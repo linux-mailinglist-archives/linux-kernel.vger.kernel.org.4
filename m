@@ -2,246 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0807C6360EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:02:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDDAB6360D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:00:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238259AbiKWOBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 09:01:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49216 "EHLO
+        id S236065AbiKWOAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 09:00:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238271AbiKWOAx (ORCPT
+        with ESMTP id S238141AbiKWOAf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 09:00:53 -0500
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC510DF94;
-        Wed, 23 Nov 2022 05:54:49 -0800 (PST)
-Received: from [10.18.29.47] (10.18.29.47) by mail-sh.amlogic.com (10.18.11.5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Wed, 23 Nov
- 2022 21:54:47 +0800
-Message-ID: <322262b1-d3db-f190-ef69-f42d5d0522c0@amlogic.com>
-Date:   Wed, 23 Nov 2022 21:54:47 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH V5 1/4] clk: meson: S4: add support for Amlogic S4 SoC PLL
- clock driver and bindings
-Content-Language: en-US
-To:     <neil.armstrong@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Wed, 23 Nov 2022 09:00:35 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4953861534;
+        Wed, 23 Nov 2022 05:55:42 -0800 (PST)
+X-UUID: 7de280f9553b40a684761cf5f413b781-20221123
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=rykZ2WGd1tRUbOPtTIsV57nz4AcJxx2AvMYWyGHdjl8=;
+        b=GjxmyUnBe0msc3frO4UzhkBYZMUfwe8DOLhJblQCiml2xMQS7P9EGhcgO1FVid1swphOlhCnUdpK+lCbSY6lIPKpSTlSAi8S0z9DTENFzbpBnObA55cak08tpfHIewqaqN8Tn1b1fVipe3QPQspBHMv3OiCpBY87inpxOrLfrbw=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.12,REQID:e19949c5-8f95-4a38-9830-895b6088ecbe,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:62cd327,CLOUDID:70289f2f-2938-482e-aafd-98d66723b8a9,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 7de280f9553b40a684761cf5f413b781-20221123
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1180831467; Wed, 23 Nov 2022 21:55:38 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 23 Nov 2022 21:55:36 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Wed, 23 Nov 2022 21:55:36 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-CC:     <kelvin.zhang@amlogic.com>
-References: <20221123021346.18136-1-yu.tu@amlogic.com>
- <20221123021346.18136-2-yu.tu@amlogic.com>
- <f03f331a-5666-298e-a1a2-bdb9bab11a48@linaro.org>
- <92b570ea-3ddc-8e91-5a7a-ed601bb7c02c@amlogic.com>
- <eb56ed39-cfaa-3368-a2c0-0a4e89440e40@linaro.org>
-From:   Yu Tu <yu.tu@amlogic.com>
-In-Reply-To: <eb56ed39-cfaa-3368-a2c0-0a4e89440e40@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.18.29.47]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <hsinyi@chromium.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH v2 0/5] Add some driver nodes for MT8186 SoC
+Date:   Wed, 23 Nov 2022 21:55:26 +0800
+Message-ID: <20221123135531.23221-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
+        SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Neil,
+This series is based on matthias github, v6.1-next.
 
-On 2022/11/23 21:23, Neil Armstrong wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> Hi,
-> 
-> On 23/11/2022 12:16, Yu Tu wrote:
->> Hi Krzysztof,
->>      Thank you for your reply.
->>
->> On 2022/11/23 18:08, Krzysztof Kozlowski wrote:
->>> [ EXTERNAL EMAIL ]
->>>
->>> On 23/11/2022 03:13, Yu Tu wrote:
->>>> Add the S4 PLL clock controller found and bindings in the s4 SoC 
->>>> family.
->>>>
->>>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
->>>> ---
->>>>   .../bindings/clock/amlogic,s4-pll-clkc.yaml   |  51 +
->>>
->>> This is v5 and still bindings are here? Bindings are always separate
->>> patches. Use subject prefixes matching the subsystem (git log --oneline
->>> -- ...).
->>>
->>> And this was split, wasn't it? What happened here?!?
->>
->> Put bindings and clock driver patch together from Jerome. Maybe you 
->> can read this chat history.
->> https://lore.kernel.or/all/1jy1v6z14n.fsf@starbuckisacylon.baylibre.com/
-> 
-> Jerome was asking you to send 2 patchsets, one with :
-> - bindings in separate patches
-> - drivers in separate patches
-> and a second with DT changes.
-> 
-> Then when the bindings + clocks patches are merged, a pull request of 
-> the bindings
-> can be done to me so I can merge it with DT.
-> 
+Changes since v1:
+ - Add mtu3 nodes intead of xhci
+ - Add mtu3 compatible for mt8186
+ - Change clk names for power domains controllers
+ - Reorder properties in some driver nodes
+ - Correct commit title and message for dsi node
 
-I may have misunderstood Jerome's advice.So should I follow the V4 patch 
-format and change as Jerome suggested from V3?
+Allen-KH Cheng (5):
+  dt-bindings: usb: mtu3: add compatible for mt8186
+  arm64: dts: mt8186: Add power domains controller
+  arm64: dts: mt8186: Add IOMMU and SMI nodes
+  arm64: dts: mt8186: Add dsi node
+  arm64: dts: mt8186: Add mtu3 nodes
 
->>
->>>
->>>
->>>>   MAINTAINERS                                   |   1 +
->>>>   drivers/clk/meson/Kconfig                     |  13 +
->>>>   drivers/clk/meson/Makefile                    |   1 +
->>>>   drivers/clk/meson/s4-pll.c                    | 875 
->>>> ++++++++++++++++++
->>>>   drivers/clk/meson/s4-pll.h                    |  88 ++
->>>>   .../dt-bindings/clock/amlogic,s4-pll-clkc.h   |  30 +
->>>>   7 files changed, 1059 insertions(+)
->>>>   create mode 100644 
->>>> Documentation/devicetree/bindings/clock/amlogic,s4-pll-clkc.yaml
->>>>   create mode 100644 drivers/clk/meson/s4-pll.c
->>>>   create mode 100644 drivers/clk/meson/s4-pll.h
->>>>   create mode 100644 include/dt-bindings/clock/amlogic,s4-pll-clkc.h
->>>>
->>>> diff --git 
->>>> a/Documentation/devicetree/bindings/clock/amlogic,s4-pll-clkc.yaml 
->>>> b/Documentation/devicetree/bindings/clock/amlogic,s4-pll-clkc.yaml
->>>> new file mode 100644
->>>> index 000000000000..fd517e8ef14f
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/clock/amlogic,s4-pll-clkc.yaml
->>>> @@ -0,0 +1,51 @@
->>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>>> +%YAML 1.2
->>>> +---
->>>> +$id: http://devicetree.org/schemas/clock/amlogic,s4-pll-clkc.yaml#
->>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>> +
->>>> +title: Amlogic Meson S serials PLL Clock Controller
->>>> +
->>>> +maintainers:
->>>> +  - Neil Armstrong <narmstrong@baylibre.com>
->>>> +  - Jerome Brunet <jbrunet@baylibre.com>
->>>> +  - Yu Tu <yu.hu@amlogic.com>
->>>> +
->>> One blank line.
->>
->>   I will delete this, on next version patch.
->>
->>>
->>>> +
->>>> +properties:
->>>> +  compatible:
->>>> +    const: amlogic,s4-pll-clkc
->>>> +
->>>> +  reg:
->>>> +    maxItems: 1
->>>> +
->>>> +  clocks:
->>>> +    maxItems: 1
->>>> +
->>>> +  clock-names:
->>>> +    items:
->>>> +      - const: xtal
->>>> +
->>>> +  "#clock-cells":
->>>> +    const: 1
->>>> +
->>>> +required:
->>>> +  - compatible
->>>> +  - reg
->>>> +  - clocks
->>>> +  - clock-names
->>>> +  - "#clock-cells"
->>>> +
->>>> +additionalProperties: false
->>>> +
->>>> +examples:
->>>> +  - |
->>>> +    clkc_pll: clock-controller@fe008000 {
->>>> +      compatible = "amlogic,s4-pll-clkc";
->>>> +      reg = <0xfe008000 0x1e8>;
->>>> +      clocks = <&xtal>;
->>>> +      clock-names = "xtal";
->>>> +      #clock-cells = <1>;
->>>> +    };
->>>
->>>
->>>> +#endif /* __MESON_S4_PLL_H__ */
->>>> diff --git a/include/dt-bindings/clock/amlogic,s4-pll-clkc.h 
->>>> b/include/dt-bindings/clock/amlogic,s4-pll-clkc.h
->>>> new file mode 100644
->>>> index 000000000000..345f87023886
->>>> --- /dev/null
->>>> +++ b/include/dt-bindings/clock/amlogic,s4-pll-clkc.h
->>>
->>> This belongs to bindings patch, not driver.
->>>
->>>> @@ -0,0 +1,30 @@
->>>> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
->>>> +/*
->>>> + * Copyright (c) 2021 Amlogic, Inc. All rights reserved.
->>>> + * Author: Yu Tu <yu.tu@amlogic.com>
->>>> + */
->>>> +
->>>> +#ifndef _DT_BINDINGS_CLOCK_AMLOGIC_S4_PLL_CLKC_H
->>>> +#define _DT_BINDINGS_CLOCK_AMLOGIC_S4_PLL_CLKC_H
->>>> +
->>>> +/*
->>>> + * CLKID index values
->>>> + */
->>>> +
->>>> +#define CLKID_FIXED_PLL            1
->>>> +#define CLKID_FCLK_DIV2            3
->>>
->>> Indexes start from 0 and are incremented by 1. Not by 2.
->>>
->>> NAK.
->>
->> I remember Jerome discussing this with you.You can look at this 
->> submission history.
->> https://lore.kernel.org/all/c088e01c-0714-82be-8347-6140daf56640@linaro.org/ 
->>
-> 
-> Historically we did that by only exposing part of the numbers, 
-> controlling which
-> clocks were part of the bindings.
-> 
-> But it seems this doesn't make sens anymore, maybe it would be time to 
-> put all the
-> clock ids in the bindings for this new SoC and break with the previous 
-> strategy.
+ .../bindings/usb/mediatek,mtu3.yaml           |   1 +
+ arch/arm64/boot/dts/mediatek/mt8186.dtsi      | 455 ++++++++++++++++++
+ 2 files changed, 456 insertions(+)
 
-That's OK with me. But I don't know if Jerome thinks it's ok?
+-- 
+2.18.0
 
-> 
-> Neil
-> 
->>
->>>
->>> Best regards,
->>> Krzysztof
->>>
->>> .
-> 
-> .
