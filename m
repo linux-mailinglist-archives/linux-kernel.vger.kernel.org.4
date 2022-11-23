@@ -2,97 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0113635AAD
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 11:58:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62BD3635AB3
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 11:58:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236232AbiKWK5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 05:57:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55592 "EHLO
+        id S237115AbiKWK5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 05:57:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237270AbiKWK5B (ORCPT
+        with ESMTP id S237567AbiKWK5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 05:57:01 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C86F242D;
-        Wed, 23 Nov 2022 02:49:46 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e747329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e747:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2B2CC1EC064F;
-        Wed, 23 Nov 2022 11:49:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1669200585;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=BFjGMXlHg3TcPz+34w140e1Tv0t0lXT0KaNS3z4Fp7E=;
-        b=P1omuEOFaA26NgokeFL5RB0ox+F6eVVDNOjA/cn4S1eYh+2O8Bbh+Y7WM6mKkqwnAJ3mjl
-        Tiy0BNOhS3Xgu40yD6EmWHUOQonbzLVnh7+g7JFpS9wNrq50VB9/yJaEg848zcrnROWJkY
-        FDMJJ3wiVyfauxwjiQj0yVWw+xm1+bw=
-Date:   Wed, 23 Nov 2022 11:49:44 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Michael Roth <michael.roth@amd.com>
-Subject: Re: [PATCH v3 00/17] x86: head_64.S spring cleaning
-Message-ID: <Y336yE4P3NjCGavN@zn.tnic>
-References: <20221122161017.2426828-1-ardb@kernel.org>
- <5750d157-43dd-6f3d-1407-f41af3cff207@amd.com>
- <CAMj1kXHUQFAcRKzRkuGG3Rsyrexdi7_NUS1-aXrS36LP4Q=rxw@mail.gmail.com>
- <26c34f9e-3b09-7b10-09a2-993a50790447@amd.com>
+        Wed, 23 Nov 2022 05:57:12 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FBEFC731;
+        Wed, 23 Nov 2022 02:50:33 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id s5so11582349wru.1;
+        Wed, 23 Nov 2022 02:50:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5mJ4XYFEsSMGscEtu1E88MW80nC31aQOMXivDq2lhNc=;
+        b=IE8UMA6VhinH8zgY45hA6zbdXgQnSd5mHtHg/96rArFtXQepHbI1yalKQFcKl1vBs/
+         WgvqUt6fm6vUcruIwrjm2+Ke8mbxrIis5SqNMdOeEjQQeflQ3vcJkW/PG+7BirCkLHtw
+         qIqn/3eiyUjhjWnP+kXHHjf1zTv9eePWcPW0qS4EBFk1jcnD8cvgq+/pRaAry+w9o8Fx
+         pAUR76EFHRIgYplPPvn9EBK15JHP4Hsnfn4s9hXynC1PzmYf/eRDf8V6yP/sW0t++dcE
+         O6sabjTlVviMjoXCo9ybeCJUcWk+XO05zhNwNEWbCMnxWZ4+uLDkREkYLvfXfMZUT+DX
+         1UWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5mJ4XYFEsSMGscEtu1E88MW80nC31aQOMXivDq2lhNc=;
+        b=EtG8R0WRsXBsjIXxbml4MLXjFHXwnzEqbTSjxbs5AHW2yUzy8y7jo/Z+hMWg1sj+mX
+         KTx++iGUbqZh+kGQ5Qnjb+/PkmjnlmGSO6LjiSUT5KhOaFesa+vtYLadOsF4EGF2pQxt
+         j9I3AY64Jtz7QvUlNBMn1x0Kr4H59ilnOxmiT8ax0ZPbrFsglQQinjB6LVRMCcpRQ/Ie
+         zkrDvQr/wXoC7NHruDxw6r59MU8UeyLUImtvtKyvg4068IWXMqKA7SMXN3cnY/LY1bD0
+         zLJu79+Wv1smWuUdUP7XsWf80x+fjVC0hY0mC0n8mpsfUildAnkOtLBiLTYQW2jjBgJv
+         JAUw==
+X-Gm-Message-State: ANoB5pkwwQZqXMAHYzGiD+7tGdCnKb02DL6hlr4o6FTUXbuhulv47D+0
+        swf19H9nIpHnuZiq7XdsVYO49L5mWlclaw==
+X-Google-Smtp-Source: AA0mqf461/lZE5/BT2BQpKWrgzp7uOAmtw0frJclKgxnll5YFmNIxfqRxwAB7zwaQ17pLHbtKKYC+Q==
+X-Received: by 2002:adf:e0c2:0:b0:236:6f18:37e6 with SMTP id m2-20020adfe0c2000000b002366f1837e6mr16294620wri.262.1669200631806;
+        Wed, 23 Nov 2022 02:50:31 -0800 (PST)
+Received: from prasmi.home ([2a00:23c8:2501:c701:3178:d8a1:a393:6d85])
+        by smtp.gmail.com with ESMTPSA id v19-20020a05600c4d9300b003cf37c5ddc0sm1759317wmp.22.2022.11.23.02.50.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 02:50:31 -0800 (PST)
+From:   Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] media: platform: rzg2l-cru: rzg2l-csi2: Enclose the macro in parentheses
+Date:   Wed, 23 Nov 2022 10:50:22 +0000
+Message-Id: <20221123105022.336198-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <26c34f9e-3b09-7b10-09a2-993a50790447@amd.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 03:49:29PM -0600, Tom Lendacky wrote:
-> diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
-> index cb5f0befee57..a0bfd31358ba 100644
-> --- a/drivers/firmware/efi/libstub/x86-stub.c
-> +++ b/drivers/firmware/efi/libstub/x86-stub.c
-> @@ -23,7 +23,7 @@
->  const efi_system_table_t *efi_system_table;
->  const efi_dxe_services_table_t *efi_dxe_table;
-> -u32 image_offset;
-> +u32 image_offset __section(".data");
->  static efi_loaded_image_t *image = NULL;
->  static efi_status_t
-> 
-> I assume it has to do with being in .data vs .bss and not being explicitly
-> cleared with the encryption bit set. With the change to put image_offset in
-> the .data section, it is read as zero, where as when it was in the .bss
-> section it was reading "ciphertext".
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Hmm, two points about this:
+Fix the below error reported by checkpatch:
 
-1. Can we do
+ERROR: Macros with complex values should be enclosed in parentheses
+					CSIDPHYSKW0_UTIL_DL1_SKW_ADJ(1) | \
+					CSIDPHYSKW0_UTIL_DL2_SKW_ADJ(1) | \
+					CSIDPHYSKW0_UTIL_DL3_SKW_ADJ(1)
 
-u32 image_offset __bss_decrypted;
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+ drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-here instead? We have this special section just for that fun and it
-self-documents this way.
-
-2. Also, why does my SEV-ES guest boot just fine without that change?
-
-[    0.000000] Linux version 6.1.0-rc6+ (root@ml) (gcc (Debian 11.3.0-1) 11.3.0, GNU ld (GNU Binutils for Debian) 2.38) #1 SMP PREEMPT_DYNAMIC Wed Nov 23 11:27:17 CET 2022
-...
-[    0.336132] Memory Encryption Features active: AMD SEV SEV-ES
-
-Thx.
-
+diff --git a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
+index aa752b80574c..a26a17eee1e7 100644
+--- a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
++++ b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
+@@ -81,10 +81,10 @@
+ #define CSIDPHYSKW0_UTIL_DL1_SKW_ADJ(x)	(((x) & 0x3) << 4)
+ #define CSIDPHYSKW0_UTIL_DL2_SKW_ADJ(x)	(((x) & 0x3) << 8)
+ #define CSIDPHYSKW0_UTIL_DL3_SKW_ADJ(x)	(((x) & 0x3) << 12)
+-#define CSIDPHYSKW0_DEFAULT_SKW		CSIDPHYSKW0_UTIL_DL0_SKW_ADJ(1) | \
+-					CSIDPHYSKW0_UTIL_DL1_SKW_ADJ(1) | \
+-					CSIDPHYSKW0_UTIL_DL2_SKW_ADJ(1) | \
+-					CSIDPHYSKW0_UTIL_DL3_SKW_ADJ(1)
++#define CSIDPHYSKW0_DEFAULT_SKW		(CSIDPHYSKW0_UTIL_DL0_SKW_ADJ(1) | \
++					 CSIDPHYSKW0_UTIL_DL1_SKW_ADJ(1) | \
++					 CSIDPHYSKW0_UTIL_DL2_SKW_ADJ(1) | \
++					 CSIDPHYSKW0_UTIL_DL3_SKW_ADJ(1))
+ 
+ #define VSRSTS_RETRIES			20
+ 
 -- 
-Regards/Gruss,
-    Boris.
+2.25.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
