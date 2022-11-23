@@ -2,75 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17CFD635F9A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:29:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A0CB635F9D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:30:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238030AbiKWN3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 08:29:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33460 "EHLO
+        id S236336AbiKWNaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 08:30:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236619AbiKWN3T (ORCPT
+        with ESMTP id S237739AbiKWN3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 08:29:19 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8239D59FD4
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:08:17 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id k7so16571529pll.6
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:08:17 -0800 (PST)
+        Wed, 23 Nov 2022 08:29:25 -0500
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6067D65E7B;
+        Wed, 23 Nov 2022 05:09:28 -0800 (PST)
+Received: by mail-pg1-x542.google.com with SMTP id 136so16753534pga.1;
+        Wed, 23 Nov 2022 05:09:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xWi6mZ6IeIfeEPlOxAtZAyKjM4+f66dl3p7cvZ+Vbjw=;
-        b=PlqoSWMckN11XHTkaubhJVgJXMz2nLNOmPEXd2vV/zYDGJ2FDSA56j6J+nk9NuLjyt
-         drDUniAkW+0jUuX9t9XuTxTfwX/jBkgWqiL1tjCX0G7csowTj8fvqGda/cNtQqZCk/jc
-         X1SGjHaIEs7mnu3bBm/QEIExcdv+Z3QuJvclyJ5MuRw+gsto+ujGdgf6huig9O98HV99
-         U3DX1GOqPjuPN515mnoG/ukRHWdPDQQcG3Sk5yPaSIdrDInioNb5zIXYVypRoVJdNR2A
-         k9G1ttM6O2l43q10jiQ7gNMk5g3Vf8YiK4XkTT9tnD2pk6foNyx43A+lZjl3s/nyooaF
-         b+OQ==
+        h=content-transfer-encoding:in-reply-to:references:cc:to
+         :content-language:subject:reply-to:user-agent:mime-version:date
+         :message-id:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/5sDDLj8hVe6h4SdJGwqUGXTtJZOuHWy81jfh5yIfz4=;
+        b=eaWlhzLlnIm3EtOzG/x4g8D+S7v2xDU4bBSwiM7/daKGHsTg5FiYpDXY39G7kPVkUx
+         sK9g3jdn6QjlC8sdOHrXH4XRPjn7W9x3HnQVL/oH/bdkqwolANJU7ihJGH+lE05yoOTW
+         DDWss6uD1QqL6K1LJmCjh4DTtFcVVvI44bGpmMdzZdR+tRfuQh2uDAWcaZTmhUkLH+dh
+         BzCQoF5NVIDfNzyZJH6Kyvv27dQDmyQFMfwTrdjLmzDQWw6aUYXE155vLY+NHCLsoxX3
+         YGlpOeVsX74+AEJHx5k1QlyjxDlrVhv1ZC+qay92GFTY4cCQ1+AZJ56Zx+CxsCeeQ/Sw
+         9pdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xWi6mZ6IeIfeEPlOxAtZAyKjM4+f66dl3p7cvZ+Vbjw=;
-        b=koBoI5O4rRu8LhUnUOVjfIxKmySIxwJaOgDCIgqi7zjmtWOPL199nLEn0SbX2vyFcW
-         IOub1RGIaDPujx22IS7WWLRtRRoVLz8fauKgKnswslB4A5CNLsj9EiMxxuDlzH+EmWIM
-         zNtsFHDnbiqeoTcH/mpHYnr6hgLFfqcCYJiA1zabilv+IUKcsw/WZuHxThIJoj558qVc
-         29/OSRo9Qofhg7DyNXcEjpU4hnS9xxG8uZ8w6ih6QF01nCX0aZp8WCb4ZT2+BHxr/ovp
-         eKsdEOqNk0mdJm2RmzCUNLJ+EBzBAIut/WUOm4wS2QA9PV6sALQreS9L9rUkUW3ZDQgm
-         EcgA==
-X-Gm-Message-State: ANoB5pm/788h7tCY83ACcQDAbxkBAg9RztawCAp3oJWftpAUryPVqLN0
-        zs0BqCpCRjxAt2sflfrWOD/uWtuR9/X+NdIbyDU=
-X-Google-Smtp-Source: AA0mqf6MpV4so7yPLvjWQj5rT39uCbNMcyE8kgJItIUFlazg9K4P0R8ARpdSpcRWIZzmq14ZnNKHP2CWP0wiZGqKbAE=
-X-Received: by 2002:a17:90a:fc7:b0:218:aefe:60e3 with SMTP id
- 65-20020a17090a0fc700b00218aefe60e3mr15715903pjz.47.1669208896980; Wed, 23
- Nov 2022 05:08:16 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:references:cc:to
+         :content-language:subject:reply-to:user-agent:mime-version:date
+         :message-id:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/5sDDLj8hVe6h4SdJGwqUGXTtJZOuHWy81jfh5yIfz4=;
+        b=BtTgiBuVJlOtLgAigUIp2C4QsSfZENe9zaQy7qEVvpc25W5OTS3BTY3viNDXqHnvG4
+         AVl0euHzdv1hktmLu0ql+kLgw1UVmi5Wox5qV2fHaMzC6mY7egcFoQlPcKIWz3MQCnHZ
+         /lZsAAiWDp66xWd8upbGapurClgnBqvCEmrQj+yVejEUeddLB6as9pqGXnFFBqENg2e/
+         LxdQYl9MzLFzNgP3Fh8diOXqRb80nhVomkCnkLWNzNu3svS5LEpy/NCR53DL7g0iwYjO
+         VbJazvX90DZBJ1DZoAtQC49NZpeUEwIim2w9n+pmo7R5k5IdGKFomcc4SwCWWMF+8iLu
+         BrVg==
+X-Gm-Message-State: ANoB5pkJy/1SMpMFpf8Nzw18/+f5pK0FKOFRoLWhk+EvIjfIpBWodYeH
+        wSV2pkiKLDv+E6OUrETr2SkMCx/iVPQY1Q==
+X-Google-Smtp-Source: AA0mqf7/4JY+gdssUIZF6j0kOvV8JD3YBfxDGEkkTruZY9oR5aZU/3tYCKBkgJ7GgrM5WXuNBggm8A==
+X-Received: by 2002:a63:1f21:0:b0:46b:2bd4:f298 with SMTP id f33-20020a631f21000000b0046b2bd4f298mr9926147pgf.135.1669208967813;
+        Wed, 23 Nov 2022 05:09:27 -0800 (PST)
+Received: from [172.18.246.94] ([1.242.215.113])
+        by smtp.gmail.com with ESMTPSA id x12-20020aa79acc000000b0056bbba4302dsm12667533pfp.119.2022.11.23.05.09.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Nov 2022 05:09:27 -0800 (PST)
+From:   Sungjong Seo <sjdev.seo@gmail.com>
+X-Google-Original-From: Sungjong Seo <sj1557.seo@samsung.com>
+Message-ID: <747ec13e-b7c8-abfa-2247-c98aba6d86e8@samsung.com>
+Date:   Wed, 23 Nov 2022 22:09:19 +0900
 MIME-Version: 1.0
-References: <20221123123159.2325763-1-feng.tang@intel.com> <20221123123159.2325763-2-feng.tang@intel.com>
-In-Reply-To: <20221123123159.2325763-2-feng.tang@intel.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Wed, 23 Nov 2022 14:08:05 +0100
-Message-ID: <CA+fCnZdCvsk-PST__zFrH0h1QNVYATEUAdLkq7WJpN-NXYj6EA@mail.gmail.com>
-Subject: Re: [PATCH v2 -next 2/2] mm/kasan: simplify and refine kasan_cache code
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-mm@kvack.org, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Reply-To: sj1557.seo@samsung.com
+Subject: Re: [PATCH v1 1/5] exfat: reduce the size of exfat_entry_set_cache
+Content-Language: en-US
+To:     "Yuezhang.Mo@sony.com" <Yuezhang.Mo@sony.com>,
+        Namjae Jeon <linkinjeon@kernel.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        "Andy.Wu@sony.com" <Andy.Wu@sony.com>,
+        "Wataru.Aoyama@sony.com" <Wataru.Aoyama@sony.com>
+References: <PUZPR04MB63168831A4F57B74109A893A81069@PUZPR04MB6316.apcprd04.prod.outlook.com>
+In-Reply-To: <PUZPR04MB63168831A4F57B74109A893A81069@PUZPR04MB6316.apcprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,162 +81,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 1:35 PM Feng Tang <feng.tang@intel.com> wrote:
->
-> struct 'kasan_cache' has a member 'is_kmalloc' indicating whether
-> its host kmem_cache is a kmalloc cache. With newly introduced
-> is_kmalloc_cache() helper, 'is_kmalloc' and its related function can
-> be replaced and removed.
->
-> Also 'kasan_cache' is only needed by KASAN generic mode, and not by
-> SW/HW tag modes, so refine its protection macro accordingly, suggested
-> by Andrey Konoval.
->
-> Signed-off-by: Feng Tang <feng.tang@intel.com>
+Hi, Yuezhang Mo,
+
+> In normal, there are 19 directory entries at most for a file or
+> a directory.
+>   - A file directory entry
+>   - A stream extension directory entry
+>   - 1~17 file name directory entry
+> 
+> So the directory entries are in 3 sectors at most, it is enough
+> for struct exfat_entry_set_cache to pre-allocate 3 bh.
+> 
+> This commit changes the size of struct exfat_entry_set_cache as:
+> 
+>                    Before   After
+> 32-bit system      88       32    bytes
+> 64-bit system      168      48    bytes
+> 
+> Signed-off-by: Yuezhang Mo <Yuezhang.Mo@sony.com>
+> Reviewed-by: Andy Wu <Andy.Wu@sony.com>
+> Reviewed-by: Aoyama Wataru <wataru.aoyama@sony.com>
 > ---
-> Changlog:
->
->   Since v1
->   * Use CONFIG_KASAN_GENERIC instead of CONFIG_KASAN for 'kasan_cache',
->     as suggested by Andrey Konovalov
->
->  include/linux/kasan.h    | 22 +++++-----------------
->  include/linux/slab_def.h |  2 +-
->  include/linux/slub_def.h |  2 +-
->  mm/kasan/common.c        |  9 ++-------
->  mm/slab_common.c         |  1 -
->  5 files changed, 9 insertions(+), 27 deletions(-)
->
-> diff --git a/include/linux/kasan.h b/include/linux/kasan.h
-> index dff604912687..0ff382f79f80 100644
-> --- a/include/linux/kasan.h
-> +++ b/include/linux/kasan.h
-> @@ -96,15 +96,6 @@ static inline bool kasan_has_integrated_init(void)
->  }
->
->  #ifdef CONFIG_KASAN
-> -
-> -struct kasan_cache {
-> -#ifdef CONFIG_KASAN_GENERIC
-> -       int alloc_meta_offset;
-> -       int free_meta_offset;
-> -#endif
-> -       bool is_kmalloc;
-> -};
-> -
->  void __kasan_unpoison_range(const void *addr, size_t size);
->  static __always_inline void kasan_unpoison_range(const void *addr, size_t size)
->  {
-> @@ -129,13 +120,6 @@ static __always_inline bool kasan_unpoison_pages(struct page *page,
->         return false;
->  }
->
-> -void __kasan_cache_create_kmalloc(struct kmem_cache *cache);
-> -static __always_inline void kasan_cache_create_kmalloc(struct kmem_cache *cache)
-> -{
-> -       if (kasan_enabled())
-> -               __kasan_cache_create_kmalloc(cache);
-> -}
-> -
->  void __kasan_poison_slab(struct slab *slab);
->  static __always_inline void kasan_poison_slab(struct slab *slab)
->  {
-> @@ -252,7 +236,6 @@ static inline void kasan_poison_pages(struct page *page, unsigned int order,
->                                       bool init) {}
->  static inline bool kasan_unpoison_pages(struct page *page, unsigned int order,
->                                         bool init) { return false; }
-> -static inline void kasan_cache_create_kmalloc(struct kmem_cache *cache) {}
->  static inline void kasan_poison_slab(struct slab *slab) {}
->  static inline void kasan_unpoison_object_data(struct kmem_cache *cache,
->                                         void *object) {}
-> @@ -303,6 +286,11 @@ static inline void kasan_unpoison_task_stack(struct task_struct *task) {}
->
->  #ifdef CONFIG_KASAN_GENERIC
->
-> +struct kasan_cache {
-> +       int alloc_meta_offset;
-> +       int free_meta_offset;
-> +};
+>  fs/exfat/exfat_fs.h | 24 ++++++++++++++++++++----
+>  1 file changed, 20 insertions(+), 4 deletions(-)
+> 
+> diff --git a/fs/exfat/exfat_fs.h b/fs/exfat/exfat_fs.h
+> index a8f8eee4937c..7d2493cda5d8 100644
+> --- a/fs/exfat/exfat_fs.h
+> +++ b/fs/exfat/exfat_fs.h
+> @@ -9,6 +9,7 @@
+>  #include <linux/fs.h>
+>  #include <linux/ratelimit.h>
+>  #include <linux/nls.h>
+> +#include <linux/blkdev.h>
+>  
+>  #define EXFAT_ROOT_INO		1
+>  
+> @@ -41,6 +42,14 @@ enum {
+>  #define ES_2_ENTRIES		2
+>  #define ES_ALL_ENTRIES		0
+>  
+> +#define ES_FILE_ENTRY		0
+> +#define ES_STREAM_ENTRY		1
+> +#define ES_FIRST_FILENAME_ENTRY	2
+
+New ES_ definitions seem to be an index in an entry set. However, this
+is confusing with definitions for specifying the range used when
+obtaining an entry set, such as ES_2_ENTRIES or ES_ALL_ENTRIES.
+Therefore, it would be better to use ES_IDX_ instead of ES_ to
+distinguish names such as ES_IDX_FILE, ES_IDX_STREAM and so on.
+(If you can think of a better prefix, it doesn't have to be ES_IDX_)
+
+> +#define EXFAT_FILENAME_ENTRY_NUM(name_len) \
+> +	DIV_ROUND_UP(name_len, EXFAT_FILE_NAME_LEN)
+> +#define ES_LAST_FILENAME_ENTRY(name_len)	\
+> +	(ES_FIRST_FILENAME_ENTRY + EXFAT_FILENAME_ENTRY_NUM(name_len))
+
+As with the newly defined ES_ value above, it makes sense for the
+ES_LAST_FILENAME_ENTRY() MACRO to return the index of the last filename
+entry. So let's subtract 1 from the current MACRO.
+
 > +
->  size_t kasan_metadata_size(struct kmem_cache *cache, bool in_object);
->  slab_flags_t kasan_never_merge(void);
->  void kasan_cache_create(struct kmem_cache *cache, unsigned int *size,
-> diff --git a/include/linux/slab_def.h b/include/linux/slab_def.h
-> index f0ffad6a3365..39f7f1f95de2 100644
-> --- a/include/linux/slab_def.h
-> +++ b/include/linux/slab_def.h
-> @@ -72,7 +72,7 @@ struct kmem_cache {
->         int obj_offset;
->  #endif /* CONFIG_DEBUG_SLAB */
->
-> -#ifdef CONFIG_KASAN
-> +#ifdef CONFIG_KASAN_GENERIC
->         struct kasan_cache kasan_info;
->  #endif
->
-> diff --git a/include/linux/slub_def.h b/include/linux/slub_def.h
-> index f9c68a9dac04..4e7cdada4bbb 100644
-> --- a/include/linux/slub_def.h
-> +++ b/include/linux/slub_def.h
-> @@ -132,7 +132,7 @@ struct kmem_cache {
->         unsigned int *random_seq;
->  #endif
->
-> -#ifdef CONFIG_KASAN
-> +#ifdef CONFIG_KASAN_GENERIC
->         struct kasan_cache kasan_info;
->  #endif
->
-> diff --git a/mm/kasan/common.c b/mm/kasan/common.c
-> index 1f30080a7a4c..6e265beefc27 100644
-> --- a/mm/kasan/common.c
-> +++ b/mm/kasan/common.c
-> @@ -122,11 +122,6 @@ void __kasan_poison_pages(struct page *page, unsigned int order, bool init)
->                              KASAN_PAGE_FREE, init);
->  }
->
-> -void __kasan_cache_create_kmalloc(struct kmem_cache *cache)
-> -{
-> -       cache->kasan_info.is_kmalloc = true;
-> -}
+>  #define DIR_DELETED		0xFFFF0321
+>  
+>  /* type values */
+> @@ -68,9 +77,6 @@ enum {
+>  #define MAX_NAME_LENGTH		255 /* max len of file name excluding NULL */
+>  #define MAX_VFSNAME_BUF_SIZE	((MAX_NAME_LENGTH + 1) * MAX_CHARSET_SIZE)
+>  
+> -/* Enough size to hold 256 dentry (even 512 Byte sector) */
+> -#define DIR_CACHE_SIZE		(256*sizeof(struct exfat_dentry)/512+1)
 > -
->  void __kasan_poison_slab(struct slab *slab)
->  {
->         struct page *page = slab_page(slab);
-> @@ -326,7 +321,7 @@ void * __must_check __kasan_slab_alloc(struct kmem_cache *cache,
->         kasan_unpoison(tagged_object, cache->object_size, init);
->
->         /* Save alloc info (if possible) for non-kmalloc() allocations. */
-> -       if (kasan_stack_collection_enabled() && !cache->kasan_info.is_kmalloc)
-> +       if (kasan_stack_collection_enabled() && !is_kmalloc_cache(cache))
->                 kasan_save_alloc_info(cache, tagged_object, flags);
->
->         return tagged_object;
-> @@ -372,7 +367,7 @@ static inline void *____kasan_kmalloc(struct kmem_cache *cache,
->          * Save alloc info (if possible) for kmalloc() allocations.
->          * This also rewrites the alloc info when called from kasan_krealloc().
->          */
-> -       if (kasan_stack_collection_enabled() && cache->kasan_info.is_kmalloc)
-> +       if (kasan_stack_collection_enabled() && is_kmalloc_cache(cache))
->                 kasan_save_alloc_info(cache, (void *)object, flags);
->
->         /* Keep the tag that was set by kasan_slab_alloc(). */
-> diff --git a/mm/slab_common.c b/mm/slab_common.c
-> index 8276022f0da4..a5480d67f391 100644
-> --- a/mm/slab_common.c
-> +++ b/mm/slab_common.c
-> @@ -663,7 +663,6 @@ struct kmem_cache *__init create_kmalloc_cache(const char *name,
->
->         create_boot_cache(s, name, size, flags | SLAB_KMALLOC, useroffset,
->                                                                 usersize);
-> -       kasan_cache_create_kmalloc(s);
->         list_add(&s->list, &slab_caches);
->         s->refcount = 1;
->         return s;
-> --
-> 2.34.1
->
+>  #define EXFAT_HINT_NONE		-1
+>  #define EXFAT_MIN_SUBDIR	2
+>  
+> @@ -125,6 +131,16 @@ enum {
+>  #define BITS_PER_BYTE_MASK	0x7
+>  #define IGNORED_BITS_REMAINED(clu, clu_base) ((1 << ((clu) - (clu_base))) - 1)
+>  
+> +/* 19 entries = 1 file entry + 1 stream entry + 17 filename entries */
+> +#define ES_MAX_ENTRY_NUM	ES_LAST_FILENAME_ENTRY(MAX_NAME_LENGTH)
 
-Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+Of course, it needs to add 1 here.
 
-Thanks!
+> +
+> +/*
+> + * 19 entries x 32 bytes/entry = 608 bytes.
+> + * The 608 bytes are in 3 sectors at most (even 512 Byte sector).
+> + */
+> +#define DIR_CACHE_SIZE		\
+> +	(DIV_ROUND_UP(EXFAT_DEN_TO_B(ES_MAX_ENTRY_NUM), SECTOR_SIZE) + 1)
+> +
+>  struct exfat_dentry_namebuf {
+>  	char *lfn;
+>  	int lfnbuf_len; /* usually MAX_UNINAME_BUF_SIZE */
+> @@ -166,11 +182,11 @@ struct exfat_hint {
+>  
+>  struct exfat_entry_set_cache {
+>  	struct super_block *sb;
+> -	bool modified;
+>  	unsigned int start_off;
+>  	int num_bh;
+>  	struct buffer_head *bh[DIR_CACHE_SIZE];
+>  	unsigned int num_entries;
+> +	bool modified;
+>  };
+>  
+>  struct exfat_dir_entry {
