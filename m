@@ -2,106 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8B0763522D
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 09:21:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99C2D635251
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 09:23:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236465AbiKWIU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 03:20:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56920 "EHLO
+        id S236471AbiKWIWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 03:22:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236461AbiKWIUt (ORCPT
+        with ESMTP id S236218AbiKWIWA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 03:20:49 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2631AF72C3
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 00:20:38 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id be13so27087079lfb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 00:20:38 -0800 (PST)
+        Wed, 23 Nov 2022 03:22:00 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F4BD22A9
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 00:21:52 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id j5-20020a05600c410500b003cfa9c0ea76so743667wmi.3
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 00:21:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IhFEQELa4VkTH3dXCJFPIV5f7OVafEghYhmDz8dxAsw=;
-        b=ti0fy3zFjpws7aumeLZs4bfmrqyyUmZEkE6AkEd6AxWduEk4ZrhiKtm/h+Mz00+5Sn
-         qB5P8Ocx1KzMRETnzTrdSiQTQJZpH2sxphGQDOwOkPp1gJ6qYSrpGJSR6FlVbaKz/+9G
-         Mcoq4D22FZP5gmimwaBhuHIdIBqb8DK8vXcRb7jF/7aMVzYFxLEN0HBcNJNg41b7wRas
-         Z2GLoJ1bjuI6R6bDGvpuxzrCa1GLfvXyeR37Jbm2emzMKbucVsLle+IfrtD1+Fh52CEb
-         HhZWkAE1deU4LoH3gLaPmorX8A4i63J+dKQLq2kBZOW0Afp2vABNv3A3NS56viGSPuln
-         9t0Q==
+        d=amarulasolutions.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=L9Thz9yns+FIJXusgM78SIai92l4nRiseqTTKyEIwSM=;
+        b=Qx9r8WsmzKnrKHCSE/h2oX+vFSIBIZN3d05cSGFXZqC424S44b1Jx8CzvEYjvVo/vQ
+         IvNvyMO05iYuXvNZb8hfX9/s+YkzIT7itzXCXaepG+sICmshpaORyGBsXw47ZThtyFYD
+         lET+9yMm5imEg+7giLsm0yHdWscNKjWIPfvtk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IhFEQELa4VkTH3dXCJFPIV5f7OVafEghYhmDz8dxAsw=;
-        b=jwC5k8uRDoiFshCqLUX0hxeoh+Ag5QjCAYNBMQQb9D8gxgYzXCe+WxBuzuO2pzJpS6
-         lFnlKTAIwyy/qrdXv46+a90C9PEZWTt+6302fpWG3FQTvxV0HXFmLOZRKuPD0qWQ0evA
-         t3H3K0ZEwI7wEVyjeGkzTXuSSqJxENq1YtATFunxwtOjcErGKXgMpj8khzgRSB3aVe22
-         sbfCC1vii7qKxZFa/aHM2QsuuqVrJaYyL/SDUwvhplYn6JTAxzW74vVf28x6LSO6G6Ll
-         mpWMqcEukh4R6rpg28zZhyuodjl7TJlu7QcIdyllEGYrn5Yn+Lcijv04iyHrVP/6iAAR
-         ED3g==
-X-Gm-Message-State: ANoB5pleiRvgyXhhjv3i5EWZhMXOrOiy9japQ74aAHz8LZiVbOQx7/dZ
-        kSydeh2Xjlmy3I6kqWowLM5QAry27xONRj9B
-X-Google-Smtp-Source: AA0mqf4CI8Ij3JSwtMSUrYc+lIf7HpUCJeQnclMNeRAu9pqSPkVrvgNxp3xG0b2MW5XqYTW6hP4Cnw==
-X-Received: by 2002:a05:6512:689:b0:494:78cc:f153 with SMTP id t9-20020a056512068900b0049478ccf153mr8626000lfe.644.1669191636500;
-        Wed, 23 Nov 2022 00:20:36 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id j12-20020a05651231cc00b0048a934168c0sm2790896lfe.35.2022.11.23.00.20.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 00:20:36 -0800 (PST)
-Message-ID: <4f4bdc95-16a2-df76-9787-df46a3b5e1eb@linaro.org>
-Date:   Wed, 23 Nov 2022 09:20:34 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=L9Thz9yns+FIJXusgM78SIai92l4nRiseqTTKyEIwSM=;
+        b=g+UkfjkrRVVrQZNVTR1NcwKN85TBQqbh5wIYx969SJC5Fn7shfRM+888ze4dRKB1qZ
+         d2yhucGixbj+yUYJKwzw92U4P+qaeU+Jg5m076GasYSV9xgk4ScbqqeedEbhehr0Q3jE
+         N5kF/v9T+WA0d4aajZrFLvYKMaZmE3ngf8b4D0Wp8lrqSW4jBPWmD5R3fpZ1k6dVllsv
+         7Nm4SUHfhc2B6SchoARQ0uzCLeuQs8LpxaDkS6iaF/iZO2r4ySGn51fLIj1K1aQeE7zD
+         JczSYWXEBk8aPAqmRMNW133THLkmdleFk3xhB8cSy38XKEjMDs8TfBsuRwJh6EbgYx5e
+         RzfQ==
+X-Gm-Message-State: ANoB5pk+psRDN5tNk+wWIJoOVVBiDIm3n6FPP6oN0h/bzR3f8YSckkb1
+        i6opnJc9QLidGV3gdm3/8EGAxg==
+X-Google-Smtp-Source: AA0mqf6nenQbqL5kVqF3svPV7Z481oVYS0C1JSjWJhHqfh2Ns7JBkLFmxh0/kDbGvLsWJlVFhwIIHQ==
+X-Received: by 2002:a05:600c:3795:b0:3cf:cfcd:1e0 with SMTP id o21-20020a05600c379500b003cfcfcd01e0mr11411542wmr.166.1669191711172;
+        Wed, 23 Nov 2022 00:21:51 -0800 (PST)
+Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-55-94.cust.vodafonedsl.it. [188.217.55.94])
+        by smtp.gmail.com with ESMTPSA id bg8-20020a05600c3c8800b003a6125562e1sm1456252wmb.46.2022.11.23.00.21.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 00:21:50 -0800 (PST)
+Date:   Wed, 23 Nov 2022 09:21:48 +0100
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: imx: remove code for non-existing config
+ IMX_GPT_ICAP
+Message-ID: <20221123082148.GC39395@tom-ThinkPad-T14s-Gen-2i>
+References: <20221122132330.30408-1-lukas.bulwahn@gmail.com>
+ <20221122160937.GB39395@tom-ThinkPad-T14s-Gen-2i>
+ <CAKXUXMxk-YoG4TdB8Em+cEMF8NA7rdMAboQz8nmhfVmVQ8oATA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: (subset) [PATCH 06/20] arm64: dts: Update cache properties for
- exynos
-Content-Language: en-US
-To:     Pierre Gondois <pierre.gondois@arm.com>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob.Herring@arm.com, linux-samsung-soc@vger.kernel.org
-References: <20221031091945.531874-1-pierre.gondois@arm.com>
- <166742051292.139492.12539582422109367063.b4-ty@linaro.org>
- <7681ba8e-1036-7540-5eda-417ed204d35f@arm.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <7681ba8e-1036-7540-5eda-417ed204d35f@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKXUXMxk-YoG4TdB8Em+cEMF8NA7rdMAboQz8nmhfVmVQ8oATA@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/11/2022 17:52, Pierre Gondois wrote:
-> Hello Krzysztof,
-> 
-> This patch and [1] were dropped after a bad patch management from my part.
-> v1 and v2 are identical, but [2] lead to the 2 patches to be removed.
-> Not willing to worsen the situation, I wanted to wait a bit before getting
-> back to these 2 patches and let them be removed.
-> Would it be possible to take back these 2 patches ?
-> 
-> Regards,
-> Pierre
-> 
-> [1] https://lore.kernel.org/all/2d8b2d85-7bc6-026a-baf9-11a47171ddc5@linaro.org/
-> [2] https://lore.kernel.org/all/bb36df3f-5aee-256a-4d64-eaeb9bff998e@arm.com/
-> 
+Hi Lukas,
 
-I was expecting a resend with:
-1. Fixed subject.
-2. Changelog.
-3. Trimmed list.
+On Wed, Nov 23, 2022 at 08:56:06AM +0100, Lukas Bulwahn wrote:
+> On Tue, Nov 22, 2022 at 5:09 PM Tommaso Merciai
+> <tommaso.merciai@amarulasolutions.com> wrote:
+> >
+> > Hi Lukas,
+> >
+> > On Tue, Nov 22, 2022 at 02:23:30PM +0100, Lukas Bulwahn wrote:
+> > > There never was a config IMX_GPT_ICAP in the repository. So remove the code
+> > > conditional on this config and simplify the callers that just called empty
+> > > functions.
+> > >
+> > > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> > > ---
+> > >  drivers/staging/media/imx/imx-media-fim.c | 54 -----------------------
+> > >  1 file changed, 54 deletions(-)
+> > >
+> > > diff --git a/drivers/staging/media/imx/imx-media-fim.c b/drivers/staging/media/imx/imx-media-fim.c
+> > > index 3a9182933508..19a48eb445fd 100644
+> > > --- a/drivers/staging/media/imx/imx-media-fim.c
+> > > +++ b/drivers/staging/media/imx/imx-media-fim.c
+> > > @@ -187,54 +187,6 @@ static void frame_interval_monitor(struct imx_media_fim *fim,
+> > >               send_fim_event(fim, error_avg);
+> > >  }
+> > >
+> > > -#ifdef CONFIG_IMX_GPT_ICAP
+> > > -/*
+> > > - * Input Capture method of measuring frame intervals. Not subject
+> > > - * to interrupt latency.
+> > > - */
+> > > -static void fim_input_capture_handler(int channel, void *dev_id,
+> > > -                                   ktime_t timestamp)
+> > > -{
+> > > -     struct imx_media_fim *fim = dev_id;
+> > > -     unsigned long flags;
+> > > -
+> > > -     spin_lock_irqsave(&fim->lock, flags);
+> > > -
+> > > -     frame_interval_monitor(fim, timestamp);
+> > > -
+> > > -     if (!completion_done(&fim->icap_first_event))
+> > > -             complete(&fim->icap_first_event);
+> > > -
+> > > -     spin_unlock_irqrestore(&fim->lock, flags);
+> > > -}
+> > > -
+> > > -static int fim_request_input_capture(struct imx_media_fim *fim)
+> > > -{
+> > > -     init_completion(&fim->icap_first_event);
+> > > -
+> > > -     return mxc_request_input_capture(fim->icap_channel,
+> > > -                                      fim_input_capture_handler,
+> > > -                                      fim->icap_flags, fim);
+> > > -}
+> > > -
+> > > -static void fim_free_input_capture(struct imx_media_fim *fim)
+> > > -{
+> > > -     mxc_free_input_capture(fim->icap_channel, fim);
+> > > -}
+> > > -
+> > > -#else /* CONFIG_IMX_GPT_ICAP */
+> > > -
+> > > -static int fim_request_input_capture(struct imx_media_fim *fim)
+> > > -{
+> > > -     return 0;
+> > > -}
+> > > -
+> > > -static void fim_free_input_capture(struct imx_media_fim *fim)
+> > > -{
+> > > -}
+> > > -
+> > > -#endif /* CONFIG_IMX_GPT_ICAP */
+> > > -
+> > >  /*
+> > >   * In case we are monitoring the first frame interval after streamon
+> > >   * (when fim->num_skip = 0), we need a valid fim->last_ts before we
+> > > @@ -435,14 +387,8 @@ int imx_media_fim_set_stream(struct imx_media_fim *fim,
+> > >               spin_unlock_irqrestore(&fim->lock, flags);
+> > >
+> > >               if (icap_enabled(fim)) {
+> > > -                     ret = fim_request_input_capture(fim);
+> > > -                     if (ret)
+> > > -                             goto out;
+> > >                       fim_acquire_first_ts(fim);
+> > >               }
+> >
+> > As suggested by the checkpatch.pl:
+> > WARNING: braces {} are not necessary for single statement blocks
+> >
+> > > -     } else {
+> > > -             if (icap_enabled(fim))
+> > > -                     fim_free_input_capture(fim);
+> > >       }
+> > >
+> > >       fim->stream_on = on;
+> > > --
+> > > 2.17.1
+> > >
+> >
+> 
+> Strangely, my checkpatch invocation on next-20221116 did not show that
+> warning and I am unaware that I made any specific changes to
+> checkpatch or its configuration.
+> 
+> Anyway, checkpatch and you, Tommaso, are right and the patch can of
+> course be improved. I sent out a patch v2:
+> 
+> https://lore.kernel.org/all/20221123075216.28193-1-lukas.bulwahn@gmail.com/
+> 
+> I hope to get an Acked-by: tag from you now. Thanks.
 
-Best regards,
-Krzysztof
+Sorry I miss the tag :)
 
+Acked-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+
+Apply the patch then run:
+ scripts/checkpatch.pl -f drivers/staging/media/imx/imx-media-fim.c
+
+Regards,
+Tommaso
+
+> 
+> Lukas
+> 
+> > Apart of this, patch looks good to me.
+> > Thanks.
+> >
+> > Regards,
+> > Tommaso
+> >
+> > --
+> > Tommaso Merciai
+> > Embedded Linux Engineer
+> > tommaso.merciai@amarulasolutions.com
+> > __________________________________
+> >
+> > Amarula Solutions SRL
+> > Via Le Canevare 30, 31100 Treviso, Veneto, IT
+> > T. +39 042 243 5310
+> > info@amarulasolutions.com
+> > www.amarulasolutions.com
+
+-- 
+Tommaso Merciai
+Embedded Linux Engineer
+tommaso.merciai@amarulasolutions.com
+__________________________________
+
+Amarula Solutions SRL
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+T. +39 042 243 5310
+info@amarulasolutions.com
+www.amarulasolutions.com
