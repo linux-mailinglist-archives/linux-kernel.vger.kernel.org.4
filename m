@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85EBA636694
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:07:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82DFB636696
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:07:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238881AbiKWRHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 12:07:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56768 "EHLO
+        id S239131AbiKWRHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 12:07:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239020AbiKWRGp (ORCPT
+        with ESMTP id S238904AbiKWRGx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 12:06:45 -0500
+        Wed, 23 Nov 2022 12:06:53 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66EAC4B69;
-        Wed, 23 Nov 2022 09:06:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D69C5B51;
+        Wed, 23 Nov 2022 09:06:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 456EB61DF7;
-        Wed, 23 Nov 2022 17:06:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2C2EC433D6;
-        Wed, 23 Nov 2022 17:06:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FE3661DEC;
+        Wed, 23 Nov 2022 17:06:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26521C43470;
+        Wed, 23 Nov 2022 17:06:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669223201;
-        bh=572LKrFlwGTVNo7fZjQcd1sMaO3bjlC22vJvxTRspSc=;
+        s=k20201202; t=1669223204;
+        bh=wx38S8oDI/3l7QO5/iOpwcyoWSlY3bOo8MNcfNr6WO8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Cy9qvLxY59+KxQyUyH+9sCX6HVEFqQVPPLH787k/5aUI4w1y1iVKXLv7gJ8lV/FjH
-         JIKLuGm+rugW5eK2RiWgfAzaVnleYP75YhnvLYK4Wym80AmihlZsAyQbgA6dtIYXcl
-         JAHvAmWGY9Iq+DHgsG5n3AQa1CIWCxbzDZbgvxwRyYp5uhtPxNSTY69EKgGEOQFwkB
-         VtTM+spQyjkNlT6lhHs1lW/EGcpYIMt7mpRFiKRBG3niH0UdlQFjglDtcUUD7r5ROG
-         1dlZQwBRVpqHMsq/XWzc9g3LjLmBf2nnavqQp+Vj74LmaKa0UpKHtvpRdL9STbz6P2
-         Q9bM3V3r2BdAA==
+        b=b/fagKtWUhKJtbRJor0oTXVyLiMPuyF+ekrSh4ajY32KOJCqwkQZC/WYTFXOcdI3Q
+         kN4IbX198yi8Tej6qJYMnQoiY5WOc4l961AtInYV0qsPonyLjEqb2FVTdEHk3U1n7O
+         AXNQU+8tJU6SLtUalujKnx85OgapVKsO8T4Mf85sH0UA8hXv6F/zn/d1qP09i1a0fA
+         VhlaDw0PhdPgJStJWwGhtZ58OZqHGCPgMkYp0a3+hUeeBJYW1NPDqq2f7MebxwdEI3
+         vdf7OGZB4WR3vLchauCrRU91A4J88OLtx4+p54t8+XAhdmyx0rWm6HZkKB5YBa88/7
+         WxwqidzJ38sbw==
 From:   Daniel Bristot de Oliveira <bristot@kernel.org>
 To:     Daniel Bristot de Oliveira <bristot@kernel.org>,
         Steven Rostedt <rostedt@goodmis.org>
@@ -40,9 +40,9 @@ Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Juri Lelli <juri.lelli@redhat.com>,
         Clark Williams <williams@redhat.com>,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V2 5/6] tracing/osnoise: Add preempt and/or irq disabled options
-Date:   Wed, 23 Nov 2022 18:06:23 +0100
-Message-Id: <78ab591cbda81b833578ee69e34c90f16438102a.1669115208.git.bristot@kernel.org>
+Subject: [PATCH V2 6/6] Documentation/osnoise: Add osnoise/options documentation
+Date:   Wed, 23 Nov 2022 18:06:24 +0100
+Message-Id: <f1a1569c22aef2744e0b787cdd414465750dc7c2.1669115208.git.bristot@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <cover.1669115208.git.bristot@kernel.org>
 References: <cover.1669115208.git.bristot@kernel.org>
@@ -57,134 +57,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The osnoise workload runs with preemption and IRQs enabled in such
-a way as to allow all sorts of noise to disturb osnoise's execution.
-hwlat tracer has a similar workload but works with irq disabled,
-allowing only NMIs and the hardware to generate noise.
+Add the documentation about the osnoise/options file, the options,
+and some additional explanation about the OSNOISE_WORKLOAD option.
 
-While thinking about adding an options file to hwlat tracer to
-allow the system to panic, and other features I was thinking
-to add, like having a tracepoint at each noise detection, it
-came to my mind that is easier to make osnoise and also do
-hardware latency detection than making hwlat "feature compatible"
-with osnoise.
-
-Other points are:
- - osnoise already has an independent cpu file.
- - osnoise has a more intuitive interface, e.g., runtime/period vs.
-   window/width (and people often need help remembering what it is).
- - osnoise: tracepoints
- - osnoise stop options
- - osnoise options file itself
-
-Moreover, the user-space side (in rtla) is simplified by reusing the
-existing osnoise code.
-
-Finally, people have been asking me about using osnoise for hw latency
-detection, and I have to explain that it was sufficient but not
-necessary. These options make it sufficient and necessary.
-
-Adding a Suggested-by Clark, as he often asked me about this
-possibility.
-
-Cc: Suggested-by: Clark Williams <williams@redhat.com>
 Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
 Cc: Steven Rostedt <rostedt@goodmis.org>
 Cc: Masami Hiramatsu <mhiramat@kernel.org>
 Cc: Jonathan Corbet <corbet@lwn.net>
 Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 ---
- kernel/trace/trace_osnoise.c | 40 +++++++++++++++++++++++++++++++-----
- 1 file changed, 35 insertions(+), 5 deletions(-)
+ Documentation/trace/osnoise-tracer.rst | 32 ++++++++++++++++++++++++--
+ 1 file changed, 30 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
-index 801eba0b5cf8..14b7f4092982 100644
---- a/kernel/trace/trace_osnoise.c
-+++ b/kernel/trace/trace_osnoise.c
-@@ -55,10 +55,17 @@ enum osnoise_options_index {
- 	OSN_DEFAULTS = 0,
- 	OSN_WORKLOAD,
- 	OSN_PANIC_ON_STOP,
-+	OSN_PREEMPT_DISABLE,
-+	OSN_IRQ_DISABLE,
- 	OSN_MAX
- };
+diff --git a/Documentation/trace/osnoise-tracer.rst b/Documentation/trace/osnoise-tracer.rst
+index 963def9f97c6..618bcdc90bb6 100644
+--- a/Documentation/trace/osnoise-tracer.rst
++++ b/Documentation/trace/osnoise-tracer.rst
+@@ -92,8 +92,8 @@ Note that the example above shows a high number of HW noise samples.
+ The reason being is that this sample was taken on a virtual machine,
+ and the host interference is detected as a hardware interference.
  
--static const char * const osnoise_options_str[OSN_MAX] = { "DEFAULTS", "OSNOISE_WORKLOAD", "PANIC_ON_STOP" };
-+static const char * const osnoise_options_str[OSN_MAX] = {
-+							"DEFAULTS",
-+							"OSNOISE_WORKLOAD",
-+							"PANIC_ON_STOP",
-+							"OSNOISE_PREEMPT_DISABLE",
-+							"OSNOISE_IRQ_DISABLE" };
+-Tracer options
+----------------------
++Tracer Configuration
++--------------------
  
- #define OSN_DEFAULT_OPTIONS	0x2
- unsigned long osnoise_options	= OSN_DEFAULT_OPTIONS;
-@@ -1308,6 +1315,8 @@ static void notify_new_max_latency(u64 latency)
-  */
- static int run_osnoise(void)
- {
-+	bool preempt_disable = test_bit(OSN_PREEMPT_DISABLE, &osnoise_options);
-+	bool irq_disable = test_bit(OSN_IRQ_DISABLE, &osnoise_options);
- 	struct osnoise_variables *osn_var = this_cpu_osn_var();
- 	u64 start, sample, last_sample;
- 	u64 last_int_count, int_count;
-@@ -1335,6 +1344,14 @@ static int run_osnoise(void)
- 	 */
- 	threshold = tracing_thresh ? : 5000;
+ The tracer has a set of options inside the osnoise directory, they are:
  
-+	/*
-+	 * IRQ disable also implies in preempt disable.
-+	 */
-+	if (irq_disable)
-+		local_irq_disable();
-+	else if (preempt_disable)
-+		preempt_disable();
+@@ -109,6 +109,27 @@ The tracer has a set of options inside the osnoise directory, they are:
+  - tracing_threshold: the minimum delta between two time() reads to be
+    considered as noise, in us. When set to 0, the default value will
+    be used, which is currently 5 us.
++ - osnoise/options: a set of on/off options that can be enabled by
++   writing the option name to the file or disabled by writing the option
++   name preceded with the 'NO_' prefix. For example, writing
++   NO_OSNOISE_WORKLOAD disables the OSNOISE_WORKLOAD option. The
++   special DEAFAULTS option resets all options to the default value.
 +
- 	/*
- 	 * Make sure NMIs see sampling first
- 	 */
-@@ -1422,16 +1439,21 @@ static int run_osnoise(void)
- 		 * cond_resched()
- 		 */
- 		if (IS_ENABLED(CONFIG_PREEMPT_RCU)) {
--			local_irq_disable();
-+			if (!irq_disable)
-+				local_irq_disable();
++Tracer Options
++--------------
 +
- 			rcu_momentary_dyntick_idle();
--			local_irq_enable();
++The osnoise/options file exposes a set of on/off configuration options for
++the osnoise tracer. These options are:
 +
-+			if (!irq_disable)
-+				local_irq_enable();
- 		}
++ - DEFAULTS: reset the options to the default value.
++ - OSNOISE_WORKLOAD: do not dispatch osnoise workload (see dedicated
++   section below).
++ - PANIC_ON_STOP: call panic() if the tracer stops. This option serves to
++    capture a vmcore.
++ - OSNOISE_PREEMPT_DISABLE: disable preemption while running the osnoise
++   workload, allowing only IRQ-related and hardware-related noise.
++ - OSNOISE_IRQ_DISABLE: disable IRQs while running the osnoise workload,
++   allowing only NMIs and hardware-related noise, like hwlat tracer.
  
- 		/*
- 		 * For the non-preemptive kernel config: let threads runs, if
--		 * they so wish.
-+		 * they so wish, unless set not do to so.
- 		 */
--		cond_resched();
-+		if (!irq_disable && !preempt_disable)
-+			cond_resched();
- 
- 		last_sample = sample;
- 		last_int_count = int_count;
-@@ -1450,6 +1472,14 @@ static int run_osnoise(void)
- 	 */
- 	barrier();
- 
-+	/*
-+	 * Return to the preemptive state.
-+	 */
-+	if (irq_disable)
-+		local_irq_enable();
-+	else if (preempt_disable)
-+		preempt_enable();
+ Additional Tracing
+ ------------------
+@@ -150,3 +171,10 @@ tracepoints is smaller than eight us reported in the sample_threshold.
+ The reason roots in the overhead of the entry and exit code that happens
+ before and after any interference execution. This justifies the dual
+ approach: measuring thread and tracing.
 +
- 	/*
- 	 * Save noise info.
- 	 */
++Running osnoise tracer without workload
++---------------------------------------
++
++By enabling the osnoise tracer with the NO_OSNOISE_WORKLOAD option set,
++the osnoise: tracepoints serves to measure the execution time of
++any type of Linux task, free from the interference of other tasks.
 -- 
 2.32.0
 
