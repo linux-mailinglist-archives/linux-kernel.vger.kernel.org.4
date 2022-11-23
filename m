@@ -2,148 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40A2D635731
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:41:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62D51635778
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:43:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237978AbiKWJkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 04:40:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59776 "EHLO
+        id S238108AbiKWJmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 04:42:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238006AbiKWJjq (ORCPT
+        with ESMTP id S238110AbiKWJl5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 04:39:46 -0500
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2083.outbound.protection.outlook.com [40.107.22.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FF9F1A
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:37:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AzVjYFI7anG0jg4L5qgC+pSMdtzcQstZSQdUI7YYd9CGUYAbFDKzmWFba/Kt4TX5RqECu8FZqJ4Q2txQFwUhNXO+Tjryf5p3Zu87eyagS4KStBVU9cK6vHxDua/xBR0v39682kpyDnLFIOgMtymsbCxIEbw+YzPch9t9fW7NtD1SSNDYS0WZO9X8sUB8xj4Mj0+ZKdubNsm6ukgd20ipn0toUKtyCHwoOvIbRZOJsegm2L4EDHFCjl7312rdBTAFW3GOuKzQA9E43fpViJiDK/+5xFJqTW9Mgyq0U7yIkGi0DPpQYh6lSEBjRrX/fkSvYT8p9zhBgEw7aaVJB3yslQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=x5ty3CLTZ0hocY15yoErpTVc1qvUG4mLefS0k4LtJ8I=;
- b=Va84C3FqeJcUyNy5eMp469qv0bTS4KobtGM+aQjZ5Kv4lqkxWPWBj9rzm4PQ5JyNHWsaBMTsRzOnoAfNu4G/Rrxz/xfpMcJ9QfK1rAyAz8RBNV1rXE/Ee6FsSInNwWkUyiolVApjObBYPZaPFKDmsGuU7rjTLKdOaoMtiIEAx4qCEF/qjsA/mmwMJSQvnsv6pyC1I2Yrl9Nm0HiJm+x54MtXkJfi+7OQWWvUkcfvKmKxZdOygKqm/qCPlyB7TNUBh9AGpAnpudrmXgb2spmsaZO6862qay/z1YnMn5buJ3wfw1ZsjTtvn+XAGsG2AOgbEogyPJSzhXY0vA5tLs5VHA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=x5ty3CLTZ0hocY15yoErpTVc1qvUG4mLefS0k4LtJ8I=;
- b=uahANS8slMezmCHiQtiKlc2m32VyUchqus1OmguGOWpKd8VnVSIKPWYaPI+eS1dL1m1atWlAy2Ashb4gFwlU62wHPa4UKdi2m8Vt6sNbZ7Oxmnf1M+3DGaP5MD23ADyp+irHbEzexn4wntl29mn+Kszdq7X5g0iPXFv628dy7k/Sf+DSSDgOE3zUFJmf0e5oFN67mLvn1qjmd0oAlDkDH1LLGHc+dG6P318kGeaYxnGfilnRz5rWrtyWKcY1z9Hd/46VJx1RffqT3splrX3E3mZ5zk1IIPys1il3MwYHOy6RYQbd6R5ITYZDEAGnvldw9owUz0GrD1WrGOzJQQYj9w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VE1PR04MB6560.eurprd04.prod.outlook.com (2603:10a6:803:122::25)
- by AM9PR04MB8858.eurprd04.prod.outlook.com (2603:10a6:20b:409::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.11; Wed, 23 Nov
- 2022 09:37:26 +0000
-Received: from VE1PR04MB6560.eurprd04.prod.outlook.com
- ([fe80::4da2:ea8b:e71e:b8d8]) by VE1PR04MB6560.eurprd04.prod.outlook.com
- ([fe80::4da2:ea8b:e71e:b8d8%4]) with mapi id 15.20.5834.015; Wed, 23 Nov 2022
- 09:37:25 +0000
-Message-ID: <1a9a16d9-221e-6fa4-0ace-fd6e8afaaa4a@suse.com>
-Date:   Wed, 23 Nov 2022 10:37:24 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 3/3] x86/xen: add a dummy trampoline for Xen PV guests
-Content-Language: en-US
-To:     Juergen Gross <jgross@suse.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org
-References: <20221122163810.29752-1-jgross@suse.com>
- <20221122163810.29752-4-jgross@suse.com>
-From:   Jan Beulich <jbeulich@suse.com>
-In-Reply-To: <20221122163810.29752-4-jgross@suse.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0145.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:95::8) To VE1PR04MB6560.eurprd04.prod.outlook.com
- (2603:10a6:803:122::25)
+        Wed, 23 Nov 2022 04:41:57 -0500
+Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.129.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9CF2496B
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:38:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxlinear.com;
+        s=selector; t=1669196310;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=snnPHsyd/Qhx5KJd9fBl0Y9Ma33VHoI9AV2EG5SzY40=;
+        b=QRdQUlfGKJrMn1PWjJrirlbtu1P2zbsvBGN5e7RZdmmnocHNuYYPntRl/dAm6lTGWeRiXP
+        KboqUBFWNYsK2fesSSHPdrjFwXb07b/aodg9qXl4BvkvfX+MXnGbALXiDAsW8WFnc7oLDO
+        ZCWJBDLLvabHNHn8/fEYpSYL2H3cZnJEG/W5FC0zP0xA+YJlvKNBRv2dUZb/gjZr2dnfjW
+        UxKIylyOlwAeSu/Quhc3pgDb+MvJYSvMAykvBcPJdh3nkRhHr1GUR1q8sd9J9ulyfrlBeI
+        zfmgbZnVgmp3Cd3fm/2uNsC0NGpyc4oCRUGh3jqiKVzsa5FuvcF1dkHds1cyLg==
+Received: from mail.maxlinear.com (174-47-1-83.static.ctl.one [174.47.1.83])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ us-mta-467-kY69ENp4N4yBz58jtm-Vuw-1; Wed, 23 Nov 2022 04:38:29 -0500
+X-MC-Unique: kY69ENp4N4yBz58jtm-Vuw-1
+Received: from sgsxdev001.isng.phoenix.local (10.226.81.111) by
+ mail.maxlinear.com (10.23.38.120) with Microsoft SMTP Server id 15.1.2375.24;
+ Wed, 23 Nov 2022 01:38:21 -0800
+From:   Rahul Tanwar <rtanwar@maxlinear.com>
+To:     Rahul Tanwar <rtanwar@maxlinear.com>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Borislav Petkov" <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, <linux-lgm-soc@maxlinear.com>
+Subject: [PATCH v4 0/4] x86/of: Add support for interrupt mode config for x86 OF systems
+Date:   Wed, 23 Nov 2022 17:38:16 +0800
+Message-ID: <20221123093820.21161-1-rtanwar@maxlinear.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VE1PR04MB6560:EE_|AM9PR04MB8858:EE_
-X-MS-Office365-Filtering-Correlation-Id: d2cd3074-9759-44f8-342f-08dacd36547b
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /JEJ1A1tsKVMY1X+NXNp5Doav6TVzAqldaZuxe5i9Tf266fIsAK1T0623sI+Q2PneAhBZxUKxtuKptbX6egWoYac7XiZfrA5RZDxe/bhJ4lifHCQDNyS3mPB3PmxehG3rGsDvH4oTena9KkCxn7fCgxCTLbycA9m+FhrMgEZrJvhNw5118+eas/luA4Lko6ZnZzwxL6L+8tE7jQWwi325Axm1vW8N/5m4OQ3DPW1ycjl4WJ/zfPmOdVKzihLtKXcwkdXXZAf25cut9pVlK8g1E9ky3ER3Hr/BWTnxLzci3MqZj0TYkCHDrmP3R6VcYBfjt+VasOEgjp1FT2wds7EzyKz6n16iC6erC3XPVnXD12ePAXa+qtNpo63QmwrubaFDJ2H8izScliamBJB1e2Vyumyjp5RYK3j8oLRbi8kw20tVVfhM/Q9s3rMXOuRHxeYhA4urQcOpK6yV198mdR7X/lLVToUOeroXHyPZrN9CMe+P4Pv4Avz91hRJoGR5GwyNSVAqZM7kPSz2WnELj7Chzd1QN5c0MeB4LidqEKVuVlcCWSxogpKD4wu3fXFmY/ovvrXrC01xjKEuP9R7Fwo1XaQcQoohvfsdHjqncocBIY9QT8As32Pzbsmw8jX61qlGw2FLZcRD2WDW6VDOaiZ8qxPzW1t764P5229Ne8g4ljZ14X22zsH7tUPhqUIFLSLIFY7rfJuT6smD+a3Okm+d+6Q0OEkQVHklIQ0mOi/O5I=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6560.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(346002)(366004)(396003)(136003)(39860400002)(451199015)(8676002)(316002)(31696002)(86362001)(66946007)(66476007)(4326008)(36756003)(5660300002)(4744005)(6862004)(6512007)(41300700001)(8936002)(53546011)(186003)(478600001)(26005)(6506007)(6486002)(2616005)(37006003)(38100700002)(6636002)(66556008)(54906003)(31686004)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bFlPSzJlNEZFSDdsdnpZbnEwQWFLQXJncW04S2cwYVdkczlPeGpUZUx2QVVI?=
- =?utf-8?B?cThRZXNZSG9RdGpTMFFvRE05a29iOG1yanlpQ0Nud3F0aVloelpOelk1UkRo?=
- =?utf-8?B?aWxhSWsyUTdvc0IrcWQ0N3dxT29OL1JyTXFwODM3d3JLQTluV09FaTZ3WU1W?=
- =?utf-8?B?aFBYem9HTldkYkhQNUlCdUM3b21WS1FpOEYzWkpuem4xVitwT0IyNGlmcmg3?=
- =?utf-8?B?V1dNeHliNmlha0duMS9vaHlVQWNKNytJYXFLTDNMWXphdFhGWGF2ZkFpcVVN?=
- =?utf-8?B?T2dvTFUvTmFrMTdaOHBEd3dyYXNyWUpuTzBjUThtRU14MytjUzBQL1QwR0pm?=
- =?utf-8?B?dFFEdThoYVFhSGsrQnQxY0lsVUYzSHRDczlGeUtxYUdFam1lbjRBbDVDQmJH?=
- =?utf-8?B?d3o2Qk1zQ0czWVQxRkp1cG41bForTDVYRWc0enJwZXJwZXJycGJHOG1IK2wz?=
- =?utf-8?B?WnMrdmk4YnBIaXpiTkFubDFzNHhPZW1PeGdXZWw2N1djNDMvdVFScHRHZFZB?=
- =?utf-8?B?cWZETWJWRFdINUhpTlp6MXRqYzJCMm5Uc0hHRnJaWW5YcUp5UFloZFRzc3Bn?=
- =?utf-8?B?YnVGZ3NtQkt6VjhBUnlpYU9ES0ZpUlRXUDE0MS80bkZnREpXUnBpbW1IUmhU?=
- =?utf-8?B?UGFxTmRIK09QRG5TVzh3TXJxN1d1OFdjYmtITFZLTWNET3k0MUZEUnpqWFgv?=
- =?utf-8?B?ekxTd1g1eXNidHgwK050SlhMdHVDTTZ2RlljNDFWMU9LZzBrMlpSQ0R5QzA0?=
- =?utf-8?B?dE0wdTlwRmlDL2U3N09SSHRqTXpzUnUzWFRNN0xpRkdybldaY3ZyQjVRbVJx?=
- =?utf-8?B?N3pCa2ZkNjdvSTNLdElaaXNvNE90bmo3ejNDV2ZWc002azlFclhadkFVMHpX?=
- =?utf-8?B?Vms5OW9vbjBCQ2pNcFBwSDhqMnFRNTRJUmJPRWgyb05odUlpSFpJNmt5WFhG?=
- =?utf-8?B?V2pic1RPZzdTWGZId1pWNmtiT0RKTm04VGhnUU9NOWxXVUdwdThSK3Z1eXVL?=
- =?utf-8?B?T3FvOGtORmRvb0NBZTlGcGJ3dlBsTjRSYVRVUElkNE9VaWtKenhqS1lrVXBy?=
- =?utf-8?B?VWRtY21oRVY0UjkzTFBHRHV2aVYyOHltdUpzZndrQmxQZ0ZiS3Z0RHJtUXYz?=
- =?utf-8?B?YUNBNEFCRXhPeTZQcmFsdUloQkdkeUozTFJXTGhRZ1lmaG9aTFFmMXFoTTNB?=
- =?utf-8?B?eG5Bckk2ZWxab1RXb2ZNOUwvNlNVRzRGczkvNGR3cy9HNlZnMVpUN0VLbnZk?=
- =?utf-8?B?dVhkYUVOdGdzSVdzb1g2TFRaTHhaMnZRdHluTkhValRRWVBBOFJCWXNvMEtV?=
- =?utf-8?B?M29OS2tPWXRFc0F2eE9lc2NGRGJKRXhtaDd2TXZ0Q1lwellsd2RMUTFMK1U3?=
- =?utf-8?B?aDc5YnRYSUVtMnNLM3IzL2xJd0xmQzY4NVNoc3FEZnkwK3NqeWZvZ1dWaGt5?=
- =?utf-8?B?MStYK3ZZRisvbU9HYkxYQTVOTktrNkdSblRydXpDVmZiWGdXa3UwNlBBNDBX?=
- =?utf-8?B?bmorZ2VIeVdYQXpUL3Z1bk1oRjRnN0lydVZicmxIYlVjbEZVY1dja1VJdDM0?=
- =?utf-8?B?anNBVXIzNWZ2TGV5QUttZVVEek9INVk0eDBuelRyUXg5UFRQQVR2Ri82SFNn?=
- =?utf-8?B?dFVPck5sQ2dFODZzang2eDIxUGVTUTB3enVhMU4xY3VpMGU1Q1FUdENtYzlq?=
- =?utf-8?B?Y2F2dVdINy9zeTBCcW5DUnJYQzVVTk5XbldRdUFVZmd3WUxkcjJnWDRRZFNu?=
- =?utf-8?B?K1JmRjdpVDFEWDd5K0dhb0pyd0REYkNmYzNSaHViNE1pN1BxaXBscXBMelY4?=
- =?utf-8?B?ajJ2dzJPWW5RcWl2N3RENXJrSjVuR0p4aWNZN1JJQWdFbGRGVStKWng0dnVU?=
- =?utf-8?B?aWJ2dUQ4NjJSS1MyNmpxUGgvUHBEaVdtZ1lYRHpkaXJPRi8vOEVDR0ZzdjI1?=
- =?utf-8?B?UEVPaHE0N1hhWm44SHdVTjhWMlVRTkw4citkSnNOV1cvUThoOWNOa3pHVWJI?=
- =?utf-8?B?K25uYlVuOEpOWmxCQlppQk5mOHNIZ1JHcWdsQlN0OW1VbGEyNTlIU0Y2R1Rw?=
- =?utf-8?B?cUJ2RHNqY3BBdDhMbVYvNllFUUZQc1JubjYxZWZhYm5XYjNhY3h4ODduUDZC?=
- =?utf-8?Q?pI/+elSyCG1YQSjtxqbw/kmgV?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d2cd3074-9759-44f8-342f-08dacd36547b
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6560.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2022 09:37:25.7509
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Q94exXPPITLJRrX4O4d/1RterQG4+qNQSFHCJ6p4b1Q4hHSoRYg91a2B4awodEo1stBZjwTMODPtbJwCkdNvMw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8858
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: maxlinear.com
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.11.2022 17:38, Juergen Gross wrote:
-> @@ -137,12 +138,28 @@ static void __init xen_pv_init_platform(void)
->  	xen_init_time_ops();
->  }
->  
-> +static struct real_mode_header xen_rm_header;
-> +
-> +static __initdata struct trampoline_ref xen_dummy_trampoline = {
-> +	.blob = (unsigned char *)&xen_rm_header,
-> +	.blob_end = (unsigned char *)&xen_rm_header,
+Hi All,
 
-With both pointing to the start of the struct, doesn't it suffice
-for the above to be xen_rm_header[0]? At which point there'd be no
-reason to wonder whether that struct could live in .init.data ...
+This patch series mainly adds a boot time interrupt delivery mode
+configuration option for OF based x86 platforms. Presently,
+boot time interrupt delivery mode is hardcoded to legacy PIC mode
+with no option to configure it to virtual wire mode. This patch
+series aims to extend it by introducing a new optional boolean
+property for lapic devicetree node which can be used to configure
+it to virtual wire mode where applicable. Please find below detailed
+rationale behind it in case you want more details about it.
 
-Jan
+Rationale:
+
+References [1], [2] & [6]
+
+For SMP systems, Intel defines three (logically four) interrupt modes
+during boot/init time while BIOS/bootloader boots & switches to linux
+kernel.
+
+  1. PIC mode - Legacy 8259 PIC interrupt controller.
+  2. Virtual wire mode via Local APIC - uses local APIC as virtual wire
+  3. Virtual wire mode via I/O APIC - uses I/O APIC as virtual wire
+  4. Symmetric I/O mode - final one used by linux for SMP systems.=20
+
+BIOS/bootloaders are supposed to boot in either #1 or #2 or #3 and then
+switch to #4 in linux for SMP systems.
+
+For our platform, we use #2.
+
+Detection of which interrupt mode the system is booting in is made by using
+below global variable in apic.c
+
+int pic_mode __ro_after_init;=20
+
+Here pic_mode =3D 1 means #1 (PIC mode) above.
+And pic_mode =3D 0 means #2 or #3 (basically virtual wire mode via apic).
+
+And apic.c while doing setup_local_APIC() uses below code [3]:
+
+        value =3D apic_read(APIC_LVT0) & APIC_LVT_MASKED;
+        if (!cpu && (pic_mode || !value || skip_ioapic_setup)) {
+                value =3D APIC_DM_EXTINT;
+                apic_printk(APIC_VERBOSE, "enabled ExtINT on CPU#%d\n", cpu=
+);
+        } else {
+                value =3D APIC_DM_EXTINT | APIC_LVT_MASKED;
+                apic_printk(APIC_VERBOSE, "masked ExtINT on CPU#%d\n", cpu)=
+;
+        }
+        apic_write(APIC_LVT0, value);
+
+What i understand from above is that if at this point of time, as long as
+it is cpu0 & pic_mode=3D1, it will set delivery mode to ExtINT (causes the
+processor to respond to the interrupt as if the interrupt originated in an
+externally connected (8259A-compatible) interrupt controller) and enables/
+unmask the interrupts. This causes kernel boot crash for platforms which
+does not support 8259 compatible external PIC.
+
+pic_mode is presently set/populated/initialized at only two places:
+ 1. In  mpparse.c [4]
+ 2. In devicetree.c [7]
+
+For #1 MPPARSE Kconfig definition is as below:
+
+=09config X86_MPPARSE
+        =09bool "Enable MPS table" if ACPI
+        =09default y
+        =09depends on X86_LOCAL_APIC
+        =09help
+          =09For old smp systems that do not have proper acpi support. Newe=
+r systems
+          =09(esp with 64bit cpus) with acpi support, MADT and DSDT will ov=
+erride it
+
+As seen above, if ACPI is not enabled, then mpparse by default is always
+enabled. Presently, there is no way to disable MPPARSE (if ACPI is not
+enabled). This to me appears to be a bug which needs fixing. As per
+theory, MPPARSE was to support MPS spec [1] as a temporary solution to
+support SMP systems until a final ACPI standard was added. But now if ACPI
+is not enabled, it will rely on MPPARSE driver to read MP floating pointer
+structure's IMCRP Bit 7 of MP feature info byte 2 [5] to figure out if it
+supports PIC mode or virtual wire mode and initialize pic_mode variable
+accordingly. If ACPI is enabled, the ACPI code overrides it by using the
+MADT table spec'ed in ACPI spec [2].=20
+
+For #2 devicetree.c presently hardcodes pic_mode =3D 1 (PIC Mode). There is
+no support to configure virtual wire mode via devicetree path for OF based
+systems.
+
+Now we have a platform which is OF based & does not use legacy 8259 PIC
+interrupt controller. Non ACPI compliant as well as non MPPARSE compliant.
+
+For such platforms, it appears to me that hardcoding pic_mode =3D 1 (PIC Mo=
+de)
+and giving no other choice to choose virtual wire mode is a lacking feature=
+.
+
+Just like mpparse relies on IMCRP bit 7 of MP feature info byte2 [5] to
+select pic_mode to PIC mode or virtual wire mode. arch/x86/kernel/devicetre=
+e.c
+should also provide some similar configurability to choose interrupt
+delivery mode & not hardcode it to PIC mode.
+
+This patch is to add above mentioned interrupt mode configurability in x86/=
+of
+controlled via a new optional bool property.
+
+Please let me know if you find any mistake in above understanding or if you
+have a alternative better suggestion to solve it or if you find anything od=
+d
+here in our platform/system. TIA.
+
+The patch is baselined on below git tree (linux-v6.1.0-rc6):
+git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+
+[1] https://pdos.csail.mit.edu/6.828/2008/readings/ia32/MPspec.pdf
+[2] https://uefi.org/sites/default/files/resources/ACPI_6_3_final_Jan30.pdf
+[3] https://elixir.bootlin.com/linux/v6.1-rc5/source/arch/x86/kernel/apic/a=
+pic.c#L1691
+[4] https://elixir.bootlin.com/linux/v6.1-rc5/source/arch/x86/kernel/mppars=
+e.c#L517
+[5] https://www.manualslib.com/manual/77733/Intel-Multiprocessor.html?page=
+=3D40#manual
+[6] https://www.intel.com/content/www/us/en/developer/articles/technical/in=
+tel-sdm.html
+[7] https://elixir.bootlin.com/linux/v6.1-rc5/source/arch/x86/kernel/device=
+tree.c#L170
+
+v4:
+- Address review concerns from Andy Shevchenko
+  * Update maintainers in binding files.
+  * Place URL in YAML schema properly as reference.
+  * Remove some unnecessary comments from YAML description.
+  * Remove fixes tag & not treat it as a bug. Treat it as new feature addit=
+ion instead.
+  * Use proper prefixes for bindings file (dt-bindings: x86: ioapic:)
+  * Add Reviewed-by tag from Andy for patch 3/4.
+
+v3:
+- Address review concerns from Andy Shevchenko
+  * Reshuffle patch series changes to make it more logical.
+  * Patch 1 just converts existing intel,ce4100-ioapic.txt into
+    YAML schema and separates out ioapic & lapic.
+  * Patch 2 adds new optional property for lapic.
+  * Patch 3 replaces older printk(KERN_LVL) to newer pr_lvl()
+  * Patch 4 adds code changes in devicetree.c to support newly
+    added property.
+- Fix 'make DT_CHECKER_FLAGS=3D-m dt_binding_check' errors reported
+  by Rob Herring's bot.
+
+v2:
+- Address review concern from Andy - rename property name to make
+  it a bit more positive & self explanatory.
+- Found that the bindings document for these HW's (APIC) are a bit
+  off/obsolete and still in text format. Created new YAML schemas
+  one for each - lapic & ioapic. Updated these schemas with latest
+  info and add in new optional property details in the updated
+  schema for lapic. Delete/let go of the text binding doc.
+- CC devicetree@vger.kernel.org as these changes appear to be
+  mainly targeted for devicetree maintainers review & approval.
+- Increase CCed list to include all possible people who touched
+  and were involved this part of code/feature addition.
+
+v1:
+- Initial draft
+
+
+Rahul Tanwar (4):
+  dt-bindings: x86: apic: Convert Intel's APIC bindings to YAML schema
+  dt-bindings: x86: apic: Introduce new optional bool property for lapic
+  x86/of: Replace printk(KERN_LVL) with pr_lvl()
+  x86/of: Add support for boot time interrupt delivery mode
+    configuration
+
+ .../intel,ce4100-ioapic.txt                   | 26 --------
+ .../intel,ce4100-ioapic.yaml                  | 62 ++++++++++++++++++
+ .../intel,ce4100-lapic.yaml                   | 63 +++++++++++++++++++
+ arch/x86/kernel/devicetree.c                  | 13 +++-
+ 4 files changed, 135 insertions(+), 29 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/=
+intel,ce4100-ioapic.txt
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/=
+intel,ce4100-ioapic.yaml
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/=
+intel,ce4100-lapic.yaml
+
+--=20
+2.17.1
+
