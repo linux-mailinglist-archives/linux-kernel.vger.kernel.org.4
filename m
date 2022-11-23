@@ -2,70 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0827635F3D
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:21:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F01E6635F40
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:22:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237390AbiKWNVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 08:21:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55868 "EHLO
+        id S238648AbiKWNWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 08:22:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236567AbiKWNVT (ORCPT
+        with ESMTP id S238206AbiKWNV4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 08:21:19 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C021255C8;
-        Wed, 23 Nov 2022 05:00:12 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id p10-20020a9d76ca000000b0066d6c6bce58so11127136otl.7;
-        Wed, 23 Nov 2022 05:00:12 -0800 (PST)
+        Wed, 23 Nov 2022 08:21:56 -0500
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C1029803;
+        Wed, 23 Nov 2022 05:00:58 -0800 (PST)
+Received: by mail-ot1-x32a.google.com with SMTP id db10-20020a0568306b0a00b0066d43e80118so11168854otb.1;
+        Wed, 23 Nov 2022 05:00:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=K4ZYfQ//8JxmSnWwTP0M4RgT7Cewn6kgcf+fVm07+o0=;
-        b=f9SGocttobr5iv9AxBeSrp68swrh9OM7wb0KL9CDgUQWBKoY77+CJkljw5GKxw9pVr
-         fKlWq4DBHLeRCYMQbS4kzz67FrL82Od/qtOST+m+z6DI0sijQ4M9hdRy2n0NSq2y3TmZ
-         HpLmtclTjoES5rp2G7elHSGvX4IUMAHPkideWT2/q93pgT1RaA2mmh1Kj9tTSY3AiZFY
-         f677+wFiRBS+/jcHEknbqfLYstuzUDDhkAtEsoUmoR1aiBtViAs2EvCDjndjA7L9Nwvo
-         s4L+O8Ats4YDySCw96awSp/w7sYzJIVTIaPUMUSucJz/mhyDRWuWGD835lmP71pN2iX7
-         PoRQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=uszX2YXhRo8OdMXZRubKyG6XQTLJS1i6JFk/Tk+AzJE=;
+        b=m9MCSmpbqdRH7+4KQyPsB99jGimXLvL7T8+W9hpeQ4oh8sBgsasHUj4lQBUv23vkaO
+         z593kbo6lONHYoUM0keJSXJKoNPld2g0MUMCWNtEmrduHeKQVT0qwQVZRidiGAmkySuJ
+         YByc//Bz9M+VuH8+BuojV5mAMc/yM2bBIFPk/RogKUdhcJH6MUPcFM+DH7Vu8GwEPhbY
+         Wsr8/XLzVIJvWs7w7x34FhncgBiSn15ih0ZUD3QOFPS7bs1LQAu7VgQMhUYFE11ffTdt
+         SubCzz6GYCEnp21hpbM+YZIh/LdYMpqfPAT7UgdF6c/wtBNVGeLCdKF5O8wOT9i69j6X
+         EdJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K4ZYfQ//8JxmSnWwTP0M4RgT7Cewn6kgcf+fVm07+o0=;
-        b=j24jbCp/1XJJLa5+nnovk2qI+wqHnFbD2qklqsBcnogulpfhdxE6b+d56uqWW0bZr+
-         xf+9saIuhWg1yIzMJToUbbkimPs5uSgubEb0/EdrxeHV9vipG/gt8WyOKe2RnA/PO0Wb
-         JyR1xuJsM2mQH91w/AjzoR1BzynKTIG9+ajB7+YPaCWEhyDv24zILFJfCaJ+yoQKZmXz
-         fWubsppYmrJujSrPIlpBts4PH+LFVu9Nh7QFRyJT3rzwburZ6kUgjErQMVRd0l7npPvB
-         6gTas+WkGSHqd9r/PG/27WHOr1h8Gt9uAE/y0mhyYdcOrDdmyhrQI13OJm+EZ+3poXSL
-         C5Gg==
-X-Gm-Message-State: ANoB5plUQlxIuqOF1pact+3zvQHT4h+Y05m6aGSZ2PwNnJoLXlhJml+C
-        QdRGfd1XwITcLjPNKPL1GaA=
-X-Google-Smtp-Source: AA0mqf5b3W1P7Ye05qcAkMoY5K2OkuivuV2/hQ7idLXXh+0tdtrFJIbVWPqsny6OhdgQwh7ePtxd/g==
-X-Received: by 2002:a9d:6486:0:b0:66d:ca7a:8b1a with SMTP id g6-20020a9d6486000000b0066dca7a8b1amr5914858otl.55.1669208407200;
-        Wed, 23 Nov 2022 05:00:07 -0800 (PST)
-Received: from t14s.localdomain ([2001:1284:f016:5412:fa8e:2d33:bd7c:54c7])
-        by smtp.gmail.com with ESMTPSA id k17-20020a0568301bf100b0066dfa0d9c1dsm3114806otb.11.2022.11.23.05.00.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 05:00:06 -0800 (PST)
-Received: by t14s.localdomain (Postfix, from userid 1000)
-        id 18B5C459C23; Wed, 23 Nov 2022 10:00:04 -0300 (-03)
-Date:   Wed, 23 Nov 2022 10:00:04 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Firo Yang <firo.yang@suse.com>
-Cc:     vyasevich@gmail.com, nhorman@tuxdriver.com, mkubecek@suse.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        firogm@gmail.com
-Subject: Re: [PATCH 1/1] sctp: sysctl: referring the correct net namespace
-Message-ID: <Y34ZVEeSryB0UTFD@t14s.localdomain>
-References: <20221123094406.32654-1-firo.yang@suse.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uszX2YXhRo8OdMXZRubKyG6XQTLJS1i6JFk/Tk+AzJE=;
+        b=o5Q0yceBw2Cm0K6O0Gin4kZsrSB5dQ/e2cLj0hR7SzDd/r1Orhpkzil0rukc1oAYqQ
+         SkkATUYmk9Yrq1AOST5DpLfY2JwFdLXcZaXncU4lAIOCCVaVF00iI5aJHfbtPPnBUwTF
+         EfqL6xu9/Q8Zof410vE1GFxHzKaYUklm8f/VSvz1Sk+n+8m00piK1AF7UN0Ck9BoBWI4
+         ObGRYYMR0e9M323F3ERayjKpu8DYgCp5lx6ur6oszqah/MP8mZq8DudywGdziDpx3Y8G
+         7pLN7KL9F/0ZUqbs8YHWudPk4v3w96dC6PszgTjJbeA0I2UbnrdHn4tHw0755dZTpBXY
+         1j+A==
+X-Gm-Message-State: ANoB5pmnqspdqckNRFFnh8TR320p6IqMbCajarY1CC4DmzHm8DrCDHs8
+        CXo5t6Xb6KTozoabCcTBQUHiNj9nQXNnoInIBPzgkH04
+X-Google-Smtp-Source: AA0mqf7avOQ6ZK8U0u3gEKBiDn/0RxoSiJmw1vU8Ce22fs45vbIEnoivj5POkfo2QWMtctbK4jmNIv+38GUoGZfVeNk=
+X-Received: by 2002:a9d:4f07:0:b0:662:c31:161c with SMTP id
+ d7-20020a9d4f07000000b006620c31161cmr7801332otl.301.1669208457897; Wed, 23
+ Nov 2022 05:00:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221123094406.32654-1-firo.yang@suse.com>
+References: <20221116200150.4657-1-linux.amoon@gmail.com> <20221116200150.4657-5-linux.amoon@gmail.com>
+ <19f1a4fb-42b2-580d-3736-e0e1d0cfe7fb@wolfvision.net>
+In-Reply-To: <19f1a4fb-42b2-580d-3736-e0e1d0cfe7fb@wolfvision.net>
+From:   Anand Moon <linux.amoon@gmail.com>
+Date:   Wed, 23 Nov 2022 18:30:36 +0530
+Message-ID: <CANAwSgT-M0sizZz1b-549HoG7Yj4ubfiG19ecvUi=AWD1mZQ3Q@mail.gmail.com>
+Subject: Re: [linux-next-v2 4/5] arm64: dts: rockchip: Add support of
+ interrupt to ethernet node on Rock 3A SBC
+To:     Michael Riesch <michael.riesch@wolfvision.net>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Chukun Pan <amadeus@jmu.edu.cn>,
+        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -76,102 +74,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 05:44:06PM +0800, Firo Yang wrote:
-> Recently, a customer reported that from their container whose
-> net namespace is different to the host's init_net, they can't set
-> the container's net.sctp.rto_max to any value smaller than
-> init_net.sctp.rto_min.
-> 
-> For instance,
-> Host:
-> sudo sysctl net.sctp.rto_min
-> net.sctp.rto_min = 1000
-> 
-> Container:
-> echo 100 > /mnt/proc-net/sctp/rto_min
-> echo 400 > /mnt/proc-net/sctp/rto_max
-> echo: write error: Invalid argument
-> 
-> This is caused by the check made from this'commit 4f3fdf3bc59c
-> ("sctp: add check rto_min and rto_max in sysctl")'
-> When validating the input value, it's always referring the boundary
-> value set for the init_net namespace.
-> 
-> Having container's rto_max smaller than host's init_net.sctp.rto_min
-> does make sense. Considering that the rto between two containers on the
-> same host is very likely smaller than it for two hosts.
+Hi Michael,
 
-Makes sense. And also, here, it is not using the init_net as
-boundaries for the values themselves. I mean, rto_min in init_net
-won't be the minimum allowed for rto_min in other netns. Ditto for
-rto_max.
+Thanks for your review comments.
 
-More below.
+On Tue, 22 Nov 2022 at 21:40, Michael Riesch
+<michael.riesch@wolfvision.net> wrote:
+>
+> Hi Anand,
+>
+> On 11/16/22 21:01, Anand Moon wrote:
+> > As per the shematic gmac1 support gpio interrupt controller
+>
+> Typo "shematic" -> "schematic"
+Ok,
+>
+> > GMAC1_INT/PMEB_GPIO3_A7 add the support for this.
+>
+> Maybe split the commit message into two proper sentences.
 
-> 
-> So to fix this problem, just referring the boundary value from the net
-> namespace where the new input value came from shold be enough.
-> 
-> Signed-off-by: Firo Yang <firo.yang@suse.com>
-> ---
->  net/sctp/sysctl.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/net/sctp/sysctl.c b/net/sctp/sysctl.c
-> index b46a416787ec..e167df4dc60b 100644
-> --- a/net/sctp/sysctl.c
-> +++ b/net/sctp/sysctl.c
-> @@ -429,6 +429,9 @@ static int proc_sctp_do_rto_min(struct ctl_table *ctl, int write,
->  	else
->  		tbl.data = &net->sctp.rto_min;
->  
-> +	if (net != &init_net)
-> +		max = net->sctp.rto_max;
+Ok this Interrupt is used for Power Management Event (supports 3.3V pull up).
+Set low if received a magic packet or wake up frame; active low.
+so this interrupt is used for suspend / resume.
 
-This also affects other sysctls:
+> >
+> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> > ---
+> > v2: new patch added
+> > ---
+> >  arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts | 10 +++++++++-
+> >  1 file changed, 9 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts b/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
+> > index 5378254c57ca..9f84a23a8789 100644
+> > --- a/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
+> > +++ b/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
+> > @@ -588,10 +588,14 @@ rgmii_phy1: ethernet-phy@0 {
+> >               compatible = "ethernet-phy-ieee802.3-c22";
+> >               reg = <0x0>;
+> >               pinctrl-names = "default";
+> > -             pinctrl-0 = <&eth_phy_rst>;
+> > +             pinctrl-0 = <&eth_phy_rst>, <&eth_phy_int>;
+> >               reset-assert-us = <20000>;
+> >               reset-deassert-us = <100000>;
+> >               reset-gpios = <&gpio3 RK_PB0 GPIO_ACTIVE_LOW>;
+> > +             interrupt-parent = <&gpio3>;
+> > +             /* GMAC1_INT/PMEB_GPIO3_A7 */
+>
+> This comment is pretty superfluous.
 
-$ grep -e procname -e extra sysctl.c | grep -B1 extra.*init_net
-                .extra1         = SYSCTL_ONE,
-                .extra2         = &init_net.sctp.rto_max
-                .procname       = "rto_max",
-                .extra1         = &init_net.sctp.rto_min,
---
-                .extra1         = SYSCTL_ZERO,
-                .extra2         = &init_net.sctp.ps_retrans,
-                .procname       = "ps_retrans",
-                .extra1         = &init_net.sctp.pf_retrans,
+Ok will drop this.
 
-And apparently, SCTP is the only one doing such dynamic limits. At
-least in networking.
+>
+> > +             interrupts = <RK_PA7 IRQ_TYPE_LEVEL_LOW>;
+> > +             #interrupt-cells = <1>;
+>
+> I am not an expert here, but I believe #interrupt-cells = <1>; means
+> that the phy provides an array of interrupts. Are you sure this is
+> correct? I find it strange that the phy driver consumes one interrupt
+> and provides N interrupts?!
+>
+Ok will drop this.
 
-While the issue you reported is fixable this way, for ps/pf_retrans,
-it is not, as it is using proc_dointvec_minmax() and it will simply
-consume those values (with no netns translation).
+> >       };
+> >  };
+> >
+> > @@ -630,6 +634,10 @@ vcc_mipi_en: vcc_mipi_en {
+> >       };
+> >
+> >       ethernet {
+> > +             eth_phy_int: eth-phy-int {
+> > +                     rockchip,pins = <3 RK_PA7 RK_FUNC_GPIO &pcfg_pull_down>;
+>
+> Interrupt is active low and you pull down the line here? There is a pull
+> up resistor on sheet 11 of the schematic, so this does not seem right at
+> all.
+>
+Actually this GPIO3_A7_d hence pull_down, this pin level triggered
+So I will set this as &pcfg_pull_none.
 
-So what about patching sctp_sysctl_net_register() instead, to update
-these pointers during netns creation? Right after where it update the
-'data' one in there:
+I don't have PoE set up to verify these changes as of now.
 
-        for (i = 0; table[i].data; i++)
-                table[i].data += (char *)(&net->sctp) - (char *)&init_net.sctp;
+> Best regards,
+> Michael
 
-Thanks,
-Marcelo
+Thanks
 
-> +
->  	ret = proc_dointvec(&tbl, write, buffer, lenp, ppos);
->  	if (write && ret == 0) {
->  		if (new_value > max || new_value < min)
-> @@ -457,6 +460,9 @@ static int proc_sctp_do_rto_max(struct ctl_table *ctl, int write,
->  	else
->  		tbl.data = &net->sctp.rto_max;
->  
-> +	if (net != &init_net)
-> +		min = net->sctp.rto_min;
-> +
->  	ret = proc_dointvec(&tbl, write, buffer, lenp, ppos);
->  	if (write && ret == 0) {
->  		if (new_value > max || new_value < min)
-> -- 
-> 2.26.2
-> 
+-Anand
