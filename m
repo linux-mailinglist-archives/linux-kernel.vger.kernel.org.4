@@ -2,100 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 687E8635A7C
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 11:48:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91C60635A81
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 11:50:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236473AbiKWKrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 05:47:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
+        id S236853AbiKWKti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 05:49:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236356AbiKWKr0 (ORCPT
+        with ESMTP id S237038AbiKWKtJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 05:47:26 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202F6154186
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 02:34:35 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id be13so27546329lfb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 02:34:35 -0800 (PST)
+        Wed, 23 Nov 2022 05:49:09 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB6915F2A9
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 02:35:33 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id b8so13448978edf.11
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 02:35:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jPdtPFLB1TZrWsH5lIP/9uszUEed9wIYjEKO4gAb5yU=;
-        b=HOF6g1RJdwdLL6iLu3D0x66hwcgOkg5/WgcsfOWuA5pquaKT84zusTGhgp7sQrHd/W
-         OKiMVV9I70OpfnR0HBdpOwdV+i5aMNHyHbd7kL/BbdDVp53s24VO+ALmHeRwtGoRXibZ
-         L5UjEmyugoL56ICfZl8Urysri+gQdo3b+HxBw1wkEmQSYLzYQFYJr22Zb5nl9JlUMDp9
-         MVmulLLYUDhq7r38JDTQYfjewWs1hyhdELlbJpi4ioDJmxSRsm+Akhc3d8oEQxqRCkv8
-         Xilguo6TDqDUqVmGVMSZ/S2/IpFHu1GDtITwhmg2+wV6zGe9rcmrfLMqYLubYyK3J9l7
-         9lzg==
+        d=amarulasolutions.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fdk6ayM1Ct66O9yHo4VxrA9gKbs+xznnUkFGTJiMlC0=;
+        b=ixd/SW/4mbmK6Eq8U/7u9FDripN0Ee0KDzFNOLNcZkTXpLexIRwydzZqRg+uK2N2Ru
+         Dcdxr5iVaE74MXUhXzk1nNzoxluSpStPsJ/g5j/xJskSFfxW5u2r9voPSKtL08AendVN
+         3nlEF2kGhoNuamYFmkMBRY1/o/FaI4tEX6WcA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jPdtPFLB1TZrWsH5lIP/9uszUEed9wIYjEKO4gAb5yU=;
-        b=ErHQjOdQe/ZkU8bePxOenRx6n3ixt6ovrr0T2DSveScGqFy9xRu1SEJ9Xlt/+D8Ohx
-         BIMf4Z/JS8a1gLmZltOM8CfAtENN6GrGPu93sPXMrHUiwPZTpn6SpBsY8VXbXVEe+Qlw
-         OXotLSs9+tE4n8F0vW8ue2DKdaEwWAhsDiWxWnRc2kl37HZs0Vb4fPIolHgmbjsIv0Tj
-         4SvjNNvm6coy4PC1tvOMiECJgVvr9KNqNy5gSVs5q7Hsts+tCxsUQmzQazzkmrTMjJx+
-         /OqJJeFWGZxnintaxma+W8aWX3RFaRXG0GsA8GPmDssuRS6H7GtA7qlkc4S5xh8WeaG6
-         RcTw==
-X-Gm-Message-State: ANoB5pltPuXXslgDaCWNftK9JguMPdQApL+enAy2UElZ62tCrLPiGBv7
-        qXQC4Qr6LCcylXIpuH54sz0EcA==
-X-Google-Smtp-Source: AA0mqf7p6ErXDvhBcT1rz9LRvU8Zd+ybGzBI3a4HdTIjjSrjm5pRGb/z52EPnwtcP2g9kd05/N+W2g==
-X-Received: by 2002:ac2:4e14:0:b0:4af:f5a0:8786 with SMTP id e20-20020ac24e14000000b004aff5a08786mr8563399lfr.265.1669199672422;
-        Wed, 23 Nov 2022 02:34:32 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id 14-20020ac25f4e000000b00499b27a329esm2842925lfz.300.2022.11.23.02.34.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 02:34:31 -0800 (PST)
-Message-ID: <c9c27d62-9299-cb7d-f379-a5b059449789@linaro.org>
-Date:   Wed, 23 Nov 2022 11:34:30 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Fdk6ayM1Ct66O9yHo4VxrA9gKbs+xznnUkFGTJiMlC0=;
+        b=u9AthH4LXYPgfmyetsBOapDZkLwkrjAA9FtJcTNp4O5XcIUsWAMnb4f0YoWxVPnHF4
+         869y2u81AsLzd7O/3ejE6IIBHIksnty6CfApCdvU2vCLcpL1ysy0dWycfwUOY9XQ7ixh
+         m/CMJYmbwFqP+lcX4ctfeO/sl6Tq4LLmE2mhFFrJ0GqZ7ranEHDrBNbjgOZYMHRdDkk+
+         qK9eMFITd1bCMVjvudbe/XnhQ3AMMn7L/+S0EVU4QsbdAkoNGGm1C9xAj+B5j02awsFa
+         QSHD4ldAfixk9rgNMQ0p0FcpkIOTXI55kHLoBAQ4ejYH/IF1VXfUbjlqkheOVn0F08Q8
+         VX8Q==
+X-Gm-Message-State: ANoB5pnMgTTeYsTpqU0TMqlZCeFDD0aLIMy/E1Uc5uwRNCJNJ6oYETka
+        llya9LeuvqgEsyXOA1Fquxtadg==
+X-Google-Smtp-Source: AA0mqf74EvznZPyWVMWqJcVg8W8zFDmrOicPF2lAdmAcsc0cuX+YS8xaKiCmanEDyWJxlD9Befz3bw==
+X-Received: by 2002:a05:6402:291b:b0:461:60b1:5c6d with SMTP id ee27-20020a056402291b00b0046160b15c6dmr13199766edb.182.1669199720603;
+        Wed, 23 Nov 2022 02:35:20 -0800 (PST)
+Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-55-94.cust.vodafonedsl.it. [188.217.55.94])
+        by smtp.gmail.com with ESMTPSA id e12-20020a1709062c0c00b0073d7b876621sm7043433ejh.205.2022.11.23.02.35.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 02:35:19 -0800 (PST)
+Date:   Wed, 23 Nov 2022 11:35:17 +0100
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH resend] media: staging: stkwebcam: Restore
+ MEDIA_{USB,CAMERA}_SUPPORT dependencies
+Message-ID: <20221123103517.GA2874916@tom-ThinkPad-T14s-Gen-2i>
+References: <a50fa46075fb760d8409ff6ea2232b2ddb7a102b.1669046259.git.geert+renesas@glider.be>
+ <20221123100831.GE39395@tom-ThinkPad-T14s-Gen-2i>
+ <CAMuHMdUW8iKFjDj4fPtWfPvyQ1sjGcAy1Kz5j-osz9F4pdA47Q@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 1/2] dt-bindings: arm: qcom: Adding DT binding for zombie
-Content-Language: en-US
-To:     Owen Yang <ecs.taipeikernel@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>, Harvey <hunge@google.com>,
-        Bob Moragues <moragues@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20221123181043.1.Idfcba5344b7995b44b7fa2e20f1aa4351defeca6@changeid>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221123181043.1.Idfcba5344b7995b44b7fa2e20f1aa4351defeca6@changeid>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdUW8iKFjDj4fPtWfPvyQ1sjGcAy1Kz5j-osz9F4pdA47Q@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/11/2022 11:11, Owen Yang wrote:
-> Add an entry in the device tree binding for sc7280-zombie.
+Hi Gaert,
 
-Subject: drop second, redundant "DT binding". This is obvious from the
-prefix.
+On Wed, Nov 23, 2022 at 11:13:31AM +0100, Geert Uytterhoeven wrote:
+> Hi Tommaso,
+> 
+> On Wed, Nov 23, 2022 at 11:08 AM Tommaso Merciai
+> <tommaso.merciai@amarulasolutions.com> wrote:
+> > On Mon, Nov 21, 2022 at 04:58:33PM +0100, Geert Uytterhoeven wrote:
+> > > By moving support for the USB Syntek DC1125 Camera to staging, the
+> > > dependencies on MEDIA_USB_SUPPORT and MEDIA_CAMERA_SUPPORT were lost.
+> > >
+> > > Fixes: 56280c64ecacc971 ("media: stkwebcam: deprecate driver, move to staging")
+> >
+> > Patch itself looks good but we have some style issue. Applying this
+> > patch I got the following warning from checkpatchl:
+> >
+> > WARNING: Please use correct Fixes: style 'Fixes: <12 chars of sha1> ("<title line>")' - ie: 'Fixes: 56280c64ecac ("media: stkwebcam: deprecate driver, move to staging")'
+> > #10:
+> >
+> > You have to pass only the first 12 chars of the sha1 commit into Fixes
+> > msg:
+> >
+> > Use:
+> >
+> >  Fixes: 56280c64ecac ("media: stkwebcam: deprecate driver, move to staging")
+> >
+> > Instead of:
+> >
+> >  Fixes: 56280c64ecacc971 ("media: stkwebcam: deprecate driver, move to staging")
+> 
+> I always use 16 chars, to avoid these becoming ambiguous in a few years.
+> 
+> Gr{oetje,eeting}s,
 
-With subject fixed:
+Thanks for sharing this info.
 
+Regards,
+Tommaso
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+>                         Geert
+> 
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
 
+-- 
+Tommaso Merciai
+Embedded Linux Engineer
+tommaso.merciai@amarulasolutions.com
+__________________________________
 
-Best regards,
-Krzysztof
-
+Amarula Solutions SRL
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+T. +39 042 243 5310
+info@amarulasolutions.com
+www.amarulasolutions.com
