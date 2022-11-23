@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3424263578A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:43:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8937C635791
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:43:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238081AbiKWJnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 04:43:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60750 "EHLO
+        id S238122AbiKWJnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 04:43:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237962AbiKWJmK (ORCPT
+        with ESMTP id S238069AbiKWJmR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 04:42:10 -0500
-Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.133.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5C0781A4
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:38:45 -0800 (PST)
+        Wed, 23 Nov 2022 04:42:17 -0500
+Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.129.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3F382BC2
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:38:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxlinear.com;
-        s=selector; t=1669196324;
+        s=selector; t=1669196328;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=AkBrFNa8JXU1rnG3IW0QD6QbjBzAOYoAULmyjQGwhog=;
-        b=JdyvyQft1X1DOmja3c9CY9xrxBwIWLWSMhdbwfwEQ6Qm6htucgG48SSmQXHTLAP44k3gnn
-        hHvAitD50U9BM7yAywReZSd4YVR0iggzvsjU4hg/JBaw0PCcmbWpc1+64OtxqRmLU2OfXf
-        pf3Cp2JATQHz0HaTFzbiG51BLWj6kn+vG3VSv1JyguUpQgMcHIaxWRaHTNjzfp4tTDhqxN
-        KttAZYhpXBubj1Od0tmTyJvmVlOwRPfMYNg75fOjlItnbMviildbop8LhH1P2bXCpCKPNH
-        cjfKWFeZPLqFhOJNP0ZDBxQzqsOFEHrCvwsNijyespTCWlqIHarlbBydbV7Uhg==
+        bh=Mc2NS0olCt0qUzsLi0zWfYaDeL0jAmHwQjCqJZ5SsT8=;
+        b=An+fYJ1ak9yv+HUO0ga2BpCsZPO9Df4pTvxFghvP0cW+824ALgkMGhicTZYJmSsrjo8JUb
+        n/AalJCBwe7cUsK6gN6bpL9fE6QQNEJVeCulSGGy7/y0Q+uS30bz3vHHvUUnwReV6I9CpG
+        gnDyCXKPOxnxoPZ+yHwg/eg8WuOY7iKvSz5fOymXM7/jG7+rksyPkuuJpCAmO2BlKTVtw0
+        IhcAhG2H7JDhflKokTTm2H4jg1KkPSV6bsjA4HT3yGKQF3+PmhmfNh5fqIVtkUfHe8/fGE
+        ciJ+2v/1G3CDfGY3CWfqUXQpn7HbEO4buyJiNWYEMS2RpMTpJWTVujB4ji+30A==
 Received: from mail.maxlinear.com (174-47-1-83.static.ctl.one [174.47.1.83])
  by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- us-mta-88-nuRbVBA0PV69qlDqrUJNnw-1; Wed, 23 Nov 2022 04:38:42 -0500
-X-MC-Unique: nuRbVBA0PV69qlDqrUJNnw-1
+ us-mta-665-BZZ1RMddN-WSVjCg2PoA3Q-1; Wed, 23 Nov 2022 04:38:47 -0500
+X-MC-Unique: BZZ1RMddN-WSVjCg2PoA3Q-1
 Received: from sgsxdev001.isng.phoenix.local (10.226.81.111) by
  mail.maxlinear.com (10.23.38.120) with Microsoft SMTP Server id 15.1.2375.24;
- Wed, 23 Nov 2022 01:38:34 -0800
+ Wed, 23 Nov 2022 01:38:39 -0800
 From:   Rahul Tanwar <rtanwar@maxlinear.com>
 To:     Rahul Tanwar <rtanwar@maxlinear.com>,
         <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
@@ -46,9 +46,9 @@ CC:     Thomas Gleixner <tglx@linutronix.de>,
         "Borislav Petkov" <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
         "H. Peter Anvin" <hpa@zytor.com>, <linux-lgm-soc@maxlinear.com>
-Subject: [PATCH v4 3/4] x86/of: Replace printk(KERN_LVL) with pr_lvl()
-Date:   Wed, 23 Nov 2022 17:38:19 +0800
-Message-ID: <20221123093820.21161-4-rtanwar@maxlinear.com>
+Subject: [PATCH v4 4/4] x86/of: Add support for boot time interrupt delivery mode configuration
+Date:   Wed, 23 Nov 2022 17:38:20 +0800
+Message-ID: <20221123093820.21161-5-rtanwar@maxlinear.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20221123093820.21161-1-rtanwar@maxlinear.com>
 References: <20221123093820.21161-1-rtanwar@maxlinear.com>
@@ -59,48 +59,53 @@ Content-Type: text/plain; charset=WINDOWS-1252
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use latest available pr_lvl() instead of older printk(KERN_LVL)
-Just a upgrade of print utilities usage no functional changes.
+Presently, init/boot time interrupt delivery mode is enumerated
+only for ACPI enabled systems by parsing MADT table or for older
+systems by parsing MP table. But for OF based x86 systems, it is
+assumed & hardcoded to legacy PIC mode. This causes boot time crash
+for platforms which do not use 8259 compliant legacy PIC.
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Add support for configuration of init time interrupt delivery mode
+for x86 OF based systems by introducing a new optional boolean
+property 'intel,virtual-wire-mode' for interrupt-controller node
+of local APIC. This property emulates IMCRP Bit 7 of MP feature
+info byte 2 of MP floating pointer structure.
+
+Defaults to legacy PIC mode if absent. Configures it to virtual
+wire compatibility mode if present.
+
 Signed-off-by: Rahul Tanwar <rtanwar@maxlinear.com>
 ---
- arch/x86/kernel/devicetree.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/kernel/devicetree.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/arch/x86/kernel/devicetree.c b/arch/x86/kernel/devicetree.c
-index 5cd51f25f446..fcc6f1b7818f 100644
+index fcc6f1b7818f..458e43490414 100644
 --- a/arch/x86/kernel/devicetree.c
 +++ b/arch/x86/kernel/devicetree.c
-@@ -248,7 +248,7 @@ static void __init dtb_add_ioapic(struct device_node *d=
-n)
-=20
- =09ret =3D of_address_to_resource(dn, 0, &r);
- =09if (ret) {
--=09=09printk(KERN_ERR "Can't obtain address from device node %pOF.\n", dn)=
-;
-+=09=09pr_err("Can't obtain address from device node %pOF.\n", dn);
- =09=09return;
+@@ -167,7 +167,14 @@ static void __init dtb_lapic_setup(void)
+ =09=09=09return;
  =09}
- =09mp_register_ioapic(++ioapic_id, r.start, gsi_top, &cfg);
-@@ -265,7 +265,7 @@ static void __init dtb_ioapic_setup(void)
- =09=09of_ioapic =3D 1;
- =09=09return;
- =09}
--=09printk(KERN_ERR "Error: No information about IO-APIC in OF.\n");
-+=09pr_err("Error: No information about IO-APIC in OF.\n");
+ =09smp_found_config =3D 1;
+-=09pic_mode =3D 1;
++=09if (of_property_read_bool(dn, "intel,virtual-wire-mode")) {
++=09=09pr_info("Virtual Wire compatibility mode.\n");
++=09=09pic_mode =3D 0;
++=09} else {
++=09=09pr_info("IMCR and PIC compatibility mode.\n");
++=09=09pic_mode =3D 1;
++=09}
++
+ =09register_lapic_address(lapic_addr);
  }
- #else
- static void __init dtb_ioapic_setup(void) {}
+=20
 --=20
 2.17.1
 
