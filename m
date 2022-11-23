@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92623636690
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:07:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F9A636695
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:07:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239195AbiKWRG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 12:06:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56466 "EHLO
+        id S239038AbiKWRHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 12:07:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238942AbiKWRGo (ORCPT
+        with ESMTP id S239024AbiKWRGp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 12:06:44 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10DDC4951;
-        Wed, 23 Nov 2022 09:06:40 -0800 (PST)
+        Wed, 23 Nov 2022 12:06:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE0BC4B5B;
+        Wed, 23 Nov 2022 09:06:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1D521CE2498;
-        Wed, 23 Nov 2022 17:06:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 405D1C43470;
-        Wed, 23 Nov 2022 17:06:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ACCF5B821BC;
+        Wed, 23 Nov 2022 17:06:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ABA2C4347C;
+        Wed, 23 Nov 2022 17:06:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669223197;
-        bh=ybjnmnbdgG5oznw+D3D3EoANpgY2rjuP8S4++LExstU=;
+        s=k20201202; t=1669223199;
+        bh=UofQ2Om5TKKPZw19SG+8wKH8TntN+ojXWrOiFhpkAis=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YDd2947JFcLM/g375aHLKLP6gISs3mYEY/D7MpYJC2M6csVX5pzcxeX65f2x9z+np
-         Pebq3NWT7wVq2Al+SUCSefnbWsnCz12yCC4RRpKpS+n2FiWlxTSFcpJ6N9bXkRXW96
-         sElVlH0upIvI3CnPEmxBnA4ctUrVyvd+TNYH5wZXJEIfXJCyw5mC4h2DNPp24IPqdZ
-         UNlzeKO0+QP2FG2E/Y61ZfoW65ACWfzWPw/khz5I47fAdF0XwOx+1krgtKRU0X8tsZ
-         PcvvEVbijULFAqeGVo7vM2ac4yunMEQ+vXPgbnHNXT0P+3/RXa/eKbOujUtveD5uN+
-         uvc6vpepg2SNg==
+        b=Zpuzjps4rlDgFJHDwYeS5J9U2UQqY/xuJGczyIdL1b18H1liRMAp3/nDzPFYH4cDs
+         oFxeCTPeCgFLw55Ltd74fC9YCrughkpeeRZWM/N4IJ7R96hByx9/Js7nDcf1Med+Ce
+         sMMRWUCUMjBoraelsC500d4UZFobIBm/d3X8gDXucwOjzjB8YmE4rfQoNwWugurjrZ
+         oU0b9KP0EgNI6zaFVn/ghRM1IX3Lx3d8+55m7VYUQLhbjj9m+C7ceYiWMT0E6zdXP2
+         kdBmF+xl43/9hyTlGlfuC0cCGCBAHAniTPnIregkApe8xkw8+6VLq4/nHBR1DvJNTD
+         3S7nCir1b+MPQ==
 From:   Daniel Bristot de Oliveira <bristot@kernel.org>
 To:     Daniel Bristot de Oliveira <bristot@kernel.org>,
         Steven Rostedt <rostedt@goodmis.org>
@@ -40,9 +40,9 @@ Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Juri Lelli <juri.lelli@redhat.com>,
         Clark Williams <williams@redhat.com>,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V2 3/6] tracing/osnoise: Add OSNOISE_WORKLOAD option
-Date:   Wed, 23 Nov 2022 18:06:21 +0100
-Message-Id: <3b96fffdd10b4a1b1537235c57683cb75b3f3070.1669115208.git.bristot@kernel.org>
+Subject: [PATCH V2 4/6] tracing/osnoise: Add PANIC_ON_STOP option
+Date:   Wed, 23 Nov 2022 18:06:22 +0100
+Message-Id: <31aa66b01dfc31af481bcadea04b4affed59430b.1669115208.git.bristot@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <cover.1669115208.git.bristot@kernel.org>
 References: <cover.1669115208.git.bristot@kernel.org>
@@ -57,115 +57,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The osnoise tracer is not only a tracer, and a set of tracepoints,
-but also a workload dispatcher.
+Often the latency observed in a CPU is not caused by the work being done
+in the CPU itself, but by work done on another CPU that causes the
+hardware to stall all CPUs. In this case, it is interesting to know
+what is happening on ALL CPUs, and the best way to do this is via
+crash dump analysis.
 
-In preparation for having other workloads, e.g., in user-space,
-add an option to avoid dispatching the workload.
+Add the PANIC_ON_STOP option to osnoise/timerlat tracers. The default
+behavior is having this option off. When enabled by the user, the system
+will panic after hitting a stop tracing condition.
 
-By not dispatching the workload, the osnoise: tracepoints become
-generic events to measure the execution time of *any* task on Linux.
+This option was motivated by a real scenario that Juri Lelli and I
+were debugging.
 
-For example:
-
-  # cd /sys/kernel/tracing/
-  # cat osnoise/options
-  DEFAULTS OSNOISE_WORKLOAD
-  # echo NO_OSNOISE_WORKLOAD > osnoise/options
-  # cat osnoise/options
-  NO_DEFAULTS NO_OSNOISE_WORKLOAD
-  # echo osnoise > set_event
-  # echo osnoise > current_tracer
-  # tail -8 trace
-      make-94722   [002] d..3.  1371.794507: thread_noise:     make:94722 start 1371.794302286 duration 200897 ns
-        sh-121042  [020] d..3.  1371.794534: thread_noise:       sh:121042 start 1371.781610976 duration 8943683 ns
-      make-121097  [005] d..3.  1371.794542: thread_noise:     make:121097 start 1371.794481522 duration 60444 ns
-     <...>-40      [005] d..3.  1371.794550: thread_noise: migration/5:40 start 1371.794542256 duration 7154 ns
-    <idle>-0       [018] dNh2.  1371.794554: irq_noise: reschedule:253 start 1371.794553547 duration 40 ns
-    <idle>-0       [018] dNh2.  1371.794561: irq_noise: local_timer:236 start 1371.794556222 duration 4890 ns
-    <idle>-0       [018] .Ns2.  1371.794563: softirq_noise:    SCHED:7 start 1371.794561803 duration 992 ns
-    <idle>-0       [018] d..3.  1371.794566: thread_noise: swapper/18:0 start 1371.781368110 duration 13191798 ns
-
-In preparation for the rtla exec_time tracer/tool and
-rtla osnoise --user option.
-
+Cc: Juri Lelli <juri.lelli@redhat.com>
 Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
 Cc: Steven Rostedt <rostedt@goodmis.org>
 Cc: Masami Hiramatsu <mhiramat@kernel.org>
 Cc: Jonathan Corbet <corbet@lwn.net>
 Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 ---
- kernel/trace/trace_osnoise.c | 28 ++++++++++++++++++++++------
- 1 file changed, 22 insertions(+), 6 deletions(-)
+ kernel/trace/trace_osnoise.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
-index 17b77fe3950b..3f10dd1f2f1c 100644
+index 3f10dd1f2f1c..801eba0b5cf8 100644
 --- a/kernel/trace/trace_osnoise.c
 +++ b/kernel/trace/trace_osnoise.c
-@@ -53,12 +53,13 @@
-  */
+@@ -54,10 +54,11 @@
  enum osnoise_options_index {
  	OSN_DEFAULTS = 0,
-+	OSN_WORKLOAD,
+ 	OSN_WORKLOAD,
++	OSN_PANIC_ON_STOP,
  	OSN_MAX
  };
  
--static const char * const osnoise_options_str[OSN_MAX] = { "DEFAULTS" };
-+static const char * const osnoise_options_str[OSN_MAX] = { "DEFAULTS", "OSNOISE_WORKLOAD" };
+-static const char * const osnoise_options_str[OSN_MAX] = { "DEFAULTS", "OSNOISE_WORKLOAD" };
++static const char * const osnoise_options_str[OSN_MAX] = { "DEFAULTS", "OSNOISE_WORKLOAD", "PANIC_ON_STOP" };
  
--#define OSN_DEFAULT_OPTIONS	0
-+#define OSN_DEFAULT_OPTIONS	0x2
+ #define OSN_DEFAULT_OPTIONS	0x2
  unsigned long osnoise_options	= OSN_DEFAULT_OPTIONS;
+@@ -1270,6 +1271,9 @@ static __always_inline void osnoise_stop_tracing(void)
+ 		trace_array_printk_buf(tr->array_buffer.buffer, _THIS_IP_,
+ 				"stop tracing hit on cpu %d\n", smp_processor_id());
  
- /*
-@@ -1186,11 +1187,12 @@ trace_sched_switch_callback(void *data, bool preempt,
- 			    unsigned int prev_state)
- {
- 	struct osnoise_variables *osn_var = this_cpu_osn_var();
-+	int workload = test_bit(OSN_WORKLOAD, &osnoise_options);
- 
--	if (p->pid != osn_var->pid)
-+	if ((p->pid != osn_var->pid) || !workload)
- 		thread_exit(osn_var, p);
- 
--	if (n->pid != osn_var->pid)
-+	if ((n->pid != osn_var->pid) || !workload)
- 		thread_entry(osn_var, n);
- }
- 
-@@ -1723,9 +1725,16 @@ static void stop_kthread(unsigned int cpu)
- 	struct task_struct *kthread;
- 
- 	kthread = per_cpu(per_cpu_osnoise_var, cpu).kthread;
--	if (kthread)
-+	if (kthread) {
- 		kthread_stop(kthread);
--	per_cpu(per_cpu_osnoise_var, cpu).kthread = NULL;
-+		per_cpu(per_cpu_osnoise_var, cpu).kthread = NULL;
-+	} else {
-+		if (!test_bit(OSN_WORKLOAD, &osnoise_options)) {
-+			per_cpu(per_cpu_osnoise_var, cpu).sampling = false;
-+			barrier();
-+			return;
-+		}
-+	}
- }
- 
- /*
-@@ -1759,6 +1768,13 @@ static int start_kthread(unsigned int cpu)
- 		snprintf(comm, 24, "timerlat/%d", cpu);
- 		main = timerlat_main;
- 	} else {
-+		/* if no workload, just return */
-+		if (!test_bit(OSN_WORKLOAD, &osnoise_options)) {
-+			per_cpu(per_cpu_osnoise_var, cpu).sampling = true;
-+			barrier();
-+			return 0;
-+		}
++		if (test_bit(OSN_PANIC_ON_STOP, &osnoise_options))
++			panic("tracer hit stop condition on CPU %d\n", smp_processor_id());
 +
- 		snprintf(comm, 24, "osnoise/%d", cpu);
+ 		tracer_tracing_off(tr);
  	}
- 
+ 	rcu_read_unlock();
 -- 
 2.32.0
 
