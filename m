@@ -2,118 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C18C63551F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:16:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B989635556
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:18:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237289AbiKWJPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 04:15:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57556 "EHLO
+        id S237334AbiKWJRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 04:17:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237287AbiKWJPa (ORCPT
+        with ESMTP id S237309AbiKWJQr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 04:15:30 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E074E107E41
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:15:29 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 834646602A65;
-        Wed, 23 Nov 2022 09:15:27 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1669194928;
-        bh=4dlMANCcWyhN3x6ntNDLGRNwp8BpM4nQM3TDNFtBdfw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Ow7d1owJRJkE2pacH5cEMLBc2rKlw90cJG1YccvOwGKSzLKNdADVUkel2QGmQuHXF
-         027zKZa25m5a1qRMqzO/Dz6mJs/9YnLmmf1VybqGG1lYAi/tcJs4TcCt2qnsXV1u8q
-         3jIQIepgAZfGinKWunqb3ilM2I76ujcJhhglMLTsmOirEm7HyCsrBb4F9nIKDxeN6+
-         i+f86bICPbPXJ8TO4w8ZAlsJVmHg9ChT4KOTqkOdIx5NpwCejhFyVigDc3wwADVioU
-         WeRvvWNhEDJV1S2rSxiOT7bVLJRz/BQCQRWlK9fAnjbtERqjzR0bEf32H2enEgLM7S
-         H1cEfIRp9L7gQ==
-Message-ID: <a67594cf-eb7f-873f-1c11-ccb4317b6bdf@collabora.com>
-Date:   Wed, 23 Nov 2022 10:15:25 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2] drm/mediatek: Clean dangling pointer on bind error
- path
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc:     kernel@collabora.com, "Nancy . Lin" <nancy.lin@mediatek.com>,
-        CK Hu <ck.hu@mediatek.com>,
-        Daniel Kurtz <djkurtz@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Mao Huang <littlecvr@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        YT Shen <yt.shen@mediatek.com>,
-        dri-devel@lists.freedesktop.org,
+        Wed, 23 Nov 2022 04:16:47 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BEAD10B410;
+        Wed, 23 Nov 2022 01:16:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669194977; x=1700730977;
+  h=from:to:cc:subject:date:message-id;
+  bh=W3JPMcfxADxcaQcKNXuih5D3EZGPzDYcLZU7qgIXdnw=;
+  b=lFE32huPZns4grkjukiTZap3TFXDgR7xHxg6beK8Vy+fng3OLQ3SXaRB
+   FQhEETH+Rb+5HniKzQDiRQmfSFclicsSZgA8pBJxF6DEWse5S4DtX3TYa
+   1MU61t0bevtozXrI40mFcqNkMry/EIBeL8yrbR+/nsNrmS0kjIkvsFWt3
+   /8CtvOLrkIxAJ/AjKEx7cw8AH9WTDLWRVS81cZQImx4yoogLc7ZciuSQ4
+   uBRC4WKvecJ8IsEIwGps0UPAjjN/v7nrsJx9RkyMVyNhy/IUzc+P4jyKx
+   ix3TMGiK3X5ZX8svIlLbZaail2+6zaaT2BMkayhqCrHky4VrNqgBU2B8M
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="315174364"
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="315174364"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 01:16:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="672805025"
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="672805025"
+Received: from p12ill01gohweish.png.intel.com ([10.88.229.16])
+  by orsmga008.jf.intel.com with ESMTP; 23 Nov 2022 01:16:10 -0800
+From:   "Goh, Wei Sheng" <wei.sheng.goh@intel.com>
+To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-References: <20221122143949.3493104-1-nfraprado@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221122143949.3493104-1-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        Voon Wei Feng <weifeng.voon@intel.com>,
+        Tan Tee Min <tee.min.tan@intel.com>,
+        Ahmad Tarmizi Noor Azura <noor.azura.ahmad.tarmizi@intel.com>,
+        Looi Hong Aun <hong.aun.looi@intel.com>,
+        Goh Wei Sheng <wei.sheng.goh@intel.com>
+Subject: [PATCH net v3] net: stmmac: Set MAC's flow control register to reflect current settings
+Date:   Wed, 23 Nov 2022 17:15:29 +0800
+Message-Id: <20221123091529.22018-1-wei.sheng.goh@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.4 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 22/11/22 15:39, Nícolas F. R. A. Prado ha scritto:
-> mtk_drm_bind() can fail, in which case drm_dev_put() is called,
-> destroying the drm_device object. However a pointer to it was still
-> being held in the private object, and that pointer would be passed along
-> to DRM in mtk_drm_sys_prepare() if a suspend were triggered at that
-> point, resulting in a panic. Clean the pointer when destroying the
-> object in the error path to prevent this from happening.
-> 
-> Fixes: 119f5173628a ("drm/mediatek: Add DRM Driver for Mediatek SoC MT8173.")
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> 
-> ---
-> 
-> Changes in v2:
-> - Added Fixes tag
-> 
->   drivers/gpu/drm/mediatek/mtk_drm_drv.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> index 39a42dc8fb85..a21ff1b3258c 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> @@ -514,6 +514,7 @@ static int mtk_drm_bind(struct device *dev)
->   err_deinit:
->   	mtk_drm_kms_deinit(drm);
->   err_free:
-> +	private->drm = NULL;
+Currently, pause frame register GMAC_RX_FLOW_CTRL_RFE is not updated
+correctly when 'ethtool -A <IFACE> autoneg off rx off tx off' command
+is issued. This fix ensures the flow control change is reflected directly
+in the GMAC_RX_FLOW_CTRL_RFE register.
 
-Sorry for not noticing that in v1, but I've rechecked this function and, while this
-commit does indeed actually solve the described issue, I think it's incomplete.
+Fixes: 46f69ded988d ("net: stmmac: Use resolved link config in mac_link_up()")
+Cc: <stable@vger.kernel.org> # 5.10.x
+Signed-off-by: Goh, Wei Sheng <wei.sheng.goh@intel.com>
+Signed-off-by: Noor Azura Ahmad Tarmizi <noor.azura.ahmad.tarmizi@intel.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+---
+V2 -> V3: Removed value assign for 'flow' in else statement based on review comments
+V1 -> V2: Removed needless condition based on review comments
 
-A few lines before, we have a loop that sets
+ drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c |  2 ++
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 12 ++++++++++--
+ 2 files changed, 13 insertions(+), 2 deletions(-)
 
-		private->all_drm_private[i]->drm = drm;
-
-...so here you should do...
-
-	private->drm = NULL;
-
-	while (i--) /* a for loop will also do, your choice */
-		private->all_drm_private[i]->drm = NULL;
-		
-That makes sure that you cleanup *everything* :-)
-
-Cheers,
-Angelo
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c b/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c
+index c25bfecb4a2d..369db308b1dd 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c
+@@ -748,6 +748,8 @@ static void dwmac4_flow_ctrl(struct mac_device_info *hw, unsigned int duplex,
+ 	if (fc & FLOW_RX) {
+ 		pr_debug("\tReceive Flow-Control ON\n");
+ 		flow |= GMAC_RX_FLOW_CTRL_RFE;
++	} else {
++		pr_debug("\tReceive Flow-Control OFF\n");
+ 	}
+ 	writel(flow, ioaddr + GMAC_RX_FLOW_CTRL);
+ 
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index 8273e6a175c8..ab7f48f32f5b 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -1061,8 +1061,16 @@ static void stmmac_mac_link_up(struct phylink_config *config,
+ 		ctrl |= priv->hw->link.duplex;
+ 
+ 	/* Flow Control operation */
+-	if (tx_pause && rx_pause)
+-		stmmac_mac_flow_ctrl(priv, duplex);
++	if (rx_pause && tx_pause)
++		priv->flow_ctrl = FLOW_AUTO;
++	else if (rx_pause && !tx_pause)
++		priv->flow_ctrl = FLOW_RX;
++	else if (!rx_pause && tx_pause)
++		priv->flow_ctrl = FLOW_TX;
++	else
++		priv->flow_ctrl = FLOW_OFF;
++
++	stmmac_mac_flow_ctrl(priv, duplex);
+ 
+ 	if (ctrl != old_ctrl)
+ 		writel(ctrl, priv->ioaddr + MAC_CTRL_REG);
+-- 
+2.17.1
 
