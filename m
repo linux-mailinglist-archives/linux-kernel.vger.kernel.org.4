@@ -2,144 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1085C636892
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:20:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70D0263688D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:19:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239501AbiKWSTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 13:19:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48430 "EHLO
+        id S238908AbiKWST3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 13:19:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239637AbiKWSSs (ORCPT
+        with ESMTP id S239421AbiKWSTA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 13:18:48 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF1711A0F;
-        Wed, 23 Nov 2022 10:18:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669227527; x=1700763527;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=E89CZqbaoYjUKLoTevrvJoCvfEz61O1bB0tNgiHnTvA=;
-  b=ih6tOimMX0Pm8MMJOQndqTCFsJ96W3582sK4vUi3UCEWpOtxdgi775lD
-   7NFKcxByfHrOiwkngDSO6mTPdHUpJnB5JR+jleZDKzQJkUPLJDX/U0SCo
-   epTX3uXQNVPHPvm45Ur3rSXH0ypR9SIGiKP5yvN9vkfFNZNXUZfsMt+X1
-   7mqJOv91VajbGTxg32SMNwJ1+SutDKBJAI+osyeJBmCBWrq4huOBChPaW
-   rai9sfoaSuxMem2HqBbU8YTChqQDR9xImENGZEJaqLs7waopMvdvx4OF7
-   gbsm0hL48PGTJyqn3/bbqleWVg90ilbzqmGwhlJtaGQn2p697nv4sw49h
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="294519300"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="294519300"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 10:18:46 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="672965938"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="672965938"
-Received: from vcbudden-mobl3.amr.corp.intel.com (HELO [10.212.129.67]) ([10.212.129.67])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 10:18:45 -0800
-Message-ID: <2d99f823-09bb-ff51-0e71-f254cc6ad28b@intel.com>
-Date:   Wed, 23 Nov 2022 10:18:45 -0800
+        Wed, 23 Nov 2022 13:19:00 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8ACEE27;
+        Wed, 23 Nov 2022 10:18:59 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id j10-20020a17090aeb0a00b00218dfce36e5so2230015pjz.1;
+        Wed, 23 Nov 2022 10:18:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/+wiUlX+ZzbOJle7HnS1krIiCPjVF1I+A5cD8cm1XM8=;
+        b=oZeeBnEeGmvjRkvxpd5dd4v1+nkW1yLWhjB1DNJmqQKV0eIUzEyRNI9KXZBGZL4JO7
+         Vp9VbeF+D/aoQ5F2L2rjPMaGOqgiO5HjnnKWNF+YJx2R7+GsbiR4jal2MHBPE6eg+jBN
+         wSFp9cv7IbUn5M+i38B6LfWvRvU5V0CvxcTXkubZwuVPzo+uS4c4JlyO0SlhL2zoydzQ
+         t5dcixwsUZnz1vGaGwou5EWvGYvjK8brVFpBVEL8Mr15CRiXWX+H81iWY12EPefqUXpO
+         4tEYMm7piYEKqHN3IdOto/oo+KvUOXVUXPaMZw+0hzmtFoJZACW3lRySAU7EWmsi5KXB
+         slgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/+wiUlX+ZzbOJle7HnS1krIiCPjVF1I+A5cD8cm1XM8=;
+        b=mLH/iwIn8p/WsdbOKOTyUv5qBVYPR+FccX76A2fAsxlCfcWQZqVhAn/wrH5re4wQ4C
+         iZ8IaAs+GWHgoZqPqR95jj+P4pEkXU9IHQs/EjkTQEbYZVCQyfmvjuLUOsACGLnJU2nv
+         jq1R3twnay4awY8rPi57Ug5aDkh7Q1irHFayVaNJAlfeQW6LZjAgf4dZRUXdoQlUONwq
+         jP/SioV0ZjvZvl0Wlt+4H7lLandAXdDIJzSsYYxS9lZhfFHKmi2sOp/uoauJJq62sajj
+         HGb92Ip8/NqEz/08jDHraZgU7V29b9yUxXDkG1tbCV8X9+MYUy3OzF1/5sjJRRJ4a8Hl
+         O6/g==
+X-Gm-Message-State: ANoB5pkGFbGbXbLj1nYGs4G5v6i2cWYX5MtRfn443xkiO+ld3WrNIdV7
+        J5iiFUMc7tB9yToHzfO9bo0=
+X-Google-Smtp-Source: AA0mqf5FyOlv0J80ex/Z/ir9XJCw/aSk4lvE198n8rm4YG/kGTkL6yXagm4WBwk+1YoqSpUb++HGug==
+X-Received: by 2002:a17:902:c702:b0:189:4bde:53c1 with SMTP id p2-20020a170902c70200b001894bde53c1mr2799075plp.1.1669227538388;
+        Wed, 23 Nov 2022 10:18:58 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id 11-20020a17090a1a0b00b00218cd71781csm1706081pjk.51.2022.11.23.10.18.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 10:18:58 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 23 Nov 2022 08:18:56 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Kemeng Shi <shikemeng@huawei.com>
+Cc:     josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 04/11] blk-throttle: correct calculation of wait time in
+ tg_may_dispatch
+Message-ID: <Y35kELlFkI/BtkqC@slm.duckdns.org>
+References: <20221123060401.20392-1-shikemeng@huawei.com>
+ <20221123060401.20392-5-shikemeng@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v7 06/20] x86/virt/tdx: Shut down TDX module in case of
- error
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     "Huang, Kai" <kai.huang@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-References: <48505089b645019a734d85c2c29f3c8ae2dbd6bd.1668988357.git.kai.huang@intel.com>
- <Y3ySxEr64HkUaEDq@hirez.programming.kicks-ass.net>
- <52b2be9b-defd-63ce-4cb2-96cd624a95a6@intel.com>
- <Y30fUS5/JClpBHVc@hirez.programming.kicks-ass.net>
- <b3938f3a-e4f8-675a-0c0e-4b4618019145@intel.com>
- <da7ae78c2d9fed125f160744af5be75f34b1b1d7.camel@intel.com>
- <791bf9a2-a079-3cd6-90a3-42dbb332a38c@intel.com>
- <9f1ea2639839305dd8b82694b3d8c697803f43a1.camel@intel.com>
- <Y35IW/PnbxinKHOL@google.com>
- <168ca2b3-ffac-31c4-0b83-2d0ee75f34a5@intel.com>
- <Y35aXX5b2Ed4vc6y@google.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <Y35aXX5b2Ed4vc6y@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221123060401.20392-5-shikemeng@huawei.com>
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/23/22 09:37, Sean Christopherson wrote:
-> On Wed, Nov 23, 2022, Dave Hansen wrote:
->> There's no way we can guarantee _that_.  For one, the PAMT* allocations
->> can always fail.  I guess we could ask sysadmins to fire up a guest to
->> "prime" things, but that seems a little silly.  Maybe that would work as
->> the initial implementation that we merge, but I suspect our users will
->> demand more determinism, maybe a boot or module parameter.
-> Oh, you mean all of TDX initialization?  I thought "initialization" here mean just
-> doing tdx_enable().
+On Wed, Nov 23, 2022 at 02:03:54PM +0800, Kemeng Shi wrote:
+> If bps and iops both reach limit, we always return bps wait time as
+> tg_within_iops_limit is after "tg_within_bps_limit(tg, bio, bps_limit) &&"
+> and will not be called if tg_within_bps_limit return true.
 
-Yes, but the first call to tdx_enable() does TDH_SYS_INIT and all the
-subsequent work to get the module going.
+Maybe it's obvious but it'd be better to explain "why" this change is being
+made.
 
-> Yeah, that's not going to be a viable option.  Aside from lacking determinisim,
-> it would be all too easy to end up on a system with fragmented memory that can't
-> allocate the PAMTs post-boot.
+> @@ -939,8 +926,9 @@ static bool tg_may_dispatch(struct throtl_grp *tg, struct bio *bio,
+>  				jiffies + tg->td->throtl_slice);
+>  	}
+>  
+> -	if (tg_within_bps_limit(tg, bio, bps_limit, &bps_wait) &&
+> -	    tg_within_iops_limit(tg, bio, iops_limit, &iops_wait)) {
+> +	bps_wait = tg_within_bps_limit(tg, bio, bps_limit);
+> +	iops_wait = tg_within_iops_limit(tg, bio, iops_limit);
+> +	if (bps_wait + iops_wait == 0) {
+>  		if (wait)
+>  			*wait = 0;
+>  		return true;
 
-For now, the post-boot runtime PAMT allocations are the one any only way
-that TDX can be initialized.  I pushed for it to be done this way.
-Here's why:
+So, max_wait is supposed to be maximum in the whole traversal path in the
+tree, not just the max value in this tg, so after this, the code should be
+changed to sth like the following, right?
 
-Doing tdx_enable() is relatively slow and it eats up a non-zero amount
-of physically contiguous RAM for metadata (~1/256th or ~0.4% of RAM).
-Systems that support TDX but will never run TDX guests should not pay
-that cost.
+        max_wait = max(max, max(bps_wait, iops_wait));
 
-That means that we either make folks opt-in at boot-time or we try to
-make a best effort at runtime to do the metadata allocations.
+Thanks.
 
-From my perspective, the best-effort stuff is absolutely needed.  Users
-are going to forget the command-line opt in and there's no harm in
-_trying_ the big allocations even if they fail.
-
-Second, in reality, the "real" systems that can run TDX guests are
-probably not going to sit around fragmenting memory for a month before
-they run their first guest.  They're going to run one shortly after they
-boot when memory isn't fragmented and the best-effort allocation will
-work really well.
-
-Third, if anyone *REALLY* cared to make it reliable *and* wanted to sit
-around fragmenting memory for a month, they could just start a TDX guest
-and kill it to get TDX initialized.  This isn't ideal.  But, to me, it
-beats defining some new, separate ABI (or boot/module option) to do it.
-
-So, let's have those discussions.  Long-term, what *is* the most
-reliable way to get the TDX module loaded with 100% determinism?  What
-new ABI or interfaces are needed?  Also, is that 100% determinism
-required the moment this series is merged?  Or, can we work up to it?
-
-I think it can wait until this particular series is farther along.
+-- 
+tejun
