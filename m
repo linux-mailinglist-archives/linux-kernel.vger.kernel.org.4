@@ -2,92 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25188636545
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 17:05:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99EFB636551
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 17:06:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238293AbiKWQF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 11:05:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58890 "EHLO
+        id S238589AbiKWQGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 11:06:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237815AbiKWQF0 (ORCPT
+        with ESMTP id S238580AbiKWQGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 11:05:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078AD1FCDA;
-        Wed, 23 Nov 2022 08:05:26 -0800 (PST)
+        Wed, 23 Nov 2022 11:06:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183F6B94AC;
+        Wed, 23 Nov 2022 08:06:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9966C61DD6;
-        Wed, 23 Nov 2022 16:05:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4687C433C1;
-        Wed, 23 Nov 2022 16:05:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AEB16B821A3;
+        Wed, 23 Nov 2022 16:06:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50051C433C1;
+        Wed, 23 Nov 2022 16:06:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669219525;
-        bh=wumT2s5vcbQLnC2Ie1QxkdtZxlwX79xhxHYlH5r//Qs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=iwA3yUXdDRK22J7A76qBE8VD+CsXQ7ytMFW8cGuF/F0lqabGHieU2qeDccVuKXdhk
-         sS35HnA7gHiLSRGgWPSl4kSKm9xGIgrtxE9b/oYIfB19CwRpjDHH76XM24JsEC/vMv
-         +s4i6gZr8larNS8WQ+HnKsM90OXLBSgWg5KnUKNPtqN5O32PhJs0qTXB1sdxkc6TUT
-         f9URkC26B4FH5z0hhe83piA8r8mcexBL8q+XSvbjrGtgjuVakuOiJ+3rRLOUqqFcWl
-         oRcsuI4lWIdBW6WelVIc7Y+5uk9q0yTS0qPdUi1eZnaYwAVcIDajzfiHZti1n8gOmp
-         v66zQVKJnL58A==
-From:   Mark Brown <broonie@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] SPI fixes for v6.1-rc6
-Date:   Wed, 23 Nov 2022 16:04:59 +0000
-Message-Id: <20221123160524.A4687C433C1@smtp.kernel.org>
+        s=k20201202; t=1669219569;
+        bh=WQYGgaE2FlHz9BgmKebu5rd6gRZbPxNH81JDfaGj06Y=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=IRYGO/4fmWR76PpS8av15fkBwXOLOYjBCFGPQZ4CE7XXUr3d5axzamdRf64l5ziWb
+         6V0iSRY0Fma2b04hVJUWIiSMN7woWN6izXe5wARaZ49bV5d8PypGDnBky3PT23f6e6
+         oODkeUsmmcGZjMHfQpygWcjZhTz0cetJTuHhE/9UrwUm912Fmttqq2ECOAGpUPCjGR
+         TYfO+DyHLVH+RKw0Ku8wBJeZVAuDQGTC1pUOyKIxPYVjl6TV8rfkEP038gXGvE/wqn
+         Lu/nyH1EkZoeRo00sO7GOR+WpdW4jOsVr2gtaIN/58BhNU5el8ZR+iwbpDAbCEGC61
+         dJb8u88vS0n4A==
+Message-ID: <9b74bde1-53e8-0435-9913-af88f626d737@kernel.org>
+Date:   Wed, 23 Nov 2022 17:06:02 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v28 01/11] dt-bindings: arm: mediatek: mmsys: add vdosys1
+ compatible for MT8195
+Content-Language: en-US
+To:     "Nancy.Lin" <nancy.lin@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, linux@roeck-us.net,
+        nfraprado@collabora.com
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "jason-jh . lin" <jason-jh.lin@mediatek.com>,
+        Yongqiang Niu <yongqiang.niu@mediatek.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, llvm@lists.linux.dev,
+        singo.chang@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20221107072243.15748-1-nancy.lin@mediatek.com>
+ <20221107072243.15748-2-nancy.lin@mediatek.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20221107072243.15748-2-nancy.lin@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit bff6bef701db784bb159a659e99c785b4594fc96:
+On 07/11/2022 08:22, Nancy.Lin wrote:
+> Add vdosys1 mmsys compatible for MT8195 platform.
+> 
+> For MT8195, VDOSYS0 and VDOSYS1 are 2 display HW pipelines binding to
+> 2 different power domains, different clock drivers and different
+> mediatek-drm drivers.
+> 
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-  spi: amd: Fix SPI_SPD7 value (2022-11-04 12:25:03 +0000)
+Any reason for not CC-ing maintainers pointed out by get_maintainers.pl?
 
-are available in the Git repository at:
+Best regards,
+Krzysztof
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.1-rc6
-
-for you to fetch changes up to e85e9e0d8cb759013d6474011c227f92e442d746:
-
-  spi: spi-imx: spi_imx_transfer_one(): check for DMA transfer first (2022-11-18 11:39:50 +0000)
-
-----------------------------------------------------------------
-spi: Fixes for v6.1
-
-A few fixes, all device specific.  The most important ones are for the
-i.MX driver which had a couple of nasty data corruption inducing errors
-appear after the change to support PIO mode in the last merge window
-(one introduced by the change and one latent one which the PIO changes
-exposed), thanks to Frieder, Fabio, Marc and Marek for jumping on that
-and resolving the issues quickly once they were found.
-
-----------------------------------------------------------------
-Frieder Schrempf (1):
-      spi: spi-imx: Fix spi_bus_clk if requested clock is higher than input clock
-
-Krishna Yarlagadda (1):
-      spi: tegra210-quad: Fix duplicate resource error
-
-Marc Kleine-Budde (1):
-      spi: spi-imx: spi_imx_transfer_one(): check for DMA transfer first
-
-Xiongfeng Wang (1):
-      spi: dw-dma: decrease reference count in dw_spi_dma_init_mfld()
-
-Zhichao Liu (1):
-      spi: mediatek: Fix DEVAPC Violation at KO Remove
-
- drivers/spi/spi-dw-dma.c        |  3 +++
- drivers/spi/spi-imx.c           | 13 ++++++++-----
- drivers/spi/spi-mt65xx.c        |  8 +++++++-
- drivers/spi/spi-tegra210-quad.c |  3 ++-
- 4 files changed, 20 insertions(+), 7 deletions(-)
