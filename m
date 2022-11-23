@@ -2,288 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F810635BFF
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 12:43:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F006D635BFD
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 12:43:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237081AbiKWLnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 06:43:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
+        id S236572AbiKWLmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 06:42:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236246AbiKWLnK (ORCPT
+        with ESMTP id S235962AbiKWLmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 06:43:10 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF10CDFDD
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 03:43:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=bjsZatlDfk0Hep6fXrRlj2Nci2uR52FF1b6AJV0In0g=; b=ABk8KNOmV+jXiFUwcbLAuSBX+D
-        xUWs99JhxEyrzliXUS8fPrM8uUg9MJmb/WsuC0ug3yMWoky2mlAGOOE1POWVO3WoroBcjFp9IIN3n
-        DXi1x5rpcB9P9tCUt02dAPc3sI7QWxv5WLRIXHixhll4tpz/7cXeBo9uSXz46HsEgkdS3P1X7Gz5D
-        r3/9x9cxE3QHIKE8oyaWrjSu58EP4lFQ0XnsS2IQ1hIGlbj5Xyus/V3Z6nKRpu5CpZ6Y4rgGxQkQM
-        Hrv2lP5u/wAd4htQAGSK4kbmry91CzcSXFymyi77BkTJoTtWsgI32QrBfhLyDafgnev5wsI2PVNZ1
-        /oVBs/fg==;
-Received: from [177.34.169.227] (helo=[192.168.0.8])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1oxo9N-007fNZ-Jp; Wed, 23 Nov 2022 12:42:45 +0100
-Message-ID: <f95f2a71-5daf-332d-9971-55f1fca67ff6@igalia.com>
-Date:   Wed, 23 Nov 2022 08:42:37 -0300
+        Wed, 23 Nov 2022 06:42:52 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4A610FE8;
+        Wed, 23 Nov 2022 03:42:50 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id D25D62773;
+        Wed, 23 Nov 2022 12:42:47 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1669203767;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LB6J/wGf4CzwbXkP6hSwR8f4LMeWZKdjM96/V7YuV2A=;
+        b=SkvW1YALPGoiCXicwHdYxqHtpFL3vLvxapvYveRSYm1H44iXriuzNEXmFdvCiEePRaKM8I
+        LAv5oCU3hZvagCW1f8oLzA2Xiqtjpm+jyTuQC1jnfMzcS1J/r9mDdjG6O+85RvHDxyDJKF
+        T6pOMYdvz6OYoiC3rkNDqGNByC6dn6H5wNwj35qpMd2g+EfgGY5nAY8S4FQfJ05WgDF0Fq
+        CK19TKzHI0P43ar2x+KyX/ELiR4Rq5M7zO9gZBLWTfWEygevSP+G1mEdMNbafZeDI1xkbe
+        QO+xQQkOZJdhs+x5Cvdnv1PFYGggLjJbht80t72kSIZu0RDDSFFAAHxz+pnWQw==
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 1/6] drm/debugfs: create device-centered debugfs functions
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Oded Gabbay <ogabbay@kernel.org>
-Cc:     =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
-        Emma Anholt <emma@anholt.net>,
-        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Wambui Karuga <wambui@karuga.org>,
-        Melissa Wen <mwen@igalia.com>,
-        Wambui Karuga <wambui.karugax@gmail.com>
-References: <20221122190314.185015-1-mcanal@igalia.com>
- <20221122190314.185015-2-mcanal@igalia.com> <87mt8ivsk8.fsf@intel.com>
-Content-Language: en-US
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>
-In-Reply-To: <87mt8ivsk8.fsf@intel.com>
-Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 23 Nov 2022 12:42:47 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Sherry Sun <sherry.sun@nxp.com>
+Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        jingchang.lu@freescale.com, tomonori.sakita@sord.co.jp,
+        atsushi.nemoto@sord.co.jp, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH V2 2/5] tty: serial: fsl_lpuart: clear UARTCTRL_LOOPS in
+ lpuart32_shutdown()
+In-Reply-To: <AS8PR04MB8404825F21A72C22C6D09B49920C9@AS8PR04MB8404.eurprd04.prod.outlook.com>
+References: <20221110081728.10172-1-sherry.sun@nxp.com>
+ <20221110081728.10172-3-sherry.sun@nxp.com>
+ <1a7c9345e3c8b97adfbadffda7340871@walle.cc>
+ <AS8PR04MB8404EBF13DF7A051650EE76C920C9@AS8PR04MB8404.eurprd04.prod.outlook.com>
+ <7724b39dabc60f872e20ffb5ed21d1d6@walle.cc>
+ <AS8PR04MB8404825F21A72C22C6D09B49920C9@AS8PR04MB8404.eurprd04.prod.outlook.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <45769b238521d4b41638406863e31ded@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jani,
+Hi Sherry,
 
-On 11/23/22 08:06, Jani Nikula wrote:
-> On Tue, 22 Nov 2022, Maíra Canal <mcanal@igalia.com> wrote:
->> Introduce the ability to track requests for the addition of DRM debugfs
->> files at any time and have them added all at once during
->> drm_dev_register().
->>
->> Drivers can add DRM debugfs files to a device-managed list and, during
->> drm_dev_register(), all added files will be created at once.
->>
->> Now, the drivers can use the functions drm_debugfs_add_file() and
->> drm_debugfs_add_files() to create DRM debugfs files instead of using the
->> drm_debugfs_create_files() function.
->>
->> Co-developed-by: Wambui Karuga <wambui.karugax@gmail.com>
->> Signed-off-by: Wambui Karuga <wambui.karugax@gmail.com>
->> Signed-off-by: Maíra Canal <mcanal@igalia.com>
->> ---
->>  drivers/gpu/drm/drm_debugfs.c | 76 +++++++++++++++++++++++++++++++++++
->>  drivers/gpu/drm/drm_drv.c     |  3 ++
->>  include/drm/drm_debugfs.h     | 45 +++++++++++++++++++++
->>  include/drm/drm_device.h      | 15 +++++++
->>  4 files changed, 139 insertions(+)
->>>> +/**
->> + * drm_debugfs_add_file - Add a given file to the DRM device debugfs file list
->> + * @dev: drm device for the ioctl
->> + * @name: debugfs file name
->> + * @show: show callback
->> + * @data: driver-private data, should not be device-specific
->> + *
->> + * Add a given file entry to the DRM device debugfs file list to be created on
->> + * drm_debugfs_init.
->> + */
->> +int drm_debugfs_add_file(struct drm_device *dev, const char *name,
->> +			 int (*show)(struct seq_file*, void*), void *data)
->> +{
->> +	struct drm_debugfs_entry *entry = drmm_kzalloc(dev, sizeof(*entry), GFP_KERNEL);
->> +
->> +	if (!entry)
->> +		return -ENOMEM;
->> +
->> +	entry->file.name = name;
->> +	entry->file.show = show;
->> +	entry->file.data = data;
->> +	entry->dev = dev;
->> +
->> +	mutex_lock(&dev->debugfs_mutex);
->> +	list_add(&entry->list, &dev->debugfs_list);
->> +	mutex_unlock(&dev->debugfs_mutex);
->> +
->> +	return 0;
->> +}
->> +EXPORT_SYMBOL(drm_debugfs_add_file);
->> +
->> +/**
->> + * drm_debugfs_add_files - Add an array of files to the DRM device debugfs file list
->> + * @dev: drm device for the ioctl
->> + * @files: The array of files to create
->> + * @count: The number of files given
->> + *
->> + * Add a given set of debugfs files represented by an array of
->> + * &struct drm_debugfs_info in the DRM device debugfs file list.
->> + */
->> +int drm_debugfs_add_files(struct drm_device *dev, const struct drm_debugfs_info *files, int count)
->> +{
->> +	int i, ret = 0, err;
->> +
->> +	for (i = 0; i < count; i++) {
->> +		err = drm_debugfs_add_file(dev, files[i].name, files[i].show, files[i].data);
->> +		if (err)
->> +			ret = err;
->> +	}
->> +
->> +	return ret;
->> +}
->> +EXPORT_SYMBOL(drm_debugfs_add_files);
+Am 2022-11-23 12:30, schrieb Sherry Sun:
+>> -----Original Message-----
+>> From: Michael Walle <michael@walle.cc>
+>> Sent: 2022年11月23日 19:09
+>> To: Sherry Sun <sherry.sun@nxp.com>
+>> Cc: gregkh@linuxfoundation.org; jirislaby@kernel.org;
+>> jingchang.lu@freescale.com; tomonori.sakita@sord.co.jp;
+>> atsushi.nemoto@sord.co.jp; linux-serial@vger.kernel.org; linux-
+>> kernel@vger.kernel.org; dl-linux-imx <linux-imx@nxp.com>
+>> Subject: Re: [PATCH V2 2/5] tty: serial: fsl_lpuart: clear 
+>> UARTCTRL_LOOPS in
+>> lpuart32_shutdown()
+>> 
+>> Am 2022-11-23 11:58, schrieb Sherry Sun:
+>> >> -----Original Message-----
+>> >> From: Michael Walle <michael@walle.cc>
+>> >> Sent: 2022年11月23日 18:34
+>> >> To: Sherry Sun <sherry.sun@nxp.com>
+>> >> Cc: gregkh@linuxfoundation.org; jirislaby@kernel.org;
+>> >> jingchang.lu@freescale.com; tomonori.sakita@sord.co.jp;
+>> >> atsushi.nemoto@sord.co.jp; linux-serial@vger.kernel.org; linux-
+>> >> kernel@vger.kernel.org; dl-linux-imx <linux-imx@nxp.com>
+>> >> Subject: Re: [PATCH V2 2/5] tty: serial: fsl_lpuart: clear
+>> >> UARTCTRL_LOOPS in
+>> >> lpuart32_shutdown()
+>> >>
+>> >> Am 2022-11-10 09:17, schrieb Sherry Sun:
+>> >> > UARTCTRL_LOOPS bit is set in lpuart32_set_mctrl() for loopback
+>> >> > mode, but nowhere clear this bit, it should be cleared when closing
+>> >> > the uart port to avoid the loopback mode been enabled by default
+>> >> > when reopening the uart.
+>> >>
+>> >> It's cleared in set_mctrl(). What is the expectation from the serial
+>> >> core here?
+>> >>
+>> >
+>> > Hi Michael,
+>> >
+>> > If we call .set_mctrl(TIOCM_LOOP), the UARTCTRL_LOOPS will be set.
+>> > Then when we call .shutdown(), serial core won't call .set_mctrl() to
+>> > clear it, so the UARTCTRL_LOOPS need to be cleared here.
+>> > Per my understanding, .shutdown() should clean up all the uart flags,
+>> > as the transmitter and receiver will been disabled, we will
+>> > re-configure all the settings needed when re-open the port.
+>> 
+>> Two things,
+>> (1) should the loopback be cleared on a newly opened serial device?
+>> (2) as mentioned in my other reply, this can also be handled in
+>>      the startup. Eg. the startup can clear the loopback flag.
+>>      (together with possible hardware events).
+>> 
+>> I'm not that deep into the serial core, thus my question about the
+>> expectations from the serial core. I guess the answer to
+>> (1) is yes, but better to ask.
+>> 
 > 
-> Do we want to add return values and error handling to debugfs related
-> functions at all?
+> Hi Michael,
+> 
+> For the (1), I have checked the serial core, seems the answer is no, .
+> startup() won't clean the status, only when the uart device is probed,
+> lpuart will do the global reset to all the registers instead of
+> .startup(). So I think the uart running status cleared in .shutdown()
+> is reasonable.
 
-Drivers such as vc4 can use the return values from debugfs-related
-functions for error handling. Although the return values are not
-explicitly necessary, some drivers can benefit from them for error handling.
+That's not what I've meant. Even with this patch as it is right now,
+the loopback flag is cleared on a "newly opened serial device". Just
+with one difference, you are clearing the flag in shutdown.
 
-Best Regards,
-- Maíra Canal
+My question was rather, should the loopback (or generally any mctrl 
+flags)
+be persistent across close/open cycles. E.g. looking at omap-serial.c,
+this driver doesn't seem to handle the loopback flag at .startup() or
+.shutdown(). Same seems to be true for sh-sci.c.
 
-> 
-> BR,
-> Jani.
-> 
-> 
->> +
->>  static int connector_show(struct seq_file *m, void *data)
->>  {
->>  	struct drm_connector *connector = m->private;
->> diff --git a/drivers/gpu/drm/drm_drv.c b/drivers/gpu/drm/drm_drv.c
->> index 8214a0b1ab7f..803942008fcb 100644
->> --- a/drivers/gpu/drm/drm_drv.c
->> +++ b/drivers/gpu/drm/drm_drv.c
->> @@ -575,6 +575,7 @@ static void drm_dev_init_release(struct drm_device *dev, void *res)
->>  	mutex_destroy(&dev->clientlist_mutex);
->>  	mutex_destroy(&dev->filelist_mutex);
->>  	mutex_destroy(&dev->struct_mutex);
->> +	mutex_destroy(&dev->debugfs_mutex);
->>  	drm_legacy_destroy_members(dev);
->>  }
->>  
->> @@ -608,12 +609,14 @@ static int drm_dev_init(struct drm_device *dev,
->>  	INIT_LIST_HEAD(&dev->filelist_internal);
->>  	INIT_LIST_HEAD(&dev->clientlist);
->>  	INIT_LIST_HEAD(&dev->vblank_event_list);
->> +	INIT_LIST_HEAD(&dev->debugfs_list);
->>  
->>  	spin_lock_init(&dev->event_lock);
->>  	mutex_init(&dev->struct_mutex);
->>  	mutex_init(&dev->filelist_mutex);
->>  	mutex_init(&dev->clientlist_mutex);
->>  	mutex_init(&dev->master_mutex);
->> +	mutex_init(&dev->debugfs_mutex);
->>  
->>  	ret = drmm_add_action(dev, drm_dev_init_release, NULL);
->>  	if (ret)
->> diff --git a/include/drm/drm_debugfs.h b/include/drm/drm_debugfs.h
->> index 2188dc83957f..c5684d6c5055 100644
->> --- a/include/drm/drm_debugfs.h
->> +++ b/include/drm/drm_debugfs.h
->> @@ -79,12 +79,43 @@ struct drm_info_node {
->>  	struct dentry *dent;
->>  };
->>  
->> +/**
->> + * struct drm_debugfs_info - debugfs info list entry
->> + *
->> + * This structure represents a debugfs file to be created by the drm
->> + * core.
->> + */
->> +struct drm_debugfs_info {
->> +	const char *name;
->> +	int (*show)(struct seq_file*, void*);
->> +	u32 driver_features;
->> +	void *data;
->> +};
->> +
->> +/**
->> + * struct drm_debugfs_entry - Per-device debugfs node structure
->> + *
->> + * This structure represents a debugfs file, as an instantiation of a &struct
->> + * drm_debugfs_info on a &struct drm_device.
->> + */
->> +struct drm_debugfs_entry {
->> +	struct drm_device *dev;
->> +	struct drm_debugfs_info file;
->> +	struct list_head list;
->> +};
->> +
->>  #if defined(CONFIG_DEBUG_FS)
->>  void drm_debugfs_create_files(const struct drm_info_list *files,
->>  			      int count, struct dentry *root,
->>  			      struct drm_minor *minor);
->>  int drm_debugfs_remove_files(const struct drm_info_list *files,
->>  			     int count, struct drm_minor *minor);
->> +
->> +int drm_debugfs_add_file(struct drm_device *dev, const char *name,
->> +			 int (*show)(struct seq_file*, void*), void *data);
->> +
->> +int drm_debugfs_add_files(struct drm_device *dev,
->> +			  const struct drm_debugfs_info *files, int count);
->>  #else
->>  static inline void drm_debugfs_create_files(const struct drm_info_list *files,
->>  					    int count, struct dentry *root,
->> @@ -96,6 +127,20 @@ static inline int drm_debugfs_remove_files(const struct drm_info_list *files,
->>  {
->>  	return 0;
->>  }
->> +
->> +static inline int drm_debugfs_add_file(struct drm_device *dev, const char *name,
->> +				       int (*show)(struct seq_file*, void*),
->> +				       void *data)
->> +{
->> +	return 0;
->> +}
->> +
->> +static inline int drm_debugfs_add_files(struct drm_device *dev,
->> +					const struct drm_debugfs_info *files,
->> +					int count)
->> +{
->> +	return 0;
->> +}
->>  #endif
->>  
->>  #endif /* _DRM_DEBUGFS_H_ */
->> diff --git a/include/drm/drm_device.h b/include/drm/drm_device.h
->> index 9923c7a6885e..fa6af1d57929 100644
->> --- a/include/drm/drm_device.h
->> +++ b/include/drm/drm_device.h
->> @@ -295,6 +295,21 @@ struct drm_device {
->>  	 */
->>  	struct drm_fb_helper *fb_helper;
->>  
->> +	/**
->> +	 * @debugfs_mutex:
->> +	 *
->> +	 * Protects &debugfs_list access.
->> +	 */
->> +	struct mutex debugfs_mutex;
->> +
->> +	/**
->> +	 * @debugfs_list:
->> +	 *
->> +	 * List of debugfs files to be created by the DRM device. The files
->> +	 * must be added during drm_dev_register().
->> +	 */
->> +	struct list_head debugfs_list;
->> +
->>  	/* Everything below here is for legacy driver, never use! */
->>  	/* private: */
->>  #if IS_ENABLED(CONFIG_DRM_LEGACY)
-> 
+Greg?
+
+-michael
