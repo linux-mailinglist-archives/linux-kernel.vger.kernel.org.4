@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E988D634D5A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 02:42:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BD99634D5E
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 02:44:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235209AbiKWBml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 20:42:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47486 "EHLO
+        id S235334AbiKWBoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 20:44:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiKWBmh (ORCPT
+        with ESMTP id S229728AbiKWBoV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 20:42:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37D465BB;
-        Tue, 22 Nov 2022 17:42:35 -0800 (PST)
+        Tue, 22 Nov 2022 20:44:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E3474CC9;
+        Tue, 22 Nov 2022 17:44:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 87215619BD;
-        Wed, 23 Nov 2022 01:42:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D88DCC433D6;
-        Wed, 23 Nov 2022 01:42:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B0CE7619D0;
+        Wed, 23 Nov 2022 01:44:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10129C433D6;
+        Wed, 23 Nov 2022 01:44:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669167753;
-        bh=psYNxc4PghRst/FBPVLKrfzinaBNDKn/Y65S38AJvTU=;
+        s=k20201202; t=1669167860;
+        bh=yYdMEzHLIt5eIeu2zhVvzwrCKj/xjohYDRGrsbFXcIo=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=Nye0C47nSa904YcLrD9Cmy+qsD2QDU7PCEBgpclF5Cg1TVVurysadT6XtND808N+f
-         8bT5v6RPoPC+mPul7e73g1oLP63lVkv3Lot/4lOlr7shXOsqlua6xRHXEvMMce4bRo
-         5TZNENDDWrGjhSPVOB/W5A9ArV/LKpqsyfdy6+a14U+WftambRuR1b1nttFwOrFk5q
-         Hy8JpCazikUqtJ3CKsmtyv4oZgMAB8AKlt32J2Hnjw3+NLuArA/hYmNnC/ocE+q9D8
-         saMi8t7We6SxYOe9es871wBq2I5gxsRjnrEVwBaSSuYfiQ6ao1KVu5dUvwle+czK9I
-         ksEJcX/DTh2mA==
+        b=ZJOiG8mKNApmQWUik10mWa1ENXwoj/RSUumKB8Pyjqi/0J30haeXQGbt31oqh2dVa
+         Q9jgxNIJE83Tqbusi6ijWCITeBv1E4KdvXR939nbqND9mIT/c5IBKPVQ3krxTyDa2z
+         lRHZn/jqagdH4h1GS/0YKod5cKmVuzhnlCkGq6UqQtr62Gkr1WmbTcP6gLL/sIqs0H
+         vCEvnYNKx47QYYMQWpi2brxZnBAziNqDFPBQue17AcviITWHygeueLYhnS5FObdvcM
+         nSm083cMVCXkl6M+ICDxqPOu82SowqgZBa/kLj4D88//xdJSs2MEPRcei9jLOVEd7C
+         9bbHvRD0H6ukA==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <97c249fd-21c5-acc2-6195-bf0aed5bee8f@rasmusvillemoes.dk>
-References: <20220928124108.500369-1-linux@rasmusvillemoes.dk> <Y3ucncQOBNHpZaxn@linaro.org> <97c249fd-21c5-acc2-6195-bf0aed5bee8f@rasmusvillemoes.dk>
-Subject: Re: [PATCH] clk: imx8mp: register driver at arch_initcall time
+In-Reply-To: <20221122184844.6794-1-rdunlap@infradead.org>
+References: <20221122184844.6794-1-rdunlap@infradead.org>
+Subject: Re: [PATCH] clk: sunxi-ng: fix ccu_mmc_timing.c kernel-doc issues
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Abel Vesa <abelvesa@kernel.org>,
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         Michael Turquette <mturquette@baylibre.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-To:     Abel Vesa <abel.vesa@linaro.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Date:   Tue, 22 Nov 2022 17:42:31 -0800
+        linux-clk@vger.kernel.org
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Date:   Tue, 22 Nov 2022 17:44:17 -0800
 User-Agent: alot/0.10
-Message-Id: <20221123014233.D88DCC433D6@smtp.kernel.org>
+Message-Id: <20221123014420.10129C433D6@smtp.kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,63 +60,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Rasmus Villemoes (2022-11-21 23:49:50)
-> On 21/11/2022 16.43, Abel Vesa wrote:
-> > On 22-09-28 14:41:08, Rasmus Villemoes wrote:
-> >> We have an imx8mp-based board with an external gpio-triggered
-> >> watchdog. Currently, we don't get to handle that in time before it
-> >> resets the board.
-> >>
-> >> The probe of the watchdog device gets deferred because the SOC's GPIO
-> >> controller is not yet ready, and the probe of that in turn gets deferr=
-ed
-> >> because its clock provider (namely, this driver) is not yet
-> >> ready. Altogether, the watchdog does not get handled until the late
-> >> initcall deferred_probe_initcall has made sure all leftover devices
-> >> have been probed, and that's way too late.
-> >>
-> >> Aside from being necessary for our board, this also reduces total boot
-> >> time because fewer device probes get deferred.
-> >>
-> >=20
-> > I'm gonna be honest here. I can't say I'm happy with this.
-> > I would suggest finding a solution to disable the external watchdog
-> > before booting the kernel, up until the driver probes, would be prefera=
-ble
-> > to me.
+Quoting Randy Dunlap (2022-11-22 10:48:44)
+> Use '-' to separate the function name and its description.
+> Use '%' on constants in kernel-doc notation.
+> Use the kernel-doc Return: format for function return values.
 >=20
-> That's not an option (it would violate the very purpose of having an
-> external always-running watchdog), and also simply not possible on the
-> given hardware.
+> Fixes this warning:
+> ccu_mmc_timing.c:21: warning: No description found for return value of 's=
+unxi_ccu_set_mmc_timing_mode'
 >=20
-> I don't understand why this simple patch can't just be applied. It hurts
-> nothing, it makes all imx8mp boards boot very slightly faster, there's
-> no maintenance burden associated with the boilerplate code,
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Yang Li <yang.lee@linux.alibaba.com>
+> Cc: Chen-Yu Tsai <wens@csie.org>
+> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
+> Cc: Samuel Holland <samuel@sholland.org>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-sunxi@lists.linux.dev
+> Cc: Michael Turquette <mturquette@baylibre.com>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: linux-clk@vger.kernel.org
+> ---
 
-There is a maintenance burden. Moving the initcall around is papering
-over the problem by not clearly describing the requirement to probe the
-watchdog driver as soon as possible. I don't expect to remember years
-from now that the watchdog driver needed this driver and the pinctrl
-driver to avoid probe defer, otherwise the watchdog will bite because it
-probes too late.
-
-The problem is not being solved directly. That's why we're concerned.
-Maybe if the problem statement was "don't allow probe defer", and that
-was worked into the driver core so drivers can be marked as "panic when
-this driver probe defers" then it would be more obvious what sort of
-behavior we don't want.
-
-Or to go further, maybe this board compatible needs to probe a board
-driver that only adds the clk, pinctrl, and watchdog devices as a first
-pass with a comment that these devices need to be probed as soon as
-possible to avoid watchdog bites on that board. Then once those devices
-are probed it can add the rest of the devices.
-
-> it allows
-> hardware that already exists to actually work with a mainline kernel
-> out-of-the-box. And in an alternate universe where the init function had
-> been arch_initcall in the initial commit (such as those in
-> drivers/clk/mediatek/), nobody would have asked any questions.
->=20
-
-The usage of arch_initcall() and core_initcall() should be fixed.
+Reviewed-by: Stephen Boyd <sboyd@kernel.org>
