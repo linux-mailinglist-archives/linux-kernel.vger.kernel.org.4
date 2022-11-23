@@ -2,40 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A2FE635337
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 09:51:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A15F63533B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 09:51:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236699AbiKWIuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 03:50:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53122 "EHLO
+        id S236720AbiKWIuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 03:50:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236698AbiKWIuI (ORCPT
+        with ESMTP id S236722AbiKWIuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 03:50:08 -0500
-X-Greylist: delayed 88825 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 23 Nov 2022 00:50:03 PST
+        Wed, 23 Nov 2022 03:50:23 -0500
 Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C0F3E9325;
-        Wed, 23 Nov 2022 00:50:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8DCEC7BF;
+        Wed, 23 Nov 2022 00:50:22 -0800 (PST)
 Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 996501D40;
-        Wed, 23 Nov 2022 09:50:00 +0100 (CET)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 7791B1D40;
+        Wed, 23 Nov 2022 09:50:20 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1669193400;
+        t=1669193420;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4W9RiPaNSvStQHiskQ7zYEFwzOOxCCQ+wsJki7XP6a8=;
-        b=rizgvhI92mBrKmoVkSg0nMWWDZJ38eOw4uCvzOskt/Z6NahkJVYao8/9Z02QLSFjcrjdb7
-        Skr1b6fpOkCFcp7JdAMCtmjkpF5/p++1auNanObEun3V9WC7XWuCxVk86+htHlrgdMylRu
-        kTIX9A/Q/MHiiJNO9r/UYcVERHsa40/Hxze+zxZvnAS4kOyRjmHGAJwms2x9+DiZgCNAxB
-        EOy3c1Ngrg3v+DTlP/YBijfvFwtuVh0OLFABsegZeTi3O1tjEAUsn8bsrauJVaLgCROml4
-        jadLj57iJeUqgkO2PhtDP07zNTuOfC1hCWuEoWApqd1fUgT3lD7j7JIMGuvs2w==
+        bh=Ot1MQf8keHxTYnGi9OMHg5JoM8v/jBK7KR6S/bFtzt4=;
+        b=mcP+L/NmRxw35qme0iE9W0Mfy43Bdvuo1FcB6BaVjQ8nDvP22m/ch3mGyMDmEJsp/Ihx+G
+        taC3VvN1kd6lL29tZvzfcKAIEkJlWuzc88VERpr2k9LT3bBKlHZyVV2aZajTWaHBJSvOEf
+        McHnPuX8lWq+hh7oBOOb/JQ+X/cxRftRvdxqPYFJG0sVXxaM0QzhZhMKoAtG5CcS1YAXVN
+        RO2vtCPS5XxwjshFGnUEUWQN4MUtjKcKbkbaglsmXPp/K3S+XwoqxK0xYFGh23HN2D6qmz
+        lC2knCRqeysPdPx21sgvdOq0GubZ+lg/HWUlZa8SsIXJqlr4U5muT6sRHrYobA==
 MIME-Version: 1.0
-Date:   Wed, 23 Nov 2022 09:50:00 +0100
+Date:   Wed, 23 Nov 2022 09:50:20 +0100
 From:   Michael Walle <michael@walle.cc>
 To:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
 Cc:     gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
@@ -45,11 +44,13 @@ Cc:     gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Claudiu Beznea <claudiu.beznea@microchip.com>,
         linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/2] serial: atmel: cleanup atmel_start+stop_tx()
-In-Reply-To: <20221123082736.24566-1-jirislaby@kernel.org>
+Subject: Re: [PATCH 2/2] serial: atmel: don't stop the transmitter when doing
+ PIO
+In-Reply-To: <20221123082736.24566-2-jirislaby@kernel.org>
 References: <20221123082736.24566-1-jirislaby@kernel.org>
+ <20221123082736.24566-2-jirislaby@kernel.org>
 User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <4b9c474a0b32ffe3725ed1cf9f084fcb@walle.cc>
+Message-ID: <df233ce37626fdb194b583808326d966@walle.cc>
 X-Sender: michael@walle.cc
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
@@ -64,14 +65,28 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Am 2022-11-23 09:27, schrieb Jiri Slaby (SUSE):
-> Define local variables holding information about whether pdc or dma is
-> used in the HW. These are retested several times by calls to
-> atmel_use_pdc_tx() and atmel_use_dma_tx(). So to make the code more
-> readable, simply cache the values.
+> Writing ATMEL_US_TXDIS to ATMEL_US_CR makes the transmitter NOT to send
+> the just queued character. This means when the character is last and
+> uart calls ops->stop_tx(), the character is not sent at all.
 > 
-> This is also a preparatory patch for the next one (where is_pdc is used
-> once more in atmel_stop_tx()).
+> The usart datasheet is not much specific on this, it just says the
+> transmitter is stopped. But apparently, the character is dropped. So
+> we should stop the transmitter only for DMA and PDC transfers to not
+> send any more characters. For PIO, this is unexpected and deviates from
+> other drivers. In particular, the below referenced commit broke TX as 
+> it
+> added a call to ->stop_tx() after the very last character written to 
+> the
+> transmitter.
 > 
+> So fix this by limiting the write of ATMEL_US_TXDIS to DMA transfers
+> only.
+> 
+> Even there, I don't know if it is correctly implemented. Are all the
+> queued characters sent once ->start_tx() is called? Anyone tested flow
+> control -- be it hard (RTSCTS) or the soft (XOFF/XON) one?
+> 
+> Fixes: 2d141e683e9a ("tty: serial: use uart_port_tx() helper")
 > Cc: Richard Genoud <richard.genoud@gmail.com>
 > Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
 > Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
