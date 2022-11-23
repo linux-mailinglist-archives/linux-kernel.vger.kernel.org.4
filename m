@@ -2,294 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC31563677E
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:44:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BCAB636785
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:45:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237578AbiKWRoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 12:44:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35922 "EHLO
+        id S238901AbiKWRph convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 23 Nov 2022 12:45:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235568AbiKWRoF (ORCPT
+        with ESMTP id S238254AbiKWRpe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 12:44:05 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271998CB8D;
-        Wed, 23 Nov 2022 09:44:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669225444; x=1700761444;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sQO+k9nuBFGZkzf+UuTqUqVli514lLoA06x9Xr2TrPk=;
-  b=SC/3kcpUITjsa0IlXpVAuFxMfBD1+Y4Mcsmq6qUF7kYmukiBHi5ZA4kl
-   8DBM1xRdHjjH/Lw7JEXrk32q+PHa7lrlga93mBE/ARHBy7YN0kTaQTxvb
-   GMnKMOw71nK54rAkpXnd2wLY+rXaROwf3x6kEUvbQKbZtU4YDoQoa7mEq
-   3IPXi17pQSC1lxxBpzxtsqgjfhs8pw2Fkd9INhJNlAL6uVrk98aSv5nMU
-   VpGuuajO243Xs81RuREKQ5Ks1gMKDdiuDIYOzGZI2BdAS8lMSUw7bGyDg
-   uQ/1viwYgi5d0Ikw5AI6tMiHfodLLcCZPCDOgxH+7clTYd1Fxsxqcs6MD
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="294511949"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="294511949"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 09:44:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="766805287"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="766805287"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 23 Nov 2022 09:44:01 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oxtmx-00GOBT-1p;
-        Wed, 23 Nov 2022 19:43:59 +0200
-Date:   Wed, 23 Nov 2022 19:43:59 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        michael@walle.cc, broonie@kernel.org
-Subject: Re: [PATCH v3 7/9] gpio: 104-dio-48e: Migrate to regmap API
-Message-ID: <Y35b38dVXJxI4fk+@smile.fi.intel.com>
-References: <cover.1669100542.git.william.gray@linaro.org>
- <79705f8932321afd05df52156ef149dc1c9c632c.1669100542.git.william.gray@linaro.org>
+        Wed, 23 Nov 2022 12:45:34 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739398FB09;
+        Wed, 23 Nov 2022 09:45:32 -0800 (PST)
+Received: from fraeml742-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NHT6v3bT1z67Mdh;
+        Thu, 24 Nov 2022 01:45:27 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml742-chm.china.huawei.com (10.206.15.223) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 23 Nov 2022 18:45:30 +0100
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 23 Nov
+ 2022 17:45:29 +0000
+Date:   Wed, 23 Nov 2022 17:45:28 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Ciprian Regus <ciprian.regus@analog.com>
+CC:     <jic23@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <robh+dt@kernel.org>, <linux-iio@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 2/2] drivers: iio: dac: Add AD5754 DAC driver
+Message-ID: <20221123174528.00001207@Huawei.com>
+In-Reply-To: <20221118172407.765423-3-ciprian.regus@analog.com>
+References: <20221118172407.765423-1-ciprian.regus@analog.com>
+        <20221118172407.765423-3-ciprian.regus@analog.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <79705f8932321afd05df52156ef149dc1c9c632c.1669100542.git.william.gray@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 02:11:04AM -0500, William Breathitt Gray wrote:
-> The regmap API supports IO port accessors so we can take advantage of
-> regmap abstractions rather than handling access to the device registers
-> directly in the driver. The 104-dio-48e module is migrated to the new
-> i8255 library interface leveraging the gpio-regmap API.
+On Fri, 18 Nov 2022 19:24:07 +0200
+Ciprian Regus <ciprian.regus@analog.com> wrote:
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-(see also below)
-
-> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
-> ---
->  drivers/gpio/gpio-104-dio-48e.c | 147 ++------------------------------
->  1 file changed, 7 insertions(+), 140 deletions(-)
+> The AD5724/AD5734/AD5754 are quad, 12-/14-/16-bit, serial input, voltage
+> output DACs. The devices operate from single-supply voltages from +4.5 V
+> up to +16.5 V or dual-supply voltages from ±4.5 V up to ±16.5 V. The
+> input coding is user-selectable twos complement or offset binary for a
+> bipolar output (depending on the state of Pin BIN/2sComp), and straight
+> binary for a unipolar output.
 > 
-> diff --git a/drivers/gpio/gpio-104-dio-48e.c b/drivers/gpio/gpio-104-dio-48e.c
-> index fcee3dc81902..64f4044150b7 100644
-> --- a/drivers/gpio/gpio-104-dio-48e.c
-> +++ b/drivers/gpio/gpio-104-dio-48e.c
-> @@ -9,7 +9,6 @@
->  #include <linux/bits.h>
->  #include <linux/device.h>
->  #include <linux/err.h>
-> -#include <linux/gpio/driver.h>
->  #include <linux/ioport.h>
->  #include <linux/irq.h>
->  #include <linux/isa.h>
-> @@ -42,90 +41,6 @@ MODULE_PARM_DESC(irq, "ACCES 104-DIO-48E interrupt line numbers");
->  
->  #define DIO48E_NUM_PPI 2
->  
-> -/**
-> - * struct dio48e_reg - device register structure
-> - * @ppi:		Programmable Peripheral Interface groups
-> - */
-> -struct dio48e_reg {
-> -	struct i8255 ppi[DIO48E_NUM_PPI];
-> -};
-> -
-> -/**
-> - * struct dio48e_gpio - GPIO device private data structure
-> - * @chip:		instance of the gpio_chip
-> - * @ppi_state:		PPI device states
-> - * @reg:		I/O address offset for the device registers
-> - */
-> -struct dio48e_gpio {
-> -	struct gpio_chip chip;
-> -	struct i8255_state ppi_state[DIO48E_NUM_PPI];
-> -	struct dio48e_reg __iomem *reg;
-> -};
-> -
-> -static int dio48e_gpio_get_direction(struct gpio_chip *chip, unsigned int offset)
-> -{
-> -	struct dio48e_gpio *const dio48egpio = gpiochip_get_data(chip);
-> -
-> -	if (i8255_get_direction(dio48egpio->ppi_state, offset))
-> -		return GPIO_LINE_DIRECTION_IN;
-> -
-> -	return GPIO_LINE_DIRECTION_OUT;
-> -}
-> -
-> -static int dio48e_gpio_direction_input(struct gpio_chip *chip, unsigned int offset)
-> -{
-> -	struct dio48e_gpio *const dio48egpio = gpiochip_get_data(chip);
-> -
-> -	i8255_direction_input(dio48egpio->reg->ppi, dio48egpio->ppi_state,
-> -			      offset);
-> -
-> -	return 0;
-> -}
-> -
-> -static int dio48e_gpio_direction_output(struct gpio_chip *chip, unsigned int offset,
-> -					int value)
-> -{
-> -	struct dio48e_gpio *const dio48egpio = gpiochip_get_data(chip);
-> -
-> -	i8255_direction_output(dio48egpio->reg->ppi, dio48egpio->ppi_state,
-> -			       offset, value);
-> -
-> -	return 0;
-> -}
-> -
-> -static int dio48e_gpio_get(struct gpio_chip *chip, unsigned int offset)
-> -{
-> -	struct dio48e_gpio *const dio48egpio = gpiochip_get_data(chip);
-> -
-> -	return i8255_get(dio48egpio->reg->ppi, offset);
-> -}
-> -
-> -static int dio48e_gpio_get_multiple(struct gpio_chip *chip, unsigned long *mask,
-> -	unsigned long *bits)
-> -{
-> -	struct dio48e_gpio *const dio48egpio = gpiochip_get_data(chip);
-> -
-> -	i8255_get_multiple(dio48egpio->reg->ppi, mask, bits, chip->ngpio);
-> -
-> -	return 0;
-> -}
-> -
-> -static void dio48e_gpio_set(struct gpio_chip *chip, unsigned int offset, int value)
-> -{
-> -	struct dio48e_gpio *const dio48egpio = gpiochip_get_data(chip);
-> -
-> -	i8255_set(dio48egpio->reg->ppi, dio48egpio->ppi_state, offset, value);
-> -}
-> -
-> -static void dio48e_gpio_set_multiple(struct gpio_chip *chip,
-> -	unsigned long *mask, unsigned long *bits)
-> -{
-> -	struct dio48e_gpio *const dio48egpio = gpiochip_get_data(chip);
-> -
-> -	i8255_set_multiple(dio48egpio->reg->ppi, dio48egpio->ppi_state, mask,
-> -			   bits, chip->ngpio);
-> -}
-> -
->  static const struct regmap_range dio48e_wr_ranges[] = {
->  	regmap_reg_range(0x0, 0x9), regmap_reg_range(0xB, 0xB),
->  	regmap_reg_range(0xD, 0xD), regmap_reg_range(0xF, 0xF),
-> @@ -237,35 +152,10 @@ static const char *dio48e_names[DIO48E_NGPIO] = {
->  	"PPI Group 1 Port C 5", "PPI Group 1 Port C 6", "PPI Group 1 Port C 7"
->  };
->  
-> -static int dio48e_irq_init_hw(struct gpio_chip *gc)
-> -{
-> -	struct dio48e_gpio *const dio48egpio = gpiochip_get_data(gc);
-> -
-> -	/* Disable IRQ by default */
-> -	ioread8(&dio48egpio->reg->enable_interrupt);
-> -
-> -	return 0;
-> -}
-> -
-> -static void dio48e_init_ppi(struct i8255 __iomem *const ppi,
-> -			    struct i8255_state *const ppi_state)
-> -{
-> -	const unsigned long ngpio = 24;
-> -	const unsigned long mask = GENMASK(ngpio - 1, 0);
-> -	const unsigned long bits = 0;
-> -	unsigned long i;
-> -
-> -	/* Initialize all GPIO to output 0 */
-> -	for (i = 0; i < DIO48E_NUM_PPI; i++) {
-> -		i8255_mode0_output(&ppi[i]);
-> -		i8255_set_multiple(&ppi[i], &ppi_state[i], &mask, &bits, ngpio);
-> -	}
-> -}
-> -
->  static int dio48e_probe(struct device *dev, unsigned int id)
->  {
-> -	struct dio48e_gpio *dio48egpio;
->  	const char *const name = dev_name(dev);
+> Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/AD5724_5734_5754.pdf
+> Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ad5722_5732_5752.pdf
+> Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/ad5724r_5734r_5754r.pdf
+> Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/AD5722R_5732R_5752R.pdf
+> Signed-off-by: Ciprian Regus <ciprian.regus@analog.com>
 
-> +	struct i8255_regmap_config config = {0};
+Hi Ciprian,
 
-{} will work okay.
+Took another look and found a few more things given you'll be spinning
+again for the dt binding.
 
->  	void __iomem *regs;
->  	struct regmap *map;
->  	unsigned int val;
-> @@ -274,10 +164,6 @@ static int dio48e_probe(struct device *dev, unsigned int id)
->  	unsigned int irq_mask;
->  	struct regmap_irq_chip_data *chip_data;
->  
-> -	dio48egpio = devm_kzalloc(dev, sizeof(*dio48egpio), GFP_KERNEL);
-> -	if (!dio48egpio)
-> -		return -ENOMEM;
-> -
->  	if (!devm_request_region(dev, base[id], DIO48E_EXTENT, name)) {
->  		dev_err(dev, "Unable to lock port addresses (0x%X-0x%X)\n",
->  			base[id], base[id] + DIO48E_EXTENT);
-> @@ -287,7 +173,6 @@ static int dio48e_probe(struct device *dev, unsigned int id)
->  	regs = devm_ioport_map(dev, base[id], DIO48E_EXTENT);
->  	if (!regs)
->  		return -ENOMEM;
-> -	dio48egpio->reg = regs;
->  
->  	map = devm_regmap_init_mmio(dev, regs, &dio48e_regmap_config);
->  	if (IS_ERR(map))
-> @@ -324,31 +209,13 @@ static int dio48e_probe(struct device *dev, unsigned int id)
->  		return err;
->  	}
->  
-> -	dio48egpio->chip.label = name;
-> -	dio48egpio->chip.parent = dev;
-> -	dio48egpio->chip.owner = THIS_MODULE;
-> -	dio48egpio->chip.base = -1;
-> -	dio48egpio->chip.ngpio = DIO48E_NGPIO;
-> -	dio48egpio->chip.names = dio48e_names;
-> -	dio48egpio->chip.get_direction = dio48e_gpio_get_direction;
-> -	dio48egpio->chip.direction_input = dio48e_gpio_direction_input;
-> -	dio48egpio->chip.direction_output = dio48e_gpio_direction_output;
-> -	dio48egpio->chip.get = dio48e_gpio_get;
-> -	dio48egpio->chip.get_multiple = dio48e_gpio_get_multiple;
-> -	dio48egpio->chip.set = dio48e_gpio_set;
-> -	dio48egpio->chip.set_multiple = dio48e_gpio_set_multiple;
-> -
-> -	i8255_state_init(dio48egpio->ppi_state, DIO48E_NUM_PPI);
-> -	dio48e_init_ppi(dio48egpio->reg->ppi, dio48egpio->ppi_state);
-> -
-> -	err = devm_gpiochip_add_data(dev, &dio48egpio->chip, dio48egpio);
-> -	if (err) {
-> -		dev_err(dev, "GPIO registering failed (%d)\n", err);
-> -		return err;
-> -	}
-> +	config.parent = dev;
-> +	config.map = map;
-> +	config.num_ppi = DIO48E_NUM_PPI;
-> +	config.names = dio48e_names;
-> +	config.domain = regmap_irq_get_domain(chip_data);
->  
-> -	return gpiochip_irqchip_add_domain(&dio48egpio->chip,
-> -					   regmap_irq_get_domain(chip_data));
-> +	return devm_i8255_regmap_register(dev, &config);
->  }
->  
->  static struct isa_driver dio48e_driver = {
-> -- 
-> 2.38.1
-> 
+Only significant one is the handling of error returns form the optional regulator.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Jonathan
 
+> diff --git a/drivers/iio/dac/ad5754.c b/drivers/iio/dac/ad5754.c
+> new file mode 100644
+> index 000000000000..81cfda2efa0f
+> --- /dev/null
+> +++ b/drivers/iio/dac/ad5754.c
+> @@ -0,0 +1,672 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2022 Analog Devices, Inc.
+> + * Author: Ciprian Regus <ciprian.regus@analog.com>
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/device.h>
+> +#include <linux/err.h>
+> +#include <linux/gpio/driver.h>
+> +#include <linux/iio/iio.h>
+> +#include <linux/kernel.h>
+> +#include <linux/linear_range.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/property.h>
+> +#include <linux/regmap.h>
+> +#include <linux/regulator/consumer.h>
+> +#include <linux/spi/spi.h>
+> +
+> +#include <asm/unaligned.h>
+> +
+> +#define AD5754_INT_VREF_mV			2500
+> +#define AD5754_FRAME_SIZE			3
+> +#define AD5754_MAX_CHANNELS			4
+> +#define AD5754_MAX_RESOLUTION			16
+> +#define uV_PER_mV				1000
+In common with units.h probably better to spell out than mix case
+(as someone will come along and 'fix' this for you ;)
+
+#define MICROVOLT_PER_MILLIVOLT
+
+Or just use MICRO/MILLI inline from units.h and rely on compiler
+work the maths out for you.
+
+
+> +
+> +static const struct iio_chan_spec ad5754_2_channels[2] = {
+> +		AD5754_CHANNEL(0),
+> +		AD5754_CHANNEL(1),
+> +};
+> +
+> +static const struct iio_chan_spec ad5754_4_channels[4] = {
+> +		AD5754_CHANNEL(0),
+> +		AD5754_CHANNEL(1),
+> +		AD5754_CHANNEL(2),
+> +		AD5754_CHANNEL(3),
+
+Why the double tab for alignment of these?
+
+> +};
+..
+
+> +
+> +static int ad5754_reg_write(void *context, unsigned int reg, unsigned int val)
+> +{
+> +	struct ad5754_state *st = context;
+> +	struct spi_transfer xfer = {
+> +		.tx_buf = st->buff,
+> +		.len = 3,
+> +	};
+> +
+> +	st->buff[0] = reg;
+> +	put_unaligned_be16(val, &st->buff[1]);
+> +
+> +	return spi_sync_transfer(st->spi, &xfer, 1);
+
+spi_write()?
+Same thing under the hood but slightly shorter code here.
+
+> +};
+
+
+> +
+> +static int ad5754_probe(struct spi_device *spi)
+> +{
+> +	struct device *dev = &spi->dev;
+> +	struct iio_dev *indio_dev;
+> +	struct ad5754_state *st;
+> +	int ret;
+> +
+
+> +
+> +	st->vref_reg = devm_regulator_get_optional(dev, "vref");
+> +	if (IS_ERR(st->vref_reg)) {
+
+Subtle corner here.
+The return may not indicate that vref was not provided, it might return
+-EPROBEDEFER for example to indicate that we need to back off until
+another driver is loaded.
+
+As such, you need separate handling for -ENODEV (I think that's the return
+for not specified) which is what you have here, and other error codes which
+should be a probe failure via a dev_err_probe() to deal with the deferred case
+debug info.
+
+> +		if (!st->chip_info->internal_vref)
+> +			return dev_err_probe(dev, PTR_ERR(st->vref_reg),
+> +					     "Failed to get the vref regulator\n");
+> +
+> +		ret = regmap_update_bits(st->regmap,
+> +					 AD5754_REG_ADDR(AD5754_PWR_REG, AD5754_PU_ADDR),
+> +					 AD5754_INT_REF_MASK,
+> +					 FIELD_PREP(AD5754_INT_REF_MASK, 1));
+> +		if (ret)
+> +			return ret;
+> +
+> +		ret = devm_add_action_or_reset(dev, ad5754_disable_int_ref, st);
+> +		if (ret)
+> +			return ret;
+> +	} else {
+> +		ret = regulator_enable(st->vref_reg);
+> +		if (ret)
+> +			return dev_err_probe(dev, ret,
+> +					     "Failed to enable the vref regulator\n");
+> +
+> +		ret = devm_add_action_or_reset(dev, ad5754_regulator_disable, st->vref_reg);
+> +		if (ret)
+> +			return ret;
+> +	}
+...
+
+> +static const struct spi_device_id ad5754_id[] = {
+> +	{ "ad5722", (kernel_ulong_t)&ad5754_chip_info_data[AD5722], },
+> +	{ "ad5732", (kernel_ulong_t)&ad5754_chip_info_data[AD5732], },
+> +	{ "ad5752", (kernel_ulong_t)&ad5754_chip_info_data[AD5752], },
+> +	{ "ad5724", (kernel_ulong_t)&ad5754_chip_info_data[AD5724], },
+> +	{ "ad5734", (kernel_ulong_t)&ad5754_chip_info_data[AD5734], },
+> +	{ "ad5754", (kernel_ulong_t)&ad5754_chip_info_data[AD5754], },
+> +	{ "ad5722r", (kernel_ulong_t)&ad5754_chip_info_data[AD5722R], },
+> +	{ "ad5732r", (kernel_ulong_t)&ad5754_chip_info_data[AD5732R], },
+> +	{ "ad5752r", (kernel_ulong_t)&ad5754_chip_info_data[AD5752R], },
+> +	{ "ad5724r", (kernel_ulong_t)&ad5754_chip_info_data[AD5724R], },
+> +	{ "ad5734r", (kernel_ulong_t)&ad5754_chip_info_data[AD5734R], },
+> +	{ "ad5754r", (kernel_ulong_t)&ad5754_chip_info_data[AD5754R], },
+> +	{}
+> +};
+> +
+> +static const struct of_device_id ad5754_dt_id[] = {
+> +	{
+> +		.compatible = "adi,ad5722",
+> +		.data = &ad5754_chip_info_data[AD5722],
+
+Whatever order you end up with in the DT binding after Krzysztof's review
+replicate here and for the spi_device_ids above.
+
+> +	}, {
+> +		.compatible = "adi,ad5732",
+> +		.data = &ad5754_chip_info_data[AD5732],
+> +	}, {
+> +		.compatible = "adi,ad5752",
+> +		.data = &ad5754_chip_info_data[AD5752],
+> +	}, {
+> +		.compatible = "adi,ad5724",
+> +		.data = &ad5754_chip_info_data[AD5724],
+> +	}, {
+> +		.compatible = "adi,ad5734",
+> +		.data = &ad5754_chip_info_data[AD5734],
+> +	}, {
+> +		.compatible = "adi,ad5754",
+> +		.data = &ad5754_chip_info_data[AD5754],
+> +	}, {
+> +		.compatible = "adi,ad5722r",
+> +		.data = &ad5754_chip_info_data[AD5722R],
+> +	}, {
+> +		.compatible = "adi,ad5732r",
+> +		.data = &ad5754_chip_info_data[AD5732R],
+> +	}, {
+> +		.compatible = "adi,ad5752r",
+> +		.data = &ad5754_chip_info_data[AD5752R],
+> +	}, {
+> +		.compatible = "adi,ad5724r",
+> +		.data = &ad5754_chip_info_data[AD5724R],
+> +	}, {
+> +		.compatible = "adi,ad5734r",
+> +		.data = &ad5754_chip_info_data[AD5734R],
+> +	}, {
+> +		.compatible = "adi,ad5754r",
+> +		.data = &ad5754_chip_info_data[AD5754R],
+> +	},
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, ad5754_dt_id);
 
