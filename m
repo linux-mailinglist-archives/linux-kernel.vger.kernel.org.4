@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 893416362FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:12:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C1D56362FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:13:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238274AbiKWPMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 10:12:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47764 "EHLO
+        id S238305AbiKWPNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 10:13:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238490AbiKWPMC (ORCPT
+        with ESMTP id S238417AbiKWPM7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 10:12:02 -0500
+        Wed, 23 Nov 2022 10:12:59 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9442DBF70
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:12:01 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81925F85C
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:12:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3CBD3B820BF
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 15:12:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 950E7C433C1;
-        Wed, 23 Nov 2022 15:11:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6511FB820BF
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 15:12:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C589AC433D6;
+        Wed, 23 Nov 2022 15:12:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669216319;
-        bh=E32LuTeewdv4LvRn43Fa4lz46cUSqIZ9KO69kapAzDQ=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=e1tBjLgkLI3ItIdUiZjmw+zk9GRtMBASep1CcRYCeSFQmcWN/gCX96cmqsfYSMXmk
-         qvAtafUkufZK0T3ao79tZwW5k8C6EUMQ6RjciVOsKJohL7w6GblAzpB9kCG2IhgNO2
-         /iyaRuT8ERmzp0qpsEmx9iAeZOV4wBkYgVrZBsw3NLPrWpuX2Nfn2RbEPeOde3gl0H
-         V1uxNN8/EYTvsh9TtsNkfoFnP+SvkeYQIwpvnjbo2YZRj0AkRLKp+RCj822TKGHrer
-         4YkC/8jc4LIGfa1d7/WSg4Oq56XDUrUG9qUF1A9pcCnaqQvg23h3LTgqRDrCQYvHIK
-         aIO7mHe47R+TQ==
-Message-ID: <c8145b2b-f8fa-9065-73dd-497c48a10a46@kernel.org>
-Date:   Wed, 23 Nov 2022 23:11:55 +0800
+        s=k20201202; t=1669216376;
+        bh=yOULMtM0+KTy5LieyRbQAWfjtQdPuaw3HboADHL+tcs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=sMCqNymJxYM7LJZnkYSsMm0pvmOet0Bly0terUqPs6d/6rwXk4qNjqr5pK0jGWLdh
+         rPQRdeGafDEounT3RlYYaor5lL3rC3qERosoVGqQirdwBObE6pVcnLNZlRN1EuEin7
+         pbmJ6/fTBtQ7jdGdL0bHNGjqEsN+HkmOGfygM08k367XwdNtdzDwxdGZywBbWxA1c2
+         SXtBgmMba3C9aMJkbNBHnsCneixzc2RYbVeK3LS9nbreuqTDd9NlY2tWvZn9yRhd4a
+         HNwvja0CbmkL6FX2pbM8PF1dILO0SlryUUhbFf+dlHkPYQ3d3HvG09GaCNzz8c9ORR
+         KKG+6y3ClB+VA==
+Message-ID: <a73cb0ce-7666-607a-fb00-dde2befb9108@kernel.org>
+Date:   Wed, 23 Nov 2022 23:12:53 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
+Subject: Re: [PATCH] f2fs: remove useless io_aware_gran variable
 Content-Language: en-US
-To:     Yangtao Li <frank.li@vivo.com>, jaegeuk@kernel.org
+To:     Yuwei Guan <ssawgyw@gmail.com>, jaegeuk@kernel.org
 Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <20221115184023.78070-1-frank.li@vivo.com>
+        linux-kernel@vger.kernel.org, Yuwei.Guan@zeekrlife.com
+References: <20221116131035.1056523-1-Yuwei.Guan@zeekrlife.com>
 From:   Chao Yu <chao@kernel.org>
-Subject: Re: [PATCH] f2fs: fix to set DISCARD opt
-In-Reply-To: <20221115184023.78070-1-frank.li@vivo.com>
+In-Reply-To: <20221116131035.1056523-1-Yuwei.Guan@zeekrlife.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -57,136 +57,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/16 2:40, Yangtao Li wrote:
-> Some minor modifications to discard opt and related parameters:
+On 2022/11/16 21:10, Yuwei Guan wrote:
+> This 'io_aware_gran' is initialized as MAX_PLIST_NUM in
+> __init_discard_policy(), and use as 'i < dpolicy->io_aware_gran'
+> in __issue_discard_cmd(), but 'i < dpolicy->io_aware_gran' is
+> true always, so remvoe this variable.
+
+I guess we can export it via sysfs for better configuation?
+
+Thanks,
+
 > 
->    1.introduce f2fs_is_readonly() and use it to simplify code
->    2.The FLUSH_MERGE opt is set by default only in non-ro mode.
->    3.When ro and DISCARD are set at the same time, an error is reported.
->    4.Display discard_unit mount opt when has discard opt.
->    5.clear DISCARD when remount as ro.
-> 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> Signed-off-by: Yuwei Guan <Yuwei.Guan@zeekrlife.com>
 > ---
->   fs/f2fs/f2fs.h  |  5 +++++
->   fs/f2fs/super.c | 53 +++++++++++++++++++++++++++----------------------
->   2 files changed, 34 insertions(+), 24 deletions(-)
+>   fs/f2fs/f2fs.h    | 1 -
+>   fs/f2fs/segment.c | 4 +---
+>   2 files changed, 1 insertion(+), 4 deletions(-)
 > 
 > diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> index b89b5d755ce0..be23059344b4 100644
+> index dedac413bf64..ced8a5b226b5 100644
 > --- a/fs/f2fs/f2fs.h
 > +++ b/fs/f2fs/f2fs.h
-> @@ -4579,4 +4579,9 @@ static inline void f2fs_handle_page_eio(struct f2fs_sb_info *sbi, pgoff_t ofs,
->   #define EFSBADCRC	EBADMSG		/* Bad CRC detected */
->   #define EFSCORRUPTED	EUCLEAN		/* Filesystem is corrupted */
+> @@ -388,7 +388,6 @@ struct discard_policy {
+>   	unsigned int mid_interval;	/* used for device busy */
+>   	unsigned int max_interval;	/* used for candidates not exist */
+>   	unsigned int max_requests;	/* # of discards issued per round */
+> -	unsigned int io_aware_gran;	/* minimum granularity discard not be aware of I/O */
+>   	bool io_aware;			/* issue discard in idle time */
+>   	bool sync;			/* submit discard with REQ_SYNC flag */
+>   	bool ordered;			/* issue discard by lba order */
+> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+> index 8b0b76550578..1cc41a65a645 100644
+> --- a/fs/f2fs/segment.c
+> +++ b/fs/f2fs/segment.c
+> @@ -1059,7 +1059,6 @@ static void __init_discard_policy(struct f2fs_sb_info *sbi,
+>   	dpolicy->granularity = granularity;
 >   
-> +static inline bool f2fs_is_readonly(struct f2fs_sb_info *sbi)
-> +{
-> +	return !!f2fs_sb_has_readonly(sbi) || f2fs_readonly(sbi->sb);
-> +}
-> +
->   #endif /* _LINUX_F2FS_H */
-> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-> index 75027ff85cd9..baa8f0860192 100644
-> --- a/fs/f2fs/super.c
-> +++ b/fs/f2fs/super.c
-> @@ -1353,12 +1353,16 @@ static int parse_options(struct super_block *sb, char *options, bool is_remount)
->   		return -EINVAL;
->   	}
+>   	dpolicy->max_requests = dcc->max_discard_request;
+> -	dpolicy->io_aware_gran = MAX_PLIST_NUM;
+>   	dpolicy->timeout = false;
 >   
-> -	if ((f2fs_sb_has_readonly(sbi) || f2fs_readonly(sbi->sb)) &&
-> -		test_opt(sbi, FLUSH_MERGE)) {
-> +	if (f2fs_is_readonly(sbi) && test_opt(sbi, FLUSH_MERGE)) {
->   		f2fs_err(sbi, "FLUSH_MERGE not compatible with readonly mode");
->   		return -EINVAL;
->   	}
+>   	if (discard_type == DPOLICY_BG) {
+> @@ -1483,8 +1482,7 @@ static int __issue_discard_cmd(struct f2fs_sb_info *sbi,
+>   				f2fs_time_over(sbi, UMOUNT_DISCARD_TIMEOUT))
+>   				break;
 >   
-> +	if (f2fs_is_readonly(sbi) && test_opt(sbi, DISCARD)) {
-> +		f2fs_err(sbi, "DISCARD not compatible with readonly mode");
-> +		return -EINVAL;
-> +	}
-
-Well, it looks ext4 support mounting image w/ both discard and ro option.
-
-And I guess for the case device is rw, and filesystem is ro, it may allow
-filesystem itself issue command to trim device, and that won't break semantic
-of readonly filesystem?
-
-> +
->   	if (f2fs_sb_has_readonly(sbi) && !f2fs_readonly(sbi->sb)) {
->   		f2fs_err(sbi, "Allow to mount readonly mode only");
->   		return -EROFS;
-> @@ -2035,12 +2039,14 @@ static int f2fs_show_options(struct seq_file *seq, struct dentry *root)
->   	if (test_opt(sbi, ATGC))
->   		seq_puts(seq, ",atgc");
->   
-> -	if (F2FS_OPTION(sbi).discard_unit == DISCARD_UNIT_BLOCK)
-> -		seq_printf(seq, ",discard_unit=%s", "block");
-> -	else if (F2FS_OPTION(sbi).discard_unit == DISCARD_UNIT_SEGMENT)
-> -		seq_printf(seq, ",discard_unit=%s", "segment");
-> -	else if (F2FS_OPTION(sbi).discard_unit == DISCARD_UNIT_SECTION)
-> -		seq_printf(seq, ",discard_unit=%s", "section");
-> +	if (test_opt(sbi, DISCARD)) {
-> +		if (F2FS_OPTION(sbi).discard_unit == DISCARD_UNIT_BLOCK)
-> +			seq_printf(seq, ",discard_unit=%s", "block");
-> +		else if (F2FS_OPTION(sbi).discard_unit == DISCARD_UNIT_SEGMENT)
-> +			seq_printf(seq, ",discard_unit=%s", "segment");
-> +		else if (F2FS_OPTION(sbi).discard_unit == DISCARD_UNIT_SECTION)
-> +			seq_printf(seq, ",discard_unit=%s", "section");
-> +	}
->   
->   	if (F2FS_OPTION(sbi).memory_mode == MEMORY_MODE_NORMAL)
->   		seq_printf(seq, ",memory=%s", "normal");
-> @@ -2081,9 +2087,10 @@ static void default_options(struct f2fs_sb_info *sbi)
->   	set_opt(sbi, MERGE_CHECKPOINT);
->   	F2FS_OPTION(sbi).unusable_cap = 0;
->   	sbi->sb->s_flags |= SB_LAZYTIME;
-> -	if (!f2fs_sb_has_readonly(sbi) && !f2fs_readonly(sbi->sb))
-> +	if (!f2fs_is_readonly(sbi))
->   		set_opt(sbi, FLUSH_MERGE);
-> -	if (f2fs_hw_support_discard(sbi) || f2fs_hw_should_discard(sbi))
-> +	if ((f2fs_hw_support_discard(sbi) || f2fs_hw_should_discard(sbi)) &&
-> +		!f2fs_is_readonly(sbi))
->   		set_opt(sbi, DISCARD);
->   	if (f2fs_sb_has_blkzoned(sbi)) {
->   		F2FS_OPTION(sbi).fs_mode = FS_MODE_LFS;
-> @@ -2221,7 +2228,6 @@ static int f2fs_remount(struct super_block *sb, int *flags, char *data)
->   	bool enable_checkpoint = !test_opt(sbi, DISABLE_CHECKPOINT);
->   	bool no_io_align = !F2FS_IO_ALIGNED(sbi);
->   	bool no_atgc = !test_opt(sbi, ATGC);
-> -	bool no_discard = !test_opt(sbi, DISCARD);
->   	bool no_compress_cache = !test_opt(sbi, COMPRESS_CACHE);
->   	bool block_unit_discard = f2fs_block_unit_discard(sbi);
->   	struct discard_cmd_control *dcc;
-> @@ -2398,19 +2404,18 @@ static int f2fs_remount(struct super_block *sb, int *flags, char *data)
->   		need_stop_flush = true;
->   	}
->   
-> -	if (no_discard == !!test_opt(sbi, DISCARD)) {
-> -		if (test_opt(sbi, DISCARD)) {
-> -			err = f2fs_start_discard_thread(sbi);
-> -			if (err)
-> -				goto restore_flush;
-> -			need_stop_discard = true;
-> -		} else {
-> -			dcc = SM_I(sbi)->dcc_info;
-> -			f2fs_stop_discard_thread(sbi);
-> -			if (atomic_read(&dcc->discard_cmd_cnt))
-> -				f2fs_issue_discard_timeout(sbi);
-> -			need_restart_discard = true;
-> -		}
-> +	if ((*flags & SB_RDONLY) || !test_opt(sbi, DISCARD)) {
-> +		clear_opt(sbi, DISCARD);
-> +		dcc = SM_I(sbi)->dcc_info;
-> +		f2fs_stop_discard_thread(sbi);
-> +		if (atomic_read(&dcc->discard_cmd_cnt))
-> +			f2fs_issue_discard_timeout(sbi);
-> +		need_restart_discard = true;
-> +	} else {
-> +		err = f2fs_start_discard_thread(sbi);
-> +		if (err)
-> +			goto restore_flush;
-> +		need_stop_discard = true;
->   	}
->   
->   	if (enable_checkpoint == !!test_opt(sbi, DISABLE_CHECKPOINT)) {
+> -			if (dpolicy->io_aware && i < dpolicy->io_aware_gran &&
+> -						!is_idle(sbi, DISCARD_TIME)) {
+> +			if (dpolicy->io_aware && !is_idle(sbi, DISCARD_TIME)) {
+>   				io_interrupted = true;
+>   				break;
+>   			}
