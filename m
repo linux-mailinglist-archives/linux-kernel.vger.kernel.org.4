@@ -2,205 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BCD56359C1
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 11:27:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7EF6359CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 11:27:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237367AbiKWKXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 05:23:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48988 "EHLO
+        id S236211AbiKWKXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 05:23:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237482AbiKWKWH (ORCPT
+        with ESMTP id S237489AbiKWKWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 05:22:07 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94589DAB
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 02:08:32 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id g12so27466373lfh.3
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 02:08:32 -0800 (PST)
+        Wed, 23 Nov 2022 05:22:09 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7992DD3
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 02:08:35 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id v1so28568959wrt.11
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 02:08:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/6KnfI+9/uy7ITylHecTvTbunNR+ZrgdbZvYW8L95tE=;
-        b=Z3GYxeYtlrpUJfiFGwuiU+qI838C6YNMSXBcHWKBD3OeHCuCpAlyNpJ8dlXJnsreT2
-         ZHoxcAjO1+dtsBH+otG8+/Eio4ekhaqXw5Pf86DXPzHPYVI9FqurhcQ1tFCeKdeVHMeq
-         HXZY1PF/BRopuElmeMKJ9v4BgMDgc7YOw3H/ofTFPFA9uadwEIdommTGe3+jGWihL9H6
-         TSRxyjHtgKYP1s8pNCrOLghvCh9R8k+MlrpX/HlNjPaspZBPXSG3oYzAGvkJ/tbUdjdK
-         DviI9Rv/n0Mik+Af52qds+pdsGXkSOY4Hp2Abdhx7PiTfKrygUxb6coVInzQhVxBrBKz
-         J6Cg==
+        d=amarulasolutions.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ouhGwXSeaVgRDyF6aOYlnUe1G6PkcJ3a2Ia2veN59q8=;
+        b=hbEPWRnyHRthni9llQ/pko59L9nujUbe07hiTRM2D3CWbFk2ap18EHe7YEPo5XTCEk
+         dd4eQD3AdJsZoMCZrJjRUwPRKv/xQkJS7WttM6KeWBd8UFu2Runk2FKMdYFHk3LkgfZR
+         ybYR3pbyVXD/b2cQMkSgaTquIo8exnsfE0Teg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/6KnfI+9/uy7ITylHecTvTbunNR+ZrgdbZvYW8L95tE=;
-        b=lTOqYTMSPucps2hUFbAi9jJXgfc2gTsjFzyi5pIVCFhucq+ox77IXhAv+SjPNhqJ22
-         w8BgSzP9I51L5hD37Ie4ndH1T47aX/N2oqUo1FBa9s0y1rG1z2pmmpY2s1g0/cd9WQYe
-         DY6EXg+W4fB/o7YHFPlt3vCp7Kci8Qh6qHxp//sQmcHF9NxGP1y350MK3Xo6wm671HsP
-         8j8EYA6FbcREnUTNij1aQgNRI6ykb+1wr7hqwQZuiAEzZrG+Nsz5dwY9IPHwrQbooqeG
-         L1muOwHFbNNRuRCCsQlHnGLOAw7fISIgVz+76qsg5sGk/gWpaO9QsTS0lDp16M3cLrtm
-         bA7w==
-X-Gm-Message-State: ANoB5pmOUtbFSw59rKDcl2uwoQoxceikuhiAc1YERxkrSeaKNFItWZzK
-        fkXZzeaCbBrzYW43X09kwoADsQ==
-X-Google-Smtp-Source: AA0mqf7ledULYqnBZnfQi9FuTJ2ZzfaNniMGFoQ0mm+yVXMomPygKM0YjBxAcGyJgZZx2qeB1bwHQw==
-X-Received: by 2002:ac2:58d9:0:b0:4b3:ccea:9b2e with SMTP id u25-20020ac258d9000000b004b3ccea9b2emr10307267lfo.379.1669198110899;
-        Wed, 23 Nov 2022 02:08:30 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id d18-20020a2e8912000000b002770eafaafbsm2199487lji.99.2022.11.23.02.08.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 02:08:30 -0800 (PST)
-Message-ID: <f03f331a-5666-298e-a1a2-bdb9bab11a48@linaro.org>
-Date:   Wed, 23 Nov 2022 11:08:29 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ouhGwXSeaVgRDyF6aOYlnUe1G6PkcJ3a2Ia2veN59q8=;
+        b=FJveBrzng8fq4HAAZoV8u0PFAKSniRGL9URZGsu7KvuV4R2JRzs4Kt7HsLfFNNdQGc
+         voW2Nj6c4VPYOdbBIWiOsC/RDdQbGRu8T2lUPf0KvhJqQINgFeRBL0/m0eEj2LG+YbjW
+         RzBUKIfc0esN+Ikw3yxeG21EYaMpFLuHqpyOVcW+VxOuDVIC3/X8EF0g/IoO1MzmjEvK
+         lKYg8xP45Od4wyBLGVUlhIUazq2yaZ8kF2l8mprYN1wDXeSm//0f8wRt9K+1noqMGYtN
+         TArtK/P4geatBij63CY0GTfmdKRIoGzUbjVO8x1TZ7GDaE51yJxnWj2UUhnA/tfAuyf/
+         iAXg==
+X-Gm-Message-State: ANoB5pkoUWSbH7yMSdbTM8H7KXd/iAAqcw/fVRRmBCqyITFYMbDJkRpe
+        Qfv1+1LlhF35pTp78lGfhcQvYw==
+X-Google-Smtp-Source: AA0mqf7JmrwWXtMFx88k5iciiSy2ZO2SDkDIGgwo8kBY1Ny7RPhvVd5HvnuLpUfi2CdI/K9sJvysrA==
+X-Received: by 2002:adf:fb0e:0:b0:241:87cb:6e0c with SMTP id c14-20020adffb0e000000b0024187cb6e0cmr6841150wrr.166.1669198114044;
+        Wed, 23 Nov 2022 02:08:34 -0800 (PST)
+Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-55-94.cust.vodafonedsl.it. [188.217.55.94])
+        by smtp.gmail.com with ESMTPSA id m66-20020a1c2645000000b003cf9bf5208esm1695004wmm.19.2022.11.23.02.08.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 02:08:33 -0800 (PST)
+Date:   Wed, 23 Nov 2022 11:08:31 +0100
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH resend] media: staging: stkwebcam: Restore
+ MEDIA_{USB,CAMERA}_SUPPORT dependencies
+Message-ID: <20221123100831.GE39395@tom-ThinkPad-T14s-Gen-2i>
+References: <a50fa46075fb760d8409ff6ea2232b2ddb7a102b.1669046259.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH V5 1/4] clk: meson: S4: add support for Amlogic S4 SoC PLL
- clock driver and bindings
-Content-Language: en-US
-To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     kelvin.zhang@amlogic.com
-References: <20221123021346.18136-1-yu.tu@amlogic.com>
- <20221123021346.18136-2-yu.tu@amlogic.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221123021346.18136-2-yu.tu@amlogic.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a50fa46075fb760d8409ff6ea2232b2ddb7a102b.1669046259.git.geert+renesas@glider.be>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/11/2022 03:13, Yu Tu wrote:
-> Add the S4 PLL clock controller found and bindings in the s4 SoC family.
+Hi Geert,
+
+On Mon, Nov 21, 2022 at 04:58:33PM +0100, Geert Uytterhoeven wrote:
+> By moving support for the USB Syntek DC1125 Camera to staging, the
+> dependencies on MEDIA_USB_SUPPORT and MEDIA_CAMERA_SUPPORT were lost.
 > 
-> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+> Fixes: 56280c64ecacc971 ("media: stkwebcam: deprecate driver, move to staging")
+
+Patch itself looks good but we have some style issue. Applying this
+patch I got the following warning from checkpatchl:
+
+WARNING: Please use correct Fixes: style 'Fixes: <12 chars of sha1> ("<title line>")' - ie: 'Fixes: 56280c64ecac ("media: stkwebcam: deprecate driver, move to staging")'
+#10: 
+
+You have to pass only the first 12 chars of the sha1 commit into Fixes
+msg:
+
+Use:
+
+ Fixes: 56280c64ecac ("media: stkwebcam: deprecate driver, move to staging")
+
+Instead of:
+
+ Fixes: 56280c64ecacc971 ("media: stkwebcam: deprecate driver, move to staging")
+
+Thanks & Regards,
+Tommaso
+
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 > ---
->  .../bindings/clock/amlogic,s4-pll-clkc.yaml   |  51 +
-
-This is v5 and still bindings are here? Bindings are always separate
-patches. Use subject prefixes matching the subsystem (git log --oneline
--- ...).
-
-And this was split, wasn't it? What happened here?!?
-
-
->  MAINTAINERS                                   |   1 +
->  drivers/clk/meson/Kconfig                     |  13 +
->  drivers/clk/meson/Makefile                    |   1 +
->  drivers/clk/meson/s4-pll.c                    | 875 ++++++++++++++++++
->  drivers/clk/meson/s4-pll.h                    |  88 ++
->  .../dt-bindings/clock/amlogic,s4-pll-clkc.h   |  30 +
->  7 files changed, 1059 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/amlogic,s4-pll-clkc.yaml
->  create mode 100644 drivers/clk/meson/s4-pll.c
->  create mode 100644 drivers/clk/meson/s4-pll.h
->  create mode 100644 include/dt-bindings/clock/amlogic,s4-pll-clkc.h
+>  drivers/staging/media/deprecated/stkwebcam/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/clock/amlogic,s4-pll-clkc.yaml b/Documentation/devicetree/bindings/clock/amlogic,s4-pll-clkc.yaml
-> new file mode 100644
-> index 000000000000..fd517e8ef14f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/amlogic,s4-pll-clkc.yaml
-> @@ -0,0 +1,51 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/amlogic,s4-pll-clkc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Amlogic Meson S serials PLL Clock Controller
-> +
-> +maintainers:
-> +  - Neil Armstrong <narmstrong@baylibre.com>
-> +  - Jerome Brunet <jbrunet@baylibre.com>
-> +  - Yu Tu <yu.hu@amlogic.com>
-> +
-One blank line.
+> diff --git a/drivers/staging/media/deprecated/stkwebcam/Kconfig b/drivers/staging/media/deprecated/stkwebcam/Kconfig
+> index 4450403dff41fb64..7234498e634ac61c 100644
+> --- a/drivers/staging/media/deprecated/stkwebcam/Kconfig
+> +++ b/drivers/staging/media/deprecated/stkwebcam/Kconfig
+> @@ -2,7 +2,7 @@
+>  config VIDEO_STKWEBCAM
+>  	tristate "USB Syntek DC1125 Camera support (DEPRECATED)"
+>  	depends on VIDEO_DEV
+> -	depends on USB
+> +	depends on MEDIA_USB_SUPPORT && MEDIA_CAMERA_SUPPORT
+>  	help
+>  	  Say Y here if you want to use this type of camera.
+>  	  Supported devices are typically found in some Asus laptops,
+> -- 
+> 2.25.1
+> 
 
-> +
-> +properties:
-> +  compatible:
-> +    const: amlogic,s4-pll-clkc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    items:
-> +      - const: xtal
-> +
-> +  "#clock-cells":
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - "#clock-cells"
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    clkc_pll: clock-controller@fe008000 {
-> +      compatible = "amlogic,s4-pll-clkc";
-> +      reg = <0xfe008000 0x1e8>;
-> +      clocks = <&xtal>;
-> +      clock-names = "xtal";
-> +      #clock-cells = <1>;
-> +    };
+-- 
+Tommaso Merciai
+Embedded Linux Engineer
+tommaso.merciai@amarulasolutions.com
+__________________________________
 
-
-> +#endif /* __MESON_S4_PLL_H__ */
-> diff --git a/include/dt-bindings/clock/amlogic,s4-pll-clkc.h b/include/dt-bindings/clock/amlogic,s4-pll-clkc.h
-> new file mode 100644
-> index 000000000000..345f87023886
-> --- /dev/null
-> +++ b/include/dt-bindings/clock/amlogic,s4-pll-clkc.h
-
-This belongs to bindings patch, not driver.
-
-> @@ -0,0 +1,30 @@
-> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
-> +/*
-> + * Copyright (c) 2021 Amlogic, Inc. All rights reserved.
-> + * Author: Yu Tu <yu.tu@amlogic.com>
-> + */
-> +
-> +#ifndef _DT_BINDINGS_CLOCK_AMLOGIC_S4_PLL_CLKC_H
-> +#define _DT_BINDINGS_CLOCK_AMLOGIC_S4_PLL_CLKC_H
-> +
-> +/*
-> + * CLKID index values
-> + */
-> +
-> +#define CLKID_FIXED_PLL			1
-> +#define CLKID_FCLK_DIV2			3
-
-Indexes start from 0 and are incremented by 1. Not by 2.
-
-NAK.
-
-Best regards,
-Krzysztof
-
+Amarula Solutions SRL
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+T. +39 042 243 5310
+info@amarulasolutions.com
+www.amarulasolutions.com
