@@ -2,73 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED27636C78
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 22:38:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFB5C636C80
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 22:40:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237891AbiKWViY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 16:38:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52410 "EHLO
+        id S235559AbiKWVk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 16:40:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236332AbiKWViW (ORCPT
+        with ESMTP id S235322AbiKWVkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 16:38:22 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF6B2717E;
-        Wed, 23 Nov 2022 13:38:21 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id l24so81781edj.8;
-        Wed, 23 Nov 2022 13:38:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bCvBTJO2gbYZhcCuljQv2b50zZ/3wvAu6KPvZevAXi8=;
-        b=QROKYGkeQv6MtC6IUDzEOTrXB5C9bMSSN1eK8fjYM8gNFcTgfP95pkgnTj2u2Nm+KF
-         pOAVZFdHSG3ARAOBf8UxO4+VwrFOk75tCSJnyT1Gn8pK/cp+5yYg10qYiD+GH86AiMHg
-         hijGs0ksGMwklQwPy6nvcx5z7JzagGNvK+Q1f50/qhwWcxwHOvPJGrgv/MLLtBn2olGd
-         i3vr0FI7WIwCGGdrVepHe/7DcSiWj7GPkaihmo7upqODFBxG+Y42jKU3lGPwq+JGqCmg
-         /TYvCkBgJA8H9LPZ/eDbGQvXlZVZPN0WYRDTIKJPNKqJiHtFhLVkZRdtwXfx1bU3Q/TC
-         6uGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bCvBTJO2gbYZhcCuljQv2b50zZ/3wvAu6KPvZevAXi8=;
-        b=sZbigb93uP7MeX2ugFcs8ILo4x6EPxxe+31Z4NuAtQj7dd+Dxl/BrI7hQsUk78Sinc
-         jzYmfooV5xJBevEyqdbBzH/KVimW9jlEk1JBREGcqM07+Hb2n/y7WnH1bLH/MlHekLV8
-         JRHID8pAfGMoqPSQEEtRU4avIL6JHECVpxLzN0xibEdpOur9nKIIVh4jL/TuQVD7NOVV
-         TsdsJ2apxjVLdzcXc1IyFxZvRefYmRG90wvBAYU6ZQedGJRBs8Aib3HLyCCNXk/zaTct
-         Jo9Vn/aXrCXb6h71BL+wdOjmXHNVVxlYAfMTh8BUaSjj37JXGb6x/PcDnVGag3aJkock
-         qKGg==
-X-Gm-Message-State: ANoB5pmIx8PNtJPA6E4SagP+iB+qPaYYRLrMtxbh7ma/KQLRhtaDz9uJ
-        W1TYLCpGRekbxs72dXsfPw8Q/DKapzlQN5sGvbA=
-X-Google-Smtp-Source: AA0mqf56UReYxybYO9VN+9QRSFdwHtn/Udxe9J3TWYXL4eMaOqC66mwLfglqqi3C1FUFm7m4H2SlH3N/2H1isHzQ5aI=
-X-Received: by 2002:aa7:d3c9:0:b0:459:aa70:d4b6 with SMTP id
- o9-20020aa7d3c9000000b00459aa70d4b6mr27419688edr.224.1669239499708; Wed, 23
- Nov 2022 13:38:19 -0800 (PST)
+        Wed, 23 Nov 2022 16:40:23 -0500
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EE3AF086;
+        Wed, 23 Nov 2022 13:40:20 -0800 (PST)
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 2ANLdwOe024156;
+        Thu, 24 Nov 2022 06:39:59 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 2ANLdwOe024156
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1669239599;
+        bh=XDaXinCZ/pwtJaEK2Uz8cutMw5i0ZxD//q2BY+FGPBY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=KSD4Ak5ha0bJ2tx+cZWR9hwNMHDFnC7O5bj/jmxVgi0oKEdu2PpRoBrccpERozaNv
+         xRvO77M0cciZOptvnsOc9WKxScJsUYyA32kTAqlAQP75I4urNCXhR6mW7MCrseV2kt
+         ZIBv5IdtzoBahg2FTlIYNjIDDOoWwjdFtiaa/+JJKDWxR70337/c4hoE3umPCY2Pyx
+         a5ViGboXGbfDrBJyRtzRXrNdZ8jCfm+qQzTNN9Ab5xHg7AqAO0dTAsgowdhgNyRnLT
+         JME+AeoFaiIxYo1j8tNm6dwvhiKtfDQEZ8Unw2mWazYYQVs6hstgSItusFEZfeyLcQ
+         Bf0OCUMcJcn+Q==
+X-Nifty-SrcIP: [209.85.160.53]
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1433ef3b61fso2304484fac.10;
+        Wed, 23 Nov 2022 13:39:58 -0800 (PST)
+X-Gm-Message-State: ANoB5plJdr6Ed5+ey2qFUORjaR5m9nMaFk+x0ZecmXwiZdfG0oIKrkjX
+        6W8WL8t4yvLtYTDNvhiEh0mTEQNJSxY8TThBuVI=
+X-Google-Smtp-Source: AA0mqf5kse+8HoHAuaJZlsc74aO2g4dOFf0yP1vFcAjTYlOnUf7ie/3LSrM2a7WM/vsYdzWmoPC2sdnkzETQ3nlk34o=
+X-Received: by 2002:a05:6870:3b06:b0:13b:5d72:d2c6 with SMTP id
+ gh6-20020a0568703b0600b0013b5d72d2c6mr5885002oab.287.1669239597800; Wed, 23
+ Nov 2022 13:39:57 -0800 (PST)
 MIME-Version: 1.0
-References: <20221116064631.16224-1-tegongkang@gmail.com> <CAEf4BzbqKRTzTdhD1Vt-j8NXaqnyqXCRjNgMe9_h56rbt4a9YA@mail.gmail.com>
- <CA+uqrQD58fJj_h1D6kEQKYPF8mRizgf0R7KTfa5YWNTLcu9xqw@mail.gmail.com>
-In-Reply-To: <CA+uqrQD58fJj_h1D6kEQKYPF8mRizgf0R7KTfa5YWNTLcu9xqw@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 23 Nov 2022 13:38:07 -0800
-Message-ID: <CAEf4BzbpkhTGF8dz4kUO-y9=1BbL_=PPbEX-qVEzw5NWn_prRg@mail.gmail.com>
-Subject: Re: [PATCH] samples, bpf: Add duration option D for sampleip
-To:     Kang Minchul <tegongkang@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org,
+References: <20221119225650.1044591-1-alobakin@pm.me>
+In-Reply-To: <20221119225650.1044591-1-alobakin@pm.me>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 24 Nov 2022 06:39:21 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASxdDFg+CivkBapM82biPDWDYhJ7kn2y0QG2YuhiXcRLw@mail.gmail.com>
+Message-ID: <CAK7LNASxdDFg+CivkBapM82biPDWDYhJ7kn2y0QG2YuhiXcRLw@mail.gmail.com>
+Subject: Re: [PATCH 00/18] treewide: fix object files shared between several modules
+To:     Alexander Lobakin <alobakin@pm.me>
+Cc:     linux-kbuild@vger.kernel.org, Nicolas Schier <nicolas@fjasle.eu>,
+        Jens Axboe <axboe@kernel.dk>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Derek Chickles <dchickles@marvell.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        NXP Linux Team <linux-imx@nxp.com>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,125 +76,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 19, 2022 at 8:06 AM Kang Minchul <tegongkang@gmail.com> wrote:
+On Sun, Nov 20, 2022 at 8:04 AM Alexander Lobakin <alobakin@pm.me> wrote:
 >
-> Thanks for your reply.
+> This is a follow-up to the series[0] that adds Kbuild warning if an
+> object is linked into several modules (including vmlinux) in order
+> to prevent hidden side effects from appearing.
+> The original series, as well as this one, was inspired by the recent
+> issue[1] with the ZSTD modules on a platform which has such sets of
+> vmlinux cflags and module cflags so that objects built with those
+> two even refuse to link with each other.
+> The final goal is to forbid linking one object several times
+> entirely.
 >
-> 2022=EB=85=84 11=EC=9B=94 18=EC=9D=BC (=EA=B8=88) =EC=98=A4=EC=A0=84 8:26=
-, Andrii Nakryiko <andrii.nakryiko@gmail.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=
-=EC=84=B1:
-> >
-> > On Tue, Nov 15, 2022 at 10:46 PM Kang Minchul <tegongkang@gmail.com> wr=
-ote:
-> > >
-> > > Although sampleip program can handle three options,
-> > > (-F for frequency, duration, and -h for help)
-> > > currently there is no independent option for duration.
-> >
-> > Because it's positional argument, which is very clearly documented by
-> > usage(). What's wrong with that and why do you want to change this?
-> Yes, but I'm not sure why only 'duration' should be a positional argument=
-.
+> Patches 1-7 and 10-11 was runtime-tested by me. Pathes 8-9 and 12-18
+> are compile-time tested only (compile, link, modpost), so I
+> encourage the maintainers to review them carefully. At least the
+> last one, for cpsw, most likely has issues :D
+> Masahiro's patches are taken from his WIP tree[2], with the two last
+> finished by me.
 >
-> I don't think it is 'wrong', but I think it's better to treat
-> 'duration' just as same as 'frequency' because
->  frequency and duration are two independent things in this case.
-> (duration is not dependent on frequency)
+> This mostly is a monotonic work, all scores go to Masahiro and
+> Alexey :P
 >
-> So I thought making an option for duration like below
+> [0] https://lore.kernel.org/linux-kbuild/20221118191551.66448-1-masahiroy@kernel.org
+> [1] https://github.com/torvalds/linux/commit/637a642f5ca5e850186bb64ac75ebb0f124b458d
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git/log/?h=tmp4
 >
-> $ sudo ./samples/bpf/sampleip -F <Frequecny> -D <Duration>
+> Alexander Lobakin (9):
+>   EDAC: i10nm, skx: fix mixed module-builtin object
+>   platform/x86: int3472: fix object shared between several modules
+>   mtd: tests: fix object shared between several modules
+>   crypto: octeontx2: fix objects shared between several modules
+>   dsa: ocelot: fix mixed module-builtin object
+>   net: dpaa2: fix mixed module-builtin object
+>   net: hns3: fix mixed module-builtin object
+>   net: octeontx2: fix mixed module-builtin object
+>   net: cpsw: fix mixed module-builtin object
 >
-> is better than below.
->
-> $ sudo ./samples/bpf/sampleip -F <Frequecny> <Duration>
->
-> I am not insisting strongly on this, so if I have misunderstood something=
-,
-> I'll respect the existing way.
->
+> Masahiro Yamada (9):
+>   block/rnbd: fix mixed module-builtin object
+>   drm/bridge: imx: fix mixed module-builtin object
+>   drm/bridge: imx: turn imx8{qm,qxp}-ldb into single-object modules
+>   sound: fix mixed module-builtin object
+>   mfd: rsmu: fix mixed module-builtin object
+>   mfd: rsmu: turn rsmu-{core,i2c,spi} into single-object modules
+>   net: liquidio: fix mixed module-builtin object
+>   net: enetc: fix mixed module-builtin object
+>   net: emac, cpsw: fix mixed module-builtin object (davinci_cpdma)
 
-I think it's just a common convention (e.g., iostat has the similar
-approach). Let's keep it as is.
 
 
-> Regards,
->
-> Kang Minchul
-> > >
-> > > This patch adds option -D for duration like below:
-> > >
-> > > $ sudo ./samples/bpf/sampleip -h
-> > > USAGE: sampleip [-F freq] [-D duration]
-> > >        -F freq       # sample frequency (Hertz), default 99
-> > >        -D duration   # sampling duration (seconds), default 5
-> > >
-> > > $ sudo ./samples/bpf/sampleip -F 120
-> > > Sampling at 120 Hertz for 5 seconds. Ctrl-C also ends.
-> > > ADDR                KSYM                          COUNT
-> > > ...
-> > >
-> > > $ sudo ./samples/bpf/sampleip -D 7
-> > > Sampling at 99 Hertz for 7 seconds. Ctrl-C also ends.
-> > > ADDR                KSYM                          COUNT
-> > > ...
-> > >
-> > > $ sudo ./samples/bpf/sampleip -F 120 -D 7
-> > > Sampling at 120 Hertz for 7 seconds. Ctrl-C also ends.
-> > > ADDR                KSYM                          COUNT
-> > > ...
-> > >
-> > > Signed-off-by: Kang Minchul <tegongkang@gmail.com>
-> > > ---
-> > >  samples/bpf/sampleip_user.c | 13 +++++++------
-> > >  1 file changed, 7 insertions(+), 6 deletions(-)
-> > >
-> > > diff --git a/samples/bpf/sampleip_user.c b/samples/bpf/sampleip_user.=
-c
-> > > index 921c505bb567..ce6aadd496e1 100644
-> > > --- a/samples/bpf/sampleip_user.c
-> > > +++ b/samples/bpf/sampleip_user.c
-> > > @@ -28,9 +28,9 @@ static int nr_cpus;
-> > >
-> > >  static void usage(void)
-> > >  {
-> > > -       printf("USAGE: sampleip [-F freq] [duration]\n");
-> > > -       printf("       -F freq    # sample frequency (Hertz), default=
- 99\n");
-> > > -       printf("       duration   # sampling duration (seconds), defa=
-ult 5\n");
-> > > +       printf("USAGE: sampleip [-F freq] [-D duration]\n");
-> > > +       printf("       -F freq       # sample frequency (Hertz), defa=
-ult 99\n");
-> > > +       printf("       -D duration   # sampling duration (seconds), d=
-efault 5\n");
-> > >  }
-> > >
-> > >  static int sampling_start(int freq, struct bpf_program *prog,
-> > > @@ -145,19 +145,20 @@ int main(int argc, char **argv)
-> > >         char filename[256];
-> > >
-> > >         /* process arguments */
-> > > -       while ((opt =3D getopt(argc, argv, "F:h")) !=3D -1) {
-> > > +       while ((opt =3D getopt(argc, argv, "F:D:h")) !=3D -1) {
-> > >                 switch (opt) {
-> > >                 case 'F':
-> > >                         freq =3D atoi(optarg);
-> > >                         break;
-> > > +               case 'D':
-> > > +                       secs =3D atoi(optarg);
-> > > +                       break;
-> > >                 case 'h':
-> > >                 default:
-> > >                         usage();
-> > >                         return 0;
-> > >                 }
-> > >         }
-> > > -       if (argc - optind =3D=3D 1)
-> > > -               secs =3D atoi(argv[optind]);
-> > >         if (freq =3D=3D 0 || secs =3D=3D 0) {
-> > >                 usage();
-> > >                 return 1;
-> > > --
-> > > 2.34.1
-> > >
+
+Please split this series and send them to each subsystem.
+You can grab authorship for 08, 09
+since most of the efforts came from you.
+
+
+Thanks for helping with this work!
+
+
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
