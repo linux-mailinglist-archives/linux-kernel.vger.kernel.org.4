@@ -2,69 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4058C636D67
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 23:42:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD886636D6E
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 23:44:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbiKWWmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 17:42:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60568 "EHLO
+        id S229848AbiKWWnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 17:43:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbiKWWmA (ORCPT
+        with ESMTP id S229840AbiKWWnA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 17:42:00 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541DD922C4;
-        Wed, 23 Nov 2022 14:41:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669243319; x=1700779319;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=BpnpEgX2wZ8HmD5N1qRAVq/FSn4sdV6C0PbBh5mJEm8=;
-  b=hep6AugMHRVwKzUuiOJ8wwtfIsZxQZEdINYc0qvCp48umZHLdLJOKUQP
-   ZSO7/QAs2iYFnjwak1OpzAEF9ELhmDHOqeJQSZQUIIp1tHGWZu1DUgHAV
-   wmdtezh6WNmwN5tXVu2xMXwRjtJBW+lMjVQdXIFQg3tF3BcD7+2YVLM9g
-   XfNwDp64cRXFcZoTHAWvGa94Lyjqk1n5CdeLq6eb8LZcG4aDD4xwABEHs
-   PTI9Zxa7kk3nBqY/TE08SO8413KE1Pn7XfwMcU56vLN7JNj8DybQu9R52
-   PO5q4s+9HEnrGbdgHJqTIrsRspP8UtxGS7Ak6cNA/aPVd4jpcm66Xyx70
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="378429807"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="378429807"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 14:41:58 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="971025756"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="971025756"
-Received: from vcbudden-mobl3.amr.corp.intel.com (HELO [10.212.129.67]) ([10.212.129.67])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 14:41:56 -0800
-Message-ID: <d84ad1d2-83f9-dab5-5639-8d71f382e3ff@intel.com>
-Date:   Wed, 23 Nov 2022 14:41:55 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v7 12/20] x86/virt/tdx: Create TDMRs to cover all TDX
- memory regions
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     linux-mm@kvack.org, seanjc@google.com, pbonzini@redhat.com,
-        dan.j.williams@intel.com, rafael.j.wysocki@intel.com,
-        kirill.shutemov@linux.intel.com, ying.huang@intel.com,
-        reinette.chatre@intel.com, len.brown@intel.com,
-        tony.luck@intel.com, peterz@infradead.org, ak@linux.intel.com,
-        isaku.yamahata@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
-        sagis@google.com, imammedo@redhat.com
-References: <cover.1668988357.git.kai.huang@intel.com>
- <4db59b4a87f0309c29e61a79892b9fa6645754a8.1668988357.git.kai.huang@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <4db59b4a87f0309c29e61a79892b9fa6645754a8.1668988357.git.kai.huang@intel.com>
+        Wed, 23 Nov 2022 17:43:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 218E19A5E0;
+        Wed, 23 Nov 2022 14:42:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0CC2B82556;
+        Wed, 23 Nov 2022 22:42:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2646C433D6;
+        Wed, 23 Nov 2022 22:42:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669243375;
+        bh=o8J7BU0lEG7DvNBEdtKGOdv3M3nGqE88WMgcMQtpHDg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OBEWh+r5uFiIfmH6VtnZiN8D0eRaMSbOFpfOppk7wR8WzW498CO7fs6U+WOkQsI7W
+         LoS+FtBCEjs/I1xxI5OkibkbL2eAyzMgtuHy1nLNlUUtQ3rZAuxc46mwYI5kgIbOBo
+         4i4DWfSL7CMahBdYaFrCw24piyKEn6eZSvacSH0+COOGNfszINJt2ZoFVgzLlmfEXh
+         flYLNgSs7DB2LDoQp5PK/PHszUIrBwQdAlsgT887/jsoNfQr8IuI/2CdsWbUa0Eyn6
+         tnTG5EgryyX6aGAzr2s9Rf7z7Sv8wRAS8wKeRoZGgTss1j1PBJWqZZYqphZJSrQoSb
+         rjjbN88QijCug==
+Date:   Thu, 24 Nov 2022 07:42:52 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Zheng Yejian <zhengyejian1@huawei.com>, stable@vger.kernel.org,
+        Yujie Liu <yujie.liu@intel.com>
+Subject: Re: [PATCH 2/2] tracing: Free buffers when a used dynamic event is
+ removed
+Message-Id: <20221124074252.1fced8fc9dd714acd0d6c1a5@kernel.org>
+In-Reply-To: <20221123192741.797436457@goodmis.org>
+References: <20221123192556.738176467@goodmis.org>
+        <20221123192741.797436457@goodmis.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,242 +60,222 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/20/22 16:26, Kai Huang wrote:
-> The kernel configures TDX-usable memory regions by passing an array of
-> "TD Memory Regions" (TDMRs) to the TDX module.  Each TDMR contains the
-> information of the base/size of a memory region, the base/size of the
-> associated Physical Address Metadata Table (PAMT) and a list of reserved
-> areas in the region.
-> 
-> Create a number of TDMRs to cover all TDX memory regions.  To keep it
-> simple, always try to create one TDMR for each memory region.  As the
-> first step only set up the base/size for each TDMR.
-> 
-> Each TDMR must be 1G aligned and the size must be in 1G granularity.
-> This implies that one TDMR could cover multiple memory regions.  If a
-> memory region spans the 1GB boundary and the former part is already
-> covered by the previous TDMR, just create a new TDMR for the remaining
-> part.
-> 
-> TDX only supports a limited number of TDMRs.  Disable TDX if all TDMRs
-> are consumed but there is more memory region to cover.
+On Wed, 23 Nov 2022 14:25:58 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-Good changelog.  This patch is doing *one* thing.
-
->  arch/x86/virt/vmx/tdx/tdx.c | 104 +++++++++++++++++++++++++++++++++++-
->  1 file changed, 103 insertions(+), 1 deletion(-)
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 > 
-> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
-> index 26048c6b0170..57b448de59a0 100644
-> --- a/arch/x86/virt/vmx/tdx/tdx.c
-> +++ b/arch/x86/virt/vmx/tdx/tdx.c
-> @@ -445,6 +445,24 @@ static int build_tdx_memory(void)
+> After 65536 dynamic events have been added and removed, the "type" field
+> of the event then uses the first type number that is available (not
+> currently used by other events). A type number is the identifier of the
+> binary blobs in the tracing ring buffer (known as events) to map them to
+> logic that can parse the binary blob.
+> 
+> The issue is that if a dynamic event (like a kprobe event) is traced and
+> is in the ring buffer, and then that event is removed (because it is
+> dynamic, which means it can be created and destroyed), if another dynamic
+> event is created that has the same number that new event's logic on
+> parsing the binary blob will be used.
+> 
+> To show how this can be an issue, the following can crash the kernel:
+> 
+>  # cd /sys/kernel/tracing
+>  # for i in `seq 65536`; do
+>      echo 'p:kprobes/foo do_sys_openat2 $arg1:u32' > kprobe_events
+>  # done
+> 
+> For every iteration of the above, the writing to the kprobe_events will
+> remove the old event and create a new one (with the same format) and
+> increase the type number to the next available on until the type number
+> reaches over 65535 which is the max number for the 16 bit type. After it
+> reaches that number, the logic to allocate a new number simply looks for
+> the next available number. When an dynamic event is removed, that number
+> is then available to be reused by the next dynamic event created. That is,
+> once the above reaches the max number, the number assigned to the event in
+> that loop will remain the same.
+> 
+> Now that means deleting one dynamic event and created another will reuse
+> the previous events type number. This is where bad things can happen.
+> After the above loop finishes, the kprobes/foo event which reads the
+> do_sys_openat2 function call's first parameter as an integer.
+> 
+>  # echo 1 > kprobes/foo/enable
+>  # cat /etc/passwd > /dev/null
+>  # cat trace
+>              cat-2211    [005] ....  2007.849603: foo: (do_sys_openat2+0x0/0x130) arg1=4294967196
+>              cat-2211    [005] ....  2007.849620: foo: (do_sys_openat2+0x0/0x130) arg1=4294967196
+>              cat-2211    [005] ....  2007.849838: foo: (do_sys_openat2+0x0/0x130) arg1=4294967196
+>              cat-2211    [005] ....  2007.849880: foo: (do_sys_openat2+0x0/0x130) arg1=4294967196
+>  # echo 0 > kprobes/foo/enable
+> 
+> Now if we delete the kprobe and create a new one that reads a string:
+> 
+>  # echo 'p:kprobes/foo do_sys_openat2 +0($arg2):string' > kprobe_events
+> 
+> And now we can the trace:
+> 
+>  # cat trace
+>         sendmail-1942    [002] .....   530.136320: foo: (do_sys_openat2+0x0/0x240) arg1=             cat-2046    [004] .....   530.930817: foo: (do_sys_openat2+0x0/0x240) arg1="������������������������������������������������������������������������������������������������"
+>              cat-2046    [004] .....   530.930961: foo: (do_sys_openat2+0x0/0x240) arg1="������������������������������������������������������������������������������������������������"
+>              cat-2046    [004] .....   530.934278: foo: (do_sys_openat2+0x0/0x240) arg1="������������������������������������������������������������������������������������������������"
+>              cat-2046    [004] .....   530.934563: foo: (do_sys_openat2+0x0/0x240) arg1="������������������������������������������������������������������������������������������������"
+>             bash-1515    [007] .....   534.299093: foo: (do_sys_openat2+0x0/0x240) arg1="kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk���������@��4Z����;Y�����U
+
+Aah, right. Even if we remove one dynamic event, it was shown
+as unknown events.
+
+> 
+> And dmesg has:
+> 
+> ==================================================================
+> BUG: KASAN: use-after-free in string+0xd4/0x1c0
+> Read of size 1 at addr ffff88805fdbbfa0 by task cat/2049
+> 
+>  CPU: 0 PID: 2049 Comm: cat Not tainted 6.1.0-rc6-test+ #641
+>  Hardware name: Hewlett-Packard HP Compaq Pro 6300 SFF/339A, BIOS K01 v03.03 07/14/2016
+>  Call Trace:
+>   <TASK>
+>   dump_stack_lvl+0x5b/0x77
+>   print_report+0x17f/0x47b
+>   kasan_report+0xad/0x130
+>   string+0xd4/0x1c0
+>   vsnprintf+0x500/0x840
+>   seq_buf_vprintf+0x62/0xc0
+>   trace_seq_printf+0x10e/0x1e0
+>   print_type_string+0x90/0xa0
+>   print_kprobe_event+0x16b/0x290
+>   print_trace_line+0x451/0x8e0
+>   s_show+0x72/0x1f0
+>   seq_read_iter+0x58e/0x750
+>   seq_read+0x115/0x160
+>   vfs_read+0x11d/0x460
+>   ksys_read+0xa9/0x130
+>   do_syscall_64+0x3a/0x90
+>   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>  RIP: 0033:0x7fc2e972ade2
+>  Code: c0 e9 b2 fe ff ff 50 48 8d 3d b2 3f 0a 00 e8 05 f0 01 00 0f 1f 44 00 00 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75 10 0f 05 <48> 3d 00 f0 ff ff 77 56 c3 0f 1f 44 00 00 48 83 ec 28 48 89 54 24
+>  RSP: 002b:00007ffc64e687c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+>  RAX: ffffffffffffffda RBX: 0000000000020000 RCX: 00007fc2e972ade2
+>  RDX: 0000000000020000 RSI: 00007fc2e980d000 RDI: 0000000000000003
+>  RBP: 00007fc2e980d000 R08: 00007fc2e980c010 R09: 0000000000000000
+>  R10: 0000000000000022 R11: 0000000000000246 R12: 0000000000020f00
+>  R13: 0000000000000003 R14: 0000000000020000 R15: 0000000000020000
+>   </TASK>
+> 
+>  The buggy address belongs to the physical page:
+>  page:ffffea00017f6ec0 refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x5fdbb
+>  flags: 0xfffffc0000000(node=0|zone=1|lastcpupid=0x1fffff)
+>  raw: 000fffffc0000000 0000000000000000 ffffea00017f6ec8 0000000000000000
+>  raw: 0000000000000000 0000000000000000 00000000ffffffff 0000000000000000
+>  page dumped because: kasan: bad access detected
+> 
+>  Memory state around the buggy address:
+>   ffff88805fdbbe80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>   ffff88805fdbbf00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>  >ffff88805fdbbf80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>                                 ^
+>   ffff88805fdbc000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>   ffff88805fdbc080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>  ==================================================================
+> 
+> This was found when Zheng Yejian sent a patch to convert the even type
+> number assignment to use IDA, which gives the next available number, and
+> this bug showed up in the fuzz testing by Yujie Liu and the kernel test
+> robot. But after further analysis, I found that this behavior is the same
+> as when the event type numbers go past the 16bit max (and the above shows
+> that).
+> 
+> As modules have a similar issue, but is dealt with by setting a
+> "WAS_ENABLED" flag when a module event is enabled, and when the module is
+> freed, if any of its events were enabled, the ring buffer that holds that
+> event is also cleared, to prevent reading stale events. The same can be
+> done for dynamic events.
+
+Indeed. If the dynamic event had not been enabled, there is no reason
+to clear the buffer.
+
+This looks good to me.
+
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+Thank you!
+
+> 
+> If any dynamic event that is being removed was enabled, then make sure the
+> buffers they were enabled in are now cleared.
+> 
+> Link: https://lore.kernel.org/all/20221110020319.1259291-1-zhengyejian1@huawei.com/
+> 
+> Cc: stable@vger.kernel.org
+> Depends-on: TBD ("tracing: Add tracing_reset_all_online_cpus_unlocked() function")
+> Depends-on: 5448d44c38557 ("tracing: Add unified dynamic event framework")
+> Depends-on: 6212dd29683ee ("tracing/kprobes: Use dyn_event framework for kprobe events")
+> Depends-on: 065e63f951432 ("tracing: Only have rmmod clear buffers that its events were active in")
+> Depends-on: 575380da8b469 ("tracing: Only clear trace buffer on module unload if event was traced")
+> Fixes: 77b44d1b7c283 ("tracing/kprobes: Rename Kprobe-tracer to kprobe-event")
+> Reported-by: Zheng Yejian <zhengyejian1@huawei.com>
+> Reported-by: Yujie Liu <yujie.liu@intel.com>
+> Reported-by: kernel test robot <yujie.liu@intel.com>
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> ---
+>  kernel/trace/trace_dynevent.c |  2 ++
+>  kernel/trace/trace_events.c   | 11 ++++++++++-
+>  2 files changed, 12 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/trace/trace_dynevent.c b/kernel/trace/trace_dynevent.c
+> index 154996684fb5..4376887e0d8a 100644
+> --- a/kernel/trace/trace_dynevent.c
+> +++ b/kernel/trace/trace_dynevent.c
+> @@ -118,6 +118,7 @@ int dyn_event_release(const char *raw_command, struct dyn_event_operations *type
+>  		if (ret)
+>  			break;
+>  	}
+> +	tracing_reset_all_online_cpus();
+>  	mutex_unlock(&event_mutex);
+>  out:
+>  	argv_free(argv);
+> @@ -214,6 +215,7 @@ int dyn_events_release_all(struct dyn_event_operations *type)
+>  			break;
+>  	}
+>  out:
+> +	tracing_reset_all_online_cpus();
+>  	mutex_unlock(&event_mutex);
+>  
 >  	return ret;
->  }
+> diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
+> index 0449e3c7d327..3bfaf560ecc4 100644
+> --- a/kernel/trace/trace_events.c
+> +++ b/kernel/trace/trace_events.c
+> @@ -2947,7 +2947,10 @@ static int probe_remove_event_call(struct trace_event_call *call)
+>  		 * TRACE_REG_UNREGISTER.
+>  		 */
+>  		if (file->flags & EVENT_FILE_FL_ENABLED)
+> -			return -EBUSY;
+> +			goto busy;
+> +
+> +		if (file->flags & EVENT_FILE_FL_WAS_ENABLED)
+> +			tr->clear_trace = true;
+>  		/*
+>  		 * The do_for_each_event_file_safe() is
+>  		 * a double loop. After finding the call for this
+> @@ -2960,6 +2963,12 @@ static int probe_remove_event_call(struct trace_event_call *call)
+>  	__trace_remove_event_call(call);
 >  
-> +/* TDMR must be 1gb aligned */
-> +#define TDMR_ALIGNMENT		BIT_ULL(30)
-> +#define TDMR_PFN_ALIGNMENT	(TDMR_ALIGNMENT >> PAGE_SHIFT)
-> +
-> +/* Align up and down the address to TDMR boundary */
-> +#define TDMR_ALIGN_DOWN(_addr)	ALIGN_DOWN((_addr), TDMR_ALIGNMENT)
-> +#define TDMR_ALIGN_UP(_addr)	ALIGN((_addr), TDMR_ALIGNMENT)
-> +
-> +static inline u64 tdmr_start(struct tdmr_info *tdmr)
-> +{
-> +	return tdmr->base;
-> +}
-
-I'm always skeptical that it's a good idea to take this in code:
-
-	tdmr->base
-
-and make it this:
-
-	tdmr_start(tdmr)
-
-because the helper is *LESS* compact than the open-coded form!  I hope
-I'm proven wrong.
-
-> +static inline u64 tdmr_end(struct tdmr_info *tdmr)
-> +{
-> +	return tdmr->base + tdmr->size;
-> +}
-> +
->  /* Calculate the actual TDMR_INFO size */
->  static inline int cal_tdmr_size(void)
->  {
-> @@ -492,14 +510,98 @@ static struct tdmr_info *alloc_tdmr_array(int *array_sz)
->  	return alloc_pages_exact(*array_sz, GFP_KERNEL | __GFP_ZERO);
->  }
->  
-> +static struct tdmr_info *tdmr_array_entry(struct tdmr_info *tdmr_array,
-> +					  int idx)
-> +{
-> +	return (struct tdmr_info *)((unsigned long)tdmr_array +
-> +			cal_tdmr_size() * idx);
-> +}
-
-FWIW, I think it's probably a bad idea to have 'struct tdmr_info *'
-types floating around since:
-
-	tmdr_info_array[0]
-
-works, but:
-
-	tmdr_info_array[1]
-
-will blow up in your face.  It would almost make sense to have
-
-struct tdmr_info_list {
-	struct tdmr_info *first_tdmr;
-}
-
-and then pass around pointers to the 'struct tdmr_info_list'.  Maybe
-that's overkill, but it is kinda silly to call something an array if []
-doesn't work on it.
-
-> +/*
-> + * Create TDMRs to cover all TDX memory regions.  The actual number
-> + * of TDMRs is set to @tdmr_num.
-> + */
-> +static int create_tdmrs(struct tdmr_info *tdmr_array, int *tdmr_num)
-> +{
-> +	struct tdx_memblock *tmb;
-> +	int tdmr_idx = 0;
-> +
-> +	/*
-> +	 * Loop over TDX memory regions and create TDMRs to cover them.
-> +	 * To keep it simple, always try to use one TDMR to cover
-> +	 * one memory region.
-> +	 */
-
-This seems like it might tend to under-utilize TDMRs.  I'm sure this is
-done for simplicity, but is it OK?  Why is it OK?  How are you sure this
-won't bite us later?
-
-> +	list_for_each_entry(tmb, &tdx_memlist, list) {
-> +		struct tdmr_info *tdmr;
-> +		u64 start, end;
-> +
-> +		tdmr = tdmr_array_entry(tdmr_array, tdmr_idx);
-> +		start = TDMR_ALIGN_DOWN(tmb->start_pfn << PAGE_SHIFT);
-> +		end = TDMR_ALIGN_UP(tmb->end_pfn << PAGE_SHIFT);
-
-Nit: a little vertical alignment can make this much more readable:
-
-		start = TDMR_ALIGN_DOWN(tmb->start_pfn << PAGE_SHIFT);
-		end   = TDMR_ALIGN_UP  (tmb->end_pfn   << PAGE_SHIFT);
-
-> +
-> +		/*
-> +		 * If the current TDMR's size hasn't been initialized,
-> +		 * it is a new TDMR to cover the new memory region.
-> +		 * Otherwise, the current TDMR has already covered the
-> +		 * previous memory region.  In the latter case, check
-> +		 * whether the current memory region has been fully or
-> +		 * partially covered by the current TDMR, since TDMR is
-> +		 * 1G aligned.
-> +		 */
-
-Again, we have a comment over a if() block that describes what the
-individual steps in the block do.  *Plus* each individual step is
-*ALREADY* commented.  What purpose does this comment serve?
-
-> +		if (tdmr->size) {
-> +			/*
-> +			 * Loop to the next memory region if the current
-> +			 * block has already been fully covered by the
-> +			 * current TDMR.
-> +			 */
-> +			if (end <= tdmr_end(tdmr))
-> +				continue;
-> +
-> +			/*
-> +			 * If part of the current memory region has
-> +			 * already been covered by the current TDMR,
-> +			 * skip the already covered part.
-> +			 */
-> +			if (start < tdmr_end(tdmr))
-> +				start = tdmr_end(tdmr);
-> +
-> +			/*
-> +			 * Create a new TDMR to cover the current memory
-> +			 * region, or the remaining part of it.
-> +			 */
-> +			tdmr_idx++;
-> +			if (tdmr_idx >= tdx_sysinfo.max_tdmrs)
-> +				return -E2BIG;
-> +
-> +			tdmr = tdmr_array_entry(tdmr_array, tdmr_idx);
-> +		}
-> +
-> +		tdmr->base = start;
-> +		tdmr->size = end - start;
+>  	return 0;
+> + busy:
+> +	/* No need to clear the trace now */
+> +	list_for_each_entry(tr, &ftrace_trace_arrays, list) {
+> +		tr->clear_trace = false;
 > +	}
-> +
-> +	/* @tdmr_idx is always the index of last valid TDMR. */
-> +	*tdmr_num = tdmr_idx + 1;
-> +
-> +	return 0;
-> +}
-
-Seems like a positive return value could be the number of populated
-TDMRs.  That would get rid of the int* argument.
-
->  /*
->   * Construct an array of TDMRs to cover all TDX memory ranges.
->   * The actual number of TDMRs is kept to @tdmr_num.
->   */
-
-OK, so something else allocated the 'tdmr_array' and it's being passed
-in here to fill it out.  "construct" and "create" are both near synonyms
-for "allocate", which isn't even being done here.
-
-We want something here that will make it clear that this function is
-taking an already populated list of TDMRs and filling it out.
-"fill_tmdrs()" seems like it might be a better choice.
-
-This is also a place where better words can help.  If the function is
-called "construct", then there's *ZERO* value in using the same word in
-the comment.  Using a word that is a close synonym but that can contrast
-it with something different would be really nice, say:
-
-This is also a place where the calling convention can be used to add
-clarity.  If you implicitly use a global variable, you have to explain
-that.  But, if you pass *in* a variable, it's a lot more clear.
-
-Take this, for instance:
-
-/*
- * Take the memory referenced in @tdx_memlist and populate the
- * preallocated @tmdr_array, following all the special alignment
- * and size rules for TDMR.
- */
-static int fill_out_tdmrs(struct list_head *tdx_memlist,
-			  struct tdmr_info *tdmr_array)
-{
-...
-
-That's 100% crystal clear about what's going on.  You know what the
-inputs are and the outputs.  You also know why this is even necessary.
-It's implied a bit, but it's because TDMRs have special rules about
-size/alignment and tdx_memlists do not.
-
->  static int construct_tdmrs(struct tdmr_info *tdmr_array, int *tdmr_num)
->  {
-> +	int ret;
-> +
-> +	ret = create_tdmrs(tdmr_array, tdmr_num);
-> +	if (ret)
-> +		goto err;
-> +
->  	/* Return -EINVAL until constructing TDMRs is done */
-> -	return -EINVAL;
-> +	ret = -EINVAL;
-> +err:
-> +	return ret;
+> +	return -EBUSY;
 >  }
 >  
->  /*
+>  /* Remove an event_call */
+> -- 
+> 2.35.1
+> 
+> 
 
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
