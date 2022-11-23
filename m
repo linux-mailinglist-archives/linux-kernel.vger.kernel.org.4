@@ -2,246 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3CF8636898
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:20:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0739636891
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:20:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239396AbiKWSUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 13:20:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49168 "EHLO
+        id S239376AbiKWSTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 13:19:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238892AbiKWST7 (ORCPT
+        with ESMTP id S238816AbiKWSTq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 13:19:59 -0500
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB36B85;
-        Wed, 23 Nov 2022 10:19:57 -0800 (PST)
-Received: from fedor-dummypc.intra.ispras.ru (unknown [10.10.165.4])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 9D6E740D4004;
-        Wed, 23 Nov 2022 18:19:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 9D6E740D4004
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1669227594;
-        bh=aEKfkaPDGkocbXhGsULGvnhKc/adpsBqQl1m77p2DtY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=TUR+KFDwSSrC5Lz00os7h8xYFwgRwXlyeeBHazGTle6pns2oEz0wCkQRRJX6HmCma
-         p/KWfKhfAcbIE59kFVIuDOI1B0tV7zQ72Iz5bDtFEZq4MRjLC1XSnibPQDqCKwB+ia
-         /gSTUaoBrjZt4IIFmd9TbhdLjzO5tg1IlqsM8CkM=
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     Fedor Pchelkin <pchelkin@ispras.ru>, linux-kernel@vger.kernel.org,
-        Daniel Starke <daniel.starke@siemens.com>,
-        jirislaby@kernel.org, Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org
-Subject: [PATCH 5.10] Revert "tty: n_gsm: avoid call of sleeping functions from atomic context"
-Date:   Wed, 23 Nov 2022 21:19:16 +0300
-Message-Id: <20221123181916.6911-1-pchelkin@ispras.ru>
-X-Mailer: git-send-email 2.38.1
+        Wed, 23 Nov 2022 13:19:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3C310FA
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 10:19:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 96D59B82215
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 18:19:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3436CC433D6;
+        Wed, 23 Nov 2022 18:19:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669227583;
+        bh=HfKCxUf/kEaMg1EqZNQeaiJch/1K7iIS4r+c9bp1iXQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aXnqfmRmmoF2y8Y1euD9uZ4PKDjWXASOgjU+dk3A/cuMWxMZ13O9gqwOS1nHGz9Ft
+         SEgs2U7Gqgl03gHDZCje0dcXSSYjvn8rtDY/28mbUuth/2QzpOfbwnkY+swPBmF0tM
+         Asi4/8pl/WmN9zQGpjeRLRJ/Hv09x7/Nrlg+W4REyiOXBug0OfaePFJJb/uS5f4107
+         C4uZB3oOW+VT2hFcAJG+E1byGg9KCm8lvOnBWLrCm55xClT7xRKmBSHWBvbAZh1f7J
+         XQ50nDMhYUPZ9YcbmKCzhItf77Bt5OoYLCnnkgTeTJlSRU1enURNik03xJ1rerX2oo
+         6PxVzrZIn3WVg==
+Date:   Wed, 23 Nov 2022 10:19:41 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>, sfr@canb.auug.org.au,
+        linux-kernel@vger.kernel.org
+Subject: Re: objtool warning for next-20221118
+Message-ID: <20221123181941.fh4hrr3pazelwtxc@treble>
+References: <20221121040736.GA3738360@paulmck-ThinkPad-P17-Gen-1>
+ <Y3thrQxfcvZSXFlr@hirez.programming.kicks-ass.net>
+ <20221121145215.GF4001@paulmck-ThinkPad-P17-Gen-1>
+ <20221122051605.4hcbslwxez2trdvt@treble>
+ <Y3yJxQJ9DwxTx7km@hirez.programming.kicks-ass.net>
+ <20221123002258.GR4001@paulmck-ThinkPad-P17-Gen-1>
+ <20221123014812.7gptbvvndzemt5nc@treble>
+ <20221123174951.GZ4001@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221123174951.GZ4001@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fedor Pchelkin <pchelkin@ispras.ru>
+On Wed, Nov 23, 2022 at 09:49:51AM -0800, Paul E. McKenney wrote:
+> > > > Perhaps the best way would be to stick a REACHABLE annotation in
+> > > > arch_cpu_idle_dead() or something?
+> > > 
+> > > When I apply this on -next, I still get the objtool complaint.
+> > > Is there something else I should also be doing?
+> > 
+> > Silly GCC is folding the inline asm.  This works (but still doesn't seem
+> > like the right approach):
+> > 
+> > diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+> > index 26e8f57c75ad..128e7d78fedf 100644
+> > --- a/arch/x86/kernel/process.c
+> > +++ b/arch/x86/kernel/process.c
+> > @@ -702,7 +702,7 @@ static void (*x86_idle)(void);
+> >  #ifndef CONFIG_SMP
+> >  static inline void play_dead(void)
+> >  {
+> > -	BUG();
+> > +	_BUG_FLAGS(ASM_UD2, 0, ASM_REACHABLE);
+> >  }
+> >  #endif
+> 
+> I tried this, and still get:
+> 
+> vmlinux.o: warning: objtool: do_idle+0x156: unreachable instruction
+> 
+> Maybe my gcc is haunted?
 
-[ Upstream commit acdab4cb4ba7e5f94d2b422ebd7bf4bf68178fb2 ]
+Weird, it worked for me.  I have
 
-This reverts commit eb75efdec8dd0f01ac85c88feafa6e63b34a2521.
+  gcc version 12.2.1 20220819 (Red Hat 12.2.1-2) (GCC)
 
-The above commit is reverted as the usage of tx_mutex seems not to solve
-the problem described in eb75efdec8dd ("tty: n_gsm: avoid call of sleeping
-functions from atomic context") and just moves the bug to another place.
+and I can't really fathom why that wouldn't work.  Maybe it's a
+different issue?  The "unreachable instruction" warning is limited to
+one, so when a first warning gets fixed, a second warning might suddenly
+become visible.
 
-Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
-Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
-Reviewed-by: Daniel Starke <daniel.starke@siemens.com>
-Link: https://lore.kernel.org/r/20221008110221.13645-2-pchelkin@ispras.ru
----
- drivers/tty/n_gsm.c | 39 +++++++++++++++++++++------------------
- 1 file changed, 21 insertions(+), 18 deletions(-)
+Can you attach arch/x86/kernel/process.o?
 
-diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index c91a3004931f..c2212f52a603 100644
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -235,7 +235,7 @@ struct gsm_mux {
- 	int old_c_iflag;		/* termios c_iflag value before attach */
- 	bool constipated;		/* Asked by remote to shut up */
- 
--	struct mutex tx_mutex;
-+	spinlock_t tx_lock;
- 	unsigned int tx_bytes;		/* TX data outstanding */
- #define TX_THRESH_HI		8192
- #define TX_THRESH_LO		2048
-@@ -820,14 +820,15 @@ static void __gsm_data_queue(struct gsm_dlci *dlci, struct gsm_msg *msg)
-  *
-  *	Add data to the transmit queue and try and get stuff moving
-  *	out of the mux tty if not already doing so. Take the
-- *	the gsm tx mutex and dlci lock.
-+ *	the gsm tx lock and dlci lock.
-  */
- 
- static void gsm_data_queue(struct gsm_dlci *dlci, struct gsm_msg *msg)
- {
--	mutex_lock(&dlci->gsm->tx_mutex);
-+	unsigned long flags;
-+	spin_lock_irqsave(&dlci->gsm->tx_lock, flags);
- 	__gsm_data_queue(dlci, msg);
--	mutex_unlock(&dlci->gsm->tx_mutex);
-+	spin_unlock_irqrestore(&dlci->gsm->tx_lock, flags);
- }
- 
- /**
-@@ -839,7 +840,7 @@ static void gsm_data_queue(struct gsm_dlci *dlci, struct gsm_msg *msg)
-  *	is data. Keep to the MRU of the mux. This path handles the usual tty
-  *	interface which is a byte stream with optional modem data.
-  *
-- *	Caller must hold the tx_mutex of the mux.
-+ *	Caller must hold the tx_lock of the mux.
-  */
- 
- static int gsm_dlci_data_output(struct gsm_mux *gsm, struct gsm_dlci *dlci)
-@@ -902,7 +903,7 @@ static int gsm_dlci_data_output(struct gsm_mux *gsm, struct gsm_dlci *dlci)
-  *	is data. Keep to the MRU of the mux. This path handles framed data
-  *	queued as skbuffs to the DLCI.
-  *
-- *	Caller must hold the tx_mutex of the mux.
-+ *	Caller must hold the tx_lock of the mux.
-  */
- 
- static int gsm_dlci_data_output_framed(struct gsm_mux *gsm,
-@@ -918,7 +919,7 @@ static int gsm_dlci_data_output_framed(struct gsm_mux *gsm,
- 	if (dlci->adaption == 4)
- 		overhead = 1;
- 
--	/* dlci->skb is locked by tx_mutex */
-+	/* dlci->skb is locked by tx_lock */
- 	if (dlci->skb == NULL) {
- 		dlci->skb = skb_dequeue_tail(&dlci->skb_list);
- 		if (dlci->skb == NULL)
-@@ -1018,12 +1019,13 @@ static void gsm_dlci_data_sweep(struct gsm_mux *gsm)
- 
- static void gsm_dlci_data_kick(struct gsm_dlci *dlci)
- {
-+	unsigned long flags;
- 	int sweep;
- 
- 	if (dlci->constipated)
- 		return;
- 
--	mutex_lock(&dlci->gsm->tx_mutex);
-+	spin_lock_irqsave(&dlci->gsm->tx_lock, flags);
- 	/* If we have nothing running then we need to fire up */
- 	sweep = (dlci->gsm->tx_bytes < TX_THRESH_LO);
- 	if (dlci->gsm->tx_bytes == 0) {
-@@ -1034,7 +1036,7 @@ static void gsm_dlci_data_kick(struct gsm_dlci *dlci)
- 	}
- 	if (sweep)
- 		gsm_dlci_data_sweep(dlci->gsm);
--	mutex_unlock(&dlci->gsm->tx_mutex);
-+	spin_unlock_irqrestore(&dlci->gsm->tx_lock, flags);
- }
- 
- /*
-@@ -1256,6 +1258,7 @@ static void gsm_control_message(struct gsm_mux *gsm, unsigned int command,
- 						const u8 *data, int clen)
- {
- 	u8 buf[1];
-+	unsigned long flags;
- 
- 	switch (command) {
- 	case CMD_CLD: {
-@@ -1277,9 +1280,9 @@ static void gsm_control_message(struct gsm_mux *gsm, unsigned int command,
- 		gsm->constipated = false;
- 		gsm_control_reply(gsm, CMD_FCON, NULL, 0);
- 		/* Kick the link in case it is idling */
--		mutex_lock(&gsm->tx_mutex);
-+		spin_lock_irqsave(&gsm->tx_lock, flags);
- 		gsm_data_kick(gsm, NULL);
--		mutex_unlock(&gsm->tx_mutex);
-+		spin_unlock_irqrestore(&gsm->tx_lock, flags);
- 		break;
- 	case CMD_FCOFF:
- 		/* Modem wants us to STFU */
-@@ -2225,7 +2228,6 @@ static void gsm_free_mux(struct gsm_mux *gsm)
- 			break;
- 		}
- 	}
--	mutex_destroy(&gsm->tx_mutex);
- 	mutex_destroy(&gsm->mutex);
- 	kfree(gsm->txframe);
- 	kfree(gsm->buf);
-@@ -2297,12 +2299,12 @@ static struct gsm_mux *gsm_alloc_mux(void)
- 	}
- 	spin_lock_init(&gsm->lock);
- 	mutex_init(&gsm->mutex);
--	mutex_init(&gsm->tx_mutex);
- 	kref_init(&gsm->ref);
- 	INIT_LIST_HEAD(&gsm->tx_list);
- 	timer_setup(&gsm->t2_timer, gsm_control_retransmit, 0);
- 	init_waitqueue_head(&gsm->event);
- 	spin_lock_init(&gsm->control_lock);
-+	spin_lock_init(&gsm->tx_lock);
- 
- 	gsm->t1 = T1;
- 	gsm->t2 = T2;
-@@ -2327,7 +2329,6 @@ static struct gsm_mux *gsm_alloc_mux(void)
- 	}
- 	spin_unlock(&gsm_mux_lock);
- 	if (i == MAX_MUX) {
--		mutex_destroy(&gsm->tx_mutex);
- 		mutex_destroy(&gsm->mutex);
- 		kfree(gsm->txframe);
- 		kfree(gsm->buf);
-@@ -2652,15 +2653,16 @@ static int gsmld_open(struct tty_struct *tty)
- static void gsmld_write_wakeup(struct tty_struct *tty)
- {
- 	struct gsm_mux *gsm = tty->disc_data;
-+	unsigned long flags;
- 
- 	/* Queue poll */
- 	clear_bit(TTY_DO_WRITE_WAKEUP, &tty->flags);
--	mutex_lock(&gsm->tx_mutex);
-+	spin_lock_irqsave(&gsm->tx_lock, flags);
- 	gsm_data_kick(gsm, NULL);
- 	if (gsm->tx_bytes < TX_THRESH_LO) {
- 		gsm_dlci_data_sweep(gsm);
- 	}
--	mutex_unlock(&gsm->tx_mutex);
-+	spin_unlock_irqrestore(&gsm->tx_lock, flags);
- }
- 
- /**
-@@ -2703,6 +2705,7 @@ static ssize_t gsmld_write(struct tty_struct *tty, struct file *file,
- 			   const unsigned char *buf, size_t nr)
- {
- 	struct gsm_mux *gsm = tty->disc_data;
-+	unsigned long flags;
- 	int space;
- 	int ret;
- 
-@@ -2710,13 +2713,13 @@ static ssize_t gsmld_write(struct tty_struct *tty, struct file *file,
- 		return -ENODEV;
- 
- 	ret = -ENOBUFS;
--	mutex_lock(&gsm->tx_mutex);
-+	spin_lock_irqsave(&gsm->tx_lock, flags);
- 	space = tty_write_room(tty);
- 	if (space >= nr)
- 		ret = tty->ops->write(tty, buf, nr);
- 	else
- 		set_bit(TTY_DO_WRITE_WAKEUP, &tty->flags);
--	mutex_unlock(&gsm->tx_mutex);
-+	spin_unlock_irqrestore(&gsm->tx_lock, flags);
- 
- 	return ret;
- }
 -- 
-2.38.1
-
+Josh
