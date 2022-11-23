@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18C376350DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 08:02:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A8F6350D7
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 08:02:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236206AbiKWHAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 02:00:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54444 "EHLO
+        id S236255AbiKWHAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 02:00:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236198AbiKWHAe (ORCPT
+        with ESMTP id S236212AbiKWHAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 23 Nov 2022 02:00:34 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2E4F2403;
-        Tue, 22 Nov 2022 23:00:31 -0800 (PST)
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BFA1F5A06;
+        Tue, 22 Nov 2022 23:00:33 -0800 (PST)
 Received: from desky.lan (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9EEEA1306;
-        Wed, 23 Nov 2022 08:00:28 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id AEC671373;
+        Wed, 23 Nov 2022 08:00:29 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1669186829;
-        bh=TFegyMOiBdBMIpxjS/hopQO/iK5LC2AFN1HdZyBBj94=;
+        s=mail; t=1669186830;
+        bh=3fphJVPxicGLurGTXvkQUE9p+5BG3KUJATq5hRVNQpM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fDRA1Vre6B8ER3hzcA/HfI+Dx0AR+Ivb2EoupCxMa0p4HD+bVRK3kVKO/0efYnVj7
-         n2qpEsAdBEYJo63EdK4qYRxvz8gqHN9/W39WZHNcQSPPdn/+2DRgJfIvm01PgtM6Lu
-         /7KKY8mtkoKa7A6GMibZEOCKi6CngHQQU+fLLTww=
+        b=MNoNLXji6WI7jRt6XJeAXNMFVzuCYtF+oveYW3Fn8gQNUEbI6D5xxZb9bnVfQPpWe
+         cWLONf2Ej98LyTyH2UPgthUOo5/wdSEbc9c+BElcDJqqjB/d6gW+8ddRQqROta1y6Z
+         eIxxQ0AQ/UB77phm8p/SryFNLoWwsvj9KGfHvLNA=
 From:   Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
@@ -40,9 +40,9 @@ Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
         Jonas Karlman <jonas@kwiboo.se>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-Subject: [PATCH v2 5/7] arm64: dts: renesas: white-hawk-cpu: Add DP output support
-Date:   Wed, 23 Nov 2022 08:59:44 +0200
-Message-Id: <20221123065946.40415-6-tomi.valkeinen+renesas@ideasonboard.com>
+Subject: [PATCH v2 6/7] drm: rcar-du: Add r8a779g0 support
+Date:   Wed, 23 Nov 2022 08:59:45 +0200
+Message-Id: <20221123065946.40415-7-tomi.valkeinen+renesas@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221123065946.40415-1-tomi.valkeinen+renesas@ideasonboard.com>
 References: <20221123065946.40415-1-tomi.valkeinen+renesas@ideasonboard.com>
@@ -57,149 +57,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add DT nodes needed for the mini DP connector. The DP is driven by
-sn65dsi86, which in turn gets the pixel data from the SoC via DSI.
+Add support for DU on r8a779g0, which is identical to DU on r8a779a0.
 
 Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
 Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- .../dts/renesas/r8a779g0-white-hawk-cpu.dtsi  | 94 +++++++++++++++++++
- 1 file changed, 94 insertions(+)
+ drivers/gpu/drm/rcar-du/rcar_du_drv.c   | 22 ++++++++++++++++++++++
+ drivers/gpu/drm/rcar-du/rcar_du_group.c |  2 +-
+ 2 files changed, 23 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/renesas/r8a779g0-white-hawk-cpu.dtsi b/arch/arm64/boot/dts/renesas/r8a779g0-white-hawk-cpu.dtsi
-index c10740aee9f6..8aab859aac7a 100644
---- a/arch/arm64/boot/dts/renesas/r8a779g0-white-hawk-cpu.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a779g0-white-hawk-cpu.dtsi
-@@ -97,6 +97,15 @@ memory@600000000 {
- 		reg = <0x6 0x00000000 0x1 0x00000000>;
- 	};
- 
-+	reg_1p2v: regulator-1p2v {
-+		compatible = "regulator-fixed";
-+		regulator-name = "fixed-1.2V";
-+		regulator-min-microvolt = <1200000>;
-+		regulator-max-microvolt = <1200000>;
-+		regulator-boot-on;
-+		regulator-always-on;
-+	};
-+
- 	reg_1p8v: regulator-1p8v {
- 		compatible = "regulator-fixed";
- 		regulator-name = "fixed-1.8V";
-@@ -114,6 +123,24 @@ reg_3p3v: regulator-3p3v {
- 		regulator-boot-on;
- 		regulator-always-on;
- 	};
-+
-+	mini-dp-con {
-+		compatible = "dp-connector";
-+		label = "CN5";
-+		type = "mini";
-+
-+		port {
-+			mini_dp_con_in: endpoint {
-+				remote-endpoint = <&sn65dsi86_out>;
-+			};
-+		};
-+	};
-+
-+	sn65dsi86_refclk: clk-x6 {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <38400000>;
-+	};
+diff --git a/drivers/gpu/drm/rcar-du/rcar_du_drv.c b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
+index d003e8d9e7a2..46c60a2d710d 100644
+--- a/drivers/gpu/drm/rcar-du/rcar_du_drv.c
++++ b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
+@@ -524,6 +524,27 @@ static const struct rcar_du_device_info rcar_du_r8a779a0_info = {
+ 	.dsi_clk_mask =  BIT(1) | BIT(0),
  };
  
- &avb0 {
-@@ -134,6 +161,23 @@ phy0: ethernet-phy@0 {
- 	};
- };
- 
-+&dsi0 {
-+	status = "okay";
-+
-+	ports {
-+		port@1 {
-+			dsi0_out: endpoint {
-+				remote-endpoint = <&sn65dsi86_in>;
-+				data-lanes = <1 2 3 4>;
-+			};
-+		};
-+	};
++static const struct rcar_du_device_info rcar_du_r8a779g0_info = {
++	.gen = 4,
++	.features = RCAR_DU_FEATURE_CRTC_IRQ
++		  | RCAR_DU_FEATURE_VSP1_SOURCE
++		  | RCAR_DU_FEATURE_NO_BLENDING,
++	.channels_mask = BIT(1) | BIT(0),
++	.routes = {
++		/* R8A779G0 has two MIPI DSI outputs. */
++		[RCAR_DU_OUTPUT_DSI0] = {
++			.possible_crtcs = BIT(0),
++			.port = 0,
++		},
++		[RCAR_DU_OUTPUT_DSI1] = {
++			.possible_crtcs = BIT(1),
++			.port = 1,
++		},
++	},
++	.num_rpf = 5,
++	.dsi_clk_mask =  BIT(1) | BIT(0),
 +};
 +
-+&du {
-+	status = "okay";
-+};
-+
- &extal_clk {
- 	clock-frequency = <16666666>;
- };
-@@ -172,6 +216,51 @@ eeprom@50 {
- 	};
+ static const struct of_device_id rcar_du_of_table[] = {
+ 	{ .compatible = "renesas,du-r8a7742", .data = &rcar_du_r8a7790_info },
+ 	{ .compatible = "renesas,du-r8a7743", .data = &rzg1_du_r8a7743_info },
+@@ -549,6 +570,7 @@ static const struct of_device_id rcar_du_of_table[] = {
+ 	{ .compatible = "renesas,du-r8a77990", .data = &rcar_du_r8a7799x_info },
+ 	{ .compatible = "renesas,du-r8a77995", .data = &rcar_du_r8a7799x_info },
+ 	{ .compatible = "renesas,du-r8a779a0", .data = &rcar_du_r8a779a0_info },
++	{ .compatible = "renesas,du-r8a779g0", .data = &rcar_du_r8a779g0_info },
+ 	{ }
  };
  
-+&i2c1 {
-+	pinctrl-0 = <&i2c1_pins>;
-+	pinctrl-names = "default";
-+
-+	status = "okay";
-+	clock-frequency = <400000>;
-+
-+	bridge@2c {
-+		compatible = "ti,sn65dsi86";
-+		reg = <0x2c>;
-+
-+		clocks = <&sn65dsi86_refclk>;
-+		clock-names = "refclk";
-+
-+		interrupt-parent = <&intc_ex>;
-+		interrupts = <0 IRQ_TYPE_LEVEL_HIGH>;
-+
-+		enable-gpios = <&gpio1 26 GPIO_ACTIVE_HIGH>;
-+
-+		vccio-supply = <&reg_1p8v>;
-+		vpll-supply = <&reg_1p8v>;
-+		vcca-supply = <&reg_1p2v>;
-+		vcc-supply = <&reg_1p2v>;
-+
-+		ports {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			port@0 {
-+				reg = <0>;
-+				sn65dsi86_in: endpoint {
-+					remote-endpoint = <&dsi0_out>;
-+				};
-+			};
-+
-+			port@1 {
-+				reg = <1>;
-+				sn65dsi86_out: endpoint {
-+					remote-endpoint = <&mini_dp_con_in>;
-+				};
-+			};
-+		};
-+	};
-+};
-+
- &mmc0 {
- 	pinctrl-0 = <&mmc_pins>;
- 	pinctrl-1 = <&mmc_pins>;
-@@ -221,6 +310,11 @@ i2c0_pins: i2c0 {
- 		function = "i2c0";
- 	};
- 
-+	i2c1_pins: i2c1 {
-+		groups = "i2c1";
-+		function = "i2c1";
-+	};
-+
- 	keys_pins: keys {
- 		pins = "GP_5_0", "GP_5_1", "GP_5_2";
- 		bias-pull-up;
+diff --git a/drivers/gpu/drm/rcar-du/rcar_du_group.c b/drivers/gpu/drm/rcar-du/rcar_du_group.c
+index 1fe8581577ed..6da01760ede5 100644
+--- a/drivers/gpu/drm/rcar-du/rcar_du_group.c
++++ b/drivers/gpu/drm/rcar-du/rcar_du_group.c
+@@ -107,7 +107,7 @@ static void rcar_du_group_setup_didsr(struct rcar_du_group *rgrp)
+ 		 */
+ 		rcrtc = rcdu->crtcs;
+ 		num_crtcs = rcdu->num_crtcs;
+-	} else if (rcdu->info->gen == 3 && rgrp->num_crtcs > 1) {
++	} else if (rcdu->info->gen >= 3 && rgrp->num_crtcs > 1) {
+ 		/*
+ 		 * On Gen3 dot clocks are setup through per-group registers,
+ 		 * only available when the group has two channels.
 -- 
 2.34.1
 
