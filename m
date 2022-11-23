@@ -2,215 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E506D6351F1
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 09:09:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19BAF6351F9
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 09:10:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236306AbiKWIJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 03:09:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47888 "EHLO
+        id S236326AbiKWIJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 03:09:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235409AbiKWIJB (ORCPT
+        with ESMTP id S235946AbiKWIJY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 03:09:01 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8DF698264;
-        Wed, 23 Nov 2022 00:09:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669190940; x=1700726940;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=YBtHH/F3FPFXp77VEuPtNwixWaPytGhn1onf9KtwKE4=;
-  b=FA2meCTKeYOpPnZgqKnnp/knEGLiGvIQ13klRfp+Q100sdseeD8/bEkF
-   nDCbvvruLl9LdJVeMbbl4aVtbG1YXGWt78BjaJhNr5raGH0KPeM/EJoAH
-   JC2ErPEF9zRIEF9obk/NFfJR0MvQdCgvZwOnIEMpoFvfCVX5ujurEkSvh
-   kGYn6Xqcas/MA5EpzNSEjwMIXfepeGUVPbAn1DYrNPwCdjbslG3p4qKtB
-   sBRwYhwc2u8DAkjThrPOf9lEj7bYL+45CYeJXIX/f8VL5GPnNUkWAQI0L
-   q67jEmWyn8ek3jJdP+zumFSdKYxeiCJ4DwE1/FNIKsaNANYYDu8hzOlmh
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="301567443"
-X-IronPort-AV: E=Sophos;i="5.96,186,1665471600"; 
-   d="scan'208";a="301567443"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 00:09:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="672784296"
-X-IronPort-AV: E=Sophos;i="5.96,186,1665471600"; 
-   d="scan'208";a="672784296"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga008.jf.intel.com with ESMTP; 23 Nov 2022 00:09:00 -0800
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 23 Nov 2022 00:08:59 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 23 Nov 2022 00:08:58 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Wed, 23 Nov 2022 00:08:58 -0800
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.176)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Wed, 23 Nov 2022 00:08:58 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JzjqUv7gdu+aiOiIbCumgE+W6GPMEmSgTOhChLzt1vC0H3tUc1dM/IghfA+PSQq/LiUN2wm1tYFJPl/MiSFwLMbDMBjr8QAEAanvBiVkaT9fDIErX6F6YntKke6iYCe4z6q6i3Jl4Md/b8GKjeY+7CUL0SZcIHOSk+n/HzLvnMP6Cez5a1N+fcsdoC9byjpTTc2UH123tno1d8iQvvfrzxVnn5526/mJVEnirtRVBHrC8w6Nqc6qNj5BvaC6aKmPU2ZGPzhrszQrKKm5TnHR80crrtQg04B7dIo9jVMZ1FTIR8yXCdSk8DZvNuaPOVs55U533K/BVdMMGkere17k2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YBtHH/F3FPFXp77VEuPtNwixWaPytGhn1onf9KtwKE4=;
- b=dr9KNOdBqJCmOS5DK+U7pxzqzBqfIWnQxzZAbHuWvkoNgrdn24xNE8vNDIOO2E5wFS77+v2O56j3hB2r2tw0HWnhB1aeA9V1yYm6Rt0U9cc2okhTE2uZggvK/guAU4Y7zyeQkiIa8HSjdz7NpPfluPwbKGXwS2IwokkC5nX5av2eApvhrivYe9aDDc6M+qlnV3MV2BBWC40H/GPKFsF0BWw7ulRRkVjMzCRe9kzzRLdVm82xG73+qHcW1+hXQ4IzCjAz2NitTSqvVXjKOABOHnfgmps4/4uhTcQjJCXyrxs1Lhl4jX+iVbYkLpmSk9qKJM6Z+YxgkxRYN8ye+DJx/Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by DS0PR11MB6325.namprd11.prod.outlook.com (2603:10b6:8:cf::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Wed, 23 Nov
- 2022 08:08:57 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::d30c:c435:9b26:7dde]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::d30c:c435:9b26:7dde%9]) with mapi id 15.20.5834.015; Wed, 23 Nov 2022
- 08:08:57 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-CC:     "x86@kernel.org" <x86@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        "Will Deacon" <will@kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Lorenzo Pieralisi" <lorenzo.pieralisi@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>,
-        "Ahmed S. Darwish" <darwi@linutronix.de>
-Subject: RE: [patch V2 12/33] PCI/MSI: Add support for per device MSI[X]
- domains
-Thread-Topic: [patch V2 12/33] PCI/MSI: Add support for per device MSI[X]
- domains
-Thread-Index: AQHY/bbibHqIjpCS0EGXLo0J/f6SVK5MFjUw
-Date:   Wed, 23 Nov 2022 08:08:57 +0000
-Message-ID: <BN9PR11MB5276E9AD0F86A27A23ED8CFB8C0C9@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20221121083657.157152924@linutronix.de>
- <20221121091327.163146917@linutronix.de>
-In-Reply-To: <20221121091327.163146917@linutronix.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|DS0PR11MB6325:EE_
-x-ms-office365-filtering-correlation-id: 57d054bd-2695-41a4-ae2d-08dacd29f873
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 3NTnVKg5/Rh9qjl5pGHa8QMoKF7BcsLKVJO5lS4UFWa5l4D7f5zExbEyPkZPw+aATnS2BJ8TR7m7DVO6z1kIFRPzg1m5a5T8BbcKjWXc/SShx1TPjQyxdT74CrOmnHH8WiJVcVkg3gHUabHC79QmN9PpR/wsO90BJg9KidQa1UvJQRoko+sg23EMscK5bGmpaYChcuTD3zKMMlCRVAPOqoQagyEdNqAPMD1CtM66XSWEIqJLqEUd69z+PV2WakUjbJMoRRb0yMCi4a7sedZ8j0PyyXnswJ1Uit42pi55K0vaMoX/ICvK+9oP/I0mF1I+YbWfDO6MNZlus9YAEOl50zBm4vayEM3bg8ZhiHESeiq9BE7iD4SLOQQMg0dWWaJAtCIW2y+S8rgBrGwob8V4DnyQEASwrSA+kiJS2ghFV/HOXMubhp5ObzIaELanMeApuK0lz0H1Z1lBg3hvvesGA+BvtNcSKuX5mSMKROM/m6u1wi6eIScDu0picma2oSe838ud8YQwzJ88PnRW/PVz5Y5bzX49c61KDwXvT+eYQo/zQkHPu2WkVVkzItSwAPAH7+w7FOkO/JwWbJqHLB0wgf74K/SqXMs8MD/pejWmQLF4XRecDIoqI0eEZeC4U7oHfo6TmYNqiGSzGFSLhy5xu+sx9XdjAVDhQtHEB5epUqOJAib8pI4h9LQhBCy73TcSxAI80DLD83AoQveRKLQ1Qw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(346002)(39860400002)(366004)(136003)(396003)(451199015)(86362001)(76116006)(33656002)(41300700001)(55016003)(66446008)(186003)(66476007)(64756008)(66946007)(66556008)(52536014)(5660300002)(4326008)(8936002)(478600001)(8676002)(7416002)(71200400001)(26005)(110136005)(316002)(7696005)(9686003)(6506007)(54906003)(122000001)(82960400001)(38070700005)(38100700002)(2906002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OFcwSjgySTRTZ0RHOHlMckpCOUd3b2dyaXlHeW9kS0ZiWDlnWHczTHhWZXVT?=
- =?utf-8?B?WkZNeGVOLzMraVV6ZHZnZVM4SGVtZEpYQ1NlcU8vWGhLVHFDMmgyQ0wrY1Nm?=
- =?utf-8?B?Q3daVHM5SXlUOUY5c1RNbUFDaENyVFNwMHlZRXA2ZzhGdFB5c2V1NUV2U1dB?=
- =?utf-8?B?Nm15R0hPK0lBMC9rbTkyS2VUTlp6MlJpWWVja0xLWW1kQ25kSTRUTUdPWkdT?=
- =?utf-8?B?OEU4alEzSmU2VHV1MDlUT3VIWWFXbUY1clpPTmRqdzI4WStJMFRhTlYzOGdH?=
- =?utf-8?B?MjJCcmo5cFRWaEZkbWVPaTgzOU5ENFpjcktUL3Z0SGF3THVqYUZobCtIVVlB?=
- =?utf-8?B?Q3ltMXYvZGtxTTlIaTVRRVdNTU4zckN3b2p0Y0JQMVh5eE9VS3FoL2FoaDBG?=
- =?utf-8?B?KzlmWE4vNDdabDlRaDJDSE1yOXVrY0tQTTRwS0c5aEkwOGt1RVpJbzhoYUNI?=
- =?utf-8?B?MXY1TWlVYlVRMlZzazFYbzFzSUI4SGREZWJUODZqNnlsU1dXekdVZzRNdlVI?=
- =?utf-8?B?UGNIMW9QSnhRN0t6N3FxTStWVS95UDJwdUJ1RXlTNTA3ZmZUV1lvTG9Nd05p?=
- =?utf-8?B?dGpIbURWQyt1QjdwS2VlVU1YSnN1b21GQ3p4cmdrcFRBNmd2MjZyK0x0TmxO?=
- =?utf-8?B?K2pDL1dBVUJrcEk2N1F6MUR5K2I0NGRHbi9rN2R0eVRxamtQdERML09qM2l2?=
- =?utf-8?B?ZzlacmhtVk5rSC9CTFhjTitCeCs1NjJRbjRhbVVDZ2pOaG5UNSsrMHJHL0lS?=
- =?utf-8?B?S1Zkc2V4K3VYeTlMbEJLaTFKVDNmdTNEZXNEeUsyNXEwMTZGUjgyWFVOWWcw?=
- =?utf-8?B?WG5sNFh0a1NCQTRMbEhnNlJzYzJoVnprS3NwblBsMkJPZGVaTnJVaVRVZ2ZE?=
- =?utf-8?B?aWtZVlBqRTBlRW5MWWcxWGp3cXljMFUxOVZtdFhBYmNlRkFiSUNGTWhkRFVJ?=
- =?utf-8?B?WjJ0QnZkUGJ3TWZ2eGhTQVF3aG9JcWhPdTc3NlVRYWs2VXRNQi8zMUkvcmIx?=
- =?utf-8?B?Um9JMWR2ZFI3NEE2d1NYT3RnYmsxKy9oTHNRU2RZS2JNZTNHRi82Skp5MVdM?=
- =?utf-8?B?K1Nablh3ZEh3dko5QnZxdVl2SzJ3ZllNcWYybmxNbnlXUm9VU1d2RGxOWmFl?=
- =?utf-8?B?bG1zWW5aUGZUTm9tbWFuRkUrZVJ3ZzVRek5QSEdqbzhOMFZGYkwyUmRVejBI?=
- =?utf-8?B?bE1NOWFENHRiOHU1YUJNUzRUa3YyNWNhd1NrbVh6bTVuU2o5a1JyYTZpMHlv?=
- =?utf-8?B?OWNFZjZ6KzBaMllJaUFMdjRpN0hyUmZUVHR3MWFvMk0yUGVjVkxGdmFIU1Av?=
- =?utf-8?B?bzZtZCtLK3FjMXBNVjJVWVdpV1Y1SytmS1ZmODBEY2ZncG96VXdHNjJoaVE3?=
- =?utf-8?B?eW14Sk9OY3cybkcvREFCd2JoaXpSSjBxWmhtYmc1ZFZFVmVtaDA5Uyt4REFY?=
- =?utf-8?B?dEtBaUdML1F4Z3QyVnVINUgrSnFWMkpSMHpYWjBrR3VPaEwxWWpkeVZ4WWtl?=
- =?utf-8?B?MC9SMkswNjJidy9FdE5YajJqOTBOQXRKK3RtWHpmNUl6OEpvR0NuVUhwaGh2?=
- =?utf-8?B?bTFkQ2tjYzNCa0tsa21ZaUU0TWhNekt2MjUrMmxBVjV0eVlHRGk4Vk00SkRh?=
- =?utf-8?B?dHVSZzZMNkJkVno2ZXBuQ24wTXNvQmQ4TStpMlRIVDM2Wm9ZSVR3YkxiUjFR?=
- =?utf-8?B?ekhLVDRXWFdKeEIxd2NkY0tCVHJpUHdNSUdqeURtTTUxd0I2NmY3bm5KMVh4?=
- =?utf-8?B?MkxkajZKdUZFRDFKRzRuWFpia0tneTZlWUE0SEZGMmxqVGMzSFYzanFQRjcv?=
- =?utf-8?B?cytibkFvcm1NNTNOSURYQldDdU1MRUs3bmdoS3dXZSsvV3hnNUM4RFlQUXUz?=
- =?utf-8?B?TG43WGFsQzNkYXZFbTdGQ0ZKU3ZJZ3llM2pOcFREdDBBeGNZekpVWllqTUEx?=
- =?utf-8?B?MFBQSDFCeFFpc2lkL2JFd1BOMFRoQ01PbndzMk1GVmJEU0F3UXNORzFjdGwr?=
- =?utf-8?B?REtjaVdCU1IwQ1FHa2o2cHBiNGRxeFYrQy9KQ0JUTjl2R3hWQUxhaE1ZV2U3?=
- =?utf-8?B?dkpkeWI1bE1GVjFZNnUvMTduYVd4Qk9ReUZLR1c3aGdGSkxFbkM0dmJleHRq?=
- =?utf-8?Q?twZPAQCozZ5DQfuD3Ruw/4v2a?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 23 Nov 2022 03:09:24 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5319A248
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 00:09:22 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oxkok-0006Eq-Bh; Wed, 23 Nov 2022 09:09:14 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oxkoi-0060sj-AG; Wed, 23 Nov 2022 09:09:13 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1oxkoi-000yN1-Ek; Wed, 23 Nov 2022 09:09:12 +0100
+Date:   Wed, 23 Nov 2022 09:09:12 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     kernel@pengutronix.de,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
+        Grant Likely <grant.likely@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>
+Subject: Re: [PATCH 571/606] serial: sc16is7xx: Convert to i2c's .probe_new()
+Message-ID: <20221123080912.lbmfgnco67psdu27@pengutronix.de>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-572-uwe@kleine-koenig.org>
+ <536ac08e-bdbd-b4d6-8309-8f6763f8db12@kernel.org>
+ <20221121070757.cqiybt5uk4qiczmr@pengutronix.de>
+ <0bfea903-5efd-a76d-5944-16a2c9362adb@kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 57d054bd-2695-41a4-ae2d-08dacd29f873
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Nov 2022 08:08:57.1873
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dyDxIRofMk8/nLF4uWtNJFvG86DiQHR7w9ZJULFf4iMemgab9qe92GDdz+e67BLfHpZ6jy35FIZM6jQX3VBLpw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB6325
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="f745plogbhx5hxup"
+Content-Disposition: inline
+In-Reply-To: <0bfea903-5efd-a76d-5944-16a2c9362adb@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBUaG9tYXMgR2xlaXhuZXIgPHRnbHhAbGludXRyb25peC5kZT4NCj4gU2VudDogTW9u
-ZGF5LCBOb3ZlbWJlciAyMSwgMjAyMiAxMDozOCBQTQ0KPiANCj4gKw0KPiArc3RhdGljIHZvaWQg
-cGNpX21hc2tfbXNpKHN0cnVjdCBpcnFfZGF0YSAqZGF0YSkNCj4gK3sNCj4gKwlzdHJ1Y3QgbXNp
-X2Rlc2MgKmRlc2MgPSBpcnFfZGF0YV9nZXRfbXNpX2Rlc2MoZGF0YSk7DQo+ICsNCj4gKwlwY2lf
-bXNpX21hc2soZGVzYywgQklUKGRhdGEtPmlycSAtIGRlc2MtPmlycSkpOw0KDQpwY2lfbWFza19t
-c2koKSBhbmQgcGNpX21zaV9tYXNrKCkgYXJlIGNvbmZ1c2luZy4NCg0KUHJvYmFibHkgcGNpX2ly
-cV9tYXNrX21zaSgpIGdpdmVuIHRoZSBwYXJhbWV0ZXIgaXMgaXJxX2RhdGEuDQoNCj4gK2Jvb2wg
-cGNpX3NldHVwX21zaV9kZXZpY2VfZG9tYWluKHN0cnVjdCBwY2lfZGV2ICpwZGV2KQ0KPiArew0K
-PiArCWlmIChXQVJOX09OX09OQ0UocGRldi0+bXNpeF9lbmFibGVkKSkNCj4gKwkJcmV0dXJuIGZh
-bHNlOw0KDQp0aGUgY2hlY2sgYWxyZWFkeSBleGlzdHMgaW4gX19wY2lfZW5hYmxlX21zaV9yYW5n
-ZSgpDQoNCj4gK2Jvb2wgcGNpX3NldHVwX21zaXhfZGV2aWNlX2RvbWFpbihzdHJ1Y3QgcGNpX2Rl
-diAqcGRldiwgdW5zaWduZWQgaW50DQo+IGh3c2l6ZSkNCj4gK3sNCj4gKwlpZiAoV0FSTl9PTl9P
-TkNFKHBkZXYtPm1zaXhfZW5hYmxlZCkpDQo+ICsJCXJldHVybiBmYWxzZTsNCg0KZGl0dG8uDQoN
-CmJ0dyBhY2NvcmRpbmcgdG8gdGhlIGNvbW1lbnQgdGhpcyBzaG91bGQgY2hlY2sgcGRldi0+bXNp
-X2VuYWJsZWQuDQoNCj4gQEAgLTE1MiwxMyArMzE2LDMzIEBAIGJvb2wgcGNpX21zaV9kb21haW5f
-c3VwcG9ydHMoc3RydWN0IHBjaV8NCj4gIHsNCj4gIAlzdHJ1Y3QgbXNpX2RvbWFpbl9pbmZvICpp
-bmZvOw0KPiAgCXN0cnVjdCBpcnFfZG9tYWluICpkb21haW47DQo+ICsJdW5zaWduZWQgaW50IHN1
-cHBvcnRlZDsNCj4gDQo+ICAJZG9tYWluID0gZGV2X2dldF9tc2lfZG9tYWluKCZwZGV2LT5kZXYp
-Ow0KPiANCj4gIAlpZiAoIWRvbWFpbiB8fCAhaXJxX2RvbWFpbl9pc19oaWVyYXJjaHkoZG9tYWlu
-KSkNCj4gIAkJcmV0dXJuIG1vZGUgPT0gQUxMT1dfTEVHQUNZOw0KPiAtCWluZm8gPSBkb21haW4t
-Pmhvc3RfZGF0YTsNCj4gLQlyZXR1cm4gKGluZm8tPmZsYWdzICYgZmVhdHVyZV9tYXNrKSA9PSBm
-ZWF0dXJlX21hc2s7DQo+ICsNCj4gKwlpZiAoIWlycV9kb21haW5faXNfbXNpX3BhcmVudChkb21h
-aW4pKSB7DQo+ICsJCS8qDQo+ICsJCSAqIEZvciAiZ2xvYmFsIiBQQ0kvTVNJIGludGVycnVwdCBk
-b21haW5zIHRoZSBhc3NvY2lhdGVkDQo+ICsJCSAqIG1zaV9kb21haW5faW5mbzo6ZmxhZ3MgaXMg
-dGhlIGF1dGhvcml0aXZlIHNvdXJjZSBvZg0KPiArCQkgKiBpbmZvcm1hdGlvbi4NCj4gKwkJICov
-DQo+ICsJCWluZm8gPSBkb21haW4tPmhvc3RfZGF0YTsNCj4gKwkJc3VwcG9ydGVkID0gaW5mby0+
-ZmxhZ3M7DQo+ICsJfSBlbHNlIHsNCj4gKwkJLyoNCj4gKwkJICogRm9yIE1TSSBwYXJlbnQgZG9t
-YWlucyB0aGUgc3VwcG9ydGVkIGZlYXR1cmUgc2V0DQo+ICsJCSAqIGlzIGF2YWxpYWJsZSBpbiB0
-aGUgcGFyZW50IG9wcy4gVGhpcyBtYWtlcyBjaGVja3MNCj4gKwkJICogcG9zc2libGUgYmVmb3Jl
-IGFjdHVhbGx5IGluc3RhbnRpYXRpbmcgdGhlDQo+ICsJCSAqIHBlciBkZXZpY2UgZG9tYWluIGJl
-Y2F1c2UgdGhlIHBhcmVudCBpcyBuZXZlcg0KPiArCQkgKiBleHBhbmRpbmcgdGhlIFBDSS9NU0kg
-ZnVuY3Rpb25hbGl0eS4NCj4gKwkJICovDQo+ICsJCXN1cHBvcnRlZCA9IGRvbWFpbi0+bXNpX3Bh
-cmVudF9vcHMtPnN1cHBvcnRlZF9mbGFnczsNCg0KVGhpcyBpcyBnZW5lcmFsIFBDSSBNU0kgbG9n
-aWMuIFNvIGFuIG9wZW4gcmVsYXRlZCB0byBteSByZWx5IHRvIHBhdGNoMDIsDQppcyBpdCBjb3Jy
-ZWN0IGZvciBQQ0kgY29yZSB0byBhc3N1bWUgdGhhdCB0aGUgcmVhbCBwYXJlbnQgaW1wb3NlcyBh
-bGwgdGhlDQpyZXN0cmljdGlvbnMgYW5kIHRoZXJlIGlzIG5vIG5lZWQgdG8gZnVydGhlciBnbyBk
-b3duIHRoZSBoaWVyYXJjaHk/DQo=
+
+--f745plogbhx5hxup
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hello Jiri,
+
+On Wed, Nov 23, 2022 at 07:36:52AM +0100, Jiri Slaby wrote:
+> On 21. 11. 22, 8:07, Uwe Kleine-K=F6nig wrote:
+> > On Mon, Nov 21, 2022 at 07:03:41AM +0100, Jiri Slaby wrote:
+> > > On 18. 11. 22, 23:45, Uwe Kleine-K=F6nig wrote:
+> > > > From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > > >=20
+> > > > .probe_new() doesn't get the i2c_device_id * parameter, so determine
+> > > > that explicitly in the probe function.
+> > >=20
+> > > I wonder why -- is this a new approach to probe functions? Or is only=
+ i2c
+> > > affected? And why? Could you point to the commit introducing and desc=
+ribing
+> > > the change in the i2c core?
+> >=20
+> > I didn't sent the cover letter to all recipents of the individual
+> > patches, so flow of information is a bit rough. Sorry about that.
+> >=20
+> > You can find it at
+> > https://lore.kernel.org/lkml/20221118224540.619276-1-uwe@kleine-koenig.=
+org/,
+> > it should answer your question.
+>=20
+> Yes, I looked up that beforehand, but was no more clever after reading it.
+>=20
+> > The short version is: The i2c framework does a more or less expensive
+> > lookup for each call to .probe() to provide the id parameter. A relevant
+> > part of the drivers however doesn't use this parameter, so the idea is
+> > to let the drivers who actually need it, determine it themselves.
+> >=20
+> > Statistics for the current state of this series in my tree:
+> > Among the 602 converted drivers, 404 don't make use of the parameter.
+>=20
+> So doesn't it make sense to provide both probe with no id and "probe_id"
+> then? 200 is quite a few (a third to be precise).
+
+Having the probe callback with the id parameter is only temporary. As
+soon as all drivers are converted, the variant with the id parameter
+will go away.
+
+> BTW is this a performance issue? I.e. does it slow down the boot?
+
+I don't know the start motivation for Lee (who triggered the conversion
+in b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new() call-back
+type")).
+Looking at the git history, he created 1e98dcd77970 ("mfd: 88pm860x:
+Move over to new I2C device .probe() call") converting a driver that
+doesn't benefit immensely. The lookup is more expensive for drivers with
+big .id_table, the converted driver has only one entry.
+
+I think in the end is a mixture between:
+
+ - A big part of the drivers doesn't benefit from the lookup.
+ - For most other busses the probe function only gets a device parameter
+   and no id (spi, platform, i3c). There are counter examples though:
+   amba, usb. Didn't check further.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--f745plogbhx5hxup
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN91SUACgkQwfwUeK3K
+7AnEJwf/W4pS8GZPEAPf9Q7m0soQa4CPHBpI/2o+JSehcUyl1SirnlbwiBy7Dq4k
+dx3FOMT9OJtN7XvRlJJhfE6Wt3OuZzpvwsDsb9sT+Gr2V7w7NsozRiTG7d1KEa2r
+qTWPl1/l9QhJlFECDavLxSSqF/IvuirEKHZ/oM87g3c+hgyxH0LrE28qpLAx/9FN
+JYUDstbnyvDfTyJiJvgx3AAMd1jDZ2uH9DdfjjBIO2Mn58nMeGvXwqWlDs29xceS
+NQGVR5/G4X+uXx8WMitZ25bcJ2h8nsZ21OY0Kehjw0fnB1sTJf2DGGgoGroQZhu0
+4A0YlTudRazzo6X24r4O99su6DQESw==
+=2Rnm
+-----END PGP SIGNATURE-----
+
+--f745plogbhx5hxup--
