@@ -2,150 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6BD0636736
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:30:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6427363673F
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:31:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239086AbiKWRam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 12:30:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48046 "EHLO
+        id S239130AbiKWRb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 12:31:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238866AbiKWRaN (ORCPT
+        with ESMTP id S239116AbiKWRbJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 12:30:13 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DDB88E295;
-        Wed, 23 Nov 2022 09:30:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1669224612; x=1700760612;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ZT9WVned9qGMAlH0r6W65dY8aAfAq0l2ES0Gvi1OpwI=;
-  b=nnHKdSPTYo47b6DAIhIVApHTAOdpOozQLnW/MQPB27rGarHhpDtCREnX
-   j3g4oBm2h17QBYN0wTEwgqKUVrS+LEUlbJ0TjHzXB7xvgXYJsa0jsqgft
-   mM6mF5HQOqHdycX5VTNVISbT2Tj0lfW98FMXb6DdYemAk9EQM5jFaxpjP
-   k=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 23 Nov 2022 09:30:12 -0800
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 09:30:11 -0800
-Received: from [10.110.94.74] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 23 Nov
- 2022 09:30:10 -0800
-Message-ID: <85a0af2c-5f79-3d84-c946-a4960aee2958@quicinc.com>
-Date:   Wed, 23 Nov 2022 11:30:09 -0600
+        Wed, 23 Nov 2022 12:31:09 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D988CF09;
+        Wed, 23 Nov 2022 09:31:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669224668; x=1700760668;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9y/SMjCFDkeuOrin0QIRW260F2k/I5+MRvsD4FQ5dFQ=;
+  b=i4DQy5YYWacvE3RHFuDkhhHWgU2htjKm6ptBQfezyPLsSy5Vb5XDkAMk
+   vqsV7Gjf0+m8yVrPJ8H7qyjPA6jA8VkHlj3pa4DDJmypHQuCM2DeywdPM
+   95/5Mv82m8VpzfjqnqsotkMaG/h63wm13N6HrEhodaAMQP4IAis2qNgUE
+   AuAx3piIWlIjZme9zm70qejstBm6Udkp1wB9uaEqTHO5LOyiNoU9HDgj2
+   8zcaawxPK+crqsoTv7bXh5qvb8FX9QntnXQGgTIVDYRHwDNHUMdraEfka
+   AwazAhMl6K4TLYw2PCSTbqwXh3AoG6rjwiu8kYCqoOwjRzt3ytbEwnwb2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="301682112"
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="301682112"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 09:31:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="816554707"
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="816554707"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 23 Nov 2022 09:31:06 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oxtaS-00GNp6-1Z;
+        Wed, 23 Nov 2022 19:31:04 +0200
+Date:   Wed, 23 Nov 2022 19:31:04 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        michael@walle.cc, broonie@kernel.org
+Subject: Re: [PATCH v3 5/9] gpio: 104-idi-48: Migrate to gpio-regmap API
+Message-ID: <Y35Y2BM8VoVQFZeJ@smile.fi.intel.com>
+References: <cover.1669100542.git.william.gray@linaro.org>
+ <5cf249405b0ac5f7408ec06cf7a65382a2ef5126.1669100542.git.william.gray@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v4 1/2] dt-bindings: pinctrl: qcom: Add QDU1000 and
- QRU1000 pinctrl
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221118182039.29236-1-quic_molvera@quicinc.com>
- <20221118182039.29236-2-quic_molvera@quicinc.com>
- <528648f2-17df-ab19-8ad4-76423bbc0ae4@linaro.org>
- <faf2d137-efab-93ab-f325-1fa507f166a7@quicinc.com>
- <03174a04-440d-a840-1e54-fbdbdfe296c3@linaro.org>
- <2a50b68f-d2dd-bae5-29b3-f608813d5a3f@quicinc.com>
- <1d13e913-d425-8cb0-d954-d1d7bc340f38@linaro.org>
-Content-Language: en-US
-From:   Melody Olvera <quic_molvera@quicinc.com>
-In-Reply-To: <1d13e913-d425-8cb0-d954-d1d7bc340f38@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5cf249405b0ac5f7408ec06cf7a65382a2ef5126.1669100542.git.william.gray@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Nov 22, 2022 at 02:11:02AM -0500, William Breathitt Gray wrote:
+> The regmap API supports IO port accessors so we can take advantage of
+> regmap abstractions rather than handling access to the device registers
+> directly in the driver. Despite the underlying interface being based on
+> i8255, it is simpler to use the gpio-regmap API directly because the
+> 104-IDI-48 device features only input signals. Therefore, the dependence
+> on the i8255 GPIO library is removed in this patch.
 
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-On 11/23/2022 2:06 AM, Krzysztof Kozlowski wrote:
-> On 22/11/2022 16:23, Melody Olvera wrote:
->>
->> On 11/22/2022 1:48 AM, Krzysztof Kozlowski wrote:
->>> On 21/11/2022 21:38, Melody Olvera wrote:
->>>> On 11/20/2022 4:58 AM, Krzysztof Kozlowski wrote:
->>>>> On 18/11/2022 19:20, Melody Olvera wrote:
->>>>>> Add device tree bindings for QDU1000 and QRU1000 TLMM devices.
->>>>>>
->>>>>> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
->>>>>> ---
->>>>>>  .../bindings/pinctrl/qcom,qdu1000-tlmm.yaml   | 134 ++++++++++++++++++
->>>>>>  1 file changed, 134 insertions(+)
->>>>>>  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,qdu1000-tlmm.yaml
->>>>>>
->>>>>> diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,qdu1000-tlmm.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,qdu1000-tlmm.yaml
->>>>>> new file mode 100644
->>>>>> index 000000000000..cb0c496d8666
->>>>>> --- /dev/null
->>>>>> +++ b/Documentation/devicetree/bindings/pinctrl/qcom,qdu1000-tlmm.yaml
->>>>>> @@ -0,0 +1,134 @@
->>>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>>>>> +%YAML 1.2
->>>>>> +---
->>>>>> +$id: http://devicetree.org/schemas/pinctrl/qcom,qdu1000-tlmm.yaml#
->>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>>> +
->>>>>> +title: Qualcomm Technologies, Inc. QDU1000/QRU1000 TLMM block
->>>>>> +
->>>>>> +maintainers:
->>>>>> +  - Melody Olvera <quic_molvera@quicinc.com>
->>>>>> +
->>>>>> +description: |
->>>>>> +  This Top Level Mode Multiplexer block (TLMM) is found in the QDU1000 and
->>>>>> +  QRU1000 platforms.
->>>>> It's better to keep consistent style which allows to do easy
->>>>> search/replace, than to have new files using their own sentences. So
->>>>> keep it the same as was unified in few recent commits.
->>>> Ok... Just making sure that's what you want. Last PS you gave comments to change
->>>> the wording of this description to remove "This binding describes..." as we've done
->>>> in all the other qcom pinctrl/tlmm bindings. I can change the wording back to the
->>>> original, just want to be clear here.
->>> I propose to have the same wording as other Qualcomm TLMM bindings,
->>> however you changed it to something not the same. Therefore I wonder -
->>> why having here different wording than all other bindings?
->>>
->>> By going back to original - what do you mean? If it matches all others,
->>> then yes, but I doubt it.
->>>
->>> Just to be sure - are you working on proper (recent) trees or something old?
->> Original matched how it was done on other Qualcomm TLMM bindings. Feedback
->> was to drop "This binding describes..." from [1], but all the Qualcomm TLMM
->> bindings start with "This binding describes...". I'm looking at qcom tree for-next
->> branch; should be recent, no?
-> No. It's not recent for anything else than managed by Bjorn. You need to
-> base the patches on maintainer's trees, which is usually the easiest to
-> achieve via linux-next (especially that these changes were in my tree
-> for some time before I sent them to Linus).
+(One nit-pick below)
 
-Ah ok; looking at linux-next looks like it should be "Top Level Mode Multiplexer pin
-controller in Qualcomm QDU1000 and QRU1000 SoCs."
+> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+> ---
+>  drivers/gpio/Kconfig           |  2 +-
+>  drivers/gpio/gpio-104-idi-48.c | 97 +++++++---------------------------
+>  2 files changed, 21 insertions(+), 78 deletions(-)
+> 
+> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+> index 6892979e511a..dd34039fc31b 100644
+> --- a/drivers/gpio/Kconfig
+> +++ b/drivers/gpio/Kconfig
+> @@ -873,7 +873,7 @@ config GPIO_104_IDI_48
+>  	select ISA_BUS_API
+>  	select REGMAP_IRQ
+>  	select GPIOLIB_IRQCHIP
+> -	select GPIO_I8255
+> +	select GPIO_REGMAP
+>  	help
+>  	  Enables GPIO support for the ACCES 104-IDI-48 family (104-IDI-48A,
+>  	  104-IDI-48AC, 104-IDI-48B, 104-IDI-48BC). The base port addresses for
+> diff --git a/drivers/gpio/gpio-104-idi-48.c b/drivers/gpio/gpio-104-idi-48.c
+> index f77c05571062..2584f411ae67 100644
+> --- a/drivers/gpio/gpio-104-idi-48.c
+> +++ b/drivers/gpio/gpio-104-idi-48.c
+> @@ -9,7 +9,7 @@
+>  #include <linux/bits.h>
+>  #include <linux/device.h>
+>  #include <linux/err.h>
+> -#include <linux/gpio/driver.h>
+> +#include <linux/gpio/regmap.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/ioport.h>
+>  #include <linux/irq.h>
+> @@ -20,10 +20,6 @@
+>  #include <linux/regmap.h>
+>  #include <linux/types.h>
+>  
+> -#include "gpio-i8255.h"
+> -
+> -MODULE_IMPORT_NS(I8255);
+> -
+>  #define IDI_48_EXTENT 8
+>  #define MAX_NUM_IDI_48 max_num_isa_dev(IDI_48_EXTENT)
+>  
+> @@ -40,56 +36,17 @@ MODULE_PARM_DESC(irq, "ACCES 104-IDI-48 interrupt line numbers");
+>  #define IDI48_IRQ_STATUS 0x7
+>  #define IDI48_IRQ_ENABLE IDI48_IRQ_STATUS
+>  
+> -/**
+> - * struct idi_48_reg - device register structure
+> - * @port0:	Port 0 Inputs
+> - * @unused:	Unused
+> - * @port1:	Port 1 Inputs
+> - * @irq:	Read: IRQ Status Register/IRQ Clear
+> - *		Write: IRQ Enable/Disable
+> - */
+> -struct idi_48_reg {
+> -	u8 port0[3];
+> -	u8 unused;
+> -	u8 port1[3];
+> -	u8 irq;
+> -};
+> -
+> -/**
+> - * struct idi_48_gpio - GPIO device private data structure
+> - * @chip:	instance of the gpio_chip
+> - * @reg:	I/O address offset for the device registers
+> - */
+> -struct idi_48_gpio {
+> -	struct gpio_chip chip;
+> -	struct idi_48_reg __iomem *reg;
+> -};
+> -
+> -static int idi_48_gpio_get_direction(struct gpio_chip *chip, unsigned int offset)
+> -{
+> -	return GPIO_LINE_DIRECTION_IN;
+> -}
+> -
+> -static int idi_48_gpio_direction_input(struct gpio_chip *chip, unsigned int offset)
+> -{
+> -	return 0;
+> -}
+> -
+> -static int idi_48_gpio_get(struct gpio_chip *chip, unsigned int offset)
+> -{
+> -	struct idi_48_gpio *const idi48gpio = gpiochip_get_data(chip);
+> -	void __iomem *const ppi = idi48gpio->reg;
+> -
+> -	return i8255_get(ppi, offset);
+> -}
+> -
+> -static int idi_48_gpio_get_multiple(struct gpio_chip *chip, unsigned long *mask,
+> -	unsigned long *bits)
+> +static int idi_48_reg_mask_xlate(struct gpio_regmap *gpio, unsigned int base,
+> +				 unsigned int offset, unsigned int *reg,
+> +				 unsigned int *mask)
+>  {
+> -	struct idi_48_gpio *const idi48gpio = gpiochip_get_data(chip);
+> -	void __iomem *const ppi = idi48gpio->reg;
+> +	const unsigned int line = offset % 8;
+> +	const unsigned int stride = offset / 8;
+> +	const unsigned int port = (stride / 3) * 4;
+> +	const unsigned int port_stride = stride % 3;
+>  
+> -	i8255_get_multiple(ppi, mask, bits, chip->ngpio);
+> +	*reg = base + port + port_stride;
+> +	*mask = BIT(line);
+>  
+>  	return 0;
+>  }
+> @@ -166,18 +123,14 @@ static const char *idi48_names[IDI48_NGPIO] = {
+>  
+>  static int idi_48_probe(struct device *dev, unsigned int id)
+>  {
+> -	struct idi_48_gpio *idi48gpio;
+>  	const char *const name = dev_name(dev);
+> +	struct gpio_regmap_config config = {0};
 
-Thanks,
-Melody
+{} will work in the same way.
 
->
-> Your all other patches might have similar issues - wrong base or not
-> good example/starting point.
->
-> Best regards,
-> Krzysztof
->
+>  	void __iomem *regs;
+>  	struct regmap *map;
+>  	struct regmap_irq_chip *chip;
+>  	struct regmap_irq_chip_data *chip_data;
+>  	int err;
+>  
+> -	idi48gpio = devm_kzalloc(dev, sizeof(*idi48gpio), GFP_KERNEL);
+> -	if (!idi48gpio)
+> -		return -ENOMEM;
+> -
+>  	if (!devm_request_region(dev, base[id], IDI_48_EXTENT, name)) {
+>  		dev_err(dev, "Unable to lock port addresses (0x%X-0x%X)\n",
+>  			base[id], base[id] + IDI_48_EXTENT);
+> @@ -187,7 +140,6 @@ static int idi_48_probe(struct device *dev, unsigned int id)
+>  	regs = devm_ioport_map(dev, base[id], IDI_48_EXTENT);
+>  	if (!regs)
+>  		return -ENOMEM;
+> -	idi48gpio->reg = regs;
+>  
+>  	map = devm_regmap_init_mmio(dev, regs, &idi48_regmap_config);
+>  	if (IS_ERR(map))
+> @@ -212,25 +164,16 @@ static int idi_48_probe(struct device *dev, unsigned int id)
+>  		return err;
+>  	}
+>  
+> -	idi48gpio->chip.label = name;
+> -	idi48gpio->chip.parent = dev;
+> -	idi48gpio->chip.owner = THIS_MODULE;
+> -	idi48gpio->chip.base = -1;
+> -	idi48gpio->chip.ngpio = IDI48_NGPIO;
+> -	idi48gpio->chip.names = idi48_names;
+> -	idi48gpio->chip.get_direction = idi_48_gpio_get_direction;
+> -	idi48gpio->chip.direction_input = idi_48_gpio_direction_input;
+> -	idi48gpio->chip.get = idi_48_gpio_get;
+> -	idi48gpio->chip.get_multiple = idi_48_gpio_get_multiple;
+> -
+> -	err = devm_gpiochip_add_data(dev, &idi48gpio->chip, idi48gpio);
+> -	if (err) {
+> -		dev_err(dev, "GPIO registering failed (%d)\n", err);
+> -		return err;
+> -	}
+> +	config.parent = dev;
+> +	config.regmap = map;
+> +	config.ngpio = IDI48_NGPIO;
+> +	config.names = idi48_names;
+> +	config.reg_dat_base = GPIO_REGMAP_ADDR(0x0);
+> +	config.ngpio_per_reg = 8;
+> +	config.reg_mask_xlate = idi_48_reg_mask_xlate;
+> +	config.irq_domain = regmap_irq_get_domain(chip_data);
+>  
+> -	return gpiochip_irqchip_add_domain(&idi48gpio->chip,
+> -					   regmap_irq_get_domain(chip_data));
+> +	return PTR_ERR_OR_ZERO(devm_gpio_regmap_register(dev, &config));
+>  }
+>  
+>  static struct isa_driver idi_48_driver = {
+> -- 
+> 2.38.1
+> 
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
