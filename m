@@ -2,131 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7EA86364B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:52:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D614D6364BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:53:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236766AbiKWPw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 10:52:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38798 "EHLO
+        id S236961AbiKWPxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 10:53:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238238AbiKWPvl (ORCPT
+        with ESMTP id S239098AbiKWPwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 10:51:41 -0500
-Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AA0C67EC
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:50:55 -0800 (PST)
-Received: by mail-vk1-xa2d.google.com with SMTP id t85so8922139vkb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:50:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Lk0yfEtk3BvnUHwTPrp3NjmYiw9JacTy/YeEdlh9ydw=;
-        b=IY4N6ZpBuG6R8rdLkhlKx0WqDftmupfzYYuCl9n6aPp4pmn3PmGuSibHJBo9Eqijm2
-         vBvpEQcNVB0PoxKHy9s++hWwFQKsWI9K13WeKPRTfhR5LcpuBFFSjY0c8tUIwBFPuYmH
-         lR6pFjB9n3ym8zzWPvXLm1lz5ztqPpIAfZ9XMnrnZzeQFhROVp3H5sCX0VuOTtQt2ZK9
-         q/2lHr+LWXDybHf/fq6T4VnXO3xYri9pQLChrLu0xIX7xKgGs0u4FFy8p30bKkiEs9iC
-         kB5tGyCyHxH2r4fCCzea5LAgNINvMt0jU9sDynyYV07QXrTzLg5UubCFA0NaW9YlLXSS
-         3y5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Lk0yfEtk3BvnUHwTPrp3NjmYiw9JacTy/YeEdlh9ydw=;
-        b=fZGNb/woO71zSEu1ZivhFv5kz7AGUEdT37/aPeswYmdWeORTAjeiGlDO6i01sNdQsn
-         wuiRzuS1H/dXYey+bS5MhS3vafpxfH6bMu61SjFP8Wxu5re1hr9NDJ6y6sQ/XkB7z4E3
-         zv5X0qQcTF9n5VWhlMK6inhNZit+9uA53apUZwgNgvQFOFFJHZfO0uA3yemPl0O8uEkw
-         p7Ifrr3D8bB1KCt60OEPmpjYBt90ueLgj5REu0bv4mKAzM9Yf045Ge+Ucti5Cut5Vb9A
-         MvrClatdDgF8H0dSCXb2zx2VniWLD25li1HnAa3cHc56n1nRHlqo5DEcE4MmLNs8JZM2
-         i8Ag==
-X-Gm-Message-State: ANoB5pm2cdopKg/HgjhBD1TIPsFuEycZ9gSEtL8Y4o+y8RbS4m2wu1eA
-        6ueKjKeKp6MFmBwVQ0x30jWrOaozwK3WisqTWUBqUw==
-X-Google-Smtp-Source: AA0mqf66qAjspGrg7C5iAS9j9Oucom4zx2aarOvSmzlAYEKQ3K1iN2thxwAPDtEjVXeIFxZXBuFd2Tlm/xIymBGZuZw=
-X-Received: by 2002:a1f:54c1:0:b0:3b7:65cc:8ebc with SMTP id
- i184-20020a1f54c1000000b003b765cc8ebcmr10695118vkb.5.1669218654732; Wed, 23
- Nov 2022 07:50:54 -0800 (PST)
-MIME-Version: 1.0
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-14-uwe@kleine-koenig.org> <CAMRc=Mc8QByAUsp5N1mD+rs-BayHs3A9sjjivzX_jGP2oQfHPg@mail.gmail.com>
-In-Reply-To: <CAMRc=Mc8QByAUsp5N1mD+rs-BayHs3A9sjjivzX_jGP2oQfHPg@mail.gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 23 Nov 2022 16:50:43 +0100
-Message-ID: <CAMRc=MeB7gVQ5RFLBHFb49Nf4UOZejsir2OmpRU+pkF8jZf+tg@mail.gmail.com>
-Subject: Re: [PATCH 013/606] gpio: pcf857x: Convert to i2c's .probe_new()
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <uwe@kleine-koenig.org>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-gpio@vger.kernel.org,
+        Wed, 23 Nov 2022 10:52:24 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83D4C72EA;
+        Wed, 23 Nov 2022 07:52:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669218721; x=1700754721;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=6ne8ydE7pKzkiu7r3g05XpgU2xo+eR0YxTixzH5yqn8=;
+  b=hS8aUoNVybqnS+6/tmzJCP1kxknWFAB+fxaqAoraSdYRGZJ4aCoWbPr5
+   EZgMb1L1Bfwzx4HF4F5D2wPtbcPdDsU16DxxgxQeNxc45l8NeDCgEfzxz
+   mRxrMGzOG361ShTBiJHTpRPlDoLn0UjJyGbkJTn/7l9d6fs606U8tNSuE
+   fkDv+FiywGhCgQycMgltDBm7MXxw9TUnQXmpmG6LGPAULwLT7varWEaKD
+   Qw2eIGLKnvcwyyEpLl/9dIkUaOMKgctRxLFlvb9/1W3BG42/2XZVjAQqd
+   4I3noQ7Tir+mKB0WowgSs/i7KIZrg65/XZacvxJ/qlmgegwyaGNwSSDKv
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="294483609"
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="294483609"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 07:51:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="747840614"
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="747840614"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga002.fm.intel.com with ESMTP; 23 Nov 2022 07:51:49 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 2ANFpm4I000385;
+        Wed, 23 Nov 2022 15:51:48 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH net] net: enetc: preserve TX ring priority across reconfiguration
+Date:   Wed, 23 Nov 2022 16:51:16 +0100
+Message-Id: <20221123155116.484163-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221122130936.1704151-1-vladimir.oltean@nxp.com>
+References: <20221122130936.1704151-1-vladimir.oltean@nxp.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 10:48 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->
-> On Fri, Nov 18, 2022 at 11:46 PM Uwe Kleine-K=C3=B6nig <uwe@kleine-koenig=
-.org> wrote:
-> >
-> > From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> >
-> > .probe_new() doesn't get the i2c_device_id * parameter, so determine
-> > that explicitly in the probe function.
-> >
-> > Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> > ---
-> >  drivers/gpio/gpio-pcf857x.c | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/gpio/gpio-pcf857x.c b/drivers/gpio/gpio-pcf857x.c
-> > index e98ea47d7237..cec2f2c78255 100644
-> > --- a/drivers/gpio/gpio-pcf857x.c
-> > +++ b/drivers/gpio/gpio-pcf857x.c
-> > @@ -247,9 +247,9 @@ static const struct irq_chip pcf857x_irq_chip =3D {
-> >
-> >  /*--------------------------------------------------------------------=
------*/
-> >
-> > -static int pcf857x_probe(struct i2c_client *client,
-> > -                        const struct i2c_device_id *id)
-> > +static int pcf857x_probe(struct i2c_client *client)
-> >  {
-> > +       const struct i2c_device_id *id =3D i2c_client_get_device_id(cli=
-ent);
-> >         struct pcf857x_platform_data    *pdata =3D dev_get_platdata(&cl=
-ient->dev);
-> >         struct device_node              *np =3D client->dev.of_node;
-> >         struct pcf857x                  *gpio;
-> > @@ -422,7 +422,7 @@ static struct i2c_driver pcf857x_driver =3D {
-> >                 .name   =3D "pcf857x",
-> >                 .of_match_table =3D of_match_ptr(pcf857x_of_table),
-> >         },
-> > -       .probe  =3D pcf857x_probe,
-> > +       .probe_new =3D pcf857x_probe,
-> >         .remove =3D pcf857x_remove,
-> >         .shutdown =3D pcf857x_shutdown,
-> >         .id_table =3D pcf857x_id,
-> > --
-> > 2.38.1
-> >
->
-> Applied, thanks!
->
-> Bartosz
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
+Date: Tue, 22 Nov 2022 15:09:36 +0200
 
-Same story as with the other ones:
+> In the blamed commit, a rudimentary reallocation procedure for RX buffer
+> descriptors was implemented, for the situation when their format changes
+> between normal (no PTP) and extended (PTP).
+> 
+> enetc_hwtstamp_set() calls enetc_close() and enetc_open() in a sequence,
+> and this sequence loses information which was previously configured in
+> the TX BDR Mode Register, specifically via the enetc_set_bdr_prio() call.
+> The TX ring priority is configured by tc-mqprio and tc-taprio, and
+> affects important things for TSN such as the TX time of packets. The
+> issue manifests itself most visibly by the fact that isochron --txtime
+> reports premature packet transmissions when PTP is first enabled on an
+> enetc interface.
+> 
+> Save the TX ring priority in a new field in struct enetc_bdr (occupies a
+> 2 byte hole on arm64) in order to make this survive a ring reconfiguration.
+> 
+> Fixes: 434cebabd3a2 ("enetc: Add dynamic allocation of extended Rx BD rings")
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> ---
+>  drivers/net/ethernet/freescale/enetc/enetc.c  |  8 ++++---
+>  drivers/net/ethernet/freescale/enetc/enetc.h  |  1 +
+>  .../net/ethernet/freescale/enetc/enetc_qos.c  | 21 ++++++++++++-------
+>  3 files changed, 19 insertions(+), 11 deletions(-)
 
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+[...]
+
+>  	err = enetc_setup_taprio(ndev, taprio);
+> -
+> -	if (err)
+> -		for (i = 0; i < priv->num_tx_rings; i++)
+> -			enetc_set_bdr_prio(hw, priv->tx_ring[i]->index,
+> -					   taprio->enable ? 0 : i);
+> +	if (err) {
+> +		for (i = 0; i < priv->num_tx_rings; i++) {
+> +			tx_ring = priv->tx_ring[i];
+> +			tx_ring->prio = taprio->enable ? 0 : i;
+
+Side note: is that `taprio ? 0 : i` correct? It's an error path
+IIUC, why not just unconditional 0?
+I guess it is, so
+
+Reviewed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+
+> +			enetc_set_bdr_prio(hw, tx_ring->index, tx_ring->prio);
+> +		}
+> +	}
+>  
+>  	return err;
+>  }
+> -- 
+> 2.34.1
+
+Thanks,
+Olek
