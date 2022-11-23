@@ -2,43 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E516362E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:08:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71AAF6362B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:05:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237309AbiKWPIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 10:08:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43202 "EHLO
+        id S237573AbiKWPFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 10:05:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238269AbiKWPH4 (ORCPT
+        with ESMTP id S235959AbiKWPFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 10:07:56 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B6C12AE5
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:07:53 -0800 (PST)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NHPcL6K1pzHw2Z;
-        Wed, 23 Nov 2022 23:07:14 +0800 (CST)
-Received: from ubuntu1804.huawei.com (10.67.174.58) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 23 Nov 2022 23:07:51 +0800
-From:   Xiu Jianfeng <xiujianfeng@huawei.com>
-To:     <oohall@gmail.com>, <dan.j.williams@intel.com>,
-        <vishal.l.verma@intel.com>, <dave.jiang@intel.com>,
-        <ira.weiny@intel.com>, <aneesh.kumar@linux.ibm.com>,
-        <tsahu@linux.ibm.com>
-CC:     <nvdimm@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] libnvdimm/of_pmem: Fix memory leak in of_pmem_region_probe()
-Date:   Wed, 23 Nov 2022 23:04:47 +0800
-Message-ID: <20221123150447.194267-1-xiujianfeng@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 23 Nov 2022 10:05:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C625D21AA;
+        Wed, 23 Nov 2022 07:05:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6242761D63;
+        Wed, 23 Nov 2022 15:05:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FA29C433C1;
+        Wed, 23 Nov 2022 15:05:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1669215908;
+        bh=B2ieTl57vrLj6dHchJgEC9dcze5oWG9C+goXxPF5SqM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=0g5FXXZCC8LhG0Z5R5xKISTS656yCpFLisQI0FDcpbqrHIewFYMRDfqr0QvrIUKqS
+         0dytqyrB3Xu0+54ZhF78G3qt22od7L0qoNpMofTHuz1lKNPd1Gf90ezjkS9NsX4hhp
+         qmNu0RFrnMDNl1X2181dL+JJbwj+dMO41hmoFobU=
+Date:   Wed, 23 Nov 2022 16:05:05 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        =?utf-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org,
+        Ilja Van Sprundel <ivansprundel@ioactive.com>,
+        Joseph Tartaro <joseph.tartaro@ioactive.com>
+Subject: Re: [PATCH] USB: disable all RNDIS protocol drivers
+Message-ID: <Y342oUJu9CFHNmlW@kroah.com>
+References: <20221123124620.1387499-1-gregkh@linuxfoundation.org>
+ <9b78783297db1ebb1a7cd922be7eef0bf33b75b9.camel@sipsolutions.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.58]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9b78783297db1ebb1a7cd922be7eef0bf33b75b9.camel@sipsolutions.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,48 +66,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After changes in commit 49bddc73d15c ("libnvdimm/of_pmem: Provide a unique
-name for bus provider"), @priv->bus_desc.provider_name is no longer a
-const string, but a dynamic string allocated by kstrdup(), it should be
-freed on the error path, and when driver is removed.
+On Wed, Nov 23, 2022 at 03:20:36PM +0100, Johannes Berg wrote:
+> On Wed, 2022-11-23 at 13:46 +0100, Greg Kroah-Hartman wrote:
+> > The Microsoft RNDIS protocol is, as designed, insecure and vulnerable on
+> > any system that uses it with untrusted hosts or devices.  Because the
+> > protocol is impossible to make secure, just disable all rndis drivers to
+> > prevent anyone from using them again.
+> > 
+> 
+> Not that I mind disabling these, but is there any more detail available
+> on this pretty broad claim? :)
 
-Fixes: 49bddc73d15c ("libnvdimm/of_pmem: Provide a unique name for bus provider")
-Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
----
-v2: check the return value of kstrdup();
----
- drivers/nvdimm/of_pmem.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+I don't want to get into specifics in public any more than the above.
 
-diff --git a/drivers/nvdimm/of_pmem.c b/drivers/nvdimm/of_pmem.c
-index 10dbdcdfb9ce..08e7f2502479 100644
---- a/drivers/nvdimm/of_pmem.c
-+++ b/drivers/nvdimm/of_pmem.c
-@@ -31,11 +31,16 @@ static int of_pmem_region_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 
- 	priv->bus_desc.provider_name = kstrdup(pdev->name, GFP_KERNEL);
-+	if (!priv->bus_desc.provider_name) {
-+		kfree(priv);
-+		return -ENOMEM;
-+	}
- 	priv->bus_desc.module = THIS_MODULE;
- 	priv->bus_desc.of_node = np;
- 
- 	priv->bus = bus = nvdimm_bus_register(&pdev->dev, &priv->bus_desc);
- 	if (!bus) {
-+		kfree(priv->bus_desc.provider_name);
- 		kfree(priv);
- 		return -ENODEV;
- 	}
-@@ -83,6 +88,7 @@ static int of_pmem_region_remove(struct platform_device *pdev)
- 	struct of_pmem_private *priv = platform_get_drvdata(pdev);
- 
- 	nvdimm_bus_unregister(priv->bus);
-+	kfree(priv->bus_desc.provider_name);
- 	kfree(priv);
- 
- 	return 0;
--- 
-2.17.1
+The protocol was never designed to be used with untrusted devices.  It
+was created, and we implemented support for it, when we trusted USB
+devices that we plugged into our systems, AND we trusted the systems we
+plugged our USB devices into.  So at the time, it kind of made sense to
+create this, and the USB protocol class support that replaced it had not
+yet been released.
 
+As designed, it really can not work at all if you do not trust either
+the host or the device, due to the way the protocol works.  And I can't
+see how it could be fixed if you wish to remain compliant with the
+protocol (i.e. still work with Windows XP systems.)
+
+Today, with untrusted hosts and devices, it's time to just retire this
+protcol.  As I mentioned in the patch comments, Android disabled this
+many years ago in their devices, with no loss of functionality.
+
+thanks,
+
+greg k-h
