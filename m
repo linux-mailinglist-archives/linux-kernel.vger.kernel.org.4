@@ -2,114 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84AF6636655
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 17:59:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A9DA63665A
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 17:59:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237028AbiKWQ7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 11:59:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
+        id S236510AbiKWQ7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 11:59:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238060AbiKWQ67 (ORCPT
+        with ESMTP id S238060AbiKWQ7K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 11:58:59 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947C368C61;
-        Wed, 23 Nov 2022 08:58:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669222738; x=1700758738;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=6G5Mp68iqToBzIfY887gjlmXUVBeK2AFrXb5/cTUWOM=;
-  b=GxPx15yhGJ7DjkxBslg/oBJbdRGNjMONTPKm2JELNlPOj0fG3Mp7Y0iL
-   N1ctCOWHfqG3dmr3LniP1QpEt1lqk85V9qZ6m1Cpjp6Unx9YOiozXHOEI
-   GeNLedfM3sbPpggSx+lOgXcrSPY7xv8eYgn3yY6apiAt0cQPTrbNh3Xla
-   Xz5o782orDMFcL49LInGuKMe0ipvyoEbZnSgWeSylIFDitxQHLU846e3f
-   y7z9IzS39fQAGFJwmGgGCcBox+SBPQoeqXgimH1Z0Yv3EAQoRatbVWgIb
-   SXkOxu+02Cp96sPfiM5C7ShqEGqPhTaKcswu/xcKsyU2/RLr4oKcVCIZf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="378370369"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="378370369"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 08:58:57 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="674786756"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="674786756"
-Received: from vcbudden-mobl3.amr.corp.intel.com (HELO [10.212.129.67]) ([10.212.129.67])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 08:58:57 -0800
-Message-ID: <e87b68ed-c51c-85aa-1cf9-7a67b8eebe00@intel.com>
-Date:   Wed, 23 Nov 2022 08:58:56 -0800
+        Wed, 23 Nov 2022 11:59:10 -0500
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79AB66CA6;
+        Wed, 23 Nov 2022 08:59:08 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 8613060009;
+        Wed, 23 Nov 2022 16:59:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1669222747;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ocNle5svEAfXW7cmp/QTXhOMQIMNm/+sptjua2c54SA=;
+        b=BwZ/6py/00KDo4z2J4uVsGL5bF1dU/Y9qkLDjp0zhlqj5DBhmsT4hq0N5batrHuJWtaBw9
+        bu1U74/50NDjhFlGFJ1gujiBCwxR0QpFnYA/sHOi1AYrEVqLjlZZ06rnqLEUy0mw3p+WCJ
+        QIP4ZfYPU+67clvVll1t/iRLH7OBc9mq49Bm/ccosWMuC1LQo92VQv3zMdlpfCwIkahg8h
+        iB8fLPmo7ROEfIJpAqeoLupgsgH0TDImjo4LtjvHOhgyOu552uMqTQv8S85BgZUwQ1j3vD
+        zWlrTmTQv/6Zs3IEKcdQKoR/6eqAuJkmX07hjWXjA71xhFlPWVAAjhwGfMFv7Q==
+Date:   Wed, 23 Nov 2022 17:59:00 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Alexander Lobakin <alobakin@pm.me>, linux-kbuild@vger.kernel.org,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Jens Axboe <axboe@kernel.dk>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Derek Chickles <dchickles@marvell.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        NXP Linux Team <linux-imx@nxp.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 12/18] mtd: tests: fix object shared between several
+ modules
+Message-ID: <20221123175900.4e05a0f2@xps-13>
+In-Reply-To: <CAK7LNASni5uNFOtR-6VykBHX1Wgg-rOt=q0Lk+H2Vbn7pCsBDQ@mail.gmail.com>
+References: <20221119225650.1044591-1-alobakin@pm.me>
+        <20221119225650.1044591-13-alobakin@pm.me>
+        <CAK7LNASni5uNFOtR-6VykBHX1Wgg-rOt=q0Lk+H2Vbn7pCsBDQ@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v7 04/20] x86/virt/tdx: Add skeleton to initialize TDX on
- demand
-Content-Language: en-US
-To:     "Huang, Kai" <kai.huang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "Luck, Tony" <tony.luck@intel.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-References: <cover.1668988357.git.kai.huang@intel.com>
- <d26254af8e5b3dcca8a070703c5d6d04f48d47a9.1668988357.git.kai.huang@intel.com>
- <ea588f69-3b9e-b0ec-e5e1-a174d6031681@intel.com>
- <f9bff97abe68cc09aecfd96226ba91e972e5a2e8.camel@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <f9bff97abe68cc09aecfd96226ba91e972e5a2e8.camel@intel.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/23/22 02:18, Huang, Kai wrote:
->> Again, there are a lot of words in that comment, but I'm not sure why
->> it's here.  Despite all the whinging about ACPI, doesn't it boil down to:
->>
->>       The TDX module itself establishes its own concept of how many
->>       logical CPUs there are in the system when it is loaded.
->>
-> This isn't accurate.  TDX MCHECK records the total number of logical CPUs when
-> the BIOS enables TDX.  This happens before the TDX module is loaded.  In fact
-> the TDX module only gets this information from a secret location.
+Hi,
 
-Kai, this is the point where I lose patience with the conversation
-around this series.  I'll you paste you the line of code where the TDX
-module literally "establishes its own concept of how many logical CPUs
-there are in the system":
+masahiroy@kernel.org wrote on Wed, 23 Nov 2022 22:11:49 +0900:
 
->     //NUM_LPS
->     tdx_global_data_ptr->num_of_lps = sysinfo_table_ptr->mcheck_fields.tot_num_lps;
+> On Sun, Nov 20, 2022 at 8:08 AM Alexander Lobakin <alobakin@pm.me> wrote:
+> >
+> > mtd_test.o is linked to 8(!) different test modules:
+> > =20
+> > > scripts/Makefile.build:252: ./drivers/mtd/tests/Makefile: mtd_test.o
+> > > is added to multiple modules: mtd_nandbiterrs mtd_oobtest mtd_pagetest
+> > > mtd_readtest mtd_speedtest mtd_stresstest mtd_subpagetest mtd_torture=
+test =20
+> >
+> > Although all of them share one Kconfig option
+> > (CONFIG_MTD_TESTS), it's better to not link one object file into
+> > several modules (and/or vmlinux).
+> > Under certain circumstances, such can lead to the situation fixed by
+> > commit 637a642f5ca5 ("zstd: Fixing mixed module-builtin objects").
+> > In this particular case, there's also no need to duplicate the very
+> > same object code 8 times.
+> >
+> > Convert mtd_test.o to a standalone module which will export its
+> > functions to the rest.
+> >
+> > Fixes: a995c792280d ("mtd: tests: rename sources in order to link a hel=
+per object")
+> > Suggested-by: Masahiro Yamada <masahiroy@kernel.org> =20
+>=20
+> IMHO, Reported-by might be a better fit.
+>=20
+>=20
+> I think they can become static inline functions in mtd_test.h
+> (at least, mtdtest_relax() is a static inline there), but I am not sure.
+>=20
+> Please send this to the MTD list, and consult the maintainer(s).
 
-Yes, this is derived directly from MCHECK.  But, this concept is
-separate from MCHECK.  We have seen zero actual facts from you or other
-folks at Intel that this is anything other than an arbitrary choice made
-for the convenience of the TDX module.  It _might_ not be this way.  I'm
-open to hearing those facts and changing my position on this.
+TBH I don't really mind. These are test modules that you insert to
+harden and profile the stack, so whatever makes the robots happy is
+fine. Anyway, they are being slowly replaced by userspace tools so we
+might eventually get rid of them.
 
-But, please bring facts, not random references to "secret locations"
-that aren't that secret.
+Thanks,
+Miqu=C3=A8l
