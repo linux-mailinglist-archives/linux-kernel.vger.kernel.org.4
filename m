@@ -2,52 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02AC9635D8D
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 13:47:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44FDE635D9A
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 13:47:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237854AbiKWMqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 07:46:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47664 "EHLO
+        id S236769AbiKWMnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 07:43:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237774AbiKWMpR (ORCPT
+        with ESMTP id S236865AbiKWMmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 07:45:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61AD7DF6D;
-        Wed, 23 Nov 2022 04:42:37 -0800 (PST)
+        Wed, 23 Nov 2022 07:42:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E0666CB8;
+        Wed, 23 Nov 2022 04:41:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A05EB81F6A;
-        Wed, 23 Nov 2022 12:42:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C0AEC433D7;
-        Wed, 23 Nov 2022 12:42:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 55920B81F3E;
+        Wed, 23 Nov 2022 12:41:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7DEAC433C1;
+        Wed, 23 Nov 2022 12:41:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669207352;
-        bh=NCRGAT2Gx7skLD4WtpLnyquFa8TS3jhU4BXj/V3O31I=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dEj5QE9XLiUlrW5nRn7L+0THcJxGI2GUBAXYF5lMHMDP4sTOsMe1OPQUOWrly6DnS
-         AIdNEy+nURzGFzUpClCXpJd0K9/tTAfNzVQSk76ELcvqr8TUI/sRATroAIljT6rtGk
-         YmVCRd9pl0jObJtv1cx6dznSwRP556iYt7FQvfrXToEMZmoYUZC/jGPBdX0NKSas1E
-         wyabTkj1CcPqtFwT5MCUp/W2wFi/xwWpFcAusAVO43QNJRoGwrscMeNF2M+wfxT7xF
-         uNEZZIQ19XzRsnUtDYfkdonLD2OgLuSlMyEpZYxbmZN+2TArClaM5M4GpJngv66tCe
-         vLJvymTsMtaeA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mikulas Patocka <mpatocka@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, agk@redhat.com,
-        dm-devel@redhat.com
-Subject: [PATCH AUTOSEL 6.0 44/44] dm integrity: clear the journal on suspend
-Date:   Wed, 23 Nov 2022 07:40:53 -0500
-Message-Id: <20221123124057.264822-44-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221123124057.264822-1-sashal@kernel.org>
-References: <20221123124057.264822-1-sashal@kernel.org>
+        s=k20201202; t=1669207300;
+        bh=RO6o1Y2z01qCZCGMJGU+iAdpzYb7jAi5dytjDqoWwDM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OgP9CysF1TVrSkWzoY1SXb1ToN2sI3kzVv2dmbj2yJe0E2+iWrQu3P0cKxq/0D2Xp
+         DTXgVbiNiwlvvslKP+cZ6ChSqpGOsM0uOURvGTZR6AV2M4u2pLjQgfFC1DHt0mThy2
+         cg4fQkEunaH6NtWSfsISO/Zvg0DlTu+ymRdSnFjCN84JGPdjeUW2zu81H1MHZZPek/
+         VCHOoFsQjJg5g9z/suVpd2TDqzK8njYJOdlRFnK6RAYcejlvDdWXM7kd0oL5cHxNs3
+         GRyVRhZX1REUrqG6J4N63q9wb1vdxohwMUoibLxczdfy5i0ZJ5m5UteoFisjJRymFJ
+         S1PU/LZ6ouxWw==
+Date:   Wed, 23 Nov 2022 12:41:29 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>, linux-i2c@vger.kernel.org,
+        kernel@pengutronix.de, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 541/606] regulator: fan53555: Convert to i2c's
+ .probe_new()
+Message-ID: <Y34U+VQyRcUqfd0G@sirena.org.uk>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-542-uwe@kleine-koenig.org>
+ <Y30l2LiPQIxb+Vll@sirena.org.uk>
+ <20221122200140.eyz7543bg2udl7be@pengutronix.de>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zhLIDG3lxUf5c1Z+"
+Content-Disposition: inline
+In-Reply-To: <20221122200140.eyz7543bg2udl7be@pengutronix.de>
+X-Cookie: I'm rated PG-34!!
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,70 +65,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikulas Patocka <mpatocka@redhat.com>
 
-[ Upstream commit 984bf2cc531e778e49298fdf6730e0396166aa21 ]
+--zhLIDG3lxUf5c1Z+
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-There was a problem that a user burned a dm-integrity image on CDROM
-and could not activate it because it had a non-empty journal.
+On Tue, Nov 22, 2022 at 09:01:40PM +0100, Uwe Kleine-K=F6nig wrote:
+> On Tue, Nov 22, 2022 at 07:41:12PM +0000, Mark Brown wrote:
+> > On Fri, Nov 18, 2022 at 11:44:35PM +0100, Uwe Kleine-K=F6nig wrote:
 
-Fix this problem by flushing the journal (done by the previous commit)
-and clearing the journal (done by this commit). Once the journal is
-cleared, dm-integrity won't attempt to replay it on the next
-activation.
+> > > +	const struct i2c_device_id *id =3D i2c_client_get_device_id(client);
 
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Signed-off-by: Mike Snitzer <snitzer@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/md/dm-integrity.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+> > This function is only in -next so I'll skip all the patches that need
+> > it.
 
-diff --git a/drivers/md/dm-integrity.c b/drivers/md/dm-integrity.c
-index f26a6cd09e0c..e97e9f97456d 100644
---- a/drivers/md/dm-integrity.c
-+++ b/drivers/md/dm-integrity.c
-@@ -263,6 +263,7 @@ struct dm_integrity_c {
- 
- 	struct completion crypto_backoff;
- 
-+	bool wrote_to_journal;
- 	bool journal_uptodate;
- 	bool just_formatted;
- 	bool recalculate_flag;
-@@ -2375,6 +2376,8 @@ static void integrity_commit(struct work_struct *w)
- 	if (!commit_sections)
- 		goto release_flush_bios;
- 
-+	ic->wrote_to_journal = true;
-+
- 	i = commit_start;
- 	for (n = 0; n < commit_sections; n++) {
- 		for (j = 0; j < ic->journal_section_entries; j++) {
-@@ -3100,6 +3103,14 @@ static void dm_integrity_postsuspend(struct dm_target *ti)
- 		queue_work(ic->writer_wq, &ic->writer_work);
- 		drain_workqueue(ic->writer_wq);
- 		dm_integrity_flush_buffers(ic, true);
-+		if (ic->wrote_to_journal) {
-+			init_journal(ic, ic->free_section,
-+				     ic->journal_sections - ic->free_section, ic->commit_seq);
-+			if (ic->free_section) {
-+				init_journal(ic, 0, ic->free_section,
-+					     next_commit_seq(ic->commit_seq));
-+			}
-+		}
- 	}
- 
- 	if (ic->mode == 'B') {
-@@ -3127,6 +3138,8 @@ static void dm_integrity_resume(struct dm_target *ti)
- 
- 	DEBUG_print("resume\n");
- 
-+	ic->wrote_to_journal = false;
-+
- 	if (ic->provided_data_sectors != old_provided_data_sectors) {
- 		if (ic->provided_data_sectors > old_provided_data_sectors &&
- 		    ic->mode == 'B' &&
--- 
-2.35.1
+> Just in case you missed that information from the cover letter:
+> You can pull this function into your tree from Wolfram's immutable
+> branch at
 
+> 	https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/client=
+_device_id_helper-immutable
+
+No, the bit I found about it in the commit message (which I had to go
+looking for...) was a link to some discussion about how it'd be a good
+idea to apply it.  I suspect things might go more smoothly if things
+were resent as per-subsystem serieses TBH.
+
+--zhLIDG3lxUf5c1Z+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN+FPgACgkQJNaLcl1U
+h9AKTwf/TCGuJS9KOzogIaCUJcig76QWaJtAVD34leua6nC0PoVzvpihetd0+bWP
+rkRcgs67Etut/mvmfnsQuUuRpg/7HjS4yo7RX9L1DqvI56p0R6Ik8jSv72frmeMw
+uODXFkYuY/YLNsuB/3ZYlBz0JfzVN3N56Lhnsyklt4g6y+sHrcqvhAKwa93QeR5E
+oCfZBaLp/wmnQPSxEgYKm2NcVu/dhi8W8r3pZUKaQlcji/GC7URy/N2q3Xi0RNRq
+HeobPU4pOO8fS4tc8ZTr93+K6HDRM2HQ0Hgc3y7ZY2h30TRtfZK9q5iX48nuRwhm
+UU413WpxRbBuYXd5LsuBHqStfz0o8A==
+=QdFW
+-----END PGP SIGNATURE-----
+
+--zhLIDG3lxUf5c1Z+--
