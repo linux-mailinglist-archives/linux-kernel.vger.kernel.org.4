@@ -2,300 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA4C8636384
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:27:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10507636371
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:26:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237988AbiKWP1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 10:27:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36376 "EHLO
+        id S238484AbiKWP01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 10:26:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237852AbiKWP0r (ORCPT
+        with ESMTP id S238450AbiKWP0B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 10:26:47 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523ACA6590;
-        Wed, 23 Nov 2022 07:26:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669217190; x=1700753190;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=aWK/w3O8H43VBVicVuiR2cJT/wFQ8uPk13PWRF6aQ9M=;
-  b=IAd51jm1doyBzUtRUXL4G12lJ3RkisiBtZtpalUnWFYwRv5w9KM/JhoY
-   Xb7mgD9mxKXDK7GsWrcNAtbgJTI3b0lqOsQd+IgRIuQtyZGObS5IDau4m
-   y53TrO1BDhe0zXeIvXh3dTPkR1yjNuIY4dNRZnS/FE1cXJyxpQBEKAkFi
-   8JM4j1x2BN1sTG8YS1eLqUh+QqSsLR/vhD6GiS0B2InDYqyeER9F92SYn
-   tBYyw0ggiHfmE8817Y8g6ARfuh1sitCMSfMDGOBPkLmAWGXXA9XGsGcNM
-   ypzPh9kt6cvLO49gaBU1Cd77Q3iRoEgygjhd3pMS/PjIcdk8D1WkCGtBb
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="184877312"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Nov 2022 08:26:29 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 23 Nov 2022 08:26:05 -0700
-Received: from den-dk-m31857.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Wed, 23 Nov 2022 08:26:02 -0700
-From:   Steen Hegelund <steen.hegelund@microchip.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-CC:     Steen Hegelund <steen.hegelund@microchip.com>,
-        <UNGLinuxDriver@microchip.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Casper Andersson" <casper.casan@gmail.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        "Nathan Huckleberry" <nhuck@google.com>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        "Steen Hegelund" <Steen.Hegelund@microchip.com>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>
-Subject: [PATCH net-next v2 4/4] net: microchip: sparx5: Add VCAP filter keys KUNIT test
-Date:   Wed, 23 Nov 2022 16:25:45 +0100
-Message-ID: <20221123152545.1997266-5-steen.hegelund@microchip.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221123152545.1997266-1-steen.hegelund@microchip.com>
-References: <20221123152545.1997266-1-steen.hegelund@microchip.com>
+        Wed, 23 Nov 2022 10:26:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A559A27D
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:25:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A9DEB82102
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 15:25:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DC14C433D7;
+        Wed, 23 Nov 2022 15:25:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669217156;
+        bh=zL0CCT56Xgsxd4SQl/Dl26mTBGpIJpFPMV7Sf5vSiW8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IbHoBq+mDlW1CD4ianlE4we3e4rnN+mAAJLuJRgJHdz5xBDqDyV8NeR+CbkZVpqc3
+         ZbgLNTd2St/C0fASeCDww26vjNpwB0JYFlL1gBiaFC0wYlS4eh6+FaRmFwTrbRK9PB
+         w0qWlEzU2+Wfi1Cl5sHG7ZBy6tugvtBwQ3pEw9f5yYHWafQTrStoaVgsOkW45uCQhQ
+         ishK2l5NuvFEUnBx4pkiZoY8EwjasbuwSShlq+0jrB+NNFe9CJsn6AhwYDgIy8ryOU
+         DeIOLs1khsFqfETj2rnUa/67bcSA18kPTgFMxtFG0nlcqhjROQPnPfvYJkhewhQRd1
+         MB0Bm9ojkUSxA==
+Date:   Wed, 23 Nov 2022 15:25:51 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Bard Liao <yung-chuan.liao@linux.intel.com>, tiwai@suse.de,
+        alsa-devel@alsa-project.org, pierre-louis.bossart@linux.intel.com,
+        bard.liao@intel.com, peter.ujfalusi@linux.intel.com,
+        ranjani.sridharan@linux.intel.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] ASoC/soundwire: remove is_sdca boolean property
+Message-ID: <Y347f24Tx5yZtjLw@sirena.org.uk>
+References: <20221118025807.534863-1-yung-chuan.liao@linux.intel.com>
+ <20221118025807.534863-2-yung-chuan.liao@linux.intel.com>
+ <Y3enHzY8XY70/nWR@sirena.org.uk>
+ <Y34znr8o9+RceRif@matsya>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mO0JegAO4sWomPS/"
+Content-Disposition: inline
+In-Reply-To: <Y34znr8o9+RceRif@matsya>
+X-Cookie: I'm rated PG-34!!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This tests the filtering of keys, either dropping unsupported keys or
-dropping keys specified in a list.
 
-Signed-off-by: Steen Hegelund <steen.hegelund@microchip.com>
----
- .../ethernet/microchip/vcap/vcap_api_kunit.c  | 194 ++++++++++++++++++
- 1 file changed, 194 insertions(+)
+--mO0JegAO4sWomPS/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c b/drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c
-index 875068e484c9..76a31215ebfb 100644
---- a/drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c
-+++ b/drivers/net/ethernet/microchip/vcap/vcap_api_kunit.c
-@@ -1954,6 +1954,198 @@ static void vcap_api_next_lookup_advanced_test(struct kunit *test)
- 	KUNIT_EXPECT_EQ(test, true, ret);
- }
- 
-+static void vcap_api_filter_unsupported_keys_test(struct kunit *test)
-+{
-+	struct vcap_admin admin = {
-+		.vtype = VCAP_TYPE_IS2,
-+	};
-+	struct vcap_rule_internal ri = {
-+		.admin = &admin,
-+		.vctrl = &test_vctrl,
-+		.data.keyset = VCAP_KFS_MAC_ETYPE,
-+	};
-+	enum vcap_key_field keylist[] = {
-+		VCAP_KF_TYPE,
-+		VCAP_KF_LOOKUP_FIRST_IS,
-+		VCAP_KF_ARP_ADDR_SPACE_OK_IS,  /* arp keys are not in keyset */
-+		VCAP_KF_ARP_PROTO_SPACE_OK_IS,
-+		VCAP_KF_ARP_LEN_OK_IS,
-+		VCAP_KF_ARP_TGT_MATCH_IS,
-+		VCAP_KF_ARP_SENDER_MATCH_IS,
-+		VCAP_KF_ARP_OPCODE_UNKNOWN_IS,
-+		VCAP_KF_ARP_OPCODE,
-+		VCAP_KF_8021Q_DEI_CLS,
-+		VCAP_KF_8021Q_PCP_CLS,
-+		VCAP_KF_8021Q_VID_CLS,
-+		VCAP_KF_L2_MC_IS,
-+		VCAP_KF_L2_BC_IS,
-+	};
-+	enum vcap_key_field expected[] = {
-+		VCAP_KF_TYPE,
-+		VCAP_KF_LOOKUP_FIRST_IS,
-+		VCAP_KF_8021Q_DEI_CLS,
-+		VCAP_KF_8021Q_PCP_CLS,
-+		VCAP_KF_8021Q_VID_CLS,
-+		VCAP_KF_L2_MC_IS,
-+		VCAP_KF_L2_BC_IS,
-+	};
-+	struct vcap_client_keyfield *ckf, *next;
-+	bool ret;
-+	int idx;
-+
-+	/* Add all keys to the rule */
-+	INIT_LIST_HEAD(&ri.data.keyfields);
-+	for (idx = 0; idx < ARRAY_SIZE(keylist); idx++) {
-+		ckf = kzalloc(sizeof(*ckf), GFP_KERNEL);
-+		if (ckf) {
-+			ckf->ctrl.key = keylist[idx];
-+			list_add_tail(&ckf->ctrl.list, &ri.data.keyfields);
-+		}
-+	}
-+
-+	KUNIT_EXPECT_EQ(test, 14, ARRAY_SIZE(keylist));
-+
-+	/* Drop unsupported keys from the rule */
-+	ret = vcap_filter_rule_keys(&ri.data, NULL, 0, true);
-+
-+	KUNIT_EXPECT_EQ(test, 0, ret);
-+
-+	/* Check remaining keys in the rule */
-+	idx = 0;
-+	list_for_each_entry_safe(ckf, next, &ri.data.keyfields, ctrl.list) {
-+		KUNIT_EXPECT_EQ(test, expected[idx], ckf->ctrl.key);
-+		list_del(&ckf->ctrl.list);
-+		kfree(ckf);
-+		++idx;
-+	}
-+	KUNIT_EXPECT_EQ(test, 7, idx);
-+}
-+
-+static void vcap_api_filter_keylist_test(struct kunit *test)
-+{
-+	struct vcap_admin admin = {
-+		.vtype = VCAP_TYPE_IS0,
-+	};
-+	struct vcap_rule_internal ri = {
-+		.admin = &admin,
-+		.vctrl = &test_vctrl,
-+		.data.keyset = VCAP_KFS_NORMAL_7TUPLE,
-+	};
-+	enum vcap_key_field keylist[] = {
-+		VCAP_KF_TYPE,
-+		VCAP_KF_LOOKUP_FIRST_IS,
-+		VCAP_KF_LOOKUP_GEN_IDX_SEL,
-+		VCAP_KF_LOOKUP_GEN_IDX,
-+		VCAP_KF_IF_IGR_PORT_MASK_SEL,
-+		VCAP_KF_IF_IGR_PORT_MASK,
-+		VCAP_KF_L2_MC_IS,
-+		VCAP_KF_L2_BC_IS,
-+		VCAP_KF_8021Q_VLAN_TAGS,
-+		VCAP_KF_8021Q_TPID0,
-+		VCAP_KF_8021Q_PCP0,
-+		VCAP_KF_8021Q_DEI0,
-+		VCAP_KF_8021Q_VID0,
-+		VCAP_KF_8021Q_TPID1,
-+		VCAP_KF_8021Q_PCP1,
-+		VCAP_KF_8021Q_DEI1,
-+		VCAP_KF_8021Q_VID1,
-+		VCAP_KF_8021Q_TPID2,
-+		VCAP_KF_8021Q_PCP2,
-+		VCAP_KF_8021Q_DEI2,
-+		VCAP_KF_8021Q_VID2,
-+		VCAP_KF_L2_DMAC,
-+		VCAP_KF_L2_SMAC,
-+		VCAP_KF_IP_MC_IS,
-+		VCAP_KF_ETYPE_LEN_IS,
-+		VCAP_KF_ETYPE,
-+		VCAP_KF_IP_SNAP_IS,
-+		VCAP_KF_IP4_IS,
-+		VCAP_KF_L3_FRAGMENT_TYPE,
-+		VCAP_KF_L3_FRAG_INVLD_L4_LEN,
-+		VCAP_KF_L3_OPTIONS_IS,
-+		VCAP_KF_L3_DSCP,
-+		VCAP_KF_L3_IP6_DIP,
-+		VCAP_KF_L3_IP6_SIP,
-+		VCAP_KF_TCP_UDP_IS,
-+		VCAP_KF_TCP_IS,
-+		VCAP_KF_L4_SPORT,
-+		VCAP_KF_L4_RNG,
-+	};
-+	enum vcap_key_field droplist[] = {
-+		VCAP_KF_8021Q_TPID1,
-+		VCAP_KF_8021Q_PCP1,
-+		VCAP_KF_8021Q_DEI1,
-+		VCAP_KF_8021Q_VID1,
-+		VCAP_KF_8021Q_TPID2,
-+		VCAP_KF_8021Q_PCP2,
-+		VCAP_KF_8021Q_DEI2,
-+		VCAP_KF_8021Q_VID2,
-+		VCAP_KF_L3_IP6_DIP,
-+		VCAP_KF_L3_IP6_SIP,
-+		VCAP_KF_L4_SPORT,
-+		VCAP_KF_L4_RNG,
-+	};
-+	enum vcap_key_field expected[] = {
-+		VCAP_KF_TYPE,
-+		VCAP_KF_LOOKUP_FIRST_IS,
-+		VCAP_KF_LOOKUP_GEN_IDX_SEL,
-+		VCAP_KF_LOOKUP_GEN_IDX,
-+		VCAP_KF_IF_IGR_PORT_MASK_SEL,
-+		VCAP_KF_IF_IGR_PORT_MASK,
-+		VCAP_KF_L2_MC_IS,
-+		VCAP_KF_L2_BC_IS,
-+		VCAP_KF_8021Q_VLAN_TAGS,
-+		VCAP_KF_8021Q_TPID0,
-+		VCAP_KF_8021Q_PCP0,
-+		VCAP_KF_8021Q_DEI0,
-+		VCAP_KF_8021Q_VID0,
-+		VCAP_KF_L2_DMAC,
-+		VCAP_KF_L2_SMAC,
-+		VCAP_KF_IP_MC_IS,
-+		VCAP_KF_ETYPE_LEN_IS,
-+		VCAP_KF_ETYPE,
-+		VCAP_KF_IP_SNAP_IS,
-+		VCAP_KF_IP4_IS,
-+		VCAP_KF_L3_FRAGMENT_TYPE,
-+		VCAP_KF_L3_FRAG_INVLD_L4_LEN,
-+		VCAP_KF_L3_OPTIONS_IS,
-+		VCAP_KF_L3_DSCP,
-+		VCAP_KF_TCP_UDP_IS,
-+		VCAP_KF_TCP_IS,
-+	};
-+	struct vcap_client_keyfield *ckf, *next;
-+	bool ret;
-+	int idx;
-+
-+	/* Add all keys to the rule */
-+	INIT_LIST_HEAD(&ri.data.keyfields);
-+	for (idx = 0; idx < ARRAY_SIZE(keylist); idx++) {
-+		ckf = kzalloc(sizeof(*ckf), GFP_KERNEL);
-+		if (ckf) {
-+			ckf->ctrl.key = keylist[idx];
-+			list_add_tail(&ckf->ctrl.list, &ri.data.keyfields);
-+		}
-+	}
-+
-+	KUNIT_EXPECT_EQ(test, 38, ARRAY_SIZE(keylist));
-+
-+	/* Drop listed keys from the rule */
-+	ret = vcap_filter_rule_keys(&ri.data, droplist, ARRAY_SIZE(droplist),
-+				    false);
-+
-+	KUNIT_EXPECT_EQ(test, 0, ret);
-+
-+	/* Check remaining keys in the rule */
-+	idx = 0;
-+	list_for_each_entry_safe(ckf, next, &ri.data.keyfields, ctrl.list) {
-+		KUNIT_EXPECT_EQ(test, expected[idx], ckf->ctrl.key);
-+		list_del(&ckf->ctrl.list);
-+		kfree(ckf);
-+		++idx;
-+	}
-+	KUNIT_EXPECT_EQ(test, 26, idx);
-+}
-+
- static struct kunit_suite vcap_api_rule_remove_test_suite = {
- 	.name = "VCAP_API_Rule_Remove_Testsuite",
- 	.test_cases = vcap_api_rule_remove_test_cases,
-@@ -1984,6 +2176,8 @@ static struct kunit_suite vcap_api_rule_counter_test_suite = {
- static struct kunit_case vcap_api_support_test_cases[] = {
- 	KUNIT_CASE(vcap_api_next_lookup_basic_test),
- 	KUNIT_CASE(vcap_api_next_lookup_advanced_test),
-+	KUNIT_CASE(vcap_api_filter_unsupported_keys_test),
-+	KUNIT_CASE(vcap_api_filter_keylist_test),
- 	{}
- };
- 
--- 
-2.38.1
+On Wed, Nov 23, 2022 at 08:22:14PM +0530, Vinod Koul wrote:
+> On 18-11-22, 15:39, Mark Brown wrote:
+> > On Fri, Nov 18, 2022 at 10:58:06AM +0800, Bard Liao wrote:
+> > > From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
+> > > The Device_ID registers already tell us if a device supports the SDCA
+> > > specification or not, in hindsight we never needed a property when the
+> > > information is reported by both hardware and ACPI.
+
+> > Acked-by: Mark Brown <broonie@kernel.org>
+
+> sound/soc/codecs/rt1318-sdw.c does not exist for me in sdw/next. Can I
+> get a tag for the changes merged into ASoC for this
+
+Not reasonably, that's basically the entire tree since Linus doesn't
+like branches.
+
+--mO0JegAO4sWomPS/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN+O34ACgkQJNaLcl1U
+h9BeTQf/arDxellNcCzUN/glW39lE/e9xse49cq5bOioF02H5Njfsyq3WgvqsGAw
+XDC7uiQlMXsyhAlAVTRf4A8ENym66Xa9a7tVl8e3zsrG1RIFIAsrAzsRCw2YfqO5
+xoTr4f1qAN6v/l+IMM6mvgFDFf5IlEp68lt04RcUvoBP67hGeiC/H3UcN9BeFhKf
+gilZ0E/AqGusU0gYyrzoFHoFOkex1kpLSe7O1XBQBd+sBaD9Jvg/1/bgudMvGVN6
+Bp5wWZSjEXdEEf+sab9JVfHBEiUHMtLcFh7e9GUhERuRg9z0EHSM8qUmXuSnFZCq
+prAlH54N3Voiz+eg0BkQ42+ZumH3wQ==
+=b6cd
+-----END PGP SIGNATURE-----
+
+--mO0JegAO4sWomPS/--
