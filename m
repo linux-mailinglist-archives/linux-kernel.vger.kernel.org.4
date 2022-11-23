@@ -2,74 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A995E636033
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:41:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3287B636038
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:42:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236870AbiKWNlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 08:41:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55206 "EHLO
+        id S235512AbiKWNmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 08:42:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238156AbiKWNlZ (ORCPT
+        with ESMTP id S238937AbiKWNmK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 08:41:25 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE2E20F6A
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:29:31 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id m22so42714892eji.10
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:29:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=773RRMVCPN6QPWjGJFIAY7FmZidOaNRJv0ENxs1SOnA=;
-        b=WYm0dytNltf59pxcfavAgINQV0zsw+yDU7h5rQdJAMcHcjLlAcg3tKIdYZi8hc7/yq
-         KOrpfda2Mn2sMB5TepPmZXyiY5AlKxzKQp3fWlF3VuL3Jjf2P1++FDpwy9WHJNRGaxWg
-         TmBjyi/4I2ESOIY7I+fQFOCa8w7HjJQxevQQ4IPpPt87eTE3bIRv0tDTL0u7wTTbiJtp
-         KVx0WokGAOQ+Xl2OpM+BsHkU4+cScqk4m42r/06QtpHVOhS4ZJVr5WIXQ5I+irYa1yXn
-         2PpcoQmXDb0dVBaMOPF/KUmO1XDnVVtbEwjATAPdNI94EnvEXqMGKm+M5/nbJnGceh43
-         ALxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=773RRMVCPN6QPWjGJFIAY7FmZidOaNRJv0ENxs1SOnA=;
-        b=OxEZDlYjbXYUx3QKFr5zgyU2mIEbNOu8oTOX26Z+a6u9FGkWds1qG76IxV+fkdvwkE
-         QmY1VESdMbgLfK78alxYK+JM+r1Dp9jKV8xNtg4S5Vhs/IE7WEeamtshVuo+lQWC29bi
-         Hl4twubQzx3vEw0PYiaOkd4dZvSLFKLt6idECrCrUgmnZe334jRGcN/Y97FS9+UQd4gZ
-         FJ6vmTTnT/onpyQspll1DdI4REECUZUg4JdGIqJCKIA0Qtjs6ZdZcNrUkpZDb5IDRxqJ
-         0ifIhMdydbH5J+MGUn0Rs5vGFsvE0U63FboB3robWU5zF9aWW7x3yrbZ0mJSf1p8xxTy
-         312w==
-X-Gm-Message-State: ANoB5pnXHpRbW9L+F2WeP4svHO9SrMBkVFbEe+unhS4bKn4UHQP+S6Bi
-        rD1ZcXQQxCfOopV309ts1wXWiSEVxQ==
-X-Google-Smtp-Source: AA0mqf61VdtljBxjfIM4D3L9ClB+eFJynjF2pDF+QZtVmpumiOjqs8BbZyA9F2NX2xM6LT4UiWnjPA==
-X-Received: by 2002:a17:906:4309:b0:78d:36d7:92ae with SMTP id j9-20020a170906430900b0078d36d792aemr7531427ejm.113.1669210169684;
-        Wed, 23 Nov 2022 05:29:29 -0800 (PST)
-Received: from p183 ([46.53.252.92])
-        by smtp.gmail.com with ESMTPSA id jo3-20020a170906f6c300b0077f324979absm7193158ejb.67.2022.11.23.05.29.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 05:29:28 -0800 (PST)
-Date:   Wed, 23 Nov 2022 16:29:27 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: [PATCH v3] selftests/x86: add "ffff8" -- kernel memory scanner
-Message-ID: <Y34gN2C48IZ+XevQ@p183>
-References: <Y1wunXB2iv0QHr22@p183>
- <84E9CFF2-760D-4A5D-9B19-11CA804E1FE8@zytor.com>
- <Y11h+mbtSEEwHKRZ@p183>
- <429982ba-e06f-e76b-061c-39db67558aa5@intel.com>
- <Y2DAk9zKYG9hT/Ov@p183>
- <6bbbb89b-1339-e5a1-b127-09270327b6c8@intel.com>
+        Wed, 23 Nov 2022 08:42:10 -0500
+Received: from DM4PR02CU001-vft-obe.outbound.protection.outlook.com (mail-centralusazon11022025.outbound.protection.outlook.com [52.101.63.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A5D26A6B7;
+        Wed, 23 Nov 2022 05:30:33 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hSqYARuXqXMYOMffju40kbba/KOvcTm4BNr7nz4u3PMJ1xdNRL1/Nfji98e4F6iLF+aYslkD9hbe+pthIS7W3Ykx4tqxw/f0uPezHfBf+zKG2aFJVipS/YZZu16AHwza4a6W9lJkvlTJLKTtMgB0wJJ9ueWaHl5DImR2PPZhXyf9tTLB1EVCnG4KtNx6mAqAQZ5f6JLjM5u+sVyleHkMTk3dD39HF3zuUIKsIPlGsDPoi8LWAH+IEQvwrMyUMmxqiTB6UnFJDljH00XFUHSkYyDt/0Thwfw2kdvAtwg3RxIaYRG0M3EghO/omyhbGtE55LUVhbkgfKge9eehT5iJPA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YqRDPEjh5EphBxxdVegy38axHvZ7wwnggr+jflnkLJ4=;
+ b=NxIZx7tNTwEpVl6+71NdCjqYs9PRrW6EQ2y9giK6XJxQctrU85NzxJpU+2fmBnldFDJVxJRl0Jd4pyWVWKCLpF7JI5fIy5bREucNuTrOZDJzzWszVI+9H8V/tqVF0NSbblCmA4GrjmNwSUDaSuq1rp55vHAyaaISvj1am7hqBWIYd6+sEnucTBa6EkhkHrXb4szPPE67ts/gJ13Vm9IJqxZpzZc8e/ECoUh5P+OxVKnwEQAL8K/F5KTmNUTge3eTvfpl7DLMXQMW8DzxGv5q/RC7Y2IlQ5B3dS7BZ4cVAmOWYdcBlmxiQlvjPr1QUWUO9XK91VrvwrcGveoxfBiOnA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YqRDPEjh5EphBxxdVegy38axHvZ7wwnggr+jflnkLJ4=;
+ b=hNt/OTNKU7b2YsQHdULiVqganh2W0Pc2OzEshKeo2iIDCuf46uoE1x6lxqcc1ufgDMX4yYHSImCbIMB8Zy2Mf17yQVtRZSmJvMkvXhSzh/cctDl7QcXUSJz/2cjQrtTRG3sxNsr274HkQBQipGqfSMcToCUfVAZQxfp92f77kaw=
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
+ by PH7PR21MB3238.namprd21.prod.outlook.com (2603:10b6:510:1da::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.2; Wed, 23 Nov
+ 2022 13:30:23 +0000
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::1e50:78ec:6954:d6dd]) by BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::1e50:78ec:6954:d6dd%4]) with mapi id 15.20.5880.002; Wed, 23 Nov 2022
+ 13:30:23 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     Dexuan Cui <decui@microsoft.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>
+CC:     "ak@linux.intel.com" <ak@linux.intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 2/6] x86/tdx: Retry TDVMCALL_MAP_GPA() when needed
+Thread-Topic: [PATCH 2/6] x86/tdx: Retry TDVMCALL_MAP_GPA() when needed
+Thread-Index: AQHY/eLxUC+R7dtU7k2iFNVaV12Qj65KDzwAgAHMAYCAAKUk0A==
+Date:   Wed, 23 Nov 2022 13:30:23 +0000
+Message-ID: <BYAPR21MB168849571A1FF2CD9BFD8579D70C9@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <20221121195151.21812-1-decui@microsoft.com>
+ <20221121195151.21812-3-decui@microsoft.com>
+ <20221122000100.bizske6iltfgdwcu@box.shutemov.name>
+ <SA1PR21MB133596B911C6A45142B83B52BF0C9@SA1PR21MB1335.namprd21.prod.outlook.com>
+In-Reply-To: <SA1PR21MB133596B911C6A45142B83B52BF0C9@SA1PR21MB1335.namprd21.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=14cc37f2-9a35-4b1e-9c6b-34c156199a7b;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-11-23T02:56:11Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|PH7PR21MB3238:EE_
+x-ms-office365-filtering-correlation-id: 65bce53d-b5f0-4858-07f0-08dacd56dfd3
+x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 3Zqvr5ObxQvLZJ3/eFQBuwgOQpuJtH1Ib8pmyCm7feZjWV3k6cWFnMBcbI2OjOQCqPvfcHDFYWzi7zX8+Q4a/OVF0PuSGIlXn7zagelOu2Sw6aepPsd8hrFcy61BbxqpCRzcbUpzeUBJTVWQs6C5paMVu3X6qAu0BcY2JCTxWyyse63nw3TQfZiuxz7lSFHP8zzYv9EvgSQS7Rbi/l1J0YjlpWm9mTffHpPRaXEsAl1EuHGbLz0XipiaJcP0Wjk9YILzpPoACuLa01L+UgLQWTlAOlOh8Cq//vY6qriUJkARJfMzrmcdboE8Jzba82DJ+S1NhWkgnFjgC5NUVlOft8kHKJ44cLKBLnBjtB3NHvepxNJWhIG6OdyRjLRrPghs96KaOhbD2p23UaaIlmkikbzPtTvzGgRRSfwAZOmRT26pzLrxyh6PtIg8ZhNRmNNPQkJuRXUU88rvWj+5CRLrkWMmxCD++CKk6S2GlAJ1njdE4EYiKJr1nnCc4MQaTXGoODqBgQY+pPuoJdfq9gy1tqmtv5BcWEE3Cyc1/J9LjQVw5lWgJnF4cTN5SvOsCjaGRNmfF+UrwyslcQeWMlizLH33pg41dKI849TAaLikaz6s+CHZ58+QdMPYLKDFFGfcD4SKa+cFbdQVqGJefAIBQqhwUZZUWwURxn3rOxZjAHC9EGoXYtcDsVEQnLBSmpz/pkaV9l5aGQEY5KkB+wzqCzlDV1fbIWvEQZ8J4AZUA7u3y8SKuTXI44obBOEs4Og4
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(346002)(136003)(376002)(39860400002)(451199015)(2906002)(478600001)(8990500004)(83380400001)(86362001)(5660300002)(122000001)(71200400001)(7416002)(186003)(82950400001)(8936002)(82960400001)(52536014)(38100700002)(41300700001)(38070700005)(8676002)(64756008)(66946007)(76116006)(4326008)(66446008)(66556008)(9686003)(66476007)(110136005)(10290500003)(54906003)(55016003)(26005)(316002)(7696005)(6506007)(33656002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?6jKA2HWiZiDNDsNciWcEBtHUdOx5NdHD4nUWMIB/pQpek4hGN+GXkiL+Wtg5?=
+ =?us-ascii?Q?+0wkeIYNje86Exb+Dmn8jXCmN3cVCxUq0inwwv6rzCKbL8mb3s7ZBj6fCVjd?=
+ =?us-ascii?Q?lgQCXtGw3TVlaK59mG6OXvQlzQ+hWpDxah8wU+Nm+DcQno5HLMczzAfBdkHF?=
+ =?us-ascii?Q?UyxLeuP7GSgbNnw3qQKAIj8IpeLKkb9DCDYTEEVwlOMWFj4YPlptrzfJJjyl?=
+ =?us-ascii?Q?YUDPa9vpr6iEjcmp13UxQnNCEdrHNgBUPzUE0RxBUBGON3mrOrtPfxUDINs/?=
+ =?us-ascii?Q?B11LM5DKZhRS/8IDh8TVbg+Lb7pSCL+eeR3SnXZbBqgVatgWsIyLFDok/y/f?=
+ =?us-ascii?Q?4O7BdHn3vEUT3rQVdxeQOIFhffruaOi01GQT1H5koACgo7/TMB+OiCOAK+8u?=
+ =?us-ascii?Q?j9mxWDDazQ7QyTYDf86CKsQ5CUTJIiSHMZPSErNfdOXIQKFjPIdJ1lE8rTHB?=
+ =?us-ascii?Q?Y4+dO4bPdgKlc4uFCQRcxbL0U3YUF5X/E4OZCUqQor0P/htZglHdikrxrQdT?=
+ =?us-ascii?Q?H2KoopFVzHn+6mhqCQFwJvN+zXz1o0wtc0j2f3fjXw3t6HxujkW0uzCwZjAr?=
+ =?us-ascii?Q?0x/GGkdBKrgePIdFEQwdzLZVLsfnOOL3lLO0vpVqooS3SGk1PwoYL/P/MIZX?=
+ =?us-ascii?Q?/f7tUPgPjjVpNaQHrra4/NEAZXWx6QkP7uxrt38pDtrlW64vN5CcZ0x6UUmO?=
+ =?us-ascii?Q?HFVA3x0YEtphZeOOFZckckie+tPhrrD6pRcl4AOd9qaAxnQTGg1bSYFHtA8N?=
+ =?us-ascii?Q?G2csJsGpbtqunUK08yXnPkjmKY4N8InHcA5xa/n84GGyQwJH1KfgVoDP6v5m?=
+ =?us-ascii?Q?ZOeD5e2SXZ96Uijq6MHuCPrm+jKikos2esOqFHfmlNVNuQcpDNdW1R3MsiNy?=
+ =?us-ascii?Q?I7EPsvYay0SvicZY5u3Z/mGYAuY1QZythITeJgAml/cHef8cCqaX0cfmWuiD?=
+ =?us-ascii?Q?M9ug/e7hNT0JosEkKwq74Ts3RK/yK72f2a4mGW+5XxKghBn0oB7kakaw96ZG?=
+ =?us-ascii?Q?r7lZ26NaF/F2dLUv0C4TE/U3xltWI4X7V81KAV4KBPOemBCJjY8t/Mbesn7E?=
+ =?us-ascii?Q?WzJQSMx5D2Mds/1TR4UWU1mg0JleujGB4HDi/nkesjb538Q3u7md8f58R5N4?=
+ =?us-ascii?Q?/ofWHHcshx7+eInxSgCDNkt7+ctaW/iAYPTKmXzWZYN9OHFThEvjFf/fdJCt?=
+ =?us-ascii?Q?im1+EveSMhHdz/Dxr0wgnjzlkYyHvJnZHIxrDVjG11Lk0dUY+Y9vgUlLRk9+?=
+ =?us-ascii?Q?Ry3StVdcodnZmaXSSPBXfpxr8Am9+XuIdgEKvirxHsHDZ9A0VkxknDHuR0L9?=
+ =?us-ascii?Q?LzY12rUzOo922ctt820SXhJqcx3Q/ki68Y/hXf9oEY/Hr5Y81hEk7vXt0yU6?=
+ =?us-ascii?Q?gZBF5+vBiYPaj/vioI40UgacFZHWgKWqjxH+ZD0ZbiivjgwC3b8MVCLVjBpW?=
+ =?us-ascii?Q?mAdJExHUE4MYjrR5oSIsPdGkgw0y+Omjd4ap9CRwmqhHEmDFPj0ClbuKQiQn?=
+ =?us-ascii?Q?+FfGezjBKx6+9PBMZRBLtuZ2c6Cpe4/BJuFyj74M/TS9MdFmb3vH5VqfIkX2?=
+ =?us-ascii?Q?vCLqYAjm9S43kWdzcMzP/BnsKGK9mSgatpudA3brxDNuvl4czwDhTJstqYC3?=
+ =?us-ascii?Q?Rg=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <6bbbb89b-1339-e5a1-b127-09270327b6c8@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 65bce53d-b5f0-4858-07f0-08dacd56dfd3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Nov 2022 13:30:23.1752
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ruve6Ur4aM+mZkPBrgyOziptTPNteDgshuAKgCgU6WxfeILoaIZQSmvxQ3mwdbAnZwQnE6n6+Jfn4y2QIeFwWIwtI2gndG5WkbaGXQXpdIU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR21MB3238
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,528 +145,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From 9cef26875f96cd4ae507ed3af6f310d1dbde3352 Mon Sep 17 00:00:00 2001
-From: Alexey Dobriyan <adobriyan@gmail.com>
-Date: Fri, 28 Oct 2022 22:09:19 +0300
-Subject: [PATCH 1/1] selftests/x86: add "ffff8" -- kernel memory scanner
+From: Dexuan Cui <decui@microsoft.com> Sent: Tuesday, November 22, 2022 7:2=
+7 PM
+>=20
+> > From: Kirill A. Shutemov <kirill@shutemov.name>
+> > Sent: Monday, November 21, 2022 4:01 PM
+> > [...]
+> > On Mon, Nov 21, 2022 at 11:51:47AM -0800, Dexuan Cui wrote:
+> > [...]
+> > I'm not convinced it deserves a separate helper for one user.
+> > Does it look that ugly if tdx_map_gpa() uses __tdx_hypercall() directly=
+?
+>=20
+> Will use __tdx_hypercall() directly.
+>=20
+> > >  /* Called from __tdx_hypercall() for unrecoverable failure */
+> > >  void __tdx_hypercall_failed(void)
+> > >  {
+> > > @@ -691,6 +712,43 @@ static bool try_accept_one(phys_addr_t *start,
+> > unsigned long len,
+> > >  	return true;
+> > >  }
+> > >
+> > > +/*
+> > > + * Notify the VMM about page mapping conversion. More info about ABI
+> > > + * can be found in TDX Guest-Host-Communication Interface (GHCI),
+> > > + * section "TDG.VP.VMCALL<MapGPA>"
+> > > + */
+> > > +static bool tdx_map_gpa(phys_addr_t start, phys_addr_t end, bool enc=
+)
+> > > +{
+> > > +	u64 ret, r11;
+> > > +
+> > > +	while (1) {
+> >
+> > Endless? Maybe an upper limit if no progress?
+>=20
+> I'll add a max count of 1000, which should be far more than enough.
+>=20
+> > > +		ret =3D _tdx_hypercall_output_r11(TDVMCALL_MAP_GPA, start,
+> > > +						end - start, 0, 0, &r11);
+> > > +		if (!ret)
+> > > +			break;
+> > > +
+> > > +		if (ret !=3D TDVMCALL_STATUS_RETRY)
+> > > +			break;
+> > > +
+> > > +		/*
+> > > +		 * The guest must retry the operation for the pages in the
+> > > +		 * region starting at the GPA specified in R11. Make sure R11
+> > > +		 * contains a sane value.
+> > > +		 */
+> > > +		if ((r11 & ~cc_mkdec(0)) < (start & ~cc_mkdec(0)) ||
+> > > +		    (r11 & ~cc_mkdec(0)) >=3D (end  & ~cc_mkdec(0)))
+> > > +			return false;
+> >
+> > Emm. All of them suppose to have shared bit set, why not compare direct=
+ly
+> > without cc_mkdec() dance?
+>=20
+> The above code is unnecessary and will be removed.
+>=20
+> So, I'll use the below in v2:
+>=20
+> /*
+>  * Notify the VMM about page mapping conversion. More info about ABI
+>  * can be found in TDX Guest-Host-Communication Interface (GHCI),
+>  * section "TDG.VP.VMCALL<MapGPA>"
+>  */
+> static bool tdx_map_gpa(phys_addr_t start, phys_addr_t end, bool enc)
+> {
+>         int max_retry_cnt =3D 1000, retry_cnt =3D 0;
+>         struct tdx_hypercall_args args;
+>         u64 map_fail_paddr, ret;
+>=20
+>         while (1) {
+>                 args.r10 =3D TDX_HYPERCALL_STANDARD;
+>                 args.r11 =3D TDVMCALL_MAP_GPA;
+>                 args.r12 =3D start;
+>                 args.r13 =3D end - start;
+>                 args.r14 =3D 0;
+>                 args.r15 =3D 0;
+>=20
+>                 ret =3D __tdx_hypercall(&args, TDX_HCALL_HAS_OUTPUT);
+>                 if (!ret)
+>                         break;
 
-During Meltdown drama Microsoft managed to screw up pagetables and give
-full kernel memory access to userspace:
+The above test is redundant and can be removed.  The "success" case is
+implicitly handled by the test below for !=3D TDVMCALL_STATUS_RETRY.
 
-	https://blog.frizk.net/2018/03/total-meltdown.html
+>=20
+>                 if (ret !=3D TDVMCALL_STATUS_RETRY)
+>                         break;
+>                 /*
+>                  * The guest must retry the operation for the pages in th=
+e
+>                  * region starting at the GPA specified in R11. Make sure=
+ R11
+>                  * contains a sane value.
+>                  */
+>                 map_fail_paddr =3D args.r11 ;
+>                 if (map_fail_paddr < start || map_fail_paddr >=3D end)
+>                         return false;
+>=20
+>                 if (map_fail_paddr =3D=3D start) {
+>                         retry_cnt++;
+>                         if (retry_cnt > max_retry_cnt)
+>                                 return false;
+>                 } else {
+>                         retry_cnt =3D 0;;
+>                         start =3D map_fail_paddr;
 
-We don't want _any_ of that.
+Just summarizing the code, we increment the retry count if the hypercall
+returns STATUS_RETRY but did nothing (i.e., map_fail_paddr =3D=3D start).  =
+But
+if the hypercall returns STATUS_RETRY after making at least some progress,
+then we reset the retry count.   So in the worst case, for example, if the
+hypercall processed only one page on each invocation, the loop will continu=
+e
+until completion, without hitting any retry limits.  That scenario seems
+plausible and within the spec.
 
-This utility named ffff8 tries to read upper half of virtual address space
-and report access that went through (excluding vsyscall page if present).
+Do we have any indication about the likelihood of the "RETRY but did
+nothing" case?   The spec doesn't appear to disallow this case, but does
+Hyper-V actually do this?  It seems like a weird case.
 
-It works by doing access and rewriting RDI in the SIGSEGV handler
-which will fault again upon exiting.
+Michael
 
-I've tested it with kernel patch which installs rogue page vsyscall style
-and the test found it:
-
-	$ ./ffff8_64 -f -s 32
-	g_mask ffffffff00000000
-	vsyscall 1
-	N 2 threads
-	thread 0, cpu 0: min ffffffff00000000, max ffffffff80000000, seed 000000000180f050 0000000000000000
-	thread 1, cpu 1: min ffffffff80000000, max 0000000000000000, seed 000000000180f078 0000000000000000
-	thread 1, cpu 1: error: kernel memory read at ffffffffff602000
-
-Usage:
-
-	$ ./ffff8_64 -h
-	usage: ./ffff8_64 [-f] [-r] [-n N] [-s S] [-t T]
-	        -f: sequential scan
-	        -r: random scan (default)
-	        -n: use N threads (default: $(nproc))
-	        -s: lowest address shift (default: 47)
-	        -t: time to run (default: 4 seconds)
-
-Intended usage is:
-
-	$ ./ffff8_64 -f		# full scan on all cores
-or
-	$ ./ffff8_64 -r -t ...	# time limited random scan
-
-Features include:
-* multithreading
-* auto spreads over CPUs allowed by taskset
-* full address space scan (sequential)
-* random scan (fully deterministic)
-* auto split work in full scan mode
-* smaller than 47/56-bit scanning (for benchmarking)
-* time limit
-* LA57 support
-
-Note 1:
-Both HT and many cores appear to make scanning slower due to ->mmap_lock
-contention. If this is the case use taskset(1) to run on a few cores only.
-
-Note 2:
-Full 47-bit, let alone 56-bit, window scan takes a long time.
-Benchmark with smaller shifts first before attempting full scan.
-
-Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
----
-
-	v3: default to 4 seconds for random scan
-
- tools/testing/selftests/x86/Makefile |   2 +-
- tools/testing/selftests/x86/ffff8.c  | 430 +++++++++++++++++++++++++++
- 2 files changed, 431 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/x86/ffff8.c
-
-diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-index 0388c4d60af0..b7555ccdad72 100644
---- a/tools/testing/selftests/x86/Makefile
-+++ b/tools/testing/selftests/x86/Makefile
-@@ -18,7 +18,7 @@ TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
- 			test_FCMOV test_FCOMI test_FISTTP \
- 			vdso_restorer
- TARGETS_C_64BIT_ONLY := fsgsbase sysret_rip syscall_numbering \
--			corrupt_xstate_header amx
-+			corrupt_xstate_header amx ffff8
- # Some selftests require 32bit support enabled also on 64bit systems
- TARGETS_C_32BIT_NEEDED := ldt_gdt ptrace_syscall
- 
-diff --git a/tools/testing/selftests/x86/ffff8.c b/tools/testing/selftests/x86/ffff8.c
-new file mode 100644
-index 000000000000..858b8d7f5d17
---- /dev/null
-+++ b/tools/testing/selftests/x86/ffff8.c
-@@ -0,0 +1,430 @@
-+/*
-+ * Copyright (c) 2022 Alexey Dobriyan <adobriyan@gmail.com>
-+ *
-+ * Permission to use, copy, modify, and distribute this software for any
-+ * purpose with or without fee is hereby granted, provided that the above
-+ * copyright notice and this permission notice appear in all copies.
-+ *
-+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
-+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-+ */
-+/* Test that kernel memory is unreadable from userspace. */
-+#undef _GNU_SOURCE
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <pthread.h>
-+#include <signal.h>
-+#include <stdint.h>
-+#include <stdlib.h>
-+#include <stdio.h>
-+#include <string.h>
-+#include <sys/resource.h>
-+#include <sys/syscall.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+
-+#define BPL (8 * sizeof(unsigned long))
-+#define PAGE_SIZE 4096
-+
-+static inline uint64_t rol64(uint64_t x, int n)
-+{
-+	return (x << n) | (x >> (64 - n));
-+}
-+
-+/*
-+ * xoroshiro128**
-+ * Written in 2018 by David Blackman and Sebastiano Vigna (vigna@acm.org)
-+ */
-+static uint64_t next(uint64_t s[2])
-+{
-+	uint64_t s0 = s[0];
-+	uint64_t s1 = s[1];
-+	uint64_t rv = rol64(s0 * 5, 7) * 9;
-+	s1 ^= s0;
-+	s[0] = rol64(s0, 24) ^ s1 ^ (s1 << 16);
-+	s[1] = rol64(s1, 37);
-+	return rv;
-+}
-+
-+static inline long sys_sched_getaffinity(pid_t pid, unsigned int len, unsigned long *m)
-+{
-+	return syscall(SYS_sched_getaffinity, pid, len, m);
-+}
-+
-+static inline long sys_sched_setaffinity(pid_t pid, unsigned int len, const unsigned long *m)
-+{
-+	return syscall(SYS_sched_setaffinity, pid, len, m);
-+}
-+
-+static inline long sys_getrandom(void *buf, size_t len, unsigned int flags)
-+{
-+#ifndef SYS_getrandom
-+#define SYS_getrandom 318
-+#endif
-+	return syscall(SYS_getrandom, buf, len, flags);
-+}
-+
-+static int x86_virt_bits(void)
-+{
-+	FILE *f = fopen("/proc/cpuinfo", "r");
-+	if (!f) {
-+		fprintf(stderr, "error: open /proc/cpuinfo, errno %d\n", errno);
-+		exit(EXIT_FAILURE);
-+	}
-+	char *line = NULL;
-+	size_t len = 0;
-+	ssize_t n;
-+	while ((n = getline(&line, &len, f)) != -1) {
-+		if (strncmp(line, "address sizes\t:", strlen("address sizes\t:")) == 0) {
-+			int rv = atoi(strchr(line, ',') + 2);
-+			free(line);
-+			fclose(f);
-+			return rv;
-+		}
-+	}
-+	__builtin_trap();
-+}
-+
-+/*
-+ * 0: vsyscall VMA doesn't exist	vsyscall=none
-+ * 1: vsyscall VMA is --xp		vsyscall=xonly
-+ * 2: vsyscall VMA is r-xp		vsyscall=emulate
-+ */
-+static int g_vsyscall;
-+#define VSYSCALL_ADDR	0xffffffffff600000
-+
-+static void sigsegv_vsyscall(int _)
-+{
-+        _exit(g_vsyscall);
-+}
-+
-+static void vsyscall(void)
-+{
-+	pid_t pid = fork();
-+	if (pid < 0) {
-+		fprintf(stderr, "fork, errno %d\n", errno);
-+		exit(EXIT_FAILURE);
-+	}
-+	if (pid == 0) {
-+		setrlimit(RLIMIT_CORE, &(struct rlimit){});
-+
-+		struct sigaction act = {};
-+		sigemptyset(&act.sa_mask);
-+		act.sa_handler = sigsegv_vsyscall;
-+		sigaction(SIGSEGV, &act, NULL);
-+
-+		g_vsyscall = 0;
-+		/* gettimeofday(NULL, NULL); */
-+		asm volatile (
-+			"call %P0"
-+			:
-+			: "i" (VSYSCALL_ADDR), "D" (NULL), "S" (NULL)
-+			: "rax", "rcx", "r11"
-+		);
-+
-+		g_vsyscall = 1;
-+		*(volatile int *)VSYSCALL_ADDR;
-+
-+		g_vsyscall = 2;
-+		exit(g_vsyscall);
-+	}
-+
-+	int wstatus;
-+	wait(&wstatus);
-+	if (WIFEXITED(wstatus)) {
-+		g_vsyscall = WEXITSTATUS(wstatus);
-+	} else {
-+		fprintf(stderr, "error: vsyscall wstatus %08x\n", wstatus);
-+		exit(EXIT_FAILURE);
-+	}
-+}
-+
-+static void sigalrm(int _)
-+{
-+	exit(EXIT_SUCCESS);
-+}
-+
-+struct thread_arg {
-+	uint64_t min;
-+	uint64_t max;
-+	int id;
-+	int cpu;
-+	uint64_t s[2];
-+};
-+
-+__attribute__((noreturn,used))
-+static void error_exit(uint64_t addr, int _, const struct thread_arg *arg)
-+{
-+	if (arg->cpu >= 0) {
-+		fprintf(stderr, "thread %d, cpu %d: error: kernel memory read at %016lx\n",
-+			arg->id, arg->cpu, addr);
-+	} else {
-+		fprintf(stderr, "thread %d: error: kernel memory read at %016lx\n",
-+			arg->id, addr);
-+	}
-+	exit(EXIT_FAILURE);
-+}
-+
-+void f_seq(uint64_t min, uint64_t max, struct thread_arg *arg);
-+asm (
-+".global f_seq;"
-+".type f_seq, @function;"
-+"f_seq:"
-+	"cmp	%rsi, %rdi;"
-+	"je	1f;"
-+	/*
-+	 * Should fault and restart from the beginning of this function
-+	 * with different address.
-+	 */
-+	"mov	(%rdi), %al;"
-+	/* DEFCON 1: kernel memory is readable from userspace. */
-+	"jmp	error_exit;"
-+"1:"
-+	"ret;"
-+".size f_seq, .-f_seq;"
-+);
-+
-+static void sigsegv_seq(int _, siginfo_t *__, void *uc_)
-+{
-+	ucontext_t *uc = uc_;
-+
-+	/* Idea stolen from Sandsifter by Christopher Domas. */
-+	uint64_t rdi = uc->uc_mcontext.gregs[REG_RDI] + PAGE_SIZE;
-+	if (rdi == VSYSCALL_ADDR && g_vsyscall == 2) {
-+		rdi += PAGE_SIZE;
-+	}
-+	uc->uc_mcontext.gregs[REG_RDI] = rdi;
-+
-+	uc->uc_mcontext.gregs[REG_RIP] = (uintptr_t)&f_seq;
-+	if (0) {
-+		printf("%016lx\n", rdi);
-+	}
-+}
-+
-+void f_rand(uint64_t min, uint64_t max, struct thread_arg *arg);
-+asm (
-+".global f_rand;"
-+".type f_rand, @function;"
-+"f_rand:"
-+	/*
-+	 * Should fault and restart from the beginning of this function
-+	 * with different address.
-+	 */
-+	"mov	(%rdi), %al;"
-+	/* DEFCON 1: kernel memory is readable from userspace. */
-+	"jmp	error_exit;"
-+".size f_rand, .-f_rand;"
-+);
-+
-+static uint64_t g_mask;
-+
-+static void sigsegv_rand(int _, siginfo_t *__, void *uc_)
-+{
-+	ucontext_t *uc = uc_;
-+	struct thread_arg *arg = (struct thread_arg *)uc->uc_mcontext.gregs[REG_RDX];
-+	uint64_t rdi;
-+
-+	do {
-+		rdi = g_mask | next(arg->s);
-+	} while ((rdi & ~(PAGE_SIZE - 1)) == VSYSCALL_ADDR && g_vsyscall == 2);
-+	uc->uc_mcontext.gregs[REG_RDI] = rdi;
-+	uc->uc_mcontext.gregs[REG_RIP] = (uintptr_t)&f_rand;
-+	if (0) {
-+		printf("%016lx\n", rdi);
-+	}
-+}
-+
-+static int g_mode = 'r';
-+static unsigned int g_len = 0;
-+
-+static void *thread_fn(void *arg_)
-+{
-+	struct thread_arg *arg = arg_;
-+
-+	if (arg->cpu >= 0) {
-+		unsigned long *m = calloc(1, g_len);
-+		int bit = arg->cpu;
-+		m[bit / BPL] |= 1UL << (bit % BPL);
-+		sys_sched_setaffinity(0, g_len, m);
-+		free(m);
-+	}
-+
-+	/*
-+	 * xoroshiro128** requires non-zero seed.
-+	 * getrandom(2) may or may not exist or return EAGAIN.
-+	 */
-+	arg->s[0] = (uintptr_t)arg;
-+	arg->s[1] = 0;
-+	if (g_mode == 'r') {
-+		do {
-+#ifndef GRND_NONBLOCK
-+#define GRND_NONBLOCK 1
-+#endif
-+			sys_getrandom(arg->s, sizeof(arg->s), GRND_NONBLOCK);
-+		} while (arg->s[0] == 0 && arg->s[1] == 0);
-+	}
-+
-+	if (arg->cpu >= 0) {
-+		printf("thread %d, cpu %d: min %016lx, max %016lx, seed %016lx %016lx\n",
-+			arg->id, arg->cpu, arg->min, arg->max, arg->s[0], arg->s[1]);
-+	} else {
-+		printf("thread %d: min %016lx, max %016lx, seed %016lx %016lx\n",
-+			arg->id, arg->min, arg->max, arg->s[0], arg->s[1]);
-+	}
-+
-+	if (g_mode == 'f') {
-+		f_seq(arg->min, arg->max, arg);
-+	} else {
-+		f_rand(arg->min, arg->max, arg);
-+	}
-+	return NULL;
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	int option_N = 0;
-+	int option_s = x86_virt_bits() - 1;
-+	unsigned int option_t = 4;
-+
-+	int opt;
-+	while ((opt = getopt(argc, argv, "fhn:rs:t:")) != -1) {
-+		switch (opt) {
-+		case 'f':
-+			/* Full scan implies running for as long as it takes. */
-+			g_mode = 'f';
-+			option_t = 0;
-+			break;
-+
-+		case 'r':
-+			g_mode = 'r';
-+			break;
-+
-+		case 'n':
-+			option_N = atoi(optarg);
-+			break;
-+
-+		case 's':
-+			option_s = atoi(optarg);
-+			break;
-+
-+		case 't':
-+			option_t = atoi(optarg);
-+			break;
-+
-+		case 'h':
-+			printf("usage: %s [-f] [-r] [-n N] [-s S] [-t T]\n", argv[0]);
-+			printf("\t-f: sequential scan\n");
-+			printf("\t-r: random scan (default)\n");
-+			printf("\t-n: use N threads (default: $(nproc))\n");
-+			printf("\t-s: lowest address shift (default: %d)\n", option_s);
-+			printf("\t-t: time to run (default: %u seconds)\n", option_t);
-+			return EXIT_FAILURE;
-+		}
-+	}
-+	if (option_s < 12 || option_s > 63) {
-+		fprintf(stderr, "error: -s %d\n", option_s);
-+		return EXIT_FAILURE;
-+	}
-+	if (option_N < 0) {
-+		fprintf(stderr, "error: -n %d\n", option_N);
-+		return EXIT_FAILURE;
-+	}
-+
-+	g_mask = (uint64_t)-1 << option_s;
-+	printf("g_mask %016lx\n", g_mask);
-+
-+	vsyscall();
-+	printf("g_vsyscall %d\n", g_vsyscall);
-+
-+	unsigned long *m = NULL;
-+	do {
-+		g_len += sizeof(unsigned long);
-+		free(m);
-+		m = malloc(g_len);
-+	} while (sys_sched_getaffinity(0, g_len, m) == -1 && errno == EINVAL);
-+
-+	int N;
-+	if (option_N > 0) {
-+		N = option_N;
-+	} else {
-+		N = 0;
-+		for (int i = 0; i < g_len / sizeof(unsigned long); i += 1) {
-+			N += __builtin_popcountl(m[i]);
-+		}
-+	}
-+	printf("N %d threads\n", N);
-+	if (option_t > 0) {
-+		printf("T %u seconds\n", option_t);
-+	}
-+
-+	{
-+		struct sigaction act = {};
-+		sigemptyset(&act.sa_mask);
-+		act.sa_flags = SA_SIGINFO;
-+		if (g_mode == 'f') {
-+			act.sa_sigaction = sigsegv_seq;
-+		} else {
-+			act.sa_sigaction = sigsegv_rand;
-+		}
-+		sigaction(SIGSEGV, &act, NULL);
-+	}
-+
-+	pthread_t *pth = calloc(N, sizeof(pthread_t));
-+	struct thread_arg *arg = calloc(N, sizeof(struct thread_arg));
-+
-+	uint64_t min_addr = g_mask;
-+	uint64_t max_addr = 0;	/* exclusive */
-+
-+	uint64_t d = ((max_addr - min_addr) / N) & ~(PAGE_SIZE - 1);
-+	uint64_t a = min_addr;
-+	uint64_t b = a + d;
-+
-+	int bit = -1;
-+	for (int i = 0; i < N; i += 1) {
-+		arg[i].min = a;
-+		/* No page left behind. */
-+		arg[i].max = (i == N - 1) ? 0 : b;
-+		arg[i].id = i;
-+
-+		if (option_N > 0) {
-+			arg[i].cpu = -1;
-+		} else {
-+			do {
-+				bit += 1;
-+			} while ((m[bit / BPL] & (1UL << (bit % BPL))) == 0);
-+			arg[i].cpu = bit;
-+		}
-+
-+		a = b;
-+		b += d;
-+	}
-+	free(m);
-+
-+	for (int i = 0; i < N; i += 1) {
-+		int rv = pthread_create(&pth[i], NULL, thread_fn, &arg[i]);
-+		if (rv != 0) {
-+			fprintf(stderr, "error: pthread_create, rv %d\n", rv);
-+			return EXIT_FAILURE;
-+		}
-+	}
-+
-+	if (option_t > 0) {
-+		struct sigaction act = {};
-+		sigemptyset(&act.sa_mask);
-+		act.sa_handler = sigalrm;
-+		sigaction(SIGALRM, &act, NULL);
-+
-+		alarm(option_t);
-+	}
-+
-+	for (int i = 0; i < N; i += 1) {
-+		pthread_join(pth[i], NULL);
-+	}
-+
-+	return EXIT_SUCCESS;
-+}
--- 
-2.38.1
-
+>                 }
+>         }
+>=20
+>         return !ret;
+> }
