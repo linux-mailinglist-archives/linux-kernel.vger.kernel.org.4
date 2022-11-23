@@ -2,172 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 880246352B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 09:32:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81E966352B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 09:32:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236453AbiKWIaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 03:30:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38512 "EHLO
+        id S236594AbiKWIcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 03:32:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236117AbiKWIaQ (ORCPT
+        with ESMTP id S236585AbiKWIb7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 03:30:16 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B733C1E3ED
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 00:30:14 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id b3so27108911lfv.2
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 00:30:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=so2oxuQ4Y7a0f26n1k3pKbLKlCZdT3KjE4FqYS40eg8=;
-        b=zIKOQLWS42fFmJhVRRmxrUjpau1bS4ATAyMBrR1xPqJZy+k6yCWZqTOOTzvDV4a9Yg
-         Y++393P9WhJldpuJrNUmZjLm67LM/aen3AYMtBE4XybhQZ3PmkWpsh3CX+2QzmH/LhEc
-         c48yVznBlXf3dx/pfoTgD95g7Jr/kfumTRPWAEeEz/HNsA8eVPwcjqq6ocu8h5rXAEdL
-         5JCigU1/grJHK2RMfTeAaxaVi03R7JfCop/K71tlNYNHXT3ATw8FsF/T+yN/UqDm0gar
-         vS00COq+uTf/xAFzBt7o//Kmnn72FOQuXgEj45tZCMuSO/Pvd9OSRLd9PTowMuJIi/FT
-         3SVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=so2oxuQ4Y7a0f26n1k3pKbLKlCZdT3KjE4FqYS40eg8=;
-        b=tny+mJ/fqIV9DSsjEkukrM20xpLcMKa1ibO8eafLByFrfR6rE1IEz36koiKQRlqpu9
-         OL9qrSVpSYdOPwoKPU18oKOXm2aVmns7OskkcFJKtQ1XwWDAXPcb63YcgtbMggKpo0wW
-         LQGWuN8BIykYhmiH494zKlTbxr+GM9OZUr0UeCvL1vBnlmLHfGKKWC9RslRHhnG56f3b
-         UKfWBnKasZ3Hknu412kk0i254q4F/pR42iijOSRtVTwiMfaYyj3iV7swHd2EnU8hOEJx
-         DjoWiG4gG7a9wx5RCF4H98yLYt70aQ36GGrKzvfxwY6WayDqVF25TGNxDxjaQ1IWo9EL
-         fY8g==
-X-Gm-Message-State: ANoB5pnFlK3FUhkLBsVShFCO/VM6zBYTdMqdnIMqmb3OEci1lIrB3pbU
-        RX8fCfE4/RywJJJlnb7xK3fe4A==
-X-Google-Smtp-Source: AA0mqf69iu9qQh6fCA6UDIq1hcLsriLuOE6oSPhjtXZDsQsFgavDS6cW7I/64DKInOEgrT2IoBd0kQ==
-X-Received: by 2002:ac2:434d:0:b0:4a2:51a2:9326 with SMTP id o13-20020ac2434d000000b004a251a29326mr8767700lfl.594.1669192213077;
-        Wed, 23 Nov 2022 00:30:13 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id c12-20020a056512324c00b0048af3c090f8sm2809369lfr.13.2022.11.23.00.30.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 00:30:12 -0800 (PST)
-Message-ID: <3d689f8e-ae2d-2b3e-e783-94b8e6ba8aa0@linaro.org>
-Date:   Wed, 23 Nov 2022 09:30:10 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [v4 2/5] dt-bindings: pwm: Add bindings for aspeed pwm controller
+        Wed, 23 Nov 2022 03:31:59 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F79312D2E;
+        Wed, 23 Nov 2022 00:31:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669192318; x=1700728318;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=W3Fe7nsAuRSQygS3JrO06wpS2F4SroInX1Xn55ARyiA=;
+  b=l48k/a2xwbi1aCJ/IJdhbMEFAQAAiJPz5XvrqsGFJIYiTIJ2QSGgLoyo
+   Lt6QYAMC7Jx8/GVAmoDjRJv747aSV+7XxgUyHwLPZ/j28Plgns4//b6vT
+   KwGbguTvELOKDKfZdSo0ktrgUFt3aME0dNghrVrf6avEswJmoZSBgAsre
+   lH4Q87H1z9yfaBxoXvLmPYnuCQjZlr1tgN1a90G7HTJnfQ6AcJAmz1vn1
+   lyZTwaQGiiiH0SkV5sS+SNt3z0Ijs07RORmcOo2nla/79O27xP2kueMNq
+   NRyeahs4hD5xselCfDzcx5Iv9d1bLqr5KgnepAJ6DDkXkUptVYAda0Ace
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="311642444"
+X-IronPort-AV: E=Sophos;i="5.96,186,1665471600"; 
+   d="scan'208";a="311642444"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 00:31:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="592440160"
+X-IronPort-AV: E=Sophos;i="5.96,186,1665471600"; 
+   d="scan'208";a="592440160"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga003.jf.intel.com with ESMTP; 23 Nov 2022 00:31:57 -0800
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 23 Nov 2022 00:31:57 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 23 Nov 2022 00:31:56 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Wed, 23 Nov 2022 00:31:56 -0800
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.49) by
+ edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Wed, 23 Nov 2022 00:31:56 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZL/b9XiuybwCfVmVTIvCh7H6gn2EVX4ANjsaYDQ9FbSSV/ByLBPwi/zFj+vXRe+v05pjGVQgBJSqUdExhCDTH+haHd85vzdvx0fJr8QieLVfw3fqBM3OVbiix/QoVFAQbdPN6PxZa342xzLipRz68TE2HdQR39rp6FH4SQ06q7q3BDp69i56CcntMFWQaXMHbS40RLKH/ubEyrGsMAlzTna71BYnM1Vg3OReigoOIy/0N3v1GkZ1deluiJTPZGkK2ljFxRyBWNzLq1ffceNxP8XCZzM9LckQiQsJlQTup1bhXJnP7czb3lSYWuxhwUqVj3DAWVmKldnilVmHVtPWHQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=enis6bpc+WfDUlIItqplYC/vdVLhUvMDEPFHsmrl9WQ=;
+ b=CM9cvx5ZMr00uK99bO74m7Y6UXC0onivMcyyMtmbrc4sIQ0ZWmUimCBxHJi50blA8A1/IhXv0Lsxeiistg/nknwzC8w7sJq/XHHRz0rn4H2+106xo7/U/K8WwOdcpMhpYu6RD1rhG524jL03GoHNto35b7TH6b4wF2Ar0r5NVzhUwC8sAGKVXv2CAnbehTdp6gCFWJv5QwjpB9a6/YI/sPS87ofebTv18blUqE3AFgMU/ogpnMdjGCaY59KYP8LppiAhJQLRozwyXVqBOYW768LSeO7JfiEY2ExNF/YalnkqlO+iV8sI7JtYfVR52RzW/rrDQ2qUNXlg0Hqs1FCajw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN6PR1101MB2161.namprd11.prod.outlook.com
+ (2603:10b6:405:52::15) by MN2PR11MB4583.namprd11.prod.outlook.com
+ (2603:10b6:208:26a::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.9; Wed, 23 Nov
+ 2022 08:31:52 +0000
+Received: from BN6PR1101MB2161.namprd11.prod.outlook.com
+ ([fe80::3a39:ae82:41a0:6492]) by BN6PR1101MB2161.namprd11.prod.outlook.com
+ ([fe80::3a39:ae82:41a0:6492%11]) with mapi id 15.20.5857.017; Wed, 23 Nov
+ 2022 08:31:52 +0000
+From:   "Li, Xin3" <xin3.li@intel.com>
+To:     "Christopherson,, Sean" <seanjc@google.com>
+CC:     Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>
+Subject: RE: [RESEND PATCH 5/6] KVM: x86/VMX: add kvm_vmx_reinject_nmi_irq()
+ for NMI/IRQ reinjection
+Thread-Topic: [RESEND PATCH 5/6] KVM: x86/VMX: add kvm_vmx_reinject_nmi_irq()
+ for NMI/IRQ reinjection
+Thread-Index: AQHY9M9YytlyKV7ob0GK/oJbeBhPY6433PwAgACmfxCAAO8aAIAAL0qAgAAENoCAAAgUAIAAGnuAgAA1qHCAACERAIADuBAAgABQYICAAXpoEIAAGnIAgAK/reCAANL/AIAAhVlggAcl+kCAAIRtgIAAu8Mw
+Date:   Wed, 23 Nov 2022 08:31:52 +0000
+Message-ID: <BN6PR1101MB216162F44664713802201FAFA80C9@BN6PR1101MB2161.namprd11.prod.outlook.com>
+References: <BN6PR1101MB216141A21353AB84CEA541DFA8009@BN6PR1101MB2161.namprd11.prod.outlook.com>
+ <Y26jkHfK9INwU7Yy@hirez.programming.kicks-ass.net>
+ <BN6PR1101MB2161E8217F50D18C56E5864EA8059@BN6PR1101MB2161.namprd11.prod.outlook.com>
+ <Y3IFo9NrAcYalBzM@hirez.programming.kicks-ass.net>
+ <BN6PR1101MB2161299749E12D484DE9302BA8049@BN6PR1101MB2161.namprd11.prod.outlook.com>
+ <Y3NZQBJugRt07udw@hirez.programming.kicks-ass.net>
+ <DM5PR1101MB2172D7D7BC49255DB3752802A8069@DM5PR1101MB2172.namprd11.prod.outlook.com>
+ <Y3ZYiKbJacmejY3K@google.com>
+ <BN6PR1101MB21611347D37CF40403B974EDA8099@BN6PR1101MB2161.namprd11.prod.outlook.com>
+ <BN6PR1101MB2161FCA1989E3C6499192028A80D9@BN6PR1101MB2161.namprd11.prod.outlook.com>
+ <Y302kxLEhcp20d65@google.com>
+In-Reply-To: <Y302kxLEhcp20d65@google.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Billy Tsai <billy_tsai@aspeedtech.com>, jdelvare@suse.com,
-        linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
-        lee@kernel.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, corbet@lwn.net,
-        p.zabel@pengutronix.de, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20221123061635.32025-1-billy_tsai@aspeedtech.com>
- <20221123061635.32025-3-billy_tsai@aspeedtech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221123061635.32025-3-billy_tsai@aspeedtech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN6PR1101MB2161:EE_|MN2PR11MB4583:EE_
+x-ms-office365-filtering-correlation-id: 78d25f51-5fd3-4bc4-dd85-08dacd2d2c2f
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 6H6kE/P5ep0X9gFO/S8bjOhJVKgk0L23g8u3WUA2RN7apdj7j3pWEl4dk/sQchPVs0Cdg7yV4lGXd4g3KtQMRFpKF2ga/n5RpPg4DMCUIY3fNHmFcGxbxZ8skFysDd/NagE7ZTY6bSIJNiS/IBaIP3MdtItMFSWKLeP6fky6++tcb+mO8JRCW8V1cAT0c70CiDWpeTs+klsgKfuWFa9+ibOYLqo518tAq0DHcNiiA5y1pidab//g/t1hveALcwkwMfxlIZIl9tjyJKM7/t2RsePkUaouKfChTEuDS0+PCt83/pIbKcmYPd+A4upAZ+kcNeJVCbCvF2T/YgppDUlfMGgd91ieWuzLOaSRzQwC+GJJ/BfxVQXl1hUz1ynEvBLIm4JJmrpoKDn/h0m3WKTlwGi937BCPvrlR1sTTW3n8sJQSDR7qoMoeHLMjPOT4vWUNeXYrtqUVP5o0f3qChKgf4+Ca7m+r3iAGrklVX9kV+2LLyP4M8D4FndeK55Y+J+Ncn9WvlBx28+5Uun5fvR5fGZ/JXssrpUM0H4q53Anvp0gWG2twMiU/YLS3XM7jkJ4RdFixFdIQ/uoLHm8H9NHPiwnXVcg/Mk1i2NwKO1xUIibJ2SbxR4z65qBm4XA7iNL5Ff399a5auDxQUqPe8n2hhqhhCiqTbz10wymUs1x1JrUUxGlfOrLbNechdO+96PbJGJBlP11yEcWrnyfu2+qWA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR1101MB2161.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(346002)(366004)(376002)(39860400002)(136003)(451199015)(38070700005)(38100700002)(86362001)(82960400001)(55016003)(122000001)(83380400001)(2906002)(64756008)(54906003)(66446008)(8676002)(478600001)(6916009)(66556008)(316002)(76116006)(8936002)(7416002)(5660300002)(52536014)(41300700001)(4326008)(66476007)(66946007)(186003)(71200400001)(9686003)(7696005)(26005)(6506007)(33656002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?9kcZqxFo2pvpx/aFtgu+Yae/Enfw1gcszriqQShUf0fVw+10101ArdnZcsA/?=
+ =?us-ascii?Q?2FiFLyQ2oBGMo3q93/rdgcdj2p2L9CZlhAmBmDdtlWjvOVVcbeenDPjsFNaa?=
+ =?us-ascii?Q?kA79pi4LlrCrvy2BAEqb6qLQ5/SvCWEzwFdesTUgyTs5n9min8g+wd6cMpXW?=
+ =?us-ascii?Q?j9VyLKrw8bUgHXjbhHNsg/aGBuFbbHG8UIypqeL/qQpAGle1tt7bSAThuyfH?=
+ =?us-ascii?Q?YclKYyt9KyYQGft/4SwtMmd2kW/MUiRHBJCceN/DRhpmjHyLf+phslJynmfO?=
+ =?us-ascii?Q?uvhR7YDhDQgr8hbT28VpWQcOQ/psxqItcLFGXYmdsGZ+4/+35AdejLFbzAhz?=
+ =?us-ascii?Q?Z+6egHbRjxeE7H6MltnGwiIJG3mg/qFthNcTcT1F/qlPPnOPdACdJeFuCmxe?=
+ =?us-ascii?Q?gL6uy+GIco3uv1CmSRK1QlYUHwr9I1TYAJZHcgI1u5zuyCZE56rgBvlo0skI?=
+ =?us-ascii?Q?QebcSWVSsNEuS1WybmJhAMy5sP+4mhtd5K7XmmMOzRKadOTXiu86humlbsLy?=
+ =?us-ascii?Q?j6hEU5hybFHbFWh0evRdtszuiXGpijXfQktzqKz6TV9Sf/ILTokY/wtU37RB?=
+ =?us-ascii?Q?BFZG8Y8odeTvuJ73OTiaMaSw/XpUBkLp7rLFo49+PkDl+g+iUHs5OucJLEVO?=
+ =?us-ascii?Q?Q9/FOW83Iz1ZxC/KB3Mq9KY7GxTcJ3VLh2udsdzzu8b8aLwTZDD2vO3W33Fk?=
+ =?us-ascii?Q?XV03Bhdk5Pi87IzeZIXQNhSZV5a51QuKxDytpWxPCv64laJXmmmVl5yA8UxH?=
+ =?us-ascii?Q?Jq7MzYwlsvxSeoVUCoo0O7YRWVVklxwo2Owz2Pbvg1d4T6z9RBsG7Wcg/BiV?=
+ =?us-ascii?Q?sVvelgsBrVMc2tzDNLn/FWCxwcVkA7yyM1ERYz81w2/KmPVxXpeKPogh964L?=
+ =?us-ascii?Q?O9OXgZbJoNA3+07Xuv9LKouhKj00w4FuprqN0dgji1UywALrJU81IMYltyIh?=
+ =?us-ascii?Q?UrufXtMhc33EAM0lDFn6WiV0eB3J7I0lWExe4TXbVOXDmbKrs/XYTl1EnQfA?=
+ =?us-ascii?Q?ZT/w7dhbaGMR177wJwjtAahtydaGhkbsKWm+KfaORqhz1cOnCnabnLw8YAGi?=
+ =?us-ascii?Q?JXL3706Pd73afCEd+QxAM7P+e9QPfayhMC/4xGUxtUoJYwfGHdwAlVROfeVO?=
+ =?us-ascii?Q?fwUceyWsh88YtsvevjN2fHniD3d52beXBoRitksiRspkMdMmP26xIsPdd1Y8?=
+ =?us-ascii?Q?xxdbBZbhfPS3mxgZ/+AF2l+NR0Alii/yJHIR3kSDFxG9adCdU3uVzSihMFVT?=
+ =?us-ascii?Q?r0bSBRHadEB18BN/XTFlem10oncNf500s7jdFZ114KGbtbmBrxiGYaBv6ss2?=
+ =?us-ascii?Q?DltQMw9CcnbfczaxGgGcIoslospdlMbavW2rrm5SuhE+uecVVV4nwHe4Kov4?=
+ =?us-ascii?Q?VLYHSOtsG+VO+k+y+50Ramj4RyfgzVH+PcVDdFCjy4rQN7QMdTM1qj/S0w8x?=
+ =?us-ascii?Q?jdr9yFcIcmGlhh5Lm94WdaB4nknrhy2jT1XVQxONyF0Hswq1KBnp+eabEpNJ?=
+ =?us-ascii?Q?5VimENN4PnPlx9j3zBR0Gto28RLYKlaOjHKpg0/J5gxPSgL1GlSd5ABQi1FC?=
+ =?us-ascii?Q?AiJAdfGVHAWrIa6Kr2w=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN6PR1101MB2161.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 78d25f51-5fd3-4bc4-dd85-08dacd2d2c2f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Nov 2022 08:31:52.4747
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: s1jIF9R00zy9+htTHd2TFVtMRj+eo/CWTQGpfCt6/1z4NoV4bvjif3cIcqdV5Cf1SJwLAxXfrIzwRkRuj5Zbew==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4583
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/11/2022 07:16, Billy Tsai wrote:
-> Add the aspeed pwm device bindings which should be the child-node of
-> pwm-tach mfd.
+> > > > > > > > And yes, the current code appears to suffer the same defect=
+.
+> > > >
+> > > > That defect isn't going to be fixed simply by changing how KVM
+> > > > forwards NMIs though.  IIUC, _everything_ between VM-Exit and the
+> > > > invocation of the NMI handler needs to be noinstr.  On VM-Exit due
+> > > > to NMI, NMIs are blocked.  If a #BP/#DB/#PF occurs before KVM gets
+> > > > to kvm_x86_handle_exit_irqoff(), the subsequent IRET will unblock
+> > > > NMIs before the original NMI is serviced, i.e. a second NMI could
+> > > > come in at anytime regardless of how KVM forwards the NMI to the
+> kernel.
+> > > >
+> > > > Is there any way to solve this without tagging everything noinstr?
+> > > > There is a metric shit ton of code between VM-Exit and the
+> > > > handling of NMIs, and much of that code is common helpers.  It
+> > > > might be possible to hoist NMI handler much earlier, though we'd
+> > > > need to do a super thorough audit to ensure all necessary host stat=
+e is
+> restored.
+> > >
+> > > As NMI is the only vector with this potential issue, it sounds a
+> > > good idea to only promote its handling.
+> > >
+> >
+> > Hi Peter/Sean,
+> >
+> > I prefer to move _everything_ between VM-Exit and the invocation of
+> > the NMI handler into the noinstr section in the next patch set, how do =
+you
+> think?
+>=20
+> That's likely going to be beyond painful and will have a _lot_ of collate=
+ral
+> damage in the sense that other paths will end up calling noinstr function=
+ just
+> because of VMX.  E.g. hw_breakpoint_restore(),
+> fpu_sync_guest_vmexit_xfd_state(),
+> kvm_get_apic_mode(), multiple static calls in KVM... the list goes on and=
+ on
+> and on.
+>=20
+> The ongoing maintenance for that would also be quite painful.
 
-Subject: drop second, redundant "bindings".
+This is very complicated and I'm lost after reading the code around it.
 
-> 
-> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
-> ---
->  .../bindings/pwm/aspeed,ast2600-pwm.yaml      | 54 +++++++++++++++++++
->  1 file changed, 54 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pwm/aspeed,ast2600-pwm.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/pwm/aspeed,ast2600-pwm.yaml b/Documentation/devicetree/bindings/pwm/aspeed,ast2600-pwm.yaml
-> new file mode 100644
-> index 000000000000..68a60fc73902
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pwm/aspeed,ast2600-pwm.yaml
-> @@ -0,0 +1,54 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (C) 2021 Aspeed, Inc.
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pwm/aspeed,ast2600-pwm.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Aspeed Ast2600 PWM controller
-> +
-> +maintainers:
-> +  - Billy Tsai <billy_tsai@aspeedtech.com>
-> +
-> +description: |
-> +  The Aspeed PWM controller supports up to 16 PWM outputs.
-> +  This module is part of the ast2600-pwm-tach multi-function device. For more
-> +  details see ../mfd/aspeed,ast2600-pwm-tach.yaml.
-> +
-> +allOf:
-> +  - $ref: pwm.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - aspeed,ast2600-pwm
-> +
-> +  "#pwm-cells":
-> +    const: 3
+Maybe some comments would help to explain the steps and order after VM exit=
+.
+(of course some people know it quite well)
 
-Blank line.
+>=20
+> Actually, SVM already enables NMIs far earlier, which means the probabili=
+ty of
+> breaking something by moving NMI handling earlier is lower.  Not zero, as=
+ I
+> don't trust that SVM gets all the corner right, but definitely low.
+>=20
+> E.g. this should be doable
 
-> +patternProperties:
-> +  "^pwm@[a-z0-9]+$":
-> +    description: Set extend properties for each pwm channel.
+Do we need to recover *all* host states before switching to NMI stack and
+handler?  if not what is the minimal set? If we restore the minimal set and
+do "int $2" as early as possible, is it a quick and dirty approach?
 
-Description is not a correct sentence. Description explains the hardware
-property you have here.
-
-> +    type: object
-> +    properties:
-> +      reg:
-> +        description:
-> +          The pwm channel index.
-> +        maxItems: 1
+>=20
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c index
+> cea8c07f5229..2fec93f38960 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -7249,6 +7249,8 @@ static fastpath_t vmx_vcpu_run(struct kvm_vcpu
+> *vcpu)
+>         if (unlikely(vmx->exit_reason.failed_vmentry))
+>                 return EXIT_FASTPATH_NONE;
+>=20
+> +       <handle NMIs here>
 > +
-> +      aspeed,wdt-reload-enable:
-> +        type: boolean
-> +        description:
-> +          Enable the function of wdt reset reload duty point.
-> +
-> +      aspeed,wdt-reload-duty-point:
-> +        description:
-> +          Define the duty point after wdt reset, 0 = 100%
-> +        minimum: 0
-> +        maximum: 255
+>         vmx->loaded_vmcs->launched =3D 1;
+>=20
+>         vmx_recover_nmi_blocking(vmx);
+>=20
+>=20
+> thouh we'd like want a fair bit of refactoring so that all of vmx_vcpu_ru=
+n() and
+> svm_vcpu_run() don't need to be noinstr.
 
-Why maximum is 255? Why 0=100%? 0 should be equal to 0 and maximum to
-some maximum value (e.g. 100%). If these are percents, use appropriate
-units. If these are not - what are these? You need a $ref in such case.
+This sounds reasonable to me, however from Documentation/core-api/entry.rst=
+,
+we do need it. Maybe we could argue guest is logically orthogonal to host,
+and the CPU is borrowed to another OS... (which also kind of explains neste=
+d)=20
 
-> +    required:
-> +      - reg
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: false
-
-Best regards,
-Krzysztof
-
+>=20
+> Another wart that needs to be addressed is trace_kvm_exit().  IIRC, trace=
+points
+> must be outside of noinstr, though maybe I'm misremembering that.  And
+> conversely, SVM doesn't trace exits that are handled in the fastpath.  Be=
+st
+> option is probably to move VMX's trace_kvm_exit() call to vmx_handle_exit=
+(),
+> and then figure out a common way to trace exits that are handled in the
+> fastpath (which can reside outside of the noinstr section).
