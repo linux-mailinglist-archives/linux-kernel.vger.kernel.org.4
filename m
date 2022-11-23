@@ -2,217 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 098666365C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 17:27:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E9FF6365C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 17:27:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239104AbiKWQ1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 11:27:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51722 "EHLO
+        id S237994AbiKWQ1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 11:27:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239077AbiKWQ1e (ORCPT
+        with ESMTP id S239101AbiKWQ1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 11:27:34 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FB7199
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 08:27:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+MO230V2uSEAZN82Bjjz0xKGbZ01cjeSXSNQ7xc90/8=; b=gKQE79TZU/7BTRiEAqpH7Fn4MH
-        6hCFhmVpXcAcQRziHoLP32PXM7mKG7BwsU4a1FguLkA2QJYKpuWIEDK1px43otKbKNAavoY7GcKDw
-        u/h8F20VsbwreeiVuSEmGbsQ+/XlvJyp+e+5eSCYvMr2Pq2/kjzHPL01AZTvz/NVvvjZPMVFijAuG
-        0l74iTMD2Yz9qhARJibwno38N97zjJdu7msczWXkyq3RdoI5nh2ltfb7C6rHIyVuJWRMjMqLF5zCQ
-        af8NW8hRkk+qGUkUb5vXlFdlHNgo5rRUTh2WcrtmzcdZwTVwf9XwSuRGx2eGv0UFl7eO5Y6g/V+7c
-        Nlj+UeyA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oxsap-007oGF-UT; Wed, 23 Nov 2022 16:27:24 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2E0E1300322;
-        Wed, 23 Nov 2022 17:27:16 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0BE2F2011C62B; Wed, 23 Nov 2022 17:27:16 +0100 (CET)
-Date:   Wed, 23 Nov 2022 17:27:15 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Marco Elver <elver@google.com>
-Cc:     Hillf Danton <hdanton@sina.com>,
-        syzbot <syzbot+9228d6098455bb209ec8@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] KASAN: use-after-free Read in task_work_run (2)
-Message-ID: <Y35J4383T5rAjSjO@hirez.programming.kicks-ass.net>
-References: <000000000000e7513905ebf4346f@google.com>
- <20221027030304.3017-1-hdanton@sina.com>
- <CANpmjNM-FNsMn4FR2murHHKt6jsVUDCO=ETmNQe-f+jrQ+4nHg@mail.gmail.com>
- <Y340Y2iwy3YubOk1@elver.google.com>
+        Wed, 23 Nov 2022 11:27:24 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2083.outbound.protection.outlook.com [40.107.244.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B24E8FF9A;
+        Wed, 23 Nov 2022 08:27:24 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Fs9Pn73z65uIMB+wqHhac+KYcokw9zMyNWXHDpxwHwEEpG3qso++nxda3W7MtN+kecbneqE52gtivVddSpwQpiO/KhlhBoDBNsg6gletR45ADmrvUV65arZVyL+4VJWOwO7RljYFT2MUu+5TnhWAThq4y0nCB5WI73UMid1Ixz+EStlKCTYNffm3ABquF3KN8ayPeWd2BGl8v11JZ6vYI08KHZhdwh3/CVYPvldEBHTAfVflLeziQJkJuIChAFr9vGrXk66ySqI4+Rye46Fnrh795pXzZCvDgul2zpdhi8qXAWe5tBR1l7wMnYpFyWVUbhEF85TfzRdsBXNl2ZFgjA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fpfoY77firEh3CsDqBSweJIooRZJPNPUYQLB7Cdc84E=;
+ b=Rsw5iRzW7uTJJMeAcvyhYXYfyVnF4eK1AnELLlksOeweT3Q2wCEIWuFpbv9L/iy0zW9CZKngOYBsjugYa67D2ZG7Q8FGN+Oc/FlSzHJ6M405QowlOVYFeICtpl3ROeur7S/JTq2FBBqvlJE+kbHkBE0WnfsqXKgikLuLcf5liOt2BjNNqtkBmoSsGflwwJO+YGZp0Rlx8mSccbZk3v7oecf7wCz09Stofmj3uN2ePmjIisOWhkGuFgkBmiHey5805vDwKe9hMEpEWUqia46jNbuIAAE7Tcu0I7TOIGvCVpAImU/c/n/idaFZbzw89FD4axT3ZuJyODSvwU93Xte2yw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fpfoY77firEh3CsDqBSweJIooRZJPNPUYQLB7Cdc84E=;
+ b=Zc3gUawg/q3Km7FrULe6CdXyJVvJsAgIQlN/v/Fmc/EOO/y3nzez/zS5laBwpLUwCn4o3PZWHagpxcpHnldNrEnCM/mP3Y+CwZ3xH1QNW/VSHLbx1ldRJlqSTRJ+NgkvDCy8T8F4IyQeHhM7taTQUFwVQ0eZ8zYoiGwJZNQ+HKY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BL1PR12MB5874.namprd12.prod.outlook.com (2603:10b6:208:396::17)
+ by MW4PR12MB6804.namprd12.prod.outlook.com (2603:10b6:303:20d::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Wed, 23 Nov
+ 2022 16:27:21 +0000
+Received: from BL1PR12MB5874.namprd12.prod.outlook.com
+ ([fe80::9eca:d454:d407:7ba2]) by BL1PR12MB5874.namprd12.prod.outlook.com
+ ([fe80::9eca:d454:d407:7ba2%3]) with mapi id 15.20.5857.017; Wed, 23 Nov 2022
+ 16:27:21 +0000
+Message-ID: <6fa7ad4d-1c92-121f-25c6-005fd5f1b6b9@amd.com>
+Date:   Wed, 23 Nov 2022 10:27:19 -0600
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.0
+Subject: Re: [PATCH] docs/sp_SP: Add process coding-style translation
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        bilbao@vt.edu
+References: <20221115184737.712625-1-carlos.bilbao@amd.com>
+ <87bkp09fkc.fsf@meer.lwn.net> <3ca31647-3f19-a9ca-c6b9-d6eba2014f2f@amd.com>
+ <87edtt8wyl.fsf@meer.lwn.net>
+From:   Carlos Bilbao <carlos.bilbao@amd.com>
+In-Reply-To: <87edtt8wyl.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SN7PR04CA0120.namprd04.prod.outlook.com
+ (2603:10b6:806:122::35) To BL1PR12MB5874.namprd12.prod.outlook.com
+ (2603:10b6:208:396::17)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y340Y2iwy3YubOk1@elver.google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5874:EE_|MW4PR12MB6804:EE_
+X-MS-Office365-Filtering-Correlation-Id: 15ab4017-6669-4a51-1364-08dacd6f98d5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8wHZhUxum/q/PJkSz680Um28JMIHa0eEmMeL815AkTTwdXX1dI3i/F8Ql57winAxnFj7scz7Y2ZdBS7qoRySBO6wQz96nQ2RPRCFLDIzdU3x47qpxC4dXZCJsCAf0UlBsc7GafDlZHAh7M/bPyvG66f3Cuv2aCbPwL7OtEWy5M+b72nI+pYVCozIkAaqrw/jE2/rBlgAeoRr7B2jdUk/Lzty/Ap5jz0PMDbJc1a9cVRMbzHm1cidkE8ss/Vbi+pPVJnVJ8s969BrhiP6MsWQzR1LjHEgofWkq5U5vcpDs3GTynTnvuabac1YJgbQo+0Pj9gdwVFvnm5Bgk6ToEP0d07XvwElULnk5dSDuDt0WsmMnUvQMWHEV6pYyayNraeHfyBQ9cM9/GoMBT0GSgOQdJwcayI+UD2RI5I1+Ub3iGvWOLsCJ16CJcz01IIzFOiLBURjdA7IG3YqRNrUnobaMmFXEvH6bXxz7mtqg8nTaN0jyV4c2GugX0A2MCHXAt/Btm+7oiqr1CYsC/qjb8OlHvj1HBzZcVh5AJGfTL2t6/QSKUX/rOK9GcdfUUVbi1Hjb/H6bt7I4+B69GEOyHRZ9Z61gp4GctP/VAwOVzYG01UF834eC+4FUKcCe0PCucs4MYIZWeamQlxfwfP4OjVNZoD05b5GDblXtjTyMBN/jO5wuLJx7AnTZUWCadPEQlell4FYtV2bUBejVFOs/yeYHqWWiiQQAsPOfT4G2fexNc0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5874.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(39860400002)(346002)(366004)(376002)(451199015)(38100700002)(31696002)(86362001)(53546011)(66556008)(478600001)(6506007)(66946007)(4326008)(8676002)(66476007)(41300700001)(316002)(6486002)(2616005)(83380400001)(2906002)(186003)(6512007)(44832011)(8936002)(5660300002)(6916009)(31686004)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NmowcHdLcUpyM3REU0hIQXk0SWs5ZTQyMDUyWnNERmN5NUFPNW9DQ0l1eG1t?=
+ =?utf-8?B?V1F6SWdlcFhZZ3h3NzhQcXZtOTNRQjU5ME1sQVJTRVRIZmxVR1EyWmpBWGhl?=
+ =?utf-8?B?MDlSTUZEbWtSdFd3enZQYnYzNjk5dmRPQ3FHalo4aXJaZ2ZvNWNPQUFHRzF1?=
+ =?utf-8?B?QnBmODhVUmJXNUNJVkU5Y2YreWlOOWxwNWVCTTQ4VzRsTU9IcEhVeFdMWU1P?=
+ =?utf-8?B?M2U3U0RLcXBUSHFvbkZ5eWl0QmhoUGdyTTBIVGZ3MzdtV2ZKMEpmakIrVnpD?=
+ =?utf-8?B?a0FqVHNPNENwa0FEMXNNN00zNldNek1teGViZ2o4UGpiYm5kbHM1bnVvUnIx?=
+ =?utf-8?B?ZEJCVlU0eEl2L1FtdzdCcFV2Y2lMNFJKTXJxRDFNbnpnQjBySFVJcDJPcTU0?=
+ =?utf-8?B?RGRXOUJ4VXpQNDNyaVprWW5ob2toWE1YdEdEZlNRQ2FVai84T3RUL3ZjajIw?=
+ =?utf-8?B?cmJuV2FqelFiOHVsV2g2VGZ0MEVKVXJHYmJRak1ZVVYzVUxDVTlpTTRqdmJV?=
+ =?utf-8?B?TngvbnZoVGwxWTR5OGN4SlRZQUlidVhMME5pV2FxL21ENkZESmZENkdSNXZT?=
+ =?utf-8?B?M3BZN1hvVkY4VWhBc0VHejdqZkJpYzdpUTc2QnFzR3A1OGFlbEx5aitNY3BZ?=
+ =?utf-8?B?V0wwSXhHVmtMdFMzaEhFUE5WNXZtbzAwRzFPMTAvUzJOYlNpZG1Na3JXQitR?=
+ =?utf-8?B?THNONUNrVVhqb2hzYUp0WmNsQjdFSVd1UmorNHorbDFMTzBDdFh1NEtUNk4z?=
+ =?utf-8?B?K1UvbXNjcVVQaVJYbkhWeTJONk5QbUZiWTdHOHJNNm1TOXcxOEkzbnpveTNV?=
+ =?utf-8?B?dmpPMVZhZld0QnNDVGJFRm9Da0t2eVNtNGE4V0hLS3ZoRFUyVGdwVHNEcnk2?=
+ =?utf-8?B?VGVDK0d3SUdTR28wZVpnWE9TcWdncVRLSzBWNzRsNmNSRnlub0JnYVVYWENt?=
+ =?utf-8?B?amVqV3ZCNGRWc2ZIQnlYSklEYWJIcWVldzZzeDJ4R2c0Um5NNzQ0bTAzTUpK?=
+ =?utf-8?B?Mm9ZWDFUeWtEcS9YczZ5WXJ2Wkx6b29adUxpR1IwY1h2NE1wenVJNEI5Rzlt?=
+ =?utf-8?B?SGpOakhBTExIeUlqYmgzUjY5NFhpVHYvVnhObTFnQW9IWFRMRHNkL1BoNHNQ?=
+ =?utf-8?B?a1VObnd4MWZCUU8zVXZzY3ZYNnhBV1VmaE51cjU3RkNYMDZua3g4OE9EcG5P?=
+ =?utf-8?B?MDZEdFdpcVR3ekIzcVRCKzAzZGpZY3hONjhBL2EwRmg3QkcvdUVONGF4RGNU?=
+ =?utf-8?B?YzF3czZNdWQ1QnR6UXZVb0NjRGtSYnNPV0NZak04MGRvb2s4NVhDVzhtelNT?=
+ =?utf-8?B?S2wwd0JpLzd6SkdtTEN4bWJpK1dYZ1Zjc1RteWhkSE40YUhlVDBOcnp5UUMw?=
+ =?utf-8?B?Rm5sVldVSFJSZS9zZDJIVDRvYTFIYzlraEIwdXJsdS8rOXd6cFRUTWdyZnl4?=
+ =?utf-8?B?eFVwV3lnckQ2MmRtNHRRL3RnVExMMFBiL0tvQXdlVEs4SU43YWVLaFpNbTZR?=
+ =?utf-8?B?Nm5iZnNkb0hKRUtRU1gydHlCY05sUW1YU1JMVGkrc3FYdVZLa1lBNWNFL2Ny?=
+ =?utf-8?B?R2U0cnd4SmhkalNxUGJZSno1eEYzM3p3ZWpsYm00UjhMVHE2eGhqZkdtUkhG?=
+ =?utf-8?B?TStXbzAyY0QxRDRqZUxhb3RVMjBzL0JPQjhJNjVlUnhLc2grTk8zRVBFaEx2?=
+ =?utf-8?B?Y0xXYU9neGR6ZklLbEcramRNcE02RWY3ZE1Gc2s3bVV1Z3pteXo4WTRJR2dF?=
+ =?utf-8?B?R3lqUGRNWE9CaGgzNjhJWkpiTGF2eUZuZ21iUmpkOW9ZQWs5ZGVLUEJoN3ht?=
+ =?utf-8?B?M1RGeWM1SVdNdS8vbFpCOUQzN1ZaSHBSSXRJSExYNzBkN1RKNm1CTndrUEZP?=
+ =?utf-8?B?TTJ5aWVkREFmMUZlcUcyTXpzNUxWS2pkeVZZVmwwWFFVKzZjOUpoczFVQjVV?=
+ =?utf-8?B?d3VqUnhRNExHZkd1cklxOFNnUEE5Z2hocGMwQjJ3WUtRa0IweWRUTGYrOGN5?=
+ =?utf-8?B?cUlyTTFpTllFVUtNTU9TSndhWmJHRTIxNXhJZEtISzFibW85RmlxWkIxdXR6?=
+ =?utf-8?B?aW1jVDlwTG5qMStCQzlubE0xRVFDNUNjMjZtMC9Vakc3Smtjem9NeXlNVytM?=
+ =?utf-8?B?TTdqZDYxYWZHd05ZTE9id2haZ1d5cjZmRXJhR1owY1lTbHY4SERyeGNmb3Zz?=
+ =?utf-8?Q?hAdZEkW+Y3oopAlq/SYozpYvmV8TcChz0Op6U/aXRg7N?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 15ab4017-6669-4a51-1364-08dacd6f98d5
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5874.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2022 16:27:21.7229
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Je03f1rrYUA1TXba0pHASU2sQqACS8QzYsEZ+otqzQTaOl1qn3+z/K5uyCrelsUSVRWQVgQ0sFIO5nrZzSRMig==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6804
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 03:55:31PM +0100, Marco Elver wrote:
+On 11/23/22 10:19 AM, Jonathan Corbet wrote:
+> Carlos Bilbao <carlos.bilbao@amd.com> writes:
+> 
+>> On 11/21/22 3:13 PM, Jonathan Corbet wrote:
+>>> Carlos Bilbao <carlos.bilbao@amd.com> writes:
+>>>
+>>>> Translate Documentation/process/coding-style.rst into Spanish.
+>>>>
+>>>> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
+>>>> ---
+>>>>  .../translations/sp_SP/coding-style.rst       | 1315 +++++++++++++++++
+>>>>  Documentation/translations/sp_SP/index.rst    |    1 +
+>>>>  2 files changed, 1316 insertions(+)
+>>>>  create mode 100644 Documentation/translations/sp_SP/coding-style.rst
+>>>
+>>> So I'm kind of slow, I'll admit...but I have finally noticed that you're
+>>> not preserving the directory structure used for Documentation/ as a
+>>> whole.  Is there a reason for that?  We've been (slowly) working to
+>>> organize our docs in a reader-friendly way, it seems unfortunate to lose
+>>> that for the translations...?
+>>
+>> Yes, you're correct. The order I was following was: "If I didn't speak
+>> English, what document would _I_ like to see translated next?". The coding
+>> style directives seemed to me like the most important thing next in line. 
+>> Following this logic, I was planning on translating
+>> process/email-clients.rst next.
+>>
+>> What would be better? Perhaps the documents of process/ in order of
+>> appearance? I don't know what would be preferable in terms of organization.
+>> Perhaps we have some data on most consulted docs for the Documentation
+>> website?
+> 
+> I think I didn't express myself clearly...I don't really care about the
+> order in which you do the translations, whatever you think is best is
+> fine there.  What I was asking about is the *directory structure* of the
+> results.  Thus, for example, I think that this translation should end up
+> in .../sp_SP/process/coding-style.rst.
+> 
+> See what I'm getting at?  The directory structure of the translations
+> should really match that of the documents they are coming from.  Or, at
+> least, so it seems to me.
 
-> > > --- x/kernel/events/core.c
-> > > +++ c/kernel/events/core.c
-> > > @@ -2291,6 +2291,7 @@ event_sched_out(struct perf_event *event
-> > >                     !event->pending_work) {
-> > >                         event->pending_work = 1;
-> > >                         dec = false;
-> > > +                       atomic_long_inc(&event->refcount);
-> > >                         task_work_add(current, &event->pending_task, TWA_RESUME);
-> > >                 }
-> > >                 if (dec)
-> > > @@ -6561,6 +6562,8 @@ static void perf_pending_task(struct cal
-> > >         struct perf_event *event = container_of(head, struct perf_event, pending_task);
-> > >         int rctx;
-> > >
-> > > +       if (event->state == PERF_EVENT_STATE_DEAD)
-> > > +               goto out;
-> > >         /*
-> > >          * If we 'fail' here, that's OK, it means recursion is already disabled
-> > >          * and we won't recurse 'further'.
-> > > @@ -6577,6 +6580,8 @@ static void perf_pending_task(struct cal
-> > >         if (rctx >= 0)
-> > >                 perf_swevent_put_recursion_context(rctx);
-> > >         preempt_enable_notrace();
-> > > +out:
-> > > +       put_event(event);
-> > >  }
-> > >
-> > >  #ifdef CONFIG_GUEST_PERF_EVENTS
+Ah, that makes sense. I will send amended patches.
 
-This is broken and will corrupt ctx->nr_pending.
+> 
+> Thanks,
+> 
+> jon
 
-
-> My guess is that the __fput task work is in the same task as the perf
-> task work, and so if we tried to cancel the task work from within
-> __fput, it won't actually cancel it if task_work_run() already exchanged
-> the 'task_works' list.
-
-That seems very likely indeed.
-
-> So it looks like prolonging the perf events lifetime is the only option
-> right now?
-
-Depends a bit on how complicated all this is; at the very least
-perf_event_release_kernel() will schedule out the event if it still
-running. It does this before switching the state to DEAD (it has to)
-which means it can raise perf_pending_task() at this point in time, even
-though we're tearing down the event.
-
-This can be avoided by a patch like this...
-
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 9ab0eb073bd5..e9ad1ff7a9f8 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -2287,6 +2287,7 @@ group_sched_out(struct perf_event *group_event, struct perf_event_context *ctx)
- 
- #define DETACH_GROUP	0x01UL
- #define DETACH_CHILD	0x02UL
-+#define DETACH_DEAD	0x04UL
- 
- /*
-  * Cross CPU call to remove a performance event
-@@ -2308,12 +2309,20 @@ __perf_remove_from_context(struct perf_event *event,
- 		update_cgrp_time_from_cpuctx(cpuctx, false);
- 	}
- 
-+	/*
-+	 * Ensure event_sched_out() switches to OFF, at the very least
-+	 * this avoids raising perf_pending_task() at this time.
-+	 */
-+	if (flags & DETACH_DEAD)
-+		event->pending_disable = 1;
- 	event_sched_out(event, ctx);
- 	if (flags & DETACH_GROUP)
- 		perf_group_detach(event);
- 	if (flags & DETACH_CHILD)
- 		perf_child_detach(event);
- 	list_del_event(event, ctx);
-+	if (flags & DETACH_DEAD)
-+		event->state = PERF_EVENT_STATE_DEAD;
- 
- 	if (!pmu_ctx->nr_events) {
- 		pmu_ctx->rotate_necessary = 0;
-@@ -5299,9 +5308,7 @@ int perf_event_release_kernel(struct perf_event *event)
- 
- 	ctx = perf_event_ctx_lock(event);
- 	WARN_ON_ONCE(ctx->parent_ctx);
--	perf_remove_from_context(event, DETACH_GROUP);
- 
--	raw_spin_lock_irq(&ctx->lock);
- 	/*
- 	 * Mark this event as STATE_DEAD, there is no external reference to it
- 	 * anymore.
-@@ -5313,8 +5320,7 @@ int perf_event_release_kernel(struct perf_event *event)
- 	 * Thus this guarantees that we will in fact observe and kill _ALL_
- 	 * child events.
- 	 */
--	event->state = PERF_EVENT_STATE_DEAD;
--	raw_spin_unlock_irq(&ctx->lock);
-+	perf_remove_from_context(event, DETACH_GROUP|DETACH_DEAD);
- 
- 	perf_event_ctx_unlock(event, ctx);
- 
----
-
-However; I don't think that actually helps, because in this case the new
-task_work would actually still be on the ->task_works list and
-task_work_cancel() should've worked.
-
-The other possibility seems to be that the sample happens and we
-schedule before close() can terminate the event, which means we've
-already got perf_pending_task() queued by the time we get to
-perf_remove_from_context().
-
-This means the perf_pending_task() queue happened before the fput()
-queue, and it is thus ran later (due to FILO ordering -- also see commit
-c82199061009 ("task_work: remove fifo ordering guarantee")).
-
-And I can't really see a way out of that other than doing refcount games
-indeed.
-
-There is the straight forward way, similar to what Hillf attempted, and
-a really nasty one that avoids the atomics in the common case and is
-really only targeted at this case -- given the overhead of signals I'm
-thinking simple is better.
-
----
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 9ab0eb073bd5..0228ea090b98 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -2248,6 +2248,7 @@ event_sched_out(struct perf_event *event, struct perf_event_context *ctx)
- 		    !event->pending_work) {
- 			event->pending_work = 1;
- 			dec = false;
-+			WARN_ON_ONCE(!atomic_long_inc_not_zero(&event->refcount));
- 			task_work_add(current, &event->pending_task, TWA_RESUME);
- 		}
- 		if (dec)
-@@ -6755,6 +6762,8 @@ static void perf_pending_task(struct callback_head *head)
- 	if (rctx >= 0)
- 		perf_swevent_put_recursion_context(rctx);
- 	preempt_enable_notrace();
-+
-+	put_event(event);
- }
- 
- #ifdef CONFIG_GUEST_PERF_EVENTS
-
-
-So perhaps both the above..
-
-Does that actually work?
+Thanks,
+Carlos
