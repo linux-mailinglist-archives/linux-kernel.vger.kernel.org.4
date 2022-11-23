@@ -2,70 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47B1B635A45
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 11:39:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E08C5635A44
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 11:39:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235965AbiKWKgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 05:36:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33176 "EHLO
+        id S236760AbiKWKiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 05:38:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237095AbiKWKfM (ORCPT
+        with ESMTP id S237648AbiKWKiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 05:35:12 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 762B1EE3B;
-        Wed, 23 Nov 2022 02:20:13 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9AEBE1FB;
-        Wed, 23 Nov 2022 02:20:19 -0800 (PST)
-Received: from bogus (unknown [10.57.6.137])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 35CBB3F587;
-        Wed, 23 Nov 2022 02:20:10 -0800 (PST)
-Date:   Wed, 23 Nov 2022 10:20:07 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>, conor.dooley@microchip.com,
-        apatel@ventanamicro.com, anup@brainfault.org,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Conor Dooley <conor@kernel.org>, rafael@kernel.org,
-        daniel.lezcano@linaro.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-pm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux@rivosinc.com
-Subject: Re: [PATCH] cpuidle: riscv-sbi: Stop using non-retentive suspend
-Message-ID: <20221123102007.2hrncka2nnpxp75h@bogus>
-References: <mhng-6299f108-11af-4e70-9981-d7e7b3be0b9a@palmer-ri-x1c9>
- <57114829-c205-dece-abdb-1100947286d4@sholland.org>
+        Wed, 23 Nov 2022 05:38:22 -0500
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776A55587;
+        Wed, 23 Nov 2022 02:22:34 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NHHHm2nWcz4f3jJ2;
+        Wed, 23 Nov 2022 18:22:28 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP1 (Coremail) with SMTP id cCh0CgBXTq1l9H1jf7LWAw--.34344S3;
+        Wed, 23 Nov 2022 18:22:30 +0800 (CST)
+Subject: Re: [PATCH v2 4/5] blk-iocost: fix sleeping in atomic context
+ warnning
+To:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>
+Cc:     Yu Kuai <yukuai1@huaweicloud.com>, hch@lst.de,
+        josef@toxicpanda.com, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20221104023938.2346986-1-yukuai1@huaweicloud.com>
+ <20221104023938.2346986-5-yukuai1@huaweicloud.com>
+ <Y3K8MSFWw8eTnxtm@slm.duckdns.org>
+ <3da991c6-21e4-8ed8-ba75-ccb92059f0ae@huaweicloud.com>
+ <Y306xJV6aNXd94kb@slm.duckdns.org>
+ <1f52ccb1-c357-a2a0-ef9d-48d7e2eb51f8@kernel.dk>
+ <Y31sYFdA2lHIvjt3@slm.duckdns.org>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <ec3754a6-3249-51ab-b659-fd795884e346@huaweicloud.com>
+Date:   Wed, 23 Nov 2022 18:22:29 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+In-Reply-To: <Y31sYFdA2lHIvjt3@slm.duckdns.org>
+Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <57114829-c205-dece-abdb-1100947286d4@sholland.org>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: cCh0CgBXTq1l9H1jf7LWAw--.34344S3
+X-Coremail-Antispam: 1UD129KBjvdXoWrZFW3JFyUJF1kWF13KFWktFb_yoWxZrcEq3
+        yq9r4qqws8AFsakF1DtryUJFZakF4jqrW7XrW0qF13A340v3W5XrZFqFsagr13JrW0qFs8
+        uryUArWYgr4xGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb3kFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
+        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
+        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
+        IF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
+        3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIda
+        VFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 11:11:23PM -0600, Samuel Holland wrote:
+Hi, Tejun
 
-[...]
+ÔÚ 2022/11/23 8:42, Tejun Heo Ð´µÀ:
+> On Tue, Nov 22, 2022 at 05:14:29PM -0700, Jens Axboe wrote:
+>>>> Then match_strdup() and kfree() in match_NUMBER() can be replaced with
+>>>> get_buffer() and put_buffer().
+>>>
+>>> Sorry about the late reply. Yeah, something like this.
 
-> While the comment in include/linux/clockchips.h and the name of the flag
-> imply that C3STOP is Intel-specific, it really isn't. The flag is used
-> on ARM, MIPS, and PowerPC as well.
->
+Thanks for the feedback. I'll remove patch 4 from this seies and send a
+new patch separately soon.
 
-+1. I agree the name is confusing but it used to just indicate that the
-timer is not always on and could stop in deeper CPU idle states. It probably
-was introduced to be used on x86 for C3 state but it is used for other
-purposes as well. May be one should have or even can now rename it to
-something more appropriate, but I am sure it might trigger some bikeshedding
-discussions ðŸ˜‰.
+Thanks,
+Kuai
+>>
+>> Doesn't local_irq_disable() imply preemption disable as well?
+> 
+> Right, I was thinking about spin_lock_irq() which doesn't imply disabling
+> preemption in PREEMPT_RT. local_irq_disable() is actual irq disable even on
+> RT. It should be fine on its own.
+> 
+> Thanks.
+> 
 
--- 
-Regards,
-Sudeep
