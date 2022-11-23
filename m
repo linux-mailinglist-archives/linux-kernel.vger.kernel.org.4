@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB0BB636293
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:58:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79BF6636294
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:58:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235496AbiKWO6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 09:58:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59222 "EHLO
+        id S238224AbiKWO6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 09:58:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238395AbiKWO6Q (ORCPT
+        with ESMTP id S238239AbiKWO6W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 09:58:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9245E3C6F4
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 06:58:15 -0800 (PST)
+        Wed, 23 Nov 2022 09:58:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619D9634E
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 06:58:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 29CD461D53
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 14:58:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8C63C433D6;
-        Wed, 23 Nov 2022 14:58:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1EBADB8201C
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 14:58:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19DB3C433D7;
+        Wed, 23 Nov 2022 14:58:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669215494;
-        bh=H4E+ornN4yLvnr16yeufh7PPylH/iBSEDCkhqnKmsoc=;
+        s=k20201202; t=1669215495;
+        bh=5jxaYMiu4ozkhB4fDUDBApe2T/jh7jSelB/YFfvZn64=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W9+eXjDSC1R4nNd9Jwt7t686RyYH8lusBKyNYUEynnIAYBRHXwe7tUjzf9oVBF/bh
-         SwsOwvlRxMjMk/zVHL7E2vspGvflxzlrjv39SeMzwj9++c7AAauNlg/sWdjORASZok
-         48Fhn6J3OKtyCsOcXw0xg4sEzWYBECXwG2Aa7sl8Dxd1iDnULk2gJaZ5oCnIYeR1i5
-         il0yPsso+LMMXkh2RJMHJHGOWlsBICoUnQgZQVjK7sxfmQvqrFW3rvXRl34sm9hRWe
-         GYcBU6SpC+94s5T6+DNzuyE78f74Poj6dWzQ+K5Zl5EoNsijatlOBCH/n2WLAPCzHQ
-         1Q1vquHlsWpPg==
+        b=fbVAF/EuyJTb5kE0t2LUt+2GaWCNKNXdwAEOR0juma/lTnErFo6v9Yigbr5c/7b+a
+         A9TLqyM3iaphnG0i3IsHxqSGwZ6t1It570pFioQ9rRov6jwvN4tLlZ4SoCckuotrnB
+         i8igL0xbEDf0RRFE2fo5aBWTPwtZdegmvCjflPNpBfnGNpkp9bnLb2G19cOCYpQ57t
+         g78eKwZn0/DUHkVVKDU4UQFwe6NUz3hyDf5NOVnvhHT5KmvzL3vYUzJwqAYUfyq7Rr
+         KaBHU+L8OZIUZ/yduv4y2s+A48fMBMMUtMkffZIILW3s9Kl52HEX3FH3DsMjt8EVHO
+         dsJEj4io0RnhA==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Ofir Bitton <obitton@habana.ai>
-Subject: [PATCH 7/8] habanalabs: fail driver load if EEPROM errors detected
-Date:   Wed, 23 Nov 2022 16:58:00 +0200
-Message-Id: <20221123145801.542029-7-ogabbay@kernel.org>
+Cc:     Ohad Sharabi <osharabi@habana.ai>
+Subject: [PATCH 8/8] habanalabs: fix VA range calculation
+Date:   Wed, 23 Nov 2022 16:58:01 +0200
+Message-Id: <20221123145801.542029-8-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221123145801.542029-1-ogabbay@kernel.org>
 References: <20221123145801.542029-1-ogabbay@kernel.org>
@@ -52,74 +52,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ofir Bitton <obitton@habana.ai>
+From: Ohad Sharabi <osharabi@habana.ai>
 
-In case EEPROM is not burned, firmware sets default EEPROM values.
-As this is not valid in production, driver should fail load upon any
-EEPROM error reported by firmware.
+Current implementation is fixing the page size to PAGE_SIZE whereas the
+input page size may be different.
 
-Signed-off-by: Ofir Bitton <obitton@habana.ai>
+Signed-off-by: Ohad Sharabi <osharabi@habana.ai>
 Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- drivers/misc/habanalabs/common/firmware_if.c | 23 ++++++++++----------
- 1 file changed, 11 insertions(+), 12 deletions(-)
+ drivers/misc/habanalabs/common/memory.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/misc/habanalabs/common/firmware_if.c b/drivers/misc/habanalabs/common/firmware_if.c
-index cf8147e43833..228b92278e48 100644
---- a/drivers/misc/habanalabs/common/firmware_if.c
-+++ b/drivers/misc/habanalabs/common/firmware_if.c
-@@ -617,16 +617,12 @@ static bool fw_report_boot_dev0(struct hl_device *hdev, u32 err_val,
- 	if (sts_val & CPU_BOOT_DEV_STS0_ENABLED)
- 		dev_dbg(hdev->dev, "Device status0 %#x\n", sts_val);
+diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
+index 541e1b6a2176..7c5c18be294a 100644
+--- a/drivers/misc/habanalabs/common/memory.c
++++ b/drivers/misc/habanalabs/common/memory.c
+@@ -2508,24 +2508,20 @@ static int va_range_init(struct hl_device *hdev, struct hl_va_range **va_ranges,
  
--	/* All warnings should go here in order not to reach the unknown error validation */
- 	if (err_val & CPU_BOOT_ERR0_EEPROM_FAIL) {
--		dev_warn(hdev->dev,
--			"Device boot warning - EEPROM failure detected, default settings applied\n");
--		/* This is a warning so we don't want it to disable the
--		 * device
--		 */
--		err_val &= ~CPU_BOOT_ERR0_EEPROM_FAIL;
-+		dev_err(hdev->dev, "Device boot error - EEPROM failure detected\n");
-+		err_exists = true;
+ 	/*
+ 	 * PAGE_SIZE alignment
+-	 * it is the callers responsibility to align the addresses if the
++	 * it is the caller's responsibility to align the addresses if the
+ 	 * page size is not a power of 2
+ 	 */
+ 
+ 	if (is_power_of_2(page_size)) {
+-		if (start & (PAGE_SIZE - 1)) {
+-			start &= PAGE_MASK;
+-			start += PAGE_SIZE;
+-		}
++		start = round_up(start, page_size);
+ 
+ 		/*
+ 		 * The end of the range is inclusive, hence we need to align it
+ 		 * to the end of the last full page in the range. For example if
+ 		 * end = 0x3ff5 with page size 0x1000, we need to align it to
+-		 * 0x2fff. The remainig 0xff5 bytes do not form a full page.
++		 * 0x2fff. The remaining 0xff5 bytes do not form a full page.
+ 		 */
+-		if ((end + 1) & (PAGE_SIZE - 1))
+-			end = ((end + 1) & PAGE_MASK) - 1;
++		end = round_down(end + 1, page_size) - 1;
  	}
  
-+	/* All warnings should go here in order not to reach the unknown error validation */
- 	if (err_val & CPU_BOOT_ERR0_DRAM_SKIPPED) {
- 		dev_warn(hdev->dev,
- 			"Device boot warning - Skipped DRAM initialization\n");
-@@ -2532,7 +2528,7 @@ static int hl_fw_dynamic_init_cpu(struct hl_device *hdev,
- 					struct fw_load_mgr *fw_loader)
- {
- 	struct cpu_dyn_regs *dyn_regs;
--	int rc;
-+	int rc, fw_error_rc;
- 
- 	dev_info(hdev->dev,
- 		"Loading %sfirmware to device, may take some time...\n",
-@@ -2632,14 +2628,17 @@ static int hl_fw_dynamic_init_cpu(struct hl_device *hdev,
- 
- 	hl_fw_dynamic_update_linux_interrupt_if(hdev);
- 
--	return 0;
--
- protocol_err:
--	if (fw_loader->dynamic_loader.fw_desc_valid)
--		fw_read_errors(hdev, le32_to_cpu(dyn_regs->cpu_boot_err0),
-+	if (fw_loader->dynamic_loader.fw_desc_valid) {
-+		fw_error_rc = fw_read_errors(hdev, le32_to_cpu(dyn_regs->cpu_boot_err0),
- 				le32_to_cpu(dyn_regs->cpu_boot_err1),
- 				le32_to_cpu(dyn_regs->cpu_boot_dev_sts0),
- 				le32_to_cpu(dyn_regs->cpu_boot_dev_sts1));
-+
-+		if (fw_error_rc)
-+			return fw_error_rc;
-+	}
-+
- 	return rc;
- }
- 
+ 	if (start >= end) {
 -- 
 2.25.1
 
