@@ -2,123 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48DF8636000
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:36:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E3D63600D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:37:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238882AbiKWNf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 08:35:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49160 "EHLO
+        id S238120AbiKWNhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 08:37:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238818AbiKWNf3 (ORCPT
+        with ESMTP id S238877AbiKWNgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 08:35:29 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43CB7643F
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:22:36 -0800 (PST)
-Received: from [192.168.2.109] (109-252-117-140.nat.spd-mgts.ru [109.252.117.140])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8042C6602AA3;
-        Wed, 23 Nov 2022 13:22:34 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1669209755;
-        bh=f4T+av3IOf/lreuEnjUCksu3kk3ljEDFeo3tLB/Kl94=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=Zun/KSYXO7Gb3+Cm755sPZ1PWDfC8XF2dsjrbyIEy2n6sVaBEsiwnjq0NU+SfL12S
-         Sq9K5pulveyaB9H9SmbV7oQh1AqVHasRpIPVbsncgHEcb0YqoxzH6pPhHpVbh8Fxsw
-         +4HEs4g282hO4Uun4rU75RtDGPQ29t7K+E5F1wfh4ARtj4E3czyc8usQqTz2Kl86g2
-         SFLUZXUS51jpXQos0yEvMhnqdlynpyOs+3qW5Pdw6OQg3zDsgTIE5VQnb8RHKvd4K2
-         J0NF7kB3PgYnBnjqvlphDT9/mpF7WjMQ8KNl1gyqetzQosYCTIK/wrB3lE82hw4ajC
-         V6kqd+JAD4L7A==
-Message-ID: <a4a2b466-ffe5-5a1f-4cdd-2d3dabf16037@collabora.com>
-Date:   Wed, 23 Nov 2022 16:22:32 +0300
+        Wed, 23 Nov 2022 08:36:43 -0500
+Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EB51DA6D;
+        Wed, 23 Nov 2022 05:23:02 -0800 (PST)
+Received: from [10.18.29.47] (10.18.29.47) by mail-sh.amlogic.com (10.18.11.5)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Wed, 23 Nov
+ 2022 21:23:00 +0800
+Message-ID: <3bdaa648-c607-a79c-f6bb-c75baa1e8509@amlogic.com>
+Date:   Wed, 23 Nov 2022 21:23:00 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v1] drm/scheduler: Fix lockup in drm_sched_entity_kill()
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH V5 4/4] arm64: dts: meson: add S4 Soc Peripheral clock
+ controller in DT
 Content-Language: en-US
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     Luben Tuikov <luben.tuikov@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20221123001303.533968-1-dmitry.osipenko@collabora.com>
-In-Reply-To: <20221123001303.533968-1-dmitry.osipenko@collabora.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     <kelvin.zhang@amlogic.com>
+References: <20221123021346.18136-1-yu.tu@amlogic.com>
+ <20221123021346.18136-5-yu.tu@amlogic.com>
+ <ae43fadf-9255-7db7-8b5e-01200e02a2c6@linaro.org>
+ <9858039f-e635-2749-80a2-75072d6e9cea@amlogic.com>
+ <8dbb3ce2-c8d9-70be-d1de-ed875de0ea1b@linaro.org>
+From:   Yu Tu <yu.tu@amlogic.com>
+In-Reply-To: <8dbb3ce2-c8d9-70be-d1de-ed875de0ea1b@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.18.29.47]
+X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
+ (10.18.11.5)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/23/22 03:13, Dmitry Osipenko wrote:
-> The drm_sched_entity_kill() is invoked twice by drm_sched_entity_destroy()
-> while userspace process is exiting or being killed. First time it's invoked
-> when sched entity is flushed and second time when entity is released. This
-> causes a lockup within wait_for_completion(entity_idle) due to how completion
-> API works.
-> 
-> Calling wait_for_completion() more times than complete() was invoked is a
-> error condition that causes lockup because completion internally uses
-> counter for complete/wait calls. The complete_all() must be used instead
-> in such cases.
-> 
-> This patch fixes lockup of Panfrost driver that is reproducible by killing
-> any application in a middle of 3d drawing operation.
-> 
-> Fixes: 2fdb8a8f07c2 ("drm/scheduler: rework entity flush, kill and fini")
-> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> ---
->  drivers/gpu/drm/scheduler/sched_entity.c | 2 +-
->  drivers/gpu/drm/scheduler/sched_main.c   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/scheduler/sched_entity.c b/drivers/gpu/drm/scheduler/sched_entity.c
-> index fe09e5be79bd..15d04a0ec623 100644
-> --- a/drivers/gpu/drm/scheduler/sched_entity.c
-> +++ b/drivers/gpu/drm/scheduler/sched_entity.c
-> @@ -81,7 +81,7 @@ int drm_sched_entity_init(struct drm_sched_entity *entity,
->  	init_completion(&entity->entity_idle);
->  
->  	/* We start in an idle state. */
-> -	complete(&entity->entity_idle);
-> +	complete_all(&entity->entity_idle);
->  
->  	spin_lock_init(&entity->rq_lock);
->  	spsc_queue_init(&entity->job_queue);
-> diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
-> index 6ce04c2e90c0..857ec20be9e8 100644
-> --- a/drivers/gpu/drm/scheduler/sched_main.c
-> +++ b/drivers/gpu/drm/scheduler/sched_main.c
-> @@ -1026,7 +1026,7 @@ static int drm_sched_main(void *param)
->  		sched_job = drm_sched_entity_pop_job(entity);
->  
->  		if (!sched_job) {
-> -			complete(&entity->entity_idle);
-> +			complete_all(&entity->entity_idle);
->  			continue;
->  		}
->  
-> @@ -1037,7 +1037,7 @@ static int drm_sched_main(void *param)
->  
->  		trace_drm_run_job(sched_job, entity);
->  		fence = sched->ops->run_job(sched_job);
-> -		complete(&entity->entity_idle);
-> +		complete_all(&entity->entity_idle);
->  		drm_sched_fence_scheduled(s_fence);
->  
->  		if (!IS_ERR_OR_NULL(fence)) {
 
-Applied to drm-misc-next
 
--- 
-Best regards,
-Dmitry
+On 2022/11/23 21:02, Krzysztof Kozlowski wrote:
+> [ EXTERNAL EMAIL ]
+> 
+> On 23/11/2022 12:27, Yu Tu wrote:
+>> Hi Krzysztof,
+>> 	
+>> On 2022/11/23 18:10, Krzysztof Kozlowski wrote:
+>>> [ EXTERNAL EMAIL ]
+>>>
+>>> On 23/11/2022 03:13, Yu Tu wrote:
+>>>> Added information about the S4 SOC Peripheral Clock controller in DT.
+>>>>
+>>>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+>>>> ---
+>>>>    arch/arm64/boot/dts/amlogic/meson-s4.dtsi | 26 +++++++++++++++++++++++
+>>>>    1 file changed, 26 insertions(+)
+>>>>
+>>>> diff --git a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
+>>>> index bd9c2ef83314..e7fab6e400be 100644
+>>>> --- a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
+>>>> +++ b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
+>>>> @@ -6,6 +6,8 @@
+>>>>    #include <dt-bindings/interrupt-controller/irq.h>
+>>>>    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>>>>    #include <dt-bindings/gpio/gpio.h>
+>>>> +#include <dt-bindings/clock/amlogic,s4-pll-clkc.h>
+>>>> +#include <dt-bindings/clock/amlogic,s4-peripherals-clkc.h>
+>>>>    
+>>>>    / {
+>>>>    	cpus {
+>>>> @@ -100,6 +102,30 @@ clkc_pll: clock-controller@8000 {
+>>>>    				#clock-cells = <1>;
+>>>>    			};
+>>>>    
+>>>> +			clkc_periphs: clock-controller {
+>>>> +				compatible = "amlogic,s4-peripherals-clkc";
+>>>> +				reg = <0x0 0x0 0x0 0x49c>;
+>>>
+>>> This is broken... did you check for warnings?
+>> Yes, i do.
+>> You can have a look at the results of my test, as follows.
+>>
+>> total: 0 errors, 0 warnings, 0 checks, 38 lines checked
+>>
+>> ../patch_clk_v5_1122/0004-arm64-dts-meson-add-S4-Soc-Peripheral-clock-controll.patch
+>> has no obvious style problems and is ready for submission.
+>>
+> 
+> This is a checkpatch output. I am talking about DTS broken. dtc should
+> warn you.
 
+Do you mean I will have wraning in compiling?
+I actually compiled without warning.
+ccf$ make ARCH=arm64 dtbs -j12
+   DTC     arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dtb
+
+> 
+> Best regards,
+> Krzysztof
+> 
+> .
