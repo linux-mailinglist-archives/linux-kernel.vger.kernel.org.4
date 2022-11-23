@@ -2,63 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 585536368D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:30:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 480006368D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:30:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238742AbiKWS3u convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 23 Nov 2022 13:29:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59368 "EHLO
+        id S239755AbiKWSaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 13:30:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238849AbiKWS3b (ORCPT
+        with ESMTP id S239221AbiKWS3w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 13:29:31 -0500
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BF91039;
-        Wed, 23 Nov 2022 10:29:29 -0800 (PST)
-Received: by mail-qt1-f178.google.com with SMTP id h24so11776990qta.9;
-        Wed, 23 Nov 2022 10:29:29 -0800 (PST)
+        Wed, 23 Nov 2022 13:29:52 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B457B6A;
+        Wed, 23 Nov 2022 10:29:51 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso2912856pjt.0;
+        Wed, 23 Nov 2022 10:29:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DQVPLKYFSJ4QgW7SluwF8mIfyxsYEuGishngmx0s4yI=;
+        b=EBWluekWbdhZB0XWgYo6kN7mgHPwsTZJrKzgmUs8vlIN+toDkOZB3gh8SghcH4Pdw9
+         aetVZ1tDqRGd1wbMXS1qQYE5bitUukYhkFNFOimSTAziveZAdtvbr5L9NemY/FbCbSz1
+         XNX+coHGs2w8DymzXAPofEJU3+sZ7WHwveRNlINCZXNlZyourTP1tXxgi3DJrifrLPhP
+         4CucWDTHDSMTcDjSvcOw07KUm4WSMcMQMhnhdzg+/WDShWJ0l6gh2Lsbua6JJNZnj0+d
+         DWXHTdA13OqZkuSNA7/VfpvnLJ/CwTxdFJLGyj9oFQnz5u6RGexuKuyRixkee+IppZNv
+         VNog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dsfzpsvEfdcI9CvvzszRzTXDzyFxBt5oFZ6I9d30cN4=;
-        b=EQgLsa0V6JWSTTnkVZ1zOIL0hNZxEmTgsNr1elhU/jLMI2nl5KOa12SmdDitOO4LRq
-         1gtTbHzFvZYmfu7kQjQDzqxeR2/5kmychNQVhLqKRcqj5GeuNzvURcV4v04vssrzUKwN
-         DfaNeLcdGb+Z4Yv09YhtiCBbvEi4EdT4XpZibU0rXElEmm88jY5IZ0RrQiwPRF+lIavw
-         XHvKagJt7davw1i8rP8N7xfr943NIGQNPsgLz6XurWO6wTF1oGG8WDVp7+vqvb4+LYsC
-         zAHLWTLEw9UE6NQgoou4eDsa6GPplQMe8jxDB4IjmdxtVUT/7Qqxm3grjCfPCK/9X4Kn
-         N3ig==
-X-Gm-Message-State: ANoB5pncgfz7eAD1pHPgJnZ/G2F3ZsIiHhOzxgG8szuwtlDjEu7KwXCM
-        RfJ9Nz18LHddsFwbEwTZaMHEaugXmCrppWFvRok=
-X-Google-Smtp-Source: AA0mqf5ZpJMMPblx9yNvIFnKauwtR7arezg4/1XgYsmT2uGdGDdg0YCJQntrnvKUNiI480FE4ydc/Sze2y2lXj3j8oo=
-X-Received: by 2002:ac8:1482:0:b0:3a5:1e6f:7e05 with SMTP id
- l2-20020ac81482000000b003a51e6f7e05mr10093865qtj.357.1669228168694; Wed, 23
- Nov 2022 10:29:28 -0800 (PST)
+        bh=DQVPLKYFSJ4QgW7SluwF8mIfyxsYEuGishngmx0s4yI=;
+        b=1qaccWJKkmC3HBW3T9G2HrAMj+QY7rxVVfPxDUN3CAZbl5IvO4WypfbzxiTJp0xqoe
+         kuRKSpVjCwQJDpr3P8GYN/SeAzml4RGhdyaF6RYO/zwyVteyD7gM7KlJoAZzdwl/kkqz
+         cX1Av01m0QR2frGHssLhCft7q9lSDCClLPan3IIedILkC5sT2tjsGuKn7c0as2z/kM6A
+         zVGplOQO5wajPQfoYz6+MPG68CZfQjdK1U+JQF64LF4/F8ojfdz0tnQfGH4Hqgfd5ID6
+         G2nCSjzUYzBSTkMXsNhLFSN/CE7xiUD4++vfMcSQEd+zxUqeek0jjWocVlstLqWEF/qK
+         kEJQ==
+X-Gm-Message-State: ANoB5plpVQqRH6pCGXsZmoCubTRsrrBV/0f2znC47B+zwAJQ6QF0trZ6
+        4q7ZyXDU6f0erq80xgXpPo9yNePiO8o=
+X-Google-Smtp-Source: AA0mqf74SDNHCyHcKlwOhqBiZBZOuExgy93tSZmyZ6fZTOphJPB/an1X+KuS4KQN8jhUXINZbD+3UQ==
+X-Received: by 2002:a17:902:bf06:b0:188:5688:828b with SMTP id bi6-20020a170902bf0600b001885688828bmr13311929plb.129.1669228190841;
+        Wed, 23 Nov 2022 10:29:50 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id j11-20020a170902da8b00b001894881842dsm1837953plx.151.2022.11.23.10.29.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 10:29:50 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 23 Nov 2022 08:29:49 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Kemeng Shi <shikemeng@huawei.com>
+Cc:     josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 11/11] blk-throttle: Use more siutable time_after check
+ for update slice_start
+Message-ID: <Y35mnXMNg8HeHXbb@slm.duckdns.org>
+References: <20221123060401.20392-1-shikemeng@huawei.com>
+ <20221123060401.20392-12-shikemeng@huawei.com>
 MIME-Version: 1.0
-References: <TYCP286MB23236DCB8906D61FAC7A508CCA029@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
- <e78ddf03-b67e-a045-cd72-f0edbc586cb2@gmail.com>
-In-Reply-To: <e78ddf03-b67e-a045-cd72-f0edbc586cb2@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 23 Nov 2022 19:29:17 +0100
-Message-ID: <CAJZ5v0jwY-cH1F3iJzGakzQG7v-ex7_-AC3cm6tUkfTd81_srw@mail.gmail.com>
-Subject: Re: [PATCH v2] ACPI: make remove callback of ACPI driver void
-To:     Maximilian Luz <luzmaximilian@gmail.com>,
-        Dawei Li <set_pte_at@outlook.com>
-Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
-        u.kleine-koenig@pengutronix.de, dvhart@infradead.org,
-        andy@infradead.org, lenb@kernel.org, arnd@arndb.de,
-        peterhuewe@gmx.de, kys@microsoft.com, kronos.it@gmail.com,
-        dmitry.torokhov@gmail.com, bleung@chromium.org,
-        sujith.thomas@intel.com, vithampi@vmware.com, lee@kernel.org,
-        wim@linux-watchdog.org, jgross@suse.com, davem@davemloft.net,
-        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221123060401.20392-12-shikemeng@huawei.com>
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
         SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,34 +75,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 10:00 PM Maximilian Luz <luzmaximilian@gmail.com> wrote:
->
-> On 11/13/22 17:26, Dawei Li wrote:
-> > For bus-based driver, device removal is implemented as:
-> > 1 device_remove()->
-> > 2   bus->remove()->
-> > 3     driver->remove()
-> >
-> > Driver core needs no inform from callee(bus driver) about the
-> > result of remove callback. In that case, commit fc7a6209d571
-> > ("bus: Make remove callback return void") forces bus_type::remove
-> > be void-returned.
-> >
-> > Now we have the situation that both 1 & 2 of calling chain are
-> > void-returned, so it does not make much sense for 3(driver->remove)
-> > to return non-void to its caller.
-> >
-> > So the basic idea behind this change is making remove() callback of
-> > any bus-based driver to be void-returned.
-> >
-> > This change, for itself, is for device drivers based on acpi-bus.
-> >
-> > Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> > Acked-by: Lee Jones <lee@kernel.org>
-> > Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-> > Signed-off-by: Dawei Li <set_pte_at@outlook.com>
->
-> Reviewed-by: Maximilian Luz <luzmaximilian@gmail.com>  # for drivers/platform/surface/*
+On Wed, Nov 23, 2022 at 02:04:01PM +0800, Kemeng Shi wrote:
+> Use more siutable time_after check for update slice_start
 
-Applied as 6.2 material, thanks!
+Why is it more suitable?
+
+-- 
+tejun
