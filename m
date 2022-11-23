@@ -2,189 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B89863509A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 07:41:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F189635097
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 07:41:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236101AbiKWGlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 01:41:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
+        id S234457AbiKWGl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 01:41:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236076AbiKWGkx (ORCPT
+        with ESMTP id S236114AbiKWGlS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 01:40:53 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2073.outbound.protection.outlook.com [40.107.94.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50076ED708
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 22:40:52 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=knj3lrayIwdp4sgTyghcc7bt3EoiCf0vDzSmDmBLIbhzKeUCey5KbKyT3owvhUMSsopPZQwSNalMLSdE1oUfVS+ZXl9/sSkokkpGsLbSDDx7egImvRVb6QeLucPFcL62BB8I09OSuKbl1c0HvlaK95wYX8go8w8oVajoeRcQA457zgub84Xe25/geTEgqkKG3lUOdktua+SWDAWB6Hc12Bnk//kzSFfmtfgCBSLOxhob46nVn07wWqIFprLFxbNtoxkvc/dtfb3VRYQsSc/MvKaZpCD7FR3es5MgV4+jdkCvWY0OxiFQA5QWTQFOuWzCH6klmJluFjrKvmbnE9dUJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gBFH3I4aDcBLgmDZ6+lKh+8MBc4ubqNOQnVCSowp19o=;
- b=mrDr0oKxaL8gCuqTFlJMcmef8zxM73pLhWemutjQaVapUNa/sKnpl4JqQpYMY93VxkAouO1WUOtf9DJDK0VXZUvehxBK3qFjFkwyFFS67Zj2/DriCkyusVc/mmY+eW/xc8BRY+RyRdwpxjHCNbSmypsS7c6ADorJE9RpNlPbwcF+jKKfpMQGqQtxoVO48Q8PJ6vm5YG0E9vo0p2/KEfHzGvB1apNu2pSNx2VemBLaz517QZWFB5AI/F8Y8+9fWUr6j734YC4jkqyesl3VhlGuysapf0XLaUyDSXZ/iFZ8XzLcM+zxPwlRV4CiqjuSqvUInafMGbBxrNlhoUfrv8l7g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gBFH3I4aDcBLgmDZ6+lKh+8MBc4ubqNOQnVCSowp19o=;
- b=MhHtpfOS/ce1tejAIwJ2jgoK9Y5VdD2uFSaBnDPwly0IYXrCrvxTVcLclq/9gMRnjAi5Lr89iXlVxOwYLUQ6I+GmwGZ/GCw/GfjR2y72IOdwneHqv1gLvI/SVMkZifwU7CpnoFbhwaZtCYzQxJRK67dyG05uffbf0n28Mic9nhw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by SA1PR12MB7151.namprd12.prod.outlook.com (2603:10b6:806:2b1::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Wed, 23 Nov
- 2022 06:40:50 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::7d43:3f30:4caf:7421]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::7d43:3f30:4caf:7421%7]) with mapi id 15.20.5834.015; Wed, 23 Nov 2022
- 06:40:48 +0000
-Message-ID: <ba83fc40-e090-ace5-58e4-bb28feb6034e@amd.com>
-Date:   Wed, 23 Nov 2022 07:40:43 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v1] drm/scheduler: Fix lockup in drm_sched_entity_kill()
-Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20221123001303.533968-1-dmitry.osipenko@collabora.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20221123001303.533968-1-dmitry.osipenko@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR3P281CA0127.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:94::13) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Wed, 23 Nov 2022 01:41:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6CDF6099;
+        Tue, 22 Nov 2022 22:41:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0C4FDB81ECB;
+        Wed, 23 Nov 2022 06:41:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF754C433D6;
+        Wed, 23 Nov 2022 06:41:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669185664;
+        bh=BqF+fMKmQdlgBmpTypjbrHnI9gIDVaSpZN4o3tTBEtI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HGluntDqwOHuKBVKwnocM18xZ5/GHfwov2XKMBY6dMhb/gq7Cgm5bsj4kfoA8VZvk
+         u79YMc8/VQLS81gIsUc6qNnCQavEmjIVc3yWZd4C1abPzZ6QGpTmly5evPvnXCJiCj
+         jM1HYdDTMY7aQ2egWzYYlukc8pA0fjHntlYzfVZSfMkP+Vj7BhCsYE9//faaA3FGYp
+         ocMtnANd1XrCDF26gMYSRfNhD6fL1a8dn3bJ+hX7AZDJOzmc4c6ABV1iR22/GJ1hdl
+         T/lPTSAgKy+25GG08yQxLGrVJ8Rc+uLJUONXi/yOF8nEzQeqJgIcaixg2Z70d9LQsz
+         J2ms+4nC+LnHQ==
+Date:   Wed, 23 Nov 2022 08:40:57 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Peter Kosyh <pkosyh@yandex.ru>, Tariq Toukan <tariqt@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+Subject: Re: [PATCH] mlx4: use snprintf() instead of sprintf() for safety
+Message-ID: <Y33AeQzuXFjnr+t/@unreal>
+References: <20221122130453.730657-1-pkosyh@yandex.ru>
+ <Y3zhL0/OItHF1R03@unreal>
+ <20221122121223.265d6d97@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|SA1PR12MB7151:EE_
-X-MS-Office365-Filtering-Correlation-Id: add56683-c1ed-477e-b62d-08dacd1da7b1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: UP9uVPXlNyeXbgpNfWTYAxSqRukJBp+kQlmKqj6o9QJU4MxU+5915mKkuDRk9dwdUCekLr0HjF9vm8udzcDraw48PheUDG2T0sTAguof2fQaOaoQtxMiqwktMleoTO3sPETiVPqHQniM8SNG7C/1KeMq2jxqXloIf4VGFdxXnd5drK6lp0WDLsU9cxqrwITR2CZaeqyg0xLTdhelxJNPb61z2URgMgHKlxKI8eaiuxb0yfMkcOmn4vU0kGepect9hCuyUtAN6mYthqqIEOhtv9OQxobiDct2AUTBdsx28ylvKbhALQgLiZPAzUxuyUt9nDT59wMHXstI4uwII2XLvgOauFiTyeB6BN5eXBgxw7QfuV4zgN1dOnuJXVrsc8NqS80Z8wioXqtpxOX+JibrV2E8OzMQdbIg6p8kCQ3/2H/vUKBlQ+mqAXqnrXfKFWpqb94CoDSK9hIGIihMKNONIbIXmTUnKxPfsKzgroTJPeWVgIHi0oWYh/RJMsMzO9EKpyFfuTblyKwHybrkltG1ytHCzKPNaYbG6RjAUgOjxhmyDLL7F8c6+1jvBTDSJFBo6mX4SN9iBq3BU/nv0Bsk/Ng4+p9ARGY04reouKH+RQW/HSlJmDlQwhNzYtZMMFI35uBLGPxwYeOXqdz1IwVhh6Hm0Wt2O0sC0FodtQu9x7xdN1s/Dmw7zS6J02lBuekqQxDTUTc75g2AUDouqCE30HuVZNtmPIFF6DtDIQEwHiY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(136003)(346002)(376002)(39860400002)(451199015)(31696002)(110136005)(41300700001)(86362001)(66556008)(66476007)(8676002)(4326008)(66946007)(8936002)(316002)(5660300002)(66574015)(83380400001)(2906002)(6666004)(6486002)(38100700002)(6506007)(186003)(2616005)(478600001)(36756003)(6512007)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?U1VvMzRGdXlGVnlvWVFUVzQrL1RET0VBczJQbHYwekNwTjhISndES3dKNERi?=
- =?utf-8?B?SjNvaUphK2NQZURvTDlZVHZscFhCODFGUk5Vb0NtRCt6SEY1alRzMUxENmhF?=
- =?utf-8?B?eTIwb1BtVWx2UCt1VldvY0VSaXc5OWlKR3JUbEcvanBNRi95cGsvcHVjS1NI?=
- =?utf-8?B?MXRCdWJJdEhoLzNjOGFFaE9UbS91aWpVM1NOS244TFMzVC9yaG1TNnZZSzZE?=
- =?utf-8?B?NmZhdFZGMys1bXhPT3YrL1g4ZnRGQlMvR213dVB6blJaa3Vrc0dJVTNvK0t4?=
- =?utf-8?B?cnRDWGpybjVBbUE4OFlVc1RNTm5Sb0JXVzh5QXFnWU9uQjNjWlVsQUZ0MkF1?=
- =?utf-8?B?dUc1K1pwUWlvVkV6Uit3MXIrY05hOE5MbnJsbUtLemFaaFk0c3N2VGRjL3dm?=
- =?utf-8?B?WE1leFBYUVJneVQrQnRQN0kzZ3drSWlrVFArS2NLb3dHYkhaZFpZUjVpbEI0?=
- =?utf-8?B?NXY5KzdTS2xFRlJKVGFyUWp3Mk1Ddi9PTUUxVDRycWRiYXI2ZDgvRHhoL0xF?=
- =?utf-8?B?UGtLWHd1ZEgzWmVNc2dMYnZFZFB0RU1vaEg5VjhBbTFUVzgxYlg2aUdFYnE5?=
- =?utf-8?B?b0lYaWh4akVjOTd0UHN6V2NOb1ZCUVdVVzdsdWsxdm5nSSszWm8rbnd0ak0z?=
- =?utf-8?B?UE1DblVLVWhQUmc4RkFSdzlNRlRjcTkvYWhGenUra2ZMTUpvcEdLREJ3YzF1?=
- =?utf-8?B?VkhUdW0wdW9ZTkZxcFpIY3ZQOERjSFRRVlNYQnc2ejFOaFgxdFpETE5oTDU4?=
- =?utf-8?B?VFdJWG5IbmlNdkprd01oMWU0YTZWb0pVUnB1bEtBNjE2MUVNNk8xMFlYb0Zr?=
- =?utf-8?B?Z2luTkE0d3lwWUNBRmxMeHJYSWcwY2xhdGdpUTJOK0JQYnh1SDd0VUZkdnVu?=
- =?utf-8?B?MUp4aC9sdnlPSS9KV0I5VjJneUZkSm54RFRHMWlBeTI4MDJpMUNZVXJsUklu?=
- =?utf-8?B?SFI4VlNUeSs5d3dlTU9td1BlM21yUTBCMERqWDdaNVBWS3FWY3ZPL2NQa0RT?=
- =?utf-8?B?Z0xtUU5qVHdKaGhhcHgrbzZ3UTRYYVJNc3ZOYmx1bHo3OXdnbW1jOVNXaldr?=
- =?utf-8?B?c2lKOGxKSWh6S0hGcCs3dkE4UVU0U2tJZTYxWFNZZ1JYY1BVNGM1MnhIVk1t?=
- =?utf-8?B?Q0o0UjZxcCsrN25kcUtSMUFnRWpadGtWQXh3Z2ZIVCtEUWc1cTJvK3g2OW1Z?=
- =?utf-8?B?czFOTXE3dGgzR0w4TmpyeWF5ako5b2ZIcmNBeWhBSGFiNEthSEVqOTlWeDlC?=
- =?utf-8?B?V3RYdjhwcGhPMTZLYTdmTUp1aS9GTlJQdmFxcFBNRGpVRUVzZGtHZlZkM1Fk?=
- =?utf-8?B?cCsvVFUvQ3UwRWR1VGp4MXprKzJ4YklUQkNTVXRnTTAzWTFDcEdxMmQ1cXRy?=
- =?utf-8?B?djdkd0RCNEFrV0dHUVMvKzJKY213OGtnYkVrV1RndVN1cFRRem1UczJNNGpC?=
- =?utf-8?B?cW1RNWd0Z2M2N21OdlNtbEtaOEgrUWFLZWZPRFZrQk8ybTFHd2k5c2IyVncx?=
- =?utf-8?B?c3JwZm9neEtxWWRCeHhtcE5yZ2loMDU2OWtFQ1Rvam8vMFN5cjJ0U1Z1aE5R?=
- =?utf-8?B?a2ZjY1NUQkgyZmtkWEkyYnhGVjJjS2tJNXFmTDdzcXV6RHU0RU9HR2dDRE5y?=
- =?utf-8?B?RjBUMFlHd2ZaYVVJZ29nM0J2MXg3NDJiNVV2cnM5am1JeWI3NmhFUVNjWW9E?=
- =?utf-8?B?V1Y4Z0VYKzg5N3NMbmJGYjhRVitEVUs3eDJxTUNYUzJ6dHRJYndFWENtMVl6?=
- =?utf-8?B?Q2ZpVWJxYmU5UVI1ZVJLajJWZ0hWd1ZZVkZzbXNKemhWNUZDRmxjbnQwUXZ5?=
- =?utf-8?B?clNjMFMwTFU2Z2tFT29SMFBLRVhhMjBJSkhMdDMwSkZmWHpwVFhWdURwcnBl?=
- =?utf-8?B?aFJPd1czRGphQkdRaCtmNHBHN3ZrV1QwZHhzcUZMd3JGaWdSeXdRcVZZZE9D?=
- =?utf-8?B?RUJHQkVHQ2pRRzF0NUtDLythRHNnNDJwOXF4aW9aK0JmNEFENGs2Q1RrT0R4?=
- =?utf-8?B?R2hWR3JienBwNmRTWVhkTVdRWmtYanE1ekFDSzRRUWdmcWNjVTdpZ2dOVGlF?=
- =?utf-8?B?RlFvNnZPcnlpVkZyUW5xc2JuOU9WOTFKUXN4Mi9Ock9UWlV4NGhLdEtESzRw?=
- =?utf-8?B?SzR4aTdzb2ZBNDZ1cFRhY0d2bWQ5M2x0UWc2Q0V0b3FQWC9Od2dXU3llOElR?=
- =?utf-8?Q?EN6JoIlm9keuXJxxQ3Wvil5SY4ZpQFOd7Xlac0uKPBA2?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: add56683-c1ed-477e-b62d-08dacd1da7b1
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2022 06:40:47.9096
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +ywaqDioMz1Zd7MYfoijvyb0jNueAszsDn1iIo7z6w/dFZ4DkoBVQvlA6hn2S87U
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7151
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221122121223.265d6d97@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 23.11.22 um 01:13 schrieb Dmitry Osipenko:
-> The drm_sched_entity_kill() is invoked twice by drm_sched_entity_destroy()
-> while userspace process is exiting or being killed. First time it's invoked
-> when sched entity is flushed and second time when entity is released. This
-> causes a lockup within wait_for_completion(entity_idle) due to how completion
-> API works.
->
-> Calling wait_for_completion() more times than complete() was invoked is a
-> error condition that causes lockup because completion internally uses
-> counter for complete/wait calls. The complete_all() must be used instead
-> in such cases.
->
-> This patch fixes lockup of Panfrost driver that is reproducible by killing
-> any application in a middle of 3d drawing operation.
->
-> Fixes: 2fdb8a8f07c2 ("drm/scheduler: rework entity flush, kill and fini")
-> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+On Tue, Nov 22, 2022 at 12:12:23PM -0800, Jakub Kicinski wrote:
+> On Tue, 22 Nov 2022 16:48:15 +0200 Leon Romanovsky wrote:
+> > On Tue, Nov 22, 2022 at 04:04:53PM +0300, Peter Kosyh wrote:
+> > > Use snprintf() to avoid the potential buffer overflow. Although in the
+> > > current code this is hardly possible, the safety is unclean.  
+> > 
+> > Let's fix the tools instead. The kernel code is correct.
+> 
+> I'm guessing the code is correct because port can't be a high value?
 
-Oh, good point. Reviewed-by: Christian König <christian.koenig@amd.com>
+Yes, port value is provided as input to mlx4_init_port_info() and it is
+capped by MLX4_MAX_PORTS, which is 2.
 
-> ---
->   drivers/gpu/drm/scheduler/sched_entity.c | 2 +-
->   drivers/gpu/drm/scheduler/sched_main.c   | 4 ++--
->   2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/gpu/drm/scheduler/sched_entity.c b/drivers/gpu/drm/scheduler/sched_entity.c
-> index fe09e5be79bd..15d04a0ec623 100644
-> --- a/drivers/gpu/drm/scheduler/sched_entity.c
-> +++ b/drivers/gpu/drm/scheduler/sched_entity.c
-> @@ -81,7 +81,7 @@ int drm_sched_entity_init(struct drm_sched_entity *entity,
->   	init_completion(&entity->entity_idle);
->   
->   	/* We start in an idle state. */
-> -	complete(&entity->entity_idle);
-> +	complete_all(&entity->entity_idle);
->   
->   	spin_lock_init(&entity->rq_lock);
->   	spsc_queue_init(&entity->job_queue);
-> diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
-> index 6ce04c2e90c0..857ec20be9e8 100644
-> --- a/drivers/gpu/drm/scheduler/sched_main.c
-> +++ b/drivers/gpu/drm/scheduler/sched_main.c
-> @@ -1026,7 +1026,7 @@ static int drm_sched_main(void *param)
->   		sched_job = drm_sched_entity_pop_job(entity);
->   
->   		if (!sched_job) {
-> -			complete(&entity->entity_idle);
-> +			complete_all(&entity->entity_idle);
->   			continue;
->   		}
->   
-> @@ -1037,7 +1037,7 @@ static int drm_sched_main(void *param)
->   
->   		trace_drm_run_job(sched_job, entity);
->   		fence = sched->ops->run_job(sched_job);
-> -		complete(&entity->entity_idle);
-> +		complete_all(&entity->entity_idle);
->   		drm_sched_fence_scheduled(s_fence);
->   
->   		if (!IS_ERR_OR_NULL(fence)) {
+> Otherwise, if I'm counting right, large enough port representation
+> (e.g. 99999999) could overflow the string. If that's the case - how
+> would they "fix the tool" to know the port is always a single digit?
 
+I may admit that I don't know how hard or easy to implement it, but it
+will be great if tool would be able to understand that dev->caps.num_ports
+are not really dynamic values, but constant ones.
+
+However, I don't mind if we merge it.
+
+Thanks,
+Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
