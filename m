@@ -2,154 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D9563611B
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:07:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8C3F63611F
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:08:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237952AbiKWOHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 09:07:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58790 "EHLO
+        id S238419AbiKWOIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 09:08:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238401AbiKWOGy (ORCPT
+        with ESMTP id S238377AbiKWOIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 09:06:54 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C36D85A18;
-        Wed, 23 Nov 2022 06:03:18 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B551E1FB;
-        Wed, 23 Nov 2022 06:03:24 -0800 (PST)
-Received: from [10.57.36.169] (unknown [10.57.36.169])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D81E23F73B;
-        Wed, 23 Nov 2022 06:03:15 -0800 (PST)
-Message-ID: <9f5f66fa-0388-6a76-25c9-cacef0e7a4e2@arm.com>
-Date:   Wed, 23 Nov 2022 14:03:14 +0000
+        Wed, 23 Nov 2022 09:08:04 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C53C71D0EA;
+        Wed, 23 Nov 2022 06:04:54 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1oxqMm-0008Pl-K2; Wed, 23 Nov 2022 15:04:44 +0100
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manoj Sai <abbaraju.manojsai@amarulasolutions.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Markus Reichl <m.reichl@fivetechno.de>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-amarula@amarulasolutions.com, Da Xue <da.xue@libretech.co>,
+        dsx724 <da@lessconfused.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Suniel Mahesh <sunil@amarulasolutions.com>,
+        Manoj Sai <abbaraju.manojsai@amarulasolutions.com>
+Subject: Re: [PATCH 1/1] arm64: dts: rockchip: increase spi-max-frequency of nor flash for roc-rk3399-pc
+Date:   Wed, 23 Nov 2022 15:04:43 +0100
+Message-ID: <4981984.iIbC2pHGDl@phil>
+In-Reply-To: <20221123094827.250657-2-abbaraju.manojsai@amarulasolutions.com>
+References: <20221123094827.250657-1-abbaraju.manojsai@amarulasolutions.com> <20221123094827.250657-2-abbaraju.manojsai@amarulasolutions.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.0
-Subject: Re: [PATCH v14 1/2] drivers/coresight: Add UltraSoc System Memory
- Buffer driver
-To:     Junhao He <hejunhao3@huawei.com>, mathieu.poirier@linaro.org,
-        mike.leach@linaro.org, leo.yan@linaro.org,
-        jonathan.cameron@huawei.com, john.garry@huawei.com
-Cc:     coresight@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        lpieralisi@kernel.org, linuxarm@huawei.com, yangyicong@huawei.com,
-        liuqi6124@gmail.com, f.fangjian@huawei.com,
-        prime.zeng@hisilicon.com
-References: <20221123123823.27973-1-hejunhao3@huawei.com>
- <20221123123823.27973-2-hejunhao3@huawei.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20221123123823.27973-2-hejunhao3@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/11/2022 12:38, Junhao He wrote:
-> From: Qi Liu <liuqi115@huawei.com>
+Hi Manoj,
+
+Am Mittwoch, 23. November 2022, 10:48:27 CET schrieb Manoj Sai:
+> Increase the spi-max-frequency of nor flash from 10Mhz to 30Mhz,this improves the
+> flash raw write speed by 0.9 MB/s to 1.6MB/s and the time taken to write is
+> get reduced from 36 seconds to 20 seconds.
 > 
-> Add driver for UltraSoc SMB(System Memory Buffer) device.
-> SMB provides a way to buffer messages from ETM, and store
-> these "CPU instructions trace" in system memory.
-> The SMB device is identifier as ACPI HID "HISI03A1". Device
-> system memory address resources are allocated using the _CRS
-> method and buffer modes is the circular buffer mode.
-> 
-> SMB is developed by UltraSoc technology, which is acquired by
-> Siemens, and we still use "UltraSoc" to name driver.
-> 
-> Signed-off-by: Qi Liu <liuqi115@huawei.com>
-> Signed-off-by: Junhao He <hejunhao3@huawei.com>
-> Tested-by: JunHao He <hejunhao3@huawei.com>
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Manoj Sai <abbaraju.manojsai@amarulasolutions.com>
+> Signed-off-by: Da Xue <da.xue@libretech.co>
+> Signed-off-by: dsx724 <da@lessconfused.com>
+
+who are these other people? :-)
+
+I.e. it looks like you're the author of the patch,
+and so it should only have your Signed-off-by line.
+
+If Da Xue and dsx724 have tested / reviewed the change, they
+should respond individually to the posted patch with
+either a "Reviewed-by: ..." or "Tested-by: ..." line.
+
+
+Thanks
+Heiko
+
 > ---
->   drivers/hwtracing/coresight/Kconfig        |  12 +
->   drivers/hwtracing/coresight/Makefile       |   1 +
->   drivers/hwtracing/coresight/ultrasoc-smb.c | 658 +++++++++++++++++++++
->   drivers/hwtracing/coresight/ultrasoc-smb.h | 129 ++++
->   4 files changed, 800 insertions(+)
->   create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.c
->   create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.h
+>  arch/arm64/boot/dts/rockchip/rk3399-roc-pc.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3399-roc-pc.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-roc-pc.dtsi
+> index 2f4b1b2e3ac7..8fd808a0df85 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3399-roc-pc.dtsi
+> +++ b/arch/arm64/boot/dts/rockchip/rk3399-roc-pc.dtsi
+> @@ -735,7 +735,7 @@ &spi1 {
+>  	flash@0 {
+>  		compatible = "jedec,spi-nor";
+>  		reg = <0>;
+> -		spi-max-frequency = <10000000>;
+> +		spi-max-frequency = <30000000>;
+>  	};
+>  };
+>  
 > 
 
-> +static void smb_sync_perf_buffer(struct smb_drv_data *drvdata,
-> +				 struct cs_buffers *buf,
-> +				 unsigned long head,
-> +				 unsigned long data_size)
-> +{
-> +	struct smb_data_buffer *sdb = &drvdata->sdb;
-> +	char **dst_pages = (char **)buf->data_pages;
-> +	unsigned long to_copy;
-> +	long pg_idx, pg_offset;
-> +
-> +	pg_idx = head >> PAGE_SHIFT;
-> +	pg_offset = head & (PAGE_SIZE - 1);
-> +
-> +	while (data_size) {
-> +		unsigned long pg_space = PAGE_SIZE - pg_offset;
-> +
-> +		/* Copy parts of trace data when read pointer wrap around */
-> +		if (sdb->rd_offset + pg_space > sdb->buf_size)
-> +			to_copy = sdb->buf_size - sdb->rd_offset;
-> +		else
-> +			to_copy = min(data_size, pg_space);
-> +
-> +		memcpy(dst_pages[pg_idx] + pg_offset,
-> +			      sdb->buf_base + sdb->rd_offset, to_copy);
-> +
-> +		pg_offset += to_copy;
-> +		if (pg_offset >= PAGE_SIZE) {
-> +			pg_offset = 0;
-> +			pg_idx++;
-> +			pg_idx %= buf->nr_pages;
-> +		}
-> +		data_size -= to_copy;
-> +		sdb->rd_offset += to_copy;
-> +		sdb->rd_offset %= sdb->buf_size;
-> +	}
-> +
-> +	sdb->data_size = 0;
 
 
---8>-- cut here --<8--
 
-> +	writel(sdb->start_addr + sdb->rd_offset,
-> +		drvdata->base + SMB_LB_RD_ADDR_REG);
-> +
-> +	/*
-> +	 * Data remained in link cannot be purged when SMB is full, so
-> +	 * synchronize the read pointer to write pointer, to make sure
-> +	 * these remained data won't influence next trace.
-> +	 */
-> +	if (sdb->full) {
-> +		smb_purge_data(drvdata);
-> +		writel(readl(drvdata->base + SMB_LB_WR_ADDR_REG),
-> +		       drvdata->base + SMB_LB_RD_ADDR_REG);
-> +	}
-
---<8-- end here --8>--
-
-As pointed out in the last review, we must do this step
-everytime for perf mode irrespective of whether the buffer
-was "FULL" or not.
-
-i.e, the above block should simply be:
-
-	if (sdb->full)
-		smb_purge_data(drvdata);
-
-	/*
-	 * The uncollected Data must be discarded for perf,
-	 * as it cannot be clubbed with next schedule. We
-	 * any way TRUNCATE the buffer in this case.
-	 */
-	writel(readl(drvdata->base + SMB_LB_WR_ADDR_REG),
-		drvdata->base + SMB_LB_RD_ADDR_REG);
-
-Suzuki
