@@ -2,79 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40B7E6362F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:11:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 348F66362F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:11:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238361AbiKWPLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 10:11:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46868 "EHLO
+        id S238386AbiKWPLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 10:11:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238395AbiKWPLF (ORCPT
+        with ESMTP id S238415AbiKWPLG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 10:11:05 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCBAB58BDF;
-        Wed, 23 Nov 2022 07:11:04 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id t1so13266053wmi.4;
-        Wed, 23 Nov 2022 07:11:04 -0800 (PST)
+        Wed, 23 Nov 2022 10:11:06 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F91349B51;
+        Wed, 23 Nov 2022 07:11:05 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id bs21so29852040wrb.4;
+        Wed, 23 Nov 2022 07:11:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TYA+sk34MTdokaTmO6Z2RqNJkrS7NKI/SfAHszvjo7s=;
-        b=AyjUdBUPSwzq13H1UQf4yKXKkqb1P7vt21u9WG70IroGGxLOVENzduplbXXl99Ouag
-         032FFl96sV1zeiCn2unh6UIVmE1Fu2oX5C8F62/h0par3rHBTmzfXdiJ/aLTHdReIa2+
-         u6hUjnA4FU/prOhjLEilWfkRyvAY16QkUQiknyyLYd49nee21nQwzyps0WMnUlsdK1kR
-         3TbI+1Gccba+/tfKlJ39xX8c24nYJjzCxWAaUuV8ctVc68vQzbHaxqQrT+nw1qHqanxz
-         vrEZSQrAmgxr6raSzrsnScnyCFR24c0Z6Cbi82BjJmaywGPikNKoXpSycIl7RCrCX8Rn
-         f2PQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+DYRTkLQkt5QsUQFkBhyOTw4ineCXo6DjjJscrJFSgc=;
+        b=a6cyw71kovfdAiAgG/Pmn3Is0bFtobdtqmKQZVwHwZei0zj4buzNah86/6bkSx8hZN
+         CcaVd5gUchTpWqD2YKnTiQoRcyvmf48JeMS46LSu7Q9BrUL4fczKCaj3MHplZnuYQfEa
+         z2J3Z3PZGMWNB9Sgol4pLp6h+7qPsTOhfvCZ9GSE1l9u1+7ZGSRbax6FkyThJTth5Q7o
+         b9vbjKpu+RepLZhj09l38CIfBMzC69vK7zfGD73f6RfnUPNiyiz7PJiu73xSVq7UUGS4
+         x8W9YjKne9o/WZqFiKiwWGkvJ1pbw2uSbyKO2wQApRTUA60nrnolf1LTh/CBx4x0XOXv
+         9bZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TYA+sk34MTdokaTmO6Z2RqNJkrS7NKI/SfAHszvjo7s=;
-        b=2sApt12sdUMxPGgHL+gg7HK1nT4LsxDVb4C0p6emXx9Qk3Q4qmaqV4GamGzXC+AUno
-         95MTEbTHa/YUnGeqYAux81KVC1317me/o/A5r8gqgRCjj5O0haf5qagUTGwksCINcbFV
-         v13VpJe3NpNHnqWU6HuSt7mgUL4nYDWy+Kj+oJlVpEA/cGzghQ/QFv2YxkzOREvcsVdg
-         Et3z58jw5YMWE7F5D1Ud+UFhCwRS0ZUHqjCqEIGALmQcPozx7b7HOYQRE9rVocYojYN6
-         NmXFWj0EXNklsADwU7inXqishphyvy06vjj6pRt3FszGj65oswa+824z3Jebw7mVdR8/
-         X+8w==
-X-Gm-Message-State: ANoB5pnzYGo0aeWwWp3tCesyQxYXjaW9DNXCPsM5IVQDQgz8PKVcCxne
-        oFNMlItITqtW9ELkE/0w0cVNHC+8VZN0oGhi
-X-Google-Smtp-Source: AA0mqf6vaZNTC+bOXSwaYf8dg/zdLGksVSE3FgIWIvtJ5sJRE1WWoQ9xinMoOejLW+T4Zki3NZXW8g==
-X-Received: by 2002:a05:600c:3553:b0:3cf:8e62:f748 with SMTP id i19-20020a05600c355300b003cf8e62f748mr23315643wmq.175.1669216263117;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+DYRTkLQkt5QsUQFkBhyOTw4ineCXo6DjjJscrJFSgc=;
+        b=ZXzXtQPuzqTZbb2JmFw4FGtZTu1C1uJpz/iVk+eZ+LuI+yM8+tNk47pEuUqB/BV6A3
+         xX+HAsNENbclk9yHHdtSFn0NsvACWzFl2fbQOhB/39vhjW9oaDa4d4GLsP3Mwq426E5m
+         ii7rF+f9zL5DfIhuIXjybUlhJ65/zBLV3ebRsMdv9jJHta2tLKXE435U+zZ4N61Ntfox
+         Rnh0lVBDO0FHBJ1gvorNBy7lMil0tOi8lxUXbzVQ2Z+6d1XN5hJntATjvIJ2kYtYGz9M
+         nuaIZB4Rl4a1ZFLLdNOcMG28d0eGEXVXw8/j8wv+X066GWJGpIutcBQupgH9BRyLS29C
+         u7gw==
+X-Gm-Message-State: ANoB5pkZ46pyYoAOkR1D7p9XpDukCutnwtdYHSueFwFL27EI2MHwPmdL
+        nz4xPfSCAWeJk0cMt0umb5lrWDmpIHI=
+X-Google-Smtp-Source: AA0mqf6QDXovSwze3tv0ycv0Haj3/XbQr1CmC7ICTzDgFzPaqSinUcDrrNIj+ryOtRqBrdJZ7F3JgQ==
+X-Received: by 2002:adf:dfd0:0:b0:22e:32d9:e1b1 with SMTP id q16-20020adfdfd0000000b0022e32d9e1b1mr16994282wrn.631.1669216263997;
         Wed, 23 Nov 2022 07:11:03 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id u6-20020a05600c210600b003cfe1376f68sm2603785wml.9.2022.11.23.07.11.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+Received: from [192.168.1.131] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id e18-20020adfdbd2000000b0022da3977ec5sm16850807wrj.113.2022.11.23.07.11.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Wed, 23 Nov 2022 07:11:02 -0800 (PST)
-Date:   Wed, 23 Nov 2022 18:10:57 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH resend] media: staging: stkwebcam: Restore
- MEDIA_{USB,CAMERA}_SUPPORT dependencies
-Message-ID: <Y344AdRANmS3STsd@kadam>
-References: <a50fa46075fb760d8409ff6ea2232b2ddb7a102b.1669046259.git.geert+renesas@glider.be>
- <20221123100831.GE39395@tom-ThinkPad-T14s-Gen-2i>
- <CAMuHMdUW8iKFjDj4fPtWfPvyQ1sjGcAy1Kz5j-osz9F4pdA47Q@mail.gmail.com>
+Message-ID: <802ae971-0790-9ad3-821a-7faa36bd9035@gmail.com>
+Date:   Wed, 23 Nov 2022 16:11:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdUW8iKFjDj4fPtWfPvyQ1sjGcAy1Kz5j-osz9F4pdA47Q@mail.gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 1/5] dt-bindings: usb: mtu3: add compatible for mt8186
+Content-Language: en-US
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, hsinyi@chromium.org
+References: <20221123135531.23221-1-allen-kh.cheng@mediatek.com>
+ <20221123135531.23221-2-allen-kh.cheng@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20221123135531.23221-2-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,41 +81,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 11:13:31AM +0100, Geert Uytterhoeven wrote:
-> Hi Tommaso,
-> 
-> On Wed, Nov 23, 2022 at 11:08 AM Tommaso Merciai
-> <tommaso.merciai@amarulasolutions.com> wrote:
-> > On Mon, Nov 21, 2022 at 04:58:33PM +0100, Geert Uytterhoeven wrote:
-> > > By moving support for the USB Syntek DC1125 Camera to staging, the
-> > > dependencies on MEDIA_USB_SUPPORT and MEDIA_CAMERA_SUPPORT were lost.
-> > >
-> > > Fixes: 56280c64ecacc971 ("media: stkwebcam: deprecate driver, move to staging")
-> >
-> > Patch itself looks good but we have some style issue. Applying this
-> > patch I got the following warning from checkpatchl:
-> >
-> > WARNING: Please use correct Fixes: style 'Fixes: <12 chars of sha1> ("<title line>")' - ie: 'Fixes: 56280c64ecac ("media: stkwebcam: deprecate driver, move to staging")'
-> > #10:
-> >
-> > You have to pass only the first 12 chars of the sha1 commit into Fixes
-> > msg:
-> >
-> > Use:
-> >
-> >  Fixes: 56280c64ecac ("media: stkwebcam: deprecate driver, move to staging")
-> >
-> > Instead of:
-> >
-> >  Fixes: 56280c64ecacc971 ("media: stkwebcam: deprecate driver, move to staging")
-> 
-> I always use 16 chars, to avoid these becoming ambiguous in a few years.
-> 
 
-If we assume hashes are randomly distributed and that people commit
-100k patches every year then with 12 character we would have 17
-collisions every 1000 years.
 
-regards,
-dan carpenter
+On 23/11/2022 14:55, Allen-KH Cheng wrote:
+> Add a new compatible for mt8186 SoC.
+> 
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
 
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+
+> ---
+>   Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+> index 80750b0f458a..7168110e2f9d 100644
+> --- a/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+> @@ -24,6 +24,7 @@ properties:
+>             - mediatek,mt2712-mtu3
+>             - mediatek,mt8173-mtu3
+>             - mediatek,mt8183-mtu3
+> +          - mediatek,mt8186-mtu3
+>             - mediatek,mt8188-mtu3
+>             - mediatek,mt8192-mtu3
+>             - mediatek,mt8195-mtu3
