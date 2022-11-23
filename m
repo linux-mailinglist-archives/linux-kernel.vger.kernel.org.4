@@ -2,90 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90479634B7A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 01:08:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2D13634B7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 01:09:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234993AbiKWAIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 19:08:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38296 "EHLO
+        id S235176AbiKWAJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 19:09:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232341AbiKWAIc (ORCPT
+        with ESMTP id S235105AbiKWAI4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 19:08:32 -0500
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB869D2F65;
-        Tue, 22 Nov 2022 16:08:30 -0800 (PST)
-Received: by mail-io1-f48.google.com with SMTP id z3so12157062iof.3;
-        Tue, 22 Nov 2022 16:08:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c5ZPbYkKnK2IkXf6T8FgMRx12jqOc1F0dei+USA8qpg=;
-        b=RWoJBoWJzSOjSw0arqQcRF3UNU5Qq2oD/uegmSJDwt524HCaUaAQOd9NXWannpyQaM
-         N6y2z4AgFpQr8BBZL0WdZOSNkYiQ8GcouHNN9+8weK3PLiXFbwNOHKRhxb9gUytqbHtZ
-         AT0VR2ZpHUv3DTMPVBP3uiu4sxhJrERnt1V/Q0CKDyNeibV1cgVO0aM0BK1rtUIju2WW
-         GJ9akvm0cIx0Q2GcZ4C+6Jhdtx0+K19c2NTimy1sFObIZkt+yXPzszAslmv1ZCzHpByg
-         7Zatp5JvCQdHKV3C+Qpvx3uKAiE2OMcHNHfIhiZERdVTnTni9zF12oipPs+Je/g1bn5y
-         Ov4w==
-X-Gm-Message-State: ANoB5pnuThT1QTCPDD/Hs+AqR3f9bLkZe+PnHbx/PTAUexbWXoddpKgu
-        rZD3HQyKTJmlhVSbsEhmIg==
-X-Google-Smtp-Source: AA0mqf6Wr7xqm6RogMUZda84qHyMvqZUsWZi6Gq6zcsxkRFMGZ1oVHNeafF1Qzbl4qKI3CfQBYwImg==
-X-Received: by 2002:a05:6638:3458:b0:376:24f6:2dc3 with SMTP id q24-20020a056638345800b0037624f62dc3mr11956348jav.26.1669162110050;
-        Tue, 22 Nov 2022 16:08:30 -0800 (PST)
-Received: from robh_at_kernel.org ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id z7-20020a05663822a700b003752e5b3c23sm5756588jas.20.2022.11.22.16.08.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 16:08:29 -0800 (PST)
-Received: (nullmailer pid 828924 invoked by uid 1000);
-        Wed, 23 Nov 2022 00:08:31 -0000
-Date:   Tue, 22 Nov 2022 18:08:31 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jerome Neanne <jerome.neanne@baylibre.com>,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
-        Andrew Davis <afd@ti.com>, Mark Brown <broonie@kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Subject: Re: [PATCH] dt-bindings: Move fixed string node names under
- 'properties'
-Message-ID: <166916210667.828774.15527231190149112577.robh@kernel.org>
-References: <20221118223708.1721134-1-robh@kernel.org>
+        Tue, 22 Nov 2022 19:08:56 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F17AD3296;
+        Tue, 22 Nov 2022 16:08:55 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669162133;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NpMA+zNMaAXKIzVLL87sVBSomMTYSA48949Ug9zbik0=;
+        b=PedtZGT9Dk+OywLP6kXQoRWO3w2k7HoKQulLCsfhsw9eJ+XJcLChqVpeJZBHmxV6I8UKEZ
+        u3EVtCZkGoXNmF5YiXwp7MlGOaQ5ZTsEonFPLVyBooEmSSGLUPPO3QfRlQOULhc5sZblOL
+        eCt1bAgOrX5Bp9TGRMVGBB0TG9luK0L4hfVpGi54FxsF4rA75PQQdt2GmFBl9lOzd2TJIa
+        yGpaZxKiGL51AyoaPd05okMlmPk0rouMfhkmaLQJ1BdAHGyBvSKlp4l1EDAwkpZ2VZy6++
+        tN/8O2Q4UKyoo89k+c/kOY53qBeF5bpcGJMSOrt3nhGWE1fCzhbYhfy5l1aQ0g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669162133;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NpMA+zNMaAXKIzVLL87sVBSomMTYSA48949Ug9zbik0=;
+        b=HCBUurIsJ4SfqL+JiymV2ToAmK8U2oV837dGO/655yZJUzSJosq/YgYNs17OvR5B44NGeV
+        2Ax9DuPyI+3LuODg==
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        David Laight <David.Laight@ACULAB.COM>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [patch V2 09/17] timers: Rename del_timer_sync() to
+ timer_delete_sync()
+In-Reply-To: <20221122174506.08ce49bd@gandalf.local.home>
+References: <20221122171312.191765396@linutronix.de>
+ <20221122173648.619071341@linutronix.de>
+ <2c42cb1fe1fa4b11ba3c0263d7886b68@AcuMS.aculab.com>
+ <20221122174506.08ce49bd@gandalf.local.home>
+Date:   Wed, 23 Nov 2022 01:08:53 +0100
+Message-ID: <87fseafs6i.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221118223708.1721134-1-robh@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Nov 22 2022 at 17:45, Steven Rostedt wrote:
+> On Tue, 22 Nov 2022 22:23:11 +0000
+> David Laight <David.Laight@ACULAB.COM> wrote:
+>
+>> > Rename del_timer_sync() to timer_delete_sync() and provide del_timer_sync()
+>> > as a wrapper. Document that del_timer_sync() is not for new code.  
+>> 
+>> To change the colo[u]r of the bikeshed, would it be better to
+>> name the functions timer_start() and timer_stop[_sync]().
+>
+> I kinda like this color. ;-)
 
-On Fri, 18 Nov 2022 16:37:07 -0600, Rob Herring wrote:
-> Fixed string node names should be under 'properties' rather than
-> 'patternProperties'. Additionally, without beginning and end of line
-> anchors, any prefix or suffix is allowed on the specified node name.
-> These cases don't appear to want a prefix or suffix, so move them under
-> 'properties'.
-> 
-> In some cases, the diff turns out to look like we're moving some
-> patterns rather than the fixed string properties.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../arm/tegra/nvidia,tegra20-pmc.yaml         | 54 ++++++++--------
->  .../bindings/regulator/ti,tps65219.yaml       | 14 ++--
->  .../bindings/sound/tlv320adcx140.yaml         | 64 +++++++++----------
->  3 files changed, 66 insertions(+), 66 deletions(-)
-> 
+Feel free to repaint the series with this new color. My spare cycles are
+exhausted by now.
 
-Applied, thanks!
+Thanks,
+
+        tglx
+
