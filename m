@@ -2,103 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 959AF636C51
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 22:22:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33864636C55
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 22:23:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237847AbiKWVWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 16:22:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39740 "EHLO
+        id S238160AbiKWVXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 16:23:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237811AbiKWVWI (ORCPT
+        with ESMTP id S235701AbiKWVXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 16:22:08 -0500
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA5F60695
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 13:22:06 -0800 (PST)
-Received: by mail-qk1-x733.google.com with SMTP id p18so13372140qkg.2
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 13:22:06 -0800 (PST)
+        Wed, 23 Nov 2022 16:23:08 -0500
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C6D2CCA5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 13:23:07 -0800 (PST)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-3938dc90ab0so167654257b3.4
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 13:23:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VHgVq5sX90/a/BhOqlHy581ALJwbQnSRnRpBrgLVdZ4=;
-        b=fELMiNAAnzjxMhrhiZt4CATnthWy6giZnkz2zXGp5/6n8EoC1LuU8oQfUfEcVQoLA/
-         QichA/k207xrB80yyoNaf6+Tc6xJWRMTitzk6yAa5opT9pLOQT8wvAuJEAXSJePCzD1w
-         P1cHz58W5dAAqh7AjcFl5B+evStoCtfUo/QXjnjllQ2Q64hRJfOI0JNS7wJdfKKTg9Xw
-         pIr4EV4lXRRTewtoWKmDfsV/KVTYBib80VzDNbshHWyjyAUJnzLjamQI1lZwjr3d5Oo3
-         LEr00TLTaUa5wfDOmxqWAXothKMITL8f1kDbUtzGHBJDRgCkI2aXdf/FUy+cJ5cKtYnu
-         K3mw==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=80FECUBxUdFegKjeWsNqCyoU5iWi51VHxXwc7NeBlDo=;
+        b=uLOkELm67Pj8ICSMSuAE32FIGw3wbJOJtLSkE3chVoNtaDuDwYgxvkJBczA1y2RJJS
+         JHyZOKwrTEeqFyrRv2Rfkrpf0TFOP+PVMhx2UtQIC8hnZTwIWWMsyzxCI4GeSaKNhsMF
+         lC1zWy9sHMdicAokBtDJMhL7LIu4W7e9NIYHOXdhSo64f7cHf2B2ra/IXtBsUabZNl+3
+         frG+4QP8pYMimMyEcqUapGVg8JOPSZu5CAM+UgxdHBTemyjW0UVLW7dZdQVP4EnJTZ0S
+         FEJH5xQfHeEGDtB6zrx1YRmk1Ob5+PxubdD/ixhqAjkonYngkQXh3aeHfoqIvjo/bd2w
+         mJ7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VHgVq5sX90/a/BhOqlHy581ALJwbQnSRnRpBrgLVdZ4=;
-        b=67QJiHKVwrgd0uWxgLylxzRPPd+9mBlkjnjSfeRrQa3D3xHqnYLOt5USN9tcFShiV/
-         H1auOettVvQ5HxZYYK2mSCfR9upFy8Q7aQCtUQkHjD4yvz757xQnJ/94ghOWTxpa3Zm0
-         96sf/fBgowqKU5KsASdQ9HGepReJXfoAyzsP8NRRG+nlW599o5jHL0kN1meI15VBhAPL
-         EpmlVreco4CHDTCFAUL5FGHYRvQ/BVDYRH6l81CubRWm3XDaMfoeY4Ankd0UAFE56mu8
-         swbiRLJj3xK/dKLRv5nXtPin3l05/la9Ro8luGn1x1MZKsZrKdfnjSkKqIKAiAph022a
-         0avA==
-X-Gm-Message-State: ANoB5pn2ZxiQKY5C6dJWuh4nZrUaX2IC3+tZI2k3rjP5NVPJjPOFvY6K
-        EvnaI4QUtlqZvj4owqNDVxpOcQ==
-X-Google-Smtp-Source: AA0mqf6Fm5ciQ4wtKxYph7OV6JtS/phXFgRnDvE6jcyPWG1R+idx88hHtrCa8QNdTRhn8Fb+kIVYhg==
-X-Received: by 2002:a05:620a:10b4:b0:6fb:f17e:c8f8 with SMTP id h20-20020a05620a10b400b006fbf17ec8f8mr16670583qkk.404.1669238526028;
-        Wed, 23 Nov 2022 13:22:06 -0800 (PST)
-Received: from localhost ([2620:10d:c091:480::1:bc4])
-        by smtp.gmail.com with ESMTPSA id c12-20020ac8054c000000b003995f6513b9sm10148797qth.95.2022.11.23.13.22.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 13:22:05 -0800 (PST)
-Date:   Wed, 23 Nov 2022 16:22:31 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Ivan Babrou <ivan@cloudflare.com>, Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, cgroups@vger.kernel.org,
-        kernel-team <kernel-team@cloudflare.com>
-Subject: Re: Low TCP throughput due to vmpressure with swap enabled
-Message-ID: <Y36PF972kOK3ADvx@cmpxchg.org>
-References: <CABWYdi0G7cyNFbndM-ELTDAR3x4Ngm0AehEp5aP0tfNkXUE+Uw@mail.gmail.com>
- <CAOUHufYd-5cqLsQvPBwcmWeph2pQyQYFRWynyg0UVpzUBWKbxw@mail.gmail.com>
- <CAOUHufYSeTeO5ZMpnCR781esHV4QV5Th+pd=52UaM9cXNNKF9w@mail.gmail.com>
- <Y31s/K8T85jh05wH@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=80FECUBxUdFegKjeWsNqCyoU5iWi51VHxXwc7NeBlDo=;
+        b=Y67MxMIW2ml0yrMTTeycNdZQ7E4saWhQnyLWiT6/TmZNsyn343b7pxND1yel5Crgxo
+         ltzqAtB0CJd8ujLCOjZtofxGDhuJT/aB4WIzxX1eJ+8W5Os2VHBD7w9/3tESYMVsTQTR
+         CLGkuE+xWhPYjBeYiFYB3lQO5T958K4u8Z0rm1/SGN9wQVR/oyoXqyQHnF4PcYn4vaoY
+         ccUZEnG10lTMt5lknCEVJz8ptN7DMYIlCcRT2lvPfGOhaDzXfyuFnuMCeOodRrXboilJ
+         IdSFy+sohvEypBDeHU2BfO8iilamedRbY3w/dHBAR7YNUX4wXWJBmG3XLgzqIdhbuSnR
+         RPJg==
+X-Gm-Message-State: ANoB5pnSvyHyxDFJqHDjNj2BPJ3tHZUsUzoWjDNzXowPJnBqsXgSzxZO
+        RPcoYE9ssRRYIncZQuLHKgLe+4bdGNVm/WRSEyRVAQ==
+X-Google-Smtp-Source: AA0mqf6MQHlEWs88gbqnsRD9Yv59kYkMampxraRXzAUqmPsucry9XnsWum+Xv66YNpMkuExEnefoQ9PgtVZoVQu19Fk=
+X-Received: by 2002:a81:65c1:0:b0:376:f7e2:4b12 with SMTP id
+ z184-20020a8165c1000000b00376f7e24b12mr11999618ywb.0.1669238586662; Wed, 23
+ Nov 2022 13:23:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y31s/K8T85jh05wH@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <BYAPR11MB3240F382BD180FF90C7DF0B9E1069@BYAPR11MB3240.namprd11.prod.outlook.com>
+ <7de35859-97ab-8e88-f590-d5851b81773b@nvidia.com> <BYAPR11MB32405F4FA22BB47BD03C8F18E10C9@BYAPR11MB3240.namprd11.prod.outlook.com>
+In-Reply-To: <BYAPR11MB32405F4FA22BB47BD03C8F18E10C9@BYAPR11MB3240.namprd11.prod.outlook.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 23 Nov 2022 22:22:55 +0100
+Message-ID: <CACRpkdbY5aU3OTufA0q+N7Pwm0shGgnjScAGR_96oo9XdgBDhQ@mail.gmail.com>
+Subject: Re: Intel timed i/o driver in HTE
+To:     "N, Pandith" <pandith.n@intel.com>
+Cc:     Dipen Patel <dipenp@nvidia.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hall, Christopher S" <christopher.s.hall@intel.com>,
+        "Gross, Mark" <mark.gross@intel.com>,
+        "Sangannavar, Mallikarjunappa" 
+        <mallikarjunappa.sangannavar@intel.com>,
+        "D, Lakshmi Sowjanya" <lakshmi.sowjanya.d@intel.com>,
+        "T R, Thejesh Reddy" <thejesh.reddy.t.r@intel.com>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "timestamp@lists.linux.dev" <timestamp@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 05:44:44PM -0700, Yu Zhao wrote:
-> Hi Johannes,
-> 
-> Do you think it makes sense to have the below for both the baseline and
-> MGLRU or it's some behavior change that the baseline doesn't want to
-> risk?
+On Wed, Nov 23, 2022 at 3:38 PM N, Pandith <pandith.n@intel.com> wrote:
 
-It looks good to me. Besides the new FMODE_NOREUSE, it's also a nice
-cleanup on the rmap side!
+> Since the current gpio framework is inadequate to periodic output modes.
+> I thought to disentangle from gpio and develop a new hte consumer. Something like hte-libcdev.c
 
-It would just be good to keep the comment from folio_referenced_one() and
-move it to the vma_has_locality() check in invalid_folio_referenced_vma().
+Maybe, if Dipen wants it.
+Or maybe it needs its own subsystem.
+Or maybe it should be with whatever is using these pulse trains.
 
-Otherwise,
+Again: what is it used for? If we have no idea what it is supposed to
+be used for, we cannot place it right, even less test it.
 
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+Yours,
+Linus Walleij
