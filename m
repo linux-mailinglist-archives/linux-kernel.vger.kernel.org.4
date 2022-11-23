@@ -2,107 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D0263688D
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:19:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3CF8636898
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:20:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238908AbiKWST3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 13:19:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43764 "EHLO
+        id S239396AbiKWSUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 13:20:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239421AbiKWSTA (ORCPT
+        with ESMTP id S238892AbiKWST7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 13:19:00 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8ACEE27;
-        Wed, 23 Nov 2022 10:18:59 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id j10-20020a17090aeb0a00b00218dfce36e5so2230015pjz.1;
-        Wed, 23 Nov 2022 10:18:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/+wiUlX+ZzbOJle7HnS1krIiCPjVF1I+A5cD8cm1XM8=;
-        b=oZeeBnEeGmvjRkvxpd5dd4v1+nkW1yLWhjB1DNJmqQKV0eIUzEyRNI9KXZBGZL4JO7
-         Vp9VbeF+D/aoQ5F2L2rjPMaGOqgiO5HjnnKWNF+YJx2R7+GsbiR4jal2MHBPE6eg+jBN
-         wSFp9cv7IbUn5M+i38B6LfWvRvU5V0CvxcTXkubZwuVPzo+uS4c4JlyO0SlhL2zoydzQ
-         t5dcixwsUZnz1vGaGwou5EWvGYvjK8brVFpBVEL8Mr15CRiXWX+H81iWY12EPefqUXpO
-         4tEYMm7piYEKqHN3IdOto/oo+KvUOXVUXPaMZw+0hzmtFoJZACW3lRySAU7EWmsi5KXB
-         slgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/+wiUlX+ZzbOJle7HnS1krIiCPjVF1I+A5cD8cm1XM8=;
-        b=mLH/iwIn8p/WsdbOKOTyUv5qBVYPR+FccX76A2fAsxlCfcWQZqVhAn/wrH5re4wQ4C
-         iZ8IaAs+GWHgoZqPqR95jj+P4pEkXU9IHQs/EjkTQEbYZVCQyfmvjuLUOsACGLnJU2nv
-         jq1R3twnay4awY8rPi57Ug5aDkh7Q1irHFayVaNJAlfeQW6LZjAgf4dZRUXdoQlUONwq
-         jP/SioV0ZjvZvl0Wlt+4H7lLandAXdDIJzSsYYxS9lZhfFHKmi2sOp/uoauJJq62sajj
-         HGb92Ip8/NqEz/08jDHraZgU7V29b9yUxXDkG1tbCV8X9+MYUy3OzF1/5sjJRRJ4a8Hl
-         O6/g==
-X-Gm-Message-State: ANoB5pkGFbGbXbLj1nYGs4G5v6i2cWYX5MtRfn443xkiO+ld3WrNIdV7
-        J5iiFUMc7tB9yToHzfO9bo0=
-X-Google-Smtp-Source: AA0mqf5FyOlv0J80ex/Z/ir9XJCw/aSk4lvE198n8rm4YG/kGTkL6yXagm4WBwk+1YoqSpUb++HGug==
-X-Received: by 2002:a17:902:c702:b0:189:4bde:53c1 with SMTP id p2-20020a170902c70200b001894bde53c1mr2799075plp.1.1669227538388;
-        Wed, 23 Nov 2022 10:18:58 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id 11-20020a17090a1a0b00b00218cd71781csm1706081pjk.51.2022.11.23.10.18.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 10:18:58 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 23 Nov 2022 08:18:56 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Kemeng Shi <shikemeng@huawei.com>
-Cc:     josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 04/11] blk-throttle: correct calculation of wait time in
- tg_may_dispatch
-Message-ID: <Y35kELlFkI/BtkqC@slm.duckdns.org>
-References: <20221123060401.20392-1-shikemeng@huawei.com>
- <20221123060401.20392-5-shikemeng@huawei.com>
+        Wed, 23 Nov 2022 13:19:59 -0500
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB36B85;
+        Wed, 23 Nov 2022 10:19:57 -0800 (PST)
+Received: from fedor-dummypc.intra.ispras.ru (unknown [10.10.165.4])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 9D6E740D4004;
+        Wed, 23 Nov 2022 18:19:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 9D6E740D4004
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1669227594;
+        bh=aEKfkaPDGkocbXhGsULGvnhKc/adpsBqQl1m77p2DtY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TUR+KFDwSSrC5Lz00os7h8xYFwgRwXlyeeBHazGTle6pns2oEz0wCkQRRJX6HmCma
+         p/KWfKhfAcbIE59kFVIuDOI1B0tV7zQ72Iz5bDtFEZq4MRjLC1XSnibPQDqCKwB+ia
+         /gSTUaoBrjZt4IIFmd9TbhdLjzO5tg1IlqsM8CkM=
+From:   Fedor Pchelkin <pchelkin@ispras.ru>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     Fedor Pchelkin <pchelkin@ispras.ru>, linux-kernel@vger.kernel.org,
+        Daniel Starke <daniel.starke@siemens.com>,
+        jirislaby@kernel.org, Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org
+Subject: [PATCH 5.10] Revert "tty: n_gsm: avoid call of sleeping functions from atomic context"
+Date:   Wed, 23 Nov 2022 21:19:16 +0300
+Message-Id: <20221123181916.6911-1-pchelkin@ispras.ru>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221123060401.20392-5-shikemeng@huawei.com>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 02:03:54PM +0800, Kemeng Shi wrote:
-> If bps and iops both reach limit, we always return bps wait time as
-> tg_within_iops_limit is after "tg_within_bps_limit(tg, bio, bps_limit) &&"
-> and will not be called if tg_within_bps_limit return true.
+From: Fedor Pchelkin <pchelkin@ispras.ru>
 
-Maybe it's obvious but it'd be better to explain "why" this change is being
-made.
+[ Upstream commit acdab4cb4ba7e5f94d2b422ebd7bf4bf68178fb2 ]
 
-> @@ -939,8 +926,9 @@ static bool tg_may_dispatch(struct throtl_grp *tg, struct bio *bio,
->  				jiffies + tg->td->throtl_slice);
->  	}
->  
-> -	if (tg_within_bps_limit(tg, bio, bps_limit, &bps_wait) &&
-> -	    tg_within_iops_limit(tg, bio, iops_limit, &iops_wait)) {
-> +	bps_wait = tg_within_bps_limit(tg, bio, bps_limit);
-> +	iops_wait = tg_within_iops_limit(tg, bio, iops_limit);
-> +	if (bps_wait + iops_wait == 0) {
->  		if (wait)
->  			*wait = 0;
->  		return true;
+This reverts commit eb75efdec8dd0f01ac85c88feafa6e63b34a2521.
 
-So, max_wait is supposed to be maximum in the whole traversal path in the
-tree, not just the max value in this tg, so after this, the code should be
-changed to sth like the following, right?
+The above commit is reverted as the usage of tx_mutex seems not to solve
+the problem described in eb75efdec8dd ("tty: n_gsm: avoid call of sleeping
+functions from atomic context") and just moves the bug to another place.
 
-        max_wait = max(max, max(bps_wait, iops_wait));
+Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
+Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+Reviewed-by: Daniel Starke <daniel.starke@siemens.com>
+Link: https://lore.kernel.org/r/20221008110221.13645-2-pchelkin@ispras.ru
+---
+ drivers/tty/n_gsm.c | 39 +++++++++++++++++++++------------------
+ 1 file changed, 21 insertions(+), 18 deletions(-)
 
-Thanks.
-
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index c91a3004931f..c2212f52a603 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -235,7 +235,7 @@ struct gsm_mux {
+ 	int old_c_iflag;		/* termios c_iflag value before attach */
+ 	bool constipated;		/* Asked by remote to shut up */
+ 
+-	struct mutex tx_mutex;
++	spinlock_t tx_lock;
+ 	unsigned int tx_bytes;		/* TX data outstanding */
+ #define TX_THRESH_HI		8192
+ #define TX_THRESH_LO		2048
+@@ -820,14 +820,15 @@ static void __gsm_data_queue(struct gsm_dlci *dlci, struct gsm_msg *msg)
+  *
+  *	Add data to the transmit queue and try and get stuff moving
+  *	out of the mux tty if not already doing so. Take the
+- *	the gsm tx mutex and dlci lock.
++ *	the gsm tx lock and dlci lock.
+  */
+ 
+ static void gsm_data_queue(struct gsm_dlci *dlci, struct gsm_msg *msg)
+ {
+-	mutex_lock(&dlci->gsm->tx_mutex);
++	unsigned long flags;
++	spin_lock_irqsave(&dlci->gsm->tx_lock, flags);
+ 	__gsm_data_queue(dlci, msg);
+-	mutex_unlock(&dlci->gsm->tx_mutex);
++	spin_unlock_irqrestore(&dlci->gsm->tx_lock, flags);
+ }
+ 
+ /**
+@@ -839,7 +840,7 @@ static void gsm_data_queue(struct gsm_dlci *dlci, struct gsm_msg *msg)
+  *	is data. Keep to the MRU of the mux. This path handles the usual tty
+  *	interface which is a byte stream with optional modem data.
+  *
+- *	Caller must hold the tx_mutex of the mux.
++ *	Caller must hold the tx_lock of the mux.
+  */
+ 
+ static int gsm_dlci_data_output(struct gsm_mux *gsm, struct gsm_dlci *dlci)
+@@ -902,7 +903,7 @@ static int gsm_dlci_data_output(struct gsm_mux *gsm, struct gsm_dlci *dlci)
+  *	is data. Keep to the MRU of the mux. This path handles framed data
+  *	queued as skbuffs to the DLCI.
+  *
+- *	Caller must hold the tx_mutex of the mux.
++ *	Caller must hold the tx_lock of the mux.
+  */
+ 
+ static int gsm_dlci_data_output_framed(struct gsm_mux *gsm,
+@@ -918,7 +919,7 @@ static int gsm_dlci_data_output_framed(struct gsm_mux *gsm,
+ 	if (dlci->adaption == 4)
+ 		overhead = 1;
+ 
+-	/* dlci->skb is locked by tx_mutex */
++	/* dlci->skb is locked by tx_lock */
+ 	if (dlci->skb == NULL) {
+ 		dlci->skb = skb_dequeue_tail(&dlci->skb_list);
+ 		if (dlci->skb == NULL)
+@@ -1018,12 +1019,13 @@ static void gsm_dlci_data_sweep(struct gsm_mux *gsm)
+ 
+ static void gsm_dlci_data_kick(struct gsm_dlci *dlci)
+ {
++	unsigned long flags;
+ 	int sweep;
+ 
+ 	if (dlci->constipated)
+ 		return;
+ 
+-	mutex_lock(&dlci->gsm->tx_mutex);
++	spin_lock_irqsave(&dlci->gsm->tx_lock, flags);
+ 	/* If we have nothing running then we need to fire up */
+ 	sweep = (dlci->gsm->tx_bytes < TX_THRESH_LO);
+ 	if (dlci->gsm->tx_bytes == 0) {
+@@ -1034,7 +1036,7 @@ static void gsm_dlci_data_kick(struct gsm_dlci *dlci)
+ 	}
+ 	if (sweep)
+ 		gsm_dlci_data_sweep(dlci->gsm);
+-	mutex_unlock(&dlci->gsm->tx_mutex);
++	spin_unlock_irqrestore(&dlci->gsm->tx_lock, flags);
+ }
+ 
+ /*
+@@ -1256,6 +1258,7 @@ static void gsm_control_message(struct gsm_mux *gsm, unsigned int command,
+ 						const u8 *data, int clen)
+ {
+ 	u8 buf[1];
++	unsigned long flags;
+ 
+ 	switch (command) {
+ 	case CMD_CLD: {
+@@ -1277,9 +1280,9 @@ static void gsm_control_message(struct gsm_mux *gsm, unsigned int command,
+ 		gsm->constipated = false;
+ 		gsm_control_reply(gsm, CMD_FCON, NULL, 0);
+ 		/* Kick the link in case it is idling */
+-		mutex_lock(&gsm->tx_mutex);
++		spin_lock_irqsave(&gsm->tx_lock, flags);
+ 		gsm_data_kick(gsm, NULL);
+-		mutex_unlock(&gsm->tx_mutex);
++		spin_unlock_irqrestore(&gsm->tx_lock, flags);
+ 		break;
+ 	case CMD_FCOFF:
+ 		/* Modem wants us to STFU */
+@@ -2225,7 +2228,6 @@ static void gsm_free_mux(struct gsm_mux *gsm)
+ 			break;
+ 		}
+ 	}
+-	mutex_destroy(&gsm->tx_mutex);
+ 	mutex_destroy(&gsm->mutex);
+ 	kfree(gsm->txframe);
+ 	kfree(gsm->buf);
+@@ -2297,12 +2299,12 @@ static struct gsm_mux *gsm_alloc_mux(void)
+ 	}
+ 	spin_lock_init(&gsm->lock);
+ 	mutex_init(&gsm->mutex);
+-	mutex_init(&gsm->tx_mutex);
+ 	kref_init(&gsm->ref);
+ 	INIT_LIST_HEAD(&gsm->tx_list);
+ 	timer_setup(&gsm->t2_timer, gsm_control_retransmit, 0);
+ 	init_waitqueue_head(&gsm->event);
+ 	spin_lock_init(&gsm->control_lock);
++	spin_lock_init(&gsm->tx_lock);
+ 
+ 	gsm->t1 = T1;
+ 	gsm->t2 = T2;
+@@ -2327,7 +2329,6 @@ static struct gsm_mux *gsm_alloc_mux(void)
+ 	}
+ 	spin_unlock(&gsm_mux_lock);
+ 	if (i == MAX_MUX) {
+-		mutex_destroy(&gsm->tx_mutex);
+ 		mutex_destroy(&gsm->mutex);
+ 		kfree(gsm->txframe);
+ 		kfree(gsm->buf);
+@@ -2652,15 +2653,16 @@ static int gsmld_open(struct tty_struct *tty)
+ static void gsmld_write_wakeup(struct tty_struct *tty)
+ {
+ 	struct gsm_mux *gsm = tty->disc_data;
++	unsigned long flags;
+ 
+ 	/* Queue poll */
+ 	clear_bit(TTY_DO_WRITE_WAKEUP, &tty->flags);
+-	mutex_lock(&gsm->tx_mutex);
++	spin_lock_irqsave(&gsm->tx_lock, flags);
+ 	gsm_data_kick(gsm, NULL);
+ 	if (gsm->tx_bytes < TX_THRESH_LO) {
+ 		gsm_dlci_data_sweep(gsm);
+ 	}
+-	mutex_unlock(&gsm->tx_mutex);
++	spin_unlock_irqrestore(&gsm->tx_lock, flags);
+ }
+ 
+ /**
+@@ -2703,6 +2705,7 @@ static ssize_t gsmld_write(struct tty_struct *tty, struct file *file,
+ 			   const unsigned char *buf, size_t nr)
+ {
+ 	struct gsm_mux *gsm = tty->disc_data;
++	unsigned long flags;
+ 	int space;
+ 	int ret;
+ 
+@@ -2710,13 +2713,13 @@ static ssize_t gsmld_write(struct tty_struct *tty, struct file *file,
+ 		return -ENODEV;
+ 
+ 	ret = -ENOBUFS;
+-	mutex_lock(&gsm->tx_mutex);
++	spin_lock_irqsave(&gsm->tx_lock, flags);
+ 	space = tty_write_room(tty);
+ 	if (space >= nr)
+ 		ret = tty->ops->write(tty, buf, nr);
+ 	else
+ 		set_bit(TTY_DO_WRITE_WAKEUP, &tty->flags);
+-	mutex_unlock(&gsm->tx_mutex);
++	spin_unlock_irqrestore(&gsm->tx_lock, flags);
+ 
+ 	return ret;
+ }
 -- 
-tejun
+2.38.1
+
