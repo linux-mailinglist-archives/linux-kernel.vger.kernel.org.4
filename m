@@ -2,72 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B76A9636151
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:17:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE45636148
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:16:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236949AbiKWORX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 09:17:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39754 "EHLO
+        id S236562AbiKWOQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 09:16:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237916AbiKWORN (ORCPT
+        with ESMTP id S235946AbiKWOQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 09:17:13 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4162F666;
-        Wed, 23 Nov 2022 06:17:12 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id j10-20020a17090aeb0a00b00218dfce36e5so1819789pjz.1;
-        Wed, 23 Nov 2022 06:17:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1K2KGPW2mhLmlk+Ll0wyye+i0QvljWWm30P6WzuM3no=;
-        b=N4UAbhkQiB0OA8KFPB9vX0y9rfEbsoZVCgvK7W3096l38caZKMdxW/7NHrGYGG4zcr
-         ZTNl4GXeMsJ9AzE24RhlR2l4uypbHFeigf384eQQAoK1jWHtLRJUf/5aqNwE/E5zEfFp
-         61AoKXLNkiuGrc4+YW8k9PcZd0r0/i0W+xdM667fWOcNwkVdzy7Vu61KiMHw0xcHIbEc
-         h4mQsDJUP2kVVDuEVTpSI7HTB6VhUTedMPqSVrGLjZUQvJAnHY0GKNUgmOjFMt21WYfG
-         UP7vy4L8A+0qZSap+1jTsGPW6zv5xKWyhE2u3idhDZ1Dl3JDupG55EvljpUOl9Jav2VA
-         sGMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1K2KGPW2mhLmlk+Ll0wyye+i0QvljWWm30P6WzuM3no=;
-        b=ujqF/OMpy3UGLXMKncZfVeemgiXB8+iejgxqT7VtZ2pwBz5HulNQgZcJplJHZMBhn7
-         vlC9ZgjSah0ysNsL/VKJszxaPnKCPoTgo8r0aV1SKklPweRs4y+uOiXSPLedsQDWfvu/
-         LgJAeaj76TRXvZVwnIsqpiykbGplAJ8PzypkWAq8qi+085KO/JWdH6zG6neGjcmkxUnJ
-         2SKSt1x2u+5S/1zEU0BdzH3Qx4PW5OAaB/Pqt2lrylF3TRqwWVTGbPEpUpm1Yu7cCDtq
-         Vy6y6emdoHG9fQp53s4/h4EkE1FoxNzomXlOsq42/cOfxn+nYKYQ2Gqwi5XUD1BB8MwH
-         53sg==
-X-Gm-Message-State: ANoB5pkp61w+URFjeWw10zBk++3VMpQUScRJ7skTyq+8IAN2x0OqhzIy
-        g8r52GsYsuWMUp+cnd7jA1e2Na57D9mo
-X-Google-Smtp-Source: AA0mqf7NlOL7rsXpzY0dhBNYM1nlm50BQNxxVZEBVF3zZVDmQM6HLkzOim/2WFqalsSeLxZbOjj+xQ==
-X-Received: by 2002:a17:902:db86:b0:189:4bde:53b9 with SMTP id m6-20020a170902db8600b001894bde53b9mr1838704pld.11.1669213031664;
-        Wed, 23 Nov 2022 06:17:11 -0800 (PST)
-Received: from pc.localdomain ([166.111.83.15])
-        by smtp.gmail.com with ESMTPSA id w4-20020a170902e88400b001868ed86a95sm14371878plg.174.2022.11.23.06.17.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 06:17:11 -0800 (PST)
-From:   Hao Sun <sunhao.th@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, Hao Sun <sunhao.th@gmail.com>
-Subject: [PATCH bpf-next 3/3] selftests/bpf: Add tests for LDX/STX/ST sanitize
-Date:   Wed, 23 Nov 2022 22:15:46 +0800
-Message-Id: <20221123141546.238297-4-sunhao.th@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221123141546.238297-1-sunhao.th@gmail.com>
-References: <20221123141546.238297-1-sunhao.th@gmail.com>
+        Wed, 23 Nov 2022 09:16:25 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2070.outbound.protection.outlook.com [40.107.92.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436E52F036;
+        Wed, 23 Nov 2022 06:16:24 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UdMdVMBK50loA3jFmW927HUYzWRhmSAECuTRVOFIz4VHiCoCu6evofeTkW4uZ+IsNAQnP4LopAan9W+SAqa9Y+nP7zuXaVnnRTMwN+5MBIOJCRRreyUawFfEpnj1VYQsg5diHgggvabgdSTDDyEnSN4CCW1V1FYQDiyFLSDeh3+MgrbyPw6CsSI8uU+GLUjmDyewCOc5Lkurto7k6LqPl2TffIk8jHKJdctP5X78ZKFkb4RujUSGqztlhRAxJ/ACadVrjRsSkZMUGb2PMzqTYe0x2zOfEDAzGJB418FpmfsUt7p7oZuM9zBZ3huKnWH5g/aizTkH2VIVtsx37i/DQw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MQDu54eXMcgih/dzntdPscdNtZZIBCQPD3/EQomAXBE=;
+ b=PxacP5b+UtXqO/179QO0laL0pcPGoqsOcMN60pdbn1V/OEThX9JbGI9d4Dt5/Z27CCA9o8RborFtAdoRJ1UF6xr/nGV4AB6YG2jL8IVa9zONc19hbSAfZi1VfIMLBZk4PiuXH6aOkQz0JA7s/gVB+BdSkytLXDxTEhkMEI/C/KPKhd15Rqop5NIJe0SMxolqYpugSa+Qo57syVeC6ESkarjpDMjZMXRxQ+xBkyqhDk+IzR7tIXUlNwpOiQegY2qVKktI6gusdL9pRONiMckixdbBUX35znrJ/Cam3Fj94j+WRVTfRXK/2I37bV+5qWh2FPEHGPlkLjhA0oguYrGELQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MQDu54eXMcgih/dzntdPscdNtZZIBCQPD3/EQomAXBE=;
+ b=CUDI8RmEqDaoVnQIvWqa+L66P7Awp1xMjpNpQs3g1PPK61r8Sv6uSnGiBMoNc5/wHTUVDS/255ahfKxX7If79IGDttYNortV2kX0CljiGT2hKNlzbzJVu2plVUQAePPZAwUESPtfgxyoEA5PCHLScRtAil52kXNZqz80WWsPzjM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+ by CH2PR12MB4152.namprd12.prod.outlook.com (2603:10b6:610:a7::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Wed, 23 Nov
+ 2022 14:16:21 +0000
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::d2d2:c91a:5927:104b]) by DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::d2d2:c91a:5927:104b%5]) with mapi id 15.20.5857.019; Wed, 23 Nov 2022
+ 14:16:21 +0000
+Message-ID: <66416f08-1daf-63c9-8ecc-47f4e2e09ba7@amd.com>
+Date:   Wed, 23 Nov 2022 08:16:19 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v3 00/17] x86: head_64.S spring cleaning
+Content-Language: en-US
+To:     Ard Biesheuvel <ardb@kernel.org>, Borislav Petkov <bp@alien8.de>
+Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Michael Roth <michael.roth@amd.com>
+References: <20221122161017.2426828-1-ardb@kernel.org>
+ <5750d157-43dd-6f3d-1407-f41af3cff207@amd.com>
+ <CAMj1kXHUQFAcRKzRkuGG3Rsyrexdi7_NUS1-aXrS36LP4Q=rxw@mail.gmail.com>
+ <26c34f9e-3b09-7b10-09a2-993a50790447@amd.com> <Y336yE4P3NjCGavN@zn.tnic>
+ <CAMj1kXGnGz+V3tmonitY+3TiWuWJFWj-mQLUbRo+xp8UwZ_SpQ@mail.gmail.com>
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+In-Reply-To: <CAMj1kXGnGz+V3tmonitY+3TiWuWJFWj-mQLUbRo+xp8UwZ_SpQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SN6PR04CA0096.namprd04.prod.outlook.com
+ (2603:10b6:805:f2::37) To DM4PR12MB5229.namprd12.prod.outlook.com
+ (2603:10b6:5:398::12)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|CH2PR12MB4152:EE_
+X-MS-Office365-Filtering-Correlation-Id: d3aa7a99-0b05-4c90-9035-08dacd5d4be6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1ewj0yZrn5cEOeMBT2Nnwk1rk9B9wx1puNycJZiXo2ZBcicYXwDJq2roPAujKwJNO3DgVe3s32FLkyUS0PeDWevJcwBY+aQNex/5DtLgv2hdwaPWN80MC8z7/pFrG2eb2m1I2TLu3EDDO7J8QT/DhtnwwGZCMGhTSh6uHuGo/gq6BVZOADcFGhMAX4cJY9ZoHfK3ewIPEhHV35FscVd5eE+PbdqohL32cSO/v/hekbILIyhT9vqOjwvpsYgKW9Yd5ANTG0VBFDb2MrgcVM6O08sxm9XitCk0Nx//0XB4x7FdnXoBv+Ec8anZcyHnO8fCErzoF9KspBaHtCrIQf/bUcNDBiz79HZPFrRbmKx3XMyZrlff0/IEUGY4XK692iHbOqeA/2JXfvufpf9JXFSjSeAljR+0AQM7as1oZC7H0qxd3COqOytLDCVtDk1yQ9AYm1rI/H7XL1nbE2gGJfl6UaFj7ZbxV6WbaBz03amXBlSVzexcjqUHO/ph66QN7gCfSRSMTjZrYekz2liyXpx+SXZy2az1gmCebJUXzo37TGsihZibs1so1rbgHH2RwY2kUMPt6pk2FUs8iu/zO8pBGb5go0VSh6qSQysZFmC5N2ztp2pZpQia76L8Jme0XF6JDn4+pOftRvTEl5SMfRleS/u12dkjE5BiMaxAti0rpND2k2ioxEGYQjagHDThQjmZ6bmi3lf0rrMfO4n9kivMISw4rKTc/M6LUEjju/XqjiRXkaphzyT5NfDyfXWp3E85wgUGr0yDOWUv5jcLeTW65g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(376002)(366004)(346002)(396003)(451199015)(36756003)(31686004)(31696002)(86362001)(2906002)(186003)(26005)(5660300002)(6512007)(83380400001)(53546011)(2616005)(38100700002)(66556008)(6486002)(966005)(54906003)(8676002)(41300700001)(8936002)(478600001)(66476007)(110136005)(6506007)(316002)(4326008)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RHlka3pZUkpHaUwzTWx0SWQ3aE9aM25NSk9yU3JHMUh6b2gvRTJrMmsxbm5T?=
+ =?utf-8?B?Ly9XYVFMaGF1UEY5RkQ4NkFHd2ZpZGp0ZzZOSHE1SzVOcWR2UzBweGVtYjBX?=
+ =?utf-8?B?cVY0WjdCdE5ueFhxdHBnRjk2R293TjZrWkVTbVlJckt4VUNVZi93UGFiQzRn?=
+ =?utf-8?B?Vk51d0RDZy9zUFlpbzBlalRzbnhEdjRaaVVaNW9yMDg1WEZKUWNnMXNIbnVt?=
+ =?utf-8?B?ZE54TmhTZW14K291NmpGT1BoWmZHUUl4L3FKS2ZQdS9WYXYwdTlQM29VSnZ6?=
+ =?utf-8?B?QjVoQkNzV28rY01xNHZib3Y4WXFTUnpSYll0K05LVjlZWitCeVZZS21sYW9O?=
+ =?utf-8?B?TXcySzcvSnV5VndvK3h2YXBxRWgxVm1mdzVQMWNnZDhiNHJ5ak0vL3dYaEtV?=
+ =?utf-8?B?a1hnckZPdkZoamk4WnVob2tMV1hocEJqYTl5bGVFS0pkbHBBZndNOW9WSEM5?=
+ =?utf-8?B?czdjREMwZlU0OFBjeG1oRUtYVlNUcmNWR1B4TnFVWTZCVER1TkZVb2FUWnJ6?=
+ =?utf-8?B?MjMyNDA4dnZqYzNjYzhqbmg1aXJiUnFHMytZNWpVSUpQSzZPYU5MQjJhZi9U?=
+ =?utf-8?B?eG1iUW9NdWhPQjlNOHlwd0J2WXdLbUV1Q0xWSFZ3aTh2dkNkWTgrcTd3YjZH?=
+ =?utf-8?B?U2ZGNUNtemdkajgvM0hGY1N2K2wyYmgramliYmY0b2lpaE05MkpmN3JTNGZM?=
+ =?utf-8?B?VDQydnR3UkpGbENjR1dXa2d1NG5CMmovV1JEdU9iV1hDMkdMVkdVNzBOSzR3?=
+ =?utf-8?B?MEt4M0lRaHF4OENjV0x4Q09wOFp6REw0RElTU1MrUExtU1ZXcW43M3pDYVpm?=
+ =?utf-8?B?MEl1OTdMdzB6dTV3cGxqVEJhK1pqZWxBd3hrMDd3Q1VuM3hmSG9QZnBicVZl?=
+ =?utf-8?B?Sm1Ma1FKWkZmM2pxZDVIMVpDd0ZrZ1VNWExuVXk5TzV4eXlOVUZHK1JLdzlI?=
+ =?utf-8?B?MHNUa2ZiVm5IL081RDhkZmJqOU5JcURTb2xrdXNUa2pMeVlySzMxcEhNSkEy?=
+ =?utf-8?B?ZFNuVkY0ZnVMNFEvUXVnTG9XV253aVBTY3JSeXVYcDdwdnV4WllGUUd3YVUv?=
+ =?utf-8?B?Y09Jc3VKaS9KSjFpSzJsVzhDSEw2d2xrTTBJdlJDQ2FiVkduOGJCdlZ2cUph?=
+ =?utf-8?B?R1NDNnIyWmRsdTZ3Y3dhYmdUNVN4MjdPd2trNUpWYXQ0eUVxVjdOT01pd05W?=
+ =?utf-8?B?N3FtdmJqSXZrWlUyUjVKL3Y3alJXMHVxc2pyK3cwR2RPSVRNUWp4YitUdDhw?=
+ =?utf-8?B?QmpnaW5aRGZtUW15OW1rdExKQkFFNG4vdFgyK0hOV2t1NTlibGRsbjE0NUZN?=
+ =?utf-8?B?UUxwcG9qMThxaFVFVXlaM2dnaS9NR3lScXltMldnajhhQmtXcmt1UTdLZkND?=
+ =?utf-8?B?OTYraTVSSHdKRGtWWCtkNC9KV0hXRTJVR25ON2F3TFhqNWIvd0h5dXZFcGt0?=
+ =?utf-8?B?L1gxNjU5emg4eFR3OGo3ZGtsVEQvOGVYdE5pTnF4OXAvcHRPMGRrektwV1Fk?=
+ =?utf-8?B?OEloYmc0ZTZrMDdkWEgzUnQzdHdacTZHMmlmbDVtdDQ5aklFU0x3bjZ4TWtQ?=
+ =?utf-8?B?VGN4K09obVlNZDhpRkErQTlaQlVmdW44aHY5ckhjdUVMeFF6RHJzK01HL281?=
+ =?utf-8?B?KzE1aW1xbVl3QXlNbnhXeXRQa0xoVVVUUGR0YWE4UWhxOEt5QXAyOTVnV210?=
+ =?utf-8?B?OTlFWStoNXk2dXdGMHZBaG95OVNzQzd6VzE4U2tjMlFWT0MwMVB4eXY1RG9H?=
+ =?utf-8?B?TUUrUC9yVk5BZ1phRkRCZ2d2VnRwVXdKVWNhK1NTRkZJZGNqblhsL1oxeVZF?=
+ =?utf-8?B?QklzK3NabUFjQllHeWlhcUZUcVNTZXMxK0sxeGZhMWNhbEFLSlI0ODNkKytx?=
+ =?utf-8?B?cStvY3hKN1BpRFpBRVhhSU9mRTY2ZEZCTTI0Z0lZWWhtdy8xSFRXVDNIRmhX?=
+ =?utf-8?B?d2Q3SVpHRVcwQ1pVVTdwQ3ROL0NmNVZCN2R5ck1IeTdMNVNDSlkyZSszU05i?=
+ =?utf-8?B?RThnTXRncmhlZVkxQlVsdlV2dnRuK1lDTU56Y3U1NFlSL3plSkZUYlhhU2RD?=
+ =?utf-8?B?WEpsUmswT0s3eHZaa1Y2OUp2SEtZak9JajM3dm5XQU13QXRZbGFJRmhidEJs?=
+ =?utf-8?Q?8Cl15KsJKGVwN9D3Jy2OeLzqd?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d3aa7a99-0b05-4c90-9035-08dacd5d4be6
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2022 14:16:21.6494
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: RlRUEmLEDJrAtd64UqzMjxMH4VSxaVDO7jATugDx369yaF8Dm5KG31+x4ygHlbT1ic0y70v3wu/C/uwG+nR+Cg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4152
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=no
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,350 +131,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add tests for LDX/STX/ST instrumentation in each possible case.
-Four cases for STX/ST, include dst_reg equals to R0, R1, R10,
-other regs, respectively, ten cases for LDX. All new/existing
-selftests can pass.
+On 11/23/22 04:52, Ard Biesheuvel wrote:
+> On Wed, 23 Nov 2022 at 11:49, Borislav Petkov <bp@alien8.de> wrote:
+>>
+>> On Tue, Nov 22, 2022 at 03:49:29PM -0600, Tom Lendacky wrote:
+>>> diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
+>>> index cb5f0befee57..a0bfd31358ba 100644
+>>> --- a/drivers/firmware/efi/libstub/x86-stub.c
+>>> +++ b/drivers/firmware/efi/libstub/x86-stub.c
+>>> @@ -23,7 +23,7 @@
+>>>   const efi_system_table_t *efi_system_table;
+>>>   const efi_dxe_services_table_t *efi_dxe_table;
+>>> -u32 image_offset;
+>>> +u32 image_offset __section(".data");
+>>>   static efi_loaded_image_t *image = NULL;
+>>>   static efi_status_t
+>>>
+>>> I assume it has to do with being in .data vs .bss and not being explicitly
+>>> cleared with the encryption bit set. With the change to put image_offset in
+>>> the .data section, it is read as zero, where as when it was in the .bss
+>>> section it was reading "ciphertext".
+>>
+>> Hmm, two points about this:
+>>
+>> 1. Can we do
+>>
+>> u32 image_offset __bss_decrypted;
+>>
+>> here instead? We have this special section just for that fun and it
+>> self-documents this way.
+>>
+> 
+> The patch moves it from .data to .bss inadvertently, and I am not
+> convinced Tom's analysis is entirely accurate: we may simply have
+> garbage in image_offset if we access it before .bss gets cleared.
 
-A slab-out-of-bounds read report is also availble, which is
-achieved by exploiting CVE-2022-23222 and can be reproduced
-in Linux v5.10: https://pastebin.com/raw/Ee1Cw492.
+When running non-encrypted, I imagine all the memory is cleared to zero as 
+part of Qemu allocating it. As soon as you put an SEV guest on top of 
+that, host made zeroes will not appear as zeroes to the SEV guest, rather 
+they will be decrypted and end up looking like ciphertext (hence the 
+random values I kept seeing in image_offset). The SEV guest must 
+explicitly clear it, which is why having it in .bss doesn't work for SEV.
 
-Signed-off-by: Hao Sun <sunhao.th@gmail.com>
----
- .../selftests/bpf/verifier/sanitize_st_ldx.c  | 323 ++++++++++++++++++
- 1 file changed, 323 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/verifier/sanitize_st_ldx.c
+Thanks,
+Tom
 
-diff --git a/tools/testing/selftests/bpf/verifier/sanitize_st_ldx.c b/tools/testing/selftests/bpf/verifier/sanitize_st_ldx.c
-new file mode 100644
-index 000000000000..3fd571abc5cc
---- /dev/null
-+++ b/tools/testing/selftests/bpf/verifier/sanitize_st_ldx.c
-@@ -0,0 +1,323 @@
-+#ifdef CONFIG_BPF_PROG_KASAN
-+{
-+	"sanitize stx: dst is R1",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_1, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 1, 1),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+	BPF_MOV64_REG(BPF_REG_0, MAX_BPF_REG),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_1, -8, 1),
-+	},
-+},
-+{
-+	"sanitize stx: dst is R0",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_0, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_0, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 1, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_1),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
-+	BPF_MOV64_REG(BPF_REG_1, MAX_BPF_REG),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_0, -8, 1),
-+	},
-+},
-+{
-+	"sanitize stx: dst is R10",
-+	.insns = {
-+	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_10, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 1, 1),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.unexpected_insns = {
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	},
-+},
-+{
-+	"sanitize stx: dst is other regs",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_2, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_2, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 1, 1),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_1),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_2),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_1),
-+	BPF_MOV64_REG(BPF_REG_1, MAX_BPF_REG),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_2, -8, 1),
-+	},
-+},
-+{
-+	"sanitize ldx: src is R1, dst is R0",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_1, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 1, 1),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8),
-+	},
-+},
-+{
-+	"sanitize ldx: src is R1, dst is R1",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_1, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 1, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+	BPF_MOV64_REG(BPF_REG_0, MAX_BPF_REG),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, -8),
-+	},
-+},
-+{
-+	"sanitize ldx: src is R1, dst is other regs",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_1, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_2, 1, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+	BPF_MOV64_REG(BPF_REG_0, MAX_BPF_REG),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, -8),
-+	},
-+},
-+{
-+	"sanitize ldx: src is R0, dst is R1",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_0, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_0, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 1, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_0, -8),
-+	},
-+},
-+{
-+	"sanitize ldx: src is R0, dst is R0",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_0, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_0, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 1, 1),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_1),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
-+	BPF_MOV64_REG(BPF_REG_1, MAX_BPF_REG),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_0, -8),
-+	},
-+},
-+{
-+	"sanitize ldx: src is R0, dst is other regs",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_0, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_0, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_2, 1, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_1),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
-+	BPF_MOV64_REG(BPF_REG_1, MAX_BPF_REG),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_0, -8),
-+	},
-+},
-+{
-+	"sanitize ldx: src is other regs, dst is R0",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_2, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_2, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 1, 1),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_1),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+	BPF_MOV64_REG(BPF_REG_1, MAX_BPF_REG),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_2, -8),
-+	},
-+},
-+{
-+	"sanitize ldx: src is other regs, dst is R1",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_2, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_2, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 1, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+	BPF_MOV64_REG(BPF_REG_0, MAX_BPF_REG),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_2, -8),
-+	},
-+},
-+{
-+	"sanitize ldx: src is other regs, dst is self",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_2, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_2, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_2, 1, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_1),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_2),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_1),
-+	BPF_MOV64_REG(BPF_REG_1, MAX_BPF_REG),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_2, -8),
-+	},
-+},
-+{
-+	"sanitize ldx: src is other regs, dst is other regs",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_2, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_3, BPF_REG_2, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_3, 1, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_3),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_1),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_MOV64_REG(BPF_REG_3, BPF_REG_0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_3),
-+	BPF_MOV64_REG(BPF_REG_1, MAX_BPF_REG),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_3, BPF_REG_2, -8),
-+	},
-+},
-+#endif /* CONFIG_BPF_PROG_KASAN */
--- 
-2.38.1
-
+> 
+>> 2. Also, why does my SEV-ES guest boot just fine without that change?
+>>
+> 
+> Indeed, so it needs to be in .data
+> 
+> 
+>> [    0.000000] Linux version 6.1.0-rc6+ (root@ml) (gcc (Debian 11.3.0-1) 11.3.0, GNU ld (GNU Binutils for Debian) 2.38) #1 SMP PREEMPT_DYNAMIC Wed Nov 23 11:27:17 CET 2022
+>> ...
+>> [    0.336132] Memory Encryption Features active: AMD SEV SEV-ES
+>>
+>> Thx.
+>>
+>> --
+>> Regards/Gruss,
+>>      Boris.
+>>
+>> https://people.kernel.org/tglx/notes-about-netiquette
