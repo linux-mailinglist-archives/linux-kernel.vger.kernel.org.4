@@ -2,50 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA5BF6362EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:10:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40B7E6362F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:11:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238382AbiKWPKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 10:10:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45094 "EHLO
+        id S238361AbiKWPLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 10:11:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238297AbiKWPJo (ORCPT
+        with ESMTP id S238395AbiKWPLF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 10:09:44 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21BEE29C96
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:09:21 -0800 (PST)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NHPZB65Z9zqScT;
-        Wed, 23 Nov 2022 23:05:22 +0800 (CST)
-Received: from [10.67.110.112] (10.67.110.112) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 23 Nov 2022 23:09:18 +0800
-Subject: Re: [PATCH] libnvdimm/of_pmem: Fix memory leak in
- of_pmem_region_probe()
-To:     Tarun Sahu <tsahu@linux.ibm.com>
-CC:     <oohall@gmail.com>, <dan.j.williams@intel.com>,
-        <vishal.l.verma@intel.com>, <dave.jiang@intel.com>,
-        <ira.weiny@intel.com>, <aneesh.kumar@linux.ibm.com>,
-        <nvdimm@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-References: <20221123134527.119441-1-xiujianfeng@huawei.com>
- <20221123145349.yrjo53cz7ez5i36o@tarunpc.in.ibm.com>
-From:   xiujianfeng <xiujianfeng@huawei.com>
-Message-ID: <52fdcd0b-67e4-2889-59bf-1889164e157f@huawei.com>
-Date:   Wed, 23 Nov 2022 23:09:18 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
+        Wed, 23 Nov 2022 10:11:05 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCBAB58BDF;
+        Wed, 23 Nov 2022 07:11:04 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id t1so13266053wmi.4;
+        Wed, 23 Nov 2022 07:11:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TYA+sk34MTdokaTmO6Z2RqNJkrS7NKI/SfAHszvjo7s=;
+        b=AyjUdBUPSwzq13H1UQf4yKXKkqb1P7vt21u9WG70IroGGxLOVENzduplbXXl99Ouag
+         032FFl96sV1zeiCn2unh6UIVmE1Fu2oX5C8F62/h0par3rHBTmzfXdiJ/aLTHdReIa2+
+         u6hUjnA4FU/prOhjLEilWfkRyvAY16QkUQiknyyLYd49nee21nQwzyps0WMnUlsdK1kR
+         3TbI+1Gccba+/tfKlJ39xX8c24nYJjzCxWAaUuV8ctVc68vQzbHaxqQrT+nw1qHqanxz
+         vrEZSQrAmgxr6raSzrsnScnyCFR24c0Z6Cbi82BjJmaywGPikNKoXpSycIl7RCrCX8Rn
+         f2PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TYA+sk34MTdokaTmO6Z2RqNJkrS7NKI/SfAHszvjo7s=;
+        b=2sApt12sdUMxPGgHL+gg7HK1nT4LsxDVb4C0p6emXx9Qk3Q4qmaqV4GamGzXC+AUno
+         95MTEbTHa/YUnGeqYAux81KVC1317me/o/A5r8gqgRCjj5O0haf5qagUTGwksCINcbFV
+         v13VpJe3NpNHnqWU6HuSt7mgUL4nYDWy+Kj+oJlVpEA/cGzghQ/QFv2YxkzOREvcsVdg
+         Et3z58jw5YMWE7F5D1Ud+UFhCwRS0ZUHqjCqEIGALmQcPozx7b7HOYQRE9rVocYojYN6
+         NmXFWj0EXNklsADwU7inXqishphyvy06vjj6pRt3FszGj65oswa+824z3Jebw7mVdR8/
+         X+8w==
+X-Gm-Message-State: ANoB5pnzYGo0aeWwWp3tCesyQxYXjaW9DNXCPsM5IVQDQgz8PKVcCxne
+        oFNMlItITqtW9ELkE/0w0cVNHC+8VZN0oGhi
+X-Google-Smtp-Source: AA0mqf6vaZNTC+bOXSwaYf8dg/zdLGksVSE3FgIWIvtJ5sJRE1WWoQ9xinMoOejLW+T4Zki3NZXW8g==
+X-Received: by 2002:a05:600c:3553:b0:3cf:8e62:f748 with SMTP id i19-20020a05600c355300b003cf8e62f748mr23315643wmq.175.1669216263117;
+        Wed, 23 Nov 2022 07:11:03 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id u6-20020a05600c210600b003cfe1376f68sm2603785wml.9.2022.11.23.07.11.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 07:11:02 -0800 (PST)
+Date:   Wed, 23 Nov 2022 18:10:57 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH resend] media: staging: stkwebcam: Restore
+ MEDIA_{USB,CAMERA}_SUPPORT dependencies
+Message-ID: <Y344AdRANmS3STsd@kadam>
+References: <a50fa46075fb760d8409ff6ea2232b2ddb7a102b.1669046259.git.geert+renesas@glider.be>
+ <20221123100831.GE39395@tom-ThinkPad-T14s-Gen-2i>
+ <CAMuHMdUW8iKFjDj4fPtWfPvyQ1sjGcAy1Kz5j-osz9F4pdA47Q@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20221123145349.yrjo53cz7ez5i36o@tarunpc.in.ibm.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.112]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdUW8iKFjDj4fPtWfPvyQ1sjGcAy1Kz5j-osz9F4pdA47Q@mail.gmail.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,52 +82,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-ÔÚ 2022/11/23 22:53, Tarun Sahu Ð´µÀ:
-> Hi,
-> Thanks for resolving it.
+On Wed, Nov 23, 2022 at 11:13:31AM +0100, Geert Uytterhoeven wrote:
+> Hi Tommaso,
 > 
-> All looks good. Except a thing, there is no check for return status of
-> ksrdup too. that can also be part of this patch.
-
-Thanks for review, already sent v2.
-
+> On Wed, Nov 23, 2022 at 11:08 AM Tommaso Merciai
+> <tommaso.merciai@amarulasolutions.com> wrote:
+> > On Mon, Nov 21, 2022 at 04:58:33PM +0100, Geert Uytterhoeven wrote:
+> > > By moving support for the USB Syntek DC1125 Camera to staging, the
+> > > dependencies on MEDIA_USB_SUPPORT and MEDIA_CAMERA_SUPPORT were lost.
+> > >
+> > > Fixes: 56280c64ecacc971 ("media: stkwebcam: deprecate driver, move to staging")
+> >
+> > Patch itself looks good but we have some style issue. Applying this
+> > patch I got the following warning from checkpatchl:
+> >
+> > WARNING: Please use correct Fixes: style 'Fixes: <12 chars of sha1> ("<title line>")' - ie: 'Fixes: 56280c64ecac ("media: stkwebcam: deprecate driver, move to staging")'
+> > #10:
+> >
+> > You have to pass only the first 12 chars of the sha1 commit into Fixes
+> > msg:
+> >
+> > Use:
+> >
+> >  Fixes: 56280c64ecac ("media: stkwebcam: deprecate driver, move to staging")
+> >
+> > Instead of:
+> >
+> >  Fixes: 56280c64ecacc971 ("media: stkwebcam: deprecate driver, move to staging")
 > 
-> On Nov 23 2022, Xiu Jianfeng wrote:
->> After changes in commit 49bddc73d15c ("libnvdimm/of_pmem: Provide a unique
->> name for bus provider"), @priv->bus_desc.provider_name is no longer a
->> const string, but a dynamic string allocated by kstrdup(), it should be
->> freed on the error path, and when driver is removed.
->>
->> Fixes: 49bddc73d15c ("libnvdimm/of_pmem: Provide a unique name for bus provider")
->> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
->> ---
->>   drivers/nvdimm/of_pmem.c | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/nvdimm/of_pmem.c b/drivers/nvdimm/of_pmem.c
->> index 10dbdcdfb9ce..1292ffca7b2e 100644
->> --- a/drivers/nvdimm/of_pmem.c
->> +++ b/drivers/nvdimm/of_pmem.c
->> @@ -36,6 +36,7 @@ static int of_pmem_region_probe(struct platform_device *pdev)
->>   
->>   	priv->bus = bus = nvdimm_bus_register(&pdev->dev, &priv->bus_desc);
->>   	if (!bus) {
->> +		kfree(priv->bus_desc.provider_name);
->>   		kfree(priv);
->>   		return -ENODEV;
->>   	}
->> @@ -83,6 +84,7 @@ static int of_pmem_region_remove(struct platform_device *pdev)
->>   	struct of_pmem_private *priv = platform_get_drvdata(pdev);
->>   
->>   	nvdimm_bus_unregister(priv->bus);
->> +	kfree(priv->bus_desc.provider_name);
->>   	kfree(priv);
->>   
->>   	return 0;
->> -- 
->> 2.17.1
->>
-> .
+> I always use 16 chars, to avoid these becoming ambiguous in a few years.
 > 
+
+If we assume hashes are randomly distributed and that people commit
+100k patches every year then with 12 character we would have 17
+collisions every 1000 years.
+
+regards,
+dan carpenter
+
