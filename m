@@ -2,142 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4174636242
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:48:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1E82636247
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:48:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237045AbiKWOsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 09:48:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48398 "EHLO
+        id S237105AbiKWOsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 09:48:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237215AbiKWOr7 (ORCPT
+        with ESMTP id S237333AbiKWOsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 09:47:59 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8BFB64563;
-        Wed, 23 Nov 2022 06:47:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669214878; x=1700750878;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=a+8IwRRWnlMenj05niCZLxI+GsQk8uB7E1I3p8nlM2A=;
-  b=XuzY5LWo8gvjvvN8sC0BcdXyj+7hCB+OcMPmIPYxCs6aixedUyI6t5wy
-   JAbe+hscn4M8T3nqx99WuM+rfaTdVzXpgaI2jPnPHtUjeUgw0Rx0xSZqU
-   hMFt7Fvj1qpNTkGqi0pWbumS28ZnvPnGiQ3ktXJ0tcP6XtcLFx14afMo7
-   1ekLNb817ksOzEzqb55F8yEksKpdr3Q8es/YFsSflOvYbEGyWWYP0aAVl
-   wpgF24cPpt2o0noTHjuqg1BDVHuFbIS284GKj1v13cQU+Dw3+oxFjofkk
-   XvxOYlodTivbnolU4augWefPW3fuVe5EZKUpr0isF8MbCf3LuzXqccVAR
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="340959168"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="340959168"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 06:47:58 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="730803960"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="730803960"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.249.168.208]) ([10.249.168.208])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 06:47:56 -0800
-Message-ID: <731bcbc7-67dd-44d1-4e19-2ae165f16beb@linux.intel.com>
-Date:   Wed, 23 Nov 2022 22:47:54 +0800
+        Wed, 23 Nov 2022 09:48:38 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B7C6E553;
+        Wed, 23 Nov 2022 06:48:36 -0800 (PST)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NHPB45PChzHw46;
+        Wed, 23 Nov 2022 22:47:56 +0800 (CST)
+Received: from [10.67.110.112] (10.67.110.112) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 23 Nov 2022 22:48:33 +0800
+Subject: Re: [PATCH] thermal/of: Fix memory leak in thermal_of_zone_register()
+From:   xiujianfeng <xiujianfeng@huawei.com>
+To:     <rafael@kernel.org>, <daniel.lezcano@linaro.org>,
+        <amitk@kernel.org>, <rui.zhang@intel.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221123143325.183870-1-xiujianfeng@huawei.com>
+Message-ID: <1c39e64f-6691-eb58-fcad-59f16ac2e6ec@huawei.com>
+Date:   Wed, 23 Nov 2022 22:48:33 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v10 100/108] KVM: TDX: Handle TDX PV report fatal error
- hypercall
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>
-References: <cover.1667110240.git.isaku.yamahata@intel.com>
- <82671e3e811ab5ad423e125186c050f46621dd86.1667110240.git.isaku.yamahata@intel.com>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <82671e3e811ab5ad423e125186c050f46621dd86.1667110240.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221123143325.183870-1-xiujianfeng@huawei.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.112]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+sorry, it seems someone already sent fix patch, ignore this.
 
-On 10/30/2022 2:23 PM, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
->
-> Wire up TDX PV report fatal error hypercall to KVM_SYSTEM_EVENT_CRASH KVM
-> exit event.
->
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+ÔÚ 2022/11/23 22:33, Xiu Jianfeng Ð´µÀ:
+> In the entry of this function, it has allocated memory by kmemdup() and
+> save it in @of_ops, it should be freed on the error paths, otherwise
+> memory leak issue happens, fix it.
+> 
+> Fixes: 3fd6d6e2b4e8 ("thermal/of: Rework the thermal device tree initialization")
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
 > ---
->   arch/x86/kvm/vmx/tdx.c   | 20 ++++++++++++++++++++
->   include/uapi/linux/kvm.h |  1 +
->   2 files changed, 21 insertions(+)
->
-> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-> index e3062c245e70..16f168f4f21a 100644
-> --- a/arch/x86/kvm/vmx/tdx.c
-> +++ b/arch/x86/kvm/vmx/tdx.c
-> @@ -1068,6 +1068,24 @@ static int tdx_emulate_wrmsr(struct kvm_vcpu *vcpu)
->   	return 1;
->   }
->   
-> +static int tdx_report_fatal_error(struct kvm_vcpu *vcpu)
-> +{
-> +	/*
-> +	 * Exit to userspace device model for teardown.
-> +	 * Because guest TD is already panicing
-
-panicking
-
-
-> , returning an error to guerst
-
-typo, guest
-
-
-
->   TD
-> +	 * doesn't make sense.  No argument check is done.
-> +	 */
-> +
-> +	vcpu->run->exit_reason = KVM_EXIT_SYSTEM_EVENT;
-> +	vcpu->run->system_event.type = KVM_SYSTEM_EVENT_TDX;
-> +	vcpu->run->system_event.ndata = 3;
-> +	vcpu->run->system_event.data[0] = TDG_VP_VMCALL_REPORT_FATAL_ERROR;
-> +	vcpu->run->system_event.data[1] = tdvmcall_a0_read(vcpu);
-> +	vcpu->run->system_event.data[2] = tdvmcall_a1_read(vcpu);
-> +
-> +	return 0;
-> +}
-> +
->   static int handle_tdvmcall(struct kvm_vcpu *vcpu)
->   {
->   	if (tdvmcall_exit_type(vcpu))
-> @@ -1086,6 +1104,8 @@ static int handle_tdvmcall(struct kvm_vcpu *vcpu)
->   		return tdx_emulate_rdmsr(vcpu);
->   	case EXIT_REASON_MSR_WRITE:
->   		return tdx_emulate_wrmsr(vcpu);
-> +	case TDG_VP_VMCALL_REPORT_FATAL_ERROR:
-> +		return tdx_report_fatal_error(vcpu);
->   	default:
->   		break;
+>   drivers/thermal/thermal_of.c | 8 ++++++--
+>   1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+> index d4b6335ace15..95d3da9051c4 100644
+> --- a/drivers/thermal/thermal_of.c
+> +++ b/drivers/thermal/thermal_of.c
+> @@ -604,13 +604,15 @@ struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor,
+>   	if (IS_ERR(np)) {
+>   		if (PTR_ERR(np) != -ENODEV)
+>   			pr_err("Failed to find thermal zone for %pOFn id=%d\n", sensor, id);
+> -		return ERR_CAST(np);
+> +		ret = PTR_ERR(np);
+> +		goto out_kfree_ops;
 >   	}
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index 49386e4de8b8..504a8f73284b 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -478,6 +478,7 @@ struct kvm_run {
->   #define KVM_SYSTEM_EVENT_WAKEUP         4
->   #define KVM_SYSTEM_EVENT_SUSPEND        5
->   #define KVM_SYSTEM_EVENT_SEV_TERM       6
-> +#define KVM_SYSTEM_EVENT_TDX            7
->   			__u32 type;
->   			__u32 ndata;
->   			union {
+>   
+>   	trips = thermal_of_trips_init(np, &ntrips);
+>   	if (IS_ERR(trips)) {
+>   		pr_err("Failed to find trip points for %pOFn id=%d\n", sensor, id);
+> -		return ERR_CAST(trips);
+> +		ret = PTR_ERR(trips);
+> +		goto out_kfree_ops;
+>   	}
+>   
+>   	ret = thermal_of_monitor_init(np, &delay, &pdelay);
+> @@ -659,6 +661,8 @@ struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor,
+>   	kfree(tzp);
+>   out_kfree_trips:
+>   	kfree(trips);
+> +out_kfree_ops:
+> +	kfree(of_ops);
+>   
+>   	return ERR_PTR(ret);
+>   }
+> 
