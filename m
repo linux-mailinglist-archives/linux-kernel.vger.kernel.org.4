@@ -2,133 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6092C636C91
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 22:48:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9884636C95
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 22:49:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237996AbiKWVsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 16:48:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58244 "EHLO
+        id S238755AbiKWVt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 16:49:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237704AbiKWVsW (ORCPT
+        with ESMTP id S238466AbiKWVtY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 16:48:22 -0500
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8252A32B96;
-        Wed, 23 Nov 2022 13:48:20 -0800 (PST)
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4NHZW46rH1z9sTm;
-        Wed, 23 Nov 2022 22:48:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1669240096;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aw2BXawO+gI2px4foXQHN/iThcaB+rQzuEfnc8I5o8w=;
-        b=sQhIOTCIFKcEXfmQZbziXRWCTJY78/QNsQfkuZNqg1w3IDW7RRjTlhGdZWNixdCGjvmg64
-        MWvv100IFEWs+0bPLqESrYPLLNFDzDyC8dFxCrj0ukGJh+Yc3+RLLvhdnuno9QGaBxxH4i
-        v2vAG5TrRE7jVQVIKy9nwCUOa42FNNeKsQZ+pUWhJCpIsTWfayEIV14r8QEugQB3LvjB7n
-        we/bqtf2eEVBHp+icbnoxaeqIz7sxM2kaxXzm7dz72dygXMxolLzFvMzThE9C5J3Uk4AST
-        iGfwYOIxVdIE7JBM141HsB2uNJ+AaTlcS1U6gtnmCPeVWm8vWlDPnJPL9u07DA==
-From:   Alexander Lobakin <alobakin@mailbox.org>
-To:     Colin Foster <colin.foster@in-advantage.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     Alexander Lobakin <alobakin@pm.me>, linux-kbuild@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Jens Axboe <axboe@kernel.dk>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Derek Chickles <dchickles@marvell.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        NXP Linux Team <linux-imx@nxp.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 14/18] dsa: ocelot: fix mixed module-builtin object
-Date:   Wed, 23 Nov 2022 22:47:46 +0100
-Message-Id: <20221123214746.62207-1-alobakin@mailbox.org>
-In-Reply-To: <Y3u/qwvLED4nE/jR@colin-ia-desktop>
-References: <20221119225650.1044591-1-alobakin@pm.me> <20221119225650.1044591-15-alobakin@pm.me> <20221121175504.qwuoyditr4xl6oew@skbuf> <Y3u/qwvLED4nE/jR@colin-ia-desktop>
+        Wed, 23 Nov 2022 16:49:24 -0500
+Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F3E391DC
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 13:49:21 -0800 (PST)
+Received: (wp-smtpd smtp.tlen.pl 15356 invoked from network); 23 Nov 2022 22:49:16 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
+          t=1669240156; bh=D/IG6aN7NVTAZ/xMxOsnr2tGYOM0JOYTUCbROLhD6IE=;
+          h=From:To:Cc:Subject;
+          b=ehkvJLTaw1giNPygoMQQm4TnossN3yKX7pNCmvhADnUf4COHSCstExcu3jdQeB3mD
+           qTMfbHcgL4y/vSf3m/nbMpw7IOhvoOfQt/Oeb1tqD0D4J31DN3JJmypzTdggHdeU3c
+           DBymsGov5byGJyCbttdKsXb0dD+HfFHJUKGkwgEk=
+Received: from aafn183.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.143.183])
+          (envelope-sender <mat.jonczyk@o2.pl>)
+          by smtp.tlen.pl (WP-SMTPD) with SMTP
+          for <linux-kernel@vger.kernel.org>; 23 Nov 2022 22:49:16 +0100
+From:   =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+To:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org
+Cc:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Borislav Petkov <bp@suse.de>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jean Delvare <jdelvare@suse.de>
+Subject: [PATCH v3] acpi,pci: warn about duplicate IRQ routing entries returned from _PRT
+Date:   Wed, 23 Nov 2022 22:48:44 +0100
+Message-Id: <20221123214844.4760-1-mat.jonczyk@o2.pl>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-MBO-RS-META: b7otjaeni3xsdy1qrdy9oxk4oj7b6453
-X-MBO-RS-ID: d4f309bc62ba0ccc568
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-WP-MailID: af4bfda2c63d7e23bafa6513101a476e
+X-WP-AV: skaner antywirusowy Poczty o2
+X-WP-SPAM: NO 000000A [0VP0]                               
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Colin Foster <colin.foster@in-advantage.com>,
-Date: Mon, 21 Nov 2022 10:12:59 -0800
+On some platforms, the ACPI _PRT function returns duplicate interrupt
+routing entries. Linux uses the first matching entry, but sometimes the
+second matching entry contains the correct interrupt vector.
 
-> On Mon, Nov 21, 2022 at 07:55:04PM +0200, Vladimir Oltean wrote:
-> > On Sat, Nov 19, 2022 at 11:09:28PM +0000, Alexander Lobakin wrote:
-> > > With CONFIG_NET_DSA_MSCC_FELIX=m and CONFIG_NET_DSA_MSCC_SEVILLE=y
-> > > (or vice versa), felix.o are linked to a module and also to vmlinux
-> > > even though the expected CFLAGS are different between builtins and
-> > > modules.
-> > > This is the same situation as fixed by
-> > > commit 637a642f5ca5 ("zstd: Fixing mixed module-builtin objects").
-> > > There's also no need to duplicate relatively big piece of object
-> > > code into two modules.
-> > > 
-> > > Introduce the new module, mscc_core, to provide the common functions
-> > > to both mscc_felix and mscc_seville.
-> > > 
-> > > Fixes: d60bc62de4ae ("net: dsa: seville: build as separate module")
-> > > Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
-> > > Signed-off-by: Alexander Lobakin <alobakin@pm.me>
-> > > ---
-> > 
-> > I don't disagree with the patch, but I dislike the name chosen.
-> > How about NET_DSA_OCELOT_LIB and mscc_ocelot_dsa_lib.o? The "core" of
-> > the hardware support is arguably mscc_ocelot_switch_lib.o, I don't think
-> > it would be good to use that word here, since the code you're moving is
-> > no more than a thin glue layer with some DSA specific code.
+Print an error to dmesg if duplicate interrupt routing entries are
+present, so that we could check how many models are affected.
 
-Sure. I usually barely work with the code touched by the series, so
-often the names can make no sense -- I'm open for better namings
-from the real developers.
-_dsa_lib sounds good, I like it.
+This happens on a Dell Latitude E6500 laptop with the i2c-i801 Intel
+SMBus controller. This controller was nonfunctional unless its interrupt
+usage was disabled (using the "disable_features=0x10" module parameter).
 
-> > 
-> > Adding Colin for a second opinion on the naming. I'm sure things could
-> > have been done better in the first place, just not sure how.
-> 
-> Good catch on this patch. "mscc_ocelot_dsa_lib" makes sense. The only
-> other option that might be considered would be along the lines of
-> "felix_lib". While I know "Felix" is the chip, in the dsa directory it
-> seems to represent the DSA lib in general.
+After investigation, it turned out that the driver was using an
+incorrect interrupt vector: in lspci output for this device there was:
+        Interrupt: pin B routed to IRQ 19
+but after running i2cdetect (without using any i2c-i801 module
+parameters) the following was logged to dmesg:
 
-The thing confused me is that one chip is named Felix and the other
-one is Seville, but the shared code is named felix as well. So at
-first I thought maybe Felix is a family of chips and Seville is a
-chip from that family, dunno :D
+        [...]
+        i801_smbus 0000:00:1f.3: Timeout waiting for interrupt!
+        i801_smbus 0000:00:1f.3: Transaction timeout
+        i801_smbus 0000:00:1f.3: Timeout waiting for interrupt!
+        i801_smbus 0000:00:1f.3: Transaction timeout
+        irq 17: nobody cared (try booting with the "irqpoll" option)
 
-> 
-> Either one seems fine for me. And thanks for the heads up, as I'll need
-> to make the same changes for ocelot_ext when it is ready.
+Existence of duplicate entries in a table returned by the _PRT method
+was confirmed by disassembling the ACPI DSDT table.
 
-Something interesting is coming, nice <.<
+Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+Cc: Bjorn Helgaas <bhelgaas@google.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Len Brown <lenb@kernel.org>
+Cc: Borislav Petkov <bp@suse.de>
+Cc: Jean Delvare <jdelvare@suse.com>
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
+Tested-by: Jean Delvare <jdelvare@suse.de>
 
-(re "pls prefix with "net: dsa: ..."" -- roger that)
+--
+v2: - add a newline at the end of the kernel log message,
+    - replace: "if (match == NULL)" -> "if (!match)"
+    - patch description tweaks.
+v3: - fix C style issues pointed by Jean Delvare,
+    - switch severity from warning to error.
 
-Thanks,
-Olek
+To consider: should we print a warning or an error in case of duplicate
+entries? This may be not serious enough to disturb the user with an
+error message at boot. On the other hand, hardware vendors should see
+it and the kernel uses this logging severtity in similar cases.
+---
+ drivers/acpi/pci_irq.c | 26 +++++++++++++++++++++++---
+ 1 file changed, 23 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/acpi/pci_irq.c b/drivers/acpi/pci_irq.c
+index 08e15774fb9f..1c846def1ce4 100644
+--- a/drivers/acpi/pci_irq.c
++++ b/drivers/acpi/pci_irq.c
+@@ -203,6 +203,8 @@ static int acpi_pci_irq_find_prt_entry(struct pci_dev *dev,
+ 	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
+ 	struct acpi_pci_routing_table *entry;
+ 	acpi_handle handle = NULL;
++	struct acpi_prt_entry *match = NULL;
++	const char *match_int_source = NULL;
+ 
+ 	if (dev->bus->bridge)
+ 		handle = ACPI_HANDLE(dev->bus->bridge);
+@@ -219,13 +221,31 @@ static int acpi_pci_irq_find_prt_entry(struct pci_dev *dev,
+ 
+ 	entry = buffer.pointer;
+ 	while (entry && (entry->length > 0)) {
+-		if (!acpi_pci_irq_check_entry(handle, dev, pin,
+-						 entry, entry_ptr))
+-			break;
++		struct acpi_prt_entry *curr;
++
++		if (!acpi_pci_irq_check_entry(handle, dev, pin, entry, &curr)) {
++			if (!match) {
++				match = curr;
++				match_int_source = entry->source;
++			} else {
++				pr_err(FW_BUG
++				       "ACPI _PRT returned duplicate IRQ routing entries for device %04x:%02x:%02x[INT%c]: %s[%d] and %s[%d]\n",
++				       curr->id.segment, curr->id.bus, curr->id.device,
++				       pin_name(curr->pin),
++				       match_int_source, match->index,
++				       entry->source, curr->index);
++				/* We use the first matching entry nonetheless,
++				 * for compatibility with older kernels.
++				 */
++			}
++		}
++
+ 		entry = (struct acpi_pci_routing_table *)
+ 		    ((unsigned long)entry + entry->length);
+ 	}
+ 
++	*entry_ptr = match;
++
+ 	kfree(buffer.pointer);
+ 	return 0;
+ }
+
+base-commit: eb7081409f94a9a8608593d0fb63a1aa3d6f95d8
+-- 
+2.25.1
+
