@@ -2,106 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82626636953
+	by mail.lfdr.de (Postfix) with ESMTP id D4447636954
 	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:54:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239445AbiKWSyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 13:54:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53788 "EHLO
+        id S239441AbiKWSyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 13:54:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238111AbiKWSyj (ORCPT
+        with ESMTP id S238569AbiKWSyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 13:54:39 -0500
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C318220B
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 10:54:38 -0800 (PST)
-Received: by mail-vs1-xe32.google.com with SMTP id p4so18331085vsa.11
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 10:54:38 -0800 (PST)
+        Wed, 23 Nov 2022 13:54:40 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B296074CC7;
+        Wed, 23 Nov 2022 10:54:39 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id f3so17532246pgc.2;
+        Wed, 23 Nov 2022 10:54:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YkY98wWkOr8gcPA7rEJ+Ei5Q1t6NA6kWh2YpykOcth4=;
-        b=h/KmO1JPprgqmpWqh2J/alqyxC9f+AjXXJRyeDTBqUUe92grkau7vpD/KZxCtOjEBc
-         Mn2ZR5cg4JdRUx4XruFVAsYt+t4jDonUJ9sSN3JfNww7hanbIIb3Nye9j86ejJoC8Xrm
-         L/BYMoITUydsw+LXLxpT4M0eGnYAWUtODeGhy6xQK/L0zn4uk7e2AYmR+rfw45Dosmyu
-         Ku7+Y24VnxQjRALrKlWZBz9N4x/pCcJjKJI5di/0EigVprwWuHFjKKQc3j90DohxKjWS
-         EKPj8dTXKzpRO17HDO3dp0eu8ndJXZVO643mQCP9jYfLfScjJ2munKVM/J8eBD5qypK4
-         gg+A==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5sSGgviv+Rd8DodQepSsltaLLYak+O+h9smkq8iHKcU=;
+        b=fPjv6zZam2cSMYf9VamxmWMlMyv7kpdr5YdnhbjOilgItBXwb6LHw4mO0zpf3risoj
+         T43v3+mu8k+SWFkbYVjXSMtXRTjZuqLsAZQgYsPkZll4do16vOHi2nbSdqbMOOQ+RSOd
+         HQvnOHS5e6tZWST/ye/mBAGqlKPT8RyA04w8Bjy50IdYj8+otNvunOrr9NEAIQ5OnbNk
+         8VXIAJ2XD2Fd61/wbMsmflnCo54arTeNGC1DBGpG5Ol7fDTNSUrV5DexVJL1LPLky1Vj
+         vlnNvp7fTlt16YKuFSyhRsSaRHXaXYyLb+ZB5wvTuDzyRVYhn/5TI9qLi+rt/1jXsZCx
+         7jkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YkY98wWkOr8gcPA7rEJ+Ei5Q1t6NA6kWh2YpykOcth4=;
-        b=u54sD5K/lQ68yuUKQPnQJ7J/Xzp4HAOOkVOk2iHG1PnS/IdEThrurWM3ydiXQfv9+s
-         iLBET4kSy91zGBsm1VHVjtvJWBqFRCmy+wjdmRToavc0Cm8nFtMecCUteJbB78vSW566
-         e49OLU9tWCfHNbwrapxotPOQ6hvSjQGUaurRceLwJI+bkv39m8/KWzcZljKS5utQAL3J
-         K3SZLTkuZlpB4geADfvossC6qS9Mg73ovpdfVDQMDcbRnhezJtwe29RHPjXFVn9lhHym
-         Wx/cv2J3kYg9e8fd0CagQX2lREHenrvat5QfnoBqUUYkm3d7WR7gfNREIjXw78xwLR4c
-         wWvA==
-X-Gm-Message-State: ANoB5plcDF4g1btJcppYdnBZ8y6NKQkpMHNi5F9u1FObOu2/F3bPwzQR
-        UjmnMbk8WhnGeU3BThJETNY+fifshrKPo7O5xLuzl09SLA==
-X-Google-Smtp-Source: AA0mqf68c8mA0lq5iZRPdSShNp/XWyAH9LMDdOzgyYW57LEaKd+hvqp1SyTHnEDwsaujfB8ZQyT1vHi+3W6lhckqjYQ=
-X-Received: by 2002:a67:ed94:0:b0:3aa:8846:b9a with SMTP id
- d20-20020a67ed94000000b003aa88460b9amr6311148vsp.58.1669229677407; Wed, 23
- Nov 2022 10:54:37 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5sSGgviv+Rd8DodQepSsltaLLYak+O+h9smkq8iHKcU=;
+        b=nSwxtyuGhtmmRNwd9xXRzT3a4iheR9W9Zigb+5wQgg058nKXbIhsqiFhAkssht1nc3
+         oERsO7BWbQKey9ZKbXfwoUix81LdugQNPtmTPHiNEEg4jkcb7BV5aqrbo9UeFTZeZe4L
+         f61NzojoCXWRN1A6blcE6OHIPijFaGn0f/Ogf7FS4f5YVbskEvD/V9+0KdeKNcE/NNTc
+         KF7uppjcyPSyAbL6L0mArHkyuA40tduI77sUDTSHULIhR/4C/kzL4GvQ7K5YsWvKSE4U
+         pclO7CckGFWsLEsBXfqFIT2GcXjkEmGpOjo7sCPD8Bny0pvV0YVZSccH29iZuInMJWY7
+         AMLg==
+X-Gm-Message-State: ANoB5pk6n7K8hiTdlujwOPhrNytoaNQcVAgSYWYmo07v/6CyJGlLCnS8
+        4IS8ReyHuPd6M2oiSbuyR38=
+X-Google-Smtp-Source: AA0mqf44BN7ykPjHPAo2C9WjPmKfOrkxDUUtieAjzTf2lWt8Sgu9pE8eJ2HMvGBgeQ0TatRabC1RUg==
+X-Received: by 2002:a05:6a00:410b:b0:56b:dc84:7783 with SMTP id bu11-20020a056a00410b00b0056bdc847783mr15005280pfb.35.1669229678922;
+        Wed, 23 Nov 2022 10:54:38 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id y3-20020a17090322c300b0018912c37c8fsm9780378plg.129.2022.11.23.10.54.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 10:54:38 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 23 Nov 2022 08:54:37 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     "haifeng.xu" <haifeng.xu@shopee.com>, lizefan.x@bytedance.com,
+        hannes@cmpxchg.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cgroup/cpuset: Optimize update_tasks_nodemask()
+Message-ID: <Y35sbREgYE6aIdIp@slm.duckdns.org>
+References: <20221123082157.71326-1-haifeng.xu@shopee.com>
+ <Y35Swdpq+rJe+Tu3@slm.duckdns.org>
+ <5fccf438-fdbe-1bc8-6460-b3911cc51566@redhat.com>
 MIME-Version: 1.0
-References: <20221121055345.111567-1-jake.macneal@gmail.com>
-In-Reply-To: <20221121055345.111567-1-jake.macneal@gmail.com>
-From:   John Stultz <jstultz@google.com>
-Date:   Wed, 23 Nov 2022 10:54:27 -0800
-Message-ID: <CANDhNCqCYkv7Ja4RT2_DEPh2zFFL+SD82wru_FC6dupCo6_4RA@mail.gmail.com>
-Subject: Re: [PATCH] time: copy tai value (International Atomic Time, in
- seconds) to output __user struct in get_old_timex32().
-To:     Jacob Macneal <jake.macneal@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5fccf438-fdbe-1bc8-6460-b3911cc51566@redhat.com>
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 20, 2022 at 9:54 PM Jacob Macneal <jake.macneal@gmail.com> wrote:
->
-> Previously, this value was not copied into the output struct. This is
-> despite all other fields of the corresponding __kernel_timex struct being
-> copied to the old_timex32 __user struct in this function.
->
-> Additionally, the matching function put_old_timex32() expects a tai value
-> to be supplied, and copies it appropriately. It would appear to be a
-> mistake that this value was never copied over in get_old_timex32().
->
-> Signed-off-by: Jacob Macneal <jake.macneal@gmail.com>
-> ---
->  kernel/time/time.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/kernel/time/time.c b/kernel/time/time.c
-> index 526257b3727c..7da9951b033a 100644
-> --- a/kernel/time/time.c
-> +++ b/kernel/time/time.c
-> @@ -311,6 +311,7 @@ int get_old_timex32(struct __kernel_timex *txc, const struct old_timex32 __user
->         txc->calcnt = tx32.calcnt;
->         txc->errcnt = tx32.errcnt;
->         txc->stbcnt = tx32.stbcnt;
-> +       txc->tai = tx32.tai;
->
+On Wed, Nov 23, 2022 at 01:48:46PM -0500, Waiman Long wrote:
+> I think it is an issue anyway if different threads of a process are in
+> different cpusets with different node mask. It is not a configuration that
+> should be used at all.
 
-This does seem like something that was overlooked.
+Anything memory related is in the same boat and people still use them
+reaching whatever end results they reach. Given the whole thing is pretty
+ill-defined, I don't wanna change the behavior now.
 
-Arnd: There isn't something more subtle I'm missing here, right?
+> This patch makes update_tasks_nodemask() somewhat similar to cpuset_attach()
+> where all tasks are iterated to update the node mask but only the task
+> leaders are required to update the mm. For a non-group leader task, maybe we
+> can check if the group leader is in the same cpuset. If so, we can skip the
+> mm update. Do we need similar change in cpuset_attach()?
 
-Otherwise:
-  Acked-by: John Stultz <jstultz@google.com>
+The leader isn't special tho. We just wanna avoid visiting the same mm more
+than once, right?
 
-thanks
--john
+Thanks.
+
+-- 
+tejun
