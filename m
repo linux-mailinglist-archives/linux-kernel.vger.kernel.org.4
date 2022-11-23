@@ -2,74 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3190C636672
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:03:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9DAF636674
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:03:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237592AbiKWRDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 12:03:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
+        id S237870AbiKWRDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 12:03:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236921AbiKWRC4 (ORCPT
+        with ESMTP id S238325AbiKWRDM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 12:02:56 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C5362059
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 09:02:53 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id x13-20020a17090a46cd00b00218f611b6e9so754096pjg.1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 09:02:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xtW9VVC8Ry6rEP8bZmq8bnNRziAwFnWeXTCQ6xclNuc=;
-        b=vs/bCMbK9G+RjRRs+gCpuLqVMrRBwRhZdKbPRvMZmjaSBjiPfozEYv5YjRFiIFJJKb
-         9YB9inrWj1a2+QvkL4aCrKoh5lFxtDBZmH9YyKCkbFXRTjBXuDn6KcjLJjrOc2d3PsyF
-         xb5qdisDgO/g++1jC+AcCdUfXOi09YAcYZKFJmx9ApyjBBTMMS/wulTrDHBh2iLKOVdh
-         CVMwD9tkyJLbJvCSfpCUgO3inTMVJEWFYEnltWUEk27HT4AsIIJA0L03VE+SVfAQWG8w
-         RM4VPLkx/g//7y2N/hV5flQrIAvBOhRaSAHNHLrjGzjqTIVsAeokY72x4iU7afA2tGqI
-         bjyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xtW9VVC8Ry6rEP8bZmq8bnNRziAwFnWeXTCQ6xclNuc=;
-        b=KqaEC+0LCiraaiHxze2oqHJ+Rn8Acv9izZmjQBVlo9mMaPND6VTeauVesotWAFBjEH
-         QMOVtKu7+d6EC04R0ZDAnHLk32D8bRcwkmgTFG3n0RZhP793SfeK/lN4iI/L+SQtzeGl
-         SHcrVV/tHvrHCVb19D6UDZ54GfvxaOaIrBO9kt4UIfFRkWd0l0ROT+cV7PrikaysviHX
-         bw+/D/PLljpLEsHmHxpsxxMcjsoAbopK5cSWxdrjYhl9dmkyquIk9n3FBqaaREEHAf+v
-         f3CDLIpzed08mZJ4dH3zhCiBXD1asw31upucDsGjFH+Mh5qFDEqnw7kUX2g8dhpJCgEy
-         K8Lw==
-X-Gm-Message-State: ANoB5pnu7sMGvxI3in0iqCk+RXo3zm8gxlAwdhZmmadF8hfCDEU3nEXj
-        kkCwQQX34ftHaBBjEesHAH2a1w==
-X-Google-Smtp-Source: AA0mqf7QBn41JsKc0E74UeARJdwT69yD+Nf84EGNKTDQvFbVw6ZlvvxfQEoJBYIA042rqG+qq7FXdA==
-X-Received: by 2002:a17:90a:d581:b0:212:b43b:ffe5 with SMTP id v1-20020a17090ad58100b00212b43bffe5mr31841949pju.32.1669222972487;
-        Wed, 23 Nov 2022 09:02:52 -0800 (PST)
-Received: from debug.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id j5-20020a170903024500b0017849a2b56asm14740970plh.46.2022.11.23.09.02.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 09:02:51 -0800 (PST)
-Date:   Wed, 23 Nov 2022 09:02:50 -0800
-From:   Deepak Gupta <debug@rivosinc.com>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH 3/4] riscv: fix race when vmap stack overflow and remove
- shadow_stack
-Message-ID: <20221123170250.GA2855837@debug.ba.rivosinc.com>
-References: <20220925175356.681-1-jszhang@kernel.org>
- <20220925175356.681-4-jszhang@kernel.org>
+        Wed, 23 Nov 2022 12:03:12 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 65E7EDDC
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 09:03:09 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F1B801FB;
+        Wed, 23 Nov 2022 09:03:15 -0800 (PST)
+Received: from [10.57.87.10] (unknown [10.57.87.10])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 606993F73B;
+        Wed, 23 Nov 2022 09:03:05 -0800 (PST)
+Message-ID: <daf19e5a-97f7-a25f-4cac-b52fd04b4021@arm.com>
+Date:   Wed, 23 Nov 2022 17:03:03 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220925175356.681-4-jszhang@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v9 11/11] drm/panfrost: Switch to generic memory shrinker
+Content-Language: en-GB
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@gmail.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Clark <robdclark@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Qiang Yu <yuq825@gmail.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Herring <robh@kernel.org>, Sean Paul <sean@poorly.run>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org
+References: <20221123025723.695075-1-dmitry.osipenko@collabora.com>
+ <20221123025723.695075-12-dmitry.osipenko@collabora.com>
+From:   Steven Price <steven.price@arm.com>
+In-Reply-To: <20221123025723.695075-12-dmitry.osipenko@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,186 +66,433 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 01:53:55AM +0800, Jisheng Zhang wrote:
->Currently, when detecting vmap stack overflow, riscv firstly switches
->to the so called shadow stack, then use this shadow stack to call the
->get_overflow_stack() to get the overflow stack. However, there's
->a race here if two or more harts use the same shadow stack at the same
->time.
->
->To solve this race, we rely on two facts:
->1. the kernel thread pointer I.E "tp" register can still be gotten from
->the CSR_SCRATCH register, thus we can clobber tp under the condition
->that we restore tp from CSR_SCRATCH later.
->
->2. Once vmap stack overflow happen, panic is coming soon, no
->performance concern at all, so we don't need to define the overflow
->stack as percpu var, we can simplify it into an array.
->
->Thus we can use tp as a tmp register to get the cpu id to calculate
->the offset of overflow stack for each cpu w/o shadow stack any more.
->Thus the race condition is removed as side effect.
->
->NOTE: we can use similar mechanism to let each cpu use different shadow
->stack to fix the race codition, but if we can remove shadow stack usage
->totally, why not.
+On 23/11/2022 02:57, Dmitry Osipenko wrote:
+> Replace Panfrost's custom memory shrinker with a common drm-shmem
+> memory shrinker.
+> 
+> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> ---
 
-I've a different patch to solve the same problem.
-Using an asm macro which allows obtaining per cpu symbols.
-Thus we can switch to overflow_stack directly from entry.S
-Patch coming soon.
+I've given this some (light) testing on my Firefly-RK3288 and it works fine.
 
->
->Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
->Fixes: 31da94c25aea ("riscv: add VMAP_STACK overflow detection")
->---
-> arch/riscv/include/asm/asm-prototypes.h |  1 -
-> arch/riscv/include/asm/thread_info.h    |  4 +-
-> arch/riscv/kernel/asm-offsets.c         |  1 +
-> arch/riscv/kernel/entry.S               | 54 ++++---------------------
-> arch/riscv/kernel/traps.c               | 15 +------
-> 5 files changed, 11 insertions(+), 64 deletions(-)
->
->diff --git a/arch/riscv/include/asm/asm-prototypes.h b/arch/riscv/include/asm/asm-prototypes.h
->index ef386fcf3939..4a06fa0f6493 100644
->--- a/arch/riscv/include/asm/asm-prototypes.h
->+++ b/arch/riscv/include/asm/asm-prototypes.h
->@@ -25,7 +25,6 @@ DECLARE_DO_ERROR_INFO(do_trap_ecall_s);
-> DECLARE_DO_ERROR_INFO(do_trap_ecall_m);
-> DECLARE_DO_ERROR_INFO(do_trap_break);
->
->-asmlinkage unsigned long get_overflow_stack(void);
-> asmlinkage void handle_bad_stack(struct pt_regs *regs);
->
-> #endif /* _ASM_RISCV_PROTOTYPES_H */
->diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
->index c970d41dc4c6..c604a5212a73 100644
->--- a/arch/riscv/include/asm/thread_info.h
->+++ b/arch/riscv/include/asm/thread_info.h
->@@ -28,14 +28,12 @@
->
-> #define THREAD_SHIFT            (PAGE_SHIFT + THREAD_SIZE_ORDER)
-> #define OVERFLOW_STACK_SIZE     SZ_4K
->-#define SHADOW_OVERFLOW_STACK_SIZE (1024)
->+#define OVERFLOW_STACK_SHIFT	12
->
-> #define IRQ_STACK_SIZE		THREAD_SIZE
->
-> #ifndef __ASSEMBLY__
->
->-extern long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE / sizeof(long)];
->-
-> #include <asm/processor.h>
-> #include <asm/csr.h>
->
->diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
->index df9444397908..62bf3bacc322 100644
->--- a/arch/riscv/kernel/asm-offsets.c
->+++ b/arch/riscv/kernel/asm-offsets.c
->@@ -37,6 +37,7 @@ void asm_offsets(void)
-> 	OFFSET(TASK_TI_PREEMPT_COUNT, task_struct, thread_info.preempt_count);
-> 	OFFSET(TASK_TI_KERNEL_SP, task_struct, thread_info.kernel_sp);
-> 	OFFSET(TASK_TI_USER_SP, task_struct, thread_info.user_sp);
->+	OFFSET(TASK_TI_CPU, task_struct, thread_info.cpu);
->
-> 	OFFSET(TASK_THREAD_F0,  task_struct, thread.fstate.f[0]);
-> 	OFFSET(TASK_THREAD_F1,  task_struct, thread.fstate.f[1]);
->diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
->index a3e1ed2fa2ac..442d93beffcf 100644
->--- a/arch/riscv/kernel/entry.S
->+++ b/arch/riscv/kernel/entry.S
->@@ -223,54 +223,14 @@ END(ret_from_exception)
->
-> #ifdef CONFIG_VMAP_STACK
-> ENTRY(handle_kernel_stack_overflow)
->-	la sp, shadow_stack
->-	addi sp, sp, SHADOW_OVERFLOW_STACK_SIZE
->-
->-	//save caller register to shadow stack
->-	addi sp, sp, -(PT_SIZE_ON_STACK)
->-	REG_S x1,  PT_RA(sp)
->-	REG_S x5,  PT_T0(sp)
->-	REG_S x6,  PT_T1(sp)
->-	REG_S x7,  PT_T2(sp)
->-	REG_S x10, PT_A0(sp)
->-	REG_S x11, PT_A1(sp)
->-	REG_S x12, PT_A2(sp)
->-	REG_S x13, PT_A3(sp)
->-	REG_S x14, PT_A4(sp)
->-	REG_S x15, PT_A5(sp)
->-	REG_S x16, PT_A6(sp)
->-	REG_S x17, PT_A7(sp)
->-	REG_S x28, PT_T3(sp)
->-	REG_S x29, PT_T4(sp)
->-	REG_S x30, PT_T5(sp)
->-	REG_S x31, PT_T6(sp)
->-
->-	la ra, restore_caller_reg
->-	tail get_overflow_stack
->-
->-restore_caller_reg:
->-	//save per-cpu overflow stack
->-	REG_S a0, -8(sp)
->-	//restore caller register from shadow_stack
->-	REG_L x1,  PT_RA(sp)
->-	REG_L x5,  PT_T0(sp)
->-	REG_L x6,  PT_T1(sp)
->-	REG_L x7,  PT_T2(sp)
->-	REG_L x10, PT_A0(sp)
->-	REG_L x11, PT_A1(sp)
->-	REG_L x12, PT_A2(sp)
->-	REG_L x13, PT_A3(sp)
->-	REG_L x14, PT_A4(sp)
->-	REG_L x15, PT_A5(sp)
->-	REG_L x16, PT_A6(sp)
->-	REG_L x17, PT_A7(sp)
->-	REG_L x28, PT_T3(sp)
->-	REG_L x29, PT_T4(sp)
->-	REG_L x30, PT_T5(sp)
->-	REG_L x31, PT_T6(sp)
->+	la sp, overflow_stack
->+	/* use tp as tmp register since we can restore it from CSR_SCRATCH */
->+	REG_L tp, TASK_TI_CPU(tp)
->+	addi tp, tp, 1
->+	slli tp, tp, OVERFLOW_STACK_SHIFT
->+	add sp, sp, tp
->+	csrr tp, CSR_SCRATCH
->
->-	//load per-cpu overflow stack
->-	REG_L sp, -8(sp)
-> 	addi sp, sp, -(PT_SIZE_ON_STACK)
->
-> 	//save context to overflow stack
->diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
->index 73f06cd149d9..2a2a977c1eff 100644
->--- a/arch/riscv/kernel/traps.c
->+++ b/arch/riscv/kernel/traps.c
->@@ -216,23 +216,12 @@ int is_valid_bugaddr(unsigned long pc)
-> #endif /* CONFIG_GENERIC_BUG */
->
-> #ifdef CONFIG_VMAP_STACK
->-static DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)],
->-		overflow_stack)__aligned(16);
->-/*
->- * shadow stack, handled_ kernel_ stack_ overflow(in kernel/entry.S) is used
->- * to get per-cpu overflow stack(get_overflow_stack).
->- */
->-long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE/sizeof(long)];
->-asmlinkage unsigned long get_overflow_stack(void)
->-{
->-	return (unsigned long)this_cpu_ptr(overflow_stack) +
->-		OVERFLOW_STACK_SIZE;
->-}
->+unsigned long overflow_stack[NR_CPUS][OVERFLOW_STACK_SIZE/sizeof(long)] __aligned(16);
->
-> asmlinkage void handle_bad_stack(struct pt_regs *regs)
-> {
-> 	unsigned long tsk_stk = (unsigned long)current->stack;
->-	unsigned long ovf_stk = (unsigned long)this_cpu_ptr(overflow_stack);
->+	unsigned long ovf_stk = (unsigned long)overflow_stack[raw_smp_processor_id()];
->
-> 	console_verbose();
->
->-- 
->2.34.1
->
+Tested-by: Steven Price <steven.price@arm.com>
+Reviewed-by: Steven Price <steven.price@arm.com>
+
+>  drivers/gpu/drm/drm_gem_shmem_helper.c        |   2 -
+>  drivers/gpu/drm/panfrost/Makefile             |   1 -
+>  drivers/gpu/drm/panfrost/panfrost_device.h    |   4 -
+>  drivers/gpu/drm/panfrost/panfrost_drv.c       |  27 ++--
+>  drivers/gpu/drm/panfrost/panfrost_gem.c       |  30 ++--
+>  drivers/gpu/drm/panfrost/panfrost_gem.h       |   9 --
+>  .../gpu/drm/panfrost/panfrost_gem_shrinker.c  | 129 ------------------
+>  drivers/gpu/drm/panfrost/panfrost_job.c       |  18 ++-
+>  include/drm/drm_gem_shmem_helper.h            |   7 -
+>  9 files changed, 47 insertions(+), 180 deletions(-)
+>  delete mode 100644 drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
+> 
+> diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
+> index 705bd32a4c92..70b25585cead 100644
+> --- a/drivers/gpu/drm/drm_gem_shmem_helper.c
+> +++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
+> @@ -87,8 +87,6 @@ __drm_gem_shmem_create(struct drm_device *dev, size_t size, bool private)
+>  	if (ret)
+>  		goto err_release;
+>  
+> -	INIT_LIST_HEAD(&shmem->madv_list);
+> -
+>  	if (!private) {
+>  		/*
+>  		 * Our buffers are kept pinned, so allocating them
+> diff --git a/drivers/gpu/drm/panfrost/Makefile b/drivers/gpu/drm/panfrost/Makefile
+> index 7da2b3f02ed9..11622e22cf15 100644
+> --- a/drivers/gpu/drm/panfrost/Makefile
+> +++ b/drivers/gpu/drm/panfrost/Makefile
+> @@ -5,7 +5,6 @@ panfrost-y := \
+>  	panfrost_device.o \
+>  	panfrost_devfreq.o \
+>  	panfrost_gem.o \
+> -	panfrost_gem_shrinker.o \
+>  	panfrost_gpu.o \
+>  	panfrost_job.o \
+>  	panfrost_mmu.o \
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_device.h b/drivers/gpu/drm/panfrost/panfrost_device.h
+> index 8b25278f34c8..fe04b21fc044 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_device.h
+> +++ b/drivers/gpu/drm/panfrost/panfrost_device.h
+> @@ -115,10 +115,6 @@ struct panfrost_device {
+>  		atomic_t pending;
+>  	} reset;
+>  
+> -	struct mutex shrinker_lock;
+> -	struct list_head shrinker_list;
+> -	struct shrinker shrinker;
+> -
+>  	struct panfrost_devfreq pfdevfreq;
+>  };
+>  
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_drv.c b/drivers/gpu/drm/panfrost/panfrost_drv.c
+> index 94b8e6de34b8..e6d293cd3494 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_drv.c
+> +++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
+> @@ -160,7 +160,6 @@ panfrost_lookup_bos(struct drm_device *dev,
+>  			break;
+>  		}
+>  
+> -		atomic_inc(&bo->gpu_usecount);
+>  		job->mappings[i] = mapping;
+>  	}
+>  
+> @@ -392,7 +391,6 @@ static int panfrost_ioctl_madvise(struct drm_device *dev, void *data,
+>  {
+>  	struct panfrost_file_priv *priv = file_priv->driver_priv;
+>  	struct drm_panfrost_madvise *args = data;
+> -	struct panfrost_device *pfdev = dev->dev_private;
+>  	struct drm_gem_object *gem_obj;
+>  	struct panfrost_gem_object *bo;
+>  	int ret = 0;
+> @@ -405,11 +403,15 @@ static int panfrost_ioctl_madvise(struct drm_device *dev, void *data,
+>  
+>  	bo = to_panfrost_bo(gem_obj);
+>  
+> +	if (bo->is_heap) {
+> +		args->retained = 1;
+> +		goto out_put_object;
+> +	}
+> +
+>  	ret = dma_resv_lock_interruptible(bo->base.base.resv, NULL);
+>  	if (ret)
+>  		goto out_put_object;
+>  
+> -	mutex_lock(&pfdev->shrinker_lock);
+>  	mutex_lock(&bo->mappings.lock);
+>  	if (args->madv == PANFROST_MADV_DONTNEED) {
+>  		struct panfrost_gem_mapping *first;
+> @@ -435,17 +437,8 @@ static int panfrost_ioctl_madvise(struct drm_device *dev, void *data,
+>  
+>  	args->retained = drm_gem_shmem_madvise(&bo->base, args->madv);
+>  
+> -	if (args->retained) {
+> -		if (args->madv == PANFROST_MADV_DONTNEED)
+> -			list_move_tail(&bo->base.madv_list,
+> -				       &pfdev->shrinker_list);
+> -		else if (args->madv == PANFROST_MADV_WILLNEED)
+> -			list_del_init(&bo->base.madv_list);
+> -	}
+> -
+>  out_unlock_mappings:
+>  	mutex_unlock(&bo->mappings.lock);
+> -	mutex_unlock(&pfdev->shrinker_lock);
+>  	dma_resv_unlock(bo->base.base.resv);
+>  out_put_object:
+>  	drm_gem_object_put(gem_obj);
+> @@ -577,9 +570,6 @@ static int panfrost_probe(struct platform_device *pdev)
+>  	ddev->dev_private = pfdev;
+>  	pfdev->ddev = ddev;
+>  
+> -	mutex_init(&pfdev->shrinker_lock);
+> -	INIT_LIST_HEAD(&pfdev->shrinker_list);
+> -
+>  	err = panfrost_device_init(pfdev);
+>  	if (err) {
+>  		if (err != -EPROBE_DEFER)
+> @@ -601,10 +591,14 @@ static int panfrost_probe(struct platform_device *pdev)
+>  	if (err < 0)
+>  		goto err_out1;
+>  
+> -	panfrost_gem_shrinker_init(ddev);
+> +	err = drmm_gem_shmem_init(ddev);
+> +	if (err < 0)
+> +		goto err_out2;
+>  
+>  	return 0;
+>  
+> +err_out2:
+> +	drm_dev_unregister(ddev);
+>  err_out1:
+>  	pm_runtime_disable(pfdev->dev);
+>  	panfrost_device_fini(pfdev);
+> @@ -620,7 +614,6 @@ static int panfrost_remove(struct platform_device *pdev)
+>  	struct drm_device *ddev = pfdev->ddev;
+>  
+>  	drm_dev_unregister(ddev);
+> -	panfrost_gem_shrinker_cleanup(ddev);
+>  
+>  	pm_runtime_get_sync(pfdev->dev);
+>  	pm_runtime_disable(pfdev->dev);
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_gem.c b/drivers/gpu/drm/panfrost/panfrost_gem.c
+> index 293e799e2fe8..a3445b3a6575 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_gem.c
+> +++ b/drivers/gpu/drm/panfrost/panfrost_gem.c
+> @@ -19,16 +19,6 @@ static void panfrost_gem_free_object(struct drm_gem_object *obj)
+>  	struct panfrost_gem_object *bo = to_panfrost_bo(obj);
+>  	struct panfrost_device *pfdev = obj->dev->dev_private;
+>  
+> -	/*
+> -	 * Make sure the BO is no longer inserted in the shrinker list before
+> -	 * taking care of the destruction itself. If we don't do that we have a
+> -	 * race condition between this function and what's done in
+> -	 * panfrost_gem_shrinker_scan().
+> -	 */
+> -	mutex_lock(&pfdev->shrinker_lock);
+> -	list_del_init(&bo->base.madv_list);
+> -	mutex_unlock(&pfdev->shrinker_lock);
+> -
+>  	/*
+>  	 * If we still have mappings attached to the BO, there's a problem in
+>  	 * our refcounting.
+> @@ -195,6 +185,25 @@ static int panfrost_gem_pin(struct drm_gem_object *obj)
+>  	return drm_gem_shmem_pin(&bo->base);
+>  }
+>  
+> +static bool panfrost_shmem_evict(struct drm_gem_object *obj)
+> +{
+> +	struct panfrost_gem_object *bo = to_panfrost_bo(obj);
+> +
+> +	if (!drm_gem_shmem_is_purgeable(&bo->base))
+> +		return false;
+> +
+> +	if (!mutex_trylock(&bo->mappings.lock))
+> +		return false;
+> +
+> +	panfrost_gem_teardown_mappings_locked(bo);
+> +
+> +	drm_gem_shmem_purge(&bo->base);
+> +
+> +	mutex_unlock(&bo->mappings.lock);
+> +
+> +	return true;
+> +}
+> +
+>  static const struct drm_gem_object_funcs panfrost_gem_funcs = {
+>  	.free = panfrost_gem_free_object,
+>  	.open = panfrost_gem_open,
+> @@ -207,6 +216,7 @@ static const struct drm_gem_object_funcs panfrost_gem_funcs = {
+>  	.vunmap = drm_gem_shmem_object_vunmap,
+>  	.mmap = drm_gem_shmem_object_mmap,
+>  	.vm_ops = &drm_gem_shmem_vm_ops,
+> +	.evict = panfrost_shmem_evict,
+>  };
+>  
+>  /**
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_gem.h b/drivers/gpu/drm/panfrost/panfrost_gem.h
+> index 8088d5fd8480..09da064f1c07 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_gem.h
+> +++ b/drivers/gpu/drm/panfrost/panfrost_gem.h
+> @@ -30,12 +30,6 @@ struct panfrost_gem_object {
+>  		struct mutex lock;
+>  	} mappings;
+>  
+> -	/*
+> -	 * Count the number of jobs referencing this BO so we don't let the
+> -	 * shrinker reclaim this object prematurely.
+> -	 */
+> -	atomic_t gpu_usecount;
+> -
+>  	bool noexec		:1;
+>  	bool is_heap		:1;
+>  };
+> @@ -84,7 +78,4 @@ panfrost_gem_mapping_get(struct panfrost_gem_object *bo,
+>  void panfrost_gem_mapping_put(struct panfrost_gem_mapping *mapping);
+>  void panfrost_gem_teardown_mappings_locked(struct panfrost_gem_object *bo);
+>  
+> -void panfrost_gem_shrinker_init(struct drm_device *dev);
+> -void panfrost_gem_shrinker_cleanup(struct drm_device *dev);
+> -
+>  #endif /* __PANFROST_GEM_H__ */
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c b/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
+> deleted file mode 100644
+> index 865a989d67c8..000000000000
+> --- a/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
+> +++ /dev/null
+> @@ -1,129 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> -/* Copyright (C) 2019 Arm Ltd.
+> - *
+> - * Based on msm_gem_freedreno.c:
+> - * Copyright (C) 2016 Red Hat
+> - * Author: Rob Clark <robdclark@gmail.com>
+> - */
+> -
+> -#include <linux/list.h>
+> -
+> -#include <drm/drm_device.h>
+> -#include <drm/drm_gem_shmem_helper.h>
+> -
+> -#include "panfrost_device.h"
+> -#include "panfrost_gem.h"
+> -#include "panfrost_mmu.h"
+> -
+> -static bool panfrost_gem_shmem_is_purgeable(struct drm_gem_shmem_object *shmem)
+> -{
+> -	return (shmem->madv > 0) &&
+> -		!shmem->pages_pin_count && shmem->sgt &&
+> -		!shmem->base.dma_buf && !shmem->base.import_attach;
+> -}
+> -
+> -static unsigned long
+> -panfrost_gem_shrinker_count(struct shrinker *shrinker, struct shrink_control *sc)
+> -{
+> -	struct panfrost_device *pfdev =
+> -		container_of(shrinker, struct panfrost_device, shrinker);
+> -	struct drm_gem_shmem_object *shmem;
+> -	unsigned long count = 0;
+> -
+> -	if (!mutex_trylock(&pfdev->shrinker_lock))
+> -		return 0;
+> -
+> -	list_for_each_entry(shmem, &pfdev->shrinker_list, madv_list) {
+> -		if (panfrost_gem_shmem_is_purgeable(shmem))
+> -			count += shmem->base.size >> PAGE_SHIFT;
+> -	}
+> -
+> -	mutex_unlock(&pfdev->shrinker_lock);
+> -
+> -	return count;
+> -}
+> -
+> -static bool panfrost_gem_purge(struct drm_gem_object *obj)
+> -{
+> -	struct drm_gem_shmem_object *shmem = to_drm_gem_shmem_obj(obj);
+> -	struct panfrost_gem_object *bo = to_panfrost_bo(obj);
+> -	bool ret = false;
+> -
+> -	if (atomic_read(&bo->gpu_usecount))
+> -		return false;
+> -
+> -	if (!mutex_trylock(&bo->mappings.lock))
+> -		return false;
+> -
+> -	if (!dma_resv_trylock(shmem->base.resv))
+> -		goto unlock_mappings;
+> -
+> -	panfrost_gem_teardown_mappings_locked(bo);
+> -	drm_gem_shmem_purge(&bo->base);
+> -	ret = true;
+> -
+> -	dma_resv_unlock(shmem->base.resv);
+> -
+> -unlock_mappings:
+> -	mutex_unlock(&bo->mappings.lock);
+> -	return ret;
+> -}
+> -
+> -static unsigned long
+> -panfrost_gem_shrinker_scan(struct shrinker *shrinker, struct shrink_control *sc)
+> -{
+> -	struct panfrost_device *pfdev =
+> -		container_of(shrinker, struct panfrost_device, shrinker);
+> -	struct drm_gem_shmem_object *shmem, *tmp;
+> -	unsigned long freed = 0;
+> -
+> -	if (!mutex_trylock(&pfdev->shrinker_lock))
+> -		return SHRINK_STOP;
+> -
+> -	list_for_each_entry_safe(shmem, tmp, &pfdev->shrinker_list, madv_list) {
+> -		if (freed >= sc->nr_to_scan)
+> -			break;
+> -		if (drm_gem_shmem_is_purgeable(shmem) &&
+> -		    panfrost_gem_purge(&shmem->base)) {
+> -			freed += shmem->base.size >> PAGE_SHIFT;
+> -			list_del_init(&shmem->madv_list);
+> -		}
+> -	}
+> -
+> -	mutex_unlock(&pfdev->shrinker_lock);
+> -
+> -	if (freed > 0)
+> -		pr_info_ratelimited("Purging %lu bytes\n", freed << PAGE_SHIFT);
+> -
+> -	return freed;
+> -}
+> -
+> -/**
+> - * panfrost_gem_shrinker_init - Initialize panfrost shrinker
+> - * @dev: DRM device
+> - *
+> - * This function registers and sets up the panfrost shrinker.
+> - */
+> -void panfrost_gem_shrinker_init(struct drm_device *dev)
+> -{
+> -	struct panfrost_device *pfdev = dev->dev_private;
+> -	pfdev->shrinker.count_objects = panfrost_gem_shrinker_count;
+> -	pfdev->shrinker.scan_objects = panfrost_gem_shrinker_scan;
+> -	pfdev->shrinker.seeks = DEFAULT_SEEKS;
+> -	WARN_ON(register_shrinker(&pfdev->shrinker, "drm-panfrost"));
+> -}
+> -
+> -/**
+> - * panfrost_gem_shrinker_cleanup - Clean up panfrost shrinker
+> - * @dev: DRM device
+> - *
+> - * This function unregisters the panfrost shrinker.
+> - */
+> -void panfrost_gem_shrinker_cleanup(struct drm_device *dev)
+> -{
+> -	struct panfrost_device *pfdev = dev->dev_private;
+> -
+> -	if (pfdev->shrinker.nr_deferred) {
+> -		unregister_shrinker(&pfdev->shrinker);
+> -	}
+> -}
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_job.c b/drivers/gpu/drm/panfrost/panfrost_job.c
+> index dbc597ab46fb..98d9751d2b2c 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_job.c
+> +++ b/drivers/gpu/drm/panfrost/panfrost_job.c
+> @@ -272,6 +272,19 @@ static void panfrost_attach_object_fences(struct drm_gem_object **bos,
+>  		dma_resv_add_fence(bos[i]->resv, fence, DMA_RESV_USAGE_WRITE);
+>  }
+>  
+> +static int panfrost_objects_prepare(struct drm_gem_object **bos, int bo_count)
+> +{
+> +	struct panfrost_gem_object *bo;
+> +	int ret = 0;
+> +
+> +	while (!ret && bo_count--) {
+> +		bo = to_panfrost_bo(bos[bo_count]);
+> +		ret = bo->base.madv ? -ENOMEM : 0;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+>  int panfrost_job_push(struct panfrost_job *job)
+>  {
+>  	struct panfrost_device *pfdev = job->pfdev;
+> @@ -283,6 +296,10 @@ int panfrost_job_push(struct panfrost_job *job)
+>  	if (ret)
+>  		return ret;
+>  
+> +	ret = panfrost_objects_prepare(job->bos, job->bo_count);
+> +	if (ret)
+> +		goto unlock;
+> +
+>  	mutex_lock(&pfdev->sched_lock);
+>  	drm_sched_job_arm(&job->base);
+>  
+> @@ -324,7 +341,6 @@ static void panfrost_job_cleanup(struct kref *ref)
+>  			if (!job->mappings[i])
+>  				break;
+>  
+> -			atomic_dec(&job->mappings[i]->obj->gpu_usecount);
+>  			panfrost_gem_mapping_put(job->mappings[i]);
+>  		}
+>  		kvfree(job->mappings);
+> diff --git a/include/drm/drm_gem_shmem_helper.h b/include/drm/drm_gem_shmem_helper.h
+> index c264caf6c83b..22039fe2b160 100644
+> --- a/include/drm/drm_gem_shmem_helper.h
+> +++ b/include/drm/drm_gem_shmem_helper.h
+> @@ -59,13 +59,6 @@ struct drm_gem_shmem_object {
+>  	 */
+>  	int madv;
+>  
+> -	/**
+> -	 * @madv_list: List entry for madvise tracking
+> -	 *
+> -	 * Typically used by drivers to track purgeable objects
+> -	 */
+> -	struct list_head madv_list;
+> -
+>  	/**
+>  	 * @sgt: Scatter/gather table for imported PRIME buffers
+>  	 */
+
