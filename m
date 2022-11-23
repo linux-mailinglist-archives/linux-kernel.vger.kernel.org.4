@@ -2,53 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D1ED635EE5
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:08:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61DFA635EDC
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:08:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238702AbiKWNHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 08:07:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44828 "EHLO
+        id S238673AbiKWNHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 08:07:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238861AbiKWNHO (ORCPT
+        with ESMTP id S238866AbiKWNHQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 08:07:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4FAE0DD5;
+        Wed, 23 Nov 2022 08:07:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C4BE0B5A;
         Wed, 23 Nov 2022 04:50:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AE26FB81F72;
+        by ams.source.kernel.org (Postfix) with ESMTPS id E4814B81FA2;
         Wed, 23 Nov 2022 12:50:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4BBF5C433C1;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 94CB1C43149;
         Wed, 23 Nov 2022 12:50:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1669207815;
-        bh=Rwnqe+d+f8uO+vt7eyPZUvBUdxUgOipJ+45IIg74uDA=;
+        bh=KIU5zp/fHoYcSmyOn6tMxUQbgOWXMmNWP4dKrv8hHw8=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=rr5cyBtSeiCCsOgCTG0kVwZX6caXsH+IHJsKNHxWm0qzDJ3HGWKVWRUxzDENU37iU
-         fcaoqyLOSDRjPvt/hjvhTjwb99KNYggA5uASSMOYEF2y0mxsZ45madSvB9+vhYQjIo
-         67qfMxhp2pGiwdLwHQImqTGTInoDQXPmrlOqjnV/CoCThQzAPLvkNtTYnXdEpHMRTa
-         jrhOIniUfDbkQcUmxDQcCM/jDBmRuiTBjRza4rwnaVnW7RmauRS/1o89aDFegOvs8G
-         w6MkfG7qBJVrWLyxiarfjqsO8+UphYVc1hy9eNDZVA4rzSPARXHmqEah30L9PC98Vf
-         f8vQaM0T972/w==
+        b=AroRLCvktahdpG9E/1xzAbX+pLCQ4UWcDM68y5Vl2CRKd6SU0zfgyCiMDUkfqlxmM
+         9DqStZMZplgx8TkXm+QTurTBPJ9Kxa/JS/+cUcpWgTXfa2xpl0vZrJ/vZXbD6TtLPd
+         mj/sMk/RV9HQaZYm3GN9H5uobHiKnMDbTxuPv9dDcML/Vznqxnh1uvJ9VvrXkXsnP7
+         n9tw9DID2HmpnJQA4Kbh5Jh5rqyB5/510BSaBgwVKiLt30t0H+nKp+kX6fIDDZdOns
+         Qs7cxYWGMqi2Xja27yf2vk6tkrMRRoqGHFqCCrllx2S1yMbhiY12ZhDQp/iBQNKh64
+         4l9tFVjCTnCWw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2A7ABC395ED;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7F6EDE21EF9;
         Wed, 23 Nov 2022 12:50:15 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] arcnet: fix potential memory leak in com20020_probe()
+Subject: Re: [PATCH net-next] Documentation: devlink: Add blank line padding on
+ numbered lists in Devlink Port documentation
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166920781516.7047.7595861515103191510.git-patchwork-notify@kernel.org>
+Message-Id: <166920781551.7047.17657573305612000567.git-patchwork-notify@kernel.org>
 Date:   Wed, 23 Nov 2022 12:50:15 +0000
-References: <20221120062438.46090-1-wanghai38@huawei.com>
-In-Reply-To: <20221120062438.46090-1-wanghai38@huawei.com>
-To:     Wang Hai <wanghai38@huawei.com>
-Cc:     m.grzeschik@pengutronix.de, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux@dominikbrodowski.net, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
+References: <20221121035854.28411-1-bagasdotme@gmail.com>
+In-Reply-To: <20221121035854.28411-1-bagasdotme@gmail.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, oe-kbuild-all@lists.linux.dev,
+        gwml@vger.gnuweeb.org, lkp@intel.com, jiri@nvidia.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, corbet@lwn.net, michal.wilczynski@intel.com,
+        ammarfaizi2@gnuweeb.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,23 +63,24 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello:
 
-This patch was applied to netdev/net.git (master)
+This patch was applied to netdev/net-next.git (master)
 by David S. Miller <davem@davemloft.net>:
 
-On Sun, 20 Nov 2022 14:24:38 +0800 you wrote:
-> In com20020_probe(), if com20020_config() fails, dev and info
-> will not be freed, which will lead to a memory leak.
+On Mon, 21 Nov 2022 10:58:55 +0700 you wrote:
+> kernel test robot reported indentation warnings:
 > 
-> This patch adds freeing dev and info after com20020_config()
-> fails to fix this bug.
+> Documentation/networking/devlink/devlink-port.rst:220: WARNING: Unexpected indentation.
+> Documentation/networking/devlink/devlink-port.rst:222: WARNING: Block quote ends without a blank line; unexpected unindent.
 > 
-> Compile tested only.
+> These warnings cause lists (arbitration flow for which the warnings blame to
+> and 3-step subfunction setup) to be rendered inline instead. Also, for the
+> former list, automatic list numbering is messed up.
 > 
 > [...]
 
 Here is the summary with links:
-  - [net] arcnet: fix potential memory leak in com20020_probe()
-    https://git.kernel.org/netdev/net/c/1c40cde6b517
+  - [net-next] Documentation: devlink: Add blank line padding on numbered lists in Devlink Port documentation
+    https://git.kernel.org/netdev/net-next/c/c84f6f6c2bb5
 
 You are awesome, thank you!
 -- 
