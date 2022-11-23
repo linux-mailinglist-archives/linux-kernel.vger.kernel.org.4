@@ -2,383 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4BB063529E
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 09:30:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 880246352B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 09:32:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236597AbiKWI3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 03:29:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36244 "EHLO
+        id S236453AbiKWIaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 03:30:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236594AbiKWI2i (ORCPT
+        with ESMTP id S236117AbiKWIaQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 03:28:38 -0500
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1253C5CD25;
-        Wed, 23 Nov 2022 00:28:34 -0800 (PST)
-Received: from hillo.muru.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTP id D696E816A;
-        Wed, 23 Nov 2022 08:28:31 +0000 (UTC)
-From:   Tony Lindgren <tony@atomide.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-serial@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] serial: core: Add port port device to flush TX on runtime resume
-Date:   Wed, 23 Nov 2022 10:28:25 +0200
-Message-Id: <20221123082825.32820-2-tony@atomide.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221123082825.32820-1-tony@atomide.com>
-References: <20221123082825.32820-1-tony@atomide.com>
+        Wed, 23 Nov 2022 03:30:16 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B733C1E3ED
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 00:30:14 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id b3so27108911lfv.2
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 00:30:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=so2oxuQ4Y7a0f26n1k3pKbLKlCZdT3KjE4FqYS40eg8=;
+        b=zIKOQLWS42fFmJhVRRmxrUjpau1bS4ATAyMBrR1xPqJZy+k6yCWZqTOOTzvDV4a9Yg
+         Y++393P9WhJldpuJrNUmZjLm67LM/aen3AYMtBE4XybhQZ3PmkWpsh3CX+2QzmH/LhEc
+         c48yVznBlXf3dx/pfoTgD95g7Jr/kfumTRPWAEeEz/HNsA8eVPwcjqq6ocu8h5rXAEdL
+         5JCigU1/grJHK2RMfTeAaxaVi03R7JfCop/K71tlNYNHXT3ATw8FsF/T+yN/UqDm0gar
+         vS00COq+uTf/xAFzBt7o//Kmnn72FOQuXgEj45tZCMuSO/Pvd9OSRLd9PTowMuJIi/FT
+         3SVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=so2oxuQ4Y7a0f26n1k3pKbLKlCZdT3KjE4FqYS40eg8=;
+        b=tny+mJ/fqIV9DSsjEkukrM20xpLcMKa1ibO8eafLByFrfR6rE1IEz36koiKQRlqpu9
+         OL9qrSVpSYdOPwoKPU18oKOXm2aVmns7OskkcFJKtQ1XwWDAXPcb63YcgtbMggKpo0wW
+         LQGWuN8BIykYhmiH494zKlTbxr+GM9OZUr0UeCvL1vBnlmLHfGKKWC9RslRHhnG56f3b
+         UKfWBnKasZ3Hknu412kk0i254q4F/pR42iijOSRtVTwiMfaYyj3iV7swHd2EnU8hOEJx
+         DjoWiG4gG7a9wx5RCF4H98yLYt70aQ36GGrKzvfxwY6WayDqVF25TGNxDxjaQ1IWo9EL
+         fY8g==
+X-Gm-Message-State: ANoB5pnFlK3FUhkLBsVShFCO/VM6zBYTdMqdnIMqmb3OEci1lIrB3pbU
+        RX8fCfE4/RywJJJlnb7xK3fe4A==
+X-Google-Smtp-Source: AA0mqf69iu9qQh6fCA6UDIq1hcLsriLuOE6oSPhjtXZDsQsFgavDS6cW7I/64DKInOEgrT2IoBd0kQ==
+X-Received: by 2002:ac2:434d:0:b0:4a2:51a2:9326 with SMTP id o13-20020ac2434d000000b004a251a29326mr8767700lfl.594.1669192213077;
+        Wed, 23 Nov 2022 00:30:13 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id c12-20020a056512324c00b0048af3c090f8sm2809369lfr.13.2022.11.23.00.30.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Nov 2022 00:30:12 -0800 (PST)
+Message-ID: <3d689f8e-ae2d-2b3e-e783-94b8e6ba8aa0@linaro.org>
+Date:   Wed, 23 Nov 2022 09:30:10 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [v4 2/5] dt-bindings: pwm: Add bindings for aspeed pwm controller
+Content-Language: en-US
+To:     Billy Tsai <billy_tsai@aspeedtech.com>, jdelvare@suse.com,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
+        lee@kernel.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, corbet@lwn.net,
+        p.zabel@pengutronix.de, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20221123061635.32025-1-billy_tsai@aspeedtech.com>
+ <20221123061635.32025-3-billy_tsai@aspeedtech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221123061635.32025-3-billy_tsai@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With PM runtime enabled for the serial port controllers, we can now flush
-pending TX for the port on runtime PM resume as suggested by
-Johan Hovold <johan@kernel.org>.
+On 23/11/2022 07:16, Billy Tsai wrote:
+> Add the aspeed pwm device bindings which should be the child-node of
+> pwm-tach mfd.
 
-To flush the pending TX, let's set up each port as a proper device as
-suggested by Greg Kroah-Hartman <gregkh@linuxfoundation.org>.
+Subject: drop second, redundant "bindings".
 
-We set up each port as a child device for the serial port controller
-device. We use platform device for this and pass the port information
-in platform_data.
+> 
+> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
+> ---
+>  .../bindings/pwm/aspeed,ast2600-pwm.yaml      | 54 +++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pwm/aspeed,ast2600-pwm.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/pwm/aspeed,ast2600-pwm.yaml b/Documentation/devicetree/bindings/pwm/aspeed,ast2600-pwm.yaml
+> new file mode 100644
+> index 000000000000..68a60fc73902
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pwm/aspeed,ast2600-pwm.yaml
+> @@ -0,0 +1,54 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (C) 2021 Aspeed, Inc.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pwm/aspeed,ast2600-pwm.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Aspeed Ast2600 PWM controller
+> +
+> +maintainers:
+> +  - Billy Tsai <billy_tsai@aspeedtech.com>
+> +
+> +description: |
+> +  The Aspeed PWM controller supports up to 16 PWM outputs.
+> +  This module is part of the ast2600-pwm-tach multi-function device. For more
+> +  details see ../mfd/aspeed,ast2600-pwm-tach.yaml.
+> +
+> +allOf:
+> +  - $ref: pwm.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - aspeed,ast2600-pwm
+> +
+> +  "#pwm-cells":
+> +    const: 3
 
-Let's just do mimimal changes needed for now, more port specific code
-can be then moved from serial_core.c to serial_port.c as needed.
+Blank line.
 
-Suggested-by: Johan Hovold <johan@kernel.org>
-Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
----
- drivers/tty/serial/Makefile      |   2 +-
- drivers/tty/serial/serial_core.c |  77 ++++++++++++++++++++-
- drivers/tty/serial/serial_port.c | 111 +++++++++++++++++++++++++++++++
- drivers/tty/serial/serial_port.h |  16 +++++
- include/linux/serial_core.h      |   1 +
- 5 files changed, 204 insertions(+), 3 deletions(-)
- create mode 100644 drivers/tty/serial/serial_port.c
- create mode 100644 drivers/tty/serial/serial_port.h
+> +patternProperties:
+> +  "^pwm@[a-z0-9]+$":
+> +    description: Set extend properties for each pwm channel.
 
-diff --git a/drivers/tty/serial/Makefile b/drivers/tty/serial/Makefile
---- a/drivers/tty/serial/Makefile
-+++ b/drivers/tty/serial/Makefile
-@@ -3,7 +3,7 @@
- # Makefile for the kernel serial device drivers.
- #
- 
--obj-$(CONFIG_SERIAL_CORE) += serial_core.o
-+obj-$(CONFIG_SERIAL_CORE) += serial_core.o serial_port.o
- 
- obj-$(CONFIG_SERIAL_EARLYCON) += earlycon.o
- obj-$(CONFIG_SERIAL_EARLYCON_ARM_SEMIHOST) += earlycon-arm-semihost.o
-diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
---- a/drivers/tty/serial/serial_core.c
-+++ b/drivers/tty/serial/serial_core.c
-@@ -16,6 +16,7 @@
- #include <linux/console.h>
- #include <linux/gpio/consumer.h>
- #include <linux/of.h>
-+#include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
- #include <linux/proc_fs.h>
- #include <linux/seq_file.h>
-@@ -31,6 +32,8 @@
- #include <linux/irq.h>
- #include <linux/uaccess.h>
- 
-+#include "serial_port.h"
-+
- /*
-  * Serial port device specific data for serial core.
-  *
-@@ -151,9 +154,31 @@ static void __uart_start(struct tty_struct *tty)
- {
- 	struct uart_state *state = tty->driver_data;
- 	struct uart_port *port = state->uart_port;
-+	struct device *port_dev;
-+	int err;
-+
-+	if (!port || uart_tx_stopped(port))
-+		return;
- 
--	if (port && !uart_tx_stopped(port))
-+	port_dev = port->state->port_dev;
-+
-+	err = pm_runtime_get(port_dev);
-+	if (err < 0) {
-+		/* Something went wrong, attempt to start TX anyways */
-+		port->ops->start_tx(port);
-+		pm_runtime_put_noidle(port_dev);
-+		return;
-+	}
-+
-+	/*
-+	 * Start TX if enabled, and kick runtime PM. Otherwise we must
-+	 * wait for a retry. See also serial_port.c for runtime PM
-+	 * autosuspend timeout.
-+	 */
-+	if (pm_runtime_active(port_dev))
- 		port->ops->start_tx(port);
-+	pm_runtime_mark_last_busy(port_dev);
-+	pm_runtime_put_autosuspend(port_dev);
- }
- 
- static void uart_start(struct tty_struct *tty)
-@@ -288,6 +313,37 @@ serial_core_find_controller(struct uart_driver *drv, struct device *dev)
- 	return NULL;
- }
- 
-+static int serial_core_add_port_device(struct uart_port *port)
-+{
-+	struct serial_port_platdata pd;
-+	struct platform_device *pdev;
-+	int ret;
-+
-+	pdev = platform_device_alloc("serial-port", PLATFORM_DEVID_AUTO);
-+	if (!pdev)
-+		return -ENOMEM;
-+
-+	pdev->dev.parent = port->dev;
-+	pd.state = port->state;
-+
-+	ret = platform_device_add_data(pdev, &pd, sizeof(pd));
-+	if (ret)
-+		goto err_put;
-+
-+	ret = platform_device_add(pdev);
-+	if (ret)
-+		goto err_put;
-+
-+	port->state->port_dev = &pdev->dev;
-+
-+	return 0;
-+
-+err_put:
-+	platform_device_put(pdev);
-+
-+	return ret;
-+}
-+
- /*
-  * Initialize a serial port device and serial port controller as
-  * needed. Called from uart_add_one_port() with port_mutex held.
-@@ -317,13 +373,21 @@ static int serial_core_register_port(struct uart_port *port,
- 	port->state->controller = controller;
- 	WARN_ON(port->supports_autosuspend != controller->supports_autosuspend);
- 
-+	ret = serial_core_add_port_device(port);
-+	if (ret)
-+		goto err_free;
-+
- 	ret = serial_core_pm_runtime_start(port);
- 	if (ret < 0)
--		goto err_free;
-+		goto err_del;
- 
- 	return 0;
- 
-+err_del:
-+	platform_device_del(to_platform_device(port->state->port_dev));
-+
- err_free:
-+	port->state->port_dev = NULL;
- 	port->state->controller = NULL;
- 	if (allocated)
- 		kfree(controller);
-@@ -339,11 +403,14 @@ static int serial_core_register_port(struct uart_port *port,
- static void serial_core_unregister_port(struct uart_port *port)
- {
- 	struct serial_controller *controller = to_controller(port);
-+	struct device *dev = port->state->port_dev;
- 
- 	/* Check for a registered controller, no struct device early on */
- 	if (!controller)
- 		return;
- 
-+	platform_device_del(to_platform_device(dev));
-+	port->state->port_dev = NULL;
- 	port->state->controller = NULL;
- 	kref_put(&controller->ref, serial_core_pm_runtime_cleanup);
- }
-@@ -363,6 +430,10 @@ static int uart_port_startup(struct tty_struct *tty, struct uart_state *state,
- 	if (uport->type == PORT_UNKNOWN)
- 		return 1;
- 
-+	retval = serial_port_get(state);
-+	if (retval)
-+		return retval;
-+
- 	/*
- 	 * Make sure the device is in D0 state.
- 	 */
-@@ -2030,6 +2101,8 @@ static void uart_port_shutdown(struct tty_port *port)
- 		/* Ensure that the IRQ handler isn't running on another CPU. */
- 		synchronize_irq(uport->irq);
- 	}
-+
-+	serial_port_put(state);
- }
- 
- static int uart_carrier_raised(struct tty_port *port)
-diff --git a/drivers/tty/serial/serial_port.c b/drivers/tty/serial/serial_port.c
-new file mode 100644
---- /dev/null
-+++ b/drivers/tty/serial/serial_port.c
-@@ -0,0 +1,111 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+
-+/*
-+ * Serial port driver to provide port specific services for serial_core
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/serial_core.h>
-+
-+#include "serial_port.h"
-+
-+#define SERIAL_PORT_AUTOSUSPEND_DELAY_MS	500
-+
-+struct serial_port_data {
-+	struct uart_state *state;
-+};
-+
-+int serial_port_get(struct uart_state *state)
-+{
-+	if (!state)
-+		return -ENODEV;
-+
-+	/* Prevent uart_port from unloading */
-+	if (!state->port_dev || !state->port_dev->driver ||
-+	    !try_module_get(state->port_dev->driver->owner))
-+		return -ENODEV;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL(serial_port_get);
-+
-+void serial_port_put(struct uart_state *state)
-+{
-+	if (!state || !state->port_dev || !state->port_dev->driver)
-+		return;
-+
-+	module_put(state->port_dev->driver->owner);
-+}
-+EXPORT_SYMBOL(serial_port_put);
-+
-+/* Only considers TX for now. Caller must take care of locking */
-+static int __serial_port_busy(struct uart_port *port)
-+{
-+	return (!uart_tx_stopped(port) &&
-+		uart_circ_chars_pending(&port->state->xmit));
-+}
-+
-+static int serial_port_runtime_resume(struct device *dev)
-+{
-+	struct serial_port_data *ddata = dev_get_drvdata(dev);
-+	struct uart_port *port = ddata->state->uart_port;
-+	unsigned long flags;
-+
-+	/* Flush any pending TX for the port */
-+	spin_lock_irqsave(&port->lock, flags);
-+	if (__serial_port_busy(port))
-+		port->ops->start_tx(port);
-+	spin_unlock_irqrestore(&port->lock, flags);
-+	pm_runtime_mark_last_busy(dev);
-+
-+	return 0;
-+}
-+
-+static const struct dev_pm_ops serial_port_pm = {
-+	SET_RUNTIME_PM_OPS(NULL, serial_port_runtime_resume, NULL)
-+};
-+
-+static int serial_port_probe(struct platform_device *pdev)
-+{
-+	struct serial_port_platdata *pd = dev_get_platdata(&pdev->dev);
-+	struct serial_port_data *ddata;
-+
-+	ddata = devm_kzalloc(&pdev->dev, sizeof(*ddata), GFP_KERNEL);
-+	if (!ddata)
-+		return -ENOMEM;
-+
-+	ddata->state = pd->state;
-+	platform_set_drvdata(pdev, ddata);
-+
-+	pm_runtime_enable(&pdev->dev);
-+	pm_runtime_set_autosuspend_delay(&pdev->dev,
-+					 SERIAL_PORT_AUTOSUSPEND_DELAY_MS);
-+	pm_runtime_use_autosuspend(&pdev->dev);
-+
-+	return 0;
-+}
-+
-+static int serial_port_remove(struct platform_device *pdev)
-+{
-+	pm_runtime_dont_use_autosuspend(&pdev->dev);
-+	pm_runtime_disable(&pdev->dev);
-+
-+	return 0;
-+}
-+
-+static struct platform_driver serial_port_driver = {
-+	.driver = {
-+		.name = "serial-port",
-+		.pm = &serial_port_pm,
-+	},
-+	.probe = serial_port_probe,
-+	.remove = serial_port_remove,
-+};
-+
-+module_platform_driver(serial_port_driver);
-+
-+MODULE_AUTHOR("Tony Lindgren <tony@atomide.com>");
-+MODULE_DESCRIPTION("Serial controller port driver");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/tty/serial/serial_port.h b/drivers/tty/serial/serial_port.h
-new file mode 100644
---- /dev/null
-+++ b/drivers/tty/serial/serial_port.h
-@@ -0,0 +1,16 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+
-+/**
-+ * struct serial_port_platdata - Serial port platform data
-+ * @state: serial port state
-+ *
-+ * Used by serial_core and serial_port only. Allocated on uart_add_one_port(),
-+ * and freed on uart_remove_one_port(). Note that the life cycle for uart_state
-+ * is different from serial_port_device.
-+ */
-+struct serial_port_platdata {
-+	struct uart_state *state;
-+};
-+
-+extern int serial_port_get(struct uart_state *state);
-+extern void serial_port_put(struct uart_state *state);
-diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
---- a/include/linux/serial_core.h
-+++ b/include/linux/serial_core.h
-@@ -614,6 +614,7 @@ struct uart_state {
- 	struct tty_port		port;
- 
- 	struct serial_controller *controller;
-+	struct device		*port_dev;
- 
- 	enum uart_pm_state	pm_state;
- 	struct circ_buf		xmit;
--- 
-2.38.1
+Description is not a correct sentence. Description explains the hardware
+property you have here.
+
+> +    type: object
+> +    properties:
+> +      reg:
+> +        description:
+> +          The pwm channel index.
+> +        maxItems: 1
+> +
+> +      aspeed,wdt-reload-enable:
+> +        type: boolean
+> +        description:
+> +          Enable the function of wdt reset reload duty point.
+> +
+> +      aspeed,wdt-reload-duty-point:
+> +        description:
+> +          Define the duty point after wdt reset, 0 = 100%
+> +        minimum: 0
+> +        maximum: 255
+
+Why maximum is 255? Why 0=100%? 0 should be equal to 0 and maximum to
+some maximum value (e.g. 100%). If these are percents, use appropriate
+units. If these are not - what are these? You need a $ref in such case.
+
+> +    required:
+> +      - reg
+> +
+> +required:
+> +  - compatible
+> +
+> +additionalProperties: false
+
+Best regards,
+Krzysztof
+
