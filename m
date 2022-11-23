@@ -2,106 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C50BE6356C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:34:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CD946356A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:34:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237801AbiKWJbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 04:31:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44270 "EHLO
+        id S237751AbiKWJcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 04:32:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237767AbiKWJbH (ORCPT
+        with ESMTP id S237816AbiKWJbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 04:31:07 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375F743874;
-        Wed, 23 Nov 2022 01:30:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=SbJhBd7PxrHJEEletiUuq25lFGytClcwopVER3Q2f6w=; b=XaXRz8zC3xm7EJCawMUmwqri3E
-        0Yakm1KamvbVF1bwfXXRl7qK5BDfuiT19inEPTo1JRNjmAP8rnlX5xK3JjT5ziWsRghmLTBHXhsL1
-        aJUHV27hP9jqjU1EbiQr+jakO1Sy4K2/QjohzNvpgzMhQvPp680+AbVAmAe1mGptCkBW9+j2GrqoI
-        l5/qrc8II+GyCwMJ7Q7av262Q3AWAfDOirpb5i7dplgQDRx2Gqv8K0AFz9we2KfL3KyYFTzuR0/zY
-        DTHCA/0v0zCpGuKKSKcn3vmMRdLj3j8uRQn58iPQGrE353fd5n5mL0eHm06E/nHTETGYbPJnRT9dB
-        nUloIqNw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oxm4i-003jja-0E; Wed, 23 Nov 2022 09:29:48 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D98DF300202;
-        Wed, 23 Nov 2022 10:29:46 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C05DA2D819C22; Wed, 23 Nov 2022 10:29:46 +0100 (CET)
-Date:   Wed, 23 Nov 2022 10:29:46 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-mm@kvack.org, seanjc@google.com,
-        pbonzini@redhat.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, kirill.shutemov@linux.intel.com,
-        ying.huang@intel.com, reinette.chatre@intel.com,
-        len.brown@intel.com, tony.luck@intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
-        sagis@google.com, imammedo@redhat.com
-Subject: Re: [PATCH v7 10/20] x86/virt/tdx: Use all system memory when
- initializing TDX module as TDX memory
-Message-ID: <Y33oCuQtLrFugMFc@hirez.programming.kicks-ass.net>
-References: <cover.1668988357.git.kai.huang@intel.com>
- <9b545148275b14a8c7edef1157f8ec44dc8116ee.1668988357.git.kai.huang@intel.com>
- <eb8d0f69-7ada-a358-46ea-da15a3aeac93@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <eb8d0f69-7ada-a358-46ea-da15a3aeac93@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 23 Nov 2022 04:31:15 -0500
+Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2D2303CB
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:30:12 -0800 (PST)
+X-QQ-SSF: 0040000000B00050
+X-QQ-FEAT: Js1xXDonPB71POLU1khepmEQeZKe3MlZu5dwceIYnExrvtsfAenUvoEGzZKhi
+        XtiCfwyjamkPU7bNFJtLb5Z5MeoB1mVAp9ysWdmcaYHgY9wq08v5yxrK2AnXOmJ9HQIrxoD
+        pCYD+5jlgKfIS8yjtoBf8jjcQqHfgV88+UQVV361FPHwOYTi256CWkERd1Wfp6a0hO1LqOj
+        6TpN9ULuTqaiAqYvzZEtJtCEP5HrVaXsdNVUxqvn/h2r3aZOnP5F+3eNwrk1AyQHsIzSRTo
+        S6jVAbouR4HRiOBn7znZx+HvJBgiW81aptdKf+U+y4VJPJsmknQBb+BdrBjfVL6CDrcu/NZ
+        AjuIMUq
+X-QQ-BUSINESS-ORIGIN: 1
+X-QQ-BUSINESS-ORIGIN: 2
+X-Originating-IP: 223.72.214.84
+X-QQ-STYLE: 
+X-QQ-mid: qywaplogic4t1669195803t823248
+From:   "=?gb18030?B?zfW66bvU?=" <honghui.wang@ucas.com.cn>
+To:     "=?gb18030?B?UGV0ciBNbGFkZWs=?=" <pmladek@suse.com>
+Cc:     "=?gb18030?B?U2VyZ2V5IFNlbm96aGF0c2t5?=" <senozhatsky@chromium.org>,
+        "=?gb18030?B?U3RldmVuIFJvc3RlZHQ=?=" <rostedt@goodmis.org>,
+        "=?gb18030?B?Sm9obiBPZ25lc3M=?=" <john.ogness@linutronix.de>,
+        "=?gb18030?B?bGludXgta2VybmVs?=" <linux-kernel@vger.kernel.org>
+Subject: =?gb18030?B?UmWjulJlOiBbUEFUQ0ggVjJdIHByaW50azogZml4?=
+ =?gb18030?B?IGEgdHlwbyBvZiBjb21tZW50?=
+Mime-Version: 1.0
+Content-Type: text/plain;
+        charset="gb18030"
+Content-Transfer-Encoding: base64
+Date:   Wed, 23 Nov 2022 17:30:02 +0800
+X-Priority: 3
+Message-ID: <tencent_3D70D8C80B9474E67AF618B6@qq.com>
+X-QQ-MIME: TCMime 1.0 by Tencent
+X-Mailer: QQMail 2.x
+X-QQ-Mailer: QQMail 2.x
+X-QQ-ReplyHash: 312409942
+X-QQ-SENDSIZE: 520
+Received: from qq.com (unknown [127.0.0.1])
+        by smtp.qq.com (ESMTP) with SMTP
+        id ; Wed, 23 Nov 2022 17:30:04 +0800 (CST)
+Feedback-ID: qywaplogic:ucas.com.cn:qybglogicsvr:qybglogicsvr5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        MSGID_FROM_MTA_HEADER,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 04:21:38PM -0800, Dave Hansen wrote:
-> > +	/*
-> > +	 * All memory regions that can be used by the TDX module must be
-> > +	 * passed to the TDX module during the module initialization.
-> > +	 * Once this is done, all "TDX-usable" memory regions are fixed
-> > +	 * during module's runtime.
-> > +	 *
-> > +	 * The initial support of TDX guests only allocates memory from
-> > +	 * the global page allocator.  To keep things simple, for now
-> > +	 * just make sure all pages in the page allocator are TDX memory.
-> > +	 *
-> > +	 * To achieve this, use all system memory in the core-mm at the
-> > +	 * time of initializing the TDX module as TDX memory, and at the
-> > +	 * meantime, reject any new memory in memory hot-add.
-> > +	 *
-> > +	 * This works as in practice, all boot-time present DIMM is TDX
-> > +	 * convertible memory.  However if any new memory is hot-added
-> > +	 * before initializing the TDX module, the initialization will
-> > +	 * fail due to that memory is not covered by CMR.
-> > +	 *
-> > +	 * This can be enhanced in the future, i.e. by allowing adding or
-> > +	 * onlining non-TDX memory to a separate node, in which case the
-> > +	 * "TDX-capable" nodes and the "non-TDX-capable" nodes can exist
-> > +	 * together -- the userspace/kernel just needs to make sure pages
-> > +	 * for TDX guests must come from those "TDX-capable" nodes.
-> > +	 *
-> > +	 * Build the list of TDX memory regions as mentioned above so
-> > +	 * they can be passed to the TDX module later.
-> > +	 */
-> 
-> This is msotly Documentation/, not a code comment.  Please clean it up.
+VGhpbmtzLA0KQmVzdCBSZWdhcmRzIQ0KDQoNCi0tLS0tLS0tLS0tLS0tLS0tLQ0KV2FuZyBI
+b25naHVpDQoNCg0KDQoNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIC0tLdStyrzT
+yrz+LS0tDQq3orz+yMs6IlBldHIgTWxhZGVrIjxwbWxhZGVrQHN1c2UuY29tPg0Kt6LLzcqx
+vOQ6MjAyMsTqMTHUwjIyyNUo0MfG2rb+KSDN7cnPNzoxNg0KytW8/sjLOiJXYW5nIEhvbmdo
+dWkiPGhvbmdodWkud2FuZ0B1Y2FzLmNvbS5jbj47DQrW98ziOiBbUEFUQ0ggVjJdIHByaW50
+azogZml4IGEgdHlwbyBvZiBjb21tZW50DQpPbiBUICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIA==
 
-So personally, I *vastly* prefer code comments over this Documentation/
-cesspit. Putting things in Documentation/ is a bit like an
-old-folks-home, neatly out of the way to (bit)rot in peace.
-
-And that whole .rst disease is making it unreadable for anybody that
-still knows how to use a text editor :-(
