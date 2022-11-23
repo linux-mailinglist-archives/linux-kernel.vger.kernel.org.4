@@ -2,72 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A2A635FCD
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:33:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39DA9635FE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:33:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238828AbiKWNdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 08:33:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
+        id S238835AbiKWNd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 08:33:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238848AbiKWNcO (ORCPT
+        with ESMTP id S238874AbiKWNcT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 08:32:14 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5037D6F358
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:17:26 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 23 Nov 2022 08:32:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6230E12D28;
+        Wed, 23 Nov 2022 05:17:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C75281F85D;
-        Wed, 23 Nov 2022 13:17:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1669209444; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BwHThTpYm4ogWgiikA57PW4WR5H2lDWMkGSpVJhBdAQ=;
-        b=1LaCHmhMTUOmzes6tF4T0u/nAJDQ3PberecBaI531n5rvnFq+GRgMF/6AMADSLomJyoEMy
-        7iO5E7WdKjNSsRVF1c+Me9oip+Rmo2KNxQdXUoFJg4HGbfZXoxOA34IvgWHnSU0exHXyKv
-        928cVDirLHkxUKJ+fQV9QalNPQhrJ4g=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1669209444;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BwHThTpYm4ogWgiikA57PW4WR5H2lDWMkGSpVJhBdAQ=;
-        b=5od+xeF3ejKfwKoFoxF772QplZmHVfCAoyGAoSgICdLOgXmQ35QvUURDhMedCKNpsVbKCA
-        ECsMxpYGhEoBRGCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A0C9013A37;
-        Wed, 23 Nov 2022 13:17:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id /Nt7JmQdfmPgfQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 23 Nov 2022 13:17:24 +0000
-Message-ID: <0afc97c8-2b43-8a0b-8884-20347438a347@suse.cz>
-Date:   Wed, 23 Nov 2022 14:17:24 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1F0B9B81F24;
+        Wed, 23 Nov 2022 13:17:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC3BFC433D6;
+        Wed, 23 Nov 2022 13:17:36 +0000 (UTC)
+Message-ID: <73481668-9c41-7d01-d328-bd137a57c0b3@xs4all.nl>
+Date:   Wed, 23 Nov 2022 14:17:35 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] mm/tracing: Add check for kmem_cache
+ Thunderbird/102.4.1
+Subject: Re: [PATCH mm-unstable v1 13/20] media: videobuf-dma-sg: remove
+ FOLL_FORCE usage
 Content-Language: en-US
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, rostedt@goodmis.org,
-        mhiramat@kernel.org, 42.hyeyoo@gmail.com, vasily.averin@linux.dev,
-        akpm@linux-foundation.org, shakeelb@google.com,
-        vvghjk1234@gmail.com
-Cc:     linux-kernel@vger.kernel.org
-References: <20221123111001.34855-1-jiasheng@iscas.ac.cn>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20221123111001.34855-1-jiasheng@iscas.ac.cn>
+To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <20221116102659.70287-1-david@redhat.com>
+ <20221116102659.70287-14-david@redhat.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20221116102659.70287-14-david@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,41 +76,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/23/22 12:10, Jiasheng Jiang wrote:
-> In __kmem_cache_alloc_lru() of mm/slab.c, cachep may be NULL when error
-> occurs in slab_alloc().
-
-Are you sure? AFAICS internally in slab_alloc_node(), slab_pre_alloc_hook()
-can return NULL which is assigned to cachep local variable, but only NULL
-propagated back to __kmem_cache_alloc_lru() is the object, not cachep.
-So trace_kmem_cache_alloc() should only see NULL s, if it was already NULL
-when passed to kmem_cache_alloc(), at which point the NULL is dereferenced
-and crashing (as expected) earlier than reaching the tracepoint.
-
-> However, trace_kmem_cache_alloc() will still use it as the parameter,
-> which may cause NULL poineter dereference.
-> Therefore, it should be better to add the check and handle the error
-> in the trace_kmem_cache_alloc().
+On 16/11/2022 11:26, David Hildenbrand wrote:
+> GUP now supports reliable R/O long-term pinning in COW mappings, such
+> that we break COW early. MAP_SHARED VMAs only use the shared zeropage so
+> far in one corner case (DAXFS file with holes), which can be ignored
+> because GUP does not support long-term pinning in fsdax (see
+> check_vma_flags()).
 > 
-> Fixes: 36555751c675 ("kmemtrace: SLAB hooks.")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> Consequently, FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM is no longer required
+> for reliable R/O long-term pinning: FOLL_LONGTERM is sufficient. So stop
+> using FOLL_FORCE, which is really only for ptrace access.
+> 
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
+
+Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+
+Looks good!
+
+	Hans
+
 > ---
->  include/trace/events/kmem.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/media/v4l2-core/videobuf-dma-sg.c | 14 +++++---------
+>  1 file changed, 5 insertions(+), 9 deletions(-)
 > 
-> diff --git a/include/trace/events/kmem.h b/include/trace/events/kmem.h
-> index 243073cfc29d..d99507d32ef5 100644
-> --- a/include/trace/events/kmem.h
-> +++ b/include/trace/events/kmem.h
-> @@ -32,8 +32,8 @@ TRACE_EVENT(kmem_cache_alloc,
->  	TP_fast_assign(
->  		__entry->call_site	= call_site;
->  		__entry->ptr		= ptr;
-> -		__entry->bytes_req	= s->object_size;
-> -		__entry->bytes_alloc	= s->size;
-> +		__entry->bytes_req	= s ? s->object_size : 0;
-> +		__entry->bytes_alloc	= s ? s->size : 0;
->  		__entry->gfp_flags	= (__force unsigned long)gfp_flags;
->  		__entry->node		= node;
->  		__entry->accounted	= IS_ENABLED(CONFIG_MEMCG_KMEM) ?
+> diff --git a/drivers/media/v4l2-core/videobuf-dma-sg.c b/drivers/media/v4l2-core/videobuf-dma-sg.c
+> index f75e5eedeee0..234e9f647c96 100644
+> --- a/drivers/media/v4l2-core/videobuf-dma-sg.c
+> +++ b/drivers/media/v4l2-core/videobuf-dma-sg.c
+> @@ -151,17 +151,16 @@ static void videobuf_dma_init(struct videobuf_dmabuf *dma)
+>  static int videobuf_dma_init_user_locked(struct videobuf_dmabuf *dma,
+>  			int direction, unsigned long data, unsigned long size)
+>  {
+> +	unsigned int gup_flags = FOLL_LONGTERM;
+>  	unsigned long first, last;
+> -	int err, rw = 0;
+> -	unsigned int flags = FOLL_FORCE;
+> +	int err;
+>  
+>  	dma->direction = direction;
+>  	switch (dma->direction) {
+>  	case DMA_FROM_DEVICE:
+> -		rw = READ;
+> +		gup_flags |= FOLL_WRITE;
+>  		break;
+>  	case DMA_TO_DEVICE:
+> -		rw = WRITE;
+>  		break;
+>  	default:
+>  		BUG();
+> @@ -177,14 +176,11 @@ static int videobuf_dma_init_user_locked(struct videobuf_dmabuf *dma,
+>  	if (NULL == dma->pages)
+>  		return -ENOMEM;
+>  
+> -	if (rw == READ)
+> -		flags |= FOLL_WRITE;
+> -
+>  	dprintk(1, "init user [0x%lx+0x%lx => %lu pages]\n",
+>  		data, size, dma->nr_pages);
+>  
+> -	err = pin_user_pages(data & PAGE_MASK, dma->nr_pages,
+> -			     flags | FOLL_LONGTERM, dma->pages, NULL);
+> +	err = pin_user_pages(data & PAGE_MASK, dma->nr_pages, gup_flags,
+> +			     dma->pages, NULL);
+>  
+>  	if (err != dma->nr_pages) {
+>  		dma->nr_pages = (err >= 0) ? err : 0;
 
