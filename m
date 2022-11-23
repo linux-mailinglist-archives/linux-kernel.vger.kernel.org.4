@@ -2,71 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A95636E8D
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 00:48:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D480636E8F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 00:49:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbiKWXsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 18:48:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
+        id S229770AbiKWXtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 18:49:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbiKWXsd (ORCPT
+        with ESMTP id S229602AbiKWXtC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 18:48:33 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48978623B0
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 15:48:32 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id z3so241336iof.3
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 15:48:32 -0800 (PST)
+        Wed, 23 Nov 2022 18:49:02 -0500
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78B28A16D
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 15:49:01 -0800 (PST)
+Received: by mail-il1-x135.google.com with SMTP id q13so144490ild.3
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 15:49:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=We3Y4AOZ212dC6RjyR8844fCrDkxjUuq7q5okkncMT8=;
-        b=D3A4jBtc/8G4S2epmN4p4OBwn93F+sxWYPAoCVbH/9mMsTOa3iNam1TtPGm/mDMZqw
-         qycXacXDoml97DjlmC/gx5ZecVJyzeEZqJC0UhjN4h7m3dd2Pw3PH2Z/BhD1EfjDHSw0
-         /py9dp1lT1Lss7qS0ktvB5GO79cSzYxJNB22atbGbjS3/mSs3aga4jNzTp1XgcCwf5BB
-         NMLH0au3WHG6WLbgiYYvOvIXbmWf4YFFHqSlbERVV8IWj++EORDDiK0RAevn4EywEG5W
-         dmgDpYpIXg1kRUUoOyUNv/9VjvNwq26+nmylbg08OlADp1vrPqk45OuVdg3uq9DJ/UaQ
-         T3OQ==
+        bh=7JFW255EPBk3XgoKAwrFF/RCi7p1HqnpoL0o2suN9TM=;
+        b=UXpz66Offu6F+6lvEB6xZs7G1T+pM1GkvWQ7Pz8qEyodOVUDfUUQgOsD8zfT1OpjNm
+         q2414zaZglwJCKHWEc+YkndFvyVbboZKmJk5rqLc6bwbP6LN9Tz6s2y5XMfvIvfcjFZB
+         z9rBoPggoL2O40DTrYhxRXIgUe0wZ9zclCPAmRkQwLLzq3LG511/EQ2Vk2jATygUMhxo
+         Z1Zhvgp1D6cybzF9vUxgOsQPwgptha48KZAaZeSq1AkPxvWH4TAKIz0hB5zSNvo/1/0s
+         v4d6vZJVYnp83I8x1tPj6DtKCFcoHupd4mxBae6EHLhG3SETvvDIvgJuGM/fIy+jw9/D
+         VK+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=We3Y4AOZ212dC6RjyR8844fCrDkxjUuq7q5okkncMT8=;
-        b=B1NPVPdDSGS+cG8KTQJ/Ywho35X7/uV/mtcDm9WZwS4NXHv+ZyUQ3M+whWfigdpw8I
-         zOaihPyRezNUe6nub6nYYyP+p/2TCcDPV/hhdNyLj7TK8ysqHh2ePPFDdvB9pcsCmfya
-         MhGL3lKwLDR2vuOYUQkrqsPl53WWA2Q5MTDB03f2IZePKVrKLj1qX3zUCuhQ92e8ppbW
-         AlqisZsYPfrYG33Zk/5FCgqT34MMAcjC7ylnCdm2XhmPFIDPdf/zGRJzzhgv6039B1jr
-         Zt93c0vGxW8MmiyqUL3aZIWKBFXas40VqsA/epxCRPs+JZAXT+j/pc156XaNM552S69y
-         P5HQ==
-X-Gm-Message-State: ANoB5pk4bl+/cjMzC4JUyFYr2i3YKvgqWERNXlvbv39zf9scibyaUHEg
-        1+w5F3R8+6VCyl0pkftJzJUidluSJvn9y2RO2MH0eg==
-X-Google-Smtp-Source: AA0mqf6cu00HOcBKiFT/xHdbnsOmjtvrb2UAlsBmrJV/4rxn1+hPuVpAckuQ+0yGBIh7KmtbvZhOCDO+KrstkTGNG7U=
-X-Received: by 2002:a6b:4409:0:b0:6de:bd7d:ee08 with SMTP id
- r9-20020a6b4409000000b006debd7dee08mr5396357ioa.0.1669247311479; Wed, 23 Nov
- 2022 15:48:31 -0800 (PST)
+        bh=7JFW255EPBk3XgoKAwrFF/RCi7p1HqnpoL0o2suN9TM=;
+        b=4OISXPr/PRNxKLfjxA66iYSwOSa7k1CVNGuc46Bl3peo3K0Dg0PqFBXho3IcWNLA95
+         YPvPEwteMoeDv9oP8GRL6HGhiA8UgbpoVa2NZy1/M3KyHg5zdRPQ+lseWZKo0KsIkb02
+         1r2Qpykm4UCmGJZESbN1izR/D7v3o2LO7arXTOHaZ0LUZ2AZcxcOXrWR5bFgru9gDmZN
+         OB29HZC5b0RUiO88RXPXozl4jAsN23JqctXGhLka23iNllE0DTO5j7frRAgNZDKiAqbe
+         x/Bo6HKfT8ymQ9kqxhlGChMLyS1KohOomr3xTZ2LIF2CdmwyHTYLwYf046hOtJJvvwbx
+         mFvA==
+X-Gm-Message-State: ANoB5pmhF43II79iDKIxQIZJouJRMYnSo4VilC4ln5bKpp39LwEYQIUM
+        lC9ujzRL4QJtO4VDHquqTSCmj/6bvtAiQ4+UuMENtg==
+X-Google-Smtp-Source: AA0mqf4H5Hu6MoVtZ/9VryRm/tLmXKgMiDvJ6XVLoYBHd30pzB9UGhSvKBHQfn7j21NS8opxa42dABr+hsZT6b+k6cw=
+X-Received: by 2002:a92:dc8b:0:b0:302:4c01:2d2b with SMTP id
+ c11-20020a92dc8b000000b003024c012d2bmr4364530iln.2.1669247341082; Wed, 23 Nov
+ 2022 15:49:01 -0800 (PST)
 MIME-Version: 1.0
-References: <20221122203850.2765015-1-almasrymina@google.com>
- <Y35fw2JSAeAddONg@cmpxchg.org> <CAHS8izN+xqM67XLT4y5qyYnGQMUWRQCJrdvf2gjTHd8nZ_=0sw@mail.gmail.com>
- <CAJD7tkZNW=u1TD-Fd_3RuzRNtaFjxihbGm0836QHkdp0Nn-vyQ@mail.gmail.com> <Y36fIGFCFKiocAd6@cmpxchg.org>
-In-Reply-To: <Y36fIGFCFKiocAd6@cmpxchg.org>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Wed, 23 Nov 2022 15:47:55 -0800
-Message-ID: <CAJD7tkZ_tz-JNEvGS3fOhHohuoHaKj_8FzpGRDSP2vhhAc+Pmg@mail.gmail.com>
-Subject: Re: [RFC PATCH V1] mm: Disable demotion from proactive reclaim
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Mina Almasry <almasrymina@google.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
-        shakeelb@google.com, gthelen@google.com, fvdl@google.com,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org
+References: <20221123231206.274392-1-mizhang@google.com> <Y36qNDBxlOslo7no@google.com>
+In-Reply-To: <Y36qNDBxlOslo7no@google.com>
+From:   Mingwei Zhang <mizhang@google.com>
+Date:   Wed, 23 Nov 2022 15:48:50 -0800
+Message-ID: <CAL715WKymGc60gLHT9_g+RDs3TgSBCZqdZJD0D3Z=ZrCgH05nA@mail.gmail.com>
+Subject: Re: [RFC PATCH] KVM: x86/mmu: replace BUG() with KVM_BUG() in shadow mmu
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Nagareddy Reddy <nspreddy@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Matlack <dmatlack@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -79,108 +72,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 2:30 PM Johannes Weiner <hannes@cmpxchg.org> wrote:
+On Wed, Nov 23, 2022 at 3:18 PM Sean Christopherson <seanjc@google.com> wrote:
 >
-> On Wed, Nov 23, 2022 at 01:35:13PM -0800, Yosry Ahmed wrote:
-> > On Wed, Nov 23, 2022 at 1:21 PM Mina Almasry <almasrymina@google.com> wrote:
-> > >
-> > > On Wed, Nov 23, 2022 at 10:00 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
-> > > >
-> > > > Hello Mina,
-> > > >
-> > > > On Tue, Nov 22, 2022 at 12:38:45PM -0800, Mina Almasry wrote:
-> > > > > Since commit 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg
-> > > > > reclaim""), the proactive reclaim interface memory.reclaim does both
-> > > > > reclaim and demotion. This is likely fine for us for latency critical
-> > > > > jobs where we would want to disable proactive reclaim entirely, and is
-> > > > > also fine for latency tolerant jobs where we would like to both
-> > > > > proactively reclaim and demote.
-> > > > >
-> > > > > However, for some latency tiers in the middle we would like to demote but
-> > > > > not reclaim. This is because reclaim and demotion incur different latency
-> > > > > costs to the jobs in the cgroup. Demoted memory would still be addressable
-> > > > > by the userspace at a higher latency, but reclaimed memory would need to
-> > > > > incur a pagefault.
-> > > > >
-> > > > > To address this, I propose having reclaim-only and demotion-only
-> > > > > mechanisms in the kernel. There are a couple possible
-> > > > > interfaces to carry this out I considered:
-> > > > >
-> > > > > 1. Disable demotion in the memory.reclaim interface and add a new
-> > > > >    demotion interface (memory.demote).
-> > > > > 2. Extend memory.reclaim with a "demote=<int>" flag to configure the demotion
-> > > > >    behavior in the kernel like so:
-> > > > >       - demote=0 would disable demotion from this call.
-> > > > >       - demote=1 would allow the kernel to demote if it desires.
-> > > > >       - demote=2 would only demote if possible but not attempt any
-> > > > >         other form of reclaim.
-> > > >
-> > > > Unfortunately, our proactive reclaim stack currently relies on
-> > > > memory.reclaim doing both. It may not stay like that, but I'm a bit
-> > > > wary of changing user-visible semantics post-facto.
-> > > >
-> > > > In patch 2, you're adding a node interface to memory.demote. Can you
-> > > > add this to memory.reclaim instead? This would allow you to control
-> > > > demotion and reclaim independently as you please: if you call it on a
-> > > > node with demotion targets, it will demote; if you call it on a node
-> > > > without one, it'll reclaim. And current users will remain unaffected.
-> > >
-> > > Hello Johannes, thanks for taking a look!
-> > >
-> > > I can certainly add the "nodes=" arg to memory.reclaim and you're
-> > > right, that would help in bridging the gap. However, if I understand
-> > > the underlying code correctly, with only the nodes= arg the kernel
-> > > will indeed attempt demotion first, but the kernel will also merrily
-> > > fall back to reclaiming if it can't demote the full amount. I had
-> > > hoped to have the flexibility to protect latency sensitive jobs from
-> > > reclaim entirely while attempting to do demotion.
-> > >
-> > > There are probably ways to get around that in the userspace. I presume
-> > > the userspace can check if there is available memory on the node's
-> > > demotion targets, and if so, the kernel should demote-only. But I feel
-> > > that wouldn't be reliable as the demotion logic may change across
-> > > kernel versions. The userspace may think the kernel would demote but
-> > > instead demotion failed due to whatever heuristic introduced into the
-> > > new kernel version.
-> > >
-> > > The above is just one angle of the issue. Another angle (which Yosry
-> > > would care most about I think) is that at Google we call
-> > > memory.reclaim mainly when memory.current is too close to memory.max
-> > > and we expect the memory usage of the cgroup to drop as a result of a
-> > > success memory.reclaim call. I suspect once we take in commit
-> > > 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg reclaim""),
-> > > we would run into that regression, but I defer to Yosry here, he may
-> > > have a solution for that in mind already.
+> On Wed, Nov 23, 2022, Mingwei Zhang wrote:
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index 4736d7849c60..075d31b0db9c 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -955,12 +955,12 @@ static void pte_list_remove(u64 *spte, struct kvm_rmap_head *rmap_head)
 > >
-> > We don't exactly rely on memory.current, but we do have a separate
-> > proactive reclaim policy today from demotion, and we do expect
-> > memory.reclaim to reclaim memory and not demote it. So it is important
-> > that we can control reclaim vs. demotion separately. Having
-> > memory.reclaim do demotions by default is not ideal for our current
-> > setup, so at least having a demote= argument to control it (no
-> > demotions, may demote, only demote) is needed.
+> >       if (!rmap_head->val) {
+> >               pr_err("%s: %p 0->BUG\n", __func__, spte);
+> > -             BUG();
+> > +             KVM_BUG();
 >
-> With a nodemask you should be able to only reclaim by specifying
-> terminal memory tiers that do that, and leave out higher tiers that
-> demote.
+> This won't compile.  KVM_BUG() isn't a direct replacement for BUG(), it's more
+> akin to WARN().
 >
-> That said, it would actually be nice if reclaim policy wouldn't have
-> to differ from demotion policy longer term. Ultimately it comes down
-> to mapping age to memory tier, right? Such that hot pages are in RAM,
-> warm pages are in CXL, cold pages are in storage. If you apply equal
-> presure on all tiers, it's access frequency that should determine
-> which RAM pages to demote, and which CXL pages to reclaim. If RAM
-> pages are hot and refuse demotion, and CXL pages are cold in
-> comparison, CXL should clear out. If RAM pages are warm, they should
-> get demoted to CXL but not reclaimed further from there (and rotate
-> instead).
->
-> Do we know what's preventing this from happening today? What's the
-> reason you want to control them independently?
+> And that's why I suggested this be RFC: @kvm needs to be plumbed down here in order
+> to use KVM_BUG().  I don't mind that too much, it's just a little unfortunate.
 
-The motivation was giving user space more flexibility to design their
-policies. However, as you point out, the current behavior of falling
-back to reclaiming when we cannot demote is not ideal, and maybe we
-should not design policies around it. We can always revisit this if a
-use case arises where a clear distinction needs to be drawn between
-reclaiming and demotion policies.
+I wonder if using kvm_get_running_vcpu()->kvm is safe here? Assuming
+we can, then @kvm plumbing shouldn't be a problem.
