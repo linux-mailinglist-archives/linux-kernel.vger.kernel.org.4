@@ -2,901 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C83A2636B06
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 21:25:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B5FD636AB4
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 21:16:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239898AbiKWUZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 15:25:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53092 "EHLO
+        id S238855AbiKWUQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 15:16:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237373AbiKWUZX (ORCPT
+        with ESMTP id S238755AbiKWUQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 15:25:23 -0500
-Received: from sonic317-38.consmr.mail.ne1.yahoo.com (sonic317-38.consmr.mail.ne1.yahoo.com [66.163.184.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822F8E074E
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 12:20:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1669234857; bh=LSlk9lF4xLYhvPsYXu95SiO4X2rzjX8vefAC2PmXp6A=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=MFcRzS91Dlc7ZRZsvJz4WaqRe5DqwwiVxngx1PmgiNBCcPXFoy2mxvnzZX9+bzOpIPfgx+os9YFCjq7SrSnu2pwXqyVzmH2dGEZ1qpxa0fRXUYMQgFxH/PnuAMr5Yhm7BWKWfXOY4jC8zWkdWNIlXSpeRGomat2Ywa2nRJptWkpiCWO+8ccqFMoPR6HU2EySAkL7jX/Phl/YdtFN4qnY/26xCAB3zP5gzNNz2cD2uyfIV2GteGt6MG4Yj433LsGlFHJRiUNVY/m6RQqU6h8UptboDjiOEq17KWl1ft9e1hEoD3fSNLY6dkp1SxV+cswPGj7iRRIvW6wRLBCLhwT0gQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1669234857; bh=izIF+VMhm9UvzanUTdoevUmzvGaIZ6f2upBCS0MGyds=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=D3ZUOMzZ2/4vFJI0Q4iZrO6XDJrYFYbj6RbaTqXwWI25/yAbgVHiz1gMNIGHh7ngopBdXVI92NWT6es2kQR7ksxlnpRNAuJkd3O/aGeIFkUTPkfhmewKrNGnwEBUrDvj+LWu5cbi7HjSHlyJEFuY5FFoZ2bfosMJOiLzxbYCR/WcdQsXUErUXRHFPM2/cJnqOjlRi8O9jPXCFE6LAcloAWcY/N+xjmJiYGfyBWYeSlGMjGddnk26KMCYyjy404zyOIMUrQjrTUPpvPluDHiAU6vJ69rcHfcyiQNwFDeBYqe3NXCEFNuNU/hC1Squ6j/RIrRARRIgECruFfwJsYG39g==
-X-YMail-OSG: epC3H7YVM1nY9I6JtS5l_2._V6FpZhzhT1Sl1b3gVsArWaH7lbQp_33T0TqMbwP
- aePIpbGg7ZOGRQyiTmU7K5twkp10_G2hsKGgfuddqcokpBl52vUdn3BZb6mKjMtdNpvk4kN73RJV
- BGZDvoSSmoLChfYINkaNxMfP8UUhRb7IYZHWMtXL.4MA3.Ab3K33kjI91MOfk439PDOpH47lm1fe
- iaAMhBk7MTYKqRJKbzVo8KiMqFq9T2K2lMBUn4bYcxTIY0FuUpbj4k4g0v4QXM_J_wMgKrog3puO
- PbyQf55.b5ybOIWJcPyHfLhpU17IGf7OAzrqWVEwsqFjzx0v7mqnhOlfA8TQ1BJgQybgYujcmxxk
- S76eV2iMM3SW7CVS4Su6tO8UA6Ax6bPOXY2OSWRR3_Pri5X_IKPHpFOKaZA7D0g.WOhHK7JZQWFq
- ar0MTRYsmyBtfybKMy5LSh6Aud4MaBg9nwleI3Gkukj8oImB4fw1ZMfepFf.1rcG1S2DqjwOakW.
- TJC_roRXV9AwJkkDTfT7yubPaqOYwfXpLdPVsj.T1j480TSPWPYy0rF1hDkG1sXum9DR40qUo9a9
- GctG4Kjy2faT9WS_id7N1FL195vM7LIkR19.7L6sQHrj.wzG4z1A7oEvJA8ToBkNur79ZzOPhT6p
- 5ZXavHf8DtUZoLHBvWXdBTgTLVpHIXkyMktMh4TuYDmpHJojmCTyan_2o2wKeYpwFOE4FOaZikL8
- 7CbfcAd.WniWKBK1dw5SgDnvQ7R.M5aAD6z2Etdn0PcqDgRBHvwgebAxzAtnmSrGIX86CWHIhEGe
- BJGQSEfgvipLTXV1PaRPrp0xHEvj16l0oC65YjtfbOQFmT3SwL.Q7o2f5lJVchFtnxODShEnZEOc
- 7IeNO1Eke9qLCEVVeZvnQ78wson9ivQgHBK3oFBSAjDf6gRL0CwnI6z2hw9XHKQKm7zho.uA83Kh
- .J2nZQRf8NuV9avITIW7nlQ2WLHPHvEvRGXvtjj80m4Uz0hAt2SUkKkrSqSVsca9VWpxrZpQzvYF
- PqY19..zZZMTbGbgFRuhkIFnQaSm_2n5dno5VMqyo_7L5Lhpw5BZc1MD57ZEIeaLFH4S2kRVtlaE
- 8erM2jp5M2TsteooynH3sKpsWgWmT_bkn0QlP83u4rrabx6_EpfjnqAkwdWP43gLjZdT6d5R1b_A
- Wn6x7nEEJuXZvMEw2C02x0sJyGyqYUQrm9.MNwggtNWAd.WbDTp0TSTKxBAbEkuj5cJq0vt_uhOF
- 1_HkZ_eXukPEIVoJyf2M7q0fFAtjzkHxk1BLkYCCslFUR1HbWEEwl2tgCGKOCZC7vSCLXDhDrOUV
- dEBr39MBoGBGh4zFZEdmwgt.h8Gakj41MrEZGAt54eUOPS1T9MC8EnrC75N78DkiaClbC0m6IoTj
- bOnuHEfEyQ0jqVYW7Ugf0jo8tbquGE_XCqb6wk69UvgV4cufok3vkleW55Ah2d5z6ZdfrKq..vkp
- wcYsFzxPJBOAPjZnmtNgwvPyr8KmdvnN9ZKa7X2.osLtFE4QoIsHsPikhdraL21nHEwAWE1Zq_nB
- Oc107_dyYVWQpb._2SQdCKHBGXncNnzlMWsB8lKPf4PaA3UDwO6TEShaOJtj5njA7XuKr9aIAgmD
- bwd34.bMQw6MPJxxtLHhxx7OE12mK9lI1zieEVY1ItQI8FDSJ5ZVWz8UrD.PHqmB2DgZBi1fGn2f
- nNcCOSQWm4hx7xRBrtDcCM3Ehq.UdqWFV9hwMvjPZGVGwwTnyTwaRU9dws8VNNeILLhhJizxTF9G
- PePZQ98Hyo5Gege5CHAp3BXksOpBXrBkMlT4W8qe7fap3IaNAZcCdMhYSbQIiTcgqxG78Po.2r8E
- rlZrc0vR_9o6jsgKYqPnyuA1F3Up_15x7XKPJ6BKPuZGCFK10e_KqupVusrEw3HRAfxu2cyZsDAY
- vqsJ8us9QG1AmkbencDdNXiBKaagZYjj81vNrnk_h0pptKGI0h3o5a3F_RG6RZR7C06JQXKPAqi3
- FnM0Speo0WQ05F9879s7IqO5TEeADOfCeWhiYEGV8x3.IuqUfrGbgum_91MRBYhwZbxAcT2dK1Wm
- XGmp9MvN8_99hbHC_9wu0TZ56r.NptMZWLhlOx42WlfiA5D0XUHuk.fS5peIfdhS5brNgTk947Kz
- nYBtcyETAeG6bLxJPKvyvvn15jkUsWCLV0fSiNdlx5vmvPduQmUqb0DLMDkO8y7JUrLvtvsT5ERt
- R0MMYnMa2hL6WIM8lsEHHefxGY.hoK6j5XXvpkORg0KSJcXKs
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic317.consmr.mail.ne1.yahoo.com with HTTP; Wed, 23 Nov 2022 20:20:57 +0000
-Received: by hermes--production-bf1-5878955b5f-xc4c6 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID fb1d64975d777c0bae103a551a2614c4;
-          Wed, 23 Nov 2022 20:20:51 +0000 (UTC)
-From:   Casey Schaufler <casey@schaufler-ca.com>
-To:     casey.schaufler@intel.com, paul@paul-moore.com,
-        linux-security-module@vger.kernel.org
-Cc:     casey@schaufler-ca.com, jmorris@namei.org, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, mic@digikod.net
-Subject: [PATCH v3 9/9] LSM: selftests for Linux Security Module infrastructure syscalls
-Date:   Wed, 23 Nov 2022 12:15:52 -0800
-Message-Id: <20221123201552.7865-10-casey@schaufler-ca.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221123201552.7865-1-casey@schaufler-ca.com>
-References: <20221123201552.7865-1-casey@schaufler-ca.com>
+        Wed, 23 Nov 2022 15:16:38 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6235E9C2;
+        Wed, 23 Nov 2022 12:16:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669234596; x=1700770596;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=2mZ3/n+qxBYYknuXkbZo7K3HO75+gh/PWNcQ1l0ZtIA=;
+  b=RGUaclmIaoMDec0k8bO7Lqt1LrXRmQsTnOI8KRvWLNUABmsF6UGciXgY
+   Uw6LTc60ivhQ1FxgMb8QWYiAaZ2rp6ALby2kGPKL2PqQrjUegC/IB01QK
+   B8usW9wVx7w5N2VEIjv1MX3jI1Q85X8/TqFNofueLc1XoHGMrkqCO99Pz
+   r/a67LY0pnttG4PBNyUCm89kjHSBuDr5Qck2ZzrT1KU2qFwVwuTaMTKk2
+   NxHnyt80Kb4nKtW0vvWPiqSm8n5RY32/Ukko9Z2xebC5R3KwtgdHbS7jN
+   T144bLdrh8EyBSMi6KlZhkXdTiC0VzDKsPxQPG1XiHxF9gq1MYy/21k+Y
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="294539626"
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="294539626"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 12:16:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="730902272"
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="730902272"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Nov 2022 12:16:35 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 23 Nov 2022 12:16:35 -0800
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 23 Nov 2022 12:16:34 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Wed, 23 Nov 2022 12:16:34 -0800
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.173)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Wed, 23 Nov 2022 12:16:34 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=edy8yQniYb6DMlOSW/f2VqFguYnlnZjPxfXvLWexNr7U61sSp3gMgt7A0zHQw5OCMkxmzjCJctz2yK9CTXkN+s46TilurxwBpygbY2U49SUjaUd2IJtEf9nDv+sa/spe5AHkTjzy5KhOShq1rivj1qeJT/vuGnKzKRlC5006GghQekrnrLuc/dLCuCPEpxweYQ+9zgRSxt0q9pfsr5Z3nJXay3k7YqGDtvL/5ATeTKzOp7GrgzMkQK4UkgvrlsMsTpIa/nvLxgovmH5xOxj/xehqF8GCITkwpEoxJEWaFn3xggcl9v8dhBcc3JJ6dnpEatLdNFeGn+Lt9KOEcE/l3A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=i32ot+qngACrzAhwaFAr1cN//85TWDbv+IjqB4jZudg=;
+ b=OufHR4GEzix4iBvPY9aiRVitVxTuQPp4p0uwghjtaSbpWBsnktoHkPw681wdxJhY/Ez/jGB116z+64YnusGaDr9oj+x0z0DG43BTyaRh5k4U/ySZsvpY0VVjioyvgDT4jsoBShficiZFAi6CjRxlrNYAIGIDdg+IfzmOjV4u3R3dG6cypXH7TFuxINND2XChuy+889LeR/DNs88HHpp3uOmKDk98o5vFB5g4feh+z9xHHN7sQMRbtDoqMVwVsW4LtsZdICGgNUnRjR63K8JEVpfMdzV5ZgrZeiikysX/i6zC+CVbYOhnfsZvxzv4+p4iHoXC4S7l4KdLiC4FjJ5vFw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from CO1PR11MB5089.namprd11.prod.outlook.com (2603:10b6:303:9b::16)
+ by CY8PR11MB7107.namprd11.prod.outlook.com (2603:10b6:930:51::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Wed, 23 Nov
+ 2022 20:16:32 +0000
+Received: from CO1PR11MB5089.namprd11.prod.outlook.com
+ ([fe80::9e54:f368:48d1:7a28]) by CO1PR11MB5089.namprd11.prod.outlook.com
+ ([fe80::9e54:f368:48d1:7a28%3]) with mapi id 15.20.5834.015; Wed, 23 Nov 2022
+ 20:16:32 +0000
+From:   "Keller, Jacob E" <jacob.e.keller@intel.com>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] net: loopback: use NET_NAME_PREDICTABLE for
+ name_assign_type
+Thread-Topic: [PATCH] net: loopback: use NET_NAME_PREDICTABLE for
+ name_assign_type
+Thread-Index: AQHY/0aKnTM/S23KHU2uX1j8XfZvJ65M8anQ
+Date:   Wed, 23 Nov 2022 20:16:32 +0000
+Message-ID: <CO1PR11MB5089116CBF3DC327E6F4C4CBD60C9@CO1PR11MB5089.namprd11.prod.outlook.com>
+References: <20221123141829.1825170-1-linux@rasmusvillemoes.dk>
+In-Reply-To: <20221123141829.1825170-1-linux@rasmusvillemoes.dk>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CO1PR11MB5089:EE_|CY8PR11MB7107:EE_
+x-ms-office365-filtering-correlation-id: e8be5e00-b3bc-4a15-a1b2-08dacd8f9ced
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: f2KzEnPLLz94aCiLo0HuFV0TMMWSC5DBJBbrDoXPFJUmhcmi9rFBnMgF19KpQcHaaiKuug2s7vC0zGgR9c+UFC5leRXVPv6RJ8peYL29X/yWeq+YzLGvQVapdaQqi0YbL1nFfkSvb6rKj/NgeCe84Wknxd9wuNvqdrbalkHwHSM9SoHjgU8BChvbAfzxpv70BdCna1ehx16uzd38w3mOyRQc1Pl2Q1u9/hEtuIG3ow7PHWg6HiSE7vywkgwjMZylAYFEUKRg1nHjgcooNR6HCDtmWhm82c/zhYsyf5VynWOXipjChkywEVt2DM1clxi0+RYSHtoWnS3SsCZ53oHT0o2mxpczwQPTPlqvvWsk/ql+eGdwsyVKTe4B5SuHImOBD4/VIDDCLCtFwsrVjicWTfL0rs1S0J/2secY3IT6iQ7MHUNm1Ror9S/36zzm8ccx737DsKB9MadZ/HXcO0PxHWy+xkakaqRRjj4iesFyBvJildCczLW7jMW9ltWbFeApUiHYf/FRC2qQXw2PkLbo+TQtKivZbr+GrYk9mHBb/q/X6lRIzfiU0MdXSHfdvxiHZAY76HCNSFnrHgQy3CkaZjCqMM82LYb2zVOPloj5+g+siAQlP827wLCMhEK9KUdP72tcqr4XGto8XIC1/20w4eXWeZwmEkH7x9LY7UQsNDyCWAt96IgZ9/L5cGnfheuuEF/tS4AWXvR47DhCbI/9fQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5089.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(366004)(376002)(136003)(396003)(39860400002)(451199015)(4326008)(76116006)(52536014)(8936002)(66446008)(66946007)(41300700001)(64756008)(82960400001)(33656002)(8676002)(7696005)(6506007)(5660300002)(9686003)(26005)(122000001)(83380400001)(54906003)(186003)(71200400001)(55016003)(316002)(38070700005)(38100700002)(66556008)(53546011)(478600001)(110136005)(86362001)(2906002)(66476007)(66899015);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?BF3D9pcqGSK4rjvFRRQQ4VGcxpwUgI/NNgRYjYV0tQtHH/TCfOdb++dyHtge?=
+ =?us-ascii?Q?MlR9z1kJyAJ1AFo5pcOHjDckA69rszsxHKA9kw5ltTPm84HDWPneT7EVzb9r?=
+ =?us-ascii?Q?YmEjaQ0UbAgyxVfUMLDjjDkE0WvduH7tCdMJCo27Sqzeg4MRQBB8S3z0CdQ3?=
+ =?us-ascii?Q?IeRN35x/lA5I+LdlViROKUGaQUCiFty0cFlUK3PheY2BPP7pKODSbbiTROx1?=
+ =?us-ascii?Q?kSFe0gNPrdX4DxDKMJBLdbz0lTned+T9MqfSR46gI6r8FS3/wiAHWpmDuPcs?=
+ =?us-ascii?Q?DUMhd0gvfd2QCWP14utJv8sr9Rerk6TTIXEEiTameSO53hLZYBK7vUOgWZ1e?=
+ =?us-ascii?Q?KPTek8vDoEM5+28JGiUBTRh2kfb/dd7umRR36ZeYTweO4SECBhXq0ByWXbSs?=
+ =?us-ascii?Q?EW2Ctwc91JKLwP8Nrbsi4COdObV50Yn/vsZ/hu5NT8ovRqzpV8g3JI/ZnN9R?=
+ =?us-ascii?Q?ZSqOl3g/wqfLqCVvdpcIMFRuhSoNustlMdxvinI2pLgQX1AfKdP/N1PtWaOl?=
+ =?us-ascii?Q?5WPh+vIpad9YmLOUZCidb7cKPJx4YtiXA09f6Tk1UybXmiAZgLK/3rl0qPGA?=
+ =?us-ascii?Q?fXScaPw2Uy34le8ubVPSgcFfOS6gNqY/4drCpUubidAMBEtq3n9zqq509iod?=
+ =?us-ascii?Q?bF2SAMwM1AmmOI3JoK3S5L3+KZNiNbuM2PPjv4KXz028TlNdeyg7hoDHpQAp?=
+ =?us-ascii?Q?QZnTNONseQQSWNQCWZwBhkWSTwu71N6HLG+aUeoOa5P2h2OCdLZyt5ojLjut?=
+ =?us-ascii?Q?DP2A1wlKlyHhqskwr7YKa0NChfzCH2f5fTRaxiuNWuXfI3Zm4z9K6gna4Cki?=
+ =?us-ascii?Q?BM0VP3oJJTwoJxOcLGc8sQfFHxfewGaena0yksWNZvKc9a7/GGH+9cMs6i9+?=
+ =?us-ascii?Q?FnGR/HhasqfZx8rbZ2t8ywIux+MwtKYNnuI6dvArk1XQ5O3fvtIIwDGtUMjq?=
+ =?us-ascii?Q?pvYhmq629yr6Me/TIEbQbvET1RVa9PhPA+M2XLhZ6DAnj+2tfwO19sExgc5z?=
+ =?us-ascii?Q?GOV856KgeppyruCt8f2BCKHaZD7l4jZhFHoZ8o4TbsEfy+3JVHYWs6XxuwEz?=
+ =?us-ascii?Q?v3P7c6Otjb4hLPmi8+ITenSXYWA2QyUfielhhF+9Tb6yCU47iBmPymy0V5xp?=
+ =?us-ascii?Q?c9TRaMjiVe3EIjEC9w2bBE5gClfJ2mNbK08oC5K07LbivKKPoZWGdTDhtzLD?=
+ =?us-ascii?Q?7C/PoqI0JXC9XbHtUU2R+UwaHQFlI2iNKgKgUfT1yT8AR1cs7B5yQOHR8SkM?=
+ =?us-ascii?Q?s6DqJNGhPlgaYPVtvop0Fe1aVFIQqBfZRhTLQEH8YO8qWoZmuyZDQQdeZXI8?=
+ =?us-ascii?Q?+Jh2dbJZIaVbSv7yUGpa4pn1PBcymU36gFKdc6a1Rs6uzmv51gAszQeHNVN9?=
+ =?us-ascii?Q?VxWpdeBVxg/ZB+SZd+tjQiD2ampeQob1j3L7bAD3+Vf+Ho1P0UGnTDWV9o1Z?=
+ =?us-ascii?Q?w59hg9/y9Jc0AQo3+VjDFR3KD1/7zXvF0GpS9KVsdVZgQfa5nxCiESZt3uAR?=
+ =?us-ascii?Q?y/j7HVBArd2pmP0PEvh06K4Og60HA4eXHLBqclzSF0BICohUe7OHsVXmrWuq?=
+ =?us-ascii?Q?tnYBRcy5shnf1myk2ib7KxpuukJHX23YEivkxHdH?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5089.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e8be5e00-b3bc-4a15-a1b2-08dacd8f9ced
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Nov 2022 20:16:32.3026
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: nyhZCsoujjbJA4DsFqKK2P33thvxiCUiJzNMYo21DD/gfx5ALDVAH2iISezJHmn5jRvVS4++b+DTIK6x7RtRTquDItBuBIUoRAuaFg2Gf2w=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7107
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add selftests for the three system calls supporting the LSM
-infrastructure.
 
-Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
----
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/lsm/Makefile          |  13 +
- tools/testing/selftests/lsm/config            |   2 +
- .../selftests/lsm/lsm_get_self_attr_test.c    | 268 ++++++++++++++
- .../selftests/lsm/lsm_module_list_test.c      | 149 ++++++++
- .../selftests/lsm/lsm_set_self_attr_test.c    | 328 ++++++++++++++++++
- 6 files changed, 761 insertions(+)
- create mode 100644 tools/testing/selftests/lsm/Makefile
- create mode 100644 tools/testing/selftests/lsm/config
- create mode 100644 tools/testing/selftests/lsm/lsm_get_self_attr_test.c
- create mode 100644 tools/testing/selftests/lsm/lsm_module_list_test.c
- create mode 100644 tools/testing/selftests/lsm/lsm_set_self_attr_test.c
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index f07aef7c592c..ee7e93bf956d 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -36,6 +36,7 @@ TARGETS += landlock
- TARGETS += lib
- TARGETS += livepatch
- TARGETS += lkdtm
-+TARGETS += lsm
- TARGETS += membarrier
- TARGETS += memfd
- TARGETS += memory-hotplug
-diff --git a/tools/testing/selftests/lsm/Makefile b/tools/testing/selftests/lsm/Makefile
-new file mode 100644
-index 000000000000..601974fdd9b8
---- /dev/null
-+++ b/tools/testing/selftests/lsm/Makefile
-@@ -0,0 +1,13 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# First run: make -C ../../../.. headers_install
-+
-+CFLAGS += -Wall -O2 $(KHDR_INCLUDES)
-+
-+TEST_GEN_PROGS := lsm_get_self_attr_test lsm_module_list_test \
-+		  lsm_set_self_attr_test
-+
-+include ../lib.mk
-+
-+$(TEST_GEN_PROGS):
-+
-diff --git a/tools/testing/selftests/lsm/config b/tools/testing/selftests/lsm/config
-new file mode 100644
-index 000000000000..afb887715f64
---- /dev/null
-+++ b/tools/testing/selftests/lsm/config
-@@ -0,0 +1,2 @@
-+CONFIG_SYSFS=y
-+CONFIG_SECURITY=y
-diff --git a/tools/testing/selftests/lsm/lsm_get_self_attr_test.c b/tools/testing/selftests/lsm/lsm_get_self_attr_test.c
-new file mode 100644
-index 000000000000..6f7f72c25cda
---- /dev/null
-+++ b/tools/testing/selftests/lsm/lsm_get_self_attr_test.c
-@@ -0,0 +1,268 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Linux Security Module infrastructure tests
-+ * Tests for the lsm_get_self_attr system call
-+ *
-+ * Copyright © 2022 Casey Schaufler <casey@schaufler-ca.com>
-+ * Copyright © 2022 Intel Corporation
-+ */
-+
-+#define _GNU_SOURCE
-+#include <linux/lsm.h>
-+#include <string.h>
-+#include <stdio.h>
-+#include <unistd.h>
-+#include <sys/types.h>
-+#include "../kselftest_harness.h"
-+
-+#define PROCATTR	"/proc/self/attr/"
-+
-+static int read_proc_attr(const char *attr, char *value, __kernel_size_t size)
-+{
-+	FILE *fp;
-+	int len;
-+	char *path;
-+
-+	len = strlen(PROCATTR) + strlen(attr) + 1;
-+	path = calloc(len, 1);
-+	if (path == NULL)
-+		return -1;
-+	sprintf(path, "%s%s", PROCATTR, attr);
-+
-+	fp = fopen(path, "r");
-+	free(path);
-+
-+	if (fp == NULL)
-+		return -1;
-+	if (fread(value, 1, size, fp) <= 0)
-+		return -1;
-+	fclose(fp);
-+
-+	path = strchr(value, '\n');
-+	if (path)
-+		*path = '\0';
-+
-+	return 0;
-+}
-+
-+static struct lsm_ctx *next_ctx(struct lsm_ctx *ctxp)
-+{
-+	void *vp;
-+
-+	vp = (void *)ctxp + sizeof(*ctxp) + ctxp->ctx_len;
-+	return (struct lsm_ctx *)vp;
-+}
-+
-+TEST(size_null_lsm_get_self_attr)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	char *ctx = calloc(page_size, 1);
-+
-+	ASSERT_NE(NULL, ctx);
-+	ASSERT_EQ(-1, syscall(__NR_lsm_get_self_attr, ctx, NULL,
-+			      LSM_ATTR_CURRENT));
-+	ASSERT_EQ(EFAULT, errno);
-+
-+	free(ctx);
-+}
-+
-+TEST(ctx_null_lsm_get_self_attr)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	__kernel_size_t size = page_size;
-+
-+	ASSERT_EQ(-1, syscall(__NR_lsm_get_self_attr, NULL, &size,
-+			      LSM_ATTR_CURRENT));
-+	ASSERT_EQ(EFAULT, errno);
-+	ASSERT_NE(1, size);
-+}
-+
-+TEST(size_too_small_lsm_get_self_attr)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	char *ctx = calloc(page_size, 1);
-+	__kernel_size_t size = 1;
-+
-+	ASSERT_NE(NULL, ctx);
-+	ASSERT_EQ(-1, syscall(__NR_lsm_get_self_attr, ctx, &size,
-+			      LSM_ATTR_CURRENT));
-+	ASSERT_EQ(ERANGE, errno);
-+	ASSERT_NE(1, size);
-+
-+	free(ctx);
-+}
-+
-+TEST(flags_zero_lsm_get_self_attr)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	char *ctx = calloc(page_size, 1);
-+	__kernel_size_t size = page_size;
-+
-+	ASSERT_NE(NULL, ctx);
-+	ASSERT_EQ(-1, syscall(__NR_lsm_get_self_attr, ctx, &size, 0));
-+	ASSERT_EQ(EINVAL, errno);
-+	ASSERT_EQ(page_size, size);
-+
-+	free(ctx);
-+}
-+
-+TEST(flags_overset_lsm_get_self_attr)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	char *ctx = calloc(page_size, 1);
-+	__kernel_size_t size = page_size;
-+
-+	ASSERT_NE(NULL, ctx);
-+	ASSERT_EQ(-1, syscall(__NR_lsm_get_self_attr, ctx, &size,
-+			      LSM_ATTR_CURRENT | LSM_ATTR_PREV));
-+	ASSERT_EQ(EINVAL, errno);
-+	ASSERT_EQ(page_size, size);
-+
-+	free(ctx);
-+}
-+
-+TEST(basic_lsm_get_self_attr)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	__kernel_size_t size = page_size;
-+	struct lsm_ctx *ctx = calloc(page_size, 1);
-+	struct lsm_ctx *tctx = NULL;
-+	__u32 *syscall_lsms = calloc(page_size, 1);
-+	char *attr = calloc(page_size, 1);
-+	int cnt_current = 0;
-+	int cnt_exec = 0;
-+	int cnt_fscreate = 0;
-+	int cnt_keycreate = 0;
-+	int cnt_prev = 0;
-+	int cnt_sockcreate = 0;
-+	int lsmcount;
-+	int count;
-+	int i;
-+
-+	ASSERT_NE(NULL, ctx);
-+	ASSERT_NE(NULL, syscall_lsms);
-+
-+	lsmcount = syscall(__NR_lsm_module_list, syscall_lsms, &size, 0);
-+	ASSERT_LE(1, lsmcount);
-+
-+	for (i = 0; i < lsmcount; i++) {
-+		switch (syscall_lsms[i]) {
-+		case LSM_ID_SELINUX:
-+			cnt_current++;
-+			cnt_exec++;
-+			cnt_fscreate++;
-+			cnt_keycreate++;
-+			cnt_prev++;
-+			cnt_sockcreate++;
-+			break;
-+		case LSM_ID_SMACK:
-+			cnt_current++;
-+			break;
-+		case LSM_ID_APPARMOR:
-+			cnt_current++;
-+			cnt_exec++;
-+			cnt_prev++;
-+			break;
-+		default:
-+			break;
-+		}
-+	}
-+
-+	if (cnt_current) {
-+		size = page_size;
-+		count = syscall(__NR_lsm_get_self_attr, ctx, &size,
-+				LSM_ATTR_CURRENT);
-+		ASSERT_EQ(cnt_current, count);
-+		tctx = ctx;
-+		ASSERT_EQ(0, read_proc_attr("current", attr, page_size));
-+		ASSERT_EQ(0, strcmp((char *)tctx->ctx, attr));
-+		for (i = 1; i < count; i++) {
-+			tctx = next_ctx(tctx);
-+			ASSERT_NE(0, strcmp((char *)tctx->ctx, attr));
-+		}
-+	}
-+	if (cnt_exec) {
-+		size = page_size;
-+		count = syscall(__NR_lsm_get_self_attr, ctx, &size,
-+				LSM_ATTR_EXEC);
-+		ASSERT_GE(cnt_exec, count);
-+		if (count > 0) {
-+			tctx = ctx;
-+			ASSERT_EQ(0, read_proc_attr("exec", attr, page_size));
-+			ASSERT_EQ(0, strcmp((char *)tctx->ctx, attr));
-+		}
-+		for (i = 1; i < count; i++) {
-+			tctx = next_ctx(tctx);
-+			ASSERT_NE(0, strcmp((char *)tctx->ctx, attr));
-+		}
-+	}
-+	if (cnt_fscreate) {
-+		size = page_size;
-+		count = syscall(__NR_lsm_get_self_attr, ctx, &size,
-+				LSM_ATTR_FSCREATE);
-+		ASSERT_GE(cnt_fscreate, count);
-+		if (count > 0) {
-+			tctx = ctx;
-+			ASSERT_EQ(0, read_proc_attr("fscreate", attr,
-+						    page_size));
-+			ASSERT_EQ(0, strcmp((char *)tctx->ctx, attr));
-+		}
-+		for (i = 1; i < count; i++) {
-+			tctx = next_ctx(tctx);
-+			ASSERT_NE(0, strcmp((char *)tctx->ctx, attr));
-+		}
-+	}
-+	if (cnt_keycreate) {
-+		size = page_size;
-+		count = syscall(__NR_lsm_get_self_attr, ctx, &size,
-+				LSM_ATTR_KEYCREATE);
-+		ASSERT_GE(cnt_keycreate, count);
-+		if (count > 0) {
-+			tctx = ctx;
-+			ASSERT_EQ(0, read_proc_attr("keycreate", attr,
-+						    page_size));
-+			ASSERT_EQ(0, strcmp((char *)tctx->ctx, attr));
-+		}
-+		for (i = 1; i < count; i++) {
-+			tctx = next_ctx(tctx);
-+			ASSERT_NE(0, strcmp((char *)tctx->ctx, attr));
-+		}
-+	}
-+	if (cnt_prev) {
-+		size = page_size;
-+		count = syscall(__NR_lsm_get_self_attr, ctx, &size,
-+				LSM_ATTR_PREV);
-+		ASSERT_GE(cnt_prev, count);
-+		if (count > 0) {
-+			tctx = ctx;
-+			ASSERT_EQ(0, read_proc_attr("prev", attr, page_size));
-+			ASSERT_EQ(0, strcmp((char *)tctx->ctx, attr));
-+			for (i = 1; i < count; i++) {
-+				tctx = next_ctx(tctx);
-+				ASSERT_NE(0, strcmp((char *)tctx->ctx, attr));
-+			}
-+		}
-+	}
-+	if (cnt_sockcreate) {
-+		size = page_size;
-+		count = syscall(__NR_lsm_get_self_attr, ctx, &size,
-+				LSM_ATTR_SOCKCREATE);
-+		ASSERT_GE(cnt_sockcreate, count);
-+		if (count > 0) {
-+			tctx = ctx;
-+			ASSERT_EQ(0, read_proc_attr("sockcreate", attr,
-+						    page_size));
-+			ASSERT_EQ(0, strcmp((char *)tctx->ctx, attr));
-+		}
-+		for (i = 1; i < count; i++) {
-+			tctx = next_ctx(tctx);
-+			ASSERT_NE(0, strcmp((char *)tctx->ctx, attr));
-+		}
-+	}
-+
-+	free(ctx);
-+	free(attr);
-+	free(syscall_lsms);
-+}
-+
-+TEST_HARNESS_MAIN
-diff --git a/tools/testing/selftests/lsm/lsm_module_list_test.c b/tools/testing/selftests/lsm/lsm_module_list_test.c
-new file mode 100644
-index 000000000000..c5675598b2a4
---- /dev/null
-+++ b/tools/testing/selftests/lsm/lsm_module_list_test.c
-@@ -0,0 +1,149 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Linux Security Module infrastructure tests
-+ * Tests for the lsm_module_list system call
-+ *
-+ * Copyright © 2022 Casey Schaufler <casey@schaufler-ca.com>
-+ * Copyright © 2022 Intel Corporation
-+ */
-+
-+#define _GNU_SOURCE
-+#include <linux/lsm.h>
-+#include <string.h>
-+#include <stdio.h>
-+#include <unistd.h>
-+#include <sys/types.h>
-+#include "../kselftest_harness.h"
-+
-+static int read_sysfs_lsms(char *lsms, __kernel_size_t size)
-+{
-+	FILE *fp;
-+
-+	fp = fopen("/sys/kernel/security/lsm", "r");
-+	if (fp == NULL)
-+		return -1;
-+	if (fread(lsms, 1, size, fp) <= 0)
-+		return -1;
-+	fclose(fp);
-+	return 0;
-+}
-+
-+TEST(size_null_lsm_module_list)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	char *syscall_lsms = calloc(page_size, 1);
-+
-+	ASSERT_NE(NULL, syscall_lsms);
-+	ASSERT_EQ(-1, syscall(__NR_lsm_module_list, syscall_lsms, NULL, 0));
-+	ASSERT_EQ(EFAULT, errno);
-+
-+	free(syscall_lsms);
-+}
-+
-+TEST(ids_null_lsm_module_list)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	__kernel_size_t size = page_size;
-+
-+	ASSERT_EQ(-1, syscall(__NR_lsm_module_list, NULL, &size, 0));
-+	ASSERT_EQ(EFAULT, errno);
-+	ASSERT_NE(1, size);
-+}
-+
-+TEST(size_too_small_lsm_module_list)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	char *syscall_lsms = calloc(page_size, 1);
-+	__kernel_size_t size = 1;
-+
-+	ASSERT_NE(NULL, syscall_lsms);
-+	ASSERT_EQ(-1, syscall(__NR_lsm_module_list, syscall_lsms, &size, 0));
-+	ASSERT_EQ(E2BIG, errno);
-+	ASSERT_NE(1, size);
-+
-+	free(syscall_lsms);
-+}
-+
-+TEST(flags_set_lsm_module_list)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	char *syscall_lsms = calloc(page_size, 1);
-+	__kernel_size_t size = page_size;
-+
-+	ASSERT_NE(NULL, syscall_lsms);
-+	ASSERT_EQ(-1, syscall(__NR_lsm_module_list, syscall_lsms, &size, 7));
-+	ASSERT_EQ(EINVAL, errno);
-+	ASSERT_EQ(page_size, size);
-+
-+	free(syscall_lsms);
-+}
-+
-+TEST(correct_lsm_module_list)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	__kernel_size_t size = page_size;
-+	__u32 *syscall_lsms = calloc(page_size, 1);
-+	char *sysfs_lsms = calloc(page_size, 1);
-+	char *name;
-+	char *cp;
-+	int count;
-+	int i;
-+
-+	ASSERT_NE(NULL, sysfs_lsms);
-+	ASSERT_NE(NULL, syscall_lsms);
-+	ASSERT_EQ(0, read_sysfs_lsms(sysfs_lsms, page_size));
-+
-+	count = syscall(__NR_lsm_module_list, syscall_lsms, &size, 0);
-+	ASSERT_LE(1, count);
-+	cp = sysfs_lsms;
-+	for (i = 0; i < count; i++) {
-+		switch (syscall_lsms[i]) {
-+		case LSM_ID_CAPABILITY:
-+			name = "capability";
-+			break;
-+		case LSM_ID_SELINUX:
-+			name = "selinux";
-+			break;
-+		case LSM_ID_SMACK:
-+			name = "smack";
-+			break;
-+		case LSM_ID_TOMOYO:
-+			name = "tomoyo";
-+			break;
-+		case LSM_ID_IMA:
-+			name = "ima";
-+			break;
-+		case LSM_ID_APPARMOR:
-+			name = "apparmor";
-+			break;
-+		case LSM_ID_YAMA:
-+			name = "yama";
-+			break;
-+		case LSM_ID_LOADPIN:
-+			name = "loadpin";
-+			break;
-+		case LSM_ID_SAFESETID:
-+			name = "safesetid";
-+			break;
-+		case LSM_ID_LOCKDOWN:
-+			name = "lockdown";
-+			break;
-+		case LSM_ID_BPF:
-+			name = "bpf";
-+			break;
-+		case LSM_ID_LANDLOCK:
-+			name = "landlock";
-+			break;
-+		default:
-+			name = "INVALID";
-+			break;
-+		}
-+		ASSERT_EQ(0, strncmp(cp, name, strlen(name)));
-+		cp += strlen(name) + 1;
-+	}
-+
-+	free(sysfs_lsms);
-+	free(syscall_lsms);
-+}
-+
-+TEST_HARNESS_MAIN
-diff --git a/tools/testing/selftests/lsm/lsm_set_self_attr_test.c b/tools/testing/selftests/lsm/lsm_set_self_attr_test.c
-new file mode 100644
-index 000000000000..86f8a5952471
---- /dev/null
-+++ b/tools/testing/selftests/lsm/lsm_set_self_attr_test.c
-@@ -0,0 +1,328 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Linux Security Module infrastructure tests
-+ * Tests for the lsm_set_self_attr system call
-+ *
-+ * Copyright © 2022 Casey Schaufler <casey@schaufler-ca.com>
-+ * Copyright © 2022 Intel Corporation
-+ */
-+
-+#define _GNU_SOURCE
-+#include <linux/lsm.h>
-+#include <string.h>
-+#include <stdio.h>
-+#include <unistd.h>
-+#include <sys/types.h>
-+#include "../kselftest_harness.h"
-+
-+static struct lsm_ctx *next_ctx(struct lsm_ctx *tctx)
-+{
-+	void *vp;
-+
-+	vp = (void *)tctx + sizeof(*tctx) + tctx->ctx_len;
-+	return (struct lsm_ctx *)vp;
-+}
-+
-+TEST(ctx_null_lsm_set_self_attr)
-+{
-+	ASSERT_EQ(-1, syscall(__NR_lsm_set_self_attr, NULL, _SC_PAGESIZE,
-+			      LSM_ATTR_CURRENT));
-+	ASSERT_EQ(EFAULT, errno);
-+}
-+
-+TEST(size_too_small_lsm_set_self_attr)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	struct lsm_ctx *ctx = calloc(page_size, 1);
-+	__kernel_size_t size = page_size;
-+
-+	ASSERT_NE(NULL, ctx);
-+	ASSERT_GE(1, syscall(__NR_lsm_get_self_attr, ctx, &size,
-+			     LSM_ATTR_CURRENT));
-+	ASSERT_EQ(-1, syscall(__NR_lsm_set_self_attr, ctx, 1,
-+			      LSM_ATTR_CURRENT));
-+	ASSERT_EQ(EINVAL, errno);
-+
-+	free(ctx);
-+}
-+
-+TEST(flags_zero_lsm_set_self_attr)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	char *ctx = calloc(page_size, 1);
-+	__kernel_size_t size = page_size;
-+
-+	ASSERT_NE(NULL, ctx);
-+	ASSERT_GE(1, syscall(__NR_lsm_get_self_attr, ctx, &size,
-+			     LSM_ATTR_CURRENT));
-+	ASSERT_EQ(-1, syscall(__NR_lsm_set_self_attr, ctx, size, 0));
-+	ASSERT_EQ(EINVAL, errno);
-+
-+	free(ctx);
-+}
-+
-+TEST(flags_overset_lsm_set_self_attr)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	char *ctx = calloc(page_size, 1);
-+	__kernel_size_t size = page_size;
-+	struct lsm_ctx *tctx = (struct lsm_ctx *)ctx;
-+
-+	ASSERT_NE(NULL, ctx);
-+	ASSERT_GE(1, syscall(__NR_lsm_get_self_attr, tctx, &size,
-+			     LSM_ATTR_CURRENT));
-+	ASSERT_EQ(-1, syscall(__NR_lsm_set_self_attr, tctx, size,
-+			      LSM_ATTR_CURRENT | LSM_ATTR_PREV));
-+	ASSERT_EQ(EINVAL, errno);
-+
-+	free(ctx);
-+}
-+
-+TEST(basic_lsm_set_self_attr)
-+{
-+	const long page_size = sysconf(_SC_PAGESIZE);
-+	__kernel_size_t size = page_size;
-+	struct lsm_ctx *ctx = calloc(page_size, 1);
-+	struct lsm_ctx *tctx;
-+	__u32 *syscall_lsms = calloc(page_size, 1);
-+	char *attr = calloc(page_size, 1);
-+	bool active_apparmor = false;
-+	bool active_selinux = false;
-+	bool active_smack = false;
-+	int cnt_current = 0;
-+	int cnt_exec = 0;
-+	int cnt_fscreate = 0;
-+	int cnt_keycreate = 0;
-+	int cnt_prev = 0;
-+	int cnt_sockcreate = 0;
-+	int lsmcount;
-+	int count;
-+	int rc;
-+	int i;
-+
-+	ASSERT_NE(NULL, ctx);
-+	ASSERT_NE(NULL, syscall_lsms);
-+
-+	lsmcount = syscall(__NR_lsm_module_list, syscall_lsms, &size, 0);
-+	ASSERT_LE(1, lsmcount);
-+
-+	for (i = 0; i < lsmcount; i++) {
-+		switch (syscall_lsms[i]) {
-+		case LSM_ID_SELINUX:
-+			active_selinux = true;
-+			cnt_current++;
-+			cnt_exec++;
-+			cnt_fscreate++;
-+			cnt_keycreate++;
-+			cnt_prev++;
-+			cnt_sockcreate++;
-+			break;
-+		case LSM_ID_SMACK:
-+			active_smack = true;
-+			cnt_current++;
-+			break;
-+		case LSM_ID_APPARMOR:
-+			active_apparmor = true;
-+			cnt_current++;
-+			cnt_exec++;
-+			cnt_prev++;
-+			break;
-+		default:
-+			break;
-+		}
-+	}
-+
-+	if (cnt_current) {
-+		size = page_size;
-+		count = syscall(__NR_lsm_get_self_attr, ctx, &size,
-+				LSM_ATTR_CURRENT);
-+		ASSERT_EQ(cnt_current, count);
-+		tctx = ctx;
-+
-+		for (i = 0; i < count; i++) {
-+			switch (tctx->id) {
-+			case LSM_ID_SELINUX:
-+				ASSERT_EQ(active_selinux, true);
-+				rc = syscall(__NR_lsm_set_self_attr, tctx, size,
-+					     LSM_ATTR_CURRENT);
-+				ASSERT_EQ(0, rc);
-+				tctx->ctx[0] = 'X';
-+				rc = syscall(__NR_lsm_set_self_attr, tctx, size,
-+					     LSM_ATTR_CURRENT);
-+				ASSERT_EQ(-1, rc);
-+				ASSERT_EQ(EINVAL, errno);
-+				break;
-+			case LSM_ID_SMACK:
-+				ASSERT_EQ(active_smack, true);
-+				rc = syscall(__NR_lsm_set_self_attr, tctx, size,
-+					     LSM_ATTR_CURRENT);
-+				ASSERT_EQ(-1, rc);
-+				ASSERT_EQ(EPERM, errno);
-+				break;
-+			case LSM_ID_APPARMOR:
-+				ASSERT_EQ(active_apparmor, true);
-+				rc = syscall(__NR_lsm_set_self_attr, tctx, size,
-+					     LSM_ATTR_CURRENT);
-+				ASSERT_EQ(-1, rc);
-+				ASSERT_EQ(EINVAL, errno);
-+				break;
-+			default:
-+			}
-+			tctx = next_ctx(tctx);
-+		}
-+	}
-+	if (cnt_exec) {
-+		size = page_size;
-+		count = syscall(__NR_lsm_get_self_attr, ctx, &size,
-+				LSM_ATTR_EXEC);
-+		ASSERT_GE(cnt_exec, count);
-+		tctx = ctx;
-+
-+		for (i = 0; i < count; i++) {
-+			switch (tctx->id) {
-+			case LSM_ID_SELINUX:
-+				ASSERT_EQ(active_selinux, true);
-+				rc = syscall(__NR_lsm_set_self_attr, tctx, size,
-+					     LSM_ATTR_EXEC);
-+				ASSERT_EQ(0, rc);
-+				tctx->ctx[0] = 'X';
-+				rc = syscall(__NR_lsm_set_self_attr, tctx, size,
-+					     LSM_ATTR_EXEC);
-+				ASSERT_EQ(-1, rc);
-+				ASSERT_EQ(EINVAL, errno);
-+				break;
-+			case LSM_ID_APPARMOR:
-+				ASSERT_EQ(active_apparmor, true);
-+				rc = syscall(__NR_lsm_set_self_attr, tctx, size,
-+					     LSM_ATTR_EXEC);
-+				ASSERT_EQ(-1, rc);
-+				ASSERT_EQ(EPERM, errno);
-+				break;
-+			default:
-+				break;
-+			}
-+			tctx = next_ctx(tctx);
-+		}
-+	}
-+	if (cnt_prev) {
-+		size = page_size;
-+		count = syscall(__NR_lsm_get_self_attr, ctx, &size,
-+				LSM_ATTR_PREV);
-+		ASSERT_GE(cnt_prev, count);
-+		tctx = ctx;
-+
-+		for (i = 0; i < count; i++) {
-+			switch (tctx->id) {
-+			case LSM_ID_SELINUX:
-+				ASSERT_EQ(active_selinux, true);
-+				rc = syscall(__NR_lsm_set_self_attr, tctx, size,
-+					     LSM_ATTR_PREV);
-+				ASSERT_EQ(-1, rc);
-+				ASSERT_EQ(EINVAL, errno);
-+				tctx->ctx[0] = 'X';
-+				rc = syscall(__NR_lsm_set_self_attr, tctx, size,
-+					     LSM_ATTR_PREV);
-+				ASSERT_EQ(-1, rc);
-+				ASSERT_EQ(EINVAL, errno);
-+				break;
-+			case LSM_ID_APPARMOR:
-+				ASSERT_EQ(active_apparmor, true);
-+				rc = syscall(__NR_lsm_set_self_attr, tctx, size,
-+					     LSM_ATTR_PREV);
-+				ASSERT_EQ(-1, rc);
-+				ASSERT_EQ(EPERM, errno);
-+				break;
-+			default:
-+				break;
-+			}
-+			tctx = next_ctx(tctx);
-+		}
-+	}
-+	if (cnt_fscreate) {
-+		size = page_size;
-+		count = syscall(__NR_lsm_get_self_attr, ctx, &size,
-+				LSM_ATTR_FSCREATE);
-+		ASSERT_GE(cnt_fscreate, count);
-+		tctx = ctx;
-+
-+		for (i = 0; i < count; i++) {
-+			switch (tctx->id) {
-+			case LSM_ID_SELINUX:
-+				ASSERT_EQ(active_selinux, true);
-+				rc = syscall(__NR_lsm_set_self_attr, tctx, size,
-+					     LSM_ATTR_FSCREATE);
-+				ASSERT_EQ(-1, rc);
-+				ASSERT_EQ(EINVAL, errno);
-+				tctx->ctx[0] = 'X';
-+				rc = syscall(__NR_lsm_set_self_attr, tctx, size,
-+					     LSM_ATTR_FSCREATE);
-+				ASSERT_EQ(-1, rc);
-+				ASSERT_EQ(EINVAL, errno);
-+				break;
-+			default:
-+				break;
-+			}
-+			tctx = next_ctx(tctx);
-+		}
-+	}
-+	if (cnt_keycreate) {
-+		size = page_size;
-+		count = syscall(__NR_lsm_get_self_attr, ctx, &size,
-+				LSM_ATTR_KEYCREATE);
-+		ASSERT_GE(cnt_keycreate, count);
-+		tctx = ctx;
-+
-+		for (i = 0; i < count; i++) {
-+			switch (tctx->id) {
-+			case LSM_ID_SELINUX:
-+				ASSERT_EQ(active_selinux, true);
-+				rc = syscall(__NR_lsm_set_self_attr, tctx, size,
-+					     LSM_ATTR_KEYCREATE);
-+				ASSERT_EQ(-1, rc);
-+				ASSERT_EQ(EINVAL, errno);
-+				tctx->ctx[0] = 'X';
-+				rc = syscall(__NR_lsm_set_self_attr, tctx, size,
-+					     LSM_ATTR_KEYCREATE);
-+				ASSERT_EQ(-1, rc);
-+				ASSERT_EQ(EINVAL, errno);
-+				break;
-+			default:
-+				break;
-+			}
-+			tctx = next_ctx(tctx);
-+		}
-+	}
-+	if (cnt_sockcreate) {
-+		size = page_size;
-+		count = syscall(__NR_lsm_get_self_attr, ctx, &size,
-+				LSM_ATTR_SOCKCREATE);
-+		ASSERT_GE(cnt_sockcreate, count);
-+		tctx = ctx;
-+
-+		for (i = 0; i < count; i++) {
-+			switch (tctx->id) {
-+			case LSM_ID_SELINUX:
-+				ASSERT_EQ(active_selinux, true);
-+				rc = syscall(__NR_lsm_set_self_attr, tctx, size,
-+					     LSM_ATTR_SOCKCREATE);
-+				ASSERT_EQ(-1, rc);
-+				ASSERT_EQ(EINVAL, errno);
-+				tctx->ctx[0] = 'X';
-+				rc = syscall(__NR_lsm_set_self_attr, tctx, size,
-+					     LSM_ATTR_SOCKCREATE);
-+				ASSERT_EQ(-1, rc);
-+				ASSERT_EQ(EINVAL, errno);
-+				break;
-+			default:
-+				break;
-+			}
-+			tctx = next_ctx(tctx);
-+		}
-+	}
-+
-+	free(ctx);
-+	free(attr);
-+	free(syscall_lsms);
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-2.38.1
+> -----Original Message-----
+> From: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> Sent: Wednesday, November 23, 2022 6:18 AM
+> To: David S. Miller <davem@davemloft.net>; Eric Dumazet
+> <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>; Paolo Abeni
+> <pabeni@redhat.com>
+> Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>; netdev@vger.kernel.org;
+> linux-kernel@vger.kernel.org
+> Subject: [PATCH] net: loopback: use NET_NAME_PREDICTABLE for
+> name_assign_type
+>=20
+> When the name_assign_type attribute was introduced (commit
+> 685343fc3ba6, "net: add name_assign_type netdev attribute"), the
+> loopback device was explicitly mentioned as one which would make use
+> of NET_NAME_PREDICTABLE:
+>=20
+>     The name_assign_type attribute gives hints where the interface name o=
+f a
+>     given net-device comes from. These values are currently defined:
+> ...
+>       NET_NAME_PREDICTABLE:
+>         The ifname has been assigned by the kernel in a predictable way
+>         that is guaranteed to avoid reuse and always be the same for a
+>         given device. Examples include statically created devices like
+>         the loopback device [...]
+>=20
+
+Heh, so the doc says loopback is an example of this but we weren't using it=
+ for that :D
+
+> Switch to that so that reading /sys/class/net/lo/name_assign_type
+> produces something sensible instead of returning -EINVAL.
+>=20
+
+This seems reasonable to me.
+
+> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> ---
+>=20
+> This is mostly cosmetic, but ideally I'd like to get to a situation
+> where I don't need to do
+>=20
+>   assign_type=3D$(cat /sys/class/net/$dev/name_assign_type 2> /dev/null |=
+| echo
+> 0)
+>=20
+> or otherwise special-case [ $dev =3D "lo" ].
+>=20
+> As always, there's a small chance that this could cause a regression,
+> but it seems extremely unlikely that anybody relies on
+> /sys/class/net/lo/name_assign_type being unreadable and thus
+> effectively is known to be NET_NAME_UNKNOWN.
+>=20
+
+I don't think I would consider this a regression. Previously name_assign_ty=
+pe was returning an error here, now it reports something useful. And we kno=
+w the name is predictable because=20
+it is the loopback device.
+
+Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
+
+>  drivers/net/loopback.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/net/loopback.c b/drivers/net/loopback.c
+> index 14e8d04cb434..2e9742952c4e 100644
+> --- a/drivers/net/loopback.c
+> +++ b/drivers/net/loopback.c
+> @@ -211,7 +211,7 @@ static __net_init int loopback_net_init(struct net *n=
+et)
+>  	int err;
+>=20
+>  	err =3D -ENOMEM;
+> -	dev =3D alloc_netdev(0, "lo", NET_NAME_UNKNOWN, loopback_setup);
+> +	dev =3D alloc_netdev(0, "lo", NET_NAME_PREDICTABLE, loopback_setup);
+>  	if (!dev)
+>  		goto out;
+>=20
+> --
+> 2.37.2
 
