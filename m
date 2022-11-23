@@ -2,83 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B05634DDC
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 03:28:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43677634DDB
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 03:28:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235195AbiKWC2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 21:28:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44270 "EHLO
+        id S234753AbiKWC2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 21:28:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234023AbiKWC2M (ORCPT
+        with ESMTP id S235555AbiKWC2M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 22 Nov 2022 21:28:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2192D1E1;
-        Tue, 22 Nov 2022 18:27:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 73E4661A02;
-        Wed, 23 Nov 2022 02:27:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B82CDC433B5;
-        Wed, 23 Nov 2022 02:27:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669170465;
-        bh=j70E8biRidyKpLWNs2x+HXH8VmJwsFnhf56UTmYl1vs=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=IEmCDi4Et0Ynn5CD3ufKKdYIiFcttpG4ACNm+45fulJTTXqrpaxRk+Jfbx2bvPrpM
-         1eZQ6pDT5SQjmjpaB0OShwdxykbvbm8PyBuks7ap0LYRRjn0HJ9zo//3P5wdsxTpt6
-         OQyJTDDDkEbq4ieuyPau1acMrKbNxdpfAjlghBMoJOZy2ZjAjfCj39XhzHAdFJi9ee
-         DW3wEdR6hnLdV4m5cQZncCscMTvVjOM2Zlo9hb5qXBoTpNn6Dt488g4jDP49V1XPzS
-         MXtCiXGZIqLsfbl7OGn8KRtmm8UmYKT4NmwU/gFc0x01ONVSGEbdCx9Lnb0VNLBbSr
-         J/FpHYvlUotiQ==
-Content-Type: text/plain; charset="utf-8"
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4734640937;
+        Tue, 22 Nov 2022 18:27:52 -0800 (PST)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8BxnusnhX1j1yYAAA--.502S3;
+        Wed, 23 Nov 2022 10:27:51 +0800 (CST)
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxFlcnhX1jXXgYAA--.45574S3;
+        Wed, 23 Nov 2022 10:27:51 +0800 (CST)
+To:     yangtiezhu@loongson.cn
+References: <1669165413-12035-1-git-send-email-yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v2 0/6] selftests: Use "grep -E" instead of "egrep"
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org, skhan@linuxfoundation.org,
+        "Paul E. McKenney" <paulmck@kernel.org>
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <bf9b26b5-2793-204f-ba9c-4d9cd55b08ad@loongson.cn>
+Date:   Wed, 23 Nov 2022 10:27:51 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20221115152956.21677-1-quic_shazhuss@quicinc.com>
-References: <20221115152956.21677-1-quic_shazhuss@quicinc.com>
-Subject: Re: [PATCH v3] clk: qcom: gcc-sc8280xp: add cxo as parent for three ufs ref clks
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     bmasney@redhat.com, agross@kernel.org, mturquette@baylibre.com,
-        ahalaney@redhat.com, Shazad Hussain <quic_shazhuss@quicinc.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-To:     Shazad Hussain <quic_shazhuss@quicinc.com>, andersson@kernel.org,
-        johan@kernel.org
-Date:   Tue, 22 Nov 2022 18:27:42 -0800
-User-Agent: alot/0.10
-Message-Id: <20221123022745.B82CDC433B5@smtp.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1669165413-12035-1-git-send-email-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8BxFlcnhX1jXXgYAA--.45574S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
+        BjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
+        xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
+        j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxV
+        AFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E
+        14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2
+        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
+        AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E
+        5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAV
+        WUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY
+        1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
+        0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7I
+        U83UUUUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Shazad Hussain (2022-11-15 07:29:56)
-> The three UFS reference clocks, gcc_ufs_ref_clkref_clk for external
-> UFS devices, gcc_ufs_card_clkref_clk and gcc_ufs_1_card_clkref_clk for
-> two PHYs are all sourced from CXO.
->=20
-> Added parent_data for all three reference clocks described above to
-> reflect that all three clocks are sourced from CXO to have valid
-> frequency for the ref clock needed by UFS controller driver.
->=20
-> Fixes: d65d005f9a6c ("clk: qcom: add sc8280xp GCC driver")
-> Link: https://lore.kernel.org/lkml/Y2Tber39cHuOSR%2FW@hovoldconsulting.co=
-m/
-> Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
-> Tested-by: Johan Hovold <johan+linaro@kernel.org>
-> Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
-> Tested-by: Andrew Halaney <ahalaney@redhat.com>
-> Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
-> Reviewed-by: Reviewed-by: Brian Masney <bmasney@redhat.com>
-> ---
+It seems that patch #2~#6 has no conflicts with the other related
+git tree, but patch #1 is conflicted with paulmck/linux-rcu.git dev.
 
-Fixed the double Rb
+What should I do?
 
-Applied to clk-fixes
+Shuah, could you please apply patch #2~#6 to your linux-kselftest.git 
+next branch and ignore patch #1?
+
+And then let me send a seperate patch #1 rebased on 
+paulmck/linux-rcu.git dev branch to rcu@vger.kernel.org.
+
+Thanks,
+Tiezhu
+
