@@ -2,113 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3FC5636CB8
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 23:02:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 861A1636CBD
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 23:05:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232359AbiKWWCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 17:02:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38342 "EHLO
+        id S232291AbiKWWFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 17:05:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231441AbiKWWCG (ORCPT
+        with ESMTP id S230242AbiKWWFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 17:02:06 -0500
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E1710CEB6;
-        Wed, 23 Nov 2022 14:02:03 -0800 (PST)
-Received: by mail-io1-f46.google.com with SMTP id p141so92244iod.6;
-        Wed, 23 Nov 2022 14:02:03 -0800 (PST)
+        Wed, 23 Nov 2022 17:05:45 -0500
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B388361753
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 14:05:43 -0800 (PST)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-3abc71aafcaso54837297b3.3
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 14:05:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sS/IgqjTF1tmvQxzdv5yarn8h8llKtnDhKBpoO1W7gw=;
+        b=H3OfneAQdVLL8lSwU/0mnFsoxLSLxCgfHi/87G5l/gHv+mdyOgH/D9L75dZF4Rx5s2
+         ug5cpP6uukXLswroGQ5JbdlnljpOKXpxM7YKbnh+1wZb1Va/GjWGkzHkoKN7f2/5zmsu
+         XELF7pGg9Tw3NnC/8sieKyPD1ef8c0McVYnZTTjbbWFgoTz2YmGLmOQ1qPC2/2bdoFBv
+         Twy4OxkoUcuNb5nQ7aby8YyaKpTB+7BVb+2qcTmnX8B+aa8a40PdxyYRjEiXgSk1+clD
+         5QC2AfBcwZx+kRvk7Ew7IB5nerw2zAq+K2HkSkja0wen5iJUsbh9qXrF39oJUaMFlkFy
+         pMZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=STB2mpiXWoHyu3qbKXIUYJxB6xfOqYOUoTsYwbynqro=;
-        b=a9r5BKgnsZhYx5DRwPiPHkZPWaPsPwI2b4dTJz7jv7hWp+TjmYWue9XLywDkcq4sId
-         9DtZLtbg/Ub1NYx9q7hu9TgD8JOZmuBy1OTRI1fk433KX1HO3TEIKeVHjlBxCjXmxBv0
-         VsZV7U/cz2XlOmVtfieM1FkjVzLw5Y/KAic5jUUqt7Dq811k7Ku9+xu6xQU2u3ugX5dk
-         BC8cjjDusTT9nhNM/8BoiQq6ZELKLeZMRMGHsuZGi7IoMSYRVIYqoUc65zSNqZWcQCXU
-         rxTwOD36QSc9F7V6nv15C2QWvOeCS9/Ob7182E+t6ACdZu+xIPCICd84z/ikFx18PG36
-         lRsg==
-X-Gm-Message-State: ANoB5pnjAjC6H01SWDAy0HFxxTYmykF+njUeCuf9kRgPQqvhWobQ3yB+
-        jsH8Chk8xPgPM7BJeJVLcA==
-X-Google-Smtp-Source: AA0mqf4oK7Q0wkwY83HR3Uk7yKxopDWV3Qaeu3P0nOmLzagVjbYiHXwZ0BOsVAw9+CBXmridrNHqEw==
-X-Received: by 2002:a05:6602:d6:b0:6bc:2cc3:cbeb with SMTP id z22-20020a05660200d600b006bc2cc3cbebmr5035484ioe.110.1669240922905;
-        Wed, 23 Nov 2022 14:02:02 -0800 (PST)
-Received: from robh_at_kernel.org ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id x9-20020a029489000000b00388b6508ec8sm13349jah.115.2022.11.23.14.02.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 14:02:02 -0800 (PST)
-Received: (nullmailer pid 2582827 invoked by uid 1000);
-        Wed, 23 Nov 2022 22:02:03 -0000
-Date:   Wed, 23 Nov 2022 16:02:03 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     netdev@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-        Taras Chornyi <tchornyi@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, Luka Perkov <luka.perkov@sartura.hr>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Walle <michael@walle.cc>, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Vadym Kochan <vadym.kochan@plvision.eu>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [PATCH 1/6] Revert "dt-bindings: marvell,prestera: Add
- description for device-tree bindings"
-Message-ID: <166924092234.2582728.15149777135659209160.robh@kernel.org>
-References: <20221117215557.1277033-1-miquel.raynal@bootlin.com>
- <20221117215557.1277033-2-miquel.raynal@bootlin.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sS/IgqjTF1tmvQxzdv5yarn8h8llKtnDhKBpoO1W7gw=;
+        b=7FS74m1p2VSuAa0udQ0uFPi+mWxv1u9L/oU+833+ixHs/FbVhSxRAQeWkgq3tkAyeY
+         ef8JLQDc9YOxtuvadDIuqnAZeXZAjs+xMoRozc6RAgKQ2nrNfx3IcYx966NV+qRd+CAg
+         YIx/VT/IIZtan1mFd1DAN8wMmwBTjbS4aTNDYhtt2JA0UWU/NRzVoPqcAP/shWPVAKYH
+         KUmluUdn+ZTg1d4MKf/24ugYm9cxB3aH/whMAU/KM7nQio7Qi/5qb7h5uurk2C1mocTT
+         ie7ntwt1HPPXnxfNyyamMtO7zaKwXvsg064CM2/kEzKgn9VnbU9tdTAoBR64c4r90vsu
+         LRDg==
+X-Gm-Message-State: ANoB5pnW5pYe35HORRlNywaEu2Z7DbCLeHXnSsFOtmLwqdws6mqYDSJu
+        13BZSUT7YKsFMc3QVzZtN69394De0xolvEHbackzRg==
+X-Google-Smtp-Source: AA0mqf4RP+UuaAyu4KmEHW5zVct6l2qm89R2f7yd/Dqrj/Tw40uxMrmXQ6A3yUE04g5OYl92I5TjytR1SlKBvbAWhTo=
+X-Received: by 2002:a81:7909:0:b0:36f:d2d9:cdc4 with SMTP id
+ u9-20020a817909000000b0036fd2d9cdc4mr13216107ywc.380.1669241142870; Wed, 23
+ Nov 2022 14:05:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221117215557.1277033-2-miquel.raynal@bootlin.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20221121123803.3786-1-zhuyinbo@loongson.cn> <20221121123803.3786-2-zhuyinbo@loongson.cn>
+ <CACRpkda1adiNwbTZHdAyHKny3r5FFMP_XXVGbo1vnCdw9U1gNg@mail.gmail.com> <8a7abd77-9540-efa8-6f67-908530e85399@loongson.cn>
+In-Reply-To: <8a7abd77-9540-efa8-6f67-908530e85399@loongson.cn>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 23 Nov 2022 23:05:31 +0100
+Message-ID: <CACRpkdb=wdydOYCcrpjLSyvfVO--_ezXsFQ46qwfVCiiTd5fNw@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] gpio: loongson: add gpio driver support
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        Arnaud Patard <apatard@mandriva.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Nov 23, 2022 at 9:02 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
+> =E5=9C=A8 2022/11/21 =E4=B8=8B=E5=8D=889:24, Linus Walleij =E5=86=99=E9=
+=81=93:
 
-On Thu, 17 Nov 2022 22:55:52 +0100, Miquel Raynal wrote:
-> This reverts commit 40acc05271abc2852c32622edbebd75698736b9b.
-> 
-> marvell,prestera.txt is an old file describing the old Alleycat3
-> standalone switches. The commit mentioned above actually hacked these
-> bindings to add support for a device tree property for a more modern
-> version of the IP connected over PCI, using only the generic compatible
-> in order to retrieve the device node from the prestera driver to read
-> one static property.
-> 
-> The problematic property discussed here is "base-mac-provider". The
-> original intent was to point to a nvmem device which could produce the
-> relevant nvmem-cell. This property has never been acked by DT
-> maintainers and fails all the layering that has been brought with the nvmem
-> bindings by pointing at a nvmem producer, bypassing the existing nvmem
-> bindings, rather than a nvmem cell directly. Furthermore, the property
-> cannot even be used upstream because it expected the ONIE tlv driver to
-> produce a specific cell, driver which used nacked bindings and thus was
-> never merged, replaced by a more integrated concept: the nvmem-layout.
-> 
-> So let's forget about this temporary addition, safely avoiding the need
-> for any backward compatibility handling. A new (yaml) binding file will
-> be brought with the prestera bindings, and there we will actually
-> include a description of the modern IP over PCI, including the right way
-> to point to a nvmem cell.
-> 
-> Cc: Vadym Kochan <vadym.kochan@plvision.eu>
-> Cc: Taras Chornyi <tchornyi@marvell.com>
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> ---
->  .../bindings/net/marvell,prestera.txt         | 34 -------------------
->  1 file changed, 34 deletions(-)
-> 
+> >> +static int loongson_gpio_request(
+> >> +                       struct gpio_chip *chip, unsigned int pin)
+> >> +{
+> >> +       if (pin >=3D chip->ngpio)
+> >> +               return -EINVAL;
+> >
+> > This is not needed, the gpiolib core already checks this. Drop it.
+> I check gpio_request in gpilib, I notice gpio_is_valid is not equal to
+> this condition, so I still kept it for byte mode.
 
-Acked-by: Rob Herring <robh@kernel.org>
+This is because descriptors can only be obtained from gpiod_get() and
+similar and gpiod_get() falls to gpiod_get_index() which will not
+return a valid descriptor from either HW backend. gpiod_get()
+will call gpiod_request() for if and only if the descriptor is valid.
+
+The only reason to implement something like this is because of
+using the legacy GPIO numberspace which we are getting rid
+of so it is irrelevant, the consumers of your driver will only be
+using gpio descriptors, will only come in through gpiod_get_index()
+and will have desc validity check done before calling gpiod_request().
+
+So drop this.
+
+> > I am bit suspicious that your IRQchip implementation expects consumers
+> > to call gpiod_to_irq() first and this is not legal.
+>
+> okay, I got it, and other driver use gpio interrupt doesn't rely on
+> gpiod_to_irq, but can use gpiod_to_irq.
+
+Yes it can be used to look up the irq corresponding to a GPIO
+but it is not mandatory to do that.
+
+> The reason is that gpio interrupt wasn't an independent module,  The
+> loongson interrupt controller liointc include lots of interrupt was
+> route to perpherial, such as i2c/spi .. gpio, so gpio interrupt as
+> normal perpherial interrupt, It is unnecessary and redundant to
+> implement a gpio irq chip. The liointc controller driver had cover all
+> interrupt.
+
+This is fine, and it is common for GPIO drivers to implement
+their own IRQchips.
+
+But these drivers can not rely on the .gpio_to_irq() callback
+to be called before an IRQ is requested and used.
+
+> in addition,  I don't like to use the dynamically allocated gpio base,
+> so I set the gpio base after call bgpio_init.
+
+Don't do that because the GPIO maintainers love the
+dynamic base and hate hardcoded bases. Set the base to -1
+If you wonder why, read drivers/gpio/TODO.
+
+Yours,
+Linus Walleij
