@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 430B26353FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:02:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88131635417
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:02:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236939AbiKWJCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 04:02:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38216 "EHLO
+        id S236974AbiKWJCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 04:02:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236928AbiKWJB7 (ORCPT
+        with ESMTP id S236964AbiKWJCH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 04:01:59 -0500
+        Wed, 23 Nov 2022 04:02:07 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DF6D4FFA97;
-        Wed, 23 Nov 2022 01:01:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7EE6E1001D8;
+        Wed, 23 Nov 2022 01:02:06 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2960D23A;
-        Wed, 23 Nov 2022 01:02:05 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 62F161FB;
+        Wed, 23 Nov 2022 01:02:12 -0800 (PST)
 Received: from pierre123.home (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id F0AB73F73B;
-        Wed, 23 Nov 2022 01:01:55 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 57BF33F73B;
+        Wed, 23 Nov 2022 01:02:03 -0800 (PST)
 From:   Pierre Gondois <pierre.gondois@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Pierre Gondois <pierre.gondois@arm.com>,
@@ -32,9 +32,9 @@ Cc:     Pierre Gondois <pierre.gondois@arm.com>,
         Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org
-Subject: [PATCH v3 1/2] arm64: dts: Update cache properties for exynos
-Date:   Wed, 23 Nov 2022 10:01:03 +0100
-Message-Id: <20221123090109.74441-2-pierre.gondois@arm.com>
+Subject: [PATCH v3 2/2] arm64: dts: Update cache properties for fds
+Date:   Wed, 23 Nov 2022 10:01:04 +0100
+Message-Id: <20221123090109.74441-3-pierre.gondois@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221123090109.74441-1-pierre.gondois@arm.com>
 References: <20221123090109.74441-1-pierre.gondois@arm.com>
@@ -58,45 +58,22 @@ Update the Device Trees accordingly.
 
 Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
 ---
- arch/arm64/boot/dts/exynos/exynos5433.dtsi | 4 ++++
- arch/arm64/boot/dts/exynos/exynos7.dtsi    | 2 ++
- 2 files changed, 6 insertions(+)
+ arch/arm64/boot/dts/tesla/fsd.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/exynos/exynos5433.dtsi b/arch/arm64/boot/dts/exynos/exynos5433.dtsi
-index bd6a354b9cb5..8619920da4b6 100644
---- a/arch/arm64/boot/dts/exynos/exynos5433.dtsi
-+++ b/arch/arm64/boot/dts/exynos/exynos5433.dtsi
-@@ -226,6 +226,8 @@ cpu7: cpu@3 {
+diff --git a/arch/arm64/boot/dts/tesla/fsd.dtsi b/arch/arm64/boot/dts/tesla/fsd.dtsi
+index f35bc5a288c2..d58d47618c95 100644
+--- a/arch/arm64/boot/dts/tesla/fsd.dtsi
++++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
+@@ -281,6 +281,8 @@ cpucl2_3: cpu@203 {
  
- 		cluster_a57_l2: l2-cache0 {
+ 		cpucl_l2: l2-cache0 {
  			compatible = "cache";
 +			cache-level = <2>;
 +			cache-unified;
- 			cache-size = <0x200000>;
+ 			cache-size = <0x400000>;
  			cache-line-size = <64>;
- 			cache-sets = <2048>;
-@@ -233,6 +235,8 @@ cluster_a57_l2: l2-cache0 {
- 
- 		cluster_a53_l2: l2-cache1 {
- 			compatible = "cache";
-+			cache-level = <2>;
-+			cache-unified;
- 			cache-size = <0x40000>;
- 			cache-line-size = <64>;
- 			cache-sets = <256>;
-diff --git a/arch/arm64/boot/dts/exynos/exynos7.dtsi b/arch/arm64/boot/dts/exynos/exynos7.dtsi
-index 1cd771c90b47..f378d8629d88 100644
---- a/arch/arm64/boot/dts/exynos/exynos7.dtsi
-+++ b/arch/arm64/boot/dts/exynos/exynos7.dtsi
-@@ -107,6 +107,8 @@ cpu_atlas3: cpu@3 {
- 
- 		atlas_l2: l2-cache0 {
- 			compatible = "cache";
-+			cache-level = <2>;
-+			cache-unified;
- 			cache-size = <0x200000>;
- 			cache-line-size = <64>;
- 			cache-sets = <2048>;
+ 			cache-sets = <4096>;
 -- 
 2.25.1
 
