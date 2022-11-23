@@ -2,175 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7B2D635A4B
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 11:39:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2526C635A3F
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 11:39:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237640AbiKWKgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 05:36:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40150 "EHLO
+        id S236276AbiKWKgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 05:36:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237571AbiKWKfG (ORCPT
+        with ESMTP id S237587AbiKWKfK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 05:35:06 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8210125202
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 02:19:58 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id cl5so28678300wrb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 02:19:58 -0800 (PST)
+        Wed, 23 Nov 2022 05:35:10 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1041D125232
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 02:20:06 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id d1so16547456wrs.12
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 02:20:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=xUMtL7H3c3DO9p5DLaMbmWt05FamHjUSHjK+GPYbYbs=;
-        b=GWXJmhv9RRkTfuDucLKv79jWJ3qqFbPnXI9L1MYZikLIRHDQ23bM/NRybSEbWiRIrH
-         HWorrH6MjWNaNt3Tc22d9IjuokOMvTBXHpZxqHM2QToqDOyErv5iK2Aupia8qZ9qjbo3
-         6y8dOhiIJ3hr2eAn6dHGGoDHZQg7jtkbc0CRBCutY6BXUKLeyfu6nkWGJux/e4CU45oA
-         YSB37iJGEdc6Z1uVtGkK6+z3+Y9bS1vxI6hYpjn0ClGPa/Bd+BACGQAx2krnDR6uvszi
-         PFRNxRCtakRJRG65cKHmYUB7LhC3r4pdmi0erFoQzdEVgFxtPKQqzIZA46wvOUONKY2G
-         5WMQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=evmqZal6P0Gh2KtjmqsYtpngHK9nsZsmphCRedKA3xE=;
+        b=lkh9GncI+CNngHOJwLpl5TTT0pzTnHj78uPilgOF9t71J+w51UpkVUSfzl0VkzLb4s
+         CTHaQcIifgKEM+P8bw9mPpIT9jIwxu6DcVxVfp7bLcT4YCLo4azv516Cz6/82DsaKDy+
+         dXimePNiTsxoOLOfTkelN6SaS9fxtyIbB4D3gDJGtwbnGDaPLjKPieoW3+ynnVXErG6I
+         QjLW6PQ1+gUrnjUnVU96UbftOBk4QVupMII4tnGGl42yZ3be69RhlVAoVlmHMd0CFOxA
+         6DcOvWMUHgVF+5OY7dYnQ4d6OowIf29f2RTVH7kImDDS/5n3tJQPGU/1+sZbaXP4GDgE
+         5Lew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xUMtL7H3c3DO9p5DLaMbmWt05FamHjUSHjK+GPYbYbs=;
-        b=IZ5avoF0qpen6iQqLJb3V0GG7WZL5ovLgBvUoYx4WyStNL7PK+ZUb0KSwqQ3fsWrDa
-         XOv2rPTTU3N98p78cX8d4KU5xqMtxfzLmd5hHOpdm+Xe59U4QRzB066CazbY8UH1EACi
-         PsiETOeJUZE4AMOKVp81sDvakiaJYYhae9j4QoNofWAu6xfchCyBbPu5NCWQtw1gF4q4
-         pKJXAoo74osu9Pg05gjp5xJlZE0MpOCpiGEtebg1cn+EKTWZkyyQ5UIui7r8JKx7XCNg
-         OrI4AItzto/fTIXzaEwIgLpaXYMhTw9EuqiLPBMFcax2fn8T+lQKMXLWw/6qYFbVdcO4
-         de7w==
-X-Gm-Message-State: ANoB5pnIEPhBREKIZLSVx3qa0xQlshc+ow8AIHhKzNHEeR5jDIGfzKHy
-        QXjOihXZRydcxCumH/hDmG9N8nwigcfeXA==
-X-Google-Smtp-Source: AA0mqf7+7XdRjYWlx1ERsF6zZgwMQnB2L3pIgVwT3QuR3MeK03vAxVKy1MepVHSUAvcimfYXBqaugw==
-X-Received: by 2002:a05:6000:1181:b0:22e:53c0:ead8 with SMTP id g1-20020a056000118100b0022e53c0ead8mr16793109wrx.210.1669198797422;
-        Wed, 23 Nov 2022 02:19:57 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:e551:24c3:152c:7c05? ([2a01:e0a:982:cbb0:e551:24c3:152c:7c05])
-        by smtp.gmail.com with ESMTPSA id g26-20020adfa49a000000b002366e3f1497sm16600418wrb.6.2022.11.23.02.19.56
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=evmqZal6P0Gh2KtjmqsYtpngHK9nsZsmphCRedKA3xE=;
+        b=Gt6IGV5sOgYbaRLn6R+24av0hpx0MymKptjKF0vtEdGlp5ql+jfTugZEilanlkKYOV
+         BXHEIsGFXECdzfgXQfUg0aMXU/qjkbiWKqougJP/4ZT37+YBlZVa2xKGsbIw/dUWMMbd
+         CEdcU15YAaozc0TlUvnMHOK+uxdUpdKN4s7ZvobCQTISzs2ELI3AXh2nWRG2PzhdDh4E
+         XDjdL8BBLxhCq1uXcRNKR2//UA7OmP/e3iYdupd1qiyKNDXOhWD+vpP2sFChabzcHbQo
+         ZtrO7izWIcsQsW0vo5/Cw376fSwy1ORijWs/LasUY9YBVGdonDvjEKqXGroECN0rVLOw
+         z7nA==
+X-Gm-Message-State: ANoB5plzmsFOqtOxsR6tsbRKwNXxYTSj8YtgPRloIuH18/nz7AEAfq6g
+        4Sx31SR8PRKfC5dcpT/46k3uuRppXpc=
+X-Google-Smtp-Source: AA0mqf4VoZcQFHNMjX7NzjbJPyyRNRq8XZnr59GZjTGNVCKozWfAGWsr4g0ZjkqCfYy/YSJJLcWrIQ==
+X-Received: by 2002:adf:f805:0:b0:236:ef0b:68c5 with SMTP id s5-20020adff805000000b00236ef0b68c5mr17363638wrp.373.1669198804459;
+        Wed, 23 Nov 2022 02:20:04 -0800 (PST)
+Received: from [192.168.1.131] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id f14-20020a05600c154e00b003c6f3e5ba42sm1898268wmg.46.2022.11.23.02.20.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 02:19:57 -0800 (PST)
-Message-ID: <eb577577-d4c9-1d68-f8f5-f42729155536@linaro.org>
-Date:   Wed, 23 Nov 2022 11:19:56 +0100
+        Wed, 23 Nov 2022 02:20:03 -0800 (PST)
+Message-ID: <ce1c6a1a-9183-e56d-6757-947f5fc8133d@gmail.com>
+Date:   Wed, 23 Nov 2022 11:20:02 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-From:   neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 1/2] dt-bindings: reserved-memory: document Qualcomm MPSS
- DSM memory
+Subject: Re: [PATCH v1] soc: mediatek: mtk-pm-domains: Allow mt8186 ADSP
+ default power on
+To:     Tinghan Shen <tinghan.shen@mediatek.com>
+Cc:     allen-kh.cheng@mediatek.com, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20221012075434.30009-1-tinghan.shen@mediatek.com>
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20221114-narmstrong-sm8550-upstream-mpss_dsm-v1-0-158dc2bb6e96@linaro.org>
- <20221114-narmstrong-sm8550-upstream-mpss_dsm-v1-1-158dc2bb6e96@linaro.org>
- <38fff21b-3e75-13f9-664e-a115bc527b67@linaro.org>
- <9aa23650-6ae1-3844-7cf3-6812dc023c11@linaro.org>
- <dfec6a0b-86c6-fb61-51f6-d1e400a6f5ef@linaro.org>
- <ad9d2e4f-1d60-15e7-dc2d-e7e32b0ec855@linaro.org>
- <7b3356a9-8f2b-49de-7ad3-b01c3279eac0@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <7b3356a9-8f2b-49de-7ad3-b01c3279eac0@linaro.org>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20221012075434.30009-1-tinghan.shen@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/11/2022 15:03, Krzysztof Kozlowski wrote:
-> On 18/11/2022 14:30, neil.armstrong@linaro.org wrote:
->> On 18/11/2022 11:45, Krzysztof Kozlowski wrote:
->>> On 17/11/2022 10:47, Neil Armstrong wrote:
->>>>>
->>>>>> +
->>>>>> +properties:
->>>>>> +  compatible:
->>>>>> +    const: qcom,mpss-dsm-mem
->>>>>
->>>>> Why do we need dedicated binding and compatible for it instead of using
->>>>> memory-region phandle in the device?
->>>>
->>>> So like rmtfs, this memory zone is shared between APPS and the MPSS subsystem.
->>>>
->>>> Like rmtfs it makes no sense to link it to the MPSS PAS, since it's only a launcher,
->>>> it doesn't represent the MPSS subsystem.
->>>
->>> This also does not represent a device. Memory region is not a device, so
->>> this is as well not correct representation of hardware.
->>
->> I never used the term device so far, but a shared memory region with a platform
->> specific process to share the region between subsystems.
+
+
+On 12/10/2022 09:54, Tinghan Shen wrote:
+> In the use case of configuring the access permissions of the ADSP core,
+> the mt8186 SoC ADSP power will be switched on in the bootloader because
+> the permission control registers are located in the ADSP subsys.
 > 
-> Yes, but you create a device in patch #2 for this binding.
+> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
 
-Implementation details are out of scope here.
+Do we need a fixes tag here?
+My bet is:
+Fixes: 88590cbc1703 ("soc: mediatek: pm-domains: Add support for mt8186")
 
+Or is this not yet a problem but needed to be able to implement access 
+permission configuration in the ADSP driver?
+
+Regards,
+Matthias
+
+> ---
+>   drivers/soc/mediatek/mt8186-pm-domains.h | 4 +---
+>   1 file changed, 1 insertion(+), 3 deletions(-)
 > 
->>
->>>
->>>>
->>>> In the PAS startup process, the resources are released from APPS once the MPSS subsystem
->>>> is running, which is not the case with the MPSS DSM where it must be shared during the whole
->>>> lifetime of the system.
->>>
->>> I don't think that PAS releases the region. I checked the
->>> qcom_q6v5_pas.c and there is only ioremap. The device stays loaded thus
->>> the memory stays mapped.
->> Yes PAS does release the firmware region when the firmware is started,
->> qcom_scm_pas_metadata_release() does that.
-> 
-> Indeed, I see it now.
-> 
->>
->>>
->>> We have already three of such "memory region devices" and we keep
->>> growing it. It's not scalable.
->>
->> If we want to properly describe this, we must then represent the MPSS subsystem
->> and associate this memory region.
-> 
-> I don't see why. None of devices in your DTS reference this memory
-> region, so it is purely to keep it mapped for Modem, right? In such case
-> I still do not get why PAS/PIL, who starts and stops the remote
-> processor, could not prepare the memory and share it with modem.
-
-OK you've got a point, but this is still an implementation detail.
-
-I got some more background about why this memory zone appeared, before it
-was including in the modem reserved-memories, but for flexibility reasons
-this is now in the hands of the APPS runtime (linux) to setup this memory
-zone and share it to the MPSS subsystem.
-
-So the only requirement for the PAS is to make sure this zone is shared
-before starting the startup process, not to actually do the share setup.
-
-The zone will need to be shared whatever the PAS state is (probe, startup, remove, ...).
-
-> 
-> The point is that this memory region is nothing special and does not
-> deserve its own compatible. We keep adding here compatibles to fulfill
-> some Linux implementation specifics, don't we?
-
-Yes this memory region is now special since it has to be shared explicitly.
-
-> 
-> Best regards,
-> Krzysztof
-> 
-
-Thanks,
-Neil
+> diff --git a/drivers/soc/mediatek/mt8186-pm-domains.h b/drivers/soc/mediatek/mt8186-pm-domains.h
+> index 108af61854a3..fce86f79c505 100644
+> --- a/drivers/soc/mediatek/mt8186-pm-domains.h
+> +++ b/drivers/soc/mediatek/mt8186-pm-domains.h
+> @@ -304,7 +304,6 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8186[] = {
+>   		.ctl_offs = 0x9FC,
+>   		.pwr_sta_offs = 0x16C,
+>   		.pwr_sta2nd_offs = 0x170,
+> -		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
+>   	},
+>   	[MT8186_POWER_DOMAIN_ADSP_INFRA] = {
+>   		.name = "adsp_infra",
+> @@ -312,7 +311,6 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8186[] = {
+>   		.ctl_offs = 0x9F8,
+>   		.pwr_sta_offs = 0x16C,
+>   		.pwr_sta2nd_offs = 0x170,
+> -		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
+>   	},
+>   	[MT8186_POWER_DOMAIN_ADSP_TOP] = {
+>   		.name = "adsp_top",
+> @@ -332,7 +330,7 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8186[] = {
+>   				MT8186_TOP_AXI_PROT_EN_3_CLR,
+>   				MT8186_TOP_AXI_PROT_EN_3_STA),
+>   		},
+> -		.caps = MTK_SCPD_SRAM_ISO | MTK_SCPD_KEEP_DEFAULT_OFF | MTK_SCPD_ACTIVE_WAKEUP,
+> +		.caps = MTK_SCPD_SRAM_ISO | MTK_SCPD_ACTIVE_WAKEUP,
+>   	},
+>   };
+>   
