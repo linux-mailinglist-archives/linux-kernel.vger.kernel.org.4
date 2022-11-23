@@ -2,154 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92405634B66
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 00:55:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 446C6634B7E
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 01:09:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235130AbiKVXzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 18:55:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60252 "EHLO
+        id S234552AbiKWAI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 19:08:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234795AbiKVXzV (ORCPT
+        with ESMTP id S233239AbiKWAIy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 18:55:21 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D00BEB55;
-        Tue, 22 Nov 2022 15:55:19 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id a11-20020a05600c2d4b00b003cf6f5fd9f1so231827wmg.2;
-        Tue, 22 Nov 2022 15:55:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cE01NZR3G4lAhA6w2A66fH8scEPgyQnlLBvPvIVhEzI=;
-        b=cQt9/vvnU+jXKUAUPnVYegPKe9zVuR5zqZo5Zb0dEsh2OFB+GHlNlp5d7lzhQYbkQr
-         q0V88J5X0Q01QC+k8o/Vg3iyG7AVvODWG+GS5ik64TtpDI9VxOX68+2Kehn6iXhXBCmv
-         gWC+W9s23lHn9h8EwsQokksCz0isUYqB2q03J7FxOoUZCM77ZjhjvX0W0WnG8MJrWGpC
-         xltNW5Y2MSbbfnF/97cpqoAY7Dt+sJDRwBMbniP/S3WiUAnlNPmw0RSA3+MvgbiRnpgu
-         o2JPtNlf3xk/ZIc+x4tTlSLOszUWx5bN25QBXMdmkvGnnv8kK47lC8bkjTwA3KMW7TDU
-         eygg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cE01NZR3G4lAhA6w2A66fH8scEPgyQnlLBvPvIVhEzI=;
-        b=vy0O5f20CnWKX9vObyABNa8wZIvQV8NwvNu5ZorT10QLDpbcXMK7jcHaR2ZFh17avB
-         UfcPkNKmZzla96YzjL1vex3GFtGgHc5EkwMiQIroKlUkC1SfroFH2fhmezb3K3ZHzUiP
-         2mEn9yM77CcHz/YUlSztFb3dFM7IOI6rAJ6nZboqDLourqAI2wEF5mmFoyCC++9bBa8M
-         BS7drLbKdTMdsgnJddmeWC1X7C127Er77O7JUQzO+BHJ+dD1CCeHid/9xReLE6DQVLas
-         MJ8y5o7GfFWaS1lzbV8RoIC3FwZEYihgapawotUnK+MZ1gx1pvhirH2BMA9WidBLj9Y1
-         1s7g==
-X-Gm-Message-State: ANoB5pl/vF/rY0w0jtZzlyA0tns6X8beEehRyTiSOMumF9s8vcgAPx5x
-        AeOTL5lEL+Q8Bp8m7jKCAs0=
-X-Google-Smtp-Source: AA0mqf6wsxuOaxIwfaHXlYB0OENMBi1wFlw0dJZRE9wBZgb4TljCLKVT95ywgLOe2zo7K6Txb3RARw==
-X-Received: by 2002:a7b:c385:0:b0:3cf:87a8:ef00 with SMTP id s5-20020a7bc385000000b003cf87a8ef00mr9339006wmj.55.1669161318306;
-        Tue, 22 Nov 2022 15:55:18 -0800 (PST)
-Received: from suse.localnet (host-79-56-6-38.retail.telecomitalia.it. [79.56.6.38])
-        by smtp.gmail.com with ESMTPSA id y7-20020a05600c364700b003cf7292c553sm299884wmq.13.2022.11.22.15.55.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 15:55:17 -0800 (PST)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Li Zhijian <lizhijian@fujitsu.com>,
-        Zhu Yanjun <zyjzyj2000@gmail.com>,
-        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>
-Subject: Re: [for-next PATCH 4/5] RDMA/rxe: refactor iova_to_vaddr
-Date:   Wed, 23 Nov 2022 00:55:16 +0100
-Message-ID: <4786191.31r3eYUQgx@suse>
-In-Reply-To: <2158152.NgBsaNRSFp@suse>
-References: <1668141030-2-1-git-send-email-lizhijian@fujitsu.com> <Y3vJQkc40o5zfM5v@ziepe.ca> <2158152.NgBsaNRSFp@suse>
+        Tue, 22 Nov 2022 19:08:54 -0500
+X-Greylist: delayed 8654 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Nov 2022 16:08:52 PST
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE35D32A4;
+        Tue, 22 Nov 2022 16:08:52 -0800 (PST)
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4NH1gj3rZZz9sTQ;
+        Wed, 23 Nov 2022 01:08:49 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+        t=1669162129;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cpqvGJ6KHdgLHFmpNmxmrXgmC1bx/Ijm3WunVFRnkw8=;
+        b=NVUYey2k2K8/IrYW3JGEDZESFL6/uhPXoiCIN8SzxBE7jhaaj8sieiF6qlGgllfmUJbbLk
+        xDaoOIRoRtJQmPLi5H3E29F7KatUV8IaZrKIbMXkjnRnH8wKVLx9YvcsQe+NDGVo4NHtUC
+        O/ArolaHMB7GmaJ0Uw686jKXBBrWwV3UeFEGBtmTovhKHxWT8p3/1sG7zInM/e5PjKxaDJ
+        T69o2tdnpewUcxioIL0lxfwyMzEwZirPdjxpJqWEcX+Z0sD3h6Gnv/DmypFZPjPAYJBQLB
+        WmxmO0c+2N48vREjxSYKeUVdKmXBqVwLbWVmeqJJ03SRemLZfZywA54GURowNA==
+From:   Alexander Lobakin <alobakin@mailbox.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+        t=1669162127;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cpqvGJ6KHdgLHFmpNmxmrXgmC1bx/Ijm3WunVFRnkw8=;
+        b=WkehU/oV9+TML/PIcxU1BvQiDNn9y2L5Xnh9BkbreCCPYxkL0Nk0U/O+0LNm5r8aDmNpbN
+        HB42nmlAyGfJLZTcxWrcOO4NlAI3UVQ7G+icweKve6RntZnLmJYGb178H+Lgg2lIEKABro
+        +v8pEtdYqQil7x8/hHheEw+rO4OwM/GAFfgGkKg1oiHACXi5kt29fAVO70KzPcbbaKW5Jx
+        OKA17Eq02YcT5ukmzXqMILvdhsQtW9QWviqT5v1ktYokNOKfX5a9PPA+DYR5zhIFBhNDd/
+        xQGK+qT7O/3pLZIQHr2xzwQI8WAnU/TeOkBUFJWrS2JScwOt95cDxCNDFEUiiQ==
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Alexander Lobakin <alobakin@mailbox.org>,
+        Alexander Lobakin <alobakin@pm.me>,
+        linux-kbuild@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Jens Axboe <axboe@kernel.dk>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Derek Chickles <dchickles@marvell.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 11/18] platform/x86: int3472: fix object shared between several modules
+Date:   Wed, 23 Nov 2022 01:01:51 +0100
+Message-Id: <20221123000151.64567-1-alobakin@mailbox.org>
+In-Reply-To: <Y3oxyUx0UkWVjGvn@smile.fi.intel.com>
+References: <20221119225650.1044591-1-alobakin@pm.me> <20221119225650.1044591-12-alobakin@pm.me> <Y3oxyUx0UkWVjGvn@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 8bit
+X-MBO-RS-ID: 128ac0f89d98468d511
+X-MBO-RS-META: 48m5g8ybbkypsfb8mrejc38cmasgeyh5
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On mercoled=EC 23 novembre 2022 00:24:26 CET Fabio M. De Francesco wrote:
-> On luned=EC 21 novembre 2022 19:53:54 CET Jason Gunthorpe wrote:
-> > On Wed, Nov 16, 2022 at 01:37:14PM +0100, Fabio M. De Francesco wrote:
-> > > > -     return (void *)(uintptr_t)mr->map[m]->buf[n].addr + offset;
-> > > > +     if (mr->ibmr.type =3D=3D IB_MR_TYPE_USER) {
-> > > > +             char *paddr;
-> > > > +             struct page *pg =3D mr->map[m]->buf[n].page;
-> > > > +
-> > > > +             paddr =3D kmap_local_page(pg);
-> > > > +             if (paddr =3D=3D NULL) {
-> > > > +                     pr_warn("Failed to map page");
-> > > > +                     return NULL;
-> > > > +             }
-> > >=20
-> > > I know nothing about this code but I am here as a result of regular=20
-checks
-> > > for changes to HIGHMEM mappings across the entire kernel. So please
->=20
-> forgive
->=20
-> > > me if I'm objecting to the correct changes.
-> > >=20
-> > > 1) It looks like this code had a call to page_address() and you=20
-converted
->=20
-> it
->=20
-> > > to mapping with kmap_local_page().
-> >=20
-> > It only worked properly because the kconfig is blocking CONFIG_HIGHMEM
-> > so ZONE_HIGHMEM doesn't exist. These pages are obtained from GUP and
-> > could be anything.
-> >=20
-> > This is done indirectly through
-> >=20
-> > config INFINIBAND_VIRT_DMA
-> >=20
-> >         def_bool !HIGHMEM
-> >=20
-> > But this patch is undoing parts of what are causing that restriction
-> > by using the proper APIs. Though I'm not sure if we can eventually get
-> > to remove it for RXE completely.
-> > Jason
->=20
-> Ah, OK. This code was for !HIGHMEM kernels...
->=20
-> I understand but, FWIW I doubt that the use of page_address(), instead of
-> kmapping, should ever be made on the bases that kconfig is blocking HIGHM=
-EM.
->=20
-> However, if I understand correctly, that restriction (!HIGHMEM) is going =
-to=20
-be
-> removed. Therefore, page_address() will break on HIGHMEM and Jason is
-> correctly converting to kmap_local_page().
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Sun, 20 Nov 2022 15:55:21 +0200
 
-Jason, I'm sorry for the erroneous attribution :-(
+> On Sat, Nov 19, 2022 at 11:08:17PM +0000, Alexander Lobakin wrote:
+> > common.o is linked to both intel_skl_int3472_{discrete,tps68470}:
+> > 
+> > > scripts/Makefile.build:252: ./drivers/platform/x86/intel/int3472/Makefile:
+> > > common.o is added to multiple modules: intel_skl_int3472_discrete
+> > > intel_skl_int3472_tps68470
+> > 
+> > Although both drivers share one Kconfig option
+> > (CONFIG_INTEL_SKL_INT3472), it's better to not link one object file
+> > into several modules (and/or vmlinux).
+> > Under certain circumstances, such can lead to the situation fixed by
+> > commit 637a642f5ca5 ("zstd: Fixing mixed module-builtin objects").
+> > 
+> > Introduce the new module, intel_skl_int3472_common, to provide the
+> > functions from common.o to both discrete and tps68470 drivers. This
+> > adds only 3 exports and doesn't provide any changes to the actual
+> > code.
+> 
+> ...
+> 
+> > +MODULE_IMPORT_NS(INTEL_SKL_INT3472);
+> > +
+> 
+> Redundant blank line. You may put it to be last MODULE_*() in the file, if you
+> think it would be more visible.
 
-=46abio
-=20
-> There is only one thing left... I think that he missed another mail from =
-me.
-> The one you responded to was missing the final paragraph, so I sent anoth=
-er
-> message few minutes later.
->=20
-> kmap_local_page() returns always valid pointers to kernel virtual address=
-es.=20
-I
-> can't see any ways for kmap_local_page() to return NULL. Therefore, I was
-> asking for the reason to check for NULL.
->=20
-> Thanks,
->=20
-> Fabio
+My intention was that it's not "standard" module info like license
+or description, rather something like exports or initcalls, that's
+why I did separate them.
+But I haven't been using module namespaces a lot previously, so if
+it should be in one block with the rest MODULE_*(), sure, I'll fix.
 
+> 
+> >  MODULE_DESCRIPTION("Intel SkyLake INT3472 ACPI Discrete Device Driver");
+> >  MODULE_AUTHOR("Daniel Scally <djrscally@gmail.com>");
+> >  MODULE_LICENSE("GPL v2");
+> 
+> ...
+> 
+> > +MODULE_IMPORT_NS(INTEL_SKL_INT3472);
+> > +
+> >  MODULE_DESCRIPTION("Intel SkyLake INT3472 ACPI TPS68470 Device Driver");
+> >  MODULE_AUTHOR("Daniel Scally <djrscally@gmail.com>");
+> >  MODULE_LICENSE("GPL v2");
+> 
+> Ditto. And the same to all your patches.
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
 
-
-
+Thanks,
+Olek
