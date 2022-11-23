@@ -2,166 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E03EC634CED
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 02:26:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56209634CF0
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 02:28:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234405AbiKWB0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 20:26:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36358 "EHLO
+        id S234334AbiKWB2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 20:28:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbiKWB0Y (ORCPT
+        with ESMTP id S233984AbiKWB2g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 20:26:24 -0500
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1152179934
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 17:26:22 -0800 (PST)
-Date:   Tue, 22 Nov 2022 17:26:04 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1669166780;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DE33Qe05E0HhCIRGVq0ssTZXTU0A7QK1v90ibfJ/wzI=;
-        b=dvQLoCLI4sJhfToRTwO5THNraG21MkbfI2BqZ4FbQIe/uhco3ARP/bRffvRSCaihzXs2xb
-        Ui8P/nOTr3M/H817gwlpBraOBgZEAUAAyHeeWdMuVt7W6Q6zXwB/L5g0psoRDO7gn6Zlyc
-        iS8VptFr7SOUbFbIrZ6FO+PKj1j5B04=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Shakeel Butt <shakeelb@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>, Yu Zhao <yuzhao@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Chris Down <chris@chrisdown.name>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH] mm: memcg: fix stale protection of reclaim target memcg
-Message-ID: <Y312rG5cq/C6a8ef@P9FQF9L96D.corp.robot.car>
-References: <20221122232721.2306102-1-yosryahmed@google.com>
- <Y31rSglEcTaaIg05@P9FQF9L96D.corp.robot.car>
- <CAJD7tkZE6TLDShcntnY=tXnRpA6jx1uLMemeZtqWLZ3JAC_GNg@mail.gmail.com>
- <CAJD7tkYfR6Kuq569=0h_crqjpK5cNT_029LuYa-EeCx16gU-6A@mail.gmail.com>
+        Tue, 22 Nov 2022 20:28:36 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF3387550
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 17:28:36 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id k84so19340603ybk.3
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 17:28:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=M42sWyNVtSXf63+/nFxRglHm/7sJT4os0b4YITaV5ns=;
+        b=EEDxxsC8axWN6EfK6HuKM4nKLyz6jyKaF6MQb03199u9fI9ncH2Pzi0Pkz2Rmfaln3
+         0LcVHqzeUlYiBsH/6c+Cd8NT5OeaxAlFYOn2KKOOs0oao+6e3/WwTuRD4LxatCOIGywm
+         VjfLjjAHKCoOCfpD6aq+RuMP4XmMlWcW/Y98o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=M42sWyNVtSXf63+/nFxRglHm/7sJT4os0b4YITaV5ns=;
+        b=QQh0Lwh267TcXHjndTW+fFU0fJvOOVEm3IZqNZChl8rM4t7xaW7S82j29vCtgMD0Eu
+         mtcmIkjsh02IhjXd6hVZySYMx16fiKtslPRjol1gClgCBu2NClJLv+w+FKEoy2gKghe9
+         IjUbkXtZ8GcOTKsJ8B8R5/unVBfmEJSFDwR4bcp/dw4qKLyZwZxknLDV+4qhyUalYOOx
+         /PgE9t0mjHbWO2dJ/EaF6aiHgtN5+oImbi+ulJCLoIXj8OtWrmO5mhQQoZYkU33Ka4ep
+         nZT3Qqto6wvwKeCBchSU7G3qrw7pXCuqIESi4ge95SQJkNUsr3GqI/rItVJW//rAb0fp
+         OyAw==
+X-Gm-Message-State: ANoB5plEN5tjFyi+WjjbYKLg3ifo4jK5HuvsDrl6HO6peIISi9BRlg5D
+        SmeHx8hlxQxisOSp+8SaG02fO+qUwvK0yF9gIclcow==
+X-Google-Smtp-Source: AA0mqf6JztjXsKrOZAvtzlYQyGBcMnqFAAI03f5vVpHLgvM2RaEycI/1qnyVsvINe/s4LO7o2SeAM+HqA9xXEvxUoQ4=
+X-Received: by 2002:a25:a0d4:0:b0:6ea:3fec:4adb with SMTP id
+ i20-20020a25a0d4000000b006ea3fec4adbmr15397598ybm.305.1669166915244; Tue, 22
+ Nov 2022 17:28:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJD7tkYfR6Kuq569=0h_crqjpK5cNT_029LuYa-EeCx16gU-6A@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CABWYdi0G7cyNFbndM-ELTDAR3x4Ngm0AehEp5aP0tfNkXUE+Uw@mail.gmail.com>
+ <Y30rdnZ+lrfOxjTB@cmpxchg.org> <CABWYdi3PqipLxnqeepXeZ471pfeBg06-PV0Uw04fU-LHnx_A4g@mail.gmail.com>
+In-Reply-To: <CABWYdi3PqipLxnqeepXeZ471pfeBg06-PV0Uw04fU-LHnx_A4g@mail.gmail.com>
+From:   Ivan Babrou <ivan@cloudflare.com>
+Date:   Tue, 22 Nov 2022 17:28:24 -0800
+Message-ID: <CABWYdi0qhWs56WK=k+KoQBAMh+Tb6Rr0nY4kJN+E5YqfGhKTmQ@mail.gmail.com>
+Subject: Re: Low TCP throughput due to vmpressure with swap enabled
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, cgroups@vger.kernel.org,
+        kernel-team <kernel-team@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 04:49:54PM -0800, Yosry Ahmed wrote:
-> On Tue, Nov 22, 2022 at 4:45 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+On Tue, Nov 22, 2022 at 2:11 PM Ivan Babrou <ivan@cloudflare.com> wrote:
+>
+> On Tue, Nov 22, 2022 at 12:05 PM Johannes Weiner <hannes@cmpxchg.org> wrote:
 > >
-> > On Tue, Nov 22, 2022 at 4:37 PM Roman Gushchin <roman.gushchin@linux.dev> wrote:
+> > On Mon, Nov 21, 2022 at 04:53:43PM -0800, Ivan Babrou wrote:
+> > > Hello,
 > > >
-> > > On Tue, Nov 22, 2022 at 11:27:21PM +0000, Yosry Ahmed wrote:
-> > > > During reclaim, mem_cgroup_calculate_protection() is used to determine
-> > > > the effective protection (emin and elow) values of a memcg. The
-> > > > protection of the reclaim target is ignored, but we cannot set their
-> > > > effective protection to 0 due to a limitation of the current
-> > > > implementation (see comment in mem_cgroup_protection()). Instead,
-> > > > we leave their effective protection values unchaged, and later ignore it
-> > > > in mem_cgroup_protection().
-> > > >
-> > > > However, mem_cgroup_protection() is called later in
-> > > > shrink_lruvec()->get_scan_count(), which is after the
-> > > > mem_cgroup_below_{min/low}() checks in shrink_node_memcgs(). As a
-> > > > result, the stale effective protection values of the target memcg may
-> > > > lead us to skip reclaiming from the target memcg entirely, before
-> > > > calling shrink_lruvec(). This can be even worse with recursive
-> > > > protection, where the stale target memcg protection can be higher than
-> > > > its standalone protection.
-> > > >
-> > > > An example where this can happen is as follows. Consider the following
-> > > > hierarchy with memory_recursiveprot:
-> > > > ROOT
-> > > >  |
-> > > >  A (memory.min = 50M)
-> > > >  |
-> > > >  B (memory.min = 10M, memory.high = 40M)
-> > > >
-> > > > Consider the following scenarion:
-> > > > - B has memory.current = 35M.
-> > > > - The system undergoes global reclaim (target memcg is NULL).
-> > > > - B will have an effective min of 50M (all of A's unclaimed protection).
-> > > > - B will not be reclaimed from.
-> > > > - Now allocate 10M more memory in B, pushing it above it's high limit.
-> > > > - The system undergoes memcg reclaim from B (target memcg is B)
-> > > > - In shrink_node_memcgs(), we call mem_cgroup_calculate_protection(),
-> > > >   which immediately returns for B without doing anything, as B is the
-> > > >   target memcg, relying on mem_cgroup_protection() to ignore B's stale
-> > > >   effective min (still 50M).
-> > > > - Directly after mem_cgroup_calculate_protection(), we will call
-> > > >   mem_cgroup_below_min(), which will read the stale effective min for B
-> > > >   and skip it (instead of ignoring its protection as intended). In this
-> > > >   case, it's really bad because we are not just considering B's
-> > > >   standalone protection (10M), but we are reading a much higher stale
-> > > >   protection (50M) which will cause us to not reclaim from B at all.
-> > > >
-> > > > This is an artifact of commit 45c7f7e1ef17 ("mm, memcg: decouple
-> > > > e{low,min} state mutations from protection checks") which made
-> > > > mem_cgroup_calculate_protection() only change the state without
-> > > > returning any value. Before that commit, we used to return
-> > > > MEMCG_PROT_NONE for the target memcg, which would cause us to skip the
-> > > > mem_cgroup_below_{min/low}() checks. After that commit we do not return
-> > > > anything and we end up checking the min & low effective protections for
-> > > > the target memcg, which are stale.
-> > > >
-> > > > Add mem_cgroup_ignore_protection() that checks if we are reclaiming from
-> > > > the target memcg, and call it in mem_cgroup_below_{min/low}() to ignore
-> > > > the stale protection of the target memcg.
-> > > >
-> > > > Fixes: 45c7f7e1ef17 ("mm, memcg: decouple e{low,min} state mutations from protection checks")
-> > > > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> > > We have observed a negative TCP throughput behavior from the following commit:
 > > >
-> > > Great catch!
-> > > The fix looks good to me, only a couple of cosmetic suggestions.
+> > > * 8e8ae645249b mm: memcontrol: hook up vmpressure to socket pressure
 > > >
-> > > > ---
-> > > >  include/linux/memcontrol.h | 33 +++++++++++++++++++++++++++------
-> > > >  mm/vmscan.c                | 11 ++++++-----
-> > > >  2 files changed, 33 insertions(+), 11 deletions(-)
-> > > >
-> > > > diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-> > > > index e1644a24009c..22c9c9f9c6b1 100644
-> > > > --- a/include/linux/memcontrol.h
-> > > > +++ b/include/linux/memcontrol.h
-> > > > @@ -625,18 +625,32 @@ static inline bool mem_cgroup_supports_protection(struct mem_cgroup *memcg)
-> > > >
-> > > >  }
-> > > >
-> > > > -static inline bool mem_cgroup_below_low(struct mem_cgroup *memcg)
-> > > > +static inline bool mem_cgroup_ignore_protection(struct mem_cgroup *target,
-> > > > +                                             struct mem_cgroup *memcg)
-> > > >  {
-> > > > -     if (!mem_cgroup_supports_protection(memcg))
+> > > It landed back in 2016 in v4.5, so it's not exactly a new issue.
 > > >
-> > > How about to merge mem_cgroup_supports_protection() and your new helper into
-> > > something like mem_cgroup_possibly_protected()? It seems like they never used
-> > > separately and unlikely ever will be used.
+> > > The crux of the issue is that in some cases with swap present the
+> > > workload can be unfairly throttled in terms of TCP throughput.
 > >
-> > Sounds good! I am thinking maybe mem_cgroup_no_protection() which is
-> > an inlining of !mem_cgroup_supports_protection() ||
-> > mem_cgorup_ignore_protection().
+> > Thanks for the detailed analysis, Ivan.
 > >
-> > > Also, I'd swap target and memcg arguments.
+> > Originally, we pushed back on sockets only when regular page reclaim
+> > had completely failed and we were about to OOM. This patch was an
+> > attempt to be smarter about it and equalize pressure more smoothly
+> > between socket memory, file cache, anonymous pages.
 > >
-> > Sounds good.
-> 
-> I just remembered, the reason I put "target" first is to match the
-> ordering of mem_cgroup_calculate_protection(), otherwise the code in
-> shrink_node_memcgs() may be confusing.
+> > After a recent discussion with Shakeel, I'm no longer quite sure the
+> > kernel is the right place to attempt this sort of balancing. It kind
+> > of depends on the workload which type of memory is more imporant. And
+> > your report shows that vmpressure is a flawed mechanism to implement
+> > this, anyway.
+> >
+> > So I'm thinking we should delete the vmpressure thing, and go back to
+> > socket throttling only if an OOM is imminent. This is in line with
+> > what we do at the system level: sockets get throttled only after
+> > reclaim fails and we hit hard limits. It's then up to the users and
+> > sysadmin to allocate a reasonable amount of buffers given the overall
+> > memory budget.
+> >
+> > Cgroup accounting, limiting and OOM enforcement is still there for the
+> > socket buffers, so misbehaving groups will be contained either way.
+> >
+> > What do you think? Something like the below patch?
+>
+> The idea sounds very reasonable to me. I can't really speak for the
+> patch contents with any sort of authority, but it looks ok to my
+> non-expert eyes.
+>
+> There were some conflicts when cherry-picking this into v5.15. I think
+> the only real one was for the "!sc->proactive" condition not being
+> present there. For the rest I just accepted the incoming change.
+>
+> I'm going to be away from my work computer until December 5th, but
+> I'll try to expedite my backported patch to a production machine today
+> to confirm that it makes the difference. If I can get some approvals
+> on my internal PRs, I should be able to provide the results by EOD
+> tomorrow.
 
-Oh, I see...
-Nevermind, let's leave it the way it is now.
-Thanks for checking it out!
+I tried the patch and something isn't right here.
 
-Roman
+With the patch applied I'm capped at ~120MB/s, which is a symptom of a
+clamped window.
+
+I can't find any sockets with memcg->socket_pressure = 1, but at the
+same time I only see the following rcv_ssthresh assigned to sockets:
+
+$ sudo ss -tim dport 6443 | fgrep rcv_ssthresh | sed
+'s/.*rcv_ssthresh://' | awk '{ print $1 }' | sort -n | uniq -c | sort
+-n | tail
+      1 64076
+    181 65495
+   1456 5792
+  16531 64088
+
+* 64088 is the default value
+* 5792 is 4 * advmss (clamped)
+
+Compare this to a machine without the patch but with
+cgroup.memory=nosocket in cmdline:
+$ sudo ss -tim dport 6443 | fgrep rcv_ssthresh | sed
+'s/.*rcv_ssthresh://' | awk '{ print $1 }' | sort -n | uniq -c | sort
+-n | tail
+      8 2806862
+      8 3777338
+      8 72776
+      8 86068
+     10 2024018
+     12 3777354
+     23 91172
+     29 66984
+    101 65495
+   5439 64088
+
+There aren't any clamped sockets here and there are many different
+rcv_ssthresh values.
