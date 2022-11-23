@@ -2,97 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07DC263632B
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:20:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C714636334
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:20:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238715AbiKWPUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 10:20:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56352 "EHLO
+        id S235979AbiKWPUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 10:20:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238695AbiKWPTt (ORCPT
+        with ESMTP id S238683AbiKWPUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 10:19:49 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E7690580;
-        Wed, 23 Nov 2022 07:19:47 -0800 (PST)
-Date:   Wed, 23 Nov 2022 16:19:44 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669216786;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oTwzhKU9n4ncsH7FV/LSW7qnOCWI7kAJ1Y5x5I67+ZY=;
-        b=RarddSxY8wubej+5CMsEi0c4ueQywT1Xj6BsflZ7pW0Q3OcLh2fBHBWi7eUN1tqNOwNV2x
-        c01JSTuG16x8QV34k9HdUYZV9ZiYuvgZTcxQ3ePuamINLp2gKArsQShyxgKzW9afIeLBRN
-        zQjRVJXWuH0JXaEd5tEy3DQtUiabK0RhA0HC3xPoNsJDtf9GbAMLEMN9fI4JqgXt4ifh0f
-        H5rTILxPo1GeT8xST2ZLqY9jrEQSZxnVdsw7JEn/uRXgmpl2MpHF0dpktPDqZDRounwffN
-        pm0jxzXeAvDljQ4arTP1+T6Xz/eqxyyZ1IUEJMFeSCrZXFRQ5WcUTgovVZpquw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669216786;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oTwzhKU9n4ncsH7FV/LSW7qnOCWI7kAJ1Y5x5I67+ZY=;
-        b=jDl6R+HoPDbfmAaXlS5ltWdEQcWIFx2SBmdf9vr/0n1PVc+h+OAhbp9dtDAHm/pjrJBaVk
-        Mwez3VfTMJ13etDg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] cgroup/cpuset: Optimize cpuset_attach() on v2
-Message-ID: <Y346ENzM4+FAjRnn@linutronix.de>
-References: <20221112221939.1272764-1-longman@redhat.com>
- <20221112221939.1272764-3-longman@redhat.com>
+        Wed, 23 Nov 2022 10:20:08 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E1F905AE
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:20:07 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id cl5so29895983wrb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:20:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ziwsq9banwczERpMX+Bo3ns23w7Dd8VFWVq2lIRwuKE=;
+        b=h+z4P+mLFJgnkVRXVdp3prIBBPkAdi+FwhU/MWCM+45GjS344kKmGvvfC2NWJqctNL
+         /b8fuSL1ttsIggGguMPLdLrNDm7QUjnWFhx1eKOzGTWwc7ABYnK8CYQn+mKfE6i9vuwq
+         jhwmETeTCYfTEC8YfaPYjjA8FG+UsOIFbQPcZkes8iHOP2u6ioYsBCdYSq5Z2IS8HHWX
+         sCTmfDmipwpLQN2bayLosN2jXgN2GknoCWPZwFLaQu/ac8PlZVf1fmWWEw0opiJnqw1z
+         hWUWqpSuWYnYRc/ITfDNE4+8FKZ7UVQiQcHqQol87JeGPzcsTjd/cjsAq+QRTtsA9EZG
+         Mn/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ziwsq9banwczERpMX+Bo3ns23w7Dd8VFWVq2lIRwuKE=;
+        b=5s+77Gy+cDi8T+9I4or6r81LY2jXP3JlZz0LfWEejvBBUSoLZgB7SdOU1i4EBNjLrY
+         Dm7jlmNDJY8QeQP21TM4FykofjGq+kRXW8kJDjBhDxXfJeUHaZgn0pEAP/6jevPJXR8o
+         /zSOmJLz82yz3JF8yZgILlzptuewcPSJcESGBgdFqSWDmtaJbWgggUsCxjC1pkI9A3Pt
+         iYI+LHkgsLgVGkg+e94PB6swiEf9QK5d9R28CUxuyYwVfuDeybg3S7P5gMzhP2P7/ZlV
+         wNbc9pZWbFUD+wmJ7gOh0gMnvGQ6L3bxKxGDir3eI2F1eF7YB6yx8SqyvGKw+kxt5Uau
+         r2/w==
+X-Gm-Message-State: ANoB5pne4XOmCRi8Ud7vM4HCP2hCJkzMDCsODTuTmZgsEveMX4FmBGjW
+        qu3UoTKPscgzA+nMjt6ihYV8SQ==
+X-Google-Smtp-Source: AA0mqf63XHGjwyrqrPkF1+AicWGQJXD0EFyrzQk6d2t/8H6zregd0KnivxFbLhZYRfMBIHYCQ0kaNg==
+X-Received: by 2002:a5d:48cf:0:b0:236:4983:285f with SMTP id p15-20020a5d48cf000000b002364983285fmr17585786wrs.576.1669216805925;
+        Wed, 23 Nov 2022 07:20:05 -0800 (PST)
+Received: from localhost.localdomain ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id l10-20020adff48a000000b002366ded5864sm16764914wro.116.2022.11.23.07.20.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 07:20:05 -0800 (PST)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
+Subject: [PATCH v2 0/4] pinctrl: qcom: Add support for SM8550
+Date:   Wed, 23 Nov 2022 17:19:57 +0200
+Message-Id: <20221123152001.694546-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221112221939.1272764-3-longman@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-12 17:19:39 [-0500], Waiman Long wrote:
-> It was found that with the default hierarchy, enabling cpuset in the
-> child cgroups can trigger a cpuset_attach() call in each of the child
-> cgroups that have tasks with no change in effective cpus and mems. If
-> there are many processes in those child cgroups, it will burn quite a
-> lot of cpu cycles iterating all the tasks without doing useful work.
+This patchset adds pinctrl support for the new Qualcomm SM8550 SoC,
+One thing needed by SM8550 is the I2C specific pull feature.
 
-Thank you.
+To: Andy Gross <agross@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+To: Linus Walleij <linus.walleij@linaro.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org
+Cc: linux-gpio@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
-So this preserves the CPU mask upon attaching the cpuset container.
+Abel Vesa (2):
+  dt-bindings: pinctrl: qcom: Add SM8550 pinctrl
+  pinctrl: qcom: Add SM8550 pinctrl driver
 
-| ~# taskset -pc $$
-| pid 1564's current affinity list: 0-2
+Neil Armstrong (2):
+  dt-bindings: pinctrl: qcom,tlmm-common: document i2c pull property
+  pinctrl: qcom: add support for i2c specific pull feature
 
-default mask after boot due to isolcpus=
+ .../bindings/pinctrl/qcom,sm8550-tlmm.yaml    |  163 ++
+ .../bindings/pinctrl/qcom,tlmm-common.yaml    |    3 +
+ drivers/pinctrl/qcom/Kconfig                  |   10 +
+ drivers/pinctrl/qcom/Makefile                 |    1 +
+ drivers/pinctrl/qcom/pinctrl-msm.c            |   20 +
+ drivers/pinctrl/qcom/pinctrl-msm.h            |    1 +
+ drivers/pinctrl/qcom/pinctrl-sm8550.c         | 1790 +++++++++++++++++
+ 7 files changed, 1988 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sm8550-tlmm.yaml
+ create mode 100644 drivers/pinctrl/qcom/pinctrl-sm8550.c
 
-| ~# echo "+cpu" >> /sys/fs/cgroup/cgroup.subtree_control ; echo "+cpuset" >> /sys/fs/cgroup/cgroup.subtree_control
-| ~# taskset -pc $$
-| pid 1564's current affinity list: 0-2
+-- 
+2.34.1
 
-okay.
-
-| ~# echo 1-3 > /sys/fs/cgroup/user.slice/cpuset.cpus
-| ~# taskset -pc $$
-| pid 1564's current affinity list: 1-3
-
-wiped away.
-
-| ~# taskset -pc 2-3 $$ 
-| pid 1564's current affinity list: 1-3
-| pid 1564's new affinity list: 2,3
-| ~# echo 2-4 > /sys/fs/cgroup/user.slice/cpuset.cpus
-| ~# taskset -pc 2-3 $$ 
-| pid 1564's current affinity list: 2,3
-| pid 1564's new affinity list: 2,3
-
-But it works if the mask was changed on purpose.
-
-Sebastian
