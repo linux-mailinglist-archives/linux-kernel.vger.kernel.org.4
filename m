@@ -2,309 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC79E635C98
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 13:17:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99615635C9B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 13:20:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236414AbiKWMRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 07:17:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52454 "EHLO
+        id S236545AbiKWMTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 07:19:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235838AbiKWMRe (ORCPT
+        with ESMTP id S235838AbiKWMTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 07:17:34 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA2E1129
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 04:17:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=vIeBl7vTF6NaLB2hFnwL23+uu766/EWpSu7THtDdPbk=; b=oOzqoUM5mcF24s36obgFHpZK9S
-        YGx6veSUMx7Tooxcvp7Hn6NR9gzZ3cM2TFUMnx510sAcDSWjnk+UQ+/8X6pGLvog4XNibPJnHyqCC
-        Um8CbqtsSgs33jQRX8Wg6EOdL0AQlTE/I8jG2Fm8x8z87uCoLfMe/2Q45GV5SeNjuWDRxcVsQYYpt
-        6BnZJ+L1vTE+x3q5q6QJVCf9TdMD1dXPOI7RRiYi6g2TgRyicJG5ktE2y+pDCcdIPnEHHRI5ehtL0
-        0HN6mKL4AycWEed2Cm31f3JVgE405Yg9Ht4jLC/e3Q7qsQJeMUIgDbjfTM19qxSslsrQ21s6ooEcg
-        9jU2bBYg==;
-Received: from [177.34.169.227] (helo=[192.168.0.8])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1oxogl-007gYx-HS; Wed, 23 Nov 2022 13:17:15 +0100
-Message-ID: <99fe053c-6ad7-37fe-625c-cfc4634a938f@igalia.com>
-Date:   Wed, 23 Nov 2022 09:17:06 -0300
+        Wed, 23 Nov 2022 07:19:31 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2062.outbound.protection.outlook.com [40.107.237.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 356703F045
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 04:19:30 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LX2d8jjAVESCnZYxw1cS30oJw8/VtUh+USmR5EIneVP04zT7PIpGzByQxzthHh+R3WJ3ZiYMrc2aIjGOJz7DEszW9R9ejX12P7OiWLyDwTUBQ5wGSsLJU5t6fX7vqksoU03cF4OYJr3PwT9EPYhvOBn2gMnlLP9rleWTRahwp43YIN2aXefuj4BBtGWxB6xG0//nN5xsOfvi1YKNYaKtTlUXsLhS6dNzQfH75fyyFOYOVHugXi8yhldERPsPm7UvZL+ymHQ1M0NfFbfaFgfwd+6qGBnW3LeCHvoyZRavfkzHmZUudmiGAkdaiLMcJHhsw+BrtVRTZ63nYiaU78MFfg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4Ejb8QJKQlT9PWx8UhIOs03cvecKzqPiNJNEMm0UUhA=;
+ b=NGpzn9i9adU2gwXP1lVfe4S5VjlWHogSWrkujcyuguU9VC+5CCMH0+7ZmG+5WydDWuBJJxiORjWjxaVrHDCgdeGhvQFIqS44IYLObyYHt0Ov+OwHGRBaOedg3vXkneG7DTi7pBc7NllUham0Tq80wpxMH4oJ6b1EHFEpD/6Ama6qXZTLLjblrURq6j3s9cNCESDs6QOygDyaSA3FKM6GwydvpKHEzwmDtzkq+YrUWQoIugJFzXZK6usVMpaCCd5PTOKWG/n8Mv9Sp5PjjH3W3oNVC/oqXXeCJ3XzjChjuyXPe0+EZY3L0VhKSNXiRgD35geQGNj6zXDfIq5I52xubQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
+ is 165.204.84.17) smtp.rcpttodomain=kernel.org
+ smtp.mailfrom=amd.corp-partner.google.com; dmarc=fail (p=reject sp=reject
+ pct=100) action=oreject header.from=amd.corp-partner.google.com; dkim=none
+ (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amdcloud.onmicrosoft.com; s=selector1-amdcloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4Ejb8QJKQlT9PWx8UhIOs03cvecKzqPiNJNEMm0UUhA=;
+ b=qlaCka3OAINs22Sv+yPpiZE5YM6nMLv6t+Vzxa5oRugaBsicsLILnpq6u0MMb/FZiaP+cYe8W2mqIUQIW/Ce5ZmROguEvOp0IvCUpPLSu/BXlfH3xK+ySSurEgJHlVRsyMh3lhQbNrtRlvyBnNxx02K3EcM+/X4g2mRgRPjOQD1LBf452dT/r/dHb4FjFZi4CYbx5HRG1/AOxJnWhHdu7DgbcNWzQef01FgglcodvLgByHK6ZsK+92S4Z3ecIppTK5Xe+OqZyc95gIelmCdKBF0beF0eUP1DaR3QdEEPdiuUmeFjsQzPktwsfZb7Orsjv+LGc+K3UYx73hD4OyMBKA==
+Received: from MW4PR03CA0308.namprd03.prod.outlook.com (2603:10b6:303:dd::13)
+ by SA3PR12MB7950.namprd12.prod.outlook.com (2603:10b6:806:31c::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Wed, 23 Nov
+ 2022 12:19:28 +0000
+Received: from CO1NAM11FT089.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:dd:cafe::76) by MW4PR03CA0308.outlook.office365.com
+ (2603:10b6:303:dd::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.17 via Frontend
+ Transport; Wed, 23 Nov 2022 12:19:27 +0000
+X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
+ 165.204.84.17) smtp.mailfrom=amd.corp-partner.google.com; dkim=none (message
+ not signed) header.d=none;dmarc=fail action=oreject
+ header.from=amd.corp-partner.google.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ amd.corp-partner.google.com discourages use of 165.204.84.17 as permitted
+ sender)
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT089.mail.protection.outlook.com (10.13.175.179) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5834.8 via Frontend Transport; Wed, 23 Nov 2022 12:19:27 +0000
+Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 23 Nov
+ 2022 06:19:25 -0600
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB08.amd.com
+ (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 23 Nov
+ 2022 04:19:11 -0800
+Received: from sof-System-Product-Name.amd.com (10.180.168.240) by
+ SATLEXMB03.amd.com (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.34
+ via Frontend Transport; Wed, 23 Nov 2022 06:19:05 -0600
+From:   V sujith kumar Reddy 
+        <vsujithkumar.reddy@amd.corp-partner.google.com>
+To:     <broonie@kernel.org>, <alsa-devel@alsa-project.org>
+CC:     <Vijendar.Mukunda@amd.com>, <Basavaraj.Hiregoudar@amd.com>,
+        <Sunil-kumar.Dommati@amd.com>, <venkataprasad.potturu@amd.com>,
+        <ssabakar@amd.com>,
+        V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        "Bard Liao" <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "Ajit Kumar Pandey" <AjitKumar.Pandey@amd.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        "moderated list:SOUND - SOUND OPEN FIRMWARE (SOF) DRIVERS" 
+        <sound-open-firmware@alsa-project.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH v1 1/4] ASoC: SOF: amd: Fix for reading position updates from stream box.
+Date:   Wed, 23 Nov 2022 17:49:08 +0530
+Message-ID: <20221123121911.3446224-2-vsujithkumar.reddy@amd.corp-partner.google.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221123121911.3446224-1-vsujithkumar.reddy@amd.corp-partner.google.com>
+References: <20221123121911.3446224-1-vsujithkumar.reddy@amd.corp-partner.google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 1/6] drm/debugfs: create device-centered debugfs functions
-Content-Language: en-US
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Oded Gabbay <ogabbay@kernel.org>
-Cc:     =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
-        Emma Anholt <emma@anholt.net>,
-        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Wambui Karuga <wambui@karuga.org>,
-        Melissa Wen <mwen@igalia.com>,
-        Wambui Karuga <wambui.karugax@gmail.com>
-References: <20221122190314.185015-1-mcanal@igalia.com>
- <20221122190314.185015-2-mcanal@igalia.com> <87mt8ivsk8.fsf@intel.com>
- <f95f2a71-5daf-332d-9971-55f1fca67ff6@igalia.com> <87h6ypx4ny.fsf@intel.com>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>
-In-Reply-To: <87h6ypx4ny.fsf@intel.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT089:EE_|SA3PR12MB7950:EE_
+X-MS-Office365-Filtering-Correlation-Id: aecd2e85-7321-4aa6-950c-08dacd4cf767
+X-MS-Exchange-SenderADCheck: 2
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: y4G5xQ5rfqsWGtrCfH5dODKfX+j957wYewfxwZtHt8Ofzy70OkU9nKsxOcODm7k0GgjI1LID0em5a1yQC6GWX5ZY0tURCKQXhH4bwMyZi6EZOLJfIFemfLDgyDEo64GoSV4AvH0W3S90+YY+9fIsHFVcufN4gA2Ln3htyL0O/jF8Inaor9VbuZtUAFTTnhvA42Qt9vXLl7SWAqYF8MLJudh19iWTxoKj1yWV4p6fvoXO8ulbqfW+9xRXSl2DMqS1/KxNiah124oWO9Sk9vn+8enErDqo0Mc9cJq/jsuSbv7Dphwx9nPxn1ILk3rDiGjiXckFlSp3shcFItwKll/I0ajqzATc0nnGB7z+MI2Kh+/77dfZDgpuJNNMd1lP0RNzGufPyntuCYjCG3Aqd9inBrm02aly9pXu3UMHvHIJL+yq+h0kICb44eEX2NSTk08Jd/XTVTX6U52EvXfCKV2yvyITnWd9XXFf0LyYxOeQx0qJClZQZkTA+7KPi0ynWEvzrZ2zjguxUrSNUqLu+Mig5/tLzP108fS8oPPSDNpojLHucLRs0yF4BMqk+MTqqcqkX0VlgVzc2B3ALrkIpwsKLKMcHdPySWjTIu5Fa0FkcooBZNmb/Z8YnD69m2ruIsuDSzglBxcnDwHQxGxX/z+QV5wtiVRbWXeXow9KEHA8v9AGkfYDu4Zvuk67j1mAAsn4JskmbK6KcKYG3j28+qHUQA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(136003)(39860400002)(376002)(451199015)(46966006)(40470700004)(110136005)(2616005)(336012)(47076005)(1076003)(2906002)(26005)(498600001)(35950700001)(40460700003)(86362001)(40480700001)(81166007)(356005)(15650500001)(82740400003)(83380400001)(82310400005)(4326008)(5660300002)(70586007)(8936002)(7416002)(8676002)(70206006)(316002)(54906003)(76482006)(41300700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amdcloud.onmicrosoft.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2022 12:19:27.6753
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: aecd2e85-7321-4aa6-950c-08dacd4cf767
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT089.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB7950
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/23/22 08:59, Jani Nikula wrote:
-> On Wed, 23 Nov 2022, Maíra Canal <mcanal@igalia.com> wrote:
->> Hi Jani,
->>
->> On 11/23/22 08:06, Jani Nikula wrote:
->>> On Tue, 22 Nov 2022, Maíra Canal <mcanal@igalia.com> wrote:
->>>> Introduce the ability to track requests for the addition of DRM debugfs
->>>> files at any time and have them added all at once during
->>>> drm_dev_register().
->>>>
->>>> Drivers can add DRM debugfs files to a device-managed list and, during
->>>> drm_dev_register(), all added files will be created at once.
->>>>
->>>> Now, the drivers can use the functions drm_debugfs_add_file() and
->>>> drm_debugfs_add_files() to create DRM debugfs files instead of using the
->>>> drm_debugfs_create_files() function.
->>>>
->>>> Co-developed-by: Wambui Karuga <wambui.karugax@gmail.com>
->>>> Signed-off-by: Wambui Karuga <wambui.karugax@gmail.com>
->>>> Signed-off-by: Maíra Canal <mcanal@igalia.com>
->>>> ---
->>>>  drivers/gpu/drm/drm_debugfs.c | 76 +++++++++++++++++++++++++++++++++++
->>>>  drivers/gpu/drm/drm_drv.c     |  3 ++
->>>>  include/drm/drm_debugfs.h     | 45 +++++++++++++++++++++
->>>>  include/drm/drm_device.h      | 15 +++++++
->>>>  4 files changed, 139 insertions(+)
->>>>>> +/**
->>>> + * drm_debugfs_add_file - Add a given file to the DRM device debugfs file list
->>>> + * @dev: drm device for the ioctl
->>>> + * @name: debugfs file name
->>>> + * @show: show callback
->>>> + * @data: driver-private data, should not be device-specific
->>>> + *
->>>> + * Add a given file entry to the DRM device debugfs file list to be created on
->>>> + * drm_debugfs_init.
->>>> + */
->>>> +int drm_debugfs_add_file(struct drm_device *dev, const char *name,
->>>> +			 int (*show)(struct seq_file*, void*), void *data)
->>>> +{
->>>> +	struct drm_debugfs_entry *entry = drmm_kzalloc(dev, sizeof(*entry), GFP_KERNEL);
->>>> +
->>>> +	if (!entry)
->>>> +		return -ENOMEM;
->>>> +
->>>> +	entry->file.name = name;
->>>> +	entry->file.show = show;
->>>> +	entry->file.data = data;
->>>> +	entry->dev = dev;
->>>> +
->>>> +	mutex_lock(&dev->debugfs_mutex);
->>>> +	list_add(&entry->list, &dev->debugfs_list);
->>>> +	mutex_unlock(&dev->debugfs_mutex);
->>>> +
->>>> +	return 0;
->>>> +}
->>>> +EXPORT_SYMBOL(drm_debugfs_add_file);
->>>> +
->>>> +/**
->>>> + * drm_debugfs_add_files - Add an array of files to the DRM device debugfs file list
->>>> + * @dev: drm device for the ioctl
->>>> + * @files: The array of files to create
->>>> + * @count: The number of files given
->>>> + *
->>>> + * Add a given set of debugfs files represented by an array of
->>>> + * &struct drm_debugfs_info in the DRM device debugfs file list.
->>>> + */
->>>> +int drm_debugfs_add_files(struct drm_device *dev, const struct drm_debugfs_info *files, int count)
->>>> +{
->>>> +	int i, ret = 0, err;
->>>> +
->>>> +	for (i = 0; i < count; i++) {
->>>> +		err = drm_debugfs_add_file(dev, files[i].name, files[i].show, files[i].data);
->>>> +		if (err)
->>>> +			ret = err;
->>>> +	}
->>>> +
->>>> +	return ret;
->>>> +}
->>>> +EXPORT_SYMBOL(drm_debugfs_add_files);
->>>
->>> Do we want to add return values and error handling to debugfs related
->>> functions at all?
->>
->> Drivers such as vc4 can use the return values from debugfs-related
->> functions for error handling. Although the return values are not
->> explicitly necessary, some drivers can benefit from them for error handling.
-> 
-> Arguably they should cease to do error handling on debugfs failures
-> too. No driver should stop probe if debugfs fails, and that's been the
-> direction for years.
+From: V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>
 
-Is it not even reasonable to return errors only to create drm_WARN_ON
-when the creation of debugfs files fails? Currently, vc4 doesn't stop to
-probe if debugfs fails, but only creates some warnings to let the user
-knows that it failed.
+By default the position updates are read from dsp box when streambox
+size is not defined.if the streambox size is defined to some value
+then position updates can be read from the streambox.
 
-Best Regards,
-- Maíra Canal
+Signed-off-by: V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>
+---
+ sound/soc/sof/amd/acp-common.c |  1 +
+ sound/soc/sof/amd/acp-ipc.c    | 30 +++++++++++++++++++++++++++++-
+ sound/soc/sof/amd/acp.h        |  4 ++++
+ 3 files changed, 34 insertions(+), 1 deletion(-)
 
-> 
-> BR,
-> Jani.
-> 
->>
->> Best Regards,
->> - Maíra Canal
->>
->>>
->>> BR,
->>> Jani.
->>>
->>>
->>>> +
->>>>  static int connector_show(struct seq_file *m, void *data)
->>>>  {
->>>>  	struct drm_connector *connector = m->private;
->>>> diff --git a/drivers/gpu/drm/drm_drv.c b/drivers/gpu/drm/drm_drv.c
->>>> index 8214a0b1ab7f..803942008fcb 100644
->>>> --- a/drivers/gpu/drm/drm_drv.c
->>>> +++ b/drivers/gpu/drm/drm_drv.c
->>>> @@ -575,6 +575,7 @@ static void drm_dev_init_release(struct drm_device *dev, void *res)
->>>>  	mutex_destroy(&dev->clientlist_mutex);
->>>>  	mutex_destroy(&dev->filelist_mutex);
->>>>  	mutex_destroy(&dev->struct_mutex);
->>>> +	mutex_destroy(&dev->debugfs_mutex);
->>>>  	drm_legacy_destroy_members(dev);
->>>>  }
->>>>  
->>>> @@ -608,12 +609,14 @@ static int drm_dev_init(struct drm_device *dev,
->>>>  	INIT_LIST_HEAD(&dev->filelist_internal);
->>>>  	INIT_LIST_HEAD(&dev->clientlist);
->>>>  	INIT_LIST_HEAD(&dev->vblank_event_list);
->>>> +	INIT_LIST_HEAD(&dev->debugfs_list);
->>>>  
->>>>  	spin_lock_init(&dev->event_lock);
->>>>  	mutex_init(&dev->struct_mutex);
->>>>  	mutex_init(&dev->filelist_mutex);
->>>>  	mutex_init(&dev->clientlist_mutex);
->>>>  	mutex_init(&dev->master_mutex);
->>>> +	mutex_init(&dev->debugfs_mutex);
->>>>  
->>>>  	ret = drmm_add_action(dev, drm_dev_init_release, NULL);
->>>>  	if (ret)
->>>> diff --git a/include/drm/drm_debugfs.h b/include/drm/drm_debugfs.h
->>>> index 2188dc83957f..c5684d6c5055 100644
->>>> --- a/include/drm/drm_debugfs.h
->>>> +++ b/include/drm/drm_debugfs.h
->>>> @@ -79,12 +79,43 @@ struct drm_info_node {
->>>>  	struct dentry *dent;
->>>>  };
->>>>  
->>>> +/**
->>>> + * struct drm_debugfs_info - debugfs info list entry
->>>> + *
->>>> + * This structure represents a debugfs file to be created by the drm
->>>> + * core.
->>>> + */
->>>> +struct drm_debugfs_info {
->>>> +	const char *name;
->>>> +	int (*show)(struct seq_file*, void*);
->>>> +	u32 driver_features;
->>>> +	void *data;
->>>> +};
->>>> +
->>>> +/**
->>>> + * struct drm_debugfs_entry - Per-device debugfs node structure
->>>> + *
->>>> + * This structure represents a debugfs file, as an instantiation of a &struct
->>>> + * drm_debugfs_info on a &struct drm_device.
->>>> + */
->>>> +struct drm_debugfs_entry {
->>>> +	struct drm_device *dev;
->>>> +	struct drm_debugfs_info file;
->>>> +	struct list_head list;
->>>> +};
->>>> +
->>>>  #if defined(CONFIG_DEBUG_FS)
->>>>  void drm_debugfs_create_files(const struct drm_info_list *files,
->>>>  			      int count, struct dentry *root,
->>>>  			      struct drm_minor *minor);
->>>>  int drm_debugfs_remove_files(const struct drm_info_list *files,
->>>>  			     int count, struct drm_minor *minor);
->>>> +
->>>> +int drm_debugfs_add_file(struct drm_device *dev, const char *name,
->>>> +			 int (*show)(struct seq_file*, void*), void *data);
->>>> +
->>>> +int drm_debugfs_add_files(struct drm_device *dev,
->>>> +			  const struct drm_debugfs_info *files, int count);
->>>>  #else
->>>>  static inline void drm_debugfs_create_files(const struct drm_info_list *files,
->>>>  					    int count, struct dentry *root,
->>>> @@ -96,6 +127,20 @@ static inline int drm_debugfs_remove_files(const struct drm_info_list *files,
->>>>  {
->>>>  	return 0;
->>>>  }
->>>> +
->>>> +static inline int drm_debugfs_add_file(struct drm_device *dev, const char *name,
->>>> +				       int (*show)(struct seq_file*, void*),
->>>> +				       void *data)
->>>> +{
->>>> +	return 0;
->>>> +}
->>>> +
->>>> +static inline int drm_debugfs_add_files(struct drm_device *dev,
->>>> +					const struct drm_debugfs_info *files,
->>>> +					int count)
->>>> +{
->>>> +	return 0;
->>>> +}
->>>>  #endif
->>>>  
->>>>  #endif /* _DRM_DEBUGFS_H_ */
->>>> diff --git a/include/drm/drm_device.h b/include/drm/drm_device.h
->>>> index 9923c7a6885e..fa6af1d57929 100644
->>>> --- a/include/drm/drm_device.h
->>>> +++ b/include/drm/drm_device.h
->>>> @@ -295,6 +295,21 @@ struct drm_device {
->>>>  	 */
->>>>  	struct drm_fb_helper *fb_helper;
->>>>  
->>>> +	/**
->>>> +	 * @debugfs_mutex:
->>>> +	 *
->>>> +	 * Protects &debugfs_list access.
->>>> +	 */
->>>> +	struct mutex debugfs_mutex;
->>>> +
->>>> +	/**
->>>> +	 * @debugfs_list:
->>>> +	 *
->>>> +	 * List of debugfs files to be created by the DRM device. The files
->>>> +	 * must be added during drm_dev_register().
->>>> +	 */
->>>> +	struct list_head debugfs_list;
->>>> +
->>>>  	/* Everything below here is for legacy driver, never use! */
->>>>  	/* private: */
->>>>  #if IS_ENABLED(CONFIG_DRM_LEGACY)
->>>
-> 
+diff --git a/sound/soc/sof/amd/acp-common.c b/sound/soc/sof/amd/acp-common.c
+index 27b95187356e..150e042e4039 100644
+--- a/sound/soc/sof/amd/acp-common.c
++++ b/sound/soc/sof/amd/acp-common.c
+@@ -76,6 +76,7 @@ struct snd_sof_dsp_ops sof_acp_common_ops = {
+ 	/*IPC */
+ 	.send_msg		= acp_sof_ipc_send_msg,
+ 	.ipc_msg_data		= acp_sof_ipc_msg_data,
++	.set_stream_data_offset = acp_set_stream_data_offset,
+ 	.get_mailbox_offset	= acp_sof_ipc_get_mailbox_offset,
+ 	.get_window_offset      = acp_sof_ipc_get_window_offset,
+ 	.irq_thread		= acp_sof_ipc_irq_thread,
+diff --git a/sound/soc/sof/amd/acp-ipc.c b/sound/soc/sof/amd/acp-ipc.c
+index dd030566e372..dd6e53c63407 100644
+--- a/sound/soc/sof/amd/acp-ipc.c
++++ b/sound/soc/sof/amd/acp-ipc.c
+@@ -192,13 +192,41 @@ int acp_sof_ipc_msg_data(struct snd_sof_dev *sdev, struct snd_pcm_substream *sub
+ {
+ 	unsigned int offset = sdev->dsp_box.offset;
+ 
+-	if (!substream || !sdev->stream_box.size)
++	if (!substream || !sdev->stream_box.size) {
+ 		acp_mailbox_read(sdev, offset, p, sz);
++	} else {
++		struct acp_dsp_stream *stream = substream->runtime->private_data;
++
++		if (!stream)
++			return -ESTRPIPE;
++
++		acp_mailbox_read(sdev, stream->posn_offset, p, sz);
++	}
+ 
+ 	return 0;
+ }
+ EXPORT_SYMBOL_NS(acp_sof_ipc_msg_data, SND_SOC_SOF_AMD_COMMON);
+ 
++int acp_set_stream_data_offset(struct snd_sof_dev *sdev,
++			       struct snd_pcm_substream *substream,
++			       size_t posn_offset)
++{
++	struct acp_dsp_stream *stream = substream->runtime->private_data;
++
++	/* check for unaligned offset or overflow */
++	if (posn_offset > sdev->stream_box.size ||
++	    posn_offset % sizeof(struct sof_ipc_stream_posn) != 0)
++		return -EINVAL;
++
++	stream->posn_offset = sdev->stream_box.offset + posn_offset;
++
++	dev_dbg(sdev->dev, "pcm: stream dir %d, posn mailbox offset is %zu",
++		substream->stream, stream->posn_offset);
++
++	return 0;
++}
++EXPORT_SYMBOL_NS(acp_set_stream_data_offset, SND_SOC_SOF_AMD_COMMON);
++
+ int acp_sof_ipc_get_mailbox_offset(struct snd_sof_dev *sdev)
+ {
+ 	const struct sof_amd_acp_desc *desc = get_chip_info(sdev->pdata);
+diff --git a/sound/soc/sof/amd/acp.h b/sound/soc/sof/amd/acp.h
+index dd3c072d0172..1529c6d9bf9b 100644
+--- a/sound/soc/sof/amd/acp.h
++++ b/sound/soc/sof/amd/acp.h
+@@ -138,6 +138,7 @@ struct acp_dsp_stream {
+ 	int stream_tag;
+ 	int active;
+ 	unsigned int reg_offset;
++	size_t posn_offset;
+ };
+ 
+ struct sof_amd_acp_desc {
+@@ -199,6 +200,9 @@ int acp_dsp_block_read(struct snd_sof_dev *sdev, enum snd_sof_fw_blk_type blk_ty
+ irqreturn_t acp_sof_ipc_irq_thread(int irq, void *context);
+ int acp_sof_ipc_msg_data(struct snd_sof_dev *sdev, struct snd_pcm_substream *substream,
+ 			 void *p, size_t sz);
++int acp_set_stream_data_offset(struct snd_sof_dev *sdev,
++			       struct snd_pcm_substream *substream,
++			       size_t posn_offset);
+ int acp_sof_ipc_send_msg(struct snd_sof_dev *sdev,
+ 			 struct snd_sof_ipc_msg *msg);
+ int acp_sof_ipc_get_mailbox_offset(struct snd_sof_dev *sdev);
+-- 
+2.25.1
+
