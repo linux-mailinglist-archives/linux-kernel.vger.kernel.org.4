@@ -2,161 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A94636CA4
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 22:58:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9373C636CA8
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 22:58:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238912AbiKWV5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 16:57:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34650 "EHLO
+        id S238948AbiKWV6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 16:58:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235336AbiKWV5s (ORCPT
+        with ESMTP id S235580AbiKWV6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 16:57:48 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288B722BEC
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 13:57:45 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id h16so93671qtu.2
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 13:57:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eXUl97TIC36iX2gzZ4z9T7kVADet1dCMIeHKCLo4dC4=;
-        b=1d778WwTHiFnSrOOtipV1oy8hteglhzctqXDcakElk44hR7nj0Kw1HZUKFrkLK1flS
-         1dy2ejEUeQqR3zUjNbKe64kHFHaCeNPfR+mHEFOOM8LiucYx2e8pjbjLk1BMo3Sbf3K9
-         wZL/Jay42f6APIg1zJmYPEYEFZuFaYZ54oLip8A+55aEI0PiSRx6eLERACZ4gNoB/nRm
-         LTOQd16sAxmRdLvYL+ViYyxYH5UhhXYq81mueLRa3i7YmQ4Cty/v68jpsO7pFl5W2ApC
-         fFUnjjrFHbN4SCxNJgdTGJifAWOycqM5/tm/mDgGyEo4EcDqRaXaB8j0C8GsSVJo9CBj
-         8CpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eXUl97TIC36iX2gzZ4z9T7kVADet1dCMIeHKCLo4dC4=;
-        b=4DXL7haKzAj3XvGYJ/ZYWiPcFfxMBeRu0uyS37TMVj5xsn20Gik7MBaIawj4lpMqLB
-         ymlFOdl/WVlhHIecTWWX0HrNvibLkhG4LqiurQnrZX22Hg1lh1vbMe8OwwgZZOeD12r5
-         tAu9xohKwurg1GPTY0er/ZUo+kX4PAqAKFGKWn6zKRMLajISsP+Kw5E6nEQcwbOB03KJ
-         86I0+lt5r3Q644pI8xPt0QWraBIQlcZ/IrQCysCORdUj+/OmXoTfc722kVRwkprymDUb
-         7TFzqrUbZGG9EvR2et4LT0dB4KGzx/6JWWJ1ZHqvv1Y0NEXwOpgcrDPmvfK4VCNUwji8
-         HOtw==
-X-Gm-Message-State: ANoB5pl3trNoadKgo3XAuQN1TtzAriHC1XaTUY9+LJKI6lcEVMTxEMLR
-        VC2xJSWxNEerIxLKlr7Bfg5/Rw==
-X-Google-Smtp-Source: AA0mqf59P97n8g2DJvpHoXjjiYjLodaojFr8pNiZ3Pf2y67xR6vLpb15b1401HTaq887RBMqTNLCfg==
-X-Received: by 2002:ac8:4a10:0:b0:3a5:2556:42ed with SMTP id x16-20020ac84a10000000b003a5255642edmr13309728qtq.422.1669240664291;
-        Wed, 23 Nov 2022 13:57:44 -0800 (PST)
-Received: from localhost ([2620:10d:c091:480::1:bc4])
-        by smtp.gmail.com with ESMTPSA id t18-20020a05620a451200b006fafc111b12sm13219537qkp.83.2022.11.23.13.57.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 13:57:43 -0800 (PST)
-Date:   Wed, 23 Nov 2022 16:58:10 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Mina Almasry <almasrymina@google.com>
-Cc:     Huang Ying <ying.huang@intel.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
-        shakeelb@google.com, gthelen@google.com, fvdl@google.com,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [RFC PATCH V1] mm: Disable demotion from proactive reclaim
-Message-ID: <Y36XchdgTCsMP4jT@cmpxchg.org>
-References: <20221122203850.2765015-1-almasrymina@google.com>
- <Y35fw2JSAeAddONg@cmpxchg.org>
- <CAHS8izN+xqM67XLT4y5qyYnGQMUWRQCJrdvf2gjTHd8nZ_=0sw@mail.gmail.com>
+        Wed, 23 Nov 2022 16:58:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28D56E56B
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 13:58:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 56F01B82508
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 21:58:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E875DC433D6;
+        Wed, 23 Nov 2022 21:58:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669240716;
+        bh=pzp4l/tbXrh8cYXp6P0Y/jWcC9QGkBTBFLQlbcicbnc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GA6D62JA2Q5ya/7AQD9jw7WlWTGI7XajYnNNlX/eU6vkYbV0rDQxSK/MwGXCJ55yG
+         oCjdaeBiM9QzZXBfTnK+GOuDsaHzY8i4rJbo7+NC/nmWQ3fP5lfZ6LRIeHJsc8UTxM
+         8rIKdJ5E9DS+31E229ZjxmRnK6nPF1dSSYd9hWumlxfSvT9JBrdkJEr8VLmwPSdKbE
+         gEmcqdD7coA+AwndzW7jLWYXAZcJ9kzipS0rFB7bTTmyep/PfTIiAMY53H4oLzX17K
+         8++720HSfkpY9dVqc7edYIa1czflEwC40wYJmOoytev7eryUPNZC1iZXxG6/Bjyq27
+         2mIu/bi3mDpgA==
+Date:   Wed, 23 Nov 2022 13:58:34 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     Daeho Jeong <daeho43@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com,
+        Daeho Jeong <daehojeong@google.com>
+Subject: Re: [f2fs-dev] [PATCH v7] f2fs: introduce
+ F2FS_IOC_START_ATOMIC_REPLACE
+Message-ID: <Y36Xis5vGsfzVS8l@google.com>
+References: <20221111170406.1086745-1-daeho43@gmail.com>
+ <6e26eb7d-8b9e-5a91-b66f-a6f8cf1d53ce@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHS8izN+xqM67XLT4y5qyYnGQMUWRQCJrdvf2gjTHd8nZ_=0sw@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <6e26eb7d-8b9e-5a91-b66f-a6f8cf1d53ce@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 01:20:57PM -0800, Mina Almasry wrote:
-> On Wed, Nov 23, 2022 at 10:00 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
-> >
-> > Hello Mina,
-> >
-> > On Tue, Nov 22, 2022 at 12:38:45PM -0800, Mina Almasry wrote:
-> > > Since commit 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg
-> > > reclaim""), the proactive reclaim interface memory.reclaim does both
-> > > reclaim and demotion. This is likely fine for us for latency critical
-> > > jobs where we would want to disable proactive reclaim entirely, and is
-> > > also fine for latency tolerant jobs where we would like to both
-> > > proactively reclaim and demote.
-> > >
-> > > However, for some latency tiers in the middle we would like to demote but
-> > > not reclaim. This is because reclaim and demotion incur different latency
-> > > costs to the jobs in the cgroup. Demoted memory would still be addressable
-> > > by the userspace at a higher latency, but reclaimed memory would need to
-> > > incur a pagefault.
-> > >
-> > > To address this, I propose having reclaim-only and demotion-only
-> > > mechanisms in the kernel. There are a couple possible
-> > > interfaces to carry this out I considered:
-> > >
-> > > 1. Disable demotion in the memory.reclaim interface and add a new
-> > >    demotion interface (memory.demote).
-> > > 2. Extend memory.reclaim with a "demote=<int>" flag to configure the demotion
-> > >    behavior in the kernel like so:
-> > >       - demote=0 would disable demotion from this call.
-> > >       - demote=1 would allow the kernel to demote if it desires.
-> > >       - demote=2 would only demote if possible but not attempt any
-> > >         other form of reclaim.
-> >
-> > Unfortunately, our proactive reclaim stack currently relies on
-> > memory.reclaim doing both. It may not stay like that, but I'm a bit
-> > wary of changing user-visible semantics post-facto.
-> >
-> > In patch 2, you're adding a node interface to memory.demote. Can you
-> > add this to memory.reclaim instead? This would allow you to control
-> > demotion and reclaim independently as you please: if you call it on a
-> > node with demotion targets, it will demote; if you call it on a node
-> > without one, it'll reclaim. And current users will remain unaffected.
+On 11/23, Chao Yu wrote:
+> On 2022/11/12 1:04, Daeho Jeong wrote:
+> > From: Daeho Jeong <daehojeong@google.com>
+> > 
+> > introduce a new ioctl to replace the whole content of a file atomically,
+> > which means it induces truncate and content update at the same time.
+> > We can start it with F2FS_IOC_START_ATOMIC_REPLACE and complete it with
+> > F2FS_IOC_COMMIT_ATOMIC_WRITE. Or abort it with
+> > F2FS_IOC_ABORT_ATOMIC_WRITE.
+> > 
+> > Signed-off-by: Daeho Jeong <daehojeong@google.com>
+> > ---
+> > v7: changed where to clear FI_ATOMIC_REPLACE
+> >      fixed tentative race condition in f2fs_ioc_start_atomic_write()
+> > v3: move i_size change after setting atomic write flag
+> > v2: add undefined ioctl number reported by <lkp@intel.com>
+> > ---
+> >   fs/f2fs/data.c            |  3 +++
+> >   fs/f2fs/f2fs.h            |  1 +
+> >   fs/f2fs/file.c            | 21 +++++++++++++++------
+> >   fs/f2fs/segment.c         | 13 ++++++++++++-
+> >   include/uapi/linux/f2fs.h |  1 +
+> >   5 files changed, 32 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+> > index 5f895ddcd64a..bce4dcc3ad78 100644
+> > --- a/fs/f2fs/data.c
+> > +++ b/fs/f2fs/data.c
+> > @@ -3457,6 +3457,9 @@ static int prepare_atomic_write_begin(struct f2fs_sb_info *sbi,
+> >   	else if (*blk_addr != NULL_ADDR)
+> >   		return 0;
+> > +	if (is_inode_flag_set(inode, FI_ATOMIC_REPLACE))
+> > +		goto reserve_block;
+> > +
+> >   	/* Look for the block in the original inode */
+> >   	err = __find_data_block(inode, index, &ori_blk_addr);
+> >   	if (err)
+> > diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> > index e29f9adf60ca..d513ecd17550 100644
+> > --- a/fs/f2fs/f2fs.h
+> > +++ b/fs/f2fs/f2fs.h
+> > @@ -765,6 +765,7 @@ enum {
+> >   	FI_ALIGNED_WRITE,	/* enable aligned write */
+> >   	FI_COW_FILE,		/* indicate COW file */
+> >   	FI_ATOMIC_COMMITTED,	/* indicate atomic commit completed except disk sync */
+> > +	FI_ATOMIC_REPLACE,	/* indicate atomic replace */
+> >   	FI_MAX,			/* max flag, never be used */
+> >   };
+> > diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> > index 7ce629c95f4a..f9a04f6d76cb 100644
+> > --- a/fs/f2fs/file.c
+> > +++ b/fs/f2fs/file.c
+> > @@ -1984,7 +1984,7 @@ static int f2fs_ioc_getversion(struct file *filp, unsigned long arg)
+> >   	return put_user(inode->i_generation, (int __user *)arg);
+> >   }
+> > -static int f2fs_ioc_start_atomic_write(struct file *filp)
+> > +static int f2fs_ioc_start_atomic_write(struct file *filp, bool truncate)
+> >   {
+> >   	struct inode *inode = file_inode(filp);
+> >   	struct user_namespace *mnt_userns = file_mnt_user_ns(filp);
+> > @@ -2053,15 +2053,22 @@ static int f2fs_ioc_start_atomic_write(struct file *filp)
+> >   	f2fs_write_inode(inode, NULL);
+> > -	isize = i_size_read(inode);
+> > -	fi->original_i_size = isize;
+> > -	f2fs_i_size_write(fi->cow_inode, isize);
+> > -
+> >   	stat_inc_atomic_inode(inode);
+> >   	set_inode_flag(inode, FI_ATOMIC_FILE);
+> >   	set_inode_flag(fi->cow_inode, FI_COW_FILE);
+> >   	clear_inode_flag(fi->cow_inode, FI_INLINE_DATA);
+> > +
+> > +	isize = i_size_read(inode);
+> > +	fi->original_i_size = isize;
+> > +	if (truncate) {
+> > +		set_inode_flag(inode, FI_ATOMIC_REPLACE);
+> > +		truncate_inode_pages_final(inode->i_mapping);
+> > +		f2fs_i_size_write(inode, 0);
+> > +		isize = 0;
+> > +	}
+> > +	f2fs_i_size_write(fi->cow_inode, isize);
+> > +
+> >   	f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
+> >   	f2fs_update_time(sbi, REQ_TIME);
+> > @@ -4089,7 +4096,9 @@ static long __f2fs_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+> >   	case FS_IOC_GETVERSION:
+> >   		return f2fs_ioc_getversion(filp, arg);
+> >   	case F2FS_IOC_START_ATOMIC_WRITE:
+> > -		return f2fs_ioc_start_atomic_write(filp);
+> > +		return f2fs_ioc_start_atomic_write(filp, false);
+> > +	case F2FS_IOC_START_ATOMIC_REPLACE:
+> > +		return f2fs_ioc_start_atomic_write(filp, true);
+> >   	case F2FS_IOC_COMMIT_ATOMIC_WRITE:
+> >   		return f2fs_ioc_commit_atomic_write(filp);
+> >   	case F2FS_IOC_ABORT_ATOMIC_WRITE:
+> > diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+> > index 9cbf88092c78..f2930fffbc7d 100644
+> > --- a/fs/f2fs/segment.c
+> > +++ b/fs/f2fs/segment.c
+> > @@ -197,6 +197,7 @@ void f2fs_abort_atomic_write(struct inode *inode, bool clean)
+> >   	fi->cow_inode = NULL;
+> >   	release_atomic_write_cnt(inode);
+> >   	clear_inode_flag(inode, FI_ATOMIC_COMMITTED);
+> > +	clear_inode_flag(inode, FI_ATOMIC_REPLACE);
+> >   	clear_inode_flag(inode, FI_ATOMIC_FILE);
+> >   	stat_dec_atomic_inode(inode);
+> > @@ -261,14 +262,24 @@ static void __complete_revoke_list(struct inode *inode, struct list_head *head,
+> >   					bool revoke)
+> >   {
+> >   	struct revoke_entry *cur, *tmp;
+> > +	pgoff_t start_index = 0;
+> > +	bool truncate = is_inode_flag_set(inode, FI_ATOMIC_REPLACE);
+> >   	list_for_each_entry_safe(cur, tmp, head, list) {
+> > -		if (revoke)
+> > +		if (revoke) {
+> >   			__replace_atomic_write_block(inode, cur->index,
+> >   						cur->old_addr, NULL, true);
+> > +		} else if (truncate) {
+> > +			f2fs_truncate_hole(inode, start_index, cur->index);
+> > +			start_index = cur->index + 1;
 > 
-> Hello Johannes, thanks for taking a look!
+> Do we try to truncate from page #0 to page #(index of last page in chain)?
 > 
-> I can certainly add the "nodes=" arg to memory.reclaim and you're
-> right, that would help in bridging the gap. However, if I understand
-> the underlying code correctly, with only the nodes= arg the kernel
-> will indeed attempt demotion first, but the kernel will also merrily
-> fall back to reclaiming if it can't demote the full amount. I had
-> hoped to have the flexibility to protect latency sensitive jobs from
-> reclaim entirely while attempting to do demotion.
+> If so, how about calling f2fs_truncate_hole(, 0, last_index) after the loop?
 
-The fallback to reclaim actually strikes me as wrong.
+I think either would be fine. Could you please send a separate patch for this?
 
-Think of reclaim as 'demoting' the pages to the storage tier. If we
-have a RAM -> CXL -> storage hierarchy, we should demote from RAM to
-CXL and from CXL to storage. If we reclaim a page from RAM, it means
-we 'demote' it directly from RAM to storage, bypassing potentially a
-huge amount of pages colder than it in CXL. That doesn't seem right.
-
-If demotion fails, IMO it shouldn't satisfy the reclaim request by
-breaking the layering. Rather it should deflect that pressure to the
-lower layers to make room. This makes sure we maintain an aging
-pipeline that honors the memory tier hierarchy.
-
-So I'm hesitant to design cgroup controls around the current behavior.
-
-> The above is just one angle of the issue. Another angle (which Yosry
-> would care most about I think) is that at Google we call
-> memory.reclaim mainly when memory.current is too close to memory.max
-> and we expect the memory usage of the cgroup to drop as a result of a
-> success memory.reclaim call. I suspect once we take in commit
-> 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg reclaim""),
-> we would run into that regression, but I defer to Yosry here, he may
-> have a solution for that in mind already.
-
-IMO it should both demote and reclaim. Simliar to how memory.reclaim
-on a non-tiered memory system would both deactivate active pages and
-reclaim inactive pages.
+> 
+> Thanks,
+> 
+> > +		}
+> > +
+> >   		list_del(&cur->list);
+> >   		kmem_cache_free(revoke_entry_slab, cur);
+> >   	}
+> > +
+> > +	if (!revoke && truncate)
+> > +		f2fs_do_truncate_blocks(inode, start_index * PAGE_SIZE, false);
+> >   }
+> >   static int __f2fs_commit_atomic_write(struct inode *inode)
+> > diff --git a/include/uapi/linux/f2fs.h b/include/uapi/linux/f2fs.h
+> > index 3121d127d5aa..955d440be104 100644
+> > --- a/include/uapi/linux/f2fs.h
+> > +++ b/include/uapi/linux/f2fs.h
+> > @@ -42,6 +42,7 @@
+> >   						struct f2fs_comp_option)
+> >   #define F2FS_IOC_DECOMPRESS_FILE	_IO(F2FS_IOCTL_MAGIC, 23)
+> >   #define F2FS_IOC_COMPRESS_FILE		_IO(F2FS_IOCTL_MAGIC, 24)
+> > +#define F2FS_IOC_START_ATOMIC_REPLACE	_IO(F2FS_IOCTL_MAGIC, 25)
+> >   /*
+> >    * should be same as XFS_IOC_GOINGDOWN.
+> 
+> 
+> _______________________________________________
+> Linux-f2fs-devel mailing list
+> Linux-f2fs-devel@lists.sourceforge.net
+> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
