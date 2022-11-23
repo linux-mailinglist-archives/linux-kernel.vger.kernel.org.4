@@ -2,112 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E0D63675A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:38:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21058636754
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:37:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239002AbiKWRi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 12:38:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57856 "EHLO
+        id S238362AbiKWRhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 12:37:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236541AbiKWRiX (ORCPT
+        with ESMTP id S238543AbiKWRhW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 12:38:23 -0500
-Received: from mx4.securetransport.de (mx4.securetransport.de [178.254.6.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 16CE38FE60;
-        Wed, 23 Nov 2022 09:38:19 -0800 (PST)
-Received: from mail.dh-electronics.com (unknown [77.24.89.57])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx4.securetransport.de (Postfix) with ESMTPSA id 944F2720109;
-        Wed, 23 Nov 2022 18:37:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
-        s=dhelectronicscom; t=1669225047;
-        bh=mr+6grJRmSi4JGM1E2bk/usBkFWsPdEVQHFYvo1s6QA=;
-        h=From:To:CC:Subject:Date:From;
-        b=xaD4jLYB+7/FKLAKtljNLNpk1Ytwfy5jp8fWjv8Le6RFde8NpbmEGgZPWMMyrsMh0
-         W9gLyPFDz87hG3xLV7jNO79UuwMvaQ1vCVZawd1BjRW4ZQDm34l0X3QWbchdgvbYhM
-         ZgxRfNGmi4fZX0ruU2qYD0OYOXePDBnllwspJb1jDeZiOBrPRnLTNKfvecwGB6COXO
-         Xr7MYUTVOV6Oi98RASXz9bIWRHSfG2Mm99mc4ByPeR9UAPh/7MIYw/sMUDdci3EtI0
-         Ij81QbP/VeFvUPaCaf/V+aEXS/DDW6Raq1PO8xSAJOUQq91t7/Jn5X4o9dbbvwPZz4
-         kVrAmnWHhdshg==
-Received: from DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) by
- DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.20; Wed, 23 Nov 2022 18:37:16 +0100
-Received: from localhost.localdomain (172.16.51.2) by
- DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.20 via Frontend Transport; Wed, 23 Nov 2022 18:37:16 +0100
-From:   Christoph Niedermaier <cniedermaier@dh-electronics.com>
-To:     <linux-arm-kernel@lists.infradead.org>
-CC:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Peng Fan <peng.fan@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-        Marek Vasut <marex@denx.de>, Fabio Estevam <festevam@denx.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        <kernel@dh-electronics.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH V2 1/4] dt-bindings: arm: fsl: Add PDK2, PicoITX and DRC02 boards for the DHCOM i.MX6ULL SoM
-Date:   Wed, 23 Nov 2022 18:35:58 +0100
-Message-ID: <20221123173601.13291-1-cniedermaier@dh-electronics.com>
-X-Mailer: git-send-email 2.11.0
-X-klartext: yes
+        Wed, 23 Nov 2022 12:37:22 -0500
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1AF86A7F;
+        Wed, 23 Nov 2022 09:37:20 -0800 (PST)
+Received: by mail-qt1-f182.google.com with SMTP id fz10so11696253qtb.3;
+        Wed, 23 Nov 2022 09:37:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ucnbBqNAI6qAohZYdKrju6FewGcPQWXWkoit1wMZomI=;
+        b=gUrIx5mrfYe3pbRUT7kl+a8X2Fe29bPVzUq+ZYqZNq76CLSxlOm82zMUi5yie960Pf
+         eMs5nLKKb6gXdqbUuWJcxXFJ6Ox7dAykJcEpXcbVTHDlxSFoNMc92p1G5pDg3CBG8SRS
+         FP5slGxOq0tzcISeRGuau/8XHCzk2M5OtRWMJlaVHbJuVHZ4d0FvrhFnzXTn53C+kRBM
+         pLAhJ4x8EgAIHSzrNUts8THJOCVNuD4aeeYhXWsRGl0/we+Ebve++AudvRwdn4kZvyq4
+         pQ2z+yIYWPC40Hvpx16etapPtNV70JHCFIYUVKv7unRWS+hxoZo88ik45nKOMB7tgn7S
+         KJ7A==
+X-Gm-Message-State: ANoB5pmxkjFTOPUwBePdsKM+9IdirR/i8BVcp0En7VC8JnyOEb//OoBg
+        d3LprTp1Dzgbwkn10uLMSz2uApnliv03bkcaG08=
+X-Google-Smtp-Source: AA0mqf5p0ypZ4M2LkUKQQnwcZd6os57hZyPq6HmySD7gjQK1ets8f5CZqfF4fE/DcKTvnbt5CnJR1UwKGuTWyeO6Hxk=
+X-Received: by 2002:a05:622a:1989:b0:3a5:7cf8:1a6e with SMTP id
+ u9-20020a05622a198900b003a57cf81a6emr27612826qtc.48.1669225040038; Wed, 23
+ Nov 2022 09:37:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221105174225.28673-1-rui.zhang@intel.com>
+In-Reply-To: <20221105174225.28673-1-rui.zhang@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 23 Nov 2022 18:37:08 +0100
+Message-ID: <CAJZ5v0gK60=Cya+u_-7qgL5LG5O9j=r+QH+Kwg71VQSGby6=YA@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/3] cpuidle: ladder: Fix bogus comparison between s64
+ and u64
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     rjw@rjwysocki.net, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add DH electronics DHCOM PDK2, PicoITX and DRC02 boards
-for the DHCOM i.MX6ULL SoM.
+On Sat, Nov 5, 2022 at 6:40 PM Zhang Rui <rui.zhang@intel.com> wrote:
+>
+> ladder_device_state.threshold.promotion_time_ns/demotion_time_ns
+> are u64 type.
+>
+> In ladder_select_state(), variable 'last_residency', as calculated by
+>
+> last_residency = dev->last_residency_ns - drv->states[last_idx].exit_latency_ns
+>
+> are s64 type, and it can be negative value.
 
-Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: Peng Fan <peng.fan@nxp.com>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Marek Vasut <marex@denx.de>
-Cc: Fabio Estevam <festevam@denx.de>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: kernel@dh-electronics.com
-Cc: devicetree@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-To: linux-arm-kernel@lists.infradead.org
----
-V2: - Add Acked-by tag
----
- Documentation/devicetree/bindings/arm/fsl.yaml | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+The code changes are fine AFAICS, but the description below could be
+more precise.
 
-diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
-index 05b5276a0e14..ba7a17d8ec19 100644
---- a/Documentation/devicetree/bindings/arm/fsl.yaml
-+++ b/Documentation/devicetree/bindings/arm/fsl.yaml
-@@ -644,6 +644,16 @@ properties:
-           - const: armadeus,imx6ull-opos6ul     # OPOS6UL (i.MX6ULL) SoM
-           - const: fsl,imx6ull
- 
-+      - description: i.MX6ULL DHCOM SoM based Boards
-+        items:
-+          - enum:
-+              - dh,imx6ull-dhcom-pdk2
-+              - dh,imx6ull-dhcom-picoitx
-+              - dh,imx6ull-dhcom-drc02
-+          - const: dh,imx6ull-dhcom-som # The DHCOR is soldered on the DHCOM
-+          - const: dh,imx6ull-dhcor-som
-+          - const: fsl,imx6ull
-+
-       - description: i.MX6ULL PHYTEC phyBOARD-Segin
-         items:
-           - enum:
--- 
-2.11.0
+> When this happens, comparing between 'last_residency' and
+> 'promotion_time_ns/demotion_time_ns' become bogus.
 
+IIUC, what happens is that last_residency is converted to u64 in the
+comparison expression and that conversion causes it to become a large
+positive number if it is negative.
+
+> As a result, the ladder governor promotes or stays with current state errornously.
+
+"promotes or retains the current state erroneously".
+
+>
+>           <idle>-0       [001] d..1.   151.893396: ladder_select_state: last_idx 7, last_residency -373033
+>           <idle>-0       [001] d..1.   151.893399: ladder_select_state:    dev->last_residency_ns 106967, drv->states[last_idx].exit_latency_ns 480000
+>           <idle>-0       [001] d..1.   151.893402: ladder_select_state:    promote, last_state->threshold.promotion_time_ns 480000
+>           <idle>-0       [001] d..1.   151.893404: ladder_select_state:    ---> new state 7
+>           <idle>-0       [001] d..1.   151.893465: ladder_select_state: last_idx 7, last_residency -463800
+>           <idle>-0       [001] d..1.   151.893467: ladder_select_state:    dev->last_residency_ns 16200, drv->states[last_idx].exit_latency_ns 480000
+>           <idle>-0       [001] d..1.   151.893468: ladder_select_state:    promote, last_state->threshold.promotion_time_ns 480000
+>           <idle>-0       [001] dn.1.   151.893470: ladder_select_state:    ---> new state 8
+>
+> Given that promotion_time_ns/demotion_time_ns are initialized with
+> cpuidle_state.exit_latency_ns, which is s64 type, and they are used to
+> compare with 'last_residency', which is also s64 type, there is no
+
+"they are compared with"
+
+> reason to use u64 for promotion_time_ns/demotion_time_ns.
+
+"so change them both to be s64".
+
+> With this patch,
+>           <idle>-0       [001] d..1.   523.578531: ladder_select_state: last_idx 8, last_residency -879453
+>           <idle>-0       [001] d..1.   523.578531: ladder_select_state:    dev->last_residency_ns 10547, drv->states[last_idx].exit_latency_ns 890000
+>           <idle>-0       [001] d..1.   523.578532: ladder_select_state:    demote , last_state->threshold.demotion_time_ns 890000
+>           <idle>-0       [001] d..1.   523.578532: ladder_select_state:    ---> new state 7
+>           <idle>-0       [001] d..1.   523.580220: ladder_select_state: last_idx 7, last_residency -169629
+>           <idle>-0       [001] d..1.   523.580221: ladder_select_state:    dev->last_residency_ns 310371, drv->states[last_idx].exit_latency_ns 480000
+>           <idle>-0       [001] d..1.   523.580221: ladder_select_state:    demote , last_state->threshold.demotion_time_ns 480000
+>           <idle>-0       [001] d..1.   523.580222: ladder_select_state:    ---> new state 6
+>
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> ---
+>  drivers/cpuidle/governors/ladder.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/cpuidle/governors/ladder.c b/drivers/cpuidle/governors/ladder.c
+> index 8e9058c4ea63..fb61118aef37 100644
+> --- a/drivers/cpuidle/governors/ladder.c
+> +++ b/drivers/cpuidle/governors/ladder.c
+> @@ -27,8 +27,8 @@ struct ladder_device_state {
+>         struct {
+>                 u32 promotion_count;
+>                 u32 demotion_count;
+> -               u64 promotion_time_ns;
+> -               u64 demotion_time_ns;
+> +               s64 promotion_time_ns;
+> +               s64 demotion_time_ns;
+>         } threshold;
+>         struct {
+>                 int promotion_count;
+> --
