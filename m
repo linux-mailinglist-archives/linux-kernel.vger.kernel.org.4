@@ -2,116 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CA18636C49
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 22:20:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BCBD636C4C
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 22:21:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237646AbiKWVUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 16:20:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38504 "EHLO
+        id S237729AbiKWVVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 16:21:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237461AbiKWVUO (ORCPT
+        with ESMTP id S237712AbiKWVVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 16:20:14 -0500
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587C05E9F4;
-        Wed, 23 Nov 2022 13:20:13 -0800 (PST)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4NHYtg3P73z9sTD;
-        Wed, 23 Nov 2022 22:20:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1669238411;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=txOGkrEA2n8kD8rEb+sAuk9hGQgHmqWBcmtclgoTBow=;
-        b=xp3P1yXiwkHyvCRR3nMU8w8Q0Xg1m5xyYuoXjPjkacNskP3q+cf0FGW5kcuZ9G4KJaJH3I
-        QauiysLTZ6bPazxXb4dA7phTs9q4cbp1++pupbvpQpRPgqED4NvDLQkPbyv6t2TgPSQX5S
-        oT5Ja49ownGekLV5AhGYO3C10cToqURFT9VdXsmHr6zYxJhqhaC6g0PvoK0I/QpKuxuQ/r
-        cpkRcLEZisIpU3eCkHbNyXsxD7eHjmvx4tVySwuHdL8VSvFyBTSU3ajSMQNj+5rMMTIWWF
-        WdSYf4yuzux7V+IOaiTrAgh7jIfMgT3DyC582f1NPJLQ/4r3EcIqARfFHNAuLw==
-From:   Alexander Lobakin <alobakin@mailbox.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1669238409;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=txOGkrEA2n8kD8rEb+sAuk9hGQgHmqWBcmtclgoTBow=;
-        b=MVuobNhkS/3qacNzrNQJBCjQo0VS+KDBfqurTDLaIB/nGqdtDdlgDUFx6X5y/UYLgdjaWb
-        hVxOzqmiFVXKrrWBWbMGbjO1HUdE8mrwInYdoXJ0WZNLosxzUr0FCH3L7kt8alcbtXF/UH
-        ysUXTl1WqJMioRJVdsiOCcWBpt+FKcA2/uYEfgVqLrmEugVLN47LmeWpu5HH5bWqPj6E/7
-        7qZqUjyN8/4DBAQ2KMyPdgjlbKoyTfBdPsiX0g3S4QZjURvbzCnJaNLKKBQsk0YUPACPS7
-        Jo3OTcmTOkXB331YwbTLCGmrB+feFH4PkAuirqKjQro/c1f5BnBISCG7Ci292g==
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Alexander Lobakin <alobakin@mailbox.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Alexander Lobakin <alobakin@pm.me>,
-        linux-kbuild@vger.kernel.org, Nicolas Schier <nicolas@fjasle.eu>,
-        Jens Axboe <axboe@kernel.dk>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Derek Chickles <dchickles@marvell.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 11/18] platform/x86: int3472: fix object shared between several modules
-Date:   Wed, 23 Nov 2022 22:19:38 +0100
-Message-Id: <20221123211938.56830-1-alobakin@mailbox.org>
-In-Reply-To: <a1f611fd-28ad-83ef-5d17-94fe2c4a6a7f@redhat.com>
-References: <20221119225650.1044591-1-alobakin@pm.me> <20221119225650.1044591-12-alobakin@pm.me> <Y3oxyUx0UkWVjGvn@smile.fi.intel.com> <961a7d7e-c917-86a8-097b-5961428e9ddc@redhat.com> <CAK7LNASxxzA1OEGuJR=BU=6G8XaatGx+gDCMe2s9Y3MRcwptYw@mail.gmail.com> <87852fc9-0757-7e58-35a2-90cccf970f5c@redhat.com> <CAK7LNAROUV6Z6L6yn4WiigfPRJTGU4+j0ujLt6nsxVp9+aCUzw@mail.gmail.com> <a1f611fd-28ad-83ef-5d17-94fe2c4a6a7f@redhat.com>
+        Wed, 23 Nov 2022 16:21:13 -0500
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0816C707
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 13:21:10 -0800 (PST)
+Received: by mail-vs1-xe29.google.com with SMTP id t5so18697539vsh.8
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 13:21:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KgB35nu4bsdO3BRjzB71vDc5gogI51cR7qkBlnNkHoA=;
+        b=RgUxytdJdEgfB4d1z2o+FdTqXryjzLvZ4nGRF+rSNbtAiNkj/xWRZCXnEjox3Qnzus
+         ibYwfYLUb6vo6Ch7w2FllZzJR4GyBdOl1wo6nDO89NSiIiWNPsb+9CUw9zNf01MWuTnJ
+         RdDrEnA2Jgkjv+Mfg/0Rnkttl2WaHuZQOqnJh5Dm5AaMts8LSC04yTsJiR/RqXB+TsdE
+         x88zNb+4QJUQ0Rz6veIlgutL2dMskRBO8Ej/+jwwlOOpd781ex+ifKun2SDUVWfsZADZ
+         s2tmYle4/MZIRDRw+fMyC1IAOXboaFxxgm7WPPnqKBTrGl9qzn5XX+EbX5Oi5AaUCwwn
+         Hu0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KgB35nu4bsdO3BRjzB71vDc5gogI51cR7qkBlnNkHoA=;
+        b=ehlwTxwfq8YWnBotvxkbsvvGeGCRLQQP+tRoZqcNXZcDo8hDO+8AEOPcWyfGQnBHv9
+         SHZR08ckvRCMum7sBK/a1i/Z62gtVYLlh/Rsq/8zgBTYw1U9WUyqPCJs/CYemyTroCDK
+         IqTkNQYIIHS4GoTZMNVrr5icCxD7P61xwmYBEBAqf6qhQyzNPuP+CohCeiPztJXUP6on
+         LxnY4MX6GjgTaSGiCjANwpjJyNHpSmrSJFedsXmOwHvLq55QVH3BVDTZC4aWI6FCH6We
+         5dPe6WvES+CzRmS1taOyGr5NREKvXx4KgjbZlT+ltJL+Fn+jaT6WgJaHD9SeEhYVeR8E
+         L83A==
+X-Gm-Message-State: ANoB5pmBGbBkL8pa4n6GVPhL0mvljySi4foJ0RN50aEmUvqNreHvAQaM
+        uYkpRO6e1SKzQTFnkbR0J08A/Di3joqgq4B+/FQIDg==
+X-Google-Smtp-Source: AA0mqf5nJbKLwqUfgbB8Ks1bdjrEYSDmO0sDuhFW6BF+7pCo0+VGmgHsGG8k4brKVY0HHevVEiOHWlRIKncwD0B7hh0=
+X-Received: by 2002:a05:6102:54a5:b0:3b0:7462:a88c with SMTP id
+ bk37-20020a05610254a500b003b07462a88cmr1981396vsb.49.1669238469273; Wed, 23
+ Nov 2022 13:21:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-MBO-RS-META: 91q874awb8ra8xgpfair6nbfiyk3i8ke
-X-MBO-RS-ID: 2715b19c8ed0829371d
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221122203850.2765015-1-almasrymina@google.com> <Y35fw2JSAeAddONg@cmpxchg.org>
+In-Reply-To: <Y35fw2JSAeAddONg@cmpxchg.org>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Wed, 23 Nov 2022 13:20:57 -0800
+Message-ID: <CAHS8izN+xqM67XLT4y5qyYnGQMUWRQCJrdvf2gjTHd8nZ_=0sw@mail.gmail.com>
+Subject: Re: [RFC PATCH V1] mm: Disable demotion from proactive reclaim
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Huang Ying <ying.huang@intel.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
+        shakeelb@google.com, gthelen@google.com, fvdl@google.com,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
-Date: Mon, 21 Nov 2022 10:34:11 +0100
+On Wed, Nov 23, 2022 at 10:00 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
+>
+> Hello Mina,
+>
+> On Tue, Nov 22, 2022 at 12:38:45PM -0800, Mina Almasry wrote:
+> > Since commit 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg
+> > reclaim""), the proactive reclaim interface memory.reclaim does both
+> > reclaim and demotion. This is likely fine for us for latency critical
+> > jobs where we would want to disable proactive reclaim entirely, and is
+> > also fine for latency tolerant jobs where we would like to both
+> > proactively reclaim and demote.
+> >
+> > However, for some latency tiers in the middle we would like to demote but
+> > not reclaim. This is because reclaim and demotion incur different latency
+> > costs to the jobs in the cgroup. Demoted memory would still be addressable
+> > by the userspace at a higher latency, but reclaimed memory would need to
+> > incur a pagefault.
+> >
+> > To address this, I propose having reclaim-only and demotion-only
+> > mechanisms in the kernel. There are a couple possible
+> > interfaces to carry this out I considered:
+> >
+> > 1. Disable demotion in the memory.reclaim interface and add a new
+> >    demotion interface (memory.demote).
+> > 2. Extend memory.reclaim with a "demote=<int>" flag to configure the demotion
+> >    behavior in the kernel like so:
+> >       - demote=0 would disable demotion from this call.
+> >       - demote=1 would allow the kernel to demote if it desires.
+> >       - demote=2 would only demote if possible but not attempt any
+> >         other form of reclaim.
+>
+> Unfortunately, our proactive reclaim stack currently relies on
+> memory.reclaim doing both. It may not stay like that, but I'm a bit
+> wary of changing user-visible semantics post-facto.
+>
+> In patch 2, you're adding a node interface to memory.demote. Can you
+> add this to memory.reclaim instead? This would allow you to control
+> demotion and reclaim independently as you please: if you call it on a
+> node with demotion targets, it will demote; if you call it on a node
+> without one, it'll reclaim. And current users will remain unaffected.
 
-> Hi,
-> 
-> On 11/21/22 10:06, Masahiro Yamada wrote:
-> > On Mon, Nov 21, 2022 at 5:12 PM Hans de Goede <hdegoede@redhat.com> wrote:
+Hello Johannes, thanks for taking a look!
 
-[...]
+I can certainly add the "nodes=" arg to memory.reclaim and you're
+right, that would help in bridging the gap. However, if I understand
+the underlying code correctly, with only the nodes= arg the kernel
+will indeed attempt demotion first, but the kernel will also merrily
+fall back to reclaiming if it can't demote the full amount. I had
+hoped to have the flexibility to protect latency sensitive jobs from
+reclaim entirely while attempting to do demotion.
 
-> > I think this patch series should be split
-> > and sent to each sub-system instead of kbuild.
-> 
-> Yes definitely, the changes are big enough that not merging
-> this through the subsystem trees is going to cause conflicts.
+There are probably ways to get around that in the userspace. I presume
+the userspace can check if there is available memory on the node's
+demotion targets, and if so, the kernel should demote-only. But I feel
+that wouldn't be reliable as the demotion logic may change across
+kernel versions. The userspace may think the kernel would demote but
+instead demotion failed due to whatever heuristic introduced into the
+new kernel version.
 
-Makes sense! I'll collect the feedback here and then will be sending
-stuff to the corresponding MLs with the reference to the original
-commits which introduce Kbuild warnings.
+The above is just one angle of the issue. Another angle (which Yosry
+would care most about I think) is that at Google we call
+memory.reclaim mainly when memory.current is too close to memory.max
+and we expect the memory usage of the cgroup to drop as a result of a
+success memory.reclaim call. I suspect once we take in commit
+3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg reclaim""),
+we would run into that regression, but I defer to Yosry here, he may
+have a solution for that in mind already.
 
-> 
-> Regards,
-> 
-> Hans
+For these reasons, what do you think about adding both the "nodes="
+and "demote=" args from my patch series to memory.reclaim? With these
+args the default memory.reclaim behavior would suit meta as-is (no
+change) but we would be able to configure it to address our use cases
+as well.
 
-[...]
-
-Thanks!
-Olek
+As always, thanks for taking the time to review!
