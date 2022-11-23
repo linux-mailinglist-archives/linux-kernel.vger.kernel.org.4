@@ -2,59 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF6C5636223
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:44:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 759BD636224
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:44:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236026AbiKWOoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 09:44:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41130 "EHLO
+        id S236444AbiKWOoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 09:44:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236316AbiKWOoA (ORCPT
+        with ESMTP id S235763AbiKWOoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 09:44:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94BCAE2;
-        Wed, 23 Nov 2022 06:43:57 -0800 (PST)
+        Wed, 23 Nov 2022 09:44:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A8E6D1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 06:44:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30BA661D2F;
-        Wed, 23 Nov 2022 14:43:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4054C433D6;
-        Wed, 23 Nov 2022 14:43:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0B8BEB8202D
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 14:44:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1648CC433D6;
+        Wed, 23 Nov 2022 14:44:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669214636;
-        bh=Y//1b3rNjcukiNpZ5Pvh7pYLjJ73zqnquLe7wn350Y8=;
+        s=k20201202; t=1669214646;
+        bh=G3ijxHCawFa1niWMPyUbZFEAKr9W06XfOYoLufYKlBQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZG0A8BqvT2ORUrlb7I1sLgQbAJlUfWRx4X3QT05SHfMJHOiZi+oRORqmZj+4Ve1sr
-         yrWervl3veC7SaL/o17MVgz3Dhfcy0sfIdmXTsu4djT54VPEw3RJkWavMyc6YUx1SN
-         g9poRnTZVXeouBC0UZFuX6m9uQ4XqT9Rm2SZUstZY6NdbdpCNIZXXUg8rJ/rXGDFnm
-         xocVZ/NP1GyqV/SPtlOUK0KMz9pz+BK8ggFE9KJ+P7VJYkoo1Jc9GcfSQ0yDAa9SVX
-         zznkZz4xqfL53zsXyhV3+8pHvNOb+T4KROZfGYgEnEdEcDbd2YXbZBbjcYD5dpvcKV
-         yktlDGX0NXmHQ==
-Date:   Wed, 23 Nov 2022 14:43:50 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-spi@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v2 5/6] memory: renesas-rpc-if: Pass device instead of
- rpcif to rpcif_*()
-Message-ID: <Y34xpkf4c55D4VRc@sirena.org.uk>
-References: <cover.1669213027.git.geert+renesas@glider.be>
- <0460fe82ba348cedec7a9a75a8eff762c50e817b.1669213027.git.geert+renesas@glider.be>
+        b=qG+b9VAeuac0I16Axm1x0mtNJNFmRI+5tell1MjfCvbugc0JCDm/M+8yfWud0dxUN
+         /ctyxcilYNitjQZW+v4F2mGSLkV2WsXI+85HRI1LSw+kd33I+5khhTjSqtfBdYC4m/
+         2pksW0/aAQ7cJVRuk14YZj7ln6v/a9euArGBDOBhb866j2v/QM8BImxLQyeiaLYn8S
+         YJy/bHHE/cMVfueUTXJusn6RekaO9OxyLhQtSLoiZyc0yHTk/7YaXyUZhkmtQJu6UC
+         JdH3YZtnxhfva15wcD6ZKTv49Bb3rdRwdRkNWnLFtQpce7WQ6UnFKlao78gNYoLFZ1
+         9oMhQiRet3GEA==
+Date:   Wed, 23 Nov 2022 20:14:02 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Bard Liao <yung-chuan.liao@linux.intel.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        pierre-louis.bossart@linux.intel.com, bard.liao@intel.com
+Subject: Re: [PATCH 1/2] soundwire: remove is_sdca boolean property
+Message-ID: <Y34xsiIkuzq/PMb+@matsya>
+References: <20221111021633.39908-1-yung-chuan.liao@linux.intel.com>
+ <20221111021633.39908-2-yung-chuan.liao@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BKAJETaVx6g41XLW"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <0460fe82ba348cedec7a9a75a8eff762c50e817b.1669213027.git.geert+renesas@glider.be>
-X-Cookie: I'm rated PG-34!!
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221111021633.39908-2-yung-chuan.liao@linux.intel.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -64,31 +55,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 11-11-22, 10:16, Bard Liao wrote:
+> From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> 
+> The Device_ID registers already tell us if a device supports the SDCA
+> specification or not, in hindsight we never needed a property when the
+> information is reported by both hardware and ACPI.
+> 
+> Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> Reviewed-by: Rander Wang <rander.wang@intel.com>
+> Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
+> Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+> ---
+>  drivers/soundwire/bus.c           | 4 ++--
+>  include/linux/soundwire/sdw.h     | 2 --
+>  sound/soc/codecs/rt1316-sdw.c     | 1 -
+>  sound/soc/codecs/rt711-sdca-sdw.c | 1 -
 
---BKAJETaVx6g41XLW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+The change lgtm, but needs ACK from Mark. Please split the ASoC bit to
+separate patch and copy Mark (that can be first patch here)
 
-On Wed, Nov 23, 2022 at 03:41:21PM +0100, Geert Uytterhoeven wrote:
-> Most rpcif_*() API functions do not need access to any other fields in
-> the rpcif structure than the device pointer.  Simplify dependencies by
-> passing the device pointer instead.
+>  4 files changed, 2 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
+> index 76515c33e639..c23275b443ac 100644
+> --- a/drivers/soundwire/bus.c
+> +++ b/drivers/soundwire/bus.c
+> @@ -1587,7 +1587,7 @@ static int sdw_handle_slave_alerts(struct sdw_slave *slave)
+>  		goto io_err;
+>  	}
+>  
+> -	if (slave->prop.is_sdca) {
+> +	if (slave->id.class_id) {
+>  		ret = sdw_read_no_pm(slave, SDW_DP0_INT);
+>  		if (ret < 0) {
+>  			dev_err(&slave->dev,
+> @@ -1724,7 +1724,7 @@ static int sdw_handle_slave_alerts(struct sdw_slave *slave)
+>  			goto io_err;
+>  		}
+>  
+> -		if (slave->prop.is_sdca) {
+> +		if (slave->id.class_id) {
+>  			ret = sdw_read_no_pm(slave, SDW_DP0_INT);
+>  			if (ret < 0) {
+>  				dev_err(&slave->dev,
+> diff --git a/include/linux/soundwire/sdw.h b/include/linux/soundwire/sdw.h
+> index 9e4537f409c2..8fb458931772 100644
+> --- a/include/linux/soundwire/sdw.h
+> +++ b/include/linux/soundwire/sdw.h
+> @@ -365,7 +365,6 @@ struct sdw_dpn_prop {
+>   * @sink_dpn_prop: Sink Data Port N properties
+>   * @scp_int1_mask: SCP_INT1_MASK desired settings
+>   * @quirks: bitmask identifying deltas from the MIPI specification
+> - * @is_sdca: the Slave supports the SDCA specification
+>   */
+>  struct sdw_slave_prop {
+>  	u32 mipi_revision;
+> @@ -389,7 +388,6 @@ struct sdw_slave_prop {
+>  	struct sdw_dpn_prop *sink_dpn_prop;
+>  	u8 scp_int1_mask;
+>  	u32 quirks;
+> -	bool is_sdca;
+>  };
+>  
+>  #define SDW_SLAVE_QUIRKS_INVALID_INITIAL_PARITY	BIT(0)
+> diff --git a/sound/soc/codecs/rt1316-sdw.c b/sound/soc/codecs/rt1316-sdw.c
+> index ed0a11436362..8b27401237f7 100644
+> --- a/sound/soc/codecs/rt1316-sdw.c
+> +++ b/sound/soc/codecs/rt1316-sdw.c
+> @@ -203,7 +203,6 @@ static int rt1316_read_prop(struct sdw_slave *slave)
+>  
+>  	prop->scp_int1_mask = SDW_SCP_INT1_BUS_CLASH | SDW_SCP_INT1_PARITY;
+>  	prop->quirks = SDW_SLAVE_QUIRKS_INVALID_INITIAL_PARITY;
+> -	prop->is_sdca = true;
+>  
+>  	prop->paging_support = true;
+>  
+> diff --git a/sound/soc/codecs/rt711-sdca-sdw.c b/sound/soc/codecs/rt711-sdca-sdw.c
+> index 4120842fe699..6ca8795eed68 100644
+> --- a/sound/soc/codecs/rt711-sdca-sdw.c
+> +++ b/sound/soc/codecs/rt711-sdca-sdw.c
+> @@ -186,7 +186,6 @@ static int rt711_sdca_read_prop(struct sdw_slave *slave)
+>  
+>  	prop->scp_int1_mask = SDW_SCP_INT1_BUS_CLASH | SDW_SCP_INT1_PARITY;
+>  	prop->quirks = SDW_SLAVE_QUIRKS_INVALID_INITIAL_PARITY;
+> -	prop->is_sdca = true;
+>  
+>  	prop->paging_support = true;
+>  
+> -- 
+> 2.25.1
 
-Acked-by: Mark Brown <broonie@kernel.org>
-
---BKAJETaVx6g41XLW
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN+MaUACgkQJNaLcl1U
-h9Bcugf9Fq5kxq2SwxU/HdgpmKvb/nRaHNMV7D4mCFZNMxmkwUY4eMNTKzbpvly3
-D4lSGL4xRZWS1hQVR4EK5Xs5BCj2PqvvYhNTAM4BLDgLP/qK/+8B9Ezs8PuSYDRg
-CRyR3HF7GGKhP0NM8Vj9+M+OoldvWwfAFp5wx4kp5henzsB1zSuwIs90Z4FxsQTN
-IiCpmwcBJrmDQcBwYeZL+rGYiVWfs5xm/7WPt/E5ssbMGXms/cOnhjMZHgexSFEv
-ZPT3WyWEY7Ka01Ri1OxtooAIgdQ3BHnxEswLJbAhJj5Reb9kPfvl8UN+6h1iV1f6
-jLNoNQ5Gr5aHbQCbbs72ASpRcUqCqA==
-=evAV
------END PGP SIGNATURE-----
-
---BKAJETaVx6g41XLW--
+-- 
+~Vinod
