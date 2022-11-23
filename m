@@ -2,145 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19BFA634F67
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 06:14:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63178634F6B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 06:16:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235720AbiKWFOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 00:14:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47692 "EHLO
+        id S234815AbiKWFQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 00:16:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235760AbiKWFOK (ORCPT
+        with ESMTP id S235745AbiKWFQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 00:14:10 -0500
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57501ECCD0
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 21:14:09 -0800 (PST)
-Received: by mail-qv1-xf32.google.com with SMTP id j6so11499726qvn.12
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 21:14:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/OkCJt0xSlohFefz/J5gZgN/a/7oPMseVk+gnc8nDg0=;
-        b=plVfVdX58j84lIGa4iqPQSbyhDhbjWozttExLyvRA1W9+qlKQ5NjDx3LZf+B4Bn5U9
-         PjW05AlxEjEb87VgnpnmSsYmZp1c/LXs89/R9/AtRgzgE+5v3/uyrnA6IqjTzALnkfCG
-         4362TdsP5r/0/hCELVqbOJZlkEXcl+qZHdIb1cxRrC9UTw2Nmv+JoVU+WFlnyzLDlnSL
-         Z9+jsb9+Q+SvfBfjePWxmJuDlX/V7EAFU4sTqghLowYRwd1ZFPYOk3wIg9uHQUY9FjwY
-         oTA9TAKSxI4TAgjy47KIohzKKjLVEgDp3nWps6Vna0ZKhxrL+v8OMsjBaV4R+UyTnRhM
-         rzzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/OkCJt0xSlohFefz/J5gZgN/a/7oPMseVk+gnc8nDg0=;
-        b=jbOw46bwI1VzofoSBqAOf9Kt1YarY2E5+Av+QWL17G4q3Y88RCVSjs3qoolQShEK58
-         E/rWJw5gdPiOTxtaQ1CPM7xsm0dolfw8KSMcvUslKIJ8ZksFyBo48WnosY/fobY1hO4A
-         AajQCjPsQAR17UeK+b1VWWfK9HUV4erHaWjqGIJRcyP2BCM43CSGA73l9QomvjV/S7nT
-         Xumv35yiZFdJfuCMxkFGo6lzpMIUY58TpnbdeyGFn9AuvmGL/sbZiWrXkPxY3b6mkLDL
-         9tw9WXCbVTHAdhRy6P1JY77eJTO7wOlQ0WVoz8q+9Va7+ckeg9A0JphoASyJj2GQsL2i
-         qoOg==
-X-Gm-Message-State: ANoB5pmIfOl6sbm9F87KGy0qycgJYV6Nw0k2CDL0ubSmj+sgsMAxaZyd
-        f1JvzrxLRmuJFhhj9jH8YAtsTg==
-X-Google-Smtp-Source: AA0mqf6VTL2hceDYuR2jQQIcVLTrbAT50vgOYN/hDopSb3SpZKzpp7T58o2B44uHsRmRDr7I33n4Zw==
-X-Received: by 2002:ad4:528a:0:b0:4c6:9033:e56b with SMTP id v10-20020ad4528a000000b004c69033e56bmr6555464qvr.12.1669180448354;
-        Tue, 22 Nov 2022 21:14:08 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id oo19-20020a05620a531300b006fa00941e9dsm10953687qkn.136.2022.11.22.21.14.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 21:14:07 -0800 (PST)
-Date:   Tue, 22 Nov 2022 21:14:04 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Gavin Shan <gshan@redhat.com>
-cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, william.kucharski@oracle.com,
-        ziy@nvidia.com, kirill.shutemov@linux.intel.com, david@redhat.com,
-        zhenyzha@redhat.com, shan.gavin@gmail.com, riel@surriel.com,
-        willy@infradead.org, apopple@nvidia.com
-Subject: Re: [PATCH] mm: migrate: Fix THP's mapcount on isolation
-In-Reply-To: <20221123005752.161003-1-gshan@redhat.com>
-Message-ID: <e8a64b11-98f9-b571-dce9-a60df98e3e5@google.com>
-References: <20221123005752.161003-1-gshan@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 23 Nov 2022 00:16:08 -0500
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5878ECCCB;
+        Tue, 22 Nov 2022 21:16:04 -0800 (PST)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 2BF61C01B; Wed, 23 Nov 2022 06:16:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1669180569; bh=iPT0LtABgClIL1IGlsba5+6joAsD3/Hw7Ap3XlgNN6I=;
+        h=Date:From:To:Cc:Subject:From;
+        b=a7xbnafB3H1BP/6ISBXFHlURChsbJeqtBu9pSVEGJEut2Zyj8IFqiWf3qeS01wbVl
+         eYBu28PDGl65eMTviJ/4ZWumHt40WYugyHTv3WS6oCAVNhPVv6WgGo+NJaLOOeTwuT
+         4GcCV5GG9Fs/onKszzqYO4D3ApCWgFBtGtrx9lyr8brgApJfJZ9vufpyAVVB8WBm6k
+         6hSA4VRcdWfteZgeZg9zLsY3JVdPOxU+jlMG5vtws9vBM8KUwO/9OKstLDO2wy+dkm
+         xlBpIlRe/IqpTu/C79ApncdK67tOXMCHxIL1f1/O2fRPRGMM7S7VEAg/g9ene6/9wF
+         eyIyYC3nirXvw==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 1A4CAC009;
+        Wed, 23 Nov 2022 06:16:06 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1669180568; bh=iPT0LtABgClIL1IGlsba5+6joAsD3/Hw7Ap3XlgNN6I=;
+        h=Date:From:To:Cc:Subject:From;
+        b=KTas6DayCTmDcJZ+jvY6SnkEXjUxPMtowIElXhAWh0eD1FI3T7NPjLHOooyTD86PZ
+         6V+yNE7B6DQXPotPoI3tWiMU8dtX4weaThSpfqn1xAmoSN0ni0pPebRpkOBhde9Wc/
+         A3TfpiPKlkgmvlIyoeafduKBsiG77577wyaYdV2YGy+Em7Hf2nsIo3SmAiP603vzPP
+         5YIR43jnjwJbmnCy2l58hbEIjd9PguiJwvFFL31IJEf8NoTND5d3rBgFj6x3UyJwAN
+         p8hfUCuNeheNOZgvhsCSR3dTveVDHBpDs84cxJPvOmZNeQ9IBsqXTHmpX+kPW0QC+i
+         ToUSjs7GJy63g==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 315a764d;
+        Wed, 23 Nov 2022 05:15:56 +0000 (UTC)
+Date:   Wed, 23 Nov 2022 14:15:41 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christian Schoenebeck <linux_oss@crudebyte.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net
+Subject: [GIT PULL] 9p fixes for 6.1-rc7
+Message-ID: <Y32sfX54JJbldBIt@codewreck.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Nov 2022, Gavin Shan wrote:
+The following changes since commit f0c4d9fc9cc9462659728d168387191387e903cc:
 
-> The issue is reported when removing memory through virtio_mem device.
-> The transparent huge page, experienced copy-on-write fault, is wrongly
-> regarded as pinned. The transparent huge page is escaped from being
-> isolated in isolate_migratepages_block(). The transparent huge page
-> can't be migrated and the corresponding memory block can't be put
-> into offline state.
-> 
-> Fix it by replacing page_mapcount() with total_mapcount(). With this,
-> the transparent huge page can be isolated and migrated, and the memory
-> block can be put into offline state.
-> 
-> Fixes: 3917c80280c9 ("thp: change CoW semantics for anon-THP")
-> Cc: stable@vger.kernel.org   # v5.8+
-> Reported-by: Zhenyu Zhang <zhenyzha@redhat.com>
-> Suggested-by: David Hildenbrand <david@redhat.com>
-> Signed-off-by: Gavin Shan <gshan@redhat.com>
+  Linux 6.1-rc4 (2022-11-06 15:07:11 -0800)
 
-Interesting, good catch, looked right to me: except for the Fixes line
-and mention of v5.8.  That CoW change may have added a case which easily
-demonstrates the problem, but it would have been the wrong test on a THP
-for long before then - but only in v5.7 were compound pages allowed
-through at all to reach that test, so I think it should be
+are available in the Git repository at:
 
-Fixes: 1da2f328fa64 ("mm,thp,compaction,cma: allow THP migration for CMA allocations")
-Cc: stable@vger.kernel.org   # v5.7+
+  https://github.com/martinetd/linux tags/9p-for-6.1-rc7
 
-Oh, no, stop: this is not so easy, even in the latest tree.
+for you to fetch changes up to 391c18cf776eb4569ecda1f7794f360fe0a45a26:
 
-Because at the time of that "admittedly racy check", we have no hold
-at all on the page in question: and if it's PageLRU or PageCompound
-at one instant, it may be different the next instant.  Which leaves it
-vulnerable to whatever BUG_ON()s there may be in the total_mapcount()
-path - needs research.  *Perhaps* there are no more BUG_ON()s in the
-total_mapcount() path than in the existing page_mapcount() path.
+  9p/xen: check logical size for buffer size (2022-11-23 14:01:27 +0900)
 
-I suspect that for this to be safe (before your patch and more so after),
-it will be necessary to shift the "admittedly racy check" down after the
-get_page_unless_zero() (and check the sequence of operations when a
-compound page is initialized).
+(yes, that's just now -- sorry, I just noticed a whitespace problem as I
+prepared this mail, there's no code change with what was tested and in
+-next for a few days)
 
-The races I'm talking about are much much rarer than the condition you
-are trying to avoid, so it's frustrating; but such races are real,
-and increasing stable's exposure to them is not so good.
+----------------------------------------------------------------
+9p-for-6.1-rc7
 
-Sorry, I'm going to run away now: just raising these concerns
-without working on the solution.
+Two fixes:
+ - 9p now uses a variable size for its recv buffer, but every place
+hadn't been updated properly to use it and some buffer overflows
+have been found and needed fixing.
+There's still one place where msize is incorrectly used in a safety
+check (p9_check_errors), but all paths leading to it should already
+be avoiding overflows and that patch took a bit more time to get
+right for zero-copy requests so I'll send it for 6.2
+ - yet another race condition in p9_conn_cancel introduced by a
+fix of a syzbot report in the same place, maybe at some point
+we'll get it right without burning it all down...
 
-Hugh
+----------------------------------------------------------------
+Dominique Martinet (1):
+      9p/xen: check logical size for buffer size
 
-> ---
->  mm/compaction.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/mm/compaction.c b/mm/compaction.c
-> index c51f7f545afe..c408b5e04c1d 100644
-> --- a/mm/compaction.c
-> +++ b/mm/compaction.c
-> @@ -990,7 +990,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
->  		 * admittedly racy check.
->  		 */
->  		mapping = page_mapping(page);
-> -		if (!mapping && page_count(page) > page_mapcount(page))
-> +		if (!mapping && page_count(page) > total_mapcount(page))
->  			goto isolate_fail;
->  
->  		/*
-> -- 
-> 2.23.0
+GUO Zihua (2):
+      9p/fd: Fix write overflow in p9_read_work
+      9p/fd: Use P9_HDRSZ for header size
+
+Zhengchao Shao (1):
+      9p/fd: fix issue of list_del corruption in p9_fd_cancel()
+
+ net/9p/trans_fd.c  | 24 +++++++++++++-----------
+ net/9p/trans_xen.c |  9 +++++++++
+ 2 files changed, 22 insertions(+), 11 deletions(-)
+ 9 files changed, 254 insertions(+), 28 deletions(-)
+--
+Dominique
