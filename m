@@ -2,96 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F10C4635CE9
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 13:32:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 533CF635CEA
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 13:32:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237502AbiKWMag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 07:30:36 -0500
+        id S236829AbiKWMbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 07:31:20 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237636AbiKWMaM (ORCPT
+        with ESMTP id S237309AbiKWMbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 07:30:12 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E109A6035E;
-        Wed, 23 Nov 2022 04:28:59 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ANBIivN010202;
-        Wed, 23 Nov 2022 12:28:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=z6Z//LUT0fOyn/j0x1lDLd1Mhd5eIGzmBSNnRr9ZuF8=;
- b=IqzRD4WR9jzHU0/inl9phbRdTIC68a/YMhn4PsPPnZjzrTYotc7UiHLU8znqVJO8yY8D
- QtmKtjYlGfrmqztS42seEwgmCxBbf5NVKXHnH0yLlOYg01btx/1d8lf+NWrT+kk+IEdz
- 2rsnkXf3tf5qnMVDqft8/EXkLSjU4Qdrt2IDzqtz6VGi4WnaVW+u+IPOIbZqZya5h7l0
- EYl1pJ/5iYKpT12tX7krp+LgQdB8bJXfTIiPTBYIHGcy4f64BPGkC7QsshT5tvK23G25
- Ax6iaLX/lrtfmbd9QSfYGaufkDHF7SWqtnxuE46abOXjKzMwLz86iD8XRFhz9zDmS6vC pg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m10bmc6xu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Nov 2022 12:28:24 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2ANCB7Rj000419;
-        Wed, 23 Nov 2022 12:28:24 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m10bmc6x3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Nov 2022 12:28:24 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2ANCKivp007274;
-        Wed, 23 Nov 2022 12:28:22 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma02wdc.us.ibm.com with ESMTP id 3kxpsa2n9q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Nov 2022 12:28:22 +0000
-Received: from smtpav04.dal12v.mail.ibm.com ([9.208.128.131])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2ANCSN0N15860336
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Nov 2022 12:28:23 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 66ED158062;
-        Wed, 23 Nov 2022 12:28:21 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E822D58056;
-        Wed, 23 Nov 2022 12:28:19 +0000 (GMT)
-Received: from sig-9-77-136-225.ibm.com (unknown [9.77.136.225])
-        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 23 Nov 2022 12:28:19 +0000 (GMT)
-Message-ID: <ccf1937cfdcc5bb28dcc7a58785dd0c65d974597.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 0/6] evm: Prepare for moving to the LSM infrastructure
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>, mark@fasheh.com,
-        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com
-Cc:     ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Wed, 23 Nov 2022 07:28:19 -0500
-In-Reply-To: <20221123095202.599252-1-roberto.sassu@huaweicloud.com>
-References: <20221123095202.599252-1-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: oBm4YhWVDMgDFAsmIXTxmThFBoavwbiU
-X-Proofpoint-GUID: ZMkr4dv6vUdyqaWwpUypXc6juADcdq3w
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-23_06,2022-11-23_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 impostorscore=0 suspectscore=0 clxscore=1011
- lowpriorityscore=0 malwarescore=0 phishscore=0 spamscore=0 mlxscore=0
- adultscore=0 mlxlogscore=703 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2210170000 definitions=main-2211230090
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        Wed, 23 Nov 2022 07:31:00 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F9F53EE2
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 04:30:27 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e747329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e747:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5E7C71EC064F;
+        Wed, 23 Nov 2022 13:30:25 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1669206625;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=5eDEkiTU4kNbmdw6Mz9QPRO3QMJ/UyuQb9sqHxy2hG4=;
+        b=nDDfJLa8Uc0xsjBOnfnXd9qunzKhokgSDeiCwVQJd/VsDSYbtiT21I1JaojWZVVT62Gzmp
+        m8hWgB37wTtPeKNwOiMfVh7ISPTHJ4exgvobCZncI6n7QCMyHAxS6FlN17lYxNV2cvKGe3
+        iYk/Ad6w3SPJu9wC8Nc8fFW6NDcuCF8=
+Date:   Wed, 23 Nov 2022 13:30:21 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Petr Pavlu <petr.pavlu@suse.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, nicolas@fjasle.eu,
+        masahiroy@kernel.org, kirill.shutemov@linux.intel.com,
+        tony.luck@intel.com, michael.roth@amd.com, nathan@kernel.org,
+        ndesaulniers@google.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] x86: Avoid relocation information in final vmlinux
+Message-ID: <Y34SXeU6JEk+UGfV@zn.tnic>
+References: <20220927084632.14531-1-petr.pavlu@suse.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220927084632.14531-1-petr.pavlu@suse.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,39 +53,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roberto,
+On Tue, Sep 27, 2022 at 10:46:32AM +0200, Petr Pavlu wrote:
+> When building a kernel supporting KASLR with CONFIG_X86_NEED_RELOCS,
+> vmlinux contains also relocation information produced by using the
+> --emit-relocs linker option. This is utilized by subsequent build steps
+> to create vmlinux.relocs and produce a relocatable image. However, the
+> information is not needed by debuggers and other standard ELF tooling.
 
-On Wed, 2022-11-23 at 10:51 +0100, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> One of the challenges that must be tackled to move IMA and EVM to the LSM
-> infrastructure is to ensure that EVM is capable to correctly handle
-> multiple stacked LSMs providing an xattr at file creation. At the moment,
-> there are few issues that would prevent a correct integration. This patch
-> set aims at solving them.
+Hm, my ld manpage says:
 
-Let's take a step back and understand the purpose of this patch set. 
-Regardless of whether IMA and EVM are moved to the "LSM
-infrastructure", EVM needs to support per LSM xattrs.  A side affect is
-the removal of the security_old_inode_init_security hook.  This patch
-set cover letter and patch descriptions should be limited to EVM
-support for per LSM (multiple) xattrs.  The motivation, concerns, and
-problems of making IMA and EVM LSMs will be documented in the patch set
-that actual makes them LSMs.  Please remove all references to "move IMA
-and EVM to the LSM infrastructure".
+       -q
+       --emit-relocs
+           Leave relocation sections and contents in fully linked executables.  Post
+	   									^^^^
+           link analysis and optimization tools may need this information in order to
+	   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When EVM was upstreamed, there were filesystem limitations on the
-number and size of the extended attributes.  In addition there were
-performance concerns, which resulted in staging the LSM, IMA and EVM
-xattrs, before calling initxattrs to write them at the same time.  With
-this patch set, not only are per LSM xattrs supported, but multiple per
-LSM xattrs are supported as well.  Have the size limitation concerns
-been addressed by the different filesystems?   If not, then at minimum
-this patch set needs to at least mention it and the possible
-ramifications.
+           perform correct modifications of executables.  This results in larger
+           executables.
+
+So what's up?
+
+> The issue is then that the collected vmlinux file and hence distribution
+> packages end up unnecessarily large because of this extra data. The
+> following is a size comparison of vmlinux v6.0-rc5 with and without the
+> relocation information:
+> | Configuration      | With relocs | Stripped relocs |
+> | x86_64_defconfig   |       70 MB |           43 MB |
+> | +CONFIG_DEBUG_INFO |      818 MB |          367 MB |
+
+Hmm, I see a different story with my tailored config here:
+
+   text    data     bss     dec     hex filename
+17131605        128673450       37339140        183144195       aea8f03 vmlinux.before
+17132217        128677706       37363716        183173639       aeb0207 vmlinux.after
+
+361M vmlinux.before
+361M vmlinux.after
+
+and
+
+738K vmlinux.relocs
+
+and before and after .configs simply have RANDOMIZE_BASE =n and =y,
+respectively.
+
+So how do you see such a big diff, even with defconfig?
+
+> The patch optimizes a resulting vmlinux by adding a postlink step that
+
+Avoid having "This/The patch" or "This commit" in the commit message. It is
+tautologically useless.
+
+Also, do
+
+$ git grep 'This patch' Documentation/process
+
+for more details.
+
+Thx.
 
 -- 
-thanks,
+Regards/Gruss,
+    Boris.
 
-Mimi
-
+https://people.kernel.org/tglx/notes-about-netiquette
