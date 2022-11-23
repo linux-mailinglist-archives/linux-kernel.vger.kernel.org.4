@@ -2,133 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CE23634FB7
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 06:38:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6687C634FB9
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 06:39:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235841AbiKWFia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 00:38:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59066 "EHLO
+        id S235870AbiKWFjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 00:39:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235834AbiKWFiZ (ORCPT
+        with ESMTP id S235828AbiKWFjo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 00:38:25 -0500
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4746B29821;
-        Tue, 22 Nov 2022 21:38:24 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id AD25D5C013A;
-        Wed, 23 Nov 2022 00:38:23 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Wed, 23 Nov 2022 00:38:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1669181903; x=
-        1669268303; bh=b+lrH+QMj1sidBK3NzEoHaF2wilAWh8S7o4I69zVMpk=; b=c
-        Psy6wTltwsDiZuEhfF6aDH2A7TEWAsJD6BfAGsgNpi58OummEuI1MytdBNUq26dm
-        PTwtupwXDgN4QfF0mwjG3lgl46c+qWqAE7fElqqFJpTS+r/y0ou4ynW7Rb5rEibP
-        9Uo3GaEwP0mYrKCAse8ey0FS4unu7VP6KbXA8oPGqEV58GD1SGdR557/NWWmEOHU
-        YfnmHd3aQQMH82vJUsw9Vy85N04Fy2dF26RGttee4ExV0QGJyormQyItIZ+JUD5Q
-        GJ7sGGzLhezSvdEMkQ77eOTikP994vTW+BvWrl1WaZxOUjhALP5/F3SJgwzJCqai
-        OPiEdkrb2BaJbqc8vewbg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1669181903; x=
-        1669268303; bh=b+lrH+QMj1sidBK3NzEoHaF2wilAWh8S7o4I69zVMpk=; b=M
-        IxBMiyqJjBxAjJX9w/ZtRVb/kyGpe+tDUIu4V+7QinA2TwAbqLFcg9WHP5oWi2R8
-        IHGTuwwMPqq2cwmgZOkeTNv3BCGWLmms5SGVtB6EtSTbMubid3pjftwUOyQBW8Eq
-        b4ncuHpx/SX7+tYxaPi5YGgfkq0xvlW2goHmjUKQlozHYQS4aV8c1gVda8dbaTb4
-        EHi3iwmtBklLItezSSpmloY+EWYLwxnPu4Q7t7752zRufkw++e0CyID8P9ePzfrj
-        2aIg2Q+jZMae8ml5mKDsYsMF4foy/Zbs/sJSG8BSi9khxF+tOTI/sj5Smv39iVv9
-        TRKaZqfgtdYQSYdgzRpyA==
-X-ME-Sender: <xms:z7F9Y1biPa51tdIDlLKFnkl6xiMgNCkKeU4TdqSMbbsq0Sw5_NEIHQ>
-    <xme:z7F9Y8a-8EwTP1ZQUNdndpT-tCZHqHN2xcIiwSAzHlHcQHB9iNN6GgAeoNcFiEu1f
-    81pZr37_6AQmIKGyg>
-X-ME-Received: <xmr:z7F9Y392z5emSsGk03SxUXn8D8lFjFkYjm2I2XsxzPHEi3MCt7oV6jOiAZWUCHYNUMSwduBhsZoDu-vTX6e4qtUc-VMeeva0_QREB3Vsomqh2llIVBiDDkZOFA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedriedtgdekiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepkeejleelfeeitdfhtdfgkeeghedufeduueegffdvhfdukeelleef
-    tdetjeehuddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:z7F9Yzr6wqs1evL-Xx_ulLBHTlyRPi29wcZuhWHxEifiwBI2QADWPA>
-    <xmx:z7F9YwprkISaCtLOc-SuY2LH38Ga8BJIytmCMui-coqHF_wsQhgtmQ>
-    <xmx:z7F9Y5QrxwujqUQV0ALXbdg_i-27kfcQpB7GWkR9yAjHmPQUN1emmQ>
-    <xmx:z7F9Y1RLjwmuuYfxAwrLoPErs42jb9dGki_zD5bu_VkPDF22iGR2Vw>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 23 Nov 2022 00:38:22 -0500 (EST)
-Message-ID: <a591599e-d133-e19a-4898-5645c3862daa@sholland.org>
-Date:   Tue, 22 Nov 2022 23:38:22 -0600
+        Wed, 23 Nov 2022 00:39:44 -0500
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0909F1D99;
+        Tue, 22 Nov 2022 21:39:42 -0800 (PST)
+Received: by mail-ej1-f42.google.com with SMTP id bj12so40289696ejb.13;
+        Tue, 22 Nov 2022 21:39:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ATGjR+WR/rvjQsAzn1FSqZfn3gb1osfEIFie0PtsarM=;
+        b=U+8Uv8gJ2qDZiQSCGRoHCx2H9bz/TkLscQkC3beEsPxseWgnqpjJkBelaJPcc8ndTM
+         cDYLXe/rspwQiuLsxIfHDdCajKt2T5W859u+atxFYqxFUqFpV6qcR45CdD5m3b4agHrE
+         uFxPEx/NRefirR4IBFGu2HtcN27Yv8e5FQE/aFu/m/8KG1jX/+iIfa8d7hARPsEv/ySu
+         s3/dNnAuMT4F4J8vhuVV5dMf0EAikZeTHvITCGFtf6cO2ZVdvG6eFluWfPPW5hZxKBWK
+         X5Nox9XDvuVk4a0Xaei1WEQYPbwo1ZtSe/pEQMt7nXAFI5ZUecd3OfvVXMKkEraJ6clh
+         sAlg==
+X-Gm-Message-State: ANoB5pkuwD8MEwOHadJ50Sl38CfPW0Yw1GESp1S4LIpBxUgPuy4HsVrW
+        dC5IpOxFWr8G65r/4dvGitYkgBaycrLqhQ==
+X-Google-Smtp-Source: AA0mqf5kI5TnLrfB3RLx5Y2CCjO7P5arxBYeHo5nRSrp0aEhmhgLF2EVkPwsltj7axC/FdZx713hFQ==
+X-Received: by 2002:a17:906:4d16:b0:78b:15dc:2355 with SMTP id r22-20020a1709064d1600b0078b15dc2355mr7706255eju.306.1669181981309;
+        Tue, 22 Nov 2022 21:39:41 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id bc3-20020a056402204300b00463597d2c25sm7219679edb.74.2022.11.22.21.39.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Nov 2022 21:39:40 -0800 (PST)
+Message-ID: <b5888b92-ed6c-98c7-0d38-982a31e10e4f@kernel.org>
+Date:   Wed, 23 Nov 2022 06:39:39 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH] cpuidle: riscv-sbi: Stop using non-retentive suspend
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v5 09/14] serial: liteuart: fix rx loop variable types
 Content-Language: en-US
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>, conor.dooley@microchip.com,
-        anup@brainfault.org, Conor Dooley <conor@kernel.org>,
-        rafael@kernel.org, daniel.lezcano@linaro.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-pm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux@rivosinc.com
-References: <mhng-6299f108-11af-4e70-9981-d7e7b3be0b9a@palmer-ri-x1c9>
- <57114829-c205-dece-abdb-1100947286d4@sholland.org>
- <CAK9=C2WLOa_zgboFE5UCgnwMB-kbWMAVtmXsBxoswqY63-5QHw@mail.gmail.com>
-From:   Samuel Holland <samuel@sholland.org>
-In-Reply-To: <CAK9=C2WLOa_zgboFE5UCgnwMB-kbWMAVtmXsBxoswqY63-5QHw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     "Gabriel L. Somlo" <gsomlo@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        gregkh@linuxfoundation.org, kgugala@antmicro.com,
+        mholenko@antmicro.com, joel@jms.id.au,
+        david.abdurachmanov@gmail.com, florent@enjoy-digital.fr,
+        geert@linux-m68k.org, ilpo.jarvinen@linux.intel.com
+References: <20221118145512.509950-1-gsomlo@gmail.com>
+ <20221118145512.509950-10-gsomlo@gmail.com>
+ <44bf21b6-cbe4-4d73-0883-a9bcbd7d5971@kernel.org>
+ <1b5a963c-2a5b-54fe-784e-fcc4d06c347e@kernel.org>
+ <Y3uDZV8b+3GfQyUY@errol.ini.cmu.edu>
+ <2f242291-99b6-a50f-cd52-e7dfd8c88c8f@kernel.org>
+ <Y305gZnFSaUBtCRa@errol.ini.cmu.edu>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <Y305gZnFSaUBtCRa@errol.ini.cmu.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Anup,
-
-On 11/22/22 23:35, Anup Patel wrote:
-> On Wed, Nov 23, 2022 at 10:41 AM Samuel Holland <samuel@sholland.org> wrote:
->> On 11/22/22 09:28, Palmer Dabbelt wrote:
->>> I also think we should stop entering non-retentive suspend until we can
->>> sort out how reliably wake up from it, as the SBI makes that a
->>> platform-specific detail.  If the answer there is "non-retentive suspend
->>> is fine on the D1 as long as we don't use the SBI timers" then that
->>> seems fine, we just need some way to describe that in Linux -- that
->>> doesn't fix other platforms and other interrupts, but at least it's a
->>> start.
->>
->> We need some way to describe the situation from the SBI implementation
->> to Linux.
->>
->> Non-retentive suspend is fine on the D1 as long as either one of these
->> conditions is met:
->>  1) we don't use the SBI timers, or
->>  2) the SBI timer implementation does not use the CLINT
->>
->> And it is up to the SBI implementation which timer hardware it uses, so
->> the SBI implementation needs to patch this information in to the DT at
->> runtime.
+On 22. 11. 22, 22:05, Gabriel L. Somlo wrote:
+> So, looking at what uart_insert_char() does, I could simply do this
+> instead:
 > 
-> Rather than SBI implementation patching information in DT, it is much
-> simpler to add a quirk in RISC-V timer driver for D1 platform (i.e. based
-> on D1 compatible string in root node).
+>   	while(!litex_read8(membase + OFF_RXEMPTY) {
+>   		...
+> 		/* LiteUART does not provide overrun bits */
+>   		if (!(uart_handle_sysrq_char(port, ch) ||
+>   		     tty_insert_flip_char(&port->state->port, ch, TTY_NORMAL)))
+>   			++port->icount.buf_overrun;
+>   
+> That is, `tty_insert_flip_char() is the portion of `uart_insert_char()`
+> that actually gets executed if status is 1 and overrun is 0...
+> 
+> I'm not quite confident about whether this is an improvement in legibility
+> and/or code quality,
 
-It would be simpler, but it would be wrong, as I just explained.
+It's not :). Keep the uart_ helper.
 
-Only the SBI implementation knows if the SBI timer extension can wake
-any given CPU from any given non-retentive suspend state.
-
-Regards,
-Samuel
+-- 
+js
+suse labs
 
