@@ -2,77 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9F6634FE7
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 07:01:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C3FB634FF3
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 07:04:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235172AbiKWGBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 01:01:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40906 "EHLO
+        id S235797AbiKWGEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 01:04:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiKWGBU (ORCPT
+        with ESMTP id S235555AbiKWGEK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 01:01:20 -0500
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16EF4D2345
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 22:01:18 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VVVXodq_1669183267;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VVVXodq_1669183267)
-          by smtp.aliyun-inc.com;
-          Wed, 23 Nov 2022 14:01:15 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     tglx@linutronix.de
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] x86/cacheinfo: Remove set but unused variable 'trace'
-Date:   Wed, 23 Nov 2022 14:01:06 +0800
-Message-Id: <20221123060106.29067-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Wed, 23 Nov 2022 01:04:10 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29893F2C05;
+        Tue, 22 Nov 2022 22:04:07 -0800 (PST)
+Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NH9Xv5ywQzHw5S;
+        Wed, 23 Nov 2022 14:03:27 +0800 (CST)
+Received: from huawei.com (10.174.178.129) by kwepemi500016.china.huawei.com
+ (7.221.188.220) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 23 Nov
+ 2022 14:04:03 +0800
+From:   Kemeng Shi <shikemeng@huawei.com>
+To:     <tj@kernel.org>, <josef@toxicpanda.com>, <axboe@kernel.dk>
+CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <shikemeng@huawei.com>
+Subject: [PATCH 00/11] A few bugfix and cleanup patches for blk-throttle
+Date:   Wed, 23 Nov 2022 14:03:50 +0800
+Message-ID: <20221123060401.20392-1-shikemeng@huawei.com>
+X-Mailer: git-send-email 2.14.1.windows.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.174.178.129]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500016.china.huawei.com (7.221.188.220)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable 'trace' is not effectively used in the function, so delete it.
+Hi, this series contain a few patches to fix problem when on the default
+hierarchy, corrent comment and so on. More detail can be found in
+respective changelogs. Thanks.
 
-arch/x86/kernel/cpu/cacheinfo.c:737:15: warning: variable 'trace' set but not used.
+Kemeng Shi (11):
+  blk-throttle: Limit whole system if root group is configured when on
+    the default hierarchy
+  blk-throttle: Fix that bps of child could exceed bps limited in parent
+  blk-throttle: ignore cgroup without io queued in
+    blk_throtl_cancel_bios
+  blk-throttle: correct calculation of wait time in tg_may_dispatch
+  blk-throttle: simpfy low limit reached check in throtl_tg_can_upgrade
+  blk-throttle: fix typo in comment of throtl_adjusted_limit
+  blk-throttle: remove incorrect comment for tg_last_low_overflow_time
+  blk-throttle: remove repeat check of elapsed time from last upgrade in
+    throtl_hierarchy_can_downgrade
+  blk-throttle: remove unnecessary check for validation of limit index
+  blk-throttle: remove unused variable td in tg_update_has_rules
+  blk-throttle: Use more siutable time_after check for update
+    slice_start
 
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3243
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- arch/x86/kernel/cpu/cacheinfo.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ block/blk-throttle.c | 98 ++++++++++++++++++--------------------------
+ 1 file changed, 39 insertions(+), 59 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/cacheinfo.c b/arch/x86/kernel/cpu/cacheinfo.c
-index f4e5aa27eec6..c6c0052def8e 100644
---- a/arch/x86/kernel/cpu/cacheinfo.c
-+++ b/arch/x86/kernel/cpu/cacheinfo.c
-@@ -734,7 +734,7 @@ void init_hygon_cacheinfo(struct cpuinfo_x86 *c)
- void init_intel_cacheinfo(struct cpuinfo_x86 *c)
- {
- 	/* Cache sizes */
--	unsigned int trace = 0, l1i = 0, l1d = 0, l2 = 0, l3 = 0;
-+	unsigned int l1i = 0, l1d = 0, l2 = 0, l3 = 0;
- 	unsigned int new_l1d = 0, new_l1i = 0; /* Cache sizes from cpuid(4) */
- 	unsigned int new_l2 = 0, new_l3 = 0, i; /* Cache sizes from cpuid(4) */
- 	unsigned int l2_id = 0, l3_id = 0, num_threads_sharing, index_msb;
-@@ -836,7 +836,6 @@ void init_intel_cacheinfo(struct cpuinfo_x86 *c)
- 							l3 += cache_table[k].size;
- 							break;
- 						case LVL_TRACE:
--							trace += cache_table[k].size;
- 							break;
- 						}
- 
 -- 
-2.20.1.7.g153144c
+2.30.0
 
