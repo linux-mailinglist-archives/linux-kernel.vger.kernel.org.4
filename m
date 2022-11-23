@@ -2,146 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F73C636652
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 17:58:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84AF6636655
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 17:59:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239015AbiKWQ6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 11:58:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48860 "EHLO
+        id S237028AbiKWQ7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 11:59:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237244AbiKWQ6e (ORCPT
+        with ESMTP id S238060AbiKWQ67 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 11:58:34 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2082.outbound.protection.outlook.com [40.107.93.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB811C13A;
-        Wed, 23 Nov 2022 08:58:25 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oGMNgffqMz4bTi5SpWDG2unQixutApLXaWwGk0EacE9S2yzV/3ve3cofdUfs7xfsrl3XgbF6JgdVWJTs/3JnJoWxWnz2EkCCb/9hcAZhICZzi6RV51nbaogOKob3U2kxCPlKbOfRce2EcOaDcXjcoR32EOenRoerdHtyofo7geDeXAL0/6hqoHDevPkHKU7+jhjzTzncI3Dv0nemQX8Bp2ame10ZasFm23nhdCcH4a3rQ5hv5hbhB3UXjCQ5SpSQiS00W74Li57bNk24siI6gfjBnPZaI9A24oMHPdjJxv2s5ixthxqKA/enp4s1J8zNz6w6B587jN3+0oOoKK5Y7g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HQcl8QAJu3P8GiFGKyNLJ2jPtqiz+9EGgjJHlzGIiX0=;
- b=fyhYRVNHTs7vVFRM8Yy2AOZEiu1Z5M/5EdpS4MKMbF4arRSeypJF6fHYe997OaSVxfB8z0T2j/z4WM2piPGuhBiM15a/vuBrmWttLCLuhEXAjFnS9Ic8R3Q6nNgpPssCQWWLrbryFoQRjZmW5d0dFhZJyolb9ApmYCzd8qLgHRJiV6+ydHtuk+d8ZAvWPREwCmqIgGb8w4kTyNAvTmpk2SM1Eon8nHhbZT5/MlluuSCIBmN7IbSerxnFZ55KnmmfbdLxxObNjpUHy454+vRc8/2R4TNm490jjHoXUmzDsAgrm6qwvJGoJfWoxq+h59Z/TojLjQF1o7pGmuTRgSyYuA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HQcl8QAJu3P8GiFGKyNLJ2jPtqiz+9EGgjJHlzGIiX0=;
- b=lDDYZi9kXMYxqAF2Z/kjsRrPwYzSQFyjRpb3ECSEIY6AsPzXqHq36AlghkQfVPRyeSZBl4S0lFxMSmol77sxlRvSccuwDpKAa6Ksq3kynuZhnOiWFqV+rle8Kq6M54lo4sBnDrQVARzIPYiie/LeAL0kBaYLISRCC3xFurBxLMLSySLz+LwQdjjEGGZ24hFhxiVTTgqcrxSKK95XWXTG7pNwqIfamT94Pn29JKCzAmVg+AQZfAyuxJHcWK4QxD7ikUhQSpFcI//wHpd6ujCenZg/r8cXi61Vwa78SZGSDPAeLHfIV7bO7TvGNgqxFUJu5gqY3lzljMuauSPSO816nA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by IA0PR12MB7554.namprd12.prod.outlook.com (2603:10b6:208:43e::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Wed, 23 Nov
- 2022 16:58:24 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a%9]) with mapi id 15.20.5834.015; Wed, 23 Nov 2022
- 16:58:24 +0000
-Date:   Wed, 23 Nov 2022 12:58:23 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>,
-        "Ahmed S. Darwish" <darwi@linutronix.de>,
-        Reinette Chatre <reinette.chatre@intel.com>
-Subject: Re: [patch 19/33] genirq/msi: Provide msi_desc::msi_data
-Message-ID: <Y35RLzzvXYRisIBX@nvidia.com>
-References: <20221111133158.196269823@linutronix.de>
- <20221111135206.346985384@linutronix.de>
- <Y3U5xwujkZvI0TEN@nvidia.com>
- <871qpzkj9k.ffs@tglx>
- <Y3uzVJ/7ecL8DBK7@nvidia.com>
- <87bkp0hzai.ffs@tglx>
- <Y3wreJlD/7TsMCme@nvidia.com>
- <87k03mg1fc.ffs@tglx>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87k03mg1fc.ffs@tglx>
-X-ClientProxiedBy: MN2PR16CA0041.namprd16.prod.outlook.com
- (2603:10b6:208:234::10) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Wed, 23 Nov 2022 11:58:59 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947C368C61;
+        Wed, 23 Nov 2022 08:58:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669222738; x=1700758738;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=6G5Mp68iqToBzIfY887gjlmXUVBeK2AFrXb5/cTUWOM=;
+  b=GxPx15yhGJ7DjkxBslg/oBJbdRGNjMONTPKm2JELNlPOj0fG3Mp7Y0iL
+   N1ctCOWHfqG3dmr3LniP1QpEt1lqk85V9qZ6m1Cpjp6Unx9YOiozXHOEI
+   GeNLedfM3sbPpggSx+lOgXcrSPY7xv8eYgn3yY6apiAt0cQPTrbNh3Xla
+   Xz5o782orDMFcL49LInGuKMe0ipvyoEbZnSgWeSylIFDitxQHLU846e3f
+   y7z9IzS39fQAGFJwmGgGCcBox+SBPQoeqXgimH1Z0Yv3EAQoRatbVWgIb
+   SXkOxu+02Cp96sPfiM5C7ShqEGqPhTaKcswu/xcKsyU2/RLr4oKcVCIZf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="378370369"
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="378370369"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 08:58:57 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="674786756"
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="674786756"
+Received: from vcbudden-mobl3.amr.corp.intel.com (HELO [10.212.129.67]) ([10.212.129.67])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 08:58:57 -0800
+Message-ID: <e87b68ed-c51c-85aa-1cf9-7a67b8eebe00@intel.com>
+Date:   Wed, 23 Nov 2022 08:58:56 -0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|IA0PR12MB7554:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0308d057-3d0a-49dd-f4b9-08dacd73eeff
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VC+89eISBy5HfTvpXaKNXZ7+Segy3YTf9zTKMhrgS8Pl5uqMRLNudw9EAqgcyL3q682+fycB0nsS5TucdBOy3S5dUwphsptsnQgdULzOYZXTjCisey0jLDI6JFpz76A4J00G2Bp0ppRJbvt3+3MCyQhVqDV/LhK1Mwt3i3eC11UxfNulS6xoaY2SZrF2PPQEhQ5r+QeHlMOvusHulL/dYJ11R8X4O3NH41aufH6o7ztqKsou8DajBVXOcYUsvgsqgcC0THRcJ3IC3QC/05bQZdrFnZMWijBpEffIULkbt/EjeJ64Wu0dnZELT4+98RWZz7JxpcNuoPw5qnsvecDIEvT3vCyZI/QQCf6IXcWnFEZVxWZOpgJPLHr3FF0bDUwcnVjJGI9mXtYy46G/g+KbL82s2W17ZMh4kQJRpCR5kwMra+4lTRD2mT0Iis1u3/ERvnLGOxiVQODWpqGjpc6E2Mg3b+Ff6TehkEZMHx4PuosO0fgbUza1x3ijjKNrlXPBfo5O+8g0LRS8OZc6KCT0AQQj7V0Px+F2ch5zBNE/JB5BpOuxo09TurBkafGiexfysR/j9+eWdvfMek0+p0K7Rt3gTba77iNSicTLPqG8+m++OgdVZA42JXkMC6plb1CY3E5VaYhXpx7KEwOPvcK3Tg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(396003)(376002)(39860400002)(136003)(451199015)(38100700002)(86362001)(8676002)(41300700001)(6486002)(8936002)(2906002)(4744005)(4326008)(5660300002)(66556008)(66476007)(316002)(26005)(6512007)(6506007)(2616005)(6916009)(66946007)(54906003)(478600001)(186003)(7416002)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lHQDV6acKWNFdc/wkHel1UFO48eZT9CLlO4GvV+XlAGXvOc0EZT/CUafbIvS?=
- =?us-ascii?Q?xgYsM1C0vZZnZn7eVL62JypVHmotoBSuc4KR5G3rNiF0GGnURSQtB9EvQbp8?=
- =?us-ascii?Q?Q1aisO8pvmk60lu6msEhYqK3Qi3SrpQ5b8uEHDjpfHVI1+HtXKBwrXfkxB0Y?=
- =?us-ascii?Q?sASHCi+EFUEMoZaz+2T/n6YqkDZ0YmJTk5swUvat0neXMOj+thdz9e/V+TZp?=
- =?us-ascii?Q?gIe+PDEX0o5t1u+ETsSU4K37hgrUMhN1eESZQRMOJ5mNrMiJTFlYMtCt/wBQ?=
- =?us-ascii?Q?uIfKZ+KPgw4WH+crGHxAMB0WKBNJJRM+vNusC6Ae4w4m0EkmmIGxl5mnVr4D?=
- =?us-ascii?Q?gL+zxF/XBoxolVgql7baEPhFZJa2yESUQJKxqbEBFJUoLpXgFUAjq3Bae7GS?=
- =?us-ascii?Q?2f0MbQyTdbd2emoyRtIJftx3rG4xcHguI4NFxj2noCulRLr8SsJfcSU+wPX0?=
- =?us-ascii?Q?NEro/DDxORSnMYiQN32dh+5ae1BpdnNuHwiij5thGJOHrzBDmSJ3gak1Hq6o?=
- =?us-ascii?Q?jsfZAh20NVqn7ny0YVlrTHvT+X4tJjF8z4P0ua5bkCj7vzfegpWOixeNLO1T?=
- =?us-ascii?Q?CWnxdUX2hhr0nkWY7WBfqpMGXaUpyKEk04m5CUV2R92TExd7u4VdVrOKXVsw?=
- =?us-ascii?Q?aAdHsXzupM+lbkkjn9+d+dzCPvsAGYJq9hiDw/maTzcy2TTKj+A2XZ6RErBA?=
- =?us-ascii?Q?MOzdX0jCA1BprS6C0wnoQ0S1RtJMc5AG8j8rdMcIE+saeb9SgWljZAhraKRE?=
- =?us-ascii?Q?ZHd2sHzMnoYdz3hzVr5g+HllC0NxDPTmBmWe7ff2bnMQ+sz7enhNZi9Zi5dk?=
- =?us-ascii?Q?ljfcHIQtRrygnaPfvDORTFnSqjFjExMpTofU1Yy198VIrXnN6LCnYsf5kVMs?=
- =?us-ascii?Q?NsFAHoF1UwEbSq7/Gaqz6kWg8FFDLhmlYbjdgJ0dcJmdNzYUJCpS7/3oxFna?=
- =?us-ascii?Q?mayAI2VQ2Cxa+wRClgQZzaG/V/Gbx9MQXZpOceQISaow2sNpY36ivItV456l?=
- =?us-ascii?Q?rTl6FAyJ9FYvjwVuta6YPWahBfg7W6LKLglqnhSql/wVhOG9/0C5jdFmlIFb?=
- =?us-ascii?Q?ECfq1reldtvc03bBedhu8GNZIkOqkVbodmeCSTDR4KWZTzfNx3uHMPeamqd8?=
- =?us-ascii?Q?uETXmZ6e17IHdvXQZ7vWn+UED3BynmEKFizWNab3TTaCBKpOUJyO9W1zzHOm?=
- =?us-ascii?Q?M86qCCVlSYj5OUeDOE4cBZ4WdUMMEeDXV0TsaHW5VoRAVAWI+8c5YTDGL8WP?=
- =?us-ascii?Q?O2+tyubHh/AdXV2/o/kOpBDXOVcZUDjD8J8dXh/vdMzdNRWTus4k1uw0NHMR?=
- =?us-ascii?Q?27IuUxom5jCUzNbVSgKA0nGq0ASPfM4TtoFul/EMxo0hFvs2FQERwqsCOA8R?=
- =?us-ascii?Q?DGZxL1U6HjSuXWNAjV+wFhILNV4jRTAzZqDfZfhLdD6slMX3S4iqASlEii2G?=
- =?us-ascii?Q?fqtmdTUsd6TM8kACUPaYLdFEaYJDbCnu5VmwqHbBBk98BY98CopSDKpgF4rN?=
- =?us-ascii?Q?ClT4hvzpIs5oq0Exjl4HmmSrQ3EacloFLUlECgS+PLPDElDbxzOdMepvkUbd?=
- =?us-ascii?Q?4oqDFa2j5ShexCI3AJM=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0308d057-3d0a-49dd-f4b9-08dacd73eeff
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2022 16:58:24.2124
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nROVEFCdqp9Ht9f0o0Jo8Zt/sc59KjjeeazQQnpmkg9RYmYAhkZXsv6F8KTQoBLF
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7554
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v7 04/20] x86/virt/tdx: Add skeleton to initialize TDX on
+ demand
+Content-Language: en-US
+To:     "Huang, Kai" <kai.huang@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "Luck, Tony" <tony.luck@intel.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+References: <cover.1668988357.git.kai.huang@intel.com>
+ <d26254af8e5b3dcca8a070703c5d6d04f48d47a9.1668988357.git.kai.huang@intel.com>
+ <ea588f69-3b9e-b0ec-e5e1-a174d6031681@intel.com>
+ <f9bff97abe68cc09aecfd96226ba91e972e5a2e8.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <f9bff97abe68cc09aecfd96226ba91e972e5a2e8.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 09:49:11PM +0100, Thomas Gleixner wrote:
+On 11/23/22 02:18, Huang, Kai wrote:
+>> Again, there are a lot of words in that comment, but I'm not sure why
+>> it's here.  Despite all the whinging about ACPI, doesn't it boil down to:
+>>
+>>       The TDX module itself establishes its own concept of how many
+>>       logical CPUs there are in the system when it is loaded.
+>>
+> This isn't accurate.  TDX MCHECK records the total number of logical CPUs when
+> the BIOS enables TDX.  This happens before the TDX module is loaded.  In fact
+> the TDX module only gets this information from a secret location.
 
-> I guess we're nearing bike shed realm by now :) Let's pick one evil and
-> see how it works out. Coccinelle is there to help us fixing it up when
-> it turns out to be the wrong evil. :)
+Kai, this is the point where I lose patience with the conversation
+around this series.  I'll you paste you the line of code where the TDX
+module literally "establishes its own concept of how many logical CPUs
+there are in the system":
 
-Sure, it is all changeable
+>     //NUM_LPS
+>     tdx_global_data_ptr->num_of_lps = sysinfo_table_ptr->mcheck_fields.tot_num_lps;
 
-I find your perspective on driver authors as the enemy quite
-interesting :)
+Yes, this is derived directly from MCHECK.  But, this concept is
+separate from MCHECK.  We have seen zero actual facts from you or other
+folks at Intel that this is anything other than an arbitrary choice made
+for the convenience of the TDX module.  It _might_ not be this way.  I'm
+open to hearing those facts and changing my position on this.
 
-Jason
+But, please bring facts, not random references to "secret locations"
+that aren't that secret.
