@@ -2,101 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F1F0636873
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:16:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C648636870
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:16:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239538AbiKWSOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 13:14:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40588 "EHLO
+        id S239667AbiKWSOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 13:14:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239572AbiKWSNi (ORCPT
+        with ESMTP id S239590AbiKWSNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 13:13:38 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226D9DFAF;
-        Wed, 23 Nov 2022 10:10:00 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso2859182pjt.0;
-        Wed, 23 Nov 2022 10:10:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=42jiVvL+Ts2qh8Knn9mc2OntlNZr+ruehTRXIYJtsgE=;
-        b=kGEGxym2YsPDl+okJR+jAn9W99iCg2L5fctazVNfEVJQ6iw7n7XVcxJnKnNmYjd6g6
-         u6u6XnwbjVrt0w8j72DAle4dZGDdtfBW8X9zTc81l5maOtamqMfUIaUQwafb8lOvrWGO
-         qINUff3Ku+XIthIeKcEVc7busmkpJoMzZYZYaogshvbYljNoFzNiXCuVjwBalmvJcrBT
-         RIfqC8i+i1MU6as4+/8XsNCXD8L1AVZJFkyLTtmZ81dFQjtaSLreuez9uTMsF/jZZw3n
-         QQ7uwWxo01UW971auvwjUE1twN8Qs0LmIOAV+H8FsQetN7TJ3taVuownfeYPwHTjHQqC
-         G7kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=42jiVvL+Ts2qh8Knn9mc2OntlNZr+ruehTRXIYJtsgE=;
-        b=rL0Et8rbi5utMRm1jglbVoT20scF8yu09lounWABPOHCFD82LnkpOifrjL0b5wffWk
-         zAH4OkcScRSWEogI0c4PLLzrbEijSx+eMilO0P7iQp3Q/5I8kbmge52N08RKx5iQwsy6
-         8DST1boSqPbBq/h8+jDhpUGBBb82lQqqs3XYUz6J5baB09JpwEDMLs5Soyc5ExbT2WXU
-         Pqrm87jdaV8ns/DQcRFArK5qtMUFpKCgwimnHSJtkgl6uurE2IUrhxsf2GnHCiTKW55F
-         qZo2VK4PriHKUaTOBPVjk74a4sgyhfuiripe7uGxsVsLar3s213lMWXQVmLVwm+TX1Ni
-         La6Q==
-X-Gm-Message-State: ANoB5plYYOwB1ZPKTRJVrP/N7GmUQcWeJjWmn6Md5f2+V4q1YRxU0ot0
-        8IxBYEDhq16bA+AtMhATqNc=
-X-Google-Smtp-Source: AA0mqf5kuG7tARTAIVt0J36rhq6lFOFV3bxt97HboHYXGMYzhr0PyTXjm63gzdQX3EzbzSmCwQy7sw==
-X-Received: by 2002:a17:902:ea06:b0:186:abaf:8fe with SMTP id s6-20020a170902ea0600b00186abaf08femr23078476plg.95.1669226999341;
-        Wed, 23 Nov 2022 10:09:59 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id w11-20020aa79a0b000000b0056bad6ff1b8sm12932685pfj.101.2022.11.23.10.09.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 10:09:58 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 23 Nov 2022 08:09:57 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Kemeng Shi <shikemeng@huawei.com>
-Cc:     josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 02/11] blk-throttle: Fix that bps of child could exceed
- bps limited in parent
-Message-ID: <Y35h9SmFeEJtBNgM@slm.duckdns.org>
-References: <20221123060401.20392-1-shikemeng@huawei.com>
- <20221123060401.20392-3-shikemeng@huawei.com>
+        Wed, 23 Nov 2022 13:13:52 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273E9FCF5;
+        Wed, 23 Nov 2022 10:10:25 -0800 (PST)
+Received: from fraeml744-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NHTgc0km7z67Q1Q;
+        Thu, 24 Nov 2022 02:10:20 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml744-chm.china.huawei.com (10.206.15.225) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 23 Nov 2022 19:10:22 +0100
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 23 Nov
+ 2022 18:10:22 +0000
+Date:   Wed, 23 Nov 2022 18:10:21 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Gerald Loacker <gerald.loacker@wolfvision.net>
+CC:     <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Jakob Hauser <jahau@rocketmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>
+Subject: Re: [PATCH v2 2/2] iio: magnetometer: add ti tmag5273 driver
+Message-ID: <20221123181021.000046b0@Huawei.com>
+In-Reply-To: <20221121123542.1322367-3-gerald.loacker@wolfvision.net>
+References: <20221121123542.1322367-1-gerald.loacker@wolfvision.net>
+        <20221121123542.1322367-3-gerald.loacker@wolfvision.net>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221123060401.20392-3-shikemeng@huawei.com>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 02:03:52PM +0800, Kemeng Shi wrote:
-> @@ -964,10 +963,8 @@ static void throtl_charge_bio(struct throtl_grp *tg, struct bio *bio)
->  	unsigned int bio_size = throtl_bio_data_size(bio);
->  
->  	/* Charge the bio to the group */
-> -	if (!bio_flagged(bio, BIO_BPS_THROTTLED)) {
-> -		tg->bytes_disp[rw] += bio_size;
-> -		tg->last_bytes_disp[rw] += bio_size;
-> -	}
-> +	tg->bytes_disp[rw] += bio_size;
-> +	tg->last_bytes_disp[rw] += bio_size;
+On Mon, 21 Nov 2022 13:35:42 +0100
+Gerald Loacker <gerald.loacker@wolfvision.net> wrote:
 
-Are you sure this isn't gonna lead to double accounting? IIRC, the primary
-purpose of this flag is avoiding duplicate accounting of bios which end up
-going through the throttling path multiple times for whatever reason and
-we've had numerous breakages around it.
+> Add support for TI TMAG5273 Low-Power Linear 3D Hall-Effect Sensor.
+> Additionally to temperature and magnetic X, Y and Z-axes the angle and
+> magnitude are reported.
+> The sensor is operating in continuous measurement mode and changes to sleep
+> mode if not used for 5 seconds.
+> 
+> Datasheet: https://www.ti.com/lit/gpn/tmag5273
+> Signed-off-by: Gerald Loacker <gerald.loacker@wolfvision.net>
 
-To address the problem you're describing in this patch, wouldn't it make
-more sense to set the flag only when the bio traversed the entire tree
-rather than after each tg?
+Hi Gerald,
 
-Thanks.
+A few additional comment from me. I quickly read Andy's and have tried
+not to overlap too much!
 
--- 
-tejun
+Thanks,
+
+Jonathan
+
+> +static int tmag5273_read_raw(struct iio_dev *indio_dev,
+> +			     const struct iio_chan_spec *chan, int *val,
+> +			     int *val2, long mask)
+> +{
+> +	struct tmag5273_data *data = iio_priv(indio_dev);
+> +	s16 t, x, y, z;
+> +	u16 angle, magnitude;
+> +	int ret;
+> +
+> +	switch (mask) {
+> +	case IIO_CHAN_INFO_PROCESSED:
+> +	case IIO_CHAN_INFO_RAW:
+> +		ret = pm_runtime_resume_and_get(data->dev);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = tmag5273_get_measure(data, &t, &x, &y, &z, &angle,
+> +					   &magnitude);
+> +		if (ret)
+> +			return ret;
+> +
+> +		pm_runtime_mark_last_busy(data->dev);
+> +		pm_runtime_put_autosuspend(data->dev);
+> +
+> +		switch (chan->address) {
+> +		case TEMPERATURE:
+> +			*val = t;
+> +			return IIO_VAL_INT;
+> +		case AXIS_X:
+> +			*val = x;
+> +			return IIO_VAL_INT;
+> +		case AXIS_Y:
+> +			*val = y;
+> +			return IIO_VAL_INT;
+> +		case AXIS_Z:
+> +			*val = z;
+> +			return IIO_VAL_INT;
+> +		case ANGLE:
+> +			*val = angle;
+> +			return IIO_VAL_INT;
+> +		case MAGNITUDE:
+> +			*val = magnitude;
+> +			return IIO_VAL_INT;
+> +		default:
+> +			dev_err(data->dev, "Unknown channel %lu\n",
+> +				chan->address);
+
+Should be impossible to get here so no need for print.
+
+> +			return -EINVAL;
+> +		}
+> +	case IIO_CHAN_INFO_SCALE:
+> +		switch (chan->type) {
+> +		case IIO_TEMP:
+> +			/*
+> +			 * Convert device specific value to millicelsius.
+> +			 * Resolution from the sensor is 60.1 LSB/celsius and
+> +			 * the reference value at 25 celsius is 17508 LSBs.
+> +			 */
+> +			*val = 10000;
+> +			*val2 = 601;
+> +			return IIO_VAL_FRACTIONAL;
+> +		case IIO_MAGN:
+> +			/* Magnetic resolution in uT */
+> +			*val = 0;
+> +			*val2 = tmag5273_scale_table[data->version]
+> +						    [data->scale_index]
+> +							    .scale_micro;
+> +			return IIO_VAL_INT_PLUS_MICRO;
+> +		case IIO_ANGL:
+> +			/*
+> +			 * Angle is in degrees and has four fractional bits,
+> +			 * therefore use 1/16 * pi/180 to convert to radiants.
+> +			 */
+> +			*val = 1000;
+> +			*val2 = 916732;
+> +			return IIO_VAL_FRACTIONAL;
+> +		default:
+> +			return -EINVAL;
+> +		}
+> +	case IIO_CHAN_INFO_OFFSET:
+> +		switch (chan->type) {
+> +		case IIO_TEMP:
+> +			*val = -266314;
+> +			return IIO_VAL_INT;
+> +		default:
+> +			return -EINVAL;
+> +		}
+> +	case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
+> +		*val = data->conv_avg;
+> +		return IIO_VAL_INT;
+> +
+> +	default:
+> +		/* Unknown request */
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +static int tmag5273_write_raw(struct iio_dev *indio_dev,
+> +			      struct iio_chan_spec const *chan, int val,
+> +			      int val2, long mask)
+> +{
+> +	struct tmag5273_data *data = iio_priv(indio_dev);
+> +	int i, ret;
+> +
+> +	switch (mask) {
+> +	case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
+> +		if (val == data->conv_avg)
+> +			return 0;
+> +		return regmap_update_bits(data->map, TMAG5273_DEVICE_CONFIG_1,
+> +					  TMAG5273_AVG_MODE_MASK, val);
+
+Update conv_avg?  Or don't store cached value at all, and always read it from
+the device (or regmap cache possibly if you have that enabled)
+
+> +	case IIO_CHAN_INFO_SCALE:
+> +		switch (chan->type) {
+> +		case IIO_MAGN:
+> +			if (val != 0)
+> +				return -EINVAL;
+> +
+> +			for (i = 0; i < ARRAY_SIZE(tmag5273_scale_table[0]);
+> +			     i++) {
+
+What Andy said.  Sometimes wrapping is just too ugly!
+
+> +				if (tmag5273_scale_table[data->version][i]
+> +					    .scale_micro == val2)
+This line break is nasty as well.  The whole thing is deeply enough nested
+I'd just rip it out to a helper function called something like
+tmag5273_write_scale() (or _magn_scale())
+
+> +					break;
+> +			}
+> +			if (i == ARRAY_SIZE(tmag5273_scale_table[0]))
+> +				return -EINVAL;
+> +			data->scale_index = i;
+> +
+> +			ret = regmap_update_bits(
+> +				data->map, TMAG5273_SENSOR_CONFIG_2,
+> +				TMAG5273_Z_RANGE_MASK | TMAG5273_X_Y_RANGE_MASK,
+> +				data->scale_index == MAGN_LOW ? 0 :
+> +					(TMAG5273_Z_RANGE_MASK |
+> +					 TMAG5273_X_Y_RANGE_MASK));
+> +			if (ret)
+> +				return ret;
+> +
+> +			return 0;
+> +		default:
+> +			return -EINVAL;
+> +		}
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+
+> +
+> +static void tmag5273_read_device_property(struct tmag5273_data *data)
+> +{
+> +	const char *angle_measurement;
+> +
+> +	data->angle_measurement = TMAG5273_ANGLE_EN_X_Y;
+> +
+> +	if (!device_property_read_string(data->dev, "ti,angle-measurement",
+> +					 &angle_measurement)) {
+> +		if (!strcmp(angle_measurement, "off"))
+> +			data->angle_measurement = TMAG5273_ANGLE_EN_OFF;
+> +		else if (!strcmp(angle_measurement, "x-y"))
+> +			data->angle_measurement = TMAG5273_ANGLE_EN_X_Y;
+> +		else if (!strcmp(angle_measurement, "y-z"))
+> +			data->angle_measurement = TMAG5273_ANGLE_EN_Y_Z;
+> +		else if (!strcmp(angle_measurement, "x-z"))
+> +			data->angle_measurement = TMAG5273_ANGLE_EN_X_Z;
+> +		else
+> +			dev_warn(data->dev,
+> +				 "failed to read angle-measurement\n");
+Somewhat inaccurate warning.   I'd print something like
+"unexpected read angle-measurement property: %s\n", angle_measurement);
+
+We read it. We just have no idea what it means! :)
+
+> +	}
+> +}
+> +
+
