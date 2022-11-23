@@ -2,79 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21EF0636D14
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 23:30:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FCD1636D33
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 23:32:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbiKWWag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 17:30:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42856 "EHLO
+        id S229678AbiKWWcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 17:32:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbiKWWae (ORCPT
+        with ESMTP id S229675AbiKWWcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 17:30:34 -0500
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D395CFDDA6
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 14:30:31 -0800 (PST)
-Received: by mail-qk1-x729.google.com with SMTP id x18so13488091qki.4
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 14:30:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2PsyXXA9CudTt1GF7QXo+ry29gXPUEu+QzCWmZI6Zig=;
-        b=XMfsHKwK6gxd9tt2hChYTe5pQ25W+G022dNNp25j8jGYTdJNaF40WrrHzq8fOVjvNQ
-         6oCZ7b3jr+K2sYCzBFxmbnk24Ep4ujNlf4doTSuQkHNDrqeL5ghS/4l4Xl148Unxbptt
-         iHkxYQ0vlJAVtsjKS2tOCk6WFNQGGe/k97tPlHGzXftZ9/eWz1QepcoTWTyk0oklY6S3
-         h+08Iq4aqap3gfcMhOfLp5DkiOX/fswAoTFAJQKh2cvH3o9OTCQAUIuAGNpMkSmNnicN
-         S2SqUR1boFkW3FREVyDD/Sx6b827THmq1YMvB30nC/aeRC118qw2xmUFWjVSv1lxqE1J
-         J+AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2PsyXXA9CudTt1GF7QXo+ry29gXPUEu+QzCWmZI6Zig=;
-        b=fhS+8TvToR1PC1LpKZ6S8UvXRBPyoJY4fF/bL91SSdvtKmc9A27jsc+b2At0qrkWtH
-         bQXzZKZvAV78dYgzKv9g/KokpeWv7NdD2M9mSKrwYRptMPTna8KF0WzR8fIUjN3T/wtB
-         33je/a0nqQLQFC2NpLHMXx+ogBZkgVOLqxnJ6jps+i77smXhBn9ZwUYsOdwNiUHUQzql
-         e40WsQARAQ39fyL7+TrN6AB7H7h3ri8bRJkvAlbAdMlhYL/UknmIKdpAY8SflUcMVOP0
-         kabmDmLf4wI2UxAtt7fzeOVUL20V8gWpr7qekFL83J9TADnABRxlj4M7E+LPReBA7nGZ
-         1nHA==
-X-Gm-Message-State: ANoB5plgXgT9xxtvC6rj1EOGbGNcBHmEgHOOiOW1t7PZcFHmQtJB/ISr
-        2x8kROdHNw8SgkSTeZEvPsZaGg==
-X-Google-Smtp-Source: AA0mqf7i13+gr+nV4F+Pz1qThWBzQ5ZvPLsujUe0vIKUyAVKNbj+hpveo1MQ3Y6HRoXfeC9fe2BM7w==
-X-Received: by 2002:a05:620a:1310:b0:6f9:ffc6:45d1 with SMTP id o16-20020a05620a131000b006f9ffc645d1mr18525732qkj.663.1669242631003;
-        Wed, 23 Nov 2022 14:30:31 -0800 (PST)
-Received: from localhost ([2620:10d:c091:480::1:bc4])
-        by smtp.gmail.com with ESMTPSA id fg22-20020a05622a581600b003a580cd979asm10695213qtb.58.2022.11.23.14.30.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 14:30:30 -0800 (PST)
-Date:   Wed, 23 Nov 2022 17:30:56 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Mina Almasry <almasrymina@google.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
-        shakeelb@google.com, gthelen@google.com, fvdl@google.com,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [RFC PATCH V1] mm: Disable demotion from proactive reclaim
-Message-ID: <Y36fIGFCFKiocAd6@cmpxchg.org>
-References: <20221122203850.2765015-1-almasrymina@google.com>
- <Y35fw2JSAeAddONg@cmpxchg.org>
- <CAHS8izN+xqM67XLT4y5qyYnGQMUWRQCJrdvf2gjTHd8nZ_=0sw@mail.gmail.com>
- <CAJD7tkZNW=u1TD-Fd_3RuzRNtaFjxihbGm0836QHkdp0Nn-vyQ@mail.gmail.com>
+        Wed, 23 Nov 2022 17:32:21 -0500
+Received: from qproxy6-pub.mail.unifiedlayer.com (qproxy6-pub.mail.unifiedlayer.com [69.89.23.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D135512BFE7
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 14:32:19 -0800 (PST)
+Received: from gproxy3-pub.mail.unifiedlayer.com (unknown [69.89.30.42])
+        by qproxy6.mail.unifiedlayer.com (Postfix) with ESMTP id 7EA798029CE6
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 22:32:19 +0000 (UTC)
+Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
+        by progateway5.mail.pro1.eigbox.com (Postfix) with ESMTP id 0B6331004A85F
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 22:31:59 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id xyHeoaqMe0QBNxyHeoeOLh; Wed, 23 Nov 2022 22:31:59 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=DuqTREz+ c=1 sm=1 tr=0 ts=637e9f5f
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=9xFQ1JgjjksA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=v/xOKGW0BsQAx53NFGgIhs2QrUVPKgaTLEUW5GUX404=; b=o1YnRX2GE7ySqkg9w9gFB4BQRk
+        lshwkgQUMLloT4L5K10Sl3bDwrQcMriMe60VcC4zaug4iA2BU7pVYuOSznmtn9KfI/qVcX0GiQwdf
+        PSS2OJxpm4KnvLOnDipM8Mdau58MLOr/y4pwh3BgJ6shimcsxtRP1aV0FZKruoLgzvaAtEHCW2FA4
+        hNUmZoa0r9PDQpyFK5iD2F0rFp5QCZpV57Lr9CNw8ZMq/LPhvKAK5Nbie25b6Mk9suGtaNzs7nuxw
+        PbyVkok1jjTaYoS0OogwY1yVqqZTz1d2rSQulfYeKTfcueCnVc5vWqnmbqvdfb/roTGqJX5tXWQJT
+        8bPKYR3w==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:58836 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1oxyHd-000NoE-Rb;
+        Wed, 23 Nov 2022 15:31:57 -0700
+Subject: Re: [PATCH 6.0 000/314] 6.0.10-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20221123084625.457073469@linuxfoundation.org>
+In-Reply-To: <20221123084625.457073469@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <d10b8119-0324-4798-76a3-e34a1ad23608@w6rz.net>
+Date:   Wed, 23 Nov 2022 14:31:54 -0800
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJD7tkZNW=u1TD-Fd_3RuzRNtaFjxihbGm0836QHkdp0Nn-vyQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1oxyHd-000NoE-Rb
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:58836
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,99 +97,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 01:35:13PM -0800, Yosry Ahmed wrote:
-> On Wed, Nov 23, 2022 at 1:21 PM Mina Almasry <almasrymina@google.com> wrote:
-> >
-> > On Wed, Nov 23, 2022 at 10:00 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
-> > >
-> > > Hello Mina,
-> > >
-> > > On Tue, Nov 22, 2022 at 12:38:45PM -0800, Mina Almasry wrote:
-> > > > Since commit 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg
-> > > > reclaim""), the proactive reclaim interface memory.reclaim does both
-> > > > reclaim and demotion. This is likely fine for us for latency critical
-> > > > jobs where we would want to disable proactive reclaim entirely, and is
-> > > > also fine for latency tolerant jobs where we would like to both
-> > > > proactively reclaim and demote.
-> > > >
-> > > > However, for some latency tiers in the middle we would like to demote but
-> > > > not reclaim. This is because reclaim and demotion incur different latency
-> > > > costs to the jobs in the cgroup. Demoted memory would still be addressable
-> > > > by the userspace at a higher latency, but reclaimed memory would need to
-> > > > incur a pagefault.
-> > > >
-> > > > To address this, I propose having reclaim-only and demotion-only
-> > > > mechanisms in the kernel. There are a couple possible
-> > > > interfaces to carry this out I considered:
-> > > >
-> > > > 1. Disable demotion in the memory.reclaim interface and add a new
-> > > >    demotion interface (memory.demote).
-> > > > 2. Extend memory.reclaim with a "demote=<int>" flag to configure the demotion
-> > > >    behavior in the kernel like so:
-> > > >       - demote=0 would disable demotion from this call.
-> > > >       - demote=1 would allow the kernel to demote if it desires.
-> > > >       - demote=2 would only demote if possible but not attempt any
-> > > >         other form of reclaim.
-> > >
-> > > Unfortunately, our proactive reclaim stack currently relies on
-> > > memory.reclaim doing both. It may not stay like that, but I'm a bit
-> > > wary of changing user-visible semantics post-facto.
-> > >
-> > > In patch 2, you're adding a node interface to memory.demote. Can you
-> > > add this to memory.reclaim instead? This would allow you to control
-> > > demotion and reclaim independently as you please: if you call it on a
-> > > node with demotion targets, it will demote; if you call it on a node
-> > > without one, it'll reclaim. And current users will remain unaffected.
-> >
-> > Hello Johannes, thanks for taking a look!
-> >
-> > I can certainly add the "nodes=" arg to memory.reclaim and you're
-> > right, that would help in bridging the gap. However, if I understand
-> > the underlying code correctly, with only the nodes= arg the kernel
-> > will indeed attempt demotion first, but the kernel will also merrily
-> > fall back to reclaiming if it can't demote the full amount. I had
-> > hoped to have the flexibility to protect latency sensitive jobs from
-> > reclaim entirely while attempting to do demotion.
-> >
-> > There are probably ways to get around that in the userspace. I presume
-> > the userspace can check if there is available memory on the node's
-> > demotion targets, and if so, the kernel should demote-only. But I feel
-> > that wouldn't be reliable as the demotion logic may change across
-> > kernel versions. The userspace may think the kernel would demote but
-> > instead demotion failed due to whatever heuristic introduced into the
-> > new kernel version.
-> >
-> > The above is just one angle of the issue. Another angle (which Yosry
-> > would care most about I think) is that at Google we call
-> > memory.reclaim mainly when memory.current is too close to memory.max
-> > and we expect the memory usage of the cgroup to drop as a result of a
-> > success memory.reclaim call. I suspect once we take in commit
-> > 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg reclaim""),
-> > we would run into that regression, but I defer to Yosry here, he may
-> > have a solution for that in mind already.
-> 
-> We don't exactly rely on memory.current, but we do have a separate
-> proactive reclaim policy today from demotion, and we do expect
-> memory.reclaim to reclaim memory and not demote it. So it is important
-> that we can control reclaim vs. demotion separately. Having
-> memory.reclaim do demotions by default is not ideal for our current
-> setup, so at least having a demote= argument to control it (no
-> demotions, may demote, only demote) is needed.
+On 11/23/22 12:47 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.10 release.
+> There are 314 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 25 Nov 2022 08:45:20 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.10-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-With a nodemask you should be able to only reclaim by specifying
-terminal memory tiers that do that, and leave out higher tiers that
-demote.
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-That said, it would actually be nice if reclaim policy wouldn't have
-to differ from demotion policy longer term. Ultimately it comes down
-to mapping age to memory tier, right? Such that hot pages are in RAM,
-warm pages are in CXL, cold pages are in storage. If you apply equal
-presure on all tiers, it's access frequency that should determine
-which RAM pages to demote, and which CXL pages to reclaim. If RAM
-pages are hot and refuse demotion, and CXL pages are cold in
-comparison, CXL should clear out. If RAM pages are warm, they should
-get demoted to CXL but not reclaimed further from there (and rotate
-instead).
+Tested-by: Ron Economos <re@w6rz.net>
 
-Do we know what's preventing this from happening today? What's the
-reason you want to control them independently?
