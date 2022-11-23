@@ -2,142 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7665D635BF1
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 12:41:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00A54635BFA
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 12:43:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237446AbiKWLlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 06:41:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49968 "EHLO
+        id S237462AbiKWLlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 06:41:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237411AbiKWLlL (ORCPT
+        with ESMTP id S237391AbiKWLlP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 06:41:11 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A30109583;
-        Wed, 23 Nov 2022 03:41:07 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669203666;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=373bQ1nq+nl0rYtdJTO5Jt2zlt/TLiciMjBg/gptv3M=;
-        b=KpEqNtPqfiJppK8AvzqtheMaPcoZmN8t/rFv6jjr6hTYoy40ftLFhpimHJ5jw8l6Va6aMw
-        Hj8rFIEBDV55rsgKjpjmn7AIQVUNwC2gbZf1xfpahuw3LOSLh/LJheui3OO1y+1cm92f6x
-        HQIXyX+ew/MZPbmSyWMukFU5yTJnHGzvmeRo4Z3KIKZfQvoGpIuFiGmWGU1jHalUcMt94Q
-        UjDY8OCA77xKJVyyWjMTJG76mp6GpoVYrvAE002YCUD9t6HNkhsIHaymA3SxGTYalj768Y
-        JPVHnOXR9BT/siy0wfNlaD21yUTYXDrgoxQ6VRkYoAyn0ji4clI4WvLn5hj9Hg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669203666;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=373bQ1nq+nl0rYtdJTO5Jt2zlt/TLiciMjBg/gptv3M=;
-        b=cQlKvLqRtjVxKMFF8O3YttItxpSP0whK6NO6CdL/nA66+knkQDkTy9kfdNkswueZtwmlSX
-        vU8ev3zdRcFC1GBQ==
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     "x86@kernel.org" <x86@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>,
-        "Ahmed S. Darwish" <darwi@linutronix.de>
-Subject: RE: [patch V2 12/33] PCI/MSI: Add support for per device MSI[X]
- domains
-In-Reply-To: <BN9PR11MB5276E9AD0F86A27A23ED8CFB8C0C9@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20221121083657.157152924@linutronix.de>
- <20221121091327.163146917@linutronix.de>
- <BN9PR11MB5276E9AD0F86A27A23ED8CFB8C0C9@BN9PR11MB5276.namprd11.prod.outlook.com>
-Date:   Wed, 23 Nov 2022 12:41:05 +0100
-Message-ID: <87zgchew4u.ffs@tglx>
+        Wed, 23 Nov 2022 06:41:15 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C411095AA;
+        Wed, 23 Nov 2022 03:41:13 -0800 (PST)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NHJyp4rQJzJnrl;
+        Wed, 23 Nov 2022 19:37:54 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 23 Nov 2022 19:41:10 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 23 Nov 2022 19:41:10 +0800
+Subject: Re: [PATCH] doc: Fix htmldocs build warnings of stallwarn.rst
+To:     "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        "Josh Triplett" <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        <linux-next@vger.kernel.org>
+References: <20221123091246.1890-1-thunder.leizhen@huawei.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <9dd0bfd0-19e7-607a-0d75-567cdfa6ab86@huawei.com>
+Date:   Wed, 23 Nov 2022 19:41:09 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221123091246.1890-1-thunder.leizhen@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23 2022 at 08:08, Kevin Tian wrote:
->> From: Thomas Gleixner <tglx@linutronix.de>
->
-> pci_mask_msi() and pci_msi_mask() are confusing.
->
-> Probably pci_irq_mask_msi() given the parameter is irq_data.
 
-maybe.
 
->> +bool pci_setup_msi_device_domain(struct pci_dev *pdev)
->> +{
->> +	if (WARN_ON_ONCE(pdev->msix_enabled))
->> +		return false;
->
-> the check already exists in __pci_enable_msi_range()
->
->> +bool pci_setup_msix_device_domain(struct pci_dev *pdev, unsigned int
->> hwsize)
->> +{
->> +	if (WARN_ON_ONCE(pdev->msix_enabled))
->> +		return false;
->
-> ditto.
->
-> btw according to the comment this should check pdev->msi_enabled.
+On 2022/11/23 17:12, Zhen Lei wrote:
+> Documentation/RCU/stallwarn.rst:
+> 401: WARNING: Literal block expected; none found.
+> 428: WARNING: Literal block expected; none found.
+> 445: WARNING: Literal block expected; none found.
+> 459: WARNING: Literal block expected; none found.
+> 468: WARNING: Literal block expected; none found.
+> 
+> The literal block need to be indented, so add two spaces to each line.
+> 
+> In addition, ':', which is used as a boundary in the literal block, is
+> replaced by '|'.
+> 
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> ---
+>  Documentation/RCU/stallwarn.rst | 44 ++++++++++++++++-----------------
+>  1 file changed, 22 insertions(+), 22 deletions(-)
+> 
+> diff --git a/Documentation/RCU/stallwarn.rst b/Documentation/RCU/stallwarn.rst
+> index c1e92dfef40d501..0f6a58ebf5d7855 100644
+> --- a/Documentation/RCU/stallwarn.rst
+> +++ b/Documentation/RCU/stallwarn.rst
+> @@ -398,9 +398,9 @@ In kernels built with CONFIG_RCU_CPU_STALL_CPUTIME=y or booted with
+>  rcupdate.rcu_cpu_stall_cputime=1, the following additional information
+>  is supplied with each RCU CPU stall warning::
+>  
+> -rcu:          hardirqs   softirqs   csw/system
+> -rcu:  number:      624         45            0
+> -rcu: cputime:       69          1         2425   ==> 2500(ms)
+> +  rcu:          hardirqs   softirqs   csw/system
+> +  rcu:  number:      624         45            0
+> +  rcu: cputime:       69          1         2425   ==> 2500(ms)
+>  
+>  These statistics are collected during the sampling period. The values
+>  in row "number:" are the number of hard interrupts, number of soft
+> @@ -412,22 +412,22 @@ in milliseconds.  Because user-mode tasks normally do not cause RCU CPU
+>  stalls, these tasks are typically kernel tasks, which is why only the
+>  system CPU time are considered.
+>  
+> -The sampling period is shown as follows:
+> -:<------------first timeout---------->:<-----second timeout----->:
+> -:<--half timeout-->:<--half timeout-->:                          :
+> -:                  :<--first period-->:                          :
+> -:                  :<-----------second sampling period---------->:
+> -:                  :                  :                          :
+> -:          snapshot time point    1st-stall                  2nd-stall
+> +The sampling period is shown as follows::
+>  
+> +  |<------------first timeout---------->|<-----second timeout----->|
+> +  |<--half timeout-->|<--half timeout-->|                          |
+> +  |                  |<--first period-->|                          |
+> +  |                  |<-----------second sampling period---------->|
+> +  |                  |                  |                          |
+> +  |          snapshot time point    1st-stall                  2nd-stall
+>  
+>  The following describes four typical scenarios:
+>  
+>  1. A CPU looping with interrupts disabled.::
+>  
 
-Yeah, those are probably redundant.
+Wait, a space is need to be added before "::", otherwise, only one colon
+will be removed from the output. And in this way, other paragraphs after
+literal block are also displayed in red when using vim to edit stallwarn.rst.
+So it would be better to use expanded form.
 
->
->> @@ -152,13 +316,33 @@ bool pci_msi_domain_supports(struct pci_
->>  {
->>  	struct msi_domain_info *info;
->>  	struct irq_domain *domain;
->> +	unsigned int supported;
->> 
->>  	domain = dev_get_msi_domain(&pdev->dev);
->> 
->>  	if (!domain || !irq_domain_is_hierarchy(domain))
->>  		return mode == ALLOW_LEGACY;
->> -	info = domain->host_data;
->> -	return (info->flags & feature_mask) == feature_mask;
->> +
->> +	if (!irq_domain_is_msi_parent(domain)) {
->> +		/*
->> +		 * For "global" PCI/MSI interrupt domains the associated
->> +		 * msi_domain_info::flags is the authoritive source of
->> +		 * information.
->> +		 */
->> +		info = domain->host_data;
->> +		supported = info->flags;
->> +	} else {
->> +		/*
->> +		 * For MSI parent domains the supported feature set
->> +		 * is avaliable in the parent ops. This makes checks
->> +		 * possible before actually instantiating the
->> +		 * per device domain because the parent is never
->> +		 * expanding the PCI/MSI functionality.
->> +		 */
->> +		supported = domain->msi_parent_ops->supported_flags;
->
-> This is general PCI MSI logic. So an open related to my rely to patch02,
-> is it correct for PCI core to assume that the real parent imposes all the
-> restrictions and there is no need to further go down the hierarchy?
+I will post v2.
 
-That was my working assumption and it turned out to be correct with both
-x86 and ARM.
+> -   rcu:          hardirqs   softirqs   csw/system
+> -   rcu:  number:        0          0            0
+> -   rcu: cputime:        0          0            0   ==> 2500(ms)
+> +     rcu:          hardirqs   softirqs   csw/system
+> +     rcu:  number:        0          0            0
+> +     rcu: cputime:        0          0            0   ==> 2500(ms)
+>  
+>     Because interrupts have been disabled throughout the measurement
+>     interval, there are no interrupts and no context switches.
+> @@ -442,9 +442,9 @@ The following describes four typical scenarios:
+>     and CPU time consumed by hard interrupts, along with non-zero CPU
+>     time consumed by in-kernel execution.::
+>  
+> -   rcu:          hardirqs   softirqs   csw/system
+> -   rcu:  number:      624          0            0
+> -   rcu: cputime:       49          0         2446   ==> 2500(ms)
+> +     rcu:          hardirqs   softirqs   csw/system
+> +     rcu:  number:      624          0            0
+> +     rcu: cputime:       49          0         2446   ==> 2500(ms)
+>  
+>     The fact that there are zero softirqs gives a hint that these were
+>     disabled, perhaps via local_bh_disable().  It is of course possible
+> @@ -456,18 +456,18 @@ The following describes four typical scenarios:
+>  
+>     Here, only the number of context switches is zero.::
+>  
+> -   rcu:          hardirqs   softirqs   csw/system
+> -   rcu:  number:      624         45            0
+> -   rcu: cputime:       69          1         2425   ==> 2500(ms)
+> +     rcu:          hardirqs   softirqs   csw/system
+> +     rcu:  number:      624         45            0
+> +     rcu: cputime:       69          1         2425   ==> 2500(ms)
+>  
+>     This situation hints that the stalled CPU was looping with preemption
+>     disabled.
+>  
+>  4. No looping, but massive hard and soft interrupts.::
+>  
+> -   rcu:          hardirqs   softirqs   csw/system
+> -   rcu:  number:       xx         xx            0
+> -   rcu: cputime:       xx         xx            0   ==> 2500(ms)
+> +     rcu:          hardirqs   softirqs   csw/system
+> +     rcu:  number:       xx         xx            0
+> +     rcu: cputime:       xx         xx            0   ==> 2500(ms)
+>  
+>     Here, the number and CPU time of hard interrupts are all non-zero,
+>     but the number of context switches and the in-kernel CPU time consumed
+> 
 
-Thanks,
-
-        tglx
+-- 
+Regards,
+  Zhen Lei
