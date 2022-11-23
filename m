@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC72B63682B
+	by mail.lfdr.de (Postfix) with ESMTP id 380DD636829
 	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:03:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239204AbiKWSDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 13:03:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53696 "EHLO
+        id S239237AbiKWSDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 13:03:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239168AbiKWSCZ (ORCPT
+        with ESMTP id S239183AbiKWSCZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 23 Nov 2022 13:02:25 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2AF2D741;
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81FA93700;
         Wed, 23 Nov 2022 10:02:22 -0800 (PST)
 Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 42CFA322F;
+        by mail.3ffe.de (Postfix) with ESMTPSA id C83B93A7F;
         Wed, 23 Nov 2022 19:02:20 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
         t=1669226540;
@@ -27,12 +27,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail20220821
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=bQO4p8yYKQXJsXFHB0RdTY77pOrPELcS4Lfg139SYHo=;
-        b=uVzBA4B+zBhLOBzQlnjDwdk5Yebf5vsK0n25923nVLEvyvC6MhJaOFMV/OBJUUl2hZQOZ8
-        yRGhURRCux6SaIh07BJVlPXG8YV8IsfMEIyNTYdYNu0iJQ9orTJB7sJrB+DkV9NlBOuP3a
-        YdTTexUQvY+yKQTO4Mma8w8k3UBNrpB9dG7+qcz0f7LJbfY7Mo/kW4LppMwuMU+UMQcjNt
-        4RO5RRbOe0jVQsrwIZ41e/Ez+T2o2HEhdOIU0ziFXZ2a94GmYIaW+vs8ZfZWmVaSQhF8GV
-        F021R8tntSAF+nCN004o9/kO1iNuSt25kEVzqY7qo4IwDspDQqJo9WZ2pMSpBw==
+        bh=1Q1MoPTERuwNbtl93gSheDb+IydkaPiCC1imB+guf7A=;
+        b=O40PtDLf1PHHYXCdyXG0dEe/l1T4hU/5ZadCAMY9NuJx9Nz4/lYbJnzCO1AtiW05WhVzwf
+        a55BRAkXHsw8LnQkXpMUwGXTZ2PL3RwDGxxhgAEGyaNjkfvPfJf0DHYORI2G0yI4/J9P/S
+        eucSBEC02A58rfUCU4Pr4K19BXqwQgoHoojCGzY1/8tVFy9AvbF8Bst8W7BwL7aoLr+Exc
+        id2EZlndNwiSPCAP689VEAzrmPxcm3q5XfDLEX7wXgcvyQYmngmhlmNlOu0Rxd3jlsejnt
+        0YbRN7zF3K2JCHHqlNCZZbVoye7hdxAyL9ue7eVxDhxx6uzLxnjRjZwiCGWYdw==
 From:   Michael Walle <michael@walle.cc>
 To:     Jonathan Corbet <corbet@lwn.net>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
@@ -43,9 +43,9 @@ To:     Jonathan Corbet <corbet@lwn.net>,
 Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         Michael Walle <michael@walle.cc>
-Subject: [PATCH v4 04/20] of: property: add #nvmem-cell-cells property
-Date:   Wed, 23 Nov 2022 19:01:35 +0100
-Message-Id: <20221123180151.2160033-5-michael@walle.cc>
+Subject: [PATCH v4 05/20] nvmem: core: fix device node refcounting
+Date:   Wed, 23 Nov 2022 19:01:36 +0100
+Message-Id: <20221123180151.2160033-6-michael@walle.cc>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221123180151.2160033-1-michael@walle.cc>
 References: <20221123180151.2160033-1-michael@walle.cc>
@@ -61,32 +61,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bindings describe the new '#nvmem-cell-cells' property. Now that the
-arguments count property is optional, we just add this property to the
-nvmem-cells.
+In of_nvmem_cell_get(), of_get_next_parent() is used on cell_np. This
+will decrement the refcount on cell_np, but cell_np is still used later
+in the code. Use of_get_parent() instead and of_node_put() in the
+appropriate places.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
-Tested-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
 changes since v3:
+ - none
+
+changes since v2:
  - new patch
 
- drivers/of/property.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/nvmem/core.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/of/property.c b/drivers/of/property.c
-index 9773bfeaed9f..f60ac02e9dec 100644
---- a/drivers/of/property.c
-+++ b/drivers/of/property.c
-@@ -1305,7 +1305,7 @@ DEFINE_SIMPLE_PROP(dmas, "dmas", "#dma-cells")
- DEFINE_SIMPLE_PROP(power_domains, "power-domains", "#power-domain-cells")
- DEFINE_SIMPLE_PROP(hwlocks, "hwlocks", "#hwlock-cells")
- DEFINE_SIMPLE_PROP(extcon, "extcon", NULL)
--DEFINE_SIMPLE_PROP(nvmem_cells, "nvmem-cells", NULL)
-+DEFINE_SIMPLE_PROP(nvmem_cells, "nvmem-cells", "#nvmem-cell-cells")
- DEFINE_SIMPLE_PROP(phys, "phys", "#phy-cells")
- DEFINE_SIMPLE_PROP(wakeup_parent, "wakeup-parent", NULL)
- DEFINE_SIMPLE_PROP(pinctrl0, "pinctrl-0", NULL)
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index 321d7d63e068..205a427f564d 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -1242,16 +1242,21 @@ struct nvmem_cell *of_nvmem_cell_get(struct device_node *np, const char *id)
+ 	if (!cell_np)
+ 		return ERR_PTR(-ENOENT);
+ 
+-	nvmem_np = of_get_next_parent(cell_np);
+-	if (!nvmem_np)
++	nvmem_np = of_get_parent(cell_np);
++	if (!nvmem_np) {
++		of_node_put(cell_np);
+ 		return ERR_PTR(-EINVAL);
++	}
+ 
+ 	nvmem = __nvmem_device_get(nvmem_np, device_match_of_node);
+ 	of_node_put(nvmem_np);
+-	if (IS_ERR(nvmem))
++	if (IS_ERR(nvmem)) {
++		of_node_put(cell_np);
+ 		return ERR_CAST(nvmem);
++	}
+ 
+ 	cell_entry = nvmem_find_cell_entry_by_node(nvmem, cell_np);
++	of_node_put(cell_np);
+ 	if (!cell_entry) {
+ 		__nvmem_device_put(nvmem);
+ 		return ERR_PTR(-ENOENT);
 -- 
 2.30.2
 
