@@ -2,47 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 412FD636421
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:40:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFE14636422
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:40:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236726AbiKWPkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 10:40:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
+        id S237480AbiKWPkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 10:40:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238256AbiKWPkO (ORCPT
+        with ESMTP id S238355AbiKWPkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 10:40:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B77C607C
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:40:06 -0800 (PST)
+        Wed, 23 Nov 2022 10:40:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20283FAE5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:40:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 425E5B82170
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 15:40:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C1D1C4347C;
-        Wed, 23 Nov 2022 15:39:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BF68BB8216D
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 15:40:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADDE3C433D7;
+        Wed, 23 Nov 2022 15:40:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669218004;
-        bh=HxcuD2UbWsx5DYi4tBcZiIRhQNFgPWwQufJ/o/enGok=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ePFKEAd38TsRrBrBQqvPK9w+TGFxwJG3MCRaqDl1Pz2JBC38SefHsoz+6Ps5YMBF0
-         Um4iBfSvZC9lJBodeVuxv80CpO4RveMFqkW9If6t3x6+Q06P/EFk1SIIDdGozkdGcL
-         H49O5wX2OlMumcWweuM5S+mgRKAQG5VpwilAdvk5FLf1lz3bPlTQrAPOZJWitckJQM
-         cPxfInscoeFR45edoPzwKpr3wullyRq0XaJEvMlleX1urnlL3hfKevlBTJcn86OZ0A
-         16Ea4GWmAMBzKVjP5bhy4jdlDjtTRfFcsHBUu/DFna69pKKAYIdOYIJL4nYmL0MCa3
-         NzzAP+aHOb4nQ==
+        s=k20201202; t=1669218009;
+        bh=klemdwhmvdHm8UXMNKhz8vGyWWFdhO3duaUDPADUSqA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=BSGNtn91mrpp3bPJslAbgOWWcK/5+OU23WPXON7/FejtddmER7EHhkkS7MhuXO4ca
+         W0AcRvSsbkvIBDYZ6REPQVDE5h+PZtldLD6nC5VqrbD0EDTg2YR0+Dk0WiZ2b1lo5T
+         f+ILD5bLCug436RG/pF8ojzCrvAiCKp/ef8gLaAr6Ty4naE0Evd41erwlbMMHxZkxG
+         mwAovIg1UoZDcga8X/4pR/UGIhVdbR0rf5SuCrL3GrWxVvheYVzmWL+OvdtnvYTO1m
+         YKOlNf2BVVW8AlIORzuzO1o5NNbkYrJ8z96wXJmgqc+AGB1J9EFf6srFoptvADgZoj
+         SLOnrRYMjC/MA==
 From:   guoren@kernel.org
 To:     anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
         conor.dooley@microchip.com, heiko@sntech.de, rostedt@goodmis.org,
         mhiramat@kernel.org, jolsa@redhat.com, bp@suse.de,
         jpoimboe@kernel.org, suagrfillet@gmail.com, andy.chiu@sifive.com
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V3 0/5] riscv: ftrace: Fixup ftrace detour code & Optimization
-Date:   Wed, 23 Nov 2022 10:39:45 -0500
-Message-Id: <20221123153950.2911981-1-guoren@kernel.org>
+        Guo Ren <guoren@kernel.org>
+Subject: [PATCH V3 1/5] riscv: ftrace: Fixup panic by disabling preemption
+Date:   Wed, 23 Nov 2022 10:39:46 -0500
+Message-Id: <20221123153950.2911981-2-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20221123153950.2911981-1-guoren@kernel.org>
+References: <20221123153950.2911981-1-guoren@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -54,110 +56,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+From: Andy Chiu <andy.chiu@sifive.com>
 
-The previous ftrace detour implementation fc76b8b8011 ("riscv: Using
-PATCHABLE_FUNCTION_ENTRY instead of MCOUNT") contain three problems.
+In RISCV, we must use an AUIPC + JALR pair to encode an immediate,
+forming a jump that jumps to an address over 4K. This may cause errors
+if we want to enable kernel preemption and remove dependency from
+patching code with stop_machine(). For example, if a task was switched
+out on auipc. And, if we changed the ftrace function before it was
+switched back, then it would jump to an address that has updated 11:0
+bits mixing with previous XLEN:12 part.
 
- - The most horrible bug is preemption panic which found by Andy [1].
-   Let's disable preemption for ftrace first, and Andy could continue
-   the ftrace preemption work.
- - The "-fpatchable-function-entry= CFLAG" wasted code size !RISCV_ISA_C.
- - The ftrace detour implementation wasted code size. 
+p: patched area performed by dynamic ftrace
+ftrace_prologue:
+p|      REG_S   ra, -SZREG(sp)
+p|      auipc   ra, 0x? ------------> preempted
+					...
+				change ftrace function
+					...
+p|      jalr    -?(ra) <------------- switched back
+p|      REG_L   ra, -SZREG(sp)
+func:
+	xxx
+	ret
 
-The first three patches solve the above problems, and the last two
-patches is from [2]:
+Fixes: fc76b8b8011 ("riscv: Using PATCHABLE_FUNCTION_ENTRY instead of MCOUNT")
+Signed-off-by: Andy Chiu <andy.chiu@sifive.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
+---
+@Andy, could you give the patch a Signed-off-by? I just copy your most
+important comment, so the first author should be you. First, let's fix
+the problem caused by my previous patch, and you can continue your
+ftrace preemption work.
+---
+ arch/riscv/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-In RISC-V architecture, when we enable the ftrace_graph tracer on some
-functions, the function tracings on other functions will suffer extra
-graph tracing work. In essence, graph_ops isn't limited by its func_hash
-due to the global ftrace_graph_[regs]_call label. That should be
-corrected.
-
-What inspires me is the commit 0c0593b45c9b ("x86/ftrace: Make function
-graph use ftrace directly") that uses graph_ops::func function to
-install return_hooker and makes the function called against its
-func_hash.
-
-This series of patches makes function graph use ftrace directly for
-riscv.
-
-If FTRACE_WITH_REGS isn't defined, ftrace_caller keeps ftrace_graph_call
-so that it can be replaced with the calling of prepare_ftrace_return by
-the enable/disable helper.
-
-As for defining FTRACE_WITH_REGS, ftrace_caller is adjusted to save the
-necessary regs against the pt_regs layout, so it can reasonably call the
-graph_ops::func function - ftrace_graph_func. And ftrace_graph_[regs]_call
-and its enable/disable helper aren't needed.
-
-Test log:
-
-The tests generated by CONFIG_FTRACE_STARTUP_TEST have passed in the
-local
-qemu-system-riscv64 virt machine. The following is the log during
-startup.
-
-```
-Nov 15 03:07:13 stage4 kernel: Testing tracer function: PASSED
-Nov 15 03:07:13 stage4 kernel: Testing dynamic ftrace: PASSED
-Nov 15 03:07:13 stage4 kernel: Testing dynamic ftrace ops #1: 
-Nov 15 03:07:13 stage4 kernel: (1 0 1 0 0)  
-Nov 15 03:07:13 stage4 kernel: (1 1 2 0 0)  
-Nov 15 03:07:13 stage4 kernel: (2 1 3 0 365) 
-Nov 15 03:07:13 stage4 kernel: (2 2 4 0 399) 
-Nov 15 03:07:13 stage4 kernel: (3 2 4 0 146071) 
-Nov 15 03:07:13 stage4 kernel: (3 3 5 0 146105) PASSED
-Nov 15 03:07:13 stage4 kernel: Testing dynamic ftrace ops #2: 
-Nov 15 03:07:13 stage4 kernel: (1 0 1 589 0)  
-Nov 15 03:07:13 stage4 kernel: (1 1 2 635 0)  
-Nov 15 03:07:13 stage4 kernel: (2 1 3 1 2)  
-Nov 15 03:07:13 stage4 kernel: (2 2 4 125 126) 
-Nov 15 03:07:13 stage4 kernel: (3 2 4 146001 146078) 
-Nov 15 03:07:13 stage4 kernel: (3 3 5 146035 146112) PASSED
-Nov 15 03:07:13 stage4 kernel: Testing ftrace recursion: PASSED
-Nov 15 03:07:13 stage4 kernel: Testing ftrace recursion safe: PASSED
-Nov 15 03:07:13 stage4 kernel: Testing ftrace regs: PASSED
-Nov 15 03:07:13 stage4 kernel: Testing tracer nop: PASSED
-Nov 15 03:07:13 stage4 kernel: Testing tracer irqsoff: PASSED
-Nov 15 03:07:13 stage4 kernel: Testing tracer wakeup:
-Nov 15 03:07:13 stage4 kernel: sched: DL replenish lagged too much
-Nov 15 03:07:13 stage4 kernel: PASSED
-Nov 15 03:07:13 stage4 kernel: Testing tracer wakeup_rt: PASSED
-Nov 15 03:07:13 stage4 kernel: Testing tracer wakeup_dl: PASSED
-Nov 15 03:07:13 stage4 kernel: Testing tracer function_graph: PASSED
-
-[1]: https://lpc.events/event/16/contributions/1171/
-[2]: https://lore.kernel.org/lkml/20221120084230.910152-1-suagrfillet@gmail.com/ 
-
-Changes in V3
- - Include [2] for maintenance. [Song Shuai]
-
-Changes in V2:
-https://lore.kernel.org/linux-riscv/20220921034910.3142465-1-guoren@kernel.org/
- - Add Signed-off for preemption fixup.
-
-Changes in V1:
-https://lore.kernel.org/linux-riscv/20220916103817.9490-1-guoren@kernel.org/
-
-Andy Chiu (1):
-  riscv: ftrace: Fixup panic by disabling preemption
-
-Guo Ren (2):
-  riscv: ftrace: Remove wasted nops for !RISCV_ISA_C
-  riscv: ftrace: Reduce the detour code size to half
-
-Song Shuai (2):
-  riscv: ftrace: Add ftrace_graph_func
-  riscv: ftrace: Make ftrace_caller call ftrace_graph_func
-
- arch/riscv/Kconfig              |   2 +-
- arch/riscv/Makefile             |   6 +-
- arch/riscv/include/asm/ftrace.h |  63 +++++++++---
- arch/riscv/kernel/ftrace.c      |  91 ++++++----------
- arch/riscv/kernel/mcount-dyn.S  | 177 +++++++++++++++++++++-----------
- 5 files changed, 202 insertions(+), 137 deletions(-)
-
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 7cd981f96f48..1d0e5838b11b 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -280,7 +280,7 @@ config ARCH_RV64I
+ 	select HAVE_DYNAMIC_FTRACE_WITH_REGS if HAVE_DYNAMIC_FTRACE
+ 	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
+ 	select HAVE_FUNCTION_GRAPH_TRACER
+-	select HAVE_FUNCTION_TRACER if !XIP_KERNEL
++	select HAVE_FUNCTION_TRACER if !XIP_KERNEL && !PREEMPTION
+ 	select SWIOTLB if MMU
+ 
+ endchoice
 -- 
 2.36.1
 
