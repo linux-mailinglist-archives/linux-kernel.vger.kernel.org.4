@@ -2,188 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93C4363625C
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:50:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B83C636251
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:49:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237611AbiKWOt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 09:49:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49324 "EHLO
+        id S237626AbiKWOt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 09:49:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237521AbiKWOtw (ORCPT
+        with ESMTP id S237580AbiKWOtQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 09:49:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF1D6D4B7
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 06:48:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669214933;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XVwsHMkeuOJlctKFKAb4Da/8dTubU4VpbLh+0BeUA34=;
-        b=XHcWS4/sHyXelC1GCNqeIT/Yp/tY7Xh0S73ueC/xdqQB2mUoUNcMb0QaO8YH+IJG9dCUT+
-        4CM919R4Gw29+6HMSOdQ0Thv+G9s69OCHrIqVwoPD+A9e56NTPH7AueYthNOoiy1gvVqLQ
-        PyPKptfkkdb4PPx8R/Sj2L4QoE+TGFk=
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
- [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-416-z97pQCNROsKGNPHVINUZPQ-1; Wed, 23 Nov 2022 09:48:51 -0500
-X-MC-Unique: z97pQCNROsKGNPHVINUZPQ-1
-Received: by mail-il1-f199.google.com with SMTP id q6-20020a056e020c2600b00302664fc72cso12998911ilg.14
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 06:48:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XVwsHMkeuOJlctKFKAb4Da/8dTubU4VpbLh+0BeUA34=;
-        b=jogll1vvDm9gnKb3DDWSmQmbyfTXQqXL5cTsl+frBk9Ma8h1kHL30I3AM+UBcFmeWq
-         1e4GObPCdCI9oEO9VcroDIZdBQTqJiQ22ZDEXcLzUr3Ngb9PaKMqiEoyJ/YoGnXfzARE
-         kVJiKiwnLZF3026GnT0IZdIlECOekkpiRWKYlnbwHac6VDCCHD2pro+GDAM0rreTMOQQ
-         s5UtXjnoYPJgMtrVCQPxm9xrPLTJcv2Pf5Kj5NxUZrrRFHws0Yu3xQLGIlrI0zaQcDK+
-         kOS78Z9dn6RIpBKt81sWo3OJzewfeGkS/+vgZ1Rvtv+JkTesLpmbUiG9G0hc9FLstuIj
-         Mheg==
-X-Gm-Message-State: ANoB5pl4oMGAQSr4EzmmWr8Om4PnXu3J723PPO39flsdBRvdVfqBYjRN
-        AAmxc0rSiHytvEcZAk9inCWtIVfzSmARmM57Pc0L8YA8fcHwb4oSiTCEMOUDI6g29aVGD0UcerF
-        cuRr2PXA3b9lXd21aCNBgf7HUtoqf7EQ5ubPSBQAl
-X-Received: by 2002:a92:c691:0:b0:302:75c9:5d55 with SMTP id o17-20020a92c691000000b0030275c95d55mr4126280ilg.34.1669214931053;
-        Wed, 23 Nov 2022 06:48:51 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7t6tBPN8sYXy8dh8uHxD1HawZPKG6isYlau3hUqFJFGOIk/LhU7kZ8leId0LJjjgLzaxuDzjr+0sIG2p/qtrU=
-X-Received: by 2002:a92:c691:0:b0:302:75c9:5d55 with SMTP id
- o17-20020a92c691000000b0030275c95d55mr4126263ilg.34.1669214930760; Wed, 23
- Nov 2022 06:48:50 -0800 (PST)
+        Wed, 23 Nov 2022 09:49:16 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264306CA12;
+        Wed, 23 Nov 2022 06:49:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669214954; x=1700750954;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=6CaDzmwprgLasCtAjji0nqGgQ6qOSWdVD2cInwSVDOE=;
+  b=P5vnlveyz4nNZzzJ/MQgHJOvUpWYDjlnFsFExWsTsy6GUdHXkeKoAozL
+   HHjGuw8LcB+1tJhgjjIyuA/Ga9cYu0WrUnYFKVe8nqL4sRrsqIoa/rK0H
+   5OvoW2/4SPLObauGFQ6GP7yk6CsgQQ7bhzNFDrvL2SiD40R8n9R5Njoqt
+   z2/kONs+QEIJFJSWXI0C59K+/yh50Dd+isUyAjKk3dMqkSamd2ZE/hkUC
+   HcuxWmZBxZ4US64jL6y9RH0m+LOjsjwRqUQJWAiXPKGU3cgk3QHRmFbNb
+   IfDFRcWi3I2jh14eMRKClfpxMuBfTdSJbvGwatRrnH51rq/4qLP74AMlL
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="376225212"
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="376225212"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 06:48:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="635936973"
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="635936973"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga007.jf.intel.com with ESMTP; 23 Nov 2022 06:48:37 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 80918128; Wed, 23 Nov 2022 16:49:03 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jakob Koschel <jakobkoschel@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jani Nikula <jani.nikula@intel.com>
+Subject: [PATCH v4 1/4] i915: Move list_count() to list.h for broader use
+Date:   Wed, 23 Nov 2022 16:48:58 +0200
+Message-Id: <20221123144901.40493-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20221103155756.687789-1-benjamin.tissoires@redhat.com>
- <20221103155756.687789-4-benjamin.tissoires@redhat.com> <ff1a0b34-71f2-cebe-a6ef-675936b276eb@nvidia.com>
-In-Reply-To: <ff1a0b34-71f2-cebe-a6ef-675936b276eb@nvidia.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Wed, 23 Nov 2022 15:48:39 +0100
-Message-ID: <CAO-hwJJZxgeTT8mLwFrYynSVASva=o7qL9Kr4xOywV3KDUu2GA@mail.gmail.com>
-Subject: Re: [PATCH hid v12 03/15] HID: initial BPF implementation
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jon,
+Some of the existing users, and definitely will be new ones, want to
+count existing nodes in the list. Provide a generic API for that by
+moving code from i915 to list.h.
 
-On Wed, Nov 23, 2022 at 2:25 PM Jon Hunter <jonathanh@nvidia.com> wrote:
->
->
-> On 03/11/2022 15:57, Benjamin Tissoires wrote:
-> > Declare an entry point that can use fmod_ret BPF programs, and
-> > also an API to access and change the incoming data.
-> >
-> > A simpler implementation would consist in just calling
-> > hid_bpf_device_event() for any incoming event and let users deal
-> > with the fact that they will be called for any event of any device.
-> >
-> > The goal of HID-BPF is to partially replace drivers, so this situation
-> > can be problematic because we might have programs which will step on
-> > each other toes.
-> >
-> > For that, we add a new API hid_bpf_attach_prog() that can be called
-> > from a syscall and we manually deal with a jump table in hid-bpf.
-> >
-> > Whenever we add a program to the jump table (in other words, when we
-> > attach a program to a HID device), we keep the number of time we added
-> > this program in the jump table so we can release it whenever there are
-> > no other users.
-> >
-> > HID devices have an RCU protected list of available programs in the
-> > jump table, and those programs are called one after the other thanks
-> > to bpf_tail_call().
-> >
-> > To achieve the detection of users losing their fds on the programs we
-> > attached, we add 2 tracing facilities on bpf_prog_release() (for when
-> > a fd is closed) and bpf_free_inode() (for when a pinned program gets
-> > unpinned).
-> >
-> > Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
->
-> ...
->
-> > +static int __init hid_bpf_init(void)
-> > +{
-> > +     int err;
-> > +
-> > +     /* Note: if we exit with an error any time here, we would entirely break HID, which
-> > +      * is probably not something we want. So we log an error and return success.
-> > +      *
-> > +      * This is not a big deal: the syscall allowing to attach a BPF program to a HID device
-> > +      * will not be available, so nobody will be able to use the functionality.
-> > +      */
-> > +
-> > +     err = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &hid_bpf_kfunc_set);
-> > +     if (err) {
-> > +             pr_warn("error while setting HID BPF tracing kfuncs: %d", err);
-> > +             return 0;
-> > +     }
-> > +
-> > +     err = hid_bpf_preload_skel();
-> > +     if (err) {
-> > +             pr_warn("error while preloading HID BPF dispatcher: %d", err);
-> > +             return 0;
-> > +     }
-> > +
-> > +     /* register syscalls after we are sure we can load our preloaded bpf program */
-> > +     err = register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &hid_bpf_syscall_kfunc_set);
-> > +     if (err) {
-> > +             pr_warn("error while setting HID BPF syscall kfuncs: %d", err);
-> > +             return 0;
-> > +     }
-> > +
-> > +     return 0;
-> > +}
->
->
-> We have a kernel test that checks for new warning and error messages on
-> boot and with this change I am now seeing the following error message on
-> our Tegra platforms ...
->
->   WARNING KERN hid_bpf: error while preloading HID BPF dispatcher: -13
->
-> I have a quick look at the code, but I can't say I am familiar with
-> this. So I wanted to ask if a way to fix this or avoid this? I see the
-> code returns 0, so one option would be to make this an informational or
-> debug print.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Acked-by: Jani Nikula <jani.nikula@intel.com>
+---
+v4: fixed prototype when converting to static inline
+v3: added tag (Jani), changed to be static inline (Mike)
+v2: dropped the duplicate code in i915 (LKP)
+ drivers/gpu/drm/i915/gt/intel_engine_cs.c | 13 +------------
+ include/linux/list.h                      | 15 +++++++++++++++
+ 2 files changed, 16 insertions(+), 12 deletions(-)
 
-I am not in favor of debug in that case, because I suspect it'll hide
-too much when getting a bug report. Informational could do, yes.
-
-However, before that, I'd like to dig a little bit more on why it is
-failing. I thought arm64 now has support of tracing bpf programs, so I
-would not expect this to fail.
-
-Would you mind sending me your .config so I can check in it if you are
-missing anything? I am thinking that maybe I need to also depend on
-BPF_JIT.
-
-Cheers,
-Benjamin
-
->
-> Thanks
-> Jon
->
-> --
-> nvpublic
->
+diff --git a/drivers/gpu/drm/i915/gt/intel_engine_cs.c b/drivers/gpu/drm/i915/gt/intel_engine_cs.c
+index c33e0d72d670..b96c8217743c 100644
+--- a/drivers/gpu/drm/i915/gt/intel_engine_cs.c
++++ b/drivers/gpu/drm/i915/gt/intel_engine_cs.c
+@@ -2094,17 +2094,6 @@ static void print_request_ring(struct drm_printer *m, struct i915_request *rq)
+ 	}
+ }
+ 
+-static unsigned long list_count(struct list_head *list)
+-{
+-	struct list_head *pos;
+-	unsigned long count = 0;
+-
+-	list_for_each(pos, list)
+-		count++;
+-
+-	return count;
+-}
+-
+ static unsigned long read_ul(void *p, size_t x)
+ {
+ 	return *(unsigned long *)(p + x);
+@@ -2279,7 +2268,7 @@ void intel_engine_dump(struct intel_engine_cs *engine,
+ 	spin_lock_irqsave(&engine->sched_engine->lock, flags);
+ 	engine_dump_active_requests(engine, m);
+ 
+-	drm_printf(m, "\tOn hold?: %lu\n",
++	drm_printf(m, "\tOn hold?: %zu\n",
+ 		   list_count(&engine->sched_engine->hold));
+ 	spin_unlock_irqrestore(&engine->sched_engine->lock, flags);
+ 
+diff --git a/include/linux/list.h b/include/linux/list.h
+index 61762054b4be..632a298c7018 100644
+--- a/include/linux/list.h
++++ b/include/linux/list.h
+@@ -655,6 +655,21 @@ static inline void list_splice_tail_init(struct list_head *list,
+ 	     !list_is_head(pos, (head)); \
+ 	     pos = n, n = pos->prev)
+ 
++/**
++ * list_count - count nodes in the list
++ * @head:	the head for your list.
++ */
++static inline size_t list_count(struct list_head *head)
++{
++	struct list_head *pos;
++	size_t count = 0;
++
++	list_for_each(pos, head)
++		count++;
++
++	return count;
++}
++
+ /**
+  * list_entry_is_head - test if the entry points to the head of the list
+  * @pos:	the type * to cursor
+-- 
+2.35.1
 
