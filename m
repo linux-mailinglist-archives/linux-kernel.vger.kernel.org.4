@@ -2,144 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49272636062
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:49:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08FBE636064
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:50:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236421AbiKWNtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 08:49:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60498 "EHLO
+        id S236540AbiKWNuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 08:50:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237814AbiKWNta (ORCPT
+        with ESMTP id S237589AbiKWNtj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 08:49:30 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7357F8CBB5
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:38:59 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id g7so28217795lfv.5
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:38:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wS8FATQNxWPdriQp0BbXocQzCpC+MIR+DcVNfDAhwFk=;
-        b=goY0xT6u7EULHQx2MRhg/J+3Xshao0AkK0Kw/Yhep2ABZQKNds0sD0jO44XqILT85D
-         GMpgwtt4t0RcnMdLfGn72E9O9T3qn7XUT2okgutwciPevDbju3FcMf/01ixtJfXX7Iiq
-         fDbqCLjRKHOzrt5uEOMdWfHgwoVRnlv2IfOnw=
+        Wed, 23 Nov 2022 08:49:39 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6498FFB6
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:39:42 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id j20-20020a056e02219400b00300a22a7fe0so12903916ila.3
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:39:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wS8FATQNxWPdriQp0BbXocQzCpC+MIR+DcVNfDAhwFk=;
-        b=H16t2hNr4+29EsBEPBiLEhI8+2vdvsOKIarhLWcMxz72eDk+5sO3qRl4ieAE8BR78J
-         paX/DKHw10aZZoQ2LFIJBnf3h5c7ApDTjRvPT8AN1NcASmYTarbHk2Um1qxJ8dqUMb4e
-         /Sxnutbyjb7cfCYCg75voGNBCHo61HugGkzKiRKDrtFFSetRwI4KTSRJbJjp/FKqDkO6
-         TqD+9+ucVA3hpiOXvYVlZh/VaWN5abWJZYyunTdS0/4k9jnZw6wLHZDZwK0U0Wy9oaH4
-         XL6cEa2DCe++1/YkaiB/Mb3b98+838lsePjuMonx4ayfWEFhxCRqt8ydjeVoS1TTPDyk
-         2rBg==
-X-Gm-Message-State: ANoB5pnbthYKyV3FNLT7RmGFfKOl/CdA4ON/xQ6Q4aaWLulF10DW4Wge
-        MgwRxu6YHeF3yHQGhXX24SMeBQ==
-X-Google-Smtp-Source: AA0mqf4f1qphI9rYgYg/KQyHXOZ4X9v9VsEAFcQc3JIS1A5jOOVNZ/Gqskm/9D51RpT1s9TMN21moQ==
-X-Received: by 2002:ac2:4bc5:0:b0:4b4:c099:a994 with SMTP id o5-20020ac24bc5000000b004b4c099a994mr7840595lfq.193.1669210737739;
-        Wed, 23 Nov 2022 05:38:57 -0800 (PST)
-Received: from prevas-ravi.prevas.se ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id r9-20020a2e5749000000b002774e7267a7sm2224924ljd.25.2022.11.23.05.38.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 05:38:57 -0800 (PST)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] net: fec: don't reset irq coalesce settings to defaults on "ip link up"
-Date:   Wed, 23 Nov 2022 14:38:52 +0100
-Message-Id: <20221123133853.1822415-1-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.37.2
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=r5v6FVJiWDPwCtZbVBbR7imLaX6jhd6vr9IiwO5Qv4M=;
+        b=EA006QR4hoBbuAO1cj34sNAT7IhbYO7F4lgSY07Yhbx+RXiOdLwyR66+EAoUCMsK0x
+         DQt/H/1IaNEDoyJcn0PNsaOK7R84gpQZyjkW/v5LIkx4GN6p5WBxj0TDJA6deGu/bhag
+         AqxXozGHnSzoPfWfpAC7PCQDKfp+TccOtMs86o7/MenyP8KgRwQMmyqSHAMkZJBKXmuh
+         kZLUM8pZ1LeyJDHisMqpwEjO72jGTfag3dSW4D7vJ9FF+4QZDN2SpRhEIAIYH/deiknT
+         X84jnze8QYHWQVt+ualXccAkfEJXqaedaHIcfMkm7RdHh9rgAYTEqztfr1LZgvl/Uud4
+         /VBQ==
+X-Gm-Message-State: ANoB5plUqLfV2Q5FtgXCmTQLwD7MQq1OnNaAUh6GLPJDA2iJYABoQbTC
+        Dehl+el22AeBSzBGk7XRSVOFz39EoNlXZa5le3p9wOwR9qlI
+X-Google-Smtp-Source: AA0mqf576t2sB8RxEr4aHp29KPgLonTD00mNU35QmiaoxRtGJIEx77JlP2vTylvd4gWH7izJ7lcF5PzpVupZK62sDC1WXn4ZAZLG
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:5187:0:b0:375:175c:b00e with SMTP id
+ s129-20020a025187000000b00375175cb00emr12513033jaa.215.1669210782082; Wed, 23
+ Nov 2022 05:39:42 -0800 (PST)
+Date:   Wed, 23 Nov 2022 05:39:42 -0800
+In-Reply-To: <000000000000b04b4705e7ea36fb@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b8acd305ee236b14@google.com>
+Subject: Re: [syzbot] BUG: unable to handle kernel paging request in open_xa_dir
+From:   syzbot <syzbot+3c530d01065fbfab6070@syzkaller.appspotmail.com>
+To:     brauner@kernel.org, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk, willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, when a FEC device is brought up, the irq coalesce settings
-are reset to their default values (1000us, 200 frames). That's
-unexpected, and breaks for example use of an appropriate .link file to
-make systemd-udev apply the desired
-settings (https://www.freedesktop.org/software/systemd/man/systemd.link.html),
-or any other method that would do a one-time setup during early boot.
+syzbot has found a reproducer for the following issue on:
 
-Refactor the code so that fec_restart() instead uses
-fec_enet_itr_coal_set(), which simply applies the settings that are
-stored in the private data, and initialize that private data with the
-default values.
+HEAD commit:    65762d97e6fa Merge branch 'for-next/perf' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=12a2de53880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=56d0c7c3a2304e8f
+dashboard link: https://syzkaller.appspot.com/bug?extid=3c530d01065fbfab6070
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17de2dfd880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16df682d880000
 
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
----
- drivers/net/ethernet/freescale/fec_main.c | 22 ++++++----------------
- 1 file changed, 6 insertions(+), 16 deletions(-)
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/52f702197b30/disk-65762d97.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/72189c2789ce/vmlinux-65762d97.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/ec0349196c98/Image-65762d97.gz.xz
+mounted in repro #1: https://storage.googleapis.com/syzbot-assets/68a9fabb474d/mount_0.gz
+mounted in repro #2: https://storage.googleapis.com/syzbot-assets/8ac3adab6aa9/mount_1.gz
 
-diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-index f623c12eaf95..2ca2b61b451f 100644
---- a/drivers/net/ethernet/freescale/fec_main.c
-+++ b/drivers/net/ethernet/freescale/fec_main.c
-@@ -74,7 +74,7 @@
- #include "fec.h"
- 
- static void set_multicast_list(struct net_device *ndev);
--static void fec_enet_itr_coal_init(struct net_device *ndev);
-+static void fec_enet_itr_coal_set(struct net_device *ndev);
- 
- #define DRIVER_NAME	"fec"
- 
-@@ -1220,8 +1220,7 @@ fec_restart(struct net_device *ndev)
- 		writel(0, fep->hwp + FEC_IMASK);
- 
- 	/* Init the interrupt coalescing */
--	fec_enet_itr_coal_init(ndev);
--
-+	fec_enet_itr_coal_set(ndev);
- }
- 
- static int fec_enet_ipc_handle_init(struct fec_enet_private *fep)
-@@ -2856,19 +2855,6 @@ static int fec_enet_set_coalesce(struct net_device *ndev,
- 	return 0;
- }
- 
--static void fec_enet_itr_coal_init(struct net_device *ndev)
--{
--	struct ethtool_coalesce ec;
--
--	ec.rx_coalesce_usecs = FEC_ITR_ICTT_DEFAULT;
--	ec.rx_max_coalesced_frames = FEC_ITR_ICFT_DEFAULT;
--
--	ec.tx_coalesce_usecs = FEC_ITR_ICTT_DEFAULT;
--	ec.tx_max_coalesced_frames = FEC_ITR_ICFT_DEFAULT;
--
--	fec_enet_set_coalesce(ndev, &ec, NULL, NULL);
--}
--
- static int fec_enet_get_tunable(struct net_device *netdev,
- 				const struct ethtool_tunable *tuna,
- 				void *data)
-@@ -3623,6 +3609,10 @@ static int fec_enet_init(struct net_device *ndev)
- 	fep->rx_align = 0x3;
- 	fep->tx_align = 0x3;
- #endif
-+	fep->rx_pkts_itr = FEC_ITR_ICFT_DEFAULT;
-+	fep->tx_pkts_itr = FEC_ITR_ICFT_DEFAULT;
-+	fep->rx_time_itr = FEC_ITR_ICTT_DEFAULT;
-+	fep->tx_time_itr = FEC_ITR_ICTT_DEFAULT;
- 
- 	/* Check mask of the streaming and coherent API */
- 	ret = dma_set_mask_and_coherent(&fep->pdev->dev, DMA_BIT_MASK(32));
--- 
-2.37.2
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3c530d01065fbfab6070@syzkaller.appspotmail.com
+
+REISERFS (device loop0): Using tea hash to sort names
+REISERFS warning (device loop0): jdm-20006 create_privroot: xattrs/ACLs enabled and couldn't find/create .reiserfs_priv. Failing mount.
+loop0: detected capacity change from 0 to 32768
+Unable to handle kernel paging request at virtual address dead4ead00000068
+Mem abort info:
+  ESR = 0x0000000096000004
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x04: level 0 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000004
+  CM = 0, WnR = 0
+[dead4ead00000068] address between user and kernel address ranges
+Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 1 PID: 3114 Comm: syz-executor354 Not tainted 6.1.0-rc6-syzkaller-32653-g65762d97e6fa #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : d_really_is_negative include/linux/dcache.h:466 [inline]
+pc : open_xa_root fs/reiserfs/xattr.c:124 [inline]
+pc : open_xa_dir+0x48/0x2a8 fs/reiserfs/xattr.c:152
+lr : open_xa_dir+0x34/0x2a8 fs/reiserfs/xattr.c:148
+sp : ffff80000fc6b850
+x29: ffff80000fc6b870 x28: 0000000000000030 x27: ffff0000c71289c0
+x26: 0000000000000000 x25: 0000000000000000 x24: dead4ead00000000
+x23: 0000000000000000 x22: 0000000000000002 x21: ffff0000caf387b8
+x20: 0000000000000002 x19: ffff0000c9dd6000 x18: 0000000000000000
+x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+x14: 0000000000000000 x13: 0000000000008000 x12: ffff80000d4fdd40
+x11: ff8080000879c764 x10: 0000000000000000 x9 : ffff80000879c764
+x8 : ffff0000c6bd2d00 x7 : ffff8000086b4590 x6 : 0000000000000000
+x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000
+x2 : 0000000000000002 x1 : 0000000000000002 x0 : ffff0000caf387b8
+Call trace:
+ open_xa_root fs/reiserfs/xattr.c:121 [inline]
+ open_xa_dir+0x48/0x2a8 fs/reiserfs/xattr.c:152
+ xattr_lookup+0x34/0x198 fs/reiserfs/xattr.c:395
+ reiserfs_xattr_get+0x8c/0x6a8 fs/reiserfs/xattr.c:677
+ reiserfs_get_acl+0x84/0x1ac fs/reiserfs/xattr_acl.c:214
+ get_acl+0x104/0x398 fs/posix_acl.c:153
+ check_acl+0x40/0x178 fs/namei.c:306
+ acl_permission_check fs/namei.c:351 [inline]
+ generic_permission+0x270/0x32c fs/namei.c:404
+ reiserfs_permission+0x4c/0x6c fs/reiserfs/xattr.c:954
+ do_inode_permission fs/namei.c:458 [inline]
+ inode_permission+0x128/0x244 fs/namei.c:525
+ may_open+0x1e4/0x2bc fs/namei.c:3185
+ do_open fs/namei.c:3555 [inline]
+ path_openat+0xdd0/0x11c4 fs/namei.c:3713
+ do_filp_open+0xdc/0x1b8 fs/namei.c:3740
+ do_sys_openat2+0xb8/0x22c fs/open.c:1310
+ do_sys_open fs/open.c:1326 [inline]
+ __do_sys_openat fs/open.c:1342 [inline]
+ __se_sys_openat fs/open.c:1337 [inline]
+ __arm64_sys_openat+0xb0/0xe0 fs/open.c:1337
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+Code: 390043ff a9007fff f9433e68 f942cd18 (f9403708) 
+---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	390043ff 	strb	wzr, [sp, #16]
+   4:	a9007fff 	stp	xzr, xzr, [sp]
+   8:	f9433e68 	ldr	x8, [x19, #1656]
+   c:	f942cd18 	ldr	x24, [x8, #1432]
+* 10:	f9403708 	ldr	x8, [x24, #104] <-- trapping instruction
 
