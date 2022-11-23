@@ -2,169 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2F87636963
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:59:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6281C63695F
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:59:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238924AbiKWS6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 13:58:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56868 "EHLO
+        id S238156AbiKWS6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 13:58:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236940AbiKWS6p (ORCPT
+        with ESMTP id S237461AbiKWS6h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 13:58:45 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B0C87543;
-        Wed, 23 Nov 2022 10:58:41 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ANI3vju030703;
-        Wed, 23 Nov 2022 18:58:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=OWd1TMAtI9YXm3ugWju/m0erSY+DisOV9bmg4+k/m3k=;
- b=q4bGZ/SwCdcxMTCDce8bjFBUoDMN0CZ31q6DI7oTd3Lf9e8FOZgCgHZQ48zOuuWvzCUO
- g65mPRAX6xpkXngwmP/wW2GD7kRr8pBWi2zh25utGJupBCeSK8g2Bmri4qiorULyb0Qb
- l2lA14Gg2WxhPDnONXZDVVOXVwiFAvhq8uROjB5r8tWrD96R7LXyRZsTdvmb8I76XwXL
- 7vVlWY8kND9j0qkhpFUgym5pBE3b+hqvo6qmV5+7CivPva8+Xj8Dc4HsLsSzR6hg2QFm
- 2FGPRDZBXW/QdGmFtJBOtR5PtYtTO6s3vgGSnrKfZyvQ6qG+yzPHRYuSxvw5Tg+dp7lY Wg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0x813evb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Nov 2022 18:58:04 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2ANIvaif024504;
-        Wed, 23 Nov 2022 18:58:03 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m0x813ev0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Nov 2022 18:58:03 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2ANIpeoh007133;
-        Wed, 23 Nov 2022 18:58:02 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma03dal.us.ibm.com with ESMTP id 3kxpsakr3n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Nov 2022 18:58:02 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com ([9.208.128.116])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2ANIw0Ji6030060
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Nov 2022 18:58:01 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C7C4258045;
-        Wed, 23 Nov 2022 18:58:00 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0A7DC5805F;
-        Wed, 23 Nov 2022 18:57:59 +0000 (GMT)
-Received: from [9.163.61.172] (unknown [9.163.61.172])
-        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 23 Nov 2022 18:57:58 +0000 (GMT)
-Message-ID: <6f2a4a5f-ab5b-8c1b-47d5-d4e6dca5fc3a@linux.vnet.ibm.com>
-Date:   Wed, 23 Nov 2022 13:57:58 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 2/4] fs: define a firmware security filesystem named
- fwsecurityfs
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Nayna Jain <nayna@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org,
-        linux-fsdevel@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, Dov Murik <dovmurik@linux.ibm.com>,
-        George Wilson <gcwilson@linux.ibm.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Russell Currey <ruscur@russell.cc>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>
-References: <20221106210744.603240-1-nayna@linux.ibm.com>
- <20221106210744.603240-3-nayna@linux.ibm.com> <Y2uvUFQ9S2oaefSY@kroah.com>
- <8447a726-c45d-8ebb-2a74-a4d759631e64@linux.vnet.ibm.com>
- <20221119114234.nnfxsqx4zxiku2h6@riteshh-domain>
- <d3e8df29-d9b0-5e8e-4a53-d191762fe7f2@linux.vnet.ibm.com>
- <a2752fdf-c89f-6f57-956e-ad035d32aec6@linux.vnet.ibm.com>
- <Y35C9O27J29bUDjA@kroah.com>
-From:   Nayna <nayna@linux.vnet.ibm.com>
-In-Reply-To: <Y35C9O27J29bUDjA@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 2YrEmH-Vwbi1pRZxNLbmgvdX-b8wwU50
-X-Proofpoint-ORIG-GUID: _wOu0IfhLy4hU6MJ6gGyX-1HjXY9bgsf
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 23 Nov 2022 13:58:37 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60EEB5A6CF
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 10:58:35 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id a22-20020a17090a6d9600b0021896eb5554so2960051pjk.1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 10:58:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YWaagzOk9zMNOAZyOy8bc0Y6K7qbOoK1v1I3u1GoRaY=;
+        b=fubQIi5tXuVOsTMltBgdbbDO7JL8EXf+ZuG81LEBXYGXSGt/FhosagYWuqWGbyHuZm
+         wcJ3YXMn7GJVVRq1joN1VjKjDv/xDjdUG/YXUCAZiiyOfJbwAOo1XhgM8sZs0L1ZwILI
+         /fyklASZCe4JvuZXOYgEkwI9Vk5+caRcaG28YWOK1m/5yyRPI8sD+YhEkINd/ehGjGXI
+         YKXTjdvema283kO9ooVfRo1JulkHNscysD0yakpqsixvNviWVZNAo4uYk5L7UigOw8IS
+         8vsivNOcpQzFGMtIDro1CAFHH3/P2cmZnTSGZDbC+OMyGGxVTQUhiajl9hyesMTNNVLP
+         SSkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YWaagzOk9zMNOAZyOy8bc0Y6K7qbOoK1v1I3u1GoRaY=;
+        b=BagZcYebfFMVXpZDkNdoOiRhWQT2emiyze3323hkhB2g9098Z5BLBObICVbNj+HMaS
+         KO64/YkUE63heUZQCSwWabuA3Muc/1AgyBL1qhzs4wZGg0iODr5o8+65Ki7BqqlO0WFU
+         zNTGChxxMsw6MbpDHX5lenEP4GXyPzYhmUzRbcQviKRr6VfbU5WYz745GdxWbyQXJL3h
+         mH0QEOQiojPYwjl3XN3kr9LyLFpyEKDNieOhcWJtlgWjbqR2TFt4lS2u1zF/Bc9Ix0Y0
+         Q6fBNiCjYLvlIFdMpQzSLo/CRp3oPYS5VUFWNPYHcxlJh74xoccNOBGi1MLavkH653mG
+         IZFw==
+X-Gm-Message-State: ANoB5pk5oCBge+gQ1QGQWaU59bFRgcRud3bhU3WTHXv3sqHMu0liOr95
+        1g6IEM6Zu3yCMhizmy0xOocI+w==
+X-Google-Smtp-Source: AA0mqf7OGhN2Sbd8Zu7+aU+RUc2WvaTOwNsnDCTkd4g3Ryyd+PpuEsm3pw/YA91DXTCGn7HAW4WvVA==
+X-Received: by 2002:a17:90b:1650:b0:218:6ad0:52c5 with SMTP id il16-20020a17090b165000b002186ad052c5mr4442697pjb.44.1669229914531;
+        Wed, 23 Nov 2022 10:58:34 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id h15-20020a170902f54f00b00188fdae6e0esm12868203plf.44.2022.11.23.10.58.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 10:58:33 -0800 (PST)
+Date:   Wed, 23 Nov 2022 18:58:29 +0000
+From:   Carlos Llamas <cmllamas@google.com>
+To:     Li Li <dualli@chromium.org>
+Cc:     dualli@google.com, gregkh@linuxfoundation.org, arve@android.com,
+        tkjos@android.com, maco@android.com, joel@joelfernandes.org,
+        brauner@kernel.org, surenb@google.com, arnd@arndb.de,
+        masahiroy@kernel.org, devel@driverdev.osuosl.org,
+        linux-kernel@vger.kernel.org, hridya@google.com,
+        smoreland@google.com, kernel-team@android.com
+Subject: Re: [PATCH v2 1/1] binder: return pending info for frozen async txns
+Message-ID: <Y35tVQb2y+gRdfpb@google.com>
+References: <20221110203405.611600-1-dualli@chromium.org>
+ <20221110203405.611600-2-dualli@chromium.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-23_10,2022-11-23_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- malwarescore=0 mlxscore=0 mlxlogscore=999 spamscore=0 phishscore=0
- bulkscore=0 suspectscore=0 priorityscore=1501 clxscore=1015
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211230137
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221110203405.611600-2-dualli@chromium.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Nov 10, 2022 at 12:34:05PM -0800, Li Li wrote:
+> From: Li Li <dualli@google.com>
+> 
+> An async transaction to a frozen process will still be successfully
+> put in the queue. But this pending async transaction won't be processed
+> until the target process is unfrozen at an unspecified time in the
+> future. Pass this important information back to the user space caller
+> by returning BR_TRANSACTION_PENDING.
+> 
+> Signed-off-by: Li Li <dualli@google.com>
+> ---
+>  drivers/android/binder.c            | 31 +++++++++++++++++++++++------
+>  drivers/android/binder_internal.h   |  3 ++-
+>  include/uapi/linux/android/binder.h |  7 ++++++-
+>  3 files changed, 33 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+> index 880224ec6abb..a798f6661488 100644
+> --- a/drivers/android/binder.c
+> +++ b/drivers/android/binder.c
+> @@ -2728,7 +2728,10 @@ binder_find_outdated_transaction_ilocked(struct binder_transaction *t,
+>   *
+>   * Return:	0 if the transaction was successfully queued
+>   *		BR_DEAD_REPLY if the target process or thread is dead
+> - *		BR_FROZEN_REPLY if the target process or thread is frozen
+> + *		BR_FROZEN_REPLY if the target process or thread is frozen and
+> + *			the sync transaction was rejected
+> + *		BR_TRANSACTION_PENDING if the target process is frozen and the
+> + *			async transaction was successfully queued
+>   */
+>  static int binder_proc_transaction(struct binder_transaction *t,
+>  				    struct binder_proc *proc,
+> @@ -2738,6 +2741,7 @@ static int binder_proc_transaction(struct binder_transaction *t,
+>  	bool oneway = !!(t->flags & TF_ONE_WAY);
+>  	bool pending_async = false;
+>  	struct binder_transaction *t_outdated = NULL;
+> +	bool frozen = false;
+>  
+>  	BUG_ON(!node);
+>  	binder_node_lock(node);
+> @@ -2751,15 +2755,16 @@ static int binder_proc_transaction(struct binder_transaction *t,
+>  
+>  	binder_inner_proc_lock(proc);
+>  	if (proc->is_frozen) {
+> +		frozen = true;
+>  		proc->sync_recv |= !oneway;
+>  		proc->async_recv |= oneway;
+>  	}
+>  
+> -	if ((proc->is_frozen && !oneway) || proc->is_dead ||
+> +	if ((frozen && !oneway) || proc->is_dead ||
+>  			(thread && thread->is_dead)) {
+>  		binder_inner_proc_unlock(proc);
+>  		binder_node_unlock(node);
+> -		return proc->is_frozen ? BR_FROZEN_REPLY : BR_DEAD_REPLY;
+> +		return frozen ? BR_FROZEN_REPLY : BR_DEAD_REPLY;
+>  	}
+>  
+>  	if (!thread && !pending_async)
+> @@ -2770,7 +2775,7 @@ static int binder_proc_transaction(struct binder_transaction *t,
+>  	} else if (!pending_async) {
+>  		binder_enqueue_work_ilocked(&t->work, &proc->todo);
+>  	} else {
+> -		if ((t->flags & TF_UPDATE_TXN) && proc->is_frozen) {
+> +		if ((t->flags & TF_UPDATE_TXN) && frozen) {
+>  			t_outdated = binder_find_outdated_transaction_ilocked(t,
+>  									      &node->async_todo);
+>  			if (t_outdated) {
+> @@ -2807,6 +2812,9 @@ static int binder_proc_transaction(struct binder_transaction *t,
+>  		binder_stats_deleted(BINDER_STAT_TRANSACTION);
+>  	}
+>  
+> +	if (oneway && frozen)
+> +		return BR_TRANSACTION_PENDING;
+> +
+>  	return 0;
+>  }
+>  
+> @@ -3607,9 +3615,16 @@ static void binder_transaction(struct binder_proc *proc,
+>  	} else {
+>  		BUG_ON(target_node == NULL);
+>  		BUG_ON(t->buffer->async_transaction != 1);
+> -		binder_enqueue_thread_work(thread, tcomplete);
+>  		return_error = binder_proc_transaction(t, target_proc, NULL);
+> -		if (return_error)
+> +		/*
+> +		 * Let the caller know when async transaction reaches a frozen
+> +		 * process and is put in a pending queue, waiting for the target
+> +		 * process to be unfrozen.
+> +		 */
+> +		if (return_error == BR_TRANSACTION_PENDING)
+> +			tcomplete->type = BINDER_WORK_TRANSACTION_PENDING;
+> +		binder_enqueue_thread_work(thread, tcomplete);
+> +		if (return_error && return_error != BR_TRANSACTION_PENDING)
+>  			goto err_dead_proc_or_thread;
+>  	}
+>  	if (target_thread)
+> @@ -4440,10 +4455,13 @@ static int binder_thread_read(struct binder_proc *proc,
+>  			binder_stat_br(proc, thread, cmd);
+>  		} break;
+>  		case BINDER_WORK_TRANSACTION_COMPLETE:
+> +		case BINDER_WORK_TRANSACTION_PENDING:
+>  		case BINDER_WORK_TRANSACTION_ONEWAY_SPAM_SUSPECT: {
+>  			if (proc->oneway_spam_detection_enabled &&
+>  				   w->type == BINDER_WORK_TRANSACTION_ONEWAY_SPAM_SUSPECT)
+>  				cmd = BR_ONEWAY_SPAM_SUSPECT;
+> +			else if (w->type == BINDER_WORK_TRANSACTION_PENDING)
+> +				cmd = BR_TRANSACTION_PENDING;
+>  			else
+>  				cmd = BR_TRANSACTION_COMPLETE;
+>  			binder_inner_proc_unlock(proc);
+> @@ -6170,6 +6188,7 @@ static const char * const binder_return_strings[] = {
+>  	"BR_FAILED_REPLY",
+>  	"BR_FROZEN_REPLY",
+>  	"BR_ONEWAY_SPAM_SUSPECT",
+> +	"BR_TRANSACTION_PENDING"
+>  };
+>  
+>  static const char * const binder_command_strings[] = {
+> diff --git a/drivers/android/binder_internal.h b/drivers/android/binder_internal.h
+> index abe19d88c6ec..6c51325a826f 100644
+> --- a/drivers/android/binder_internal.h
+> +++ b/drivers/android/binder_internal.h
+> @@ -133,7 +133,7 @@ enum binder_stat_types {
+>  };
+>  
+>  struct binder_stats {
+> -	atomic_t br[_IOC_NR(BR_ONEWAY_SPAM_SUSPECT) + 1];
+> +	atomic_t br[_IOC_NR(BR_TRANSACTION_PENDING) + 1];
+>  	atomic_t bc[_IOC_NR(BC_REPLY_SG) + 1];
+>  	atomic_t obj_created[BINDER_STAT_COUNT];
+>  	atomic_t obj_deleted[BINDER_STAT_COUNT];
+> @@ -152,6 +152,7 @@ struct binder_work {
+>  	enum binder_work_type {
+>  		BINDER_WORK_TRANSACTION = 1,
+>  		BINDER_WORK_TRANSACTION_COMPLETE,
+> +		BINDER_WORK_TRANSACTION_PENDING,
+>  		BINDER_WORK_TRANSACTION_ONEWAY_SPAM_SUSPECT,
+>  		BINDER_WORK_RETURN_ERROR,
+>  		BINDER_WORK_NODE,
+> diff --git a/include/uapi/linux/android/binder.h b/include/uapi/linux/android/binder.h
+> index e72e4de8f452..c21b3b3eb4e4 100644
+> --- a/include/uapi/linux/android/binder.h
+> +++ b/include/uapi/linux/android/binder.h
+> @@ -450,7 +450,7 @@ enum binder_driver_return_protocol {
+>  
+>  	BR_FROZEN_REPLY = _IO('r', 18),
+>  	/*
+> -	 * The target of the last transaction (either a bcTRANSACTION or
+> +	 * The target of the last sync transaction (either a bcTRANSACTION or
+>  	 * a bcATTEMPT_ACQUIRE) is frozen.  No parameters.
+>  	 */
+>  
+> @@ -460,6 +460,11 @@ enum binder_driver_return_protocol {
+>  	 * asynchronous transaction makes the allocated async buffer size exceed
+>  	 * detection threshold.  No parameters.
+>  	 */
+> +
+> +	BR_TRANSACTION_PENDING = _IO('r', 20),
+> +	/*
+> +	 * The target of the last async transaction is frozen.  No parameters.
+> +	 */
+>  };
+>  
+>  enum binder_driver_command_protocol {
+> -- 
+> 2.38.1.431.g37b22c650d-goog
+> 
 
-On 11/23/22 10:57, Greg Kroah-Hartman wrote:
-> On Wed, Nov 23, 2022 at 10:05:49AM -0500, Nayna wrote:
->> On 11/22/22 18:21, Nayna wrote:
->>>  From the perspective of our use case, we need to expose firmware
->>> security objects to userspace for management. Not all of the objects
->>> pre-exist and we would like to allow root to create them from userspace.
->>>
->>>  From a unification perspective, I have considered a common location at
->>> /sys/firmware/security for managing any platform's security objects. And
->>> I've proposed a generic filesystem, which could be used by any platform
->>> to represent firmware security objects via /sys/firmware/security.
->>>
->>> Here are some alternatives to generic filesystem in discussion:
->>>
->>> 1. Start with a platform-specific filesystem. If more platforms would
->>> like to use the approach, it can be made generic. We would still have a
->>> common location of /sys/firmware/security and new code would live in
->>> arch. This is my preference and would be the best fit for our use case.
->>>
->>> 2. Use securityfs.  This would mean modifying it to satisfy other use
->>> cases, including supporting userspace file creation. I don't know if the
->>> securityfs maintainer would find that acceptable. I would also still
->>> want some way to expose variables at /sys/firmware/security.
->>>
->>> 3. Use a sysfs-based approach. This would be a platform-specific
->>> implementation. However, sysfs has a similar issue to securityfs for
->>> file creation. When I tried it in RFC v1[1], I had to implement a
->>> workaround to achieve that.
->>>
->>> [1] https://lore.kernel.org/linuxppc-dev/20220122005637.28199-3-nayna@linux.ibm.com/
->>>
->> Hi Greg,
->>
->> Based on the discussions so far, is Option 1, described above, an acceptable
->> next step?
-> No, as I said almost a year ago, I do not want to see platform-only
-> filesystems going and implementing stuff that should be shared by all
-> platforms.
-
-Given there are no other exploiters for fwsecurityfs and there should be 
-no platform-specific fs, would modifying sysfs now to let userspace 
-create files cleanly be the way forward? Or, if we should strongly 
-consider securityfs, which would result in updating securityfs to allow 
-userspace creation of files and then expose variables via a more 
-platform-specific directory /sys/kernel/security/pks? We want to pick 
-the best available option and would find some hints on direction helpful 
-before we develop the next patch.
-
-Thanks & Regards,
-
-       - Nayna
-
+This looks good. Could you rename the new op to signify the frozen
+scenario though? We might have some other instances of pending
+transactions in the future so might as well be specific here.
