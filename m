@@ -2,71 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7815636594
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 17:20:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7ECA636598
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 17:20:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238469AbiKWQU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 11:20:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46032 "EHLO
+        id S238314AbiKWQUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 11:20:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237693AbiKWQUX (ORCPT
+        with ESMTP id S239046AbiKWQUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 11:20:23 -0500
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B3B8B861
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 08:20:18 -0800 (PST)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-14286d5ebc3so18042152fac.3
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 08:20:18 -0800 (PST)
+        Wed, 23 Nov 2022 11:20:49 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D28F8F3EF
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 08:20:48 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id b1-20020a17090a7ac100b00213fde52d49so2268955pjl.3
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 08:20:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YYbQqRG19ssSJjAnC8LyFdc+iA79g7OKJroOWVugZCY=;
-        b=Nm9vji+QEpKSyI0RcIo69Sh8Af4qlzhD0uy5CS8zw9gYWVTnpRUfXoNMwZynYXcvvx
-         wTlk+gZBIim5Bfv8x1Hev7f4c3lm8Cz5Pjfk+dNcPyZS5ds4OcLFmN4tL90g8blGffS2
-         9SxxUO+jP1sBicA+4rZC2bM9/PHYLX9NaiVB3sj4tQU6a97tQVesir3Osjq/sBeCjDE5
-         uSTpcgv08YU8kR2KU7mWp7gCmUNOlSlWT8MO5jwG8UPkReFdxsxseix9OnBK56am3T4n
-         /AwOyojxTzRN1daeMKADD7vqu9ZTQ4Z7fn2AS9by8A66dsvtrt0RnnqfG1q82pTWr/8v
-         IP0w==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=biytTCPD12F4npEKT0DfXCiC4jXj2dN/DuTN/IJuM4s=;
+        b=AF3yX36RbTt6w4YEqeeyFdeC+mAm6+7DlXNR5rnZVktMI8K6LdlLOZ6r6wn5ZFj+Tf
+         lQjlmkDJPf4hsgvCsYB37Q4wWjng3xSdxWBgiqcJ/edqBZfWuAtpjFU9ImN5HhLWbYnd
+         2RIhMM1aMliGLXZyB4bqFeL7TjrWxPVyvYhaKSOZbmhLU6m3U9IIzf0QYr0NS0QayBMr
+         yYUvc/iHV1UhN1a/Lvy/RMDKFZz9yt0t+j2i83TNzA/8YogsvLzOJ1jiMNJnk0vElcPP
+         UtIk4CJybUNrKl3EUJPbl3KTk9Wif7xwTAQhkeEn58zqTeq7pesgEdvT0lUf75PCyqe5
+         +tHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YYbQqRG19ssSJjAnC8LyFdc+iA79g7OKJroOWVugZCY=;
-        b=hSbEWvGY9eatXScoSrK9t8QJNnG+RYp6qVcwo6aQbtQUswnr2DS7JTPaD6rgxWzUNF
-         ZnMA6jgajoTZXoDXjLR9NfLqZNyzPER+Fv9M4xZJmHJZ/IHR0hzF4ZEGxwtrE6YGE5Sg
-         J3iXYRSPPJw/hJYYBxbyXXuEVVD+YFK7aC0B7JsXw/2dw1kzMwIm8xFV7e+B+fcXt5fd
-         44XxPPRVZ6iTYVcWM+DR4lMASRriDL0HzzZr43FwY7QViPa7LzGhu+jEIMOkCQTHdzpe
-         Pz9KqWUNUSf5peOfYNx1dmac4dGcDflBkOpfa6uSukIwGnQSk4VHKkDb7BQtYZvhkX7f
-         i5vA==
-X-Gm-Message-State: ANoB5pls2FrurXILClUWLuF5K1N4pkwHQaYsgm6gj5ztGu8S0VkXISam
-        HIte/WyYEnF7drjbiUNAMnlM0dE7868=
-X-Google-Smtp-Source: AA0mqf6iRO9U9e/s4mp4giVnHFneYyqGqa6KnGJlVr15d50kHLBDMqNrqfyVleHpToUZUBNThB9wTA==
-X-Received: by 2002:a05:6870:d611:b0:13c:3fbb:5954 with SMTP id a17-20020a056870d61100b0013c3fbb5954mr6837394oaq.0.1669220418150;
-        Wed, 23 Nov 2022 08:20:18 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c126-20020aca3584000000b00354948e04e4sm6723117oia.2.2022.11.23.08.20.17
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=biytTCPD12F4npEKT0DfXCiC4jXj2dN/DuTN/IJuM4s=;
+        b=s9KJh+Y7kRWZthaqLC3rrbt5zvN0FqhF2vzfwzxFrr6CRAzhfWSptuqkzSIAZhKt35
+         OJulvvIB19Iy8GdJSmO5p5fhZ6TFLDtb3TCp0PRfX2t8trMvLfm873ORy21UMpRxgutu
+         cbaZXAhjtC9D6NzXklcFzmLzOU1zBy0i6I8fwBt67hLp+lZ8j4ip8SmDkQCj953/4ZWt
+         4m25LK7rbMAVFMy3wTH9x+YgM9PULrm/JnHMTUbzb2jU75GAwzqxLkAsyraT9yR9Y7N5
+         R1z8meyyr/xAdyaapjbh/NGoCp3ZQ5AINxbwhug+iUEjaXcc6bEjRT3g+DUrpY/huARn
+         Q8vA==
+X-Gm-Message-State: ANoB5pkLktMNWAUNZfehEhyidpzLtp1yMSuCL4RcKUjbP1ORUeTlXszt
+        LdDGfHKiX9CH0pYVte97TMtniQ==
+X-Google-Smtp-Source: AA0mqf4LMvmUvNu8vznYJ9wo0VaZW/vEVEFJ6RP2FuHSxjBL2AQ6kZF8XJvOOwNkqFIQHA99DQTkqQ==
+X-Received: by 2002:a17:902:d711:b0:17f:52af:d035 with SMTP id w17-20020a170902d71100b0017f52afd035mr10178670ply.106.1669220447476;
+        Wed, 23 Nov 2022 08:20:47 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id a22-20020a170902b59600b00177f25f8ab3sm14522037pls.89.2022.11.23.08.20.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 08:20:17 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 23 Nov 2022 08:20:16 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Cc:     wim@linux-watchdog.org, linux-kernel@vger.kernel.org,
-        yangyingliang@huawei.com
-Subject: Re: [PATCH] watchdog: sp5100_tco: Fix PCI device refcount leak
-Message-ID: <20221123162016.GB2374110@roeck-us.net>
-References: <20221122115651.33877-1-wangxiongfeng2@huawei.com>
+        Wed, 23 Nov 2022 08:20:46 -0800 (PST)
+Date:   Wed, 23 Nov 2022 16:20:43 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "peterz@infradead.org" <peterz@infradead.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+Subject: Re: [PATCH v7 06/20] x86/virt/tdx: Shut down TDX module in case of
+ error
+Message-ID: <Y35IW/PnbxinKHOL@google.com>
+References: <cover.1668988357.git.kai.huang@intel.com>
+ <48505089b645019a734d85c2c29f3c8ae2dbd6bd.1668988357.git.kai.huang@intel.com>
+ <Y3ySxEr64HkUaEDq@hirez.programming.kicks-ass.net>
+ <52b2be9b-defd-63ce-4cb2-96cd624a95a6@intel.com>
+ <Y30fUS5/JClpBHVc@hirez.programming.kicks-ass.net>
+ <b3938f3a-e4f8-675a-0c0e-4b4618019145@intel.com>
+ <da7ae78c2d9fed125f160744af5be75f34b1b1d7.camel@intel.com>
+ <791bf9a2-a079-3cd6-90a3-42dbb332a38c@intel.com>
+ <9f1ea2639839305dd8b82694b3d8c697803f43a1.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221122115651.33877-1-wangxiongfeng2@huawei.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9f1ea2639839305dd8b82694b3d8c697803f43a1.camel@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,56 +102,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 07:56:51PM +0800, Xiongfeng Wang wrote:
-> for_each_pci_dev() is implemented by pci_get_device(). The comment of
-> pci_get_device() says that it will increase the reference count for the
-> returned pci_dev and also decrease the reference count for the input
-> pci_dev @from if it is not NULL.
+On Wed, Nov 23, 2022, Huang, Kai wrote:
+> On Tue, 2022-11-22 at 17:04 -0800, Dave Hansen wrote:
+> > On 11/22/22 16:58, Huang, Kai wrote:
+> > > On Tue, 2022-11-22 at 11:24 -0800, Dave Hansen wrote:
+> > > > > I was expecting TDX to not get initialized until the first TDX using KVM
+> > > > > instance is created. Am I wrong?
+> > > > I went looking for it in this series to prove you wrong.  I failed.  😄
+> > > > 
+> > > > tdx_enable() is buried in here somewhere:
+> > > > 
+> > > > > https://lore.kernel.org/lkml/CAAhR5DFrwP+5K8MOxz5YK7jYShhaK4A+2h1Pi31U_9+Z+cz-0A@mail.gmail.com/T/
+> > > > I don't have the patience to dig it out today, so I guess we'll have Kai
+> > > > tell us.
+> > > It will be done when KVM module is loaded, but not when the first TDX guest is
+> > > created.
+> > 
+> > Why is it done that way?
+> > 
+> > Can it be changed to delay TDX initialization until the first TDX guest
+> > needs to run?
+> > 
 > 
-> If we break out for_each_pci_dev() loop with pdev not NULL, we need to
-> call pci_dev_put() to decrease the reference count. Add the missing
-> pci_dev_put() in error path of sp5100_tco_init() and also when we unload
-> module.
+> Sean suggested.
 > 
-> Fixes: 15e28bf13008 ("watchdog: Add support for sp5100 chipset TCO")
-> Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+> Hi Sean, could you commenet?
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
->  drivers/watchdog/sp5100_tco.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/sp5100_tco.c b/drivers/watchdog/sp5100_tco.c
-> index fb426b7d81da..f00f26f90444 100644
-> --- a/drivers/watchdog/sp5100_tco.c
-> +++ b/drivers/watchdog/sp5100_tco.c
-> @@ -599,7 +599,7 @@ static int __init sp5100_tco_init(void)
->  
->  	err = platform_driver_register(&sp5100_tco_driver);
->  	if (err)
-> -		return err;
-> +		goto put_dev;
->  
->  	sp5100_tco_platform_device =
->  		platform_device_register_simple(TCO_DRIVER_NAME, -1, NULL, 0);
-> @@ -612,6 +612,8 @@ static int __init sp5100_tco_init(void)
->  
->  unreg_platform_driver:
->  	platform_driver_unregister(&sp5100_tco_driver);
-> +put_dev:
-> +	pci_dev_put(sp5100_tco_pci);
->  	return err;
->  }
->  
-> @@ -619,6 +621,7 @@ static void __exit sp5100_tco_exit(void)
->  {
->  	platform_device_unregister(sp5100_tco_platform_device);
->  	platform_driver_unregister(&sp5100_tco_driver);
-> +	pci_dev_put(sp5100_tco_pci);
->  }
->  
->  module_init(sp5100_tco_init);
-> -- 
-> 2.20.1
-> 
+Waiting until the first TDX guest is created would result in false advertising,
+as KVM wouldn't know whether or not TDX is actually supported until that first
+VM is created.  If we can guarantee that TDH.SYS.INIT will fail if and only if
+there is a kernel bug, then I would be ok deferring the "enabling" until the
+first VM is created.
