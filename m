@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE586350C5
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 08:00:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6E7E6350CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 08:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236188AbiKWHAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 02:00:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54306 "EHLO
+        id S236201AbiKWHAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 02:00:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236164AbiKWHA1 (ORCPT
+        with ESMTP id S236165AbiKWHA2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 02:00:27 -0500
+        Wed, 23 Nov 2022 02:00:28 -0500
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D11ED714;
-        Tue, 22 Nov 2022 23:00:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C6CECCD6;
+        Tue, 22 Nov 2022 23:00:27 -0800 (PST)
 Received: from desky.lan (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 34BC288F;
-        Wed, 23 Nov 2022 08:00:23 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4D76E890;
+        Wed, 23 Nov 2022 08:00:24 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1669186824;
-        bh=Knz0JCCrfCqQxJejdfCSEXVWPhZVH+yr9Z4AiAaBvFg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=oRRanw51554oiR9W7rj4aus04gF+aGASx6InEVVf73OEMWWbYnl1jgaPxSFCiL5w1
-         gGYB856SbsrKDl6gJxt1XEON195cLORWienlYPruWVzg1GUpaUTOvhCcroJ6/N5Ska
-         w0hCCsucGs5sdv73p3jqDpECgOkBIMHoCgozUSY8=
+        s=mail; t=1669186825;
+        bh=NihHXOAyw3YquNkpsRZgUpX6GQmS+L99zVdRiIJdslI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=PrNWPIb6cHFBSRNUZm50YFXvlgAqTQG0BuFe9/wk61/DJZHKL/ACZK7lp2+l+hAwC
+         KnSsmzODapVInbfPjfFwGHY7HZ06VKdd+ksgOCj9utdDREj7bwMCTYaKSs0OO78jTB
+         TIxl8PGXUB6/VAOk+kpAOp7jFfn43mgVpcupKi+4=
 From:   Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
@@ -39,11 +39,14 @@ Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
         Robert Foss <robert.foss@linaro.org>,
         Jonas Karlman <jonas@kwiboo.se>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: [PATCH v2 0/7] Renesas V4H DSI & DP output support
-Date:   Wed, 23 Nov 2022 08:59:39 +0200
-Message-Id: <20221123065946.40415-1-tomi.valkeinen+renesas@ideasonboard.com>
+        Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 1/7] dt-bindings: display: renesas,du: Provide bindings for r8a779g0
+Date:   Wed, 23 Nov 2022 08:59:40 +0200
+Message-Id: <20221123065946.40415-2-tomi.valkeinen+renesas@ideasonboard.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221123065946.40415-1-tomi.valkeinen+renesas@ideasonboard.com>
+References: <20221123065946.40415-1-tomi.valkeinen+renesas@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -55,50 +58,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Extend the Renesas DU display bindings to support the r8a779g0 V4H.
 
-Hi,
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ Documentation/devicetree/bindings/display/renesas,du.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-These add support for DSI on V4H SoC (r8a779g0) and DP for Whitehawk
-board.
-
-Changes in v2:
-- A few cosmetic changes
-- Increase vspd address range in dts to 0x7000
-- Arrange nodes in dts by the block address
-- Use gen = 4 for r8a779g0 du
-- Drop the CLOCKSET1 hack patch
-
-The CLOCKSET1 patch is apparently not needed to get the DSI & DP
-working. Which is baffling, as I'm quite sure it was needed. There are a
-few possible explanations: 1) it was never needed and I was just messing
-things up, 2) it was needed, but some of my later improvements made it
-unnecessary, 3) Whitehawk board firmware was updated in the middle of
-the development of this series, possibly the firmware made the patch
-unnecessary.
-
- Tomi
-
-Tomi Valkeinen (7):
-  dt-bindings: display: renesas,du: Provide bindings for r8a779g0
-  dt-bindings: display: bridge: renesas,dsi-csi2-tx: Add r8a779g0
-  clk: renesas: r8a779g0: Add display related clocks
-  arm64: dts: renesas: r8a779g0: Add display related nodes
-  arm64: dts: renesas: white-hawk-cpu: Add DP output support
-  drm: rcar-du: Add r8a779g0 support
-  drm: rcar-du: dsi: Add r8A779g0 support
-
- .../display/bridge/renesas,dsi-csi2-tx.yaml   |   3 +-
- .../bindings/display/renesas,du.yaml          |   2 +
- .../dts/renesas/r8a779g0-white-hawk-cpu.dtsi  |  94 ++++
- arch/arm64/boot/dts/renesas/r8a779g0.dtsi     | 130 +++++
- drivers/clk/renesas/r8a779g0-cpg-mssr.c       |  14 +
- drivers/gpu/drm/rcar-du/rcar_du_drv.c         |  22 +
- drivers/gpu/drm/rcar-du/rcar_du_group.c       |   2 +-
- drivers/gpu/drm/rcar-du/rcar_mipi_dsi.c       | 484 ++++++++++++++----
- drivers/gpu/drm/rcar-du/rcar_mipi_dsi_regs.h  |   6 +-
- 9 files changed, 649 insertions(+), 108 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/display/renesas,du.yaml b/Documentation/devicetree/bindings/display/renesas,du.yaml
+index b3e588022082..d4830f52c512 100644
+--- a/Documentation/devicetree/bindings/display/renesas,du.yaml
++++ b/Documentation/devicetree/bindings/display/renesas,du.yaml
+@@ -40,6 +40,7 @@ properties:
+       - renesas,du-r8a77990 # for R-Car E3 compatible DU
+       - renesas,du-r8a77995 # for R-Car D3 compatible DU
+       - renesas,du-r8a779a0 # for R-Car V3U compatible DU
++      - renesas,du-r8a779g0 # for R-Car V4H compatible DU
+ 
+   reg:
+     maxItems: 1
+@@ -762,6 +763,7 @@ allOf:
+           contains:
+             enum:
+               - renesas,du-r8a779a0
++              - renesas,du-r8a779g0
+     then:
+       properties:
+         clocks:
 -- 
 2.34.1
 
