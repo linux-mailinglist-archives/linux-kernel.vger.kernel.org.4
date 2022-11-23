@@ -2,127 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF8C63649C
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:50:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC11A6364B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:51:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238756AbiKWPuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 10:50:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38678 "EHLO
+        id S235968AbiKWPvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 10:51:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238987AbiKWPtm (ORCPT
+        with ESMTP id S235917AbiKWPux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 10:49:42 -0500
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1ECCC6956;
-        Wed, 23 Nov 2022 07:49:19 -0800 (PST)
-Received: by mail-qk1-f169.google.com with SMTP id z1so12682631qkl.9;
-        Wed, 23 Nov 2022 07:49:19 -0800 (PST)
+        Wed, 23 Nov 2022 10:50:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834FC8B11A
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:49:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669218571;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KF/ov70bORdprLanpzIpmLSFeEwa9e3wCywBo/4P5WE=;
+        b=amB4gwMR5notD8cQ+Oi7tHbDwYzeIz6mr2rSOqjZzjI/6xBS4RzyIgHeYmj842tOnPao69
+        kApmVssGznQqwEG9ggAieC9U8lKb8V6uKa6HyrzgUkkCTCUHiDD9Xg0o+dTLk8ym4E0EeP
+        ViTMZ/4z4ZrhLtvExWbgMeYuSU87X+c=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-516-kTDUYF1zPWms8PPC1SQs2g-1; Wed, 23 Nov 2022 10:49:30 -0500
+X-MC-Unique: kTDUYF1zPWms8PPC1SQs2g-1
+Received: by mail-wr1-f70.google.com with SMTP id u24-20020adfa198000000b00241da98e057so2670682wru.22
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:49:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Q2hwfJ3OGi9bNFK3Bxx9uQ9VsJMFOKPpsAznNmxcF54=;
-        b=6DI2d28p4IB35GeQ9uhN3VYIQBXuzjNstFv4icEgtFsmcXZN1NRpaoZoyU2IQiCaaH
-         J5D1xFR1MjoV/mQOBHnJy9aiDQ6LkUECQdYTFZ9e9NYz2qoVoaZ6hwIbLh3fQnWEScoE
-         Wkp3M8Jt6eHiZjtznYJUv5A69KjtWGWRSepC1mzcxzJaGDaRJjU6t5UIoLDZCwDrCHK5
-         zAmOsoypFh/zR2mU+bwZgMKmTPINnzyWhuYqi+tfVN0lawfwzSXaX/4p0B5gZigRyXa9
-         tCnztaU2ebMPJhReipeOGr1zC4vucW7cmP0rQqJ+jNbvrI4cOcyEc3SM0k6HQFaboA+/
-         vCuw==
-X-Gm-Message-State: ANoB5pnC5/Az/TFoIlPWtaVKpGGntD3gu3+OdCuTRGPqi1ddO6O9x3gt
-        N9zkjTWGvbM/ni4p0nn2c+92/GDXZ/WIEg==
-X-Google-Smtp-Source: AA0mqf5/s1nu9KxeNK5kWrTGT6fnqZq6W3t8ZCgJikRoanX5vFzYP0wdD/w224AijyROyzU3NDswgQ==
-X-Received: by 2002:a37:8a45:0:b0:6f9:fd7a:f300 with SMTP id m66-20020a378a45000000b006f9fd7af300mr9618927qkd.257.1669218558707;
-        Wed, 23 Nov 2022 07:49:18 -0800 (PST)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id cb7-20020a05622a1f8700b0039cc0fbdb61sm10002545qtb.53.2022.11.23.07.49.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 07:49:17 -0800 (PST)
-Received: by mail-yb1-f177.google.com with SMTP id z192so21330486yba.0;
-        Wed, 23 Nov 2022 07:49:17 -0800 (PST)
-X-Received: by 2002:a25:8249:0:b0:6dd:b521:a8f2 with SMTP id
- d9-20020a258249000000b006ddb521a8f2mr7980121ybn.380.1669218556787; Wed, 23
- Nov 2022 07:49:16 -0800 (PST)
-MIME-Version: 1.0
-References: <a50fa46075fb760d8409ff6ea2232b2ddb7a102b.1669046259.git.geert+renesas@glider.be>
- <20221123100831.GE39395@tom-ThinkPad-T14s-Gen-2i> <CAMuHMdUW8iKFjDj4fPtWfPvyQ1sjGcAy1Kz5j-osz9F4pdA47Q@mail.gmail.com>
- <Y344AdRANmS3STsd@kadam>
-In-Reply-To: <Y344AdRANmS3STsd@kadam>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 23 Nov 2022 16:49:05 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVRZhBECgABtTxe00gM7_EqBaX5auZhmjUfmcLx4zoetQ@mail.gmail.com>
-Message-ID: <CAMuHMdVRZhBECgABtTxe00gM7_EqBaX5auZhmjUfmcLx4zoetQ@mail.gmail.com>
-Subject: Re: [PATCH resend] media: staging: stkwebcam: Restore
- MEDIA_{USB,CAMERA}_SUPPORT dependencies
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KF/ov70bORdprLanpzIpmLSFeEwa9e3wCywBo/4P5WE=;
+        b=H0Wxj8Z5cexqqKflRlbLGsNMp1msmBBGTNpGdYNB5TY8+mna9uUg2w7vJ08N6rXU+J
+         om0maKVB28zUoqomP7jgsUemGls/fAWDDFkfxLGSmcmOqAw+z+sh4bGKI7UxqXjBObtT
+         tL1QIEJbK5D7E0wQe330WfkxhgEWSOIbEiUhU3d/dYKFLffctGn4R5HRDtBrJPvUHjBW
+         I2jPUm/KXbPYPY9WcwAF5KqkM8I1ZvQMJt9ycGujkF3a1KpWm9JQ4T7jy8pqFLIJOZXG
+         T/S7rbLJ0ldqeEg1ZGvQN3roaL7gFoZ+jLIFWsGZm7ENSCoWvF8sLk33A+Q92GwRD8Rf
+         vM/A==
+X-Gm-Message-State: ANoB5pmZu0ljG4HIuqOrXXlJ/J8nGb8lMmJ8pjcy0uwCF7aKLJJS7HKA
+        YBNUqj1dSbEO+q+plRdgEtBd4sXFKgS28UIZ4q+ZfrPh6MJvLfixFHWr+EJjVmVyF8L6nBl5dtn
+        M3e7pbHTe+IXpERLEKlhCBdqC
+X-Received: by 2002:a5d:6706:0:b0:241:cf90:ab1e with SMTP id o6-20020a5d6706000000b00241cf90ab1emr8060362wru.685.1669218568965;
+        Wed, 23 Nov 2022 07:49:28 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5MXC1Gnn3d7MuC2idiVTxfYIH+t32YkYXeo2vUYG8xk+Blpi+PNvoc7oab2ZPOg4ajRWOf5w==
+X-Received: by 2002:a5d:6706:0:b0:241:cf90:ab1e with SMTP id o6-20020a5d6706000000b00241cf90ab1emr8060343wru.685.1669218568717;
+        Wed, 23 Nov 2022 07:49:28 -0800 (PST)
+Received: from redhat.com ([2.52.16.74])
+        by smtp.gmail.com with ESMTPSA id x9-20020a5d6509000000b0023c8026841csm17024927wru.23.2022.11.23.07.49.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 07:49:28 -0800 (PST)
+Date:   Wed, 23 Nov 2022 10:49:25 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Dawei Li <set_pte_at@outlook.com>
+Cc:     jasowang@redhat.com, virtualization@lists.linux-foundation.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] virtio: sanity check on callback of virtio drivers
+Message-ID: <20221123104757-mutt-send-email-mst@kernel.org>
+References: <TYCP286MB23234D3251765359630AD72ECA0C9@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <TYCP286MB23234D3251765359630AD72ECA0C9@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dan,
+On Wed, Nov 23, 2022 at 11:32:27PM +0800, Dawei Li wrote:
+> This commit includes changes below:
+> 
+> 1 Since register_virtio_driver doesn't force probe & remove
+>   to be mandatory callback, so it's caller's job to make the
+>   sanity check before invocation.
 
-On Wed, Nov 23, 2022 at 4:11 PM Dan Carpenter <error27@gmail.com> wrote:
-> On Wed, Nov 23, 2022 at 11:13:31AM +0100, Geert Uytterhoeven wrote:
-> > On Wed, Nov 23, 2022 at 11:08 AM Tommaso Merciai
-> > <tommaso.merciai@amarulasolutions.com> wrote:
-> > > On Mon, Nov 21, 2022 at 04:58:33PM +0100, Geert Uytterhoeven wrote:
-> > > > By moving support for the USB Syntek DC1125 Camera to staging, the
-> > > > dependencies on MEDIA_USB_SUPPORT and MEDIA_CAMERA_SUPPORT were lost.
-> > > >
-> > > > Fixes: 56280c64ecacc971 ("media: stkwebcam: deprecate driver, move to staging")
-> > >
-> > > Patch itself looks good but we have some style issue. Applying this
-> > > patch I got the following warning from checkpatchl:
-> > >
-> > > WARNING: Please use correct Fixes: style 'Fixes: <12 chars of sha1> ("<title line>")' - ie: 'Fixes: 56280c64ecac ("media: stkwebcam: deprecate driver, move to staging")'
-> > > #10:
-> > >
-> > > You have to pass only the first 12 chars of the sha1 commit into Fixes
-> > > msg:
-> > >
-> > > Use:
-> > >
-> > >  Fixes: 56280c64ecac ("media: stkwebcam: deprecate driver, move to staging")
-> > >
-> > > Instead of:
-> > >
-> > >  Fixes: 56280c64ecacc971 ("media: stkwebcam: deprecate driver, move to staging")
-> >
-> > I always use 16 chars, to avoid these becoming ambiguous in a few years.
->
-> If we assume hashes are randomly distributed and that people commit
-> 100k patches every year then with 12 character we would have 17
-> collisions every 1000 years.
+What's the point of these checks? I don't see how any driver
+won't have these set. Why waste memory checking?
 
-So I can expect to see a collision before my retirement day
-(which coincides with the signed 32-bit time_t flag day ;-)
+> 2 Replace sprintf with sysfs_emit or its variants for their
+>   built-in PAGE_SIZE awareness.
 
-BTW, does the above take into account that commit hashes can
-collide with other object type hashes, too?
+this makes sense.
 
-Gr{oetje,eeting}s,
+> Signed-off-by: Dawei Li <set_pte_at@outlook.com>
+> ---
+>  drivers/virtio/virtio.c | 23 +++++++++++++----------
+>  1 file changed, 13 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
+> index 828ced060742..e391a8dff333 100644
+> --- a/drivers/virtio/virtio.c
+> +++ b/drivers/virtio/virtio.c
+> @@ -15,7 +15,7 @@ static ssize_t device_show(struct device *_d,
+>  			   struct device_attribute *attr, char *buf)
+>  {
+>  	struct virtio_device *dev = dev_to_virtio(_d);
+> -	return sprintf(buf, "0x%04x\n", dev->id.device);
+> +	return sysfs_emit(buf, "0x%04x\n", dev->id.device);
+>  }
+>  static DEVICE_ATTR_RO(device);
+>  
+> @@ -23,7 +23,7 @@ static ssize_t vendor_show(struct device *_d,
+>  			   struct device_attribute *attr, char *buf)
+>  {
+>  	struct virtio_device *dev = dev_to_virtio(_d);
+> -	return sprintf(buf, "0x%04x\n", dev->id.vendor);
+> +	return sysfs_emit(buf, "0x%04x\n", dev->id.vendor);
+>  }
+>  static DEVICE_ATTR_RO(vendor);
+>  
+> @@ -31,7 +31,7 @@ static ssize_t status_show(struct device *_d,
+>  			   struct device_attribute *attr, char *buf)
+>  {
+>  	struct virtio_device *dev = dev_to_virtio(_d);
+> -	return sprintf(buf, "0x%08x\n", dev->config->get_status(dev));
+> +	return sysfs_emit(buf, "0x%08x\n", dev->config->get_status(dev));
+>  }
+>  static DEVICE_ATTR_RO(status);
+>  
+> @@ -39,7 +39,7 @@ static ssize_t modalias_show(struct device *_d,
+>  			     struct device_attribute *attr, char *buf)
+>  {
+>  	struct virtio_device *dev = dev_to_virtio(_d);
+> -	return sprintf(buf, "virtio:d%08Xv%08X\n",
+> +	return sysfs_emit(buf, "virtio:d%08Xv%08X\n",
+>  		       dev->id.device, dev->id.vendor);
+>  }
+>  static DEVICE_ATTR_RO(modalias);
+> @@ -54,9 +54,9 @@ static ssize_t features_show(struct device *_d,
+>  	/* We actually represent this as a bitstring, as it could be
+>  	 * arbitrary length in future. */
+>  	for (i = 0; i < sizeof(dev->features)*8; i++)
+> -		len += sprintf(buf+len, "%c",
+> +		len += sysfs_emit_at(buf, len, "%c",
+>  			       __virtio_test_bit(dev, i) ? '1' : '0');
+> -	len += sprintf(buf+len, "\n");
+> +	len += sysfs_emit_at(buf, len, "\n");
+>  	return len;
+>  }
+>  static DEVICE_ATTR_RO(features);
+> @@ -302,9 +302,11 @@ static int virtio_dev_probe(struct device *_d)
+>  	if (err)
+>  		goto err;
+>  
+> -	err = drv->probe(dev);
+> -	if (err)
+> -		goto err;
+> +	if (drv->probe) {
+> +		err = drv->probe(dev);
+> +		if (err)
+> +			goto err;
+> +	}
+>  
+>  	/* If probe didn't do it, mark device DRIVER_OK ourselves. */
+>  	if (!(dev->config->get_status(dev) & VIRTIO_CONFIG_S_DRIVER_OK))
+> @@ -329,7 +331,8 @@ static void virtio_dev_remove(struct device *_d)
+>  
+>  	virtio_config_disable(dev);
+>  
+> -	drv->remove(dev);
+> +	if (drv->remove)
+> +		drv->remove(dev);
+>  
+>  	/* Driver should have reset device. */
+>  	WARN_ON_ONCE(dev->config->get_status(dev));
+> -- 
+> 2.25.1
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
