@@ -2,98 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 014A0634BC0
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 01:42:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2105634BC2
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 01:42:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235287AbiKWAmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 19:42:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56256 "EHLO
+        id S235315AbiKWAmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 19:42:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233436AbiKWAmM (ORCPT
+        with ESMTP id S233443AbiKWAm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 19:42:12 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B259C694C;
-        Tue, 22 Nov 2022 16:42:11 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id ci10so8419804pjb.1;
-        Tue, 22 Nov 2022 16:42:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QBgNP0HxZqEmc/2hnmKVV8WQI9992gjmzgYgDwpjSpA=;
-        b=AMxaAaqozpiEIqVSD0dnERL7aTmBQ+mWEkbAkNKt57+j7WUWbOEYANuBlKIshObE7V
-         FtRNcmRfpQYu6RVscVuW2wJEBjLW/APviQcpCqWhkRfWEQbpHb4RHBx8DVhAfXLdkopA
-         aRY2Qoo9/iB/mo9wd3jZIQEmr8ohNIPISRDiSLNpj11QoG4igApiy8SZHr9v9WDcCGsC
-         68dZNoVEPocgQXaf2sxmHLlRqBCrimoKD5Ou1+/f60sQl1M42NS7+c/0iLX50G1I0TDl
-         XUqkCueyjZdyoaITTPMSK9NwX/FsmV8feYdp4Opfi5pulqkKp64DsutTrOBnlwqLrZh9
-         hXOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QBgNP0HxZqEmc/2hnmKVV8WQI9992gjmzgYgDwpjSpA=;
-        b=dUuqYn0IwWcjL36NDFRLhZjCFAoSyPFw/lDGeCjBhCcJZGG9rfbLfK5g7hXBux/uNq
-         JsNCFjUri99OCzoAuwliTvxd6F3kadaSKfXYYSmECeNEvvflTHl9eHfmzBxysY9muwRH
-         67eULtFnvAvam432fZZgmi+qibPKhCh5Ma6DpOYbvU7O5qlNPT64yncsH7Y56NOAy9Qz
-         3D9pXWyC9/eveT+t17nqtKntUGPJr6oiKI4VY3U7FrlsZK9mZGsYg5ehA5Ro4/GUF5zZ
-         32CmxiI+Qk74sjIlpgedRDroo3LDJwmI9cZDUhw7FlYnVY0cfHqpPZWe7nmo6LK/P/F4
-         7icQ==
-X-Gm-Message-State: ANoB5pni58bRZBo6RJ7ilNHmYtYkG+4xb/YXDwwkozt1/yHQBBOgPoJJ
-        RjndXHZoVwoovCKF/PL26LFi+oQgYGM/Yw==
-X-Google-Smtp-Source: AA0mqf5wgPBRdjuuP93HssD4zaNUMxkHa8K5eiih1KIyB+W2rPjrQuf/xN76KD3YRcU4P7gVzd/OVw==
-X-Received: by 2002:a17:902:b908:b0:189:1ef4:237b with SMTP id bf8-20020a170902b90800b001891ef4237bmr6869149plb.20.1669164130654;
-        Tue, 22 Nov 2022 16:42:10 -0800 (PST)
-Received: from localhost ([2620:10d:c090:400::5:bb3])
-        by smtp.gmail.com with ESMTPSA id l12-20020a170903120c00b0016be834d54asm12656101plh.306.2022.11.22.16.42.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 16:42:10 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 22 Nov 2022 14:42:08 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Yu Kuai <yukuai1@huaweicloud.com>, hch@lst.de,
-        josef@toxicpanda.com, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-Subject: Re: [PATCH v2 4/5] blk-iocost: fix sleeping in atomic context
- warnning
-Message-ID: <Y31sYFdA2lHIvjt3@slm.duckdns.org>
-References: <20221104023938.2346986-1-yukuai1@huaweicloud.com>
- <20221104023938.2346986-5-yukuai1@huaweicloud.com>
- <Y3K8MSFWw8eTnxtm@slm.duckdns.org>
- <3da991c6-21e4-8ed8-ba75-ccb92059f0ae@huaweicloud.com>
- <Y306xJV6aNXd94kb@slm.duckdns.org>
- <1f52ccb1-c357-a2a0-ef9d-48d7e2eb51f8@kernel.dk>
+        Tue, 22 Nov 2022 19:42:29 -0500
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F6360E7;
+        Tue, 22 Nov 2022 16:42:26 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0VVU6Gh8_1669164140;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VVU6Gh8_1669164140)
+          by smtp.aliyun-inc.com;
+          Wed, 23 Nov 2022 08:42:23 +0800
+Date:   Wed, 23 Nov 2022 08:42:16 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Oliver Sang <oliver.sang@intel.com>, oe-lkp@lists.linux.dev,
+        lkp@intel.com, Zirong Lang <zlang@redhat.com>,
+        linux-xfs@vger.kernel.org, ying.huang@intel.com,
+        feng.tang@intel.com, zhengjun.xing@linux.intel.com,
+        fengwei.yin@intel.com, "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        Brian Foster <bfoster@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] xfs: account extra freespace btree splits for multiple
+ allocations
+Message-ID: <Y31saO9m0ixZKdkV@B-P7TQMD6M-0146.local>
+Mail-Followup-To: Dave Chinner <david@fromorbit.com>,
+        Oliver Sang <oliver.sang@intel.com>, oe-lkp@lists.linux.dev,
+        lkp@intel.com, Zirong Lang <zlang@redhat.com>,
+        linux-xfs@vger.kernel.org, ying.huang@intel.com,
+        feng.tang@intel.com, zhengjun.xing@linux.intel.com,
+        fengwei.yin@intel.com, "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        Brian Foster <bfoster@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20221109034802.40322-1-hsiangkao@linux.alibaba.com>
+ <202211220854.48dad6fd-oliver.sang@intel.com>
+ <Y3wm8hwPMXcFNjiO@B-P7TQMD6M-0146.local>
+ <Y3yeVzzt5WIIHfhm@xsang-OptiPlex-9020>
+ <20221122224243.GS3600936@dread.disaster.area>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1f52ccb1-c357-a2a0-ef9d-48d7e2eb51f8@kernel.dk>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221122224243.GS3600936@dread.disaster.area>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 05:14:29PM -0700, Jens Axboe wrote:
-> >> Then match_strdup() and kfree() in match_NUMBER() can be replaced with
-> >> get_buffer() and put_buffer().
+On Wed, Nov 23, 2022 at 09:42:43AM +1100, Dave Chinner wrote:
+> On Tue, Nov 22, 2022 at 06:03:03PM +0800, Oliver Sang wrote:
+> > hi Gao Xiang,
 > > 
-> > Sorry about the late reply. Yeah, something like this.
+> > On Tue, Nov 22, 2022 at 09:33:38AM +0800, Gao Xiang wrote:
+> > > On Tue, Nov 22, 2022 at 09:09:34AM +0800, kernel test robot wrote:
+> > > > 
+> > > > please be noted we noticed Gao Xiang and Dave Chinner have already had lots of
+> > > > discussion around this patch, which seems there is maybe new version later.
+> > > > we just sent out this report FYI the possible performance impact of this patch.
+> > > > 
+> > > > 
+> > > > Greeting,
+> > > > 
+> > > > FYI, we noticed a -15.1% regression of fxmark.ssd_xfs_MWCM_72_directio.works/sec due to commit:
+> > > 
+> > > Thanks for your report!
+> > > 
+> > > At a glance, I have no idea why this commit can have performance
+> > > impacts.  Is the result stable?
+> > 
+> > in our tests, the result is quite stable.
+> >      45589           -15.1%      38687 ±  2%  fxmark.ssd_xfs_MWCM_72_directio.works/sec
+> > 
+> > and detail data is as below:
+> > for this commit:
+> >   "fxmark.ssd_xfs_MWCM_72_directio.works/sec": [
+> >     39192.224368,
+> >     39665.690567,
+> >     38980.680601,
+> >     37298.99538,
+> >     37483.256377,
+> >     39504.606569
+> >   ],
+> > 
+> > for parent:
+> >   "fxmark.ssd_xfs_MWCM_72_directio.works/sec": [
+> >     45381.458009,
+> >     45314.376204,
+> >     45724.688965,
+> >     45751.955937,
+> >     45614.323267,
+> >     45747.216475
+> >   ],
 > 
-> Doesn't local_irq_disable() imply preemption disable as well?
+> This MWCM workload uses a shared directory. Every worker thread (72
+> of them) iterates creating a new file, writes 4kB of data to it and
+> then closes it. There is no synchronisation between worker threads.
+> 
+> The worker threads will lockstep on the directory lock for file
+> creation, they will all attempt to allocate data in the same AG as
+> the file is created. Hence writeback will race with file creation
+> for AG locks, too.  Once the first AG is full, they will all attempt
+> to allocate in the next AG (file creation and writeback).
+> 
+> IOWs, this workload will race to fill AGs, will exercise the "AG
+> full so skip to next AG" allocator fallbacks, etc.
 
-Right, I was thinking about spin_lock_irq() which doesn't imply disabling
-preemption in PREEMPT_RT. local_irq_disable() is actual irq disable even on
-RT. It should be fine on its own.
+Glad to know about that.  I didn't look into the MWCM workload before.
 
-Thanks.
+> 
+> Changing where/how AGs are considered full will impact how the AG
+> selection is made. I'm betting that there's a mismatch between the
+> code that selects the initial AG for allocation (from
+> xfs_bmap_btalloc() via the nullfb case) and the code that selects
+> the actual AG for allocation (xfs_alloc_vextent() w/ NEAR_BNO
+> policy) as a result of this change. This then results in
+> xfs_alloc_vextent() trying to initially allocate from an AG that
+> xfs_alloc_fix_freelist() considers to be full, so it skips the
+> initial selected AG and starts searching for an AG it can allocate
+> into.
 
--- 
-tejun
+I can imagine, but I didn't think out several block reservation could
+cause such huge impacts.
+
+> 
+> Combine that with AGF lock contention from 70+ tasks all trying to
+> allocate in the same location...
+
+Yeah, anyway, I will reconfirm on our side about this workload
+as well.
+
+Thanks,
+Gao Xiang
+
+> 
+> Cheers,
+> 
+> Dave.
+> -- 
+> Dave Chinner
+> david@fromorbit.com
