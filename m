@@ -2,71 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E484763557D
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:20:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC5AE63556B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:20:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237345AbiKWJUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 04:20:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35324 "EHLO
+        id S237421AbiKWJUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 04:20:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237308AbiKWJTy (ORCPT
+        with ESMTP id S237405AbiKWJUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 04:19:54 -0500
-Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ACD13C6E8
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:19:52 -0800 (PST)
-Received: by mail-vk1-xa2a.google.com with SMTP id g4so8444532vkk.6
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:19:52 -0800 (PST)
+        Wed, 23 Nov 2022 04:20:13 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66A52189F
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:20:08 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id bp15so27239337lfb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:20:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CLz2lymS7yB9iwRc9o5jyvwana2uEOwXGBiRWu6feME=;
-        b=A6pM2C44v9fOLlTdX2JUqpKeU4aBjqFrGwlZy4aUjCmnOuByIdIUloYPx3ZfpMl86o
-         HlqwNwiGme7xXPKSPcJoCPUj++mHEEdMNbEOxzrauiaqBLwLt0P/XmS6mO8TQWfbnZPF
-         Y1IigR/mJJ6S4eAAkkovssi1mvgnIIE2E0F1wR/JhOZEHbw9auFT2nS+Op9Gfe2LswnH
-         FzimEcyd9iVouw6oSsbNAWXZcKb3YzHtwpR904hQoU3NcAQKH0GYSfFU86+uo2KBrorD
-         /C0FJ6NUC1VgQuxxXhWxYcImjeG/xp5xBDdUNKJKv2RuhcjiePdPPpLsNcR1JViZ4RHj
-         iJNw==
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0/uGIrK5/QpagY3HfNVJOY+gWJKGB/HD78CMIt9WOjU=;
+        b=KC/uAbtf/fpzdr8ScJNAcu/GE5frX/DdXyCvUQIscDw5gJP8G2QOgt54qmPjjAGPOk
+         UKJ5um2ExWJWPFtLH+P3I16ylTheDritPYFQYauSKtJyxZvI9QKZR/6eUExCIqyZBoZA
+         yHsJqo7QSdwTFjhmnErKDXzvfwXZATR8JqOz1wioWU0n6bcDuCcQq5hQbID2ZVYowatV
+         1WRYgc76BIKrn/9kuRjGUIvd1VENoLXRD1psfZwCgS+1tSQL8qNsuXhg0EDOvOswnHM8
+         AqaESGgqr6bQHSrRib9itEfpgyUKQGdU6baXbengOVgLm+Tm8PjxzKETzJItsDg7GVXk
+         /B5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CLz2lymS7yB9iwRc9o5jyvwana2uEOwXGBiRWu6feME=;
-        b=uCppPoroSdrYyNV+cquNJpj5v0O/5ZhnI+IlbchXmXyYPzWs57dK/n8dYCSM+miLvW
-         pfdF3oGVPkgnu6s9Jc4dURu9wyL3ecrx9hYrk5xQSlLphVaege9qRgZ1lHC9Z9I1UrCC
-         kQOsBb3cA6Tyt7gk5740XWyZ4EHyLY3DfDelF9wi+07oPZIcrqF6Y6VztDzI48wcfTH2
-         A1qDk+8vaFsl4Bvrgqmefpl6TIoBx0IIsgWeFJWz/CMmeRcMzipboRRUAXjekoIIVvjc
-         XbG/JaTx1djAVHFB48V4x1rHUwWVCDZMf1NkK1CIo6ea6LFoXW+zFU1MmkQ0Y3ocQlGG
-         pIKA==
-X-Gm-Message-State: ANoB5pl3OvvuAoDpYDTa3MJeualc6W7tK+zV9eSoC6Ko/4gmiCAXNLwC
-        4ncoWlbKq32ZJJ5SqGunqi4s3slcGxyXW99DVWogCQ==
-X-Google-Smtp-Source: AA0mqf4v/lSMiv+VQztYC9J+tX9N6wZCVRlbMlFcKO6bjp7g359goNsX4etvwTpQ+NOGWYgQen99CKRTsw8PjqoqSQE=
-X-Received: by 2002:a1f:b693:0:b0:3bc:7ad1:1e2e with SMTP id
- g141-20020a1fb693000000b003bc7ad11e2emr5362652vkf.7.1669195191160; Wed, 23
- Nov 2022 01:19:51 -0800 (PST)
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0/uGIrK5/QpagY3HfNVJOY+gWJKGB/HD78CMIt9WOjU=;
+        b=uh+JzL//66XzmzTL6DPxsRDjuiCa7YBKlNtC9x7/czdgp7TqQN483dt1veK6qm/5k+
+         FQxUY6WB4Zmx18++7NhtrHxOz0+mMowEQTx06WzLoIv79Fe3H/VF2MnaNXYADz4kMfMc
+         cMWNKGsKt//7bOoYim2jSk7OaKqdOMxqV6fXQ3Vp/hHSTZQTew/PR4027vEb1pT9y+vs
+         c/2DV3jZYFyNY0asLafPCX8OslfyMw/tx0I1/TRimN5H5CiRJFD/1p4xYJNbt839Uyjd
+         N4VSOPvBTqHy36zr0BIwnJzJklARZywhNeH/ZqO7kAdaQ6SlKPaSyvBwU86mvHOOGxs8
+         6wsw==
+X-Gm-Message-State: ANoB5pl8Gaf+WFHAssRvkcDcSeQ5zhIu5hKC3PhfxhxOxaBJQnP8Skqx
+        uleAeK7b9KS6eIKDkYe78niR/xEoxrg=
+X-Google-Smtp-Source: AA0mqf6s02c3rpau1p+PHdEzgNituFoGKGjD/O4Wan68VIGdGqHC8jjUpqHwhuKKcq6GgWEnYg5Scg==
+X-Received: by 2002:ac2:58d9:0:b0:4b3:ccea:9b2e with SMTP id u25-20020ac258d9000000b004b3ccea9b2emr10242849lfo.379.1669195206971;
+        Wed, 23 Nov 2022 01:20:06 -0800 (PST)
+Received: from fedora ([213.255.186.46])
+        by smtp.gmail.com with ESMTPSA id m19-20020a195213000000b004a46f92a15bsm2850935lfb.41.2022.11.23.01.20.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 01:20:06 -0800 (PST)
+Date:   Wed, 23 Nov 2022 11:19:49 +0200
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Lee Jones <lee@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH] mfd: rohm-bd*: Use dev_err_probe()
+Message-ID: <Y33lte0PKd2u6dyR@fedora>
 MIME-Version: 1.0
-References: <20221102175959.2921063-1-rmoar@google.com> <20221102175959.2921063-3-rmoar@google.com>
- <3fbf707a-fc9e-18c6-dc40-ec266bd524e5@canonical.com>
-In-Reply-To: <3fbf707a-fc9e-18c6-dc40-ec266bd524e5@canonical.com>
-From:   David Gow <davidgow@google.com>
-Date:   Wed, 23 Nov 2022 17:19:38 +0800
-Message-ID: <CABVgOSkTojOjNv05aiD9tV7Vw12QOTtw9H9qCPFjjm_COdKb8w@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] apparmor: test: make static symbols visible during
- kunit testing
-To:     John Johansen <john.johansen@canonical.com>
-Cc:     Rae Moar <rmoar@google.com>, brendanhiggins@google.com,
-        dlatypov@google.com, skhan@linuxfoundation.org,
-        tales.aparecida@gmail.com, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        apparmor@lists.ubuntu.com
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000075b76b05ee1fcaec"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="vdHUOjEUZjKFGKRe"
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,471 +70,212 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000075b76b05ee1fcaec
-Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Nov 22, 2022 at 2:20 PM John Johansen
-<john.johansen@canonical.com> wrote:
->
-> On 11/2/22 10:59, Rae Moar wrote:
-> > Use macros, VISIBLE_IF_KUNIT and EXPORT_SYMBOL_IF_KUNIT, to allow
-> > static symbols to be conditionally set to be visible during KUnit
-> > testing. Remove the need to include testing file in the implementation
-> > file. Provide example of how static symbols can be dealt with in
-> > testing.
-> >
-> > Signed-off-by: Rae Moar <rmoar@google.com>
-> > ---
-> >   security/apparmor/Kconfig                 |  4 +-
-> >   security/apparmor/Makefile                |  2 +
-> >   security/apparmor/include/policy_unpack.h | 50 ++++++++++++++++
-> >   security/apparmor/policy_unpack.c         | 72 +++++++----------------
-> >   security/apparmor/policy_unpack_test.c    |  5 ++
-> >   5 files changed, 80 insertions(+), 53 deletions(-)
-> >
-> > diff --git a/security/apparmor/Kconfig b/security/apparmor/Kconfig
-> > index cb3496e00d8a..f334e7cccf2d 100644
-> > --- a/security/apparmor/Kconfig
-> > +++ b/security/apparmor/Kconfig
-> > @@ -106,8 +106,8 @@ config SECURITY_APPARMOR_PARANOID_LOAD
-> >         Disabling the check will speed up policy loads.
-> >
-> >   config SECURITY_APPARMOR_KUNIT_TEST
-> > -     bool "Build KUnit tests for policy_unpack.c" if !KUNIT_ALL_TESTS
-> > -     depends on KUNIT=y && SECURITY_APPARMOR
-> > +     tristate "Build KUnit tests for policy_unpack.c" if !KUNIT_ALL_TESTS
-> > +     depends on KUNIT && SECURITY_APPARMOR
-> >       default KUNIT_ALL_TESTS
-> >       help
-> >         This builds the AppArmor KUnit tests.
-> > diff --git a/security/apparmor/Makefile b/security/apparmor/Makefile
-> > index ff23fcfefe19..6a92428375eb 100644
-> > --- a/security/apparmor/Makefile
-> > +++ b/security/apparmor/Makefile
-> > @@ -8,6 +8,8 @@ apparmor-y := apparmorfs.o audit.o capability.o task.o ipc.o lib.o match.o \
-> >                 resource.o secid.o file.o policy_ns.o label.o mount.o net.o
-> >   apparmor-$(CONFIG_SECURITY_APPARMOR_HASH) += crypto.o
-> >
-> > +obj-$(CONFIG_SECURITY_APPARMOR_KUNIT_TEST) += policy_unpack_test.o
-> > +
-> >   clean-files := capability_names.h rlim_names.h net_names.h
-> >
-> >   # Build a lower case string table of address family names
-> > diff --git a/security/apparmor/include/policy_unpack.h b/security/apparmor/include/policy_unpack.h
-> > index eb5f7d7f132b..a963687bcc9b 100644
-> > --- a/security/apparmor/include/policy_unpack.h
-> > +++ b/security/apparmor/include/policy_unpack.h
-> > @@ -48,6 +48,43 @@ enum {
-> >       AAFS_LOADDATA_NDENTS            /* count of entries */
-> >   };
-> >
-> > +/*
-> > + * The AppArmor interface treats data as a type byte followed by the
-> > + * actual data.  The interface has the notion of a named entry
-> > + * which has a name (AA_NAME typecode followed by name string) followed by
-> > + * the entries typecode and data.  Named types allow for optional
-> > + * elements and extensions to be added and tested for without breaking
-> > + * backwards compatibility.
-> > + */
-> > +
-> > +enum aa_code {
-> > +     AA_U8,
-> > +     AA_U16,
-> > +     AA_U32,
-> > +     AA_U64,
-> > +     AA_NAME,                /* same as string except it is items name */
-> > +     AA_STRING,
-> > +     AA_BLOB,
-> > +     AA_STRUCT,
-> > +     AA_STRUCTEND,
-> > +     AA_LIST,
-> > +     AA_LISTEND,
-> > +     AA_ARRAY,
-> > +     AA_ARRAYEND,
-> > +};
-> > +
-> > +/*
-> > + * aa_ext is the read of the buffer containing the serialized profile.  The
-> > + * data is copied into a kernel buffer in apparmorfs and then handed off to
-> > + * the unpack routines.
-> > + */
-> > +struct aa_ext {
-> > +     void *start;
-> > +     void *end;
-> > +     void *pos;              /* pointer to current position in the buffer */
-> > +     u32 version;
-> > +};
-> > +
->
-> hrmmm, I prefer these symbols to be only available to the unpack code but can
-> live with them being more widely available.
->
-> >   /*
-> >    * struct aa_loaddata - buffer of policy raw_data set
-> >    *
-> > @@ -126,4 +163,17 @@ static inline void aa_put_loaddata(struct aa_loaddata *data)
-> >               kref_put(&data->count, aa_loaddata_kref);
-> >   }
-> >
-> > +#if IS_ENABLED(CONFIG_KUNIT)
-> > +bool inbounds(struct aa_ext *e, size_t size);
-> > +size_t unpack_u16_chunk(struct aa_ext *e, char **chunk);
-> > +bool unpack_X(struct aa_ext *e, enum aa_code code);
-> > +bool unpack_nameX(struct aa_ext *e, enum aa_code code, const char *name);
-> > +bool unpack_u32(struct aa_ext *e, u32 *data, const char *name);
-> > +bool unpack_u64(struct aa_ext *e, u64 *data, const char *name);
-> > +size_t unpack_array(struct aa_ext *e, const char *name);
-> > +size_t unpack_blob(struct aa_ext *e, char **blob, const char *name);
-> > +int unpack_str(struct aa_ext *e, const char **string, const char *name);
-> > +int unpack_strdup(struct aa_ext *e, char **string, const char *name);
->
-> So this is a problem. If this symbols are going to be visible outside of the
-> unpack code they need to be prefixed with aa_ to help avoid collisions with
-> other kernel code.
->
+--vdHUOjEUZjKFGKRe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Hmm... I agree we need some sort of way of restricting access to these symbols.
+The dev_err_probe() has (at least) following benefits over dev_err()
+when printing an error print for a failed function call at a device
+driver probe:
+	- Omit error level print if error is 'EPRBE_DEFER'
+	- Standardized print format for returned error
+	- return the error value allowing shortening calls like:
 
-As-is, they're _exported_ to a different symbol namespace, so it
-shouldn't be a problem during linking when built as a module, nor if
-KUnit is disabled (due to the preprocessor step).
+	if (ret) {
+		dev_err(...);
+		return ret;
+	}
 
-One option is to put these in a separate header (that only the test
-and policy-unpack code include), but even that doesn't solve the
-linking problem when built-in.
+	to
 
-So I guess namespacing is the only option which solves all of these
-problems. (It'd be nice if the symbol namespacing system worked for
-built-ins as well as modules...)
+	if (ret)
+		return dev_err_probe(...);
 
-> > +#endif
-> > +
-> >   #endif /* __POLICY_INTERFACE_H */
-> > diff --git a/security/apparmor/policy_unpack.c b/security/apparmor/policy_unpack.c
-> > index 55d31bac4f35..c23aa70349aa 100644
-> > --- a/security/apparmor/policy_unpack.c
-> > +++ b/security/apparmor/policy_unpack.c
-> > @@ -14,6 +14,7 @@
-> >    */
-> >
-> >   #include <asm/unaligned.h>
-> > +#include <kunit/visibility.h>
-> >   #include <linux/ctype.h>
-> >   #include <linux/errno.h>
-> >   #include <linux/zlib.h>
-> > @@ -37,43 +38,6 @@
-> >   #define v7  7
-> >   #define v8  8       /* full network masking */
-> >
-> > -/*
-> > - * The AppArmor interface treats data as a type byte followed by the
-> > - * actual data.  The interface has the notion of a named entry
-> > - * which has a name (AA_NAME typecode followed by name string) followed by
-> > - * the entries typecode and data.  Named types allow for optional
-> > - * elements and extensions to be added and tested for without breaking
-> > - * backwards compatibility.
-> > - */
-> > -
-> > -enum aa_code {
-> > -     AA_U8,
-> > -     AA_U16,
-> > -     AA_U32,
-> > -     AA_U64,
-> > -     AA_NAME,                /* same as string except it is items name */
-> > -     AA_STRING,
-> > -     AA_BLOB,
-> > -     AA_STRUCT,
-> > -     AA_STRUCTEND,
-> > -     AA_LIST,
-> > -     AA_LISTEND,
-> > -     AA_ARRAY,
-> > -     AA_ARRAYEND,
-> > -};
-> > -
-> > -/*
-> > - * aa_ext is the read of the buffer containing the serialized profile.  The
-> > - * data is copied into a kernel buffer in apparmorfs and then handed off to
-> > - * the unpack routines.
-> > - */
-> > -struct aa_ext {
-> > -     void *start;
-> > -     void *end;
-> > -     void *pos;              /* pointer to current position in the buffer */
-> > -     u32 version;
-> > -};
-> > -
-> >   /* audit callback for unpack fields */
-> >   static void audit_cb(struct audit_buffer *ab, void *va)
-> >   {
-> > @@ -199,10 +163,11 @@ struct aa_loaddata *aa_loaddata_alloc(size_t size)
-> >   }
-> >
-> >   /* test if read will be in packed data bounds */
-> > -static bool inbounds(struct aa_ext *e, size_t size)
-> > +VISIBLE_IF_KUNIT bool inbounds(struct aa_ext *e, size_t size)
-> >   {
-> >       return (size <= e->end - e->pos);
-> >   }
-> > +EXPORT_SYMBOL_IF_KUNIT(inbounds);
-> >
-> >   static void *kvmemdup(const void *src, size_t len)
-> >   {
-> > @@ -220,7 +185,7 @@ static void *kvmemdup(const void *src, size_t len)
-> >    *
-> >    * Returns: the size of chunk found with the read head at the end of the chunk.
-> >    */
-> > -static size_t unpack_u16_chunk(struct aa_ext *e, char **chunk)
-> > +VISIBLE_IF_KUNIT size_t unpack_u16_chunk(struct aa_ext *e, char **chunk)
-> >   {
-> >       size_t size = 0;
-> >       void *pos = e->pos;
-> > @@ -239,9 +204,10 @@ static size_t unpack_u16_chunk(struct aa_ext *e, char **chunk)
-> >       e->pos = pos;
-> >       return 0;
-> >   }
-> > +EXPORT_SYMBOL_IF_KUNIT(unpack_u16_chunk);
-> >
-> >   /* unpack control byte */
-> > -static bool unpack_X(struct aa_ext *e, enum aa_code code)
-> > +VISIBLE_IF_KUNIT bool unpack_X(struct aa_ext *e, enum aa_code code)
-> >   {
-> >       if (!inbounds(e, 1))
-> >               return false;
-> > @@ -250,6 +216,7 @@ static bool unpack_X(struct aa_ext *e, enum aa_code code)
-> >       e->pos++;
-> >       return true;
-> >   }
-> > +EXPORT_SYMBOL_IF_KUNIT(unpack_X);
-> >
-> >   /**
-> >    * unpack_nameX - check is the next element is of type X with a name of @name
-> > @@ -267,7 +234,7 @@ static bool unpack_X(struct aa_ext *e, enum aa_code code)
-> >    *
-> >    * Returns: false if either match fails, the read head does not move
-> >    */
-> > -static bool unpack_nameX(struct aa_ext *e, enum aa_code code, const char *name)
-> > +VISIBLE_IF_KUNIT bool unpack_nameX(struct aa_ext *e, enum aa_code code, const char *name)
-> >   {
-> >       /*
-> >        * May need to reset pos if name or type doesn't match
-> > @@ -296,6 +263,7 @@ static bool unpack_nameX(struct aa_ext *e, enum aa_code code, const char *name)
-> >       e->pos = pos;
-> >       return false;
-> >   }
-> > +EXPORT_SYMBOL_IF_KUNIT(unpack_nameX);
-> >
-> >   static bool unpack_u8(struct aa_ext *e, u8 *data, const char *name)
-> >   {
-> > @@ -315,7 +283,7 @@ static bool unpack_u8(struct aa_ext *e, u8 *data, const char *name)
-> >       return false;
-> >   }
-> >
-> > -static bool unpack_u32(struct aa_ext *e, u32 *data, const char *name)
-> > +VISIBLE_IF_KUNIT bool unpack_u32(struct aa_ext *e, u32 *data, const char *name)
-> >   {
-> >       void *pos = e->pos;
-> >
-> > @@ -332,8 +300,9 @@ static bool unpack_u32(struct aa_ext *e, u32 *data, const char *name)
-> >       e->pos = pos;
-> >       return false;
-> >   }
-> > +EXPORT_SYMBOL_IF_KUNIT(unpack_u32);
-> >
-> > -static bool unpack_u64(struct aa_ext *e, u64 *data, const char *name)
-> > +VISIBLE_IF_KUNIT bool unpack_u64(struct aa_ext *e, u64 *data, const char *name)
-> >   {
-> >       void *pos = e->pos;
-> >
-> > @@ -350,8 +319,9 @@ static bool unpack_u64(struct aa_ext *e, u64 *data, const char *name)
-> >       e->pos = pos;
-> >       return false;
-> >   }
-> > +EXPORT_SYMBOL_IF_KUNIT(unpack_u64);
-> >
-> > -static size_t unpack_array(struct aa_ext *e, const char *name)
-> > +VISIBLE_IF_KUNIT size_t unpack_array(struct aa_ext *e, const char *name)
-> >   {
-> >       void *pos = e->pos;
-> >
-> > @@ -368,8 +338,9 @@ static size_t unpack_array(struct aa_ext *e, const char *name)
-> >       e->pos = pos;
-> >       return 0;
-> >   }
-> > +EXPORT_SYMBOL_IF_KUNIT(unpack_array);
-> >
-> > -static size_t unpack_blob(struct aa_ext *e, char **blob, const char *name)
-> > +VISIBLE_IF_KUNIT size_t unpack_blob(struct aa_ext *e, char **blob, const char *name)
-> >   {
-> >       void *pos = e->pos;
-> >
-> > @@ -390,8 +361,9 @@ static size_t unpack_blob(struct aa_ext *e, char **blob, const char *name)
-> >       e->pos = pos;
-> >       return 0;
-> >   }
-> > +EXPORT_SYMBOL_IF_KUNIT(unpack_blob);
-> >
-> > -static int unpack_str(struct aa_ext *e, const char **string, const char *name)
-> > +VISIBLE_IF_KUNIT int unpack_str(struct aa_ext *e, const char **string, const char *name)
-> >   {
-> >       char *src_str;
-> >       size_t size = 0;
-> > @@ -413,8 +385,9 @@ static int unpack_str(struct aa_ext *e, const char **string, const char *name)
-> >       e->pos = pos;
-> >       return 0;
-> >   }
-> > +EXPORT_SYMBOL_IF_KUNIT(unpack_str);
-> >
-> > -static int unpack_strdup(struct aa_ext *e, char **string, const char *name)
-> > +VISIBLE_IF_KUNIT int unpack_strdup(struct aa_ext *e, char **string, const char *name)
-> >   {
-> >       const char *tmp;
-> >       void *pos = e->pos;
-> > @@ -432,6 +405,7 @@ static int unpack_strdup(struct aa_ext *e, char **string, const char *name)
-> >
-> >       return res;
-> >   }
-> > +EXPORT_SYMBOL_IF_KUNIT(unpack_strdup);
-> >
-> Again if the symbols are going to be exported they need the aa_ prefix
->
-> But I am not sure this is worth doing, exporting a lot of symbols just so the
-> test code can be built as a module doesn't seem worth it to me.
->
+Convert the ROHM BD71828, ROHM BD718x7 and ROHM BD9576 core drivers to
+use the dev_err_probe() when returned error is not hard-coded constant.
 
-Again, agreed that we need to namespace these for the non-module case
-(the symbol namespacing should be okay otherwise).
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+---
+ drivers/mfd/rohm-bd71828.c | 23 ++++++++++-------------
+ drivers/mfd/rohm-bd718x7.c | 21 ++++++++-------------
+ drivers/mfd/rohm-bd9576.c  | 17 ++++++++---------
+ 3 files changed, 26 insertions(+), 35 deletions(-)
 
-One of the reasons behind doing this is that there are a few KUnit
-users who can only run tests which are built as modules. In
-particular, Android and (IIRC) Red Hat are both configuring all of
-their kernels with KUnit built as a module, and distributing the KUnit
-and KUnit test modules in a different package.
+diff --git a/drivers/mfd/rohm-bd71828.c b/drivers/mfd/rohm-bd71828.c
+index 714d9fcbf07b..ae5430500599 100644
+--- a/drivers/mfd/rohm-bd71828.c
++++ b/drivers/mfd/rohm-bd71828.c
+@@ -515,27 +515,24 @@ static int bd71828_i2c_probe(struct i2c_client *i2c)
+ 	}
+=20
+ 	regmap =3D devm_regmap_init_i2c(i2c, regmap_config);
+-	if (IS_ERR(regmap)) {
+-		dev_err(&i2c->dev, "Failed to initialize Regmap\n");
+-		return PTR_ERR(regmap);
+-	}
++	if (IS_ERR(regmap))
++		return dev_err_probe(&i2c->dev, PTR_ERR(regmap),
++				     "Failed to initialize Regmap\n");
+=20
+ 	ret =3D devm_regmap_add_irq_chip(&i2c->dev, regmap, i2c->irq,
+ 				       IRQF_ONESHOT, 0, irqchip, &irq_data);
+-	if (ret) {
+-		dev_err(&i2c->dev, "Failed to add IRQ chip\n");
+-		return ret;
+-	}
++	if (ret)
++		return dev_err_probe(&i2c->dev, ret,
++				     "Failed to add IRQ chip\n");
+=20
+ 	dev_dbg(&i2c->dev, "Registered %d IRQs for chip\n",
+ 		irqchip->num_irqs);
+=20
+ 	if (button_irq) {
+ 		ret =3D regmap_irq_get_virq(irq_data, button_irq);
+-		if (ret < 0) {
+-			dev_err(&i2c->dev, "Failed to get the power-key IRQ\n");
+-			return ret;
+-		}
++		if (ret < 0)
++			return dev_err_probe(&i2c->dev, ret,
++					     "Failed to get the power-key IRQ\n");
+=20
+ 		button.irq =3D ret;
+ 	}
+@@ -547,7 +544,7 @@ static int bd71828_i2c_probe(struct i2c_client *i2c)
+ 	ret =3D devm_mfd_add_devices(&i2c->dev, PLATFORM_DEVID_AUTO, mfd, cells,
+ 				   NULL, 0, regmap_irq_get_domain(irq_data));
+ 	if (ret)
+-		dev_err(&i2c->dev, "Failed to create subdevices\n");
++		dev_err_probe(&i2c->dev, ret, "Failed to create subdevices\n");
+=20
+ 	return ret;
+ }
+diff --git a/drivers/mfd/rohm-bd718x7.c b/drivers/mfd/rohm-bd718x7.c
+index bfd81f78beae..1c0f6419ee4f 100644
+--- a/drivers/mfd/rohm-bd718x7.c
++++ b/drivers/mfd/rohm-bd718x7.c
+@@ -158,18 +158,15 @@ static int bd718xx_i2c_probe(struct i2c_client *i2c,
+ 	}
+=20
+ 	regmap =3D devm_regmap_init_i2c(i2c, &bd718xx_regmap_config);
+-	if (IS_ERR(regmap)) {
+-		dev_err(&i2c->dev, "regmap initialization failed\n");
+-		return PTR_ERR(regmap);
+-	}
++	if (IS_ERR(regmap))
++		return dev_err_probe(&i2c->dev, PTR_ERR(regmap),
++				     "regmap initialization failed\n");
+=20
+ 	ret =3D devm_regmap_add_irq_chip(&i2c->dev, regmap, i2c->irq,
+ 				       IRQF_ONESHOT, 0, &bd718xx_irq_chip,
+ 				       &irq_data);
+-	if (ret) {
+-		dev_err(&i2c->dev, "Failed to add irq_chip\n");
+-		return ret;
+-	}
++	if (ret)
++		return dev_err_probe(&i2c->dev, ret, "Failed to add irq_chip\n");
+=20
+ 	ret =3D bd718xx_init_press_duration(regmap, &i2c->dev);
+ 	if (ret)
+@@ -177,10 +174,8 @@ static int bd718xx_i2c_probe(struct i2c_client *i2c,
+=20
+ 	ret =3D regmap_irq_get_virq(irq_data, BD718XX_INT_PWRBTN_S);
+=20
+-	if (ret < 0) {
+-		dev_err(&i2c->dev, "Failed to get the IRQ\n");
+-		return ret;
+-	}
++	if (ret < 0)
++		return dev_err_probe(&i2c->dev, ret, "Failed to get the IRQ\n");
+=20
+ 	button.irq =3D ret;
+=20
+@@ -188,7 +183,7 @@ static int bd718xx_i2c_probe(struct i2c_client *i2c,
+ 				   mfd, cells, NULL, 0,
+ 				   regmap_irq_get_domain(irq_data));
+ 	if (ret)
+-		dev_err(&i2c->dev, "Failed to create subdevices\n");
++		dev_err_probe(&i2c->dev, ret, "Failed to create subdevices\n");
+=20
+ 	return ret;
+ }
+diff --git a/drivers/mfd/rohm-bd9576.c b/drivers/mfd/rohm-bd9576.c
+index f37cd4f27aeb..c421867af6c9 100644
+--- a/drivers/mfd/rohm-bd9576.c
++++ b/drivers/mfd/rohm-bd9576.c
+@@ -122,10 +122,9 @@ static int bd957x_i2c_probe(struct i2c_client *i2c,
+ 	}
+=20
+ 	regmap =3D devm_regmap_init_i2c(i2c, &bd957x_regmap);
+-	if (IS_ERR(regmap)) {
+-		dev_err(&i2c->dev, "Failed to initialize Regmap\n");
+-		return PTR_ERR(regmap);
+-	}
++	if (IS_ERR(regmap))
++		return dev_err_probe(&i2c->dev, PTR_ERR(regmap),
++				     "Failed to initialize Regmap\n");
+=20
+ 	/*
+ 	 * BD9576 behaves badly. It kepts IRQ line asserted for the whole
+@@ -146,10 +145,10 @@ static int bd957x_i2c_probe(struct i2c_client *i2c,
+ 		ret =3D devm_regmap_add_irq_chip(&i2c->dev, regmap, i2c->irq,
+ 					       IRQF_ONESHOT, 0,
+ 					       &bd9576_irq_chip, &irq_data);
+-		if (ret) {
+-			dev_err(&i2c->dev, "Failed to add IRQ chip\n");
+-			return ret;
+-		}
++		if (ret)
++			return dev_err_probe(&i2c->dev, ret,
++					     "Failed to add IRQ chip\n");
++
+ 		domain =3D regmap_irq_get_domain(irq_data);
+ 	} else {
+ 		ret =3D regmap_update_bits(regmap, BD957X_REG_INT_MAIN_MASK,
+@@ -163,7 +162,7 @@ static int bd957x_i2c_probe(struct i2c_client *i2c,
+ 	ret =3D devm_mfd_add_devices(&i2c->dev, PLATFORM_DEVID_AUTO, cells,
+ 				   num_cells, NULL, 0, domain);
+ 	if (ret)
+-		dev_err(&i2c->dev, "Failed to create subdevices\n");
++		dev_err_probe(&i2c->dev, ret, "Failed to create subdevices\n");
+=20
+ 	return ret;
+ }
 
-If we kept things the way there are, then it'd not be possible to
-unconditionally _build_ the apparmor tests, but only load and run them
-on demand (due to the way they're built into the apparmor module,
-they'd always run when it loads). This is a no-go for Android/Red Hat,
-so they won't ship or run the apparmor tests. (There are some other
-tests with the same problem, notably amdgpu, but apparmor seemed a
-nice first trial-user, as it were, having a small but non-trivial
-number of symbols to export.)
+base-commit: 094226ad94f471a9f19e8f8e7140a09c2625abaa
+--=20
+2.38.1
 
-Thoughts?
 
-> >
-> >   /**
-> > @@ -1251,7 +1225,3 @@ int aa_unpack(struct aa_loaddata *udata, struct list_head *lh,
-> >
-> >       return error;
-> >   }
-> > -
-> > -#ifdef CONFIG_SECURITY_APPARMOR_KUNIT_TEST
-> > -#include "policy_unpack_test.c"
-> > -#endif /* CONFIG_SECURITY_APPARMOR_KUNIT_TEST */
-> > diff --git a/security/apparmor/policy_unpack_test.c b/security/apparmor/policy_unpack_test.c
-> > index 0a969b2e03db..3474fe2cd922 100644
-> > --- a/security/apparmor/policy_unpack_test.c
-> > +++ b/security/apparmor/policy_unpack_test.c
-> > @@ -4,6 +4,7 @@
-> >    */
-> >
-> >   #include <kunit/test.h>
-> > +#include <kunit/visibility.h>
-> >
-> >   #include "include/policy.h"
-> >   #include "include/policy_unpack.h"
-> > @@ -43,6 +44,8 @@
-> >   #define TEST_ARRAY_BUF_OFFSET \
-> >       (TEST_NAMED_ARRAY_BUF_OFFSET + 3 + strlen(TEST_ARRAY_NAME) + 1)
-> >
-> > +MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING);
-> > +
-> >   struct policy_unpack_fixture {
-> >       struct aa_ext *e;
-> >       size_t e_size;
-> > @@ -605,3 +608,5 @@ static struct kunit_suite apparmor_policy_unpack_test_module = {
-> >   };
-> >
-> >   kunit_test_suite(apparmor_policy_unpack_test_module);
-> > +
-> > +MODULE_LICENSE("GPL");
->
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
 
---00000000000075b76b05ee1fcaec
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-N0A3bgltvER3q1cGraQJMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAxS21FdvRtCQVc
-jgEj+xxSnUr0N9reJlI5J9zRiBCWGxm5yhz965IDka3XVFEbj+beJj/gyHoxbaTGf2AjOufpcMqy
-p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
-2MXoxQsFucGJO5a4CwDBaGgJAqvwCXU5Q64rKVIUBk6mtcd3cDwX+PXqx4QrhHFGq6b6oi37YQ8B
-+bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
-/GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBi
-l4ksp8TC7LbVv/S5djzWaUn5PFW5aCW17cQ+I5JbJjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjExMjMwOTE5NTFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAa8vx4zmsQ5g5fxB78NPq
-sjlSmHKnYlR/7PMSkV6s8z4WvGV4UMAr6s0Wn+3JAuw2RZVSPLpkEClFSpekow4adDjLiFqfHS3D
-6YD5szwnE6Uy2lziqFQaWjvcKhUCWYwZ2fhv9a6H2d2SX7jcmO6jcrV8MX8Kdu8xZkos/gPMAVOQ
-Abjbt2e3SeQ0qcEhoHysGkJ+aC1juRXsYACciZljnO3IyQrcHJdPMMZuka4UeSUonoSSsCaoxyP5
-n6RF3XpFL+psgOKKNjAWIrGeci+W1oxt8pskXhY1WpyljV+OjLyH9fc3wvnfAOvbc+wHlS2KrMjm
-KgqzZSmT8xsMECmXZw==
---00000000000075b76b05ee1fcaec--
+--vdHUOjEUZjKFGKRe
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmN95agACgkQeFA3/03a
+ocWb4Af9HokFcphcnvoevA62CuYL24TGDnxlx8uuU5OqwyPJA7em3IWIbmnYLiAH
+EcasPiFfIVAtYmVlEolBvMG1xLjfK7xs41mTVcYmqYKLxnd10e9kUpPXByMhTWx8
+H+am3Sss1T7HW7jVuCwdEIVdjWg2T2eRQkWrDudchTzy5UtIgg7o5b3wIlLub3VL
+mSA5RKuH4n1w+cde7XZSe5N0xKB4cbkTql5eLtZQzKlFFucAi7SseNz685OUxrWl
+EwV/mPoTKbdaP0PdWbbiLbX1g8PqXWI8BPUGvv9nISnO1FgXlq60q8XVDtgOu1Ry
++04bOvQYBiKi0KcD7fW5wceKUALySA==
+=yJyz
+-----END PGP SIGNATURE-----
+
+--vdHUOjEUZjKFGKRe--
