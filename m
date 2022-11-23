@@ -2,58 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1852863606B
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:50:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49272636062
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:49:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237972AbiKWNum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 08:50:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33074 "EHLO
+        id S236421AbiKWNtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 08:49:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236618AbiKWNuN (ORCPT
+        with ESMTP id S237814AbiKWNta (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 08:50:13 -0500
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5CB781AA;
-        Wed, 23 Nov 2022 05:38:31 -0800 (PST)
-Received: from [10.18.29.47] (10.18.29.47) by mail-sh.amlogic.com (10.18.11.5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Wed, 23 Nov
- 2022 21:38:29 +0800
-Message-ID: <8091c596-7700-8603-e8e9-9bad4603fa14@amlogic.com>
-Date:   Wed, 23 Nov 2022 21:38:28 +0800
+        Wed, 23 Nov 2022 08:49:30 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7357F8CBB5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:38:59 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id g7so28217795lfv.5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:38:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wS8FATQNxWPdriQp0BbXocQzCpC+MIR+DcVNfDAhwFk=;
+        b=goY0xT6u7EULHQx2MRhg/J+3Xshao0AkK0Kw/Yhep2ABZQKNds0sD0jO44XqILT85D
+         GMpgwtt4t0RcnMdLfGn72E9O9T3qn7XUT2okgutwciPevDbju3FcMf/01ixtJfXX7Iiq
+         fDbqCLjRKHOzrt5uEOMdWfHgwoVRnlv2IfOnw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wS8FATQNxWPdriQp0BbXocQzCpC+MIR+DcVNfDAhwFk=;
+        b=H16t2hNr4+29EsBEPBiLEhI8+2vdvsOKIarhLWcMxz72eDk+5sO3qRl4ieAE8BR78J
+         paX/DKHw10aZZoQ2LFIJBnf3h5c7ApDTjRvPT8AN1NcASmYTarbHk2Um1qxJ8dqUMb4e
+         /Sxnutbyjb7cfCYCg75voGNBCHo61HugGkzKiRKDrtFFSetRwI4KTSRJbJjp/FKqDkO6
+         TqD+9+ucVA3hpiOXvYVlZh/VaWN5abWJZYyunTdS0/4k9jnZw6wLHZDZwK0U0Wy9oaH4
+         XL6cEa2DCe++1/YkaiB/Mb3b98+838lsePjuMonx4ayfWEFhxCRqt8ydjeVoS1TTPDyk
+         2rBg==
+X-Gm-Message-State: ANoB5pnbthYKyV3FNLT7RmGFfKOl/CdA4ON/xQ6Q4aaWLulF10DW4Wge
+        MgwRxu6YHeF3yHQGhXX24SMeBQ==
+X-Google-Smtp-Source: AA0mqf4f1qphI9rYgYg/KQyHXOZ4X9v9VsEAFcQc3JIS1A5jOOVNZ/Gqskm/9D51RpT1s9TMN21moQ==
+X-Received: by 2002:ac2:4bc5:0:b0:4b4:c099:a994 with SMTP id o5-20020ac24bc5000000b004b4c099a994mr7840595lfq.193.1669210737739;
+        Wed, 23 Nov 2022 05:38:57 -0800 (PST)
+Received: from prevas-ravi.prevas.se ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id r9-20020a2e5749000000b002774e7267a7sm2224924ljd.25.2022.11.23.05.38.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 05:38:57 -0800 (PST)
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] net: fec: don't reset irq coalesce settings to defaults on "ip link up"
+Date:   Wed, 23 Nov 2022 14:38:52 +0100
+Message-Id: <20221123133853.1822415-1-linux@rasmusvillemoes.dk>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH V5 4/4] arm64: dts: meson: add S4 Soc Peripheral clock
- controller in DT
-Content-Language: en-US
-To:     <neil.armstrong@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-CC:     <kelvin.zhang@amlogic.com>
-References: <20221123021346.18136-1-yu.tu@amlogic.com>
- <20221123021346.18136-5-yu.tu@amlogic.com>
- <ae43fadf-9255-7db7-8b5e-01200e02a2c6@linaro.org>
- <9961d579-9463-c585-34a6-a3abcd4b3e52@linaro.org>
-From:   Yu Tu <yu.tu@amlogic.com>
-In-Reply-To: <9961d579-9463-c585-34a6-a3abcd4b3e52@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.18.29.47]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,58 +69,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Neil,
-	Thanks for your reply and explanation.
+Currently, when a FEC device is brought up, the irq coalesce settings
+are reset to their default values (1000us, 200 frames). That's
+unexpected, and breaks for example use of an appropriate .link file to
+make systemd-udev apply the desired
+settings (https://www.freedesktop.org/software/systemd/man/systemd.link.html),
+or any other method that would do a one-time setup during early boot.
 
-On 2022/11/23 21:27, Neil Armstrong wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> On 23/11/2022 11:10, Krzysztof Kozlowski wrote:
->> On 23/11/2022 03:13, Yu Tu wrote:
->>> Added information about the S4 SOC Peripheral Clock controller in DT.
->>>
->>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
->>> ---
->>>   arch/arm64/boot/dts/amlogic/meson-s4.dtsi | 26 +++++++++++++++++++++++
->>>   1 file changed, 26 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi 
->>> b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
->>> index bd9c2ef83314..e7fab6e400be 100644
->>> --- a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
->>> +++ b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
->>> @@ -6,6 +6,8 @@
->>>   #include <dt-bindings/interrupt-controller/irq.h>
->>>   #include <dt-bindings/interrupt-controller/arm-gic.h>
->>>   #include <dt-bindings/gpio/gpio.h>
->>> +#include <dt-bindings/clock/amlogic,s4-pll-clkc.h>
->>> +#include <dt-bindings/clock/amlogic,s4-peripherals-clkc.h>
->>>   / {
->>>       cpus {
->>> @@ -100,6 +102,30 @@ clkc_pll: clock-controller@8000 {
->>>                   #clock-cells = <1>;
->>>               };
->>> +            clkc_periphs: clock-controller {
->>> +                compatible = "amlogic,s4-peripherals-clkc";
->>> +                reg = <0x0 0x0 0x0 0x49c>;
->>
->> This is broken... did you check for warnings?
-> 
-> This is actually fine, the parent node has a ranges property:
-> https://github.com/torvalds/linux/blob/eb7081409f94a9a8608593d0fb63a1aa3d6f95d8/arch/arm64/boot/dts/amlogic/meson-s4.dtsi#L93 
-> 
-> 
-> Neil
-> 
->>
->>
->> Best regards,
->> Krzysztof
->>
->>
->> _______________________________________________
->> linux-amlogic mailing list
->> linux-amlogic@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-amlogic
-> 
-> .
+Refactor the code so that fec_restart() instead uses
+fec_enet_itr_coal_set(), which simply applies the settings that are
+stored in the private data, and initialize that private data with the
+default values.
+
+Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+---
+ drivers/net/ethernet/freescale/fec_main.c | 22 ++++++----------------
+ 1 file changed, 6 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
+index f623c12eaf95..2ca2b61b451f 100644
+--- a/drivers/net/ethernet/freescale/fec_main.c
++++ b/drivers/net/ethernet/freescale/fec_main.c
+@@ -74,7 +74,7 @@
+ #include "fec.h"
+ 
+ static void set_multicast_list(struct net_device *ndev);
+-static void fec_enet_itr_coal_init(struct net_device *ndev);
++static void fec_enet_itr_coal_set(struct net_device *ndev);
+ 
+ #define DRIVER_NAME	"fec"
+ 
+@@ -1220,8 +1220,7 @@ fec_restart(struct net_device *ndev)
+ 		writel(0, fep->hwp + FEC_IMASK);
+ 
+ 	/* Init the interrupt coalescing */
+-	fec_enet_itr_coal_init(ndev);
+-
++	fec_enet_itr_coal_set(ndev);
+ }
+ 
+ static int fec_enet_ipc_handle_init(struct fec_enet_private *fep)
+@@ -2856,19 +2855,6 @@ static int fec_enet_set_coalesce(struct net_device *ndev,
+ 	return 0;
+ }
+ 
+-static void fec_enet_itr_coal_init(struct net_device *ndev)
+-{
+-	struct ethtool_coalesce ec;
+-
+-	ec.rx_coalesce_usecs = FEC_ITR_ICTT_DEFAULT;
+-	ec.rx_max_coalesced_frames = FEC_ITR_ICFT_DEFAULT;
+-
+-	ec.tx_coalesce_usecs = FEC_ITR_ICTT_DEFAULT;
+-	ec.tx_max_coalesced_frames = FEC_ITR_ICFT_DEFAULT;
+-
+-	fec_enet_set_coalesce(ndev, &ec, NULL, NULL);
+-}
+-
+ static int fec_enet_get_tunable(struct net_device *netdev,
+ 				const struct ethtool_tunable *tuna,
+ 				void *data)
+@@ -3623,6 +3609,10 @@ static int fec_enet_init(struct net_device *ndev)
+ 	fep->rx_align = 0x3;
+ 	fep->tx_align = 0x3;
+ #endif
++	fep->rx_pkts_itr = FEC_ITR_ICFT_DEFAULT;
++	fep->tx_pkts_itr = FEC_ITR_ICFT_DEFAULT;
++	fep->rx_time_itr = FEC_ITR_ICTT_DEFAULT;
++	fep->tx_time_itr = FEC_ITR_ICTT_DEFAULT;
+ 
+ 	/* Check mask of the streaming and coherent API */
+ 	ret = dma_set_mask_and_coherent(&fep->pdev->dev, DMA_BIT_MASK(32));
+-- 
+2.37.2
+
