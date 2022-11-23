@@ -2,329 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9188634E5A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 04:29:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B77634E5D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 04:33:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235595AbiKWD3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 22:29:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46646 "EHLO
+        id S235597AbiKWDdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 22:33:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234070AbiKWD31 (ORCPT
+        with ESMTP id S234070AbiKWDdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 22:29:27 -0500
-Received: from out199-2.us.a.mail.aliyun.com (out199-2.us.a.mail.aliyun.com [47.90.199.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F9BE120F;
-        Tue, 22 Nov 2022 19:29:24 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VVUtD9I_1669174159;
-Received: from 30.221.128.211(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VVUtD9I_1669174159)
-          by smtp.aliyun-inc.com;
-          Wed, 23 Nov 2022 11:29:20 +0800
-Message-ID: <f03ad01c-1b7a-8f77-86bb-aa41b2a77d37@linux.alibaba.com>
-Date:   Wed, 23 Nov 2022 11:29:19 +0800
+        Tue, 22 Nov 2022 22:33:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F48119C37;
+        Tue, 22 Nov 2022 19:33:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C4DED619FA;
+        Wed, 23 Nov 2022 03:33:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A00DC433C1;
+        Wed, 23 Nov 2022 03:33:00 +0000 (UTC)
+Date:   Tue, 22 Nov 2022 22:32:58 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Zheng Yejian <zhengyejian1@huawei.com>
+Cc:     <mhiramat@kernel.org>, <yujie.liu@intel.com>,
+        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] tracing: Optimize event type allocation with IDA
+Message-ID: <20221122223258.10faaf4e@rorschach.local.home>
+In-Reply-To: <20221123031806.735511-1-zhengyejian1@huawei.com>
+References: <20221111234137.90d9ec624497a7e1f5cb5003@kernel.org>
+        <20221123031806.735511-1-zhengyejian1@huawei.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.0
-Subject: Re: [Linux-cachefs] [PATCH v4 1/2] fscache, cachefiles: add
- prepare_ondemand_read() callback
-Content-Language: en-US
-From:   Jingbo Xu <jefflexu@linux.alibaba.com>
-To:     xiang@kernel.org, chao@kernel.org, jlayton@kernel.org,
-        linux-erofs@lists.ozlabs.org, linux-cachefs@redhat.com,
-        dhowells@redhat.com
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221117053017.21074-1-jefflexu@linux.alibaba.com>
- <20221117053017.21074-2-jefflexu@linux.alibaba.com>
-In-Reply-To: <20221117053017.21074-2-jefflexu@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
+On Wed, 23 Nov 2022 11:18:06 +0800
+Zheng Yejian <zhengyejian1@huawei.com> wrote:
 
-How do you think of this patch?  It's already -rc6 and we'd like to
-enable erofs large folios for Linux 6.2.
-
-If it's possible, could you review or ack this patch?  Many thanks.
-
-
-Thanks,
-Jingbo Xu
-
-
-On 11/17/22 1:30 PM, Jingbo Xu wrote:
-> Add prepare_ondemand_read() callback dedicated for the on-demand read
-> scenario, so that callers from this scenario can be decoupled from
-> netfs_io_subrequest.
+> But Yujie Liu <yujie.liu@intel.com> reported a problem that highly
+> reproducible after applying this patch:
+> Link: https://lore.kernel.org/lkml/54f23c9c-97ae-e326-5873-bfa5d2c81f52@intel.com/
 > 
-> The original cachefiles_prepare_read() is now refactored to a generic
-> routine accepting a parameter list instead of netfs_io_subrequest.
-> There's no logic change, except that some debug info retrieved from
-> netfs_io_subrequest is removed from trace_cachefiles_prep_read().
-> 
-> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
-> ---
->  fs/cachefiles/io.c                | 77 ++++++++++++++++++++-----------
->  include/linux/netfs.h             |  8 ++++
->  include/trace/events/cachefiles.h | 27 ++++++-----
->  3 files changed, 71 insertions(+), 41 deletions(-)
-> 
-> diff --git a/fs/cachefiles/io.c b/fs/cachefiles/io.c
-> index 000a28f46e59..13648348d9f9 100644
-> --- a/fs/cachefiles/io.c
-> +++ b/fs/cachefiles/io.c
-> @@ -385,38 +385,35 @@ static int cachefiles_write(struct netfs_cache_resources *cres,
->  				  term_func, term_func_priv);
->  }
->  
-> -/*
-> - * Prepare a read operation, shortening it to a cached/uncached
-> - * boundary as appropriate.
-> - */
-> -static enum netfs_io_source cachefiles_prepare_read(struct netfs_io_subrequest *subreq,
-> -						      loff_t i_size)
-> +static inline enum netfs_io_source
-> +cachefiles_do_prepare_read(struct netfs_cache_resources *cres,
-> +			   loff_t start, size_t *_len, loff_t i_size,
-> +			   unsigned long *_flags)
->  {
->  	enum cachefiles_prepare_read_trace why;
-> -	struct netfs_io_request *rreq = subreq->rreq;
-> -	struct netfs_cache_resources *cres = &rreq->cache_resources;
-> -	struct cachefiles_object *object;
-> +	struct cachefiles_object *object = NULL;
->  	struct cachefiles_cache *cache;
->  	struct fscache_cookie *cookie = fscache_cres_cookie(cres);
->  	const struct cred *saved_cred;
->  	struct file *file = cachefiles_cres_file(cres);
->  	enum netfs_io_source ret = NETFS_DOWNLOAD_FROM_SERVER;
-> +	size_t len = *_len;
->  	loff_t off, to;
->  	ino_t ino = file ? file_inode(file)->i_ino : 0;
->  	int rc;
->  
-> -	_enter("%zx @%llx/%llx", subreq->len, subreq->start, i_size);
-> +	_enter("%zx @%llx/%llx", len, start, i_size);
->  
-> -	if (subreq->start >= i_size) {
-> +	if (start >= i_size) {
->  		ret = NETFS_FILL_WITH_ZEROES;
->  		why = cachefiles_trace_read_after_eof;
->  		goto out_no_object;
->  	}
->  
->  	if (test_bit(FSCACHE_COOKIE_NO_DATA_TO_READ, &cookie->flags)) {
-> -		__set_bit(NETFS_SREQ_COPY_TO_CACHE, &subreq->flags);
-> +		__set_bit(NETFS_SREQ_COPY_TO_CACHE, _flags);
->  		why = cachefiles_trace_read_no_data;
-> -		if (!test_bit(NETFS_SREQ_ONDEMAND, &subreq->flags))
-> +		if (!test_bit(NETFS_SREQ_ONDEMAND, _flags))
->  			goto out_no_object;
->  	}
->  
-> @@ -437,7 +434,7 @@ static enum netfs_io_source cachefiles_prepare_read(struct netfs_io_subrequest *
->  retry:
->  	off = cachefiles_inject_read_error();
->  	if (off == 0)
-> -		off = vfs_llseek(file, subreq->start, SEEK_DATA);
-> +		off = vfs_llseek(file, start, SEEK_DATA);
->  	if (off < 0 && off >= (loff_t)-MAX_ERRNO) {
->  		if (off == (loff_t)-ENXIO) {
->  			why = cachefiles_trace_read_seek_nxio;
-> @@ -449,21 +446,22 @@ static enum netfs_io_source cachefiles_prepare_read(struct netfs_io_subrequest *
->  		goto out;
->  	}
->  
-> -	if (off >= subreq->start + subreq->len) {
-> +	if (off >= start + len) {
->  		why = cachefiles_trace_read_found_hole;
->  		goto download_and_store;
->  	}
->  
-> -	if (off > subreq->start) {
-> +	if (off > start) {
->  		off = round_up(off, cache->bsize);
-> -		subreq->len = off - subreq->start;
-> +		len = off - start;
-> +		*_len = len;
->  		why = cachefiles_trace_read_found_part;
->  		goto download_and_store;
->  	}
->  
->  	to = cachefiles_inject_read_error();
->  	if (to == 0)
-> -		to = vfs_llseek(file, subreq->start, SEEK_HOLE);
-> +		to = vfs_llseek(file, start, SEEK_HOLE);
->  	if (to < 0 && to >= (loff_t)-MAX_ERRNO) {
->  		trace_cachefiles_io_error(object, file_inode(file), to,
->  					  cachefiles_trace_seek_error);
-> @@ -471,12 +469,13 @@ static enum netfs_io_source cachefiles_prepare_read(struct netfs_io_subrequest *
->  		goto out;
->  	}
->  
-> -	if (to < subreq->start + subreq->len) {
-> -		if (subreq->start + subreq->len >= i_size)
-> +	if (to < start + len) {
-> +		if (start + len >= i_size)
->  			to = round_up(to, cache->bsize);
->  		else
->  			to = round_down(to, cache->bsize);
-> -		subreq->len = to - subreq->start;
-> +		len = to - start;
-> +		*_len = len;
->  	}
->  
->  	why = cachefiles_trace_read_have_data;
-> @@ -484,12 +483,11 @@ static enum netfs_io_source cachefiles_prepare_read(struct netfs_io_subrequest *
->  	goto out;
->  
->  download_and_store:
-> -	__set_bit(NETFS_SREQ_COPY_TO_CACHE, &subreq->flags);
-> -	if (test_bit(NETFS_SREQ_ONDEMAND, &subreq->flags)) {
-> -		rc = cachefiles_ondemand_read(object, subreq->start,
-> -					      subreq->len);
-> +	__set_bit(NETFS_SREQ_COPY_TO_CACHE, _flags);
-> +	if (test_bit(NETFS_SREQ_ONDEMAND, _flags)) {
-> +		rc = cachefiles_ondemand_read(object, start, len);
->  		if (!rc) {
-> -			__clear_bit(NETFS_SREQ_ONDEMAND, &subreq->flags);
-> +			__clear_bit(NETFS_SREQ_ONDEMAND, _flags);
->  			goto retry;
->  		}
->  		ret = NETFS_INVALID_READ;
-> @@ -497,10 +495,34 @@ static enum netfs_io_source cachefiles_prepare_read(struct netfs_io_subrequest *
->  out:
->  	cachefiles_end_secure(cache, saved_cred);
->  out_no_object:
-> -	trace_cachefiles_prep_read(subreq, ret, why, ino);
-> +	trace_cachefiles_prep_read(object, start, len, *_flags, ret, why, ino);
->  	return ret;
->  }
->  
-> +/*
-> + * Prepare a read operation, shortening it to a cached/uncached
-> + * boundary as appropriate.
-> + */
-> +static enum netfs_io_source cachefiles_prepare_read(struct netfs_io_subrequest *subreq,
-> +						    loff_t i_size)
-> +{
-> +	return cachefiles_do_prepare_read(&subreq->rreq->cache_resources,
-> +					  subreq->start, &subreq->len, i_size,
-> +					  &subreq->flags);
-> +}
-> +
-> +/*
-> + * Prepare an on-demand read operation, shortening it to a cached/uncached
-> + * boundary as appropriate.
-> + */
-> +static enum netfs_io_source
-> +cachefiles_prepare_ondemand_read(struct netfs_cache_resources *cres,
-> +				 loff_t start, size_t *_len, loff_t i_size,
-> +				 unsigned long *_flags)
-> +{
-> +	return cachefiles_do_prepare_read(cres, start, _len, i_size, _flags);
-> +}
-> +
->  /*
->   * Prepare for a write to occur.
->   */
-> @@ -621,6 +643,7 @@ static const struct netfs_cache_ops cachefiles_netfs_cache_ops = {
->  	.write			= cachefiles_write,
->  	.prepare_read		= cachefiles_prepare_read,
->  	.prepare_write		= cachefiles_prepare_write,
-> +	.prepare_ondemand_read	= cachefiles_prepare_ondemand_read,
->  	.query_occupancy	= cachefiles_query_occupancy,
->  };
->  
-> diff --git a/include/linux/netfs.h b/include/linux/netfs.h
-> index f2402ddeafbf..95cc0397f0ee 100644
-> --- a/include/linux/netfs.h
-> +++ b/include/linux/netfs.h
-> @@ -267,6 +267,14 @@ struct netfs_cache_ops {
->  			     loff_t *_start, size_t *_len, loff_t i_size,
->  			     bool no_space_allocated_yet);
->  
-> +	/* Prepare an on-demand read operation, shortening it to a cached/uncached
-> +	 * boundary as appropriate.
-> +	 */
-> +	enum netfs_io_source (*prepare_ondemand_read)(struct netfs_cache_resources *cres,
-> +						      loff_t start, size_t *_len,
-> +						      loff_t i_size,
-> +						      unsigned long *_flags);
-> +
->  	/* Query the occupancy of the cache in a region, returning where the
->  	 * next chunk of data starts and how long it is.
->  	 */
-> diff --git a/include/trace/events/cachefiles.h b/include/trace/events/cachefiles.h
-> index d8d4d73fe7b6..171c0d7f0bb7 100644
-> --- a/include/trace/events/cachefiles.h
-> +++ b/include/trace/events/cachefiles.h
-> @@ -428,44 +428,43 @@ TRACE_EVENT(cachefiles_vol_coherency,
->  	    );
->  
->  TRACE_EVENT(cachefiles_prep_read,
-> -	    TP_PROTO(struct netfs_io_subrequest *sreq,
-> +	    TP_PROTO(struct cachefiles_object *obj,
-> +		     loff_t start,
-> +		     size_t len,
-> +		     unsigned short flags,
->  		     enum netfs_io_source source,
->  		     enum cachefiles_prepare_read_trace why,
->  		     ino_t cache_inode),
->  
-> -	    TP_ARGS(sreq, source, why, cache_inode),
-> +	    TP_ARGS(obj, start, len, flags, source, why, cache_inode),
->  
->  	    TP_STRUCT__entry(
-> -		    __field(unsigned int,		rreq		)
-> -		    __field(unsigned short,		index		)
-> +		    __field(unsigned int,		obj		)
->  		    __field(unsigned short,		flags		)
->  		    __field(enum netfs_io_source,	source		)
->  		    __field(enum cachefiles_prepare_read_trace,	why	)
->  		    __field(size_t,			len		)
->  		    __field(loff_t,			start		)
-> -		    __field(unsigned int,		netfs_inode	)
->  		    __field(unsigned int,		cache_inode	)
->  			     ),
->  
->  	    TP_fast_assign(
-> -		    __entry->rreq	= sreq->rreq->debug_id;
-> -		    __entry->index	= sreq->debug_index;
-> -		    __entry->flags	= sreq->flags;
-> +		    __entry->obj	= obj ? obj->debug_id : 0;
-> +		    __entry->flags	= flags;
->  		    __entry->source	= source;
->  		    __entry->why	= why;
-> -		    __entry->len	= sreq->len;
-> -		    __entry->start	= sreq->start;
-> -		    __entry->netfs_inode = sreq->rreq->inode->i_ino;
-> +		    __entry->len	= len;
-> +		    __entry->start	= start;
->  		    __entry->cache_inode = cache_inode;
->  			   ),
->  
-> -	    TP_printk("R=%08x[%u] %s %s f=%02x s=%llx %zx ni=%x B=%x",
-> -		      __entry->rreq, __entry->index,
-> +	    TP_printk("o=%08x %s %s f=%02x s=%llx %zx B=%x",
-> +		      __entry->obj,
->  		      __print_symbolic(__entry->source, netfs_sreq_sources),
->  		      __print_symbolic(__entry->why, cachefiles_prepare_read_traces),
->  		      __entry->flags,
->  		      __entry->start, __entry->len,
-> -		      __entry->netfs_inode, __entry->cache_inode)
-> +		      __entry->cache_inode)
->  	    );
->  
->  TRACE_EVENT(cachefiles_read,
+> So please DO NOT apply this patch before I find what happened about it.
 
--- 
-Thanks,
-Jingbo
+I know what the issue is.
+
+The current way of assigning types is to always increment. And not to
+reuse until it fills up. And even then, it looks for the next available
+number.
+
+I'm guessing the IDA will reuse a number as soon as it is freed. This
+may also have uncovered a bug, as in reality, we must actually clear
+the tracing buffers every time a number is reused.
+
+What happens is that the type number is associated to a print format.
+That is, the raw data is tagged with the type. This type maps to how to
+parse the raw data. If you have a kprobe, it creates a new type number.
+If you free it, and create another one. With the IDA, it is likely to
+reassign the previously freed number to a new probe.
+
+To explain this better, let's look at the following scenario:
+
+ echo 'p:foo val=$arg1:u64' > kprobe_events
+ echo 1 > events/kprobes/foo/enable
+ sleep 1
+ echo 0 > events/kprobes/foo/enable
+
+ echo 'p:bar val=+0($arg1):string' > kprobe_events
+
+ # foo kprobe is deleted and bar is created and
+ # with IDA, bar has the same number for type as foo
+
+ cat trace
+
+When you read the trace, it will see a binary blob representing an
+event and marked with a type. Although the event was foo, it will now
+map it to bar. And it will read foo's $arg1:u64 as bar's
++0($arg1):string, and will crash.
+
+-- Steve
