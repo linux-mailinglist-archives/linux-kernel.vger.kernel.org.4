@@ -2,93 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF0A0635EF2
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:08:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE5E635EDA
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:08:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238585AbiKWM7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 07:59:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60650 "EHLO
+        id S238339AbiKWM7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 07:59:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238413AbiKWM5A (ORCPT
+        with ESMTP id S238329AbiKWM54 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 07:57:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA103922DC;
-        Wed, 23 Nov 2022 04:45:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 38865B81F38;
-        Wed, 23 Nov 2022 12:45:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3D63C433D6;
-        Wed, 23 Nov 2022 12:45:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669207548;
-        bh=LvLVu7eCSKvmkz1Xc5uqTks3k5jqf3ccQogSm2JxzMo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N7Zcn4erZbskBmCKScfmqV96P+BT4Ey2QVanw4FRR+F2ZxmUg+mvHZGvDMXnUjSYd
-         u7Gk/hhIl5zA929ZHV/kTOMnzbOJwwBL44Bwoaku8O3mB9XPYb9Hc3e2IGS52mddfl
-         y1Ksd3FR6Kd0+0bsLxaynPhV9/DGGcz+t0hWdGm3mHi9GtMi5hBUnXjYi0vTSoU6V5
-         teMeCZUkmimUSX6Ope8TF9GuSLiyDTdaztbesboHpvwQrVVkdE0PVvSilwEstk4Wem
-         xlMOe1juf7foKlRMZYE6k255lrdmNHpKHFbuW4WHQFheSa0rTeUUDgT7MwGEjf6Pdi
-         fetlDJwE5M4AQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Enrico Sau <enrico.sau@gmail.com>,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 5/5] net: usb: qmi_wwan: add Telit 0x103a composition
-Date:   Wed, 23 Nov 2022 07:45:37 -0500
-Message-Id: <20221123124540.266772-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221123124540.266772-1-sashal@kernel.org>
-References: <20221123124540.266772-1-sashal@kernel.org>
+        Wed, 23 Nov 2022 07:57:56 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C37194A7C;
+        Wed, 23 Nov 2022 04:46:20 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id m7-20020a05600c090700b003cf8a105d9eso1205716wmp.5;
+        Wed, 23 Nov 2022 04:46:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0LW62Ti7mfshMfxCZUJVluE7umXYJJzUzfDjrUZcXpU=;
+        b=VShjlACwmJy3zF3ybErpld9hZR/86uTUySpyCy0LKeYE0xudLRVlE2qDXcGadnzHY5
+         pgLxw4WIEuZ0srU3r0FXkFzdXGcJ5nenn56oVh07rXmqmznZejzg7a8hdkW0oN0cqs4E
+         vB9cup0ZhxSI+R1OlhQvbj997E4qougSUt+FJ72Wj3Lj/vuBSW1ezWBDb9UVfF8XMUgF
+         WoCVO/SLVAWVfCPkzdK/z8UOQnCClUThck9ihzGelfKTELiKjkDhiTqiz9/zus1y0Zhl
+         QOBMa7Lmv2B4H9G7f6IyZ/Rw4BLzrWOO8yS9IPgzR6lBC6D/5hT2tSqghzeTwr5hAjXn
+         CtNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0LW62Ti7mfshMfxCZUJVluE7umXYJJzUzfDjrUZcXpU=;
+        b=VeWk7a063l6S1bjk9m0otWyi1tvLVbSEdccgx3IlPnAEkJydrD8vCGMX1YngpJAz3C
+         KSGKj+tMt0ebmajoiC7q+ikYXvZCEK1lJP0hYoQSpQUnDabQKxTt0pY7sTZJHvDXLMMZ
+         UxPB4ah3ru89o9urjfGfPNRpgKcvakD18HQaeE9PUBmTdUUouXXdPQbwyY/oiNV+yKlQ
+         nqUlkDoaCDxyrS19mvw0UQLFiMYmfCmhSPMo2kj7qS/9WcL/S0Gz5OnbPSVu7DkA2igg
+         Ld2TbZNrbtQWzYcUnslm+1dm5mlxdei1gsD26iysASDhEFk0piLI4l9KcGa1Rzjc94lB
+         vVIg==
+X-Gm-Message-State: ANoB5pmnPxlA9c6k8UWbSt7I5+DIf/x9W1eHikyHc4Dj0CqzNGctbgbm
+        S1Bki8idmVimG4XoV27ut9XePcWHaD0=
+X-Google-Smtp-Source: AA0mqf61wJK7TB1tH9sT3E/AjZZ4eV17JPD+famsDd5w3gXU3efvkpaAl3HGbgiV+XnQx7JubXMO9w==
+X-Received: by 2002:a05:600c:4e8e:b0:3c6:b7cc:79d2 with SMTP id f14-20020a05600c4e8e00b003c6b7cc79d2mr24289145wmq.42.1669207578715;
+        Wed, 23 Nov 2022 04:46:18 -0800 (PST)
+Received: from [192.168.2.41] ([46.227.18.67])
+        by smtp.gmail.com with ESMTPSA id k17-20020a5d6291000000b0022e66749437sm16623931wru.93.2022.11.23.04.46.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Nov 2022 04:46:18 -0800 (PST)
+Message-ID: <ffb1f40b-bbe8-5431-63cf-a53fc0606971@gmail.com>
+Date:   Wed, 23 Nov 2022 13:46:17 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 2/2] serial: atmel: don't stop the transmitter when doing
+ PIO
+Content-Language: fr
+To:     Michael Walle <michael@walle.cc>,
+        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+Cc:     gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-arm-kernel@lists.infradead.org
+References: <20221123082736.24566-1-jirislaby@kernel.org>
+ <20221123082736.24566-2-jirislaby@kernel.org>
+ <df233ce37626fdb194b583808326d966@walle.cc>
+From:   Richard Genoud <richard.genoud@gmail.com>
+In-Reply-To: <df233ce37626fdb194b583808326d966@walle.cc>
 Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Enrico Sau <enrico.sau@gmail.com>
+Le 23/11/2022 à 09:50, Michael Walle a écrit :
+> Am 2022-11-23 09:27, schrieb Jiri Slaby (SUSE):
+>> Writing ATMEL_US_TXDIS to ATMEL_US_CR makes the transmitter NOT to send
+>> the just queued character. This means when the character is last and
+>> uart calls ops->stop_tx(), the character is not sent at all.
+>>
+>> The usart datasheet is not much specific on this, it just says the
+>> transmitter is stopped. But apparently, the character is dropped. So
+>> we should stop the transmitter only for DMA and PDC transfers to not
+>> send any more characters. For PIO, this is unexpected and deviates from
+>> other drivers. In particular, the below referenced commit broke TX as it
+>> added a call to ->stop_tx() after the very last character written to the
+>> transmitter.
+>>
+>> So fix this by limiting the write of ATMEL_US_TXDIS to DMA transfers
+>> only.
+>>
+>> Even there, I don't know if it is correctly implemented. Are all the
+>> queued characters sent once ->start_tx() is called? Anyone tested flow
+>> control -- be it hard (RTSCTS) or the soft (XOFF/XON) one?
+>>
+>> Fixes: 2d141e683e9a ("tty: serial: use uart_port_tx() helper")
+>> Cc: Richard Genoud <richard.genoud@gmail.com>
+>> Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+>> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+>> Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
+>> Cc: linux-arm-kernel@lists.infradead.org
+>> Reported-by: Michael Walle <michael@walle.cc>
+>> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
+> 
+> Already merged, but:
+> Tested-by: Michael Walle <michael@walle.cc>
+Acked-by: Richard Genoud <richard.genoud@gmail.com>
 
-[ Upstream commit e103ba33998d0f25653cc8ebe745b68d1ee10cda ]
-
-Add the following Telit LE910C4-WWX composition:
-
-0x103a: rmnet
-
-Signed-off-by: Enrico Sau <enrico.sau@gmail.com>
-Acked-by: Bjørn Mork <bjorn@mork.no>
-Link: https://lore.kernel.org/r/20221115105859.14324-1-enrico.sau@gmail.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/usb/qmi_wwan.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 547693118606..62eb45a819e7 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -926,6 +926,7 @@ static const struct usb_device_id products[] = {
- 	{QMI_FIXED_INTF(0x2357, 0x0201, 4)},	/* TP-LINK HSUPA Modem MA180 */
- 	{QMI_FIXED_INTF(0x2357, 0x9000, 4)},	/* TP-LINK MA260 */
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1031, 3)}, /* Telit LE910C1-EUX */
-+	{QMI_QUIRK_SET_DTR(0x1bc7, 0x103a, 0)}, /* Telit LE910C4-WWX */
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1040, 2)},	/* Telit LE922A */
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1050, 2)},	/* Telit FN980 */
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1060, 2)},	/* Telit LN920 */
--- 
-2.35.1
-
+> 
+> Thanks,
+> -michael
+Thanks !
