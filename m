@@ -2,139 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 714A663602D
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:40:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8D55636031
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:41:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238038AbiKWNky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 08:40:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54586 "EHLO
+        id S237861AbiKWNlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 08:41:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238024AbiKWNk1 (ORCPT
+        with ESMTP id S238421AbiKWNki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 08:40:27 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44102638B
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:27:36 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id b12so15579705wrn.2
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:27:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:reply-to:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=fT/xDuYv9xGq77UWP89SFz3uGJYiuqZ8uj1zssl6LEI=;
-        b=m4LuSbWqBjT7NwHQH0tifRloLcrY3pwxm1CueZ4AmCT2gUl/V1p8xjXwKORPOqJCsK
-         Rqu8SpS/v32Bq9OdGT9TY7Dhs5p1nLKSPt2dtKY3io58zqaHQj9BW4tpcFHZFlNu9Ib8
-         AcGwX4cq5h7T4zTzji74Ahi3vC6i3D9LJbAoPYVTBvtel4xOpslBxfIsDolwComWC8RI
-         Zi/Y0k4GpHPk6mU9ViYMW2fhXCLlqg6PomorrJEoA5YVpfLNcaTH2vgwZrR4XSt4nvOl
-         QPVb5zDfc6vW0uX45KhY20BpCTHoeBQdpxpLnJigbUlq1ck3dMtNMvRYGQgHLY8l5Ezn
-         PeeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:reply-to:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fT/xDuYv9xGq77UWP89SFz3uGJYiuqZ8uj1zssl6LEI=;
-        b=LhEjzemNGbb4RiBMJo/U0jI76G9+GpWWtFN/LKaQlr/ddt+TO4KgLOtoaE5fhSVikn
-         TRaqfFFWqTEefJuWrFrpeYuf5Zx6afO/lDd1czOVTMoF1hH5y5FIyx4SKPRhLkXnFR4B
-         Zn/Wl1808iwfECWGJ4L3AiyDAoPe0KVrYzCbuyzNMpgbZ3OyD9poQPhX78tK8qNysVP/
-         QtMCTrw+SmPIdC7Rj7tzLo8FtHmCnLMjjX4EzuYQF99t9ZoLXz2if1fsK4pr4O57Wonk
-         e0HjPOpNV5S2ivhy/W1UwOpaOtap23jfUL2FlYEleRGv65uJsrBIGl1l9qOuZSC8URwz
-         zcAQ==
-X-Gm-Message-State: ANoB5plygnTO3kVYTMFcGl9SMRY0miaqbFkF8ede8/VkmL3919IBZizo
-        +oEyI6hZlG6GM6rq6nlwJtRo/g==
-X-Google-Smtp-Source: AA0mqf6rOqEuavZEDT+cCpsbo0nI8+NuQqSYhObPcsBGUEd3IpX2Pk1gKE8zWfzCrTcLpzL9QcyX8g==
-X-Received: by 2002:a5d:6b0c:0:b0:241:c595:9f05 with SMTP id v12-20020a5d6b0c000000b00241c5959f05mr14052664wrw.439.1669210054818;
-        Wed, 23 Nov 2022 05:27:34 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:e551:24c3:152c:7c05? ([2a01:e0a:982:cbb0:e551:24c3:152c:7c05])
-        by smtp.gmail.com with ESMTPSA id h20-20020a05600c351400b003c6cd82596esm2609540wmq.43.2022.11.23.05.27.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 05:27:34 -0800 (PST)
-Message-ID: <9961d579-9463-c585-34a6-a3abcd4b3e52@linaro.org>
-Date:   Wed, 23 Nov 2022 14:27:33 +0100
+        Wed, 23 Nov 2022 08:40:38 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683E231350;
+        Wed, 23 Nov 2022 05:28:26 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 2564B21D6D;
+        Wed, 23 Nov 2022 13:28:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1669210105; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lftKQS0Jx+lLFwwtA+DmuDztJ+B9DLUPYk915WjeBA4=;
+        b=B97cnp1olHh4IxfqkO4dLSxqBoHic9dqoTxF2c3pKfHMrpiwjrGLLLArmu+b1JNqiQeKQi
+        BfSKAsomMoixcyHjxfvBHC0/f6zMTb+XdBJjxyYoIAMVqeX/TmOFPYUaZr2hkLfyDT35/5
+        n7+0xEsm76a01RB2ojwkped74N2mrPw=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id C6A402C141;
+        Wed, 23 Nov 2022 13:28:24 +0000 (UTC)
+Date:   Wed, 23 Nov 2022 14:28:24 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Laight <David.Laight@aculab.com>
+Subject: Re: [PATCH v8 6/9] livepatch: Use kallsyms_on_each_match_symbol() to
+ improve performance
+Message-ID: <Y34f+IqqSGbtC82V@alley>
+References: <20221102084921.1615-1-thunder.leizhen@huawei.com>
+ <20221102084921.1615-7-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH V5 4/4] arm64: dts: meson: add S4 Soc Peripheral clock
- controller in DT
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     kelvin.zhang@amlogic.com
-References: <20221123021346.18136-1-yu.tu@amlogic.com>
- <20221123021346.18136-5-yu.tu@amlogic.com>
- <ae43fadf-9255-7db7-8b5e-01200e02a2c6@linaro.org>
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <ae43fadf-9255-7db7-8b5e-01200e02a2c6@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221102084921.1615-7-thunder.leizhen@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/11/2022 11:10, Krzysztof Kozlowski wrote:
-> On 23/11/2022 03:13, Yu Tu wrote:
->> Added information about the S4 SOC Peripheral Clock controller in DT.
->>
->> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
->> ---
->>   arch/arm64/boot/dts/amlogic/meson-s4.dtsi | 26 +++++++++++++++++++++++
->>   1 file changed, 26 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
->> index bd9c2ef83314..e7fab6e400be 100644
->> --- a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
->> +++ b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
->> @@ -6,6 +6,8 @@
->>   #include <dt-bindings/interrupt-controller/irq.h>
->>   #include <dt-bindings/interrupt-controller/arm-gic.h>
->>   #include <dt-bindings/gpio/gpio.h>
->> +#include <dt-bindings/clock/amlogic,s4-pll-clkc.h>
->> +#include <dt-bindings/clock/amlogic,s4-peripherals-clkc.h>
->>   
->>   / {
->>   	cpus {
->> @@ -100,6 +102,30 @@ clkc_pll: clock-controller@8000 {
->>   				#clock-cells = <1>;
->>   			};
->>   
->> +			clkc_periphs: clock-controller {
->> +				compatible = "amlogic,s4-peripherals-clkc";
->> +				reg = <0x0 0x0 0x0 0x49c>;
-> 
-> This is broken... did you check for warnings?
+Hi,
 
-This is actually fine, the parent node has a ranges property:
-https://github.com/torvalds/linux/blob/eb7081409f94a9a8608593d0fb63a1aa3d6f95d8/arch/arm64/boot/dts/amlogic/meson-s4.dtsi#L93
+I am sorry for the late review. I have been snowed under another
+tasks.
 
-Neil
+On Wed 2022-11-02 16:49:18, Zhen Lei wrote:
+> Based on the test results of kallsyms_on_each_match_symbol() and
+> kallsyms_on_each_symbol(), the average performance can be improved by
+> more than 1500 times.
 
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
-> 
-> _______________________________________________
-> linux-amlogic mailing list
-> linux-amlogic@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-amlogic
+Sounds great.
 
+> --- a/kernel/livepatch/core.c
+> +++ b/kernel/livepatch/core.c
+> @@ -153,6 +153,24 @@ static int klp_find_callback(void *data, const char *name,
+>  	return 0;
+>  }
+>  
+> +static int klp_match_callback(void *data, unsigned long addr)
+> +{
+> +	struct klp_find_arg *args = data;
+> +
+> +	args->addr = addr;
+> +	args->count++;
+> +
+> +	/*
+> +	 * Finish the search when the symbol is found for the desired position
+> +	 * or the position is not defined for a non-unique symbol.
+> +	 */
+> +	if ((args->pos && (args->count == args->pos)) ||
+> +	    (!args->pos && (args->count > 1)))
+> +		return 1;
+> +
+> +	return 0;
+
+This duplicates most of the klp_find_callback(). Please, call this
+new function in klp_find_callback() instead of the duplicated code.
+I mean to do:
+
+static int klp_find_callback(void *data, const char *name, unsigned long addr)
+{
+	struct klp_find_arg *args = data;
+
+	if (strcmp(args->name, name))
+		return 0;
+
+	return klp_match_callback(data, addr);
+}
+
+Otherwise, it looks good.
+
+Best Regards,
+Petr
