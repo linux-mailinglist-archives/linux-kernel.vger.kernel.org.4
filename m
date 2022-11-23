@@ -2,126 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D614D6364BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:53:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9D7B6364BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:53:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236961AbiKWPxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 10:53:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39604 "EHLO
+        id S236379AbiKWPw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 10:52:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239098AbiKWPwY (ORCPT
+        with ESMTP id S239081AbiKWPwW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 10:52:24 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83D4C72EA;
-        Wed, 23 Nov 2022 07:52:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669218721; x=1700754721;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=6ne8ydE7pKzkiu7r3g05XpgU2xo+eR0YxTixzH5yqn8=;
-  b=hS8aUoNVybqnS+6/tmzJCP1kxknWFAB+fxaqAoraSdYRGZJ4aCoWbPr5
-   EZgMb1L1Bfwzx4HF4F5D2wPtbcPdDsU16DxxgxQeNxc45l8NeDCgEfzxz
-   mRxrMGzOG361ShTBiJHTpRPlDoLn0UjJyGbkJTn/7l9d6fs606U8tNSuE
-   fkDv+FiywGhCgQycMgltDBm7MXxw9TUnQXmpmG6LGPAULwLT7varWEaKD
-   Qw2eIGLKnvcwyyEpLl/9dIkUaOMKgctRxLFlvb9/1W3BG42/2XZVjAQqd
-   4I3noQ7Tir+mKB0WowgSs/i7KIZrg65/XZacvxJ/qlmgegwyaGNwSSDKv
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="294483609"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="294483609"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 07:51:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="747840614"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="747840614"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga002.fm.intel.com with ESMTP; 23 Nov 2022 07:51:49 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 2ANFpm4I000385;
-        Wed, 23 Nov 2022 15:51:48 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Wed, 23 Nov 2022 10:52:22 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FFBC6BEF;
+        Wed, 23 Nov 2022 07:52:00 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id r9-20020a1c4409000000b003d02dd48c45so1434898wma.0;
+        Wed, 23 Nov 2022 07:52:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=++E1vp6+xyfegCAT71khtdOEoE+9YsdkyoFRM1NuM3c=;
+        b=GXLHAlwH+Njmvyj+SPjPfOH1/1e+wlgnzW2b8oN59RNi7+0RgESKcUiV6V9AxnLztK
+         z50xDK/Njyfbb7uzRSs+2B/NxXl2ObEpOw4G098PzJVWYkmeu3KQKaOplm9vYhvbku2e
+         Bh6FNqBAKj9jsrI9vy1Ezxrt34jD5jK+ySF4Rw8u2974AojnftTixzMdOZccwvKB4TDR
+         4Y+wBiYu5pJPa798iAk/ttD8250UN08t9Qt6pq1xg38oGUDOXJj+vlu6dRdH1oFjzZ0a
+         NcZCYXYisaeqFAjvjZHd1eVzP8hn0lHmIzSI4/qmXzYdeArTrpnG9PGJ1L/OuiuYk8HP
+         FoAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=++E1vp6+xyfegCAT71khtdOEoE+9YsdkyoFRM1NuM3c=;
+        b=MbyRKRS7DQZtunwQhWMZJypA+GDrJ7rCxdvmRd1ch1CoCG1tTfYA9YTXqgZUdEf9j3
+         XpvQHOzkf0mRyFTdzJDCE3O9qPJeWlAxw6bTzOE5bOxF4HVvXyp8I9vPGeD2eEkyloFJ
+         QdZt1dwXQc1GsEjkEdnaEEPqckIbCmFhaXJOqpHHdTC03vqxXm+HMSWg0NNTjjXwtXXx
+         XNO/n2InhYPDSu2ZDehGunN0HTfQpZstA07NjKoz3WkTj4+shy0gXcN8bYvSRrgQFPm7
+         VQ7cy9q+oguZi2VXLS5KiPuM8W2WaKgMmhRtUa9iw14BvZWGJHNxdc7ovqw0UyDGNQTa
+         SNBg==
+X-Gm-Message-State: ANoB5pn+PmIUKJFrf6k/w90szUr9i+TDYGBO9LVMMkygFgI1Ih8KT7CU
+        lIwE0fw9KQDbh79SNYsncLM=
+X-Google-Smtp-Source: AA0mqf71kvwmJPvlUO4d6EhKv/nSwsxHVmlh40//junEO4REeKrI6DGtUgYpipX4ygFdSNgOmdzVXg==
+X-Received: by 2002:a7b:cb91:0:b0:3c6:cb54:ef66 with SMTP id m17-20020a7bcb91000000b003c6cb54ef66mr9934854wmi.90.1669218718769;
+        Wed, 23 Nov 2022 07:51:58 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id o7-20020a05600c510700b003cf5ec79bf9sm3006745wms.40.2022.11.23.07.51.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 07:51:58 -0800 (PST)
+Date:   Wed, 23 Nov 2022 18:51:55 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] net: enetc: preserve TX ring priority across reconfiguration
-Date:   Wed, 23 Nov 2022 16:51:16 +0100
-Message-Id: <20221123155116.484163-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221122130936.1704151-1-vladimir.oltean@nxp.com>
-References: <20221122130936.1704151-1-vladimir.oltean@nxp.com>
+Subject: Re: [PATCH resend] media: staging: stkwebcam: Restore
+ MEDIA_{USB,CAMERA}_SUPPORT dependencies
+Message-ID: <Y35Bm8bhKojxzdox@kadam>
+References: <a50fa46075fb760d8409ff6ea2232b2ddb7a102b.1669046259.git.geert+renesas@glider.be>
+ <20221123100831.GE39395@tom-ThinkPad-T14s-Gen-2i>
+ <CAMuHMdUW8iKFjDj4fPtWfPvyQ1sjGcAy1Kz5j-osz9F4pdA47Q@mail.gmail.com>
+ <Y344AdRANmS3STsd@kadam>
+ <CAMuHMdVRZhBECgABtTxe00gM7_EqBaX5auZhmjUfmcLx4zoetQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdVRZhBECgABtTxe00gM7_EqBaX5auZhmjUfmcLx4zoetQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
-Date: Tue, 22 Nov 2022 15:09:36 +0200
-
-> In the blamed commit, a rudimentary reallocation procedure for RX buffer
-> descriptors was implemented, for the situation when their format changes
-> between normal (no PTP) and extended (PTP).
+On Wed, Nov 23, 2022 at 04:49:05PM +0100, Geert Uytterhoeven wrote:
+> Hi Dan,
 > 
-> enetc_hwtstamp_set() calls enetc_close() and enetc_open() in a sequence,
-> and this sequence loses information which was previously configured in
-> the TX BDR Mode Register, specifically via the enetc_set_bdr_prio() call.
-> The TX ring priority is configured by tc-mqprio and tc-taprio, and
-> affects important things for TSN such as the TX time of packets. The
-> issue manifests itself most visibly by the fact that isochron --txtime
-> reports premature packet transmissions when PTP is first enabled on an
-> enetc interface.
+> On Wed, Nov 23, 2022 at 4:11 PM Dan Carpenter <error27@gmail.com> wrote:
+> > On Wed, Nov 23, 2022 at 11:13:31AM +0100, Geert Uytterhoeven wrote:
+> > > On Wed, Nov 23, 2022 at 11:08 AM Tommaso Merciai
+> > > <tommaso.merciai@amarulasolutions.com> wrote:
+> > > > On Mon, Nov 21, 2022 at 04:58:33PM +0100, Geert Uytterhoeven wrote:
+> > > > > By moving support for the USB Syntek DC1125 Camera to staging, the
+> > > > > dependencies on MEDIA_USB_SUPPORT and MEDIA_CAMERA_SUPPORT were lost.
+> > > > >
+> > > > > Fixes: 56280c64ecacc971 ("media: stkwebcam: deprecate driver, move to staging")
+> > > >
+> > > > Patch itself looks good but we have some style issue. Applying this
+> > > > patch I got the following warning from checkpatchl:
+> > > >
+> > > > WARNING: Please use correct Fixes: style 'Fixes: <12 chars of sha1> ("<title line>")' - ie: 'Fixes: 56280c64ecac ("media: stkwebcam: deprecate driver, move to staging")'
+> > > > #10:
+> > > >
+> > > > You have to pass only the first 12 chars of the sha1 commit into Fixes
+> > > > msg:
+> > > >
+> > > > Use:
+> > > >
+> > > >  Fixes: 56280c64ecac ("media: stkwebcam: deprecate driver, move to staging")
+> > > >
+> > > > Instead of:
+> > > >
+> > > >  Fixes: 56280c64ecacc971 ("media: stkwebcam: deprecate driver, move to staging")
+> > >
+> > > I always use 16 chars, to avoid these becoming ambiguous in a few years.
+> >
+> > If we assume hashes are randomly distributed and that people commit
+> > 100k patches every year then with 12 character we would have 17
+> > collisions every 1000 years.
 > 
-> Save the TX ring priority in a new field in struct enetc_bdr (occupies a
-> 2 byte hole on arm64) in order to make this survive a ring reconfiguration.
+> So I can expect to see a collision before my retirement day
+> (which coincides with the signed 32-bit time_t flag day ;-)
 > 
-> Fixes: 434cebabd3a2 ("enetc: Add dynamic allocation of extended Rx BD rings")
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> ---
->  drivers/net/ethernet/freescale/enetc/enetc.c  |  8 ++++---
->  drivers/net/ethernet/freescale/enetc/enetc.h  |  1 +
->  .../net/ethernet/freescale/enetc/enetc_qos.c  | 21 ++++++++++++-------
->  3 files changed, 19 insertions(+), 11 deletions(-)
+> BTW, does the above take into account that commit hashes can
+> collide with other object type hashes, too?
 
-[...]
+I assumed that `git show` won't show those other object types, but I
+don't really know if that's true.
 
->  	err = enetc_setup_taprio(ndev, taprio);
-> -
-> -	if (err)
-> -		for (i = 0; i < priv->num_tx_rings; i++)
-> -			enetc_set_bdr_prio(hw, priv->tx_ring[i]->index,
-> -					   taprio->enable ? 0 : i);
-> +	if (err) {
-> +		for (i = 0; i < priv->num_tx_rings; i++) {
-> +			tx_ring = priv->tx_ring[i];
-> +			tx_ring->prio = taprio->enable ? 0 : i;
+regards,
+dan carpenter
 
-Side note: is that `taprio ? 0 : i` correct? It's an error path
-IIUC, why not just unconditional 0?
-I guess it is, so
-
-Reviewed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-
-> +			enetc_set_bdr_prio(hw, tx_ring->index, tx_ring->prio);
-> +		}
-> +	}
->  
->  	return err;
->  }
-> -- 
-> 2.34.1
-
-Thanks,
-Olek
