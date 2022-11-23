@@ -2,116 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F01F635334
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 09:51:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 588E1635344
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 09:54:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236667AbiKWIvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 03:51:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54234 "EHLO
+        id S235878AbiKWIwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 03:52:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236649AbiKWIvK (ORCPT
+        with ESMTP id S229563AbiKWIwl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 03:51:10 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57AA9EC095
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 00:51:08 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id d3so20661235ljl.1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 00:51:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vE++5vLwb67DahKEwL1NXxuRxUTeETw1sq0DG9JKnPs=;
-        b=eDPSn7/6kb1CMEWfq46VqkmkHK/vBYGMlzLNxKGhcHC96gnEGPfsDj2hRC3D3+0K/K
-         nEe7kVfSMcDnBMpcslsPmZD7sycWxZurDwfbzuNXkZsvnUyFZd8egtiOWOewnIuGrSX1
-         CwSlY6i3mfcQCE1BONVmlepyH/mlLpEdIIogM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vE++5vLwb67DahKEwL1NXxuRxUTeETw1sq0DG9JKnPs=;
-        b=EbcnWfh0jRinlr50yDaDFNZxO0xOo40qQ6MrCha6AN8ZoJ6jQtjtTt8LquOCOYqRUD
-         19ltkdIvPxfecUkCGh4HsiMlfm/E8LLvHhqu0npJQk5b7o8Of+EwSp9sqIblendRJq/3
-         lSDtlaafHX23LMgPt1wnYX/jyesmmtHD3md75napaJlwlNfbzSi/Wl9QzJ4xkjgDh9qe
-         hLXthDR/Z0zkMUBqK7P7R1EHrPGL6RWYbWzOHRa+rj1mlr/hFOdXTC1LUAHcWAM9b9bY
-         k7xAmEnwlfRtNKutAsRsWMJUntoYVfcDvh0gWaS1F5aXfTj1Tq6xTYIWB31VRZTfYNnf
-         WOEA==
-X-Gm-Message-State: ANoB5ple1WcLcq+3U/mBz83r599oLxResab7rjnbwE48WZmNCqA2hy5h
-        W9Chnx1mf9gGw2ey1NpLPLhkNw==
-X-Google-Smtp-Source: AA0mqf4HD7o0V7cctrri/bgHQuP2OrT988YzhpJ2yA34/vUS3vxMKihKLGVVQkl9eSFRAmwtZ6M03Q==
-X-Received: by 2002:a2e:9117:0:b0:279:4f30:da0f with SMTP id m23-20020a2e9117000000b002794f30da0fmr3713652ljg.366.1669193466652;
-        Wed, 23 Nov 2022 00:51:06 -0800 (PST)
-Received: from [172.16.11.74] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id l7-20020a2e7007000000b0027776efa48csm2134522ljc.91.2022.11.23.00.51.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 00:51:05 -0800 (PST)
-Message-ID: <842fd97b-c958-7b0d-2c77-6927c7ab4d72@rasmusvillemoes.dk>
-Date:   Wed, 23 Nov 2022 09:51:04 +0100
+        Wed, 23 Nov 2022 03:52:41 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4B819C07
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 00:52:37 -0800 (PST)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NHFHT0fwPz15Mml;
+        Wed, 23 Nov 2022 16:52:05 +0800 (CST)
+Received: from [10.67.110.25] (10.67.110.25) by dggpemm500022.china.huawei.com
+ (7.185.36.162) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 23 Nov
+ 2022 16:52:35 +0800
+Message-ID: <47efc7e4-75bd-8302-48e8-1ddb2be48886@huawei.com>
+Date:   Wed, 23 Nov 2022 16:52:29 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v6 2/3] random: introduce generic vDSO getrandom()
- implementation
-Content-Language: en-US, da
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        tglx@linutronix.de
-Cc:     linux-crypto@vger.kernel.org, x86@kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Carlos O'Donell <carlos@redhat.com>,
-        Linux API <linux-api@vger.kernel.org>
-References: <20221121152909.3414096-1-Jason@zx2c4.com>
- <20221121152909.3414096-3-Jason@zx2c4.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <20221121152909.3414096-3-Jason@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH] sched/fair: limit burst to zero when cfs bandwidth is
+ toggled off
+From:   "zhaowenhui (A)" <zhaowenhui8@huawei.com>
+To:     <peterz@infradead.org>
+CC:     <zhaogongyi@huawei.com>, <dietmar.eggemann@arm.com>,
+        <rostedt@goodmis.org>, <bsegall@google.com>, <mgorman@suse.de>,
+        <bristot@redhat.com>, <vschneid@redhat.com>,
+        <shanpeic@linux.alibaba.com>, <changhuaixin@linux.alibaba.com>,
+        <tj@kernel.org>, <dtcccc@linux.alibaba.com>, <mingo@redhat.com>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220809120320.19496-1-zhaowenhui8@huawei.com>
+ <f860bb06-1ef6-5652-4668-53de39be13a7@huawei.com>
+ <b93d70a2-380a-6088-d5ec-8098cfd57033@huawei.com>
+In-Reply-To: <b93d70a2-380a-6088-d5ec-8098cfd57033@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.25]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500022.china.huawei.com (7.185.36.162)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/11/2022 16.29, Jason A. Donenfeld wrote:
 
-Cc += linux-api
 
+在 2022/9/30 16:32, zhaowenhui (A) 写道:
 > 
->       if (!new_block)
->         goto out;
->       new_cap = grnd_allocator.cap + num;
->       new_states = reallocarray(grnd_allocator.states, new_cap, sizeof(*grnd_allocator.states));
->       if (!new_states) {
->         munmap(new_block, num * size_per_each);
+> 
+> 在 2022/8/30 11:19, zhaowenhui (A) 写道:
+>>
+>>
+>> 在 2022/8/9 20:03, Zhao Wenhui 写道:
+>>> When the quota value in CFS bandwidth is set to -1, that imples the
+>>> cfs bandwidth is toggled off. So the burst feature is supposed to
+>>> be disable as well.
+>>>
+>>> Currently, when quota is -1, burst will not be check, so that it can be
+>>> set to almost arbitery value. Examples:
+>>>          mkdir /sys/fs/cgroup/cpu/test
+>>>          echo -1 > /sys/fs/cgroup/cpu/test/cpu.cfs_quota_us
+>>>          echo 10000000000000000 > 
+>>> /sys/fs/cgroup/cpu/test/cpu.cfs_burst_us
+>>>
+>>> Moreover, after the burst modified by this way, quota can't be set
+>>> to any value:
+>>>          echo 100000 > cpu.cfs_quota_us
+>>>          -bash: echo: write error: Invalid argument
+>>>
+>>> This patch can ensure the burst value being zero and unalterable,
+>>> when quota is set to -1.
+>>>
+>>> Fixes: f4183717b370 ("sched/fair: Introduce the burstable CFS 
+>>> controller")
+>>> Reported-by: Zhao Gongyi <zhaogongyi@huawei.com>
+>>> Signed-off-by: Zhao Wenhui <zhaowenhui8@huawei.com>
+>>> ---
+>>>   kernel/sched/core.c | 10 +++++++++-
+>>>   1 file changed, 9 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+>>> index ee28253c9ac0..4c1fc01d8c68 100644
+>>> --- a/kernel/sched/core.c
+>>> +++ b/kernel/sched/core.c
+>>> @@ -10584,6 +10584,12 @@ static int tg_set_cfs_bandwidth(struct 
+>>> task_group *tg, u64 period, u64 quota,
+>>>                        burst + quota > max_cfs_runtime))
+>>>           return -EINVAL;
+>>> +    /*
+>>> +     * Ensure burst equals to zero when quota is -1.
+>>> +     */
+>>> +    if (quota == RUNTIME_INF && burst)
+>>> +        return -EINVAL;
+>>> +
+>>>       /*
+>>>        * Prevent race between setting of cfs_rq->runtime_enabled and
+>>>        * unthrottle_offline_cfs_rqs().
+>>> @@ -10643,8 +10649,10 @@ static int tg_set_cfs_quota(struct 
+>>> task_group *tg, long cfs_quota_us)
+>>>       period = ktime_to_ns(tg->cfs_bandwidth.period);
+>>>       burst = tg->cfs_bandwidth.burst;
+>>> -    if (cfs_quota_us < 0)
+>>> +    if (cfs_quota_us < 0) {
+>>>           quota = RUNTIME_INF;
+>>> +        burst = 0;
+>>> +    }
+>>>       else if ((u64)cfs_quota_us <= U64_MAX / NSEC_PER_USEC)
+>>>           quota = (u64)cfs_quota_us * NSEC_PER_USEC;
+>>>       else
+>>
+>> Gentle ping.
+>>
+>> Thanks,
+>> Zhao Wenhui
+> 
+> Dear Maintainers,
+> Hi, this patch has been reviewed by two reviewers over a month ago.
+> So, Any more suggestions for this patch or it can be picked?
+> 
+> Regards,
+> Zhao Wenhui
 
-Hm. This does leak an implementation detail of vgetrandom_alloc(),
-namely that it is based on mmap() of that size rounded up to page size.
-Do we want to commit to this being the proper way of disposing of a
-succesful vgetrandom_alloc(), or should there also be a
-vgetrandom_free(void *states, long num, long size_per_each)?
+Peter,
+Sorry to disturbed, for this patch is submitted long long time ago...
+And this is my first patch, so I really wonder if there is something
+to be improved for the patch.
 
-And if so, what color should the bikeshed really have. I.e.,
+Looking forward to your reply.
 
-- does it need to take that size_per_each parameter which the kernel knows
-
-- should it rather take the product so it can for now be a simple alias
-for munmap
-
-- should it also have a flags argument just because that's what all
-well-behaving syscalls have these days...
-
-Also, should vgetrandom_alloc() take a void *hint argument that
-would/could be passed through to mmap() to give userspace some control
-over where the memory is located - possibly only in the future, i.e.
-insist on it being NULL for now, but it could open the possibility for
-adding e.g. VGRND_MAP_FIXED[_NOREPLACE] that would translate to the
-corresponding MAP_ flags.
-
-Rasmus
-
+Thank you,
+Zhao Wenhui
