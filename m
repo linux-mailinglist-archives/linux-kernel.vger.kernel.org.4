@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B662B636E34
+	by mail.lfdr.de (Postfix) with ESMTP id 0C089636E32
 	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 00:14:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbiKWXOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 18:14:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
+        id S229845AbiKWXO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 18:14:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiKWXOO (ORCPT
+        with ESMTP id S229700AbiKWXOP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 18:14:14 -0500
+        Wed, 23 Nov 2022 18:14:15 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2F0B8572
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 15:14:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652D9BCDF1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 15:14:14 -0800 (PST)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669245251;
+        s=2020; t=1669245252;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=F3opJ7HlbeLq3ffu10RUcIJy4CWkVQ7ilUuqExGzyjQ=;
-        b=dqKa6Wr1Wdtr4Pf6qxKwBGE8yTiS7HowAJnEYkCsZBht7qIyYlU5t6DYmzm13I2y+RtbTV
-        GQmYX/78A+otM0IMGWAFs+Y5Yzio/l6x2vEFdNBI5LS6YHUYLcaYyphjdnirY4nnEkW9uI
-        XtGAsuz649cQinBcrr2jDcHqvLZSF+nLyDRCRE3J57uru/WsBNw8CLF2dRVCuxh30J9ojw
-        g9LEF8wT0kdeROQt6PLP47saUTwI24kWk8sx2xRXnHWkD9K5TQpbDMEzysrC8DcD6Zv491
-        EZ/gDsWJRgHC6y0TL9wTL9WZa8XdioUUiR6bAklSK4lHnKwJ1xb6QN5FiF3gww==
+        bh=j15phA1lmvkZMkDgT4Ymay4UivTflRDgylXp+daG2hk=;
+        b=tC75imPv7KTPVlhTdENOrDnePftFnntPZqtOo7lXs8ITaY4oNHRqw1ZsSB5hamb6Bkb0gd
+        2zixhJ0bY3k88YMItL69goWwRxiL4CESyvF+ZytQQOa1BxxrQC1P5U1/dQ2LW++qbXgy4p
+        htcVDjnh50BOPr4dOSv9hCzNjCIWA1Z5wY/0/tVjfbm+v6rehUDBoOBcrl+XSOypLI7hvU
+        yMygGWWhxw5Do3Nq5gzqNgFZ4WFXwpombaPzhZIQkqo9LWY9lm3zm9gpuvqPRMyOdCwKqV
+        FtLs0esGtSBhJurR5GSasRoXVcUm/o8hXLRTEZFPpJK8Ox/BgbhowIb51C6lVQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669245251;
+        s=2020e; t=1669245252;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=F3opJ7HlbeLq3ffu10RUcIJy4CWkVQ7ilUuqExGzyjQ=;
-        b=W1ydZ2KGZJWegCfX3wzYey2lDEjnY0PfPIF0wpO9cLHp6C/dqNGjtEdLsYkchSQ65Qk7t2
-        lwhG+M7/4iWYbFDg==
+        bh=j15phA1lmvkZMkDgT4Ymay4UivTflRDgylXp+daG2hk=;
+        b=HjI+6lRUyAYxQIumILednEjKM+aPeEeewy5p9ga2fhkB5bUNDm/Q2UScBZniOqI6yz1ggy
+        wAec0LLVJTqzfpCQ==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH printk v2 2/7] console: Use BIT() macros for @flags values
-Date:   Thu, 24 Nov 2022 00:19:55 +0106
-Message-Id: <20221123231400.614679-3-john.ogness@linutronix.de>
+Subject: [PATCH printk v2 3/7] console: Document struct console
+Date:   Thu, 24 Nov 2022 00:19:56 +0106
+Message-Id: <20221123231400.614679-4-john.ogness@linutronix.de>
 In-Reply-To: <20221123231400.614679-1-john.ogness@linutronix.de>
 References: <20221123231400.614679-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -62,82 +62,80 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Thomas Gleixner <tglx@linutronix.de>
 
-Rather than manually calculating powers of 2, use the BIT() macros.
-Also take this opportunatity to cleanup and restructure the value
-comments into proper kerneldoc comments.
+Add kerneldoc comments to struct console.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
 ---
- include/linux/console.h | 46 ++++++++++++++++++++++++++++++++---------
- 1 file changed, 36 insertions(+), 10 deletions(-)
+ include/linux/console.h | 54 ++++++++++++++++++++++++++++-------------
+ 1 file changed, 37 insertions(+), 17 deletions(-)
 
 diff --git a/include/linux/console.h b/include/linux/console.h
-index 799fc3216aad..f7a14ea6bae0 100644
+index f7a14ea6bae0..b2cf256c23b6 100644
 --- a/include/linux/console.h
 +++ b/include/linux/console.h
-@@ -15,6 +15,7 @@
- #define _LINUX_CONSOLE_H_ 1
+@@ -178,24 +178,44 @@ enum cons_flags {
+ 	CON_EXTENDED		= BIT(6),
+ };
  
- #include <linux/atomic.h>
-+#include <linux/bits.h>
- #include <linux/rculist.h>
- #include <linux/types.h>
- 
-@@ -139,18 +140,43 @@ static inline int con_debug_leave(void)
- /*
-  * The interface for a console, or any other device that wants to capture
-  * console messages (printer driver?)
-- *
-- * If a console driver is marked CON_BOOT then it will be auto-unregistered
-- * when the first real console is registered.  This is for early-printk drivers.
-  */
- 
--#define CON_PRINTBUFFER	(1)
--#define CON_CONSDEV	(2) /* Preferred console, /dev/console */
--#define CON_ENABLED	(4)
--#define CON_BOOT	(8)
--#define CON_ANYTIME	(16) /* Safe to call when cpu is offline */
--#define CON_BRL		(32) /* Used for a braille device */
--#define CON_EXTENDED	(64) /* Use the extended output format a la /dev/kmsg */
 +/**
-+ * cons_flags - General console flags
-+ * @CON_PRINTBUFFER:	Used by newly registered consoles to avoid duplicate
-+ *			output of messages that were already shown by boot
-+ *			consoles or read by userspace via syslog() syscall.
-+ * @CON_CONSDEV:	Indicates that the console driver is backing
-+ *			/dev/console.
-+ * @CON_ENABLED:	Indicates if a console is allowed to print records. If
-+ *			false, the console also will not advance to later
-+ *			records.
-+ * @CON_BOOT:		Marks the console driver as early console driver which
-+ *			is used during boot before the real driver becomes
-+ *			available. It will be automatically unregistered
-+ *			when the real console driver is registered unless
-+ *			"keep_bootcon" parameter is used.
-+ * @CON_ANYTIME:	A misnomed historical flag which tells the core code
-+ *			that the legacy @console::write callback can be invoked
-+ *			on a CPU which is marked OFFLINE. That is misleading as
-+ *			it suggests that there is no contextual limit for
-+ *			invoking the callback. The original motivation was
-+ *			readiness of the per-CPU areas.
-+ * @CON_BRL:		Indicates a braille device which is exempt from
-+ *			receiving the printk spam for obvious reasons.
-+ * @CON_EXTENDED:	The console supports the extended output format of
-+ *			/dev/kmesg which requires a larger output buffer.
++ * struct console - The console descriptor structure
++ * @name:		The name of the console driver
++ * @write:		Write callback to output messages (Optional)
++ * @read:		Read callback for console input (Optional)
++ * @device:		The underlying TTY device driver (Optional)
++ * @unblank:		Callback to unblank the console (Optional)
++ * @setup:		Callback for initializing the console (Optional)
++ * @exit:		Callback for teardown of the console (Optional)
++ * @match:		Callback for matching a console (Optional)
++ * @flags:		Console flags. See enum cons_flags
++ * @index:		Console index, e.g. port number
++ * @cflag:		TTY control mode flags
++ * @ispeed:		TTY input speed
++ * @ospeed:		TTY output speed
++ * @seq:		Sequence number of the next ringbuffer record to print
++ * @dropped:		Number of dropped ringbuffer records
++ * @data:		Driver private data
++ * @node:		hlist node for the console list
 + */
-+enum cons_flags {
-+	CON_PRINTBUFFER		= BIT(0),
-+	CON_CONSDEV		= BIT(1),
-+	CON_ENABLED		= BIT(2),
-+	CON_BOOT		= BIT(3),
-+	CON_ANYTIME		= BIT(4),
-+	CON_BRL			= BIT(5),
-+	CON_EXTENDED		= BIT(6),
-+};
- 
  struct console {
- 	char	name[16];
+-	char	name[16];
+-	void	(*write)(struct console *, const char *, unsigned);
+-	int	(*read)(struct console *, char *, unsigned);
+-	struct tty_driver *(*device)(struct console *, int *);
+-	void	(*unblank)(void);
+-	int	(*setup)(struct console *, char *);
+-	int	(*exit)(struct console *);
+-	int	(*match)(struct console *, char *name, int idx, char *options);
+-	short	flags;
+-	short	index;
+-	int	cflag;
+-	uint	ispeed;
+-	uint	ospeed;
+-	u64	seq;
+-	unsigned long dropped;
+-	void	*data;
+-	struct hlist_node node;
++	char			name[16];
++	void			(*write)(struct console *co, const char *s, unsigned int count);
++	int			(*read)(struct console *co, char *s, unsigned int count);
++	struct tty_driver	*(*device)(struct console *co, int *index);
++	void			(*unblank)(void);
++	int			(*setup)(struct console *co, char *options);
++	int			(*exit)(struct console *co);
++	int			(*match)(struct console *co, char *name, int idx, char *options);
++	short			flags;
++	short			index;
++	int			cflag;
++	uint			ispeed;
++	uint			ospeed;
++	u64			seq;
++	unsigned long		dropped;
++	void			*data;
++	struct hlist_node	node;
+ };
+ 
+ #ifdef CONFIG_LOCKDEP
 -- 
 2.30.2
 
