@@ -2,144 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C48A6367DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:57:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6EB06367DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:58:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239275AbiKWR5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 12:57:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47856 "EHLO
+        id S236825AbiKWR6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 12:58:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239329AbiKWR5L (ORCPT
+        with ESMTP id S239325AbiKWR6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 12:57:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E04CEC6633
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 09:57:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A61661E2F
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 17:57:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A4FC433C1;
-        Wed, 23 Nov 2022 17:57:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669226225;
-        bh=Qtzc1cobsjubwRvtdGwHlSQ/wf5MdQwUif68mEyoqSU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DQ4JJSB/XOtyPKOjZ1GrOhpinUo5woM9ghzuWgxkGNn6nquKVhFEH0Oc9zXsyPxyr
-         h461ekvrnW3s/gZKpwj8f2NcWktzAFaauDJMuNt8k+yNB43iy4DoVXt3PodhdqINs0
-         r+du0fRqP/EFf9OUVkSaZDoTn1kOkvNSxpT3BibR0cuS88szRrXi/0Zii5ZewIhRlV
-         UDeIi7A0sQ5bO0UJqSo8GaYLQVmR8J0KwjM6jn0fe3fJwXockgcQJpY1goGijNQvIH
-         JGuHunYoiyohF20Htz04jlP0ax32f0+U5lh005WgSLFlzDW01LzDG5d107DgLd4BZA
-         nVEQmCsXReUrg==
-From:   Conor Dooley <conor@kernel.org>
-To:     Conor Dooley <conor.dooley@microchip.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>
-Cc:     Daire McNamara <daire.mcnamara@microchip.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] mailbox: mpfs: read the system controller's status
-Date:   Wed, 23 Nov 2022 17:56:52 +0000
-Message-Id: <20221123175652.327859-3-conor@kernel.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221123175652.327859-1-conor@kernel.org>
-References: <20221123175652.327859-1-conor@kernel.org>
+        Wed, 23 Nov 2022 12:58:17 -0500
+Received: from wedge010.net.lu.se (wedge010.net.lu.se [130.235.56.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A9F64570;
+        Wed, 23 Nov 2022 09:57:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; d=control.lth.se; s=edge;
+        c=relaxed/relaxed; t=1669226272; h=from:subject:to:date:message-id;
+        bh=KQhk2ap/hZCSu63a5uf1OoR3V/bnmsDEXpetctJWHwM=;
+        b=FGisCrKKTYZY8/+bw/C9GhcYkpyc7tkgtgEzgyq6pDfJLK4S0oW9eA0hLagX/CYu/KOwXvhGphq
+        O69CMxKAR5PfXtiaMKf2sZ0nspBu3I4IzJHKm3kcB9zzTTZo0Vp9M33Q6B6n7pNBznEQWtQeTd9sX
+        qT1+roCKnuqo4qvOMfcep0Na6HEMSZtpd6er/qP07xcxELU3FEkbSfGwWBDf7WgfW2TkkSY8StmoN
+        WDyYZdw01LgNJOMK1Jl/ocvJKDymMhi9vsE5lLr6+QWO9oDeKDmhyYGrMBSI+zkm9jslCfZf8kQwi
+        zMcHkclCYZcUDMuZHbZEtSh/40j3nlx8Up8w==
+Received: from wexc007.uw.lu.se (130.235.59.251) by mail.lu.se
+ (130.235.56.200) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P256) id 15.1.2507.13; Wed, 23
+ Nov 2022 18:57:52 +0100
+Received: from [130.235.83.196] (130.235.139.100) by wexc007.uw.lu.se
+ (130.235.59.251) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P521) id 15.1.2507.13; Wed, 23
+ Nov 2022 18:57:46 +0100
+Message-ID: <d2d80dc2-2ac9-809f-635d-a8c2f2bfdb69@control.lth.se>
+Date:   Wed, 23 Nov 2022 18:57:41 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: Kernel 6.0.5 breaks virtual machines that boot from nfs mounted
+ qcow2 images
+Content-Language: en-US
+To:     Chuck Lever III <chuck.lever@oracle.com>,
+        Benjamin Coddington <bcodding@redhat.com>
+CC:     Jeff Layton <jlayton@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Anna Schumaker <anna@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+References: <65115206-ec17-443e-8495-91661a2fd9be@control.lth.se>
+ <0abaa41e-79e1-3c0c-6d1b-47d4e21f2296@control.lth.se>
+ <A0F05ED3-14B0-4AE7-B4F7-82398033CA34@redhat.com>
+ <90DACFB9-2854-4688-8822-936C6EEB1FD3@oracle.com>
+From:   Anders Blomdell <anders.blomdell@control.lth.se>
+In-Reply-To: <90DACFB9-2854-4688-8822-936C6EEB1FD3@oracle.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [130.235.139.100]
+X-ClientProxiedBy: wexc011.uw.lu.se (130.235.59.233) To wexc007.uw.lu.se
+ (130.235.59.251)
+X-CrossPremisesHeadersFilteredBySendConnector: wexc007.uw.lu.se
+X-OrganizationHeadersPreserved: wexc007.uw.lu.se
+Received-SPF: Pass (wedge010.net.lu.se: domain of
+ anders.blomdell@control.lth.se designates 130.235.59.251 as permitted sender)
+ receiver=wedge010.net.lu.se; client-ip=130.235.59.251; helo=wexc007.uw.lu.se;
+X-CrossPremisesHeadersFilteredBySendConnector: wedge010.net.lu.se
+X-OrganizationHeadersPreserved: wedge010.net.lu.se
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
 
-Some services explicitly return an error code in their response, but
-others rely on the system controller to set a status in its status
-register. The meaning of the bits varies based on what service is
-requested, so pass it back up to the driver that requested the service
-in the first place. The field in the message struct already existed, but
-was unused until now.
 
-If the system controller is busy, in which case we should never actually
-be in the interrupt handler, or if the service fails the mailbox itself
-should not be read. Callers should check the status before operating on
-the response.
+On 2022-11-23 18:51, Chuck Lever III wrote:
+> 
+>> On Nov 23, 2022, at 12:49 PM, Benjamin Coddington <bcodding@redhat.com> wrote:
+>>
+>> On 23 Nov 2022, at 5:08, Anders Blomdell wrote:
+>>
+>>> Our problems turned out to be a fallout of Al Viros's splice rework, where nfsd reads with non-zero offsets and not ending
+>>> on a page boundary failed to remap the last page. I belive that this is a decent fix for that problem (tested on v6.1-rc6,
+>>> 6.0.7 and 6.0.9)
+>>>
+>>> ---- a/fs/nfsd/vfs.c
+>>> +++ b/fs/nfsd/vfs.c
+>>> @@ -873,7 +873,7 @@ nfsd_splice_actor(struct pipe_inode_info *pipe, struct pipe_buffer *buf,
+>>>         unsigned offset = buf->offset;
+>>>          page += offset / PAGE_SIZE;
+>>> -       for (int i = sd->len; i > 0; i -= PAGE_SIZE)
+>>> +       for (int i = sd->len + offset % PAGE_SIZE; i > 0; i -= PAGE_SIZE)
+>>>                 svc_rqst_replace_page(rqstp, page++);
+>>>         if (rqstp->rq_res.page_len == 0)        // first call
+>>>                 rqstp->rq_res.page_base = offset % PAGE_SIZE;
+>>
+>>
+>> Does anyone have insight into how we could possibly have caught this in testing?
+> 
+> Was also wondering this. I had though fstests (via fsx) would have exercised
+> this usage scenario.
+My guess is that one has to look very hard at qcow2 handling in qemu...
 
-There's an existing, but unused, #define for the mailbox mask - but it
-was incorrect. It was doing a GENMASK_ULL(32, 16) which should've just
-been a GENMASK(31, 16), so fix that up and start using it.
+/Anders
 
-Fixes: 83d7b1560810 ("mbox: add polarfire soc system controller mailbox")
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- drivers/mailbox/mailbox-mpfs.c | 31 ++++++++++++++++++++++++++++---
- 1 file changed, 28 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/mailbox/mailbox-mpfs.c b/drivers/mailbox/mailbox-mpfs.c
-index cfacb3f320a6..853901acaeec 100644
---- a/drivers/mailbox/mailbox-mpfs.c
-+++ b/drivers/mailbox/mailbox-mpfs.c
-@@ -2,7 +2,7 @@
- /*
-  * Microchip PolarFire SoC (MPFS) system controller/mailbox controller driver
-  *
-- * Copyright (c) 2020 Microchip Corporation. All rights reserved.
-+ * Copyright (c) 2020-2022 Microchip Corporation. All rights reserved.
-  *
-  * Author: Conor Dooley <conor.dooley@microchip.com>
-  *
-@@ -56,7 +56,7 @@
- #define SCB_STATUS_NOTIFY_MASK BIT(SCB_STATUS_NOTIFY)
- 
- #define SCB_STATUS_POS (16)
--#define SCB_STATUS_MASK GENMASK_ULL(SCB_STATUS_POS + SCB_MASK_WIDTH, SCB_STATUS_POS)
-+#define SCB_STATUS_MASK GENMASK(SCB_STATUS_POS + SCB_MASK_WIDTH - 1, SCB_STATUS_POS)
- 
- struct mpfs_mbox {
- 	struct mbox_controller controller;
-@@ -130,13 +130,38 @@ static void mpfs_mbox_rx_data(struct mbox_chan *chan)
- 	struct mpfs_mbox *mbox = (struct mpfs_mbox *)chan->con_priv;
- 	struct mpfs_mss_response *response = mbox->response;
- 	u16 num_words = ALIGN((response->resp_size), (4)) / 4U;
--	u32 i;
-+	u32 i, status;
- 
- 	if (!response->resp_msg) {
- 		dev_err(mbox->dev, "failed to assign memory for response %d\n", -ENOMEM);
- 		return;
- 	}
- 
-+	/*
-+	 * The status is stored in bits 31:16 of the SERVICES_SR register.
-+	 * It is only valid when BUSY == 0.
-+	 * We should *never* get an interrupt while the controller is
-+	 * still in the busy state. If we do, something has gone badly
-+	 * wrong & the content of the mailbox would not be valid.
-+	 */
-+	if (mpfs_mbox_busy(mbox)) {
-+		dev_err(mbox->dev, "got an interrupt but system controller is busy\n");
-+		response->resp_status = 0xDEAD;
-+		return;
-+	}
-+
-+	status = readl_relaxed(mbox->ctrl_base + SERVICES_SR_OFFSET);
-+
-+	/*
-+	 * If the status of the individual servers is non-zero, the service has
-+	 * failed. The contents of the mailbox at this point are not be valid,
-+	 * so don't bother reading them. Set the status so that the driver
-+	 * implementing the service can handle the result.
-+	 */
-+	response->resp_status = (status & SCB_STATUS_MASK) >> SCB_STATUS_POS;
-+	if (response->resp_status)
-+		return;
-+
- 	if (!mpfs_mbox_busy(mbox)) {
- 		for (i = 0; i < num_words; i++) {
- 			response->resp_msg[i] =
 -- 
-2.38.1
-
+Anders Blomdell                  Email: anders.blomdell@control.lth.se
+Department of Automatic Control
+Lund University                  Phone:    +46 46 222 4625
+P.O. Box 118
+SE-221 00 Lund, Sweden
