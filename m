@@ -2,322 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76085636478
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:48:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9433A63648B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:49:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238886AbiKWPss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 10:48:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
+        id S237652AbiKWPtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 10:49:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238840AbiKWPsb (ORCPT
+        with ESMTP id S238744AbiKWPss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 10:48:31 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A78769C3
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:48:27 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id 130so17090196pgc.5
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:48:27 -0800 (PST)
+        Wed, 23 Nov 2022 10:48:48 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9033763BB0;
+        Wed, 23 Nov 2022 07:48:47 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id f27so43798192eje.1;
+        Wed, 23 Nov 2022 07:48:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CogaOYhU5rJYKcosZZYpH+BPGYo5v/qCbF8p4NIZlQk=;
-        b=QCh1P3qKGCWXWNFLoqB+/VFvpe244cW86jbJrqavwhTOIwJ/l8HhgMCxsR1h95yKnW
-         WhoAYG4p/+mg/DFiNdUKsBiYqWvjsH5pD4UWruB7EjBSwtsZflpyvhLbAgfgRLZFVV5Q
-         Fhn1w/djy4SpbNsiWqxnWCVDgREhFMx0bCzDLhfAJQGIxg5WMvm4cPeLaa3LrWpMRpde
-         1oYoEjiiC4hXHBODrc+/2TnUS3rT0jhOH/PpYLsl32IuuSLIvfgHeNUv1krv4K5Jga2y
-         hNkiE2UDPNO45BM1W5zIesrUpwU09BiTawjLJPiALyaLDTgu8gp+q7UMovCAh9600kzb
-         x6TA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rWol0vfLar2wlbq1lnLcJmfHTOdUxjebNWwkBKe5szA=;
+        b=a/Mi1ENzdoE9EIvB5Ye2ZQm0JoL4Qwgm366qbxZz3HxkBSOnQFKmyQLhpQAjVgu++T
+         iNr990l84OmsE564r2IQu1CRgoA88Wb/mt2CHH78qJtf4q3nQA3U1QKhyeQuy+Q+SYXE
+         oZhRapBFxOxxnkL23W+rryu0Y+MJLd0y4Fe7TRY0xIfc4q+GYKMDxyonVvL6xJoMSchF
+         jLZRHWdmt7Td106aDj/tE2AbjWoHM4ou1ytNrlgQpiTkFQzZfmYOirqXurIcW94gBPGQ
+         28MGrk0sS5gGlQz9rnrWrp2bEB/SyKW465+JKI8nLKKWqbRcuF/csCfXF+MM71V/+RQ0
+         Lg2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CogaOYhU5rJYKcosZZYpH+BPGYo5v/qCbF8p4NIZlQk=;
-        b=G+hEH1SVGSMqwhemMuXY0Y6l282/KosUaLm1gEDmwwnW+NarvPkzqnqdbWvxF/nwA0
-         8uAsbJJLccCrgRDS8LxXlLNX1WV9NvK76SgTc3UCj5k4lOTgPd66/Xv5vUt+AvRyl+2T
-         jmSmi+qTDVRSkOoOm37P4UdwLpQD3MVDz6c4d8kaspN4Vzgh0e5+yW0Y90eFBUjYEvEK
-         4nCSAlawMxmeHXUOY+sDbB+WPRHantYLrKHsxIcYka/ROq+CdDAIIPBTZOy44wakEen3
-         FhlBmmCg+P0oRvlFUbkSQXglifr5gkdJ6Qo7h//Egqcek0+U5D1T8Ccd2s4oRG1O37JP
-         jTIQ==
-X-Gm-Message-State: ANoB5pluFsPh8roSt4wiGPPmqn1yp8CTYfYqGizdlRpSGa3JMbaMx6gy
-        bB6k1dUk0w48V6PXMUG98Ou517mZq7x2Y48Q/qLhfUtqHjU=
-X-Google-Smtp-Source: AA0mqf7Grm5pcLT0zZvlUsRZ3/VqLKGx+80LWNt2LwDFZdqdAdmKL4oeqSbo9WQm0QQoGpWAHgVTmPgK8G+gQ14qRtU=
-X-Received: by 2002:a65:4586:0:b0:476:f119:40b2 with SMTP id
- o6-20020a654586000000b00476f11940b2mr26182155pgq.330.1669218506684; Wed, 23
- Nov 2022 07:48:26 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rWol0vfLar2wlbq1lnLcJmfHTOdUxjebNWwkBKe5szA=;
+        b=130V0IEan4abqUJ7+xsgyUCBkbo5q7AzSYrEkRByz8PVOJMBYF2MFdadaFLfedP3cZ
+         flNS/6UnFWze5kobFwq6qXwpRSmlTCWHaf5xBHWD7nbOcGM3jP0lp5jMIshISOmL+JWF
+         tFPSp1fFIne8C/J5n/aYOten3JmnovzuKV/R/g0q0vJIilef/VTadAGHTz/7VFwk7jeG
+         AHriIncpMZ+Ya76VF1rXLXf9eT+NDDHOvwh+u5ouIMbjjBkTw9rv7ZZzEaeoUjIZde50
+         rHrLgeRPNsRsmGBZ0rmetAlwdxDVoprbdZo36bQ38NRye6omZXp2R8BEd3LTD5tYgeWO
+         2tBg==
+X-Gm-Message-State: ANoB5pmmI7rOfyBHaelpp8XCtIBJPZHCZn0Doxr3T5m80ul1qsORpvAv
+        qg4UvzXPOqw9LZNTOD8XJ8M=
+X-Google-Smtp-Source: AA0mqf4DGaq6LxoFCutoUkFiDXs1R0I6U1M0ITumJqqtc2ke50QNhjcw+Z4GMeoZk1Cs/xwOs0ED4Q==
+X-Received: by 2002:a17:907:c016:b0:7a4:98cc:7c8e with SMTP id ss22-20020a170907c01600b007a498cc7c8emr14564304ejc.48.1669218525781;
+        Wed, 23 Nov 2022 07:48:45 -0800 (PST)
+Received: from [10.20.0.7] ([37.120.217.162])
+        by smtp.gmail.com with ESMTPSA id u2-20020a1709061da200b0073ae9ba9ba8sm7295109ejh.3.2022.11.23.07.48.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Nov 2022 07:48:44 -0800 (PST)
+Message-ID: <b93a9fcd-0d7b-14fd-1018-bba35f961a27@gmail.com>
+Date:   Wed, 23 Nov 2022 16:48:41 +0100
 MIME-Version: 1.0
-References: <20221119081252.3864249-1-davidgow@google.com> <20221119081252.3864249-2-davidgow@google.com>
-In-Reply-To: <20221119081252.3864249-2-davidgow@google.com>
-From:   Sadiya Kazi <sadiyakazi@google.com>
-Date:   Wed, 23 Nov 2022 21:18:15 +0530
-Message-ID: <CAO2JNKXnePO7Azhsa5+pPpn7+cv862P=VryCX7SmpcnWbZ8xog@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] kunit: Use the static key when retrieving the
- current test
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        Jonathan Corbet <corbet@lwn.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 3/5] driver core: make struct device_type.uevent() take a
+ const *
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Wolfram Sang <wsa@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sean Young <sean@mess.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Ming Lei <ming.lei@redhat.com>,
+        Jilin Yuan <yuanjilin@cdjrlc.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Won Chung <wonchung@google.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-i3c@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org
+References: <20221123122523.1332370-1-gregkh@linuxfoundation.org>
+ <20221123122523.1332370-3-gregkh@linuxfoundation.org>
+ <711d5275-7e80-c00d-0cdc-0f3d52175361@gmail.com>
+ <Y34hgIW8p1RlQTBB@smile.fi.intel.com>
+ <97be39ed-3cea-d55a-caa6-c2652baef399@gmail.com>
+ <Y34zyzdbRUdyOSkA@casper.infradead.org> <Y34+V2bCDdqujBDk@kroah.com>
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <Y34+V2bCDdqujBDk@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you, David. This looks fine to me but I do have a few comments
-for the documentation. Please see my comments inline below.
-Additionally, it would be great to use second person, but we can
-reserve that change for another time.
+On 11/23/22 16:37, Greg Kroah-Hartman wrote:
+> On Wed, Nov 23, 2022 at 02:52:59PM +0000, Matthew Wilcox wrote:
+>> On Wed, Nov 23, 2022 at 02:59:00PM +0100, Maximilian Luz wrote:
+>>> On 11/23/22 14:34, Andy Shevchenko wrote:
+>>>> On Wed, Nov 23, 2022 at 02:14:31PM +0100, Maximilian Luz wrote:
+>>>>> On 11/23/22 13:25, Greg Kroah-Hartman wrote:
+>>>>>> The uevent() callback in struct device_type should not be modifying the
+>>>>>> device that is passed into it, so mark it as a const * and propagate the
+>>>>>> function signature changes out into all relevant subsystems that use
+>>>>>> this callback.
+>>>>
+>>>> [...]
+>>>>
+>>>>>> -static inline struct ssam_device *to_ssam_device(struct device *d)
+>>>>>> +static inline struct ssam_device *to_ssam_device(const struct device *d)
+>>>>>>     {
+>>>>>>     	return container_of(d, struct ssam_device, dev);
+>>>>>>     }
+>>>>>
+>>>>> I am slightly conflicted about this change as that now more or less
+>>>>> implicitly drops the const. So I'm wondering if it wouldn't be better to
+>>>>> either create a function specifically for const pointers or to just
+>>>>> open-code it in the instance above.
+>>>>>
+>>>>> I guess we could also convert this to a macro. Then at least there
+>>>>> wouldn't be an explicit and potentially misleading const-conversion
+>>>>> indicated in the function signature.
+>>>>
+>>>> This is an intermediate step as far as I know since moving container_of to
+>>>> recognize const is a bit noisy right now. I guess you can find a discussion
+>>>> on the topic between Greg and Sakari.
+>>>
+>>> Thanks! I assume you are referring to the following?
+>>>
+>>> 	https://lore.kernel.org/lkml/4218173bd72b4f1899d4c41a8e251f0d@AcuMS.aculab.com/T/
+>>>
+>>> As far as I can tell this is only a warning in documentation, not
+>>> compile time (which would probably be impossible?).
+>>>
+>>> As I've said I'd be fine with converting the function to a macro (and
+>>> preferably adding a similar warning like the one proposed in that
+>>> thread). The point that irks me up is just that, as proposed, the
+>>> function signature would now advertise a conversion that should never be
+>>> happening.
+>>>
+>>> Having two separate functions would create a compile-time guarantee, so
+>>> I'd prefer that, but I can understand if that might be considered too
+>>> noisy in code. Or if there is a push to make container_of() emit a
+>>> compile-time warning I'd also be perfectly happy with converting it to a
+>>> macro now as that'd alleviate the need for functions in the future.
+>>
+>> Can't we do:
+>>
+>> static inline const struct ssam_device *to_ssam_device(const struct device *d)
+>> {
+>> 	return container_of(d, const struct ssam_device, dev);
+>> }
+>>
+> 
+> You could, if you can always handle a const pointer coming out of this
+> function, but I don't think you can.
+> 
+> What you might want to do instead, and I'll be glad to do it for all of
+> the functions like this I change, is to do what we have for struct
+> device now:
+> 
+> static inline struct device *__kobj_to_dev(struct kobject *kobj)
+> {
+>          return container_of(kobj, struct device, kobj);
+> }
+> 
+> static inline const struct device *__kobj_to_dev_const(const struct kobject *kobj)
+> {
+>          return container_of(kobj, const struct device, kobj);
+> }
+> 
+> /*
+>   * container_of() will happily take a const * and spit back a non-const * as it
+>   * is just doing pointer math.  But we want to be a bit more careful in the
+>   * driver code, so manually force any const * of a kobject to also be a const *
+>   * to a device.
+>   */
+> #define kobj_to_dev(kobj)                                       \
+>          _Generic((kobj),                                        \
+>                   const struct kobject *: __kobj_to_dev_const,   \
+>                   struct kobject *: __kobj_to_dev)(kobj)
+> 
+> 
+> Want me to do the same thing here as well?
 
-Best Regards,
-Sadiya
+That looks great! Thanks!
 
+I would very much prefer that.
 
-
-
-On Sat, Nov 19, 2022 at 1:43 PM 'David Gow' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
->
-> In order to detect if a KUnit test is running, and to access its
-> context, the 'kunit_test' member of the current task_struct is used.
-> Usually, this is accessed directly or via the kunit_fail_current_task()
-> function.
->
-> In order to speed up the case where no test is running, add a wrapper,
-> kunit_get_current_test(), which uses the static key to fail early.
-> Equally, Speed up kunit_fail_current_test() by using the static key.
->
-> This should make it convenient for code to call this
-> unconditionally in fakes or error paths, without worrying that this will
-> slow the code down significantly.
->
-> If CONFIG_KUNIT=n (or m), this compiles away to nothing. If
-> CONFIG_KUNIT=y, it will compile down to a NOP (on most architectures) if
-> no KUnit test is currently running.
->
-> Note that kunit_get_current_test() does not work if KUnit is built as a
-> module. This mirrors the existing restriction on kunit_fail_current_test().
->
-> Note that the definition of kunit_fail_current_test() still wraps an
-> empty, inline function if KUnit is not built-in. This is to ensure that
-> the printf format string __attribute__ will still work.
->
-> Also update the documentation to suggest users use the new
-> kunit_get_current_test() function, update the example, and to describe
-> the behaviour when KUnit is disabled better.
->
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Sadiya Kazi <sadiyakazi@google.com>
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
->
-> As-is, the only code which will be directly affected by this (via the
-> kunit_fail_current_test() change) will be UBSAN's KUnit integration.
->
-> Patches to port other tests to use kunit_get_current_test() will be sent
-> separately (other than the SLUB one in patch 3/3). KASAN in particular
-> are reworking their KUnit tests and integration, so we'll use this in a
-> follow up to avoid introducing a conflict.
->
-> Changes since v2:
-> https://lore.kernel.org/all/20221025071907.1251820-2-davidgow@google.com/
-> - Only add kunit_get_current_test() when KUnit is built-in, as the
->   static key isn't available otherwise.
->   - I'm going to try to put together some patches to make things like
->     this available when CONFIG_KUNIT=m in the future.
->   - Also update the documentation to note this.
->
-> Changes since v1:
-> https://lore.kernel.org/linux-kselftest/20221021072854.333010-2-davidgow@google.com/
-> - Fix a missing '}' which broke everything. Thanks Kees, kernel test
->   robot.
-> - Add the new kunit_get_current_test() function, as most of the cases
->   where we retrieve the current test (even to fail it) were accessing
->   current->kunit_test directly, not using kunit_fail_current_test().
-> - Add some documentation comments.
-> - Update the documentation in usage.rst.
->   - The version in tips.rst was not updated, and will be removed:
->   https://lore.kernel.org/linux-kselftest/20221025055844.1231592-1-davidgow@google.com/
->
-> ---
->  Documentation/dev-tools/kunit/usage.rst | 25 +++++++-----
->  include/kunit/test-bug.h                | 53 +++++++++++++++++++++++--
->  2 files changed, 66 insertions(+), 12 deletions(-)
->
-> diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-> index 2737863ef365..e70014b82350 100644
-> --- a/Documentation/dev-tools/kunit/usage.rst
-> +++ b/Documentation/dev-tools/kunit/usage.rst
-> @@ -625,17 +625,21 @@ as shown in next section: *Accessing The Current Test*.
->  Accessing The Current Test
->  --------------------------
->
-> -In some cases, we need to call test-only code from outside the test file.
-> -For example, see example in section *Injecting Test-Only Code* or if
-> -we are providing a fake implementation of an ops struct. Using
-> -``kunit_test`` field in ``task_struct``, we can access it via
-> -``current->kunit_test``.
-> +In some cases, we need to call test-only code from outside the test file,
-> +for example,  when providing a fake implementation of a function, or to fail
-> +any current test from within an error handler.
-> +We can do this via the ``kunit_test`` field in ``task_struct``, which we can
-> +access using the ``kunit_get_current_test`` function in ``kunit/test-bug.h``.
->
-How about this:
-In some cases, we need to call test-only code from outside the test
-file. This is helpful, for instance, when providing a fake implementation
-of a function, or if we wish to fail the current test from within an
-error handler.
-
-> -The example below includes how to implement "mocking":
-> +``kunit_get_current_test`` requires KUnit be built-in to the kernel, i.e.
-> +``CONFIG_KUNIT=y``. It is safe to call even if KUnit is not enabled, is built as a module,
-> +or no test is currently running, in which case it will quickly return ``NULL``.
-
-Suggestion:
-Although the function ``kunit get current test()`` is always
-available, it will only
-produce a test if the kernel includes KUnit (i.e., if CONFIG KUNIT=y). It will
-return NULL in all other circumstances.
-> +
-> +The example below uses this to implement a "mock" implementation of a function, ``foo``:
->
->  .. code-block:: c
->
-> -       #include <linux/sched.h> /* for current */
-> +       #include <kunit/test-bug.h> /* for kunit_get_current_test */
->
->         struct test_data {
->                 int foo_result;
-> @@ -644,7 +648,7 @@ The example below includes how to implement "mocking":
->
->         static int fake_foo(int arg)
->         {
-> -               struct kunit *test = current->kunit_test;
-> +               struct kunit *test = kunit_get_current_test();
->                 struct test_data *test_data = test->priv;
->
->                 KUNIT_EXPECT_EQ(test, test_data->want_foo_called_with, arg);
-> @@ -675,7 +679,7 @@ Each test can have multiple resources which have string names providing the same
->  flexibility as a ``priv`` member, but also, for example, allowing helper
->  functions to create resources without conflicting with each other. It is also
->  possible to define a clean up function for each resource, making it easy to
-> -avoid resource leaks. For more information, see Documentation/dev-tools/kunit/api/test.rst.
-> +avoid resource leaks. For more information, see Documentation/dev-tools/kunit/api/resource.rst.
->
->  Failing The Current Test
->  ------------------------
-> @@ -703,3 +707,6 @@ structures as shown below:
->         static void my_debug_function(void) { }
->         #endif
->
-> +Note that ``kunit_fail_current_test`` requires KUnit be built-in to the kernel, i.e.
-> +``CONFIG_KUNIT=y``. It is safe to call even if KUnit is not enabled, is built as a module,
-> +or no test is currently running, but will do nothing.
-
-same as above
-
-> diff --git a/include/kunit/test-bug.h b/include/kunit/test-bug.h
-> index 5fc58081d511..87a953dceeaa 100644
-> --- a/include/kunit/test-bug.h
-> +++ b/include/kunit/test-bug.h
-> @@ -9,16 +9,63 @@
->  #ifndef _KUNIT_TEST_BUG_H
->  #define _KUNIT_TEST_BUG_H
->
-> -#define kunit_fail_current_test(fmt, ...) \
-> -       __kunit_fail_current_test(__FILE__, __LINE__, fmt, ##__VA_ARGS__)
-> -
->  #if IS_BUILTIN(CONFIG_KUNIT)
->
-> +#include <linux/jump_label.h> /* For static branch */
-> +#include <linux/sched.h>
-> +
-> +/* Static key if KUnit is running any tests. */
-> +extern struct static_key_false kunit_running;
-> +
-> +/**
-> + * kunit_get_current_test() - Return a pointer to the currently-running
-> + *                           KUnit test.
-Suggestion: You can use "currently running KUnit test" or just say
-"current KUnit test".
-> + *
-> + * If a KUnit test is running in the current task, returns a pointer to
-> + * its associated struct kunit, which can then be passed to any KUnit function
-> + * or assertion. If no test is running (or a test is running in a different
-> + * task), returns NULL.
-
-How about this:
-Returns a pointer to the associated struct kunit if a KUnit test is
-currently running
-in the task. This pointer can then be passed to any KUnit function or assertion.
-Returns NULL if no tests are running (or tests are running in a different task).
-
-> + *
-> + * This function is safe to call even when KUnit is disabled: it will compile
-> + * down to nothing if CONFIG_KUNIT is not enabled, and will be very fast if
-> + * no test is running.
-> + */
-
-How about this: You can safely call this function even when KUnit is disabled.
-If CONFIG_KUNIT is not enabled, it will compile to nothing and will
-run quickly if no tests are running.
-
-
-
-> +static inline struct kunit *kunit_get_current_test(void)
-> +{
-> +       if (!static_branch_unlikely(&kunit_running))
-> +               return NULL;
-> +
-> +       return current->kunit_test;
-> +}
-> +
-> +
-> +/**
-> + * kunit_fail_current_test() - If a KUnit test is running, fail it.
-> + *
-> + * If a KUnit test is running in the current task, mark that test as failed.
-> + *
-> + * This macro will only work if KUnit is built-in (though the tests
-> + * themselves can be modules). Otherwise, it compiles down to nothing.
-> + */
-> +#define kunit_fail_current_test(fmt, ...) do {                                 \
-> +               if (static_branch_unlikely(&kunit_running)) {                   \
-> +                       __kunit_fail_current_test(__FILE__, __LINE__,           \
-> +                                                 fmt, ##__VA_ARGS__);          \
-> +               }                                                               \
-> +       } while (0)
-> +
-> +
->  extern __printf(3, 4) void __kunit_fail_current_test(const char *file, int line,
->                                                     const char *fmt, ...);
->
->  #else
->
-> +static inline struct kunit *kunit_get_current_test(void) { return NULL; }
-> +
-> +/* We define this with an empty helper function so format string warnings work */
-> +#define kunit_fail_current_test(fmt, ...) \
-> +               __kunit_fail_current_test(__FILE__, __LINE__, fmt, ##__VA_ARGS__)
-> +
->  static inline __printf(3, 4) void __kunit_fail_current_test(const char *file, int line,
->                                                             const char *fmt, ...)
->  {
-> --
-> 2.38.1.584.g0f3c55d4c2-goog
->
-> --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20221119081252.3864249-2-davidgow%40google.com.
+Regards,
+Max
