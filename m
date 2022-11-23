@@ -2,47 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9DD4635EFB
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:08:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D1ED635EE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:08:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238597AbiKWNFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 08:05:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42938 "EHLO
+        id S238702AbiKWNHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 08:07:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238577AbiKWNFB (ORCPT
+        with ESMTP id S238861AbiKWNHO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 08:05:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D636CEBB5;
-        Wed, 23 Nov 2022 04:49:14 -0800 (PST)
+        Wed, 23 Nov 2022 08:07:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4FAE0DD5;
+        Wed, 23 Nov 2022 04:50:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A451B61C61;
-        Wed, 23 Nov 2022 12:48:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5559C43144;
-        Wed, 23 Nov 2022 12:48:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE26FB81F72;
+        Wed, 23 Nov 2022 12:50:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4BBF5C433C1;
+        Wed, 23 Nov 2022 12:50:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669207739;
-        bh=o3Io+SK7lX1cC2f73bZPoDGBckcr/KVKDkRqhBF9SK4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j/bcDk7krj5VnAJm2QAY4P6ukQmr50nr9VztKrPLZPPaAHHARlB6jDeG3CJe7ygK9
-         ajzzdKjAc2QfpF2CE4IYwJ3JEUOC+BJ/c0v6+WZaPjIOVTPdc5ZdnxRSTDpyHYlFxZ
-         YH2We6ZPxg2x9fSSn8yDKw1rYBeFFJhm/n1CSHt8ilolU4AMupj5uTXVou9+f30F6j
-         VZ7ruHQjgtlhEPGMXxc9H4QuOMQftV/WiJtoJ0yCDe3/rqaSPF+fwu2iu2FmOozO6k
-         ZotEDFxugoZRZXAlfCmiy8buyVdCayVEkeBUKn4/WggsU+nvHnYZE3FyTD2j0MuDfM
-         KqB9UuK0uof5g==
-From:   Roger Quadros <rogerq@kernel.org>
-To:     davem@davemloft.net, maciej.fijalkowski@intel.com, kuba@kernel.org
-Cc:     edumazet@google.com, pabeni@redhat.com, vigneshr@ti.com,
-        linux-omap@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Roger Quadros <rogerq@kernel.org>
-Subject: [PATCH v3 net-next 6/6] net: ethernet: ti: am65-cpsw: Fix hardware switch mode on suspend/resume
-Date:   Wed, 23 Nov 2022 14:48:35 +0200
-Message-Id: <20221123124835.18937-7-rogerq@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221123124835.18937-1-rogerq@kernel.org>
-References: <20221123124835.18937-1-rogerq@kernel.org>
+        s=k20201202; t=1669207815;
+        bh=Rwnqe+d+f8uO+vt7eyPZUvBUdxUgOipJ+45IIg74uDA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=rr5cyBtSeiCCsOgCTG0kVwZX6caXsH+IHJsKNHxWm0qzDJ3HGWKVWRUxzDENU37iU
+         fcaoqyLOSDRjPvt/hjvhTjwb99KNYggA5uASSMOYEF2y0mxsZ45madSvB9+vhYQjIo
+         67qfMxhp2pGiwdLwHQImqTGTInoDQXPmrlOqjnV/CoCThQzAPLvkNtTYnXdEpHMRTa
+         jrhOIniUfDbkQcUmxDQcCM/jDBmRuiTBjRza4rwnaVnW7RmauRS/1o89aDFegOvs8G
+         w6MkfG7qBJVrWLyxiarfjqsO8+UphYVc1hy9eNDZVA4rzSPARXHmqEah30L9PC98Vf
+         f8vQaM0T972/w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2A7ABC395ED;
+        Wed, 23 Nov 2022 12:50:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] arcnet: fix potential memory leak in com20020_probe()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166920781516.7047.7595861515103191510.git-patchwork-notify@kernel.org>
+Date:   Wed, 23 Nov 2022 12:50:15 +0000
+References: <20221120062438.46090-1-wanghai38@huawei.com>
+In-Reply-To: <20221120062438.46090-1-wanghai38@huawei.com>
+To:     Wang Hai <wanghai38@huawei.com>
+Cc:     m.grzeschik@pengutronix.de, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux@dominikbrodowski.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -52,68 +58,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On low power during system suspend the ALE table context is lost.
-Save the ALE context before suspend and restore it after resume.
+Hello:
 
-Signed-off-by: Roger Quadros <rogerq@kernel.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
----
- drivers/net/ethernet/ti/am65-cpsw-nuss.c | 7 +++++++
- drivers/net/ethernet/ti/am65-cpsw-nuss.h | 2 ++
- 2 files changed, 9 insertions(+)
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-index f5357afde527..72e4ee71f106 100644
---- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-+++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-@@ -2712,6 +2712,7 @@ static int am65_cpsw_nuss_probe(struct platform_device *pdev)
- 	struct clk *clk;
- 	u64 id_temp;
- 	int ret, i;
-+	int ale_entries;
- 
- 	common = devm_kzalloc(dev, sizeof(struct am65_cpsw_common), GFP_KERNEL);
- 	if (!common)
-@@ -2807,6 +2808,10 @@ static int am65_cpsw_nuss_probe(struct platform_device *pdev)
- 		goto err_of_clear;
- 	}
- 
-+	ale_entries = common->ale->params.ale_entries;
-+	common->ale_context = devm_kzalloc(dev,
-+					   ale_entries * ALE_ENTRY_WORDS * sizeof(u32),
-+					   GFP_KERNEL);
- 	ret = am65_cpsw_init_cpts(common);
- 	if (ret)
- 		goto err_of_clear;
-@@ -2877,6 +2882,7 @@ static int am65_cpsw_nuss_suspend(struct device *dev)
- 	int i, ret;
- 	struct am65_cpsw_host *host_p = am65_common_get_host(common);
- 
-+	cpsw_ale_dump(common->ale, common->ale_context);
- 	host_p->vid_context = readl(host_p->port_base + AM65_CPSW_PORT_VLAN_REG_OFFSET);
- 	for (i = 0; i < common->port_num; i++) {
- 		port = &common->ports[i];
-@@ -2949,6 +2955,7 @@ static int am65_cpsw_nuss_resume(struct device *dev)
- 	}
- 
- 	writel(host_p->vid_context, host_p->port_base + AM65_CPSW_PORT_VLAN_REG_OFFSET);
-+	cpsw_ale_restore(common->ale, common->ale_context);
- 
- 	return 0;
- }
-diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.h b/drivers/net/ethernet/ti/am65-cpsw-nuss.h
-index e95cc37a7286..4b75620f8d28 100644
---- a/drivers/net/ethernet/ti/am65-cpsw-nuss.h
-+++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.h
-@@ -149,6 +149,8 @@ struct am65_cpsw_common {
- 	struct net_device *hw_bridge_dev;
- 	struct notifier_block am65_cpsw_netdevice_nb;
- 	unsigned char switch_id[MAX_PHYS_ITEM_ID_LEN];
-+	/* only for suspend/resume context restore */
-+	u32			*ale_context;
- };
- 
- struct am65_cpsw_ndev_stats {
+On Sun, 20 Nov 2022 14:24:38 +0800 you wrote:
+> In com20020_probe(), if com20020_config() fails, dev and info
+> will not be freed, which will lead to a memory leak.
+> 
+> This patch adds freeing dev and info after com20020_config()
+> fails to fix this bug.
+> 
+> Compile tested only.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net] arcnet: fix potential memory leak in com20020_probe()
+    https://git.kernel.org/netdev/net/c/1c40cde6b517
+
+You are awesome, thank you!
 -- 
-2.17.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
