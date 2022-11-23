@@ -2,109 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62BD3635AB3
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 11:58:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DA1D635AE3
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 12:01:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237115AbiKWK5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 05:57:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57024 "EHLO
+        id S237099AbiKWK7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 05:59:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237567AbiKWK5M (ORCPT
+        with ESMTP id S236924AbiKWK6e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 05:57:12 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FBEFC731;
-        Wed, 23 Nov 2022 02:50:33 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id s5so11582349wru.1;
-        Wed, 23 Nov 2022 02:50:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5mJ4XYFEsSMGscEtu1E88MW80nC31aQOMXivDq2lhNc=;
-        b=IE8UMA6VhinH8zgY45hA6zbdXgQnSd5mHtHg/96rArFtXQepHbI1yalKQFcKl1vBs/
-         WgvqUt6fm6vUcruIwrjm2+Ke8mbxrIis5SqNMdOeEjQQeflQ3vcJkW/PG+7BirCkLHtw
-         qIqn/3eiyUjhjWnP+kXHHjf1zTv9eePWcPW0qS4EBFk1jcnD8cvgq+/pRaAry+w9o8Fx
-         pAUR76EFHRIgYplPPvn9EBK15JHP4Hsnfn4s9hXynC1PzmYf/eRDf8V6yP/sW0t++dcE
-         O6sabjTlVviMjoXCo9ybeCJUcWk+XO05zhNwNEWbCMnxWZ4+uLDkREkYLvfXfMZUT+DX
-         1UWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5mJ4XYFEsSMGscEtu1E88MW80nC31aQOMXivDq2lhNc=;
-        b=EtG8R0WRsXBsjIXxbml4MLXjFHXwnzEqbTSjxbs5AHW2yUzy8y7jo/Z+hMWg1sj+mX
-         KTx++iGUbqZh+kGQ5Qnjb+/PkmjnlmGSO6LjiSUT5KhOaFesa+vtYLadOsF4EGF2pQxt
-         j9I3AY64Jtz7QvUlNBMn1x0Kr4H59ilnOxmiT8ax0ZPbrFsglQQinjB6LVRMCcpRQ/Ie
-         zkrDvQr/wXoC7NHruDxw6r59MU8UeyLUImtvtKyvg4068IWXMqKA7SMXN3cnY/LY1bD0
-         zLJu79+Wv1smWuUdUP7XsWf80x+fjVC0hY0mC0n8mpsfUildAnkOtLBiLTYQW2jjBgJv
-         JAUw==
-X-Gm-Message-State: ANoB5pkwwQZqXMAHYzGiD+7tGdCnKb02DL6hlr4o6FTUXbuhulv47D+0
-        swf19H9nIpHnuZiq7XdsVYO49L5mWlclaw==
-X-Google-Smtp-Source: AA0mqf461/lZE5/BT2BQpKWrgzp7uOAmtw0frJclKgxnll5YFmNIxfqRxwAB7zwaQ17pLHbtKKYC+Q==
-X-Received: by 2002:adf:e0c2:0:b0:236:6f18:37e6 with SMTP id m2-20020adfe0c2000000b002366f1837e6mr16294620wri.262.1669200631806;
-        Wed, 23 Nov 2022 02:50:31 -0800 (PST)
-Received: from prasmi.home ([2a00:23c8:2501:c701:3178:d8a1:a393:6d85])
-        by smtp.gmail.com with ESMTPSA id v19-20020a05600c4d9300b003cf37c5ddc0sm1759317wmp.22.2022.11.23.02.50.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 02:50:31 -0800 (PST)
-From:   Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH] media: platform: rzg2l-cru: rzg2l-csi2: Enclose the macro in parentheses
-Date:   Wed, 23 Nov 2022 10:50:22 +0000
-Message-Id: <20221123105022.336198-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 23 Nov 2022 05:58:34 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71581CD;
+        Wed, 23 Nov 2022 02:51:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669200718; x=1700736718;
+  h=from:to:cc:subject:date:message-id;
+  bh=6iGjfHGImnQA/ryUfPU7pulSh2j0yD9AxLZ5NGkr2kQ=;
+  b=Lea1g6qPwXgmFe2iceq3WySE50RDe4CbHDGA2O4wHfgi+XMWbRYLlS1U
+   FlXlP//toEF1wPsn1mp1aCNwfINtJRomQW7xjHzx9lZ1z5d4vQBRTGsCl
+   IbT/bi3KG5SXAcc1E5y1Z2JKRFq0N3LyQh5g/tybZHbOr4Lt3mv2fVwcH
+   GPadzMci7qHzw/txGR1RhA+xvasyW41Tl1yA/8aJKWb6iGp+xpyGSUT8P
+   DVf3tXsXme4n9HqSS1dXm5sLBSNCNxS7Q3sWxew94Mgw2jHUdvzpnRPTh
+   YsyPGs11s83vylKcGG661is2Q5MHpVn01lbiWK9/ArNn7lmZDHgA8RHkn
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="297399779"
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="297399779"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 02:51:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="672837333"
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="672837333"
+Received: from p12ill01gohweish.png.intel.com ([10.88.229.16])
+  by orsmga008.jf.intel.com with ESMTP; 23 Nov 2022 02:51:53 -0800
+From:   "Goh, Wei Sheng" <wei.sheng.goh@intel.com>
+To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        Voon Wei Feng <weifeng.voon@intel.com>,
+        Tan Tee Min <tee.min.tan@intel.com>,
+        Ahmad Tarmizi Noor Azura <noor.azura.ahmad.tarmizi@intel.com>,
+        Looi Hong Aun <hong.aun.looi@intel.com>,
+        Goh Wei Sheng <wei.sheng.goh@intel.com>
+Subject: [PATCH net v4] net: stmmac: Set MAC's flow control register to reflect current settings
+Date:   Wed, 23 Nov 2022 18:51:10 +0800
+Message-Id: <20221123105110.23617-1-wei.sheng.goh@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=0.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Currently, pause frame register GMAC_RX_FLOW_CTRL_RFE is not updated
+correctly when 'ethtool -A <IFACE> autoneg off rx off tx off' command
+is issued. This fix ensures the flow control change is reflected directly
+in the GMAC_RX_FLOW_CTRL_RFE register.
 
-Fix the below error reported by checkpatch:
-
-ERROR: Macros with complex values should be enclosed in parentheses
-					CSIDPHYSKW0_UTIL_DL1_SKW_ADJ(1) | \
-					CSIDPHYSKW0_UTIL_DL2_SKW_ADJ(1) | \
-					CSIDPHYSKW0_UTIL_DL3_SKW_ADJ(1)
-
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Fixes: 46f69ded988d ("net: stmmac: Use resolved link config in mac_link_up()")
+Cc: <stable@vger.kernel.org> # 5.10.x
+Signed-off-by: Goh, Wei Sheng <wei.sheng.goh@intel.com>
+Signed-off-by: Noor Azura Ahmad Tarmizi <noor.azura.ahmad.tarmizi@intel.com>
 ---
- drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+V3 -> V4: Fix commit message and incorrect insertions(+) value
+V2 -> V3: Removed value assign for 'flow' in else statement based on review comments
+V1 -> V2: Removed needless condition based on review comments
 
-diff --git a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
-index aa752b80574c..a26a17eee1e7 100644
---- a/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
-+++ b/drivers/media/platform/renesas/rzg2l-cru/rzg2l-csi2.c
-@@ -81,10 +81,10 @@
- #define CSIDPHYSKW0_UTIL_DL1_SKW_ADJ(x)	(((x) & 0x3) << 4)
- #define CSIDPHYSKW0_UTIL_DL2_SKW_ADJ(x)	(((x) & 0x3) << 8)
- #define CSIDPHYSKW0_UTIL_DL3_SKW_ADJ(x)	(((x) & 0x3) << 12)
--#define CSIDPHYSKW0_DEFAULT_SKW		CSIDPHYSKW0_UTIL_DL0_SKW_ADJ(1) | \
--					CSIDPHYSKW0_UTIL_DL1_SKW_ADJ(1) | \
--					CSIDPHYSKW0_UTIL_DL2_SKW_ADJ(1) | \
--					CSIDPHYSKW0_UTIL_DL3_SKW_ADJ(1)
-+#define CSIDPHYSKW0_DEFAULT_SKW		(CSIDPHYSKW0_UTIL_DL0_SKW_ADJ(1) | \
-+					 CSIDPHYSKW0_UTIL_DL1_SKW_ADJ(1) | \
-+					 CSIDPHYSKW0_UTIL_DL2_SKW_ADJ(1) | \
-+					 CSIDPHYSKW0_UTIL_DL3_SKW_ADJ(1))
+ drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c |  2 ++
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 12 ++++++++++--
+ 2 files changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c b/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c
+index c25bfecb4a2d..369db308b1dd 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c
+@@ -748,6 +748,8 @@ static void dwmac4_flow_ctrl(struct mac_device_info *hw, unsigned int duplex,
+ 	if (fc & FLOW_RX) {
+ 		pr_debug("\tReceive Flow-Control ON\n");
+ 		flow |= GMAC_RX_FLOW_CTRL_RFE;
++	} else {
++		pr_debug("\tReceive Flow-Control OFF\n");
+ 	}
+ 	writel(flow, ioaddr + GMAC_RX_FLOW_CTRL);
  
- #define VSRSTS_RETRIES			20
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index 8273e6a175c8..ab7f48f32f5b 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -1061,8 +1061,16 @@ static void stmmac_mac_link_up(struct phylink_config *config,
+ 		ctrl |= priv->hw->link.duplex;
  
+ 	/* Flow Control operation */
+-	if (tx_pause && rx_pause)
+-		stmmac_mac_flow_ctrl(priv, duplex);
++	if (rx_pause && tx_pause)
++		priv->flow_ctrl = FLOW_AUTO;
++	else if (rx_pause && !tx_pause)
++		priv->flow_ctrl = FLOW_RX;
++	else if (!rx_pause && tx_pause)
++		priv->flow_ctrl = FLOW_TX;
++	else
++		priv->flow_ctrl = FLOW_OFF;
++
++	stmmac_mac_flow_ctrl(priv, duplex);
+ 
+ 	if (ctrl != old_ctrl)
+ 		writel(ctrl, priv->ioaddr + MAC_CTRL_REG);
 -- 
-2.25.1
+2.17.1
 
