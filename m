@@ -2,271 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC8C2634FBA
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 06:42:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49289634FBC
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 06:43:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235683AbiKWFmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 00:42:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60942 "EHLO
+        id S235766AbiKWFnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 00:43:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbiKWFmG (ORCPT
+        with ESMTP id S229717AbiKWFnH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 00:42:06 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2044.outbound.protection.outlook.com [40.107.244.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3142BF1DAC;
-        Tue, 22 Nov 2022 21:42:05 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VST4R6jlp7Tgouth/LoH1zvu1Jb4Ixq6TAcw5nc0FGk6XtjQ/h5Gmc3/YePOrS2IFo8fM/d0o9h7afX2CwNz5DuZag2XGjmPrXTNfCaXPJ7I4/0+egxDaaEN1qQ5TODKbpObU3jcSKpDBtNo+C0MRyo/hg8Qi3wkl68jD6MXdZcb9Ba6XIrYoTQq1ST1/5H0yjewDbBJk4lE2e4R614BttMz+rZUB0rbkxwDKnDrKp5rqhYoTK+Sqi+sKkPgjKsYiSvBAO2yZMrNT/qAY4wrXFlc18OaDwVOGGDSgW+hKkrsNnVtfCMp/5SPyu/0aXZLDmDP5+kusyXPSt2idwTXyw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VpPjnFB/8FacUG1eI10JHf0h8Bmlxmd9Ihd39FY+AsQ=;
- b=YU0gNKVv8gELJ1pxCGz7jW14VvL+unKw5CKWjnJf3xpwJWWecVgIGH3vdP0DDSmre1vN7zJD2AJj72O4h3FkB5InWCKP+Mq0vNKJiPGShJj6ZbqeK5CXeTjJ9kQNiNQ3cT09pacvA9WzoqmRMSyI+Edt+P2dU9GnFIULo1IjR8EPDLenGRXzaqfbk53WoQ2oGsYMQhIZE4sUSHHIbGG9D9gnAY+M00FPzplaAJuN4R7ePWBazCOjKuWSzeskEbouAJnnJMPO85vpovcdNaqS13CRw2r75n1d+y+dB1CbNQNrY9D2bdmm4bG1T+aK1Zl+PSWCJbAz0BUwS7HwtKbK3Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VpPjnFB/8FacUG1eI10JHf0h8Bmlxmd9Ihd39FY+AsQ=;
- b=VnlJkYcSfHtxzvMcFAHOCKmDKPARv1pip2VvHkJxsp9HYXqm/1E44yetpMlXh2oKYafLPHm4AQeLuwwxgQ6DvRZTU+TrUvIxBFV9LX99Kja032l2qVEnfEJ1wSuvXoVv608tO144hDbgD48JhCcI3KkbJuoDklCsGtOMcsI1Nok=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB5712.namprd12.prod.outlook.com (2603:10b6:510:1e3::13)
- by PH0PR12MB5404.namprd12.prod.outlook.com (2603:10b6:510:d7::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Wed, 23 Nov
- 2022 05:42:03 +0000
-Received: from PH7PR12MB5712.namprd12.prod.outlook.com
- ([fe80::5593:9517:a2e9:1b6b]) by PH7PR12MB5712.namprd12.prod.outlook.com
- ([fe80::5593:9517:a2e9:1b6b%3]) with mapi id 15.20.5834.015; Wed, 23 Nov 2022
- 05:42:03 +0000
-Message-ID: <cc0050ba-0eff-fead-f739-b1dda011cd25@amd.com>
-Date:   Wed, 23 Nov 2022 11:11:46 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] arch/x86/events/amd/core.c: Return -ENODEV when CPU does
- not have PERFCTL_CORE bit
-From:   Sandipan Das <sandipan.das@amd.com>
-To:     Liang Yan <lyan@digitalocean.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221027133511.161922-1-lyan@digtalocean.com>
- <Y1/Gvs0xkk/W0Nro@hirez.programming.kicks-ass.net>
- <a9677c3e-1f2b-a18f-97f5-9cc1a216ed9c@amd.com>
- <f5793630-f13d-42d3-c045-276311230682@digitalocean.com>
- <923336bd-9669-88fd-9c18-159f2b6c4b00@amd.com>
-Content-Language: en-US
-In-Reply-To: <923336bd-9669-88fd-9c18-159f2b6c4b00@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN0PR01CA0038.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:49::7) To PH7PR12MB5712.namprd12.prod.outlook.com
- (2603:10b6:510:1e3::13)
+        Wed, 23 Nov 2022 00:43:07 -0500
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA35A13CE3;
+        Tue, 22 Nov 2022 21:43:06 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 223C35C010A;
+        Wed, 23 Nov 2022 00:43:06 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Wed, 23 Nov 2022 00:43:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1669182186; x=
+        1669268586; bh=tSVppnYkpeXnvHJUaWTsGY07NlSPhzPn1JiOoH5/HyE=; b=D
+        3eSJv+20H8TXCSPTvFOo/bOny1fv8RxplvzQVkb2/Izev6Oy84wT9DlLyFcpK4Bu
+        x8Yrdp4r3DK88kGRuI/O905Uh2jSscSAsvhWHQznWg0fHnepnrt0leigEByh6tlv
+        EJ2tVOM5NPQmLVW0h+ycQtIedE76znn7KcmDABXIZjSqLZY5A+ggryv3HhUmIwHE
+        M10OkSqEuB+cFZibEP/bhDgn1JBD82cDdpwnfK0wmIZZnxxPq3nJxdrf12FAtXPZ
+        2/WmsT9Jtg7vwJfbKXr/EY8IX37ndvBzLBxFUUXLYYRjprAb0J8DVc3mjtgUq07f
+        vUM5d18tsXeX5OTaMW6tw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1669182186; x=
+        1669268586; bh=tSVppnYkpeXnvHJUaWTsGY07NlSPhzPn1JiOoH5/HyE=; b=c
+        9vHnGChIlGMiLqQBwDo7DCJUOF9wunu4vWnKXpcn1UCPdGh8W0E+NgcDeYmlhNx9
+        rkHX0arpD+C8hcik6BlSpth6Go3v1PZC/H0Nz1cQNivWaoZgPVaNZITtL6Y+F6U8
+        j0tqFrDfWR+Kdwm7cz11nWrZEhAs4UbBmaJ8twbWWOTQhmjat+BcFPo0VBSb8FC1
+        rR38kJh657AecYfVB/5Mk6ukMgi/meDvmvDvLEMQ2w1012Ncp+Uy+ofjTZE8W+KY
+        laPQ+oqHvkP/0ZC9hVFp18e/GI2zntt+rxtkmvsvxWSP7cWbBtx+5t1CGlmFnME6
+        KHhONFZY6oikTUfUqgSXg==
+X-ME-Sender: <xms:6bJ9Y3m-XQyW_cW19EF0O7_qSgwYBs78gcIFkmZOEvtLFK-ybK7Mbg>
+    <xme:6bJ9Y63rjEr4m1DW9F5hobFuuR7BWw4SXQx-ahVEkqlN5DrPFLBTxbGKKXf4A9tX9
+    oGwA-ISkycPysVRww>
+X-ME-Received: <xmr:6bJ9Y9oemprdq9BqkxXaBkmpK3H8lQuomL0oD6G39wfSDt1bQWVprKsTOo5cTENRaMvclgl8N7Q-Groz_h2aT64mh01_Ipcm72IHtQsMyJRKfOcqkT9OepogFQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedriedtgdekkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfvvehfhffujggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepjefgfffhudejfedtuedugeeutdetgfeiteffffehjeeugfeuvdeh
+    jeetfedtffdtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:6bJ9Y_lqMg3jiaGs7hy7HpZRfc5co6xof8uTYu8XKCLGZTLHMJ9kBg>
+    <xmx:6bJ9Y10GY7LEHQ-c-r5q1s5_6nbAfmI-kg3zXJmNBOfY7jjMejfSlQ>
+    <xmx:6bJ9Y-vfg_AHIULqTZmNT0_ucgTU-gEurRoRsnaY54BKr-Q_pzj7hA>
+    <xmx:6rJ9Y001uFlYr4G8WozL5W2N2KX3RNkMAw0Vr4dYKx3UD3j-IqK3zw>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 23 Nov 2022 00:43:04 -0500 (EST)
+Message-ID: <2b329306-9706-7156-ad18-b87e4da666d9@sholland.org>
+Date:   Tue, 22 Nov 2022 23:43:04 -0600
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5712:EE_|PH0PR12MB5404:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4f2906da-f00f-4c62-133c-08dacd15729b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AWWfYF9eef+7IqmrYhT5sRT32L/D60exDw9DVDzGKLY9zTXgYFk8QTnt8dpyNRimgl5VEsUBS5vjNhC0p7aW/B4eJ1aHNY8N0EXmN+IOJiavdFdCCF8txvD2wGpiJifgh+eL7nu+oSYJKaOp8GCI/NPMx4E5AXqfd+fBVMMDTS+YB0S14t4I9hWWP7Fb8CEdmQ3tE0SNe+xkwpB7+PrUl7nil7HhYnTOYXduoAvL58PpA3eyDCercVMsImrFUxjjMuKikgtlmXMhOS7kGI9iB1yTznbFV6iK424PE9qxw79xCobZ7TTBGDdMjJwFj2KQbfl77r/tI2ytZpmPZ0DusP/6eKog5HGvPYw60HDpmui5zOJ0KOoUjZ54KcI5toRUK2LEK1i/OLGFqPU9FpCSCSTkAGQsDOtIclKQT8HWqFmxAzxVIAX/gC7/3Au/pYajwjZ6VUoyUydixbvy+0IMetQDdosFubjnbPhGTrj46VX5uN0N0Yh3EeJ6tmN9KvjIAVwe6fR5EFqAo6tXvyCfg+R6QYc85u6dP60AIx16bnJlJwqFxf68zEipdAv0YnZhPw7SqcWkd4xGhyYmpZDR/17txdko9QxETh4NbRWagt3UknIluTVHiIyMfQ97YNkNgXtL8Cx0JosL5S85p+QONYCIGk0qbpVz/qUO5Oj9Zs4n224fWIls78zWTdFKu9DqFi7i4vQJ+stBrdLkHao4dMgf+iAj7clv3hUD0eRCMDcBmQA2Lh5sobnccg+coo6H
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5712.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(346002)(376002)(39860400002)(366004)(451199015)(31696002)(66556008)(36756003)(86362001)(2616005)(41300700001)(53546011)(66946007)(5660300002)(66476007)(186003)(6666004)(8676002)(8936002)(7416002)(26005)(478600001)(44832011)(6512007)(966005)(316002)(6486002)(6506007)(54906003)(6916009)(38100700002)(4326008)(2906002)(31686004)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?L05Cb3BPYkw5UldBVzYxalFFVndYYmZQaHJsaHJNbE9KWi82N2pFTmY0aHBI?=
- =?utf-8?B?ODZxUUp0UFVCOFFPTWRXMUxvUmV3QjRxSWdqdEVFeTVBL1lXS2ZxMHBremtX?=
- =?utf-8?B?S3pHYjhvekRVRmpBNFhNNk8yemx1UnZOeXhrMGMxZitveHlweEtDcUozU2xY?=
- =?utf-8?B?cVk5R2x6WGc0YXAzVXc5L0psaXdCdzBhWW5Md2YyUm04akNWTFJPRHJYRlN3?=
- =?utf-8?B?cUpCK0ZEMUdsNDFSdkE1aTNpaHlBNDJwV0srUE5LNUFyVkRnMUh4eXVQdHpB?=
- =?utf-8?B?a2J5TFVJTU9wY21oVGFIV2RQL3lvN2dXWjFSMWZZb29WeGI5SVNXclhYR2pF?=
- =?utf-8?B?blJvdzN5cWdLS2dUQ3p0anh2SjBaMUV6by9JRitKOUFxb01yUWo5OVBITHRp?=
- =?utf-8?B?V3JOdllSNHBoQ2NLTnNuTnNGMnAyckRETE5FQVcvWmh0UlFERlUydnZraU1O?=
- =?utf-8?B?dUhBWVVEMURMcXZCcUoyTmlNZnZxTVJ2Vm9EZ2tFWkE5WFhMTHZhdFBpQUVH?=
- =?utf-8?B?QlpYZndqN3VlanhCV2xBUDYyd1Rna0tvYjVrdVdiRkZzbmxmK3hzRTBZbzdU?=
- =?utf-8?B?R01oN2lLbmU1MVRyNC9vVitsR2tmN3ZPRDdrNUhQLzV1bm5uRGhTeDllTlhk?=
- =?utf-8?B?aGQvdE13cFNiYTFkN1RDSUMweHRYNzR6VnMxS1RuUjl1WklveFNiREpYRndz?=
- =?utf-8?B?SjFJRDJ6NFZ6cjkwdWswRDZlamJFY0w0MFVhbzRQY1NlK3p3Z0pkRjlNSWF4?=
- =?utf-8?B?NmtLOW9YaEpiYnBOT0t5eTVxQW5xbXBQNkFqNEo4WE56U3VzU1JpZ0FZcnJX?=
- =?utf-8?B?NWxWZCtRYlJ0ZXFDeWFZTTltVms5RWJsS24xVlhHeE40YU9GS3k4ZHhsOXpr?=
- =?utf-8?B?TFhUYk1GbFQ5MkRiVjBjUEF6MHJnbnZ0UkM3ZTdGazh2SlR0U2NqaFhqSHQ0?=
- =?utf-8?B?RWZrM1Uza0lzUUdvY25NQlVFcTkyQWg2UnRnUGxXbzBFZ0hKbEcxalFnRlQ5?=
- =?utf-8?B?aUJGT0dxTW1BTDNYRGI0UDRwMVdwc05VNjdyNlc1UDV0MWhoVksybjQwcDRw?=
- =?utf-8?B?dy9Dbm52WXgrTk9PVERJZGhnTHRCS1gxbzlQSHZUZ1hHbmE4d2lNQnF6ZHRJ?=
- =?utf-8?B?Y216QmtuUkZMamlYWXNpTGdQcW93QzZuR1YyYzhBaHpvTkd3bS93YVZ5bmJM?=
- =?utf-8?B?eGRteTF5a1dheHhxSGxXQlMwdHVuZnR3NERsZEc0TlF2K2w4czVTYUVFWEhk?=
- =?utf-8?B?VlNEa2tCc2lRdlRNSUw2TkM1RlU4TlNyVFV5Sys3Q3pKanhjVEZUREtWQW1k?=
- =?utf-8?B?ZmdTNVY1VzRWc2VnWU1ybVdmVUdEQkNHRTg2cEdCZHZ1ZmJiekxPVklZcER1?=
- =?utf-8?B?ODhRZlRPc0xCbzF6ekV0WldMdVpFSGF4bEJhREtjM0dQcTZPSlE5UGhCYlBk?=
- =?utf-8?B?Y1JyZnhVM09QOEFxSXlKVkYxR2NNNUFBRmtVTjJlWXpyUkM0b01UenJxa1Jq?=
- =?utf-8?B?akxpcUtpTzhpMEd2Qy9tNkJHL2JzNHNVeUk1K2pvOGdVMmdnRUxscjA2M044?=
- =?utf-8?B?V2kzNGhIK0lQOXdjdU5razJUZS94NFZPTmhIdFBZRWwyRGVwMzRwMDI1MTlL?=
- =?utf-8?B?TXZHNi9LbjhUYUhLWnRhNGdyK3BIbVBwMlFvbE1CSVlBU1hNdW1pRU0xUGVO?=
- =?utf-8?B?eVRUUGRhN0ZOOGtMTjRFWFphQ0tqdHlGWTdQYVNsblVOcEdGOG14ZW1Qajh3?=
- =?utf-8?B?ZHlHZTMwOU11WnoxRmtOZmN3NmM4a2UvWENoTjJLQUgxOVM3a1VLYWZMSlVu?=
- =?utf-8?B?SnhVUmhMOSs1SmlNNzFzRHRHbW04cEFPcFZlOHUxTnhjdmRqbzhpMkVlUzZa?=
- =?utf-8?B?RURKczJjQXgwU2JRNWVCWGdycllWN2lkdHhzcy9aeUdrWkFTb242dFlveFpL?=
- =?utf-8?B?aVFZaGc0MjIwOEdCYU9SL2RSV01PWitLOE9UOEdKakhuaDVaU0sxZXB3OEQ5?=
- =?utf-8?B?WGZndll3U1JEVzVKVXltRHVQUnB5VEVUT1N1RURkNW1yVWQ3bVpHK3dXYzU2?=
- =?utf-8?B?V2Z6TU0zMHBkZUFmWGFvY3VWZjhWSkpQWjdRQVFqR3l1M0haQkpPd2RGV1VQ?=
- =?utf-8?Q?Z+kN2OICnw5kQc90w/lCa7zw+?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4f2906da-f00f-4c62-133c-08dacd15729b
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5712.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2022 05:42:03.0880
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: so+FNkx11ZBuV8chML64l/fyXHphBfxAiez/wh8V7Nl2lQBzBYBB4g47gHiyDeezbbLRYbY2pyREx401Ujy99w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5404
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Content-Language: en-US
+To:     Conor Dooley <conor.dooley@microchip.com>,
+        Anup Patel <anup@brainfault.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220727114302.302201-1-apatel@ventanamicro.com>
+ <20220727114302.302201-2-apatel@ventanamicro.com>
+ <372e37bf-ac90-c371-ad9e-b9c18e1cc059@linaro.org>
+ <CAK9=C2WjU+2cD7UZbja3TT++KCdRyWroT=50dw=fzi5mX30rcw@mail.gmail.com>
+ <7a0477a0-9f0f-87d6-4070-30321745f4cc@linaro.org>
+ <CAAhSdy20p5bkVanKGkGyArn94hWJhwncztnX7U+4WkN9-v7NsA@mail.gmail.com>
+ <Y3zjQXqEHsaoVVvf@wendy>
+From:   Samuel Holland <samuel@sholland.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: riscv: Add optional DT property
+ riscv,timer-can-wake-cpu
+In-Reply-To: <Y3zjQXqEHsaoVVvf@wendy>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/14/2022 4:22 PM, Sandipan Das wrote:
-> On 11/13/2022 4:03 AM, Liang Yan wrote:
->>
->> On 10/31/22 10:28, Sandipan Das wrote:
->>> Hi Liang, Peter,
->>>
->>> On 10/31/2022 6:29 PM, Peter Zijlstra wrote:
->>>> On Thu, Oct 27, 2022 at 09:35:11AM -0400, Liang Yan wrote:
->>>>> After disabling cpu.perfctr_core in qemu, I noticed that the guest kernel
->>>>> still loads the pmu driver while the cpuid does not have perfctl_core.
->>>>>
->>>>> The test is running on an EPYC Rome machine.
->>>>> root@ubuntu-s-4vcpu-8gb-amd-nyc1-01:~# lscpu | grep perfctl
->>>>> root@ubuntu-s-4vcpu-8gb-amd-nyc1-01:~#
->>>>> root@ubuntu-s-4vcpu-8gb-amd-nyc1-01:~# dmesg | grep PMU
->>>>> [    0.732097] Performance Events: AMD PMU driver.
->>>>>
->>>>> By further looking,
->>>>>
->>>>> ==> init_hw_perf_events
->>>>>      ==> amd_pmu_init
->>>>>          ==> amd_core_pmu_init
->>>>>              ==>
->>>>>                  if (!boot_cpu_has(X86_FEATURE_PERFCTR_CORE))
->>>>>             return 0;
->>>>>
->>>>> With returning 0, it will bypass amd_pmu_init and return 0 to
->>>>> init_hw_perf_events, and continue the initialization.
->>>>>
->>>>> I am not a perf expert and not sure if it is expected for AMD PMU,
->>>>> otherwise, it would be nice to return -ENODEV instead.
->>>>>
->>>>> New output after the change:
->>>>> root@ubuntu-s-4vcpu-8gb-amd-nyc1-01:~# dmesg | grep PMU
->>>>> [    0.531609] Performance Events: no PMU driver, software events only.
->>>>>
->>>>> Signed-off-by: Liang Yan <lyan@digtalocean.com>
->>>> Looks about right, Ravi?
->>>>
->>>>> ---
->>>>>   arch/x86/events/amd/core.c | 2 +-
->>>>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
->>>>> index 8b70237c33f7..34d3d2944020 100644
->>>>> --- a/arch/x86/events/amd/core.c
->>>>> +++ b/arch/x86/events/amd/core.c
->>>>> @@ -1335,7 +1335,7 @@ static int __init amd_core_pmu_init(void)
->>>>>       int i;
->>>>>         if (!boot_cpu_has(X86_FEATURE_PERFCTR_CORE))
->>>>> -        return 0;
->>>>> +        return -ENODEV;
->>>>>   
->>> There are four legacy counters that are always available even when PERFCTR_CORE
->>> is absent. This is why the code returns 0 here. I found this to be a bit confusing
->>> as well during PerfMonV2 development so I wrote the following patch but forgot to
->>> send it out.
->>
->>
->> Hi Sandipan,
->>
->> Thanks for the classification.
->> Do these legacy counters belong to the AMD PMU property from a VM perspective? I mean, if I want to disable PMU for an AMD vcpu for some reason, is it possible to disable perfctr_core and the four counters, or is this not logical since the four counters could not be disabled from the bare-metal level?
->> I asked because I saw 'pmu' could be disabled for Intel and ARM, but it seems not for AMD.
->>
-> 
-> From what I see, the four legacy counters are not tied to any processor
-> properties (e.g. CPUID bits). Disabling "perfctr-core" only brings the
-> number of supported core counters down to 4 from 6. So guests exhibit
-> the same behaviour as bare-metal where the legacy counters are used if
-> CPUID 0x80000001[ECX].PerfCtrExtCore is not set.
-> 
-> The "pmu" property only overrides guest CPUID. Hence it is not possible
-> to prevent the discovery of the legacy counters using that.
-> 
+Hi Conor,
 
-Following up on this:
-
-KVM has an "enable_pmu" parameter which when disabled can turn off guest PMC
-access completely.
-
-Here's how it works:
-
-Upon setting enable_pmu=0, the PMC MSR interceptions fail. The SVM code also
-takes care of clearing the PerfCtrExtCore bit for the guest CPUID (see
-svm_set_cpu_caps() in arch/x86/kvm/svm/svm.c).
-
-During PMU initialization, check_hw_exists() from arch/x86/events/core.c tests
-if all the required PMC MSRs are accessible by reading them. For a guest, this
-fails due to an exception and stops hardware PMU initialization. At this point,
-the guest kernel continues with just software events.
-
->> Also, could you please list the four legacy counters here?
->>
+On 11/22/22 08:57, Conor Dooley wrote:
+>> If we add a timer DT node now
+>> then we have to deal with compatibility for existing platforms.
 > 
-> The MSRs for the four legacy counters are:
->   0xc001000[0..3] known as PERF_LEGACY_CTL[0..3], alias of PERF_CTL[0..3]
->   0xc001000[4..7] known as PERF_LEGACY_CTR[0..3], alias of PERF_CTR[0..3]
+> In terms of what to encode in a DT, and given the spec never says that
+> the timer interrupt must arrive during suspend, we must assume, by
+> default, that no timer events arrive during suspend.
 > 
-> You can find more details in the Processor Programming Reference (PPR) that
-> is appropriate for the AMD processor that you are using. PPRs can be found
-> at: https://bugzilla.kernel.org/show_bug.cgi?id=206537
+> We have a bunch of existing platforms that may (do?) get timer events
+> during suspend, the opposite of the proposed default behaviour.
 > 
->>
->>
->>> diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
->>> index 262e39a85031..d3eb7b2f4dda 100644
->>> --- a/arch/x86/events/amd/core.c
->>> +++ b/arch/x86/events/amd/core.c
->>> @@ -1345,6 +1345,14 @@ static int __init amd_core_pmu_init(void)
->>>       u64 even_ctr_mask = 0ULL;
->>>       int i;
->>>   +    /*
->>> +     * All processors support four PMCs even when X86_FEATURE_PERFCTR_CORE
->>> +     * is unavailable. They are programmable via the PERF_LEGACY_CTLx and
->>> +     * PERF_LEGACY_CTRx registers which have the same address as that of
->>> +     * MSR_K7_EVNTSELx and MSR_K7_PERFCTRx. For Family 17h+, these are
->>> +     * legacy aliases of PERF_CTLx and PERF_CTRx respectively. Hence, not
->>> +     * returning -ENODEV here.
->>> +     */
->>>       if (!boot_cpu_has(X86_FEATURE_PERFCTR_CORE))
->>>           return 0;
->>>
->>>
->>> If this looks good to you, I will post it.
->>>
->>> - Sandipan
->>>
+> I'm trying to follow the line of reasoning but I fail to see how taking
+> either the property or node approach allows us to maintain behaviour for
+> exiting platforms that that do see timer events during suspend without
+> adding *something* to the DT. No matter what we add, we've got some sort
+> of backwards compatibility issue, right?
+
+In the absence of bugs/limitations in Linux timer code (like the ones
+you are seeing on PolarFire), the backwards compatibility issue with
+setting C3STOP by default is that non-retentive idle states will be
+ignored unless:
+ 1) the DT property is added (i.e. firmware upgrade), or
+ 2) some other timer driver is available.
+No other behavior should be affected.
+
+On the other hand, if C3STOP defaults to off, then the backwards
+compatibility issue concerns platforms that can currently boot Linux,
+but which cannot use cpuidle because they need the flag. If they were to
+upgrade their firmware, and Linux is provided a DTB that includes both
+idle states and the property, these platforms would unexpectedly fail to
+boot. (They would enter an idle state and never wake up.)
+
+Assuming no such platforms exist, then it would actually be better to
+default C3STOP to off.
+
+Now, this says nothing about how the property should be named -- we can
+set C3STOP based on the absence of a property, just as easily as we can
+clear C3STOP based on the presence of a property.
+
+> I noted the above:
 > 
+>> Since, there is no dedicated timer node, we use CPU compatible string
+>> for probing the per-CPU timer.
+> 
+> If we could rely on the cpu compatible why would we need to add a
+> dt-property anyway? Forgive my naivety here, but is the timer event in
+> suspend behaviour not a "core complex" level attribute rather than a
+> something that can be consistently determined by the cpu compatible?
+
+I do not support using either the CPU compatible (not specific enough)
+or the board compatible (too many to list, but still not specific
+enough). Consider that not all CPUs in a system may need this property.
+
+> Either way, we need to figure out why enabling C3STOP is causing other
+> timer issues even when we are not in some sort of sleep state & do
+> something about that - or figure out some different way to communicate
+> the behavioural differences.
+> I would expect timers to continue working "normally" with the flag set,
+> even if how they work is subtly different?
+
+Definitely agree here. My intention was not to affect anything other
+than cpuidle behavior.
+
+> On a D1, with the C3STOP "feature" flag set, and it's custom timer
+> implementation unused, how do timers behave?
+
+D1 is uniprocessor, so I build with CONFIG_SMP=n. In this case,
+CONFIG_GENERIC_CLOCKEVENTS_BROADCAST=n, and thus
+__tick_broadcast_oneshot_control() returns -EBUSY, forcing
+cpuidle_enter_state() to choose a retentive idle state.
+
+Regards,
+Samuel
 
