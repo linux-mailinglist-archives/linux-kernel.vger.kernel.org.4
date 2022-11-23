@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A875636E39
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 00:15:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF22E636E38
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 00:15:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229903AbiKWXOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 18:14:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43630 "EHLO
+        id S229927AbiKWXOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 18:14:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbiKWXOT (ORCPT
+        with ESMTP id S229797AbiKWXOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 18:14:19 -0500
+        Wed, 23 Nov 2022 18:14:20 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEC8D14D9
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 15:14:17 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11019D14E8
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 15:14:19 -0800 (PST)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669245255;
+        s=2020; t=1669245256;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/+ga5EsQ4Q0dD6QKcBL7AASWXoGeU5dLsOdcdIgzrhs=;
-        b=ENbn+NVeyH3goCHcBewID4TRhVV6TmCCFuuG2iQfD7h0paqLwG/rHRTVm1q9gCCJFpJTMa
-        XC3fJbUgQO2BVeUKwUGj9GTVtD+kJFSTqMyoy1XQSk5gjLSInHpVDfPvw5Ov35XK3Efs07
-        zhifff4+2qJBwOYPv/ciWdEXfB9Iw203sWEWg9MJ76MtDjfzINAoXuSXOa89Do2mohtUjI
-        RdtdklCZXjOMAZ/S9BhnIMAxE+Rm1hhqKGRnb8+rPnBb0F1TksbGO2WGtn3fh90srC5fP0
-        DkeAZjjbICwMpxJEpL4H/FvOu6bHKMJNjJ0aIQXQpL6Tx4NK06OFd3YIa2+m0g==
+        bh=0qJ3iGikvuTukQn/cCJfO+65/fD4hTu0WWCBxLF08iQ=;
+        b=qFG7KOKPIOGPVQw4I4QTVM52nnmpM91ysQ6T70Acjrw1gpl0mSL1hKuzjaYH3IyrBdHtv6
+        oh/j557mygD9WK7tfw/fKTKt1veJRrSPK/tfHkUVK2/aD1rCsP9TA24uV7U6CwgM+UnHK3
+        33M0kpa68PuW0Ut2XgbpCvlM5j5RRdPeszmPqkKCBPHHmvZTE/TT/ad9TN6LxRbxPV5DUv
+        WpwG0pluX/88uGy/c12JMEfAt+cQjzIfzZQ3Qg2oVIXdDCmxYEh75Xm/C23581Dg3PZEZw
+        Cc1NwxIkCOATcuq59S94MuFyyppOkXrb0C0tO/A08yqCqgTUkZ/Ci6ANn0QXGQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669245255;
+        s=2020e; t=1669245256;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/+ga5EsQ4Q0dD6QKcBL7AASWXoGeU5dLsOdcdIgzrhs=;
-        b=mTgAe5Nxh1q4mgK3PfLQ6P+S/ViwtZ4ERFiuk8l/2jxdxCU6/uzf7eMa7aa4MvbCPqnN4m
-        9o2HKk52WW56qzBA==
+        bh=0qJ3iGikvuTukQn/cCJfO+65/fD4hTu0WWCBxLF08iQ=;
+        b=SDLoP6aDtGO+Fh77Cy+vmar1/O+F8pe4MEZi8b2SuHvnnXV3AVCXOa3UDf8N3bIdogk61N
+        B3dJyH5e3wquaECg==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH printk v2 6/7] printk: Use an output buffer descriptor struct for emit
-Date:   Thu, 24 Nov 2022 00:19:59 +0106
-Message-Id: <20221123231400.614679-7-john.ogness@linutronix.de>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH printk v2 7/7] printk: Handle dropped message smarter
+Date:   Thu, 24 Nov 2022 00:20:00 +0106
+Message-Id: <20221123231400.614679-8-john.ogness@linutronix.de>
 In-Reply-To: <20221123231400.614679-1-john.ogness@linutronix.de>
 References: <20221123231400.614679-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -62,193 +61,195 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Thomas Gleixner <tglx@linutronix.de>
 
-To prepare for a new console infrastructure that is independent of
-the console BKL, wrap the output mode into a descriptor struct so
-the new infrastructure can share the emit code that dumps the
-ringbuffer record into the output text buffers.
+If a 'dropped message' is to be printed, move the record text to be
+directly appended to the 'dropped message' and let console->write()
+output it in one go.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
 ---
- include/linux/console.h |  15 ++++++
- kernel/printk/printk.c  | 107 ++++++++++++++++++++++++++++------------
- 2 files changed, 90 insertions(+), 32 deletions(-)
+ kernel/printk/printk.c | 125 +++++++++++++++++++++++++++--------------
+ 1 file changed, 82 insertions(+), 43 deletions(-)
 
-diff --git a/include/linux/console.h b/include/linux/console.h
-index 641c1ca7fb67..32614011a950 100644
---- a/include/linux/console.h
-+++ b/include/linux/console.h
-@@ -188,6 +188,21 @@ struct console_buffers {
- 	char	text[CONSOLE_LOG_MAX];
- };
- 
-+/**
-+ * struct console_message - console output buffer descriptor
-+ * @cbufs:		Pointer to console buffers storing the record text
-+ * @outbuf:		Pointer to the text buffer to be used for writing out
-+ *			to the device
-+ * @outbuf_len:		Length of text at @outbuf
-+ * @is_extmsg:		True if this is an extended format message
-+ */
-+struct console_message {
-+	struct console_buffers	*cbufs;
-+	char			*outbuf;
-+	unsigned int		outbuf_len;
-+	bool			is_extmsg;
-+};
-+
- /**
-  * struct console - The console descriptor structure
-  * @name:		The name of the console driver
 diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index 750559171e30..dd1d8599ce5a 100644
+index dd1d8599ce5a..c4b148a7d114 100644
 --- a/kernel/printk/printk.c
 +++ b/kernel/printk/printk.c
-@@ -2741,11 +2741,76 @@ static void __console_unlock(void)
+@@ -2007,31 +2007,6 @@ static int console_trylock_spinning(void)
+ 	return 1;
+ }
+ 
+-#if DROPPED_TEXT_MAX > CONSOLE_EXT_LOG_MAX
+-#error "DROPPED_TEXT_MAX too large for console_buffers->ext_text"
+-#endif
+-
+-/*
+- * Call the specified console driver, asking it to write out the specified
+- * text and length. If @dropped_text is non-NULL and any records have been
+- * dropped, a dropped message will be written out first.
+- */
+-static void call_console_driver(struct console *con, const char *text, size_t len,
+-				char *dropped_text)
+-{
+-	size_t dropped_len;
+-
+-	if (con->dropped && dropped_text) {
+-		dropped_len = snprintf(dropped_text, DROPPED_TEXT_MAX,
+-				       "** %lu printk messages dropped **\n",
+-				       con->dropped);
+-		con->dropped = 0;
+-		con->write(con, dropped_text, dropped_len);
+-	}
+-
+-	con->write(con, text, len);
+-}
+-
+ /*
+  * Recursion is tracked separately on each CPU. If NMIs are supported, an
+  * additional NMI context per CPU is also separately tracked. Until per-CPU
+@@ -2412,10 +2387,6 @@ static ssize_t msg_print_ext_body(char *buf, size_t size,
+ 				  struct dev_printk_info *dev_info) { return 0; }
+ static void console_lock_spinning_enable(void) { }
+ static int console_lock_spinning_disable_and_check(int cookie) { return 0; }
+-static void call_console_driver(struct console *con, const char *text, size_t len,
+-				char *dropped_text)
+-{
+-}
+ static bool suppress_message_printing(int level) { return false; }
+ static bool pr_flush(int timeout_ms, bool reset_on_progress) { return true; }
+ static bool __pr_flush(struct console *con, int timeout_ms, bool reset_on_progress) { return true; }
+@@ -2741,6 +2712,60 @@ static void __console_unlock(void)
  	up_console_sem();
  }
  
-+/**
-+ * console_get_next_message - Fill the output buffer with the next record
-+ * @con:	The console to print on
-+ * @cmsg:	Pointer to the output buffer descriptor
-+ *
-+ * Return: False if there is no pending record in the ringbuffer.
-+ *	   True if there is a pending record in the ringbuffer.
-+ *
-+ * When the return value is true, then the caller must check
-+ * @cmsg->outbuf. If not NULL it points to the first character to write
-+ * to the device and @cmsg->outbuf_len contains the length of the message.
-+ * If it is NULL then the record will be skipped.
++/*
++ * A maximum dropped message together with a maximum regular message
++ * must be able to fit within console_buffers->ext_text.
 + */
-+static bool console_get_next_message(struct console *con, struct console_message *cmsg)
++#if DROPPED_TEXT_MAX > (CONSOLE_EXT_LOG_MAX - CONSOLE_LOG_MAX)
++#error "DROPPED_TEXT_MAX too large for console_buffers->ext_text"
++#endif
++
++/**
++ * msg_print_dropped - Prepend a "dropped message" if required
++ * @desc:	Pointer to the output descriptor
++ * @dropped:	The number of dropped messages to report
++ *
++ * Inserts the "dropped message" into the output buffer if @dropped is
++ * not 0 and the regular format is requested. Extended format does not
++ * need this message because it prints the sequence numbers.
++ *
++ * In regular format, the extended message buffer is not in use. So
++ * string-print the dropped message there and move the record text to be
++ * appended to the dropped message. The extended message buffer is much
++ * larger and can accommodate both messages.
++ *
++ * In case a dropped message is needed, this returns with @desc->outbuf
++ * and @desc->len updated. The caller is responsible for tracking and
++ * resetting the dropped count. If no dropped message is required then
++ * @desc is not modified.
++ */
++static void msg_print_dropped(struct console_message *cmsg, unsigned long dropped)
 +{
 +	struct console_buffers *cbufs = cmsg->cbufs;
-+	static int panic_console_dropped;
-+	struct printk_info info;
-+	struct printk_record r;
-+	size_t write_text_size;
-+	char *write_text;
++	char *ext_text = &cbufs->ext_text[0];
 +	size_t len;
 +
-+	cmsg->outbuf = NULL;
-+	cmsg->outbuf_len = 0;
++	if (!dropped || cmsg->is_extmsg)
++		return;
 +
-+	prb_rec_init_rd(&r, &info, &cbufs->text[0], sizeof(cbufs->text));
++	if (WARN_ON_ONCE(cmsg->outbuf != &cbufs->text[0]))
++		return;
 +
-+	if (!prb_read_valid(prb, con->seq, &r))
-+		return false;
-+
-+	if (con->seq != r.info->seq) {
-+		con->dropped += r.info->seq - con->seq;
-+		con->seq = r.info->seq;
-+		if (panic_in_progress() && panic_console_dropped++ > 10) {
-+			suppress_panic_printk = 1;
-+			pr_warn_once("Too many dropped messages. Suppress messages on non-panic CPUs to prevent livelock.\n");
-+		}
-+	}
++	/* Print it into ext_text, which is unused. */
++	len = snprintf(ext_text, DROPPED_TEXT_MAX,
++		       "** %lu printk messages dropped **\n", dropped);
 +
 +	/*
-+	 * Skip record that has level above the console loglevel.
-+	 * Return true so the caller knows a record exists and
-+	 * leave cmsg->outbuf NULL so the caller knows the record
-+	 * is being skipped.
++	 * Append the record text to the dropped message so that it
++	 * goes out with one write.
 +	 */
-+	if (suppress_message_printing(r.info->level))
-+		return true;
++	memcpy(ext_text + len, &cbufs->text[0], cmsg->outbuf_len);
 +
-+	if (cmsg->is_extmsg) {
-+		write_text = &cbufs->ext_text[0];
-+		write_text_size = sizeof(cbufs->ext_text);
-+		len = info_print_ext_header(write_text, write_text_size, r.info);
-+		len += msg_print_ext_body(write_text + len, write_text_size - len,
-+					  &r.text_buf[0], r.info->text_len, &r.info->dev_info);
-+	} else {
-+		write_text = &cbufs->text[0];
-+		len = record_print_text(&r, console_msg_format & MSG_FORMAT_SYSLOG, printk_time);
-+	}
-+
-+	cmsg->outbuf = write_text;
-+	cmsg->outbuf_len = len;
-+	return true;
++	/* Update the output buffer descriptor. */
++	cmsg->outbuf = ext_text;
++	cmsg->outbuf_len += len;
 +}
 +
- /*
-  * Print one record for the given console. The record printed is whatever
-  * record is the next available record for the given console.
-  *
-- * @cbufs is the console buffers used to string-print the formatted messages.
-+ * @cbufs is the console buffers to use for string-printing the message.
-  *
-  * @cookie is the cookie from entering the SRCU read-side critical section.
-  *
-@@ -2761,52 +2826,30 @@ static void __console_unlock(void)
- static bool console_emit_next_record(struct console *con, struct console_buffers *cbufs,
- 				     int cookie, bool *handover)
- {
--	static int panic_console_dropped;
--	struct printk_info info;
--	struct printk_record r;
--	size_t write_text_size;
-+	struct console_message cmsg = {
-+		.cbufs		= cbufs,
-+		.is_extmsg	= console_srcu_read_flags(con) & CON_EXTENDED,
-+	};
+ /**
+  * console_get_next_message - Fill the output buffer with the next record
+  * @con:	The console to print on
+@@ -2796,13 +2821,32 @@ static bool console_get_next_message(struct console *con, struct console_message
+ 		len = info_print_ext_header(write_text, write_text_size, r.info);
+ 		len += msg_print_ext_body(write_text + len, write_text_size - len,
+ 					  &r.text_buf[0], r.info->text_len, &r.info->dev_info);
++
++		cmsg->outbuf = write_text;
++		cmsg->outbuf_len = len;
++
++		/*
++		 * Extended consoles do not print "dropped messages"
++		 * as that can be seen from the sequence number.
++		 */
+ 	} else {
+-		write_text = &cbufs->text[0];
+ 		len = record_print_text(&r, console_msg_format & MSG_FORMAT_SYSLOG, printk_time);
++
++		cmsg->outbuf = &cbufs->text[0];
++		cmsg->outbuf_len = len;
++
++		if (con->dropped) {
++			/*
++			 * It is expected that @outbuf and @outbuf_len are
++			 * already set. They will be updated after inserting
++			 * the "dropped message".
++			 */
++			msg_print_dropped(cmsg, con->dropped);
++
++			con->dropped = 0;
++		}
+ 	}
+ 
+-	cmsg->outbuf = write_text;
+-	cmsg->outbuf_len = len;
+ 	return true;
+ }
+ 
+@@ -2831,7 +2875,6 @@ static bool console_emit_next_record(struct console *con, struct console_buffers
+ 		.is_extmsg	= console_srcu_read_flags(con) & CON_EXTENDED,
+ 	};
  	unsigned long flags;
- 	char *dropped_text;
--	char *write_text;
--	size_t len;
--
--	prb_rec_init_rd(&r, &info, &cbufs->text[0], sizeof(cbufs->text));
+-	char *dropped_text;
  
  	*handover = false;
  
--	if (!prb_read_valid(prb, con->seq, &r))
-+	if (!console_get_next_message(con, &cmsg))
- 		return false;
- 
--	if (con->seq != r.info->seq) {
--		con->dropped += r.info->seq - con->seq;
--		con->seq = r.info->seq;
--		if (panic_in_progress() && panic_console_dropped++ > 10) {
--			suppress_panic_printk = 1;
--			pr_warn_once("Too many dropped messages. Suppress messages on non-panic CPUs to prevent livelock.\n");
--		}
--	}
--
--	/* Skip record that has level above the console loglevel. */
--	if (suppress_message_printing(r.info->level)) {
-+	if (!cmsg.outbuf) {
-+		/* Skipping this record. */
- 		con->seq++;
+@@ -2844,14 +2887,6 @@ static bool console_emit_next_record(struct console *con, struct console_buffers
  		goto skip;
  	}
  
--	if (console_srcu_read_flags(con) & CON_EXTENDED) {
-+	if (cmsg.is_extmsg) {
- 		/* Extended consoles do not print "dropped messages". */
- 		dropped_text = NULL;
+-	if (cmsg.is_extmsg) {
+-		/* Extended consoles do not print "dropped messages". */
+-		dropped_text = NULL;
+-	} else {
+-		/* @ext_text is unused. Use it for "dropped messages". */
+-		dropped_text = &cbufs->ext_text[0];
+-	}
 -
--		write_text = &cbufs->ext_text[0];
--		write_text_size = sizeof(cbufs->ext_text);
--		len = info_print_ext_header(write_text, write_text_size, r.info);
--		len += msg_print_ext_body(write_text + len, write_text_size - len,
--					  &r.text_buf[0], r.info->text_len, &r.info->dev_info);
- 	} else {
- 		/* @ext_text is unused. Use it for "dropped messages". */
- 		dropped_text = &cbufs->ext_text[0];
--
--		write_text = &cbufs->text[0];
--		len = record_print_text(&r, console_msg_format & MSG_FORMAT_SYSLOG, printk_time);
- 	}
- 
  	/*
-@@ -2823,7 +2866,7 @@ static bool console_emit_next_record(struct console *con, struct console_buffers
+ 	 * While actively printing out messages, if another printk()
+ 	 * were to occur on another CPU, it may wait for this one to
+@@ -2865,8 +2900,12 @@ static bool console_emit_next_record(struct console *con, struct console_buffers
+ 	printk_safe_enter_irqsave(flags);
  	console_lock_spinning_enable();
  
- 	stop_critical_timings();	/* don't trace print latency */
--	call_console_driver(con, write_text, len, dropped_text);
-+	call_console_driver(con, cmsg.outbuf, cmsg.outbuf_len, dropped_text);
+-	stop_critical_timings();	/* don't trace print latency */
+-	call_console_driver(con, cmsg.outbuf, cmsg.outbuf_len, dropped_text);
++	/* Do not trace print latency. */
++	stop_critical_timings();
++
++	/* Write everything out to the hardware. */
++	con->write(con, cmsg.outbuf, cmsg.outbuf_len);
++
  	start_critical_timings();
  
  	con->seq++;
