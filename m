@@ -2,184 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0CB26363B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F736363B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:31:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238052AbiKWPa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 10:30:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36428 "EHLO
+        id S238850AbiKWPbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 10:31:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238816AbiKWPaA (ORCPT
+        with ESMTP id S238886AbiKWPam (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 10:30:00 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB6C7665;
-        Wed, 23 Nov 2022 07:29:06 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 2E2E91F88D;
-        Wed, 23 Nov 2022 15:29:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1669217345; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QpW5/43SDhPsYac/DGPcgp+HRWanDglkFBDiPk9Aubo=;
-        b=tBTY1GG47MoYjwDFR9Z6UCoz0Q9N1YiEtgSK3Jhp5RK/IrTM0/iV+4GUilsJqWHKIUCOqi
-        LdIk6WlIgiI1fvXFB+ER5X/rT9XOUztfQ7YWC18bPqLzD2ia8/FGl2fXNbL1KiqN6pcsSs
-        X7frWVineEqa1zfnsb4c2X6kk4vM7XE=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 138F02C142;
-        Wed, 23 Nov 2022 15:29:05 +0000 (UTC)
-Date:   Wed, 23 Nov 2022 16:29:04 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Petr Pavlu <petr.pavlu@suse.com>
-Cc:     mcgrof@kernel.org, prarit@redhat.com, david@redhat.com,
-        mwilck@suse.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] module: Don't wait for GOING modules
-Message-ID: <Y348QNmO2AHh3eNr@alley>
-References: <20221123131226.24359-1-petr.pavlu@suse.com>
+        Wed, 23 Nov 2022 10:30:42 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B434856541;
+        Wed, 23 Nov 2022 07:30:04 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso1700966wme.5;
+        Wed, 23 Nov 2022 07:30:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bpOfjD7j/Rp783J2m0+A9BpqEQItESEc2TO4AhrSmVA=;
+        b=hM3SOVHGwLlws8xrfb0FFcF0Y+5QOgaPSyLYc1uwSz+yG+KoBbD2wWmJPwydUYq49f
+         24CZlfTDaWEDi7/+kZX6JTqwPmxZia1M/FoCNnFEYwL6DlcCl60aydfSJ3/jPifz+Wvw
+         oi3ra9WuGDYP8p4grhmiRWgs5p/h8QE5Ua8KIrDcONx4k2UqC7MsO+HBnmVXhwNCDU8G
+         BBQC1mbrTOe8aq3LESltSYvHyW6paL6LEdulpCkV+oqub0yZs9ifcsNc1hlBiKma5fr3
+         v8y8ooj2GhljboAEfygTHATK6lOwUL+Cqbg7WmkqIbuM2KAGXplaK1dynh/kI/LQGEPO
+         tENQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bpOfjD7j/Rp783J2m0+A9BpqEQItESEc2TO4AhrSmVA=;
+        b=Vz/O12Nvo/a/SYXBYze31KiN5QKLcDfI9JqsjphicoBxmpp8cHuArwz0Ad4S3wHtKy
+         CJS8Km5I5xCwg6Rl3y9w0IFpI5P22YXmvnL6LNxM0KbqmCPZGFsEMqadaWhcuPwEzKuC
+         9E4v2+pHJgV54g14YhTsXenV7OQdJNrh/nZgZXNey23+rGnJ3JLaLz2I1/uGP/WNkuOt
+         URPhOx/G76p3l2/h2DN247UsHpYHyCTduHHL94KF1qm5XZqXvDVL72vYc9Yz4bjS3+Oe
+         a2/aSkPGLDOQkuTF3QSjk1RjBBmPuVij3dYCfgiL6o9jwtzXNwJRoKW3B0vOIFBHfkTM
+         zsZQ==
+X-Gm-Message-State: ANoB5pn7Qr1U0D4N2l3VQtXTjEVHX3UstR2EhuOPFoGqrdBM6IkAWi1T
+        c2LB/86imX4pIlLUREqmNlI=
+X-Google-Smtp-Source: AA0mqf48NKm6cCxxcl+5VTmNaZVQjZE0+MXp1r2BS9HXWJ5keVIsFYwuf1MT28TfKun1cdl98l7NHQ==
+X-Received: by 2002:a1c:2743:0:b0:3c6:e471:7400 with SMTP id n64-20020a1c2743000000b003c6e4717400mr6927100wmn.98.1669217403138;
+        Wed, 23 Nov 2022 07:30:03 -0800 (PST)
+Received: from [192.168.1.131] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id k21-20020a05600c1c9500b003cfa3a12660sm8469311wms.1.2022.11.23.07.30.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Nov 2022 07:30:01 -0800 (PST)
+Message-ID: <2238a980-7e04-1615-d836-c385a41628a9@gmail.com>
+Date:   Wed, 23 Nov 2022 16:30:00 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221123131226.24359-1-petr.pavlu@suse.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 4/5] arm64: dts: mt8186: Add dsi node
+Content-Language: en-US
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, hsinyi@chromium.org
+References: <20221123135531.23221-1-allen-kh.cheng@mediatek.com>
+ <20221123135531.23221-5-allen-kh.cheng@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20221123135531.23221-5-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-11-23 14:12:26, Petr Pavlu wrote:
-> During a system boot, it can happen that the kernel receives a burst of
-> requests to insert the same module but loading it eventually fails
-> during its init call. For instance, udev can make a request to insert
-> a frequency module for each individual CPU when another frequency module
-> is already loaded which causes the init function of the new module to
-> return an error.
+
+
+On 23/11/2022 14:55, Allen-KH Cheng wrote:
+> Add dsi node for mt8186 SoC.
 > 
-> Since commit 6e6de3dee51a ("kernel/module.c: Only return -EEXIST for
-> modules that have finished loading"), the kernel waits for modules in
-> MODULE_STATE_GOING state to finish unloading before making another
-> attempt to load the same module.
-> 
-> This creates unnecessary work in the described scenario and delays the
-> boot. In the worst case, it can prevent udev from loading drivers for
-> other devices and might cause timeouts of services waiting on them and
-> subsequently a failed boot.
-> 
-> This patch attempts a different solution for the problem 6e6de3dee51a
-> was trying to solve. Rather than waiting for the unloading to complete,
-> it returns a different error code (-EBUSY) for modules in the GOING
-> state. This should avoid the error situation that was described in
-> 6e6de3dee51a (user space attempting to load a dependent module because
-> the -EEXIST error code would suggest to user space that the first module
-> had been loaded successfully), while avoiding the delay situation too.
->
-> Fixes: 6e6de3dee51a ("kernel/module.c: Only return -EEXIST for modules that have finished loading")
-> Co-developed-by: Martin Wilck <mwilck@suse.com>
-> Signed-off-by: Martin Wilck <mwilck@suse.com>
-> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
-> Cc: stable@vger.kernel.org
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+
+Applied, thanks!
+
 > ---
+>   arch/arm64/boot/dts/mediatek/mt8186.dtsi | 19 +++++++++++++++++++
+>   1 file changed, 19 insertions(+)
 > 
-> Notes:
->     Sending this alternative patch per the discussion in
->     https://lore.kernel.org/linux-modules/20220919123233.8538-1-petr.pavlu@suse.com/.
->     The initial version comes internally from Martin, hence the co-developed tag.
-> 
->  kernel/module/main.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index d02d39c7174e..b7e08d1edc27 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -2386,7 +2386,8 @@ static bool finished_loading(const char *name)
->  	sched_annotate_sleep();
->  	mutex_lock(&module_mutex);
->  	mod = find_module_all(name, strlen(name), true);
-> -	ret = !mod || mod->state == MODULE_STATE_LIVE;
-> +	ret = !mod || mod->state == MODULE_STATE_LIVE
-> +		|| mod->state == MODULE_STATE_GOING;
->  	mutex_unlock(&module_mutex);
->  
->  	return ret;
-> @@ -2566,7 +2567,8 @@ static int add_unformed_module(struct module *mod)
->  	mutex_lock(&module_mutex);
->  	old = find_module_all(mod->name, strlen(mod->name), true);
->  	if (old != NULL) {
-> -		if (old->state != MODULE_STATE_LIVE) {
-> +		if (old->state == MODULE_STATE_COMING
-> +		    || old->state == MODULE_STATE_UNFORMED) {
->  			/* Wait in case it fails to load. */
->  			mutex_unlock(&module_mutex);
->  			err = wait_event_interruptible(module_wq,
-> @@ -2575,7 +2577,7 @@ static int add_unformed_module(struct module *mod)
->  				goto out_unlocked;
->  			goto again;
->  		}
-> -		err = -EEXIST;
-> +		err = old->state != MODULE_STATE_LIVE ? -EBUSY : -EEXIST;
-
-Hmm, this is not much reliable. It helps only when we manage to read
-the old module state before it is gone.
-
-A better solution would be to always return when there was a parallel
-load. The older patch from Petr Pavlu was more precise because it
-stored result of the exact parallel load. The below code is easier
-and might be good enough.
-
-static int add_unformed_module(struct module *mod)
-{
-	int err;
-	struct module *old;
-
-	mod->state = MODULE_STATE_UNFORMED;
-
-	mutex_lock(&module_mutex);
-	old = find_module_all(mod->name, strlen(mod->name), true);
-	if (old != NULL) {
-		if (old->state == MODULE_STATE_COMING
-		    || old->state == MODULE_STATE_UNFORMED) {
-			/* Wait for the result of the parallel load. */
-			mutex_unlock(&module_mutex);
-			err = wait_event_interruptible(module_wq,
-					       finished_loading(mod->name));
-			if (err)
-				goto out_unlocked;
-		}
-
-		/* The module might have gone in the meantime. */
-		mutex_lock(&module_mutex);
-		old = find_module_all(mod->name, strlen(mod->name), true);
-
-		/*
-		 * We are here only when the same module was being loaded.
-		 * Do not try to load it again right now. It prevents
-		 * long delays caused by serialized module load failures.
-		 * It might happen when more devices of the same type trigger
-		 * load of a particular module.
-		 */
-		if (old && old->state == MODULE_STATE_LIVE)
-			err = -EXIST;
-		else
-			err = -EBUSY;
-		goto out;
-	}
-	mod_update_bounds(mod);
-	list_add_rcu(&mod->list, &modules);
-	mod_tree_insert(mod);
-	err = 0;
-
-out:
-	mutex_unlock(&module_mutex);
-out_unlocked:
-	return err;
-}
-
-Best Regards,
-Petr
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8186.dtsi b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+> index c0481f0dc527..4a2f7ad3c6f0 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+> @@ -979,6 +979,25 @@
+>   			power-domains = <&spm MT8186_POWER_DOMAIN_DIS>;
+>   		};
+>   
+> +		dsi0: dsi@14013000 {
+> +			compatible = "mediatek,mt8186-dsi";
+> +			reg = <0 0x14013000 0 0x1000>;
+> +			clocks = <&mmsys CLK_MM_DSI0>,
+> +				 <&mmsys CLK_MM_DSI0_DSI_CK_DOMAIN>,
+> +				 <&mipi_tx0>;
+> +			clock-names = "engine", "digital", "hs";
+> +			interrupts = <GIC_SPI 311 IRQ_TYPE_LEVEL_HIGH 0>;
+> +			power-domains = <&spm MT8186_POWER_DOMAIN_DIS>;
+> +			resets = <&mmsys MT8186_MMSYS_SW0_RST_B_DISP_DSI0>;
+> +			phys = <&mipi_tx0>;
+> +			phy-names = "dphy";
+> +			status = "disabled";
+> +
+> +			port {
+> +				dsi_out: endpoint { };
+> +			};
+> +		};
+> +
+>   		iommu_mm: iommu@14016000 {
+>   			compatible = "mediatek,mt8186-iommu-mm";
+>   			reg = <0 0x14016000 0 0x1000>;
