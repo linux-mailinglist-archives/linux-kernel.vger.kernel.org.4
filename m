@@ -2,205 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5FDB635A57
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 11:41:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E4ED6359C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 11:27:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235839AbiKWKky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 05:40:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
+        id S236931AbiKWKZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 05:25:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237333AbiKWKkT (ORCPT
+        with ESMTP id S236778AbiKWKYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 05:40:19 -0500
-X-Greylist: delayed 907 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 23 Nov 2022 02:24:21 PST
-Received: from wedge010.net.lu.se (wedge010.net.lu.se [130.235.56.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A7D14F9F6
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 02:24:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; d=control.lth.se; s=edge;
-        c=relaxed/relaxed; t=1669198148; h=from:subject:to:date:message-id;
-        bh=LOG11IkVuLSppmJk7o7Daf3tskCPuBJsXjz2PdvUY4c=;
-        b=TH8BWLxRu1pBSr134K+7ELySd7uMzKb42vpZc7568ZF1eV296wF6wWE3+TBBzYYuPb50KfF2TPc
-        0wGXAAFW5sTdKpYf2o0ab5NrYjdZYOvjETb+oDgJRy+FLjiiynwuyVfYiixd61r+BCbeCudIF5sK4
-        j/NnB7pHx56RKtFiStXEs3JwDJleZrMc4+I4+0ybdXoAYiDWRSCGhOLt2KV5bT6aWhS+y4YQcyJGi
-        SsvFesOF/Su6/Bf+wyD6zyx/CqKVkQaELiKZW9JcvwLkiVcA/Kw0KotRN+h7Y5Ql+C0xX56QNjim0
-        /jiOarMwQb24VzrmBzIsT9JE3hO6fJQfpmsA==
-Received: from wexc007.uw.lu.se (130.235.59.251) by mail.lu.se
- (130.235.56.200) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P256) id 15.1.2507.13; Wed, 23
- Nov 2022 11:09:07 +0100
-Received: from [130.235.83.196] (130.235.139.100) by wexc007.uw.lu.se
- (130.235.59.251) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P521) id 15.1.2507.13; Wed, 23
- Nov 2022 11:08:47 +0100
-Message-ID: <0abaa41e-79e1-3c0c-6d1b-47d4e21f2296@control.lth.se>
-Date:   Wed, 23 Nov 2022 11:08:42 +0100
+        Wed, 23 Nov 2022 05:24:09 -0500
+Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.133.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08137252B2
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 02:09:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxlinear.com;
+        s=selector; t=1669198141;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=0BlMP3vE6NPYkowJ5CYY9pKK4uobIqguXEfH7GISyWM=;
+        b=hNwJu+7aHf2/tACy7j/lzZlRrPCnHatghGbvEiGM02gXLpYq9Gp401xeyw+YRo8KeMIRFs
+        lIMv51qhGUiA5olsfI55o3JRZ0IYhPQ7YDPVcfEUnvLEqbNbiXUTlQjApimqJgcD3dN4w8
+        mf+Bcdg/s36lOprj43lqqtwTY9hbeFw5Us8CyT+Z8e/T7UHmM7Pv7tZ40w2t9nM0A+PeTq
+        5hP1Ekn4MAShxBG4XKM/PoL91Z2EwI95FftWIt4YolcfUxFgfXn4PHNpNq+UBHrBlMgucH
+        AzYZM7vz4fuAOgs7czwWBlTV4ANBu8Yjib03s5EXjLWKbKJu76VU9vzxhKtHuQ==
+Received: from mail.maxlinear.com (174-47-1-84.static.ctl.one [174.47.1.84])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ us-mta-634-GlAu2hBEM3-xoo23vO7U3g-1; Wed, 23 Nov 2022 05:09:00 -0500
+X-MC-Unique: GlAu2hBEM3-xoo23vO7U3g-1
+Received: from sgsxdev001.isng.phoenix.local (10.226.81.111) by
+ mail.maxlinear.com (10.23.38.119) with Microsoft SMTP Server id 15.1.2375.24;
+ Wed, 23 Nov 2022 02:08:51 -0800
+From:   Rahul Tanwar <rtanwar@maxlinear.com>
+To:     Rahul Tanwar <rtanwar@maxlinear.com>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Borislav Petkov" <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, <linux-lgm-soc@maxlinear.com>,
+        <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v4 0/4] x86/of: Add support for interrupt mode config for x86 OF systems
+Date:   Wed, 23 Nov 2022 18:08:46 +0800
+Message-ID: <20221123100850.22969-1-rtanwar@maxlinear.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: Kernel 6.0.5 breaks virtual machines that boot from nfs mounted
- qcow2 images
-Content-Language: en-US
-From:   Anders Blomdell <anders.blomdell@control.lth.se>
-To:     <linux-nfs@vger.kernel.org>, Chuck Lever <chuck.lever@oracle.com>,
-        "Jeff Layton" <jlayton@kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Anna Schumaker <anna@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Benjamin Coddington <bcodding@redhat.com>
-References: <65115206-ec17-443e-8495-91661a2fd9be@control.lth.se>
-In-Reply-To: <65115206-ec17-443e-8495-91661a2fd9be@control.lth.se>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [130.235.139.100]
-X-ClientProxiedBy: wexc008.uw.lu.se (130.235.59.252) To wexc007.uw.lu.se
- (130.235.59.251)
-X-CrossPremisesHeadersFilteredBySendConnector: wexc007.uw.lu.se
-X-OrganizationHeadersPreserved: wexc007.uw.lu.se
-Received-SPF: Pass (wedge010.net.lu.se: domain of
- anders.blomdell@control.lth.se designates 130.235.59.251 as permitted sender)
- receiver=wedge010.net.lu.se; client-ip=130.235.59.251; helo=wexc007.uw.lu.se;
-X-CrossPremisesHeadersFilteredBySendConnector: wedge010.net.lu.se
-X-OrganizationHeadersPreserved: wedge010.net.lu.se
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: maxlinear.com
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Our problems turned out to be a fallout of Al Viros's splice rework, where nfsd reads with non-zero offsets and not ending
-on a page boundary failed to remap the last page. I belive that this is a decent fix for that problem (tested on v6.1-rc6,
-6.0.7 and 6.0.9)
+[RESEND due a missing Cc in previous send]
 
----- a/fs/nfsd/vfs.c
-+++ b/fs/nfsd/vfs.c
-@@ -873,7 +873,7 @@ nfsd_splice_actor(struct pipe_inode_info *pipe, struct pipe_buffer *buf,
-         unsigned offset = buf->offset;
-  
-         page += offset / PAGE_SIZE;
--       for (int i = sd->len; i > 0; i -= PAGE_SIZE)
-+       for (int i = sd->len + offset % PAGE_SIZE; i > 0; i -= PAGE_SIZE)
-                 svc_rqst_replace_page(rqstp, page++);
-         if (rqstp->rq_res.page_len == 0)        // first call
-                 rqstp->rq_res.page_base = offset % PAGE_SIZE;
+Hi All,
 
-On 2022-11-11 20:35, Anders Blomdell wrote:
-> The text below is an excerpt of  https://bugzilla.redhat.com/show_bug.cgi?id=2142132
-> 
-> Description of problem:
-> 
-> Virtual machines that boots from nfs mounted qcow2 images fails to boot when
-> the nfs server runs kernel 6.0.5
-> 
-> The erros are often
-> 
->    Booting from Hard Disk...
->    GRUB loading.
->    Welcome to GRUB!
-> 
->    error ../../grub-core/kern/dl.c:ELF header smaller than expected.
->    Entering rescue mode...
->    grub rescue>
-> 
-> Version-Release number of selected component (if applicable):
-> 
->    qemu-6.2.0-16.fc36.x86_64
->    kernel-6.0.5-200.fc36.x86_64
-> 
-> How reproducible:
-> 
->    always
-> 
-> Steps to Reproduce:
-> 1. Run a virtual machine with boot disk qcow2 formatted mounted from an nfs server
->     running kernel-6.0.5-200.fc36.x86_64
-> 
-> Actual results:
-> 
-> Machine fails to boot
-> 
-> Expected results:
-> 
-> Clean boot
-> 
-> Additional info:
-> 
-> Git repo is linux-stable
-> 
-> A git bisect lands me at 310d9d5a5009a93377200b98daa2d84aa2bd8160
-> 
-> So commit 746de1f86fcd works
-> 
-> But cherry picking f0f6b614f83d 310d9d5a5009 bfbfb6182ad1 on top of 746de1f86fcd is broken.
-> 
-> The bfbfb6182ad1 is picked due to the commit comment
-> 
-> commit bfbfb6182ad1d7d184b16f25165faad879147f79
-> Author: Al Viro <viro@zeniv.linux.org.uk>
-> Date:   Sat Sep 10 22:14:02 2022 +0100
-> 
->      nfsd_splice_actor(): handle compound pages
->      pipe_buffer might refer to a compound page (and contain more than a PAGE_SIZE
->      worth of data).  Theoretically it had been possible since way back, but
->      nfsd_splice_actor() hadn't run into that until copy_page_to_iter() change.
->      Fortunately, the only thing that changes for compound pages is that we
->      need to stuff each relevant subpage in and convert the offset into offset
->      in the first subpage.
->      Acked-by: Chuck Lever <chuck.lever@oracle.com>
->      Tested-by: Benjamin Coddington <bcodding@redhat.com>
->      Fixes: f0f6b614f83d "copy_page_to_iter(): don't split high-order page in case of ITER_PIPE"
->      Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-> 
-> The bisect I did:
-> 
-> git bisect start
-> # status: waiting for both good and bad commits
-> # bad: [3829606fc5dffeccdf80aebeed3aa75255257f35] Linux 6.0.5
-> git bisect bad 3829606fc5dffeccdf80aebeed3aa75255257f35
-> # status: waiting for good commit(s), bad commit known
-> # good: [0b0649b1d27a768d37f23acf4d88e6e90cca7856] Linux 5.19.4
-> git bisect good 0b0649b1d27a768d37f23acf4d88e6e90cca7856
-> # good: [0b0649b1d27a768d37f23acf4d88e6e90cca7856] Linux 5.19.4
-> git bisect good 0b0649b1d27a768d37f23acf4d88e6e90cca7856
-> # good: [3d7cb6b04c3f3115719235cc6866b10326de34cd] Linux 5.19
-> git bisect good 3d7cb6b04c3f3115719235cc6866b10326de34cd
-> # good: [7c5c3a6177fa9646884114fc7f2e970b0bc50dc9] Merge tag 'for-linus' of git://git.kernel.org/pub/scm/virt/kvm/kvm
-> git bisect good 7c5c3a6177fa9646884114fc7f2e970b0bc50dc9
-> # bad: [eeac7730418563152b0e3172bce9bac4ff6d6bc4] perf pmu-events: Avoid passing pmu_events_map
-> git bisect bad eeac7730418563152b0e3172bce9bac4ff6d6bc4
-> # good: [f20c95b46b8fa3ad34b3ea2e134337f88591468b] Merge tag 'tpmdd-next-v5.20' of git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd
-> git bisect good f20c95b46b8fa3ad34b3ea2e134337f88591468b
-> # good: [c993e07be023acdeec8e84e2e0743c52adb5fc94] Merge tag 'dma-mapping-5.20-2022-08-06' of git://git.infradead.org/users/hch/dma-mapping
-> git bisect good c993e07be023acdeec8e84e2e0743c52adb5fc94
-> # good: [e2ebff9c57fe4eb104ce4768f6ebcccf76bef849] vfs: Check the truncate maximum size in inode_newsize_ok()
-> git bisect good e2ebff9c57fe4eb104ce4768f6ebcccf76bef849
-> # good: [c8a684e2e110376c58f0bfa30fb3855d1e319670] Merge tag 'leds-5.20-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds
-> git bisect good c8a684e2e110376c58f0bfa30fb3855d1e319670
-> # good: [c72687614b3627b3ea55d8d169e31cac70f56f3e] Merge tag 'rpmsg-v5.20' of git://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux
-> git bisect good c72687614b3627b3ea55d8d169e31cac70f56f3e
-> # bad: [f30adc0d332fdfe5315cb98bd6a7ff0d5cf2aa38] Merge tag 'pull-work.iov_iter-rebased' of git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs
-> git bisect bad f30adc0d332fdfe5315cb98bd6a7ff0d5cf2aa38
-> # good: [60349fd52ecbb8b14545ff25aba2f2e230c4d618] remoteproc: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-> git bisect good 60349fd52ecbb8b14545ff25aba2f2e230c4d618
-> # good: [8520008417c581c4c22e39597f92b9814ae34c31] fold __pipe_get_pages() into pipe_get_pages()
-> git bisect good 8520008417c581c4c22e39597f92b9814ae34c31
-> # good: [746de1f86fcd33464acac047f111eea877f2f7a0] pipe_get_pages(): switch to append_pipe()
-> git bisect good 746de1f86fcd33464acac047f111eea877f2f7a0
-> # good: [5d5d353bed32dc3ea52e2619e0d1c60b17133b91] Merge tag 'rproc-v5.20' of git://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux
-> git bisect good 5d5d353bed32dc3ea52e2619e0d1c60b17133b91
-> # bad: [f0f6b614f83dbae99d283b7b12ab5dd2e04df979] copy_page_to_iter(): don't split high-order page in case of ITER_PIPE
-> git bisect bad f0f6b614f83dbae99d283b7b12ab5dd2e04df979
-> # bad: [310d9d5a5009a93377200b98daa2d84aa2bd8160] expand those iov_iter_advance()...
-> git bisect bad 310d9d5a5009a93377200b98daa2d84aa2bd8160
-> # first bad commit: [310d9d5a5009a93377200b98daa2d84aa2bd8160] expand those iov_iter_advance()...
-> 
-> 
+This patch series mainly adds a boot time interrupt delivery mode
+configuration option for OF based x86 platforms. Presently,
+boot time interrupt delivery mode is hardcoded to legacy PIC mode
+with no option to configure it to virtual wire mode. This patch
+series aims to extend it by introducing a new optional boolean
+property for lapic devicetree node which can be used to configure
+it to virtual wire mode where applicable. Please find below detailed
+rationale behind it.
 
--- 
-Anders Blomdell                  Email: anders.blomdell@control.lth.se
-Department of Automatic Control
-Lund University                  Phone:    +46 46 222 4625
-P.O. Box 118
-SE-221 00 Lund, Sweden
+Rationale:
+
+References [1], [2] & [6]
+
+For SMP systems, Intel defines three (logically four) interrupt modes
+during boot/init time while BIOS/bootloader boots & switches to linux
+kernel.
+
+  1. PIC mode - Legacy 8259 PIC interrupt controller.
+  2. Virtual wire mode via Local APIC - uses local APIC as virtual wire
+  3. Virtual wire mode via I/O APIC - uses I/O APIC as virtual wire
+  4. Symmetric I/O mode - final one used by linux for SMP systems.=20
+
+BIOS/bootloaders are supposed to boot in either #1 or #2 or #3 and then
+switch to #4 in linux for SMP systems.
+
+For our platform, we use #2.
+
+Detection of which interrupt mode the system is booting in is made by using
+below global variable in apic.c
+
+int pic_mode __ro_after_init;=20
+
+Here pic_mode =3D 1 means #1 (PIC mode) above.
+And pic_mode =3D 0 means #2 or #3 (basically virtual wire mode via apic).
+
+And apic.c while doing setup_local_APIC() uses below code [3]:
+
+        value =3D apic_read(APIC_LVT0) & APIC_LVT_MASKED;
+        if (!cpu && (pic_mode || !value || skip_ioapic_setup)) {
+                value =3D APIC_DM_EXTINT;
+                apic_printk(APIC_VERBOSE, "enabled ExtINT on CPU#%d\n", cpu=
+);
+        } else {
+                value =3D APIC_DM_EXTINT | APIC_LVT_MASKED;
+                apic_printk(APIC_VERBOSE, "masked ExtINT on CPU#%d\n", cpu)=
+;
+        }
+        apic_write(APIC_LVT0, value);
+
+What i understand from above is that if at this point of time, as long as
+it is cpu0 & pic_mode=3D1, it will set delivery mode to ExtINT (causes the
+processor to respond to the interrupt as if the interrupt originated in an
+externally connected (8259A-compatible) interrupt controller) and enables/
+unmask the interrupts. This causes kernel boot crash for platforms which
+does not support 8259 compatible external PIC.
+
+pic_mode is presently set/populated/initialized at only two places:
+ 1. In  mpparse.c [4]
+ 2. In devicetree.c [7]
+
+For #1 MPPARSE Kconfig definition is as below:
+
+=09config X86_MPPARSE
+        =09bool "Enable MPS table" if ACPI
+        =09default y
+        =09depends on X86_LOCAL_APIC
+        =09help
+          =09For old smp systems that do not have proper acpi support. Newe=
+r systems
+          =09(esp with 64bit cpus) with acpi support, MADT and DSDT will ov=
+erride it
+
+As seen above, if ACPI is not enabled, then mpparse by default is always
+enabled. Presently, there is no way to disable MPPARSE (if ACPI is not
+enabled). This to me appears to be a bug which needs fixing. As per
+theory, MPPARSE was to support MPS spec [1] as a temporary solution to
+support SMP systems until a final ACPI standard was added. But now if ACPI
+is not enabled, it will rely on MPPARSE driver to read MP floating pointer
+structure's IMCRP Bit 7 of MP feature info byte 2 [5] to figure out if it
+supports PIC mode or virtual wire mode and initialize pic_mode variable
+accordingly. If ACPI is enabled, the ACPI code overrides it by using the
+MADT table spec'ed in ACPI spec [2].=20
+
+For #2 devicetree.c presently hardcodes pic_mode =3D 1 (PIC Mode). There is
+no support to configure virtual wire mode via devicetree path for OF based
+systems.
+
+Now we have a platform which is OF based & does not use legacy 8259 PIC
+interrupt controller. Non ACPI compliant as well as non MPPARSE compliant.
+
+For such platforms, it appears to me that hardcoding pic_mode =3D 1 (PIC Mo=
+de)
+and giving no other choice to choose virtual wire mode is a lacking feature=
+.
+
+Just like mpparse relies on IMCRP bit 7 of MP feature info byte2 [5] to
+select pic_mode to PIC mode or virtual wire mode. arch/x86/kernel/devicetre=
+e.c
+should also provide some similar configurability to choose interrupt
+delivery mode & not hardcode it to PIC mode.
+
+This patch is to add above mentioned interrupt mode configurability in x86/=
+of
+controlled via a new optional bool property.
+
+Please let me know if you find any mistake in above understanding or if you
+have a alternative better suggestion to solve it or if you find anything od=
+d
+here in our platform/system. TIA.
+
+The patch is baselined on below git tree (linux-v6.1.0-rc6):
+git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+
+[1] https://pdos.csail.mit.edu/6.828/2008/readings/ia32/MPspec.pdf
+[2] https://uefi.org/sites/default/files/resources/ACPI_6_3_final_Jan30.pdf
+[3] https://elixir.bootlin.com/linux/v6.1-rc5/source/arch/x86/kernel/apic/a=
+pic.c#L1691
+[4] https://elixir.bootlin.com/linux/v6.1-rc5/source/arch/x86/kernel/mppars=
+e.c#L517
+[5] https://www.manualslib.com/manual/77733/Intel-Multiprocessor.html?page=
+=3D40#manual
+[6] https://www.intel.com/content/www/us/en/developer/articles/technical/in=
+tel-sdm.html
+[7] https://elixir.bootlin.com/linux/v6.1-rc5/source/arch/x86/kernel/device=
+tree.c#L170
+
+v4:
+- Address review concerns from Andy Shevchenko
+  * Update maintainers in binding files.
+  * Place URL in YAML schema properly as reference.
+  * Remove some unnecessary comments from YAML description.
+  * Remove fixes tag & not treat it as a bug. Treat it as new feature addit=
+ion instead.
+  * Use proper prefixes for bindings file (dt-bindings: x86: ioapic:)
+  * Add Reviewed-by tag from Andy for patch 3/4.
+
+v3:
+- Address review concerns from Andy Shevchenko
+  * Reshuffle patch series changes to make it more logical.
+  * Patch 1 just converts existing intel,ce4100-ioapic.txt into
+    YAML schema and separates out ioapic & lapic.
+  * Patch 2 adds new optional property for lapic.
+  * Patch 3 replaces older printk(KERN_LVL) to newer pr_lvl()
+  * Patch 4 adds code changes in devicetree.c to support newly
+    added property.
+- Fix 'make DT_CHECKER_FLAGS=3D-m dt_binding_check' errors reported
+  by Rob Herring's bot.
+
+v2:
+- Address review concern from Andy - rename property name to make
+  it a bit more positive & self explanatory.
+- Found that the bindings document for these HW's (APIC) are a bit
+  off/obsolete and still in text format. Created new YAML schemas
+  one for each - lapic & ioapic. Updated these schemas with latest
+  info and add in new optional property details in the updated
+  schema for lapic. Delete/let go of the text binding doc.
+- CC devicetree@vger.kernel.org as these changes appear to be
+  mainly targeted for devicetree maintainers review & approval.
+- Increase CCed list to include all possible people who touched
+  and were involved this part of code/feature addition.
+
+v1:
+- Initial draft
+
+
+Rahul Tanwar (4):
+  dt-bindings: x86: apic: Convert Intel's APIC bindings to YAML schema
+  dt-bindings: x86: apic: Introduce new optional bool property for lapic
+  x86/of: Replace printk(KERN_LVL) with pr_lvl()
+  x86/of: Add support for boot time interrupt delivery mode
+    configuration
+
+ .../intel,ce4100-ioapic.txt                   | 26 --------
+ .../intel,ce4100-ioapic.yaml                  | 62 ++++++++++++++++++
+ .../intel,ce4100-lapic.yaml                   | 63 +++++++++++++++++++
+ arch/x86/kernel/devicetree.c                  | 13 +++-
+ 4 files changed, 135 insertions(+), 29 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/=
+intel,ce4100-ioapic.txt
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/=
+intel,ce4100-ioapic.yaml
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/=
+intel,ce4100-lapic.yaml
+
+--=20
+2.17.1
+
