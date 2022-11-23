@@ -2,93 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAAD66364C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:53:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 776C96364DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:54:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236142AbiKWPxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 10:53:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38264 "EHLO
+        id S237481AbiKWPyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 10:54:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238772AbiKWPwz (ORCPT
+        with ESMTP id S237463AbiKWPxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 10:52:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB32457B76;
-        Wed, 23 Nov 2022 07:52:50 -0800 (PST)
+        Wed, 23 Nov 2022 10:53:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77ACB14D2C
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:53:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 57703B82172;
-        Wed, 23 Nov 2022 15:52:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DFB3C433D6;
-        Wed, 23 Nov 2022 15:52:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669218768;
-        bh=/DumSgjbm3+bFjW/YII5HB+37hZffmS6RIQzxFus23A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Axk59HaPRU6B2o8/sQ2xV/J3QDnuJbllXINFmP+zTkfGNyl9/NsBA856568zy/Zy0
-         ziibqVHor7E2pImZW09H3fsO0rmk5lAkiY8/xImxvEPWF1JugZkU42k7XZp/1gGlxF
-         YjrYDdmJl0DMzZ+GHnRpj/dpCWN4eBZtN+hiAE0Q=
-Date:   Wed, 23 Nov 2022 16:52:45 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Maximilian Luz <luzmaximilian@gmail.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        Wolfram Sang <wsa@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        Jilin Yuan <yuanjilin@cdjrlc.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Won Chung <wonchung@google.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-i3c@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH 3/5] driver core: make struct device_type.uevent() take a
- const *
-Message-ID: <Y35BzXYg8/WGqf6V@kroah.com>
-References: <20221123122523.1332370-1-gregkh@linuxfoundation.org>
- <20221123122523.1332370-3-gregkh@linuxfoundation.org>
- <711d5275-7e80-c00d-0cdc-0f3d52175361@gmail.com>
- <Y34hgIW8p1RlQTBB@smile.fi.intel.com>
- <97be39ed-3cea-d55a-caa6-c2652baef399@gmail.com>
- <Y34zyzdbRUdyOSkA@casper.infradead.org>
- <Y34+V2bCDdqujBDk@kroah.com>
- <b93a9fcd-0d7b-14fd-1018-bba35f961a27@gmail.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 23A31B82172
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 15:53:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23CCBC433D6;
+        Wed, 23 Nov 2022 15:53:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669218797;
+        bh=Cf1pPy9spjKZfNQ4bVr0kU8uO6RvN+2GFsVuHB/+4NE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=DANwlapDRmV9P/Zf2TbvK6mWFw8iU7tqXH0y/2TNLyqCOiYtAbAlC1GsPYWqt+sug
+         s9Az3JA1R6oSJkC8T/2AkQOv5XiOlUJcALcjQcnmM+/xhjyKo5D/TvWbkJM5Zhgujg
+         GQQxYunySFphu8xd5U1BbwUvXqh/1LIVTb4Q0so4wrzH8HsMijDSyOgnhf5r3lqWiG
+         lbr4WzjIRjG+mTEvPV5rylZ3+Ku+oayekjFEEttDtBu1k9Jtuo7ngDeTyc6CdEU7oP
+         ApmbChbjsIh6TtP7DBbp4lvEIBzYtVjFqYkEx7LzxGShrODJ72WMtun8qt5+1PxJDS
+         DLVkduDB4usMQ==
+Date:   Wed, 23 Nov 2022 17:53:13 +0200
+From:   Oded Gabbay <ogabbay@kernel.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [git pull] habanalabs pull request for kernel 6.2
+Message-ID: <20221123155313.GA545312@ogabbay-vm-u20.habana-labs.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b93a9fcd-0d7b-14fd-1018-bba35f961a27@gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -98,108 +50,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 04:48:41PM +0100, Maximilian Luz wrote:
-> On 11/23/22 16:37, Greg Kroah-Hartman wrote:
-> > On Wed, Nov 23, 2022 at 02:52:59PM +0000, Matthew Wilcox wrote:
-> > > On Wed, Nov 23, 2022 at 02:59:00PM +0100, Maximilian Luz wrote:
-> > > > On 11/23/22 14:34, Andy Shevchenko wrote:
-> > > > > On Wed, Nov 23, 2022 at 02:14:31PM +0100, Maximilian Luz wrote:
-> > > > > > On 11/23/22 13:25, Greg Kroah-Hartman wrote:
-> > > > > > > The uevent() callback in struct device_type should not be modifying the
-> > > > > > > device that is passed into it, so mark it as a const * and propagate the
-> > > > > > > function signature changes out into all relevant subsystems that use
-> > > > > > > this callback.
-> > > > > 
-> > > > > [...]
-> > > > > 
-> > > > > > > -static inline struct ssam_device *to_ssam_device(struct device *d)
-> > > > > > > +static inline struct ssam_device *to_ssam_device(const struct device *d)
-> > > > > > >     {
-> > > > > > >     	return container_of(d, struct ssam_device, dev);
-> > > > > > >     }
-> > > > > > 
-> > > > > > I am slightly conflicted about this change as that now more or less
-> > > > > > implicitly drops the const. So I'm wondering if it wouldn't be better to
-> > > > > > either create a function specifically for const pointers or to just
-> > > > > > open-code it in the instance above.
-> > > > > > 
-> > > > > > I guess we could also convert this to a macro. Then at least there
-> > > > > > wouldn't be an explicit and potentially misleading const-conversion
-> > > > > > indicated in the function signature.
-> > > > > 
-> > > > > This is an intermediate step as far as I know since moving container_of to
-> > > > > recognize const is a bit noisy right now. I guess you can find a discussion
-> > > > > on the topic between Greg and Sakari.
-> > > > 
-> > > > Thanks! I assume you are referring to the following?
-> > > > 
-> > > > 	https://lore.kernel.org/lkml/4218173bd72b4f1899d4c41a8e251f0d@AcuMS.aculab.com/T/
-> > > > 
-> > > > As far as I can tell this is only a warning in documentation, not
-> > > > compile time (which would probably be impossible?).
-> > > > 
-> > > > As I've said I'd be fine with converting the function to a macro (and
-> > > > preferably adding a similar warning like the one proposed in that
-> > > > thread). The point that irks me up is just that, as proposed, the
-> > > > function signature would now advertise a conversion that should never be
-> > > > happening.
-> > > > 
-> > > > Having two separate functions would create a compile-time guarantee, so
-> > > > I'd prefer that, but I can understand if that might be considered too
-> > > > noisy in code. Or if there is a push to make container_of() emit a
-> > > > compile-time warning I'd also be perfectly happy with converting it to a
-> > > > macro now as that'd alleviate the need for functions in the future.
-> > > 
-> > > Can't we do:
-> > > 
-> > > static inline const struct ssam_device *to_ssam_device(const struct device *d)
-> > > {
-> > > 	return container_of(d, const struct ssam_device, dev);
-> > > }
-> > > 
-> > 
-> > You could, if you can always handle a const pointer coming out of this
-> > function, but I don't think you can.
-> > 
-> > What you might want to do instead, and I'll be glad to do it for all of
-> > the functions like this I change, is to do what we have for struct
-> > device now:
-> > 
-> > static inline struct device *__kobj_to_dev(struct kobject *kobj)
-> > {
-> >          return container_of(kobj, struct device, kobj);
-> > }
-> > 
-> > static inline const struct device *__kobj_to_dev_const(const struct kobject *kobj)
-> > {
-> >          return container_of(kobj, const struct device, kobj);
-> > }
-> > 
-> > /*
-> >   * container_of() will happily take a const * and spit back a non-const * as it
-> >   * is just doing pointer math.  But we want to be a bit more careful in the
-> >   * driver code, so manually force any const * of a kobject to also be a const *
-> >   * to a device.
-> >   */
-> > #define kobj_to_dev(kobj)                                       \
-> >          _Generic((kobj),                                        \
-> >                   const struct kobject *: __kobj_to_dev_const,   \
-> >                   struct kobject *: __kobj_to_dev)(kobj)
-> > 
-> > 
-> > Want me to do the same thing here as well?
-> 
-> That looks great! Thanks!
-> 
-> I would very much prefer that.
+Hi Greg,
 
-Ok, will respin this patch as at least 2 individual patches, one that
-does the change to to_ssam_device() and the next that does the bus-wide
-changes.
+This is habanalabs pull request for the merge window of kernel 6.2.
 
-I'll review the other container_of() users in this patch as well to see
-if they can be converted as well.
+There isn't any fancy stuff to talk about. There are some minor features and
+enhancements, but most of the commits are multiple bug fixes, refactors, etc.
 
-thanks,
+Full details are in the tag.
 
-greg k-h
+Thanks,
+Oded
+
+The following changes since commit 210a671cc30429c7178a332b1feb5ebc2709dcd6:
+
+  Merge 6.1-rc6 into char-misc-next (2022-11-21 10:05:34 +0100)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git tags/misc-habanalabs-next-2022-11-23
+
+for you to fetch changes up to 19a17a9fb486b2961dbd7f3fff0d79a144c9a3b6:
+
+  habanalabs: fix VA range calculation (2022-11-23 16:54:10 +0200)
+
+----------------------------------------------------------------
+This tag contains habanalabs driver changes for v6.2:
+
+- New feature of graceful hard-reset. Instead of immediately killing the
+  user-process when a command submission times out, we wait a bit and give
+  the user-process notification and let it try to close things gracefully,
+  with the ability to retrieve debug information.
+
+- Enhance the EventFD mechanism. Add new events such as access to illegal
+  address (RAZWI), page fault, device unavailable. In addition, change the
+  event workqueue to be handled in a single-threaded workqueue.
+
+- Allow the control device to work during reset of the ASIC, to enable
+  monitoring applications to continue getting the data.
+
+- Add handling for Gaudi2 with PCI revision 2.
+
+- Reduce severity of prints due to power/thermal events.
+
+- Change how we use the h/w to perform memory scrubbing in Gaudi2.
+
+- Multiple bug fixes, refactors and renames.
+
+----------------------------------------------------------------
+Bharat Jauhari (1):
+      habanalabs: use lower_32_bits()
+
+Dafna Hirschfeld (2):
+      habanalabs: replace 'pf' to 'prefetch'
+      habanalabs: add RMWREG32_SHIFTED to set a val within a mask
+
+Dani Liberman (11):
+      habanalabs: refactor razwi event notification
+      habanalabs: add page fault info uapi
+      habanalabs: handle HBM MMU when capturing page fault data
+      habanalabs/gaudi2: capture RAZWI information
+      habanalabs/gaudi2: capture page fault data
+      habanalabs: fix user mappings calculation in case of page fault
+      habanalabs/gaudi: add razwi notify event
+      habanalabs: use single threaded WQ for event handling
+      habanalabs/gaudi: add page fault notify event
+      habanalabs/gaudi2: add razwi notify event
+      habanalabs/gaudi2: add page fault notify event
+
+Dilip Puri (1):
+      habanalabs/gaudi2: unsecure CBU_EARLY_BRESP registers
+
+Koby Elbaz (1):
+      habanalabs/gaudi2: remove privileged MME clock configuration
+
+Marco Pagani (2):
+      habanalabs: added return value check for hl_fw_dynamic_send_clear_cmd()
+      habanalabs/gaudi2: added memset for the cq_size register
+
+Oded Gabbay (3):
+      habanalabs: Use simplified API for p2p dist calc
+      habanalabs: check schedule_hard_reset correctly
+      habanalabs: extend process wait timeout in device fine
+
+Ofir Bitton (7):
+      habanalabs: allow control device open during reset
+      habanalabs: add warning print upon a PCI error
+      habanalabs: remove redundant gaudi2_sec asic type
+      habanalabs/gaudi2: add PCI revision 2 support
+      habanalabs/gaudi2: implement fp32 not supported event
+      habanalabs/gaudi2: classify power/thermal events as info
+      habanalabs: fail driver load if EEPROM errors detected
+
+Ohad Sharabi (5):
+      habanalabs: fix using freed pointer
+      habanalabs: allow setting HBM BAR to other regions
+      habanalabs: avoid divide by zero in device utilization
+      habanalabs: skip events info ioctl if not supported
+      habanalabs: fix VA range calculation
+
+Tal Cohen (3):
+      habanalabs/gaudi2: add device unavailable notification
+      habanalabs: verify no zero event is sent
+      habanalabs: no consecutive err when user context is enabled
+
+Tomer Tayar (22):
+      habanalabs/gaudi2: fix module ID for RAZWI handling
+      habanalabs: skip idle status check if reset on device release
+      habanalabs: allow unregistering eventfd when device non-operational
+      habanalabs: move reset workqueue to be under hl_device
+      habanalabs/gaudi2: remove configurations to access the MSI-X doorbell
+      habanalabs: add support for graceful hard reset
+      habanalabs: add an option to control watchdog timeout via debugfs
+      habanalabs/gaudi: use graceful hard reset for F/W events
+      habanalabs/gaudi2: use graceful hard reset for F/W events
+      habanalabs: use graceful hard reset for CS timeouts
+      habanalabs: fix PCIe access to SRAM via debugfs
+      habanalabs: fix print for out-of-sync and pkt-failure events
+      habanalabs/gaudi: fix print for firmware-alive event
+      habanalabs/gaudi2: don't enable entries in the MSIX_GW table
+      habanalabs/gaudi2: return to reset upon SM SEI BRESP error
+      habanalabs: reset device if still in use when released
+      habanalabs: increase the size of busy engines mask
+      habanalabs: fix rc when new CPUCP opcodes are not supported
+      habanalabs: print context refcount value if hard reset fails
+      habanalabs: don't put context in hl_encaps_handle_do_release_sob()
+      habanalabs: clear non-released encapsulated signals
+      habanalabs: make print of engines idle mask more readable
+
+Yang Yingliang (1):
+      habanalabs: fix return value check in hl_fw_get_sec_attest_data()
+
+farah kassabri (4):
+      habanalabs: zero ts registration buff when allocated
+      habanalabs: fix firmware descriptor copy operation
+      habanalabs/gaudi2: remove redundant firmware version check
+      habanalabs/gaudi2: change memory scrub mechanism
+
+ .../ABI/testing/debugfs-driver-habanalabs          |   7 +
+ .../misc/habanalabs/common/command_submission.c    |  62 +-
+ drivers/misc/habanalabs/common/context.c           |  54 +-
+ drivers/misc/habanalabs/common/debugfs.c           |   5 +
+ drivers/misc/habanalabs/common/device.c            | 452 ++++++++++++---
+ drivers/misc/habanalabs/common/firmware_if.c       |  54 +-
+ drivers/misc/habanalabs/common/habanalabs.h        | 127 ++--
+ drivers/misc/habanalabs/common/habanalabs_drv.c    |  42 +-
+ drivers/misc/habanalabs/common/habanalabs_ioctl.c  |  70 ++-
+ drivers/misc/habanalabs/common/memory.c            |  16 +-
+ drivers/misc/habanalabs/common/mmu/mmu.c           |  24 +-
+ drivers/misc/habanalabs/common/sysfs.c             |   4 +-
+ drivers/misc/habanalabs/gaudi/gaudi.c              | 124 ++--
+ drivers/misc/habanalabs/gaudi2/gaudi2.c            | 643 ++++++++++++++-------
+ drivers/misc/habanalabs/gaudi2/gaudi2P.h           |   2 -
+ drivers/misc/habanalabs/gaudi2/gaudi2_security.c   |   1 +
+ drivers/misc/habanalabs/goya/goya.c                |   4 +-
+ .../include/gaudi2/gaudi2_async_events.h           |   1 +
+ .../include/gaudi2/gaudi2_async_ids_map_extended.h |   4 +-
+ .../habanalabs/include/hw_ip/pci/pci_general.h     |   7 +
+ include/uapi/misc/habanalabs.h                     |  93 ++-
+ 21 files changed, 1267 insertions(+), 529 deletions(-)
