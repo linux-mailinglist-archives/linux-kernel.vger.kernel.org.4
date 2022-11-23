@@ -2,132 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF5DF63649B
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:50:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EF8C63649C
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:50:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238489AbiKWPuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 10:50:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39068 "EHLO
+        id S238756AbiKWPuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 10:50:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238916AbiKWPtk (ORCPT
+        with ESMTP id S238987AbiKWPtm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 10:49:40 -0500
-Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A99FC68A0
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:49:17 -0800 (PST)
-Received: by mail-vk1-xa2d.google.com with SMTP id b81so8928551vkf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:49:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Jivc45dTXvLm1YRXWATZxQPSyvJMgufwFq3xGWuqv3M=;
-        b=HhGGX95JXkc8p/cmrwB5sqv/RmAgSIe6Y1pIc6pBWtss4VPKEWpXS5pYXhmooshnuM
-         rcTc1CheQ5j1WJBjffdRCu8xo7NIx/+fg90KRf35VV2y45j14D8dcDy9Nxy6HSeMqpnI
-         vw8Bj8w5QAnm7jbG345EfuyFaELsS/TqhxRxtD7+Inj3LuI1wNwYCp4rsksYzFpniw3O
-         kYwVPAfVhwbbGP/Wpll/QJK5hsohJ88WWafxcQRsVQthMkA6/oKK4qQK3FtOsJtZWK6V
-         AN1bYOHyr0OnYpouDiUWTbMLFtpsksrU//fePasFTt1AHx/qfO9FLNoN8US8gPDAORAQ
-         /5HA==
+        Wed, 23 Nov 2022 10:49:42 -0500
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1ECCC6956;
+        Wed, 23 Nov 2022 07:49:19 -0800 (PST)
+Received: by mail-qk1-f169.google.com with SMTP id z1so12682631qkl.9;
+        Wed, 23 Nov 2022 07:49:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Jivc45dTXvLm1YRXWATZxQPSyvJMgufwFq3xGWuqv3M=;
-        b=GOWr47yr3LhlqWH7msmfGPiJfXJKHSNNuDvumUCLSp86W5bEXv8OY39EKbGKRsTEEA
-         36UR0oo7wgscZmEwnOFRTrwJiMIxJGtl5UCnsBOUwiEXgkcronywJMnhqX2Xt3t3txRd
-         NaHlOE5goJyrQQvNrP1ex7OXUIUwU9Vm3LyGJDyBkiUJ+ZlgCKMP66IhvABA6vTdZVCx
-         NDDwI8+0Jg87L7+4lnSrOvFXs4nwkBRCKnrIzgWGxzP5YHNgBP3fIzZ1kt6SyeW87Nw6
-         ZsPDdp+/ghwiKGl3d3nXNb9XHUtsKUj8jLBxA6xxbRGmTj7WtkmWDQi5vPSNq799PDYF
-         0eww==
-X-Gm-Message-State: ANoB5pkRAlRVO+pW9eAidaSoDd115cXjYsfAjpUUBx5V9ngal33xvhat
-        eAaA1Cwsw4DL93zCVUVW47uRCmhg9xWSV0Ju6XnlBA==
-X-Google-Smtp-Source: AA0mqf4OTkJmqH0nX+bnMDHlcETQbnZux4XMI/LgC9yc/Mif5H9e9AKyW0o+PZg050EBQBNhpu0Aadhu7D6IO6KKtHE=
-X-Received: by 2002:a1f:54c1:0:b0:3b7:65cc:8ebc with SMTP id
- i184-20020a1f54c1000000b003b765cc8ebcmr10691674vkb.5.1669218556496; Wed, 23
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q2hwfJ3OGi9bNFK3Bxx9uQ9VsJMFOKPpsAznNmxcF54=;
+        b=6DI2d28p4IB35GeQ9uhN3VYIQBXuzjNstFv4icEgtFsmcXZN1NRpaoZoyU2IQiCaaH
+         J5D1xFR1MjoV/mQOBHnJy9aiDQ6LkUECQdYTFZ9e9NYz2qoVoaZ6hwIbLh3fQnWEScoE
+         Wkp3M8Jt6eHiZjtznYJUv5A69KjtWGWRSepC1mzcxzJaGDaRJjU6t5UIoLDZCwDrCHK5
+         zAmOsoypFh/zR2mU+bwZgMKmTPINnzyWhuYqi+tfVN0lawfwzSXaX/4p0B5gZigRyXa9
+         tCnztaU2ebMPJhReipeOGr1zC4vucW7cmP0rQqJ+jNbvrI4cOcyEc3SM0k6HQFaboA+/
+         vCuw==
+X-Gm-Message-State: ANoB5pnC5/Az/TFoIlPWtaVKpGGntD3gu3+OdCuTRGPqi1ddO6O9x3gt
+        N9zkjTWGvbM/ni4p0nn2c+92/GDXZ/WIEg==
+X-Google-Smtp-Source: AA0mqf5/s1nu9KxeNK5kWrTGT6fnqZq6W3t8ZCgJikRoanX5vFzYP0wdD/w224AijyROyzU3NDswgQ==
+X-Received: by 2002:a37:8a45:0:b0:6f9:fd7a:f300 with SMTP id m66-20020a378a45000000b006f9fd7af300mr9618927qkd.257.1669218558707;
+        Wed, 23 Nov 2022 07:49:18 -0800 (PST)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id cb7-20020a05622a1f8700b0039cc0fbdb61sm10002545qtb.53.2022.11.23.07.49.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Nov 2022 07:49:17 -0800 (PST)
+Received: by mail-yb1-f177.google.com with SMTP id z192so21330486yba.0;
+        Wed, 23 Nov 2022 07:49:17 -0800 (PST)
+X-Received: by 2002:a25:8249:0:b0:6dd:b521:a8f2 with SMTP id
+ d9-20020a258249000000b006ddb521a8f2mr7980121ybn.380.1669218556787; Wed, 23
  Nov 2022 07:49:16 -0800 (PST)
 MIME-Version: 1.0
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-12-uwe@kleine-koenig.org> <CAMRc=Mfjcs-BBFhr8O1O956f4jdvAzY9ofZs1fme8+Ki=T60JA@mail.gmail.com>
-In-Reply-To: <CAMRc=Mfjcs-BBFhr8O1O956f4jdvAzY9ofZs1fme8+Ki=T60JA@mail.gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
+References: <a50fa46075fb760d8409ff6ea2232b2ddb7a102b.1669046259.git.geert+renesas@glider.be>
+ <20221123100831.GE39395@tom-ThinkPad-T14s-Gen-2i> <CAMuHMdUW8iKFjDj4fPtWfPvyQ1sjGcAy1Kz5j-osz9F4pdA47Q@mail.gmail.com>
+ <Y344AdRANmS3STsd@kadam>
+In-Reply-To: <Y344AdRANmS3STsd@kadam>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
 Date:   Wed, 23 Nov 2022 16:49:05 +0100
-Message-ID: <CAMRc=MfwSabay==DcyONc4AVgOPETsA5x3wuLX05Ndvfwiv4bg@mail.gmail.com>
-Subject: Re: [PATCH 011/606] gpio: max732x: Convert to i2c's .probe_new()
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <uwe@kleine-koenig.org>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-gpio@vger.kernel.org,
+X-Gmail-Original-Message-ID: <CAMuHMdVRZhBECgABtTxe00gM7_EqBaX5auZhmjUfmcLx4zoetQ@mail.gmail.com>
+Message-ID: <CAMuHMdVRZhBECgABtTxe00gM7_EqBaX5auZhmjUfmcLx4zoetQ@mail.gmail.com>
+Subject: Re: [PATCH resend] media: staging: stkwebcam: Restore
+ MEDIA_{USB,CAMERA}_SUPPORT dependencies
+To:     Dan Carpenter <error27@gmail.com>
+Cc:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 10:47 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->
-> On Fri, Nov 18, 2022 at 11:46 PM Uwe Kleine-K=C3=B6nig <uwe@kleine-koenig=
-.org> wrote:
-> >
-> > From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> >
-> > .probe_new() doesn't get the i2c_device_id * parameter, so determine
-> > that explicitly in the probe function.
-> >
-> > Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> > ---
-> >  drivers/gpio/gpio-max732x.c | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/gpio/gpio-max732x.c b/drivers/gpio/gpio-max732x.c
-> > index da6972117030..68e982cdee73 100644
-> > --- a/drivers/gpio/gpio-max732x.c
-> > +++ b/drivers/gpio/gpio-max732x.c
-> > @@ -608,9 +608,9 @@ static struct max732x_platform_data *of_gpio_max732=
-x(struct device *dev)
-> >         return pdata;
-> >  }
-> >
-> > -static int max732x_probe(struct i2c_client *client,
-> > -                                  const struct i2c_device_id *id)
-> > +static int max732x_probe(struct i2c_client *client)
-> >  {
-> > +       const struct i2c_device_id *id =3D i2c_client_get_device_id(cli=
-ent);
-> >         struct max732x_platform_data *pdata;
-> >         struct device_node *node;
-> >         struct max732x_chip *chip;
-> > @@ -707,7 +707,7 @@ static struct i2c_driver max732x_driver =3D {
-> >                 .name           =3D "max732x",
-> >                 .of_match_table =3D of_match_ptr(max732x_of_table),
-> >         },
-> > -       .probe          =3D max732x_probe,
-> > +       .probe_new      =3D max732x_probe,
-> >         .id_table       =3D max732x_id,
-> >  };
-> >
-> > --
-> > 2.38.1
-> >
->
-> Applied, thanks!
->
-> Bartosz
+Hi Dan,
 
-Ugh, backing it out, I thought these patches were independent.
+On Wed, Nov 23, 2022 at 4:11 PM Dan Carpenter <error27@gmail.com> wrote:
+> On Wed, Nov 23, 2022 at 11:13:31AM +0100, Geert Uytterhoeven wrote:
+> > On Wed, Nov 23, 2022 at 11:08 AM Tommaso Merciai
+> > <tommaso.merciai@amarulasolutions.com> wrote:
+> > > On Mon, Nov 21, 2022 at 04:58:33PM +0100, Geert Uytterhoeven wrote:
+> > > > By moving support for the USB Syntek DC1125 Camera to staging, the
+> > > > dependencies on MEDIA_USB_SUPPORT and MEDIA_CAMERA_SUPPORT were lost.
+> > > >
+> > > > Fixes: 56280c64ecacc971 ("media: stkwebcam: deprecate driver, move to staging")
+> > >
+> > > Patch itself looks good but we have some style issue. Applying this
+> > > patch I got the following warning from checkpatchl:
+> > >
+> > > WARNING: Please use correct Fixes: style 'Fixes: <12 chars of sha1> ("<title line>")' - ie: 'Fixes: 56280c64ecac ("media: stkwebcam: deprecate driver, move to staging")'
+> > > #10:
+> > >
+> > > You have to pass only the first 12 chars of the sha1 commit into Fixes
+> > > msg:
+> > >
+> > > Use:
+> > >
+> > >  Fixes: 56280c64ecac ("media: stkwebcam: deprecate driver, move to staging")
+> > >
+> > > Instead of:
+> > >
+> > >  Fixes: 56280c64ecacc971 ("media: stkwebcam: deprecate driver, move to staging")
+> >
+> > I always use 16 chars, to avoid these becoming ambiguous in a few years.
+>
+> If we assume hashes are randomly distributed and that people commit
+> 100k patches every year then with 12 character we would have 17
+> collisions every 1000 years.
 
-In that case:
+So I can expect to see a collision before my retirement day
+(which coincides with the signed 32-bit time_t flag day ;-)
 
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+BTW, does the above take into account that commit hashes can
+collide with other object type hashes, too?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
