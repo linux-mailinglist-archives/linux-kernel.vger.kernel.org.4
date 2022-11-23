@@ -2,258 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A808063684E
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:07:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2AC2636858
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:13:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239372AbiKWSHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 13:07:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57102 "EHLO
+        id S239383AbiKWSNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 13:13:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239611AbiKWSGi (ORCPT
+        with ESMTP id S239487AbiKWSLv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 13:06:38 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAFEED1C08;
-        Wed, 23 Nov 2022 10:03:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669226601; x=1700762601;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=w9RmeZjtCjYZDa05D70xUE4PGBJek3/Pk2HxVVisXRs=;
-  b=IG+CcfHfK7x5gMwGCbIEHcV+Nn24sBi6sUCh6fHdY4FtwpTfGpuuSA2q
-   aJJfmAwzvIXU+b66sTTZLz+ahoWVeqttnSqLOb50/dMIHSu7/wrv77MwR
-   Hc0nI4+Dqlex/X6JhP2D7AabN6J/5GwizUVtFMx8/MgF/6Z9rlMOXCfJt
-   bwXgSRSLvPBlxtQxoYEe/3GufMBHYN4HwdI0M1yJ/SGNYPa6hOFzbSorN
-   Lu6FHe1SkCC3sww7sVaKmyoi5k9x4pLhQTuz0PTYqj9/zWtaaI+DrMgho
-   Ww6Dc5yx89R4ZWYw8p7gWZf7sSk8zyRMpNMcKTWzfNrSz5lGSiB4H2jQn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="311764581"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="311764581"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 10:03:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="816565091"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="816565091"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga005.jf.intel.com with ESMTP; 23 Nov 2022 10:03:10 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 2ANI38Ug029972;
-        Wed, 23 Nov 2022 18:03:09 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Suman Ghosh <sumang@marvell.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, sgoutham@marvell.com, sbhatta@marvell.com,
-        jerinj@marvell.com, gakula@marvell.com, hkelam@marvell.com,
-        lcherian@marvell.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [net-next PATCH V2] octeontx2-pf: Add support to filter packet based on IP fragment
-Date:   Wed, 23 Nov 2022 19:02:49 +0100
-Message-Id: <20221123180249.487977-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221123084038.2824345-1-sumang@marvell.com>
-References: <20221123084038.2824345-1-sumang@marvell.com>
+        Wed, 23 Nov 2022 13:11:51 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD0DCEFFB;
+        Wed, 23 Nov 2022 10:06:29 -0800 (PST)
+Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 30EBA6600014;
+        Wed, 23 Nov 2022 18:06:05 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1669226767;
+        bh=VkdBVLf6PQKIQJO5DDFSN1vQB/6ESgX35dSNtG4ynI8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PgoQBnUGv8ddeQErPYf+crVHXVCMUcSW/khqsSqmcAHWz5do81TouoAdsnSkVM39G
+         X6SlkkwTySVDB/MXAcxhF3BdhYQAVzsxzoiBq2k2X3CbiLSGwvYBDO9qItMUotDDXC
+         4RgWKv9Flkw6ABTo7Uisva7agqC+oEpvAskzZuZH3w0e+69tWAtV6WzUC7XKxoxmZC
+         Kdyw6khXuXR9328AcpzjUi94/YSQo283G5IGMgB//FmFb67+t2vPDsyBjk+n71Gv0l
+         zP/3MJkftdobYN8ChJkOyhq7CLlTCQTjiMmTj3QaYFp8FsML4frkA8FPLsHB+myJnZ
+         4948FkBNCR0lw==
+Date:   Wed, 23 Nov 2022 13:06:00 -0500
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>
+Cc:     Rob Herring <robh@kernel.org>, Chen-Yu Tsai <wenst@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Allen-KH Cheng =?utf-8?B?KOeoi+WGoOWLsyk=?= 
+        <Allen-KH.Cheng@mediatek.com>
+Subject: Re: [PATCH v2,3/3] arm64: dts: mt8195: Add video decoder node
+Message-ID: <20221123180600.a4w5e2jzydwer7h6@notapiano>
+References: <20221110102834.8946-1-yunfei.dong@mediatek.com>
+ <20221110102834.8946-3-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221110102834.8946-3-yunfei.dong@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Suman Ghosh <sumang@marvell.com>
-Date: Wed, 23 Nov 2022 14:10:38 +0530
-
-> 1. Added support to filter packets based on IP fragment.
-> For IPv4 packets check for ip_flag == 0x20 (more fragment bit set).
-> For IPv6 packets check for next_header == 0x2c (next_header set to
-> 'fragment header for IPv6')
-> 2. Added configuration support from both "ethtool ntuple" and "tc flower".
+On Thu, Nov 10, 2022 at 06:28:34PM +0800, Yunfei Dong wrote:
+> Add video decoder node to mt8195 device tree.
 > 
-> Signed-off-by: Suman Ghosh <sumang@marvell.com>
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 > ---
-> Changes since v1:
-> - Added extack change.
-> - Added be32_to_cpu conversion for ip_flag mask also.
+> Compared with v1:
+> - add description in yaml, and remove /* ... */ for each reg.
+> ---
+>  arch/arm64/boot/dts/mediatek/mt8195.dtsi | 63 ++++++++++++++++++++++++
+>  1 file changed, 63 insertions(+)
 > 
->  .../net/ethernet/marvell/octeontx2/af/mbox.h  |  4 +++
->  .../net/ethernet/marvell/octeontx2/af/npc.h   |  2 ++
->  .../marvell/octeontx2/af/rvu_debugfs.c        |  8 ++++++
->  .../marvell/octeontx2/af/rvu_npc_fs.c         |  8 ++++++
->  .../marvell/octeontx2/nic/otx2_flows.c        | 25 ++++++++++++++++---
->  .../ethernet/marvell/octeontx2/nic/otx2_tc.c  | 25 +++++++++++++++++++
->  6 files changed, 68 insertions(+), 4 deletions(-)
-
-[...]
-
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c
-> index 642e58a04da0..1cf026de5f1a 100644
-> --- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c
-> +++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c
-> @@ -2799,6 +2799,14 @@ static void rvu_dbg_npc_mcam_show_flows(struct seq_file *s,
->  			seq_printf(s, "%pI6 ", rule->packet.ip6dst);
->  			seq_printf(s, "mask %pI6\n", rule->mask.ip6dst);
->  			break;
-> +		case NPC_IPFRAG_IPV6:
-> +			seq_printf(s, "%d ", rule->packet.next_header);
-> +			seq_printf(s, "mask 0x%x\n", rule->mask.next_header);
-
-Why the same field is printed as signed decimal in the first printf,
-but as unsigned hex in the second? Could you please unify to `0x%x`?
-
-> +			break;
-> +		case NPC_IPFRAG_IPV4:
-> +			seq_printf(s, "%d ", rule->packet.ip_flag);
-> +			seq_printf(s, "mask 0x%x\n", rule->mask.ip_flag);
-
-(same)
-
-> +			break;
->  		case NPC_SPORT_TCP:
->  		case NPC_SPORT_UDP:
->  		case NPC_SPORT_SCTP:
-
-[...]
-
-> @@ -484,8 +486,10 @@ do {									       \
->  	 * Example: Source IP is 4 bytes and starts at 12th byte of IP header
->  	 */
->  	NPC_SCAN_HDR(NPC_TOS, NPC_LID_LC, NPC_LT_LC_IP, 1, 1);
-> +	NPC_SCAN_HDR(NPC_IPFRAG_IPV4, NPC_LID_LC, NPC_LT_LC_IP, 6, 1);
-
-I know it's out of the patch's subject, but this macro has "hidden"
-argument usage:
-
-* lid;
-* lt;
-* hdr;
-* nr_bytes;
-* mcam;
-* cfg;
-* intf;
-* ...
-
-We try to avoid that.
-Could you please (in a separate patch, it can be made later)
-refactor that block? For example, you can create an onstack
-structure, put all those variables there and then pass that struct
-to the macro.
-
-Also, you call that macro 20+ times and it's not so small itself, so
-converting these 20 calls to an array of 20 const parameters and
-then doing one loop over that array can significantly reduce code
-size.
-
->  	NPC_SCAN_HDR(NPC_SIP_IPV4, NPC_LID_LC, NPC_LT_LC_IP, 12, 4);
->  	NPC_SCAN_HDR(NPC_DIP_IPV4, NPC_LID_LC, NPC_LT_LC_IP, 16, 4);
-> +	NPC_SCAN_HDR(NPC_IPFRAG_IPV6, NPC_LID_LC, NPC_LT_LC_IP6_EXT, 6, 1);
->  	NPC_SCAN_HDR(NPC_SIP_IPV6, NPC_LID_LC, NPC_LT_LC_IP6, 8, 16);
->  	NPC_SCAN_HDR(NPC_DIP_IPV6, NPC_LID_LC, NPC_LT_LC_IP6, 24, 16);
->  	NPC_SCAN_HDR(NPC_SPORT_UDP, NPC_LID_LD, NPC_LT_LD_UDP, 0, 2);
-> @@ -899,6 +903,8 @@ do {									      \
->  	NPC_WRITE_FLOW(NPC_ETYPE, etype, ntohs(pkt->etype), 0,
->  		       ntohs(mask->etype), 0);
->  	NPC_WRITE_FLOW(NPC_TOS, tos, pkt->tos, 0, mask->tos, 0);
-> +	NPC_WRITE_FLOW(NPC_IPFRAG_IPV4, ip_flag, pkt->ip_flag, 0,
-> +		       mask->ip_flag, 0);
-
-Same for this function.
-
->  	NPC_WRITE_FLOW(NPC_SIP_IPV4, ip4src, ntohl(pkt->ip4src), 0,
->  		       ntohl(mask->ip4src), 0);
->  	NPC_WRITE_FLOW(NPC_DIP_IPV4, ip4dst, ntohl(pkt->ip4dst), 0,
-> @@ -919,6 +925,8 @@ do {									      \
->  	NPC_WRITE_FLOW(NPC_OUTER_VID, vlan_tci, ntohs(pkt->vlan_tci), 0,
->  		       ntohs(mask->vlan_tci), 0);
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> index 905d1a90b406..3ef7eef02415 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> @@ -1874,6 +1874,69 @@
+>  			power-domains = <&spm MT8195_POWER_DOMAIN_CAM>;
+>  		};
 >  
-> +	NPC_WRITE_FLOW(NPC_IPFRAG_IPV6, next_header, pkt->next_header, 0,
-> +		       mask->next_header, 0);
->  	npc_update_ipv6_flow(rvu, entry, features, pkt, mask, output, intf);
->  	npc_update_vlan_features(rvu, entry, features, intf);
+> +		video-codec@18000000 {
+> +			compatible = "mediatek,mt8195-vcodec-dec";
+> +			mediatek,scp = <&scp>;
+> +			iommus = <&iommu_vdo M4U_PORT_L21_VDEC_MC_EXT>;
+> +			dma-ranges = <0x1 0x0 0x0 0x40000000 0x0 0xfff00000>;
 
-[...]
+Hi,
 
-> -		/* Not Drop/Direct to queue but use action in default entry */
-> -		if (fsp->m_ext.data[1] &&
-> -		    fsp->h_ext.data[1] == cpu_to_be32(OTX2_DEFAULT_ACTION))
-> -			req->op = NIX_RX_ACTION_DEFAULT;
-> +		if (fsp->m_ext.data[1]) {
-> +			if (flow_type == IP_USER_FLOW) {
-> +				if (be32_to_cpu(fsp->h_ext.data[1]) != 0x20)
+similarly to what I've commented for the mt8192 node [1], having dma-ranges
+on this node causes IOMMU faults on the latest next. Since the iommu is already
+used in this node, please drop the dma-ranges property.
 
-Define 0x20 as a macro to not search for it for long when it's
-needed?
+The binding will also need updating to remove this property (given it was marked
+as required), so please include that change in either your or Allen's series.
 
-> +					return -EINVAL;
-> +
-> +				pkt->ip_flag = (u8)be32_to_cpu(fsp->h_ext.data[1]);
-> +				pmask->ip_flag = (u8)be32_to_cpu(fsp->m_ext.data[1]);
++cc Allen
 
-These explicit casts are not needed unless I'm missing something?
-
-> +				req->features |= BIT_ULL(NPC_IPFRAG_IPV4);
-> +			} else if (fsp->h_ext.data[1] ==
-> +					cpu_to_be32(OTX2_DEFAULT_ACTION)) {
-> +				/* Not Drop/Direct to queue but use action
-> +				 * in default entry
-> +				 */
-> +				req->op = NIX_RX_ACTION_DEFAULT;
-> +			}
-> +		}
->  	}
->  
->  	if (fsp->flow_type & FLOW_MAC_EXT &&
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-> index e64318c110fd..93b36d2cf883 100644
-> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-> @@ -532,6 +532,31 @@ static int otx2_tc_prepare_flow(struct otx2_nic *nic, struct otx2_tc_flow *node,
->  			req->features |= BIT_ULL(NPC_IPPROTO_ICMP6);
->  	}
->  
-> +	if (flow_rule_match_key(rule, FLOW_DISSECTOR_KEY_CONTROL)) {
-> +		struct flow_match_control match;
-> +
-> +		flow_rule_match_control(rule, &match);
-> +		if (match.mask->flags & FLOW_DIS_FIRST_FRAG) {
-> +			NL_SET_ERR_MSG_MOD(extack, "HW doesn't support frag first/later");
-> +			return -EOPNOTSUPP;
-> +		}
-> +
-> +		if (match.mask->flags & FLOW_DIS_IS_FRAGMENT) {
-> +			if (ntohs(flow_spec->etype) == ETH_P_IP) {
-> +				flow_spec->ip_flag = 0x20;
-
-0x20 again, see? One definition for both would make it clear.
-
-> +				flow_mask->ip_flag = 0xff;
-> +				req->features |= BIT_ULL(NPC_IPFRAG_IPV4);
-> +			} else if (ntohs(flow_spec->etype) == ETH_P_IPV6) {
-> +				flow_spec->next_header = IPPROTO_FRAGMENT;
-> +				flow_mask->next_header = 0xff;
-> +				req->features |= BIT_ULL(NPC_IPFRAG_IPV6);
-> +			} else {
-> +				NL_SET_ERR_MSG_MOD(extack, "flow-type should be either IPv4 and IPv6");
-> +				return -EOPNOTSUPP;
-> +			}
-> +		}
-> +	}
-
-This block is big and the function is huge even before the patch.
-Could you (it may be a separate patch as well) split it logically?
-
-> +
->  	if (flow_rule_match_key(rule, FLOW_DISSECTOR_KEY_ETH_ADDRS)) {
->  		struct flow_match_eth_addrs match;
->  
-> -- 
-> 2.25.1
+[1] https://lore.kernel.org/all/20221118141039.y2ap7dzdp26ih2la@notapiano
 
 Thanks,
-Olek
+Nícolas
+
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			reg = <0 0x18000000 0 0x1000>,
+> +			      <0 0x18004000 0 0x1000>;
+> +			ranges = <0 0 0 0x18000000 0 0x26000>;
+> +			clocks = <&topckgen CLK_TOP_VDEC>,
+> +			         <&topckgen CLK_TOP_UNIVPLL_D4>;
+> +			clock-names = "vdec-sel", "top";
+> +			assigned-clocks = <&topckgen CLK_TOP_VDEC>;
+> +			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D4>;
+> +
+> +			vcodec-lat-soc@2000 {
+> +				compatible = "mediatek,mtk-vcodec-lat-soc";
+> +				reg = <0 0x2000 0 0x800>;
+> +				iommus = <&iommu_vpp M4U_PORT_L23_VDEC_UFO_ENC_EXT>,
+> +					 <&iommu_vpp M4U_PORT_L23_VDEC_RDMA_EXT>;
+> +				clocks = <&vdecsys_soc CLK_VDEC_SOC_VDEC>,
+> +					 <&vdecsys_soc CLK_VDEC_SOC_LAT>;
+> +				clock-names = "vdec-soc-vdec", "vdec-soc-lat";
+> +				power-domains = <&spm MT8195_POWER_DOMAIN_VDEC0>;
+> +			};
+> +
+> +			vcodec-lat@10000 {
+> +				compatible = "mediatek,mtk-vcodec-lat";
+> +				reg = <0 0x10000 0 0x800>;
+> +				interrupts = <GIC_SPI 708 IRQ_TYPE_LEVEL_HIGH 0>;
+> +				iommus = <&iommu_vdo M4U_PORT_L24_VDEC_LAT0_VLD_EXT>,
+> +					 <&iommu_vdo M4U_PORT_L24_VDEC_LAT0_VLD2_EXT>,
+> +					 <&iommu_vdo M4U_PORT_L24_VDEC_LAT0_AVC_MC_EXT>,
+> +					 <&iommu_vdo M4U_PORT_L24_VDEC_LAT0_PRED_RD_EXT>,
+> +					 <&iommu_vdo M4U_PORT_L24_VDEC_LAT0_TILE_EXT>,
+> +					 <&iommu_vdo M4U_PORT_L24_VDEC_LAT0_WDMA_EXT>;
+> +				clocks = <&vdecsys_soc CLK_VDEC_SOC_VDEC>,
+> +					 <&vdecsys_soc CLK_VDEC_SOC_LAT>;
+> +				clock-names = "vdec-soc-vdec", "vdec-soc-lat";
+> +				power-domains = <&spm MT8195_POWER_DOMAIN_VDEC0>;
+> +			};
+> +
+> +			vcodec-core@25000 {
+> +				compatible = "mediatek,mtk-vcodec-core";
+> +				reg = <0 0x25000 0 0x1000>;
+> +				interrupts = <GIC_SPI 707 IRQ_TYPE_LEVEL_HIGH 0>;
+> +				iommus = <&iommu_vdo M4U_PORT_L21_VDEC_MC_EXT>,
+> +					 <&iommu_vdo M4U_PORT_L21_VDEC_UFO_EXT>,
+> +					 <&iommu_vdo M4U_PORT_L21_VDEC_PP_EXT>,
+> +					 <&iommu_vdo M4U_PORT_L21_VDEC_PRED_RD_EXT>,
+> +					 <&iommu_vdo M4U_PORT_L21_VDEC_PRED_WR_EXT>,
+> +					 <&iommu_vdo M4U_PORT_L21_VDEC_PPWRAP_EXT>,
+> +					 <&iommu_vdo M4U_PORT_L21_VDEC_TILE_EXT>,
+> +					 <&iommu_vdo M4U_PORT_L21_VDEC_VLD_EXT>,
+> +					 <&iommu_vdo M4U_PORT_L21_VDEC_VLD2_EXT>,
+> +					 <&iommu_vdo M4U_PORT_L21_VDEC_AVC_MV_EXT>;
+> +				clocks = <&vdecsys CLK_VDEC_VDEC>, <&vdecsys CLK_VDEC_LAT>;
+> +				clock-names = "vdec-vdec", "vdec-lat";
+> +				power-domains = <&spm MT8195_POWER_DOMAIN_VDEC1>;
+> +			};
+> +		};
+> +
+>  		larb24: larb@1800d000 {
+>  			compatible = "mediatek,mt8195-smi-larb";
+>  			reg = <0 0x1800d000 0 0x1000>;
+> -- 
+> 2.18.0
+> 
+> 
+> 
