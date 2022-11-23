@@ -2,99 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08296635456
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2887635449
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:05:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237018AbiKWJFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 04:05:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41414 "EHLO
+        id S237021AbiKWJFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 04:05:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236960AbiKWJEy (ORCPT
+        with ESMTP id S236374AbiKWJE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 04:04:54 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D895DFFAAB;
-        Wed, 23 Nov 2022 01:04:52 -0800 (PST)
-Received: from mxct.zte.com.cn (unknown [192.168.251.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 23 Nov 2022 04:04:58 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B18FCDE8;
+        Wed, 23 Nov 2022 01:04:56 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NHFZC2p6Xz4xVnf;
-        Wed, 23 Nov 2022 17:04:51 +0800 (CST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NHFZ94qlgz4xyCN;
-        Wed, 23 Nov 2022 17:04:49 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2AN94heK059175;
-        Wed, 23 Nov 2022 17:04:43 +0800 (+08)
-        (envelope-from zhang.songyi@zte.com.cn)
-Received: from mapi (xaxapp02[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Wed, 23 Nov 2022 17:04:45 +0800 (CST)
-Date:   Wed, 23 Nov 2022 17:04:45 +0800 (CST)
-X-Zmail-TransId: 2afa637de22dffffffff95a3dc38
-X-Mailer: Zmail v1.0
-Message-ID: <202211231704457807160@zte.com.cn>
-Mime-Version: 1.0
-From:   <zhang.songyi@zte.com.cn>
-To:     <seanjc@google.com>
-Cc:     <pbonzini@redhat.com>, <tglx@linutronix.de>, <mingo@redhat.com>,
-        <bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <hpa@zytor.com>, <kvm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <zhang.songyi@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIEtWTTogeDg2OiByZW1vdmUgcmVkdW5kYW50IHJldCB2YXJpYWJsZQ==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2AN94heK059175
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 637DE233.000 by FangMail milter!
-X-FangMail-Envelope: 1669194291/4NHFZC2p6Xz4xVnf/637DE233.000/192.168.251.13/[192.168.251.13]/mxct.zte.com.cn/<zhang.songyi@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 637DE233.000/4NHFZC2p6Xz4xVnf
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id CF4E86602A65;
+        Wed, 23 Nov 2022 09:04:53 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1669194294;
+        bh=zG135kRe8+iItmvKrsgi+crsZCaDW2dydm76wVwCcwM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=RypeNJ4pvfaBL1Sz9otgZ0HjwnQTEZ60pw7YMU4oFwKbLLbDu7bGf5CVPp/urRfgg
+         IzIvcjt+W+ToY6+E1oXhkKLPQwEKkFNo6H76cT3cFYBDYBr6dNaEhKu72IjRRH5irf
+         vaZ4eWdDq6eSMRLC1UcmaALRKyfVGmXs2RF2ecMjyNcQwCVhKGJltwwG+Jvgb9EyLU
+         Erx9r/hEKZReSh+3kZYpyjfO9kFWD7iOblNsvFANII4T3kDwZlUowLmxca9kjVFCCg
+         GbZIYxxQcgBs3TJzl/kNCIryb+3PHIM43/1bvOcFVBa0eipG+RE3IGMQjkscIywojR
+         iT2akcAxuuP3A==
+Message-ID: <15b502b0-517b-5380-77ae-f6c23b025a85@collabora.com>
+Date:   Wed, 23 Nov 2022 10:04:51 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v1 3/4] irqchip: irq-mtk-cirq: Move register offsets to
+ const array
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     tglx@linutronix.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        youlin.pei@mediatek.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20221118100639.33704-1-angelogioacchino.delregno@collabora.com>
+ <20221118100639.33704-4-angelogioacchino.delregno@collabora.com>
+ <86pmdfnntg.wl-maz@kernel.org>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <86pmdfnntg.wl-maz@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: zhang songyi <zhang.songyi@zte.com.cn>
+Il 22/11/22 14:03, Marc Zyngier ha scritto:
+> On Fri, 18 Nov 2022 10:06:38 +0000,
+> AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> wrote:
+>>
+>> In preparation to add support for new SoCs having different register
+>> offsets, add an enumeration that documents registers and move the
+>> register offsets definitions to a u32 array.
+>>
+>> Of course, every usage of the definitions was changed to use the
+>> newly introduced register offsets array.
+>>
+>> This change brings no functional changes.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+>>   drivers/irqchip/irq-mtk-cirq.c | 62 ++++++++++++++++++++++++----------
+>>   1 file changed, 44 insertions(+), 18 deletions(-)
+>>
+>> diff --git a/drivers/irqchip/irq-mtk-cirq.c b/drivers/irqchip/irq-mtk-cirq.c
+>> index 9bca0918078e..affbc0f48550 100644
+>> --- a/drivers/irqchip/irq-mtk-cirq.c
+>> +++ b/drivers/irqchip/irq-mtk-cirq.c
+>> @@ -15,14 +15,30 @@
+>>   #include <linux/slab.h>
+>>   #include <linux/syscore_ops.h>
+>>   
+>> -#define CIRQ_ACK	0x40
+>> -#define CIRQ_MASK_SET	0xc0
+>> -#define CIRQ_MASK_CLR	0x100
+>> -#define CIRQ_SENS_SET	0x180
+>> -#define CIRQ_SENS_CLR	0x1c0
+>> -#define CIRQ_POL_SET	0x240
+>> -#define CIRQ_POL_CLR	0x280
+>> -#define CIRQ_CONTROL	0x300
+>> +enum mtk_cirq_reg_index {
+>> +	CIRQ_STA = 0,
+> 
+> Enums starting from 0 are the default.
+> 
+>> +	CIRQ_ACK,
+>> +	CIRQ_MASK_SET,
+>> +	CIRQ_MASK_CLR,
+>> +	CIRQ_SENS_SET,
+>> +	CIRQ_SENS_CLR,
+>> +	CIRQ_POL_SET,
+>> +	CIRQ_POL_CLR,
+>> +	CIRQ_CONTROL,
+>> +	CIRQ_MAX
+> 
+> What's the use of this last constant?
+> 
 
-Return value from apic_get_tmcct() directly instead of taking
-this in another redundant variable.
+None, was commodity for loops - will remove, thanks.
 
-Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
----
- arch/x86/kvm/lapic.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+>> +};
+>> +
+>> +static const u32 mtk_cirq_regs_v1[] = {
+>> +	[CIRQ_STA]	= 0x0,
+>> +	[CIRQ_ACK]	= 0x40,
+>> +	[CIRQ_MASK_SET]	= 0xc0,
+>> +	[CIRQ_MASK_CLR]	= 0x100,
+>> +	[CIRQ_SENS_SET]	= 0x180,
+>> +	[CIRQ_SENS_CLR]	= 0x1c0,
+>> +	[CIRQ_POL_SET]	= 0x240,
+>> +	[CIRQ_POL_CLR]	= 0x280,
+>> +	[CIRQ_CONTROL]	= 0x300,
+>> +};
+>>   
+>>   #define CIRQ_EN	0x1
+>>   #define CIRQ_EDGE	0x2
+>> @@ -32,18 +48,20 @@ struct mtk_cirq_chip_data {
+>>   	void __iomem *base;
+>>   	unsigned int ext_irq_start;
+>>   	unsigned int ext_irq_end;
+>> +	const u32 *regs;
+> 
+> This is an array of *offsets*, not registers. Please name it accordingly.
+> 
 
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index d7639d126e6c..707970804502 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -1363,7 +1363,6 @@ static u32 apic_get_tmcct(struct kvm_lapic *apic)
- {
-        ktime_t remaining, now;
-        s64 ns;
--       u32 tmcct;
+Will do
 
-        ASSERT(apic != NULL);
+>>   	struct irq_domain *domain;
+>>   };
+>>   
+>>   static struct mtk_cirq_chip_data *cirq_data;
+>>   
+>> -static void mtk_cirq_write_mask(struct irq_data *data, unsigned int offset)
+>> +static void mtk_cirq_write_mask(struct irq_data *data, enum mtk_cirq_reg_index idx)
+>>   {
+>>   	struct mtk_cirq_chip_data *chip_data = data->chip_data;
+>>   	unsigned int cirq_num = data->hwirq;
+>>   	u32 mask = 1 << (cirq_num % 32);
+>> +	u32 reg = chip_data->regs[idx] + (cirq_num / 32) * 4;
+> 
+> Please provide an accessor that takes chip_data and an index, and
+> returns an address.
+> 
 
-@@ -1378,10 +1377,9 @@ static u32 apic_get_tmcct(struct kvm_lapic *apic)
-                remaining = 0;
+Ack.
 
-        ns = mod_64(ktime_to_ns(remaining), apic->lapic_timer.period);
--       tmcct = div64_u64(ns,
--                        (APIC_BUS_CYCLE_NS * apic->divide_count));
+>>   
+>> -	writel_relaxed(mask, chip_data->base + offset + (cirq_num / 32) * 4);
+>> +	writel_relaxed(mask, chip_data->base + reg);
+>>   }
+>>   
+>>   static void mtk_cirq_mask(struct irq_data *data)
+>> @@ -160,7 +178,7 @@ static const struct irq_domain_ops cirq_domain_ops = {
+>>   #ifdef CONFIG_PM_SLEEP
+>>   static int mtk_cirq_suspend(void)
+>>   {
+>> -	u32 value, mask;
+>> +	u32 value, mask, reg;
+>>   	unsigned int irq, hwirq_num;
+>>   	bool pending, masked;
+>>   	int i, pendret, maskret;
+>> @@ -200,31 +218,34 @@ static int mtk_cirq_suspend(void)
+>>   				continue;
+>>   		}
+>>   
+>> +		reg = cirq_data->regs[CIRQ_ACK] + (i / 32) * 4;
+>>   		mask = 1 << (i % 32);
+>> -		writel_relaxed(mask, cirq_data->base + CIRQ_ACK + (i / 32) * 4);
+>> +		writel_relaxed(mask, cirq_data->base + reg);
+>>   	}
+>>   
+>>   	/* set edge_only mode, record edge-triggerd interrupts */
+>>   	/* enable cirq */
+>> -	value = readl_relaxed(cirq_data->base + CIRQ_CONTROL);
+>> +	reg = cirq_data->regs[CIRQ_CONTROL];
+>> +	value = readl_relaxed(cirq_data->base + reg);
+>>   	value |= (CIRQ_EDGE | CIRQ_EN);
+>> -	writel_relaxed(value, cirq_data->base + CIRQ_CONTROL);
+>> +	writel_relaxed(value, cirq_data->base + reg);
+>>   
+>>   	return 0;
+>>   }
+>>   
+>>   static void mtk_cirq_resume(void)
+>>   {
+>> +	u32 reg = cirq_data->regs[CIRQ_CONTROL];
+>>   	u32 value;
+>>   
+>>   	/* flush recorded interrupts, will send signals to parent controller */
+>> -	value = readl_relaxed(cirq_data->base + CIRQ_CONTROL);
+>> -	writel_relaxed(value | CIRQ_FLUSH, cirq_data->base + CIRQ_CONTROL);
+>> +	value = readl_relaxed(cirq_data->base + reg);
+>> +	writel_relaxed(value | CIRQ_FLUSH, cirq_data->base + reg);
+>>   
+>>   	/* disable cirq */
+>> -	value = readl_relaxed(cirq_data->base + CIRQ_CONTROL);
+>> +	value = readl_relaxed(cirq_data->base + reg);
+>>   	value &= ~(CIRQ_EDGE | CIRQ_EN);
+>> -	writel_relaxed(value, cirq_data->base + CIRQ_CONTROL);
+>> +	writel_relaxed(value, cirq_data->base + reg);
+>>   }
+>>   
+>>   static struct syscore_ops mtk_cirq_syscore_ops = {
+>> @@ -240,6 +261,9 @@ static void mtk_cirq_syscore_init(void)
+>>   static inline void mtk_cirq_syscore_init(void) {}
+>>   #endif
+>>   
+>> +static const struct of_device_id mtk_cirq_of_match[] = {
+>> +	{ .compatible = "mediatek,
+>> +
+> 
+> I can tell by this hunk the quality of testing this patch has
+> received.
+> 
 
--       return tmcct;
-+       return div64_u64(ns,
-+                       (APIC_BUS_CYCLE_NS * apic->divide_count));
- }
+Actually, the testing was performed on multiple SoCs.
 
- static void __report_tpr_access(struct kvm_lapic *apic, bool write)
---
-2.15.2
+As for why this is there, check below...
+
+>>   static int __init mtk_cirq_of_init(struct device_node *node,
+>>   				   struct device_node *parent)
+>>   {
+>> @@ -274,6 +298,8 @@ static int __init mtk_cirq_of_init(struct device_node *node,
+>>   	if (ret)
+>>   		goto out_unmap;
+>>   
+>> +	cirq_data->regs = mtk_cirq_regs_v1;
+> 
+> Why isn't this obtained from the matching array?
+> 
+
+.... I'm truly sorry for what happened, I've just checked - the right patchset
+was in a different folder and I've somehow sent the wrong one.
+
+Sorry again - will send a v2 ASAP.
+
+Best regards,
+Angelo
