@@ -2,110 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8937C635791
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:43:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 111C0635761
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:43:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238122AbiKWJnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 04:43:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
+        id S237991AbiKWJl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 04:41:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238069AbiKWJmR (ORCPT
+        with ESMTP id S237981AbiKWJld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 04:42:17 -0500
-Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.129.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3F382BC2
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:38:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxlinear.com;
-        s=selector; t=1669196328;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Mc2NS0olCt0qUzsLi0zWfYaDeL0jAmHwQjCqJZ5SsT8=;
-        b=An+fYJ1ak9yv+HUO0ga2BpCsZPO9Df4pTvxFghvP0cW+824ALgkMGhicTZYJmSsrjo8JUb
-        n/AalJCBwe7cUsK6gN6bpL9fE6QQNEJVeCulSGGy7/y0Q+uS30bz3vHHvUUnwReV6I9CpG
-        gnDyCXKPOxnxoPZ+yHwg/eg8WuOY7iKvSz5fOymXM7/jG7+rksyPkuuJpCAmO2BlKTVtw0
-        IhcAhG2H7JDhflKokTTm2H4jg1KkPSV6bsjA4HT3yGKQF3+PmhmfNh5fqIVtkUfHe8/fGE
-        ciJ+2v/1G3CDfGY3CWfqUXQpn7HbEO4buyJiNWYEMS2RpMTpJWTVujB4ji+30A==
-Received: from mail.maxlinear.com (174-47-1-83.static.ctl.one [174.47.1.83])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- us-mta-665-BZZ1RMddN-WSVjCg2PoA3Q-1; Wed, 23 Nov 2022 04:38:47 -0500
-X-MC-Unique: BZZ1RMddN-WSVjCg2PoA3Q-1
-Received: from sgsxdev001.isng.phoenix.local (10.226.81.111) by
- mail.maxlinear.com (10.23.38.120) with Microsoft SMTP Server id 15.1.2375.24;
- Wed, 23 Nov 2022 01:38:39 -0800
-From:   Rahul Tanwar <rtanwar@maxlinear.com>
-To:     Rahul Tanwar <rtanwar@maxlinear.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Borislav Petkov" <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, <linux-lgm-soc@maxlinear.com>
-Subject: [PATCH v4 4/4] x86/of: Add support for boot time interrupt delivery mode configuration
-Date:   Wed, 23 Nov 2022 17:38:20 +0800
-Message-ID: <20221123093820.21161-5-rtanwar@maxlinear.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221123093820.21161-1-rtanwar@maxlinear.com>
-References: <20221123093820.21161-1-rtanwar@maxlinear.com>
+        Wed, 23 Nov 2022 04:41:33 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89284FC716;
+        Wed, 23 Nov 2022 01:39:08 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AN7Peo3010134;
+        Wed, 23 Nov 2022 09:39:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=G7MppZwrAD9hv1WL9YxVrbxXR61NAceyba4rmUIFQno=;
+ b=jHsvQkoX6LuIDBgOgy7q0OMsLn30SY4BFfXVxlTN975u0YwdZ7+6OBgHdXJ23F6rZIp8
+ +pIU1xHQOQkKw9J5U14Mga+ZLQuwzcgh1sAZjRu4eGWn71naCSEV60D4RVnE/50IVizt
+ QKjdEh8eWJ5cYgMoHnOQB7igFw3pY0Du+SDDe1uRHzVCcRC5yjIJe4G2AMPmZWHQBMye
+ kyup1GF2faYENS0Q3qk9v2GTGdWDOmxO4IxGQ3PsY2sKcbF2HuIbu5/F3AY0zqB7cz2i
+ D2ruoIhJkv5cN2rWYPvqKQi9JiNiWISwLkWfbd6/FehbCDS+QkhFGjzzUBVx5BVB6xYY Ig== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m10w5pwp9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Nov 2022 09:39:07 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AN9MK8c013102;
+        Wed, 23 Nov 2022 09:39:06 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m10w5pwn9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Nov 2022 09:39:06 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AN9YkdD021747;
+        Wed, 23 Nov 2022 09:39:04 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03ams.nl.ibm.com with ESMTP id 3kxps8wfew-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Nov 2022 09:39:04 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AN9d1rv63177088
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 23 Nov 2022 09:39:01 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6308142042;
+        Wed, 23 Nov 2022 09:39:01 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1B27442041;
+        Wed, 23 Nov 2022 09:39:01 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.152.224.56])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 23 Nov 2022 09:39:01 +0000 (GMT)
+Date:   Wed, 23 Nov 2022 10:38:59 +0100
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     Thomas Huth <thuth@redhat.com>
+Cc:     kvm@vger.kernel.org, Janosch Frank <frankja@linux.ibm.com>,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        "Collin L. Walling" <walling@linux.ibm.com>,
+        Jason J Herne <jjherne@linux.ibm.com>
+Subject: Re: [PATCH] KVM: s390: vsie: Fix the initialization of the epoch
+ extension (epdx) field
+Message-ID: <20221123103859.1d861c44@p-imbrenda>
+In-Reply-To: <20221123090833.292938-1-thuth@redhat.com>
+References: <20221123090833.292938-1-thuth@redhat.com>
+Organization: IBM
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: VB7N-UmU2w5V8YnsGnJfOrH4quVoW2GC
+X-Proofpoint-ORIG-GUID: mmYlp7Uaw75Lq2JRuQlR7jx7IdMePVU_
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: maxlinear.com
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-23_04,2022-11-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ bulkscore=0 adultscore=0 mlxscore=0 lowpriorityscore=0 suspectscore=0
+ impostorscore=0 priorityscore=1501 spamscore=0 phishscore=0
+ mlxlogscore=994 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211230071
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Presently, init/boot time interrupt delivery mode is enumerated
-only for ACPI enabled systems by parsing MADT table or for older
-systems by parsing MP table. But for OF based x86 systems, it is
-assumed & hardcoded to legacy PIC mode. This causes boot time crash
-for platforms which do not use 8259 compliant legacy PIC.
+On Wed, 23 Nov 2022 10:08:33 +0100
+Thomas Huth <thuth@redhat.com> wrote:
 
-Add support for configuration of init time interrupt delivery mode
-for x86 OF based systems by introducing a new optional boolean
-property 'intel,virtual-wire-mode' for interrupt-controller node
-of local APIC. This property emulates IMCRP Bit 7 of MP feature
-info byte 2 of MP floating pointer structure.
+> We recently experienced some weird huge time jumps in nested guests when
+> rebooting them in certain cases. After adding some debug code to the epoch
+> handling in vsie.c (thanks to David Hildenbrand for the idea!), it was
+> obvious that the "epdx" field (the multi-epoch extension) did not get set
+> to 0xff in case the "epoch" field was negative.
+> Seems like the code misses to copy the value from the epdx field from
+> the guest to the shadow control block. By doing so, the weird time
+> jumps are gone in our scenarios.
+> 
+> Link: https://bugzilla.redhat.com/show_bug.cgi?id=2140899
+> Fixes: 8fa1696ea781 ("KVM: s390: Multiple Epoch Facility support")
+> Signed-off-by: Thomas Huth <thuth@redhat.com>
 
-Defaults to legacy PIC mode if absent. Configures it to virtual
-wire compatibility mode if present.
+Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
 
-Signed-off-by: Rahul Tanwar <rtanwar@maxlinear.com>
----
- arch/x86/kernel/devicetree.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+> ---
+>  arch/s390/kvm/vsie.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/s390/kvm/vsie.c b/arch/s390/kvm/vsie.c
+> index 94138f8f0c1c..ace2541ababd 100644
+> --- a/arch/s390/kvm/vsie.c
+> +++ b/arch/s390/kvm/vsie.c
+> @@ -546,8 +546,10 @@ static int shadow_scb(struct kvm_vcpu *vcpu, struct vsie_page *vsie_page)
+>  	if (test_kvm_cpu_feat(vcpu->kvm, KVM_S390_VM_CPU_FEAT_CEI))
+>  		scb_s->eca |= scb_o->eca & ECA_CEI;
+>  	/* Epoch Extension */
+> -	if (test_kvm_facility(vcpu->kvm, 139))
+> +	if (test_kvm_facility(vcpu->kvm, 139)) {
+>  		scb_s->ecd |= scb_o->ecd & ECD_MEF;
+> +		scb_s->epdx = scb_o->epdx;
 
-diff --git a/arch/x86/kernel/devicetree.c b/arch/x86/kernel/devicetree.c
-index fcc6f1b7818f..458e43490414 100644
---- a/arch/x86/kernel/devicetree.c
-+++ b/arch/x86/kernel/devicetree.c
-@@ -167,7 +167,14 @@ static void __init dtb_lapic_setup(void)
- =09=09=09return;
- =09}
- =09smp_found_config =3D 1;
--=09pic_mode =3D 1;
-+=09if (of_property_read_bool(dn, "intel,virtual-wire-mode")) {
-+=09=09pr_info("Virtual Wire compatibility mode.\n");
-+=09=09pic_mode =3D 0;
-+=09} else {
-+=09=09pr_info("IMCR and PIC compatibility mode.\n");
-+=09=09pic_mode =3D 1;
-+=09}
-+
- =09register_lapic_address(lapic_addr);
- }
-=20
---=20
-2.17.1
+looks quite straightforward
+
+> +	}
+>  
+>  	/* etoken */
+>  	if (test_kvm_facility(vcpu->kvm, 156))
 
