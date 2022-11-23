@@ -2,83 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E045F636678
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:03:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC286636679
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:03:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238348AbiKWRDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 12:03:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53632 "EHLO
+        id S238747AbiKWRDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 12:03:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237983AbiKWRDc (ORCPT
+        with ESMTP id S238417AbiKWRDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 12:03:32 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A20994A73
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 09:03:27 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 23 Nov 2022 12:03:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8726B11C20
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 09:03:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id AD7E921A20;
-        Wed, 23 Nov 2022 17:03:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1669223006; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QOTqESa3U7W1bqo4V15GNCzXDu459rGsEt2ugIrp2oo=;
-        b=P7YAkbJdM0MPjlher8/nZaZlAvbB5SpS4NQTqUjziAAGNcKgQZy61aewO4JVcnBIq0LeiK
-        2sq34Wvrg6WL1ZlOKiqIYDalzhJ9FYZnKnb1LQcW8Mts+ZyjHFUnphlpInf9bwp3rOfQSX
-        CsPvaoBnhAR4SXwUDZsI0D7st4RpSPU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1669223006;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QOTqESa3U7W1bqo4V15GNCzXDu459rGsEt2ugIrp2oo=;
-        b=ct7u2HKkDhEc2h4wRrne/VdJiY9EG+3LNhuq2lQ5tMb6YwBYdcdf+9mX1U4cPUaWZ+HoX7
-        YkC0t/bht/r8hzCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6EDA213AE7;
-        Wed, 23 Nov 2022 17:03:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id PkBhGl5SfmOscAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 23 Nov 2022 17:03:26 +0000
-Message-ID: <bdafa84a-e5db-471b-fdb2-34ecbf09c225@suse.cz>
-Date:   Wed, 23 Nov 2022 18:03:26 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3E259B821D1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 17:03:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84193C433B5;
+        Wed, 23 Nov 2022 17:03:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669223019;
+        bh=m9XRdTo1RKmcs2mxaIv6FBSHv+6lgqotVqiNHoXrWdc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KIsPk3EyOIxwWCYLSnt73pV3xqGkyYI625biqcGf6DZOEwcTFpFfPyetoe4qgcmD0
+         9B/nQKKjGeOJznrCyFEEO1diQUnxBXnB1OS6/fbbMC/f2cbaKCEMACyE0zoK8+mYM0
+         XcAVCDy9AP+95u/VmUv7e9UOtIlbvf+lsM1MqifC9asQqh36Bv2oEQstSSVEA3Z1G0
+         NqWF28lvWXIWqsmuGepb4eM5KYVoRaDd8iFOwPKPYOCW3rWm7zxwikrcM5o1uVt5Kk
+         V4K7KnlBJ+4e8mcPyqzJPxAZzmnpbtrI1trv1tOMUNdDliSVXHqCoY1aC08XKiGU7F
+         voULg1tMcGajA==
+Date:   Wed, 23 Nov 2022 09:03:37 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Andrew Cooper <Andrew.Cooper3@citrix.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jgross@suse.com" <jgross@suse.com>,
+        "sstabellini@kernel.org" <sstabellini@kernel.org>,
+        "boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: objtool warning for next-20221118
+Message-ID: <20221123170337.keacggyvn4ykbtsw@treble>
+References: <20221121040736.GA3738360@paulmck-ThinkPad-P17-Gen-1>
+ <Y3thrQxfcvZSXFlr@hirez.programming.kicks-ass.net>
+ <20221121145215.GF4001@paulmck-ThinkPad-P17-Gen-1>
+ <20221122051605.4hcbslwxez2trdvt@treble>
+ <Y3yJxQJ9DwxTx7km@hirez.programming.kicks-ass.net>
+ <20221123012350.kelmmadh65lyswqz@treble>
+ <Y33gAiFP2IpVdxJu@hirez.programming.kicks-ass.net>
+ <2255c45f-d8ba-3f32-9d99-737ad3040dd7@citrix.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 -next 1/2] mm/slb: add is_kmalloc_cache() helper
- function
-Content-Language: en-US
-To:     Feng Tang <feng.tang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     linux-mm@kvack.org, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-References: <20221123123159.2325763-1-feng.tang@intel.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20221123123159.2325763-1-feng.tang@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2255c45f-d8ba-3f32-9d99-737ad3040dd7@citrix.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,55 +68,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Subject should say mm/slab
+On Wed, Nov 23, 2022 at 10:52:09AM +0000, Andrew Cooper wrote:
+> > Well, if you return from arch_cpu_idle_dead() you're back in the idle
+> > loop -- exactly where you would be if you were to bootstrap the whole
+> > CPU -- provided you have it remember the whole state (easier with a
+> > vCPU).
 
-On 11/23/22 13:31, Feng Tang wrote:
-> commit 6edf2576a6cc ("mm/slub: enable debugging memory wasting of
-> kmalloc") introduces 'SLAB_KMALLOC' bit specifying whether a
-> kmem_cache is a kmalloc cache for slab/slub (slob doesn't have
-> dedicated kmalloc caches).
+play_dead() really needs sane semantics.  Not only does it introduce a
+surprise to the offlining code in do_idle(), it also skips the entire
+hotplug state machine.  Not sure if that introduces any bugs, but at the
+very least it's subtle and surprising.
+
+> > But maybe I'm missing something, lets add Xen folks on.
 > 
-> Add a helper inline function for other components like kasan to
-> simplify code.
+> Calling VCPUOP_down on oneself always succeeds, but all it does is
+> deschedule the vCPU.
 > 
-> Signed-off-by: Feng Tang <feng.tang@intel.com>
-
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
-
-Patch 2 seems to depend on patches in Andrew's tree so it's simpler if he
-takes both of these too.
-
-Thanks,
-Vlastimil
-
-> ---
-> changlog:
->   
->   since v1:
->   * don't use macro for the helper (Andrew Morton)
->   * place the inline function in mm/slb.h to solve data structure
->     definition issue (Vlastimil Babka)
+> It can be undone at a later point by a different vcpu issuing VCPUOP_up
+> against the previously-downed CPU, at which point the vCPU gets rescheduled.
 > 
->  mm/slab.h | 8 ++++++++
->  1 file changed, 8 insertions(+)
+> This is why the VCPUOP_down hypercall returns normally.  All state
+> really is intact.
 > 
-> diff --git a/mm/slab.h b/mm/slab.h
-> index e3b3231af742..0d72fd62751a 100644
-> --- a/mm/slab.h
-> +++ b/mm/slab.h
-> @@ -325,6 +325,14 @@ static inline slab_flags_t kmem_cache_flags(unsigned int object_size,
->  }
->  #endif
->  
-> +static inline bool is_kmalloc_cache(struct kmem_cache *s)
-> +{
-> +#ifndef CONFIG_SLOB
-> +	return (s->flags & SLAB_KMALLOC);
-> +#else
-> +	return false;
-> +#endif
-> +}
->  
->  /* Legal flag mask for kmem_cache_create(), for various configurations */
->  #define SLAB_CORE_FLAGS (SLAB_HWCACHE_ALIGN | SLAB_CACHE_DMA | \
+> As for what Linux does, this is how xen_pv_cpu_up() currently behaves. 
+> If you want to make Xen behave more everything else, then bug a BUG()
+> after VCPUOP_down, and adjust xen_pv_cpu_up() to skip its initialised
+> check and always use VCPUOP_initialise to bring the vCPU back online.
 
+Or we could do what sev_es_play_dead() does and just call start_cpu0()
+after the hypercall returns?
+
+Though, start_cpu0() seems very suspect, it just uses the stack of the
+idle task of whatever CPU happened to be last brought up via cpu_up().
+Which means we now have two idle tasks sharing the same stack?  How is
+start_cpu0() not broken???
+
+-- 
+Josh
