@@ -2,120 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 238C16367A1
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:49:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA416367A2
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:50:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239230AbiKWRtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 12:49:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40988 "EHLO
+        id S239280AbiKWRuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 12:50:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239147AbiKWRtu (ORCPT
+        with ESMTP id S239246AbiKWRt4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 12:49:50 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 362F1BE266;
-        Wed, 23 Nov 2022 09:49:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=3fTJtAhCYVf4T6+HaU0lUlvFevgLRUqxFHqxF0+M6mQ=; b=PsGxbrOAWhmOQwY2+t8gUj0lt8
-        YgJWe0wCbRmKhkaNMxQrEv6bl/KfCT3fTToiLGDu7OHzaxHKam06wEd44l0yMXWihhru3JN5dbOz+
-        z7yp7UE/E/I/YneKKLNgOcj5+nccs/cC3guuN8LzGUby6Doiinv0fCWvvxMlXivAGj6u6PF+riLi2
-        LeA79P9G/yt6pxvybg6aQ4YZkhos9sIpY/uuOe1/sV+1gr3feJnCNyFNIxwprdY1Hq9cLd3Ygp5jJ
-        f9FYMdZAoZHQ1ovdLLTBLm/NC7Jcs4zIddL8Sm83AguCkSkYweKgbyn70U1T/J5pD3EC9oSGcxcc2
-        L9pWqQRQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oxtsO-007sVm-GW; Wed, 23 Nov 2022 17:49:36 +0000
-Date:   Wed, 23 Nov 2022 17:49:36 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        Wolfram Sang <wsa@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        Jilin Yuan <yuanjilin@cdjrlc.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Won Chung <wonchung@google.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-i3c@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH 3/5] driver core: make struct device_type.uevent() take a
- const *
-Message-ID: <Y35dMIaNYSE0Cykd@casper.infradead.org>
-References: <20221123122523.1332370-1-gregkh@linuxfoundation.org>
- <20221123122523.1332370-3-gregkh@linuxfoundation.org>
- <711d5275-7e80-c00d-0cdc-0f3d52175361@gmail.com>
- <Y34hgIW8p1RlQTBB@smile.fi.intel.com>
- <97be39ed-3cea-d55a-caa6-c2652baef399@gmail.com>
- <Y34zyzdbRUdyOSkA@casper.infradead.org>
- <Y34+V2bCDdqujBDk@kroah.com>
- <Y35JfNJDppRp5bLX@ziepe.ca>
- <Y35R+/eQJYI7VaDS@kroah.com>
- <Y35YlI93UBuTfgYy@ziepe.ca>
+        Wed, 23 Nov 2022 12:49:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11828BE266
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 09:49:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 66568B82202
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 17:49:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E33F8C433D7;
+        Wed, 23 Nov 2022 17:49:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669225792;
+        bh=/kQvzs/iNALbr97SgLe2N6KrPnAAyGsng1wmG/TRpZc=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=opAP4xpb5RlZOwyZXqhCmFKlZ/Pi5vzRg4Xpnu9xb+5Sv/fC9LKIQAfCeN1Y7EoRr
+         qua5iso2FxuU8a0eo79L13todz2MxO2IZmB1VOz8c+SDQls5PerD2HdchfHuNLHIFA
+         LEd1Urf+1+Lkg5dEzDPP2q3y3pg0Qh8HAc6mfyWACgIOO67Ob2fNJE8SSSPPrCOguJ
+         rc98xrXWGICOF7fQR1YTifTgIHYKDAnI5kBF5GjPCErd+jIh/UTk3qvBzDT7GOPxmn
+         N2xyv/kUyiS3xBJXTy5tAVA5ZeHRwsgyow/M8SPTLrDSLt9xsgs+NLUry/yy7Gr+Dt
+         rLIvwivECoUfQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 8FCA35C0A3F; Wed, 23 Nov 2022 09:49:51 -0800 (PST)
+Date:   Wed, 23 Nov 2022 09:49:51 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>, sfr@canb.auug.org.au,
+        linux-kernel@vger.kernel.org
+Subject: Re: objtool warning for next-20221118
+Message-ID: <20221123174951.GZ4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221121040736.GA3738360@paulmck-ThinkPad-P17-Gen-1>
+ <Y3thrQxfcvZSXFlr@hirez.programming.kicks-ass.net>
+ <20221121145215.GF4001@paulmck-ThinkPad-P17-Gen-1>
+ <20221122051605.4hcbslwxez2trdvt@treble>
+ <Y3yJxQJ9DwxTx7km@hirez.programming.kicks-ass.net>
+ <20221123002258.GR4001@paulmck-ThinkPad-P17-Gen-1>
+ <20221123014812.7gptbvvndzemt5nc@treble>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y35YlI93UBuTfgYy@ziepe.ca>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221123014812.7gptbvvndzemt5nc@treble>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 01:29:56PM -0400, Jason Gunthorpe wrote:
-> #define generic_container_of(in_type, in, out_type, out_member) \
-> 	_Generic(in,                                        \
->                   const in_type *: ((const out_type *)container_of(in, out_type, out_member)),   \
->                   in_type *: ((out_type *)container_of(in, out_type, out_member)) \
-> 		  )
-
-There's a neat trick I found in seqlock.h:
-
-#define generic_container_of(in_t, in, out_t, m)			\
-	_Generic(*(in),							\
-		const in_t: ((const out_t *)container_of(in, out_t, m)), \
-		in_t: ((out_t *)container_of(in, out_type, m))	\
-	)
-
-and now it fits in 80 columns ;-)
-
-> #define kobj_to_dev(__kobj) \
-> 	generic_container_of(struct kobject, __kobj, struct device, kobj)
+On Tue, Nov 22, 2022 at 05:48:12PM -0800, Josh Poimboeuf wrote:
+> On Tue, Nov 22, 2022 at 04:22:58PM -0800, Paul E. McKenney wrote:
+> > On Tue, Nov 22, 2022 at 09:35:17AM +0100, Peter Zijlstra wrote:
+> > > On Mon, Nov 21, 2022 at 09:16:05PM -0800, Josh Poimboeuf wrote:
+> > > 
+> > > > It's complaining about an unreachable instruction after a call to
+> > > > arch_cpu_idle_dead().  In this case objtool detects the fact
+> > > > arch_cpu_idle_dead() doesn't return due to its call to the
+> > > > non-CONFIG_SMP version of play_dead().  But GCC has no way of detecting
+> > > > that because the caller is in another translation unit.
+> > > > 
+> > > > As far as I can tell, that function should never return.  Though it
+> > > > seems to have some dubious semantics (see xen_pv_play_dead() for
+> > > > example, which *does* seem to return?).  I'm thinking it would be an
+> > > > improvement to enforce that noreturn behavior across all arches and
+> > > > platforms, sprinkling __noreturn and BUG() on arch_cpu_idle_dead() and
+> > > > maybe some of it callees, where needed.
+> > > > 
+> > > > Peter, what do you think?  I could attempt a patch.
+> > > 
+> > > I'm thinking the Xen case makes all this really rather difficult :/
+> > > 
+> > > While normally a CPU is brought up through a trampoline, Xen seems to
+> > > have implemented it by simply returning from play_dead(), and afaict
+> > > that is actually a valid way to go about doing it.
+> > > 
+> > > Perhaps the best way would be to stick a REACHABLE annotation in
+> > > arch_cpu_idle_dead() or something?
+> > 
+> > When I apply this on -next, I still get the objtool complaint.
+> > Is there something else I should also be doing?
 > 
-> Jason
+> Silly GCC is folding the inline asm.  This works (but still doesn't seem
+> like the right approach):
+> 
+> diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+> index 26e8f57c75ad..128e7d78fedf 100644
+> --- a/arch/x86/kernel/process.c
+> +++ b/arch/x86/kernel/process.c
+> @@ -702,7 +702,7 @@ static void (*x86_idle)(void);
+>  #ifndef CONFIG_SMP
+>  static inline void play_dead(void)
+>  {
+> -	BUG();
+> +	_BUG_FLAGS(ASM_UD2, 0, ASM_REACHABLE);
+>  }
+>  #endif
+
+I tried this, and still get:
+
+vmlinux.o: warning: objtool: do_idle+0x156: unreachable instruction
+
+Maybe my gcc is haunted?
+
+							Thanx, Paul
