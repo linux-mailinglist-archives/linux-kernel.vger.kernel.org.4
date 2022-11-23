@@ -2,43 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA595634EE8
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 05:22:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E081F634EEA
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 05:26:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235755AbiKWEWc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 22 Nov 2022 23:22:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45234 "EHLO
+        id S235754AbiKWE0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 23:26:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235743AbiKWEVh (ORCPT
+        with ESMTP id S235875AbiKWEZk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 23:21:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70973F4190;
-        Tue, 22 Nov 2022 20:17:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A3ACDB81E51;
-        Wed, 23 Nov 2022 04:17:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0D5FC433D6;
-        Wed, 23 Nov 2022 04:17:11 +0000 (UTC)
-Date:   Tue, 22 Nov 2022 23:17:10 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Zheng Yejian <zhengyejian1@huawei.com>
-Cc:     <mhiramat@kernel.org>, <yujie.liu@intel.com>,
-        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] tracing: Optimize event type allocation with IDA
-Message-ID: <20221122231710.4315f890@rorschach.local.home>
-In-Reply-To: <20221122223258.10faaf4e@rorschach.local.home>
-References: <20221111234137.90d9ec624497a7e1f5cb5003@kernel.org>
-        <20221123031806.735511-1-zhengyejian1@huawei.com>
-        <20221122223258.10faaf4e@rorschach.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 22 Nov 2022 23:25:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE2CE9165
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 20:20:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669177258;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WIloXbDe6Xf5V7hRDZwNW8sxVxxV79aT2COzbooV/8o=;
+        b=OqWgyb8R3fgVxtSZ0xkTSLDHmwy7iguirE/x0bp6QazIZQjgZfdnf6wefchq0jD0hYLoer
+        jKEI/8X17ST/IlyMur8OiJ4N1b8V7Q81W6aIDZ+RlPCI6E+X1ccALn5n0LVKkP0Q0LxtVB
+        li6rq52BRenQMj7L4UYjlUe1RBZSUkc=
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
+ [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-41-V4G4sybDPZa2Dda1FX-A8Q-1; Tue, 22 Nov 2022 23:20:56 -0500
+X-MC-Unique: V4G4sybDPZa2Dda1FX-A8Q-1
+Received: by mail-pj1-f72.google.com with SMTP id my9-20020a17090b4c8900b002130d29fd7cso509085pjb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 20:20:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WIloXbDe6Xf5V7hRDZwNW8sxVxxV79aT2COzbooV/8o=;
+        b=zFFWPGEZst82sXpMEI5VRbWdlUjfTU6MVl6btB6w1NsImxxNgkjzc5S9TCcNHL168B
+         sLntRSQ8ZTdCkObCEmiRzGDzA4cPWHdABr3b6VhhikJzsZ7crBaaht2WJOEAVXQUCftr
+         SI6zzlT/zOsrZjKOxHUa89lD8K7Hs6TaYywzoopM/Ukriyf6FK9sHb8sxHVZFjQQV2WZ
+         uqXxt1tcOEWXKqFhVa1+d3VBRkSRCJV2L2sB5iJ3JydwAO3KwhtvILx3b3O+VOwviTAN
+         N74Tn/QQp1SAv7quhOg0/MIoVPzMNcB4nOPJnBOvR9OhZvOK2x5aPs/Q1bzgbqVwwzkk
+         KDBA==
+X-Gm-Message-State: ANoB5plH5CenOnmvGpz3mNf08m3h/VtWhM1tSdsKUBcrcCNgYI5MZ2Ot
+        EF2m0KoMB9Xn/cWw7WkCNb5iXsYMRpwGglaeKH2eIlQpbvXIzIgZQcY7XaL1bqr3KHeRAhwvUW7
+        YmAf3i7CQDbOQiK0PQUYa61Nt
+X-Received: by 2002:a17:90a:4b4d:b0:218:b2da:1091 with SMTP id o13-20020a17090a4b4d00b00218b2da1091mr13456792pjl.154.1669177255642;
+        Tue, 22 Nov 2022 20:20:55 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7wOf2Zw6T2jczoJNsiubvwnOuZb/A3PpE3Jw9LSXqJcak1g13OXdGfx5velA/NGlNiwWppmQ==
+X-Received: by 2002:a17:90a:4b4d:b0:218:b2da:1091 with SMTP id o13-20020a17090a4b4d00b00218b2da1091mr13456777pjl.154.1669177255314;
+        Tue, 22 Nov 2022 20:20:55 -0800 (PST)
+Received: from [10.72.12.114] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id h3-20020a170902b94300b00183c6784704sm5516850pls.291.2022.11.22.20.20.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Nov 2022 20:20:54 -0800 (PST)
+Message-ID: <88643033-45e1-3078-cb41-d7255ef874ad@redhat.com>
+Date:   Wed, 23 Nov 2022 12:20:47 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.0
+Subject: Re: [PATCH v2] net: tun: Fix use-after-free in tun_detach()
+Content-Language: en-US
+To:     Eric Dumazet <edumazet@google.com>,
+        Shigeru Yoshida <syoshida@redhat.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        syzbot+106f9b687cd64ee70cd1@syzkaller.appspotmail.com
+References: <20221120090213.922567-1-syoshida@redhat.com>
+ <CANn89iLy3zBDN-y0JB_FJ9Mnmr5N0OguvHRfjVhyXELEpLREMw@mail.gmail.com>
+ <20221123.031005.476714651315933198.syoshida@redhat.com>
+ <CANn89iKQVvaHN+QXxmvk+Cm2vauHNcPRyh3ee_F=JH8coUQnnA@mail.gmail.com>
+From:   Jason Wang <jasowang@redhat.com>
+In-Reply-To: <CANn89iKQVvaHN+QXxmvk+Cm2vauHNcPRyh3ee_F=JH8coUQnnA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,135 +87,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Nov 2022 22:32:58 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
 
-> To explain this better, let's look at the following scenario:
-> 
->  echo 'p:foo val=$arg1:u64' > kprobe_events
->  echo 1 > events/kprobes/foo/enable
->  sleep 1
->  echo 0 > events/kprobes/foo/enable
-> 
->  echo 'p:bar val=+0($arg1):string' > kprobe_events
-> 
->  # foo kprobe is deleted and bar is created and
->  # with IDA, bar has the same number for type as foo
-> 
->  cat trace
-> 
-> When you read the trace, it will see a binary blob representing an
-> event and marked with a type. Although the event was foo, it will now
-> map it to bar. And it will read foo's $arg1:u64 as bar's
-> +0($arg1):string, and will crash.
+在 2022/11/23 02:47, Eric Dumazet 写道:
+> On Tue, Nov 22, 2022 at 10:10 AM Shigeru Yoshida <syoshida@redhat.com> wrote:
+>> Hi Eric,
+>>
+>> On Mon, 21 Nov 2022 08:47:17 -0800, Eric Dumazet wrote:
+>>> On Sun, Nov 20, 2022 at 1:02 AM Shigeru Yoshida <syoshida@redhat.com> wrote:
+>>>> syzbot reported use-after-free in tun_detach() [1].  This causes call
+>>>> trace like below:
+>>>>
+>>>> ==================================================================
+>>>> BUG: KASAN: use-after-free in notifier_call_chain+0x1ee/0x200 kernel/notifier.c:75
+>>>> Read of size 8 at addr ffff88807324e2a8 by task syz-executor.0/3673
+>>>>
+>>>> CPU: 0 PID: 3673 Comm: syz-executor.0 Not tainted 6.1.0-rc5-syzkaller-00044-gcc675d22e422 #0
+>>>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+>>>> Call Trace:
+>>>>   <TASK>
+>>>>   __dump_stack lib/dump_stack.c:88 [inline]
+>>>>   dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+>>>>   print_address_description mm/kasan/report.c:284 [inline]
+>>>>   print_report+0x15e/0x461 mm/kasan/report.c:395
+>>>>   kasan_report+0xbf/0x1f0 mm/kasan/report.c:495
+>>>>   notifier_call_chain+0x1ee/0x200 kernel/notifier.c:75
+>>>>   call_netdevice_notifiers_info+0x86/0x130 net/core/dev.c:1942
+>>>>   call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
+>>>>   call_netdevice_notifiers net/core/dev.c:1997 [inline]
+>>>>   netdev_wait_allrefs_any net/core/dev.c:10237 [inline]
+>>>>   netdev_run_todo+0xbc6/0x1100 net/core/dev.c:10351
+>>>>   tun_detach drivers/net/tun.c:704 [inline]
+>>>>   tun_chr_close+0xe4/0x190 drivers/net/tun.c:3467
+>>>>   __fput+0x27c/0xa90 fs/file_table.c:320
+>>>>   task_work_run+0x16f/0x270 kernel/task_work.c:179
+>>>>   exit_task_work include/linux/task_work.h:38 [inline]
+>>>>   do_exit+0xb3d/0x2a30 kernel/exit.c:820
+>>>>   do_group_exit+0xd4/0x2a0 kernel/exit.c:950
+>>>>   get_signal+0x21b1/0x2440 kernel/signal.c:2858
+>>>>   arch_do_signal_or_restart+0x86/0x2300 arch/x86/kernel/signal.c:869
+>>>>   exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+>>>>   exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:203
+>>>>   __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+>>>>   syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
+>>>>   do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+>>>>   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>>>
+>>>> The cause of the issue is that sock_put() from __tun_detach() drops
+>>>> last reference count for struct net, and then notifier_call_chain()
+>>>> from netdev_state_change() accesses that struct net.
+>>>>
+>>>> This patch fixes the issue by calling sock_put() from tun_detach()
+>>>> after all necessary accesses for the struct net has done.
+>>>>
+>>>> Fixes: 83c1f36f9880 ("tun: send netlink notification when the device is modified")
+>>>> Reported-by: syzbot+106f9b687cd64ee70cd1@syzkaller.appspotmail.com
+>>>> Link: https://syzkaller.appspot.com/bug?id=96eb7f1ce75ef933697f24eeab928c4a716edefe [1]
+>>>> Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
+>>>> ---
+>>>> v2:
+>>>> - Include symbolic stack trace
+>>>> - Add Fixes and Reported-by tags
+>>>> v1: https://lore.kernel.org/all/20221119075615.723290-1-syoshida@redhat.com/
+>>>> ---
+>>>>   drivers/net/tun.c | 6 +++++-
+>>>>   1 file changed, 5 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+>>>> index 7a3ab3427369..ce9fcf4c8ef4 100644
+>>>> --- a/drivers/net/tun.c
+>>>> +++ b/drivers/net/tun.c
+>>>> @@ -686,7 +686,6 @@ static void __tun_detach(struct tun_file *tfile, bool clean)
+>>>>                  if (tun)
+>>>>                          xdp_rxq_info_unreg(&tfile->xdp_rxq);
+>>>>                  ptr_ring_cleanup(&tfile->tx_ring, tun_ptr_free);
+>>>> -               sock_put(&tfile->sk);
+>>>>          }
+>>>>   }
+>>>>
+>>>> @@ -702,6 +701,11 @@ static void tun_detach(struct tun_file *tfile, bool clean)
+>>>>          if (dev)
+>>>>                  netdev_state_change(dev);
+>>>>          rtnl_unlock();
+>>>> +
+>>>> +       if (clean) {
+>>> Would you mind explaining (a comment would be nice) why this barrier is needed ?
+>> I thought that tfile is accessed with rcu_lock(), so I put
+>> synchronize_rcu() here.  Please let me know if I misunderstand the
+>> concept of rcu (I'm losing my confidence...).
+>>
+> Addin Jason for comments.
+>
+> If an RCU grace period was needed before commit 83c1f36f9880 ("tun:
+> send netlink notification when the device is modified"),
+> would we need another patch ?
 
-I just tested my theory, and it proved it:
 
- # cd /sys/kernel/tracing
- # echo 'p:kprobes/foo do_sys_openat2 $arg1:u32' > kprobe_events
- # echo 1 > events/kprobes/foo/enable
- # cat /etc/passwd
- # echo 0 > events/kprobes/foo/enable
- # echo 'p:kprobes/foo do_sys_openat2 +0($arg2):string' > kprobe_events
- # cat trace
-# tracer: nop
-#
-# entries-in-buffer/entries-written: 14/14   #P:8
-#
-#                                _-----=> irqs-off/BH-disabled
-#                               / _----=> need-resched
-#                              | / _---=> hardirq/softirq
-#                              || / _--=> preempt-depth
-#                              ||| / _-=> migrate-disable
-#                              |||| /     delay
-#           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-#              | |         |   |||||     |         |
-        sendmail-1942    [002] .....   530.136320: foo: (do_sys_openat2+0x0/0x240) arg1=             cat-2046    [004] .....   530.930817: foo: (do_sys_openat2+0x0/0x240) arg1="������������������������������������������������������������������������������������������������"
-             cat-2046    [004] .....   530.930961: foo: (do_sys_openat2+0x0/0x240) arg1="������������������������������������������������������������������������������������������������"
-             cat-2046    [004] .....   530.934278: foo: (do_sys_openat2+0x0/0x240) arg1="������������������������������������������������������������������������������������������������"
-             cat-2046    [004] .....   530.934563: foo: (do_sys_openat2+0x0/0x240) arg1="������������������������������������������������������������������������������������������������"
-            bash-1515    [007] .....   534.299093: foo: (do_sys_openat2+0x0/0x240) arg1="kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk���������@��4Z����;Y�����U
+I think we don't need another synchronization here. __tun_detach() has 
+already done the necessary synchronization when it tries to modify 
+tun->tfiles array and tfile->tun.
 
-And dmesg has:
+Thanks
 
-[  558.504698] ==================================================================
-[  558.511925] BUG: KASAN: use-after-free in string+0xd4/0x1c0
-[  558.517501] Read of size 1 at addr ffff88805fdbbfa0 by task cat/2049
 
-[  558.525348] CPU: 0 PID: 2049 Comm: cat Not tainted 6.1.0-rc6-test+ #641
-[  558.531959] Hardware name: Hewlett-Packard HP Compaq Pro 6300 SFF/339A, BIOS K01 v03.03 07/14/2016
-[  558.540909] Call Trace:
-[  558.543360]  <TASK>
-[  558.545465]  dump_stack_lvl+0x5b/0x77
-[  558.549132]  print_report+0x17f/0x47b
-[  558.552805]  ? __virt_addr_valid+0xd9/0x160
-[  558.556998]  ? string+0xd4/0x1c0
-[  558.560229]  ? string+0xd4/0x1c0
-[  558.563462]  kasan_report+0xad/0x130
-[  558.567042]  ? string+0xd4/0x1c0
-[  558.570274]  string+0xd4/0x1c0
-[  558.573332]  ? ip6_addr_string_sa+0x3e0/0x3e0
-[  558.577690]  ? format_decode+0xa2/0x690
-[  558.581531]  ? simple_strtoul+0x10/0x10
-[  558.585378]  vsnprintf+0x500/0x840
-[  558.588785]  ? pointer+0x740/0x740
-[  558.592190]  ? pointer+0x740/0x740
-[  558.595594]  seq_buf_vprintf+0x62/0xc0
-[  558.599346]  trace_seq_printf+0x10e/0x1e0
-[  558.603359]  ? trace_seq_bitmask+0x130/0x130
-[  558.607632]  ? memcpy+0x38/0x60
-[  558.610774]  ? seq_buf_putmem+0x6e/0xa0
-[  558.614616]  print_type_string+0x90/0xa0
-[  558.618539]  ? print_type_symbol+0x80/0x80
-[  558.622640]  print_kprobe_event+0x16b/0x290
-[  558.626830]  print_trace_line+0x451/0x8e0
-[  558.630847]  ? tracing_buffers_read+0x3f0/0x3f0
-[  558.635380]  ? preempt_count_sub+0xb7/0x100
-[  558.639566]  ? _raw_spin_unlock_irqrestore+0x28/0x50
-[  558.644532]  ? trace_find_next_entry_inc+0xa7/0xe0
-[  558.649325]  s_show+0x72/0x1f0
-[  558.652386]  seq_read_iter+0x58e/0x750
-[  558.656147]  seq_read+0x115/0x160
-[  558.659475]  ? seq_read_iter+0x750/0x750
-[  558.663401]  ? __mod_lruvec_page_state+0x123/0x280
-[  558.668199]  ? tracer_preempt_on+0x74/0x1d0
-[  558.672386]  ? preempt_count_sub+0xb7/0x100
-[  558.676573]  ? fsnotify_perm.part.0+0xa0/0x250
-[  558.681025]  vfs_read+0x11d/0x460
-[  558.684344]  ? kernel_read+0xc0/0xc0
-[  558.687922]  ? __fget_light+0x1b0/0x200
-[  558.691763]  ksys_read+0xa9/0x130
-[  558.695082]  ? __ia32_sys_pwrite64+0x120/0x120
-[  558.699528]  ? trace_hardirqs_on+0x2c/0x110
-[  558.703715]  do_syscall_64+0x3a/0x90
-[  558.707304]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[  558.712356] RIP: 0033:0x7fc2e972ade2
-[  558.715934] Code: c0 e9 b2 fe ff ff 50 48 8d 3d b2 3f 0a 00 e8 05 f0 01 00 0f 1f 44 00 00 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75 10 0f 05 <48> 3d 00 f0 ff ff 77 56 c3 0f 1f 44 00 00 48 83 ec 28 48 89 54 24
-[  558.734684] RSP: 002b:00007ffc64e687c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-[  558.742257] RAX: ffffffffffffffda RBX: 0000000000020000 RCX: 00007fc2e972ade2
-[  558.749388] RDX: 0000000000020000 RSI: 00007fc2e980d000 RDI: 0000000000000003
-[  558.756520] RBP: 00007fc2e980d000 R08: 00007fc2e980c010 R09: 0000000000000000
-[  558.763652] R10: 0000000000000022 R11: 0000000000000246 R12: 0000000000020f00
-[  558.770785] R13: 0000000000000003 R14: 0000000000020000 R15: 0000000000020000
-[  558.777920]  </TASK>
-
-[  558.781609] The buggy address belongs to the physical page:
-[  558.787182] page:ffffea00017f6ec0 refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x5fdbb
-[  558.796483] flags: 0xfffffc0000000(node=0|zone=1|lastcpupid=0x1fffff)
-[  558.802925] raw: 000fffffc0000000 0000000000000000 ffffea00017f6ec8 0000000000000000
-[  558.810663] raw: 0000000000000000 0000000000000000 00000000ffffffff 0000000000000000
-[  558.818400] page dumped because: kasan: bad access detected
-
-[  558.825465] Memory state around the buggy address:
-[  558.830258]  ffff88805fdbbe80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-[  558.837479]  ffff88805fdbbf00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-[  558.844699] >ffff88805fdbbf80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-[  558.851917]                                ^
-[  558.856190]  ffff88805fdbc000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-[  558.863409]  ffff88805fdbc080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-[  558.870628] ==================================================================
-
-Look familiar?
-
--- Steve
+>
+> Also sock_flag(sk, SOCK_RCU_FREE) would probably be better than adding
+> a synchronize_rcu() (if again a grace period is needed)
+>
+>
+>
+>> Thanks,
+>> Shigeru
+>>
+>>> Thanks.
+>>>
+>>>> +               synchronize_rcu();
+>>>> +               sock_put(&tfile->sk);
+>>>> +       }
+>>>>   }
+>>>>
+>>>>   static void tun_detach_all(struct net_device *dev)
+>>>> --
+>>>> 2.38.1
+>>>>
 
