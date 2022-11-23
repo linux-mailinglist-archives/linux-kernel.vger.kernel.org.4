@@ -2,148 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE6C763603E
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:44:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1327863603F
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237738AbiKWNn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 08:43:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55206 "EHLO
+        id S238064AbiKWNpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 08:45:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237559AbiKWNnl (ORCPT
+        with ESMTP id S237948AbiKWNpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 08:43:41 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709AA8E09B;
-        Wed, 23 Nov 2022 05:32:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669210327; x=1700746327;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nANvhtrFdqCwCwxA6/+CX0ExEjOjpCpyBs81wpazx0E=;
-  b=Kfgqx84DNrxl9TaZUtHhTfvqNiKtVT9oE40P2pkuAOMe9WcsT4iMtiwF
-   0xlrA87sdp1r1NvBjoFFgCiB2AyBpjKGlhddvZcPnSpmRkfoCPvbITNcx
-   2G+msKHpZzdJmpOSI3wv4v6YFEjLTC2lcTgGA8BVMfQsEtzrQak5PF61M
-   GPtr4io3aOtr7DmEG8No8gHdH8ii72r3fo7kcumlA+tIbrDE8rDMgNqM3
-   d6AgjcvDYUP6SC0qtx6ot8BqvponSwCaqXq4c5FXPApR3t8BEoXSi81yU
-   /snvnIfDZqhyYtvbG+dx5JAovoRhO6gwdqFS8SZBQe4uWG1465aA4EOKa
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="340944976"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="340944976"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 05:32:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="641797490"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="641797490"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 23 Nov 2022 05:32:01 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oxpr5-00GIjM-2x;
-        Wed, 23 Nov 2022 15:31:59 +0200
-Date:   Wed, 23 Nov 2022 15:31:59 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        djrscally@gmail.com, heikki.krogerus@linux.intel.com,
-        sakari.ailus@linux.intel.com, gregkh@linuxfoundation.org,
-        rafael@kernel.org
-Subject: Re: [PATCH v3] device property: fix of node refcount leak in
- fwnode_graph_get_next_endpoint()
-Message-ID: <Y34gz4UXN7il3b49@smile.fi.intel.com>
-References: <20221123022542.2999510-1-yangyingliang@huawei.com>
+        Wed, 23 Nov 2022 08:45:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED6DD5396;
+        Wed, 23 Nov 2022 05:33:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A9EB61CC9;
+        Wed, 23 Nov 2022 13:33:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BB36C433D6;
+        Wed, 23 Nov 2022 13:33:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669210409;
+        bh=o5a/1D++1Mz35bMC46Wx3lUgNniBZ5e14zrk6/8nSLA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LOl7Q4n4cEl48OuaUSA+Bgl0IZTxdonu6mUt/hJRzmYjzYC5vh9Aa2N3ZXMxrUR/6
+         48m+AKkRf2fO3muoslzGBzQUQBe2NxHZTgy+eHvpR+Au3yxQ2og13EtKoKPsTf8Wyg
+         nwUHbaUgC/sR+weWCCWEzz0ML39ZkwLmTORo98UEeKQs4s5cDDnvO08asxGGog6Ydz
+         eBDgNoiqpV5wqgiRgNG0A/FUmd9zgySBEdzk5Ud2AYI+S2ARX0UaCBcxxK1s3revGZ
+         GA8gUTbE00d7ixoql1pdSKm1bZNED2WAN8pFIiz5zQiXrapqcLWoVFoJCyl8cfqdRy
+         8bN3OuFhi7ziQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id E73C84034E; Wed, 23 Nov 2022 10:33:26 -0300 (-03)
+Date:   Wed, 23 Nov 2022 10:33:26 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        Disha Goel <disgoel@linux.vnet.ibm.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] perf test: Skip watchpoint tests if no watchpoints
+ available
+Message-ID: <Y34hJrqCzSE+W+X9@kernel.org>
+References: <20221121102747.208289-1-naveen.n.rao@linux.vnet.ibm.com>
+ <a9f0f8f1-96cd-f6a8-9dda-d4744b938f97@csgroup.eu>
+ <CAP-5=fXJf+1V5RF-m3e+AhK0Qg-yaJ1_2HL0CTOvp1xkK-1fDg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20221123022542.2999510-1-yangyingliang@huawei.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP-5=fXJf+1V5RF-m3e+AhK0Qg-yaJ1_2HL0CTOvp1xkK-1fDg@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 10:25:42AM +0800, Yang Yingliang wrote:
-> The 'parent' returned by fwnode_graph_get_port_parent()
-> with refcount incremented when 'prev' is not NULL, it
-> needs be put when finish using it.
+Em Tue, Nov 22, 2022 at 12:57:05PM -0800, Ian Rogers escreveu:
+> On Tue, Nov 22, 2022 at 11:19 AM Christophe Leroy
+> <christophe.leroy@csgroup.eu> wrote:
+> >
+> >
+> >
+> > Le 21/11/2022 à 11:27, Naveen N. Rao a écrit :
+> > > On IBM Power9, perf watchpoint tests fail since no hardware breakpoints
+> > > are available. Detect this by checking the error returned by
+> > > perf_event_open() and skip the tests in that case.
+> > >
+> > > Reported-by: Disha Goel <disgoel@linux.vnet.ibm.com>
+> > > Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+> > > ---
+> > >   tools/perf/tests/wp.c | 12 +++++++-----
+> > >   1 file changed, 7 insertions(+), 5 deletions(-)
+> > >
+> > > diff --git a/tools/perf/tests/wp.c b/tools/perf/tests/wp.c
+> > > index 56455da30341b4..cc8719609b19ea 100644
+> > > --- a/tools/perf/tests/wp.c
+> > > +++ b/tools/perf/tests/wp.c
+> > > @@ -59,8 +59,10 @@ static int __event(int wp_type, void *wp_addr, unsigned long wp_len)
+> > >       get__perf_event_attr(&attr, wp_type, wp_addr, wp_len);
+> > >       fd = sys_perf_event_open(&attr, 0, -1, -1,
+> > >                                perf_event_open_cloexec_flag());
+> > > -     if (fd < 0)
+> > > +     if (fd < 0) {
+> > > +             fd = -errno;
+> > >               pr_debug("failed opening event %x\n", attr.bp_type);
+> > > +     }
+> >
+> > Do you really need that ?
+> >
+> > Can't you directly check errno in the caller ?
 > 
-> Because the parent is const, introduce a new variable to
-> store the returned fwnode, then put it before returning
-> from fwnode_graph_get_next_endpoint().
-
-To me this looks good enough. Not sure if Dan has a chance (time) to look at
-this, though. And maybe even test...
-
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-> Fixes: b5b41ab6b0c1 ("device property: Check fwnode->secondary in fwnode_graph_get_next_endpoint()")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
-> v2 -> v3:
->   Add a out label.
+> errno is very easily clobbered and not clearly set on success - ie,
+> it'd be better not to do that.
 > 
-> v1 -> v2:
->   Introduce a new variable to store the returned fwnode.
-> ---
->  drivers/base/property.c | 18 ++++++++++++------
->  1 file changed, 12 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/base/property.c b/drivers/base/property.c
-> index 2a5a37fcd998..7f338cb4fb7b 100644
-> --- a/drivers/base/property.c
-> +++ b/drivers/base/property.c
-> @@ -989,26 +989,32 @@ struct fwnode_handle *
->  fwnode_graph_get_next_endpoint(const struct fwnode_handle *fwnode,
->  			       struct fwnode_handle *prev)
->  {
-> +	struct fwnode_handle *ep, *port_parent = NULL;
->  	const struct fwnode_handle *parent;
-> -	struct fwnode_handle *ep;
->  
->  	/*
->  	 * If this function is in a loop and the previous iteration returned
->  	 * an endpoint from fwnode->secondary, then we need to use the secondary
->  	 * as parent rather than @fwnode.
->  	 */
-> -	if (prev)
-> -		parent = fwnode_graph_get_port_parent(prev);
-> -	else
-> +	if (prev) {
-> +		port_parent = fwnode_graph_get_port_parent(prev);
-> +		parent = port_parent;
-> +	} else {
->  		parent = fwnode;
-> +	}
->  	if (IS_ERR_OR_NULL(parent))
->  		return NULL;
->  
->  	ep = fwnode_call_ptr_op(parent, graph_get_next_endpoint, prev);
->  	if (ep)
-> -		return ep;
-> +		goto out_put_port_parent;
-> +
-> +	ep = fwnode_graph_get_next_endpoint(parent->secondary, NULL);
->  
-> -	return fwnode_graph_get_next_endpoint(parent->secondary, NULL);
-> +out_put_port_parent:
-> +	fwnode_handle_put(port_parent);
-> +	return ep;
->  }
->  EXPORT_SYMBOL_GPL(fwnode_graph_get_next_endpoint);
->  
-> -- 
-> 2.25.1
-> 
+> Acked-by: Ian Rogers <irogers@google.com>
 
--- 
-With Best Regards,
-Andy Shevchenko
+Thanks, applied.
 
+- Arnaldo
 
