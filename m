@@ -2,98 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D90246351B9
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 08:59:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AED4C6351C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 09:01:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235974AbiKWH7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 02:59:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36462 "EHLO
+        id S235949AbiKWIBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 03:01:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236112AbiKWH7S (ORCPT
+        with ESMTP id S235733AbiKWIBE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 02:59:18 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C975F27CE1;
-        Tue, 22 Nov 2022 23:59:05 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id vv4so31641544ejc.2;
-        Tue, 22 Nov 2022 23:59:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=f4Agszvcd8QQMAqioCrcTnE+poivJbc38QaNotksFdc=;
-        b=Yb1k+KxH+C9om/ZZiZxwn8UcaOs8xPuuxdLRjtfa51vPSFh6T0K3v8kSl5eeXRQeQG
-         38z2eE2a6ItpJftrkqbbTodr6uV5OEARhHmjX9Dt5t9Xb7GfTgo1dqv5Dl8aNcTVz6Cl
-         1x9cZtYp4FDthDCjnTLq7xCGeG4saj20lEinVYtQ0b2/3SYkQop71IM6uQkNkNt8FEp+
-         HohD7D9Iwn/sWDiA4pEyRnj5ZBr9x9REeE6VFRj6x3/JDqSF6p4U76JcIF/Hm2Hb5Gt2
-         VUojEKlDmvsjGmaC4fDAuEgYXISGcWTLz1Cv9wAyMMYlvd0vF1EiCItCnIHEqHQj5Tp5
-         HUnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f4Agszvcd8QQMAqioCrcTnE+poivJbc38QaNotksFdc=;
-        b=BRM2Y1lg4O0VAvQEVQFZuRsLM/MemFFQDSVe5KEgEhVJF8IFKIoI60WGJ8ElcCAcuS
-         78zHqa46nISSwVS7alGcIDC5qybp0Ig5o17gElBsT809ceTTU1TPpGcAE14cn7v4UKOY
-         r/NoDe13G2Z/0EgKkKiRxPZc69ehUZ7xZEWN10ISzlqRyELgHgbUnjKWx4O7jBcxKtZU
-         xLv7jm648UQgdudqwZ8y/Xa/MIp7fX7alTyMS3XOPSjgniw0zLRSTjO333b0hBJ1WN/0
-         CC6EohBHgql/mzTnP07ARpwkGyFEakqe/8aOnknEqEgTzaYkAH8lqq2xx6UCPwqqQZ6f
-         9Hcg==
-X-Gm-Message-State: ANoB5pksy11zA+zfTXHfz5lHk4GBVLDJjkFh3EkRlAXfveH+5ZcaCskt
-        6h1zurQhWwMU9imEqHV63/Y=
-X-Google-Smtp-Source: AA0mqf6/FyQ5WmB597b5JSXc5L+Ov3fi7K3xXst75oUpGs2S8vauPO5uLf5krdfA5+X+Ciw5oeqhPQ==
-X-Received: by 2002:a17:906:86c9:b0:78d:9324:6f18 with SMTP id j9-20020a17090686c900b0078d93246f18mr23171607ejy.664.1669190344265;
-        Tue, 22 Nov 2022 23:59:04 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id u9-20020a1709061da900b0074136cac2e7sm3742089ejh.81.2022.11.22.23.59.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 23:59:03 -0800 (PST)
-Date:   Wed, 23 Nov 2022 10:59:00 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: imx: remove code for non-existing config
- IMX_GPT_ICAP
-Message-ID: <Y33SxLh9xD8fQHAo@kadam>
-References: <20221122132330.30408-1-lukas.bulwahn@gmail.com>
- <20221122160937.GB39395@tom-ThinkPad-T14s-Gen-2i>
- <CAKXUXMxk-YoG4TdB8Em+cEMF8NA7rdMAboQz8nmhfVmVQ8oATA@mail.gmail.com>
+        Wed, 23 Nov 2022 03:01:04 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C598F101F6;
+        Wed, 23 Nov 2022 00:01:02 -0800 (PST)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NHD415fBJzqSdg;
+        Wed, 23 Nov 2022 15:57:05 +0800 (CST)
+Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 23 Nov 2022 16:01:00 +0800
+Received: from localhost.localdomain (10.67.175.61) by
+ dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 23 Nov 2022 16:01:00 +0800
+From:   Zheng Yejian <zhengyejian1@huawei.com>
+To:     <rostedt@goodmis.org>
+CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <mhiramat@kernel.org>, <yujie.liu@intel.com>,
+        <zhengyejian1@huawei.com>, <linux-trace-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] tracing: Optimize event type allocation with IDA
+Date:   Wed, 23 Nov 2022 16:01:33 +0800
+Message-ID: <20221123080133.1128186-1-zhengyejian1@huawei.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221122223258.10faaf4e@rorschach.local.home>
+References: <20221122223258.10faaf4e@rorschach.local.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKXUXMxk-YoG4TdB8Em+cEMF8NA7rdMAboQz8nmhfVmVQ8oATA@mail.gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.61]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml100012.china.huawei.com (7.185.36.121)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 08:56:06AM +0100, Lukas Bulwahn wrote:
-> 
-> Strangely, my checkpatch invocation on next-20221116 did not show that
-> warning and I am unaware that I made any specific changes to
-> checkpatch or its configuration.
-> 
+On Tue, 22 Nov 2022 22:32:58 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
+> On Wed, 23 Nov 2022 11:18:06 +0800
+> Zheng Yejian <zhengyejian1@huawei.com> wrote:
+>
+> > But Yujie Liu <yujie.liu@intel.com> reported a problem that highly
+> > reproducible after applying this patch:
+> > Link: https://lore.kernel.org/lkml/54f23c9c-97ae-e326-5873-bfa5d2c81f52@intel.com/
+> >
+> > So please DO NOT apply this patch before I find what happened about it.
+>
+> I know what the issue is.
+>
+> The current way of assigning types is to always increment. And not to
+> reuse until it fills up. And even then, it looks for the next available
+> number.
+>
+> I'm guessing the IDA will reuse a number as soon as it is freed. This
 
-I think you need to apply the patch and retest with the -f option.
+Yes, it is.
 
-regards,
-dan carpenter
+> may also have uncovered a bug, as in reality, we must actually clear
+> the tracing buffers every time a number is reused.
 
+Thanks for your explanation!
+
+It seems almost the case, and with current way of assigning types, this
+problem maybe also happend when reuse type id, am I right?
+
+But instead of clear tracing buffers, would it be better to just mark
+that record invalid if we had a way of knowing that the format had changed?
+
+>
+> What happens is that the type number is associated to a print format.
+> That is, the raw data is tagged with the type. This type maps to how to
+> parse the raw data. If you have a kprobe, it creates a new type number.
+> If you free it, and create another one. With the IDA, it is likely to
+> reassign the previously freed number to a new probe.
+>
+> To explain this better, let's look at the following scenario:
+>
+>  echo 'p:foo val=$arg1:u64' > kprobe_events
+>  echo 1 > events/kprobes/foo/enable
+>  sleep 1
+>  echo 0 > events/kprobes/foo/enable
+>
+>  echo 'p:bar val=+0($arg1):string' > kprobe_events
+>
+>  # foo kprobe is deleted and bar is created and
+>  # with IDA, bar has the same number for type as foo
+>
+>  cat trace
+>
+> When you read the trace, it will see a binary blob representing an
+> event and marked with a type. Although the event was foo, it will now
+> map it to bar. And it will read foo's $arg1:u64 as bar's
+> +0($arg1):string, and will crash.
+>
+> -- Steve
