@@ -2,150 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00475636274
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:53:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B25A4636279
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:54:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237915AbiKWOx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 09:53:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52942 "EHLO
+        id S237827AbiKWOyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 09:54:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237907AbiKWOxN (ORCPT
+        with ESMTP id S237758AbiKWOyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 09:53:13 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E471EEF2;
-        Wed, 23 Nov 2022 06:53:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=d34IWNksyN/fUaMdJSyNyFr5/NYJSUamcGjA6pAMtuA=; b=caDYBku0DlKozdr16VvQx2Pf47
-        2FemMLhC3IcrPQOUzURzAZnbhstHNQck3oc9tp/PXObEiBO1MfrwTzqTVM4sWneDrW/0ivZt02rfR
-        GJ97qbtKp6invRyg7JlLsZYl3ZG3vWExlD7hzk57S+mKdQTrPuVtfzCSbDoVVJ8FxhHKtoRSJ0jtU
-        XYB3KakhM7UNmV0lB+Oflj6FYMkeTc2cxN2tMw87mvmQsXCHH2Ve1EXgve0TduL0q7RtvwUTii1c5
-        R8WonwObHfVSic7ZLMDFLvXv3RjVaPGgy5xWCwSrWbCPm+c1AWWTPP+4n4zTi5sjodPbwnBYZMh7x
-        2Km029GQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oxr7T-007j3f-RC; Wed, 23 Nov 2022 14:53:00 +0000
-Date:   Wed, 23 Nov 2022 14:52:59 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Maximilian Luz <luzmaximilian@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        Wolfram Sang <wsa@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        Jilin Yuan <yuanjilin@cdjrlc.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Won Chung <wonchung@google.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-i3c@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH 3/5] driver core: make struct device_type.uevent() take a
- const *
-Message-ID: <Y34zyzdbRUdyOSkA@casper.infradead.org>
-References: <20221123122523.1332370-1-gregkh@linuxfoundation.org>
- <20221123122523.1332370-3-gregkh@linuxfoundation.org>
- <711d5275-7e80-c00d-0cdc-0f3d52175361@gmail.com>
- <Y34hgIW8p1RlQTBB@smile.fi.intel.com>
- <97be39ed-3cea-d55a-caa6-c2652baef399@gmail.com>
+        Wed, 23 Nov 2022 09:54:18 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C13DC23F
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 06:54:17 -0800 (PST)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ANEahAB029309;
+        Wed, 23 Nov 2022 14:54:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=gjywfSLx66XudyOcfC0Q+7A2zHWwhQJG44Cp+hcysn8=;
+ b=m47cAIH3nr+Rgd2r5NHCCV9sZ2yGZuH6HUmXogawtN1HQ4MfrLZS31K8bz31Es/5HVLo
+ VC8iELP5qFW27DRMXcM/56IHU3+virsYCbZljE0nbKOcdJAVQJAV/ylU3CV/R74dC0gb
+ lgwyZ/S9MFthYcD+BYBxWjHc3vAGpC2a3J3iyYnD4kNb0l5PzrW7YZuDM1A+BdXudnmG
+ fIb5gvm5g1HMk0UbscXiCbqkr+aAxmkZ2dtsIWgnYhoViZnWbKJWYNttlku3fQZAocGH
+ oIUco2rWU7BuiwOA3UnMFKM81WOgsdc5E2jXY/GjC1norKnEV3qLrtUXmfJcnNlHZi5L BQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m10ffrp7d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Nov 2022 14:54:00 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2ANEbVSP033847;
+        Wed, 23 Nov 2022 14:54:00 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m10ffrp6e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Nov 2022 14:54:00 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2ANEop97010439;
+        Wed, 23 Nov 2022 14:53:57 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma03ams.nl.ibm.com with ESMTP id 3kxps8wvyy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Nov 2022 14:53:57 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2ANErtJ63670636
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 23 Nov 2022 14:53:55 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2AA274C044;
+        Wed, 23 Nov 2022 14:53:55 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E05ED4C046;
+        Wed, 23 Nov 2022 14:53:52 +0000 (GMT)
+Received: from tarunpc.in.ibm.com (unknown [9.199.157.25])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed, 23 Nov 2022 14:53:52 +0000 (GMT)
+Date:   Wed, 23 Nov 2022 20:23:49 +0530
+From:   Tarun Sahu <tsahu@linux.ibm.com>
+To:     Xiu Jianfeng <xiujianfeng@huawei.com>
+Cc:     oohall@gmail.com, dan.j.williams@intel.com,
+        vishal.l.verma@intel.com, dave.jiang@intel.com,
+        ira.weiny@intel.com, aneesh.kumar@linux.ibm.com,
+        nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] libnvdimm/of_pmem: Fix memory leak in
+ of_pmem_region_probe()
+Message-ID: <20221123145349.yrjo53cz7ez5i36o@tarunpc.in.ibm.com>
+References: <20221123134527.119441-1-xiujianfeng@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <97be39ed-3cea-d55a-caa6-c2652baef399@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221123134527.119441-1-xiujianfeng@huawei.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: VwnmYOhzArG9qUxHupJYkXv_WUak0ZC6
+X-Proofpoint-GUID: kXHQCqt2-hpkSZJmV9_bdXiANo2QQ4bJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-23_08,2022-11-23_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ priorityscore=1501 spamscore=0 clxscore=1011 lowpriorityscore=0
+ bulkscore=0 suspectscore=0 impostorscore=0 malwarescore=0 mlxscore=0
+ adultscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211230108
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 02:59:00PM +0100, Maximilian Luz wrote:
-> On 11/23/22 14:34, Andy Shevchenko wrote:
-> > On Wed, Nov 23, 2022 at 02:14:31PM +0100, Maximilian Luz wrote:
-> > > On 11/23/22 13:25, Greg Kroah-Hartman wrote:
-> > > > The uevent() callback in struct device_type should not be modifying the
-> > > > device that is passed into it, so mark it as a const * and propagate the
-> > > > function signature changes out into all relevant subsystems that use
-> > > > this callback.
-> > 
-> > [...]
-> > 
-> > > > -static inline struct ssam_device *to_ssam_device(struct device *d)
-> > > > +static inline struct ssam_device *to_ssam_device(const struct device *d)
-> > > >    {
-> > > >    	return container_of(d, struct ssam_device, dev);
-> > > >    }
-> > > 
-> > > I am slightly conflicted about this change as that now more or less
-> > > implicitly drops the const. So I'm wondering if it wouldn't be better to
-> > > either create a function specifically for const pointers or to just
-> > > open-code it in the instance above.
-> > > 
-> > > I guess we could also convert this to a macro. Then at least there
-> > > wouldn't be an explicit and potentially misleading const-conversion
-> > > indicated in the function signature.
-> > 
-> > This is an intermediate step as far as I know since moving container_of to
-> > recognize const is a bit noisy right now. I guess you can find a discussion
-> > on the topic between Greg and Sakari.
-> 
-> Thanks! I assume you are referring to the following?
-> 
-> 	https://lore.kernel.org/lkml/4218173bd72b4f1899d4c41a8e251f0d@AcuMS.aculab.com/T/
-> 
-> As far as I can tell this is only a warning in documentation, not
-> compile time (which would probably be impossible?).
-> 
-> As I've said I'd be fine with converting the function to a macro (and
-> preferably adding a similar warning like the one proposed in that
-> thread). The point that irks me up is just that, as proposed, the
-> function signature would now advertise a conversion that should never be
-> happening.
-> 
-> Having two separate functions would create a compile-time guarantee, so
-> I'd prefer that, but I can understand if that might be considered too
-> noisy in code. Or if there is a push to make container_of() emit a
-> compile-time warning I'd also be perfectly happy with converting it to a
-> macro now as that'd alleviate the need for functions in the future.
+Hi,
+Thanks for resolving it.
 
-Can't we do:
+All looks good. Except a thing, there is no check for return status of
+ksrdup too. that can also be part of this patch.
 
-static inline const struct ssam_device *to_ssam_device(const struct device *d)
-{
-	return container_of(d, const struct ssam_device, dev);
-}
-
+On Nov 23 2022, Xiu Jianfeng wrote:
+> After changes in commit 49bddc73d15c ("libnvdimm/of_pmem: Provide a unique
+> name for bus provider"), @priv->bus_desc.provider_name is no longer a
+> const string, but a dynamic string allocated by kstrdup(), it should be
+> freed on the error path, and when driver is removed.
+> 
+> Fixes: 49bddc73d15c ("libnvdimm/of_pmem: Provide a unique name for bus provider")
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+> ---
+>  drivers/nvdimm/of_pmem.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/nvdimm/of_pmem.c b/drivers/nvdimm/of_pmem.c
+> index 10dbdcdfb9ce..1292ffca7b2e 100644
+> --- a/drivers/nvdimm/of_pmem.c
+> +++ b/drivers/nvdimm/of_pmem.c
+> @@ -36,6 +36,7 @@ static int of_pmem_region_probe(struct platform_device *pdev)
+>  
+>  	priv->bus = bus = nvdimm_bus_register(&pdev->dev, &priv->bus_desc);
+>  	if (!bus) {
+> +		kfree(priv->bus_desc.provider_name);
+>  		kfree(priv);
+>  		return -ENODEV;
+>  	}
+> @@ -83,6 +84,7 @@ static int of_pmem_region_remove(struct platform_device *pdev)
+>  	struct of_pmem_private *priv = platform_get_drvdata(pdev);
+>  
+>  	nvdimm_bus_unregister(priv->bus);
+> +	kfree(priv->bus_desc.provider_name);
+>  	kfree(priv);
+>  
+>  	return 0;
+> -- 
+> 2.17.1
+> 
