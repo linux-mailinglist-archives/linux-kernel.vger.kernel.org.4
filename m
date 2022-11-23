@@ -2,177 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA148634DDF
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 03:28:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64E48634DE2
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 03:30:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235324AbiKWC2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 21:28:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45260 "EHLO
+        id S235289AbiKWCad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 21:30:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234023AbiKWC2p (ORCPT
+        with ESMTP id S234023AbiKWCaa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 21:28:45 -0500
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A942CE0688;
-        Tue, 22 Nov 2022 18:28:44 -0800 (PST)
-Received: by mail-io1-f48.google.com with SMTP id d123so12304692iof.7;
-        Tue, 22 Nov 2022 18:28:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Zj/cHXoWYv8o+sJtjgpTEuZhl2QFJwpoNEmZc0bJX4o=;
-        b=LZNzM8+JJ7lrE8r/ulXIQJp0xYR08MeWSqUzfe0HPVcyZbTRP13D56g80prls5L+Dt
-         GyF2RoXg7N8ev+YzmiyP0E34kFpJZtGJGH3dAuYAtt/5IWLF7SeGIUL/L48hnPW6qFnP
-         4J5hIloqlrJAdbvbOEbmyHkvKBqIDwW0h0Duj6eNV0orhooPktoM5rq9BgqZCFnWJoSh
-         mnnW9lAyQ4kqbHLuzixcapcQTdIMsX2EH89g+zCFOqkfVHDWh+y8lBer/pKlfnGNWmfg
-         dAuULYayAVzIOapTgiTWOw+8FabAIE+QkyOB8RhS1h/nyG4jaKtz4YmDsZVTfKTuciWB
-         cahQ==
-X-Gm-Message-State: ANoB5plsG92ku+NJK5jOll8RJlFo//25b07YHYMuuwaIvjhQfKEHnGZX
-        CFoY1IpLFX1puuH/qfw2HA==
-X-Google-Smtp-Source: AA0mqf5ZqoZAZyZrDERM++koEMloL+V38iwkLLRL0dZkuFkaBLcJ31HFzf+6xYoJWh5V3n3G2HUkzQ==
-X-Received: by 2002:a05:6638:440f:b0:375:1820:bb85 with SMTP id bp15-20020a056638440f00b003751820bb85mr11758692jab.46.1669170523964;
-        Tue, 22 Nov 2022 18:28:43 -0800 (PST)
-Received: from robh_at_kernel.org ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id l18-20020a02a892000000b003636cb862d0sm5949379jam.42.2022.11.22.18.28.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 18:28:43 -0800 (PST)
-Received: (nullmailer pid 1022635 invoked by uid 1000);
-        Wed, 23 Nov 2022 02:28:45 -0000
-Date:   Tue, 22 Nov 2022 20:28:45 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sasha Finkelstein <fnkl.kernel@gmail.com>
-Cc:     thierry.reding@gmail.com, krzysztof.kozlowski+dt@linaro.org,
-        marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io,
-        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v3 3/4] arm64: dts: apple: t8103: Add PWM
- controller
-Message-ID: <20221123022845.GB1006695-robh@kernel.org>
-References: <20221121174228.93670-1-fnkl.kernel@gmail.com>
- <20221121174228.93670-4-fnkl.kernel@gmail.com>
+        Tue, 22 Nov 2022 21:30:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14DF2E06A8;
+        Tue, 22 Nov 2022 18:30:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA752B81E51;
+        Wed, 23 Nov 2022 02:30:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 487A7C433D7;
+        Wed, 23 Nov 2022 02:30:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669170627;
+        bh=sZtUMJY2VcKD4NHYZpzaajhtKLwlIs9S6QbWT2Yalq8=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=EjRsGvx/RKFCMBVMR2xWS40YMCXJ0DDXZ5l3rziIQENzvkf0NPyERw95Ehtba0Pro
+         gBPqJvTXE/xq/2s910KH20wQYntlX/SrGQGeC+GvZvkt52yFyImauGdfei9C3Q5Nn4
+         EGJrYwM8DQWhZhipIZYPXSaofvx0/JBD7JwlVafFRXyj2+wTPLUSI06uK122RO88M3
+         egntePmkmFwISiTxpuXA494V454dmuluDvincW18lYzqMYj+2uAZdSooXOIcUenKv9
+         Nd9B3++SdlPkU/Qjzu7XC2n5cXmCNAIl3NUHimQksUA3Mk4A5K5vGrEjdBG4kdpdcu
+         C9t5d7oWbq/sg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221121174228.93670-4-fnkl.kernel@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20221116214655.1116467-1-robimarko@gmail.com>
+References: <20221116214655.1116467-1-robimarko@gmail.com>
+Subject: Re: [PATCH v2] clk: qcom: ipq8074: populate fw_name for all parents
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Robert Marko <robimarko@gmail.com>,
+        Christian Marangi <ansuelsmth@gmail.com>
+To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mturquette@baylibre.com
+Date:   Tue, 22 Nov 2022 18:30:23 -0800
+User-Agent: alot/0.10
+Message-Id: <20221123023027.487A7C433D7@smtp.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 08:42:27PM +0300, Sasha Finkelstein wrote:
-> Adds PWM controller and keyboard backlight bindings for M1 MacBooks
-> 
-> Signed-off-by: Sasha Finkelstein <fnkl.kernel@gmail.com>
-> Acked-by: Sven Peter <sven@svenpeter.dev>
+Quoting Robert Marko (2022-11-16 13:46:55)
+> It appears that having only .name populated in parent_data for clocks
+> which are only globally searchable currently will not work as the clk core
+> won't copy that name if there is no .fw_name present as well.
+>=20
+> So, populate .fw_name for all parent clocks in parent_data.
+>=20
+> Fixes: ae55ad32e273 ("clk: qcom: ipq8074: convert to parent data")
+>=20
+> Co-developed-by: Christian Marangi <ansuelsmth@gmail.com>
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
 > ---
->  arch/arm64/boot/dts/apple/t8103-j293.dts | 20 ++++++++++++++++++++
->  arch/arm64/boot/dts/apple/t8103-j313.dts | 20 ++++++++++++++++++++
->  arch/arm64/boot/dts/apple/t8103.dtsi     |  9 +++++++++
->  3 files changed, 49 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/apple/t8103-j293.dts b/arch/arm64/boot/dts/apple/t8103-j293.dts
-> index ecb10d237a05..0b4b7e8e0726 100644
-> --- a/arch/arm64/boot/dts/apple/t8103-j293.dts
-> +++ b/arch/arm64/boot/dts/apple/t8103-j293.dts
-> @@ -11,6 +11,7 @@
->  
->  #include "t8103.dtsi"
->  #include "t8103-jxxx.dtsi"
-> +#include <dt-bindings/leds/common.h>
->  
->  / {
->  	compatible = "apple,j293", "apple,t8103", "apple,arm-platform";
-> @@ -43,3 +44,22 @@ &i2c2 {
->  &i2c4 {
->  	status = "okay";
+> Changes in v2:
+> * Add fw_name for PCIe PHY pipe clocks as well
+> ---
+>  drivers/clk/qcom/gcc-ipq8074.c | 52 +++++++++++++++++-----------------
+>  1 file changed, 26 insertions(+), 26 deletions(-)
+>=20
+> diff --git a/drivers/clk/qcom/gcc-ipq8074.c b/drivers/clk/qcom/gcc-ipq807=
+4.c
+> index d231866804f6..8374cc40915a 100644
+> --- a/drivers/clk/qcom/gcc-ipq8074.c
+> +++ b/drivers/clk/qcom/gcc-ipq8074.c
+> @@ -680,7 +680,7 @@ static struct clk_rcg2 pcie0_aux_clk_src =3D {
 >  };
-> +
-> +/ {
-> +	led-controller {
-> +		compatible = "pwm-leds";
-> +		led-0 {
-> +			pwms = <&fpwm1 0 40000>;
-> +			pwm-names = "kbd-backlight";
+> =20
+>  static const struct clk_parent_data gcc_pcie20_phy0_pipe_clk_xo[] =3D {
+> -       { .name =3D "pcie20_phy0_pipe_clk" },
+> +       { .fw_name =3D "pcie0_pipe", .name =3D "pcie20_phy0_pipe_clk" },
 
-While allowed pwm-names isn't really needed here as there is only ever 1 
-PWM and it is redundant with 'label'.
-
-> +			label = "kbd_backlight";
-> +			function = LED_FUNCTION_KBD_BACKLIGHT;
-> +			color = <LED_COLOR_ID_WHITE>;
-> +			max-brightness = <255>;
-> +			default-state = "keep";
-> +		};
-> +	};
-> +};
-> +
-> +&fpwm1 {
-> +	status = "okay";
-> +};
-> diff --git a/arch/arm64/boot/dts/apple/t8103-j313.dts b/arch/arm64/boot/dts/apple/t8103-j313.dts
-> index df741737b8e6..0e0f57dee96b 100644
-> --- a/arch/arm64/boot/dts/apple/t8103-j313.dts
-> +++ b/arch/arm64/boot/dts/apple/t8103-j313.dts
-> @@ -11,6 +11,7 @@
->  
->  #include "t8103.dtsi"
->  #include "t8103-jxxx.dtsi"
-> +#include <dt-bindings/leds/common.h>
->  
->  / {
->  	compatible = "apple,j313", "apple,t8103", "apple,arm-platform";
-> @@ -35,3 +36,22 @@ &pcie0_dart_2 {
->  
->  /delete-node/ &port01;
->  /delete-node/ &port02;
-> +
-> +/ {
-> +	led-controller {
-> +		compatible = "pwm-leds";
-> +		led-0 {
-> +			pwms = <&fpwm1 0 40000>;
-> +			pwm-names = "kbd-backlight";
-> +			label = "kbd_backlight";
-> +			function = LED_FUNCTION_KBD_BACKLIGHT;
-> +			color = <LED_COLOR_ID_WHITE>;
-> +			max-brightness = <255>;
-> +			default-state = "keep";
-> +		};
-> +	};
-> +};
-> +
-> +&fpwm1 {
-> +	status = "okay";
-> +};
-> diff --git a/arch/arm64/boot/dts/apple/t8103.dtsi b/arch/arm64/boot/dts/apple/t8103.dtsi
-> index 51a63b29d404..ccdb26ef6b22 100644
-> --- a/arch/arm64/boot/dts/apple/t8103.dtsi
-> +++ b/arch/arm64/boot/dts/apple/t8103.dtsi
-> @@ -191,6 +191,15 @@ i2c4: i2c@235020000 {
->  			status = "disabled"; /* only used in J293 */
->  		};
->  
-> +		fpwm1: pwm@235044000 {
-> +			compatible = "apple,t8103-fpwm", "apple,s5l-fpwm";
-> +			reg = <0x2 0x35044000 0x0 0x4000>;
-> +			power-domains = <&ps_fpwm1>;
-> +			clocks = <&clkref>;
-> +			#pwm-cells = <2>;
-> +			status = "disabled";
-> +		};
-> +
->  		serial0: serial@235200000 {
->  			compatible = "apple,s5l-uart";
->  			reg = <0x2 0x35200000 0x0 0x1000>;
-> -- 
-> 2.38.1
-> 
-> 
+Is there a DT binding update for these firmware names?
