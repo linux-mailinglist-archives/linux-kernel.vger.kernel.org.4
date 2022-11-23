@@ -2,168 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF461636AA5
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 21:15:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 449BC636A89
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 21:09:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237251AbiKWUPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 15:15:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36868 "EHLO
+        id S237795AbiKWUIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 15:08:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237546AbiKWUPL (ORCPT
+        with ESMTP id S235952AbiKWUIr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 15:15:11 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A3556EC8;
-        Wed, 23 Nov 2022 12:15:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669234508; x=1700770508;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eSntQzF4q26wzrEFVAJywooKAOI3AAj+06yfqsfV9sw=;
-  b=WJgxBiNOlToKBNACKH2VOi1WzQFZOLv+G6el085K3U7OfMW63xXpbgJJ
-   IeUgaX48GQo+A+AKzgzr7X/LZhU1d9m1jHt3n5X/QmoaLXZGPsplRyCQq
-   qbJeFjfV4H8ClAL4P+JiNO9PsxvNcyO2Wzn5Ff4Cm0tYC7aA+fieVWsS6
-   nrf4TYgTG41JMxaORfGOc4iDNibNEUomuf943E85Tc3KgjsKwCTGKNijD
-   DxkEQ9MOI+z1e7yuewAh65dmy+J39jrTEJOvCV1XwfYKa/llolLi/4kOr
-   5hm2/7Tm+EwKjrIxy1ocicganBjNkCmYk9yZ8Z/6e9X9EKaEymASihDj2
-   g==;
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="184920813"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Nov 2022 13:15:06 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 23 Nov 2022 13:15:05 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Wed, 23 Nov 2022 13:15:04 -0700
-Date:   Wed, 23 Nov 2022 21:19:55 +0100
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <ast@kernel.org>, <daniel@iogearbox.net>, <hawk@kernel.org>,
-        <john.fastabend@gmail.com>, <alexandr.lobakin@intel.com>,
-        <UNGLinuxDriver@microchip.com>
-Subject: Re: [PATCH net-next v4 6/7] net: lan966x: Add support for XDP_TX
-Message-ID: <20221123201955.koaobohzf6kcm4ho@soft-dev3-1>
-References: <20221122214413.3446006-1-horatiu.vultur@microchip.com>
- <20221122214413.3446006-7-horatiu.vultur@microchip.com>
- <Y31Mu/hAxrmbn7Ws@boxer>
+        Wed, 23 Nov 2022 15:08:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB1A7C034;
+        Wed, 23 Nov 2022 12:08:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5EF1361EDF;
+        Wed, 23 Nov 2022 20:08:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32C98C433C1;
+        Wed, 23 Nov 2022 20:08:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669234123;
+        bh=pMYFCDEnrTaheqJWKdnXehbOr0/Y6jGvgtCVjILFdVQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WDxLTTknA0Pw9PHTOTsHBbF7v2f0vAvXcOgRK7Y5+dIkTut7mYHgf8Jv8fJn7Se3F
+         bIlrC0q7zp9ydlhEmMapJvWNHY7b6DPLiJbh2Rn+vxpXSYwPtehQpLUh2BWDx7+QVf
+         YC4r3y4dooOxRj2Vu/zEHBxiDZ9QrC6s4j7owIMXyL0Wh58nt8+u3WGVAmlY5XY/bt
+         YiHMvHbFSPYFejDyCSzjD39Q18YdcPT3hRtMVboxroiuazO31AfVHqITSkJSEQbotZ
+         nfwCDDpOpZamPCeePaMleNStqZQKoEOh8r/SdX0ptwK6f/UTuSA23GzvmHR/Rbdvt0
+         ZEsGZYZ7PtCQw==
+Date:   Wed, 23 Nov 2022 20:21:15 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <uwe@kleine-koenig.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jean-Baptiste Maneyrol <jean-baptiste.maneyrol@tdk.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Michael Srba <Michael.Srba@seznam.cz>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Uwe =?UTF-8?B?S2xlaW5l?= =?UTF-8?B?LUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 109/606] iio: imu: inv_mpu6050: Convert to i2c's
+ .probe_new()
+Message-ID: <20221123202115.43162a30@jic23-huawei>
+In-Reply-To: <20221118224540.619276-110-uwe@kleine-koenig.org>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+        <20221118224540.619276-110-uwe@kleine-koenig.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <Y31Mu/hAxrmbn7Ws@boxer>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 11/22/2022 23:27, Maciej Fijalkowski wrote:
-> 
-> On Tue, Nov 22, 2022 at 10:44:12PM +0100, Horatiu Vultur wrote:
-> > Extend lan966x XDP support with the action XDP_TX. In this case when the
-> > received buffer needs to execute XDP_TX, the buffer will be moved to the
-> > TX buffers. So a new RX buffer will be allocated.
-> > When the TX finish with the frame, it would give back the buffer to the
-> > page pool.
-> >
-> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> > ---
-...
-> >
-> >  struct lan966x_port;
-> > @@ -176,6 +178,7 @@ struct lan966x_tx_dcb_buf {
-> >       dma_addr_t dma_addr;
-> >       struct net_device *dev;
-> >       struct sk_buff *skb;
-> > +     struct xdp_frame *xdpf;
-> 
-> Couldn't you make an union out of skb and xdpf? I'd say these two are
-> mutually exclusive, no? I believe this would simplify some things.
+On Fri, 18 Nov 2022 23:37:23 +0100
+Uwe Kleine-K=C3=B6nig <uwe@kleine-koenig.org> wrote:
 
-Yes, skb and xdpf are mutually exclusive.
-Also Alexander Lobakin mention something similar and I was not sure.
-Now that I have tried it I can see it that is more clear that skb and
-xdpf are mutually exclusive and also reduce the size of the struct.
-So I will update this in the next series.
+> From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+>=20
+> .probe_new() doesn't get the i2c_device_id * parameter, so determine
+> that explicitly in the probe function.
+>=20
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> ---
+>  drivers/iio/imu/inv_mpu6050/inv_mpu_i2c.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/iio/imu/inv_mpu6050/inv_mpu_i2c.c b/drivers/iio/imu/=
+inv_mpu6050/inv_mpu_i2c.c
+> index 7a8d60a5afa9..70eaa408e388 100644
+> --- a/drivers/iio/imu/inv_mpu6050/inv_mpu_i2c.c
+> +++ b/drivers/iio/imu/inv_mpu6050/inv_mpu_i2c.c
+> @@ -95,9 +95,9 @@ static int inv_mpu_i2c_aux_setup(struct iio_dev *indio_=
+dev)
+>   *
+Kernel-doc (no idea why it needs it for a probe function) has
+id documented.  I've fixed up dropping that.
 
-> 
-> >       u32 len;
-> >       u32 used : 1;
-> >       u32 ptp : 1;
-> > @@ -360,6 +363,8 @@ bool lan966x_hw_offload(struct lan966x *lan966x, u32 port, struct sk_buff *skb);
-> >
-> >  void lan966x_ifh_get_src_port(void *ifh, u64 *src_port);
-> >  void lan966x_ifh_get_timestamp(void *ifh, u64 *timestamp);
-> > +void lan966x_ifh_set_bypass(void *ifh, u64 bypass);
-> > +void lan966x_ifh_set_port(void *ifh, u64 bypass);
-> >
-> >  void lan966x_stats_get(struct net_device *dev,
-> >                      struct rtnl_link_stats64 *stats);
-> > @@ -460,6 +465,9 @@ u32 lan966x_ptp_get_period_ps(void);
-> >  int lan966x_ptp_gettime64(struct ptp_clock_info *ptp, struct timespec64 *ts);
-> >
-> >  int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev);
-> > +int lan966x_fdma_xmit_xdpf(struct lan966x_port *port,
-> > +                        struct xdp_frame *frame,
-> > +                        struct page *page);
-> >  int lan966x_fdma_change_mtu(struct lan966x *lan966x);
-> >  void lan966x_fdma_netdev_init(struct lan966x *lan966x, struct net_device *dev);
-> >  void lan966x_fdma_netdev_deinit(struct lan966x *lan966x, struct net_device *dev);
-> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
-> > index a99657154cca4..e7998fef7048c 100644
-> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
-> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
-> > @@ -54,6 +54,7 @@ int lan966x_xdp_run(struct lan966x_port *port, struct page *page, u32 data_len)
-> >  {
-> >       struct bpf_prog *xdp_prog = port->xdp_prog;
-> >       struct lan966x *lan966x = port->lan966x;
-> > +     struct xdp_frame *xdpf;
-> >       struct xdp_buff xdp;
-> >       u32 act;
-> >
-> > @@ -66,6 +67,13 @@ int lan966x_xdp_run(struct lan966x_port *port, struct page *page, u32 data_len)
-> >       switch (act) {
-> >       case XDP_PASS:
-> >               return FDMA_PASS;
-> > +     case XDP_TX:
-> > +             xdpf = xdp_convert_buff_to_frame(&xdp);
-> > +             if (!xdpf)
-> > +                     return FDMA_DROP;
-> 
-> I would generally challenge the need for xdp_frame in XDP_TX path. You
-> probably would be good to go with calling directly
-> page_pool_put_full_page() on cleaning side. This frame is not going to be
-> redirected so I don't see the need for carrying additional info. I'm
-> bringing this up as I was observing performance improvement on ice driver
-> when I decided to operate directly on xdp_buff for XDP_TX.
+Jonathan
 
-Thanks for suggestion. I definetly see your point.
-I would prefer for now to keep this like it is. Because I think in the
-near future I should do a proper investigation to see where the
-performance of the FDMA can be improved. And this will
-definetly be on the TODO.
-> 
-> But it's of course up to you.
+>   *  Returns 0 on success, a negative error code otherwise.
+>   */
+> -static int inv_mpu_probe(struct i2c_client *client,
+> -			 const struct i2c_device_id *id)
+> +static int inv_mpu_probe(struct i2c_client *client)
+>  {
+> +	const struct i2c_device_id *id =3D i2c_client_get_device_id(client);
+>  	const void *match;
+>  	struct inv_mpu6050_state *st;
+>  	int result;
+> @@ -260,7 +260,7 @@ static const struct acpi_device_id inv_acpi_match[] =
+=3D {
+>  MODULE_DEVICE_TABLE(acpi, inv_acpi_match);
+> =20
+>  static struct i2c_driver inv_mpu_driver =3D {
+> -	.probe		=3D	inv_mpu_probe,
+> +	.probe_new	=3D	inv_mpu_probe,
+>  	.remove		=3D	inv_mpu_remove,
+>  	.id_table	=3D	inv_mpu_id,
+>  	.driver =3D {
 
-> 
-> > +
-> > +             return lan966x_fdma_xmit_xdpf(port, xdpf, page) ?
-> > +                    FDMA_DROP : FDMA_TX;
-> >       default:
-> >               bpf_warn_invalid_xdp_action(port->dev, xdp_prog, act);
-> >               fallthrough;
-> > --
-> > 2.38.0
-> >
-
--- 
-/Horatiu
