@@ -2,160 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9554F636816
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:02:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A808063684E
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:07:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239463AbiKWSCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 13:02:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53594 "EHLO
+        id S239372AbiKWSHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 13:07:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239354AbiKWSCU (ORCPT
+        with ESMTP id S239611AbiKWSGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 13:02:20 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7B093700
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 10:02:16 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id w4so8548060plp.1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 10:02:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JBAHsDOjy5OO4Ngubx5UMoEA0/sDtPMwp6OMmJM5Kq8=;
-        b=j0pjNho9RlZm19Tehr3FVjo7Db8885B4Y7xkdDdUAoWctaEVu0QXpeH4dAhlT+H/66
-         rXShciLYPKXX/As5ej1NnFhKVYsgqZOAIM86zq/8g4IoL0rpFkAis4hyMIxH32ObpzTD
-         q12ac2q20Bq/175aKSlrDsis/kh1ZErXHlsfXaFF0vLM0VKl7Q/KOGrAwfHxRNQmXI/O
-         driosPsB+7yejIXs59Nh7GScXFt/2qGI69bVfBSTlUwjFNjy1R5omvxslKZApaKKy6Vb
-         bCz1WtnxHp4F2zgsQTYD/KhQpB2n22TuYLklkc67sIj+R3YF0oMYZg8xQcjMBvZBgqVR
-         chmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JBAHsDOjy5OO4Ngubx5UMoEA0/sDtPMwp6OMmJM5Kq8=;
-        b=hLKZq3PGL4TQ8YmyRh7gc5Wsc1t1aS1g3ssc7NuZJtuFWXEo8rJnbR+XFLyuU3MLs7
-         eKwFJOcq/aNGXqmkjCMF1t/AJjq7/W+QAE/q66bD0DMk0QWHz6Pt9LrKgU3IDFcMs1Fk
-         APO54j136bFhR4HxJEt5zt0XI/Fufqo1TdNMPVDJu03jeDMtXpA+OL6BneExonzLjPNz
-         E89dk6Gj8SPQ2J8myjyyMVPX8Wo+toNFt020DQYIP2FVSMBOaM39yC6tTHp2RY3MCZKu
-         gp4wbL6+sDHIjYJEi2VpfDen+xzGCsO59U2PNcjIfBHbM75t/YWSBA4AZuqgh3PvuxAZ
-         wL2A==
-X-Gm-Message-State: ANoB5pnwfwxKDu5mkEqbjAf1OGSQWqs50asHtPxYY/WVsiZvRwI6zECG
-        q7E2s6viekBsk/AMj6B4bEqMVA==
-X-Google-Smtp-Source: AA0mqf4h/eDzvGfQmUc/ZjBSomm7vgT2Crg1NblOZpQoP8uNf60lMXpAkbUo70CvheBSDG5J9lpZAg==
-X-Received: by 2002:a17:902:da89:b0:189:8b2:b069 with SMTP id j9-20020a170902da8900b0018908b2b069mr10756414plx.13.1669226535720;
-        Wed, 23 Nov 2022 10:02:15 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id w26-20020a63475a000000b00462612c2699sm11075143pgk.86.2022.11.23.10.02.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 10:02:15 -0800 (PST)
-Date:   Wed, 23 Nov 2022 18:02:11 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     Alex =?utf-8?B?QmVubu+/vWU=?= <alex.bennee@linaro.org>,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v9 3/8] KVM: Add KVM_EXIT_MEMORY_FAULT exit
-Message-ID: <Y35gI0L8GMt9+OkK@google.com>
-References: <20221025151344.3784230-4-chao.p.peng@linux.intel.com>
- <87cz9o9mr8.fsf@linaro.org>
- <20221116031441.GA364614@chaop.bj.intel.com>
- <87mt8q90rw.fsf@linaro.org>
- <20221117134520.GD422408@chaop.bj.intel.com>
- <87a64p8vof.fsf@linaro.org>
- <20221118013201.GA456562@chaop.bj.intel.com>
- <87o7t475o7.fsf@linaro.org>
- <Y3er0M5Rpf1X97W/@google.com>
- <20221122095022.GA617784@chaop.bj.intel.com>
+        Wed, 23 Nov 2022 13:06:38 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAFEED1C08;
+        Wed, 23 Nov 2022 10:03:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669226601; x=1700762601;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=w9RmeZjtCjYZDa05D70xUE4PGBJek3/Pk2HxVVisXRs=;
+  b=IG+CcfHfK7x5gMwGCbIEHcV+Nn24sBi6sUCh6fHdY4FtwpTfGpuuSA2q
+   aJJfmAwzvIXU+b66sTTZLz+ahoWVeqttnSqLOb50/dMIHSu7/wrv77MwR
+   Hc0nI4+Dqlex/X6JhP2D7AabN6J/5GwizUVtFMx8/MgF/6Z9rlMOXCfJt
+   bwXgSRSLvPBlxtQxoYEe/3GufMBHYN4HwdI0M1yJ/SGNYPa6hOFzbSorN
+   Lu6FHe1SkCC3sww7sVaKmyoi5k9x4pLhQTuz0PTYqj9/zWtaaI+DrMgho
+   Ww6Dc5yx89R4ZWYw8p7gWZf7sSk8zyRMpNMcKTWzfNrSz5lGSiB4H2jQn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="311764581"
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="311764581"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 10:03:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="816565091"
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="816565091"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga005.jf.intel.com with ESMTP; 23 Nov 2022 10:03:10 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 2ANI38Ug029972;
+        Wed, 23 Nov 2022 18:03:09 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Suman Ghosh <sumang@marvell.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, sgoutham@marvell.com, sbhatta@marvell.com,
+        jerinj@marvell.com, gakula@marvell.com, hkelam@marvell.com,
+        lcherian@marvell.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [net-next PATCH V2] octeontx2-pf: Add support to filter packet based on IP fragment
+Date:   Wed, 23 Nov 2022 19:02:49 +0100
+Message-Id: <20221123180249.487977-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221123084038.2824345-1-sumang@marvell.com>
+References: <20221123084038.2824345-1-sumang@marvell.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221122095022.GA617784@chaop.bj.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022, Chao Peng wrote:
-> On Fri, Nov 18, 2022 at 03:59:12PM +0000, Sean Christopherson wrote:
-> > On Fri, Nov 18, 2022, Alex Benn?e wrote:
-> > > > We don't actually need a new bit, the opposite side of private is
-> > > > shared, i.e. flags with KVM_MEMORY_EXIT_FLAG_PRIVATE cleared expresses
-> > > > 'shared'.
-> > > 
-> > > If that is always true and we never expect a 3rd type of memory that is
-> > > fine. But given we are leaving room for expansion having an explicit bit
-> > > allows for that as well as making cases of forgetting to set the flags
-> > > more obvious.
-> > 
-> > Hrm, I'm on the fence.
-> > 
-> > A dedicated flag isn't strictly needed, e.g. even if we end up with 3+ types in
-> > this category, the baseline could always be "private".
+From: Suman Ghosh <sumang@marvell.com>
+Date: Wed, 23 Nov 2022 14:10:38 +0530
+
+> 1. Added support to filter packets based on IP fragment.
+> For IPv4 packets check for ip_flag == 0x20 (more fragment bit set).
+> For IPv6 packets check for next_header == 0x2c (next_header set to
+> 'fragment header for IPv6')
+> 2. Added configuration support from both "ethtool ntuple" and "tc flower".
 > 
-> The baseline for the current code is actually "shared".
-
-Ah, right, the baseline needs to be "shared" so that legacy code doesn't end up
-with impossible states.
-
-> > I do like being explicit, and adding a PRIVATE flag costs KVM practically nothing
-> > to implement and maintain, but evetually we'll up with flags that are paired with
-> > an implicit state, e.g. see the many #PF error codes in x86.  In other words,
-> > inevitably KVM will need to define the default/base state of the access, at which
-> > point the base state for SHARED vs. PRIVATE is "undefined".  
+> Signed-off-by: Suman Ghosh <sumang@marvell.com>
+> ---
+> Changes since v1:
+> - Added extack change.
+> - Added be32_to_cpu conversion for ip_flag mask also.
 > 
-> Current memory conversion for confidential usage is bi-directional so we
-> already need both private and shared states and if we use one bit for
-> both "shared" and "private" then we will have to define the default
-> state, e.g, currently the default state is "shared" when we define
-> 
-> 	KVM_MEMORY_EXIT_FLAG_PRIVATE	(1 << 0)
+>  .../net/ethernet/marvell/octeontx2/af/mbox.h  |  4 +++
+>  .../net/ethernet/marvell/octeontx2/af/npc.h   |  2 ++
+>  .../marvell/octeontx2/af/rvu_debugfs.c        |  8 ++++++
+>  .../marvell/octeontx2/af/rvu_npc_fs.c         |  8 ++++++
+>  .../marvell/octeontx2/nic/otx2_flows.c        | 25 ++++++++++++++++---
+>  .../ethernet/marvell/octeontx2/nic/otx2_tc.c  | 25 +++++++++++++++++++
+>  6 files changed, 68 insertions(+), 4 deletions(-)
 
-...
+[...]
 
-> > So I would say if we add an explicit READ flag, then we might as well add an explicit
-> > PRIVATE flag too.  But if we omit PRIVATE, then we should omit READ too.
-> 
-> Since we assume the default state is shared, so we actually only need a
-> PRIVATE flag, e.g. there is no SHARED flag and will ignore the RWX for now.
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c
+> index 642e58a04da0..1cf026de5f1a 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c
+> @@ -2799,6 +2799,14 @@ static void rvu_dbg_npc_mcam_show_flows(struct seq_file *s,
+>  			seq_printf(s, "%pI6 ", rule->packet.ip6dst);
+>  			seq_printf(s, "mask %pI6\n", rule->mask.ip6dst);
+>  			break;
+> +		case NPC_IPFRAG_IPV6:
+> +			seq_printf(s, "%d ", rule->packet.next_header);
+> +			seq_printf(s, "mask 0x%x\n", rule->mask.next_header);
 
-Yeah, I'm leading towards "shared" being the implied default state.  Ditto for
-"read" if/when we need to communicate write/execute information  E.g. for VMs
-that don't support guest private memory, the "shared" flag is in some ways
-nonsensical.  Worst case scenario, e.g. if we end up with variations of "shared",
-we'll need something like KVM_MEMORY_EXIT_FLAG_SHARED_RESTRICTIVE or whatever,
-but the basic "shared" default will still work.
+Why the same field is printed as signed decimal in the first printf,
+but as unsigned hex in the second? Could you please unify to `0x%x`?
+
+> +			break;
+> +		case NPC_IPFRAG_IPV4:
+> +			seq_printf(s, "%d ", rule->packet.ip_flag);
+> +			seq_printf(s, "mask 0x%x\n", rule->mask.ip_flag);
+
+(same)
+
+> +			break;
+>  		case NPC_SPORT_TCP:
+>  		case NPC_SPORT_UDP:
+>  		case NPC_SPORT_SCTP:
+
+[...]
+
+> @@ -484,8 +486,10 @@ do {									       \
+>  	 * Example: Source IP is 4 bytes and starts at 12th byte of IP header
+>  	 */
+>  	NPC_SCAN_HDR(NPC_TOS, NPC_LID_LC, NPC_LT_LC_IP, 1, 1);
+> +	NPC_SCAN_HDR(NPC_IPFRAG_IPV4, NPC_LID_LC, NPC_LT_LC_IP, 6, 1);
+
+I know it's out of the patch's subject, but this macro has "hidden"
+argument usage:
+
+* lid;
+* lt;
+* hdr;
+* nr_bytes;
+* mcam;
+* cfg;
+* intf;
+* ...
+
+We try to avoid that.
+Could you please (in a separate patch, it can be made later)
+refactor that block? For example, you can create an onstack
+structure, put all those variables there and then pass that struct
+to the macro.
+
+Also, you call that macro 20+ times and it's not so small itself, so
+converting these 20 calls to an array of 20 const parameters and
+then doing one loop over that array can significantly reduce code
+size.
+
+>  	NPC_SCAN_HDR(NPC_SIP_IPV4, NPC_LID_LC, NPC_LT_LC_IP, 12, 4);
+>  	NPC_SCAN_HDR(NPC_DIP_IPV4, NPC_LID_LC, NPC_LT_LC_IP, 16, 4);
+> +	NPC_SCAN_HDR(NPC_IPFRAG_IPV6, NPC_LID_LC, NPC_LT_LC_IP6_EXT, 6, 1);
+>  	NPC_SCAN_HDR(NPC_SIP_IPV6, NPC_LID_LC, NPC_LT_LC_IP6, 8, 16);
+>  	NPC_SCAN_HDR(NPC_DIP_IPV6, NPC_LID_LC, NPC_LT_LC_IP6, 24, 16);
+>  	NPC_SCAN_HDR(NPC_SPORT_UDP, NPC_LID_LD, NPC_LT_LD_UDP, 0, 2);
+> @@ -899,6 +903,8 @@ do {									      \
+>  	NPC_WRITE_FLOW(NPC_ETYPE, etype, ntohs(pkt->etype), 0,
+>  		       ntohs(mask->etype), 0);
+>  	NPC_WRITE_FLOW(NPC_TOS, tos, pkt->tos, 0, mask->tos, 0);
+> +	NPC_WRITE_FLOW(NPC_IPFRAG_IPV4, ip_flag, pkt->ip_flag, 0,
+> +		       mask->ip_flag, 0);
+
+Same for this function.
+
+>  	NPC_WRITE_FLOW(NPC_SIP_IPV4, ip4src, ntohl(pkt->ip4src), 0,
+>  		       ntohl(mask->ip4src), 0);
+>  	NPC_WRITE_FLOW(NPC_DIP_IPV4, ip4dst, ntohl(pkt->ip4dst), 0,
+> @@ -919,6 +925,8 @@ do {									      \
+>  	NPC_WRITE_FLOW(NPC_OUTER_VID, vlan_tci, ntohs(pkt->vlan_tci), 0,
+>  		       ntohs(mask->vlan_tci), 0);
+>  
+> +	NPC_WRITE_FLOW(NPC_IPFRAG_IPV6, next_header, pkt->next_header, 0,
+> +		       mask->next_header, 0);
+>  	npc_update_ipv6_flow(rvu, entry, features, pkt, mask, output, intf);
+>  	npc_update_vlan_features(rvu, entry, features, intf);
+
+[...]
+
+> -		/* Not Drop/Direct to queue but use action in default entry */
+> -		if (fsp->m_ext.data[1] &&
+> -		    fsp->h_ext.data[1] == cpu_to_be32(OTX2_DEFAULT_ACTION))
+> -			req->op = NIX_RX_ACTION_DEFAULT;
+> +		if (fsp->m_ext.data[1]) {
+> +			if (flow_type == IP_USER_FLOW) {
+> +				if (be32_to_cpu(fsp->h_ext.data[1]) != 0x20)
+
+Define 0x20 as a macro to not search for it for long when it's
+needed?
+
+> +					return -EINVAL;
+> +
+> +				pkt->ip_flag = (u8)be32_to_cpu(fsp->h_ext.data[1]);
+> +				pmask->ip_flag = (u8)be32_to_cpu(fsp->m_ext.data[1]);
+
+These explicit casts are not needed unless I'm missing something?
+
+> +				req->features |= BIT_ULL(NPC_IPFRAG_IPV4);
+> +			} else if (fsp->h_ext.data[1] ==
+> +					cpu_to_be32(OTX2_DEFAULT_ACTION)) {
+> +				/* Not Drop/Direct to queue but use action
+> +				 * in default entry
+> +				 */
+> +				req->op = NIX_RX_ACTION_DEFAULT;
+> +			}
+> +		}
+>  	}
+>  
+>  	if (fsp->flow_type & FLOW_MAC_EXT &&
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+> index e64318c110fd..93b36d2cf883 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+> @@ -532,6 +532,31 @@ static int otx2_tc_prepare_flow(struct otx2_nic *nic, struct otx2_tc_flow *node,
+>  			req->features |= BIT_ULL(NPC_IPPROTO_ICMP6);
+>  	}
+>  
+> +	if (flow_rule_match_key(rule, FLOW_DISSECTOR_KEY_CONTROL)) {
+> +		struct flow_match_control match;
+> +
+> +		flow_rule_match_control(rule, &match);
+> +		if (match.mask->flags & FLOW_DIS_FIRST_FRAG) {
+> +			NL_SET_ERR_MSG_MOD(extack, "HW doesn't support frag first/later");
+> +			return -EOPNOTSUPP;
+> +		}
+> +
+> +		if (match.mask->flags & FLOW_DIS_IS_FRAGMENT) {
+> +			if (ntohs(flow_spec->etype) == ETH_P_IP) {
+> +				flow_spec->ip_flag = 0x20;
+
+0x20 again, see? One definition for both would make it clear.
+
+> +				flow_mask->ip_flag = 0xff;
+> +				req->features |= BIT_ULL(NPC_IPFRAG_IPV4);
+> +			} else if (ntohs(flow_spec->etype) == ETH_P_IPV6) {
+> +				flow_spec->next_header = IPPROTO_FRAGMENT;
+> +				flow_mask->next_header = 0xff;
+> +				req->features |= BIT_ULL(NPC_IPFRAG_IPV6);
+> +			} else {
+> +				NL_SET_ERR_MSG_MOD(extack, "flow-type should be either IPv4 and IPv6");
+> +				return -EOPNOTSUPP;
+> +			}
+> +		}
+> +	}
+
+This block is big and the function is huge even before the patch.
+Could you (it may be a separate patch as well) split it logically?
+
+> +
+>  	if (flow_rule_match_key(rule, FLOW_DISSECTOR_KEY_ETH_ADDRS)) {
+>  		struct flow_match_eth_addrs match;
+>  
+> -- 
+> 2.25.1
+
+Thanks,
+Olek
