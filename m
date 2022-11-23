@@ -2,57 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4853C636B41
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 21:33:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB7B1636B2F
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 21:33:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238596AbiKWUce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 15:32:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54894 "EHLO
+        id S237506AbiKWUcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 15:32:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239770AbiKWUbR (ORCPT
+        with ESMTP id S239899AbiKWUbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 15:31:17 -0500
-Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.148])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB65E4C
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 12:28:15 -0800 (PST)
-Received: (wp-smtpd smtp.tlen.pl 5473 invoked from network); 23 Nov 2022 21:28:11 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
-          t=1669235291; bh=4B+0gVhfeVMpr3xVWJpkPm7YJRc30ybzLuOA8k2a714=;
-          h=From:Subject:To:Cc;
-          b=Ce865vWNuhQr/TnVnyy1/+H8fh52Y3QBMV5MoOSY7SO8/PbBmJXmOQJXZe6PngaE9
-           MpsoFfXNDHkMCNFevc62TrSKI6oQ4HNoN6uMvnYqd7IaFKFo4p5LAinmh8V73xNUTZ
-           TxT4hdsEZBD/tu14YsLgmpRkxHGkKFoISy/649wU=
-Received: from aafn183.neoplus.adsl.tpnet.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[83.4.143.183])
-          (envelope-sender <mat.jonczyk@o2.pl>)
-          by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <jdelvare@suse.de>; 23 Nov 2022 21:28:11 +0100
-Message-ID: <140691e3-9c3d-4855-ad21-ec96e77e6693@o2.pl>
-Date:   Wed, 23 Nov 2022 21:28:10 +0100
+        Wed, 23 Nov 2022 15:31:21 -0500
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32EEC633D
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 12:29:18 -0800 (PST)
+Received: by mail-ua1-x92f.google.com with SMTP id e26so6703987uaa.7
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 12:29:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kLXsXSr0QtnCbQ9haWU7vYJFI/CTwk9Wy76ZUUM5pjI=;
+        b=j7CFSGEbyVpo7nAJTcl7vifTrIu1wWdn9vzwkme16ZTA36Ic2uQwGD5mBCwqLyFr08
+         09gkP/QvYwauZVNMN/IL0Ng0YE1x+dsYq8LTD999L7CV6BAWJvUKe5GYSVy22x/vLmxb
+         HKliLvRYqpaG4y/Hb7HROl/rgQ33wGIjXn6pN4k2np4ciDXKvZ1w+8Xs8GA+mSY6UbcB
+         zeNHJWRegwzoX086DeWwm9E62hKNNtYPqhvbCph6qq9+NYFI5DUO6dNgUfmhRtqimbhx
+         X3dMCdBH4V3hnBLl6Lrtj0DP5QSP/jGN1BuLmTc5TyBo8+OcST03DvAjkKPtwwYpAi0Q
+         XjpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kLXsXSr0QtnCbQ9haWU7vYJFI/CTwk9Wy76ZUUM5pjI=;
+        b=jRhZP3AjT4EHidMTMjxL/Fk+Y5RnPSR1lUz1CgUqPS6UEAtAW1Gh81Etk+7gwStFRo
+         iSsrxPixKH5zSKU55bBUs/nP5KsmqHA73ZwauaEDmj1AM9uPnGzYo4wUecyoEXQin0Ww
+         jqbCyYL7UZ2z2KSBZ1y0mqgSSY+YQHOkBxc+emvDEA/NIF6z/BcHAuIsMPs46jteDDZV
+         q9zck9RkZVMAiiWWqnL4SNu9NrQFZ3xOTjZrd17PVCvm2yOLTQJc8TucAb0Jw/nMozD6
+         o8sFktncMbvq5bmongqxJvTyuI9zOd+DUImkPCfG2Twjx25yJ1B9JTlehGd4PWSC4es9
+         0bvg==
+X-Gm-Message-State: ANoB5pm8ZFAOHy+jqW/p6FlVWez+dB9+SeUqTeGdtZEyjso9jSSuLwrA
+        EZQj7fndHtqcZTInqARUPXBRYp1zDElj+xs46d9E
+X-Google-Smtp-Source: AA0mqf4qDAlXk6kJtTuQiCzBcCpNPoOzEie3uJLGYf/t26VHDBO9vGh1/SIPwBtlhc13xCagko5dZsY8Uq1gTfpyI+I=
+X-Received: by 2002:ab0:374a:0:b0:414:5de7:23ab with SMTP id
+ i10-20020ab0374a000000b004145de723abmr6699709uat.52.1669235357288; Wed, 23
+ Nov 2022 12:29:17 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-From:   =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>
-Subject: Re: [PATCH v2] acpi,pci: warn about duplicate IRQ routing entries
- returned from _PRT
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Borislav Petkov <bp@suse.de>
-References: <20221112200927.7255-1-mat.jonczyk@o2.pl>
- <20221113173442.5770-1-mat.jonczyk@o2.pl>
- <20221115093617.519f3aeb@endymion.delvare>
-Content-Language: en-GB
-In-Reply-To: <20221115093617.519f3aeb@endymion.delvare>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-WP-MailID: dfc6105109ff66cb953bd9e99eb03b64
-X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 0000002 [8eGW]                               
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+References: <20221121055345.111567-1-jake.macneal@gmail.com>
+ <CANDhNCqCYkv7Ja4RT2_DEPh2zFFL+SD82wru_FC6dupCo6_4RA@mail.gmail.com> <7d95f4bb-01a3-44db-af08-275daa9ffb1e@app.fastmail.com>
+In-Reply-To: <7d95f4bb-01a3-44db-af08-275daa9ffb1e@app.fastmail.com>
+From:   John Stultz <jstultz@google.com>
+Date:   Wed, 23 Nov 2022 12:29:05 -0800
+Message-ID: <CANDhNCqzLxsAx=XRBdL554SDZ83vQonnppTQPKgB6=RDhw_XjA@mail.gmail.com>
+Subject: Re: [PATCH] time: copy tai value (International Atomic Time, in
+ seconds) to output __user struct in get_old_timex32().
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Jacob Macneal <jake.macneal@gmail.com>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,135 +71,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-W dniu 15.11.2022 o 09:36, Jean Delvare pisze:
-> Hi Mateusz,
+On Wed, Nov 23, 2022 at 11:53 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> On Wed, Nov 23, 2022, at 19:54, John Stultz wrote:
+> > On Sun, Nov 20, 2022 at 9:54 PM Jacob Macneal <jake.macneal@gmail.com> wrote:
+> >> --- a/kernel/time/time.c
+> >> +++ b/kernel/time/time.c
+> >> @@ -311,6 +311,7 @@ int get_old_timex32(struct __kernel_timex *txc, const struct old_timex32 __user
+> >>         txc->calcnt = tx32.calcnt;
+> >>         txc->errcnt = tx32.errcnt;
+> >>         txc->stbcnt = tx32.stbcnt;
+> >> +       txc->tai = tx32.tai;
+> >>
+> >
+> > This does seem like something that was overlooked.
+> >
+> > Arnd: There isn't something more subtle I'm missing here, right?
 >
-> On Sun, 13 Nov 2022 18:34:42 +0100, Mateusz Jończyk wrote:
->> On some platforms, the ACPI _PRT function returns duplicate interrupt
->> routing entries. Linux uses the first matching entry, but sometimes the
->> second matching entry contains the correct interrupt vector.
->>
->> Print a warning to dmesg if duplicate interrupt routing entries are
->> present, so that we could check how many models are affected.
-> Excellent idea. We want hardware manufacturers to fix such bugs in the
-> firmware, and the best way for this to happen is to report them
-> whenever they are encountered.
+> I agree. Looking at the git history, it seems that the tai field
+> was added a long time ago in 153b5d054ac2 ("ntp: support for TAI").
+> The commit correctly did the conversion for copying the data out
+> of the kernel and did not copy the value in because it wasn't
+> needed at the time.
 >
->> This happens on a Dell Latitude E6500 laptop with the i2c-i801 Intel
->> SMBus controller. This controller was nonfunctional unless its interrupt
->> usage was disabled (using the "disable_features=0x10" module parameter).
->>
->> After investigation, it turned out that the driver was using an
->> incorrect interrupt vector: in lspci output for this device there was:
->>         Interrupt: pin B routed to IRQ 19
->> but after running i2cdetect (without using any i2c-i801 module
->> parameters) the following was logged to dmesg:
->>
->>         [...]
->>         i801_smbus 0000:00:1f.3: Timeout waiting for interrupt!
->>         i801_smbus 0000:00:1f.3: Transaction timeout
->>         i801_smbus 0000:00:1f.3: Timeout waiting for interrupt!
->>         i801_smbus 0000:00:1f.3: Transaction timeout
->>         irq 17: nobody cared (try booting with the "irqpoll" option)
->>
->> Existence of duplicate entries in a table returned by the _PRT method
->> was confirmed by disassembling the ACPI DSDT table.
-> Excuse a probably stupid question, but what would happen if we would
-> plain ignore the IRQ routing information from ACPI in this case? Would
-> we fallback to some pure-PCI routing logic which may have a chance to
-> find the right IRQ routing (matching the second ACPI routing entry in
-> this case)?
+> I don't see any user of the tai field that gets copied into
+> the kernel, so the bug appears harmless, but Jacob's fix is
 
-From what I understand, the PCI IRQ routing information is not discoverable
-by probing the hardware (in the general case), it has to be obtained from
-the ACPI tables (or perhaps from the obsolete MP tables, also provided by
-firmware). See https://docs.kernel.org/PCI/acpi-info.html :
+Oh, right. There is a quirk of the adjtimex ADJ_TAI interface (added
+in 153b5d054ac2) where it for some reason used the constant field
+instead of the newly added tai field.
+So we never should be using the tai field value from userspace (only
+writing it out), which might have been the reason it was not copied
+over.
 
-> For example, there’s no standard hardware mechanism for enumerating PCI
-> host bridges, so the ACPI namespace must describe each host bridge,
-> the method for accessing PCI config space below it, the address space
-> windows the host bridge forwards to PCI (using _CRS), and the routing
-> of legacy INTx interrupts (using _PRT).
+> nevertheless correct, as we should not use any uninitialized
+> data in a structure that comes from userspace.
 
-(a PCI host bridge connects the CPU cores to the PCI bus, it is the root of the PCI
-device tree. This patch concerns the "legacy INTx interrupts" as above).
+Agreed.
 
-In the case of this particular laptop, however, it should be possible to obtain
-the information by reading chipset registers, which are documented at
-https://www.intel.com/content/www/us/en/io/io-controller-hub-9-datasheet.html
-But this is difficult to implement in every case.
-
->> Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
->> Cc: Bjorn Helgaas <bhelgaas@google.com>
->> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
->> Cc: Len Brown <lenb@kernel.org>
->> Cc: Borislav Petkov <bp@suse.de>
->> Cc: Jean Delvare <jdelvare@suse.com>
->>
->> --
->> v2: - add a newline at the end of the kernel log message,
->>     - replace: "if (match == NULL)" -> "if (!match)"
->>     - patch description tweaks.
->>
->> Tested on two computers, including the affected Dell Latitude E6500 laptop.
->>
->>  drivers/acpi/pci_irq.c | 25 ++++++++++++++++++++++---
->>  1 file changed, 22 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/acpi/pci_irq.c b/drivers/acpi/pci_irq.c
->> index 08e15774fb9f..a4e41b7b71ed 100644
->> --- a/drivers/acpi/pci_irq.c
->> +++ b/drivers/acpi/pci_irq.c
->> @@ -203,6 +203,8 @@ static int acpi_pci_irq_find_prt_entry(struct pci_dev *dev,
->>  	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
->>  	struct acpi_pci_routing_table *entry;
->>  	acpi_handle handle = NULL;
->> +	struct acpi_prt_entry *match = NULL;
->> +	const char *match_int_source = NULL;
->>  
->>  	if (dev->bus->bridge)
->>  		handle = ACPI_HANDLE(dev->bus->bridge);
->> @@ -219,13 +221,30 @@ static int acpi_pci_irq_find_prt_entry(struct pci_dev *dev,
->>  
->>  	entry = buffer.pointer;
->>  	while (entry && (entry->length > 0)) {
->> -		if (!acpi_pci_irq_check_entry(handle, dev, pin,
->> -						 entry, entry_ptr))
->> -			break;
->> +		struct acpi_prt_entry *curr;
->> +
->> +		if (!acpi_pci_irq_check_entry(handle, dev, pin, entry, &curr)) {
->> +			if (!match) {
->> +				match = curr;
->> +				match_int_source = entry->source;
->> +			} else {
->> +				pr_warn(FW_BUG
->> +				"ACPI _PRT returned duplicate IRQ routing entries for device "
->> +					"%04x:%02x:%02x[INT%c]: %s[%d] and %s[%d].\n",
-> The beginning of the string should be aligned with the opening
-> parenthesis, and the string should be on a single line (this is a
-> encouraged exception to the 80-column rule). I would also omit the
-> tailing dot for consistency.
-OK
->> +					curr->id.segment, curr->id.bus, curr->id.device,
-> Is the IRQ per PCI device, or per PCI function? If the latter, then you
-> should print "%02x.%x" instead of just "%02x", with the extra element
-> being curr->id.function.
-
-This is per PCI device.
-
-[snip]
-
-> Reviewed-by: Jean Delvare <jdelvare@suse.de>
-> Tested-by: Jean Delvare <jdelvare@suse.de>
->
-> (Tested on a Dell OptiPlex 9020 not affected by the problem.)
->
-Thank you for reviewing.
-
-Greetings,
-
-Mateusz
-
+thanks
+-john
