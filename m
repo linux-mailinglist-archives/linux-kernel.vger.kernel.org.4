@@ -2,137 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B670634BBC
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 01:40:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 014A0634BC0
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 01:42:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235306AbiKWAk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 19:40:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55882 "EHLO
+        id S235287AbiKWAmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 19:42:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233436AbiKWAk0 (ORCPT
+        with ESMTP id S233436AbiKWAmM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 19:40:26 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BE8A5C689E;
-        Tue, 22 Nov 2022 16:40:24 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Dxvuv2a31j1yEAAA--.400S3;
-        Wed, 23 Nov 2022 08:40:22 +0800 (CST)
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxiFfxa31jwGsYAA--.45736S3;
-        Wed, 23 Nov 2022 08:40:18 +0800 (CST)
-Subject: Re: [PATCH] tools: selftests: Use "grep -E" instead of "egrep"
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Shuah Khan <shuah@kernel.org>
-References: <1668763704-10408-1-git-send-email-yangtiezhu@loongson.cn>
- <42c7effb-691c-c7a1-0d7d-8ba1569c0269@linuxfoundation.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <4cd49bce-7722-f388-6c2b-1b65b65cb54f@loongson.cn>
-Date:   Wed, 23 Nov 2022 08:40:17 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Tue, 22 Nov 2022 19:42:12 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B259C694C;
+        Tue, 22 Nov 2022 16:42:11 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id ci10so8419804pjb.1;
+        Tue, 22 Nov 2022 16:42:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QBgNP0HxZqEmc/2hnmKVV8WQI9992gjmzgYgDwpjSpA=;
+        b=AMxaAaqozpiEIqVSD0dnERL7aTmBQ+mWEkbAkNKt57+j7WUWbOEYANuBlKIshObE7V
+         FtRNcmRfpQYu6RVscVuW2wJEBjLW/APviQcpCqWhkRfWEQbpHb4RHBx8DVhAfXLdkopA
+         aRY2Qoo9/iB/mo9wd3jZIQEmr8ohNIPISRDiSLNpj11QoG4igApiy8SZHr9v9WDcCGsC
+         68dZNoVEPocgQXaf2sxmHLlRqBCrimoKD5Ou1+/f60sQl1M42NS7+c/0iLX50G1I0TDl
+         XUqkCueyjZdyoaITTPMSK9NwX/FsmV8feYdp4Opfi5pulqkKp64DsutTrOBnlwqLrZh9
+         hXOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QBgNP0HxZqEmc/2hnmKVV8WQI9992gjmzgYgDwpjSpA=;
+        b=dUuqYn0IwWcjL36NDFRLhZjCFAoSyPFw/lDGeCjBhCcJZGG9rfbLfK5g7hXBux/uNq
+         JsNCFjUri99OCzoAuwliTvxd6F3kadaSKfXYYSmECeNEvvflTHl9eHfmzBxysY9muwRH
+         67eULtFnvAvam432fZZgmi+qibPKhCh5Ma6DpOYbvU7O5qlNPT64yncsH7Y56NOAy9Qz
+         3D9pXWyC9/eveT+t17nqtKntUGPJr6oiKI4VY3U7FrlsZK9mZGsYg5ehA5Ro4/GUF5zZ
+         32CmxiI+Qk74sjIlpgedRDroo3LDJwmI9cZDUhw7FlYnVY0cfHqpPZWe7nmo6LK/P/F4
+         7icQ==
+X-Gm-Message-State: ANoB5pni58bRZBo6RJ7ilNHmYtYkG+4xb/YXDwwkozt1/yHQBBOgPoJJ
+        RjndXHZoVwoovCKF/PL26LFi+oQgYGM/Yw==
+X-Google-Smtp-Source: AA0mqf5wgPBRdjuuP93HssD4zaNUMxkHa8K5eiih1KIyB+W2rPjrQuf/xN76KD3YRcU4P7gVzd/OVw==
+X-Received: by 2002:a17:902:b908:b0:189:1ef4:237b with SMTP id bf8-20020a170902b90800b001891ef4237bmr6869149plb.20.1669164130654;
+        Tue, 22 Nov 2022 16:42:10 -0800 (PST)
+Received: from localhost ([2620:10d:c090:400::5:bb3])
+        by smtp.gmail.com with ESMTPSA id l12-20020a170903120c00b0016be834d54asm12656101plh.306.2022.11.22.16.42.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 16:42:10 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 22 Nov 2022 14:42:08 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Yu Kuai <yukuai1@huaweicloud.com>, hch@lst.de,
+        josef@toxicpanda.com, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+Subject: Re: [PATCH v2 4/5] blk-iocost: fix sleeping in atomic context
+ warnning
+Message-ID: <Y31sYFdA2lHIvjt3@slm.duckdns.org>
+References: <20221104023938.2346986-1-yukuai1@huaweicloud.com>
+ <20221104023938.2346986-5-yukuai1@huaweicloud.com>
+ <Y3K8MSFWw8eTnxtm@slm.duckdns.org>
+ <3da991c6-21e4-8ed8-ba75-ccb92059f0ae@huaweicloud.com>
+ <Y306xJV6aNXd94kb@slm.duckdns.org>
+ <1f52ccb1-c357-a2a0-ef9d-48d7e2eb51f8@kernel.dk>
 MIME-Version: 1.0
-In-Reply-To: <42c7effb-691c-c7a1-0d7d-8ba1569c0269@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8AxiFfxa31jwGsYAA--.45736S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7uFyDuF43Kr4Uur43Ww4DJwb_yoW8tFyDpa
-        y8J3Wagr18tFy7XF1xJrsrXFyftFs5Ja1rJw4rtryDXrn8XFnaqr1IgFsxKFZrWrZ5XrsY
-        va92gF17Cw48A37anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bxxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1le2I2
-        62IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4
-        CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvj
-        eVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw2
-        8IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
-        x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrw
-        CI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI
-        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z2
-        80aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU7XTmDUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1f52ccb1-c357-a2a0-ef9d-48d7e2eb51f8@kernel.dk>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Nov 22, 2022 at 05:14:29PM -0700, Jens Axboe wrote:
+> >> Then match_strdup() and kfree() in match_NUMBER() can be replaced with
+> >> get_buffer() and put_buffer().
+> > 
+> > Sorry about the late reply. Yeah, something like this.
+> 
+> Doesn't local_irq_disable() imply preemption disable as well?
 
+Right, I was thinking about spin_lock_irq() which doesn't imply disabling
+preemption in PREEMPT_RT. local_irq_disable() is actual irq disable even on
+RT. It should be fine on its own.
 
-On 11/22/2022 11:43 PM, Shuah Khan wrote:
-> On 11/18/22 02:28, Tiezhu Yang wrote:
->> The latest version of grep claims the egrep is now obsolete so the build
->> now contains warnings that look like:
->>     egrep: warning: egrep is obsolescent; using grep -E
->> fix this up by moving the related file to use "grep -E" instead.
->>
->>    sed -i "s/egrep/grep -E/g" `grep egrep -rwl tools/testing/selftests`
->>
->> Here are the steps to install the latest grep:
->>
->>    wget http://ftp.gnu.org/gnu/grep/grep-3.8.tar.gz
->>    tar xf grep-3.8.tar.gz
->>    cd grep-3.8 && ./configure && make
->>    sudo make install
->>    export PATH=/usr/local/bin:$PATH
->>
->
-> Does this change work without the latest grep? It seems to work on
-> grep (GNU grep) 3.7 when I ran quick test on kselftest_deps.sh with
-> your change.
+Thanks.
 
-Yes, AFAIK, "grep -E" is supported by various versions of grep.
-
-We can see the following NEWS in grep-3.8 release announcement [1]:
-
-"The egrep and fgrep commands, which have been deprecated since
-  release 2.5.3 (2007), now warn that they are obsolescent and should
-  be replaced by grep -E and grep -F."
-
-[1] https://savannah.gnu.org/forum/forum.php?forum_id=10227
-
->
->> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->> ---
->>   .../selftests/ftrace/test.d/preemptirq/irqsoff_tracer.tc       |  8
->> ++++----
->>   tools/testing/selftests/gpio/gpio-sim.sh                       |  2 +-
->>   tools/testing/selftests/kselftest_deps.sh                      |  2 +-
->>   tools/testing/selftests/net/toeplitz.sh                        |  2 +-
->>   tools/testing/selftests/powerpc/scripts/hmi.sh                 |  2 +-
->>   tools/testing/selftests/rcutorture/bin/console-badness.sh      |  2 +-
->>   tools/testing/selftests/rcutorture/bin/kvm-build.sh            |  4
->> ++--
->>   tools/testing/selftests/rcutorture/bin/kvm-find-errors.sh      |  4
->> ++--
->>   tools/testing/selftests/rcutorture/bin/kvm.sh                  |  4
->> ++--
->>   tools/testing/selftests/rcutorture/bin/parse-console.sh        | 10
->> +++++-----
->>   10 files changed, 20 insertions(+), 20 deletions(-)
->>
->
-> Please split these into sepratate 5 patches. All rcu changes in one, net in
-> one, powerpc  etc.
-
-OK, maybe 6 patches,
-(1) rcutorture
-(2) ftrace
-(3) powerpc
-(4) gpio
-(5) net
-(6) kselftest_deps.sh
-
->
-> The change looks good to me.
-
-Thank you, I will send v2 later.
-
-Thanks,
-Tiezhu
-
+-- 
+tejun
