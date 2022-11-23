@@ -2,215 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C39D96369ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 20:35:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D69A6369E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 20:32:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239030AbiKWTfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 14:35:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59844 "EHLO
+        id S237570AbiKWTcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 14:32:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236748AbiKWTfE (ORCPT
+        with ESMTP id S235321AbiKWTcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 14:35:04 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2732A5A6F7
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 11:35:03 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id w79so466277pfc.2
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 11:35:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Zw4WyKM9DBvayVTRE4i7RSk2LhfDltgpSKG4zBjifYs=;
-        b=XMJtRrlnTXVBcoyHujvErjTAqzGHuybT6RNT1Er5bJrKwKEh7NeijldbMDp6KBUffc
-         Yalc/mjwDbYliUWcYuf55hZ5wrFlwRG8T5Jc0zElKA4J7z7vqi4+xvh8U715+CFAPyQg
-         mw5WnQqCDRbvon9S2fzGnlwwjKW8dEexrCPXxmFjCp8gTYf2C/m3/fdNqhAr6o+SdC29
-         siyeqccDBIGwfDF0SvkCe56er4N1TFDT9PRG3gVCZfFedkVNsDRbfpu3HqqMLc0xYAGM
-         PUGHkYIE4e40rOGmMh6Mp2MIcCIhhFfeoDm5YD4CiZTCje19T44CWAek/WF4pZyIkZ5H
-         t7+A==
+        Wed, 23 Nov 2022 14:32:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62FC2A245
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 11:31:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669231882;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=of6BBewdTwcAl18GJoeXpGt0yO4qHxqQv2rqdT+vNQU=;
+        b=Aiiwel9IUcBYlLaiixBFsy8n2Ehp+5yKR0ESThaAjIxMXMgM9dF5d7stavt2+YFhmVhZLz
+        iYPvCwWU/SzKM+245i/CXwAN0uInIZzL08Ba8m0A1FAA85gpk4y+DJ4WsystcTyc+7r8Nt
+        mfnlE8lylTwe+cl9eG4ikrMxinDJCY4=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-513-C2u4n5n2Prif3gq6Zu3POw-1; Wed, 23 Nov 2022 14:31:21 -0500
+X-MC-Unique: C2u4n5n2Prif3gq6Zu3POw-1
+Received: by mail-wm1-f70.google.com with SMTP id bg25-20020a05600c3c9900b003cf3ed7e27bso10001590wmb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 11:31:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Zw4WyKM9DBvayVTRE4i7RSk2LhfDltgpSKG4zBjifYs=;
-        b=hsmjRxJ3FoU4g8tWia/T3iQDruIvOrsXY/2ApRVKZVsHCSl3aU5uL62WzzLK3R07M8
-         ckd+2XnuvsFbOKy04M3RJF7bFLRexUnMNxpET2K+c7G8glm/dI3wkuwNJYWd9XC3wUXW
-         xEafjXrGq/1nHKYP60/rrUpi8cj5x0jyl05fOVrdkm4beenW++dZSusiYRX3uB+OrU4J
-         Y+BEDzGnwrHtccIsTQlCCJm8ySSUppRO3NHCQJY+wQB3ZSV3jaoJ5jQljWLMAxth8m8M
-         ztilvFoiEPTFNG+eJyVc3yCEm2zUU6xlQq7fYZuHXRQaAnNCZrtvqdMNyeYXZ/IDZjhk
-         1zNw==
-X-Gm-Message-State: ANoB5pl9lFaYPSPPs0m4hszDanfS48UY9lj/radsxHT3Hir51OLsNOZG
-        qMTqsEt8WL4bakDp30IBDb9PqcJbHto=
-X-Google-Smtp-Source: AA0mqf6Jsu2ej9z6FPyYdMuIguGaUqFE2fq/fuLv9fHofeGV1Ss1FIrCzEvgXGv8Ot5J8/c5NjpToQ==
-X-Received: by 2002:a05:6a00:2403:b0:572:698b:5f69 with SMTP id z3-20020a056a00240300b00572698b5f69mr14698532pfh.54.1669232102646;
-        Wed, 23 Nov 2022 11:35:02 -0800 (PST)
-Received: from localhost.localdomain (c-67-174-241-145.hsd1.ca.comcast.net. [67.174.241.145])
-        by smtp.gmail.com with ESMTPSA id g17-20020a63e611000000b00476c2180dbcsm6702628pgh.29.2022.11.23.11.35.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 11:35:02 -0800 (PST)
-From:   Yang Shi <shy828301@gmail.com>
-To:     zokeefe@google.com, mhocko@suse.com, akpm@linux-foundation.org
-Cc:     shy828301@gmail.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [mm-unstable v4 PATCH] mm: replace VM_WARN_ON to pr_warn if the node is offline with __GFP_THISNODE
-Date:   Wed, 23 Nov 2022 11:30:14 -0800
-Message-Id: <20221123193014.153983-1-shy828301@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221108184357.55614-3-shy828301@gmail.com>
-References: <20221108184357.55614-3-shy828301@gmail.com>
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=of6BBewdTwcAl18GJoeXpGt0yO4qHxqQv2rqdT+vNQU=;
+        b=0GgE3B2GdVrgsjh4VEewbxbRscFIpcxR8Ukt9c/wb2Gluo8rNR61JzSQdTMpPJ2bd4
+         zr6C4I5D5NJIM6BPatrb7xtvnteBlHEOJab2Pb2wlB9+5uFdXoTh9S60FAyX6oA3ptg0
+         v9edMG+5wK+TFFaIMcq/iHZFZMu8x+PDZH6XfmUWJruyx7/Jk4Ibm+GSR3DrkRXYYn3M
+         dE2J+dCwxpiT9hO5D8xoy76CWv28eealjgS39xCTJxGc2y+Q6yPBQseRUGqqs51I+btn
+         mHQ6Nc+R88KfPseE6TNU8Q8/efMtsvC7FT8DhCU1hvAZzr7Uep+MBcET6iG61e1M4Lya
+         ECKw==
+X-Gm-Message-State: ANoB5plTytpQvUx/JRbtccjC/faztr2t5irDxXDzsuWn66ievY1LLl9c
+        le3QmWaulDQkmw5+ocfI4dBi93HFQDmpUPhwyrQcfHCQW5u3hDnwzyX2hCFjmy6FEGZdWLO2Kgm
+        ZXAlwhcM/+TNctf/mC4z8POTB
+X-Received: by 2002:a7b:c048:0:b0:3a8:3e58:bb9b with SMTP id u8-20020a7bc048000000b003a83e58bb9bmr11074614wmc.168.1669231880237;
+        Wed, 23 Nov 2022 11:31:20 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4Wp/b0j11VObTynBBu9QcnlwyPQSskAgXFOBT/I+1/dIPrJfEOGaLa02LYRHt8G6iE5vlpVw==
+X-Received: by 2002:a7b:c048:0:b0:3a8:3e58:bb9b with SMTP id u8-20020a7bc048000000b003a83e58bb9bmr11074594wmc.168.1669231879864;
+        Wed, 23 Nov 2022 11:31:19 -0800 (PST)
+Received: from ?IPV6:2003:cb:c704:9f00:a98d:4026:7c44:40fd? (p200300cbc7049f00a98d40267c4440fd.dip0.t-ipconnect.de. [2003:cb:c704:9f00:a98d:4026:7c44:40fd])
+        by smtp.gmail.com with ESMTPSA id u12-20020adfdb8c000000b002367ad808a9sm17174818wri.30.2022.11.23.11.31.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Nov 2022 11:31:19 -0800 (PST)
+Message-ID: <6fc2066e-1386-5fc4-44c6-d84404c2ef25@redhat.com>
+Date:   Wed, 23 Nov 2022 20:31:18 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH RFC v2 00/12] mm/hugetlb: Make huge_pte_offset()
+ thread-safe for pmd unshare
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Rik van Riel <riel@surriel.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        James Houghton <jthoughton@google.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Miaohe Lin <linmiaohe@huawei.com>
+References: <20221118011025.2178986-1-peterx@redhat.com>
+ <70376d57-7924-8ac9-9e93-1831248115a0@redhat.com> <Y343kIQ9l2d8wViz@x1n>
+ <Y35kqkYQGW8ohKEa@monkey> <Y35swd4HHblyL3P7@x1n>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <Y35swd4HHblyL3P7@x1n>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzbot reported the below splat:
+On 23.11.22 19:56, Peter Xu wrote:
+> On Wed, Nov 23, 2022 at 10:21:30AM -0800, Mike Kravetz wrote:
+>> On 11/23/22 10:09, Peter Xu wrote:
+>>> On Wed, Nov 23, 2022 at 10:40:40AM +0100, David Hildenbrand wrote:
+>>>> Let me try understand the basic problem first:
+>>>>
+>>>> hugetlb walks page tables semi-lockless: while we hold the mmap lock, we
+>>>> don't grab the page table locks. That's very hugetlb specific handling and I
+>>>> assume hugetlb uses different mechanisms to sync against MADV_DONTNEED,
+>>>> concurrent page fault s... but that's no news. hugetlb is weird in many ways
+>>>> :)
+>>>>
+>>>> So, IIUC, you want a mechanism to synchronize against PMD unsharing. Can't
+>>>> we use some very basic locking for that?
+>>>
+>>> Yes we can in most cases.  Please refer to above paragraph [1] where I
+>>> referred Mike's recent work on vma lock.  That's the basic locking we need
+>>> so far to protect pmd unsharing.  I'll attach the link too in the next
+>>> post, which is here:
+>>>
+>>> https://lore.kernel.org/r/20220914221810.95771-1-mike.kravetz@oracle.com
+>>>
+>>>>
+>>>> Using RCU / disabling local irqs seems a bit excessive because we *are*
+>>>> holding the mmap lock and only care about concurrent unsharing
+>>>
+>>> The series wanted to address where the vma lock is not easy to take.  It
+>>> originates from when I was reading Mike's other patch, I forgot why I did
+>>> that but I just noticed there's some code path that we may not want to take
+>>> a sleepable lock, e.g. in follow page code.
+>>
+>> Yes, it was the patch suggested by David,
+>>
+>> https://lore.kernel.org/linux-mm/20221030225825.40872-1-mike.kravetz@oracle.com/
+>>
+>> The issue was that FOLL_NOWAIT could be passed into follow_page_mask.  If so,
+>> then we do not want potentially sleep on the mutex.
+>>
+>> Since you both are on this thread, I thought of/noticed a related issue.  In
+>> follow_hugetlb_page, it looks like we can call hugetlb_fault if FOLL_NOWAIT
+>> is set.  hugetlb_fault certainly has the potential for sleeping.  Is this also
+>> a similar issue?
+> 
+> Yeah maybe the clean way to do this is when FAULT_FLAG_RETRY_NOWAIT is set
+> we should always try to not sleep at all.
 
-WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 __alloc_pages_node
-include/linux/gfp.h:221 [inline]
-WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221
-hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
-WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221
-alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
-Modules linked in:
-CPU: 1 PID: 3646 Comm: syz-executor210 Not tainted
-6.1.0-rc1-syzkaller-00454-ga70385240892 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-Google 10/11/2022
-RIP: 0010:__alloc_pages_node include/linux/gfp.h:221 [inline]
-RIP: 0010:hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
-RIP: 0010:alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
-Code: e5 01 4c 89 ee e8 6e f9 ae ff 4d 85 ed 0f 84 28 fc ff ff e8 70 fc
-ae ff 48 8d 6b ff 4c 8d 63 07 e9 16 fc ff ff e8 5e fc ae ff <0f> 0b e9
-96 fa ff ff 41 bc 1a 00 00 00 e9 86 fd ff ff e8 47 fc ae
-RSP: 0018:ffffc90003fdf7d8 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff888077f457c0 RSI: ffffffff81cd8f42 RDI: 0000000000000001
-RBP: ffff888079388c0c R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: dffffc0000000000 R14: 0000000000000000 R15: 0000000000000000
-FS:  00007f6b48ccf700(0000) GS:ffff8880b9b00000(0000)
-knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f6b48a819f0 CR3: 00000000171e7000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- collapse_file+0x1ca/0x5780 mm/khugepaged.c:1715
- hpage_collapse_scan_file+0xd6c/0x17a0 mm/khugepaged.c:2156
- madvise_collapse+0x53a/0xb40 mm/khugepaged.c:2611
- madvise_vma_behavior+0xd0a/0x1cc0 mm/madvise.c:1066
- madvise_walk_vmas+0x1c7/0x2b0 mm/madvise.c:1240
- do_madvise.part.0+0x24a/0x340 mm/madvise.c:1419
- do_madvise mm/madvise.c:1432 [inline]
- __do_sys_madvise mm/madvise.c:1432 [inline]
- __se_sys_madvise mm/madvise.c:1430 [inline]
- __x64_sys_madvise+0x113/0x150 mm/madvise.c:1430
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f6b48a4eef9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 15 00 00 90 48 89 f8 48 89
-f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01
-f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f6b48ccf318 EFLAGS: 00000246 ORIG_RAX: 000000000000001c
-RAX: ffffffffffffffda RBX: 00007f6b48af0048 RCX: 00007f6b48a4eef9
-RDX: 0000000000000019 RSI: 0000000000600003 RDI: 0000000020000000
-RBP: 00007f6b48af0040 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f6b48aa53a4
-R13: 00007f6b48bffcbf R14: 00007f6b48ccf400 R15: 0000000000022000
- </TASK>
+hva_to_pfn_slow() that sets FOLL_NOWAIT calls get_user_pages_unlocked(), 
+which will just do a straight mmap_read_lock().
 
-It is because khugepaged allocates pages with __GFP_THISNODE, but the
-preferred node is bogus.  The previous patch fixed the khugepaged
-code to avoid allocating page from non-existing node.  But it is still
-racy against memory hotremove.  There is no synchronization with the
-memory hotplug so it is possible that memory gets offline during a
-longer taking scanning.
+The interpretation of FOLL_NOWAIT should not be "don't take any 
+sleepable locks" but instead more like "don't wait for a page to get 
+swapped in".
 
-So this warning still seems not quite helpful because:
-  * There is no guarantee the node is online for __GFP_THISNODE context
-    for all the callsites.
-  * Kernel just fails the allocation regardless the warning, and it looks
-    all callsites handle the allocation failure gracefully.
+#define FOLL_NOWAIT  0x20  /* if a disk transfer is needed, start the IO
 
-Although while the warning has helped to identify a buggy code, it is not
-safe in general and this warning could panic the system with panic-on-warn
-configuration which tends to be used surprisingly often.  So replace
-VM_WARN_ON to pr_warn().  And the warning will be triggered if
-__GFP_NOWARN is set since the allocator would print out warning for such
-case if __GFP_NOWARN is not set.
 
-Reported-by: syzbot+0044b22d177870ee974f@syzkaller.appspotmail.com
-Signed-off-by: Yang Shi <shy828301@gmail.com>
-Suggested-by: Michal Hocko <mhocko@suse.com>
-Cc: Zach O'Keefe <zokeefe@google.com>
-Acked-by: Michal Hocko <mhocko@suse.com>
----
-v4: * Renamed nid to this_node and gfp to warn_gfp to make the code
-      more readable per Michal.
-    * Collected ack from Michal.
-v3: * Reverted the old commit from mm-unstable which remove the VM_WARN
-      (patch 1/3).
-    * Incorporated the suggestion from Michal to use pr_warn.
-v2: * Added patch 1/2.
-    * Reworded the commit log per Michal.
+I did not read the full replies yet (sorry, busy hacking :) ) but *any* 
+code path that already takes the mmap_read_lock() can just take whatever 
+other lock we want -- IMHO. No need to over-complicate our code trying 
+to avoid locks in that case.
 
- include/linux/gfp.h | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
-
-diff --git a/include/linux/gfp.h b/include/linux/gfp.h
-index ef4aea3b356e..7e144b81c6c4 100644
---- a/include/linux/gfp.h
-+++ b/include/linux/gfp.h
-@@ -210,6 +210,20 @@ alloc_pages_bulk_array_node(gfp_t gfp, int nid, unsigned long nr_pages, struct p
- 	return __alloc_pages_bulk(gfp, nid, NULL, nr_pages, NULL, page_array);
- }
- 
-+static inline void warn_if_node_offline(int this_node, gfp_t gfp_mask)
-+{
-+	gfp_t warn_gfp = gfp_mask & (__GFP_THISNODE|__GFP_NOWARN);
-+
-+	if (warn_gfp != (__GFP_THISNODE|__GFP_NOWARN))
-+		return;
-+
-+	if(node_online(this_node))
-+		return;
-+
-+	pr_warn("%pGg allocation from offline node %d\n", &warn_gfp, this_node);
-+	dump_stack();
-+}
-+
- /*
-  * Allocate pages, preferring the node given as nid. The node must be valid and
-  * online. For more general interface, see alloc_pages_node().
-@@ -218,7 +232,7 @@ static inline struct page *
- __alloc_pages_node(int nid, gfp_t gfp_mask, unsigned int order)
- {
- 	VM_BUG_ON(nid < 0 || nid >= MAX_NUMNODES);
--	VM_WARN_ON((gfp_mask & __GFP_THISNODE) && !node_online(nid));
-+	warn_if_node_offline(nid, gfp_mask);
- 
- 	return __alloc_pages(gfp_mask, order, nid, NULL);
- }
-@@ -227,7 +241,7 @@ static inline
- struct folio *__folio_alloc_node(gfp_t gfp, unsigned int order, int nid)
- {
- 	VM_BUG_ON(nid < 0 || nid >= MAX_NUMNODES);
--	VM_WARN_ON((gfp & __GFP_THISNODE) && !node_online(nid));
-+	warn_if_node_offline(nid, gfp);
- 
- 	return __folio_alloc(gfp, order, nid, NULL);
- }
 -- 
-2.38.1
+Thanks,
+
+David / dhildenb
 
