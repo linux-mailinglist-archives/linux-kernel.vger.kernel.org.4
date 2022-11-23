@@ -2,251 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D35C0636019
+	by mail.lfdr.de (Postfix) with ESMTP id 86296636018
 	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:37:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238430AbiKWNhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 08:37:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48742 "EHLO
+        id S237995AbiKWNhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 08:37:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238978AbiKWNhJ (ORCPT
+        with ESMTP id S238970AbiKWNhI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 08:37:09 -0500
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2129.outbound.protection.outlook.com [40.107.255.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3E1716F1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:25:17 -0800 (PST)
+        Wed, 23 Nov 2022 08:37:08 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2088.outbound.protection.outlook.com [40.107.223.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CC270A13;
+        Wed, 23 Nov 2022 05:25:12 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PtSkzpBwQLyawi56RyH4MOZqsH08zkonE/O200jkM7zCzXY0ZuP9rMC6pmgV4WB9n01n3+Nlc4mWZxIPDIFx+NdKf2rBjENGY6wgF2Sg0Qwv3P5yHe8v9TO7yDz8E8OFkg04LDoOLnkVVBGDkSu+RzmkoAnqF+GBkIS6wdnrBSsmrI7epuroPH/Ql9bZAl17p3KIifq9YhxJQQnoKXcNEhaqKCvM1mIIP10Q5t7CXHQq4fK4x35xrZ0CLIk6Viu+5p1n+uZUKGwWQVfySf7URbebJwxJ6fYZLaqlySkmkTKKXAvhXkMRiP3YWpbWbbnv2L0/bcgBdqLUkjyLdjyiEQ==
+ b=dDJbICxQ8w8BzgKCSrv072ecorp7bTH6fBfbQ05/UHIQmX59Aapzh8jDBCaS7VZdeylJL+i/hvMHXVHp8Bw18m+iXgj5wW+uT769cH6waVGpj4rVyb1+IaSVk5Gc8jkG+jn4G0IKUheAeAjsE+r11mZMi5KNPlxxbx5RqUzZvH5HdV83PnZVvidmpLfoEY53XWMLR+baaho1jWJ5lMKXQX4Njs2/7YBAph/Rxy+h5hZ6kdtSV81K5wXvWspJfQy/Se18oo3cihDOkAHSDnmPno68WTXlIdtsrcC1Ag3lgAHb0TwrA1+9md7XVyrpil3ln0mJVN+Uhb0/GJlMTCd6IA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=V6RZHRvRat957QOJppzHSoWWgIQtYgkYdWiy0+6mMjw=;
- b=P7l7qSUepPo69dG+lNDtMfmoBMd2jNFNqb5mqKft6LlPTWW9liCrqCetLZy9uV7oqoIdHOkm3sJ5455LJv95m2VDpa7kYBqptfrFJYJYqFBP54HgiIKYQIz1TIP9zDdMm5yjIWrkDoIwqw9XIOH/uRSiAUwsgQAGg66eshUj9SWUssqRMxQvh8uieFxKa0zduZztrXkVdHe8Dk73QOyTPjgSvCcxtJwHpYD54TGCKEo3KAo+7wj+UmekbjIEwvbjxaUWyL8CJllhHpGrHh3jrNUX5SCUO8vW7jkUUwyt8BuS+W23+sHqGR/gS78TcV0bQj/iK9saZ9bIUinB3v0lXw==
+ bh=tGYTjg0iV6GcZu0muAsvUY3GwRcH250ChKEIu4CmGsc=;
+ b=fV7otKsWxlcDwtnka+46zGl06U+MY4siKMXvgzxFnAutj14gjWI45FCt9BU4vhL6miLd17JDB2IVSHwDVhUWezlgCra8sM5FaxbcrrZ7ilNBVa1L0oHM2uK88MdO4Z4u1QtgyQB2+LjT2EAx9RGnDR9DufeVub5KTwzIAb4NESF3sxSYl7+yZBvtuwPJyq0wz5BrLRC03nyOZC27MFEOWo6QW17OyjAT05IusIo62nbhoEBtpVnMB7+kb08N7TOiPDdEH228ZELxDayqPeqWslzUo1J69f4VpbCXuLlLnvwAPCrQsAakl52MR2wdyn4znuu3ArHDhGw3DxPvoTVABQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=V6RZHRvRat957QOJppzHSoWWgIQtYgkYdWiy0+6mMjw=;
- b=UP5+ogZulIKdhe2qW+JinZQXG7rlgR1FinAxQf6FMFa7qg/zRCv4z/uVAOfIbLwwnMTk08RG4rxYE/P9L3WcI1rNbDkQEfZqgHiH/AT/dURJ+2MWVmvceAEE4vgiPk/yLfKdRwSRak9Emo+Yp6yer09WteONmpCHU5vSGCjKFCbjGJdFvZqn06Wy65UD4xKq281DXwn+Lr8qYbvUpiUZ/0MXGGgNNLdSa4nc2QZQPO15mfHP2h9vHwHlSOFSVpaww+ii003X1w+xE7ks98rTIO6y8nNUxP9Y8MTfiVOPCOMx7NYqSaD3WoHQh/RP98VGTEzmySRd7m/buegOLFGQRQ==
+ bh=tGYTjg0iV6GcZu0muAsvUY3GwRcH250ChKEIu4CmGsc=;
+ b=I5ggdLnzpJE+qiPgHTFCDDhWxp3AgMXE15Q7luQP3SWn9plDwxXQxXhRU98XEmCwZ/fsVEIGMbJX6ZMewOphMdJMsNBqaHg5yuUAQ3+IgQIQEOKUFe1ENdyY19cGK5Oeu5FXkyX0Evw0pVoAcXKzllg9ImB99HaV6fRbqG6VyftFlE1U2IkM/sDzEq5aGXm69FGD0IkP+0sjoRzsL/YTbw6Inx8vmrWGhgAIX025Z5X2dpuJWjnC/cpsL6WUxi7XKhZ21Nd1RUTVLxHdsMD600+eV+0YG5Vjyrj27tEAYIdJ7UKrEEQOXM7fOtVsvc8faoVwf1XDsFamB4TRsY01bg==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by SI2PR06MB3948.apcprd06.prod.outlook.com (2603:1096:4:fd::6) with Microsoft
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
+ CY8PR12MB7243.namprd12.prod.outlook.com (2603:10b6:930:58::6) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5834.15; Wed, 23 Nov 2022 13:25:14 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::1230:5f04:fe98:d139]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::1230:5f04:fe98:d139%7]) with mapi id 15.20.5834.015; Wed, 23 Nov 2022
- 13:25:14 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
-Subject: [PATCH] f2fs: add support for counting the average time of submit discard cmd
-Date:   Wed, 23 Nov 2022 21:25:02 +0800
-Message-Id: <20221123132502.72078-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.35.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR06CA0014.apcprd06.prod.outlook.com
- (2603:1096:4:186::11) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+ 15.20.5834.15; Wed, 23 Nov 2022 13:25:11 +0000
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::8edd:6269:6f31:779e]) by CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::8edd:6269:6f31:779e%6]) with mapi id 15.20.5834.015; Wed, 23 Nov 2022
+ 13:25:11 +0000
+Message-ID: <ff1a0b34-71f2-cebe-a6ef-675936b276eb@nvidia.com>
+Date:   Wed, 23 Nov 2022 13:25:04 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH hid v12 03/15] HID: initial BPF implementation
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+References: <20221103155756.687789-1-benjamin.tissoires@redhat.com>
+ <20221103155756.687789-4-benjamin.tissoires@redhat.com>
+Content-Language: en-US
+From:   Jon Hunter <jonathanh@nvidia.com>
+In-Reply-To: <20221103155756.687789-4-benjamin.tissoires@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO2P265CA0073.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:8::13) To CO6PR12MB5444.namprd12.prod.outlook.com
+ (2603:10b6:5:35e::8)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SI2PR06MB3948:EE_
-X-MS-Office365-Filtering-Correlation-Id: 18d25546-d9ff-4e50-d207-08dacd56276e
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|CY8PR12MB7243:EE_
+X-MS-Office365-Filtering-Correlation-Id: c9f2c350-e92f-47ea-9d67-08dacd5625e2
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: W8Yzv7Kh3zLMehWUlLXk63E7pC7c/ZAGep7l9kqxgNG6r9RxHbP7r4FKQhLKK6FdBfU1OIj+apxDuHu7eKi5TFfPeQWFCSx5K3UNTvPqzDXUzTOsxoll/rAK4WBY0MuTEEXb/HW+u9/DQZNPzjRaSJSZXL33smEUVAmUEa5qk5PFt4VlF7Z+XGxpzRh3p2MD6INllDL1T1fHVj9JOjCfRgOvOBsV04fNNpF7rWdX7L3U35pphNKAlrkjF0j8YsXj6Vy8mKiNpdLeqX1xGMJVGa+0jiavMY52Prwetzz7ZZb+ZtK459yT4/gTERZJDlAVVwRT1EVzsESwFYBme/qzHqRHVcJEO5eDqLPlQVL456NjjuP0dqQ+208ciLnMvBWx9cJXofpa/4nuCADPKiFq6hsT6Vczg3GlDkDPQRGcvKS1D8LmgUJQ0lZRYjF9vnTN/TJeSC2XlPojlhXfJGuB8ox19TkMTsxYKuntGnsC1ywui1lhRsLIF+7/3jNb1bnCK0SBzpNtCg3L5bNv0/FUYR/gJw1BRzJ7GSgKjiv2X3IGZUsfpYFeIoTfja5N9Mq1TjuLxSfMXuxKVzAo5B7FNcSMuYUvDD7Lt5gqBo1sNbJnQSR/DHsSQkbMtCEaYUw+ZxVgVkFMP2rxEFx2buTGWdOmoMp6vMF8Ncy9ngFCcT85QNBQo6zd7HsgyQ6GHZsj
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(136003)(376002)(366004)(396003)(451199015)(36756003)(86362001)(26005)(38100700002)(38350700002)(186003)(2616005)(107886003)(2906002)(6512007)(1076003)(83380400001)(8936002)(5660300002)(52116002)(6506007)(478600001)(66556008)(6666004)(41300700001)(8676002)(66476007)(6486002)(316002)(66946007)(4326008);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: zS1NqGZQvGFP4YKyYrg2PariLmcZLwS73fc7FM0GXHBPuFgfgw2Dh7xj0dwJ4Ru+cjtapO/TmEpPTbafo6V0jV+fqi6T8I1uCUkIMR2tVCq/jHHXHFRJVIZZLkNXi0YedQ55+pCm2SETJV+CUX9m4+q3SUsL0rma+iPQWsYxfno85nc5iTpFGZcCTVDpJ/smDR0rosUOmwNESRIFkjKB1E5PjbECG2bArqOr5gF8Cor6nw9foAusBo/xKMWu7aziL78rYZbRDcWANcPR9ypg2izg9Hdq43DIcAp9vpytI+FJEIHqrQCf4v9oLSzw0VErTmjRXYpblJef4/OvJnpE8S9YFvC2xBo8JGzV6fuqMCd6CmnwYDJaFLxL2SWFf0Tdx+jL4I536zTS+g5MuF73eg7mX0r7queOU55iyW9V1voxFPAWjcJ2MAmvbI2VuiDMpGTvXV/SoRqtSTa29ufIcQP5hJXK8njUSA0er+ekbVbAWwSVmWNBUrZiYrvtIeBo1NYAActXsZN7lPuW3VPUU4g8y/erPtPpbX1YDqZorijzfisofE1lbsRYdePWTTC7pqRLWkgDolUO93zFBmdVPh+++g7fs0L8uofarFMXBMWL+1Fo3iSXVaWFYp2vZwv9nzPcsSKj6oQCgNIZ2HUrMmH9xPWGhuhf0hAqHbqkXL1Bh9ITZdxyC4Yr79QfR/4yeWSzJc4l8viab8USSnmuvsetYju58D4rh16HRW9yekI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(136003)(366004)(346002)(39860400002)(451199015)(66899015)(2906002)(38100700002)(31686004)(5660300002)(83380400001)(8676002)(41300700001)(86362001)(31696002)(66476007)(8936002)(66946007)(66556008)(7416002)(4326008)(36756003)(53546011)(316002)(54906003)(2616005)(110136005)(6486002)(26005)(478600001)(6506007)(55236004)(186003)(6666004)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IXh11TEYXC3PBb+qDYaLdrJkD8f4vBCjLVHbTdXHTtSUFIhFllxP7btps5/s?=
- =?us-ascii?Q?xNWWIqJh+Ky8s7781dBa9OyNufh2aD5brJon53N0gD6Clsm8nyP70b+V/Lxr?=
- =?us-ascii?Q?AttYdZg0zB/zBJe142DMviXQ4bRJN3swQ9qST91GGuXg/goDnkw8xnDeFAr/?=
- =?us-ascii?Q?sWX36q+VBNraHrnj7iqYffanSbCIQ4th2adzc7B04fnC5gSZFIuNyEOdlrvU?=
- =?us-ascii?Q?FL9PvgD329k91jXyyYh0/KwkkZWFTcPZ2N+dIk2so1y85J41TnrWBAQNJXRI?=
- =?us-ascii?Q?xXiZJQpbTmgKcs8+wRPmu51Goz/+aX9MIb6Rs7YrqAyxdIoKUE4+3x9+ub7P?=
- =?us-ascii?Q?JAKJpvl5sxd8Lh1zp+msFIJvOxZKSlTe5gth+IEno/0nCaDrTt1bm2oxtxbD?=
- =?us-ascii?Q?EagxDxdcfe50v9EUbgYJvBkm/nuK6H6WXrwOFY9qTKEYzeny7g5q1ZZa6Pz2?=
- =?us-ascii?Q?yoIz8ODf277GDtGUCxGPf+Wpl6TFHkLGicKgdJ2F7M3eXWPpwTxNGHJ9jmPh?=
- =?us-ascii?Q?6XfLyGZmwb41hcWBhRwk9vPyyvnzENZmIVI8RBVeC1yDNEllFwNj3MgIR3Wj?=
- =?us-ascii?Q?Oz6PfEIpkpQSjClKIZ1tRBXQnDFXheAG56la+VX5Ag0Y0mgt6oN1XdV0C76G?=
- =?us-ascii?Q?W6ROZTZk+Yr38R2rdxaMdaf4v63tyLddpJiYGfcct9A4rTCpxkZVCcfxOhOe?=
- =?us-ascii?Q?oRPcu5EwRGT/ldWyxNuQp+90eIiEqP8RwKl07ds/e2Mxav8k6SgXRIVnSgJR?=
- =?us-ascii?Q?q7Kxfv+FU8zoehaE0FbtPA3z485rdZZ4ICF9QaA4cRJeNIB2OXiTpLHGRJ5K?=
- =?us-ascii?Q?qWmC2yqQLj2vova/FjtKy6BlAK5OVzDuyXVrOMnhfS+wzRfC8KwMqxrWef0Q?=
- =?us-ascii?Q?s6C9dtzYrkJlTgdJJVX3mFH1GRbDY7OgOq4XGXl4R9PDLTb/tyl3YmYTxiq2?=
- =?us-ascii?Q?b/6HNI/DGg4CBU/d6Px6CzyA4cRzcbBzKuQuRNQ+bIGXNvhdEVYiUeHdqDmc?=
- =?us-ascii?Q?1QGmwKY6+8sh6aLnVM54eqyRXMkwU9JP9nH7nMwsZYrSinNub9UdZpC13bN7?=
- =?us-ascii?Q?7ON/4cRjTHD6OHYAmxoOkZJPjb0PP3+KOKmA14a/Q7mNXb4dY5AfiVX/nYdq?=
- =?us-ascii?Q?v8TV+n9bnUOzdFrAA6vOR4fTBPhCXxkgIe0ZLMC2Q9l4YvaY2E2/8rK3oNYu?=
- =?us-ascii?Q?w5A6jycAG3eTucofWNRkXKFp2YuRvVJmN9j7J9VYrLvGkwZMXC7+fN5VXDI5?=
- =?us-ascii?Q?0pZhKwK79WCDtgBx5Z4cXVxJI9j1KL3f9KVJ3A0eCH2z7VLi2SOgpG0535OJ?=
- =?us-ascii?Q?JetSyPrL+t4kWLTydZkhC/bx8pHzuwtUmIsOc9nPuCALHsSIeJGa/xjeq4IH?=
- =?us-ascii?Q?aKQaLB3faUy80NEFh0T3BgryRd1DNvAPxiTiSzo/qZJGNmmC+9vcLCh1YIA7?=
- =?us-ascii?Q?/Su80YVPJtimuWV2kANJ/+cEacj6QhAM+IHdLURipTndHJnWGyWnKjBGJ5al?=
- =?us-ascii?Q?V4V83q/74W8gZr+6FrWnnhLy5tPYHTh02BhKWrKTlIo+StdBX7a7NhQRoOKs?=
- =?us-ascii?Q?214BcyiTZ+Jl4dl0v5vbllCXZ2It29oXG7qAtkMJ?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 18d25546-d9ff-4e50-d207-08dacd56276e
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?b3IvZlR4bWVpTm1UQ1NJSFhHNWd3OFoyK3VYL25jeUVsb0R6VFFJWEpaSFF1?=
+ =?utf-8?B?QmtaQUt0Rk1sb3NzV20rZ2xVOUNCWDZBMldCSXIwWlYzYUNNTXkvcW1rMlFy?=
+ =?utf-8?B?c1pTVmN4cEJtbUtZaW9oM0xlQlpHM2MwQ0dzck1RMy9oQ0o0R2IzQ2hFTkJD?=
+ =?utf-8?B?MWM2VHpWRGtzRUsyMEpDdE9mQUpJS0swbjZFVXpVT1RFeXJaSWRqWUtpTytQ?=
+ =?utf-8?B?ZzQ5OWN3RSt1YnNRWGRxSEo5STVMZWNhS1BWTVFFOHJFK05tTjMra3pFenBD?=
+ =?utf-8?B?NjhHZlgwRE5DYjlsVllGRnc3ZFZjSk9CZFBWaDU2ZTJ5RjROUU9oNTFTdW1m?=
+ =?utf-8?B?SmJTZnR4RmlQR1AzYlMyYnd4T2cvODdFM2NFT1JHVGIxSHFNZkZVUkd0bnF1?=
+ =?utf-8?B?cWdVWGNoQ05LSlRjc3B3R0FpTTdDbittTm9zcUFaZ29mb3JPeDduNXpBYUJ2?=
+ =?utf-8?B?OGpjc2lBL0RDMzNrWGpVUDNoOVErZ0taUTdUdkV4VUlwa3FabjJKdVNteDJH?=
+ =?utf-8?B?QVorbk5JeFdRRHo5WS8xdnUrSEp2ZkpESmJVU1k0bkdZUVVGbXRqZ3F2eTBx?=
+ =?utf-8?B?SDhZdkJqNnBDMjhsM3JCaUtFdndYQlh3bDVNeUMzTnBlV05vWVlVcHRheGFP?=
+ =?utf-8?B?bFk1RmtUVC9mK2kxcHIvSXZSbC9lbmFYTnpiVnNZOU1rdTZhUlhJT2lFZnRk?=
+ =?utf-8?B?Um0zS2hnSWdSSHRqY1F6bXZxMzF0bWRORkhqck9ld09ldExuWlMzRXREdzVp?=
+ =?utf-8?B?UkRBVzVmT2RqUGZVWEhVYUlENzdoVUs2OU1XSlNPUUw0clFqWitpTHZMYUQ2?=
+ =?utf-8?B?cTEvQU5kaWtDbXVLZC9BenZaTHBFd1QxcVYvOTg4WmtZMno2R1FwaFdmcERL?=
+ =?utf-8?B?WEd4VHo5VnEwSHFGcGJCZkFJRG16Y2xJYXNwcWdtZUd1dUJINmM0SnUwZnlB?=
+ =?utf-8?B?bFJtRFJ3MExQK0RuS0h1MERWY1NHWGJiYXZqMG4raGtJWmRmRGM4QWtGQ1hJ?=
+ =?utf-8?B?cnBHd09pUGd5SlVyWk1za0VtQ09RbEE0RjRRVkJ0VUtDbk9EL20way9sTXZJ?=
+ =?utf-8?B?MENFQXVwZ0FFeDhVWEFVVVZmaXJqTFFGUEtCcVlOODY2TS8rN1MxZHRQMGtB?=
+ =?utf-8?B?Si9jNkhIZitnSk9MaGxTdVU4bllRcWxvR0poc0J3OWZXSFRiN2J5cVUrZXRK?=
+ =?utf-8?B?R3hOS0orVitrditDdXdQb1pCSUE2Q21jMVF4dE0zRUpORHFpendwTkxnam1t?=
+ =?utf-8?B?TVBiK0dhMVFzQ0p3dUd4VmY3aEgzakdmakc5dHQreUpIbzNDMHhLODVsN09P?=
+ =?utf-8?B?QVpjbncxMDJtZHE1SnhaZXdPalZKMGVRM1haNUh6ZE5oL1BqeFR1anpwcnI1?=
+ =?utf-8?B?QUdiU2VmTENsQnE1K29TMElXd0w5Sy9lalRlUHBCU0xpS3FXN3VRMncvcDVi?=
+ =?utf-8?B?SVM1Rmg2c2oydVBuUkViUTlUUDlBbi9Vb1EwT0g0R2Qvb2ZwZGR1RmJVbFIy?=
+ =?utf-8?B?WDFIWEt5N2gwTS9xMVFIcTBaOUJ4MjlyZC96ZnhOcEpKZWJLcWpIOE1WZlA5?=
+ =?utf-8?B?Tm1nejRLUHhtNUtEeGhWclJIUEpoM1A4dUl5RWkxVXFaaXpZYm1JQ1NRcEZj?=
+ =?utf-8?B?eHRnc1M1VHppZGtLVFVMZVg5OFQ3ak9uNnc4T1ljdGprMW9ielBuTTg0K2VK?=
+ =?utf-8?B?VEhTTlM3aG1LVlh2QzdUTFJRR2NhbGRWeHBORFY1ejhJQ2YrUGl5aytTQWNz?=
+ =?utf-8?B?NFFXR3R2ek5oRy9XR0xZWHo5RGFNSGY4K2NmZlFveldESWdIb0d2cGZ4eFgv?=
+ =?utf-8?B?WTlKUy93TmJPWDJpRFdkY2h4MExjWmI1cGVobVJ3enkrN3o0eUZlSWdDRkFm?=
+ =?utf-8?B?NTNmWnFQWmN5enNSMGwwUWZGMVY5cjJuNXoxeTBLM0ovaUFBYUY3RGxoTDk0?=
+ =?utf-8?B?ZGExN21lMC9KZFpVY25hVyt6QVZTZnVlbXd4VElCc3JyblkrVWxVZFUrbERI?=
+ =?utf-8?B?OC8raWNMdExWSGxwRGJwejVvSHBFVmJJUHMrWTYzRVVJSEF6eHZkL1lpRWcr?=
+ =?utf-8?B?Q1RkN2VOb1lzazY5SitMeWlCamIyMWxyM1BYZmxkT2xFbGJsK1NoeDcwdG9R?=
+ =?utf-8?Q?FW3ZVwX5+bRmjKTlNiT0n46lP?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c9f2c350-e92f-47ea-9d67-08dacd5625e2
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2022 13:25:14.0989
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2022 13:25:11.4711
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: i0tTwedMJT2t08jwQdqPyMRj+MkrncF8XfgSx1LClqGgeQCFH/iPUIjQRSZYXzDaZKL6b3ZXmTiGx30Q4SWg7w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB3948
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: g+5yDZ0QzH6rtJgL5gkgHWrxi8RrTJ89ioa1QPSFoiB6MulrtO6QNKfCIEnHB/FWavFagQxn/LCdu2nb8eswOg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7243
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds support for counting the average time of submit discard
-command, and we can see its value in debugfs.
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- fs/f2fs/debug.c   |  7 +++++--
- fs/f2fs/f2fs.h    |  5 +++++
- fs/f2fs/segment.c | 17 +++++++++++++++--
- 3 files changed, 25 insertions(+), 4 deletions(-)
+On 03/11/2022 15:57, Benjamin Tissoires wrote:
+> Declare an entry point that can use fmod_ret BPF programs, and
+> also an API to access and change the incoming data.
+> 
+> A simpler implementation would consist in just calling
+> hid_bpf_device_event() for any incoming event and let users deal
+> with the fact that they will be called for any event of any device.
+> 
+> The goal of HID-BPF is to partially replace drivers, so this situation
+> can be problematic because we might have programs which will step on
+> each other toes.
+> 
+> For that, we add a new API hid_bpf_attach_prog() that can be called
+> from a syscall and we manually deal with a jump table in hid-bpf.
+> 
+> Whenever we add a program to the jump table (in other words, when we
+> attach a program to a HID device), we keep the number of time we added
+> this program in the jump table so we can release it whenever there are
+> no other users.
+> 
+> HID devices have an RCU protected list of available programs in the
+> jump table, and those programs are called one after the other thanks
+> to bpf_tail_call().
+> 
+> To achieve the detection of users losing their fds on the programs we
+> attached, we add 2 tracing facilities on bpf_prog_release() (for when
+> a fd is closed) and bpf_free_inode() (for when a pinned program gets
+> unpinned).
+> 
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
-diff --git a/fs/f2fs/debug.c b/fs/f2fs/debug.c
-index a216dcdf6941..ede862cb178d 100644
---- a/fs/f2fs/debug.c
-+++ b/fs/f2fs/debug.c
-@@ -109,6 +109,9 @@ static void update_general_status(struct f2fs_sb_info *sbi)
- 			llist_empty(&SM_I(sbi)->fcc_info->issue_list);
- 	}
- 	if (SM_I(sbi)->dcc_info) {
-+		struct discard_cmd_control *dcc = SM_I(sbi)->dcc_info;
-+
-+		si->discard_avg = dcc->discard_time_avg;
- 		si->nr_discarded =
- 			atomic_read(&SM_I(sbi)->dcc_info->issued_discard);
- 		si->nr_discarding =
-@@ -506,11 +509,11 @@ static int stat_show(struct seq_file *s, void *v)
- 		seq_printf(s, "  - IO_R (Data: %4d, Node: %4d, Meta: %4d\n",
- 			   si->nr_rd_data, si->nr_rd_node, si->nr_rd_meta);
- 		seq_printf(s, "  - IO_W (CP: %4d, Data: %4d, Flush: (%4d %4d %4d), "
--			"Discard: (%4d %4d)) cmd: %4d undiscard:%4u\n",
-+					  "Discard: (%4d %4d avg:%4lldns)) cmd: %4d undiscard:%4u\n",
- 			   si->nr_wb_cp_data, si->nr_wb_data,
- 			   si->nr_flushing, si->nr_flushed,
- 			   si->flush_list_empty,
--			   si->nr_discarding, si->nr_discarded,
-+			   si->nr_discarding, si->nr_discarded, ktime_to_us(si->discard_avg),
- 			   si->nr_discard_cmd, si->undiscard_blks);
- 		seq_printf(s, "  - atomic IO: %4d (Max. %4d)\n",
- 			   si->aw_cnt, si->max_aw_cnt);
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index f0833638f59e..6891467fdb6a 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -372,6 +372,8 @@ struct discard_cmd {
- 	int error;			/* bio error */
- 	spinlock_t lock;		/* for state/bio_ref updating */
- 	unsigned short bio_ref;		/* bio reference count */
-+	struct discard_cmd_control *dcc; /* global discard cmd control */
-+	ktime_t submit_start;		/* submit start time */
- };
- 
- enum {
-@@ -415,6 +417,8 @@ struct discard_cmd_control {
- 	unsigned int max_ordered_discard;	/* maximum discard granularity issued by lba order */
- 	unsigned int undiscard_blks;		/* # of undiscard blocks */
- 	unsigned int next_pos;			/* next discard position */
-+	spinlock_t discard_time_lock;	/* for discard time statistics */
-+	ktime_t discard_time_avg;		/* issued discard cmd avg time */
- 	atomic_t issued_discard;		/* # of issued discard */
- 	atomic_t queued_discard;		/* # of queued discard */
- 	atomic_t discard_cmd_cnt;		/* # of cached cmd count */
-@@ -3883,6 +3887,7 @@ struct f2fs_stat_info {
- 	int nr_dio_read, nr_dio_write;
- 	unsigned int io_skip_bggc, other_skip_bggc;
- 	int nr_flushing, nr_flushed, flush_list_empty;
-+	ktime_t	discard_avg;
- 	int nr_discarding, nr_discarded;
- 	int nr_discard_cmd;
- 	unsigned int undiscard_blks;
-diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index 8b0b76550578..dd67e936615a 100644
---- a/fs/f2fs/segment.c
-+++ b/fs/f2fs/segment.c
-@@ -936,6 +936,7 @@ static struct discard_cmd *__create_discard_cmd(struct f2fs_sb_info *sbi,
- 	list_add_tail(&dc->list, pend_list);
- 	spin_lock_init(&dc->lock);
- 	dc->bio_ref = 0;
-+	dc->dcc = dcc;
- 	atomic_inc(&dcc->discard_cmd_cnt);
- 	dcc->undiscard_blks += len;
- 
-@@ -1005,9 +1006,13 @@ static void __remove_discard_cmd(struct f2fs_sb_info *sbi,
- static void f2fs_submit_discard_endio(struct bio *bio)
- {
- 	struct discard_cmd *dc = (struct discard_cmd *)bio->bi_private;
-+	struct discard_cmd_control *dcc = dc->dcc;
- 	unsigned long flags;
-+	ktime_t submit_time;
-+	int nr_discarded;
- 
- 	spin_lock_irqsave(&dc->lock, flags);
-+	submit_time = ktime_sub(ktime_get(), dc->submit_start);
- 	if (!dc->error)
- 		dc->error = blk_status_to_errno(bio->bi_status);
- 	dc->bio_ref--;
-@@ -1017,6 +1022,13 @@ static void f2fs_submit_discard_endio(struct bio *bio)
- 	}
- 	spin_unlock_irqrestore(&dc->lock, flags);
- 	bio_put(bio);
-+
-+	spin_lock_irqsave(&dcc->discard_time_lock, flags);
-+	nr_discarded = atomic_read(&dcc->issued_discard);
-+	dcc->discard_time_avg = div_u64(ktime_add(nr_discarded * dcc->discard_time_avg, submit_time),
-+									nr_discarded + 1);
-+	atomic_inc(&dcc->issued_discard);
-+	spin_unlock_irqrestore(&dcc->discard_time_lock, flags);
- }
- 
- static void __check_sit_bitmap(struct f2fs_sb_info *sbi,
-@@ -1165,6 +1177,7 @@ static int __submit_discard_cmd(struct f2fs_sb_info *sbi,
- 		 * right away
- 		 */
- 		spin_lock_irqsave(&dc->lock, flags);
-+		dc->submit_start = ktime_get();
- 		if (last)
- 			dc->state = D_SUBMIT;
- 		else
-@@ -1184,8 +1197,6 @@ static int __submit_discard_cmd(struct f2fs_sb_info *sbi,
- 		bio->bi_opf |= flag;
- 		submit_bio(bio);
- 
--		atomic_inc(&dcc->issued_discard);
--
- 		f2fs_update_iostat(sbi, NULL, FS_DISCARD, 1);
- 
- 		lstart += len;
-@@ -2076,9 +2087,11 @@ static int create_discard_cmd_control(struct f2fs_sb_info *sbi)
- 	INIT_LIST_HEAD(&dcc->wait_list);
- 	INIT_LIST_HEAD(&dcc->fstrim_list);
- 	mutex_init(&dcc->cmd_lock);
-+	spin_lock_init(&dcc->discard_time_lock);
- 	atomic_set(&dcc->issued_discard, 0);
- 	atomic_set(&dcc->queued_discard, 0);
- 	atomic_set(&dcc->discard_cmd_cnt, 0);
-+	dcc->discard_time_avg = 0;
- 	dcc->nr_discards = 0;
- 	dcc->max_discards = MAIN_SEGS(sbi) << sbi->log_blocks_per_seg;
- 	dcc->max_discard_request = DEF_MAX_DISCARD_REQUEST;
+...
+
+> +static int __init hid_bpf_init(void)
+> +{
+> +	int err;
+> +
+> +	/* Note: if we exit with an error any time here, we would entirely break HID, which
+> +	 * is probably not something we want. So we log an error and return success.
+> +	 *
+> +	 * This is not a big deal: the syscall allowing to attach a BPF program to a HID device
+> +	 * will not be available, so nobody will be able to use the functionality.
+> +	 */
+> +
+> +	err = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &hid_bpf_kfunc_set);
+> +	if (err) {
+> +		pr_warn("error while setting HID BPF tracing kfuncs: %d", err);
+> +		return 0;
+> +	}
+> +
+> +	err = hid_bpf_preload_skel();
+> +	if (err) {
+> +		pr_warn("error while preloading HID BPF dispatcher: %d", err);
+> +		return 0;
+> +	}
+> +
+> +	/* register syscalls after we are sure we can load our preloaded bpf program */
+> +	err = register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &hid_bpf_syscall_kfunc_set);
+> +	if (err) {
+> +		pr_warn("error while setting HID BPF syscall kfuncs: %d", err);
+> +		return 0;
+> +	}
+> +
+> +	return 0;
+> +}
+
+
+We have a kernel test that checks for new warning and error messages on 
+boot and with this change I am now seeing the following error message on 
+our Tegra platforms ...
+
+  WARNING KERN hid_bpf: error while preloading HID BPF dispatcher: -13
+
+I have a quick look at the code, but I can't say I am familiar with 
+this. So I wanted to ask if a way to fix this or avoid this? I see the 
+code returns 0, so one option would be to make this an informational or 
+debug print.
+
+Thanks
+Jon
+
 -- 
-2.25.1
-
+nvpublic
