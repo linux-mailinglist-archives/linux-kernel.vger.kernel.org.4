@@ -2,191 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E37F636B31
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 21:33:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5C62636B73
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 21:43:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239943AbiKWUbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 15:31:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55022 "EHLO
+        id S235718AbiKWUmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 15:42:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239047AbiKWUbI (ORCPT
+        with ESMTP id S236938AbiKWUmb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 15:31:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD19B8565;
-        Wed, 23 Nov 2022 12:27:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 10EF461EFA;
-        Wed, 23 Nov 2022 20:27:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A32C5C433B5;
-        Wed, 23 Nov 2022 20:27:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669235244;
-        bh=gPkfbnv3qPJ9FOJmn467RGATD1PErQvKRtVe1xtGPiE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=GC1/j2m85haDlVSmG14J/wxR6a6O5GE/AZG//rvBg9iWO+pZJseIvX0knZVBNpHg4
-         WtLeMxrtC/5pIrA7xiGxtcNAs2ZPb3QEISfOk89/Fl5703952U9We3I5kMeAkx5Xqi
-         wdQGE4akGP+k/EFXxE8bJfgiRn/w3OZALUKV9pMi25Dg9203SOFDLgqI7gbxYlKFw9
-         8PEW5donjR8xsvRdIvEu5yY7vBPhFYeTBsQjRbgy+g0GNPRU6H+T8MKT9GnUfuzOml
-         jdLS7JHLGQlyM7WIcT0JSPbLlva4NHz7ulQYftS/lPntpmzOfqYcrCLm5GdmiOYnFO
-         9XKGfpMzyaBhg==
-Date:   Wed, 23 Nov 2022 20:39:57 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Ramona Bolboaca <ramona.bolboaca@analog.com>
-Cc:     <nuno.sa@analog.com>, <linux-iio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 1/9] iio: adis: add '__adis_enable_irq()'
- implementation
-Message-ID: <20221123203957.1fc50880@jic23-huawei>
-In-Reply-To: <20221122082757.449452-2-ramona.bolboaca@analog.com>
-References: <20221122082757.449452-1-ramona.bolboaca@analog.com>
-        <20221122082757.449452-2-ramona.bolboaca@analog.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Wed, 23 Nov 2022 15:42:31 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B110B641D
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 12:42:29 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id e27so5209845ejc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 12:42:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XD90mtWntPX9pwvtOpGYtVjtAn6i2D6yqLZ47F2nZx8=;
+        b=PakzoMBe6XuEcqY4mg0M4UsAZ1xu8yPSR4BBUsY4UGz8JlNWqU1xqT5xl0+H9KHWPN
+         1sPw+cQJ3ROTx6Joj6yx6CLTt6RynRo0MCz2L0CTy/K4Q1CT8JGvUOerJRFAYxLm8vwy
+         VONCoXHcmMaoDPwnyGBF0fJo6vcacvf5G9UhM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XD90mtWntPX9pwvtOpGYtVjtAn6i2D6yqLZ47F2nZx8=;
+        b=aLodBfWwxSB45PDed5a4NxwVc5xVKGq04JVsAwSDSss9xn5WDVKYGLwUfTKfO0709U
+         jA7ITyf+PjcOv7JiaKQL+Ma01iXnwDAJ99g+0WVv8/jU308svoxgpVJ0C0+fpLElcrl7
+         r2kseNN8Aru/Lr8TUp1YRErr1utCM8bko9OSUcANtrxr3n3Y4bQ8TczIeWL22Ho7XXk9
+         LEtHl+8PL/+RsQunUw/PCOsaSX9hvivoVJFAHqq9puUnW8MEW1K+NJMjSah7QINCerxL
+         ztZ8bcpm90oYkOKVM5MVIjg4GKwwo483xW1MrIlUe9Pq8g0l0ANmY772v1TbqHFJ8lbj
+         X0AA==
+X-Gm-Message-State: ANoB5pm+uHOPGK14r/l+l8NhbX4Cm61UqRs7ePoBkQr7oPOLf1TTMKie
+        7rKSRR5UaxOC85+wOoX/ENSK2pfOvu/Wlva4jF1HHw==
+X-Google-Smtp-Source: AA0mqf69yNdx9CrCRlqJ6He3JtviZ8KuNMKF0Z/DUd1d2xwVqC2Hkhu0/7KXBY5hFinOZ8T7+4YYJYNBJSRrwhVs0bk=
+X-Received: by 2002:a17:906:4e4e:b0:7ae:e6ac:2427 with SMTP id
+ g14-20020a1709064e4e00b007aee6ac2427mr25318494ejw.345.1669236147705; Wed, 23
+ Nov 2022 12:42:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221123191627.3442831-1-lixiaoyan@google.com>
+ <20221123191627.3442831-2-lixiaoyan@google.com> <CACKFLin=H_j6Jy+1jZJiG5xuE=C41joZ_dPS_BZmBwcf7W1rHA@mail.gmail.com>
+In-Reply-To: <CACKFLin=H_j6Jy+1jZJiG5xuE=C41joZ_dPS_BZmBwcf7W1rHA@mail.gmail.com>
+From:   Michael Chan <michael.chan@broadcom.com>
+Date:   Wed, 23 Nov 2022 12:42:15 -0800
+Message-ID: <CACKFLimobzAyN5gvLrQAhbhS4tL_ARN=Mo_rWRJN9g+D9rkpGw@mail.gmail.com>
+Subject: Re: [RFC net-next v2 2/2] bnxt: Use generic HBH removal helper in tx path
+To:     Coco Li <lixiaoyan@google.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Gospodarek <gospo@broadcom.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000ac081205ee2953c1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Nov 2022 10:27:49 +0200
-Ramona Bolboaca <ramona.bolboaca@analog.com> wrote:
+--000000000000ac081205ee2953c1
+Content-Type: text/plain; charset="UTF-8"
 
-> Add '__adis_enable_irq()' implementation which is the unlocked
-> version of 'adis_enable_irq()'.
-> Call '__adis_enable_irq()' instead of 'adis_enable_irq()' from
-> '__adis_intial_startup()' to keep the expected unlocked functionality.
->=20
-> This fix is needed to remove a deadlock for all devices which are
-> using 'adis_initial_startup()'. The deadlock occurs because the
-> same mutex is acquired twice, without releasing it.
-> The mutex is acquired once inside 'adis_initial_startup()', before
-> calling '__adis_initial_startup()', and once inside
-> 'adis_enable_irq()', which is called by '__adis_initial_startup()'.
-> The deadlock is removed by calling '__adis_enable_irq()', instead of
-> 'adis_enable_irq()' from within '__adis_initial_startup()'.
->=20
-> Fixes: b600bd7eb3335 ("iio: adis: do not disabe IRQs in 'adis_init()'")
-> Signed-off-by: Ramona Bolboaca <ramona.bolboaca@analog.com>
-> Reviewed-by: Nuno S=C3=A1 <nuno.sa@analog.com>
-Build issue in here that I've fixed up.
+On Wed, Nov 23, 2022 at 11:42 AM Michael Chan <michael.chan@broadcom.com> wrote:
+>
+> On Wed, Nov 23, 2022 at 11:16 AM Coco Li <lixiaoyan@google.com> wrote:
+> >
+> > @@ -13657,6 +13660,7 @@ static int bnxt_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+> >                 dev->features &= ~NETIF_F_LRO;
+> >         dev->priv_flags |= IFF_UNICAST_FLT;
+> >
+> > +       netif_set_tso_max_size(dev, GSO_MAX_SIZE);
+>
+> Our chips can only transmit TSO packets up to 64K bytes, so I think
+> this won't work.
 
-> ---
->  drivers/iio/imu/adis.c       | 28 ++++++++++------------------
->  include/linux/iio/imu/adis.h | 13 ++++++++++++-
->  2 files changed, 22 insertions(+), 19 deletions(-)
->=20
-> diff --git a/drivers/iio/imu/adis.c b/drivers/iio/imu/adis.c
-> index f7fcfd04f659..bc40240b29e2 100644
-> --- a/drivers/iio/imu/adis.c
-> +++ b/drivers/iio/imu/adis.c
-> @@ -270,23 +270,19 @@ EXPORT_SYMBOL_NS(adis_debugfs_reg_access, IIO_ADISL=
-IB);
->  #endif
-> =20
->  /**
-> - * adis_enable_irq() - Enable or disable data ready IRQ
-> + * __adis_enable_irq() - Enable or disable data ready IRQ (unlocked)
->   * @adis: The adis device
->   * @enable: Whether to enable the IRQ
->   *
->   * Returns 0 on success, negative error code otherwise
->   */
-> -int adis_enable_irq(struct adis *adis, bool enable)
-> +int __adis_enable_irq(struct adis *adis, bool enable)
->  {
-> -	int ret =3D 0;
-> +	int ret;
->  	u16 msc;
-> =20
-> -	mutex_lock(&adis->state_lock);
-> -
-> -	if (adis->data->enable_irq) {
-> -		ret =3D adis->data->enable_irq(adis, enable);
-> -		goto out_unlock;
-> -	}
-> +	if (adis->data->enable_irq)
-> +		return adis->data->enable_irq(adis, enable);
-> =20
->  	if (adis->data->unmasked_drdy) {
->  		if (enable)
-> @@ -294,12 +290,12 @@ int adis_enable_irq(struct adis *adis, bool enable)
->  		else
->  			disable_irq(adis->spi->irq);
-> =20
-> -		goto out_unlock;
-> +		return 0;
->  	}
-> =20
->  	ret =3D __adis_read_reg_16(adis, adis->data->msc_ctrl_reg, &msc);
->  	if (ret)
-> -		goto out_unlock;
-> +		return ret;
-> =20
->  	msc |=3D ADIS_MSC_CTRL_DATA_RDY_POL_HIGH;
->  	msc &=3D ~ADIS_MSC_CTRL_DATA_RDY_DIO2;
-> @@ -308,13 +304,9 @@ int adis_enable_irq(struct adis *adis, bool enable)
->  	else
->  		msc &=3D ~ADIS_MSC_CTRL_DATA_RDY_EN;
-> =20
-> -	ret =3D __adis_write_reg_16(adis, adis->data->msc_ctrl_reg, msc);
-> -
-> -out_unlock:
-> -	mutex_unlock(&adis->state_lock);
-> -	return ret;
-> +	return __adis_write_reg_16(adis, adis->data->msc_ctrl_reg, msc);
->  }
-> -EXPORT_SYMBOL_NS(adis_enable_irq, IIO_ADISLIB);
-> +EXPORT_SYMBOL_NS(__adis_enable_irq, IIO_ADISLIB);
-> =20
->  /**
->   * __adis_check_status() - Check the device for error conditions (unlock=
-ed)
-> @@ -445,7 +437,7 @@ int __adis_initial_startup(struct adis *adis)
->  	 * with 'IRQF_NO_AUTOEN' anyways.
->  	 */
->  	if (!adis->data->unmasked_drdy)
-> -		adis_enable_irq(adis, false);
-> +		__adis_enable_irq(adis, false);
-> =20
->  	if (!adis->data->prod_id_reg)
->  		return 0;
-> diff --git a/include/linux/iio/imu/adis.h b/include/linux/iio/imu/adis.h
-> index 515ca09764fe..d789ecf8d0c8 100644
-> --- a/include/linux/iio/imu/adis.h
-> +++ b/include/linux/iio/imu/adis.h
-> @@ -402,9 +402,20 @@ static inline int adis_update_bits_base(struct adis =
-*adis, unsigned int reg,
->  	__adis_update_bits_base(adis, reg, mask, val, sizeof(val));	\
->  })
-> =20
-> -int adis_enable_irq(struct adis *adis, bool enable);
-> +static inline int adis_enable_irq(struct adis *adis, bool enable)
-> +{
-> +	int ret;
-> +
-> +	mutex_lock(&adis->state_lock);
-> +	ret =3D __adis_enable_irq(adis, enable);
-> +	mutex_unlock(&adis->state_lock);
-> +
-> +	return ret;
-> +}
-> +
->  int __adis_check_status(struct adis *adis);
->  int __adis_initial_startup(struct adis *adis);
-> +int __adis_enable_irq(struct adis *adis, bool enable);
+I wanted to double check with the hardware team but there's no one in
+the office today.  I will confirm early next week.  Thanks.
 
-Move the above down here seeing as __adis_enable_irq() isn't
-defined until this point (and that gave a bunch of build issues).
+--000000000000ac081205ee2953c1
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-> =20
->  static inline int adis_check_status(struct adis *adis)
->  {
-
+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
+OnaLEot1MoQO7BIe5S9H4AcCEXXcrJJiAtMCl47ARpyHmvQFQFFTrHgUYEd9V+9bOzY7MBIGSV1N
+/JfsT1sZw6HT0lJkSQefhPGpBniAob62DJP3qr11tu8CAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
+AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
+c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
+AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
+TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
+bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
+L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
+BB0wG4EZbWljaGFlbC5jaGFuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
+HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQU31rAyTdZweIF0tJTFYwfOv2w
+L4QwDQYJKoZIhvcNAQELBQADggEBACcuyaGmk0NSZ7Kio7O7WSZ0j0f9xXcBnLbJvQXFYM7JI5uS
+kw5ozATEN5gfmNIe0AHzqwoYjAf3x8Dv2w7HgyrxWdpjTKQFv5jojxa3A5LVuM8mhPGZfR/L5jSk
+5xc3llsKqrWI4ov4JyW79p0E99gfPA6Waixoavxvv1CZBQ4Stu7N660kTu9sJrACf20E+hdKLoiU
+hd5wiQXo9B2ncm5P3jFLYLBmPltIn/uzdiYpFj+E9kS9XYDd+boBZhN1Vh0296zLQZobLfKFzClo
+E6IFyTTANonrXvCRgodKS+QJEH8Syu2jSKe023aVemkuZjzvPK7o9iU7BKkPG2pzLPgxggJtMIIC
+aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
+EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxeQGjDntHGb2iaQkIw
+DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILCKoYe2iwSdTAc1NavZE24HgAotDXkY
+r3HCBaNJlul9MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMTEy
+MzIwNDIyOFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
+SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
+ATANBgkqhkiG9w0BAQEFAASCAQAJL7H2/0MKmdOnkRHTYQw4gFLx9zoZgHUSDLSCtA05oH0TCuLe
+tPODOSUakJHc+qGTpH5rJ3OBJhdbYA2MO+ef03gMOji591vKnHhOlCxE7arhbBjplPQS6UHPeJ4T
+RijT8XrWMRVq3nWvqEZ3/2AuYxHLvYg+HqXIfqgaDUK+nstGiMNQ4zHE024qsZQKRs0Z6q/i8GGW
+DpYJonH9zp0mF/LldPSWJq+lD+NBMAUTi5CdRQHh2xl08vXMjbIXpbDhJvuRZAt2jybV+wyY7jr4
+1k4IJ3kqGiRIVA3hXL8xuo3D/+PKcSdGuXgGjVa5xiGnY1Gr0XzJ3S/16qd260Qy
+--000000000000ac081205ee2953c1--
