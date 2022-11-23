@@ -2,121 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD9946350C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 07:59:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE586350C5
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 08:00:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236179AbiKWG7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 01:59:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53692 "EHLO
+        id S236188AbiKWHAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 02:00:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236165AbiKWG7C (ORCPT
+        with ESMTP id S236164AbiKWHA1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 01:59:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8A382BC0;
-        Tue, 22 Nov 2022 22:59:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4431261AA5;
-        Wed, 23 Nov 2022 06:59:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAD02C433C1;
-        Wed, 23 Nov 2022 06:58:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669186740;
-        bh=zIbIy/PtmE2LjDQ6u0ycesYy6M+OQfQCW7bQkpgh7Wk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bzgzCfjQd1alk5/e+Spa+hdB0/oWpYut0+k/MsWjFCwQ7L+rdhlvDdNiPab4PBrXI
-         1HArTIHZwB4Er/kcirALZN/UcNcB/AlutbbLSHLsWt8f4fW2GH+VayFQeqoxzgU+Jj
-         +WpqJXCWUj0yZbpxtkjIm6aA3UsNsKdSpwMmsk605B+KVsldgdYgXeDEqhJJaO/cjP
-         1pnH1mFaTORk4pTX6HDFo62VluvlVE00/MmG8ylJj5b0mNC4pZo9fGZYylrfFiR7Vo
-         ji9o0JpZKxLm+OD30GBRvLjBfBYIUNnYYIxcSRH2dWn+gYMgSuQjdzxPxlqI9w9COc
-         O3kE3Uy26wQZQ==
-Date:   Wed, 23 Nov 2022 08:58:53 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Ajit Khaparde <ajit.khaparde@broadcom.com>
-Cc:     andrew.gospodarek@broadcom.com, davem@davemloft.net,
-        edumazet@google.com, jgg@ziepe.ca, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        michael.chan@broadcom.com, netdev@vger.kernel.org,
-        pabeni@redhat.com, selvin.xavier@broadcom.com
-Subject: Re: [PATCH v4 0/6] Add Auxiliary driver support
-Message-ID: <Y33ErZHAsX76y34Z@unreal>
-References: <20221109184244.7032-1-ajit.khaparde@broadcom.com>
- <Y2zYPOUKgoArq7mM@unreal>
- <CACZ4nhu_2FoOTmXPuq+amRYAipusq1XcobavytN0cFK=TSE5mQ@mail.gmail.com>
- <Y3Tj/BrskSJPuTFw@unreal>
- <CACZ4nhsv4zyzANrGh90WGKORz0Su=i7+Jmsk6nWoOq4or7Y0=Q@mail.gmail.com>
+        Wed, 23 Nov 2022 02:00:27 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D11ED714;
+        Tue, 22 Nov 2022 23:00:26 -0800 (PST)
+Received: from desky.lan (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 34BC288F;
+        Wed, 23 Nov 2022 08:00:23 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1669186824;
+        bh=Knz0JCCrfCqQxJejdfCSEXVWPhZVH+yr9Z4AiAaBvFg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=oRRanw51554oiR9W7rj4aus04gF+aGASx6InEVVf73OEMWWbYnl1jgaPxSFCiL5w1
+         gGYB856SbsrKDl6gJxt1XEON195cLORWienlYPruWVzg1GUpaUTOvhCcroJ6/N5Ska
+         w0hCCsucGs5sdv73p3jqDpECgOkBIMHoCgozUSY8=
+From:   Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v2 0/7] Renesas V4H DSI & DP output support
+Date:   Wed, 23 Nov 2022 08:59:39 +0200
+Message-Id: <20221123065946.40415-1-tomi.valkeinen+renesas@ideasonboard.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACZ4nhsv4zyzANrGh90WGKORz0Su=i7+Jmsk6nWoOq4or7Y0=Q@mail.gmail.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 07:02:45AM -0800, Ajit Khaparde wrote:
-> On Wed, Nov 16, 2022 at 5:22 AM Leon Romanovsky <leon@kernel.org> wrote:
-> >
-> ::snip::
-> > > > All PCI management logic and interfaces are needed to be inside eth part
-> > > > of your driver and only that part should implement SR-IOV config. Once
-> > > > user enabled SR-IOV, the PCI driver should create auxiliary devices for
-> > > > each VF. These device will have RDMA capabilities and it will trigger RDMA
-> > > > driver to bind to them.
-> > > I agree and once the PF creates the auxiliary devices for the VF, the RoCE
-> > > Vf indeed get probed and created. But the twist in bnxt_en/bnxt_re
-> > > design is that
-> > > the RoCE driver is responsible for making adjustments to the RoCE resources.
-> >
-> > You can still do these adjustments by checking type of function that
-> > called to RDMA .probe. PCI core exposes some functions to help distinguish between
-> > PF and VFs.
-> >
-> > >
-> > > So once the VF's are created and the bnxt_en driver enables SRIOV adjusts the
-> > > NIC resources for the VF,  and such, it tries to call into the bnxt_re
-> > > driver for the
-> > > same purpose.
-> >
-> > If I read code correctly, all these resources are for one PCI function.
-> >
-> > Something like this:
-> >
-> > bnxt_re_probe()
-> > {
-> >   ...
-> >         if (is_virtfn(p))
-> >                  bnxt_re_sriov_config(p);
-> >   ...
-> > }
-> I understand what you are suggesting.
-> But what I want is a way to do this in the context of the PF
-> preferably before the VFs are probed. 
+From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 
-I don't understand the last sentence. You call to this sriov_config in
-bnxt_re driver without any protection from VFs being probed,
+Hi,
 
-> So we are trying to call the
-> bnxt_re_sriov_config in the context of handling the PF's
-> sriov_configure implementation.  Having the ulp_ops is allowing us to
-> avoid resource wastage and assumptions in the bnxt_re driver.
+These add support for DSI on V4H SoC (r8a779g0) and DP for Whitehawk
+board.
 
-To which resource wastage are you referring?
+Changes in v2:
+- A few cosmetic changes
+- Increase vspd address range in dts to 0x7000
+- Arrange nodes in dts by the block address
+- Use gen = 4 for r8a779g0 du
+- Drop the CLOCKSET1 hack patch
 
-There are no differences if same limits will be in bnxt_en driver when
-RDMA bnxt device is created or in bnxt_re which will be called once RDMA
-device is created.
+The CLOCKSET1 patch is apparently not needed to get the DSI & DP
+working. Which is baffling, as I'm quite sure it was needed. There are a
+few possible explanations: 1) it was never needed and I was just messing
+things up, 2) it was needed, but some of my later improvements made it
+unnecessary, 3) Whitehawk board firmware was updated in the middle of
+the development of this series, possibly the firmware made the patch
+unnecessary.
 
-Thanks
+ Tomi
 
-> 
-> ::snip::
+Tomi Valkeinen (7):
+  dt-bindings: display: renesas,du: Provide bindings for r8a779g0
+  dt-bindings: display: bridge: renesas,dsi-csi2-tx: Add r8a779g0
+  clk: renesas: r8a779g0: Add display related clocks
+  arm64: dts: renesas: r8a779g0: Add display related nodes
+  arm64: dts: renesas: white-hawk-cpu: Add DP output support
+  drm: rcar-du: Add r8a779g0 support
+  drm: rcar-du: dsi: Add r8A779g0 support
 
+ .../display/bridge/renesas,dsi-csi2-tx.yaml   |   3 +-
+ .../bindings/display/renesas,du.yaml          |   2 +
+ .../dts/renesas/r8a779g0-white-hawk-cpu.dtsi  |  94 ++++
+ arch/arm64/boot/dts/renesas/r8a779g0.dtsi     | 130 +++++
+ drivers/clk/renesas/r8a779g0-cpg-mssr.c       |  14 +
+ drivers/gpu/drm/rcar-du/rcar_du_drv.c         |  22 +
+ drivers/gpu/drm/rcar-du/rcar_du_group.c       |   2 +-
+ drivers/gpu/drm/rcar-du/rcar_mipi_dsi.c       | 484 ++++++++++++++----
+ drivers/gpu/drm/rcar-du/rcar_mipi_dsi_regs.h  |   6 +-
+ 9 files changed, 649 insertions(+), 108 deletions(-)
+
+-- 
+2.34.1
 
