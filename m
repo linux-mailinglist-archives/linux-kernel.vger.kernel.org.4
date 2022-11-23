@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59740635BAE
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 12:29:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5090635BBC
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 12:30:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237206AbiKWL1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 06:27:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32826 "EHLO
+        id S237383AbiKWLaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 06:30:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236323AbiKWL0k (ORCPT
+        with ESMTP id S237045AbiKWL3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 06:26:40 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F06ED5FD
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 03:26:39 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oxntd-0003vq-Hc; Wed, 23 Nov 2022 12:26:29 +0100
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oxntb-0062RP-J7; Wed, 23 Nov 2022 12:26:28 +0100
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oxntb-008jrB-ET; Wed, 23 Nov 2022 12:26:27 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Arun.Ramadoss@microchip.com
-Subject: [PATCH net-next v5 5/5] net: dsa: microchip: enable MTU normalization for KSZ8795 and KSZ9477 compatible switches
-Date:   Wed, 23 Nov 2022 12:26:25 +0100
-Message-Id: <20221123112625.2082797-6-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221123112625.2082797-1-o.rempel@pengutronix.de>
-References: <20221123112625.2082797-1-o.rempel@pengutronix.de>
+        Wed, 23 Nov 2022 06:29:42 -0500
+Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78523F1D81;
+        Wed, 23 Nov 2022 03:27:27 -0800 (PST)
+Received: from [10.18.29.47] (10.18.29.47) by mail-sh.amlogic.com (10.18.11.5)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Wed, 23 Nov
+ 2022 19:27:25 +0800
+Message-ID: <9858039f-e635-2749-80a2-75072d6e9cea@amlogic.com>
+Date:   Wed, 23 Nov 2022 19:27:25 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH V5 4/4] arm64: dts: meson: add S4 Soc Peripheral clock
+ controller in DT
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     <kelvin.zhang@amlogic.com>
+References: <20221123021346.18136-1-yu.tu@amlogic.com>
+ <20221123021346.18136-5-yu.tu@amlogic.com>
+ <ae43fadf-9255-7db7-8b5e-01200e02a2c6@linaro.org>
+From:   Yu Tu <yu.tu@amlogic.com>
+In-Reply-To: <ae43fadf-9255-7db7-8b5e-01200e02a2c6@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.18.29.47]
+X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
+ (10.18.11.5)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,41 +59,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KSZ8795 and KSZ9477 compatible series of switches use global max frame
-size configuration register. So, enable MTU normalization for this reason.
+Hi Krzysztof,
+	
+On 2022/11/23 18:10, Krzysztof Kozlowski wrote:
+> [ EXTERNAL EMAIL ]
+> 
+> On 23/11/2022 03:13, Yu Tu wrote:
+>> Added information about the S4 SOC Peripheral Clock controller in DT.
+>>
+>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+>> ---
+>>   arch/arm64/boot/dts/amlogic/meson-s4.dtsi | 26 +++++++++++++++++++++++
+>>   1 file changed, 26 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
+>> index bd9c2ef83314..e7fab6e400be 100644
+>> --- a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
+>> +++ b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
+>> @@ -6,6 +6,8 @@
+>>   #include <dt-bindings/interrupt-controller/irq.h>
+>>   #include <dt-bindings/interrupt-controller/arm-gic.h>
+>>   #include <dt-bindings/gpio/gpio.h>
+>> +#include <dt-bindings/clock/amlogic,s4-pll-clkc.h>
+>> +#include <dt-bindings/clock/amlogic,s4-peripherals-clkc.h>
+>>   
+>>   / {
+>>   	cpus {
+>> @@ -100,6 +102,30 @@ clkc_pll: clock-controller@8000 {
+>>   				#clock-cells = <1>;
+>>   			};
+>>   
+>> +			clkc_periphs: clock-controller {
+>> +				compatible = "amlogic,s4-peripherals-clkc";
+>> +				reg = <0x0 0x0 0x0 0x49c>;
+> 
+> This is broken... did you check for warnings?
+Yes, i do.
+You can have a look at the results of my test, as follows.
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- drivers/net/dsa/microchip/ksz8795.c | 2 ++
- drivers/net/dsa/microchip/ksz9477.c | 2 ++
- 2 files changed, 4 insertions(+)
+total: 0 errors, 0 warnings, 0 checks, 38 lines checked
 
-diff --git a/drivers/net/dsa/microchip/ksz8795.c b/drivers/net/dsa/microchip/ksz8795.c
-index d01bfd609130..d88d0b989e1a 100644
---- a/drivers/net/dsa/microchip/ksz8795.c
-+++ b/drivers/net/dsa/microchip/ksz8795.c
-@@ -1426,6 +1426,8 @@ int ksz8_switch_init(struct ksz_device *dev)
- 	 */
- 	dev->ds->vlan_filtering_is_global = true;
- 
-+	dev->ds->mtu_enforcement_ingress = true;
-+
- 	return 0;
- }
- 
-diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
-index f6e7968ab105..4fb07fbdf565 100644
---- a/drivers/net/dsa/microchip/ksz9477.c
-+++ b/drivers/net/dsa/microchip/ksz9477.c
-@@ -1134,6 +1134,8 @@ int ksz9477_setup(struct dsa_switch *ds)
- 	struct ksz_device *dev = ds->priv;
- 	int ret = 0;
- 
-+	dev->ds->mtu_enforcement_ingress = true;
-+
- 	/* Required for port partitioning. */
- 	ksz9477_cfg32(dev, REG_SW_QM_CTRL__4, UNICAST_VLAN_BOUNDARY,
- 		      true);
--- 
-2.30.2
+../patch_clk_v5_1122/0004-arm64-dts-meson-add-S4-Soc-Peripheral-clock-controll.patch 
+has no obvious style problems and is ready for submission.
 
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
+> .
