@@ -2,94 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE992635C40
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 12:55:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5054C635C43
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 12:57:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236953AbiKWLzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 06:55:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32868 "EHLO
+        id S236656AbiKWL5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 06:57:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236656AbiKWLzT (ORCPT
+        with ESMTP id S236701AbiKWL5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 06:55:19 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDA5C65;
-        Wed, 23 Nov 2022 03:55:18 -0800 (PST)
-Received: from [192.168.0.192] (unknown [194.146.248.75])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Wed, 23 Nov 2022 06:57:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D8B4E420
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 03:56:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669204606;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=72X0u56tTcH3cffEqUa/4emv/ok6eCjQ+RB31fNcuLo=;
+        b=UMP2QgrVxos48xcvuNPpD0BmQxZiOuYp0rs4mavb0rOCfWmZPoRyMxna7ZUuubosdEv5W/
+        8kGUWF+qDXRy8AvavQ4gjUyU1+Yx+IDasmKyCFiC62xyZLvFoBC+KdAf4KWG2sOJmlpAwq
+        9PijPJpoXOHPoVFTVQVC5ZQ0B/1BVFY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-189-GqFqv4YROdmOEB2YANGDRA-1; Wed, 23 Nov 2022 06:56:41 -0500
+X-MC-Unique: GqFqv4YROdmOEB2YANGDRA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: andrzej.p)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 36AA56601615;
-        Wed, 23 Nov 2022 11:55:17 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1669204517;
-        bh=wGEZtLTeZPeK0VlHGG0r8cTHtzmBHhRkskvyyEeF8Ik=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=hbEH8JPT7PilLf2DAVVEVDOMKY08CG2aj951mgFAevRLQApr3rlh2xn7nCBMYWwEb
-         GlBpQQi82dNvjaUV+DHfRAf0mMKugmhP9G8B7Z6SSI+lUqSjx87IvWPFSjsxXsgOeG
-         tb99bjnnk+A1j/v7C2KgHbPikf6doE1/xh76PhSAj7CUngdl2KOMgDyUheuWmgqSKQ
-         EcQqyPXfncm5dtBnvONUAv/YwkhK28cxKea0c3Rhq25A93l9l0xIS4HEqVjh6JBo64
-         VaG+PEKMB5G2fjW2mCWfs3PLdxLcrTXpsjQdDu5YJjzULYJGtDJlRcbkpdh7ymfyD6
-         2Om42pvxy4n/g==
-Message-ID: <dcd180f6-7769-3bc5-403f-8960e922bb50@collabora.com>
-Date:   Wed, 23 Nov 2022 12:55:14 +0100
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 408DB88B776;
+        Wed, 23 Nov 2022 11:56:41 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (ovpn-194-238.brq.redhat.com [10.40.194.238])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 63727C2C8C5;
+        Wed, 23 Nov 2022 11:56:39 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Wed, 23 Nov 2022 12:56:40 +0100 (CET)
+Date:   Wed, 23 Nov 2022 12:56:38 +0100
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Petr Skocik <pskocik@gmail.com>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] Fix kill(-1,s) returning 0 on 0 kills
+Message-ID: <20221123115637.GD32207@redhat.com>
+References: <20221122161240.137570-1-pskocik@gmail.com>
+ <20221122161240.137570-2-pskocik@gmail.com>
+ <20221123103016.GA32207@redhat.com>
+ <dcfcb10b-10c9-eb37-b345-07735453f5b5@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 2/3] usb: gadget: f_hid: fix refcount leak on error path
-Content-Language: en-US
-To:     John Keeping <john@metanate.com>, linux-usb@vger.kernel.org
-Cc:     Fabien Chouteau <fabien.chouteau@barco.com>,
-        Peter Korsgaard <peter.korsgaard@barco.com>,
-        Felipe Balbi <balbi@ti.com>,
-        Andrzej Pietrasiewicz <andrzej.p@samsung.com>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-References: <20221122123523.3068034-1-john@metanate.com>
- <20221122123523.3068034-3-john@metanate.com>
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-In-Reply-To: <20221122123523.3068034-3-john@metanate.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dcfcb10b-10c9-eb37-b345-07735453f5b5@gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-W dniu 22.11.2022 o 13:35, John Keeping pisze:
-> When failing to allocate report_desc, opts->refcnt has already been
-> incremented so it needs to be decremented to avoid leaving the options
-> structure permanently locked.
+On 11/23, Petr Skocik wrote:
+>
+> On 11/23/22 11:30, Oleg Nesterov wrote:
+> >
+> >But I fail to understand the /*either all 0 or all -EINVAL*/ comment above..
+> >
+> >Oleg.
+> >
 > 
-> Fixes: 21a9476a7ba8 ("usb: gadget: hid: add configfs support")
-> Signed-off-by: John Keeping <john@metanate.com>
+> Thanks. The comment is explained in my reply to Kees Cook:
+> https://lkml.org/lkml/2022/11/22/1327.
+> I felt like making it because without it to me it suspiciously looks like
+> the
+> `if ( err != -EPERM) ret = err;` (or `if ( err != -EPERM) retval = err;` in
+> the original) could be masking
+> a non-EPERM failure with a later success, but it isn't because in this
+> context, all the non-EPERM return vals should either ALL be 0 or ALL be
+> -EINVAL.
 
-I'd personally place the bugfix before patches 1 and 3, but anyway
+Ah, now I see what did you mean, thanks.
 
-Reviewed-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Well, you are probably right, __send_signal_locked() won't fail even if
+__sigqueue_alloc() fails, because si_code = SI_USER.
 
-> ---
->   drivers/usb/gadget/function/f_hid.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
-> index 8b8bbeaa27cb..6be6009f911e 100644
-> --- a/drivers/usb/gadget/function/f_hid.c
-> +++ b/drivers/usb/gadget/function/f_hid.c
-> @@ -1292,6 +1292,7 @@ static struct usb_function *hidg_alloc(struct usb_function_instance *fi)
->   						 GFP_KERNEL);
->   		if (!hidg->report_desc) {
->   			put_device(&hidg->dev);
-> +			--opts->refcnt;
->   			mutex_unlock(&opts->lock);
->   			return ERR_PTR(-ENOMEM);
->   		}
+Not sure we should rely on this, but I won't argue.
+
+Oleg.
 
