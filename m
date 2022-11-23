@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0983636812
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:02:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91190636818
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:03:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239458AbiKWSCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 13:02:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53584 "EHLO
+        id S239472AbiKWSDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 13:03:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239343AbiKWSCR (ORCPT
+        with ESMTP id S239359AbiKWSCU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 13:02:17 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5011893CC7;
-        Wed, 23 Nov 2022 10:02:17 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id y14-20020a17090a2b4e00b002189a1b84d4so2526037pjc.2;
-        Wed, 23 Nov 2022 10:02:17 -0800 (PST)
+        Wed, 23 Nov 2022 13:02:20 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0C160F9;
+        Wed, 23 Nov 2022 10:02:18 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id v28so18006470pfi.12;
+        Wed, 23 Nov 2022 10:02:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/XCyVoN2CehHx7RpmSNkS0ILYMPbGDge+MWsh49BZP0=;
-        b=RA6XwERAQ9oFGKRK9FwW2+BAXVuDXEcWwE98pPTTLsUP3d/uoo+JL//dsBAHnjn4YX
-         r41ok0+UGjJ+K1LT5J3SdMujw8e0BulQwi3Lcb3Cp/GjmqYJqO+VDT9wAJbV6d2rnYju
-         WGmkHN/N3eh3XepR7sYmi6x7gzb9c6dF8l5NxzN+k5SNSS8FLJHyg1lVrz/g/wzFltnh
-         Im0n53P1/kfTNowa3pf9fMXGAqer8r/eGnrCNNalZx1GRcURXPsVDNkgjBkgqeEE1Roa
-         r7RGzZB0EBZB5KcoNvu04H65LpGejG3zpHEBgWxJ3xdOiFHXNdAquYcJMz4e7Gb2nJBJ
-         7rfw==
+        bh=XSagVML7GgOqlOudGxczoz0/8G87CcGh9QY51qbKYAY=;
+        b=ixqc+fmP1EpYwjc94PYCfvYVyvk1b5Q7/lCMMoLyMbzTKtNetDuy/0FhIf8rhhTEi5
+         G4jqBVVV8NG8HitM5TUlTJMExA1DX4cKRAip8OLufvcBZwHPqYIaCKGd1BpzWYFLkD1o
+         gylPTOpMhucAftwmh9v0CPo4ak1alld20Q7R5poqnbOfhPjkMhGRiTlAzQ0xDA/Vn/f5
+         x5tOxSMR7KphqJEMgcy7jTa5InRL8z8Zvabm/RiTmV2+kz58p1yIZey+nwChvk6z58GA
+         ji+Gl+OvcYIomtG2t/V2aYdP8YgqrST/zg/oQpt9Tx77R5boFq4izG9abLuzrq6RI45n
+         QzcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=/XCyVoN2CehHx7RpmSNkS0ILYMPbGDge+MWsh49BZP0=;
-        b=e6dLkJ91kdtIrZ9W4/ilx+sXFmQpIFW+eIWnVluRccnPgYzpAwAyQNK4FfamAFVCXD
-         2xnQyZo8krq0baUDbZKbrqCqeWKRd6PD29SD1AOsWxbroEN/b1OXtr4BE+RVkMsRCkdw
-         zJM7IHrvm8fUiOqpRsXrIrr7g/uSR21oSmLMI6S8ao0pFjcr58qD1P1pvuygkIufPEKH
-         s1B8NQ692n8qbFAQMAfSofTaqLLqqQ+u63tN996qNQY4ayI8BRWxwESKRevfRwno3Vgc
-         Pi96Y8wUOjXYLpnTB+65RvH32KAhmRphUm6/74HMLfD6CqhBj/8fYCkkM7SLd70BYw/L
-         k1sg==
-X-Gm-Message-State: ANoB5pnQWiWIRqDivTc3GoytDahG87olscMZq9tb6T1Qph548Vgn5soc
-        podUpHuoBe7IO7VODbZ/eGU=
-X-Google-Smtp-Source: AA0mqf59GDhKSyTePcmHXcmPXPe4IwSZ8QKzZBWKzqgEWXanTT2rXLZgYVVcUunvq1wvsC06q3C0fg==
-X-Received: by 2002:a17:902:6847:b0:183:6555:38ef with SMTP id f7-20020a170902684700b00183655538efmr13403292pln.157.1669226536694;
-        Wed, 23 Nov 2022 10:02:16 -0800 (PST)
+        bh=XSagVML7GgOqlOudGxczoz0/8G87CcGh9QY51qbKYAY=;
+        b=XgMWds5uELM4fZFBTrQYAmej/wyEb4pCuW6vOCiseeY82n+HDVx648DtNp4Hxm1wWs
+         ZXOSB4AsRjDzD/SXk02yM9gQiHgeePOQl1GIEAz+OcSg5G+9BJCoIYN5mmcJGRk31Z+S
+         0nNcA4zwVGTz+0c/e9QPlY68AjAwGATIL3snhYnBVcaq3iFVfE6K8zJOd8zIduIu6xxN
+         L4kXP5WmqyB5WEGLKzTJCTFQCJzAlxcGY3m9GrbzxtuYViL9G3pwnMk4k4TBslLgvxuL
+         8P24VeShSrXEKKT8vpW6GYkq2/UbNGjwMSgUvUa+un1fD+l5F0ewwzr0Vu+hLpfx8A7t
+         4ruA==
+X-Gm-Message-State: ANoB5pmYnTJTzGyYPxReYvfk/KNTF/XQrq0gEm90I9xwQP0/rxaJ+ZQH
+        2h5JFig93nXAYj/vhGRLsCw=
+X-Google-Smtp-Source: AA0mqf6KzYb+/auV2JdDKMMa0tioOSOQjN7DGFDSezEYynfNyIFk8ympGBU0GuWU3Nh4oYZfsvtRrw==
+X-Received: by 2002:a63:5b44:0:b0:46f:c9e8:5752 with SMTP id l4-20020a635b44000000b0046fc9e85752mr8580769pgm.157.1669226538136;
+        Wed, 23 Nov 2022 10:02:18 -0800 (PST)
 Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:a80:c968:76:254b:3790])
-        by smtp.gmail.com with ESMTPSA id i15-20020a655b8f000000b00470275c8d6dsm10792364pgr.10.2022.11.23.10.02.15
+        by smtp.gmail.com with ESMTPSA id i15-20020a655b8f000000b00470275c8d6dsm10792364pgr.10.2022.11.23.10.02.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 10:02:16 -0800 (PST)
+        Wed, 23 Nov 2022 10:02:17 -0800 (PST)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -64,9 +64,9 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         Zhengjun Xing <zhengjun.xing@linux.intel.com>,
         James Clark <james.clark@arm.com>,
         Athira Jajeev <atrajeev@linux.vnet.ibm.com>
-Subject: [PATCH 04/15] perf stat: Use scnprintf() in prepare_interval()
-Date:   Wed, 23 Nov 2022 10:01:57 -0800
-Message-Id: <20221123180208.2068936-5-namhyung@kernel.org>
+Subject: [PATCH 05/15] perf stat: Remove prefix argument in print_metric_headers()
+Date:   Wed, 23 Nov 2022 10:01:58 -0800
+Message-Id: <20221123180208.2068936-6-namhyung@kernel.org>
 X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
 In-Reply-To: <20221123180208.2068936-1-namhyung@kernel.org>
 References: <20221123180208.2068936-1-namhyung@kernel.org>
@@ -82,60 +82,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It should not use sprintf() anymore.  Let's pass the buffer size and use the
-safer scnprintf() instead.
+It always passes a whitespace to the function, thus we can just add it to the
+function body.  Furthermore, it's only used in the normal output mode.
+
+Well, actually CSV used it but it doesn't need to since we don't care about the
+indentation or alignment in the CSV output.
 
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/util/stat-display.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ tools/perf/util/stat-display.c | 26 ++++++++++----------------
+ 1 file changed, 10 insertions(+), 16 deletions(-)
 
 diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
-index 15c88b9b5aa3..744b7a40f59a 100644
+index 744b7a40f59a..deed6ccf072f 100644
 --- a/tools/perf/util/stat-display.c
 +++ b/tools/perf/util/stat-display.c
-@@ -1073,23 +1073,23 @@ static void print_metric_headers(struct perf_stat_config *config,
+@@ -996,10 +996,9 @@ static void print_no_aggr_metric(struct perf_stat_config *config,
  }
  
- static void prepare_interval(struct perf_stat_config *config,
--			     char *prefix, struct timespec *ts)
-+			     char *prefix, size_t len, struct timespec *ts)
+ static void print_metric_headers_std(struct perf_stat_config *config,
+-				     const char *prefix, bool no_indent)
++				     bool no_indent)
  {
- 	if (config->iostat_run)
- 		return;
+-	if (prefix)
+-		fprintf(config->output, "%s", prefix);
++	fputc(' ', config->output);
  
- 	if (config->csv_output)
--		sprintf(prefix, "%lu.%09lu%s", (unsigned long) ts->tv_sec,
--				 ts->tv_nsec, config->csv_sep);
-+		scnprintf(prefix, len, "%lu.%09lu%s",
-+			  (unsigned long) ts->tv_sec, ts->tv_nsec, config->csv_sep);
- 	else if (!config->json_output)
--		sprintf(prefix, "%6lu.%09lu ", (unsigned long) ts->tv_sec,
--				 ts->tv_nsec);
-+		scnprintf(prefix, len, "%6lu.%09lu ",
-+			  (unsigned long) ts->tv_sec, ts->tv_nsec);
- 	else if (!config->metric_only)
--		sprintf(prefix, "{\"interval\" : %lu.%09lu, ", (unsigned long)
--				 ts->tv_sec, ts->tv_nsec);
-+		scnprintf(prefix, len, "{\"interval\" : %lu.%09lu, ",
-+			  (unsigned long) ts->tv_sec, ts->tv_nsec);
- 	else
--		sprintf(prefix, "{\"interval\" : %lu.%09lu}", (unsigned long)
--				 ts->tv_sec, ts->tv_nsec);
-+		scnprintf(prefix, len, "{\"interval\" : %lu.%09lu}",
-+			  (unsigned long) ts->tv_sec, ts->tv_nsec);
+ 	if (!no_indent) {
+ 		int len = aggr_header_lens[config->aggr_mode];
+@@ -1012,11 +1011,8 @@ static void print_metric_headers_std(struct perf_stat_config *config,
  }
  
- static void print_header_interval_std(struct perf_stat_config *config,
-@@ -1390,7 +1390,7 @@ void evlist__print_counters(struct evlist *evlist, struct perf_stat_config *conf
+ static void print_metric_headers_csv(struct perf_stat_config *config,
+-				     const char *prefix,
+ 				     bool no_indent __maybe_unused)
+ {
+-	if (prefix)
+-		fprintf(config->output, "%s", prefix);
+ 	if (config->interval)
+ 		fputs("time,", config->output);
+ 	if (!config->iostat_run)
+@@ -1024,7 +1020,6 @@ static void print_metric_headers_csv(struct perf_stat_config *config,
+ }
  
- 	if (interval) {
- 		prefix = buf;
--		prepare_interval(config, prefix, ts);
-+		prepare_interval(config, buf, sizeof(buf), ts);
+ static void print_metric_headers_json(struct perf_stat_config *config,
+-				      const char *prefix __maybe_unused,
+ 				      bool no_indent __maybe_unused)
+ {
+ 	if (config->interval)
+@@ -1032,8 +1027,7 @@ static void print_metric_headers_json(struct perf_stat_config *config,
+ }
+ 
+ static void print_metric_headers(struct perf_stat_config *config,
+-				 struct evlist *evlist,
+-				 const char *prefix, bool no_indent)
++				 struct evlist *evlist, bool no_indent)
+ {
+ 	struct evsel *counter;
+ 	struct outstate os = {
+@@ -1047,11 +1041,11 @@ static void print_metric_headers(struct perf_stat_config *config,
+ 	};
+ 
+ 	if (config->json_output)
+-		print_metric_headers_json(config, prefix, no_indent);
++		print_metric_headers_json(config, no_indent);
+ 	else if (config->csv_output)
+-		print_metric_headers_csv(config, prefix, no_indent);
++		print_metric_headers_csv(config, no_indent);
+ 	else
+-		print_metric_headers_std(config, prefix, no_indent);
++		print_metric_headers_std(config, no_indent);
+ 
+ 	if (config->iostat_run)
+ 		iostat_print_header_prefix(config);
+@@ -1132,7 +1126,7 @@ static void print_header_interval_std(struct perf_stat_config *config,
  	}
  
- 	print_header(config, _target, evlist, argc, argv);
+ 	if (config->metric_only)
+-		print_metric_headers(config, evlist, " ", true);
++		print_metric_headers(config, evlist, true);
+ 	else
+ 		fprintf(output, " %*s %*s events\n",
+ 			COUNTS_LEN, "counts", config->unit_width, "unit");
+@@ -1168,7 +1162,7 @@ static void print_header_std(struct perf_stat_config *config,
+ 	fprintf(output, ":\n\n");
+ 
+ 	if (config->metric_only)
+-		print_metric_headers(config, evlist, " ", false);
++		print_metric_headers(config, evlist, false);
+ }
+ 
+ static void print_header_csv(struct perf_stat_config *config,
+@@ -1178,7 +1172,7 @@ static void print_header_csv(struct perf_stat_config *config,
+ 			     const char **argv __maybe_unused)
+ {
+ 	if (config->metric_only)
+-		print_metric_headers(config, evlist, " ", true);
++		print_metric_headers(config, evlist, true);
+ }
+ static void print_header_json(struct perf_stat_config *config,
+ 			      struct target *_target __maybe_unused,
+@@ -1187,7 +1181,7 @@ static void print_header_json(struct perf_stat_config *config,
+ 			      const char **argv __maybe_unused)
+ {
+ 	if (config->metric_only)
+-		print_metric_headers(config, evlist, " ", true);
++		print_metric_headers(config, evlist, true);
+ }
+ 
+ static void print_header(struct perf_stat_config *config,
 -- 
 2.38.1.584.g0f3c55d4c2-goog
 
