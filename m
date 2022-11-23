@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4669463624D
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:49:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3C76636250
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:49:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237515AbiKWOtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 09:49:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49498 "EHLO
+        id S237553AbiKWOt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 09:49:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237484AbiKWOtO (ORCPT
+        with ESMTP id S237549AbiKWOtP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 09:49:14 -0500
+        Wed, 23 Nov 2022 09:49:15 -0500
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093AF74A83;
-        Wed, 23 Nov 2022 06:49:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A0B70188;
+        Wed, 23 Nov 2022 06:49:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669214951; x=1700750951;
+  t=1669214952; x=1700750952;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=PZw/qx/VCBuHt8kLTtD2kAjtrp/ndgtSgsymsuc6HUA=;
-  b=b94MSyV6Z3VbT8k4JYhSSkUqY7+WLa3Fth1u8DJFhCIB0Yl1ZDtJgzl7
-   vkoosvAr/k4/0X7DTa0S7fnBy9s/PHtIwmyNu2u3mJfmh/ceN+GrFBN53
-   84iq5BOEk4Cr/a/Do5s+wcVe6NwjddSUZ3YiREmiUR6oaaUB5LXi9WHfL
-   hussW35TGAucXEty9DXmJvGJXux6q30N5BaOYpRooWycO5bI0XhKzUceP
-   pXJhimV92n7JQbRbBBTW/gpyVImGvVMJfxLq4wm2V7s5tZt/ffaEVms5p
-   C6JQ55osYLQZ1LAKnEmA09FIlYe3SsYcJVnIeTq9a7G5ZenIqFGYxPCaj
+  bh=yNdh/hk4prTZOSg8R5rGTM68n79WKoKNAojMOq62B0c=;
+  b=Kvg0AP4UY358dpDgJDZEWma9ql/q39sFfEyD+KkhQS7PbE0b1+trDHs/
+   Yr8a/t9Xibxrzs36qRToPA0W8FLgKv0wmXR3k99r+6fsBQtwlLjw7JFpb
+   UR/XUXyZrKH+C/w+/DFbE0viosSOpHinhXQ2vcxVNDjTHRa5rGKUf1htR
+   xaNqeJpz+mSBwioyAgqgQ4qO5P3qP4RPfmpsHe5JJeA+jEg5rqNZvJaTV
+   1m2ZLThQwdWDDtQP8unRU6OZJlpjK0oLvGmSrzzzM4cGwlDPplJp/3Kaa
+   J96sIeJ51qg0laE05HUXpUTJIhV70DZB5HGcSAWAg/C0KH0LTsdye2mY6
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="376225198"
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="376225206"
 X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="376225198"
+   d="scan'208";a="376225206"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
   by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 06:48:49 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="635936969"
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="635936971"
 X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="635936969"
+   d="scan'208";a="635936971"
 Received: from black.fi.intel.com ([10.237.72.28])
   by orsmga007.jf.intel.com with ESMTP; 23 Nov 2022 06:48:37 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 9096CB7; Wed, 23 Nov 2022 16:49:03 +0200 (EET)
+        id A0A95184; Wed, 23 Nov 2022 16:49:03 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Jakob Koschel <jakobkoschel@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -57,9 +57,9 @@ Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
         Kevin Cernekee <cernekee@gmail.com>,
         Mathias Nyman <mathias.nyman@intel.com>,
         Hans de Goede <hdegoede@redhat.com>
-Subject: [PATCH v4 2/4] usb: gadget: hid: Convert to use list_count()
-Date:   Wed, 23 Nov 2022 16:48:59 +0200
-Message-Id: <20221123144901.40493-2-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v4 3/4] usb: gadget: udc: bcm63xx: Convert to use list_count()
+Date:   Wed, 23 Nov 2022 16:49:00 +0200
+Message-Id: <20221123144901.40493-3-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221123144901.40493-1-andriy.shevchenko@linux.intel.com>
 References: <20221123144901.40493-1-andriy.shevchenko@linux.intel.com>
@@ -80,32 +80,41 @@ existing nodes in the list. Utilise it.
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
 v4: no change
-v3: fixed typo in the commit message (Fabio)
+v3: no change
 v2: no change
- drivers/usb/gadget/legacy/hid.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ drivers/usb/gadget/udc/bcm63xx_udc.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/usb/gadget/legacy/hid.c b/drivers/usb/gadget/legacy/hid.c
-index 1187ee4f316a..6196c3456e0b 100644
---- a/drivers/usb/gadget/legacy/hid.c
-+++ b/drivers/usb/gadget/legacy/hid.c
-@@ -133,14 +133,11 @@ static struct usb_configuration config_driver = {
- static int hid_bind(struct usb_composite_dev *cdev)
- {
- 	struct usb_gadget *gadget = cdev->gadget;
--	struct list_head *tmp;
- 	struct hidg_func_node *n = NULL, *m, *iter_n;
- 	struct f_hid_opts *hid_opts;
--	int status, funcs = 0;
--
--	list_for_each(tmp, &hidg_func_list)
--		funcs++;
-+	int status, funcs;
+diff --git a/drivers/usb/gadget/udc/bcm63xx_udc.c b/drivers/usb/gadget/udc/bcm63xx_udc.c
+index 2cdb07905bde..0762e49e85f8 100644
+--- a/drivers/usb/gadget/udc/bcm63xx_udc.c
++++ b/drivers/usb/gadget/udc/bcm63xx_udc.c
+@@ -2172,7 +2172,6 @@ static int bcm63xx_iudma_dbg_show(struct seq_file *s, void *p)
  
-+	funcs = list_count(&hidg_func_list);
- 	if (!funcs)
- 		return -ENODEV;
+ 	for (ch_idx = 0; ch_idx < BCM63XX_NUM_IUDMA; ch_idx++) {
+ 		struct iudma_ch *iudma = &udc->iudma[ch_idx];
+-		struct list_head *pos;
  
+ 		seq_printf(s, "IUDMA channel %d -- ", ch_idx);
+ 		switch (iudma_defaults[ch_idx].ep_type) {
+@@ -2205,14 +2204,10 @@ static int bcm63xx_iudma_dbg_show(struct seq_file *s, void *p)
+ 		seq_printf(s, "  desc: %d/%d used", iudma->n_bds_used,
+ 			   iudma->n_bds);
+ 
+-		if (iudma->bep) {
+-			i = 0;
+-			list_for_each(pos, &iudma->bep->queue)
+-				i++;
+-			seq_printf(s, "; %d queued\n", i);
+-		} else {
++		if (iudma->bep)
++			seq_printf(s, "; %zu queued\n", list_count(&iudma->bep->queue));
++		else
+ 			seq_printf(s, "\n");
+-		}
+ 
+ 		for (i = 0; i < iudma->n_bds; i++) {
+ 			struct bcm_enet_desc *d = &iudma->bd_ring[i];
 -- 
 2.35.1
 
