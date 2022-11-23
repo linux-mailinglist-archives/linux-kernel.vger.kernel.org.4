@@ -2,121 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FCD1636D33
+	by mail.lfdr.de (Postfix) with ESMTP id 56849636D32
 	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 23:32:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbiKWWcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 17:32:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43512 "EHLO
+        id S229684AbiKWWc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 17:32:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbiKWWcV (ORCPT
+        with ESMTP id S229646AbiKWWcU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 17:32:21 -0500
-Received: from qproxy6-pub.mail.unifiedlayer.com (qproxy6-pub.mail.unifiedlayer.com [69.89.23.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D135512BFE7
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 14:32:19 -0800 (PST)
-Received: from gproxy3-pub.mail.unifiedlayer.com (unknown [69.89.30.42])
-        by qproxy6.mail.unifiedlayer.com (Postfix) with ESMTP id 7EA798029CE6
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 22:32:19 +0000 (UTC)
-Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
-        by progateway5.mail.pro1.eigbox.com (Postfix) with ESMTP id 0B6331004A85F
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 22:31:59 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id xyHeoaqMe0QBNxyHeoeOLh; Wed, 23 Nov 2022 22:31:59 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=DuqTREz+ c=1 sm=1 tr=0 ts=637e9f5f
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=9xFQ1JgjjksA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=v/xOKGW0BsQAx53NFGgIhs2QrUVPKgaTLEUW5GUX404=; b=o1YnRX2GE7ySqkg9w9gFB4BQRk
-        lshwkgQUMLloT4L5K10Sl3bDwrQcMriMe60VcC4zaug4iA2BU7pVYuOSznmtn9KfI/qVcX0GiQwdf
-        PSS2OJxpm4KnvLOnDipM8Mdau58MLOr/y4pwh3BgJ6shimcsxtRP1aV0FZKruoLgzvaAtEHCW2FA4
-        hNUmZoa0r9PDQpyFK5iD2F0rFp5QCZpV57Lr9CNw8ZMq/LPhvKAK5Nbie25b6Mk9suGtaNzs7nuxw
-        PbyVkok1jjTaYoS0OogwY1yVqqZTz1d2rSQulfYeKTfcueCnVc5vWqnmbqvdfb/roTGqJX5tXWQJT
-        8bPKYR3w==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:58836 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1oxyHd-000NoE-Rb;
-        Wed, 23 Nov 2022 15:31:57 -0700
-Subject: Re: [PATCH 6.0 000/314] 6.0.10-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20221123084625.457073469@linuxfoundation.org>
-In-Reply-To: <20221123084625.457073469@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <d10b8119-0324-4798-76a3-e34a1ad23608@w6rz.net>
-Date:   Wed, 23 Nov 2022 14:31:54 -0800
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 23 Nov 2022 17:32:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677D31055A9
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 14:32:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C44661F52
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 22:32:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48CF2C433D6;
+        Wed, 23 Nov 2022 22:32:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669242736;
+        bh=K8EpGiSxouT+B3+NBXCF70URW9KNafmq//7W+BT261k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bl6aq1kQjEKjhrJc13pSTVBRCNgQ6nOjUpauzwqNVcw5zi64fD17oLR0PEQXy+PYp
+         LpA98X2TA/wxE0nRo62X0N886HsnBpmcRhYpeReAPjBUYwu1rStoVBlIYGlRg3ITgw
+         VxG/Ekg+ChxVbJQN1hLUmyiHT7yuBd/7zoiDwVJn02anUcUbGluZh5EDWnXVXNhzKp
+         W345r4O8PNZcSQPhxNImcfNao+FotY/p35zy6Y3tD61OkCFn6MqZk0vacBWftD1IfM
+         uGF4nTd03v6uaO0apbYsPPMNSvtljgWLhKYpVR4pwvmqP07CDraiHt/1XUiYY6+a0x
+         DeshJHfVIi4mw==
+Date:   Wed, 23 Nov 2022 14:32:14 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>, sfr@canb.auug.org.au,
+        linux-kernel@vger.kernel.org
+Subject: Re: objtool warning for next-20221118
+Message-ID: <20221123223214.gxwyrakfj7nbs2fb@treble>
+References: <20221121040736.GA3738360@paulmck-ThinkPad-P17-Gen-1>
+ <Y3thrQxfcvZSXFlr@hirez.programming.kicks-ass.net>
+ <20221121145215.GF4001@paulmck-ThinkPad-P17-Gen-1>
+ <20221122051605.4hcbslwxez2trdvt@treble>
+ <Y3yJxQJ9DwxTx7km@hirez.programming.kicks-ass.net>
+ <20221123002258.GR4001@paulmck-ThinkPad-P17-Gen-1>
+ <20221123014812.7gptbvvndzemt5nc@treble>
+ <20221123174951.GZ4001@paulmck-ThinkPad-P17-Gen-1>
+ <20221123181941.fh4hrr3pazelwtxc@treble>
+ <20221123191242.GG4001@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1oxyHd-000NoE-Rb
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:58836
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221123191242.GG4001@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/23/22 12:47 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.10 release.
-> There are 314 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 25 Nov 2022 08:45:20 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.10-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Wed, Nov 23, 2022 at 11:12:42AM -0800, Paul E. McKenney wrote:
+> On Wed, Nov 23, 2022 at 10:19:41AM -0800, Josh Poimboeuf wrote:
+> > On Wed, Nov 23, 2022 at 09:49:51AM -0800, Paul E. McKenney wrote:
+> > > > > > Perhaps the best way would be to stick a REACHABLE annotation in
+> > > > > > arch_cpu_idle_dead() or something?
+> > > > > 
+> > > > > When I apply this on -next, I still get the objtool complaint.
+> > > > > Is there something else I should also be doing?
+> > > > 
+> > > > Silly GCC is folding the inline asm.  This works (but still doesn't seem
+> > > > like the right approach):
+> > > > 
+> > > > diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+> > > > index 26e8f57c75ad..128e7d78fedf 100644
+> > > > --- a/arch/x86/kernel/process.c
+> > > > +++ b/arch/x86/kernel/process.c
+> > > > @@ -702,7 +702,7 @@ static void (*x86_idle)(void);
+> > > >  #ifndef CONFIG_SMP
+> > > >  static inline void play_dead(void)
+> > > >  {
+> > > > -	BUG();
+> > > > +	_BUG_FLAGS(ASM_UD2, 0, ASM_REACHABLE);
+> > > >  }
+> > > >  #endif
+> > > 
+> > > I tried this, and still get:
+> > > 
+> > > vmlinux.o: warning: objtool: do_idle+0x156: unreachable instruction
+> > > 
+> > > Maybe my gcc is haunted?
+> > 
+> > Weird, it worked for me.  I have
+> > 
+> >   gcc version 12.2.1 20220819 (Red Hat 12.2.1-2) (GCC)
+> 
+> Me, I have these, so quite a bit older:
+> 
+> gcc version 8.5.0 20210514 (Red Hat 8.5.0-15) (GCC)
+> gcc version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04.1)
+> 
+> > and I can't really fathom why that wouldn't work.  Maybe it's a
+> > different issue?  The "unreachable instruction" warning is limited to
+> > one, so when a first warning gets fixed, a second warning might suddenly
+> > become visible.
+> > 
+> > Can you attach arch/x86/kernel/process.o?
+> 
+> Attached!
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Hm, for whatever reason, that .o file is indeed missing the reachable
+annotation.  <scratches head>
 
-Tested-by: Ron Economos <re@w6rz.net>
+I confirmed the patch also fixes the warning with:
 
+  gcc version 8.5.0 20210514 (Red Hat 8.5.0-10) (GCC)
+
+No idea why it's not working for you... but maybe it doesn't matter as
+I'm still thinking we should go with a different approach.
+
+-- 
+Josh
