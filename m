@@ -2,211 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7405C635B7F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 12:22:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2562635B85
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 12:24:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236467AbiKWLWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 06:22:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56866 "EHLO
+        id S236435AbiKWLXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 06:23:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234151AbiKWLWS (ORCPT
+        with ESMTP id S236766AbiKWLXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 06:22:18 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27AF86D481
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 03:22:17 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id g12so28869757wrs.10
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 03:22:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DNglsK4+/iip/Tdvq3qRkWjn1wP+WYSOSH+/chHxROE=;
-        b=OJhkeN0ePg+bL5YO/tnj62hFLU9N+gj9+WOdC8CuOqgqkCkH4xyStZAjTbJhEEMd0J
-         nvi0CquQM6I91s+eN6GWpXvVtnYOVg2UgrbSo8ZY3uBV2ZP5IjL1yeD3b7hrvnoF04x1
-         n7EipWkPA6kfSjNy9I6pdpzpaCRo8jIpdeOD08tsT+dErTadJlL6PYRgW78DdXyrvHQf
-         KgYbFYepclO7T5syTv/9I4VQqo9PXaxWGD2r5G3zKzxSHniYqMQIdLS/0mLyN0VWV3oI
-         okqt9zYbOIJ4TRzRDxRVYtT4CA3QSA3rmQpwEFyPlVEROa5iE2FogdgBrRJTYwdo+yTT
-         IK2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DNglsK4+/iip/Tdvq3qRkWjn1wP+WYSOSH+/chHxROE=;
-        b=NFyhNuOC2+hxU/iWgnMiceErszAQtM7lZUNy5Pj3sJzLCUq1+2ivLA25c3XtYYr3aO
-         af656/2C+wQrQRW1Nu3CI4NZdg8qvqXE2sznwkCw+EoDTuhaylVWGrSYQzhxNRzV6adN
-         A22WaFYCCLlPedPQTinW/+PU1XXvQrmg9qtqjlwtGGGCrkH/oChQYlUaV/Y8dY/AkGR/
-         0LnnIulYFS35f7OA3/sWGHL+0ptShClc0bMcFy/oBXslospdRPgjwCH55xWRR8rjXitf
-         aa7LuAW7FuTBcX+0SkVis1DTmEAmJt7xxgaRUYYkJDFfH1cNxO6Q0fXGZvy/Mx+GhKFM
-         ccJQ==
-X-Gm-Message-State: ANoB5pkCsVztTgQCkYBKGNoxovJTJvA5Jh0HEgXVphChU/K8tndh1mQE
-        o5LxSPvhLvGpDuhx+BLGxykzQw==
-X-Google-Smtp-Source: AA0mqf7hr367nAUVa9igwAtZ4K7DD6B/xC6ioylGPhZdSWf5jiMGuYa/X8qp1Cyggyiaf+DbK7HviA==
-X-Received: by 2002:a05:6000:104c:b0:23a:5a31:29eb with SMTP id c12-20020a056000104c00b0023a5a3129ebmr10151892wrx.679.1669202535626;
-        Wed, 23 Nov 2022 03:22:15 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id q2-20020adff502000000b00241cfa9333fsm10259640wro.5.2022.11.23.03.22.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 03:22:14 -0800 (PST)
-Message-ID: <1085c75e-fd12-f432-8893-b58f7c3a7cab@linaro.org>
-Date:   Wed, 23 Nov 2022 11:22:13 +0000
+        Wed, 23 Nov 2022 06:23:01 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646276316E;
+        Wed, 23 Nov 2022 03:22:59 -0800 (PST)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4A4F16602A1D;
+        Wed, 23 Nov 2022 11:22:57 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1669202577;
+        bh=+f+soK5ibkBzyHND0/INlV0VOdmTdJmaAL6gQPdWIUo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Fohq9DEzlCEE/5lh4LJ4BYVjRxw396rO4ldL+nsahl6kzXBXJ9+kl0KtXEnlsGbKr
+         jl6y8O+6z12Uknf2vz/30XUJ6lbG3dTnFzS8cPLqy+97zZDdzE55g9H+LPWziSbJCE
+         KagE+/XGNVV9NHqP9+UwJBVEM4A27a1mZvNsZRmwGAEc5hEL6Rr1ArTTO1zocKz4TD
+         KMc5lAh8iY4kH00DV6YCL5miDKmO6S5eqTMpKSEBImvuCLZX/y8rymXGNWb+6D5cIS
+         A8UHIiXKPSHhTf6+JCOAIX3uDFq6FPuBxiuvpO6XXYDunjiIrZOTtdD6A2VODny57Q
+         FMGEh5XbPLc5Q==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     tglx@linutronix.de
+Cc:     maz@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        youlin.pei@mediatek.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2 0/4] MediaTek CIRQ: new register layout and schema
+Date:   Wed, 23 Nov 2022 12:22:45 +0100
+Message-Id: <20221123112249.98281-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 0/4] firmware: Add support for Qualcomm UEFI Secure
- Application
-To:     Maximilian Luz <luzmaximilian@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-efi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220723224949.1089973-1-luzmaximilian@gmail.com>
- <dfd07f84-c4bd-a18c-2263-49f999f2934c@linaro.org>
- <f42539d0-c2a3-a2b2-c35b-b7a5904b376f@gmail.com>
-Content-Language: en-US
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <f42539d0-c2a3-a2b2-c35b-b7a5904b376f@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Max,
+On newer SoCs (like MT8192/95 and also other non-chromebook chips), the
+MediaTek CIRQ controller has a new register layout: this series adds
+some more flexibility to the irq-mtk-cirq driver, allowing to select
+the register layout based on a SoC-specific compatible.
 
-On 02/08/2022 14:22, Maximilian Luz wrote:
-> 
-> 
-> On 8/2/22 13:51, Srinivas Kandagatla wrote:
->> Hi Maximilian,
->>
->> On 23/07/2022 23:49, Maximilian Luz wrote:
->>> On modern Qualcomm platforms, access to EFI variables is restricted to
->>> the secure world / TrustZone, i.e. the Trusted Execution Environment
->>> (TrEE or TEE) as Qualcomm seems to call it. To access EFI variables, we
->>> therefore need to talk to the UEFI Secure Application (uefisecapp),
->>> residing in the TrEE.
->>>
->>> This series adds support for accessing EFI variables on those platforms.
->>>
->>> To do this, we first need to add some SCM call functions used to manage
->>> and talk to Secure Applications. A very small subset of this interface
->>> is added in the second patch (whereas the first one exports the required
->>> functions for that). Interface specifications are extracted from [1].
->>> While this does not (yet) support re-entrant SCM calls (including
->>> callbacks and listeners), this is enough to talk to the aforementioned
->>> uefisecapp on a couple of platforms (I've tested this on a Surface Pro X
->>> and heard reports from Lenovo Flex 5G, Lenovo Thinkpad x13s, and Lenovo
->>> Yoga C630 devices).
->>>
->>> The third patch adds a client driver for uefisecapp, installing the
->>> respective efivar operations. The application interface has been reverse
->>> engineered from the Windows QcTrEE8180.sys driver.
->>>
->>> Apart from uefisecapp, there are more Secure Applications running that
->>> we might want to support in the future. For example, on the Surface Pro
->>> X (sc8180x-based), the TPM is also managed via one.
->>>
->>> I'm not sure whether this should go to drivers/firmware or to
->>> drivers/soc/qcom. I've put this into firmware as all of this is
->>> essentially an interface to the secure firmware running in the TrustZone
->>> (and SCM stuff is handled here already), but please let me know if I
->>> should move this.
->>
->>  From what I see so far is that this is adapted from downstream 
->> qseecom driver, this approach could work for a limited usecases but 
->> not scalable, as we cannot add drivers for each Qualcomm specific TA 
->> in kernel.
->> This has to be handled in much generic way using Linux TEE framework, 
->> and let the userspace side deal with TA specific bits.
-> 
-> I generally agree with the sentiment, however UEFI variables should IMHO be
-> handled by the kernel. Moving handling of those to userspace breaks 
-> things like
-> EFI-based pstore and efivarfs. The latter will in turn break some 
-> user-space
-> tools (most notably efibootmgr used by e.g. GRUB and I think fwupdmgr which
-> needs to set some capsule variables). Ideally, we would find a way to 
-> not break
-> these, i.e. have them work out-of-the-box.
-> 
-> A similar argumentation might apply to the TPM app.
-> 
->> AFAIU, Qualcomm is moving away from qseecom interface to new 
->> smc-invoke interface, most of Qualcomm SoCs starting from SDM660 
->> already have support to this.
->>
->> This interface provides a better abstracted IPC mechanism to talk to 
->> TA. Most of these TA specific interfaces are packed in closed 
->> userspace source.
->> Having said that QTEE smcinvoke driver can be modeled as a proper TEE 
->> driver with Userspace driving the TA specific bits using existing tee 
->> uapis.
->> This also brings in other features like loading, Listeners aka 
->> callbacks, secure memory allocations..etc.
->>
->> In the past, I have tried to do a prototype of this smcinvoke driver 
->> as a proper tee driver, incase you are interested patches are at 
->> https://git.linaro.org/landing-teams/working/qualcomm/kernel.git/log/?h=tracking-qcomlt-qcomtee
->> Plan is to discuss with Qualcomm and send it for upstream review.
-> 
-> Thanks for this information! So as far as I understand it, this is 
-> currently an
-> interface to user-space only, i.e. does not allow in-kernel drivers for 
-> apps?
-> It would be great if this could then be extended to handle (the bare 
-> minimum
-> of) in-kernel drivers (i.e. only things that the kernel itself needs, 
-> like EFI
-> variables). Alternatively, I'm happy to hear suggestions on how we not 
-> break
-> the aforementioned things while moving handling off to userspace.
-> 
->> I think its worth exploring if uefisecapp can talk smcinvoke.
->> I can ping Qualcomm engineers to see if that is doable.
-> 
-> I think that would be great! Thanks!
-Sorry for such a long delay to reply to this,
+While at it, I've also performed a schema conversion .. because why not.
 
-here is what I have.
+This was tested on MT8173 Elm, MT8192 Asurada, MT8195 Tomato (both
+MT8192 and MT8195 require devicetree work to actually make use of
+the CIRQ, not included in this series - while MT8173 has it already).
 
-Access to TA using SCM calls remain valid and it will continue to work 
-till SM8550 and probably after that if the TA is *NOT* loaded using 
-smcinvoke for some reasons.
+Changes in v2:
+ - Used the right base patches, as something went wrong in v1 (sorry!)
+ - [1/4] Fixed items for mediatek,ext-irq-range
+ - [3/4] Renamed `regs` to `offsets`, as it's effectively a register
+         offsets (and not registers) array
+ - [3/4] Added mtk_cirq_reg() accessor
+ - [3/4] Added all supported compatible strings to of_device_id
+ - [3/4] Fixed mtk_cirq_reg_index enumeration to not assign 0 to the
+         first index (as it's 0 by default), removed meaningless
+         CIRQ_MAX index
+ - [4/4] Now this patch only adds the `v2` offsets and a compatible
+         string "mediatek,mt8192-cirq".
 
-But overall by default on all new SoCs after sm8550 all the access to TA 
-is only done via smcinvoke, and the underlying scm call that are used in 
-this patchset will not be supported anymore.
+AngeloGioacchino Del Regno (4):
+  dt-bindings: interrupt-controller: mediatek,cirq: Migrate to dt schema
+  dt-bindings: interrupt-controller: mediatek,cirq: Document MT8192
+  irqchip: irq-mtk-cirq: Move register offsets to const array
+  irqchip: irq-mtk-cirq: Add support for System CIRQ on MT8192
 
- From SM8550, we will need to move this driver to a proper TEE client 
-kernel driver.
+ .../interrupt-controller/mediatek,cirq.txt    | 33 -------
+ .../mediatek,mtk-cirq.yaml                    | 68 ++++++++++++++
+ drivers/irqchip/irq-mtk-cirq.c                | 91 +++++++++++++++----
+ 3 files changed, 142 insertions(+), 50 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/mediatek,cirq.txt
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/mediatek,mtk-cirq.yaml
 
-So, with that in mind, I would suggest that we carefully name the 
-compatibles based on SoC rather than generic ones.
+-- 
+2.38.1
 
-
---srini
-
-
-
-
-> 
-> Regards,
-> Max
