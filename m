@@ -2,158 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5768C635B2F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 12:11:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A64F6635B5B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 12:15:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237389AbiKWLKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 06:10:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44806 "EHLO
+        id S236855AbiKWLOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 06:14:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236678AbiKWLIj (ORCPT
+        with ESMTP id S236054AbiKWLOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 06:08:39 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D62D226;
-        Wed, 23 Nov 2022 03:08:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669201714; x=1700737714;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=nEqvAW5e5WrGa/oW+eUTBhZKa268bM9z28Wl13BAzN8=;
-  b=WwFZ6zV8Het8yLzqrVEiyXemznlKs/UJ8Y1gFUsZBMJhNhLlppO3L/pI
-   1j3IoHRhzh2ZH+Eu9MUCG5w5GPdDLSrHUvhP9UdojETOFzi7efYR4KrQJ
-   nF/q2FNeEvEKOYQTpp0k4DTzP7/F3uOuvVmP37d1iIzIXgqEEmhLqkVeE
-   fQQjWv35LCgZnQTTszqKk/Vb/WdaSFsJh4lVNmQW857Z0G82qUHgdZrjv
-   bRpQ4qO4gRuC9e85IdxgaTJiIzZamfzR7FBcI0oPoPkpA/cnzLOgCf3f5
-   qOE2z5CBGLD8ewgHZk6TmX4w0cLGFTxZhvlJz5A3vYMBW6gldvwV7HV9Q
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="340920168"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="340920168"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 03:08:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="766683403"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="766683403"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga004.jf.intel.com with ESMTP; 23 Nov 2022 03:08:30 -0800
-Message-ID: <a384d15d-c1df-160c-030b-fddd5d965996@linux.intel.com>
-Date:   Wed, 23 Nov 2022 13:10:08 +0200
+        Wed, 23 Nov 2022 06:14:18 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7894111DA12
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 03:11:15 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id 6so16470853pgm.6
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 03:11:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=heitbaum.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jcfXEcruqvTE2G0on9M/bXzLRbEd9FM+dGkOzqj5auE=;
+        b=STg8oyDVjJ95ozkHYKBwCxoKKj15bLbGMbv335PGZHqMTJw86ZgweIhxINoun+8qds
+         uxQIDZFk9WU19P0ojQ+Zu7EwZb8TThefYKUdIHexlXfDaSh5nHv0xV7/m2r7dXJd7Neq
+         J44TUAqxfGi7ELpSAOc1UaAUtTyDQEDuMZziQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jcfXEcruqvTE2G0on9M/bXzLRbEd9FM+dGkOzqj5auE=;
+        b=yAlTfK/fUCpPYh4GgcRuD5TJxXN22C7hhongK+AGZjT7y3KNWCiQfTrliaPzzG8CCh
+         I3c3uHpYfAGymDE/xvp0L6fkWg2lsdiC53yaZS5kWCfXGZl0DYGQBcSwW6TeA8z3C3Ro
+         weRYNDf6IkKroD6zxoJDSy5auYgKsECzBl/FrJ/dDePBDsyp5Jg3i1xksFjsws6mMf0F
+         i0rNVhhVxvytvLAaqKeLQbn2+/RABB3zIC/XWCoMeVp2QQQody67HPEh7bqG/cTXGNwd
+         JmcEPK4n3pYqU4D848tJIY4m1UgqCttgCusRL0uLpb/CerlJ3spHCA7jkCHZwvW80ir/
+         gr6g==
+X-Gm-Message-State: ANoB5pnWRabWrKzGSsUcE2hQouNoBeYQx9g21IDjFBBx6l58XTvO+uLs
+        tsRyXVkND1VEOTlqsJQhHcHzfw==
+X-Google-Smtp-Source: AA0mqf5DeCVCvYGoX+mI5w2NZxsP2alnVqmS3+XGoCLpIGrKuvlbL77Knf091D8CiTaTFYjdMJf/BA==
+X-Received: by 2002:a05:6a00:298d:b0:561:5d08:761 with SMTP id cj13-20020a056a00298d00b005615d080761mr11655969pfb.14.1669201874767;
+        Wed, 23 Nov 2022 03:11:14 -0800 (PST)
+Received: from 1682a9d2d5f8 ([220.253.112.46])
+        by smtp.gmail.com with ESMTPSA id f5-20020a63f745000000b0046fe244ed6esm10626904pgk.23.2022.11.23.03.11.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 03:11:13 -0800 (PST)
+Date:   Wed, 23 Nov 2022 11:11:06 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.10 000/149] 5.10.156-rc1 review
+Message-ID: <20221123111106.GA3974538@1682a9d2d5f8>
+References: <20221123084557.945845710@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Mathias Nyman <mathias.nyman@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Eddie Hung <eddie.hung@mediatek.com>
-References: <20221118110116.20165-1-chunfeng.yun@mediatek.com>
-Content-Language: en-US
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH] usb: host: xhci-mtk: omit shared hcd if either root hub
- has no ports
-In-Reply-To: <20221118110116.20165-1-chunfeng.yun@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221123084557.945845710@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18.11.2022 13.01, Chunfeng Yun wrote:
-> There is error log when add a usb3 root hub without ports:
-> "hub 4-0:1.0: config failed, hub doesn't have any ports! (err -19)"
+On Wed, Nov 23, 2022 at 09:49:43AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.156 release.
+> There are 149 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> so omit the shared hcd if either of the root hubs has no ports, but
-> usually there is no usb3 port.
-> 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> ---
->   drivers/usb/host/xhci-mtk.c | 72 +++++++++++++++++++++++--------------
->   1 file changed, 46 insertions(+), 26 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
-> index 01705e559c42..cff3c4aea036 100644
-> --- a/drivers/usb/host/xhci-mtk.c
-> +++ b/drivers/usb/host/xhci-mtk.c
-> @@ -485,6 +485,7 @@ static int xhci_mtk_probe(struct platform_device *pdev)
->   	const struct hc_driver *driver;
->   	struct xhci_hcd *xhci;
->   	struct resource *res;
-> +	struct usb_hcd *usb3_hcd;
->   	struct usb_hcd *hcd;
->   	int ret = -ENODEV;
->   	int wakeup_irq;
-> @@ -593,6 +594,7 @@ static int xhci_mtk_probe(struct platform_device *pdev)
->   
->   	xhci = hcd_to_xhci(hcd);
->   	xhci->main_hcd = hcd;
-> +	xhci->allow_single_roothub = 1;
->   
->   	/*
->   	 * imod_interval is the interrupt moderation value in nanoseconds.
-> @@ -602,24 +604,29 @@ static int xhci_mtk_probe(struct platform_device *pdev)
->   	xhci->imod_interval = 5000;
->   	device_property_read_u32(dev, "imod-interval-ns", &xhci->imod_interval);
->   
-> -	xhci->shared_hcd = usb_create_shared_hcd(driver, dev,
-> -			dev_name(dev), hcd);
-> -	if (!xhci->shared_hcd) {
-> -		ret = -ENOMEM;
-> -		goto disable_device_wakeup;
-> -	}
-> -
->   	ret = usb_add_hcd(hcd, irq, IRQF_SHARED);
->   	if (ret)
-> -		goto put_usb3_hcd;
-> +		goto disable_device_wakeup;
->   
-> -	if (HCC_MAX_PSA(xhci->hcc_params) >= 4 &&
-> +	if (!xhci_has_one_roothub(xhci)) {
-> +		xhci->shared_hcd = usb_create_shared_hcd(driver, dev,
-> +							 dev_name(dev), hcd);
-> +		if (!xhci->shared_hcd) {
-> +			ret = -ENOMEM;
-> +			goto dealloc_usb2_hcd;
-> +		}
-> +	}
-> +
-> +	usb3_hcd = xhci_get_usb3_hcd(xhci);
-> +	if (usb3_hcd && HCC_MAX_PSA(xhci->hcc_params) >= 4 &&
->   	    !(xhci->quirks & XHCI_BROKEN_STREAMS))
-> -		xhci->shared_hcd->can_do_streams = 1;
-> +		usb3_hcd->can_do_streams = 1;
->   
-> -	ret = usb_add_hcd(xhci->shared_hcd, irq, IRQF_SHARED);
-> -	if (ret)
-> -		goto dealloc_usb2_hcd;
-> +	if (xhci->shared_hcd) {
-> +		ret = usb_add_hcd(xhci->shared_hcd, irq, IRQF_SHARED);
-> +		if (ret)
-> +			goto put_usb3_hcd;
-> +	}
->   
->   	if (wakeup_irq > 0) {
->   		ret = dev_pm_set_dedicated_wake_irq_reverse(dev, wakeup_irq);
-	
-dev_pm_set_dedicated_wake_irq_reverse() can be called with just one hcd, if it fails
-it will goto dealloc_usb3_hcd:
+> Responses should be made by Fri, 25 Nov 2022 08:45:20 +0000.
+> Anything received after that time might be too late.
 
-dealloc_usb3_hcd:
-	usb_remove_hcd(xhci->shared_hcd);   // xhci->shared_hcd may be null
-	xhci->shared_hcd = NULL; // causes usb_put_hcd() issues if shared_hcd exists
+Hi Greg,
 
-put_usb3_hcd:
-         usb_put_hcd(xhci->shared_hcd); // shared_hcd may be set NULL above
+5.10.156-rc1 tested.
 
--Mathias
-  
+Run tested on:
+- Intel Skylake x86_64 (nuc6 i5-6260U)
+
+In addition - build tested for:
+- Allwinner A64
+- Allwinner H3
+- Allwinner H5
+- Allwinner H6
+- Rockchip RK3288
+- Rockchip RK3328
+- Rockchip RK3399pro
+
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+--
+Rudi
