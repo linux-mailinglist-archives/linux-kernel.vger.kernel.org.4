@@ -2,142 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7656D6352BA
+	by mail.lfdr.de (Postfix) with ESMTP id C61356352BB
 	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 09:33:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236596AbiKWIcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 03:32:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39806 "EHLO
+        id S236446AbiKWIdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 03:33:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236609AbiKWIcS (ORCPT
+        with ESMTP id S236142AbiKWIdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 03:32:18 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F23F2FC1F;
-        Wed, 23 Nov 2022 00:32:15 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id a11-20020a05600c2d4b00b003cf6f5fd9f1so763116wmg.2;
-        Wed, 23 Nov 2022 00:32:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tiVq12etDEqpSPghR2pHAXWqLMT5ZsuO549677H8yKw=;
-        b=MyEV25w3LrvWhMxVEvRvLa3evdPIH+e40Svg0wHs/feDnitL6BmGPaIAd+kTt0evP9
-         /rfcjapSmugozwxRxFv1ndCofOBaP6LWVVa2Nao8xFHhbJkaW8f5tdXUyK0F11CksELZ
-         bkzKGeCRi8xAchSva0GRTTokYQ+8SOvV/9VwYi/PIefA90Owulxhb93hIxPAqMgubX6E
-         oACKfHhoU3tfLhGnX+eQLhr/4wnY8Dh/NRO2hlZIOJdNMd13KiVXEOgM2PeBkZxes+jM
-         /9kO+MFB8wpR/Z3A8aEFRAMUnZa6LPwxNx10rcrXNawVdxLBLLIpZH1etTDtys2042tj
-         5Nbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tiVq12etDEqpSPghR2pHAXWqLMT5ZsuO549677H8yKw=;
-        b=tXrhpjRjzTJVkFgJMcvfKuEqzepWLH20HsHqgNu/D/lsVPAmvSlJl2DOfcS7i63vTL
-         06AeHK19ZG+NRM97rT9AWly+WuH7Pl1VNELeqjSyr5uKZ6sDAJU04O8ryUaOs0rqix48
-         KPaqL0KyGIy1eHAXUy24TvfiH8k1wkY7LteQDHK44AfaHYY+LAwQhInrf+BkL6AUZxPV
-         Zw+pcX+EZ4iDazfDCHmVAriddrPIaOQrmZOA8JbeUUvOh3JoHBTlvPJNnLyRMbSV7GPY
-         3ZRe2cwoLCcqHrsyr/4gQ9VoHRp97NKqa8iLJn7XoY7KTF/Q3RVuVZv8uy+t6FrU9Y1S
-         a7Ug==
-X-Gm-Message-State: ANoB5plv+YIuMrTmon53IF3hUar6JHlPQN5mW11bUs88x6OhF/CJTKcs
-        xtDpdCIhP882gXxWD0RuR8o=
-X-Google-Smtp-Source: AA0mqf58n/JCu3Qxs0fcYSBCRxypmvGsJMgBKbGX+NLdLniHernMYaeW19FVmoPaIQ5ZA+oKOo5eWQ==
-X-Received: by 2002:a05:600c:314f:b0:3cf:9efc:a9b7 with SMTP id h15-20020a05600c314f00b003cf9efca9b7mr19406962wmo.10.1669192333854;
-        Wed, 23 Nov 2022 00:32:13 -0800 (PST)
-Received: from felia.fritz.box (200116b826997500d517ac74edd630a9.dip.versatel-1u1.de. [2001:16b8:2699:7500:d517:ac74:edd6:30a9])
-        by smtp.gmail.com with ESMTPSA id l8-20020adfa388000000b002417f35767asm16276487wrb.40.2022.11.23.00.32.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 00:32:13 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Maarten ter Huurne <maarten@treewalker.org>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH v2] clocksource: ingenic-ost: define pm functions properly in platform_driver struct
-Date:   Wed, 23 Nov 2022 09:31:59 +0100
-Message-Id: <20221123083159.22821-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 23 Nov 2022 03:33:05 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C896729A9;
+        Wed, 23 Nov 2022 00:33:03 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 77FED220C6;
+        Wed, 23 Nov 2022 08:33:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669192382; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hNQlWKXs/MH91UsdigvjQBX+ylGHs8MNJsZNwJEJ8ZY=;
+        b=MpA6Cwax6KZQ3hK0dtrtjCeccDrOqyirrz1389h/W8sJ6qvYnHOVJ9cHfEFBUGIUc4fIUv
+        e2JcIWdNtnxIb0DG/vK3Fr0xrIa3hiO1if2rDOsaiBOas8YZANiql1yNTIEKY6CJm633bs
+        DPt7GSjZdTfXyc0qvbN7tmixLLshtcA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669192382;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hNQlWKXs/MH91UsdigvjQBX+ylGHs8MNJsZNwJEJ8ZY=;
+        b=w2l6LYj2mIwzZg/UIyhpDoGioeUppLF6NgEWXcx9zYw0R1ySldNpwXcYRVAh3cc/vzvfKX
+        uyo4gsDn0fpV3yCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 522D813A37;
+        Wed, 23 Nov 2022 08:33:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 9n4vE77afWNPdQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 23 Nov 2022 08:33:02 +0000
+Message-ID: <3332093f-4a9a-a7ca-aeba-22d3de383d0e@suse.de>
+Date:   Wed, 23 Nov 2022 09:33:01 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: linux-next: build failure after merge of the drm-misc tree
+Content-Language: en-US
+To:     David Airlie <airlied@redhat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20221117183214.2473e745@canb.auug.org.au>
+ <20221123162033.02910a5a@canb.auug.org.au>
+ <CAMwc25pz4mBYJUK5_GX01X0_5CCCrzfrGS=HoFTtrVRrqF13kA@mail.gmail.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <CAMwc25pz4mBYJUK5_GX01X0_5CCCrzfrGS=HoFTtrVRrqF13kA@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------0osnNQKmu45Fkg3R03W9zLh8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit ca7b72b5a5f2 ("clocksource: Add driver for the Ingenic JZ47xx OST")
-adds the struct platform_driver ingenic_ost_driver, with the definition of
-pm functions under the non-existing config PM_SUSPEND, which means the
-intended pm functions were never actually included in any build.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------0osnNQKmu45Fkg3R03W9zLh8
+Content-Type: multipart/mixed; boundary="------------jVie6nt74P5DO9SS0jrl9C36";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: David Airlie <airlied@redhat.com>, Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>,
+ Intel Graphics <intel-gfx@lists.freedesktop.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ DRI <dri-devel@lists.freedesktop.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+Message-ID: <3332093f-4a9a-a7ca-aeba-22d3de383d0e@suse.de>
+Subject: Re: linux-next: build failure after merge of the drm-misc tree
+References: <20221117183214.2473e745@canb.auug.org.au>
+ <20221123162033.02910a5a@canb.auug.org.au>
+ <CAMwc25pz4mBYJUK5_GX01X0_5CCCrzfrGS=HoFTtrVRrqF13kA@mail.gmail.com>
+In-Reply-To: <CAMwc25pz4mBYJUK5_GX01X0_5CCCrzfrGS=HoFTtrVRrqF13kA@mail.gmail.com>
 
-As the only callbacks are .suspend_noirq and .resume_noirq, we can assume
-that it is intended to be CONFIG_PM_SLEEP.
+--------------jVie6nt74P5DO9SS0jrl9C36
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Since commit 1a3c7bb08826 ("PM: core: Add new *_PM_OPS macros, deprecate
-old ones"), the default pattern for platform_driver definitions
-conditional for CONFIG_PM_SLEEP is to use pm_sleep_ptr().
+SGkNCg0KQW0gMjMuMTEuMjIgdW0gMDY6MzUgc2NocmllYiBEYXZpZCBBaXJsaWU6DQo+IE9u
+IFdlZCwgTm92IDIzLCAyMDIyIGF0IDM6MjEgUE0gU3RlcGhlbiBSb3Rod2VsbCA8c2ZyQGNh
+bmIuYXV1Zy5vcmcuYXU+IHdyb3RlOg0KPj4NCj4+IEhpIGFsbCwNCj4+DQo+PiBPbiBUaHUs
+IDE3IE5vdiAyMDIyIDE4OjMyOjE0ICsxMTAwIFN0ZXBoZW4gUm90aHdlbGwgPHNmckBjYW5i
+LmF1dWcub3JnLmF1PiB3cm90ZToNCj4+Pg0KPj4+IEFmdGVyIG1lcmdpbmcgdGhlIGRybS1t
+aXNjIHRyZWUsIHRvZGF5J3MgbGludXgtbmV4dCBidWlsZCAocG93ZXJwYw0KPj4+IHBwYzQ0
+eF9kZWZjb25maWcpIGZhaWxlZCBsaWtlIHRoaXM6DQo+Pj4NCj4+PiBsZDogZHJpdmVycy92
+aWRlby9mYmRldi9jb3JlL2ZibW9uLm86IGluIGZ1bmN0aW9uIGBmYl9tb2Rlc2V0dGluZ19k
+aXNhYmxlZCc6DQo+Pj4gZmJtb24uYzooLnRleHQrMHgxZTQpOiBtdWx0aXBsZSBkZWZpbml0
+aW9uIG9mIGBmYl9tb2Rlc2V0dGluZ19kaXNhYmxlZCc7IGRyaXZlcnMvdmlkZW8vZmJkZXYv
+Y29yZS9mYm1lbS5vOmZibWVtLmM6KC50ZXh0KzB4MWJhYyk6IGZpcnN0IGRlZmluZWQgaGVy
+ZQ0KPj4+IGxkOiBkcml2ZXJzL3ZpZGVvL2ZiZGV2L2NvcmUvZmJjbWFwLm86IGluIGZ1bmN0
+aW9uIGBmYl9tb2Rlc2V0dGluZ19kaXNhYmxlZCc6DQo+Pj4gZmJjbWFwLmM6KC50ZXh0KzB4
+NDc4KTogbXVsdGlwbGUgZGVmaW5pdGlvbiBvZiBgZmJfbW9kZXNldHRpbmdfZGlzYWJsZWQn
+OyBkcml2ZXJzL3ZpZGVvL2ZiZGV2L2NvcmUvZmJtZW0ubzpmYm1lbS5jOigudGV4dCsweDFi
+YWMpOiBmaXJzdCBkZWZpbmVkIGhlcmUNCj4+PiBsZDogZHJpdmVycy92aWRlby9mYmRldi9j
+b3JlL2Zic3lzZnMubzogaW4gZnVuY3Rpb24gYGZiX21vZGVzZXR0aW5nX2Rpc2FibGVkJzoN
+Cj4+PiBmYnN5c2ZzLmM6KC50ZXh0KzB4YjY0KTogbXVsdGlwbGUgZGVmaW5pdGlvbiBvZiBg
+ZmJfbW9kZXNldHRpbmdfZGlzYWJsZWQnOyBkcml2ZXJzL3ZpZGVvL2ZiZGV2L2NvcmUvZmJt
+ZW0ubzpmYm1lbS5jOigudGV4dCsweDFiYWMpOiBmaXJzdCBkZWZpbmVkIGhlcmUNCj4+PiBs
+ZDogZHJpdmVycy92aWRlby9mYmRldi9jb3JlL21vZGVkYi5vOiBpbiBmdW5jdGlvbiBgZmJf
+bW9kZXNldHRpbmdfZGlzYWJsZWQnOg0KPj4+IG1vZGVkYi5jOigudGV4dCsweDEyOWMpOiBt
+dWx0aXBsZSBkZWZpbml0aW9uIG9mIGBmYl9tb2Rlc2V0dGluZ19kaXNhYmxlZCc7IGRyaXZl
+cnMvdmlkZW8vZmJkZXYvY29yZS9mYm1lbS5vOmZibWVtLmM6KC50ZXh0KzB4MWJhYyk6IGZp
+cnN0IGRlZmluZWQgaGVyZQ0KPj4+IGxkOiBkcml2ZXJzL3ZpZGVvL2ZiZGV2L2NvcmUvZmJj
+dnQubzogaW4gZnVuY3Rpb24gYGZiX21vZGVzZXR0aW5nX2Rpc2FibGVkJzoNCj4+PiBmYmN2
+dC5jOigudGV4dCsweDApOiBtdWx0aXBsZSBkZWZpbml0aW9uIG9mIGBmYl9tb2Rlc2V0dGlu
+Z19kaXNhYmxlZCc7IGRyaXZlcnMvdmlkZW8vZmJkZXYvY29yZS9mYm1lbS5vOmZibWVtLmM6
+KC50ZXh0KzB4MWJhYyk6IGZpcnN0IGRlZmluZWQgaGVyZQ0KPj4+DQo+Pj4gQ2F1c2VkIGJ5
+IGNvbW1pdA0KPj4+DQo+Pj4gICAgMGJhMmZhOGNiZDI5ICgiZmJkZXY6IEFkZCBzdXBwb3J0
+IGZvciB0aGUgbm9tb2Rlc2V0IGtlcm5lbCBwYXJhbWV0ZXIiKQ0KPj4+DQo+Pj4gVGhpcyBi
+dWlsZCBkb2VzIG5vdCBoYXZlIENPTkZJR19WSURFT19OT01PREVTRVQgc2V0Lg0KPj4+DQo+
+Pj4gSSBhcHBsaWVkIHRoZSBmb2xsb3dpbmcgcGF0Y2ggZm9yIHRvZGF5Lg0KPj4+DQo+Pj4g
+IEZyb20gNjNmOTU3YTA1MGM2MjQ3OGVkMTM0OGM1YjIwNGJjNjVjNjhkZjRkNyBNb24gU2Vw
+IDE3IDAwOjAwOjAwIDIwMDENCj4+PiBGcm9tOiBTdGVwaGVuIFJvdGh3ZWxsIDxzZnJAY2Fu
+Yi5hdXVnLm9yZy5hdT4NCj4+PiBEYXRlOiBUaHUsIDE3IE5vdiAyMDIyIDE4OjE5OjIyICsx
+MTAwDQo+Pj4gU3ViamVjdDogW1BBVENIXSBmaXggdXAgZm9yICJmYmRldjogQWRkIHN1cHBv
+cnQgZm9yIHRoZSBub21vZGVzZXQga2VybmVsIHBhcmFtZXRlciINCj4+Pg0KPj4+IFNpZ25l
+ZC1vZmYtYnk6IFN0ZXBoZW4gUm90aHdlbGwgPHNmckBjYW5iLmF1dWcub3JnLmF1Pg0KPj4+
+IC0tLQ0KPj4+ICAgaW5jbHVkZS9saW51eC9mYi5oIHwgMiArLQ0KPj4+ICAgMSBmaWxlIGNo
+YW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQo+Pj4NCj4+PiBkaWZmIC0t
+Z2l0IGEvaW5jbHVkZS9saW51eC9mYi5oIGIvaW5jbHVkZS9saW51eC9mYi5oDQo+Pj4gaW5k
+ZXggM2E4MjJlNDM1N2IxLi5lYTQyMTcyNGY3MzMgMTAwNjQ0DQo+Pj4gLS0tIGEvaW5jbHVk
+ZS9saW51eC9mYi5oDQo+Pj4gKysrIGIvaW5jbHVkZS9saW51eC9mYi5oDQo+Pj4gQEAgLTgw
+Nyw3ICs4MDcsNyBAQCBleHRlcm4gaW50IGZiX2ZpbmRfbW9kZShzdHJ1Y3QgZmJfdmFyX3Nj
+cmVlbmluZm8gKnZhciwNCj4+PiAgICNpZiBkZWZpbmVkKENPTkZJR19WSURFT19OT01PREVT
+RVQpDQo+Pj4gICBib29sIGZiX21vZGVzZXR0aW5nX2Rpc2FibGVkKGNvbnN0IGNoYXIgKmRy
+dm5hbWUpOw0KPj4+ICAgI2Vsc2UNCj4+PiAtYm9vbCBmYl9tb2Rlc2V0dGluZ19kaXNhYmxl
+ZChjb25zdCBjaGFyICpkcnZuYW1lKQ0KPj4+ICtzdGF0aWMgaW5saW5lIGJvb2wgZmJfbW9k
+ZXNldHRpbmdfZGlzYWJsZWQoY29uc3QgY2hhciAqZHJ2bmFtZSkNCj4+PiAgIHsNCj4+PiAg
+ICAgICAgcmV0dXJuIGZhbHNlOw0KPj4+ICAgfQ0KPj4+IC0tDQo+Pj4gMi4zNS4xDQo+Pg0K
+Pj4gVGhpcyBjb21taXQgd2VudCBhd2F5IGZvciBhIGNvdXBsZSBvZiBsaW51eC1uZXh0IHJl
+bGVhc2VzLCBidXQgbm93IGhhcw0KPj4gcmVhcHBlYXJlZCBpbiB0aGUgZHJtIHRyZWUgOi0o
+ICBXaGF0IHdlbnQgd3Jvbmc/DQo+IA0KPiBOb3RoaW5nIGdvbmUgd3JvbmcgYXMgc3VjaCwg
+anVzdCB0aGUgZHJtLW1pc2MtbmV4dCBwdWxsIHJlcXVlc3Qgd2FzDQo+IHNlbnQgb24gYSBy
+ZWd1bGFyIHdlZWtseSBjYWRlbmNlLCB0aGVuIEkgbWVyZ2VkIGl0IGEgZmV3IGRheXMgbGF0
+ZXIuDQo+IFRoZSBmaXggZm9yIHRoaXMgaXMgc3RpbGwgaW4gdGhlIGRybS1taXNjLW5leHQg
+cXVldWUgZm9yIHRoZSBuZXh0IFBSDQo+IHdoaWNoIEkgd2lsbCBnZXQgdGhpcyB3ZWVrLg0K
+DQpUaGUgbmV4dCBQUiBzaG91bGQgYmUgZHJtLW1pc2MtbmV4dC1maXhlcy4gRllJIEkgZm9y
+d2FyZGVkIHRoZSB0cmVlIGFuZCANCmNoZXJyeS1waWNrZWQgdGhlIHBhdGNoIGZyb20gZHJt
+LW1pc2MtbmV4dC4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiANCj4gRGF2ZS4NCj4g
+DQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXIN
+ClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwg
+OTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpH
+ZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
-As __maybe_unused annotations on the dev_pm_ops structure and its callbacks
-are not needed anymore, remove these as well.
+--------------jVie6nt74P5DO9SS0jrl9C36--
 
-Suggested-by: Paul Cercueil <paul@crapouillou.net>
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-v1: https://lore.kernel.org/all/20221122141434.30498-1-lukas.bulwahn@gmail.com/
+--------------0osnNQKmu45Fkg3R03W9zLh8
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-v1 -> v2:
-  - incorporated Paul Cercueil's feedback:
-    - changed to pm_sleep_ptr
-    - dropped Fixes: tag
+-----BEGIN PGP SIGNATURE-----
 
- drivers/clocksource/ingenic-ost.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmN92r0FAwAAAAAACgkQlh/E3EQov+Ao
+yxAApV5Ale3PHGkNbZlm9ihzVELP7Y3Tr8w1wbTqIgfRuwimAewSl8calZhvtKZc+vzw1bef86dg
+PEOmZh+GQSS/iPGoRpt6I1Nix8NjXHdYQrEoQMZ3B52LHhVxzANcKo9r9+GbWxoYTP0letPjX4op
+CTvabCLikxW7LofJYZkV19pzqDHGScewOlCMvDFuKUC5H1D0TSv8c7WEkxJilTPXRWOUpNc4lFNh
+ub6+yDems3UF1woqzqZ8kG4gMflkFh5dHSmRzv+CicA39mUqvwToCB404APWoMIHgQqIqAqFvsCJ
+t8GxDukRf6+dBbkW5IvQ+dlqhtnmFBZpK9kbMnixffUgelNX7aTu4nZsIpQ6pa+T7MsEQL+r+p76
+VsqwFoNVB5o5AvXi5Dsd93Qf6pN4TBIzkEtNC0IHrVuh52Za7OpeDnFqvkvjRXv3yKUydx/R8OoU
+3crz3RlYDfHYg5DGt5SrA43ax6EeKqj4jGdR3k7r41K1S/3kgKBZ/HL+R1ykWoGzWIijyRtiPC8c
+1UgGR4lU7a1Vl0GkMm1dqlU3yPJbBwbYhL/TOVJvOcpl3P3M3nXw6M9TZiCgV1O3FUZwy3ni1gQf
+SChPBuX4RWS7xuhBkmTAXixkryrShDzxWpluNkBA5yHMS7zxQN33gUUUVLQ11wnEuNf4kqRAQ1C+
+/lk=
+=ilOZ
+-----END PGP SIGNATURE-----
 
-diff --git a/drivers/clocksource/ingenic-ost.c b/drivers/clocksource/ingenic-ost.c
-index 06d25754e606..9f7c280a1336 100644
---- a/drivers/clocksource/ingenic-ost.c
-+++ b/drivers/clocksource/ingenic-ost.c
-@@ -141,7 +141,7 @@ static int __init ingenic_ost_probe(struct platform_device *pdev)
- 	return 0;
- }
- 
--static int __maybe_unused ingenic_ost_suspend(struct device *dev)
-+static int ingenic_ost_suspend(struct device *dev)
- {
- 	struct ingenic_ost *ost = dev_get_drvdata(dev);
- 
-@@ -150,14 +150,14 @@ static int __maybe_unused ingenic_ost_suspend(struct device *dev)
- 	return 0;
- }
- 
--static int __maybe_unused ingenic_ost_resume(struct device *dev)
-+static int ingenic_ost_resume(struct device *dev)
- {
- 	struct ingenic_ost *ost = dev_get_drvdata(dev);
- 
- 	return clk_enable(ost->clk);
- }
- 
--static const struct dev_pm_ops __maybe_unused ingenic_ost_pm_ops = {
-+static const struct dev_pm_ops ingenic_ost_pm_ops = {
- 	/* _noirq: We want the OST clock to be gated last / ungated first */
- 	.suspend_noirq = ingenic_ost_suspend,
- 	.resume_noirq  = ingenic_ost_resume,
-@@ -181,9 +181,7 @@ static const struct of_device_id ingenic_ost_of_match[] = {
- static struct platform_driver ingenic_ost_driver = {
- 	.driver = {
- 		.name = "ingenic-ost",
--#ifdef CONFIG_PM_SUSPEND
--		.pm = &ingenic_ost_pm_ops,
--#endif
-+		.pm = pm_sleep_ptr(&ingenic_ost_pm_ops),
- 		.of_match_table = ingenic_ost_of_match,
- 	},
- };
--- 
-2.17.1
-
+--------------0osnNQKmu45Fkg3R03W9zLh8--
