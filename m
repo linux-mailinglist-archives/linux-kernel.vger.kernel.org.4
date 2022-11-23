@@ -2,58 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55B08636C9D
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 22:53:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A94636CA4
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 22:58:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238869AbiKWVxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 16:53:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60644 "EHLO
+        id S238912AbiKWV5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 16:57:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235150AbiKWVxC (ORCPT
+        with ESMTP id S235336AbiKWV5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 16:53:02 -0500
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD62213E85;
-        Wed, 23 Nov 2022 13:53:00 -0800 (PST)
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 2ANLqht0001692;
-        Thu, 24 Nov 2022 06:52:43 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 2ANLqht0001692
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1669240363;
-        bh=4brSLwsgf2K/MFuU7IhDLjbD5WLitSIHjPY7T12lCSs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=eZm8QKm1b9nEh3FXt5Hmij2qZ9fQfQKrmj0fOZKJCPAEMfbFNOMquZ+IDYJa6fHST
-         mF9WVYM6kYDLkXLZoSVKKjUFiNGsNgOPURNqO395ZBotP2tEHCJAtPqvKiAwNGEEY8
-         aI0dFoBJKxE7He44kzle8M/3RX1NWXhHZoyJZ1POIjEqJdblcUOWj4Is1zE04xmzYV
-         YEJGyrX452d0yOJs6DtNcmyU7N9UgfDWiAT15pxpjzHs/QNMmbf23X2FOwPhhRqdaA
-         95ZwxZrOc+RruyYTgUFV/AuUfgtT0x4BO56cNkOXGmPM9mViS6t/4uHNX3KT9xTPDy
-         G3x9o2E+SPs2A==
-X-Nifty-SrcIP: [209.85.161.46]
-Received: by mail-oo1-f46.google.com with SMTP id o140-20020a4a2c92000000b0049effb01130so14657ooo.9;
-        Wed, 23 Nov 2022 13:52:43 -0800 (PST)
-X-Gm-Message-State: ANoB5pnwMG3RzQN5fw4SkfF8mABnKB5GTLbX+nFhFl2YQdj1dzQT7dDO
-        EJVW7Ixykxp/OOUiYZ2h+AADhThW/e7Gbef0AJw=
-X-Google-Smtp-Source: AA0mqf6i/EEWnNHGZ3i5ZmQAemkwA7O5D08FxMyftKnoinBWlrcPrejPJ9XtrRE17pl3f2WOeQ3uasT9NLLRn4I+BRA=
-X-Received: by 2002:a05:6820:16a7:b0:49f:c664:44e2 with SMTP id
- bc39-20020a05682016a700b0049fc66444e2mr5014359oob.96.1669240362315; Wed, 23
- Nov 2022 13:52:42 -0800 (PST)
+        Wed, 23 Nov 2022 16:57:48 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288B722BEC
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 13:57:45 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id h16so93671qtu.2
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 13:57:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eXUl97TIC36iX2gzZ4z9T7kVADet1dCMIeHKCLo4dC4=;
+        b=1d778WwTHiFnSrOOtipV1oy8hteglhzctqXDcakElk44hR7nj0Kw1HZUKFrkLK1flS
+         1dy2ejEUeQqR3zUjNbKe64kHFHaCeNPfR+mHEFOOM8LiucYx2e8pjbjLk1BMo3Sbf3K9
+         wZL/Jay42f6APIg1zJmYPEYEFZuFaYZ54oLip8A+55aEI0PiSRx6eLERACZ4gNoB/nRm
+         LTOQd16sAxmRdLvYL+ViYyxYH5UhhXYq81mueLRa3i7YmQ4Cty/v68jpsO7pFl5W2ApC
+         fFUnjjrFHbN4SCxNJgdTGJifAWOycqM5/tm/mDgGyEo4EcDqRaXaB8j0C8GsSVJo9CBj
+         8CpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eXUl97TIC36iX2gzZ4z9T7kVADet1dCMIeHKCLo4dC4=;
+        b=4DXL7haKzAj3XvGYJ/ZYWiPcFfxMBeRu0uyS37TMVj5xsn20Gik7MBaIawj4lpMqLB
+         ymlFOdl/WVlhHIecTWWX0HrNvibLkhG4LqiurQnrZX22Hg1lh1vbMe8OwwgZZOeD12r5
+         tAu9xohKwurg1GPTY0er/ZUo+kX4PAqAKFGKWn6zKRMLajISsP+Kw5E6nEQcwbOB03KJ
+         86I0+lt5r3Q644pI8xPt0QWraBIQlcZ/IrQCysCORdUj+/OmXoTfc722kVRwkprymDUb
+         7TFzqrUbZGG9EvR2et4LT0dB4KGzx/6JWWJ1ZHqvv1Y0NEXwOpgcrDPmvfK4VCNUwji8
+         HOtw==
+X-Gm-Message-State: ANoB5pl3trNoadKgo3XAuQN1TtzAriHC1XaTUY9+LJKI6lcEVMTxEMLR
+        VC2xJSWxNEerIxLKlr7Bfg5/Rw==
+X-Google-Smtp-Source: AA0mqf59P97n8g2DJvpHoXjjiYjLodaojFr8pNiZ3Pf2y67xR6vLpb15b1401HTaq887RBMqTNLCfg==
+X-Received: by 2002:ac8:4a10:0:b0:3a5:2556:42ed with SMTP id x16-20020ac84a10000000b003a5255642edmr13309728qtq.422.1669240664291;
+        Wed, 23 Nov 2022 13:57:44 -0800 (PST)
+Received: from localhost ([2620:10d:c091:480::1:bc4])
+        by smtp.gmail.com with ESMTPSA id t18-20020a05620a451200b006fafc111b12sm13219537qkp.83.2022.11.23.13.57.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 13:57:43 -0800 (PST)
+Date:   Wed, 23 Nov 2022 16:58:10 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     Huang Ying <ying.huang@intel.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
+        shakeelb@google.com, gthelen@google.com, fvdl@google.com,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [RFC PATCH V1] mm: Disable demotion from proactive reclaim
+Message-ID: <Y36XchdgTCsMP4jT@cmpxchg.org>
+References: <20221122203850.2765015-1-almasrymina@google.com>
+ <Y35fw2JSAeAddONg@cmpxchg.org>
+ <CAHS8izN+xqM67XLT4y5qyYnGQMUWRQCJrdvf2gjTHd8nZ_=0sw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221123151828.509565-1-masahiroy@kernel.org> <20221123151828.509565-3-masahiroy@kernel.org>
- <Y36KLFArg5etHRD8@bergen.fjasle.eu>
-In-Reply-To: <Y36KLFArg5etHRD8@bergen.fjasle.eu>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 24 Nov 2022 06:52:06 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASWd-8awDOwE3iU9nx8QPj3VnoFtnUiX3NLyT+fx3BfjQ@mail.gmail.com>
-Message-ID: <CAK7LNASWd-8awDOwE3iU9nx8QPj3VnoFtnUiX3NLyT+fx3BfjQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] kbuild: add read-file macro
-To:     Nicolas Schier <nicolas@fjasle.eu>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHS8izN+xqM67XLT4y5qyYnGQMUWRQCJrdvf2gjTHd8nZ_=0sw@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,106 +81,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 6:02 AM Nicolas Schier <nicolas@fjasle.eu> wrote:
->
-> On Thu 24 Nov 2022 00:18:26 GMT, Masahiro Yamada wrote:
-> > Since GMU Make 4.2, $(file ...) supports the read operater '<', which is
-> > useful to read a file without forking any process. No warning is shown even
-> > if the input file is missing.
+On Wed, Nov 23, 2022 at 01:20:57PM -0800, Mina Almasry wrote:
+> On Wed, Nov 23, 2022 at 10:00 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
 > >
-> > For older Make versions, it falls back to the cat command.
+> > Hello Mina,
 > >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > ---
+> > On Tue, Nov 22, 2022 at 12:38:45PM -0800, Mina Almasry wrote:
+> > > Since commit 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg
+> > > reclaim""), the proactive reclaim interface memory.reclaim does both
+> > > reclaim and demotion. This is likely fine for us for latency critical
+> > > jobs where we would want to disable proactive reclaim entirely, and is
+> > > also fine for latency tolerant jobs where we would like to both
+> > > proactively reclaim and demote.
+> > >
+> > > However, for some latency tiers in the middle we would like to demote but
+> > > not reclaim. This is because reclaim and demotion incur different latency
+> > > costs to the jobs in the cgroup. Demoted memory would still be addressable
+> > > by the userspace at a higher latency, but reclaimed memory would need to
+> > > incur a pagefault.
+> > >
+> > > To address this, I propose having reclaim-only and demotion-only
+> > > mechanisms in the kernel. There are a couple possible
+> > > interfaces to carry this out I considered:
+> > >
+> > > 1. Disable demotion in the memory.reclaim interface and add a new
+> > >    demotion interface (memory.demote).
+> > > 2. Extend memory.reclaim with a "demote=<int>" flag to configure the demotion
+> > >    behavior in the kernel like so:
+> > >       - demote=0 would disable demotion from this call.
+> > >       - demote=1 would allow the kernel to demote if it desires.
+> > >       - demote=2 would only demote if possible but not attempt any
+> > >         other form of reclaim.
 > >
-> > (no changes since v1)
+> > Unfortunately, our proactive reclaim stack currently relies on
+> > memory.reclaim doing both. It may not stay like that, but I'm a bit
+> > wary of changing user-visible semantics post-facto.
 > >
-> >  Makefile                  |  2 +-
-> >  scripts/Kbuild.include    | 12 ++++++++++++
-> >  scripts/Makefile.modfinal |  2 +-
-> >  scripts/Makefile.modinst  |  2 +-
-> >  4 files changed, 15 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/Makefile b/Makefile
-> > index eb80332f7b51..60ce9dcafc72 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -369,7 +369,7 @@ else # !mixed-build
-> >  include $(srctree)/scripts/Kbuild.include
-> >
-> >  # Read KERNELRELEASE from include/config/kernel.release (if it exists)
-> > -KERNELRELEASE = $(shell cat include/config/kernel.release 2> /dev/null)
-> > +KERNELRELEASE = $(call read-file, include/config/kernel.release)
-> >  KERNELVERSION = $(VERSION)$(if $(PATCHLEVEL),.$(PATCHLEVEL)$(if $(SUBLEVEL),.$(SUBLEVEL)))$(EXTRAVERSION)
-> >  export VERSION PATCHLEVEL SUBLEVEL KERNELRELEASE KERNELVERSION
-> >
-> > diff --git a/scripts/Kbuild.include b/scripts/Kbuild.include
-> > index 9996f34327cb..722846c23264 100644
-> > --- a/scripts/Kbuild.include
-> > +++ b/scripts/Kbuild.include
-> > @@ -10,6 +10,10 @@ empty   :=
-> >  space   := $(empty) $(empty)
-> >  space_escape := _-_SPACE_-_
-> >  pound := \#
-> > +define newline
-> > +
-> > +
-> > +endef
-> >
-> >  ###
-> >  # Comparison macros.
-> > @@ -55,6 +59,14 @@ stringify = $(squote)$(quote)$1$(quote)$(squote)
-> >  kbuild-dir = $(if $(filter /%,$(src)),$(src),$(srctree)/$(src))
-> >  kbuild-file = $(or $(wildcard $(kbuild-dir)/Kbuild),$(kbuild-dir)/Makefile)
-> >
-> > +###
-> > +# Read a file, replacing newlines with spaces
-> > +ifeq ($(call test-ge, $(MAKE_VERSION), 4.2),y)
-> > +read-file = $(subst $(newline),$(space),$(file < $1))
-> > +else
-> > +read-file = $(shell cat $1 2>/dev/null)
-> > +endif
-> > +
->
-> I like the implementation of read-file, but I am afraid that the
-> MAKE_VERSION comparison breaks all make versions w/ a minor version
-> number: 3.99.9x, 4.2.x, 4.3.x.
+> > In patch 2, you're adding a node interface to memory.demote. Can you
+> > add this to memory.reclaim instead? This would allow you to control
+> > demotion and reclaim independently as you please: if you call it on a
+> > node with demotion targets, it will demote; if you call it on a node
+> > without one, it'll reclaim. And current users will remain unaffected.
+> 
+> Hello Johannes, thanks for taking a look!
+> 
+> I can certainly add the "nodes=" arg to memory.reclaim and you're
+> right, that would help in bridging the gap. However, if I understand
+> the underlying code correctly, with only the nodes= arg the kernel
+> will indeed attempt demotion first, but the kernel will also merrily
+> fall back to reclaiming if it can't demote the full amount. I had
+> hoped to have the flexibility to protect latency sensitive jobs from
+> reclaim entirely while attempting to do demotion.
 
+The fallback to reclaim actually strikes me as wrong.
 
-I think these should work correctly
-unless I missed something terribly.
+Think of reclaim as 'demoting' the pages to the storage tier. If we
+have a RAM -> CXL -> storage hierarchy, we should demote from RAM to
+CXL and from CXL to storage. If we reclaim a page from RAM, it means
+we 'demote' it directly from RAM to storage, bypassing potentially a
+huge amount of pages colder than it in CXL. That doesn't seem right.
 
+If demotion fails, IMO it shouldn't satisfy the reclaim request by
+breaking the layering. Rather it should deflect that pressure to the
+lower layers to make room. This makes sure we maintain an aging
+pipeline that honors the memory tier hierarchy.
 
-In the ASCII-sorting, they are sorted like this:
+So I'm hesitant to design cgroup controls around the current behavior.
 
-3.99.9x  4.2   4.2.x  4.3.x
+> The above is just one angle of the issue. Another angle (which Yosry
+> would care most about I think) is that at Google we call
+> memory.reclaim mainly when memory.current is too close to memory.max
+> and we expect the memory usage of the cgroup to drop as a result of a
+> success memory.reclaim call. I suspect once we take in commit
+> 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg reclaim""),
+> we would run into that regression, but I defer to Yosry here, he may
+> have a solution for that in mind already.
 
-
-
-
-
-
-The bad scenarios I came up with is GNU Make 4.10
-and GNU Make 10.0 because $(sort ) will sort
-
-10  4.10  4.2
-
-
-
-
-GNU Make 4.3 was released in Jan 2020
-GNU Make 4.4 was released in Oct 2022
-
-
-
-If the current release pace continues,
-we will have about 10 years until GNU Make hits 4.10
-
-Until then, we can remove this ifeq.
-
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+IMO it should both demote and reclaim. Simliar to how memory.reclaim
+on a non-tiered memory system would both deactivate active pages and
+reclaim inactive pages.
