@@ -2,91 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33864636C55
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 22:23:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D70E9636C57
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 22:24:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238160AbiKWVXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 16:23:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41548 "EHLO
+        id S238234AbiKWVXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 16:23:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235701AbiKWVXI (ORCPT
+        with ESMTP id S235701AbiKWVXv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 16:23:08 -0500
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C6D2CCA5
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 13:23:07 -0800 (PST)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-3938dc90ab0so167654257b3.4
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 13:23:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=80FECUBxUdFegKjeWsNqCyoU5iWi51VHxXwc7NeBlDo=;
-        b=uLOkELm67Pj8ICSMSuAE32FIGw3wbJOJtLSkE3chVoNtaDuDwYgxvkJBczA1y2RJJS
-         JHyZOKwrTEeqFyrRv2Rfkrpf0TFOP+PVMhx2UtQIC8hnZTwIWWMsyzxCI4GeSaKNhsMF
-         lC1zWy9sHMdicAokBtDJMhL7LIu4W7e9NIYHOXdhSo64f7cHf2B2ra/IXtBsUabZNl+3
-         frG+4QP8pYMimMyEcqUapGVg8JOPSZu5CAM+UgxdHBTemyjW0UVLW7dZdQVP4EnJTZ0S
-         FEJH5xQfHeEGDtB6zrx1YRmk1Ob5+PxubdD/ixhqAjkonYngkQXh3aeHfoqIvjo/bd2w
-         mJ7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=80FECUBxUdFegKjeWsNqCyoU5iWi51VHxXwc7NeBlDo=;
-        b=Y67MxMIW2ml0yrMTTeycNdZQ7E4saWhQnyLWiT6/TmZNsyn343b7pxND1yel5Crgxo
-         ltzqAtB0CJd8ujLCOjZtofxGDhuJT/aB4WIzxX1eJ+8W5Os2VHBD7w9/3tESYMVsTQTR
-         CLGkuE+xWhPYjBeYiFYB3lQO5T958K4u8Z0rm1/SGN9wQVR/oyoXqyQHnF4PcYn4vaoY
-         ccUZEnG10lTMt5lknCEVJz8ptN7DMYIlCcRT2lvPfGOhaDzXfyuFnuMCeOodRrXboilJ
-         IdSFy+sohvEypBDeHU2BfO8iilamedRbY3w/dHBAR7YNUX4wXWJBmG3XLgzqIdhbuSnR
-         RPJg==
-X-Gm-Message-State: ANoB5pnSvyHyxDFJqHDjNj2BPJ3tHZUsUzoWjDNzXowPJnBqsXgSzxZO
-        RPcoYE9ssRRYIncZQuLHKgLe+4bdGNVm/WRSEyRVAQ==
-X-Google-Smtp-Source: AA0mqf6MQHlEWs88gbqnsRD9Yv59kYkMampxraRXzAUqmPsucry9XnsWum+Xv66YNpMkuExEnefoQ9PgtVZoVQu19Fk=
-X-Received: by 2002:a81:65c1:0:b0:376:f7e2:4b12 with SMTP id
- z184-20020a8165c1000000b00376f7e24b12mr11999618ywb.0.1669238586662; Wed, 23
- Nov 2022 13:23:06 -0800 (PST)
+        Wed, 23 Nov 2022 16:23:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1E470A12
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 13:23:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B57561F2B
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 21:23:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2931C433C1;
+        Wed, 23 Nov 2022 21:23:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669238628;
+        bh=cATiR1QG6cTY/mqQnaWiwo/Sa8WflOSrl15CfQvSEVM=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=HqV2reqZWvvaU0usYoj+DiRq9qcSL8WIDjmq26rH/DjkS/afyL+WCs8tC/1vZriV8
+         WOdmpnHsd2kgVsx2kY8D1JLZFxhBjpDkhKl0ZSEG6m5jN+cc7MnqC3PWWltkIW3x+q
+         puOWOToSThuXbwgbH/aQ5yn1p5dqCXmIAcBeh1u4RG3MjYv6DwUoG79+zL2lum3lzN
+         nyhxCWnC9CcEtPs3EylGoBMrXtxqclGBBFrksJYGcmnSgm+qJAjZUS+vWx6lj6Ochp
+         Qq5xkFRMsy/A14sg1u5Izfg8BXHJT+2rmX+rnT6J570yeTrXfnwfRTCmf2kTjgb1hW
+         IzjqLSBdhUtqQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 5184B5C1286; Wed, 23 Nov 2022 13:23:48 -0800 (PST)
+Date:   Wed, 23 Nov 2022 13:23:48 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        john.stultz@linaro.org, sboyd@kernel.org, corbet@lwn.net,
+        Mark.Rutland@arm.com, maz@kernel.org, kernel-team@meta.com,
+        neeraju@codeaurora.org, ak@linux.intel.com,
+        zhengjun.xing@intel.com, Chris Mason <clm@meta.com>,
+        John Stultz <jstultz@google.com>,
+        Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH clocksource 1/3] clocksource: Reject bogus watchdog
+ clocksource measurements
+Message-ID: <20221123212348.GI4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221114232807.GA834337@paulmck-ThinkPad-P17-Gen-1>
+ <20221114232827.835599-1-paulmck@kernel.org>
+ <87mt8pkzw1.ffs@tglx>
+ <20221117230910.GI4001@paulmck-ThinkPad-P17-Gen-1>
+ <Y3rMc2VbgVLHN9db@feng-clx>
+ <20221121181449.GA3774542@paulmck-ThinkPad-P17-Gen-1>
+ <Y3zxB6r1kin8pSH1@feng-clx>
+ <20221122220712.GP4001@paulmck-ThinkPad-P17-Gen-1>
+ <Y32HFE+BaATh9+l/@feng-clx>
 MIME-Version: 1.0
-References: <BYAPR11MB3240F382BD180FF90C7DF0B9E1069@BYAPR11MB3240.namprd11.prod.outlook.com>
- <7de35859-97ab-8e88-f590-d5851b81773b@nvidia.com> <BYAPR11MB32405F4FA22BB47BD03C8F18E10C9@BYAPR11MB3240.namprd11.prod.outlook.com>
-In-Reply-To: <BYAPR11MB32405F4FA22BB47BD03C8F18E10C9@BYAPR11MB3240.namprd11.prod.outlook.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 23 Nov 2022 22:22:55 +0100
-Message-ID: <CACRpkdbY5aU3OTufA0q+N7Pwm0shGgnjScAGR_96oo9XdgBDhQ@mail.gmail.com>
-Subject: Re: Intel timed i/o driver in HTE
-To:     "N, Pandith" <pandith.n@intel.com>
-Cc:     Dipen Patel <dipenp@nvidia.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hall, Christopher S" <christopher.s.hall@intel.com>,
-        "Gross, Mark" <mark.gross@intel.com>,
-        "Sangannavar, Mallikarjunappa" 
-        <mallikarjunappa.sangannavar@intel.com>,
-        "D, Lakshmi Sowjanya" <lakshmi.sowjanya.d@intel.com>,
-        "T R, Thejesh Reddy" <thejesh.reddy.t.r@intel.com>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "timestamp@lists.linux.dev" <timestamp@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y32HFE+BaATh9+l/@feng-clx>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 3:38 PM N, Pandith <pandith.n@intel.com> wrote:
+On Wed, Nov 23, 2022 at 10:36:04AM +0800, Feng Tang wrote:
+> On Tue, Nov 22, 2022 at 02:07:12PM -0800, Paul E. McKenney wrote:
+> [...] 
+> > > > If PM_TIMER was involved, I would expect 'acpi_pm' instead of
+> > > > refined-jiffies.  Or am I misinterpreting the output and/or code?
+> > > 
+> > > It's about timing. On a typical server platform, the clocksources
+> > > init order could be:
+> > >   refined-jiffies --> hpet --> tsc-early --> acpi_pm --> tsc 
+> > > 
+> > > >From your log, TSC('tsc-early') is disabled before 'acpi_pm' get
+> > > initialized, so 'acpi_pm' timer (if exist) had no chance to watchdog
+> > > the tsc.
+> > > 
+> > > > Either way, would it make sense to add CLOCK_SOURCE_MUST_VERIFY to
+> > > > clocksource_hpet.flags?
+> > > 
+> > > Maybe try below patch, which will skip watchdog for 'tsc-early',
+> > > while giving 'acpi_pm' timer a chance to watchdog 'tsc'.
+> > > 
+> > > diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+> > > index cafacb2e58cc..9840f0131764 100644
+> > > --- a/arch/x86/kernel/tsc.c
+> > > +++ b/arch/x86/kernel/tsc.c
+> > > @@ -1131,8 +1131,7 @@ static struct clocksource clocksource_tsc_early = {
+> > >  	.uncertainty_margin	= 32 * NSEC_PER_MSEC,
+> > >  	.read			= read_tsc,
+> > >  	.mask			= CLOCKSOURCE_MASK(64),
+> > > -	.flags			= CLOCK_SOURCE_IS_CONTINUOUS |
+> > > -				  CLOCK_SOURCE_MUST_VERIFY,
+> > > +	.flags			= CLOCK_SOURCE_IS_CONTINUOUS,
+> > >  	.vdso_clock_mode	= VDSO_CLOCKMODE_TSC,
+> > >  	.enable			= tsc_cs_enable,
+> > >  	.resume			= tsc_resume,
+> > 
+> > Your mainline patch b50db7095fe0 ("x86/tsc: Disable clocksource watchdog
+> > for TSC on qualified platorms") mitigates the issue so we are good for
+> > the immediate future, at least assuming reliable TSC.
+> > 
+> > But it also disables checking against HPET, hence my question about
+> > marking clocksource_hpet.flags with CLOCK_SOURCE_MUST_VERIFY at boot time
+> > on systems whose CPUs have constant_tsc, nonstop_tsc, and tsc_adjust.
+> 
+> IIUC, this will make TSC to watchdog HPET every 500 ms. We have got
+> report that the 500ms watchdog timer had big impact on some parallel
+> workload on big servers, that was another factor for us to seek
+> stopping the timer.
 
-> Since the current gpio framework is inadequate to periodic output modes.
-> I thought to disentangle from gpio and develop a new hte consumer. Something like hte-libcdev.c
+Another approach would be to slow it down.  Given the tighter bounds
+on skew, it could be done every (say) 10 seconds while allowing
+2 milliseconds skew instead of the current 100 microseconds.
 
-Maybe, if Dipen wants it.
-Or maybe it needs its own subsystem.
-Or maybe it should be with whatever is using these pulse trains.
+> Is this about the concern of possible TSC frequency calibration
+> issue, as the 40 ms per second drift between HPET and TSC? With 
+> b50db7095fe0 backported, we also have another patch to force TSC
+> calibration for those platforms which get the TSC freq directly
+> from CPUID or MSR and don't have such info in dmesg:
+>  "tsc: Refined TSC clocksource calibration: 2693.509 MHz" 
+> 
+> https://lore.kernel.org/lkml/20220509144110.9242-1-feng.tang@intel.com/
+> 
+> We did met tsc calibration issue due to some firmware issue, and
+> this can help to catch it. You can try it if you think it's relevant.
 
-Again: what is it used for? If we have no idea what it is supposed to
-be used for, we cannot place it right, even less test it.
+I am giving this a go, thank you!
 
-Yours,
-Linus Walleij
+						Thanx, Paul
+
+> Thanks,
+> Feng
+> 
+> > Would that make sense?
+> > 
+> > 							Thanx, Paul
+> > 
+> > > > I am sending the full console output off-list.  Hey, you asked for it!  ;-)
+> > > 
+> > > Thanks for sharing!
+> > > 
+> > > Thanks,
+> > > Feng
+> > > 
+> > > > 
+> > > > 							Thanx, Paul
