@@ -2,111 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7B1636B2F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 21:33:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E57DD636B3D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 21:33:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237506AbiKWUcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 15:32:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
+        id S239361AbiKWUbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 15:31:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239899AbiKWUbV (ORCPT
+        with ESMTP id S238440AbiKWUbH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 15:31:21 -0500
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32EEC633D
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 12:29:18 -0800 (PST)
-Received: by mail-ua1-x92f.google.com with SMTP id e26so6703987uaa.7
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 12:29:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kLXsXSr0QtnCbQ9haWU7vYJFI/CTwk9Wy76ZUUM5pjI=;
-        b=j7CFSGEbyVpo7nAJTcl7vifTrIu1wWdn9vzwkme16ZTA36Ic2uQwGD5mBCwqLyFr08
-         09gkP/QvYwauZVNMN/IL0Ng0YE1x+dsYq8LTD999L7CV6BAWJvUKe5GYSVy22x/vLmxb
-         HKliLvRYqpaG4y/Hb7HROl/rgQ33wGIjXn6pN4k2np4ciDXKvZ1w+8Xs8GA+mSY6UbcB
-         zeNHJWRegwzoX086DeWwm9E62hKNNtYPqhvbCph6qq9+NYFI5DUO6dNgUfmhRtqimbhx
-         X3dMCdBH4V3hnBLl6Lrtj0DP5QSP/jGN1BuLmTc5TyBo8+OcST03DvAjkKPtwwYpAi0Q
-         XjpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kLXsXSr0QtnCbQ9haWU7vYJFI/CTwk9Wy76ZUUM5pjI=;
-        b=jRhZP3AjT4EHidMTMjxL/Fk+Y5RnPSR1lUz1CgUqPS6UEAtAW1Gh81Etk+7gwStFRo
-         iSsrxPixKH5zSKU55bBUs/nP5KsmqHA73ZwauaEDmj1AM9uPnGzYo4wUecyoEXQin0Ww
-         jqbCyYL7UZ2z2KSBZ1y0mqgSSY+YQHOkBxc+emvDEA/NIF6z/BcHAuIsMPs46jteDDZV
-         q9zck9RkZVMAiiWWqnL4SNu9NrQFZ3xOTjZrd17PVCvm2yOLTQJc8TucAb0Jw/nMozD6
-         o8sFktncMbvq5bmongqxJvTyuI9zOd+DUImkPCfG2Twjx25yJ1B9JTlehGd4PWSC4es9
-         0bvg==
-X-Gm-Message-State: ANoB5pm8ZFAOHy+jqW/p6FlVWez+dB9+SeUqTeGdtZEyjso9jSSuLwrA
-        EZQj7fndHtqcZTInqARUPXBRYp1zDElj+xs46d9E
-X-Google-Smtp-Source: AA0mqf4qDAlXk6kJtTuQiCzBcCpNPoOzEie3uJLGYf/t26VHDBO9vGh1/SIPwBtlhc13xCagko5dZsY8Uq1gTfpyI+I=
-X-Received: by 2002:ab0:374a:0:b0:414:5de7:23ab with SMTP id
- i10-20020ab0374a000000b004145de723abmr6699709uat.52.1669235357288; Wed, 23
- Nov 2022 12:29:17 -0800 (PST)
+        Wed, 23 Nov 2022 15:31:07 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494AABE24D;
+        Wed, 23 Nov 2022 12:27:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1669235238; x=1700771238;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=NZt7INHr2d7Hd0MIy/SXhj1Tvl6whRgvUFOvpNmOXV8=;
+  b=1XJajZn6sk0/abwrqjxesFhfxaBEGX6B1iSrQKsS1mDANCupmhAsUeAy
+   fBpE1wwJTxcHQPk+ld1e60HDQSKxPVBJ/Z48YHKniCVEolukqSKj9qM56
+   1rrXhGcnkblAiYiwfD4Yb6bNkXzbRYJ3Tl3jRuoFmwKd4LRKU+ZoFu+bi
+   9d0bj91IW8A2W2b7VLRHLEPEHCJhL3VDYnGblX3kTE6L+czyODszgsbhw
+   C0GpSJt7vuLY+lE4qVBq42Ss8cJ+cfE/mp+tKxMa4mKA9Vcx1MafVP3Ua
+   zwddKqLl3J4TozHbUXz44r79SgPxKTO1BuSLz7UJGioHSxp3MaoQ1aC35
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="124842447"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Nov 2022 13:27:09 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 23 Nov 2022 13:27:05 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Wed, 23 Nov 2022 13:27:03 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <hawk@kernel.org>, <john.fastabend@gmail.com>,
+        <UNGLinuxDriver@microchip.com>, <alexandr.lobakin@intel.com>,
+        <maciej.fijalkowski@intel.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next v5 0/7] net: lan966x: Extend xdp support
+Date:   Wed, 23 Nov 2022 21:31:32 +0100
+Message-ID: <20221123203139.3828548-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-References: <20221121055345.111567-1-jake.macneal@gmail.com>
- <CANDhNCqCYkv7Ja4RT2_DEPh2zFFL+SD82wru_FC6dupCo6_4RA@mail.gmail.com> <7d95f4bb-01a3-44db-af08-275daa9ffb1e@app.fastmail.com>
-In-Reply-To: <7d95f4bb-01a3-44db-af08-275daa9ffb1e@app.fastmail.com>
-From:   John Stultz <jstultz@google.com>
-Date:   Wed, 23 Nov 2022 12:29:05 -0800
-Message-ID: <CANDhNCqzLxsAx=XRBdL554SDZ83vQonnppTQPKgB6=RDhw_XjA@mail.gmail.com>
-Subject: Re: [PATCH] time: copy tai value (International Atomic Time, in
- seconds) to output __user struct in get_old_timex32().
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Jacob Macneal <jake.macneal@gmail.com>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 11:53 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> On Wed, Nov 23, 2022, at 19:54, John Stultz wrote:
-> > On Sun, Nov 20, 2022 at 9:54 PM Jacob Macneal <jake.macneal@gmail.com> wrote:
-> >> --- a/kernel/time/time.c
-> >> +++ b/kernel/time/time.c
-> >> @@ -311,6 +311,7 @@ int get_old_timex32(struct __kernel_timex *txc, const struct old_timex32 __user
-> >>         txc->calcnt = tx32.calcnt;
-> >>         txc->errcnt = tx32.errcnt;
-> >>         txc->stbcnt = tx32.stbcnt;
-> >> +       txc->tai = tx32.tai;
-> >>
-> >
-> > This does seem like something that was overlooked.
-> >
-> > Arnd: There isn't something more subtle I'm missing here, right?
->
-> I agree. Looking at the git history, it seems that the tai field
-> was added a long time ago in 153b5d054ac2 ("ntp: support for TAI").
-> The commit correctly did the conversion for copying the data out
-> of the kernel and did not copy the value in because it wasn't
-> needed at the time.
->
-> I don't see any user of the tai field that gets copied into
-> the kernel, so the bug appears harmless, but Jacob's fix is
+Extend the current support of XDP in lan966x with the action XDP_TX and
+XDP_REDIRECT.
+The first patches just prepare the things such that it would be easier
+to add XDP_TX and XDP_REDIRECT actions. Like adding XDP_PACKET_HEADROOM,
+introduce helper functions, use the correct dma_dir for the page pool
+The last 2 patches introduce the XDP actions XDP_TX and XDP_REDIRECT.
 
-Oh, right. There is a quirk of the adjtimex ADJ_TAI interface (added
-in 153b5d054ac2) where it for some reason used the constant field
-instead of the newly added tai field.
-So we never should be using the tai field value from userspace (only
-writing it out), which might have been the reason it was not copied
-over.
+v4->v5:
+- add iterator declaration inside for loops
+- move the scope of port inside the function lan966x_fdma_rx_alloc_page_pool
+- create union for skb and xdpf inside struct lan966x_tx_dcb_buf
 
-> nevertheless correct, as we should not use any uninitialized
-> data in a structure that comes from userspace.
+v3->v4:
+- use napi_consume_skb instead of dev_kfree_skb_any
+- arrange members in struct lan966x_tx_dcb_buf not to have holes
+- fix when xdp program is added the check for determining if page pool
+  needs to be recreated was wrong
+- change type for len in lan966x_tx_dcb_buf to u32
 
-Agreed.
+v2->v3:
+- make sure to update rxq memory model
+- update the page pool direction if there is any xdp program
+- in case of action XDP_TX give back to reuse the page
+- in case of action XDP_REDIRECT, remap the frame and make sure to
+  unmap it when is transmitted.
 
-thanks
--john
+v1->v2:
+- use skb_reserve of using skb_put and skb_pull
+- make sure that data_len doesn't include XDP_PACKET_HEADROOM
+
+
+Horatiu Vultur (7):
+  net: lan966x: Add XDP_PACKET_HEADROOM
+  net: lan966x: Introduce helper functions
+  net: lan966x: Add len field to lan966x_tx_dcb_buf
+  net: lan966x: Update rxq memory model
+  net: lan966x: Update dma_dir of page_pool_params
+  net: lan966x: Add support for XDP_TX
+  net: lan966x: Add support for XDP_REDIRECT
+
+ .../ethernet/microchip/lan966x/lan966x_fdma.c | 264 +++++++++++++++---
+ .../ethernet/microchip/lan966x/lan966x_main.c |   5 +-
+ .../ethernet/microchip/lan966x/lan966x_main.h |  30 +-
+ .../ethernet/microchip/lan966x/lan966x_xdp.c  |  66 ++++-
+ 4 files changed, 312 insertions(+), 53 deletions(-)
+
+-- 
+2.38.0
+
