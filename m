@@ -2,117 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A35DB635090
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 07:39:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B89863509A
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 07:41:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236064AbiKWGio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 01:38:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40456 "EHLO
+        id S236101AbiKWGlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 01:41:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235505AbiKWGim (ORCPT
+        with ESMTP id S236076AbiKWGkx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 01:38:42 -0500
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6E5ECCF5
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 22:38:40 -0800 (PST)
-Received: by mail-io1-f72.google.com with SMTP id a14-20020a6b660e000000b006bd37975cdfso8718097ioc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 22:38:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=24x6pIXKgI7yTktOcxvzOm6+0lfxVAvmMB4rANgEJoU=;
-        b=sYDlY89/Jy+DIV9ZKt9htz3b8HLL7LjpaZpkCbV+z8//kDBgflgVkC1Qzmm0VmzvB/
-         odMbP+pF6JSn7LJ6mGM4SRX7PLO0WwYXFIsTL6oUjto6IcR3APdymgim+tbCsPqyiEL+
-         ueaiucgPDMNle+lZh1XzgPlmsgpblFOk0BSHuhs/L/WjfV4FltcezYFExaWAvfhbunaB
-         0d5m77aIwg3W5NmOpoN90SvZBn24fOdhHcKz4wgT53W9M1plDUwvnRiOCIH0s1FZPbfW
-         v3jvOkeXtm95fr/fyREO+HwzQVpuV/n3xWiHOwph7lYdBbdhloQGnthOZFs3RXAzlLaz
-         ZljQ==
-X-Gm-Message-State: ANoB5pnwrI9MnmmlXeTId8g+RXpU2udh4Yitpy1rz4m+kcx3/7B0oFpx
-        0UQOkdr3kEyRGmjVGbYBrWl/RF/1765yj83o0Grg1OB7w1Cc
-X-Google-Smtp-Source: AA0mqf4+dSE1VsXEaZLFGskDtjzIr8M3rbqzx/Qd2CvZGDAqjzbmQXAfEBJrALOTpbZNj8iPq22e8WO/4qBcoEp9tVT7zyAnLGB/
+        Wed, 23 Nov 2022 01:40:53 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2073.outbound.protection.outlook.com [40.107.94.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50076ED708
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 22:40:52 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=knj3lrayIwdp4sgTyghcc7bt3EoiCf0vDzSmDmBLIbhzKeUCey5KbKyT3owvhUMSsopPZQwSNalMLSdE1oUfVS+ZXl9/sSkokkpGsLbSDDx7egImvRVb6QeLucPFcL62BB8I09OSuKbl1c0HvlaK95wYX8go8w8oVajoeRcQA457zgub84Xe25/geTEgqkKG3lUOdktua+SWDAWB6Hc12Bnk//kzSFfmtfgCBSLOxhob46nVn07wWqIFprLFxbNtoxkvc/dtfb3VRYQsSc/MvKaZpCD7FR3es5MgV4+jdkCvWY0OxiFQA5QWTQFOuWzCH6klmJluFjrKvmbnE9dUJA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gBFH3I4aDcBLgmDZ6+lKh+8MBc4ubqNOQnVCSowp19o=;
+ b=mrDr0oKxaL8gCuqTFlJMcmef8zxM73pLhWemutjQaVapUNa/sKnpl4JqQpYMY93VxkAouO1WUOtf9DJDK0VXZUvehxBK3qFjFkwyFFS67Zj2/DriCkyusVc/mmY+eW/xc8BRY+RyRdwpxjHCNbSmypsS7c6ADorJE9RpNlPbwcF+jKKfpMQGqQtxoVO48Q8PJ6vm5YG0E9vo0p2/KEfHzGvB1apNu2pSNx2VemBLaz517QZWFB5AI/F8Y8+9fWUr6j734YC4jkqyesl3VhlGuysapf0XLaUyDSXZ/iFZ8XzLcM+zxPwlRV4CiqjuSqvUInafMGbBxrNlhoUfrv8l7g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gBFH3I4aDcBLgmDZ6+lKh+8MBc4ubqNOQnVCSowp19o=;
+ b=MhHtpfOS/ce1tejAIwJ2jgoK9Y5VdD2uFSaBnDPwly0IYXrCrvxTVcLclq/9gMRnjAi5Lr89iXlVxOwYLUQ6I+GmwGZ/GCw/GfjR2y72IOdwneHqv1gLvI/SVMkZifwU7CpnoFbhwaZtCYzQxJRK67dyG05uffbf0n28Mic9nhw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by SA1PR12MB7151.namprd12.prod.outlook.com (2603:10b6:806:2b1::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Wed, 23 Nov
+ 2022 06:40:50 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::7d43:3f30:4caf:7421]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::7d43:3f30:4caf:7421%7]) with mapi id 15.20.5834.015; Wed, 23 Nov 2022
+ 06:40:48 +0000
+Message-ID: <ba83fc40-e090-ace5-58e4-bb28feb6034e@amd.com>
+Date:   Wed, 23 Nov 2022 07:40:43 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v1] drm/scheduler: Fix lockup in drm_sched_entity_kill()
+Content-Language: en-US
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20221123001303.533968-1-dmitry.osipenko@collabora.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20221123001303.533968-1-dmitry.osipenko@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR3P281CA0127.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:94::13) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-X-Received: by 2002:a6b:4114:0:b0:6d2:76f4:e041 with SMTP id
- n20-20020a6b4114000000b006d276f4e041mr3594438ioa.11.1669185520070; Tue, 22
- Nov 2022 22:38:40 -0800 (PST)
-Date:   Tue, 22 Nov 2022 22:38:40 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000fcf6d705ee1d8947@google.com>
-Subject: [syzbot] WARNING in do_chunk_alloc
-From:   syzbot <syzbot+88247ec7a18c953867d5@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|SA1PR12MB7151:EE_
+X-MS-Office365-Filtering-Correlation-Id: add56683-c1ed-477e-b62d-08dacd1da7b1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UP9uVPXlNyeXbgpNfWTYAxSqRukJBp+kQlmKqj6o9QJU4MxU+5915mKkuDRk9dwdUCekLr0HjF9vm8udzcDraw48PheUDG2T0sTAguof2fQaOaoQtxMiqwktMleoTO3sPETiVPqHQniM8SNG7C/1KeMq2jxqXloIf4VGFdxXnd5drK6lp0WDLsU9cxqrwITR2CZaeqyg0xLTdhelxJNPb61z2URgMgHKlxKI8eaiuxb0yfMkcOmn4vU0kGepect9hCuyUtAN6mYthqqIEOhtv9OQxobiDct2AUTBdsx28ylvKbhALQgLiZPAzUxuyUt9nDT59wMHXstI4uwII2XLvgOauFiTyeB6BN5eXBgxw7QfuV4zgN1dOnuJXVrsc8NqS80Z8wioXqtpxOX+JibrV2E8OzMQdbIg6p8kCQ3/2H/vUKBlQ+mqAXqnrXfKFWpqb94CoDSK9hIGIihMKNONIbIXmTUnKxPfsKzgroTJPeWVgIHi0oWYh/RJMsMzO9EKpyFfuTblyKwHybrkltG1ytHCzKPNaYbG6RjAUgOjxhmyDLL7F8c6+1jvBTDSJFBo6mX4SN9iBq3BU/nv0Bsk/Ng4+p9ARGY04reouKH+RQW/HSlJmDlQwhNzYtZMMFI35uBLGPxwYeOXqdz1IwVhh6Hm0Wt2O0sC0FodtQu9x7xdN1s/Dmw7zS6J02lBuekqQxDTUTc75g2AUDouqCE30HuVZNtmPIFF6DtDIQEwHiY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(136003)(346002)(376002)(39860400002)(451199015)(31696002)(110136005)(41300700001)(86362001)(66556008)(66476007)(8676002)(4326008)(66946007)(8936002)(316002)(5660300002)(66574015)(83380400001)(2906002)(6666004)(6486002)(38100700002)(6506007)(186003)(2616005)(478600001)(36756003)(6512007)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?U1VvMzRGdXlGVnlvWVFUVzQrL1RET0VBczJQbHYwekNwTjhISndES3dKNERi?=
+ =?utf-8?B?SjNvaUphK2NQZURvTDlZVHZscFhCODFGUk5Vb0NtRCt6SEY1alRzMUxENmhF?=
+ =?utf-8?B?eTIwb1BtVWx2UCt1VldvY0VSaXc5OWlKR3JUbEcvanBNRi95cGsvcHVjS1NI?=
+ =?utf-8?B?MXRCdWJJdEhoLzNjOGFFaE9UbS91aWpVM1NOS244TFMzVC9yaG1TNnZZSzZE?=
+ =?utf-8?B?NmZhdFZGMys1bXhPT3YrL1g4ZnRGQlMvR213dVB6blJaa3Vrc0dJVTNvK0t4?=
+ =?utf-8?B?cnRDWGpybjVBbUE4OFlVc1RNTm5Sb0JXVzh5QXFnWU9uQjNjWlVsQUZ0MkF1?=
+ =?utf-8?B?dUc1K1pwUWlvVkV6Uit3MXIrY05hOE5MbnJsbUtLemFaaFk0c3N2VGRjL3dm?=
+ =?utf-8?B?WE1leFBYUVJneVQrQnRQN0kzZ3drSWlrVFArS2NLb3dHYkhaZFpZUjVpbEI0?=
+ =?utf-8?B?NXY5KzdTS2xFRlJKVGFyUWp3Mk1Ddi9PTUUxVDRycWRiYXI2ZDgvRHhoL0xF?=
+ =?utf-8?B?UGtLWHd1ZEgzWmVNc2dMYnZFZFB0RU1vaEg5VjhBbTFUVzgxYlg2aUdFYnE5?=
+ =?utf-8?B?b0lYaWh4akVjOTd0UHN6V2NOb1ZCUVdVVzdsdWsxdm5nSSszWm8rbnd0ak0z?=
+ =?utf-8?B?UE1DblVLVWhQUmc4RkFSdzlNRlRjcTkvYWhGenUra2ZMTUpvcEdLREJ3YzF1?=
+ =?utf-8?B?VkhUdW0wdW9ZTkZxcFpIY3ZQOERjSFRRVlNYQnc2ejFOaFgxdFpETE5oTDU4?=
+ =?utf-8?B?VFdJWG5IbmlNdkprd01oMWU0YTZWb0pVUnB1bEtBNjE2MUVNNk8xMFlYb0Zr?=
+ =?utf-8?B?Z2luTkE0d3lwWUNBRmxMeHJYSWcwY2xhdGdpUTJOK0JQYnh1SDd0VUZkdnVu?=
+ =?utf-8?B?MUp4aC9sdnlPSS9KV0I5VjJneUZkSm54RFRHMWlBeTI4MDJpMUNZVXJsUklu?=
+ =?utf-8?B?SFI4VlNUeSs5d3dlTU9td1BlM21yUTBCMERqWDdaNVBWS3FWY3ZPL2NQa0RT?=
+ =?utf-8?B?Z0xtUU5qVHdKaGhhcHgrbzZ3UTRYYVJNc3ZOYmx1bHo3OXdnbW1jOVNXaldr?=
+ =?utf-8?B?c2lKOGxKSWh6S0hGcCs3dkE4UVU0U2tJZTYxWFNZZ1JYY1BVNGM1MnhIVk1t?=
+ =?utf-8?B?Q0o0UjZxcCsrN25kcUtSMUFnRWpadGtWQXh3Z2ZIVCtEUWc1cTJvK3g2OW1Z?=
+ =?utf-8?B?czFOTXE3dGgzR0w4TmpyeWF5ako5b2ZIcmNBeWhBSGFiNEthSEVqOTlWeDlC?=
+ =?utf-8?B?V3RYdjhwcGhPMTZLYTdmTUp1aS9GTlJQdmFxcFBNRGpVRUVzZGtHZlZkM1Fk?=
+ =?utf-8?B?cCsvVFUvQ3UwRWR1VGp4MXprKzJ4YklUQkNTVXRnTTAzWTFDcEdxMmQ1cXRy?=
+ =?utf-8?B?djdkd0RCNEFrV0dHUVMvKzJKY213OGtnYkVrV1RndVN1cFRRem1UczJNNGpC?=
+ =?utf-8?B?cW1RNWd0Z2M2N21OdlNtbEtaOEgrUWFLZWZPRFZrQk8ybTFHd2k5c2IyVncx?=
+ =?utf-8?B?c3JwZm9neEtxWWRCeHhtcE5yZ2loMDU2OWtFQ1Rvam8vMFN5cjJ0U1Z1aE5R?=
+ =?utf-8?B?a2ZjY1NUQkgyZmtkWEkyYnhGVjJjS2tJNXFmTDdzcXV6RHU0RU9HR2dDRE5y?=
+ =?utf-8?B?RjBUMFlHd2ZaYVVJZ29nM0J2MXg3NDJiNVV2cnM5am1JeWI3NmhFUVNjWW9E?=
+ =?utf-8?B?V1Y4Z0VYKzg5N3NMbmJGYjhRVitEVUs3eDJxTUNYUzJ6dHRJYndFWENtMVl6?=
+ =?utf-8?B?Q2ZpVWJxYmU5UVI1ZVJLajJWZ0hWd1ZZVkZzbXNKemhWNUZDRmxjbnQwUXZ5?=
+ =?utf-8?B?clNjMFMwTFU2Z2tFT29SMFBLRVhhMjBJSkhMdDMwSkZmWHpwVFhWdURwcnBl?=
+ =?utf-8?B?aFJPd1czRGphQkdRaCtmNHBHN3ZrV1QwZHhzcUZMd3JGaWdSeXdRcVZZZE9D?=
+ =?utf-8?B?RUJHQkVHQ2pRRzF0NUtDLythRHNnNDJwOXF4aW9aK0JmNEFENGs2Q1RrT0R4?=
+ =?utf-8?B?R2hWR3JienBwNmRTWVhkTVdRWmtYanE1ekFDSzRRUWdmcWNjVTdpZ2dOVGlF?=
+ =?utf-8?B?RlFvNnZPcnlpVkZyUW5xc2JuOU9WOTFKUXN4Mi9Ock9UWlV4NGhLdEtESzRw?=
+ =?utf-8?B?SzR4aTdzb2ZBNDZ1cFRhY0d2bWQ5M2x0UWc2Q0V0b3FQWC9Od2dXU3llOElR?=
+ =?utf-8?Q?EN6JoIlm9keuXJxxQ3Wvil5SY4ZpQFOd7Xlac0uKPBA2?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: add56683-c1ed-477e-b62d-08dacd1da7b1
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2022 06:40:47.9096
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +ywaqDioMz1Zd7MYfoijvyb0jNueAszsDn1iIo7z6w/dFZ4DkoBVQvlA6hn2S87U
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7151
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Am 23.11.22 um 01:13 schrieb Dmitry Osipenko:
+> The drm_sched_entity_kill() is invoked twice by drm_sched_entity_destroy()
+> while userspace process is exiting or being killed. First time it's invoked
+> when sched entity is flushed and second time when entity is released. This
+> causes a lockup within wait_for_completion(entity_idle) due to how completion
+> API works.
+>
+> Calling wait_for_completion() more times than complete() was invoked is a
+> error condition that causes lockup because completion internally uses
+> counter for complete/wait calls. The complete_all() must be used instead
+> in such cases.
+>
+> This patch fixes lockup of Panfrost driver that is reproducible by killing
+> any application in a middle of 3d drawing operation.
+>
+> Fixes: 2fdb8a8f07c2 ("drm/scheduler: rework entity flush, kill and fini")
+> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 
-syzbot found the following issue on:
+Oh, good point. Reviewed-by: Christian König <christian.koenig@amd.com>
 
-HEAD commit:    eb7081409f94 Linux 6.1-rc6
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=17b83119880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8cdf448d3b35234
-dashboard link: https://syzkaller.appspot.com/bug?extid=88247ec7a18c953867d5
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10b80ab1880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12dd6d45880000
+> ---
+>   drivers/gpu/drm/scheduler/sched_entity.c | 2 +-
+>   drivers/gpu/drm/scheduler/sched_main.c   | 4 ++--
+>   2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/scheduler/sched_entity.c b/drivers/gpu/drm/scheduler/sched_entity.c
+> index fe09e5be79bd..15d04a0ec623 100644
+> --- a/drivers/gpu/drm/scheduler/sched_entity.c
+> +++ b/drivers/gpu/drm/scheduler/sched_entity.c
+> @@ -81,7 +81,7 @@ int drm_sched_entity_init(struct drm_sched_entity *entity,
+>   	init_completion(&entity->entity_idle);
+>   
+>   	/* We start in an idle state. */
+> -	complete(&entity->entity_idle);
+> +	complete_all(&entity->entity_idle);
+>   
+>   	spin_lock_init(&entity->rq_lock);
+>   	spsc_queue_init(&entity->job_queue);
+> diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
+> index 6ce04c2e90c0..857ec20be9e8 100644
+> --- a/drivers/gpu/drm/scheduler/sched_main.c
+> +++ b/drivers/gpu/drm/scheduler/sched_main.c
+> @@ -1026,7 +1026,7 @@ static int drm_sched_main(void *param)
+>   		sched_job = drm_sched_entity_pop_job(entity);
+>   
+>   		if (!sched_job) {
+> -			complete(&entity->entity_idle);
+> +			complete_all(&entity->entity_idle);
+>   			continue;
+>   		}
+>   
+> @@ -1037,7 +1037,7 @@ static int drm_sched_main(void *param)
+>   
+>   		trace_drm_run_job(sched_job, entity);
+>   		fence = sched->ops->run_job(sched_job);
+> -		complete(&entity->entity_idle);
+> +		complete_all(&entity->entity_idle);
+>   		drm_sched_fence_scheduled(s_fence);
+>   
+>   		if (!IS_ERR_OR_NULL(fence)) {
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/4a019f55c517/disk-eb708140.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/eb36e890aa8b/vmlinux-eb708140.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/feee2c23ec64/bzImage-eb708140.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/f765e3fd06e2/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+88247ec7a18c953867d5@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 102 at fs/btrfs/block-group.c:3535 do_chunk_alloc+0x653/0x6c0 fs/btrfs/block-group.c:3535
-Modules linked in:
-CPU: 1 PID: 102 Comm: kworker/u4:4 Not tainted 6.1.0-rc6-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Workqueue: events_unbound btrfs_async_reclaim_metadata_space
-RIP: 0010:do_chunk_alloc+0x653/0x6c0 fs/btrfs/block-group.c:3535
-Code: 3d 8b 44 89 fe 31 c0 e8 cb a1 a0 fd 0f 0b b3 01 e9 fd fe ff ff e8 bd 03 d9 fd 48 c7 c7 a0 a9 3d 8b 89 de 31 c0 e8 ad a1 a0 fd <0f> 0b 40 b5 01 e9 fa fe ff ff e8 9e 03 d9 fd 48 c7 c7 a0 a9 3d 8b
-RSP: 0018:ffffc900015c7870 EFLAGS: 00010246
-RAX: 3ba9b5084e06eb00 RBX: ffffffffffffffe4 RCX: ffff88801981ba80
-RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-RBP: ffff88801e4dc001 R08: ffffffff816e568d R09: ffffed1017304f1b
-R10: ffffed1017304f1b R11: 1ffff11017304f1a R12: ffff8880733f02a0
-R13: ffff888147573000 R14: 1ffff1100e67e05e R15: 00000000ffffffe4
-FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000556f9b0c86a8 CR3: 0000000028162000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- btrfs_chunk_alloc+0x6a4/0x900 fs/btrfs/block-group.c:3777
- flush_space+0x9d8/0xbc0 fs/btrfs/space-info.c:769
- btrfs_async_reclaim_metadata_space+0x8e8/0xa50 fs/btrfs/space-info.c:1083
- process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
- worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
- kthread+0x266/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
