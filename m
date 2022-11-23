@@ -2,148 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DCF3636769
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:39:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE6663675F
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:39:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239111AbiKWRjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 12:39:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58826 "EHLO
+        id S238898AbiKWRjF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 23 Nov 2022 12:39:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238749AbiKWRjS (ORCPT
+        with ESMTP id S237549AbiKWRjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 12:39:18 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98FAC711BA
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 09:39:11 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id p16so13617714wmc.3
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 09:39:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=olRr0NxHpe7WEA5OvPe/+zbTbmND6iy3IpcPyCocNn4=;
-        b=MGZ7QykbkGij1YHktOvviVyuOHcrM4D71hg6bgmigrwh1aI2PXhTjkh/bhjj80SOLu
-         HIfRLgpltd7ZARZGjE8AfzX4m8IsaSfJOMB4KF38mYZKM5amck060zKzxudmYDdpZ+cF
-         7sFTyBnqskBT8GbYEpR+TPRglwVIl7YThS7+wOU2BaMr79APWYKsHN3P9KG4x8i1/QqX
-         qudcetSody7PYuQhyKZehAViaumz+mkzZgueaiUNLLb5nAMCUDQG3mACdNuZIfOzhYpP
-         2f9dk7nWj9UIChiAGAeP7So0MTiWDgUhuep5AMUJYEfeuK6QOimTBM0b32ceKoMp1If+
-         kXWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=olRr0NxHpe7WEA5OvPe/+zbTbmND6iy3IpcPyCocNn4=;
-        b=jEY9y4Ymrtp9l1cJQqeMts+cBG8IbWsMjJ2hLT872cldHUvfy+hpavd0hEWQixXT+t
-         rWbKhBGOStZn7ceqbbtNZvOkYAJWobdlPMy2sLsabg4ASTlKe2/PeyYwYC3JurTLcjIz
-         2BqWXy2xpF79JyICVfosn5JuDENyEY7Mxbs4civpntQfo+ojfw/wUc8OWbiBCGSBp3fI
-         QWywCJ1MViZkfuKvBTdug5X5Mli4JjHvRk9wDjn+I1b9gSbFjTjZt7BDvmE6VQcTZ9yz
-         UQwo6c8F2ooh3Qw5XOU2YUhQ3Lpqe4+PpXP80YjJ8Mob3LLuGnDVejlckUC0vXsc0f2M
-         X09w==
-X-Gm-Message-State: ANoB5pnccB4HoHrLHO/PxIoBogCdxG5CSw3NixVUvYa1vbBWpmADEY19
-        W2Pv16G8eQPhjuOvJ0aP/umzjTIRe3xfxw==
-X-Google-Smtp-Source: AA0mqf5ZXb831DoeJ91bgKnU9Kw8Xp3nNPKytEPtbgieWFiQ8KaRRWhshV8qQr+zStcrrQyYDk138g==
-X-Received: by 2002:a05:600c:ac1:b0:3c6:d18b:304b with SMTP id c1-20020a05600c0ac100b003c6d18b304bmr9474739wmr.142.1669225149831;
-        Wed, 23 Nov 2022 09:39:09 -0800 (PST)
-Received: from Mindolluin.ire.aristanetworks.com ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id v10-20020adfe28a000000b0023647841c5bsm17464636wri.60.2022.11.23.09.39.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 09:39:09 -0800 (PST)
-From:   Dmitry Safonov <dima@arista.com>
-To:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Dmitry Safonov <dima@arista.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Bob Gilligan <gilligan@arista.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        Steven Rostedt <rostedt@goodmis.org>, netdev@vger.kernel.org
-Subject: [PATCH v6 2/5] net/tcp: Separate tcp_md5sig_info allocation into tcp_md5sig_info_add()
+        Wed, 23 Nov 2022 12:39:03 -0500
+Received: from mail4.swissbit.com (mail4.swissbit.com [176.95.1.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52D55657A;
+        Wed, 23 Nov 2022 09:38:59 -0800 (PST)
+Received: from mail4.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id 78D211234CB;
+        Wed, 23 Nov 2022 18:38:57 +0100 (CET)
+Received: from mail4.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id 623A8121C79;
+        Wed, 23 Nov 2022 18:38:57 +0100 (CET)
+X-TM-AS-ERS: 10.149.2.42-127.5.254.253
+X-TM-AS-SMTP: 1.0 ZXguc3dpc3NiaXQuY29t Y2xvZWhsZUBoeXBlcnN0b25lLmNvbQ==
+X-DDEI-TLS-USAGE: Used
+Received: from ex.swissbit.com (unknown [10.149.2.42])
+        by mail4.swissbit.com (Postfix) with ESMTPS;
+        Wed, 23 Nov 2022 18:38:57 +0100 (CET)
+Received: from sbdeex04.sbitdom.lan (10.149.2.42) by sbdeex04.sbitdom.lan
+ (10.149.2.42) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Wed, 23 Nov
+ 2022 18:38:56 +0100
+Received: from sbdeex04.sbitdom.lan ([fe80::2047:4968:b5a0:1818]) by
+ sbdeex04.sbitdom.lan ([fe80::2047:4968:b5a0:1818%9]) with mapi id
+ 15.02.1118.009; Wed, 23 Nov 2022 18:38:56 +0100
+From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
+To:     "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Avri Altman <Avri.Altman@wdc.com>
+Subject: [PATCH] mmc: block: remove non-data R1B ioctl workaround
+Thread-Topic: [PATCH] mmc: block: remove non-data R1B ioctl workaround
+Thread-Index: Adj/YjUrXkzlUmHATlmcTHF+6XwQXw==
 Date:   Wed, 23 Nov 2022 17:38:56 +0000
-Message-Id: <20221123173859.473629-3-dima@arista.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221123173859.473629-1-dima@arista.com>
-References: <20221123173859.473629-1-dima@arista.com>
+Message-ID: <dd632a86fb924b019d1a009b17eb3cbc@hyperstone.com>
+Accept-Language: en-US, de-DE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.153.4.23]
+Content-Type: text/plain;
+        charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-TMASE-Version: DDEI-5.1-9.0.1002-27282.001
+X-TMASE-Result: 10-4.657200-10.000000
+X-TMASE-MatchedRID: ge9e+QLSeayzwwnlAhUjjJAk4Vz6rKorI64EUz6lBagHMdltgqikB9AY
+        WUo4HSIkhw5E/ZidsH8ep5R/z/M+R+ztpCSqSkXKSHCU59h5KrHVBDonH99+Vtm24hViZXUPKJp
+        KpGmR8G37pkcZlMac521ZdkOX+yj7BXY0oXpqJ14ReM8i8p3vgEyQ5fRSh265855M88ee2L/ovF
+        l9K5XN2X69Y7ea2kurrCdjRFVGO+toMCLywE0ygQtuKBGekqUpI/NGWt0UYPDKS2C7UIL4TmvpM
+        +0rLfKmp6aDqxA3fahFehRbIllwo+0DVTpPbBPr
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-TMASE-INERTIA: 0-0;;;;
+X-TMASE-XGENCLOUD: 4509e344-abd3-486d-bfc7-c1c6ea2d3b2a-0-0-200-0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a helper to allocate tcp_md5sig_info, that will help later to
-do/allocate things when info allocated, once per socket.
+The workaround of pretending R1B non-data transfers are
+data transfers in order for the busy timeout to be respected
+by the host controller driver is removed. It wasn't useful
+in a long time.
 
-Signed-off-by: Dmitry Safonov <dima@arista.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Acked-by: Jakub Kicinski <kuba@kernel.org>
+Initially the workaround ensured that R1B commands did not
+time out by setting the data timeout to be the command timeout
+in commit cb87ea28ed9e ("mmc: core: Add mmc CMD+ACMD passthrough ioctl").
+This was moved inside of an if clause with idata->buf_bytes being set
+in commit 4d6144de8ba2 ("mmc: core: check for zero length ioctl data").
+This patch intends to fix the issuing of R1B data command CMD24.
+Its data timeout was being overwritten with 0 because cmd_timeout
+wasn't set at the point the workaround applied, but data_timeout was.
+But since the workaround was now inside of the idata->buf_bytes clause
+and intended to fix R1B non-data transfers that do not have buf_bytes
+set we can also remove the workaround altogether.
+
+Fixes: cb87ea28ed9e ("mmc: core: Add mmc CMD+ACMD passthrough ioctl")
+Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
 ---
- net/ipv4/tcp_ipv4.c | 30 +++++++++++++++++++++---------
- 1 file changed, 21 insertions(+), 9 deletions(-)
+ drivers/mmc/core/block.c | 13 -------------
+ 1 file changed, 13 deletions(-)
 
-diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-index f0343538d1f8..2d76d50b8ae8 100644
---- a/net/ipv4/tcp_ipv4.c
-+++ b/net/ipv4/tcp_ipv4.c
-@@ -1172,6 +1172,24 @@ struct tcp_md5sig_key *tcp_v4_md5_lookup(const struct sock *sk,
- }
- EXPORT_SYMBOL(tcp_v4_md5_lookup);
+diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+index db6d8a099910..20da7ed43e6d 100644
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@ -514,19 +514,6 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
+ 		if (idata->ic.data_timeout_ns)
+ 			data.timeout_ns = idata->ic.data_timeout_ns;
  
-+static int tcp_md5sig_info_add(struct sock *sk, gfp_t gfp)
-+{
-+	struct tcp_sock *tp = tcp_sk(sk);
-+	struct tcp_md5sig_info *md5sig;
-+
-+	if (rcu_dereference_protected(tp->md5sig_info, lockdep_sock_is_held(sk)))
-+		return 0;
-+
-+	md5sig = kmalloc(sizeof(*md5sig), gfp);
-+	if (!md5sig)
-+		return -ENOMEM;
-+
-+	sk_gso_disable(sk);
-+	INIT_HLIST_HEAD(&md5sig->head);
-+	rcu_assign_pointer(tp->md5sig_info, md5sig);
-+	return 0;
-+}
-+
- /* This can be called on a newly created socket, from other files */
- int tcp_md5_do_add(struct sock *sk, const union tcp_md5_addr *addr,
- 		   int family, u8 prefixlen, int l3index, u8 flags,
-@@ -1202,17 +1220,11 @@ int tcp_md5_do_add(struct sock *sk, const union tcp_md5_addr *addr,
- 		return 0;
+-		if ((cmd.flags & MMC_RSP_R1B) == MMC_RSP_R1B) {
+-			/*
+-			 * Pretend this is a data transfer and rely on the
+-			 * host driver to compute timeout.  When all host
+-			 * drivers support cmd.cmd_timeout for R1B, this
+-			 * can be changed to:
+-			 *
+-			 *     mrq.data = NULL;
+-			 *     cmd.cmd_timeout = idata->ic.cmd_timeout_ms;
+-			 */
+-			data.timeout_ns = idata->ic.cmd_timeout_ms * 1000000;
+-		}
+-
+ 		mrq.data = &data;
  	}
  
-+	if (tcp_md5sig_info_add(sk, gfp))
-+		return -ENOMEM;
-+
- 	md5sig = rcu_dereference_protected(tp->md5sig_info,
- 					   lockdep_sock_is_held(sk));
--	if (!md5sig) {
--		md5sig = kmalloc(sizeof(*md5sig), gfp);
--		if (!md5sig)
--			return -ENOMEM;
--
--		sk_gso_disable(sk);
--		INIT_HLIST_HEAD(&md5sig->head);
--		rcu_assign_pointer(tp->md5sig_info, md5sig);
--	}
- 
- 	key = sock_kmalloc(sk, sizeof(*key), gfp | __GFP_ZERO);
- 	if (!key)
 -- 
-2.38.1
+2.37.3
+
+Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
+Managing Director: Dr. Jan Peter Berns.
+Commercial register of local courts: Freiburg HRB381782
 
