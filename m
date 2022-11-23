@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C08E63676D
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:40:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3143363676E
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:40:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237667AbiKWRkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 12:40:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58846 "EHLO
+        id S239261AbiKWRkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 12:40:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239161AbiKWRjW (ORCPT
+        with ESMTP id S239177AbiKWRjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 12:39:22 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BAAE9E963
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 09:39:14 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id ja4-20020a05600c556400b003cf6e77f89cso3368754wmb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 09:39:14 -0800 (PST)
+        Wed, 23 Nov 2022 12:39:23 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C2CB97C1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 09:39:16 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id c65-20020a1c3544000000b003cfffd00fc0so2043145wma.1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 09:39:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=arista.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SmDkIrBVfUMbGOBltM7PoGg9g03wcI36X1ZwAu/jynQ=;
-        b=LD4MRU/DCHliVq/YHIZWlJjin2QNdAQoGk6lgZc7akHPAmqjUFE+ut9mFMd5QKCTyf
-         PJf2edhebPqnUqt4K8K299b4GrfwP7I5Copin0aWgc4XFCrjzWezRndf8zYDKvqNkCKw
-         HdbrVFAo/kax408LxOrsyGVtsD9aBrZCeMyT3xf5JTdnUFpwUGLHhTCm8fpesn0qb5T/
-         N3xgajw6m/aydB1XrJQaiBdcYpFNlAw1O8ABAZeXPMQAoBFMV4pxPD6PnCV7qJ7xHEn0
-         Uj1z+rJP0hrEReE8EHSMJDn4spd8ohJxIRV08XYc0y6yrZ8jHJsjibrjIdViRC2PraV5
-         jiiA==
+        bh=B6YByZGXcPaxVAwfhLuLTeQPsdnWRNfeeMbhOwZgWvo=;
+        b=JPBm03qP/4/EIPZVSZlhAkYt210/IaMdI4rETETcBPQ1Ry1KY1ZIObqQaEOP5XKoYb
+         RgX98xIjbhsZm7VIgN1F4l6nP7POFydPt/LNkg0DaPPceR4UXQIEw3cvxqU6qeClZyh8
+         DR2RPbUIwhrmKi6S1H6Taf938/zIIGQ03P57vklgYI0K4RNjT5OGR+bK63++sVupcIfp
+         zaqWqpohktUIk5JCmdRqzCBRNd6E7Bc/d3n2FtU1Fj40dTLGaUsmQaEB4LT3vqyg2I3p
+         1WyyrbhxFuaKNJXtJ7iiDY0Qe4fcv/AVtneQx8TRHgjPNKv2LX5FFdPFRugZ6bkQIS+M
+         fqkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SmDkIrBVfUMbGOBltM7PoGg9g03wcI36X1ZwAu/jynQ=;
-        b=b3Yc96HRhxArtl69rVcllgBDu3/f9zzcY9SJmS7mAmwGaw0zbHOBCRi12iAV4qr3YJ
-         L/6lBhJY0ZnjfH8hrM7nSqJiIXhF7tJE7KBpQJfK5BeA4cT65YnbNtHRyXnkc8pXR3uN
-         6nvuppFNEVUQizdjAxnZyLX1Goqs3wOMfOb1orn7f1nHQXAAatgonMDXlpQ9RmMn83P7
-         n1LlTlB07lORq1IS3uqH4TuTt1OXid12ueVgYviP7xI0mc7FTztdEcHrVUg3Mvxwn+cP
-         SBW4Bqlpdq0YZdkXdCSuzvocgkIFMIyos4bJIW0Ph+Gd/lPiV1DiubrazPyx24Tu6kCJ
-         qdUQ==
-X-Gm-Message-State: ANoB5pl31Xyv9LhnVvFazrlOCtTwQrGi+f3xn5OrVLutpPzxYTNEhBa4
-        /1ufxM2zUNSsH2XRQK6+THLcsc6gMwCEhw==
-X-Google-Smtp-Source: AA0mqf7ymQbNbUEzGQzIwWAlN38NB9tz8tam6wmSGZCHApcPTqMq/u7sSBgUVZX6mslnPfL8DK6IeA==
-X-Received: by 2002:a05:600c:2296:b0:3cf:baa6:8ca5 with SMTP id 22-20020a05600c229600b003cfbaa68ca5mr7025631wmf.178.1669225152774;
-        Wed, 23 Nov 2022 09:39:12 -0800 (PST)
+        bh=B6YByZGXcPaxVAwfhLuLTeQPsdnWRNfeeMbhOwZgWvo=;
+        b=gNcyjxBKkWQMkhSqy4JO4DhcvKnNWOIeDzf8iuBH77sWxkyVH/sp+QJ7ndChLPJ8pw
+         yupJVzdE+E9u7PziWXFnN2IiUydMv0rMrKy2qFmNujdwmh+nbxaa3cugZ8mAuUzpYERo
+         44kc2FviMjbzRQeUN+B5SbeuT9q3E4ZOUFjFFb2JCKTzH792oa3Jn1TdpaP1Qt8gYdwg
+         tVfb+PVqYwvIdLRaXno3m1lpqPzQRw8aXvzT5Pd4Z0AHF77g1jybfkexsDCcnIr3xNkq
+         jy9s1hMfpO9ecQkiT8alACTRvVwy3MjsnJV4SPf8vszikJec4yLkayBHMfH5sBauqOOO
+         Yz+A==
+X-Gm-Message-State: ANoB5pnT1xxyzxfO1iptGZAljGIFX5WxOC8Y+HAfwTB/WHdrPGnqTzhq
+        xm2FXFizvPIKIKNpjjgt9L4a4VrBk6wFsw==
+X-Google-Smtp-Source: AA0mqf4iPA2Zbe25WnFk0phcy+nscdWNKfFtwgtbqx9FmzFG85JuMQP0IrrAznNC588KVkAzDvdG1A==
+X-Received: by 2002:a1c:4b12:0:b0:3cf:5237:c0be with SMTP id y18-20020a1c4b12000000b003cf5237c0bemr20405557wma.163.1669225154298;
+        Wed, 23 Nov 2022 09:39:14 -0800 (PST)
 Received: from Mindolluin.ire.aristanetworks.com ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id v10-20020adfe28a000000b0023647841c5bsm17464636wri.60.2022.11.23.09.39.11
+        by smtp.gmail.com with ESMTPSA id v10-20020adfe28a000000b0023647841c5bsm17464636wri.60.2022.11.23.09.39.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 09:39:12 -0800 (PST)
+        Wed, 23 Nov 2022 09:39:13 -0800 (PST)
 From:   Dmitry Safonov <dima@arista.com>
 To:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
         Eric Dumazet <edumazet@google.com>,
@@ -66,9 +66,9 @@ Cc:     Dmitry Safonov <dima@arista.com>, Ard Biesheuvel <ardb@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
         Salam Noureddine <noureddine@arista.com>,
         Steven Rostedt <rostedt@goodmis.org>, netdev@vger.kernel.org
-Subject: [PATCH v6 4/5] net/tcp: Do cleanup on tcp_md5_key_copy() failure
-Date:   Wed, 23 Nov 2022 17:38:58 +0000
-Message-Id: <20221123173859.473629-5-dima@arista.com>
+Subject: [PATCH v6 5/5] net/tcp: Separate initialization of twsk
+Date:   Wed, 23 Nov 2022 17:38:59 +0000
+Message-Id: <20221123173859.473629-6-dima@arista.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221123173859.473629-1-dima@arista.com>
 References: <20221123173859.473629-1-dima@arista.com>
@@ -84,64 +84,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the kernel was short on (atomic) memory and failed to allocate it -
-don't proceed to creation of request socket. Otherwise the socket would
-be unsigned and userspace likely doesn't expect that the TCP is not
-MD5-signed anymore.
+Convert BUG_ON() to WARN_ON_ONCE() and warn as well for unlikely
+static key int overflow error-path.
 
 Signed-off-by: Dmitry Safonov <dima@arista.com>
 Acked-by: Jakub Kicinski <kuba@kernel.org>
 ---
- net/ipv4/tcp_ipv4.c |  9 ++-------
- net/ipv6/tcp_ipv6.c | 15 ++++++++-------
- 2 files changed, 10 insertions(+), 14 deletions(-)
+ net/ipv4/tcp_minisocks.c | 61 +++++++++++++++++++++++-----------------
+ 1 file changed, 35 insertions(+), 26 deletions(-)
 
-diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-index 2ae6a061f36e..e214098087fe 100644
---- a/net/ipv4/tcp_ipv4.c
-+++ b/net/ipv4/tcp_ipv4.c
-@@ -1630,13 +1630,8 @@ struct sock *tcp_v4_syn_recv_sock(const struct sock *sk, struct sk_buff *skb,
- 	addr = (union tcp_md5_addr *)&newinet->inet_daddr;
- 	key = tcp_md5_do_lookup(sk, l3index, addr, AF_INET);
- 	if (key) {
--		/*
--		 * We're using one, so create a matching key
--		 * on the newsk structure. If we fail to get
--		 * memory, then we end up not copying the key
--		 * across. Shucks.
--		 */
--		tcp_md5_key_copy(newsk, addr, AF_INET, 32, l3index, key);
-+		if (tcp_md5_key_copy(newsk, addr, AF_INET, 32, l3index, key))
-+			goto put_and_exit;
- 		sk_gso_disable(newsk);
- 	}
- #endif
-diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
-index 83304d6a6bd0..21486b4a9774 100644
---- a/net/ipv6/tcp_ipv6.c
-+++ b/net/ipv6/tcp_ipv6.c
-@@ -1376,13 +1376,14 @@ static struct sock *tcp_v6_syn_recv_sock(const struct sock *sk, struct sk_buff *
- 	/* Copy over the MD5 key from the original socket */
- 	key = tcp_v6_md5_do_lookup(sk, &newsk->sk_v6_daddr, l3index);
- 	if (key) {
--		/* We're using one, so create a matching key
--		 * on the newsk structure. If we fail to get
--		 * memory, then we end up not copying the key
--		 * across. Shucks.
--		 */
--		tcp_md5_key_copy(newsk, (union tcp_md5_addr *)&newsk->sk_v6_daddr,
--				 AF_INET6, 128, l3index, key);
-+		const union tcp_md5_addr *addr;
+diff --git a/net/ipv4/tcp_minisocks.c b/net/ipv4/tcp_minisocks.c
+index 6908812d50d3..e002f2e1d4f2 100644
+--- a/net/ipv4/tcp_minisocks.c
++++ b/net/ipv4/tcp_minisocks.c
+@@ -240,6 +240,40 @@ tcp_timewait_state_process(struct inet_timewait_sock *tw, struct sk_buff *skb,
+ }
+ EXPORT_SYMBOL(tcp_timewait_state_process);
+ 
++static void tcp_time_wait_init(struct sock *sk, struct tcp_timewait_sock *tcptw)
++{
++#ifdef CONFIG_TCP_MD5SIG
++	const struct tcp_sock *tp = tcp_sk(sk);
++	struct tcp_md5sig_key *key;
 +
-+		addr = (union tcp_md5_addr *)&newsk->sk_v6_daddr;
-+		if (tcp_md5_key_copy(newsk, addr, AF_INET6, 128, l3index, key)) {
-+			inet_csk_prepare_forced_close(newsk);
-+			tcp_done(newsk);
-+			goto out;
-+		}
- 	}
++	/*
++	 * The timewait bucket does not have the key DB from the
++	 * sock structure. We just make a quick copy of the
++	 * md5 key being used (if indeed we are using one)
++	 * so the timewait ack generating code has the key.
++	 */
++	tcptw->tw_md5_key = NULL;
++	if (!static_branch_unlikely(&tcp_md5_needed.key))
++		return;
++
++	key = tp->af_specific->md5_lookup(sk, sk);
++	if (key) {
++		tcptw->tw_md5_key = kmemdup(key, sizeof(*key), GFP_ATOMIC);
++		if (!tcptw->tw_md5_key)
++			return;
++		if (!tcp_alloc_md5sig_pool())
++			goto out_free;
++		if (!static_key_fast_inc_not_disabled(&tcp_md5_needed.key.key))
++			goto out_free;
++	}
++	return;
++out_free:
++	WARN_ON_ONCE(1);
++	kfree(tcptw->tw_md5_key);
++	tcptw->tw_md5_key = NULL;
++#endif
++}
++
+ /*
+  * Move a socket to time-wait or dead fin-wait-2 state.
+  */
+@@ -282,32 +316,7 @@ void tcp_time_wait(struct sock *sk, int state, int timeo)
+ 		}
  #endif
  
+-#ifdef CONFIG_TCP_MD5SIG
+-		/*
+-		 * The timewait bucket does not have the key DB from the
+-		 * sock structure. We just make a quick copy of the
+-		 * md5 key being used (if indeed we are using one)
+-		 * so the timewait ack generating code has the key.
+-		 */
+-		do {
+-			tcptw->tw_md5_key = NULL;
+-			if (static_branch_unlikely(&tcp_md5_needed.key)) {
+-				struct tcp_md5sig_key *key;
+-
+-				key = tp->af_specific->md5_lookup(sk, sk);
+-				if (key) {
+-					tcptw->tw_md5_key = kmemdup(key, sizeof(*key), GFP_ATOMIC);
+-					if (!tcptw->tw_md5_key)
+-						break;
+-					BUG_ON(!tcp_alloc_md5sig_pool());
+-					if (!static_key_fast_inc_not_disabled(&tcp_md5_needed.key.key)) {
+-						kfree(tcptw->tw_md5_key);
+-						tcptw->tw_md5_key = NULL;
+-					}
+-				}
+-			}
+-		} while (0);
+-#endif
++		tcp_time_wait_init(sk, tcptw);
+ 
+ 		/* Get the TIME_WAIT timeout firing. */
+ 		if (timeo < rto)
 -- 
 2.38.1
 
