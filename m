@@ -2,230 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 711626368B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:27:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5A9E6368AB
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:26:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239228AbiKWS0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 13:26:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54990 "EHLO
+        id S239277AbiKWS0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 13:26:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239631AbiKWS0W (ORCPT
+        with ESMTP id S238510AbiKWS0G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 13:26:22 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFACC716FD
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 10:26:18 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-349423f04dbso174593727b3.13
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 10:26:18 -0800 (PST)
+        Wed, 23 Nov 2022 13:26:06 -0500
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7270365875
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 10:26:01 -0800 (PST)
+Received: by mail-qt1-x82f.google.com with SMTP id l15so11783208qtv.4
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 10:26:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Afz8PsANDnUvtBvSoF0QFvNdyMeaZ1ofX1YaO/pgZVM=;
-        b=sBiuo8a2cIxrSgYaooXOob5HMsTHvVXAiUBTZJ9mlC+f6Y0+nHeU645NZr8dij4w19
-         EnpZ3hLjNRGdS4OPRryWUEWC/tvr+pe3UYsOoO88O/FL5ZwGcrGlzuzCnpyxxq3Z/Ji/
-         mNenC1rJc23zXngdfoCpK1n7nMvrP3l+XcFA2MP0QbP+EuZE/7nXeSuonVHuS/I6cmwX
-         BlBQMrpxofgI9snuABMtw32wVWrEL4StVttByA8MnLsKK/ZRC2+BZuThtI4XMs6voMll
-         vbpxGbAdsaJqEkiJRvzD2UB3rlhd72xmL28QzmeD9jEGADIqMf4+JJz5miw7HxFldVnn
-         NjDQ==
+        d=ziepe.ca; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wor3YG1VA6P7o8c/O7L7eJMI/pZ9HPWWwXQft3hmCP0=;
+        b=cedo7ZWSmsuH0XJ4ubpV07F12j6QbWjVQ5/8pLuMpcToghtBSuk56S6MXMX6Qm7WjS
+         1NChO+moKmrDNMneamIggSvWWzwr/T//kN/Kwcj6tkr42ZlPhD/UrODWK93fqzNGGGwJ
+         iaes3XW9eYna/Bw5lL+n4z8tFP5LtgS2cmv98rZ7AlPx3XDSdaiaMvzcA8+djvnqI1Jm
+         kByuaQkEy2IUN0jEoJWE9aJxjegXkz/nFnBqeS7bAW8o6PzzHwTSega1vNzAX6eGe++Z
+         VrL1e2yxkd6Af/0OPW4nuezYyEJvxr1zGiOqJwebNXGUK6ij0o7CaXNXzEmp7wpIRmex
+         6uNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Afz8PsANDnUvtBvSoF0QFvNdyMeaZ1ofX1YaO/pgZVM=;
-        b=nnAnrES83/3obSe7HdOTXYn+YGX6GdFNHZ8HJ5tYcIMRSc5IIusK8qEnWwiSHAhCfj
-         3OQO6/4bQ36sGcnSHvJpmPxn/HSQvOLIfXfLPa/Fi1g0lJeH0ZAf0cxm8x7oIIymvB+q
-         X92sx9CgCA52iqK/fxLOiGoPWUlOxm18YL9qfn+XppI1ai0rVO4bkcX36u4h6/HgD4sJ
-         A5JSprN4Bogq5Z0zD9uukSFx3Z3ld6K3Bdcc6Umd/HyNk+svNKGBl/8i29BG18Hk7B0C
-         CU7EHpfYjxBFgG/gDEDUjvC/Azl6v35Ou2RAGMZSPlnZ8GuzKWYzEjUKOnYjrN6wtq/8
-         IkgA==
-X-Gm-Message-State: ANoB5pm692Z5P9OfosbRwIuIP+OUa3+yFGn2il6ZeU/PvP21bk0NO5IG
-        BEmXEiMgudPgCm29lzSFLbGYAqJHPw==
-X-Google-Smtp-Source: AA0mqf6ZoB0Uy7y/SdWtM2cSZrRxbN7wf6VAUau2kP+ATiEfRQLlegtgUz26MstbcT9O8JzRRQDHBjJQiQ==
-X-Received: from rmoar.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:4259])
- (user=rmoar job=sendgmr) by 2002:a0d:e943:0:b0:38c:6e92:e2f9 with SMTP id
- s64-20020a0de943000000b0038c6e92e2f9mr4ywe.379.1669227977595; Wed, 23 Nov
- 2022 10:26:17 -0800 (PST)
-Date:   Wed, 23 Nov 2022 18:25:58 +0000
-In-Reply-To: <20221123182558.2203639-1-rmoar@google.com>
-Mime-Version: 1.0
-References: <20221123182558.2203639-1-rmoar@google.com>
-X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221123182558.2203639-2-rmoar@google.com>
-Subject: [PATCH v3 2/2] kunit: improve KTAP compliance of KUnit test output
-From:   Rae Moar <rmoar@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com, dlatypov@google.com
-Cc:     skhan@linuxfoundation.org, mauro.chehab@linux.intel.com,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, isabbasso@riseup.net,
-        anders.roxell@linaro.org, Rae Moar <rmoar@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wor3YG1VA6P7o8c/O7L7eJMI/pZ9HPWWwXQft3hmCP0=;
+        b=r+itJBDuVJjAgtUDwBjXIq/QWYBiIxChqmesY+sX+VTFmAMzxXCYviBlfUmNIpr0R8
+         RqPxZ6mBmtHI500GxElQ4tDxrALRI3ww/L6bXjyvCVfKD3+FPzT4OG9ijw8NE/7ssAqr
+         utVVxM5fR9jRUj9Z1a4kDA6jB8wLKKGZbDa0dlekt1Nz7kl1wXOTHjizzl/+a3d1cl7W
+         fBa9Zyh1jNMYEtdxiOIS6uoA5MZLqcM+7572BmoY5IUP9Cev6EnvrJ5HzjvzNQZCX4VZ
+         OKnSuQKcXtJWW8RJTqu5bveMr9RwOOMPMKoAIO+VdHXEgkBpkrKseCwCDXBsAI4oyq/T
+         iLaw==
+X-Gm-Message-State: ANoB5pkt4v9RU0bWyiuVKXYftI883C4LQbc4V8nDDvFEBDoAWgLZ/47/
+        NEIWPsace6OsxmqyUSjdToxGdA==
+X-Google-Smtp-Source: AA0mqf7b8dECsNl10eMwxdSE/ntYRY0ZHq3jcx6smQ+WjEjXUXHAE2sWPKfXnqS1wuH6GWMgna/H+Q==
+X-Received: by 2002:a05:622a:1f97:b0:3a6:39c4:dc6 with SMTP id cb23-20020a05622a1f9700b003a639c40dc6mr19492448qtb.515.1669227960618;
+        Wed, 23 Nov 2022 10:26:00 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
+        by smtp.gmail.com with ESMTPSA id e9-20020ac81309000000b003a56796a764sm10034417qtj.25.2022.11.23.10.25.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 10:25:59 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1oxuRb-00AgEQ-7R;
+        Wed, 23 Nov 2022 14:25:59 -0400
+Date:   Wed, 23 Nov 2022 14:25:59 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Wolfram Sang <wsa@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sean Young <sean@mess.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Ming Lei <ming.lei@redhat.com>,
+        Jilin Yuan <yuanjilin@cdjrlc.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Won Chung <wonchung@google.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-i3c@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH 3/5] driver core: make struct device_type.uevent() take a
+ const *
+Message-ID: <Y35lt+0jXrOKynL5@ziepe.ca>
+References: <711d5275-7e80-c00d-0cdc-0f3d52175361@gmail.com>
+ <Y34hgIW8p1RlQTBB@smile.fi.intel.com>
+ <97be39ed-3cea-d55a-caa6-c2652baef399@gmail.com>
+ <Y34zyzdbRUdyOSkA@casper.infradead.org>
+ <Y34+V2bCDdqujBDk@kroah.com>
+ <Y35JfNJDppRp5bLX@ziepe.ca>
+ <Y35R+/eQJYI7VaDS@kroah.com>
+ <Y35YlI93UBuTfgYy@ziepe.ca>
+ <Y35dMIaNYSE0Cykd@casper.infradead.org>
+ <Y35iKfYf3ThdVvaR@kroah.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y35iKfYf3ThdVvaR@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change KUnit test output to better comply with KTAP v1 specifications
-found here: https://kernel.org/doc/html/latest/dev-tools/ktap.html.
-1) Use "KTAP version 1" instead of "TAP version 14" as test output header
-2) Remove '-' between test number and test name on test result lines
-2) Add KTAP version lines to each subtest header as well
+On Wed, Nov 23, 2022 at 07:10:49PM +0100, Greg Kroah-Hartman wrote:
+> On Wed, Nov 23, 2022 at 05:49:36PM +0000, Matthew Wilcox wrote:
+> > On Wed, Nov 23, 2022 at 01:29:56PM -0400, Jason Gunthorpe wrote:
+> > > #define generic_container_of(in_type, in, out_type, out_member) \
+> > > 	_Generic(in,                                        \
+> > >                   const in_type *: ((const out_type *)container_of(in, out_type, out_member)),   \
+> > >                   in_type *: ((out_type *)container_of(in, out_type, out_member)) \
+> > > 		  )
+> > 
+> > There's a neat trick I found in seqlock.h:
+> > 
+> > #define generic_container_of(in_t, in, out_t, m)			\
+> > 	_Generic(*(in),							\
+> > 		const in_t: ((const out_t *)container_of(in, out_t, m)), \
+> > 		in_t: ((out_t *)container_of(in, out_type, m))	\
+> > 	)
+> > 
+> > and now it fits in 80 columns ;-)
+> 
+> Nice trick!  Dropping the inline functions is a bit different, let me
+> see if that still gives a sane error if we pass an incorrect type or
+> mess with the const * the wrong way.  I'll run some tests tomorrow
+> afternoon...
 
-Note that the new KUnit output still includes the =E2=80=9C# Subtest=E2=80=
-=9D line now
-located after the KTAP version line. This does not completely match the
-KTAP v1 spec but since it is classified as a diagnostic line, it is not
-expected to be disruptive or break any existing parsers. This
-=E2=80=9C# Subtest=E2=80=9D line comes from the TAP 14 spec
-(https://testanything.org/tap-version-14-specification.html) and it is
-used to define the test name before the results.
+The errors in some cases are very verbose, but it is somewhat
+understandable - the worst is when _Generic fails to match anything,
+but also at least clang partially expanded container_of and it throws
+other assertions too.
 
-Original output:
+I also wonder if this could just be rolled into the normal
+container_of.
 
- TAP version 14
- 1..1
-   # Subtest: kunit-test-suite
-   1..3
-   ok 1 - kunit_test_1
-   ok 2 - kunit_test_2
-   ok 3 - kunit_test_3
- # kunit-test-suite: pass:3 fail:0 skip:0 total:3
- # Totals: pass:3 fail:0 skip:0 total:3
- ok 1 - kunit-test-suite
+in_type would have to be derived like:
 
-New output:
+  in_type = typeof((out_type *)NULL)->out_member)
 
- KTAP version 1
- 1..1
-   KTAP version 1
-   # Subtest: kunit-test-suite
-   1..3
-   ok 1 kunit_test_1
-   ok 2 kunit_test_2
-   ok 3 kunit_test_3
- # kunit-test-suite: pass:3 fail:0 skip:0 total:3
- # Totals: pass:3 fail:0 skip:0 total:3
- ok 1 kunit-test-suite
+But I don't know if you can use typeof in a generic type matching expression..
 
-Signed-off-by: Rae Moar <rmoar@google.com>
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: David Gow <davidgow@google.com>
----
-
-Changes since v2:
-https://lore.kernel.org/all/20221121184743.1123556-2-rmoar@google.com/
-- Made fixes discussed on the v2 patch to now correctly output test
-  results after second level testing
-
-Changes since v1:
-https://lore.kernel.org/all/20221104194705.3245738-1-rmoar@google.com/
-- Switch order of patches to make changes to the parser before making
-  changes to the test output
-- Change location of the new KTAP version line in subtest header to be
-  before the subtest header line
-
- lib/kunit/debugfs.c  | 2 +-
- lib/kunit/executor.c | 6 +++---
- lib/kunit/test.c     | 9 ++++++---
- 3 files changed, 10 insertions(+), 7 deletions(-)
-
-diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
-index 1048ef1b8d6e..de0ee2e03ed6 100644
---- a/lib/kunit/debugfs.c
-+++ b/lib/kunit/debugfs.c
-@@ -63,7 +63,7 @@ static int debugfs_print_results(struct seq_file *seq, vo=
-id *v)
- 	kunit_suite_for_each_test_case(suite, test_case)
- 		debugfs_print_result(seq, suite, test_case);
-=20
--	seq_printf(seq, "%s %d - %s\n",
-+	seq_printf(seq, "%s %d %s\n",
- 		   kunit_status_to_ok_not_ok(success), 1, suite->name);
- 	return 0;
- }
-diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-index 9bbc422c284b..74982b83707c 100644
---- a/lib/kunit/executor.c
-+++ b/lib/kunit/executor.c
-@@ -166,7 +166,7 @@ static void kunit_exec_run_tests(struct suite_set *suit=
-e_set)
- {
- 	size_t num_suites =3D suite_set->end - suite_set->start;
-=20
--	pr_info("TAP version 14\n");
-+	pr_info("KTAP version 1\n");
- 	pr_info("1..%zu\n", num_suites);
-=20
- 	__kunit_test_suites_init(suite_set->start, num_suites);
-@@ -177,8 +177,8 @@ static void kunit_exec_list_tests(struct suite_set *sui=
-te_set)
- 	struct kunit_suite * const *suites;
- 	struct kunit_case *test_case;
-=20
--	/* Hack: print a tap header so kunit.py can find the start of KUnit outpu=
-t. */
--	pr_info("TAP version 14\n");
-+	/* Hack: print a ktap header so kunit.py can find the start of KUnit outp=
-ut. */
-+	pr_info("KTAP version 1\n");
-=20
- 	for (suites =3D suite_set->start; suites < suite_set->end; suites++)
- 		kunit_suite_for_each_test_case((*suites), test_case) {
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 90640a43cf62..1c9d8d962d67 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -149,6 +149,7 @@ EXPORT_SYMBOL_GPL(kunit_suite_num_test_cases);
-=20
- static void kunit_print_suite_start(struct kunit_suite *suite)
- {
-+	kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "KTAP version 1\n");
- 	kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "# Subtest: %s",
- 		  suite->name);
- 	kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "1..%zd",
-@@ -175,13 +176,13 @@ static void kunit_print_ok_not_ok(void *test_or_suite=
-,
- 	 * representation.
- 	 */
- 	if (suite)
--		pr_info("%s %zd - %s%s%s\n",
-+		pr_info("%s %zd %s%s%s\n",
- 			kunit_status_to_ok_not_ok(status),
- 			test_number, description, directive_header,
- 			(status =3D=3D KUNIT_SKIPPED) ? directive : "");
- 	else
- 		kunit_log(KERN_INFO, test,
--			  KUNIT_SUBTEST_INDENT "%s %zd - %s%s%s",
-+			  KUNIT_SUBTEST_INDENT "%s %zd %s%s%s",
- 			  kunit_status_to_ok_not_ok(status),
- 			  test_number, description, directive_header,
- 			  (status =3D=3D KUNIT_SKIPPED) ? directive : "");
-@@ -542,6 +543,8 @@ int kunit_run_tests(struct kunit_suite *suite)
- 			/* Get initial param. */
- 			param_desc[0] =3D '\0';
- 			test.param_value =3D test_case->generate_params(NULL, param_desc);
-+			kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
-+				  "KTAP version 1\n");
- 			kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
- 				  "# Subtest: %s", test_case->name);
-=20
-@@ -555,7 +558,7 @@ int kunit_run_tests(struct kunit_suite *suite)
-=20
- 				kunit_log(KERN_INFO, &test,
- 					  KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
--					  "%s %d - %s",
-+					  "%s %d %s",
- 					  kunit_status_to_ok_not_ok(test.status),
- 					  test.param_index + 1, param_desc);
-=20
---=20
-2.38.1.584.g0f3c55d4c2-goog
-
+Jason
