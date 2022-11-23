@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 186BF636E35
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 00:14:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B662B636E34
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 00:14:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiKWXOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 18:14:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43570 "EHLO
+        id S229813AbiKWXOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 18:14:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiKWXON (ORCPT
+        with ESMTP id S229607AbiKWXOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 18:14:13 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48BB49B3B0
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 15:14:12 -0800 (PST)
+        Wed, 23 Nov 2022 18:14:14 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2F0B8572
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 15:14:13 -0800 (PST)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669245250;
+        s=2020; t=1669245251;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/iaK6Q3VBEVIk95GUMPiu3drrm6jETQodWaJtL9sezc=;
-        b=RPvCHbzeTnVF+1dfTWNpp1u2Ja4oUusnLtx0+NH6sMCxYoOR02JlqMlu3LV9oTETqz4j9n
-        t9Wc/t26f4+a2isGNtBY6ZtXYv9rwvZifPRr+uPZTZ/t7tdUF6eIBaLN6S51VLoT14la88
-        0LplEnL7XKetw/yLNGMg2E5S/M+D2wzXpJucFLxf2w5ma2O2O2DcP1j+NpSWc7I4+q8TXJ
-        NXs2eeNoeJnOYk23Gj56igQeMgwz4zJlv9LW5qk33hmFyG18sYzE0NYjS+/w1X13Z3SWZ4
-        76uWOnvJA2OcNSdqvW1ig1eiOkLmFlIHsEm2ym5SwmtL1R9J+L5cMliwc7i19A==
+        bh=F3opJ7HlbeLq3ffu10RUcIJy4CWkVQ7ilUuqExGzyjQ=;
+        b=dqKa6Wr1Wdtr4Pf6qxKwBGE8yTiS7HowAJnEYkCsZBht7qIyYlU5t6DYmzm13I2y+RtbTV
+        GQmYX/78A+otM0IMGWAFs+Y5Yzio/l6x2vEFdNBI5LS6YHUYLcaYyphjdnirY4nnEkW9uI
+        XtGAsuz649cQinBcrr2jDcHqvLZSF+nLyDRCRE3J57uru/WsBNw8CLF2dRVCuxh30J9ojw
+        g9LEF8wT0kdeROQt6PLP47saUTwI24kWk8sx2xRXnHWkD9K5TQpbDMEzysrC8DcD6Zv491
+        EZ/gDsWJRgHC6y0TL9wTL9WZa8XdioUUiR6bAklSK4lHnKwJ1xb6QN5FiF3gww==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669245250;
+        s=2020e; t=1669245251;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/iaK6Q3VBEVIk95GUMPiu3drrm6jETQodWaJtL9sezc=;
-        b=69B7EmoOEwgiqYg29s+3eHdc8AjiAjVWVTXwWTObH4kfEJ8gT1qdFR7VycoxkUJPky/uGu
-        ADMt+2TjjCRTz7DQ==
+        bh=F3opJ7HlbeLq3ffu10RUcIJy4CWkVQ7ilUuqExGzyjQ=;
+        b=W1ydZ2KGZJWegCfX3wzYey2lDEjnY0PfPIF0wpO9cLHp6C/dqNGjtEdLsYkchSQ65Qk7t2
+        lwhG+M7/4iWYbFDg==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH printk v2 1/7] printk: Move buffer size defines
-Date:   Thu, 24 Nov 2022 00:19:54 +0106
-Message-Id: <20221123231400.614679-2-john.ogness@linutronix.de>
+Subject: [PATCH printk v2 2/7] console: Use BIT() macros for @flags values
+Date:   Thu, 24 Nov 2022 00:19:55 +0106
+Message-Id: <20221123231400.614679-3-john.ogness@linutronix.de>
 In-Reply-To: <20221123231400.614679-1-john.ogness@linutronix.de>
 References: <20221123231400.614679-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -62,79 +62,82 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Thomas Gleixner <tglx@linutronix.de>
 
-Move the buffer size defines to console.h in preparation of adding a
-buffer structure. The new buffer structure will be embedded within
-struct console. Therefore console.h was chosen as the new home for
-these defines.
+Rather than manually calculating powers of 2, use the BIT() macros.
+Also take this opportunatity to cleanup and restructure the value
+comments into proper kerneldoc comments.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
 ---
- include/linux/console.h | 14 ++++++++++++++
- include/linux/printk.h  |  2 --
- kernel/printk/printk.c  |  4 ----
- 3 files changed, 14 insertions(+), 6 deletions(-)
+ include/linux/console.h | 46 ++++++++++++++++++++++++++++++++---------
+ 1 file changed, 36 insertions(+), 10 deletions(-)
 
 diff --git a/include/linux/console.h b/include/linux/console.h
-index 9cea254b34b8..799fc3216aad 100644
+index 799fc3216aad..f7a14ea6bae0 100644
 --- a/include/linux/console.h
 +++ b/include/linux/console.h
-@@ -122,6 +122,20 @@ static inline int con_debug_leave(void)
- #define CM_ERASE    (2)
- #define CM_MOVE     (3)
+@@ -15,6 +15,7 @@
+ #define _LINUX_CONSOLE_H_ 1
  
-+#ifdef CONFIG_PRINTK
-+
-+/* The maximum size of a formatted record (i.e. with prefix added per line) */
-+#define CONSOLE_LOG_MAX		1024
-+
-+#else
-+
-+#define CONSOLE_LOG_MAX		0
-+
-+#endif
-+
-+/* The maximum size of a formatted extended record */
-+#define CONSOLE_EXT_LOG_MAX	8192
-+
+ #include <linux/atomic.h>
++#include <linux/bits.h>
+ #include <linux/rculist.h>
+ #include <linux/types.h>
+ 
+@@ -139,18 +140,43 @@ static inline int con_debug_leave(void)
  /*
   * The interface for a console, or any other device that wants to capture
   * console messages (printer driver?)
-diff --git a/include/linux/printk.h b/include/linux/printk.h
-index 8c81806c2e99..8ef499ab3c1e 100644
---- a/include/linux/printk.h
-+++ b/include/linux/printk.h
-@@ -44,8 +44,6 @@ static inline const char *printk_skip_headers(const char *buffer)
- 	return buffer;
- }
+- *
+- * If a console driver is marked CON_BOOT then it will be auto-unregistered
+- * when the first real console is registered.  This is for early-printk drivers.
+  */
  
--#define CONSOLE_EXT_LOG_MAX	8192
--
- /* printk's without a loglevel use this.. */
- #define MESSAGE_LOGLEVEL_DEFAULT CONFIG_MESSAGE_LOGLEVEL_DEFAULT
+-#define CON_PRINTBUFFER	(1)
+-#define CON_CONSDEV	(2) /* Preferred console, /dev/console */
+-#define CON_ENABLED	(4)
+-#define CON_BOOT	(8)
+-#define CON_ANYTIME	(16) /* Safe to call when cpu is offline */
+-#define CON_BRL		(32) /* Used for a braille device */
+-#define CON_EXTENDED	(64) /* Use the extended output format a la /dev/kmsg */
++/**
++ * cons_flags - General console flags
++ * @CON_PRINTBUFFER:	Used by newly registered consoles to avoid duplicate
++ *			output of messages that were already shown by boot
++ *			consoles or read by userspace via syslog() syscall.
++ * @CON_CONSDEV:	Indicates that the console driver is backing
++ *			/dev/console.
++ * @CON_ENABLED:	Indicates if a console is allowed to print records. If
++ *			false, the console also will not advance to later
++ *			records.
++ * @CON_BOOT:		Marks the console driver as early console driver which
++ *			is used during boot before the real driver becomes
++ *			available. It will be automatically unregistered
++ *			when the real console driver is registered unless
++ *			"keep_bootcon" parameter is used.
++ * @CON_ANYTIME:	A misnomed historical flag which tells the core code
++ *			that the legacy @console::write callback can be invoked
++ *			on a CPU which is marked OFFLINE. That is misleading as
++ *			it suggests that there is no contextual limit for
++ *			invoking the callback. The original motivation was
++ *			readiness of the per-CPU areas.
++ * @CON_BRL:		Indicates a braille device which is exempt from
++ *			receiving the printk spam for obvious reasons.
++ * @CON_EXTENDED:	The console supports the extended output format of
++ *			/dev/kmesg which requires a larger output buffer.
++ */
++enum cons_flags {
++	CON_PRINTBUFFER		= BIT(0),
++	CON_CONSDEV		= BIT(1),
++	CON_ENABLED		= BIT(2),
++	CON_BOOT		= BIT(3),
++	CON_ANYTIME		= BIT(4),
++	CON_BRL			= BIT(5),
++	CON_EXTENDED		= BIT(6),
++};
  
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index 9ec101766471..a4854a60e6d8 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -471,9 +471,6 @@ static struct latched_seq clear_seq = {
- #define PREFIX_MAX		32
- #endif
- 
--/* the maximum size of a formatted record (i.e. with prefix added per line) */
--#define CONSOLE_LOG_MAX		1024
--
- /* the maximum size for a dropped text message */
- #define DROPPED_TEXT_MAX	64
- 
-@@ -2387,7 +2384,6 @@ static bool __pr_flush(struct console *con, int timeout_ms, bool reset_on_progre
- 
- #else /* CONFIG_PRINTK */
- 
--#define CONSOLE_LOG_MAX		0
- #define DROPPED_TEXT_MAX	0
- #define printk_time		false
- 
+ struct console {
+ 	char	name[16];
 -- 
 2.30.2
 
