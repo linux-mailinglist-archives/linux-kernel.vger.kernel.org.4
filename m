@@ -2,162 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00476636354
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:23:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C84663634B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:22:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238178AbiKWPW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 10:22:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59980 "EHLO
+        id S236822AbiKWPWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 10:22:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238028AbiKWPWd (ORCPT
+        with ESMTP id S236185AbiKWPVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 10:22:33 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7BD1134
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:22:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669216950; x=1700752950;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=0NIejNQpV8quIAUKsiRNP8gc7z0BU9lL3ortd8Zz/VQ=;
-  b=CEFI7BCMlSlVnj2YlznAvRxu+O24jP+fg0mq0LIE7Od/HU6ujPbp/N5Y
-   9qM29uV3jN19Vksrutzs+dyoSaFQmVw4HtQhtXJ4c+FJm6h00X1NBMusY
-   mN9s16qhcLVstJjQNb+ilCnhI8nio2Zw8Rpiyt+bLoHCnap7tH2LYQ0lW
-   Xkmqr56/DUk9yCi3J74hrjWEXAq7BY4wup6hdCycuQ/8pa7wWV7HRgYWE
-   NS8G6YlWhOtX5DZhs9BBUO4eDciqYVW5bSSa+sr3SrhGF7G5qZ/KNnTGA
-   sxF/SgrxDS98TbNA2CtZ2hMhhew2HBDXYyvC67dXpL+fjBeoa9jHk08dU
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="294478018"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="294478018"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 07:22:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="886987956"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="886987956"
-Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 23 Nov 2022 07:22:24 -0800
-Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oxrZw-0002qh-0v;
-        Wed, 23 Nov 2022 15:22:24 +0000
-Date:   Wed, 23 Nov 2022 23:21:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/urgent] BUILD SUCCESS
- 4dbd6a3e90e03130973688fd79e19425f720d999
-Message-ID: <637e3a89.Zt8Syc8jB/xFgTPO%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 23 Nov 2022 10:21:50 -0500
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C78063BAD;
+        Wed, 23 Nov 2022 07:21:49 -0800 (PST)
+Received: by mail-ot1-x332.google.com with SMTP id t19-20020a9d7753000000b0066d77a3d474so11387720otl.10;
+        Wed, 23 Nov 2022 07:21:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=4aoLHgFE05riq4cmWmfmiT+Ki6XAw13WHmlMKR+7aRQ=;
+        b=FIYqM2Z4zwJkd03cpZExtLXs5D1EcfVfgDi3wMib43kPB9h2immK0hfK6fkkeHo4Vk
+         TQKdVEI1YB2me/wkf6fCRFIWhRWI3rLYQaoLoRgUB16YDck5XXxim6rYlrAFr9oz7fNL
+         3lDvd8XxA9Xv3uSCXIG8QuprUR794x5W8tS9mgQtBmc5AgUxHKhBSiQOVWekB7Unut1h
+         2lY8Mu3WyCGJrY5cKTbd6XYkk+DPzMm3ANgc/h/F8b6CXAchJF4XYtCqpsBWewSuSMDi
+         m8xQtks+78XXRnWu1aDcUIl8TBFPJUpSaEHE75WhpWiNGxMgAFAJiz98+HI7A8kZwB6Z
+         pnOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4aoLHgFE05riq4cmWmfmiT+Ki6XAw13WHmlMKR+7aRQ=;
+        b=UI7VD19P9v+82zQAonkAzhGOS9cn+3c0cfCvYQNiA/qO8wN8S3cmoYYAdRUdaLK5XT
+         Ja3Db8jlGk6hvLdqhe2uXNFdyOyqYqNq5uhZ+CAQQI2uZYwiKTpjg/oVK5LyXjUAwLCG
+         7PoGbQYVWNxpDtgIsd400A4S+ma7wVO727k3v8ZNScvgIAzpA8zZf2e62GFPAWPKOwTE
+         PwVwZJJNIXS8zXhQmqORqzDp4I+DH5jHnbT82f0Hd2gNv3lXPcmiQNbpSMR9OFhStd9n
+         WS9dhk2jPr7X5kSXoHQ7QDqcsM0yf8DKSwZBpfkg8jodR35p4+Yed7iHjrUbGYyoB2Zc
+         NcZw==
+X-Gm-Message-State: ANoB5pl/7m4Qk6kFvvYc19Llt8WXM6tLS5mzPz/gXgTFCoUKuWbGOXJB
+        JLx15oxbNr9isOEC2oxtJCU=
+X-Google-Smtp-Source: AA0mqf6j3JfOqMGcXTRxGtsdc4OmDhJ+STJS3nrH05Ko1b+ciKHvjsbwSDRblJz5KBqDhemfYIO3AA==
+X-Received: by 2002:a9d:4c84:0:b0:66b:34bd:772b with SMTP id m4-20020a9d4c84000000b0066b34bd772bmr15089714otf.276.1669216908871;
+        Wed, 23 Nov 2022 07:21:48 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id el33-20020a056870f6a100b0013bc95650c8sm9263267oab.54.2022.11.23.07.21.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Nov 2022 07:21:48 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <979b192d-7011-680e-0e0d-d70519bec2b1@roeck-us.net>
+Date:   Wed, 23 Nov 2022 07:21:45 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [v4 3/5] dt-bindings: hwmon: Add bindings for aspeed tach
+ controller
+Content-Language: en-US
+To:     Billy Tsai <billy_tsai@aspeedtech.com>, jdelvare@suse.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        joel@jms.id.au, andrew@aj.id.au, lee@kernel.org,
+        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        corbet@lwn.net, p.zabel@pengutronix.de,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20221123061635.32025-1-billy_tsai@aspeedtech.com>
+ <20221123061635.32025-4-billy_tsai@aspeedtech.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20221123061635.32025-4-billy_tsai@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
-branch HEAD: 4dbd6a3e90e03130973688fd79e19425f720d999  x86/ioremap: Fix page aligned size calculation in __ioremap_caller()
+On 11/22/22 22:16, Billy Tsai wrote:
+> Add the aspeed tach device bindings which should be the child-node of
+> pwm-tach mfd.
+> 
+> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
+> ---
+>   .../bindings/hwmon/aspeed,ast2600-tach.yaml   | 36 +++++++++++++++++++
+>   1 file changed, 36 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed,ast2600-tach.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/aspeed,ast2600-tach.yaml b/Documentation/devicetree/bindings/hwmon/aspeed,ast2600-tach.yaml
+> new file mode 100644
+> index 000000000000..f42114f8e3c2
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/aspeed,ast2600-tach.yaml
+> @@ -0,0 +1,36 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (C) 2021 Aspeed, Inc.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/aspeed,ast2600-tach.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Aspeed Ast2600 Tach controller
+> +
+> +maintainers:
+> +  - Billy Tsai <billy_tsai@aspeedtech.com>
+> +
+> +description: |
+> +  The Aspeed Tach controller can support upto 16 fan input.
+> +  This module is part of the ast2600-pwm-tach multi-function device. For more
+> +  details see ../mfd/aspeed,ast2600-pwm-tach.yaml.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - aspeed,ast2600-tach
+> +patternProperties:
+> +  "^fan@[a-z0-9]+$":
+> +    type: object
+> +    properties:
+> +      reg:
+> +        description:
+> +          The tach channel used for this node.
+> +        maxItems: 1
+> +    required:
+> +      - reg
+> +
+> +required:
+> +  - compatible
+> +
+> +additionalProperties: false
 
-elapsed time: 1661m
+I am not a devicetree expert, but I have to say I find it confusing that
+there is no clear explanation that this is for a single fan channel
+which is really a child of aspeed,ast2600-tach. An example might be
+helpful.
 
-configs tested: 80
-configs skipped: 2
+Guenter
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-arc                                 defconfig
-s390                             allmodconfig
-alpha                               defconfig
-s390                                defconfig
-s390                             allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-sh                               allmodconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-i386                 randconfig-a011-20221121
-i386                 randconfig-a013-20221121
-i386                 randconfig-a012-20221121
-i386                 randconfig-a014-20221121
-i386                 randconfig-a015-20221121
-i386                 randconfig-a016-20221121
-ia64                             allmodconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-x86_64               randconfig-a012-20221121
-x86_64               randconfig-a011-20221121
-m68k                             allmodconfig
-x86_64               randconfig-a013-20221121
-arc                              allyesconfig
-alpha                            allyesconfig
-x86_64               randconfig-a016-20221121
-x86_64               randconfig-a015-20221121
-m68k                             allyesconfig
-x86_64               randconfig-a014-20221121
-i386                                defconfig
-arc                  randconfig-r043-20221122
-i386                             allyesconfig
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-arc                  randconfig-r043-20221120
-riscv                randconfig-r042-20221121
-arc                  randconfig-r043-20221121
-s390                 randconfig-r044-20221121
-arm                                 defconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-
-clang tested configs:
-x86_64               randconfig-a001-20221121
-x86_64               randconfig-a003-20221121
-x86_64               randconfig-a002-20221121
-x86_64               randconfig-a004-20221121
-x86_64               randconfig-a005-20221121
-x86_64               randconfig-a006-20221121
-hexagon              randconfig-r041-20221122
-hexagon              randconfig-r045-20221122
-s390                 randconfig-r044-20221122
-riscv                randconfig-r042-20221122
-i386                 randconfig-a001-20221121
-i386                 randconfig-a003-20221121
-i386                 randconfig-a002-20221121
-i386                 randconfig-a004-20221121
-i386                 randconfig-a005-20221121
-i386                 randconfig-a006-20221121
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-hexagon              randconfig-r041-20221120
-hexagon              randconfig-r041-20221121
-hexagon              randconfig-r045-20221120
-hexagon              randconfig-r045-20221121
-riscv                randconfig-r042-20221120
-s390                 randconfig-r044-20221120
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
