@@ -2,384 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 811E7635C86
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 13:15:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB400635AE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 12:03:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237447AbiKWMOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 07:14:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50512 "EHLO
+        id S236488AbiKWLCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 06:02:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236830AbiKWMOO (ORCPT
+        with ESMTP id S237213AbiKWLBj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 07:14:14 -0500
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29956DEDA
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 04:13:57 -0800 (PST)
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20221123121355epoutp015d6b2bbdf62c3e1e6cb1b7e112af84a4~qNa6BqmGS1428614286epoutp01g
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 12:13:55 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20221123121355epoutp015d6b2bbdf62c3e1e6cb1b7e112af84a4~qNa6BqmGS1428614286epoutp01g
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1669205635;
-        bh=YqupztLsqJKNMJ1nElmssuz1wSCJkSdrlxpPrynw4J0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=X24mIZHprjeC1AN2Lxzc6tMLa+n3b0bzd4PAznyP8g78/ygeBgGQw4O4matpo4MCv
-         ELk+b3wYkn5ILjCUI19HI8SEjiTJU6pjWR1FAJ6o2NfNc0O6vCPQVLH8vI8l5eFRSl
-         AHo4gWEoOAAEjEsApHZm8dfa0/kzsaAB57Tcxc4U=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20221123121354epcas5p3c4a880738c02eec4d1b85ab65c092ebe~qNa5VKSZR0081800818epcas5p3c;
-        Wed, 23 Nov 2022 12:13:54 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.180]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4NHKmJ22P4z4x9Pv; Wed, 23 Nov
-        2022 12:13:52 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        DF.3C.56352.08E0E736; Wed, 23 Nov 2022 21:13:52 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20221123102436epcas5p45ed06bc94371fec331b80092a08f9400~qL7dLMNGh2898328983epcas5p4e;
-        Wed, 23 Nov 2022 10:24:36 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20221123102436epsmtrp2062cf8c710f11bf976af04339696e547~qL7dI2e__2330723307epsmtrp2d;
-        Wed, 23 Nov 2022 10:24:36 +0000 (GMT)
-X-AuditID: b6c32a4b-5f7fe7000001dc20-e1-637e0e80291b
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        79.8F.18644.4E4FD736; Wed, 23 Nov 2022 19:24:36 +0900 (KST)
-Received: from test-zns (unknown [107.110.206.5]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20221123102432epsmtip25b864b9a404b9e21b1160635842d1ca1~qL7aGUOYX2006520065epsmtip2f;
-        Wed, 23 Nov 2022 10:24:32 +0000 (GMT)
-Date:   Wed, 23 Nov 2022 15:43:13 +0530
-From:   Nitesh Shetty <nj.shetty@samsung.com>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
-        dm-devel@redhat.com, kbusch@kernel.org, hch@lst.de,
-        sagi@grimberg.me, james.smart@broadcom.com, kch@nvidia.com,
-        damien.lemoal@opensource.wdc.com, naohiro.aota@wdc.com,
-        jth@kernel.org, viro@zeniv.linux.org.uk,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        anuj20.g@samsung.com, joshi.k@samsung.com, p.raghav@samsung.com,
-        nitheshshetty@gmail.com, gost.dev@samsung.com
-Subject: Re: [PATCH v5 10/10] fs: add support for copy file range in zonefs
-Message-ID: <20221123101313.GB26377@test-zns>
+        Wed, 23 Nov 2022 06:01:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B32D9079
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 02:55:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669200913;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WjN0A038hUNXkFR2KQMpb0VK379m/PpggczZKW7tkGQ=;
+        b=HAiZrmoyyWDz6qLMe1OUZkXvgucZamQtNPNftI7g3eiYJgkVGjgNQy9TaqfJHf64LSuAXy
+        pOYZWAikiYIe1xktk12CBPmRxjf9ox4925kViP/C86upGTMNxE62Mmj+vQATUFteEsewI5
+        zMTY2Co+kxQ2+1FlLyg24GxN+qSOksM=
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
+ [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-214-RK5fbJXuN1CUXDhHSH6RHA-1; Wed, 23 Nov 2022 05:55:12 -0500
+X-MC-Unique: RK5fbJXuN1CUXDhHSH6RHA-1
+Received: by mail-pl1-f198.google.com with SMTP id h16-20020a170902f55000b001871b770a83so13384163plf.9
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 02:55:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WjN0A038hUNXkFR2KQMpb0VK379m/PpggczZKW7tkGQ=;
+        b=ddXJGrT10EC9tekNM1awxuenNJQbK79NHaUaCvz3pJg+GEk5jNJJakG79Ve3zCca7Q
+         2XHqxxNgKRreRugJdu59hhN/CtYZsvkl+ISVipAhji+OGse4aXhlguBdLwDuktRN5i9j
+         djbF9h84CDw+fzbRj+junhv7m+G9yo28/vPqXwRlw3Gzrm/FfQZxKdH0mv+KYbu7vHml
+         DRWkMw3PXlIBYMPs4Ui7cwxcuwzOJ0Tsl/W8SXAmz8kVKj7rkZ6VTMjef1d6MucWuif4
+         TAm3WnRoueBxFYsXTHIJ4cNmJiOF7XPCQnsVd/VDybCWhrsVd9Ks/LV3BfQI14iQDLlm
+         QsXQ==
+X-Gm-Message-State: ANoB5pngexLBRaOabpe4eOBZ3cM+BIc/nTrtxMfb83Z3k0KoEHs3qSzg
+        MAOPaYNYF/odZIvVmyz31uFMM33ngKQs0DcLunA1yPnByGpuMkPf2p5cWDeFAAAILZ7u5ieF6gV
+        vaLLKjnrjlvLQehwa9pwB9XHObBjYnwXuLpE6R0Zq
+X-Received: by 2002:a62:1d05:0:b0:56b:a0f4:decc with SMTP id d5-20020a621d05000000b0056ba0f4deccmr8151857pfd.33.1669200911120;
+        Wed, 23 Nov 2022 02:55:11 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5KV3rIew/dEZSatpPIXrjXgboVSGvhiHt840etOO/utTaf9Qo74JgvSdAvUco5bJMPfGwpHH4LH6hXVj9IHa0=
+X-Received: by 2002:a62:1d05:0:b0:56b:a0f4:decc with SMTP id
+ d5-20020a621d05000000b0056ba0f4deccmr8151844pfd.33.1669200910826; Wed, 23 Nov
+ 2022 02:55:10 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAOQ4uxhMX9MF0+6DD7NO5QzqDRwESkhiY5f9CB7DXFVa22Za+w@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Ta0xbZRjH8562p4UIHG7yUtyGBZ0wLkVa9uIAl0DcUZiy+MFEo6yhJ0Ao
-        7VlbYOCylUGdsiBDWIKVcRlsc5SLlroVsIxUoYAiCw1MQIZggchVxsQwgrNwwOzb7/0//yfP
-        LS+P5VHB5fMy5GpKKZfIBLgz+84PQUGhGtfzqcLmhxzUOtDLQvdb9ABdvLLNQvrJUhxtDQ6x
-        kHnlKw4a627H0G19D4Y669Yw1PN0GUfTj8fZ6AvLKECzIzoMmcePoO/N/Wxk66jCUc3NWS4q
-        s7ZxkMleAND6jSIuallcZaO+cT80tG3lHPchdVODONmum+SSQw+/ZZO2wWzS0PgZTrY1XCA7
-        xzQ4WVK44jBopzjkatcITn5ubATkuuEgean7MkYa7MtYsuv7mTHplERKKf0peapCmiFPixUk
-        vpsSnyKOEkaERkSjowJ/uSSLihUkJCWHvpEhc8wv8M+RyLIdUrJEpRKEx8UoFdlqyj9doVLH
-        CihaKqNFdJhKkqXKlqeFySn1axFC4atih/F0Znrh3UUuXZB8drB5jKUBT8TFwIkHCRGsX/4Z
-        22EPohPAuw1EMXB28CMAzdo1DvNYB/DP9mbWfoa2t4TNZHQAqNF9wJjmAOwr39wNsImX4PDa
-        b6AY8Hg4cQT+9JS3I3sRh2HT1Y1dC4vQsOHsGLHDnkQitF3Uc3fYhQiFul+2AcPusP9L+67f
-        iTgFS4uKd3vwJgJg9x0rtlMXEm1O0HJtBGeaS4DTddMchj3hgtXIZZgP11fMe55ceLvia5xJ
-        LgJQ90AHmMDrUDtQymK6S4eL+mGM0Q/AqwMtGKO7wpIt+57uAk3V+xwAm1pr9wr4wtF/CvaY
-        hFMTJsBs6BIGNzbq2VfAId0z0+meqcdwCKztfITrHMtjEX7w1r88BoNga0d4LeA0Al+KVmWl
-        USoxHSmncv8/eKoiywB2v0dwognM/P5XmAVgPGABkMcSeLlcePNcqoeLVJKXTykVKcpsGaWy
-        ALHjWGUsvneqwvG/5OqUCFG0UBQVFSWKjoyKEPi41FcGp3oQaRI1lUlRNKXcz8N4TnwNdmLu
-        Xl5gTv6S4bncUz7O2Stpfm1uM+c+zTLKTpbP3xB3tfWJLz/f+46bR1PZhEJotL/YYKrsd81T
-        rlgCb52Jp78zeX+y9OT0R53THQveVeXzo9PW9BfWAg4HYhsJjyXjtPuxum/ca1KSNiuNLXY3
-        bWiX4Z7F52blieT8Xtr41pnrngPSAzptwPGY+8oe23tb/t3hOO2bN2PwzDlPlWnn37YX/4E2
-        h7dk/id/NNMVW4Uh286Dk8d+5dWEG7xWzat1KnV1ysGQ0uAp8lDG32edq8NenrMh+3rrRtXM
-        5kQxf2YiTgSOzizZPly47iON579SEKbPF8Q55WU+sEZ+fC02iRawVemSiGCWUiX5D4bzlVan
-        BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrOIsWRmVeSWpSXmKPExsWy7bCSvO6TL7XJBhOWsFisP3WM2eLCutWM
-        Fk0T/jJbrL7bz2bx++x5Zou972azWtw8sJPJYuXqo0wWuxd+ZLI4+v8tm8XDL7dYLCYdusZo
-        8fTqLCaLvbe0LfbsPclicXnXHDaL+cuesltMPL6Z1WLHk0ZGi89LW9gt1r1+z2Jx4pa0xfm/
-        x1kdxD1m3T/L5rFz1l12j/P3NrJ4XD5b6rFpVSebx+Yl9R67bzawefQ2vwMqaL3P6vF+31U2
-        j74tqxg9Pm+S82g/0M3ksenJW6YAvigum5TUnMyy1CJ9uwSujG2zmpkLDvpWTJ/3gaWB8bJx
-        FyMnh4SAiUTrsV6WLkYuDiGBHYwSb69sZIJISEos+3uEGcIWllj57zk7RNETRol73bdYQRIs
-        AqoSlz7eYexi5OBgE9CWOP2fAyQsIqAusWbqN7ChzAJNLBLzrt1mA0kIC3hLXG5azQ5i8wro
-        Ssw695cRYmg7k8Si9StYIRKCEidnPmEBsZkFtCRu/HvJBLKAWUBaYvk/sAWcAoES/S1dYMeJ
-        CihLHNh2nGkCo+AsJN2zkHTPQuhewMi8ilEytaA4Nz232LDAKC+1XK84Mbe4NC9dLzk/dxMj
-        OO61tHYw7ln1Qe8QIxMH4yFGCQ5mJRHees+aZCHelMTKqtSi/Pii0pzU4kOM0hwsSuK8F7pO
-        xgsJpCeWpGanphakFsFkmTg4pRqYpM7l/3Z+sEWYv3Zn1/8Tb0Lqsw7cn/f6wQ9z7n+xN+YE
-        ShvMSHecIZT2c/aJwLv3a4ptbFjear86UM8SnrovZG/eqeD1Kx8+2uFW3TLpuNTZ00xTtP5F
-        SWpINz9l+b1lZdyh0Nub9m1o5uubZ5D1u4A7fanuJJuNLyeZ3DItLnXt/aIe2s+p+s+7/pag
-        5SyrS2y1mi/CZv5cPW3nVvY1/etUvdr97/HPy1793jgpNi0t4Prh2Veb1Ze913iclF46o31u
-        kPWltlcb2BYZFF26Gxt8vYWvJrKMb8feCK2EeWs7jwUVzkxYlJ4pnDD/wxWdP9s3MWXwXot7
-        sk2XU/nW8TwVtTv3XXyCW3cl/GufoMRSnJFoqMVcVJwIAH3sjhpqAwAA
-X-CMS-MailID: 20221123102436epcas5p45ed06bc94371fec331b80092a08f9400
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-        boundary="----GsYAgckb8ZPIB7TqR4NYyp-jgnPv5c.LE-kW9H5hDU_d1TDU=_664b6_"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221123061044epcas5p2ac082a91fc8197821f29e84278b6203c
-References: <CGME20221123061044epcas5p2ac082a91fc8197821f29e84278b6203c@epcas5p2.samsung.com>
-        <20221123055827.26996-1-nj.shetty@samsung.com>
-        <20221123055827.26996-11-nj.shetty@samsung.com>
-        <CAOQ4uxhMX9MF0+6DD7NO5QzqDRwESkhiY5f9CB7DXFVa22Za+w@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <Y3Ybpuy67I0xlwLa@xpf.sh.intel.com>
+In-Reply-To: <Y3Ybpuy67I0xlwLa@xpf.sh.intel.com>
+From:   Miklos Szeredi <mszeredi@redhat.com>
+Date:   Wed, 23 Nov 2022 11:54:59 +0100
+Message-ID: <CAOssrKdNRew=5OMsmc+F01NEzyz1cd6ctJKV=FBVrHardpEZSg@mail.gmail.com>
+Subject: Re: [Syzkaller & bisect] There is "notify_change" WARNING in v6.1-rc5 kernel
+To:     Pengfei Xu <pengfei.xu@intel.com>
+Cc:     linux-kernel@vger.kernel.org, heng.su@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-------GsYAgckb8ZPIB7TqR4NYyp-jgnPv5c.LE-kW9H5hDU_d1TDU=_664b6_
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
+On Thu, Nov 17, 2022 at 12:32 PM Pengfei Xu <pengfei.xu@intel.com> wrote:
+>
+> Hi Miklos Szeredi and developer,
+>
+> Greeting!
+>
+> There is "notify_change" WARNING in v6.1-rc5:
+> [   45.378232] ------------[ cut here ]------------
+> [   45.378741] WARNING: CPU: 0 PID: 463 at fs/attr.c:327 notify_change+0x9a1/0xb50
+> [   45.379511] Modules linked in:
+> [   45.379868] CPU: 0 PID: 463 Comm: repro Not tainted 6.1.0-rc5-094226ad94f4 #1
+> [   45.380617] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+> [   45.381752] RIP: 0010:notify_change+0x9a1/0xb50
+> [   45.382234] Code: 44 89 f6 e8 81 2d cf ff 41 83 fe ff 74 0c c7 45 c4 00 00 00 00 e9 e1 fd ff ff 41 be b5 ff ff ff e9 ea fb ff ff e8 ef 2b cf ff <0f> 0b e9 c2 4
+> [   45.384114] RSP: 0018:ffffc90000ef3b30 EFLAGS: 00010246
+> [   45.384661] RAX: 0000000000000000 RBX: 0000000000004200 RCX: ffffffff8155b451
+> [   45.385389] RDX: 0000000000000000 RSI: ffff88800cd40000 RDI: 0000000000000002
+> [   45.386112] RBP: ffffc90000ef3b90 R08: ffff888009ed2f50 R09: 0101010101010101
+> [   45.386840] R10: ffffc90000ef3bb0 R11: 0000000000005c67 R12: ffffc90000ef3bb8
+> [   45.387568] R13: ffff88800af5ed80 R14: 0000000000000000 R15: ffffffff8385ff40
+> [   45.388312] FS:  00007f914d059700(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
+> [   45.389142] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   45.389727] CR2: 0000000020006000 CR3: 000000000bfc0006 CR4: 0000000000770ef0
+> [   45.390458] PKRU: 55555554
+> [   45.390752] Call Trace:
+> [   45.391015]  <TASK>
+> [   45.391253]  ? write_comp_data+0x2f/0x90
+> [   45.391697]  __file_remove_privs+0x1de/0x240
+> [   45.392181]  ? __file_remove_privs+0x1de/0x240
+> [   45.392671]  ? __sanitizer_cov_trace_pc+0x25/0x60
+> [   45.393181]  ? current_time+0x64/0xb0
+> [   45.393592]  file_modified_flags+0x51/0x160
+> [   45.394055]  file_modified+0x20/0x30
+> [   45.394462]  fuse_file_fallocate+0x53a/0x620
+> [   45.394928]  ? __schedule+0x2e6/0x8f0
+> [   45.395347]  ? fuse_copy_file_range+0xc0/0xc0
+> [   45.395835]  vfs_fallocate+0x336/0x690
+> [   45.396243]  ioctl_preallocate+0xdf/0x110
+> [   45.396677]  do_vfs_ioctl+0xaf9/0xc20
+> [   45.397080]  ? __fget_light+0xb0/0x220
+> [   45.397488]  ? __sanitizer_cov_trace_pc+0x25/0x60
+> [   45.397993]  ? write_comp_data+0x2f/0x90
+> [   45.398419]  __x64_sys_ioctl+0xca/0x160
+> [   45.398836]  do_syscall_64+0x3b/0x90
+> [   45.399235]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> [   45.399788] RIP: 0033:0x7f914d17f59d
+> [   45.400182] Code: 00 c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 8
+> [   45.402039] RSP: 002b:00007f914d058b28 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> [   45.402815] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f914d17f59d
+> [   45.403543] RDX: 00000000200001c0 RSI: 0000000040305828 RDI: 0000000000000004
+> [   45.404286] RBP: 00007f914d058e00 R08: 0000000100000001 R09: 0000000000000000
+> [   45.405023] R10: 0000000100000001 R11: 0000000000000246 R12: 00007fff22e7ec4e
+> [   45.405758] R13: 00007fff22e7ec4f R14: 00007fff22e7ece0 R15: 00007f914d059700
+> [   45.406496]  </TASK>
+> [   45.406736] ---[ end trace 0000000000000000 ]---
+>
+> Bisected and found the first bad commit:
+> 4a6f278d4827b59ba26ceae0ff4529ee826aa258
+> "fuse: add file_modified() to fallocate"
+>
+> After only revert this commit, this issue was gone.
+>
+> Kconfig, reproduced code from syzkaller, bisect info is in attached.
+>
+> All detailed info is in link:
+> https://github.com/xupengfe/syzkaller_logs/tree/main/221117_083125_notify_change
+>
+> If you find this info is useful, please add the "Reviewed-by" tag from me.
 
-On Wed, Nov 23, 2022 at 08:53:14AM +0200, Amir Goldstein wrote:
-> On Wed, Nov 23, 2022 at 8:26 AM Nitesh Shetty <nj.shetty@samsung.com> wrote:
-> >
-> > copy_file_range is implemented using copy offload,
-> > copy offloading to device is always enabled.
-> > To disable copy offloading mount with "no_copy_offload" mount option.
-> > At present copy offload is only used, if the source and destination files
-> > are on same block device, otherwise copy file range is completed by
-> > generic copy file range.
-> >
-> > copy file range implemented as following:
-> >         - write pending writes on the src and dest files
-> >         - drop page cache for dest file if its conv zone
-> >         - copy the range using offload
-> >         - update dest file info
-> >
-> > For all failure cases we fallback to generic file copy range
-> > At present this implementation does not support conv aggregation
-> >
-> > Signed-off-by: Nitesh Shetty <nj.shetty@samsung.com>
-> > Signed-off-by: Anuj Gupta <anuj20.g@samsung.com>
-> > ---
-> >  fs/zonefs/super.c | 179 ++++++++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 179 insertions(+)
-> >
-> > diff --git a/fs/zonefs/super.c b/fs/zonefs/super.c
-> > index abc9a85106f2..15613433d4ae 100644
-> > --- a/fs/zonefs/super.c
-> > +++ b/fs/zonefs/super.c
-> > @@ -1223,6 +1223,183 @@ static int zonefs_file_release(struct inode *inode, struct file *file)
-> >         return 0;
-> >  }
-> >
-> > +static int zonefs_is_file_copy_offset_ok(struct inode *src_inode,
-> > +               struct inode *dst_inode, loff_t src_off, loff_t dst_off,
-> > +               size_t *len)
-> > +{
-> > +       loff_t size, endoff;
-> > +       struct zonefs_inode_info *dst_zi = ZONEFS_I(dst_inode);
-> > +
-> > +       inode_lock(src_inode);
-> > +       size = i_size_read(src_inode);
-> > +       inode_unlock(src_inode);
-> > +       /* Don't copy beyond source file EOF. */
-> > +       if (src_off < size) {
-> > +               if (src_off + *len > size)
-> > +                       *len = (size - (src_off + *len));
-> > +       } else
-> > +               *len = 0;
-> > +
-> > +       mutex_lock(&dst_zi->i_truncate_mutex);
-> > +       if (dst_zi->i_ztype == ZONEFS_ZTYPE_SEQ) {
-> > +               if (*len > dst_zi->i_max_size - dst_zi->i_wpoffset)
-> > +                       *len -= dst_zi->i_max_size - dst_zi->i_wpoffset;
-> > +
-> > +               if (dst_off != dst_zi->i_wpoffset)
-> > +                       goto err;
-> > +       }
-> > +       mutex_unlock(&dst_zi->i_truncate_mutex);
-> > +
-> > +       endoff = dst_off + *len;
-> > +       inode_lock(dst_inode);
-> > +       if (endoff > dst_zi->i_max_size ||
-> > +                       inode_newsize_ok(dst_inode, endoff)) {
-> > +               inode_unlock(dst_inode);
-> > +               goto err;
-> > +       }
-> > +       inode_unlock(dst_inode);
-> > +
-> > +       return 0;
-> > +err:
-> > +       mutex_unlock(&dst_zi->i_truncate_mutex);
-> > +       return -EINVAL;
-> > +}
-> > +
-> > +static ssize_t zonefs_issue_copy(struct zonefs_inode_info *src_zi,
-> > +               loff_t src_off, struct zonefs_inode_info *dst_zi,
-> > +               loff_t dst_off, size_t len)
-> > +{
-> > +       struct block_device *src_bdev = src_zi->i_vnode.i_sb->s_bdev;
-> > +       struct block_device *dst_bdev = dst_zi->i_vnode.i_sb->s_bdev;
-> > +       struct range_entry *rlist = NULL;
-> > +       int ret = len;
-> > +
-> > +       rlist = kmalloc(sizeof(*rlist), GFP_KERNEL);
-> > +       if (!rlist)
-> > +               return -ENOMEM;
-> > +
-> > +       rlist[0].dst = (dst_zi->i_zsector << SECTOR_SHIFT) + dst_off;
-> > +       rlist[0].src = (src_zi->i_zsector << SECTOR_SHIFT) + src_off;
-> > +       rlist[0].len = len;
-> > +       rlist[0].comp_len = 0;
-> > +       ret = blkdev_issue_copy(src_bdev, dst_bdev, rlist, 1, NULL, NULL,
-> > +                       GFP_KERNEL);
-> > +       if (rlist[0].comp_len > 0)
-> > +               ret = rlist[0].comp_len;
-> > +       kfree(rlist);
-> > +
-> > +       return ret;
-> > +}
-> > +
-> > +/* Returns length of possible copy, else returns error */
-> > +static ssize_t zonefs_copy_file_checks(struct file *src_file, loff_t src_off,
-> > +                                       struct file *dst_file, loff_t dst_off,
-> > +                                       size_t *len, unsigned int flags)
-> > +{
-> > +       struct inode *src_inode = file_inode(src_file);
-> > +       struct inode *dst_inode = file_inode(dst_file);
-> > +       struct zonefs_inode_info *src_zi = ZONEFS_I(src_inode);
-> > +       struct zonefs_inode_info *dst_zi = ZONEFS_I(dst_inode);
-> > +       ssize_t ret;
-> > +
-> > +       if (src_inode->i_sb != dst_inode->i_sb)
-> > +               return -EXDEV;
-> > +
-> > +       /* Start by sync'ing the source and destination files for conv zones */
-> > +       if (src_zi->i_ztype == ZONEFS_ZTYPE_CNV) {
-> > +               ret = file_write_and_wait_range(src_file, src_off,
-> > +                               (src_off + *len));
-> > +               if (ret < 0)
-> > +                       goto io_error;
-> > +       }
-> > +       inode_dio_wait(src_inode);
-> > +
-> > +       /* Start by sync'ing the source and destination files ifor conv zones */
-> > +       if (dst_zi->i_ztype == ZONEFS_ZTYPE_CNV) {
-> > +               ret = file_write_and_wait_range(dst_file, dst_off,
-> > +                               (dst_off + *len));
-> > +               if (ret < 0)
-> > +                       goto io_error;
-> > +       }
-> > +       inode_dio_wait(dst_inode);
-> > +
-> > +       /* Drop dst file cached pages for a conv zone*/
-> > +       if (dst_zi->i_ztype == ZONEFS_ZTYPE_CNV) {
-> > +               ret = invalidate_inode_pages2_range(dst_inode->i_mapping,
-> > +                               dst_off >> PAGE_SHIFT,
-> > +                               (dst_off + *len) >> PAGE_SHIFT);
-> > +               if (ret < 0)
-> > +                       goto io_error;
-> > +       }
-> > +
-> > +       ret = zonefs_is_file_copy_offset_ok(src_inode, dst_inode, src_off,
-> > +                       dst_off, len);
-> > +       if (ret < 0)
-> > +               return ret;
-> > +
-> > +       return *len;
-> > +
-> > +io_error:
-> > +       zonefs_io_error(dst_inode, true);
-> > +       return ret;
-> > +}
-> > +
-> > +static ssize_t zonefs_copy_file(struct file *src_file, loff_t src_off,
-> > +               struct file *dst_file, loff_t dst_off,
-> > +               size_t len, unsigned int flags)
-> > +{
-> > +       struct inode *src_inode = file_inode(src_file);
-> > +       struct inode *dst_inode = file_inode(dst_file);
-> > +       struct zonefs_inode_info *src_zi = ZONEFS_I(src_inode);
-> > +       struct zonefs_inode_info *dst_zi = ZONEFS_I(dst_inode);
-> > +       ssize_t ret = 0, bytes;
-> > +
-> > +       inode_lock(src_inode);
-> > +       inode_lock(dst_inode);
-> > +       bytes = zonefs_issue_copy(src_zi, src_off, dst_zi, dst_off, len);
-> > +       if (bytes < 0)
-> > +               goto unlock_exit;
-> > +
-> > +       ret += bytes;
-> > +
-> > +       file_update_time(dst_file);
-> > +       mutex_lock(&dst_zi->i_truncate_mutex);
-> > +       zonefs_update_stats(dst_inode, dst_off + bytes);
-> > +       zonefs_i_size_write(dst_inode, dst_off + bytes);
-> > +       dst_zi->i_wpoffset += bytes;
-> > +       mutex_unlock(&dst_zi->i_truncate_mutex);
-> > +       /* if we still have some bytes left, do splice copy */
-> > +       if (bytes && (bytes < len)) {
-> > +               bytes = do_splice_direct(src_file, &src_off, dst_file,
-> > +                                        &dst_off, len, flags);
-> > +               if (bytes > 0)
-> > +                       ret += bytes;
-> > +       }
-> > +unlock_exit:
-> > +       if (ret < 0)
-> > +               zonefs_io_error(dst_inode, true);
-> > +       inode_unlock(src_inode);
-> > +       inode_unlock(dst_inode);
-> > +       return ret;
-> > +}
-> > +
-> > +static ssize_t zonefs_copy_file_range(struct file *src_file, loff_t src_off,
-> > +                                     struct file *dst_file, loff_t dst_off,
-> > +                                     size_t len, unsigned int flags)
-> > +{
-> > +       ssize_t ret = -EIO;
-> > +
-> > +       ret = zonefs_copy_file_checks(src_file, src_off, dst_file, dst_off,
-> > +                                    &len, flags);
-> > +       if (ret > 0)
-> > +               ret = zonefs_copy_file(src_file, src_off, dst_file, dst_off,
-> > +                                    len, flags);
-> > +       else if (ret < 0 && ret == -EXDEV)
-> 
-> First of all, ret < 0 is redundant.
-> 
+Thanks for the report, fix now sent out.
 
-acked
+Miklos
 
-> > +               ret = generic_copy_file_range(src_file, src_off, dst_file,
-> > +                                             dst_off, len, flags);
-> 
-> But more importantly, why do you want to fall back to
-> do_splice_direct() in zonefs copy_file_range?
-> How does it serve your patch set or the prospect consumers
-> of zonefs copy_file_range?
-> 
-> The reason I am asking is because commit 5dae222a5ff0
-> ("vfs: allow copy_file_range to copy across devices")
-> turned out to be an API mistake that was later reverted by
-> 868f9f2f8e00 ("vfs: fix copy_file_range() regression in cross-fs copies")
-> 
-> It is always better to return EXDEV to userspace which can
-> always fallback to splice itself, but maybe it has something
-> smarter to do.
-> 
-> The places where it made sense for kernel to fallback to
-> direct splice was for network servers server-side-copy, but that
-> is independent of any specific filesystem copy_file_range()
-> implementation.
-> 
-> Thanks,
-> Amir.
-> 
-
-At present we don't handle few case's such as IO getting split incase of
-copy offload, so we wanted to fallback to existing mechanism. So went with
-default operation, do_splice_direct.
-
-Regards,
-Nitesh Shetty
-
-
-------GsYAgckb8ZPIB7TqR4NYyp-jgnPv5c.LE-kW9H5hDU_d1TDU=_664b6_
-Content-Type: text/plain; charset="utf-8"
-
-
-------GsYAgckb8ZPIB7TqR4NYyp-jgnPv5c.LE-kW9H5hDU_d1TDU=_664b6_--
