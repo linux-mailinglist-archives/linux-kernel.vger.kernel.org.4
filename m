@@ -2,582 +2,321 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A886351AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 08:58:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD93D6351C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 09:02:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236381AbiKWH4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 02:56:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33778 "EHLO
+        id S236267AbiKWICV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 03:02:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiKWH4Q (ORCPT
+        with ESMTP id S235612AbiKWICR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 02:56:16 -0500
-Received: from 189.cn (ptr.189.cn [183.61.185.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 46BC5B12;
-        Tue, 22 Nov 2022 23:55:37 -0800 (PST)
-HMM_SOURCE_IP: 10.64.8.41:60424.395643342
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-123.150.8.42 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id 7162E1002F8;
-        Wed, 23 Nov 2022 15:55:35 +0800 (CST)
-Received: from  ([123.150.8.42])
-        by gateway-153622-dep-6cffbd87dd-5n69v with ESMTP id 5ffab1451469406dac7f2bfd4a4a65a3 for rostedt@goodmis.org;
-        Wed, 23 Nov 2022 15:55:36 CST
-X-Transaction-ID: 5ffab1451469406dac7f2bfd4a4a65a3
-X-Real-From: chensong_2000@189.cn
-X-Receive-IP: 123.150.8.42
-X-MEDUSA-Status: 0
-Sender: chensong_2000@189.cn
-From:   Song Chen <chensong_2000@189.cn>
-To:     rostedt@goodmis.org, mhiramat@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        Song Chen <chensong_2000@189.cn>
-Subject: [PATCH v2 2/2] kernel/trace: Provide default impelentations defined in trace_probe_tmpl.h
-Date:   Wed, 23 Nov 2022 16:02:04 +0800
-Message-Id: <1669190524-2894-1-git-send-email-chensong_2000@189.cn>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Wed, 23 Nov 2022 03:02:17 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CD8F92183C;
+        Wed, 23 Nov 2022 00:02:13 -0800 (PST)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8DxM_CE031jGTEAAA--.576S3;
+        Wed, 23 Nov 2022 16:02:12 +0800 (CST)
+Received: from [10.180.13.64] (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx9VaB031j750YAA--.45728S2;
+        Wed, 23 Nov 2022 16:02:09 +0800 (CST)
+Subject: Re: [PATCH v5 2/3] gpio: loongson: add gpio driver support
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        Arnaud Patard <apatard@mandriva.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>
+References: <20221121123803.3786-1-zhuyinbo@loongson.cn>
+ <20221121123803.3786-2-zhuyinbo@loongson.cn>
+ <CACRpkda1adiNwbTZHdAyHKny3r5FFMP_XXVGbo1vnCdw9U1gNg@mail.gmail.com>
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+Message-ID: <8a7abd77-9540-efa8-6f67-908530e85399@loongson.cn>
+Date:   Wed, 23 Nov 2022 16:02:08 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <CACRpkda1adiNwbTZHdAyHKny3r5FFMP_XXVGbo1vnCdw9U1gNg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Dx9VaB031j750YAA--.45728S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3AF43Kr1ktFy3Gw4kXFWDJwb_yoW3GF47pF
+        W5ua13Kr4DJr4jkr1DXrs8uF13Jr98KrsrtFs7C348AFyqvr97XFWj9F1ru3srurZ5Zr13
+        ZFWrCFy8u3Z8CaDanT9S1TB71UUUUjJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bDAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY
+        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
+        C2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE
+        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
+        v26r1q6r43MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
+        7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcV
+        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jnkucUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are 7 function definitions in trace_probe_tmpl.h, they are:
 
-1, process_fetch_insn
-2, fetch_store_strlen
-3, fetch_store_string
-4, fetch_store_strlen_user
-5, fetch_store_string_user
-6, probe_mem_read
-7, probe_mem_read_user
 
-Every C file which includes trace_probe_tmpl.h has to implement them,
-otherwise it gets warnings and errors. However, some of them are identical,
-like kprobe and eprobe, as a result, there is a lot redundant code in those
-2 files.
+在 2022/11/21 下午9:24, Linus Walleij 写道:
+> On Mon, Nov 21, 2022 at 1:38 PM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
+> 
+>> The Loongson platforms GPIO controller contains 60 GPIO pins in total,
+>> 4 of which are dedicated GPIO pins, and the remaining 56 are reused
+>> with other functions. Each GPIO can set input/output and has the
+>> interrupt capability.
+>>
+>> This driver added support for Loongson GPIO controller and support to
+>> use DTS or ACPI to descibe GPIO device resources.
+>>
+>> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+>> Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
+>> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
+>> Signed-off-by: Juxin Gao <gaojuxin@loongson.cn>
+>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>> ---
+>> Change in v5:
+> 
+> This is starting to look really good! We are getting to the final polish.
+> 
+>> +config GPIO_LOONGSON
+>> +       tristate "Loongson GPIO support"
+>> +       depends on LOONGARCH || COMPILE_TEST
+> 
+> select GPIO_GENERIC
+> 
+> You should use this in the "bit mode".
+> 
+>>   obj-$(CONFIG_GPIO_LOONGSON1)           += gpio-loongson1.o
+>> +obj-$(CONFIG_GPIO_LOONGSON)            += gpio-loongson.o
+> 
+> Isn't this a bit confusing? What about naming it
+> gpio-loongson2.c?
+This driver was plan to cover all loongson platform, not only Loongson-2
+SoC but also other loongson platform. and I adop your advice in another
+mail. I named this driver was gpio-loongson-64bit.c.
+> 
+>> +enum loongson_gpio_mode {
+>> +       BIT_CTRL_MODE,
+>> +       BYTE_CTRL_MODE,
+>> +};
+> 
+> I don't think you will need to track this, jus assume BYTE_CTRL_MODE
+> in your callbacks because we will replace the bit mode with assigned
+> accessors from GPIO_GENERIC.
+  yes, but in loongson_gpio_init need a distinction, so I kept this.
+> 
+>> +
+>> +struct loongson_gpio_platform_data {
+>> +       const char              *label;
+>> +       enum loongson_gpio_mode mode;
+> 
+> So drop this.
 
-This patch would like to provide default behaviors for those functions
-which kprobe and eprobe can share by just including trace_probe_kernel.h
-with trace_probe_tmpl.h together.
+> 
+>> +static int loongson_gpio_request(
+>> +                       struct gpio_chip *chip, unsigned int pin)
+>> +{
+>> +       if (pin >= chip->ngpio)
+>> +               return -EINVAL;
+> 
+> This is not needed, the gpiolib core already checks this. Drop it.
+I check gpio_request in gpilib, I notice gpio_is_valid is not equal to
+this condition, so I still kept it for byte mode.
+> 
+>> +static inline void __set_direction(struct loongson_gpio_chip *lgpio,
+>> +                       unsigned int pin, int input)
+>> +{
+>> +       u64 qval;
+>> +       u8  bval;
+>> +
+>> +       if (lgpio->p_data->mode == BIT_CTRL_MODE) {
+>> +               qval = readq(LOONGSON_GPIO_OEN(lgpio));
+>> +               if (input)
+>> +                       qval |= 1ULL << pin;
+>> +               else
+>> +                       qval &= ~(1ULL << pin);
+>> +               writeq(qval, LOONGSON_GPIO_OEN(lgpio));
+>> +       } else {
+>> +               bval = input ? 1 : 0;
+>> +               writeb(bval, LOONGSON_GPIO_OEN_BYTE(lgpio, pin));
+>> +       }
+> 
+> Drop bit mode keep only byte mode.
+okay, I will drop it.
+> 
+>> +static void __set_level(struct loongson_gpio_chip *lgpio, unsigned int pin,
+>> +                       int high)
+>> +{
+>> +       u64 qval;
+>> +       u8 bval;
+>> +
+>> +       if (lgpio->p_data->mode == BIT_CTRL_MODE) {
+>> +               qval = readq(LOONGSON_GPIO_OUT(lgpio));
+>> +               if (high)
+>> +                       qval |= 1ULL << pin;
+>> +               else
+>> +                       qval &= ~(1ULL << pin);
+>> +               writeq(qval, LOONGSON_GPIO_OUT(lgpio));
+>> +       } else {
+>> +               bval = high ? 1 : 0;
+>> +               writeb(bval, LOONGSON_GPIO_OUT_BYTE(lgpio, pin));
+>> +       }
+> 
+> Dito.
+okay, I will drop bit mode.
+> 
+>> +static int loongson_gpio_get(struct gpio_chip *chip, unsigned int pin)
+>> +{
+>> +       u64 qval;
+>> +       u8  bval;
+>> +       int val;
+>> +
+>> +       struct loongson_gpio_chip *lgpio =
+>> +               container_of(chip, struct loongson_gpio_chip, chip);
+>> +
+>> +       if (lgpio->p_data->mode == BIT_CTRL_MODE) {
+>> +               qval = readq(LOONGSON_GPIO_IN(lgpio));
+>> +               val = (qval & (1ULL << pin)) != 0;
+>> +       } else {
+>> +               bval = readb(LOONGSON_GPIO_IN_BYTE(lgpio, pin));
+>> +               val = bval & 1;
+>> +       }
+> 
+> Dito.
+okay, I will drop bit mode.
+> 
+>> +static int loongson_gpio_to_irq(
+>> +                       struct gpio_chip *chip, unsigned int offset)
+>> +{
+>> +       struct platform_device *pdev =
+>> +               container_of(chip->parent, struct platform_device, dev);
+>> +       struct loongson_gpio_chip *lgpio =
+>> +               container_of(chip, struct loongson_gpio_chip, chip);
+>> +
+>> +       if (offset >= chip->ngpio)
+>> +               return -EINVAL;
+>> +
+>> +       if ((lgpio->gsi_idx_map != NULL) && (offset < lgpio->mapsize))
+>> +               offset = lgpio->gsi_idx_map[offset];
+>> +       else
+>> +               return -EINVAL;
+>> +
+>> +       return platform_get_irq(pdev, offset);
+>> +}
+> 
+> I'm a bit suspicious about this. See the following in
+> Documentation/driver-api/gpio/driver.rst:
+> 
+> ------------------
+> It is legal for any IRQ consumer to request an IRQ from any irqchip even if it
+> is a combined GPIO+IRQ driver. The basic premise is that gpio_chip and
+> irq_chip are orthogonal, and offering their services independent of each
+> other.
+> 
+> gpiod_to_irq() is just a convenience function to figure out the IRQ for a
+> certain GPIO line and should not be relied upon to have been called before
+> the IRQ is used.
+> 
+> Always prepare the hardware and make it ready for action in respective
+> callbacks from the GPIO and irq_chip APIs. Do not rely on gpiod_to_irq() having
+> been called first.
+> ------------------
+> 
+> I am bit suspicious that your IRQchip implementation expects consumers
+> to call gpiod_to_irq() first and this is not legal.
+okay, I got it, and other driver use gpio interrupt doesn't rely on 
+gpiod_to_irq, but can use gpiod_to_irq.
 
-It removes redundant code, increases readability, and more importantly,
-makes it easier to introduce a new feature based on trace probe
-(it's possible).
+The reason is that gpio interrupt wasn't an independent module,  The
+loongson interrupt controller liointc include lots of interrupt was
+route to perpherial, such as i2c/spi .. gpio, so gpio interrupt as
+normal perpherial interrupt, It is unnecessary and redundant to
+implement a gpio irq chip. The liointc controller driver had cover all
+interrupt.
+> 
+>> +static int loongson_gpio_init(
+>> +                       struct device *dev, struct loongson_gpio_chip *lgpio,
+>> +                       struct device_node *np, void __iomem *base)
+>> +{
+> 
+> Do something like this:
+> 
+> #define LOONGSON_GPIO_IN(x)            (x->base + x->p_data->in_offset)
+> +#define LOONGSON_GPIO_OUT(x)           (x->base + x->p_data->out_offset)
+> +#define LOONGSON_GPIO_OEN(x)           (x->base + x->p_data->conf_offset)
+> 
+> if (lgpio->p_data->mode == BIT_CTRL_MODE) {
+>         ret = bgpio_init(&g->gc, dev, 8,
+>                           lgpio->base + lgpio->p_data->in_offset,
+>                           lgpio->base + lgpio->p_data->out_offset,
+>                           0,
+>                           lgpio->base + lgpio->p_data->conf_offset,
+>                           NULL,
+>                           0);
+>          if (ret) {
+>                  dev_err(dev, "unable to init generic GPIO\n");
+>                  goto dis_clk;
+>          }
+> 
+> If you actually have a special purpose clear register in your hardware
+> which is not included here, then add it in the line with just 0 for that
+> function.
+okay, I had do it.
+in addition,  I don't like to use the dynamically allocated gpio base, 
+so I set the gpio base after call bgpio_init.
 
-Signed-off-by: Song Chen <chensong_2000@189.cn>
----
- kernel/trace/trace_eprobe.c       | 144 ------------------------------
- kernel/trace/trace_events_synth.c |   7 +-
- kernel/trace/trace_kprobe.c       | 102 ---------------------
- kernel/trace/trace_probe_kernel.h | 140 +++++++++++++++++++++++++++--
- 4 files changed, 138 insertions(+), 255 deletions(-)
-
-diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-index bdb26eee7a0c..60ced4a7a25d 100644
---- a/kernel/trace/trace_eprobe.c
-+++ b/kernel/trace/trace_eprobe.c
-@@ -319,64 +319,6 @@ print_eprobe_event(struct trace_iterator *iter, int flags,
- 	return trace_handle_return(s);
- }
- 
--static unsigned long get_event_field(struct fetch_insn *code, void *rec)
--{
--	struct ftrace_event_field *field = code->data;
--	unsigned long val;
--	void *addr;
--
--	addr = rec + field->offset;
--
--	if (is_string_field(field)) {
--		switch (field->filter_type) {
--		case FILTER_DYN_STRING:
--			val = (unsigned long)(rec + (*(unsigned int *)addr & 0xffff));
--			break;
--		case FILTER_RDYN_STRING:
--			val = (unsigned long)(addr + (*(unsigned int *)addr & 0xffff));
--			break;
--		case FILTER_STATIC_STRING:
--			val = (unsigned long)addr;
--			break;
--		case FILTER_PTR_STRING:
--			val = (unsigned long)(*(char *)addr);
--			break;
--		default:
--			WARN_ON_ONCE(1);
--			return 0;
--		}
--		return val;
--	}
--
--	switch (field->size) {
--	case 1:
--		if (field->is_signed)
--			val = *(char *)addr;
--		else
--			val = *(unsigned char *)addr;
--		break;
--	case 2:
--		if (field->is_signed)
--			val = *(short *)addr;
--		else
--			val = *(unsigned short *)addr;
--		break;
--	case 4:
--		if (field->is_signed)
--			val = *(int *)addr;
--		else
--			val = *(unsigned int *)addr;
--		break;
--	default:
--		if (field->is_signed)
--			val = *(long *)addr;
--		else
--			val = *(unsigned long *)addr;
--		break;
--	}
--	return val;
--}
--
- static int get_eprobe_size(struct trace_probe *tp, void *rec)
- {
- 	struct fetch_insn *code;
-@@ -419,92 +361,6 @@ static int get_eprobe_size(struct trace_probe *tp, void *rec)
- 	return ret;
- }
- 
--/* Kprobe specific fetch functions */
--
--/* Note that we don't verify it, since the code does not come from user space */
--static int
--process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
--		   void *base)
--{
--	unsigned long val;
--
-- retry:
--	switch (code->op) {
--	case FETCH_OP_TP_ARG:
--		val = get_event_field(code, rec);
--		break;
--	case FETCH_OP_IMM:
--		val = code->immediate;
--		break;
--	case FETCH_OP_COMM:
--		val = (unsigned long)current->comm;
--		break;
--	case FETCH_OP_DATA:
--		val = (unsigned long)code->data;
--		break;
--	case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
--		code++;
--		goto retry;
--	default:
--		return -EILSEQ;
--	}
--	code++;
--	return process_fetch_insn_bottom(code, val, dest, base);
--}
--NOKPROBE_SYMBOL(process_fetch_insn)
--
--/* Return the length of string -- including null terminal byte */
--static nokprobe_inline int
--fetch_store_strlen_user(unsigned long addr)
--{
--	return kern_fetch_store_strlen_user(addr);
--}
--
--/* Return the length of string -- including null terminal byte */
--static nokprobe_inline int
--fetch_store_strlen(unsigned long addr)
--{
--	return kern_fetch_store_strlen(addr);
--}
--
--/*
-- * Fetch a null-terminated string from user. Caller MUST set *(u32 *)buf
-- * with max length and relative data location.
-- */
--static nokprobe_inline int
--fetch_store_string_user(unsigned long addr, void *dest, void *base)
--{
--	return kern_fetch_store_string_user(addr, dest, base);
--}
--
--/*
-- * Fetch a null-terminated string. Caller MUST set *(u32 *)buf with max
-- * length and relative data location.
-- */
--static nokprobe_inline int
--fetch_store_string(unsigned long addr, void *dest, void *base)
--{
--	return kern_fetch_store_string(addr, dest, base);
--}
--
--static nokprobe_inline int
--probe_mem_read_user(void *dest, void *src, size_t size)
--{
--	const void __user *uaddr =  (__force const void __user *)src;
--
--	return copy_from_user_nofault(dest, uaddr, size);
--}
--
--static nokprobe_inline int
--probe_mem_read(void *dest, void *src, size_t size)
--{
--#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
--	if ((unsigned long)src < TASK_SIZE)
--		return probe_mem_read_user(dest, src, size);
--#endif
--	return copy_from_kernel_nofault(dest, src, size);
--}
--
- /* eprobe handler */
- static inline void
- __eprobe_trace_func(struct eprobe_data *edata, void *rec)
-diff --git a/kernel/trace/trace_events_synth.c b/kernel/trace/trace_events_synth.c
-index e310052dc83c..7460f18ba973 100644
---- a/kernel/trace/trace_events_synth.c
-+++ b/kernel/trace/trace_events_synth.c
-@@ -18,6 +18,7 @@
- #include <linux/trace_events.h>
- #include <trace/events/mmflags.h>
- #include "trace_probe.h"
-+#include "trace_probe_tmpl.h"
- #include "trace_probe_kernel.h"
- 
- #include "trace_synth.h"
-@@ -420,12 +421,12 @@ static unsigned int trace_string(struct synth_trace_event *entry,
- 		data_offset += event->n_u64 * sizeof(u64);
- 		data_offset += data_size;
- 
--		len = kern_fetch_store_strlen((unsigned long)str_val);
-+		len = fetch_store_strlen((unsigned long)str_val);
- 
- 		data_offset |= len << 16;
- 		*(u32 *)&entry->fields[*n_u64] = data_offset;
- 
--		ret = kern_fetch_store_string((unsigned long)str_val, &entry->fields[*n_u64], entry);
-+		ret = fetch_store_string((unsigned long)str_val, &entry->fields[*n_u64], entry);
- 
- 		(*n_u64)++;
- 	} else {
-@@ -473,7 +474,7 @@ static notrace void trace_event_raw_event_synth(void *__data,
- 		val_idx = var_ref_idx[field_pos];
- 		str_val = (char *)(long)var_ref_vals[val_idx];
- 
--		len = kern_fetch_store_strlen((unsigned long)str_val);
-+		len = fetch_store_strlen((unsigned long)str_val);
- 
- 		fields_size += len;
- 	}
-diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-index a4ffa864dbb7..c2e0b741ae82 100644
---- a/kernel/trace/trace_kprobe.c
-+++ b/kernel/trace/trace_kprobe.c
-@@ -1218,108 +1218,6 @@ static const struct file_operations kprobe_profile_ops = {
- 	.release        = seq_release,
- };
- 
--/* Kprobe specific fetch functions */
--
--/* Return the length of string -- including null terminal byte */
--static nokprobe_inline int
--fetch_store_strlen_user(unsigned long addr)
--{
--	return kern_fetch_store_strlen_user(addr);
--}
--
--/* Return the length of string -- including null terminal byte */
--static nokprobe_inline int
--fetch_store_strlen(unsigned long addr)
--{
--	return kern_fetch_store_strlen(addr);
--}
--
--/*
-- * Fetch a null-terminated string from user. Caller MUST set *(u32 *)buf
-- * with max length and relative data location.
-- */
--static nokprobe_inline int
--fetch_store_string_user(unsigned long addr, void *dest, void *base)
--{
--	return kern_fetch_store_string_user(addr, dest, base);
--}
--
--/*
-- * Fetch a null-terminated string. Caller MUST set *(u32 *)buf with max
-- * length and relative data location.
-- */
--static nokprobe_inline int
--fetch_store_string(unsigned long addr, void *dest, void *base)
--{
--	return kern_fetch_store_string(addr, dest, base);
--}
--
--static nokprobe_inline int
--probe_mem_read_user(void *dest, void *src, size_t size)
--{
--	const void __user *uaddr =  (__force const void __user *)src;
--
--	return copy_from_user_nofault(dest, uaddr, size);
--}
--
--static nokprobe_inline int
--probe_mem_read(void *dest, void *src, size_t size)
--{
--#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
--	if ((unsigned long)src < TASK_SIZE)
--		return probe_mem_read_user(dest, src, size);
--#endif
--	return copy_from_kernel_nofault(dest, src, size);
--}
--
--/* Note that we don't verify it, since the code does not come from user space */
--static int
--process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
--		   void *base)
--{
--	struct pt_regs *regs = rec;
--	unsigned long val;
--
--retry:
--	/* 1st stage: get value from context */
--	switch (code->op) {
--	case FETCH_OP_REG:
--		val = regs_get_register(regs, code->param);
--		break;
--	case FETCH_OP_STACK:
--		val = regs_get_kernel_stack_nth(regs, code->param);
--		break;
--	case FETCH_OP_STACKP:
--		val = kernel_stack_pointer(regs);
--		break;
--	case FETCH_OP_RETVAL:
--		val = regs_return_value(regs);
--		break;
--	case FETCH_OP_IMM:
--		val = code->immediate;
--		break;
--	case FETCH_OP_COMM:
--		val = (unsigned long)current->comm;
--		break;
--	case FETCH_OP_DATA:
--		val = (unsigned long)code->data;
--		break;
--#ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
--	case FETCH_OP_ARG:
--		val = regs_get_kernel_argument(regs, code->param);
--		break;
--#endif
--	case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
--		code++;
--		goto retry;
--	default:
--		return -EILSEQ;
--	}
--	code++;
--
--	return process_fetch_insn_bottom(code, val, dest, base);
--}
--NOKPROBE_SYMBOL(process_fetch_insn)
- 
- /* Kprobe handler */
- static nokprobe_inline void
-diff --git a/kernel/trace/trace_probe_kernel.h b/kernel/trace/trace_probe_kernel.h
-index 77dbd9ff9782..cee6078b1043 100644
---- a/kernel/trace/trace_probe_kernel.h
-+++ b/kernel/trace/trace_probe_kernel.h
-@@ -12,7 +12,7 @@
-  */
- /* Return the length of string -- including null terminal byte */
- static nokprobe_inline int
--kern_fetch_store_strlen_user(unsigned long addr)
-+fetch_store_strlen_user(unsigned long addr)
- {
- 	const void __user *uaddr =  (__force const void __user *)addr;
- 	int ret;
-@@ -29,14 +29,14 @@ kern_fetch_store_strlen_user(unsigned long addr)
- 
- /* Return the length of string -- including null terminal byte */
- static nokprobe_inline int
--kern_fetch_store_strlen(unsigned long addr)
-+fetch_store_strlen(unsigned long addr)
- {
- 	int ret, len = 0;
- 	u8 c;
- 
- #ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
- 	if (addr < TASK_SIZE)
--		return kern_fetch_store_strlen_user(addr);
-+		return fetch_store_strlen_user(addr);
- #endif
- 
- 	do {
-@@ -63,7 +63,7 @@ static nokprobe_inline void set_data_loc(int ret, void *dest, void *__dest, void
-  * with max length and relative data location.
-  */
- static nokprobe_inline int
--kern_fetch_store_string_user(unsigned long addr, void *dest, void *base)
-+fetch_store_string_user(unsigned long addr, void *dest, void *base)
- {
- 	const void __user *uaddr =  (__force const void __user *)addr;
- 	int maxlen = get_loc_len(*(u32 *)dest);
-@@ -86,7 +86,7 @@ kern_fetch_store_string_user(unsigned long addr, void *dest, void *base)
-  * length and relative data location.
-  */
- static nokprobe_inline int
--kern_fetch_store_string(unsigned long addr, void *dest, void *base)
-+fetch_store_string(unsigned long addr, void *dest, void *base)
- {
- 	int maxlen = get_loc_len(*(u32 *)dest);
- 	void *__dest;
-@@ -94,7 +94,7 @@ kern_fetch_store_string(unsigned long addr, void *dest, void *base)
- 
- #ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
- 	if ((unsigned long)addr < TASK_SIZE)
--		return kern_fetch_store_string_user(addr, dest, base);
-+		return fetch_store_string_user(addr, dest, base);
- #endif
- 
- 	if (unlikely(!maxlen))
-@@ -112,4 +112,132 @@ kern_fetch_store_string(unsigned long addr, void *dest, void *base)
- 	return ret;
- }
- 
-+static nokprobe_inline int
-+probe_mem_read_user(void *dest, void *src, size_t size)
-+{
-+	const void __user *uaddr =  (__force const void __user *)src;
-+
-+	return copy_from_user_nofault(dest, uaddr, size);
-+}
-+
-+static nokprobe_inline int
-+probe_mem_read(void *dest, void *src, size_t size)
-+{
-+#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
-+	if ((unsigned long)src < TASK_SIZE)
-+		return probe_mem_read_user(dest, src, size);
-+#endif
-+	return copy_from_kernel_nofault(dest, src, size);
-+}
-+
-+static unsigned long get_event_field(struct fetch_insn *code, void *rec)
-+{
-+	struct ftrace_event_field *field = code->data;
-+	unsigned long val;
-+	void *addr;
-+
-+	addr = rec + field->offset;
-+
-+	if (is_string_field(field)) {
-+		switch (field->filter_type) {
-+		case FILTER_DYN_STRING:
-+			val = (unsigned long)(rec + (*(unsigned int *)addr & 0xffff));
-+			break;
-+		case FILTER_RDYN_STRING:
-+			val = (unsigned long)(addr + (*(unsigned int *)addr & 0xffff));
-+			break;
-+		case FILTER_STATIC_STRING:
-+			val = (unsigned long)addr;
-+			break;
-+		case FILTER_PTR_STRING:
-+			val = (unsigned long)(*(char *)addr);
-+			break;
-+		default:
-+			WARN_ON_ONCE(1);
-+			return 0;
-+		}
-+		return val;
-+	}
-+
-+	switch (field->size) {
-+	case 1:
-+		if (field->is_signed)
-+			val = *(char *)addr;
-+		else
-+			val = *(unsigned char *)addr;
-+		break;
-+	case 2:
-+		if (field->is_signed)
-+			val = *(short *)addr;
-+		else
-+			val = *(unsigned short *)addr;
-+		break;
-+	case 4:
-+		if (field->is_signed)
-+			val = *(int *)addr;
-+		else
-+			val = *(unsigned int *)addr;
-+		break;
-+	default:
-+		if (field->is_signed)
-+			val = *(long *)addr;
-+		else
-+			val = *(unsigned long *)addr;
-+		break;
-+	}
-+	return val;
-+}
-+
-+/* Note that we don't verify it, since the code does not come from user space */
-+static int
-+process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
-+		   void *base)
-+{
-+	struct pt_regs *regs = rec;
-+	unsigned long val;
-+
-+retry:
-+	/* 1st stage: get value from context */
-+	switch (code->op) {
-+	case FETCH_OP_REG:
-+		val = regs_get_register(regs, code->param);
-+		break;
-+	case FETCH_OP_STACK:
-+		val = regs_get_kernel_stack_nth(regs, code->param);
-+		break;
-+	case FETCH_OP_STACKP:
-+		val = kernel_stack_pointer(regs);
-+		break;
-+	case FETCH_OP_RETVAL:
-+		val = regs_return_value(regs);
-+		break;
-+	case FETCH_OP_IMM:
-+		val = code->immediate;
-+		break;
-+	case FETCH_OP_COMM:
-+		val = (unsigned long)current->comm;
-+		break;
-+	case FETCH_OP_DATA:
-+		val = (unsigned long)code->data;
-+		break;
-+#ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
-+	case FETCH_OP_ARG:
-+		val = regs_get_kernel_argument(regs, code->param);
-+		break;
-+#endif
-+	case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
-+		code++;
-+		goto retry;
-+	case FETCH_OP_TP_ARG:
-+		val = get_event_field(code, rec);
-+		break;
-+	default:
-+		return -EILSEQ;
-+	}
-+	code++;
-+
-+	return process_fetch_insn_bottom(code, val, dest, base);
-+}
-+NOKPROBE_SYMBOL(process_fetch_insn)
-+
- #endif /* __TRACE_PROBE_KERNEL_H_ */
--- 
-2.25.1
+> 
+> See the kerneldoc in bgpio_init() in drivers/gpio/gpio-mmio.c.
+> 
+> Then:
+> 
+> }  else {
+> 
+>> +       lgpio->chip.request = loongson_gpio_request;
+>> +       lgpio->chip.direction_input = loongson_gpio_direction_input;
+>> +       lgpio->chip.get = loongson_gpio_get;
+>> +       lgpio->chip.direction_output = loongson_gpio_direction_output;
+>> +       lgpio->chip.set = loongson_gpio_set;
+> 
+> Note also: implement loongson_gpio_get_direction(). To read the setting
+> of the conf register on startup. You now only need to implement it for
+> byte mode.
+okay, I had implement it.
+> 
+> }
+> 
+> After this you should set ngpios, because bgpio_init() will overwrite it
+> with 64, so it cannot be done directly when parsing platform data,
+> cache it somewhere and write it here.
+okay, I will do it.
+> 
+> (...)
+> 
+> Yours,
+> Linus Walleij
+> 
 
