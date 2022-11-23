@@ -2,176 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 144E1636A26
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 20:53:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01AEC636A28
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 20:53:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235164AbiKWTvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 14:51:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41342 "EHLO
+        id S239507AbiKWTwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 14:52:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239233AbiKWTvD (ORCPT
+        with ESMTP id S239447AbiKWTwX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 14:51:03 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA900C4954
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 11:50:36 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id i12so27160545wrb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 11:50:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7MmfeWQlT78drM8G0hOv804O+RJ2l1J7iO54NF0OyN8=;
-        b=d4J+ppIOHgyeqnxekrWs1BAsBbFYXo7FQ3YKAYqZ9zwh09K1atWEboy3oixlH3exb3
-         Vffbqcgwx419G4Ufl8i4zTkPeDc+Ho9vliUX/DJsnajCj8HO1uPIGUQGbZCoBOvO3Ysg
-         /ilXf4+QraCj2qFwnkL0AsN4qC94j6Q4se1F+/te+fVrYuThorSkRLMPmikPE+tIDqc/
-         Uthn9Jy5wjKs3yV7ncE2PlubGv/5rywAnRNyt6iS+qXVtJm5xigZCK9ek9mUfqEVOl7J
-         vyftoTpyy/eCv1niCPq9XIqkD/Ps1ZGVpZVeG2ac793A3WcJhOEwRCCNobm7TCfuPZLg
-         4Ipw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7MmfeWQlT78drM8G0hOv804O+RJ2l1J7iO54NF0OyN8=;
-        b=lwnmwa5Jla6SgbSEsxeaUOtkkce7rnaEJicCEOS+T1ho8E7f1mtUzxoZv3uin2q9/S
-         e3Feb7NsXRw9+5vFNao9GsNNOkbu/x80UXzzfiVux7RobFe+LoxT8uXFrv+lPBu7QAg/
-         LD0RGzkrQm/le1jTdeBovcgRob3dJgn4ywJRxiZ+khi6+63kcm6e+pt7jV2cmnY9Srhd
-         jQVjjg4219op1fnbihx3pfpUaS6yRfwipd4aS5k5jQQcEITL386tMSj3fWtrgYHP8sfR
-         VJh4tT4p4BLRlN5No7RTgCIbJj7FKFc3FegEhb+0fCfLqr1Cmd9ZlJBTKjZfcMJ/qfR2
-         loiw==
-X-Gm-Message-State: ANoB5pn6p9sqEkujlXlmOEk891fhHs8OBDVyTclCilH3BPuBYbXThlor
-        rdSqdm1nJXseMOno052TufpS6g==
-X-Google-Smtp-Source: AA0mqf6RruZzVFpXN6h4KCkZZ95lJIotI25/WuGySzSv0FbAsvAMxS7Zbc7Yzk2LkDSt4vRbUXbHhQ==
-X-Received: by 2002:a5d:5b19:0:b0:241:dea3:ad48 with SMTP id bx25-20020a5d5b19000000b00241dea3ad48mr8019020wrb.357.1669233036374;
-        Wed, 23 Nov 2022 11:50:36 -0800 (PST)
-Received: from linaro.org ([2a00:23c5:6809:2201:fcbc:7b5d:8d6c:43a4])
-        by smtp.gmail.com with ESMTPSA id w5-20020a5d6805000000b002364c77bcacsm7267414wru.38.2022.11.23.11.50.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 11:50:35 -0800 (PST)
-From:   Mike Leach <mike.leach@linaro.org>
-To:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     mathieu.poirier@linaro.org, suzuki.poulose@arm.com,
-        peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        linux-perf-users@vger.kernel.org, leo.yan@linaro.org,
-        quic_jinlmao@quicinc.com, Mike Leach <mike.leach@linaro.org>
-Subject: [PATCH v6 14/14] coresight: trace-id: Add debug & test macros to Trace ID allocation
-Date:   Wed, 23 Nov 2022 19:50:10 +0000
-Message-Id: <20221123195010.6859-15-mike.leach@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221123195010.6859-1-mike.leach@linaro.org>
-References: <20221123195010.6859-1-mike.leach@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 23 Nov 2022 14:52:23 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC3FCC168;
+        Wed, 23 Nov 2022 11:51:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=gWgahCN0LwC89E2KB43w5T+Gp5ZpXQ1ebFse858HZYA=; b=aC79aj24enbYgV2hpmBvp9wsnL
+        qwbwTJ6xtdijYnoXSkhsfv5lPt0Ow5+QQoWPLd9bYd9HdqLiaI1/VyZV31f8oqiYtE+/UrcKue6go
+        eOzLw3/yB/1AGr62slNCOGam+g2JI59kRBPKOd9MVz+NJx3OJu/KHubE0N9HZPmsCVULPxCPaRkpn
+        OV8K2fw8im0qOJq5OiTixKz2y7LQarby7iXHQHNRmNKnNAYJSSptVXuZKbu7SDZov2WQ3DhQN+1+s
+        /r2rfAx6v2sN7ePVFd4iSYNZ5CqT7xD8Uo0LEa9DT0dMEqgpuH88VdZR4XgVi6MPQ+gctuUGhkcdB
+        /b/chChQ==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oxvm0-0023uQ-QK; Wed, 23 Nov 2022 19:51:08 +0000
+Message-ID: <a689b96c-166a-c42d-79fd-c83f841ff078@infradead.org>
+Date:   Wed, 23 Nov 2022 11:51:08 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] dma-buf: A collection of typo and documentation fixes
+Content-Language: en-US
+To:     "T.J. Mercier" <tjmercier@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+References: <20221123193519.3948105-1-tjmercier@google.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20221123193519.3948105-1-tjmercier@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds in a number of pr_debug macros to allow the debugging and test of
-the trace ID allocation system.
 
-Signed-off-by: Mike Leach <mike.leach@linaro.org>
----
- .../hwtracing/coresight/coresight-trace-id.c  | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
 
-diff --git a/drivers/hwtracing/coresight/coresight-trace-id.c b/drivers/hwtracing/coresight/coresight-trace-id.c
-index 9b85c376cb12..367bbfb4c213 100644
---- a/drivers/hwtracing/coresight/coresight-trace-id.c
-+++ b/drivers/hwtracing/coresight/coresight-trace-id.c
-@@ -24,6 +24,27 @@ static atomic_t perf_cs_etm_session_active = ATOMIC_INIT(0);
- /* lock to protect id_map and cpu data  */
- static DEFINE_SPINLOCK(id_map_lock);
- 
-+/* #define TRACE_ID_DEBUG 1 */
-+#if defined(TRACE_ID_DEBUG) || defined(CONFIG_COMPILE_TEST)
-+
-+static void coresight_trace_id_dump_table(struct coresight_trace_id_map *id_map,
-+					  const char *func_name)
-+{
-+	pr_debug("%s id_map::\n", func_name);
-+	pr_debug("Used = %*pb\n", CORESIGHT_TRACE_IDS_MAX, id_map->used_ids);
-+	pr_debug("Pend = %*pb\n", CORESIGHT_TRACE_IDS_MAX, id_map->pend_rel_ids);
-+}
-+#define DUMP_ID_MAP(map)   coresight_trace_id_dump_table(map, __func__)
-+#define DUMP_ID_CPU(cpu, id) pr_debug("%s called;  cpu=%d, id=%d\n", __func__, cpu, id)
-+#define DUMP_ID(id)   pr_debug("%s called; id=%d\n", __func__, id)
-+#define PERF_SESSION(n) pr_debug("%s perf count %d\n", __func__, n)
-+#else
-+#define DUMP_ID_MAP(map)
-+#define DUMP_ID(id)
-+#define DUMP_ID_CPU(cpu, id)
-+#define PERF_SESSION(n)
-+#endif
-+
- /* unlocked read of current trace ID value for given CPU */
- static int _coresight_trace_id_read_cpu_id(int cpu)
- {
-@@ -127,6 +148,7 @@ static void coresight_trace_id_release_all_pending(void)
- 		cpumask_clear_cpu(cpu, &cpu_id_release_pending);
- 	}
- 	spin_unlock_irqrestore(&id_map_lock, flags);
-+	DUMP_ID_MAP(id_map);
- }
- 
- static int coresight_trace_id_map_get_cpu_id(int cpu, struct coresight_trace_id_map *id_map)
-@@ -168,6 +190,8 @@ static int coresight_trace_id_map_get_cpu_id(int cpu, struct coresight_trace_id_
- get_cpu_id_out_unlock:
- 	spin_unlock_irqrestore(&id_map_lock, flags);
- 
-+	DUMP_ID_CPU(cpu, id);
-+	DUMP_ID_MAP(id_map);
- 	return id;
- }
- 
-@@ -194,6 +218,8 @@ static void coresight_trace_id_map_put_cpu_id(int cpu, struct coresight_trace_id
- 	}
- 
- 	spin_unlock_irqrestore(&id_map_lock, flags);
-+	DUMP_ID_CPU(cpu, id);
-+	DUMP_ID_MAP(id_map);
- }
- 
- static int coresight_trace_id_map_get_system_id(struct coresight_trace_id_map *id_map)
-@@ -206,6 +232,8 @@ static int coresight_trace_id_map_get_system_id(struct coresight_trace_id_map *i
- 	id = coresight_trace_id_alloc_new_id(id_map, 0, true);
- 	spin_unlock_irqrestore(&id_map_lock, flags);
- 
-+	DUMP_ID(id);
-+	DUMP_ID_MAP(id_map);
- 	return id;
- }
- 
-@@ -216,6 +244,9 @@ static void coresight_trace_id_map_put_system_id(struct coresight_trace_id_map *
- 	spin_lock_irqsave(&id_map_lock, flags);
- 	coresight_trace_id_free(id, id_map);
- 	spin_unlock_irqrestore(&id_map_lock, flags);
-+
-+	DUMP_ID(id);
-+	DUMP_ID_MAP(id_map);
- }
- 
- /* API functions */
-@@ -253,6 +284,7 @@ EXPORT_SYMBOL_GPL(coresight_trace_id_put_system_id);
- void coresight_trace_id_perf_start(void)
- {
- 	atomic_inc(&perf_cs_etm_session_active);
-+	PERF_SESSION(atomic_read(&perf_cs_etm_session_active));
- }
- EXPORT_SYMBOL_GPL(coresight_trace_id_perf_start);
- 
-@@ -260,6 +292,7 @@ void coresight_trace_id_perf_stop(void)
- {
- 	if (!atomic_dec_return(&perf_cs_etm_session_active))
- 		coresight_trace_id_release_all_pending();
-+	PERF_SESSION(atomic_read(&perf_cs_etm_session_active));
- }
- EXPORT_SYMBOL_GPL(coresight_trace_id_perf_stop);
- 
+On 11/23/22 11:35, T.J. Mercier wrote:
+> I've been collecting these typo fixes for a while and it feels like
+> time to send them in.
+> 
+> Signed-off-by: T.J. Mercier <tjmercier@google.com>
+
+
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+Thanks.
+
+(although I would prefer to see CPU instead of cpu, but that's no
+reason to hold up this patch)
+
+> ---
+>  drivers/dma-buf/dma-buf.c | 14 +++++++-------
+>  include/linux/dma-buf.h   |  6 +++---
+>  2 files changed, 10 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+> index dd0f83ee505b..614ccd208af4 100644
+> --- a/drivers/dma-buf/dma-buf.c
+> +++ b/drivers/dma-buf/dma-buf.c
+> @@ -1141,7 +1141,7 @@ EXPORT_SYMBOL_NS_GPL(dma_buf_unmap_attachment, DMA_BUF);
+>   *
+>   * @dmabuf:	[in]	buffer which is moving
+>   *
+> - * Informs all attachmenst that they need to destroy and recreated all their
+> + * Informs all attachments that they need to destroy and recreate all their
+>   * mappings.
+>   */
+>  void dma_buf_move_notify(struct dma_buf *dmabuf)
+> @@ -1159,11 +1159,11 @@ EXPORT_SYMBOL_NS_GPL(dma_buf_move_notify, DMA_BUF);
+>  /**
+>   * DOC: cpu access
+>   *
+> - * There are mutliple reasons for supporting CPU access to a dma buffer object:
+> + * There are multiple reasons for supporting CPU access to a dma buffer object:
+>   *
+>   * - Fallback operations in the kernel, for example when a device is connected
+>   *   over USB and the kernel needs to shuffle the data around first before
+> - *   sending it away. Cache coherency is handled by braketing any transactions
+> + *   sending it away. Cache coherency is handled by bracketing any transactions
+>   *   with calls to dma_buf_begin_cpu_access() and dma_buf_end_cpu_access()
+>   *   access.
+>   *
+> @@ -1190,7 +1190,7 @@ EXPORT_SYMBOL_NS_GPL(dma_buf_move_notify, DMA_BUF);
+>   *   replace ION buffers mmap support was needed.
+>   *
+>   *   There is no special interfaces, userspace simply calls mmap on the dma-buf
+> - *   fd. But like for CPU access there's a need to braket the actual access,
+> + *   fd. But like for CPU access there's a need to bracket the actual access,
+>   *   which is handled by the ioctl (DMA_BUF_IOCTL_SYNC). Note that
+>   *   DMA_BUF_IOCTL_SYNC can fail with -EAGAIN or -EINTR, in which case it must
+>   *   be restarted.
+> @@ -1264,10 +1264,10 @@ static int __dma_buf_begin_cpu_access(struct dma_buf *dmabuf,
+>   * preparations. Coherency is only guaranteed in the specified range for the
+>   * specified access direction.
+>   * @dmabuf:	[in]	buffer to prepare cpu access for.
+> - * @direction:	[in]	length of range for cpu access.
+> + * @direction:	[in]	direction of access.
+>   *
+>   * After the cpu access is complete the caller should call
+> - * dma_buf_end_cpu_access(). Only when cpu access is braketed by both calls is
+> + * dma_buf_end_cpu_access(). Only when cpu access is bracketed by both calls is
+>   * it guaranteed to be coherent with other DMA access.
+>   *
+>   * This function will also wait for any DMA transactions tracked through
+> @@ -1307,7 +1307,7 @@ EXPORT_SYMBOL_NS_GPL(dma_buf_begin_cpu_access, DMA_BUF);
+>   * actions. Coherency is only guaranteed in the specified range for the
+>   * specified access direction.
+>   * @dmabuf:	[in]	buffer to complete cpu access for.
+> - * @direction:	[in]	length of range for cpu access.
+> + * @direction:	[in]	direction of access.
+>   *
+>   * This terminates CPU access started with dma_buf_begin_cpu_access().
+>   *
+> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
+> index 71731796c8c3..1d61a4f6db35 100644
+> --- a/include/linux/dma-buf.h
+> +++ b/include/linux/dma-buf.h
+> @@ -330,7 +330,7 @@ struct dma_buf {
+>  	 * @lock:
+>  	 *
+>  	 * Used internally to serialize list manipulation, attach/detach and
+> -	 * vmap/unmap. Note that in many cases this is superseeded by
+> +	 * vmap/unmap. Note that in many cases this is superseded by
+>  	 * dma_resv_lock() on @resv.
+>  	 */
+>  	struct mutex lock;
+> @@ -365,7 +365,7 @@ struct dma_buf {
+>  	 */
+>  	const char *name;
+>  
+> -	/** @name_lock: Spinlock to protect name acces for read access. */
+> +	/** @name_lock: Spinlock to protect name access for read access. */
+>  	spinlock_t name_lock;
+>  
+>  	/**
+> @@ -402,7 +402,7 @@ struct dma_buf {
+>  	 *   anything the userspace API considers write access.
+>  	 *
+>  	 * - Drivers may just always add a write fence, since that only
+> -	 *   causes unecessarily synchronization, but no correctness issues.
+> +	 *   causes unnecessary synchronization, but no correctness issues.
+>  	 *
+>  	 * - Some drivers only expose a synchronous userspace API with no
+>  	 *   pipelining across drivers. These do not set any fences for their
+
 -- 
-2.17.1
-
+~Randy
