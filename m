@@ -2,111 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 278C3635886
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:59:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFB206358A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 11:02:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236431AbiKWJ7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 04:59:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55930 "EHLO
+        id S236804AbiKWKCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 05:02:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236804AbiKWJ6Q (ORCPT
+        with ESMTP id S237172AbiKWKAz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 04:58:16 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4E2EC0B7;
-        Wed, 23 Nov 2022 01:52:26 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 7420F1D40;
-        Wed, 23 Nov 2022 10:52:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1669197144;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zQZCMeZbkCsZ9VF9ouX01MwdWli+CdAZ1Of8k/5J5XM=;
-        b=hcBaH5TJzJwY+q9FCjgme0ERQPLxmXCoJkzjJ/cxpWaUwmckRi41AzIiYh0Mck12fKp3fM
-        zP2qhvUn/QiW6OFlSaJEpXD9M/2ypF94M95QzKQ8vFeg31umjCR7JLDbk21FvOMyEHOWtD
-        6qlVP3lPZPJ6qJKngqQqrZAEUUL1zLg9KB4v+Y/hoiLavO8gqw75X7KQpdHiLXahWjPNn9
-        Hu0gLAUeww2eFY0dBrg00HzXfUnKTsfG757tuLzHiNLK85nITw3uzP9tRIkZmA1DUJGV65
-        n6g+AqPsWAHQhtIY66PK/qP5HA2YqPcUjANVKZ/V5e2RcvlVCcfEy2TIii5VvA==
+        Wed, 23 Nov 2022 05:00:55 -0500
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B04811A706
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:53:11 -0800 (PST)
+Received: by mail-il1-x136.google.com with SMTP id x13so4991661ilp.8
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:53:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jYp5ciN+0qztnx6RQRU9dAwf2ffuXWpcwKE4LLsfTYI=;
+        b=lCz6WF00d4O+Tal73kRXJROlcVyF48WmIgEfi6QtzIErr8dvbBsFPC3IA/Zgvg3AOx
+         pPBRh6hewio/grqJAKDQqlW5ZYaQIcA3RYyjLINQqd/mZafinXFdMZOftnymNKaRQ096
+         1fQPVZRVu1nD+aaSDVSgNdmomH50rxmmxi6IQtfAS77oYrcp2D2leewGSKp/IqwjbxVT
+         2k9qpv8lb8bwturHOyW4FxMF5eXxwvN/BDXrXV0zw5maBhGR21bzXUUDj08ytwj+/rUE
+         a0EozBjX/+aZJBuFs0NkabtvTFTQsgbzX72M5vjsTIdMkXU6jNCHK/nw3cMdBxEWhqXC
+         IkJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jYp5ciN+0qztnx6RQRU9dAwf2ffuXWpcwKE4LLsfTYI=;
+        b=R4ahY4vmpk0UEURaDQ4Dq0CahrqT3nNvIWWUtDmT/N5yh8D1523ZIGeUHEyutUPAWz
+         H7ggXqMv5Rt9ebAUsE+twp1yoiJ3q+fSTD2sy1n9a4/XCXbqzcGXl35Mj9LoMxCbjizh
+         Zm/rvAIUKd4Wb6eFd0KS+WV09rn/Vz6uaSF92+rGxdMq+bg66lefZd/sACN2VGugCZFI
+         m/QU8FdSCguLZbclVWQWpcAkrslteM2PS5C6M4vofHiU1NBP/Q5mhuwNM3WimislpIuX
+         2NqEAOZ4PNG4RuulMyiy7/blgQNev2cCpJ0bVWh5AC9Uh+lDq4Fnl8rb4sbgvF6WI4cj
+         eEYQ==
+X-Gm-Message-State: ANoB5pkTIFE/M3A7DVT8HlHoqJ82MbiU3liwTrURFfJu0YgSeUUqL31x
+        TwQ2dw1JSRtRvThr3AoBWQJqY1O8O4/dtfCpof8=
+X-Google-Smtp-Source: AA0mqf7iT7AhDxgTNACX6iuzF3c1Y0Vf7cdQBvzzQWrWxRgp5l8IGwiODoFiizJYEE7r9FUhEzfWGABQ8iB1up451jg=
+X-Received: by 2002:a92:b0e:0:b0:2fa:52cd:80eb with SMTP id
+ b14-20020a920b0e000000b002fa52cd80ebmr3463260ilf.236.1669197190612; Wed, 23
+ Nov 2022 01:53:10 -0800 (PST)
 MIME-Version: 1.0
-Date:   Wed, 23 Nov 2022 10:52:24 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Sascha Hauer <sha@pengutronix.de>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 17/18] nvmem: layouts: Add ONIE tlv layout driver
-In-Reply-To: <20221121075144.GL3143@pengutronix.de>
-References: <20221118185118.1190044-1-michael@walle.cc>
- <20221118185118.1190044-18-michael@walle.cc>
- <20221121075144.GL3143@pengutronix.de>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <03a2791283d26c847d07852506e9d48f@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6e02:1e08:0:0:0:0 with HTTP; Wed, 23 Nov 2022 01:53:10
+ -0800 (PST)
+Reply-To: cristinacampel@outlook.com
+From:   "Mrs. Cristina Campbell" <sa6917671@gmail.com>
+Date:   Wed, 23 Nov 2022 09:53:10 +0000
+Message-ID: <CAJOk5_qf2fELfvtszToaF6UQvoO5CzQczrHStkBttzxUuwAsdA@mail.gmail.com>
+Subject: =?UTF-8?Q?K=C3=B6nnen_Sie_ein_H=C3=A4ndler_unserer_Produkte_werden=3F?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-11-21 08:51, schrieb Sascha Hauer:
-> On Fri, Nov 18, 2022 at 07:51:17PM +0100, Michael Walle wrote:
->> From: Miquel Raynal <miquel.raynal@bootlin.com>
->> 
->> This layout applies no top of any non volatile storage device 
->> containing
-> 
-> s/no/on/
-> 
->> +	table_len = hdr_len + data_len;
->> +	if (table_len > ONIE_TLV_MAX_LEN) {
->> +		dev_err(dev, "Invalid ONIE TLV data length\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	table = devm_kmalloc(dev, table_len, GFP_KERNEL);
->> +	if (!table)
->> +		return -ENOMEM;
->> +
->> +	ret = nvmem_device_read(nvmem, 0, table_len, table);
->> +	if (ret != table_len)
->> +		goto free_data_buf;
->> +
->> +	if (!onie_tlv_crc_is_valid(dev, table_len, table)) {
->> +		ret = -EINVAL;
->> +		goto free_data_buf;
->> +	}
->> +
->> +	data = table + hdr_len;
->> +	ret = onie_tlv_add_cells(dev, nvmem, data_len, data);
->> +	if (ret)
->> +		goto free_data_buf;
->> +
->> +free_data_buf:
->> +	kfree(table);
-> 
-> This is allocated with devm_kmalloc(), you shouldn't free it here.
+Sehr geehrter Herr / Frau
 
-Miquel, should I drop your patches or should I fix this in place and
-repost them?
 
-Also, there is a mistake in nvmem_add_cells_from_layout() which doesn't
-handle the return code. Probably a leftover from before when I had
-.add_cells() return void.
+Mein Name ist Dr. John Smith; ein Verkaufsberater bei Diageo Company
+London, Vereinigtes K=C3=B6nigreich, Diageo Company sucht nach einer
+zuverl=C3=A4ssigen Person in Ihrem Land, die ihr Vertreter als Distributor
+ihrer Produkte und Marken sein kann.
 
--michael
+Das Unternehmen stellt Ihnen 50 % Vorauszahlung f=C3=BCr das Produkt zur
+Verf=C3=BCgung, wenn es davon =C3=BCberzeugt ist, dass Sie zuverl=C3=A4ssig=
+ sind und
+die F=C3=A4higkeit haben, die Interessen des Unternehmens zu vertreten und
+die Markenprodukte zur Gewinnmaximierung effektiv in und um Ihr Land
+herum zu vertreiben.
+
+Ich werde Ihnen weitere Einzelheiten mitteilen, nachdem ich von Ihnen
+geh=C3=B6rt habe, und wenn Sie daran interessiert sind, ein Distributor und
+Vertreter der Diageo Company in Ihrem Land zu werden, antworten Sie
+mir bitte auf meine unten angegebene pers=C3=B6nliche E-Mail.
+
+Mit freundlichen Gr=C3=BC=C3=9Fen
+Dr. John Smith
+E-Mail; johnoffic@hotmail.com
