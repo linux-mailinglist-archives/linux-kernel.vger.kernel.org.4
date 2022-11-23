@@ -2,104 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04B376365E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 17:33:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC456365EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 17:35:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237943AbiKWQdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 11:33:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58908 "EHLO
+        id S238415AbiKWQfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 11:35:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235641AbiKWQdI (ORCPT
+        with ESMTP id S235641AbiKWQft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 11:33:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04DCD22515;
-        Wed, 23 Nov 2022 08:33:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 744EA61DF6;
-        Wed, 23 Nov 2022 16:33:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E966C433D6;
-        Wed, 23 Nov 2022 16:33:05 +0000 (UTC)
-Date:   Wed, 23 Nov 2022 11:33:04 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     Rafael Mendonca <rafaelmendsr@gmail.com>,
-        "Tzvetomir Stoyanov (VMware)" <tz.stoyanov@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        Tom Zanussi <zanussi@kernel.org>
-Subject: Re: [PATCH] tracing/eprobe: Update cond flag before enabling
- trigger
-Message-ID: <20221123113304.3f41ff1b@gandalf.local.home>
-In-Reply-To: <20221124010152.75846db3bc63a5c6c109945f@kernel.org>
-References: <20221116192552.1066630-1-rafaelmendsr@gmail.com>
-        <20221117211726.4bbbb96a@gandalf.local.home>
-        <20221117213109.6119750e@gandalf.local.home>
-        <Y3d9KcpcwrEUUYKT@macondo>
-        <Y3eJ8GiGnEvVd8/N@macondo>
-        <20221118111940.1268da2b@gandalf.local.home>
-        <20221124010152.75846db3bc63a5c6c109945f@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 23 Nov 2022 11:35:49 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C15E23BD7;
+        Wed, 23 Nov 2022 08:35:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=3h/VgEw0Wflfm9bqnZb5OvyNPIn+ZE40wg6eS0dcqRM=; b=fT8osm953AWBxu8+52OtN4myCG
+        neTJeoJChBklml5lCWyNy25CDFeCueojHw+n+N61xIYLuxt1T0p6PxZVBJjwjMV0ldvrUH2A9OPYR
+        itmfGGiLDmlnZXP36gb1owvtUQvHzf7Bhp4BKeaTXV8RUlfIwfnhhKdkNzQb/KSsUKO3ko7L9q+nJ
+        z57ddCke4H/HGWjrZM2F76zLg2jda4Ljv9btOrm663EPRkvBCTE7sGeyjzbaVMz4F2QkOJyvsyHfj
+        pxSBJRnkJQvI0qSzv+OzdDFYLi0au9aheuskBtF1H6aN58aWr8WzoD5HTnMtiM9Xxtyo+Is5iBpQ2
+        DOF4RH5A==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oxsix-000tzy-65; Wed, 23 Nov 2022 16:35:47 +0000
+Message-ID: <fcdb5238-5977-526a-4752-fa82893a580e@infradead.org>
+Date:   Wed, 23 Nov 2022 08:35:44 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH -next] fbdev: offb: allow build when DRM_OFDRM=m
+Content-Language: en-US
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
+Cc:     linux-fbdev@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Michal Suchanek <msuchanek@suse.de>,
+        linuxppc-dev@lists.ozlabs.org, Helge Deller <deller@gmx.de>
+References: <20221123031605.16680-1-rdunlap@infradead.org>
+ <4b10b87d-f255-4839-8700-858d98ffb801@app.fastmail.com>
+ <25c22370-b67a-33a6-f1e6-abf70760d866@infradead.org>
+In-Reply-To: <25c22370-b67a-33a6-f1e6-abf70760d866@infradead.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Nov 2022 01:01:52 +0900
-Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
 
-> On Fri, 18 Nov 2022 11:19:40 -0500
-> Steven Rostedt <rostedt@goodmis.org> wrote:
+
+On 11/23/22 02:02, Randy Dunlap wrote:
+> Hi Arnd,
 > 
-> > On Fri, 18 Nov 2022 10:34:40 -0300
-> > Rafael Mendonca <rafaelmendsr@gmail.com> wrote:
-> >   
-> > > It did not trigger the NULL pointer issue to be more specific. When
-> > > creating event probe for all events I was unable to create any event for
-> > > the xhci-hcd system:
-> > > 
-> > > root@localhost:/sys/kernel/tracing# echo 'e xhci-hcd/xhci_add_endpoint' > dynamic_events 
-> > > -bash: echo: write error: Invalid argument
-> > > 
-> > > Debugging the issue it seems that the problem is in the is_good_name()
-> > > check, which returns false for "xhci-hcd". Should we sanitize it by  
-> > 
-> > Ouch. I didn't realize that.  
+> On 11/23/22 01:08, Arnd Bergmann wrote:
+>> On Wed, Nov 23, 2022, at 04:16, Randy Dunlap wrote:
+>>> Fix build when CONFIG_FB_OF=y and CONFIG_DRM_OFDRM=m.
+>>> When the latter symbol is =m, kconfig downgrades (limits) the 'select's
+>>> under FB_OF to modular (=m). This causes undefined symbol references:
+>>>
+>>> powerpc64-linux-ld: drivers/video/fbdev/offb.o:(.data.rel.ro+0x58): 
+>>> undefined reference to `cfb_fillrect'
+>>> powerpc64-linux-ld: drivers/video/fbdev/offb.o:(.data.rel.ro+0x60): 
+>>> undefined reference to `cfb_copyarea'
+>>> powerpc64-linux-ld: drivers/video/fbdev/offb.o:(.data.rel.ro+0x68): 
+>>> undefined reference to `cfb_imageblit'
+>>>
+>>> Fix this by allowing FB_OF any time that DRM_OFDRM != y so that the
+>>> selected FB_CFB_* symbols will become =y instead of =m.
+>>>
+>>> In tristate logic (for DRM_OFDRM), this changes the dependency from
+>>>     !DRM_OFDRM	== 2 - 1 == 1 => modular only (or disabled)
+>>> to (boolean)
+>>>     DRM_OFDRM != y == y, allowing the 'select's to cause the
+>>> FB_CFB_* symbols to =y instead of =m.
+>>>
+>>
+>> Is it actually a useful configuration to have OFDRM=m and
+>> FB_OF=y though? I would expect in that case that the OFDRM
+>> driver never binds to a device because it's already owned
+>> by FB_OF.
+>>
+>>> diff -- a/drivers/video/fbdev/Kconfig b/drivers/video/fbdev/Kconfig
+>>> --- a/drivers/video/fbdev/Kconfig
+>>> +++ b/drivers/video/fbdev/Kconfig
+>>> @@ -455,7 +455,7 @@ config FB_ATARI
+>>>  config FB_OF
+>>>  	bool "Open Firmware frame buffer device support"
+>>>  	depends on (FB = y) && PPC && (!PPC_PSERIES || PCI)
+>>> -	depends on !DRM_OFDRM
+>>> +	depends on DRM_OFDRM != y
+>>>  	select APERTURE_HELPERS
+>>
+>> I would instead make this 'depends on DRM_OFDRM=n', which
+>> completely eliminates configs that have both driver enabled.
 > 
-> Maybe we need better error message so that user can notice which character
-> caused the error. 
+> Yep, that works for me. Thanks.
 > 
-> >   
-> > > converting '-' into '_'?  
-> > 
-> > Actually, it's just the system name that's an issue. I tested this patch
-> > and it appears to work.  
+> Thomas, Michal, are you OK with that change?
 > 
-> Ah, the system name is more flexible than the event name because it has
-> TRACE_SYSTEM_VAR.
-> 
-> Steve, can you send me the below patch?
+>> A nicer change would be to make FB_OF a tristate symbol,
+>> which makes it possible to load one of the two modules if
+>> both are enabled =m, while only allowing one of them to
+>> be =y if the other is completely disabled. It looks like
+>> offb was originally written to be usable as a loadable module,
+>> but Kconfig has prevented this since at least the start of
+>> the git history.
 
-I already did ;-)
+ISTM that a distro would prefer to have both DFM_OFDRM and
+FB_OF as tristate symbols that could both be built as loadable
+modules, as Arnd describes above.
+I'll look into that.
 
-  https://patchwork.kernel.org/project/linux-trace-kernel/patch/20221122122345.160f5077@gandalf.local.home/
-
-
-> 
-> BTW, TRACE_DEFINE_ENUM() and TRACE_DEFINE_SIZEOF() macros are using
-> TRACE_SYSTEM instead of TRACE_SYSTEM_VAR. Should those use TRACE_SYSTEM_VAR
-> for defining a variable?
-
-Hmm, good question. Probably. But since nothing that has a bad name uses
-it, we can fix that whenever (but before a system with a hyphen uses those
-macros). Do you want to make the change, or shall I?
-
--- Steve
+-- 
+~Randy
