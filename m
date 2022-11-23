@@ -2,173 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 449F1636135
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:12:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3655863613B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:12:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237737AbiKWOMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 09:12:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35488 "EHLO
+        id S236548AbiKWOMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 09:12:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236038AbiKWOMJ (ORCPT
+        with ESMTP id S238091AbiKWOMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 09:12:09 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72AC3238
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 06:12:08 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id t1so13136249wmi.4
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 06:12:08 -0800 (PST)
+        Wed, 23 Nov 2022 09:12:36 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4CA1CE6
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 06:12:28 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id s8so28320072lfc.8
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 06:12:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Bws7Utd85LMsHk1OFS5y1Jt3azqf33BIHbl8d6KTHuQ=;
-        b=D+wYqLDP1MEA7jCYynzAsSVMjisFupGWEdxCzQFgAuLl/j7P7VMONsmjag6HspHkDv
-         2Hb7jLfBYBKn7EXSFEe3S39UkuY40vBMpDWg4yQJ4DUQJ2YzXHc5fdHK/JikDPxeLKxO
-         echf0BlGjUZhObFuWaVKRFMbuGyKOaQyUfzZ5RSdHkDArwX/vjxyuFeGEnfPpd2yOQz5
-         s6JTEbHITuLdXFNGDf8zpWu7spCPT+9jtpiRGHW4pmypT2XUM/EKUobQXJYypI6Vm0Ol
-         b0rOtA2VPArOraLFkReBtfw21uDCV+3qXlv6/BoK+zYCKDvGg/JYisGHDWZ3Nx59gFVi
-         1P0A==
+        bh=YpScT/PLZhW9m/mc8mS4KdOL1HgAD8oZWMFJX7jIr5M=;
+        b=dVw7XBd3kFmPkaiQVhTxkTxRTXfXPM2I5cBO1BHdipcu1xZUATDW3nqvCXHSJHNjkG
+         Saq4PQcGqWeTRcsEBw+SoTuEWDyarGTLZS7tyefqZMUT4tfAG9qNjBQPdJBzFFJY4zde
+         cq8lLYQqft+3Pp6JhU7YBgBAml7uUKP+8lhWRS2CHTvlFdzTn9QKPaEYPncuHSTY+0Ac
+         caMiN5HuJTr7cdk2bBZ+dfO+1kewrN6lfF/PGFTWzkY4N0mMTvZVvDnotGyjVaZ+DeUz
+         7jVx5CyB8Iq+8PCQgVa0WFVeihPaEtKsmTU7HmeJ02eGcdn3/yvIDo5oy20WEkfdX0LD
+         lVGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bws7Utd85LMsHk1OFS5y1Jt3azqf33BIHbl8d6KTHuQ=;
-        b=gxEbtK21uxeCoaN8W8VelV3AvqeP1RALvFcsENKHfQRIzTydQJUVU1947DQ3kySSD0
-         bbg2UjMh78gPE1+Qf+3V8iSFPqnwOBuhrgZSB2Ru6raeifi3UkvcwCn0PeiudSyUn4MO
-         5MIRSuVUZ9rsnbHaZ0RsGDvQo1mjzupi9jZ5HHiYW72FZ//R2+y+fuHPuLYj2o4CD+lg
-         zH9npBvFjJQQGzmuoLKIP7KE+nkXq16akfjsAAcjp+3CKbn6X0J1NhZekQmjb9YJaraE
-         OIQ8w+B+oouFGINi0CTKOjiV4vg/VDHTw0nXuU2McsKwUhJPGKfR5MtxKUEtpDUKtloU
-         kDsg==
-X-Gm-Message-State: ANoB5pmLrpZfn3kB3CJUi3mVif8hLDWE9vhcycHpJ0d5P8d7IKqKxNEy
-        E0lvJ7rDBD/JDyeXFRV+XcVMVw==
-X-Google-Smtp-Source: AA0mqf6Y0ju2xImGL+9QBlfOHXw/7y97CmSePiN/N1bGOjf5pSx013+27gKxLKN4IqD5oXnpuuoyFA==
-X-Received: by 2002:a05:600c:2302:b0:3cf:a3c4:59b3 with SMTP id 2-20020a05600c230200b003cfa3c459b3mr12643453wmo.198.1669212726904;
-        Wed, 23 Nov 2022 06:12:06 -0800 (PST)
-Received: from [10.83.37.24] ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id y7-20020a1c4b07000000b003b4c979e6bcsm2345676wma.10.2022.11.23.06.12.05
+        bh=YpScT/PLZhW9m/mc8mS4KdOL1HgAD8oZWMFJX7jIr5M=;
+        b=VnhKZYCYInvNLucJKfDdF5faJw433eL4+oe7vZSGe8OgtUfOjn/Nx4YijhbIy4oVR+
+         ltGaXFuCXwRimSYuk9D3Ap3XT11hUBWJMQchViC47zGsHsITPN9hgs9XMo+lyIxZLWWS
+         LhLFmZmZEvNJAHVKyaS/d51vd2WDFh3IuA3tLv+QACicLoJ/NF0KOJ7w3rs+HxpYnY0S
+         sTJdcr7RNV9e85tH/E314IduvZcgeNJcT/o0X15HiW9QsFDQ1ZeDV/HhmfSzyWCuuvLl
+         38VcU/S/7pj85ya6cCkczK5F+wyw5IZFfz9YxaJ+jRHrzV/78ca10+1zkKRqy8hrNHpd
+         Ml5A==
+X-Gm-Message-State: ANoB5pkeK094UYsWoXbLOv78S06VKy4fLb50lmDRsYtsuqzksl82Blu5
+        EiKYkskScsSeQ0942uDJUWYkTw==
+X-Google-Smtp-Source: AA0mqf65irOcr+aB/hyQQfJeHM7Hq1+nPrF12N6FMB1oep9oKnjE/+MQX7mNMHiHEpGS4c3FQkZxMg==
+X-Received: by 2002:ac2:4209:0:b0:499:f8e4:6dd0 with SMTP id y9-20020ac24209000000b00499f8e46dd0mr9925093lfh.162.1669212746994;
+        Wed, 23 Nov 2022 06:12:26 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id s29-20020a19771d000000b004afeacffb84sm2899160lfc.98.2022.11.23.06.12.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 06:12:06 -0800 (PST)
-Message-ID: <9e730aaf-9bbb-38d4-c26f-dfc58c4a9352@arista.com>
-Date:   Wed, 23 Nov 2022 14:11:59 +0000
+        Wed, 23 Nov 2022 06:12:26 -0800 (PST)
+Message-ID: <663d8e29-b47f-8135-8b4e-c95b68559367@linaro.org>
+Date:   Wed, 23 Nov 2022 15:12:25 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH v5 1/5] jump_label: Prevent key->enabled int overflow
+Subject: Re: [PATCH V5 4/4] arm64: dts: meson: add S4 Soc Peripheral clock
+ controller in DT
 Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Bob Gilligan <gilligan@arista.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        Steven Rostedt <rostedt@goodmis.org>, netdev@vger.kernel.org
-References: <20221122185534.308643-1-dima@arista.com>
- <20221122185534.308643-2-dima@arista.com>
- <Y33uEHIHwPZ/5IiA@hirez.programming.kicks-ass.net>
-From:   Dmitry Safonov <dima@arista.com>
-In-Reply-To: <Y33uEHIHwPZ/5IiA@hirez.programming.kicks-ass.net>
+To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     kelvin.zhang@amlogic.com
+References: <20221123021346.18136-1-yu.tu@amlogic.com>
+ <20221123021346.18136-5-yu.tu@amlogic.com>
+ <ae43fadf-9255-7db7-8b5e-01200e02a2c6@linaro.org>
+ <9858039f-e635-2749-80a2-75072d6e9cea@amlogic.com>
+ <8dbb3ce2-c8d9-70be-d1de-ed875de0ea1b@linaro.org>
+ <3bdaa648-c607-a79c-f6bb-c75baa1e8509@amlogic.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <3bdaa648-c607-a79c-f6bb-c75baa1e8509@amlogic.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/23/22 09:55, Peter Zijlstra wrote:
-> On Tue, Nov 22, 2022 at 06:55:30PM +0000, Dmitry Safonov wrote:
+On 23/11/2022 14:23, Yu Tu wrote:
+>>> ../patch_clk_v5_1122/0004-arm64-dts-meson-add-S4-Soc-Peripheral-clock-controll.patch
+>>> has no obvious style problems and is ready for submission.
+>>>
+>>
+>> This is a checkpatch output. I am talking about DTS broken. dtc should
+>> warn you.
 > 
->> +/***
->> + * static_key_fast_inc_not_negative - adds a user for a static key
->> + * @key: static key that must be already enabled
->> + *
->> + * The caller must make sure that the static key can't get disabled while
->> + * in this function. It doesn't patch jump labels, only adds a user to
->> + * an already enabled static key.
->> + *
->> + * Returns true if the increment was done.
->> + */
+> Do you mean I will have wraning in compiling?
+> I actually compiled without warning.
+> ccf$ make ARCH=arm64 dtbs -j12
+>    DTC     arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dtb
 > 
-> I don't normally do kerneldoc style comments, and this is the first in
-> the whole file. The moment I get a docs person complaining about some
-> markup issue I just take the ** off.
 
-The only reason I used kerneldoc style is that otherwise usually someone
-would come and complain. I'll convert it to a regular comment.
+Nope:
 
-> One more thing; it might be useful to point out that unlike refcount_t
-> this thing does not saturate but will fail to increment on overflow.
+../arch/arm64/boot/dts/amlogic/meson-s4.dtsi:105.35-127.6: Warning
+(unit_address_vs_reg): /soc/apb4@fe000000/clock-controller: node has a
+reg or ranges property, but no unit name
 
-Will add it as well.
+Test your patches better before using reviewers time for trivial
+compile-time fixes. The same rules for C code apply for DTS.
 
-> 
->> +static bool static_key_fast_inc_not_negative(struct static_key *key)
->>  {
->> +	int v;
->> +
->>  	STATIC_KEY_CHECK_USE(key);
->> +	/*
->> +	 * Negative key->enabled has a special meaning: it sends
->> +	 * static_key_slow_inc() down the slow path, and it is non-zero
->> +	 * so it counts as "enabled" in jump_label_update().  Note that
->> +	 * atomic_inc_unless_negative() checks >= 0, so roll our own.
->> +	 */
->> +	v = atomic_read(&key->enabled);
->> +	do {
->> +		if (v <= 0 || (v + 1) < 0)
->> +			return false;
->> +	} while (!likely(atomic_try_cmpxchg(&key->enabled, &v, v + 1)));
->> +
->> +	return true;
->> +}
-> 
-> ( vexing how this function and the JUMP_LABEL=n static_key_slow_inc() are
->   only a single character different )
-
-Yeah, also another reason for it was that when JUMP_LABEL=y jump_label.h
-doesn't include <linux/atomic.h> and <linux/bug.h> because of the
-inclusion hell:
-commit 1f69bf9c6137 ("jump_label: remove bug.h, atomic.h dependencies
-for HAVE_JUMP_LABEL")
-and I can't move JUMP_LABEL=n version of static_key_slow_inc() to
-jump_label.c as it is not being built without the config set.
-
-So, in result I was looking into macro-define for both cases, but that
-adds quite some ugliness and has no type checks for just reusing 10
-lines, where 1 differs...
-
-> So while strictly accurate, I dislike this name (and I see I was not
-> quick enough responding to your earlier suggestion :/). The whole
-> negative thing is an implementation detail that should not spread
-> outside of jump_label.c.
-> 
-> Since you did not like the canonical _inc_not_zero(), how about
-> inc_not_disabled() ?
-
-Ok, that sounds good, I'll rename in v6.
-
-> Also, perhaps expose this function in this patch, instead of hiding that
-> in patch 3?
-
-Will do.
-
-> Otherwise, things look good.
-> 
-> Thanks!
-Thanks again for the review,
-          Dmitry
+Best regards,
+Krzysztof
 
