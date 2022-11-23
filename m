@@ -2,141 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5C39636C46
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 22:20:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CA18636C49
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 22:20:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237655AbiKWVUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 16:20:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
+        id S237646AbiKWVUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 16:20:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236642AbiKWVUI (ORCPT
+        with ESMTP id S237461AbiKWVUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 16:20:08 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65245EF81;
-        Wed, 23 Nov 2022 13:20:02 -0800 (PST)
-Received: from leknes.fjasle.eu ([46.142.96.241]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MS3zP-1oVAmo2pB5-00TQgl; Wed, 23 Nov 2022 22:19:37 +0100
-Received: from localhost.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:6f0:21ff:fe91:394])
+        Wed, 23 Nov 2022 16:20:14 -0500
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587C05E9F4;
+        Wed, 23 Nov 2022 13:20:13 -0800 (PST)
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by leknes.fjasle.eu (Postfix) with ESMTPS id 6891F3C0EF;
-        Wed, 23 Nov 2022 22:19:36 +0100 (CET)
-Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
-Received: by localhost.fjasle.eu (Postfix, from userid 1000)
-        id 6B16E1C7; Wed, 23 Nov 2022 22:19:33 +0100 (CET)
-Date:   Wed, 23 Nov 2022 22:19:33 +0100
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH v2 5/5] kbuild: check Make version
-Message-ID: <Y36OZVnAZBqxcrBw@bergen.fjasle.eu>
-References: <20221123151828.509565-1-masahiroy@kernel.org>
- <20221123151828.509565-5-masahiroy@kernel.org>
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4NHYtg3P73z9sTD;
+        Wed, 23 Nov 2022 22:20:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+        t=1669238411;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=txOGkrEA2n8kD8rEb+sAuk9hGQgHmqWBcmtclgoTBow=;
+        b=xp3P1yXiwkHyvCRR3nMU8w8Q0Xg1m5xyYuoXjPjkacNskP3q+cf0FGW5kcuZ9G4KJaJH3I
+        QauiysLTZ6bPazxXb4dA7phTs9q4cbp1++pupbvpQpRPgqED4NvDLQkPbyv6t2TgPSQX5S
+        oT5Ja49ownGekLV5AhGYO3C10cToqURFT9VdXsmHr6zYxJhqhaC6g0PvoK0I/QpKuxuQ/r
+        cpkRcLEZisIpU3eCkHbNyXsxD7eHjmvx4tVySwuHdL8VSvFyBTSU3ajSMQNj+5rMMTIWWF
+        WdSYf4yuzux7V+IOaiTrAgh7jIfMgT3DyC582f1NPJLQ/4r3EcIqARfFHNAuLw==
+From:   Alexander Lobakin <alobakin@mailbox.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+        t=1669238409;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=txOGkrEA2n8kD8rEb+sAuk9hGQgHmqWBcmtclgoTBow=;
+        b=MVuobNhkS/3qacNzrNQJBCjQo0VS+KDBfqurTDLaIB/nGqdtDdlgDUFx6X5y/UYLgdjaWb
+        hVxOzqmiFVXKrrWBWbMGbjO1HUdE8mrwInYdoXJ0WZNLosxzUr0FCH3L7kt8alcbtXF/UH
+        ysUXTl1WqJMioRJVdsiOCcWBpt+FKcA2/uYEfgVqLrmEugVLN47LmeWpu5HH5bWqPj6E/7
+        7qZqUjyN8/4DBAQ2KMyPdgjlbKoyTfBdPsiX0g3S4QZjURvbzCnJaNLKKBQsk0YUPACPS7
+        Jo3OTcmTOkXB331YwbTLCGmrB+feFH4PkAuirqKjQro/c1f5BnBISCG7Ci292g==
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Alexander Lobakin <alobakin@mailbox.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Alexander Lobakin <alobakin@pm.me>,
+        linux-kbuild@vger.kernel.org, Nicolas Schier <nicolas@fjasle.eu>,
+        Jens Axboe <axboe@kernel.dk>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Derek Chickles <dchickles@marvell.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 11/18] platform/x86: int3472: fix object shared between several modules
+Date:   Wed, 23 Nov 2022 22:19:38 +0100
+Message-Id: <20221123211938.56830-1-alobakin@mailbox.org>
+In-Reply-To: <a1f611fd-28ad-83ef-5d17-94fe2c4a6a7f@redhat.com>
+References: <20221119225650.1044591-1-alobakin@pm.me> <20221119225650.1044591-12-alobakin@pm.me> <Y3oxyUx0UkWVjGvn@smile.fi.intel.com> <961a7d7e-c917-86a8-097b-5961428e9ddc@redhat.com> <CAK7LNASxxzA1OEGuJR=BU=6G8XaatGx+gDCMe2s9Y3MRcwptYw@mail.gmail.com> <87852fc9-0757-7e58-35a2-90cccf970f5c@redhat.com> <CAK7LNAROUV6Z6L6yn4WiigfPRJTGU4+j0ujLt6nsxVp9+aCUzw@mail.gmail.com> <a1f611fd-28ad-83ef-5d17-94fe2c4a6a7f@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Maq/TkbjpaCwn4xr"
-Content-Disposition: inline
-In-Reply-To: <20221123151828.509565-5-masahiroy@kernel.org>
-Jabber-ID: nicolas@fjasle.eu
-X-Operating-System: Debian GNU/Linux bookworm/sid
-X-Provags-ID: V03:K1:/9KcQRCK2bBQpiBsYL5NkiW1zveXPgDA6HF3VgiDYd66guiX+Hp
- WgA3ZmMCzSfbfrz/S0yn6uZz1hmohMyhUJgLSt646npE7Y+bC2VD6juBc5azyA8qnfOdaWU
- U4Na5yjcdUjWN/r/u/nL1nIUvibSkwkk5MqZyJ2LaRp/yY7bPECF1CBtsBhn6icW2hpiZYf
- RCZJUa3fyYY0aWbNuixcQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:br0VPB7P5HU=:q5sJH8bUFHecxtl3AZdhkP
- FYdHbbHrL1Or8eyONyf17m6A8DEq6wlzE+jRAyFlmOM0MimNM5/dDmnBOEq71H/8iUpGm9ScK
- VUoHBXGDgRNqQJ26+nAktUCUy/yHkkmFjB60IXF/JBCop6RihXfmYg2AKTrrISjQxpigQia40
- WT3+c6S9+ro9SZx/fCW8wLfRCB+TyHSF2rOnfZkLnsNkvoh8gr4K6bGkHkzGgC0w6gRcu8KJR
- ztd7BX83wkHMSf50aVIo8DYEAsfKfNL/bdimyD/pNSggdCWOTXQrFV78JDudqupF2m7gBC66c
- IIFFv0C2tnbkiBJPrEltTMF4YkoZeOG0YQFlRxI1y5ZpGuUfWCuyLX1IABnOclLu26YnlL4gQ
- 2MMPVu81ACv4Mw6YidqsAhGPEf4RiiFxI3VOp0taixabKmtlwhSSe65XgSeQCEcpCrju7JvCQ
- AJdqSMyDsOWF2zspTGiFfv1xK2YWxxeKqOB9Lg2hePJsimTk4DO64/6Z8Vi0MiUMf7yz5a5e0
- 3QiInUJHXgQWyIIkTyxfY+ZkrbSbH1NLb5ccBcA+ZUsWrTMLY8S8HeUPZu6jU5gin/QehKM4Q
- 2w29Q91vz5NIgonpd7HtuBMXyLEy+SrRc1SDg0rae0fIwUlsNyiJS5KZJfMbE6okpY+btwobi
- hbDq3qSLae9bL1p8snjwH8FLjboYr2wRAQQARXuUDZj6Cpr7myxKzB8MIbj1UG4Cys1iZXRxk
- wZqeioVcRXFuRBhF5WpF7UbNpJJc1VPJJS9Mr3YY4FzxY22la3g2Lg62th3uPky4XDzIjfbo1
- YgM+8BX
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-MBO-RS-META: 91q874awb8ra8xgpfair6nbfiyk3i8ke
+X-MBO-RS-ID: 2715b19c8ed0829371d
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Mon, 21 Nov 2022 10:34:11 +0100
 
---Maq/TkbjpaCwn4xr
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Hi,
+> 
+> On 11/21/22 10:06, Masahiro Yamada wrote:
+> > On Mon, Nov 21, 2022 at 5:12 PM Hans de Goede <hdegoede@redhat.com> wrote:
 
-On Thu 24 Nov 2022 00:18:28 GMT, Masahiro Yamada wrote:
-> This is implemented based on test-le. It will work until GNU Make 10
-> is released.
+[...]
 
-=2E.. and as long as nobody uses make versions w/ minor version numbers,=20
-cp. patch 3/5.
+> > I think this patch series should be split
+> > and sent to each sub-system instead of kbuild.
+> 
+> Yes definitely, the changes are big enough that not merging
+> this through the subsystem trees is going to cause conflicts.
 
-Kind regards,
-Nicolas
+Makes sense! I'll collect the feedback here and then will be sending
+stuff to the corresponding MLs with the reference to the original
+commits which introduce Kbuild warnings.
 
->=20
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->=20
-> (no changes since v1)
->=20
->  Makefile | 3 +++
->  1 file changed, 3 insertions(+)
->=20
-> diff --git a/Makefile b/Makefile
-> index 60ce9dcafc72..797fafbc1b45 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -368,6 +368,9 @@ else # !mixed-build
-> =20
->  include $(srctree)/scripts/Kbuild.include
-> =20
-> +# Check for the minimal Make version
-> +$(if $(call test-lt, $(MAKE_VERSION), 3.82), $(error Make $(MAKE_VERSION=
-) is too old))
-> +
->  # Read KERNELRELEASE from include/config/kernel.release (if it exists)
->  KERNELRELEASE =3D $(call read-file, include/config/kernel.release)
->  KERNELVERSION =3D $(VERSION)$(if $(PATCHLEVEL),.$(PATCHLEVEL)$(if $(SUBL=
-EVEL),.$(SUBLEVEL)))$(EXTRAVERSION)
-> --=20
-> 2.34.1
+> 
+> Regards,
+> 
+> Hans
 
---=20
-epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-=E2=86=B3 gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
-     -- frykten for herren er opphav til kunnskap --
+[...]
 
---Maq/TkbjpaCwn4xr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmN+jmQACgkQB1IKcBYm
-EmmE7hAAmLPqlfjpFXmV+/c+cPJEKP6laxzbiEnmKhKdRjpVWoRZKHzgmFPasa2p
-idphyfO7XE2o/+qw1bAF6X2+N6JicJzaEN+a12KQFGomJ5iAxjCaNJled3GUnmx4
-wI78Ypuu3ILrUwGWrNUklTf3S6yy3Krqpoor/5IOGdHYQWmOTYXjvbYK5DS43TkY
-GsjhwR3Fi+w25Ljv7l9HXQatoiVkEG57aH47OFkBuDjCyZfkTpcL8DE89mltzeLa
-DpGeNt/ipe1wpvrPRI17hF6lJQCZS/qZtx1RXuen8/MzB0xBvfVjGz3De/Io6kgd
-9GHTDftA2qobq1yLzkWXVJgbfYDgvpNRVfdwLWu8wIHwVhSBqrX2uOgRDWKOKX2G
-5E2aacd7nMF446f+JoAeavOZSAU/HZkH1LYkEbvrs10zWhuYhF3Pbu3i02BXDhfU
-aCufPsuAh1UiZ5KeYEweSKFwVoLqZ5xmr3A73UXH3mNHbWpdLuGd6hv65q804DIJ
-DdbLs+HToE5Jw+lSAVNhIUSX6wZRDX4mWa/3s1R4gHqwTt8P4bqGg1/9+wmwNb1a
-OAW8qGsoDAqG3mahozsIrLUpPwCUC/F3S7OKdJQaS4Ly2oLWq/42x3u7kK1ap2Jl
-KVMMWrjoi/1gD5KngOBApV6ypIe321/RNHJyVgZ/LdlBeolI5yQ=
-=VP5l
------END PGP SIGNATURE-----
-
---Maq/TkbjpaCwn4xr--
+Thanks!
+Olek
