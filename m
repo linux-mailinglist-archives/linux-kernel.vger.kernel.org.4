@@ -2,136 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2394635FE4
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:33:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 889FE635FE6
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:33:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238774AbiKWNcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 08:32:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39876 "EHLO
+        id S238797AbiKWNcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 08:32:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238234AbiKWNbO (ORCPT
+        with ESMTP id S238210AbiKWNbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 23 Nov 2022 08:31:14 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7423931352;
-        Wed, 23 Nov 2022 05:13:06 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 05E0321875;
-        Wed, 23 Nov 2022 13:13:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1669209185; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=iz1HRqkggoLI/S14nTxBDCcxxQV81AgfLfdqBcyXeZY=;
-        b=EjgqBi3fsvzjjAiQ7uHz0ZN8XQAzcmGw/LLZUk+BjcL9eFvUAlxrn21WLO5IkdCcKN+3C4
-        NhTySQGKjWTej7+KKKbaBwoLYz9vPA6RimvtHV87/1Y9w2+rap613OwVDMZqqsfdeB1hS2
-        LPtnZl1udKikg1FmMR5/gLb6iyg1oLU=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C622813A37;
-        Wed, 23 Nov 2022 13:13:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 9+1fL2AcfmN9ewAAMHmgww
-        (envelope-from <petr.pavlu@suse.com>); Wed, 23 Nov 2022 13:13:04 +0000
-From:   Petr Pavlu <petr.pavlu@suse.com>
-To:     mcgrof@kernel.org
-Cc:     pmladek@suse.com, prarit@redhat.com, david@redhat.com,
-        mwilck@suse.com, petr.pavlu@suse.com,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: [PATCH] module: Don't wait for GOING modules
-Date:   Wed, 23 Nov 2022 14:12:26 +0100
-Message-Id: <20221123131226.24359-1-petr.pavlu@suse.com>
-X-Mailer: git-send-email 2.35.3
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D8F156D7D;
+        Wed, 23 Nov 2022 05:13:04 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ANAe6IK026900;
+        Wed, 23 Nov 2022 13:12:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=9PXQukpxuogl+8l31b8WwhvCbvp+U7J+XqCX2qkFTGE=;
+ b=ieoJPpTfsIcCtPXvKSpUqs6UfKHqFjLGBdXPXTWDX9kLITBSJQkI4eRL/YTgUx19nMG0
+ 7IYmKhlPfE4sk2o655ekHeTIY2y+rO2ctE5x6TTSJwzN2cOjMzhD+w17h7wZvS+naXgu
+ /i+CRkTTazmTk+kVp4j3A8srGQsMSirQVZ3JWj14Zouvh67riSn+ZBFCgNW5510Wzt09
+ a1HuV8vZlRlg2fyXyq2EI8RgJ0V/p37IKFRUL3xmAUxOdDkG7APYRuD+dq2TzV2Mhl1l
+ x6ZB8GXBgIWfrB9hQQRG/KfqEj0P+1Un1P1nJQRZGzw6QlXcLGtioBIccPxENfZIgxDR yw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m10bmdkks-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Nov 2022 13:12:34 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2ANCfQfW022844;
+        Wed, 23 Nov 2022 13:12:33 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m10bmdkjt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Nov 2022 13:12:33 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AND5alC023180;
+        Wed, 23 Nov 2022 13:12:32 GMT
+Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
+        by ppma03dal.us.ibm.com with ESMTP id 3kxpsahg5y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Nov 2022 13:12:32 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com ([9.208.128.115])
+        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2ANDCUm0590518
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 23 Nov 2022 13:12:31 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A7C8458054;
+        Wed, 23 Nov 2022 13:12:30 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1EF205804E;
+        Wed, 23 Nov 2022 13:12:28 +0000 (GMT)
+Received: from sig-9-77-136-225.ibm.com (unknown [9.77.136.225])
+        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 23 Nov 2022 13:12:28 +0000 (GMT)
+Message-ID: <c5cea3cad1eaf79c29e91e9ecf8e8b7dcee2ce2c.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 1/6] reiserfs: Switch to
+ security_inode_init_security()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>, mark@fasheh.com,
+        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com
+Cc:     ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Wed, 23 Nov 2022 08:12:27 -0500
+In-Reply-To: <20221123095202.599252-2-roberto.sassu@huaweicloud.com>
+References: <20221123095202.599252-1-roberto.sassu@huaweicloud.com>
+         <20221123095202.599252-2-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: HWsORPoDyF1vNBqDC9P4hNJ3cn8uMOKU
+X-Proofpoint-GUID: YBNNnLZ7uTDIZ5ugeSf2R6ADJAMFSScw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-23_07,2022-11-23_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 impostorscore=0 suspectscore=0 clxscore=1015
+ lowpriorityscore=0 malwarescore=0 phishscore=0 spamscore=0 mlxscore=0
+ adultscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2210170000 definitions=main-2211230097
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During a system boot, it can happen that the kernel receives a burst of
-requests to insert the same module but loading it eventually fails
-during its init call. For instance, udev can make a request to insert
-a frequency module for each individual CPU when another frequency module
-is already loaded which causes the init function of the new module to
-return an error.
+On Wed, 2022-11-23 at 10:51 +0100, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> In preparation for removing security_old_inode_init_security(), switch to
+> security_inode_init_security().
+> 
+> Define the initxattrs callback reiserfs_initxattrs(), to populate the
+> name/value/len triple in the reiserfs_security_handle() with the first
+> xattr provided by LSMs. Multiple xattrs are currently not supported, as the
+> reiserfs_security_handle structure is exported to user space.
 
-Since commit 6e6de3dee51a ("kernel/module.c: Only return -EEXIST for
-modules that have finished loading"), the kernel waits for modules in
-MODULE_STATE_GOING state to finish unloading before making another
-attempt to load the same module.
+The security_old_inode_init_security() hook doesn't support EVM. 
+Missing from this patch description is whether the move to the
+security_inode_init_security() hook changes security.evm.  FYI, I'm not
+suggesting it should.  Please update the patch description accordingly.
 
-This creates unnecessary work in the described scenario and delays the
-boot. In the worst case, it can prevent udev from loading drivers for
-other devices and might cause timeouts of services waiting on them and
-subsequently a failed boot.
+Mimi
 
-This patch attempts a different solution for the problem 6e6de3dee51a
-was trying to solve. Rather than waiting for the unloading to complete,
-it returns a different error code (-EBUSY) for modules in the GOING
-state. This should avoid the error situation that was described in
-6e6de3dee51a (user space attempting to load a dependent module because
-the -EEXIST error code would suggest to user space that the first module
-had been loaded successfully), while avoiding the delay situation too.
+> 
+> In reiserfs_initxattrs(), make a copy of the first xattr value, as
+> security_inode_init_security() frees it.
+> 
+> After the call to security_inode_init_security(), remove the check for
+> returning -EOPNOTSUPP, as security_inode_init_security() changes it to
+> zero.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  fs/reiserfs/xattr_security.c | 23 ++++++++++++++++++-----
+>  1 file changed, 18 insertions(+), 5 deletions(-)
+> 
+> diff --git a/fs/reiserfs/xattr_security.c b/fs/reiserfs/xattr_security.c
+> index 857a65b05726..0ba96757681d 100644
+> --- a/fs/reiserfs/xattr_security.c
+> +++ b/fs/reiserfs/xattr_security.c
+> @@ -39,6 +39,22 @@ static bool security_list(struct dentry *dentry)
+>  	return !IS_PRIVATE(d_inode(dentry));
+>  }
+>  
+> +static int
+> +reiserfs_initxattrs(struct inode *inode, const struct xattr *xattr_array,
+> +		    void *fs_info)
+> +{
+> +	struct reiserfs_security_handle *sec = fs_info;
+> +
+> +	sec->value = kmemdup(xattr_array->value, xattr_array->value_len,
+> +			     GFP_KERNEL);
+> +	if (!sec->value)
+> +		return -ENOMEM;
+> +
+> +	sec->name = xattr_array->name;
+> +	sec->length = xattr_array->value_len;
+> +	return 0;
+> +}
+> +
+>  /* Initializes the security context for a new inode and returns the number
+>   * of blocks needed for the transaction. If successful, reiserfs_security
+>   * must be released using reiserfs_security_free when the caller is done. */
+> @@ -56,12 +72,9 @@ int reiserfs_security_init(struct inode *dir, struct inode *inode,
+>  	if (IS_PRIVATE(dir))
+>  		return 0;
+>  
+> -	error = security_old_inode_init_security(inode, dir, qstr, &sec->name,
+> -						 &sec->value, &sec->length);
+> +	error = security_inode_init_security(inode, dir, qstr,
+> +					     &reiserfs_initxattrs, sec);
+>  	if (error) {
+> -		if (error == -EOPNOTSUPP)
+> -			error = 0;
+> -
+>  		sec->name = NULL;
+>  		sec->value = NULL;
+>  		sec->length = 0;
 
-Fixes: 6e6de3dee51a ("kernel/module.c: Only return -EEXIST for modules that have finished loading")
-Co-developed-by: Martin Wilck <mwilck@suse.com>
-Signed-off-by: Martin Wilck <mwilck@suse.com>
-Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
-Cc: stable@vger.kernel.org
----
-
-Notes:
-    Sending this alternative patch per the discussion in
-    https://lore.kernel.org/linux-modules/20220919123233.8538-1-petr.pavlu@suse.com/.
-    The initial version comes internally from Martin, hence the co-developed tag.
-
- kernel/module/main.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index d02d39c7174e..b7e08d1edc27 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -2386,7 +2386,8 @@ static bool finished_loading(const char *name)
- 	sched_annotate_sleep();
- 	mutex_lock(&module_mutex);
- 	mod = find_module_all(name, strlen(name), true);
--	ret = !mod || mod->state == MODULE_STATE_LIVE;
-+	ret = !mod || mod->state == MODULE_STATE_LIVE
-+		|| mod->state == MODULE_STATE_GOING;
- 	mutex_unlock(&module_mutex);
- 
- 	return ret;
-@@ -2566,7 +2567,8 @@ static int add_unformed_module(struct module *mod)
- 	mutex_lock(&module_mutex);
- 	old = find_module_all(mod->name, strlen(mod->name), true);
- 	if (old != NULL) {
--		if (old->state != MODULE_STATE_LIVE) {
-+		if (old->state == MODULE_STATE_COMING
-+		    || old->state == MODULE_STATE_UNFORMED) {
- 			/* Wait in case it fails to load. */
- 			mutex_unlock(&module_mutex);
- 			err = wait_event_interruptible(module_wq,
-@@ -2575,7 +2577,7 @@ static int add_unformed_module(struct module *mod)
- 				goto out_unlocked;
- 			goto again;
- 		}
--		err = -EEXIST;
-+		err = old->state != MODULE_STATE_LIVE ? -EBUSY : -EEXIST;
- 		goto out;
- 	}
- 	mod_update_bounds(mod);
--- 
-2.35.3
 
