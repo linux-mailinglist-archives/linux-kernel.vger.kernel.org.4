@@ -2,234 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 456F86369E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 20:33:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEEA26369EB
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 20:34:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239497AbiKWTch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 14:32:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57594 "EHLO
+        id S238248AbiKWTee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 14:34:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238329AbiKWTce (ORCPT
+        with ESMTP id S236748AbiKWTeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 14:32:34 -0500
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B820AE3B
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 11:32:28 -0800 (PST)
-Received: by mail-io1-f71.google.com with SMTP id k21-20020a5e8915000000b006de391b332fso9398666ioj.4
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 11:32:28 -0800 (PST)
+        Wed, 23 Nov 2022 14:34:31 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E8B56D44
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 11:34:30 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id v1so30916330wrt.11
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 11:34:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=54gwlBZl2Mf+sd8h4nHSOZMRH+Engb2ZuOzenuumqrU=;
+        b=r/jDHxwUcpE0J33YIxMPzCAbn66zIkY7Q08m9fJKufH0T+rFcLNb+uOZx7Pr9zIYYj
+         6XAEu1scb2/xoBcdIQ/25G1AfU1KMT6VVF7EdwY4RK9ykdimufhV/dIBwl8ni8Wcq0Iy
+         OdUJ9eD/ERrqemK69RdjVDUZKRPBr6n6fGQq/vgK8LSRj/IywofXkUz7g1n41S3X2iVo
+         amNeKtwRj1fwa6XIA2hEdIlTJNuXgJVsCqhvxLFmB0XAMZmIJQvdJIZRwGjd73BIayee
+         XoZxS/O0vNvWQ2UwX+Iu787Em+M5eleVGF51cH/RSbnCR3Pox7ojor6llQFMlkbi9UGd
+         Qfow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ieQT2+amnCPQkrT/b4MsUc2qUSHECxGcta2Tz8dlWww=;
-        b=w9XoJ+tYlO2Si1AQ+RBKXjCWVTv45w++lBvjkRShKI3jCdJFxMau0HnD8odeefuf85
-         +IJgXHi/lVsBisu+QNUBEzkFaiyN1pGXSZ0vB7NWjB5uIJywIgaV3LaWSjpUVApKWOrL
-         6S84NV8LOTlV/AvGAFzJtv0UMh+f6B0MGg40XvZ+xJre1ITmyl+ncbnME89RT6q4Sm3X
-         JCy14nw3ENw4YW4SU1eN3hQk1oyfAAh3/Ocwi/uey1SVK83p5Sl/4ikPqe2dX5W27trr
-         2aYxiQIPx2MwNy8OOOSFUjCjn5A9szyLelUn91NI8TCNi17UY+obk44nPcxbhWzSodkw
-         1wCQ==
-X-Gm-Message-State: ANoB5pmQ7kfhj7Sr2T5/czOI+YGwoe/Cul1LlITZABBZT3pPb4XAraVx
-        M1xEXRQYlgsi9HJ28fg83OpfIg/mGmWVnY+jrWp2hOXVPk/H
-X-Google-Smtp-Source: AA0mqf79B8oIR5C8i+qvxuclMp0m4BMCwZ8MjtX7srTIIl9YOhTlnAzHr/jmrGrm/FnxYHO3493C9IhBFBtQNKm2bmqisOh47SbI
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=54gwlBZl2Mf+sd8h4nHSOZMRH+Engb2ZuOzenuumqrU=;
+        b=O6JDNsIcoN6RGmwhRO5YZLj8V1KqBfGEB1Ih7TAqTlfDzzpCwjowHo35e9CCxNZf7y
+         EFVf9MkiM1Xg4CCHU/cFHUZq+7R+J16CHSmwbLqSaPyWocazHNbVhbeiDDtGP7/kmRwT
+         A8quwlMLC1B+CvoO9BOfhsasKXArtcl+8TIKDSU0rc9q9/9zQnc2a5vazG22JgghBzkP
+         865FfaUf29vebZMn9dAjEL9o1gz3uCPWg2egxAdvNUvUa9kdSk/tk0HAboBY3KkO4Faq
+         0+6ZsmQPCQmy9ETXx20H2NxXWgJ9EZ5qHqgyRogljQ/Rj8qm+NvjcBS4GXQO7SggLmrT
+         EoKg==
+X-Gm-Message-State: ANoB5pkePrlFPMcDr8MQXO36Ob6v9kdpWoqDosxRuZPkgQcQiLeYq/B5
+        x92WDap+/jmXj2/7SYu7fJl3XuYBc5w9WzqMsgEiGA==
+X-Google-Smtp-Source: AA0mqf7K/+5nkPCwqrpkV1q/a9sC32bxcEA8Ux5+uxQ+MxbdQfVj3zItbtfIknPXxhAUOL2/sHq5/OnBKMxLMel1sXY=
+X-Received: by 2002:a5d:5d0f:0:b0:236:6f6f:8dd7 with SMTP id
+ ch15-20020a5d5d0f000000b002366f6f8dd7mr7794554wrb.4.1669232068839; Wed, 23
+ Nov 2022 11:34:28 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a02:6603:0:b0:375:9e02:b459 with SMTP id
- k3-20020a026603000000b003759e02b459mr13511512jac.30.1669231948027; Wed, 23
- Nov 2022 11:32:28 -0800 (PST)
-Date:   Wed, 23 Nov 2022 11:32:28 -0800
-In-Reply-To: <Y338pCjXlDT8Zu3z@elver.google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004f620e05ee285958@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in task_work_run (2)
-From:   syzbot <syzbot+9228d6098455bb209ec8@syzkaller.appspotmail.com>
-To:     acme@kernel.org, dvyukov@google.com, elver@google.com,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        peterz@infradead.org, syzkaller-bugs@googlegroups.com
+References: <20221121234026.3037083-1-vipinsh@google.com> <20221121234026.3037083-7-vipinsh@google.com>
+ <87mt8jouc0.fsf@ovpn-194-185.brq.redhat.com>
+In-Reply-To: <87mt8jouc0.fsf@ovpn-194-185.brq.redhat.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Wed, 23 Nov 2022 11:33:52 -0800
+Message-ID: <CAHVum0cpR7=yk-8s5yx8em7vCMxPWemqxYD2ULm+L7_CWpA7Ag@mail.gmail.com>
+Subject: Re: [PATCH v2 6/6] KVM: selftests: Test Hyper-V extended hypercall
+ exit to userspace
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        seanjc@google.com, pbonzini@redhat.com, dmatlack@google.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Nov 22, 2022 at 7:57 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+>
+> Vipin Sharma <vipinsh@google.com> writes:
+>
+> > index 082855d94c72..b17874697d74 100644
+> > --- a/tools/testing/selftests/kvm/.gitignore
+> > +++ b/tools/testing/selftests/kvm/.gitignore
+> > @@ -24,6 +24,7 @@
+> >  /x86_64/hyperv_clock
+> >  /x86_64/hyperv_cpuid
+> >  /x86_64/hyperv_evmcs
+> > +/x86_64/hyperv_extended_hypercalls
+>
+> My personal preference would be to shorten the name to something like
+> "hyperv_ext_hcalls", doesn't seem to be ambiguos. No strong preference
+> though, feel free to keep the long version.
+>
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-KASAN: use-after-free Read in task_work_run
+I will keep the long one, in v1 David was suggesting it will be easier
+for non Hyperv developers to read and understand.
 
-==================================================================
-BUG: KASAN: use-after-free in task_work_run+0x1b0/0x270 kernel/task_work.c:178
-Read of size 8 at addr ffff88807a0a2208 by task syz-executor.0/4187
+> > +/* Hyper-V defined paravirt features */
+> > +#define X86_FEATURE_HYPERV_EXTENDED_HYPERCALLS       KVM_X86_CPU_FEATURE(0x40000003, 0, EBX, 20)
+> > +
+>
+> I completely forgot about my other series where I've converted the whole
+> hyperv_features test to using KVM_X86_CPU_FEATURE():
+> https://lore.kernel.org/kvm/20221013095849.705943-6-vkuznets@redhat.com/
+>
+> but your define reminded me of it, thanks! Hope the whole thing will get
+> queued soon.
+>
 
-CPU: 1 PID: 4187 Comm: syz-executor.0 Not tainted 6.1.0-rc2-syzkaller-00073-g88619e77b33d-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:284 [inline]
- print_report+0x15e/0x45d mm/kasan/report.c:395
- kasan_report+0xbb/0x1f0 mm/kasan/report.c:495
- task_work_run+0x1b0/0x270 kernel/task_work.c:178
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0xb35/0x2a20 kernel/exit.c:820
- do_group_exit+0xd0/0x2a0 kernel/exit.c:950
- get_signal+0x21a1/0x2430 kernel/signal.c:2858
- arch_do_signal_or_restart+0x82/0x2300 arch/x86/kernel/signal.c:869
- exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
- exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:203
- __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
- syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:296
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fac4248b5a9
-Code: Unable to access opcode bytes at 0x7fac4248b57f.
-RSP: 002b:00007fac432bf218 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
-RAX: 0000000000000001 RBX: 00007fac425abf88 RCX: 00007fac4248b5a9
-RDX: 00000000000f4240 RSI: 0000000000000081 RDI: 00007fac425abf8c
-RBP: 00007fac425abf80 R08: 00007ffde2bb1080 R09: 0000000000000000
-R10: 0000000000000003 R11: 0000000000000246 R12: 00007fac425abf8c
-R13: 00007ffde2b9c48f R14: 00007fac432bf300 R15: 0000000000022000
- </TASK>
+Your patches are always one step ahead of me :D
 
-Allocated by task 4187:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:45
- kasan_set_track+0x21/0x30 mm/kasan/common.c:52
- __kasan_slab_alloc+0x7e/0x80 mm/kasan/common.c:325
- kasan_slab_alloc include/linux/kasan.h:201 [inline]
- slab_post_alloc_hook mm/slab.h:737 [inline]
- slab_alloc_node mm/slub.c:3398 [inline]
- kmem_cache_alloc_node+0x2fc/0x400 mm/slub.c:3443
- perf_event_alloc.part.0+0x69/0x3bc0 kernel/events/core.c:11627
- perf_event_alloc kernel/events/core.c:12176 [inline]
- __do_sys_perf_event_open+0x4ae/0x32d0 kernel/events/core.c:12274
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+If your series doesn't show up in the KVM queue soon, I will rebase my
+patch series on top of your series
 
-Freed by task 4190:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:45
- kasan_set_track+0x21/0x30 mm/kasan/common.c:52
- kasan_save_free_info+0x2a/0x40 mm/kasan/generic.c:511
- ____kasan_slab_free mm/kasan/common.c:236 [inline]
- ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
- kasan_slab_free include/linux/kasan.h:177 [inline]
- slab_free_hook mm/slub.c:1724 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1750
- slab_free mm/slub.c:3661 [inline]
- kmem_cache_free+0xea/0x5b0 mm/slub.c:3683
- rcu_do_batch kernel/rcu/tree.c:2250 [inline]
- rcu_core+0x81f/0x1980 kernel/rcu/tree.c:2510
- __do_softirq+0x1f7/0xad8 kernel/softirq.c:571
+> As for your change, I think it is better suited for
+> include/x86_64/hyperv.h instead of include/x86_64/processor.h anyway,
+> I'm trying to keep all Hyper-V related stuff separate as Hyper-V CPUID
+> leaves intersect with KVM's, e.g. 0x40000001.
+>
 
-Last potentially related work creation:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:45
- __kasan_record_aux_stack+0xbc/0xd0 mm/kasan/generic.c:481
- call_rcu+0x99/0x820 kernel/rcu/tree.c:2798
- put_event kernel/events/core.c:5097 [inline]
- perf_event_release_kernel+0x6f2/0x940 kernel/events/core.c:5212
- perf_release+0x33/0x40 kernel/events/core.c:5222
- __fput+0x27c/0xa90 fs/file_table.c:320
- task_work_run+0x16b/0x270 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
- exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:203
- __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
- syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:296
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Sounds good.
 
-Second to last potentially related work creation:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:45
- __kasan_record_aux_stack+0xbc/0xd0 mm/kasan/generic.c:481
- task_work_add+0x7b/0x2c0 kernel/task_work.c:48
- event_sched_out+0xe35/0x1190 kernel/events/core.c:2294
- __perf_remove_from_context+0x87/0xc40 kernel/events/core.c:2359
- event_function+0x29e/0x3e0 kernel/events/core.c:254
- remote_function kernel/events/core.c:92 [inline]
- remote_function+0x11e/0x1a0 kernel/events/core.c:72
- __flush_smp_call_function_queue+0x205/0x9a0 kernel/smp.c:630
- __sysvec_call_function_single+0xca/0x4d0 arch/x86/kernel/smp.c:248
- sysvec_call_function_single+0x40/0xc0 arch/x86/kernel/smp.c:243
- asm_sysvec_call_function_single+0x16/0x20 arch/x86/include/asm/idtentry.h:657
+> >  /*
+> >   * Same idea as X86_FEATURE_XXX, but X86_PROPERTY_XXX retrieves a multi-bit
+> >   * value/property as opposed to a single-bit feature.  Again, pack the info
+> > diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_extended_hypercalls.c b/tools/testing/selftests/kvm/x86_64/hyperv_extended_hypercalls.c
+> > new file mode 100644
+> > index 000000000000..13c1b03294a4
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/kvm/x86_64/hyperv_extended_hypercalls.c
+> > @@ -0,0 +1,94 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Test Hyper-V extended hypercall, HV_EXT_CALL_QUERY_CAPABILITIES (0x8001),
+> > + * exit to userspace and receive result in guest.
+> > + *
+> > + * Negative tests are present in hyperv_features.c
+> > + *
+> > + * Copyright 2022 Google LLC
+> > + * Author: Vipin Sharma <vipinsh@google.com>
+> > + */
+> > +
+> > +#include "kvm_util.h"
+> > +#include "processor.h"
+> > +#include "hyperv.h"
+> > +
+> > +/* Any value is fine */
+> > +#define EXT_CAPABILITIES 0xbull
+> > +
+> > +static void guest_code(vm_vaddr_t in_pg_gpa, vm_vaddr_t out_pg_gpa,
+> > +                    vm_vaddr_t out_pg_gva)
+> > +{
+> > +     uint64_t *output_gva;
+> > +
+> > +     wrmsr(HV_X64_MSR_GUEST_OS_ID, HYPERV_LINUX_OS_ID);
+> > +     wrmsr(HV_X64_MSR_HYPERCALL, in_pg_gpa);
+> > +
+> > +     output_gva = (uint64_t *)out_pg_gva;
+> > +
+> > +     hyperv_hypercall(HV_EXT_CALL_QUERY_CAPABILITIES, in_pg_gpa, out_pg_gpa);
+> > +
+> > +     /* TLFS states output will be a uint64_t value */
+> > +     GUEST_ASSERT_EQ(*output_gva, EXT_CAPABILITIES);
+> > +
+> > +     GUEST_DONE();
+> > +}
+> > +
+> > +int main(void)
+> > +{
+> > +     vm_vaddr_t hcall_out_page;
+> > +     vm_vaddr_t hcall_in_page;
+> > +     struct kvm_vcpu *vcpu;
+> > +     struct kvm_run *run;
+> > +     struct kvm_vm *vm;
+> > +     uint64_t *outval;
+> > +     struct ucall uc;
+> > +
+> > +     /* Verify if extended hypercalls are supported */
+> > +     if (!kvm_cpuid_has(kvm_get_supported_hv_cpuid(),
+> > +                        X86_FEATURE_HYPERV_EXTENDED_HYPERCALLS)) {
+> > +             print_skip("Extended calls not supported by the kernel");
+> > +             exit(KSFT_SKIP);
+> > +     }
+> > +
+> > +     vm = vm_create_with_one_vcpu(&vcpu, guest_code);
+> > +     run = vcpu->run;
+> > +     vcpu_enable_cap(vcpu, KVM_CAP_HYPERV_ENFORCE_CPUID, 1);
+>
+> Do we need this enforcement assuming we have no plans to add 'negative'
+> tests here (hyperv_features does it just fine)? vcpu_set_hv_cpuid()
+> enables everything anyway...
+>
 
-The buggy address belongs to the object at ffff88807a0a1db0
- which belongs to the cache perf_event of size 1392
-The buggy address is located 1112 bytes inside of
- 1392-byte region [ffff88807a0a1db0, ffff88807a0a2320)
+We do not. I will remove it.
 
-The buggy address belongs to the physical page:
-page:ffffea0001e82800 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x7a0a0
-head:ffffea0001e82800 order:3 compound_mapcount:0 compound_pincount:0
-flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 0000000000000000 dead000000000122 ffff8880118c23c0
-raw: 0000000000000000 0000000080150015 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 3, migratetype Unmovable, gfp_mask 0x1d20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL), pid 4164, tgid 4163 (syz-executor.0), ts 81241255075, free_ts 81180758193
- prep_new_page mm/page_alloc.c:2538 [inline]
- get_page_from_freelist+0x10b5/0x2d50 mm/page_alloc.c:4287
- __alloc_pages+0x1c7/0x5a0 mm/page_alloc.c:5554
- alloc_pages+0x1a6/0x270 mm/mempolicy.c:2285
- alloc_slab_page mm/slub.c:1794 [inline]
- allocate_slab+0x213/0x300 mm/slub.c:1939
- new_slab mm/slub.c:1992 [inline]
- ___slab_alloc+0xa91/0x1400 mm/slub.c:3180
- __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3279
- slab_alloc_node mm/slub.c:3364 [inline]
- kmem_cache_alloc_node+0x189/0x400 mm/slub.c:3443
- perf_event_alloc.part.0+0x69/0x3bc0 kernel/events/core.c:11627
- perf_event_alloc kernel/events/core.c:12176 [inline]
- __do_sys_perf_event_open+0x4ae/0x32d0 kernel/events/core.c:12274
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1458 [inline]
- free_pcp_prepare+0x65c/0xd90 mm/page_alloc.c:1508
- free_unref_page_prepare mm/page_alloc.c:3386 [inline]
- free_unref_page+0x19/0x4d0 mm/page_alloc.c:3482
- __unfreeze_partials+0x17c/0x1a0 mm/slub.c:2586
- qlink_free mm/kasan/quarantine.c:168 [inline]
- qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:187
- kasan_quarantine_reduce+0x180/0x200 mm/kasan/quarantine.c:294
- __kasan_slab_alloc+0x62/0x80 mm/kasan/common.c:302
- kasan_slab_alloc include/linux/kasan.h:201 [inline]
- slab_post_alloc_hook mm/slab.h:737 [inline]
- slab_alloc_node mm/slub.c:3398 [inline]
- slab_alloc mm/slub.c:3406 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3413 [inline]
- kmem_cache_alloc+0x2ac/0x3c0 mm/slub.c:3422
- getname_flags.part.0+0x50/0x4f0 fs/namei.c:139
- getname_flags+0x9a/0xe0 include/linux/audit.h:320
- vfs_fstatat+0x73/0xb0 fs/stat.c:266
- __do_sys_newfstatat+0x94/0x120 fs/stat.c:437
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Memory state around the buggy address:
- ffff88807a0a2100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88807a0a2180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff88807a0a2200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                      ^
- ffff88807a0a2280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88807a0a2300: fb fb fb fb fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
-
-
-Tested on:
-
-commit:         88619e77 net: stmmac: rk3588: Allow multiple gmac cont..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=127408e5880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a66c6c673fb555e8
-dashboard link: https://syzkaller.appspot.com/bug?extid=9228d6098455bb209ec8
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=147a9dfd880000
-
+> > +     vcpu_set_hv_cpuid(vcpu);
+> > +
+> > +     /* Hypercall input */
+> > +     hcall_in_page = vm_vaddr_alloc_pages(vm, 1);
+> > +     memset(addr_gva2hva(vm, hcall_in_page), 0x0, vm->page_size);
+> > +
+> > +     /* Hypercall output */
+> > +     hcall_out_page = vm_vaddr_alloc_pages(vm, 1);
+> > +     memset(addr_gva2hva(vm, hcall_out_page), 0x0, vm->page_size);
+> > +
+> > +     vcpu_args_set(vcpu, 3, addr_gva2gpa(vm, hcall_in_page),
+> > +                   addr_gva2gpa(vm, hcall_out_page), hcall_out_page);
+> > +
+> > +     vcpu_run(vcpu);
+> > +
+> > +     ASSERT_EXIT_REASON(vcpu, KVM_EXIT_HYPERV);
+> > +
+> > +     outval = addr_gpa2hva(vm, run->hyperv.u.hcall.params[1]);
+> > +     *outval = EXT_CAPABILITIES;
+> > +     run->hyperv.u.hcall.result = HV_STATUS_SUCCESS;
+> > +
+> > +     vcpu_run(vcpu);
+> > +
+> > +     ASSERT_EXIT_REASON(vcpu, KVM_EXIT_IO);
+> > +
+> > +     switch (get_ucall(vcpu, &uc)) {
+> > +     case UCALL_ABORT:
+> > +             REPORT_GUEST_ASSERT_2(uc, "arg1 = %ld, arg2 = %ld");
+> > +             break;
+> > +     case UCALL_DONE:
+> > +             break;
+> > +     default:
+> > +             TEST_FAIL("Unhandled ucall: %ld", uc.cmd);
+> > +     }
+> > +
+> > +     kvm_vm_free(vm);
+> > +     return 0;
+> > +}
+>
+> --
+> Vitaly
+>
