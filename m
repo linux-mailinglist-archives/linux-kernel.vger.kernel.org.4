@@ -2,196 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DC496360A4
+	by mail.lfdr.de (Postfix) with ESMTP id E9E286360A6
 	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:56:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237798AbiKWN4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 08:56:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43356 "EHLO
+        id S237855AbiKWN4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 08:56:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236736AbiKWN4V (ORCPT
+        with ESMTP id S237701AbiKWN4d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 08:56:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6DBF7DEDF
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:50:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669211406;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=c6zewKWTDgfvIFJXOy081wvDhtOx6ntJm4J8sIpATHc=;
-        b=RgYAdVQa3HPNFyPAYqsbL9/cZqevJMz9/IJ97kj5g0rYWWQMlQDr+Po0gpiCTGj4fnjXMR
-        UV+kyeVKcgaJ2sMGzNcSEgR46NI8edtHBpXmZ/Zttt5x8P42HglU12ZRvW+NBeC5eKre/B
-        lTjHnO7t5l5T7idOo59TmTtTp/4D+H0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-527-CousNDlQNeqUYBc6rAHqyw-1; Wed, 23 Nov 2022 08:50:02 -0500
-X-MC-Unique: CousNDlQNeqUYBc6rAHqyw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 23 Nov 2022 08:56:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36488CDF;
+        Wed, 23 Nov 2022 05:50:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DC9943C0ED4D;
-        Wed, 23 Nov 2022 13:50:01 +0000 (UTC)
-Received: from localhost (ovpn-12-208.pek2.redhat.com [10.72.12.208])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0646E2024CC8;
-        Wed, 23 Nov 2022 13:49:59 +0000 (UTC)
-Date:   Wed, 23 Nov 2022 21:49:55 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
-        Ross Zwisler <zwisler@kernel.org>, linux-doc@vger.kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH v1 2/2] kexec: Introduce kexec_reboot_disabled
-Message-ID: <Y335zmhd0us0e7tD@MiWiFi-R3L-srv>
-References: <20221114-disable-kexec-reset-v1-0-fb51d20cf871@chromium.org>
- <20221114-disable-kexec-reset-v1-2-fb51d20cf871@chromium.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221114-disable-kexec-reset-v1-2-fb51d20cf871@chromium.org>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id D6991B81FF8;
+        Wed, 23 Nov 2022 13:50:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D626C433D6;
+        Wed, 23 Nov 2022 13:50:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669211444;
+        bh=1K4KKuYzQDiRPr30w0FGmFYIG9ERTvCPp8FhiOGJB3g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lnILgmyW5ki+H38tNjXPBzO4HB9fskkoE2crJSFj1EmGyyz6CVrPafXP+r0qUy2y0
+         4Ot7MaHRc2TsMhFB/ea4GJQHsdL71n4VUAHXvgGkOlOBsmb5J3eDnkCmkQHeUXCKuV
+         3+cXMS9vt6Qa30l9M3YaKd6+JisO2jfe+MjtHfHp2sqBJB0ZFCMVVMJlNVWvqPLC6e
+         bIOt1apNkuqzRRJrfkva2fDWreheq0cLiPZykR2nYgU55OSTK7lRb/5UOdJsLseMe7
+         0KJDCV3FuEEacLVk44godx/TsUc70n9//i3PnFeSYz3O+ccm0AIOloNgkbLizbgygw
+         N6sgk9Fz0ZX9Q==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oxq9C-0088Ya-2w;
+        Wed, 23 Nov 2022 13:50:42 +0000
+Date:   Wed, 23 Nov 2022 13:50:41 +0000
+Message-ID: <86fse9ok3y.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     tglx@linutronix.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        youlin.pei@mediatek.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2 3/4] irqchip: irq-mtk-cirq: Move register offsets to const array
+In-Reply-To: <20221123112249.98281-4-angelogioacchino.delregno@collabora.com>
+References: <20221123112249.98281-1-angelogioacchino.delregno@collabora.com>
+        <20221123112249.98281-4-angelogioacchino.delregno@collabora.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: angelogioacchino.delregno@collabora.com, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com, youlin.pei@mediatek.com, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/14/22 at 02:18pm, Ricardo Ribalda wrote:
-> Create a new toogle that disables LINUX_REBOOT_CMD_KEXEC, reducing the
-               ~ toggle
-> attack surface to a system.
+On Wed, 23 Nov 2022 11:22:48 +0000,
+AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> wrote:
 > 
-> Without this toogle, an attacker can only reboot into a different kernel
-  ~~s/without/with/
-> if they can create a panic().
-
-The log just tells what it's doing, but miss the most important why this
-has to be needed, the motivation.
-
-I roughly read the talking between you and Philipp, wondering why do you
-believe panicked kernel, if you worry about the untrusted kernel kexec
-rebooted into. People can change scripts in initramfs, e.g drop into
-emergency shell and switch into rootfs, there are a lot of things people
-can do in there too.
-
+> In preparation to add support for new SoCs having a different
+> register layout, add an enumeration that documents register
+> offsets and move the definitions for the same to a u32 array;
 > 
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> Selecting the right register offsets array is done by adding an
+> of_device_id array containing all of the currently supported
+> compatible strings pointing to the "v1" offsets array (as data):
+> since no devicetree declares the `mediatek,mtk-cirq` compatible
+> without a SoC-specific one, it wasn't necessary to provide any
+> legacy fallback.
 > 
-> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
-> index 97394bd9d065..25d019682d33 100644
-> --- a/Documentation/admin-guide/sysctl/kernel.rst
-> +++ b/Documentation/admin-guide/sysctl/kernel.rst
-> @@ -462,6 +462,17 @@ altered.
->  Generally used together with the `modules_disabled`_ sysctl.
+> Every usage of the aforemementioned definitions was changed to
+> get a register address through a newly introduced `mtk_cirq_reg()`
+> accessor.
+> 
+> This change brings no functional changes.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/irqchip/irq-mtk-cirq.c | 78 ++++++++++++++++++++++++++--------
+>  1 file changed, 61 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-mtk-cirq.c b/drivers/irqchip/irq-mtk-cirq.c
+> index 9bca0918078e..4d873d2ba0fd 100644
+> --- a/drivers/irqchip/irq-mtk-cirq.c
+> +++ b/drivers/irqchip/irq-mtk-cirq.c
+> @@ -15,14 +15,29 @@
+>  #include <linux/slab.h>
+>  #include <linux/syscore_ops.h>
 >  
->  
-> +kexec_reboot_disabled
-> +=====================
+> -#define CIRQ_ACK	0x40
+> -#define CIRQ_MASK_SET	0xc0
+> -#define CIRQ_MASK_CLR	0x100
+> -#define CIRQ_SENS_SET	0x180
+> -#define CIRQ_SENS_CLR	0x1c0
+> -#define CIRQ_POL_SET	0x240
+> -#define CIRQ_POL_CLR	0x280
+> -#define CIRQ_CONTROL	0x300
+> +enum mtk_cirq_reg_index {
+> +	CIRQ_STA,
+> +	CIRQ_ACK,
+> +	CIRQ_MASK_SET,
+> +	CIRQ_MASK_CLR,
+> +	CIRQ_SENS_SET,
+> +	CIRQ_SENS_CLR,
+> +	CIRQ_POL_SET,
+> +	CIRQ_POL_CLR,
+> +	CIRQ_CONTROL
+> +};
 > +
-> +A toggle indicating if ``LINUX_REBOOT_CMD_KEXEC`` has been disabled.
-> +This value defaults to 0 (false: ``LINUX_REBOOT_CMD_KEXEC`` enabled),
-> +but can be set to 1 (true: ``LINUX_REBOOT_CMD_KEXEC`` disabled).
-> +Once true, kexec can no longer be used for reboot and the toggle
-> +cannot be set back to false.
-> +This toggle does not affect the use of kexec during a crash.
-> +
-> +
->  kptr_restrict
->  =============
+> +static const u32 mtk_cirq_regs_v1[] = {
+
+Again: this contains offsets, not registers. Consistency matters.
+
+> +	[CIRQ_STA]	= 0x0,
+> +	[CIRQ_ACK]	= 0x40,
+> +	[CIRQ_MASK_SET]	= 0xc0,
+> +	[CIRQ_MASK_CLR]	= 0x100,
+> +	[CIRQ_SENS_SET]	= 0x180,
+> +	[CIRQ_SENS_CLR]	= 0x1c0,
+> +	[CIRQ_POL_SET]	= 0x240,
+> +	[CIRQ_POL_CLR]	= 0x280,
+> +	[CIRQ_CONTROL]	= 0x300,
+> +};
 >  
-> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
-> index 41a686996aaa..15c3fad8918b 100644
-> --- a/include/linux/kexec.h
-> +++ b/include/linux/kexec.h
-> @@ -407,6 +407,7 @@ extern int kimage_crash_copy_vmcoreinfo(struct kimage *image);
->  extern struct kimage *kexec_image;
->  extern struct kimage *kexec_crash_image;
->  extern int kexec_load_disabled;
-> +extern int kexec_reboot_disabled;
->  
->  #ifndef kexec_flush_icache_page
->  #define kexec_flush_icache_page(page)
-> diff --git a/kernel/kexec.c b/kernel/kexec.c
-> index cb8e6e6f983c..43063f803d81 100644
-> --- a/kernel/kexec.c
-> +++ b/kernel/kexec.c
-> @@ -196,6 +196,10 @@ static inline int kexec_load_check(unsigned long nr_segments,
->  	if (!capable(CAP_SYS_BOOT) || kexec_load_disabled)
->  		return -EPERM;
->  
-> +	/* Check if the system admin has disabled kexec reboot. */
-> +	if (!(flags & KEXEC_ON_CRASH) && kexec_reboot_disabled)
-> +		return -EPERM;
-> +
->  	/* Permit LSMs and IMA to fail the kexec */
->  	result = security_kernel_load_data(LOADING_KEXEC_IMAGE, false);
->  	if (result < 0)
-> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-> index ca2743f9c634..fe82e2525705 100644
-> --- a/kernel/kexec_core.c
-> +++ b/kernel/kexec_core.c
-> @@ -929,6 +929,7 @@ int kimage_load_segment(struct kimage *image,
->  struct kimage *kexec_image;
->  struct kimage *kexec_crash_image;
->  int kexec_load_disabled;
-> +int kexec_reboot_disabled;
->  #ifdef CONFIG_SYSCTL
->  static struct ctl_table kexec_core_sysctls[] = {
->  	{
-> @@ -941,6 +942,16 @@ static struct ctl_table kexec_core_sysctls[] = {
->  		.extra1		= SYSCTL_ONE,
->  		.extra2		= SYSCTL_ONE,
->  	},
-> +	{
-> +		.procname	= "kexec_reboot_disabled",
-> +		.data		= &kexec_reboot_disabled,
-> +		.maxlen		= sizeof(int),
-> +		.mode		= 0644,
-> +		/* only handle a transition from default "0" to "1" */
-> +		.proc_handler	= proc_dointvec_minmax,
-> +		.extra1		= SYSCTL_ONE,
-> +		.extra2		= SYSCTL_ONE,
-> +	},
->  	{ }
+>  #define CIRQ_EN	0x1
+>  #define CIRQ_EDGE	0x2
+> @@ -32,18 +47,28 @@ struct mtk_cirq_chip_data {
+>  	void __iomem *base;
+>  	unsigned int ext_irq_start;
+>  	unsigned int ext_irq_end;
+> +	const u32 *offsets;
+>  	struct irq_domain *domain;
 >  };
 >  
-> @@ -1138,7 +1149,7 @@ int kernel_kexec(void)
+>  static struct mtk_cirq_chip_data *cirq_data;
 >  
->  	if (!kexec_trylock())
->  		return -EBUSY;
-> -	if (!kexec_image) {
-> +	if (!kexec_image || kexec_reboot_disabled) {
->  		error = -EINVAL;
->  		goto Unlock;
->  	}
-> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-> index 45637511e0de..583fba6de5cb 100644
-> --- a/kernel/kexec_file.c
-> +++ b/kernel/kexec_file.c
-> @@ -333,6 +333,11 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
->  	if (!capable(CAP_SYS_BOOT) || kexec_load_disabled)
->  		return -EPERM;
->  
-> +	/* Check if the system admin has disabled kexec reboot. */
-> +	if (!(flags & (KEXEC_FILE_ON_CRASH | KEXEC_FILE_UNLOAD))
-> +	    && kexec_reboot_disabled)
-> +		return -EPERM;
-> +
->  	/* Make sure we have a legal set of flags */
->  	if (flags != (flags & KEXEC_FILE_FLAGS))
->  		return -EINVAL;
-> 
-> -- 
-> b4 0.11.0-dev-d93f8
-> 
+> -static void mtk_cirq_write_mask(struct irq_data *data, unsigned int offset)
+> +static inline void __iomem *mtk_cirq_reg(struct mtk_cirq_chip_data *chip_data,
 
+Drop the inline. That's for the compiler to figure it out.
+
+> +					 enum mtk_cirq_reg_index idx,
+> +					 unsigned int cirq_num)
+
+What does cirq_num mean for registers that are not relative to an
+interrupt? Create a separate helper for those.
+
+> +{
+> +	void __iomem *reg = chip_data->base + chip_data->offsets[idx];
+> +
+> +	return reg + (cirq_num / 32) * 4;
+> +}
+> +
+> +static void mtk_cirq_write_mask(struct irq_data *data, enum mtk_cirq_reg_index idx)
+>  {
+>  	struct mtk_cirq_chip_data *chip_data = data->chip_data;
+>  	unsigned int cirq_num = data->hwirq;
+>  	u32 mask = 1 << (cirq_num % 32);
+>  
+> -	writel_relaxed(mask, chip_data->base + offset + (cirq_num / 32) * 4);
+> +	writel_relaxed(mask, mtk_cirq_reg(chip_data, idx, cirq_num));
+>  }
+>  
+>  static void mtk_cirq_mask(struct irq_data *data)
+> @@ -160,6 +185,7 @@ static const struct irq_domain_ops cirq_domain_ops = {
+>  #ifdef CONFIG_PM_SLEEP
+>  static int mtk_cirq_suspend(void)
+>  {
+> +	void __iomem *reg;
+>  	u32 value, mask;
+>  	unsigned int irq, hwirq_num;
+>  	bool pending, masked;
+> @@ -200,31 +226,34 @@ static int mtk_cirq_suspend(void)
+>  				continue;
+>  		}
+>  
+> +		reg = mtk_cirq_reg(cirq_data, CIRQ_ACK, i);
+>  		mask = 1 << (i % 32);
+> -		writel_relaxed(mask, cirq_data->base + CIRQ_ACK + (i / 32) * 4);
+> +		writel_relaxed(mask, reg);
+>  	}
+>  
+>  	/* set edge_only mode, record edge-triggerd interrupts */
+>  	/* enable cirq */
+> -	value = readl_relaxed(cirq_data->base + CIRQ_CONTROL);
+> +	reg = mtk_cirq_reg(cirq_data, CIRQ_CONTROL, 0);
+> +	value = readl_relaxed(reg);
+>  	value |= (CIRQ_EDGE | CIRQ_EN);
+> -	writel_relaxed(value, cirq_data->base + CIRQ_CONTROL);
+> +	writel_relaxed(value, reg);
+>  
+>  	return 0;
+>  }
+>  
+>  static void mtk_cirq_resume(void)
+>  {
+> +	void __iomem *reg = mtk_cirq_reg(cirq_data, CIRQ_CONTROL, 0);
+>  	u32 value;
+>  
+>  	/* flush recorded interrupts, will send signals to parent controller */
+> -	value = readl_relaxed(cirq_data->base + CIRQ_CONTROL);
+> -	writel_relaxed(value | CIRQ_FLUSH, cirq_data->base + CIRQ_CONTROL);
+> +	value = readl_relaxed(reg);
+> +	writel_relaxed(value | CIRQ_FLUSH, reg);
+>  
+>  	/* disable cirq */
+> -	value = readl_relaxed(cirq_data->base + CIRQ_CONTROL);
+> +	value = readl_relaxed(reg);
+>  	value &= ~(CIRQ_EDGE | CIRQ_EN);
+> -	writel_relaxed(value, cirq_data->base + CIRQ_CONTROL);
+> +	writel_relaxed(value, reg);
+>  }
+>  
+>  static struct syscore_ops mtk_cirq_syscore_ops = {
+> @@ -240,10 +269,18 @@ static void mtk_cirq_syscore_init(void)
+>  static inline void mtk_cirq_syscore_init(void) {}
+>  #endif
+>  
+> +static const struct of_device_id mtk_cirq_of_match[] = {
+
+Can't this be made __initconst?
+
+> +	{ .compatible = "mediatek,mt2701-cirq", .data = &mtk_cirq_regs_v1 },
+> +	{ .compatible = "mediatek,mt8135-cirq", .data = &mtk_cirq_regs_v1 },
+> +	{ .compatible = "mediatek,mt8173-cirq", .data = &mtk_cirq_regs_v1 },
+> +	{ /* sentinel */ }
+> +};
+> +
+>  static int __init mtk_cirq_of_init(struct device_node *node,
+>  				   struct device_node *parent)
+>  {
+>  	struct irq_domain *domain, *domain_parent;
+> +	const struct of_device_id *match;
+>  	unsigned int irq_num;
+>  	int ret;
+>  
+> @@ -274,6 +311,13 @@ static int __init mtk_cirq_of_init(struct device_node *node,
+>  	if (ret)
+>  		goto out_unmap;
+>  
+> +	match = of_match_node(mtk_cirq_of_match, node);
+> +	if (!match) {
+> +		ret = -ENODEV;
+> +		goto out_unmap;
+> +	}
+
+Can't you perform this before mapping the MMIO region and allocating
+memory? If you must fail, fail early.
+
+> +	cirq_data->offsets = match->data;
+> +
+>  	irq_num = cirq_data->ext_irq_end - cirq_data->ext_irq_start + 1;
+>  	domain = irq_domain_add_hierarchy(domain_parent, 0,
+>  					  irq_num, node,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
