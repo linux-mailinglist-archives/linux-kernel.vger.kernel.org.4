@@ -2,234 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 505A7636462
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:47:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC44636468
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:48:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238653AbiKWPr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 10:47:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
+        id S238135AbiKWPsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 10:48:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238932AbiKWPrI (ORCPT
+        with ESMTP id S238723AbiKWPsK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 10:47:08 -0500
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52EDE77212
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:47:07 -0800 (PST)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-142612a5454so20593517fac.2
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:47:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YM14aiVzqDo2VYlJPLD2N03qJKZNpMBQyuvIk6tlGNY=;
-        b=nH/2LsxhLaH6XcmoOc6ztXPeUKL6fNyzeEK0EHZNeTahDT5YT1M09jjwAjtpcFG6kE
-         4beCzlMVU1GK6oWHmUavV0x0PBTf7zZjeo4igHNs73DKK8MjYdtHJ8jXXqhXaxXZg0mb
-         0gb/ucTpegyyWsLT/Cp4jQzN0zBji7NcQ3vFt4UvwXuWAhptz0GyVwUe3dlyGaRnAYea
-         im8sXmP6p5QUjZFXakmbNpMQHlbx7A6IXc1gEtfrsHfN5Yal7j4ESMwXAM8ivN4+dWCN
-         C8CfydgGichYuA1cwiwHlQrq+6sWoiwhrE2yGmQTK/3KiDqrQ6mGNdEWx9poNxP8usjn
-         JBnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YM14aiVzqDo2VYlJPLD2N03qJKZNpMBQyuvIk6tlGNY=;
-        b=3VqNekavMz2JxDPT/KR6OhKlZpR/Y6M/RlM7vCCG1mwq2pFAYGxd+2h3jlQAq5dD3b
-         tTv6/UN/dP5m0J0z9XQsaXmwJUJjvMrHwjEPL4MRDneFyBc9hxGKF7V2It6aVn5tHuqN
-         xyaXXhMwoYu45QmEdeIhzV1mUEhYiDsdDAGz+x+79ZDHAOYz0prCHg3jCBfoeIrPfEBf
-         F+XeDPzVFkKsDKMYLC+OootIH6PEKIFDJO7b1/uD+mL9AVV/Un+6r0YpJVB+qM/YBvOO
-         DNIVqtEzH72DCejaKgfFF4nvX1bM+bG+pFIQtWIkjo2pLa/grvu8PHJ/DFUweienhUHd
-         83Iw==
-X-Gm-Message-State: ANoB5pk+JlN1D8UAoIB/haPd+67+Nc3fUiA98fi1gn/ITb0mCpB+5ciV
-        4b2ZAOGyJ3rqLJkeerkq0lbRxt2ul2/hLemUdPK1Kg==
-X-Google-Smtp-Source: AA0mqf6SmYaTkY15OJxApRh8xFwuKZLN4SNTXpRCUcINCNpWUALoUWNVHELpC+FPEOyvLfqKx1cJM1WikWq05upKj1g=
-X-Received: by 2002:a05:6870:3b0a:b0:142:ff0f:3db with SMTP id
- gh10-20020a0568703b0a00b00142ff0f03dbmr6102336oab.17.1669218426481; Wed, 23
- Nov 2022 07:47:06 -0800 (PST)
+        Wed, 23 Nov 2022 10:48:10 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6213A1B5;
+        Wed, 23 Nov 2022 07:48:07 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NHQMY4q3Rz9xGKG;
+        Wed, 23 Nov 2022 23:41:13 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwD34W6OQH5jUE+LAA--.33660S2;
+        Wed, 23 Nov 2022 16:47:38 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com
+Cc:     ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v6 0/6] evm: Do HMAC of multiple per LSM xattrs for new inodes
+Date:   Wed, 23 Nov 2022 16:47:06 +0100
+Message-Id: <20221123154712.752074-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220727114302.302201-1-apatel@ventanamicro.com>
- <20220727114302.302201-2-apatel@ventanamicro.com> <372e37bf-ac90-c371-ad9e-b9c18e1cc059@linaro.org>
- <CAK9=C2WjU+2cD7UZbja3TT++KCdRyWroT=50dw=fzi5mX30rcw@mail.gmail.com>
- <7a0477a0-9f0f-87d6-4070-30321745f4cc@linaro.org> <CAAhSdy20p5bkVanKGkGyArn94hWJhwncztnX7U+4WkN9-v7NsA@mail.gmail.com>
- <Y3zjQXqEHsaoVVvf@wendy> <Y34kM9TZ1FSqpeEB@wendy>
-In-Reply-To: <Y34kM9TZ1FSqpeEB@wendy>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Wed, 23 Nov 2022 21:16:55 +0530
-Message-ID: <CAK9=C2UeUhMXmbMZzS4rnhS++DfsTYTCQ4y-LVu6QgL0c64=0A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: riscv: Add optional DT property riscv,timer-can-wake-cpu
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Anup Patel <anup@brainfault.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Samuel Holland <samuel@sholland.org>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: LxC2BwD34W6OQH5jUE+LAA--.33660S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxKFy3Xr47Aw1rKry3XFy8uFg_yoWfKr4xpF
+        Wjg3W5Krn8AFWjgrWfAa1xua1SgrWrGr47Jrs3Gryjy3Z8Gr1xtr1Ikry5ua45XrZ5AF9a
+        qw17Awn8u3Z8A37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
+        IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E
+        87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU13rcDUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAFBF1jj4HL3wABsm
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 7:17 PM Conor Dooley <conor.dooley@microchip.com> wrote:
->
-> Hey Anup,
->
-> (keeping all the context since you didn't reply to this mail yet)
->
-> On Tue, Nov 22, 2022 at 02:57:05PM +0000, Conor Dooley wrote:
-> > Hey Anup,
-> >
-> > I've been meaning to get back to you on this stuff for quite a while,
-> > but unfortunately I've gotten distracted with other stuff every time I
-> > got close. Apologies for that :(
-> >
-> > On Wed, Jul 27, 2022 at 07:04:57PM +0530, Anup Patel wrote:
-> > > On Wed, Jul 27, 2022 at 6:05 PM Krzysztof Kozlowski
-> > > <krzysztof.kozlowski@linaro.org> wrote:
-> > > >
-> > > > On 27/07/2022 14:21, Anup Patel wrote:
-> > > > > On Wed, Jul 27, 2022 at 5:37 PM Krzysztof Kozlowski
-> > > > > <krzysztof.kozlowski@linaro.org> wrote:
-> > > > >>
-> > > > >> On 27/07/2022 13:43, Anup Patel wrote:
-> > > > >
-> > > > > Since, there is no dedicated timer node, we use CPU compatible string
-> > > > > for probing the per-CPU timer.
-> > > >
-> > > > Next time you add a properties:
-> > > > riscv,saata-can-wake-cpu
-> > > > riscv,usb-can-wake-cpu
-> > > > riscv,interrupt-controller-can-wake-cpu
-> > > >
-> > > > and so on and keep explaining that "historically" you did not define
-> > > > separate nodes, so thus must be in CPU node.
-> > >
-> > > This is a one-of-case with RISC-V DeviceTree where we are living with
-> > > the fact that there is no timer DT node. If we add a timer DT node now
-> > > then we have to deal with compatibility for existing platforms.
-> >
-> > I don't really understand the argument here. Perhaps this made sense a
-> > few months ago, but it no longer does IMO.
-> >
-> > We have existing platforms that interpreted the SBI spec (or perhaps
-> > predated the SBI spec in the relevant form?) differently. I've pasted it
-> > several times now I feel but it's relevant so pasting it here again...
-> >
-> > On the subject of suspend, the RISC-V SBI spec states:
-> > > Request the SBI implementation to put the calling hart in a platform
-> > > specific suspend (or low power) state specified by the suspend_type
-> > > parameter. The hart will automatically come out of suspended state and
-> > > resume normal execution when it receives an interrupt or platform
-> > > specific hardware event.
-> >
-> > This does not cover whether a given event actually reaches the hart or
-> > not, just what the hart will do if it receives an event. For the
-> > implementation on the Allwinner D1, timer events are not received during
-> > suspend.
-> >
-> > Through-out the various bits of conversation so far, I have been
-> > operating on the assumption that on PolarFire SoC, and potentially other
-> > SiFive based implementations, events from the RISC-V timer do reach a
-> > hart during suspend.
-> > I realised while writing this response that I have never actually tested
-> > it - the C3STOP flag caused problems for me during regular operation &
-> > not while using some DT defined sleep states.
-> > I've been learning/piecing together the bits of what is happening here as
-> > time goes on, so I made an assumption that may or may not be correct, and
-> > I am still oh-so-far from an understanding.
-> > I just took it for granted that the existing driver worked correctly for
-> > "old" SiFive stuff which MPFS is based on & figured that with ~the same
-> > core complex as the fu540 that we'd behave similarly.
-> > Perhaps that was not a good idea & please let me know if I've been
-> > barking up the wrong tree.
-> >
-> > Do we know definitively what is/isn't the case for any of the existing
-> > platforms?
-> > I can test some stuff, but it'll take some time as it's a bad week in
-> > my neck of the woods.
-> >
-> > > If we add a timer DT node now
-> > > then we have to deal with compatibility for existing platforms.
-> >
-> > In terms of what to encode in a DT, and given the spec never says that
-> > the timer interrupt must arrive during suspend, we must assume, by
-> > default, that no timer events arrive during suspend.
-> >
-> > We have a bunch of existing platforms that may (do?) get timer events
-> > during suspend, the opposite of the proposed default behaviour.
-> >
-> > I'm trying to follow the line of reasoning but I fail to see how taking
-> > either the property or node approach allows us to maintain behaviour for
-> > exiting platforms that that do see timer events during suspend without
-> > adding *something* to the DT. No matter what we add, we've got some sort
-> > of backwards compatibility issue, right?
-> >
-> > I noted the above:
-> >
-> > > Since, there is no dedicated timer node, we use CPU compatible string
-> > > for probing the per-CPU timer.
-> >
-> > If we could rely on the cpu compatible why would we need to add a
-> > dt-property anyway? Forgive my naivety here, but is the timer event in
-> > suspend behaviour not a "core complex" level attribute rather than a
-> > something that can be consistently determined by the cpu compatible?
-> >
-> > Either way, we need to figure out why enabling C3STOP is causing other
-> > timer issues even when we are not in some sort of sleep state & do
-> > something about that - or figure out some different way to communicate
-> > the behavioural differences.
-> > I would expect timers to continue working "normally" with the flag set,
-> > even if how they work is subtly different?
-> > On a D1, with the C3STOP "feature" flag set, and it's custom timer
-> > implementation unused, how do timers behave?
-> >
-> > Hopefully I've missed something blatant here Anup!
->
-> So what I missed, as Anup pointed out else where, is:
->
-> > me:
-> > > I don't really follow. How is there a compatibility issue created by
-> > > adding a new node that is not added for a new property? Both will
-> > > require changes to the device tree. (You need not reply here, I am going
-> > > to review the other thread, it's been on my todo list for too long. Been
-> > > caught up with non-coherent stuff & our sw release cycle..)
-> >
-> > Adding a new timer DT node would mean, the RISC-V timer driver
-> > will now be probed using the compatible to the new DT node whereas
-> > the RISC-V timer driver is currently probed using CPU DT nodes.
->
-> In that case, we would have to retain the ability to match against the
-> "riscv". Spitballing:
-> - add a new timer node
-> - keep matching against "riscv"
-> - look up a timer node during init w/ of_find_matching_node() that
->   contains any new timer properties
->
-> I think it's unlikely that this will be the last time we have to add
-> some timer properties & we should avoid doing odd things in a DT to suit
-> an operating system?
->
-> Would something along those lines work Anup, or am I, yet again, missing
-> something?
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-I was already working on v3 along these lines. I will try to post a v3 this
-week itself.
+One of the major goals of LSM stacking is to run multiple LSMs side by side
+without interfering with each other. The ultimate decision will depend on
+individual LSM decision.
 
-Regards,
-Anup
+Several changes need to be made to the LSM infrastructure to be able to
+support that. This patch set tackles one of them: gives to each LSM the
+ability to specify one or multiple xattrs to be set at inode creation
+time and, at the same time, gives to EVM the ability to access all those
+xattrs and calculate the HMAC on them.
 
->
-> Thanks,
-> Conor.
->
+The first problem that this patch set addresses is to make the
+inode_init_security hook definition suitable to use with EVM which, unlike
+other LSMs, needs to have visibility of all xattrs and not only the one
+that the LSM infrastructure passes to the LSM to be set.
+
+The solution is to replace in the inode_init_security definition the
+name/value/len parameters with the beginning of the array containing all
+xattrs set by LSMs. Due to security_old_inode_init_security() API
+limitation of setting only one xattr, it has been dropped and the remaining
+users, ocfs2 and reiserfs, switch to security_inode_init_security().
+However, due to the complexity of the changes required to fully exploit the
+ability of security_inode_init_security() to set multiple xattrs, those
+users can still set only one xattr (the first set in the xattr array) where
+previously they called security_old_inode_init_security().
+
+Furthermore, while EVM is invoked unlike before, its xattr will not be set
+as it would not be the first set in the xattr array, or if it is the first,
+there would not be protected xattrs to calculate the HMAC on.
+
+The second problem this patch set addresses is the limitation of the
+call_int_hook() of stopping the loop when the return value from a hook
+implementation is not zero. Unfortunately, for the inode_init_security hook
+it is a legitimate case to return -EOPNOTSUPP, but this would not
+necessarily mean that there is an error to report to the LSM infrastructure
+but just that an LSM does not will to set an xattr. Other LSMs should be
+still consulted as well.
+
+The solution for this specific case is to replace the call_int_hook() with
+the loop itself, so that -EOPNOTSUPP can be ignored.
+
+Next, this patch set removes the limitation of creating only two xattrs,
+one by an active LSM and another by EVM. This patch set extends the
+reservation mechanism of the LSM infrastructure, to allow each LSM to
+request one or multiple xattrs. While this could potentially lead to
+reaching the filesystem limits of number/size of the xattrs, it seems not
+an issue that need to be solved by the LSM infrastructure but by the
+filesystems themselves. Currently, if the limit is reached, the only
+workaround would be to use fewer LSMs.
+
+The reservation mechanism concept makes it very easy for LSMs to position
+themselves correctly in the xattr array, as the LSM infrastructure at
+initialization time changes the number of xattrs requested by each LSM with
+an offset. LSMs can just take that offset as the starting index in the
+xattr array and fill the next slots depending on how many xattrs they
+requested.
+
+However, while this concept is intuitive, it needs extra care. While for
+security blobs (the main reason of the reservation mechanism) it is not
+relevant for an LSM if other LSMs filled their portion, it matters for
+xattrs, as both EVM and initxattrs() callbacks scan the entire array until
+a terminator (xattr with NULL name). If an LSM did not provide an xattr,
+which could happen if it is loaded but not initialized, consumers of the
+xattr array would stop prematurely.
+
+This patch set avoids this problem by compacting the xattr array each time
+after an LSM executed its implementation of the inode_init_security hook.
+It needs to be done after each LSM, and not after all, since there might be
+LSMs scanning that xattr array too. Compacting the array after all LSMs
+would be too late.
+
+Finally, this patch set modifies the evm_inode_init_security() definition
+to be compatible with the inode_init_security hook definition and adds
+support for scanning the whole xattr array and for calculating the HMAC
+on all xattrs provided by LSMs.
+
+This patch set has been tested by introducing several instances of a
+TestLSM (some providing an xattr, some not, one with a wrong implementation
+to see how the LSM infrastructure handles it, one providing multiple xattrs
+and another providing an xattr but in a disabled state). The patch is not
+included in this set but it is available here:
+
+https://github.com/robertosassu/linux/commit/e13a03236df0c399dccb73df5fe4cfceb4bb1d89
+
+The test, added to ima-evm-utils, is available here:
+
+https://github.com/robertosassu/ima-evm-utils/blob/evm-multiple-lsms-v5-devel-v3/tests/evm_multiple_lsms.test
+
+The test takes a UML kernel built by Github Actions and launches it several
+times, each time with a different combination of LSMs and filesystems (ext4,
+reiserfs, ocfs2). After boot, it first checks that there is an xattr for each
+LSM providing it (for reiserfs and ocfs2 just the first LSM), and then (for
+ext4) calculates the HMAC in user space and compares it with the HMAC
+calculated by EVM in kernel space.
+
+A test report can be obtained here:
+
+https://github.com/robertosassu/ima-evm-utils/actions/runs/3525619568/jobs/5912560168
+
+The patch set has been tested with both the SElinux and Smack test suites.
+Below, there is the summary of the test results:
+
+SELinux Test Suite result (without patches):
+Files=73, Tests=1346, 225 wallclock secs ( 0.43 usr  0.23 sys +  6.11 cusr 58.70 csys = 65.47 CPU)
+Result: FAIL
+Failed 4/73 test programs. 13/1346 subtests failed.
+
+SELinux Test Suite result (with patches):
+Files=73, Tests=1346, 225 wallclock secs ( 0.44 usr  0.22 sys +  6.15 cusr 59.94 csys = 66.75 CPU)
+Result: FAIL
+Failed 4/73 test programs. 13/1346 subtests failed.
+
+Smack Test Suite result (without patches):
+95 Passed, 0 Failed, 100% Success rate
+
+Smack Test Suite result (with patches):
+95 Passed, 0 Failed, 100% Success rate
+
+Changelog
+
+v5:
+- Modify the cover letter to explain that the goal of this patch set is
+  supporting multiple per LSM xattrs in EVM, and not moving IMA and EVM to
+  the LSM infrastructure
+- Remove references in the patches description about moving IMA and EVM
+  to the LSM infrastructure
+- Explain that the additional EVM invocation due to the switch to
+  security_inode_init_security() will not cause the EVM xattr to be added
+
+v4:
+- Remove patch to call reiserfs_security_free(), already queued
+- Switch ocfs2 and reiserfs to security_inode_init_security() (suggested by
+  Mimi)
+- Remove security_old_inode_init_security() (suggested by Paul)
+- Rename security_check_compact_xattrs() to
+  security_check_compact_filled_xattrs() and add function description
+  (suggested by Mimi)
+- Rename checked_xattrs parameter of security_check_compact_filled_xattrs()
+  to num_filled_xattrs (suggested by Mimi)
+- Rename cur_xattrs variable in security_inode_init_security() to
+  num_filled_xattrs (suggested by Mimi)
+
+v3:
+- Don't free the xattr name in reiserfs_security_free()
+- Don't include fs_data parameter in inode_init_security hook
+- Don't change evm_inode_init_security(), as it will be removed if EVM is
+  stacked
+- Fix inode_init_security hook documentation
+- Drop lsm_find_xattr_slot(), use simple xattr reservation mechanism and
+  introduce security_check_compact_xattrs() to compact the xattr array
+- Don't allocate xattr array if LSMs didn't reserve any xattr
+- Return zero if initxattrs() is not provided to
+  security_inode_init_security(), -EOPNOTSUPP if value is not provided to
+  security_old_inode_init_security()
+- Request LSMs to fill xattrs if only value (not the triple) is provided to
+  security_old_inode_init_security(), to avoid unnecessary memory
+  allocation
+
+v2:
+- rewrite selinux_old_inode_init_security() to use
+  security_inode_init_security()
+- add lbs_xattr field to lsm_blob_sizes structure, to give the ability to
+  LSMs to reserve slots in the xattr array (suggested by Casey)
+- add new parameter base_slot to inode_init_security hook definition
+
+v1:
+- add calls to reiserfs_security_free() and initialize sec->value to NULL
+  (suggested by Tetsuo and Mimi)
+- change definition of inode_init_security hook, replace the name, value
+  and len triple with the xattr array (suggested by Casey)
+- introduce lsm_find_xattr_slot() helper for LSMs to find an unused slot in
+  the passed xattr array
+
+Roberto Sassu (6):
+  reiserfs: Switch to security_inode_init_security()
+  ocfs2: Switch to security_inode_init_security()
+  security: Remove security_old_inode_init_security()
+  security: Allow all LSMs to provide xattrs for inode_init_security
+    hook
+  evm: Align evm_inode_init_security() definition with LSM
+    infrastructure
+  evm: Support multiple LSMs providing an xattr
+
+ fs/ocfs2/namei.c                    |  18 ++---
+ fs/ocfs2/xattr.c                    |  30 +++++++-
+ fs/reiserfs/xattr_security.c        |  23 ++++--
+ include/linux/evm.h                 |  12 +--
+ include/linux/lsm_hook_defs.h       |   3 +-
+ include/linux/lsm_hooks.h           |  17 ++--
+ include/linux/security.h            |  12 ---
+ security/integrity/evm/evm.h        |   2 +
+ security/integrity/evm/evm_crypto.c |   9 ++-
+ security/integrity/evm/evm_main.c   |  28 +++++--
+ security/security.c                 | 115 +++++++++++++++++++++-------
+ security/selinux/hooks.c            |  19 +++--
+ security/smack/smack_lsm.c          |  26 ++++---
+ 13 files changed, 213 insertions(+), 101 deletions(-)
+
+-- 
+2.25.1
+
