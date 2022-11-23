@@ -2,82 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA0F2634BCE
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 01:47:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0192634BD2
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 01:50:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235114AbiKWArO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 19:47:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59324 "EHLO
+        id S235345AbiKWAue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 19:50:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235329AbiKWArM (ORCPT
+        with ESMTP id S233239AbiKWAuc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 19:47:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F460D5A1B;
-        Tue, 22 Nov 2022 16:47:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F00796194A;
-        Wed, 23 Nov 2022 00:47:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5245DC433D7;
-        Wed, 23 Nov 2022 00:47:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669164430;
-        bh=lDXdSzw4PMXXXF3nLrHVxQyZSnT026dh4Nn6IkU0BoE=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=fONDl5k1h7xPaYRhwR/ZemCKa1Gug8LSReGg8z2vWwv7Uv0JSpU41MJlxzUlsuK91
-         SwRGmf/yw1FozuNeod0H7EdllsB067ZT4XnurkY+bjamJoVclq8WDH7pDeYFv6Hw49
-         GkPj0rQP3qpv4DkIdBuyoo6rDN7GtTCIRNgzxaXI6Vjmj6adT5BrcYLdDoMQOWiOdD
-         VWDBx8Y05U24utxAk0MUzFeq8K5aCsMkzhm045ZpDpGVLHasrj1J81oISP949JY0Gy
-         3ckwwR5QyAyhOdkQnbm76ZxvfAS7EsWw/vdyiebEy4IhMkyJG83ef8I4AdkyozVn+0
-         G3IXfxIetxfYQ==
-Content-Type: text/plain; charset="utf-8"
+        Tue, 22 Nov 2022 19:50:32 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416348CBA5
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 16:50:31 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id r81so12203467iod.2
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 16:50:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/Wyg27Oeq4DqDZ4lYFkdjF7i3NTxjJy7JLvTsaNTj88=;
+        b=UUX2Pzj4rv7SI7AC9kHHtblwdjLwJVfefYk4Y6ryDlKu37g9yCHeEiMGLn6idfv7wU
+         yQbWigJuJJzjd6jybOPBUF2+XiTcg3zciQmhCsyfq8PYYL4oWafZEpcumlBPvd6DCOyG
+         3dZJMWaKJK+TBQ4lPySTlMaP5lzcZzKww1QJEKI/nyFoEM94VPEFj32LfVt56x7NLXx5
+         AA5xjysQ388tTDD2naOZXfCW86lu/yHEoX1ZNdlKfVRrkEMZQxkEITMFY/7RX0Wz5Wn6
+         AlVOzAyOVSHD8VN47gc3O2QN3R1Om4FvSrTbP3Wn3KAr3Eln0hF8OHYkH1CzYd7DyOQP
+         ndrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/Wyg27Oeq4DqDZ4lYFkdjF7i3NTxjJy7JLvTsaNTj88=;
+        b=QtfkOAcewyyfQlEjseCOo0sIwX2GQ5t0+ffs0JPU/jhdksEw0xh9XY9V12rchTp1eS
+         RymFJxYFJrFAVqXSO+b5ehJEd4Xjdh9T2KmC2z9nPxvSHw+C1jULXS718pJ42OxrBLvo
+         yc8TT17K37OSUTufWCpUiewNdNJrJOFWgdeu1qNvnxnLtal9BjIsEba31t0XcNvt3P71
+         Ceb63eWWGmQkEoW3V20FjGl6oPT0TffZUg0Z5iqlLoohZMgD/w9m76DSwjNR8M6geWkp
+         +l9iaGU/chAkoJV62+NbmvqH8NsH4C+/5SXQ6N4oJzsg9m/bJl9yEAK1I30o90VJyKGF
+         HewA==
+X-Gm-Message-State: ANoB5plaFZ/YT1LTAjRxQF92OhVDbvP5UsVYbwahyiitwmumlyBI48jO
+        y/HD9dP2+8Q0erNH//24j8AaeDwg9+1hgZYPiyqy3Q==
+X-Google-Smtp-Source: AA0mqf4NR6Es1jcFfkVDVEhHLmRW3Glm/E4ZOd5g9Aph6VfZkmnmoWCGfEb8L2jymCL355X1qCogkyfn+5WCfjAu13Y=
+X-Received: by 2002:a02:2ace:0:b0:363:a77e:369e with SMTP id
+ w197-20020a022ace000000b00363a77e369emr11957258jaw.53.1669164630472; Tue, 22
+ Nov 2022 16:50:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20221116092616.17960-1-krzysztof.kozlowski@linaro.org>
-References: <20221116092616.17960-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: [GIT PULL] clk: samsung: Pull for v6.2
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        linux-clk@vger.kernel.org, Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>
-Date:   Tue, 22 Nov 2022 16:47:08 -0800
-User-Agent: alot/0.10
-Message-Id: <20221123004710.5245DC433D7@smtp.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221122232721.2306102-1-yosryahmed@google.com>
+ <Y31rSglEcTaaIg05@P9FQF9L96D.corp.robot.car> <CAJD7tkZE6TLDShcntnY=tXnRpA6jx1uLMemeZtqWLZ3JAC_GNg@mail.gmail.com>
+In-Reply-To: <CAJD7tkZE6TLDShcntnY=tXnRpA6jx1uLMemeZtqWLZ3JAC_GNg@mail.gmail.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Tue, 22 Nov 2022 16:49:54 -0800
+Message-ID: <CAJD7tkYfR6Kuq569=0h_crqjpK5cNT_029LuYa-EeCx16gU-6A@mail.gmail.com>
+Subject: Re: [PATCH] mm: memcg: fix stale protection of reclaim target memcg
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Shakeel Butt <shakeelb@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>, Yu Zhao <yuzhao@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Chris Down <chris@chrisdown.name>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Krzysztof Kozlowski (2022-11-16 01:26:16)
-> The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc7=
-80:
->=20
->   Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
->=20
-> are available in the Git repository at:
->=20
->   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/sam=
-sung-clk-6.2
->=20
-> for you to fetch changes up to 2bc5febd05abe86c3e3d4b4f18dff4bc4316c1be:
->=20
->   clk: samsung: Revert "clk: samsung: exynos-clkout: Use of_device_get_ma=
-tch_data()" (2022-11-15 10:36:54 +0100)
->=20
-> ----------------------------------------------------------------
+On Tue, Nov 22, 2022 at 4:45 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+>
+> On Tue, Nov 22, 2022 at 4:37 PM Roman Gushchin <roman.gushchin@linux.dev> wrote:
+> >
+> > On Tue, Nov 22, 2022 at 11:27:21PM +0000, Yosry Ahmed wrote:
+> > > During reclaim, mem_cgroup_calculate_protection() is used to determine
+> > > the effective protection (emin and elow) values of a memcg. The
+> > > protection of the reclaim target is ignored, but we cannot set their
+> > > effective protection to 0 due to a limitation of the current
+> > > implementation (see comment in mem_cgroup_protection()). Instead,
+> > > we leave their effective protection values unchaged, and later ignore it
+> > > in mem_cgroup_protection().
+> > >
+> > > However, mem_cgroup_protection() is called later in
+> > > shrink_lruvec()->get_scan_count(), which is after the
+> > > mem_cgroup_below_{min/low}() checks in shrink_node_memcgs(). As a
+> > > result, the stale effective protection values of the target memcg may
+> > > lead us to skip reclaiming from the target memcg entirely, before
+> > > calling shrink_lruvec(). This can be even worse with recursive
+> > > protection, where the stale target memcg protection can be higher than
+> > > its standalone protection.
+> > >
+> > > An example where this can happen is as follows. Consider the following
+> > > hierarchy with memory_recursiveprot:
+> > > ROOT
+> > >  |
+> > >  A (memory.min = 50M)
+> > >  |
+> > >  B (memory.min = 10M, memory.high = 40M)
+> > >
+> > > Consider the following scenarion:
+> > > - B has memory.current = 35M.
+> > > - The system undergoes global reclaim (target memcg is NULL).
+> > > - B will have an effective min of 50M (all of A's unclaimed protection).
+> > > - B will not be reclaimed from.
+> > > - Now allocate 10M more memory in B, pushing it above it's high limit.
+> > > - The system undergoes memcg reclaim from B (target memcg is B)
+> > > - In shrink_node_memcgs(), we call mem_cgroup_calculate_protection(),
+> > >   which immediately returns for B without doing anything, as B is the
+> > >   target memcg, relying on mem_cgroup_protection() to ignore B's stale
+> > >   effective min (still 50M).
+> > > - Directly after mem_cgroup_calculate_protection(), we will call
+> > >   mem_cgroup_below_min(), which will read the stale effective min for B
+> > >   and skip it (instead of ignoring its protection as intended). In this
+> > >   case, it's really bad because we are not just considering B's
+> > >   standalone protection (10M), but we are reading a much higher stale
+> > >   protection (50M) which will cause us to not reclaim from B at all.
+> > >
+> > > This is an artifact of commit 45c7f7e1ef17 ("mm, memcg: decouple
+> > > e{low,min} state mutations from protection checks") which made
+> > > mem_cgroup_calculate_protection() only change the state without
+> > > returning any value. Before that commit, we used to return
+> > > MEMCG_PROT_NONE for the target memcg, which would cause us to skip the
+> > > mem_cgroup_below_{min/low}() checks. After that commit we do not return
+> > > anything and we end up checking the min & low effective protections for
+> > > the target memcg, which are stale.
+> > >
+> > > Add mem_cgroup_ignore_protection() that checks if we are reclaiming from
+> > > the target memcg, and call it in mem_cgroup_below_{min/low}() to ignore
+> > > the stale protection of the target memcg.
+> > >
+> > > Fixes: 45c7f7e1ef17 ("mm, memcg: decouple e{low,min} state mutations from protection checks")
+> > > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> >
+> > Great catch!
+> > The fix looks good to me, only a couple of cosmetic suggestions.
+> >
+> > > ---
+> > >  include/linux/memcontrol.h | 33 +++++++++++++++++++++++++++------
+> > >  mm/vmscan.c                | 11 ++++++-----
+> > >  2 files changed, 33 insertions(+), 11 deletions(-)
+> > >
+> > > diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+> > > index e1644a24009c..22c9c9f9c6b1 100644
+> > > --- a/include/linux/memcontrol.h
+> > > +++ b/include/linux/memcontrol.h
+> > > @@ -625,18 +625,32 @@ static inline bool mem_cgroup_supports_protection(struct mem_cgroup *memcg)
+> > >
+> > >  }
+> > >
+> > > -static inline bool mem_cgroup_below_low(struct mem_cgroup *memcg)
+> > > +static inline bool mem_cgroup_ignore_protection(struct mem_cgroup *target,
+> > > +                                             struct mem_cgroup *memcg)
+> > >  {
+> > > -     if (!mem_cgroup_supports_protection(memcg))
+> >
+> > How about to merge mem_cgroup_supports_protection() and your new helper into
+> > something like mem_cgroup_possibly_protected()? It seems like they never used
+> > separately and unlikely ever will be used.
+>
+> Sounds good! I am thinking maybe mem_cgroup_no_protection() which is
+> an inlining of !mem_cgroup_supports_protection() ||
+> mem_cgorup_ignore_protection().
+>
+> > Also, I'd swap target and memcg arguments.
+>
+> Sounds good.
 
-Thanks. Pulled into clk-fixes even though the subject says v6.2 they
-look like fixes that we really want now instead of later.
+I just remembered, the reason I put "target" first is to match the
+ordering of mem_cgroup_calculate_protection(), otherwise the code in
+shrink_node_memcgs() may be confusing.
+
+>
+> >
+> > Thank you!
+> >
+> >
+> > PS If it's not too hard, please, consider adding a new kselftest to cover this case.
+> > Thank you!
+>
+> I will try to translate my bash test to something in test_memcontrol,
+> I don't plan to spend a lot of time on it though so I hope it's simple
+> enough..
