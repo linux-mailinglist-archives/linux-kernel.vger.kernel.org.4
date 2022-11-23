@@ -2,85 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1BC263653A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 17:03:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABB0163653B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 17:04:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236238AbiKWQDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 11:03:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56892 "EHLO
+        id S238240AbiKWQD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 11:03:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237793AbiKWQDh (ORCPT
+        with ESMTP id S238509AbiKWQDv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 11:03:37 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFD258BE0;
-        Wed, 23 Nov 2022 08:03:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669219416; x=1700755416;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=RC/dJSMFGCQR6lU8cmnAoaGtXjo/0QLdlyY2gZJCtVM=;
-  b=JVPL1BNMfZ/pEW8CYSrUD1Wfdx8/qldoxg2wxw+WCQhzqGU5IAEfie26
-   GpDgbvnKM6m9zuu5XAgiTpBkEHzkdz0R6wqargqaHYNw3h99oNoQl/hyZ
-   6HSrxt/TrwqhQHqhnryXpjS1eQC7fHDkMpdzzt8iKRQTD4UMeQg20tfcF
-   H12BSerBtrgenUFpoSTFF76olbynK4E/VGpWcCxFot7VKczhQ2OX0HzvB
-   fpu2U3lXFTTU8mUGnc00QCLSEUuprPxN53Ga174Vr0XBUn28Pb8OV46O8
-   v0KcVBIE2oLpQIfBB58drPZifSKmLCKlIDeoxWrgBoUBxTxiUcpF+d38u
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="311728002"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="311728002"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 08:03:35 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="619664771"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="619664771"
-Received: from vcbudden-mobl3.amr.corp.intel.com (HELO [10.212.129.67]) ([10.212.129.67])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 08:03:34 -0800
-Message-ID: <1249f7d6-1a95-4268-366b-7da5ecec7b92@intel.com>
-Date:   Wed, 23 Nov 2022 08:03:33 -0800
+        Wed, 23 Nov 2022 11:03:51 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F104B5E3EA
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 08:03:50 -0800 (PST)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NHQn54Mp3zqSV2;
+        Wed, 23 Nov 2022 23:59:53 +0800 (CST)
+Received: from [10.67.110.112] (10.67.110.112) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 24 Nov 2022 00:03:49 +0800
+Subject: Re: [PATCH 0/2] x86/xen: Fix memory leak issue
+To:     Juergen Gross <jgross@suse.com>, <boris.ostrovsky@oracle.com>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <hpa@zytor.com>, <jeremy@goop.org>
+CC:     <x86@kernel.org>, <xen-devel@lists.xenproject.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221119085923.114889-1-xiujianfeng@huawei.com>
+ <33b9d446-9907-ded6-114e-ce6c43cc3446@suse.com>
+From:   xiujianfeng <xiujianfeng@huawei.com>
+Message-ID: <22003e76-0aae-e699-f231-85f8313e4a36@huawei.com>
+Date:   Thu, 24 Nov 2022 00:03:48 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 1/6] x86/tdx: Support hypercalls for TDX guests on Hyper-V
-Content-Language: en-US
-To:     Dexuan Cui <decui@microsoft.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221121195151.21812-1-decui@microsoft.com>
- <20221121195151.21812-2-decui@microsoft.com>
- <18323d11-146f-c418-e8f0-addb2b8adb19@intel.com>
- <SA1PR21MB13353C24B5BF2E7D6E8BCFA5BF0C9@SA1PR21MB1335.namprd21.prod.outlook.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <SA1PR21MB13353C24B5BF2E7D6E8BCFA5BF0C9@SA1PR21MB1335.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <33b9d446-9907-ded6-114e-ce6c43cc3446@suse.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.112]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,50 +52,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/22/22 17:37, Dexuan Cui wrote:
->> From: Dave Hansen <dave.hansen@intel.com>
->> Sent: Monday, November 21, 2022 12:39 PM
->> [...]
->> On 11/21/22 11:51, Dexuan Cui wrote:
->>> __tdx_hypercall() doesn't work for a TDX guest running on Hyper-V,
->>> because Hyper-V uses a different calling convention, so add the
->>> new function __tdx_ms_hv_hypercall().
+Hi,
+
+在 2022/11/23 23:23, Juergen Gross 写道:
+> On 19.11.22 09:59, Xiu Jianfeng wrote:
+>> The new string allocated by kasprintf() is leaked on error path
 >>
->> Other than R10 being variable here and fixed for __tdx_hypercall(), this
->> looks *EXACTLY* the same as __tdx_hypercall(), or at least a strict
->> subset of what __tdx_hypercall() can do.
+>> Xiu Jianfeng (2):
+>>    x86/xen: Fix memory leak in xen_smp_intr_init{_pv}()
+>>    x86/xen: Fix memory leak in xen_init_lock_cpu()
 >>
->> Did I miss something?
+>>   arch/x86/xen/smp.c      | 16 ++++++++++++----
+>>   arch/x86/xen/smp_pv.c   |  8 ++++++--
+>>   arch/x86/xen/spinlock.c |  3 ++-
+>>   3 files changed, 20 insertions(+), 7 deletions(-)
+>>
 > 
-> The existing asm code for __tdx_hypercall() passes through R10~R15
-> (see TDVMCALL_EXPOSE_REGS_MASK) to the (KVM) hypervisor.
+> Hmm, I think it would make more sense to always store the name generated
+> via kasprintf() in the percpu variable (independently from succeeding to
+> bind the irq), and in the related free function to always kfree() it and
+> set it to NULL again.
 > 
-> Unluckily, for Hyper-V, we need to pass through RDX, R8, R10 and R11
-> to Hyper-V, so I don't think I can use the existing __tdx_hypercall() ?
+> This would result in less code.
 
-What's to prevent you from adding RDX and R8?  You could make
-TDVMCALL_EXPOSE_REGS_MASK a macro argument.
-
-Look at 'has_erro_code', for instance in "idtentry_body"
-arch/x86/entry/entry_64.S.
-
->> Another way of saying this:  It seems like you could do this with a new
->> version of _tdx_hypercall() (and all in C) instead of a new
->> __tdx_hypercall().
+Thanks, It's good to me, already sent v2.
 > 
-> I don't think the current TDVMCALL_EXPOSE_REGS_MASK allows me
-> to pass through RDX and R8 to Hyper-V.
-
-Right.  So pass it in.
-
-> PS, the comment before __tdx_hypercall() contains this line:
 > 
-> "* RBX, RBP, RDI, RSI  - Used to pass VMCALL sub function specific
-> arguments."
-> 
-> But it looks like currently RBX an RBP are not used at all in 
-> arch/x86/coco/tdx/tdcall.S ?
-
-Yeah, it looks like they are a part of the hypercall ABI but no existing
-hypercall is using them.  Patches to fix it accepted. :)
-
+> Juergen
