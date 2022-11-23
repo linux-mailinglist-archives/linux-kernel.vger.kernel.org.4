@@ -2,160 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D69A6369E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 20:32:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 456F86369E9
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 20:33:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237570AbiKWTcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 14:32:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57174 "EHLO
+        id S239497AbiKWTch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 14:32:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235321AbiKWTcS (ORCPT
+        with ESMTP id S238329AbiKWTce (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 14:32:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62FC2A245
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 11:31:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669231882;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=of6BBewdTwcAl18GJoeXpGt0yO4qHxqQv2rqdT+vNQU=;
-        b=Aiiwel9IUcBYlLaiixBFsy8n2Ehp+5yKR0ESThaAjIxMXMgM9dF5d7stavt2+YFhmVhZLz
-        iYPvCwWU/SzKM+245i/CXwAN0uInIZzL08Ba8m0A1FAA85gpk4y+DJ4WsystcTyc+7r8Nt
-        mfnlE8lylTwe+cl9eG4ikrMxinDJCY4=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-513-C2u4n5n2Prif3gq6Zu3POw-1; Wed, 23 Nov 2022 14:31:21 -0500
-X-MC-Unique: C2u4n5n2Prif3gq6Zu3POw-1
-Received: by mail-wm1-f70.google.com with SMTP id bg25-20020a05600c3c9900b003cf3ed7e27bso10001590wmb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 11:31:21 -0800 (PST)
+        Wed, 23 Nov 2022 14:32:34 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B820AE3B
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 11:32:28 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id k21-20020a5e8915000000b006de391b332fso9398666ioj.4
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 11:32:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=of6BBewdTwcAl18GJoeXpGt0yO4qHxqQv2rqdT+vNQU=;
-        b=0GgE3B2GdVrgsjh4VEewbxbRscFIpcxR8Ukt9c/wb2Gluo8rNR61JzSQdTMpPJ2bd4
-         zr6C4I5D5NJIM6BPatrb7xtvnteBlHEOJab2Pb2wlB9+5uFdXoTh9S60FAyX6oA3ptg0
-         v9edMG+5wK+TFFaIMcq/iHZFZMu8x+PDZH6XfmUWJruyx7/Jk4Ibm+GSR3DrkRXYYn3M
-         dE2J+dCwxpiT9hO5D8xoy76CWv28eealjgS39xCTJxGc2y+Q6yPBQseRUGqqs51I+btn
-         mHQ6Nc+R88KfPseE6TNU8Q8/efMtsvC7FT8DhCU1hvAZzr7Uep+MBcET6iG61e1M4Lya
-         ECKw==
-X-Gm-Message-State: ANoB5plTytpQvUx/JRbtccjC/faztr2t5irDxXDzsuWn66ievY1LLl9c
-        le3QmWaulDQkmw5+ocfI4dBi93HFQDmpUPhwyrQcfHCQW5u3hDnwzyX2hCFjmy6FEGZdWLO2Kgm
-        ZXAlwhcM/+TNctf/mC4z8POTB
-X-Received: by 2002:a7b:c048:0:b0:3a8:3e58:bb9b with SMTP id u8-20020a7bc048000000b003a83e58bb9bmr11074614wmc.168.1669231880237;
-        Wed, 23 Nov 2022 11:31:20 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4Wp/b0j11VObTynBBu9QcnlwyPQSskAgXFOBT/I+1/dIPrJfEOGaLa02LYRHt8G6iE5vlpVw==
-X-Received: by 2002:a7b:c048:0:b0:3a8:3e58:bb9b with SMTP id u8-20020a7bc048000000b003a83e58bb9bmr11074594wmc.168.1669231879864;
-        Wed, 23 Nov 2022 11:31:19 -0800 (PST)
-Received: from ?IPV6:2003:cb:c704:9f00:a98d:4026:7c44:40fd? (p200300cbc7049f00a98d40267c4440fd.dip0.t-ipconnect.de. [2003:cb:c704:9f00:a98d:4026:7c44:40fd])
-        by smtp.gmail.com with ESMTPSA id u12-20020adfdb8c000000b002367ad808a9sm17174818wri.30.2022.11.23.11.31.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 11:31:19 -0800 (PST)
-Message-ID: <6fc2066e-1386-5fc4-44c6-d84404c2ef25@redhat.com>
-Date:   Wed, 23 Nov 2022 20:31:18 +0100
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ieQT2+amnCPQkrT/b4MsUc2qUSHECxGcta2Tz8dlWww=;
+        b=w9XoJ+tYlO2Si1AQ+RBKXjCWVTv45w++lBvjkRShKI3jCdJFxMau0HnD8odeefuf85
+         +IJgXHi/lVsBisu+QNUBEzkFaiyN1pGXSZ0vB7NWjB5uIJywIgaV3LaWSjpUVApKWOrL
+         6S84NV8LOTlV/AvGAFzJtv0UMh+f6B0MGg40XvZ+xJre1ITmyl+ncbnME89RT6q4Sm3X
+         JCy14nw3ENw4YW4SU1eN3hQk1oyfAAh3/Ocwi/uey1SVK83p5Sl/4ikPqe2dX5W27trr
+         2aYxiQIPx2MwNy8OOOSFUjCjn5A9szyLelUn91NI8TCNi17UY+obk44nPcxbhWzSodkw
+         1wCQ==
+X-Gm-Message-State: ANoB5pmQ7kfhj7Sr2T5/czOI+YGwoe/Cul1LlITZABBZT3pPb4XAraVx
+        M1xEXRQYlgsi9HJ28fg83OpfIg/mGmWVnY+jrWp2hOXVPk/H
+X-Google-Smtp-Source: AA0mqf79B8oIR5C8i+qvxuclMp0m4BMCwZ8MjtX7srTIIl9YOhTlnAzHr/jmrGrm/FnxYHO3493C9IhBFBtQNKm2bmqisOh47SbI
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH RFC v2 00/12] mm/hugetlb: Make huge_pte_offset()
- thread-safe for pmd unshare
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Rik van Riel <riel@surriel.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        James Houghton <jthoughton@google.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Miaohe Lin <linmiaohe@huawei.com>
-References: <20221118011025.2178986-1-peterx@redhat.com>
- <70376d57-7924-8ac9-9e93-1831248115a0@redhat.com> <Y343kIQ9l2d8wViz@x1n>
- <Y35kqkYQGW8ohKEa@monkey> <Y35swd4HHblyL3P7@x1n>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <Y35swd4HHblyL3P7@x1n>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:6603:0:b0:375:9e02:b459 with SMTP id
+ k3-20020a026603000000b003759e02b459mr13511512jac.30.1669231948027; Wed, 23
+ Nov 2022 11:32:28 -0800 (PST)
+Date:   Wed, 23 Nov 2022 11:32:28 -0800
+In-Reply-To: <Y338pCjXlDT8Zu3z@elver.google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004f620e05ee285958@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in task_work_run (2)
+From:   syzbot <syzbot+9228d6098455bb209ec8@syzkaller.appspotmail.com>
+To:     acme@kernel.org, dvyukov@google.com, elver@google.com,
+        linux-kernel@vger.kernel.org, mingo@redhat.com,
+        peterz@infradead.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.11.22 19:56, Peter Xu wrote:
-> On Wed, Nov 23, 2022 at 10:21:30AM -0800, Mike Kravetz wrote:
->> On 11/23/22 10:09, Peter Xu wrote:
->>> On Wed, Nov 23, 2022 at 10:40:40AM +0100, David Hildenbrand wrote:
->>>> Let me try understand the basic problem first:
->>>>
->>>> hugetlb walks page tables semi-lockless: while we hold the mmap lock, we
->>>> don't grab the page table locks. That's very hugetlb specific handling and I
->>>> assume hugetlb uses different mechanisms to sync against MADV_DONTNEED,
->>>> concurrent page fault s... but that's no news. hugetlb is weird in many ways
->>>> :)
->>>>
->>>> So, IIUC, you want a mechanism to synchronize against PMD unsharing. Can't
->>>> we use some very basic locking for that?
->>>
->>> Yes we can in most cases.  Please refer to above paragraph [1] where I
->>> referred Mike's recent work on vma lock.  That's the basic locking we need
->>> so far to protect pmd unsharing.  I'll attach the link too in the next
->>> post, which is here:
->>>
->>> https://lore.kernel.org/r/20220914221810.95771-1-mike.kravetz@oracle.com
->>>
->>>>
->>>> Using RCU / disabling local irqs seems a bit excessive because we *are*
->>>> holding the mmap lock and only care about concurrent unsharing
->>>
->>> The series wanted to address where the vma lock is not easy to take.  It
->>> originates from when I was reading Mike's other patch, I forgot why I did
->>> that but I just noticed there's some code path that we may not want to take
->>> a sleepable lock, e.g. in follow page code.
->>
->> Yes, it was the patch suggested by David,
->>
->> https://lore.kernel.org/linux-mm/20221030225825.40872-1-mike.kravetz@oracle.com/
->>
->> The issue was that FOLL_NOWAIT could be passed into follow_page_mask.  If so,
->> then we do not want potentially sleep on the mutex.
->>
->> Since you both are on this thread, I thought of/noticed a related issue.  In
->> follow_hugetlb_page, it looks like we can call hugetlb_fault if FOLL_NOWAIT
->> is set.  hugetlb_fault certainly has the potential for sleeping.  Is this also
->> a similar issue?
-> 
-> Yeah maybe the clean way to do this is when FAULT_FLAG_RETRY_NOWAIT is set
-> we should always try to not sleep at all.
+Hello,
 
-hva_to_pfn_slow() that sets FOLL_NOWAIT calls get_user_pages_unlocked(), 
-which will just do a straight mmap_read_lock().
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+KASAN: use-after-free Read in task_work_run
 
-The interpretation of FOLL_NOWAIT should not be "don't take any 
-sleepable locks" but instead more like "don't wait for a page to get 
-swapped in".
+==================================================================
+BUG: KASAN: use-after-free in task_work_run+0x1b0/0x270 kernel/task_work.c:178
+Read of size 8 at addr ffff88807a0a2208 by task syz-executor.0/4187
 
-#define FOLL_NOWAIT  0x20  /* if a disk transfer is needed, start the IO
+CPU: 1 PID: 4187 Comm: syz-executor.0 Not tainted 6.1.0-rc2-syzkaller-00073-g88619e77b33d-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:284 [inline]
+ print_report+0x15e/0x45d mm/kasan/report.c:395
+ kasan_report+0xbb/0x1f0 mm/kasan/report.c:495
+ task_work_run+0x1b0/0x270 kernel/task_work.c:178
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0xb35/0x2a20 kernel/exit.c:820
+ do_group_exit+0xd0/0x2a0 kernel/exit.c:950
+ get_signal+0x21a1/0x2430 kernel/signal.c:2858
+ arch_do_signal_or_restart+0x82/0x2300 arch/x86/kernel/signal.c:869
+ exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+ exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:203
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+ syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:296
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fac4248b5a9
+Code: Unable to access opcode bytes at 0x7fac4248b57f.
+RSP: 002b:00007fac432bf218 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
+RAX: 0000000000000001 RBX: 00007fac425abf88 RCX: 00007fac4248b5a9
+RDX: 00000000000f4240 RSI: 0000000000000081 RDI: 00007fac425abf8c
+RBP: 00007fac425abf80 R08: 00007ffde2bb1080 R09: 0000000000000000
+R10: 0000000000000003 R11: 0000000000000246 R12: 00007fac425abf8c
+R13: 00007ffde2b9c48f R14: 00007fac432bf300 R15: 0000000000022000
+ </TASK>
+
+Allocated by task 4187:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:52
+ __kasan_slab_alloc+0x7e/0x80 mm/kasan/common.c:325
+ kasan_slab_alloc include/linux/kasan.h:201 [inline]
+ slab_post_alloc_hook mm/slab.h:737 [inline]
+ slab_alloc_node mm/slub.c:3398 [inline]
+ kmem_cache_alloc_node+0x2fc/0x400 mm/slub.c:3443
+ perf_event_alloc.part.0+0x69/0x3bc0 kernel/events/core.c:11627
+ perf_event_alloc kernel/events/core.c:12176 [inline]
+ __do_sys_perf_event_open+0x4ae/0x32d0 kernel/events/core.c:12274
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Freed by task 4190:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x21/0x30 mm/kasan/common.c:52
+ kasan_save_free_info+0x2a/0x40 mm/kasan/generic.c:511
+ ____kasan_slab_free mm/kasan/common.c:236 [inline]
+ ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
+ kasan_slab_free include/linux/kasan.h:177 [inline]
+ slab_free_hook mm/slub.c:1724 [inline]
+ slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1750
+ slab_free mm/slub.c:3661 [inline]
+ kmem_cache_free+0xea/0x5b0 mm/slub.c:3683
+ rcu_do_batch kernel/rcu/tree.c:2250 [inline]
+ rcu_core+0x81f/0x1980 kernel/rcu/tree.c:2510
+ __do_softirq+0x1f7/0xad8 kernel/softirq.c:571
+
+Last potentially related work creation:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:45
+ __kasan_record_aux_stack+0xbc/0xd0 mm/kasan/generic.c:481
+ call_rcu+0x99/0x820 kernel/rcu/tree.c:2798
+ put_event kernel/events/core.c:5097 [inline]
+ perf_event_release_kernel+0x6f2/0x940 kernel/events/core.c:5212
+ perf_release+0x33/0x40 kernel/events/core.c:5222
+ __fput+0x27c/0xa90 fs/file_table.c:320
+ task_work_run+0x16b/0x270 kernel/task_work.c:179
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
+ exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:203
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+ syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:296
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Second to last potentially related work creation:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:45
+ __kasan_record_aux_stack+0xbc/0xd0 mm/kasan/generic.c:481
+ task_work_add+0x7b/0x2c0 kernel/task_work.c:48
+ event_sched_out+0xe35/0x1190 kernel/events/core.c:2294
+ __perf_remove_from_context+0x87/0xc40 kernel/events/core.c:2359
+ event_function+0x29e/0x3e0 kernel/events/core.c:254
+ remote_function kernel/events/core.c:92 [inline]
+ remote_function+0x11e/0x1a0 kernel/events/core.c:72
+ __flush_smp_call_function_queue+0x205/0x9a0 kernel/smp.c:630
+ __sysvec_call_function_single+0xca/0x4d0 arch/x86/kernel/smp.c:248
+ sysvec_call_function_single+0x40/0xc0 arch/x86/kernel/smp.c:243
+ asm_sysvec_call_function_single+0x16/0x20 arch/x86/include/asm/idtentry.h:657
+
+The buggy address belongs to the object at ffff88807a0a1db0
+ which belongs to the cache perf_event of size 1392
+The buggy address is located 1112 bytes inside of
+ 1392-byte region [ffff88807a0a1db0, ffff88807a0a2320)
+
+The buggy address belongs to the physical page:
+page:ffffea0001e82800 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x7a0a0
+head:ffffea0001e82800 order:3 compound_mapcount:0 compound_pincount:0
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 0000000000000000 dead000000000122 ffff8880118c23c0
+raw: 0000000000000000 0000000080150015 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 3, migratetype Unmovable, gfp_mask 0x1d20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL), pid 4164, tgid 4163 (syz-executor.0), ts 81241255075, free_ts 81180758193
+ prep_new_page mm/page_alloc.c:2538 [inline]
+ get_page_from_freelist+0x10b5/0x2d50 mm/page_alloc.c:4287
+ __alloc_pages+0x1c7/0x5a0 mm/page_alloc.c:5554
+ alloc_pages+0x1a6/0x270 mm/mempolicy.c:2285
+ alloc_slab_page mm/slub.c:1794 [inline]
+ allocate_slab+0x213/0x300 mm/slub.c:1939
+ new_slab mm/slub.c:1992 [inline]
+ ___slab_alloc+0xa91/0x1400 mm/slub.c:3180
+ __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3279
+ slab_alloc_node mm/slub.c:3364 [inline]
+ kmem_cache_alloc_node+0x189/0x400 mm/slub.c:3443
+ perf_event_alloc.part.0+0x69/0x3bc0 kernel/events/core.c:11627
+ perf_event_alloc kernel/events/core.c:12176 [inline]
+ __do_sys_perf_event_open+0x4ae/0x32d0 kernel/events/core.c:12274
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1458 [inline]
+ free_pcp_prepare+0x65c/0xd90 mm/page_alloc.c:1508
+ free_unref_page_prepare mm/page_alloc.c:3386 [inline]
+ free_unref_page+0x19/0x4d0 mm/page_alloc.c:3482
+ __unfreeze_partials+0x17c/0x1a0 mm/slub.c:2586
+ qlink_free mm/kasan/quarantine.c:168 [inline]
+ qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:187
+ kasan_quarantine_reduce+0x180/0x200 mm/kasan/quarantine.c:294
+ __kasan_slab_alloc+0x62/0x80 mm/kasan/common.c:302
+ kasan_slab_alloc include/linux/kasan.h:201 [inline]
+ slab_post_alloc_hook mm/slab.h:737 [inline]
+ slab_alloc_node mm/slub.c:3398 [inline]
+ slab_alloc mm/slub.c:3406 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3413 [inline]
+ kmem_cache_alloc+0x2ac/0x3c0 mm/slub.c:3422
+ getname_flags.part.0+0x50/0x4f0 fs/namei.c:139
+ getname_flags+0x9a/0xe0 include/linux/audit.h:320
+ vfs_fstatat+0x73/0xb0 fs/stat.c:266
+ __do_sys_newfstatat+0x94/0x120 fs/stat.c:437
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Memory state around the buggy address:
+ ffff88807a0a2100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88807a0a2180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff88807a0a2200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                      ^
+ ffff88807a0a2280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88807a0a2300: fb fb fb fb fc fc fc fc fc fc fc fc fc fc fc fc
+==================================================================
 
 
-I did not read the full replies yet (sorry, busy hacking :) ) but *any* 
-code path that already takes the mmap_read_lock() can just take whatever 
-other lock we want -- IMHO. No need to over-complicate our code trying 
-to avoid locks in that case.
+Tested on:
 
--- 
-Thanks,
-
-David / dhildenb
+commit:         88619e77 net: stmmac: rk3588: Allow multiple gmac cont..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=127408e5880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a66c6c673fb555e8
+dashboard link: https://syzkaller.appspot.com/bug?extid=9228d6098455bb209ec8
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=147a9dfd880000
 
