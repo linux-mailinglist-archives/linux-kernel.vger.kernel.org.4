@@ -2,183 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A03326362DD
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:08:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 860F96362D7
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:07:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238169AbiKWPHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 10:07:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41934 "EHLO
+        id S238145AbiKWPHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 10:07:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238528AbiKWPHQ (ORCPT
+        with ESMTP id S238589AbiKWPH0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 10:07:16 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38811DB1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:07:15 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id e189so13347954iof.1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:07:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=w3+6kZ2jPHYC5XIhLk4GWvNk5dgTaXJHF9rl6H9TAKQ=;
-        b=QxyS2jc4eEVkc7xWxzPYNIuXzGXAbZ8bAvsyjhaprQIYWaXpa8/mb0+5btpVEIRzOq
-         8bFEiKF2mpWq3B87UAQu/4QBUJ0NjvxwpTCDG3HBeJsfBxgoTvxIaqeQmIotAhTSCpAr
-         i3+XwQBf/22NjT/8M9cJXZNdbQN7k6L6Z5Z4c=
+        Wed, 23 Nov 2022 10:07:26 -0500
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13382286DE;
+        Wed, 23 Nov 2022 07:07:24 -0800 (PST)
+Received: by mail-io1-f51.google.com with SMTP id n188so13334363iof.8;
+        Wed, 23 Nov 2022 07:07:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w3+6kZ2jPHYC5XIhLk4GWvNk5dgTaXJHF9rl6H9TAKQ=;
-        b=s27pEId+G+EzE5dJ9VVpu7a7/+ZcpX0EBzuzFV9S8SjsbYkTAlYjnMI1/7NMZ0rU1i
-         lAWPr3FNolblG5dzyIgY7SxhddBiMm7bASn16AvdRn2BZU5nHUujeNFqRgKRHUFi4fnC
-         yjr0ulI/fFmH9J2pQqygVB53J2CpGTxTcyIDbwu60criCNYnm6KO+ZVDECX3FES/KfqZ
-         9qyKrKCwstKGXXp348y6tBIqWshGu+k7jzlNCeKjlmy6++buCSxG1dkokHcFMjWjc8cB
-         sKmxUGQuv6jHt38k8UlxM/tZL32hJ+pOIeY7BAIOXap9TgZtq+yQzX7vk77ulhCeNOym
-         DnaQ==
-X-Gm-Message-State: ANoB5pmA4Do1hekYCvd5kAhuZaVBqcdoBHQ+aKmfmZRsTNJB2bNkkjec
-        E/teWvuukwT1JslLdtStN87cFw==
-X-Google-Smtp-Source: AA0mqf46YDgL+DFXaRtC//XFl6SUoUuagE8OHUpFvGoORyGX6ge4WY9xVHBXqJ5q7g4cVZOGNRJV4w==
-X-Received: by 2002:a6b:1455:0:b0:6de:896e:529c with SMTP id 82-20020a6b1455000000b006de896e529cmr12735578iou.45.1669216034569;
-        Wed, 23 Nov 2022 07:07:14 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id b13-20020a02a58d000000b003633848da58sm6454991jam.41.2022.11.23.07.07.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 07:07:14 -0800 (PST)
-Date:   Wed, 23 Nov 2022 15:07:13 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     =?utf-8?B?5qWK5a6X57+w?= <ecs.taipeikernel@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Bob Moragues <moragues@chromium.org>,
-        Harvey <hunge@google.com>, Stephen Boyd <swboyd@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, Abner.Yen@ecs.com.tw,
-        Gavin.Lee@ecs.com.tw, Vicy.Lee@ecs.com.tw, Jason.Huang@ecs.com.tw,
-        Darren.Chen@ecs.com.tw
-Subject: Re: [PATCH v2 1/2] dt-bindings: arm: qcom: Adding DT binding for
- zombie
-Message-ID: <Y343IWgkli+y8HMn@google.com>
-References: <20221122203635.v2.1.Ie05fd439d0b271b927acb25c2a6e41af7a927e90@changeid>
- <Y3zck7tPA5WFd0p1@google.com>
- <CAPao8GKpXcRm3PmWnv+rsr2z53r6J-ScXAq+fOi4ydQg_Gy31A@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=mEKRRENqRMYufrIxQe5nh4pku7YdsEXR7GLENp5qxds=;
+        b=7HYCzPeRz6R67eBGjx8AK+E+VUMgd5IrFWPHPLhDVlqjIKFF0TwZq+jy1XH/YHyOFI
+         /s04lzpFRnkRoEtNS87RN8G5N4hNtyrabYQhs0onSjQjkP2bcRFHmgS3W2sW2BQqRRuT
+         jL1ofvoFknurGJwpKg5GpcGDsZjvfjY19wlOfCZQsZ1DEgljA+evs+T/sieyuH7IlYPI
+         n99DmNd1stgEUbQy32tAbyNssioQpSQpO8A9phBN+V3yON1Kvxywia0D+a1OL759V9bS
+         N1OXIXAOaIH70LeJPdqZKjTTHfIzSfOo5rCo9Nb+6PbfQ1pqqeAmWVqS1PxDPSnVksbu
+         ZRJA==
+X-Gm-Message-State: ANoB5pkSeGRO8yvB1kKu1MpvPzmzDflMW7JPk/qZQFODoJjSJrRwzDWE
+        g7uJMn4bd/YqDR9TMdR2Lg==
+X-Google-Smtp-Source: AA0mqf5WEOGwgDMNRRrW1Nl5ZZQrwr9oGk58/ul6P+DcjJ/FKrD+KR+qn5EypzZ/kztelu0r7NW1nA==
+X-Received: by 2002:a5e:8302:0:b0:6de:4dce:37ef with SMTP id x2-20020a5e8302000000b006de4dce37efmr4093910iom.68.1669216043222;
+        Wed, 23 Nov 2022 07:07:23 -0800 (PST)
+Received: from robh_at_kernel.org ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id u28-20020a02cbdc000000b003757ab96c08sm6561820jaq.67.2022.11.23.07.07.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 07:07:22 -0800 (PST)
+Received: (nullmailer pid 2005408 invoked by uid 1000);
+        Wed, 23 Nov 2022 15:07:21 -0000
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPao8GKpXcRm3PmWnv+rsr2z53r6J-ScXAq+fOi4ydQg_Gy31A@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Billy Tsai <billy_tsai@aspeedtech.com>
+Cc:     linux-aspeed@lists.ozlabs.org, linux-hwmon@vger.kernel.org,
+        lee@kernel.org, linux-doc@vger.kernel.org, jdelvare@suse.com,
+        linux-pwm@vger.kernel.org, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, u.kleine-koenig@pengutronix.de,
+        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
+        thierry.reding@gmail.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, corbet@lwn.net,
+        andrew@aj.id.au, joel@jms.id.au
+In-Reply-To: <20221123061635.32025-2-billy_tsai@aspeedtech.com>
+References: <20221123061635.32025-1-billy_tsai@aspeedtech.com>
+ <20221123061635.32025-2-billy_tsai@aspeedtech.com>
+Message-Id: <166921592541.2001852.8427859391374590200.robh@kernel.org>
+Subject: Re: [v4 1/5] dt-bindings: mfd: Add aspeed pwm-tach binding
+Date:   Wed, 23 Nov 2022 09:07:21 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 02:02:38PM +0800, 楊宗翰 wrote:
-> HiÂ Matthias ,
-> 
-> When I run "patman" still get warning "<patch>:36: warning: added, moved or
-> deleted file(s), does MAINTAINERS need updating?"
 
-The warning is expected because you added new files. In this case you can
-ignore it as it isn't expected that you become the maintainer of the new zombie
-DT files.
-
-> And I screenshot my "git gui" as below(attachment "git_gui_screenshot.jpg"):
-> [image.png]
+On Wed, 23 Nov 2022 14:16:31 +0800, Billy Tsai wrote:
+> Add device binding for aspeed pwm-tach device which is a multi-function
+> device include pwm and tach function.
 > 
-> The latest git log info as below:
+> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
 > ---
-> commit 4d2b529bce125b83c546aebbc36ecedf76dfc55e (linux_qcom/for-next)
-> Merge: 9abf2313adc1 c03fa428ac6e afcd946be11c aec5f36cf676 cea42b8d7966
-> aa9f474014b1 37b5e8c48b9d cadaa773bcf1
-> Author: Bjorn Andersson <andersson@kernel.org>
-> Date: Â  Tue Nov 15 11:45:55 2022 -0600
+>  .../bindings/mfd/aspeed,ast2600-pwm-tach.yaml | 73 +++++++++++++++++++
+>  1 file changed, 73 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.yaml
 > 
-> Â  Â  Merge branches 'arm64-defconfig-for-6.2', 'arm64-for-6.2', 'clk-for-6.2',
-> 'defconfig-for-6.2', 'drivers-for-6.2', 'dts-for-6.2' and 'arm64-fixes-for-6.1'
-> into for-next
-> ---
-> 
-> My checkout steps as below:
-> $ git remote add linux_qcomÂ git://git.kernel.org/pub/scm/linux/kernel/git/
-> qcom/linux.git
-> $ git fetch --no-tags linux_qcom
-> $ git checkout -b <MyLocalBranchName> linux_qcom/for-next
-> 
-> Is myÂ code base branch still worng?Â  Am IÂ missing something?Â 
 
-My understanding is that it is best to base you changes on a branch like
-'arm64-for-6.2' as the 'for-next' branch is re-created every time changes
-land in one of the '${area}-for-${version}' branches.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-No big issue in this case, just use the corresponding '${area}-for-${version}'
-branch for future patches/versions :)
+yamllint warnings/errors:
 
-> The attachment is "0001-dt-bindings-arm-qcom-Adding-DT-binding-for-
-> zombie.patch" patch file,
-> Â I have drop "Documentation/devicetree/bindings/arm/qcom.yaml" as your advice.
-> 
-> Matthias Kaehlcke <mka@chromium.org> æ¼ 2022å¹´11æ22æ¥ é±äº æä¸10:
-> 28å¯«éï¼
->      On which tree is this series based? My earlier reply bounced for
->      Bjorn's
->      old Linaro e-mail address, which suggests that the series might be
->      based
->      on an older kernel tree (maybe downstream Chrome OS v5.15?). Please
->      make
->      sure to base patches to upstream lists on the corresponding
->      maintainer
->      tree/branch or a recent kernel version/rc.
-> 
->      On Tue, Nov 22, 2022 at 08:37:02PM +0800, Owen Yang wrote:
->      > Add an entry in the device tree binding for sc7280-zombie.
->      >
->      > Documentation/devicetree/bindings/arm/qcom.yaml
->      >
->      > Signed-off-by: Owen Yang <ecs.taipeikernel@gmail.com>
->      > ---
->      >
->      > Changes in v2:
->      > - Move binding item to Google series bottom.
->      > - Modify DT file for zombie.
->      >
->      >Â  Documentation/devicetree/bindings/arm/qcom.yaml | 10 ++++++++++
->      >Â  1 file changed, 10 insertions(+)
->      >
->      > diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/
->      Documentation/devicetree/bindings/arm/qcom.yaml
->      > index c15a729a6852..f617923f7485 100644
->      > --- a/Documentation/devicetree/bindings/arm/qcom.yaml
->      > +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
->      > @@ -538,6 +538,16 @@ properties:
->      >Â  Â  Â  Â  Â  Â  - const: google,villager-sku512
->      >Â  Â  Â  Â  Â  Â  - const: qcom,sc7280
->      >Â 
->      > +Â  Â  Â  - description: Google Zombie (newest rev)
->      > +Â  Â  Â  Â  items:
->      > +Â  Â  Â  Â  Â  - const: google,zombie
->      > +Â  Â  Â  Â  Â  - const: qcom,sc7280
->      > +
->      > +Â  Â  Â  - description: Google Zombie with LTE (newest rev)
->      > +Â  Â  Â  Â  items:
->      > +Â  Â  Â  Â  Â  - const: google,zombie-sku512
->      > +Â  Â  Â  Â  Â  - const: qcom,sc7280
->      > +
->      >Â  Â  Â  Â  - items:
->      >Â  Â  Â  Â  Â  Â  - enum:
->      >Â  Â  Â  Â  Â  Â  Â  Â  - xiaomi,lavender
->      > --
->      > 2.17.1
->      >
+dtschema/dtc warnings/errors:
+./Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/pwm/aspeed,ast2600-pwm.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.example.dtb: pwm-tach@1e610000: pwm: False schema does not allow {'compatible': ['aspeed,ast2600-pwm'], '#pwm-cells': [[3]], 'pinctrl-names': ['default'], 'pinctrl-0': [[4294967295]]}
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.example.dtb: pwm-tach@1e610000: tach: False schema does not allow {'compatible': ['aspeed,ast2600-tach'], 'pinctrl-names': ['default'], 'pinctrl-0': [[4294967295]]}
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.yaml
+Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.example.dtb:0:0: /example-0/pwm-tach@1e610000/pwm: failed to match any schema with compatible: ['aspeed,ast2600-pwm']
+Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.example.dtb:0:0: /example-0/pwm-tach@1e610000/tach: failed to match any schema with compatible: ['aspeed,ast2600-tach']
 
+doc reference errors (make refcheckdocs):
 
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221123061635.32025-2-billy_tsai@aspeedtech.com
 
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command.
 
