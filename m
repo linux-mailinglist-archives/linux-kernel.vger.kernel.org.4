@@ -2,112 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AED4C6351C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 09:01:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2256351AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 08:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235949AbiKWIBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 03:01:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39894 "EHLO
+        id S236412AbiKWH4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 02:56:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235733AbiKWIBE (ORCPT
+        with ESMTP id S236193AbiKWH4O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 03:01:04 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C598F101F6;
-        Wed, 23 Nov 2022 00:01:02 -0800 (PST)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NHD415fBJzqSdg;
-        Wed, 23 Nov 2022 15:57:05 +0800 (CST)
-Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 23 Nov 2022 16:01:00 +0800
-Received: from localhost.localdomain (10.67.175.61) by
- dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 23 Nov 2022 16:01:00 +0800
-From:   Zheng Yejian <zhengyejian1@huawei.com>
-To:     <rostedt@goodmis.org>
-CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <mhiramat@kernel.org>, <yujie.liu@intel.com>,
-        <zhengyejian1@huawei.com>, <linux-trace-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] tracing: Optimize event type allocation with IDA
-Date:   Wed, 23 Nov 2022 16:01:33 +0800
-Message-ID: <20221123080133.1128186-1-zhengyejian1@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221122223258.10faaf4e@rorschach.local.home>
-References: <20221122223258.10faaf4e@rorschach.local.home>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.175.61]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml100012.china.huawei.com (7.185.36.121)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 23 Nov 2022 02:56:14 -0500
+Received: from 189.cn (ptr.189.cn [183.61.185.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9750A1AF;
+        Tue, 22 Nov 2022 23:55:14 -0800 (PST)
+HMM_SOURCE_IP: 10.64.8.31:34556.651846289
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-123.150.8.42 (unknown [10.64.8.31])
+        by 189.cn (HERMES) with SMTP id C6443100302;
+        Wed, 23 Nov 2022 15:55:11 +0800 (CST)
+Received: from  ([123.150.8.42])
+        by gateway-153622-dep-6cffbd87dd-pzsb9 with ESMTP id a7ce1a020ff04a4085f415edf4631d51 for rostedt@goodmis.org;
+        Wed, 23 Nov 2022 15:55:12 CST
+X-Transaction-ID: a7ce1a020ff04a4085f415edf4631d51
+X-Real-From: chensong_2000@189.cn
+X-Receive-IP: 123.150.8.42
+X-MEDUSA-Status: 0
+Sender: chensong_2000@189.cn
+From:   Song Chen <chensong_2000@189.cn>
+To:     rostedt@goodmis.org, mhiramat@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        Song Chen <chensong_2000@189.cn>
+Subject: [PATCH v2 0/2] reorganize trace_peobe_tmpl.h
+Date:   Wed, 23 Nov 2022 16:01:38 +0800
+Message-Id: <1669190498-2807-1-git-send-email-chensong_2000@189.cn>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Nov 2022 22:32:58 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
-> On Wed, 23 Nov 2022 11:18:06 +0800
-> Zheng Yejian <zhengyejian1@huawei.com> wrote:
->
-> > But Yujie Liu <yujie.liu@intel.com> reported a problem that highly
-> > reproducible after applying this patch:
-> > Link: https://lore.kernel.org/lkml/54f23c9c-97ae-e326-5873-bfa5d2c81f52@intel.com/
-> >
-> > So please DO NOT apply this patch before I find what happened about it.
->
-> I know what the issue is.
->
-> The current way of assigning types is to always increment. And not to
-> reuse until it fills up. And even then, it looks for the next available
-> number.
->
-> I'm guessing the IDA will reuse a number as soon as it is freed. This
+Hi,
 
-Yes, it is.
+In the first patchset, my intension was to remove trace_probe_tmpl.h,
+just keep a unified process_fetch_insn and process_fetch_insn_bottom
+in trace_probe.c for all *probes. is_uprobe was the most important
+move to approach. If it was not accepted, the whole patchset couldn't
+stand.
 
-> may also have uncovered a bug, as in reality, we must actually clear
-> the tracing buffers every time a number is reused.
+Then I change my goal to at least no warnings or errors when impelenting
+a new feature based on trace probe if it includes trace_probe_tmpl.h by
+provideing default behaviors. What's more, it also removes redundant
+code in kprobe and eprobe.
 
-Thanks for your explanation!
+Song Chen (2):
+  kernel/trace: Introduce trace_probe_print_args and use it in *probes
+  kernel/trace: Provide default impelentations defined in
+    trace_probe_tmpl.h
 
-It seems almost the case, and with current way of assigning types, this
-problem maybe also happend when reuse type id, am I right?
+ kernel/trace/trace_eprobe.c       | 146 +-----------------------------
+ kernel/trace/trace_events_synth.c |   7 +-
+ kernel/trace/trace_kprobe.c       | 106 +---------------------
+ kernel/trace/trace_probe.c        |  27 ++++++
+ kernel/trace/trace_probe.h        |   2 +
+ kernel/trace/trace_probe_kernel.h | 140 ++++++++++++++++++++++++++--
+ kernel/trace/trace_probe_tmpl.h   |  28 ------
+ kernel/trace/trace_uprobe.c       |   2 +-
+ 8 files changed, 171 insertions(+), 287 deletions(-)
 
-But instead of clear tracing buffers, would it be better to just mark
-that record invalid if we had a way of knowing that the format had changed?
+-- 
+2.25.1
 
->
-> What happens is that the type number is associated to a print format.
-> That is, the raw data is tagged with the type. This type maps to how to
-> parse the raw data. If you have a kprobe, it creates a new type number.
-> If you free it, and create another one. With the IDA, it is likely to
-> reassign the previously freed number to a new probe.
->
-> To explain this better, let's look at the following scenario:
->
->  echo 'p:foo val=$arg1:u64' > kprobe_events
->  echo 1 > events/kprobes/foo/enable
->  sleep 1
->  echo 0 > events/kprobes/foo/enable
->
->  echo 'p:bar val=+0($arg1):string' > kprobe_events
->
->  # foo kprobe is deleted and bar is created and
->  # with IDA, bar has the same number for type as foo
->
->  cat trace
->
-> When you read the trace, it will see a binary blob representing an
-> event and marked with a type. Although the event was foo, it will now
-> map it to bar. And it will read foo's $arg1:u64 as bar's
-> +0($arg1):string, and will crash.
->
-> -- Steve
