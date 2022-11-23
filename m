@@ -2,182 +2,530 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6997D634BCC
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 01:46:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB9B5634BCA
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 01:46:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235326AbiKWAqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 19:46:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58672 "EHLO
+        id S235328AbiKWAqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 19:46:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235329AbiKWAq2 (ORCPT
+        with ESMTP id S235326AbiKWAq2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 22 Nov 2022 19:46:28 -0500
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3F9D907C
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 16:46:26 -0800 (PST)
-Received: by mail-il1-x129.google.com with SMTP id bp12so7873732ilb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 16:46:26 -0800 (PST)
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD939D9B86
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 16:46:25 -0800 (PST)
+Received: by mail-ot1-x32b.google.com with SMTP id db10-20020a0568306b0a00b0066d43e80118so10389170otb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 16:46:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=atishpatra.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HCqiKLLnoiFcJW128YgyhQV3aZ+j8zueWc+2Mjy7QDw=;
-        b=P2OPgvc42GjVbzAFJtllZKLMFc61w1isQHKvEcP5yiMOWGleesqrhoLQIQhdsP6GDE
-         9ps4Tq2j7LR+SSAH64kH1RYuigJP8KjN/6AmU7YYZ4Lvn3Cgb7fOiqvN28u6CW/0K9Uf
-         dKonoiT2zED/Kx4CTxRDpW9zGZ1mkvyg7q4vA/qp6GPpNkbX6Cehih0gRIhpbatSdfSZ
-         cbaM9L0H8DQ65UZVwA/K5tVtRMmlA+zlRMVEyYy9P2cS3gw2Y4T2tetE5XchKLnLCX7u
-         2UaJGyeTgRsdUXq1dlrlP6FzM9aSYHLyomGWwfhRZpZSBWs8KfcmXVZz1TMnj6c+Zpcz
-         5EnQ==
+        bh=u1W+ts6Qp6IYqic7lQhH5TEgO/rK0l3BseEk5inmup4=;
+        b=Fc1O5NHVCP6nq/kq1IcJ+P9iYi3rC+JXZn6Vutzx1sIRickzK1fM1Ox7ILPNB4MLJ2
+         frohev/P83pXV2LEdjSB2G0cFZAwrW391+nfzWBruirOg+SKzAYgH9Py+w6jMAtgWytm
+         J89BgBvRerH5AldFlxb4qGaIlKpPT/dO4mnFc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=HCqiKLLnoiFcJW128YgyhQV3aZ+j8zueWc+2Mjy7QDw=;
-        b=GLxQ4di22MAItuDKrh50j86XcanfiTgjLGiKTGCmuZshWsnAR9rUQatSaGJ7XvVHSa
-         UL9eeZLnse1TKZVM8Cz8tTI6xsPhvO2jOQLYhe2OSccn0Og/0RB+bdm/VP5om5PDrvnU
-         RpmRzblgsHJS23kSfkC28e4sIN9GZjPA5RZlZJQzUMnv99gwcaw5p67gYgIgMsxz2VJJ
-         ZF/32C6T1grSm4YIJXxandYJAvPbvioFB1uNfPDQRWRkJsPiyT/g3p/ITAXytpbZCP0r
-         dMUXp3AvKsCRET4AHJi/AUmfG3sh8ZoydeMFGxSbq+bsVXtL3AQtOqL8lKaPMsYUqZoS
-         HrOg==
-X-Gm-Message-State: ANoB5pm3Do8m6nrbvJhNlkLI/LXS9yuLTtasuAmFcVhzz0CRFRI3mKL/
-        9Y/eyA4YUwPakXLFR9a+ObCokJiw8WL5OL6LN5lpRQ==
-X-Google-Smtp-Source: AA0mqf4L0GbX8I8q8w0YiGVmt4MtBul+hhQ7iVRKGIEZLiVPea/oqIJVTnMpmzrKMqVduKgfXyGBhocQot8JgF/gX/M=
-X-Received: by 2002:a92:7310:0:b0:302:571f:8d7f with SMTP id
- o16-20020a927310000000b00302571f8d7fmr11554477ilc.53.1669164385808; Tue, 22
+        bh=u1W+ts6Qp6IYqic7lQhH5TEgO/rK0l3BseEk5inmup4=;
+        b=nWCp6T6R0xeijSe7MICarPbujlE57vg5Ew0bFwNWhVRq9XV9H4irULcpUcv/zM8HJx
+         ze3WHuEYodVmxwAwEvepN2i3pufwOO7wLOuYTltfX/7U84udaagkr8dVTqPWUNmjW1Et
+         1auMw8I+TYI4PCgPgHLphZRFEGAPvNbzlxfZhhaLQZF1NH26yxC5kHCFjvHMezzbA2JJ
+         /lSGZs9616/YeeXZ5uIWl+RkQRkDVfw139VuMt5/IHPLmL6e31xKNJdfuwia/FqdAxhl
+         VQiidaP73Edk2mbNjxo9hrHYwQU14ZskZqet5LTmTad3fBv0+VI8tEIocpfrHcfAQ5o/
+         Iccg==
+X-Gm-Message-State: ANoB5plX2ini7jt1C0hGANf6/pvPJNumVkEHl2YHF8OZ1djoLssRDZ4y
+        PXEdOZi6Q+d9haroHbQWCMb6fq1ZDsBjZ1xptKL0
+X-Google-Smtp-Source: AA0mqf6wjYvSuXmfkihC7DSEUxp9oQvr5xQiUI0clKTyXa3ecV4R2vghF6moTBuU7PrLcvn1ajBajb2Zi2RN8Cvhj4o=
+X-Received: by 2002:a05:6830:22f2:b0:669:3797:c1b4 with SMTP id
+ t18-20020a05683022f200b006693797c1b4mr12868212otc.293.1669164385081; Tue, 22
  Nov 2022 16:46:25 -0800 (PST)
 MIME-Version: 1.0
-References: <20221122232721.2306102-1-yosryahmed@google.com> <Y31rSglEcTaaIg05@P9FQF9L96D.corp.robot.car>
-In-Reply-To: <Y31rSglEcTaaIg05@P9FQF9L96D.corp.robot.car>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Tue, 22 Nov 2022 16:45:50 -0800
-Message-ID: <CAJD7tkZE6TLDShcntnY=tXnRpA6jx1uLMemeZtqWLZ3JAC_GNg@mail.gmail.com>
-Subject: Re: [PATCH] mm: memcg: fix stale protection of reclaim target memcg
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Shakeel Butt <shakeelb@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>, Yu Zhao <yuzhao@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Chris Down <chris@chrisdown.name>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <20220718170205.2972215-1-atishp@rivosinc.com> <20220718170205.2972215-6-atishp@rivosinc.com>
+ <20221101141329.j4qtvjf6kmqixt2r@kamzik>
+In-Reply-To: <20221101141329.j4qtvjf6kmqixt2r@kamzik>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Tue, 22 Nov 2022 16:46:14 -0800
+Message-ID: <CAOnJCULMbTp6WhVRWHxzFnUgCJJV01hcyukQxSEih-sYt5TJWg@mail.gmail.com>
+Subject: Re: [RFC 5/9] RISC-V: KVM: Add skeleton support for perf
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Atish Patra <atishp@rivosinc.com>, linux-kernel@vger.kernel.org,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>, Guo Ren <guoren@kernel.org>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Will Deacon <will@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 4:37 PM Roman Gushchin <roman.gushchin@linux.dev> wrote:
+ at runtime.
+
+On Tue, Nov 1, 2022 at 7:13 AM Andrew Jones <ajones@ventanamicro.com> wrote:
 >
-> On Tue, Nov 22, 2022 at 11:27:21PM +0000, Yosry Ahmed wrote:
-> > During reclaim, mem_cgroup_calculate_protection() is used to determine
-> > the effective protection (emin and elow) values of a memcg. The
-> > protection of the reclaim target is ignored, but we cannot set their
-> > effective protection to 0 due to a limitation of the current
-> > implementation (see comment in mem_cgroup_protection()). Instead,
-> > we leave their effective protection values unchaged, and later ignore it
-> > in mem_cgroup_protection().
-> >
-> > However, mem_cgroup_protection() is called later in
-> > shrink_lruvec()->get_scan_count(), which is after the
-> > mem_cgroup_below_{min/low}() checks in shrink_node_memcgs(). As a
-> > result, the stale effective protection values of the target memcg may
-> > lead us to skip reclaiming from the target memcg entirely, before
-> > calling shrink_lruvec(). This can be even worse with recursive
-> > protection, where the stale target memcg protection can be higher than
-> > its standalone protection.
-> >
-> > An example where this can happen is as follows. Consider the following
-> > hierarchy with memory_recursiveprot:
-> > ROOT
-> >  |
-> >  A (memory.min = 50M)
-> >  |
-> >  B (memory.min = 10M, memory.high = 40M)
-> >
-> > Consider the following scenarion:
-> > - B has memory.current = 35M.
-> > - The system undergoes global reclaim (target memcg is NULL).
-> > - B will have an effective min of 50M (all of A's unclaimed protection).
-> > - B will not be reclaimed from.
-> > - Now allocate 10M more memory in B, pushing it above it's high limit.
-> > - The system undergoes memcg reclaim from B (target memcg is B)
-> > - In shrink_node_memcgs(), we call mem_cgroup_calculate_protection(),
-> >   which immediately returns for B without doing anything, as B is the
-> >   target memcg, relying on mem_cgroup_protection() to ignore B's stale
-> >   effective min (still 50M).
-> > - Directly after mem_cgroup_calculate_protection(), we will call
-> >   mem_cgroup_below_min(), which will read the stale effective min for B
-> >   and skip it (instead of ignoring its protection as intended). In this
-> >   case, it's really bad because we are not just considering B's
-> >   standalone protection (10M), but we are reading a much higher stale
-> >   protection (50M) which will cause us to not reclaim from B at all.
-> >
-> > This is an artifact of commit 45c7f7e1ef17 ("mm, memcg: decouple
-> > e{low,min} state mutations from protection checks") which made
-> > mem_cgroup_calculate_protection() only change the state without
-> > returning any value. Before that commit, we used to return
-> > MEMCG_PROT_NONE for the target memcg, which would cause us to skip the
-> > mem_cgroup_below_{min/low}() checks. After that commit we do not return
-> > anything and we end up checking the min & low effective protections for
-> > the target memcg, which are stale.
-> >
-> > Add mem_cgroup_ignore_protection() that checks if we are reclaiming from
-> > the target memcg, and call it in mem_cgroup_below_{min/low}() to ignore
-> > the stale protection of the target memcg.
-> >
-> > Fixes: 45c7f7e1ef17 ("mm, memcg: decouple e{low,min} state mutations from protection checks")
-> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> On Mon, Jul 18, 2022 at 10:02:01AM -0700, Atish Patra wrote:
+> > This patch only adds barebore structure of perf implementation. Most of
+>                        a bare bones         ^ the
 >
-> Great catch!
-> The fix looks good to me, only a couple of cosmetic suggestions.
+> > the function returns zero at this point and will be implemented
+>       functions
 >
+> > fully in the future.
+>
+> s/the future/later patches/
+>
+
+Done.
+
+> >
+> > Signed-off-by: Atish Patra <atishp@rivosinc.com>
 > > ---
-> >  include/linux/memcontrol.h | 33 +++++++++++++++++++++++++++------
-> >  mm/vmscan.c                | 11 ++++++-----
-> >  2 files changed, 33 insertions(+), 11 deletions(-)
+> >  arch/riscv/include/asm/kvm_host.h     |   3 +
+> >  arch/riscv/include/asm/kvm_vcpu_pmu.h |  70 +++++++++++++
+> >  arch/riscv/kvm/Makefile               |   1 +
+> >  arch/riscv/kvm/main.c                 |   3 +-
+> >  arch/riscv/kvm/vcpu.c                 |   5 +
+> >  arch/riscv/kvm/vcpu_insn.c            |   3 +-
+> >  arch/riscv/kvm/vcpu_pmu.c             | 136 ++++++++++++++++++++++++++
+> >  7 files changed, 219 insertions(+), 2 deletions(-)
+> >  create mode 100644 arch/riscv/include/asm/kvm_vcpu_pmu.h
+> >  create mode 100644 arch/riscv/kvm/vcpu_pmu.c
 > >
-> > diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-> > index e1644a24009c..22c9c9f9c6b1 100644
-> > --- a/include/linux/memcontrol.h
-> > +++ b/include/linux/memcontrol.h
-> > @@ -625,18 +625,32 @@ static inline bool mem_cgroup_supports_protection(struct mem_cgroup *memcg)
+> > diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
+> > index 59a0cf2ca7b9..5d2312828bb2 100644
+> > --- a/arch/riscv/include/asm/kvm_host.h
+> > +++ b/arch/riscv/include/asm/kvm_host.h
+> > @@ -18,6 +18,7 @@
+> >  #include <asm/kvm_vcpu_fp.h>
+> >  #include <asm/kvm_vcpu_insn.h>
+> >  #include <asm/kvm_vcpu_timer.h>
+> > +#include <asm/kvm_vcpu_pmu.h>
 > >
+> >  #define KVM_MAX_VCPUS                        1024
+> >
+> > @@ -226,6 +227,8 @@ struct kvm_vcpu_arch {
+> >
+> >       /* Don't run the VCPU (blocked) */
+> >       bool pause;
+> > +
+> > +     struct kvm_pmu pmu;
+> >  };
+> >
+> >  static inline void kvm_arch_hardware_unsetup(void) {}
+> > diff --git a/arch/riscv/include/asm/kvm_vcpu_pmu.h b/arch/riscv/include/asm/kvm_vcpu_pmu.h
+> > new file mode 100644
+> > index 000000000000..bffee052f2ae
+> > --- /dev/null
+> > +++ b/arch/riscv/include/asm/kvm_vcpu_pmu.h
+> > @@ -0,0 +1,70 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +/*
+> > + * Copyright (c) 2022 Rivos Inc
+> > + *
+> > + * Authors:
+> > + *     Atish Patra <atishp@rivosinc.com>
+> > + */
+> > +
+> > +#ifndef _KVM_VCPU_RISCV_PMU_H
+> > +#define _KVM_VCPU_RISCV_PMU_H
+>
+> The convention seems to be to leading underscores for these types of
+> defines, i.e. __KVM_VCPU_RISCV_PMU_H
+>
+
+Yes. It was a typo. Fixed.
+
+> > +
+> > +#include <linux/perf/riscv_pmu.h>
+> > +#include <asm/sbi.h>
+> > +
+> > +#ifdef CONFIG_RISCV_PMU_SBI
+> > +#define RISCV_KVM_MAX_FW_CTRS 32
+> > +
+> > +/* Per virtual pmu counter data */
+> > +struct kvm_pmc {
+> > +     u8 idx;
+> > +     struct kvm_vcpu *vcpu;
+>
+> I'm not sure we need a vcpu pointer here. If it's just to implement
+> pmc_to_pmu(), then we can instead implement a pmc_to_vcpu(), like
+> arm64's kvm_pmc_to_vcpu(). x86 might be able to do that too, since
+> it appears the conversion macros below originated there.
+>
+
+Yes. We can implement arm64 as well instead of x86.
+I just thought the x86 approach keeping a reference to vcpu is a bit
+simpler than computing
+the parent offset using container_of multiple times. This will be
+invoked once per overflow in the counter overflow path.
+
+If you feel strongly about it arm64 way, we can follow that. I have
+removed from this series for now.
+Depending on the conclusion, I will add it back in kvm sscofpmf
+support series if required.
+
+> > +     struct perf_event *perf_event;
+> > +     uint64_t counter_val;
+> > +     union sbi_pmu_ctr_info cinfo;
+> > +};
+> > +
+> > +/* PMU data structure per vcpu */
+> > +struct kvm_pmu {
+> > +     struct kvm_pmc pmc[RISCV_MAX_COUNTERS];
+> > +     /* Number of the virtual firmware counters available */
+> > +     int num_fw_ctrs;
+> > +     /* Number of the virtual hardware counters available */
+> > +     int num_hw_ctrs;
+> > +     /* Bit map of all the virtual counter used */
+>                                       counters
+>
+> > +     DECLARE_BITMAP(used_pmc, RISCV_MAX_COUNTERS);
+>
+> How about naming this pmc_in_use like x86?
+>
+
+Done.
+
+> > +};
+> > +
+> > +#define vcpu_to_pmu(vcpu) (&(vcpu)->arch.pmu)
+> > +#define pmu_to_vcpu(pmu)  (container_of((pmu), struct kvm_vcpu, arch.pmu))
+> > +#define pmc_to_pmu(pmc)   (&(pmc)->vcpu->arch.pmu)
+> > +
+> > +int kvm_riscv_vcpu_pmu_num_ctrs(struct kvm_vcpu *vcpu, unsigned long *out_val);
+> > +int kvm_riscv_vcpu_pmu_ctr_info(struct kvm_vcpu *vcpu, unsigned long cidx,
+> > +                             unsigned long *ctr_info);
+> > +
+>
+> nit: no need for this blank line
+
+Fixed.
+
+>
+> > +int kvm_riscv_vcpu_pmu_ctr_start(struct kvm_vcpu *vcpu, unsigned long ctr_base,
+> > +                              unsigned long ctr_mask, unsigned long flag, uint64_t ival);
+> > +int kvm_riscv_vcpu_pmu_ctr_stop(struct kvm_vcpu *vcpu, unsigned long ctr_base,
+> > +                              unsigned long ctr_mask, unsigned long flag);
+> > +int kvm_riscv_vcpu_pmu_ctr_cfg_match(struct kvm_vcpu *vcpu, unsigned long ctr_base,
+> > +                                  unsigned long ctr_mask, unsigned long flag,
+> > +                                  unsigned long eidx, uint64_t edata);
+> > +int kvm_riscv_vcpu_pmu_ctr_read(struct kvm_vcpu *vcpu, unsigned long cidx,
+> > +                             unsigned long *out_val);
+> > +int kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu);
+> > +void kvm_riscv_vcpu_pmu_deinit(struct kvm_vcpu *vcpu);
+> > +void kvm_riscv_vcpu_pmu_reset(struct kvm_vcpu *vcpu);
+> > +
+> > +#else
+> > +struct kvm_pmu {
+> > +};
+> > +
+> > +static inline int kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu)
+> > +{
+> > +     return 0;
+> > +}
+> > +static inline void kvm_riscv_vcpu_pmu_deinit(struct kvm_vcpu *vcpu) {}
+> > +static inline void kvm_riscv_vcpu_pmu_reset(struct kvm_vcpu *vcpu) {}
+> > +#endif
+> > +#endif
+> > diff --git a/arch/riscv/kvm/Makefile b/arch/riscv/kvm/Makefile
+> > index 019df9208bdd..342d7199e89d 100644
+> > --- a/arch/riscv/kvm/Makefile
+> > +++ b/arch/riscv/kvm/Makefile
+> > @@ -25,3 +25,4 @@ kvm-y += vcpu_sbi_base.o
+> >  kvm-y += vcpu_sbi_replace.o
+> >  kvm-y += vcpu_sbi_hsm.o
+> >  kvm-y += vcpu_timer.o
+> > +kvm-$(CONFIG_RISCV_PMU_SBI) += vcpu_sbi_pmu.o vcpu_pmu.o
+> > diff --git a/arch/riscv/kvm/main.c b/arch/riscv/kvm/main.c
+> > index 1549205fe5fe..d41ab6d1987d 100644
+> > --- a/arch/riscv/kvm/main.c
+> > +++ b/arch/riscv/kvm/main.c
+> > @@ -49,7 +49,8 @@ int kvm_arch_hardware_enable(void)
+> >       hideleg |= (1UL << IRQ_VS_EXT);
+> >       csr_write(CSR_HIDELEG, hideleg);
+> >
+> > -     csr_write(CSR_HCOUNTEREN, -1UL);
+> > +     /* VS should access only TM bit. Everything else should trap */
+> > +     csr_write(CSR_HCOUNTEREN, 0x02);
+>
+> This looks like something that should be broken out into a separate patch
+> with a description of what happens now when guests try to access the newly
+> trapping counter registers. We should probably also create a TM define.
+>
+
+Done.
+
+> >
+> >       csr_write(CSR_HVIP, 0);
+> >
+> > diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
+> > index 3c95924d38c7..4cc964aaf2ad 100644
+> > --- a/arch/riscv/kvm/vcpu.c
+> > +++ b/arch/riscv/kvm/vcpu.c
+> > @@ -122,6 +122,7 @@ static void kvm_riscv_reset_vcpu(struct kvm_vcpu *vcpu)
+> >
+> >       WRITE_ONCE(vcpu->arch.irqs_pending, 0);
+> >       WRITE_ONCE(vcpu->arch.irqs_pending_mask, 0);
+> > +     kvm_riscv_vcpu_pmu_reset(vcpu);
+> >
+> >       vcpu->arch.hfence_head = 0;
+> >       vcpu->arch.hfence_tail = 0;
+> > @@ -174,6 +175,9 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+> >       /* Setup VCPU timer */
+> >       kvm_riscv_vcpu_timer_init(vcpu);
+> >
+> > +     /* setup performance monitoring */
+> > +     kvm_riscv_vcpu_pmu_init(vcpu);
+> > +
+> >       /* Reset VCPU */
+> >       kvm_riscv_reset_vcpu(vcpu);
+> >
+> > @@ -196,6 +200,7 @@ void kvm_arch_vcpu_destroy(struct kvm_vcpu *vcpu)
+> >       /* Cleanup VCPU timer */
+> >       kvm_riscv_vcpu_timer_deinit(vcpu);
+> >
+> > +     kvm_riscv_vcpu_pmu_deinit(vcpu);
+> >       /* Free unused pages pre-allocated for G-stage page table mappings */
+> >       kvm_mmu_free_memory_cache(&vcpu->arch.mmu_page_cache);
 > >  }
+> > diff --git a/arch/riscv/kvm/vcpu_insn.c b/arch/riscv/kvm/vcpu_insn.c
+> > index 7eb90a47b571..0aa334f853c8 100644
+> > --- a/arch/riscv/kvm/vcpu_insn.c
+> > +++ b/arch/riscv/kvm/vcpu_insn.c
+> > @@ -214,7 +214,8 @@ struct csr_func {
+> >                   unsigned long wr_mask);
+> >  };
 > >
-> > -static inline bool mem_cgroup_below_low(struct mem_cgroup *memcg)
-> > +static inline bool mem_cgroup_ignore_protection(struct mem_cgroup *target,
-> > +                                             struct mem_cgroup *memcg)
-> >  {
-> > -     if (!mem_cgroup_supports_protection(memcg))
+> > -static const struct csr_func csr_funcs[] = { };
+> > +static const struct csr_func csr_funcs[] = {
+> > +};
 >
-> How about to merge mem_cgroup_supports_protection() and your new helper into
-> something like mem_cgroup_possibly_protected()? It seems like they never used
-> separately and unlikely ever will be used.
-
-Sounds good! I am thinking maybe mem_cgroup_no_protection() which is
-an inlining of !mem_cgroup_supports_protection() ||
-mem_cgorup_ignore_protection().
-
-> Also, I'd swap target and memcg arguments.
-
-Sounds good.
-
+> stray change
 >
-> Thank you!
->
->
-> PS If it's not too hard, please, consider adding a new kselftest to cover this case.
-> Thank you!
 
-I will try to translate my bash test to something in test_memcontrol,
-I don't plan to spend a lot of time on it though so I hope it's simple
-enough..
+Fixed
+
+> >
+> >  /**
+> >   * kvm_riscv_vcpu_csr_return -- Handle CSR read/write after user space
+> > diff --git a/arch/riscv/kvm/vcpu_pmu.c b/arch/riscv/kvm/vcpu_pmu.c
+> > new file mode 100644
+> > index 000000000000..3168ed740bdd
+> > --- /dev/null
+> > +++ b/arch/riscv/kvm/vcpu_pmu.c
+> > @@ -0,0 +1,136 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright (c) 2022 Rivos Inc
+> > + *
+> > + * Authors:
+> > + *     Atish Patra <atishp@rivosinc.com>
+> > + */
+> > +
+> > +#include <linux/errno.h>
+> > +#include <linux/err.h>
+> > +#include <linux/kvm_host.h>
+> > +#include <linux/perf/riscv_pmu.h>
+> > +#include <asm/csr.h>
+> > +#include <asm/kvm_vcpu_pmu.h>
+> > +#include <linux/kvm_host.h>
+> > +
+> > +int kvm_riscv_vcpu_pmu_num_ctrs(struct kvm_vcpu *vcpu, unsigned long *out_val)
+> > +{
+> > +     struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
+> > +
+> > +     if (!kvpmu)
+> > +             return -EINVAL;
+>
+> kvpmu can never be null because arch.pmu isn't a pointer. We probably
+> shouldn't be making calls to kvm_riscv_vcpu_pmu_num_ctrs() without knowing
+> we have an initialized pmu anyway, though.
+>
+
+Yes. I have added an init_done flag to do that sanity check.
+I can change it based on the conclusion on PATCH 6.
+
+> > +
+> > +     *out_val = kvpmu->num_fw_ctrs + kvpmu->num_hw_ctrs;
+> > +     return 0;
+> > +}
+> > +
+> > +int kvm_riscv_vcpu_pmu_ctr_info(struct kvm_vcpu *vcpu, unsigned long cidx,
+> > +                             unsigned long *ctr_info)
+> > +{
+> > +     struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
+> > +
+> > +     if (!kvpmu || (cidx > RISCV_MAX_COUNTERS) || (cidx == 1))
+>
+> nit: unnecessary ()
+>
+> > +             return -EINVAL;
+> > +
+> > +     *ctr_info = kvpmu->pmc[cidx].cinfo.value;
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +int kvm_riscv_vcpu_pmu_ctr_start(struct kvm_vcpu *vcpu, unsigned long ctr_base,
+> > +                              unsigned long ctr_mask, unsigned long flag, uint64_t ival)
+> > +{
+> > +     /* TODO */
+> > +     return 0;
+> > +}
+> > +
+> > +int kvm_riscv_vcpu_pmu_ctr_stop(struct kvm_vcpu *vcpu, unsigned long ctr_base,
+> > +                              unsigned long ctr_mask, unsigned long flag)
+> > +{
+> > +     /* TODO */
+> > +     return 0;
+> > +}
+> > +
+> > +int kvm_riscv_vcpu_pmu_ctr_cfg_match(struct kvm_vcpu *vcpu, unsigned long ctr_base,
+> > +                                  unsigned long ctr_mask, unsigned long flag,
+> > +                                  unsigned long eidx, uint64_t edata)
+> > +{
+> > +     /* TODO */
+> > +     return 0;
+> > +}
+> > +
+> > +int kvm_riscv_vcpu_pmu_ctr_read(struct kvm_vcpu *vcpu, unsigned long cidx,
+> > +                             unsigned long *out_val)
+> > +{
+> > +     /* TODO */
+> > +     return 0;
+> > +}
+> > +
+> > +int kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu)
+> > +{
+> > +     int i = 0, num_hw_ctrs, num_fw_ctrs, hpm_width;
+> > +     struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
+> > +
+> > +     if (!kvpmu)
+> > +             return -EINVAL;
+> > +
+> > +     num_hw_ctrs = riscv_pmu_sbi_get_num_hw_ctrs();
+> > +     if ((num_hw_ctrs + RISCV_KVM_MAX_FW_CTRS) > RISCV_MAX_COUNTERS)
+> > +             num_fw_ctrs = RISCV_MAX_COUNTERS - num_hw_ctrs;
+> > +     else
+> > +             num_fw_ctrs = RISCV_KVM_MAX_FW_CTRS;
+>
+> Why do we need RISCV_KVM_MAX_FW_CTRS? Can't we just always get the number
+> with RISCV_MAX_COUNTERS - num_hw_ctrs ?
+>
+We can. But we have to allocate fw_event at runtime. As most platforms
+don't implement
+more than all 29 hpmcounters, you end up having more firmware counters
+than needed.
+Current, SBI spec only define 21 firmware counter anyways.
+
+Thus I felt it is unnecessary to do runtime allocation. But it's just
+few bytes. So I don't feel
+strongly about it.
+
+> > +
+> > +     hpm_width = riscv_pmu_sbi_hpmc_width();
+> > +     if (hpm_width <= 0) {
+> > +             pr_err("Can not initialize PMU for vcpu as hpmcounter width is not available\n");
+> > +             return -EINVAL;
+> > +     }
+> > +
+> > +     kvpmu->num_hw_ctrs = num_hw_ctrs;
+> > +     kvpmu->num_fw_ctrs = num_fw_ctrs;
+>
+> Maybe it's coming later, but we need to give KVM userspace control over
+> the number of counters to allow it to migrate to a larger set of hosts.
+> Also, a previous patch said the virtual width must be the same as the
+> host width for the hw counters, so we need userspace to know what that
+> is in order to determine to which hosts it can migrate a guest.
+>
+
+Yes. The entire user space access control needs to be sketched out.
+We probably need another one reg interface to set/get the number of
+counters/width.
+
+However, Is it a common to migrate a guest between different hosts
+with different PMU capabilities ?
+
+> > +     /*
+> > +      * There is no corelation betwen the logical hardware counter and virtual counters.
+> > +      * However, we need to encode a hpmcounter CSR in the counter info field so that
+> > +      * KVM can trap n emulate the read. This works well in the migraiton usecase as well
+>
+> s/well//
+>
+> > +      * KVM doesn't care if the actual hpmcounter is available in the hardware or not.
+> > +      */
+> > +     for (i = 0; i < num_hw_ctrs + num_fw_ctrs; i++) {
+>
+> Maybe we need a helper macro like
+>
+>  #define kvm_pmu_num_counters(pmu) ((pmu)->num_hw_ctrs + (pmu)->num_fw_ctrs)
+>
+> if we're going to loop over all counters frequently.
+>
+
+Done.
+
+
+> > +             /* TIME CSR shouldn't be read from perf interface */
+> > +             if (i == 1)
+> > +                     continue;
+> > +             kvpmu->pmc[i].idx = i;
+> > +             kvpmu->pmc[i].vcpu = vcpu;
+> > +             if (i < kvpmu->num_hw_ctrs) {
+> > +                     kvpmu->pmc[i].cinfo.type = SBI_PMU_CTR_TYPE_HW;
+> > +                     if (i < 3)
+> > +                             /* CY, IR counters */
+> > +                             kvpmu->pmc[i].cinfo.width = 63;
+> > +                     else
+> > +                             kvpmu->pmc[i].cinfo.width = hpm_width;
+> > +                     /*
+> > +                      * The CSR number doesn't have any relation with the logical
+> > +                      * hardware counters. The CSR numbers are encoded sequentially
+> > +                      * to avoid maintaining a map between the virtual counter
+> > +                      * and CSR number.
+> > +                      */
+> > +                     kvpmu->pmc[i].cinfo.csr = CSR_CYCLE + i;
+> > +             } else {
+> > +                     kvpmu->pmc[i].cinfo.type = SBI_PMU_CTR_TYPE_FW;
+> > +                     kvpmu->pmc[i].cinfo.width = BITS_PER_LONG - 1;
+> > +             }
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +void kvm_riscv_vcpu_pmu_reset(struct kvm_vcpu *vcpu)
+> > +{
+> > +     /* TODO */
+> > +}
+> > +
+> > +void kvm_riscv_vcpu_pmu_deinit(struct kvm_vcpu *vcpu)
+> > +{
+> > +     /* TODO */
+> > +}
+> > +
+> > --
+> > 2.25.1
+> >
+>
+> Thanks,
+> drew
+
+
+
+--
+Regards,
+Atish
