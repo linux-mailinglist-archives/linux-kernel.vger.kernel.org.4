@@ -2,183 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FB54635C53
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 13:03:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69AF5635C59
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 13:05:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237186AbiKWMDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 07:03:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40350 "EHLO
+        id S237423AbiKWMEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 07:04:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235568AbiKWMDF (ORCPT
+        with ESMTP id S237391AbiKWMDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 07:03:05 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630315FA6;
-        Wed, 23 Nov 2022 04:03:03 -0800 (PST)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NHKS14nswzJnhn;
-        Wed, 23 Nov 2022 19:59:45 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 23 Nov 2022 20:03:01 +0800
-Received: from thunder-town.china.huawei.com (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 23 Nov 2022 20:03:00 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        "Josh Triplett" <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        <linux-next@vger.kernel.org>
-Subject: [PATCH v2] doc: Fix htmldocs build warnings of stallwarn.rst
-Date:   Wed, 23 Nov 2022 20:02:38 +0800
-Message-ID: <20221123120238.1904-1-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.37.3.windows.1
+        Wed, 23 Nov 2022 07:03:49 -0500
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A114044A;
+        Wed, 23 Nov 2022 04:03:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-ID:Content-Description;
+        bh=5uH2u2Mf5FTWWLv2WeaMZLafTBLl9MFAoHfwQhR/DdQ=; b=gAbE2NrRNelE+MW4ZZMcaX70Fa
+        zigye3uWbFKF8/9tCVIzR0SKZvFIa8pdtAfbZlapkPW6hRGi/7ZbDlqATbQs3WLchJOe2fU+TYRWm
+        RZwqlBRaFav+UmeqYZFZ6eN5tSvqVW/oGDT1+HIp13fQMoG8llgRzTo/uy6nqItkvfDon5ntGrMRu
+        cZVY8DQIXmB87V0XN5zRlTcXDRx/p9nJG7+SRy3YDvfJ0Vne+koRpJcj3fFpQC/cGZ430FEVjYKIU
+        E/zknXrY//CZu7ZwXv/kPw1wGhkuzi9aKFHHxdDUFei8NT/06nDwnoJl5NX8s8kclTDa3PKC4HS6l
+        34rmu5AQ==;
+Received: from dougal.metanate.com ([192.168.88.1] helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <john@metanate.com>)
+        id 1oxoTc-0007EL-QS;
+        Wed, 23 Nov 2022 12:03:41 +0000
+Date:   Wed, 23 Nov 2022 12:03:40 +0000
+From:   John Keeping <john@metanate.com>
+To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Cc:     linux-usb@vger.kernel.org,
+        Fabien Chouteau <fabien.chouteau@barco.com>,
+        Peter Korsgaard <peter.korsgaard@barco.com>,
+        Felipe Balbi <balbi@ti.com>,
+        Andrzej Pietrasiewicz <andrzej.p@samsung.com>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: Re: [PATCH 1/3] usb: gadget: f_hid: fix f_hidg lifetime vs cdev
+Message-ID: <Y34MHCPs1kDObB9m@donbot>
+References: <20221122123523.3068034-1-john@metanate.com>
+ <20221122123523.3068034-2-john@metanate.com>
+ <723bd024-121d-dd89-7c39-315e93e49c44@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <723bd024-121d-dd89-7c39-315e93e49c44@collabora.com>
+X-Authenticated: YES
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Documentation/RCU/stallwarn.rst:
-401: WARNING: Literal block expected; none found.
-428: WARNING: Literal block expected; none found.
-445: WARNING: Literal block expected; none found.
-459: WARNING: Literal block expected; none found.
-468: WARNING: Literal block expected; none found.
+On Wed, Nov 23, 2022 at 12:52:24PM +0100, Andrzej Pietrasiewicz wrote:
+> Hi John,
+> 
+> W dniu 22.11.2022 o 13:35, John Keeping pisze:
+> > The embedded struct cdev does not have its lifetime correctly tied to
+> > the enclosing struct f_hidg, so there is a use-after-free if /dev/hidgN
+> > is held open while the gadget is deleted.
+> > 
+> > This can readily be replicated with libusbgx's example programs (for
+> > conciseness - operating directly via configfs is equivalent):
+> > 
+> > 	gadget-hid
+> > 	exec 3<> /dev/hidg0
+> > 	gadget-vid-pid-remove
+> > 	exec 3<&-
+> > 
+> > Pull the existing device up in to struct f_hidg and make use of the
+> > cdev_device_{add,del}() helpers.  This changes the lifetime of the
+> > device object to match struct f_hidg, but note that it is still added
+> > and deleted at the same time.
+> > 
+> > Fixes: 71adf1189469 ("USB: gadget: add HID gadget driver")
+> > Signed-off-by: John Keeping <john@metanate.com>
+> > ---
+> >   drivers/usb/gadget/function/f_hid.c | 52 ++++++++++++++++-------------
+> >   1 file changed, 28 insertions(+), 24 deletions(-)
+> > 
+> > diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
+> > index ca0a7d9eaa34..8b8bbeaa27cb 100644
+> > --- a/drivers/usb/gadget/function/f_hid.c
+> > +++ b/drivers/usb/gadget/function/f_hid.c
+> > @@ -71,7 +71,7 @@ struct f_hidg {
+> >   	wait_queue_head_t		write_queue;
+> >   	struct usb_request		*req;
+> > -	int				minor;
+> > +	struct device			dev;
+> >   	struct cdev			cdev;
+> >   	struct usb_function		func;
+> > @@ -84,6 +84,14 @@ static inline struct f_hidg *func_to_hidg(struct usb_function *f)
+> >   	return container_of(f, struct f_hidg, func);
+> >   }
+> > +static void hidg_release(struct device *dev)
+> > +{
+> > +	struct f_hidg *hidg = container_of(dev, struct f_hidg, dev);
+> > +
+> > +	kfree(hidg->set_report_buf);
+> > +	kfree(hidg);
+> > +}
+> > +
+> 
+> I assume the above is supposed to free the hidg memory as a result of
+> put_device() and you free two things here ...
+> 
+> >   /*-------------------------------------------------------------------------*/
+> >   /*                           Static descriptors                            */
+> > @@ -904,9 +912,7 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
+> >   	struct usb_ep		*ep;
+> >   	struct f_hidg		*hidg = func_to_hidg(f);
+> >   	struct usb_string	*us;
+> > -	struct device		*device;
+> >   	int			status;
+> > -	dev_t			dev;
+> >   	/* maybe allocate device-global string IDs, and patch descriptors */
+> >   	us = usb_gstrings_attach(c->cdev, ct_func_strings,
+> > @@ -999,21 +1005,11 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
+> >   	/* create char device */
+> >   	cdev_init(&hidg->cdev, &f_hidg_fops);
+> > -	dev = MKDEV(major, hidg->minor);
+> > -	status = cdev_add(&hidg->cdev, dev, 1);
+> > +	status = cdev_device_add(&hidg->cdev, &hidg->dev);
+> >   	if (status)
+> >   		goto fail_free_descs;
+> > -	device = device_create(hidg_class, NULL, dev, NULL,
+> > -			       "%s%d", "hidg", hidg->minor);
+> > -	if (IS_ERR(device)) {
+> > -		status = PTR_ERR(device);
+> > -		goto del;
+> > -	}
+> > -
+> >   	return 0;
+> > -del:
+> > -	cdev_del(&hidg->cdev);
+> >   fail_free_descs:
+> >   	usb_free_all_descriptors(f);
+> >   fail:
+> > @@ -1244,9 +1240,7 @@ static void hidg_free(struct usb_function *f)
+> >   	hidg = func_to_hidg(f);
+> >   	opts = container_of(f->fi, struct f_hid_opts, func_inst);
+> > -	kfree(hidg->report_desc);
+> > -	kfree(hidg->set_report_buf);
+> > -	kfree(hidg);
+> 
+> ... while here 3 things used to be freed. What happens to hidg->report_desc?
 
-The literal block need to be indented, so add two spaces to each line.
-
-In addition, ':', which is used as a boundary in the literal block, is
-replaced by '|'.
-
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
----
- Documentation/RCU/stallwarn.rst | 56 ++++++++++++++++++---------------
- 1 file changed, 30 insertions(+), 26 deletions(-)
-
-v1 --> v2:
-For the case that both colons need to be deleted, change "::" to expanded
-form or partially minimized form.
-
-diff --git a/Documentation/RCU/stallwarn.rst b/Documentation/RCU/stallwarn.rst
-index c1e92dfef40d501..f15b766d39b8d98 100644
---- a/Documentation/RCU/stallwarn.rst
-+++ b/Documentation/RCU/stallwarn.rst
-@@ -398,9 +398,9 @@ In kernels built with CONFIG_RCU_CPU_STALL_CPUTIME=y or booted with
- rcupdate.rcu_cpu_stall_cputime=1, the following additional information
- is supplied with each RCU CPU stall warning::
- 
--rcu:          hardirqs   softirqs   csw/system
--rcu:  number:      624         45            0
--rcu: cputime:       69          1         2425   ==> 2500(ms)
-+  rcu:          hardirqs   softirqs   csw/system
-+  rcu:  number:      624         45            0
-+  rcu: cputime:       69          1         2425   ==> 2500(ms)
- 
- These statistics are collected during the sampling period. The values
- in row "number:" are the number of hard interrupts, number of soft
-@@ -412,22 +412,24 @@ in milliseconds.  Because user-mode tasks normally do not cause RCU CPU
- stalls, these tasks are typically kernel tasks, which is why only the
- system CPU time are considered.
- 
--The sampling period is shown as follows:
--:<------------first timeout---------->:<-----second timeout----->:
--:<--half timeout-->:<--half timeout-->:                          :
--:                  :<--first period-->:                          :
--:                  :<-----------second sampling period---------->:
--:                  :                  :                          :
--:          snapshot time point    1st-stall                  2nd-stall
-+The sampling period is shown as follows::
- 
-+  |<------------first timeout---------->|<-----second timeout----->|
-+  |<--half timeout-->|<--half timeout-->|                          |
-+  |                  |<--first period-->|                          |
-+  |                  |<-----------second sampling period---------->|
-+  |                  |                  |                          |
-+  |          snapshot time point    1st-stall                  2nd-stall
- 
- The following describes four typical scenarios:
- 
--1. A CPU looping with interrupts disabled.::
-+1. A CPU looping with interrupts disabled.
- 
--   rcu:          hardirqs   softirqs   csw/system
--   rcu:  number:        0          0            0
--   rcu: cputime:        0          0            0   ==> 2500(ms)
-+   ::
-+
-+     rcu:          hardirqs   softirqs   csw/system
-+     rcu:  number:        0          0            0
-+     rcu: cputime:        0          0            0   ==> 2500(ms)
- 
-    Because interrupts have been disabled throughout the measurement
-    interval, there are no interrupts and no context switches.
-@@ -440,11 +442,11 @@ The following describes four typical scenarios:
- 
-    This is similar to the previous example, but with non-zero number of
-    and CPU time consumed by hard interrupts, along with non-zero CPU
--   time consumed by in-kernel execution.::
-+   time consumed by in-kernel execution. ::
- 
--   rcu:          hardirqs   softirqs   csw/system
--   rcu:  number:      624          0            0
--   rcu: cputime:       49          0         2446   ==> 2500(ms)
-+     rcu:          hardirqs   softirqs   csw/system
-+     rcu:  number:      624          0            0
-+     rcu: cputime:       49          0         2446   ==> 2500(ms)
- 
-    The fact that there are zero softirqs gives a hint that these were
-    disabled, perhaps via local_bh_disable().  It is of course possible
-@@ -454,20 +456,22 @@ The following describes four typical scenarios:
- 
- 3. A CPU looping with preemption disabled.
- 
--   Here, only the number of context switches is zero.::
-+   Here, only the number of context switches is zero. ::
- 
--   rcu:          hardirqs   softirqs   csw/system
--   rcu:  number:      624         45            0
--   rcu: cputime:       69          1         2425   ==> 2500(ms)
-+     rcu:          hardirqs   softirqs   csw/system
-+     rcu:  number:      624         45            0
-+     rcu: cputime:       69          1         2425   ==> 2500(ms)
- 
-    This situation hints that the stalled CPU was looping with preemption
-    disabled.
- 
--4. No looping, but massive hard and soft interrupts.::
-+4. No looping, but massive hard and soft interrupts.
-+
-+   ::
- 
--   rcu:          hardirqs   softirqs   csw/system
--   rcu:  number:       xx         xx            0
--   rcu: cputime:       xx         xx            0   ==> 2500(ms)
-+     rcu:          hardirqs   softirqs   csw/system
-+     rcu:  number:       xx         xx            0
-+     rcu: cputime:       xx         xx            0   ==> 2500(ms)
- 
-    Here, the number and CPU time of hard interrupts are all non-zero,
-    but the number of context switches and the in-kernel CPU time consumed
--- 
-2.25.1
-
+This switched to devm to simplify error handling in hidg_alloc().
