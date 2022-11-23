@@ -2,117 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB5363651B
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:58:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD96763651D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:59:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238297AbiKWP6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 10:58:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46230 "EHLO
+        id S235433AbiKWP7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 10:59:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238254AbiKWP6Y (ORCPT
+        with ESMTP id S239018AbiKWP6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 10:58:24 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08481A812;
-        Wed, 23 Nov 2022 07:57:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 04B76CE2322;
-        Wed, 23 Nov 2022 15:57:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2E49C433C1;
-        Wed, 23 Nov 2022 15:57:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669219063;
-        bh=Q0SEQR3uc6eCtl05I/8Xe29JQKDtlOnHtgnxpmvfeK0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mhiplsOioxUX4b7OWO/JF0jiV4e9OaOyeXb1vLr7BIXe2hSqp14HiG3LS60tfKiXR
-         XYHklTI6LnIYJ+JdVdOx89JEMI34ZRFLWpqBlzMQsRqI8TmEAFjO9/8CnTgju7xKis
-         AnxSbQ0zYNV4rEJno4YOqL/ulKqGxpwcGux1giIg=
-Date:   Wed, 23 Nov 2022 16:57:40 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Nayna <nayna@linux.vnet.ibm.com>
-Cc:     Nayna Jain <nayna@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org,
-        linux-fsdevel@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, Dov Murik <dovmurik@linux.ibm.com>,
-        George Wilson <gcwilson@linux.ibm.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Russell Currey <ruscur@russell.cc>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>
-Subject: Re: [PATCH 2/4] fs: define a firmware security filesystem named
- fwsecurityfs
-Message-ID: <Y35C9O27J29bUDjA@kroah.com>
-References: <20221106210744.603240-1-nayna@linux.ibm.com>
- <20221106210744.603240-3-nayna@linux.ibm.com>
- <Y2uvUFQ9S2oaefSY@kroah.com>
- <8447a726-c45d-8ebb-2a74-a4d759631e64@linux.vnet.ibm.com>
- <20221119114234.nnfxsqx4zxiku2h6@riteshh-domain>
- <d3e8df29-d9b0-5e8e-4a53-d191762fe7f2@linux.vnet.ibm.com>
- <a2752fdf-c89f-6f57-956e-ad035d32aec6@linux.vnet.ibm.com>
+        Wed, 23 Nov 2022 10:58:32 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 58FA9627EA
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:58:21 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3D6161FB;
+        Wed, 23 Nov 2022 07:58:27 -0800 (PST)
+Received: from [10.57.87.10] (unknown [10.57.87.10])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 262FE3F73B;
+        Wed, 23 Nov 2022 07:58:16 -0800 (PST)
+Message-ID: <f390d9ec-e8b2-a10d-bd2e-011ec879c615@arm.com>
+Date:   Wed, 23 Nov 2022 15:58:14 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a2752fdf-c89f-6f57-956e-ad035d32aec6@linux.vnet.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v9 03/11] drm/gem: Add evict() callback to
+ drm_gem_object_funcs
+Content-Language: en-GB
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@gmail.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Clark <robdclark@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Qiang Yu <yuq825@gmail.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Herring <robh@kernel.org>, Sean Paul <sean@poorly.run>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org
+References: <20221123025723.695075-1-dmitry.osipenko@collabora.com>
+ <20221123025723.695075-4-dmitry.osipenko@collabora.com>
+From:   Steven Price <steven.price@arm.com>
+In-Reply-To: <20221123025723.695075-4-dmitry.osipenko@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 10:05:49AM -0500, Nayna wrote:
+On 23/11/2022 02:57, Dmitry Osipenko wrote:
+> Add new common evict() callback to drm_gem_object_funcs and corresponding
+> drm_gem_object_evict() helper. This is a first step on a way to providing
+> common GEM-shrinker API for DRM drivers.
 > 
-> On 11/22/22 18:21, Nayna wrote:
-> > 
-> > From the perspective of our use case, we need to expose firmware
-> > security objects to userspace for management. Not all of the objects
-> > pre-exist and we would like to allow root to create them from userspace.
-> > 
-> > From a unification perspective, I have considered a common location at
-> > /sys/firmware/security for managing any platform's security objects. And
-> > I've proposed a generic filesystem, which could be used by any platform
-> > to represent firmware security objects via /sys/firmware/security.
-> > 
-> > Here are some alternatives to generic filesystem in discussion:
-> > 
-> > 1. Start with a platform-specific filesystem. If more platforms would
-> > like to use the approach, it can be made generic. We would still have a
-> > common location of /sys/firmware/security and new code would live in
-> > arch. This is my preference and would be the best fit for our use case.
-> > 
-> > 2. Use securityfs.  This would mean modifying it to satisfy other use
-> > cases, including supporting userspace file creation. I don't know if the
-> > securityfs maintainer would find that acceptable. I would also still
-> > want some way to expose variables at /sys/firmware/security.
-> > 
-> > 3. Use a sysfs-based approach. This would be a platform-specific
-> > implementation. However, sysfs has a similar issue to securityfs for
-> > file creation. When I tried it in RFC v1[1], I had to implement a
-> > workaround to achieve that.
-> > 
-> > [1] https://lore.kernel.org/linuxppc-dev/20220122005637.28199-3-nayna@linux.ibm.com/
-> > 
-> Hi Greg,
+> Suggested-by: Thomas Zimmermann <tzimmermann@suse.de>
+> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> ---
+>  drivers/gpu/drm/drm_gem.c | 15 +++++++++++++++
+>  include/drm/drm_gem.h     | 12 ++++++++++++
+>  2 files changed, 27 insertions(+)
 > 
-> Based on the discussions so far, is Option 1, described above, an acceptable
-> next step?
+> diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
+> index 299bca1390aa..c0510b8080d2 100644
+> --- a/drivers/gpu/drm/drm_gem.c
+> +++ b/drivers/gpu/drm/drm_gem.c
+> @@ -1458,3 +1458,18 @@ drm_gem_lru_scan(struct drm_gem_lru *lru,
+>  	return freed;
+>  }
+>  EXPORT_SYMBOL(drm_gem_lru_scan);
+> +
+> +/**
+> + * drm_gem_object_evict - helper to evict backing pages for a GEM object
+> + * @obj: obj in question
+> + */
+> +bool
+> +drm_gem_object_evict(struct drm_gem_object *obj)
+> +{
+> +	dma_resv_assert_held(obj->resv);
+> +
+> +	if (obj->funcs->evict)
+> +		return obj->funcs->evict(obj);
+> +
+> +	return false;
+> +}
 
-No, as I said almost a year ago, I do not want to see platform-only
-filesystems going and implementing stuff that should be shared by all
-platforms.
+This function needs exporting for the module build to work correctly.
 
-thanks,
+Steve
 
-greg k-h
+> diff --git a/include/drm/drm_gem.h b/include/drm/drm_gem.h
+> index b46ade812443..add1371453f0 100644
+> --- a/include/drm/drm_gem.h
+> +++ b/include/drm/drm_gem.h
+> @@ -172,6 +172,16 @@ struct drm_gem_object_funcs {
+>  	 * This is optional but necessary for mmap support.
+>  	 */
+>  	const struct vm_operations_struct *vm_ops;
+> +
+> +	/**
+> +	 * @evict:
+> +	 *
+> +	 * Evicts gem object out from memory. Used by the drm_gem_object_evict()
+> +	 * helper. Returns true on success, false otherwise.
+> +	 *
+> +	 * This callback is optional.
+> +	 */
+> +	bool (*evict)(struct drm_gem_object *obj);
+>  };
+>  
+>  /**
+> @@ -480,4 +490,6 @@ unsigned long drm_gem_lru_scan(struct drm_gem_lru *lru,
+>  			       unsigned long *remaining,
+>  			       bool (*shrink)(struct drm_gem_object *obj));
+>  
+> +bool drm_gem_object_evict(struct drm_gem_object *obj);
+> +
+>  #endif /* __DRM_GEM_H__ */
+
