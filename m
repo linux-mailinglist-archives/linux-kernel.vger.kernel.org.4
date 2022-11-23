@@ -2,73 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4BD635A7F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 11:48:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 687E8635A7C
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 11:48:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237207AbiKWKsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 05:48:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51866 "EHLO
+        id S236473AbiKWKrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 05:47:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237231AbiKWKro (ORCPT
+        with ESMTP id S236356AbiKWKr0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 05:47:44 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920B615AA84;
-        Wed, 23 Nov 2022 02:34:48 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 0DEA21D40;
-        Wed, 23 Nov 2022 11:34:21 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1669199661;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ugMG0Tcnl7CDfJOrBRttmEp/8J+TkQScVAZ9tYvp7jA=;
-        b=ZTslL8+2vDBksTnAyBBuYZKCAPFi1g5JWnotNu0agoVSmye30ARW+yyX6bhCtkK2C08B4E
-        a8+kbVsGPOCdwCxjk0KpDWkNKxQuWSrmWeZ6EsV0oreIlRnpQfiPtDBykinmdLaTK95/OH
-        hvgAHpv2l/xNav0loSDWJ8hJu0pXy8WeVmvBM2fmCV10b+6OjeaQ1CcYNipAjsdbOhB1G8
-        XiSlFeTp8BO+qVR5zKrxdNQSa3AYvh9L//iY+fuGel3jGPwdQOkTtsA3cR9RFEzrkECiUQ
-        /mfnihVKPwD312PpcFmrDVybR9MRwqDm5qFIgcR+GS1LI1vcobWCyaxEMMOljA==
+        Wed, 23 Nov 2022 05:47:26 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202F6154186
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 02:34:35 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id be13so27546329lfb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 02:34:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jPdtPFLB1TZrWsH5lIP/9uszUEed9wIYjEKO4gAb5yU=;
+        b=HOF6g1RJdwdLL6iLu3D0x66hwcgOkg5/WgcsfOWuA5pquaKT84zusTGhgp7sQrHd/W
+         OKiMVV9I70OpfnR0HBdpOwdV+i5aMNHyHbd7kL/BbdDVp53s24VO+ALmHeRwtGoRXibZ
+         L5UjEmyugoL56ICfZl8Urysri+gQdo3b+HxBw1wkEmQSYLzYQFYJr22Zb5nl9JlUMDp9
+         MVmulLLYUDhq7r38JDTQYfjewWs1hyhdELlbJpi4ioDJmxSRsm+Akhc3d8oEQxqRCkv8
+         Xilguo6TDqDUqVmGVMSZ/S2/IpFHu1GDtITwhmg2+wV6zGe9rcmrfLMqYLubYyK3J9l7
+         9lzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jPdtPFLB1TZrWsH5lIP/9uszUEed9wIYjEKO4gAb5yU=;
+        b=ErHQjOdQe/ZkU8bePxOenRx6n3ixt6ovrr0T2DSveScGqFy9xRu1SEJ9Xlt/+D8Ohx
+         BIMf4Z/JS8a1gLmZltOM8CfAtENN6GrGPu93sPXMrHUiwPZTpn6SpBsY8VXbXVEe+Qlw
+         OXotLSs9+tE4n8F0vW8ue2DKdaEwWAhsDiWxWnRc2kl37HZs0Vb4fPIolHgmbjsIv0Tj
+         4SvjNNvm6coy4PC1tvOMiECJgVvr9KNqNy5gSVs5q7Hsts+tCxsUQmzQazzkmrTMjJx+
+         /OqJJeFWGZxnintaxma+W8aWX3RFaRXG0GsA8GPmDssuRS6H7GtA7qlkc4S5xh8WeaG6
+         RcTw==
+X-Gm-Message-State: ANoB5pltPuXXslgDaCWNftK9JguMPdQApL+enAy2UElZ62tCrLPiGBv7
+        qXQC4Qr6LCcylXIpuH54sz0EcA==
+X-Google-Smtp-Source: AA0mqf7p6ErXDvhBcT1rz9LRvU8Zd+ybGzBI3a4HdTIjjSrjm5pRGb/z52EPnwtcP2g9kd05/N+W2g==
+X-Received: by 2002:ac2:4e14:0:b0:4af:f5a0:8786 with SMTP id e20-20020ac24e14000000b004aff5a08786mr8563399lfr.265.1669199672422;
+        Wed, 23 Nov 2022 02:34:32 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id 14-20020ac25f4e000000b00499b27a329esm2842925lfz.300.2022.11.23.02.34.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Nov 2022 02:34:31 -0800 (PST)
+Message-ID: <c9c27d62-9299-cb7d-f379-a5b059449789@linaro.org>
+Date:   Wed, 23 Nov 2022 11:34:30 +0100
 MIME-Version: 1.0
-Date:   Wed, 23 Nov 2022 11:34:20 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Sherry Sun <sherry.sun@nxp.com>
-Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        jingchang.lu@freescale.com, tomonori.sakita@sord.co.jp,
-        atsushi.nemoto@sord.co.jp, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com
-Subject: Re: [PATCH V2 2/5] tty: serial: fsl_lpuart: clear UARTCTRL_LOOPS in
- lpuart32_shutdown()
-In-Reply-To: <20221110081728.10172-3-sherry.sun@nxp.com>
-References: <20221110081728.10172-1-sherry.sun@nxp.com>
- <20221110081728.10172-3-sherry.sun@nxp.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <1a7c9345e3c8b97adfbadffda7340871@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 1/2] dt-bindings: arm: qcom: Adding DT binding for zombie
+Content-Language: en-US
+To:     Owen Yang <ecs.taipeikernel@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>, Harvey <hunge@google.com>,
+        Bob Moragues <moragues@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20221123181043.1.Idfcba5344b7995b44b7fa2e20f1aa4351defeca6@changeid>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221123181043.1.Idfcba5344b7995b44b7fa2e20f1aa4351defeca6@changeid>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-11-10 09:17, schrieb Sherry Sun:
-> UARTCTRL_LOOPS bit is set in lpuart32_set_mctrl() for loopback mode, 
-> but
-> nowhere clear this bit, it should be cleared when closing the uart port
-> to avoid the loopback mode been enabled by default when reopening the
-> uart.
+On 23/11/2022 11:11, Owen Yang wrote:
+> Add an entry in the device tree binding for sc7280-zombie.
 
-It's cleared in set_mctrl(). What is the expectation from the serial
-core here?
+Subject: drop second, redundant "DT binding". This is obvious from the
+prefix.
 
--michael
+With subject fixed:
+
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof
+
