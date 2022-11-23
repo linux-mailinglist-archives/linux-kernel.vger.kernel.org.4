@@ -2,112 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 604F86360C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:59:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 863C46360C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:59:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238070AbiKWN7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 08:59:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49806 "EHLO
+        id S237342AbiKWN7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 08:59:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238082AbiKWN6o (ORCPT
+        with ESMTP id S237310AbiKWN6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 08:58:44 -0500
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E855943AEB;
-        Wed, 23 Nov 2022 05:52:54 -0800 (PST)
-Received: by mail-qk1-f173.google.com with SMTP id i9so2889252qkl.5;
-        Wed, 23 Nov 2022 05:52:54 -0800 (PST)
+        Wed, 23 Nov 2022 08:58:51 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA4A62040
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:53:06 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id io19so16689496plb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:53:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t9CmsBIWPbQRo+TQhWjPbgMCBvMUGNV8/tiPp8eu33A=;
+        b=yxrVfZ0wWyZdqelxuvxh/YdZ1nBYHWUwk6oxwPvk304duX4I9vWxogIpb/cfsEI9zH
+         dCIdvO8YnEFqAOJLXg0N1SOM+SnEXBRVhIqLMx6Rmzku19LfNnyUCTa50K3hCFIWIEZE
+         QCIawit9/k4dg2LsuT7kqRWAf/POAws9KaYOSg7DCNAVEGu/Z3vM96SDxTj18uQqUftz
+         xDWV+lHziX73nHBXddpuF6QFG72Rtye6ddy8nUvhCS4ZgcFGtWTDqqwqdSgFX8dE5AWa
+         va+hedob9txWrBhyl10U3on6RwBARyMaZp4UVjeiyJrHl/BrYkb4SBTWFiKj3C9lmBUo
+         Xo2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ru2/Qo/Fi2mBuBD/tnfTwcQucjWsxv7vBNnif4KKxRg=;
-        b=Irq8G/TbUp1OPHCe0S0cViZvzY0QkvV12l6XN9jOCRUDRKIcpR+VzomCErm49MN08v
-         h5gRzTg1qp9GJrvlWBggvMxQ9uUozo+ER9Ef7HQqYZYCBbaABj4xBYCQ1OTIB3Vmj350
-         11bVR24Mza84+vJfSS6TmpVUgCmUwPTCnxJfB+aSC0xGQ5WUq+cZfZr/fTxnvYkH+5YH
-         sW0wkHK1XxnLrL34CNkEwlgiqrot3A4Ri5ZLAfYlg9GRrqSCNJoX2MHpFkcLbkNAB6Az
-         itu9j/m0S4r99E0nY4d9qsRYSXfKsuD66h2X6WHNaZ1xN6W92KMu7Fdr742elPFC3IIa
-         rFjg==
-X-Gm-Message-State: ANoB5pmoLjq4/E8ByoNxc+PWTPZgBOyIumdZD1w32D6lxANnqMH8KrKH
-        m0QHplv7ThAdaVlCTLZANYgi7Vhzn4j0MXl4
-X-Google-Smtp-Source: AA0mqf7tsx4XkmtL07zI1j84rNZsR2zRGWZdsl/oWLCKxBnJz55LkZQWsszpShzauicMzCQJmZ1yDQ==
-X-Received: by 2002:a05:620a:561:b0:6fa:4b0b:d08f with SMTP id p1-20020a05620a056100b006fa4b0bd08fmr25515242qkp.488.1669211573582;
-        Wed, 23 Nov 2022 05:52:53 -0800 (PST)
-Received: from localhost (c-24-15-214-156.hsd1.il.comcast.net. [24.15.214.156])
-        by smtp.gmail.com with ESMTPSA id d7-20020a05620a240700b006e702033b15sm12525280qkn.66.2022.11.23.05.52.52
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=t9CmsBIWPbQRo+TQhWjPbgMCBvMUGNV8/tiPp8eu33A=;
+        b=l6Mu64N/A+iKTua7jKWqgUU+nasmydXdbGnqpyG5O1soBzthPsw27THqZCiH0Hziqb
+         A1VWYDW99WYwcUtnl3WeS+j2Q93pbkevAQEcRkMa2ZeX4j+qnMzJXVkSSZtY+lbnjUc0
+         g9sZTWhVzyCpyI9e7srUPQRNiqv7NdQ8Sh0AfD02Lc4OSf/8KkN1gEB9m9J7DooSglFB
+         1+2nH6axAAlpqnOaSyFnBtwX4F6TAGukQF5FLOfxDZnyExHCztgT8EI4ro/L2p5ZaXKn
+         V3cB1CU39VZNPWYZzxp93uyvWGUdSHfcYcPHQG9pg+QrXRGCUt5vXMW06FAbOVaSHzfR
+         2zjw==
+X-Gm-Message-State: ANoB5pkiwB/asojLyA0ZfiD5mNmy90sSer4r77oEMKR13j18ynZ8gxUH
+        11TsCBBPiqvA0+37ussnQD1GGQ==
+X-Google-Smtp-Source: AA0mqf5sVEtPanjRBHYnlAf9OAv84TFp0ljtU0HTcjdOSxHLvWkAQFzNWw/gOjyRff/Sv+CxIY6HSw==
+X-Received: by 2002:a17:902:f68a:b0:189:b07:10fd with SMTP id l10-20020a170902f68a00b001890b0710fdmr8726256plg.151.1669211585735;
+        Wed, 23 Nov 2022 05:53:05 -0800 (PST)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id c3-20020a170903234300b0018862bb3976sm2222618plh.308.2022.11.23.05.53.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 05:52:53 -0800 (PST)
-From:   David Vernet <void@manifault.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
-        martin.lau@linux.dev, yhs@fb.com, song@kernel.org, sdf@google.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, jolsa@kernel.org,
-        haoluo@google.com, tj@kernel.org, kernel-team@fb.com,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: [PATCH bpf-next] bpf: Don't use idx variable when registering kfunc dtors
-Date:   Wed, 23 Nov 2022 07:52:53 -0600
-Message-Id: <20221123135253.637525-1-void@manifault.com>
-X-Mailer: git-send-email 2.38.1
+        Wed, 23 Nov 2022 05:53:05 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Jinlong Chen <nickyc975@zju.edu.cn>
+Cc:     linux-block@vger.kernel.org, hch@lst.de,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <cover.1669126766.git.nickyc975@zju.edu.cn>
+References: <cover.1669126766.git.nickyc975@zju.edu.cn>
+Subject: Re: [PATCH 0/4] random improvments and cleanups for elevator.c
+Message-Id: <166921158474.84780.6332237082581853166.b4-ty@kernel.dk>
+Date:   Wed, 23 Nov 2022 06:53:04 -0700
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Mailer: b4 0.11.0-dev-28747
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In commit fda01efc6160 ("bpf: Enable cgroups to be used as kptrs"), I
-added an 'int idx' variable to kfunc_init() which was meant to
-dynamically set the index of the btf id entries of the
-'generic_dtor_ids' array. This was done to make the code slightly less
-brittle as the struct cgroup * kptr kfuncs such as bpf_cgroup_aquire()
-are compiled out if CONFIG_CGROUPS is not defined. This, however, causes
-an lkp build warning:
+On Tue, 22 Nov 2022 22:21:22 +0800, Jinlong Chen wrote:
+> This series updates some function documents (patch 1 and 3), removes an
+> outdated comment (patch 4), and adds a warning message (patch 2) in
+> elevator.c.
+> 
+> Jinlong Chen (4):
+>   elevator: update the document of elevator_switch
+>   elevator: printk a warning if switching to a new io scheduler fails
+>   elevator: update the document of elevator_match
+>   elevator: remove an outdated comment in elevator_change
+> 
+> [...]
 
->> kernel/bpf/helpers.c:2005:40: warning: multiple unsequenced
-   modifications to 'idx' [-Wunsequenced]
-	.btf_id       = generic_dtor_ids[idx++],
+Applied, thanks!
 
-Fix the warning by just hard-coding the indices.
+[1/4] elevator: update the document of elevator_switch
+      commit: ac1171bd2c7a3a32dfbdd3c347919fee32b745a1
+[2/4] elevator: printk a warning if switching to a new io scheduler fails
+      commit: e0cca8bc9cd8d6176921cb3f5f466d3ccfbc6b99
+[3/4] elevator: update the document of elevator_match
+      commit: f69b5e8f356e4e57e94b806ca1dcb9771933bb9c
+[4/4] elevator: remove an outdated comment in elevator_change
+      commit: 4284354758d67cf77ab2a4494e28d4c05fb83074
 
-Fixes: fda01efc6160 ("bpf: Enable cgroups to be used as kptrs")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: David Vernet <void@manifault.com>
----
- kernel/bpf/helpers.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index e4e9db301db5..da2681ebb7c3 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2019,16 +2019,16 @@ static const struct btf_kfunc_id_set common_kfunc_set = {
- 
- static int __init kfunc_init(void)
- {
--	int ret, idx = 0;
-+	int ret;
- 	const struct btf_id_dtor_kfunc generic_dtors[] = {
- 		{
--			.btf_id       = generic_dtor_ids[idx++],
--			.kfunc_btf_id = generic_dtor_ids[idx++]
-+			.btf_id       = generic_dtor_ids[0],
-+			.kfunc_btf_id = generic_dtor_ids[1]
- 		},
- #ifdef CONFIG_CGROUPS
- 		{
--			.btf_id       = generic_dtor_ids[idx++],
--			.kfunc_btf_id = generic_dtor_ids[idx++]
-+			.btf_id       = generic_dtor_ids[2],
-+			.kfunc_btf_id = generic_dtor_ids[3]
- 		},
- #endif
- 	};
+Best regards,
 -- 
-2.38.1
+Jens Axboe
+
 
