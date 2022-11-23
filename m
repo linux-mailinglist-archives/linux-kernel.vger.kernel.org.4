@@ -2,112 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7EA76359D2
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 11:27:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF0846359DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 11:28:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236928AbiKWK0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 05:26:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
+        id S236640AbiKWK2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 05:28:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235897AbiKWKZJ (ORCPT
+        with ESMTP id S237519AbiKWK1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 05:25:09 -0500
-Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.133.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680A2134127
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 02:09:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxlinear.com;
-        s=selector; t=1669198160;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Mc2NS0olCt0qUzsLi0zWfYaDeL0jAmHwQjCqJZ5SsT8=;
-        b=RcvdiO6Z5CWmhEdhqft/GB4vg4tSIdwBuJIKKXpQfQT+xc7Kegd+QZg0pznnshEcoAInde
-        pv13+9o2HgiLWUBS64bAlZkrtEwAdxMlRaMjkljXH2/Xkk6uECsFDLCHVv2m77cfMtDVWl
-        AIZdDDc4GBfqpKRwGdrcST2SD75Y/2kP237JiMZVxSQgDb8hqEOzsaSpPC1b2FjjpHqTz0
-        jxmNk/3UH58Ji3eY0PaAKxy64v5MxqMyXwB9Tl4YC8FQHI2mYZXYOvrmJoRzByUgqM0TxN
-        fsZTSMn9Mr09pWK1Pl6L7WAUesOIk/Sg2kEdMI/CX3KjkHD9eKCfcVM/33wDJA==
-Received: from mail.maxlinear.com (174-47-1-84.static.ctl.one [174.47.1.84])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- us-mta-60-BskRCc8PMByVuKyULDY1HA-1; Wed, 23 Nov 2022 05:09:16 -0500
-X-MC-Unique: BskRCc8PMByVuKyULDY1HA-1
-Received: from sgsxdev001.isng.phoenix.local (10.226.81.111) by
- mail.maxlinear.com (10.23.38.119) with Microsoft SMTP Server id 15.1.2375.24;
- Wed, 23 Nov 2022 02:09:08 -0800
-From:   Rahul Tanwar <rtanwar@maxlinear.com>
-To:     Rahul Tanwar <rtanwar@maxlinear.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Borislav Petkov" <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, <linux-lgm-soc@maxlinear.com>,
-        <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v4 4/4] x86/of: Add support for boot time interrupt delivery mode configuration
-Date:   Wed, 23 Nov 2022 18:08:50 +0800
-Message-ID: <20221123100850.22969-5-rtanwar@maxlinear.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221123100850.22969-1-rtanwar@maxlinear.com>
-References: <20221123100850.22969-1-rtanwar@maxlinear.com>
+        Wed, 23 Nov 2022 05:27:10 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B14E1201;
+        Wed, 23 Nov 2022 02:10:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1669198215; x=1700734215;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+TpboofMEOuW566fs/EUm7LVwp3TsGK1qTspl5yq6EM=;
+  b=Nw2KUAJZxpKLHs+mq5v4zuEb6vH9wli7azI0Nrhr5NqmIeg0lTNaWsFY
+   dduTaPtS7QVCzlnMHb1ctXKobhXiLgStnAIO8+MK5AtFWK4ReAADuxfr8
+   yYPdXjNp+bVn7eCREyE8DpdF9W2kAb4DzXqs/fjJJOonnmiueeXWmoJ1/
+   rn9qRObn1gEi+4MswCiwIrFWNUO8a/1jYjv80i5TMUVUectjCyo1jtYjS
+   FQQcUnjVWtCBcOV5Way5jK8mIlk5TfwZwYZqKVtDjbG5CzHoh4PtdHNSm
+   WmV9Of1KhwbuT30IQx2DB3YBBwEYIHDC2Z7v5XEBpFun0RKy1znL498T6
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="188305129"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Nov 2022 03:10:14 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 23 Nov 2022 03:10:11 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Wed, 23 Nov 2022 03:10:09 -0700
+Date:   Wed, 23 Nov 2022 10:09:51 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Anup Patel <anup@brainfault.org>
+CC:     Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Conor Dooley <conor@kernel.org>, <rafael@kernel.org>,
+        <daniel.lezcano@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        <aou@eecs.berkeley.edu>, <linux-pm@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux@rivosinc.com>
+Subject: Re: [PATCH] cpuidle: riscv-sbi: Stop using non-retentive suspend
+Message-ID: <Y33xb0jxZqdexzRc@wendy>
+References: <CAAhSdy0Fs9ZVoRgtz92RgLnFPvgwUzCP_KpK9SCOiVsA-t3p3Q@mail.gmail.com>
+ <mhng-3f44cc1f-7305-41c5-a1cf-dfed096bd364@palmer-ri-x1c9>
+ <CAK9=C2USZHdfBQrrgd2Rs3u3_gTyscpRgxvPU5P6ptOPu1+Axg@mail.gmail.com>
+ <Y3ywTzv3vbgRXQGG@wendy>
+ <CAAhSdy1UwBQwX2jnmJXUAAjFL5TZXTUrs9yf9DRMSH=GV4BcHg@mail.gmail.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: maxlinear.com
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAAhSdy1UwBQwX2jnmJXUAAjFL5TZXTUrs9yf9DRMSH=GV4BcHg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Presently, init/boot time interrupt delivery mode is enumerated
-only for ACPI enabled systems by parsing MADT table or for older
-systems by parsing MP table. But for OF based x86 systems, it is
-assumed & hardcoded to legacy PIC mode. This causes boot time crash
-for platforms which do not use 8259 compliant legacy PIC.
+Hey Anup,
 
-Add support for configuration of init time interrupt delivery mode
-for x86 OF based systems by introducing a new optional boolean
-property 'intel,virtual-wire-mode' for interrupt-controller node
-of local APIC. This property emulates IMCRP Bit 7 of MP feature
-info byte 2 of MP floating pointer structure.
+On Wed, Nov 23, 2022 at 09:56:31AM +0530, Anup Patel wrote:
+> On Tue, Nov 22, 2022 at 4:50 PM Conor Dooley <conor.dooley@microchip.com> wrote:
+> >
+> > On Tue, Nov 22, 2022 at 11:06:15AM +0530, Anup Patel wrote:
+> > > On Tue, Nov 22, 2022 at 10:46 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
+> > > >
+> > > > On Mon, 21 Nov 2022 19:45:07 PST (-0800), anup@brainfault.org wrote:
+> > > > > On Tue, Nov 22, 2022 at 2:27 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
+> > > > >>
+> > > > >> From: Palmer Dabbelt <palmer@rivosinc.com>
+> > > > >>
+> > > > >> As per [1], whether or not the core can wake up from non-retentive
+> > > > >> suspend is a platform-specific detail.  We don't have any way to encode
+> > > > >> that, so just stop using them until we've sorted that out.
+> > > > >>
+> > > > >> Link: https://github.com/riscv-non-isa/riscv-sbi-doc/issues/98#issuecomment-1288564687
+> > > > >> Fixes: 6abf32f1d9c5 ("cpuidle: Add RISC-V SBI CPU idle driver")
+> > > > >> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+> > > > >
+> > > > > This is just unnecessary maintenance churn and it's not the
+> > > > > right way to go. Better to fix this the right way instead of having
+> > > > > a temporary fix.
+> > > > >
+> > > > > I had already sent-out a patch series 5 months back to describe
+> > > > > this in DT:
+> > > > > https://lore.kernel.org/lkml/20220727114302.302201-1-apatel@ventanamicro.com/
+> > > > >
+> > > > > No one has commented/suggested anything (except Samuel
+> > > > > Holland and Sudeep Holla).
+> > > >
+> > > > I see some comments from Krzysztof here
+> > > > <https://lore.kernel.org/lkml/7a0477a0-9f0f-87d6-4070-30321745f4cc@linaro.org/>
+> > > > as well.  Looks like everyone is pointing out that having our CPU nodes
+> > > > encode timers is a bad idea, my guess is that they're probably right.
+> > >
+> > > Adding a separate timer DT node, creates a new set of compatibility
+> > > issues for existing platforms. I am fine updating my series to have
+> > > separate timer DT node but do we want to go in this direction ?
+> >
+> > I don't really follow. How is there a compatibility issue created by
+> > adding a new node that is not added for a new property? Both will
+> > require changes to the device tree. (You need not reply here, I am going
+> > to review the other thread, it's been on my todo list for too long. Been
+> > caught up with non-coherent stuff & our sw release cycle..)
+> 
+> Adding a new timer DT node would mean, the RISC-V timer driver
+> will now be probed using the compatible to the new DT node whereas
+> the RISC-V timer driver is currently probed using CPU DT nodes.
 
-Defaults to legacy PIC mode if absent. Configures it to virtual
-wire compatibility mode if present.
+Ahh, that is what I have missed. I'll continue my thoughts on this in
+the dt-binding thread.
 
-Signed-off-by: Rahul Tanwar <rtanwar@maxlinear.com>
----
- arch/x86/kernel/devicetree.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+> > > Even if ARM has a separate timer DT node, the timers are still part
+> > > of the CPU. It depends on how we see the DT bindings aligning with
+> > > actual HW.
+> > >
+> > > >
+> > > > > Please review this series. I can quickly address comments to
+> > > > > make this available for Linux-6.2. Until this series is merged,
+> > > > > the affected platforms can simply remove non-retentive suspend
+> > > > > states from their DT.
+> > > >
+> > > > That leaves us with a dependency between kernel versions and DT
+> > > > bindings: kernels with the current driver will result in broken systems
+> > > > with the non-retentive suspend states in the DT they boot with when
+> > > > those states can't wake up the CPU.
+> >
+> > Can someone point me at a (non D1 or virt) system that has suspend
+> > states in the DT that would need fixing?
+> 
+> For the QEMU virt machine, the default non-retentive suspend state was
+> tested using a temporary DTB provided separately via QEMU command
+> line. The QEMU virt machine does not have its own HART suspend
+> states so OpenSBI will functionally emulate default retentive/non-retentive
+> suspend states.
 
-diff --git a/arch/x86/kernel/devicetree.c b/arch/x86/kernel/devicetree.c
-index fcc6f1b7818f..458e43490414 100644
---- a/arch/x86/kernel/devicetree.c
-+++ b/arch/x86/kernel/devicetree.c
-@@ -167,7 +167,14 @@ static void __init dtb_lapic_setup(void)
- =09=09=09return;
- =09}
- =09smp_found_config =3D 1;
--=09pic_mode =3D 1;
-+=09if (of_property_read_bool(dn, "intel,virtual-wire-mode")) {
-+=09=09pr_info("Virtual Wire compatibility mode.\n");
-+=09=09pic_mode =3D 0;
-+=09} else {
-+=09=09pr_info("IMCR and PIC compatibility mode.\n");
-+=09=09pic_mode =3D 1;
-+=09}
-+
- =09register_lapic_address(lapic_addr);
- }
-=20
---=20
-2.17.1
+So since I asked for non D1 or virt systems, that's a no & no DTs
+actually needs to be fixed :)
+
+> > > This is not a new problem we are facing. Even in the ARM world,
+> > > the DT bindings grew organically over time based on newer platform
+> > > requirements.
+> > >
+> > > Now that we have a platform which does not want the time
+> > > C3STOP feature, we need to first come-up with DT bindings
+> > > to support this platform instead of temporarily disabling
+> > > features which don't work on this platform.
+> >
+> > It's the opposite surely? It should be "now that we have a platform that
+> > *does want* the C3STOP feature", right?
+> 
+> Yes, we can think this way as well.
+
+No, there's no "thinking" involved here from what I can tell. Pre-D1
+systems do not seem to need the flag and the D1 does want that flag for
+its riscv,timer. We have to operate with respect to hardware timelines
+& the corresponding software implementations, not specs in this context.
+
+If it was the case that you proposed, there would be no chance for
+regressions if someone updates their kernel but not their DT.
+
+> > > > > With all due respect, NACK to this patch from my side.
+> >
+> > As Samuel pointed out that the D1 doesn't actually use the timer in
+> > question, I think we are okay here?
+> 
+> Yes, that's why D1 needs the C3STOP flag.
+
+I don't understand what you mean here, you don't appear to be replying
+to what I said.
+
+I was saying that the current D1 configuration does not actually use
+the timer-riscv driver as there's another one that has a higher rating
+& therefore we are okay to not apply this patch as my revert will not
+cause it to be put into sleep states that it cannot return from.
+
+Your reply makes no sense to me in that context.
+
+Thanks,
+Conor.
 
