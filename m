@@ -2,81 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37A09636B38
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 21:33:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4853C636B41
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 21:33:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239551AbiKWUcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 15:32:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54084 "EHLO
+        id S238596AbiKWUce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 15:32:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239874AbiKWUbO (ORCPT
+        with ESMTP id S239770AbiKWUbR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 15:31:14 -0500
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5002AC6C
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 12:27:50 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id q13so3593257ild.3
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 12:27:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zjgLfIgymxMMYmWuqWPWGKjG2YLyiLx1k/rybg/+Fog=;
-        b=emU5TDI2MbojzF3Rj6h9/mvm8hyJXNIpA51tkz1gHiTfQayAEsPBQ8c57EjdSVqccs
-         Xpq979Mpem08d0+/EvxAUPsR+Td15FmnKynt9RhYPWjx0E7slJCcosYZi9ctJgx1ibhP
-         +fMSCtofTjP2GUS0UXEl/zFIlGfM9kvYGhVlAgeRCcT6GbRqa94SKJY+IVClsHzo+JQk
-         KcKif6hEWTbot7A42BaIG/7YCGRlXEulSixW6AIArWBoMfkUCAVTT2s0WHP6oYcLE1co
-         Sx7qud7gmKaHb/Yo7syu7hcKZAeY1zbeghQZqWoP5OT3X6K7Y/N1m0yKn6JPrWrLUWe+
-         M9Cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zjgLfIgymxMMYmWuqWPWGKjG2YLyiLx1k/rybg/+Fog=;
-        b=qqoa0QvHbOMZSMFyNAH0rz6lEot7g1H2LhKc0WPvQPNwlDk0slsatRf5JtPnQyF7CX
-         s8VrL/08yCboUaFFwNPs4YdpU8z1i1GDDun/kOtDOqIFv95xr79h7HmDZ0ERSGPcqiQt
-         uiWhZFam6n0OEokUEcwuC+XDZ70yGCcGBykEWTS/4fPPmNITCFjMt7y/iKhxeh68EHzL
-         7UtFoEMvB0ib4Ah8LDznTjgse4Ak55jpDxCoXfw0e/JjHJv5QZsyPmRZ9aVifsFYZ0w/
-         rn3PkDZFX60qPihnd+BrYCwNYQqNLIYNUI0huoH73gnYy8YzUGRIzOlr1/3V/3WZ6x/V
-         dVww==
-X-Gm-Message-State: ANoB5pnjVHz8rWsbxThhT/YzeT51n4TQyeqBLDDCoEBf8MT9MLLRyJCI
-        VwLWiBCDiSvWejjNO1O9sYj/FLDosWkmrlCwqep2xw==
-X-Google-Smtp-Source: AA0mqf59ynR8eDMr2FuXqeoM+2l8U8kyRTbLAClnQcYWMsZbsIH+WSZbh22svAe6rVnxi/kOupIIjWA5LwI+w3yB+ts=
-X-Received: by 2002:a92:6e07:0:b0:300:1f82:73e5 with SMTP id
- j7-20020a926e07000000b003001f8273e5mr4494601ilc.85.1669235269478; Wed, 23 Nov
- 2022 12:27:49 -0800 (PST)
+        Wed, 23 Nov 2022 15:31:17 -0500
+Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.148])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB65E4C
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 12:28:15 -0800 (PST)
+Received: (wp-smtpd smtp.tlen.pl 5473 invoked from network); 23 Nov 2022 21:28:11 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
+          t=1669235291; bh=4B+0gVhfeVMpr3xVWJpkPm7YJRc30ybzLuOA8k2a714=;
+          h=From:Subject:To:Cc;
+          b=Ce865vWNuhQr/TnVnyy1/+H8fh52Y3QBMV5MoOSY7SO8/PbBmJXmOQJXZe6PngaE9
+           MpsoFfXNDHkMCNFevc62TrSKI6oQ4HNoN6uMvnYqd7IaFKFo4p5LAinmh8V73xNUTZ
+           TxT4hdsEZBD/tu14YsLgmpRkxHGkKFoISy/649wU=
+Received: from aafn183.neoplus.adsl.tpnet.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[83.4.143.183])
+          (envelope-sender <mat.jonczyk@o2.pl>)
+          by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <jdelvare@suse.de>; 23 Nov 2022 21:28:11 +0100
+Message-ID: <140691e3-9c3d-4855-ad21-ec96e77e6693@o2.pl>
+Date:   Wed, 23 Nov 2022 21:28:10 +0100
 MIME-Version: 1.0
-References: <20221123124620.1387499-1-gregkh@linuxfoundation.org>
-In-Reply-To: <20221123124620.1387499-1-gregkh@linuxfoundation.org>
-From:   =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
-Date:   Wed, 23 Nov 2022 12:27:37 -0800
-Message-ID: <CANP3RGcno+UOsNTzqQ7XXjeOEQM+wseFramNNQyZ6U3bzc1yww@mail.gmail.com>
-Subject: Re: [PATCH] USB: disable all RNDIS protocol drivers
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        =?UTF-8?Q?=C5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
-        Ilja Van Sprundel <ivansprundel@ioactive.com>,
-        Joseph Tartaro <joseph.tartaro@ioactive.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+From:   =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>
+Subject: Re: [PATCH v2] acpi,pci: warn about duplicate IRQ routing entries
+ returned from _PRT
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Borislav Petkov <bp@suse.de>
+References: <20221112200927.7255-1-mat.jonczyk@o2.pl>
+ <20221113173442.5770-1-mat.jonczyk@o2.pl>
+ <20221115093617.519f3aeb@endymion.delvare>
+Content-Language: en-GB
+In-Reply-To: <20221115093617.519f3aeb@endymion.delvare>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: dfc6105109ff66cb953bd9e99eb03b64
+X-WP-AV: skaner antywirusowy Poczty o2
+X-WP-SPAM: NO 0000002 [8eGW]                               
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,192 +60,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 4:46 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+Hello,
+
+W dniu 15.11.2022 o 09:36, Jean Delvare pisze:
+> Hi Mateusz,
 >
-> The Microsoft RNDIS protocol is, as designed, insecure and vulnerable on
-> any system that uses it with untrusted hosts or devices.  Because the
-> protocol is impossible to make secure, just disable all rndis drivers to
-> prevent anyone from using them again.
+> On Sun, 13 Nov 2022 18:34:42 +0100, Mateusz Jończyk wrote:
+>> On some platforms, the ACPI _PRT function returns duplicate interrupt
+>> routing entries. Linux uses the first matching entry, but sometimes the
+>> second matching entry contains the correct interrupt vector.
+>>
+>> Print a warning to dmesg if duplicate interrupt routing entries are
+>> present, so that we could check how many models are affected.
+> Excellent idea. We want hardware manufacturers to fix such bugs in the
+> firmware, and the best way for this to happen is to report them
+> whenever they are encountered.
 >
-> Windows only needed this for XP and newer systems, Windows systems older
-> than that can use the normal USB class protocols instead, which do not
-> have these problems.
+>> This happens on a Dell Latitude E6500 laptop with the i2c-i801 Intel
+>> SMBus controller. This controller was nonfunctional unless its interrupt
+>> usage was disabled (using the "disable_features=0x10" module parameter).
+>>
+>> After investigation, it turned out that the driver was using an
+>> incorrect interrupt vector: in lspci output for this device there was:
+>>         Interrupt: pin B routed to IRQ 19
+>> but after running i2cdetect (without using any i2c-i801 module
+>> parameters) the following was logged to dmesg:
+>>
+>>         [...]
+>>         i801_smbus 0000:00:1f.3: Timeout waiting for interrupt!
+>>         i801_smbus 0000:00:1f.3: Transaction timeout
+>>         i801_smbus 0000:00:1f.3: Timeout waiting for interrupt!
+>>         i801_smbus 0000:00:1f.3: Transaction timeout
+>>         irq 17: nobody cared (try booting with the "irqpoll" option)
+>>
+>> Existence of duplicate entries in a table returned by the _PRT method
+>> was confirmed by disassembling the ACPI DSDT table.
+> Excuse a probably stupid question, but what would happen if we would
+> plain ignore the IRQ routing information from ACPI in this case? Would
+> we fallback to some pure-PCI routing logic which may have a chance to
+> find the right IRQ routing (matching the second ACPI routing entry in
+> this case)?
+
+From what I understand, the PCI IRQ routing information is not discoverable
+by probing the hardware (in the general case), it has to be obtained from
+the ACPI tables (or perhaps from the obsolete MP tables, also provided by
+firmware). See https://docs.kernel.org/PCI/acpi-info.html :
+
+> For example, there’s no standard hardware mechanism for enumerating PCI
+> host bridges, so the ACPI namespace must describe each host bridge,
+> the method for accessing PCI config space below it, the address space
+> windows the host bridge forwards to PCI (using _CRS), and the routing
+> of legacy INTx interrupts (using _PRT).
+
+(a PCI host bridge connects the CPU cores to the PCI bus, it is the root of the PCI
+device tree. This patch concerns the "legacy INTx interrupts" as above).
+
+In the case of this particular laptop, however, it should be possible to obtain
+the information by reading chipset registers, which are documented at
+https://www.intel.com/content/www/us/en/io/io-controller-hub-9-datasheet.html
+But this is difficult to implement in every case.
+
+>> Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+>> Cc: Bjorn Helgaas <bhelgaas@google.com>
+>> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+>> Cc: Len Brown <lenb@kernel.org>
+>> Cc: Borislav Petkov <bp@suse.de>
+>> Cc: Jean Delvare <jdelvare@suse.com>
+>>
+>> --
+>> v2: - add a newline at the end of the kernel log message,
+>>     - replace: "if (match == NULL)" -> "if (!match)"
+>>     - patch description tweaks.
+>>
+>> Tested on two computers, including the affected Dell Latitude E6500 laptop.
+>>
+>>  drivers/acpi/pci_irq.c | 25 ++++++++++++++++++++++---
+>>  1 file changed, 22 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/acpi/pci_irq.c b/drivers/acpi/pci_irq.c
+>> index 08e15774fb9f..a4e41b7b71ed 100644
+>> --- a/drivers/acpi/pci_irq.c
+>> +++ b/drivers/acpi/pci_irq.c
+>> @@ -203,6 +203,8 @@ static int acpi_pci_irq_find_prt_entry(struct pci_dev *dev,
+>>  	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
+>>  	struct acpi_pci_routing_table *entry;
+>>  	acpi_handle handle = NULL;
+>> +	struct acpi_prt_entry *match = NULL;
+>> +	const char *match_int_source = NULL;
+>>  
+>>  	if (dev->bus->bridge)
+>>  		handle = ACPI_HANDLE(dev->bus->bridge);
+>> @@ -219,13 +221,30 @@ static int acpi_pci_irq_find_prt_entry(struct pci_dev *dev,
+>>  
+>>  	entry = buffer.pointer;
+>>  	while (entry && (entry->length > 0)) {
+>> -		if (!acpi_pci_irq_check_entry(handle, dev, pin,
+>> -						 entry, entry_ptr))
+>> -			break;
+>> +		struct acpi_prt_entry *curr;
+>> +
+>> +		if (!acpi_pci_irq_check_entry(handle, dev, pin, entry, &curr)) {
+>> +			if (!match) {
+>> +				match = curr;
+>> +				match_int_source = entry->source;
+>> +			} else {
+>> +				pr_warn(FW_BUG
+>> +				"ACPI _PRT returned duplicate IRQ routing entries for device "
+>> +					"%04x:%02x:%02x[INT%c]: %s[%d] and %s[%d].\n",
+> The beginning of the string should be aligned with the opening
+> parenthesis, and the string should be on a single line (this is a
+> encouraged exception to the 80-column rule). I would also omit the
+> tailing dot for consistency.
+OK
+>> +					curr->id.segment, curr->id.bus, curr->id.device,
+> Is the IRQ per PCI device, or per PCI function? If the latter, then you
+> should print "%02x.%x" instead of just "%02x", with the extra element
+> being curr->id.function.
+
+This is per PCI device.
+
+[snip]
+
+> Reviewed-by: Jean Delvare <jdelvare@suse.de>
+> Tested-by: Jean Delvare <jdelvare@suse.de>
 >
-> Android has had this disabled for many years so there should not be any
-> real systems that still need this.
+> (Tested on a Dell OptiPlex 9020 not affected by the problem.)
 >
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Kalle Valo <kvalo@kernel.org>
-> Cc: Oleksij Rempel <linux@rempel-privat.de>
-> Cc: "Maciej =C5=BBenczykowski" <maze@google.com>
-> Cc: Neil Armstrong <neil.armstrong@linaro.org>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>
-> Cc: Jacopo Mondi <jacopo@jmondi.org>
-> Cc: "=C5=81ukasz Stelmach" <l.stelmach@samsung.com>
-> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Cc: linux-usb@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-wireless@vger.kernel.org
-> Reported-by: Ilja Van Sprundel <ivansprundel@ioactive.com>
-> Reported-by: Joseph Tartaro <joseph.tartaro@ioactive.com>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
-> Note, I'll submit patches removing the individual drivers for later, but
-> that is more complex as unwinding the interaction between the CDC
-> networking and RNDIS drivers is tricky.  For now, let's just disable all
-> of this code as it is not secure.
->
-> I can take this through the USB tree if the networking maintainers have
-> no objection.  I thought I had done this months ago, when the last round
-> of "there are bugs in the protocol!" reports happened at the end of
-> 2021, but forgot to do so, my fault.
->
->  drivers/net/usb/Kconfig           | 1 +
->  drivers/net/wireless/Kconfig      | 1 +
->  drivers/usb/gadget/Kconfig        | 4 +---
->  drivers/usb/gadget/legacy/Kconfig | 3 +++
->  4 files changed, 6 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/net/usb/Kconfig b/drivers/net/usb/Kconfig
-> index 4402eedb3d1a..83f9c0632642 100644
-> --- a/drivers/net/usb/Kconfig
-> +++ b/drivers/net/usb/Kconfig
-> @@ -401,6 +401,7 @@ config USB_NET_MCS7830
->  config USB_NET_RNDIS_HOST
->         tristate "Host for RNDIS and ActiveSync devices"
->         depends on USB_USBNET
-> +       depends on BROKEN
->         select USB_NET_CDCETHER
->         help
->           This option enables hosting "Remote NDIS" USB networking links,
+Thank you for reviewing.
 
-NACK.
+Greetings,
 
-I'm perfectly okay with disabling the gadget (guest/client/device)
-side rndis drivers.
-New devices (ie. phones) moving to newer kernels should simply be
-switching to the NCM gadget drivers.
-Especially since AFAICT this won't land until 6.2 and thus will
-presumably not be in the 6.1 LTS and thus won't even end up in next
-year's Android 14/U,
-and instead will only be present on the absolutely freshest Android
-15/V devices launching near the end of 2024 (or really in early 2025).
-Additionally the gadget side upstream RNDIS implementation simply
-isn't used by some chipset vendors - like Qualcomm (which AFAIK uses
-an out of tree driver to provide rndis gadget with IPA hardware
-offload acceleration).
+Mateusz
 
-However, AFAICT this patch is also disabling *HOST* side RNDIS driver suppo=
-rt.
-
-ie. the RNDIS driver you'd use on a Linux laptop to usb tether off of
-an Android phone.
-
-AFAICT this will break usb tethering off of the *vast* majority of
-Android phones - likely including most of those currently being
-manufactured and sold.
-
-The only Android phones I'm actually aware of that have switched to
-NCM instead of RNDIS for usb tethering are Google Pixel 6+ (ie.
-6/6pro/6a/7/7pro).
-Though it's possible there might be some relatively new hardware from
-other phone vendors that also uses NCM - I don't track this that
-closely...
-I do know Android 13/T doesn't require phones to use NCM for
-tethering, and I've not heard of any plans to change that with Android
-14/U either...
-
-Note that NCM isn't natively supported by Windows <10 and it required
-a fair bit of 'guts' on our side to drop support for usb tethering
-Windows 8.1 devices prior to Win 8.1 EOL (which is only this coming
-January).
-
-Yes, AFAICT, this patch as currently written will break usb tethering
-off of a Google Pixel ../3/4/5,
-and I'd assume any and all qualcomm chipset derived devices, etc...
-
-ie. most likely the first of these two and possibly the second are required=
-:
-CONFIG_USB_NET_RNDIS_HOST=3Dm
-CONFIG_USB_NET_RNDIS_WLAN=3Dm
-
-(AFAIK the rndis host side driver is also used by various cell dongles
-and portable cell hotspots)
-
-[I also don't understand the commit description where it talks about
-Windows XP - how is XP relevant? AFAIK the issue is with Win<10 not
-WinXP]
-
-> diff --git a/drivers/net/wireless/Kconfig b/drivers/net/wireless/Kconfig
-> index cb1c15012dd0..f162b25123d7 100644
-> --- a/drivers/net/wireless/Kconfig
-> +++ b/drivers/net/wireless/Kconfig
-> @@ -81,6 +81,7 @@ config USB_NET_RNDIS_WLAN
->         tristate "Wireless RNDIS USB support"
->         depends on USB
->         depends on CFG80211
-> +       depends on BROKEN
->         select USB_NET_DRIVERS
->         select USB_USBNET
->         select USB_NET_CDCETHER
-> diff --git a/drivers/usb/gadget/Kconfig b/drivers/usb/gadget/Kconfig
-> index 4fa2ddf322b4..2c99d4313064 100644
-> --- a/drivers/usb/gadget/Kconfig
-> +++ b/drivers/usb/gadget/Kconfig
-> @@ -183,9 +183,6 @@ config USB_F_EEM
->  config USB_F_SUBSET
->         tristate
->
-> -config USB_F_RNDIS
-> -       tristate
-> -
->  config USB_F_MASS_STORAGE
->         tristate
->
-> @@ -297,6 +294,7 @@ config USB_CONFIGFS_RNDIS
->         bool "RNDIS"
->         depends on USB_CONFIGFS
->         depends on NET
-> +       depends on BROKEN
->         select USB_U_ETHER
->         select USB_F_RNDIS
->         help
-> diff --git a/drivers/usb/gadget/legacy/Kconfig b/drivers/usb/gadget/legac=
-y/Kconfig
-> index 0a7b382fbe27..03d6da63edf7 100644
-> --- a/drivers/usb/gadget/legacy/Kconfig
-> +++ b/drivers/usb/gadget/legacy/Kconfig
-> @@ -153,6 +153,7 @@ config USB_ETH
->  config USB_ETH_RNDIS
->         bool "RNDIS support"
->         depends on USB_ETH
-> +       depends on BROKEN
->         select USB_LIBCOMPOSITE
->         select USB_F_RNDIS
->         default y
-> @@ -247,6 +248,7 @@ config USB_FUNCTIONFS_ETH
->  config USB_FUNCTIONFS_RNDIS
->         bool "Include configuration with RNDIS (Ethernet)"
->         depends on USB_FUNCTIONFS && NET
-> +       depends on BROKEN
->         select USB_U_ETHER
->         select USB_F_RNDIS
->         help
-> @@ -427,6 +429,7 @@ config USB_G_MULTI
->  config USB_G_MULTI_RNDIS
->         bool "RNDIS + CDC Serial + Storage configuration"
->         depends on USB_G_MULTI
-> +       depends on BROKEN
->         select USB_F_RNDIS
->         default y
->         help
-> --
-> 2.38.1
->
-Maciej =C5=BBenczykowski, Kernel Networking Developer @ Google
