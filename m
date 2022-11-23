@@ -2,123 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 641EA6367EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:00:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D26B16367E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:00:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238936AbiKWSA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 13:00:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52886 "EHLO
+        id S238640AbiKWSAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 13:00:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238650AbiKWSAY (ORCPT
+        with ESMTP id S236875AbiKWSAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 13:00:24 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A940D2D741;
-        Wed, 23 Nov 2022 10:00:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=EYzonTBkqTC9UWGLyjpc9x9J1BcQF0kByl1sDiQq+FM=; b=RZfJNgokp9yAuCF0f4VaqGLucW
-        jadEdnjqdDcWiMevKYrbHCLGV91kOSbZOy+jqSyoYv9E1+mOnaun2MEVyYCnR+Rn5MSiME3RW9iy0
-        Bg57st+nr6Bau6DxXwclhYnN499E3wW1etLZIS2mzdI43oDTyCxs5p4X0ehT80+8Iavk5Zca6yumq
-        YdXIfKJgwyxbKfoKRtq/OI/ZrZKLqeNrPwBXzRi2ZcZqmM9X7PyZvmySE8cTVDIAuteWIHciyXQMT
-        cljX/6emsm+HvGcH7ZS2ZKGaksXgjZrBVPjLjECTL0E/SnS5GQvEqAjSU1r78ItrP0pbE9w5a9fXZ
-        GTzAK9qg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oxu2p-007t5i-Iz; Wed, 23 Nov 2022 18:00:23 +0000
-Date:   Wed, 23 Nov 2022 18:00:23 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        Wolfram Sang <wsa@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        Jilin Yuan <yuanjilin@cdjrlc.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Won Chung <wonchung@google.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-i3c@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH 3/5] driver core: make struct device_type.uevent() take a
- const *
-Message-ID: <Y35ftyYlE8FX8xQO@casper.infradead.org>
-References: <711d5275-7e80-c00d-0cdc-0f3d52175361@gmail.com>
- <Y34hgIW8p1RlQTBB@smile.fi.intel.com>
- <97be39ed-3cea-d55a-caa6-c2652baef399@gmail.com>
- <Y34zyzdbRUdyOSkA@casper.infradead.org>
- <Y34+V2bCDdqujBDk@kroah.com>
- <Y35JfNJDppRp5bLX@ziepe.ca>
- <Y35R+/eQJYI7VaDS@kroah.com>
- <Y35YlI93UBuTfgYy@ziepe.ca>
- <Y35dMIaNYSE0Cykd@casper.infradead.org>
- <Y35enjI+dhhqiG3B@ziepe.ca>
+        Wed, 23 Nov 2022 13:00:11 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4A960F9
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 10:00:10 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id h24so11719597qta.9
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 10:00:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9A8cQiLxG2eDxIN9LqbxR9kHprQzAjhFPvRfMzy2nbA=;
+        b=JThIsrnalYZmSDDhQKwWGGeuUVFsTtfznTSg/LnbVkKWTcX9TtIOv42OyoGs/EtBM8
+         5lKGVFslA1HnCNcURKMoM7T/K5hQwmN15JAejQfmZfRaoCm/MMDOmrdCHuzVCDcYlBOm
+         3IAENmp+qd/OJOhBTPrmss/VakKTnaf6J5wSznE4djUqzpdYatYSslwQHPZmXSf277kI
+         D2w+/RQ5P18zqyLmhAbeXS1zvALCeHv+RG+/JYfuS9W+4DGU4sd57x7C61z2PraoCam2
+         GEGp6cj7FfpM9ECL7TpcAPgq0EZ2u8/s5TQ1PwqG5SQpnHDtFREeAmmJ6yvoVy//Qa5W
+         SsjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9A8cQiLxG2eDxIN9LqbxR9kHprQzAjhFPvRfMzy2nbA=;
+        b=V58NuEbUghfL1rcM+fD4sa1X06z7yBxwXp6TUcmfTg9ZGhZAHKr62VG7n1auu0wTjN
+         2SHXHfEMCb8cYhJI2zFp48LsKNoESyU9VlK0ZPXg1MEYQnQSnIn04caInxjsYUu5ArzX
+         nAeDQxfHorBG0rpsRjwq2ZXdNNdNJH7EFzR2Fq8leVc9bpOdC0XEKAIry/03+FkuI6QG
+         vUWoNEmHL7loqeYH1XRlexEvaXqD2c+Drrdo3BK8i805AMSu6Yksm18SCH8LKChpWnU+
+         BfIenJFh2EWjkFt9CpqPlak0NIR4SWmUFcErXzZoUSCjnPHjIO+Jr/0S+rbdZ4jKOtZ0
+         Ew2A==
+X-Gm-Message-State: ANoB5pmiRkIq9m3ezEw2gu1o4AVlSyC6EuphzPBE5YO6YDQyFIKsso5p
+        Jr4wa4MawqXOfDvY7TTzu0VD/A==
+X-Google-Smtp-Source: AA0mqf7yzb7BfNDeGRABLsmwYWSqaGKI2q66TVb/68TnDeMjm5zA8YnyzmhmQSDqNQ1wSvG+wsNWTA==
+X-Received: by 2002:a05:622a:4890:b0:3a5:84b9:3292 with SMTP id fc16-20020a05622a489000b003a584b93292mr27137746qtb.119.1669226409525;
+        Wed, 23 Nov 2022 10:00:09 -0800 (PST)
+Received: from localhost ([2620:10d:c091:480::1:bc4])
+        by smtp.gmail.com with ESMTPSA id i10-20020a05620a404a00b006bb8b5b79efsm12868905qko.129.2022.11.23.10.00.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 10:00:09 -0800 (PST)
+Date:   Wed, 23 Nov 2022 13:00:35 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     Huang Ying <ying.huang@intel.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
+        shakeelb@google.com, gthelen@google.com, fvdl@google.com,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [RFC PATCH V1] mm: Disable demotion from proactive reclaim
+Message-ID: <Y35fw2JSAeAddONg@cmpxchg.org>
+References: <20221122203850.2765015-1-almasrymina@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y35enjI+dhhqiG3B@ziepe.ca>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221122203850.2765015-1-almasrymina@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 01:55:42PM -0400, Jason Gunthorpe wrote:
-> On Wed, Nov 23, 2022 at 05:49:36PM +0000, Matthew Wilcox wrote:
-> > On Wed, Nov 23, 2022 at 01:29:56PM -0400, Jason Gunthorpe wrote:
-> > > #define generic_container_of(in_type, in, out_type, out_member) \
-> > > 	_Generic(in,                                        \
-> > >                   const in_type *: ((const out_type *)container_of(in, out_type, out_member)),   \
-> > >                   in_type *: ((out_type *)container_of(in, out_type, out_member)) \
-> > > 		  )
-> > 
-> > There's a neat trick I found in seqlock.h:
-> > 
-> > #define generic_container_of(in_t, in, out_t, m)			\
-> > 	_Generic(*(in),							\
-> > 		const in_t: ((const out_t *)container_of(in, out_t, m)), \
-> > 		in_t: ((out_t *)container_of(in, out_type, m))	\
-> > 	)
-> >
-> > and now it fits in 80 columns ;-)
-> 
-> Aside from less letters, is their another benifit to using *(in) ?
+Hello Mina,
 
-I don't think so.  It just looks nicer to me than putting the star in
-each case.  If I'd thought of it, I would have done it to page_folio(),
-but I won't change it now.
+On Tue, Nov 22, 2022 at 12:38:45PM -0800, Mina Almasry wrote:
+> Since commit 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg
+> reclaim""), the proactive reclaim interface memory.reclaim does both
+> reclaim and demotion. This is likely fine for us for latency critical
+> jobs where we would want to disable proactive reclaim entirely, and is
+> also fine for latency tolerant jobs where we would like to both
+> proactively reclaim and demote.
+> 
+> However, for some latency tiers in the middle we would like to demote but
+> not reclaim. This is because reclaim and demotion incur different latency
+> costs to the jobs in the cgroup. Demoted memory would still be addressable
+> by the userspace at a higher latency, but reclaimed memory would need to
+> incur a pagefault.
+> 
+> To address this, I propose having reclaim-only and demotion-only
+> mechanisms in the kernel. There are a couple possible
+> interfaces to carry this out I considered:
+> 
+> 1. Disable demotion in the memory.reclaim interface and add a new
+>    demotion interface (memory.demote).
+> 2. Extend memory.reclaim with a "demote=<int>" flag to configure the demotion
+>    behavior in the kernel like so:
+>    	- demote=0 would disable demotion from this call.
+> 	- demote=1 would allow the kernel to demote if it desires.
+> 	- demote=2 would only demote if possible but not attempt any
+> 	  other form of reclaim.
+
+Unfortunately, our proactive reclaim stack currently relies on
+memory.reclaim doing both. It may not stay like that, but I'm a bit
+wary of changing user-visible semantics post-facto.
+
+In patch 2, you're adding a node interface to memory.demote. Can you
+add this to memory.reclaim instead? This would allow you to control
+demotion and reclaim independently as you please: if you call it on a
+node with demotion targets, it will demote; if you call it on a node
+without one, it'll reclaim. And current users will remain unaffected.
