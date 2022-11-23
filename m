@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57091635C4D
+	by mail.lfdr.de (Postfix) with ESMTP id A2A35635C4E
 	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 13:01:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237086AbiKWMAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 07:00:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37174 "EHLO
+        id S237134AbiKWMAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 07:00:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236982AbiKWMAa (ORCPT
+        with ESMTP id S237133AbiKWMAp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 07:00:30 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE87A7651
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 04:00:27 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id r12so27883321lfp.1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 04:00:27 -0800 (PST)
+        Wed, 23 Nov 2022 07:00:45 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36249624A
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 04:00:44 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id s8so27820396lfc.8
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 04:00:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=x5p4E1mI/PEqffjz8f8OBqeFrGyZRJUVUJmG4+2QrCs=;
-        b=jycwFKbXMlZHgNRBW8WkRiTlZgPFeIVvaxQAfGZ77WVlLnzg6fqwEwUkshRSp/1sEr
-         2kxb8Uw8xAnQ+rXrXSBpw07NrlYZiNEG0RO7DHwZK+bpX5JOL/Vnml8/UfIqleJMjOzg
-         xD+IS9wKm+8JUx/MqGnfqAa2d9JgO9kaJafjxEFzuW1pIuz8syhr98hagafP6/gCOLCq
-         LrNyFz+/L+ke8h0eqecdo1uUigr6qA1qEcves9XU99qT5XmWaKItuTJ4XvKJV2xvOG8u
-         pKXT6NzjYySfqCVkvnEF2cYQseWQlfvlWMQ3conHtYBE09428AUHOQ99XJHmUUEiFXj2
-         CFkQ==
+        bh=hcR8ovYNo2My0WUKcVnNmYC5cYpEMC0rr3gdSJ74NfU=;
+        b=ZrlPHAS+WGiK3Lav2tjX9E3L3EQhNwAGul34uyaC6bhMi4CQY5elSYO++LxtQ+rIG7
+         pynaS8fphG+u0aowuVnGAGSO308yaigyNIPmgo2h9itDgHFQKi03T7NGZl+96WAr7+k1
+         OKf6GBFSb/8U0NObV+mVI5sikProfgzcwhqJoiErqM490fCODGRBD2biWQLeX63LAIT6
+         9gHBFjNOMOc5CaeR8dEZKz+2i9v0z5qpZpEep3MVS+ZoeSAmAo3SN1wnPVS6uKXFPs71
+         fqYOZt/GYlz08sOgbf1t2FvLTMExnQPPTa0b6TK1jk+wTPp1uNOznGI4Yk9le4LNWiDs
+         vwWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=x5p4E1mI/PEqffjz8f8OBqeFrGyZRJUVUJmG4+2QrCs=;
-        b=YLrvuUUEDRSgLAs51OB/do0sRXNRJ2i6et0dwlRYH6LZs0C5xLKJ7BerQYJ8UgLp9+
-         Drm27SZUQ5pgkrnc2VUsNkRxvCcAa3y8PqbmfQpwQonmz6ycsx59qTA+gRSxcCyPcDGr
-         eSa1gmDJiWaCbpyY1Ns5VHmk/XlHZEOPqYseIZKACh89KP5jH8FGkozWTNxT1Bhi7KeV
-         u+vecBQJZHXc3VCFbPga+cgeLijKhgxkf/ZO4dvbKwh1HhjirtyFT0Dk+v86CE2Q1Qt2
-         n0tOsxG59ZAeJzh/xkH5FBq1IjW3Cx2/rBNx2otUsHPIHFGxUdf2DBcR5gEuA9a1VGDf
-         SRNw==
-X-Gm-Message-State: ANoB5plABJCQdew3wy4UK6KRYjGIQX3vplPCfISCuEjQWoMQP/TeEnrE
-        4KLzFX2WzfF7k/vmMR429D/aLpcEkyI=
-X-Google-Smtp-Source: AA0mqf7YwukOfXWDIg4MANymtbNnIERJFhiOnpyWK/h5C6t5SIzAllEgcRBjpxjIBGXX9x0hs5fVlw==
-X-Received: by 2002:a05:6512:3c83:b0:4a2:3a78:106d with SMTP id h3-20020a0565123c8300b004a23a78106dmr9000513lfv.419.1669204826033;
-        Wed, 23 Nov 2022 04:00:26 -0800 (PST)
+        bh=hcR8ovYNo2My0WUKcVnNmYC5cYpEMC0rr3gdSJ74NfU=;
+        b=TLCDroC83hHX9dRrRPu09a9hfEkH9w2YnfqNWGW9hvrYBybRbbpMXNCqiTNDSHuWIp
+         Yq0iD/5phcZk3sK7dSjteKQ6EKSEABaPCF6gee1WC11ESBKlES9pikfRcP5nbJ3y2gYU
+         hIXDPY2qRDzLvyYSFG5r+FZz/DyszAYEEyKm+fsGBQmGnJK/093HwVmRRah4DtYcMD41
+         1EseJA3FLGnJ4127NDJjHBraPoVvFe5Jkss1QwesU3PotorYvnk5G/nHsP//4HHtvdgy
+         2zatYOsvjp+EH4nl4l5MmX1BgiiAEa6bkarVIwUqY9CsPHuP6XpusE/CtiplWcvroJdt
+         kshg==
+X-Gm-Message-State: ANoB5pl4U1IWzBbCfTUPPSNspUxYc7EXIUS36MZcdIxj/SRL1wzbLUPq
+        jPLhO4c/UCW3SGPKdy0wJEEBOODMDM4=
+X-Google-Smtp-Source: AA0mqf5fQTrrGiUBe6YgPLonglnqFdXNQLBvN4RKRcZqL01u41/3wbm9cmGiL8uHKDcF+fq8QsecuA==
+X-Received: by 2002:a05:6512:68b:b0:4a8:d2b7:ed5c with SMTP id t11-20020a056512068b00b004a8d2b7ed5cmr10789411lfe.434.1669204842474;
+        Wed, 23 Nov 2022 04:00:42 -0800 (PST)
 Received: from fedora ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id q21-20020a056512211500b004aa3d587c84sm2881410lfr.200.2022.11.23.04.00.25
+        by smtp.gmail.com with ESMTPSA id o7-20020ac25e27000000b004b48c977d8dsm2892067lfg.125.2022.11.23.04.00.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 04:00:25 -0800 (PST)
-Date:   Wed, 23 Nov 2022 14:00:21 +0200
+        Wed, 23 Nov 2022 04:00:41 -0800 (PST)
+Date:   Wed, 23 Nov 2022 14:00:38 +0200
 From:   Matti Vaittinen <mazziesaccount@gmail.com>
 To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Matti Vaittinen <mazziesaccount@gmail.com>
 Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/3] regulator: bd71815: bd71828: bd9576: Use dev_err_probe()
-Message-ID: <0b644da4a8f58558ffe474d2593f85c46de2f965.1669203610.git.mazziesaccount@gmail.com>
+Subject: [PATCH 3/3] regulator: bd718x7: Use dev_err_probe()
+Message-ID: <fee54c2d04bb41b51381e31523f9ed31575206d2.1669203610.git.mazziesaccount@gmail.com>
 References: <cover.1669203610.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="pD2NDMyRXoJxPXvH"
+        protocol="application/pgp-signature"; boundary="+iqplJKpcdzleyKU"
 Content-Disposition: inline
 In-Reply-To: <cover.1669203610.git.mazziesaccount@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,7 +75,7 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---pD2NDMyRXoJxPXvH
+--+iqplJKpcdzleyKU
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
@@ -97,151 +97,162 @@ driver probe:
         if (ret)
                 return dev_err_probe(...);
 
-Convert the ROHM BD71828, ROHM BD71815 and ROHM BD9576 regulator drivers
-to use the dev_err_probe() when returned error is not hard-coded constant.
+Convert the ROHM BD718x7 regulator driver to use the dev_err_probe() when
+returned error is not hard-coded constant.
+
+NOTE:
+This commit also changes the error handling path to return immediately
+=66rom a spot where the error is spotted instead of using a single point
+of exit.
 
 Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
----
- drivers/regulator/bd71815-regulator.c | 10 ++---
- drivers/regulator/bd71828-regulator.c | 21 +++++------
- drivers/regulator/bd9576-regulator.c  | 54 +++++++++++++--------------
- 3 files changed, 38 insertions(+), 47 deletions(-)
 
-diff --git a/drivers/regulator/bd71815-regulator.c b/drivers/regulator/bd71=
-815-regulator.c
-index c2b8b8be7824..8b55046eded8 100644
---- a/drivers/regulator/bd71815-regulator.c
-+++ b/drivers/regulator/bd71815-regulator.c
-@@ -602,12 +602,10 @@ static int bd7181x_probe(struct platform_device *pdev)
- 			config.ena_gpiod =3D NULL;
+---
+For many years I have preferred a single point of exit in a function
+when managing it does not require any big tricks. In my experience a
+single point of exit makes resource-leaking and lock releasing much less
+error prone. Eg, consider mistakes like:
+
+=2E..
+mutex_lock(&mtx)
+=2E..
+if (err)
+	return err;
+=2E..
+mutex_unlock(&mtx);
+
+return 0;
+
+Vs.
+
+=2E..
+mutex_lock(&mtx)
+=2E..
+if (err)
+	goto err_out;
+=2E..
+
+err_out:
+mutex_unlock(&mtx);
+
+return err;
+
+I still think a single point of exit is often a good idea. However, I am
+slowly adapting to thought that the single point of exit does not really
+play a big role in bd718x7 regulator probe and using dev_err_probe()
+allows us to avoid the extra {} after condition... So, maybe it indeed
+is a time for me to ditch the goto here. Please, let me know if you
+think othervice :)
+---
+ drivers/regulator/bd718x7-regulator.c | 51 ++++++++++-----------------
+ 1 file changed, 19 insertions(+), 32 deletions(-)
+
+diff --git a/drivers/regulator/bd718x7-regulator.c b/drivers/regulator/bd71=
+8x7-regulator.c
+index d161b0026f33..894fab0d53d0 100644
+--- a/drivers/regulator/bd718x7-regulator.c
++++ b/drivers/regulator/bd718x7-regulator.c
+@@ -1706,20 +1706,17 @@ static int bd718xx_probe(struct platform_device *pd=
+ev)
+ 		break;
+ 	default:
+ 		dev_err(&pdev->dev, "Unsupported chip type\n");
+-		err =3D -EINVAL;
+-		goto err;
++		return -EINVAL;
+ 	}
+=20
+ 	/* Register LOCK release */
+ 	err =3D regmap_update_bits(regmap, BD718XX_REG_REGLOCK,
+ 				 (REGLOCK_PWRSEQ | REGLOCK_VREG), 0);
+-	if (err) {
+-		dev_err(&pdev->dev, "Failed to unlock PMIC (%d)\n", err);
+-		goto err;
+-	} else {
+-		dev_dbg(&pdev->dev, "Unlocked lock register 0x%x\n",
+-			BD718XX_REG_REGLOCK);
+-	}
++	if (err)
++		return dev_err_probe(&pdev->dev, err, "Failed to unlock PMIC\n");
++
++	dev_dbg(&pdev->dev, "Unlocked lock register 0x%x\n",
++		BD718XX_REG_REGLOCK);
+=20
+ 	use_snvs =3D of_property_read_bool(pdev->dev.parent->of_node,
+ 					 "rohm,reset-snvs-powered");
+@@ -1736,13 +1733,11 @@ static int bd718xx_probe(struct platform_device *pd=
+ev)
+ 					 BD718XX_WDOG_POWEROFF_MASK |
+ 					 BD718XX_KEY_L_POWEROFF_MASK,
+ 					 BD718XX_POWOFF_TO_RDY);
+-		if (err) {
+-			dev_err(&pdev->dev, "Failed to change reset target\n");
+-			goto err;
+-		} else {
+-			dev_dbg(&pdev->dev,
+-				"Changed all resets from SVNS to READY\n");
+-		}
++		if (err)
++			return dev_err_probe(&pdev->dev, err,
++					     "Failed to change reset target\n");
++
++		dev_dbg(&pdev->dev, "Changed all resets from SVNS to READY\n");
+ 	}
+=20
+ 	config.dev =3D pdev->dev.parent;
+@@ -1778,13 +1773,10 @@ static int bd718xx_probe(struct platform_device *pd=
+ev)
+ 			desc->ops =3D swops[i];
 =20
  		rdev =3D devm_regulator_register(&pdev->dev, desc, &config);
 -		if (IS_ERR(rdev)) {
 -			dev_err(&pdev->dev,
 -				"failed to register %s regulator\n",
 -				desc->name);
--			return PTR_ERR(rdev);
+-			err =3D PTR_ERR(rdev);
+-			goto err;
 -		}
 +		if (IS_ERR(rdev))
 +			return dev_err_probe(&pdev->dev, PTR_ERR(rdev),
 +					     "failed to register %s regulator\n",
 +					     desc->name);
- 	}
- 	return 0;
- }
-diff --git a/drivers/regulator/bd71828-regulator.c b/drivers/regulator/bd71=
-828-regulator.c
-index a4f09a5a30ca..ad728f4f2241 100644
---- a/drivers/regulator/bd71828-regulator.c
-+++ b/drivers/regulator/bd71828-regulator.c
-@@ -750,23 +750,20 @@ static int bd71828_probe(struct platform_device *pdev)
- 		rd =3D &bd71828_rdata[i];
- 		rdev =3D devm_regulator_register(&pdev->dev,
- 					       &rd->desc, &config);
--		if (IS_ERR(rdev)) {
--			dev_err(&pdev->dev,
--				"failed to register %s regulator\n",
--				rd->desc.name);
--			return PTR_ERR(rdev);
--		}
-+		if (IS_ERR(rdev))
-+			return dev_err_probe(&pdev->dev, PTR_ERR(rdev),
-+					     "failed to register %s regulator\n",
-+					     rd->desc.name);
-+
- 		for (j =3D 0; j < rd->reg_init_amnt; j++) {
- 			ret =3D regmap_update_bits(config.regmap,
- 						 rd->reg_inits[j].reg,
- 						 rd->reg_inits[j].mask,
- 						 rd->reg_inits[j].val);
--			if (ret) {
+=20
+ 		/*
+ 		 * Regulator register gets the regulator constraints and
+@@ -1807,28 +1799,23 @@ static int bd718xx_probe(struct platform_device *pd=
+ev)
+ 		    !rdev->constraints->boot_on)) {
+ 			err =3D regmap_update_bits(regmap, r->init.reg,
+ 						 r->init.mask, r->init.val);
+-			if (err) {
 -				dev_err(&pdev->dev,
--					"regulator %s init failed\n",
--					rd->desc.name);
--				return ret;
++			if (err)
++				return dev_err_probe(&pdev->dev, err,
+ 					"Failed to take control for (%s)\n",
+ 					desc->name);
+-				goto err;
 -			}
-+			if (ret)
-+				return dev_err_probe(&pdev->dev, ret,
-+						     "regulator %s init failed\n",
-+						     rd->desc.name);
+ 		}
+ 		for (j =3D 0; j < r->additional_init_amnt; j++) {
+ 			err =3D regmap_update_bits(regmap,
+ 						 r->additional_inits[j].reg,
+ 						 r->additional_inits[j].mask,
+ 						 r->additional_inits[j].val);
+-			if (err) {
+-				dev_err(&pdev->dev,
++			if (err)
++				return dev_err_probe(&pdev->dev, err,
+ 					"Buck (%s) initialization failed\n",
+ 					desc->name);
+-				goto err;
+-			}
  		}
  	}
- 	return 0;
-diff --git a/drivers/regulator/bd9576-regulator.c b/drivers/regulator/bd957=
-6-regulator.c
-index 393c8693b327..02c70768652b 100644
---- a/drivers/regulator/bd9576-regulator.c
-+++ b/drivers/regulator/bd9576-regulator.c
-@@ -953,30 +953,28 @@ static int bd957x_probe(struct platform_device *pdev)
- 					   dev_fwnode(pdev->dev.parent),
- 					   "rohm,vout1-en", GPIOD_OUT_LOW,
- 					   "vout1-en");
--		if (!IS_ERR(en)) {
--			/* VOUT1_OPS gpio ctrl */
--			/*
--			 * Regulator core prioritizes the ena_gpio over
--			 * enable/disable/is_enabled callbacks so no need to
--			 * clear them. We can still use same ops
--			 */
-+
-+		/* VOUT1_OPS gpio ctrl */
-+		/*
-+		 * Regulator core prioritizes the ena_gpio over
-+		 * enable/disable/is_enabled callbacks so no need to clear them
-+		 * even if GPIO is used. So, we can still use same ops.
-+		 *
-+		 * In theory it is possible someone wants to set vout1-en LOW
-+		 * during OTP loading and set VOUT1 to be controlled by GPIO -
-+		 * but control the GPIO from some where else than this driver.
-+		 * For that to work we should unset the is_enabled callback
-+		 * here.
-+		 *
-+		 * I believe such case where rohm,vout1-en-low is set and
-+		 * vout1-en-gpios is not is likely to be a misconfiguration.
-+		 * So let's just err out for now.
-+		 */
-+		if (!IS_ERR(en))
- 			config.ena_gpiod =3D en;
--		} else {
--			/*
--			 * In theory it is possible someone wants to set
--			 * vout1-en LOW during OTP loading and set VOUT1 to be
--			 * controlled by GPIO - but control the GPIO from some
--			 * where else than this driver. For that to work we
--			 * should unset the is_enabled callback here.
--			 *
--			 * I believe such case where rohm,vout1-en-low is set
--			 * and vout1-en-gpios is not is likely to be a
--			 * misconfiguration. So let's just err out for now.
--			 */
--			dev_err(&pdev->dev,
--				"Failed to get VOUT1 control GPIO\n");
--			return PTR_ERR(en);
--		}
-+		else
-+			return dev_err_probe(&pdev->dev, PTR_ERR(en),
-+					"Failed to get VOUT1 control GPIO\n");
- 	}
 =20
- 	/*
-@@ -1037,12 +1035,10 @@ static int bd957x_probe(struct platform_device *pde=
-v)
+-err:
+ 	return err;
+ }
 =20
- 		r->rdev =3D devm_regulator_register(&pdev->dev, desc,
- 							   &config);
--		if (IS_ERR(r->rdev)) {
--			dev_err(&pdev->dev,
--				"failed to register %s regulator\n",
--				desc->name);
--			return PTR_ERR(r->rdev);
--		}
-+		if (IS_ERR(r->rdev))
-+			return dev_err_probe(&pdev->dev, PTR_ERR(r->rdev),
-+					"failed to register %s regulator\n",
-+					desc->name);
- 		/*
- 		 * Clear the VOUT1 GPIO setting - rest of the regulators do not
- 		 * support GPIO control
 --=20
 2.38.1
 
@@ -258,19 +269,19 @@ Simon says - in Latin please.
 ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
 Thanks to Simon Glass for the translation =3D]=20
 
---pD2NDMyRXoJxPXvH
+--+iqplJKpcdzleyKU
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmN+C1UACgkQeFA3/03a
-ocV6xggAj4EFx9qaOc+bNDhdAVx40wXxZ0O3XX75hvb06bM9RqFaX2BUQxe3MG3Y
-uB9G6Lo2wJXQvLLLbclmJthnAf1OEmouubKHUG4IbWed6OYHlOB+nnr+QZO/X88N
-bnE794vfVMCsebaUNahmEXWpjNkgPcE8/uBFkuZxF7SCF0W8wz1Jf7NAd4eM3wwi
-BN+GwGtLa9oKpm1Lhmf81w1JkShP7HcQrxxWS3UezDQampV9G9IvYKhwSYo53PUx
-N8E4ZNOMB3zU3v3gUk3XZhOYi1IBZ9Np3W1f17NCqG++nDUeNIOZxiOq/WNtBGur
-N7z746RGdCMr6HBpEaN70lI3SRcQQA==
-=Cdo8
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmN+C2YACgkQeFA3/03a
+ocUWRgf/fEgNu7YYaMh5NmKk50Btq9kWI28dfnEKIa8PQAhJ6IePYvwfwAP7p4Ke
+mr+XktaBV0CQi2e4yENTKuZMk1XKGY4mHuO7rdMNYrbR6EqWmia0ijZwai4FAi9Q
+2Iga1IYdAHtuU5RX4yuFr8E8r7ZzppxBU4RjslIMt7MB8/kl/xqSdJWaSVLs0oLb
+CQ4bftM8X5LHsRoQ3swbJIRQVBt3FsZEokDARIgaUSogykSd8SoOCY9/usThzH6Q
+004f5ugNtR5XwwYyXvkDOJo4DRgcA8i3yrTZ/YpVLJMZwEBVkagnlZ18NnZqXpn6
+tjyl8BWn58Gthij524kFUh71QlhkaA==
+=47Ei
 -----END PGP SIGNATURE-----
 
---pD2NDMyRXoJxPXvH--
+--+iqplJKpcdzleyKU--
