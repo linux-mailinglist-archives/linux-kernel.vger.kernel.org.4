@@ -2,61 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3B49635A9E
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 11:54:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6656B635ACD
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 11:58:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237231AbiKWKyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 05:54:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56680 "EHLO
+        id S236791AbiKWK4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 05:56:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236560AbiKWKx2 (ORCPT
+        with ESMTP id S234151AbiKWK4R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 05:53:28 -0500
+        Wed, 23 Nov 2022 05:56:17 -0500
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9258E2DD2;
-        Wed, 23 Nov 2022 02:41:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7249B26AD4;
+        Wed, 23 Nov 2022 02:46:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669200078; x=1700736078;
+  t=1669200415; x=1700736415;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=j3uIlflRX6X3w3UzK50E4aZVuOuALfClRJmuCDZuPSc=;
-  b=gM4WVsfL9Ztl+ATQgqY+bHEDZhnWNAwFHJ5/d+XHLJHeFa6MRLPDv2Yf
-   G5p32RVDr/eMU0O9gNfDuYUr7QSP5mGjYecjuG2BT9UGR9tw82rB+gfiO
-   ejdzcJ9eMucFnG2Ua7EhjazJBIEAymCPmxEh4/QIYcYb1FUuusudM4BCZ
-   ZThCFoLpsHod6nRWcaa5EKUiiQr1np3VrL6EbYBo3sz5ny2AASklO02Tq
-   mRLLj6cL8pKf3nnIj//jWT87ALW/6AG1fydIx0HWxLmACJKOBiSM1Muuh
-   vTpvnsrSGMU0buk1USPYm0OzvBsaq3Hsec8D0Xdxwqj1uoLPgUvys90sq
-   g==;
+  bh=ExYIHLvCt5/rD5+mucH1shR+P7Rdt20GrJ8oCYWI4Bo=;
+  b=F3UKxWJhaMKqmur6G8txAnfnguBXeaCQZSSy23irKaZxbee+zyC0i18p
+   6tfNC/xp5w33fFn5n5bQRzN8sJf0QuKhpk8BmckTyPLOvdZ8yV0doWAvt
+   gOvs7HE+Na0FpagnGK+KaVxjCamGfzEpeppHnpTUQuV+376q37O8xZOxY
+   ZfHhAk5kNDfmuCxTjGxornvxucIftacEfRzZKBTD9hsl/J7JjebQ8wf1K
+   /PO6vFZX3bndWlNeV60m2/G/CT+Tz1APWr1HNuxpBwOGxYcqDrC9Zbe1C
+   MQF3tnb1h70qt3u1zQRtIl9kthhAXmy6QmKOm5x41jTn8S5Xsx9sfm5hT
+   A==;
 X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="188308734"
+   d="scan'208";a="188309618"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Nov 2022 03:41:18 -0700
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Nov 2022 03:46:54 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 23 Nov 2022 03:40:59 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Wed, 23 Nov 2022 03:40:59 -0700
-Date:   Wed, 23 Nov 2022 11:45:50 +0100
-From:   Horatiu Vultur - M31836 <Horatiu.Vultur@microchip.com>
-To:     Claudiu Beznea - M18063 <Claudiu.Beznea@microchip.com>
-CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        Nicolas Ferre - M43238 <Nicolas.Ferre@microchip.com>,
-        UNGLinuxDriver <UNGLinuxDriver@microchip.com>
-Subject: Re: [PATCH] ARM: dts: lan966x: Add otp support
-Message-ID: <20221123104550.3hnod4bo4yitisy3@soft-dev3-1>
-References: <20220916194946.2869510-1-horatiu.vultur@microchip.com>
- <c108d42d-dae8-0852-d89b-160b70b196dc@microchip.com>
+ 15.1.2507.12; Wed, 23 Nov 2022 03:46:53 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Wed, 23 Nov 2022 03:46:51 -0700
+Date:   Wed, 23 Nov 2022 10:46:33 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Samuel Holland <samuel@sholland.org>
+CC:     Palmer Dabbelt <palmer@rivosinc.com>,
+        Conor Dooley <conor@kernel.org>, <anup@brainfault.org>,
+        <rafael@kernel.org>, <daniel.lezcano@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
+        <linux-pm@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux@rivosinc.com>
+Subject: Re: [PATCH] cpuidle: riscv-sbi: Stop using non-retentive suspend
+Message-ID: <Y336CQ81NFv7Ev7n@wendy>
+References: <20221121205647.23343-1-palmer@rivosinc.com>
+ <bf6d3b1f-f703-4a25-833e-972a44a04114@sholland.org>
+ <Y3ytSj6NEeU54z7m@wendy>
+ <2309d3e5-0e37-c77b-1c0b-610abf0af62d@sholland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <c108d42d-dae8-0852-d89b-160b70b196dc@microchip.com>
+In-Reply-To: <2309d3e5-0e37-c77b-1c0b-610abf0af62d@sholland.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_PASS,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
@@ -67,54 +70,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 10/26/2022 07:42, Claudiu Beznea - M18063 wrote:
+Hey Samuel,
 
-Hi Claudiu,
+>On Tue, Nov 22, 2022 at 09:42:24PM -0600, Samuel Holland wrote:
+> On 11/22/22 05:06, Conor Dooley wrote:
+> > On Mon, Nov 21, 2022 at 06:45:25PM -0600, Samuel Holland wrote:
+> > > On 11/21/22 14:56, Palmer Dabbelt wrote:
 
-I just want to let you know that the patch that blocked this patch
-was applied and reached the linus' tree [0].
-Should I resend this patch?
-
-[0] https://elixir.bootlin.com/linux/v6.1-rc6/source/drivers/nvmem/lan9662-otpc.c#L206
-
-> Hi, Horatiu,
-> 
-> I will postpone this until [1] or [2] is applied.
-> 
-> Thank you,
-> Claudiu Beznea
-> 
-> [1]
-> https://lore.kernel.org/all/20220928195112.630351-1-horatiu.vultur@microchip.com/
-> [2]
-> https://lore.kernel.org/all/20221025072217.3715634-1-claudiu.beznea@microchip.com/
-> 
-> On 16.09.2022 22:49, Horatiu Vultur wrote:
-> > Add OTP (one time programmable) support.
-> > The both lan966x SocS (lan9662 and lan9668) have the same OTP IP.
+> > > > As per [1], whether or not the core can wake up from non-retentive
+> > > > suspend is a platform-specific detail.  We don't have any way to encode
+> > > > that, so just stop using them until we've sorted that out.
+> > >
+> > > We do have *exactly* a way to encode that. Specifically, the existence
+> > > or non-existence of a non-retentive CPU suspend state in the DT.
+> > >
+> > > If a hart has no way of resuming from non-retentive suspend (i.e. a
+> > > complete lack of interrupt delivery in non-retentive suspend), then it
+> > > makes zero sense to advertise such a suspend state in the DT.
 > > 
-> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> > ---
-> >  arch/arm/boot/dts/lan966x.dtsi | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> > 
-> > diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
-> > index 23665a0429906..784caba369485 100644
-> > --- a/arch/arm/boot/dts/lan966x.dtsi
-> > +++ b/arch/arm/boot/dts/lan966x.dtsi
-> > @@ -163,6 +163,11 @@ port7: port@7 {
-> >  			};
-> >  		};
-> >  
-> > +		otp: otp@e0021000 {
-> > +			compatible = "microchip,lan9668-otpc", "microchip,lan9662-otpc";
-> > +			reg = <0xe0021000 0x300>;
-> > +		};
-> > +
-> >  		flx0: flexcom@e0040000 {
-> >  			compatible = "atmel,sama5d2-flexcom";
-> >  			reg = <0xe0040000 0x100>;
+> > I would have to agree with that. I think the sprawling conversation has
+> > confused us all at this point, I (prior to reading this mail) thought
+> > that suspend was borked on the D1. I don't think anyone is advertising
+> > specific states in the DT at the moment though, I had a check in the D1
+> > patchset and didn't see anything there - unless you're adding it
+> > dynamically from the bootloader?
 > 
+> The availability and latency properties of idle states depend on the SBI
+> implementation, so yes, they need to be added dynamically.
 
--- 
-/Horatiu
+Right, thanks for clarifying.
+
+> > > I do not have any functioning RISC-V
+> > > hardware with SMP, so it is hard for me to help debug the root issue in
+> > > the Linux timer code. I do not know why turning on the C3STOP flag
+> > > breaks RCU stall detection or clock_nanosleep(), but I agree that
+> > > breakage should not happen.
+> > >
+> > > So while I still think 232ccac1bd9b is the right change to make from a
+> > > "following the spec" standpoint
+> > 
+> > Right, so the spec says:
+> > Request the SBI implementation to put the calling hart in a platform
+> > specific suspend (or low power) state specified by the suspend_type
+> > parameter. The hart will automatically come out of suspended state and
+> > resume normal execution when it receives an interrupt or platform
+> > specific hardware event.
+> > 
+> > That, as we have discussed a bunch of times, does not say whether a
+> > given interrupt should actually arrive during suspend. The correct
+> > behaviour, to me, is to assume that no events arrive during suspend.
+> 
+> Are you suggesting that we need some property to declare the delivery of
+> each kind of interrupt (software, timer, external, PMU)? 
+
+I'm possibly taking things to an extreme, since if we're having a
+discussion that covers what the spec does and does not allow I see no
+harm in going down the rabbit hole!
+
+Obviously, some sort of event must get the CPU out of suspend - what I
+meant was more like "The correct (software) behaviour, to me, is to
+assume that, when looking at an individual source, its events may not
+arrive during suspend."
+
+I've not looked at the relevant specs to see if they specify whether
+their interrupts *must* arrive, just the SBI one that the issue was
+created against.
+
+> I assumed that
+> external interrupt delivery would be required to consider an idle state
+> "viable", but I suppose it would be _possible_ to have a state where
+> only timer interrupts are deliverable.
+
+Who knows what some hardware folks will come up with! Maybe I am being
+pretty <whatever the modern version of black & white> is here, but I
+fear for a repeat whenever someone does something "creative".
+
+I know I've not answered your question about other kinds of properties
+but I am well outside my comfort zone here.
+
+Thanks,
+Conor.
+
