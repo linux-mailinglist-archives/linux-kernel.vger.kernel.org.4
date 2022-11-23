@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B70A7635F5E
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:25:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78001635F62
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:25:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237958AbiKWNZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 08:25:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59212 "EHLO
+        id S238327AbiKWNZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 08:25:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237105AbiKWNYZ (ORCPT
+        with ESMTP id S238266AbiKWNY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 08:24:25 -0500
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413A8742CA;
-        Wed, 23 Nov 2022 05:05:10 -0800 (PST)
-Received: by mail-qt1-x82c.google.com with SMTP id l15so11135793qtv.4;
-        Wed, 23 Nov 2022 05:05:10 -0800 (PST)
+        Wed, 23 Nov 2022 08:24:27 -0500
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221F974A82;
+        Wed, 23 Nov 2022 05:05:11 -0800 (PST)
+Received: by mail-qv1-xf29.google.com with SMTP id n12so6018203qvr.11;
+        Wed, 23 Nov 2022 05:05:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yT54MJUH8hXwVTeBLM7UDa2q//81cRvBtk4+Tr+w4wU=;
-        b=OrS640M1kZVAfPr1Tkxs7MkXbXxZBpyfICSz8cyGXbu5hKVFm4jqALHrRPoYSu1mDb
-         Pe+XxNe/jnB/XWJoNcz0Nvw7R5gvvexqhR/rmIRQTZY7abIs4/BgIuCZXaJqJVhBExmi
-         NY/qW0fXWszaXTZ089EkolGhWVoXrh18DoSLU/tRwJS2mLLH+9b90/hBXkr3KtQpFg63
-         yutEfY4IZk0TJg7ODdndUaTGStYYy+g/epDl2E6kNnrNbYIOzO5TrmJxNX+y5/TQTxRc
-         hjg3aUEbXw/HehYwvnajoBhvAYukj0zVORnHtSsUm+FF+XwnCSf3vAmwMrcZZI72MJEV
-         BnVQ==
+        bh=kK3JqJNT1I4j3gkX/C8zdj1X4u6J0EiKkU/hbVHbrx0=;
+        b=bEquYI4pYdgUZm/tUjpiXKrZMvQdc3GYF3xl4vhVZLv5yLR5iTr8raOMfb89s+vbHq
+         7P7uevp6iJYAiCWebyIT6vGh8HawknY6I6O7IOLdv3rDmPpnTdVcEgZgn5eRzfxYfOUo
+         eaFUjmZ5Qs0XtnO99CI5I4JHTKdLPSEWtwjoleKpPmZyWqyyJv3hiwU5rIgVzmqpkf9T
+         w12AiVNrpltc46c8FPTyba84dWNTrSQQ2bbihzs+kta2teqPghl2l6fJdzts2G75jn45
+         Hakq1lHENj4TzBH4iO4/65GMqWjXF8B6boyRxy5yMPvkl8/RwvVWdc5im0OjPjLL3FdD
+         auGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yT54MJUH8hXwVTeBLM7UDa2q//81cRvBtk4+Tr+w4wU=;
-        b=zX8aqV6V98MZ5KVbehrsJiyyB8OgfiWuUBW7bNeopO+ANPuf4UQ6OR4Og52f6PEzXL
-         68jQzMDaz7w1HDe4Bt/OJRd1ABCZdxbcfXekDenORAqR6SFWigK/fJYoBDNyQkCh247X
-         tghjmIOTe/WkeiNcluI/RswrmEqw27dAnA37xirCNAgzgW6nfId2FQeX8E2dS4BjrOFJ
-         GRusHdfaDtTVQnn4ZYCyoQVm9B30u56rQJMxSgG3pDW7Yl36D+yJgHmmzcFMMr5c4G14
-         ODZTowvWePvSTermfItmCXMTdcV8h5WZa7zICSmCbH0f8twve0pNvSGE2YE1uBnei2wZ
-         9S6g==
-X-Gm-Message-State: ANoB5pmMlvcIe+mtome+lQGVwhKPsWSuoTtnSe4grO1Dg45DgA88scKq
-        4CKZSHE+MajLW96nOt9MquIrVs7fJ6njrw==
-X-Google-Smtp-Source: AA0mqf6pLiwCCpkEiKr8jlCwnBC9uwE0eCQOg6ibYFpJVsN56xL9dT7FT/2awtdO0/Jw6pRwQgY+hg==
-X-Received: by 2002:ac8:4e47:0:b0:3a5:c306:324 with SMTP id e7-20020ac84e47000000b003a5c3060324mr10053895qtw.116.1669208708590;
-        Wed, 23 Nov 2022 05:05:08 -0800 (PST)
+        bh=kK3JqJNT1I4j3gkX/C8zdj1X4u6J0EiKkU/hbVHbrx0=;
+        b=xuou+rzRoP78Ch8feNUyVDVGkIHSyZMBvAlZXONyoG9yi0co1q2SiOj+/vGgKn7EGD
+         sNFLd5ctYcu+2uT7406yrznoxkSGOOCjZUtDmMEVaaIclSJhb82rxDmgCotA5jK0iipt
+         MA2vaXJl8Orv5FhULvi4cxRxZbdddWmzYZ5xMuONsQ/oVxn0kpQeyzQLSzzJV8WbVnvw
+         n0BWH5lBpjt7JINWW6qNvVxmIbcBpGVJeV8kt9qE6JyfSWIt594zBqprDiffXI8CSLCv
+         ajp6bxsyE1MTzWEJb8uu+K2GCzoO3qI/4jARJFwlHHOoe0IIv5hx5twBpKu7vAIZ0K71
+         1MVQ==
+X-Gm-Message-State: ANoB5pmDA1B0tyOVUsbXnjwbLnssS4ywT9+cHyvDApOTKAreqQbZkeAN
+        ZCToMfC3AkKQ19zsJDFiYmJ3dnQX+0kWKQ==
+X-Google-Smtp-Source: AA0mqf6IRO4TgUF8T0Xk+YL/cCQPdh4DF5+3L/BNGdALphrUzwsRNvPnRHYn5GJGFi6jeFLxIgxZ4A==
+X-Received: by 2002:a0c:edcf:0:b0:4b3:fe67:349d with SMTP id i15-20020a0cedcf000000b004b3fe67349dmr26126307qvr.60.1669208709841;
+        Wed, 23 Nov 2022 05:05:09 -0800 (PST)
 Received: from glsvmlin.ini.cmu.edu (GLSVMLIN.INI.CMU.EDU. [128.2.16.9])
-        by smtp.gmail.com with ESMTPSA id f13-20020a05620a408d00b006bb78d095c5sm12188520qko.79.2022.11.23.05.05.07
+        by smtp.gmail.com with ESMTPSA id f13-20020a05620a408d00b006bb78d095c5sm12188520qko.79.2022.11.23.05.05.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 05:05:07 -0800 (PST)
+        Wed, 23 Nov 2022 05:05:09 -0800 (PST)
 From:   Gabriel Somlo <gsomlo@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
@@ -57,9 +57,9 @@ Cc:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
         joel@jms.id.au, david.abdurachmanov@gmail.com,
         florent@enjoy-digital.fr, geert@linux-m68k.org,
         ilpo.jarvinen@linux.intel.com
-Subject: [PATCH v6 01/14] serial: liteuart: use KBUILD_MODNAME as driver name
-Date:   Wed, 23 Nov 2022 08:04:47 -0500
-Message-Id: <20221123130500.1030189-2-gsomlo@gmail.com>
+Subject: [PATCH v6 02/14] serial: liteuart: use bit number macros
+Date:   Wed, 23 Nov 2022 08:04:48 -0500
+Message-Id: <20221123130500.1030189-3-gsomlo@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221123130500.1030189-1-gsomlo@gmail.com>
 References: <20221123130500.1030189-1-gsomlo@gmail.com>
@@ -75,45 +75,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace hard-coded instances of "liteuart" with KBUILD_MODNAME.
+Replace magic bit constants (e.g., 1, 2, 4) with BIT(x) expressions.
 
 Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
 Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
 ---
- drivers/tty/serial/liteuart.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/tty/serial/liteuart.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
-index 062812fe1b09..db898751ffe3 100644
+index db898751ffe3..18c1eb315ee9 100644
 --- a/drivers/tty/serial/liteuart.c
 +++ b/drivers/tty/serial/liteuart.c
-@@ -57,7 +57,7 @@ static struct console liteuart_console;
+@@ -5,6 +5,7 @@
+  * Copyright (C) 2019-2020 Antmicro <www.antmicro.com>
+  */
  
- static struct uart_driver liteuart_driver = {
- 	.owner = THIS_MODULE,
--	.driver_name = "liteuart",
-+	.driver_name = KBUILD_MODNAME,
- 	.dev_name = "ttyLXU",
- 	.major = 0,
- 	.minor = 0,
-@@ -321,7 +321,7 @@ static struct platform_driver liteuart_platform_driver = {
- 	.probe = liteuart_probe,
- 	.remove = liteuart_remove,
- 	.driver = {
--		.name = "liteuart",
-+		.name = KBUILD_MODNAME,
- 		.of_match_table = liteuart_of_match,
- 	},
- };
-@@ -367,7 +367,7 @@ static int liteuart_console_setup(struct console *co, char *options)
- }
++#include <linux/bits.h>
+ #include <linux/console.h>
+ #include <linux/litex.h>
+ #include <linux/module.h>
+@@ -38,8 +39,8 @@
+ #define OFF_EV_ENABLE	0x14
  
- static struct console liteuart_console = {
--	.name = "liteuart",
-+	.name = KBUILD_MODNAME,
- 	.write = liteuart_console_write,
- 	.device = uart_console_device,
- 	.setup = liteuart_console_setup,
+ /* events */
+-#define EV_TX		0x1
+-#define EV_RX		0x2
++#define EV_TX		BIT(0)
++#define EV_RX		BIT(1)
+ 
+ struct liteuart_port {
+ 	struct uart_port port;
 -- 
 2.38.1
 
