@@ -2,114 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6259B6359F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 11:31:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D55A8635A1A
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 11:35:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236695AbiKWKbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 05:31:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59120 "EHLO
+        id S237470AbiKWKd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 05:33:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236834AbiKWKav (ORCPT
+        with ESMTP id S236834AbiKWKbx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 05:30:51 -0500
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7EF12294D;
-        Wed, 23 Nov 2022 02:13:45 -0800 (PST)
-Received: by mail-qv1-f50.google.com with SMTP id h7so11249056qvs.3;
-        Wed, 23 Nov 2022 02:13:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1J1/Dk89lTEXUaWgB7PSlowyLzY8WAPYmQ4lIK/72+8=;
-        b=MVWl9JHFuL2lc+s1+HJdbHS8/dX2EQbXoX/yMwXWry9nV83l3kIFK9J2NbD8G8ksK7
-         vKWQVhdYEc0jbEyzk+M5ZnIJ7Ktaet+C+XJBIDIkV9aM2N2h5S2baPiYA6V2t0PSal35
-         bUF35z9wxqyNqqDTLmaavKxJLg5aMVatIdEZ7P/aDx2wmxvAO9UGJHT/AL0OPsaGuT3C
-         6OzsIwUzXOjJjVput1wGYQg4sL6j/3mmemYnwERJqFDoTPatfxVq/g/HgNoi1BctD6yM
-         v+tmKQLFdQ9pOkCuQnxYwp4JunOd0sIfr84WO09tkqCRwf/ULYQjidb7oBeRyeCaZhdw
-         RPxw==
-X-Gm-Message-State: ANoB5pkRMLrZnKmK7eC9qju88lreIPjBeL95myKnVwM2/PqsWRIYrACi
-        3FGYNqJPKiebGugOqJnoP6zSQKEN2jUtbA==
-X-Google-Smtp-Source: AA0mqf7B09LUkeAyo/gD39xh+jGigjeZU8wlH5Mw5bvBWprw/17e7pDva275Zrue7vnVQQBhF6dADA==
-X-Received: by 2002:a05:6214:4290:b0:4bb:5d3a:bdad with SMTP id og16-20020a056214429000b004bb5d3abdadmr7798908qvb.26.1669198424729;
-        Wed, 23 Nov 2022 02:13:44 -0800 (PST)
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
-        by smtp.gmail.com with ESMTPSA id ey10-20020a05622a4c0a00b003a5fb681ae7sm9573050qtb.3.2022.11.23.02.13.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 02:13:43 -0800 (PST)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-3691e040abaso169719247b3.9;
-        Wed, 23 Nov 2022 02:13:42 -0800 (PST)
-X-Received: by 2002:a05:690c:b01:b0:370:202b:f085 with SMTP id
- cj1-20020a05690c0b0100b00370202bf085mr25967882ywb.502.1669198422650; Wed, 23
- Nov 2022 02:13:42 -0800 (PST)
+        Wed, 23 Nov 2022 05:31:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B12DEB
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 02:14:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669198471;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ziHJjbEHvKPBD/w57rLjBmunfh+NKoJJcYefTCmtlG8=;
+        b=PtzI0D9zs9x6R/xbnGjteKg8coo1bUWGTBLB6t1MIhL0xyqaTm2pkyIySvlOrzZZpl9ivJ
+        l1ooIyfdY23+KbP7NzKQ/pqQZvc0PI30aopsgMK65CbazCCbvIZKGPPQ/X9B4ygGPgWELx
+        XMJsvwOdRU7V520S23WQPkYbXHy0d7E=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-301-DG9H_KJUOhSF7E-5JZemVg-1; Wed, 23 Nov 2022 05:14:28 -0500
+X-MC-Unique: DG9H_KJUOhSF7E-5JZemVg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C1A163C01D80;
+        Wed, 23 Nov 2022 10:14:27 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.14])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0EDA8C1908A;
+        Wed, 23 Nov 2022 10:14:26 +0000 (UTC)
+Subject: [PATCH net-next 00/17] rxrpc: Increasing SACK size and moving away
+ from softirq, part 3
+From:   David Howells <dhowells@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org, dhowells@redhat.com,
+        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org
+Date:   Wed, 23 Nov 2022 10:14:24 +0000
+Message-ID: <166919846440.1258552.9618708344491052554.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.5
 MIME-Version: 1.0
-References: <a50fa46075fb760d8409ff6ea2232b2ddb7a102b.1669046259.git.geert+renesas@glider.be>
- <20221123100831.GE39395@tom-ThinkPad-T14s-Gen-2i>
-In-Reply-To: <20221123100831.GE39395@tom-ThinkPad-T14s-Gen-2i>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 23 Nov 2022 11:13:31 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUW8iKFjDj4fPtWfPvyQ1sjGcAy1Kz5j-osz9F4pdA47Q@mail.gmail.com>
-Message-ID: <CAMuHMdUW8iKFjDj4fPtWfPvyQ1sjGcAy1Kz5j-osz9F4pdA47Q@mail.gmail.com>
-Subject: Re: [PATCH resend] media: staging: stkwebcam: Restore
- MEDIA_{USB,CAMERA}_SUPPORT dependencies
-To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tommaso,
 
-On Wed, Nov 23, 2022 at 11:08 AM Tommaso Merciai
-<tommaso.merciai@amarulasolutions.com> wrote:
-> On Mon, Nov 21, 2022 at 04:58:33PM +0100, Geert Uytterhoeven wrote:
-> > By moving support for the USB Syntek DC1125 Camera to staging, the
-> > dependencies on MEDIA_USB_SUPPORT and MEDIA_CAMERA_SUPPORT were lost.
-> >
-> > Fixes: 56280c64ecacc971 ("media: stkwebcam: deprecate driver, move to staging")
->
-> Patch itself looks good but we have some style issue. Applying this
-> patch I got the following warning from checkpatchl:
->
-> WARNING: Please use correct Fixes: style 'Fixes: <12 chars of sha1> ("<title line>")' - ie: 'Fixes: 56280c64ecac ("media: stkwebcam: deprecate driver, move to staging")'
-> #10:
->
-> You have to pass only the first 12 chars of the sha1 commit into Fixes
-> msg:
->
-> Use:
->
->  Fixes: 56280c64ecac ("media: stkwebcam: deprecate driver, move to staging")
->
-> Instead of:
->
->  Fixes: 56280c64ecacc971 ("media: stkwebcam: deprecate driver, move to staging")
+This is the third set of patches in the process of moving rxrpc from doing
+a lot of its stuff in softirq context to doing it in an I/O thread in
+process context and thereby making it easier to support a larger SACK table
+(full description in part 1[1]).
 
-I always use 16 chars, to avoid these becoming ambiguous in a few years.
+[!] Note that these patches are based part 2[2], which is based on a merge
+    of a fix in net/master with net-next/master.  The fix makes a number of
+    conflicting changes, so it's better if this set is built on top of it.
 
-Gr{oetje,eeting}s,
+This set of patches introduces the I/O thread and cuts various bits over to
+running there:
 
-                        Geert
+ (1) Split input.c so that the call packet processing bits are separate
+     from the received packet distribution bits.  Call packet processing
+     will get bumped over to the call event handler.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+ (2) Create a per-local endpoint I/O thread.  Barring some tiny bits that
+     still get done in softirq context, all packet reception, processing
+     and transmission is done in this thread.  That will allow a load of
+     locking to be removed.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+ (3) Perform packet processing and error processing from the I/O thread.
+
+ (4) Provide a mechanism to process call event notifications in the I/O
+     thread rather than queuing a work item for that call.
+
+ (5) Move data and ACK transmission into the I/O thread.  ACKs can then be
+     transmitted at the point they're generated rather than getting
+     delegated from softirq context to some process context somewhere.
+
+ (6) Move call and local processor event handling into the I/O thread.
+
+ (7) Move cwnd degradation to after packets have been transmitted so that
+     they don't shorten the window too quickly.
+
+A bunch of simplifications can then be done:
+
+ (1) The input_lock is no longer necessary as exclusion is achieved by
+     running the code in the I/O thread only.
+
+ (2) Don't need to use sk->sk_receive_queue.lock to guard socket state
+     changes as the socket mutex should suffice.
+
+ (3) Don't take spinlocks in RCU callback functions as they get run in
+     softirq context and thus need _bh annotations.
+
+ (4) RCU is then no longer needed for the peer's error_targets list.
+
+ (5) Simplify the skbuff handling in the receive path by dropping the ref
+     in the basic I/O thread loop and getting an extra ref as and when we
+     need to queue the packet for recvmsg or another context.
+
+Link: https://lore.kernel.org/r/166794587113.2389296.16484814996876530222.stgit@warthog.procyon.org.uk/ [1]
+Link: https://lore.kernel.org/r/166919798040.1256245.11495568684139066955.stgit@warthog.procyon.org.uk [2]
+
+---
+The patches are tagged here:
+
+	git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git tags/rxrpc-next-20221121-b
+
+And can be found on this branch:
+
+	http://git.kernel.org/cgit/linux/kernel/git/dhowells/linux-fs.git/log/?h=rxrpc-next
+
+David
+---
+David Howells (17):
+      rxrpc: Split the receive code
+      rxrpc: Create a per-local endpoint receive queue and I/O thread
+      rxrpc: Move packet reception processing into I/O thread
+      rxrpc: Move error processing into the local endpoint I/O thread
+      rxrpc: Remove call->input_lock
+      rxrpc: Don't use sk->sk_receive_queue.lock to guard socket state changes
+      rxrpc: Don't take spinlocks in the RCU callback functions
+      rxrpc: Remove the _bh annotation from all the spinlocks
+      rxrpc: Implement a mechanism to send an event notification to a call
+      rxrpc: Move DATA transmission into call processor work item
+      rxrpc: Remove RCU from peer->error_targets list
+      rxrpc: Make the I/O thread take over the call and local processor work
+      rxrpc: Trace/count transmission underflows and cwnd resets
+      rxrpc: Move the cwnd degradation after transmitting packets
+      rxrpc: Fold __rxrpc_unuse_local() into rxrpc_unuse_local()
+      rxrpc: Transmit ACKs at the point of generation
+      rxrpc: Simplify skbuff accounting in receive path
+
+
+ include/trace/events/rxrpc.h | 137 ++++++--
+ net/rxrpc/Makefile           |   1 +
+ net/rxrpc/af_rxrpc.c         |   8 +-
+ net/rxrpc/ar-internal.h      |  84 ++---
+ net/rxrpc/call_accept.c      |  55 +---
+ net/rxrpc/call_event.c       | 255 ++++++++-------
+ net/rxrpc/call_object.c      | 157 +++++----
+ net/rxrpc/conn_client.c      |   8 +-
+ net/rxrpc/conn_event.c       |  76 ++++-
+ net/rxrpc/conn_object.c      |  24 +-
+ net/rxrpc/conn_service.c     |  10 +-
+ net/rxrpc/input.c            | 616 ++++++-----------------------------
+ net/rxrpc/io_thread.c        | 423 ++++++++++++++++++++++++
+ net/rxrpc/local_event.c      |  43 +--
+ net/rxrpc/local_object.c     | 102 ++----
+ net/rxrpc/output.c           | 190 +++++------
+ net/rxrpc/peer_event.c       | 101 +++---
+ net/rxrpc/peer_object.c      |   8 +-
+ net/rxrpc/proc.c             |  31 +-
+ net/rxrpc/recvmsg.c          |  48 ++-
+ net/rxrpc/sendmsg.c          |  99 ++----
+ net/rxrpc/txbuf.c            |   3 +-
+ 22 files changed, 1216 insertions(+), 1263 deletions(-)
+ create mode 100644 net/rxrpc/io_thread.c
+
+
