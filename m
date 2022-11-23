@@ -2,133 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6463A636027
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:39:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2996636028
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:40:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236372AbiKWNjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 08:39:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49162 "EHLO
+        id S238085AbiKWNkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 08:40:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236632AbiKWNjH (ORCPT
+        with ESMTP id S238286AbiKWNju (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 08:39:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADE597ABE;
-        Wed, 23 Nov 2022 05:26:20 -0800 (PST)
+        Wed, 23 Nov 2022 08:39:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1869B9A27D
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:26:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A097561CC3;
-        Wed, 23 Nov 2022 13:26:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB42CC433C1;
-        Wed, 23 Nov 2022 13:26:11 +0000 (UTC)
-Message-ID: <36dd800b-d96b-af39-d0de-a5a8ca1034dd@xs4all.nl>
-Date:   Wed, 23 Nov 2022 14:26:10 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id BF65FB81FEA
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 13:26:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA220C43151;
+        Wed, 23 Nov 2022 13:26:48 +0000 (UTC)
+Date:   Wed, 23 Nov 2022 08:26:47 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Uros Bizjak <ubizjak@gmail.com>, linux-kernel@vger.kernel.org,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jason Baron <jbaron@akamai.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: Re: [PATCH] jump_label: use atomic_try_cmpxchg in
+ static_key_slow_inc_cpuslocked
+Message-ID: <20221123082647.4531eabf@gandalf.local.home>
+In-Reply-To: <Y33jK7p2Xc6KD1ax@hirez.programming.kicks-ass.net>
+References: <20221019140850.3395-1-ubizjak@gmail.com>
+        <20221122161446.28907755@gandalf.local.home>
+        <Y33jK7p2Xc6KD1ax@hirez.programming.kicks-ass.net>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>,
-        Tomasz Figa <tfiga@chromium.org>
-Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org
-References: <20221116102659.70287-1-david@redhat.com>
- <20221116102659.70287-17-david@redhat.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: Re: [PATCH mm-unstable v1 16/20] mm/frame-vector: remove FOLL_FORCE
- usage
-In-Reply-To: <20221116102659.70287-17-david@redhat.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David, Tomasz,
+On Wed, 23 Nov 2022 10:08:59 +0100
+Peter Zijlstra <peterz@infradead.org> wrote:
 
-On 16/11/2022 11:26, David Hildenbrand wrote:
-> FOLL_FORCE is really only for ptrace access. According to commit
-> 707947247e95 ("media: videobuf2-vmalloc: get_userptr: buffers are always
-> writable"), get_vaddr_frames() currently pins all pages writable as a
-> workaround for issues with read-only buffers.
-
-I've decided to revert 707947247e95: I have not been able to reproduce the problem
-described in that commit, and Tomasz reported that it caused problems with a
-specific use-case they encountered. I'll post that patch soon and I expect it
-to land in 6.2. It will cause a conflict with this patch, though.
-
-If the problem described in that patch occurs again, then I will revisit it
-and hopefully do a better job than I did before. That commit was not my
-finest moment.
-
-Regards,
-
-	Hans
-
+> On Tue, Nov 22, 2022 at 04:14:46PM -0500, Steven Rostedt wrote:
 > 
-> FOLL_FORCE, however, seems to be a legacy leftover as it predates
-> commit 707947247e95 ("media: videobuf2-vmalloc: get_userptr: buffers are
-> always writable"). Let's just remove it.
+> > > +	for (int v = atomic_read(&key->enabled); v > 0; )  
+> > 
+> > Although it's permitted by the compiler, the kernel style is to not add
+> > declarations in conditionals.  
 > 
-> Once the read-only buffer issue has been resolved, FOLL_WRITE could
-> again be set depending on the DMA direction.
-> 
-> Cc: Hans Verkuil <hverkuil@xs4all.nl>
-> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-> Cc: Tomasz Figa <tfiga@chromium.org>
-> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-> ---
->  drivers/media/common/videobuf2/frame_vector.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/common/videobuf2/frame_vector.c b/drivers/media/common/videobuf2/frame_vector.c
-> index 542dde9d2609..062e98148c53 100644
-> --- a/drivers/media/common/videobuf2/frame_vector.c
-> +++ b/drivers/media/common/videobuf2/frame_vector.c
-> @@ -50,7 +50,7 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
->  	start = untagged_addr(start);
->  
->  	ret = pin_user_pages_fast(start, nr_frames,
-> -				  FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
-> +				  FOLL_WRITE | FOLL_LONGTERM,
->  				  (struct page **)(vec->ptrs));
->  	if (ret > 0) {
->  		vec->got_ref = true;
+> I'm thinking the whole motivation for upping to C99 was exactly so that
+> we could start using this pattern.
 
+OK, if you are fine with it then sure. I personally like seeing all
+variables declared in one place. Maybe because I've been trained that way,
+and I can easily be confused when I see a variable somewhere and don't see
+it in the beginning declarations.
+
+-- Steve
