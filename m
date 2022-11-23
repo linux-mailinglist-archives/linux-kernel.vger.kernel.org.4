@@ -2,97 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8C3F63611F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:08:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5AD6636126
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:09:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238419AbiKWOIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 09:08:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60198 "EHLO
+        id S238402AbiKWOJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 09:09:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238377AbiKWOIE (ORCPT
+        with ESMTP id S238274AbiKWOJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 09:08:04 -0500
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C53C71D0EA;
-        Wed, 23 Nov 2022 06:04:54 -0800 (PST)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1oxqMm-0008Pl-K2; Wed, 23 Nov 2022 15:04:44 +0100
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manoj Sai <abbaraju.manojsai@amarulasolutions.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Markus Reichl <m.reichl@fivetechno.de>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-amarula@amarulasolutions.com, Da Xue <da.xue@libretech.co>,
-        dsx724 <da@lessconfused.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Suniel Mahesh <sunil@amarulasolutions.com>,
-        Manoj Sai <abbaraju.manojsai@amarulasolutions.com>
-Subject: Re: [PATCH 1/1] arm64: dts: rockchip: increase spi-max-frequency of nor flash for roc-rk3399-pc
-Date:   Wed, 23 Nov 2022 15:04:43 +0100
-Message-ID: <4981984.iIbC2pHGDl@phil>
-In-Reply-To: <20221123094827.250657-2-abbaraju.manojsai@amarulasolutions.com>
-References: <20221123094827.250657-1-abbaraju.manojsai@amarulasolutions.com> <20221123094827.250657-2-abbaraju.manojsai@amarulasolutions.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 23 Nov 2022 09:09:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B4BA18D
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 06:07:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DE696B81EE0
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 14:07:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81FCFC433D6;
+        Wed, 23 Nov 2022 14:07:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669212427;
+        bh=HlVzEn9iVpO1hFWWoa7vvFL1MYhSqvFeHFhYnVxbf14=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OW4TEf8ZMiSTtnAuGUJQLLTa1FzN1XPIJUricYxhF114mqgOADjogR2hy73tQ5uLh
+         d9wl52ojGwqyD77NyyC3Upw7XYm0rLFisN2DY6LIKJcrSU8bgzCbqF0E1+6pgxMzBQ
+         /EVSOQXAGgygl1MG8p6jq7dFiZLJrqWaSm2mGAcKkgiOL0UYrjZJGDWQY+0wlsaEjw
+         ciOXrMv4R6kTKm6NQZ9lv6GhGZlw3BpGrJHDnyfi6ZOSvECB0Hp5FS52ccifCvNz3z
+         NHjHYwQoRJHmYYp2UNY0cKZCH87Gbg8IBfBtqDZaH/5FBNRcx/AyptSIuYQrTfjL4q
+         QUsESlA+X9IMg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oxqP3-0088sj-7f;
+        Wed, 23 Nov 2022 14:07:05 +0000
+Date:   Wed, 23 Nov 2022 14:07:04 +0000
+Message-ID: <86edttojcn.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Icenowy Zheng <uwu@icenowy.me>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH] irqchip/sifive-plic: drop quirk for two-cell variant
+In-Reply-To: <463d5effd271c002fb18fb3b8326321501c18782.camel@icenowy.me>
+References: <20221121042026.419383-1-uwu@icenowy.me>
+        <86o7syoq4t.wl-maz@kernel.org>
+        <16d01eebc1693916fc74e1e75458d6c0f080cf37.camel@icenowy.me>
+        <86ilj5oltb.wl-maz@kernel.org>
+        <402eb920c5ca84e7d751ec7bd9b7f4f512a66921.camel@icenowy.me>
+        <86h6ypol03.wl-maz@kernel.org>
+        <463d5effd271c002fb18fb3b8326321501c18782.camel@icenowy.me>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: uwu@icenowy.me, tglx@linutronix.de, palmer@dabbelt.com, paul.walmsley@sifive.com, samuel@sholland.org, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Manoj,
+On Wed, 23 Nov 2022 13:35:58 +0000,
+Icenowy Zheng <uwu@icenowy.me> wrote:
+>=20
+> =E5=9C=A8 2022-11-23=E6=98=9F=E6=9C=9F=E4=B8=89=E7=9A=84 13:31 +0000=EF=
+=BC=8CMarc Zyngier=E5=86=99=E9=81=93=EF=BC=9A
+> > On Wed, 23 Nov 2022 13:16:01 +0000,
+> > Icenowy Zheng <uwu@icenowy.me> wrote:
+> > >=20
+> > > =E5=9C=A8 2022-11-23=E6=98=9F=E6=9C=9F=E4=B8=89=E7=9A=84 13:13 +0000=
+=EF=BC=8CMarc Zyngier=E5=86=99=E9=81=93=EF=BC=9A
+> > > > On Wed, 23 Nov 2022 12:38:56 +0000,
+> > > > Icenowy Zheng <uwu@icenowy.me> wrote:
+> > > > >=20
+> > > > > =E5=9C=A8 2022-11-22=E6=98=9F=E6=9C=9F=E4=BA=8C=E7=9A=84 17:28 +0=
+000=EF=BC=8CMarc Zyngier=E5=86=99=E9=81=93=EF=BC=9A
+> > > > > > On Mon, 21 Nov 2022 04:20:26 +0000,
+> > > > > > Icenowy Zheng <uwu@icenowy.me> wrote:
+> > > > > > >=20
+> > > > > > > As the special handling of edge-triggered interrupts are
+> > > > > > > defined in
+> > > > > > > the
+> > > > > > > PLIC spec, we can assume it's not a quirk, but a feature of
+> > > > > > > the
+> > > > > > > PLIC
+> > > > > > > spec; thus making it a quirk and use quirk-based codepath
+> > > > > > > is
+> > > > > > > not so
+> > > > > > > necessary.
+> > > > > >=20
+> > > > > > It *is* necessary.
+> > > > > >=20
+> > > > > > >=20
+> > > > > > > Move to a #interrupt-cells-based practice which will allow
+> > > > > > > both
+> > > > > > > device
+> > > > > > > trees without interrupt flags and with interrupt flags work
+> > > > > > > for
+> > > > > > > all
+> > > > > > > compatible strings.
+> > > > > >=20
+> > > > > > No. You're tying together two unrelated concepts:
+> > > > > >=20
+> > > > > > - Edges get dropped in some implementations (and only some).
+> > > > > > You
+> > > > > > can
+> > > > > > =C2=A0 argue that the architecture allows it, but I see it is an
+> > > > > > =C2=A0 implementation bug.
+> > > > >=20
+> > > > > As the specification allows it, it's not an implementation bug
+> > > > > --
+> > > > > and
+> > > > > for those which do not show this problem, it's possible that
+> > > > > it's
+> > > > > just
+> > > > > all using the same trigger type (e.g. Rocket).
+> > > >=20
+> > > > What are you against? The fact that this is flagged as a quirk?
+> > > > Honestly, I don't care about that. If we can fold all
+> > > > implementations
+> > > > into the same scheme, that's fine by me.
+> > >=20
+> > > Then what should I do?
+> >=20
+> > Make all edge-triggered interrupts use the edge flow.
+> >=20
+> > >=20
+> > > >=20
+> > > > >=20
+> > > > > >=20
+> > > > > > - The need for expressing additional information in the
+> > > > > > interrupt
+> > > > > > =C2=A0 specifier is not necessarily related to the above. Other
+> > > > > > interrupt
+> > > > > > =C2=A0 controllers use extra cells to encode the interrupt
+> > > > > > affinity,
+> > > > > > for
+> > > > > > =C2=A0 example.
+> > > > >=20
+> > > > > I think in these situations, if the interrupt controller does
+> > > > > not
+> > > > > contain any special handling for edge interrupts, we can just
+> > > > > describe
+> > > > > them as level ones in SW.
+> > > >=20
+> > > > No, that's utterly wrong. We don't describe an edge as level.
+> > > > Ever.
+> > > >=20
+> > > > >=20
+> > > > > >=20
+> > > > > > I want these two things to be kept separate. Otherwise, once
+> > > > > > we
+> > > > > > get
+> > > > > > some fancy ACPI support for RISCV (no, please...), we'll have
+> > > > > > to
+> > > > > > redo
+> > > > > > the whole thing...
+> > > > > >=20
+> > > > > > > In addition, this addresses a stable version DT binding
+> > > > > > > violation -
+> > > > > > > -
+> > > > > > > Linux v5.19 comes with "thead,c900-plic" with #interrupt-
+> > > > > > > cells
+> > > > > > > defined to
+> > > > > > > be 1 instead of 2, this commit will allow DTs that complies
+> > > > > > > to
+> > > > > > > Linux
+> > > > > > > v5.19 binding work (although no such DT is devliered to the
+> > > > > > > public
+> > > > > > > now).
+> > > > > >=20
+> > > > > > *That* is what should get fixed.
+> > > > >=20
+> > > > > Supporting all stable versions' DT binding is our promise, I
+> > > > > think.
+> > > >=20
+> > > > Absolutely. And I'm asking you to fix it. And only that.
+> > >=20
+> > > Then what should I do? Mask this as another quirk that is only
+> > > applicable to c900-plic?
+> >=20
+> > No. Make interrupts with a single cell use the level flow.
+>=20
+> This sounds exactly like what we do in this patch now.
 
-Am Mittwoch, 23. November 2022, 10:48:27 CET schrieb Manoj Sai:
-> Increase the spi-max-frequency of nor flash from 10Mhz to 30Mhz,this improves the
-> flash raw write speed by 0.9 MB/s to 1.6MB/s and the time taken to write is
-> get reduced from 36 seconds to 20 seconds.
-> 
-> Signed-off-by: Manoj Sai <abbaraju.manojsai@amarulasolutions.com>
-> Signed-off-by: Da Xue <da.xue@libretech.co>
-> Signed-off-by: dsx724 <da@lessconfused.com>
+No. Really not. If anything, you add more pointless crap.
 
-who are these other people? :-)
+> Or, should we keep the quirk, and require both a flag cell containing
+> IRQ_TYPE_EDGE_RISING and an interrupt controller that matches the quirk
+> to use the special codepath for edge interrupts?
 
-I.e. it looks like you're the author of the patch,
-and so it should only have your Signed-off-by line.
+This is becoming tedious.
 
-If Da Xue and dsx724 have tested / reviewed the change, they
-should respond individually to the posted patch with
-either a "Reviewed-by: ..." or "Tested-by: ..." line.
+	M.
 
+diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive=
+-plic.c
+index 2f4784860df5..6774ae19ad0b 100644
+--- a/drivers/irqchip/irq-sifive-plic.c
++++ b/drivers/irqchip/irq-sifive-plic.c
+@@ -60,13 +60,10 @@
+ #define	PLIC_DISABLE_THRESHOLD		0x7
+ #define	PLIC_ENABLE_THRESHOLD		0
+=20
+-#define PLIC_QUIRK_EDGE_INTERRUPT	0
+-
+ struct plic_priv {
+ 	struct cpumask lmask;
+ 	struct irq_domain *irqdomain;
+ 	void __iomem *regs;
+-	unsigned long plic_quirks;
+ };
+=20
+ struct plic_handler {
+@@ -208,9 +205,6 @@ static int plic_irq_set_type(struct irq_data *d, unsign=
+ed int type)
+ {
+ 	struct plic_priv *priv =3D irq_data_get_irq_chip_data(d);
+=20
+-	if (!test_bit(PLIC_QUIRK_EDGE_INTERRUPT, &priv->plic_quirks))
+-		return IRQ_SET_MASK_OK_NOCOPY;
+-
+ 	switch (type) {
+ 	case IRQ_TYPE_EDGE_RISING:
+ 		irq_set_chip_handler_name_locked(d, &plic_edge_chip,
+@@ -244,9 +238,7 @@ static int plic_irq_domain_translate(struct irq_domain =
+*d,
+ 				     unsigned long *hwirq,
+ 				     unsigned int *type)
+ {
+-	struct plic_priv *priv =3D d->host_data;
+-
+-	if (test_bit(PLIC_QUIRK_EDGE_INTERRUPT, &priv->plic_quirks))
++	if (irq_fwspec->param_count >=3D 2)
+ 		return irq_domain_translate_twocell(d, fwspec, hwirq, type);
+=20
+ 	return irq_domain_translate_onecell(d, fwspec, hwirq, type);
+@@ -335,9 +327,8 @@ static int plic_starting_cpu(unsigned int cpu)
+ 	return 0;
+ }
+=20
+-static int __init __plic_init(struct device_node *node,
+-			      struct device_node *parent,
+-			      unsigned long plic_quirks)
++static int __init plic_init(struct device_node *node,
++			    struct device_node *parent)
+ {
+ 	int error =3D 0, nr_contexts, nr_handlers =3D 0, i;
+ 	u32 nr_irqs;
+@@ -348,8 +339,6 @@ static int __init __plic_init(struct device_node *node,
+ 	if (!priv)
+ 		return -ENOMEM;
+=20
+-	priv->plic_quirks =3D plic_quirks;
+-
+ 	priv->regs =3D of_iomap(node, 0);
+ 	if (WARN_ON(!priv->regs)) {
+ 		error =3D -EIO;
+@@ -471,20 +460,7 @@ static int __init __plic_init(struct device_node *node,
+ 	return error;
+ }
+=20
+-static int __init plic_init(struct device_node *node,
+-			    struct device_node *parent)
+-{
+-	return __plic_init(node, parent, 0);
+-}
+-
+ IRQCHIP_DECLARE(sifive_plic, "sifive,plic-1.0.0", plic_init);
+ IRQCHIP_DECLARE(riscv_plic0, "riscv,plic0", plic_init); /* for legacy syst=
+ems */
+-
+-static int __init plic_edge_init(struct device_node *node,
+-				 struct device_node *parent)
+-{
+-	return __plic_init(node, parent, BIT(PLIC_QUIRK_EDGE_INTERRUPT));
+-}
+-
+-IRQCHIP_DECLARE(andestech_nceplic100, "andestech,nceplic100", plic_edge_in=
+it);
+-IRQCHIP_DECLARE(thead_c900_plic, "thead,c900-plic", plic_edge_init);
++IRQCHIP_DECLARE(andestech_nceplic100, "andestech,nceplic100", plic_init);
++IRQCHIP_DECLARE(thead_c900_plic, "thead,c900-plic", plic_init);
 
-Thanks
-Heiko
-
-> ---
->  arch/arm64/boot/dts/rockchip/rk3399-roc-pc.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3399-roc-pc.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-roc-pc.dtsi
-> index 2f4b1b2e3ac7..8fd808a0df85 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3399-roc-pc.dtsi
-> +++ b/arch/arm64/boot/dts/rockchip/rk3399-roc-pc.dtsi
-> @@ -735,7 +735,7 @@ &spi1 {
->  	flash@0 {
->  		compatible = "jedec,spi-nor";
->  		reg = <0>;
-> -		spi-max-frequency = <10000000>;
-> +		spi-max-frequency = <30000000>;
->  	};
->  };
->  
-> 
-
-
-
-
+--=20
+Without deviation from the norm, progress is not possible.
