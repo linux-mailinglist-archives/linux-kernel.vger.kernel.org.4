@@ -2,307 +2,398 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50538636225
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:44:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E58F663622A
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:45:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236795AbiKWOoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 09:44:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44828 "EHLO
+        id S236823AbiKWOpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 09:45:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236726AbiKWOoS (ORCPT
+        with ESMTP id S236459AbiKWOp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 09:44:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34EFDDF3C
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 06:44:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F09461D51
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 14:44:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83DF4C433D6;
-        Wed, 23 Nov 2022 14:44:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669214655;
-        bh=27NGPz3cNFUc+l8uRsWBcvcCJpkbbBBy7XasujLP8BM=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=kQTr3JzVrRLeVwQDcjNOfBbSZl5HQcg/ROh5tOD1HNR2Z2n4/YyTMoAQsUX04Pl/B
-         RHfHHbFCEaAzN8TD/TzesMSqGHfJ6gUqdkLwa9XPxxr/a+Py417e18XC1HhIu0eRXP
-         IwMpenXc6sg2p9tkrfivAPbViL4MJc+EPTAp8M09monjCJ7O3JjRPVO+whVM0srZHO
-         57D9lINwYHWPTWuJu9TzgylcPnqXZSMahyeIQT0d1gmCdh07asDcNLyiaryy4mIDR/
-         fbNEZ8OBHrfDFW8PMLpftwzwQgzwro2K2wDsS9Utf1vMKqBg1gfefSFxcyXaJBg3ht
-         oRABQrGTzJ0DQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 1EE505C0584; Wed, 23 Nov 2022 06:44:15 -0800 (PST)
-Date:   Wed, 23 Nov 2022 06:44:15 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     Phillip Lougher <phillip@squashfs.org.uk>,
-        LKML <linux-kernel@vger.kernel.org>, phillip.lougher@gmail.com,
-        Thorsten Leemhuis <regressions@leemhuis.info>, elliott@hpe.com
-Subject: Re: BUG: BISECTED: in squashfs_xz_uncompress() (Was: RCU stalls in
- squashfs_readahead())
-Message-ID: <20221123144415.GX4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <eac8af79-8936-f845-c8dd-c63ebf0d5e81@alu.unizg.hr>
- <02877aee-8c05-6534-8a91-94ba366d0276@squashfs.org.uk>
- <20221118155534.GJ4001@paulmck-ThinkPad-P17-Gen-1>
- <dd430080-774b-1cba-1758-2bf92cb1acac@alu.unizg.hr>
- <20221120175016.GC4001@paulmck-ThinkPad-P17-Gen-1>
- <8e62a31f-3ef8-71ec-6181-2afa56eeb5db@alu.unizg.hr>
- <20221120192150.GE4001@paulmck-ThinkPad-P17-Gen-1>
- <8c9eb87b-5623-730a-5cf6-72d831ef797a@alu.unizg.hr>
- <20221122020734.GD4001@paulmck-ThinkPad-P17-Gen-1>
- <e8f5b9b3-383a-c267-9ee3-f1e0da5466fc@alu.unizg.hr>
+        Wed, 23 Nov 2022 09:45:26 -0500
+Received: from DM4PR02CU001-vft-obe.outbound.protection.outlook.com (mail-centralusazon11022015.outbound.protection.outlook.com [52.101.63.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A0327B31;
+        Wed, 23 Nov 2022 06:45:24 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=U9/olN0Q3ImnvHmRd1JaC+gVKBphyvdg+K0k94Q8TrHECcuUoK7v/Ss7a7kWqyAVgjs+H+PA7mF8X8az93BnLLkr8lRZkDA4QaGHYuOst5dwXHRTErR23m8cuJ5jg2XnhYkzdMVXN0ODu2IT1QWhc525psA8u5k8Zmdhet1PyEQKKVXXogLoQ6uNJOX4xEuH1iH6uIZkEoc+SvZa0NJDVUvY886fiAVXbSJZDgNUZsH21lT0F2U+XY5/mPn8Dwg7PvE8ojnXDZKDSAMO56H+o7RG7jIX59Ki7XSahk/oqF25l+ZG65fQCB8+xM3ppp9ZpEuC+ya9rW3WYDbFuHQm6Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PaXfWlzLahE9B0t1NDv2j8BBIDrLFskyMjQICqCmMS8=;
+ b=cpixIz5GIweDLzHAIN9057+0heGaMbtiZw/9G7fBTWpd+XRiT5DH604qxixp1L6GtFEYfEo1hqZETCXsco9tPj4i/MOPLmI4EuqTUrfyioJonLHd+lzh2DOEGtgdhGDolozOZq2VCMfI1vBU+5JMZoXqvS6/z8QHwA5zUQaUqDnRZcfOge92waIrfmzWkAD1+k0A5zRFVWWx3Vtr3BeGRhm/g9OqFvXMWqArFMCKDQ41DRSPwD6LRxrB5wj7N1lp6LDypd+ircRHM+msLlcBvagAl8Veer34QG1f2kkK5R3pJbsNg5LoH7Jdol/L3U46dMNkGQTSe2xtP78l0hwKJg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PaXfWlzLahE9B0t1NDv2j8BBIDrLFskyMjQICqCmMS8=;
+ b=c4gWoFhGUUiJ5VF+DGVHAYuxDpIkRCKKk2jJzqQxY+utUTVFFWipWhxfyH61aZR1CDkFBE1BArficfjLwjiPIYhJrInKXTAVSkjSYZ5MlGxZe/7SWxBn8JYB3b3ylxQWJbgTcQXQKF0PUFub6sNV86EW0tu8pRNcfTiXQ0UVxnQ=
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
+ by BL1PR21MB3114.namprd21.prod.outlook.com (2603:10b6:208:392::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.2; Wed, 23 Nov
+ 2022 14:45:21 +0000
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::1e50:78ec:6954:d6dd]) by BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::1e50:78ec:6954:d6dd%4]) with mapi id 15.20.5880.002; Wed, 23 Nov 2022
+ 14:45:15 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     Dexuan Cui <decui@microsoft.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Dexuan Cui <decui@microsoft.com>
+Subject: RE: [PATCH 5/6] x86/hyperv: Support hypercalls for TDX guests
+Thread-Topic: [PATCH 5/6] x86/hyperv: Support hypercalls for TDX guests
+Thread-Index: AQHY/eL68sa7B8PD5UqEC8+ROEIS6K5MlaWg
+Date:   Wed, 23 Nov 2022 14:45:14 +0000
+Message-ID: <BYAPR21MB16886270B7899F35E8A826A4D70C9@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <20221121195151.21812-1-decui@microsoft.com>
+ <20221121195151.21812-6-decui@microsoft.com>
+In-Reply-To: <20221121195151.21812-6-decui@microsoft.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=a799fdd5-3e93-46b4-b0f9-8dd673651b98;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-11-23T14:34:36Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|BL1PR21MB3114:EE_
+x-ms-office365-filtering-correlation-id: 335b5260-f8f7-4215-b394-08dacd615514
+x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: klaEowYSNrpwY/EmBv+8na3YEVtDVFN9+8JrCe13m4b+20vdIkHF9OicwmbiQSJFnUjFyON2AzbVIwrAoqsmyGu4aMQN7eFVkPBfMzSPcnyWHOZW76RZ06ign0h3/ooxRuIfpZQg3rpEQA3lCWtO0g5BJ+hjJ3s3EBQ3nxtJHSN0psx8moyQrt9H+kFEVpCxr9RteyNmibR2kDYc2edkKWDs7+qxxwRpnc80ycRzjXJMe1hznT5InsnjEjGooNXevP7O0+YxQiLsvgHxQCGaL2qjMxBC2+uvUznKcD4Cl20mXQwq7Beo6H63job4EyZm3yf5It2DqYRqdsfXUGZ/KqhOnu60WOcAreGNTUyeFYggzLOht/xy+Cx/Tc/AmL6h6WZCPPClJsbeZLzzchNReBqaOc2zkhX4LrNwA4lgngL6LpR4C9+C2+zg1TtRPd0wrfoqXhasn0DTM86ejTVbrfjCmqZTpGKKR17VM51te5PiXW4v9NAzEHVi+ZH4VbrGh3pOA3s5iSHVWptqcPsHcQkWBKaBCHuJg3dicnN9zxaP2Y4+G/zGWvnALwZbI278e5vIff1GhMLMRVyxoc1Cwx7aj9WMo1CpxyLNaa4D5ZQ0Bi1Y4fCjMaIsZjMaPDVr1htP6r1MeVbFeGm4r+OK/60eSt09m7KECqB0u8y77gQFS5kzHWsNMaNthgpWPoIn4VWA7yAROkGMsqXRy2O/wJ6nlo1d319d1C/7Ii1DYFG/oCplsf7t04KAYVGbA0tOhFtzW1uVl5loWFZrXJKsLg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(376002)(346002)(396003)(136003)(39860400002)(451199015)(8990500004)(478600001)(83380400001)(2906002)(38100700002)(122000001)(7416002)(5660300002)(82950400001)(82960400001)(8936002)(71200400001)(52536014)(186003)(41300700001)(55016003)(66446008)(921005)(38070700005)(64756008)(66476007)(8676002)(4326008)(66556008)(76116006)(9686003)(66946007)(107886003)(110136005)(26005)(10290500003)(86362001)(316002)(54906003)(7696005)(33656002)(6506007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?piFzj29C623qbHsm0sJNaHi4CtZAC9k0t0fvgiqIMZWAguhu13KPsFlAAq8Q?=
+ =?us-ascii?Q?U5P7L3nEH8LgbhKX81WXM+BtyJvN6yrbVmAfDpXY9wKx5uUy8J6M6x4DmcBo?=
+ =?us-ascii?Q?y9AMcl92LMnc1Aju8syDUDAeLHYOvg/gPuj0Upygc3z26u8EQFdYWEvWkGyD?=
+ =?us-ascii?Q?8NHnDdKY+WF39MWHosUKPIDYHPUkJxKa/07E2zJcKclfmSegSOmwtudRZHoM?=
+ =?us-ascii?Q?0j2xgL4cjvyZmmhI0d+Sz1/FPlBtS1EoCcVaRjj381KlCqheh9UkW/DBYwxI?=
+ =?us-ascii?Q?ej9EZoHY8Awc2M8zJldMXUTs75UbkBrHXuQhmW9tLvxea+QlmDqXal5ubiGb?=
+ =?us-ascii?Q?7vXz4ZGUSdl9p3wLLFATCImWrLRCpoPklYH1ROWQpSTh8p9OxxojIeBOVi86?=
+ =?us-ascii?Q?E0H+C4UkQnKiSSEMbSD474FQ3U6NLwpxr5e6zd6pQ+YT0GZ0VAOScjxTk0ow?=
+ =?us-ascii?Q?0HXHBmhS23g/YBe+glECrIzt9136cXSV2IBN4RqWuzFsN+8SG1PuYxTJ4+R7?=
+ =?us-ascii?Q?IY6nsST3+NWf2pfoWJDahRazzSLKSnvXbwGUTJpuOsbzAYnwaLJ6hSmf6Lt8?=
+ =?us-ascii?Q?Z9o05V+TiZoRcCnQ6+FdCIkYgRLVZSZ+Bh4Sq2Cvdx9SIMlP46gU5pS1FrKs?=
+ =?us-ascii?Q?qI/m0hZXL5xS6MxEij/+MOEYtoUtPqnu0fnjizj3Hm54ee0CFAkS+Wt3Xls5?=
+ =?us-ascii?Q?jsN/8RjC8uSkkwOy0xDQ0Q3JR9VE52CZQmSXIXxn99nI2hIdH3POGLVsL3t+?=
+ =?us-ascii?Q?H5lDYSFqkD33TOB0f2Hf/p1X86E1Mf2FetSE3IRq8hawzHe+0a8BGoka6QH3?=
+ =?us-ascii?Q?pv2WXm9rRt5u+5rvkS5nEPtRPKO/kX0aSHePLt348sSaypjVKfbMDfmrvILD?=
+ =?us-ascii?Q?IhnUwDp3tO1Y1bfGabS9DS/8j5l+lVAl3ghsdMj85fZqDNMUnbOduWxB0trj?=
+ =?us-ascii?Q?AWcUzoFg9PI2ntRL7Adp7fwFB+6QXziSGr9suIpYC9rVmZhvGCUjQ/B1SED0?=
+ =?us-ascii?Q?BDfrkaxzaRHZEvjslxjnO+0cpkMO/R5Za7N2iQzB2hvzB2mz28PiPLQ17asX?=
+ =?us-ascii?Q?4vj8ytjUoMcxnrU5LauRXZoeru0EC8aaU20lzhxkE+mvfYEoZMBlJSDj9sBI?=
+ =?us-ascii?Q?kk0/2VBTZ0E1bjQU2UnI++IbaexdO73AzgxbU6upYDmbEzT5RGvLGe6AyGAJ?=
+ =?us-ascii?Q?AdVkjdMDGWsoxrVkUe5B54cjFWuQqeeMg/mJWGwkY99Z34adN6M59ZLUgf12?=
+ =?us-ascii?Q?BYAXvNEzBWv1jZ5mpQgSnHeS/koDzMkCsLqI7M2cdDiUP8aipCJadVPaH+ZX?=
+ =?us-ascii?Q?KFKG4MHJf5vOFNK6XAeTIi1M439ebRnadehAXZ4wuo4mLJW4sEyhIpXztlwh?=
+ =?us-ascii?Q?ZsJgwdXlv92iR4/qMqwRZ/4re6m8pdOyPcycjb/ZyCI+N39GglIHp1p86D2p?=
+ =?us-ascii?Q?UEMVtfiUTWpLyDMw1WYUQKcL/GACZ6n1QrjJVw8gMtdMaIxxoMext/oBqNX/?=
+ =?us-ascii?Q?V8sTZV+D+9V5OK5QsPYCi+iD+hilZF8Uecz08pm+L3abDoTuz1+n1rwQRbq3?=
+ =?us-ascii?Q?VyiHVHTyy2JjyTYSmAxSbfFegqUSgJ9fjjG0EzEBoY6cMe+6BDGICHGYh/rR?=
+ =?us-ascii?Q?QQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e8f5b9b3-383a-c267-9ee3-f1e0da5466fc@alu.unizg.hr>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 335b5260-f8f7-4215-b394-08dacd615514
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Nov 2022 14:45:14.8663
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: G0bE3XaJOlXHzeb8c1iDrvmDHVHn6gxWBaIS8UZoDUcl5+58uqk6jRZZiw4tn2HSsYdYWipueqHq06uLp7bC4CNEmjF+Z1YthHNeMTB+NQI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR21MB3114
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 10:14:07AM +0100, Mirsad Goran Todorovac wrote:
-> On 22. 11. 2022. 03:07, Paul E. McKenney wrote:
-> 
-> > > I'm afraid that I would lose in Far Cry miserably if my cores
-> > > decided to all lock up for 21 secs. :-(
-> > 
-> > Agreed, 21 seconds is an improvement over the earlier 60 seconds, but
-> > still a very long time.  Me, I come from DYNIX/ptx, where the equivalent
-> > to the RCU CPU stall warning was 1.5 seconds.  On the other hand, it
-> > is also the case that DYNIX/ptx had nowhere near the variety of drivers
-> > and subsystems, nor did it scale anywhere near as far as Linux does today.
-> > 
-> > But you only need one CPU to lock up for 21 seconds to get an RCU CPU
-> > stall warning, not all of them.  ;-)
-> 
-> I can recall an occasion or a couple of them where the entire X Window system
-> had been unresponsive for quite a number of seconds that sometimes made me reset
-> the Ubuntu box.
-> 
-> I have the good news: the patches did not apply because they were already applied
-> in the mainline tree:
-> 
-> mtodorov@domac:~/linux/kernel/linux_stable_build_b$ git log | grep -C5 28b3ae426598
->     Signed-off-by: Borislav Petkov <bp@suse.de>
->     Reviewed-by: Kees Cook <keescook@chromium.org>
->     Acked-by: Florian Weimer <fweimer@redhat.com>
->     Link: https://lore.kernel.org/r/898932fe61db6a9d61bc2458fa2f6049f1ca9f5c.1652290558.git.luto@kernel.org
-> 
-> commit 28b3ae426598e722cf5d5ab9cc7038791b955a56
-> Author: Uladzislau Rezki <uladzislau.rezki@sony.com>
-> Date:   Wed Feb 16 14:52:09 2022 +0100
-> 
->     rcu: Introduce CONFIG_RCU_EXP_CPU_STALL_TIMEOUT
-> 
-> mtodorov@domac:~/linux/kernel/linux_stable_build_b$ git log | grep -C5 1045a06724f3
->     Somehow kernel-doc complains here about strong markup, but
->     we really don't need the [] so just remove that.
-> 
->     Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-> 
-> commit 1045a06724f322ed61f1ffb994427c7bdbe64647
-> Author: Christoph Hellwig <hch@lst.de>
-> Date:   Wed Jun 29 17:01:02 2022 +0200
-> 
->     remove CONFIG_ANDROID
-> 
-> mtodorov@domac:~/linux/kernel/linux_stable_build_b$
+From: Dexuan Cui <decui@microsoft.com> Sent: Monday, November 21, 2022 11:5=
+2 AM
+>=20
+> A TDX guest uses the GHCI call rather than hv_hypercall_pg.
+>=20
+> In hv_do_hypercall(), Hyper-V requires that the input/output addresses
+> must have the vTOM bit set. With current Hyper-V, the bit for TDX is
+> bit 47, which is saved into ms_hyperv.shared_gpa_boundary() in
+> ms_hyperv_init_platform().
+>=20
+> arch/x86/include/asm/mshyperv.h: hv_do_hypercall() needs
+> "struct ms_hyperv_info", which is defined in
+> include/asm-generic/mshyperv.h, which can't be included in
+> arch/x86/include/asm/mshyperv.h because include/asm-generic/mshyperv.h
+> has vmbus_signal_eom() -> hv_set_register(), which is defined in
+> arch/x86/include/asm/mshyperv.h.
+>=20
+> Break this circular dependency by introducing a new header file
+> for "struct ms_hyperv_info".
+>=20
+> Signed-off-by: Dexuan Cui <decui@microsoft.com>
+> ---
+>  MAINTAINERS                          |  1 +
+>  arch/x86/hyperv/hv_init.c            |  8 ++++++++
+>  arch/x86/include/asm/mshyperv.h      | 24 ++++++++++++++++++++++-
+>  arch/x86/kernel/cpu/mshyperv.c       |  2 ++
+>  include/asm-generic/ms_hyperv_info.h | 29 ++++++++++++++++++++++++++++
+>  include/asm-generic/mshyperv.h       | 24 +----------------------
+>  6 files changed, 64 insertions(+), 24 deletions(-)
+>  create mode 100644 include/asm-generic/ms_hyperv_info.h
+>=20
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 256f03904987..455ecaf188fe 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -9537,6 +9537,7 @@ F:	drivers/scsi/storvsc_drv.c
+>  F:	drivers/uio/uio_hv_generic.c
+>  F:	drivers/video/fbdev/hyperv_fb.c
+>  F:	include/asm-generic/hyperv-tlfs.h
+> +F:	include/asm-generic/ms_hyperv_info.h
+>  F:	include/asm-generic/mshyperv.h
+>  F:	include/clocksource/hyperv_timer.h
+>  F:	include/linux/hyperv.h
+> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+> index 89954490af93..05682c4e327f 100644
+> --- a/arch/x86/hyperv/hv_init.c
+> +++ b/arch/x86/hyperv/hv_init.c
+> @@ -432,6 +432,10 @@ void __init hyperv_init(void)
+>  	/* Hyper-V requires to write guest os id via ghcb in SNP IVM. */
+>  	hv_ghcb_msr_write(HV_X64_MSR_GUEST_OS_ID, guest_id);
+>=20
+> +	/* A TDX guest uses the GHCI call rather than hv_hypercall_pg. */
+> +	if (hv_isolation_type_tdx())
+> +		goto skip_hypercall_pg_init;
+> +
+>  	hv_hypercall_pg =3D __vmalloc_node_range(PAGE_SIZE, 1, VMALLOC_START,
+>  			VMALLOC_END, GFP_KERNEL, PAGE_KERNEL_ROX,
+>  			VM_FLUSH_RESET_PERMS, NUMA_NO_NODE,
+> @@ -471,6 +475,7 @@ void __init hyperv_init(void)
+>  		wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
+>  	}
+>=20
+> +skip_hypercall_pg_init:
+>  	/*
+>  	 * hyperv_init() is called before LAPIC is initialized: see
+>  	 * apic_intr_mode_init() -> x86_platform.apic_post_init() and
+> @@ -606,6 +611,9 @@ bool hv_is_hyperv_initialized(void)
+>  	if (x86_hyper_type !=3D X86_HYPER_MS_HYPERV)
+>  		return false;
+>=20
+> +	/* A TDX guest uses the GHCI call rather than hv_hypercall_pg. */
+> +	if (hv_isolation_type_tdx())
+> +		return true;
+>  	/*
+>  	 * Verify that earlier initialization succeeded by checking
+>  	 * that the hypercall page is setup
+> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyp=
+erv.h
+> index 9d593ab2be26..650b4fae2fd8 100644
+> --- a/arch/x86/include/asm/mshyperv.h
+> +++ b/arch/x86/include/asm/mshyperv.h
+> @@ -9,7 +9,7 @@
+>  #include <asm/hyperv-tlfs.h>
+>  #include <asm/nospec-branch.h>
+>  #include <asm/paravirt.h>
+> -#include <asm/mshyperv.h>
+> +#include <asm-generic/ms_hyperv_info.h>
+>=20
+>  union hv_ghcb;
+>=20
+> @@ -48,6 +48,18 @@ static inline u64 hv_do_hypercall(u64 control, void *i=
+nput, void
+> *output)
+>  	u64 hv_status;
+>=20
+>  #ifdef CONFIG_X86_64
+> +#if CONFIG_INTEL_TDX_GUEST
+> +	if (hv_isolation_type_tdx()) {
+> +		if (input_address)
+> +			input_address +=3D ms_hyperv.shared_gpa_boundary;
+> +
+> +		if (output_address)
+> +			output_address +=3D ms_hyperv.shared_gpa_boundary;
+> +
+> +		return __tdx_ms_hv_hypercall(control, output_address,
+> +					     input_address);
+> +	}
+> +#endif
 
-OK, very good.
+Two thoughts:
 
-But your CONFIG_RCU_EXP_CPU_STALL_TIMEOUT seems to be about 20.
-As in 20 milliseconds.
+1)  The #ifdef CONFIG_INTEL_TDX_GUEST could probably be removed entirely
+with a tweak.  hv_isolation_type_tdx() already doesn't need the #ifdef as t=
+here's
+already a stub that returns 'false'.   Then you just need a way to handle
+__tdx_ms_hv_hypercall(), or whatever it becomes based on the other discussi=
+on.
+As long as you can provide a stub that does nothing, the #ifdef won't be ne=
+eded.
 
-Is that intentional?
+2)  Assuming that we end up with some kind of Hyper-V specific version of
+__tdx_hypercall(), and hopefully as a "C" function, could you move the hand=
+ling
+of  ms_hyperv.shared_gpa_boundary into that function?  Then you won't need
+to break out a separate include file for struct ms_hyperv.  The Hyper-V TDX
+hypercall function must handle both normal and "fast" hypercalls, and the
+shared_gpa_boundary adjustment is needed only for normal hypercalls,
+but you can check the "fast" bit in the control word to decide.
 
-> > > This is at present just the wishful thinking, as I lack your 30 years of
-> > > experience with the kernel and RCU update system. I am only beginning to realise
-> > > why it is more efficient than the traditional locking, and IMHO it should
-> > > avoid locking up cores instead of increasing the number of complaints.
-> > 
-> > Just to set the record straight, RCU does not normally lock up any of
-> > the cores.  Instead, RCU detects that cores have been locked up.
-> > 
-> > Give or take the occasional bug in RCU, of course!
-> 
-> Currently, I cannot be the judge of that, for I can't seem to understand how the
-> magic of RCU works., how it is implemented. There's more homework to be done ;-)
+I haven't coded these ideas, so maybe there are snags I haven't thought of.
+But I'm really hoping we can avoid having to create a separate include
+file for struct ms_hyperv.
 
-The high-level specification is dead simple.  Calls synchronize_rcu()
-must wait for any CPU or task that has already executed rcu_read_lock()
-to reach the corresponding rcu_read_unlock().  For more requirements:
+Michael
 
-Documentation/RCU/Design/Requirements/Requirements.rst
-
-> > > But even if the Linux kernel source is magically "memory mapped" into my
-> > > mind, I still do not see how it could be done. My Linux kernel learning curve
-> > > had not yet got that up, but I have no doubts that it is designed by
-> > > Intelligent Designers who are very witty people, and not village idiots ;-)
-> > 
-> > There is the school of thought that claims that the Linux kernel is
-> > driven by evolutionary forces rather than intelligent design.  And as
-> > we all know, evolutionary forces are driven by random changes, which
-> > absolutely anyone could make.
-> 
-> Give or take the rate of improbability where a bunch of monkeys randomly typing
-> would produce a working Linux kernel source would be about a couple of working
-> sources in a space of 96^30,000,00 (something like 10^300,000,000), it is comparable
-> to the probability of random coming of the first simplest DNA into the existence
-> from the amino acid primordial soup.
-> 
-> (Not that many atoms in the Universe - 10^82, you'd need an awful lot of wasted
-> multiverses with no even single cell life and certainly no working Linux kernels.)
-
-Just apply continuous integration to each monkey's output.  Just like
-was done to the strands of amino acids.
-
-(Sorry, couldn't resist!)
-
-> > And one approach is to take a less aggressive RCU CPU stall timeout,
-> > say reducing from 21 seconds to (say) 15 seconds instead of all the
-> > way down to 20 milliseconds.  This could allow you to ease into the
-> > latency-reduction work.
-> > 
-> > Alternatively, consider that response time is a property of the
-> > entire system plus the environment that it runs in.  So I suspect that
-> > the Android folks are accompanying that 20-millisecond timeout with
-> > some restrictions on what the on-phone workloads are permitted to do.
-> > Maybe ask the Android guys what those restrictions are and loosen them
-> > slightly, again allowing you to ease into the latency-reduction work.
-> 
-> Good point.
-> > Sometimes an NMI does get the CPUs back on track.  Sometimes the RCU CPU
-> > stall warning is a symptom of the CPU having gotten too old and failing.
-> > Most often, though, it is a sign of some sort of lockup, a too-long
-> > RCU read-side critical section, or as Robert Elliot noted, the lack of
-> > a cond_resched().
-> > 
-> > But please keep in mind that cond_resched() helps only in kernels built
-> > with CONFIG_PREEMPTION=n.
-> 
-> I have bad news that 6.1-r6 is still affected with squashfs_xz_uncompress bug, despite having both of your fixes
-> (as visible in above command's output -- double checked):
-> 
-> [   91.065659] rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { 3-.... } 6 jiffies s: 621 root: 0x8/.
-
-If you build with (say) CONFIG_RCU_EXP_CPU_STALL_TIMEOUT=200, does
-this still happen?
-
-For that 
-
-> [   91.065694] rcu: blocking rcu_node structures (internal RCU debug):
-> [   91.065704] Sending NMI from CPU 5 to CPUs 3:
-> [   91.065721] NMI backtrace for cpu 3
-> [   91.065730] CPU: 3 PID: 2829 Comm: snap-store Not tainted 6.1.0-rc6 #1
-> [   91.065741] Hardware name: LENOVO 82H8/LNVNB161216, BIOS GGCN49WW 07/21/2022
-> [   91.065746] RIP: 0010:__asan_load4+0x0/0xa0
-> [   91.065764] Code: 9e c0 84 c0 75 e1 5d c3 cc cc cc cc 48 c1 e8 03 80 3c
-> 10 00 75 e9 5d c3 cc cc cc cc 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 <55>
-> 48 89 e5 48 8b 4d 08 48 83 ff fb 77 64 eb 0f 0f 1f 00 48 b8 00
-> [   91.065771] RSP: 0000:ffff8881388ef140 EFLAGS: 00000246
-> [   91.065779] RAX: 0000000000000000 RBX: 0000000000000003 RCX: ffffffff9be992fd
-> [   91.065785] RDX: 0000000000000003 RSI: dffffc0000000000 RDI: ffff888125500004
-> [   91.065789] RBP: ffff8881388ef1e0 R08: 0000000000000001 R09: ffffed1024aa0de8
-> [   91.065794] R10: ffff888125506f39 R11: ffffed1024aa0de7 R12: 0000000001067db0
-> [   91.065799] R13: ffff888125500000 R14: 00000000014fe803 R15: ffff888125502112
-> [   91.065804] FS:  00007fdec50ab180(0000) GS:ffff888257180000(0000) knlGS:0000000000000000
-> [   91.065810] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   91.065815] CR2: 00007fdeb7cb6260 CR3: 000000011a436005 CR4: 0000000000770ee0
-> [   91.065820] PKRU: 55555554
-> [   91.065823] Call Trace:
-> [   91.065826]  <TASK>
-> [   91.065829]  ? lzma_main+0x37a/0x1260
-> [   91.065845]  lzma2_lzma+0x2b9/0x430
-> [   91.065857]  xz_dec_lzma2_run+0x11f/0xb90
-> [   91.065867]  ? __asan_load4+0x55/0xa0
-> [   91.065880]  xz_dec_run+0x346/0x11f0
-> [   91.065892]  squashfs_xz_uncompress+0x196/0x370
-> [   91.065905]  ? lzo_uncompress+0x400/0x400
-> [   91.065913]  squashfs_decompress+0x88/0xd0
-> [   91.065923]  squashfs_read_data+0x1e5/0x900
-> [   91.065930]  ? __create_object+0x4ae/0x560
-> [   91.065942]  ? squashfs_bio_read.isra.3+0x230/0x230
-> [   91.065951]  ? __kasan_kmalloc+0xb6/0xc0
-> [   91.065961]  ? squashfs_page_actor_init_special+0x1a6/0x210
-> [   91.065972]  squashfs_readahead+0xaa3/0xe80
-> [   91.065985]  ? squashfs_fill_page+0x190/0x190
-> [   91.065993]  ? __filemap_add_folio+0x3a1/0x680
-> [   91.066003]  ? dio_warn_stale_pagecache.part.67+0x90/0x90
-> [   91.066012]  read_pages+0x122/0x540
-> [   91.066023]  ? file_ra_state_init+0x60/0x60
-> [   91.066032]  ? filemap_add_folio+0xd4/0x140
-> [   91.066040]  ? folio_alloc+0x1b/0x50
-> [   91.066051]  page_cache_ra_unbounded+0x1e6/0x280
-> [   91.066064]  do_page_cache_ra+0x7c/0x90
-> [   91.066074]  page_cache_ra_order+0x393/0x400
-> [   91.066087]  ondemand_readahead+0x2f1/0x4e0
-> [   91.066098]  page_cache_async_ra+0x8b/0xa0
-> [   91.066106]  filemap_fault+0x742/0x1490
-> [   91.066113]  ? __folio_memcg_unlock+0x35/0x80
-> [   91.066124]  ? read_cache_page_gfp+0x90/0x90
-> [   91.066132]  ? filemap_map_pages+0x28e/0xc60
-> [   91.066145]  __do_fault+0x76/0x1b0
-> [   91.066154]  do_fault+0x1c6/0x680
-> [   91.066163]  __handle_mm_fault+0x89a/0x1310
-> [   91.066173]  ? copy_page_range+0x1b20/0x1b20
-> [   91.066181]  ? mt_find+0x189/0x330
-> [   91.066190]  ? mas_next_entry+0xa80/0xa80
-> [   91.066204]  handle_mm_fault+0x11b/0x390
-> [   91.066213]  do_user_addr_fault+0x258/0x860
-> [   91.066225]  exc_page_fault+0x64/0xf0
-> [   91.066235]  asm_exc_page_fault+0x27/0x30
-> [   91.066245] RIP: 0033:0x7fdeb7a1e541
-> [   91.066252] Code: 11 44 b8 e0 0f 11 44 b8 f0 0f 11 04 b8 48 83 c7 40 48
-> 83 c6 f8 75 92 48 85 d2 74 2d 4c 01 d7 49 8d 04 b9 48 83 c0 10 48 f7 da <0f>
-> 28 05 18 7d 29 00 0f 1f 84 00 00 00 00 00 0f 11 40 f0 0f 11 00
-> [   91.066259] RSP: 002b:00007fff46f77b60 EFLAGS: 00010293
-> [   91.066265] RAX: 000055fbe1a57c30 RBX: 00007fff46f77d18 RCX: 000055fbe1a57c20
-> [   91.066270] RDX: fffffffffffffffb RSI: 0000000000000005 RDI: 0000000000000000
-> [   91.066274] RBP: 000055fbe16563b0 R08: 0000000000000028 R09: 000055fbe1a57c20
-> [   91.066279] R10: 0000000000000000 R11: 0000000000000000 R12: 000000000000002b
-> [   91.066283] R13: 000055fbe1656408 R14: 00007fff46f77b80 R15: 0000000000000000
-> [   91.066292]  </TASK>
-> 
-> (This is apparently only visible in CONFIG_KASAN=y build.)
-
-And KASAN does add some overhead.
-
-So maybe the value of CONFIG_RCU_EXP_CPU_STALL_TIMEOUT needs to be a
-function of CONFIG_KASAN in your build.
-
-> > > Yes, you guys do an amasing job of keeping 30 million lines of code organised
-> > > and making some sense. I will cut the smalltalk as I know you are a busy man.
-> > > If I make a progress to actually produce any patches fixing these lockups and
-> > > stalls, I will be sure to include you into CC: as you requested.
-> > 
-> > Looking forward to seeing what you come up with!
-> 
-> There will have to be a lot of homework to catch up with to before I'd be able to do anything
-> sensible. :)
-
-Doing the homework up front can be a good thing!  ;-)
-
-							Thanx, Paul
-
-> Thanks,
-> Mirsad
-> 
+>  	if (!hv_hypercall_pg)
+>  		return U64_MAX;
+>=20
+> @@ -85,6 +97,11 @@ static inline u64 hv_do_fast_hypercall8(u16 code, u64 =
+input1)
+>  	u64 hv_status, control =3D (u64)code | HV_HYPERCALL_FAST_BIT;
+>=20
+>  #ifdef CONFIG_X86_64
+> +#if CONFIG_INTEL_TDX_GUEST
+> +	if (hv_isolation_type_tdx())
+> +		return __tdx_ms_hv_hypercall(control, 0, input1);
+> +#endif
+> +
+>  	{
+>  		__asm__ __volatile__(CALL_NOSPEC
+>  				     : "=3Da" (hv_status), ASM_CALL_CONSTRAINT,
+> @@ -116,6 +133,11 @@ static inline u64 hv_do_fast_hypercall16(u16 code, u=
+64 input1,
+> u64 input2)
+>  	u64 hv_status, control =3D (u64)code | HV_HYPERCALL_FAST_BIT;
+>=20
+>  #ifdef CONFIG_X86_64
+> +#if CONFIG_INTEL_TDX_GUEST
+> +	if (hv_isolation_type_tdx())
+> +		return __tdx_ms_hv_hypercall(control, input2, input1);
+> +#endif
+> +
+>  	{
+>  		__asm__ __volatile__("mov %4, %%r8\n"
+>  				     CALL_NOSPEC
+> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyper=
+v.c
+> index 9ad0b0abf0e0..dddccdbc5526 100644
+> --- a/arch/x86/kernel/cpu/mshyperv.c
+> +++ b/arch/x86/kernel/cpu/mshyperv.c
+> @@ -349,6 +349,8 @@ static void __init ms_hyperv_init_platform(void)
+>=20
+>  			case HV_ISOLATION_TYPE_TDX:
+>  				static_branch_enable(&isolation_type_tdx);
+> +
+> +				ms_hyperv.shared_gpa_boundary =3D cc_mkdec(0);
+>  				break;
+>=20
+>  			default:
+> diff --git a/include/asm-generic/ms_hyperv_info.h b/include/asm-
+> generic/ms_hyperv_info.h
+> new file mode 100644
+> index 000000000000..734583dfea99
+> --- /dev/null
+> +++ b/include/asm-generic/ms_hyperv_info.h
+> @@ -0,0 +1,29 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +#ifndef _ASM_GENERIC_MS_HYPERV_INFO_H
+> +#define _ASM_GENERIC_MS_HYPERV_INFO_H
+> +
+> +struct ms_hyperv_info {
+> +	u32 features;
+> +	u32 priv_high;
+> +	u32 misc_features;
+> +	u32 hints;
+> +	u32 nested_features;
+> +	u32 max_vp_index;
+> +	u32 max_lp_index;
+> +	u32 isolation_config_a;
+> +	union {
+> +		u32 isolation_config_b;
+> +		struct {
+> +			u32 cvm_type : 4;
+> +			u32 reserved1 : 1;
+> +			u32 shared_gpa_boundary_active : 1;
+> +			u32 shared_gpa_boundary_bits : 6;
+> +			u32 reserved2 : 20;
+> +		};
+> +	};
+> +	u64 shared_gpa_boundary;
+> +};
+> +extern struct ms_hyperv_info ms_hyperv;
+> +
+> +#endif
+> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyper=
+v.h
+> index bfb9eb9d7215..2ae3e4e4256b 100644
+> --- a/include/asm-generic/mshyperv.h
+> +++ b/include/asm-generic/mshyperv.h
+> @@ -25,29 +25,7 @@
+>  #include <linux/nmi.h>
+>  #include <asm/ptrace.h>
+>  #include <asm/hyperv-tlfs.h>
+> -
+> -struct ms_hyperv_info {
+> -	u32 features;
+> -	u32 priv_high;
+> -	u32 misc_features;
+> -	u32 hints;
+> -	u32 nested_features;
+> -	u32 max_vp_index;
+> -	u32 max_lp_index;
+> -	u32 isolation_config_a;
+> -	union {
+> -		u32 isolation_config_b;
+> -		struct {
+> -			u32 cvm_type : 4;
+> -			u32 reserved1 : 1;
+> -			u32 shared_gpa_boundary_active : 1;
+> -			u32 shared_gpa_boundary_bits : 6;
+> -			u32 reserved2 : 20;
+> -		};
+> -	};
+> -	u64 shared_gpa_boundary;
+> -};
+> -extern struct ms_hyperv_info ms_hyperv;
+> +#include <asm-generic/ms_hyperv_info.h>
+>=20
+>  extern void * __percpu *hyperv_pcpu_input_arg;
+>  extern void * __percpu *hyperv_pcpu_output_arg;
 > --
-> Mirsad Goran Todorovac
-> Sistem inženjer
-> Grafički fakultet | Akademija likovnih umjetnosti
-> Sveučilište u Zagrebu
-> -- 
-> System engineer
-> Faculty of Graphic Arts | Academy of Fine Arts
-> University of Zagreb, Republic of Croatia
-> The European Union
-> 
+> 2.25.1
+
