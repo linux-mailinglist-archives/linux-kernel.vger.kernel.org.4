@@ -2,108 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5899635B8E
+	by mail.lfdr.de (Postfix) with ESMTP id 3AE16635B8C
 	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 12:24:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236960AbiKWLXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 06:23:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58414 "EHLO
+        id S237056AbiKWLXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 06:23:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236527AbiKWLXH (ORCPT
+        with ESMTP id S237091AbiKWLXV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 06:23:07 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6DD769FA;
-        Wed, 23 Nov 2022 03:23:02 -0800 (PST)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 23 Nov 2022 06:23:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE67BED5F6;
+        Wed, 23 Nov 2022 03:23:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4C7426602AE2;
-        Wed, 23 Nov 2022 11:23:00 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1669202580;
-        bh=SS5h0AcRIuCYZwAghSxIqcJiZsZkfQ+w6DNodr6pz3o=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V20LmNqEDP+RZ0vAsiU/DQZGF5/FzpEzVBLshk46yMDkXxGYO4LWXx9JEi0+gutz8
-         7kkJmsbuS0HechadCgfeRB/dAcVA+ZGOHCZdkS6XOipqkEsbdkZ+W80o0YoLoZryIg
-         E+rNNVZNt9nbw0qBMh3Axy7Y0Do+7bzWppxD8u7S4leSJnC7gqdZFLMOZAKAx7RWo3
-         nzHCHgq83zmjzyDz+ettN+5uq7XAQBcTtioiPlt1XLAKPiDWkdLlfGEXmH1f2XU2m7
-         oVFRA55Z8wDuOJOMAzg/E+QXMHFj31rhFH7LxhejhrrflUQsKd/Y7jneWSXQLWo7tz
-         lvioMV7HT09qg==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     tglx@linutronix.de
-Cc:     maz@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        youlin.pei@mediatek.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v2 4/4] irqchip: irq-mtk-cirq: Add support for System CIRQ on MT8192
-Date:   Wed, 23 Nov 2022 12:22:49 +0100
-Message-Id: <20221123112249.98281-5-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221123112249.98281-1-angelogioacchino.delregno@collabora.com>
-References: <20221123112249.98281-1-angelogioacchino.delregno@collabora.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A48561C21;
+        Wed, 23 Nov 2022 11:23:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D159EC43144;
+        Wed, 23 Nov 2022 11:23:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669202588;
+        bh=XKRzTZEWHP1EN1Nejvn+0OZzGhKx7U4U140sQA04rVU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=b9F53+1W1kELCSLkWE7UxyjE0kyKvKveLb6yRiwPo0cez4f7CwWFzetXgTgwuwqC7
+         2uCkL575Sxo7CtObNKn4o2D7xTzphq90TwT8SiP2//RkxSUMwteTgOxcIazHc7OhpQ
+         +1gjR1qz9FJo+ibJ+3o3rlHCDBExYlAKwl9aKe1jMMAoqAC4vm9AIkHoOeWNgbsB57
+         WzcGGaVlaIbXhMCZmqcQcUZw93/lD8f14VzRGMb0eWiptrjxQK2ShVP/9h2oNAWqbj
+         VM6iIpeAGaiurqzr0uOO2lwlrv4qGAwJoUm6XLIH7QJfjK1ch+t9JmOZTFTzUQ53ij
+         rrefrBuSxZhNw==
+Received: by mail-lf1-f44.google.com with SMTP id b3so27705394lfv.2;
+        Wed, 23 Nov 2022 03:23:08 -0800 (PST)
+X-Gm-Message-State: ANoB5pkPu+hP7PQeOeHxdsAS16KXEN3ouhgPakQ/DrVXWzToAXWDDm5y
+        fkUMxVk1MNzmifEY85PEtT1BfBcvRn1EzShL7hk=
+X-Google-Smtp-Source: AA0mqf7xQPXEKhZUbEG6N9rf61z9C6ox/MXh8L49cyEIG/qq1rOwP2K7b9s22Svaz/OKT6OfyeUtr8LfYTIMYVFKw7w=
+X-Received: by 2002:a05:6512:3c89:b0:4a2:bfd2:b218 with SMTP id
+ h9-20020a0565123c8900b004a2bfd2b218mr9251006lfv.228.1669202586752; Wed, 23
+ Nov 2022 03:23:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221122161017.2426828-1-ardb@kernel.org> <5750d157-43dd-6f3d-1407-f41af3cff207@amd.com>
+ <CAMj1kXHUQFAcRKzRkuGG3Rsyrexdi7_NUS1-aXrS36LP4Q=rxw@mail.gmail.com>
+ <26c34f9e-3b09-7b10-09a2-993a50790447@amd.com> <Y336yE4P3NjCGavN@zn.tnic>
+ <CAMj1kXGnGz+V3tmonitY+3TiWuWJFWj-mQLUbRo+xp8UwZ_SpQ@mail.gmail.com> <Y33/VIsB5HGREY4i@zn.tnic>
+In-Reply-To: <Y33/VIsB5HGREY4i@zn.tnic>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 23 Nov 2022 12:22:55 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXFMc_1ZVeiBJmUwPjPh-_LCU8Jqr_iSOEhVHT=PJFstcQ@mail.gmail.com>
+Message-ID: <CAMj1kXFMc_1ZVeiBJmUwPjPh-_LCU8Jqr_iSOEhVHT=PJFstcQ@mail.gmail.com>
+Subject: Re: [PATCH v3 00/17] x86: head_64.S spring cleaning
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Tom Lendacky <thomas.lendacky@amd.com>, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Michael Roth <michael.roth@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some SoCs the System CIRQ register layout is slightly different,
-as there are more registers per function and in some cases other
-differences later in the layout: this is seen on at least MT8192,
-but it's also valid for some other "contemporary" SoCs both for
-Chromebooks and for smartphones.
+On Wed, 23 Nov 2022 at 12:09, Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Wed, Nov 23, 2022 at 11:52:32AM +0100, Ard Biesheuvel wrote:
+> > The patch moves it from .data to .bss inadvertently, and I am not
+> > convinced Tom's analysis is entirely accurate: we may simply have
+> > garbage in image_offset if we access it before .bss gets cleared.
+>
+> That should not be too hard to find out: add an endless loop in asm in
+> the guest right after the first image_offset access:
+>
+> 1:
+>         jmp 1b
+>
+> and then dump its value.
+>
+> Or Tom might have an even better solution.
+>
+> But looking at the code, BSS clearing happens later, at .Lrelocated and
+> the EFI stub comes before it. AFAICT.
+>
 
-Add the new "v2" register layout and use it if the compatible
-"mediatek,mt8192-cirq" is found.
+Indeed. And moving it back into .data makes the most sense in any case
+- the point of the patch is to drop the duplicate definitions from asm
+code, not to move it into a different section.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/irqchip/irq-mtk-cirq.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
-
-diff --git a/drivers/irqchip/irq-mtk-cirq.c b/drivers/irqchip/irq-mtk-cirq.c
-index 4d873d2ba0fd..57452d389b47 100644
---- a/drivers/irqchip/irq-mtk-cirq.c
-+++ b/drivers/irqchip/irq-mtk-cirq.c
-@@ -39,6 +39,18 @@ static const u32 mtk_cirq_regs_v1[] = {
- 	[CIRQ_CONTROL]	= 0x300,
- };
- 
-+static const u32 mtk_cirq_regs_v2[] = {
-+	[CIRQ_STA]	= 0x0,
-+	[CIRQ_ACK]	= 0x80,
-+	[CIRQ_MASK_SET]	= 0x180,
-+	[CIRQ_MASK_CLR]	= 0x200,
-+	[CIRQ_SENS_SET]	= 0x300,
-+	[CIRQ_SENS_CLR]	= 0x380,
-+	[CIRQ_POL_SET]	= 0x480,
-+	[CIRQ_POL_CLR]	= 0x500,
-+	[CIRQ_CONTROL]	= 0x600,
-+};
-+
- #define CIRQ_EN	0x1
- #define CIRQ_EDGE	0x2
- #define CIRQ_FLUSH	0x4
-@@ -273,6 +285,7 @@ static const struct of_device_id mtk_cirq_of_match[] = {
- 	{ .compatible = "mediatek,mt2701-cirq", .data = &mtk_cirq_regs_v1 },
- 	{ .compatible = "mediatek,mt8135-cirq", .data = &mtk_cirq_regs_v1 },
- 	{ .compatible = "mediatek,mt8173-cirq", .data = &mtk_cirq_regs_v1 },
-+	{ .compatible = "mediatek,mt8192-cirq", .data = &mtk_cirq_regs_v2 },
- 	{ /* sentinel */ }
- };
- 
--- 
-2.38.1
-
+The reason I hadn't spotted this is because my boot chain always sets
+the value of image_offset during the boot, and does not rely on the
+statically initialized value at all.
