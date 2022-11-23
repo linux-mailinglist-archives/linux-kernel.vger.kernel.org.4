@@ -2,408 +2,687 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B346636C86
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 22:44:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C75DF636C87
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 22:45:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235765AbiKWVoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 16:44:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55704 "EHLO
+        id S236685AbiKWVoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 16:44:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235320AbiKWVoK (ORCPT
+        with ESMTP id S235400AbiKWVod (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 16:44:10 -0500
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FABC688A
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 13:44:08 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id p141so64941iod.6
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 13:44:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ndLvFvzrQi4KY9EBB6F51rhBs2HHxiUpuZy5HeAcnK8=;
-        b=WB83wweHpSOKzdvrfMDqsPohu84YJwjVwYe0JjsmgMD61XXgzbZz/AJCePGfqLF7NJ
-         UPmaGZxnTP7xcdHU5KGo1FL1j5vMVqF6ak9c+XTnP8uEWjtDodFLHTlF+IOtp/BDa42i
-         3/wu56dVh9GRWhP4+idyAQNXRWvRRhBH0aUlQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ndLvFvzrQi4KY9EBB6F51rhBs2HHxiUpuZy5HeAcnK8=;
-        b=5zKk9oSiJ+KjpiLa4xLOzbxriVOTe6HrsySDSTMKS0UacD3k+Ob9Qs6xws6iDyWiWR
-         4ETV95cMbqmwpg95jS0YzJB3Pd5KazX2MwRXIl5t/hdPCsRY8SlRw+5OxkTRruspSJp8
-         XfRbwT/N6YFTTuVPmUm5vkofAEWdxRMLeToX2Lg+uZn20j7jnoI7IyBB2cXLDWEkNr5t
-         E9WmIOxzvAEbkiGRA7ytHff2eM1sCp/CyX+tr+1FprEaz09cfhYHJmyJn5lJAwvjzghL
-         aCqcHDTYhY3gxU4Ke7IlyA6S8XZbXooYagnGs5oOMZdfwzQ/04TstKEu/pDCaotG2lhx
-         cG0Q==
-X-Gm-Message-State: ANoB5plaJo7H1iB8nbMAbqjsSk5EHZa4stoz6s30Ry75ar+7uOclmc96
-        YB1JMWkgDwycCnywsLCrI1rARg==
-X-Google-Smtp-Source: AA0mqf7X1+Ruvcb2iSjxHFr57YzynUkGHWv69JWvWxrRk38xKZnb7qJys+EEwK7cOSnFR1NjO8SK8Q==
-X-Received: by 2002:a05:6638:4395:b0:36d:9ec0:14e3 with SMTP id bo21-20020a056638439500b0036d9ec014e3mr8247144jab.44.1669239847503;
-        Wed, 23 Nov 2022 13:44:07 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id g2-20020a92d7c2000000b003024b62725dsm6016102ilq.22.2022.11.23.13.44.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 13:44:07 -0800 (PST)
-Date:   Wed, 23 Nov 2022 21:44:06 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Vidya Sagar <vidyas@nvidia.com>,
-        "Kenneth R. Crudup" <kenny@panix.com>, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com, hkallweit1@gmail.com,
-        wangxiongfeng2@huawei.com, mika.westerberg@linux.intel.com,
-        kai.heng.feng@canonical.com, chris.packham@alliedtelesis.co.nz,
-        yangyicong@hisilicon.com, treding@nvidia.com, jonathanh@nvidia.com,
-        abhsahu@nvidia.com, sagupta@nvidia.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kthota@nvidia.com,
-        mmaddireddy@nvidia.com, sagar.tv@gmail.com,
-        Ricky Wu <ricky_wu@realtek.com>,
-        Rajat Jain <rajatja@google.com>,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>,
-        Victor Ding <victording@google.com>
-Subject: Re: [PATCH V1] PCI/ASPM: Save/restore L1SS Capability for
- suspend/resume
-Message-ID: <Y36UJu4Ho54KBaHF@google.com>
-References: <0d8cc8c0-31a1-0290-5aa5-0c7b16db1edb@nvidia.com>
- <20220412225047.GA627910@bhelgaas>
+        Wed, 23 Nov 2022 16:44:33 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2088.outbound.protection.outlook.com [40.107.223.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF548C9018;
+        Wed, 23 Nov 2022 13:44:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EPDCnrE340C2sOm1Bqp5fxlzd9SSfpo2EHClaprDwswjRPVPzoGrWJk7vgV3YmqbGGRkgBk5BCAdgaY81skZ+hR0mtVqw/SlFWFPVXSXNvOY+qKftJKXW0gW8NeZF1cExLzZ7P3W9GfEEOxetyomCrF+vxHNqBo8beRAerO0t9hdf2sngwcPLYZNrLIHoxq40mhguluUlJhDnH6rM7Ikq/YjH09snLRy2CILXpDDrDzEb3cjT+4BkzDzJA0PjMao/Jx3k5xYolTrKLh8JgxlUNpc0XArMt9hScKr9ezPCeBX+i9TNJR9ra+h0TpqEWaWFCt93UDEnf/z8KHD6klo+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iqfzjM/w89Vywkx8nI832GTHrEF+ao1mFnfPtMLCl5M=;
+ b=ZUftPb3ZnvGi+3EbYWz1V1ZSrNzRpg0zWhdwsdBDC5Tdzuo729vfGciex0I23Y6YPmN5hB6aWDdVhmJKKjEUbbYr3mO/cwlXn79QkVkePZfpNtMPfVHUPcl/8LJNpRmUsW6Q4aiFH+xuEXtIhw/wnsQfJdakoJL5/nLzJmCIdNS3QY0KyHPw3WZoRLoqTlGnGg4XFN4XbR6N+QuT9x69FgGoUhPqNCMhL3Wdg3/KY5J51VoRnssdWOB6t8WUyvMbnxz407ZCjcBMQ/OqQAxsE6/Zss+sBMduBhGV41CHpnb09ebyq39y8A1GfmMmBStHwd/zluCay7MZbh9XQtWHdA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iqfzjM/w89Vywkx8nI832GTHrEF+ao1mFnfPtMLCl5M=;
+ b=k5euOBlGmnyf84sx2iWn0gXSCqfYqvDA9KA7Vsnr4YCyV1ktPSfOwJBmQzjAb33iyAY9Rd6QWyFMvPNgqqOVkyRHrWxRznzHPEclGeHDTtDdq8lqGtO+wSL4x4CDi98yJrbnmRRTQhMhcPo5Il2fsB8ynyCv4ZQYelJ97q1E0AI=
+Received: from MW3PR12MB4553.namprd12.prod.outlook.com (2603:10b6:303:2c::19)
+ by CH2PR12MB4325.namprd12.prod.outlook.com (2603:10b6:610:a9::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.18; Wed, 23 Nov
+ 2022 21:44:28 +0000
+Received: from MW3PR12MB4553.namprd12.prod.outlook.com
+ ([fe80::790c:da77:2d05:6098]) by MW3PR12MB4553.namprd12.prod.outlook.com
+ ([fe80::790c:da77:2d05:6098%4]) with mapi id 15.20.5857.018; Wed, 23 Nov 2022
+ 21:44:28 +0000
+Content-Type: multipart/mixed;
+        boundary="_000_MW3PR12MB45531279C61A2A75C8CC47C2950C9MW3PR12MB4553namp_"
+From:   "Moger, Babu" <Babu.Moger@amd.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>,
+        Peter Newman <peternewman@google.com>
+CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "chang.seok.bae@intel.com" <chang.seok.bae@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>,
+        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "eranian@google.com" <eranian@google.com>,
+        "fenghua.yu@intel.com" <fenghua.yu@intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "pawan.kumar.gupta@linux.intel.com" 
+        <pawan.kumar.gupta@linux.intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "Das1, Sandipan" <Sandipan.Das@amd.com>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: RE: [PATCH v8 10/13] x86/resctrl: Add sysfs interface to write
+ mbm_total_bytes_config
+Thread-Topic: [PATCH v8 10/13] x86/resctrl: Add sysfs interface to write
+ mbm_total_bytes_config
+Thread-Index: AQHY8Ig1NUxgMo+j/USgNFOHQRk/GK4zRFsAgACQ5oCAF+IHAIABbtJQ
+Date:   Wed, 23 Nov 2022 21:44:27 +0000
+Message-ID: <MW3PR12MB45531279C61A2A75C8CC47C2950C9@MW3PR12MB4553.namprd12.prod.outlook.com>
+References: <166759206900.3281208.11975514088019160962.stgit@bmoger-ubuntu>
+ <20221107102134.255757-1-peternewman@google.com>
+ <cccacde9-7d0b-f0c8-2e3d-2b09c910b8c5@amd.com>
+ <5ce5bdd7-c2ee-fa7c-a01c-174ee3ee24d8@intel.com>
+In-Reply-To: <5ce5bdd7-c2ee-fa7c-a01c-174ee3ee24d8@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: <MW3PR12MB45531279C61A2A75C8CC47C2950C9@MW3PR12MB4553.namprd12.prod.outlook.com>
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-11-23T21:36:02Z;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=ff47bb2d-6e4e-49f0-b8da-3f18de91d62d;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2022-11-23T21:44:26Z
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: c716a640-f1b9-4a3b-9e8b-be910d6f86b2
+msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW3PR12MB4553:EE_|CH2PR12MB4325:EE_
+x-ms-office365-filtering-correlation-id: b66da2de-1f50-437e-55e9-08dacd9be57d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: =?iso-8859-1?Q?ILzZjgHkM/z+u6epUGBNumm08mJ0KYOZQ8xArgfsXA+L3PSHmlNmdTs6W5?=
+ =?iso-8859-1?Q?edcR0fEp3A1RQktLCL5Y6XraQGry5Gmi48FK77LALR8F89qd43AUFTZ0Rl?=
+ =?iso-8859-1?Q?My8qyEkmCUdgv15TSOMnQj0L3y34PuZX5mx56WxZN9J6uK+GFpYttMkABe?=
+ =?iso-8859-1?Q?kTp8kz+Xxj2IY89OAwkklSUS6Rho+psL90u3TwSRbktqM8+/cqAo2l8ZNc?=
+ =?iso-8859-1?Q?4UXBRkAk6ws33+C6tS5wLSs1KgU1VNsFuRXhn1DhWRD3cYgrgSxMwD7yoz?=
+ =?iso-8859-1?Q?zt5uadNnn1MMc4+d4nOpYW9GBr2JwGubp5Y2mWUIMWg1qrjF3HdVgSc9cE?=
+ =?iso-8859-1?Q?AV6lMbdJYZ68O4dDIOQwm1bG4jHWN7Pt+7bcMVRbE+m+zXiz0lAAQ1rKIp?=
+ =?iso-8859-1?Q?6vnIk2cSgyt2vpasj3MpWehwjb/SEFjOKa0UbnUb6iQ+O7K3XcLfzmC2Af?=
+ =?iso-8859-1?Q?xQuQe6dcSGrL7O58kRj4Q+9s4C/bM02F+LhQgM5Hm23Cuvs7++AUByKqG4?=
+ =?iso-8859-1?Q?KlF2RGu335pmk33EboRgM2pnQZmQ9rTAXqBaT4KTNUfkSTszxiCrkdOecS?=
+ =?iso-8859-1?Q?WkyVm3mawp7Y/cIq/85WLrD2zXYNkfpr9DkjWO5MictDtYxPp5AUjpRsJM?=
+ =?iso-8859-1?Q?7Xp01k81+kZReV1zm5HTCCgkZ3iD4mX2MM2qBuB+u/HK2jHbk1qWDZcbwA?=
+ =?iso-8859-1?Q?JWBX3DoNPHfaG2kwTWNr6iu37MlhLbLxdz3hwqZ8lObmR/RnMLCCjO1nuA?=
+ =?iso-8859-1?Q?29KKi7FBAA8bVdW5EDJATsuZHCA190D17pbRHNS2QUlz8027cGkVWgDgpp?=
+ =?iso-8859-1?Q?B95qyLnshMgRx3UfRdxNmGOfcsrkOvCrfq03NB/F+dkPb5C2/HTW5mH1vM?=
+ =?iso-8859-1?Q?31f5kyHLnYmNQrMyO0gjP2V8oVe5GrFTlHiyu9UkiLhhkuGR3a5SaQB8aE?=
+ =?iso-8859-1?Q?1N/7nyWVGKGAYAYXR3hgbwRZpKO4NdLD84Bh8jukCw9Zscflj5T70XMXE6?=
+ =?iso-8859-1?Q?TjtSnMBhommMZFpKdVQGg45Uiy2dqsOWRUxrNx?=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR12MB4553.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(366004)(396003)(39860400002)(136003)(346002)(451199015)(4326008)(8676002)(45080400002)(2906002)(38100700002)(64756008)(66446008)(122000001)(52536014)(966005)(8936002)(71200400001)(41300700001)(478600001)(5660300002)(38070700005)(316002)(33656002)(7416002)(66946007)(76116006)(66556008)(66476007)(55016003)(86362001)(54906003)(110136005)(83380400001)(186003)(6506007)(7696005)(53546011)(26005)(9686003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?93hIkyooyR1HGkNgiTXIpHCUVB59E16iX7PAvCMXfYoYFMwvlO88v9XqGV?=
+ =?iso-8859-1?Q?guw+LbXMD0b5ugFwQy8kvJiRGWcDBEIHEfpWLMzJ5Jha6C4kxnu9n2AF2S?=
+ =?iso-8859-1?Q?RZwMsWWZeOVgbsRBr1xLTWxCpw8feDrOBAiQ7pER9c9HUmmOj8rJsVOFwb?=
+ =?iso-8859-1?Q?sC74EHmDEdx0cJPSTuDJ4aygYgPfc1itP1yqQtMFxsG2kZRIXeTZwdd+va?=
+ =?iso-8859-1?Q?DKqYhZTV0RFeLCYqRxMcwTrZO6nse5IqTKivNjosx7mfj6FhPKxr2VeZRs?=
+ =?iso-8859-1?Q?WLUdcN2R8eDGgt05IhZ6QuaPVmvq0skK5A8XJpahdpKbZOTtqwYkgEFqSp?=
+ =?iso-8859-1?Q?gaLmZVDiWGdyACMbHSh09sf/GfvGLFBwT6Xe6wkkt1BX8urHDSFDhVYQ34?=
+ =?iso-8859-1?Q?HoSMIhKCp5e6xoSKEjzAlBTq0KXj0BrsEEd9GFQz1nNRItIJ5KG/7qdGLe?=
+ =?iso-8859-1?Q?W3WDg3ZFHau8IZuul+QJtJT8WmJFYCR4uZnh5EkK3h/L35ZN8uaigv13MU?=
+ =?iso-8859-1?Q?p4EBMp2xV8NkQEEILhDJXoqsIu5ND3tKB3MZK3sylCOIODP/OE8vxIjuuF?=
+ =?iso-8859-1?Q?sbU1UNwU7t+Xnzrti24LRPGnVkVvumkCtwXVpSIbfauzxr/KHNWIfnKpWC?=
+ =?iso-8859-1?Q?bL6K2jzQhafL7tfwEl/8RCkJyYNoC5nT26rccXYRJaRddDfWAp7e77GUj/?=
+ =?iso-8859-1?Q?pEC9sKJ4OfPpoKWthsoj2GldjcViPptb0HetAYXA4gjxC3t0E86XcZveZ0?=
+ =?iso-8859-1?Q?IJ4Vrj2t7skF2Z/VS6BJ+tDUcLloF6UaoGNvCta81mt3dYN6SOyYLMwcRx?=
+ =?iso-8859-1?Q?U0DnJq1isp3Si8/MFY6jK1g+FLTir/yEgFMqchY5fyjVb80wCtzy7RVTb6?=
+ =?iso-8859-1?Q?a40CdeYg2DBkDGfluBLJkamw+zDIn/UWuSL1OTPrXof+jWRpxERSGoipV7?=
+ =?iso-8859-1?Q?xDLM8D2pAxB2S5TWWUiR/96O04BClw8C/pb6Qk1nTSpzEPnbL1WSpk0Icv?=
+ =?iso-8859-1?Q?LMYUoU2/mYEddxHZoa4S0PH7fA7hslfuZl5VgPcaRg4Trt04I3uHRLR1im?=
+ =?iso-8859-1?Q?OREWZ9+zcCocfVqr4B/w66qRlsJfkGsNf9M1OD9aTq5rBPzNf1z43wqyOw?=
+ =?iso-8859-1?Q?NFq+SSbGBiyQI7St/jKD+U2zE3Ivyv+Qw7pLP8SPjUiKOJdqLZceEFDWeN?=
+ =?iso-8859-1?Q?KE0xRhJndM3CR4rZbSd6f5pcPqcTwuXq+A/7NKCygtquSu40sX/FMufk/U?=
+ =?iso-8859-1?Q?7DRcKfYH5sDziix7L78BP4BsunE8P7qXTDqTXuCsGFdUICEqsXy2TwWhum?=
+ =?iso-8859-1?Q?CXRSnTEU0pkqQRHHq0X89G4NWWJnQmWsK2z/Qz61FYrNUnYFZRFwLK+PLc?=
+ =?iso-8859-1?Q?ypqn/g6UiwofDa6NBElftUpOkuvs9sauDLJ5O4VmQj7b01furI5f4rKxhi?=
+ =?iso-8859-1?Q?+pczIP35vDkTYeJkAldrPj7v0tumeYBlv6BDJJvQVJkL6wJC/GUw95rD0t?=
+ =?iso-8859-1?Q?PSpZ28UaFnfK/ndGeWDu10ns+gYYVeETHS7NzQAjk1JeFghDTSXesGLUsO?=
+ =?iso-8859-1?Q?ctZIr4Yya5qMEWapjXeSwufNCS28KpR2+8tLr5PthYcESePewZ0RxQK2tj?=
+ =?iso-8859-1?Q?vCThvkm0eDkfs=3D?=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220412225047.GA627910@bhelgaas>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW3PR12MB4553.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b66da2de-1f50-437e-55e9-08dacd9be57d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Nov 2022 21:44:27.9855
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: wZKHpSqbnDjkoXGBHlq9JVzkYFBxc6+x4ZuP2AVvnhizQFgosnXbnDT8BsYg5hr2
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4325
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+--_000_MW3PR12MB45531279C61A2A75C8CC47C2950C9MW3PR12MB4553namp_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-not sure this is the best thread to reply to, but we are also
-observing suspend issues with the same Kioxia NVMe on a platform
-with a Qualcomm sc7280 SoC. The system runs a v5.15 downstream
-kernel which includes most (post v5.15) ASPM patches from
-upstream.
+[AMD Official Use Only - General]
 
-There are two issues with the Kioxia NVMe:
+Hi Reinette,
 
-1. Power consumption is high unless a LTR_L1.2_THRESHOLD of 0ns
-   is configured (related dubious patch: [1])
+> -----Original Message-----
+> From: Reinette Chatre <reinette.chatre@intel.com>
+> Sent: Tuesday, November 22, 2022 5:43 PM
+> To: Moger, Babu <Babu.Moger@amd.com>; Peter Newman
+> <peternewman@google.com>
+> Cc: akpm@linux-foundation.org; bagasdotme@gmail.com; bp@alien8.de;
+> chang.seok.bae@intel.com; corbet@lwn.net;
+> damien.lemoal@opensource.wdc.com; daniel.sneddon@linux.intel.com;
+> dave.hansen@linux.intel.com; eranian@google.com; fenghua.yu@intel.com;
+> hpa@zytor.com; james.morse@arm.com; jmattson@google.com;
+> jpoimboe@kernel.org; linux-doc@vger.kernel.org; linux-
+> kernel@vger.kernel.org; mingo@redhat.com; paulmck@kernel.org;
+> pawan.kumar.gupta@linux.intel.com; pbonzini@redhat.com;
+> peterz@infradead.org; quic_neeraju@quicinc.com; rdunlap@infradead.org;
+> Das1, Sandipan <Sandipan.Das@amd.com>; songmuchun@bytedance.com;
+> tglx@linutronix.de; tony.luck@intel.com; x86@kernel.org
+> Subject: Re: [PATCH v8 10/13] x86/resctrl: Add sysfs interface to write
+> mbm_total_bytes_config
+>=20
+> Hi Babu,
+>=20
+> On 11/7/2022 11:00 AM, Moger, Babu wrote:
+> >
+> > On 11/7/22 04:21, Peter Newman wrote:
+> >> Hi Babu,
+> >>
+> >> On Fri, Nov 04, 2022 at 03:01:09PM -0500, Babu Moger wrote:
+> >>> +	/*
+> >>> +	 * When an Event Configuration is changed, the bandwidth counters
+> >>> +	 * for all RMIDs and Events will be cleared by the hardware. The
+> >>> +	 * hardware also sets MSR_IA32_QM_CTR.Unavailable (bit 62) for
+> >>> +	 * every RMID on the next read to any event for every RMID.
+> >>> +	 * Subsequent reads will have MSR_IA32_QM_CTR.Unavailable (bit 62)
+> >>> +	 * cleared while it is tracked by the hardware. Clear the
+> >>> +	 * mbm_local and mbm_total counts for all the RMIDs.
+> >>> +	 */
+> >>> +	memset(d->mbm_local, 0, sizeof(struct mbm_state) * r->num_rmid);
+> >>> +	memset(d->mbm_total, 0, sizeof(struct mbm_state) * r->num_rmid);
+> >> Looking around, I can't find a reader for mbm_total anymore. It looks
+> >> like the last place it was used went away in James's recent change:
+> >>
+> >> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Flo=
+r
+> >> e.kernel.org%2Fall%2F20220902154829.30399-19-
+> james.morse%40arm.com&am
+> >>
+> p;data=3D05%7C01%7Cbabu.moger%40amd.com%7Ccb4a2daf65b84b45aeac08da
+> cce35
+> >>
+> 66d%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C63804757402544
+> 6241%7
+> >>
+> CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI
+> 6Ik
+> >>
+> 1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=3DQZUVrpdr0YQFSJ
+> BbS0BHSu
+> >> q%2BhMwZHAA06MUqx98hD0U%3D&amp;reserved=3D0
+> >>
+> >> Are we supposed to be clearing arch_mbm_total now?
+> >>
+> > Patch got garbled in previous response.
+> >
+> > Here is it now.
+> >
+> > diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> > b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> > index 6b222f8e58ae..28d9d99a639e 100644
+> > --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> > +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> > @@ -1517,7 +1517,7 @@ static int mbm_config_write(struct rdt_resource
+> > *r, struct rdt_domain *d,
+> > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0 u32 evtid, u32 val)
+> > =A0{
+> > =A0=A0=A0=A0=A0=A0=A0 struct mon_config_info mon_info =3D {0};
+> > -=A0=A0=A0=A0=A0=A0 int ret =3D 0;
+> > +=A0=A0=A0=A0=A0=A0 int ret =3D 0, i;
+> >
+> > =A0=A0=A0=A0=A0=A0=A0 rdt_last_cmd_clear();
+> >
+> > @@ -1557,8 +1557,10 @@ static int mbm_config_write(struct rdt_resource
+> > *r, struct rdt_domain *d,
+> > =A0=A0=A0=A0=A0=A0=A0=A0 * cleared while it is tracked by the hardware.=
+ Clear the
+> > =A0=A0=A0=A0=A0=A0=A0=A0 * mbm_local and mbm_total counts for all the R=
+MIDs.
+> > =A0=A0=A0=A0=A0=A0=A0=A0 */
+> > -=A0=A0=A0=A0=A0=A0 memset(d->mbm_local, 0, sizeof(struct mbm_state) *
+> > r->num_rmid);
+> > -=A0=A0=A0=A0=A0=A0 memset(d->mbm_total, 0, sizeof(struct mbm_state) *
+> > r->num_rmid);
+> > +=A0=A0=A0=A0=A0=A0 for (i =3D 0; i < r->num_rmid; i++) {
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 resctrl_arch_reset_rmid(r, =
+d, i,
+> > +QOS_L3_MBM_TOTAL_EVENT_ID);
+> > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 resctrl_arch_reset_rmid(r, =
+d, i,
+> > +QOS_L3_MBM_LOCAL_EVENT_ID);
+> > +=A0=A0=A0=A0=A0=A0 }
+> >
+> > =A0write_exit:
+> > =A0=A0=A0=A0=A0=A0=A0 return ret;
+>=20
+> Resetting each member of an array individually seems unnecessary when the
+> array could just be reset as a unit. How about instead a new
+> resctrl_arch_reset_rmid_all() that can do so?
 
-2. The system often hangs on resume unless a longer delay is
-   added in the suspend pass. QC engineers say that the NVMe is
-   taking so much time to settle in L1ss.
+Yes. We can do something like this below.=20
 
-Other NVMe models don't exhibit power or suspend issues on this
-platform, except for one model which also needs a shorter
-delay during suspend, otherwise the system will hang
-occasionally upon resume.
+diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/re=
+sctrl/monitor.c
+index a188dacab6c8..2e67de911222 100644
+--- a/arch/x86/kernel/cpu/resctrl/monitor.c
++++ b/arch/x86/kernel/cpu/resctrl/monitor.c
+@@ -176,6 +176,14 @@ void resctrl_arch_reset_rmid(struct rdt_resource *r, s=
+truct rdt_domain *d,
+                memset(am, 0, sizeof(*am));
+ }
 
-The second issue could possibly be 'fixed' with a quirk for
-the Kioxia NVMe model, though it seems the issue is not seen on
-all platforms, apparently the delay is not needed on Kenny's
-system.
++void resctrl_arch_reset_rmid_all(struct rdt_domain *d)
++{
++       struct rdt_hw_domain *hw_dom =3D resctrl_to_arch_dom(d);
++
++       memset(hw_dom->arch_mbm_total, 0, sizeof(*hw_dom->arch_mbm_total));
++       memset(hw_dom->arch_mbm_local, 0, sizeof(*hw_dom->arch_mbm_local));
++}
++
+ static u64 mbm_overflow_count(u64 prev_msr, u64 cur_msr, unsigned int widt=
+h)
+ {
+        u64 shift =3D 64 - width, chunks;
 
-I'm currently a bit at a loss with the first issue. The patch
-mentioned above claims that the (no-)snoop latencies are
-involved, which may or may not be true. In this thread I saw
-Kenny posting 'lspci' output from his (now) working system.
-I noticed max (no-)snoop values of 3145728ns, which seems to
-be some sort of default (programmed) max. On my system these
-values are 0ns, which is the default value of the registers.
-I tried to set these to 3146us from the kernel to see if that
-makes a difference, but could only successfully update the max
-snoop latency, but not non-snoop (maybe this can be only done
-at early initialization time?). With just the max snoop latency
-set to 3146us power consumption of the NVMe remains high.
+--_000_MW3PR12MB45531279C61A2A75C8CC47C2950C9MW3PR12MB4553namp_
+Content-Disposition: attachment; filename="winmail.dat"
+Content-Transfer-Encoding: base64
+Content-Type: application/ms-tnef; name="winmail.dat"
 
-The output of lspci from my system is attached.
+eJ8+IpQlAQaQCAAEAAAAAAABAAEAAQeQBgAIAAAA5AQAAAAAAADoAAEJgAEAIQAAAEEzRUMwQjgx
+NjgxRDFBNDY5OTUwNDQwQTQzODJCOUM4AA0HAQ2ABAACAAAAAgACAAEFgAMADgAAAOYHCwAXABUA
+LAAbAAMAbgEBIIADAA4AAADmBwsAFwAVACwAGwADAG4BAQiABwAYAAAASVBNLk1pY3Jvc29mdCBN
+YWlsLk5vdGUAMQgBBIABAFYAAABSRTogW1BBVENIIHY4IDEwLzEzXSB4ODYvcmVzY3RybDogQWRk
+IHN5c2ZzIGludGVyZmFjZSB0byB3cml0ZSBtYm1fdG90YWxfYnl0ZXNfY29uZmlnAEMdAQOQBgBw
+TgAAcwAAAAIBfwABAAAAUQAAADxNVzNQUjEyTUI0NTUzMTI3OUM2MUEyQTc1QzhDQzQ3QzI5NTBD
+OUBNVzNQUjEyTUI0NTUzLm5hbXByZDEyLnByb2Qub3V0bG9vay5jb20+AAAAAAsAHw4AAAAAAgEJ
+EAEAAAD0CwAA8AsAANQXAABMWkZ1tR0CR2EACmZiaWQEAABjY8BwZzEyNTIA/gND8HRleHQB9wKk
+A+MCAARjaArAc2V0MCDvB20CgwBQEU0yCoAGtAKAln0KgAjIOwliMTkOwL8JwxZyCjIWcQKAFWIq
+CbBzCfAEkGF0BbIOUANgc6JvAYAgRXgRwW4YMF0GUnYEkBe2AhByAMB0fQhQbhoxECAFwAWgG2Rk
+miADUiAQIheyXHYIkOR3awuAZDUdUwTwB0ANF3AwCnEX8mJrbWsGcwGQACAgQk1fQuBFR0lOfQr8
+AfEL8AAyIFtBTUQgT2cBIA5QBzEgVRIAIeBuQGx5IC0gRxhDbGhdXGwLgGUKgSPESJppB/BlI9EC
+QGUsI7zWPiMAJlJPBRBnC4AiUXJNB5BzYRgwJlMlx0alA2E6JLcgQxHQdAlwbCA8CXAk5C4RwSmh
+QNsLgBAgbCpwA3A+JccGYAsCMCjAVApQc2RhefosB7BvGjAG0BuxIXAs8AMB0CFxNTo0MyBQkk0l
+x1RvKMBNbxgwanIs8EIBoHUp0C/iLqEvc0BhbWQrQzsucJ8SEBuxB8EDgSXHPHAxouMYUDISQGdv
+L4AecCtMBENjKMBha3BtQNEjwXV4LQIQdR3AGICqaQIgLgWwZzFwYidw8mEssG90B4AzoADAAxA7
+K0I2wXAw4CPACfA4Li8BABYgJdYZky4SAG9rvi424CrZMXAFoS1gdDVwXnc2cCTxOQgswG04kS7n
+HnAEYAdAQG8y8ACACGHiYypgd2RjN+QswAMAdSshcxhQZDcwM5A1gy73Opg8ORowLhmhEgA/vzFw
+LxhhAwAzizFwZgnwZ2hgdWEueXU6iSXHaLEKsEB6eRiRN+RqMPD9B5AuBGAR8TDgGwBG5RsRjnQZ
+IEObJcdqcG8HcPsG4CrQazMiKzA2kzWENzDoY0B2L5EuSv8n6EykzUxPIDzgGcBvQAlxKYGDN+QK
+sHVsbWNrSurbJccKsHcAcEyQdQDARtBcZ3UFMEZwQi9wBuBuunoLgGlQKlIoMaJ6KuGdA1BhAQBX
+YDaEcXUOUPZfGFAYYWpFAFgSC4A+db8LIDYAC2A4UFcsJcdENxC+MSzwBhEN4AqwA6A8XAbeLluh
+MOlI4TeQdRHANgB8QGJGoAmAAHA+IUCbdN0z4Hg1cymgAiBpQBA44XscwAIgeT0gXmBRUDqZeIw4
+NkrpK5h1YmoFkAcsUSTAKMBbUEFUQyBIIHY4IB6QLzF0M11isi8JcATwKaBsTSjAQT+AXgB5cwPQ
+IDkq8nJmANAZ4BiQIHfPBRAQICXHBtBtXxiQAZDkbF9ewnNfG+EiEGOYfyXHJJEv4iVGawkiwGWQ
+MdgvNy8t422AOh6gZtD+TSzwL3poUDdAZNAlxyuIw205IYAwNDoyW9Exmr9vf2ufc/Jzim1RKIBp
+LPNvcdEtxRiAcdAzbkBuMTnzLoAjADA1HqAvxS9zcx9ldBErDIIgLxgQef8g4CAqIFdoCfA1IAOg
+/kUaMAIwKWBqQwhwNjNncOsEIBmUZCzwdHygNtEdwP0D8GR/EBvRNgAboQ4Ae08XfFIa4TUgbAMg
+Uk1J/kQEIFwRfQQEIAPwgiEtYP8b0B5wCsAcUV7AfwMR0X+A/YQRLhJAfKCAf3xDhNaCAR8ZIF4A
+EhAEIAXgUl9JIEEzMl9RH9BDVOhSLlUm8HY3sQGgHnCMICgNwAVANjIpgcK7ha98Q2UaMSLwglIg
+fiH/fxIYUBBAWaBXgWgSAHAi8O+MEX1BgdKMGC6Kv3xDZDH/EgBYEH0yjYKDRRHQGjCIL5+JP4pB
+j598Q4Pmd2gDEP8Z4IoRflEpoADQTKCET4VQ/kOD8n8ClO98Q2kyCQAeUf+Co2k3f+QEIIHWfxKC
+U4+PXXwzL54fevAHgG0SASh4ZC0+mwcs8HihAJB66ToQZigfYHJeYAVAaTLvH2EQIIpgfHByoSA1
+oGlQ+xsADdApOQigD6EVaXOh37ei76P/c+RMM8AdoWc1ILcDYDYBLPBJG9AAcCeOgf8dsTUgjXMb
+sYHSm+iOAUeh/YVBSQVACQA6IIBqS6FMoP9/AwtgH2BQ4AtgZ/GKEVLQ/QQgdRIAlqF9MlLBIvAL
+gPQgSkdSJwQgCXA+IH1BFxmUc3pzimgCQHBzOrQvLybwbW2AOfBhRHDzI8EfUC5wb5JkgDZTYLCT
+rpIrQi8/CHBsPbVDwCUzQSUyRrkBCQH/c4oqYEyouQGCEbkBLeJ4EAEt8DE1NDgyOS7iM3ewOTkt
+FnAn6EdJ6CU0MEgFJjDws99SghI7NiFhPXhwJTdD/3fgwQE24DBhBGAvkb5iMQRBwQFjYjRhMizA
+ZqA2NWI4NMMANTpguQDQMDgswDkYPiAzHeCjv08mMDY2ZMEBMz+AcDg5NjFEcLxAw6BlpjbEMBdw
+MWG8UGS8wDnHsDE4xvDBAsj1NjNiOHHgNzU3vnAOoDTyNMYIMjTBQcVfNMKToBhrbm87wMEBVFdG
+YVTgR1pzYsbwx/B5EEpXSWpKgE1DNCB3TGpBdyHAQWmQTENKUc5iVjIKQKhNeknPUkIHYEnGCKxJ
+a8t/JiExEdBXA/CBz2FYVkNJNk0KAP240ETGwh6gySLUhL8BwHADLLHAsVFaVVZycABkcjBZUUZT
+SoElx0JiUzBCSGQwBXOKcbkAQmhNd1oQSEFBMNOgVXF4wDk4aEQwVdPh1RP7ZlEaEmTA0NGfc+QH
+EBng/7GgXgBTgEpwsWJoIYO2qtRtEcBfm+jM8T/bD3DjUPsYgBHAIDOwBUA3ADtgHnB/HGCyQbbA
+jBA2ULFQjXFz70pwQdGeCXCJSASQlwFnYf8FQMzx419w4w3gASAmQSbQtbHRL95iL2YSTKQvDmC+
+dWZGZkB/sAnACGBwKnD9cIli57/oz+neHbEQMIowkmIhcDJmx/A1ODpgqC4uMsRAOchhYcmg9jkZ
+4B6RNsppJjPnn+vfP+zveqD0kOrP8m/zfyBAhkAjALwgMTcsN3qgf/hF+AGocg5QZ3JpI2o0X39o
+U6e29rGpYAeQPfNwiSrfL7H7KTcwN6EDoCp+4HCJ+/8///l1kwCMATZAfuEBAu2T0GyU2XxQXBBg
+/q/9Nn3B0G76RlchaDAEsgVjPfsC4Q/AfaSZIwH/9PnSCXB754AGQDAGuvSwB58s8Gn/pJkDH3xQ
++5KwMmogMQBqIN2D8iikivdfygAsZYD4sf8PoR6Q+S/6P/tP/F/9b/5////zli+XP5hPmV0WipsP
+nB//nS8az59LB2egr6bvp/5wif+pDyC/pf8i3yPvJP8mDQlm/YHSKGvACHJncDAgKzot4b/0kIpg
+AvsJZgwnZmRf3mP32mITAaRRKG8BfuF2gPPqAFFPU19MM19NAkKTQFRPVEFMX6BFVkVOVJLQRCv/
+jzB/MY8ynzOuTE9DNN/fCP0GkA3//wNoU1/uMIoQ+3N5Nsl0uEB8wAgxRbjSR/9kwIfhtyCq4cQB
+f9AhoYOw/3KQKTB80plAfeCyIlww4nC/WcCCEYxQh+AhsbFAbo0w/cUQc7YgjEEXwHyxmXpD5P1/
+8Wzh8FiwsFGDsTgjggDvgpFFYYoQhVBI5XCCAFTwv2CwZ3GwUI2SrGCNMHfSR/83XzhkN8CCIA3A
+fwF3gaux2+bgh8Fv34bSRVm94XyA/4PBTdaykH8QqtKvpX5Rg7D/HEDlgGsW0kXm//U/9kUEsf+K
+EIHgwoD0z1R/VYTSRe4EDmHIsMRBq7BiNmM46+8hx8A3rLA5bYDugfAMf/EvVs9X3vSfXM9X3vgD
+N5g2LDb4oWJBMTT38v52zoDh8EufOGUSf2fxFF9fFW3//iGlsoAoqiqygCn/pIc86F5mY09MXmaf
+FaGU1s96sAMGCWZlGWh3ZzdyNP8KUWzmrXBkBGdBIgCkh3qw/3CsIaVyNCIg3mxp63bPrXP/ath1
+33kdIo947xw0elk891t1VhCmdfBAG/NvjCFmd1GRBOEdoSiBsuJC3qBz+zjRgbJjuECDpeMgEeCN
+MP/h8rDxRJAZMJTWAugAh4HB+nMX0GYIUoHBW9CFozjgz7NgRXC2kDu2fX1oMIowHwBCAAEAAAAY
+AAAATQBvAGcAZQByACwAIABCAGEAYgB1AAAAHwBlAAEAAAAmAAAAQgBhAGIAdQAuAE0AbwBnAGUA
+cgBAAGEAbQBkAC4AYwBvAG0AAAAAAB8AZAABAAAACgAAAFMATQBUAFAAAAAAAAIBQQABAAAAYAAA
+AAAAAACBKx+kvqMQGZ1uAN0BD1QCAAAAgE0AbwBnAGUAcgAsACAAQgBhAGIAdQAAAFMATQBUAFAA
+AABCAGEAYgB1AC4ATQBvAGcAZQByAEAAYQBtAGQALgBjAG8AbQAAAB8AAl0BAAAAJgAAAEIAYQBi
+AHUALgBNAG8AZwBlAHIAQABhAG0AZAAuAGMAbwBtAAAAAAAfAOVfAQAAAC4AAABzAGkAcAA6AGIA
+YQBiAHUALgBtAG8AZwBlAHIAQABhAG0AZAAuAGMAbwBtAAAAAAAfABoMAQAAABgAAABNAG8AZwBl
+AHIALAAgAEIAYQBiAHUAAAAfAB8MAQAAACYAAABCAGEAYgB1AC4ATQBvAGcAZQByAEAAYQBtAGQA
+LgBjAG8AbQAAAAAAHwAeDAEAAAAKAAAAUwBNAFQAUAAAAAAAAgEZDAEAAABgAAAAAAAAAIErH6S+
+oxAZnW4A3QEPVAIAAACATQBvAGcAZQByACwAIABCAGEAYgB1AAAAUwBNAFQAUAAAAEIAYQBiAHUA
+LgBNAG8AZwBlAHIAQABhAG0AZAAuAGMAbwBtAAAAHwABXQEAAAAmAAAAQgBhAGIAdQAuAE0AbwBn
+AGUAcgBAAGEAbQBkAC4AYwBvAG0AAAAAAAsAQDoBAAAAHwAaAAEAAAASAAAASQBQAE0ALgBOAG8A
+dABlAAAAAAADAPE/CQQAAAsAQDoBAAAAAwD9P+QEAAACAQswAQAAABAAAACj7AuBaB0aRplQRApD
+grnIAwAXAAEAAABAADkAgC9rwoT/2AFAAAgwPqb1woT/2AEfADcAAQAAAKwAAABSAEUAOgAgAFsA
+UABBAFQAQwBIACAAdgA4ACAAMQAwAC8AMQAzAF0AIAB4ADgANgAvAHIAZQBzAGMAdAByAGwAOgAg
+AEEAZABkACAAcwB5AHMAZgBzACAAaQBuAHQAZQByAGYAYQBjAGUAIAB0AG8AIAB3AHIAaQB0AGUA
+IABtAGIAbQBfAHQAbwB0AGEAbABfAGIAeQB0AGUAcwBfAGMAbwBuAGYAaQBnAAAAHwA9AAEAAAAK
+AAAAUgBFADoAIAAAAAAAAwDeP69vAAALAAIAAQAAAAsAIwAAAAAAAwAmAAAAAAALACkAAAAAAAsA
+KwAAAAAAAwAuAAAAAAADADYAAAAAAB8AcAABAAAApAAAAFsAUABBAFQAQwBIACAAdgA4ACAAMQAw
+AC8AMQAzAF0AIAB4ADgANgAvAHIAZQBzAGMAdAByAGwAOgAgAEEAZABkACAAcwB5AHMAZgBzACAA
+aQBuAHQAZQByAGYAYQBjAGUAIAB0AG8AIAB3AHIAaQB0AGUAIABtAGIAbQBfAHQAbwB0AGEAbABf
+AGIAeQB0AGUAcwBfAGMAbwBuAGYAaQBnAAAAAgFxAAEAAAAqAAAAAQHY8Ig1NUxgMo+j/USgNFOH
+QRk/GK4zRFsAgACQ5oCAF+IHAIABbtJQAAALAAYMAAAAAB8ANRABAAAAogAAADwATQBXADMAUABS
+ADEAMgBNAEIANAA1ADUAMwAxADIANwA5AEMANgAxAEEAMgBBADcANQBDADgAQwBDADQANwBDADIA
+OQA1ADAAQwA5AEAATQBXADMAUABSADEAMgBNAEIANAA1ADUAMwAuAG4AYQBtAHAAcgBkADEAMgAu
+AHAAcgBvAGQALgBvAHUAdABsAG8AbwBrAC4AYwBvAG0APgAAAAAAHwA5EAEAAACiAQAAPAAxADYA
+NgA3ADUAOQAyADAANgA5ADAAMAAuADMAMgA4ADEAMgAwADgALgAxADEAOQA3ADUANQAxADQAMAA4
+ADgAMAAxADkAMQA2ADAAOQA2ADIALgBzAHQAZwBpAHQAQABiAG0AbwBnAGUAcgAtAHUAYgB1AG4A
+dAB1AD4AIAA8ADIAMAAyADIAMQAxADAANwAxADAAMgAxADMANAAuADIANQA1ADcANQA3AC0AMQAt
+AHAAZQB0AGUAcgBuAGUAdwBtAGEAbgBAAGcAbwBvAGcAbABlAC4AYwBvAG0APgAgADwAYwBjAGMA
+YQBjAGQAZQA5AC0ANwBkADAAYgAtAGYAMABjADgALQAyAGUAMwBkAC0AMgBiADAAOQBjADkAMQAw
+AGIAOABjADUAQABhAG0AZAAuAGMAbwBtAD4AIAA8ADUAYwBlADUAYgBkAGQANwAtAGMAMgBlAGUA
+LQBmAGEANwBjAC0AYQAwADEAYwAtADEANwA0AGUAZQAzAGUAZQAyADQAZAA4AEAAaQBuAHQAZQBs
+AC4AYwBvAG0APgAAAAAAHwBCEAEAAABiAAAAPAA1AGMAZQA1AGIAZABkADcALQBjADIAZQBlAC0A
+ZgBhADcAYwAtAGEAMAAxAGMALQAxADcANABlAGUAMwBlAGUAMgA0AGQAOABAAGkAbgB0AGUAbAAu
+AGMAbwBtAD4AAAAAAAMAgBD/////AwATEgAAAABAAAcw9lvIwoT/2AECARAwAQAAAEYAAAAAAAAA
+Bk49JLzi7Eu5+EriwEUZFwcANkqnH+0DSU2rCBT9YtYsWwAAAAABCwAANkqnH+0DSU2rCBT9YtYs
+WwAC+r6oPgAAAAACARMwAQAAABAAAAA1TGAyj6P9RKA0U4dBGT8YAgEUMAEAAAAMAAAAqwEAAE42
+hmNbAAAAAwBbMwEAAAADAFo2AAAAAAMAaDYNAAAACwD6NgEAAAAfANk/AQAAAAACAABbAEEATQBE
+ACAATwBmAGYAaQBjAGkAYQBsACAAVQBzAGUAIABPAG4AbAB5ACAALQAgAEcAZQBuAGUAcgBhAGwA
+XQANAAoADQAKAEgAaQAgAFIAZQBpAG4AZQB0AHQAZQAsAA0ACgANAAoAPgAgAC0ALQAtAC0ALQBP
+AHIAaQBnAGkAbgBhAGwAIABNAGUAcwBzAGEAZwBlAC0ALQAtAC0ALQANAAoAPgAgAEYAcgBvAG0A
+OgAgAFIAZQBpAG4AZQB0AHQAZQAgAEMAaABhAHQAcgBlACAAPAByAGUAaQBuAGUAdAB0AGUALgBj
+AGgAYQB0AHIAZQBAAGkAbgB0AGUAbAAuAGMAbwBtAD4ADQAKAD4AIABTAGUAbgB0ADoAIABUAHUA
+ZQBzAGQAYQB5ACwAIABOAG8AdgBlAG0AYgBlAHIAIAAyADIALAAgADIAMAAyADIAIAA1ADoANAAz
+ACAAUABNAA0ACgA+ACAAVABvADoAIABNAG8AZwBlAHIALAAgAEIAYQBiAHUAIAA8AEIAYQBiAHUA
+LgBNAG8AZwBlAHIAQABhAG0AZAAuAGMAbwBtAD4AOwAgAFAAZQB0AGUAcgAgAE4AZQB3AG0AYQBu
+AA0ACgA+ACAAPABwAGUAdABlAHIAbgBlAHcAbQBhAG4AQABnAG8AbwBnAGwAZQAAAB8A+D8BAAAA
+GAAAAE0AbwBnAGUAcgAsACAAQgBhAGIAdQAAAB8A+j8BAAAAGAAAAE0AbwBnAGUAcgAsACAAQgBh
+AGIAdQAAAB8AIkABAAAABgAAAEUAWAAAAAAAHwAjQAEAAAACAQAALwBPAD0ARQBYAEMASABBAE4A
+RwBFAEwAQQBCAFMALwBPAFUAPQBFAFgAQwBIAEEATgBHAEUAIABBAEQATQBJAE4ASQBTAFQAUgBB
+AFQASQBWAEUAIABHAFIATwBVAFAAIAAoAEYAWQBEAEkAQgBPAEgARgAyADMAUwBQAEQATABUACkA
+LwBDAE4APQBSAEUAQwBJAFAASQBFAE4AVABTAC8AQwBOAD0ARgBEAEUAMgA2ADMAQQBGADIANgA4
+AEUANAA2ADMAQgBBAEQAMwBBADQARQBCADAANAA5ADYANgAxADMAQQA3AC0ATQBPAEcARQBSACwA
+IABCAEEAQgBVAAAAAAAfACRAAQAAAAYAAABFAFgAAAAAAB8AJUABAAAAAgEAAC8ATwA9AEUAWABD
+AEgAQQBOAEcARQBMAEEAQgBTAC8ATwBVAD0ARQBYAEMASABBAE4ARwBFACAAQQBEAE0ASQBOAEkA
+UwBUAFIAQQBUAEkAVgBFACAARwBSAE8AVQBQACAAKABGAFkARABJAEIATwBIAEYAMgAzAFMAUABE
+AEwAVAApAC8AQwBOAD0AUgBFAEMASQBQAEkARQBOAFQAUwAvAEMATgA9AEYARABFADIANgAzAEEA
+RgAyADYAOABFADQANgAzAEIAQQBEADMAQQA0AEUAQgAwADQAOQA2ADYAMQAzAEEANwAtAE0ATwBH
+AEUAUgAsACAAQgBBAEIAVQAAAAAAHwAwQAEAAAAYAAAATQBvAGcAZQByACwAIABCAGEAYgB1AAAA
+HwAxQAEAAAAYAAAATQBvAGcAZQByACwAIABCAGEAYgB1AAAAHwA4QAEAAAAYAAAATQBvAGcAZQBy
+ACwAIABCAGEAYgB1AAAAHwA5QAEAAAAYAAAATQBvAGcAZQByACwAIABCAGEAYgB1AAAAAwBZQAAA
+AAADAFpAAAAAAAMAN1ABAAAAAwAJWQEAAAAfAApdAQAAACYAAABCAGEAYgB1AC4ATQBvAGcAZQBy
+AEAAYQBtAGQALgBjAG8AbQAAAAAAHwALXQEAAAAmAAAAQgBhAGIAdQAuAE0AbwBnAGUAcgBAAGEA
+bQBkAC4AYwBvAG0AAAAAAAIBFV0BAAAAEgAAAAIfltg9iORgTo4RqC2ZThg9AQAAAgEWXQEAAAAS
+AAAAAh+W2D2I5GBOjhGoLZlOGD0BAAALAACACCAGAAAAAADAAAAAAAAARgAAAAAUhQAAAAAAAAMA
+AIAIIAYAAAAAAMAAAAAAAABGAQAAADIAAABFAHgAYwBoAGEAbgBnAGUAQQBwAHAAbABpAGMAYQB0
+AGkAbwBuAEYAbABhAGcAcwAAAAAAIAAAAB8AAIATj/JB9IMUQaWE7ttaawv/AQAAABYAAABDAGwA
+aQBlAG4AdABJAG4AZgBvAAAAAAABAAAAKgAAAEMAbABpAGUAbgB0AD0ATQBTAEUAeABjAGgAYQBu
+AGcAZQBSAFAAQwAAAAAACwAAgAggBgAAAAAAwAAAAAAAAEYAAAAABoUAAAAAAAALAACACCAGAAAA
+AADAAAAAAAAARgAAAAADhQAAAAAAAAMAAIAIIAYAAAAAAMAAAAAAAABGAAAAAAGFAAAAAAAAAgEA
+gBOP8kH0gxRBpYTu21prC/8BAAAALgAAAEgAZQBhAGQAZQByAEIAbwBkAHkARgByAGEAZwBtAGUA
+bgB0AEwAaQBzAHQAAAAAAAEAAAByAAAAAQAKAAAABAAAAAQAAAAUAAAAAAAAAAAAAAA1AAAAAAAA
+ABQAAAAAAAAATAEAADwEAAAAAAAAFAAAAAAAAABpBAAAbgQAAAAAAAAUAAAAAAAAAJkEAACuBAAA
+AAAAABQAAAAAAAAA8AQAAP////8AAAAAAAALAACAE4/yQfSDFEGlhO7bWmsL/wEAAAAcAAAASABh
+AHMAUQB1AG8AdABlAGQAVABlAHgAdAAAAAEAAAALAACAE4/yQfSDFEGlhO7bWmsL/wEAAAAoAAAA
+SQBzAFEAdQBvAHQAZQBkAFQAZQB4AHQAQwBoAGEAbgBnAGUAZAAAAAEAAAACAQCAE4/yQfSDFEGl
+hO7bWmsL/wEAAABAAAAAQwBvAG4AdgBlAHIAcwBhAHQAaQBvAG4AVAByAGUAZQBQAGEAcgBlAG4A
+dABSAGUAYwBvAHIAZABLAGUAeQAAAAEAAAAuAAAAAAAAAAZOPSS84uxLufhK4sBFGRcBADZKpx/t
+A0lNqwgU/WLWLFsABLnFX8QAAAAAAwAAgAggBgAAAAAAwAAAAAAAAEYAAAAAEIUAAAAAAAAfAACA
+H6TrM6h6LkK+e3nhqY5UswEAAAA4AAAAQwBvAG4AdgBlAHIAcwBhAHQAaQBvAG4ASQBuAGQAZQB4
+AFQAcgBhAGMAawBpAG4AZwBFAHgAAAABAAAA/AEAAEkASQA9AFsAQwBJAEQAPQAzADIANgAwADQA
+YwAzADUALQBhADMAOABmAC0ANAA0AGYAZAAtAGEAMAAzADQALQA1ADMAOAA3ADQAMQAxADkAMwBm
+ADEAOAA7AEkARABYAEgARQBBAEQAPQAwADEARAA4AEYAMAA4ADgAMwA1ADsASQBEAFgAQwBPAFUA
+TgBUAD0ANQBdADsAUwBCAE0ASQBEAD0AMQA2ADsAUwAxAD0APAA1AGMAZQA1AGIAZABkADcALQBj
+ADIAZQBlAC0AZgBhADcAYwAtAGEAMAAxAGMALQAxADcANABlAGUAMwBlAGUAMgA0AGQAOABAAGkA
+bgB0AGUAbAAuAGMAbwBtAD4AOwBSAFQAUAA9AEQAaQByAGUAYwB0AEMAaABpAGwAZAA7AFQARABO
+AD0ATgBvAG4AQwBvAG4AYwBsAHUAcwBpAHYAZQA7AFQAUAA9AFMAYQBtAGUAOwBUAEYAUgA9AE4A
+bwB0AEYAbwByAGsAaQBuAGcAOwBWAGUAcgBzAGkAbwBuAD0AVgBlAHIAcwBpAG8AbgAgADEANQAu
+ADIAMAAgACgAQgB1AGkAbABkACAANQA4ADUANwAuADAAKQAsACAAUwB0AGEAZwBlAD0ASAAxADsA
+VQBQAD0ARAAwADsARABQAD0AMQAwADEAAAALAACACCAGAAAAAADAAAAAAAAARgAAAAAOhQAAAAAA
+AAMAAIAIIAYAAAAAAMAAAAAAAABGAAAAABiFAAAAAAAACwAAgAggBgAAAAAAwAAAAAAAAEYAAAAA
+goUAAAAAAABAAACACCAGAAAAAADAAAAAAAAARgAAAAC/hQAAELl6A4T/2AEfAACACCAGAAAAAADA
+AAAAAAAARgAAAADYhQAAAQAAABIAAABJAFAATQAuAE4AbwB0AGUAAAAAAAMAAIBQ42MLzJzQEbzb
+AIBfzM4EAQAAACQAAABJAG4AZABlAHgAaQBuAGcARQByAHIAbwByAEMAbwBkAGUAAAAbAAAAHwAA
+gFDjYwvMnNARvNsAgF/MzgQBAAAAKgAAAEkAbgBkAGUAeABpAG4AZwBFAHIAcgBvAHIATQBlAHMA
+cwBhAGcAZQAAAAAAAQAAAHAAAABJAG4AZABlAHgAaQBuAGcAIABQAGUAbgBkAGkAbgBnACAAdwBo
+AGkAbABlACAAQgBpAGcARgB1AG4AbgBlAGwAUABPAEkASQBzAFUAcABUAG8ARABhAHQAZQAgAGkA
+cwAgAGYAYQBsAHMAZQAuAAAACwAAgFDjYwvMnNARvNsAgF/MzgQBAAAAJgAAAEkAcwBQAGUAcgBt
+AGEAbgBlAG4AdABGAGEAaQBsAHUAcgBlAAAAAAAAAAAAAgEAgAggBgAAAAAAwAAAAAAAAEYBAAAA
+NgAAAEkAbgBUAHIAYQBuAHMAaQB0AE0AZQBzAHMAYQBnAGUAQwBvAHIAcgBlAGwAYQB0AG8AcgAA
+AAAAAQAAABAAAADnVPSOU679QKPb+RP2Ur8VHwAAgIYDAgAAAAAAwAAAAAAAAEYBAAAAGAAAAG0A
+cwBpAHAAXwBsAGEAYgBlAGwAcwAAAAEAAAAKBAAATQBTAEkAUABfAEwAYQBiAGUAbABfADQAMwA0
+ADIAMwAxADQAZQAtADAAZABmADQALQA0AGIANQA4AC0AOAA0AGIAZgAtADMAOABiAGUAZAA2ADEA
+NwAwAGEAMABmAF8ARQBuAGEAYgBsAGUAZAA9AHQAcgB1AGUAOwAgAE0AUwBJAFAAXwBMAGEAYgBl
+AGwAXwA0ADMANAAyADMAMQA0AGUALQAwAGQAZgA0AC0ANABiADUAOAAtADgANABiAGYALQAzADgA
+YgBlAGQANgAxADcAMABhADAAZgBfAFMAZQB0AEQAYQB0AGUAPQAyADAAMgAyAC0AMQAxAC0AMgAz
+AFQAMgAxADoAMwA2ADoAMAAyAFoAOwAgAE0AUwBJAFAAXwBMAGEAYgBlAGwAXwA0ADMANAAyADMA
+MQA0AGUALQAwAGQAZgA0AC0ANABiADUAOAAtADgANABiAGYALQAzADgAYgBlAGQANgAxADcAMABh
+ADAAZgBfAE0AZQB0AGgAbwBkAD0AUwB0AGEAbgBkAGEAcgBkADsAIABNAFMASQBQAF8ATABhAGIA
+ZQBsAF8ANAAzADQAMgAzADEANABlAC0AMABkAGYANAAtADQAYgA1ADgALQA4ADQAYgBmAC0AMwA4
+AGIAZQBkADYAMQA3ADAAYQAwAGYAXwBOAGEAbQBlAD0ARwBlAG4AZQByAGEAbAA7ACAATQBTAEkA
+UABfAEwAYQBiAGUAbABfADQAMwA0ADIAMwAxADQAZQAtADAAZABmADQALQA0AGIANQA4AC0AOAA0
+AGIAZgAtADMAOABiAGUAZAA2ADEANwAwAGEAMABmAF8AUwBpAHQAZQBJAGQAPQAzAGQAZAA4ADkA
+NgAxAGYALQBlADQAOAA4AC0ANABlADYAMAAtADgAZQAxADEALQBhADgAMgBkADkAOQA0AGUAMQA4
+ADMAZAA7ACAATQBTAEkAUABfAEwAYQBiAGUAbABfADQAMwA0ADIAMwAxADQAZQAtADAAZABmADQA
+LQA0AGIANQA4AC0AOAA0AGIAZgAtADMAOABiAGUAZAA2ADEANwAwAGEAMABmAF8AQQBjAHQAaQBv
+AG4ASQBkAD0AZgBmADQANwBiAGIAMgBkAC0ANgBlADQAZQAtADQAOQBmADAALQBiADgAZABhAC0A
+MwBmADEAOABkAGUAOQAxAGQANgAyAGQAOwAgAE0AUwBJAFAAXwBMAGEAYgBlAGwAXwA0ADMANAAy
+ADMAMQA0AGUALQAwAGQAZgA0AC0ANABiADUAOAAtADgANABiAGYALQAzADgAYgBlAGQANgAxADcA
+MABhADAAZgBfAEMAbwBuAHQAZQBuAHQAQgBpAHQAcwA9ADEAAAAAAEgAAIBrxT9AMM3FR4b47enj
+WgIrAQAAABwAAABNAFMASQBQAEwAYQBiAGUAbABHAHUAaQBkAAAATjFCQ/QNWEuEvzi+1hcKDx8A
+AIApAwIAAAAAAMAAAAAAAABGAQAAAB4AAABJAG4AcwBwAGUAYwB0AG8AcgBBAGkAcABJAGQAAAAA
+AAEAAABKAAAAYgBkAGEANwA5ADkAMAA4AC0AOABlAGMAYQAtADQAOQBiADIALQA4ADcANABmAC0A
+MQBkAGEAOQAyAGIAMgAxADcANgA4AGUAAAAAAB8AAICGAwIAAAAAAMAAAAAAAABGAQAAAHAAAABt
+AHMAaQBwAF8AbABhAGIAZQBsAF8ANAAzADQAMgAzADEANABlAC0AMABkAGYANAAtADQAYgA1ADgA
+LQA4ADQAYgBmAC0AMwA4AGIAZQBkADYAMQA3ADAAYQAwAGYAXwBlAG4AYQBiAGwAZQBkAAAAAQAA
+AAoAAAB0AHIAdQBlAAAAAAAfAACAhgMCAAAAAADAAAAAAAAARgEAAABwAAAAbQBzAGkAcABfAGwA
+YQBiAGUAbABfADQAMwA0ADIAMwAxADQAZQAtADAAZABmADQALQA0AGIANQA4AC0AOAA0AGIAZgAt
+ADMAOABiAGUAZAA2ADEANwAwAGEAMABmAF8AcwBlAHQAZABhAHQAZQAAAAEAAAAqAAAAMgAwADIA
+MgAtADEAMQAtADIAMwBUADIAMQA6ADQANAA6ADIANgBaAAAAAAAfAACAhgMCAAAAAADAAAAAAAAA
+RgEAAABuAAAAbQBzAGkAcABfAGwAYQBiAGUAbABfADQAMwA0ADIAMwAxADQAZQAtADAAZABmADQA
+LQA0AGIANQA4AC0AOAA0AGIAZgAtADMAOABiAGUAZAA2ADEANwAwAGEAMABmAF8AbQBlAHQAaABv
+AGQAAAAAAAEAAAASAAAAUwB0AGEAbgBkAGEAcgBkAAAAAAAfAACAhgMCAAAAAADAAAAAAAAARgEA
+AABqAAAAbQBzAGkAcABfAGwAYQBiAGUAbABfADQAMwA0ADIAMwAxADQAZQAtADAAZABmADQALQA0
+AGIANQA4AC0AOAA0AGIAZgAtADMAOABiAGUAZAA2ADEANwAwAGEAMABmAF8AbgBhAG0AZQAAAAAA
+AQAAABAAAABHAGUAbgBlAHIAYQBsAAAAHwAAgIYDAgAAAAAAwAAAAAAAAEYBAAAAbgAAAG0AcwBp
+AHAAXwBsAGEAYgBlAGwAXwA0ADMANAAyADMAMQA0AGUALQAwAGQAZgA0AC0ANABiADUAOAAtADgA
+NABiAGYALQAzADgAYgBlAGQANgAxADcAMABhADAAZgBfAHMAaQB0AGUAaQBkAAAAAAABAAAASgAA
+ADMAZABkADgAOQA2ADEAZgAtAGUANAA4ADgALQA0AGUANgAwAC0AOABlADEAMQAtAGEAOAAyAGQA
+OQA5ADQAZQAxADgAMwBkAAAAAAAfAACAhgMCAAAAAADAAAAAAAAARgEAAAByAAAAbQBzAGkAcABf
+AGwAYQBiAGUAbABfADQAMwA0ADIAMwAxADQAZQAtADAAZABmADQALQA0AGIANQA4AC0AOAA0AGIA
+ZgAtADMAOABiAGUAZAA2ADEANwAwAGEAMABmAF8AYQBjAHQAaQBvAG4AaQBkAAAAAAABAAAASgAA
+AGMANwAxADYAYQA2ADQAMAAtAGYAMQBiADkALQA0AGEAMwBiAC0AOQBlADgAYgAtAGIAZQA5ADEA
+MABkADYAZgA4ADYAYgAyAAAAAAAfAACAhgMCAAAAAADAAAAAAAAARgEAAAB4AAAAbQBzAGkAcABf
+AGwAYQBiAGUAbABfADQAMwA0ADIAMwAxADQAZQAtADAAZABmADQALQA0AGIANQA4AC0AOAA0AGIA
+ZgAtADMAOABiAGUAZAA2ADEANwAwAGEAMABmAF8AYwBvAG4AdABlAG4AdABiAGkAdABzAAAAAQAA
+AAQAAAAwAAAAAwANNP0/AAAfAACAhgMCAAAAAADAAAAAAAAARgEAAAAuAAAAYQB1AHQAaABlAG4A
+dABpAGMAYQB0AGkAbwBuAC0AcgBlAHMAdQBsAHQAcwAAAAAAAQAAALIAAABkAGsAaQBtAD0AbgBv
+AG4AZQAgACgAbQBlAHMAcwBhAGcAZQAgAG4AbwB0ACAAcwBpAGcAbgBlAGQAKQAgAGgAZQBhAGQA
+ZQByAC4AZAA9AG4AbwBuAGUAOwBkAG0AYQByAGMAPQBuAG8AbgBlACAAYQBjAHQAaQBvAG4APQBu
+AG8AbgBlACAAaABlAGEAZABlAHIALgBmAHIAbwBtAD0AYQBtAGQALgBjAG8AbQA7AAAAAAAfAACA
+hgMCAAAAAADAAAAAAAAARgEAAAAeAAAAYQBjAGMAZQBwAHQAbABhAG4AZwB1AGEAZwBlAAAAAAAB
+AAAADAAAAGUAbgAtAFUAUwAAAB8AAICGAwIAAAAAAMAAAAAAAABGAQAAACAAAAB4AC0AbQBzAC0A
+aABhAHMALQBhAHQAdABhAGMAaAAAAAEAAAACAAAAAAAAAB8AAIBrxT9AMM3FR4b47enjWgIrAQAA
+ABIAAABNAEkAUABMAGEAYgBlAGwAAAAAAAEAAADMAQAAWwB7ACIAaQBkACIAOgAiADQAMwA0ADIA
+MwAxADQAZQAtADAAZABmADQALQA0AGIANQA4AC0AOAA0AGIAZgAtADMAOABiAGUAZAA2ADEANwAw
+AGEAMABmACIALAAiAHQAaQAiADoAIgAzAGQAZAA4ADkANgAxAGYALQBlADQAOAA4AC0ANABlADYA
+MAAtADgAZQAxADEALQBhADgAMgBkADkAOQA0AGUAMQA4ADMAZAAiACwAIgBwAGkAIgA6ACIAMAAw
+ADAAMAAwADAAMAAwAC0AMAAwADAAMAAtADAAMAAwADAALQAwADAAMAAwAC0AMAAwADAAMAAwADAA
+MAAwADAAMAAwADAAIgAsACIAbgBtACIAOgAiAEcAZQBuAGUAcgBhAGwAIgAsACIAYQBjACIAOgAx
+ACwAIgBvAHAAIgA6ADEALAAiAGMAdAAiADoAIgAyADAAMgAyAC0AMQAxAC0AMgAzAFQAMgAxADoA
+MwA2ADoAMAAyAFoAIgAsACIAbQB0ACIAOgAiADAAMAAwADEALQAwADEALQAwADEAVAAwADAAOgAw
+ADAAOgAwADAAIgAsACIAdQBjACIAOgBuAHUAbABsAH0AXQAAAEgAAIAIIAYAAAAAAMAAAAAAAABG
+AQAAACIAAABOAGUAdAB3AG8AcgBrAE0AZQBzAHMAYQBnAGUASQBkAAAAAADeom22UB9+Q1XpCNrN
+m+V9HwAAgIYDAgAAAAAAwAAAAAAAAEYBAAAALgAAAHgALQBtAHMALQBwAHUAYgBsAGkAYwB0AHIA
+YQBmAGYAaQBjAHQAeQBwAGUAAAAAAAEAAAAMAAAARQBtAGEAaQBsAAAAHwAAgIYDAgAAAAAAwAAA
+AAAAAEYBAAAANgAAAHgALQBtAHMALQB0AHIAYQBmAGYAaQBjAHQAeQBwAGUAZABpAGEAZwBuAG8A
+cwB0AGkAYwAAAAAAAQAAAEgAAABNAFcAMwBQAFIAMQAyAE0AQgA0ADUANQAzADoARQBFAF8AfABD
+AEgAMgBQAFIAMQAyAE0AQgA0ADMAMgA1ADoARQBFAF8AAAAfAACAhgMCAAAAAADAAAAAAAAARgEA
+AABQAAAAeAAtAG0AcwAtAG8AZgBmAGkAYwBlADMANgA1AC0AZgBpAGwAdABlAHIAaQBuAGcALQBj
+AG8AcgByAGUAbABhAHQAaQBvAG4ALQBpAGQAAAABAAAASgAAAGIANgA2AGQAYQAyAGQAZQAtADEA
+ZgA1ADAALQA0ADMANwBlAC0ANQA1AGUAOQAtADAAOABkAGEAYwBkADkAYgBlADUANwBkAAAAAAAf
+AACAhgMCAAAAAADAAAAAAAAARgEAAAA4AAAAeAAtAG0AcwAtAGUAeABjAGgAYQBuAGcAZQAtAHMA
+ZQBuAGQAZQByAGEAZABjAGgAZQBjAGsAAAABAAAABAAAADEAAAAfAACAhgMCAAAAAADAAAAAAAAA
+RgEAAAA6AAAAeAAtAG0AcwAtAGUAeABjAGgAYQBuAGcAZQAtAGEAbgB0AGkAcwBwAGEAbQAtAHIA
+ZQBsAGEAeQAAAAAAAQAAAAQAAAAwAAAAHwAAgIYDAgAAAAAAwAAAAAAAAEYBAAAAKgAAAHgALQBt
+AGkAYwByAG8AcwBvAGYAdAAtAGEAbgB0AGkAcwBwAGEAbQAAAAAAAQAAAA4AAABCAEMATAA6ADAA
+OwAAAAAAHwAAgIYDAgAAAAAAwAAAAAAAAEYBAAAARAAAAHgALQBtAGkAYwByAG8AcwBvAGYAdAAt
+AGEAbgB0AGkAcwBwAGEAbQAtAG0AZQBzAHMAYQBnAGUALQBpAG4AZgBvAAAAAQAAAAIIAABJAEwA
+egBaAGoAZwBIAGsATQAvAHoAKwB1ADYAZQBwAFUARwBCAE4AdQBtAG0AMAA4AG0ASgAwAEsAWQBP
+AFoAUQA4AHgAQQByAGcAZgBzAFgAQQArAEwAMwBQAFMASABtAGwATgBtAGQAVABzADYAVwA1AGUA
+ZABjAFIAMABmAEUAcAAzAEEAMQBSAFEAawB0AEwAQwBMADUAWQA2AFgAcgBhAFEARwByAHkANQBH
+AG0AaQA0ADgARgBLADcANwBMAEEATABSADgARgA4ADkAcQBkADQAMwBBAFUARgBUAFoAMABSAGwA
+TQB5ADgAcQB5AEUAawBtAEMAVQBkAGcAdgAxADUAVABTAE8ATQBuAFEAagAwAEwAMwB5ADMANABQ
+AHUAWgBYADUAbQB4ADUANgBXAHgAWgBOADkASgA2AHUASwArAEcARgBwAFkAdAB0AE0AawBBAEIA
+ZQBrAFQAcAA4AGsAegArAFgAeABqADIASQBZADgAOQBPAEEAdwBrAGsAbABTAFUAUwA2AFIAaABv
+ACsAcABzAEwAOQAwAHUAMwBUAHcAUwBSAGIAawB0AHEATQA4ACsALwBjAHEAQQBvADIAbAA4AFoA
+TgBjADQAVQBYAEIAUgBrAEEAawA2AHcAcwAzADMAKwBDADYAdABTADUAdwBMAFMAcwAxAEsAZwBV
+ADEAVgBOAHMARgB1AFIAWABoAG4AMQBEAGgAVwBSAEQAMwBjAFkAZwByAGcAUwB4AE0AdwBEADcA
+eQBvAHoAegB0ADUAdQBhAGQATgBuAG4AMQBNAE0AYwA0ACsAZAA0AG4ATwBwAFkAVwA5AEcAQgBy
+ADIASgB3AEcAdQBiAHAANQBZADIAbQBXAFUASQBNAFcAZwAxAHEAcgBqAEYAMwBIAGQAVgBnAFMA
+YwA5AGMARQBBAFYANgBsAE0AYgBkAEoAWQBaADYAOABPADQAZABEAEkATwBRAHcAbQAxAGIARwA0
+AGoASABXAE4ANwBQAHQAKwA3AGIAYwBNAFYAUgBiAEUAKwBtACsAegBYAGkAegAwAGwAQQBBAFEA
+MQByAEsASQBwADYAdgBuAEkAawAyAGMAUwBnAHkAdAAyAHYAcABhAHMAagAzAE0AcABXAGUAaAB3
+AGoAYgAvAFMARQBGAGoATwBLAGEAMABVAGIAbgBVAGIANgBpAFEAKwBPADcASwAzAFgAYwBMAGYA
+egBtAEMAMgBBAGYAeABRAHUAUQBlADYAZABjAFMARwByAEwANwBPADUAOABrAFIAagA0AFEAKwA5
+AHMANABDAC8AYgBNADAAMgBGACsATABoAFEAZwBNADUASABtADIAMwBDAHUAdgBzADcAKwArAEEA
+VQBCAHkASwBxAEcANABLAGwARgAyAFIARwB1ADMAMwA1AHAAbQBrADMAMwBFAGIAbwBSAGcATQAy
+AHAAbgBRAFoAbQBRADkAcgBUAEEAWABxAEIAYQBUADQASwBUAE4AVQBmAGsAUwBUAHMAegB4AGkA
+QwByAGsAZABPAGUAYwBTAFcAawB5AFYAbQAzAG0AYQB3AHAANwBZAC8AYwBJAHEALwA4ADUAVwBM
+AHIARAAyAHoAWABZAE4AawBmAHAAcgA5AEQAawBqAFcATwA1AE0AaQBjAHQARAB0AFkAeABQAHAA
+NQBBAFUAagBwAFIAcwBKAE0ANwBYAHAAMAAxAGsAOAAxACsAawBaAFIAZQBWADEAegBtADUASABU
+AEMAQwBnAGsAWgAzAGkARAA0AG0AWAAyAE0ATQAyAHEAQgB1AEIAKwB1AC8ASABLADIAagBIAGIA
+awAxAHEAVwBEAFoAYwBiAHcAQQBKAFcAQgBYADMARABvAE4AUABIAGYAYQBHADIAawB3AFQAVwBO
+AHIANgBpAHUAMwA3AE0AbABoAEwAYgBMAHgAZAB6ADMAaAB3AHEAWgA4AGwATwBiAG0AUgAvAFIA
+bgBNAEwAQwBDAGoATwAxAG4AdQBBADIAOQBLAEsAaQA3AEYAQgBBAEEAOABiAFYAZABXADUARQBE
+AEoAQQBUAHMAdQBaAEgAQwBBADEAOQAwAEQAMQA3AHAAYgBSAEgATgBTADIAUQBVAGwAegA4ADAA
+MgA3AGMARwBrAFYAVwBnAEQAZwBwAHAAQgA5ADUAcQB5AEwAbgBzAGgATQBnAFIAeAAzAFUAZgBS
+AGQAeABOAG0ARwBPAGYAYwBzAHIAawBPAHYAQwByAGYAcQAwADMATgBCAC8ARgArAGQAawBQAGIA
+NQBDADIALwBIAFQAVwA1AG0ASAAxAHYATQAzADEAZgA1AGsAeQBIAEwAbgBZAG0ATgBRAHIATQB5
+AE8AMABnAGoAUAAyAFYAOABvAFYAZQA1AEcAcgBGAFQAbABIAGkAeQB1ADkAVQBrAGkATABoAGgA
+awB1AEcAUgAzAGEANQBTAGEAUQBCADgAYQBFADEATgAvADcAbgB5AFcAVgBHAEsARwBBAFkAQQBZ
+AFgAUgAzAGgAZwBiAHcAUgBaAHAASwBPADQATgBkAEwARAA4ADQAQgBoADgAagB1AGsAQwB3ADkA
+WgBzAGMAZgBsAGoANQBUADcAMABYAE0AWABFADYAVABqAHQAUwBuAE0AQgBoAG8AbQBtAE0AWgBG
+AHAASwBkAFYAUQBHAGcANAA1AFUAaQB5ADIAZABxAHMATwBXAFIAVQB4AHIATgB4AAAAAAAfAACA
+hgMCAAAAAADAAAAAAAAARgEAAAA4AAAAeAAtAGYAbwByAGUAZgByAG8AbgB0AC0AYQBuAHQAaQBz
+AHAAYQBtAC0AcgBlAHAAbwByAHQAAAABAAAAdAQAAEMASQBQADoAMgA1ADUALgAyADUANQAuADIA
+NQA1AC4AMgA1ADUAOwBDAFQAUgBZADoAOwBMAEEATgBHADoAZQBuADsAUwBDAEwAOgAxADsAUwBS
+AFYAOgA7AEkAUABWADoATgBMAEkAOwBTAEYAVgA6AE4AUwBQAE0AOwBIADoATQBXADMAUABSADEA
+MgBNAEIANAA1ADUAMwAuAG4AYQBtAHAAcgBkADEAMgAuAHAAcgBvAGQALgBvAHUAdABsAG8AbwBr
+AC4AYwBvAG0AOwBQAFQAUgA6ADsAQwBBAFQAOgBOAE8ATgBFADsAUwBGAFMAOgAoADEAMwAyADMA
+MAAwADIAMgApACgANAA2ADMANgAwADAAOQApACgAMwA3ADYAMAAwADIAKQAoADMANgA2ADAAMAA0
+ACkAKAAzADkANgAwADAAMwApACgAMwA5ADgANgAwADQAMAAwADAAMAAyACkAKAAxADMANgAwADAA
+MwApACgAMwA0ADYAMAAwADIAKQAoADQANQAxADEAOQA5ADAAMQA1ACkAKAA0ADMAMgA2ADAAMAA4
+ACkAKAA4ADYANwA2ADAAMAAyACkAKAA0ADUAMAA4ADAANAAwADAAMAAwADIAKQAoADIAOQAwADYA
+MAAwADIAKQAoADMAOAAxADAAMAA3ADAAMAAwADAAMgApACgANgA0ADcANQA2ADAAMAA4ACkAKAA2
+ADYANAA0ADYAMAAwADgAKQAoADEAMgAyADAAMAAwADAAMAAxACkAKAA1ADIANQAzADYAMAAxADQA
+KQAoADkANgA2ADAAMAA1ACkAKAA4ADkAMwA2ADAAMAAyACkAKAA3ADEAMgAwADAANAAwADAAMAAw
+ADEAKQAoADQAMQAzADAAMAA3ADAAMAAwADAAMQApACgANAA3ADgANgAwADAAMAAwADEAKQAoADUA
+NgA2ADAAMwAwADAAMAAwADIAKQAoADMAOAAwADcAMAA3ADAAMAAwADAANQApACgAMwAxADYAMAAw
+ADIAKQAoADMAMwA2ADUANgAwADAAMgApACgANwA0ADEANgAwADAAMgApACgANgA2ADkANAA2ADAA
+MAA3ACkAKAA3ADYAMQAxADYAMAAwADYAKQAoADYANgA1ADUANgAwADAAOAApACgANgA2ADQANwA2
+ADAAMAA3ACkAKAA1ADUAMAAxADYAMAAwADMAKQAoADgANgAzADYAMgAwADAAMQApACgANQA0ADkA
+MAA2ADAAMAAzACkAKAAxADEAMAAxADMANgAwADAANQApACgAOAAzADMAOAAwADQAMAAwADAAMAAx
+ACkAKAAxADgANgAwADAAMwApACgANgA1ADAANgAwADAANwApACgANwA2ADkANgAwADAANQApACgA
+NQAzADUANAA2ADAAMQAxACkAKAAyADYAMAAwADUAKQAoADkANgA4ADYAMAAwADMAKQA7AEQASQBS
+ADoATwBVAFQAOwBTAEYAUAA6ADEAMQAwADEAOwAAAB8AAICGAwIAAAAAAMAAAAAAAABGAQAAAFwA
+AAB4AC0AbQBzAC0AZQB4AGMAaABhAG4AZwBlAC0AYQBuAHQAaQBzAHAAYQBtAC0AbQBlAHMAcwBh
+AGcAZQBkAGEAdABhAC0AYwBoAHUAbgBrAGMAbwB1AG4AdAAAAAEAAAAEAAAAMQAAAB8AAICGAwIA
+AAAAAMAAAAAAAABGAQAAAEoAAAB4AC0AbQBzAC0AZQB4AGMAaABhAG4AZwBlAC0AYQBuAHQAaQBz
+AHAAYQBtAC0AbQBlAHMAcwBhAGcAZQBkAGEAdABhAC0AMAAAAAAAAQAAAFoMAAA5ADMAaABJAGsA
+eQBvAG8AeQBSADEASABHAGsATgBnAGkAVABYAEkAcABIAEMAVQBWAEIANQA5AEUAMQA2AGkAWAA3
+AFAAQQB2AEMATQBYAGYAWQBvAFkARgBNAHcAdgBsAE8AOAA4AHYAOQBYAHEARwBWAGcAdQB3ACsA
+TABiAFgATQBEADAAYgA1AHUAZwBGAHcAUQB5ADgAawB2AEoAaQBSAEcAVwBjAEQAQgBFAEkASABF
+AGYAcABXAEwATQB6AEoANQBKAGgAYQA2AEMANABrAHgAbgB1ADkAbgAyAEEARgAyAFMAUgBaAHcA
+TQBzAFcAVwBaAGUATwBWAGcAYgBzAFIAQgByADEAeABMAFQAVwB4AEMAcAB3ADgAZgBlAEQAcgBP
+AEIAQQBpAFEANwBwAEUAUgA5AGMAOQBIAFUAbQBtAE8AagA4AHIASgBzAFYATwBGAHcAYgBzAEMA
+NwA0AEUASABtAEQARQBkAHgAMABjAEoAUABTAFQAdQBEAEoANABhAHkAZwBZAGcAUABmAGMAMQBp
+AHQAUAAxAHkAcQBRAHQATQBGAHgAcwBHADIAawBaAFIASQBYAGUAVABaAHcAZABkACsAdgBhAEQA
+SwBxAFkAaABaAFQAVgAwAFIARgBlAEwAQwBZAHEAUgB4AE0AYwB3AFQAcgBaAE8ANgBuAHMAZQA1
+AEkAcQBUAEsAaQB2AE4AagBvAHMAeAA3AG0AZgBqADYARgBoAFAASwB4AHIAMgBWAGUAWgBSAHMA
+VwBMAFUAZABjAE4AMgBSADgAZQBEAEcAZwB0ADAANQBJAGgAWgA2AFEAdQBhAFAAVgBtAHYAcQAw
+AHMAawBLADUAQQA4AFgASgBwAGEAaABkAHAASwBiAFoATwBUAHQAcQB3AFkAawBnAEUARgBxAFMA
+cABnAGEATABtAFoAVgBEAGkAVwBHAGQAeQBBAEMATQBiAEgAUwBoADAAOQBzAGYALwBHAGYAdgBH
+AEwARgBCAHcAVAA2AFgAZQA2AHcAawBrAHQAMQBCAFgAOAB1AHIASABEAFMARgBEAGgAVgBZAFEA
+MwA0AEgAbwBTAE0ASQBoAEsAQwBwADUAZQA2AHgAbwBTAEsARQBqAHoAQQBsAEIAVABxADAASwBY
+AGoAMABCAHIAcwBFAEUAZAA5AEcARgBRAHoAMQBuAE4AUgBJAHQASQBKADUASwBHAC8ANwBxAGQA
+RwBMAGUAVwAzAFcARABnADMAWgBGAEgAYQB1ADgASQBaAHUAdQBsACsAUQBKAHQASgBUADgAVwBt
+AEoARgBZAEMAUgA0AHUAWgBuAGgANQBFAGsASwAzAGgALwBMADMANQBaAE4AOAB1AGEAaQBnAHYA
+MQAzAE0AVQBwADQARQBCAE0AcAAyAHgAVgA4AE4AawBRAEUARQBJAEwAaABEAEoAWABvAHEAcwBJ
+AHUANQBOAEQAMwB0AEsAQgAzAE0AWgBLADMAcwB5AGwAQwBPAEkATwBEAFAALwBPAEUAOAB2AHgA
+SQBqAHUAdQBGAHMAYgBVADEAVQBOAHcAVQA3AHQAKwBYAG4AegByAHQAaQAyADQATABSAFAARwBu
+AFYAawBWAHYAdQBtAGsAQwB0AHcAWABWAHAAUwBJAGIAZgBhAHUAegB4AHIALwBLAEgATgBXAEkA
+ZgBuAEsAcABXAEMAYgBMADYASwAyAGoAegBRAGgAYQBmAEwANwB0AGYAdwBFAGwALwA4AFIAQwBr
+AEoAeQBZAE4AbwBDADUAbgBUADIANgByAGMAYwBYAFkAUgBKAGEAUgBkAGQARABmAFcAQQBwADcA
+ZQA3ADcARwBVAGoALwBwAEUAQwA5AHMASwBKADQATwBmAFAAcABvAEsAVwB0AGgAcwBvAGoAMgBH
+AGwAZABqAGMAVgBpAFAAcAB0AGIAMABIAGUAdABBAFkAWABBADQAZwBqAHgAQwAzAHQAMABFADgA
+NgBYAGMAWgB2AGUAWgAwAEkASgA0AFYAcgBqADIAdAA3AHMAawBGADIAWgAvAFYAUwA2AEIASgAr
+AHQARABVAGMATABsAG8ARgA2AFUAYQBvAEcATgB2AEMAdABhADgAMQBtAHQAMwBkAFkATgA2AFMA
+TwB5AFkATABNAHcAYwBSAHgAVQAwAEQAbgBKAHEAMQBpAHMAcAAzAFMAaQA4AC8ATQBGAFkANgBq
+AEsAMQBnACsARgBMAFQAaQByAC8AeQBFAGcARgBNAHEAYwBoAFkANQBmAHkAagBWAGIAOAAwAHcA
+QwB0AHoAeQA3AFIAVgBUAGIANgBhADQAMABDAGQAZQBZAGcAMgBEAEIAawBEAEcAZgBsAHUAQgBM
+AEoAawBhAG0AdwArAHoARABJAG4ALwBVAFcAdQBTAEwAMQBPAFQAUAByAFgAbwBmACsAagBXAFIA
+cAB4AEUAUgBTAEcAbwBpAHAAVgA3AHgARABMAE0AOABEADIAcABBAHgAQgAyAFMANQBUAFcAVwBV
+AGkAUgAvADkANgBPADAANABCAEMAbAB3ADgAQwAvAHAAYgA2AFEAawAxAG4AVABTAHAAegBFAFAA
+bgBiAEwAMQBXAFMAcABrADAASQBjAHYATABNAFkAVQBvAFUAMgAvAG0AWQBFAGQAZAB4AEgAWgBv
+AGEANABTADAAUABIADcAZgBBADcAaABzAGwAZgB1AFoAbAA1AFYAZwBQAGMAYQBSAGcANABUAHIA
+dAAwADQASQAzAHUASABSAEwAUgAxAGkAbQBPAFIARQBXAFoAOQArAHoAYwBDAG8AYwBmAFYAcQBy
+ADQAQgAvAHcANgA2AHEAUgBsAHMASgBmAGsARwBzAE4AZgA5AE0AMQBPAEQAOQBhAFQAcQA1AHIA
+QgBQAHoATgBmADEAegA0ADMAdwBxAHkATwB3AE4ARgBxACsAUwBTAGIARwBCAGkAeQBRAEkANwBT
+AHQALwBqAEsARAArAFUAMgB6AEUAMwBJAHYAeQB2ACsAUQB3ADcAcABMAFAAOABTAFAAagBVAGkA
+SwBPAEoAZABxAEwAWgBjAGUARQBGAEQAVwBlAE4ASwBFADAAeABSAGgASgBuAGQATQAzAEMAUgA0
+AHIAWgBiAFMAZAA2AGYANQBwAGMAUABxAGMAVAB3AHUAWABxACsAQQAvADcATgBLAEMAeQBnAHQA
+cQB1AFMAdQA0ADAAcwBYAC8ARgBNAHUAZgBrAC8AVQA3AEQAUgBjAEsAZgBZAEgANQBzAEQAegBp
+AGkAeAA3AEwANwA4AEIAUAA0AEIAcwB1AG4ARQA4AFAANwBxAFgAVABEAHEAVABYAHUAQwBzAEcA
+RgBkAFUASQBDAEUAcQBzAFgAeQAyAFQAdwBXAGgAdQBtAEMAWABSAFMAbgBUAEUAVQAwAHAAawBx
+AFEAUgBIAEgAcQAwAFgAOAA5AEcANABOAFcAVwBKAG4AUQBtAFcAcwBLADIAegAvAFEAegA2ADEA
+RgBZAHIATgBVAG4AWQBGAFoAUgBGAHcATABLACsAUABMAGMAeQBwAHEAbgAvAGcANgBVAGkAdwBv
+AGYARABhADYATgBCAEUAbABmAHQAVQBwAE8AawB1AHYAcwA5AHMAYQB1AEQATABKADUATwA0AFYA
+bQBRAGoANwBiADAAMQBmAHUAcgBJADUAZgA0AHIASwB4AGgAaQArAHAAYwB6AEkAUAAzADUAdgBE
+AGsAVABZAGUASgBrAEEAbABkAHIAUABqADcAdgAwAHQAdQBtAGUAWQBCAGwAdgA2AEIARABKAEoA
+dgBRAFYASgBrAEwANgB3AEoAQwAvAEcAVQB3ADkANQByAEQAMAB0AFAAUwBwAFoAMgA4AFUAYQBG
+AG4AZgBLAC8AbgBkAEcAZQBXAEQAdQAxADAAbgBzACsAZwBZAFkAVgBlAEUAVABIAFMANwBOAHoA
+UQBBAGoAawAxAEoAZQBGAGcAaABEAFQAUwBYAGUAcwBHAEwAVQBzAE8AYwB0AFoASQByADQAWQB5
+AGEANQBxAE0ARQBXAGEAcABqAFgAZQBTAHcAdQBmAE4AQwBTADIAOABLAHAAUgAyACsAOAB0AEwA
+cgA1AFAAdABoAFkAYwBFAFMAZQBQAGUAdwBaADAAUgB4AFEASwAyAHQAagB2AEMAVABoAHYAawBt
+ADAAZQBEAGsAZgBzAD0AAAAAAIDr
 
-In this thread it was mentioned that possibly a BIOS update
-fixed the issue Kenny was seeing. What kind of values is
-the BIOS supposed to adjust (I'm a PCI n00b)?
-
-Any suggestions about what else to try?
-
-Thanks
-
-m.
-
-[1] https://patchwork.kernel.org/project/linux-arm-msm/patch/1663315719-21563-1-git-send-email-quic_krichai@quicinc.com/
-
----
-
-0001:00:00.0 PCI bridge: Qualcomm Device 010b (prog-if 00 [Normal decode])
-	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR+ FastB2B- DisINTx+
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Latency: 0
-	Interrupt: pin A routed to IRQ 183
-	IOMMU group: 0
-	Region 0: Memory at 40700000 (32-bit, non-prefetchable) [size=4K]
-	Bus: primary=00, secondary=01, subordinate=ff, sec-latency=0
-	I/O behind bridge: 00001000-00001fff [size=4K]
-	Memory behind bridge: 40300000-404fffff [size=2M]
-	Prefetchable memory behind bridge: 0000000040500000-00000000406fffff [size=2M]
-	Secondary status: 66MHz- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- <SERR- <PERR-
-	BridgeCtl: Parity- SERR+ NoISA- VGA- VGA16- MAbort- >Reset- FastB2B-
-		PriDiscTmr- SecDiscTmr- DiscTmrStat- DiscTmrSERREn-
-	Capabilities: [40] Power Management version 3
-		Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA PME(D0+,D1-,D2-,D3hot+,D3cold+)
-		Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
-	Capabilities: [50] MSI: Enable+ Count=1/32 Maskable+ 64bit+
-		Address: 00000000fffff000  Data: 0000
-		Masking: fffffffe  Pending: 00000000
-	Capabilities: [70] Express (v2) Root Port (Slot+), MSI 00
-		DevCap:	MaxPayload 128 bytes, PhantFunc 0
-			ExtTag- RBE+
-		DevCtl:	CorrErr- NonFatalErr- FatalErr- UnsupReq-
-			RlxdOrd+ ExtTag- PhantFunc- AuxPwr- NoSnoop+
-			MaxPayload 128 bytes, MaxReadReq 512 bytes
-		DevSta:	CorrErr- NonFatalErr- FatalErr- UnsupReq- AuxPwr+ TransPend-
-		LnkCap:	Port #0, Speed 8GT/s, Width x2, ASPM L0s L1, Exit Latency L0s <1us, L1 <64us
-			ClockPM- Surprise- LLActRep+ BwNot- ASPMOptComp+
-		LnkCtl:	ASPM L0s L1 Enabled; RCB 128 bytes, Disabled- CommClk+
-			ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
-		LnkSta:	Speed 8GT/s (ok), Width x2 (ok)
-			TrErr- Train- SlotClk+ DLActive+ BWMgmt- ABWMgmt-
-		SltCap:	AttnBtn+ PwrCtrl+ MRL+ AttnInd+ PwrInd+ HotPlug+ Surprise+
-			Slot #0, PowerLimit 0.000W; Interlock+ NoCompl-
-		SltCtl:	Enable: AttnBtn- PwrFlt- MRL- PresDet- CmdCplt- HPIrq- LinkChg-
-			Control: AttnInd Off, PwrInd Off, Power- Interlock-
-		SltSta:	Status: AttnBtn- PowerFlt- MRL- CmdCplt- PresDet- Interlock-
-			Changed: MRL- PresDet- LinkState-
-		RootCap: CRSVisible-
-		RootCtl: ErrCorrectable- ErrNon-Fatal- ErrFatal- PMEIntEna+ CRSVisible-
-		RootSta: PME ReqID 0000, PMEStatus- PMEPending-
-		DevCap2: Completion Timeout: Range ABCD, TimeoutDis+ NROPrPrP+ LTR+
-			 10BitTagComp- 10BitTagReq- OBFF Not Supported, ExtFmt- EETLPPrefix-
-			 EmergencyPowerReduction Not Supported, EmergencyPowerReductionInit-
-			 FRS- LN System CLS Not Supported, TPHComp+ ExtTPHComp- ARIFwd-
-			 AtomicOpsCap: Routing- 32bit- 64bit- 128bitCAS-
-		DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis- LTR+ OBFF Disabled, ARIFwd-
-			 AtomicOpsCtl: ReqEn- EgressBlck-
-		LnkCap2: Supported Link Speeds: 2.5-8GT/s, Crosslink- Retimer- 2Retimers- DRS-
-		LnkCtl2: Target Link Speed: 8GT/s, EnterCompliance- SpeedDis-
-			 Transmit Margin: Normal Operating Range, EnterModifiedCompliance- ComplianceSOS-
-			 Compliance De-emphasis: -6dB
-		LnkSta2: Current De-emphasis Level: -6dB, EqualizationComplete+ EqualizationPhase1+
-			 EqualizationPhase2+ EqualizationPhase3+ LinkEqualizationRequest-
-			 Retimer- 2Retimers- CrosslinkRes: unsupported
-	Capabilities: [100 v2] Advanced Error Reporting
-		UESta:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-		UEMsk:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-		UESvrt:	DLP+ SDES+ TLP- FCP+ CmpltTO- CmpltAbrt- UnxCmplt- RxOF+ MalfTLP+ ECRC- UnsupReq- ACSViol-
-		CESta:	RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr-
-		CEMsk:	RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr+
-		AERCap:	First Error Pointer: 00, ECRCGenCap+ ECRCGenEn- ECRCChkCap+ ECRCChkEn-
-			MultHdrRecCap- MultHdrRecEn- TLPPfxPres- HdrLogCap-
-		HeaderLog: 00000000 00000000 00000000 00000000
-		RootCmd: CERptEn- NFERptEn- FERptEn-
-		RootSta: CERcvd- MultCERcvd- UERcvd- MultUERcvd-
-			 FirstFatal- NonFatalMsg- FatalMsg- IntMsg 0
-		ErrorSrc: ERR_COR: 0000 ERR_FATAL/NONFATAL: 0000
-	Capabilities: [148 v1] Secondary PCI Express
-		LnkCtl3: LnkEquIntrruptEn- PerformEqu-
-		LaneErrStat: 0
-	Capabilities: [168 v1] Transaction Processing Hints
-		No steering table available
-	Capabilities: [1fc v1] L1 PM Substates
-		L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_L1.1+ L1_PM_Substates+
-			  PortCommonModeRestoreTime=70us PortTPowerOnTime=0us
-		L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1- ASPM_L1.2+ ASPM_L1.1-
-			   T_CommonMode=70us LTR1.2_Threshold=86016ns
-		L1SubCtl2: T_PwrOn=10us
-	Kernel driver in use: pcieport
-
-0001:01:00.0 Non-Volatile memory controller: KIOXIA Corporation Device 0001 (prog-if 02 [NVM Express])
-	Subsystem: KIOXIA Corporation Device 0001
-	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
-	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-	Latency: 0
-	Interrupt: pin A routed to IRQ 182
-	IOMMU group: 0
-	Region 0: Memory at 40300000 (64-bit, non-prefetchable) [size=16K]
-	Capabilities: [40] Express (v2) Endpoint, MSI 00
-		DevCap:	MaxPayload 256 bytes, PhantFunc 0, Latency L0s unlimited, L1 unlimited
-			ExtTag- AttnBtn- AttnInd- PwrInd- RBE+ FLReset+ SlotPowerLimit 0.000W
-		DevCtl:	CorrErr- NonFatalErr- FatalErr- UnsupReq-
-			RlxdOrd- ExtTag- PhantFunc- AuxPwr- NoSnoop- FLReset-
-			MaxPayload 128 bytes, MaxReadReq 512 bytes
-		DevSta:	CorrErr- NonFatalErr- FatalErr- UnsupReq- AuxPwr- TransPend-
-		LnkCap:	Port #0, Speed 8GT/s, Width x4, ASPM L0s L1, Exit Latency L0s <2us, L1 <32us
-			ClockPM- Surprise- LLActRep- BwNot- ASPMOptComp+
-		LnkCtl:	ASPM L0s L1 Enabled; RCB 64 bytes, Disabled- CommClk+
-			ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
-		LnkSta:	Speed 8GT/s (ok), Width x2 (downgraded)
-			TrErr- Train- SlotClk+ DLActive- BWMgmt- ABWMgmt-
-		DevCap2: Completion Timeout: Range AB, TimeoutDis+ NROPrPrP- LTR+
-			 10BitTagComp- 10BitTagReq- OBFF Not Supported, ExtFmt+ EETLPPrefix-
-			 EmergencyPowerReduction Not Supported, EmergencyPowerReductionInit-
-			 FRS- TPHComp- ExtTPHComp-
-			 AtomicOpsCap: 32bit- 64bit- 128bitCAS-
-		DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis- LTR+ OBFF Disabled,
-			 AtomicOpsCtl: ReqEn-
-		LnkCap2: Supported Link Speeds: 2.5-8GT/s, Crosslink- Retimer- 2Retimers- DRS-
-		LnkCtl2: Target Link Speed: 8GT/s, EnterCompliance- SpeedDis-
-			 Transmit Margin: Normal Operating Range, EnterModifiedCompliance- ComplianceSOS-
-			 Compliance De-emphasis: -6dB
-		LnkSta2: Current De-emphasis Level: -6dB, EqualizationComplete+ EqualizationPhase1+
-			 EqualizationPhase2+ EqualizationPhase3+ LinkEqualizationRequest-
-			 Retimer- 2Retimers- CrosslinkRes: unsupported
-	Capabilities: [80] Power Management version 3
-		Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA PME(D0+,D1-,D2-,D3hot+,D3cold-)
-		Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
-	Capabilities: [90] MSI: Enable- Count=1/32 Maskable+ 64bit+
-		Address: 0000000000000000  Data: 0000
-		Masking: 00000000  Pending: 00000000
-	Capabilities: [b0] MSI-X: Enable+ Count=32 Masked-
-		Vector table: BAR=0 offset=00002000
-		PBA: BAR=0 offset=00003000
-	Capabilities: [100 v2] Advanced Error Reporting
-		UESta:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-		UEMsk:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-		UESvrt:	DLP+ SDES- TLP- FCP+ CmpltTO- CmpltAbrt- UnxCmplt- RxOF+ MalfTLP+ ECRC- UnsupReq- ACSViol-
-		CESta:	RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr-
-		CEMsk:	RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr+
-		AERCap:	First Error Pointer: 00, ECRCGenCap- ECRCGenEn- ECRCChkCap- ECRCChkEn-
-			MultHdrRecCap- MultHdrRecEn- TLPPfxPres- HdrLogCap-
-		HeaderLog: 00000000 00000000 00000000 00000000
-	Capabilities: [150 v1] Virtual Channel
-		Caps:	LPEVC=0 RefClk=100ns PATEntryBits=1
-		Arb:	Fixed- WRR32- WRR64- WRR128-
-		Ctrl:	ArbSelect=Fixed
-		Status:	InProgress-
-		VC0:	Caps:	PATOffset=00 MaxTimeSlots=1 RejSnoopTrans-
-			Arb:	Fixed- WRR32- WRR64- WRR128- TWRR128- WRR256-
-			Ctrl:	Enable+ ID=0 ArbSelect=Fixed TC/VC=ff
-			Status:	NegoPending- InProgress-
-	Capabilities: [260 v1] Latency Tolerance Reporting
-		Max snoop latency: 0ns
-		Max no snoop latency: 0ns
-	Capabilities: [300 v1] Secondary PCI Express
-		LnkCtl3: LnkEquIntrruptEn- PerformEqu-
-		LaneErrStat: 0
-	Capabilities: [400 v1] L1 PM Substates
-		L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1- ASPM_L1.2+ ASPM_L1.1- L1_PM_Substates+
-			  PortCommonModeRestoreTime=60us PortTPowerOnTime=10us
-		L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1- ASPM_L1.2+ ASPM_L1.1-
-			   T_CommonMode=0us LTR1.2_Threshold=86016ns
-		L1SubCtl2: T_PwrOn=10us
-	Kernel driver in use: nvme
-
-
-On Tue, Apr 12, 2022 at 05:50:47PM -0500, Bjorn Helgaas wrote:
-> [+cc Ricky for rtsx_pci ASPM behavior, Rajat, Prasad for L1 SS stuff,
-> Victor for interest in disabling ASPM during save/restore]
-> 
-> On Wed, Feb 16, 2022 at 06:41:39PM +0530, Vidya Sagar wrote:
-> > On 2/16/2022 11:30 AM, Kenneth R. Crudup wrote:
-> > > On Wed, 16 Feb 2022, Vidya Sagar wrote:
-> > > 
-> > > > I see that the ASPM-L1 state of Realtek NIC which was in
-> > > > disabled state before hibernate got enabled after hibernate.
-> > > 
-> > > That's actually my SD-Card reader; there's a good chance the BIOS
-> > > does "something" to it at boot time, as it's possible to boot from
-> > > SD-Card on my laptop.
-> > > 
-> > > > This patch doesn't do anything to LnkCtl register which has
-> > > > control for ASPM L1 state.
-> > > 
-> > > > Could you please check why ASPM L1 got enabled post hibernation?
-> > > 
-> > > I wouldn't know how to do that; if you're still interested in that
-> > > let me know what to do to determine that.
-> 
-> > I would like Bjorn to take a call on it.
-> > At this point, there are contradictions in observations.
-> 
-> Remind me what contradictions you see?  I know Kenny saw NVMe errors
-> on a kernel that included 4257f7e008ea ("PCI/ASPM: Save/restore L1SS
-> Capability for suspend/resume") in December 2020 [1], and that he did
-> *not* see those errors on 4257f7e008ea in February 2022 [2].  Is that
-> what you mean?
-> 
-> > Just to summarize,
-> > - The root ports in your laptop don't have support for L1SS
-> > - With the same old code base with which the errors were observed plus my
-> > patch on top of it, I see that ASPM-L1 state getting enabled for one of the
-> > endpoints (Realtek SD-Card reader) after system comes out of hibernation
-> > even though ASPM-L1 was disabled before the system enter into hibernation.
-> > No errors are reported now.
-> 
-> I assume you refer to [2], where on 4257f7e008ea ("PCI/ASPM:
-> Save/restore L1SS Capability for suspend/resume"), Kenny saw ASPM L1
-> disabled before hibernate and enabled afterwards:
-> 
->   --- pre-hibernate
->   +++ post-hibernate
->     00:1d.7 PCI bridge [0604]: Intel [8086:34b7]
->       Bus: primary=00, secondary=58, subordinate=58
-> 	LnkCtl: ASPM Disabled; RCB 64 bytes, Disabled- CommClk+
->     58:00.0 RTS525A PCI Express Card Reader [10ec:525a]
->   -     LnkCtl: ASPM Disabled; RCB 64 bytes, Disabled- CommClk-
->   -             ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
->   +     LnkCtl: ASPM L1 Enabled; RCB 64 bytes, Disabled- CommClk-
->   +             ExtSynch- ClockPM+ AutWidDis- BWInt- AutBWInt-
-> 
-> Per PCIe r6.0, sec 7.5.3.7, "ASPM L1 must be enabled by software in
-> the Upstream component on a Link prior to enabling ASPM L1 in the
-> Downstream component on that Link," so this definitely seems broken,
-> but wouldn't explain the NVMe issue.
-> 
-> The PCI core (pcie_config_aspm_link()) always enables L1 in the
-> upstream component before the downstream one, but 58:00.0 uses the
-> rtsx_pci driver, which does a lot of its own ASPM fiddling, so my
-> guess is that it's doing something wrong here.
-> 
-> > - With the linux-next top of the tree plus my patch, no change in the ASPM
-> > states and no errors also reported.
-> 
-> I don't know which report this refers to.
-> 
-> > This points to BIOS being buggy (both old and new with new one being less
-> > problematic)
-> 
-> I agree that a BIOS change between [1] and [2] seems plausible, but I
-> don't think we can prove that yet.  I'm slightly queasy because while
-> Kenny may have updated his BIOS, most people will not have.
-> 
-> I think we should try this patch again with some changes and maybe
-> some debug logging:
-> 
->   - I wonder if we should integrate the LTR, L1 SS, and Link Control
->     ASPM restore instead of having them spread around through
->     pci_restore_ltr_state(), pci_restore_aspm_l1ss_state(), and
->     pci_restore_pcie_state().  Maybe a new pci_restore_aspm() that
->     would be called from pci_restore_pcie_state()?
-> 
->   - For L1 PM Substates configuration, sec 5.5.4 says that both ports
->     must be configured while ASPM L1 is disabled, but I don't think we
->     currently guarantee this: we restore all the upstream component
->     state first, and we don't know the ASPM state of the downstream
->     one.  Maybe we need to:
-> 
->       * When restoring upstream component,
->           + disable its ASPM
-> 
->       * When restoring downstream component,
->           + disable its ASPM
-> 	  + restore upstream component's LTR, L1SS
-> 	  + restore downstream component's LTR, L1SS
-> 	  + restore upstream component's ASPM
-> 	  + restore downstream component's ASPM
-> 
->       This seems pretty messy, but seems like what the spec requires.
-> 
->     - Add some pci_dbg() logging of all these save/restore values to
->       help debug any issues.
-> 
-> Bjorn
-> 
-> [1] https://lore.kernel.org/r/20201228040513.GA611645@bjorn-Precision-5520
-> [2] https://lore.kernel.org/r/3ca14a7-b726-8430-fe61-a3ac183a1088@panix.com
-> 
+--_000_MW3PR12MB45531279C61A2A75C8CC47C2950C9MW3PR12MB4553namp_--
