@@ -2,77 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC85E6361D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:30:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A65DE6361DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:31:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238750AbiKWOah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 09:30:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57786 "EHLO
+        id S238062AbiKWOan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 09:30:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238450AbiKWOaJ (ORCPT
+        with ESMTP id S238275AbiKWOaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 09:30:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C93290580;
-        Wed, 23 Nov 2022 06:28:36 -0800 (PST)
+        Wed, 23 Nov 2022 09:30:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C733905AE
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 06:28:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 60E9E61D3B;
-        Wed, 23 Nov 2022 14:28:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B521C433D6;
-        Wed, 23 Nov 2022 14:28:28 +0000 (UTC)
-Message-ID: <0da1813a-7e37-bc35-cf8d-8c41590f3b1a@xs4all.nl>
-Date:   Wed, 23 Nov 2022 15:28:27 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH mm-unstable v1 16/20] mm/frame-vector: remove FOLL_FORCE
- usage
-Content-Language: en-US
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-To:     David Hildenbrand <david@redhat.com>,
-        Tomasz Figa <tfiga@chromium.org>
-Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 00184B8202D
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 14:28:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFFD8C433D6;
+        Wed, 23 Nov 2022 14:28:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669213731;
+        bh=C8LAvH10eyEIrd0dXgkWe5lm7XPXVZ76OgS++XwNOis=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=ZnfA+CxxK3VgKvHxqPMhzhGXrPRo5KpWjezJhPCd4dRf6jNfKMPBxz72e0tF9dDzj
+         SxsETo5g0GhItRkimtnFB0fwgj1XVPzvi+ywZov60FAH3fC3nw4YiaeQ1fq1S2BGzY
+         sTv4Z1J34nRBYn4SrfsKXn3IvE24e4TANMX2g9NlIHOL7hZoNgc+fh33jgQGHS/D5P
+         1++fcfePg2Jn9i4xlpmc92Eu1r72rujKBxH7FPP1Ee1yAgZu+CSjUHujZw/vgsdYNj
+         PF5d7h6x6BEBVeQw2xpa8IuZmZUCbJGGr3c2lr4jrK1KALmPJWQO2uTjZN1R4l3hc4
+         KIFgYSMPhz6Lg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Wang ShaoBo <bobo.shaobowang@huawei.com>
+Cc:     lgirdwood@gmail.com, liwei391@huawei.com,
         linux-kernel@vger.kernel.org
-References: <20221116102659.70287-1-david@redhat.com>
- <20221116102659.70287-17-david@redhat.com>
- <36dd800b-d96b-af39-d0de-a5a8ca1034dd@xs4all.nl>
-In-Reply-To: <36dd800b-d96b-af39-d0de-a5a8ca1034dd@xs4all.nl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20221123034616.3609537-1-bobo.shaobowang@huawei.com>
+References: <20221123034616.3609537-1-bobo.shaobowang@huawei.com>
+Subject: Re: [PATCH] regulator: core: use kfree_const() to free space conditionally
+Message-Id: <166921373057.240778.13837593639387001474.b4-ty@kernel.org>
+Date:   Wed, 23 Nov 2022 14:28:50 +0000
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fc921
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,67 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/11/2022 14:26, Hans Verkuil wrote:
-> Hi David, Tomasz,
+On Wed, 23 Nov 2022 11:46:16 +0800, Wang ShaoBo wrote:
+> Use kfree_const() to free supply_name conditionally in create_regulator()
+> as supply_name may be allocated from kmalloc() or directly from .rodata
+> section.
 > 
-> On 16/11/2022 11:26, David Hildenbrand wrote:
->> FOLL_FORCE is really only for ptrace access. According to commit
->> 707947247e95 ("media: videobuf2-vmalloc: get_userptr: buffers are always
->> writable"), get_vaddr_frames() currently pins all pages writable as a
->> workaround for issues with read-only buffers.
-> 
-> I've decided to revert 707947247e95: I have not been able to reproduce the problem
-> described in that commit, and Tomasz reported that it caused problems with a
-> specific use-case they encountered. I'll post that patch soon and I expect it
-> to land in 6.2. It will cause a conflict with this patch, though.
-> 
-> If the problem described in that patch occurs again, then I will revisit it
-> and hopefully do a better job than I did before. That commit was not my
-> finest moment.
-
-In any case, for this patch:
-
-Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-
-Regards,
-
-	Hans
-
-> 
-> Regards,
-> 
-> 	Hans
-> 
->>
->> FOLL_FORCE, however, seems to be a legacy leftover as it predates
->> commit 707947247e95 ("media: videobuf2-vmalloc: get_userptr: buffers are
->> always writable"). Let's just remove it.
->>
->> Once the read-only buffer issue has been resolved, FOLL_WRITE could
->> again be set depending on the DMA direction.
->>
->> Cc: Hans Verkuil <hverkuil@xs4all.nl>
->> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
->> Cc: Tomasz Figa <tfiga@chromium.org>
->> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
->> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
->> Signed-off-by: David Hildenbrand <david@redhat.com>
->> ---
->>  drivers/media/common/videobuf2/frame_vector.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/media/common/videobuf2/frame_vector.c b/drivers/media/common/videobuf2/frame_vector.c
->> index 542dde9d2609..062e98148c53 100644
->> --- a/drivers/media/common/videobuf2/frame_vector.c
->> +++ b/drivers/media/common/videobuf2/frame_vector.c
->> @@ -50,7 +50,7 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
->>  	start = untagged_addr(start);
->>  
->>  	ret = pin_user_pages_fast(start, nr_frames,
->> -				  FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
->> +				  FOLL_WRITE | FOLL_LONGTERM,
->>  				  (struct page **)(vec->ptrs));
->>  	if (ret > 0) {
->>  		vec->got_ref = true;
 > 
 
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+
+Thanks!
+
+[1/1] regulator: core: use kfree_const() to free space conditionally
+      commit: dc8d006d15b623c1d80b90b45d6dcb6e890dad09
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
