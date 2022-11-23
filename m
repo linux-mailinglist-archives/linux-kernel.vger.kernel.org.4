@@ -2,97 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE02636138
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:12:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 449F1636135
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:12:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236000AbiKWOMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 09:12:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35414 "EHLO
+        id S237737AbiKWOMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 09:12:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236038AbiKWOMf (ORCPT
+        with ESMTP id S236038AbiKWOMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 09:12:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C778CDD
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 06:11:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669212694;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8/DTsoiDdjjsRtV9pwPMMoAHlpx48KJLm5OuDCWlE6M=;
-        b=ImN9HtjAGd1kycPpbn2VPlQDfoA5FI4JEG2SZK0CojefJ88vThg1QNnXwTp6PY4rABU2Gu
-        ZEf+XQ4r7fouAxiubqpQ2rsxekt0MJYPJO2mwWgaLLspNH464R2JgUQHEtWBhWMVE/l/6c
-        4zRMQy0mAAbJS4SJP4gju+XbG4EY8hQ=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-204-EGs5dCU5M7GQ7px830C7fg-1; Wed, 23 Nov 2022 09:11:33 -0500
-X-MC-Unique: EGs5dCU5M7GQ7px830C7fg-1
-Received: by mail-qt1-f199.google.com with SMTP id u31-20020a05622a199f00b003a51fa90654so17231213qtc.19
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 06:11:33 -0800 (PST)
+        Wed, 23 Nov 2022 09:12:09 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72AC3238
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 06:12:08 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id t1so13136249wmi.4
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 06:12:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Bws7Utd85LMsHk1OFS5y1Jt3azqf33BIHbl8d6KTHuQ=;
+        b=D+wYqLDP1MEA7jCYynzAsSVMjisFupGWEdxCzQFgAuLl/j7P7VMONsmjag6HspHkDv
+         2Hb7jLfBYBKn7EXSFEe3S39UkuY40vBMpDWg4yQJ4DUQJ2YzXHc5fdHK/JikDPxeLKxO
+         echf0BlGjUZhObFuWaVKRFMbuGyKOaQyUfzZ5RSdHkDArwX/vjxyuFeGEnfPpd2yOQz5
+         s6JTEbHITuLdXFNGDf8zpWu7spCPT+9jtpiRGHW4pmypT2XUM/EKUobQXJYypI6Vm0Ol
+         b0rOtA2VPArOraLFkReBtfw21uDCV+3qXlv6/BoK+zYCKDvGg/JYisGHDWZ3Nx59gFVi
+         1P0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8/DTsoiDdjjsRtV9pwPMMoAHlpx48KJLm5OuDCWlE6M=;
-        b=77BHNdIAFjFGYRl0ziUuYlGOf3bu75KamnG3gCN37zMljGnnHGMEfJISdTk+lMh4Wt
-         4ncEz1SxQOSaJKYnl6tz0a+89Vu+iKk+9EfDGgkAtE3H6lhIK5OmLbePDj0hbKBKZnZN
-         0eYKW+8j3CVbO6pPlu6wrYvPFmAYkESwbOcQd6pZsuGMRVqcwESiVC2q+4B/aB0q4TZX
-         UU3qCsL2KPeHebFqh4viN5bDYNJcAlgWb+viW0IUWy3196nKJ/F4/DO7MRfAWPNbvSAt
-         M8/I7ZwHNCbvUrERop1JorbzlUv7wlnm3BmWuW1TsNvXyd2FBnyJmoU+pmFZ2lSxzdLK
-         aCaA==
-X-Gm-Message-State: ANoB5plGQsxos1mOsUaLoeVXr4TIXdAj/wjiOG/4fjkgv3aR6sx8hHlq
-        qviUFNz2M6ZTYOxBKC9frwxQ2wk+04Y/C5VdYNpkUt9CKKs6aKQlytApZp5vz+M/pIpkNYJ6fFp
-        YsjL6Gh9PHqflPgPCsR3ga2s/
-X-Received: by 2002:a05:620a:215c:b0:6fa:937f:61d4 with SMTP id m28-20020a05620a215c00b006fa937f61d4mr10724828qkm.280.1669212692628;
-        Wed, 23 Nov 2022 06:11:32 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6SUx6m2TjrGKG87f9C4JXPILTeMPN0Mxipek+6Q+wnWntXqutLB5B+k6aNyyqF0614O+yLqQ==
-X-Received: by 2002:a05:620a:215c:b0:6fa:937f:61d4 with SMTP id m28-20020a05620a215c00b006fa937f61d4mr10724802qkm.280.1669212692303;
-        Wed, 23 Nov 2022 06:11:32 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id n30-20020ac81e1e000000b003a50b9f099esm9980897qtl.12.2022.11.23.06.11.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 06:11:31 -0800 (PST)
-Date:   Wed, 23 Nov 2022 09:11:30 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Zach O'Keefe <zokeefe@google.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>, kernel@collabora.com,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Peter Enderborg <peter.enderborg@sony.com>,
-        "open list : KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list : PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
-        "open list : MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Andrea Arcangeli <aarcange@redhat.com>
-Subject: Re: [PATCH v6 0/3] Implement IOCTL to get and/or the clear info
- about PTEs
-Message-ID: <Y34qEo6cB3oDwoCe@x1n>
-References: <20221109102303.851281-1-usama.anjum@collabora.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bws7Utd85LMsHk1OFS5y1Jt3azqf33BIHbl8d6KTHuQ=;
+        b=gxEbtK21uxeCoaN8W8VelV3AvqeP1RALvFcsENKHfQRIzTydQJUVU1947DQ3kySSD0
+         bbg2UjMh78gPE1+Qf+3V8iSFPqnwOBuhrgZSB2Ru6raeifi3UkvcwCn0PeiudSyUn4MO
+         5MIRSuVUZ9rsnbHaZ0RsGDvQo1mjzupi9jZ5HHiYW72FZ//R2+y+fuHPuLYj2o4CD+lg
+         zH9npBvFjJQQGzmuoLKIP7KE+nkXq16akfjsAAcjp+3CKbn6X0J1NhZekQmjb9YJaraE
+         OIQ8w+B+oouFGINi0CTKOjiV4vg/VDHTw0nXuU2McsKwUhJPGKfR5MtxKUEtpDUKtloU
+         kDsg==
+X-Gm-Message-State: ANoB5pmLrpZfn3kB3CJUi3mVif8hLDWE9vhcycHpJ0d5P8d7IKqKxNEy
+        E0lvJ7rDBD/JDyeXFRV+XcVMVw==
+X-Google-Smtp-Source: AA0mqf6Y0ju2xImGL+9QBlfOHXw/7y97CmSePiN/N1bGOjf5pSx013+27gKxLKN4IqD5oXnpuuoyFA==
+X-Received: by 2002:a05:600c:2302:b0:3cf:a3c4:59b3 with SMTP id 2-20020a05600c230200b003cfa3c459b3mr12643453wmo.198.1669212726904;
+        Wed, 23 Nov 2022 06:12:06 -0800 (PST)
+Received: from [10.83.37.24] ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id y7-20020a1c4b07000000b003b4c979e6bcsm2345676wma.10.2022.11.23.06.12.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Nov 2022 06:12:06 -0800 (PST)
+Message-ID: <9e730aaf-9bbb-38d4-c26f-dfc58c4a9352@arista.com>
+Date:   Wed, 23 Nov 2022 14:11:59 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221109102303.851281-1-usama.anjum@collabora.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v5 1/5] jump_label: Prevent key->enabled int overflow
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Bob Gilligan <gilligan@arista.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Baron <jbaron@akamai.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        Steven Rostedt <rostedt@goodmis.org>, netdev@vger.kernel.org
+References: <20221122185534.308643-1-dima@arista.com>
+ <20221122185534.308643-2-dima@arista.com>
+ <Y33uEHIHwPZ/5IiA@hirez.programming.kicks-ass.net>
+From:   Dmitry Safonov <dima@arista.com>
+In-Reply-To: <Y33uEHIHwPZ/5IiA@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,74 +89,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 03:23:00PM +0500, Muhammad Usama Anjum wrote:
-> Soft-dirty PTE bit of the memory pages can be read by using the pagemap
-> procfs file. The soft-dirty PTE bit for the whole memory range of the
-> process can be cleared by writing to the clear_refs file. There are other
-> methods to mimic this information entirely in userspace with poor
-> performance:
-> - The mprotect syscall and SIGSEGV handler for bookkeeping
-> - The userfaultfd syscall with the handler for bookkeeping
+On 11/23/22 09:55, Peter Zijlstra wrote:
+> On Tue, Nov 22, 2022 at 06:55:30PM +0000, Dmitry Safonov wrote:
+> 
+>> +/***
+>> + * static_key_fast_inc_not_negative - adds a user for a static key
+>> + * @key: static key that must be already enabled
+>> + *
+>> + * The caller must make sure that the static key can't get disabled while
+>> + * in this function. It doesn't patch jump labels, only adds a user to
+>> + * an already enabled static key.
+>> + *
+>> + * Returns true if the increment was done.
+>> + */
+> 
+> I don't normally do kerneldoc style comments, and this is the first in
+> the whole file. The moment I get a docs person complaining about some
+> markup issue I just take the ** off.
 
-Userfaultfd is definitely slow in this case because it needs the messaging
-roundtrip that happens in two different threads synchronously, so at least
-more schedule effort even than mprotect.
+The only reason I used kerneldoc style is that otherwise usually someone
+would come and complain. I'll convert it to a regular comment.
 
-I saw the other patch on vma merging with SOFTDIRTY, didn't look deeper
-there but IIUC it won't really help much if the other commit (34228d47)
-can't be reverted then it seems to help nothing.  And, it does looks risky
-to revert that because in the same commit it mentioned the case where one
-can clear ref right before a vma merge, so definitely worth more thoughts
-and testings, which I agree with you.
+> One more thing; it might be useful to point out that unlike refcount_t
+> this thing does not saturate but will fail to increment on overflow.
 
-I'm thinking whether the vma issue can be totally avoided.  For example by
-providing an async version of uffd-wp.
+Will add it as well.
 
-Currently uffd-wp must be synchronous and it'll be slow but it services
-specific purposes.  And this is definitely not the 1st time any of us
-thinking about uffd-wp being async, it's just that we need to solve the
-problem of storage on the dirty information.
+> 
+>> +static bool static_key_fast_inc_not_negative(struct static_key *key)
+>>  {
+>> +	int v;
+>> +
+>>  	STATIC_KEY_CHECK_USE(key);
+>> +	/*
+>> +	 * Negative key->enabled has a special meaning: it sends
+>> +	 * static_key_slow_inc() down the slow path, and it is non-zero
+>> +	 * so it counts as "enabled" in jump_label_update().  Note that
+>> +	 * atomic_inc_unless_negative() checks >= 0, so roll our own.
+>> +	 */
+>> +	v = atomic_read(&key->enabled);
+>> +	do {
+>> +		if (v <= 0 || (v + 1) < 0)
+>> +			return false;
+>> +	} while (!likely(atomic_try_cmpxchg(&key->enabled, &v, v + 1)));
+>> +
+>> +	return true;
+>> +}
+> 
+> ( vexing how this function and the JUMP_LABEL=n static_key_slow_inc() are
+>   only a single character different )
 
-Actually we can also use other storage form but so far I didn't think of
-anything that's easy and clean.  Current soft-dirty bit also has its
-defects (e.g. the need to take mmap lock and walk the pgtables), but that
-part will be the same as soft-dirty for now.
+Yeah, also another reason for it was that when JUMP_LABEL=y jump_label.h
+doesn't include <linux/atomic.h> and <linux/bug.h> because of the
+inclusion hell:
+commit 1f69bf9c6137 ("jump_label: remove bug.h, atomic.h dependencies
+for HAVE_JUMP_LABEL")
+and I can't move JUMP_LABEL=n version of static_key_slow_inc() to
+jump_label.c as it is not being built without the config set.
 
-Now I'm wildly thinking whether we can just reuse the soft-dirty bit in the
-ptes already defined.  The GET interface could be similar as proposed here,
-or at least a separate issue.
+So, in result I was looking into macro-define for both cases, but that
+adds quite some ugliness and has no type checks for just reusing 10
+lines, where 1 differs...
 
-So _maybe_ we can have a feature (bound to the uffd context) for uffd that
-enables async uffd-wp, in which case the wr-protect fault is not sending
-any message anymore (nor enqueuing) but instead setting the soft-dirty then
-quickly resolving the write bit immediately and continue the fault.
+> So while strictly accurate, I dislike this name (and I see I was not
+> quick enough responding to your earlier suggestion :/). The whole
+> negative thing is an implementation detail that should not spread
+> outside of jump_label.c.
+> 
+> Since you did not like the canonical _inc_not_zero(), how about
+> inc_not_disabled() ?
 
-Clearing of the soft-dirty bit needs to be done in UFFDIO_WRITEPROTECT
-alongside of clearing uffd-wp bit.  So on that part the current GET+CLEAR
-interface for pagemap may need to be replaced.  And frankly, it feels weird
-to me to allow change mm layout in pagemap ioctls..  With this we can keep
-the pagemap interface to only fetch information, like before.
+Ok, that sounds good, I'll rename in v6.
 
-A major benefit of using uffd is that uffd is by nature pte-based, so no
-fiddling with vma needed at all.  Firstly, no need to worry about merging
-vmas with tons of false positives.  Meanwhile, one can wr-protect in
-page-size granule easily.  All the wr-protect is not governed by vma flag
-anymore but based on uffd-wp flag, so no extra overhead too on any page
-that the monitor is not interested.  There's already infrastructure code
-for persisting uffd-wp bit, so it'll naturally work similarly for an async
-mode if to come to the world.
+> Also, perhaps expose this function in this patch, instead of hiding that
+> in patch 3?
 
-It's just that we'll also need to consider exclusive use of the bit, so
-we'll need to fail clear_refs on vmas where we have VM_UFFD_WP and also the
-async feature enabled.  I would hope that's very rare, but worth thinking
-about its side effect.  The same will need to apply to UFFDIO_REGISTER on
-async wp mode when soft-dirty enabled, we'll need to bailout too.
+Will do.
 
-Said that, this is not a suggestion of a new design, but just something I
-thought about when reading this, and quickly writting this down.
-
-Thanks,
-
--- 
-Peter Xu
+> Otherwise, things look good.
+> 
+> Thanks!
+Thanks again for the review,
+          Dmitry
 
