@@ -2,38 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4ED6359C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 11:27:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A86CE6359C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 11:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236931AbiKWKZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 05:25:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50362 "EHLO
+        id S236079AbiKWKZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 05:25:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236778AbiKWKYJ (ORCPT
+        with ESMTP id S236713AbiKWKYI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 05:24:09 -0500
-Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.133.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08137252B2
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 02:09:02 -0800 (PST)
+        Wed, 23 Nov 2022 05:24:08 -0500
+Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.129.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085E62610B
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 02:09:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxlinear.com;
-        s=selector; t=1669198141;
+        s=selector; t=1669198144;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=0BlMP3vE6NPYkowJ5CYY9pKK4uobIqguXEfH7GISyWM=;
-        b=hNwJu+7aHf2/tACy7j/lzZlRrPCnHatghGbvEiGM02gXLpYq9Gp401xeyw+YRo8KeMIRFs
-        lIMv51qhGUiA5olsfI55o3JRZ0IYhPQ7YDPVcfEUnvLEqbNbiXUTlQjApimqJgcD3dN4w8
-        mf+Bcdg/s36lOprj43lqqtwTY9hbeFw5Us8CyT+Z8e/T7UHmM7Pv7tZ40w2t9nM0A+PeTq
-        5hP1Ekn4MAShxBG4XKM/PoL91Z2EwI95FftWIt4YolcfUxFgfXn4PHNpNq+UBHrBlMgucH
-        AzYZM7vz4fuAOgs7czwWBlTV4ANBu8Yjib03s5EXjLWKbKJu76VU9vzxhKtHuQ==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3Ue4Fy+YA0IMAcpbUeiAy+Mm1ILff9j4snIOtf29MKo=;
+        b=VG7qBFtbYKkmxkRic3PNiGFqjn7A2SBTco/uIYn/FXOXqHbVpvLhACfbfj9E0XpzU8H2qU
+        tib9GfXGN4NwGawNh2ea6FOeqf/7zkteE78+XIXOkBTYrPguSNC/LAR6zlQsLxvyuVB2k9
+        zNWzlQGzCKmuSEUBj+5FMXQzEZfUe98OvAcPsxdHsnbGZcn9cKemRQi9gf4xMxEsEMEo1O
+        aH6XvHGLvS8ytfIVVNHGn2tKMR8p6ojeu4LuV/DwkAyjLf5vKzBEtfqjvHr1PW/cLKeLDA
+        LPLPUIfZCG+xqR8aI831hhmGnQvjo1OohkzFnLxb7aE1D7s2Ut8naFsicblnmw==
 Received: from mail.maxlinear.com (174-47-1-84.static.ctl.one [174.47.1.84])
  by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- us-mta-634-GlAu2hBEM3-xoo23vO7U3g-1; Wed, 23 Nov 2022 05:09:00 -0500
-X-MC-Unique: GlAu2hBEM3-xoo23vO7U3g-1
+ us-mta-661-ARiWs3_FPHemW0O6P508gQ-1; Wed, 23 Nov 2022 05:09:03 -0500
+X-MC-Unique: ARiWs3_FPHemW0O6P508gQ-1
 Received: from sgsxdev001.isng.phoenix.local (10.226.81.111) by
  mail.maxlinear.com (10.23.38.119) with Microsoft SMTP Server id 15.1.2375.24;
- Wed, 23 Nov 2022 02:08:51 -0800
+ Wed, 23 Nov 2022 02:08:55 -0800
 From:   Rahul Tanwar <rtanwar@maxlinear.com>
 To:     Rahul Tanwar <rtanwar@maxlinear.com>,
         <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
@@ -46,10 +47,12 @@ CC:     Thomas Gleixner <tglx@linutronix.de>,
         Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
         "H. Peter Anvin" <hpa@zytor.com>, <linux-lgm-soc@maxlinear.com>,
         <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v4 0/4] x86/of: Add support for interrupt mode config for x86 OF systems
-Date:   Wed, 23 Nov 2022 18:08:46 +0800
-Message-ID: <20221123100850.22969-1-rtanwar@maxlinear.com>
+Subject: [PATCH v4 1/4] dt-bindings: x86: apic: Convert Intel's APIC bindings to YAML schema
+Date:   Wed, 23 Nov 2022 18:08:47 +0800
+Message-ID: <20221123100850.22969-2-rtanwar@maxlinear.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20221123100850.22969-1-rtanwar@maxlinear.com>
+References: <20221123100850.22969-1-rtanwar@maxlinear.com>
 MIME-Version: 1.0
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: maxlinear.com
@@ -57,194 +60,28 @@ Content-Type: text/plain; charset=WINDOWS-1252
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[RESEND due a missing Cc in previous send]
+Intel's APIC family of interrupt controllers support local APIC
+(lapic) & I/O APIC (ioapic). Convert existing bindings for lapic
+& ioapic from text to YAML schema. Separate lapic & ioapic schemas.
+Addditionally, add description which was missing in text file and
+add few more required standard properties which were also missing
+in text file.
 
-Hi All,
-
-This patch series mainly adds a boot time interrupt delivery mode
-configuration option for OF based x86 platforms. Presently,
-boot time interrupt delivery mode is hardcoded to legacy PIC mode
-with no option to configure it to virtual wire mode. This patch
-series aims to extend it by introducing a new optional boolean
-property for lapic devicetree node which can be used to configure
-it to virtual wire mode where applicable. Please find below detailed
-rationale behind it.
-
-Rationale:
-
-References [1], [2] & [6]
-
-For SMP systems, Intel defines three (logically four) interrupt modes
-during boot/init time while BIOS/bootloader boots & switches to linux
-kernel.
-
-  1. PIC mode - Legacy 8259 PIC interrupt controller.
-  2. Virtual wire mode via Local APIC - uses local APIC as virtual wire
-  3. Virtual wire mode via I/O APIC - uses I/O APIC as virtual wire
-  4. Symmetric I/O mode - final one used by linux for SMP systems.=20
-
-BIOS/bootloaders are supposed to boot in either #1 or #2 or #3 and then
-switch to #4 in linux for SMP systems.
-
-For our platform, we use #2.
-
-Detection of which interrupt mode the system is booting in is made by using
-below global variable in apic.c
-
-int pic_mode __ro_after_init;=20
-
-Here pic_mode =3D 1 means #1 (PIC mode) above.
-And pic_mode =3D 0 means #2 or #3 (basically virtual wire mode via apic).
-
-And apic.c while doing setup_local_APIC() uses below code [3]:
-
-        value =3D apic_read(APIC_LVT0) & APIC_LVT_MASKED;
-        if (!cpu && (pic_mode || !value || skip_ioapic_setup)) {
-                value =3D APIC_DM_EXTINT;
-                apic_printk(APIC_VERBOSE, "enabled ExtINT on CPU#%d\n", cpu=
-);
-        } else {
-                value =3D APIC_DM_EXTINT | APIC_LVT_MASKED;
-                apic_printk(APIC_VERBOSE, "masked ExtINT on CPU#%d\n", cpu)=
-;
-        }
-        apic_write(APIC_LVT0, value);
-
-What i understand from above is that if at this point of time, as long as
-it is cpu0 & pic_mode=3D1, it will set delivery mode to ExtINT (causes the
-processor to respond to the interrupt as if the interrupt originated in an
-externally connected (8259A-compatible) interrupt controller) and enables/
-unmask the interrupts. This causes kernel boot crash for platforms which
-does not support 8259 compatible external PIC.
-
-pic_mode is presently set/populated/initialized at only two places:
- 1. In  mpparse.c [4]
- 2. In devicetree.c [7]
-
-For #1 MPPARSE Kconfig definition is as below:
-
-=09config X86_MPPARSE
-        =09bool "Enable MPS table" if ACPI
-        =09default y
-        =09depends on X86_LOCAL_APIC
-        =09help
-          =09For old smp systems that do not have proper acpi support. Newe=
-r systems
-          =09(esp with 64bit cpus) with acpi support, MADT and DSDT will ov=
-erride it
-
-As seen above, if ACPI is not enabled, then mpparse by default is always
-enabled. Presently, there is no way to disable MPPARSE (if ACPI is not
-enabled). This to me appears to be a bug which needs fixing. As per
-theory, MPPARSE was to support MPS spec [1] as a temporary solution to
-support SMP systems until a final ACPI standard was added. But now if ACPI
-is not enabled, it will rely on MPPARSE driver to read MP floating pointer
-structure's IMCRP Bit 7 of MP feature info byte 2 [5] to figure out if it
-supports PIC mode or virtual wire mode and initialize pic_mode variable
-accordingly. If ACPI is enabled, the ACPI code overrides it by using the
-MADT table spec'ed in ACPI spec [2].=20
-
-For #2 devicetree.c presently hardcodes pic_mode =3D 1 (PIC Mode). There is
-no support to configure virtual wire mode via devicetree path for OF based
-systems.
-
-Now we have a platform which is OF based & does not use legacy 8259 PIC
-interrupt controller. Non ACPI compliant as well as non MPPARSE compliant.
-
-For such platforms, it appears to me that hardcoding pic_mode =3D 1 (PIC Mo=
-de)
-and giving no other choice to choose virtual wire mode is a lacking feature=
-.
-
-Just like mpparse relies on IMCRP bit 7 of MP feature info byte2 [5] to
-select pic_mode to PIC mode or virtual wire mode. arch/x86/kernel/devicetre=
-e.c
-should also provide some similar configurability to choose interrupt
-delivery mode & not hardcode it to PIC mode.
-
-This patch is to add above mentioned interrupt mode configurability in x86/=
-of
-controlled via a new optional bool property.
-
-Please let me know if you find any mistake in above understanding or if you
-have a alternative better suggestion to solve it or if you find anything od=
-d
-here in our platform/system. TIA.
-
-The patch is baselined on below git tree (linux-v6.1.0-rc6):
-git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-
-[1] https://pdos.csail.mit.edu/6.828/2008/readings/ia32/MPspec.pdf
-[2] https://uefi.org/sites/default/files/resources/ACPI_6_3_final_Jan30.pdf
-[3] https://elixir.bootlin.com/linux/v6.1-rc5/source/arch/x86/kernel/apic/a=
-pic.c#L1691
-[4] https://elixir.bootlin.com/linux/v6.1-rc5/source/arch/x86/kernel/mppars=
-e.c#L517
-[5] https://www.manualslib.com/manual/77733/Intel-Multiprocessor.html?page=
-=3D40#manual
-[6] https://www.intel.com/content/www/us/en/developer/articles/technical/in=
-tel-sdm.html
-[7] https://elixir.bootlin.com/linux/v6.1-rc5/source/arch/x86/kernel/device=
-tree.c#L170
-
-v4:
-- Address review concerns from Andy Shevchenko
-  * Update maintainers in binding files.
-  * Place URL in YAML schema properly as reference.
-  * Remove some unnecessary comments from YAML description.
-  * Remove fixes tag & not treat it as a bug. Treat it as new feature addit=
-ion instead.
-  * Use proper prefixes for bindings file (dt-bindings: x86: ioapic:)
-  * Add Reviewed-by tag from Andy for patch 3/4.
-
-v3:
-- Address review concerns from Andy Shevchenko
-  * Reshuffle patch series changes to make it more logical.
-  * Patch 1 just converts existing intel,ce4100-ioapic.txt into
-    YAML schema and separates out ioapic & lapic.
-  * Patch 2 adds new optional property for lapic.
-  * Patch 3 replaces older printk(KERN_LVL) to newer pr_lvl()
-  * Patch 4 adds code changes in devicetree.c to support newly
-    added property.
-- Fix 'make DT_CHECKER_FLAGS=3D-m dt_binding_check' errors reported
-  by Rob Herring's bot.
-
-v2:
-- Address review concern from Andy - rename property name to make
-  it a bit more positive & self explanatory.
-- Found that the bindings document for these HW's (APIC) are a bit
-  off/obsolete and still in text format. Created new YAML schemas
-  one for each - lapic & ioapic. Updated these schemas with latest
-  info and add in new optional property details in the updated
-  schema for lapic. Delete/let go of the text binding doc.
-- CC devicetree@vger.kernel.org as these changes appear to be
-  mainly targeted for devicetree maintainers review & approval.
-- Increase CCed list to include all possible people who touched
-  and were involved this part of code/feature addition.
-
-v1:
-- Initial draft
-
-
-Rahul Tanwar (4):
-  dt-bindings: x86: apic: Convert Intel's APIC bindings to YAML schema
-  dt-bindings: x86: apic: Introduce new optional bool property for lapic
-  x86/of: Replace printk(KERN_LVL) with pr_lvl()
-  x86/of: Add support for boot time interrupt delivery mode
-    configuration
-
+Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Rahul Tanwar <rtanwar@maxlinear.com>
+---
  .../intel,ce4100-ioapic.txt                   | 26 --------
- .../intel,ce4100-ioapic.yaml                  | 62 ++++++++++++++++++
- .../intel,ce4100-lapic.yaml                   | 63 +++++++++++++++++++
- arch/x86/kernel/devicetree.c                  | 13 +++-
- 4 files changed, 135 insertions(+), 29 deletions(-)
+ .../intel,ce4100-ioapic.yaml                  | 62 +++++++++++++++++++
+ .../intel,ce4100-lapic.yaml                   | 49 +++++++++++++++
+ 3 files changed, 111 insertions(+), 26 deletions(-)
  delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/=
 intel,ce4100-ioapic.txt
  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/=
@@ -252,6 +89,172 @@ intel,ce4100-ioapic.yaml
  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/=
 intel,ce4100-lapic.yaml
 
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/intel,c=
+e4100-ioapic.txt b/Documentation/devicetree/bindings/interrupt-controller/i=
+ntel,ce4100-ioapic.txt
+deleted file mode 100644
+index 7d19f494f19a..000000000000
+--- a/Documentation/devicetree/bindings/interrupt-controller/intel,ce4100-i=
+oapic.txt
++++ /dev/null
+@@ -1,26 +0,0 @@
+-Interrupt chips
+----------------
+-
+-* Intel I/O Advanced Programmable Interrupt Controller (IO APIC)
+-
+-  Required properties:
+-  --------------------
+-     compatible =3D "intel,ce4100-ioapic";
+-     #interrupt-cells =3D <2>;
+-
+-  Device's interrupt property:
+-
+-     interrupts =3D <P S>;
+-
+-  The first number (P) represents the interrupt pin which is wired to the
+-  IO APIC. The second number (S) represents the sense of interrupt which
+-  should be configured and can be one of:
+-    0 - Edge Rising
+-    1 - Level Low
+-    2 - Level High
+-    3 - Edge Falling
+-
+-* Local APIC
+-  Required property:
+-
+-     compatible =3D "intel,ce4100-lapic";
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/intel,c=
+e4100-ioapic.yaml b/Documentation/devicetree/bindings/interrupt-controller/=
+intel,ce4100-ioapic.yaml
+new file mode 100644
+index 000000000000..25d549220c2a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/interrupt-controller/intel,ce4100-i=
+oapic.yaml
+@@ -0,0 +1,62 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/interrupt-controller/intel,ce4100-ioap=
+ic.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: Intel I/O Advanced Programmable Interrupt Controller (IO APIC)
++
++maintainers:
++  - Rahul Tanwar <rtanwar@maxlinear.com>
++
++
++description: |
++  Intel's Advanced Programmable Interrupt Controller (APIC) is a
++  family of interrupt controllers. The APIC is a split
++  architecture design, with a local component (LAPIC) integrated
++  into the processor itself and an external I/O APIC. Local APIC
++  (lapic) receives interrupts from the processor's interrupt pins,
++  from internal sources and from an external I/O APIC (ioapic).
++  And it sends these to the processor core for handling.
++  See [1] Chapter 8 for more details.
++
++  Many of the Intel's generic devices like hpet, ioapic, lapic have
++  the ce4100 name in their compatible property names because they
++  first appeared in CE4100 SoC.
++
++  This schema defines bindings for I/O APIC interrupt controller.
++
++  [1] https://pdos.csail.mit.edu/6.828/2008/readings/ia32/IA32-3A.pdf
++
++properties:
++  compatible:
++    const: intel,ce4100-ioapic
++
++  reg:
++    maxItems: 1
++
++  interrupt-controller: true
++
++  '#interrupt-cells':
++    const: 2
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupt-controller
++  - '#interrupt-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    ioapic1: interrupt-controller@fec00000 {
++        compatible =3D "intel,ce4100-ioapic";
++        reg =3D <0xfec00000 0x1000>;
++        #interrupt-cells =3D <2>;
++        #address-cells =3D <0>;
++        interrupt-controller;
++    };
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/intel,c=
+e4100-lapic.yaml b/Documentation/devicetree/bindings/interrupt-controller/i=
+ntel,ce4100-lapic.yaml
+new file mode 100644
+index 000000000000..88f320ef4616
+--- /dev/null
++++ b/Documentation/devicetree/bindings/interrupt-controller/intel,ce4100-l=
+apic.yaml
+@@ -0,0 +1,49 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/interrupt-controller/intel,ce4100-lapi=
+c.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: Intel Local Advanced Programmable Interrupt Controller (LAPIC)
++
++maintainers:
++  - Rahul Tanwar <rtanwar@maxlinear.com>
++
++
++description: |
++  Intel's Advanced Programmable Interrupt Controller (APIC) is a
++  family of interrupt controllers. The APIC is a split
++  architecture design, with a local component (LAPIC) integrated
++  into the processor itself and an external I/O APIC. Local APIC
++  (lapic) receives interrupts from the processor's interrupt pins,
++  from internal sources and from an external I/O APIC (ioapic).
++  And it sends these to the processor core for handling.
++  See [1] Chapter 8 for more details.
++
++  Many of the Intel's generic devices like hpet, ioapic, lapic have
++  the ce4100 name in their compatible property names because they
++  first appeared in CE4100 SoC.
++
++  This schema defines bindings for local APIC interrupt controller.
++
++  [1] https://pdos.csail.mit.edu/6.828/2008/readings/ia32/IA32-3A.pdf
++
++properties:
++  compatible:
++    const: intel,ce4100-lapic
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    lapic0: interrupt-controller@fee00000 {
++        compatible =3D "intel,ce4100-lapic";
++        reg =3D <0xfee00000 0x1000>;
++    };
 --=20
 2.17.1
 
