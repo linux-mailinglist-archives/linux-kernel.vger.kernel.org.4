@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01C69636B76
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 21:44:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9D1636B86
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 21:49:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235889AbiKWUoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 15:44:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42766 "EHLO
+        id S234468AbiKWUtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 15:49:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232341AbiKWUoV (ORCPT
+        with ESMTP id S240023AbiKWUsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 15:44:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614C4B3E;
-        Wed, 23 Nov 2022 12:44:20 -0800 (PST)
+        Wed, 23 Nov 2022 15:48:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD07E2D1D9;
+        Wed, 23 Nov 2022 12:48:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 15D83B82479;
-        Wed, 23 Nov 2022 20:44:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1276FC433D6;
-        Wed, 23 Nov 2022 20:44:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 691FF61F09;
+        Wed, 23 Nov 2022 20:48:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F09FEC433D7;
+        Wed, 23 Nov 2022 20:48:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669236257;
-        bh=blYSzKUNc7T988paAGw1Il7D1vmiMKzkZW2yOWCzzlg=;
+        s=k20201202; t=1669236499;
+        bh=RYM0ZVfQo37kojwDQYWBQz6lC3vEa60h8jFcKimdRX0=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hE7THTRUjsqqpPzD1p2zT+Sgxpmvspx3KLbpcQGOZr2BmnKf70NEIbO7heL7VJx+X
-         1M3JcHc209FIGLf4HtLpfNu06csLx46ZQRgpbZTDuamESCHaRw7Fq+gtnX4JdHMKWJ
-         Aqt0uZe7C0pRUR4g7/Hbp26I+BhIRaXtT61gvr9QOybqjcFFy3b6+yXi/UzH0c8Ext
-         rrworE6PHYCtU6gbWMsyFxfDpue0ay2EMtA4JgFwdBWQybY73Xpy1y6cIjNDC6uzbf
-         nGSNXNutBibXCa+eeHNpgSnLi5Zmonjt2vhCvelH4icfgryzAe0zlzYmDXGHLzFQbQ
-         RdhpiD65GLmgQ==
-Date:   Wed, 23 Nov 2022 20:56:50 +0000
+        b=hslFglZ+XfllEFhU0oLjGluIc98RcRLJHWcwyaE61A7muWAGXE+P45ERpW+4MFjpl
+         MT8FMk2fjr2qr9as1vBZpvWvp2OJxS1SCVwjLmqw+V+17p7TxxycDk4LHJ5uwhkHNa
+         VtHCAJVMb9500UAPrBzRoOiRUJ+UhY3GZmgDG879zjwqAHRaFcp9D6BNjW6KtpF1qG
+         Hb2gBv0rsjD3aCYzog+KcDU1zKfKFyBAJqoZdV5N0qRcxNnhGOFWEx8AgGB+qLEZP+
+         eyOpXVtCn8MAA8MHC53rQgAuAx2CWTX6oMXIlDZZYr7aMBsFiZx/KKr5oXFde7CAEA
+         xUTVEBjtWFVGA==
+Date:   Wed, 23 Nov 2022 21:00:52 +0000
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Cc:     Olivier Moysan <olivier.moysan@foss.st.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <linux-iio@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/3] iio: adc: stm32: add smart calibration
-Message-ID: <20221123205650.3be4ee4e@jic23-huawei>
-In-Reply-To: <f7a2a680-4879-b6cf-3546-e890b3c96e32@foss.st.com>
-References: <20221115103124.70074-1-olivier.moysan@foss.st.com>
-        <f7a2a680-4879-b6cf-3546-e890b3c96e32@foss.st.com>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Javier Arteaga <javier@emutex.com>,
+        Dan O'Donovan <dan@emutex.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Nicola Lunghi <nicola.lunghi@emutex.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iio: adc128s052: add proper .data members in
+ adc128_of_match table
+Message-ID: <20221123210052.4c1796f9@jic23-huawei>
+In-Reply-To: <d8e3b536-06ac-2346-3fe1-90ed2fb1127d@rasmusvillemoes.dk>
+References: <20221115132324.1078169-1-linux@rasmusvillemoes.dk>
+        <d8e3b536-06ac-2346-3fe1-90ed2fb1127d@rasmusvillemoes.dk>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -61,49 +61,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Nov 2022 12:04:36 +0100
-Fabrice Gasnier <fabrice.gasnier@foss.st.com> wrote:
+On Tue, 22 Nov 2022 15:41:21 +0100
+Rasmus Villemoes <linux@rasmusvillemoes.dk> wrote:
 
-> On 11/15/22 11:31, Olivier Moysan wrote:
-> > Refine offset and linear calibration strategy for STM32MP15 and
-> > STM32MP13 SoCs:
+> On 15/11/2022 14.23, Rasmus Villemoes wrote:
+> > Prior to commit bd5d54e4d49d ("iio: adc128s052: add ACPI _HID
+> > AANT1280"), the driver unconditionally used spi_get_device_id() to get
+> > the index into the adc128_config array.
 > > 
-> > - offset calibration
-> > This calibration depends on factors such as temperature and voltage.
-> > As it is not time consuming, it's worth doing it on each ADC
-> > start, to get the best accuracy. There is no need to save these data.
+> > However, with that commit, OF-based boards now incorrectly treat all
+> > supported sensors as if they are an adc128s052, because all the .data
+> > members of the adc128_of_match table are implicitly 0. Our board,
+> > which has an adc122s021, thus exposes 8 channels whereas it really
+> > only has two.
 > > 
-> > - linear calibration
-> > This calibration is basically SoC dependent, so it can be done only once.
-> > When this calibration has been performed at boot stage, the ADC kernel
-> > driver can retrieve the calibration data from the ADC registers.
-> > Otherwise, the linear calibration is performed once by the ADC driver.
-> > The backup of these data, allows to restore them on successive ADC starts.
-> > 
-> > Olivier Moysan (3):
-> >   iio: adc: stm32-adc: smart calibration support
-> >   iio: adc: stm32-adc: improve calibration error log
-> >   iio: adc: stm32-adc: add debugfs to read raw calibration result  
+> > Fixes: bd5d54e4d49d ("iio: adc128s052: add ACPI _HID AANT1280")
+> > Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> > ---  
 > 
-> Hi Olivier,
-> 
-> For the series, you can add my:
-> Reviewed-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+> Ping. Any chance this could be picked up before the merge window for 6.2
+> opens?
 
-Applied to the togreg branch of iio.git and pushed out as testing to let
-0-day have a first look at it.
+Given it is a clear fix, but for an issue that is multiple versions old
+(so I'm not sneaking it in post rc6)..
+No actual rush on this, but meh I'm queuing a bunch of other stuff that
+will hopefully just make it this cycle so applied to the togreg branch of iio.git
+and marked for stable.
 
 Thanks,
 
 Jonathan
-
-> 
-> Thanks,
-> Fabrice
-> 
-> > 
-> >  drivers/iio/adc/stm32-adc-core.h |   1 +
-> >  drivers/iio/adc/stm32-adc.c      | 135 ++++++++++++++++++-------------
-> >  2 files changed, 78 insertions(+), 58 deletions(-)
-> >   
-
