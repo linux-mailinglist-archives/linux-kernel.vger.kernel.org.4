@@ -2,145 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A75A76367C5
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:55:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E98EF6367D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:55:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237837AbiKWRzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 12:55:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46270 "EHLO
+        id S237049AbiKWRzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 12:55:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238510AbiKWRy7 (ORCPT
+        with ESMTP id S237899AbiKWRzq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 12:54:59 -0500
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B4DF6A6AE;
-        Wed, 23 Nov 2022 09:54:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1669226095; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jHjYY2fJd6j8Ey0DgGBVJy1ZtjI/zI9LZpso74F6uno=;
-        b=1ceT52ICq2ZQyZ4ilTggZSteICvAwpgdUn1vYvVXSE1Mpod8SfUX32Wt/8J54K2lHRso31
-        snZSJGXMiK4SQZ2abeu3/UdXwAg09siupD1vdHV0NmqLQ+Dk6DCG8amLlA0klFo4G47bUL
-        SH03ByJZwO+d1SzA5l3/31j22IB6uJQ=
-Date:   Wed, 23 Nov 2022 17:54:47 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v2] clocksource: ingenic-ost: define pm functions properly
- in platform_driver struct
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Wed, 23 Nov 2022 12:55:46 -0500
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBC2B972B
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 09:55:44 -0800 (PST)
+Received: by mail-qv1-xf29.google.com with SMTP id j6so12612969qvn.12
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 09:55:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mZGGAbQVRBkDZyExP7ffjlyLb6N0sV9F4cgg4l8gSxE=;
+        b=My/je7B5AkyQl5fsdxgrcU4MlCIO0r7BQ5Ticu0quoimRFyd1QFWg1CIRYo2hSlhCk
+         gVjIJJSUMGBCSbu4UDXzbQPaiJloUApBWvaqFNa76nYHQxGNxzJWcDLEm0qltzXuuN/Z
+         gO+uDnAR3m7NYXWzCuDuYM8LFnvN0Xu6vLCMlAClrlBYpN6lXcqxJLcrsGyjBmH/Sv12
+         +4Tfy+Id6dykaHW4e8It4+0URa6BTBpgvGETfgKsz3tVQND5afP3nmgNdrdjI227ASXm
+         vr1NQmNHtxvof8mhDMYhIaXb4hON7jWdw6w75cCEJBe1LxtxXk3bYjl3v+s4zDC4Zj8c
+         gKuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mZGGAbQVRBkDZyExP7ffjlyLb6N0sV9F4cgg4l8gSxE=;
+        b=a3723so4/KuHwNtYaEs1hRbHYBRv5WLvTK8sDZhn/qcPPCTnff0EPBPlo9hNatsOG9
+         eS7nIFkRXw3YP6i4nJAyXzmKfsdLeLF+nxighq8L5ug6W5JTVgRtZ/r1/uvacvKUY+u4
+         bQPEuGjxe4pJKGOEV2KIIGa+teEuIezS8snChHwvNaAyS/gsnCl9ZZiencFXyrUSgxxA
+         TiBn8aDJrORLHarOwwNckEoWm+/deaiF2j9t4oKidkYmy4VwSFPSUU0HTnC4XfhzOTKG
+         r6Sirb5+8j/fGxN/IyK3lxo4w/YgZlcaVlrrq9r//YQkzvkFeo4ZQSYbyCH8+hX/AWS+
+         yJJw==
+X-Gm-Message-State: ANoB5pk34/dmgG628yr7cYp6gUKd8ulD+V58aTfni5RH6Zb7pzr28zNH
+        0RyMMySZ00M3o9vr1IXg0MscoQ==
+X-Google-Smtp-Source: AA0mqf6wKiTjKYxvtjsF4TJ4YPeSr0mdEUQ+pw8A+HZdflt1p0dm9sIfWC/e+svu0siqN7xcA8Vb/g==
+X-Received: by 2002:a05:6214:209:b0:4bb:6bbd:8c1b with SMTP id i9-20020a056214020900b004bb6bbd8c1bmr9012796qvt.111.1669226143925;
+        Wed, 23 Nov 2022 09:55:43 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
+        by smtp.gmail.com with ESMTPSA id o18-20020a05620a111200b006faaf6dc55asm11988986qkk.22.2022.11.23.09.55.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 09:55:43 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1oxtyI-00Afdu-Dk;
+        Wed, 23 Nov 2022 13:55:42 -0400
+Date:   Wed, 23 Nov 2022 13:55:42 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Wolfram Sang <wsa@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sean Young <sean@mess.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Ming Lei <ming.lei@redhat.com>,
+        Jilin Yuan <yuanjilin@cdjrlc.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Maarten ter Huurne <maarten@treewalker.org>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <B3BTLR.7FLNQ6FO762W3@crapouillou.net>
-In-Reply-To: <20221123083159.22821-1-lukas.bulwahn@gmail.com>
-References: <20221123083159.22821-1-lukas.bulwahn@gmail.com>
+        Ira Weiny <ira.weiny@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Won Chung <wonchung@google.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-i3c@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH 3/5] driver core: make struct device_type.uevent() take a
+ const *
+Message-ID: <Y35enjI+dhhqiG3B@ziepe.ca>
+References: <20221123122523.1332370-3-gregkh@linuxfoundation.org>
+ <711d5275-7e80-c00d-0cdc-0f3d52175361@gmail.com>
+ <Y34hgIW8p1RlQTBB@smile.fi.intel.com>
+ <97be39ed-3cea-d55a-caa6-c2652baef399@gmail.com>
+ <Y34zyzdbRUdyOSkA@casper.infradead.org>
+ <Y34+V2bCDdqujBDk@kroah.com>
+ <Y35JfNJDppRp5bLX@ziepe.ca>
+ <Y35R+/eQJYI7VaDS@kroah.com>
+ <Y35YlI93UBuTfgYy@ziepe.ca>
+ <Y35dMIaNYSE0Cykd@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y35dMIaNYSE0Cykd@casper.infradead.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lukas,
+On Wed, Nov 23, 2022 at 05:49:36PM +0000, Matthew Wilcox wrote:
+> On Wed, Nov 23, 2022 at 01:29:56PM -0400, Jason Gunthorpe wrote:
+> > #define generic_container_of(in_type, in, out_type, out_member) \
+> > 	_Generic(in,                                        \
+> >                   const in_type *: ((const out_type *)container_of(in, out_type, out_member)),   \
+> >                   in_type *: ((out_type *)container_of(in, out_type, out_member)) \
+> > 		  )
+> 
+> There's a neat trick I found in seqlock.h:
+> 
+> #define generic_container_of(in_t, in, out_t, m)			\
+> 	_Generic(*(in),							\
+> 		const in_t: ((const out_t *)container_of(in, out_t, m)), \
+> 		in_t: ((out_t *)container_of(in, out_type, m))	\
+> 	)
+>
+> and now it fits in 80 columns ;-)
 
-Le mer. 23 nov. 2022 =E0 09:31:59 +0100, Lukas Bulwahn=20
-<lukas.bulwahn@gmail.com> a =E9crit :
-> Commit ca7b72b5a5f2 ("clocksource: Add driver for the Ingenic JZ47xx=20
-> OST")
-> adds the struct platform_driver ingenic_ost_driver, with the=20
-> definition of
-> pm functions under the non-existing config PM_SUSPEND, which means the
-> intended pm functions were never actually included in any build.
->=20
-> As the only callbacks are .suspend_noirq and .resume_noirq, we can=20
-> assume
-> that it is intended to be CONFIG_PM_SLEEP.
->=20
-> Since commit 1a3c7bb08826 ("PM: core: Add new *_PM_OPS macros,=20
-> deprecate
-> old ones"), the default pattern for platform_driver definitions
-> conditional for CONFIG_PM_SLEEP is to use pm_sleep_ptr().
->=20
-> As __maybe_unused annotations on the dev_pm_ops structure and its=20
-> callbacks
-> are not needed anymore, remove these as well.
->=20
-> Suggested-by: Paul Cercueil <paul@crapouillou.net>
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Aside from less letters, is their another benifit to using *(in) ?
 
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-
-Cheers,
--Paul
-
-> ---
-> v1:=20
-> https://lore.kernel.org/all/20221122141434.30498-1-lukas.bulwahn@gmail.co=
-m/
->=20
-> v1 -> v2:
->   - incorporated Paul Cercueil's feedback:
->     - changed to pm_sleep_ptr
->     - dropped Fixes: tag
->=20
->  drivers/clocksource/ingenic-ost.c | 10 ++++------
->  1 file changed, 4 insertions(+), 6 deletions(-)
->=20
-> diff --git a/drivers/clocksource/ingenic-ost.c=20
-> b/drivers/clocksource/ingenic-ost.c
-> index 06d25754e606..9f7c280a1336 100644
-> --- a/drivers/clocksource/ingenic-ost.c
-> +++ b/drivers/clocksource/ingenic-ost.c
-> @@ -141,7 +141,7 @@ static int __init ingenic_ost_probe(struct=20
-> platform_device *pdev)
->  	return 0;
->  }
->=20
-> -static int __maybe_unused ingenic_ost_suspend(struct device *dev)
-> +static int ingenic_ost_suspend(struct device *dev)
->  {
->  	struct ingenic_ost *ost =3D dev_get_drvdata(dev);
->=20
-> @@ -150,14 +150,14 @@ static int __maybe_unused=20
-> ingenic_ost_suspend(struct device *dev)
->  	return 0;
->  }
->=20
-> -static int __maybe_unused ingenic_ost_resume(struct device *dev)
-> +static int ingenic_ost_resume(struct device *dev)
->  {
->  	struct ingenic_ost *ost =3D dev_get_drvdata(dev);
->=20
->  	return clk_enable(ost->clk);
->  }
->=20
-> -static const struct dev_pm_ops __maybe_unused ingenic_ost_pm_ops =3D {
-> +static const struct dev_pm_ops ingenic_ost_pm_ops =3D {
->  	/* _noirq: We want the OST clock to be gated last / ungated first */
->  	.suspend_noirq =3D ingenic_ost_suspend,
->  	.resume_noirq  =3D ingenic_ost_resume,
-> @@ -181,9 +181,7 @@ static const struct of_device_id=20
-> ingenic_ost_of_match[] =3D {
->  static struct platform_driver ingenic_ost_driver =3D {
->  	.driver =3D {
->  		.name =3D "ingenic-ost",
-> -#ifdef CONFIG_PM_SUSPEND
-> -		.pm =3D &ingenic_ost_pm_ops,
-> -#endif
-> +		.pm =3D pm_sleep_ptr(&ingenic_ost_pm_ops),
->  		.of_match_table =3D ingenic_ost_of_match,
->  	},
->  };
-> --
-> 2.17.1
->=20
-
-
+Jason
