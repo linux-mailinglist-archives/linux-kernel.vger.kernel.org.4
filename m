@@ -2,122 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1A0A6365AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 17:24:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 026596365B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 17:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239004AbiKWQYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 11:24:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49806 "EHLO
+        id S238960AbiKWQZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 11:25:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238960AbiKWQYT (ORCPT
+        with ESMTP id S238878AbiKWQZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 11:24:19 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577A188F83
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 08:24:18 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id ci10so10104165pjb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 08:24:18 -0800 (PST)
+        Wed, 23 Nov 2022 11:25:36 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68F98F3F2
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 08:25:34 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id h16so3102451qtu.2
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 08:25:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=ziepe.ca; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=L+6ppVIqqbNb02maVSXdZmZVIyzAVJ79ha839OUO0cA=;
-        b=f/RfJ7lFv/MTQKJya9oVQyJr03wOCjShEQkN5OhgObroHh7BDFf7f0izssVx6oOI4Z
-         /noX/O9lSTrq+KGUDbE0816ALj+ilmrEnehwZ1O6X6qfUhxRgXbfMxvaoXhEEPYNYIiQ
-         X5CawSpzsw6rlCYaO+LG8G4sirpxkdEiZtgJWgG0MWuxGCyR70BE3gAYW9VCzkJVJnpR
-         0p/EeBYK+TiVtkAdKT6Xe7eIcbF8nBhKLVn4pnKcwk9d3Uh+5iJ5xwnjB8ZK73+ERjVT
-         jbaElHzSaYexAOsx89R+xxxgcEEHJksAH3U9ILWLS0/mP/KrQm4AQ+K8cwNalQsBfwbz
-         RM3w==
+        bh=PhJSJnLVsP1vBula4KCFSx5kBTht7CuZrspFHU0N884=;
+        b=ebGDyq+q12UGY7Qk5Tupc9qhDLGyIcTZVkm5UZYo/563kMYJJqyAeOt5CzUtM4J8DZ
+         3trFHny8FIDylUgXR9JjN8PS72NcWsvrDfr1Nd1Q7FDnTR43onbW+jw1+Ctw0cwtwrCd
+         T18F6CTTWbwHWY6WrhS9prZWxtXaTjwzs7IQnIsjaZTmFdCmKdzeecD0BbnuyMQqVQVg
+         z0s4POzfjTxMQ62r8mCHZM0rSmjmaRN4hzlYV7zdZbP1xMXxym5gxZ3SKz4kt6tgYYum
+         EfCUt6/g2D4WDco0MNWeSPD0NJ6lencxZ7NqZJCJlD8ikZ4WiUl7N0yJnMd2Q4wIPSG2
+         7pnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=L+6ppVIqqbNb02maVSXdZmZVIyzAVJ79ha839OUO0cA=;
-        b=LiR28C9xBJP75TT3CoIfZnCadHdaFMQcGsNDW/b6eL+NmgzVxq8YySl5IWt6ow7v4M
-         Lpq1C9FQCGtSrrYXTP2WAyEFFfb6ufVhTftZIczu8Om41VNbAl3IJ+y4n3BN33UPLvkU
-         /LIXAUaFdKFxtmnO+J4rdQeH8ZdtXt1nTQ/QzCLJDGroBk0tOK+eRKCOk5DIg8Mjx7+d
-         /GCHzogD1Veef22spy64ADI5SQwTdxAJ20Ol+CCJO6Gk9zVvo1EuRJbFW1KPJG0uncbZ
-         DruI6u46V6N1MQlNjL0I01cvUel22Z4s63ZssXQP1RiH5zSdAcViWBmz27vE1HampNnn
-         5UPQ==
-X-Gm-Message-State: ANoB5pnVg/XaB+FirQJrsVPoumWD6znYd9eZNMQMOUcbT3ARnMDbrxS6
-        ShlJ06b0I2Tx+sgfsExsRrbfnQ==
-X-Google-Smtp-Source: AA0mqf5VS/h4A73iHgZYDMfT9P5J23PD6gSRRSSMj40uq1Mn1RE1S7EhmzziFGRZek2lUzfJWdKPNA==
-X-Received: by 2002:a17:902:bd04:b0:189:38a1:30fe with SMTP id p4-20020a170902bd0400b0018938a130femr6638487pls.47.1669220657738;
-        Wed, 23 Nov 2022 08:24:17 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id 135-20020a62178d000000b0056e8eb09d58sm13233391pfx.170.2022.11.23.08.24.16
+        bh=PhJSJnLVsP1vBula4KCFSx5kBTht7CuZrspFHU0N884=;
+        b=0Xc0GOzdW1QGG0H2G2lNJ+SdWTTa+SylcpGGDItBAGWa0J2nS+NUoSAP5TG2uwnTrV
+         6cJ+5Z1gV87X64PTGFy9/SGXwvTsyIWDvkwygk0NyZ8kh/g/HpEeYXA/h8mVRHGjdt0T
+         2SwSZ/ftb1calY8kMMh/QA+u6yzIos+2uJ4SrZ6sKBasWL4Dsu5xXbE3MXUDs6J/Sh6y
+         Xf1hGt8stQ0IdKCzLL9VgJPkJM1L+mWiMwEFzXaLqPBkI2mWfLbSalihPrNymXJUFfnF
+         L5VfNsO/WQ6BpQHhJawOn7xEvgzZ3qWDWXcfPiKoMjzfqEzA1punl30mlJKkBNR1glbj
+         0kAw==
+X-Gm-Message-State: ANoB5pknv7bWr10Mw2inh10sptRk/MFHAbiQrQdCalF9KTNuUJaWSOu8
+        4uIxtgVm92sdMxpnVy2fLXZUhQ==
+X-Google-Smtp-Source: AA0mqf7URgWK3LZKBiCOJvrYX2BcRTBThzd2VlaYXoILbXTQHzjAWJMWnGzlcI0wVuCFvjEWzX6GjA==
+X-Received: by 2002:ac8:60c:0:b0:3a6:37bd:ace5 with SMTP id d12-20020ac8060c000000b003a637bdace5mr14127789qth.426.1669220734011;
+        Wed, 23 Nov 2022 08:25:34 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
+        by smtp.gmail.com with ESMTPSA id q7-20020a05620a0d8700b006f8665f483fsm12561497qkl.85.2022.11.23.08.25.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 08:24:17 -0800 (PST)
-Date:   Wed, 23 Nov 2022 16:24:13 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Wang, Lei" <lei4.wang@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Andrew Jones <drjones@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Oliver Upton <oupton@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 036/144] KVM: selftest: Add proper helpers for
- x86-specific save/restore ioctls
-Message-ID: <Y35JLYD8uU2x7OpG@google.com>
-References: <20220603004331.1523888-1-seanjc@google.com>
- <20220603004331.1523888-37-seanjc@google.com>
- <e6fdcfeb-bd78-6906-f2b2-94c765be7902@intel.com>
+        Wed, 23 Nov 2022 08:25:33 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1oxsZ2-00AOLL-MZ;
+        Wed, 23 Nov 2022 12:25:32 -0400
+Date:   Wed, 23 Nov 2022 12:25:32 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Wolfram Sang <wsa@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sean Young <sean@mess.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Ming Lei <ming.lei@redhat.com>,
+        Jilin Yuan <yuanjilin@cdjrlc.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Won Chung <wonchung@google.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-i3c@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH 3/5] driver core: make struct device_type.uevent() take a
+ const *
+Message-ID: <Y35JfNJDppRp5bLX@ziepe.ca>
+References: <20221123122523.1332370-1-gregkh@linuxfoundation.org>
+ <20221123122523.1332370-3-gregkh@linuxfoundation.org>
+ <711d5275-7e80-c00d-0cdc-0f3d52175361@gmail.com>
+ <Y34hgIW8p1RlQTBB@smile.fi.intel.com>
+ <97be39ed-3cea-d55a-caa6-c2652baef399@gmail.com>
+ <Y34zyzdbRUdyOSkA@casper.infradead.org>
+ <Y34+V2bCDdqujBDk@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e6fdcfeb-bd78-6906-f2b2-94c765be7902@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y34+V2bCDdqujBDk@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022, Wang, Lei wrote:
+On Wed, Nov 23, 2022 at 04:37:59PM +0100, Greg Kroah-Hartman wrote:
+> static inline struct device *__kobj_to_dev(struct kobject *kobj)
+> {
+>         return container_of(kobj, struct device, kobj);
+> }
 > 
-> On 6/3/2022 8:41 AM, Sean Christopherson wrote:
-> > Add helpers for the various one-off helpers used by x86's vCPU state
-> > save/restore helpers, and convert the other open coded ioctl()s to use
-> > existing helpers.
-> > 
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
-> >  .../selftests/kvm/include/x86_64/processor.h  |  54 ++++++++
-> >  .../selftests/kvm/lib/x86_64/processor.c      | 126 +++++-------------
-> >  2 files changed, 91 insertions(+), 89 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-> > index e4268432cfe8..1d46d60bb480 100644
-> > --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-> > +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-> > @@ -432,6 +432,60 @@ const struct kvm_msr_list *kvm_get_feature_msr_index_list(void);
-> >  bool kvm_msr_is_in_save_restore_list(uint32_t msr_index);
-> >  uint64_t kvm_get_feature_msr(uint64_t msr_index);
-> >  
-> > +static inline void vcpu_msrs_get(struct kvm_vm *vm, uint32_t vcpuid,
-> > +				 struct kvm_msrs *msrs)
-> > +{
-> > +	int r = __vcpu_ioctl(vm, vcpuid, KVM_GET_MSRS, msrs);
-> > +
-> > +	TEST_ASSERT(r == msrs->nmsrs,
-> > +		    "KVM_GET_MSRS failed, r: %i (failed on MSR %x)",
-> > +		    r, r < 0 || r >= msrs->nmsrs ? -1 : msrs->entries[r].index);
-> > +}
-> > +static inline void vcpu_msrs_set(struct kvm_vm *vm, uint32_t vcpuid,
-> > +				 struct kvm_msrs *msrs)
-> > +{
-> > +	int r = __vcpu_ioctl(vm, vcpuid, KVM_SET_MSRS, msrs);
-> > +
-> > +	TEST_ASSERT(r == msrs->nmsrs,
-> > +		    "KVM_GET_MSRS failed, r: %i (failed on MSR %x)",
+> static inline const struct device *__kobj_to_dev_const(const struct kobject *kobj)
+> {
+>         return container_of(kobj, const struct device, kobj);
+> }
 > 
-> Hi, Sean, this should be the "KVM_SET_MSRS failed", right?
+> /*
+>  * container_of() will happily take a const * and spit back a non-const * as it
+>  * is just doing pointer math.  But we want to be a bit more careful in the
+>  * driver code, so manually force any const * of a kobject to also be a const *
+>  * to a device.
+>  */
+> #define kobj_to_dev(kobj)                                       \
+>         _Generic((kobj),                                        \
+>                  const struct kobject *: __kobj_to_dev_const,   \
+>                  struct kobject *: __kobj_to_dev)(kobj)
+> 
+> 
+> Want me to do the same thing here as well?
 
-Yep.  I wish I could say I was cleverly justifying use of macro magic, but it was
-just a copy+paste goof.
+It would be nice to have a shared macro code gen all of the above
+instead of copy and pasting it. Then maybe other cases beyond struct
+device could adopt const too..
+
+Jason
