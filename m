@@ -2,54 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2817F635102
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 08:16:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9C09635105
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 08:17:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235992AbiKWHQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 02:16:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36654 "EHLO
+        id S235573AbiKWHRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 02:17:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235612AbiKWHQt (ORCPT
+        with ESMTP id S236244AbiKWHRF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 02:16:49 -0500
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A956DCF5;
-        Tue, 22 Nov 2022 23:16:48 -0800 (PST)
-Received: from mail-internal.denx.de (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        Wed, 23 Nov 2022 02:17:05 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22DADF8031
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 23:17:04 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: noc@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 576808517E;
-        Wed, 23 Nov 2022 08:16:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1669187805;
-        bh=OIYyALv6fQ3JaJSDccGn0Zm5VKzxXieKgqBDhfmERf8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=RZcr20f3rmxjLNXy72K3I1ssAqLpDp6cuc8zAiMNGampKqrIt2jqQTE168nJylOvu
-         Q2rSgDvnbv7tp3Txcs7ZCgfhnwg9W+TstMJNFYlME1LzdTDuwPFCXc94hLasPbnIz6
-         0vWoCW0bbGfNJXQr1DorIsRIoG9n8bgvKL8+ul3JTxNKfqjPUup9Ql41EtDZSsRh3p
-         gr2r8e2zhi0Khsmci6gQ8s+QNuJSw01zvlOIb3Y7zMXK0vJwOKeithboB50eEPotN3
-         vccv7+M1C5nM5N1S3oq8V0I2tUVEo8U+P/N5sMgs5rWh0ruoqzKES08WU0Mrf1bqBy
-         vWDcPFED6STog==
-Received: from pollux.denx.de (pollux [192.168.1.1])
-        by mail-internal.denx.de (Postfix) with ESMTPS id E3031180523;
-        Wed, 23 Nov 2022 08:16:38 +0100 (CET)
-Received: by pollux.denx.de (Postfix, from userid 515)
-        id A8CD41A86FB; Wed, 23 Nov 2022 08:16:38 +0100 (CET)
-From:   Heiko Schocher <hs@denx.de>
-To:     linux-can@vger.kernel.org
-Cc:     Heiko Schocher <hs@denx.de>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1] can: sja1000: fix size of OCR_MODE_MASK define
-Date:   Wed, 23 Nov 2022 08:16:36 +0100
-Message-Id: <20221123071636.2407823-1-hs@denx.de>
-X-Mailer: git-send-email 2.37.3
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B93A6220D7;
+        Wed, 23 Nov 2022 07:17:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669187822; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qoVSvB0KJ1pA3zQh2W2ESlJGILDsMMP8nb+gJVT4lCQ=;
+        b=ygCYA+01JE4GASflQeWe0R/6OgIzb3da3m3lrzkBtlj8/CreGe48dEv4He6hXHoErrxOp9
+        YYiuypwv3OblM9Nc0ErcR5F/dcCszPY1UGqrvtlPfv0c5Fg0iqVfw5ynCwT+uUuuzflsK0
+        kFEI4AAeYvf5j0yEyKXbS1guMW5LjDs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669187822;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qoVSvB0KJ1pA3zQh2W2ESlJGILDsMMP8nb+gJVT4lCQ=;
+        b=5IhFYKDF0THPEwEd8+xT+s+kuASgvoIHLvKMahDxuqW7URJWNBI1hlnRFishpj6JXGIb+a
+        LSSC8DjuUw6VLqBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 90CC413A37;
+        Wed, 23 Nov 2022 07:17:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id YRJnIu7IfWMFTwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 23 Nov 2022 07:17:02 +0000
+Date:   Wed, 23 Nov 2022 08:17:02 +0100
+Message-ID: <87ilj65edt.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     butt3rflyh4ck <butterflyhuangxx@gmail.com>
+Cc:     perex@perex.cz, tiwai@suse.com, baolin.wang@linux.alibaba.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [RESEND PATCH] ALSA: rawmidi: fix infoleak in snd_rawmidi_ioctl_status_compat64
+In-Reply-To: <CAFcO6XPoNnM+VzY+bj5sPfJ-tCLQQ_pb8yb90KifWTwVpdENKA@mail.gmail.com>
+References: <20221123050911.1045190-1-butterflyhuangxx@gmail.com>
+        <87mt8i5fcz.wl-tiwai@suse.de>
+        <CAFcO6XPoNnM+VzY+bj5sPfJ-tCLQQ_pb8yb90KifWTwVpdENKA@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,28 +70,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-bitfield mode in ocr register has only 2 bits not 3, so correct
-the OCR_MODE_MASK define.
+On Wed, 23 Nov 2022 08:06:16 +0100,
+butt3rflyh4ck wrote:
+> 
+> Hi, the compat_status structure is struct compat_snd_rawmidi_status64 {
+> s32 stream;
+> u8 rsvd[4]; /* alignment */
+> s64 tstamp_sec;
+> s64 tstamp_nsec;
+> u32 avail;
+> u32 xruns;
+> unsigned char reserved[16];
+> } __attribute__((packed));
+> The rsvd[4] and reserved[16] are not  initialized.
 
-Signed-off-by: Heiko Schocher <hs@denx.de>
----
+Other members are initialized with zero.
+  https://gcc.gnu.org/onlinedocs/gcc/Designated-Inits.html
 
- include/linux/can/platform/sja1000.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/can/platform/sja1000.h b/include/linux/can/platform/sja1000.h
-index 5755ae5a4712..6a869682c120 100644
---- a/include/linux/can/platform/sja1000.h
-+++ b/include/linux/can/platform/sja1000.h
-@@ -14,7 +14,7 @@
- #define OCR_MODE_TEST     0x01
- #define OCR_MODE_NORMAL   0x02
- #define OCR_MODE_CLOCK    0x03
--#define OCR_MODE_MASK     0x07
-+#define OCR_MODE_MASK     0x03
- #define OCR_TX0_INVERT    0x04
- #define OCR_TX0_PULLDOWN  0x08
- #define OCR_TX0_PULLUP    0x10
--- 
-2.37.3
+Takashi
 
+> 
+> 
+> Regards,
+>  butt3rflyh4ck.
+> 
+> On Wed, Nov 23, 2022 at 2:55 PM Takashi Iwai <tiwai@suse.de> wrote:
+> >
+> > On Wed, 23 Nov 2022 06:09:11 +0100,
+> > Xiaolong Huang wrote:
+> > >
+> > > The compat_status is declared off of the stack, so it needs to
+> > > be zeroed out before copied back to userspace to prevent any
+> > > unintentional data leakage.
+> > >
+> > > Fixes: d9e5582c4bb2 ("ALSA: Avoid using timespec for struct snd_rawmidi_status")
+> > > Signed-off-by: Xiaolong Huang <butterflyhuangxx@gmail.com>
+> > >
+> > > ---
+> > >
+> > > Reason for resend:
+> > > 1. add Fixes line.
+> > > ---
+> > >  sound/core/rawmidi_compat.c | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/sound/core/rawmidi_compat.c b/sound/core/rawmidi_compat.c
+> > > index 68a93443583c..6afa68165b17 100644
+> > > --- a/sound/core/rawmidi_compat.c
+> > > +++ b/sound/core/rawmidi_compat.c
+> > > @@ -80,6 +80,7 @@ static int snd_rawmidi_ioctl_status_compat64(struct snd_rawmidi_file *rfile,
+> > >       if (err < 0)
+> > >               return err;
+> > >
+> > > +     memset(&compat_status, 0, sizeof(compat_status));
+> > >       compat_status = (struct compat_snd_rawmidi_status64) {
+> > >               .stream = status.stream,
+> > >               .tstamp_sec = status.tstamp_sec,
+> >
+> > Here at the line just after your addition, compat_status is fully
+> > initialized by substitution, so I believe the memset is superfluous.
+> >
+> > Or have you verified that it really leaks the uninitialized memory?
+> >
+> >
+> > thanks,
+> >
+> > Takashi
+> 
+> 
+> 
+> -- 
+> Active Defense Lab of Venustech
+> 
