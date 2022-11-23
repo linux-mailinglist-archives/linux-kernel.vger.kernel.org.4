@@ -2,101 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 588A1635869
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:57:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 468F16355ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:27:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236393AbiKWJ5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 04:57:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
+        id S237476AbiKWJZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 04:25:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236143AbiKWJ4K (ORCPT
+        with ESMTP id S237409AbiKWJYs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 04:56:10 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AE911A30
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:51:13 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id f9so12124739pgf.7
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:51:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1WTAgfKs3/0cN6Zc1ausxuW6PJkVWotfdNKd3Rj+z9U=;
-        b=eAwvoglIkg7D+Ag/AtcA124l2+KVzg4521phk5lBk8qpiyEMu091NZk49uyrKvaIXb
-         FpMOv9O/jiYxYheO9TMpB12ViB9mOap1Q3TE4YDZmps28aG8epm496o6TTwcnFHFO7fP
-         /PGrWj9hFyjx+x1jKoVhQOMM5KoXD0CAWJOjxbN1ih8oyJXJuGpx3eVKI+ysBr4O0BkJ
-         pN3xiMueC4gzeONSXHeW4Ytpcysv8wXbbBM2ftVke7X0t0vReK6amaLuM+vXPs8xbG7P
-         PIwhM6Lvd6nYfI3eGRjZm9aQTxqcjHy5D49xARNzmRMSXflxBrm6X2TBNfclakJNerwm
-         9fEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1WTAgfKs3/0cN6Zc1ausxuW6PJkVWotfdNKd3Rj+z9U=;
-        b=lBSv9XBEbBxw5Yhg+RHpsh26+X7NsiAhV/MAwEr3/NOt45I+wPn7TVhobUiCFwCKth
-         sZp1pALHwU7Fmn1iysmHjChwYxOnJSwyZkxcR2CFkfcOIhvInhjJBHL7IReXvFDUMULk
-         bZFJEqjaq2ZqqUcb1td+zY91fHDgAdhcvSn6dk6sRbpRzOdvgVMV4lUX/hf9faBjnCP7
-         EmI6Lwqr7O9kdJG1KI9IwD014BGitoIIvHNmvlaAq2h4/WD4qvs54HN/iqmdJeFTpKEh
-         6eyZAr694Apww/6ZGGZgSTWYGJ4WJYGakIUExOnyIyN3lPWHfIbJ14vUjaaWsLn8bcMk
-         cTkA==
-X-Gm-Message-State: ANoB5pnMr8vWB/qeLKWNFQxzwFIxtiXAPqgp83YoeXmh87jbq3xPWqhw
-        zsh5PzRRlY77f61c+gWLaGY=
-X-Google-Smtp-Source: AA0mqf7cV+a5M4IeUaG4RfexyCp8c6sLcKj4usaBbjmHLK0srh+qU62Nm3cN1VoUq6Zuuu//awNI3A==
-X-Received: by 2002:aa7:91c9:0:b0:53e:7332:709d with SMTP id z9-20020aa791c9000000b0053e7332709dmr11708111pfa.56.1669197073277;
-        Wed, 23 Nov 2022 01:51:13 -0800 (PST)
-Received: from den-workstation.fareast.nevint.com ([140.206.46.75])
-        by smtp.gmail.com with ESMTPSA id i29-20020a63131d000000b00460ea630c1bsm10392079pgl.46.2022.11.23.01.51.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 01:51:12 -0800 (PST)
-From:   Richard Clark <richard.xnu.clark@gmail.com>
-To:     tj@kernel.org
-Cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
-        Richard Clark <richard.xnu.clark@gmail.com>
-Subject: [PATCH] workqueue: Remove the unbound release work from the per-cpu type
-Date:   Wed, 23 Nov 2022 17:50:58 +0800
-Message-Id: <20221123095058.669684-1-richard.xnu.clark@gmail.com>
-X-Mailer: git-send-email 2.37.2
+        Wed, 23 Nov 2022 04:24:48 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7D5C76D
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:23:22 -0800 (PST)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NHFyw3ZNJzmW8K;
+        Wed, 23 Nov 2022 17:22:48 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 23 Nov 2022 17:23:19 +0800
+Received: from octopus.huawei.com (10.67.174.191) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 23 Nov 2022 17:23:19 +0800
+From:   Wang Weiyang <wangweiyang2@huawei.com>
+To:     <mporter@kernel.crashing.org>, <alex.bou9@gmail.com>,
+        <akpm@linux-foundation.org>, <yangyingliang@huawei.com>,
+        <jakobkoschel@gmail.com>, <jhubbard@nvidia.com>,
+        <error27@gmail.com>, <wangweiyang2@huawei.com>
+CC:     <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3] rapidio: fix possible UAF when kfifo_alloc() fails
+Date:   Wed, 23 Nov 2022 17:51:47 +0800
+Message-ID: <20221123095147.52408-1-wangweiyang2@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.191]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both the per-cpu and unbound workqueue will call init_pwq(...) currently,
-the latter will init an unbound release work for the pwq which is unnecessary
-for the per-cpu type workqueue.
-This commit will remove this work item from the per-cpu workqueue by checking the
-wq->flags in init_pwq(...), the work is still reserved for the unbound workqueue.
+If kfifo_alloc() fails in mport_cdev_open(), goto err_fifo and just free
+priv. But priv is still in the chdev->file_list, then list traversal
+may cause UAF. This fixes the following smatch warning:
 
-Signed-off-by: Richard Clark <richard.xnu.clark@gmail.com>
-Cc: Tejun Heo <tj@kernel.org>
-Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+drivers/rapidio/devices/rio_mport_cdev.c:1930 mport_cdev_open() warn: '&priv->list' not removed from list
+
+Fixes: e8de370188d0 ("rapidio: add mport char device driver")
+Signed-off-by: Wang Weiyang <wangweiyang2@huawei.com>
 ---
- kernel/workqueue.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index 7cd5f5e7e0a1..01bdfb74081e 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -3807,7 +3807,8 @@ static void init_pwq(struct pool_workqueue *pwq, struct workqueue_struct *wq,
- 	INIT_LIST_HEAD(&pwq->inactive_works);
- 	INIT_LIST_HEAD(&pwq->pwqs_node);
- 	INIT_LIST_HEAD(&pwq->mayday_node);
--	INIT_WORK(&pwq->unbound_release_work, pwq_unbound_release_workfn);
-+	if (wq->flags & WQ_UNBOUND)
-+		INIT_WORK(&pwq->unbound_release_work, pwq_unbound_release_workfn);
- }
+Changes in v3:
+- Avoid the list addition until the new instance has been fully
+  initialized.
+
+Changes in v2:
+- Put the list addition after kfifo_alloc().
+
+ drivers/rapidio/devices/rio_mport_cdev.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/rapidio/devices/rio_mport_cdev.c b/drivers/rapidio/devices/rio_mport_cdev.c
+index 3cc83997a1f8..fecf523f36d8 100644
+--- a/drivers/rapidio/devices/rio_mport_cdev.c
++++ b/drivers/rapidio/devices/rio_mport_cdev.c
+@@ -1904,10 +1904,6 @@ static int mport_cdev_open(struct inode *inode, struct file *filp)
  
- /* sync @pwq with the current state of its associated wq and link it */
+ 	priv->md = chdev;
+ 
+-	mutex_lock(&chdev->file_mutex);
+-	list_add_tail(&priv->list, &chdev->file_list);
+-	mutex_unlock(&chdev->file_mutex);
+-
+ 	INIT_LIST_HEAD(&priv->db_filters);
+ 	INIT_LIST_HEAD(&priv->pw_filters);
+ 	spin_lock_init(&priv->fifo_lock);
+@@ -1926,6 +1922,9 @@ static int mport_cdev_open(struct inode *inode, struct file *filp)
+ 	spin_lock_init(&priv->req_lock);
+ 	mutex_init(&priv->dma_lock);
+ #endif
++	mutex_lock(&chdev->file_mutex);
++	list_add_tail(&priv->list, &chdev->file_list);
++	mutex_unlock(&chdev->file_mutex);
+ 
+ 	filp->private_data = priv;
+ 	goto out;
 -- 
-2.37.2
+2.17.1
 
