@@ -2,129 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCE9D634F55
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 06:04:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 619A2634F59
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 06:07:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235488AbiKWFEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 00:04:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42636 "EHLO
+        id S235563AbiKWFHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 00:07:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234815AbiKWFD7 (ORCPT
+        with ESMTP id S235513AbiKWFHq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 00:03:59 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006C5E9338
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 21:03:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669179838; x=1700715838;
-  h=message-id:date:mime-version:cc:to:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=piSeHphfFBUuFKj955dzRIMO4eKHzZ6VALiFWXwyXUo=;
-  b=K6iP0TWGyTcVYXDkDUQH0Z69msbvVOdS8Qt7c+WTtSTVTCmDbArCG6PO
-   K4rUqHnNcG9l51goWal78yYa0vaz1+1Khmx2wEqoi+89C/hCr8jb1g1M9
-   Fgnk+u1zqraeWa2n8BX3O7OeCP4+jtp73X506zWW/fBDJ9oAX+xM7TY9Q
-   ZU31RDS4BD23T898mV/HlS2mBvudtWBJaC+rlKSGkITPQiQRznRy1vizm
-   UAEs51vk6AtxxuKDn5KI/DClzcdMHvXDBHX3YMUdwZetBTV9ehdfBbfYw
-   k8ddG0RjWx09+NQm4gq6Z9gCz2E0qc2dE4kD+s+gv3+bapxZBp2NxrxFP
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="311609414"
-X-IronPort-AV: E=Sophos;i="5.96,186,1665471600"; 
-   d="scan'208";a="311609414"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 21:03:57 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="816348905"
-X-IronPort-AV: E=Sophos;i="5.96,186,1665471600"; 
-   d="scan'208";a="816348905"
-Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.213.242]) ([10.254.213.242])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 21:03:54 -0800
-Message-ID: <c085f67d-7874-4a83-a12c-703d1638d940@linux.intel.com>
-Date:   Wed, 23 Nov 2022 13:03:52 +0800
+        Wed, 23 Nov 2022 00:07:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC8CEC78F
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 21:06:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669180006;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jGWcKl8qBYO1tbvPCd08CEn8cDcWUBz7kzb9tc09dPg=;
+        b=TbWFVWiWj/XgXZS9uBSWpwG5NF/quTbVAbK7cS4g7DuWL8n2wyJsNQB5uWFQ3pZW8nrm5E
+        RxQfhMCnQ95HgjkIT51JN/iMFTWHnun6FFjjn9ZUnXvQtXeYAxV9U7MEkhZZk08egZmtfl
+        cRHZreoDdCTrvhSCMEhFOOx9Gcydo58=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-249-qb-JEGj8MaKQy4hu6zHiSQ-1; Wed, 23 Nov 2022 00:06:43 -0500
+X-MC-Unique: qb-JEGj8MaKQy4hu6zHiSQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E95EA3C0D180;
+        Wed, 23 Nov 2022 05:06:42 +0000 (UTC)
+Received: from [10.64.54.62] (vpn2-54-62.bne.redhat.com [10.64.54.62])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B6ED2140EBF3;
+        Wed, 23 Nov 2022 05:06:39 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH] mm: migrate: Fix THP's mapcount on isolation
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, william.kucharski@oracle.com,
+        ziy@nvidia.com, kirill.shutemov@linux.intel.com, david@redhat.com,
+        zhenyzha@redhat.com, shan.gavin@gmail.com
+References: <20221123005752.161003-1-gshan@redhat.com>
+ <87sfias2hd.fsf@nvidia.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <1a095dbe-0f9a-db49-8473-17552deccf75@redhat.com>
+Date:   Wed, 23 Nov 2022 13:06:36 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Cc:     baolu.lu@linux.intel.com, Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Luo, Yuzhang" <yuzhang.luo@intel.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Joerg Roedel <joro@8bytes.org>
-References: <20221122034529.3311562-1-jacob.jun.pan@linux.intel.com>
- <bc647ceb-b14b-dc5b-ba83-4f8befd188c5@arm.com>
- <BN9PR11MB527620902046A4339EAACD3F8C0C9@BN9PR11MB5276.namprd11.prod.outlook.com>
+In-Reply-To: <87sfias2hd.fsf@nvidia.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH] iommu/vt-d: Add a fix for devices need extra dtlb flush
-In-Reply-To: <BN9PR11MB527620902046A4339EAACD3F8C0C9@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/23 9:02, Tian, Kevin wrote:
->> From: Robin Murphy <robin.murphy@arm.com>
->> Sent: Wednesday, November 23, 2022 1:49 AM
+Hi Alistair,
+
+On 11/23/22 12:26 PM, Alistair Popple wrote:
+> Gavin Shan <gshan@redhat.com> writes:
+> 
+>> The issue is reported when removing memory through virtio_mem device.
+>> The transparent huge page, experienced copy-on-write fault, is wrongly
+>> regarded as pinned. The transparent huge page is escaped from being
+>> isolated in isolate_migratepages_block(). The transparent huge page
+>> can't be migrated and the corresponding memory block can't be put
+>> into offline state.
 >>
->>> +
->>> +/* Impacted QAT device IDs ranging from 0x4940 to 0x4943 */
->>> +#define BUGGY_QAT_DEVID_MASK 0x494c
->>> +static bool dev_needs_extra_dtlb_flush(struct pci_dev *pdev)
->>> +{
->>> +	if (pdev->vendor != PCI_VENDOR_ID_INTEL)
->>> +		return false;
->>> +
->>> +	if ((pdev->device & 0xfffc) != BUGGY_QAT_DEVID_MASK)
->>> +		return false;
->>> +
->>> +	if (risky_device(pdev))
->>> +		return false;
+>> Fix it by replacing page_mapcount() with total_mapcount(). With this,
+>> the transparent huge page can be isolated and migrated, and the memory
+>> block can be put into offline state.
 >>
->> Hmm, I'm not sure that that makes much sense to me - what privilege can
->> the device gain from being told to invalidate things twice? Why would we
->> want to implicitly *allow* a device to potentially keep using a stale
->> translation if for some bizarre reason firmware has marked it as
->> external, surely that's worse?
-
- From the perspective of IOMMU, any quirk is only applicable to trusted
-devices. If the IOMMU driver detects that a quirk is being applied to an
-untrusted device, it is already buggy or malicious. The IOMMU driver
-should let the users know by:
-
-	pci_info(pdev,
-		 "Skipping IOMMU quirk for dev [%04X:%04X] on untrusted PCI link\n",
-		 pdev->vendor, pdev->device);
-	pci_info(pdev, "Please check with your BIOS/Platform vendor about this\n");
-
-and stop applying any quirk.
-
+>> Fixes: 3917c80280c9 ("thp: change CoW semantics for anon-THP")
+>> Cc: stable@vger.kernel.org   # v5.8+
+>> Reported-by: Zhenyu Zhang <zhenyzha@redhat.com>
+>> Suggested-by: David Hildenbrand <david@redhat.com>
+>> Signed-off-by: Gavin Shan <gshan@redhat.com>
+>> ---
+>>   mm/compaction.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
 >>
+>> diff --git a/mm/compaction.c b/mm/compaction.c
+>> index c51f7f545afe..c408b5e04c1d 100644
+>> --- a/mm/compaction.c
+>> +++ b/mm/compaction.c
+>> @@ -990,7 +990,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+>>   		 * admittedly racy check.
+>>   		 */
+>>   		mapping = page_mapping(page);
+>> -		if (!mapping && page_count(page) > page_mapcount(page))
+>> +		if (!mapping && page_count(page) > total_mapcount(page))
 > 
-> ATS is disabled for such device hence no dtlb at all.
+> We have several versions of these checks for pinned pages open-coded
+> around the place. See for example migrate_vma_check_page() and
+> folio_expected_refs(). It looks like you could use a variant of
+> migrate_vma_check_page() which would also check non-anon pins, although
+> I don't know the compaction code well enough to know if that's useful.
 > 
-> bool pci_ats_supported(struct pci_dev *dev)
-> {
-> 	if (!dev->ats_cap)
-> 		return false;
+> Either way it would be nice if we had a common helper for these kind of
+> checks. Guess that would be harder to backport, and the change itself
+> looks ok. But why isn't the fixes tag 119d6d59dcc0 ("mm, compaction:
+> avoid isolating pinned pages")?
 > 
-> 	return (dev->untrusted == 0);
-> }
-> 
-> So above check doesn't make things worse. It's kind of meaningless
-> but according to Baolu he wants that check in every quirk...
 
-At some time in the future, the hardware may support kind of enhanced
-ATS (or Secure ATS). At that time, above condition may be changed.
+Nice to see your comments. folio_expected_refs() only returns the
+mapcount for file-mapped pages. migrate_vma_check_page() doesn't
+cover THP and there is a 'FIXME' there. A unified helper is beneficial
+to maintainance. I think the issue can be fixed in place and have a
+followup patch to introduce the unified helper, to make the backporting
+happy.
 
-Best regards,
-baolu
+Right, I was thinking of 119d6d59dcc0, which was merged in early days
+back to v3.15. I doubt we even had THP support that time. 3917c80280c9
+changed the behavior of THP COW handling, to split the THP. Without
+3917c80280c9, no splitting is expected and the original condition is
+correct to check for anon pins.
+
+>>   			goto isolate_fail;
+>>   
+>>   		/*
+> 
+
+Thanks,
+Gavin
+
