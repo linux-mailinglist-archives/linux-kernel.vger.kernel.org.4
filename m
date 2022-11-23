@@ -2,131 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9643563607F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:52:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AA04636088
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:54:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236290AbiKWNwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 08:52:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32912 "EHLO
+        id S236992AbiKWNyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 08:54:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235962AbiKWNwS (ORCPT
+        with ESMTP id S235950AbiKWNy3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 08:52:18 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB88765A;
-        Wed, 23 Nov 2022 05:44:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669211094; x=1700747094;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8ThpPRnT3H2tIfP/zSsUWW1oRAj/U3AJ3PTwjtrPgLE=;
-  b=XPKwM/rlGGPF8I/7Z+bTmJo1UWxbHMlhZzuMOgzuWiYM/6mY0W61A8sE
-   z7N/KkRab52oVfbjtYGGELgLXwSRC5VhymWatWzzUDNktNfevqwzKJ6OF
-   J377cIgK/dZW0phwVjfVE4V0TeEjv/Qgg/17g5l9z2k5zGntpUT1cmjyW
-   JOURB4fEHdy1rR92dJIvbmdbumzP2MwqFcmHruHSVrSBEh6LIRRuJDofd
-   kmkF197WyK6XF2hzOpD/v52U4DMoqkDUWVhUi7rK2VEVCqOEmQC9Orked
-   VwpiIcGZDZB3CdPNdAXhtqjC974LYJE6WekbtMhmtfdJofHFF1yHVdd9E
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="340947058"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="340947058"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 05:44:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="672880767"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="672880767"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008.jf.intel.com with ESMTP; 23 Nov 2022 05:44:51 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oxq3U-00GIyb-2x;
-        Wed, 23 Nov 2022 15:44:48 +0200
-Date:   Wed, 23 Nov 2022 15:44:48 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Rahul Tanwar <rtanwar@maxlinear.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-lgm-soc@maxlinear.com
-Subject: Re: [PATCH v4 4/4] x86/of: Add support for boot time interrupt
- delivery mode configuration
-Message-ID: <Y34j0BgRTVS6KG4i@smile.fi.intel.com>
-References: <20221123100850.22969-1-rtanwar@maxlinear.com>
- <20221123100850.22969-5-rtanwar@maxlinear.com>
+        Wed, 23 Nov 2022 08:54:29 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EBDF22
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:48:32 -0800 (PST)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NHMrn5c6LzHw3y;
+        Wed, 23 Nov 2022 21:47:53 +0800 (CST)
+Received: from ubuntu1804.huawei.com (10.67.174.58) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 23 Nov 2022 21:48:30 +0800
+From:   Xiu Jianfeng <xiujianfeng@huawei.com>
+To:     <oohall@gmail.com>, <dan.j.williams@intel.com>,
+        <vishal.l.verma@intel.com>, <dave.jiang@intel.com>,
+        <ira.weiny@intel.com>, <aneesh.kumar@linux.ibm.com>
+CC:     <nvdimm@lists.linux.dev>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] libnvdimm/of_pmem: Fix memory leak in of_pmem_region_probe()
+Date:   Wed, 23 Nov 2022 21:45:27 +0800
+Message-ID: <20221123134527.119441-1-xiujianfeng@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221123100850.22969-5-rtanwar@maxlinear.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.58]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 06:08:50PM +0800, Rahul Tanwar wrote:
-> Presently, init/boot time interrupt delivery mode is enumerated
-> only for ACPI enabled systems by parsing MADT table or for older
-> systems by parsing MP table. But for OF based x86 systems, it is
-> assumed & hardcoded to legacy PIC mode. This causes boot time crash
-> for platforms which do not use 8259 compliant legacy PIC.
-> 
-> Add support for configuration of init time interrupt delivery mode
-> for x86 OF based systems by introducing a new optional boolean
-> property 'intel,virtual-wire-mode' for interrupt-controller node
-> of local APIC. This property emulates IMCRP Bit 7 of MP feature
-> info byte 2 of MP floating pointer structure.
-> 
-> Defaults to legacy PIC mode if absent. Configures it to virtual
-> wire compatibility mode if present.
+After changes in commit 49bddc73d15c ("libnvdimm/of_pmem: Provide a unique
+name for bus provider"), @priv->bus_desc.provider_name is no longer a
+const string, but a dynamic string allocated by kstrdup(), it should be
+freed on the error path, and when driver is removed.
 
-From code perspective looks good to me, but you need to have a blessing by DT
-people for first two patches.
+Fixes: 49bddc73d15c ("libnvdimm/of_pmem: Provide a unique name for bus provider")
+Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+---
+ drivers/nvdimm/of_pmem.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-With whatever property name agreed on,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-> Signed-off-by: Rahul Tanwar <rtanwar@maxlinear.com>
-> ---
->  arch/x86/kernel/devicetree.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kernel/devicetree.c b/arch/x86/kernel/devicetree.c
-> index fcc6f1b7818f..458e43490414 100644
-> --- a/arch/x86/kernel/devicetree.c
-> +++ b/arch/x86/kernel/devicetree.c
-> @@ -167,7 +167,14 @@ static void __init dtb_lapic_setup(void)
->  			return;
->  	}
->  	smp_found_config = 1;
-> -	pic_mode = 1;
-> +	if (of_property_read_bool(dn, "intel,virtual-wire-mode")) {
-> +		pr_info("Virtual Wire compatibility mode.\n");
-> +		pic_mode = 0;
-> +	} else {
-> +		pr_info("IMCR and PIC compatibility mode.\n");
-> +		pic_mode = 1;
-> +	}
-> +
->  	register_lapic_address(lapic_addr);
->  }
->  
-> -- 
-> 2.17.1
-> 
-
+diff --git a/drivers/nvdimm/of_pmem.c b/drivers/nvdimm/of_pmem.c
+index 10dbdcdfb9ce..1292ffca7b2e 100644
+--- a/drivers/nvdimm/of_pmem.c
++++ b/drivers/nvdimm/of_pmem.c
+@@ -36,6 +36,7 @@ static int of_pmem_region_probe(struct platform_device *pdev)
+ 
+ 	priv->bus = bus = nvdimm_bus_register(&pdev->dev, &priv->bus_desc);
+ 	if (!bus) {
++		kfree(priv->bus_desc.provider_name);
+ 		kfree(priv);
+ 		return -ENODEV;
+ 	}
+@@ -83,6 +84,7 @@ static int of_pmem_region_remove(struct platform_device *pdev)
+ 	struct of_pmem_private *priv = platform_get_drvdata(pdev);
+ 
+ 	nvdimm_bus_unregister(priv->bus);
++	kfree(priv->bus_desc.provider_name);
+ 	kfree(priv);
+ 
+ 	return 0;
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.17.1
 
