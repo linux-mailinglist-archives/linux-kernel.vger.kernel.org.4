@@ -2,86 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33183636B8D
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 21:50:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC1F636BC0
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 22:02:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235378AbiKWUtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 15:49:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45448 "EHLO
+        id S235593AbiKWVCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 16:02:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239495AbiKWUtb (ORCPT
+        with ESMTP id S229728AbiKWVCA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 15:49:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467D26C72C;
-        Wed, 23 Nov 2022 12:49:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC0EA61F0F;
-        Wed, 23 Nov 2022 20:49:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCE71C433C1;
-        Wed, 23 Nov 2022 20:49:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669236555;
-        bh=zhAO3YZEgtsjDcAYaBQkQ0qOKaBzRKJDU31uqjYHdfg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VTt8eJ9W5dgiW9v1VRM9XlXRxoPrs3ngI9nfJi5+STVAhATYsaoyO+DSK0fST7AvZ
-         m+45pjUZgI7ezOvJjuKahoJmSF7rjhix4UHXQMIhgE8pDcel1ddsInpeBb4nlgZa8A
-         NzOnsQ8+0BEOMzwKk4/K3X6V0blkR3+4grUnBXp2nFppHVxjE2U75Tp38bPF2DDrL6
-         wdfuv0wZEYiXklzcjUFpJefhy/cS80zTggApHtkI+PVSRQph+ZO12+Lc5seJ8juou3
-         LtPkKYnLh3wwVvgdwNZS1xvDLF6FrGuEuGqFTZ/Fez5Y4xpsawMyjjuF3qwN66g65Z
-         ohqndyx/2v+gg==
-Date:   Wed, 23 Nov 2022 21:01:47 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Subject: Re: [PATCH] dt-bindings: iio: adc: renesas,rzg2l-adc: Document
- RZ/Five SoC
-Message-ID: <20221123210147.0bf34345@jic23-huawei>
-In-Reply-To: <166863468321.1016692.3662033617872440170.robh@kernel.org>
-References: <20221115124128.1183144-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-        <166863468321.1016692.3662033617872440170.robh@kernel.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Wed, 23 Nov 2022 16:02:00 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06FA014D01;
+        Wed, 23 Nov 2022 13:01:59 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669237317;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KPY0QPiwPxOVNsUhFw4qklPqSP46kFJcNzsOhN1n538=;
+        b=ORlVKv/m7tEpD4UVrSrPCm6J+eBk0xqmjwUulhd3d/QDKGlpl1PrgW4uX9WBfYtVw8dMNQ
+        KCJCOYvUUPW2sEp+Ti1YD5lD28plFoJnwMPjc0Xx/tosLREa8IY2uSTuAqt57VnhrFhVpb
+        z4rp31jZV7sIxWROrFrG7BMo2digq5jqsNyl3Zgt/RJ2TQo+hvZM+ews4EL4cWzHZmVUju
+        egBD+o8SetcnmCIoYMmRnCO5XZOOvRvEyyE9/I131m0NNmA9yYRlA/iCMuEKE7m2jgxhvC
+        pMKQs6O8Sh0JYLc2qtTFb+lQ9AOgElBbZMrUv+VHkOK3RcJ1uieEU3nJUS0c5Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669237317;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KPY0QPiwPxOVNsUhFw4qklPqSP46kFJcNzsOhN1n538=;
+        b=O1eXHnlVkm6CTF96zn3Fg/SVgP3bXEsbm4ePNRytcJEB86WwopkHY3WPHu0o+uUPvD7vo6
+        qYLo+gx3cBCp+iAQ==
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     "x86@kernel.org" <x86@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>
+Subject: RE: [patch V2 07/33] genirq/msi: Provide
+ msi_create/free_device_irq_domain()
+In-Reply-To: <8735a9gau7.ffs@tglx>
+References: <20221121083657.157152924@linutronix.de>
+ <20221121091326.879869866@linutronix.de>
+ <BN9PR11MB527604DE2A881FF615B7D0748C0C9@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <8735a9gau7.ffs@tglx>
+Date:   Wed, 23 Nov 2022 22:01:56 +0100
+Message-ID: <875yf5e663.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Nov 2022 15:38:03 -0600
-Rob Herring <robh@kernel.org> wrote:
+On Wed, Nov 23 2022 at 12:38, Thomas Gleixner wrote:
+> On Wed, Nov 23 2022 at 08:02, Kevin Tian wrote:
+>>> +	bundle->info.hwsize = hwsize ? hwsize : MSI_MAX_INDEX;
+>>
+>> patch04 marks that hwsize being 0 means unknown or unlimited in the
+>> header file.
+>>
+>> but here info.hwsize always gets a value i.e. the meaning of 0 only exists
+>> in this function. What about removing the trailing words about 0 in
+>> patch04?
+>>
+>> - + * @hwsize:		The hardware table size (0 if unknown/unlimited)
+>> + + * @hwsize:		The hardware table size
+>
+> Fair enough, though I rather make that:
+>
+>  * @hwsize:		The hardware table size or the software defined
+>                         index limit
+>
 
-> On Tue, 15 Nov 2022 12:41:28 +0000, Prabhakar wrote:
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > 
-> > The ADC block on the RZ/Five SoC is identical to one found on the RZ/G2UL
-> > SoC. "renesas,r9a07g043-adc" compatible string will be used on the RZ/Five
-> > SoC so to make this clear, update the comment to include RZ/Five SoC.
-> > 
-> > No driver changes are required as generic compatible string
-> > "renesas,rzg2l-adc" will be used as a fallback on RZ/Five SoC.
-> > 
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> >  .../devicetree/bindings/iio/adc/renesas,rzg2l-adc.yaml          | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >   
-> 
-> Acked-by: Rob Herring <robh@kernel.org>
+Actually 0 still needs to be valid to guarantee backward compatibility
+for all existing msi_domain_info implementations.
 
-Applied. Thanks,
+The above is the per device domain creation function, but yes, I can lift
+that initialization into the common MSI domain creation code.
+
+Let me stare at this some more.
