@@ -2,165 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E527636103
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:04:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 445B563610B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:04:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238397AbiKWOD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 09:03:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55114 "EHLO
+        id S238407AbiKWOEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 09:04:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238351AbiKWODi (ORCPT
+        with ESMTP id S238402AbiKWODl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 09:03:38 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21DA6E5E
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:58:45 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id a11-20020a05600c2d4b00b003cf6f5fd9f1so1350174wmg.2
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:58:45 -0800 (PST)
+        Wed, 23 Nov 2022 09:03:41 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FAC7658;
+        Wed, 23 Nov 2022 05:59:06 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id f18so42997141ejz.5;
+        Wed, 23 Nov 2022 05:59:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=b1Quh2S4Mqiz+mnmyB9nbm+e1ppPa6f3UhLHFNBAwqA=;
-        b=RtArgD6+Z8rmyrUSFbh8yCVa5eEuQ0iy1z/3lv/Pmpd0w0tSDdpujqmsSNJX0x4mmd
-         WIqT4YBwZWrDyaCzY1bdpaGY+t7jMv9Pmu8HJe4Ndtz5E587A2I0rUl3lg5TwjHg/xPH
-         yYn/G0QQkQ52ZgshAgQCyG0Ebv3wSa1WZWYBwjQJxwIssdAKD9kSMNAAuet4myzGnmBB
-         RIfNzvIIMxrxOIKnK6F0MMkFixiH8KV09xVtHfISjKrgPaerVMMXn6TFlMfNteX48vha
-         Ly17fqLt5ylR2IGFfF3VVsfXofaivmpU9lSqRo2pxgwVH54gPAxL/HT55x90YlejspCV
-         GZUw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AJ96Qo939E/LqBCZfcidWQRpLbhFZIXN8NEAiTpAhxk=;
+        b=iZRqD+AZI8YXmWPNNo+Fwqqrxkdxxp8sdDhXpzQpS+Z7O6ViZRfqwWBRa1+q6Fn++z
+         AayBKunxqdaXyMJwtJZy3prCnDCGQ0bf8s3sNL8v8cU+NRhqFpeFsIofjTg60S/cPv71
+         H+sPHuj9u82mvhCqWAi/DQC3hw1wr9h8SadxlGtO1i2opKK+8L4eXSIBcFr67zvlz0zl
+         CppQAaJx+cMEavlnguot+la0zcqSDuv3T+S6/PQUa7xI6LA3gJLCSh2MX8CVHkwmdm4o
+         1ueE/AeHSGD8djbrX3VA431+kO+OYoaPdqwS1MoX0XoMPIRKU2d/L5Kyjwtu65MvGCmS
+         m0iA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b1Quh2S4Mqiz+mnmyB9nbm+e1ppPa6f3UhLHFNBAwqA=;
-        b=2FpjvDGHF2UaYgARNBYXJnn9DV+hhzav67oOAGbpJVCAxm+h3PLl7ITW/3O+bAYlZ9
-         YXWrb4fj99maQeofZWnCYLsMLnyuWPdCxWLALSo4o3r5hMkgItS5O2KWpkYMBjRri2dq
-         1PJSXgq8Ae7n7jOw22nm6P7sVQaRmOfb4lwRU/H7iU+B1bXl0dYusvXtOhanlqon8l8v
-         HlJiODGJ8xK8iGJm+JKHxcpuCGLxYnejtWdAMjjzwIAkTm6FAHL71WVFiCaG1M1fT4lU
-         zEQbABJEU1sLMi4a3lrTK/HQfvq+4Vt7k1E8nfVFo/XB3x47v3uymHSPG7M7/0QAi68s
-         Psiw==
-X-Gm-Message-State: ANoB5pnt044t7ElvSI4+E6YZTHX4voPh6RCp03SLiADHkwr3Jcpe6H2o
-        CQlST1ctb+HFyRHX/5+3zt1b9g==
-X-Google-Smtp-Source: AA0mqf4VrPbtxMqRs2lUsgDIfzAcYJfq1GzhGZj+v9rkaPfsGzHMCFlz1vXX8UzjKJAqIn3aEELWwg==
-X-Received: by 2002:a05:600c:4f55:b0:3cf:729b:d4b4 with SMTP id m21-20020a05600c4f5500b003cf729bd4b4mr14142344wmq.48.1669211923651;
-        Wed, 23 Nov 2022 05:58:43 -0800 (PST)
-Received: from localhost (2001-1ae9-1c2-4c00-748-2a9a-a2a6-1362.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:748:2a9a:a2a6:1362])
-        by smtp.gmail.com with ESMTPSA id y10-20020a5d620a000000b002366dd0e030sm16751799wru.68.2022.11.23.05.58.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 05:58:43 -0800 (PST)
-Date:   Wed, 23 Nov 2022 14:58:42 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Atish Patra <atishp@atishpatra.org>
-Cc:     Atish Patra <atishp@rivosinc.com>, linux-kernel@vger.kernel.org,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>, Guo Ren <guoren@kernel.org>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [RFC 6/9] RISC-V: KVM: Add SBI PMU extension support
-Message-ID: <20221123135842.uyw46kbybgb7unm2@kamzik>
-References: <20220718170205.2972215-1-atishp@rivosinc.com>
- <20220718170205.2972215-7-atishp@rivosinc.com>
- <20221101142631.du54p4kyhlgf54cr@kamzik>
- <CAOnJCUJfakcoiWh4vFk5_BcTKfoSDbx+wtmh7MW4cPYog7q4BQ@mail.gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AJ96Qo939E/LqBCZfcidWQRpLbhFZIXN8NEAiTpAhxk=;
+        b=N/g480wtD8DkRSvzjFK0982z5jF2d5bt6Z1mRY2gUT8oWuFBrWpXcTDoTGEPC1oVjY
+         HmgB7FZUep8UNto1dQarttCT5e3x/XLxsACdFjekiqBJLgQa5Aw7Tk6tO3E9FkGwA5ON
+         ALcL2RLr1kNdIuXQyYgriWXLBCa6cFr4zmC/W5v5grjhxxpy2VeztCJkn6jUdMJzHS2M
+         ZBMuVcPqSbispu9NW8zw5xFgVDF+YIR2cpycjrTInTGEAI0B7U4HWbOtVSiJRU84vp43
+         fy8C2FRHALL5moTG7La08EDJ5ioCnI51rHhzn5kVAn5ZhAEcciSfpraZ5ee5a63WXSVG
+         v5Cg==
+X-Gm-Message-State: ANoB5pnP/M70V7HMqNOn81cSXBk/Q/kxqbX6LGjBSOfq10OY/urW1f+G
+        X13+ETVLkpWNCdJ4HXMB4YA=
+X-Google-Smtp-Source: AA0mqf4zngmNYriYQQf6WQDa/SSuXsv/0hsexE8WPkPKL+mwy2wneQC+ycXRX8UErwxgAKGb3ytkyA==
+X-Received: by 2002:a17:906:c30c:b0:7ba:1f48:ccec with SMTP id s12-20020a170906c30c00b007ba1f48ccecmr1909635ejz.105.1669211944571;
+        Wed, 23 Nov 2022 05:59:04 -0800 (PST)
+Received: from [10.20.0.7] ([37.120.217.162])
+        by smtp.gmail.com with ESMTPSA id d12-20020a056402078c00b0045b3853c4b7sm7741854edy.51.2022.11.23.05.59.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Nov 2022 05:59:04 -0800 (PST)
+Message-ID: <97be39ed-3cea-d55a-caa6-c2652baef399@gmail.com>
+Date:   Wed, 23 Nov 2022 14:59:00 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOnJCUJfakcoiWh4vFk5_BcTKfoSDbx+wtmh7MW4cPYog7q4BQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 3/5] driver core: make struct device_type.uevent() take a
+ const *
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Wolfram Sang <wsa@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sean Young <sean@mess.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Ming Lei <ming.lei@redhat.com>,
+        Jilin Yuan <yuanjilin@cdjrlc.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Won Chung <wonchung@google.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-i3c@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org
+References: <20221123122523.1332370-1-gregkh@linuxfoundation.org>
+ <20221123122523.1332370-3-gregkh@linuxfoundation.org>
+ <711d5275-7e80-c00d-0cdc-0f3d52175361@gmail.com>
+ <Y34hgIW8p1RlQTBB@smile.fi.intel.com>
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <Y34hgIW8p1RlQTBB@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 03:08:34PM -0800, Atish Patra wrote:
-> On Tue, Nov 1, 2022 at 7:26 AM Andrew Jones <ajones@ventanamicro.com> wrote:
-> >
-> > On Mon, Jul 18, 2022 at 10:02:02AM -0700, Atish Patra wrote:
-...
-> > > +static int kvm_sbi_ext_pmu_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
-> > > +                                unsigned long *out_val,
-> > > +                                struct kvm_cpu_trap *utrap,
-> > > +                                bool *exit)
-> > > +{
-> > > +     int ret = -EOPNOTSUPP;
-> > > +     struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
-> > > +     unsigned long funcid = cp->a6;
-> > > +     uint64_t temp;
-> >
-> > I think we need something like
-> >
-> >    if (!vcpu_to_pmu(vcpu)->enabled)
-> >       return -EOPNOTSUPP;
-> >
-> > here. Where 'enabled' is only true when we successfully initialize
-> > the pmu. And, successful initialization depends on
+On 11/23/22 14:34, Andy Shevchenko wrote:
+> On Wed, Nov 23, 2022 at 02:14:31PM +0100, Maximilian Luz wrote:
+>> On 11/23/22 13:25, Greg Kroah-Hartman wrote:
+>>> The uevent() callback in struct device_type should not be modifying the
+>>> device that is passed into it, so mark it as a const * and propagate the
+>>> function signature changes out into all relevant subsystems that use
+>>> this callback.
 > 
-> Yes. I have added the flag. But should we do the check here or
-> respective function
-> as a paranoia sanity check ?
-
-I think something like above that returns a not-supported error should be
-in all the entry points, like the top level SBI call handler. Functions
-that should never be called unless the PMU is active could have WARNs
-added for sanity checks.
-
+> [...]
 > 
-> > IS_ENABLED(CONFIG_RISCV_PMU_SBI) and
+>>> -static inline struct ssam_device *to_ssam_device(struct device *d)
+>>> +static inline struct ssam_device *to_ssam_device(const struct device *d)
+>>>    {
+>>>    	return container_of(d, struct ssam_device, dev);
+>>>    }
+>>
+>> I am slightly conflicted about this change as that now more or less
+>> implicitly drops the const. So I'm wondering if it wouldn't be better to
+>> either create a function specifically for const pointers or to just
+>> open-code it in the instance above.
+>>
+>> I guess we could also convert this to a macro. Then at least there
+>> wouldn't be an explicit and potentially misleading const-conversion
+>> indicated in the function signature.
 > 
-> Why do we need to guard under CONFIG_RISCV_PMU_SBI ?
-> vcpu_sbi_pmu.c is only compiled under CONFIG_RISCV_PMU_SBI
-> 
-> If CONFIG_RISCV_PMU_SBI is not enabled, probe function will return failure.
+> This is an intermediate step as far as I know since moving container_of to
+> recognize const is a bit noisy right now. I guess you can find a discussion
+> on the topic between Greg and Sakari.
 
-You're right. We don't need explicit config checks for things that can't
-exist without the config.
+Thanks! I assume you are referring to the following?
 
-> 
-> In fact, I think we should also add the pmu enabled check in the probe function
-> itself. Probe function(kvm_sbi_ext_pmu_probe) should only true when
-> both vcpu_to_pmu(vcpu)->enabled and
-> riscv_isa_extension_available(NULL, SSCOFPMF) are true.
-> 
-> Thoughts?
+	https://lore.kernel.org/lkml/4218173bd72b4f1899d4c41a8e251f0d@AcuMS.aculab.com/T/
 
-Agreed.
+As far as I can tell this is only a warning in documentation, not
+compile time (which would probably be impossible?).
 
-> 
-> > riscv_isa_extension_available(NULL, SSCOFPMF) as well as not
-> > failing other things. And, KVM userspace should be able to
-> > disable the pmu, which keep enabled from being set as well.
-> >
-> We already have provisions for disabling sscofpmf from guests via ISA
-> one reg interface.
-> Do you mean disable the entire PMU from userspace ?
+As I've said I'd be fine with converting the function to a macro (and
+preferably adding a similar warning like the one proposed in that
+thread). The point that irks me up is just that, as proposed, the
+function signature would now advertise a conversion that should never be
+happening.
 
-Yes. We may need to configure a VM without a PMU to increase its
-migratability, workaround errata, or just for testing/debugging purposes.
+Having two separate functions would create a compile-time guarantee, so
+I'd prefer that, but I can understand if that might be considered too
+noisy in code. Or if there is a push to make container_of() emit a
+compile-time warning I'd also be perfectly happy with converting it to a
+macro now as that'd alleviate the need for functions in the future.
 
-> 
-> Currently, ARM64 enables pmu from user space using device control APIs
-> on vcpu fd.
-> Are you suggesting we should do something like that ?
+Regards,
+Max
 
-Yes. Although choosing which KVM API should be used could probably be
-thought-out again. x86 uses VM ioctls.
-
-> 
-> If PMU needs to have device control APIs (either via vcpu fd or its
-> own), we can retrieve
-> the hpmcounter width and count from there as well.
-
-Right. We need to decide how the VM/VCPU + PMU user interface should look.
-A separate PMU device, like arm64 has, sounds good, but the ioctl
-sequences for initialization may get more tricky.
-
-Thanks,
-drew
