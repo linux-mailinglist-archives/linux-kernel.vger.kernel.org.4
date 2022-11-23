@@ -2,62 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 062B56358D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 11:04:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E1F9635702
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:38:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236970AbiKWKD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 05:03:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55646 "EHLO
+        id S237848AbiKWJhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 04:37:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237475AbiKWKCQ (ORCPT
+        with ESMTP id S237668AbiKWJgb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 05:02:16 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5ED69FAE98;
-        Wed, 23 Nov 2022 01:54:27 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 69F981FB;
-        Wed, 23 Nov 2022 01:54:33 -0800 (PST)
-Received: from bogus (unknown [10.57.6.137])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3EEAB3F587;
-        Wed, 23 Nov 2022 01:54:24 -0800 (PST)
-Date:   Wed, 23 Nov 2022 09:54:21 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     rafael@kernel.org, lenb@kernel.org, linux-acpi@vger.kernel.org,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] ACPI: bus: make osc_sb_ffh_opregion_support_confirmed
- static
-Message-ID: <20221123095421.ffolxbq2csqirw7u@bogus>
-References: <20221123034215.119461-1-jiapeng.chong@linux.alibaba.com>
+        Wed, 23 Nov 2022 04:36:31 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47ABD1144A2;
+        Wed, 23 Nov 2022 01:33:56 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NHGCf0tXrz4f3jqj;
+        Wed, 23 Nov 2022 17:33:50 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP4 (Coremail) with SMTP id gCh0CgAnmdYA6X1j0LUOBA--.21740S4;
+        Wed, 23 Nov 2022 17:33:53 +0800 (CST)
+From:   Ye Bin <yebin@huaweicloud.com>
+To:     ulf.hansson@linaro.org, wsa+renesas@sang-engineering.com,
+        kvalo@kernel.org, adrian.hunter@intel.com,
+        linux-mmc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, yebin10@huawei.com
+Subject: [PATCH] mmc: mmc_test: fix missing assignment of 'file' when register debugfs file
+Date:   Wed, 23 Nov 2022 17:55:06 +0800
+Message-Id: <20221123095506.1965691-1-yebin@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221123034215.119461-1-jiapeng.chong@linux.alibaba.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgAnmdYA6X1j0LUOBA--.21740S4
+X-Coremail-Antispam: 1UD129KBjvdXoWrtrykCF4fXrWxCF18urWkCrg_yoWftwcE93
+        4Sqr9rArs2gry7Wr4fCw13XFW7Kan5ur13WFWaqrWayry8Xr97ZryIg34DXw43ZrZrCay3
+        AF98tF1jyr9rGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbr8YFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Y
+        z7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zV
+        AF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4l
+        IxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WF
+        yUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIY
+        CTnIWIevJa73UjIFyTuYvjxUOyCJDUUUU
+X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 11:42:15AM +0800, Jiapeng Chong wrote:
-> This symbol is not used outside of bus.c, so marks it static.
-> 
-> drivers/acpi/bus.c:304:6: warning: symbol 'osc_sb_ffh_opregion_support_confirmed' was not declared. Should it be static?
-> 
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3241
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+From: Ye Bin <yebin10@huawei.com>
 
-Sorry for not replying to the original report which I meant to and for some
-reason left it in the draft. Anyways in order to fix another bug, this
-variable was removed thereby removing this build/sparse warning. This
-warning should not appear from today's linux-next.
+Now, 'file' is always NULL. obviously, 'file' is used to store return value of
+'debugfs_create_file()'.
 
-Thanks for spotting and this patch fixing it.
+Fixes: a04c50aaa916 ("mmc: core: no need to check return value of debugfs_create functions")
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+---
+ drivers/mmc/core/mmc_test.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/mmc/core/mmc_test.c b/drivers/mmc/core/mmc_test.c
+index 6cd6f8a94a71..156d34b2ed4d 100644
+--- a/drivers/mmc/core/mmc_test.c
++++ b/drivers/mmc/core/mmc_test.c
+@@ -3174,7 +3174,8 @@ static int __mmc_test_register_dbgfs_file(struct mmc_card *card,
+ 	struct mmc_test_dbgfs_file *df;
+ 
+ 	if (card->debugfs_root)
+-		debugfs_create_file(name, mode, card->debugfs_root, card, fops);
++		file = debugfs_create_file(name, mode, card->debugfs_root,
++					   card, fops);
+ 
+ 	df = kmalloc(sizeof(*df), GFP_KERNEL);
+ 	if (!df) {
 -- 
-Regards,
-Sudeep
+2.31.1
+
