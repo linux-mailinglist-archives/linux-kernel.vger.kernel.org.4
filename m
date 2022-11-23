@@ -2,85 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 154CA636357
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:23:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E283F63635D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:23:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237558AbiKWPXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 10:23:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59010 "EHLO
+        id S236344AbiKWPXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 10:23:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238746AbiKWPXA (ORCPT
+        with ESMTP id S235513AbiKWPXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 10:23:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F09764A07
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:22:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669216928;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iAQ+WUBilLvtBfWw+OuxYtN3auR7ZBxIQdmmFViSJCU=;
-        b=XQ4zh5vJn4kX6WkkgoZwvhmjP748S6BsAZel1G00opQiMHKJ8XNXrhKEwkrXUCWGE6tpt4
-        eQya7MKwK0NlK1foLmvVW5bD6zj1wWmaXnQulqjiosfD0nCz9xdqkvwrfOqTT0s3cJw8qJ
-        7MgZYyiDh2x2ED1WJlJ+44EAcuJKneo=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-198-N9Yd3yz-NtioDe3telSw5Q-1; Wed, 23 Nov 2022 10:22:07 -0500
-X-MC-Unique: N9Yd3yz-NtioDe3telSw5Q-1
-Received: by mail-qv1-f72.google.com with SMTP id d8-20020a0cfe88000000b004bb65193fdcso16672931qvs.12
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:22:07 -0800 (PST)
+        Wed, 23 Nov 2022 10:23:20 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E8A62C2;
+        Wed, 23 Nov 2022 07:23:12 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id p16so13315244wmc.3;
+        Wed, 23 Nov 2022 07:23:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mRsDugZQHZ3cAp8Uo4BX8m8iIIGYim123jYJVHkkzNM=;
+        b=JTS32H5Rl1FRQ5qQGs7q0aes2NHFbc/tVU1PRG9uzTWCLptD9c3MBLc2IqYddt3s+j
+         9Of0wCplecvcC/ZN1lmfkazZqsy11weqsJhVk4QzwDldCoYxshlc7rC+qRSCf9Y/SqWB
+         v/saVhfl+UuoPYhBVsTcqPPB1s6kP/enS0YerURQUZMzmRXmcAtyZYWjr5bPNnE9wIDH
+         VW49UWoCb5VTT2rNTAVnEMk9qRuYv594NWL0wRMEci2KxO0FRzeZNCtNLbScBe0Xo0p7
+         8H7kU9A+dvHezIaVrs3sjWhaXVIIBafgl/QMvsjn7GYdWVgzQ/Pi5mVzH95DYjng5LzN
+         Pwgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iAQ+WUBilLvtBfWw+OuxYtN3auR7ZBxIQdmmFViSJCU=;
-        b=anLuCP13rYKbRILmzX1Px9IXC34Ela6p6spc1uUCCo8YKelpjRssffiaVTNt/osak1
-         JvlIvrZzxVnMe1tpr2HYKPAmGIWhhzPp+fsXI7dQwAXiNV35pitz5LOZGnQm+71HsiCQ
-         xRBfXgvVSiek6/pTpriFGHNKLlc0ilTmbTtA+APVhzUaNE9c5jkL2QZSJwzdLOWQjQYs
-         0XzLaqBzC0Lcw4BlUJL4d1W/8lDaHwg7Vz+NjQi+UUsLwg2dozej4Mc/qbOB1Rn8Qrxw
-         tQ7AxNUJuiSYt3p3Wp21XjTRaArOW3KAu4WZaO+gwoIqqf3C5OU/8ZKIac/Q9mCy6T8c
-         Tm0g==
-X-Gm-Message-State: ANoB5plY9VFzhCEjpWiHJ7wYNwUjk3aWCihg2GnjqciADCrnhcZUBdaZ
-        PBDZ1gR+2LP4m3awZOy2Utgq+dBoBTb8+1yTHfV8Frtp6B8pvcxL4H2c/I5gfz6PCszgo6lTNLe
-        +R8SCijHkx1o5pLLXLv7LMXPd
-X-Received: by 2002:a05:622a:4c15:b0:398:8048:6f75 with SMTP id ey21-20020a05622a4c1500b0039880486f75mr10367988qtb.316.1669216926651;
-        Wed, 23 Nov 2022 07:22:06 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4sD3+Iedq4yhwBmBg6QKG+ew06sbvutG4uKTF/wuyFU4KECi/G/prQEwmsbfcWmBDXde195w==
-X-Received: by 2002:a05:622a:4c15:b0:398:8048:6f75 with SMTP id ey21-20020a05622a4c1500b0039880486f75mr10367963qtb.316.1669216926356;
-        Wed, 23 Nov 2022 07:22:06 -0800 (PST)
-Received: from sgarzare-redhat (host-82-53-134-234.retail.telecomitalia.it. [82.53.134.234])
-        by smtp.gmail.com with ESMTPSA id m20-20020a05620a24d400b006b949afa980sm12666193qkn.56.2022.11.23.07.22.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 07:22:05 -0800 (PST)
-Date:   Wed, 23 Nov 2022 16:21:59 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
-        Bobby Eshleman <bobby.eshleman@gmail.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        kernel <kernel@sberdevices.ru>,
-        Krasnov Arseniy <oxffffaa@gmail.com>
-Subject: Re: [RFC PATCH v1 2/3] test/vsock: add big message test
-Message-ID: <20221123152159.xbqhsslrhh4ymbnn@sgarzare-redhat>
-References: <ba294dff-812a-bfc2-a43c-286f99aee0b8@sberdevices.ru>
- <f0510949-cc97-7a01-5fc8-f7e855b80515@sberdevices.ru>
- <20221121145248.cmscv5vg3fir543x@sgarzare-redhat>
- <ff71c2d3-9f61-d649-7ae5-cd012eada10d@sberdevices.ru>
- <749f147b-6112-2e6f-1ebe-05ba2e8a8727@sberdevices.ru>
+        bh=mRsDugZQHZ3cAp8Uo4BX8m8iIIGYim123jYJVHkkzNM=;
+        b=UttgYdID17rzYxZMQrDCv5NC+KSWYmeYDWIqVj0AZaldFV7boB3u5h4ayWud3QoNh+
+         A7FlRFC0MKhWB7INEc5X6YSoQgSm2hJITruoSd/Zl3txDNX8qn+fkXst3l1ve86Uhk15
+         EwEuVgy3hxnYTadQvV7ffNsNSOR52DBKuLhwvy6KfNu6ZN2mybytLhhooz4HvmAxqBPs
+         RfiAczQ5uzqTsxo7fNF7nPOPoGkQkaQ6yJQ8EN6uOhbAFdGmF7/qJfz3gTSQ/mDivtw6
+         tDAbshPr3FYsoX61dOUJ+GqZZ/YOwEiSh4dpoESRk8p+9ROYEbf/VrweZblYUSwfaCrw
+         KIRQ==
+X-Gm-Message-State: ANoB5pl0ChlssDtBW7lvDD/p/7a1c93v/2u7k0e4Y+txlDGol2LNlxNt
+        dXc7l+CpHgb9yrkW3Kpg8ic=
+X-Google-Smtp-Source: AA0mqf4GOX3D3H86tdcDE4TkSHPMY+S13P3j1Dp/lKoItpeUJRYos1PzrSOxOWOfWevsQEXVOhunCg==
+X-Received: by 2002:a05:600c:2309:b0:3c6:f252:f072 with SMTP id 9-20020a05600c230900b003c6f252f072mr7118083wmo.145.1669216991388;
+        Wed, 23 Nov 2022 07:23:11 -0800 (PST)
+Received: from [192.168.1.131] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id c18-20020adffb12000000b002365730eae8sm16654203wrr.55.2022.11.23.07.23.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Nov 2022 07:23:10 -0800 (PST)
+Message-ID: <5b253182-c15e-7fdd-48e2-37fd64838644@gmail.com>
+Date:   Wed, 23 Nov 2022 16:23:09 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <749f147b-6112-2e6f-1ebe-05ba2e8a8727@sberdevices.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 2/5] arm64: dts: mt8186: Add power domains controller
+Content-Language: en-US
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, hsinyi@chromium.org
+References: <20221123135531.23221-1-allen-kh.cheng@mediatek.com>
+ <20221123135531.23221-3-allen-kh.cheng@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20221123135531.23221-3-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,80 +81,218 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 09:40:39PM +0000, Arseniy Krasnov wrote:
->On 21.11.2022 19:50, Arseniy Krasnov wrote:
->> On 21.11.2022 17:52, Stefano Garzarella wrote:
->>> On Tue, Nov 15, 2022 at 08:52:35PM +0000, Arseniy Krasnov wrote:
->>>> This adds test for sending message, bigger than peer's buffer size.
->>>> For SOCK_SEQPACKET socket it must fail, as this type of socket has
->>>> message size limit.
->>>>
->>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->>>> ---
->>>> tools/testing/vsock/vsock_test.c | 62 ++++++++++++++++++++++++++++++++
->>>> 1 file changed, 62 insertions(+)
->>>>
->>>> diff --git a/tools/testing/vsock/vsock_test.c b/tools/testing/vsock/vsock_test.c
->>>> index 107c11165887..bb4e8657f1d6 100644
->>>> --- a/tools/testing/vsock/vsock_test.c
->>>> +++ b/tools/testing/vsock/vsock_test.c
->>>> @@ -560,6 +560,63 @@ static void test_seqpacket_timeout_server(const struct test_opts *opts)
->>>>     close(fd);
->>>> }
->>>>
->>>> +static void test_seqpacket_bigmsg_client(const struct test_opts *opts)
->>>> +{
->>>> +    unsigned long sock_buf_size;
->>>> +    ssize_t send_size;
->>>> +    socklen_t len;
->>>> +    void *data;
->>>> +    int fd;
->>>> +
->>>> +    len = sizeof(sock_buf_size);
->>>> +
->>>> +    fd = vsock_seqpacket_connect(opts->peer_cid, 1234);
->>>
->>> Not for this patch, but someday we should add a macro for this port and maybe even make it configurable :-)
->>>
->>>> +    if (fd < 0) {
->>>> +        perror("connect");
->>>> +        exit(EXIT_FAILURE);
->>>> +    }
->>>> +
->>>> +    if (getsockopt(fd, AF_VSOCK, SO_VM_SOCKETS_BUFFER_SIZE,
->>>> +               &sock_buf_size, &len)) {
->>>> +        perror("getsockopt");
->>>> +        exit(EXIT_FAILURE);
->>>> +    }
->>>> +
->>>> +    sock_buf_size++;
->>>> +
->>>> +    data = malloc(sock_buf_size);
->>>> +    if (!data) {
->>>> +        perror("malloc");
->>>> +        exit(EXIT_FAILURE);
->>>> +    }
->>>> +
->>>> +    send_size = send(fd, data, sock_buf_size, 0);
->>>> +    if (send_size != -1) {
->>>
->>> Can we check also `errno`?
->>> IIUC it should contains EMSGSIZE.
->Hm, seems current implementation is a little bit broken and returns ENOMEM, because any negative value, returned by
->transport callback is always replaced to ENOMEM. I think i need this patch from Bobby:
->https://lore.kernel.org/lkml/d81818b868216c774613dd03641fcfe63cc55a45.1660362668.git.bobby.eshleman@bytedance.com/
->May be i can include it to this patchset also fixing review comments(of course keeping Bobby as author). Or more
->simple way is to check ENOMEM instead of EMSGSIZE in this test(simple, but a little bit dumb i think).
 
-Maybe in this patch you can start checking ENOMEM (with a TODO comment),
-and then Bobby can change it when sending his patch.
 
-Or you can repost it (I'm not sure if we should keep the legacy behavior 
-for other transports or it was an error, but better to discuss it on 
-that patch). However, I think we should merge that patch.
+On 23/11/2022 14:55, Allen-KH Cheng wrote:
+> Add power domains controller for mt8186 SoC.
+> 
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
 
-@Bobby, what do you think?
+Applied for the next merge window. (v6.2-tmp/dts64 which will transform into 
+v6.2-next/dts64 once v6.2-rc1 is released)
 
-Thanks,
-Stefano
+Thanks
 
+> ---
+>   arch/arm64/boot/dts/mediatek/mt8186.dtsi | 188 +++++++++++++++++++++++
+>   1 file changed, 188 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8186.dtsi b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+> index c326aeb33a10..2b03a342b8db 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+> @@ -332,6 +332,194 @@
+>   			#interrupt-cells = <2>;
+>   		};
+>   
+> +		scpsys: syscon@10006000 {
+> +			compatible = "mediatek,mt8186-scpsys", "syscon", "simple-mfd";
+> +			reg = <0 0x10006000 0 0x1000>;
+> +
+> +			/* System Power Manager */
+> +			spm: power-controller {
+> +				compatible = "mediatek,mt8186-power-controller";
+> +				#address-cells = <1>;
+> +				#size-cells = <0>;
+> +				#power-domain-cells = <1>;
+> +
+> +				/* power domain of the SoC */
+> +				mfg0: power-domain@MT8186_POWER_DOMAIN_MFG0 {
+> +					reg = <MT8186_POWER_DOMAIN_MFG0>;
+> +					clocks = <&topckgen CLK_TOP_MFG>;
+> +					clock-names = "mfg00";
+> +					#address-cells = <1>;
+> +					#size-cells = <0>;
+> +					#power-domain-cells = <1>;
+> +
+> +					power-domain@MT8186_POWER_DOMAIN_MFG1 {
+> +						reg = <MT8186_POWER_DOMAIN_MFG1>;
+> +						mediatek,infracfg = <&infracfg_ao>;
+> +						#address-cells = <1>;
+> +						#size-cells = <0>;
+> +						#power-domain-cells = <1>;
+> +
+> +						power-domain@MT8186_POWER_DOMAIN_MFG2 {
+> +							reg = <MT8186_POWER_DOMAIN_MFG2>;
+> +							#power-domain-cells = <0>;
+> +						};
+> +
+> +						power-domain@MT8186_POWER_DOMAIN_MFG3 {
+> +							reg = <MT8186_POWER_DOMAIN_MFG3>;
+> +							#power-domain-cells = <0>;
+> +						};
+> +					};
+> +				};
+> +
+> +				power-domain@MT8186_POWER_DOMAIN_CSIRX_TOP {
+> +					reg = <MT8186_POWER_DOMAIN_CSIRX_TOP>;
+> +					clocks = <&topckgen CLK_TOP_SENINF>,
+> +						 <&topckgen CLK_TOP_SENINF1>;
+> +					clock-names = "csirx_top0", "csirx_top1";
+> +					#power-domain-cells = <0>;
+> +				};
+> +
+> +				power-domain@MT8186_POWER_DOMAIN_SSUSB {
+> +					reg = <MT8186_POWER_DOMAIN_SSUSB>;
+> +					#power-domain-cells = <0>;
+> +				};
+> +
+> +				power-domain@MT8186_POWER_DOMAIN_SSUSB_P1 {
+> +					reg = <MT8186_POWER_DOMAIN_SSUSB_P1>;
+> +					#power-domain-cells = <0>;
+> +				};
+> +
+> +				power-domain@MT8186_POWER_DOMAIN_ADSP_AO {
+> +					reg = <MT8186_POWER_DOMAIN_ADSP_AO>;
+> +					clocks = <&topckgen CLK_TOP_AUDIODSP>,
+> +						 <&topckgen CLK_TOP_ADSP_BUS>;
+> +					clock-names = "audioadsp", "adsp_bus";
+> +					#address-cells = <1>;
+> +					#size-cells = <0>;
+> +					#power-domain-cells = <1>;
+> +
+> +					power-domain@MT8186_POWER_DOMAIN_ADSP_INFRA {
+> +						reg = <MT8186_POWER_DOMAIN_ADSP_INFRA>;
+> +						#address-cells = <1>;
+> +						#size-cells = <0>;
+> +						#power-domain-cells = <1>;
+> +
+> +						power-domain@MT8186_POWER_DOMAIN_ADSP_TOP {
+> +							reg = <MT8186_POWER_DOMAIN_ADSP_TOP>;
+> +							mediatek,infracfg = <&infracfg_ao>;
+> +							#power-domain-cells = <0>;
+> +						};
+> +					};
+> +				};
+> +
+> +				power-domain@MT8186_POWER_DOMAIN_CONN_ON {
+> +					reg = <MT8186_POWER_DOMAIN_CONN_ON>;
+> +					mediatek,infracfg = <&infracfg_ao>;
+> +					#power-domain-cells = <0>;
+> +				};
+> +
+> +				power-domain@MT8186_POWER_DOMAIN_DIS {
+> +					reg = <MT8186_POWER_DOMAIN_DIS>;
+> +					clocks = <&topckgen CLK_TOP_DISP>,
+> +						 <&topckgen CLK_TOP_MDP>,
+> +						 <&mmsys CLK_MM_SMI_INFRA>,
+> +						 <&mmsys CLK_MM_SMI_COMMON>,
+> +						 <&mmsys CLK_MM_SMI_GALS>,
+> +						 <&mmsys CLK_MM_SMI_IOMMU>;
+> +					clock-names = "disp", "mdp", "smi_infra", "smi_common",
+> +						     "smi_gals", "smi_iommu";
+> +					mediatek,infracfg = <&infracfg_ao>;
+> +					#address-cells = <1>;
+> +					#size-cells = <0>;
+> +					#power-domain-cells = <1>;
+> +
+> +					power-domain@MT8186_POWER_DOMAIN_VDEC {
+> +						reg = <MT8186_POWER_DOMAIN_VDEC>;
+> +						clocks = <&topckgen CLK_TOP_VDEC>,
+> +							 <&vdecsys CLK_VDEC_LARB1_CKEN>;
+> +						clock-names = "vdec0", "larb";
+> +						mediatek,infracfg = <&infracfg_ao>;
+> +						#power-domain-cells = <0>;
+> +					};
+> +
+> +					power-domain@MT8186_POWER_DOMAIN_CAM {
+> +						reg = <MT8186_POWER_DOMAIN_CAM>;
+> +						clocks = <&topckgen CLK_TOP_CAM>,
+> +							 <&topckgen CLK_TOP_SENINF>,
+> +							 <&topckgen CLK_TOP_SENINF1>,
+> +							 <&topckgen CLK_TOP_SENINF2>,
+> +							 <&topckgen CLK_TOP_SENINF3>,
+> +							 <&topckgen CLK_TOP_CAMTM>,
+> +							 <&camsys CLK_CAM2MM_GALS>;
+> +						clock-names = "cam-top", "cam0", "cam1", "cam2",
+> +							     "cam3", "cam-tm", "gals";
+> +						mediatek,infracfg = <&infracfg_ao>;
+> +						#address-cells = <1>;
+> +						#size-cells = <0>;
+> +						#power-domain-cells = <1>;
+> +
+> +						power-domain@MT8186_POWER_DOMAIN_CAM_RAWB {
+> +							reg = <MT8186_POWER_DOMAIN_CAM_RAWB>;
+> +							#power-domain-cells = <0>;
+> +						};
+> +
+> +						power-domain@MT8186_POWER_DOMAIN_CAM_RAWA {
+> +							reg = <MT8186_POWER_DOMAIN_CAM_RAWA>;
+> +							#power-domain-cells = <0>;
+> +						};
+> +					};
+> +
+> +					power-domain@MT8186_POWER_DOMAIN_IMG {
+> +						reg = <MT8186_POWER_DOMAIN_IMG>;
+> +						clocks = <&topckgen CLK_TOP_IMG1>,
+> +							 <&imgsys1 CLK_IMG1_GALS_IMG1>;
+> +						clock-names = "img-top", "gals";
+> +						mediatek,infracfg = <&infracfg_ao>;
+> +						#address-cells = <1>;
+> +						#size-cells = <0>;
+> +						#power-domain-cells = <1>;
+> +
+> +						power-domain@MT8186_POWER_DOMAIN_IMG2 {
+> +							reg = <MT8186_POWER_DOMAIN_IMG2>;
+> +							#power-domain-cells = <0>;
+> +						};
+> +					};
+> +
+> +					power-domain@MT8186_POWER_DOMAIN_IPE {
+> +						reg = <MT8186_POWER_DOMAIN_IPE>;
+> +						clocks = <&topckgen CLK_TOP_IPE>,
+> +							 <&ipesys CLK_IPE_LARB19>,
+> +							 <&ipesys CLK_IPE_LARB20>,
+> +							 <&ipesys CLK_IPE_SMI_SUBCOM>,
+> +							 <&ipesys CLK_IPE_GALS_IPE>;
+> +						clock-names = "ipe-top", "ipe-larb0", "ipe-larb1",
+> +							      "ipe-smi", "ipe-gals";
+> +						mediatek,infracfg = <&infracfg_ao>;
+> +						#power-domain-cells = <0>;
+> +					};
+> +
+> +					power-domain@MT8186_POWER_DOMAIN_VENC {
+> +						reg = <MT8186_POWER_DOMAIN_VENC>;
+> +						clocks = <&topckgen CLK_TOP_VENC>,
+> +							 <&vencsys CLK_VENC_CKE1_VENC>;
+> +						clock-names = "venc0", "larb";
+> +						mediatek,infracfg = <&infracfg_ao>;
+> +						#power-domain-cells = <0>;
+> +					};
+> +
+> +					power-domain@MT8186_POWER_DOMAIN_WPE {
+> +						reg = <MT8186_POWER_DOMAIN_WPE>;
+> +						clocks = <&topckgen CLK_TOP_WPE>,
+> +							 <&wpesys CLK_WPE_SMI_LARB8_CK_EN>,
+> +							 <&wpesys CLK_WPE_SMI_LARB8_PCLK_EN>;
+> +						clock-names = "wpe0", "larb-ck", "larb-pclk";
+> +						mediatek,infracfg = <&infracfg_ao>;
+> +						#power-domain-cells = <0>;
+> +					};
+> +				};
+> +			};
+> +		};
+> +
+>   		watchdog: watchdog@10007000 {
+>   			compatible = "mediatek,mt8186-wdt",
+>   				     "mediatek,mt6589-wdt";
