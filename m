@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E66CA63686F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:16:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6567636860
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:16:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239498AbiKWSOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 13:14:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40782 "EHLO
+        id S239548AbiKWSOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 13:14:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239406AbiKWSNa (ORCPT
+        with ESMTP id S239532AbiKWSNc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 13:13:30 -0500
+        Wed, 23 Nov 2022 13:13:32 -0500
 Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95798248C3
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 10:08:24 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id e12-20020a62aa0c000000b0056c12c0aadeso11480609pff.21
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 10:08:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55AD65AE
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 10:09:25 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id bq9-20020a056a000e0900b00571802a2eaaso11522065pfb.22
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 10:09:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=ZhRYpgjyXSj58WhO81SjAEi8hSt+BCz5HFDcwIe8pM8=;
-        b=eemCHDnPT999d32SWZB6wMX6suDtePfunnKNAKvzoIn3dNciBQ3Ljfi3yTquKoy4zi
-         pcrK20E0xXlpAUqIBXCsUy2HESlz6t7owcjQppn946VULCvKTSBqzveGqfypNqgpNaj6
-         iXJJ06APrWP4InCRCTIf8kHE2/VDWVF+MFQq0ndYTrBiNiLs+FjRyPNEHDsG5r2ooIeI
-         CsiIDq8CprGQJ677tUo/JkB1kA7RBtQGesqHsnudWvHEOOVStEsMkrcTe8XMdiBbDUUr
-         Wvup2PTocsoLNg5b9xVg9/tSx6vcK13d6i/NYpDI5r7NH1ZyRGnIfOvOepA7ESo1xmo0
-         LQrw==
+        bh=8AnrcGQxermayS9lzY4/PftYYJ1h7RYNfHX8xCVtV1c=;
+        b=mLkBARzh9DEoczzapN40SjDSvfSO9nAnK4l7SEQlkecJWP9ks6Bnl+jjSjXJFx96mP
+         X/zxr5Gdo+FYdbk0nY5U+gtLuL1HoNADzQsH1vNYJ3aHZjb5OWnAkVWeYx1Nr4cx608+
+         5rCF9s1+CsORn3Gva3cK6mJniR0xr8NdKtzQ/lt/wo61RW1zH4tnHKYqX+nl2bZMMJmO
+         P19cZl/P1PQEyizWuij5WoOIv41uIflr/80PPs00WtxoMR/gbsEqqJSyrAeFhZGKAW5v
+         9FWFTV250Y2UnKZXM0FOoER96PJUv6pk6HezB4soFYS5xu5FUh9wZ5o49oM2hkb5wfk+
+         uqWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZhRYpgjyXSj58WhO81SjAEi8hSt+BCz5HFDcwIe8pM8=;
-        b=rrA/vhMaYFBsgDmnfTeBiSxjbchdan/avu1O32/yn5kDqV8nG94qpPcZKjKLwDUglg
-         bAskeV0sn47kdLBvGjPDa3QWn5iBNLnVmkL2qOPtaxYtqGvSEem0T3MEcOz6fGYm3J1a
-         j8TwfkNSHTqk2CakR5BUXmZNkgo8kgdGJo4IjdtoiR5X4echn7KMyBOZqcCY/LOuNgCs
-         5OjPBzto4lNmPGOJ95kk/+Z6YZOMe0GP5iN6DTT3QtvSu1eRvSnqGH1ol0KO66TKBFQy
-         ew5Ao8MZ9aGyTP4VvvkSi3CM0VLPWIWgyIRCbNojOnGW5nE1duKBbUzbQdwHveRHrkgU
-         72sQ==
-X-Gm-Message-State: ANoB5pnnqrB7HoUKzKfcGgo4CAWHk88/Gn9s1TlUrcqxZFdDLqmzsfnP
-        s4VN3ixnTgH+KlyueGuMcSA2L4aWsmklGw==
-X-Google-Smtp-Source: AA0mqf41K5vmq3rhuByfU4W/AtqvhvmmSD+ilGqHI9sbx2YLgKgUB/+/zYf/bq4bL7Zu31IA6ToFXW/4h0yGow==
+        bh=8AnrcGQxermayS9lzY4/PftYYJ1h7RYNfHX8xCVtV1c=;
+        b=3G9UHYR7Uk/VMxiK+je4JaxQbRRu7I1VnGXcdImofZi/yh35FGh5bQRDBoD7O1ra/I
+         epu6FKd/BTNMoVF5n/cL9FiZDfpJn3AHT62rc1jIHnHWGIEBFVmHJ/q+hLY+M6Iu3ZiY
+         6hjtnnuQYRww0ZOa4BAgdZlGfm6m/xAF7D0M0hYRL5W8VoApIUxoWdLhwpN06Y4tJsa2
+         /zoOqkxMocRL3VPXnkBb+9MNoGgRJgvOdx9j3Q7JfHmxfksUkk+1I/w38YbVq1ohvC+n
+         v5an95CvLD3ZbvE5sAlcrNGEL24kg7QJIomB96BrWes5Knkm15YVSdPoiVSTMalu+gmf
+         qHeg==
+X-Gm-Message-State: ANoB5pmoKpFfyLpgUv87HByOUb23PZ+OIoQ8fAGArvf0kwsBe9UXsX2E
+        UnfZtMQRp7RnRMU0UBTAjy2Pj7z2J2wqlA==
+X-Google-Smtp-Source: AA0mqf5Xc1KOJwNTNf49TsdXYL1qiDu6Xvj71CD7OpYTPMjz0vmWKZRCyaIGhUW8iWfg/r1x3ex8Wa7SZojBNw==
 X-Received: from xllamas.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5070])
- (user=cmllamas job=sendgmr) by 2002:aa7:83d3:0:b0:56e:8477:1add with SMTP id
- j19-20020aa783d3000000b0056e84771addmr19165796pfn.13.1669226904028; Wed, 23
- Nov 2022 10:08:24 -0800 (PST)
-Date:   Wed, 23 Nov 2022 18:08:09 +0000
+ (user=cmllamas job=sendgmr) by 2002:a17:90a:cf08:b0:218:6bd8:3114 with SMTP
+ id h8-20020a17090acf0800b002186bd83114mr31561207pju.128.1669226965293; Wed,
+ 23 Nov 2022 10:09:25 -0800 (PST)
+Date:   Wed, 23 Nov 2022 18:09:21 +0000
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221123180809.1501779-1-cmllamas@google.com>
-Subject: [PATCH 6.0] binder: validate alloc->mm in ->mmap() handler
+Message-ID: <20221123180922.1502550-1-cmllamas@google.com>
+Subject: [PATCH 5.15] binder: validate alloc->mm in ->mmap() handler
 From:   Carlos Llamas <cmllamas@google.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?=" <arve@android.com>,
         Todd Kjos <tkjos@android.com>,
         Martijn Coenen <maco@android.com>,
         Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Carlos Llamas <cmllamas@google.com>,
+        Christian Brauner <christian@brauner.io>,
+        Hridya Valsaraju <hridya@google.com>,
         Suren Baghdasaryan <surenb@google.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Carlos Llamas <cmllamas@google.com>
 Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
         Jann Horn <jannh@google.com>, stable@vger.kernel.org,
         Todd Kjos <tkjos@google.com>
@@ -108,10 +109,10 @@ Signed-off-by: Carlos Llamas <cmllamas@google.com>
  1 file changed, 7 insertions(+)
 
 diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
-index 9b1778c00610..64999777e0bf 100644
+index 8ed450125c92..6acfb896b2e5 100644
 --- a/drivers/android/binder_alloc.c
 +++ b/drivers/android/binder_alloc.c
-@@ -760,6 +760,12 @@ int binder_alloc_mmap_handler(struct binder_alloc *alloc,
+@@ -753,6 +753,12 @@ int binder_alloc_mmap_handler(struct binder_alloc *alloc,
  	const char *failure_string;
  	struct binder_buffer *buffer;
  
@@ -124,7 +125,7 @@ index 9b1778c00610..64999777e0bf 100644
  	mutex_lock(&binder_alloc_mmap_lock);
  	if (alloc->buffer_size) {
  		ret = -EBUSY;
-@@ -806,6 +812,7 @@ int binder_alloc_mmap_handler(struct binder_alloc *alloc,
+@@ -799,6 +805,7 @@ int binder_alloc_mmap_handler(struct binder_alloc *alloc,
  	alloc->buffer_size = 0;
  err_already_mapped:
  	mutex_unlock(&binder_alloc_mmap_lock);
