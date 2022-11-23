@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6AF56369BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 20:18:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DE276369C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 20:18:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239329AbiKWTRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 14:17:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47106 "EHLO
+        id S239881AbiKWTRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 14:17:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239923AbiKWTRG (ORCPT
+        with ESMTP id S239935AbiKWTRM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 14:17:06 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CD8C72CA
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 11:17:05 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id p12so17506391plq.4
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 11:17:05 -0800 (PST)
+        Wed, 23 Nov 2022 14:17:12 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8C68C72DC
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 11:17:06 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id k7so17491331pll.6
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 11:17:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8zszPKirATociZwkufCMKuACjS2vwEYsrnSZpS9P9lU=;
-        b=Pjl0mjJlKG1hOe2sKOhjXT4gUoSAjgo1SasKPbLKNH10Mwo7iw07plvWf50TYRiYD/
-         lmRm617Y3gCQ+CaSwGIqJnTR/lpteyBRLmBW+LlbxUuLHhx9sld4qVIx721DTVCXv/Xr
-         1mr8W6jJh3AqJ0uXmDXyWm/vfk14FQM7Wp5D0znqXME4eVBcJ3uM58CzPXFkmyH/MWLl
-         yYMsvLyoBqUut6u3gJo1d6E6Pm/MKgJDYyP0vFzlusNnIj7iuPmMqURMzx9knZcUPOJO
-         QQnzOGwFW2ItNQfq1Yp/dTsbGx9WEXSoN2+LmOaiC+rFYLB8QwH/JMaq6dctbb7sWXCJ
-         b7TQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k0SYvGjxlp7dw6JXDykKNCVFvc4QQ+pWPp2+QDRowV4=;
+        b=kCBq9GguWJ4WHhxUlYFsFQb4CIUVrgFiCSAnYUxAlbSR0oxyreDtq45d+AovRSAQ7C
+         1NfMyR8KF1COiW2lb6pdV5PCD90DcINjoOox+n0IDr9+TodG62OR5Eqh4eEDGMOEt/vH
+         vY7wlXqFnwJbDfamwmH7gEf/kTImVPaA332JgUZ+V87tkLSxrWl93o2BF+pYnMVjxhOh
+         yveVws5/DPVjOIdLKaJ9MMvqpj0NwkgiVBHL4WqWJrVtgNaR87hIIS1+CZjiWf7VTfsW
+         qKr+FFrLJtiv7/xEh3gmT2FvrrWxlJH1VtYA9yOj5yS1Q0N/PIPT6oEa5vCwIfrlpBCF
+         fY/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8zszPKirATociZwkufCMKuACjS2vwEYsrnSZpS9P9lU=;
-        b=qH+CY+8vTKO0VU1p4KCwTgqLrK7twSIU1TgbMQ25NMau9DGBGRa5Uwuk2i/noz1g+7
-         i1dvdXzV+zBqfeh/eKO9AhuxJ2pLFJheAoGTznfPJQxgoepvkDwW+uO8jfat74I/3iqU
-         VtVy3HenXp/DAQZKLKV5P8i2fRbfWZdtzFvXIDpqCIiC8eKLX42vdktydX7GHg+3Nr6x
-         yS7Q6fR9cKnyQuDOs96vz9dZOETCv18LQJYFKlz+sOxd0yNMPIO9pFCw8rMpOlCcAetk
-         Fx4ACHcDfNoprCJlUdXi+IsDAqPi56+PFS9x9fglGaJOeBBztP0FBtyPykkPKY3CVHPU
-         Oigg==
-X-Gm-Message-State: ANoB5pl9t3+jXlJOge7WHB1PR2xaxOyc0K7xQ1l9AUYxCB+KmccAx7ms
-        i/1z0auxndQ2HW/bSRVwQM8=
-X-Google-Smtp-Source: AA0mqf7sE3DNwI8yQ+VmRrDuWB9sYV3N0BLxETDbF+WTN69Rchh9HUX9BCBlkK80HpEAGYYHEzbjHQ==
-X-Received: by 2002:a17:902:9881:b0:188:62b8:2278 with SMTP id s1-20020a170902988100b0018862b82278mr16094017plp.96.1669231025106;
-        Wed, 23 Nov 2022 11:17:05 -0800 (PST)
-Received: from localhost (fwdproxy-prn-014.fbsv.net. [2a03:2880:ff:e::face:b00c])
-        by smtp.gmail.com with ESMTPSA id i29-20020a63131d000000b00460ea630c1bsm11021421pgl.46.2022.11.23.11.17.04
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=k0SYvGjxlp7dw6JXDykKNCVFvc4QQ+pWPp2+QDRowV4=;
+        b=NZY4MBB8X1uQyXTHHOYFJprtJrF9yc/eRfrFSymN6rCY92P/Pu8GuwAkmF+R97NMfZ
+         yyPg2eyGiY9NfhhQmAFKkbil08VkfaqlBQA1S6jkCOxsXEkjeQXtmRODGZzFH9IfhTN2
+         LdlPODCoopA91yg+q5yqWjzsdCpWonrqOd4BKswNQsffkXYdNPLdpUKl45PAR6YIh4pS
+         sQ3rn9S+9X4PNBsctQj5xOehZ1IhnuF5j5OE612NGSS+h+Hnjd6X5mSIRBqILidyMfU4
+         x4WJFysvyUnH6agHwghcTVV0HHskuycNWo3QlEwXxNkImeKn1SLQ+RLBoIUpPsB0+sIg
+         JyNA==
+X-Gm-Message-State: ANoB5pmAQfiAjXEItGLdizbEGUpx3AsLfSVwjwLN2xdHxA77Kjnf2g//
+        sO4dyF8VAlN9y2o6zALCsUk=
+X-Google-Smtp-Source: AA0mqf4aTF2t29dtAxRyWgY0LpBARMr/iVrO8UN6QfmAylGKzziqN6PcoAfC9Jx7jBo8WQd4tVD+8g==
+X-Received: by 2002:a17:902:8f96:b0:189:3803:23e6 with SMTP id z22-20020a1709028f9600b00189380323e6mr7577592plo.77.1669231026347;
+        Wed, 23 Nov 2022 11:17:06 -0800 (PST)
+Received: from localhost (fwdproxy-prn-020.fbsv.net. [2a03:2880:ff:14::face:b00c])
+        by smtp.gmail.com with ESMTPSA id l7-20020a170902f68700b00177fb862a87sm14920203plg.20.2022.11.23.11.17.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 11:17:04 -0800 (PST)
+        Wed, 23 Nov 2022 11:17:05 -0800 (PST)
 From:   Nhat Pham <nphamcs@gmail.com>
 To:     akpm@linux-foundation.org
 Cc:     hannes@cmpxchg.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, minchan@kernel.org,
         ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
         ddstreet@ieee.org, vitaly.wool@konsulko.com
-Subject: [PATCH v6 0/6] Implement writeback for zsmalloc (fix)
-Date:   Wed, 23 Nov 2022 11:17:01 -0800
-Message-Id: <20221123191703.2902079-1-nphamcs@gmail.com>
+Subject: [PATCH v6 4/6] zsmalloc: Add a LRU to zs_pool to keep track of zspages in LRU order (fix)
+Date:   Wed, 23 Nov 2022 11:17:02 -0800
+Message-Id: <20221123191703.2902079-2-nphamcs@gmail.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221123191703.2902079-1-nphamcs@gmail.com>
+References: <20221123191703.2902079-1-nphamcs@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,43 +74,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This contains two small fixes that should be applied on top of patch 4
-and patch 6 of my zsmalloc writeback series, respectively.
+Add a comment explaining the mapping check for LRU update.
 
-Changelog:
-v6-fix:
-  * Add a comment explaining LRU update logic in zs_map_object.
-    (patch 4)
-    (sugegested by Sergey Senozhatsky and Johannes Weiner).
-  * Use get_first_page() and add cond_resched() in retry-loop.
-    (patch 6) (sugegested by Sergey Senozhatsky).
-v6:
-  * Move the move-to-front logic into zs_map_object (patch 4)
-    (suggested by Minchan Kim).
-  * Small clean up for free_zspage at free_handles() call site
-    (patch 6) (suggested by Minchan Kim).
-v5:
-  * Add a new patch that eliminates unused code in zpool and simplify
-    the logic for storing evict handler in zbud/z3fold (patch 2)
-  * Remove redudant fields in zs_pool (previously required by zpool)
-    (patch 3)
-  * Wrap under_reclaim and deferred handle freeing logic in CONFIG_ZPOOL
-    (patch 6) (suggested by Minchan Kim)
-  * Move a small piece of refactoring from patch 6 to patch 4.
-v4:
-  * Wrap the new LRU logic in CONFIG_ZPOOL (patch 3).
-    (suggested by Minchan Kim)
-v3:
-  * Set pool->ops = NULL when pool->zpool_ops is null (patch 4).
-  * Stop holding pool's lock when calling lock_zspage() (patch 5).
-    (suggested by Sergey Senozhatsky)
-  * Stop holding pool's lock when checking pool->ops and retries.
-    (patch 5) (suggested by Sergey Senozhatsky)
-  * Fix formatting issues (.shrink, extra spaces in casting removed).
-    (patch 5) (suggested by Sergey Senozhatsky)
-v2:
-  * Add missing CONFIG_ZPOOL ifdefs (patch 5)
-    (detected by kernel test robot).
+Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+Suggested-by: Johannes Weiner <hannes@cmpxchg.org>
+Suggested-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+---
+ mm/zsmalloc.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
+diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
+index 7dd464b5a6a5..d9bd865047e2 100644
+--- a/mm/zsmalloc.c
++++ b/mm/zsmalloc.c
+@@ -1268,7 +1268,23 @@ void *zs_map_object(struct zs_pool *pool, unsigned long handle,
+ 	zspage = get_zspage(page);
+
+ #ifdef CONFIG_ZPOOL
+-	/* Move the zspage to front of pool's LRU */
++	/*
++	 * Move the zspage to front of pool's LRU.
++	 *
++	 * Note that this is swap-specific, so by definition there are no ongoing
++	 * accesses to the memory while the page is swapped out that would make
++	 * it "hot". A new entry is hot, then ages to the tail until it gets either
++	 * written back or swaps back in.
++	 *
++	 * Furthermore, map is also called during writeback. We must not put an
++	 * isolated page on the LRU mid-reclaim.
++	 *
++	 * As a result, only update the LRU when the page is mapped for write
++	 * when it's first instantiated.
++	 *
++	 * This is a deviation from the other backends, which perform this update
++	 * in the allocation function (zbud_alloc, z3fold_alloc).
++	 */
+ 	if (mm == ZS_MM_WO) {
+ 		if (!list_empty(&zspage->lru))
+ 			list_del(&zspage->lru);
 --
 2.30.2
