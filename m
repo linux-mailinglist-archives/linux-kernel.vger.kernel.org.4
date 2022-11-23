@@ -2,167 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D51A63678F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:47:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 921BB636791
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239102AbiKWRrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 12:47:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38524 "EHLO
+        id S238932AbiKWRsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 12:48:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239229AbiKWRrl (ORCPT
+        with ESMTP id S236541AbiKWRsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 12:47:41 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4715D2EF04
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 09:47:38 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id k19so22227493lji.2
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 09:47:38 -0800 (PST)
+        Wed, 23 Nov 2022 12:48:17 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4EA65BD4C
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 09:48:15 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id ci10so10284456pjb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 09:48:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9nz9iEcY2kdM43iSCySU+3LqfVVEhngM0To5eDK7hgY=;
-        b=UUHKkbK6uQco9NM+AqOONI3WNrPyE0Yr1XzCwOEODPgoPGwx+Vig7iVCLBwNiZHLDo
-         ir6ISsc/BuhvKmkj3e1wOurKH/RJ+Ej27fjYPAq++SHiLYQ3TKsxe2N/twlxywySmx2o
-         z/So/hLQpoIc9YOhNIqL6V2/pgzumHnREHPTY=
+        d=google.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=YzrL02JdEOvJNF7Jtm6mOFZtcnU8RnnoI7dq0vaKkEU=;
+        b=q1TRSyGvqBioq3tfh3//gpbNDNamy468ziIjM+NNotYgTNywXifLRDACuuBgcbviSt
+         mOc4dSkVQTg43f2eBUHNotAE5Yq9dd1TDCEoreLEAyzJyviwYISFJdelynuJyUTYOQPF
+         qs6cei0wbTDTaiNggmsYjyCXlRxoywP+pZ/aHeg+CCxTkZciu9wz5pSVW+5G1Wvi2WI+
+         S0h3UxSJyIOw/G+BVuQYiFu90inrUGL8n7jth1J6BTFJbo3YKHzZ0XpoJ8ncGMLtJCes
+         xb0eelzMTkupcpucjGAJhiaE1wbFBvicACfsCG6tEXiF6XP7pCk66cHdbO/C5VqeLT6a
+         TpNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9nz9iEcY2kdM43iSCySU+3LqfVVEhngM0To5eDK7hgY=;
-        b=kxW6pI3uORC6p0hv6OzANoUcUACMWTTFP9e8EXcbz26a3ky/NOuKbzE+1binaR4I5x
-         4cLhRtegw/O9GWOYEAhPjMM+PZSA0EKX+i89/LlvSFy4dsvg2nNtetamG4lI2H0cp9gx
-         BBP9MTRCAocF0NkAIPs4dBTBHW4r2wEIPpzWyPVVxgDCzdoi2x161pJRUbyvXh+uzBZG
-         Nb4yaB5R0BZffFhuDVyC103wqhkbMKfyV0PBj7ERH+DWbX3PlpFt3bUoJ9pbV6W3C0zs
-         0Myal6bF1l4/HZsiXTDc8j2i/BW6PkCa5L51h1iK3TsSC1ncUfzTCCDhbdg7fLqJ2wqR
-         eypA==
-X-Gm-Message-State: ANoB5pmpoZSw+KmUv0fg2QG33U20tvqxAPYrrqZaL5b73k8+kR5wZpqG
-        gy6srlr4cb2xv+fBLBxG+Fa/Ss1AkdY6Ow==
-X-Google-Smtp-Source: AA0mqf6pfZAkORWtOerQtqSgql4nZzScJcajUZCB1UoOschtdUugDRkrQ14OIpMeN7FXczau8LVQJA==
-X-Received: by 2002:a2e:9c51:0:b0:277:e8e:8d90 with SMTP id t17-20020a2e9c51000000b002770e8e8d90mr4263988ljj.243.1669225656437;
-        Wed, 23 Nov 2022 09:47:36 -0800 (PST)
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com. [209.85.167.46])
-        by smtp.gmail.com with ESMTPSA id a12-20020a056512200c00b00492aefd73a5sm2981486lfb.132.2022.11.23.09.47.35
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 09:47:35 -0800 (PST)
-Received: by mail-lf1-f46.google.com with SMTP id s8so29215518lfc.8
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 09:47:35 -0800 (PST)
-X-Received: by 2002:ac2:47ec:0:b0:4a7:8b6b:2320 with SMTP id
- b12-20020ac247ec000000b004a78b6b2320mr3309100lfp.267.1669225654599; Wed, 23
- Nov 2022 09:47:34 -0800 (PST)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YzrL02JdEOvJNF7Jtm6mOFZtcnU8RnnoI7dq0vaKkEU=;
+        b=xMdrwTpPIB63YKNmzv/Tfkxe4IYIQUd8g0UDnT2vk8j7OsZywQWPCceDPportXl7L6
+         mgCc+T6uVmhyCb1M4z3JA3H+SMErar9wnY2ZLDNHK49t0fG0m3j1pSS/e58XLDSGoo+n
+         cgkcGmJxnaO6pdrH/6D7OQZUzCcn4J/cbfoUDtbTrryKFC5gcMzwXzpDGEZrA+IzOkL4
+         0vtm5MMdt1SPl9D05OIKvKPbVs5TmNlGhBXiPLBwNCYe8JCPuq3dDugZIvOMUoAVnI51
+         Lp5yWNravHyVWBIJYlCKRjDOr4BujYUn8658xCZ+7AvmyO2MW4JOLBmj0ahrzlZ1TDVG
+         KQ+g==
+X-Gm-Message-State: ANoB5pkThylXWkUoPjHGHUVAqrgf6R9B9dVGkJuGbOH/7wIOuqRyhbAE
+        Vb90fG22OVuBf1CYMTmnY0blHw==
+X-Google-Smtp-Source: AA0mqf5owaqykZA0kUarbc6tzXu+YrAUpt94JD9fda07SKqPgLJRkCzpQ+fUQZWZYQyYpEnO2NvbgQ==
+X-Received: by 2002:a17:90b:1987:b0:218:d339:1b85 with SMTP id mv7-20020a17090b198700b00218d3391b85mr7792609pjb.122.1669225695255;
+        Wed, 23 Nov 2022 09:48:15 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id h19-20020a656393000000b0044ed37dbca8sm11169615pgv.2.2022.11.23.09.48.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 09:48:14 -0800 (PST)
+Date:   Wed, 23 Nov 2022 17:48:11 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paul Durrant <paul@xen.org>
+Subject: Re: [PATCH] KVM: x86/xen: Make number of event channels defines less
+ magical
+Message-ID: <Y35c21N1fVI2+FZD@google.com>
+References: <20221114181632.3279119-1-seanjc@google.com>
+ <629d6d90ce95b9db74f0101a4428be1119c4bfc7.camel@infradead.org>
+ <Y3KZVUCCH+YQDbqu@google.com>
+ <fde14caa0cf774b2b46f1124644a3b326a0a8f09.camel@infradead.org>
+ <Y30xm/y2CKPchObi@google.com>
+ <9d0e54e248c740eb52bcaa63764afb99a4dfcde9.camel@infradead.org>
 MIME-Version: 1.0
-References: <20221117225822.16154-1-mario.limonciello@amd.com> <20221117225822.16154-4-mario.limonciello@amd.com>
-In-Reply-To: <20221117225822.16154-4-mario.limonciello@amd.com>
-From:   Sven van Ashbrook <svenva@chromium.org>
-Date:   Wed, 23 Nov 2022 12:47:23 -0500
-X-Gmail-Original-Message-ID: <CAM7w-FW8fGPxv0djzkzt4B88xcsMhjXJZ4i6n2ueaC81h4giaw@mail.gmail.com>
-Message-ID: <CAM7w-FW8fGPxv0djzkzt4B88xcsMhjXJZ4i6n2ueaC81h4giaw@mail.gmail.com>
-Subject: Re: [RFC v4 3/5] platform/x86/intel/pmc: core: Drop check_counters
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
-        David E Box <david.e.box@intel.com>,
-        Raul Rangel <rrangel@chromium.org>, linux-pm@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Len Brown <len.brown@intel.com>,
-        John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
-        Rajat Jain <rajatja@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-kernel@vger.kernel.org, Mark Gross <markgross@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9d0e54e248c740eb52bcaa63764afb99a4dfcde9.camel@infradead.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mario, comments below.
+On Tue, Nov 22, 2022, David Woodhouse wrote:
+> On Tue, 2022-11-22 at 20:31 +0000, Sean Christopherson wrote:
+> How's something like this? I did start typing that comment in the
+> max_evtchn_port() function in xen.c but moved it over.
+> 
+> Still not utterly convinced, as it's still somewhat circular — we now
+> define NR_CHANNELS as (32*32) with a big comment explaining *why* that
+> is, and the reason is basically "because that's the number of bits in
+> an array of uint32_t[32]".
 
-On Thu, Nov 17, 2022 at 5:58 PM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
->
-> `check_counters` is a stateful variable for indicating whether or
-> not to be checking if counters incremented on resume from s2idle.
->
-> As the module already has code to gate whether to check the counters
-> that will fail the suspend when this is enabled, use that instead.
->
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
-> RFC v3->v4:
->  * No changes
-> ---
->  drivers/platform/x86/intel/pmc/core.c | 7 ++-----
->  drivers/platform/x86/intel/pmc/core.h | 1 -
->  2 files changed, 2 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
-> index 17ec5825d13d..adc2cae4db28 100644
-> --- a/drivers/platform/x86/intel/pmc/core.c
-> +++ b/drivers/platform/x86/intel/pmc/core.c
-> @@ -2059,8 +2059,6 @@ static __maybe_unused int pmc_core_suspend(struct device *dev)
->  {
->         struct pmc_dev *pmcdev = dev_get_drvdata(dev);
->
-> -       pmcdev->check_counters = false;
-> -
->         /* No warnings on S0ix failures */
->         if (!warn_on_s0ix_failures)
->                 return 0;
-> @@ -2077,7 +2075,6 @@ static __maybe_unused int pmc_core_suspend(struct device *dev)
->         if (pmc_core_dev_state_get(pmcdev, &pmcdev->s0ix_counter))
->                 return -EIO;
->
-> -       pmcdev->check_counters = true;
->         return 0;
->  }
->
-> @@ -2113,10 +2110,10 @@ static __maybe_unused int pmc_core_resume(struct device *dev)
->         const struct pmc_bit_map **maps = pmcdev->map->lpm_sts;
->         int offset = pmcdev->map->lpm_status_offset;
->
-> -       if (!pmcdev->check_counters)
-> +       if (!pmc_core_is_s0ix_failed(pmcdev))
-
-Will this break the "CPU did not enter SLP_S0!!!" warning?
-
-As far as I can tell,
-If an Intel system uses S3 instead of S0ix, pmcdev->s0ix_counter will
-not get updated in the
-suspend callback. In the resume callback, the counter check in
-pmc_core_is_s0ix_failed()
-no longer makes any sense. It either fails all the time (if
-pmcdev->s0ix_counter was inited with a non-
-zero value) or succeeds all the time (if pmcdev->s0ix_counter was zero-inited).
-
->                 return 0;
->
-> -       if (!pmc_core_is_s0ix_failed(pmcdev))
-> +       if (!warn_on_s0ix_failures)
->                 return 0;
->
->         if (pmc_core_is_pc10_failed(pmcdev)) {
-> diff --git a/drivers/platform/x86/intel/pmc/core.h b/drivers/platform/x86/intel/pmc/core.h
-> index 7a059e02c265..5687e91e884c 100644
-> --- a/drivers/platform/x86/intel/pmc/core.h
-> +++ b/drivers/platform/x86/intel/pmc/core.h
-> @@ -316,7 +316,6 @@ struct pmc_reg_map {
->   * @pmc_xram_read_bit: flag to indicate whether PMC XRAM shadow registers
->   *                     used to read MPHY PG and PLL status are available
->   * @mutex_lock:                mutex to complete one transcation
-> - * @check_counters:    On resume, check if counters are getting incremented
->   * @pc10_counter:      PC10 residency counter
->   * @s0ix_counter:      S0ix residency (step adjusted)
->   * @num_lpm_modes:     Count of enabled modes
-> --
-> 2.34.1
->
+Agreed, probably not an improvement across the board.  Consistency with how the
+non-compat code declares the fields is also valuable, so unless someone changes
+upstream Xen code, let's just leave things as-is.
