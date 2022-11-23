@@ -2,141 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A773D635799
+	by mail.lfdr.de (Postfix) with ESMTP id 002CE63579A
 	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:46:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238069AbiKWJoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 04:44:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37566 "EHLO
+        id S238221AbiKWJpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 04:45:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238104AbiKWJn6 (ORCPT
+        with ESMTP id S238164AbiKWJpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 04:43:58 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F47942F7E;
-        Wed, 23 Nov 2022 01:41:57 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AN8kwum029481;
-        Wed, 23 Nov 2022 09:41:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=owZfrQSSK0gTRIi7ih5TPmwEmhrUtM9WaUR+nvZLnlE=;
- b=sT/aW9J30P4WVKzoRIayoLH3FJL5p4FB9QYBC/Ckudh1csU/AP5jSaUD3Op0sbR8ez8+
- J0jJRdjL/7cataJexFC03UtYzLLZcOnn4/ySEPJujqW3uFrZaBCc8AjAp3IH+43L5aeF
- xKHlbzd0/k10r+Nnn/cKdesZzc5G8l8myZ7URYKSRbC6DT9HLtr48mfIu+l35ZI60Ub2
- eu35/X/zGphbakopEv9oOOJIM2TH5SAytJQJnH8M+jG90O+/rvfcTr82DPrWJln6P17+
- x1igXU+lVTqDDD1Le9dUz04xpeJ+5UXJx/Fr2s9GwEfmmOIvwYhk2dyWA1CqnDTDYpIk gA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3m100srv9r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Nov 2022 09:41:56 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AN9B8JI025377;
-        Wed, 23 Nov 2022 09:41:55 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3m100srv96-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Nov 2022 09:41:55 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AN9aBgF003684;
-        Wed, 23 Nov 2022 09:41:53 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma02fra.de.ibm.com with ESMTP id 3kxps8v0bt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Nov 2022 09:41:53 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AN9fo1s1770062
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Nov 2022 09:41:50 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4A7BBA404D;
-        Wed, 23 Nov 2022 09:41:50 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D8FDEA4040;
-        Wed, 23 Nov 2022 09:41:49 +0000 (GMT)
-Received: from [9.171.16.188] (unknown [9.171.16.188])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 23 Nov 2022 09:41:49 +0000 (GMT)
-Message-ID: <e7f84070-aeec-99d6-8ac0-cf90ad61ba88@linux.ibm.com>
-Date:   Wed, 23 Nov 2022 10:41:49 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH] KVM: s390: vsie: Fix the initialization of the epoch
- extension (epdx) field
-To:     Thomas Huth <thuth@redhat.com>, kvm@vger.kernel.org,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        "Collin L. Walling" <walling@linux.ibm.com>,
-        Jason J Herne <jjherne@linux.ibm.com>
-References: <20221123090833.292938-1-thuth@redhat.com>
-Content-Language: en-US
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <20221123090833.292938-1-thuth@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 2teNH9Bhw7jxQaiIpQvUmIqw4T-5L9iW
-X-Proofpoint-ORIG-GUID: kp6DHK56rmcE1bxlTBKgGq9cE7C9YGTK
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 23 Nov 2022 04:45:03 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480292B184;
+        Wed, 23 Nov 2022 01:42:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1669196563; x=1700732563;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=SCfTb+mbXqvYnjROomS2ofDscv9/hIdAV5b4EqXaNWI=;
+  b=Q5yZXb2Ba8yV3iE6SUEJg1QRGMdlS+f3W+i79YzQybgOI8keB1uuEszI
+   qZCjHCMOZ6fVpS6eGCL6yS1P/7YELbU9xIX6W3/XJDWsnC54mmHqsrUqh
+   1KQwmIAnEacM10b3BuMtO81OGLkn8pfV8nF14hI+Vu93ptcAFlZvEl7d8
+   fFvhCwDh43tcsTN+YogRBMxC+tlS08zvipqdhmtBd3zlww3Mfg12PmASv
+   gg3OkncpMQPwFkYSNyU/HZ7MffLvEksf3iIU3YbvSHFChZZwoZiUtTGPc
+   3ZeCG3cx6cnN32JghXSUeDRbflpmaUTnL/beHI8OjqRJQIrRwxPjhuFDM
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="184823755"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Nov 2022 02:42:41 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 23 Nov 2022 02:42:33 -0700
+Received: from den-dk-m31857.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Wed, 23 Nov 2022 02:42:30 -0700
+Message-ID: <582f747ea6965b07b4a389dbbc0d86983daffcf7.camel@microchip.com>
+Subject: Re: [PATCH net-next 1/4] net: microchip: sparx5: Support for
+ copying and modifying rules in the API
+From:   Steen Hegelund <steen.hegelund@microchip.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        <UNGLinuxDriver@microchip.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Casper Andersson" <casper.casan@gmail.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        "Nathan Huckleberry" <nhuck@google.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        "Daniel Machon" <daniel.machon@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>
+Date:   Wed, 23 Nov 2022 10:42:29 +0100
+In-Reply-To: <20221122204545.40597627@kernel.org>
+References: <20221122145938.1775954-1-steen.hegelund@microchip.com>
+         <20221122145938.1775954-2-steen.hegelund@microchip.com>
+         <20221122204545.40597627@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.1 
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-23_04,2022-11-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- mlxlogscore=999 adultscore=0 lowpriorityscore=0 priorityscore=1501
- impostorscore=0 spamscore=0 clxscore=1015 bulkscore=0 malwarescore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211230071
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jacub,
 
+Thanks for the feedback.
 
-Am 23.11.22 um 10:08 schrieb Thomas Huth:
-> We recently experienced some weird huge time jumps in nested guests when
-> rebooting them in certain cases. After adding some debug code to the epoch
-> handling in vsie.c (thanks to David Hildenbrand for the idea!), it was
-> obvious that the "epdx" field (the multi-epoch extension) did not get set
-> to 0xff in case the "epoch" field was negative.
-> Seems like the code misses to copy the value from the epdx field from
-> the guest to the shadow control block. By doing so, the weird time
-> jumps are gone in our scenarios.
-> 
-> Link: https://bugzilla.redhat.com/show_bug.cgi?id=2140899
-> Fixes: 8fa1696ea781 ("KVM: s390: Multiple Epoch Facility support")
+I needed an update of the sparse tool to allow me to spot this among all th=
+e
+"unreplaced" warnings...
 
-We might want to add cc stable, just in case.
+I will send a new series.
 
-Reviewed-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+On Tue, 2022-11-22 at 20:45 -0800, Jakub Kicinski wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know th=
+e
+> content is safe
+>=20
+> On Tue, 22 Nov 2022 15:59:35 +0100 Steen Hegelund wrote:
+> > This adds support for making a copy of a rule and modify keys and actio=
+ns
+> > to differentiate the copy.
+>=20
+> gcc says:
+>=20
+> drivers/net/ethernet/microchip/vcap/vcap_api.c:1479:16: warning: Using pl=
+ain
+> integer as NULL pointer
 
+BR
+Steen
 
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
-> ---
->   arch/s390/kvm/vsie.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/s390/kvm/vsie.c b/arch/s390/kvm/vsie.c
-> index 94138f8f0c1c..ace2541ababd 100644
-> --- a/arch/s390/kvm/vsie.c
-> +++ b/arch/s390/kvm/vsie.c
-> @@ -546,8 +546,10 @@ static int shadow_scb(struct kvm_vcpu *vcpu, struct vsie_page *vsie_page)
->   	if (test_kvm_cpu_feat(vcpu->kvm, KVM_S390_VM_CPU_FEAT_CEI))
->   		scb_s->eca |= scb_o->eca & ECA_CEI;
->   	/* Epoch Extension */
-> -	if (test_kvm_facility(vcpu->kvm, 139))
-> +	if (test_kvm_facility(vcpu->kvm, 139)) {
->   		scb_s->ecd |= scb_o->ecd & ECD_MEF;
-> +		scb_s->epdx = scb_o->epdx;
-> +	}
->   
->   	/* etoken */
->   	if (test_kvm_facility(vcpu->kvm, 156))
