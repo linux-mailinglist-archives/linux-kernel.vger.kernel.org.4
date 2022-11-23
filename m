@@ -2,117 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE21635C51
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 13:02:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FB54635C53
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 13:03:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237168AbiKWMCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 07:02:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38678 "EHLO
+        id S237186AbiKWMDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 07:03:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235568AbiKWMCe (ORCPT
+        with ESMTP id S235568AbiKWMDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 07:02:34 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A63FE60;
-        Wed, 23 Nov 2022 04:02:30 -0800 (PST)
-Date:   Wed, 23 Nov 2022 13:02:27 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669204948;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GBqote1BzkExg7MDXCmwtPPCsS+a19i+SHqr+lLca80=;
-        b=y0HTq8Y1ZNK8Wtx/oprXpMyJ2N9mqtEFNwZt5LxOb1F9SRbDb3Rhf5nS6KvVLSK2yr+chq
-        UAyUIMyIP5VBrhr2JJnGC3jFzBXDOjNtD8ugbm4sj8C/CFYUJFowIFBG8f9BuwC9O+oqlq
-        LWhr8pvgWkG7kZsIIEKSW+d4BuIGoFCa8Qgf4jXlGE1OFJgFrPJBBtd6ww4aXRoKaoNoyo
-        dl/u7FQPSCSzXHWVDTOl+c2uoYrzmGN/gfKHXj4EgtGiHmOa9gtB3YFnQpjugeSpTfRHZK
-        u90AdOsj9cTnYrqs1rXagGk5UviSpZ6RHlUBx5Kb7CQSJU4MdSeyXZBmTM36nQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669204948;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GBqote1BzkExg7MDXCmwtPPCsS+a19i+SHqr+lLca80=;
-        b=+dQr51Q/aNU9Zi95upJOwnukC6/3AeHNq7llh46X/GY39Cd4rhXeE02hvdPBokTfSOXfey
-        JuOTX+74Hbe2BNBQ==
-From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
-To:     Thomas Gleixner <tglx@linutronix.de>
-cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Wed, 23 Nov 2022 07:03:05 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630315FA6;
+        Wed, 23 Nov 2022 04:03:03 -0800 (PST)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NHKS14nswzJnhn;
+        Wed, 23 Nov 2022 19:59:45 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 23 Nov 2022 20:03:01 +0800
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 23 Nov 2022 20:03:00 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        "Josh Triplett" <josh@joshtriplett.org>,
         Steven Rostedt <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        linux-bluetooth@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Subject: Re: [patch V2 15/17] timers: Provide timer_shutdown[_sync]()
-In-Reply-To: <20221122173648.962476045@linutronix.de>
-Message-ID: <3779da12-6da5-8f6b-ec93-f8d52e38a40@linutronix.de>
-References: <20221122171312.191765396@linutronix.de> <20221122173648.962476045@linutronix.de>
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        <linux-next@vger.kernel.org>
+Subject: [PATCH v2] doc: Fix htmldocs build warnings of stallwarn.rst
+Date:   Wed, 23 Nov 2022 20:02:38 +0800
+Message-ID: <20221123120238.1904-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.37.3.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Nov 2022, Thomas Gleixner wrote:
+Documentation/RCU/stallwarn.rst:
+401: WARNING: Literal block expected; none found.
+428: WARNING: Literal block expected; none found.
+445: WARNING: Literal block expected; none found.
+459: WARNING: Literal block expected; none found.
+468: WARNING: Literal block expected; none found.
 
-> @@ -1605,6 +1629,48 @@ int timer_delete_sync(struct timer_list
->  }
->  EXPORT_SYMBOL(timer_delete_sync);
->  
-> +/**
-> + * timer_shutdown_sync - Shutdown a timer and prevent rearming
-> + * @timer: The timer to be shutdown
-> + *
-> + * When the function returns it is guaranteed that:
-> + *   - @timer is not queued
-> + *   - The callback function of @timer is not running
-> + *   - @timer cannot be enqueued again. Any attempt to rearm
-> + *     @timer is silently ignored.
-> + *
-> + * See timer_delete_sync() for synchronization rules.
-> + *
-> + * This function is useful for final teardown of an infrastructure where
-> + * the timer is subject to a circular dependency problem.
-> + *
-> + * A common pattern for this is a timer and a workqueue where the timer can
-> + * schedule work and work can arm the timer. On shutdown the workqueue must
-> + * be destroyed and the timer must be prevented from rearming. Unless the
-> + * code has conditionals like 'if (mything->in_shutdown)' to prevent that
-> + * there is no way to get this correct with timer_delete_sync().
-> + *
-> + * timer_shutdown_sync() is solving the problem. The correct ordering of
-> + * calls in this case is:
-> + *
-> + *	timer_shutdown_sync(&mything->timer);
-> + *	workqueue_destroy(&mything->workqueue);
-> + *
-> + * After this 'mything' can be safely freed.
-> + *
-> + * This obviously requires that the timer is not required to be functional
-> + * for the rest of the shutdown operation.
+The literal block need to be indented, so add two spaces to each line.
 
-NIT... Maybe the first requires could be replaced by
-assumes/expects/presupposes to prevent double use of required?
+In addition, ':', which is used as a boundary in the literal block, is
+replaced by '|'.
 
-Thanks,
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+---
+ Documentation/RCU/stallwarn.rst | 56 ++++++++++++++++++---------------
+ 1 file changed, 30 insertions(+), 26 deletions(-)
 
-	Anna-Maria
+v1 --> v2:
+For the case that both colons need to be deleted, change "::" to expanded
+form or partially minimized form.
+
+diff --git a/Documentation/RCU/stallwarn.rst b/Documentation/RCU/stallwarn.rst
+index c1e92dfef40d501..f15b766d39b8d98 100644
+--- a/Documentation/RCU/stallwarn.rst
++++ b/Documentation/RCU/stallwarn.rst
+@@ -398,9 +398,9 @@ In kernels built with CONFIG_RCU_CPU_STALL_CPUTIME=y or booted with
+ rcupdate.rcu_cpu_stall_cputime=1, the following additional information
+ is supplied with each RCU CPU stall warning::
+ 
+-rcu:          hardirqs   softirqs   csw/system
+-rcu:  number:      624         45            0
+-rcu: cputime:       69          1         2425   ==> 2500(ms)
++  rcu:          hardirqs   softirqs   csw/system
++  rcu:  number:      624         45            0
++  rcu: cputime:       69          1         2425   ==> 2500(ms)
+ 
+ These statistics are collected during the sampling period. The values
+ in row "number:" are the number of hard interrupts, number of soft
+@@ -412,22 +412,24 @@ in milliseconds.  Because user-mode tasks normally do not cause RCU CPU
+ stalls, these tasks are typically kernel tasks, which is why only the
+ system CPU time are considered.
+ 
+-The sampling period is shown as follows:
+-:<------------first timeout---------->:<-----second timeout----->:
+-:<--half timeout-->:<--half timeout-->:                          :
+-:                  :<--first period-->:                          :
+-:                  :<-----------second sampling period---------->:
+-:                  :                  :                          :
+-:          snapshot time point    1st-stall                  2nd-stall
++The sampling period is shown as follows::
+ 
++  |<------------first timeout---------->|<-----second timeout----->|
++  |<--half timeout-->|<--half timeout-->|                          |
++  |                  |<--first period-->|                          |
++  |                  |<-----------second sampling period---------->|
++  |                  |                  |                          |
++  |          snapshot time point    1st-stall                  2nd-stall
+ 
+ The following describes four typical scenarios:
+ 
+-1. A CPU looping with interrupts disabled.::
++1. A CPU looping with interrupts disabled.
+ 
+-   rcu:          hardirqs   softirqs   csw/system
+-   rcu:  number:        0          0            0
+-   rcu: cputime:        0          0            0   ==> 2500(ms)
++   ::
++
++     rcu:          hardirqs   softirqs   csw/system
++     rcu:  number:        0          0            0
++     rcu: cputime:        0          0            0   ==> 2500(ms)
+ 
+    Because interrupts have been disabled throughout the measurement
+    interval, there are no interrupts and no context switches.
+@@ -440,11 +442,11 @@ The following describes four typical scenarios:
+ 
+    This is similar to the previous example, but with non-zero number of
+    and CPU time consumed by hard interrupts, along with non-zero CPU
+-   time consumed by in-kernel execution.::
++   time consumed by in-kernel execution. ::
+ 
+-   rcu:          hardirqs   softirqs   csw/system
+-   rcu:  number:      624          0            0
+-   rcu: cputime:       49          0         2446   ==> 2500(ms)
++     rcu:          hardirqs   softirqs   csw/system
++     rcu:  number:      624          0            0
++     rcu: cputime:       49          0         2446   ==> 2500(ms)
+ 
+    The fact that there are zero softirqs gives a hint that these were
+    disabled, perhaps via local_bh_disable().  It is of course possible
+@@ -454,20 +456,22 @@ The following describes four typical scenarios:
+ 
+ 3. A CPU looping with preemption disabled.
+ 
+-   Here, only the number of context switches is zero.::
++   Here, only the number of context switches is zero. ::
+ 
+-   rcu:          hardirqs   softirqs   csw/system
+-   rcu:  number:      624         45            0
+-   rcu: cputime:       69          1         2425   ==> 2500(ms)
++     rcu:          hardirqs   softirqs   csw/system
++     rcu:  number:      624         45            0
++     rcu: cputime:       69          1         2425   ==> 2500(ms)
+ 
+    This situation hints that the stalled CPU was looping with preemption
+    disabled.
+ 
+-4. No looping, but massive hard and soft interrupts.::
++4. No looping, but massive hard and soft interrupts.
++
++   ::
+ 
+-   rcu:          hardirqs   softirqs   csw/system
+-   rcu:  number:       xx         xx            0
+-   rcu: cputime:       xx         xx            0   ==> 2500(ms)
++     rcu:          hardirqs   softirqs   csw/system
++     rcu:  number:       xx         xx            0
++     rcu: cputime:       xx         xx            0   ==> 2500(ms)
+ 
+    Here, the number and CPU time of hard interrupts are all non-zero,
+    but the number of context switches and the in-kernel CPU time consumed
+-- 
+2.25.1
 
