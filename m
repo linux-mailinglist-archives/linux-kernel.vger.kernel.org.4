@@ -2,123 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC4796365CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 17:28:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87EEB6365D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 17:28:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239149AbiKWQ2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 11:28:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53312 "EHLO
+        id S238967AbiKWQ2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 11:28:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239112AbiKWQ1r (ORCPT
+        with ESMTP id S239141AbiKWQ2O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 11:27:47 -0500
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2A319022;
-        Wed, 23 Nov 2022 08:27:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=aoAeMEdmL2MvS8jsSZitNEibkl3qtsPxiMd3aeqhHUA=;
-        t=1669220866; x=1670430466; b=s/OgaVQksgPM11mqnSsPiDaP/NHFjYR7vVz5JDzgEBnWuA7
-        Hp44u74sLT+yntwaTD8CCxLn+EZTANA5GdKOcye2SxWUbq4U5b6Rh1bzt73N7q4ni8gSfDVQogkVL
-        L1pYiIpeL5Qe0u+g3RJD1Cv0Zg3s+ryE82iNpqd8TYcOtPdPg/dTM1sjTzlmsn21oT33L/WEkf8pn
-        TUC88MYM+pg548J0DDcYfyV/2mB8iBHrUElcnFWJo43dndQATe9LNBFOitONGNla9llEz8SFbIhdO
-        Slkry0S1Wb8g28ZmEnhTdIhidJ+OA7QayG+EWpeAk4uqOWmRr7xAtmrBkUQ0gjPQ==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1oxsay-007Fjd-0F;
-        Wed, 23 Nov 2022 17:27:32 +0100
-Message-ID: <d397e09df8bfd1286ed3e652fbba37ec7fe02f32.camel@sipsolutions.net>
-Subject: Re: [PATCH] USB: disable all RNDIS protocol drivers
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Maciej =?UTF-8?Q?=C5=BBenczykowski?= <maze@google.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        =?UTF-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
-        Ilja Van Sprundel <ivansprundel@ioactive.com>,
-        Joseph Tartaro <joseph.tartaro@ioactive.com>
-Date:   Wed, 23 Nov 2022 17:27:30 +0100
-In-Reply-To: <Y342oUJu9CFHNmlW@kroah.com>
-References: <20221123124620.1387499-1-gregkh@linuxfoundation.org>
-         <9b78783297db1ebb1a7cd922be7eef0bf33b75b9.camel@sipsolutions.net>
-         <Y342oUJu9CFHNmlW@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
-MIME-Version: 1.0
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 23 Nov 2022 11:28:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FBFB5DB96;
+        Wed, 23 Nov 2022 08:28:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC44261DB2;
+        Wed, 23 Nov 2022 16:28:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F6C2C433C1;
+        Wed, 23 Nov 2022 16:28:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669220891;
+        bh=dzyLXMtXy6cZx8prGfrgAfjTZ0RmbKIX+ZoSI6qBS64=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=TeKWyCsb0x1vF39wYLZlLwM1ixgeT9Lc+UFTMLHCRbYi1iEX8CJ2cAtesLH7YwQRH
+         W3cwmGxh7O3jVnag4/VBgrfUs7zNaQ2UxORA/1eUpvm+xhCWG+z2c1xVVMAsNuBGfP
+         EA+S+OyTpggjyn3MOt0fGvKSSDnOfwXdcBAQD/Hdiz77iifLk94jZmC/uQi+TndxN5
+         vUDzHhJ+Aje6QGm38V4QKDMAEhrOooTxEH8sgPVL78KAMYk/IY43abnYGHB9r+NofI
+         ZkRz9P54Xfsf6w51qsyxhviU8drf83DY7lwxEuHRo6d/EQOQ5km179S14YEf2BI+in
+         4VVe28o60E4jQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oxsbY-008BGI-QG;
+        Wed, 23 Nov 2022 16:28:08 +0000
+Date:   Wed, 23 Nov 2022 16:28:08 +0000
+Message-ID: <86cz9doctj.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     tglx@linutronix.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        youlin.pei@mediatek.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2 3/4] irqchip: irq-mtk-cirq: Move register offsets to const array
+In-Reply-To: <c8174977-2995-811a-83e2-9f941057acd8@collabora.com>
+References: <20221123112249.98281-1-angelogioacchino.delregno@collabora.com>
+        <20221123112249.98281-4-angelogioacchino.delregno@collabora.com>
+        <86fse9ok3y.wl-maz@kernel.org>
+        <c8174977-2995-811a-83e2-9f941057acd8@collabora.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: angelogioacchino.delregno@collabora.com, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com, youlin.pei@mediatek.com, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-11-23 at 16:05 +0100, Greg Kroah-Hartman wrote:
-> On Wed, Nov 23, 2022 at 03:20:36PM +0100, Johannes Berg wrote:
-> > On Wed, 2022-11-23 at 13:46 +0100, Greg Kroah-Hartman wrote:
-> > > The Microsoft RNDIS protocol is, as designed, insecure and vulnerable=
- on
-> > > any system that uses it with untrusted hosts or devices.  Because the
-> > > protocol is impossible to make secure, just disable all rndis drivers=
- to
-> > > prevent anyone from using them again.
-> > >=20
-> >=20
-> > Not that I mind disabling these, but is there any more detail available
-> > on this pretty broad claim? :)
->=20
-> I don't want to get into specifics in public any more than the above.
+On Wed, 23 Nov 2022 14:57:02 +0000,
+AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> wrote:
+> 
+> >> +					 enum mtk_cirq_reg_index idx,
+> >> +					 unsigned int cirq_num)
+> > 
+> > What does cirq_num mean for registers that are not relative to an
+> > interrupt? Create a separate helper for those.
+> > 
+> Means literally nothing, so yes I agree, but...
+> 
+> ... mtk_cirq_irq_reg(), mtk_cirq_reg() feels too similar and may lead to
+> confusion while reading the code.
+> 
+> Any advice about a possibly clear-er name?
 
-Fair.
+I think the names are OK. Passing an interrupt number as a parameter
+is a good discriminant anyway.
 
-> The protocol was never designed to be used with untrusted devices.  It
-> was created, and we implemented support for it, when we trusted USB
-> devices that we plugged into our systems, AND we trusted the systems we
-> plugged our USB devices into.  So at the time, it kind of made sense to
-> create this, and the USB protocol class support that replaced it had not
-> yet been released.
->=20
-> As designed, it really can not work at all if you do not trust either
-> the host or the device, due to the way the protocol works.  And I can't
-> see how it could be fixed if you wish to remain compliant with the
-> protocol (i.e. still work with Windows XP systems.)
+Please wait for a few days before posting the next version though.
 
-I guess I just don't see how a USB-based protocol can be fundamentally
-insecure (to the host), when the host is always in control over messages
-and parses their content etc.?
+	M.
 
-I can see this with e.g. firewire which must allow DMA access, and now
-with Thunderbolt we have the same and ended up with boltd, but USB?
-
-> Today, with untrusted hosts and devices, it's time to just retire this
-> protcol.  As I mentioned in the patch comments, Android disabled this
-> many years ago in their devices, with no loss of functionality.
-
-I'm not sure Android counts that much, FWIW, at least for WiFi there
-really is no good reason to plug in a USB WiFi dongle into an Android
-phone, and quick googling shows that e.g. Android TV may - depending on
-build - support/permit RNDIS Ethernet?
-
-Anyway, there was probably exactly one RNDIS WiFi dongle from Broadcom
-(for some kind of console IIRC), so it's not a huge loss. Just having
-issues with the blanket statement that a USB protocol can be designed as
-inscure :)
-
-johannes
+-- 
+Without deviation from the norm, progress is not possible.
