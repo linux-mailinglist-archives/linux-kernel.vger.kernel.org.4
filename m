@@ -2,102 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F2D06353C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:00:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95E05635387
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 09:58:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236839AbiKWI60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 03:58:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34060 "EHLO
+        id S236757AbiKWI4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 03:56:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236814AbiKWI6M (ORCPT
+        with ESMTP id S236789AbiKWI4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 03:58:12 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCD8748C1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 00:58:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=WEbEoRwkNU50xfDUGpl4daXU2L4OBNgPFu286C7zJm8=; b=Zw8zAIaFHr+ssmLxghLb2Zn751
-        8Cpacemx3ZAqyuSFe66NhvA0Lg6Ebw3hBz+9NLIdzJ0MfkaN3NrfOf3HFEbALlUF8hzhZZTAjK7Wc
-        GUUNogOt3XHOl46ZpgWCQQ2pUJRlYrKlvZrsnheOKJVs74c5f6yGHbw6cJCw8FNnWX/uG4dbRw0DZ
-        EMHMlSy6QCb0uskkyg6GtMCJoGpyGszdtq3IB5BUCarFcnz/16Aq4yIA28TYWLy/ieTNTvmhMhW+c
-        MNPW56zsypplyYprshJTA3A6b4irPVYCGnQbvgngTm0qbsf6yXnbAzQQv/GuZjfTIKCSEXG82Lf/U
-        se5OavBA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oxlXZ-003jLI-6a; Wed, 23 Nov 2022 08:57:33 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3564F30013F;
-        Wed, 23 Nov 2022 09:55:30 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A0AFF2D819C4D; Wed, 23 Nov 2022 09:55:30 +0100 (CET)
-Date:   Wed, 23 Nov 2022 09:55:30 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>, sfr@canb.auug.org.au,
-        linux-kernel@vger.kernel.org, jgross@suse.com,
-        sstabellini@kernel.org, boris.ostrovsky@oracle.com,
-        xen-devel@lists.xenproject.org,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>
-Subject: Re: objtool warning for next-20221118
-Message-ID: <Y33gAiFP2IpVdxJu@hirez.programming.kicks-ass.net>
-References: <20221121040736.GA3738360@paulmck-ThinkPad-P17-Gen-1>
- <Y3thrQxfcvZSXFlr@hirez.programming.kicks-ass.net>
- <20221121145215.GF4001@paulmck-ThinkPad-P17-Gen-1>
- <20221122051605.4hcbslwxez2trdvt@treble>
- <Y3yJxQJ9DwxTx7km@hirez.programming.kicks-ass.net>
- <20221123012350.kelmmadh65lyswqz@treble>
+        Wed, 23 Nov 2022 03:56:19 -0500
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6547FDD87;
+        Wed, 23 Nov 2022 00:56:10 -0800 (PST)
+Message-ID: <ff604843-f4d6-df33-c7d0-c613014e4b53@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1669193768;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bmj3iGmMmrXHk3HK77keyYkqNEJHYSCRlerSaDAfDUk=;
+        b=D5Aj3RhtwMWJnDMUva6Mjt9xgD0ci30UClHNBQTvnZDiNA5KEbTIY34G2wcfpcT1hCXeQ6
+        5YGZ90JHwk/EjsjViF1j8zIO446hE9MtBykM8ugD0CrsE7o5L7TRfgJPeSkHvv1IGQTNtB
+        IWYpGRa8+o75OZR9gjeTF/h6Ucc2W90=
+Date:   Wed, 23 Nov 2022 16:56:01 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221123012350.kelmmadh65lyswqz@treble>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v4] media: uvcvideo: Fix bandwidth error for Alcor camera
+Content-Language: en-US
+To:     Ai Chao <aichao@kylinos.cn>, laurent.pinchart@ideasonboard.com,
+        mchehab@kernel.org, ribalda@chromium.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221122084833.1241078-1-aichao@kylinos.cn>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Jackie Liu <liu.yun@linux.dev>
+In-Reply-To: <20221122084833.1241078-1-aichao@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 05:23:50PM -0800, Josh Poimboeuf wrote:
-> On Tue, Nov 22, 2022 at 09:35:17AM +0100, Peter Zijlstra wrote:
-> > On Mon, Nov 21, 2022 at 09:16:05PM -0800, Josh Poimboeuf wrote:
-> > 
-> > > It's complaining about an unreachable instruction after a call to
-> > > arch_cpu_idle_dead().  In this case objtool detects the fact
-> > > arch_cpu_idle_dead() doesn't return due to its call to the
-> > > non-CONFIG_SMP version of play_dead().  But GCC has no way of detecting
-> > > that because the caller is in another translation unit.
-> > > 
-> > > As far as I can tell, that function should never return.  Though it
-> > > seems to have some dubious semantics (see xen_pv_play_dead() for
-> > > example, which *does* seem to return?).  I'm thinking it would be an
-> > > improvement to enforce that noreturn behavior across all arches and
-> > > platforms, sprinkling __noreturn and BUG() on arch_cpu_idle_dead() and
-> > > maybe some of it callees, where needed.
-> > > 
-> > > Peter, what do you think?  I could attempt a patch.
-> > 
-> > I'm thinking the Xen case makes all this really rather difficult :/
-> > 
-> > While normally a CPU is brought up through a trampoline, Xen seems to
-> > have implemented it by simply returning from play_dead(), and afaict
-> > that is actually a valid way to go about doing it.
-> 
-> o_O
-> 
-> How the @#$% is that a valid way of doing it?  Why not just do it the
-> normal way?
+Hi, Chao.
 
-Well, if you return from arch_cpu_idle_dead() you're back in the idle
-loop -- exactly where you would be if you were to bootstrap the whole
-CPU -- provided you have it remember the whole state (easier with a
-vCPU).
+在 2022/11/22 16:48, Ai Chao 写道:
+> For Alcor Corp. Slave camera(1b17:6684/2017:0011), it support to output
+>   compressed video data, and it return a wrong dwMaxPayloadTransferSize
+Instead of starting with a space, please start with a letter.
+>   fields. This is a fireware issue, but the manufacturer cannot provide
+>   a const return fieldsby the fireware. For some device, it requested
 
-But maybe I'm missing something, lets add Xen folks on.
+s/fireware/firmware/ ???
+
+>   2752512 B/frame bandwidth. For normally device, it requested 3072 or 1024
+>   B/frame bandwidth. so we check the dwMaxPayloadTransferSize fields,if it
+>   large than 0x1000, reset dwMaxPayloadTransferSize to 1024, and the camera
+>   preview normally.
+
+Until here.
+
+>
+> Signed-off-by: Ai Chao <aichao@kylinos.cn>
+>
+> ---
+> change for v4
+> - Change usb_match_one_id to usb_match_id
+> - Modify the discription
+>
+> change for v3
+> - Add VID/PID 2017:0011
+>
+> change for v2
+> - Used usb_match_one_id to check VID and PID
+> ---
+> ---
+>   drivers/media/usb/uvc/uvc_video.c | 12 ++++++++++++
+>   1 file changed, 12 insertions(+)
+>
+> diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+> index d2eb9066e4dc..75bdd71d0e5a 100644
+> --- a/drivers/media/usb/uvc/uvc_video.c
+> +++ b/drivers/media/usb/uvc/uvc_video.c
+> @@ -135,6 +135,11 @@ static void uvc_fixup_video_ctrl(struct uvc_streaming *stream,
+>   	static const struct usb_device_id elgato_cam_link_4k = {
+>   		USB_DEVICE(0x0fd9, 0x0066)
+>   	};
+> +	static const struct usb_device_id alcor_corp_slave_cam[] = {
+> +		{ USB_DEVICE(0x2017, 0x0011) },
+> +		{ USB_DEVICE(0x1b17, 0x6684) },
+> +		{ }
+> +	};
+>   	struct uvc_format *format = NULL;
+>   	struct uvc_frame *frame = NULL;
+>   	unsigned int i;
+> @@ -234,6 +239,13 @@ static void uvc_fixup_video_ctrl(struct uvc_streaming *stream,
+>   
+>   		ctrl->dwMaxPayloadTransferSize = bandwidth;
+>   	}
+> +
+> +	/* Alcor Corp. Slave camera return wrong dwMaxPayloadTransferSize */
+> +	if ((format->flags & UVC_FMT_FLAG_COMPRESSED) &&
+> +	    (ctrl->dwMaxPayloadTransferSize > 0x1000) &&
+> +	    usb_match_id(stream->dev->intf, alcor_corp_slave_cam)) {
+> +		ctrl->dwMaxPayloadTransferSize = 1024;
+> +	}
+>   }
+>   
+>   static size_t uvc_video_ctrl_size(struct uvc_streaming *stream)
+
+Others, LGTM.
+
+Reviewed-by: Jackie Liu <liuyun01@kylinos.cn>
+
+-- 
+Jackie Liu
