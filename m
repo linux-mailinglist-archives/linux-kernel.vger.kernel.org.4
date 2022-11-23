@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59B506350B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 07:56:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB9E86350B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 07:57:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236153AbiKWG4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 01:56:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51306 "EHLO
+        id S236158AbiKWG51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 01:57:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236072AbiKWGz7 (ORCPT
+        with ESMTP id S236072AbiKWG50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 01:55:59 -0500
+        Wed, 23 Nov 2022 01:57:26 -0500
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14094F41A7
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 22:55:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D7387A48
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 22:57:25 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 8003D220D5;
-        Wed, 23 Nov 2022 06:55:56 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C6F71220D6;
+        Wed, 23 Nov 2022 06:57:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1669186556; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1669186643; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=DWIEFciCRBJZr4QjejGTJsTfwg2gOtGq8bBxtqG2n8Y=;
-        b=wfmbIv8JpgkhaZK8IIXmc5hWdRBRECNB1gXH6/QkPtm9Wo3WSygKkxZqNqy8O8FVv9VXNg
-        GY++2ZG1C9iM2Q/aamtiCsmgpXQAt9sjfUKXYBqEgWKddynrY6Dn7S3OlHkQcKmFiU4HT4
-        q5uIGt359H+869VsnU8MsYPHvDtx+rA=
+        bh=W/l5LGJXmFFqs5xhyU6UR80AleXRgxcGIEDmuS+suso=;
+        b=BYam6U61waT6cmb8fKIthCiV0SLGsgkH9ZubYiLkDiOhFTys75xGbLBNrhR+OQpbmRXV3m
+        uNx4i9phB5NoOjVGUbaxrzTTkbvkknNDV0uKtTmCaAOKh9y6fRv+zuuU8DZDaGuxxNmq8N
+        ZTlD0oKNka01QiKpgCromT6VAWMqsOk=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1669186556;
+        s=susede2_ed25519; t=1669186643;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=DWIEFciCRBJZr4QjejGTJsTfwg2gOtGq8bBxtqG2n8Y=;
-        b=GFRPrWkEHgYQbiDNPXUQHVtuSEx0ietQjcKiXG9GwaQasQCLjXIXUYPQkDqo7wmo/Gn9T8
-        6pOIeDfor7etEDAQ==
+        bh=W/l5LGJXmFFqs5xhyU6UR80AleXRgxcGIEDmuS+suso=;
+        b=hKHIDvBiq2s6Ic+Fx8zZsY3d/ECT2RaZM8oOCLJLjNSvpLqVTRWD1cG3lcGnicFY9psoaF
+        ym+MucG9neo6qVAQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5114913A37;
-        Wed, 23 Nov 2022 06:55:56 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A7ACC13A37;
+        Wed, 23 Nov 2022 06:57:23 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id krdFEvzDfWO2RQAAMHmgww
-        (envelope-from <tiwai@suse.de>); Wed, 23 Nov 2022 06:55:56 +0000
-Date:   Wed, 23 Nov 2022 07:55:56 +0100
-Message-ID: <87mt8i5fcz.wl-tiwai@suse.de>
+        id ncf5J1PEfWNTRgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 23 Nov 2022 06:57:23 +0000
+Date:   Wed, 23 Nov 2022 07:57:24 +0100
+Message-ID: <87leo25faj.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
-To:     Xiaolong Huang <butterflyhuangxx@gmail.com>
-Cc:     perex@perex.cz, tiwai@suse.com, baolin.wang@linux.alibaba.com,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH] ALSA: rawmidi: fix infoleak in snd_rawmidi_ioctl_status_compat64
-In-Reply-To: <20221123050911.1045190-1-butterflyhuangxx@gmail.com>
-References: <20221123050911.1045190-1-butterflyhuangxx@gmail.com>
+To:     Baisong Zhong <zhongbaisong@huawei.com>
+Cc:     <linux-kernel@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <perex@perex.cz>, <tiwai@suse.com>
+Subject: Re: [PATCH -next v2] ALSA: pcm: fix undefined behavior in bit shift for SNDRV_PCM_RATE_KNOT
+In-Reply-To: <20221121110044.3115686-1-zhongbaisong@huawei.com>
+References: <20221121110044.3115686-1-zhongbaisong@huawei.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -68,43 +68,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Nov 2022 06:09:11 +0100,
-Xiaolong Huang wrote:
+On Mon, 21 Nov 2022 12:00:44 +0100,
+Baisong Zhong wrote:
 > 
-> The compat_status is declared off of the stack, so it needs to
-> be zeroed out before copied back to userspace to prevent any
-> unintentional data leakage.
+> Shifting signed 32-bit value by 31 bits is undefined, so changing
+> significant bit to unsigned. The UBSAN warning calltrace like below:
 > 
-> Fixes: d9e5582c4bb2 ("ALSA: Avoid using timespec for struct snd_rawmidi_status")
-> Signed-off-by: Xiaolong Huang <butterflyhuangxx@gmail.com>
+> UBSAN: shift-out-of-bounds in sound/core/pcm_native.c:2676:21
+> left shift of 1 by 31 places cannot be represented in type 'int'
+> ...
+> Call Trace:
+>  <TASK>
+>  dump_stack_lvl+0x8d/0xcf
+>  ubsan_epilogue+0xa/0x44
+>  __ubsan_handle_shift_out_of_bounds+0x1e7/0x208
+>  snd_pcm_open_substream+0x9f0/0xa90
+>  snd_pcm_oss_open.part.26+0x313/0x670
+>  snd_pcm_oss_open+0x30/0x40
+>  soundcore_open+0x18b/0x2e0
+>  chrdev_open+0xe2/0x270
+>  do_dentry_open+0x2f7/0x620
+>  path_openat+0xd66/0xe70
+>  do_filp_open+0xe3/0x170
+>  do_sys_openat2+0x357/0x4a0
+>  do_sys_open+0x87/0xd0
+>  do_syscall_64+0x34/0x80
 > 
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Signed-off-by: Baisong Zhong <zhongbaisong@huawei.com>
 > ---
-> 
-> Reason for resend:
-> 1. add Fixes line.
-> ---
->  sound/core/rawmidi_compat.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/sound/core/rawmidi_compat.c b/sound/core/rawmidi_compat.c
-> index 68a93443583c..6afa68165b17 100644
-> --- a/sound/core/rawmidi_compat.c
-> +++ b/sound/core/rawmidi_compat.c
-> @@ -80,6 +80,7 @@ static int snd_rawmidi_ioctl_status_compat64(struct snd_rawmidi_file *rfile,
->  	if (err < 0)
->  		return err;
->  
-> +	memset(&compat_status, 0, sizeof(compat_status));
->  	compat_status = (struct compat_snd_rawmidi_status64) {
->  		.stream = status.stream,
->  		.tstamp_sec = status.tstamp_sec,
+> v2: update all SNDRV_PCM_RATE_* to 1U to keep consistent
 
-Here at the line just after your addition, compat_status is fully
-initialized by substitution, so I believe the memset is superfluous.
+Thanks, applied now.
 
-Or have you verified that it really leaks the uninitialized memory?
-
-
-thanks,
 
 Takashi
