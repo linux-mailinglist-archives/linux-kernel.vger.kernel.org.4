@@ -2,117 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0897E634E95
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 05:04:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45FF2634E93
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 05:04:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235489AbiKWEC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 23:02:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33896 "EHLO
+        id S235686AbiKWEDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 23:03:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235354AbiKWECu (ORCPT
+        with ESMTP id S235448AbiKWEDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 23:02:50 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C01E0AB
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 20:02:49 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id v82so187832oib.4
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 20:02:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ySZEGeQLDNriKrOLo1dJs5uwir+Qbj3CsrcAGxN4mpk=;
-        b=i/IUD3jrtZYypvMXyiJEb9qfZ9qf+AmDI3mig3rHxadg69IrmimZ2Cy8uR0ZsDpqs5
-         DVomw1EtmQWdTyjzN5anDglKnK7nY+R0QlHt5Yn0qZOByl+tY6/Xs8SP+tS6zN88565I
-         Kh2KIuOvo2uCmO0t1UHwRJQkiDL/Tlc2jXNVOrbzAuI/49eO1zsLQmDLMYFbw09K86Hu
-         fMtSuwpwLPb36PeQpdmeHTf1tIhAoqsvzNQU8w6G242DJVFs9xJSCi1idm6oHp41ows5
-         iKu/WoJsoNVYQFbV1BDQnmByv1kmTZxB0zwj8YAEnb+lJT8tY2nEpVv/lZBLKHn+Qxcz
-         vFqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ySZEGeQLDNriKrOLo1dJs5uwir+Qbj3CsrcAGxN4mpk=;
-        b=sctVE36s9KuzBpLIPIxRcT9xLQoqyNhuPrjOQKAJJYJc+AefNyly4NI94XC0B4WYaH
-         J0T5Uttc5NQmmmp6MMVWls4WVndjuK8sACbjFy9BvX/v9pI68tceNvVm6AqBtyTP/n35
-         DMLyfkfTgzmpAFmY/CndXN+hIVrsgMe+0mq5meHhV3Jso4ycckHm42mjlMuma/envphT
-         vMdwegiFjbHC2pFm9RnrajlhDcrKofWql7kgXt2T8c4IYbBYALMeasOTAhIDo2Kj9qIz
-         oa10PXm3BITfXbgNkcHkm6K3cHRitHqyCoEP6HK6Nqvc7Onj1gwXV9YKmlF5m3Ow+yhq
-         D4lA==
-X-Gm-Message-State: ANoB5pkw4J247Xrv2RVtAUi0XKeCRdJCqkL0rIgva383mCOJCFYJFndi
-        Zxzee5U32GMLY6LYcuzIXVr09g==
-X-Google-Smtp-Source: AA0mqf5FyMHYhOSMNEGk1zhvDm63vD+AXaPam8LV9ALZA/uO6GJ8utMwCpD19U5CmmrkhOnDz4Wgsw==
-X-Received: by 2002:a54:4796:0:b0:355:7ae5:4fe with SMTP id o22-20020a544796000000b003557ae504femr6762744oic.54.1669176168322;
-        Tue, 22 Nov 2022 20:02:48 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id s7-20020aca4507000000b0035a81480ffcsm6119553oia.38.2022.11.22.20.02.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 20:02:47 -0800 (PST)
-Date:   Tue, 22 Nov 2022 20:02:36 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     hev <r@hev.cc>, Matthew Wilcox <willy@infradead.org>
-cc:     Guoqi <chenguoqic@163.com>, Huacai Chen <chenhuacai@loongson.cn>,
-        Rui Wang <kernel@hev.cc>, Hugh Dickins <hughd@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [RFC PATCH] mm/shmem: Fix undo range for failed fallocate
-In-Reply-To: <CAHirt9h2CrLhYML3XW=Vj4=BD5eVDoRAbULVGgNbEdYnAzwCzA@mail.gmail.com>
-Message-ID: <9984f58e-826-74c6-1cd4-65366cc01549@google.com>
-References: <20221101032248.819360-1-kernel@hev.cc> <Y2KBovUHODJJ8ZnV@casper.infradead.org> <CAHirt9h2CrLhYML3XW=Vj4=BD5eVDoRAbULVGgNbEdYnAzwCzA@mail.gmail.com>
+        Tue, 22 Nov 2022 23:03:15 -0500
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3C651C1C
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 20:03:08 -0800 (PST)
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20221123040302epoutp015609eeea44a89d0bb6a4c65bd1efebba~qGuTzFZwJ2517825178epoutp01e
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 04:03:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20221123040302epoutp015609eeea44a89d0bb6a4c65bd1efebba~qGuTzFZwJ2517825178epoutp01e
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1669176182;
+        bh=4+LuTRetsOem5wM3LudAqA6LHPacm1Zpfhf1LB2Q0Zw=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=kn/Y2ulBjaM4M9AePNRLjLoOs7S+rup4qbdcyC5n1487xzG9GOoMQzKxk0QdzlVFH
+         Xoiv4RyOGbbQRy6IBVo6oMefu11kZNIdCt8Xp9y497uwQDK6X/oX/DbRs4XfuKHnnv
+         a+lmBBEGmGJ9wTqaKMMu+GccMTMxHrVbwK8ORZ64=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20221123040301epcas5p3a9ed4c6e147feb62168616a4dcc82ffe~qGuTQ-cw02089920899epcas5p3R;
+        Wed, 23 Nov 2022 04:03:01 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.174]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4NH6sw2CnSz4x9Ps; Wed, 23 Nov
+        2022 04:03:00 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        9C.0C.56352.47B9D736; Wed, 23 Nov 2022 13:03:00 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+        20221123040259epcas5p25b09846a349e11a7e23374c75d87cdc3~qGuRVMssL1465614656epcas5p2l;
+        Wed, 23 Nov 2022 04:02:59 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20221123040259epsmtrp100a0f7c01c65134584dbf0a4fcb9a1c9~qGuRUYhUC0849508495epsmtrp1d;
+        Wed, 23 Nov 2022 04:02:59 +0000 (GMT)
+X-AuditID: b6c32a4b-5f7fe7000001dc20-9c-637d9b7435d4
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        4F.03.18644.37B9D736; Wed, 23 Nov 2022 13:02:59 +0900 (KST)
+Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20221123040257epsmtip12d9d20da3d0131f69cab802adebc1001~qGuPM437-0646406464epsmtip1z;
+        Wed, 23 Nov 2022 04:02:57 +0000 (GMT)
+From:   "Alim Akhtar" <alim.akhtar@samsung.com>
+To:     "'Xiu Jianfeng'" <xiujianfeng@huawei.com>,
+        <krzysztof.kozlowski@linaro.org>, <s.nawrocki@samsung.com>,
+        <tomasz.figa@gmail.com>, <cw00.choi@samsung.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <dianders@chromium.org>, <yadi.brar@samsung.com>,
+        <mturquette@linaro.org>
+Cc:     <linux-samsung-soc@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+In-Reply-To: <20221123032015.63980-1-xiujianfeng@huawei.com>
+Subject: RE: [PATCH] clk: samsung: Fix memory leak in
+ _samsung_clk_register_pll()
+Date:   Wed, 23 Nov 2022 09:32:56 +0530
+Message-ID: <000001d8fef0$79cb1c70$6d615550$@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQI0s+zTjYHKjxc1/SfsBPJ2IwYZMwIWIRkVrYPHnYA=
+Content-Language: en-us
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrAJsWRmVeSWpSXmKPExsWy7bCmhm7J7NpkgyP7eC2uf3nOanF22UE2
+        i72vt7JbfOy5x2pxedccNosZ5/cxWVw85WrxdMJFNovDb9pZLf5d28hisWrXH0aL7bN2MDrw
+        eLy/0cruMbvhIovHzll32T1ajrxl9di0qpPN4861PWwefVtWMXp83iQXwBGVbZORmpiSWqSQ
+        mpecn5KZl26r5B0c7xxvamZgqGtoaWGupJCXmJtqq+TiE6DrlpkDdK2SQlliTilQKCCxuFhJ
+        386mKL+0JFUhI7+4xFYptSAlp8CkQK84Mbe4NC9dLy+1xMrQwMDIFKgwITvj3ZwtLAXNPBXf
+        7razNzCu4epi5OSQEDCRmD6rhbGLkYtDSGA3o8TibfvZIJxPjBIzJzVBOZ8ZJRa0XGaHaela
+        sIIZxBYS2MUo8Wu/I4T9klFi7c8wEJtNQFdix+I2sGYRgblMErt232YFSTALpEmsOLUFbBCn
+        gI3ExrXLweLCAsESE7d2sIHYLAKqEhunPAOzeQUsJS4+XMYMYQtKnJz5hAVijrzE9rdzmCEO
+        UpD4+XQZ2BwRASuJ/wfWs0PUiEu8PHqEHeQICYErHBKdqzczQjS4SMx/s5sJwhaWeHV8C9Rn
+        UhIv+9uAbA4g20Ni0R8piHCGxNvl66Fa7SUOXJnDAlLCLKApsX6XPsQqPone30+YIDp5JTra
+        hCCqVSWa311lgbClJSZ2d7NC2B4Sx89tYpzAqDgLyWOzkDw2C8kDsxCWLWBkWcUomVpQnJue
+        WmxaYJyXWg6P7uT83E2M4KSs5b2D8dGDD3qHGJk4GA8xSnAwK4nw1nvWJAvxpiRWVqUW5ccX
+        leakFh9iNAWG9kRmKdHkfGBeyCuJNzSxNDAxMzMzsTQ2M1QS5108QytZSCA9sSQ1OzW1ILUI
+        po+Jg1OqgSlcYP+S7u13f6qpBEQlJggt11khemNTYf/je/+3Z2SYdUaJn9vkJhG+p4hd2ODv
+        GrNVkVLVgrk2v2cy+b6xLdi0JUFm4jTxhGMrYu1lPFMUXE+fSXzAHBeh/Fxn+qGW9cHH72i7
+        1M+POvTE73bky7Ktu2wuSiqYmaRf+qwpb/V6O5v8zq7iBouGOxLX0nnXaF3qZOpQKE+/tkSM
+        TUxzXudM+9uMu47OnXnmR+X5+xs/VK6Wznnq925BWKgB19Wd5cJ3jf+wmpzb7Hz0hoLC0vz7
+        YdszVDlKn2Qdq55moBvM5H82jONNhsXmI/VmYg9NT4t480n8nfU9eLr//jNrHFyUL3mF9DeV
+        WXAe5jlRqMRSnJFoqMVcVJwIAFo481JTBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrJIsWRmVeSWpSXmKPExsWy7bCSnG7x7NpkgxXv9Syuf3nOanF22UE2
+        i72vt7JbfOy5x2pxedccNosZ5/cxWVw85WrxdMJFNovDb9pZLf5d28hisWrXH0aL7bN2MDrw
+        eLy/0cruMbvhIovHzll32T1ajrxl9di0qpPN4861PWwefVtWMXp83iQXwBHFZZOSmpNZllqk
+        b5fAlfFuzhaWgmaeim9329kbGNdwdTFyckgImEh0LVjB3MXIxSEksINRou/gdVaIhLTE9Y0T
+        2CFsYYmV/56D2UICzxkltuyPBbHZBHQldixuYwNpFhFYziTx6dV5JpAEs0CGxKFr79kgpvYy
+        Sjz7sR2sm1PARmLj2uVgG4QFAiUe7drABmKzCKhKbJzyDMzmFbCUuPhwGTOELShxcuYTli5G
+        DqChehJtGxkh5stLbH87hxniOAWJn0+XgY0UEbCS+H9gPTtEjbjEy6NH2CcwCs9CMmkWwqRZ
+        SCbNQtKxgJFlFaNkakFxbnpusWGBUV5quV5xYm5xaV66XnJ+7iZGcGxqae1g3LPqg94hRiYO
+        xkOMEhzMSiK89Z41yUK8KYmVValF+fFFpTmpxYcYpTlYlMR5L3SdjBcSSE8sSc1OTS1ILYLJ
+        MnFwSjUwzdDxXPm3WDFwJYfNJ9Xzz/qUE3b0SElvf75VV+No3cquJtuf9SrXWCM5drzY26D3
+        kOmt+Gwtg3MZCba/Cv5M39nq8jb75YFtsTNvnZ+4zVGh9mbU1Ey26XEi59J/rnTsLjmbdSnX
+        63aZu8mDn2IBC3ZXL2g/7pSpWl+e+G92knPEO43jOhcbf0XcbvNUKrv7nN/ynZjGoVndJbtr
+        RSb/atzBUX78/4MVk+c5yRsYh69cO/XBt60/dz/9FHCEl6NGQqxk7VKDQ8XVHtwmkn9O7Xl6
+        gFuYWfqplt30NZs6efe62OffsLr43KFDrzx31pfjxQ6u7k4/livo7piypCmh/vvsCQu3MFzZ
+        eXHarRknopRYijMSDbWYi4oTAY55XfM8AwAA
+X-CMS-MailID: 20221123040259epcas5p25b09846a349e11a7e23374c75d87cdc3
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20221123032321epcas5p235a61ac36bf6c90dc4f0fbf516646dd9
+References: <CGME20221123032321epcas5p235a61ac36bf6c90dc4f0fbf516646dd9@epcas5p2.samsung.com>
+        <20221123032015.63980-1-xiujianfeng@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 3 Nov 2022, hev wrote:
-> On Wed, Nov 2, 2022 at 10:41 PM Matthew Wilcox <willy@infradead.org> wrote:
-> > On Tue, Nov 01, 2022 at 11:22:48AM +0800, Rui Wang wrote:
-> > > This patch fixes data loss caused by the fallocate system
-> > > call interrupted by a signal.
-> > >
-> > > Bug: https://lore.kernel.org/linux-mm/33b85d82.7764.1842e9ab207.Coremail.chenguoqic@163.com/
-> > > Fixes: b9a8a4195c7d ("truncate,shmem: Handle truncates that split large folios")
-> >
-> > How does that commit introduce this bug?
-> 
-> In the test case[1], we created a file that contains non-zero data
-> from offset 0 to A-1. and a process try to expand this file by
-> fallocate(fd, 0, 0, B), B > A.
-> Concurrently, another process try to interrupt this fallocate syscall
-> by a signal. I think the expected results are:
-> 
-> 1. The file is not expanded and file size is A, and the data from
-> offset 0 to A-1 is not changed.
-> 2. The file is expanded and the data from offset 0 to A-1 is not
-> changed, and from A to B-1 contains zeros.
-> 
-> Now, the unexpected result is that the file is not expanded and the
-> data that from offset 0 to A-1 is changed by
-> truncate_inode_partial_folio that called
-> from shmem_undo_range with unfalloc = true.
-> 
-> This issue is only reproduced when file on tmpfs, and begin from this
-> commit: b9a8a4195c7d ("truncate,shmem: Handle truncates that split
-> large folios")
+Hi Xiu
 
-Like Matthew, I was sceptical at first.
+>-----Original Message-----
+>From: Xiu Jianfeng [mailto:xiujianfeng@huawei.com]
+>Sent: Wednesday, November 23, 2022 8:50 AM
+>To: krzysztof.kozlowski@linaro.org; s.nawrocki@samsung.com;
+>tomasz.figa@gmail.com; cw00.choi@samsung.com;
+>alim.akhtar@samsung.com; mturquette@baylibre.com; sboyd@kernel.org;
+>dianders@chromium.org; yadi.brar@samsung.com; mturquette@linaro.org
+>Cc: linux-samsung-soc@vger.kernel.org; linux-clk@vger.kernel.org; linux-
+>kernel@vger.kernel.org
+>Subject: [PATCH] clk: samsung: Fix memory leak in
+>_samsung_clk_register_pll()
+>
+>If clk_register() fails, @pll->rate_table may have allocated memory by
+>kmemdup(), so it needs to be freed, otherwise will cause memory leak issue,
+>this patch fixes it.
+>
+>Fixes: 3ff6e0d8d64d ("clk: samsung: Add support to register rate_table for
+>samsung plls")
+>Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+>---
+Thanks!
 
-But I currently think that you have discovered something important, and
-that your patch is the correct fix to it; but I'm still rather confused,
-and want to do some more thinking and testing: this mail is mainly to
-signal to Matthew that I'm on it, so he doesn't have to rush to look
-at it when he's back.
+Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
 
-I was able to reproduce it with the test case, once I multiplied both
-of the usleep intervals by 10 - before that, it was too difficult for
-it to complete a fallocate: guess the timing is different on my x86 box.
+> drivers/clk/samsung/clk-pll.c | 1 +
+> 1 file changed, 1 insertion(+)
+>
+>diff --git a/drivers/clk/samsung/clk-pll.c b/drivers/clk/samsung/clk-pll.c
+index
+>fe383471c5f0..0ff28938943f 100644
+>--- a/drivers/clk/samsung/clk-pll.c
+>+++ b/drivers/clk/samsung/clk-pll.c
+>@@ -1583,6 +1583,7 @@ static void __init _samsung_clk_register_pll(struct
+>samsung_clk_provider *ctx,
+> 	if (ret) {
+> 		pr_err("%s: failed to register pll clock %s : %d\n",
+> 			__func__, pll_clk->name, ret);
+>+		kfree(pll->rate_table);
+> 		kfree(pll);
+> 		return;
+> 	}
+>--
+>2.17.1
 
-Hugh
+
