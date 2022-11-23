@@ -2,91 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25672636905
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 466D763690F
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:36:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239279AbiKWSfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 13:35:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34428 "EHLO
+        id S239641AbiKWSfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 13:35:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239777AbiKWSew (ORCPT
+        with ESMTP id S239467AbiKWSfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 13:34:52 -0500
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7ACCFEA2
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 10:34:40 -0800 (PST)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-3abc71aafcaso50036987b3.3
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 10:34:40 -0800 (PST)
+        Wed, 23 Nov 2022 13:35:20 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04AD913F94
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 10:35:20 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id w15-20020a17090a380f00b0021873113cb4so2628568pjb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 10:35:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tELD2VQL8vhWDECXZ4KBFxXiAPz5Gyk7j2brYG+e7vo=;
-        b=MsY086PNmr0Enodb3X6kbiamRzMWU6bqnw3zAK/YhYEIMOzRtWLfMKo/hKzzyBUapk
-         QcM9+DGMXq9/qqpaiec63a+VT4ELUKRbyCZ3+ZFDDW1CnwYEe+kwXwuGSUo01eohnJ5F
-         C0P7zjWF88GUfhfkn/pJLlJMCoHR8O3Rb5bZIq80jG9kUd83cEOOhuOwSFI1Iv9KE2Kt
-         jpufQUaMk2odO6mtmdK7EhfINsOo6DhuZtdaxlQPKXJFdVpjTqlArOKKI+4rFAIbY6xG
-         0IMiw8bfVB7sDBvcxZYEOHndyy4gYsLtQor3yHI2KLjKXYbibhvPhJ9Hp8jsRO/bzHn/
-         dEGg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RpDf9OxzAy1VP0XClxFMnzs891tMVQH/cAEFMD0xtYE=;
+        b=SQBx7rbnJ0G27gn3WjgNmlFE3ODm5RF97U2x5uHCdBpD947CSf6dZibhY19rwRixUf
+         FJAiMIHyLdRPOpy4cd54xX3HJ1wz6v0S11ee6MKuvl/eiRo5EExzMBHr6e+qX8dI92oQ
+         SXGOvgRrswIlw6IdoAvBR97km9qNYPU/6IBfniqcygWyxnOQ6+BBRt4QkLpKyrSW+/3r
+         MbszPwUUscrbzlby5XCC8Sx09wMRFMV9h6N+jcLwV5zzXkC2uJvBsohXKr0ie0IrmFw+
+         E/d1sfoIo9xAluPKrhKHEHTiwGWzQgam9X6zE+wPwCfWEie9Obz6cJ9SS/cZNlXGnPp+
+         SFQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tELD2VQL8vhWDECXZ4KBFxXiAPz5Gyk7j2brYG+e7vo=;
-        b=wuOB/lMPEz18uCIjrvvVIR/96vhAacv7v1z2ECDOyx+6k3XZ92hVnRAOd+jXjAXvWG
-         PdqUIeve41SAmcpJRah+9rCmepy94bYCUmvfebEFnukYGGuh4Wch/c0pk2WN0oNmLs+r
-         6D44zftxKj4n5xWASAoDqzPKxcpnAfnGa0YJIfG8HDO0RfG7jl0f67gyhvWGzDRiI3kp
-         diva1Vow7AAJvV9T8ncXBusVQB+VeMFo7HDWUMldJcrl06R65svgZta/fnxNQBfluEgN
-         N75jvjBsT1T3rgnTSHpYp2DvhkXbDhg+h5msuBBBROKdCg1cI9l4BxcaCzJjjAXQ70YR
-         +FJg==
-X-Gm-Message-State: ANoB5pm+aB0SG9Ak5OnzdCC/+SeCA9Oa3AACXJtQqNWbElRcQuj7SQBV
-        kyMfAQW2wPh6GJkXHtd1BVxHLyySGSW2Uva+WG99H07UzRY=
-X-Google-Smtp-Source: AA0mqf63BwCDKbT1psyyIgHPu4i+Q9UO32S4KaibspypqvHEqagKzj/uhWOYCo3lqz739vZRqbmiJMWRgQX3hLzftlA=
-X-Received: by 2002:a81:5c82:0:b0:392:b19b:47e9 with SMTP id
- q124-20020a815c82000000b00392b19b47e9mr12433845ywb.252.1669228479550; Wed, 23
- Nov 2022 10:34:39 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RpDf9OxzAy1VP0XClxFMnzs891tMVQH/cAEFMD0xtYE=;
+        b=kFsSs1qELvpgSJZe9eZmxRFVrS/AfwN1wYJ/cAy5DKaoec7rQRMbCqAMkWJjgvJF0Y
+         NKarHjvEYPym52IMTIKrHb8PJPoTYgSui4SwcYhv8GMngNrmdi0YFQ6jdX3+O3Wx2mwe
+         Y8caj7NNFoySRsyeb3cWtF2l1pGJclhkQZFejE537ETbv9v0S5A1AzTAhHZWy4YfN+Xe
+         +U8rjl/7+eY4UyL3RvfhiaTRR7/3xygIQuD7CNRfO89QF8P7JUJI4aYdhSLjIaAHYvq6
+         o5WVkfOGiUOYcZJ0EVPOAJD1ytdlij5wYbctoSXfw/1T85glj25uYGS+K+337EoHQtTy
+         ECEw==
+X-Gm-Message-State: ANoB5pnnaObDc+t2Oc8jIi3Ssu/IUO4/FHzIbV6+GnuMXxdteVVImoRo
+        jTXGh0CsxaqTSr+f3Gld2UA=
+X-Google-Smtp-Source: AA0mqf4+bnEWFv/HCKEyOKfWsBQ1HZhapNIDziXbul+phoNEiJMTc+pvR6nbDJPZ6z9ixBGQuWQ0MA==
+X-Received: by 2002:a17:902:6a86:b0:187:722:f4db with SMTP id n6-20020a1709026a8600b001870722f4dbmr10750267plk.87.1669228519348;
+        Wed, 23 Nov 2022 10:35:19 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id u9-20020a17090a2b8900b00218e8a0d7f0sm1514647pjd.22.2022.11.23.10.35.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 10:35:18 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 23 Nov 2022 08:35:17 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
+        linux-kernel@vger.kernel.org,
+        syzbot+2fdf66e68f5f882c1074@syzkaller.appspotmail.com
+Subject: Re: [PATCH] fs/kernfs: Fix lockdep warning in kernfs_active()
+Message-ID: <Y35n5b8dFQuDWOL6@slm.duckdns.org>
+References: <0000000000002473fd05eca7540a@google.com>
+ <20221109120415.55759-1-zhouchengming@bytedance.com>
+ <Y35mqfhdIxnDvCn4@kroah.com>
 MIME-Version: 1.0
-References: <20221123181838.1373440-1-hannes@cmpxchg.org>
-In-Reply-To: <20221123181838.1373440-1-hannes@cmpxchg.org>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Wed, 23 Nov 2022 10:34:27 -0800
-Message-ID: <CALvZod488YStQ5tucPgc0b3FSwiqFhVJptPceFvaZjj2Ba24YA@mail.gmail.com>
-Subject: Re: [PATCH] mm: remove lock_page_memcg() from rmap
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y35mqfhdIxnDvCn4@kroah.com>
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 10:18 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
->
-> rmap changes (mapping and unmapping) of a page currently take
-> lock_page_memcg() to serialize 1) update of the mapcount and the
-> cgroup mapped counter with 2) cgroup moving the page and updating the
-> old cgroup and the new cgroup counters based on page_mapped().
->
-> Before b2052564e66d ("mm: memcontrol: continue cache reclaim from
-> offlined groups"), we used to reassign all pages that could be found
-> on a cgroup's LRU list on deletion - something that rmap didn't
-> naturally serialize against. Since that commit, however, the only
-> pages that get moved are those mapped into page tables of a task
-> that's being migrated. In that case, the pte lock is always held (and
-> we know the page is mapped), which keeps rmap changes at bay already.
->
-> The additional lock_page_memcg() by rmap is redundant. Remove it.
->
-> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+On Wed, Nov 23, 2022 at 07:30:01PM +0100, Greg KH wrote:
+> Is this still needed in 6.1-rc6?
 
-Acked-by: Shakeel Butt <shakeelb@google.com>
+1edfe4ea16ca ("kernfs: Fix spurious lockdep warning in
+kernfs_find_and_get_node_by_id()") already fixed the issue. So, not needed.
+
+Thanks.
+
+-- 
+tejun
