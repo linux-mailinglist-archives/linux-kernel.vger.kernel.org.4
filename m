@@ -2,110 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12BC9635106
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 08:17:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2817F635102
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 08:16:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236256AbiKWHRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 02:17:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
+        id S235992AbiKWHQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 02:16:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235612AbiKWHRP (ORCPT
+        with ESMTP id S235612AbiKWHQt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 02:17:15 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A6CF801D
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 23:17:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669187834; x=1700723834;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Nrgye89etE0QGPMrXbvgq5tgpKQhySQZ5VS5MrNldis=;
-  b=KYRdosrDUqxiRAMJ92/yCK29X1+B+Y+c4yma+uljZgFdZh6yd2ByrLal
-   UJJdlPdYiXUqbYMa3FheV8Rm+AtaVeUg7GxPhAWRXlO03czIgN/kCkrQ/
-   8Gp+NW30yxjV0sm0xaWA63gj9WHp61U0B3Fy/fu/Lp45/baKxy2QvT86r
-   5ktQ/FWhi+ZL2HGrngIs0bDBnQKBkMYymsRC0g1WavUf//MJPtFDmS0W9
-   WVIlCfJYXrBA4HjqFDE/OXTNeNadYk4jUZE1sKvFbu6WVaX+laa8M28qz
-   kriLccgNcGsIOJoNBHlr2mWS9NuJLUlOAswX+ZOo6kBaXS8mBIU5BH757
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="400292396"
-X-IronPort-AV: E=Sophos;i="5.96,186,1665471600"; 
-   d="scan'208";a="400292396"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 23:17:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="641693602"
-X-IronPort-AV: E=Sophos;i="5.96,186,1665471600"; 
-   d="scan'208";a="641693602"
-Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 22 Nov 2022 23:17:00 -0800
-Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oxk0A-0002QR-1c;
-        Wed, 23 Nov 2022 07:16:58 +0000
-Date:   Wed, 23 Nov 2022 15:16:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 1682b36ba3534371330805b73051d15acd41f744
-Message-ID: <637dc8ba.8kwLOftdGhlxeugm%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 23 Nov 2022 02:16:49 -0500
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A956DCF5;
+        Tue, 22 Nov 2022 23:16:48 -0800 (PST)
+Received: from mail-internal.denx.de (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: noc@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 576808517E;
+        Wed, 23 Nov 2022 08:16:45 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1669187805;
+        bh=OIYyALv6fQ3JaJSDccGn0Zm5VKzxXieKgqBDhfmERf8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RZcr20f3rmxjLNXy72K3I1ssAqLpDp6cuc8zAiMNGampKqrIt2jqQTE168nJylOvu
+         Q2rSgDvnbv7tp3Txcs7ZCgfhnwg9W+TstMJNFYlME1LzdTDuwPFCXc94hLasPbnIz6
+         0vWoCW0bbGfNJXQr1DorIsRIoG9n8bgvKL8+ul3JTxNKfqjPUup9Ql41EtDZSsRh3p
+         gr2r8e2zhi0Khsmci6gQ8s+QNuJSw01zvlOIb3Y7zMXK0vJwOKeithboB50eEPotN3
+         vccv7+M1C5nM5N1S3oq8V0I2tUVEo8U+P/N5sMgs5rWh0ruoqzKES08WU0Mrf1bqBy
+         vWDcPFED6STog==
+Received: from pollux.denx.de (pollux [192.168.1.1])
+        by mail-internal.denx.de (Postfix) with ESMTPS id E3031180523;
+        Wed, 23 Nov 2022 08:16:38 +0100 (CET)
+Received: by pollux.denx.de (Postfix, from userid 515)
+        id A8CD41A86FB; Wed, 23 Nov 2022 08:16:38 +0100 (CET)
+From:   Heiko Schocher <hs@denx.de>
+To:     linux-can@vger.kernel.org
+Cc:     Heiko Schocher <hs@denx.de>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1] can: sja1000: fix size of OCR_MODE_MASK define
+Date:   Wed, 23 Nov 2022 08:16:36 +0100
+Message-Id: <20221123071636.2407823-1-hs@denx.de>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 1682b36ba3534371330805b73051d15acd41f744  Merge x86/cpu into tip/master
+bitfield mode in ocr register has only 2 bits not 3, so correct
+the OCR_MODE_MASK define.
 
-elapsed time: 792m
+Signed-off-by: Heiko Schocher <hs@denx.de>
+---
 
-configs tested: 28
-configs skipped: 88
+ include/linux/can/platform/sja1000.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-i386                                defconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-i386                             allyesconfig
-
-clang tested configs:
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-x86_64               randconfig-a004-20221121
-x86_64               randconfig-a001-20221121
-x86_64               randconfig-a003-20221121
-x86_64               randconfig-a002-20221121
-x86_64               randconfig-a006-20221121
-x86_64               randconfig-a005-20221121
-i386                 randconfig-a001-20221121
-i386                 randconfig-a003-20221121
-i386                 randconfig-a002-20221121
-i386                 randconfig-a004-20221121
-i386                 randconfig-a005-20221121
-i386                 randconfig-a006-20221121
-
+diff --git a/include/linux/can/platform/sja1000.h b/include/linux/can/platform/sja1000.h
+index 5755ae5a4712..6a869682c120 100644
+--- a/include/linux/can/platform/sja1000.h
++++ b/include/linux/can/platform/sja1000.h
+@@ -14,7 +14,7 @@
+ #define OCR_MODE_TEST     0x01
+ #define OCR_MODE_NORMAL   0x02
+ #define OCR_MODE_CLOCK    0x03
+-#define OCR_MODE_MASK     0x07
++#define OCR_MODE_MASK     0x03
+ #define OCR_TX0_INVERT    0x04
+ #define OCR_TX0_PULLDOWN  0x08
+ #define OCR_TX0_PULLUP    0x10
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.3
+
