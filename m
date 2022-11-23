@@ -2,72 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22200634D7F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 02:56:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAF83634D84
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 02:58:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234126AbiKWB4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 20:56:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52954 "EHLO
+        id S234919AbiKWB6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 20:58:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235296AbiKWB42 (ORCPT
+        with ESMTP id S232445AbiKWB6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 20:56:28 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC75682A8;
-        Tue, 22 Nov 2022 17:56:27 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id b1-20020a17090a7ac100b00213fde52d49so570738pjl.3;
-        Tue, 22 Nov 2022 17:56:27 -0800 (PST)
+        Tue, 22 Nov 2022 20:58:31 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B71158C0B1
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 17:58:30 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id b185so16038389pfb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 17:58:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=iwQ+Ae7FcbFe/GyQX34Uo+D823BkM25C+bZq61zmpJQ=;
-        b=SnVDVKcXzYYCXt/v6mhH2Gmzrfy2oHdsmoccdDd62UDoKR5/eRo49hhNGX0peEyRa9
-         Gu3pl5MdGI6GtuNdMT6QFUCokS+hpTKXukSmUnxhprdvobWkzcOkt4OGE5IKmRKC+RD5
-         sEtUdsgIW1aBnb/ClbuGPAIq5KQfM0LG3PmGLv6xZPGLpQVpey7ka1WDBH4aXZUnRbbh
-         ouZygPxL0mfddffg+yEgQvM3EEwM5C/iXt7uvgTXMzFFOFeFyv+IDm5u4W+f4NDJC7gl
-         fcWb6xMXWFd0Ois3v/m1nrp3HkQeEAdYD3601r9iZu2ItqOTXQ/x6EV0sj0wiW2ocEmi
-         a3Ug==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iXu1zQrnjp/lS+bnY1uKt+7jp3qPlyv/bmFa7h/muvk=;
+        b=h0JO7tRIHgqdyFOTX7K0lbAbzwTTkiud1nbKUHOSeXcUg+Fs7LliA9f79AuHBwjsQY
+         eUhDRqXfXPfUW/oJKYpr3OE7bhPV+hALZisIF4jh0Dgx9++VswrAtY2Nh7dx8LnnXhiY
+         y2ogHYEgUQ8BCgPFYqGK4Uo3w/dz15IrVy+4QeSjIS93p7UQmPxa8xtWKq9dalia6kBb
+         n7sUX2GL0AOMr4rSkf26kAMe2quNHVExrRXFPk6y9aFYI/0s0Vrcq4xbDQt7oUBFH0Fe
+         cSKSVdwhLUmVf+uE3hrCp+KXfqetldZrx+Y7mH4D53nQ+LNTO/efeU7lVVMgobGC964U
+         ShpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iwQ+Ae7FcbFe/GyQX34Uo+D823BkM25C+bZq61zmpJQ=;
-        b=yS8U3g/fjxAmZnTlvCHXIbQ8mhyE2mmZrGB+x7gTdgaizNOKhcgmeSuogcoW4pKzD5
-         6aP6ucnrc3jgy7gRPbFaYccFyzVQtfK+M3NqcW1R4WGOCoAXsMPyDw6G3X5GQmgWKLgn
-         YdrTJpNva7seHxdkRIoo+RgkaMxv6EHo4arG0zs249gw9NuTnyvyPyuI6IRHugiRJ23t
-         cei6Ub1qlUNQn2ffobz02URlmNuNDDkQdS1QQxw+OTjHKm+iHIWIbSxYLOOVY8T2WTJH
-         17jhartdr0wz24ANg6zCcXrIN5U7nOK5FPEkkXYHyVcta7UJ9MVEwOsV1f6K2h+fxKhC
-         aSxA==
-X-Gm-Message-State: ANoB5pnpphQGEtIi6uxM07wDZ4wPS63PYI/z1ZydoVuWZnsAQWNKOaCH
-        Ysa4C4MFGVBpE7dHtPyDvsk=
-X-Google-Smtp-Source: AA0mqf6z6tY5m4u6p51/gclPjqLMiQdNpZ0sFdQd2UQYcSoMHLIybMsWN7UmTTbWjA6xkdVl1fPyYA==
-X-Received: by 2002:a17:902:b283:b0:186:be05:798e with SMTP id u3-20020a170902b28300b00186be05798emr6521981plr.37.1669168586793;
-        Tue, 22 Nov 2022 17:56:26 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:af8d:6047:29d5:446c])
-        by smtp.gmail.com with ESMTPSA id z11-20020aa79e4b000000b0056c0d129edfsm11286376pfq.121.2022.11.22.17.56.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 17:56:26 -0800 (PST)
-Date:   Tue, 22 Nov 2022 17:56:22 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Eray =?iso-8859-1?Q?Or=E7unus?= <erayorcunus@gmail.com>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org, ike.pan@canonical.com,
-        jikos@kernel.org, benjamin.tissoires@redhat.com,
-        mgross@linux.intel.com, pobrn@protonmail.com
-Subject: Re: [PATCH v2 2/7] HID: add mapping for camera access keys
-Message-ID: <Y319xtS7ZHKC2+ic@google.com>
-References: <20221029120311.11152-1-erayorcunus@gmail.com>
- <20221029120311.11152-3-erayorcunus@gmail.com>
- <4f6e561b-12d7-0163-5f26-05d47a72d6cb@redhat.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iXu1zQrnjp/lS+bnY1uKt+7jp3qPlyv/bmFa7h/muvk=;
+        b=IWVvGrKKNwKIayxhaPXatMkkkKX3VGCSarWYrXNV4HoiDcEaE3au23ifgzuIZWZVin
+         uooOGzgUywT2cfz6wWFcMuwOIOG8suSMDybT6hkgEFrSDK2NboU0+aB4QLgWfA23FRLJ
+         FCjUzTs0c6RVMl8dLGSncDja8MmTGOsN6DvB3KjNToOBy9SXnTxjcUHz55GCz+FV5F+8
+         2b7uOJAJICjI+dcwu8mk7FopDXkiD6Z8lKlIY0zN2D6G3iMd07fWQpaQ6mAbKXVlwGv5
+         s9gWCC51Q8p04geIS1yhXwBhwv7YXmNx0Sqto2N/7K55wR5o5T12SfMNkdzEi734cP7t
+         IIjQ==
+X-Gm-Message-State: ANoB5pktjQsjm3nX9lYy6sGltMX4m/Jr/iTSmGkcMsHH7ytyzw8EX6tF
+        JZh998TAzxSEo0Ze1MyBAZvZJ7Cu4mf+oekL5Hs=
+X-Google-Smtp-Source: AA0mqf60s4thaIY/8QgKd28z+Dxljt5qEdOpEnyEgsaAdxa92Kjy5IR95KQoHlJcPuuTmZQ4PnNSgTOLGC47wfsRymE=
+X-Received: by 2002:a63:525e:0:b0:477:bca8:1cd9 with SMTP id
+ s30-20020a63525e000000b00477bca81cd9mr458942pgl.581.1669168709423; Tue, 22
+ Nov 2022 17:58:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <4f6e561b-12d7-0163-5f26-05d47a72d6cb@redhat.com>
+References: <20221026132039.2236233-1-suagrfillet@gmail.com>
+ <CAAYs2=iOvP-TxLs+_QFMLQHG86xi2PYK_CN_rXUWHBx=kY+1aw@mail.gmail.com> <20221122163225.76a19e1d@gandalf.local.home>
+In-Reply-To: <20221122163225.76a19e1d@gandalf.local.home>
+From:   Song Shuai <suagrfillet@gmail.com>
+Date:   Wed, 23 Nov 2022 01:58:18 +0000
+Message-ID: <CAAYs2=jZ=uR61QXB-m4+7ocuydn1diGv0yV6KWmm4jfZYvam8Q@mail.gmail.com>
+Subject: Re: [PATCH] ftrace: avoid replacing the list func with itself
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -78,37 +69,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 09:33:49PM +0100, Hans de Goede wrote:
-> Hi Dmitry,
-> 
-> On 10/29/22 14:03, Eray Orçunus wrote:
-> > HUTRR72 added 3 new usage codes for keys that are supposed to enable,
-> > disable and toggle camera access. These are useful, considering many
-> > laptops today have key(s) for toggling access to camera.
-> > 
-> > This patch adds new key definitions for KEY_CAMERA_ACCESS_ENABLE,
-> > KEY_CAMERA_ACCESS_DISABLE and KEY_CAMERA_ACCESS_TOGGLE. Additionally
-> > hid-debug is adjusted to recognize this new usage codes as well.
-> > 
-> > Signed-off-by: Eray Orçunus <erayorcunus@gmail.com>
-> > Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> 
-> I have rejected the drivers/platform/x86 patch which depends
-> on this, because it changes current behavior, potentially
-> breaking userspace.
-> 
-> Since this means I won't be taking any patches depending on
-> this I believe it is best if this is merged through the input tree.
-> 
-> Note this also has a:
-> 
-> Acked-by: Jiri Kosina <jkosina@suse.cz>
-> 
-> tag given in this email thread.
-
-OK, I picked it up.
-
-Thanks.
-
--- 
-Dmitry
+Steven Rostedt <rostedt@goodmis.org> =E4=BA=8E2022=E5=B9=B411=E6=9C=8822=E6=
+=97=A5=E5=91=A8=E4=BA=8C 21:32=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Tue, 22 Nov 2022 02:28:25 +0000
+> Song Shuai <suagrfillet@gmail.com> wrote:
+>
+> > Song Shuai <suagrfillet@gmail.com> =E4=BA=8E2022=E5=B9=B410=E6=9C=8826=
+=E6=97=A5=E5=91=A8=E4=B8=89 13:20=E5=86=99=E9=81=93=EF=BC=9A
+> > >
+> > > The list func (ftrace_ops_list_func) will be patched first
+> > > before the transition between old and new calls are set,
+> > > which fixed the race described in this commit `59338f75`.
+> > >
+> > > While ftrace_trace_function changes from the list func to a
+> > > ftrace_ops func, like unregistering the klp_ops to leave the only
+> > > global_ops in ftrace_ops_list, the ftrace_[regs]_call will be
+> > > replaced with the list func although it already exists. So there
+> > > should be a condition to avoid this.
+> > >
+> > > This patch backups saved_ftrace_func by saved_ftrace_func_old
+> > > which will be compared with the list func before trying to patch it.
+> > >
+> > Ping...
+>
+> Wouldn't something like this be simpler and easier to manage (without
+> adding another variable to keep track of)?
+>
+> -- Steve
+>
+Thanks for the corrections, this looks great to me.
+> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> index 65a5d36463e0..d04552c0c275 100644
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -2763,6 +2763,19 @@ void __weak ftrace_arch_code_modify_post_process(v=
+oid)
+>  {
+>  }
+>
+> +static int update_ftrace_func(ftrace_func_t func)
+> +{
+> +       static ftrace_func_t save_func;
+> +
+> +       /* Avoid updating if it hasn't changed */
+> +       if (func =3D=3D save_func)
+> +               return 0;
+> +
+> +       save_func =3D func;
+> +
+> +       return ftrace_update_ftrace_func(func);
+> +}
+> +
+>  void ftrace_modify_all_code(int command)
+>  {
+>         int update =3D command & FTRACE_UPDATE_TRACE_FUNC;
+> @@ -2783,7 +2796,7 @@ void ftrace_modify_all_code(int command)
+>          * traced.
+>          */
+>         if (update) {
+> -               err =3D ftrace_update_ftrace_func(ftrace_ops_list_func);
+> +               err =3D update_ftrace_func(ftrace_ops_list_func);
+>                 if (FTRACE_WARN_ON(err))
+>                         return;
+>         }
+> @@ -2799,7 +2812,7 @@ void ftrace_modify_all_code(int command)
+>                 /* If irqs are disabled, we are in stop machine */
+>                 if (!irqs_disabled())
+>                         smp_call_function(ftrace_sync_ipi, NULL, 1);
+> -               err =3D ftrace_update_ftrace_func(ftrace_trace_function);
+> +               err =3D update_ftrace_func(ftrace_trace_function);
+>                 if (FTRACE_WARN_ON(err))
+>                         return;
+>         }
+Thanks,
+Song
