@@ -2,98 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49289634FBC
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 06:43:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FFA0634FC7
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 06:49:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235766AbiKWFnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 00:43:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34556 "EHLO
+        id S235834AbiKWFtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 00:49:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbiKWFnH (ORCPT
+        with ESMTP id S229717AbiKWFtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 00:43:07 -0500
+        Wed, 23 Nov 2022 00:49:53 -0500
 Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA35A13CE3;
-        Tue, 22 Nov 2022 21:43:06 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 223C35C010A;
-        Wed, 23 Nov 2022 00:43:06 -0500 (EST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 398E9F1DA2
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 21:49:52 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id A8D675C01A8;
+        Wed, 23 Nov 2022 00:49:51 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Wed, 23 Nov 2022 00:43:06 -0500
+  by compute3.internal (MEProxy); Wed, 23 Nov 2022 00:49:51 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1669182186; x=
-        1669268586; bh=tSVppnYkpeXnvHJUaWTsGY07NlSPhzPn1JiOoH5/HyE=; b=D
-        3eSJv+20H8TXCSPTvFOo/bOny1fv8RxplvzQVkb2/Izev6Oy84wT9DlLyFcpK4Bu
-        x8Yrdp4r3DK88kGRuI/O905Uh2jSscSAsvhWHQznWg0fHnepnrt0leigEByh6tlv
-        EJ2tVOM5NPQmLVW0h+ycQtIedE76znn7KcmDABXIZjSqLZY5A+ggryv3HhUmIwHE
-        M10OkSqEuB+cFZibEP/bhDgn1JBD82cDdpwnfK0wmIZZnxxPq3nJxdrf12FAtXPZ
-        2/WmsT9Jtg7vwJfbKXr/EY8IX37ndvBzLBxFUUXLYYRjprAb0J8DVc3mjtgUq07f
-        vUM5d18tsXeX5OTaMW6tw==
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1669182591; x=
+        1669268991; bh=mBVtnDaBkuQcFRIzo1SOlDo6jVRm6UTP6X8KNYwdMJE=; b=H
+        Zz3mifbUFIUVLbv02TCGZLRukTLnclKvWTd9dVrjGSHwykx3MK1rkTvGdNLWZaiE
+        3ABtEvoUvkM8/y43GBztZojQUOqaEYiTqiEH4hOT2YTKzRE71K+hK3pgi9M6rp/b
+        Fh8+JUQNmuTEvlxTHn4Q7Mp0aRr3Hst1sue4I4W+YU9fcIoLAqIO7UfLE1oz2Dby
+        Xs3X8pFuYst+35l22uBbQBigxuWxmQ+R7XIOF4NGlUzEKuDs9xgfhN+9ghQ714p2
+        wQYrUbcmNq8jP/l2knmwRytY/s1zrxNj0Ps0u3yyo9NZeEB//M1qrDxByEmuSEPu
+        A1U2r8tk+C/vuV6Lba/qg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1669182186; x=
-        1669268586; bh=tSVppnYkpeXnvHJUaWTsGY07NlSPhzPn1JiOoH5/HyE=; b=c
-        9vHnGChIlGMiLqQBwDo7DCJUOF9wunu4vWnKXpcn1UCPdGh8W0E+NgcDeYmlhNx9
-        rkHX0arpD+C8hcik6BlSpth6Go3v1PZC/H0Nz1cQNivWaoZgPVaNZITtL6Y+F6U8
-        j0tqFrDfWR+Kdwm7cz11nWrZEhAs4UbBmaJ8twbWWOTQhmjat+BcFPo0VBSb8FC1
-        rR38kJh657AecYfVB/5Mk6ukMgi/meDvmvDvLEMQ2w1012Ncp+Uy+ofjTZE8W+KY
-        laPQ+oqHvkP/0ZC9hVFp18e/GI2zntt+rxtkmvsvxWSP7cWbBtx+5t1CGlmFnME6
-        KHhONFZY6oikTUfUqgSXg==
-X-ME-Sender: <xms:6bJ9Y3m-XQyW_cW19EF0O7_qSgwYBs78gcIFkmZOEvtLFK-ybK7Mbg>
-    <xme:6bJ9Y63rjEr4m1DW9F5hobFuuR7BWw4SXQx-ahVEkqlN5DrPFLBTxbGKKXf4A9tX9
-    oGwA-ISkycPysVRww>
-X-ME-Received: <xmr:6bJ9Y9oemprdq9BqkxXaBkmpK3H8lQuomL0oD6G39wfSDt1bQWVprKsTOo5cTENRaMvclgl8N7Q-Groz_h2aT64mh01_Ipcm72IHtQsMyJRKfOcqkT9OepogFQ>
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1669182591; x=
+        1669268991; bh=mBVtnDaBkuQcFRIzo1SOlDo6jVRm6UTP6X8KNYwdMJE=; b=F
+        Cjlyb/A2mVMfUg2HKISjGwIgr3mvFWS0kyTuDfiFgpfeHs3SR/X7TKtwvBhmHr21
+        4aklCAeGNNiCufAndXVGNAi2d4KAOF2v58R4Gpymz/RVsmKtVD65KeT8Mv/dab8z
+        bSkFp07Gp5NqevVDLL/0d7QbDnVN2Y0yQe5ZHIVvaPIWkf5JYx4MdSUEl++rF9cq
+        hLsNPlT46m703KzN6ChxeA1EzWK5tIYKqYbsEqvJ8fvLYvPz3Z3JqCnQ9+EciIgy
+        t5mEBZNFEdVm5sTscBU+Rkyc97uD6VsB+YNo+9Vf0AnZwRCTevRQQe2+E2n+G8of
+        ftq0uMZSuGsk2UeQvhrEA==
+X-ME-Sender: <xms:f7R9Y2JJepbnANxyT0sH7va8I-hEnRTTKqiCMZkMCaVF7k76gr3KHg>
+    <xme:f7R9Y-JmTdqLW0zpc8DcM9jncqptLYDCCKQcrP-7ucGRK9BfoCrUhrO3zjKJxalXm
+    p7wTbWuLfmN_n7u3A>
+X-ME-Received: <xmr:f7R9Y2syHEniHltffTZ6zaRB9qRuu67SzXUZ-6I-476UfH-9VYYhd7NdVnla1aeyLrdAhuQuGOX9o-HsCb1haI20mjmHJFbCkgD-NsHDrpN5CKJ62_RWXQMuiA>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedriedtgdekkecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfvvehfhffujggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
+    fjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
     vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepjefgfffhudejfedtuedugeeutdetgfeiteffffehjeeugfeuvdeh
-    jeetfedtffdtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:6bJ9Y_lqMg3jiaGs7hy7HpZRfc5co6xof8uTYu8XKCLGZTLHMJ9kBg>
-    <xmx:6bJ9Y10GY7LEHQ-c-r5q1s5_6nbAfmI-kg3zXJmNBOfY7jjMejfSlQ>
-    <xmx:6bJ9Y-vfg_AHIULqTZmNT0_ucgTU-gEurRoRsnaY54BKr-Q_pzj7hA>
-    <xmx:6rJ9Y001uFlYr4G8WozL5W2N2KX3RNkMAw0Vr4dYKx3UD3j-IqK3zw>
+    ftrfgrthhtvghrnhepteehheehtdegledtiedvfeeludekhfdtkeeuiefgfffhuedtjedt
+    fffhfeelleeunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpghhithhhuhgsrdgtoh
+    hmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshgr
+    mhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:f7R9Y7YF1f_d71J_y2hI3Z6qOUOdDp4_OrNDUegkBKYPE8VMad9C6w>
+    <xmx:f7R9Y9a24KQR-hjs7Y3AJQciwbOWD302TJHVRH4oPt2_kJRAhz2kXw>
+    <xmx:f7R9Y3C5ILrszIF9DwU1VEqZCa2TckxbgoW2CPyN_4NHHFxApWawkw>
+    <xmx:f7R9Y6Sq2kdIQ3CTQcreeodpgf9J_UxkTnPk9HLOXYYkDTDcsYYa4Q>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 23 Nov 2022 00:43:04 -0500 (EST)
-Message-ID: <2b329306-9706-7156-ad18-b87e4da666d9@sholland.org>
-Date:   Tue, 22 Nov 2022 23:43:04 -0600
+ 23 Nov 2022 00:49:50 -0500 (EST)
+Message-ID: <a218ebf8-0fba-168d-6598-c970bbff5faf@sholland.org>
+Date:   Tue, 22 Nov 2022 23:49:49 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
  Thunderbird/102.3.3
+Subject: Re: [PATCH v2] Revert "clocksource/drivers/riscv: Events are stopped
+ during CPU suspend"
 Content-Language: en-US
 To:     Conor Dooley <conor.dooley@microchip.com>,
-        Anup Patel <anup@brainfault.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        daniel.lezcano@linaro.org, tglx@linutronix.de
+Cc:     Anup Patel <anup@brainfault.org>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220727114302.302201-1-apatel@ventanamicro.com>
- <20220727114302.302201-2-apatel@ventanamicro.com>
- <372e37bf-ac90-c371-ad9e-b9c18e1cc059@linaro.org>
- <CAK9=C2WjU+2cD7UZbja3TT++KCdRyWroT=50dw=fzi5mX30rcw@mail.gmail.com>
- <7a0477a0-9f0f-87d6-4070-30321745f4cc@linaro.org>
- <CAAhSdy20p5bkVanKGkGyArn94hWJhwncztnX7U+4WkN9-v7NsA@mail.gmail.com>
- <Y3zjQXqEHsaoVVvf@wendy>
+        Palmer Dabbelt <palmer@rivosinc.com>, aou@eecs.berkeley.edu,
+        atishp@atishpatra.org, dmitriy@oss-tech.org,
+        paul.walmsley@sifive.com, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+References: <20221122121620.3522431-1-conor.dooley@microchip.com>
 From:   Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH v2 1/2] dt-bindings: riscv: Add optional DT property
- riscv,timer-can-wake-cpu
-In-Reply-To: <Y3zjQXqEHsaoVVvf@wendy>
+In-Reply-To: <20221122121620.3522431-1-conor.dooley@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -106,79 +95,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
-
-On 11/22/22 08:57, Conor Dooley wrote:
->> If we add a timer DT node now
->> then we have to deal with compatibility for existing platforms.
+On 11/22/22 06:16, Conor Dooley wrote:
+> This reverts commit 232ccac1bd9b5bfe73895f527c08623e7fa0752d.
 > 
-> In terms of what to encode in a DT, and given the spec never says that
-> the timer interrupt must arrive during suspend, we must assume, by
-> default, that no timer events arrive during suspend.
+> On the subject of suspend, the RISC-V SBI spec states:
+>> Request the SBI implementation to put the calling hart in a platform
+>> specific suspend (or low power) state specified by the suspend_type
+>> parameter. The hart will automatically come out of suspended state and
+>> resume normal execution when it receives an interrupt or platform
+>> specific hardware event.
 > 
-> We have a bunch of existing platforms that may (do?) get timer events
-> during suspend, the opposite of the proposed default behaviour.
+> This does not cover whether any given events actually reach the hart or
+> not, just what the hart will do if it receives an event. On PolarFire
+> SoC, and potentially other SiFive based implementations, events from the
+> RISC-V timer do reach a hart during suspend. This is not the case for
+> the implementation on the Allwinner D1 - there timer events are not
+> received during suspend.
 > 
-> I'm trying to follow the line of reasoning but I fail to see how taking
-> either the property or node approach allows us to maintain behaviour for
-> exiting platforms that that do see timer events during suspend without
-> adding *something* to the DT. No matter what we add, we've got some sort
-> of backwards compatibility issue, right?
+> To fix this, the x86 C3STOP feature was enabled for the timer driver -
 
-In the absence of bugs/limitations in Linux timer code (like the ones
-you are seeing on PolarFire), the backwards compatibility issue with
-setting C3STOP by default is that non-retentive idle states will be
-ignored unless:
- 1) the DT property is added (i.e. firmware upgrade), or
- 2) some other timer driver is available.
-No other behavior should be affected.
+C3STOP isn't inherently x86-specific.
 
-On the other hand, if C3STOP defaults to off, then the backwards
-compatibility issue concerns platforms that can currently boot Linux,
-but which cannot use cpuidle because they need the flag. If they were to
-upgrade their firmware, and Linux is provided a DTB that includes both
-idle states and the property, these platforms would unexpectedly fail to
-boot. (They would enter an idle state and never wake up.)
-
-Assuming no such platforms exist, then it would actually be better to
-default C3STOP to off.
-
-Now, this says nothing about how the property should be named -- we can
-set C3STOP based on the absence of a property, just as easily as we can
-clear C3STOP based on the presence of a property.
-
-> I noted the above:
+> but this has broken both RCU stall detection and timers generally on
+> PolarFire SoC (and potentially other SiFive based implementations).
 > 
->> Since, there is no dedicated timer node, we use CPU compatible string
->> for probing the per-CPU timer.
+> If an AXI read to the PCIe controller on PolarFire SoC times out, the
+> system will stall, however, with this patch applied, the system just
+> locks up without RCU stalling:
+> 	io scheduler mq-deadline registered
+> 	io scheduler kyber registered
+> 	microchip-pcie 2000000000.pcie: host bridge /soc/pcie@2000000000 ranges:
+> 	microchip-pcie 2000000000.pcie:      MEM 0x2008000000..0x2087ffffff -> 0x0008000000
+> 	microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
+> 	microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
+> 	microchip-pcie 2000000000.pcie: axi read request error
+> 	microchip-pcie 2000000000.pcie: axi read timeout
+> 	microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
+> 	microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
+> 	microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
+> 	microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
+> 	microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
+> 	microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
+> 	Freeing initrd memory: 7332K
 > 
-> If we could rely on the cpu compatible why would we need to add a
-> dt-property anyway? Forgive my naivety here, but is the timer event in
-> suspend behaviour not a "core complex" level attribute rather than a
-> something that can be consistently determined by the cpu compatible?
+> Similarly issues were reported with clock_nanosleep() - with a test app
+> that sleeps each cpu for 6, 5, 4, 3 ms respectively, HZ=250 & the blamed
+> commit in place, the sleep times are rounded up to the next jiffy:
+> 
+> == CPU: 1 ==      == CPU: 2 ==      == CPU: 3 ==      == CPU: 4 ==
+> Mean: 7.974992    Mean: 7.976534    Mean: 7.962591    Mean: 3.952179
+> Std Dev: 0.154374 Std Dev: 0.156082 Std Dev: 0.171018 Std Dev: 0.076193
+> Hi: 9.472000      Hi: 10.495000     Hi: 8.864000      Hi: 4.736000
+> Lo: 6.087000      Lo: 6.380000      Lo: 4.872000      Lo: 3.403000
+> Samples: 521      Samples: 521      Samples: 521      Samples: 521
+> 
+> Fortunately, the D1 has a second timer, which is "currently used in
+> preference to the RISC-V/SBI timer driver" so a revert here does not
+> hurt operation of D1 in it's current form.
 
-I do not support using either the CPU compatible (not specific enough)
-or the board compatible (too many to list, but still not specific
-enough). Consider that not all CPUs in a system may need this property.
+typo: its
 
-> Either way, we need to figure out why enabling C3STOP is causing other
-> timer issues even when we are not in some sort of sleep state & do
-> something about that - or figure out some different way to communicate
-> the behavioural differences.
-> I would expect timers to continue working "normally" with the flag set,
-> even if how they work is subtly different?
+> Ultimately, a DeviceTree property (or node) will be added to encode the
+> behaviour of the timers, but until then revert the addition of
+> CLOCK_EVT_FEAT_C3STOP.
+> 
+> Link: https://lore.kernel.org/linux-riscv/YzYTNQRxLr7Q9JR0@spud/
+> Link: https://github.com/riscv-non-isa/riscv-sbi-doc/issues/98/
+> Link: https://lore.kernel.org/linux-riscv/bf6d3b1f-f703-4a25-833e-972a44a04114@sholland.org/
+> Fixes: 232ccac1bd9b ("clocksource/drivers/riscv: Events are stopped during CPU suspend")
+> CC: Samuel Holland <samuel@sholland.org>
+> CC: Anup Patel <anup@brainfault.org>
+> CC: Palmer Dabbelt <palmer@dabbelt.com>
+> Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+> 
+> For v2, I have re-worked the commit message to (hopefully) add improved
+> context.
+> 
+> CC: aou@eecs.berkeley.edu
+> CC: atishp@atishpatra.org
+> CC: daniel.lezcano@linaro.org
+> CC: dmitriy@oss-tech.org
+> CC: paul.walmsley@sifive.com
+> CC: tglx@linutronix.de
+> CC: linux-kernel@vger.kernel.org
+> CC: linux-riscv@lists.infradead.org
+> ---
+>  drivers/clocksource/timer-riscv.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/timer-riscv.c
+> index 969a552da8d2..a0d66fabf073 100644
+> --- a/drivers/clocksource/timer-riscv.c
+> +++ b/drivers/clocksource/timer-riscv.c
+> @@ -51,7 +51,7 @@ static int riscv_clock_next_event(unsigned long delta,
+>  static unsigned int riscv_clock_event_irq;
+>  static DEFINE_PER_CPU(struct clock_event_device, riscv_clock_event) = {
+>  	.name			= "riscv_timer_clockevent",
+> -	.features		= CLOCK_EVT_FEAT_ONESHOT | CLOCK_EVT_FEAT_C3STOP,
+> +	.features		= CLOCK_EVT_FEAT_ONESHOT,
+>  	.rating			= 100,
+>  	.set_next_event		= riscv_clock_next_event,
+>  };
 
-Definitely agree here. My intention was not to affect anything other
-than cpuidle behavior.
-
-> On a D1, with the C3STOP "feature" flag set, and it's custom timer
-> implementation unused, how do timers behave?
-
-D1 is uniprocessor, so I build with CONFIG_SMP=n. In this case,
-CONFIG_GENERIC_CLOCKEVENTS_BROADCAST=n, and thus
-__tick_broadcast_oneshot_control() returns -EBUSY, forcing
-cpuidle_enter_state() to choose a retentive idle state.
-
-Regards,
-Samuel
+Acked-by: Samuel Holland <samuel@sholland.org>
 
