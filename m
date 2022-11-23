@@ -2,165 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE90B634F28
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 05:45:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96E11634EED
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 05:27:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235560AbiKWEpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 23:45:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
+        id S234329AbiKWE0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 23:26:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234338AbiKWEpl (ORCPT
+        with ESMTP id S235759AbiKWE0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 23:45:41 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2087.outbound.protection.outlook.com [40.107.237.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6337ECC16E
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 20:45:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RizZZc2y+XNKSLtMIJP9iK3NzjSLi60GO0BC1o5GfjglC6cV4UljdhFN3eIcX4XGjQga7VJRwGZQspA0xkRF0SvI2oTYrH7IUUci8pO1Jyv9Il7S6sIvzkR3acTBenUvAAv5yyW31q2XKiGdFpWLToWTVqgsmHEQGDryx1SQphmJdFLPGbOTeFCw93E4oyCNphk8hhIXAW/kSGB92caNm7dB33gniTvUdkPexf9HiPejRRgCXLCvOrzH4Xb3rLSiLUNr7Tb+VREBbhpwMCcT2ebTKV+fxmkiyAnxs5FaXdBsVdSQdBbreXe/i16W/g0Hqo+2OUNNP7+pC/6w+e07NQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Lr+G0fvjU0fBJ+Rx3zl3M6BEUoBn9KbCPMMMUfwYfA0=;
- b=WG6RbOB2wgAF4MRiwoT3yf3db+eLeGZ0Ti9sua8f+1iyHo3+lO5UQjAMFyD/23vFXkdu0DFqE4215xvfx290R3OMMCm53IFDUaofpGeUr5um9Ea6al6X+VkZZm1dhQYroQNZDkADx3KpgrDdSrv7+CWyb5ZS1RnysZlEeClYlETCUrdqgjgYkkSV76Ma/VKgGQm/k9qonWFQ0r6SMsoAvFnt3bQcZQ3safWIohE4BgGlKJVAAZCZlAm0vv8WIWNBJKfhcjahA6FL9jhfKeXNrLCR12SI6J4TnxXuSeiwCZnzFCeggkDl15VO6Vletq7Q2C9UTN7VhOEM7sUSoroJ8A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Lr+G0fvjU0fBJ+Rx3zl3M6BEUoBn9KbCPMMMUfwYfA0=;
- b=HGpgdecmVhN2h6rlpxPRULTS7lt6bT3swHaVWj9fFSU18ZqFAA8N0A/ZWVhIlGppAubbB4XRlVVtZwLDqhRwcFWbGd5uSegrhdQHaoC1KZvxIh0hpKkWu49naDqEjkDqGn7+xT4FMG58Eujt7fV/0AujYQRE0aK7yWlruYWhnoG4I+b1x54X9ShnS79wqA6IpyC/r6ifWLkQQbcyrCGcpQ/AatULq8vxsVEiX7+/bbZ2IKoeGEtnqDK94FtVWU7/SW1sZ6vXqf/Oo0v0ZqDTmeXbDgkFDKdeD9maHjaF6WLFQSZVV5/DmvQ4BNAMNge1TUb85El1pvyssYmfqReO4A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
- by CO6PR12MB5443.namprd12.prod.outlook.com (2603:10b6:303:13a::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Wed, 23 Nov
- 2022 04:45:38 +0000
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::ecfb:a3ad:3efa:9df8]) by BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::ecfb:a3ad:3efa:9df8%3]) with mapi id 15.20.5834.015; Wed, 23 Nov 2022
- 04:45:38 +0000
-References: <20221123005752.161003-1-gshan@redhat.com>
-User-agent: mu4e 1.8.10; emacs 28.2
-From:   Alistair Popple <apopple@nvidia.com>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, william.kucharski@oracle.com,
-        ziy@nvidia.com, kirill.shutemov@linux.intel.com, david@redhat.com,
-        zhenyzha@redhat.com, shan.gavin@gmail.com
-Subject: Re: [PATCH] mm: migrate: Fix THP's mapcount on isolation
-Date:   Wed, 23 Nov 2022 15:26:25 +1100
-In-reply-to: <20221123005752.161003-1-gshan@redhat.com>
-Message-ID: <87sfias2hd.fsf@nvidia.com>
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR03CA0331.namprd03.prod.outlook.com
- (2603:10b6:a03:39c::6) To BYAPR12MB3176.namprd12.prod.outlook.com
- (2603:10b6:a03:134::26)
+        Tue, 22 Nov 2022 23:26:46 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B23D62645
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 20:26:44 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id m22so40086904eji.10
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 20:26:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3EuOL+ghAt3LsHWBsR22c5MNj/lDkjJFSot/k6OsYDU=;
+        b=c5Ej4bAc6C8zTSNMHVHXD4/ppV/i0GvlLzerVd07mpWd195+P2AviSWbSg1KKdyd3d
+         jGKFztaaLDnvOE+UPLi5SbMDWJ012nwlmxEgR95vo5vZFpFSOgjz7yr6/QUUkkVwOQBy
+         NZ79ZHAM18B5E/HgU0J696xaMmpa0srgus/i7FlO172p46CXoCoZ6w3TetDMICBjfmE2
+         Cq7xNdhUGM4TSKNAZUZ3QdE9xImfyA7JUHfnmugB718Zna5nh7ZZouY6Mf6Qsi2M2/PZ
+         Ha5dq6Eh20XO0NrBdJrFeJTQK1Fm0/njY5SAjVfUpdVI+5sTKvnAG5tGPjP72Hzve0PI
+         zzgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3EuOL+ghAt3LsHWBsR22c5MNj/lDkjJFSot/k6OsYDU=;
+        b=7U/7YU5M4E2BsZlE34UChHRcnIWvKpxQBMsCvIvccY9WOfSWyRydMI03xegxsXV6V/
+         eDtkzGbdznLqGLH1eNqqoL1+IMsNeoPYhera9TCcieodmcV6ML8TIcp8aru4aAkR+vp7
+         tAeqn3SRJ9NbO8HDD69ED5vFJirXH8BdjQ4Wx5VnObiQD76SrF6ynonoPsYSvFJhKUts
+         bbuj2q/gx08ovlNdlH5/s04Sr7fuj+etCq8zsm4gEHTSPdQtXq3cs+KugHz9wBs4hJo9
+         7E/zO1si1c0S0lDMT3dOs7IHhpNoTB3OV/lst2Sg7K/mwtZrlntabGszZ1tcM0oxkhPE
+         6QeQ==
+X-Gm-Message-State: ANoB5pmXHxm407cdLe7yrnUv8PW2gbqGRVlbwvhdj6w0HL1z95/fHUQw
+        WF9Q10MsoUuQg7kAEmq1xLzBiYxP3OnuXAyeWAxbWQ==
+X-Google-Smtp-Source: AA0mqf4D83+Ec3zN/J0yAmt3eLxf8PEuxG0j7MWm6AL0n84S1q1nb5ZD5lRZnIk7bqoNUgSVj4axDGQOQl2JLC4woHE=
+X-Received: by 2002:a17:906:b250:b0:7b2:86d5:8b14 with SMTP id
+ ce16-20020a170906b25000b007b286d58b14mr22641046ejb.230.1669177602504; Tue, 22
+ Nov 2022 20:26:42 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3176:EE_|CO6PR12MB5443:EE_
-X-MS-Office365-Filtering-Correlation-Id: b2c8547c-5273-4aa3-40b9-08dacd0d915b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mD+Vc165R6oMZMq+V4vAZqG8AbiHGAdknxUzFxsAcN/SvpqQV18bPiE5jT6RElTFSPrfoJIgLgmtmzO2j/V7wTFBVHLmuze56oZgUoGmZ0+zL+SMGXnAr56cx56ZJcfPHplJA39nmBeHWGYEUZa+Z9NRLgD6L3BI5haDBFYqtAZ3cvxuY4Fpn3ZvWWAGHfLsnwEPWGLrhV3DWOPcevYuZhTVNlOZJHWigJqhEnEhaJ5MVG+I2Z+lJeXfVX/yEi8CqE1eWmHFfd4JJcqFB3+5zi+nMTFQAqzxqxFdliXGsHCjWeNj95I5i95rRQv2Ye+5ZnfANwv0t1YF5qfGcivH0tUpqirOGj6cqnZ1EUrMh5T5wnzDTt88Cr7pPlld8L/JffdFVdcBKo0cQqCjVQ+ag1pL4Yjl6akF0DMbV6pA9FeY09j+b6bM0yHioejLIPgFBJdJUlsZtDHx83sLyL8by/snMZ5HC2/mP74Txj0VyqZAkRNX8NqnSlAtvPJ+SNp7zp81/tl2zLmP+DTz679L0FJPPD5v8HvAxFKdKW/LzpLXixeJtJ/gmI5yP2xx8DQPALKA64xSw7/rJDhn1S8g3VkqumVEPrpJSR7Vqd1Q0Dwoe244FU9MDIly91p0xBMG
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(366004)(136003)(376002)(39860400002)(396003)(451199015)(8676002)(66556008)(316002)(6512007)(66476007)(66946007)(6916009)(4326008)(26005)(41300700001)(36756003)(6506007)(2616005)(6666004)(6486002)(2906002)(38100700002)(83380400001)(8936002)(186003)(478600001)(5660300002)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vynIw4jZj6P084QgTFaylCqAL9ZWCVnXy3+YBvjz7KK9fzRUXDfr4Qjy4PO0?=
- =?us-ascii?Q?oicCgc6DcKKV5jj50IkiXOR9raBt3dcjJKsabdB7XnaF/HXg7Au/fyBTL3/Z?=
- =?us-ascii?Q?MRWLHAHTI4MT+2YV0roIoudFi2fXT2Gqqd4WdqSokXhbARy7I8kuKxzyw0gG?=
- =?us-ascii?Q?EXdMBCOwS6AOLk3DhxR5FK5uPgfFn2HGPH0DPNATer8F1hV6+2Uw8XuDRW+b?=
- =?us-ascii?Q?Z1OGkgKxWx3Mkja8fH9cPvz4EztKYLq9jskN/AWNHIoXj2Kr3obE5mCvI2ym?=
- =?us-ascii?Q?npUwijxzlU1GlvmywzHK+BE8jiCUzESy266WCy7D4JDllF1wGbHFVPeZ+nYR?=
- =?us-ascii?Q?W44bzt9BK2luN2p/UtoeA7dU1u3moH75Hvo4Vn0dYloW1HlLB+VgCmPzNbDn?=
- =?us-ascii?Q?3w46V5r7y3VZlfHWi6CojcQG152OB9HjzPXmvTU4t6Gr/h71xrj3mdnHA7Hg?=
- =?us-ascii?Q?ZvfBPiL/zh6K9s7+eMD7unBx6crF5i7x7DWF97tCREgrMblK8GOPZzqIC/5T?=
- =?us-ascii?Q?pCzWoIODMU3EG9iC+ECPz7oWmTXHPL8MRUJRG9t/0bZT5c/3cBSsh8tFht5o?=
- =?us-ascii?Q?zmJVY1DKuj2lBRZxaE/XuHp8mVUUner+xTXG3cD+FImItAqHLN19KkDaWBMw?=
- =?us-ascii?Q?sTmudD2eSY93NkaBFLd4NbrBZH4li2chkf4SfTv+qFdO8ZkbZMxMcU7QFiJS?=
- =?us-ascii?Q?TzwGMCi8+I1k54mqhKsptAOnEjZirv1G1bBIZJ/iNJHJaIuMdm0JrZ/vKwoO?=
- =?us-ascii?Q?6j5h26BYAqAetP5p4LYsMtpYjRVC8oDr2rUpAE/mwUhBTStPk+KMEzlFCJ6G?=
- =?us-ascii?Q?YAuQPerOPDjFk5xtqrLkj99DyrAUC25sJBf5ehhleaWhYMoOFLB3PeHY3sYg?=
- =?us-ascii?Q?ArVUfp5mP+WkaRY9xNB0MT9dAE8y1ZOywfQvA8wcMbrXoxa082PESaHVDgIN?=
- =?us-ascii?Q?NkfME7VClZPJDxYG+qOznmCmu6sjnUwMDVHgVoEMlr6/12oQaCcqBjCnw6tO?=
- =?us-ascii?Q?9NFlk4nHy3TKgpQjo5YtjmeZnps8PsLiiBVgpO+XqnznHG9KFRFsBCF+EOcW?=
- =?us-ascii?Q?z8PT1q/JAzwBj/RN+MaMPFpC2defV8dPV1skdmkxQUi2NAIFfyroQLcTsw66?=
- =?us-ascii?Q?YzhuGQ65GRrO+51+LO6sCJSAQMvOGabgaTdtF2eNXRA8mE7OmqqlP23i8Hp4?=
- =?us-ascii?Q?70Utbl4LizAZwHe3ZGGcbvEnSCSkzaD0TSqCl5K077BFbt0YjksiQCS7d2iQ?=
- =?us-ascii?Q?VH9TDFPBq6t4TTcohNs7sfytFVtRxxc0V+xaav0FSSRjGqaPnq0pSInZogEk?=
- =?us-ascii?Q?Gx7xw/GP3NQyeG7g6Uu41+d5dUdczHZGw+kOft/6UWoDTAYhnmll/FXCH8bX?=
- =?us-ascii?Q?8Hk9Uiqs/egEcnGeLcvOBLJGDY2Vo6B1UzVRRR+trSz4nkB3TMIfV4NEKoXE?=
- =?us-ascii?Q?sClie8YVkhFA4w0KhQ8a4NO+WdNCa4v4bR6EThs9USCjqeq/w5w1xT6vSieF?=
- =?us-ascii?Q?bZUzVQUo2+k07h1MB/l+pP0K7JHv5Du84Mxwq3sT/d62E5cvP8QOrVV+qP0s?=
- =?us-ascii?Q?3y47hGPhdmPQInhYA01kVk/J/koqd8ion/FI/h4+?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b2c8547c-5273-4aa3-40b9-08dacd0d915b
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2022 04:45:38.4698
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CAxoV7uF3YI0pVz5Mpsz+RTLaIefFnYaRIkDkluW0WrKPI2wJIEHF+E0U6HnIK2V27HuoEulMLFq2E4Me2HZwA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5443
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <CAAhSdy0Fs9ZVoRgtz92RgLnFPvgwUzCP_KpK9SCOiVsA-t3p3Q@mail.gmail.com>
+ <mhng-3f44cc1f-7305-41c5-a1cf-dfed096bd364@palmer-ri-x1c9>
+ <CAK9=C2USZHdfBQrrgd2Rs3u3_gTyscpRgxvPU5P6ptOPu1+Axg@mail.gmail.com> <Y3ywTzv3vbgRXQGG@wendy>
+In-Reply-To: <Y3ywTzv3vbgRXQGG@wendy>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Wed, 23 Nov 2022 09:56:31 +0530
+Message-ID: <CAAhSdy1UwBQwX2jnmJXUAAjFL5TZXTUrs9yf9DRMSH=GV4BcHg@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: riscv-sbi: Stop using non-retentive suspend
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Conor Dooley <conor@kernel.org>, rafael@kernel.org,
+        daniel.lezcano@linaro.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, linux-pm@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux@rivosinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Gavin Shan <gshan@redhat.com> writes:
-
-> The issue is reported when removing memory through virtio_mem device.
-> The transparent huge page, experienced copy-on-write fault, is wrongly
-> regarded as pinned. The transparent huge page is escaped from being
-> isolated in isolate_migratepages_block(). The transparent huge page
-> can't be migrated and the corresponding memory block can't be put
-> into offline state.
+On Tue, Nov 22, 2022 at 4:50 PM Conor Dooley <conor.dooley@microchip.com> wrote:
 >
-> Fix it by replacing page_mapcount() with total_mapcount(). With this,
-> the transparent huge page can be isolated and migrated, and the memory
-> block can be put into offline state.
+> On Tue, Nov 22, 2022 at 11:06:15AM +0530, Anup Patel wrote:
+> > On Tue, Nov 22, 2022 at 10:46 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
+> > >
+> > > On Mon, 21 Nov 2022 19:45:07 PST (-0800), anup@brainfault.org wrote:
+> > > > On Tue, Nov 22, 2022 at 2:27 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
+> > > >>
+> > > >> From: Palmer Dabbelt <palmer@rivosinc.com>
+> > > >>
+> > > >> As per [1], whether or not the core can wake up from non-retentive
+> > > >> suspend is a platform-specific detail.  We don't have any way to encode
+> > > >> that, so just stop using them until we've sorted that out.
+> > > >>
+> > > >> Link: https://github.com/riscv-non-isa/riscv-sbi-doc/issues/98#issuecomment-1288564687
+> > > >> Fixes: 6abf32f1d9c5 ("cpuidle: Add RISC-V SBI CPU idle driver")
+> > > >> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+> > > >
+> > > > This is just unnecessary maintenance churn and it's not the
+> > > > right way to go. Better to fix this the right way instead of having
+> > > > a temporary fix.
+> > > >
+> > > > I had already sent-out a patch series 5 months back to describe
+> > > > this in DT:
+> > > > https://lore.kernel.org/lkml/20220727114302.302201-1-apatel@ventanamicro.com/
+> > > >
+> > > > No one has commented/suggested anything (except Samuel
+> > > > Holland and Sudeep Holla).
+> > >
+> > > I see some comments from Krzysztof here
+> > > <https://lore.kernel.org/lkml/7a0477a0-9f0f-87d6-4070-30321745f4cc@linaro.org/>
+> > > as well.  Looks like everyone is pointing out that having our CPU nodes
+> > > encode timers is a bad idea, my guess is that they're probably right.
+> >
+> > Adding a separate timer DT node, creates a new set of compatibility
+> > issues for existing platforms. I am fine updating my series to have
+> > separate timer DT node but do we want to go in this direction ?
 >
-> Fixes: 3917c80280c9 ("thp: change CoW semantics for anon-THP")
-> Cc: stable@vger.kernel.org   # v5.8+
-> Reported-by: Zhenyu Zhang <zhenyzha@redhat.com>
-> Suggested-by: David Hildenbrand <david@redhat.com>
-> Signed-off-by: Gavin Shan <gshan@redhat.com>
-> ---
->  mm/compaction.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> I don't really follow. How is there a compatibility issue created by
+> adding a new node that is not added for a new property? Both will
+> require changes to the device tree. (You need not reply here, I am going
+> to review the other thread, it's been on my todo list for too long. Been
+> caught up with non-coherent stuff & our sw release cycle..)
+
+Adding a new timer DT node would mean, the RISC-V timer driver
+will now be probed using the compatible to the new DT node whereas
+the RISC-V timer driver is currently probed using CPU DT nodes.
+
 >
-> diff --git a/mm/compaction.c b/mm/compaction.c
-> index c51f7f545afe..c408b5e04c1d 100644
-> --- a/mm/compaction.c
-> +++ b/mm/compaction.c
-> @@ -990,7 +990,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
->  		 * admittedly racy check.
->  		 */
->  		mapping = page_mapping(page);
-> -		if (!mapping && page_count(page) > page_mapcount(page))
-> +		if (!mapping && page_count(page) > total_mapcount(page))
+> > Even if ARM has a separate timer DT node, the timers are still part
+> > of the CPU. It depends on how we see the DT bindings aligning with
+> > actual HW.
+> >
+> > >
+> > > > Please review this series. I can quickly address comments to
+> > > > make this available for Linux-6.2. Until this series is merged,
+> > > > the affected platforms can simply remove non-retentive suspend
+> > > > states from their DT.
+> > >
+> > > That leaves us with a dependency between kernel versions and DT
+> > > bindings: kernels with the current driver will result in broken systems
+> > > with the non-retentive suspend states in the DT they boot with when
+> > > those states can't wake up the CPU.
+>
+> Can someone point me at a (non D1 or virt) system that has suspend
+> states in the DT that would need fixing?
 
-We have several versions of these checks for pinned pages open-coded
-around the place. See for example migrate_vma_check_page() and
-folio_expected_refs(). It looks like you could use a variant of
-migrate_vma_check_page() which would also check non-anon pins, although
-I don't know the compaction code well enough to know if that's useful.
+For the QEMU virt machine, the default non-retentive suspend state was
+tested using a temporary DTB provided separately via QEMU command
+line. The QEMU virt machine does not have its own HART suspend
+states so OpenSBI will functionally emulate default retentive/non-retentive
+suspend states.
 
-Either way it would be nice if we had a common helper for these kind of
-checks. Guess that would be harder to backport, and the change itself
-looks ok. But why isn't the fixes tag 119d6d59dcc0 ("mm, compaction:
-avoid isolating pinned pages")?
+>
+> > This is not a new problem we are facing. Even in the ARM world,
+> > the DT bindings grew organically over time based on newer platform
+> > requirements.
+> >
+> > Now that we have a platform which does not want the time
+> > C3STOP feature, we need to first come-up with DT bindings
+> > to support this platform instead of temporarily disabling
+> > features which don't work on this platform.
+>
+> It's the opposite surely? It should be "now that we have a platform that
+> *does want* the C3STOP feature", right?
 
->  			goto isolate_fail;
->  
->  		/*
+Yes, we can think this way as well.
 
+>
+> > > > With all due respect, NACK to this patch from my side.
+>
+> As Samuel pointed out that the D1 doesn't actually use the timer in
+> question, I think we are okay here?
+
+Yes, that's why D1 needs the C3STOP flag.
+
+>
+> > > >>
+> > > >> ---
+> > > >>
+> > > >> This should allow us to revert 232ccac1bd9b ("clocksource/drivers/riscv:
+> > > >> Events are stopped during CPU suspend"), which fixes suspend on the D1
+> > > >> but breaks timers everywhere.
+> > > >> ---
+> > > >>  drivers/cpuidle/cpuidle-riscv-sbi.c | 11 +++++++++++
+> > > >>  1 file changed, 11 insertions(+)
+> > > >>
+> > > >> diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
+> > > >> index 05fe2902df9a..9d1063a54495 100644
+> > > >> --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
+> > > >> +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
+> > > >> @@ -214,6 +214,17 @@ static bool sbi_suspend_state_is_valid(u32 state)
+> > > >>         if (state > SBI_HSM_SUSPEND_NON_RET_DEFAULT &&
+> > > >>             state < SBI_HSM_SUSPEND_NON_RET_PLATFORM)
+> > > >>                 return false;
+> > > >> +
+> > > >> +       /*
+> > > >> +        * Whether or not RISC-V systems deliver interrupts to harts in a
+> > > >> +        * non-retentive suspend state is a platform-specific detail.  This can
+> > > >> +        * leave the hart unable to wake up, so just mark these states as
+> > > >> +        * unsupported until we have a mechanism to expose these
+> > > >> +        * platform-specific details to Linux.
+> > > >> +        */
+> > > >> +       if (state & SBI_HSM_SUSP_NON_RET_BIT)
+> > > >> +               return false;
+> > > >> +
+> > > >>         return true;
+> > > >>  }
+> > > >>
+> > > >> --
+> > > >> 2.38.1
+> > > >>
+
+Regards,
+Anup
