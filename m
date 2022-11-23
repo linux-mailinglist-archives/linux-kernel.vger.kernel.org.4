@@ -2,102 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACCFB6360C4
+	by mail.lfdr.de (Postfix) with ESMTP id 604F86360C3
 	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:59:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238101AbiKWN7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 08:59:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49094 "EHLO
+        id S238070AbiKWN7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 08:59:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236016AbiKWN6p (ORCPT
+        with ESMTP id S238082AbiKWN6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 08:58:45 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6941D5A6CF
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:53:02 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oxqBL-0000GM-HC; Wed, 23 Nov 2022 14:52:55 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oxqBJ-0063uu-5s; Wed, 23 Nov 2022 14:52:54 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oxqBJ-0011bN-B2; Wed, 23 Nov 2022 14:52:53 +0100
-Date:   Wed, 23 Nov 2022 14:52:53 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Cc:     thierry.reding@gmail.com, alexandre.torgue@foss.st.com,
-        linux-pwm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        olivier.moysan@foss.st.com
-Subject: Re: [PATCH] pwm: stm32-lp: fix the check on arr and cmp registers
- update
-Message-ID: <20221123135253.dcuxxuyqvqtdwz5b@pengutronix.de>
-References: <20221123133652.465724-1-fabrice.gasnier@foss.st.com>
+        Wed, 23 Nov 2022 08:58:44 -0500
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E855943AEB;
+        Wed, 23 Nov 2022 05:52:54 -0800 (PST)
+Received: by mail-qk1-f173.google.com with SMTP id i9so2889252qkl.5;
+        Wed, 23 Nov 2022 05:52:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ru2/Qo/Fi2mBuBD/tnfTwcQucjWsxv7vBNnif4KKxRg=;
+        b=Irq8G/TbUp1OPHCe0S0cViZvzY0QkvV12l6XN9jOCRUDRKIcpR+VzomCErm49MN08v
+         h5gRzTg1qp9GJrvlWBggvMxQ9uUozo+ER9Ef7HQqYZYCBbaABj4xBYCQ1OTIB3Vmj350
+         11bVR24Mza84+vJfSS6TmpVUgCmUwPTCnxJfB+aSC0xGQ5WUq+cZfZr/fTxnvYkH+5YH
+         sW0wkHK1XxnLrL34CNkEwlgiqrot3A4Ri5ZLAfYlg9GRrqSCNJoX2MHpFkcLbkNAB6Az
+         itu9j/m0S4r99E0nY4d9qsRYSXfKsuD66h2X6WHNaZ1xN6W92KMu7Fdr742elPFC3IIa
+         rFjg==
+X-Gm-Message-State: ANoB5pmoLjq4/E8ByoNxc+PWTPZgBOyIumdZD1w32D6lxANnqMH8KrKH
+        m0QHplv7ThAdaVlCTLZANYgi7Vhzn4j0MXl4
+X-Google-Smtp-Source: AA0mqf7tsx4XkmtL07zI1j84rNZsR2zRGWZdsl/oWLCKxBnJz55LkZQWsszpShzauicMzCQJmZ1yDQ==
+X-Received: by 2002:a05:620a:561:b0:6fa:4b0b:d08f with SMTP id p1-20020a05620a056100b006fa4b0bd08fmr25515242qkp.488.1669211573582;
+        Wed, 23 Nov 2022 05:52:53 -0800 (PST)
+Received: from localhost (c-24-15-214-156.hsd1.il.comcast.net. [24.15.214.156])
+        by smtp.gmail.com with ESMTPSA id d7-20020a05620a240700b006e702033b15sm12525280qkn.66.2022.11.23.05.52.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 05:52:53 -0800 (PST)
+From:   David Vernet <void@manifault.com>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+        martin.lau@linux.dev, yhs@fb.com, song@kernel.org, sdf@google.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, jolsa@kernel.org,
+        haoluo@google.com, tj@kernel.org, kernel-team@fb.com,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: [PATCH bpf-next] bpf: Don't use idx variable when registering kfunc dtors
+Date:   Wed, 23 Nov 2022 07:52:53 -0600
+Message-Id: <20221123135253.637525-1-void@manifault.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cvhlradggud6ocvy"
-Content-Disposition: inline
-In-Reply-To: <20221123133652.465724-1-fabrice.gasnier@foss.st.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In commit fda01efc6160 ("bpf: Enable cgroups to be used as kptrs"), I
+added an 'int idx' variable to kfunc_init() which was meant to
+dynamically set the index of the btf id entries of the
+'generic_dtor_ids' array. This was done to make the code slightly less
+brittle as the struct cgroup * kptr kfuncs such as bpf_cgroup_aquire()
+are compiled out if CONFIG_CGROUPS is not defined. This, however, causes
+an lkp build warning:
 
---cvhlradggud6ocvy
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+>> kernel/bpf/helpers.c:2005:40: warning: multiple unsequenced
+   modifications to 'idx' [-Wunsequenced]
+	.btf_id       = generic_dtor_ids[idx++],
 
-On Wed, Nov 23, 2022 at 02:36:52PM +0100, Fabrice Gasnier wrote:
-> The ARR (auto reload register) and CMP (compare) registers are
-> successively written. The status bits to check the update of these
-> registers are polled together with regmap_read_poll_timeout().
-> The condition to end the loop may become true, even if one of the
-> register isn't correctly updated.
-> So ensure both status bits are set before clearing them.
->=20
-> Fixes: e70a540b4e02 ("pwm: Add STM32 LPTimer PWM driver")
-> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Fix the warning by just hard-coding the indices.
 
-Looks reasonable
+Fixes: fda01efc6160 ("bpf: Enable cgroups to be used as kptrs")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: David Vernet <void@manifault.com>
+---
+ kernel/bpf/helpers.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index e4e9db301db5..da2681ebb7c3 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -2019,16 +2019,16 @@ static const struct btf_kfunc_id_set common_kfunc_set = {
+ 
+ static int __init kfunc_init(void)
+ {
+-	int ret, idx = 0;
++	int ret;
+ 	const struct btf_id_dtor_kfunc generic_dtors[] = {
+ 		{
+-			.btf_id       = generic_dtor_ids[idx++],
+-			.kfunc_btf_id = generic_dtor_ids[idx++]
++			.btf_id       = generic_dtor_ids[0],
++			.kfunc_btf_id = generic_dtor_ids[1]
+ 		},
+ #ifdef CONFIG_CGROUPS
+ 		{
+-			.btf_id       = generic_dtor_ids[idx++],
+-			.kfunc_btf_id = generic_dtor_ids[idx++]
++			.btf_id       = generic_dtor_ids[2],
++			.kfunc_btf_id = generic_dtor_ids[3]
+ 		},
+ #endif
+ 	};
+-- 
+2.38.1
 
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---cvhlradggud6ocvy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN+JbIACgkQwfwUeK3K
-7AnTrAf9H/ODBQF61mFT1V6ZbR5uR/JCsCZBHrsNck9itpnzc6LvJO8K68jaVEVj
-2c58ekTJ7mhqz/UF7tk5fNdQlUDvLRPG8IX3LDWjrEDSQVaEH30nw4y0CBKU8lVh
-5LcMu/oe7KtSAj/bxp1AdYViZ/YHMZPPDJgpqgrQPxAWWQAcZRj0aRsEgPdi0FTU
-DD+wCZTfu5NgVgHvH2rEF+AqEE1L2dU1TU5FSLN2gUTWsBKgqJyQheebazCJkC6H
-vR3vLWxSRtxhs59VZdXxdyJ5m+s4aWzsroclCFtu8A0ubijprskO5aAtef8MJhMy
-wCymEGzXOGRdQNHgJ8RGfqo2acVpsg==
-=LlXc
------END PGP SIGNATURE-----
-
---cvhlradggud6ocvy--
