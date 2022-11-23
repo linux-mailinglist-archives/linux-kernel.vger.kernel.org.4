@@ -2,70 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1FA4635139
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 08:44:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A1463513C
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 08:46:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236295AbiKWHoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 02:44:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50030 "EHLO
+        id S235829AbiKWHo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 02:44:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235633AbiKWHoA (ORCPT
+        with ESMTP id S234911AbiKWHoy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 02:44:00 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA2BF72C5;
-        Tue, 22 Nov 2022 23:43:59 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id z63so4704733ede.1;
-        Tue, 22 Nov 2022 23:43:59 -0800 (PST)
+        Wed, 23 Nov 2022 02:44:54 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D995CF72C5
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 23:44:53 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso1235248pjt.0
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 23:44:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4tVlprrrNke5mFJD3/iYHZS4yaa+3ERCi6F/wJGiXeM=;
-        b=D8LMubMYRPyqtEe2Gjzyr9EplHp0q3MLWskKwHjRMUwgenyPDDpRZEkg8Io47uLz1X
-         vcDl6SbtlYIBMpNRSnRXNaG6xdLiHpuZBb5MKQUnhy7unO6dCUU15hjW4lMJ3hHSknhn
-         m7pALpuyQWFpm2NGNum+Be3YrFprtZqo+ZF+r83Jav+Ke+wO1ArwqZ9M22vAymcDhCY1
-         FSiZqhzOXyltmOD+/oVmZe1MihCKzQXP9XXC6AGCNDr4yBvuP6LXERTEGZ2XxNEVuHKw
-         VVasILyvML6eAY7oPF8Lw0LPUa9EC+aqfIwJNVY2nmBzCRHTFjbaYE81cNDezVY7xOon
-         6U9g==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DkNCuvzVKZTIBNAMLhyXJqvNV8XoAxmEaDHLKjpaxZk=;
+        b=GIZt1ORBmaG7n9RolwWkJ49wmMDAqSAEdkZa8bbfIDHYwD7sXZ5/XEVMkrDHclYtz2
+         hhoMoHNj7Y+Mmh577ISuaMfObcYKtff0K5UFEBv1HUMsUl4g8q4atXrN4jWDmw4GrQZk
+         m8p8q+ZvAWyb3GLIY1EMqlGI5EvucKfaalL/3RVjz4mcJzzKdqUwKrALJl69n4Rpi9bW
+         VY54dSqKoGj6mF9EzI0t6Wo6GK64PWy2CCKzTH8n1VVRJGoNoSq76mKwj4h1ptCcfhjn
+         H4ZSYewVbLviJZWghcZqHwaGu8e3L1DJDj8eyHHQtEBRFXvJeFPsg+C23QdYTOGIqK1z
+         Fx4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4tVlprrrNke5mFJD3/iYHZS4yaa+3ERCi6F/wJGiXeM=;
-        b=U+BMeXhMX9ETXdS9W5PlRtf4flq+iLXxbX8O8k0jdW1FVD4rC3IK+mGlhRNLLNcP3M
-         m6R7q0szv5UmYuVT1ab0yxPRJicQ0lL7xwxR11KdtNLg+2T1XkAPNB3DNQ9CDCJNv1w5
-         3FdBmxGgGOw/UC8JxClxL/4dloR9zM57DfKuMTEp5ngG8dX8AnHCBZYkIQl3ym8DOU5l
-         CiaYhTDfmzO1//gMzECUQF1FHWZWS7Z+uL/VJEhnUd3+TDzHU1tPUPB0RLN1IkJCBkWp
-         E+6ENP21CHzvkdUEiQVkLkAfAzn/xBuomUau5SXRlUuohMpn1KVidkK4CWBZephJ/MoX
-         RYmw==
-X-Gm-Message-State: ANoB5plcx5N2f1kdk78BDYJFK28Jo5fnHiKvhhsS9yA4IKZp/1M1VHyY
-        T1rylr7cY550EmEp7cNyI5k=
-X-Google-Smtp-Source: AA0mqf4cajyyEnqd7ZFPlV8ZMXO0wtZID40H63DrcO87cf5SlOZ8JsQQKIBnpLBDkPeYd4KYwGnFGg==
-X-Received: by 2002:a50:f602:0:b0:469:4e4f:4827 with SMTP id c2-20020a50f602000000b004694e4f4827mr16435104edn.214.1669189438290;
-        Tue, 22 Nov 2022 23:43:58 -0800 (PST)
-Received: from felia.fritz.box (200116b826997500d517ac74edd630a9.dip.versatel-1u1.de. [2001:16b8:2699:7500:d517:ac74:edd6:30a9])
-        by smtp.gmail.com with ESMTPSA id fi17-20020a056402551100b00459012e5145sm7284446edb.70.2022.11.22.23.43.56
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DkNCuvzVKZTIBNAMLhyXJqvNV8XoAxmEaDHLKjpaxZk=;
+        b=wfAev0TpW5Nh3d6nZTQALEIZG4ajF1lNQF93bn/RisQrUB+bLKu9DUd1Kp+MRIeP3Q
+         fq/Mjg6w7rYX5gnDmeyuIlG4aa5D7Sw12+/8JvDOwupTsh3uNfz3g3TQa7+HYZDmmv6O
+         KOxm1UT951NWgxDyT/4AP+q+UI7nEuFLWsUVWGvPC5C+061pA49IkOugLL54d74mr0o+
+         9PHhfmOujm3w0T2Upj2KmpBaRyfPBJ2CCGscBEljuQQZxvys/z8Gj1fWHnH3H5n3Dkwu
+         VnEYaoNGI67jgFBvqF/oEi1eW7CKtBFAV3V72SXE0b691DeSDqBjMCsW4bGi32JlRieF
+         4xVw==
+X-Gm-Message-State: ANoB5pm3zyNjf+9abqz5aK8JQw1h/DsX/kUd3VrYk077ibcJkL8UmUaO
+        3kepnvgyGAszmaRnxACd5AQ=
+X-Google-Smtp-Source: AA0mqf4ueg2nmqyofxlnFvFtstNwE5iLMoeyWgBN/2X4G08aj/OkYsyL4cJ3tIrLa+4UEKHwNu+I8Q==
+X-Received: by 2002:a17:902:b691:b0:17e:3f0f:5ad0 with SMTP id c17-20020a170902b69100b0017e3f0f5ad0mr12056528pls.162.1669189493415;
+        Tue, 22 Nov 2022 23:44:53 -0800 (PST)
+Received: from localhost.localdomain ([43.132.141.9])
+        by smtp.gmail.com with ESMTPSA id u3-20020a170902714300b00188f07c9eedsm13290823plm.176.2022.11.22.23.44.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 23:43:57 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] can: etas_es58x: repair conditional for a verbose debug message
-Date:   Wed, 23 Nov 2022 08:42:14 +0100
-Message-Id: <20221123074214.21538-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Tue, 22 Nov 2022 23:44:52 -0800 (PST)
+From:   zys.zljxml@gmail.com
+To:     alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Yushan Zhou <katrinzhou@tencent.com>
+Subject: [PATCH] drm/amdgpu: remove redundant NULL check
+Date:   Wed, 23 Nov 2022 15:44:37 +0800
+Message-Id: <20221123074437.1841014-1-zys.zljxml@gmail.com>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,34 +70,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The definition of VERBOSE_DEBUG for detailled debugging is set simply by
-adding "#define VERBOSE_DEBUG" in the source code. It is not a kernel
-configuration that is prefixed by CONFIG.
+From: Yushan Zhou <katrinzhou@tencent.com>
 
-As the netdev_vdbg() macro is already defined conditional on
-defined(VERBOSE_DEBUG), there is really no need to duplicate the check
-before calling netdev_vdbg().
+release_firmware() checks whether firmware pointer is NULL.
+Remove the redundant NULL check in psp_sw_fini().
 
-Repair the conditional for a verbose debug message.
-
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Signed-off-by: Yushan Zhou <katrinzhou@tencent.com>
 ---
- drivers/net/can/usb/etas_es58x/es58x_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c | 36 +++++++++++--------------
+ 1 file changed, 16 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
-index 25f863b4f5f0..2708909fb851 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_core.c
-+++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
-@@ -989,7 +989,7 @@ int es58x_rx_cmd_ret_u32(struct net_device *netdev,
- 			break;
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
+index effa7df3ddbf..77b966ab5439 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
+@@ -484,26 +484,22 @@ static int psp_sw_fini(void *handle)
+ 	struct psp_gfx_cmd_resp *cmd = psp->cmd;
  
- 		case ES58X_RET_TYPE_TX_MSG:
--			if (IS_ENABLED(CONFIG_VERBOSE_DEBUG) && net_ratelimit())
-+			if (net_ratelimit())
- 				netdev_vdbg(netdev, "%s: OK\n", ret_desc);
- 			break;
- 
+ 	psp_memory_training_fini(psp);
+-	if (psp->sos_fw) {
+-		release_firmware(psp->sos_fw);
+-		psp->sos_fw = NULL;
+-	}
+-	if (psp->asd_fw) {
+-		release_firmware(psp->asd_fw);
+-		psp->asd_fw = NULL;
+-	}
+-	if (psp->ta_fw) {
+-		release_firmware(psp->ta_fw);
+-		psp->ta_fw = NULL;
+-	}
+-	if (psp->cap_fw) {
+-		release_firmware(psp->cap_fw);
+-		psp->cap_fw = NULL;
+-	}
+-	if (psp->toc_fw) {
+-		release_firmware(psp->toc_fw);
+-		psp->toc_fw = NULL;
+-	}
++
++	release_firmware(psp->sos_fw);
++	psp->sos_fw = NULL;
++
++	release_firmware(psp->asd_fw);
++	psp->asd_fw = NULL;
++
++	release_firmware(psp->ta_fw);
++	psp->ta_fw = NULL;
++
++	release_firmware(psp->cap_fw);
++	psp->cap_fw = NULL;
++
++	release_firmware(psp->toc_fw);
++	psp->toc_fw = NULL;
++
+ 	if (adev->ip_versions[MP0_HWIP][0] == IP_VERSION(11, 0, 0) ||
+ 	    adev->ip_versions[MP0_HWIP][0] == IP_VERSION(11, 0, 7))
+ 		psp_sysfs_fini(adev);
 -- 
-2.17.1
+2.27.0
 
