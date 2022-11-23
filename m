@@ -2,85 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7AA46368C6
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:29:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C98976368CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:29:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236923AbiKWS3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 13:29:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57620 "EHLO
+        id S239429AbiKWS32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 13:29:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237073AbiKWS2r (ORCPT
+        with ESMTP id S239709AbiKWS26 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 13:28:47 -0500
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A50EAE7F;
-        Wed, 23 Nov 2022 10:28:23 -0800 (PST)
-Received: by mail-qv1-f45.google.com with SMTP id q10so1798252qvt.10;
-        Wed, 23 Nov 2022 10:28:23 -0800 (PST)
+        Wed, 23 Nov 2022 13:28:58 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C7A97358;
+        Wed, 23 Nov 2022 10:28:49 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id y4so17405327plb.2;
+        Wed, 23 Nov 2022 10:28:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HeXP11t/+0yLhKm0StolEpyltEEHuq6W+e1tTErqQaI=;
+        b=OO3acBF/AxFG9PvE3FfXDejXXULUCcDhFYGrWXM8f02v5B58SoZCg5HBB98r+jNnwD
+         Qz+NUoxIxl/Eg7QNIfdgGeIxRVNwSO7xs37P/+J6Vi4UyN2jfq5LHnbwJM4Sydqvam6+
+         heP0Lvyl2RfOftV00QuromUhSzPtd2zQ4rz3TNfcJv2gDAJolfN/yK53qd+/WJtf0LB4
+         94BQOHf5IMg90I6b27Rrs7dm5xiYAlfbCOhh/CfGrNBFmnOTCbxiXZCessgimQYKesXZ
+         EZ0yCCF3X2lypZ7NwzHg1vBIPBTriuuMqWkNfg4dfCh758tkmQhHw/QX58nbKy8HelQm
+         uIMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MlAtcGHYSDmdv8L+tYr1Di5ydYageamCywcR0aydFEQ=;
-        b=WFii2lIcjgacVRp2AY7USwy9kmkI8Z9vSH6Nblq/l0xc2hlCSO7GmqcCnj0rXd3IfR
-         DhUCYUAo2F2j8cmoUQ8EMlM3kaHuD31U0fr1G/TTnBwjjk9MX3O1ML/jiRX2Mf7ABwX9
-         novwcRJ17ydqkHu3RPzNFq4jLJTaFhyBUIxEFHc2Gyrm7H+piTmTPSpmTn7Xwb4pSP0i
-         YXKWGTFmRb9oriMYVlc3Fqg0fuAbD8wu7F6DEznb3N6XuEQKxgEajeaOnLrw4QTxb0bJ
-         v5SN5okGYFU0s0CgC0ZIb6jFJhT+eTuPZ6nJIYjr1FK9Blo05gG58K5PLCyvPXSmOo4s
-         9aTQ==
-X-Gm-Message-State: ANoB5pkFn6JDwB3/9RwCzkscTgMT+LBlG74rm6Y3r6abDFefGELdjbeH
-        916Ok/sMkDG8syrCtq+U9KNRique0aCJbGwZp60=
-X-Google-Smtp-Source: AA0mqf7XA44tquEVgp8cYRaZYhoIn4DfQqGm2VGwG6J166bI7A5AMshPv2PYoN/zTfGmQRvV6nUFVB3cUFkzLcv0Lv4=
-X-Received: by 2002:ad4:534b:0:b0:4b1:8429:a8a7 with SMTP id
- v11-20020ad4534b000000b004b18429a8a7mr9456555qvs.52.1669228102544; Wed, 23
- Nov 2022 10:28:22 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HeXP11t/+0yLhKm0StolEpyltEEHuq6W+e1tTErqQaI=;
+        b=uxAc+BvcC2BI62zKw3G52Aa+/6Rutcu7ou4IPYWbw/Xw1YIfkgZ2kFgvOv4nvBE5jb
+         QA5U88x3sbrIMzEJIpQ8U63vEm0MCppIi9LF/J6wH4kFYN4y5F7+M2AM6hqkEsNRlz5o
+         0UaMaDDcUratSjQMaJ0uT4Q2K4zkQIgF/RBCMIk5tFRoXB26GFz1cdmMUYmq4/2bEA62
+         6QSh84YLiNMLovSBhsSFZugcgUBdPNKlICYIludTU7biUpAbcfV99YGZJ9QPGPOjdNcQ
+         LJJNN8d4TgjK1ieZmMHvbrDoO+cg6Jg8ERARzlZNKb9tD7wwILVhTHrA+W6j8D/3FU/z
+         /krg==
+X-Gm-Message-State: ANoB5pnJJvrz6jDKodvGPdpVZJFQ1B8fYi+hy7NibvMNE436IDSEapFw
+        xx/c7RzMKcKLP0AJjQFGykA=
+X-Google-Smtp-Source: AA0mqf677qi+OR8ze787bk+49oIsafVTAux+aItt91jTR7n4sKuIHMs3PG/M1JQciezYcIgQxOLYiw==
+X-Received: by 2002:a17:90a:2b43:b0:200:40a2:eaaa with SMTP id y3-20020a17090a2b4300b0020040a2eaaamr37620844pjc.68.1669228128497;
+        Wed, 23 Nov 2022 10:28:48 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id w3-20020aa79543000000b005633a06ad67sm299883pfq.64.2022.11.23.10.28.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 10:28:48 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 23 Nov 2022 08:28:47 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Kemeng Shi <shikemeng@huawei.com>
+Cc:     josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/11] blk-throttle: remove repeat check of elapsed time
+ from last upgrade in throtl_hierarchy_can_downgrade
+Message-ID: <Y35mXymUTC1lx50j@slm.duckdns.org>
+References: <20221123060401.20392-1-shikemeng@huawei.com>
+ <20221123060401.20392-9-shikemeng@huawei.com>
 MIME-Version: 1.0
-References: <20221110015034.7943-1-lihuisong@huawei.com> <20221112020528.7837-1-lihuisong@huawei.com>
-In-Reply-To: <20221112020528.7837-1-lihuisong@huawei.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 23 Nov 2022 19:28:11 +0100
-Message-ID: <CAJZ5v0h16arZRYRkYr+VQB8OP3F8rVSFyodh-ZnZO1_-2bMOxg@mail.gmail.com>
-Subject: Re: [PATCH V3 0/2] Optimize PCC OpRegion code and reset pcc_chan_count
-To:     Huisong Li <lihuisong@huawei.com>
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rafael@kernel.org, sudeep.holla@arm.com,
-        rafael.j.wysocki@intel.com, wanghuiqiang@huawei.com,
-        zhangzekun11@huawei.com, wangxiongfeng2@huawei.com,
-        tanxiaofei@huawei.com, guohanjun@huawei.com, xiexiuqi@huawei.com,
-        wangkefeng.wang@huawei.com, huangdaode@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221123060401.20392-9-shikemeng@huawei.com>
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 12, 2022 at 3:07 AM Huisong Li <lihuisong@huawei.com> wrote:
->
-> This series clarifies the dependency of PCC OpRegion on interrupt and reset
-> pcc_chan_count to zero in case of PCC probe failure.
->
->
-> ---
->  - v3: fix commit log and goto tags.
->  - v2: drop the patch that rename platform interrupt bit macro
-> ---
->
-> Huisong Li (2):
->   ACPI: PCC: Setup PCC Opregion handler only if platform interrupt is
->     available
->   mailbox: pcc: Reset pcc_chan_count to zero in case of PCC probe
->     failure
->
->  drivers/acpi/acpi_pcc.c | 47 +++++++++++++++++++++++++----------------
->  drivers/mailbox/pcc.c   |  1 +
->  2 files changed, 30 insertions(+), 18 deletions(-)
->
-> --
+On Wed, Nov 23, 2022 at 02:03:58PM +0800, Kemeng Shi wrote:
+>  static bool throtl_hierarchy_can_downgrade(struct throtl_grp *tg)
+>  {
+> +	if (time_before(now, tg->td->low_upgrade_time + td->throtl_slice))
+> +		return false;
 
-Both applied as 6.2 material, thanks!
+Does this even build? Where is td defined?
+
+-- 
+tejun
