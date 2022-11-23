@@ -2,144 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7AF06350B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 07:54:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59B506350B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 07:56:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236134AbiKWGye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 01:54:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50576 "EHLO
+        id S236153AbiKWG4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 01:56:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235891AbiKWGyb (ORCPT
+        with ESMTP id S236072AbiKWGz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 01:54:31 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D602386A56;
-        Tue, 22 Nov 2022 22:54:29 -0800 (PST)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NHBgB2VRZzRpRY;
-        Wed, 23 Nov 2022 14:53:58 +0800 (CST)
-Received: from dggpeml500002.china.huawei.com (7.185.36.158) by
- dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 23 Nov 2022 14:54:28 +0800
-Received: from [10.67.103.44] (10.67.103.44) by dggpeml500002.china.huawei.com
- (7.185.36.158) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 23 Nov
- 2022 14:54:27 +0800
-Subject: Re: [PATCH v13 1/2] drivers/coresight: Add UltraSoc System Memory
- Buffer driver
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        <mathieu.poirier@linaro.org>, <mike.leach@linaro.org>,
-        <leo.yan@linaro.org>, <jonathan.cameron@huawei.com>,
-        <john.garry@huawei.com>
-References: <20221114090316.63157-1-hejunhao3@huawei.com>
- <20221114090316.63157-2-hejunhao3@huawei.com>
- <92291cb2-859c-a994-b05d-806def431376@arm.com>
- <c07e6417-7a37-3cf5-d3dd-b3ce7b3c20b1@huawei.com>
- <1c8da30c-d798-729d-c8e5-73a07f8b9f18@arm.com>
- <95024107-94d2-6114-4c50-b152c4da362b@huawei.com>
- <2f65e490-c264-9771-b120-e5ce76376170@arm.com>
-CC:     <coresight@lists.linaro.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-doc@vger.kernel.org>, <lpieralisi@kernel.org>,
-        <linuxarm@huawei.com>, <yangyicong@huawei.com>,
-        <liuqi115@huawei.com>, <f.fangjian@huawei.com>,
-        <prime.zeng@hisilicon.com>
-From:   hejunhao <hejunhao3@huawei.com>
-Message-ID: <58f94eac-3b3f-f106-7a22-e33b6c3f8a25@huawei.com>
-Date:   Wed, 23 Nov 2022 14:54:27 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
-MIME-Version: 1.0
-In-Reply-To: <2f65e490-c264-9771-b120-e5ce76376170@arm.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.103.44]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500002.china.huawei.com (7.185.36.158)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 23 Nov 2022 01:55:59 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14094F41A7
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 22:55:57 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8003D220D5;
+        Wed, 23 Nov 2022 06:55:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669186556; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DWIEFciCRBJZr4QjejGTJsTfwg2gOtGq8bBxtqG2n8Y=;
+        b=wfmbIv8JpgkhaZK8IIXmc5hWdRBRECNB1gXH6/QkPtm9Wo3WSygKkxZqNqy8O8FVv9VXNg
+        GY++2ZG1C9iM2Q/aamtiCsmgpXQAt9sjfUKXYBqEgWKddynrY6Dn7S3OlHkQcKmFiU4HT4
+        q5uIGt359H+869VsnU8MsYPHvDtx+rA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669186556;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DWIEFciCRBJZr4QjejGTJsTfwg2gOtGq8bBxtqG2n8Y=;
+        b=GFRPrWkEHgYQbiDNPXUQHVtuSEx0ietQjcKiXG9GwaQasQCLjXIXUYPQkDqo7wmo/Gn9T8
+        6pOIeDfor7etEDAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5114913A37;
+        Wed, 23 Nov 2022 06:55:56 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id krdFEvzDfWO2RQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 23 Nov 2022 06:55:56 +0000
+Date:   Wed, 23 Nov 2022 07:55:56 +0100
+Message-ID: <87mt8i5fcz.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Xiaolong Huang <butterflyhuangxx@gmail.com>
+Cc:     perex@perex.cz, tiwai@suse.com, baolin.wang@linux.alibaba.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [RESEND PATCH] ALSA: rawmidi: fix infoleak in snd_rawmidi_ioctl_status_compat64
+In-Reply-To: <20221123050911.1045190-1-butterflyhuangxx@gmail.com>
+References: <20221123050911.1045190-1-butterflyhuangxx@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Suzuki ,
+On Wed, 23 Nov 2022 06:09:11 +0100,
+Xiaolong Huang wrote:
+> 
+> The compat_status is declared off of the stack, so it needs to
+> be zeroed out before copied back to userspace to prevent any
+> unintentional data leakage.
+> 
+> Fixes: d9e5582c4bb2 ("ALSA: Avoid using timespec for struct snd_rawmidi_status")
+> Signed-off-by: Xiaolong Huang <butterflyhuangxx@gmail.com>
+> 
+> ---
+> 
+> Reason for resend:
+> 1. add Fixes line.
+> ---
+>  sound/core/rawmidi_compat.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/sound/core/rawmidi_compat.c b/sound/core/rawmidi_compat.c
+> index 68a93443583c..6afa68165b17 100644
+> --- a/sound/core/rawmidi_compat.c
+> +++ b/sound/core/rawmidi_compat.c
+> @@ -80,6 +80,7 @@ static int snd_rawmidi_ioctl_status_compat64(struct snd_rawmidi_file *rfile,
+>  	if (err < 0)
+>  		return err;
+>  
+> +	memset(&compat_status, 0, sizeof(compat_status));
+>  	compat_status = (struct compat_snd_rawmidi_status64) {
+>  		.stream = status.stream,
+>  		.tstamp_sec = status.tstamp_sec,
 
-On 2022/11/22 22:06, Suzuki K Poulose wrote:
-> On 22/11/2022 13:23, hejunhao wrote:
->>
->> On 2022/11/21 18:47, Suzuki Kuruppassery Poulose wrote:
->>> On 18/11/2022 12:45, hejunhao wrote:
->>>> Hi Suzuki ,
->>>>
->>>>
->>>> On 2022/11/15 19:06, Suzuki K Poulose wrote:
->>>>> On 14/11/2022 09:03, Junhao He wrote:
->>>>>> From: Qi Liu <liuqi115@huawei.com>
->>>>>>
->>>
->>>>>> +static void smb_init_hw(struct smb_drv_data *drvdata)
->>>>>> +{
->>>>>> +    /* First disable SMB and clear the status of SMB buffer */
->>>>>> +    smb_reset_buffer_status(drvdata);
->>>>>> +    smb_disable_hw(drvdata);
->>>>>> +    smb_purge_data(drvdata);
->>>>>> +
->>>>>> +    writel(SMB_LB_CFG_LO_DEFAULT, drvdata->base + 
->>>>>> SMB_LB_CFG_LO_REG);
->>>>>> +    writel(SMB_LB_CFG_HI_DEFAULT, drvdata->base + 
->>>>>> SMB_LB_CFG_HI_REG);
->>>>>> +    writel(SMB_GLB_CFG_DEFAULT, drvdata->base + SMB_GLB_CFG_REG);
->>>>>> +    writel(SMB_GLB_INT_CFG, drvdata->base + SMB_GLB_INT_REG);
->>>>>> +    writel(SMB_LB_INT_CTRL_CFG, drvdata->base + 
->>>>>> SMB_LB_INT_CTRL_REG);
->>>>>
->>>>> Does this come with interrupt on overflow ? Do we not use this ?
->>>>>
->>>> When the buffer overflow, no interrupt will come.
->>>> Interrupt will upgrade SMB_LB_INT_STS_REG register status if start 
->>>> trace.
->>>> Thanks.
->>>>> Rest looks fine to me.
->>>
->>> What is the purpose of the "Interrupt" on the SMB ? It is not clear to
->>> me.
->> The SMB_LB_INT_CTRL_REG register control the validity of both real-time
->> events and interrupts. When logical buffer status changes causes to 
->> issue an
->> interrupt at the same time as it issues a real-time event.
->> Real-time events are used in SMB driver, which needs to get the 
->> buffer status.
->> Interrupts are used in debugger mode and cannot be registered in kernel.
->>   ..._BUF_NOTE_MASK control which events flags or interrupts are valid.
->
-> Please add this to a comment in the code above the register write.
->
-> Thanks
-> Suzuki
->
-Yes, thanks for the comment. I will do that.
+Here at the line just after your addition, compat_status is fully
+initialized by substitution, so I believe the memset is superfluous.
 
-Best regards,
-Junhao.
->>
->> Thanks.
->>
->> Best regards,
->> Junhao.
->>
->>> Suzuki
->>>
->>> _______________________________________________
->>> CoreSight mailing list -- coresight@lists.linaro.org
->>> To unsubscribe send an email to coresight-leave@lists.linaro.org
->>
->
-> _______________________________________________
-> CoreSight mailing list -- coresight@lists.linaro.org
-> To unsubscribe send an email to coresight-leave@lists.linaro.org
+Or have you verified that it really leaks the uninitialized memory?
 
+
+thanks,
+
+Takashi
