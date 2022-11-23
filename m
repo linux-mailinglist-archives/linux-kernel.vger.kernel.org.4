@@ -2,99 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4447636954
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:54:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7310E636956
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:55:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239441AbiKWSyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 13:54:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53794 "EHLO
+        id S238357AbiKWSze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 13:55:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238569AbiKWSyk (ORCPT
+        with ESMTP id S239125AbiKWSz3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 13:54:40 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B296074CC7;
-        Wed, 23 Nov 2022 10:54:39 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id f3so17532246pgc.2;
-        Wed, 23 Nov 2022 10:54:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5sSGgviv+Rd8DodQepSsltaLLYak+O+h9smkq8iHKcU=;
-        b=fPjv6zZam2cSMYf9VamxmWMlMyv7kpdr5YdnhbjOilgItBXwb6LHw4mO0zpf3risoj
-         T43v3+mu8k+SWFkbYVjXSMtXRTjZuqLsAZQgYsPkZll4do16vOHi2nbSdqbMOOQ+RSOd
-         HQvnOHS5e6tZWST/ye/mBAGqlKPT8RyA04w8Bjy50IdYj8+otNvunOrr9NEAIQ5OnbNk
-         8VXIAJ2XD2Fd61/wbMsmflnCo54arTeNGC1DBGpG5Ol7fDTNSUrV5DexVJL1LPLky1Vj
-         vlnNvp7fTlt16YKuFSyhRsSaRHXaXYyLb+ZB5wvTuDzyRVYhn/5TI9qLi+rt/1jXsZCx
-         7jkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5sSGgviv+Rd8DodQepSsltaLLYak+O+h9smkq8iHKcU=;
-        b=nSwxtyuGhtmmRNwd9xXRzT3a4iheR9W9Zigb+5wQgg058nKXbIhsqiFhAkssht1nc3
-         oERsO7BWbQKey9ZKbXfwoUix81LdugQNPtmTPHiNEEg4jkcb7BV5aqrbo9UeFTZeZe4L
-         f61NzojoCXWRN1A6blcE6OHIPijFaGn0f/Ogf7FS4f5YVbskEvD/V9+0KdeKNcE/NNTc
-         KF7uppjcyPSyAbL6L0mArHkyuA40tduI77sUDTSHULIhR/4C/kzL4GvQ7K5YsWvKSE4U
-         pclO7CckGFWsLEsBXfqFIT2GcXjkEmGpOjo7sCPD8Bny0pvV0YVZSccH29iZuInMJWY7
-         AMLg==
-X-Gm-Message-State: ANoB5pk6n7K8hiTdlujwOPhrNytoaNQcVAgSYWYmo07v/6CyJGlLCnS8
-        4IS8ReyHuPd6M2oiSbuyR38=
-X-Google-Smtp-Source: AA0mqf44BN7ykPjHPAo2C9WjPmKfOrkxDUUtieAjzTf2lWt8Sgu9pE8eJ2HMvGBgeQ0TatRabC1RUg==
-X-Received: by 2002:a05:6a00:410b:b0:56b:dc84:7783 with SMTP id bu11-20020a056a00410b00b0056bdc847783mr15005280pfb.35.1669229678922;
-        Wed, 23 Nov 2022 10:54:38 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id y3-20020a17090322c300b0018912c37c8fsm9780378plg.129.2022.11.23.10.54.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 10:54:38 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 23 Nov 2022 08:54:37 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     "haifeng.xu" <haifeng.xu@shopee.com>, lizefan.x@bytedance.com,
-        hannes@cmpxchg.org, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cgroup/cpuset: Optimize update_tasks_nodemask()
-Message-ID: <Y35sbREgYE6aIdIp@slm.duckdns.org>
-References: <20221123082157.71326-1-haifeng.xu@shopee.com>
- <Y35Swdpq+rJe+Tu3@slm.duckdns.org>
- <5fccf438-fdbe-1bc8-6460-b3911cc51566@redhat.com>
+        Wed, 23 Nov 2022 13:55:29 -0500
+Received: from na01-obe.outbound.protection.outlook.com (mail-eastusazon11022025.outbound.protection.outlook.com [52.101.53.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B86C88F80;
+        Wed, 23 Nov 2022 10:55:22 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MeDczRl4D590lu6woPGXxPwOosQb538syOUh/HHfeMprRZe4ivEHPaK4AEfWDDxvm05MFGecqF2c6PcUnE8Yx23qVHrGFXxIUGQoulaO129cp7c7P0/KbUfmd+yDGJvn+taDU5xj5WGY4qDvrchS6s38OHt+H8omNcIQpYZArNiko4M9xM/gJG7sAETEB+TUZUcK900H+8MloDhzc1undUzTyVUs+tGFhgFx3/38AKR3BRIOAO2axS1ikOA2jB5OausBXaboL679hKEoD+6Aes0E2uVMbReTJ2uXbZnFMKWtNKW/1UM25RaHEmyLtZuf1J5qaroLJwshC9Wlvg3CUQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9QLHRfqKD0vVqeM6S2f5ehUu59W1SXGPOPjQ81oGWxU=;
+ b=ErGA4BeDf2+FD4qKm+w8DuVfa/bvXz4IbymbSApRb2nJpIiIQNqopAG6Kr1XiUVZoc29erzSV/Ywhx9e5dZe2NsBB7miwfA/NAt35e2WA4pVvSPfXbFYIkoZqdT+BSwMO2piqY6U0/IM5/OEgd1HLkwcyWPJR/SXrAJn6MR9zc7BdAss1Yq7+n31dYvjEVaRwK3kDF+FFxuEj7Sh9pUf0oBmf+8IFnjou/n7DNmkMhngfyu7b+hb0GxyNEDZdZQzkTEtmiwFXPgN4vyNCznbWJ1FQZL5VaLR8ETg+2n/Aw9697L2e531qtgxcA8SCEpYb+sHx0CD2iOnzADcvby3JQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9QLHRfqKD0vVqeM6S2f5ehUu59W1SXGPOPjQ81oGWxU=;
+ b=Hpsa+2hEv20ZB7/hsgYdj7gir5KM8auZr2vL1dSrlgYcn3jtj/6H2Bd/+TuxiBqKYXADiFkfcprCw8NHiXXCMclDEBYXwVPrqeXn0otdbV7XoPwPDe1rRKtD4FPMRDtSq2vTUvOcSUoxC8FkHUF3xUUuoQH0mWaaAHZ51MQ3zP4=
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
+ by PH0PR21MB1991.namprd21.prod.outlook.com (2603:10b6:510:1d::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.4; Wed, 23 Nov
+ 2022 18:55:19 +0000
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::ac9b:6fe1:dca5:b817]) by SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::ac9b:6fe1:dca5:b817%5]) with mapi id 15.20.5880.004; Wed, 23 Nov 2022
+ 18:55:18 +0000
+From:   Dexuan Cui <decui@microsoft.com>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+CC:     Dave Hansen <dave.hansen@intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 1/6] x86/tdx: Support hypercalls for TDX guests on Hyper-V
+Thread-Topic: [PATCH 1/6] x86/tdx: Support hypercalls for TDX guests on
+ Hyper-V
+Thread-Index: AQHY/elAG0JYcbbfGkmNBxJJMMwuJ65LuIUwgADeyYCAAEbnMA==
+Date:   Wed, 23 Nov 2022 18:55:18 +0000
+Message-ID: <SA1PR21MB1335EEEC1DE4CB42F6477A5EBF0C9@SA1PR21MB1335.namprd21.prod.outlook.com>
+References: <20221121195151.21812-1-decui@microsoft.com>
+ <20221121195151.21812-2-decui@microsoft.com>
+ <18323d11-146f-c418-e8f0-addb2b8adb19@intel.com>
+ <SA1PR21MB13353C24B5BF2E7D6E8BCFA5BF0C9@SA1PR21MB1335.namprd21.prod.outlook.com>
+ <20221123144043.ne34k5xw7dahzscq@box.shutemov.name>
+In-Reply-To: <20221123144043.ne34k5xw7dahzscq@box.shutemov.name>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=9781b948-f20b-4377-b29d-f930da102b44;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-11-23T18:54:29Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|PH0PR21MB1991:EE_
+x-ms-office365-filtering-correlation-id: a2c5291e-cae7-45d6-e7b7-08dacd8443f7
+x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: IqNHMpTYiV6ApN5jQpiXtIfbBx/NBPRiL1RJTvJ/Grxin1WCmLqxFz+O5rHs9GOBQsl3/DAeKoAy7bbSdl+WOKWoWGalNtc8n2a+THXMO9Xxq++QCamGvXH3LpZJLwZQsr60i5lIyBXwEJSjisrmz/0littoeInWswtqAkVJuS+WKBMkYrJrwlVYqCyLMaENYJo/gORijS7EFlIYthbJk9Z+gNTCwMP0oB5GYYZ/X6uPbPtPgkJ/QzgNLztsT0Trn0FhTxWblGFKwwxJr0n6Fxp8VwygSlmgHgLneKWbPmvR+DkryXRvq04XyzoHGktxTOnoywhUzibRd3sdRKY6AycgBgwUbz0KOxyS7zEIa+wV47ou6ybrXoauM0Y/jhqdx4L+VW0FJzSIAx096QvdbSQScW/A1uACno6q7AzP7Fa+n7yOtQJ9kCLjKrvKeFSH4lz/bwMkl/UwAY26xhDLnN1uVPdk9nht8X8CUbXVaRRGbGY2HGySxe3O94lznoDn7vFtRlVV+jKQbh5kTGhJD22oE8L8QOtlCfdkc7L7JWKO8UyNjf8BgZTlSBwblVnkF67SwRtYrG46vobpy8Uyj/CZxe9/mgDffkUtxkczVF2LIiyzokDt0HXVj3iroNbd8XmG8TRPy8KEv+t/GW1WTgYF7CNeCHim/s3pJ1ose06N73MMVmyhTWerSCSoUsNiFJ97m/958tPIvi9lwE75pf4tmATH/fhRnEyqzpBytw7xsxrFR4WHR6XAZGiry4dT
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(376002)(39860400002)(366004)(396003)(451199015)(41300700001)(5660300002)(7416002)(2906002)(38070700005)(26005)(8936002)(9686003)(52536014)(38100700002)(10290500003)(6506007)(82960400001)(82950400001)(7696005)(122000001)(55016003)(558084003)(316002)(33656002)(71200400001)(6916009)(54906003)(66446008)(4326008)(8676002)(66476007)(8990500004)(66556008)(64756008)(86362001)(186003)(66946007)(478600001)(76116006);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?3m5B19/hg25Pyb34kD12kc45fJunqYI24Wa94749uXjCuh0WGwVsFr13HTCi?=
+ =?us-ascii?Q?DsKEaMz6zIgRayjXQHtJo6uMjmA2zPW/Z7DakVuv5imt2vLUsyvnyPs5VVS4?=
+ =?us-ascii?Q?gdFcMdFN79jopNN+MklFHNu8Z9nUUBPvX8NZWRV6FyOh4JIXlK0Ehx4RRi4x?=
+ =?us-ascii?Q?a2eEgGtL0FALX1gZCDUI8/m/cUH3FPqYB6UL3yqe1+5UyMS2SAoqRX6Kn4l0?=
+ =?us-ascii?Q?RWyHIUDgryxEpoVM6HKvCOkFFcoyVq+IQP4xpMJIKninCiGBQCuUdDXYlwvQ?=
+ =?us-ascii?Q?cxgm75/3A51vr0YIn6acH+BInGxI30tLOe2bwgOgosenVjSsWCci605FDOws?=
+ =?us-ascii?Q?HfTOBNtOTE2WZJUgIPiQGncaqXsh5boQthF4zQ4ukJzNkHQm2ceFatxExTLF?=
+ =?us-ascii?Q?wprkqY+CIR5zsxERNYXUlyuIY3KHCnh4ygwIMUxc6xZWukiSK9l39Yf5bQ7Q?=
+ =?us-ascii?Q?CTDMIcdydqQVxrLYykasdl0yd/J9P8QqMyAGPFhnB1D8/rcIoFIEXouGkB5C?=
+ =?us-ascii?Q?cgcjZ6R7V9LqZw/YIvhMEIh3dQ6Uz9fh02P5d4bwmwC2o0dLbfQHE5EfRoTz?=
+ =?us-ascii?Q?bTHVbw+HfXzPdEn3KsNygnz9AG0xh6CsrWWG1OTiy4mXZIeCui+E3G2b6AV4?=
+ =?us-ascii?Q?WQVOVv/t+VOZflYV9bZsC52nEJExv5a1UhlLaM3vIJEoUGj0fZh/91g4kRpJ?=
+ =?us-ascii?Q?D6J7l78AVtZe7pTh8E563uWXrwJ2CJSCrcIduRrVmt8p+LArAxbT1ll8L046?=
+ =?us-ascii?Q?JTmqnlQVj9mzEERH0+hoQ4eCx7iWgSieqUgdkokW7kwqOSBYzhfITIJILpmA?=
+ =?us-ascii?Q?in0dPV4Qn4Kd832kbN6FEKskgqV0zStoqlNGeOLuiOc6czDqamlWatNn+mYp?=
+ =?us-ascii?Q?e+DklA64+B3Q+YKxO2DiRxbh4NUx34XqZEhsHtXWJ8eM3gTJoRDrWo91VkQR?=
+ =?us-ascii?Q?F2iwLicwF2oKQS2JXusDd0/hEInPTECWQObsr2HiUU84tX3Nnh5lEetEbZFq?=
+ =?us-ascii?Q?eDYV8gNFje0YL7C3iGfGgO6qtEO72vHXmq845zgh2fqEIH0CHoS/MKmnJD1C?=
+ =?us-ascii?Q?DR2hnAIiCk83MzMv+pahaazNx69g6ds1yVI4D+AlLNZzzeE1RLoVBtx+GHdm?=
+ =?us-ascii?Q?CK3bh6osSVl+dIOxYrXUcnN/etaJy85kzd9FmfasFX4zA90mMHjIBi238/q8?=
+ =?us-ascii?Q?ccZXXcnvuS5kX5f5k5h/2WNrxTH+AUGXzxDG/05e8Vf9tCPnHDq+RPBG4Mt+?=
+ =?us-ascii?Q?V/xeKDFKXqrXOi8iehmdln05mGM3Li6rWKeb3Ikdb7kOc4l++MPMEDeIW+We?=
+ =?us-ascii?Q?T93CS1osDjAO7K7p+pz+xJsnkKl7IN6o1k1OKNCQp3qv7X1Qo5KxSY35SR/+?=
+ =?us-ascii?Q?o+6zGK/zH+cALei71eZeWeefwQrxrWT+43Qqjlo6BYwUZnx6DaHLxThCXV+l?=
+ =?us-ascii?Q?XK37L2ZIzzIhanVMK3bKLoyunIfaFgM+8vZIS/tA1sQyqTk1s4HLGvDrDfS+?=
+ =?us-ascii?Q?RSuVp3/kYZYRlpKDYRR6yESq68d48BRStTUTA+frbJlfZC/2RRHV0RX2uj3F?=
+ =?us-ascii?Q?62Zbt924p7eNQx76xO8MFVL2BkgNuil6T5oCROpj?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5fccf438-fdbe-1bc8-6460-b3911cc51566@redhat.com>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a2c5291e-cae7-45d6-e7b7-08dacd8443f7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Nov 2022 18:55:18.5575
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: CD1SIYedjDZAjFRa5wQKwaUiFtLuVjj5YAcKQQXn24SdWJokkE9W1weq048614NO1LlAdaDuMCJv6hyRBBwP9g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR21MB1991
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 01:48:46PM -0500, Waiman Long wrote:
-> I think it is an issue anyway if different threads of a process are in
-> different cpusets with different node mask. It is not a configuration that
-> should be used at all.
+> From: Kirill A. Shutemov <kirill@shutemov.name>
+> Sent: Wednesday, November 23, 2022 6:41 AM
+> [...]
+> I have plan to expand __tdx_hypercall() to cover more registers.
+> See the patch below.
 
-Anything memory related is in the same boat and people still use them
-reaching whatever end results they reach. Given the whole thing is pretty
-ill-defined, I don't wanna change the behavior now.
+Great! Thank you!
 
-> This patch makes update_tasks_nodemask() somewhat similar to cpuset_attach()
-> where all tasks are iterated to update the node mask but only the task
-> leaders are required to update the mm. For a non-group leader task, maybe we
-> can check if the group leader is in the same cpuset. If so, we can skip the
-> mm update. Do we need similar change in cpuset_attach()?
-
-The leader isn't special tho. We just wanna avoid visiting the same mm more
-than once, right?
-
-Thanks.
-
--- 
-tejun
+> Is it enough for you?
+Yes.
