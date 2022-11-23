@@ -2,151 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19BAF6351F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 09:10:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07C756351FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 09:11:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236326AbiKWIJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 03:09:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48188 "EHLO
+        id S236333AbiKWIKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 03:10:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235946AbiKWIJY (ORCPT
+        with ESMTP id S235705AbiKWIKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 03:09:24 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5319A248
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 00:09:22 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oxkok-0006Eq-Bh; Wed, 23 Nov 2022 09:09:14 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oxkoi-0060sj-AG; Wed, 23 Nov 2022 09:09:13 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oxkoi-000yN1-Ek; Wed, 23 Nov 2022 09:09:12 +0100
-Date:   Wed, 23 Nov 2022 09:09:12 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     kernel@pengutronix.de,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
-        Grant Likely <grant.likely@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>
-Subject: Re: [PATCH 571/606] serial: sc16is7xx: Convert to i2c's .probe_new()
-Message-ID: <20221123080912.lbmfgnco67psdu27@pengutronix.de>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-572-uwe@kleine-koenig.org>
- <536ac08e-bdbd-b4d6-8309-8f6763f8db12@kernel.org>
- <20221121070757.cqiybt5uk4qiczmr@pengutronix.de>
- <0bfea903-5efd-a76d-5944-16a2c9362adb@kernel.org>
+        Wed, 23 Nov 2022 03:10:45 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C9B98264
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 00:10:44 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id h10-20020a056e021b8a00b00302671bb5fdso12602915ili.21
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 00:10:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6I1W1y2x8WCoMes3YNYuaCCPghY6aiWezz6ayF0TOpI=;
+        b=EPSWgGTMC47N7hAEGL5MrtIyreBAQpwA0M6KIFO5y9QOWi7zEOF6rKbKDhnEMm2gYH
+         sGuuID+45vTX/DSidl051xfczm3EoB6Smim3FRXBEtBzg0EOhMeXaBKhcJXR5hGezYAw
+         tw1ogl03XVy/B1tBRHiT9E9qUa4tBHYy58vSPit6nj4ZRMtqfz2ki6z/gEoIMa/xNthN
+         /eGR2ISmY2DS3RmV5YBgiTpifFsO+0vMQFtSZIBA/I1LlGx89q7buWRniUX2ScmAf5bk
+         mrRlwDxpUCgREZnaa0F7XD5eIwhHfE+xH1JFxV9QVL+nxsZGcWI+jqLly3dRI8BHcfIR
+         IczA==
+X-Gm-Message-State: ANoB5plYvH3hff4Lcl+DJh11vUSEx5Pw+GdKvtmCSKUW+tVDrBQgWff8
+        K2Zq9QxeRO0Qm/Y5fZi/S9T+nXfbKb9EwcbSdbqyzx7pzabX
+X-Google-Smtp-Source: AA0mqf6lHz47qefUNe175SSyHMTEPPiuorHnQZf649VTAzEe4ThbeOrdNrjCMWkY9W0Rn2sjDa9rZDovEozLCWnV4IxxU7WhWje3
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="f745plogbhx5hxup"
-Content-Disposition: inline
-In-Reply-To: <0bfea903-5efd-a76d-5944-16a2c9362adb@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:d701:0:b0:300:ca48:e52d with SMTP id
+ m1-20020a92d701000000b00300ca48e52dmr11818832iln.86.1669191044114; Wed, 23
+ Nov 2022 00:10:44 -0800 (PST)
+Date:   Wed, 23 Nov 2022 00:10:44 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003f315b05ee1ed3f4@google.com>
+Subject: [syzbot] kernel BUG in close_ctree
+From:   syzbot <syzbot+2665d678fffcc4608e18@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
---f745plogbhx5hxup
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+syzbot found the following issue on:
 
-Hello Jiri,
+HEAD commit:    eb7081409f94 Linux 6.1-rc6
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=17e5b309880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5db36e7087dcccae
+dashboard link: https://syzkaller.appspot.com/bug?extid=2665d678fffcc4608e18
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-On Wed, Nov 23, 2022 at 07:36:52AM +0100, Jiri Slaby wrote:
-> On 21. 11. 22, 8:07, Uwe Kleine-K=F6nig wrote:
-> > On Mon, Nov 21, 2022 at 07:03:41AM +0100, Jiri Slaby wrote:
-> > > On 18. 11. 22, 23:45, Uwe Kleine-K=F6nig wrote:
-> > > > From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> > > >=20
-> > > > .probe_new() doesn't get the i2c_device_id * parameter, so determine
-> > > > that explicitly in the probe function.
-> > >=20
-> > > I wonder why -- is this a new approach to probe functions? Or is only=
- i2c
-> > > affected? And why? Could you point to the commit introducing and desc=
-ribing
-> > > the change in the i2c core?
-> >=20
-> > I didn't sent the cover letter to all recipents of the individual
-> > patches, so flow of information is a bit rough. Sorry about that.
-> >=20
-> > You can find it at
-> > https://lore.kernel.org/lkml/20221118224540.619276-1-uwe@kleine-koenig.=
-org/,
-> > it should answer your question.
->=20
-> Yes, I looked up that beforehand, but was no more clever after reading it.
->=20
-> > The short version is: The i2c framework does a more or less expensive
-> > lookup for each call to .probe() to provide the id parameter. A relevant
-> > part of the drivers however doesn't use this parameter, so the idea is
-> > to let the drivers who actually need it, determine it themselves.
-> >=20
-> > Statistics for the current state of this series in my tree:
-> > Among the 602 converted drivers, 404 don't make use of the parameter.
->=20
-> So doesn't it make sense to provide both probe with no id and "probe_id"
-> then? 200 is quite a few (a third to be precise).
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Having the probe callback with the id parameter is only temporary. As
-soon as all drivers are converted, the variant with the id parameter
-will go away.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/12e9c825ff47/disk-eb708140.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/107e5e091c9e/vmlinux-eb708140.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/605ab211617d/bzImage-eb708140.xz
 
-> BTW is this a performance issue? I.e. does it slow down the boot?
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2665d678fffcc4608e18@syzkaller.appspotmail.com
 
-I don't know the start motivation for Lee (who triggered the conversion
-in b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new() call-back
-type")).
-Looking at the git history, he created 1e98dcd77970 ("mfd: 88pm860x:
-Move over to new I2C device .probe() call") converting a driver that
-doesn't benefit immensely. The lookup is more expensive for drivers with
-big .id_table, the converted driver has only one entry.
+assertion failed: list_empty(&fs_info->delayed_iputs), in fs/btrfs/disk-io.c:4664
+------------[ cut here ]------------
+kernel BUG at fs/btrfs/ctree.h:3713!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 3696 Comm: syz-executor.2 Not tainted 6.1.0-rc6-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:assertfail.constprop.0+0x27/0x29 fs/btrfs/ctree.h:3713
+Code: 3f c9 f7 41 54 41 89 f4 55 48 89 fd e8 a2 3f c9 f7 44 89 e1 48 89 ee 48 c7 c2 60 a4 95 8a 48 c7 c7 a0 a4 95 8a e8 00 76 f5 ff <0f> 0b e8 82 3f c9 f7 e8 8d 3d 15 f8 be 73 04 00 00 48 c7 c7 40 a5
+RSP: 0018:ffffc90003727be8 EFLAGS: 00010282
+RAX: 0000000000000051 RBX: ffff888027d9c000 RCX: 0000000000000000
+RDX: ffff88804a6b6280 RSI: ffffffff8164973c RDI: fffff520006e4f6f
+RBP: ffffffff8a95dac0 R08: 0000000000000051 R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000000 R12: 0000000000001238
+R13: 0000000000000000 R14: 0000000000000000 R15: ffff88801da29200
+FS:  0000555555bec400(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f17654d56be CR3: 0000000031a82000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ close_ctree+0x502/0xdc7 fs/btrfs/disk-io.c:4664
+ generic_shutdown_super+0x158/0x410 fs/super.c:492
+ kill_anon_super+0x3a/0x60 fs/super.c:1086
+ btrfs_kill_super+0x3c/0x50 fs/btrfs/super.c:2441
+ deactivate_locked_super+0x98/0x160 fs/super.c:332
+ deactivate_super+0xb1/0xd0 fs/super.c:363
+ cleanup_mnt+0x2ae/0x3d0 fs/namespace.c:1186
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
+ exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:203
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+ syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
+ do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f7827a8d5f7
+Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffeef557068 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f7827a8d5f7
+RDX: 00007ffeef55713c RSI: 000000000000000a RDI: 00007ffeef557130
+RBP: 00007ffeef557130 R08: 00000000ffffffff R09: 00007ffeef556f00
+R10: 0000555555bed8b3 R11: 0000000000000246 R12: 00007f7827ae6b46
+R13: 00007ffeef5581f0 R14: 0000555555bed810 R15: 00007ffeef558230
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:assertfail.constprop.0+0x27/0x29 fs/btrfs/ctree.h:3713
+Code: 3f c9 f7 41 54 41 89 f4 55 48 89 fd e8 a2 3f c9 f7 44 89 e1 48 89 ee 48 c7 c2 60 a4 95 8a 48 c7 c7 a0 a4 95 8a e8 00 76 f5 ff <0f> 0b e8 82 3f c9 f7 e8 8d 3d 15 f8 be 73 04 00 00 48 c7 c7 40 a5
+RSP: 0018:ffffc90003727be8 EFLAGS: 00010282
+RAX: 0000000000000051 RBX: ffff888027d9c000 RCX: 0000000000000000
+RDX: ffff88804a6b6280 RSI: ffffffff8164973c RDI: fffff520006e4f6f
+RBP: ffffffff8a95dac0 R08: 0000000000000051 R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000000 R12: 0000000000001238
+R13: 0000000000000000 R14: 0000000000000000 R15: ffff88801da29200
+FS:  0000555555bec400(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fd78dea19d8 CR3: 0000000031a82000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
-I think in the end is a mixture between:
 
- - A big part of the drivers doesn't benefit from the lookup.
- - For most other busses the probe function only gets a device parameter
-   and no id (spi, platform, i3c). There are counter examples though:
-   amba, usb. Didn't check further.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---f745plogbhx5hxup
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN91SUACgkQwfwUeK3K
-7AnEJwf/W4pS8GZPEAPf9Q7m0soQa4CPHBpI/2o+JSehcUyl1SirnlbwiBy7Dq4k
-dx3FOMT9OJtN7XvRlJJhfE6Wt3OuZzpvwsDsb9sT+Gr2V7w7NsozRiTG7d1KEa2r
-qTWPl1/l9QhJlFECDavLxSSqF/IvuirEKHZ/oM87g3c+hgyxH0LrE28qpLAx/9FN
-JYUDstbnyvDfTyJiJvgx3AAMd1jDZ2uH9DdfjjBIO2Mn58nMeGvXwqWlDs29xceS
-NQGVR5/G4X+uXx8WMitZ25bcJ2h8nsZ21OY0Kehjw0fnB1sTJf2DGGgoGroQZhu0
-4A0YlTudRazzo6X24r4O99su6DQESw==
-=2Rnm
------END PGP SIGNATURE-----
-
---f745plogbhx5hxup--
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
