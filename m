@@ -2,123 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5770D636A08
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 20:45:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D3CF636A05
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 20:45:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238939AbiKWTog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 14:44:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38152 "EHLO
+        id S239359AbiKWTox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 14:44:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238997AbiKWTob (ORCPT
+        with ESMTP id S239327AbiKWTok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 14:44:31 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3541970A7;
-        Wed, 23 Nov 2022 11:44:29 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id k7so17550346pll.6;
-        Wed, 23 Nov 2022 11:44:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iq+S8pJ19eLCshsu6zUlPlVA+hDzpK61Zpqontnfdxc=;
-        b=Dm3D+mqV77F9C7k/l2vNMGPcVRDxMjooR0mQRAyxRRzmPWscbW1/2i1odpXbhpeRtY
-         P3pzvJJBuS5S6DpvDSAM29Kb6D2R4UU5MbTrgxZQxKsX1uZh7VWa78UdZtK1E8SRa+/K
-         /J3QaiKVGVsFYtfyT4JPlP43OCJMpQEuHZNFb5DZOBslo4lGCvTNAAVvbalZu+6ob478
-         6cn9H8U8CBK7DCT5ZPNNmyQlvg/Ncp1VMJ9dBhLI+2sw+BR2X/0f6SyQWRTzadz17cYi
-         rA2ZSGaIPL1zb970UrUzKAaSqLmZbwwh7lW0mPhiJYwEpHE96kJ1sY3yDICfiVEqrYjC
-         sVsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iq+S8pJ19eLCshsu6zUlPlVA+hDzpK61Zpqontnfdxc=;
-        b=o/Q7CVe0KtAsb5Ot2mE9wfx/IDmGBKpKv/Tt0lC1CJaiG1T2rQmBcrCtgWMWRrLj3C
-         iYOTR5pD02lHozwK2nZnKJOF+zPBmE2MzJCrMPepYQWbTqqOwnMCNno80aMl8nhTyizq
-         r1eWXPxfZkUPzKN9V+sdml8sSf8wTgEduKhgUYvA9HLx2BcAfIsj4YfeXG73CWgF2ALU
-         tXUwqg4LXXK17z+GwExL2rzKR8TSZ0qO6PvuXd4rmmyUNuK5FRsY/fMDZvqf0weMFr59
-         v0zhHflaThiUAEJVZGN5fjE8HXL13PEpwE4IEhfeE/a+dKY0s35BvF3mGy4fIkUOuToO
-         ag5g==
-X-Gm-Message-State: ANoB5pk4xJGOHDJ5D8uRSv0eVmH1mzMV36HXCsxegV1R/ndLvv520Rxn
-        QsO4aqUOzoDfP4BULr+89eo=
-X-Google-Smtp-Source: AA0mqf4Sib+LsBB6wxr85YLdCZMtxzjPRgIkr15/KD5fuNvZWALUMZlQYGL3bhcQwJFptLutb36uyg==
-X-Received: by 2002:a17:902:7fc3:b0:189:4d89:a442 with SMTP id t3-20020a1709027fc300b001894d89a442mr2964656plb.151.1669232669273;
-        Wed, 23 Nov 2022 11:44:29 -0800 (PST)
-Received: from x570.spacecubics.com (221x245x252x90.ap221.ftth.ucom.ne.jp. [221.245.252.90])
-        by smtp.gmail.com with ESMTPSA id t8-20020a170902e84800b0017a0f40fa19sm14795066plg.191.2022.11.23.11.44.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 11:44:28 -0800 (PST)
-From:   Yasushi SHOJI <yasushi.shoji@gmail.com>
-X-Google-Original-From: Yasushi SHOJI <yashi@spacecubics.com>
-To:     Yasushi SHOJI <yashi@spacecubics.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        Wed, 23 Nov 2022 14:44:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DDEFC6550;
+        Wed, 23 Nov 2022 11:44:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9CA261EE2;
+        Wed, 23 Nov 2022 19:44:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD71BC433D6;
+        Wed, 23 Nov 2022 19:44:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669232678;
+        bh=F02znBj6KNef3o7bHTzpkOxBET/7qugaTKwIDtKe1VI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=ObHby0MtZRskNzZAC3jvRQ6u2Q/ljOGaBlx8GSy44q8Qw4TnjTA3WbCid+iwr1Obe
+         75ZzNgNy4wUBqVBsJ6j7Clm1Y7h31pvZcr9nF577+sYc0t1GZ80+AaQEgz5hCAbPal
+         ZNJ8rMv6w2WBCiP7h5q00J9xNu7Hzw2tS1Yj6bpZpz+qwU/dH9PvwKPxoMfEehannr
+         0/9l1ttYnd134l7P/EFLZeIoSE1u/VC2O/L20xBvXzck3X5i6/dHFWPln3QodU175q
+         3Z2pLBsRe8o+6lh8aZOXVNXcvmD+CsN4MRXXVpioiuVio61oGqD7LXhGTrVRbmnZbh
+         G45ygzVp8RHOg==
+Date:   Wed, 23 Nov 2022 13:44:36 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Rob Herring <robh+dt@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        caihuoqing <caihuoqing@baidu.com>, Vinod Koul <vkoul@kernel.org>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] can: mcba_usb: Fix termination command argument
-Date:   Thu, 24 Nov 2022 04:44:06 +0900
-Message-Id: <20221123194406.80575-1-yashi@spacecubics.com>
-X-Mailer: git-send-email 2.38.1
+Subject: Re: [PATCH v7 17/20] PCI: dwc: Introduce generic resources getter
+Message-ID: <20221123194436.GA277209@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221113191301.5526-18-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Microchip USB Analyzer can be set with termination setting ON or OFF.
-As I've observed, both with my oscilloscope and USB packet capture
-below, you must send "0" to turn it ON, and "1" to turn it OFF.
+Hi Serge,
 
-Reverse the argument value to fix this.
+On Sun, Nov 13, 2022 at 10:12:58PM +0300, Serge Semin wrote:
+> Currently the DW PCIe Root Port and Endpoint CSR spaces are retrieved in
+> the separate parts of the DW PCIe core driver. It doesn't really make
+> sense since the both controller types have identical set of the core CSR
+> regions: DBI, DBI CS2 and iATU/eDMA. Thus we can simplify the DW PCIe Host
+> and EP initialization methods by moving the platform-specific registers
+> space getting and mapping into a common method. It gets to be even more
+> justified seeing the CSRs base address pointers are preserved in the
+> common DW PCIe descriptor. Note all the OF-based common DW PCIe settings
+> initialization will be moved to the new method too in order to have a
+> single function for all the generic platform properties handling in single
+> place.
+> 
+> A nice side-effect of this change is that the pcie-designware-host.c and
+> pcie-designware-ep.c drivers are cleaned up from all the direct dw_pcie
+> storage modification, which makes the DW PCIe core, Root Port and Endpoint
+> modules more coherent.
 
-These are the two commands sequence, ON then OFF.
+Thanks for these new generic interfaces in the DWC core!  And thanks
+for the changes in this patch to take advantage of them in the
+pcie-designware drivers.
 
-> No.     Time           Source                Destination           Protocol Length Info
->       1 0.000000       host                  1.3.1                 USB      46     URB_BULK out
->
-> Frame 1: 46 bytes on wire (368 bits), 46 bytes captured (368 bits)
-> USB URB
-> Leftover Capture Data: a80000000000000000000000000000000000a8
->
-> No.     Time           Source                Destination           Protocol Length Info
->       2 4.372547       host                  1.3.1                 USB      46     URB_BULK out
->
-> Frame 2: 46 bytes on wire (368 bits), 46 bytes captured (368 bits)
-> USB URB
-> Leftover Capture Data: a80100000000000000000000000000000000a9
+Do you plan similar changes to other drivers to take advantage of
+these DWC-generic data and interfaces?  If you add generic things to
+the DWC core but only take advantage of them in your driver, I don't
+think they are really usefully generic.
 
-Signed-off-by: Yasushi SHOJI <yashi@spacecubics.com>
----
- drivers/net/can/usb/mcba_usb.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/can/usb/mcba_usb.c b/drivers/net/can/usb/mcba_usb.c
-index 218b098b261d..67beff1a3876 100644
---- a/drivers/net/can/usb/mcba_usb.c
-+++ b/drivers/net/can/usb/mcba_usb.c
-@@ -785,9 +785,9 @@ static int mcba_set_termination(struct net_device *netdev, u16 term)
- 	};
- 
- 	if (term == MCBA_TERMINATION_ENABLED)
--		usb_msg.termination = 1;
--	else
- 		usb_msg.termination = 0;
-+	else
-+		usb_msg.termination = 1;
- 
- 	mcba_usb_xmit_cmd(priv, (struct mcba_usb_msg *)&usb_msg);
- 
--- 
-2.38.1
-
+Bjorn
