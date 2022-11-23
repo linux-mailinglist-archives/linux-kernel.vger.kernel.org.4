@@ -2,236 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A466355B9
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:24:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6963D6355BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:24:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237418AbiKWJVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 04:21:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36188 "EHLO
+        id S237452AbiKWJVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 04:21:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237417AbiKWJUi (ORCPT
+        with ESMTP id S237396AbiKWJUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 04:20:38 -0500
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2062.outbound.protection.outlook.com [40.107.95.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744108FE74;
-        Wed, 23 Nov 2022 01:20:36 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Y/7MSF+96YqP3yqWbDbZY/l4j8tQu8Zegy7g853avB0Ji+fnEOV3h6WySqAV2aU9Q0XJp8+Y2gU1c153AUGG4Us7IUHA5suRIHheyzSzfzZOZ2qo/LgmOi8Z2SQ7Vnzpnsacphu/stOWjOBBJzh2oa9ejb4wZ2Kf5Nw3b7Q2Dra7paeAvait33QUndDvKLjQL0MstUsluGqgxllUfTAV12pU2CNIO8isOg+fnn2xom5jQrI5nrZ1/YIDkfRRQXAX+/mwvVw4R+fIjm7AHNUrYaS1oQaKsbGuLyP58y/4b59RgF6cD9brOIWI2zpM5cIWs8AKI+KceacVTiDYsr5QaA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=V9nxb7J9kIIeH/n/FLXw3QUOA6jjKpMU+gpq28t8f7c=;
- b=bqf3nasCKvhwDJ6AHLlT9/QoSBhuSLuow3iM1vUBV7Bo9xJOKG8fjTnt2nlJa9M9/GrtUgn/HIIt50mtuKIQr3icS/PNLEYZPM581WFt6bvo1WDd7DP4fQS39FHKFSRc1c+iK3zJkKJMT0UrOiilqK14cAPtAE0jfggplfDF96ESat+1HCXSxMjEeCFOGAAH3viYcoAub5SvSFNCoQMNym2j22/yNUIbSw4S1Lbkf9h9HKDE1R6zyUl2Xej0XFzWHLFzgze/ohKd3M+RWp90kV5nMbN55KpbZlUobwOUXd1P3KfPTueoBaVMYns7yNH3WA+UNUuEx8Iw2+cUxgrU6Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synaptics.com; dmarc=pass action=none
- header.from=synaptics.com; dkim=pass header.d=synaptics.com; arc=none
+        Wed, 23 Nov 2022 04:20:40 -0500
+Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AEC48F3EB
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:20:39 -0800 (PST)
+Received: by mail-vk1-xa2e.google.com with SMTP id v81so8440370vkv.5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:20:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=V9nxb7J9kIIeH/n/FLXw3QUOA6jjKpMU+gpq28t8f7c=;
- b=U/ZiurlUqIfgnjSNfoDlCnIpzIrXdAcAw9XpVmcwuXnDQmmXXnlp28R/16B7G1hftdEcQlEq3oXWMz1qH0NG0WeXXK3GRH46YfxtVaMXHCSWHavIHtneBGGnlFx4ml5rdW8DK0BgBgAbu5oT7P1CUE7Heyzr+9ntSeUBLv7iHIo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=synaptics.com;
-Received: from DM6PR03MB5196.namprd03.prod.outlook.com (2603:10b6:5:24a::19)
- by CO1PR03MB5682.namprd03.prod.outlook.com (2603:10b6:303:94::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.17; Wed, 23 Nov
- 2022 09:20:34 +0000
-Received: from DM6PR03MB5196.namprd03.prod.outlook.com
- ([fe80::a132:66d9:ed0f:e5c1]) by DM6PR03MB5196.namprd03.prod.outlook.com
- ([fe80::a132:66d9:ed0f:e5c1%6]) with mapi id 15.20.5834.015; Wed, 23 Nov 2022
- 09:20:34 +0000
-From:   Hsia-Jun Li <randy.li@synaptics.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     airlied@linux.ie, daniel@ffwll.ch, ezequiel@vanguardiasur.com.ar,
-        helen.koike@collabora.com, jszhang@kernel.org,
-        laurent.pinchart@ideasonboard.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, maarten.lankhorst@linux.intel.com,
-        mchehab@kernel.org, mripard@kernel.org, nicolas@ndufresne.ca,
-        ribalda@chromium.org, sakari.ailus@linux.intel.com,
-        sebastian.hesselbarth@gmail.com, tfiga@chromium.org,
-        tzimmermann@suse.de, ayaka@soulik.info,
-        "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
-Subject: [PATCH v4] drm/fourcc: Add Synaptics VideoSmart tiled modifiers
-Date:   Wed, 23 Nov 2022 17:19:57 +0800
-Message-Id: <20221123091957.75967-1-randy.li@synaptics.com>
-X-Mailer: git-send-email 2.37.3
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR13CA0053.namprd13.prod.outlook.com
- (2603:10b6:a03:2c2::28) To DM6PR03MB5196.namprd03.prod.outlook.com
- (2603:10b6:5:24a::19)
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1wFD7J3kiqfUk63926QLAWi5o53bw70rTEkH3Y4/hi4=;
+        b=ngs+NhGFzjPfh7N4lsC1BaTIhqo1etcxuHRU5zyjzxzwYOrLKBnqBR3AzJdMbSaV3N
+         uLW2FJtuClt/DCKxZ1XNE3OjG+Y2xSFQa0KqJDe6rGSGh+TI6BcnKfn5r1OCTILspOVM
+         bJhToVY0FwODS1OD7pnTqOr6BBJIkGNKRZlBbboTuaQSsKHFuFkxUa2wgGHSsej09V0X
+         TECQWqSecdmdYrtJyblxcWL6Zl+Vcp8GzyjrGRVPNgaYVN5tkZGQW0+ruNzCrb8yOQ1f
+         KNWD8dJDGx0TKQVAjAEwOvuOtnjGLSTOnAbWfPhlZ2WqQZ94REC8Fm48Rgl7qkk8ttHf
+         s4yQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1wFD7J3kiqfUk63926QLAWi5o53bw70rTEkH3Y4/hi4=;
+        b=Vnpb8u1CEYhPwfA6eruiEhpxTPksGgYzUVTI8ZVLRHIgqQVdDSg99G2BXcYUzNwyw7
+         Rc3b9XhVvLuYzqjLAeLGYQ71Z8wnqHCYful+CMPum7CSPUJOwylw8MbqgAJig65Fac6k
+         1vSCfE2ysPvQEPbqhCvByff8Daj48tm1M/RSoGDph17/dJUy/K81NBaWWTx4DH9ux432
+         sk59x/KT48NDM9x7cQNbmnw1ViTZvrqf1YiITkdNZgEsQE8cuhxH92RsyxA1XfBdhRfm
+         rkHrRpXY+j3wl4sxGDSDkdtjQ1fc5ctDlTgmiJn5lhKZv8AamlQm7YXOeDagxdF4/eCU
+         xH5A==
+X-Gm-Message-State: ANoB5pnytvtWoy+L2EeDJ2Qftom9pWslkmn7c9nFGXlsgfBYnrcbuZep
+        cnfM8YOKDBmNFNoJhQJmeORCzhG4dnE+uyBEtRpQ0Q==
+X-Google-Smtp-Source: AA0mqf7LxQSQclcoOBTzJVY+p9DtmqgV0yJC34U6qdy9Xg8iU49XiBqQ1G1IYFVjRhzcXIqq0YVXRtHWVjFymVAydyY=
+X-Received: by 2002:a1f:230c:0:b0:3bb:eb08:6ee with SMTP id
+ j12-20020a1f230c000000b003bbeb0806eemr4637581vkj.4.1669195238217; Wed, 23 Nov
+ 2022 01:20:38 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR03MB5196:EE_|CO1PR03MB5682:EE_
-X-MS-Office365-Filtering-Correlation-Id: 614fc8ce-3403-4f5f-8e02-08dacd33f858
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uHLhaFLCZGgmIKGmrAnLN8fqtFGcO755GSriGlXJPlY3XLSbBaOEWk/EWX9Qy2o5B8LCWhgcgBNIcxlPwV9jfVZtwOa1B8Rpnc0wJ+MQJoN0ItZ8HWi9uEpJhuCGAJZPlBOFs1bjOX4f6EaRHsaUjgv4ZcxZtnx9W2EEBqNbXj9jng+dfcHf0lhMPZhkIJF8R2dSRHeLS4aL45Lx00K9tS+N1v5R+X0yqhdRgrZy1WRkt6Vhzj1NVPHs7vYCF+cPO2luW2mYNfGPxShJPuLswBq8AzFq+c3F5t35g8x52ORJ/lzYsQrc1UaFf3IXXgPO5FyknwHeuBPtp0Puohk7fI4JlS/YisJua2oZ1XzxLygZhjNY0DWmhACdnHx5jCo4oeqmUbV2cVclBC/La2nViBHHlBkE+yMi8S3w6SXnUsab3KzPuNDDaYD0550xjkbWz2cvl1zUrUjVaxZQ698hSYMml7FvsuSZomd+89pq54VBwBuWQwC0LJIK3z0J3RyDZzdMFMJjI+7fZD/1VB0ipQLHx896lP7bAb5HoDjPVa5ecDjdASTmQutdYhnEUfPp5siO8cZn33USsX5hwc5PaP/k50xIgK552Q/YdZfwlq/P2pw+iXmWtkyVZMyjnYRAOxB4BTP7i5UodeAPt3egj59CBrJ0f5+zW58b0WzwsZBq8zw6vu7uC/7A2fmBMQ9EAQPlgyYaPPIzDv8hLPd9ww==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR03MB5196.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(376002)(39860400002)(136003)(346002)(396003)(451199015)(36756003)(2906002)(5660300002)(316002)(8936002)(66476007)(86362001)(186003)(2616005)(66556008)(6916009)(7416002)(83380400001)(4326008)(478600001)(26005)(6512007)(66946007)(1076003)(6486002)(8676002)(107886003)(6666004)(38350700002)(38100700002)(52116002)(6506007)(41300700001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?n83cspczHNFfpPWJ5MUqfoc7TN7P408GwPlIUfWgk+rdStSe6bAGD13iBJTr?=
- =?us-ascii?Q?hMoPXHj1gVxafncv5gbRPVS/Y7AJH50DfplTAZiUqlN1ZqVSfzBCZDT5Z7ZF?=
- =?us-ascii?Q?Qgkvcf2l14q4b3C/33rQefv+QkZTuCQAKMJA2Q2qh+GB/zyKHp9BMegv2nmQ?=
- =?us-ascii?Q?7fTh6rHYdisbanAti7EfendrjT1b2x7SdS8fuXkk7nIZWCRec+8VR2s0pZig?=
- =?us-ascii?Q?1ROiQ9cqplYvVIxxUbSOe0C0dGIwEzl7qLvChjNKjtUdLN+zjnm49vmsaChZ?=
- =?us-ascii?Q?ubLch5tv6VtnydUqADRD/pnOF6x/W/7Rn/bVRrczVBKQoH+15WtLpSfn4c0o?=
- =?us-ascii?Q?0kRrJcESO4Du/ZR/upz/CuMvftsrLUurVcV0M3PblY9XSfwSu6aA8ivaaGhD?=
- =?us-ascii?Q?LaM6TtTsEZwGG7gJ+0Uz9DJS6xIRn9C3E81q43/ioPTZmcDp1n7wy7cF+EmP?=
- =?us-ascii?Q?cb4FWY+fadtIXjHVXEOgT0X4Jghmb/3nPfLAV8lQhQw+CN1scYElCAR6N8/M?=
- =?us-ascii?Q?Jbc1SXw0zvqCed1NX2Orh+acS1lrcQXxigC67vYxU88od6i9bMsTRIReubO6?=
- =?us-ascii?Q?hTsE+lli3Z2rrGhHI3DcDHSGs+Xnz5PsNRc6t+yLS3otpUkdRuRT3jO8LMUi?=
- =?us-ascii?Q?b60WwWVo3adocELl106ta2s+4Ou2ZA4IcJrqlAO+hzrwxOSwHSI01DZGWajS?=
- =?us-ascii?Q?eWAFPYX38K6BE7ZMs5W8h3EclqxHToS2/hetg7m4YG8UdgQOuqsx2dG840Ca?=
- =?us-ascii?Q?0f51o9SI1HEZiNcUwlt77th8kQ2sjhe9RP8UYmINPuopCRtxcb+r8y9CpKMm?=
- =?us-ascii?Q?zT443tAyafINyAHUy64mCdUI13zPMiL6w0ShCcoMya+KEuA1rfKwIakbKpS2?=
- =?us-ascii?Q?mTHHW2bzmwUdKPVk5Q8Ibcj1+cqf6SRVoxKibYUJCBT+K6rBv02R5Q7J7Jz8?=
- =?us-ascii?Q?CT0CxS6GbS5Y07ptvDzrMROtICBAWqI0Wq14Wg+LMMq1FFsiFIgtTb2GvkaG?=
- =?us-ascii?Q?Ugy2sYwBWupYWuN8IYDhdCpJ8acCHS3T871QQBNkYJSuVdh7J+zkJC2UCWhc?=
- =?us-ascii?Q?6LaBVqVDPYlUbNOMfDdLmejAlv2kzULLxu8EmHcGvI3ElwELcHGcZaJHVs2w?=
- =?us-ascii?Q?G/bsk52mRZbWEwgrPqdeojgzLVh/8GTMhqgbyVOF0wst0DEcjmck4ghtYkCc?=
- =?us-ascii?Q?eZIRpqYb0CZoaYDK90DInll/oEWQi3I9xQaUSODrv1IbX4JGHvnyey4LdCoS?=
- =?us-ascii?Q?msVoK2G0a5M4++bS5s5k88s03HPWDheiB51feSJf0AuGcrnn+24RT40NUXXb?=
- =?us-ascii?Q?xpLXtFc0x1luhnt97+hEnKUrg8Qlq/UFAYO5zRHjR8KoGn1kuPuevA9Dm4Bo?=
- =?us-ascii?Q?6N70zT8wwT44LDYTYZL6KXz/9DOya45s59zMJoL5p5XLJ5hMIIo7+NYOzwlA?=
- =?us-ascii?Q?gfBgSIO3N3RarJp3qZ71BLi6M29bIhgCuebLS2vztC6YvNvcp4cu/SZXj7i9?=
- =?us-ascii?Q?AP48+fHahMZY4bPYJQ2tofbf2W/v6NJ0A6+aEXfFaeVtxXbLHJDWGvgLBnWh?=
- =?us-ascii?Q?bdKTadUXYviHWOjGixUOAUXtNd7MD0YKtwjdVQ/j?=
-X-OriginatorOrg: synaptics.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 614fc8ce-3403-4f5f-8e02-08dacd33f858
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR03MB5196.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2022 09:20:34.3672
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 335d1fbc-2124-4173-9863-17e7051a2a0e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UUAVmx351ZAIgStjztlRHUwi9bUBgWPLKlOVz8ng/T/8xZnnI+Jyum/fD3NhiSan1zNAWwiTKK10f+tx4H/CVQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR03MB5682
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221102175959.2921063-1-rmoar@google.com> <20221102175959.2921063-2-rmoar@google.com>
+In-Reply-To: <20221102175959.2921063-2-rmoar@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Wed, 23 Nov 2022 17:20:27 +0800
+Message-ID: <CABVgOS=JHm=pxFbcKDgJ1Ag4vDRTygZjwjp4sUq-_BUTNVgJyg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] kunit: add macro to allow conditionally exposing
+ static symbols to tests
+To:     Rae Moar <rmoar@google.com>
+Cc:     brendanhiggins@google.com, dlatypov@google.com,
+        skhan@linuxfoundation.org, tales.aparecida@gmail.com,
+        john.johansen@canonical.com, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        apparmor@lists.ubuntu.com
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000041227d05ee1fcdce"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
+--00000000000041227d05ee1fcdce
+Content-Type: text/plain; charset="UTF-8"
 
-Memory Traffic Reduction(MTR) is a module in Synaptics
-VideoSmart platform could process lossless compression image
-and cache the tile memory line.
+On Thu, Nov 3, 2022 at 2:02 AM Rae Moar <rmoar@google.com> wrote:
+>
+> Create two macros:
+>
+> VISIBLE_IF_KUNIT - A macro that sets symbols to be static if CONFIG_KUNIT
+> is not enabled. Otherwise if CONFIG_KUNIT is enabled there is no change
+> to the symbol definition.
+>
+> EXPORT_SYMBOL_IF_KUNIT(symbol) - Exports symbol into
+> EXPORTED_FOR_KUNIT_TESTING namespace only if CONFIG_KUNIT is enabled. Must
+> use MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING) in test file in order to
+> use symbols.
+>
+> Signed-off-by: Rae Moar <rmoar@google.com>
+> ---
 
-Those modifiers only record the parameters would effort pixel
-layout or memory layout. Whether physical memory page mapping
-is used is not a part of format.
+This looks good to me overall.
 
-We would allocate the same size of memory for uncompressed
-and compressed luma and chroma data, while the compressed buffer
-would request two extra planes holding the metadata for
-the decompression.
+Two thoughts (though they're not _problems_ with this patch, so
+shouldn't necessarily hold it up).
 
-Signed-off-by: Hsia-Jun(Randy) Li <randy.li@synaptics.com>
----
- include/uapi/drm/drm_fourcc.h | 75 +++++++++++++++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
+How many KUnit headers do we want for these sorts of things? We've
+currently got 'test.h' (for actual tests) and 'test-bug.h' for the
+kunit_fail_current_test() style hooks. And there'll be 'static-stub.h'
+coming.
+Maybe it'd make sense to merge some of these, if it turns out the same
+code always needs to access them? On the other hand, I actually quite
+like having them separate like this. (Though the split of assertions
+into assert.h and perhaps renaming test-bug.h might be worth doing
+down the line.) No immediate action item, but something perhaps worth
+thinking about.
 
-diff --git a/include/uapi/drm/drm_fourcc.h b/include/uapi/drm/drm_fourcc.h
-index bc056f2d537d..ca0b4ca70b36 100644
---- a/include/uapi/drm/drm_fourcc.h
-+++ b/include/uapi/drm/drm_fourcc.h
-@@ -407,6 +407,7 @@ extern "C" {
- #define DRM_FORMAT_MOD_VENDOR_ARM     0x08
- #define DRM_FORMAT_MOD_VENDOR_ALLWINNER 0x09
- #define DRM_FORMAT_MOD_VENDOR_AMLOGIC 0x0a
-+#define DRM_FORMAT_MOD_VENDOR_SYNAPTICS 0x0b
- 
- /* add more to the end as needed */
- 
-@@ -1507,6 +1508,80 @@ drm_fourcc_canonicalize_nvidia_format_mod(__u64 modifier)
- #define AMD_FMT_MOD_CLEAR(field) \
- 	(~((__u64)AMD_FMT_MOD_##field##_MASK << AMD_FMT_MOD_##field##_SHIFT))
- 
-+/*
-+ * Synaptics VideoSmart modifiers
-+ *
-+ * Tiles could be arranged in Groups of Tiles (GOTs), it is a small tile
-+ * within a tile. GOT size and layout varies based on platform and
-+ * performance concern. When the compression is applied, it is possible
-+ * that we would have two tile type in the GOT, these parameters can't
-+ * tell the secondary tile type.
-+ *
-+ * Besides, an 8 size 4 bytes arrary (32 bytes) would be need to store
-+ * some compression parameters for a compression meta data plane.
-+ *
-+ *       Macro
-+ * Bits  Param Description
-+ * ----  ----- -----------------------------------------------------------------
-+ *
-+ *  7:0  f     Scan direction description.
-+ *
-+ *               0 = Invalid
-+ *               1 = V4, the scan would always start from vertical for 4 pixel
-+ *                   then move back to the start pixel of the next horizontal
-+ *                   direction.
-+ *               2 = Reserved for future use.
-+ *
-+ * 15:8  m     The times of pattern repeat in the right angle direction from
-+ *             the first scan direction.
-+ *
-+ * 19:16 p     The padding bits after the whole scan, could be zero.
-+ *
-+ * 20:20 g     GOT packing flag.
-+ *
-+ * 23:21 -     Reserved for future use.  Must be zero.
-+ *
-+ * 27:24 h     log2(horizontal) of bytes, in GOTs.
-+ *
-+ * 31:28 v     log2(vertical) of bytes, in GOTs.
-+ *
-+ * 35:32 -     Reserved for future use.  Must be zero.
-+ *
-+ * 36:36 c     Compression flag.
-+ *
-+ * 55:37 -     Reserved for future use.  Must be zero.
-+ *
-+ */
-+
-+#define DRM_FORMAT_MOD_SYNA_V4_TILED		fourcc_mod_code(SYNAPTICS, 1)
-+
-+#define DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(f, m, p, g, h, v, c) \
-+	fourcc_mod_code(SYNAPTICS, ((__u64)((f) & 0xff) | \
-+				 ((__u64)((m) & 0xff) << 8) | \
-+				 ((__u64)((p) & 0xf) << 16) | \
-+				 ((__u64)((g) & 0x1) << 20) | \
-+				 ((__u64)((h) & 0xf) << 24) | \
-+				 ((__u64)((v) & 0xf) << 28) | \
-+				 ((__u64)((c) & 0x1) << 36)))
-+
-+#define DRM_FORMAT_MOD_SYNA_V4H1 \
-+	DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 1, 0, 0, 0, 0, 0)
-+
-+#define DRM_FORMAT_MOD_SYNA_V4H3P8 \
-+	DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 3, 8, 0, 0, 0, 0)
-+
-+#define DRM_FORMAT_MOD_SYNA_V4H1_64L4_COMPRESSED \
-+	DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 1, 0, 1, 6, 2, 1)
-+
-+#define DRM_FORMAT_MOD_SYNA_V4H3P8_64L4_COMPRESSED \
-+	DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 3, 8, 1, 6, 2, 1)
-+
-+#define DRM_FORMAT_MOD_SYNA_V4H1_128L128_COMPRESSED \
-+	DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 1, 0, 1, 7, 7, 1)
-+
-+#define DRM_FORMAT_MOD_SYNA_V4H3P8_128L128_COMPRESSED \
-+	DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 3, 8, 1, 7, 7, 1)
-+
- #if defined(__cplusplus)
- }
- #endif
--- 
-2.17.1
+Secondly, do we want to support individual subsystems and/or tests to
+have their own symbol namespaces. Again, not a problem for the moment,
+but we may need to deal with this if we need to export multiple copies
+of very-generically-named functions. Any thoughts (e.g., an
+EXPORT_SYMBOL_IF_KUNIT_NS macro which allows the user to specify the
+namespace?)
 
+Regardless, this is
+Reviewed-by: David Gow <davidgow@google.com>
+
+Cheers,
+-- David
+
+>  include/kunit/visibility.h | 32 ++++++++++++++++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+>  create mode 100644 include/kunit/visibility.h
+>
+> diff --git a/include/kunit/visibility.h b/include/kunit/visibility.h
+> new file mode 100644
+> index 000000000000..eb22c9e6b4eb
+> --- /dev/null
+> +++ b/include/kunit/visibility.h
+> @@ -0,0 +1,32 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * KUnit API to allow symbols to be conditionally visible during KUnit
+> + * testing
+> + *
+> + * Copyright (C) 2019, Google LLC.
+> + * Author: Brendan Higgins <brendanhiggins@google.com>
+
+Please update the date here, and use your name/email for the Author section.
+
+
+> + */
+> +
+> +#ifndef _KUNIT_VISIBILITY_H
+> +#define _KUNIT_VISIBILITY_H
+> +
+> +/**
+> + * VISIBLE_IF_KUNIT - A macro that sets symbols to be static if CONFIG_KUNIT
+> + * is not enabled. Otherwise if CONFIG_KUNIT is enabled there is no change
+> + * to the symbol definition.
+> + *
+> + * EXPORT_SYMBOL_IF_KUNIT(symbol) - Exports symbol into
+> + * EXPORTED_FOR_KUNIT_TESTING namespace only if CONFIG_KUNIT is
+> + * enabled. Must use MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING)
+> + * in test file in order to use symbols.
+> + */
+> +#if IS_ENABLED(CONFIG_KUNIT)
+> +    #define VISIBLE_IF_KUNIT
+> +    #define EXPORT_SYMBOL_IF_KUNIT(symbol) EXPORT_SYMBOL_NS(symbol, \
+> +           EXPORTED_FOR_KUNIT_TESTING)
+> +#else
+> +    #define VISIBLE_IF_KUNIT static
+> +    #define EXPORT_SYMBOL_IF_KUNIT(symbol)
+> +#endif
+> +
+> +#endif /* _KUNIT_VISIBILITY_H */
+> --
+> 2.38.1.273.g43a17bfeac-goog
+>
+
+--00000000000041227d05ee1fcdce
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+N0A3bgltvER3q1cGraQJMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAxS21FdvRtCQVc
+jgEj+xxSnUr0N9reJlI5J9zRiBCWGxm5yhz965IDka3XVFEbj+beJj/gyHoxbaTGf2AjOufpcMqy
+p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
+2MXoxQsFucGJO5a4CwDBaGgJAqvwCXU5Q64rKVIUBk6mtcd3cDwX+PXqx4QrhHFGq6b6oi37YQ8B
++bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
+/GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCC/
+4cIyAN6DZ9w7T8GsRjFqx36icJE9vroyDsoYUgtPMDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjExMjMwOTIwMzhaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAAARCnTCbLXMEUKzW9RvM
+r4Re56xmKSG/QHCmNk85dolWzIAj6p+/SX/9oBPLbbAGrj0yocG19xYh90IIhmmLLaFV5076fyRB
+G5A8UtiCw9JuVeQmfZQ+Mw/71SRVBp9H9StGnnEiOcjC1XnH+XDiNwxkMOQh8hEwVIooZ2Sovjj7
+Hjmb8pBFeWBjIy48pmBiCGvD0GkEw/F/HmnJPZ66hRuzw1eCkuT7tIJN9UgEjgLNEHb5GpAnJ1cB
+Qeb2oR0H695NFQttFzTErZQD4O7lcZgRUq847e+fYLhwGpOBnQZL2pPH2G/LwIXyX4KMP+Lrsate
+tBYne0HeBrW1VSJZAg==
+--00000000000041227d05ee1fcdce--
