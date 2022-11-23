@@ -2,115 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7E96635C27
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 12:52:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC2E635C28
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 12:52:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236552AbiKWLwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 06:52:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57794 "EHLO
+        id S236740AbiKWLwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 06:52:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236580AbiKWLvy (ORCPT
+        with ESMTP id S236639AbiKWLwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 06:51:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B8265E4;
-        Wed, 23 Nov 2022 03:51:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 23 Nov 2022 06:52:35 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F193BEF;
+        Wed, 23 Nov 2022 03:52:29 -0800 (PST)
+Received: from [192.168.0.192] (unknown [194.146.248.75])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3F0BBB81F15;
-        Wed, 23 Nov 2022 11:51:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFD3DC433B5;
-        Wed, 23 Nov 2022 11:51:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669204311;
-        bh=phhd+Gdc/wkAagQCT1G+/rsG794g5og7Pbf7/CZVfeY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A/UzU6ivTd7IAAFQyDa/xI56j3AVN0e9T9sqCMWjOQK0LOvk93P9YZcJM7mYQCe3H
-         pZVpc0QVqoFJ6BQo8jEGEG8//6cz/70/xFnYxnTf6iWQo2IPN4vp0rovKJul2ynDS7
-         cqITQ8IvmMGxZzMeF5Jc5PK5yievH389a8eqTa2ecraq09+nACKfLdggnG5lqyuU1z
-         B/dwqWpM/0npZ/9q4VdLBfrDkikv7X4TCqiMBK9zxZE+NBzPx1jWihEWE5LlQ+yWF8
-         V7vz62NbMcQdm2aK51F7C1MMFqXD05wTDR0JorXwXTIpu/Pgam7GykElLzxkXx5eqf
-         e4gwx9p9cBBjg==
-Date:   Wed, 23 Nov 2022 11:51:42 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Alexander Lobakin <alobakin@mailbox.org>
-Cc:     Alexander Lobakin <alobakin@pm.me>, linux-kbuild@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Jens Axboe <axboe@kernel.dk>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Derek Chickles <dchickles@marvell.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        NXP Linux Team <linux-imx@nxp.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/18] treewide: fix object files shared between several
- modules
-Message-ID: <Y34JTrCARZ1Gllsi@sirena.org.uk>
-References: <20221119225650.1044591-1-alobakin@pm.me>
- <Y3oWYhw9VZOANneu@sirena.org.uk>
- <20221122213754.45474-1-alobakin@mailbox.org>
+        (Authenticated sender: andrzej.p)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 325A06601811;
+        Wed, 23 Nov 2022 11:52:27 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1669204347;
+        bh=vHLUEr5mi2DQo1JQp7BT2vNEGAAKgbXba77RAgXm5nI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=npnJxbcx5J4yegITXEb4t6FujJUuWFOBZytJDEgbOT7vyDUmap+7kOprGeckJ4W22
+         zo2soh0rpg5V0xz7Zc6FxE/gC0X1Ip9UagQso9Pb1hL+YfZcKbClq/UTFpruEq+xah
+         wGdMKKV5L+Yrrf1IUyIKdN4clirxiSBSB/bMJE/HYLC8CaBAGM03COrXjPyCtxHE4U
+         K9pmO6iPooRDDdA/QjTURmUzumOQxM+YTDMVfoRjUkTmCJKcDFZPBGZqob9GqyXQiG
+         7y7bHHwRclb7xDgsWGizzheGSP46FoWLp4Ud7mDdtb8NmtEc41Uk8Sn+AJeIlyC6Ab
+         5TIK7QEa+Uzag==
+Message-ID: <723bd024-121d-dd89-7c39-315e93e49c44@collabora.com>
+Date:   Wed, 23 Nov 2022 12:52:24 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yzeGM2sBEGtnAUH/"
-Content-Disposition: inline
-In-Reply-To: <20221122213754.45474-1-alobakin@mailbox.org>
-X-Cookie: I'm rated PG-34!!
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/3] usb: gadget: f_hid: fix f_hidg lifetime vs cdev
+To:     John Keeping <john@metanate.com>, linux-usb@vger.kernel.org
+Cc:     Fabien Chouteau <fabien.chouteau@barco.com>,
+        Peter Korsgaard <peter.korsgaard@barco.com>,
+        Felipe Balbi <balbi@ti.com>,
+        Andrzej Pietrasiewicz <andrzej.p@samsung.com>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+References: <20221122123523.3068034-1-john@metanate.com>
+ <20221122123523.3068034-2-john@metanate.com>
+Content-Language: en-US
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+In-Reply-To: <20221122123523.3068034-2-john@metanate.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi John,
 
---yzeGM2sBEGtnAUH/
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+W dniu 22.11.2022 o 13:35, John Keeping pisze:
+> The embedded struct cdev does not have its lifetime correctly tied to
+> the enclosing struct f_hidg, so there is a use-after-free if /dev/hidgN
+> is held open while the gadget is deleted.
+> 
+> This can readily be replicated with libusbgx's example programs (for
+> conciseness - operating directly via configfs is equivalent):
+> 
+> 	gadget-hid
+> 	exec 3<> /dev/hidg0
+> 	gadget-vid-pid-remove
+> 	exec 3<&-
+> 
+> Pull the existing device up in to struct f_hidg and make use of the
+> cdev_device_{add,del}() helpers.  This changes the lifetime of the
+> device object to match struct f_hidg, but note that it is still added
+> and deleted at the same time.
+> 
+> Fixes: 71adf1189469 ("USB: gadget: add HID gadget driver")
+> Signed-off-by: John Keeping <john@metanate.com>
+> ---
+>   drivers/usb/gadget/function/f_hid.c | 52 ++++++++++++++++-------------
+>   1 file changed, 28 insertions(+), 24 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
+> index ca0a7d9eaa34..8b8bbeaa27cb 100644
+> --- a/drivers/usb/gadget/function/f_hid.c
+> +++ b/drivers/usb/gadget/function/f_hid.c
+> @@ -71,7 +71,7 @@ struct f_hidg {
+>   	wait_queue_head_t		write_queue;
+>   	struct usb_request		*req;
+>   
+> -	int				minor;
+> +	struct device			dev;
+>   	struct cdev			cdev;
+>   	struct usb_function		func;
+>   
+> @@ -84,6 +84,14 @@ static inline struct f_hidg *func_to_hidg(struct usb_function *f)
+>   	return container_of(f, struct f_hidg, func);
+>   }
+>   
+> +static void hidg_release(struct device *dev)
+> +{
+> +	struct f_hidg *hidg = container_of(dev, struct f_hidg, dev);
+> +
+> +	kfree(hidg->set_report_buf);
+> +	kfree(hidg);
+> +}
+> +
 
-On Tue, Nov 22, 2022 at 10:37:54PM +0100, Alexander Lobakin wrote:
-> From: Mark Brown <broonie@kernel.org>
-> > On Sat, Nov 19, 2022 at 11:03:57PM +0000, Alexander Lobakin wrote:
+I assume the above is supposed to free the hidg memory as a result of
+put_device() and you free two things here ...
 
-> > Your mails appear to be encrypted which isn't helping with
-> > review...
+>   /*-------------------------------------------------------------------------*/
+>   /*                           Static descriptors                            */
+>   
+> @@ -904,9 +912,7 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
+>   	struct usb_ep		*ep;
+>   	struct f_hidg		*hidg = func_to_hidg(f);
+>   	struct usb_string	*us;
+> -	struct device		*device;
+>   	int			status;
+> -	dev_t			dev;
+>   
+>   	/* maybe allocate device-global string IDs, and patch descriptors */
+>   	us = usb_gstrings_attach(c->cdev, ct_func_strings,
+> @@ -999,21 +1005,11 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
+>   
+>   	/* create char device */
+>   	cdev_init(&hidg->cdev, &f_hidg_fops);
+> -	dev = MKDEV(major, hidg->minor);
+> -	status = cdev_add(&hidg->cdev, dev, 1);
+> +	status = cdev_device_add(&hidg->cdev, &hidg->dev);
+>   	if (status)
+>   		goto fail_free_descs;
+>   
+> -	device = device_create(hidg_class, NULL, dev, NULL,
+> -			       "%s%d", "hidg", hidg->minor);
+> -	if (IS_ERR(device)) {
+> -		status = PTR_ERR(device);
+> -		goto del;
+> -	}
+> -
+>   	return 0;
+> -del:
+> -	cdev_del(&hidg->cdev);
+>   fail_free_descs:
+>   	usb_free_all_descriptors(f);
+>   fail:
+> @@ -1244,9 +1240,7 @@ static void hidg_free(struct usb_function *f)
+>   
+>   	hidg = func_to_hidg(f);
+>   	opts = container_of(f->fi, struct f_hid_opts, func_inst);
+> -	kfree(hidg->report_desc);
+> -	kfree(hidg->set_report_buf);
+> -	kfree(hidg);
 
-> Oh I'm sorry. I gave ProtonMail one more chance. I had the same
-> issue with them at spring, they told me then that it's a super-pro
-> builtin feature that I can't disable :clownface: They promised to
-> "think on it" tho, so I thought maybe after half a year...
-> Nope. Ok, whatever. My workaround will be the same as Conor's, just
-> to change the provider lol.
-> Should be better now?
+... while here 3 things used to be freed. What happens to hidg->report_desc?
 
-Yes, everything's fine now - thanks for looking into it.
+Regards,
 
---yzeGM2sBEGtnAUH/
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN+CU0ACgkQJNaLcl1U
-h9ARigf9GW+E64m62h0pb2LtRUO0gPTWvPUn+ORptGnHGlsvJVhzigffMuHNhxY9
-0nhYtG/KF7hqMTiL5BFqCp2qI2FUGIEAS2DqHgNDuysHP18pMah388xpWdnCrmAi
-m6snZhHVpJKaCo6te9Sn+L+ilFbmGYdyInKp7QsOAFHj7YJ9ceiK90BefO8GTR4T
-Dz7B5fHFhaWWRAjR+KWZSrJPAMGVGLb0ezkStlrTeMoo4dSnzsNDqpy1n6N5hie3
-h5Xuh0oj7jPRtJV8d0vqzeE9sjF6eI0WxDA9+Jt/WQP03fUF2XPJqsia/u8RUGQN
-b4rLpDDGVV72tJgL6eFoJU2Pdxc7qQ==
-=8oQE
------END PGP SIGNATURE-----
-
---yzeGM2sBEGtnAUH/--
+Andrzej
