@@ -2,85 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9BB635622
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:28:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F306355B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:24:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237508AbiKWJYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 04:24:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36548 "EHLO
+        id S237518AbiKWJWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 04:22:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237635AbiKWJYK (ORCPT
+        with ESMTP id S237595AbiKWJV4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 04:24:10 -0500
-Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C01971032
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:22:41 -0800 (PST)
-X-QQ-GoodBg: 2
-X-QQ-SSF: 0040000000B00050
-X-QQ-FEAT: gteAknHNoYKQOJ++3tdxfYsLngky6VNps3zHcNE6bJ8yeIjgpog3dejQngndP
-        q3Lm4GuOGkCkiZTtJYNYPLlTzIgFdhwJaWuFBXpt9zr/eqlXZgBmm6jjl10cDNKpcOAIw/y
-        Sgau9YA2FNfzfnbMJWu8BlOz1eaIJ4rL4k3YIVjymIH/8O9KFBLv4eDxGFiw0K4O28gmfJp
-        MGUnLaufc58SJ8+UL140gtalY+8C/tRJY/1XZ39gbFJlpxmMyNN6Qx2w1K/27HlOT+2VBIU
-        NlfuKS8Z6m9vm+oUPx/Rq57hlimrcMv/wOYbfDceKgW1ClDZC7NMF4yrUgdj6ySuBfKGETX
-        BqFHGiZHt8fwudlgy+aqqH3H/IXuDk0x3o8bDaVNyk+4uImDxL+H2mi2IE8qA==
-X-QQ-BUSINESS-ORIGIN: 2
-X-Originating-IP: 223.72.214.84
-X-QQ-STYLE: 
-X-QQ-mid: maileng8t1669195266t197957
-From:   "=?utf-8?B?546L5rSq6L6J?=" <honghui.wang@ucas.com.cn>
-To:     "=?utf-8?B?UGV0ciBNbGFkZWs=?=" <pmladek@suse.com>
-Cc:     "=?utf-8?B?U2VyZ2V5IFNlbm96aGF0c2t5?=" <senozhatsky@chromium.org>,
-        "=?utf-8?B?U3RldmVuIFJvc3RlZHQ=?=" <rostedt@goodmis.org>,
-        "=?utf-8?B?Sm9obiBPZ25lc3M=?=" <john.ogness@linutronix.de>,
-        "=?utf-8?B?bGludXgta2VybmVs?=" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V2] printk: fix a typo of comment
+        Wed, 23 Nov 2022 04:21:56 -0500
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D5F02189F
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:21:38 -0800 (PST)
+Received: by mail-pg1-x549.google.com with SMTP id f132-20020a636a8a000000b00473d0b600ebso9816723pgc.14
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:21:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=N8aMTHwZ5WhdNd/taFqhW6oCnMv7Hs8LkFgvgW835eE=;
+        b=nPBStnU0nNvPiCaL5LqZMwaE6rg463N1CT1Nycb/gGZ7X4HbwZ5+sBxndYSF/DhErA
+         Ql1RpffgRhRRHlA0BT/yYdJXGlK1BgLhYaaCw/bZQv4FN5QeYF1wV50muFqo6rfcVQ9t
+         uSHkGFqG+uIQlPXyCQai8gVHrHOUS3wzj+DMkq5zFKrerN7BIizijLnDxa8Pnzpy2baS
+         29mlSeIqmA07gEXsbUx33rLahVyrc2JcK5EfZzuG9tuvpOSh+pv2P85O+CYa/rfYXW7H
+         Q7nKw5cPTzEZ+EHB9bsc3HkK5GY5oL9QcljnXJRr1c60FM5DnniRIfQiQPtagGEMzmsy
+         5w5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=N8aMTHwZ5WhdNd/taFqhW6oCnMv7Hs8LkFgvgW835eE=;
+        b=bOKT+vRRDnWij8d0Qnc9tCMjkxvN+PK+mt66BFvE9QprO4NqLvTZrh+BH+RLPgUhXq
+         iAQrw1uhr6624HwohpA59sHoSxU30drhKLXhFuqbTlfdMtk7KCbUeIsWoTEyxrs4/lwg
+         R3yBqPJ7Mzq+TfCvv2ROpbz29J5BtAEzL+Fo0EtBtXwZn9nzFkSdis7VZnr3uiJKzRDe
+         g1dDhA51+9SQORUygkOa7ka07T0IzWispMxfhjRNNZKKs7y4SwT1Cyn7AMSmilOTCJGw
+         6wA0qYWYB8M6No8o5qARdqkURGV9VEvpB9HAFBrZvcHOEw09H6SNbayqx5/7mLfxsVKv
+         gQcA==
+X-Gm-Message-State: ANoB5plCb5hzMSI4RPpbUaSvx8wMsaMqeiQZxslzPCx/0WYXywAXJz2y
+        2lAI2yWu3Z0EVuDpGqKlTw63OhEANZAKakVz
+X-Google-Smtp-Source: AA0mqf6eA/SswF6GKB6vAvjx1nUPJ9m0no7zaMHd1/I+pSCtTiat8jOinykDmpe7ezdAH0s9bdjOaYlwOEh5C2Ji
+X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
+ (user=yosryahmed job=sendgmr) by 2002:a17:902:680e:b0:188:d552:fb02 with SMTP
+ id h14-20020a170902680e00b00188d552fb02mr8216533plk.76.1669195297553; Wed, 23
+ Nov 2022 01:21:37 -0800 (PST)
+Date:   Wed, 23 Nov 2022 09:21:29 +0000
 Mime-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: base64
-Date:   Wed, 23 Nov 2022 17:21:05 +0800
-X-Priority: 3
-Message-ID: <tencent_58021F77224429481C4676D4@qq.com>
-X-QQ-MIME: TCMime 1.0 by Tencent
-X-Mailer: QQMail 2.x
-X-QQ-Mailer: QQMail 2.x
-References: <0C7C980DB815FAE1+Y3yNXJCqZ3Nzxa5V@TP-P15V.lan>
-        <Y3yvmMq8FsK85qjl@alley>
-In-Reply-To: <Y3yvmMq8FsK85qjl@alley>
-X-QQ-ReplyHash: 312409942
-X-QQ-SENDSIZE: 520
-Received: from qq.com (unknown [127.0.0.1])
-        by smtp.qq.com (ESMTP) with SMTP
-        id ; Wed, 23 Nov 2022 17:21:07 +0800 (CST)
-Feedback-ID: maileng:ucas.com.cn:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        MSGID_FROM_MTA_HEADER,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_NONE,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
+Message-ID: <20221123092132.2521764-1-yosryahmed@google.com>
+Subject: [PATCH v2 0/3] mm: memcg: fix protection of reclaim target memcg
+From:   Yosry Ahmed <yosryahmed@google.com>
+To:     Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>, Yu Zhao <yuzhao@google.com>,
+        Muchun Song <songmuchun@bytedance.com>
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Chris Down <chris@chrisdown.name>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VGhhbmtzLEJlc3QgUmVnYXJkcyFXYW5nIEhvbmdodWkmbmJzcDsmbmJzcDstLS0tLS0tLS0t
-LS0tLS0tLS0mbmJzcDtPcmlnaW5hbCZuYnNwOy0tLS0tLS0tLS0tLS0tLS0tLUZyb206ICZu
-YnNwOyJQZXRyJm5ic3A7TWxhZGVrIjxwbWxhZGVrQHN1c2UuY29tPjtEYXRlOiAmbmJzcDtU
-dWUsIE5vdiAyMiwgMjAyMiAwNzoxNiBQTVRvOiAmbmJzcDsiV2FuZyBIb25naHVpIjxob25n
-aHVpLndhbmdAdWNhcy5jb20uY24+OyBDYzogJm5ic3A7IlNlcmdleSBTZW5vemhhdHNreSI8
-c2Vub3poYXRza3lAY2hyb21pdW0ub3JnPjsgIlN0ZXZlbiBSb3N0ZWR0Ijxyb3N0ZWR0QGdv
-b2RtaXMub3JnPjsgIkpvaG4gT2duZXNzIjxqb2huLm9nbmVzc0BsaW51dHJvbml4LmRlPjsg
-ImxpbnV4LWtlcm5lbCI8bGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZz47IFN1YmplY3Q6
-ICZuYnNwO1JlOiBbUEFUQ0ggVjJdIHByaW50azogZml4IGEgdHlwbyBvZiBjb21tZW50Jm5i
-c3A7T24gVHVlIDIwMjItMTEtMjIgMTY6NTA6MzYsIFdhbmcgSG9uZ2h1aSB3cm90ZTomZ3Q7
-IEZpeCBhIHR5cG8gb2YgY29tbWVudCZndDsgJmd0OyBTaWduZWQtb2ZmLWJ5OiBXYW5nIEhv
-bmdodWkgPGhvbmdodWkud2FuZ0B1Y2FzLmNvbS5jbj5KRllJLCB0aGUgcGF0Y2ggaGFzIGJl
-ZW4gY29tbWl0dGVkIGludG8gcHJpbnRrL2xpbnV4LmdpdCwgYnJhbmNoIGZvci02LjIuQmVz
-dCBSZWdhcmRzLFBldHJQUzogSSBoYXZlIGFkZGVkIEpvaG4ncyBSZXZpZXdlZC1ieSBmcm9t
-IHYxIFsxXS4gVGhpcyB2ZXJzaW9uIG9mIHRoZSBwYXRjaCBqdXN0IGZpeGVkIHRoZSB0eXBv
-IHRoYXQgSm9obiBtZW50aW9uZWQgdGhlcmVbMV0gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcv
-ci84NzRqdXJxdDVnLmZzZkBqb2duZXNzLmxpbnV0cm9uaXguZGU8L2hvbmdodWkud2FuZ0B1
-Y2FzLmNvbS5jbj48L2xpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc+PC9qb2huLm9nbmVz
-c0BsaW51dHJvbml4LmRlPjwvcm9zdGVkdEBnb29kbWlzLm9yZz48L3Nlbm96aGF0c2t5QGNo
-cm9taXVtLm9yZz48L2hvbmdodWkud2FuZ0B1Y2FzLmNvbS5jbj48L3BtbGFkZWtAc3VzZS5j
-b20+
+This series fixes a bug in calculating the protection of the reclaim
+target memcg where we end up using stale effective protection values from
+the last reclaim operation, instead of completely ignoring the
+protection of the reclaim target as intended. More detailed explanation
+and examples in patch 1, which includes the fix.
+Patches 2 & 3 introduce a selftest case that catches the bug.
+
+v1 -> v2:
+- Instead of adding a new helper, extended
+  mem_cgroup_supports_protection() to check if the current memcg is the
+  target memcg, renamed to mem_cgroup_unprotected() which is much easier
+  to reason about (suggested by Roman).
+- Add a selftest case to catch the bug (suggested by Roman).
+
+Yosry Ahmed (3):
+  mm: memcg: fix stale protection of reclaim target memcg
+  selftests: cgroup: refactor proactive reclaim code to reclaim_until()
+  selftests: cgroup: make sure reclaim target memcg is unprotected
+
+ include/linux/memcontrol.h                    | 31 ++++--
+ mm/vmscan.c                                   | 11 ++-
+ .../selftests/cgroup/test_memcontrol.c        | 96 ++++++++++++-------
+ 3 files changed, 87 insertions(+), 51 deletions(-)
+
+-- 
+2.38.1.584.g0f3c55d4c2-goog
 
