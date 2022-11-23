@@ -2,100 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA4C4636677
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:03:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E045F636678
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:03:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238014AbiKWRDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 12:03:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53528 "EHLO
+        id S238348AbiKWRDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 12:03:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236541AbiKWRDZ (ORCPT
+        with ESMTP id S237983AbiKWRDc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 12:03:25 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 841CA25D1;
-        Wed, 23 Nov 2022 09:03:24 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id q83so19631825oib.10;
-        Wed, 23 Nov 2022 09:03:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Xvt9NMUMshKq6vZrNophFamB+BPLohd5Icmfx4xFrM8=;
-        b=bm9/oOvAW0+K3TJJ7Gj5sl3POoljrlM5fVEpGzyPYDn4OCbo2EeE67VBrIOriN/jqg
-         ht41OZVqCMlusFwyludo9TG2r5836OGVFluTeXayWnJN3BwV1XlA3NC5EVlIkCH5gHPJ
-         HN27HGz0DIoa4TEqjlB9O3zEO5gvarItsEocQ3K+jerWc0/bh90xxvNYnOYfAv/nSFQw
-         gMQOc6drXwiicuWIoc7v0eKNzPfOY3raHDwtA6vTKMmZbIBh/28u++jjNJblBh8RKK07
-         Io7YWkQaVhSTvIaweIs8MKe40rxEWQFmw7loCuk+6YlBZZUerx9FXPWKZgeSKXnez3Nu
-         U+mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Xvt9NMUMshKq6vZrNophFamB+BPLohd5Icmfx4xFrM8=;
-        b=6L3rxPJMpOBZyxIH0mTPnahaBzVr1YgnbhcxYGpPWb1+MemObpznsx6NY5aCNT0qUY
-         Hi6EMGuLJoN+crUpcHSpWfcBJABi3Cup1+YgsM94VuXRc+8jOXjzdIwjXM8ta9d/vUeR
-         q45l8/GCEVXywGtiGdQgH02j66ZKXlGd8OhcPlSFQ/bwSg6dzftU14u+6bxLrfDWRV9y
-         UxV4yHgPnv9YT7vcMopdpE1M4kopz/1vZvG4S9Wm4dyTb0tPY4Pop+MtmCmV3T6OuZSG
-         DmNNwXl+uV78SLq7mjFpSL5tbA1wNP/HWcNlUkm4Jx+kIbKCUtEnjK/ltXARKkIVs6p7
-         eiEg==
-X-Gm-Message-State: ANoB5pkKT3EQ6DOpx6OExzpWSrMQSCW6UdQexLz7bzWIdWkS/s5vu4qK
-        CrGEnEI55tH74eMl3L9jER0=
-X-Google-Smtp-Source: AA0mqf5wBlGvPRLvp/pTWhAa3z7dqWlSRK2KNfpsujr/Ynf5V+BHlGBDdSDKcoDbs2wesz+bqx1Fbw==
-X-Received: by 2002:a05:6808:1115:b0:359:cb71:328b with SMTP id e21-20020a056808111500b00359cb71328bmr14023971oih.282.1669223003837;
-        Wed, 23 Nov 2022 09:03:23 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s8-20020a056870248800b001431bf4e5a0sm2090707oaq.38.2022.11.23.09.03.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 09:03:23 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 23 Nov 2022 09:03:22 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.0 000/314] 6.0.10-rc1 review
-Message-ID: <20221123170322.GB3745358@roeck-us.net>
-References: <20221123084625.457073469@linuxfoundation.org>
+        Wed, 23 Nov 2022 12:03:32 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A20994A73
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 09:03:27 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id AD7E921A20;
+        Wed, 23 Nov 2022 17:03:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1669223006; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QOTqESa3U7W1bqo4V15GNCzXDu459rGsEt2ugIrp2oo=;
+        b=P7YAkbJdM0MPjlher8/nZaZlAvbB5SpS4NQTqUjziAAGNcKgQZy61aewO4JVcnBIq0LeiK
+        2sq34Wvrg6WL1ZlOKiqIYDalzhJ9FYZnKnb1LQcW8Mts+ZyjHFUnphlpInf9bwp3rOfQSX
+        CsPvaoBnhAR4SXwUDZsI0D7st4RpSPU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1669223006;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QOTqESa3U7W1bqo4V15GNCzXDu459rGsEt2ugIrp2oo=;
+        b=ct7u2HKkDhEc2h4wRrne/VdJiY9EG+3LNhuq2lQ5tMb6YwBYdcdf+9mX1U4cPUaWZ+HoX7
+        YkC0t/bht/r8hzCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6EDA213AE7;
+        Wed, 23 Nov 2022 17:03:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id PkBhGl5SfmOscAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 23 Nov 2022 17:03:26 +0000
+Message-ID: <bdafa84a-e5db-471b-fdb2-34ecbf09c225@suse.cz>
+Date:   Wed, 23 Nov 2022 18:03:26 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221123084625.457073469@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 -next 1/2] mm/slb: add is_kmalloc_cache() helper
+ function
+Content-Language: en-US
+To:     Feng Tang <feng.tang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     linux-mm@kvack.org, kasan-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
+References: <20221123123159.2325763-1-feng.tang@intel.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20221123123159.2325763-1-feng.tang@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 09:47:25AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.10 release.
-> There are 314 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+Subject should say mm/slab
+
+On 11/23/22 13:31, Feng Tang wrote:
+> commit 6edf2576a6cc ("mm/slub: enable debugging memory wasting of
+> kmalloc") introduces 'SLAB_KMALLOC' bit specifying whether a
+> kmem_cache is a kmalloc cache for slab/slub (slob doesn't have
+> dedicated kmalloc caches).
 > 
-> Responses should be made by Fri, 25 Nov 2022 08:45:20 +0000.
-> Anything received after that time might be too late.
+> Add a helper inline function for other components like kasan to
+> simplify code.
 > 
+> Signed-off-by: Feng Tang <feng.tang@intel.com>
 
-Build reference: v6.0.9-315-gdcf677c
-Compiler version: arm-linux-gnueabi-gcc (GCC) 11.3.0
-Assembler version: GNU assembler (GNU Binutils) 2.39
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-Building arm:allmodconfig ... failed
---------------
-Error log:
-drivers/rtc/rtc-cmos.c:1347:13: error: 'rtc_wake_setup' defined but not used [-Werror=unused-function]
- 1347 | static void rtc_wake_setup(struct device *dev)
+Patch 2 seems to depend on patches in Andrew's tree so it's simpler if he
+takes both of these too.
 
-Guenter
+Thanks,
+Vlastimil
+
+> ---
+> changlog:
+>   
+>   since v1:
+>   * don't use macro for the helper (Andrew Morton)
+>   * place the inline function in mm/slb.h to solve data structure
+>     definition issue (Vlastimil Babka)
+> 
+>  mm/slab.h | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/mm/slab.h b/mm/slab.h
+> index e3b3231af742..0d72fd62751a 100644
+> --- a/mm/slab.h
+> +++ b/mm/slab.h
+> @@ -325,6 +325,14 @@ static inline slab_flags_t kmem_cache_flags(unsigned int object_size,
+>  }
+>  #endif
+>  
+> +static inline bool is_kmalloc_cache(struct kmem_cache *s)
+> +{
+> +#ifndef CONFIG_SLOB
+> +	return (s->flags & SLAB_KMALLOC);
+> +#else
+> +	return false;
+> +#endif
+> +}
+>  
+>  /* Legal flag mask for kmem_cache_create(), for various configurations */
+>  #define SLAB_CORE_FLAGS (SLAB_HWCACHE_ALIGN | SLAB_CACHE_DMA | \
+
