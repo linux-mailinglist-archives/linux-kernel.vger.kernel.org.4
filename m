@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A72F634EB9
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 05:15:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65232634EC3
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 05:15:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235737AbiKWEO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 23:14:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39746 "EHLO
+        id S235847AbiKWEPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 23:15:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235784AbiKWEOY (ORCPT
+        with ESMTP id S235801AbiKWEOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 23:14:24 -0500
+        Tue, 22 Nov 2022 23:14:43 -0500
 Received: from mail-40140.protonmail.ch (mail-40140.protonmail.ch [185.70.40.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5F6E9145;
-        Tue, 22 Nov 2022 20:13:26 -0800 (PST)
-Date:   Wed, 23 Nov 2022 04:13:12 +0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5CAEEC0A6;
+        Tue, 22 Nov 2022 20:13:33 -0800 (PST)
+Date:   Wed, 23 Nov 2022 04:13:24 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1669176802; x=1669436002;
-        bh=vucYwH44vada8ZS4xeW86emggjOf64YACa1sNFU1WAE=;
+        s=protonmail3; t=1669176811; x=1669436011;
+        bh=iZV4jMjwSd5s27CRv+6a+52wBdjGQm1GF/F0PZLQgpE=;
         h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
          Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
          Message-ID:BIMI-Selector;
-        b=SAizi2iNERss6Ghv8TGGMlAb0KQnkwMay1OtmNP3gKRr62Ls8anTi2SaHlEnbXytX
-         EOz8uUjgR+9pdUPro508PVinIpkXBl324BVQKly9RJ/GHYBMoc/XkXt3v80A1AK9nq
-         ukKPEguiFYLiAf5Klad4AG4TnNICZWr7+Y/sZefmggKQ61NkFjbRX7tABYlnJSkT79
-         UEgYhtUT75SHg1XpznlP6fG+L8NG6kiuQn4h9S4RqdFsckgGwDlpBdFsnSRaXutOAM
-         F+FjQ+mhmzqo+EmpT2CowcAl8X71CJqAVOdU7r80dXB4rPt2xJy6bsmhKsRW7YbprB
-         JWVO/6HJP3jlw==
+        b=oLGFWtU6jzFN4TfvbUTBFPQuPJ/MPulT/sfaQoqltK0SKTOcX91jvtjKYJGdDS+9Z
+         vDN310Kik05tdQdLz2ydqVUxBMTXU7p/ATCAuufTV8TwT1tLort0IxpqRmhipGpUEA
+         cnS5uajxcQEY6fk2fPJTJ/oKauKuaMzIx5cMyO+ou6IBFIav5fjm4t4F5vUhmMXKhD
+         BT9BSXNS5NPLFDm00rFY0/huleNkZle31XLXHoR7e2iNYjbpamTT3P0BjXpL43xvEa
+         uzX107JK77kgDAqYBqJZ4nIFVrsZyAg9JFniQDaZ/Oqq77/zR98YDz2huBfz/SuVL6
+         BtlN737Fhkfbw==
 To:     linux-kernel@vger.kernel.org
 From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -43,8 +43,8 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v4 1/5] dt-bindings: vendor-prefixes: Add GPLUS
-Message-ID: <20221123041220.150893-1-linmengbo0689@protonmail.com>
+Subject: [PATCH v4 2/5] dt-bindings: qcom: Document msm8916-gplus-fl8005a
+Message-ID: <20221123041233.150947-1-linmengbo0689@protonmail.com>
 In-Reply-To: <20221123041110.150837-1-linmengbo0689@protonmail.com>
 References: <20221123041110.150837-1-linmengbo0689@protonmail.com>
 Feedback-ID: 40467236:user:proton
@@ -61,29 +61,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add vendor prefix for GPLUS.
-https://www.gplus.com.tw
+Document the new gplus,fl8005a device tree bindings used in its
+device tree.
 
 Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Docum=
-entation/devicetree/bindings/vendor-prefixes.yaml
-index be7554349545..f5a7e0309e2b 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -510,6 +510,8 @@ patternProperties:
-     description: Shenzhen Huiding Technology Co., Ltd.
-   "^google,.*":
-     description: Google, Inc.
-+  "^gplus,.*":
-+    description: GPLUS
-   "^grinn,.*":
-     description: Grinn
-   "^grmn,.*":
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentatio=
+n/devicetree/bindings/arm/qcom.yaml
+index 463509f0f23a..e19aee193c2b 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -182,6 +182,7 @@ properties:
+           - enum:
+               - alcatel,idol347
+               - asus,z00l
++              - gplus,fl8005a
+               - huawei,g7
+               - longcheer,l8910
+               - samsung,a3u-eur
 --=20
 2.30.2
 
