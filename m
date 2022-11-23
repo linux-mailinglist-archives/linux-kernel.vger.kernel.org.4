@@ -2,116 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A815636E8A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 00:46:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70A95636E8D
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 00:48:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbiKWXqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 18:46:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
+        id S229980AbiKWXsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 18:48:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiKWXqZ (ORCPT
+        with ESMTP id S229705AbiKWXsd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 18:46:25 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD2FED2369
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 15:46:24 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id o5-20020a17090a678500b00218cd5a21c9so106233pjj.4
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 15:46:24 -0800 (PST)
+        Wed, 23 Nov 2022 18:48:33 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48978623B0
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 15:48:32 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id z3so241336iof.3
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 15:48:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GYM94BK5jOKxwjQapo3+0rxZpxWo/HNBHuhrQBd6z+E=;
-        b=fsgMU5jh6bhYT5vNigv9YvRgR+GjBU6wHfYZ0IHJSKRiAGPFGEllYJQFR4EdowNFLL
-         k1mD4C+vjik5SYX5xpIgsVfLB7U0mWDzaFW/cFuw2z6C/s4EALsPfFiczvHNC9utcW83
-         D7qBCy3Nh9UoonQpzw07rIDWVOQJb3wSlh3/k=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=We3Y4AOZ212dC6RjyR8844fCrDkxjUuq7q5okkncMT8=;
+        b=D3A4jBtc/8G4S2epmN4p4OBwn93F+sxWYPAoCVbH/9mMsTOa3iNam1TtPGm/mDMZqw
+         qycXacXDoml97DjlmC/gx5ZecVJyzeEZqJC0UhjN4h7m3dd2Pw3PH2Z/BhD1EfjDHSw0
+         /py9dp1lT1Lss7qS0ktvB5GO79cSzYxJNB22atbGbjS3/mSs3aga4jNzTp1XgcCwf5BB
+         NMLH0au3WHG6WLbgiYYvOvIXbmWf4YFFHqSlbERVV8IWj++EORDDiK0RAevn4EywEG5W
+         dmgDpYpIXg1kRUUoOyUNv/9VjvNwq26+nmylbg08OlADp1vrPqk45OuVdg3uq9DJ/UaQ
+         T3OQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GYM94BK5jOKxwjQapo3+0rxZpxWo/HNBHuhrQBd6z+E=;
-        b=PlO4fq32AuEYraZNYnbrlUystcU7nXddyZ4YdQiu8ih/MnpdEmSJwsmo86ls4izZjM
-         9Oa8krL/3i09byMHVnxHnzjEL4bREx/tfZQkr5Gf9lpaGcIQbna2If5pGM16oqd4SfEO
-         TUSKN0ExRIxnxaQzy630cWGO3uY4umJ1WIH5uwzdGU1m5jSSWkRbBSFJt+F2eNiS0rrN
-         Md7/y5zSkmmjSqO9abgJGt1Hpn4erzSmnRfRadGFmftGP6/YnEQxEPz0plps9EGFOMKQ
-         fzKgYmfkh4bSUL2kYvKtE5b4HIEZXi0hlBWUpzu3MJJToGCmj3b9VjjAKQzBy+P/V/+j
-         IGCQ==
-X-Gm-Message-State: ANoB5plsPHVdf7lNNn+Tkbg6k7UX4YCdTUVH5F4BLT5/9c+nuZC29xPK
-        kKa44qpCG1Pg534WipY8kmoSOpNQ2VdD8A6WtPw=
-X-Google-Smtp-Source: AA0mqf5KLH3mzZVDxS7IHw8X8/QtUJOX2YP5UlPgvgZ1gVL593UHDCC8RJr5Dt0ZsA+4WCRlFMxe8A==
-X-Received: by 2002:a17:90a:668b:b0:218:8666:e77f with SMTP id m11-20020a17090a668b00b002188666e77fmr28116164pjj.0.1669247184198;
-        Wed, 23 Nov 2022 15:46:24 -0800 (PST)
-Received: from jingyliang-input-linux.c.googlers.com.com (30.202.168.34.bc.googleusercontent.com. [34.168.202.30])
-        by smtp.gmail.com with ESMTPSA id m8-20020a170902db0800b001783f964fe3sm15025400plx.113.2022.11.23.15.46.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 15:46:23 -0800 (PST)
-From:   Jingyuan Liang <jingyliang@chromium.org>
-To:     LKML <linux-kernel@vger.kernel.org>, linux-input@vger.kernel.org
-Cc:     hbarnor@chromium.org, dtor@chromium.org, seobrien@chromium.org,
-        Jingyuan Liang <jingyliang@chromium.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>
-Subject: [PATCH] HID: Add Mapping for System Microphone Mute
-Date:   Wed, 23 Nov 2022 23:46:19 +0000
-Message-Id: <20221123234619.91313-1-jingyliang@chromium.org>
-X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
+        bh=We3Y4AOZ212dC6RjyR8844fCrDkxjUuq7q5okkncMT8=;
+        b=B1NPVPdDSGS+cG8KTQJ/Ywho35X7/uV/mtcDm9WZwS4NXHv+ZyUQ3M+whWfigdpw8I
+         zOaihPyRezNUe6nub6nYYyP+p/2TCcDPV/hhdNyLj7TK8ysqHh2ePPFDdvB9pcsCmfya
+         MhGL3lKwLDR2vuOYUQkrqsPl53WWA2Q5MTDB03f2IZePKVrKLj1qX3zUCuhQ92e8ppbW
+         AlqisZsYPfrYG33Zk/5FCgqT34MMAcjC7ylnCdm2XhmPFIDPdf/zGRJzzhgv6039B1jr
+         Zt93c0vGxW8MmiyqUL3aZIWKBFXas40VqsA/epxCRPs+JZAXT+j/pc156XaNM552S69y
+         P5HQ==
+X-Gm-Message-State: ANoB5pk4bl+/cjMzC4JUyFYr2i3YKvgqWERNXlvbv39zf9scibyaUHEg
+        1+w5F3R8+6VCyl0pkftJzJUidluSJvn9y2RO2MH0eg==
+X-Google-Smtp-Source: AA0mqf6cu00HOcBKiFT/xHdbnsOmjtvrb2UAlsBmrJV/4rxn1+hPuVpAckuQ+0yGBIh7KmtbvZhOCDO+KrstkTGNG7U=
+X-Received: by 2002:a6b:4409:0:b0:6de:bd7d:ee08 with SMTP id
+ r9-20020a6b4409000000b006debd7dee08mr5396357ioa.0.1669247311479; Wed, 23 Nov
+ 2022 15:48:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221122203850.2765015-1-almasrymina@google.com>
+ <Y35fw2JSAeAddONg@cmpxchg.org> <CAHS8izN+xqM67XLT4y5qyYnGQMUWRQCJrdvf2gjTHd8nZ_=0sw@mail.gmail.com>
+ <CAJD7tkZNW=u1TD-Fd_3RuzRNtaFjxihbGm0836QHkdp0Nn-vyQ@mail.gmail.com> <Y36fIGFCFKiocAd6@cmpxchg.org>
+In-Reply-To: <Y36fIGFCFKiocAd6@cmpxchg.org>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Wed, 23 Nov 2022 15:47:55 -0800
+Message-ID: <CAJD7tkZ_tz-JNEvGS3fOhHohuoHaKj_8FzpGRDSP2vhhAc+Pmg@mail.gmail.com>
+Subject: Re: [RFC PATCH V1] mm: Disable demotion from proactive reclaim
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Mina Almasry <almasrymina@google.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
+        shakeelb@google.com, gthelen@google.com, fvdl@google.com,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HUTRR110 added a new usage code for a key that is supposed to
-mute/unmute microphone system-wide.
+On Wed, Nov 23, 2022 at 2:30 PM Johannes Weiner <hannes@cmpxchg.org> wrote:
+>
+> On Wed, Nov 23, 2022 at 01:35:13PM -0800, Yosry Ahmed wrote:
+> > On Wed, Nov 23, 2022 at 1:21 PM Mina Almasry <almasrymina@google.com> wrote:
+> > >
+> > > On Wed, Nov 23, 2022 at 10:00 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
+> > > >
+> > > > Hello Mina,
+> > > >
+> > > > On Tue, Nov 22, 2022 at 12:38:45PM -0800, Mina Almasry wrote:
+> > > > > Since commit 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg
+> > > > > reclaim""), the proactive reclaim interface memory.reclaim does both
+> > > > > reclaim and demotion. This is likely fine for us for latency critical
+> > > > > jobs where we would want to disable proactive reclaim entirely, and is
+> > > > > also fine for latency tolerant jobs where we would like to both
+> > > > > proactively reclaim and demote.
+> > > > >
+> > > > > However, for some latency tiers in the middle we would like to demote but
+> > > > > not reclaim. This is because reclaim and demotion incur different latency
+> > > > > costs to the jobs in the cgroup. Demoted memory would still be addressable
+> > > > > by the userspace at a higher latency, but reclaimed memory would need to
+> > > > > incur a pagefault.
+> > > > >
+> > > > > To address this, I propose having reclaim-only and demotion-only
+> > > > > mechanisms in the kernel. There are a couple possible
+> > > > > interfaces to carry this out I considered:
+> > > > >
+> > > > > 1. Disable demotion in the memory.reclaim interface and add a new
+> > > > >    demotion interface (memory.demote).
+> > > > > 2. Extend memory.reclaim with a "demote=<int>" flag to configure the demotion
+> > > > >    behavior in the kernel like so:
+> > > > >       - demote=0 would disable demotion from this call.
+> > > > >       - demote=1 would allow the kernel to demote if it desires.
+> > > > >       - demote=2 would only demote if possible but not attempt any
+> > > > >         other form of reclaim.
+> > > >
+> > > > Unfortunately, our proactive reclaim stack currently relies on
+> > > > memory.reclaim doing both. It may not stay like that, but I'm a bit
+> > > > wary of changing user-visible semantics post-facto.
+> > > >
+> > > > In patch 2, you're adding a node interface to memory.demote. Can you
+> > > > add this to memory.reclaim instead? This would allow you to control
+> > > > demotion and reclaim independently as you please: if you call it on a
+> > > > node with demotion targets, it will demote; if you call it on a node
+> > > > without one, it'll reclaim. And current users will remain unaffected.
+> > >
+> > > Hello Johannes, thanks for taking a look!
+> > >
+> > > I can certainly add the "nodes=" arg to memory.reclaim and you're
+> > > right, that would help in bridging the gap. However, if I understand
+> > > the underlying code correctly, with only the nodes= arg the kernel
+> > > will indeed attempt demotion first, but the kernel will also merrily
+> > > fall back to reclaiming if it can't demote the full amount. I had
+> > > hoped to have the flexibility to protect latency sensitive jobs from
+> > > reclaim entirely while attempting to do demotion.
+> > >
+> > > There are probably ways to get around that in the userspace. I presume
+> > > the userspace can check if there is available memory on the node's
+> > > demotion targets, and if so, the kernel should demote-only. But I feel
+> > > that wouldn't be reliable as the demotion logic may change across
+> > > kernel versions. The userspace may think the kernel would demote but
+> > > instead demotion failed due to whatever heuristic introduced into the
+> > > new kernel version.
+> > >
+> > > The above is just one angle of the issue. Another angle (which Yosry
+> > > would care most about I think) is that at Google we call
+> > > memory.reclaim mainly when memory.current is too close to memory.max
+> > > and we expect the memory usage of the cgroup to drop as a result of a
+> > > success memory.reclaim call. I suspect once we take in commit
+> > > 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg reclaim""),
+> > > we would run into that regression, but I defer to Yosry here, he may
+> > > have a solution for that in mind already.
+> >
+> > We don't exactly rely on memory.current, but we do have a separate
+> > proactive reclaim policy today from demotion, and we do expect
+> > memory.reclaim to reclaim memory and not demote it. So it is important
+> > that we can control reclaim vs. demotion separately. Having
+> > memory.reclaim do demotions by default is not ideal for our current
+> > setup, so at least having a demote= argument to control it (no
+> > demotions, may demote, only demote) is needed.
+>
+> With a nodemask you should be able to only reclaim by specifying
+> terminal memory tiers that do that, and leave out higher tiers that
+> demote.
+>
+> That said, it would actually be nice if reclaim policy wouldn't have
+> to differ from demotion policy longer term. Ultimately it comes down
+> to mapping age to memory tier, right? Such that hot pages are in RAM,
+> warm pages are in CXL, cold pages are in storage. If you apply equal
+> presure on all tiers, it's access frequency that should determine
+> which RAM pages to demote, and which CXL pages to reclaim. If RAM
+> pages are hot and refuse demotion, and CXL pages are cold in
+> comparison, CXL should clear out. If RAM pages are warm, they should
+> get demoted to CXL but not reclaimed further from there (and rotate
+> instead).
+>
+> Do we know what's preventing this from happening today? What's the
+> reason you want to control them independently?
 
-This patch maps the new usage code(0x01 0xa9) to keycode KEY_MICMUTE.
-Additionally hid-debug is adjusted to recognize this keycode as well.
-
-Signed-off-by: Jingyuan Liang <jingyliang@chromium.org>
----
-
- drivers/hid/hid-debug.c | 1 +
- drivers/hid/hid-input.c | 8 ++++++++
- 2 files changed, 9 insertions(+)
-
-diff --git a/drivers/hid/hid-debug.c b/drivers/hid/hid-debug.c
-index 2ca6ab600bc9..15e35702773c 100644
---- a/drivers/hid/hid-debug.c
-+++ b/drivers/hid/hid-debug.c
-@@ -972,6 +972,7 @@ static const char *keys[KEY_MAX + 1] = {
- 	[KEY_KBD_LAYOUT_NEXT] = "KbdLayoutNext",
- 	[KEY_EMOJI_PICKER] = "EmojiPicker",
- 	[KEY_DICTATE] = "Dictate",
-+	[KEY_MICMUTE] = "MicrophoneMute",
- 	[KEY_BRIGHTNESS_MIN] = "BrightnessMin",
- 	[KEY_BRIGHTNESS_MAX] = "BrightnessMax",
- 	[KEY_BRIGHTNESS_AUTO] = "BrightnessAuto",
-diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
-index 859aeb07542e..6396ed434b37 100644
---- a/drivers/hid/hid-input.c
-+++ b/drivers/hid/hid-input.c
-@@ -781,6 +781,14 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
- 			break;
- 		}
- 
-+		if ((usage->hid & 0xf0) == 0xa0) {	/* SystemControl */
-+			switch (usage->hid & 0xf) {
-+			case 0x9: map_key_clear(KEY_MICMUTE); break;
-+			default: goto ignore;
-+			}
-+			break;
-+		}
-+
- 		if ((usage->hid & 0xf0) == 0xb0) {	/* SC - Display */
- 			switch (usage->hid & 0xf) {
- 			case 0x05: map_key_clear(KEY_SWITCHVIDEOMODE); break;
--- 
-2.38.1.584.g0f3c55d4c2-goog
-
+The motivation was giving user space more flexibility to design their
+policies. However, as you point out, the current behavior of falling
+back to reclaiming when we cannot demote is not ideal, and maybe we
+should not design policies around it. We can always revisit this if a
+use case arises where a clear distinction needs to be drawn between
+reclaiming and demotion policies.
