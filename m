@@ -2,453 +2,310 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E44A636363
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:24:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 572F663636D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:25:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236556AbiKWPYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 10:24:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33946 "EHLO
+        id S238024AbiKWPZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 10:25:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235513AbiKWPYq (ORCPT
+        with ESMTP id S236642AbiKWPZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 10:24:46 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 77BBAD8
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:24:43 -0800 (PST)
-Received: from loongson.cn (unknown [125.69.43.27])
-        by gateway (Coremail) with SMTP id _____8AxhfA4O35jLEAAAA--.781S3;
-        Wed, 23 Nov 2022 23:24:40 +0800 (CST)
-Received: from [127.0.0.1] (unknown [125.69.43.27])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxd1c0O35jfckYAA--.46395S3;
-        Wed, 23 Nov 2022 23:24:37 +0800 (CST)
-Message-ID: <7e4143dc-c444-e497-43bb-ac0ba18b6691@loongson.cn>
-Date:   Wed, 23 Nov 2022 23:24:36 +0800
+        Wed, 23 Nov 2022 10:25:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E8125EB0
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:24:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669217087;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+JIKrf57nj1kWRXglPfPJ258p/fyMgl7dlr5TafbPCE=;
+        b=SfQAimNIc8rxMBO2xBRRERSDZQiS7ZCmpA2koHz/0eUZ3x4uarnzslL3HPDj177Xi2vz0f
+        KTFQE3p/IYVM7wftllV3XntR8odPViZ/NHFYo1D23w1deR0zadXEC+kI07zLyhmzFSojvv
+        MY6yIxXv9wVJkkhpfji723QFMZTxEGQ=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-91-7I-pzQpvO_OFj83qEUjWrg-1; Wed, 23 Nov 2022 10:24:44 -0500
+X-MC-Unique: 7I-pzQpvO_OFj83qEUjWrg-1
+Received: by mail-qk1-f199.google.com with SMTP id h13-20020a05620a244d00b006fb713618b8so22752206qkn.0
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:24:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+JIKrf57nj1kWRXglPfPJ258p/fyMgl7dlr5TafbPCE=;
+        b=idPLTExBka9MmP0Aiv9zBmUbcbWPZxzVTmW68QnXuzkD5jHec3BPEA+nPihzksbHzV
+         SMXduIetsOBbnAqoGYf+1IcWBWVsXOtxDvEyVMZiJBjTBiTeKNCJmfnEm9zJ/Nxdt++y
+         8EV/AOU1PxUga9oLIh5TtGh5MMtobLPS/juKOmoPUBCdf81g+fRPGmBOU/BcidW/JRdF
+         g0ZDE4z2bENiTOMC2II2nx49TlGtBeAO6qj+OuIsHbqj5XAkGtF54zreuAodXTnoYwJ2
+         nWAMx2i/Y1vEG47HNwMvYa2AKOJYAM+lb0sHL156ios0SMNbiG76MJosQwWhtIpS6z0i
+         gp8Q==
+X-Gm-Message-State: ANoB5pmS3HNKpqxdqU/RJv4FNkSsKv2bVuv65hq4dCetmcze86uMiGa3
+        I4bJ0vyDn53QRfr88tceADe+tLtzvc7pUlV0lMvh5T12l/L7RvxbuG6vGuoCR1SWsDSoqneKJQi
+        0uso68WOT6c1DNEo6FLhR6m4m
+X-Received: by 2002:a05:620a:1527:b0:6ec:ff06:8307 with SMTP id n7-20020a05620a152700b006ecff068307mr10509916qkk.683.1669217084253;
+        Wed, 23 Nov 2022 07:24:44 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf71bOLl6p3QloT2gsNe/gsl/rWhKoQzcq0yCqIGJJaDaiJrvVCJtiQp8VwqkDgswaMsII218Q==
+X-Received: by 2002:a05:620a:1527:b0:6ec:ff06:8307 with SMTP id n7-20020a05620a152700b006ecff068307mr10509885qkk.683.1669217083898;
+        Wed, 23 Nov 2022 07:24:43 -0800 (PST)
+Received: from sgarzare-redhat (host-82-53-134-234.retail.telecomitalia.it. [82.53.134.234])
+        by smtp.gmail.com with ESMTPSA id i5-20020a05622a08c500b003431446588fsm10141112qte.5.2022.11.23.07.24.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 07:24:43 -0800 (PST)
+Date:   Wed, 23 Nov 2022 16:24:37 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        kernel <kernel@sberdevices.ru>,
+        Bobby Eshleman <bobby.eshleman@gmail.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>
+Subject: Re: [RFC PATCH v1 1/3] test/vsock: rework message bound test
+Message-ID: <20221123152437.gat3feinipkdsi3v@sgarzare-redhat>
+References: <ba294dff-812a-bfc2-a43c-286f99aee0b8@sberdevices.ru>
+ <c991dffd-1dbc-e1d1-b682-a3c71f6ce51c@sberdevices.ru>
+ <20221121144602.gnrzlaatrnasaard@sgarzare-redhat>
+ <e86656c2-079b-5223-cc69-d651cb846e24@sberdevices.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: Questions about kprobe handler
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <9b6eb4db-83fe-e6d9-a580-1a11aace84b0@loongson.cn>
- <20221117220915.8b233ec82dc10a84753150b4@kernel.org>
-From:   Jinyang He <hejinyang@loongson.cn>
-In-Reply-To: <20221117220915.8b233ec82dc10a84753150b4@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Dxd1c0O35jfckYAA--.46395S3
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3CFyxCw4rCr17Zw1ktFyDtrb_yoWkuF45pF
-        Z5C3W5KrW8JFy8C3sFq3WjyrySvrWDZ3yUJwn3Ga4Yyw1DXr1Yqr1xWw429F4DCrWvga1a
-        vr1xtFy5uF98tFJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
-        w2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2
-        jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
-        AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI
-        1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_Jr
-        Wlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j
-        6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr
-        0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIY
-        CTnIWIevJa73UjIFyTuYvjxU2MKZDUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <e86656c2-079b-5223-cc69-d651cb846e24@sberdevices.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-åœ¨ 2022/11/17 21:09, Masami Hiramatsu (Google) å†™é“:
+On Mon, Nov 21, 2022 at 04:49:23PM +0000, Arseniy Krasnov wrote:
+>On 21.11.2022 17:46, Stefano Garzarella wrote:
+>> On Tue, Nov 15, 2022 at 08:50:36PM +0000, Arseniy Krasnov wrote:
+>>> This updates message bound test making it more complex. Instead of
+>>> sending 1 bytes messages with one MSG_EOR bit, it sends messages of
+>>> random length(one half of messages are smaller than page size, second
+>>> half are bigger) with random number of MSG_EOR bits set. Receiver
+>>> also don't know total number of messages.
+>>>
+>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>>> ---
+>>> tools/testing/vsock/control.c    |  34 +++++++++
+>>> tools/testing/vsock/control.h    |   2 +
+>>> tools/testing/vsock/util.c       |  13 ++++
+>>> tools/testing/vsock/util.h       |   1 +
+>>> tools/testing/vsock/vsock_test.c | 115 +++++++++++++++++++++++++++----
+>>> 5 files changed, 152 insertions(+), 13 deletions(-)
+>>>
+>>> diff --git a/tools/testing/vsock/control.c b/tools/testing/vsock/control.c
+>>> index 4874872fc5a3..bed1649bdf3d 100644
+>>> --- a/tools/testing/vsock/control.c
+>>> +++ b/tools/testing/vsock/control.c
+>>> @@ -141,6 +141,40 @@ void control_writeln(const char *str)
+>>>     timeout_end();
+>>> }
+>>>
+>>> +void control_writeulong(unsigned long value)
+>>> +{
+>>> +    char str[32];
+>>> +
+>>> +    if (snprintf(str, sizeof(str), "%lu", value) >= sizeof(str)) {
+>>> +        perror("snprintf");
+>>> +        exit(EXIT_FAILURE);
+>>> +    }
+>>> +
+>>> +    control_writeln(str);
+>>> +}
+>>> +
+>>> +unsigned long control_readulong(bool *ok)
+>>> +{
+>>> +    unsigned long value;
+>>> +    char *str;
+>>> +
+>>> +    if (ok)
+>>> +        *ok = false;
+>>> +
+>>> +    str = control_readln();
+>>> +
+>>> +    if (str == NULL)
+>>
+>> checkpatch suggests to use !str
+>>
+>>> +        return 0;
+>>
+>> Maybe we can just call exit(EXIT_FAILURE) here and remove the `ok`
+>> parameter, since I'm not sure we can recover from this error.
+>>
+>>> +
+>>> +    value = strtoul(str, NULL, 10);
+>>> +    free(str);
+>>> +
+>>> +    if (ok)
+>>> +        *ok = true;
+>>> +
+>>> +    return value;
+>>> +}
+>>> +
+>>> /* Return the next line from the control socket (without the trailing newline).
+>>>  *
+>>>  * The program terminates if a timeout occurs.
+>>> diff --git a/tools/testing/vsock/control.h b/tools/testing/vsock/control.h
+>>> index 51814b4f9ac1..cdd922dfea68 100644
+>>> --- a/tools/testing/vsock/control.h
+>>> +++ b/tools/testing/vsock/control.h
+>>> @@ -9,7 +9,9 @@ void control_init(const char *control_host, const char *control_port,
+>>> void control_cleanup(void);
+>>> void control_writeln(const char *str);
+>>> char *control_readln(void);
+>>> +unsigned long control_readulong(bool *ok);
+>>> void control_expectln(const char *str);
+>>> bool control_cmpln(char *line, const char *str, bool fail);
+>>> +void control_writeulong(unsigned long value);
+>>>
+>>> #endif /* CONTROL_H */
+>>> diff --git a/tools/testing/vsock/util.c b/tools/testing/vsock/util.c
+>>> index 2acbb7703c6a..351903836774 100644
+>>> --- a/tools/testing/vsock/util.c
+>>> +++ b/tools/testing/vsock/util.c
+>>> @@ -395,3 +395,16 @@ void skip_test(struct test_case *test_cases, size_t test_cases_len,
+>>>
+>>>     test_cases[test_id].skip = true;
+>>> }
+>>> +
+>>> +unsigned long djb2(const void *data, size_t len)
+>>
+>> I would add hash_ as a prefix (or suffix).
+>>
+>>> +{
+>>> +    unsigned long hash = 5381;
+>>> +    int i = 0;
+>>> +
+>>> +    while (i < len) {
+>>> +        hash = ((hash << 5) + hash) + ((unsigned char *)data)[i];
+>>> +        i++;
+>>> +    }
+>>> +
+>>> +    return hash;
+>>> +}
+>>> diff --git a/tools/testing/vsock/util.h b/tools/testing/vsock/util.h
+>>> index a3375ad2fb7f..988cc69a4642 100644
+>>> --- a/tools/testing/vsock/util.h
+>>> +++ b/tools/testing/vsock/util.h
+>>> @@ -49,4 +49,5 @@ void run_tests(const struct test_case *test_cases,
+>>> void list_tests(const struct test_case *test_cases);
+>>> void skip_test(struct test_case *test_cases, size_t test_cases_len,
+>>>            const char *test_id_str);
+>>> +unsigned long djb2(const void *data, size_t len);
+>>> #endif /* UTIL_H */
+>>> diff --git a/tools/testing/vsock/vsock_test.c b/tools/testing/vsock/vsock_test.c
+>>> index bb6d691cb30d..107c11165887 100644
+>>> --- a/tools/testing/vsock/vsock_test.c
+>>> +++ b/tools/testing/vsock/vsock_test.c
+>>> @@ -284,10 +284,14 @@ static void test_stream_msg_peek_server(const struct test_opts *opts)
+>>>     close(fd);
+>>> }
+>>>
+>>> -#define MESSAGES_CNT 7
+>>> -#define MSG_EOR_IDX (MESSAGES_CNT / 2)
+>>> +#define SOCK_BUF_SIZE (2 * 1024 * 1024)
+>>> +#define MAX_MSG_SIZE (32 * 1024)
+>>> +
+>>> static void test_seqpacket_msg_bounds_client(const struct test_opts *opts)
+>>> {
+>>> +    unsigned long curr_hash;
+>>> +    int page_size;
+>>> +    int msg_count;
+>>>     int fd;
+>>>
+>>>     fd = vsock_seqpacket_connect(opts->peer_cid, 1234);
+>>> @@ -296,18 +300,69 @@ static void test_seqpacket_msg_bounds_client(const struct test_opts *opts)
+>>>         exit(EXIT_FAILURE);
+>>>     }
+>>>
+>>> -    /* Send several messages, one with MSG_EOR flag */
+>>> -    for (int i = 0; i < MESSAGES_CNT; i++)
+>>> -        send_byte(fd, 1, (i == MSG_EOR_IDX) ? MSG_EOR : 0);
+>>> +    /* Wait, until receiver sets buffer size. */
+>>> +    control_expectln("SRVREADY");
+>>> +
+>>> +    curr_hash = 0;
+>>> +    page_size = getpagesize();
+>>> +    msg_count = SOCK_BUF_SIZE / MAX_MSG_SIZE;
+>>> +
+>>> +    for (int i = 0; i < msg_count; i++) {
+>>> +        ssize_t send_size;
+>>> +        size_t buf_size;
+>>> +        int flags;
+>>> +        void *buf;
+>>> +
+>>> +        /* Use "small" buffers and "big" buffers. */
+>>> +        if (i & 1)
+>>> +            buf_size = page_size +
+>>> +                    (rand() % (MAX_MSG_SIZE - page_size));
+>>> +        else
+>>> +            buf_size = 1 + (rand() % page_size);
+>>> +
+>>> +        buf = malloc(buf_size);
+>>> +
+>>> +        if (!buf) {
+>>> +            perror("malloc");
+>>> +            exit(EXIT_FAILURE);
+>>> +        }
+>>> +
+>>> +        /* Set at least one MSG_EOR + some random. */
+>>> +        if (i == (msg_count / 2) || (rand() & 1)) {
+>>> +            flags = MSG_EOR;
+>>> +            curr_hash++;
+>>> +        } else {
+>>> +            flags = 0;
+>>> +        }
+>>> +
+>>> +        send_size = send(fd, buf, buf_size, flags);
+>>> +
+>>> +        if (send_size < 0) {
+>>> +            perror("send");
+>>> +            exit(EXIT_FAILURE);
+>>> +        }
+>>> +
+>>> +        if (send_size != buf_size) {
+>>> +            fprintf(stderr, "Invalid send size\n");
+>>> +            exit(EXIT_FAILURE);
+>>> +        }
+>>> +
+>>> +        curr_hash += send_size;
+>>> +        curr_hash = djb2(&curr_hash, sizeof(curr_hash));
+>>> +    }
+>>>
+>>>     control_writeln("SENDDONE");
+>>> +    control_writeulong(curr_hash);
+>>
+>> Why do we need to hash the size?
+>>
+>> Maybe we can send it without making the hash, anyway even if it wraps,
+>> it should wrap the same way in both the server and the client.
+>> (Or maybe we can use uin32_t or uint64_t to make sure both were
+>> using 4 or 8 bytes)
+>Hello, thanks for review. I think if we will use sum of message size(IIUC), in most
+>paranoic case it won't guarantee message bounds control: single 4 bytes message
+>could be read as 4 x 1 byte message(IIUC of course). Idea of hashing is simple:
+>every iteration we do current_hash = hash(previous_hash + size of current message);
+>I think this is more reliable and protects from case described above.
 
-> On Thu, 17 Nov 2022 09:07:37 +0800
-> Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+Okay, now I understand what it is for and agree that using hash is 
+better.
+Please add a comment to explain it.
+
 >
->> Hi KPROBES maintainers,
->>
->> There are some differences of kprobe handler implementations on various
->> archs, the implementations are almost same on arm64, riscv, csky, the
->> code logic is clear and understandable. But on mips and loongarch (not
->> upstreamed yet), if get_kprobe() returns NULL, what is the purpose of
->> the check "if (addr->word != breakpoint_insn.word)", is it necessary?
->> Can we just return directly? Please take a look, thank you.
-> Good question!
->
-> This means that when the software breakpoint was hit on that CPU, but
-> before calling kprobe handler function, the other CPU can remove that
-> kprobe from hash table, becahse the hash table is not locked.
-> In that case, the get_kprobe(addr) will return NULL, and the software
-> breakpoint instruction is already removed (replaced with the original
-> instruction). Thus it is safe to go back. But this is originally
-> implemented for x86, which doesn't need stop_machine() to modify the
-> code. On the other hand, if an architecture which needs stop_machine()
-> to modify code, the above scenario never happen. In that case, you
-> don't need this "if" case.
->
-> Thank you,
->
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/mips/kernel/kprobes.c#n323
->> 		p = get_kprobe(addr);
->> 		if (p) {
->> 			...
->> 		} else if (addr->word != breakpoint_insn.word) {
+>All other comments - ack.
 
-Hi,
-
-
-Sorry for the late reply, but I think there should be some public
-comments so that I can get the authoritative response, as offline
-communication with Tiezhu is always one-sided.
-
-I think the branch you answered here is " if (p)... " rather than
-"else if (addr->word != breakpoint_insn.word)". It is right if we
-not use stop_machine here we need this branch. In fact, Tiezhu
-and Huacai, the maintainer of LoongArch are more concerned
-about the latter why we need compare with the breakpoint_insn.
-
-The reason I gave as follows, and I show mips code here,
-
- Â Â  Â p = get_kprobe(addr);
- Â Â  Â if (!p) {
- Â Â  Â Â Â Â  if (addr->word != breakpoint_insn.word) {
- Â Â  Â Â Â Â  Â Â Â  /*
- Â Â  Â Â Â Â  Â Â Â  Â * The breakpoint instruction was removed right
- Â Â  Â Â Â Â  Â Â Â  Â * after we hit it.Â  Another cpu has removed
- Â Â  Â Â Â Â  Â Â Â  Â * either a probepoint or a debugger breakpoint
- Â Â  Â Â Â Â  Â Â Â  Â * at this address.Â  In either case, no further
- Â Â  Â Â Â Â  Â Â Â  Â * handling of this interrupt is appropriate.
- Â Â  Â Â Â Â  Â Â Â  Â */
- Â Â  Â Â Â Â  Â Â Â  ret = 1;
- Â Â  Â Â Â Â  }
- Â Â  Â Â Â Â  /* Not one of ours: let kernel handle it */
- Â Â  Â Â Â Â  goto no_kprobe;
- Â Â  Â }
-
-...
-int kprobe_exceptions_notify(struct notifier_block *self,
- Â Â  Â Â Â Â  Â Â Â  Â Â Â  Â Â Â Â Â Â  unsigned long val, void *data)
-{
- Â Â  Â struct die_args *args = (struct die_args *)data;
- Â Â  Â int ret = NOTIFY_DONE;
-
- Â Â  Â switch (val) {
- Â Â  Â case DIE_BREAK:
- Â Â  Â Â Â Â  if (kprobe_handler(args->regs))
- Â Â  Â Â Â Â  Â Â Â  ret = NOTIFY_STOP;
- Â Â  Â Â Â Â  break;
-...
-
-The !p means this insn has been moved, and then in most cases the COND
-"addr->word != breakpoint_insn.word" is true, we return 1 so that the return
-value in kprobe_exceptions_notify will be changed to NOTIFY_STOP.
-The mips use soft breakpoint like "break hint". How if the original insn
-is same as breakpoint_insn? That is a few case when COND is false. In that
-case, it means we should handle it by other handlers and doesn't change 
-ret to
-keep NOTIFY_DONE as kprobe_exceptions_notify return value.
-
-Is this idea reasonable? Thanks!
-
-
-Jinyang
-
->> 			/*
->> 			 * The breakpoint instruction was removed by
->> 			 * another cpu right after we hit, no further
->> 			 * handling of this interrupt is appropriate
->> 			 */
->> 			ret = 1;
->> 		}
->> https://github.com/loongson/linux/blob/loongarch-next-generic-stub/arch/loongarch/kernel/kprobes.c#L262
->> 	p = get_kprobe(addr);
->> 	if (p) {
->> 		...
->> 	} else {
->> 		if (addr->word != breakpoint_insn.word) {
->> 			/*
->> 			 * The breakpoint instruction was removed right
->> 			 * after we hit it.  Another cpu has removed
->> 			 * either a probepoint or a debugger breakpoint
->> 			 * at this address.  In either case, no further
->> 			 * handling of this interrupt is appropriate.
->> 			 */
->> 			preempt_enable_no_resched();
->> 			return 1;
->> 		}
->> 	}
->>
->> (1) arm64
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/kernel/probes/kprobes.c#n309
->> static void __kprobes kprobe_handler(struct pt_regs *regs)
->> {
->> 	struct kprobe *p, *cur_kprobe;
->> 	struct kprobe_ctlblk *kcb;
->> 	unsigned long addr = instruction_pointer(regs);
->>
->> 	kcb = get_kprobe_ctlblk();
->> 	cur_kprobe = kprobe_running();
->>
->> 	p = get_kprobe((kprobe_opcode_t *) addr);
->>
->> 	if (p) {
->> 		if (cur_kprobe) {
->> 			if (reenter_kprobe(p, regs, kcb))
->> 				return;
->> 		} else {
->> 			/* Probe hit */
->> 			set_current_kprobe(p);
->> 			kcb->kprobe_status = KPROBE_HIT_ACTIVE;
->>
->> 			/*
->> 			 * If we have no pre-handler or it returned 0, we
->> 			 * continue with normal processing.  If we have a
->> 			 * pre-handler and it returned non-zero, it will
->> 			 * modify the execution path and no need to single
->> 			 * stepping. Let's just reset current kprobe and exit.
->> 			 */
->> 			if (!p->pre_handler || !p->pre_handler(p, regs)) {
->> 				setup_singlestep(p, regs, kcb, 0);
->> 			} else
->> 				reset_current_kprobe();
->> 		}
->> 	}
->> 	/*
->> 	 * The breakpoint instruction was removed right
->> 	 * after we hit it.  Another cpu has removed
->> 	 * either a probepoint or a debugger breakpoint
->> 	 * at this address.  In either case, no further
->> 	 * handling of this interrupt is appropriate.
->> 	 * Return back to original instruction, and continue.
->> 	 */
->> }
->>
->> (2) riscv
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/riscv/kernel/probes/kprobes.c#n269
->> bool __kprobes
->> kprobe_breakpoint_handler(struct pt_regs *regs)
->> {
->> 	struct kprobe *p, *cur_kprobe;
->> 	struct kprobe_ctlblk *kcb;
->> 	unsigned long addr = instruction_pointer(regs);
->>
->> 	kcb = get_kprobe_ctlblk();
->> 	cur_kprobe = kprobe_running();
->>
->> 	p = get_kprobe((kprobe_opcode_t *) addr);
->>
->> 	if (p) {
->> 		if (cur_kprobe) {
->> 			if (reenter_kprobe(p, regs, kcb))
->> 				return true;
->> 		} else {
->> 			/* Probe hit */
->> 			set_current_kprobe(p);
->> 			kcb->kprobe_status = KPROBE_HIT_ACTIVE;
->>
->> 			/*
->> 			 * If we have no pre-handler or it returned 0, we
->> 			 * continue with normal processing.  If we have a
->> 			 * pre-handler and it returned non-zero, it will
->> 			 * modify the execution path and no need to single
->> 			 * stepping. Let's just reset current kprobe and exit.
->> 			 *
->> 			 * pre_handler can hit a breakpoint and can step thru
->> 			 * before return.
->> 			 */
->> 			if (!p->pre_handler || !p->pre_handler(p, regs))
->> 				setup_singlestep(p, regs, kcb, 0);
->> 			else
->> 				reset_current_kprobe();
->> 		}
->> 		return true;
->> 	}
->>
->> 	/*
->> 	 * The breakpoint instruction was removed right
->> 	 * after we hit it.  Another cpu has removed
->> 	 * either a probepoint or a debugger breakpoint
->> 	 * at this address.  In either case, no further
->> 	 * handling of this interrupt is appropriate.
->> 	 * Return back to original instruction, and continue.
->> 	 */
->> 	return false;
->> }
->>
->> (3) csky
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/csky/kernel/probes/kprobes.c#n311
->> int __kprobes
->> kprobe_breakpoint_handler(struct pt_regs *regs)
->> {
->> 	struct kprobe *p, *cur_kprobe;
->> 	struct kprobe_ctlblk *kcb;
->> 	unsigned long addr = instruction_pointer(regs);
->>
->> 	kcb = get_kprobe_ctlblk();
->> 	cur_kprobe = kprobe_running();
->>
->> 	p = get_kprobe((kprobe_opcode_t *) addr);
->>
->> 	if (p) {
->> 		if (cur_kprobe) {
->> 			if (reenter_kprobe(p, regs, kcb))
->> 				return 1;
->> 		} else {
->> 			/* Probe hit */
->> 			set_current_kprobe(p);
->> 			kcb->kprobe_status = KPROBE_HIT_ACTIVE;
->>
->> 			/*
->> 			 * If we have no pre-handler or it returned 0, we
->> 			 * continue with normal processing.  If we have a
->> 			 * pre-handler and it returned non-zero, it will
->> 			 * modify the execution path and no need to single
->> 			 * stepping. Let's just reset current kprobe and exit.
->> 			 *
->> 			 * pre_handler can hit a breakpoint and can step thru
->> 			 * before return.
->> 			 */
->> 			if (!p->pre_handler || !p->pre_handler(p, regs))
->> 				setup_singlestep(p, regs, kcb, 0);
->> 			else
->> 				reset_current_kprobe();
->> 		}
->> 		return 1;
->> 	}
->>
->> 	/*
->> 	 * The breakpoint instruction was removed right
->> 	 * after we hit it.  Another cpu has removed
->> 	 * either a probepoint or a debugger breakpoint
->> 	 * at this address.  In either case, no further
->> 	 * handling of this interrupt is appropriate.
->> 	 * Return back to original instruction, and continue.
->> 	 */
->> 	return 0;
->> }
->>
->> (4) mips
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/mips/kernel/kprobes.c#n279
->> static int kprobe_handler(struct pt_regs *regs)
->> {
->> 	struct kprobe *p;
->> 	int ret = 0;
->> 	kprobe_opcode_t *addr;
->> 	struct kprobe_ctlblk *kcb;
->>
->> 	addr = (kprobe_opcode_t *) regs->cp0_epc;
->>
->> 	/*
->> 	 * We don't want to be preempted for the entire
->> 	 * duration of kprobe processing
->> 	 */
->> 	preempt_disable();
->> 	kcb = get_kprobe_ctlblk();
->>
->> 	/* Check we're not actually recursing */
->> 	if (kprobe_running()) {
->> 		p = get_kprobe(addr);
->> 		if (p) {
->> 			if (kcb->kprobe_status == KPROBE_HIT_SS &&
->> 			    p->ainsn.insn->word == breakpoint_insn.word) {
->> 				regs->cp0_status &= ~ST0_IE;
->> 				regs->cp0_status |= kcb->kprobe_saved_SR;
->> 				goto no_kprobe;
->> 			}
->> 			/*
->> 			 * We have reentered the kprobe_handler(), since
->> 			 * another probe was hit while within the handler.
->> 			 * We here save the original kprobes variables and
->> 			 * just single step on the instruction of the new probe
->> 			 * without calling any user handlers.
->> 			 */
->> 			save_previous_kprobe(kcb);
->> 			set_current_kprobe(p, regs, kcb);
->> 			kprobes_inc_nmissed_count(p);
->> 			prepare_singlestep(p, regs, kcb);
->> 			kcb->kprobe_status = KPROBE_REENTER;
->> 			if (kcb->flags & SKIP_DELAYSLOT) {
->> 				resume_execution(p, regs, kcb);
->> 				restore_previous_kprobe(kcb);
->> 				preempt_enable_no_resched();
->> 			}
->> 			return 1;
->> 		} else if (addr->word != breakpoint_insn.word) {
->> 			/*
->> 			 * The breakpoint instruction was removed by
->> 			 * another cpu right after we hit, no further
->> 			 * handling of this interrupt is appropriate
->> 			 */
->> 			ret = 1;
->> 		}
->> 		goto no_kprobe;
->> 	}
->> ...
->> }
->>
->> (5) loongarch
->> https://github.com/loongson/linux/blob/loongarch-next-generic-stub/arch/loongarch/kernel/kprobes.c#L228
->> static int __kprobes kprobe_handler(struct pt_regs *regs)
->> {
->> 	struct kprobe *p;
->> 	kprobe_opcode_t *addr;
->> 	struct kprobe_ctlblk *kcb;
->>
->> 	addr = (kprobe_opcode_t *) regs->csr_era;
->>
->> 	/*
->> 	 * We don't want to be preempted for the entire
->> 	 * duration of kprobe processing
->> 	 */
->> 	preempt_disable();
->> 	kcb = get_kprobe_ctlblk();
->>
->> 	p = get_kprobe(addr);
->> 	if (p) {
->> 		if (kprobe_running()) {
->> 			if (reenter_kprobe(p, regs, kcb))
->> 				return 1;
->> 		} else {
->> 			set_current_kprobe(p, regs, kcb);
->> 			kcb->kprobe_status = KPROBE_HIT_ACTIVE;
->> 			if (p->pre_handler && p->pre_handler(p, regs)) {
->> 			/* handler has already set things up, so skip ss setup */
->> 				reset_current_kprobe();
->> 				preempt_enable_no_resched();
->> 				return 1;
->> 			} else {
->> 				setup_singlestep(p, regs, kcb, 0);
->> 				return 1;
->> 			}
->> 		}
->> 	} else {
->> 		if (addr->word != breakpoint_insn.word) {
->> 			/*
->> 			 * The breakpoint instruction was removed right
->> 			 * after we hit it.  Another cpu has removed
->> 			 * either a probepoint or a debugger breakpoint
->> 			 * at this address.  In either case, no further
->> 			 * handling of this interrupt is appropriate.
->> 			 */
->> 			preempt_enable_no_resched();
->> 			return 1;
->> 		}
->> 	}
->>
->> 	preempt_enable_no_resched();
->>
->> 	return 0;
->> }
->>
->> Thanks,
->> Tiezhu
->>
->
+Thanks,
+Stefano
 
