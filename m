@@ -2,101 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E6E0635832
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:52:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11B25635834
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:52:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237061AbiKWJwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 04:52:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46212 "EHLO
+        id S235652AbiKWJvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 04:51:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237282AbiKWJvC (ORCPT
+        with ESMTP id S237081AbiKWJur (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 04:51:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BA365D1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:47:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669196853;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/JvhkIMHaE9tMvv7uV8gHbGibKRYLhWKCV1r10ib1SI=;
-        b=FxvBzNBmiZALtlkvEEuBOqLWXyI7iFj2IbfFiZZ1NltqV9KYMQL1KK+D2WeP2YCdcFrgDf
-        6TI+gMcD7vp0JjlyVJ27GV6JWzimQ6qhFfE3OMsoXv3P1nOGdNGcHEtgT6WKDMLo5o8nAW
-        8HbdABSm/PwerLNqu1IVjRV8CMAv2tU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-186-wcLG9FRXPSiJz2FVZjmd8Q-1; Wed, 23 Nov 2022 04:47:31 -0500
-X-MC-Unique: wcLG9FRXPSiJz2FVZjmd8Q-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E70B73C0E460;
-        Wed, 23 Nov 2022 09:47:28 +0000 (UTC)
-Received: from localhost (ovpn-13-118.pek2.redhat.com [10.72.13.118])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 054CB2166B31;
-        Wed, 23 Nov 2022 09:47:27 +0000 (UTC)
-Date:   Wed, 23 Nov 2022 17:47:20 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
-        Ross Zwisler <zwisler@kernel.org>, linux-doc@vger.kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH v1 1/2] Documentation: sysctl: Correct kexec_load_disabled
-Message-ID: <Y33sKLOwqjCc7Qwe@MiWiFi-R3L-srv>
-References: <20221114-disable-kexec-reset-v1-0-fb51d20cf871@chromium.org>
- <20221114-disable-kexec-reset-v1-1-fb51d20cf871@chromium.org>
+        Wed, 23 Nov 2022 04:50:47 -0500
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88BB8252B2
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:47:58 -0800 (PST)
+Received: by mail-vs1-xe32.google.com with SMTP id 125so643916vsi.9
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:47:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5JJaR5hJvuf5++j5Vl6eoqqI4BspUUmDXkurZukMxZs=;
+        b=xr3ds3O1aP0Cly4A/ysEuxHmVnLvc4eu3PKCZhMWRC/dATnKt6om+vu7ICyQzJJXSI
+         OTsl5/BZ34hGUSpmBWGM/P7E6khc954CTJm3tf176irhtTg04zwszZnTfB+iRCK8kef2
+         9arPJeHjDlVs9gZSBvERiRp/84pe7iyQAFgOoi4JMsYzh05AZ39TwfUSOyjkqSOAGH61
+         EJYN5SG+hFvW0FiBWryiqDHaE+umKTMdQea4Ozb1wKFZCnJ75SOBuQEvjA0eTY13hITr
+         p7Gg3tcgdDk5MkdKmiBCsI1MCiDPMAziWHOlPa6mRMBO6qdkYPuyKMY8T5zrZNmuSMg5
+         Krgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5JJaR5hJvuf5++j5Vl6eoqqI4BspUUmDXkurZukMxZs=;
+        b=ErGf45X9cmvCRHY9lX662TZvUOgvvzUwl94Lee8ymYl9ZPFGXDnDghgQCwTYbtjf/M
+         Amys2yZ/bKetLlJ95FNnN42nKPeqSM0YxZby1E5t/Rt3zUVt8MaB7R6viuTIVWIwdrhF
+         A4xdbIfhFQXENXsoMQlzrvfYSe8o4h5A8zoaV8fZyTBhOEvHy21aod8z1Ru9iiqwWsVf
+         988CKtUUfiyfJOFXAszRvCQO7LksubIs/ioIHQWSNl6xIwozLfP9EFdY3+bjisGnkgtl
+         fbakB17AxbvglJiKeQpmIsTZelVDmStN4c8D8SfkOugKBlsrJ+rvZVbzpqp+zP0f+umj
+         huRg==
+X-Gm-Message-State: ANoB5pkP6sx5Rv8fGJ4Q4NhqP1seHasZ8fA1UfUZe/36+DrimgzC3bry
+        yIjWwO3IpfOX0BrCVvPpAUklWQYV2uUYQ97XyRePDA==
+X-Google-Smtp-Source: AA0mqf5015brl+4dkPOsvMU6fDCs5ePpm/2PWrYsJ3/czU+9mnWwri4bgOsPFCCNqPICVl/iwJDAGCKE7acVHAduazA=
+X-Received: by 2002:a05:6102:829:b0:3b0:6449:baba with SMTP id
+ k9-20020a056102082900b003b06449babamr3543541vsb.61.1669196877951; Wed, 23 Nov
+ 2022 01:47:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221114-disable-kexec-reset-v1-1-fb51d20cf871@chromium.org>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221118224540.619276-1-uwe@kleine-koenig.org> <20221118224540.619276-12-uwe@kleine-koenig.org>
+In-Reply-To: <20221118224540.619276-12-uwe@kleine-koenig.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 23 Nov 2022 10:47:47 +0100
+Message-ID: <CAMRc=Mfjcs-BBFhr8O1O956f4jdvAzY9ofZs1fme8+Ki=T60JA@mail.gmail.com>
+Subject: Re: [PATCH 011/606] gpio: max732x: Convert to i2c's .probe_new()
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <uwe@kleine-koenig.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/14/22 at 02:18pm, Ricardo Ribalda wrote:
-> kexec_load_disabled affects both ``kexec_load`` and ``kexec_file_load``
-> syscalls. Make it explicit.
-> 
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> 
-> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
-> index 98d1b198b2b4..97394bd9d065 100644
-> --- a/Documentation/admin-guide/sysctl/kernel.rst
-> +++ b/Documentation/admin-guide/sysctl/kernel.rst
-> @@ -450,9 +450,10 @@ this allows system administrators to override the
->  kexec_load_disabled
->  ===================
->  
-> -A toggle indicating if the ``kexec_load`` syscall has been disabled.
-> -This value defaults to 0 (false: ``kexec_load`` enabled), but can be
-> -set to 1 (true: ``kexec_load`` disabled).
-> +A toggle indicating if the syscalls ``kexec_load`` and
-> +``kexec_file_load`` have been disabled.
-> +This value defaults to 0 (false: ``kexec_*load`` enabled), but can be
-> +set to 1 (true: ``kexec_*load`` disabled).
->  Once true, kexec can no longer be used, and the toggle cannot be set
->  back to false.
->  This allows a kexec image to be loaded before disabling the syscall,
+On Fri, Nov 18, 2022 at 11:46 PM Uwe Kleine-K=C3=B6nig <uwe@kleine-koenig.o=
+rg> wrote:
+>
+> From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+>
+> .probe_new() doesn't get the i2c_device_id * parameter, so determine
+> that explicitly in the probe function.
+>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> ---
+>  drivers/gpio/gpio-max732x.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/gpio/gpio-max732x.c b/drivers/gpio/gpio-max732x.c
+> index da6972117030..68e982cdee73 100644
+> --- a/drivers/gpio/gpio-max732x.c
+> +++ b/drivers/gpio/gpio-max732x.c
+> @@ -608,9 +608,9 @@ static struct max732x_platform_data *of_gpio_max732x(=
+struct device *dev)
+>         return pdata;
+>  }
+>
+> -static int max732x_probe(struct i2c_client *client,
+> -                                  const struct i2c_device_id *id)
+> +static int max732x_probe(struct i2c_client *client)
+>  {
+> +       const struct i2c_device_id *id =3D i2c_client_get_device_id(clien=
+t);
+>         struct max732x_platform_data *pdata;
+>         struct device_node *node;
+>         struct max732x_chip *chip;
+> @@ -707,7 +707,7 @@ static struct i2c_driver max732x_driver =3D {
+>                 .name           =3D "max732x",
+>                 .of_match_table =3D of_match_ptr(max732x_of_table),
+>         },
+> -       .probe          =3D max732x_probe,
+> +       .probe_new      =3D max732x_probe,
+>         .id_table       =3D max732x_id,
+>  };
+>
+> --
+> 2.38.1
+>
 
-LGTM,
+Applied, thanks!
 
-Acked-by: Baoquan He <bhe@redhat.com>
-
-> 
-> -- 
-> b4 0.11.0-dev-d93f8
-> 
-
+Bartosz
