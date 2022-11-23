@@ -2,76 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A253635273
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 09:26:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F84F635279
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 09:26:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235945AbiKWIZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 03:25:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32988 "EHLO
+        id S236466AbiKWIZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 03:25:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236522AbiKWIY6 (ORCPT
+        with ESMTP id S236365AbiKWIZF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 03:24:58 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6AFFC72F;
-        Wed, 23 Nov 2022 00:24:54 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id z192so20108642yba.0;
-        Wed, 23 Nov 2022 00:24:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=olonk8iFpg1UnUmS3Yq9vG//2BtL7EZzQMT3kacEImU=;
-        b=KLsGgdN9rTVkVpm+hXOgeB+N+nXJVo9bbwpX2eQ2n2H9TGOXw6tuMmOzceQVnALi+d
-         uOmNOHUt9vkapZQ6LuhnLQk5GZXwCgWc9NRp70KNbWbr3N9B687ZQU4MIIjVOTdAL/3p
-         iyv+GcSZoGq1gXNgitUHvp4BO23ivbCAJvGk2vyFt+ZfPX/RoToXGj9EJox4FTq93jLf
-         LIL7I0anwMal2s0EQWorwDZmamo7YcjGKip6WjDDfJ6KcH3LCDQN8FeC+R6j+wvGl1ea
-         xqT2451dzBCbFg3NzPMfgc6mhsj+7Tdy/0ohi9KErU6a/P67CZaTAiBDgEqhznAUJrqR
-         L7sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=olonk8iFpg1UnUmS3Yq9vG//2BtL7EZzQMT3kacEImU=;
-        b=p1mU3MKaZr+qIBxJrggNCqhFqoQ4YlWVKLKR287haJxEh67aHzdBWaqvuVOrKaUbWL
-         iSDNzWVewpAqzxNExtsXV9HaeavWrGU/Emv5QzdPuQX5SEcaUSMwr4hY9zqvhIa22uX1
-         rsD2ERYwKdN7/6sqMyG3yvBhAhSSpK9GXMpZJmQDCvs69sjXyeIX36lbWLX7DAvTqLtM
-         mVQaqih5Y6eiaUlYnwoMs8ZHNxmAllVWBH6jEan8dqEbYcZXDP304a39VG7+o4lAK7mQ
-         iHE3Xq/1MWihBXRt5Zm/vLsSlwM/DOdt93bvwdmUb6Mfsx7rmYqaizwpkfyGeW8zuQ44
-         xAvw==
-X-Gm-Message-State: ANoB5pkYLMzX6CL6pzjf2zJmJVnn+KxoMOtjSympxnIWoBk7BcDK3EuA
-        ib0ppwuf6NewL08/m7nBvTXlsdcIJnGtdK917H+0q7KB
-X-Google-Smtp-Source: AA0mqf7FxKVxlcQdedGMWjmPDaH5Kle+PZ5/xN8+NrpA5ZuLYWkj3r4ItDHDAKnugJPl3XlvkdCWePR9AyVRgpXUWew=
-X-Received: by 2002:a25:8189:0:b0:6ca:6bfb:3374 with SMTP id
- p9-20020a258189000000b006ca6bfb3374mr25479310ybk.175.1669191893411; Wed, 23
- Nov 2022 00:24:53 -0800 (PST)
+        Wed, 23 Nov 2022 03:25:05 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA71FBAB3
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 00:25:03 -0800 (PST)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NHDgf2pBKzmVyP;
+        Wed, 23 Nov 2022 16:24:30 +0800 (CST)
+Received: from dggpemm100002.china.huawei.com (7.185.36.179) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 23 Nov 2022 16:25:01 +0800
+Received: from [10.174.178.178] (10.174.178.178) by
+ dggpemm100002.china.huawei.com (7.185.36.179) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 23 Nov 2022 16:25:01 +0800
+Message-ID: <bc2c6314-7c94-8096-19f0-0c11882479e4@huawei.com>
+Date:   Wed, 23 Nov 2022 16:25:00 +0800
 MIME-Version: 1.0
-References: <20221122132330.30408-1-lukas.bulwahn@gmail.com>
- <20221122160937.GB39395@tom-ThinkPad-T14s-Gen-2i> <CAKXUXMxk-YoG4TdB8Em+cEMF8NA7rdMAboQz8nmhfVmVQ8oATA@mail.gmail.com>
- <20221123082148.GC39395@tom-ThinkPad-T14s-Gen-2i>
-In-Reply-To: <20221123082148.GC39395@tom-ThinkPad-T14s-Gen-2i>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Wed, 23 Nov 2022 09:24:42 +0100
-Message-ID: <CAKXUXMx81Mvo_H4KzkHXgPbYq07SbEuTcs9LBae5D5GRTK_T0Q@mail.gmail.com>
-Subject: Re: [PATCH] media: imx: remove code for non-existing config IMX_GPT_ICAP
-To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.0.3
+Subject: Re: [RFC PATCH v1 1/4] zram: introduce merge identical pages
+ mechanism
+To:     Alexey Romanov <avromanov@sberdevices.ru>, <minchan@kernel.org>,
+        <senozhatsky@chromium.org>, <ngupta@vflare.org>,
+        <akpm@linux-foundation.org>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@sberdevices.ru>, <ddrokosov@sberdevices.ru>
+References: <20221121190020.66548-1-avromanov@sberdevices.ru>
+ <20221121190020.66548-2-avromanov@sberdevices.ru>
+From:   Chen Wandun <chenwandun@huawei.com>
+In-Reply-To: <20221121190020.66548-2-avromanov@sberdevices.ru>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.178]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm100002.china.huawei.com (7.185.36.179)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,167 +57,402 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 9:21 AM Tommaso Merciai
-<tommaso.merciai@amarulasolutions.com> wrote:
->
-> Hi Lukas,
->
-> On Wed, Nov 23, 2022 at 08:56:06AM +0100, Lukas Bulwahn wrote:
-> > On Tue, Nov 22, 2022 at 5:09 PM Tommaso Merciai
-> > <tommaso.merciai@amarulasolutions.com> wrote:
-> > >
-> > > Hi Lukas,
-> > >
-> > > On Tue, Nov 22, 2022 at 02:23:30PM +0100, Lukas Bulwahn wrote:
-> > > > There never was a config IMX_GPT_ICAP in the repository. So remove the code
-> > > > conditional on this config and simplify the callers that just called empty
-> > > > functions.
-> > > >
-> > > > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> > > > ---
-> > > >  drivers/staging/media/imx/imx-media-fim.c | 54 -----------------------
-> > > >  1 file changed, 54 deletions(-)
-> > > >
-> > > > diff --git a/drivers/staging/media/imx/imx-media-fim.c b/drivers/staging/media/imx/imx-media-fim.c
-> > > > index 3a9182933508..19a48eb445fd 100644
-> > > > --- a/drivers/staging/media/imx/imx-media-fim.c
-> > > > +++ b/drivers/staging/media/imx/imx-media-fim.c
-> > > > @@ -187,54 +187,6 @@ static void frame_interval_monitor(struct imx_media_fim *fim,
-> > > >               send_fim_event(fim, error_avg);
-> > > >  }
-> > > >
-> > > > -#ifdef CONFIG_IMX_GPT_ICAP
-> > > > -/*
-> > > > - * Input Capture method of measuring frame intervals. Not subject
-> > > > - * to interrupt latency.
-> > > > - */
-> > > > -static void fim_input_capture_handler(int channel, void *dev_id,
-> > > > -                                   ktime_t timestamp)
-> > > > -{
-> > > > -     struct imx_media_fim *fim = dev_id;
-> > > > -     unsigned long flags;
-> > > > -
-> > > > -     spin_lock_irqsave(&fim->lock, flags);
-> > > > -
-> > > > -     frame_interval_monitor(fim, timestamp);
-> > > > -
-> > > > -     if (!completion_done(&fim->icap_first_event))
-> > > > -             complete(&fim->icap_first_event);
-> > > > -
-> > > > -     spin_unlock_irqrestore(&fim->lock, flags);
-> > > > -}
-> > > > -
-> > > > -static int fim_request_input_capture(struct imx_media_fim *fim)
-> > > > -{
-> > > > -     init_completion(&fim->icap_first_event);
-> > > > -
-> > > > -     return mxc_request_input_capture(fim->icap_channel,
-> > > > -                                      fim_input_capture_handler,
-> > > > -                                      fim->icap_flags, fim);
-> > > > -}
-> > > > -
-> > > > -static void fim_free_input_capture(struct imx_media_fim *fim)
-> > > > -{
-> > > > -     mxc_free_input_capture(fim->icap_channel, fim);
-> > > > -}
-> > > > -
-> > > > -#else /* CONFIG_IMX_GPT_ICAP */
-> > > > -
-> > > > -static int fim_request_input_capture(struct imx_media_fim *fim)
-> > > > -{
-> > > > -     return 0;
-> > > > -}
-> > > > -
-> > > > -static void fim_free_input_capture(struct imx_media_fim *fim)
-> > > > -{
-> > > > -}
-> > > > -
-> > > > -#endif /* CONFIG_IMX_GPT_ICAP */
-> > > > -
-> > > >  /*
-> > > >   * In case we are monitoring the first frame interval after streamon
-> > > >   * (when fim->num_skip = 0), we need a valid fim->last_ts before we
-> > > > @@ -435,14 +387,8 @@ int imx_media_fim_set_stream(struct imx_media_fim *fim,
-> > > >               spin_unlock_irqrestore(&fim->lock, flags);
-> > > >
-> > > >               if (icap_enabled(fim)) {
-> > > > -                     ret = fim_request_input_capture(fim);
-> > > > -                     if (ret)
-> > > > -                             goto out;
-> > > >                       fim_acquire_first_ts(fim);
-> > > >               }
-> > >
-> > > As suggested by the checkpatch.pl:
-> > > WARNING: braces {} are not necessary for single statement blocks
-> > >
-> > > > -     } else {
-> > > > -             if (icap_enabled(fim))
-> > > > -                     fim_free_input_capture(fim);
-> > > >       }
-> > > >
-> > > >       fim->stream_on = on;
-> > > > --
-> > > > 2.17.1
-> > > >
-> > >
-> >
-> > Strangely, my checkpatch invocation on next-20221116 did not show that
-> > warning and I am unaware that I made any specific changes to
-> > checkpatch or its configuration.
-> >
-> > Anyway, checkpatch and you, Tommaso, are right and the patch can of
-> > course be improved. I sent out a patch v2:
-> >
-> > https://lore.kernel.org/all/20221123075216.28193-1-lukas.bulwahn@gmail.com/
-> >
-> > I hope to get an Acked-by: tag from you now. Thanks.
->
-> Sorry I miss the tag :)
->
-> Acked-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
->
-> Apply the patch then run:
->  scripts/checkpatch.pl -f drivers/staging/media/imx/imx-media-fim.c
->
 
-I see. I usually just run checkpatch.pl on the patch, but do not apply
-the patch and run checkpatch on the file. That explains the difference
-of observations. Good to know.
 
-Lukas
+在 2022/11/22 3:00, Alexey Romanov 写道:
+> zram maps each page (struct page) to a zsmalloc object that
+> contains a compressed buffer of that page's data. This fact
+> generates data redundancy: for example, two identical pages
+> will be store in compressed form in zsmalloc allocator twice.
+>
+> This patch adds a mechanism to scan zram_table_entry array
+> and frees all identical objects in zsmalloc allocator, leaving
+> only one. All zram_table_entry elements which reference this
+> freed objects now refer to the same, not freed, object.
+>
+> To implement this mechanism, we sequentially scan the
+> zram_table_entry array, counting the hash from the contents of
+> the compressed pages (zsmalloc objects) and enter the index of
+> the object into the hash table (hlist_head). If the hash matches,
+> we remove the identical zsmalloc (zs_free) objects and update
+> the link rbtree.
+>
+> Also, we can't just call zs_free() function during zram_free_page().
+> Before calling this function we have to make sure that no one else
+> refers to this zsmalloc object.
+>
+> To implement the mechanism for merging identical compressed
+> pages (zsmalloc objects), a rbtree is needed.
+>
+> The tree node key is a reference to the zsmalloc object
+> (handle), and the value is the number of references to
+> this object (atomic counter). This is necessary for data
+> consistency so that we do not zs_free the object referenced
+> by any element of the zram_table_entry array.
+>
+> Signed-off-by: Alexey Romanov <avromanov@sberdevices.ru>
+> ---
+>   drivers/block/zram/zram_drv.c | 278 +++++++++++++++++++++++++++++++++-
+>   drivers/block/zram/zram_drv.h |   6 +
+>   2 files changed, 283 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
+> index e290d6d97047..716c2f72805e 100644
+> --- a/drivers/block/zram/zram_drv.c
+> +++ b/drivers/block/zram/zram_drv.c
+> @@ -33,12 +33,15 @@
+>   #include <linux/debugfs.h>
+>   #include <linux/cpuhotplug.h>
+>   #include <linux/part_stat.h>
+> +#include <linux/hashtable.h>
+> +#include <linux/xxhash.h>
+>   
+>   #include "zram_drv.h"
+>   
+>   static DEFINE_IDR(zram_index_idr);
+>   /* idr index must be protected */
+>   static DEFINE_MUTEX(zram_index_mutex);
+> +static DEFINE_MUTEX(zram_rbtree_mutex);
+>   
+>   static int zram_major;
+>   static const char *default_compressor = CONFIG_ZRAM_DEF_COMP;
+> @@ -57,6 +60,16 @@ static void zram_free_page(struct zram *zram, size_t index);
+>   static int zram_bvec_read(struct zram *zram, struct bio_vec *bvec,
+>   				u32 index, int offset, struct bio *bio);
+>   
+> +struct zram_rbtree_node {
+> +	struct rb_node node;
+> +	unsigned long key;
+> +	unsigned long cnt;
+> +};
+> +
+> +struct zram_hash_node {
+> +	unsigned long index;
+> +	struct hlist_node next;
+> +};
+>   
+>   static int zram_slot_trylock(struct zram *zram, u32 index)
+>   {
+> @@ -1283,6 +1296,247 @@ static DEVICE_ATTR_RO(bd_stat);
+>   #endif
+>   static DEVICE_ATTR_RO(debug_stat);
+>   
+> +static bool zram_rbtree_insert(struct rb_root *root, struct zram_rbtree_node *data)
+> +{
+> +	struct rb_node **new = &(root->rb_node), *parent = NULL;
+> +	struct zram_rbtree_node *this;
+> +
+> +	while (*new) {
+> +		this = rb_entry(*new, struct zram_rbtree_node, node);
+> +		parent = *new;
+> +		if (data->key < this->key)
+> +			new = &((*new)->rb_left);
+> +		else if (data->key > this->key)
+> +			new = &((*new)->rb_right);
+> +		else
+> +			return false;
+> +	}
+> +
+> +	rb_link_node(&data->node, parent, new);
+> +	rb_insert_color(&data->node, root);
+> +	return true;
+> +}
+> +
+> +static struct zram_rbtree_node *zram_rbtree_search(struct rb_root *root,
+> +		unsigned long key)
+> +{
+> +	struct rb_node *node = root->rb_node;
+> +	struct zram_rbtree_node *data;
+> +
+> +	while (node) {
+> +		data = rb_entry(node, struct zram_rbtree_node, node);
+> +		if (key < data->key)
+> +			node = node->rb_left;
+> +		else if (key > data->key)
+> +			node = node->rb_right;
+> +		else
+> +			return data;
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+> +static unsigned long zram_calc_hash(void *src, size_t len)
+> +{
+> +	return xxhash(src, len, 0);
+> +}
+> +
+> +static int zram_cmp_obj_and_merge(struct zram *zram, struct hlist_head *htable,
+> +		size_t htable_size, size_t index)
+> +{
+> +	struct zram_rbtree_node *rb_node;
+> +	struct zram_hash_node *node;
+> +	unsigned long handle, cur_handle;
+> +	size_t obj_size;
+> +	char *src, *buf;
+> +	unsigned long hash;
+> +	int ret = 0;
+> +
+> +	handle = zram_get_handle(zram, index);
+> +	if (!handle)
+> +		return ret;
+> +
+> +	obj_size = zram_get_obj_size(zram, index);
+> +	buf = kmalloc(obj_size, GFP_KERNEL);
+> +	if (!buf) {
+> +		pr_err("Failed to allocate zs_map_object buffer\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	src = zs_map_object(zram->mem_pool, handle, ZS_MM_RO);
+> +	memcpy(buf, src, obj_size);
+> +	zs_unmap_object(zram->mem_pool, handle);
+> +	hash = zram_calc_hash(buf, obj_size);
+> +
+> +	mutex_lock(&zram_rbtree_mutex);
+> +	hlist_for_each_entry(node, &htable[hash % htable_size], next) {
+> +		int cmp;
+> +
+> +		zram_slot_lock(zram, node->index);
+> +
+> +		/*
+> +		 * Page may change as the hash table is being formed,
+> +		 * so the checks below are necessary.
+> +		 */
+> +		cur_handle = zram_get_handle(zram, node->index);
+> +		if (handle == cur_handle ||
+> +			obj_size != zram_get_obj_size(zram, node->index)) {
+> +			zram_slot_unlock(zram, node->index);
+> +			continue;
+> +		}
+> +
+> +		src = zs_map_object(zram->mem_pool, cur_handle, ZS_MM_RO);
+> +		cmp = memcmp(buf, src, obj_size);
+> +		zs_unmap_object(zram->mem_pool, cur_handle);
+> +
+> +		if (!cmp) {
+> +			rb_node = zram_rbtree_search(&zram->sph_rbtree, handle);
+> +
+> +			/*
+> +			 * This check is necessary in order not to zs_free an object
+> +			 * that someone already refers to. This situation is possible
+> +			 * when with repeated calls to zram_do_scan(). For example:
+> +			 *
+> +			 * [slot0] [slot1] [slot2] [slot3] [slot4]
+> +			 * [obj0]  [obj1]  [obj2]  [obj3]  [obj4]
+> +			 *
+> +			 * Let's imagine that obj2 and obj3 are equal, and we called
+> +			 * zram_do_scan() function:
+> +			 *
+> +			 * [slot0] [slot1] [slot2] [slot3] [slot4]
+> +			 * [obj0]  [obj1]  [obj2]  [obj2]  [obj4]
+> +			 *
+> +			 * Now, slot2 and slot3 refers to obj2 zsmalloc object.
+> +			 * Time passed, now slot0 refres to obj0_n, which is equal
+> +			 * to obj2:
+> +			 *
+> +			 * [slot0]  [slot1] [slot2] [slot3] [slot4]
+> +			 * [obj0_n] [obj1]  [obj2]  [obj2]  [obj4]
+> +			 *
+> +			 * Now we call zram_do_scan() function again. We get to slot2,
+> +			 * and we understand that obj2 and obj0_n hashes are the same. We
+> +			 * try to zs_free(obj2), but slot3 also already refers to it.
+> +			 *
+> +			 * This is not correct!
+> +			 */
+In this case, it seem like can't merge all same object, is that right?
 
-> Regards,
-> Tommaso
->
-> >
-> > Lukas
-> >
-> > > Apart of this, patch looks good to me.
-> > > Thanks.
-> > >
-> > > Regards,
-> > > Tommaso
-> > >
-> > > --
-> > > Tommaso Merciai
-> > > Embedded Linux Engineer
-> > > tommaso.merciai@amarulasolutions.com
-> > > __________________________________
-> > >
-> > > Amarula Solutions SRL
-> > > Via Le Canevare 30, 31100 Treviso, Veneto, IT
-> > > T. +39 042 243 5310
-> > > info@amarulasolutions.com
-> > > www.amarulasolutions.com
->
-> --
-> Tommaso Merciai
-> Embedded Linux Engineer
-> tommaso.merciai@amarulasolutions.com
-> __________________________________
->
-> Amarula Solutions SRL
-> Via Le Canevare 30, 31100 Treviso, Veneto, IT
-> T. +39 042 243 5310
-> info@amarulasolutions.com
-> www.amarulasolutions.com
+how about let slot2 point to obj0_n and decrease the rb_node ref of 
+slot2/slot3 in the first loop,
+let slot3 point to obj0_n and decrease the rb_node ref in the next 
+loop,  then the obj2 can be free.
+> +			if (unlikely(rb_node))
+> +				if (rb_node->cnt > 1) {
+> +					zram_slot_unlock(zram, node->index);
+> +					continue;
+> +				}
+> +
+> +			zram_set_handle(zram, index, cur_handle);
+> +			zs_free(zram->mem_pool, handle);
+> +
+> +			rb_node = zram_rbtree_search(&zram->sph_rbtree, cur_handle);
+> +
+> +			if (!rb_node) {
+> +				rb_node = kzalloc(sizeof(struct zram_rbtree_node),
+> +								GFP_KERNEL);
+> +				if (!rb_node) {
+> +					pr_err("Failed to allocate rb_node\n");
+> +					ret = -ENOMEM;
+> +					zram_slot_unlock(zram, node->index);
+> +					mutex_unlock(&zram_rbtree_mutex);
+> +					goto merged_or_err;
+> +				}
+> +
+> +				rb_node->key = cur_handle;
+> +				/* Two slots refers to an zsmalloc object with cur_handle key */
+> +				rb_node->cnt = 2;
+> +				zram_rbtree_insert(&zram->sph_rbtree, rb_node);
+> +			} else {
+> +				rb_node->cnt++;
+> +			}
+> +
+> +			atomic64_sub(obj_size, &zram->stats.compr_data_size);
+> +			zram_set_flag(zram, index, ZRAM_MERGED);
+> +			zram_set_flag(zram, node->index, ZRAM_MERGED);
+> +
+> +			zram_slot_unlock(zram, node->index);
+> +			mutex_unlock(&zram_rbtree_mutex);
+> +			goto merged_or_err;
+> +		}
+> +
+> +		zram_slot_unlock(zram, node->index);
+> +	}
+> +
+> +	mutex_unlock(&zram_rbtree_mutex);
+> +
+> +	node = kmalloc(sizeof(struct zram_hash_node), GFP_KERNEL);
+> +	if (!node) {
+> +		ret = -ENOMEM;
+> +		goto merged_or_err;
+> +	}
+> +
+> +	node->index = index;
+> +	hlist_add_head(&node->next, &htable[hash % htable_size]);
+> +
+> +merged_or_err:
+> +	kfree(buf);
+> +	return ret;
+> +}
+> +
+> +static void zram_free_htable_entries(struct hlist_head *htable,
+> +		size_t htable_size)
+> +{
+> +	struct hlist_node *n;
+> +	struct zram_hash_node *node;
+> +
+> +	hlist_for_each_entry_safe(node, n, htable, next) {
+> +		hlist_del(&node->next);
+> +		kfree(node);
+> +	}
+> +}
+> +
+> +static int zram_do_scan(struct zram *zram)
+> +{
+> +	size_t num_pages = zram->disksize >> PAGE_SHIFT;
+> +	size_t htable_size = num_pages;
+> +	size_t index;
+> +	struct hlist_head *htable;
+> +	int i, ret = 0;
+> +
+> +	htable = vzalloc(htable_size * sizeof(struct hlist_head));
+> +	if (!htable) {
+> +		pr_err("Failed to allocate hash table\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	for (i = 0; i < htable_size; i++)
+> +		INIT_HLIST_HEAD(&htable[i]);
+> +
+> +	for (index = 0; index < num_pages; index++) {
+> +		zram_slot_lock(zram, index);
+> +
+> +		if (!zram_allocated(zram, index)) {
+> +			zram_slot_unlock(zram, index);
+> +			continue;
+> +		}
+> +
+> +		if (zram_test_flag(zram, index, ZRAM_UNDER_WB) ||
+> +			zram_test_flag(zram, index, ZRAM_WB) ||
+> +			zram_test_flag(zram, index, ZRAM_SAME)) {
+> +			zram_slot_unlock(zram, index);
+> +			continue;
+> +		}
+> +
+> +		/* Ignore pages that have been recompressed */
+> +		if (zram_get_priority(zram, index) != 0)
+> +			continue;
+> +
+> +		ret = zram_cmp_obj_and_merge(zram, htable, htable_size, index);
+> +		zram_slot_unlock(zram, index);
+> +		if (ret != 0)
+> +			goto out;
+> +	}
+> +
+> +out:
+> +	zram_free_htable_entries(htable, htable_size);
+> +	vfree(htable);
+> +	return ret;
+> +}
+> +
+>   static void zram_meta_free(struct zram *zram, u64 disksize)
+>   {
+>   	size_t num_pages = disksize >> PAGE_SHIFT;
+> @@ -1324,6 +1578,7 @@ static bool zram_meta_alloc(struct zram *zram, u64 disksize)
+>   static void zram_free_page(struct zram *zram, size_t index)
+>   {
+>   	unsigned long handle;
+> +	struct zram_rbtree_node *node;
+>   
+>   #ifdef CONFIG_ZRAM_MEMORY_TRACKING
+>   	zram->table[index].ac_time = 0;
+> @@ -1361,7 +1616,26 @@ static void zram_free_page(struct zram *zram, size_t index)
+>   	if (!handle)
+>   		return;
+>   
+> -	zs_free(zram->mem_pool, handle);
+> +	if (zram_test_flag(zram, index, ZRAM_MERGED)) {
+> +		zram_clear_flag(zram, index, ZRAM_MERGED);
+> +		mutex_lock(&zram_rbtree_mutex);
+> +
+> +		node = zram_rbtree_search(&zram->sph_rbtree, handle);
+> +		BUG_ON(!node);
+> +
+> +		node->cnt--;
+> +		if (node->cnt == 0) {
+> +			rb_erase(&node->node, &zram->sph_rbtree);
+> +			mutex_unlock(&zram_rbtree_mutex);
+> +
+> +			zs_free(zram->mem_pool, handle);
+> +			kfree(node);
+> +		} else {
+> +			mutex_unlock(&zram_rbtree_mutex);
+> +		}
+> +	} else {
+> +		zs_free(zram->mem_pool, handle);
+> +	}
+>   
+>   	atomic64_sub(zram_get_obj_size(zram, index),
+>   			&zram->stats.compr_data_size);
+> @@ -2421,6 +2695,8 @@ static int zram_add(void)
+>   
+>   	comp_algorithm_set(zram, ZRAM_PRIMARY_COMP, default_compressor);
+>   
+> +	zram->sph_rbtree = RB_ROOT;
+> +
+>   	zram_debugfs_register(zram);
+>   	pr_info("Added device: %s\n", zram->disk->disk_name);
+>   	return device_id;
+> diff --git a/drivers/block/zram/zram_drv.h b/drivers/block/zram/zram_drv.h
+> index c5254626f051..4a7151c94523 100644
+> --- a/drivers/block/zram/zram_drv.h
+> +++ b/drivers/block/zram/zram_drv.h
+> @@ -56,6 +56,7 @@ enum zram_pageflags {
+>   
+>   	ZRAM_COMP_PRIORITY_BIT1, /* First bit of comp priority index */
+>   	ZRAM_COMP_PRIORITY_BIT2, /* Second bit of comp priority index */
+> +	ZRAM_MERGED,	/* page was merged */
+>   
+>   	__NR_ZRAM_PAGEFLAGS,
+>   };
+> @@ -140,5 +141,10 @@ struct zram {
+>   #ifdef CONFIG_ZRAM_MEMORY_TRACKING
+>   	struct dentry *debugfs_dir;
+>   #endif
+> +	/*
+> +	 * This is same pages handle's rb tree, where the key is a handle
+> +	 * to same pages and the value is a link counter
+> +	 */
+> +	struct rb_root sph_rbtree;
+>   };
+>   #endif
+
