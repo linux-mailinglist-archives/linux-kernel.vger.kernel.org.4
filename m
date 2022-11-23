@@ -2,83 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1860863596A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 11:14:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F3AE635949
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 11:09:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237175AbiKWKMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 05:12:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38992 "EHLO
+        id S237155AbiKWKJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 05:09:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237341AbiKWKLy (ORCPT
+        with ESMTP id S236856AbiKWKIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 05:11:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F12B78CBA9;
-        Wed, 23 Nov 2022 02:01:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 62219B81EF8;
-        Wed, 23 Nov 2022 10:01:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 973D7C433D6;
-        Wed, 23 Nov 2022 10:01:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669197697;
-        bh=dZ68XrAsFIvw0c6zalixMEiSvin0wpXKWe5COOYdqmI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rEKW0y4TH5+riy0/SE36Gkn4SiiCEesPdezlV5G4QMWKFV1ZdQwM6eNrfsXhp86/o
-         Mj54csBqxy6D+AKmUBolY3RD3KOIFP/YcVoskQAPEGyhyZUtFaJq1te2eQuthcpvlG
-         nbcchtjaIdaMhnU8oDyTckhhMKbBE6WGGKfv5XDk=
-Date:   Wed, 23 Nov 2022 10:57:38 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 5/5] driver core: pass a const * into of_device_uevent()
-Message-ID: <Y33ukqDN93tnwHX8@kroah.com>
-References: <20221121094649.1556002-1-gregkh@linuxfoundation.org>
- <20221121094649.1556002-5-gregkh@linuxfoundation.org>
- <20221122212209.GA583854-robh@kernel.org>
+        Wed, 23 Nov 2022 05:08:44 -0500
+Received: from nbd.name (nbd.name [46.4.11.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8047AE2E;
+        Wed, 23 Nov 2022 01:58:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
+        s=20160729; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=6uGEkYiiDNJdirEp88wlQrzHeOKWYnyUx0/Iz4Kx7zs=; b=aH9ewe1zvFWVb4tslzb7s84Um4
+        d7ns8MepdyUaAsbWXaxhzralIQRPE2yKshe1mJQHAUbBYjwf4pRPXOg7AjSc4eMYWtUf8PP9+k5ux
+        q4rkshNyg0LcPJ5s4z7P16utRWFLRIeidovjf4NK//Mu2Vn93gMxy5WUnqSFmRkmlDI4=;
+Received: from p200300daa7225c0894d890dd9e4669b3.dip0.t-ipconnect.de ([2003:da:a722:5c08:94d8:90dd:9e46:69b3] helo=Maecks.lan)
+        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
+        (Exim 4.94.2)
+        (envelope-from <nbd@nbd.name>)
+        id 1oxmVv-003vzk-My; Wed, 23 Nov 2022 10:57:55 +0100
+From:   Felix Fietkau <nbd@nbd.name>
+To:     netdev@vger.kernel.org, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/5] net: ethernet: mtk_eth_soc: account for vlan in rx header length
+Date:   Wed, 23 Nov 2022 10:57:50 +0100
+Message-Id: <20221123095754.36821-1-nbd@nbd.name>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221122212209.GA583854-robh@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 03:22:09PM -0600, Rob Herring wrote:
-> On Mon, Nov 21, 2022 at 10:46:49AM +0100, Greg Kroah-Hartman wrote:
-> > of_device_uevent() does not modify the struct device * passed into it,
-> > so make it a const * to enforce this.  Also the documentation for the
-> > function was really wrong so fix that up at the same time.
-> > 
-> > Cc: Rob Herring <robh+dt@kernel.org>
-> > Cc: Frank Rowand <frowand.list@gmail.com>
-> > Cc: devicetree@vger.kernel.org
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > ---
-> >  drivers/of/device.c       | 6 +++---
-> >  include/linux/of_device.h | 4 ++--
-> >  2 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> Looks like I can take this one?
+The network stack assumes that devices can handle an extra VLAN tag without
+increasing the MTU
 
-I need it for later patches I have coming that clean this up more.
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
+---
+ drivers/net/ethernet/mediatek/mtk_eth_soc.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-But you can take it in your tree as well if you want to build on top of
-it.
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+index 7ca806b4de10..a553265c10de 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+@@ -34,7 +34,7 @@
+ #define MTK_QDMA_RING_SIZE	2048
+ #define MTK_DMA_SIZE		512
+ #define MTK_MAC_COUNT		2
+-#define MTK_RX_ETH_HLEN		(ETH_HLEN + ETH_FCS_LEN)
++#define MTK_RX_ETH_HLEN		(VLAN_ETH_HLEN + ETH_FCS_LEN)
+ #define MTK_RX_HLEN		(NET_SKB_PAD + MTK_RX_ETH_HLEN + NET_IP_ALIGN)
+ #define MTK_DMA_DUMMY_DESC	0xffffffff
+ #define MTK_DEFAULT_MSG_ENABLE	(NETIF_MSG_DRV | \
+-- 
+2.38.1
 
-> The same could be done for several other functions in of/device.c.
-
-That would be good!
-
-thanks,
-
-greg k-h
