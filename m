@@ -2,67 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36292636A02
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 20:44:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5770D636A08
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 20:45:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237825AbiKWToY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 14:44:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38002 "EHLO
+        id S238939AbiKWTog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 14:44:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233044AbiKWToW (ORCPT
+        with ESMTP id S238997AbiKWTob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 14:44:22 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDAB09373D
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 11:44:20 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id cl5so31018973wrb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 11:44:20 -0800 (PST)
+        Wed, 23 Nov 2022 14:44:31 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3541970A7;
+        Wed, 23 Nov 2022 11:44:29 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id k7so17550346pll.6;
+        Wed, 23 Nov 2022 11:44:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hrl6+3qmvAqDeMuij9blfcXYnf1KVu5G00Q9l3GMlnI=;
-        b=SNovYVTaZmO0i+VnP2+4GFFrm8M+cqdooCqNRT7svES0he9+w5RVtLotpNrcU7982X
-         LrLz6V60QxdPoJHrUcQq5Yi/016rZZw+hFIDQ5N78JYzo6sUd59t7JCOfz1yqRFq8K+x
-         XzuPHmZG+Vys29d4fZgydGrf9sGytKRWFckJO1JhzSL2NN1aFyD2s52suWj7EQAHmAas
-         bGiMLZnScoritgF3Tca3OVmNqoZNGFfExjRnblQeGzblWkyHgqrrai3hzq34LsLxSuDp
-         krz1xGxUwxCK4A+OUfInMuu55uUEW/9uDqdF9nCody/6Y+zwVMMlEPlPA04I5dkSY2j9
-         S+Bg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iq+S8pJ19eLCshsu6zUlPlVA+hDzpK61Zpqontnfdxc=;
+        b=Dm3D+mqV77F9C7k/l2vNMGPcVRDxMjooR0mQRAyxRRzmPWscbW1/2i1odpXbhpeRtY
+         P3pzvJJBuS5S6DpvDSAM29Kb6D2R4UU5MbTrgxZQxKsX1uZh7VWa78UdZtK1E8SRa+/K
+         /J3QaiKVGVsFYtfyT4JPlP43OCJMpQEuHZNFb5DZOBslo4lGCvTNAAVvbalZu+6ob478
+         6cn9H8U8CBK7DCT5ZPNNmyQlvg/Ncp1VMJ9dBhLI+2sw+BR2X/0f6SyQWRTzadz17cYi
+         rA2ZSGaIPL1zb970UrUzKAaSqLmZbwwh7lW0mPhiJYwEpHE96kJ1sY3yDICfiVEqrYjC
+         sVsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Hrl6+3qmvAqDeMuij9blfcXYnf1KVu5G00Q9l3GMlnI=;
-        b=kJS2XTquIUJxHc0b1xLA3pXljgy21EHnEyW/Psdq9HzIWHHPChQeguHSxCJHYKPIoS
-         SF3dXaf8KXVrKRfvoiudYiDZEpNkuy1c8mQg1chxRr57UQPF9QvKAkQhWxLN9jIGncGE
-         MMdgM1EAMjDTwKmW/HXm1WRoOc81YcjbHZbXhOY0HiU7vm3rac7H8Ny8Dvsx+aNLCPEu
-         n4js7udWTxB76p7NLqRy3kjr3yOAS8vQe39TbtDEp8zbv3Dt88xRsrRHl06KqUzia31i
-         Lgiv8SHK68PuK63grkdz+InGtzb2xSsf9nmFGgLhJAOPPW0C6j7JTFxx3qJfMsW8PjlH
-         TXkA==
-X-Gm-Message-State: ANoB5pkPfALHboOEI/IpdtuvpG3Ioax/WeT7xXRRFGeTVWv8J3Is7Wam
-        bfaSYxw0BMZ8Y+99VsUzYBj/IX4eXpCKeJAhpYM2Vw==
-X-Google-Smtp-Source: AA0mqf6bb0QGlHd6yp3zuA753A/Y1GCQ8KoTIzjf+fG+DQ5GjEgC7BqGOxHfiGNv0ZasiH0RSpsggZdUCpi/YmhPtuM=
-X-Received: by 2002:a05:6000:1192:b0:241:e7a6:9135 with SMTP id
- g18-20020a056000119200b00241e7a69135mr4550464wrx.641.1669232659216; Wed, 23
- Nov 2022 11:44:19 -0800 (PST)
+        bh=iq+S8pJ19eLCshsu6zUlPlVA+hDzpK61Zpqontnfdxc=;
+        b=o/Q7CVe0KtAsb5Ot2mE9wfx/IDmGBKpKv/Tt0lC1CJaiG1T2rQmBcrCtgWMWRrLj3C
+         iYOTR5pD02lHozwK2nZnKJOF+zPBmE2MzJCrMPepYQWbTqqOwnMCNno80aMl8nhTyizq
+         r1eWXPxfZkUPzKN9V+sdml8sSf8wTgEduKhgUYvA9HLx2BcAfIsj4YfeXG73CWgF2ALU
+         tXUwqg4LXXK17z+GwExL2rzKR8TSZ0qO6PvuXd4rmmyUNuK5FRsY/fMDZvqf0weMFr59
+         v0zhHflaThiUAEJVZGN5fjE8HXL13PEpwE4IEhfeE/a+dKY0s35BvF3mGy4fIkUOuToO
+         ag5g==
+X-Gm-Message-State: ANoB5pk4xJGOHDJ5D8uRSv0eVmH1mzMV36HXCsxegV1R/ndLvv520Rxn
+        QsO4aqUOzoDfP4BULr+89eo=
+X-Google-Smtp-Source: AA0mqf4Sib+LsBB6wxr85YLdCZMtxzjPRgIkr15/KD5fuNvZWALUMZlQYGL3bhcQwJFptLutb36uyg==
+X-Received: by 2002:a17:902:7fc3:b0:189:4d89:a442 with SMTP id t3-20020a1709027fc300b001894d89a442mr2964656plb.151.1669232669273;
+        Wed, 23 Nov 2022 11:44:29 -0800 (PST)
+Received: from x570.spacecubics.com (221x245x252x90.ap221.ftth.ucom.ne.jp. [221.245.252.90])
+        by smtp.gmail.com with ESMTPSA id t8-20020a170902e84800b0017a0f40fa19sm14795066plg.191.2022.11.23.11.44.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 11:44:28 -0800 (PST)
+From:   Yasushi SHOJI <yasushi.shoji@gmail.com>
+X-Google-Original-From: Yasushi SHOJI <yashi@spacecubics.com>
+To:     Yasushi SHOJI <yashi@spacecubics.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] can: mcba_usb: Fix termination command argument
+Date:   Thu, 24 Nov 2022 04:44:06 +0900
+Message-Id: <20221123194406.80575-1-yashi@spacecubics.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221121234026.3037083-1-vipinsh@google.com> <20221121234026.3037083-3-vipinsh@google.com>
- <87bkozosvh.fsf@ovpn-194-185.brq.redhat.com>
-In-Reply-To: <87bkozosvh.fsf@ovpn-194-185.brq.redhat.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Wed, 23 Nov 2022 11:43:43 -0800
-Message-ID: <CAHVum0eW4WMHe1vNsWn-2xbMxgckFwu_pOQR7hs0NbFj3sM8Tg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] KVM: x86: hyper-v: Add extended hypercall support
- in Hyper-v
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        seanjc@google.com, pbonzini@redhat.com, dmatlack@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,86 +76,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 8:29 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
->
-> Vipin Sharma <vipinsh@google.com> writes:
->
-> > +/*
-> > + * The TLFS carves out 64 possible extended hypercalls, numbered sequentially
-> > + * after the base capabilities extended hypercall.
-> > + */
-> > +#define HV_EXT_CALL_MAX (HV_EXT_CALL_QUERY_CAPABILITIES + 64)
-> > +
->
-> First, I thought there's an off-by-one here (and should be '63') but
-> then I checked with TLFS and figured out that the limit comes from
-> HvExtCallQueryCapabilities's response which doesn't include itself
-> (0x8001) in the mask, this means it can encode
->
-> 0x8002 == bit0
-> 0x8003 == bit1
-> ..
-> 0x8041 == bit63
->
-> so indeed, the last one supported is 0x8041 == 0x8001 + 64
->
-> maybe it's worth extending the commont on where '64' comes from.
->
+Microchip USB Analyzer can be set with termination setting ON or OFF.
+As I've observed, both with my oscilloscope and USB packet capture
+below, you must send "0" to turn it ON, and "1" to turn it OFF.
 
-Yeah, I will expand comments.
+Reverse the argument value to fix this.
 
-> >  static void stimer_mark_pending(struct kvm_vcpu_hv_stimer *stimer,
-> >                               bool vcpu_kick);
-> >
-> > @@ -2411,6 +2417,9 @@ static bool hv_check_hypercall_access(struct kvm_vcpu_hv *hv_vcpu, u16 code)
-> >       case HVCALL_SEND_IPI:
-> >               return hv_vcpu->cpuid_cache.enlightenments_eax &
-> >                       HV_X64_CLUSTER_IPI_RECOMMENDED;
-> > +     case HV_EXT_CALL_QUERY_CAPABILITIES ... HV_EXT_CALL_MAX:
-> > +             return hv_vcpu->cpuid_cache.features_ebx &
-> > +                             HV_ENABLE_EXTENDED_HYPERCALLS;
-> >       default:
-> >               break;
-> >       }
-> > @@ -2564,6 +2573,12 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
-> >               }
-> >               goto hypercall_userspace_exit;
-> >       }
-> > +     case HV_EXT_CALL_QUERY_CAPABILITIES ... HV_EXT_CALL_MAX:
-> > +             if (unlikely(hc.fast)) {
-> > +                     ret = HV_STATUS_INVALID_PARAMETER;
->
-> I wasn't able to find any statement in TLFS stating whether extended
-> hypercalls can be 'fast', I can imagine e.g. MemoryHeatHintAsync using
-> it. Unfortunatelly, our userspace exit will have to be modified to
-> handle such stuff. This can stay for the time being I guess..
->
+These are the two commands sequence, ON then OFF.
 
-I agree TLFS doesn't state anything about "fast" extended hypercall
-but nothing stops in future for some call to be "fast". I think this
-condition should also be handled by userspace as it is handling
-everything else.
+> No.     Time           Source                Destination           Protocol Length Info
+>       1 0.000000       host                  1.3.1                 USB      46     URB_BULK out
+>
+> Frame 1: 46 bytes on wire (368 bits), 46 bytes captured (368 bits)
+> USB URB
+> Leftover Capture Data: a80000000000000000000000000000000000a8
+>
+> No.     Time           Source                Destination           Protocol Length Info
+>       2 4.372547       host                  1.3.1                 USB      46     URB_BULK out
+>
+> Frame 2: 46 bytes on wire (368 bits), 46 bytes captured (368 bits)
+> USB URB
+> Leftover Capture Data: a80100000000000000000000000000000000a9
 
-I will remove it in the next version of the patch. I don't see any
-value in verification here.
+Signed-off-by: Yasushi SHOJI <yashi@spacecubics.com>
+---
+ drivers/net/can/usb/mcba_usb.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> > +                     break;
-> > +             }
-> > +             goto hypercall_userspace_exit;
-> >       default:
-> >               ret = HV_STATUS_INVALID_HYPERCALL_CODE;
-> >               break;
-> > @@ -2722,6 +2737,7 @@ int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid,
-> >
-> >                       ent->ebx |= HV_POST_MESSAGES;
-> >                       ent->ebx |= HV_SIGNAL_EVENTS;
-> > +                     ent->ebx |= HV_ENABLE_EXTENDED_HYPERCALLS;
-> >
-> >                       ent->edx |= HV_X64_HYPERCALL_XMM_INPUT_AVAILABLE;
-> >                       ent->edx |= HV_FEATURE_FREQUENCY_MSRS_AVAILABLE;
->
-> Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
->
-> --
-> Vitaly
->
+diff --git a/drivers/net/can/usb/mcba_usb.c b/drivers/net/can/usb/mcba_usb.c
+index 218b098b261d..67beff1a3876 100644
+--- a/drivers/net/can/usb/mcba_usb.c
++++ b/drivers/net/can/usb/mcba_usb.c
+@@ -785,9 +785,9 @@ static int mcba_set_termination(struct net_device *netdev, u16 term)
+ 	};
+ 
+ 	if (term == MCBA_TERMINATION_ENABLED)
+-		usb_msg.termination = 1;
+-	else
+ 		usb_msg.termination = 0;
++	else
++		usb_msg.termination = 1;
+ 
+ 	mcba_usb_xmit_cmd(priv, (struct mcba_usb_msg *)&usb_msg);
+ 
+-- 
+2.38.1
+
