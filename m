@@ -2,199 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB4F863684B
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:05:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9554F636816
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:02:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239642AbiKWSF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 13:05:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56244 "EHLO
+        id S239463AbiKWSCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 13:02:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239495AbiKWSDK (ORCPT
+        with ESMTP id S239354AbiKWSCU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 13:03:10 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7371B86B;
-        Wed, 23 Nov 2022 10:02:32 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id io19so17330837plb.8;
-        Wed, 23 Nov 2022 10:02:32 -0800 (PST)
+        Wed, 23 Nov 2022 13:02:20 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7B093700
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 10:02:16 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id w4so8548060plp.1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 10:02:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5gWMIg8ivBELEJG/R0PKwrUC/7uMdDKInwMAEQaG27g=;
-        b=qke1to8QicpmSPkYhan1X5ZD1RXagJ2z9CmBhlLxQnhfXiTNJv8xxwutR/52394kes
-         /01n7X41yjZGds2kUIu5G9xg2YM8+VDjSESa6fAiTsGHXfgO3j6QTC5HJDSwJN4E7eKH
-         1maVXeqsL+OzSug7BaPNpHQw+lJLgtlPWzSpJQrhtBCxCto4yLKv3yA+j0tGTV2Xf0zH
-         XuELKUdwLzl+JQqJ5qv1xzNITBfylJFCh3RO/44/tN61UNXshv+B4U2FF4CwgHGR2MuW
-         OvkT+rhMS0TMFgvbe2U5+6lolArOc4uY0IKRs67Sutu0wItPk0E03j9nrsqC5gsTvG6O
-         Hqdg==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JBAHsDOjy5OO4Ngubx5UMoEA0/sDtPMwp6OMmJM5Kq8=;
+        b=j0pjNho9RlZm19Tehr3FVjo7Db8885B4Y7xkdDdUAoWctaEVu0QXpeH4dAhlT+H/66
+         rXShciLYPKXX/As5ej1NnFhKVYsgqZOAIM86zq/8g4IoL0rpFkAis4hyMIxH32ObpzTD
+         q12ac2q20Bq/175aKSlrDsis/kh1ZErXHlsfXaFF0vLM0VKl7Q/KOGrAwfHxRNQmXI/O
+         driosPsB+7yejIXs59Nh7GScXFt/2qGI69bVfBSTlUwjFNjy1R5omvxslKZApaKKy6Vb
+         bCz1WtnxHp4F2zgsQTYD/KhQpB2n22TuYLklkc67sIj+R3YF0oMYZg8xQcjMBvZBgqVR
+         chmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=5gWMIg8ivBELEJG/R0PKwrUC/7uMdDKInwMAEQaG27g=;
-        b=CSgyiyVa/M7uRk7X2k+g6+qsCIc11Q8TFlMn46yfxaa+tABOZhOPSZhBbarrbq6xj7
-         vHrw+xmuv8XZz4r6tntEDE/v3kGo0An2SD8Vui1+4gfsGO8VDVARN90xzbpv+jW5Auv5
-         ULERn1XPRSatCXCFGRw7YB0RSuUowJk4o++IKx+IqnjVil3ZXth8E8CrRGMc8hQ8qlT0
-         KuLVS+Yps21Y2Kcx9+OVesgbJFmU0vdSUi80mHmXEjg26ms3lljbrBmslDMWuF7emB3u
-         H+NVpDjYwqAm2LhRyEiFG9mK8DCvg6IRRe6FCr8BzifLh5NOVyRroPpdQLw6GS7Bnv29
-         6aFQ==
-X-Gm-Message-State: ANoB5plyjAtva/h0YfG9QYiKimb/znui+sBSaeo0ua0luyiFY7XWWj47
-        rfG4B//Apn4DuaW7SKWQw6w=
-X-Google-Smtp-Source: AA0mqf4xZ5Y7E2KNh89B4QFT2XJ7+bbx0UghsjM6tXas+Zl8Eyd1Eui7nsyNb9KnfRXIcrOl4GcCWA==
-X-Received: by 2002:a17:903:3311:b0:186:d5b9:fbcd with SMTP id jk17-20020a170903331100b00186d5b9fbcdmr12767970plb.64.1669226552177;
-        Wed, 23 Nov 2022 10:02:32 -0800 (PST)
-Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:a80:c968:76:254b:3790])
-        by smtp.gmail.com with ESMTPSA id i15-20020a655b8f000000b00470275c8d6dsm10792364pgr.10.2022.11.23.10.02.31
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JBAHsDOjy5OO4Ngubx5UMoEA0/sDtPMwp6OMmJM5Kq8=;
+        b=hLKZq3PGL4TQ8YmyRh7gc5Wsc1t1aS1g3ssc7NuZJtuFWXEo8rJnbR+XFLyuU3MLs7
+         eKwFJOcq/aNGXqmkjCMF1t/AJjq7/W+QAE/q66bD0DMk0QWHz6Pt9LrKgU3IDFcMs1Fk
+         APO54j136bFhR4HxJEt5zt0XI/Fufqo1TdNMPVDJu03jeDMtXpA+OL6BneExonzLjPNz
+         E89dk6Gj8SPQ2J8myjyyMVPX8Wo+toNFt020DQYIP2FVSMBOaM39yC6tTHp2RY3MCZKu
+         gp4wbL6+sDHIjYJEi2VpfDen+xzGCsO59U2PNcjIfBHbM75t/YWSBA4AZuqgh3PvuxAZ
+         wL2A==
+X-Gm-Message-State: ANoB5pnwfwxKDu5mkEqbjAf1OGSQWqs50asHtPxYY/WVsiZvRwI6zECG
+        q7E2s6viekBsk/AMj6B4bEqMVA==
+X-Google-Smtp-Source: AA0mqf4h/eDzvGfQmUc/ZjBSomm7vgT2Crg1NblOZpQoP8uNf60lMXpAkbUo70CvheBSDG5J9lpZAg==
+X-Received: by 2002:a17:902:da89:b0:189:8b2:b069 with SMTP id j9-20020a170902da8900b0018908b2b069mr10756414plx.13.1669226535720;
+        Wed, 23 Nov 2022 10:02:15 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id w26-20020a63475a000000b00462612c2699sm11075143pgk.86.2022.11.23.10.02.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 10:02:31 -0800 (PST)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        James Clark <james.clark@arm.com>,
-        Athira Jajeev <atrajeev@linux.vnet.ibm.com>
-Subject: [PATCH 15/15] perf stat: Tidy up JSON metric-only output when no metrics
-Date:   Wed, 23 Nov 2022 10:02:08 -0800
-Message-Id: <20221123180208.2068936-16-namhyung@kernel.org>
-X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-In-Reply-To: <20221123180208.2068936-1-namhyung@kernel.org>
-References: <20221123180208.2068936-1-namhyung@kernel.org>
+        Wed, 23 Nov 2022 10:02:15 -0800 (PST)
+Date:   Wed, 23 Nov 2022 18:02:11 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     Alex =?utf-8?B?QmVubu+/vWU=?= <alex.bennee@linaro.org>,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v9 3/8] KVM: Add KVM_EXIT_MEMORY_FAULT exit
+Message-ID: <Y35gI0L8GMt9+OkK@google.com>
+References: <20221025151344.3784230-4-chao.p.peng@linux.intel.com>
+ <87cz9o9mr8.fsf@linaro.org>
+ <20221116031441.GA364614@chaop.bj.intel.com>
+ <87mt8q90rw.fsf@linaro.org>
+ <20221117134520.GD422408@chaop.bj.intel.com>
+ <87a64p8vof.fsf@linaro.org>
+ <20221118013201.GA456562@chaop.bj.intel.com>
+ <87o7t475o7.fsf@linaro.org>
+ <Y3er0M5Rpf1X97W/@google.com>
+ <20221122095022.GA617784@chaop.bj.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221122095022.GA617784@chaop.bj.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It printed empty strings for each metric.  I guess it's needed for CSV
-output to match the column number.  We could just ignore the empty
-metrics in JSON but it ended up with a broken JSON object with a
-trailing comma.
+On Tue, Nov 22, 2022, Chao Peng wrote:
+> On Fri, Nov 18, 2022 at 03:59:12PM +0000, Sean Christopherson wrote:
+> > On Fri, Nov 18, 2022, Alex Benn?e wrote:
+> > > > We don't actually need a new bit, the opposite side of private is
+> > > > shared, i.e. flags with KVM_MEMORY_EXIT_FLAG_PRIVATE cleared expresses
+> > > > 'shared'.
+> > > 
+> > > If that is always true and we never expect a 3rd type of memory that is
+> > > fine. But given we are leaving room for expansion having an explicit bit
+> > > allows for that as well as making cases of forgetting to set the flags
+> > > more obvious.
+> > 
+> > Hrm, I'm on the fence.
+> > 
+> > A dedicated flag isn't strictly needed, e.g. even if we end up with 3+ types in
+> > this category, the baseline could always be "private".
+> 
+> The baseline for the current code is actually "shared".
 
-So I added a dummy '"metric-value" : "none"' part.  To do that, it
-needs to pass struct outstate to print_metric_end() to check if any
-metric value is printed or not.
+Ah, right, the baseline needs to be "shared" so that legacy code doesn't end up
+with impossible states.
 
-Before:
-  # perf stat -aj --metric-only --per-socket --for-each-cgroup system.slice true
-  {"socket" : "S0", "cpu-count" : 8, "cgroup" : "system.slice", "" : "", "" : "", "" : "", "" : "", "" : "", "" : "", "" : "", "" : ""}
+> > I do like being explicit, and adding a PRIVATE flag costs KVM practically nothing
+> > to implement and maintain, but evetually we'll up with flags that are paired with
+> > an implicit state, e.g. see the many #PF error codes in x86.  In other words,
+> > inevitably KVM will need to define the default/base state of the access, at which
+> > point the base state for SHARED vs. PRIVATE is "undefined".  
+> 
+> Current memory conversion for confidential usage is bi-directional so we
+> already need both private and shared states and if we use one bit for
+> both "shared" and "private" then we will have to define the default
+> state, e.g, currently the default state is "shared" when we define
+> 
+> 	KVM_MEMORY_EXIT_FLAG_PRIVATE	(1 << 0)
 
-After:
-  # perf stat -aj --metric-only --per-socket --for-each-cgroup system.slice true
-  {"socket" : "S0", "cpu-count" : 8, "cgroup" : "system.slice", "metric-value" : "none"}
+...
 
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- tools/perf/util/stat-display.c | 27 +++++++++++++++++----------
- 1 file changed, 17 insertions(+), 10 deletions(-)
+> > So I would say if we add an explicit READ flag, then we might as well add an explicit
+> > PRIVATE flag too.  But if we omit PRIVATE, then we should omit READ too.
+> 
+> Since we assume the default state is shared, so we actually only need a
+> PRIVATE flag, e.g. there is no SHARED flag and will ignore the RWX for now.
 
-diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
-index 7a39a1a7261d..847acdb5dc40 100644
---- a/tools/perf/util/stat-display.c
-+++ b/tools/perf/util/stat-display.c
-@@ -532,6 +532,8 @@ static void print_metric_only_json(struct perf_stat_config *config __maybe_unuse
- 	while (isdigit(*ends) || *ends == '.')
- 		ends++;
- 	*ends = 0;
-+	if (!unit[0] || !vals[0])
-+		return;
- 	fprintf(out, "%s\"%s\" : \"%s\"", os->first ? "" : ", ", unit, vals);
- 	os->first = false;
- }
-@@ -864,14 +866,19 @@ static void print_metric_begin(struct perf_stat_config *config,
- 	print_cgroup(config, os->cgrp ? : evsel->cgrp);
- }
- 
--static void print_metric_end(struct perf_stat_config *config)
-+static void print_metric_end(struct perf_stat_config *config, struct outstate *os)
- {
-+	FILE *output = config->output;
-+
- 	if (!config->metric_only)
- 		return;
- 
--	if (config->json_output)
--		fputc('}', config->output);
--	fputc('\n', config->output);
-+	if (config->json_output) {
-+		if (os->first)
-+			fputs("\"metric-value\" : \"none\"", output);
-+		fputc('}', output);
-+	}
-+	fputc('\n', output);
- }
- 
- static void print_aggr(struct perf_stat_config *config,
-@@ -897,7 +904,7 @@ static void print_aggr(struct perf_stat_config *config,
- 
- 			print_counter_aggrdata(config, counter, s, os);
- 		}
--		print_metric_end(config);
-+		print_metric_end(config, os);
- 	}
- }
- 
-@@ -929,7 +936,7 @@ static void print_aggr_cgroup(struct perf_stat_config *config,
- 
- 				print_counter_aggrdata(config, counter, s, os);
- 			}
--			print_metric_end(config);
-+			print_metric_end(config, os);
- 		}
- 	}
- }
-@@ -985,7 +992,7 @@ static void print_no_aggr_metric(struct perf_stat_config *config,
- 			printout(config, os, uval, run, ena, 1.0, counter_idx);
- 		}
- 		if (!first)
--			print_metric_end(config);
-+			print_metric_end(config, os);
- 	}
- }
- 
-@@ -1348,7 +1355,7 @@ static void print_cgroup_counter(struct perf_stat_config *config, struct evlist
- 	evlist__for_each_entry(evlist, counter) {
- 		if (os->cgrp != counter->cgrp) {
- 			if (os->cgrp != NULL)
--				print_metric_end(config);
-+				print_metric_end(config, os);
- 
- 			os->cgrp = counter->cgrp;
- 			print_metric_begin(config, evlist, os, /*aggr_idx=*/0);
-@@ -1357,7 +1364,7 @@ static void print_cgroup_counter(struct perf_stat_config *config, struct evlist
- 		print_counter(config, counter, os);
- 	}
- 	if (os->cgrp)
--		print_metric_end(config);
-+		print_metric_end(config, os);
- }
- 
- void evlist__print_counters(struct evlist *evlist, struct perf_stat_config *config,
-@@ -1405,7 +1412,7 @@ void evlist__print_counters(struct evlist *evlist, struct perf_stat_config *conf
- 			evlist__for_each_entry(evlist, counter) {
- 				print_counter(config, counter, &os);
- 			}
--			print_metric_end(config);
-+			print_metric_end(config, &os);
- 		}
- 		break;
- 	case AGGR_NONE:
--- 
-2.38.1.584.g0f3c55d4c2-goog
-
+Yeah, I'm leading towards "shared" being the implied default state.  Ditto for
+"read" if/when we need to communicate write/execute information  E.g. for VMs
+that don't support guest private memory, the "shared" flag is in some ways
+nonsensical.  Worst case scenario, e.g. if we end up with variations of "shared",
+we'll need something like KVM_MEMORY_EXIT_FLAG_SHARED_RESTRICTIVE or whatever,
+but the basic "shared" default will still work.
