@@ -2,207 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7033863576F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:43:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA30F63577F
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:43:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238045AbiKWJmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 04:42:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58434 "EHLO
+        id S238137AbiKWJm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 04:42:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238086AbiKWJlw (ORCPT
+        with ESMTP id S238139AbiKWJmB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 04:41:52 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB3574ABC
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:39:45 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id j4so27398387lfk.0
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:39:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HhqMtvHL6CzJDiLWuozbG2Jml88D7dY6P8TNnkcKrDk=;
-        b=uPcF2XKQ3yB8cxrDLUDzCH6YV36F1+y0M6Rxy2QxQEAVoZTzlfdojxgHr57lhPYv5Z
-         mvygHAfNvmroP5qhfZkQyzCDVc4n+ztMBYZO9poIohFylLJB8+4Q6P9BQRXemTgiWEOh
-         z1rctkkfQjvkzmKQMScUuLlwqfYgn9TygkLAjGGpwbvjaRuB2Sql6ikYhfcNfWFq21UY
-         TBogac2ZRtjdeDLfORHdgb5AseVSVAEvJ3qqWgWI9Syq5YwxjXWqgGu/zUjI+ieHO/ZW
-         YYbDMSKtbuXGHao1FM5Il9NCwdlomVwtK5h7m6WOj1qSCHqPMv9IJIRTb1q9AglycZM9
-         hIuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HhqMtvHL6CzJDiLWuozbG2Jml88D7dY6P8TNnkcKrDk=;
-        b=GhJaXdx1wHBH6pWVp1M9yNaUXSGIUz969z5Ki4cmGiqExheSa5PMSczreK8PIpvJLB
-         qZhILrgPwnB2KX/4eJyGxP/z9W5l09YK0aUK91QBp8pGIoBHk2nbpXKZ6srwsD53l6x/
-         2mDkJHvJhOu+iN054kW53AZjzTgEfm9mMAXUQThPs0CCH1EfZPBr6q6lHRFKpoAq972a
-         z6O67J4bzUv8sDcLUwjaoB/AwyWdPVAGKV+hgeG+30c4diVE/VxOjK2jvhNnEeXswPmY
-         3Tyb5eJxy5Wc33G23zUBKd2VUSNjrfM7lgHAX6CP6nLkY2Q4uBR8AWP5flaarwyKwp/R
-         PSBQ==
-X-Gm-Message-State: ANoB5pkRV5B1hr+2pd1gnwEl2F7ID/n3G86vZw5+NXAmePTGdDJD9cLh
-        4u/8gpRg92hAFinZ1FjdGmqI2Q==
-X-Google-Smtp-Source: AA0mqf5DA9z8M5jnKKs9XTmwUcoENZ3ioMO2Niz5dey3n7Kt+mn3Y92KAjKcnZl7/Qj50MFNZ79P0A==
-X-Received: by 2002:a19:9155:0:b0:492:f5b6:2124 with SMTP id y21-20020a199155000000b00492f5b62124mr8739646lfj.369.1669196383804;
-        Wed, 23 Nov 2022 01:39:43 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id j8-20020ac253a8000000b004946a1e045fsm2788676lfh.197.2022.11.23.01.39.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 01:39:43 -0800 (PST)
-Message-ID: <02db6a5d-ae9d-68b5-f5c5-bebb471e0f70@linaro.org>
-Date:   Wed, 23 Nov 2022 10:39:41 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 2/7] dt-bindings: clock: renesas,r9a06g032-sysctrl: Add
- h2mode property
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Herve Codina <herve.codina@bootlin.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-References: <20221114111513.1436165-1-herve.codina@bootlin.com>
- <20221114111513.1436165-3-herve.codina@bootlin.com>
- <a1a7fdf4-2608-d6c9-7c7a-f8e8fae3a742@linaro.org>
- <c9a77262-f137-21d9-58af-eb4efb8aadbf@linaro.org>
- <20221115150417.513955a7@bootlin.com> <20221118112349.7f09eefb@bootlin.com>
- <d9bd5075-9d06-888d-36a9-911e2d7ec5af@linaro.org>
- <20221121165921.559d6538@bootlin.com>
- <4e54bfb4-bb67-73b8-f58f-56797c5925d3@linaro.org>
- <CAMuHMdU=-ZUzHSb0Z8P3wsLK9cgGVCPdMi6AcjTH23tUQEeEBA@mail.gmail.com>
- <a3e1332e-fc15-8a78-0ddd-6d5b26197f11@linaro.org>
- <CAMuHMdXzqZB4sKMmroriq5oPp7z=yXiHk=+eQKwSyPhNbYqgYA@mail.gmail.com>
- <1f12883b-1e37-7f2b-f9e9-c8bad290a133@linaro.org>
- <CAMuHMdVbzg8y2So+A=z8nUwHMoL+XKUrvoXp9QdbCnUve1_Atw@mail.gmail.com>
- <191a7f3e-0733-8058-5829-fe170a06dd5a@linaro.org>
- <20221122100706.739cec4d@bootlin.com>
- <3856e2d8-1c16-a69f-4ac5-34b8e7f18c2b@linaro.org>
- <CAMuHMdXPndkt=+k1CAcDbH7eK=TFfS6wMu+xdqWZSCz1+hyhEA@mail.gmail.com>
+        Wed, 23 Nov 2022 04:42:01 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E94114BB8;
+        Wed, 23 Nov 2022 01:40:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669196404; x=1700732404;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=DFuspZ+LJQArl69V04JXnrL3F5Wu9uZSHFH/o52UcZI=;
+  b=j1FRQrX0z9982lNWoyn6teBbKKgnmo1tl07qqY1mXxvNB+8p/URHVC3r
+   VuIBkN5YGu+9Q78tqb3IjHKVyg+O9vcuabPOXkuw6R6G8lwouhQy2mt5B
+   Qa3aBYCrglaSAbm/Fs/EW3kIE7nKPeEtYbMwa5TfzlbhRGcLBL6lB6FGe
+   uFE74vsiAXOFeR4rlPVp1+rGuUJfZzQmFsQimxOiBDXsrK8k22Rc4MpzK
+   Z1Rnl9QWsD3b4PBFgHT+FsPT9NiyuN88bqVa4XEkb01kWlXSXyF03+xiz
+   brg03OUajdoQkkwRu5LVI8St4Hl0gl4S3klNbiBCmWNVydhNBEIiKoDWX
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="314060677"
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="314060677"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 01:40:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="592459340"
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="592459340"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga003.jf.intel.com with ESMTP; 23 Nov 2022 01:40:03 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 23 Nov 2022 01:40:03 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 23 Nov 2022 01:40:02 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Wed, 23 Nov 2022 01:40:02 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.175)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Wed, 23 Nov 2022 01:40:02 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=m1eOWrdH6U7/JD2xQZcmySUxTn5q1NRR5pY72/v8S5yNvKWzF0SEMO+8P9CCL6OLl2KhurDg8fncd8je74thJhqUjswmtFgrGwnH3QYdFgtb860NpT47AS9tpKrQ/WrUWvv/sqxa7QEHLGmFxIAIfUhnm+LgkBFOuxqJwFdCPTQl0llJAVGe+1ztIXaCqywWgrwSyzRncoBaY8KvVmof8kx6QAAsu+v6MDTOdalh9RyNCdSaBU0/MwWSsEE7+VW86z04i9JOFwc14Bo+Me+tk64MhRW9Vhdoruck3FwhwRy6pImMs5gSvpdUC8GNE8WFUyXQUWj22MA3d+CjHXdFJw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DFuspZ+LJQArl69V04JXnrL3F5Wu9uZSHFH/o52UcZI=;
+ b=DAopVomg8Zm6izsH2I8n8snXj+lo/QoRcZluKCt8sDrjSk7aaHx8OEZV03X3wpvEbNETSvnYOnmhtVF1QfcwWdBFE8v6Yz3N9vXgPl8sEkqUMoBWDeruuJmh8vsfMI7Jxc3rr8SGmxS1MHPWub2YC1X7C0a7LNHPnNND7Az3/xQ8rUb+scN03JGQoTTS313RK+d5NmXBneg+UGNUsxpGSasTx5SLNF7jiMb+1hxUbbUaFmW5Qnjix3OkTFzV5hbVQtu2D/aejrieYofV0eJhWODofwGJvlOVSxucjNQzjAexoQYdM/ssRcRANt7NRagkiys3NKqeMy/r392LGtPh6A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
+ by DM6PR11MB4531.namprd11.prod.outlook.com (2603:10b6:5:2a5::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Wed, 23 Nov
+ 2022 09:39:58 +0000
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::2fb7:be18:a20d:9b6e]) by BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::2fb7:be18:a20d:9b6e%8]) with mapi id 15.20.5834.015; Wed, 23 Nov 2022
+ 09:39:58 +0000
+From:   "Huang, Kai" <kai.huang@intel.com>
+To:     "peterz@infradead.org" <peterz@infradead.org>,
+        "Christopherson,, Sean" <seanjc@google.com>
+CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+Subject: Re: [PATCH v7 06/20] x86/virt/tdx: Shut down TDX module in case of
+ error
+Thread-Topic: [PATCH v7 06/20] x86/virt/tdx: Shut down TDX module in case of
+ error
+Thread-Index: AQHY/T2+AlEdwutNGkW7IAmyyjQDW65KrPSAgABgioCAAEMZAIAABv8AgADtBIA=
+Date:   Wed, 23 Nov 2022 09:39:58 +0000
+Message-ID: <9b4c8ecd3c26fc51d0c135aeb197f5bd58625365.camel@intel.com>
+References: <cover.1668988357.git.kai.huang@intel.com>
+         <48505089b645019a734d85c2c29f3c8ae2dbd6bd.1668988357.git.kai.huang@intel.com>
+         <Y3yUdcJjrY2LhUWJ@hirez.programming.kicks-ass.net> <87bkozgham.ffs@tglx>
+         <Y30dujuXC8wlLwoQ@hirez.programming.kicks-ass.net>
+         <Y30jmKOOsvtzt6UT@google.com>
+In-Reply-To: <Y30jmKOOsvtzt6UT@google.com>
+Accept-Language: en-US
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAMuHMdXPndkt=+k1CAcDbH7eK=TFfS6wMu+xdqWZSCz1+hyhEA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|DM6PR11MB4531:EE_
+x-ms-office365-filtering-correlation-id: 5a557ff1-84a9-463a-23cf-08dacd36af9d
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: B3DJinwTIq49MyaXK/F5Gt7x/NHUjppNqd4kQ/UmW30+e0eehw+jZ184pcCP5IdNG8FFhdzErFvss1LosU/cat9z13XtBjJZX2i6b1/d+his/IbY8wY4BpCDwW43i8AQfiQ4wYJSAjQZre5dhuZvT4FW8P6IudhdLS8gQS5ATCKFpQhlhr9ut9te5uCqpVP3+PEdb6fSCU95+Oq/LnX7tC3fswLk79TLAVTrlIHpsvWAjcVlxaBMH5Wyt9HiB6vokKZuFH3J2YfpdVT2JHZwRAC89ODeXlQYr83flBSRp9yEiipSGD6YSNxs9daCQ3dx64kHJpNQeyUqDA0QNxwfMgwx/uO2LmmH+Lt07tf8DWqONe3nWykdxJRQjTUYv5maSeajpDBUUAvQDzb8unT01nl92yxzdy69X1wn4XPmv9XgYhIliMD+ZXrQjtSP+YZKsCQXcVDqHAa1CwllMY0wGDTSzb0vqjMOM3od4xrspsfx2zpZB7npfGGYw9Xt+q91r6wQ4LVPjv6KIWekHa1p562o6WrVSCkmo0Uc2aEdG9eypN9t258P19LgqqvfynTOSNWkKFIIMhMkjJTY0zrR6kcb6vd3yc70TEpDoQXHfDCYonuvxc/bMMW6kyQiJFq0V7XjYHi6c73eHbMEGbag3EV5bJN9BHaJnyprF7t/nJ6fHvHTjGxy2XRfCBSNBtfbRyReGP6RTeauD9Udgsy3iw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(366004)(396003)(376002)(39860400002)(346002)(451199015)(36756003)(86362001)(38100700002)(64756008)(76116006)(7416002)(5660300002)(186003)(2906002)(4001150100001)(122000001)(2616005)(6512007)(26005)(38070700005)(82960400001)(83380400001)(91956017)(6486002)(66476007)(66556008)(71200400001)(6506007)(4326008)(66446008)(41300700001)(54906003)(110136005)(8936002)(66946007)(8676002)(316002)(478600001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NXpZQnprQ3FWUDVqbGFOb21Wdm1mTVg5UGtvY2RPaGJHaU9CcHNlOUdCV3FC?=
+ =?utf-8?B?QkZ2NmRQUkxXamVuTW1WclpMZVQxd2orR09yclQ0cld0eEhybUtrMzlqSzl4?=
+ =?utf-8?B?U0lBR0NzL1B0N1RhR1VMSEZIbVk4UUFTZ2xNTU95elNia2MxZElMdEs3Tm55?=
+ =?utf-8?B?UUI0dzk3UHJLM2hoNFdhQmZwdkZYWHNnbjM4NERTaWw2N2hxaVhscFIwTlNz?=
+ =?utf-8?B?ZVNkS1RETEFwK3c0MFhrSlROQlgwaU1oOXpieEhwRnJhWkRLdUllWFEyai9I?=
+ =?utf-8?B?TXZiM1NpclN4djYrV2Q3Q0xhbXFpbUdNMmpiTjcrSzhWbHd1b2RWYjBMMi81?=
+ =?utf-8?B?NjNZV3R6ZDAzTUFkQm9PM1FVS0ovNlo5Z3FFa2NTS2R5MUVmTUpNQVdWcVA4?=
+ =?utf-8?B?b2tKN0xqVWlxbitxbE9WZnc1Q21BcTd3MmRZVEs0MnNpbFU0QmIvN0Q3dlBH?=
+ =?utf-8?B?bjg0QksyQnhyN0tUa29ES0ZZYnVQYkRsWHRONEZHSU02YzZ2aDNaQ0lNVWhR?=
+ =?utf-8?B?OTZ1MkhtcGVCSFp6bHVydEE4cVN0V2FGQWlIUVhMcm8xM3JYSWErR2dOR2ZK?=
+ =?utf-8?B?bGRpekMyS0h6OGtOZGVBRDg0WE9SUWE3TWNUSDN3alhpc0g4YWRhMCsrcGND?=
+ =?utf-8?B?bVZzeVJLUnEzVk5FRkpLVWRlVzNWbklNRXpNR1Rrc0MvdmZzZ0JzZmlMZGNP?=
+ =?utf-8?B?YlBYMlFkRTJML3JHSFdEcmFKUk5nem0wT01GdjcxMTQ0dll5aE9ERmVjNnRj?=
+ =?utf-8?B?TFJXZ0VLd1JsR2QzRkxMajBHQlpaYWZKSE10WjFnTHo4dWVMeDZLUUhzbm5p?=
+ =?utf-8?B?Y1RYQUhSc2RFWGlnMXFLRTg0bGIvblVKamJuSVJGcENGTmhoREY2VnlXbTlj?=
+ =?utf-8?B?Q2tQVGRYaXFKZmcwODR6eE51ZEZKajk0akxZMFptYUpYeGJXdmxTOXptUGpx?=
+ =?utf-8?B?SWRsZTkyKzVwTXo1SUM5Q2RodEZkYnFadkpXTU95Q3hxQUlNU3lYVUFyR1Jx?=
+ =?utf-8?B?cTk3SkNydnpibCt6d0lXTkZnQXZUVzVtM083NFErT2tKTEg1UEhtSVlOTXNL?=
+ =?utf-8?B?T2M5RkVmQm1JNklFUE0rQ3Y5RUhaQXhxYVVxWGhxSDRsb1lKNnUveEdtaXVr?=
+ =?utf-8?B?QjlpOHZLMFlSSEJ2L29tdzYvWVMzUlNGdDBLWUlIQXRjN1J1a0ladzZBQmdi?=
+ =?utf-8?B?QmY2NDZJL2hHY2lTKzFaT2hDdDRmUE1ieVZCbHZPZ1ZQNUE4S29iV1czV2h2?=
+ =?utf-8?B?VFl4dTdlcE9OTHlkVnpRM0cvRFVXczlOQmhxUWZpTGRFYzFTeldIbWkvWTMv?=
+ =?utf-8?B?VTAvRVI0VENYNVNLS1hqd1lscnRLRUJjaitDWkd1WjBWU0hER1QvSjBNQktx?=
+ =?utf-8?B?c1VEK1luVXA5RWxZcW1UNGZkWkwyUWdCM2ptbGxvMHFmY2o3bzAralQrQ0hm?=
+ =?utf-8?B?eUtVc2w3cGE4QVF5YXIxT21BL2RHRVh2aG81cE9selExUEw3a0paTFYyQjI3?=
+ =?utf-8?B?SE5qU0VMRDlzcVpMaE1UejI2b3Byc1lSOFM1YXEzL1FPRjZiS2FaM3FiYkFX?=
+ =?utf-8?B?SVJxc1laL0UrRlBKbHdxenM4Q2R2NTZQY05BZ0h4c0xpQmM0RmU5dkdiclgw?=
+ =?utf-8?B?M1dOMTlpV09mSHljL0NPNmo2OUNXWFo0N000ck80K2EwRUtTRWkxTjlPVkpX?=
+ =?utf-8?B?aHlTalJ5dzl6QkZHMU1KN09hS0hZRnJ4YWh5UVByb3ZzOGYvYUp3cG1xQ1Br?=
+ =?utf-8?B?K21abHBaWUozWDdyamdkUjVFME55UDZsU0tBQkxxaUVIMWV3RFFydUwwTkgw?=
+ =?utf-8?B?d3RwTW1Yc2ZkRHlQL0lCWUo0NG5MdjJBTVU5TForWm9adHZjYUJuc0trVlo1?=
+ =?utf-8?B?d3Jwb2V1ZW8vMk1lZDBiNTlRWndNTzNBenA4ZGdsekRoRmhkb0lpRlFscndB?=
+ =?utf-8?B?M3AxZXRmTmdwaThRK2FoMHFFTm40SERGcndSL2t4bzdNbDB0bDdTeFo2TStO?=
+ =?utf-8?B?NlhIc3cxUkE4WHhvTVVLQUViYzJWSWlFNVpnYzBTL1dKdkgvTHdvb1grd2hT?=
+ =?utf-8?B?dXBnQ0VLd1BNL01mUFZYY2dmbG5qWVE0OEE2cm45eVN0OGpURmNKbGFkZ0dh?=
+ =?utf-8?B?TDdaeDcrLzVMbmYveERpM2VrSzFXR0N1RTFRdUs2dFlDZ21ic1g4NUZtQmR5?=
+ =?utf-8?B?dkE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <DA39312F1B1D574C9DC401600B1EE782@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5a557ff1-84a9-463a-23cf-08dacd36af9d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Nov 2022 09:39:58.3959
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: JPT4HiAmXHxP3sDfKpK7hlhhCl+EJOx6u6tFr1TA6ZzOY4lj8ScfwiphzfVbh3YM5EhrQFmvvxsMbH3PyvP5+A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4531
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/11/2022 11:47, Geert Uytterhoeven wrote:
-> Hi Krzysztof,
-> 
-> On Tue, Nov 22, 2022 at 11:30 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->> On 22/11/2022 10:07, Herve Codina wrote:
->>> On Tue, 22 Nov 2022 09:42:48 +0100
->>> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
->>>
->>>> On 22/11/2022 09:25, Geert Uytterhoeven wrote:
->>>>> Hi Krzysztof,
->>>>>
->>>>> On Tue, Nov 22, 2022 at 8:45 AM Krzysztof Kozlowski
->>>>> <krzysztof.kozlowski@linaro.org> wrote:
->>>>>> On 21/11/2022 21:46, Geert Uytterhoeven wrote:
->>>>>>>> This does not change anything. Herve wrote:
->>>>>>>>
->>>>>>>>> probe some devices (USB host and probably others)
->>>>>>>>
->>>>>>>> Why some can be probed earlier and some not, if there are no
->>>>>>>> dependencies? If there are dependencies, it's the same case with sysctrl
->>>>>>>> touching the register bit and the USB controller touching it (as well
->>>>>>>> via syscon, but that's obvious, I assume).
->>>>>>>>
->>>>>>>> Where is the synchronization problem?
->>>>>>>
->>>>>>> The h2mode bit (and probably a few other controls we haven't figured out
->>>>>>> yet) in the sysctrl must be set before any of the USB devices is active.
->>>>>>> Hence it's safest for the sysctrl to do this before any of the USB drivers
->>>>>>> probes.
->>>>>>
->>>>>> Again, this does not differ from many, many of other devices. All of
->>>>>> them must set something in system controller block, before they start
->>>>>> operating (or at specific time). It's exactly the same everywhere.
->>>>>
->>>>> The issue here is that there are two _different drivers_ (USB host
->>>>> and device). When both are modular, and the driver that depends on the
->>>>> sysctrl setting is loaded second, you have a problem: the sysctrl change
->>>>> must not be done when the first driver is already using the hardware.
->>>>>
->>>>> Hence the sysctrl driver should take care of it itself during early
->>>>> initialization (it's the main clock controller, so it's a dependency
->>>>> for all other I/O device drivers).
->>>>
->>>> I assumed you have there bit for the first device (which can switch
->>>> between USB host and USB device) to choose appropriate mode. The
->>>> bindings also expressed this - "the USBs are". Never said anything about
->>>> dependency between these USBs.
->>>>
->>>> Are you saying that the mode for first device cannot be changed once the
->>>> second device (which is only host) is started? IOW, the mode setup must
->>>> happen before any of these devices are started?
->>>>
->>>> Anyway with sysctrl approach you will have dependency and you cannot
->>>> rely on clock provider-consumer relationship to order that dependency.
->>>> What if you make all clocks on and do not take any clocks in USB device?
->>>> Broken dependency. What if you want to use this in a different SoC,
->>>> where the sysctrl does not provide clocks? Broken dependency.
->>>
->>> The issue is really related to the Renesas sysctrl itself and not related
->>> to the USB drivers themselves.
->>> From the drivers themselves, the issue is not seen (I mean the driver
->>> takes no specific action related to this issue).
->>> If we change the SOC, the issue will probably not exist anymore.
->>
->> Yeah, and in the next SoC you will bring 10 of such properties to
->> sysctrl arguing that if one was approved, 10 is also fine. Somehow
->> people on the lists like to use that argument - I saw it somewhere, so I
->> am allowed to do here the same.
-> 
-> Like pin control properties? ;-)
-> This property represents a wiring on the board...
-> I.e. a system integration issue.
-> 
->> I understand that the registers responsible for configuration are in
->> sysctrl block, but it does not mean that it should be described as part
->> of sysctrl Devicetree node. If there was no synchronization problem,
->> this would be regular example of register in syscon which is handled
->> (toggled) by the device (so USB device/host controller). Since there is
->> synchronization problem, you argue that it is correct representation of
->> hardware. No, it is not, because logically in DT you do not describe
->> mode or existence of other devices in some other node and it still does
->> not describe this ordering.
-> 
-> So we have to drop the property, and let the sysctrl block look
-> for <name>@<reg> nodes, and check which ones are enabled?
-> 
-> Running out of ideas...
-
-One solution could be making USB nodes children of the sysctrl block which:
-1. Gives proper ordering (children cannot start before parent)
-regardless of any other shared resources,
-2. Allows to drop this mode property and instead check what type of
-children you have and configure mode depending on them.
-
-However this also might not be correct representation of hardware
-(dunno...), so I am also running out of ideas.
-
-Anyway, I appreciate your explanations. I don't oppose this and I defer
-the decision to Rob (for this or for v3 patch with descriptive strings).
-
-Best regards,
-Krzysztof
-
+T24gVHVlLCAyMDIyLTExLTIyIGF0IDE5OjMxICswMDAwLCBTZWFuIENocmlzdG9waGVyc29uIHdy
+b3RlOg0KPiBPbiBUdWUsIE5vdiAyMiwgMjAyMiwgUGV0ZXIgWmlqbHN0cmEgd3JvdGU6DQo+ID4g
+T24gVHVlLCBOb3YgMjIsIDIwMjIgYXQgMDQ6MDY6MjVQTSArMDEwMCwgVGhvbWFzIEdsZWl4bmVy
+IHdyb3RlOg0KPiA+ID4gT24gVHVlLCBOb3YgMjIgMjAyMiBhdCAxMDoyMCwgUGV0ZXIgWmlqbHN0
+cmEgd3JvdGU6DQo+ID4gPiANCj4gPiA+ID4gT24gTW9uLCBOb3YgMjEsIDIwMjIgYXQgMDE6MjY6
+MjhQTSArMTMwMCwgS2FpIEh1YW5nIHdyb3RlOg0KPiA+ID4gPiANCj4gPiA+ID4gPiBTaHV0dGlu
+ZyBkb3duIHRoZSBURFggbW9kdWxlIHJlcXVpcmVzIGNhbGxpbmcgVERILlNZUy5MUC5TSFVURE9X
+TiBvbiBhbGwNCj4gPiA+ID4gPiBCSU9TLWVuYWJsZWQgQ1BVcywgYW5kIHRoZSBTRU1BQ0FMTCBj
+YW4gcnVuIGNvbmN1cnJlbnRseSBvbiBkaWZmZXJlbnQNCj4gPiA+ID4gPiBDUFVzLiAgSW1wbGVt
+ZW50IGEgbWVjaGFuaXNtIHRvIHJ1biBTRUFNQ0FMTCBjb25jdXJyZW50bHkgb24gYWxsIG9ubGlu
+ZQ0KPiA+ID4gPiA+IENQVXMgYW5kIHVzZSBpdCB0byBzaHV0IGRvd24gdGhlIG1vZHVsZS4gIExh
+dGVyIGxvZ2ljYWwtY3B1IHNjb3BlIG1vZHVsZQ0KPiA+ID4gPiA+IGluaXRpYWxpemF0aW9uIHdp
+bGwgdXNlIGl0IHRvby4NCj4gPiA+ID4gDQo+ID4gPiA+IFVoaCwgdGhvc2UgcmVxdWlyZW1lbnRz
+IF4gYXJlIG5vdCBtZXQgYnkgdGhpczoNCj4gPiA+IA0KPiA+ID4gICBDYW4gcnVuIGNvbmN1cnJl
+bnRseSAhPSBNdXN0IHJ1biBjb25jdXJyZW50bHkNCj4gPiA+ICANCj4gPiA+IFRoZSBkb2N1bWVu
+dGF0aW9uIGNsZWFybHkgc2F5cyAiY2FuIHJ1biBjb25jdXJyZW50bHkiIGFzIHF1b3RlZCBhYm92
+ZS4NCj4gPiANCj4gPiBUaGUgbmV4dCBzZW50ZW5zZSBzYXlzOiAiSW1wbGVtZW50IGEgbWVjaGFu
+aXNtIHRvIHJ1biBTRUFNQ0FMTA0KPiA+IGNvbmN1cnJlbnRseSIgLS0gaXQgZG9lcyBub3QuDQo+
+ID4gDQo+ID4gQW55d2F5LCBzaW5jZSB3ZSdyZSBhbGwgaW4gYWdyZWVtZW50IHRoZXJlIGlzIG5v
+IHN1Y2ggcmVxdWlyZW1lbnQgYXQNCj4gPiBhbGwsIGEgc2NoZWR1bGVfb25fZWFjaF9jcHUoKSBt
+aWdodCBiZSBtb3JlIGFwcHJvcHJpYXRlLCB0aGVyZSBpcyBubw0KPiA+IHJlYXNvbiB0byB1c2Ug
+SVBJcyBhbmQgc3Bpbi13YWl0aW5nIGZvciBhbnkgb2YgdGhpcy4NCj4gDQo+IEJhY2tpbmcgdXAg
+YSBiaXQsIHdoYXQncyB0aGUgcmVhc29uIGZvciBfYW55XyBvZiB0aGlzPyAgVGhlIGNoYW5nZWxv
+ZyBzYXlzDQo+IA0KPiAgIEl0J3MgcG9pbnRsZXNzIHRvIGxlYXZlIHRoZSBURFggbW9kdWxlIGlu
+IHNvbWUgbWlkZGxlIHN0YXRlLg0KPiANCj4gYnV0IElNTyBpdCdzIGp1c3QgYXMgcG9pbnRsZXNz
+IHRvIGRvIGEgc2h1dGRvd24gdW5sZXNzIHRoZSBrZXJuZWwgYmVuZWZpdHMgaW4NCj4gc29tZSBt
+ZWFuaW5nZnVsIHdheS4gIEFuZCBJSVVDLCBUREguU1lTLkxQLlNIVVRET1dOIGRvZXMgbm90aGlu
+ZyBtb3JlIHRoYW4gY2hhbmdlDQo+IHRoZSBTRUFNIFZNQ1MuSE9TVF9SSVAgdG8gcG9pbnQgdG8g
+YW4gZXJyb3IgdHJhbXBvbGluZS4gIEUuZy4gaXQncyBub3QgbGlrZSBkb2luZw0KPiBhIHNodXRk
+b3duIGxldHMgdGhlIGtlcm5lbCByZWNsYWltIG1lbW9yeSB0aGF0IHdhcyBnaWZ0ZWQgdG8gdGhl
+IFREWCBtb2R1bGUuDQoNClRoZSBtZXRhZGF0YSBtZW1vcnkgaGFzIGJlZW4gZnJlZWQgYmFjayB0
+byB0aGUga2VybmVsIGluIGNhc2Ugb2YgZXJyb3IgYmVmb3JlDQpzaHV0dGluZyBkb3duIHRoZSBt
+b2R1bGUuDQoNCj4gDQo+IEluIG90aGVyIHdvcmRzLCB0aGlzIGlzIGp1c3QgYSByZWFsbHkgZXhw
+ZW5zaXZlIHdheSBvZiBjaGFuZ2luZyBhIGZ1bmN0aW9uIHBvaW50ZXIsDQo+IGFuZCB0aGUgb25s
+eSB3YXkgaXQgd291bGQgZXZlciBiZW5lZml0IHRoZSBrZXJuZWwgaXMgaWYgdGhlcmUgaXMgYSBr
+ZXJuZWwgYnVnIHRoYXQNCj4gbGVhZHMgdG8gdHJ5aW5nIHRvIHVzZSBURFggYWZ0ZXIgYSBmYXRh
+bCBlcnJvci4gIEFuZCBldmVuIHRoZW4sIHRoZSBvbmx5IGRpZmZlcmVuY2UNCj4gc2VlbXMgdG8g
+YmUgdGhhdCBzdWJzZXF1ZW50IGJvZ3VzIFNFQU1DQUxMcyB3b3VsZCBnZXQgYSBtb3JlIHVuaXF1
+ZSBlcnJvciBtZXNzYWdlLg0KDQpUaGUgb25seSBpc3N1ZSBvZiBsZWF2aW5nIG1vZHVsZSBvcGVu
+IGlzIGxpa2UgeW91IHNhaWQgYm9ndXMgU0VBTUNBTExzIGNhbiBzdGlsbA0KYmUgbWFkZS4gIFRo
+ZXJlJ3MgYSBzbGlnaHQgcmlzayB0aGF0IHRob3NlIFNFQU1DQUxMcyBtYXkgYWN0dWFsbHkgYmUg
+YWJsZSB0byBkbw0Kc29tZXRoaW5nIHRoYXQgbWF5IGNyYXNoIHRoZSBrZXJuZWwgKGkuZS4gaWYg
+dGhlIG1vZHVsZSBpcyBzaHV0IGRvd24gZHVlIHRvDQpUREguU1lTLklOSVQuVERNUiBlcnJvciwg
+dGhlbiBmdXJ0aGVyIGJvZ3VzIFRESC5TWVMuSU5JVC5URE1SIGNhbiBzdGlsbCBjb3JydXB0DQp0
+aGUgbWV0YWRhdGEpLg0KDQpCdXQsIHRoaXMgYmVsb25ncyB0byAia2VybmVsIGJ1ZyIgb3IgImtl
+cm5lbCBpcyB1bmRlciBhdHRhY2siIGNhdGVnb3J5LiAgTmVpdGhlcg0Kb2YgdGhlbSBzaG91bGQg
+YmUgYSBjb25jZXJuIG9mIFREWDogaG9zdCBrZXJuZWwgaXMgb3V0IG9mIFRDQiwgYW5kIHByZXZl
+bnRpbmcNCkRvUyBhdHRhY2sgaXMgbm90IHBhcnQgb2YgVERYIGFueXdheS4NCg0KQWxzbywgaW4g
+Y2FzZSBvZiBrZXhlYygpLCB3ZSBjYW5ub3Qgc2h1dCBkb3duIHRoZSBtb2R1bGUgZWl0aGVyIChp
+biB0aGlzDQppbXBsZW1lbnRhdGlvbiwgZHVlIHRvIENQVSBtYXkgbm90IGJlIGluIFZNWCBvcGVy
+YXRpb24gd2hlbiBrZXhlYygpKS4NCg0KU28gSSBhZ3JlZSB3aXRoIHlvdSwgaXQncyBmaW5lIHRv
+IG5vdCBzaHV0IGRvd24gdGhlIG1vZHVsZS4NCg0KSGkgbWFpbnRhaW5lcnMsIGRvZXMgdGhpcyBs
+b29rIGdvb2QgdG8geW91Pw0K
