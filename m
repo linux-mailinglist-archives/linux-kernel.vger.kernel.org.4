@@ -2,220 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA791636433
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47117636434
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:43:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237210AbiKWPm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 10:42:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56830 "EHLO
+        id S237746AbiKWPng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 10:43:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238784AbiKWPlp (ORCPT
+        with ESMTP id S237748AbiKWPn1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 10:41:45 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF668B8F98;
-        Wed, 23 Nov 2022 07:41:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669218103; x=1700754103;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=RY9fcRFSYNd4nMLKwMgL64h5Ej8MdpAnvM+IQQVM+DA=;
-  b=eMlsGuFumwaKUzHUevvnNkobftGbJMbchHV5edgMdX4OshJuJxsE2X1O
-   R8rjvr5VBXUY4052gzbE+nJg3HTuM9hNL7K3XT89KnFImX7WrzOClCyOH
-   Geh+vNIH20unm7cDQg259cYVPd1WR4bXbxM7ztNoD4m7u/QtXFheubZMf
-   cHWGNbzj8Vp3hZJSsTRPZKRwRVfCZK7SCGCsRfhumhVi2gTh8S8QjDipl
-   W7YRC9nplWQCW4mksZVZ+CwX2fCfqLu5BeTOqPwRB04i/BS7VWhRKIHy9
-   M4iTydvvCIA70y+u2CdWubFnLO/fh8SFcdl+5IaNi4TUb9vOPqRNAH0Ah
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="293800181"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="293800181"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 07:41:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="635953290"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="635953290"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga007.jf.intel.com with ESMTP; 23 Nov 2022 07:41:40 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 23 Nov 2022 07:41:40 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 23 Nov 2022 07:41:40 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Wed, 23 Nov 2022 07:41:40 -0800
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.168)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Wed, 23 Nov 2022 07:41:40 -0800
+        Wed, 23 Nov 2022 10:43:27 -0500
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2080.outbound.protection.outlook.com [40.107.20.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89485CE18
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:43:25 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YPHHeYgdsSiiO9b83YGPuVY2vtWLdyllnOwuv9YCT69mLoib9xTfY65D2BmOgnuM36Ya+4UtQMGh2lFx6QT2cRogrsA8HRXRdzqLmTA/il5djbKR8NHj/Dq6DKv/BAevAeJDcXdHFxdhnQDmmsDHzUXs5tvZx0fBP6Z+yvIUZ/uASrWzWsmzR+JuadkiFLpczRTt0BjlLlniKMEGCcaIJyRXpg/a+gNctEZO6n65TmH0aLtMJZ3BqzEvs8BnEtPAJw86mcGfxub7Y8Hr5T2QBj2y+XpRq50t+keuBhljYCkYuxPNUOcugPyUPKEcHl0nyE8z3h3lYfHh3oyNsk8Txg==
+ b=fBwoUdfV+POxFoQCN0QZY5R536DaoY1PKrrW9NX96KFwFI95KeHBdAk6HC5cdGxhMjOLUjaYi+xCpYcAUQtenj9CxSOIDuzV72CCPmBA1rYheskPo7mdWDHWokTNaBhZux3IYzp9DljeCpukjg+Vx0FsHMWLNwrLIyoPXohlcg0VhLAoiSz8Ycia+jB2eNIq4CC4Q4xwCy8WaTsdrit96PTDuUx9jrZR4f3vXVe/fOUSCFM1XhEVgpw2jTql+u5byqv6gSIsNLdcpp7MJGQJE9/wP6ZDt55QakBtvtP5Jt4DYd+MNfLPB7Q8xsvgd/9KhBbKH+4I3kCRjMPoWQdlyQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=abzaikSlqE5RD7Fw9m2UkB2Uf2BdRJWJPSUi2oUCRg4=;
- b=n/guZ7mqOgxEeGbo0XIB7Yd//7039o5/pOTAejX5GGrA5ZzkOb7BzVptpCSRhh2BQuxwzDw04tu/1niuckDNyx7U5OWr2MvxP9b2j3RbKFt4Rie01lLSTuqLHc42Q5HSgbsIdI2vvFijTCraNai8FqBTmWtM8F/SpDjwbXHdBRfpVbyr6HSXLe0un4DXTWGwXv3iU/XdQwFrMjT341NCZn6kcMAd3rRWDbrNYyTgMMfsKWS69ObKaWCnwTrizecTXFggCB63GtOxH6vifwvqrPcAgHfSOy2xFToUqzpk0myEEq90Jb8Ttm6nJS5UymSGNsfcnephO7bYWDmH4QP1Kw==
+ bh=GBzJAXzirXBgyW+wonn6TfS7mrnUxbJpzdieOW5Q654=;
+ b=cbji0CflAauKKwfWUvOozYOahMq1V+Iu3DOXrjLq2P9FaC4tIZUlW3+hSoQ7GQpMdbn/RQrOHnj4DWNyYlb21FIenyorgnUdvpMhugQPfj/BiCgpu3/R/mHPEucclFrmgxNeOCYB7Jh3p65rL2HU/fJ0Gy+W5fIKa3g9Ra2of2W9p28cFm6G2UTgW1vY0XDyXvhx+ZgBbhJgP/6RGMqdV6oE6pPbAf0eEA6Ck1QZBZcwIRI09Av/d9wdzsJ2Z6uc4xFKVx5elQQcwOM5dz6nt3bT5skrKPZNNwIYIQMeEde8ziZxWsurkXyUaAlIZNL3annaVhdOwLo4heHz2AqfEw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GBzJAXzirXBgyW+wonn6TfS7mrnUxbJpzdieOW5Q654=;
+ b=wwJ482/KQQzek2v0PbN7alMkqZxx/QWBOkjJDk5oLXA5cqH1KcG1iHQywNZyjzwLoVKcByRTr8kL7E8q+Iy2bl6eICnqsPNAMeAXLEJ7W20t2mF8vvkVEL42WxubmWPcsP1ij9iqRWLrUlB8Akyyq4QZSNHFP9rcDVhRzteO76kpGCbewpuzoRgZfAvSyGO5yI0k5lQLsszl1b8A25N4JL0JelbRwi6VM35dbJJI4gOqb0EsREWHjDXa1edWGy+KF3pIwGhf7h6BS93ksSHg9/rzNp/ziG86n6MV8TUZtc16uCcS3OKBX2AN6jJorMnfX6xRTMHhOtDy0Grznhqwbg==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
- SA2PR11MB4908.namprd11.prod.outlook.com (2603:10b6:806:112::15) with
- Microsoft SMTP Server (version=TLS1_2,
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
+ (2603:10a6:208:1a::16) by PAXPR04MB9325.eurprd04.prod.outlook.com
+ (2603:10a6:102:2b9::11) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Wed, 23 Nov
- 2022 15:41:38 +0000
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::5f39:1ef:13a5:38b6]) by DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::5f39:1ef:13a5:38b6%6]) with mapi id 15.20.5834.009; Wed, 23 Nov 2022
- 15:41:38 +0000
-Date:   Wed, 23 Nov 2022 16:41:32 +0100
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     Akihiko Odaki <akihiko.odaki@daynix.com>
-CC:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <intel-wired-lan@lists.osuosl.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Yan Vugenfirer" <yan@daynix.com>,
-        Yuri Benditovich <yuri.benditovich@daynix.com>
-Subject: Re: [PATCH v3] igb: Allocate MSI-X vector when testing
-Message-ID: <Y34/LDxCnYd6VGJ2@boxer>
-References: <20221123010926.7924-1-akihiko.odaki@daynix.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221123010926.7924-1-akihiko.odaki@daynix.com>
-X-ClientProxiedBy: FR3P281CA0170.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a0::18) To DM4PR11MB6117.namprd11.prod.outlook.com
- (2603:10b6:8:b3::19)
+ 2022 15:43:23 +0000
+Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
+ ([fe80::14eb:6506:8510:875f]) by AM0PR0402MB3395.eurprd04.prod.outlook.com
+ ([fe80::14eb:6506:8510:875f%7]) with mapi id 15.20.5834.011; Wed, 23 Nov 2022
+ 15:43:23 +0000
+Message-ID: <1af5ee66-5ab1-45b2-f229-182f89dc6b94@suse.com>
+Date:   Wed, 23 Nov 2022 16:43:20 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2] x86: Avoid relocation information in final vmlinux
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, nicolas@fjasle.eu,
+        masahiroy@kernel.org, kirill.shutemov@linux.intel.com,
+        tony.luck@intel.com, michael.roth@amd.com, nathan@kernel.org,
+        ndesaulniers@google.com, linux-kernel@vger.kernel.org
+References: <20220927084632.14531-1-petr.pavlu@suse.com>
+ <Y34SXeU6JEk+UGfV@zn.tnic>
+From:   Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <Y34SXeU6JEk+UGfV@zn.tnic>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR0P281CA0014.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:15::19) To AM0PR0402MB3395.eurprd04.prod.outlook.com
+ (2603:10a6:208:1a::16)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|SA2PR11MB4908:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6f6a45b3-a985-4444-f57e-08dacd6935c0
+X-MS-TrafficTypeDiagnostic: AM0PR0402MB3395:EE_|PAXPR04MB9325:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9f76c29b-d6ae-447f-e437-08dacd6973fc
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6JxMSFzeAkma45nIhtCSF0kKjpzVXDntPIG9fc2x+N0Tx1X+B3svL8K9iFRmIOchcQPfgijwHws3w4+7p0JQaeME/GfPYbnYEqucb14byknEl+r2oXrGWOf7hQeKZICXAcZz6+8YFPJJLArWWnYogkPD6aXDBGBjglmXt7MMk/NYXJComwD4/eePpvmheELE3v82k/6keflNlWZvo9vepHwF4Carg6jGA7UGGd9s8Ou0wRyRMh2gTfJ4ALdXUK8dkEJB89FBsdhURJL1KJJN9G+7a5X44m/fEtuSGvP9kxOwKzjhdi5VGJDQcv9suW9X9EOWG/MBKeuH6G1BAUME+b6uhV+aAccK2F0CIT6Ik0q7xteLh7D76FUXyrgqoHmUWkWifyZfQW4j0KBJ9D/5lCBwjFNvXEazyzCAgo2f79C5aFbI7hH103cQv8c0/D63kteHdDGb5bqPSo4hYmGACv5EJPEi4omS1f4REF8CVaZ/WAL1BanzQH2tS8L3u3d7kYnueKchJbotlNGqi6B4+4Dr/FlR4HyZewSJo6RQanM0rZmgZ1uJJwcJPspN0KvmckSYGQpkIgRJ3VNjvDX8L4RelOx5PHso/ubUThyaviyb8G2d5C4HYDt9b2Nh6DQ7JnUJdpuFbuR4BuyTItgXxg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(39860400002)(376002)(346002)(396003)(366004)(136003)(451199015)(66476007)(83380400001)(86362001)(9686003)(41300700001)(2906002)(82960400001)(38100700002)(44832011)(7416002)(478600001)(8936002)(6506007)(6512007)(5660300002)(6916009)(33716001)(6666004)(4326008)(186003)(8676002)(66556008)(316002)(66946007)(26005)(6486002)(54906003);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: yqCIvH/HopJHzLYF+BUPbA9Sbg+bJgr7BNelyfY/FNOJJajcKE5MfjyXHu940dj8tCoEyaXBDwLwbOzQVc5F17jHZYvru1zG8KHIDM2Zd1pHTMBETwD1PjsujYTj1wM+P3+O9rvRBBplAg2XQf2VSsHIyMbliENxMnwZWQRH79TFsPgVGf60zwTo8zF0dFduf0eLfJuLD2InFwK5X+ZxJL6t5QmzXE5utHdfIuM3yv8+cpYCe1triVQLmshyrTe3yGmaJKnnSKvyPcBrqnXm1helQAdQOn7EzzUIaRiG4ca4OnWCo6egQkqlCzF7dkVuQ3JZsRlLfIb1fwn+pU6yvgBmWMTxd6vfb/p6u/AkxjyCEp22qmzhM7GffnqksS8+h8UWL0RVOw5w8HOU/TkAJzLjGqDC+ZtvmRUj6E09HebJy8fjSu7a4LoEWKK6foU4TFfL5wPrrHo/hTSG80KF+cABYmJKxrpgEzB61AWBthwSog8aPSrbqLX04PRcX7CclIGCRY3XnfMhcpwcwnABnBkVeI+wi1aV0S+U6BWOlQmb6u4Lz0/sRQlLgWkMTTx5ZO+DYrdFQWnQdqgpusXk5h1rBIMflm1ebD/X5cBqEaVXxxn557NGrhzYXCZDQBfONMBXUcnrwEFxtiaMrQa220sGvlRxuXTSOa3RvvO4IgjqR/7j9bIF0PTfxxA9K7t0LAyQSuXsdoV1K8OYZLaY05xFejc+DoMah0spJjPZ16U=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3395.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(376002)(346002)(366004)(39860400002)(396003)(451199015)(36756003)(31686004)(6512007)(31696002)(86362001)(38100700002)(2906002)(83380400001)(186003)(26005)(2616005)(44832011)(7416002)(53546011)(55236004)(6506007)(478600001)(66476007)(41300700001)(5660300002)(8936002)(6916009)(316002)(6486002)(4326008)(66556008)(8676002)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+Dmct6oijr2ewdLC882EGqo/I4x1sPN7F7hjqNfSLa2mH8nTnZXhuzMdYcLT?=
- =?us-ascii?Q?NhSAqaX5t4G4vqWxNwN3Oei8r6ACF99Tncs7+nCrEMmfYLWbLCQ1zHHLroAa?=
- =?us-ascii?Q?jiKZvLeEbu8YfOETgjBIc3vPVZhY/U22Y3M60h+2OnI56VEI++Mo4H8+IsUa?=
- =?us-ascii?Q?YwsLMvs5rum9l2k0SUmXrCfuU9Ql2GyG6d08eOWpJZjlvHXAjHOn6A71Odiq?=
- =?us-ascii?Q?kd+dxR5usfzaok7iHEFout578D7uLGTmWIJxHG/1iell72NPT4eAayJ6x91r?=
- =?us-ascii?Q?WXjpzxDIh4XPmSWVX8UFCZYnKSTruBxZoh1CXfe2p7FZWWIrHQDE9b2ca15A?=
- =?us-ascii?Q?LvGZG1qRNfJB7hYnmkMEL/PLmHqQvXbbLlfr79jr8MtJsb4lQWyOm6EF7nus?=
- =?us-ascii?Q?Hm1FiUsDm2OlPrTb6NFl+vo0mdy3gqJq0i/BDGNJBc01mIFqCZl+KpgDiNRD?=
- =?us-ascii?Q?5ei2WDzIRudJjpZQeBcTkMAArczyLttAxN2Cr3mBhVzvgH/OFRdDZL2foaFK?=
- =?us-ascii?Q?jWRq5knPIvwvbVQwLk1BRTZjwxy9DAhGc34sRQb3zcH7g4PsRlitSsSf/U97?=
- =?us-ascii?Q?Y4cFLmCVZ6Fde9uuuIUyLDW4SH6NWJ1UywcV8k6Pvpsd7U8ZY+Fr49aIILss?=
- =?us-ascii?Q?HzqiaoOIW77B9Mmcsu/qLA6Ca7TIxQ+8Rbl2CgP3PNhm8swQgtxVSTgLf/cJ?=
- =?us-ascii?Q?QczDg3OedvxVaf6uyOSXII1EDkxjkU/iq4+lJ+QRLxB1gB1zcRA+ibPhduIC?=
- =?us-ascii?Q?9hAS/qCELuS3e+8/S02bHM3IjKHN4ACGzfwDBrDjAmzO5ASlJ30UtFClU3Mg?=
- =?us-ascii?Q?XV0u1Te4i2aC8gTeXY6o3VI2oJqVtgto9dbO0vLqlyfqnuPKesY2Ui1nwO3g?=
- =?us-ascii?Q?bJPHm/Yn+03O7GcNh2PzWwdpusiXNYGptt49O19WvNS+rmjHQ+jzSYZKvqqs?=
- =?us-ascii?Q?sobFVJqqUTQGf+/HxZqB4OlUjccLdewo1fb+Am6961y5Xvl8wBLuclaoY2B4?=
- =?us-ascii?Q?qABlGTg0YwrpscM456IQ5Nr+PkPpBjpjRV5dFSNU0b6nDCDbDuIbaVSfaTZ1?=
- =?us-ascii?Q?XWxYEk7JQfhh9T4gEvHjT8h+E8cu4Nm7fX9h94QwOVAgJuSAUmZW1A2/ur23?=
- =?us-ascii?Q?QJgKQNVooOPlj044Ymf2WVtQxsqnsglJmbFA+SahR2VuJTOlMo6I39QH+fHZ?=
- =?us-ascii?Q?6dhUdEaCiBVejmY34avSvIDphtwR3iEKscNfHHH1t7KVmexxOetIo2qJNGmu?=
- =?us-ascii?Q?1JzLX5BA5pPIUgMtuRpLi9gk3Go0i8pzYfoD4i4XQtImYcWCGoCBM3kmf+LE?=
- =?us-ascii?Q?Z5Hgbhqp+8KGtB9OcRdhiwlR8WSl+su8vfuBx/8Z9nuXclI1WIN7J5eutQ04?=
- =?us-ascii?Q?x7JzLIeSuvsm7q+FVNnonmQYTDuyibJshD74LDZeKn0xciPnV4vtGBo+jybO?=
- =?us-ascii?Q?PG18p5bJ1IuzyelLztRNU1PTsnj51S6D3xQglpiG8QZ7nueE5J7QkUHjtJ0T?=
- =?us-ascii?Q?uPfIkMQd84dlnHsTDU8QiD01bEZ0QVzHEJ63efBw6DFdh/NxJOIkHh9EyFzM?=
- =?us-ascii?Q?KQqeZKiLTmB+73Cl0d4iXECp6aOniGz5nzwlRaH6nF/d4K7k0SjSAE9Y++6e?=
- =?us-ascii?Q?XA=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6f6a45b3-a985-4444-f57e-08dacd6935c0
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZGIxd3E4QTNLTER4TDFIWHR2UDNLTzZzQjJSell5eStYUlJHZGFIYU16MmVX?=
+ =?utf-8?B?S1ZkODgrMmpZdktnMHc0K2J2WVZ3OXZhQ2haeHhxQ1Nhd09wbjArNzNRUmQw?=
+ =?utf-8?B?dWhMYnZZSTZlSHpqKzZUcjZ0cjJibmxRelZ4TEUyU2V2eG1rdDNjSjlBRFc5?=
+ =?utf-8?B?V0o2RGptdElrdW50aWEvYkhFbFllbDlZaC9tcVUvY0ZDaTFlVHk5aVBsM1hM?=
+ =?utf-8?B?YVpXKzI3V0N6N0wzOFV5ditLTXZFT3V3cDZiUnI1OTZtbTdKUzZmM1A3akUy?=
+ =?utf-8?B?azNHV3V1YUlQQ251QUlPd1UzbWFPWUhsQWxFRlYrYXJQajlCUHRmSXhXK1l2?=
+ =?utf-8?B?a3RWa2VWb1ErblBYRUk5Wmg4NVNINXdla1ZFcE42NlYxb1BSZzdhOTArdEVr?=
+ =?utf-8?B?SlJwb1R4YWNWUzN1dUtiWFBSYSt0TXdCbzVmYTN0L0srUXFpM3FnbjBnRDhP?=
+ =?utf-8?B?azlYSmorVGV3Tm5uWXl5cjY1WkxxdERKeDdBcjBRYUU0UXh0b0Yzem81eTJD?=
+ =?utf-8?B?dllja0k3dTlBMUludDhTNkEyVVYwSW8yMXViVDk0Y3lob3d0S2NabFFIUGxl?=
+ =?utf-8?B?MlNnRUQ0V1B3UG8wMUVCdXBuZzV1YnpPcjYwNFMvaTZ4ekJodThHdDg0QUY0?=
+ =?utf-8?B?aFZWTEt0U3NHWmxOcnV5MEgyMGJpMWRzc0tjL1pGbFo3d01FVVFKc3BlZXVj?=
+ =?utf-8?B?L0NoTi9Va1k0UGRyLy8yYTF3ckxYWHlJLzM2WGJEZUx2UVg4d0c3azJlcTBk?=
+ =?utf-8?B?dUt2QkVTQVZuaklQMURxRVA0SVd5aEw0RnNCVTVGNGVxUTFjclB2KzJJdjdV?=
+ =?utf-8?B?VTBIQWp4QWphaEdSMjVvZlp0RmRXM1VmT0JPdGNzZFlkVFVjd0NPcUhHTi84?=
+ =?utf-8?B?ZUJHVHBUeml6a3JDTStiOC91RHVoUlVham91OGcvc2tXSHlaUWd6WCt4ZW5z?=
+ =?utf-8?B?Nlp0R2J4a1NTRWx1NExEVGJ0dXQ2djAvcW5BUDlscmJwTDgwMzh0VFlmRUhC?=
+ =?utf-8?B?UjVzbGJLQUM3V0dEVGZyYkNhT0ZESHRtdHVpOWNOZ0lIZkpudVhXQTFoZVBK?=
+ =?utf-8?B?cTFjU1gxVjBBYjkrSHphMVJSdkJBZHd6M0ZMUWNwZXBWdmhFVjNwV045RUNt?=
+ =?utf-8?B?dzRDK0p6TVNrY215UFVrOXRIekdhbGh3NmhGK1JVVktzYmx1TU03ejlNQk1H?=
+ =?utf-8?B?TmlrelZSbE9GcTcvS1o2RU9DV3FyZS8vSWR0eGRmMlh6V3NNZzRQNnlyNTha?=
+ =?utf-8?B?U0h0Yi9CYTJkUGhyb3JHOWZENkUrOVo4L0kvRmR0R3cvdWh2VlRqWldpaSt1?=
+ =?utf-8?B?STZlV3FMYlU2cCtJZWcwcGlNVjVYa20wTW5oc0E1Mk1qdHpjN1JSYU9WL05R?=
+ =?utf-8?B?UEozYllScmVIR3htL2hNcTRGMXYzWFBnS1h3T205RnJVQ1E1czBYd3VsdFZF?=
+ =?utf-8?B?akptRFJ4Mi9GNjZkNWh3MzQ5NE1kLzY5VzhmRmZjYlB2d3NkcHJQcXYvZFJQ?=
+ =?utf-8?B?cVpSMFVRSTdlZlk3Q08yWC9Ea3c2OGNGUmkvZFkxSll4cEdUTHlVcVVYa1Fz?=
+ =?utf-8?B?ZHVzWnRwc0VrTE8zVkJlMjlqOTNMYlFZcWxBektPb0VnVGZ0Ny82SlFVd1Fj?=
+ =?utf-8?B?SlE1N1BKWDQzOU5sWFlOdnhjcVV4UFBSQkNHNEF5Tk9KeFVLT0NSMGRORFJp?=
+ =?utf-8?B?Q1ZRSEM0bUxsYzB5K2pNbXpLTXYwSlBLVmdUeldNWXp1QVJDcXAwUUJRczcy?=
+ =?utf-8?B?U05HUnBVeW1EbUJqQUg1bXdyQVZiSFFiUW9UOXhUUGExU24yTUtyUDk1MG5E?=
+ =?utf-8?B?d2ZxTXEyV3ZiL0J4NXNRb2g4NldDOGQwR2NudnJQdElqM1FBcURHQ2F1dUZQ?=
+ =?utf-8?B?bTNHbnluSWlVQnlyeFZIaElVZFp3UC9mZG5hQi9YTkRGRXgzSUwvbldsQ1Ew?=
+ =?utf-8?B?dXl3RTEzeVJwbVBlZUMvRWpqWk5uMFRxSTVDeHk1UEExb1ptTFVnYmNpc1pj?=
+ =?utf-8?B?RkE3YzFsaU5SZDgzSXR3U1RhNDc0bXRJN3MzSnJsMTlZQngxUTdPSDJ6UWtV?=
+ =?utf-8?B?dHFOZXhIZWtKczBvVVFSb3ZVWGpBT0ticXpMV2xFUndUVENybkZDWHd3WWdj?=
+ =?utf-8?Q?Ns/KdoYfDAxzWvImtcT4RSdjU?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9f76c29b-d6ae-447f-e437-08dacd6973fc
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3395.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2022 15:41:38.5803
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2022 15:43:22.9747
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kXu1VKbRhcrHddo4ecZ5PwmICJV72hGm+1CuFdMIpbORa4pdrBppfV9MF9H+R1l4H5tx4Pv2yLV9cWL22DQ8GAICMJHi0Rp+RgxKvCzQTJw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4908
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: fE2FOIvQEtKUTvaIG+yUV7Tdn+iyFqJemULCaxj0IYSXEMuad9WEHfKDYXcIKewDy01TBpkFKobVeNsJ0BEImQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9325
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 10:09:26AM +0900, Akihiko Odaki wrote:
-> Without this change, the interrupt test fail with MSI-X environment:
+On 11/23/22 13:30, Borislav Petkov wrote:
+> On Tue, Sep 27, 2022 at 10:46:32AM +0200, Petr Pavlu wrote:
+>> When building a kernel supporting KASLR with CONFIG_X86_NEED_RELOCS,
+>> vmlinux contains also relocation information produced by using the
+>> --emit-relocs linker option. This is utilized by subsequent build steps
+>> to create vmlinux.relocs and produce a relocatable image. However, the
+>> information is not needed by debuggers and other standard ELF tooling.
 > 
-> $ sudo ethtool -t enp0s2 offline
-> [   43.921783] igb 0000:00:02.0: offline testing starting
-> [   44.855824] igb 0000:00:02.0 enp0s2: igb: enp0s2 NIC Link is Down
-> [   44.961249] igb 0000:00:02.0 enp0s2: igb: enp0s2 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX/TX
-> [   51.272202] igb 0000:00:02.0: testing shared interrupt
-> [   56.996975] igb 0000:00:02.0 enp0s2: igb: enp0s2 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX/TX
-> The test result is FAIL
-> The test extra info:
-> Register test  (offline)	 0
-> Eeprom test    (offline)	 0
-> Interrupt test (offline)	 4
-> Loopback test  (offline)	 0
-> Link test   (on/offline)	 0
+> Hm, my ld manpage says:
 > 
-> Here, "4" means an expected interrupt was not delivered.
+>        -q
+>        --emit-relocs
+>            Leave relocation sections and contents in fully linked executables.  Post
+> 	   									^^^^
+>            link analysis and optimization tools may need this information in order to
+> 	   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 > 
-> To fix this, route IRQs correctly to the first MSI-X vector by setting
-> IVAR_MISC. Also, set bit 0 of EIMS so that the vector will not be
-> masked. The interrupt test now runs properly with this change:
+>            perform correct modifications of executables.  This results in larger
+>            executables.
+> 
+> So what's up?
 
-Much better!
+The only post-link analysis tool in this case should be arch/x86/tools/relocs.
+It produces a vmlinux.relocs file which is appended to vmlinux.bin. This is
+all internal to the Linux build. I'm not aware of any external tooling, such
+as kernel debuggers, that would require this relocation information in
+vmlinux.
 
+>> The issue is then that the collected vmlinux file and hence distribution
+>> packages end up unnecessarily large because of this extra data. The
+>> following is a size comparison of vmlinux v6.0-rc5 with and without the
+>> relocation information:
+>> | Configuration      | With relocs | Stripped relocs |
+>> | x86_64_defconfig   |       70 MB |           43 MB |
+>> | +CONFIG_DEBUG_INFO |      818 MB |          367 MB |
 > 
-> $ sudo ethtool -t enp0s2 offline
-> [   42.762985] igb 0000:00:02.0: offline testing starting
-> [   50.141967] igb 0000:00:02.0: testing shared interrupt
-> [   56.163957] igb 0000:00:02.0 enp0s2: igb: enp0s2 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX/TX
-> The test result is PASS
-> The test extra info:
-> Register test  (offline)	 0
-> Eeprom test    (offline)	 0
-> Interrupt test (offline)	 0
-> Loopback test  (offline)	 0
-> Link test   (on/offline)	 0
+> Hmm, I see a different story with my tailored config here:
 > 
-> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+>    text    data     bss     dec     hex filename
+> 17131605        128673450       37339140        183144195       aea8f03 vmlinux.before
+> 17132217        128677706       37363716        183173639       aeb0207 vmlinux.after
+> 
+> 361M vmlinux.before
+> 361M vmlinux.after
+> 
+> and
+> 
+> 738K vmlinux.relocs
+> 
+> and before and after .configs simply have RANDOMIZE_BASE =n and =y,
+> respectively.
+> 
+> So how do you see such a big diff, even with defconfig?
 
-Same comment as on other patch - justify why there is no fixes tag and
-specify the tree in subject.
+The size command used in your example includes only allocatable code, data and
+bss sections. It does not show size of any relocation sections.
 
-> ---
->  drivers/net/ethernet/intel/igb/igb_ethtool.c | 2 ++
->  1 file changed, 2 insertions(+)
+My measurement was simply with 'ls -lh'. One can compare output of 'readelf
+--sections' from the before and after binaries to see what sections are
+removed with the patch and what is their size.
+
+The following sections are dropped for defconfig on v6.1-rc6:
+
+Section Headers:
+  [Nr] Name              Type             Address           Offset
+       Size              EntSize          Flags  Link  Info  Align
+  [ 2] .rela.text        RELA             0000000000000000  02adf908
+       00000000009457f8  0000000000000018   I      60     1     8
+  [ 4] .rela.rodata      RELA             0000000000000000  03425100
+       00000000001781d0  0000000000000018   I      60     3     8
+  [ 6] .rela.pci_fixup   RELA             0000000000000000  0359d2d0
+       0000000000005028  0000000000000018   I      60     5     8
+  [ 8] .rela.tracedata   RELA             0000000000000000  035a22f8
+       0000000000000120  0000000000000018   I      60     7     8
+  [10] .rela__ksymtab    RELA             0000000000000000  035a2418
+       000000000006fff0  0000000000000018   I      60     9     8
+  [12] .rela__ksymt[...] RELA             0000000000000000  03612408
+       00000000000609a8  0000000000000018   I      60    11     8
+  [15] .rela__param      RELA             0000000000000000  03672db0
+       0000000000009150  0000000000000018   I      60    14     8
+  [17] .rela__modver     RELA             0000000000000000  0367bf00
+       0000000000000540  0000000000000018   I      60    16     8
+  [19] .rela__ex_table   RELA             0000000000000000  0367c440
+       000000000000dec0  0000000000000018   I      60    18     8
+  [22] .rela.data        RELA             0000000000000000  0368a300
+       000000000011e5a8  0000000000000018   I      60    21     8
+  [24] .rela__bug_table  RELA             0000000000000000  037a88a8
+       0000000000073b30  0000000000000018   I      60    23     8
+  [26] .rela.orc_un[...] RELA             0000000000000000  0381c3d8
+       0000000000aea9e0  0000000000000018   I      60    25     8
+  [31] .rela.data..[...] RELA             0000000000000000  04306db8
+       0000000000000180  0000000000000018   I      60    30     8
+  [33] .rela.init.text   RELA             0000000000000000  04306f38
+       000000000009f8a0  0000000000000018   I      60    32     8
+  [35] .rela.altins[...] RELA             0000000000000000  043a67d8
+       0000000000009dc8  0000000000000018   I      60    34     8
+  [37] .rela.init.data   RELA             0000000000000000  043b05a0
+       000000000002ec50  0000000000000018   I      60    36     8
+  [39] .rela.x86_cp[...] RELA             0000000000000000  043df1f0
+       0000000000000078  0000000000000018   I      60    38     8
+  [41] .rela.parain[...] RELA             0000000000000000  043df268
+       00000000000015f0  0000000000000018   I      60    40     8
+  [43] .rela.retpol[...] RELA             0000000000000000  043e0858
+       000000000005c700  0000000000000018   I      60    42     8
+  [45] .rela.return[...] RELA             0000000000000000  0443cf58
+       0000000000170fe8  0000000000000018   I      60    44     8
+  [47] .rela.altins[...] RELA             0000000000000000  045adf40
+       000000000001b0f0  0000000000000018   I      60    46     8
+  [49] .rela.altins[...] RELA             0000000000000000  045c9030
+       0000000000004d28  0000000000000018   I      60    48     8
+  [51] .rela.apicdrivers RELA             0000000000000000  045cdd58
+       0000000000000030  0000000000000018   I      60    50     8
+  [53] .rela.exit.text   RELA             0000000000000000  045cdd88
+       0000000000006870  0000000000000018   I      60    52     8
+  [55] .rela.smp_locks   RELA             0000000000000000  045d45f8
+       00000000000420c0  0000000000000018   I      60    54     8
+
+Total size of these sections is 27.2 MB.
+
+>> The patch optimizes a resulting vmlinux by adding a postlink step that
 > 
-> diff --git a/drivers/net/ethernet/intel/igb/igb_ethtool.c b/drivers/net/ethernet/intel/igb/igb_ethtool.c
-> index e5f3e7680dc6..ff911af16a4b 100644
-> --- a/drivers/net/ethernet/intel/igb/igb_ethtool.c
-> +++ b/drivers/net/ethernet/intel/igb/igb_ethtool.c
-> @@ -1413,6 +1413,8 @@ static int igb_intr_test(struct igb_adapter *adapter, u64 *data)
->  			*data = 1;
->  			return -1;
->  		}
-> +		wr32(E1000_IVAR_MISC, E1000_IVAR_VALID << 8);
-> +		wr32(E1000_EIMS, BIT(0));
->  	} else if (adapter->flags & IGB_FLAG_HAS_MSI) {
->  		shared_int = false;
->  		if (request_irq(irq,
-> -- 
-> 2.38.1
+> Avoid having "This/The patch" or "This commit" in the commit message. It is
+> tautologically useless.
 > 
+> Also, do
+> 
+> $ git grep 'This patch' Documentation/process
+> 
+> for more details.
+
+Noted.
+
+Thanks,
+Petr
