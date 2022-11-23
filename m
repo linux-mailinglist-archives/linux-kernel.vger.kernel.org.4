@@ -2,170 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56209634CF0
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 02:28:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65906634CF2
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 02:31:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234334AbiKWB2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 20:28:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38002 "EHLO
+        id S235300AbiKWBbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 20:31:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233984AbiKWB2g (ORCPT
+        with ESMTP id S233984AbiKWBa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 20:28:36 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF3387550
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 17:28:36 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id k84so19340603ybk.3
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 17:28:36 -0800 (PST)
+        Tue, 22 Nov 2022 20:30:59 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63CB8E084
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 17:30:58 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id v28so15976075pfi.12
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 17:30:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=M42sWyNVtSXf63+/nFxRglHm/7sJT4os0b4YITaV5ns=;
-        b=EEDxxsC8axWN6EfK6HuKM4nKLyz6jyKaF6MQb03199u9fI9ncH2Pzi0Pkz2Rmfaln3
-         0LcVHqzeUlYiBsH/6c+Cd8NT5OeaxAlFYOn2KKOOs0oao+6e3/WwTuRD4LxatCOIGywm
-         VjfLjjAHKCoOCfpD6aq+RuMP4XmMlWcW/Y98o=
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DKO5lR4cLz6p7NWkfnd0y6rPCWBH2+knxhaYnv/yN7g=;
+        b=NXD0++W1grzconoV0x+G2IAlIiJtVCOGTMBnUhvmAstsMhj6jtOs7BcAJGgKzdSGxJ
+         6WRKCQPUQQdVSYMLLzc9pngh3MZKR8YrFD8d/E9qcP1+rhgI4WqDBdm04K8qAIi5/dCs
+         l/OF72+iUkIrkggctoMI3+D8SQLzptPdnkw+nsDBb4TjXNCOUZkK4+AEHFZDAycjlOeW
+         mSZqXSpomAhvM2koEPenAJbEQl7m64YkqH7+NoPou3o3g13CGO3qQd3jpsYENN9pD+95
+         KZWGcbJIpU5W+68tUnqzWFjs0R7CLIucsBRjr7AHpne6oOJ+/xKUwsr2KtjsxZjhRTVc
+         Zt7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=M42sWyNVtSXf63+/nFxRglHm/7sJT4os0b4YITaV5ns=;
-        b=QQh0Lwh267TcXHjndTW+fFU0fJvOOVEm3IZqNZChl8rM4t7xaW7S82j29vCtgMD0Eu
-         mtcmIkjsh02IhjXd6hVZySYMx16fiKtslPRjol1gClgCBu2NClJLv+w+FKEoy2gKghe9
-         IjUbkXtZ8GcOTKsJ8B8R5/unVBfmEJSFDwR4bcp/dw4qKLyZwZxknLDV+4qhyUalYOOx
-         /PgE9t0mjHbWO2dJ/EaF6aiHgtN5+oImbi+ulJCLoIXj8OtWrmO5mhQQoZYkU33Ka4ep
-         nZT3Qqto6wvwKeCBchSU7G3qrw7pXCuqIESi4ge95SQJkNUsr3GqI/rItVJW//rAb0fp
-         OyAw==
-X-Gm-Message-State: ANoB5plEN5tjFyi+WjjbYKLg3ifo4jK5HuvsDrl6HO6peIISi9BRlg5D
-        SmeHx8hlxQxisOSp+8SaG02fO+qUwvK0yF9gIclcow==
-X-Google-Smtp-Source: AA0mqf6JztjXsKrOZAvtzlYQyGBcMnqFAAI03f5vVpHLgvM2RaEycI/1qnyVsvINe/s4LO7o2SeAM+HqA9xXEvxUoQ4=
-X-Received: by 2002:a25:a0d4:0:b0:6ea:3fec:4adb with SMTP id
- i20-20020a25a0d4000000b006ea3fec4adbmr15397598ybm.305.1669166915244; Tue, 22
- Nov 2022 17:28:35 -0800 (PST)
-MIME-Version: 1.0
-References: <CABWYdi0G7cyNFbndM-ELTDAR3x4Ngm0AehEp5aP0tfNkXUE+Uw@mail.gmail.com>
- <Y30rdnZ+lrfOxjTB@cmpxchg.org> <CABWYdi3PqipLxnqeepXeZ471pfeBg06-PV0Uw04fU-LHnx_A4g@mail.gmail.com>
-In-Reply-To: <CABWYdi3PqipLxnqeepXeZ471pfeBg06-PV0Uw04fU-LHnx_A4g@mail.gmail.com>
-From:   Ivan Babrou <ivan@cloudflare.com>
-Date:   Tue, 22 Nov 2022 17:28:24 -0800
-Message-ID: <CABWYdi0qhWs56WK=k+KoQBAMh+Tb6Rr0nY4kJN+E5YqfGhKTmQ@mail.gmail.com>
-Subject: Re: Low TCP throughput due to vmpressure with swap enabled
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DKO5lR4cLz6p7NWkfnd0y6rPCWBH2+knxhaYnv/yN7g=;
+        b=pXdYwx1VFCwCG5Zy5FyYsZv3BkVQ7kKxGZNzOlSAM9M3FrDHDYMFpwalkTGxyq/WPc
+         lrV684tbQBXLwl58JjkdLKnM3Jz46omkVX0ZM8d/o6SD1Wg69r5bU4KQYrNgqwsQ34eW
+         uW2WjyEXFPS403fDNUgykC+c5h+NLqjSXeq4dMTmvI/Q7v8efEbzmGP1VyBr6EzD8Cxr
+         7im204IPGfSIuHSRTjBvpYqYGiTc5ZH7OojnZlbSRoaFC400RVhkh/35op8c3PPUnLWz
+         gbRXZUk5BcsS71I7xp8kSWByJPGL4egGJJqO1YJtWJQwVYqawo5Ik9vVddO5Yl2l0pao
+         4iRQ==
+X-Gm-Message-State: ANoB5pmt1NNix2PowTUsMj/e1xUKSJZxtcscUrdLX/2CZTKCcHJRzEcR
+        mTW6tFA8w2iYFhpcYa7Un/AF0w==
+X-Google-Smtp-Source: AA0mqf7QekbcagrdW2ZDZzvV7seCNJVnDeErvb+ZQk78iSZep5oGbGV2XKOj4eOZEI3kIJGB0bxSpg==
+X-Received: by 2002:a05:6a00:1a14:b0:572:5be2:505b with SMTP id g20-20020a056a001a1400b005725be2505bmr6959442pfv.52.1669167058288;
+        Tue, 22 Nov 2022 17:30:58 -0800 (PST)
+Received: from [2620:15c:29:203:2520:fc16:115d:2f43] ([2620:15c:29:203:2520:fc16:115d:2f43])
+        by smtp.gmail.com with ESMTPSA id r8-20020a170902be0800b00176e6f553efsm12647970pls.84.2022.11.22.17.30.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Nov 2022 17:30:57 -0800 (PST)
+Date:   Tue, 22 Nov 2022 17:30:57 -0800 (PST)
+From:   David Rientjes <rientjes@google.com>
+To:     Kees Cook <keescook@chromium.org>
+cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, cgroups@vger.kernel.org,
-        kernel-team <kernel-team@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-mm@kvack.org, kasan-dev@googlegroups.com,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] mm: Make ksize() a reporting-only function
+In-Reply-To: <20221118035656.gonna.698-kees@kernel.org>
+Message-ID: <d49df494-7c42-1d2a-97c8-62972c0d6c03@google.com>
+References: <20221118035656.gonna.698-kees@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 2:11 PM Ivan Babrou <ivan@cloudflare.com> wrote:
->
-> On Tue, Nov 22, 2022 at 12:05 PM Johannes Weiner <hannes@cmpxchg.org> wrote:
-> >
-> > On Mon, Nov 21, 2022 at 04:53:43PM -0800, Ivan Babrou wrote:
-> > > Hello,
-> > >
-> > > We have observed a negative TCP throughput behavior from the following commit:
-> > >
-> > > * 8e8ae645249b mm: memcontrol: hook up vmpressure to socket pressure
-> > >
-> > > It landed back in 2016 in v4.5, so it's not exactly a new issue.
-> > >
-> > > The crux of the issue is that in some cases with swap present the
-> > > workload can be unfairly throttled in terms of TCP throughput.
-> >
-> > Thanks for the detailed analysis, Ivan.
-> >
-> > Originally, we pushed back on sockets only when regular page reclaim
-> > had completely failed and we were about to OOM. This patch was an
-> > attempt to be smarter about it and equalize pressure more smoothly
-> > between socket memory, file cache, anonymous pages.
-> >
-> > After a recent discussion with Shakeel, I'm no longer quite sure the
-> > kernel is the right place to attempt this sort of balancing. It kind
-> > of depends on the workload which type of memory is more imporant. And
-> > your report shows that vmpressure is a flawed mechanism to implement
-> > this, anyway.
-> >
-> > So I'm thinking we should delete the vmpressure thing, and go back to
-> > socket throttling only if an OOM is imminent. This is in line with
-> > what we do at the system level: sockets get throttled only after
-> > reclaim fails and we hit hard limits. It's then up to the users and
-> > sysadmin to allocate a reasonable amount of buffers given the overall
-> > memory budget.
-> >
-> > Cgroup accounting, limiting and OOM enforcement is still there for the
-> > socket buffers, so misbehaving groups will be contained either way.
-> >
-> > What do you think? Something like the below patch?
->
-> The idea sounds very reasonable to me. I can't really speak for the
-> patch contents with any sort of authority, but it looks ok to my
-> non-expert eyes.
->
-> There were some conflicts when cherry-picking this into v5.15. I think
-> the only real one was for the "!sc->proactive" condition not being
-> present there. For the rest I just accepted the incoming change.
->
-> I'm going to be away from my work computer until December 5th, but
-> I'll try to expedite my backported patch to a production machine today
-> to confirm that it makes the difference. If I can get some approvals
-> on my internal PRs, I should be able to provide the results by EOD
-> tomorrow.
+On Thu, 17 Nov 2022, Kees Cook wrote:
 
-I tried the patch and something isn't right here.
+> With all "silently resizing" callers of ksize() refactored, remove the
+> logic in ksize() that would allow it to be used to effectively change
+> the size of an allocation (bypassing __alloc_size hints, etc). Users
+> wanting this feature need to either use kmalloc_size_roundup() before an
+> allocation, or use krealloc() directly.
+> 
+> For kfree_sensitive(), move the unpoisoning logic inline. Replace the
+> some of the partially open-coded ksize() in __do_krealloc with ksize()
+> now that it doesn't perform unpoisoning.
+> 
+> Adjust the KUnit tests to match the new ksize() behavior.
+> 
+> Cc: Andrey Konovalov <andreyknvl@gmail.com>
+> Cc: Christoph Lameter <cl@linux.com>
+> Cc: Pekka Enberg <penberg@kernel.org>
+> Cc: David Rientjes <rientjes@google.com>
+> Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Roman Gushchin <roman.gushchin@linux.dev>
+> Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+> Cc: Alexander Potapenko <glider@google.com>
+> Cc: Dmitry Vyukov <dvyukov@google.com>
+> Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> Cc: linux-mm@kvack.org
+> Cc: kasan-dev@googlegroups.com
+> Acked-by: Vlastimil Babka <vbabka@suse.cz>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-With the patch applied I'm capped at ~120MB/s, which is a symptom of a
-clamped window.
-
-I can't find any sockets with memcg->socket_pressure = 1, but at the
-same time I only see the following rcv_ssthresh assigned to sockets:
-
-$ sudo ss -tim dport 6443 | fgrep rcv_ssthresh | sed
-'s/.*rcv_ssthresh://' | awk '{ print $1 }' | sort -n | uniq -c | sort
--n | tail
-      1 64076
-    181 65495
-   1456 5792
-  16531 64088
-
-* 64088 is the default value
-* 5792 is 4 * advmss (clamped)
-
-Compare this to a machine without the patch but with
-cgroup.memory=nosocket in cmdline:
-$ sudo ss -tim dport 6443 | fgrep rcv_ssthresh | sed
-'s/.*rcv_ssthresh://' | awk '{ print $1 }' | sort -n | uniq -c | sort
--n | tail
-      8 2806862
-      8 3777338
-      8 72776
-      8 86068
-     10 2024018
-     12 3777354
-     23 91172
-     29 66984
-    101 65495
-   5439 64088
-
-There aren't any clamped sockets here and there are many different
-rcv_ssthresh values.
+Acked-by: David Rientjes <rientjes@google.com>
