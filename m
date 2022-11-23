@@ -2,98 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7730636756
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A754D636761
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:39:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237359AbiKWRhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 12:37:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56750 "EHLO
+        id S236768AbiKWRjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 12:39:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237578AbiKWRhk (ORCPT
+        with ESMTP id S238503AbiKWRjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 12:37:40 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD4913CFF
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 09:37:38 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id mv18so8791260pjb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 09:37:38 -0800 (PST)
+        Wed, 23 Nov 2022 12:39:05 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5014898DA;
+        Wed, 23 Nov 2022 09:39:04 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id s5so25794170edc.12;
+        Wed, 23 Nov 2022 09:39:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BTJPrqrqSEwhgHq/Fq7SqerFqPYBOzBQre48SjGb0AQ=;
-        b=AXeIwTvPHhsokCd+EErazsQ8K+lGrncHyEuqRtdoyXhSyIF6UVoIlnqPmu2VPCED60
-         mHOMk9yvQi+Gkq2gElaHXoFKHK98cKz3dh0r+qnBWB8mkJErZXQtp2n65JXr0nQZLPTv
-         l+uls76z3THb1hzYMsRVgcWtdRMNwMFmxSUgM7S+eDqYs+GCbQPXKxO2yJVTGAP/ciN3
-         k52M91Nm7cY14fq1v5NDox/uaxslvzh9LZZ0HZ4tYPTwqi75XfG+zmcNIOM4Ob0iU4rM
-         HFJzp8uu18XWOkqNscJmULjVMC+GNteFWjyVJ1aG8Kq6QsGiFl+6ZGWuHQ1zer8WnHrS
-         z7WA==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kY1l32BjvmTEjJLwJuMtTS3l+ptPCvj6BygkCcwmqdA=;
+        b=FydYzUivVhWzTDIFaXUTJQlHJ+RXRHhbd6TAM7hKoDPhbDMhxSutKnKJaDNkrCJ6mq
+         SxKqG+Gm/HYNo2YpWD6E/QayLjEaU8UIyiUtcWtXcEYxQtPVWfMG36DpDy4zGHvaVzmw
+         IK2GD3H1OTOOy4ApHBk3lACJbLztCIFu0URTfjBl/Y0Yj4YMLQsf59VSVF9wqc4DM0Je
+         IGWpws3Muv7yQA5dDP7nmP7+KjMRuWfaZ8+JVQ9nyiqK2TolF8US0sJ1HS9OLWIKrW23
+         KIIMW1Vfwg3Gloq166cQI1vFdUK0uOgR+JSwsYkpJz9W6VCnm2tOpxUjmvgCJo1N75Xz
+         Gu5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BTJPrqrqSEwhgHq/Fq7SqerFqPYBOzBQre48SjGb0AQ=;
-        b=x3uUe/G1yuGCtPfxEk1RE4GCGxiTMOD1pI3EjGxgdICRcfRccBGqo7lAn1xoVCWwNY
-         QrO0uho2swyYJC5arOxCAOZHCdOJHzUK11/Sf2odDQQ7gcQ7ATQKBbzj1Bdgtmbex58D
-         /WyZOZeYRmCEblq7oDBiVYZqhWktZXFYOMI6OoYdORaWkitG/ryyEtO87AN6wKRys6Fm
-         1DWAf1V2/3mRwGfSkJjzIUseueQvGRN1v6rjK5fJe5u/35g5QF0QB1N1f7pGgt5Zf7UJ
-         hvWNpjOFMmpE3d/Efc+RQ0Dii77oPtBGP+O59P4YQ0flFTqu1KZPnLLzohiSNUz+QvZ0
-         uu7w==
-X-Gm-Message-State: ANoB5pljMR+LV2Hp6gJ7n5sbOhqGodIi/f4m2O1LLMUmeP/aa3OfmMtW
-        U8uj79cpeONcHyAXzLPewZHYHA==
-X-Google-Smtp-Source: AA0mqf7xphM5oz2jsApOp1Egc3rjQzspTFKB7OyQetps+UBwK7ZlkxAJ3k6ifjL4pknC+ROvb0Qnuw==
-X-Received: by 2002:a17:903:1250:b0:188:6ccd:f2c5 with SMTP id u16-20020a170903125000b001886ccdf2c5mr10331527plh.6.1669225058240;
-        Wed, 23 Nov 2022 09:37:38 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id j11-20020a170902da8b00b00188f7ad561asm1163747plx.249.2022.11.23.09.37.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 09:37:37 -0800 (PST)
-Date:   Wed, 23 Nov 2022 17:37:33 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "Huang, Kai" <kai.huang@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-Subject: Re: [PATCH v7 06/20] x86/virt/tdx: Shut down TDX module in case of
- error
-Message-ID: <Y35aXX5b2Ed4vc6y@google.com>
-References: <48505089b645019a734d85c2c29f3c8ae2dbd6bd.1668988357.git.kai.huang@intel.com>
- <Y3ySxEr64HkUaEDq@hirez.programming.kicks-ass.net>
- <52b2be9b-defd-63ce-4cb2-96cd624a95a6@intel.com>
- <Y30fUS5/JClpBHVc@hirez.programming.kicks-ass.net>
- <b3938f3a-e4f8-675a-0c0e-4b4618019145@intel.com>
- <da7ae78c2d9fed125f160744af5be75f34b1b1d7.camel@intel.com>
- <791bf9a2-a079-3cd6-90a3-42dbb332a38c@intel.com>
- <9f1ea2639839305dd8b82694b3d8c697803f43a1.camel@intel.com>
- <Y35IW/PnbxinKHOL@google.com>
- <168ca2b3-ffac-31c4-0b83-2d0ee75f34a5@intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kY1l32BjvmTEjJLwJuMtTS3l+ptPCvj6BygkCcwmqdA=;
+        b=tCGFNg4DymVx3e5431XPcTbXO/aqqFCEVe8SziXBn/ly5/C6EeEElxbSWB61OWJI+a
+         u1osQ9tP9VQV9SavDDs8wD52URBJO7atn2i36QNt5IjIkxwAka8DfVt0g30mJ7e/4BjB
+         Lieh8GauiI54aIXguYWTQyAfLaWZxz5FnpUwxnk0TS8WVdH4nC6V/gGcXHX+0Gx5928s
+         LiO8EKdJuBqO5tcFDniW1zfz0X8oZLyamLJe+tPv/0URqHJOBQXRs6reoqzr3P9EfLGu
+         ebxBQvdJjOeICHLWltDQvuZj3Kl4OBKplrjqS7JUkh49nPyalGdEadDxkXRhXFYzOi3s
+         7SvA==
+X-Gm-Message-State: ANoB5pkB0X2x4BPrvQXH8b0oEEzBZvB/dvTj3luyd/XlFDH3va6x7LIW
+        B4zXk727JosnVfWAbv/h70O4u2UEUHzXeDcfoH0=
+X-Google-Smtp-Source: AA0mqf45GjSHrPoTrfxcuwQC8LmpekL9dlSnJfrFJnQjoraO9pYapCJIbdfySrra661SWHZQzcVWPogwQrjzWuyLeIU=
+X-Received: by 2002:a05:6402:10c4:b0:467:7827:232 with SMTP id
+ p4-20020a05640210c400b0046778270232mr27594712edu.268.1669225143120; Wed, 23
+ Nov 2022 09:39:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <168ca2b3-ffac-31c4-0b83-2d0ee75f34a5@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+References: <20221122213040.4128105-1-haowenchao@huawei.com>
+ <4d21f806-6653-5457-918c-563a3032d128@suse.com> <00f11c61-a53f-c48a-017f-4c06055ea708@huawei.com>
+ <717da158-5a7e-b478-61d3-3753b0b00e01@oracle.com>
+In-Reply-To: <717da158-5a7e-b478-61d3-3753b0b00e01@oracle.com>
+From:   Wenchao Hao <haowenchao22@gmail.com>
+Date:   Thu, 24 Nov 2022 01:38:51 +0800
+Message-ID: <CAOptpSMO5+Orp20S=WD-SezVOBEwJyKJSMjaCENN+4jXMX2X-A@mail.gmail.com>
+Subject: Re: [PATCH] scsi:iscsi: Record session's startup mode in kernel
+To:     Mike Christie <michael.christie@oracle.com>
+Cc:     Wenchao Hao <haowenchao@huawei.com>, Lee Duncan <lduncan@suse.com>,
+        Chris Leech <cleech@redhat.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        open-iscsi@googlegroups.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, liuzhiqiang26@huawei.com,
+        linfeilong@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,31 +74,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022, Dave Hansen wrote:
-> On 11/23/22 08:20, Sean Christopherson wrote:
-> >>> Why is it done that way?
-> >>>
-> >>> Can it be changed to delay TDX initialization until the first TDX guest
-> >>> needs to run?
-> >>>
-> >> Sean suggested.
-> >>
-> >> Hi Sean, could you commenet?
-> > Waiting until the first TDX guest is created would result in false advertising,
-> > as KVM wouldn't know whether or not TDX is actually supported until that first
-> > VM is created.  If we can guarantee that TDH.SYS.INIT will fail if and only if
-> > there is a kernel bug, then I would be ok deferring the "enabling" until the
-> > first VM is created.
-> 
-> There's no way we can guarantee _that_.  For one, the PAMT* allocations
-> can always fail.  I guess we could ask sysadmins to fire up a guest to
-> "prime" things, but that seems a little silly.  Maybe that would work as
-> the initial implementation that we merge, but I suspect our users will
-> demand more determinism, maybe a boot or module parameter.
+On Thu, Nov 24, 2022 at 1:29 AM Mike Christie
+<michael.christie@oracle.com> wrote:
+>
+> On 11/22/22 10:41 PM, Wenchao Hao wrote:
+> > Sorry I did not highlight the key points. The root reason we need to record
+> > node_startup mode in kernel is userspace's node_startup mode is unreliable in
+> > some scenarios:
+> >
+> > 1. iscsi node and session is created in initrd, the configure files of these
+> >    nodes would be lost after we switch to rootfs
+> > 2. someone do iscsiadm -m discovery but did not specify the operation mode,
+> >    the iscsi node's node_startup would be updated to which specified in iscsid.conf
+> > 3. someone do iscsiadm -m node -o update to update nodes' configure
+> >
+> > What's more, it seems "iscsiadm/iscsid" only refuse to logout of an ONBOOT
+> > session when logout is specificed by "--logoutall". We still can logout an
+> > ONBOOT session with "iscsiadm -m node -u comamnd".
+>
+> logout_by_startup does go by the startup setting, but I think you missed the
+> session_in_use related code. It checks the mounts and holders already. Just
+> change it for whatever you need. I think your lvm use case should be covered
+> by the holder check. If not, add it.
 
-Oh, you mean all of TDX initialization?  I thought "initialization" here mean just
-doing tdx_enable().
+I did not enable the iscsid.safe_logout in iscsid.conf, so the session
+still could be logged out.
+If tested with iscsid.safe_logout set to "Yes", the issue is solved.
 
-Yeah, that's not going to be a viable option.  Aside from lacking determinisim,
-it would be all too easy to end up on a system with fragmented memory that can't
-allocate the PAMTs post-boot.
+Thanks a lot
