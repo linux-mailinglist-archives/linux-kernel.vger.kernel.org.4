@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11B25635834
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:52:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB64663583B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:52:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235652AbiKWJvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 04:51:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45538 "EHLO
+        id S236610AbiKWJwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 04:52:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237081AbiKWJur (ORCPT
+        with ESMTP id S235823AbiKWJvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 04:50:47 -0500
+        Wed, 23 Nov 2022 04:51:10 -0500
 Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88BB8252B2
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:47:58 -0800 (PST)
-Received: by mail-vs1-xe32.google.com with SMTP id 125so643916vsi.9
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:47:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8788098244
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:48:11 -0800 (PST)
+Received: by mail-vs1-xe32.google.com with SMTP id v128so2386248vsb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:48:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5JJaR5hJvuf5++j5Vl6eoqqI4BspUUmDXkurZukMxZs=;
-        b=xr3ds3O1aP0Cly4A/ysEuxHmVnLvc4eu3PKCZhMWRC/dATnKt6om+vu7ICyQzJJXSI
-         OTsl5/BZ34hGUSpmBWGM/P7E6khc954CTJm3tf176irhtTg04zwszZnTfB+iRCK8kef2
-         9arPJeHjDlVs9gZSBvERiRp/84pe7iyQAFgOoi4JMsYzh05AZ39TwfUSOyjkqSOAGH61
-         EJYN5SG+hFvW0FiBWryiqDHaE+umKTMdQea4Ozb1wKFZCnJ75SOBuQEvjA0eTY13hITr
-         p7Gg3tcgdDk5MkdKmiBCsI1MCiDPMAziWHOlPa6mRMBO6qdkYPuyKMY8T5zrZNmuSMg5
-         Krgg==
+        bh=YNWMujDoE8kNxHJht66FEwgt8YaN3ef3GP1JbL99z40=;
+        b=ozoa4aWdr/7k2FzQARebELuDZCvqRIX9Dbw+UBF3Xu8MqEqxdmyhN+6ct3REmZqb4O
+         lxiTRxO6K+IruK9kEL8ZL9ns7i1mx1bHN7qSNWjL9QUFZD+QvHm8eYu+BJE/N8rErCUP
+         7/zSVYtmAWi147tja25HDFUb8lM5Jz8/Vks5oBPwE8LIgnExyjHYkYQhZIQXB6S7ZtMP
+         g1cltKVrr1XbC3AVs9OEHei6ibhz2t4ByEvLwl7hMYwln35oX53zwjn5wg200ITVxkfm
+         njrtg6ivg4ijoFLBxuRS4t6LAcINZHT0TwKmm3ozUNRywqqiNVZ5oIg3sOgUiZtAcvUn
+         fNxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5JJaR5hJvuf5++j5Vl6eoqqI4BspUUmDXkurZukMxZs=;
-        b=ErGf45X9cmvCRHY9lX662TZvUOgvvzUwl94Lee8ymYl9ZPFGXDnDghgQCwTYbtjf/M
-         Amys2yZ/bKetLlJ95FNnN42nKPeqSM0YxZby1E5t/Rt3zUVt8MaB7R6viuTIVWIwdrhF
-         A4xdbIfhFQXENXsoMQlzrvfYSe8o4h5A8zoaV8fZyTBhOEvHy21aod8z1Ru9iiqwWsVf
-         988CKtUUfiyfJOFXAszRvCQO7LksubIs/ioIHQWSNl6xIwozLfP9EFdY3+bjisGnkgtl
-         fbakB17AxbvglJiKeQpmIsTZelVDmStN4c8D8SfkOugKBlsrJ+rvZVbzpqp+zP0f+umj
-         huRg==
-X-Gm-Message-State: ANoB5pkP6sx5Rv8fGJ4Q4NhqP1seHasZ8fA1UfUZe/36+DrimgzC3bry
-        yIjWwO3IpfOX0BrCVvPpAUklWQYV2uUYQ97XyRePDA==
-X-Google-Smtp-Source: AA0mqf5015brl+4dkPOsvMU6fDCs5ePpm/2PWrYsJ3/czU+9mnWwri4bgOsPFCCNqPICVl/iwJDAGCKE7acVHAduazA=
-X-Received: by 2002:a05:6102:829:b0:3b0:6449:baba with SMTP id
- k9-20020a056102082900b003b06449babamr3543541vsb.61.1669196877951; Wed, 23 Nov
- 2022 01:47:57 -0800 (PST)
+        bh=YNWMujDoE8kNxHJht66FEwgt8YaN3ef3GP1JbL99z40=;
+        b=OjgJA9VROC1UXDgArKFtA0Gg6iRJ0rfZgDsdoHBDUhl4roQA4ujawGRfGCGJM9MrUx
+         BhxkcTtxJ1l2db9krAsKdSgNnt2KtZGVADuYiCqdBukjsgFGQkGAn7UCEtg0Yhe8oOxh
+         tPJtaOV78VxwG4jkANAMBc0O1/WmnrTqSS3QermGG/WYtOHKpD04a/zM2NUcOxZBoptq
+         Xudv/OSsUvObpw+L0YKkbAfQdDZLsn4867DE5+LwDsTNAENM+AL5akAiRQu2hwz+CSUh
+         hOtzrRuvfaK6RUSDGqZW2sa8WfuWhdNBNb9oLgzObFARDwSegpnnka+H3043m1YZkt1T
+         NV5g==
+X-Gm-Message-State: ANoB5pmvOCBqf7oLVAsKF+oG0bXQm94lv08kf72rMSOivKuv3H9ptk2V
+        Iwptob7PHIEs+pxeUuWcsfAv7f7q2Cwk72iYvOkIdw==
+X-Google-Smtp-Source: AA0mqf5I0O8l8ui+oblFnrzS//5FsMptKKMavXkWpJV3WBktCymIDfBBUw/R+2HD1hHUMlpQ5EQC4JJvbwRLg+uHQDY=
+X-Received: by 2002:a67:f645:0:b0:3a7:769c:6dee with SMTP id
+ u5-20020a67f645000000b003a7769c6deemr5271170vso.13.1669196891150; Wed, 23 Nov
+ 2022 01:48:11 -0800 (PST)
 MIME-Version: 1.0
-References: <20221118224540.619276-1-uwe@kleine-koenig.org> <20221118224540.619276-12-uwe@kleine-koenig.org>
-In-Reply-To: <20221118224540.619276-12-uwe@kleine-koenig.org>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org> <20221118224540.619276-13-uwe@kleine-koenig.org>
+In-Reply-To: <20221118224540.619276-13-uwe@kleine-koenig.org>
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 23 Nov 2022 10:47:47 +0100
-Message-ID: <CAMRc=Mfjcs-BBFhr8O1O956f4jdvAzY9ofZs1fme8+Ki=T60JA@mail.gmail.com>
-Subject: Re: [PATCH 011/606] gpio: max732x: Convert to i2c's .probe_new()
+Date:   Wed, 23 Nov 2022 10:48:00 +0100
+Message-ID: <CAMRc=McKJ1NY7Me2UbzaeBU8AAoAXOnOEp61fJjWLhMCuxZP8w@mail.gmail.com>
+Subject: Re: [PATCH 012/606] gpio: pca953x: Convert to i2c's .probe_new()
 To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <uwe@kleine-koenig.org>
 Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
@@ -67,8 +67,8 @@ Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -85,36 +85,36 @@ rg> wrote:
 >
 > Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 > ---
->  drivers/gpio/gpio-max732x.c | 6 +++---
+>  drivers/gpio/gpio-pca953x.c | 6 +++---
 >  1 file changed, 3 insertions(+), 3 deletions(-)
 >
-> diff --git a/drivers/gpio/gpio-max732x.c b/drivers/gpio/gpio-max732x.c
-> index da6972117030..68e982cdee73 100644
-> --- a/drivers/gpio/gpio-max732x.c
-> +++ b/drivers/gpio/gpio-max732x.c
-> @@ -608,9 +608,9 @@ static struct max732x_platform_data *of_gpio_max732x(=
-struct device *dev)
->         return pdata;
+> diff --git a/drivers/gpio/gpio-pca953x.c b/drivers/gpio/gpio-pca953x.c
+> index 6e67867e1dcd..a59d61cd44b2 100644
+> --- a/drivers/gpio/gpio-pca953x.c
+> +++ b/drivers/gpio/gpio-pca953x.c
+> @@ -1050,9 +1050,9 @@ static int device_pca957x_init(struct pca953x_chip =
+*chip, u32 invert)
+>         return ret;
 >  }
 >
-> -static int max732x_probe(struct i2c_client *client,
-> -                                  const struct i2c_device_id *id)
-> +static int max732x_probe(struct i2c_client *client)
+> -static int pca953x_probe(struct i2c_client *client,
+> -                        const struct i2c_device_id *i2c_id)
+> +static int pca953x_probe(struct i2c_client *client)
 >  {
-> +       const struct i2c_device_id *id =3D i2c_client_get_device_id(clien=
-t);
->         struct max732x_platform_data *pdata;
->         struct device_node *node;
->         struct max732x_chip *chip;
-> @@ -707,7 +707,7 @@ static struct i2c_driver max732x_driver =3D {
->                 .name           =3D "max732x",
->                 .of_match_table =3D of_match_ptr(max732x_of_table),
+> +       const struct i2c_device_id *i2c_id =3D i2c_client_get_device_id(c=
+lient);
+>         struct pca953x_platform_data *pdata;
+>         struct pca953x_chip *chip;
+>         int irq_base =3D 0;
+> @@ -1376,7 +1376,7 @@ static struct i2c_driver pca953x_driver =3D {
+>                 .of_match_table =3D pca953x_dt_ids,
+>                 .acpi_match_table =3D pca953x_acpi_ids,
 >         },
-> -       .probe          =3D max732x_probe,
-> +       .probe_new      =3D max732x_probe,
->         .id_table       =3D max732x_id,
+> -       .probe          =3D pca953x_probe,
+> +       .probe_new      =3D pca953x_probe,
+>         .remove         =3D pca953x_remove,
+>         .id_table       =3D pca953x_id,
 >  };
->
 > --
 > 2.38.1
 >
