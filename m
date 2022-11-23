@@ -2,141 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 111C0635761
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:43:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7033863576F
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:43:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237991AbiKWJl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 04:41:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59774 "EHLO
+        id S238045AbiKWJmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 04:42:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237981AbiKWJld (ORCPT
+        with ESMTP id S238086AbiKWJlw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 04:41:33 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89284FC716;
-        Wed, 23 Nov 2022 01:39:08 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AN7Peo3010134;
-        Wed, 23 Nov 2022 09:39:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=G7MppZwrAD9hv1WL9YxVrbxXR61NAceyba4rmUIFQno=;
- b=jHsvQkoX6LuIDBgOgy7q0OMsLn30SY4BFfXVxlTN975u0YwdZ7+6OBgHdXJ23F6rZIp8
- +pIU1xHQOQkKw9J5U14Mga+ZLQuwzcgh1sAZjRu4eGWn71naCSEV60D4RVnE/50IVizt
- QKjdEh8eWJ5cYgMoHnOQB7igFw3pY0Du+SDDe1uRHzVCcRC5yjIJe4G2AMPmZWHQBMye
- kyup1GF2faYENS0Q3qk9v2GTGdWDOmxO4IxGQ3PsY2sKcbF2HuIbu5/F3AY0zqB7cz2i
- D2ruoIhJkv5cN2rWYPvqKQi9JiNiWISwLkWfbd6/FehbCDS+QkhFGjzzUBVx5BVB6xYY Ig== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m10w5pwp9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Nov 2022 09:39:07 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AN9MK8c013102;
-        Wed, 23 Nov 2022 09:39:06 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m10w5pwn9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Nov 2022 09:39:06 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AN9YkdD021747;
-        Wed, 23 Nov 2022 09:39:04 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 3kxps8wfew-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Nov 2022 09:39:04 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AN9d1rv63177088
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Nov 2022 09:39:01 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6308142042;
-        Wed, 23 Nov 2022 09:39:01 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1B27442041;
-        Wed, 23 Nov 2022 09:39:01 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.152.224.56])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 23 Nov 2022 09:39:01 +0000 (GMT)
-Date:   Wed, 23 Nov 2022 10:38:59 +0100
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Thomas Huth <thuth@redhat.com>
-Cc:     kvm@vger.kernel.org, Janosch Frank <frankja@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        "Collin L. Walling" <walling@linux.ibm.com>,
-        Jason J Herne <jjherne@linux.ibm.com>
-Subject: Re: [PATCH] KVM: s390: vsie: Fix the initialization of the epoch
- extension (epdx) field
-Message-ID: <20221123103859.1d861c44@p-imbrenda>
-In-Reply-To: <20221123090833.292938-1-thuth@redhat.com>
-References: <20221123090833.292938-1-thuth@redhat.com>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: VB7N-UmU2w5V8YnsGnJfOrH4quVoW2GC
-X-Proofpoint-ORIG-GUID: mmYlp7Uaw75Lq2JRuQlR7jx7IdMePVU_
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 23 Nov 2022 04:41:52 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB3574ABC
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:39:45 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id j4so27398387lfk.0
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:39:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HhqMtvHL6CzJDiLWuozbG2Jml88D7dY6P8TNnkcKrDk=;
+        b=uPcF2XKQ3yB8cxrDLUDzCH6YV36F1+y0M6Rxy2QxQEAVoZTzlfdojxgHr57lhPYv5Z
+         mvygHAfNvmroP5qhfZkQyzCDVc4n+ztMBYZO9poIohFylLJB8+4Q6P9BQRXemTgiWEOh
+         z1rctkkfQjvkzmKQMScUuLlwqfYgn9TygkLAjGGpwbvjaRuB2Sql6ikYhfcNfWFq21UY
+         TBogac2ZRtjdeDLfORHdgb5AseVSVAEvJ3qqWgWI9Syq5YwxjXWqgGu/zUjI+ieHO/ZW
+         YYbDMSKtbuXGHao1FM5Il9NCwdlomVwtK5h7m6WOj1qSCHqPMv9IJIRTb1q9AglycZM9
+         hIuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HhqMtvHL6CzJDiLWuozbG2Jml88D7dY6P8TNnkcKrDk=;
+        b=GhJaXdx1wHBH6pWVp1M9yNaUXSGIUz969z5Ki4cmGiqExheSa5PMSczreK8PIpvJLB
+         qZhILrgPwnB2KX/4eJyGxP/z9W5l09YK0aUK91QBp8pGIoBHk2nbpXKZ6srwsD53l6x/
+         2mDkJHvJhOu+iN054kW53AZjzTgEfm9mMAXUQThPs0CCH1EfZPBr6q6lHRFKpoAq972a
+         z6O67J4bzUv8sDcLUwjaoB/AwyWdPVAGKV+hgeG+30c4diVE/VxOjK2jvhNnEeXswPmY
+         3Tyb5eJxy5Wc33G23zUBKd2VUSNjrfM7lgHAX6CP6nLkY2Q4uBR8AWP5flaarwyKwp/R
+         PSBQ==
+X-Gm-Message-State: ANoB5pkRV5B1hr+2pd1gnwEl2F7ID/n3G86vZw5+NXAmePTGdDJD9cLh
+        4u/8gpRg92hAFinZ1FjdGmqI2Q==
+X-Google-Smtp-Source: AA0mqf5DA9z8M5jnKKs9XTmwUcoENZ3ioMO2Niz5dey3n7Kt+mn3Y92KAjKcnZl7/Qj50MFNZ79P0A==
+X-Received: by 2002:a19:9155:0:b0:492:f5b6:2124 with SMTP id y21-20020a199155000000b00492f5b62124mr8739646lfj.369.1669196383804;
+        Wed, 23 Nov 2022 01:39:43 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id j8-20020ac253a8000000b004946a1e045fsm2788676lfh.197.2022.11.23.01.39.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Nov 2022 01:39:43 -0800 (PST)
+Message-ID: <02db6a5d-ae9d-68b5-f5c5-bebb471e0f70@linaro.org>
+Date:   Wed, 23 Nov 2022 10:39:41 +0100
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-23_04,2022-11-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- bulkscore=0 adultscore=0 mlxscore=0 lowpriorityscore=0 suspectscore=0
- impostorscore=0 priorityscore=1501 spamscore=0 phishscore=0
- mlxlogscore=994 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211230071
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 2/7] dt-bindings: clock: renesas,r9a06g032-sysctrl: Add
+ h2mode property
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Herve Codina <herve.codina@bootlin.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+References: <20221114111513.1436165-1-herve.codina@bootlin.com>
+ <20221114111513.1436165-3-herve.codina@bootlin.com>
+ <a1a7fdf4-2608-d6c9-7c7a-f8e8fae3a742@linaro.org>
+ <c9a77262-f137-21d9-58af-eb4efb8aadbf@linaro.org>
+ <20221115150417.513955a7@bootlin.com> <20221118112349.7f09eefb@bootlin.com>
+ <d9bd5075-9d06-888d-36a9-911e2d7ec5af@linaro.org>
+ <20221121165921.559d6538@bootlin.com>
+ <4e54bfb4-bb67-73b8-f58f-56797c5925d3@linaro.org>
+ <CAMuHMdU=-ZUzHSb0Z8P3wsLK9cgGVCPdMi6AcjTH23tUQEeEBA@mail.gmail.com>
+ <a3e1332e-fc15-8a78-0ddd-6d5b26197f11@linaro.org>
+ <CAMuHMdXzqZB4sKMmroriq5oPp7z=yXiHk=+eQKwSyPhNbYqgYA@mail.gmail.com>
+ <1f12883b-1e37-7f2b-f9e9-c8bad290a133@linaro.org>
+ <CAMuHMdVbzg8y2So+A=z8nUwHMoL+XKUrvoXp9QdbCnUve1_Atw@mail.gmail.com>
+ <191a7f3e-0733-8058-5829-fe170a06dd5a@linaro.org>
+ <20221122100706.739cec4d@bootlin.com>
+ <3856e2d8-1c16-a69f-4ac5-34b8e7f18c2b@linaro.org>
+ <CAMuHMdXPndkt=+k1CAcDbH7eK=TFfS6wMu+xdqWZSCz1+hyhEA@mail.gmail.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAMuHMdXPndkt=+k1CAcDbH7eK=TFfS6wMu+xdqWZSCz1+hyhEA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Nov 2022 10:08:33 +0100
-Thomas Huth <thuth@redhat.com> wrote:
-
-> We recently experienced some weird huge time jumps in nested guests when
-> rebooting them in certain cases. After adding some debug code to the epoch
-> handling in vsie.c (thanks to David Hildenbrand for the idea!), it was
-> obvious that the "epdx" field (the multi-epoch extension) did not get set
-> to 0xff in case the "epoch" field was negative.
-> Seems like the code misses to copy the value from the epdx field from
-> the guest to the shadow control block. By doing so, the weird time
-> jumps are gone in our scenarios.
+On 22/11/2022 11:47, Geert Uytterhoeven wrote:
+> Hi Krzysztof,
 > 
-> Link: https://bugzilla.redhat.com/show_bug.cgi?id=2140899
-> Fixes: 8fa1696ea781 ("KVM: s390: Multiple Epoch Facility support")
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
-
-Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-
-> ---
->  arch/s390/kvm/vsie.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> On Tue, Nov 22, 2022 at 11:30 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>> On 22/11/2022 10:07, Herve Codina wrote:
+>>> On Tue, 22 Nov 2022 09:42:48 +0100
+>>> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+>>>
+>>>> On 22/11/2022 09:25, Geert Uytterhoeven wrote:
+>>>>> Hi Krzysztof,
+>>>>>
+>>>>> On Tue, Nov 22, 2022 at 8:45 AM Krzysztof Kozlowski
+>>>>> <krzysztof.kozlowski@linaro.org> wrote:
+>>>>>> On 21/11/2022 21:46, Geert Uytterhoeven wrote:
+>>>>>>>> This does not change anything. Herve wrote:
+>>>>>>>>
+>>>>>>>>> probe some devices (USB host and probably others)
+>>>>>>>>
+>>>>>>>> Why some can be probed earlier and some not, if there are no
+>>>>>>>> dependencies? If there are dependencies, it's the same case with sysctrl
+>>>>>>>> touching the register bit and the USB controller touching it (as well
+>>>>>>>> via syscon, but that's obvious, I assume).
+>>>>>>>>
+>>>>>>>> Where is the synchronization problem?
+>>>>>>>
+>>>>>>> The h2mode bit (and probably a few other controls we haven't figured out
+>>>>>>> yet) in the sysctrl must be set before any of the USB devices is active.
+>>>>>>> Hence it's safest for the sysctrl to do this before any of the USB drivers
+>>>>>>> probes.
+>>>>>>
+>>>>>> Again, this does not differ from many, many of other devices. All of
+>>>>>> them must set something in system controller block, before they start
+>>>>>> operating (or at specific time). It's exactly the same everywhere.
+>>>>>
+>>>>> The issue here is that there are two _different drivers_ (USB host
+>>>>> and device). When both are modular, and the driver that depends on the
+>>>>> sysctrl setting is loaded second, you have a problem: the sysctrl change
+>>>>> must not be done when the first driver is already using the hardware.
+>>>>>
+>>>>> Hence the sysctrl driver should take care of it itself during early
+>>>>> initialization (it's the main clock controller, so it's a dependency
+>>>>> for all other I/O device drivers).
+>>>>
+>>>> I assumed you have there bit for the first device (which can switch
+>>>> between USB host and USB device) to choose appropriate mode. The
+>>>> bindings also expressed this - "the USBs are". Never said anything about
+>>>> dependency between these USBs.
+>>>>
+>>>> Are you saying that the mode for first device cannot be changed once the
+>>>> second device (which is only host) is started? IOW, the mode setup must
+>>>> happen before any of these devices are started?
+>>>>
+>>>> Anyway with sysctrl approach you will have dependency and you cannot
+>>>> rely on clock provider-consumer relationship to order that dependency.
+>>>> What if you make all clocks on and do not take any clocks in USB device?
+>>>> Broken dependency. What if you want to use this in a different SoC,
+>>>> where the sysctrl does not provide clocks? Broken dependency.
+>>>
+>>> The issue is really related to the Renesas sysctrl itself and not related
+>>> to the USB drivers themselves.
+>>> From the drivers themselves, the issue is not seen (I mean the driver
+>>> takes no specific action related to this issue).
+>>> If we change the SOC, the issue will probably not exist anymore.
+>>
+>> Yeah, and in the next SoC you will bring 10 of such properties to
+>> sysctrl arguing that if one was approved, 10 is also fine. Somehow
+>> people on the lists like to use that argument - I saw it somewhere, so I
+>> am allowed to do here the same.
 > 
-> diff --git a/arch/s390/kvm/vsie.c b/arch/s390/kvm/vsie.c
-> index 94138f8f0c1c..ace2541ababd 100644
-> --- a/arch/s390/kvm/vsie.c
-> +++ b/arch/s390/kvm/vsie.c
-> @@ -546,8 +546,10 @@ static int shadow_scb(struct kvm_vcpu *vcpu, struct vsie_page *vsie_page)
->  	if (test_kvm_cpu_feat(vcpu->kvm, KVM_S390_VM_CPU_FEAT_CEI))
->  		scb_s->eca |= scb_o->eca & ECA_CEI;
->  	/* Epoch Extension */
-> -	if (test_kvm_facility(vcpu->kvm, 139))
-> +	if (test_kvm_facility(vcpu->kvm, 139)) {
->  		scb_s->ecd |= scb_o->ecd & ECD_MEF;
-> +		scb_s->epdx = scb_o->epdx;
+> Like pin control properties? ;-)
+> This property represents a wiring on the board...
+> I.e. a system integration issue.
+> 
+>> I understand that the registers responsible for configuration are in
+>> sysctrl block, but it does not mean that it should be described as part
+>> of sysctrl Devicetree node. If there was no synchronization problem,
+>> this would be regular example of register in syscon which is handled
+>> (toggled) by the device (so USB device/host controller). Since there is
+>> synchronization problem, you argue that it is correct representation of
+>> hardware. No, it is not, because logically in DT you do not describe
+>> mode or existence of other devices in some other node and it still does
+>> not describe this ordering.
+> 
+> So we have to drop the property, and let the sysctrl block look
+> for <name>@<reg> nodes, and check which ones are enabled?
+> 
+> Running out of ideas...
 
-looks quite straightforward
+One solution could be making USB nodes children of the sysctrl block which:
+1. Gives proper ordering (children cannot start before parent)
+regardless of any other shared resources,
+2. Allows to drop this mode property and instead check what type of
+children you have and configure mode depending on them.
 
-> +	}
->  
->  	/* etoken */
->  	if (test_kvm_facility(vcpu->kvm, 156))
+However this also might not be correct representation of hardware
+(dunno...), so I am also running out of ideas.
+
+Anyway, I appreciate your explanations. I don't oppose this and I defer
+the decision to Rob (for this or for v3 patch with descriptive strings).
+
+Best regards,
+Krzysztof
 
