@@ -2,109 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 071F36363F7
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:37:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D9176363FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:38:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238978AbiKWPhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 10:37:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
+        id S238802AbiKWPh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 10:37:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238825AbiKWPh3 (ORCPT
+        with ESMTP id S238785AbiKWPho (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 10:37:29 -0500
+        Wed, 23 Nov 2022 10:37:44 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1FF0626A;
-        Wed, 23 Nov 2022 07:37:27 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B871CFC7
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:37:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8DB27B8216D;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6F2C2B82108
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 15:37:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CE54C433D6;
         Wed, 23 Nov 2022 15:37:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47180C433D6;
-        Wed, 23 Nov 2022 15:37:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669217845;
-        bh=UanCtzyfyh7s6GC+lB/BgGuUYEuJMVRrxquRNUED7QE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m6P+8V1/dZMe1Sdy38Jer2Kq0kWOQcWPpch/6FCsgX7mogbRiZx+nRYmaqo4cOT5c
-         2VBhRCgyAp1QZeQHA3EETx8HSmmQjCOuPPa172HaY1MAN9akX9CNVq37lxVTz8BMr8
-         BBLccHPaIU6D7mYb41M582jELquyQZxntjmwvKYXyotA//5tW/2MbJATyer9nFW/f0
-         ufcjB46KzIThaQo20IBXLl20DeebxUayijZK5CPRM4y+7O6LBfTdsu4RRUcLHP5KOK
-         b4r/lHFcNKfmA5EJjEfSCvbMR52QJimK5ICXr91dLn0KonGcS4j6q3bU+aNI+8DhYx
-         YzSjHFJvVHfAg==
-Date:   Wed, 23 Nov 2022 15:37:13 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-watchdog@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v2 4/9] dt-bindings: drop redundant part of title (end)
-Message-ID: <Y34+KaMMI5H/qBlI@sirena.org.uk>
-References: <20221121110615.97962-1-krzysztof.kozlowski@linaro.org>
- <20221121110615.97962-5-krzysztof.kozlowski@linaro.org>
+        s=k20201202; t=1669217848;
+        bh=WtG/nCMmHFjaiF9yiTnMEGa5dsGUrNmb98PkLsNAl88=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=dWGhMqwUJk+AbyPMelvRGJERNUWBRm/iwdfVlBMce2s9DpWnU6tK+1bEnQmxSX9WL
+         wRDKKPlVTTBBbCh8y1fi4mJd+JXPhO2UrzWMAIwX+qzWnJJ1TSQ51kITPkvHmr7h31
+         CgYkV0zo22JhPI47ogAgrqJVGpdR+YQOvbGE86WfEol3Fowc4Xlp/Npio1deb+hxn+
+         jw+q4LA5y1SK7+sLUHOR1CP4ZbsU9ciwv0cXh/X1r2VBQZ5XlJinTRhRBps70V6yEP
+         zx6kRNBq/37vsmWMADN7I2xiyF+Cu7NcLqPVogC8c+5UGSjLr6w1d+Dd9IAgHbR2fZ
+         jYqiz8Lkic6BA==
+Message-ID: <1bba50dd-99a3-76c8-3469-ab096bd23c38@kernel.org>
+Date:   Wed, 23 Nov 2022 23:37:25 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="c3/TYdFfqHAXL0OZ"
-Content-Disposition: inline
-In-Reply-To: <20221121110615.97962-5-krzysztof.kozlowski@linaro.org>
-X-Cookie: I'm rated PG-34!!
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] f2fs: fix description about discard_granularity node
+Content-Language: en-US
+To:     Yangtao Li <frank.li@vivo.com>, jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20221118174028.63702-1-frank.li@vivo.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20221118174028.63702-1-frank.li@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/11/19 1:40, Yangtao Li wrote:
+> Let's fix the inconsistency in the text description.
+> Default discard granularity is 16. For small devices,
+> default value is 1.
+> 
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
---c3/TYdFfqHAXL0OZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Reviewed-by: Chao Yu <chao@kernel.org>
 
-On Mon, Nov 21, 2022 at 12:06:10PM +0100, Krzysztof Kozlowski wrote:
-> The Devicetree bindings document does not have to say in the title that
-> it is a "Devicetree binding", but instead just describe the hardware.
-
-Acked-by: Mark Brown <broonie@kernel.org>
-
---c3/TYdFfqHAXL0OZ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN+PikACgkQJNaLcl1U
-h9Axvwf9HW9i1/TYYTLxyy8fUtu5a3P9a9v1aqZ5Vk5GOoY4gLBJ+Nn6TQz4e3WA
-B/mLs0ELXPm3nJVTGPQfpqgCN3STLaUwDcVJIskltCSFn08YUWFcyfkQWyBkAWym
-cNTiF+sk8z6Aw5orSNcjJFWhpEZejA/1yQ+eBJbfm3d44vR/G2D5tMGJXmbE3rEA
-bRa98QZef1l34JDi6+gadC0w7LX4jj8Q41K/mjRuLqdmV6BUstQvCsKC/8YIeoua
-G3jLmit5vd8KXG2eEiqK2lY2t5FBYlNLXqLoaE2yjZFcmvABd6Vh/2JDcOOFeBpK
-sPr6SAIesrsLQzCHS/nuT/saF9E/UA==
-=p0qY
------END PGP SIGNATURE-----
-
---c3/TYdFfqHAXL0OZ--
+Thanks,
