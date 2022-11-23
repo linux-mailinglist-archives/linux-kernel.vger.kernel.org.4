@@ -2,72 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D32A635080
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 07:33:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1752E635095
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 07:41:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236045AbiKWGdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 01:33:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37872 "EHLO
+        id S236075AbiKWGkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 01:40:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234531AbiKWGdv (ORCPT
+        with ESMTP id S235505AbiKWGko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 01:33:51 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 870E5EA138;
-        Tue, 22 Nov 2022 22:33:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669185230; x=1700721230;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=27L+f2UUfa+f7KW/A/rdUyhJdUZDtfiEtjWnXwlvi1A=;
-  b=UCQ00pT3nIaQuAk0UpdFMW/hzVH2hh3oDE8TwVgd2BE+Ju4pi90elDRH
-   VSShPn7K+AxZdiehoP2P2ufLV5Fnj10Wb2vzVc+eMXWYTIIe+CCXqUGm7
-   KR0wHfzdzHJ44CbWm9lKmakCegjcGrOqbpnV3xY5YjOgww1ZU9RKvFPMS
-   uUtb/tXuTt18KQ8J3cptAOX/bSHAmwh230rdGEHkHSdf1CJt6m1NwsLS7
-   VIC2napiGt6lC6vlE9kUD9b1LaZkYlsuvH+touxJUk8+D4Z8aGGuCCJHV
-   3dKS9jRWpscBd31qQwjabHMqH9xeX6+MLIpSTePt/fJCPYgTaI7py6hfC
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="340870395"
-X-IronPort-AV: E=Sophos;i="5.96,186,1665471600"; 
-   d="scan'208";a="340870395"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 22:33:50 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="643995920"
-X-IronPort-AV: E=Sophos;i="5.96,186,1665471600"; 
-   d="scan'208";a="643995920"
-Received: from jiaxiche-mobl.ccr.corp.intel.com (HELO [10.254.210.241]) ([10.254.210.241])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 22:33:37 -0800
-Message-ID: <f2cf136e-bf38-54ce-a0dc-31b0192d1dd6@linux.intel.com>
-Date:   Wed, 23 Nov 2022 14:33:32 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v4 1/6] x86: KVM: Advertise CMPccXADD CPUID to user space
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     kvm@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
-        ndesaulniers@google.com, alexandre.belloni@bootlin.com,
-        peterz@infradead.org, jpoimboe@kernel.org,
-        chang.seok.bae@intel.com, pawan.kumar.gupta@linux.intel.com,
-        babu.moger@amd.com, jmattson@google.com, sandipan.das@amd.com,
-        tony.luck@intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        fenghua.yu@intel.com, keescook@chromium.org, nathan@kernel.org,
+        Wed, 23 Nov 2022 01:40:44 -0500
+X-Greylist: delayed 178 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Nov 2022 22:40:42 PST
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5EB7ECCFC
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 22:40:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1669185279;
+    s=strato-dkim-0002; d=fpond.eu;
+    h=Subject:References:In-Reply-To:Message-ID:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=Q2ku8PZxGwxrMfipwnTd7Em+iNYROIWJ2cEv4fZ1s8g=;
+    b=QrFR/6+6tniaHA3MPzgHTK9czHuTUdINwEBlEXd5MpEeI4Pvthhz3NiMiBdMQpei5E
+    S7zsEAPs1UahH8XEFnxBOwiXEAwuZaXghAyu1s0lrUZit9/dvYK+fO+RSLx7FL/VRO5x
+    sx3NYu5fELVUAZgcrGRTIE2rxPUWRjGsISR4ZI+N/uD+Q4hXttfDMCUJ0pb5yxboy2fD
+    5y85dlIdA4K/ZwnA7AX6oPBwQzspqLwmHhP4quI5I/gVMKIEmirPfrp1cs8cIqc0TX91
+    Y/7NpOmqlQmXw33IhjTVEly2QU1qtZ/7qRYBAFMlgBPRbPxJdIlU8sx/6kTXAD2601ln
+    Ue4Q==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":OWANVUa4dPFUgKR/3dpvnYP0Np73amq+g13rqGzvv3qxio1R8fCv/x64jlM="
+X-RZG-CLASS-ID: mo00
+Received: from oxapp06-05.back.ox.d0m.de
+    by smtp-ox.front (RZmta 48.2.1 AUTH)
+    with ESMTPSA id y28384yAN6Yd1A0
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Wed, 23 Nov 2022 07:34:39 +0100 (CET)
+Date:   Wed, 23 Nov 2022 07:34:39 +0100 (CET)
+From:   Ulrich Hecht <uli@fpond.eu>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
-References: <20221118141509.489359-1-jiaxi.chen@linux.intel.com>
- <20221118141509.489359-2-jiaxi.chen@linux.intel.com>
- <efb55727-f8bd-815c-ddfc-a8432ae5af4e@intel.com>
- <f04c2e74-87e4-5d50-579a-0a60554b83d3@linux.intel.com>
- <6d7fae50-ef3c-dc1e-336c-691095007117@intel.com>
-From:   Jiaxi Chen <jiaxi.chen@linux.intel.com>
-In-Reply-To: <6d7fae50-ef3c-dc1e-336c-691095007117@intel.com>
+Cc:     stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Letu Ren <fantasquex@gmail.com>, Helge Deller <deller@gmx.de>,
+        Sasha Levin <sashal@kernel.org>,
+        "pavel@denx.de" <pavel@denx.de>
+Message-ID: <970394644.1257305.1669185279738@webmail.strato.com>
+In-Reply-To: <20220913140342.308723271@linuxfoundation.org>
+References: <20220913140342.228397194@linuxfoundation.org>
+ <20220913140342.308723271@linuxfoundation.org>
+Subject: Re: [PATCH 4.9 01/42] fbdev: fb_pm2fb: Avoid potential divide by
+ zero error
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Priority: 3
+Importance: Normal
+X-Mailer: Open-Xchange Mailer v7.10.6-Rev30
+X-Originating-Client: open-xchange-appsuite
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,31 +69,60 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+> On 09/13/2022 4:07 PM CEST Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> 
+>  
+> From: Letu Ren <fantasquex@gmail.com>
+> 
+> commit 19f953e7435644b81332dd632ba1b2d80b1e37af upstream.
+> 
+> In `do_fb_ioctl()` of fbmem.c, if cmd is FBIOPUT_VSCREENINFO, var will be
+> copied from user, then go through `fb_set_var()` and
+> `info->fbops->fb_check_var()` which could may be `pm2fb_check_var()`.
+> Along the path, `var->pixclock` won't be modified. This function checks
+> whether reciprocal of `var->pixclock` is too high. If `var->pixclock` is
+> zero, there will be a divide by zero error. So, it is necessary to check
+> whether denominator is zero to avoid crash. As this bug is found by
+> Syzkaller, logs are listed below.
+> 
+> divide error in pm2fb_check_var
+> Call Trace:
+>  <TASK>
+>  fb_set_var+0x367/0xeb0 drivers/video/fbdev/core/fbmem.c:1015
+>  do_fb_ioctl+0x234/0x670 drivers/video/fbdev/core/fbmem.c:1110
+>  fb_ioctl+0xdd/0x130 drivers/video/fbdev/core/fbmem.c:1189
+> 
+> Reported-by: Zheyu Ma <zheyuma97@gmail.com>
+> Signed-off-by: Letu Ren <fantasquex@gmail.com>
+> Signed-off-by: Helge Deller <deller@gmx.de>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>  drivers/video/fbdev/pm2fb.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/video/fbdev/pm2fb.c b/drivers/video/fbdev/pm2fb.c
+> index 9b32b9fc44a5c..50b569d047b10 100644
+> --- a/drivers/video/fbdev/pm2fb.c
+> +++ b/drivers/video/fbdev/pm2fb.c
+> @@ -619,6 +619,11 @@ static int pm2fb_check_var(struct fb_var_screeninfo *var, struct fb_info *info)
+>  		return -EINVAL;
+>  	}
+>  
+> +	if (!var->pixclock) {
+> +		DPRINTK("pixclock is zero\n");
+> +		return -EINVAL;
+> +	}
+> +
+>  	if (PICOS2KHZ(var->pixclock) > PM2_MAX_PIXCLOCK) {
+>  		DPRINTK("pixclock too high (%ldKHz)\n",
+>  			PICOS2KHZ(var->pixclock));
+> -- 
+> 2.35.1
 
-On 11/21/2022 11:29 PM, Dave Hansen wrote:
-> On 11/21/22 06:46, Jiaxi Chen wrote:
->> Features which has been enabled in kernel usually should be added to
->> /proc/cpuinfo.
-> 
-> Features that the kernel *itself* is actually using always get in there.
->  Things like "smep".
-> 
-> But, things that the kernel "enables" but that only get used by
-> userspace don't generally show up in /proc/cpuinfo.
-> 
-> KVM is kinda a weird case.  The kernel is making the feature available
-> to guests, but it's not _using_ it in any meaningful way.  To me, this
-> seems much more akin to the features that are just available to
-> userspace than something that the kernel is truly using.
-> 
-> Also, these feature names are just long and ugly, and the "flags" line
-> is already a human-*un*readable mess.  I think we should just leave them
-> out.
+This is a duplicate, the same patch has already been applied in 4.9.327 (0f1174f4972ea9fad6becf8881d71adca8e9ca91), so the above snippet of code is now in there twice.
 
-True and agree. As for these cpuids are not truly used by kernel except
-for advertising to kvm userspace, we can hide them in /proc/cpuinfo by
-overriding their name with "".
+Doesn't make a difference in functionality in this case, I just happened to notice it when reviewing backports from 4.9 for the CIP 4.4-stable tree.
 
--- 
-Regards,
-Jiaxi
+CU
+Uli
