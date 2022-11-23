@@ -2,121 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2525636C32
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 22:18:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCCA4636C3D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 22:19:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236189AbiKWVR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 16:17:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
+        id S237546AbiKWVTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 16:19:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235288AbiKWVRz (ORCPT
+        with ESMTP id S237514AbiKWVTF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 16:17:55 -0500
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 360DE248D5;
-        Wed, 23 Nov 2022 13:17:53 -0800 (PST)
-Received: by mail-io1-f42.google.com with SMTP id p141so23905iod.6;
-        Wed, 23 Nov 2022 13:17:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=BlGzPtaFyxT63ceQLXbSW4Fmxcnh3kelB9yPiEvgEPw=;
-        b=Dei/jEdHgaR4K1VGrWuVROTLYOorjL2tbGE9iQQ7DH4Yzk8MeWSEs035yp6yWSj1jU
-         UpH/hHCpmrbT9sDXyXd6FssDU4LcJ9PGSYP3O7IPsnlr93CCvxptEVrYdkSECraeGMJ2
-         eMnZd4sFMFmLZfebU2Hh4lUCi+RrKYVuKNlrE9890rQH6eAAurJS6a3MCMO9FcNsWalw
-         7BRXU2GVVuIS6Vfo5CZxCQmnx5qNqb7bLOnNysIymidYvESDPEDB3a/NfRMSAkgGq9jJ
-         V00QNYvjA7WAnS0ormJ/U4VIx3ZQf+/+gA55tVZzyGJDkiMHoTtGfAOMaRNfei4ityeF
-         l86w==
-X-Gm-Message-State: ANoB5pl93znrU+MNhT/MDVFO096GQBdwFaDn1Rt3gLuPsAFfaxmp2GwI
-        SQs9avBYLkwI67RDmMWoA2xpH1WP7g==
-X-Google-Smtp-Source: AA0mqf7M9NWs/AP1+/NB1NNy5H44vkbvteepEMbJ1+gr4DpWhp1CvkedqtvGFv2cQop4Vmpov33/7Q==
-X-Received: by 2002:a6b:6b07:0:b0:6dd:f70e:dda5 with SMTP id g7-20020a6b6b07000000b006ddf70edda5mr6778925ioc.100.1669238273216;
-        Wed, 23 Nov 2022 13:17:53 -0800 (PST)
-Received: from robh_at_kernel.org ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id u12-20020a02c94c000000b003758390c97esm6813302jao.83.2022.11.23.13.17.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 13:17:52 -0800 (PST)
-Received: (nullmailer pid 2511151 invoked by uid 1000);
-        Wed, 23 Nov 2022 21:17:54 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Wed, 23 Nov 2022 16:19:05 -0500
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E686153D;
+        Wed, 23 Nov 2022 13:19:03 -0800 (PST)
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 2ANLIZtB011371;
+        Thu, 24 Nov 2022 06:18:36 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 2ANLIZtB011371
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1669238316;
+        bh=JaNFLVtpV/R2YcJ5P3G75gE6eDlCUl66VDKvTIO+Uto=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Nm4BQHt/aNubjM0c0XRsqsGCStBmXbgMiUQduWj4yG/7odqRlLtx3FB/UqvtEuuml
+         D94xgG8JGi8Wzl9hK9CSZOAWhaPUMp2HFrfzMh7Sl9qhcSp0whk8sgwZgoSG3ixeU3
+         ITYjV5becHZGev8v59yUYNCnaPnt55Z+JQX8M5DON5mMIafwhXTJYQKCJ1kIOSywQ1
+         k0sX61l3Bd1hpRMrTi56qUxwQytnU8FfpE1FISy9kO4Hq/PgTwmW3XgKJdsZw/VCH1
+         Mo7KhZkDkaXJooN19rr6atSI/LvVcpjm2WWdOIibv1j/En8Qm6ikYX3WVdSR9OBpwZ
+         ZlBLjJgmnszRg==
+X-Nifty-SrcIP: [209.85.160.47]
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-14286d5ebc3so18981557fac.3;
+        Wed, 23 Nov 2022 13:18:36 -0800 (PST)
+X-Gm-Message-State: ANoB5pnCWLO5H94JWa3G3huPOtA6vc/vlkxAkfOahfzb/+/RLrYrMlLW
+        UoqoXb90wI/tZxJJ+qu/b7y49iojrhPJrOaS5JA=
+X-Google-Smtp-Source: AA0mqf5+9n103gtVjj2U0+Y5pS++GUYYMT8oQPohQ8QyssNwg8NbY1AtMDegi1EXNw5mYeZhkWoEM+JWSjjEDJ2ODjA=
+X-Received: by 2002:a05:6870:ea8e:b0:13b:a31f:45fd with SMTP id
+ s14-20020a056870ea8e00b0013ba31f45fdmr19803930oap.194.1669238315233; Wed, 23
+ Nov 2022 13:18:35 -0800 (PST)
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
-        linux-clk@vger.kernel.org,
-        Mike Turquette <mturquette@baylibre.com>,
-        devicetree@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>
-In-Reply-To: <20221123142009.594781-3-abel.vesa@linaro.org>
-References: <20221123142009.594781-1-abel.vesa@linaro.org>
- <20221123142009.594781-3-abel.vesa@linaro.org>
-Message-Id: <166923784873.2501231.6595702811083404727.robh@kernel.org>
-Subject: Re: [PATCH v2 2/9] dt-bindings: clock: Add SM8550 TCSR CC clocks
-Date:   Wed, 23 Nov 2022 15:17:54 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20221123151828.509565-1-masahiroy@kernel.org> <20221123151828.509565-2-masahiroy@kernel.org>
+ <Y36Ef3ie05YO1moS@bergen.fjasle.eu>
+In-Reply-To: <Y36Ef3ie05YO1moS@bergen.fjasle.eu>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 24 Nov 2022 06:17:59 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAT+aNeG6FDdQw8=ZUpmbVUjr9DgwMMF4gOCTczECMTRGA@mail.gmail.com>
+Message-ID: <CAK7LNAT+aNeG6FDdQw8=ZUpmbVUjr9DgwMMF4gOCTczECMTRGA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] kbuild: implement {gcc,clang}-min-version only
+ with built-in functions
+To:     Nicolas Schier <nicolas@fjasle.eu>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Nov 24, 2022 at 5:37 AM Nicolas Schier <nicolas@fjasle.eu> wrote:
+>
+> On Thu 24 Nov 2022 00:18:25 GMT, Masahiro Yamada wrote:
+> > Converting clang-min-version is straightforward because the versions
+> > are always 6-digit.
+> >
+> > gcc-min-version is somewhat tricky because the minimal GCC version
+> > is GCC 5.2; prepend '0' to the version that is less than 10 so that
+> > test-ge is always passed with 6-digit versions.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
+> >
+> > Changes in v2:
+> >   - Covert gcc-min-version in a different way
+> >
+> >  scripts/Makefile.compiler | 8 ++++++--
+> >  1 file changed, 6 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
+> > index 20d353dcabfb..cd75f81e88ef 100644
+> > --- a/scripts/Makefile.compiler
+> > +++ b/scripts/Makefile.compiler
+> > @@ -63,11 +63,15 @@ cc-disable-warning = $(call try-run,\
+> >
+> >  # gcc-min-version
+> >  # Usage: cflags-$(call gcc-min-version, 70100) += -foo
+> > -gcc-min-version = $(shell [ $(CONFIG_GCC_VERSION)0 -ge $(1)0 ] && echo y)
+> > +
+> > +# Preprend 0 to the version that is less than 10 so test-ge works.
+> > +gcc-min-version = $(call test-ge, \
+> > +                  $(or $(filter 1%, $(CONFIG_GCC_VERSION)), 0$(CONFIG_GCC_VERSION)), \
+> > +                  $(or $(filter 1%, $1), 0$(strip $1)))
+>
+> Hm, this silently expects a gcc version < 20, which we should expect in
+> about seven-eight years [1].   I am thinking about the possibility of
+> silent (but unlikely) breaks when someone in far future uses a gcc 20
+> against a kernel with this line.  Probably we should not care about
+> that today, yet, right?
 
-On Wed, 23 Nov 2022 16:20:02 +0200, Abel Vesa wrote:
-> Add bindings documentation for clock TCSR driver on SM8550.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
-> 
-> Changes since v1:
->  * based on recent bindings, like Krzysztof asked
->  * used qcom,gcc.yaml and dropped redundant properties
->  * used additionalProperties instead unevaluatedProperties
->  * renamed qcom,tcsrcc-sm8550.h to qcom,sm8550-tcsrcc.h, to match
->    compatible
->  * added dual lincese to qcom,sm8550-tcsrcc.h
->  * moved patch to the beginning of patchset
->  * dropped redundant "bindings" from subject line
-> 
->  .../bindings/clock/qcom,sm8550-tcsrcc.yaml    | 39 +++++++++++++++++++
->  .../dt-bindings/clock/qcom,sm8550-tcsrcc.h    | 18 +++++++++
->  2 files changed, 57 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/qcom,sm8550-tcsrcc.yaml
->  create mode 100644 include/dt-bindings/clock/qcom,sm8550-tcsrcc.h
-> 
+Yeah, I thought of it.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+It depends on which of the following two will happen first.
 
-yamllint warnings/errors:
+ (a) We raise the min gcc version to 10.0.0 and remove this hack
+ (b) GCC 20 is released
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,sm8550-tcsrcc.yaml: allOf:0: '$ref qcom,gcc.yaml#' is not of type 'object', 'boolean'
-	from schema $id: http://json-schema.org/draft-07/schema#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,sm8550-tcsrcc.yaml: ignoring, error in schema: allOf: 0
-Documentation/devicetree/bindings/clock/qcom,sm8550-tcsrcc.example.dtb:0:0: /example-0/clock-controller@1fc0000: failed to match any schema with compatible: ['qcom,sm8550-tcsrcc']
+I am guessing (a) will occur first, so we do not need to care about (b).
 
-doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221123142009.594781-3-abel.vesa@linaro.org
+If (b) happens first, we will need to add "2%".
+It means that the window of supported GCC versions will get larger than 10.
+Presumably, we do not want to support such a wide range of compiler
+versions.
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+GCC 5.1 was released in 2015.
+So, the current window of GCC versions is 7 years.
+I hope it will not get even larger...
 
-pip3 install dtschema --upgrade
 
-Please check and re-submit after running the above command.
 
+
+
+-- 
+Best Regards
+Masahiro Yamada
