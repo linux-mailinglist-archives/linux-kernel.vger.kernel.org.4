@@ -2,97 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E632D636072
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:51:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6070636068
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:50:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234875AbiKWNvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 08:51:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37522 "EHLO
+        id S237764AbiKWNuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 08:50:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236651AbiKWNun (ORCPT
+        with ESMTP id S237248AbiKWNtm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 08:50:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639B98FF99
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:40:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669210809;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SNHhmVfjWC62dBHkktz2lKH8qamIk/lczkSRmxlEqVI=;
-        b=LUnliWDdooJ2wf6J00FUL9tsssMDpwd7sFDUT+/6iTT7kw1eVErSLlfDmUTV56mo2P6/cK
-        lVJkpG4ZwRnXgYrzH7bb+1Jn7y/PZEIO2BDbyOsh8ydzdwFPDm/tSC/JW9YL41detXammd
-        tJ5FeTf9RecfRGB1vAk4g5a5yXPApoM=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-654-3RHsdkQYPCeXkQk45cC3rA-1; Wed, 23 Nov 2022 08:40:08 -0500
-X-MC-Unique: 3RHsdkQYPCeXkQk45cC3rA-1
-Received: by mail-ej1-f71.google.com with SMTP id nb1-20020a1709071c8100b007ae4083d6f5so9942072ejc.15
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:40:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SNHhmVfjWC62dBHkktz2lKH8qamIk/lczkSRmxlEqVI=;
-        b=SloIIfQR+tUXJBlo/OoB8Te5xxoTEVjJW61SagfcXYBqJnPvOKaeJDXqyihhlyStNl
-         ZK5A/hnPi4bfIjDzesJdEBSORldESVVA7zbcmtcsG0WGGKtTfX/KuXNPp6NuLo1QnRgy
-         Isnlhy/VojqvQdo6UZWL8SCKodifCytTTX1ysBSB1+iHOxtdxiU4EnoajCx+5JzU+PU4
-         RN8sveW9sDu/NKxhYQWDAX01XrlKDD9+jQpEX/UIvo/kxu3ARyNJSaLmksVX4wRbPaCQ
-         eVGqly192D2iq8b1IjeWY6SjjkpSXCFSSHw0pJCetja4qhY2zSe88yuwLZDjZY86gakn
-         8hWA==
-X-Gm-Message-State: ANoB5pmT34c+nRt6f+BvkY7AO6064zYvc2vH+22CkfUJjMbIXGoNuBCd
-        fRiW1B1bBZAmXCTv370e5Bfwe07mgozCJHovZS1z01hJAbaP2GV4B/CC+pyeMzPUqGk0lOlnvL1
-        fGMHW7LWW2P3d195QQ2hMAot7MwFKHeQw3qBziJpe
-X-Received: by 2002:aa7:dd45:0:b0:45a:3c66:b0e4 with SMTP id o5-20020aa7dd45000000b0045a3c66b0e4mr26301512edw.33.1669210807041;
-        Wed, 23 Nov 2022 05:40:07 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7gzZQFA230BeIin7j0qKxuZe3sbEXZICJfqwgbe50BaZYLtBE6/nZoPy4vtGYoisx+/mQFisC850w0rm+Qf4I=
-X-Received: by 2002:aa7:dd45:0:b0:45a:3c66:b0e4 with SMTP id
- o5-20020aa7dd45000000b0045a3c66b0e4mr26301496edw.33.1669210806830; Wed, 23
- Nov 2022 05:40:06 -0800 (PST)
+        Wed, 23 Nov 2022 08:49:42 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861D59039D;
+        Wed, 23 Nov 2022 05:40:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669210803; x=1700746803;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9srsKAsm31l1dTbkfAVTNzSDO2Kf610A6JWSfuub0kk=;
+  b=O8w2xloMEqmWt0Oi58sjwSLMJUVXFoFozTFcy8wRZAAYgq7tWXu1PQp0
+   3NVBC6PVGoxo+5xzXZaJmVTHFILwV0VW0wMPuyEIzZJIHl6ZJOIFfNgIz
+   /NY184QqgbHvTMmsjN6J16AVKDfB83AmcED+ZzYgQ+RTwodf4XQpUarr/
+   oN9/1ESKpC+i2iIdbcjZIxWMpD/o4iq2mRXsrF8BqiEjQRlotM9Fku5Ap
+   S3z4ha7l5L+en/hmJcBl2lx3MqcCOzKsTtKchvR4F0kKVLhyCoWmkZ/yy
+   qy2zoN1kkdOqRVhZYcMoClHGwVfbUCT87WEtg8RNiXMZuRz0d3XLrmKz6
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="312766696"
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="312766696"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 05:40:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="641799230"
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="641799230"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 23 Nov 2022 05:39:59 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oxpyo-00GIsS-0d;
+        Wed, 23 Nov 2022 15:39:58 +0200
+Date:   Wed, 23 Nov 2022 15:39:57 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Gerald Loacker <gerald.loacker@wolfvision.net>
+Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Jakob Hauser <jahau@rocketmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>
+Subject: Re: [PATCH v2 2/2] iio: magnetometer: add ti tmag5273 driver
+Message-ID: <Y34irZRlkpdqLrll@smile.fi.intel.com>
+References: <20221121123542.1322367-1-gerald.loacker@wolfvision.net>
+ <20221121123542.1322367-3-gerald.loacker@wolfvision.net>
+ <Y3uFWH5GV/x7UDcP@smile.fi.intel.com>
+ <f3fbf861-37c6-3bcf-615b-2f55261fbf90@wolfvision.net>
 MIME-Version: 1.0
-References: <20221123065319.56756-1-zhengyongjun3@huawei.com>
-In-Reply-To: <20221123065319.56756-1-zhengyongjun3@huawei.com>
-From:   Alexander Aring <aahringo@redhat.com>
-Date:   Wed, 23 Nov 2022 08:39:55 -0500
-Message-ID: <CAK-6q+gWK3g-g+6ox240hEmVQu2xjq4ZfxGdO9AHoqKG-5Myfw@mail.gmail.com>
-Subject: Re: [Cluster-devel] [PATCH -next] fs: dlm: Fix build error without DEBUG_LOCK_ALLOC
-To:     Zheng Yongjun <zhengyongjun3@huawei.com>
-Cc:     cluster-devel@redhat.com, linux-kernel@vger.kernel.org,
-        zhengbin13@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f3fbf861-37c6-3bcf-615b-2f55261fbf90@wolfvision.net>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Nov 23, 2022 at 10:58:47AM +0100, Gerald Loacker wrote:
+> Am 21.11.2022 um 15:04 schrieb Andy Shevchenko:
+> > On Mon, Nov 21, 2022 at 01:35:42PM +0100, Gerald Loacker wrote:
 
-On Wed, Nov 23, 2022 at 8:37 AM Zheng Yongjun <zhengyongjun3@huawei.com> wrote:
->
-> If CONFIG_DLM is y, DEBUG_LOCK_ALLOC is n, building fails:
->
-> fs/dlm/lowcomms.o: In function `lowcomms_queue_rwork':
-> lowcomms.c:(.text+0x2ac): undefined reference to `lockdep_is_held'
-> lowcomms.c:(.text+0x308): undefined reference to `lockdep_is_held'
-> fs/dlm/lowcomms.o: In function `lowcomms_queue_swork':
-> lowcomms.c:(.text+0x3e0): undefined reference to `lockdep_is_held'
-> fs/dlm/lowcomms.o: In function `restore_callbacks':
-> lowcomms.c:(.text+0xd8c): undefined reference to `lockdep_is_held'
-> lowcomms.c:(.text+0xdcc): undefined reference to `lockdep_is_held'
->
-> Make DLM select DEBUG_LOCK_ALLOC to fix this.
->
+...
 
-Thanks, there is a different approach already in dlm/next and I think
-we don't want to have dlm selecting a debug option.
+> >> +static const struct {
+> >> +	unsigned int scale_int;
+> >> +	unsigned int scale_micro;
+> > 
+> > Can we have a separate patch to define this one eventually in the (one of) IIO
+> > generic headers? It's a bit pity that every new driver seems to reinvent the
+> > wheel.
+> > 
+> >> +} tmag5273_scale_table[4][2] = {
+> >> +	{ { 0, 0 }, { 0, 0 } },
+> >> +	{ { 0, 12200 }, { 0, 24400 } },
+> >> +	{ { 0, 40600 }, { 0, 81200 } },
+> >> +	{ { 0, 0 }, { 0, 0 } },
+> >> +};
+> > 
+> 
+> I'm thinking of defining structs for all similar types of IIO output
+> formats in iio.h like this:
+> 
+> 
+> struct iio_val_int_plus_micro {
+> 	int val_int;
+> 	int val_micro;
+> };
+> 
+> struct iio_val_int_plus_nano {
+> 	int val_int;
+> 	int val_nano;
+> };
+> 
+> struct iio_val_int_plus_micro_db {
+> 	int val_int;
+> 	int val_micro_db;
+> };
 
-- Alex
+...
+
+> struct iio_val_fractional {
+> 	int dividend;
+> 	int divisor;
+> };
+
+This one...
+
+> struct iio_val_fractional_log2 {
+> 	int dividend;
+> 	int divisor;
+> };
+
+...and this one repeat struct s32_fract (or u32_fract, whatever suits better).
+
+> Do you agree?
+
+Me, yes, but you need a blessing by maintainers of IIO.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
