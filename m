@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E5DF636ABF
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 21:19:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 860C1636B0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 21:25:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236797AbiKWUSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 15:18:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40018 "EHLO
+        id S238753AbiKWUXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 15:23:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239876AbiKWURs (ORCPT
+        with ESMTP id S237516AbiKWUWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 15:17:48 -0500
+        Wed, 23 Nov 2022 15:22:53 -0500
 Received: from sonic311-30.consmr.mail.ne1.yahoo.com (sonic311-30.consmr.mail.ne1.yahoo.com [66.163.188.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C1445ED3
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 12:17:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1669234666; bh=YdB7BgVRtE1M+y+ieY1Nzu+9wxVYg2PUdxD+5M52C6g=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=Q2bIT9VPUt4zIN1k3kRIENUHkRsXqGJLqlIjtOqTliwGy45XttGtge0h2fofc+RU/tdLibHu2T2SCPh6qVLNCFxJAGnccXmzUmShAVQlhhGrMveuVaC6cuTMYW05JvBtP6gcViv5X7greLpEWQzIRMt7/LW2An/ZwdYHFYs6M6V6UCAzMlWZ54szRZLT90JLFfLF9kkpzsuhV0pI0bqD2SkfVcFGFUTfbobjr1Pcd4MUgiyjA1+tXmBJaDlcOP+spapmPtTf2AmdedpY1OOZKMgQudJjQfV0DYdo2yJixboEuBQ6vieMcFBIsLTGX4+jqwVzfYA/Lm4mjDzzFS4etw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1669234666; bh=Uhl6uDkhiO1THX1yrKs9jusY3cH9pVdGu93Sg8+Jmy6=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=GyEmCzc0Br+9xad9LaTqL5vquOMnq/JwYGw75t5O+GHQEn072a7Tj88IwjQviRIPEfGchs0NiQvakQmxDRu/6BdMw3CeEX/WnBHyL0xudGmgoRV0pkWH64RPukMyW3sdoicL3/JlMxidSeWPbSFLr2YgimvZChP+g8S6I46PSTWtbCIxdvb7xT2r7o1Bj6ApJ/fMV+gVo7g/LVN1Q3PqpdZyzsj+YN6as/hKZ/D4Dy3WD+NS5ykzQXDAf2706CTvnnRZt+lYrCg1vwxDOCl8RW1UzxRtWS/12g4Tbo0VnrH7aJtZDKYkKVV7Jhj6/12hKmzsFBB8oY+xwDcrAx4uvA==
-X-YMail-OSG: BM775HcVM1k71PyGQY4.Og9cZkVQNB4vnNFqFRnr_ym8uffWzqiBfzOnA_JqkjX
- w6NGaZOBW.N4v5x9TyZ0cR89ncroz9H6NSf7pD4TYAS_.YyWd3TU9VQILI6iUJLcTxppw1BqrqhX
- sXPcclG59Lq36d1tGKELvbd795CNdrwzSU6rrAttK2DlwTAgAYe2a8sN6o9XBrtptRwY_F.YRzZO
- 3V3NBKMm5boWBmjdPl9CD0cfgIeVCvK2f3tbkkX9ykInp_lerktewMGdS8L9J9Incj2umj3JueHb
- BAOZozjeVU6bYP8lVicgkHkNsahUFz5NOFptdS_TjY4OQjIb1v5xyHJK94oWB1ZRdN.LmsjkbMAZ
- U8yt3z0AjkAFFz.V7xkMei1bqgiKvpkvWT8HP3cyMoxxjKkTZZTpiIbDqjwH9OHrvqRbwbJK8hS.
- h8mXdSYmboa_u9up2CH_739Job5gs8W4qZH__aLX1bScswbcXebPhkVYnXFfiQNNBkwDVuucW860
- Al7tdxohfyYPEEQ1R.s47a.NXQx8H1vQcha4RcMcaPa6GPEg1wSDR2LFUCoOOD0GT2fy1504HQpn
- TGDG3QwJSSz1P_HMsT31AcTcNx9ZAw_ZsTq0.u7mB1_08gGi2xdrBcl8MUwR7vvNf40GasPRo1F_
- fFoY5nCtOpfW00aPURcCasvabd1hqtIX_94ZrLjkVy3mnLMoTv.OQhsF_kUhfnTpqzFEZCa3IPjh
- cFGjFg0JJiZeM29ymRb9Zi1LT_n2HJbtzbMzP5inRZAtErX48byXzbZh1NBJZKV48j6Lr15b1pns
- OZAOtTWFlzL6BW_SDXE6D5DHzhlsxARhBFcmSrXE7x5pnU.D4dkDC5dbiZw4Wpr5vdnzni3E2rPW
- YYy7m9CPK8gT64wDijjSlMKRuKcn4RW6vVT1H.AnRGorpWrmqCutcC6qROKiACl9tmTRasixaIGZ
- 0.etGhK.wT_hgch4.FgqKYMTsj2M7A0onfYjeixlNmpYx3AAFBS0yvfp.hBmhlHHVCCmhSHJiMEW
- BKbXUnE5RKx5PYzoTaT18MLZSAA47n5RmLIAeEXApM6KtK0x6B9sOhs.7w3Wr30xZrVaIWHI5JjW
- rb6HQJcgTCRmSQZZzUhoVVFpp6A6KXuBjyzR5P6qZMZBpiBJ39brfP2cmkhYuKOP_K7dPNUwcoz_
- fXxd9FsNKnNnf4LgnrqYB5ifdp2l0F8r1LKmxccN.JeuoQJ3XkTVcnqpp9QZYKMvWrqQT266WMrz
- XfyNYQSN41kfm9tzZ_JaSQb7suuN9C1NgTwqSd_x2ZGn83AOepREB91AkGZJnI8O6a56__6AnGr0
- J36w4c6gGwqywBoG.V8.m0VnDQIWITqSiYoXBmvF7pktMDyr60HxOzDSToXqp3z2KoeNAJKudm9K
- caexYVIRp.GcylKPdTgogpGeetqug4usUYA1aO3GowCETo62IG_SHjQMz9oEtntgRBcqSc6EYDCK
- 0rg94tvGG2_YD89Liz2NI940e4Fqy9dsX0K7AgJB4JMKtBg41Um_FHg6XBMfiaj_WlrrqtasEKxJ
- HToMCQn0m0O_65KrJi6RiSD4laZfMuK5fgJPC8eo7MBUTgPimusFAg.HvmzHzZj3_HZZ4M1wQ5B7
- fyi6AQ85ZXq86u1JmBkOrATXE61Z6PkqIbkvbyNK_Qifw.A5IFtohtKhGopbSHbsGe8hlzXA5EZV
- SuavXtshT5XwPOnoYX0o9mQQuhF6dis2hHRbKs4YC.J30._jQOLut3VCM7m7lHFo2LihgciYrg72
- wc2VMUbMwKT5TfUdbRQ9nUgcHEXDfzTQ.oogrKtGg2bROB_HRCmfptC223d4mRD8CKyhKVNbcale
- 2MWmBvGnqeUG7mvUiswGPd86hbGz.fIN1A0b4aHjUhGl7z73chE29AOI2udxZqEjQ2E836R2iz8U
- gk4Q.GH0zFhu1eiJJksHskHdyIcIGNxidT6sCQzlRFKZFAPn4W5ZlNWxHPE._tMRurR5AtxARXyw
- JKGdVPgTRTKpP6LTi9mldfmI5uk806NaTevIhMydqhKb1PvrAbDUqEOgHVJlUDXBBhH9sWEfatov
- pTCVUyNnoRlX1Qg2SCDKWye.AO.j.7hJdsZyu73lMbG6Sf9uQ9V.fj1ymWU.cN45my95zoN1OMr2
- d1SDtlh4niX6Kiad.pupFkkj6SdgJvVLVGNWKDq14hq2rqoDXY8qou_6rI.jv2nFGBfIeuCbCdQZ
- I5LZlZRPzZ9KeTYVkGitVtpamxbgawsiGTzuqNoOtcOgRODL5kcxPP__Th.zS6A8T4sgXvB7gf8V
- dc4PYjskBGtJz3K4xBeaeUBB6AQ--
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 868F4D0DD5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 12:19:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1669234756; bh=rYli4IiwIzjJa6Ogek16TJclF9LuaigC5LiyN6c36JU=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=d+37kx9g0t08oaqldgFVuMjItCO995Iw4pf0+hK6KV4j0q+bhVPi0jXua8dOxnvsp8VhlvBFHaX2s+yPOt2AKyAYRDIi/G97QQwDrTul3by6hi/45lzEe0qgVdh4J2aKMqLgdPYYP+daFp9HaE/PlaunpPRI2zIXLwTUDRbH7Cm2P9Vry5bpnHc45Om4DaeW6XWCZhP0TxQN8oMrVqwfVIcyi1W5QeEbscvdmZ7rkxbkRKfCzlImxLEIjT0EckEylUsrXhGZvsLm2v9lkuPZcmZcyxCPKbxp5GOQruF6bdm+PaAAPtxwJZ3rEkqThbC4d0jMSwpa5+IIiDzkcQYjHw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1669234756; bh=PEVyjk1mjUdMgp2ecW2RNt9Wth4VFiQRv8kI9yaHvRR=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=I8amNO0KKrBVUNnnXSVOD1wx9agtDlvMaA+x5uI8LFRerLk57d9UG8DubmU/i8GQ4Jg8zXrdz1sc6Nbl4Hl4Agqf05sLp07qDA2n06MtuV71PGjAiENqJtuOuJpC7fefqj36J6vVk0uu7QdW/khxuMKq1lEVi+GqHpvHSSb1F9V3w+4sHfkygmSwUuYH2y4IkWSs/O6j46StbSjy1p8Y81+ViZ8gB4FR7pyOZLPhugcmvLHeiW6oqxmDKRkc75/yT683aqk4J6Qfmn9h6cw0QY9UJ4RSzNBt8F6XIBhx3bGpHl1Is7baPkYZt5Dbe+a44LuwaGD1ptsbf4pOL9n2FA==
+X-YMail-OSG: QwpYOo8VM1mCk2slxbhaHI7T17svcQNUJCgWMudQ1UpHe7JsaMPt79Llz6ynbwz
+ MV_nDubcipn0scHEQ.SphucXJswiZa9TetTp9Ln_nFd5KdCRaysOF2fLnmKzzz9_MxCeqmIY2ntq
+ JZ4fuq_PCNlKg1lcgWCF3b_6KpZokjcAsKs9kbl4KcMsP7qOSfOlgITiRg9dR191BOdgXQrRgW_t
+ ze29j9Hoj_ss7EmqKL_t3ZFs20fxTqENgTLov5WGqv_6ROWSfoiJMHPoW05wImo64LGVIEYHMTOl
+ UPc3pky4._WXwh0uOcTr5ASKup7smK8y4yffj4W7gV6.lFMl_hCUEOKD0jdPQfGyPUqOqVTDp2qt
+ o2GEpY_i7jZ0FfDVEN6SKViut2XlZrIfN76R8sz9iTHBqBj.LV13_0awApiulndCJ8ulESjCiGls
+ aL5paGHlJBIwr9ikLK4LGY3nkMnR2c_K55KvE_PW6G9ZbhvceaTLsIuu40A0ngYNtI5LpUJbcfln
+ 3kYciLXKoycEPj.E5nzxSpZZldndE_QypCbSJ_jb3CdqZv8M_LFb4TMs0Bp3UMzXXXIndtPHig.W
+ _YPlEEYKhRtyGgGK39CKPkx2lkRaFHMBDq40nBLHIuRAqZPK0bl0p1Lc7VDSBk3Y2OWA6vRKHQey
+ _o7CR.KWj9zb6lcd0VBE8ojuY6nsGaPzKYeRd0mrduTkVWG8Pb053rchdDLYybv.g3m2fRb.fpjC
+ anYPVmI_r7_mYgywO96nN4N8NadhNj_ZTtcZi5KrCdWwuF8_AmQbNIVrLeS1UcwkADmMnu40p4.W
+ QoXTkPivwSVq5FpSo6NtIGGDfpWG71HEopqP3nwsFGZlhKFaq1k49CoASzZZb83l7WNwrFSUIy.s
+ CA.iwY9QfXPCLj2Sg6s1icxvZT2.OJ6RDs0u119Qw5ErRq7RZrB7ICR9e9sRYSpruTPpyjnJ2UOA
+ Az4VJJyj44ezn6TYUnWk1Dz_jjRTBd5Ie.6ODXBRlKX9eOFCjyQIPy15klERYl80UVNrUQnR3Lfx
+ XwIdLeDvDCqNIuAbzCW3tX9VLth8RbN_FxaFKAMhuicOfdj3OBlkoFL6ndB0Xzw7g5oUBQbyViJb
+ .IpDYWgVq5xtLKZG5VqwLKb6vqqsGGdwbGPy.rOq_3n4h8SZ0r5uDahuUW15ii1JtVGcz2tLMy9m
+ y6P54VP8M3p3sMN9ZqA2YZCHd8GpMccClT.Aa1NhIpyl26nEuBGNRJHGm_mHP2bk20wi9CD7TCaJ
+ bdPPhZLxW.pCInbNrhlQyLtlpK1846UD3qYkxLJYKeFpDu_4sNPkKYGaoEnNtcrfgPqBE75h_8gG
+ jRTSft01nESIx57ksvsc1qInZo9x6iPD0NJePYf5j77UH5rJ0bj0_QY6qM4OmoWGN9L7h33Zx1ET
+ APGEd5IaT.vDI_mHRBDLuxarBh6Jyk_ZXNTjPDq5CO2cNQwJExFODXXfs.Phb6W0mosh2sHIy2yK
+ wufch3FL.AtCztxZZVXBdhCFHywQM3wMXEmRvaM5bbxCbqdgF0GpYT9KpDHwuwp9toqUr96q6rPL
+ xtBEOqQRuAPi8a0yVYSPvkTbHT6mwglkviCSROsUs91P46nLVyaA5b14_4.mm9Se4OhDymBk9.Cv
+ LGrSb1GQNHhWbKYBYVGyggrlZBW1au7sHRoilamqx257x1smWeJNtoziRinUySDcqH1OOXs5ScXw
+ CQMuMcAuv6fLGof082pUZOjYfl8eTm7TuFR4KAvb5.oaR7Aiu4GVk1fe6Zwr2iXU5f3ngkgMjKRz
+ 5Inc4f_2BYBNPvjuvN3LxzEqbtEubx9x_bfhFYQyO1QsR_ANa0wdShBBVs6uMIRk5c8HwGja4MNa
+ Hk4bkldnyINxKC.ppSE2u1HwfJ2G9BQ9GW9YHzUD8DWFYoisbuwK0MtFUBctt3t7WBik5fLeABdY
+ .IKCJ97thX7sAK1eMx3_iPjmCGzFSbVZ8g4Eg7S9Q7v.d8msYMXfWWKmIDsuftQi8VuVejVWYb5Z
+ 8dHDHw49IMXe4soy36T8hSf_zHNuB_9ZN9szfJjz0UMVGv6WzAszdFFdREga8ylN_2E2ZNTYd8UO
+ m8QCgQDjQmpplKHn6fA_26BJBBMh9ZyTtE6sdSGrmR9jYXDiHj.KPe5OUtUh6XT7.GoXIe59v6_D
+ k5Mfep3NhOOT_XRpmZBn51XJVz1qlTZ2qEp1CGBuGMuasq1NNj8r9G57O_vCxjCCcRlil_U3RObZ
+ RZX3HcSiAHPVVRleIt5oMCixEVXUIQPVtvALc_yxtHhEX_kY-
 X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Wed, 23 Nov 2022 20:17:46 +0000
-Received: by hermes--production-ne1-6bcfb7fb87-5nqxg (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID c337f88fc64cf6889317bc459f114f1a;
-          Wed, 23 Nov 2022 20:17:40 +0000 (UTC)
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Wed, 23 Nov 2022 20:19:16 +0000
+Received: by hermes--production-gq1-579bc4bddd-b8ql8 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 38c80e614aa0809f99b59395af46cd39;
+          Wed, 23 Nov 2022 20:19:13 +0000 (UTC)
 From:   Casey Schaufler <casey@schaufler-ca.com>
 To:     casey.schaufler@intel.com, paul@paul-moore.com,
         linux-security-module@vger.kernel.org
@@ -60,9 +59,9 @@ Cc:     casey@schaufler-ca.com, jmorris@namei.org, keescook@chromium.org,
         john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
         stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
         linux-api@vger.kernel.org, mic@digikod.net
-Subject: [PATCH v3 5/9] LSM: lsm_get_self_attr syscall for LSM self attributes
-Date:   Wed, 23 Nov 2022 12:15:48 -0800
-Message-Id: <20221123201552.7865-6-casey@schaufler-ca.com>
+Subject: [PATCH v3 6/9] LSM: Create lsm_module_list system call
+Date:   Wed, 23 Nov 2022 12:15:49 -0800
+Message-Id: <20221123201552.7865-7-casey@schaufler-ca.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221123201552.7865-1-casey@schaufler-ca.com>
 References: <20221123201552.7865-1-casey@schaufler-ca.com>
@@ -77,333 +76,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create a system call lsm_get_self_attr() to provide the security
-module maintained attributes of the current process. Historically
-these attributes have been exposed to user space via entries in
-procfs under /proc/self/attr.
+Create a system call to report the list of Linux Security Modules
+that are active on the system. The list is provided as an array
+of LSM ID numbers.
 
-Attributes are provided as a collection of lsm_ctx structures
-which are placed into a user supplied buffer. Each structure
-identifys the size of the attribute, and the attribute value.
-The format of the attribute value is defined by the security
-module, but will always be \0 terminated. The ctx_len value
-will always be strlen(ctx)+1.
-
-        ---------------------------
-        | __u32 id                |
-        ---------------------------
-        | __u64 flags             |
-        ---------------------------
-        | __kernel_size_t ctx_len |
-        ---------------------------
-        | __u8 ctx[ctx_len]       |
-        ---------------------------
-        | __u32 id                |
-        ---------------------------
-        | __u64 flags             |
-        ---------------------------
-        | __kernel_size_t ctx_len |
-        ---------------------------
-        | __u8 ctx[ctx_len]       |
-        ---------------------------
+The calling application can use this list determine what LSM
+specific actions it might take. That might include chosing an
+output format, determining required privilege or bypassing
+security module specific behavior.
 
 Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 ---
- Documentation/userspace-api/lsm.rst |   9 ++
- include/linux/syscalls.h            |   3 +
- include/uapi/linux/lsm.h            |  21 ++++
- kernel/sys_ni.c                     |   3 +
- security/Makefile                   |   1 +
- security/lsm_syscalls.c             | 182 ++++++++++++++++++++++++++++
- 6 files changed, 219 insertions(+)
- create mode 100644 security/lsm_syscalls.c
+ Documentation/userspace-api/lsm.rst |  3 +++
+ include/linux/syscalls.h            |  1 +
+ kernel/sys_ni.c                     |  1 +
+ security/lsm_syscalls.c             | 41 +++++++++++++++++++++++++++++
+ 4 files changed, 46 insertions(+)
 
 diff --git a/Documentation/userspace-api/lsm.rst b/Documentation/userspace-api/lsm.rst
-index 6ddf5506110b..98a0c191b499 100644
+index 98a0c191b499..e342d75b99ab 100644
 --- a/Documentation/userspace-api/lsm.rst
 +++ b/Documentation/userspace-api/lsm.rst
-@@ -48,6 +48,15 @@ creating socket objects.
- The proc filesystem provides this value in ``/proc/self/attr/sockcreate``.
- This is supported by the SELinux security module.
+@@ -57,6 +57,9 @@ Get the security attributes of the current process
+ .. kernel-doc:: security/lsm_syscalls.c
+     :identifiers: sys_lsm_get_self_attr
  
-+Kernel interface
-+================
-+
-+Get the security attributes of the current process
-+--------------------------------------------------
-+
 +.. kernel-doc:: security/lsm_syscalls.c
-+    :identifiers: sys_lsm_get_self_attr
++    :identifiers: sys_lsm_module_list
 +
  Additional documentation
  ========================
  
 diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-index a34b0f9a9972..2f2434adec4a 100644
+index 2f2434adec4a..2411b4043752 100644
 --- a/include/linux/syscalls.h
 +++ b/include/linux/syscalls.h
-@@ -71,6 +71,7 @@ struct clone_args;
- struct open_how;
- struct mount_attr;
- struct landlock_ruleset_attr;
-+struct lsm_cxt;
- enum landlock_rule_type;
- 
- #include <linux/types.h>
-@@ -1056,6 +1057,8 @@ asmlinkage long sys_memfd_secret(unsigned int flags);
- asmlinkage long sys_set_mempolicy_home_node(unsigned long start, unsigned long len,
- 					    unsigned long home_node,
+@@ -1059,6 +1059,7 @@ asmlinkage long sys_set_mempolicy_home_node(unsigned long start, unsigned long l
  					    unsigned long flags);
-+asmlinkage long sys_lsm_get_self_attr(struct lsm_ctx *ctx, size_t *size,
-+				      int flags);
+ asmlinkage long sys_lsm_get_self_attr(struct lsm_ctx *ctx, size_t *size,
+ 				      int flags);
++asmlinkage long sys_lsm_module_list(u32 *ids, size_t *size, int flags);
  
  /*
   * Architecture-specific system calls
-diff --git a/include/uapi/linux/lsm.h b/include/uapi/linux/lsm.h
-index 8e9124bf622c..a400ae056d22 100644
---- a/include/uapi/linux/lsm.h
-+++ b/include/uapi/linux/lsm.h
-@@ -9,6 +9,27 @@
- #ifndef _UAPI_LINUX_LSM_H
- #define _UAPI_LINUX_LSM_H
- 
-+#include <linux/types.h>
-+#include <linux/unistd.h>
-+
-+/**
-+ * struct lsm_ctx - LSM context
-+ * @id: the LSM id number, see LSM_ID_XXX
-+ * @flags: context specifier and LSM specific flags
-+ * @ctx_len: the size of @ctx
-+ * @ctx: the LSM context, a nul terminated string
-+ *
-+ * @ctx in a nul terminated string.
-+ *	(strlen(@ctx) < @ctx_len) is always true.
-+ *	(strlen(@ctx) == @ctx_len + 1) is not guaranteed.
-+ */
-+struct lsm_ctx {
-+	__u32		id;
-+	__u64		flags;
-+	__kernel_size_t	ctx_len;
-+	__u8		ctx[];
-+};
-+
- /*
-  * ID values to identify security modules.
-  * A system may use more than one security module.
 diff --git a/kernel/sys_ni.c b/kernel/sys_ni.c
-index 860b2dcf3ac4..7b2513d5605d 100644
+index 7b2513d5605d..af1fd28c0420 100644
 --- a/kernel/sys_ni.c
 +++ b/kernel/sys_ni.c
-@@ -262,6 +262,9 @@ COND_SYSCALL_COMPAT(recvmsg);
- /* mm/nommu.c, also with MMU */
- COND_SYSCALL(mremap);
+@@ -264,6 +264,7 @@ COND_SYSCALL(mremap);
  
-+/* security/lsm_syscalls.c */
-+COND_SYSCALL(lsm_get_self_attr);
-+
+ /* security/lsm_syscalls.c */
+ COND_SYSCALL(lsm_get_self_attr);
++COND_SYSCALL(lsm_module_list);
+ 
  /* security/keys/keyctl.c */
  COND_SYSCALL(add_key);
- COND_SYSCALL(request_key);
-diff --git a/security/Makefile b/security/Makefile
-index 18121f8f85cd..59f238490665 100644
---- a/security/Makefile
-+++ b/security/Makefile
-@@ -7,6 +7,7 @@ obj-$(CONFIG_KEYS)			+= keys/
- 
- # always enable default capabilities
- obj-y					+= commoncap.o
-+obj-$(CONFIG_SECURITY) 			+= lsm_syscalls.o
- obj-$(CONFIG_MMU)			+= min_addr.o
- 
- # Object file lists
 diff --git a/security/lsm_syscalls.c b/security/lsm_syscalls.c
-new file mode 100644
-index 000000000000..c109a0dc18fe
---- /dev/null
+index c109a0dc18fe..3838cdf66310 100644
+--- a/security/lsm_syscalls.c
 +++ b/security/lsm_syscalls.c
-@@ -0,0 +1,182 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * System calls implementing the Linux Security Module API.
-+ *
-+ *  Copyright (C) 2022 Casey Schaufler <casey@schaufler-ca.com>
-+ *  Copyright (C) 2022 Intel Corporation
-+ */
-+
-+#include <asm/current.h>
-+#include <linux/compiler_types.h>
-+#include <linux/err.h>
-+#include <linux/errno.h>
-+#include <linux/security.h>
-+#include <linux/stddef.h>
-+#include <linux/syscalls.h>
-+#include <linux/types.h>
-+#include <linux/lsm_hooks.h>
-+#include <uapi/linux/lsm.h>
-+
-+struct attrs_used_map {
-+	char *name;
-+	int attrs_used;
-+};
-+
-+static const struct attrs_used_map lsm_attr_names[] = {
-+	{ .name = "current",	.attrs_used = LSM_ATTR_CURRENT, },
-+	{ .name = "exec",	.attrs_used = LSM_ATTR_EXEC, },
-+	{ .name = "fscreate",	.attrs_used = LSM_ATTR_FSCREATE, },
-+	{ .name = "keycreate",	.attrs_used = LSM_ATTR_KEYCREATE, },
-+	{ .name = "prev",	.attrs_used = LSM_ATTR_PREV, },
-+	{ .name = "sockcreate",	.attrs_used = LSM_ATTR_SOCKCREATE, },
-+};
-+
-+static int attr_used_index(u32 flags)
-+{
-+	int i;
-+
-+	if (flags == 0)
-+		return -EINVAL;
-+
-+	for (i = 0; i < ARRAY_SIZE(lsm_attr_names); i++)
-+		if ((lsm_attr_names[i].attrs_used & flags) == flags)
-+			return i;
-+
-+	return -EINVAL;
-+}
+@@ -180,3 +180,44 @@ SYSCALL_DEFINE3(lsm_get_self_attr,
+ 	kfree(final);
+ 	return rc;
+ }
 +
 +/**
-+ * sys_lsm_get_self_attr - Return current task's security module attributes
-+ * @ctx: the LSM contexts
-+ * @size: size of @ctx, updated on return
-+ * @flags: which attribute to return
++ * sys_lsm_module_list - Return a list of the active security modules
++ * @ids: the LSM module ids
++ * @size: size of @ids, updated on return
++ * @flags: reserved for future use, must be zero
 + *
-+ * Returns the calling task's LSM contexts. On success this
-+ * function returns the number of @ctx array elements. This value
-+ * may be zero if there are no LSM contexts assigned. If @size is
-+ * insufficient to contain the return data -E2BIG is returned and
-+ * @size is set to the minimum required size. In all other cases
-+ * a negative value indicating the error is returned.
++ * Returns a list of the active LSM ids. On success this function
++ * returns the number of @ids array elements. This value may be zero
++ * if there are no LSMs active. If @size is insufficient to contain
++ * the return data -E2BIG is returned and @size is set to the minimum
++ * required size. In all other cases a negative value indicating the
++ * error is returned.
 + */
-+SYSCALL_DEFINE3(lsm_get_self_attr,
-+		struct lsm_ctx __user *, ctx,
-+		__kernel_size_t __user *, size,
-+		__u32, flags)
++SYSCALL_DEFINE3(lsm_module_list,
++		__u32 __user *, ids,
++		size_t __user *, size,
++		__u64, flags)
 +{
++	size_t total_size = lsm_active_cnt * sizeof(*ids);
++	size_t usize;
 +	int i;
-+	int rc = 0;
-+	int len;
-+	int attr;
-+	int count = 0;
-+	void *curr;
-+	char *cp;
-+	char *np;
-+	char **interum_ctx;
-+	size_t total_size = 0;
-+	struct lsm_ctx *ip;
-+	struct lsm_ctx *interum;
-+	struct lsm_ctx *final = NULL;
 +
-+	attr = attr_used_index(flags);
-+	if (attr < 0)
-+		return attr;
++	if (flags)
++		return -EINVAL;
 +
-+	interum = kzalloc(ARRAY_SIZE(lsm_attr_names) * lsm_active_cnt *
-+			  sizeof(*interum), GFP_KERNEL);
-+	if (interum == NULL)
-+		return -ENOMEM;
-+	ip = interum;
++	if (get_user(usize, size))
++		return -EFAULT;
 +
-+	interum_ctx = kzalloc(ARRAY_SIZE(lsm_attr_names) * lsm_active_cnt *
-+			      sizeof(*interum_ctx), GFP_KERNEL);
-+	if (interum_ctx == NULL) {
-+		kfree(interum);
-+		return -ENOMEM;
-+	}
++	if (put_user(total_size, size) != 0)
++		return -EFAULT;
 +
-+	for (i = 0; i < lsm_active_cnt; i++) {
-+		if ((lsm_idlist[i]->attrs_used &
-+		     lsm_attr_names[attr].attrs_used) == 0)
-+			continue;
++	if (usize < total_size)
++		return -E2BIG;
 +
-+		len = security_getprocattr(current, lsm_idlist[i]->id,
-+					   lsm_attr_names[attr].name,
-+					   &cp);
-+		if (len <= 0)
-+			continue;
++	for (i = 0; i < lsm_active_cnt; i++)
++		if (put_user(lsm_idlist[i]->id, ids++))
++			return -EFAULT;
 +
-+		ip->id = lsm_idlist[i]->id;
-+		ip->flags = lsm_attr_names[attr].attrs_used;
-+		interum_ctx[count] = cp;
-+
-+		/*
-+		 * A security module that returns a binary attribute
-+		 * will need to identify itself to prevent string
-+		 * processing.
-+		 *
-+		 * At least one security module adds a \n at the
-+		 * end of a context to make it look nicer. Change
-+		 * that to a \0 so that user space doesn't have to
-+		 * work around it.
-+		 *
-+		 * Security modules have been inconsistent about
-+		 * including the \0 terminator in the size. If it's
-+		 * not there make space for it.
-+		 *
-+		 * The length returned will reflect the length of
-+		 * the string provided by the security module, which
-+		 * may not match what getprocattr returned.
-+		 */
-+		np = strnchr(cp, len, '\n');
-+		if (np != NULL)
-+			*np = '\0';
-+		ip->ctx_len = strnlen(cp, len) + 1;
-+		total_size += sizeof(*interum) + ip->ctx_len;
-+		ip++;
-+		count++;
-+	}
-+
-+	if (count == 0)
-+		goto free_out;
-+
-+	final = kzalloc(total_size, GFP_KERNEL);
-+	if (final == NULL) {
-+		rc = -ENOMEM;
-+		goto free_out;
-+	}
-+
-+	curr = final;
-+	ip = interum;
-+	for (i = 0; i < count; i++) {
-+		memcpy(curr, ip, sizeof(*interum));
-+		curr += sizeof(*interum);
-+		if (ip->ctx_len > 1)
-+			memcpy(curr, interum_ctx[i], ip->ctx_len - 1);
-+		curr += ip->ctx_len;
-+		ip++;
-+	}
-+
-+	if (get_user(len, size)) {
-+		rc = -EFAULT;
-+		goto free_out;
-+	}
-+	if (total_size > len) {
-+		rc = -ERANGE;
-+		if (put_user(total_size, size) != 0)
-+			rc = -EFAULT;
-+		goto free_out;
-+	}
-+	if (copy_to_user(ctx, final, total_size) != 0 ||
-+	    put_user(total_size, size) != 0)
-+		rc = -EFAULT;
-+	else
-+		rc = count;
-+
-+free_out:
-+	for (i = 0; i < count; i++)
-+		kfree(interum_ctx[i]);
-+	kfree(interum_ctx);
-+	kfree(interum);
-+	kfree(final);
-+	return rc;
++	return lsm_active_cnt;
 +}
 -- 
 2.38.1
