@@ -2,166 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63571635FD0
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:33:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 580B3635FFE
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:35:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238803AbiKWNdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 08:33:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38554 "EHLO
+        id S238800AbiKWNew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 08:34:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238813AbiKWNcI (ORCPT
+        with ESMTP id S238779AbiKWNdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 08:32:08 -0500
-Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CACD8FB09
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:16:19 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1669209367; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=VgJ7rsfjU0vkSBmmZa0LW45iT+Tnqilgx1INQNmYo8429dTFqritHdkdWjiU33jiWT25bhzHu02W6LnUT0jPLoDof0bnPRpqAeyz28ynCWrlmDBW55vrdyMAUR4hMqXn6NWVGIny3IPd2egwEYpbRrsB1n6YIpvv6jluLEOsXqE=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1669209367; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=UDJV2XySpjIKGCIbE8woRdDrQFpOJvF+DUQItZkefkk=; 
-        b=L6coffg38kauvPZAlzGSccLygADXGt3O7vIsN728twyZKNIPw8JOMZSC+mAliEpCPJJDIj0RCi5QY7PMNiuwXhvhnLx4AxvS4J1aqbZiFf1Q3e21eDxeNl/srMTSDm3wfx2+wgV1/uP7vhR0lTEpP1hJI0D1IrM9Jedx+UXmPJg=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=icenowy.me;
-        spf=pass  smtp.mailfrom=uwu@icenowy.me;
-        dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1669209367;
-        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
-        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
-        bh=UDJV2XySpjIKGCIbE8woRdDrQFpOJvF+DUQItZkefkk=;
-        b=CQaMyzP7Nt5gKdXrbT9jvzUK5Yrt+pTmEYUbegAPsMLjsU9n4Wwp+2s31TC8sw6r
-        SIPFBNmhi9adIqaRInQdEMm41HeJkmlWxM3o2P92zJC8GHt/QAEqAbZoc1BgjAJKN5n
-        2O7AiB5EhdRTPIb7LjDB5tJrCERgJCFWJbRiy/9E=
-Received: from edelgard.fodlan.icenowy.me (112.94.103.239 [112.94.103.239]) by mx.zohomail.com
-        with SMTPS id 1669209364789380.3220861886971; Wed, 23 Nov 2022 05:16:04 -0800 (PST)
-Message-ID: <402eb920c5ca84e7d751ec7bd9b7f4f512a66921.camel@icenowy.me>
-Subject: Re: [PATCH] irqchip/sifive-plic: drop quirk for two-cell variant
-From:   Icenowy Zheng <uwu@icenowy.me>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Date:   Wed, 23 Nov 2022 21:16:01 +0800
-In-Reply-To: <86ilj5oltb.wl-maz@kernel.org>
-References: <20221121042026.419383-1-uwu@icenowy.me>
-         <86o7syoq4t.wl-maz@kernel.org>
-         <16d01eebc1693916fc74e1e75458d6c0f080cf37.camel@icenowy.me>
-         <86ilj5oltb.wl-maz@kernel.org>
-Organization: Anthon Open-Source Community
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 
+        Wed, 23 Nov 2022 08:33:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3A8B82
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:16:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669209388;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=hOjXEo74LMv/9JyDqLl/For3+JWaKkwN289eetN1FnE=;
+        b=cLIwygiwbe+YGnzt8HztW367gHaXKiEnhgY6c0ZKPYWssbxAlXqtqRRkVz9V48JSN9pSM8
+        eAnOvaqHTV3kpmZI8ocWwFigiEsAGt/eAfLWPexIBWA89ie9Dcfh4agSOdIAOJI2HsY0Oc
+        zaD8B7qB6Z05BpXE1QhRrCNLOnJ2FPg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-383-z1Aa5QxNN061Zxr5IJP3dQ-1; Wed, 23 Nov 2022 08:16:25 -0500
+X-MC-Unique: z1Aa5QxNN061Zxr5IJP3dQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9E09B801585;
+        Wed, 23 Nov 2022 13:16:24 +0000 (UTC)
+Received: from llong.com (unknown [10.22.8.230])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1165A2024CBE;
+        Wed, 23 Nov 2022 13:16:24 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Cc:     Phil Auld <pauld@redhat.com>, linux-kernel@vger.kernel.org,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH-tip v2] sched: Fix NULL user_cpus_ptr check in dup_user_cpus_ptr()
+Date:   Wed, 23 Nov 2022 08:16:12 -0500
+Message-Id: <20221123131612.914906-1-longman@redhat.com>
 MIME-Version: 1.0
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=E5=9C=A8 2022-11-23=E6=98=9F=E6=9C=9F=E4=B8=89=E7=9A=84 13:13 +0000=EF=BC=
-=8CMarc Zyngier=E5=86=99=E9=81=93=EF=BC=9A
-> On Wed, 23 Nov 2022 12:38:56 +0000,
-> Icenowy Zheng <uwu@icenowy.me> wrote:
-> >=20
-> > =E5=9C=A8 2022-11-22=E6=98=9F=E6=9C=9F=E4=BA=8C=E7=9A=84 17:28 +0000=EF=
-=BC=8CMarc Zyngier=E5=86=99=E9=81=93=EF=BC=9A
-> > > On Mon, 21 Nov 2022 04:20:26 +0000,
-> > > Icenowy Zheng <uwu@icenowy.me> wrote:
-> > > >=20
-> > > > As the special handling of edge-triggered interrupts are
-> > > > defined in
-> > > > the
-> > > > PLIC spec, we can assume it's not a quirk, but a feature of the
-> > > > PLIC
-> > > > spec; thus making it a quirk and use quirk-based codepath is
-> > > > not so
-> > > > necessary.
-> > >=20
-> > > It *is* necessary.
-> > >=20
-> > > >=20
-> > > > Move to a #interrupt-cells-based practice which will allow both
-> > > > device
-> > > > trees without interrupt flags and with interrupt flags work for
-> > > > all
-> > > > compatible strings.
-> > >=20
-> > > No. You're tying together two unrelated concepts:
-> > >=20
-> > > - Edges get dropped in some implementations (and only some). You
-> > > can
-> > > =C2=A0 argue that the architecture allows it, but I see it is an
-> > > =C2=A0 implementation bug.
-> >=20
-> > As the specification allows it, it's not an implementation bug --
-> > and
-> > for those which do not show this problem, it's possible that it's
-> > just
-> > all using the same trigger type (e.g. Rocket).
->=20
-> What are you against? The fact that this is flagged as a quirk?
-> Honestly, I don't care about that. If we can fold all implementations
-> into the same scheme, that's fine by me.
+In general, a non-null user_cpus_ptr will remain set until the task dies.
+A possible exception to this is the fact that do_set_cpus_allowed()
+will clear a non-null user_cpus_ptr. To allow this possible racing
+condition, we need to check for NULL user_cpus_ptr under the pi_lock
+before duping the user mask.
 
-Then what should I do?
+Fixes: 851a723e45d1 ("sched: Always clear user_cpus_ptr in do_set_cpus_allowed()")
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ kernel/sched/core.c | 23 +++++++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
 
->=20
-> >=20
-> > >=20
-> > > - The need for expressing additional information in the interrupt
-> > > =C2=A0 specifier is not necessarily related to the above. Other
-> > > interrupt
-> > > =C2=A0 controllers use extra cells to encode the interrupt affinity,
-> > > for
-> > > =C2=A0 example.
-> >=20
-> > I think in these situations, if the interrupt controller does not
-> > contain any special handling for edge interrupts, we can just
-> > describe
-> > them as level ones in SW.
->=20
-> No, that's utterly wrong. We don't describe an edge as level. Ever.
->=20
-> >=20
-> > >=20
-> > > I want these two things to be kept separate. Otherwise, once we
-> > > get
-> > > some fancy ACPI support for RISCV (no, please...), we'll have to
-> > > redo
-> > > the whole thing...
-> > >=20
-> > > > In addition, this addresses a stable version DT binding
-> > > > violation -
-> > > > -
-> > > > Linux v5.19 comes with "thead,c900-plic" with #interrupt-cells
-> > > > defined to
-> > > > be 1 instead of 2, this commit will allow DTs that complies to
-> > > > Linux
-> > > > v5.19 binding work (although no such DT is devliered to the
-> > > > public
-> > > > now).
-> > >=20
-> > > *That* is what should get fixed.
-> >=20
-> > Supporting all stable versions' DT binding is our promise, I think.
->=20
-> Absolutely. And I'm asking you to fix it. And only that.
-
-Then what should I do? Mask this as another quirk that is only
-applicable to c900-plic?
-
-Sounds more crazy...
-
->=20
-> Thanks,
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0M.
->=20
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 8df51b08bb38..6b259d9e127a 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -2624,8 +2624,14 @@ void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask)
+ int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src,
+ 		      int node)
+ {
++	cpumask_t *user_mask = NULL;
+ 	unsigned long flags;
+ 
++	/*
++	 * This check is racy and losing the race is a valid situation.
++	 * It is not worth the extra overhead of taking the pi_lock on
++	 * every fork/clone.
++	 */
+ 	if (!src->user_cpus_ptr)
+ 		return 0;
+ 
+@@ -2633,10 +2639,23 @@ int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src,
+ 	if (!dst->user_cpus_ptr)
+ 		return -ENOMEM;
+ 
+-	/* Use pi_lock to protect content of user_cpus_ptr */
++	/*
++	 * Use pi_lock to protect content of user_cpus_ptr
++	 *
++	 * Though unlikely, user_cpus_ptr can be reset to NULL by a concurrent
++	 * do_set_cpus_allowed(). When this happens, we need to clear
++	 * dst->user_cpus_ptr and free the allocated memory afterward.
++	 */
+ 	raw_spin_lock_irqsave(&src->pi_lock, flags);
+-	cpumask_copy(dst->user_cpus_ptr, src->user_cpus_ptr);
++	if (src->user_cpus_ptr)
++		cpumask_copy(dst->user_cpus_ptr, src->user_cpus_ptr);
++	else
++		swap(dst->user_cpus_ptr, user_mask);
+ 	raw_spin_unlock_irqrestore(&src->pi_lock, flags);
++
++	if (unlikely(user_mask))
++		kfree(user_mask);
++
+ 	return 0;
+ }
+ 
+-- 
+2.31.1
 
