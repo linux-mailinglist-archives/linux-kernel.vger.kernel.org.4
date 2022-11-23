@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D749635DF1
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 13:56:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DB2D635EA2
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 13:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238525AbiKWM4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 07:56:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48398 "EHLO
+        id S238323AbiKWM4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 07:56:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238520AbiKWMzV (ORCPT
+        with ESMTP id S238556AbiKWMzZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 07:55:21 -0500
+        Wed, 23 Nov 2022 07:55:25 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1184B6B38F;
-        Wed, 23 Nov 2022 04:45:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698348B872;
+        Wed, 23 Nov 2022 04:45:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7C63BB81F70;
-        Wed, 23 Nov 2022 12:45:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 694C2C433D7;
-        Wed, 23 Nov 2022 12:45:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2494BB81F5D;
+        Wed, 23 Nov 2022 12:45:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4150FC433B5;
+        Wed, 23 Nov 2022 12:45:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669207528;
-        bh=3Z5VSz+IaXP3WVAY6Thqe7EqruPoNaXQOHKek17Oe7E=;
+        s=k20201202; t=1669207531;
+        bh=3MviyrC2njBscUAbTJZ9qmoodCR9Uz6Jufyhkr1+Q0c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sFQ5yoeNiVW/jqkdfMwNI1vYzLy+rzhvWe4Jmb9spLL5CKewzJn3r3jv/OZL0gYnM
-         nYHt7AlpTS2PTLEFqnq/T/3hbnn9x2COxFDhfVjukA54TImSA54zSK+bHK+Snu++zV
-         ablbXXZRWMt4d6BCkNdVNQofl7/xaYvoBMITw9qRu4hOIx33PHCMMhXm78G+8cqQAI
-         Z0BjC+ZJsdApmS/P/HcRnrDkjZ4qfngzcCTz6wUOvImPYKCwThqiwtlYSdCWTKgkyX
-         laUE3HFJCzD5a0cJ/14UNmT7JgJm7QwqY9jj0j1lHlFjfOMnmS8RffpRoNawGI+rKl
-         7TP/tJf34IOgA==
+        b=HLmm8tTV82h51H7NkAeuZ5lQTdlKhem4i08Q88xYPXjKftaTrCmjZAUdPK424zCq5
+         Yam86Ub2tQi957hBlaUQiSLO7qEq6PfM/+gLOxYDKr5mavzW68dGzpBD35ScokIrpE
+         85+qteydds8EzD+HwF3N3pivkNM6HWiCoZH0PqjIFPJAcGpTG06vUGsJfPuxlnh+sd
+         77EBoY6N/pB2i51DFfcoraRLSYx6NoXFCNPYyr7ppb+u9P4gUzqCL4dCDt9eHU2Qa4
+         erSxLZmy+1T34JEIB0/o58QnD8XKfBQashYpJWmWA9zPBAbLirdGqZDPJkvGHC7N3M
+         OLMLFJg1LZqSA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     ruanjinjie <ruanjinjie@huawei.com>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Juergen Gross <jgross@suse.com>,
-        Sasha Levin <sashal@kernel.org>, sstabellini@kernel.org,
-        xen-devel@lists.xenproject.org
-Subject: [PATCH AUTOSEL 4.14 03/10] xen/platform-pci: add missing free_irq() in error path
-Date:   Wed, 23 Nov 2022 07:45:11 -0500
-Message-Id: <20221123124520.266643-3-sashal@kernel.org>
+Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, markgross@kernel.org,
+        platform-driver-x86@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 06/10] platform/x86: hp-wmi: Ignore Smart Experience App event
+Date:   Wed, 23 Nov 2022 07:45:14 -0500
+Message-Id: <20221123124520.266643-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221123124520.266643-1-sashal@kernel.org>
 References: <20221123124520.266643-1-sashal@kernel.org>
@@ -58,52 +57,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ruanjinjie <ruanjinjie@huawei.com>
+From: Kai-Heng Feng <kai.heng.feng@canonical.com>
 
-[ Upstream commit c53717e1e3f0d0f9129b2e0dbc6dcc5e0a8132e9 ]
+[ Upstream commit 8b9b6a044b408283b086702b1d9e3cf4ba45b426 ]
 
-free_irq() is missing in case of error in platform_pci_probe(), fix that.
+Sometimes hp-wmi driver complains on system resume:
+[ 483.116451] hp_wmi: Unknown event_id - 33 - 0x0
 
-Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
-Reviewed-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Link: https://lore.kernel.org/r/20221114112124.1965611-1-ruanjinjie@huawei.com
-Signed-off-by: Juergen Gross <jgross@suse.com>
+According to HP it's a feature called "HP Smart Experience App" and it's
+safe to be ignored.
+
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Link: https://lore.kernel.org/r/20221114073842.205392-1-kai.heng.feng@canonical.com
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/xen/platform-pci.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/platform/x86/hp-wmi.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/xen/platform-pci.c b/drivers/xen/platform-pci.c
-index 4cec8146609a..c7e190e5db30 100644
---- a/drivers/xen/platform-pci.c
-+++ b/drivers/xen/platform-pci.c
-@@ -150,7 +150,7 @@ static int platform_pci_probe(struct pci_dev *pdev,
- 		if (ret) {
- 			dev_warn(&pdev->dev, "Unable to set the evtchn callback "
- 					 "err=%d\n", ret);
--			goto out;
-+			goto irq_out;
- 		}
- 	}
+diff --git a/drivers/platform/x86/hp-wmi.c b/drivers/platform/x86/hp-wmi.c
+index f911410bb4c7..6f35becaa743 100644
+--- a/drivers/platform/x86/hp-wmi.c
++++ b/drivers/platform/x86/hp-wmi.c
+@@ -76,6 +76,7 @@ enum hp_wmi_event_ids {
+ 	HPWMI_PEAKSHIFT_PERIOD		= 0x0F,
+ 	HPWMI_BATTERY_CHARGE_PERIOD	= 0x10,
+ 	HPWMI_SANITIZATION_MODE		= 0x17,
++	HPWMI_SMART_EXPERIENCE_APP	= 0x21,
+ };
  
-@@ -158,13 +158,16 @@ static int platform_pci_probe(struct pci_dev *pdev,
- 	grant_frames = alloc_xen_mmio(PAGE_SIZE * max_nr_gframes);
- 	ret = gnttab_setup_auto_xlat_frames(grant_frames);
- 	if (ret)
--		goto out;
-+		goto irq_out;
- 	ret = gnttab_init();
- 	if (ret)
- 		goto grant_out;
- 	return 0;
- grant_out:
- 	gnttab_free_auto_xlat_frames();
-+irq_out:
-+	if (!xen_have_vector_callback)
-+		free_irq(pdev->irq, pdev);
- out:
- 	pci_release_region(pdev, 0);
- mem_out:
+ struct bios_args {
+@@ -634,6 +635,8 @@ static void hp_wmi_notify(u32 value, void *context)
+ 		break;
+ 	case HPWMI_SANITIZATION_MODE:
+ 		break;
++	case HPWMI_SMART_EXPERIENCE_APP:
++		break;
+ 	default:
+ 		pr_info("Unknown event_id - %d - 0x%x\n", event_id, event_data);
+ 		break;
 -- 
 2.35.1
 
