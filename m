@@ -2,269 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C648636870
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:16:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79236636862
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:16:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239667AbiKWSOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 13:14:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40604 "EHLO
+        id S239693AbiKWSOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 13:14:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239590AbiKWSNw (ORCPT
+        with ESMTP id S239435AbiKWSN7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 13:13:52 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273E9FCF5;
-        Wed, 23 Nov 2022 10:10:25 -0800 (PST)
-Received: from fraeml744-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NHTgc0km7z67Q1Q;
-        Thu, 24 Nov 2022 02:10:20 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml744-chm.china.huawei.com (10.206.15.225) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 23 Nov 2022 19:10:22 +0100
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 23 Nov
- 2022 18:10:22 +0000
-Date:   Wed, 23 Nov 2022 18:10:21 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Gerald Loacker <gerald.loacker@wolfvision.net>
-CC:     <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wed, 23 Nov 2022 13:13:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC4D913D41;
+        Wed, 23 Nov 2022 10:10:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B45661E38;
+        Wed, 23 Nov 2022 18:10:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BB2DC433D6;
+        Wed, 23 Nov 2022 18:10:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1669227053;
+        bh=7X1Me0V7EXsm5r0OrPDHsQK8HbsG4Re2XTojZLZDjdc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YTyA9A1RK3VBVc4OuLsGmjha4gZZFX3fOAmM46DVvT12a9cMFNag8b+bk1nJBSkOS
+         iYBRuVdyoNseo7VxiYe+zfzA7cAKf7r+yPGFV7L1PjP6Bq7qE0QAPRFkIwzbad3cyJ
+         8YPFAWrJ2IcD41r/Fw+Je3USDQVOZs3K0ic3VM6I=
+Date:   Wed, 23 Nov 2022 19:10:49 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Jakob Hauser <jahau@rocketmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>
-Subject: Re: [PATCH v2 2/2] iio: magnetometer: add ti tmag5273 driver
-Message-ID: <20221123181021.000046b0@Huawei.com>
-In-Reply-To: <20221121123542.1322367-3-gerald.loacker@wolfvision.net>
-References: <20221121123542.1322367-1-gerald.loacker@wolfvision.net>
-        <20221121123542.1322367-3-gerald.loacker@wolfvision.net>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Wolfram Sang <wsa@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sean Young <sean@mess.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Ming Lei <ming.lei@redhat.com>,
+        Jilin Yuan <yuanjilin@cdjrlc.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Won Chung <wonchung@google.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-i3c@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH 3/5] driver core: make struct device_type.uevent() take a
+ const *
+Message-ID: <Y35iKfYf3ThdVvaR@kroah.com>
+References: <20221123122523.1332370-3-gregkh@linuxfoundation.org>
+ <711d5275-7e80-c00d-0cdc-0f3d52175361@gmail.com>
+ <Y34hgIW8p1RlQTBB@smile.fi.intel.com>
+ <97be39ed-3cea-d55a-caa6-c2652baef399@gmail.com>
+ <Y34zyzdbRUdyOSkA@casper.infradead.org>
+ <Y34+V2bCDdqujBDk@kroah.com>
+ <Y35JfNJDppRp5bLX@ziepe.ca>
+ <Y35R+/eQJYI7VaDS@kroah.com>
+ <Y35YlI93UBuTfgYy@ziepe.ca>
+ <Y35dMIaNYSE0Cykd@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y35dMIaNYSE0Cykd@casper.infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Nov 2022 13:35:42 +0100
-Gerald Loacker <gerald.loacker@wolfvision.net> wrote:
-
-> Add support for TI TMAG5273 Low-Power Linear 3D Hall-Effect Sensor.
-> Additionally to temperature and magnetic X, Y and Z-axes the angle and
-> magnitude are reported.
-> The sensor is operating in continuous measurement mode and changes to sleep
-> mode if not used for 5 seconds.
+On Wed, Nov 23, 2022 at 05:49:36PM +0000, Matthew Wilcox wrote:
+> On Wed, Nov 23, 2022 at 01:29:56PM -0400, Jason Gunthorpe wrote:
+> > #define generic_container_of(in_type, in, out_type, out_member) \
+> > 	_Generic(in,                                        \
+> >                   const in_type *: ((const out_type *)container_of(in, out_type, out_member)),   \
+> >                   in_type *: ((out_type *)container_of(in, out_type, out_member)) \
+> > 		  )
 > 
-> Datasheet: https://www.ti.com/lit/gpn/tmag5273
-> Signed-off-by: Gerald Loacker <gerald.loacker@wolfvision.net>
+> There's a neat trick I found in seqlock.h:
+> 
+> #define generic_container_of(in_t, in, out_t, m)			\
+> 	_Generic(*(in),							\
+> 		const in_t: ((const out_t *)container_of(in, out_t, m)), \
+> 		in_t: ((out_t *)container_of(in, out_type, m))	\
+> 	)
+> 
+> and now it fits in 80 columns ;-)
 
-Hi Gerald,
+Nice trick!  Dropping the inline functions is a bit different, let me
+see if that still gives a sane error if we pass an incorrect type or
+mess with the const * the wrong way.  I'll run some tests tomorrow
+afternoon...
 
-A few additional comment from me. I quickly read Andy's and have tried
-not to overlap too much!
+thanks,
 
-Thanks,
-
-Jonathan
-
-> +static int tmag5273_read_raw(struct iio_dev *indio_dev,
-> +			     const struct iio_chan_spec *chan, int *val,
-> +			     int *val2, long mask)
-> +{
-> +	struct tmag5273_data *data = iio_priv(indio_dev);
-> +	s16 t, x, y, z;
-> +	u16 angle, magnitude;
-> +	int ret;
-> +
-> +	switch (mask) {
-> +	case IIO_CHAN_INFO_PROCESSED:
-> +	case IIO_CHAN_INFO_RAW:
-> +		ret = pm_runtime_resume_and_get(data->dev);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		ret = tmag5273_get_measure(data, &t, &x, &y, &z, &angle,
-> +					   &magnitude);
-> +		if (ret)
-> +			return ret;
-> +
-> +		pm_runtime_mark_last_busy(data->dev);
-> +		pm_runtime_put_autosuspend(data->dev);
-> +
-> +		switch (chan->address) {
-> +		case TEMPERATURE:
-> +			*val = t;
-> +			return IIO_VAL_INT;
-> +		case AXIS_X:
-> +			*val = x;
-> +			return IIO_VAL_INT;
-> +		case AXIS_Y:
-> +			*val = y;
-> +			return IIO_VAL_INT;
-> +		case AXIS_Z:
-> +			*val = z;
-> +			return IIO_VAL_INT;
-> +		case ANGLE:
-> +			*val = angle;
-> +			return IIO_VAL_INT;
-> +		case MAGNITUDE:
-> +			*val = magnitude;
-> +			return IIO_VAL_INT;
-> +		default:
-> +			dev_err(data->dev, "Unknown channel %lu\n",
-> +				chan->address);
-
-Should be impossible to get here so no need for print.
-
-> +			return -EINVAL;
-> +		}
-> +	case IIO_CHAN_INFO_SCALE:
-> +		switch (chan->type) {
-> +		case IIO_TEMP:
-> +			/*
-> +			 * Convert device specific value to millicelsius.
-> +			 * Resolution from the sensor is 60.1 LSB/celsius and
-> +			 * the reference value at 25 celsius is 17508 LSBs.
-> +			 */
-> +			*val = 10000;
-> +			*val2 = 601;
-> +			return IIO_VAL_FRACTIONAL;
-> +		case IIO_MAGN:
-> +			/* Magnetic resolution in uT */
-> +			*val = 0;
-> +			*val2 = tmag5273_scale_table[data->version]
-> +						    [data->scale_index]
-> +							    .scale_micro;
-> +			return IIO_VAL_INT_PLUS_MICRO;
-> +		case IIO_ANGL:
-> +			/*
-> +			 * Angle is in degrees and has four fractional bits,
-> +			 * therefore use 1/16 * pi/180 to convert to radiants.
-> +			 */
-> +			*val = 1000;
-> +			*val2 = 916732;
-> +			return IIO_VAL_FRACTIONAL;
-> +		default:
-> +			return -EINVAL;
-> +		}
-> +	case IIO_CHAN_INFO_OFFSET:
-> +		switch (chan->type) {
-> +		case IIO_TEMP:
-> +			*val = -266314;
-> +			return IIO_VAL_INT;
-> +		default:
-> +			return -EINVAL;
-> +		}
-> +	case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
-> +		*val = data->conv_avg;
-> +		return IIO_VAL_INT;
-> +
-> +	default:
-> +		/* Unknown request */
-> +		return -EINVAL;
-> +	}
-> +}
-> +
-> +static int tmag5273_write_raw(struct iio_dev *indio_dev,
-> +			      struct iio_chan_spec const *chan, int val,
-> +			      int val2, long mask)
-> +{
-> +	struct tmag5273_data *data = iio_priv(indio_dev);
-> +	int i, ret;
-> +
-> +	switch (mask) {
-> +	case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
-> +		if (val == data->conv_avg)
-> +			return 0;
-> +		return regmap_update_bits(data->map, TMAG5273_DEVICE_CONFIG_1,
-> +					  TMAG5273_AVG_MODE_MASK, val);
-
-Update conv_avg?  Or don't store cached value at all, and always read it from
-the device (or regmap cache possibly if you have that enabled)
-
-> +	case IIO_CHAN_INFO_SCALE:
-> +		switch (chan->type) {
-> +		case IIO_MAGN:
-> +			if (val != 0)
-> +				return -EINVAL;
-> +
-> +			for (i = 0; i < ARRAY_SIZE(tmag5273_scale_table[0]);
-> +			     i++) {
-
-What Andy said.  Sometimes wrapping is just too ugly!
-
-> +				if (tmag5273_scale_table[data->version][i]
-> +					    .scale_micro == val2)
-This line break is nasty as well.  The whole thing is deeply enough nested
-I'd just rip it out to a helper function called something like
-tmag5273_write_scale() (or _magn_scale())
-
-> +					break;
-> +			}
-> +			if (i == ARRAY_SIZE(tmag5273_scale_table[0]))
-> +				return -EINVAL;
-> +			data->scale_index = i;
-> +
-> +			ret = regmap_update_bits(
-> +				data->map, TMAG5273_SENSOR_CONFIG_2,
-> +				TMAG5273_Z_RANGE_MASK | TMAG5273_X_Y_RANGE_MASK,
-> +				data->scale_index == MAGN_LOW ? 0 :
-> +					(TMAG5273_Z_RANGE_MASK |
-> +					 TMAG5273_X_Y_RANGE_MASK));
-> +			if (ret)
-> +				return ret;
-> +
-> +			return 0;
-> +		default:
-> +			return -EINVAL;
-> +		}
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +}
-
-> +
-> +static void tmag5273_read_device_property(struct tmag5273_data *data)
-> +{
-> +	const char *angle_measurement;
-> +
-> +	data->angle_measurement = TMAG5273_ANGLE_EN_X_Y;
-> +
-> +	if (!device_property_read_string(data->dev, "ti,angle-measurement",
-> +					 &angle_measurement)) {
-> +		if (!strcmp(angle_measurement, "off"))
-> +			data->angle_measurement = TMAG5273_ANGLE_EN_OFF;
-> +		else if (!strcmp(angle_measurement, "x-y"))
-> +			data->angle_measurement = TMAG5273_ANGLE_EN_X_Y;
-> +		else if (!strcmp(angle_measurement, "y-z"))
-> +			data->angle_measurement = TMAG5273_ANGLE_EN_Y_Z;
-> +		else if (!strcmp(angle_measurement, "x-z"))
-> +			data->angle_measurement = TMAG5273_ANGLE_EN_X_Z;
-> +		else
-> +			dev_warn(data->dev,
-> +				 "failed to read angle-measurement\n");
-Somewhat inaccurate warning.   I'd print something like
-"unexpected read angle-measurement property: %s\n", angle_measurement);
-
-We read it. We just have no idea what it means! :)
-
-> +	}
-> +}
-> +
-
+greg k-h
