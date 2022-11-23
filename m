@@ -2,117 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF05B636D3C
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 23:37:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FCDB636D3E
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 23:37:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiKWWhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 17:37:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53424 "EHLO
+        id S229733AbiKWWhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 17:37:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiKWWhF (ORCPT
+        with ESMTP id S229724AbiKWWhR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 17:37:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381A815F28B
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 14:37:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C8CA861F62
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 22:37:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5433C433B5;
-        Wed, 23 Nov 2022 22:37:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669243021;
-        bh=pFxW3XhSD3d0Xg11g6vFFA+rrYHw+VJrUIpvO4P87Yk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZY/gsWR1+ftH5DmBc5HB7/AUYXKs0bWvfWJvgxns0MX4s3BWaWwpRfSIcHTKcEYmV
-         B0wnZtvhgasQ8QQHSG2F/yEhwaCYy/3vmu/4vnG8nq4qv5T9iXYwi7F1fpEvszTTcf
-         ggzhMUVag7f+38J1um0MBp9jS9hA1pPCgTK/Py9Hhy8u29ScfdMKm2uZyK+oUqtJd+
-         8rEbhdATPFXXMo7SgV5s6h3zBAoxoas3rl1taC6vt/YMWQMNG65L1l8Nz4+Xdr8qjM
-         ZZs5fdUge3U1dKHzUFe13npiakAyb0XB4nMjOnuJv8TFbIbPmDC24lB5vTHpfUXuW3
-         gWhmggu4Bmpxg==
-Date:   Wed, 23 Nov 2022 23:36:58 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Zhouyi Zhou <zhouzhouyi@gmail.com>
-Cc:     fweisbec@gmail.com, tglx@linutronix.de, mingo@kernel.org,
-        dave@stgolabs.net, paulmck@kernel.org, josh@joshtriplett.org,
-        mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH linux-next][RFC]torture: avoid offline tick_do_timer_cpu
-Message-ID: <20221123223658.GC1395324@lothringen>
-References: <20221121035140.118651-1-zhouzhouyi@gmail.com>
+        Wed, 23 Nov 2022 17:37:17 -0500
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EE11647AC
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 14:37:16 -0800 (PST)
+Received: by mail-vs1-xe2d.google.com with SMTP id 125so2561310vsi.9
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 14:37:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dWg4CPBS1rHon+H83SkA4H14sLH1o04yGoKobBsvf5w=;
+        b=Joz6LLphsQFnzqMzE4EJRbSIxf04MbkPtcfl1yd2mTjwLfuf81a5HnRued3BN/uBBD
+         0FWJFMBhdek23e6wLn5uNHNdPLmb5CBF2HQgUyGr0xvZyQtuKOMzAWMMLRMGTEwhIr7R
+         zqwu1u5FxN5GLmL9OUnnb6ZTffbaJJZnTV3BljIfjPBMfEYFJyS52V4+FwxGaGDoo+HG
+         jXPIUo83qe2S5+nBg7r7+ptiu7GOP+OHiocf/XkDpJVhoNn4T7FLqHMl08ahlqL29W/9
+         Z59/0l3nS7xdfcY25FrzRzByxPMS5qrxvHqzJYAmK0YkEIN90C7gcaIRqLUYEBrKrmPh
+         C3JQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dWg4CPBS1rHon+H83SkA4H14sLH1o04yGoKobBsvf5w=;
+        b=I1Uw9XMJDxmnUEBMDOIUj53evK0HWuox6rNzIgY18S1PNPVHPOIQmszkOjdfpTTLM3
+         Qt9F0wo3W19kG26PBRfA5WVkTCA7jfNF1p4rvWM8CkKkDPX8FpHbC7oepXIvC8STdlfD
+         VUY8drB6OXZXu1bP9PQkCBiJxsd3aFbScL2V7N7VHe7tTdt/wuiNqgW+0vx0NKIvjm2N
+         4AvfYla203sO2FAEdWRE92fFo6nxOvhP/mdn2ZzYjzM3Ng4w1dJ++/GbQ/R/hQZszhAg
+         n14BhRn4qUuTPd+UUqyT6kGzcXu4m8hsKv2QI75U7VeexmoasqkB43qX8D+LpcMQUZFk
+         AP2Q==
+X-Gm-Message-State: ANoB5pkJjJ9i8vPVm+rhx2woqiqyO8nwaJ711bFHUwxA7Y7B69zz8TJj
+        4EaV2TowwBJhb3L/b2k7FgnCVRHtAcQjpxint0p3lw==
+X-Google-Smtp-Source: AA0mqf4phBfqh4Fj7+uZdO4AuzHjDowKnNnPoPbZHlOwQOAlLz8bxwIb+0/5pStBLISuOqdq5zddxDrQbR5u/4dJS4E=
+X-Received: by 2002:a05:6102:54a5:b0:3b0:7462:a88c with SMTP id
+ bk37-20020a05610254a500b003b07462a88cmr2101038vsb.49.1669243035410; Wed, 23
+ Nov 2022 14:37:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221121035140.118651-1-zhouzhouyi@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221122203850.2765015-1-almasrymina@google.com>
+ <Y35fw2JSAeAddONg@cmpxchg.org> <CAHS8izN+xqM67XLT4y5qyYnGQMUWRQCJrdvf2gjTHd8nZ_=0sw@mail.gmail.com>
+ <Y36XchdgTCsMP4jT@cmpxchg.org>
+In-Reply-To: <Y36XchdgTCsMP4jT@cmpxchg.org>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Wed, 23 Nov 2022 14:37:04 -0800
+Message-ID: <CAHS8izNoWM_oSdntpacFaEyVrXfX5YrzAWtMGvU6j_pAVNsvtA@mail.gmail.com>
+Subject: Re: [RFC PATCH V1] mm: Disable demotion from proactive reclaim
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Huang Ying <ying.huang@intel.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
+        shakeelb@google.com, gthelen@google.com, fvdl@google.com,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 11:51:40AM +0800, Zhouyi Zhou wrote:
-> During CPU-hotplug torture (CONFIG_NO_HZ_FULL=y), if we try to
-> offline tick_do_timer_cpu, the operation will fail because in
-> function tick_nohz_cpu_down:
-> ```
-> if (tick_nohz_full_running && tick_do_timer_cpu == cpu)
->       return -EBUSY;
-> ```
-> Above bug was first discovered in torture tests performed in PPC VM
-> of Open Source Lab of Oregon State University, and reproducable in RISC-V
-> and X86-64 (with additional kernel commandline cpu0_hotplug).
-> 
-> In this patch, we avoid offline tick_do_timer_cpu by distribute
-> the offlining cpu among remaining cpus.
-> 
-> Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
-> ---
->  include/linux/tick.h        |  1 +
->  kernel/time/tick-common.c   |  1 +
->  kernel/time/tick-internal.h |  1 -
->  kernel/torture.c            | 10 ++++++++++
->  4 files changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/tick.h b/include/linux/tick.h
-> index bfd571f18cfd..23cc0b205853 100644
-> --- a/include/linux/tick.h
-> +++ b/include/linux/tick.h
-> @@ -14,6 +14,7 @@
->  #include <linux/rcupdate.h>
->  
->  #ifdef CONFIG_GENERIC_CLOCKEVENTS
-> +extern int tick_do_timer_cpu __read_mostly;
->  extern void __init tick_init(void);
->  /* Should be core only, but ARM BL switcher requires it */
->  extern void tick_suspend_local(void);
-> diff --git a/kernel/time/tick-common.c b/kernel/time/tick-common.c
-> index 46789356f856..87b9b9afa320 100644
-> --- a/kernel/time/tick-common.c
-> +++ b/kernel/time/tick-common.c
-> @@ -48,6 +48,7 @@ ktime_t tick_next_period;
->   *    procedure also covers cpu hotplug.
->   */
->  int tick_do_timer_cpu __read_mostly = TICK_DO_TIMER_BOOT;
-> +EXPORT_SYMBOL_GPL(tick_do_timer_cpu);
+On Wed, Nov 23, 2022 at 1:57 PM Johannes Weiner <hannes@cmpxchg.org> wrote:
+>
+> On Wed, Nov 23, 2022 at 01:20:57PM -0800, Mina Almasry wrote:
+> > On Wed, Nov 23, 2022 at 10:00 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
+> > >
+> > > Hello Mina,
+> > >
+> > > On Tue, Nov 22, 2022 at 12:38:45PM -0800, Mina Almasry wrote:
+> > > > Since commit 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg
+> > > > reclaim""), the proactive reclaim interface memory.reclaim does both
+> > > > reclaim and demotion. This is likely fine for us for latency critical
+> > > > jobs where we would want to disable proactive reclaim entirely, and is
+> > > > also fine for latency tolerant jobs where we would like to both
+> > > > proactively reclaim and demote.
+> > > >
+> > > > However, for some latency tiers in the middle we would like to demote but
+> > > > not reclaim. This is because reclaim and demotion incur different latency
+> > > > costs to the jobs in the cgroup. Demoted memory would still be addressable
+> > > > by the userspace at a higher latency, but reclaimed memory would need to
+> > > > incur a pagefault.
+> > > >
+> > > > To address this, I propose having reclaim-only and demotion-only
+> > > > mechanisms in the kernel. There are a couple possible
+> > > > interfaces to carry this out I considered:
+> > > >
+> > > > 1. Disable demotion in the memory.reclaim interface and add a new
+> > > >    demotion interface (memory.demote).
+> > > > 2. Extend memory.reclaim with a "demote=<int>" flag to configure the demotion
+> > > >    behavior in the kernel like so:
+> > > >       - demote=0 would disable demotion from this call.
+> > > >       - demote=1 would allow the kernel to demote if it desires.
+> > > >       - demote=2 would only demote if possible but not attempt any
+> > > >         other form of reclaim.
+> > >
+> > > Unfortunately, our proactive reclaim stack currently relies on
+> > > memory.reclaim doing both. It may not stay like that, but I'm a bit
+> > > wary of changing user-visible semantics post-facto.
+> > >
+> > > In patch 2, you're adding a node interface to memory.demote. Can you
+> > > add this to memory.reclaim instead? This would allow you to control
+> > > demotion and reclaim independently as you please: if you call it on a
+> > > node with demotion targets, it will demote; if you call it on a node
+> > > without one, it'll reclaim. And current users will remain unaffected.
+> >
+> > Hello Johannes, thanks for taking a look!
+> >
+> > I can certainly add the "nodes=" arg to memory.reclaim and you're
+> > right, that would help in bridging the gap. However, if I understand
+> > the underlying code correctly, with only the nodes= arg the kernel
+> > will indeed attempt demotion first, but the kernel will also merrily
+> > fall back to reclaiming if it can't demote the full amount. I had
+> > hoped to have the flexibility to protect latency sensitive jobs from
+> > reclaim entirely while attempting to do demotion.
+>
+> The fallback to reclaim actually strikes me as wrong.
+>
+> Think of reclaim as 'demoting' the pages to the storage tier. If we
+> have a RAM -> CXL -> storage hierarchy, we should demote from RAM to
+> CXL and from CXL to storage. If we reclaim a page from RAM, it means
+> we 'demote' it directly from RAM to storage, bypassing potentially a
+> huge amount of pages colder than it in CXL. That doesn't seem right.
+>
 
-Please rather make a function for this. This is an internal value
-that we don't want to expose to modules.
+Ah, I see. When you put it like that it makes a lot of sense. Reclaim
+would be just another type of demotion as you put it, i.e. demoting
+from the lowest memory tier to storage. I assume in your model
+demoting from the lowest memory tier to storage includes all of
+swapping, writing back of dirty pages, and discarding clean file
+pages. All these pages (anon, clean file pages, or dirty file pages)
+should first be demoted down the memory tiers until finally they get
+'demoted' to storage. i.e. reclaimed.
 
-This can be:
+> If demotion fails, IMO it shouldn't satisfy the reclaim request by
+> breaking the layering. Rather it should deflect that pressure to the
+> lower layers to make room. This makes sure we maintain an aging
+> pipeline that honors the memory tier hierarchy.
+>
 
-     int tick_nohz_full_timekeeper(void)
-     {
-         if (tick_nohz_full_enabled() && tick_do_timer_cpu >= 0)
-             return tick_do_timer_cpu;
-         else
-	     return nr_cpu_ids;
-     }
+Also got it. I believe the pseudo code would be roughly like a bubble
+sort algorithm of sorts, where the coldest pages are demoted to the
+next memory tier, and finally reclaimed from the final memory tier:
 
-And then just check if the value is below nr_cpu_ids.
+demoted_pages = 0;
+retry:
+    memory_tier = lowest_tier:
+    for (; memory_tier < 0; memory_tier--) {
+        if (memory_tier == lowest_tier)
+            demoted_pages += demote_to_storage();
+        else
+            demote_pages += demote_to_the_next_memory_tier(memory_tier);
+    }
+    if (demoted_pages < pages_to_demote)
+         goto retry;
 
-Thanks.
+> So I'm hesitant to design cgroup controls around the current behavior.
+>
+
+Thanks for taking the time to explain this. I think if it sounds good
+to folks I'll add the "nodes=" arg as you described now. Reworking the
+reclaim algorithm for memory tiering would be a bigger change in need
+of its own patchset.
+
+I think the nodes= arg by itself would help bridge the gap quite a
+bit. I surmise for Google we can :
+1. Force reclaim by: echo "<size> nodes=<lowest memory tier nodes>" >
+memory.reclaim
+2. Almost force demotion by: echo "<size> nodes=<highest memory tier
+nodes>" > memory.reclaim
+
+In case #2 the kernel may still reclaim it if it can't demote the full
+amount, but that is as you put it more of a bug that should be fixed.
+
+However, even in a world where the reclaim code works as you
+described, I wonder if we still need some kind of demote= arg. The
+issue is that demoting from the lowest memory tier to storage incurs
+more of a latency impact to the application than demoting between the
+other memory tiers, and that's because the other memory tiers are
+directly addressable, while pages demote to storage incur a pagefault.
+Not sure if that's a big concern at the moment.
+
+> > The above is just one angle of the issue. Another angle (which Yosry
+> > would care most about I think) is that at Google we call
+> > memory.reclaim mainly when memory.current is too close to memory.max
+> > and we expect the memory usage of the cgroup to drop as a result of a
+> > success memory.reclaim call. I suspect once we take in commit
+> > 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg reclaim""),
+> > we would run into that regression, but I defer to Yosry here, he may
+> > have a solution for that in mind already.
+>
+> IMO it should both demote and reclaim. Simliar to how memory.reclaim
+> on a non-tiered memory system would both deactivate active pages and
+> reclaim inactive pages.
