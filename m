@@ -2,172 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE6A5635267
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 09:25:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A253635273
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 09:26:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236433AbiKWIYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 03:24:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60978 "EHLO
+        id S235945AbiKWIZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 03:25:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236374AbiKWIYj (ORCPT
+        with ESMTP id S236522AbiKWIY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 03:24:39 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40904FC70B
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 00:24:38 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id s24so20522244ljs.11
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 00:24:38 -0800 (PST)
+        Wed, 23 Nov 2022 03:24:58 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6AFFC72F;
+        Wed, 23 Nov 2022 00:24:54 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id z192so20108642yba.0;
+        Wed, 23 Nov 2022 00:24:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qQrDHCXSqC/XpmgwTdQyvmX254FcV0tmVuSLVUTqodg=;
-        b=iAB9ioyFKLlNCgKnD6q3l2t859zPNg4auZGsr2Rg5VGBclq0WCjr3EQb0wMWVg22j9
-         UhlgN0IWOGV8Kh5mD/w0pVAMssS9mmhYioVWsmF3g1b07uSH/a0Gmycjw3hGXC/CJvVR
-         voCFLtfj3bYYPgeOuNT/ARyXty0hTIT+rEtUbQYC6YRJgYQB8WuyqwQCacGgsIjZv2sY
-         eDyGI/j/dqPaDd/KQPdJf8ADy3PbJeeAa9wgZiJcIZWzlaZd1VNfIQ30jNdTK6Ov/QPZ
-         jbn8FF1tj8XKvRFIUUGqv2VaMLznuoEreBdkOWFwFHE0VQ+S7ZSQoXQ3GS+Ae8KcJCFt
-         VqcQ==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=olonk8iFpg1UnUmS3Yq9vG//2BtL7EZzQMT3kacEImU=;
+        b=KLsGgdN9rTVkVpm+hXOgeB+N+nXJVo9bbwpX2eQ2n2H9TGOXw6tuMmOzceQVnALi+d
+         uOmNOHUt9vkapZQ6LuhnLQk5GZXwCgWc9NRp70KNbWbr3N9B687ZQU4MIIjVOTdAL/3p
+         iyv+GcSZoGq1gXNgitUHvp4BO23ivbCAJvGk2vyFt+ZfPX/RoToXGj9EJox4FTq93jLf
+         LIL7I0anwMal2s0EQWorwDZmamo7YcjGKip6WjDDfJ6KcH3LCDQN8FeC+R6j+wvGl1ea
+         xqT2451dzBCbFg3NzPMfgc6mhsj+7Tdy/0ohi9KErU6a/P67CZaTAiBDgEqhznAUJrqR
+         L7sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qQrDHCXSqC/XpmgwTdQyvmX254FcV0tmVuSLVUTqodg=;
-        b=ZUMwD9znumyGQWwXseyERZNUCBiQw3z3xNw5ePlTJ6yHdPIBHeV7GUkSFpY3FL8N9Y
-         0uCPHFecqJk8D1IdVyc64VsYXt4hObHWa2lLfhNTv15WguBcjfZdUfOCbKLqXiUSWTLx
-         K3akApk8EWfz7YXl5h4fd3khb8Fn+lWS+hxgzh9p9CitZ7SeXi6lsHoqSrQ8RENMGy8g
-         w0zRf8+PGNANOG8toCeNfqrfKAev37sJFSbeeYq38ntCVdh3DJQ1H7iktmvG+tuP/c8o
-         ZlsyiNK660a4DIsUuB/CeIdMppSlM/TpTPOGb5o4JImLB8Hli5WKuMSg+hGtQNcR4U0z
-         WpxQ==
-X-Gm-Message-State: ANoB5pn59X//pKC25bZwgNniI3/uqQfMYJHhdgxUeLiatBJA7mRxMHBD
-        KBJFdqJOfjl/rC0FLzc6qaRDbA==
-X-Google-Smtp-Source: AA0mqf6iwY1eT/pvUtAt3GMkQhHH6pJs3Gapli4TS8EaFHzKoaH3BxsLR6VynPRL9UadZ7c1M9Qsgw==
-X-Received: by 2002:a05:651c:10a2:b0:279:e41:1481 with SMTP id k2-20020a05651c10a200b002790e411481mr3606750ljn.184.1669191876623;
-        Wed, 23 Nov 2022 00:24:36 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id v3-20020a056512348300b004b4b5da5f80sm2791751lfr.219.2022.11.23.00.24.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 00:24:36 -0800 (PST)
-Message-ID: <c4b188b1-06a4-3cb0-a758-e12942e1f67b@linaro.org>
-Date:   Wed, 23 Nov 2022 09:24:34 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=olonk8iFpg1UnUmS3Yq9vG//2BtL7EZzQMT3kacEImU=;
+        b=p1mU3MKaZr+qIBxJrggNCqhFqoQ4YlWVKLKR287haJxEh67aHzdBWaqvuVOrKaUbWL
+         iSDNzWVewpAqzxNExtsXV9HaeavWrGU/Emv5QzdPuQX5SEcaUSMwr4hY9zqvhIa22uX1
+         rsD2ERYwKdN7/6sqMyG3yvBhAhSSpK9GXMpZJmQDCvs69sjXyeIX36lbWLX7DAvTqLtM
+         mVQaqih5Y6eiaUlYnwoMs8ZHNxmAllVWBH6jEan8dqEbYcZXDP304a39VG7+o4lAK7mQ
+         iHE3Xq/1MWihBXRt5Zm/vLsSlwM/DOdt93bvwdmUb6Mfsx7rmYqaizwpkfyGeW8zuQ44
+         xAvw==
+X-Gm-Message-State: ANoB5pkYLMzX6CL6pzjf2zJmJVnn+KxoMOtjSympxnIWoBk7BcDK3EuA
+        ib0ppwuf6NewL08/m7nBvTXlsdcIJnGtdK917H+0q7KB
+X-Google-Smtp-Source: AA0mqf7FxKVxlcQdedGMWjmPDaH5Kle+PZ5/xN8+NrpA5ZuLYWkj3r4ItDHDAKnugJPl3XlvkdCWePR9AyVRgpXUWew=
+X-Received: by 2002:a25:8189:0:b0:6ca:6bfb:3374 with SMTP id
+ p9-20020a258189000000b006ca6bfb3374mr25479310ybk.175.1669191893411; Wed, 23
+ Nov 2022 00:24:53 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [v4 1/5] dt-bindings: mfd: Add aspeed pwm-tach binding
-Content-Language: en-US
-To:     Billy Tsai <billy_tsai@aspeedtech.com>, jdelvare@suse.com,
-        linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
-        lee@kernel.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, corbet@lwn.net,
-        p.zabel@pengutronix.de, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20221123061635.32025-1-billy_tsai@aspeedtech.com>
- <20221123061635.32025-2-billy_tsai@aspeedtech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221123061635.32025-2-billy_tsai@aspeedtech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20221122132330.30408-1-lukas.bulwahn@gmail.com>
+ <20221122160937.GB39395@tom-ThinkPad-T14s-Gen-2i> <CAKXUXMxk-YoG4TdB8Em+cEMF8NA7rdMAboQz8nmhfVmVQ8oATA@mail.gmail.com>
+ <20221123082148.GC39395@tom-ThinkPad-T14s-Gen-2i>
+In-Reply-To: <20221123082148.GC39395@tom-ThinkPad-T14s-Gen-2i>
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Wed, 23 Nov 2022 09:24:42 +0100
+Message-ID: <CAKXUXMx81Mvo_H4KzkHXgPbYq07SbEuTcs9LBae5D5GRTK_T0Q@mail.gmail.com>
+Subject: Re: [PATCH] media: imx: remove code for non-existing config IMX_GPT_ICAP
+To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/11/2022 07:16, Billy Tsai wrote:
-> Add device binding for aspeed pwm-tach device which is a multi-function
-> device include pwm and tach function.
+On Wed, Nov 23, 2022 at 9:21 AM Tommaso Merciai
+<tommaso.merciai@amarulasolutions.com> wrote:
+>
+> Hi Lukas,
+>
+> On Wed, Nov 23, 2022 at 08:56:06AM +0100, Lukas Bulwahn wrote:
+> > On Tue, Nov 22, 2022 at 5:09 PM Tommaso Merciai
+> > <tommaso.merciai@amarulasolutions.com> wrote:
+> > >
+> > > Hi Lukas,
+> > >
+> > > On Tue, Nov 22, 2022 at 02:23:30PM +0100, Lukas Bulwahn wrote:
+> > > > There never was a config IMX_GPT_ICAP in the repository. So remove the code
+> > > > conditional on this config and simplify the callers that just called empty
+> > > > functions.
+> > > >
+> > > > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> > > > ---
+> > > >  drivers/staging/media/imx/imx-media-fim.c | 54 -----------------------
+> > > >  1 file changed, 54 deletions(-)
+> > > >
+> > > > diff --git a/drivers/staging/media/imx/imx-media-fim.c b/drivers/staging/media/imx/imx-media-fim.c
+> > > > index 3a9182933508..19a48eb445fd 100644
+> > > > --- a/drivers/staging/media/imx/imx-media-fim.c
+> > > > +++ b/drivers/staging/media/imx/imx-media-fim.c
+> > > > @@ -187,54 +187,6 @@ static void frame_interval_monitor(struct imx_media_fim *fim,
+> > > >               send_fim_event(fim, error_avg);
+> > > >  }
+> > > >
+> > > > -#ifdef CONFIG_IMX_GPT_ICAP
+> > > > -/*
+> > > > - * Input Capture method of measuring frame intervals. Not subject
+> > > > - * to interrupt latency.
+> > > > - */
+> > > > -static void fim_input_capture_handler(int channel, void *dev_id,
+> > > > -                                   ktime_t timestamp)
+> > > > -{
+> > > > -     struct imx_media_fim *fim = dev_id;
+> > > > -     unsigned long flags;
+> > > > -
+> > > > -     spin_lock_irqsave(&fim->lock, flags);
+> > > > -
+> > > > -     frame_interval_monitor(fim, timestamp);
+> > > > -
+> > > > -     if (!completion_done(&fim->icap_first_event))
+> > > > -             complete(&fim->icap_first_event);
+> > > > -
+> > > > -     spin_unlock_irqrestore(&fim->lock, flags);
+> > > > -}
+> > > > -
+> > > > -static int fim_request_input_capture(struct imx_media_fim *fim)
+> > > > -{
+> > > > -     init_completion(&fim->icap_first_event);
+> > > > -
+> > > > -     return mxc_request_input_capture(fim->icap_channel,
+> > > > -                                      fim_input_capture_handler,
+> > > > -                                      fim->icap_flags, fim);
+> > > > -}
+> > > > -
+> > > > -static void fim_free_input_capture(struct imx_media_fim *fim)
+> > > > -{
+> > > > -     mxc_free_input_capture(fim->icap_channel, fim);
+> > > > -}
+> > > > -
+> > > > -#else /* CONFIG_IMX_GPT_ICAP */
+> > > > -
+> > > > -static int fim_request_input_capture(struct imx_media_fim *fim)
+> > > > -{
+> > > > -     return 0;
+> > > > -}
+> > > > -
+> > > > -static void fim_free_input_capture(struct imx_media_fim *fim)
+> > > > -{
+> > > > -}
+> > > > -
+> > > > -#endif /* CONFIG_IMX_GPT_ICAP */
+> > > > -
+> > > >  /*
+> > > >   * In case we are monitoring the first frame interval after streamon
+> > > >   * (when fim->num_skip = 0), we need a valid fim->last_ts before we
+> > > > @@ -435,14 +387,8 @@ int imx_media_fim_set_stream(struct imx_media_fim *fim,
+> > > >               spin_unlock_irqrestore(&fim->lock, flags);
+> > > >
+> > > >               if (icap_enabled(fim)) {
+> > > > -                     ret = fim_request_input_capture(fim);
+> > > > -                     if (ret)
+> > > > -                             goto out;
+> > > >                       fim_acquire_first_ts(fim);
+> > > >               }
+> > >
+> > > As suggested by the checkpatch.pl:
+> > > WARNING: braces {} are not necessary for single statement blocks
+> > >
+> > > > -     } else {
+> > > > -             if (icap_enabled(fim))
+> > > > -                     fim_free_input_capture(fim);
+> > > >       }
+> > > >
+> > > >       fim->stream_on = on;
+> > > > --
+> > > > 2.17.1
+> > > >
+> > >
+> >
+> > Strangely, my checkpatch invocation on next-20221116 did not show that
+> > warning and I am unaware that I made any specific changes to
+> > checkpatch or its configuration.
+> >
+> > Anyway, checkpatch and you, Tommaso, are right and the patch can of
+> > course be improved. I sent out a patch v2:
+> >
+> > https://lore.kernel.org/all/20221123075216.28193-1-lukas.bulwahn@gmail.com/
+> >
+> > I hope to get an Acked-by: tag from you now. Thanks.
+>
+> Sorry I miss the tag :)
+>
+> Acked-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+>
+> Apply the patch then run:
+>  scripts/checkpatch.pl -f drivers/staging/media/imx/imx-media-fim.c
+>
 
-Subject: drop second, redundant "bindings".
-Also use proper PATCH prefix.
+I see. I usually just run checkpatch.pl on the patch, but do not apply
+the patch and run checkpatch on the file. That explains the difference
+of observations. Good to know.
 
-> 
-> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
-> ---
->  .../bindings/mfd/aspeed,ast2600-pwm-tach.yaml | 73 +++++++++++++++++++
->  1 file changed, 73 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.yaml b/Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.yaml
-> new file mode 100644
-> index 000000000000..e2a7be2e0a18
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.yaml
-> @@ -0,0 +1,73 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (C) 2021 Aspeed, Inc.
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/aspeed,ast2600-pwm-tach.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: PWM Tach controller
-> +
-> +description: |
-> +  The PWM Tach controller is represented as a multi-function device which
-> +  includes:
-> +    PWM
-> +    Tach
-> +
-> +maintainers:
-> +  - Billy Tsai <billy_tsai@aspeedtech.com>
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - aspeed,ast2600-pwm-tach
-> +      - const: syscon
-> +      - const: simple-mfd
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
+Lukas
 
-If this is simple-mfd then it cannot take clocks or resets.  Usually the
-recommendation for such case is: This is not simple-mfd, drop it. Drop
-also syscon and make a proper device.
-
-However I am surprised to see such change, so I have no clue why this
-was done.
-
-> +
-> +  pwm:
-> +    type: object
-> +    $ref: "/schemas/pwm/aspeed,ast2600-pwm.yaml"
-
-Drop quotes.
-
-There is no such file. Are you sure you ordered the patches correctly?
-
-> +
-> +  tach:
-> +    type: object
-> +    $ref: "/schemas/hwmon/aspeed,ast2600-tach.yaml"
-
-Drop quotes.
-
-There is no such file.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - resets
-
-Best regards,
-Krzysztof
-
+> Regards,
+> Tommaso
+>
+> >
+> > Lukas
+> >
+> > > Apart of this, patch looks good to me.
+> > > Thanks.
+> > >
+> > > Regards,
+> > > Tommaso
+> > >
+> > > --
+> > > Tommaso Merciai
+> > > Embedded Linux Engineer
+> > > tommaso.merciai@amarulasolutions.com
+> > > __________________________________
+> > >
+> > > Amarula Solutions SRL
+> > > Via Le Canevare 30, 31100 Treviso, Veneto, IT
+> > > T. +39 042 243 5310
+> > > info@amarulasolutions.com
+> > > www.amarulasolutions.com
+>
+> --
+> Tommaso Merciai
+> Embedded Linux Engineer
+> tommaso.merciai@amarulasolutions.com
+> __________________________________
+>
+> Amarula Solutions SRL
+> Via Le Canevare 30, 31100 Treviso, Veneto, IT
+> T. +39 042 243 5310
+> info@amarulasolutions.com
+> www.amarulasolutions.com
