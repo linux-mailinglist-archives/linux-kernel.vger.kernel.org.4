@@ -2,141 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA387635B78
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 12:20:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C7C3635B79
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 12:21:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236608AbiKWLUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 06:20:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56156 "EHLO
+        id S236676AbiKWLVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 06:21:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234151AbiKWLUP (ORCPT
+        with ESMTP id S234151AbiKWLVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 06:20:15 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F2E25EB4
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 03:20:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=dh9okv0CFmE+7ITwvD24RMqqbe+1nNONuHmqI/QVkSs=; b=mcedh0OUT1NlyQZX9hfP6f5sat
-        9bc4h2L1lSW0gdrrw/ZuD33Tqby4xtLC4gIU90IgcqSnCBVvQ5kijL7jfGV86aVF03TPYcAHbTRir
-        R2VKUZw9vSIuklE0kEhRnjUsoSubJsd9wzQPmv0/dteksBkquAjqTa0OHDutDcGLegDGV7jcrde0E
-        sTHsubwa05eR3cJmCFZxkKQEVNtHkDY+lnKHVNTiOsIqA6SX+QSe0LOJi3XQO5vjpLzaBaWL1nP+M
-        GaVMg5ibYSj8mYJv4u2FUjZc0Pyg5dYJtn3Hkc8o0hByqlY3yPz2WQYO8oh2XbkcVXOaGrEfeTYg2
-        UicYHFcw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oxnnO-003lRH-3t; Wed, 23 Nov 2022 11:20:02 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id ACDDB30034E;
-        Wed, 23 Nov 2022 12:20:00 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 6BA0520B6C71D; Wed, 23 Nov 2022 12:20:00 +0100 (CET)
-Date:   Wed, 23 Nov 2022 12:20:00 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Phil Auld <pauld@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sched: Fix NULL user_cpus_ptr check in
- dup_user_cpus_ptr()
-Message-ID: <Y34B4N7fzWylFV94@hirez.programming.kicks-ass.net>
-References: <20221122190653.818506-1-longman@redhat.com>
+        Wed, 23 Nov 2022 06:21:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4774F258
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 03:20:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669202412;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yntr30HDhqXyZ1w8rrZC4JD3zysTqY8HnCblqV5YZ4w=;
+        b=bMFnXFDr1H8tLr325gNp8e3QjuIVL5Y3Ku8PoGHjGyrch+MSS+d9wzAfyZvHMpCRFCRTWq
+        t/vwru1mvFup3moKC6+IaC/L2zO3a9OhIUPwiSmMPC7cPOOOipQGvxvxQG1v5cxGq6BuoT
+        m5QyAA7u9+Xllg0PyvVFMx9he8LmKMw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-613-lvRuXjGkPk6_yrIYyLHd1w-1; Wed, 23 Nov 2022 06:20:07 -0500
+X-MC-Unique: lvRuXjGkPk6_yrIYyLHd1w-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 64C57811E84;
+        Wed, 23 Nov 2022 11:20:06 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (ovpn-194-238.brq.redhat.com [10.40.194.238])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 8816F4B3FC6;
+        Wed, 23 Nov 2022 11:20:04 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Wed, 23 Nov 2022 12:20:06 +0100 (CET)
+Date:   Wed, 23 Nov 2022 12:20:03 +0100
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Petr Skocik <pskocik@gmail.com>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] Fix kill(-1,s) returning 0 on 0 kills
+Message-ID: <20221123112002.GC32207@redhat.com>
+References: <20221122161240.137570-1-pskocik@gmail.com>
+ <20221122161240.137570-2-pskocik@gmail.com>
+ <20221123103016.GA32207@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221122190653.818506-1-longman@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221123103016.GA32207@redhat.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 02:06:53PM -0500, Waiman Long wrote:
-> In general, a non-null user_cpus_ptr will remain set until the task dies.
-> A possible exception to this is the fact that do_set_cpus_allowed()
-> will clear a non-null user_cpus_ptr. To allow this possible racing
-> condition, we need to check for NULL user_cpus_ptr under the pi_lock
-> before duping the user mask.
-> 
-> Fixes: 851a723e45d1 ("sched: Always clear user_cpus_ptr in do_set_cpus_allowed()")
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->  kernel/sched/core.c | 23 +++++++++++++++++++++--
->  1 file changed, 21 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 8df51b08bb38..f447a6285ea2 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -2625,7 +2625,14 @@ int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src,
->  		      int node)
->  {
->  	unsigned long flags;
-> +	cpumask_t *user_mask = NULL;
+On 11/23, Oleg Nesterov wrote:
+>
+> On 11/22, Petr Skocik wrote:
+> >
+> > --- a/kernel/signal.c
+> > +++ b/kernel/signal.c
+> > @@ -1600,20 +1600,18 @@ static int kill_something_info(int sig, struct kernel_siginfo *info, pid_t pid)
+> >  		ret = __kill_pgrp_info(sig, info,
+> >  				pid ? find_vpid(-pid) : task_pgrp(current));
+> >  	} else {
+> > -		int retval = 0, count = 0;
+> >  		struct task_struct * p;
+> >
+> > +		ret = -ESRCH;
+> >  		for_each_process(p) {
+> >  			if (task_pid_vnr(p) > 1 &&
+> >  					!same_thread_group(p, current)) {
+> >  				int err = group_send_sig_info(sig, info, p,
+> >  							      PIDTYPE_MAX);
+> > -				++count;
+> >  				if (err != -EPERM)
+> > -					retval = err;
+> > +					ret = err; /*either all 0 or all -EINVAL*/
+>
+> The patch looks good to me, and it also simplifies the code.
+>
+> But I fail to understand the /*either all 0 or all -EINVAL*/ comment above..
 
-The inverse xmas tree is sad :-(
+OTOH... I think we do not really care, but there is another problem with
+or without your patch. Suppose that group_send_sig_info() returns -EAGAIN,
+then succeeds. So perhaps something like
 
->  
-> +	/*
-> +	 * If there is a concurrent sched_setaffinity(), we may miss the
-> +	 * newly updated user_cpus_ptr. However, a non-NULL user_cpus_ptr
-> +	 * is relatively unlikely and it is not worth the extra overhead
-> +	 * of taking the pi_lock on every fork/clone.
-> +	 */
+		struct task_struct *p;
+		int esrch = -ESRCH;
 
-I think the correct argument is saying the thing is racy and loosing the
-race is a valid situation. IOW, this is the same as if the concurrent
-sched_setaffinity() happens after fork().
+		ret = 0;
+		for_each_process(p) {
+			if (task_pid_vnr(p) > 1 &&
+					!same_thread_group(p, current)) {
+				int err = group_send_sig_info(sig, info, p,
+							      PIDTYPE_MAX);
+				if (err == 0)
+					esrch = 0;
+				else if (err != -EPERM)
+					ret = err;
+			}
+		}
+		ret = ret ?: esrch;
 
->  	if (!src->user_cpus_ptr)
->  		return 0;
->  
-> @@ -2633,10 +2640,22 @@ int dup_user_cpus_ptr(struct task_struct *dst, struct task_struct *src,
->  	if (!dst->user_cpus_ptr)
->  		return -ENOMEM;
->  
-> -	/* Use pi_lock to protect content of user_cpus_ptr */
-> +	/*
-> +	 * Use pi_lock to protect content of user_cpus_ptr
-> +	 *
-> +	 * Though unlikely, user_cpus_ptr can be reset to NULL by a concurrent
-> +	 * do_set_cpus_allowed().
-> +	 */
->  	raw_spin_lock_irqsave(&src->pi_lock, flags);
-> +	if (src->user_cpus_ptr)
-> +		cpumask_copy(dst->user_cpus_ptr, src->user_cpus_ptr);
-> +	else
-> +		swap(dst->user_cpus_ptr, user_mask);
+if we really want to make this code "100% correct". But again, I am not sure
+this makes sense.
 
-Uhhhh, did you mean to write:
+Oleg.
 
-	if (src->user_cpus_ptr) {
-		cpumask_copy(user_mask, src->user_cpus_ptr);
-		swap(dst->user_cpus_ptr, user_mask);
-	}
-
-?
-
->  	raw_spin_unlock_irqrestore(&src->pi_lock, flags);
-> +
-> +	if (unlikely(user_mask))
-> +		kfree(user_mask);
-> +
->  	return 0;
->  }
->  
-> -- 
-> 2.31.1
-> 
