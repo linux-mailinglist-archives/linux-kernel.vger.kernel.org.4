@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CEE5635BA4
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 12:27:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22E9C635BAB
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 12:29:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236592AbiKWL1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 06:27:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32824 "EHLO
+        id S237358AbiKWL1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 06:27:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235935AbiKWL0k (ORCPT
+        with ESMTP id S236367AbiKWL0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 06:26:40 -0500
+        Wed, 23 Nov 2022 06:26:41 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7E5E9333
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7EB8ED5F0
         for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 03:26:39 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1oxntd-0003vn-HZ; Wed, 23 Nov 2022 12:26:29 +0100
+        id 1oxntd-0003vp-Hd; Wed, 23 Nov 2022 12:26:29 +0100
 Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ore@pengutronix.de>)
-        id 1oxntb-0062RG-FT; Wed, 23 Nov 2022 12:26:28 +0100
+        id 1oxntb-0062RI-Fq; Wed, 23 Nov 2022 12:26:28 +0100
 Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ore@pengutronix.de>)
-        id 1oxntb-008jqk-3c; Wed, 23 Nov 2022 12:26:27 +0100
+        id 1oxntb-008jqt-7E; Wed, 23 Nov 2022 12:26:27 +0100
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
 To:     Woojung Huh <woojung.huh@microchip.com>,
         UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
@@ -37,12 +37,13 @@ To:     Woojung Huh <woojung.huh@microchip.com>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Arun.Ramadoss@microchip.com
-Subject: [PATCH net-next v5 2/5] net: dsa: microchip: do not store max MTU for all ports
-Date:   Wed, 23 Nov 2022 12:26:22 +0100
-Message-Id: <20221123112625.2082797-3-o.rempel@pengutronix.de>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Arun Ramadoss <arun.ramadoss@microchip.com>,
+        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Arun.Ramadoss@microchip.com
+Subject: [PATCH net-next v5 3/5] net: dsa: microchip: add ksz_rmw8() function
+Date:   Wed, 23 Nov 2022 12:26:23 +0100
+Message-Id: <20221123112625.2082797-4-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221123112625.2082797-1-o.rempel@pengutronix.de>
 References: <20221123112625.2082797-1-o.rempel@pengutronix.de>
@@ -60,58 +61,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If we have global MTU configuration, it is enough to configure it on CPU
-port only.
+Add ksz_rmw8(), it will be used in the next patch.
 
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+Acked-by: Arun Ramadoss <arun.ramadoss@microchip.com>
 Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- drivers/net/dsa/microchip/ksz9477.c    | 14 +++++---------
- drivers/net/dsa/microchip/ksz_common.h |  1 -
- 2 files changed, 5 insertions(+), 10 deletions(-)
+ drivers/net/dsa/microchip/ksz_common.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
-index 602d00671bef..f6e7968ab105 100644
---- a/drivers/net/dsa/microchip/ksz9477.c
-+++ b/drivers/net/dsa/microchip/ksz9477.c
-@@ -45,19 +45,15 @@ static void ksz9477_port_cfg32(struct ksz_device *dev, int port, int offset,
- 
- int ksz9477_change_mtu(struct ksz_device *dev, int port, int mtu)
- {
--	u16 frame_size, max_frame = 0;
--	int i;
--
--	frame_size = mtu + VLAN_ETH_HLEN + ETH_FCS_LEN;
-+	u16 frame_size;
- 
--	/* Cache the per-port MTU setting */
--	dev->ports[port].max_frame = frame_size;
-+	if (!dsa_is_cpu_port(dev->ds, port))
-+		return 0;
- 
--	for (i = 0; i < dev->info->port_cnt; i++)
--		max_frame = max(max_frame, dev->ports[i].max_frame);
-+	frame_size = mtu + VLAN_ETH_HLEN + ETH_FCS_LEN;
- 
- 	return regmap_update_bits(dev->regmap[1], REG_SW_MTU__2,
--				  REG_SW_MTU_MASK, max_frame);
-+				  REG_SW_MTU_MASK, frame_size);
- }
- 
- static int ksz9477_wait_vlan_ctrl_ready(struct ksz_device *dev)
 diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
-index 27c26ee15af4..61228be299f9 100644
+index 61228be299f9..5f404a444ce1 100644
 --- a/drivers/net/dsa/microchip/ksz_common.h
 +++ b/drivers/net/dsa/microchip/ksz_common.h
-@@ -95,7 +95,6 @@ struct ksz_port {
+@@ -454,6 +454,11 @@ static inline int ksz_write64(struct ksz_device *dev, u32 reg, u64 value)
+ 	return regmap_bulk_write(dev->regmap[2], reg, val, 2);
+ }
  
- 	struct ksz_port_mib mib;
- 	phy_interface_t interface;
--	u16 max_frame;
- 	u32 rgmii_tx_val;
- 	u32 rgmii_rx_val;
- 	struct ksz_device *ksz_dev;
++static inline int ksz_rmw8(struct ksz_device *dev, int offset, u8 mask, u8 val)
++{
++	return regmap_update_bits(dev->regmap[0], offset, mask, val);
++}
++
+ static inline int ksz_pread8(struct ksz_device *dev, int port, int offset,
+ 			     u8 *data)
+ {
 -- 
 2.30.2
 
