@@ -2,60 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44FDE635D9A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 13:47:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91644635DC1
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 13:47:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236769AbiKWMnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 07:43:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48812 "EHLO
+        id S237192AbiKWMq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 07:46:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236865AbiKWMmO (ORCPT
+        with ESMTP id S237564AbiKWMpZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 07:42:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E0666CB8;
-        Wed, 23 Nov 2022 04:41:42 -0800 (PST)
+        Wed, 23 Nov 2022 07:45:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1489512D13;
+        Wed, 23 Nov 2022 04:42:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 55920B81F3E;
-        Wed, 23 Nov 2022 12:41:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7DEAC433C1;
-        Wed, 23 Nov 2022 12:41:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AD787B81F3A;
+        Wed, 23 Nov 2022 12:42:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 776C4C433C1;
+        Wed, 23 Nov 2022 12:42:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669207300;
-        bh=RO6o1Y2z01qCZCGMJGU+iAdpzYb7jAi5dytjDqoWwDM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OgP9CysF1TVrSkWzoY1SXb1ToN2sI3kzVv2dmbj2yJe0E2+iWrQu3P0cKxq/0D2Xp
-         DTXgVbiNiwlvvslKP+cZ6ChSqpGOsM0uOURvGTZR6AV2M4u2pLjQgfFC1DHt0mThy2
-         cg4fQkEunaH6NtWSfsISO/Zvg0DlTu+ymRdSnFjCN84JGPdjeUW2zu81H1MHZZPek/
-         VCHOoFsQjJg5g9z/suVpd2TDqzK8njYJOdlRFnK6RAYcejlvDdWXM7kd0oL5cHxNs3
-         GRyVRhZX1REUrqG6J4N63q9wb1vdxohwMUoibLxczdfy5i0ZJ5m5UteoFisjJRymFJ
-         S1PU/LZ6ouxWw==
-Date:   Wed, 23 Nov 2022 12:41:29 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>, linux-i2c@vger.kernel.org,
-        kernel@pengutronix.de, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 541/606] regulator: fan53555: Convert to i2c's
- .probe_new()
-Message-ID: <Y34U+VQyRcUqfd0G@sirena.org.uk>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-542-uwe@kleine-koenig.org>
- <Y30l2LiPQIxb+Vll@sirena.org.uk>
- <20221122200140.eyz7543bg2udl7be@pengutronix.de>
+        s=k20201202; t=1669207357;
+        bh=OEz5pe170WRbn7bIErG4oxky6D1iXWKCqtNHxTaSKzI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gGbvzqIPz8FS8z9OMlFEdT+MO2BqPJxFc8yPja0Q7CfSdzDfpcbm8Yj3NrDBs17j+
+         44xnMew2Nq9+8PYFg8ebRyezQPP0TQ8uyif9VyGaxeSZ86QIzoUQXf9Y05GgpkCAvS
+         jqkkvzCExo5q21xqnm8QC3nC7r+RZzNDRJZiUv8AAYEyc+1FRCPz1wclFjJoWzhWlh
+         2n4CSnBeaga9pbk/5rL0Y00DHzvcmOzojqHDP1fr1EecuRDx3pgwdbA851h9JYzkDd
+         I+WaEz8QU9P4QoiDxIaxBs6pCmQ2VMcyFPUmA8HpnHlYzmTfkYbggscfbSHdi1xIJh
+         94Rf0v+oyXbCw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Aman Dhoot <amandhoot12@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sasha Levin <sashal@kernel.org>, markpearson@lenovo.com,
+        snafu109@gmail.com, lyude@redhat.com,
+        wsa+renesas@sang-engineering.com, linux-input@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 01/31] Input: synaptics - switch touchpad on HP Laptop 15-da3001TU to RMI mode
+Date:   Wed, 23 Nov 2022 07:42:02 -0500
+Message-Id: <20221123124234.265396-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zhLIDG3lxUf5c1Z+"
-Content-Disposition: inline
-In-Reply-To: <20221122200140.eyz7543bg2udl7be@pengutronix.de>
-X-Cookie: I'm rated PG-34!!
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -65,46 +56,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Aman Dhoot <amandhoot12@gmail.com>
 
---zhLIDG3lxUf5c1Z+
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[ Upstream commit ac5408991ea6b06e29129b4d4861097c4c3e0d59 ]
 
-On Tue, Nov 22, 2022 at 09:01:40PM +0100, Uwe Kleine-K=F6nig wrote:
-> On Tue, Nov 22, 2022 at 07:41:12PM +0000, Mark Brown wrote:
-> > On Fri, Nov 18, 2022 at 11:44:35PM +0100, Uwe Kleine-K=F6nig wrote:
+The device works fine in native RMI mode, there is no reason to use legacy
+PS/2 mode with it.
 
-> > > +	const struct i2c_device_id *id =3D i2c_client_get_device_id(client);
+Signed-off-by: Aman Dhoot <amandhoot12@gmail.com>
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/input/mouse/synaptics.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> > This function is only in -next so I'll skip all the patches that need
-> > it.
+diff --git a/drivers/input/mouse/synaptics.c b/drivers/input/mouse/synaptics.c
+index ffad142801b3..973a4c1d5d09 100644
+--- a/drivers/input/mouse/synaptics.c
++++ b/drivers/input/mouse/synaptics.c
+@@ -191,6 +191,7 @@ static const char * const smbus_pnp_ids[] = {
+ 	"SYN3221", /* HP 15-ay000 */
+ 	"SYN323d", /* HP Spectre X360 13-w013dx */
+ 	"SYN3257", /* HP Envy 13-ad105ng */
++	"SYN3286", /* HP Laptop 15-da3001TU */
+ 	NULL
+ };
+ 
+-- 
+2.35.1
 
-> Just in case you missed that information from the cover letter:
-> You can pull this function into your tree from Wolfram's immutable
-> branch at
-
-> 	https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/client=
-_device_id_helper-immutable
-
-No, the bit I found about it in the commit message (which I had to go
-looking for...) was a link to some discussion about how it'd be a good
-idea to apply it.  I suspect things might go more smoothly if things
-were resent as per-subsystem serieses TBH.
-
---zhLIDG3lxUf5c1Z+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN+FPgACgkQJNaLcl1U
-h9AKTwf/TCGuJS9KOzogIaCUJcig76QWaJtAVD34leua6nC0PoVzvpihetd0+bWP
-rkRcgs67Etut/mvmfnsQuUuRpg/7HjS4yo7RX9L1DqvI56p0R6Ik8jSv72frmeMw
-uODXFkYuY/YLNsuB/3ZYlBz0JfzVN3N56Lhnsyklt4g6y+sHrcqvhAKwa93QeR5E
-oCfZBaLp/wmnQPSxEgYKm2NcVu/dhi8W8r3pZUKaQlcji/GC7URy/N2q3Xi0RNRq
-HeobPU4pOO8fS4tc8ZTr93+K6HDRM2HQ0Hgc3y7ZY2h30TRtfZK9q5iX48nuRwhm
-UU413WpxRbBuYXd5LsuBHqStfz0o8A==
-=QdFW
------END PGP SIGNATURE-----
-
---zhLIDG3lxUf5c1Z+--
