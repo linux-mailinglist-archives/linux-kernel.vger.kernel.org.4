@@ -2,132 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B7C636889
+	by mail.lfdr.de (Postfix) with ESMTP id 517F4636888
 	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:18:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239613AbiKWSSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 13:18:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44534 "EHLO
+        id S239540AbiKWSSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 13:18:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239321AbiKWSSL (ORCPT
+        with ESMTP id S239396AbiKWSSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 13:18:11 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD2810FC7;
-        Wed, 23 Nov 2022 10:18:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669227490; x=1700763490;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=2Yp5xFOMLGQYpWLQIiUQjZ0rsJHrk7HcR/XL9Lf6XoE=;
-  b=ig9WopsCTbG+DLsVHXra9E8UMDkKkr5+MiOIlG7OJcAjz/MvMJCL5H5P
-   EUFlGPmsHnPW1AFqodA9PfL40+7UEfucxIhrAi9qg9KX4s4wN6dmb037s
-   A7EPC04BYPjb2camhzix7hutbQcDDQc53+e2yytKD9hrOLYySXSzPO2Pz
-   htTcBqF7soxLK0a5Sc+TTBK5MdmPUhj4izhiLzpieENa+PV/bNG5KecS+
-   YkZdfmXmOxeMMCtn5w+4EXPuqzTOIK//7WTIQNIRTVb7QkUGuBRTnvK2j
-   4gWsiYM463insJOfpO/bdUlXwzpl4cCjA/g7Mgc+YZ7DMDw8qaSLCpzNK
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="314166591"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="314166591"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 10:18:10 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="766817074"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="766817074"
-Received: from htg1-mobl1.amr.corp.intel.com (HELO [10.209.96.66]) ([10.209.96.66])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 10:18:08 -0800
-Message-ID: <73407b18-d878-48de-167d-c23fa7e13e31@linux.intel.com>
-Date:   Wed, 23 Nov 2022 10:18:09 -0800
+        Wed, 23 Nov 2022 13:18:14 -0500
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2183F11A0F
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 10:18:13 -0800 (PST)
+Received: by mail-qv1-xf2a.google.com with SMTP id i12so12696488qvs.2
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 10:18:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LByvlpCL+LRhavRIegrpdrd5Lc2V7kp80WStpkpve1I=;
+        b=cCBLtfi5K4sU5yrNo1RImOt+Dj8joY80jakzA+6USTvY467lH6tomTnQmnyul5qx3B
+         dreZImpWfOi6dCDe6L46g1ybagMMyOeu+/yInkp04GIfiyCLZRL8mf0+LzZfJMf2jolk
+         FJHdEJBOKctYHolC1/b26ialFQwRJGC177w2fMw6t/H7/BXbnBqvy7XKvo4cmtt2ibv4
+         d+2IAyVQ/t9IxQAqfNr2Z+rxZ+hfPj69QX8vnS93R52rsFvX//2LwqjGu1zcfwF/A73Q
+         pae3opRy+jrtwYhDv7S3iarQpyjSM5kUBe2Mr6Y+G9cCpTdTAv+x0r+jJSnBsXk3rZxZ
+         HxOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LByvlpCL+LRhavRIegrpdrd5Lc2V7kp80WStpkpve1I=;
+        b=Dz0Wi7WxziCAn56qbUJDqmgjaEZnfQ9C+QdH7aTC7iz4pB+8WjUrXeZ10JIujHM29K
+         XB5QM/BiFnmM8BMid2e32no54A2Uh5noE4YVkqg+bUKIfcpoQ+EOjAA+C9/FgNUZqjzU
+         kOykLDypzRWNeIRPDuHGoKyBH5p2GvmYMiwDQXh/HVYKh1frXmRtkNwyVqBsiuD4oSaT
+         nmL38nvogQkiDKCzLf9yrKsZi00mGgnv/xUGVtnqD95C60lQcc9rAACxDIH/tekW/+GF
+         fkDE7Ll4Zsvms2tS2KusIZ0NcyHyzSwwXisv+GakdWrAGhSuMrLdRoQHgZLNwhYJzqvt
+         wVAg==
+X-Gm-Message-State: ANoB5pmi2kt7xg1VMpygQCYdICEFyVHzGyT88O3Jq4GZYPmS+u2qjiLy
+        iNFz4fgOwRY4cnk6/HEy7QrmFw==
+X-Google-Smtp-Source: AA0mqf6euLVRQD6uWEiFOFFxCWVfrFfGyAoT44QChDA6t+nqbhvSbPtvgRHWym3ku5j6LUmaz6CySA==
+X-Received: by 2002:ad4:448f:0:b0:4c6:c62f:fbe5 with SMTP id m15-20020ad4448f000000b004c6c62ffbe5mr4408701qvt.105.1669227492209;
+        Wed, 23 Nov 2022 10:18:12 -0800 (PST)
+Received: from localhost ([2620:10d:c091:480::1:bc4])
+        by smtp.gmail.com with ESMTPSA id a11-20020ac8108b000000b0035d08c1da35sm10021966qtj.45.2022.11.23.10.18.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 10:18:11 -0800 (PST)
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Shakeel Butt <shakeelb@google.com>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] mm: remove lock_page_memcg() from rmap
+Date:   Wed, 23 Nov 2022 13:18:38 -0500
+Message-Id: <20221123181838.1373440-1-hannes@cmpxchg.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [PATCH 5/6] x86/hyperv: Support hypercalls for TDX guests
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Dexuan Cui <decui@microsoft.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221121195151.21812-1-decui@microsoft.com>
- <20221121195151.21812-6-decui@microsoft.com>
- <344c8b55-b5c3-85c4-72b3-4120e425201e@intel.com>
- <SA1PR21MB13359D878631F5C327DE8148BF0C9@SA1PR21MB1335.namprd21.prod.outlook.com>
- <20221123144714.vjp6alujwgzdjz5v@box.shutemov.name>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20221123144714.vjp6alujwgzdjz5v@box.shutemov.name>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+rmap changes (mapping and unmapping) of a page currently take
+lock_page_memcg() to serialize 1) update of the mapcount and the
+cgroup mapped counter with 2) cgroup moving the page and updating the
+old cgroup and the new cgroup counters based on page_mapped().
 
+Before b2052564e66d ("mm: memcontrol: continue cache reclaim from
+offlined groups"), we used to reassign all pages that could be found
+on a cgroup's LRU list on deletion - something that rmap didn't
+naturally serialize against. Since that commit, however, the only
+pages that get moved are those mapped into page tables of a task
+that's being migrated. In that case, the pte lock is always held (and
+we know the page is mapped), which keeps rmap changes at bay already.
 
-On 11/23/22 6:47 AM, Kirill A. Shutemov wrote:
-> On Wed, Nov 23, 2022 at 02:14:58AM +0000, Dexuan Cui wrote:
->>> From: Dave Hansen <dave.hansen@intel.com>
->>> Sent: Monday, November 21, 2022 12:05 PM
->>> [...]
->>>>  #ifdef CONFIG_X86_64
->>>> +#if CONFIG_INTEL_TDX_GUEST
->>>> +	if (hv_isolation_type_tdx()) {
->>>
->>>>  #ifdef CONFIG_X86_64
->>>> +#if CONFIG_INTEL_TDX_GUEST
->>>> +	if (hv_isolation_type_tdx())
->>>
->>>>  #ifdef CONFIG_X86_64
->>>> +#if CONFIG_INTEL_TDX_GUEST
->>>> +	if (hv_isolation_type_tdx())
->>>> +		return __tdx_ms_hv_hypercall(control, input2, input1);
->>>
->>> See any common patterns there?
->>>
->>> The "no #ifdef's in C files" rule would be good to apply here.  Please
->>> do one #ifdef in a header.
->>
->> Sorry, I should use #ifdef rather than #if. I'll fix it like the below.
-> 
-> No, can we hide preprocessor hell inside hv_isolation_type_tdx()?
-> 
-> Like make it return false for !CONFIG_INTEL_TDX_GUEST and avoid all
-> #if/#ifdefs in C file.
+The additional lock_page_memcg() by rmap is redundant. Remove it.
 
-There is a weak reference to hv_isolation_type_tdx() which returns false
-by default. So defining the hv_isolation_type_tdx within
-#ifdef CONFIG_INTEL_TDX_GUEST would be enough.
+Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+---
+ mm/memcontrol.c | 35 ++++++++++++++++++++---------------
+ mm/rmap.c       | 12 ------------
+ 2 files changed, 20 insertions(+), 27 deletions(-)
 
-> 
-> 
-
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 23750cec0036..52b86ca7a78e 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -5676,7 +5676,10 @@ static struct page *mc_handle_file_pte(struct vm_area_struct *vma,
+  * @from: mem_cgroup which the page is moved from.
+  * @to:	mem_cgroup which the page is moved to. @from != @to.
+  *
+- * The caller must make sure the page is not on LRU (isolate_page() is useful.)
++ * This function acquires folio_lock() and folio_lock_memcg(). The
++ * caller must exclude all other possible ways of accessing
++ * page->memcg, such as LRU isolation (to lock out isolation) and
++ * having the page mapped and pte-locked (to lock out rmap).
+  *
+  * This function doesn't do "charge" to new cgroup and doesn't do "uncharge"
+  * from old cgroup.
+@@ -5696,6 +5699,13 @@ static int mem_cgroup_move_account(struct page *page,
+ 	VM_BUG_ON_FOLIO(folio_test_lru(folio), folio);
+ 	VM_BUG_ON(compound && !folio_test_large(folio));
+ 
++	/*
++	 * We're only moving pages mapped into the moving process's
++	 * page tables. The caller's pte lock prevents rmap from
++	 * removing the NR_x_MAPPED state while we transfer it.
++	 */
++	VM_WARN_ON_ONCE(!folio_mapped(folio));
++
+ 	/*
+ 	 * Prevent mem_cgroup_migrate() from looking at
+ 	 * page's memory cgroup of its source page while we change it.
+@@ -5715,30 +5725,25 @@ static int mem_cgroup_move_account(struct page *page,
+ 	folio_memcg_lock(folio);
+ 
+ 	if (folio_test_anon(folio)) {
+-		if (folio_mapped(folio)) {
+-			__mod_lruvec_state(from_vec, NR_ANON_MAPPED, -nr_pages);
+-			__mod_lruvec_state(to_vec, NR_ANON_MAPPED, nr_pages);
+-			if (folio_test_transhuge(folio)) {
+-				__mod_lruvec_state(from_vec, NR_ANON_THPS,
+-						   -nr_pages);
+-				__mod_lruvec_state(to_vec, NR_ANON_THPS,
+-						   nr_pages);
+-			}
++		__mod_lruvec_state(from_vec, NR_ANON_MAPPED, -nr_pages);
++		__mod_lruvec_state(to_vec, NR_ANON_MAPPED, nr_pages);
++
++		if (folio_test_transhuge(folio)) {
++			__mod_lruvec_state(from_vec, NR_ANON_THPS, -nr_pages);
++			__mod_lruvec_state(to_vec, NR_ANON_THPS, nr_pages);
+ 		}
+ 	} else {
+ 		__mod_lruvec_state(from_vec, NR_FILE_PAGES, -nr_pages);
+ 		__mod_lruvec_state(to_vec, NR_FILE_PAGES, nr_pages);
+ 
++		__mod_lruvec_state(from_vec, NR_FILE_MAPPED, -nr_pages);
++		__mod_lruvec_state(to_vec, NR_FILE_MAPPED, nr_pages);
++
+ 		if (folio_test_swapbacked(folio)) {
+ 			__mod_lruvec_state(from_vec, NR_SHMEM, -nr_pages);
+ 			__mod_lruvec_state(to_vec, NR_SHMEM, nr_pages);
+ 		}
+ 
+-		if (folio_mapped(folio)) {
+-			__mod_lruvec_state(from_vec, NR_FILE_MAPPED, -nr_pages);
+-			__mod_lruvec_state(to_vec, NR_FILE_MAPPED, nr_pages);
+-		}
+-
+ 		if (folio_test_dirty(folio)) {
+ 			struct address_space *mapping = folio_mapping(folio);
+ 
+diff --git a/mm/rmap.c b/mm/rmap.c
+index 459dc1c44d8a..11a4894158db 100644
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -1222,9 +1222,6 @@ void page_add_anon_rmap(struct page *page,
+ 	bool compound = flags & RMAP_COMPOUND;
+ 	bool first = true;
+ 
+-	if (unlikely(PageKsm(page)))
+-		lock_page_memcg(page);
+-
+ 	/* Is page being mapped by PTE? Is this its first map to be added? */
+ 	if (likely(!compound)) {
+ 		first = atomic_inc_and_test(&page->_mapcount);
+@@ -1254,9 +1251,6 @@ void page_add_anon_rmap(struct page *page,
+ 	if (nr)
+ 		__mod_lruvec_page_state(page, NR_ANON_MAPPED, nr);
+ 
+-	if (unlikely(PageKsm(page)))
+-		unlock_page_memcg(page);
+-
+ 	/* address might be in next vma when migration races vma_adjust */
+ 	else if (first)
+ 		__page_set_anon_rmap(page, vma, address,
+@@ -1321,7 +1315,6 @@ void page_add_file_rmap(struct page *page,
+ 	bool first;
+ 
+ 	VM_BUG_ON_PAGE(compound && !PageTransHuge(page), page);
+-	lock_page_memcg(page);
+ 
+ 	/* Is page being mapped by PTE? Is this its first map to be added? */
+ 	if (likely(!compound)) {
+@@ -1349,7 +1342,6 @@ void page_add_file_rmap(struct page *page,
+ 			NR_SHMEM_PMDMAPPED : NR_FILE_PMDMAPPED, nr_pmdmapped);
+ 	if (nr)
+ 		__mod_lruvec_page_state(page, NR_FILE_MAPPED, nr);
+-	unlock_page_memcg(page);
+ 
+ 	mlock_vma_page(page, vma, compound);
+ }
+@@ -1378,8 +1370,6 @@ void page_remove_rmap(struct page *page,
+ 		return;
+ 	}
+ 
+-	lock_page_memcg(page);
+-
+ 	/* Is page being unmapped by PTE? Is this its last map to be removed? */
+ 	if (likely(!compound)) {
+ 		last = atomic_add_negative(-1, &page->_mapcount);
+@@ -1427,8 +1417,6 @@ void page_remove_rmap(struct page *page,
+ 	 * and remember that it's only reliable while mapped.
+ 	 */
+ 
+-	unlock_page_memcg(page);
+-
+ 	munlock_vma_page(page, vma, compound);
+ }
+ 
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+2.38.1
+
