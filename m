@@ -2,81 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 825F0636BC7
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 22:03:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC0E636BD0
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 22:04:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236639AbiKWVC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 16:02:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54944 "EHLO
+        id S237196AbiKWVEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 16:04:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236590AbiKWVCw (ORCPT
+        with ESMTP id S236642AbiKWVEG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 16:02:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FDF22A96D;
-        Wed, 23 Nov 2022 13:02:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CA188B82488;
-        Wed, 23 Nov 2022 21:02:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7C96C433C1;
-        Wed, 23 Nov 2022 21:02:47 +0000 (UTC)
-Date:   Wed, 23 Nov 2022 16:02:46 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
-        Rafael Mendonca <rafaelmendsr@gmail.com>,
-        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
-        Tom Zanussi <zanussi@kernel.org>
-Subject: Re: [PATCH] tracing: Fix race where eprobes can be called before
- the event
-Message-ID: <20221123160246.348c11b4@gandalf.local.home>
-In-Reply-To: <20221118211809.701d40c0f8a757b0df3c025a@kernel.org>
-References: <20221117214249.2addbe10@gandalf.local.home>
-        <20221118211809.701d40c0f8a757b0df3c025a@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 23 Nov 2022 16:04:06 -0500
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894A72936F;
+        Wed, 23 Nov 2022 13:04:03 -0800 (PST)
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 2ANL3RFg000357;
+        Thu, 24 Nov 2022 06:03:28 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 2ANL3RFg000357
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1669237408;
+        bh=W0nCyQqLQfReQqK54zE3fJbgqD+3GLnWxu8/PxCNlXQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=A5YMICOx+m5Mmd3hE7kvpbXpnIWzrtGftJdG06Zsk4CuHc84E51WBS2hrSC6tbQAQ
+         MN6exYDV7Gutx75//uumFPJG0dlUzZJ2/CORGbcQQrprLPbQazhsFP7WWZW1fwXffa
+         O5PK4IXUgJ+25kAi40oT6eOKH9NQ2+V8IP/xHrgr/QdoQsh9wbYjmntAocRI3zQcL0
+         5oSCxuIJCSjxgqHbMpQ0vb69yW0SKdMDXOhCTc7OZch5hPvm9lpDGBG33IfwZS/l6N
+         W+ZQoQcV799vW72oPaWF6ELpSHBvaMS5pdjvj+nPZqGpKM3lgC6ZR3q0p7PoapsZpm
+         8NaBdtBj0jNZA==
+X-Nifty-SrcIP: [209.85.210.44]
+Received: by mail-ot1-f44.google.com with SMTP id w26-20020a056830061a00b0066c320f5b49so11995806oti.5;
+        Wed, 23 Nov 2022 13:03:27 -0800 (PST)
+X-Gm-Message-State: ANoB5pkc+ebPEo/YBmgFqHNolXgmJenUbjHqBQ72sgBxOO+bI0eyMpHG
+        0SGN6ry11sTI9h+sHyRsq7rex+gj4E17DVNt4Ew=
+X-Google-Smtp-Source: AA0mqf4FtoW/4lVAQkI/4YgB2sFM1/xO0IxB0jVFyO/6YbGnUpsxENwldQ+0E9ZFKUSx3arF7kz9NxNwfW7TnxCoDqs=
+X-Received: by 2002:a05:6830:1b67:b0:661:8d9e:1959 with SMTP id
+ d7-20020a0568301b6700b006618d9e1959mr15550185ote.225.1669237406822; Wed, 23
+ Nov 2022 13:03:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221119225650.1044591-1-alobakin@pm.me> <20221119225650.1044591-16-alobakin@pm.me>
+In-Reply-To: <20221119225650.1044591-16-alobakin@pm.me>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 24 Nov 2022 06:02:50 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARfs413qp7f1biiX7TJfbJtWyL+C4rEkzWB9TWDkD2FrQ@mail.gmail.com>
+Message-ID: <CAK7LNARfs413qp7f1biiX7TJfbJtWyL+C4rEkzWB9TWDkD2FrQ@mail.gmail.com>
+Subject: Re: [PATCH 15/18] net: dpaa2: fix mixed module-builtin object
+To:     Alexander Lobakin <alobakin@pm.me>
+Cc:     linux-kbuild@vger.kernel.org, Nicolas Schier <nicolas@fjasle.eu>,
+        Jens Axboe <axboe@kernel.dk>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Derek Chickles <dchickles@marvell.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        NXP Linux Team <linux-imx@nxp.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Nov 2022 21:18:09 +0900
-Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+On Sun, Nov 20, 2022 at 8:09 AM Alexander Lobakin <alobakin@pm.me> wrote:
+>
+> With CONFIG_FSL_DPAA2_ETH=m and CONFIG_FSL_DPAA2_SWITCH=y (or vice
+> versa), dpaa2-mac.o and dpmac.o are linked to a module and also to
+> vmlinux even though the expected CFLAGS are different between
+> builtins and modules.
+> This is the same situation as fixed by
+> commit 637a642f5ca5 ("zstd: Fixing mixed module-builtin objects").
+> There's also no need to duplicate relatively big piece of object
+> code into two modules.
+>
+> Introduce the new module, fsl-dpaa2-mac, to provide the common
+> functions to both fsl-dpaa2-eth and fsl-dpaa2-switch.
+>
+> Misc: constify and shrink @dpaa2_mac_ethtool_stats while at it.
+>
+> Fixes: 84cba72956fd ("dpaa2-switch: integrate the MAC endpoint support")
+> Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
+> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+> ---
 
-> This looks good to me.
-> 
-> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> BTW, would other trigger callbacks also need to add similar checks?
-
-I just checked, and yes, I think that histograms (the only other trigger
-that has EVENT_CMD_FL_NEEDS_REC set) has the same issue, and requires:
-
-diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
-index 087c19548049..1c82478e8dff 100644
---- a/kernel/trace/trace_events_hist.c
-+++ b/kernel/trace/trace_events_hist.c
-@@ -5143,6 +5143,9 @@ static void event_hist_trigger(struct event_trigger_data *data,
- 	void *key = NULL;
- 	unsigned int i;
- 
-+	if (unlikely(!rbe))
-+		return;
-+
- 	memset(compound_key, 0, hist_data->key_size);
- 
- 	for_each_hist_key_field(i, hist_data) {
+Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
 
 
-I'll add that next.
 
--- Steve
+-- 
+Best Regards
+Masahiro Yamada
