@@ -2,107 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B856635F42
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:22:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82986635F46
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:22:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238721AbiKWNWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 08:22:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58334 "EHLO
+        id S238638AbiKWNWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 08:22:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237827AbiKWNWM (ORCPT
+        with ESMTP id S238600AbiKWNWY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 08:22:12 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7351CB4805;
-        Wed, 23 Nov 2022 05:01:10 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id n186so18891819oih.7;
-        Wed, 23 Nov 2022 05:01:10 -0800 (PST)
+        Wed, 23 Nov 2022 08:22:24 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251AA2A26D
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:01:34 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id b9so21299517ljr.5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:01:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=D8iNsY38chO/HqPmklDMe6KMcfnGGpO+SfN25u2MR9k=;
-        b=fe6HirGOUDK4nqPF1BFgY1lmrm30/fCj8oi73BGLRuy7chtWit372NNZOCRvH8nsAx
-         CIsFes5MpzAdzt1LCqTErH0eG6JXlo944wFSHTL+SMiKb3w/adeTWloYj4LRAONDTlPf
-         5hsgIt6+otyfavu7LrGylkto+jDSS29+OPmAG7j1cdO3pFA3moX0pxEylcY24DNrVdtt
-         JxI2MffvwraF1TbxK2VDp2DOdZ+XdE+VrpVGcvox/ArDzWmTwXUeg2qjxck/nFnEqR/y
-         8LZxd9tEVGgO2rk6J0nH81iIJnCvN0uvuNzNzxAP6KW/jWgtMKRq7R7QYP1KIllBHGpt
-         jnqg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Rp9LQRHK4UZG+xUfLLMwYJtuh3wPrpxN6Fnd2UjWdQg=;
+        b=YqKW4WZ12w3737HpIKaIbSfRqSmPKWir3XDrW/zdqOV9JGrfgldRSUQjiOR4mpwLZL
+         CO+CHVIHt2qkz75r4PuT1YifKI/ufwNk5CLMVXDEnjYh7zYOibvXOFRLqK+eOY4JqvRa
+         eylk3gfX+g7syMCZg6KdhAncldUPL6p8UKHWvE8a+SpBROLKURnbhyQ76keSjsPLxvFr
+         euPLS7vpgu8v9MlgyjPLinBvTgoSYUbjCGPFxWH5zBqhxO9NI3+MV1+oW06cV5+DmYTU
+         2Wxron4/P1HDYbINnL2S67EKIlSDaeuH8ldHoqSH2es4ghAFTlCTrCpmNhgR2wRM3yw0
+         WEWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=D8iNsY38chO/HqPmklDMe6KMcfnGGpO+SfN25u2MR9k=;
-        b=G3RHCsIIggwiJKbxm8PhQnkC8syyfKP34IW6hKIEDcqNZmp9f+GmZVdNZr7GPDNeLk
-         0fzEbZPgBVeOE0pNKa0GgKBRlorE3StFXk6HUT2245j6kEAJTFa09kzFPior0Geu0Z2n
-         6o89s/wcms484ATTopoPMc5OpOmpRVNaQZ8edG2a42zPAxFUcfs+6W0J1DMqYXDLXgpo
-         FgcUSoj4DU3YyVOaO+Y80pTBn/9+LzOVOHzxjbkpqagjuklPdk+xNr9tmjFXjfFuCiGq
-         RipL1bh6clIO21X3ttYt9abGWHhjOtLgITPNL8JW092pZQ4w5HdqGFCRgVlPmh7cjKyh
-         HWYA==
-X-Gm-Message-State: ANoB5pkWvaSJEdxi+l2S1xYORMlypGOSBTiA2nmJ2zse7JIDYxAYa95R
-        CDBDIdeXBcgtlTEDN43/nXcIAdjQ/Ekj4bCBRIc=
-X-Google-Smtp-Source: AA0mqf5xNBOot5wGFrpujJ4FWWy2MHxMhw7SnCOf6Jrue4uTFZvRmZ83x0rBa8NZBvW1D92mdfQnd8YAo7ubu5u00GE=
-X-Received: by 2002:a05:6808:284:b0:35a:e9d:925c with SMTP id
- z4-20020a056808028400b0035a0e9d925cmr13280366oic.260.1669208469849; Wed, 23
- Nov 2022 05:01:09 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rp9LQRHK4UZG+xUfLLMwYJtuh3wPrpxN6Fnd2UjWdQg=;
+        b=YuikNYXqGORsMMfXybiD2tpvzlUzXi3icIT8KOxYNQKl4DIYdUwtYN6yh1quupb5KV
+         2YvtILesAnihpq4llGXS9TWNguGKRHQFYXBc5jSl0prs8g8Mmzq5DXOs7RmCQ86mirAc
+         nhXLwPtpn3ob3QjXj+83WJpVg6eniWeSttnLwohIjFA9DqTgmB+SE63Kvrtkkgzn85aB
+         ZlSE8o80ciQS75Z60HGFi+L3fYM2soG+uKI/2FmyjzMrRCe4aX91r0rhyxeFEmIzURN8
+         FoL9czbIreGpGjDVQKt56VP3kbIx/RcQ8mE1Jg1QdR1ITi9Y4UYWiq3HkPk8rcmAVLzZ
+         bHQQ==
+X-Gm-Message-State: ANoB5plsD1xgseHPimOAxct7ireP7YlXOWdqQQgZKvBljECZjZTDFSYp
+        dPQGYqFZQ8QiKDql8Cyg7EG1cQ==
+X-Google-Smtp-Source: AA0mqf5DGm4ZvktT4NR9WyAWpPuHSnlNUVoErSOEdsb9pP81a5SYi+qylXXNjUQBbNtecR/QIXyT/g==
+X-Received: by 2002:a2e:a90b:0:b0:277:794:ae09 with SMTP id j11-20020a2ea90b000000b002770794ae09mr8806647ljq.286.1669208492340;
+        Wed, 23 Nov 2022 05:01:32 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id p7-20020a2eb987000000b002796fb63dbdsm534480ljp.13.2022.11.23.05.01.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Nov 2022 05:01:31 -0800 (PST)
+Message-ID: <4d62d7e9-5454-4d1c-b3bb-4ba1fd7a31d6@linaro.org>
+Date:   Wed, 23 Nov 2022 14:01:30 +0100
 MIME-Version: 1.0
-References: <20221116200150.4657-1-linux.amoon@gmail.com> <20221116200150.4657-3-linux.amoon@gmail.com>
- <3e4e601b-e7f8-e9df-0ec5-4f4b629d9c0c@wolfvision.net>
-In-Reply-To: <3e4e601b-e7f8-e9df-0ec5-4f4b629d9c0c@wolfvision.net>
-From:   Anand Moon <linux.amoon@gmail.com>
-Date:   Wed, 23 Nov 2022 18:30:50 +0530
-Message-ID: <CANAwSgTbTziSY-5=V3_WJG9-SaTY4R0JM4hkohLFE-q1bERcdg@mail.gmail.com>
-Subject: Re: [linux-next-v2 2/5] arm64: dts: rockchip: Add support of external
- clock to ethernet node on Rock 3A SBC
-To:     Michael Riesch <michael.riesch@wolfvision.net>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v5] dt-bindings: iio: adc: ad7923: adjust documentation
+Content-Language: en-US
+To:     Edmund Berenson <edmund.berenson@emlix.com>
+Cc:     Lukasz Zemla <Lukasz.Zemla@woodward.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Chukun Pan <amadeus@jmu.edu.cn>,
-        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221122161437.18937-1-edmund.berenson@emlix.com>
+ <c96d84e9-44d0-a389-429d-91d8a7d747b5@linaro.org>
+ <20221123113224.5vxs2zmxf7z2bmvm@emlix.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221123113224.5vxs2zmxf7z2bmvm@emlix.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael, Heiko
+On 23/11/2022 12:32, Edmund Berenson wrote:
+> On Wed, Nov 23, 2022 at 11:42:40AM +0100, Krzysztof Kozlowski wrote:
+>> On 22/11/2022 17:14, Edmund Berenson wrote:
+>>> - The ad7927 is fully compatible with ad7928 driver, add
+>>> documentation for device.
+>>> - ad7923 and ad7924 are treated the same in the driver, show
+>>> the relationship in the documentation.
+>>>
+>>> Suggested-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
+>>> Signed-off-by: Edmund Berenson <edmund.berenson@emlix.com>
+>>> ---
+>>>  .../bindings/iio/adc/adi,ad7923.yaml          | 26 ++++++++++++-------
+>>>  1 file changed, 17 insertions(+), 9 deletions(-)
+>>>
+>>
+>> 1. This is a v5, what are the changes?
+>>
+> The original idea was adding the compatible string into driver itself,
+> then it was suggested that I have a fallback compatible to 7928 as the
+> hardware versions are treated the same in the driver. After that it was
+> suggested to add deprecated flag to standalone compatibility, but doing
+> so I didn't want to add compatibility on driver side just to mark it
+> deprecated in the documentation, so I dropped driver side changes.
+> Finally I had some issues getting the documentation syntax into an
+> acceptable form, mainly const vs enum listing of compatibility stings.
 
-On Tue, 22 Nov 2022 at 16:48, Michael Riesch
-<michael.riesch@wolfvision.net> wrote:
->
-> Hi Anand,
->
-> On 11/16/22 21:01, Anand Moon wrote:
-> > Add support of external clock gmac1_clkin which is used as input clock
-> > to ethernet node.
->
-> Indeed this operating mode is defined in the schematics, thanks for the fix.
->
-> >
-> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
->
-> Reviewed-by: Michael Riesch <michael.riesch@wolfvision.net>
-> Tested-by: Michael Riesch <michael.riesch@wolfvision.net>
->
+That's a bit too long for a changelog. Keep it short but still
+descriptive. Anyway - this must be in the changelog place, so after ---
 
-Actually, I wanted to drop these changes since looking into clk_summary
-gmac1 CLK gets wrongly configured with PLL and the reference count is
-not correct.
 
-Plz do the patches, I will send the correct changes next version.
+Best regards,
+Krzysztof
 
-> Best regards,
-> Michael
->
-Thanks
-
--Anand
