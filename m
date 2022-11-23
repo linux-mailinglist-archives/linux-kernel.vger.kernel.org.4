@@ -2,88 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8937B63699A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 20:10:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B71BA6369A5
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 20:11:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239752AbiKWTJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 14:09:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40840 "EHLO
+        id S239791AbiKWTK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 14:10:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239666AbiKWTJ4 (ORCPT
+        with ESMTP id S238974AbiKWTKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 14:09:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0CCF3E
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 11:09:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CC0A2B82439
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 19:09:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BD19C433C1;
-        Wed, 23 Nov 2022 19:09:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669230592;
-        bh=Fkx7NNxQpeQ/Bu04mLlsyHDFFetZUQoYudxuRd2fzf4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j/485IK0yk1tjvafssJ1B73k8Gb/Ed6Gmq2OtdzOQ6ZWFxp6gmNshuPC6VTjEOVEK
-         2s/t5uj6D2rtj5lgiuTH+iOqK5gb06F6sPZ2u8hHnSouja74sYO7+MU8lmntIlUSFo
-         ik9HvnXgaDXLiJ5MmJIcMTMBWwNySFBeQwU77a9U=
-Date:   Wed, 23 Nov 2022 20:09:50 +0100
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     Sanan Hasanov <sanan.hasanov@knights.ucf.edu>
-Cc:     "jirislaby@kernel.org" <jirislaby@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "syzkaller@googlegroups.com" <syzkaller@googlegroups.com>,
-        Paul Gazzillo <Paul.Gazzillo@ucf.edu>
-Subject: Re: Syzkaller found a bug: KASAN: use-after-free Read in
- do_update_region
-Message-ID: <Y35v/ieA0OrF510w@kroah.com>
-References: <BN6PR07MB3185D3400510E9D395288D71AB0C9@BN6PR07MB3185.namprd07.prod.outlook.com>
+        Wed, 23 Nov 2022 14:10:54 -0500
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AFC28FE64;
+        Wed, 23 Nov 2022 11:10:53 -0800 (PST)
+Received: by mail-qk1-f181.google.com with SMTP id x18so13143750qki.4;
+        Wed, 23 Nov 2022 11:10:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NbSPkwnTrNcrJ9VpYRRJzoDHi8UiOrKZOPAZpU08zhM=;
+        b=Ymvi1X6cNs04gk4izymUrzydXDcNkA+HQ7qapsnjWGbI9hNa49SkShAEBYJTWssBTf
+         pB/cqXJ4Cg6k4rw52N3Uy286fMiXS5SQgAAh3tUgMLEOJl5y1s9HAS5YzTP/uLtG2nLq
+         avlbVrPaQNUff5Q1MUB7cOYCY2QcwEQj+bH3OWekj1JvSCeWxplr5hMrJPUPfi3gw30A
+         hen7FRynfyvoSWpovr2S2L4VlQiyrStNHwpQw7MFO2Pq3s5qdjsJkpTt2nnTi/wa5fdq
+         wyTenk5PwUwEhw57vvysRXPDaJ+nGFunUTnFD7hXp1WvChBX9xSzXujQl8BzeMoWwXL1
+         PKDg==
+X-Gm-Message-State: ANoB5pnsVw9FfdM1NYUVxG3IsfwimbRDy3mYJ0Vm6Uvj6Qj3HYoKPOxS
+        bi9IXFFdbjNE9bFLO6q4czTKm5PHqW94gAHkaEUiXeYRj+w=
+X-Google-Smtp-Source: AA0mqf6fNv3a2I+13Tw+6GO9/D1Fg05iUWfCplG+Fb1qm7+WLi0e1o74TtCSLGatgMloBVykryvibeFXNLKgWVrW4Rw=
+X-Received: by 2002:a05:620a:4611:b0:6fa:af7e:927c with SMTP id
+ br17-20020a05620a461100b006faaf7e927cmr25906532qkb.443.1669230652623; Wed, 23
+ Nov 2022 11:10:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN6PR07MB3185D3400510E9D395288D71AB0C9@BN6PR07MB3185.namprd07.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221116025417.2590275-1-srinivas.pandruvada@linux.intel.com>
+ <CAJZ5v0hQkZ=jprMc5MNaCudKNATtjs_5Z+N7+a7eeaXRjGpaDQ@mail.gmail.com>
+ <4b168fc1cad6a57e0f20b9050c86174a57b34989.camel@linux.intel.com> <CAJZ5v0gD+d=9DhpjD80qJWkvp4pro3gqf2cFLEjsGk9jSx+XGQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0gD+d=9DhpjD80qJWkvp4pro3gqf2cFLEjsGk9jSx+XGQ@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 23 Nov 2022 20:10:41 +0100
+Message-ID: <CAJZ5v0gDQ7JCrp_sim+SWqOcmiYxHWDgT-m772fMnhej0YTE1Q@mail.gmail.com>
+Subject: Re: [PATCH RESEND 1/2] thermal: intel: Prevent accidental clearing of
+ HFI status
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 06:38:01PM +0000, Sanan Hasanov wrote:
-> Good day, dear maintainers,
-> 
-> We found a bug using a modified kernel configuration file used by syzbot.
-> 
-> We enhanced the coverage of the configuration file using our tool, klocalizer.
-> 
-> Kernel branch: linux-next 5.11.0-rc1+ (HEAD detached at 6a4b1f2dff55)
-> 
-> configuration file: https://drive.google.com/file/d/18W-8umgZVSm-KwvIzcBQpxRn74Q1S_Fa/view?usp=sharing
-> 
-> Unfortunately, we have no reproducer for this bug yet.
+On Fri, Nov 18, 2022 at 8:49 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Fri, Nov 18, 2022 at 8:38 PM srinivas pandruvada
+> <srinivas.pandruvada@linux.intel.com> wrote:
+> >
+> > On Fri, 2022-11-18 at 18:54 +0100, Rafael J. Wysocki wrote:
+> > > On Wed, Nov 16, 2022 at 3:54 AM Srinivas Pandruvada
+> > > <srinivas.pandruvada@linux.intel.com> wrote:
+> > > >
+> > > > When there is a package thermal interrupt with PROCHOT log, it will
+> > > > be
+> > > > processed and cleared. It is possible that there is an active HFI
+> > > > event
+> > > > status, which is about to get processed or getting processed. While
+> > > > clearing PROCHOT log bit, it will also clear HFI status bit. This
+> > > > means
+> > > > that hardware is free to update HFI memory.
+> > > >
+> > > > When clearing a package thermal interrupt, some processors will
+> > > > generate
+> > > > a "general protection fault" when any of the read only bit is set
+> > > > to 1.
+> > > > The driver maintains a mask of all read-write bits which can be
+> > > > set.
+> > > > This mask doesn't include HFI status bit. This bit will also be
+> > > > cleared,
+> > > > as it will be assumed read-only bit. So, add HFI status bit 26 to
+> > > > the
+> > > > mask.
+> > > >
+> > > > Signed-off-by: Srinivas Pandruvada
+> > > > <srinivas.pandruvada@linux.intel.com>
+> > > > Reviewed-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> > >
+> > > Is a Fixes tag missing here?
+> > While adding the following change, this should have been take care of:
+> > ab09b0744a99 ("thermal: intel: hfi: Enable notification interrupt")
+> >
+> > But the above change didn't add this line, which this patch is
+> > changing. We can add:
+> >
+> > Fixes: ab09b0744a99 ("thermal: intel: hfi: Enable notification
+> > interrupt")
+>
+> OK
+>
+> > Do you want me to send another PATCH with fixes.
+>
+> No, I can take care of this.
+>
+> > >
+> > > Also, do you want it in 6.1-rc7 or would 6.2 suffice?
+> > Not urgent. 6.2 should be fine.
+>
+> OK, thanks!
 
-Reproducer would be great, thanks.  Otherwise this goes on the thousands
-of other "syzbot-found-bugs-with-no-way-to-reproduce" pile that we
-have...
-
-> ==================================================================
-> BUG: KASAN: use-after-free in do_update_region+0x571/0x5f0 drivers/tty/vt/vt.c:664
-> Read of size 2 at addr ffff888000100000 by task (agetty)/17350
-> 
-> CPU: 6 PID: 17350 Comm: (agetty) Not tainted 5.11.0-rc1+ #3
-
-Wait, that's a VERY old and obsolete and known buggy kernel version.
-Please test with something more modern, usually Linus's tree, or
-linux-next or worst case, the latest stable release.  5.11-rc1 came out
-almost 2 years ago, and over 150 thousand changes have happened since
-then.
-
-Not much we really can do about old obsolete kernels, sorry.
-
-thanks,
-
-greg k-h
+Both applied as 6.2 material now, thanks!
