@@ -2,114 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6EB06367DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:58:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B71E96367E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:59:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236825AbiKWR6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 12:58:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49172 "EHLO
+        id S238462AbiKWR7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 12:59:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239325AbiKWR6R (ORCPT
+        with ESMTP id S236875AbiKWR7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 12:58:17 -0500
-Received: from wedge010.net.lu.se (wedge010.net.lu.se [130.235.56.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A9F64570;
-        Wed, 23 Nov 2022 09:57:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; d=control.lth.se; s=edge;
-        c=relaxed/relaxed; t=1669226272; h=from:subject:to:date:message-id;
-        bh=KQhk2ap/hZCSu63a5uf1OoR3V/bnmsDEXpetctJWHwM=;
-        b=FGisCrKKTYZY8/+bw/C9GhcYkpyc7tkgtgEzgyq6pDfJLK4S0oW9eA0hLagX/CYu/KOwXvhGphq
-        O69CMxKAR5PfXtiaMKf2sZ0nspBu3I4IzJHKm3kcB9zzTTZo0Vp9M33Q6B6n7pNBznEQWtQeTd9sX
-        qT1+roCKnuqo4qvOMfcep0Na6HEMSZtpd6er/qP07xcxELU3FEkbSfGwWBDf7WgfW2TkkSY8StmoN
-        WDyYZdw01LgNJOMK1Jl/ocvJKDymMhi9vsE5lLr6+QWO9oDeKDmhyYGrMBSI+zkm9jslCfZf8kQwi
-        zMcHkclCYZcUDMuZHbZEtSh/40j3nlx8Up8w==
-Received: from wexc007.uw.lu.se (130.235.59.251) by mail.lu.se
- (130.235.56.200) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P256) id 15.1.2507.13; Wed, 23
- Nov 2022 18:57:52 +0100
-Received: from [130.235.83.196] (130.235.139.100) by wexc007.uw.lu.se
- (130.235.59.251) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P521) id 15.1.2507.13; Wed, 23
- Nov 2022 18:57:46 +0100
-Message-ID: <d2d80dc2-2ac9-809f-635d-a8c2f2bfdb69@control.lth.se>
-Date:   Wed, 23 Nov 2022 18:57:41 +0100
+        Wed, 23 Nov 2022 12:59:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D83EE37;
+        Wed, 23 Nov 2022 09:59:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 51AF8B82215;
+        Wed, 23 Nov 2022 17:59:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEFFBC433D6;
+        Wed, 23 Nov 2022 17:59:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669226371;
+        bh=fo+5RajrLOWrgXzM+Dx5VV6uRU0lJQMAjI3KTS77p5w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pOkPLTiR2ZiV9f0l+NjiZnJhsn0x52zY/ZL5PiWHoxrD2La5EXianO7ellh88t2WX
+         hr166iVCyjUmSqY7LN01JwfRpROB2NbDSKS7qUz5hqJqV8g+7In3WlqgM3g7v5fOsV
+         vkAQC6ZLl1vYZcywAnPMdFaULMpRSGAb7lBz18jXGp3kBtAIGKWL0Mt/LgLjv+bUxS
+         HND3rRTW7oUGYkE/4THvnKBknxqeHAtAussMTvuN3ZujmAGtBrmFSW4lTkhGUYc2pq
+         fZNFyWczoe1zbpsc/9c81jWcIZlXIBMvtBHAPaK/e4ZyIqRTW3reqgtV4UYRspKnsx
+         kyVPfmSLfTiew==
+Date:   Wed, 23 Nov 2022 17:59:25 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Anup Patel <anup@brainfault.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Samuel Holland <samuel@sholland.org>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: riscv: Add optional DT property
+ riscv,timer-can-wake-cpu
+Message-ID: <Y35ffSHWy4B6v+Pc@spud>
+References: <20220727114302.302201-1-apatel@ventanamicro.com>
+ <20220727114302.302201-2-apatel@ventanamicro.com>
+ <372e37bf-ac90-c371-ad9e-b9c18e1cc059@linaro.org>
+ <CAK9=C2WjU+2cD7UZbja3TT++KCdRyWroT=50dw=fzi5mX30rcw@mail.gmail.com>
+ <7a0477a0-9f0f-87d6-4070-30321745f4cc@linaro.org>
+ <CAAhSdy20p5bkVanKGkGyArn94hWJhwncztnX7U+4WkN9-v7NsA@mail.gmail.com>
+ <Y3zjQXqEHsaoVVvf@wendy>
+ <Y34kM9TZ1FSqpeEB@wendy>
+ <CAK9=C2UeUhMXmbMZzS4rnhS++DfsTYTCQ4y-LVu6QgL0c64=0A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: Kernel 6.0.5 breaks virtual machines that boot from nfs mounted
- qcow2 images
-Content-Language: en-US
-To:     Chuck Lever III <chuck.lever@oracle.com>,
-        Benjamin Coddington <bcodding@redhat.com>
-CC:     Jeff Layton <jlayton@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Anna Schumaker <anna@kernel.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>
-References: <65115206-ec17-443e-8495-91661a2fd9be@control.lth.se>
- <0abaa41e-79e1-3c0c-6d1b-47d4e21f2296@control.lth.se>
- <A0F05ED3-14B0-4AE7-B4F7-82398033CA34@redhat.com>
- <90DACFB9-2854-4688-8822-936C6EEB1FD3@oracle.com>
-From:   Anders Blomdell <anders.blomdell@control.lth.se>
-In-Reply-To: <90DACFB9-2854-4688-8822-936C6EEB1FD3@oracle.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [130.235.139.100]
-X-ClientProxiedBy: wexc011.uw.lu.se (130.235.59.233) To wexc007.uw.lu.se
- (130.235.59.251)
-X-CrossPremisesHeadersFilteredBySendConnector: wexc007.uw.lu.se
-X-OrganizationHeadersPreserved: wexc007.uw.lu.se
-Received-SPF: Pass (wedge010.net.lu.se: domain of
- anders.blomdell@control.lth.se designates 130.235.59.251 as permitted sender)
- receiver=wedge010.net.lu.se; client-ip=130.235.59.251; helo=wexc007.uw.lu.se;
-X-CrossPremisesHeadersFilteredBySendConnector: wedge010.net.lu.se
-X-OrganizationHeadersPreserved: wedge010.net.lu.se
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK9=C2UeUhMXmbMZzS4rnhS++DfsTYTCQ4y-LVu6QgL0c64=0A@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Nov 23, 2022 at 09:16:55PM +0530, Anup Patel wrote:
+> On Wed, Nov 23, 2022 at 7:17 PM Conor Dooley <conor.dooley@microchip.com> wrote:
 
-
-On 2022-11-23 18:51, Chuck Lever III wrote:
+> > > Adding a new timer DT node would mean, the RISC-V timer driver
+> > > will now be probed using the compatible to the new DT node whereas
+> > > the RISC-V timer driver is currently probed using CPU DT nodes.
+> >
+> > In that case, we would have to retain the ability to match against the
+> > "riscv". Spitballing:
+> > - add a new timer node
+> > - keep matching against "riscv"
+> > - look up a timer node during init w/ of_find_matching_node() that
+> >   contains any new timer properties
+> >
+> > I think it's unlikely that this will be the last time we have to add
+> > some timer properties & we should avoid doing odd things in a DT to suit
+> > an operating system?
+> >
+> > Would something along those lines work Anup, or am I, yet again, missing
+> > something?
 > 
->> On Nov 23, 2022, at 12:49 PM, Benjamin Coddington <bcodding@redhat.com> wrote:
->>
->> On 23 Nov 2022, at 5:08, Anders Blomdell wrote:
->>
->>> Our problems turned out to be a fallout of Al Viros's splice rework, where nfsd reads with non-zero offsets and not ending
->>> on a page boundary failed to remap the last page. I belive that this is a decent fix for that problem (tested on v6.1-rc6,
->>> 6.0.7 and 6.0.9)
->>>
->>> ---- a/fs/nfsd/vfs.c
->>> +++ b/fs/nfsd/vfs.c
->>> @@ -873,7 +873,7 @@ nfsd_splice_actor(struct pipe_inode_info *pipe, struct pipe_buffer *buf,
->>>         unsigned offset = buf->offset;
->>>          page += offset / PAGE_SIZE;
->>> -       for (int i = sd->len; i > 0; i -= PAGE_SIZE)
->>> +       for (int i = sd->len + offset % PAGE_SIZE; i > 0; i -= PAGE_SIZE)
->>>                 svc_rqst_replace_page(rqstp, page++);
->>>         if (rqstp->rq_res.page_len == 0)        // first call
->>>                 rqstp->rq_res.page_base = offset % PAGE_SIZE;
->>
->>
->> Does anyone have insight into how we could possibly have caught this in testing?
-> 
-> Was also wondering this. I had though fstests (via fsx) would have exercised
-> this usage scenario.
-My guess is that one has to look very hard at qcow2 handling in qemu...
+> I was already working on v3 along these lines. I will try to post a v3 this
+> week itself.
 
-/Anders
+Cool, I'll keep my eyes peeled :)
 
+Thanks Anup!
 
--- 
-Anders Blomdell                  Email: anders.blomdell@control.lth.se
-Department of Automatic Control
-Lund University                  Phone:    +46 46 222 4625
-P.O. Box 118
-SE-221 00 Lund, Sweden
