@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F01E6635F40
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:22:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B856635F42
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:22:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238648AbiKWNWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 08:22:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57282 "EHLO
+        id S238721AbiKWNWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 08:22:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238206AbiKWNV4 (ORCPT
+        with ESMTP id S237827AbiKWNWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 08:21:56 -0500
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C1029803;
-        Wed, 23 Nov 2022 05:00:58 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id db10-20020a0568306b0a00b0066d43e80118so11168854otb.1;
-        Wed, 23 Nov 2022 05:00:58 -0800 (PST)
+        Wed, 23 Nov 2022 08:22:12 -0500
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7351CB4805;
+        Wed, 23 Nov 2022 05:01:10 -0800 (PST)
+Received: by mail-oi1-x232.google.com with SMTP id n186so18891819oih.7;
+        Wed, 23 Nov 2022 05:01:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uszX2YXhRo8OdMXZRubKyG6XQTLJS1i6JFk/Tk+AzJE=;
-        b=m9MCSmpbqdRH7+4KQyPsB99jGimXLvL7T8+W9hpeQ4oh8sBgsasHUj4lQBUv23vkaO
-         z593kbo6lONHYoUM0keJSXJKoNPld2g0MUMCWNtEmrduHeKQVT0qwQVZRidiGAmkySuJ
-         YByc//Bz9M+VuH8+BuojV5mAMc/yM2bBIFPk/RogKUdhcJH6MUPcFM+DH7Vu8GwEPhbY
-         Wsr8/XLzVIJvWs7w7x34FhncgBiSn15ih0ZUD3QOFPS7bs1LQAu7VgQMhUYFE11ffTdt
-         SubCzz6GYCEnp21hpbM+YZIh/LdYMpqfPAT7UgdF6c/wtBNVGeLCdKF5O8wOT9i69j6X
-         EdJw==
+        bh=D8iNsY38chO/HqPmklDMe6KMcfnGGpO+SfN25u2MR9k=;
+        b=fe6HirGOUDK4nqPF1BFgY1lmrm30/fCj8oi73BGLRuy7chtWit372NNZOCRvH8nsAx
+         CIsFes5MpzAdzt1LCqTErH0eG6JXlo944wFSHTL+SMiKb3w/adeTWloYj4LRAONDTlPf
+         5hsgIt6+otyfavu7LrGylkto+jDSS29+OPmAG7j1cdO3pFA3moX0pxEylcY24DNrVdtt
+         JxI2MffvwraF1TbxK2VDp2DOdZ+XdE+VrpVGcvox/ArDzWmTwXUeg2qjxck/nFnEqR/y
+         8LZxd9tEVGgO2rk6J0nH81iIJnCvN0uvuNzNzxAP6KW/jWgtMKRq7R7QYP1KIllBHGpt
+         jnqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=uszX2YXhRo8OdMXZRubKyG6XQTLJS1i6JFk/Tk+AzJE=;
-        b=o5Q0yceBw2Cm0K6O0Gin4kZsrSB5dQ/e2cLj0hR7SzDd/r1Orhpkzil0rukc1oAYqQ
-         SkkATUYmk9Yrq1AOST5DpLfY2JwFdLXcZaXncU4lAIOCCVaVF00iI5aJHfbtPPnBUwTF
-         EfqL6xu9/Q8Zof410vE1GFxHzKaYUklm8f/VSvz1Sk+n+8m00piK1AF7UN0Ck9BoBWI4
-         ObGRYYMR0e9M323F3ERayjKpu8DYgCp5lx6ur6oszqah/MP8mZq8DudywGdziDpx3Y8G
-         7pLN7KL9F/0ZUqbs8YHWudPk4v3w96dC6PszgTjJbeA0I2UbnrdHn4tHw0755dZTpBXY
-         1j+A==
-X-Gm-Message-State: ANoB5pmnqspdqckNRFFnh8TR320p6IqMbCajarY1CC4DmzHm8DrCDHs8
-        CXo5t6Xb6KTozoabCcTBQUHiNj9nQXNnoInIBPzgkH04
-X-Google-Smtp-Source: AA0mqf7avOQ6ZK8U0u3gEKBiDn/0RxoSiJmw1vU8Ce22fs45vbIEnoivj5POkfo2QWMtctbK4jmNIv+38GUoGZfVeNk=
-X-Received: by 2002:a9d:4f07:0:b0:662:c31:161c with SMTP id
- d7-20020a9d4f07000000b006620c31161cmr7801332otl.301.1669208457897; Wed, 23
- Nov 2022 05:00:57 -0800 (PST)
+        bh=D8iNsY38chO/HqPmklDMe6KMcfnGGpO+SfN25u2MR9k=;
+        b=G3RHCsIIggwiJKbxm8PhQnkC8syyfKP34IW6hKIEDcqNZmp9f+GmZVdNZr7GPDNeLk
+         0fzEbZPgBVeOE0pNKa0GgKBRlorE3StFXk6HUT2245j6kEAJTFa09kzFPior0Geu0Z2n
+         6o89s/wcms484ATTopoPMc5OpOmpRVNaQZ8edG2a42zPAxFUcfs+6W0J1DMqYXDLXgpo
+         FgcUSoj4DU3YyVOaO+Y80pTBn/9+LzOVOHzxjbkpqagjuklPdk+xNr9tmjFXjfFuCiGq
+         RipL1bh6clIO21X3ttYt9abGWHhjOtLgITPNL8JW092pZQ4w5HdqGFCRgVlPmh7cjKyh
+         HWYA==
+X-Gm-Message-State: ANoB5pkWvaSJEdxi+l2S1xYORMlypGOSBTiA2nmJ2zse7JIDYxAYa95R
+        CDBDIdeXBcgtlTEDN43/nXcIAdjQ/Ekj4bCBRIc=
+X-Google-Smtp-Source: AA0mqf5xNBOot5wGFrpujJ4FWWy2MHxMhw7SnCOf6Jrue4uTFZvRmZ83x0rBa8NZBvW1D92mdfQnd8YAo7ubu5u00GE=
+X-Received: by 2002:a05:6808:284:b0:35a:e9d:925c with SMTP id
+ z4-20020a056808028400b0035a0e9d925cmr13280366oic.260.1669208469849; Wed, 23
+ Nov 2022 05:01:09 -0800 (PST)
 MIME-Version: 1.0
-References: <20221116200150.4657-1-linux.amoon@gmail.com> <20221116200150.4657-5-linux.amoon@gmail.com>
- <19f1a4fb-42b2-580d-3736-e0e1d0cfe7fb@wolfvision.net>
-In-Reply-To: <19f1a4fb-42b2-580d-3736-e0e1d0cfe7fb@wolfvision.net>
+References: <20221116200150.4657-1-linux.amoon@gmail.com> <20221116200150.4657-3-linux.amoon@gmail.com>
+ <3e4e601b-e7f8-e9df-0ec5-4f4b629d9c0c@wolfvision.net>
+In-Reply-To: <3e4e601b-e7f8-e9df-0ec5-4f4b629d9c0c@wolfvision.net>
 From:   Anand Moon <linux.amoon@gmail.com>
-Date:   Wed, 23 Nov 2022 18:30:36 +0530
-Message-ID: <CANAwSgT-M0sizZz1b-549HoG7Yj4ubfiG19ecvUi=AWD1mZQ3Q@mail.gmail.com>
-Subject: Re: [linux-next-v2 4/5] arm64: dts: rockchip: Add support of
- interrupt to ethernet node on Rock 3A SBC
+Date:   Wed, 23 Nov 2022 18:30:50 +0530
+Message-ID: <CANAwSgTbTziSY-5=V3_WJG9-SaTY4R0JM4hkohLFE-q1bERcdg@mail.gmail.com>
+Subject: Re: [linux-next-v2 2/5] arm64: dts: rockchip: Add support of external
+ clock to ethernet node on Rock 3A SBC
 To:     Michael Riesch <michael.riesch@wolfvision.net>
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -74,90 +74,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+Hi Michael, Heiko
 
-Thanks for your review comments.
-
-On Tue, 22 Nov 2022 at 21:40, Michael Riesch
+On Tue, 22 Nov 2022 at 16:48, Michael Riesch
 <michael.riesch@wolfvision.net> wrote:
 >
 > Hi Anand,
 >
 > On 11/16/22 21:01, Anand Moon wrote:
-> > As per the shematic gmac1 support gpio interrupt controller
+> > Add support of external clock gmac1_clkin which is used as input clock
+> > to ethernet node.
 >
-> Typo "shematic" -> "schematic"
-Ok,
+> Indeed this operating mode is defined in the schematics, thanks for the fix.
 >
-> > GMAC1_INT/PMEB_GPIO3_A7 add the support for this.
->
-> Maybe split the commit message into two proper sentences.
-
-Ok this Interrupt is used for Power Management Event (supports 3.3V pull up).
-Set low if received a magic packet or wake up frame; active low.
-so this interrupt is used for suspend / resume.
-
 > >
 > > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> > ---
-> > v2: new patch added
-> > ---
-> >  arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts | 10 +++++++++-
-> >  1 file changed, 9 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts b/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
-> > index 5378254c57ca..9f84a23a8789 100644
-> > --- a/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
-> > +++ b/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
-> > @@ -588,10 +588,14 @@ rgmii_phy1: ethernet-phy@0 {
-> >               compatible = "ethernet-phy-ieee802.3-c22";
-> >               reg = <0x0>;
-> >               pinctrl-names = "default";
-> > -             pinctrl-0 = <&eth_phy_rst>;
-> > +             pinctrl-0 = <&eth_phy_rst>, <&eth_phy_int>;
-> >               reset-assert-us = <20000>;
-> >               reset-deassert-us = <100000>;
-> >               reset-gpios = <&gpio3 RK_PB0 GPIO_ACTIVE_LOW>;
-> > +             interrupt-parent = <&gpio3>;
-> > +             /* GMAC1_INT/PMEB_GPIO3_A7 */
 >
-> This comment is pretty superfluous.
+> Reviewed-by: Michael Riesch <michael.riesch@wolfvision.net>
+> Tested-by: Michael Riesch <michael.riesch@wolfvision.net>
+>
 
-Ok will drop this.
+Actually, I wanted to drop these changes since looking into clk_summary
+gmac1 CLK gets wrongly configured with PLL and the reference count is
+not correct.
 
->
-> > +             interrupts = <RK_PA7 IRQ_TYPE_LEVEL_LOW>;
-> > +             #interrupt-cells = <1>;
->
-> I am not an expert here, but I believe #interrupt-cells = <1>; means
-> that the phy provides an array of interrupts. Are you sure this is
-> correct? I find it strange that the phy driver consumes one interrupt
-> and provides N interrupts?!
->
-Ok will drop this.
-
-> >       };
-> >  };
-> >
-> > @@ -630,6 +634,10 @@ vcc_mipi_en: vcc_mipi_en {
-> >       };
-> >
-> >       ethernet {
-> > +             eth_phy_int: eth-phy-int {
-> > +                     rockchip,pins = <3 RK_PA7 RK_FUNC_GPIO &pcfg_pull_down>;
->
-> Interrupt is active low and you pull down the line here? There is a pull
-> up resistor on sheet 11 of the schematic, so this does not seem right at
-> all.
->
-Actually this GPIO3_A7_d hence pull_down, this pin level triggered
-So I will set this as &pcfg_pull_none.
-
-I don't have PoE set up to verify these changes as of now.
+Plz do the patches, I will send the correct changes next version.
 
 > Best regards,
 > Michael
-
+>
 Thanks
 
 -Anand
