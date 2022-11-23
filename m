@@ -2,161 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D836357AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:46:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A773D635799
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:46:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238109AbiKWJop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 04:44:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36008 "EHLO
+        id S238069AbiKWJoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 04:44:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238227AbiKWJoT (ORCPT
+        with ESMTP id S238104AbiKWJn6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 04:44:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D9DFAC6
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:40:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669196444;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EIewY6zGMepwtTpZ6QHtBGZ6thS0v5hQWPigFbEbTdc=;
-        b=YgcV03BYleHRgkMzAOUz78ymfSvo9k8q7voTGiwZ/IZHskdYrGkJDHFNf4U5Mw+zzew2gx
-        VX0pw3NdeuMgNzgLHNDPFhNBplVjHdQQX/nKyjOLJAGbfe5FVJyUSZnQMyuLfiQjhtPMsc
-        S6c5GengKz8e4xxOHETIKOcLZ/Y3Pss=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-25-d55aCwvAPrquHllmB9j0ug-1; Wed, 23 Nov 2022 04:40:43 -0500
-X-MC-Unique: d55aCwvAPrquHllmB9j0ug-1
-Received: by mail-wm1-f72.google.com with SMTP id l32-20020a05600c1d2000b003cfefa531c9so1682491wms.0
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:40:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EIewY6zGMepwtTpZ6QHtBGZ6thS0v5hQWPigFbEbTdc=;
-        b=eH32VH/ldTu8u7gpaI3e+h1sCgljnUg+AwlNdtaQBezMCmo0LfDNy+sRtzFjDeYw+N
-         +AFZNViog8Kha1E/laKya/dAH4tB+E/ylLirxodqI0bk/8Z9m//jV7N9KdHX6qAbCF9r
-         RzUnM/qHmsjJytMklrefJZwS4HKIy8xz/gq0zhvKSEMjg1UFwJZFxD7o5hhSyZgoT3ab
-         8pJxfvt6gA+fw7DqAASOsdCzrfOlp8y0DtaZY3oyySNox8S7rAjGFw0kJcOcu7OaodPQ
-         4HDKFnA0szvNZThl7Lumd4a9/ZZP/haZCS4MgpUQFOckI4ebAc6MGHMdL3syHuTr3SfJ
-         PMMw==
-X-Gm-Message-State: ANoB5pmlZT1YTBQySGbUXdIdQolz42ZqFKDBbqd4BRcnxJ4aWv+N2y9e
-        1b9xIrCVmOAcJ+P2nODcgn6rMfOfcsoPt9kvGvfk1tYB4k/6Q8NNHbbW6CbvHSZgsbFSnmLyjRM
-        NmBTyeXOFZIxwQ8CoNptGXbJO
-X-Received: by 2002:a5d:69c4:0:b0:236:c206:b2b1 with SMTP id s4-20020a5d69c4000000b00236c206b2b1mr5861378wrw.624.1669196441771;
-        Wed, 23 Nov 2022 01:40:41 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5bG4gFkFm+Q8OjD7Da9s09hKezfUXf8nQTiZw3I+t8CP8HdQAVnymgv3iWh5Qlsuedew9i8w==
-X-Received: by 2002:a5d:69c4:0:b0:236:c206:b2b1 with SMTP id s4-20020a5d69c4000000b00236c206b2b1mr5861361wrw.624.1669196441373;
-        Wed, 23 Nov 2022 01:40:41 -0800 (PST)
-Received: from ?IPV6:2003:cb:c704:9f00:a98d:4026:7c44:40fd? (p200300cbc7049f00a98d40267c4440fd.dip0.t-ipconnect.de. [2003:cb:c704:9f00:a98d:4026:7c44:40fd])
-        by smtp.gmail.com with ESMTPSA id n38-20020a05600c3ba600b003c6bbe910fdsm2208981wms.9.2022.11.23.01.40.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 01:40:41 -0800 (PST)
-Message-ID: <70376d57-7924-8ac9-9e93-1831248115a0@redhat.com>
-Date:   Wed, 23 Nov 2022 10:40:40 +0100
-MIME-Version: 1.0
+        Wed, 23 Nov 2022 04:43:58 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F47942F7E;
+        Wed, 23 Nov 2022 01:41:57 -0800 (PST)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AN8kwum029481;
+        Wed, 23 Nov 2022 09:41:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=owZfrQSSK0gTRIi7ih5TPmwEmhrUtM9WaUR+nvZLnlE=;
+ b=sT/aW9J30P4WVKzoRIayoLH3FJL5p4FB9QYBC/Ckudh1csU/AP5jSaUD3Op0sbR8ez8+
+ J0jJRdjL/7cataJexFC03UtYzLLZcOnn4/ySEPJujqW3uFrZaBCc8AjAp3IH+43L5aeF
+ xKHlbzd0/k10r+Nnn/cKdesZzc5G8l8myZ7URYKSRbC6DT9HLtr48mfIu+l35ZI60Ub2
+ eu35/X/zGphbakopEv9oOOJIM2TH5SAytJQJnH8M+jG90O+/rvfcTr82DPrWJln6P17+
+ x1igXU+lVTqDDD1Le9dUz04xpeJ+5UXJx/Fr2s9GwEfmmOIvwYhk2dyWA1CqnDTDYpIk gA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3m100srv9r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Nov 2022 09:41:56 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AN9B8JI025377;
+        Wed, 23 Nov 2022 09:41:55 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3m100srv96-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Nov 2022 09:41:55 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AN9aBgF003684;
+        Wed, 23 Nov 2022 09:41:53 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma02fra.de.ibm.com with ESMTP id 3kxps8v0bt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Nov 2022 09:41:53 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AN9fo1s1770062
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 23 Nov 2022 09:41:50 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4A7BBA404D;
+        Wed, 23 Nov 2022 09:41:50 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D8FDEA4040;
+        Wed, 23 Nov 2022 09:41:49 +0000 (GMT)
+Received: from [9.171.16.188] (unknown [9.171.16.188])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 23 Nov 2022 09:41:49 +0000 (GMT)
+Message-ID: <e7f84070-aeec-99d6-8ac0-cf90ad61ba88@linux.ibm.com>
+Date:   Wed, 23 Nov 2022 10:41:49 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH RFC v2 00/12] mm/hugetlb: Make huge_pte_offset()
- thread-safe for pmd unshare
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] KVM: s390: vsie: Fix the initialization of the epoch
+ extension (epdx) field
+To:     Thomas Huth <thuth@redhat.com>, kvm@vger.kernel.org,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        "Collin L. Walling" <walling@linux.ibm.com>,
+        Jason J Herne <jjherne@linux.ibm.com>
+References: <20221123090833.292938-1-thuth@redhat.com>
 Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     Rik van Riel <riel@surriel.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        James Houghton <jthoughton@google.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-References: <20221118011025.2178986-1-peterx@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20221118011025.2178986-1-peterx@redhat.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <20221123090833.292938-1-thuth@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 2teNH9Bhw7jxQaiIpQvUmIqw4T-5L9iW
+X-Proofpoint-ORIG-GUID: kp6DHK56rmcE1bxlTBKgGq9cE7C9YGTK
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-23_04,2022-11-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ mlxlogscore=999 adultscore=0 lowpriorityscore=0 priorityscore=1501
+ impostorscore=0 spamscore=0 clxscore=1015 bulkscore=0 malwarescore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211230071
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18.11.22 02:10, Peter Xu wrote:
-> Based on latest mm-unstable (96aa38b69507).
-> 
-> This can be seen as a follow-up series to Mike's recent hugetlb vma lock
-> series for pmd unsharing, so this series also depends on that one.
-> Hopefully this series can make it a more complete resolution for pmd
-> unsharing.
-> 
-> PS: so far no one strongly ACKed this, let me keep the RFC tag.  But I
-> think I'm already more confident than many of the RFCs I posted.
-> 
-> PS2: there're a lot of changes comparing to rfcv1, so I'm just not adding
-> the changelog.  The whole idea is still the same, though.
-> 
-> Problem
-> =======
-> 
-> huge_pte_offset() is a major helper used by hugetlb code paths to walk a
-> hugetlb pgtable.  It's used mostly everywhere since that's needed even
-> before taking the pgtable lock.
-> 
-> huge_pte_offset() is always called with mmap lock held with either read or
-> write.
-> 
-> For normal memory types that's far enough, since any pgtable removal
-> requires mmap write lock (e.g. munmap or mm destructions).  However hugetlb
-> has the pmd unshare feature, it means not only the pgtable page can be gone
-> from under us when we're doing a walking, but also the pgtable page we're
-> walking (even after unshared, in this case it can only be the huge PUD page
-> which contains 512 huge pmd entries, with the vma VM_SHARED mapped).  It's
-> possible because even though freeing the pgtable page requires mmap write
-> lock, it doesn't help us when we're walking on another mm's pgtable, so
-> it's still on risk even if we're with the current->mm's mmap lock.
-> 
-> The recent work from Mike on vma lock can resolve most of this already.
-> It's achieved by forbidden pmd unsharing during the lock being taken, so no
-> further risk of the pgtable page being freed.  It means if we can take the
-> vma lock around all huge_pte_offset() callers it'll be safe.
-> 
-> There're already a bunch of them that we did as per the latest mm-unstable,
-> but also quite a few others that we didn't for various reasons.  E.g. it
-> may not be applicable for not-allow-to-sleep contexts like FOLL_NOWAIT.
-> Or, huge_pmd_share() is actually a tricky user of huge_pte_offset(),
-> because even if we took the vma lock, we're walking on another mm's vma!
-> Taking vma lock for all the vmas are probably not gonna work.
-> 
-> I have totally no report showing that I can trigger such a race, but from
-> code wise I never see anything that stops the race from happening.  This
-> series is trying to resolve that problem.
 
-Let me try understand the basic problem first:
 
-hugetlb walks page tables semi-lockless: while we hold the mmap lock, we 
-don't grab the page table locks. That's very hugetlb specific handling 
-and I assume hugetlb uses different mechanisms to sync against 
-MADV_DONTNEED, concurrent page fault s... but that's no news. hugetlb is 
-weird in many ways :)
+Am 23.11.22 um 10:08 schrieb Thomas Huth:
+> We recently experienced some weird huge time jumps in nested guests when
+> rebooting them in certain cases. After adding some debug code to the epoch
+> handling in vsie.c (thanks to David Hildenbrand for the idea!), it was
+> obvious that the "epdx" field (the multi-epoch extension) did not get set
+> to 0xff in case the "epoch" field was negative.
+> Seems like the code misses to copy the value from the epdx field from
+> the guest to the shadow control block. By doing so, the weird time
+> jumps are gone in our scenarios.
+> 
+> Link: https://bugzilla.redhat.com/show_bug.cgi?id=2140899
+> Fixes: 8fa1696ea781 ("KVM: s390: Multiple Epoch Facility support")
 
-So, IIUC, you want a mechanism to synchronize against PMD unsharing. 
-Can't we use some very basic locking for that?
+We might want to add cc stable, just in case.
 
-Using RCU / disabling local irqs seems a bit excessive because we *are* 
-holding the mmap lock and only care about concurrent unsharing
+Reviewed-by: Christian Borntraeger <borntraeger@linux.ibm.com>
 
--- 
-Thanks,
 
-David / dhildenb
-
+> Signed-off-by: Thomas Huth <thuth@redhat.com>
+> ---
+>   arch/s390/kvm/vsie.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/s390/kvm/vsie.c b/arch/s390/kvm/vsie.c
+> index 94138f8f0c1c..ace2541ababd 100644
+> --- a/arch/s390/kvm/vsie.c
+> +++ b/arch/s390/kvm/vsie.c
+> @@ -546,8 +546,10 @@ static int shadow_scb(struct kvm_vcpu *vcpu, struct vsie_page *vsie_page)
+>   	if (test_kvm_cpu_feat(vcpu->kvm, KVM_S390_VM_CPU_FEAT_CEI))
+>   		scb_s->eca |= scb_o->eca & ECA_CEI;
+>   	/* Epoch Extension */
+> -	if (test_kvm_facility(vcpu->kvm, 139))
+> +	if (test_kvm_facility(vcpu->kvm, 139)) {
+>   		scb_s->ecd |= scb_o->ecd & ECD_MEF;
+> +		scb_s->epdx = scb_o->epdx;
+> +	}
+>   
+>   	/* etoken */
+>   	if (test_kvm_facility(vcpu->kvm, 156))
