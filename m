@@ -2,176 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 846FB636553
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 17:06:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A167F636556
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 17:07:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238613AbiKWQGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 11:06:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59684 "EHLO
+        id S238512AbiKWQGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 11:06:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238512AbiKWQGb (ORCPT
+        with ESMTP id S238624AbiKWQGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 11:06:31 -0500
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BD11088;
-        Wed, 23 Nov 2022 08:06:29 -0800 (PST)
-Received: by mail-qk1-f172.google.com with SMTP id j26so5584193qki.10;
-        Wed, 23 Nov 2022 08:06:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NvAz8VTWEj1QZNwzkHkmPpJH4VWeA6kRnRjefoqZBuI=;
-        b=JUBOtDMnwv0MQNUSFSEUzsUEp7i9KBn3ukBz+0KZ+4P+2VnvP8QLEu+K9qqQK9/5Sa
-         klnMf7x6mDMTlYosD8/BpxF9MmRS1x7nGOnEE+MP5hajXWAnuuspPfqS9HUbl4lkA4NE
-         vGSCqoU7z7OnjTTS0k5t1WyjVlheku0A05YsC2PCDYg8x0gWRqLT28RnNShw2YxlVOnK
-         m0kNtK7TfA5xEKYNnhCZLri2+lr8P3IuE47LTV85G6q8bXNM1UEHrRnJUBLX0FuIAJ6O
-         cVE4QMbQUwfU8mMIBwm/dtZsW9ITjEhZ9K50mPMx6ZkU0j5gXoE/aaLAF+tluRM6Ve6w
-         NS5A==
-X-Gm-Message-State: ANoB5pkZuIM5bF/Aime198OSZXQMmUIuuPSIMa1q8VuOm+vQRO72r/h1
-        hCrsxcQa8ApDmuvX1WHVsmTA+Ig/qfrDzQ==
-X-Google-Smtp-Source: AA0mqf7PNoZ9TakHW++yj0Qw5o9FOrbI0Bf4vFhaPH6IolnzOXzhSK3f7OyuD1iMAKgQb0qVdsIOqw==
-X-Received: by 2002:a05:620a:2005:b0:6fa:2ddc:87f4 with SMTP id c5-20020a05620a200500b006fa2ddc87f4mr10809980qka.479.1669219588768;
-        Wed, 23 Nov 2022 08:06:28 -0800 (PST)
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
-        by smtp.gmail.com with ESMTPSA id bn4-20020a05622a1dc400b003a62dcf09f0sm8624146qtb.6.2022.11.23.08.06.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 08:06:28 -0800 (PST)
-Received: by mail-yb1-f182.google.com with SMTP id 205so2112669ybf.6;
-        Wed, 23 Nov 2022 08:06:28 -0800 (PST)
-X-Received: by 2002:a25:9e84:0:b0:6de:6183:c5c3 with SMTP id
- p4-20020a259e84000000b006de6183c5c3mr9144415ybq.89.1669219585142; Wed, 23 Nov
- 2022 08:06:25 -0800 (PST)
-MIME-Version: 1.0
-References: <a50fa46075fb760d8409ff6ea2232b2ddb7a102b.1669046259.git.geert+renesas@glider.be>
- <20221123100831.GE39395@tom-ThinkPad-T14s-Gen-2i> <CAMuHMdUW8iKFjDj4fPtWfPvyQ1sjGcAy1Kz5j-osz9F4pdA47Q@mail.gmail.com>
- <Y344AdRANmS3STsd@kadam> <CAMuHMdVRZhBECgABtTxe00gM7_EqBaX5auZhmjUfmcLx4zoetQ@mail.gmail.com>
- <Y35Bm8bhKojxzdox@kadam>
-In-Reply-To: <Y35Bm8bhKojxzdox@kadam>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 23 Nov 2022 17:06:13 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUsqpG2GsYn_Pa_6me+vmYKZ6C2vrXLRhSWCDefezw=hg@mail.gmail.com>
-Message-ID: <CAMuHMdUsqpG2GsYn_Pa_6me+vmYKZ6C2vrXLRhSWCDefezw=hg@mail.gmail.com>
-Subject: Re: [PATCH resend] media: staging: stkwebcam: Restore
- MEDIA_{USB,CAMERA}_SUPPORT dependencies
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        Wed, 23 Nov 2022 11:06:39 -0500
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2139.outbound.protection.outlook.com [40.107.255.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D8DF786C0
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 08:06:36 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QM1zDMBfTdGl/J2lJv82s73/dA4elMdFUXrGl+e57ZBoaWbMpdVxIz12nhR690YQu0KD5bDdL9AkQ37mcUpdAK7ZAVYVvy4IV7Mp9R8YR7YptqyCkwSjLUpG/6/dspPQWhnKPDqj0RKssIijru2zpR2A6DdLFxOAGNpdjgBFQtcayRJtCD5FU56s8CaF8C5r+cnMZxAMnrMw3zfdmIR+ZvWk+cUehOMZ3VpnW1FuCPh5EjbXoPT3/UP8YdWgyXCcz3d//jceF4Gbn5a+BD7EydxpGnWHaeFqmXYuMvJByOyUNgwnL0l/WP9skDwVuIrlFgp5LW4qaTFwUQjo2IyXhw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tpGYq8BNuqxB4oD6Ky6HddTrWOvGwfUwHl4As9dC/mY=;
+ b=bUiRyKVucrTEa10ymlub9GTH2As16+4eBomwtBY7shBxC5YSExXDRzzhqRH2G5gC+/yRsVVDBQdA5YSJQ9mMvwmPR2XpMpCzsiGVAz01fxCzKlipAji+nzqJf1j0Rh/HHxb6Et7pW6k6bpVcz6Ed6Gj3QAVC0jvAgaXqHjhmde0ed8aeQTt5qR44dnHQkW+/M5oFDgpALeDwWMrgJC72uPVZXTELvSqsKtoclZsLAhlsGhvB25BaRbIx3K+K6zyNDpl9QqTRXFhAcNKsVGgecQvQscs2L0qiUO7BBLoNBiuAi458zRy9A7YFal335Dd084z9s07ARw1TAMnfW+A/LQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tpGYq8BNuqxB4oD6Ky6HddTrWOvGwfUwHl4As9dC/mY=;
+ b=iqECvdju+egHW6bWU8o46KvM5MzeGRHv4JRZEnIwPvJ82HZEOLTMDH0JTwd3XWjvqjWUy2Q1CtUQODblCoyZnV+vudEaa+jGIgIcFTsPIPZ4BlxdrcEoVo3ieq6KWiOyM2LY0hPESXfTPSz+JKNbVT/kV0w7KxFU0eBreuhLyLQW8m/uThZkOWlH6kZZH8MA/1JaSWJVocgNwWnh1MtGvhRQE8CH2c7/QQ7W9acurDcUj+uj5glOkK6vI+sHh6u35pDKQHpk89x2Kqo2yATFyiFX+EKFgvAHWyoUS/eTi8BqnUfC5g/W4O5C2wI6WlPgS48NE5+Ad2aSzNgHwhZjhA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by SI2PR06MB4347.apcprd06.prod.outlook.com (2603:1096:4:15b::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Wed, 23 Nov
+ 2022 16:06:34 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::1230:5f04:fe98:d139]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::1230:5f04:fe98:d139%7]) with mapi id 15.20.5834.015; Wed, 23 Nov 2022
+ 16:06:33 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] f2fs: init discard policy after thread wakeup
+Date:   Thu, 24 Nov 2022 00:06:25 +0800
+Message-Id: <20221123160625.9309-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <6258327d-8205-644e-9879-c96448841720@kernel.org>
+References: <6258327d-8205-644e-9879-c96448841720@kernel.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: TYWPR01CA0048.jpnprd01.prod.outlook.com
+ (2603:1096:400:17f::18) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SI2PR06MB4347:EE_
+X-MS-Office365-Filtering-Correlation-Id: f4ea80fb-cdc9-43d7-28aa-08dacd6cb0fb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qCDCgJyuhGO6h93NSgwvnKqWvQCowWFPhT8iWeAVTAewwECHNptmK+jMcLlNv3t3PRHdjegHCTBbQdGoDvTjL9UzFonTvxI8AvNiA4tb13CKc0+pKvA6emxYjZkKLGpcby1fAzJGAn1Ytja4q4VI9tbIwYHtbz/xdByfLQezRpvb2jmBOnGWWlhBfm9b+Jpd3Iz38XikV/VWsu92lFL+8CknuXdqJ1TxJ0fqkbYmVWJHIx6KgpgGFwqbDqOv2hKWy8tFu2hdfvJGn74a+wG3kg7OuzFhNncV2OKWTDODzJXJ51wb021YT5v8TRRgZ3gNWZsEXk1fLWdoEb+Jn9P2BruqFlAn+XXVRQPPn6vwO2/NymjHtaDFJHL3BMblTDc60oozMjtcAQs5XCLXMo1Ox/ffYdFkmypJrk03gwJ5WNniEiALzF5kATOGvP0r1kvft2d9TzAwCtjSmT27pl6wKLxqboPz19AUid51q81KhO89+bWTtdZ3uUhM1Nc0Iwc3Eyhm97Cd6OuQc5W0IHZN65pdarTH61VuVFeikjEJtbSSDgKFbHeOVDhndNGgXUw9xy/W+U9mAFgENOzMqHx/vtVC1DzIiZ25IO7KTbOrhHZ03SwR6YCKW136BFN0GNkZAxSHA48BJf/FjgRQh8/wScPeySctzVRx6gnl8xpqWjJI92XX3XPy3WqVXD2m+1i5
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(39860400002)(346002)(366004)(376002)(451199015)(38100700002)(26005)(38350700002)(558084003)(86362001)(6666004)(52116002)(66556008)(478600001)(6506007)(66946007)(4326008)(8676002)(66476007)(41300700001)(316002)(6486002)(2616005)(1076003)(2906002)(186003)(6512007)(8936002)(5660300002)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3i1lXNIVufzf24QEMM589K1bIzl0jh7MNEhpdGI3eWFuxvcsuNpaEch4OU0I?=
+ =?us-ascii?Q?agN9YFw4XL1At0GlhsenukL73SzLgKt+MwgdDxfsKR/1lPTT0MLLLnf7LN/a?=
+ =?us-ascii?Q?5VIhKd6uV4M5XoLiTAsM0USe08cdi0HmlcYasIvOEhKvZcayNVg1IuubR/JD?=
+ =?us-ascii?Q?xFj3KtuKdO5O4HunCpAO6k4sMQ64X9cd+9fAl0Pr8gqRDbNuss+8tPutH7Oh?=
+ =?us-ascii?Q?+uJNYotQ2f++tjWU9UVZXUklW0YdcMS+0484ICwJy1X0lSse1aeMxO6ZSvVT?=
+ =?us-ascii?Q?/CvR3ikWqMEVt94rgdYwIJrORroKaLbOb/CyhdwzCsKf3lfDkotoz1VjTTxz?=
+ =?us-ascii?Q?JHeumN6jB+GXap//NWBToApZf6/ELiZIIifE5NzpIozWnEwyHk20mVrqS5aw?=
+ =?us-ascii?Q?HMvgFOIebN5k8T/6QUmYdzWsXruogMiokNny8oerIbSzVdiWIqGfo2vICdjj?=
+ =?us-ascii?Q?8mVN1FYHD2wFgMGHNCOrBICGyXiUCJXSqH9Gng3fA7Q2pwCilGEx1cRfG9MX?=
+ =?us-ascii?Q?Sw/6C5f4EppKRiEtVbaVc44Q8aA39LZNna6Vov1Np6c1IZ9LwJzZQKpn940y?=
+ =?us-ascii?Q?6T77Cqy4yiY6sOSWLU1aH2YWuBC4X4mU2tLuhaF0CV1hH+jBtjyTqRiIgKa2?=
+ =?us-ascii?Q?GzJpe5gKY7mEpklHNIkkBzStm0ULvKqGCX3J0WN6DkjFYXeF60qaLX632df/?=
+ =?us-ascii?Q?aLwKgcth4/xPB+4G6YWggOzXiNRhKB5dIqAkrnAwEkAvs+pzMn+wPg1gvmCc?=
+ =?us-ascii?Q?NYJ04Sbg4KCXbMEnET1303Fwj5GMYGQI2eT5IyJVq3PMdMhCJVzxNn3nZpnj?=
+ =?us-ascii?Q?hVsOFha2XpZQW+z6NUYrqyig2jW5yccnh4O8zh1KA09O/JziG2k/mnSsbFs4?=
+ =?us-ascii?Q?Y1e4GQnOl2H4ikw50Nf8qeIKvkuDj1U55I0BiwStXA9YSbXxPBKmDe1ZJQkL?=
+ =?us-ascii?Q?RJ/w/lDv17grfA9G9ozr7OpZLNjH1PMDJza2IW4f4+oasa7QWS1/CAQc0N8Z?=
+ =?us-ascii?Q?QHERqCJiC1HKnZOphPShtEzV7NYBxT2OkTVIzluJ0PwItQGXq9zZJF/qUiKR?=
+ =?us-ascii?Q?X8kxc1f07IZpVDYM4W+H42inSXTXUge67P+nf9u/eMQwZqLTcRi0VomvCpkU?=
+ =?us-ascii?Q?0O8kXR5V8XO3xbTXuRscdLJt+jRknGOp+2PqPKCApu8By/teOdkVaXxbGWQa?=
+ =?us-ascii?Q?J04rt2Phj4452QW/JUG/QfGlT3o+3W3h00ncP0P1ngwfpKS+/eS8Qw/3m8cO?=
+ =?us-ascii?Q?moDwENccwUP62urqKB8VpASSSRn0XXZMtTdHE94/aNSgCldvW8wouMXhiwfw?=
+ =?us-ascii?Q?HSx3Y1Mxtu3OuynUOtlaoZdLYEx2tBvIlsQ//45XiYLQEuhkXjjd1lMxalLt?=
+ =?us-ascii?Q?o202MQLHnQZCDTQWpdL1qBJAFmxe3ezu6Ls45d9GRBb90Z7Qe0n8iygg8Jdj?=
+ =?us-ascii?Q?2VSPVK7PPtuE8cyc5CEVbriX5ps4cnZRslmsuHcrhrQb0V8aRKjFmoGAr9UO?=
+ =?us-ascii?Q?xXq/4Muv4f9oooOsgIzqEoWdxxrSag4W8ETW2zi5/iRwP56jSDGhKUC/aYTt?=
+ =?us-ascii?Q?LXBJYf1ALJG0Ds9Z13QX0fgmlB5pw+k945NI9ply?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f4ea80fb-cdc9-43d7-28aa-08dacd6cb0fb
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2022 16:06:33.7476
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YnTLRygl0BxOrf9qsvjKaRACFjsSTMdUs7eA1sKJekLjYh8yy08UIXWS9ggDfE5Dtgl38uXeKM0Dl/yNV1uEXQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB4347
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dan,
-
-On Wed, Nov 23, 2022 at 4:52 PM Dan Carpenter <error27@gmail.com> wrote:
-> On Wed, Nov 23, 2022 at 04:49:05PM +0100, Geert Uytterhoeven wrote:
-> > On Wed, Nov 23, 2022 at 4:11 PM Dan Carpenter <error27@gmail.com> wrote:
-> > > On Wed, Nov 23, 2022 at 11:13:31AM +0100, Geert Uytterhoeven wrote:
-> > > > On Wed, Nov 23, 2022 at 11:08 AM Tommaso Merciai
-> > > > <tommaso.merciai@amarulasolutions.com> wrote:
-> > > > > On Mon, Nov 21, 2022 at 04:58:33PM +0100, Geert Uytterhoeven wrote:
-> > > > > > By moving support for the USB Syntek DC1125 Camera to staging, the
-> > > > > > dependencies on MEDIA_USB_SUPPORT and MEDIA_CAMERA_SUPPORT were lost.
-> > > > > >
-> > > > > > Fixes: 56280c64ecacc971 ("media: stkwebcam: deprecate driver, move to staging")
-> > > > >
-> > > > > Patch itself looks good but we have some style issue. Applying this
-> > > > > patch I got the following warning from checkpatchl:
-> > > > >
-> > > > > WARNING: Please use correct Fixes: style 'Fixes: <12 chars of sha1> ("<title line>")' - ie: 'Fixes: 56280c64ecac ("media: stkwebcam: deprecate driver, move to staging")'
-> > > > > #10:
-> > > > >
-> > > > > You have to pass only the first 12 chars of the sha1 commit into Fixes
-> > > > > msg:
-> > > > >
-> > > > > Use:
-> > > > >
-> > > > >  Fixes: 56280c64ecac ("media: stkwebcam: deprecate driver, move to staging")
-> > > > >
-> > > > > Instead of:
-> > > > >
-> > > > >  Fixes: 56280c64ecacc971 ("media: stkwebcam: deprecate driver, move to staging")
-> > > >
-> > > > I always use 16 chars, to avoid these becoming ambiguous in a few years.
-> > >
-> > > If we assume hashes are randomly distributed and that people commit
-> > > 100k patches every year then with 12 character we would have 17
-> > > collisions every 1000 years.
-> >
-> > So I can expect to see a collision before my retirement day
-> > (which coincides with the signed 32-bit time_t flag day ;-)
-> >
-> > BTW, does the above take into account that commit hashes can
-> > collide with other object type hashes, too?
+HI Chao,
+>>		set_freezable();
+>>   
+>>		do {
 >
-> I assumed that `git show` won't show those other object types, but I
-> don't really know if that's true.
+>		if (!atomic_read(&dcc->discard_cmd_cnt))
+>		       wait_ms = dpolicy.max_interval;
 
-"git show" is not limited to commit types:
+dpolicy has not been initialized for the first time, and the value in the stack is unstable.
 
-$ git cat-file commit eb7081409f94a9a8608593d0fb63a1aa3d6f95d8
-tree 0e320b5ae477efe1c9928057762bf63d730204ce
-parent c6c67bf9bc2714d9c2c2e7ecfbf29d912b8c4f17
-author Linus Torvalds <torvalds@linux-foundation.org> 1668988936 -0800
-committer Linus Torvalds <torvalds@linux-foundation.org> 1668988936 -0800
-
-Linux 6.1-rc6
-$ git show 0e320b5ae477efe1c9928057762bf63d730204ce
-tree 0e320b5ae477efe1c9928057762bf63d730204ce
-
-.clang-format
-.cocciconfig
-[...]
-$ git show eb708
-error: short SHA1 eb708 is ambiguous
-hint: The candidates are:
-hint:   eb7081409f94a9a8 commit 2022-11-20 - Linux 6.1-rc6
-hint:   eb708b0ff972bfe0 commit 2016-11-12 - arm64: dts: Add ARM PMU
-node for exynos7
-hint:   eb7080213d0fee54 tree
-hint:   eb7080d36f660012 tree
-hint:   eb7083e15bcb5eea tree
-hint:   eb7083f45a088bf3 tree
-hint:   eb7084a7ae5f486a tree
-hint:   eb70866f5c60a477 tree
-hint:   eb7087c754052a42 tree
-hint:   eb7089eeb5f67a5f tree
-hint:   eb708a906ceeea91 tree
-hint:   eb708c1853ce1355 tree
-hint:   eb708ca4d77be915 tree
-hint:   eb708e4839466fdd tree
-hint:   eb708431cb964d36 blob
-hint:   eb708b77c4a54a68 blob
-fatal: ambiguous argument 'eb708': unknown revision or path not in the
-working tree.
-Use '--' to separate paths from revisions, like this:
-'git <command> [<revision>...] -- [<file>...]'
-
-I couldn't find an easy way to count the number of objects per
-type in a repository.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thx,
+Yangtao
