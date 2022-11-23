@@ -2,339 +2,586 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36913634BC5
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 01:44:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C06CE634BC8
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 01:45:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235313AbiKWAow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 19:44:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57908 "EHLO
+        id S235325AbiKWApc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 19:45:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234753AbiKWAou (ORCPT
+        with ESMTP id S235317AbiKWApa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 19:44:50 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32792C696C
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 16:44:49 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id h17so3755079ila.6
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 16:44:49 -0800 (PST)
+        Tue, 22 Nov 2022 19:45:30 -0500
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8BEC696F
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 16:45:28 -0800 (PST)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-14279410bf4so17409823fac.8
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Nov 2022 16:45:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qt0Oia7FwaxA/+PML2ZHZEDGbQNkFk0tG08XyL42aso=;
-        b=HgwUhGpb33lLR5Ugn3ck6loKESVPF+muFD2n7g9xAqGCgk+iXjDli12LYoWqeAOrci
-         V58UVErhfmJkb8fexsEJtvDKBMIDN/PQ6yaxPgykccn9xBnGZuEq8Cp9Pw2Yd+QziERV
-         wIQbQOKm76lQJ3jfzJ4yFwXwu64V78qH60+vy6tsE66sT9S7WzbfLhKvBNuRIydbFuWA
-         Ikb3/PR4Ep2k2UqCFkwnebgWeZqPXNQ/NBN4ksDtHEw+UafQjqlMfyoU5g+kHkGpb4j2
-         4D7vwm/J9pjdkou6LGgJK6qBvATodfaV4bKkEUA7oIIdcKra4IihOLjatPFywDAkQGml
-         YPOA==
+        d=atishpatra.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QDfPHulS/Vn3UOA4vR1uM87IErqQEjtpmYPvJXgv2cc=;
+        b=n/WEWNZYmpf+Qj0M9QMABmyYmEMn3MwSKKOTD2GtDlkOtEUnE2e4UyLXvprOTVzCkC
+         gpN2lAVl/dTG59HMGFr0viYw0A4O4x9vXDW3mNE1pSmD4T5HYpcMiD1iUUYVBTUwt3Nn
+         SOTnDWKW8GY8GgPVFFIBtl+0+zEPulzwJwSyU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qt0Oia7FwaxA/+PML2ZHZEDGbQNkFk0tG08XyL42aso=;
-        b=dhVn1tAjm7RlmWZbIdpOton2mb27uX6EauGIvjwn8jPfuqZM14o9Z19f6DKOiXSjmw
-         kjRdcoQcWieNdLL2LIHrYnUscxymMnbh649fDyA+L8vD7Fb8sUdxpHte2rs0G/zeQHdn
-         f4E14HME8V6l3xjnoWF5PYZ5x4WD+iUIsArL4EwYqrGLayxlh0Mg9g+Kj6P9GToVNkuR
-         lvuYaghUk8f0xPP6kysJWONF/uU+EkqKj+Gih2qq5X3CMDHl4OuAyhF1Ftfm0Oje9ZIl
-         055Z/rRha2P+5VjgmlONQ3p0t7dZxiatPSW9AxirITX7D5JuuQVDjQ3soOf0dPzplIwX
-         dBMA==
-X-Gm-Message-State: ANoB5pm+aVSSc3W2BJJ27eUU899TDwE3j4GEAJLgXi3PQdo7mHW0BFDK
-        ZLTGik5u8iYTUotjYCirbtyH1w==
-X-Google-Smtp-Source: AA0mqf6zhajD41LQHGsku1D72fTtdOapRkc5Le4GLeMD3oRGuOLOFO0UH1PgSQNqMi55bgnDU0xwRw==
-X-Received: by 2002:a05:6e02:50a:b0:302:a672:a25a with SMTP id d10-20020a056e02050a00b00302a672a25amr2836612ils.68.1669164288366;
-        Tue, 22 Nov 2022 16:44:48 -0800 (PST)
-Received: from google.com ([2620:15c:183:200:5e97:e61d:2d36:6a3f])
-        by smtp.gmail.com with ESMTPSA id d15-20020a0566022bef00b006cecd92164esm5807898ioy.34.2022.11.22.16.44.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 16:44:47 -0800 (PST)
-Date:   Tue, 22 Nov 2022 17:44:44 -0700
-From:   Yu Zhao <yuzhao@google.com>
-To:     Ivan Babrou <ivan@cloudflare.com>,
-        Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, cgroups@vger.kernel.org,
-        kernel-team <kernel-team@cloudflare.com>
-Subject: Re: Low TCP throughput due to vmpressure with swap enabled
-Message-ID: <Y31s/K8T85jh05wH@google.com>
-References: <CABWYdi0G7cyNFbndM-ELTDAR3x4Ngm0AehEp5aP0tfNkXUE+Uw@mail.gmail.com>
- <CAOUHufYd-5cqLsQvPBwcmWeph2pQyQYFRWynyg0UVpzUBWKbxw@mail.gmail.com>
- <CAOUHufYSeTeO5ZMpnCR781esHV4QV5Th+pd=52UaM9cXNNKF9w@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QDfPHulS/Vn3UOA4vR1uM87IErqQEjtpmYPvJXgv2cc=;
+        b=bD26Iu36Ap7j92CzSwlYxRlEwsHl5cyABmhuwyzNEytSyjScO3KsSGPuGThWnEu5M0
+         3+6WOjQtlN5lOSqPTn0tyye2l6zGYurtbD+FsvKYFX7m6R2l5/ysGp23kHF6nT8o5Ic5
+         v1fTtELD+UcvCSXp7wPIdKxDwryZp8V008MeSu0NN6cj1jWH/pjXCjxFN50nh/yK541s
+         gmzO8OPSwlxmfuWxP0TYE5IjYeCzAfKfUQOxvzFcK+yfOrTBLU5HSNDeAKGYJnBYLM6G
+         WgxDKEtGkPd7TfDqmN0r4KCfbis20ci5YMkdWeZeMtdSG9OqhzxZpTvs7h4AS5QtqplE
+         wFZQ==
+X-Gm-Message-State: ANoB5pmIgL3mR1P1EtPpBkYjdaI8ag4FKmBBBqFryYhk/i17pGREFByH
+        cl8OaKX0Z2qYRdY9EQWdOUGMtz/WtONo275QKFvI
+X-Google-Smtp-Source: AA0mqf482MHjboGZeIsQnz4qTwhroK1wCGfeA0+PTYJ60ny8yeg4bGGnfuyAH58RMP7NM3Cx6PTBzDQ+N69SjfkMErQ=
+X-Received: by 2002:a05:6870:60a4:b0:132:79b1:f85 with SMTP id
+ t36-20020a05687060a400b0013279b10f85mr5833548oae.274.1669164327405; Tue, 22
+ Nov 2022 16:45:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOUHufYSeTeO5ZMpnCR781esHV4QV5Th+pd=52UaM9cXNNKF9w@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220718170205.2972215-1-atishp@rivosinc.com> <20220718170205.2972215-9-atishp@rivosinc.com>
+ <20221101153112.hpst2bohsdvqours@kamzik>
+In-Reply-To: <20221101153112.hpst2bohsdvqours@kamzik>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Tue, 22 Nov 2022 16:45:16 -0800
+Message-ID: <CAOnJCU++M5jd6toy1J8T+FPGJWSUaw8s9X7sxZY25naPoZeJJw@mail.gmail.com>
+Subject: Re: [RFC 8/9] RISC-V: KVM: Implement perf support
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Atish Patra <atishp@rivosinc.com>, linux-kernel@vger.kernel.org,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>, Guo Ren <guoren@kernel.org>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 01:05:32PM -0700, Yu Zhao wrote:
-> On Tue, Nov 22, 2022 at 12:46 PM Yu Zhao <yuzhao@google.com> wrote:
+On Tue, Nov 1, 2022 at 8:31 AM Andrew Jones <ajones@ventanamicro.com> wrote:
+>
+> On Mon, Jul 18, 2022 at 10:02:04AM -0700, Atish Patra wrote:
+> > RISC-V SBI PMU & Sscofpmf ISA extension allows supporting perf in
+> > the virtualization enviornment as well. KVM implementation
+> > relies on SBI PMU extension for most of the part while traps
+>
+> ...relies on the SBI PMU extension for the most part while trapping
+> and emulating...
+>
+> > & emulates the CSRs read for counter access.
 > >
-> > On Mon, Nov 21, 2022 at 5:53 PM Ivan Babrou <ivan@cloudflare.com> wrote:
-> > >
-> > > Hello,
-> > >
-> > > We have observed a negative TCP throughput behavior from the following commit:
-> > >
-> > > * 8e8ae645249b mm: memcontrol: hook up vmpressure to socket pressure
-> > >
-> > > It landed back in 2016 in v4.5, so it's not exactly a new issue.
-> > >
-> > > The crux of the issue is that in some cases with swap present the
-> > > workload can be unfairly throttled in terms of TCP throughput.
-> > >
-> > > I am able to reproduce this issue in a VM locally on v6.1-rc6 with 8
-> > > GiB of RAM with zram enabled.
-> > >
-> > > The setup is fairly simple:
-> > >
-> > > 1. Run the following go proxy in one cgroup (it has some memory
-> > > ballast to simulate useful memory usage):
-> > >
-> > > * https://gist.github.com/bobrik/2c1a8a19b921fefe22caac21fda1be82
-> > >
-> > > sudo systemd-run --scope -p MemoryLimit=6G go run main.go
-> > >
-> > > 2. Run the following fio config in another cgroup to simulate mmapped
-> > > page cache usage:
-> > >
-> > > [global]
-> > > size=8g
-> > > bs=256k
-> > > iodepth=256
-> > > direct=0
-> > > ioengine=mmap
-> > > group_reporting
-> > > time_based
-> > > runtime=86400
-> > > numjobs=8
-> > > name=randread
-> > > rw=randread
+> > Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> > ---
+> >  arch/riscv/kvm/vcpu_pmu.c | 318 ++++++++++++++++++++++++++++++++++++--
+> >  1 file changed, 301 insertions(+), 17 deletions(-)
 > >
-> > Is it practical for your workload to apply some madvise/fadvise hint?
-> > For the above repro, it would be fadvise_hint=1 which is mapped into
-> > MADV_RANDOM automatically. The kernel also supports MADV_SEQUENTIAL,
-> > but not POSIX_FADV_NOREUSE at the moment.
-> 
-> Actually fadvise_hint already defaults to 1. At least with MGLRU, the
-> page cache should be thrown away without causing you any problem. It
-> might be mapped to POSIX_FADV_RANDOM rather than MADV_RANDOM.
-> POSIX_FADV_RANDOM is ignored at the moment.
-> 
-> Sorry for all the noise. Let me dig into this and get back to you later today.
-> 
-> 
-> > We actually have similar issues but unfortunately I haven't been able
-> > to come up with any solution beyond recommending the above flags.
-> > The problem is that harvesting the accessed bit from mmapped memory is
-> > costly, and when random accesses happen fast enough, the cost of doing
-> > that prevents LRU from collecting more information to make better
-> > decisions. In a nutshell, LRU can't tell whether there is genuine
-> > memory locality with your test case.
+> > diff --git a/arch/riscv/kvm/vcpu_pmu.c b/arch/riscv/kvm/vcpu_pmu.c
+> > index 5434051f495d..278c261efad3 100644
+> > --- a/arch/riscv/kvm/vcpu_pmu.c
+> > +++ b/arch/riscv/kvm/vcpu_pmu.c
+> > @@ -11,9 +11,163 @@
+> >  #include <linux/kvm_host.h>
+> >  #include <linux/perf/riscv_pmu.h>
+> >  #include <asm/csr.h>
+> > +#include <asm/bitops.h>
+> >  #include <asm/kvm_vcpu_pmu.h>
+> >  #include <linux/kvm_host.h>
 > >
-> > It's a very difficult problem to solve from LRU's POV. I'd like to
-> > hear more about your workloads and see whether there are workarounds
-> > other than tackling the problem head-on, if applying hints is not
-> > practical or preferrable.
+> > +#define get_event_type(x) ((x & SBI_PMU_EVENT_IDX_TYPE_MASK) >> 16)
+> > +#define get_event_code(x) (x & SBI_PMU_EVENT_IDX_CODE_MASK)
+> > +
+> > +static inline u64 pmu_get_sample_period(struct kvm_pmc *pmc)
+> > +{
+> > +     u64 counter_val_mask = GENMASK(pmc->cinfo.width, 0);
+> > +     u64 sample_period;
+> > +
+> > +     if (!pmc->counter_val)
+> > +             sample_period = counter_val_mask;
+> > +     else
+> > +             sample_period = pmc->counter_val & counter_val_mask;
+> > +
+> > +     return sample_period;
+> > +}
+> > +
+> > +static u32 pmu_get_perf_event_type(unsigned long eidx)
+> > +{
+> > +     enum sbi_pmu_event_type etype = get_event_type(eidx);
+> > +     u32 type;
+> > +
+> > +     if (etype == SBI_PMU_EVENT_TYPE_HW)
+> > +             type = PERF_TYPE_HARDWARE;
+> > +     else if (etype == SBI_PMU_EVENT_TYPE_CACHE)
+> > +             type = PERF_TYPE_HW_CACHE;
+> > +     else if (etype == SBI_PMU_EVENT_TYPE_RAW || etype == SBI_PMU_EVENT_TYPE_FW)
+> > +             type = PERF_TYPE_RAW;
+> > +     else
+> > +             type = PERF_TYPE_MAX;
+> > +
+> > +     return type;
+> > +}
+> > +
+> > +static inline bool pmu_is_fw_event(unsigned long eidx)
+> > +{
+> > +     enum sbi_pmu_event_type etype = get_event_type(eidx);
+> > +
+> > +     return (etype == SBI_PMU_EVENT_TYPE_FW) ? true : false;
+>
+>  return get_event_type(eidx) == SBI_PMU_EVENT_TYPE_FW;
+>
 
-Apparently MADV_RANDOM isn't properly handled in MGLRU. (I think I broke
-it at some point but have yet to find out when.)
+Done.
 
-I tried the patch below with a test case similar to yours and it shows
-improvements for both the baseline and MGLRU. It should fix the problem
-for your repro but not your production unless it also does madvise. So
-no worries if you don't care to try.
+> > +}
+> > +
+> > +static void pmu_release_perf_event(struct kvm_pmc *pmc)
+> > +{
+> > +     if (pmc->perf_event) {
+> > +             perf_event_disable(pmc->perf_event);
+> > +             perf_event_release_kernel(pmc->perf_event);
+> > +             pmc->perf_event = NULL;
+> > +     }
+> > +}
+> > +
+> > +static u64 pmu_get_perf_event_hw_config(u32 sbi_event_code)
+> > +{
+> > +     /* SBI PMU HW event code is offset by 1 from perf hw event codes */
+> > +     return (u64)sbi_event_code - 1;
+> > +}
+> > +
+> > +static u64 pmu_get_perf_event_cache_config(u32 sbi_event_code)
+> > +{
+> > +     u64 config = U64_MAX;
+> > +     unsigned int cache_type, cache_op, cache_result;
+> > +
+> > +     /* All the cache event masks lie within 0xFF. No separate masking is necesssary */
+> > +     cache_type = (sbi_event_code & SBI_PMU_EVENT_CACHE_ID_CODE_MASK) >> 3;
+> > +     cache_op = (sbi_event_code & SBI_PMU_EVENT_CACHE_OP_ID_CODE_MASK) >> 1;
+> > +     cache_result = sbi_event_code & SBI_PMU_EVENT_CACHE_RESULT_ID_CODE_MASK;
+> > +
+> > +     if (cache_type >= PERF_COUNT_HW_CACHE_MAX ||
+> > +         cache_op >= PERF_COUNT_HW_CACHE_OP_MAX ||
+> > +         cache_result >= PERF_COUNT_HW_CACHE_RESULT_MAX)
+> > +             goto out;
+>
+> No goto necessary
+>
+
+Done.
+
+>         if (...)
+>                 return U64_MAX;
+>         return cache_type | (cache_op << 8) | (cache_result << 16);
+>
+> > +     config = cache_type | (cache_op << 8) | (cache_result << 16);
+> > +out:
+> > +     return config;
+> > +}
+> > +
+> > +static u64 pmu_get_perf_event_config(unsigned long eidx, uint64_t edata)
+> > +{
+> > +     enum sbi_pmu_event_type etype = get_event_type(eidx);
+> > +     u32 ecode = get_event_code(eidx);
+> > +     u64 config = U64_MAX;
+> > +
+> > +     if (etype == SBI_PMU_EVENT_TYPE_HW)
+> > +             config = pmu_get_perf_event_hw_config(ecode);
+> > +     else if (etype == SBI_PMU_EVENT_TYPE_CACHE)
+> > +             config = pmu_get_perf_event_cache_config(ecode);
+> > +     else if (etype == SBI_PMU_EVENT_TYPE_RAW)
+> > +             config = edata & RISCV_PMU_RAW_EVENT_MASK;
+> > +     else if ((etype == SBI_PMU_EVENT_TYPE_FW) && (ecode < SBI_PMU_FW_MAX))
+> > +             config = (1ULL << 63) | ecode;
+> > +
+> > +     return config;
+> > +}
+> > +
+> > +static int pmu_get_fixed_pmc_index(unsigned long eidx)
+> > +{
+> > +     u32 etype = pmu_get_perf_event_type(eidx);
+> > +     u32 ecode = get_event_code(eidx);
+> > +     int ctr_idx;
+> > +
+> > +     if (etype != SBI_PMU_EVENT_TYPE_HW)
+> > +             return -EINVAL;
+> > +
+> > +     if (ecode == SBI_PMU_HW_CPU_CYCLES)
+> > +             ctr_idx = 0;
+> > +     else if (ecode == SBI_PMU_HW_INSTRUCTIONS)
+> > +             ctr_idx = 2;
+> > +     else
+> > +             return -EINVAL;
+> > +
+> > +     return ctr_idx;
+> > +}
+> > +
+> > +static int pmu_get_programmable_pmc_index(struct kvm_pmu *kvpmu, unsigned long eidx,
+> > +                                       unsigned long cbase, unsigned long cmask)
+> > +{
+> > +     int ctr_idx = -1;
+> > +     int i, pmc_idx;
+> > +     int min, max;
+> > +
+> > +     if (pmu_is_fw_event(eidx)) {
+> > +             /* Firmware counters are mapped 1:1 starting from num_hw_ctrs for simplicity */
+> > +             min = kvpmu->num_hw_ctrs;
+> > +             max = min + kvpmu->num_fw_ctrs;
+> > +     } else {
+> > +             /* First 3 counters are reserved for fixed counters */
+> > +             min = 3;
+> > +             max = kvpmu->num_hw_ctrs;
+> > +     }
+> > +
+> > +     for_each_set_bit(i, &cmask, BITS_PER_LONG) {
+> > +             pmc_idx = i + cbase;
+> > +             if ((pmc_idx >= min && pmc_idx < max) &&
+> > +                 !test_bit(pmc_idx, kvpmu->used_pmc)) {
+> > +                     ctr_idx = pmc_idx;
+> > +                     break;
+> > +             }
+> > +     }
+> > +
+> > +     return ctr_idx;
+> > +}
+> > +
+> > +static int pmu_get_pmc_index(struct kvm_pmu *pmu, unsigned long eidx,
+> > +                          unsigned long cbase, unsigned long cmask)
+> > +{
+> > +     int ret;
+> > +
+> > +     /* Fixed counters need to be have fixed mapping as they have different width */
+> > +     ret = pmu_get_fixed_pmc_index(eidx);
+> > +     if (ret >= 0)
+> > +             return ret;
+> > +
+> > +     return pmu_get_programmable_pmc_index(pmu, eidx, cbase, cmask);
+> > +}
+> > +
+> >  int kvm_riscv_vcpu_pmu_ctr_read(struct kvm_vcpu *vcpu, unsigned long cidx,
+> >                               unsigned long *out_val)
+> >  {
+> > @@ -43,7 +197,6 @@ int kvm_riscv_vcpu_pmu_read_hpm(struct kvm_vcpu *vcpu, unsigned int csr_num,
+> >
+> >       if (!kvpmu)
+> >               return KVM_INSN_EXIT_TO_USER_SPACE;
+> > -     //TODO: Should we check if vcpu pmu is initialized or not!
+> >       if (wr_mask)
+> >               return KVM_INSN_ILLEGAL_TRAP;
+> >       cidx = csr_num - CSR_CYCLE;
+> > @@ -81,14 +234,62 @@ int kvm_riscv_vcpu_pmu_ctr_info(struct kvm_vcpu *vcpu, unsigned long cidx,
+> >  int kvm_riscv_vcpu_pmu_ctr_start(struct kvm_vcpu *vcpu, unsigned long ctr_base,
+> >                                unsigned long ctr_mask, unsigned long flag, uint64_t ival)
+> >  {
+> > -     /* TODO */
+> > +     struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
+> > +     int i, num_ctrs, pmc_index;
+> > +     struct kvm_pmc *pmc;
+> > +
+> > +     num_ctrs = kvpmu->num_fw_ctrs + kvpmu->num_hw_ctrs;
+> > +     if (ctr_base + __fls(ctr_mask) >= num_ctrs)
+> > +             return -EINVAL;
+> > +
+> > +     /* Start the counters that have been configured and requested by the guest */
+> > +     for_each_set_bit(i, &ctr_mask, RISCV_MAX_COUNTERS) {
+> > +             pmc_index = i + ctr_base;
+> > +             if (!test_bit(pmc_index, kvpmu->used_pmc))
+> > +                     continue;
+> > +             pmc = &kvpmu->pmc[pmc_index];
+> > +             if (flag & SBI_PMU_START_FLAG_SET_INIT_VALUE)
+> > +                     pmc->counter_val = ival;
+> > +             if (pmc->perf_event) {
+> > +                     perf_event_period(pmc->perf_event, pmu_get_sample_period(pmc));
+> > +                     perf_event_enable(pmc->perf_event);
+> > +             }
+>
+> What about checking the "SBI_ERR_ALREADY_STARTED" condition?
+>
+
+pmu start and stop functions in core framework return void. Thus, perf
+core can not check any error code
+returning from pmu start/stop. We can not check SBI_ERR_ALREADY_STARTED/STOPPED.
+It does maintain a state PERF_EVENT_STATE_ACTIVE(once
+enabled)/PERF_EVENT_STATE_OFF(disabled).
+We can check those states but those states can be invalid for other
+reasons. A debug message can be printed
+if enabling/disabling fails though.
+
+However, KVM pmu implementation should return SBI_ERR_ALREADY_STARTED/STOPPED if
+the event state is not accurate before enabling/disabling the event. I
+have added that.
+
+This brings up another generic error returning problem in KVM SBI
+land. Usually, SBI error code numbers do not
+align with Linux error codes to accommodate other operating systems.
+However, most of the SBI error codes
+have 1-1 relationship with the Linux error code.
+Thus, kvm internal code returns a Linux specific error code and
+vcpu_sbi will map those to SBI error code using
+kvm_linux_err_map_sbi.
+
+However, this will not work for SBI_ERR_ALREADY_STARTED/STOPPED as
+there are no corresponding
+Linux specific error codes. We can directly return the SBI error codes
+from vcpu_pmu.c and modify the
+kvm_linux_err_map_sbi to pass through those. In that case, we can't
+map any linux error code that
+collides with SBI error code. Any other ideas to handle this case ?
 
 
-Hi Johannes,
+> > +     }
+> > +
+> >       return 0;
+> >  }
+> >
+> >  int kvm_riscv_vcpu_pmu_ctr_stop(struct kvm_vcpu *vcpu, unsigned long ctr_base,
+> >                                unsigned long ctr_mask, unsigned long flag)
+> >  {
+> > -     /* TODO */
+> > +     struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
+> > +     int i, num_ctrs, pmc_index;
+> > +     u64 enabled, running;
+> > +     struct kvm_pmc *pmc;
+> > +
+> > +     num_ctrs = kvpmu->num_fw_ctrs + kvpmu->num_hw_ctrs;
+> > +     if ((ctr_base + __fls(ctr_mask)) >= num_ctrs)
+> > +             return -EINVAL;
+> > +
+> > +     /* Stop the counters that have been configured and requested by the guest */
+> > +     for_each_set_bit(i, &ctr_mask, RISCV_MAX_COUNTERS) {
+> > +             pmc_index = i + ctr_base;
+> > +             if (!test_bit(pmc_index, kvpmu->used_pmc))
+> > +                     continue;
+> > +             pmc = &kvpmu->pmc[pmc_index];
+> > +             if (pmc->perf_event) {
+> > +                     /* Stop counting the counter */
+> > +                     perf_event_disable(pmc->perf_event);
+> > +                     if (flag & SBI_PMU_STOP_FLAG_RESET) {
+> > +                             /* Relase the counter if this is a reset request */
+> > +                             pmc->counter_val += perf_event_read_value(pmc->perf_event,
+> > +                                                                       &enabled, &running);
+> > +                             pmu_release_perf_event(pmc);
+> > +                             clear_bit(pmc_index, kvpmu->used_pmc);
+> > +                     }
+>
+> What about checking the "SBI_ERR_ALREADY_STOPPED" condition?
+>
 
-Do you think it makes sense to have the below for both the baseline and
-MGLRU or it's some behavior change that the baseline doesn't want to
-risk?
+> > +             }
+> > +     }
+> > +
+> >       return 0;
+> >  }
+> >
+> > @@ -96,14 +297,85 @@ int kvm_riscv_vcpu_pmu_ctr_cfg_match(struct kvm_vcpu *vcpu, unsigned long ctr_ba
+> >                                    unsigned long ctr_mask, unsigned long flag,
+> >                                    unsigned long eidx, uint64_t edata)
+> >  {
+> > -     /* TODO */
+> > -     return 0;
+> > +     struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
+> > +     struct perf_event *event;
+> > +     struct perf_event_attr attr;
+> > +     int num_ctrs, ctr_idx;
+> > +     u32 etype = pmu_get_perf_event_type(eidx);
+> > +     u64 config;
+> > +     struct kvm_pmc *pmc;
+> > +
+> > +     num_ctrs = kvpmu->num_fw_ctrs + kvpmu->num_hw_ctrs;
+> > +     if ((etype == PERF_TYPE_MAX) || ((ctr_base + __fls(ctr_mask)) >= num_ctrs))
+>
+> nit: Unnecessary ()
+>
 
-Thanks.
+Fixed.
+
+> > +             return -EINVAL;
+> > +
+> > +     if (pmu_is_fw_event(eidx))
+> > +             return -EOPNOTSUPP;
+>
+> nit: need blank line here
+>
+
+Fixed.
+
+> > +     /*
+> > +      * SKIP_MATCH flag indicates the caller is aware of the assigned counter
+> > +      * for this event. Just do a sanity check if it already marked used.
+> > +      */
+> > +     if (flag & SBI_PMU_CFG_FLAG_SKIP_MATCH) {
+> > +             if (!test_bit(ctr_base, kvpmu->used_pmc))
+> > +                     return -EINVAL;
+> > +             ctr_idx = ctr_base;
+> > +             goto match_done;
+> > +     }
+> > +
+> > +     ctr_idx = pmu_get_pmc_index(kvpmu, eidx, ctr_base, ctr_mask);
+> > +     if (ctr_idx < 0)
+> > +             return -EOPNOTSUPP;
+> > +
+> > +match_done:
+> > +     pmc = &kvpmu->pmc[ctr_idx];
+> > +     pmu_release_perf_event(pmc);
+> > +     pmc->idx = ctr_idx;
+> > +
+> > +     config = pmu_get_perf_event_config(eidx, edata);
+> > +     memset(&attr, 0, sizeof(struct perf_event_attr));
+> > +     attr.type = etype;
+> > +     attr.size = sizeof(attr);
+> > +     attr.pinned = true;
+> > +
+> > +     /*
+> > +      * It should never reach here if the platform doesn't support sscofpmf extensio
+> > +      * as mode filtering won't work without it.
+> > +      */
+> > +     attr.exclude_host = true;
+> > +     attr.exclude_hv = true;
+> > +     attr.exclude_user = flag & SBI_PMU_CFG_FLAG_SET_UINH ? 1 : 0;
+> > +     attr.exclude_kernel = flag & SBI_PMU_CFG_FLAG_SET_SINH ? 1 : 0;
+>
+> nit: can use !!(flag & SBI_PMU_CFG_FLAG_SET_UINH)
+
+Fixed.
+
+>
+> > +     attr.config = config;
+> > +     attr.config1 = RISCV_KVM_PMU_CONFIG1_GUEST_EVENTS;
+> > +     if (flag & SBI_PMU_CFG_FLAG_CLEAR_VALUE) {
+> > +             //TODO: Do we really want to clear the value in hardware counter
+> > +             pmc->counter_val = 0;
+> > +     }
+>
+> nit: add blank line
+
+Fixed.
+
+>
+> > +     /*
+> > +      * Set the default sample_period for now. The guest specified value
+> > +      * will be updated in the start call.
+> > +      */
+> > +     attr.sample_period = pmu_get_sample_period(pmc);
+> > +
+> > +     event = perf_event_create_kernel_counter(&attr, -1, current, NULL, pmc);
+> > +     if (IS_ERR(event)) {
+> > +             pr_err("kvm pmu event creation failed event %pe for eidx %lx\n", event, eidx);
+> > +             return -EOPNOTSUPP;
+> > +     }
+> > +
+> > +     set_bit(ctr_idx, kvpmu->used_pmc);
+> > +     pmc->perf_event = event;
+> > +     if (flag & SBI_PMU_CFG_FLAG_AUTO_START)
+> > +             perf_event_enable(pmc->perf_event);
+> > +
+> > +     return ctr_idx;
+> >  }
+> >
+> >  int kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu)
+> >  {
+> >       int i = 0, num_hw_ctrs, num_fw_ctrs, hpm_width;
+> >       struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
+> > +     struct kvm_pmc *pmc;
+> >
+> >       if (!kvpmu)
+> >               return -EINVAL;
+> > @@ -120,6 +392,7 @@ int kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu)
+> >               return -EINVAL;
+> >       }
+> >
+> > +     bitmap_zero(kvpmu->used_pmc, RISCV_MAX_COUNTERS);
+> >       kvpmu->num_hw_ctrs = num_hw_ctrs;
+> >       kvpmu->num_fw_ctrs = num_fw_ctrs;
+> >       /*
+> > @@ -132,38 +405,49 @@ int kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu)
+> >               /* TIME CSR shouldn't be read from perf interface */
+> >               if (i == 1)
+> >                       continue;
+> > -             kvpmu->pmc[i].idx = i;
+> > -             kvpmu->pmc[i].vcpu = vcpu;
+> > +             pmc = &kvpmu->pmc[i];
+>
+> Better to introduce this with the patch that introduced this loop.
+>
+
+Sure. Done.
+
+> > +             pmc->idx = i;
+> > +             pmc->counter_val = 0;
+> > +             pmc->vcpu = vcpu;
+> >               if (i < kvpmu->num_hw_ctrs) {
+> >                       kvpmu->pmc[i].cinfo.type = SBI_PMU_CTR_TYPE_HW;
+> >                       if (i < 3)
+> >                               /* CY, IR counters */
+> > -                             kvpmu->pmc[i].cinfo.width = 63;
+> > +                             pmc->cinfo.width = 63;
+> >                       else
+> > -                             kvpmu->pmc[i].cinfo.width = hpm_width;
+> > +                             pmc->cinfo.width = hpm_width;
+> >                       /*
+> >                        * The CSR number doesn't have any relation with the logical
+> >                        * hardware counters. The CSR numbers are encoded sequentially
+> >                        * to avoid maintaining a map between the virtual counter
+> >                        * and CSR number.
+> >                        */
+> > -                     kvpmu->pmc[i].cinfo.csr = CSR_CYCLE + i;
+> > +                     pmc->cinfo.csr = CSR_CYCLE + i;
+> >               } else {
+> > -                     kvpmu->pmc[i].cinfo.type = SBI_PMU_CTR_TYPE_FW;
+> > -                     kvpmu->pmc[i].cinfo.width = BITS_PER_LONG - 1;
+> > +                     pmc->cinfo.type = SBI_PMU_CTR_TYPE_FW;
+> > +                     pmc->cinfo.width = BITS_PER_LONG - 1;
+> >               }
+> >       }
+> >
+> >       return 0;
+> >  }
+> >
+> > -void kvm_riscv_vcpu_pmu_reset(struct kvm_vcpu *vcpu)
+> > +void kvm_riscv_vcpu_pmu_deinit(struct kvm_vcpu *vcpu)
+> >  {
+> > -     /* TODO */
+> > +     struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
+> > +     struct kvm_pmc *pmc;
+> > +     int i;
+> > +
+> > +     if (!kvpmu)
+> > +             return;
+> > +
+> > +     for_each_set_bit(i, kvpmu->used_pmc, RISCV_MAX_COUNTERS) {
+> > +             pmc = &kvpmu->pmc[i];
+> > +             pmu_release_perf_event(pmc);
+> > +     }
+> >  }
+> >
+> > -void kvm_riscv_vcpu_pmu_deinit(struct kvm_vcpu *vcpu)
+> > +void kvm_riscv_vcpu_pmu_reset(struct kvm_vcpu *vcpu)
+> >  {
+> > -     /* TODO */
+> > +     kvm_riscv_vcpu_pmu_deinit(vcpu);
+> >  }
+> > -
+> > --
+> > 2.25.1
+> >
+>
+> Thanks,
+> drew
 
 
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index e654435f1651..632e0f462df9 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -166,6 +166,8 @@ typedef int (dio_iodone_t)(struct kiocb *iocb, loff_t offset,
- /* File supports DIRECT IO */
- #define	FMODE_CAN_ODIRECT	((__force fmode_t)0x400000)
- 
-+#define	FMODE_NOREUSE		((__force fmode_t)0x800000)
-+
- /* File was opened by fanotify and shouldn't generate fanotify events */
- #define FMODE_NONOTIFY		((__force fmode_t)0x4000000)
- 
-diff --git a/include/linux/mm_inline.h b/include/linux/mm_inline.h
-index 2f53c31216de..4122a4db5b49 100644
---- a/include/linux/mm_inline.h
-+++ b/include/linux/mm_inline.h
-@@ -595,4 +595,15 @@ pte_install_uffd_wp_if_needed(struct vm_area_struct *vma, unsigned long addr,
- #endif
- }
- 
-+static inline bool vma_has_locality(struct vm_area_struct *vma)
-+{
-+	if (vma->vm_flags & (VM_SEQ_READ | VM_RAND_READ))
-+		return false;
-+
-+	if (vma->vm_file && (vma->vm_file->f_mode & FMODE_NOREUSE))
-+		return false;
-+
-+	return true;
-+}
-+
- #endif
-diff --git a/mm/fadvise.c b/mm/fadvise.c
-index c76ee665355a..2ba24d865bf5 100644
---- a/mm/fadvise.c
-+++ b/mm/fadvise.c
-@@ -80,7 +80,7 @@ int generic_fadvise(struct file *file, loff_t offset, loff_t len, int advice)
- 	case POSIX_FADV_NORMAL:
- 		file->f_ra.ra_pages = bdi->ra_pages;
- 		spin_lock(&file->f_lock);
--		file->f_mode &= ~FMODE_RANDOM;
-+		file->f_mode &= ~(FMODE_RANDOM | FMODE_NOREUSE);
- 		spin_unlock(&file->f_lock);
- 		break;
- 	case POSIX_FADV_RANDOM:
-@@ -107,6 +107,9 @@ int generic_fadvise(struct file *file, loff_t offset, loff_t len, int advice)
- 		force_page_cache_readahead(mapping, file, start_index, nrpages);
- 		break;
- 	case POSIX_FADV_NOREUSE:
-+		spin_lock(&file->f_lock);
-+		file->f_mode |= FMODE_NOREUSE;
-+		spin_unlock(&file->f_lock);
- 		break;
- 	case POSIX_FADV_DONTNEED:
- 		__filemap_fdatawrite_range(mapping, offset, endbyte,
-diff --git a/mm/memory.c b/mm/memory.c
-index f88c351aecd4..69fba1d58eb2 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -1448,8 +1448,7 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
- 					force_flush = 1;
- 					set_page_dirty(page);
- 				}
--				if (pte_young(ptent) &&
--				    likely(!(vma->vm_flags & VM_SEQ_READ)))
-+				if (pte_young(ptent) && likely(vma_has_locality(vma)))
- 					mark_page_accessed(page);
- 			}
- 			rss[mm_counter(page)]--;
-@@ -5161,8 +5160,7 @@ static inline void mm_account_fault(struct pt_regs *regs,
- #ifdef CONFIG_LRU_GEN
- static void lru_gen_enter_fault(struct vm_area_struct *vma)
- {
--	/* the LRU algorithm doesn't apply to sequential or random reads */
--	current->in_lru_fault = !(vma->vm_flags & (VM_SEQ_READ | VM_RAND_READ));
-+	current->in_lru_fault = vma_has_locality(vma);
- }
- 
- static void lru_gen_exit_fault(void)
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 2ec925e5fa6a..b1bb492115ae 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -823,25 +823,14 @@ static bool folio_referenced_one(struct folio *folio,
- 		}
- 
- 		if (pvmw.pte) {
--			if (lru_gen_enabled() && pte_young(*pvmw.pte) &&
--			    !(vma->vm_flags & (VM_SEQ_READ | VM_RAND_READ))) {
-+			if (lru_gen_enabled() && pte_young(*pvmw.pte)) {
- 				lru_gen_look_around(&pvmw);
- 				referenced++;
- 			}
- 
- 			if (ptep_clear_flush_young_notify(vma, address,
--						pvmw.pte)) {
--				/*
--				 * Don't treat a reference through
--				 * a sequentially read mapping as such.
--				 * If the folio has been used in another mapping,
--				 * we will catch it; if this other mapping is
--				 * already gone, the unmap path will have set
--				 * the referenced flag or activated the folio.
--				 */
--				if (likely(!(vma->vm_flags & VM_SEQ_READ)))
--					referenced++;
--			}
-+						pvmw.pte))
-+				referenced++;
- 		} else if (IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE)) {
- 			if (pmdp_clear_flush_young_notify(vma, address,
- 						pvmw.pmd))
-@@ -875,7 +864,15 @@ static bool invalid_folio_referenced_vma(struct vm_area_struct *vma, void *arg)
- 	struct folio_referenced_arg *pra = arg;
- 	struct mem_cgroup *memcg = pra->memcg;
- 
--	if (!mm_match_cgroup(vma->vm_mm, memcg))
-+	if (!vma_has_locality(vma))
-+		return true;
-+
-+	/*
-+	 * If we are reclaiming on behalf of a cgroup, skip
-+	 * counting on behalf of references from different
-+	 * cgroups
-+	 */
-+	if (memcg && !mm_match_cgroup(vma->vm_mm, memcg))
- 		return true;
- 
- 	return false;
-@@ -921,14 +918,7 @@ int folio_referenced(struct folio *folio, int is_locked,
- 			return 1;
- 	}
- 
--	/*
--	 * If we are reclaiming on behalf of a cgroup, skip
--	 * counting on behalf of references from different
--	 * cgroups
--	 */
--	if (memcg) {
--		rwc.invalid_vma = invalid_folio_referenced_vma;
--	}
-+	rwc.invalid_vma = invalid_folio_referenced_vma;
- 
- 	rmap_walk(folio, &rwc);
- 	*vm_flags = pra.vm_flags;
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 7d3cc787b840..97ce5d37d67c 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -3742,7 +3742,10 @@ static int should_skip_vma(unsigned long start, unsigned long end, struct mm_wal
- 	if (is_vm_hugetlb_page(vma))
- 		return true;
- 
--	if (vma->vm_flags & (VM_LOCKED | VM_SPECIAL | VM_SEQ_READ | VM_RAND_READ))
-+	if (!vma_has_locality(vma))
-+		return true;
-+
-+	if (vma->vm_flags & (VM_LOCKED | VM_SPECIAL))
- 		return true;
- 
- 	if (vma == get_gate_vma(vma->vm_mm))
+
+-- 
+Regards,
+Atish
