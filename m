@@ -2,104 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B722363696B
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 20:00:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE99863696C
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 20:01:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239215AbiKWTAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 14:00:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58280 "EHLO
+        id S239310AbiKWTA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 14:00:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236748AbiKWTAP (ORCPT
+        with ESMTP id S239234AbiKWTA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 14:00:15 -0500
-Received: from wedge010.net.lu.se (wedge010.net.lu.se [130.235.56.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD2988FE5C;
-        Wed, 23 Nov 2022 11:00:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; d=control.lth.se; s=edge;
-        c=relaxed/relaxed; t=1669230010; h=from:subject:to:date:message-id;
-        bh=kSHuC6LXb+PE+chwjpVMprQcFyficGssjG266e/qJ7w=;
-        b=dxrq+8mrvfFC7sKa9pReD2C66KhbInKE4TwtMIIxK+y+jRqGRJrBlY3QT8jS96tCiBqklzrK1+Z
-        G91MHAYJXosSpsLN3cY4ghFYj6Ko/rSDUAy8s6ub3oZ/YiE0L1XGUbYp6IjJpLolfnM104ciFCf2A
-        Yo06wq4YH+t9Lt8I/5oiuAzpvAl6Rcj8wsYZibxOGuGfbl7kUpvaw6rkZrFcEr8rl8a3Cg3e/IZG4
-        oJ/dbiZnPKtL31IfCXfOpnHOx9YLY/9yvBWK0tihE61U+QNAhHCcPlmrUyOgJfZ5iT/EtsNgxrqMc
-        z4Xanr0d/fXLo8SN41XRz7uxO+G+U5KtywkA==
-Received: from wexc007.uw.lu.se (130.235.59.251) by mail.lu.se
- (130.235.56.200) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P256) id 15.1.2507.13; Wed, 23
- Nov 2022 20:00:09 +0100
-Received: from [130.235.83.196] (130.235.139.100) by wexc007.uw.lu.se
- (130.235.59.251) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P521) id 15.1.2507.13; Wed, 23
- Nov 2022 20:00:10 +0100
-Message-ID: <9e45fed2-f9e9-8c5e-3c33-993de330f11e@control.lth.se>
-Date:   Wed, 23 Nov 2022 20:00:10 +0100
+        Wed, 23 Nov 2022 14:00:26 -0500
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359D58FE5C;
+        Wed, 23 Nov 2022 11:00:25 -0800 (PST)
+Received: by mail-qt1-f177.google.com with SMTP id a27so11820373qtw.10;
+        Wed, 23 Nov 2022 11:00:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+l0igR7hKkTKvvyys2qs4E7Aer7/krdWL5FOFxNPBAA=;
+        b=ZDF5LN1+8Lifv+6tWI7k2p7BPj6et5YZPAdk8IvAoCxxSk4HyuBPS10HQbxrMGlHxk
+         HPIBrkQkw9hdHwgHMwLlSWinUbyx/Ykg7I4Hsm8tbjul5luFRh3a87b2mKPWPoDN9j/t
+         vDfTpq5dmNjENzJ+9mbIdH227V8cOx8Wt4DtZcmxY1lUnEDzB5Kx5DbktsxS6UCSMzgv
+         i31xoo4h6BxEpb9+FmmRCzGGfrnEoL5QXu8BId+s1McNcdFiJoXCUZsSb9FhmhIjslhf
+         4bpjHghsEXe8E6QQCjs15pnYON9/QU305Y5lEHwNb1kgIXVOy/+NMMaQOqDkCovrZSxl
+         /ibQ==
+X-Gm-Message-State: ANoB5pnsTFAbN2noX+59hpRShTKaXR18aTgtiQVYV7mnmoVrJCUTBlyj
+        vrLTcNiia3utsm4e0dsxZBIBuRZkj8tR/th4o0U=
+X-Google-Smtp-Source: AA0mqf7sI46tBXUWpLMXE8nVVH+hrIVtKuUyfa7scQxb2RDvbes27xd11ZfVW6gU3JWJVLyfie0RMtF+aCRX4qGnxPA=
+X-Received: by 2002:ac8:60d3:0:b0:3a5:4678:5b24 with SMTP id
+ i19-20020ac860d3000000b003a546785b24mr27555628qtm.411.1669230024997; Wed, 23
+ Nov 2022 11:00:24 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-From:   Anders Blomdell <anders.blomdell@control.lth.se>
-Subject: [PATCH v2 1/1] Make nfsd_splice_actor work with reads with a non-zero
- offset that doesn't end on a page boundary
-To:     Jeff Layton <jlayton@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        "Al Viro" <viro@zeniv.linux.org.uk>
-CC:     <linux-nfs@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
-Content-Language: en-US
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [130.235.139.100]
-X-ClientProxiedBy: wexc012.uw.lu.se (130.235.59.234) To wexc007.uw.lu.se
- (130.235.59.251)
-X-CrossPremisesHeadersFilteredBySendConnector: wexc007.uw.lu.se
-X-OrganizationHeadersPreserved: wexc007.uw.lu.se
-Received-SPF: Pass (wedge010.net.lu.se: domain of
- anders.blomdell@control.lth.se designates 130.235.59.251 as permitted sender)
- receiver=wedge010.net.lu.se; client-ip=130.235.59.251; helo=wexc007.uw.lu.se;
-X-CrossPremisesHeadersFilteredBySendConnector: wedge010.net.lu.se
-X-OrganizationHeadersPreserved: wedge010.net.lu.se
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221112094048.3614365-1-yangyingliang@huawei.com>
+In-Reply-To: <20221112094048.3614365-1-yangyingliang@huawei.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 23 Nov 2022 20:00:14 +0100
+Message-ID: <CAJZ5v0g6bct5pTruxHjjJPQpwDNR8WgqhLWaZWo8NKeRH3n6iw@mail.gmail.com>
+Subject: Re: [PATCH] powercap: fix possible name leak while device_register() fails
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-pm@vger.kernel.org, rafael@kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make nfsd_splice_actor work with reads with a non-zero offset that doesn't end on a page boundary.
+On Sat, Nov 12, 2022 at 10:42 AM Yang Yingliang
+<yangyingliang@huawei.com> wrote:
+>
+> If device_register() returns error, the name allocated by
+> dev_set_name() need be freed. In technical, we should call
+> put_device() to give up the reference and free the name in
+> driver core, but in some cases the device is not intizalized,
+> put_device() can not be called, so don't complicate the code,
+> just call kfree_const() to free name in the error path.
+>
+> Fixes: 75d2364ea0ca ("PowerCap: Add class driver")
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+>  drivers/powercap/powercap_sys.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/powercap/powercap_sys.c b/drivers/powercap/powercap_sys.c
+> index f0654a932b37..11e742dc83b9 100644
+> --- a/drivers/powercap/powercap_sys.c
+> +++ b/drivers/powercap/powercap_sys.c
+> @@ -572,6 +572,7 @@ struct powercap_zone *powercap_register_zone(
+>  err_name_alloc:
+>         idr_remove(power_zone->parent_idr, power_zone->id);
+>  err_idr_alloc:
+> +       kfree_const(dev_name(&power_zone->dev));
+>         if (power_zone->allocated)
+>                 kfree(power_zone);
+>         mutex_unlock(&control_type->lock);
+> @@ -622,6 +623,7 @@ struct powercap_control_type *powercap_register_control_type(
+>         dev_set_name(&control_type->dev, "%s", name);
+>         result = device_register(&control_type->dev);
+>         if (result) {
+> +               kfree_const(dev_name(&control_type->dev));
 
-This was found when virtual machines with nfs-mounted qcow2 disks failed to boot properly (originally found
-on v6.0.5, fix also needed and tested on v6.0.9 and v6.1-rc6).
+Why is it necessary to free a device name explicitly after a failing
+device_register()?
 
-Signed-off-by: Anders Blomdell <anders.blomdell@control.lth.se>
-Link: https://bugzilla.redhat.com/show_bug.cgi?id=2142132
-Fixes: bfbfb6182ad1 "nfsd_splice_actor(): handle compound pages"
-Cc: stable@vger.kernel.org # v6.0+
+If it is really necessary, then there is a problem in
+device_register() itself AFAICS, because it uses dev_set_name() at
+least in the dev->init_name present case.
 
--- a/fs/nfsd/vfs.c
-+++ b/fs/nfsd/vfs.c
-@@ -869,12 +869,13 @@ nfsd_splice_actor(struct pipe_inode_info *pipe, struct pipe_buffer *buf,
-  		  struct splice_desc *sd)
-  {
-  	struct svc_rqst *rqstp = sd->u.data;
--	struct page *page = buf->page;	// may be a compound one
-+	// buf->page may be a compound one
-  	unsigned offset = buf->offset;
-+	struct page *first = buf->page + offset / PAGE_SIZE;
-+	struct page *last = buf->page + (offset + sd->len - 1) / PAGE_SIZE;
-
--	page += offset / PAGE_SIZE;
--	for (int i = sd->len; i > 0; i -= PAGE_SIZE)
--		svc_rqst_replace_page(rqstp, page++);
-+	for (struct page *page = first; page <= last; page++)
-+		svc_rqst_replace_page(rqstp, page);
-  	if (rqstp->rq_res.page_len == 0)	// first call
-  		rqstp->rq_res.page_base = offset % PAGE_SIZE;
-  	rqstp->rq_res.page_len += sd->len;
-
--- 
-Anders Blomdell                  Email: anders.blomdell@control.lth.se
-Department of Automatic Control
-Lund University                  Phone:    +46 46 222 4625
-P.O. Box 118
-SE-221 00 Lund, Sweden
+>                 if (control_type->allocated)
+>                         kfree(control_type);
+>                 return ERR_PTR(result);
+> --
