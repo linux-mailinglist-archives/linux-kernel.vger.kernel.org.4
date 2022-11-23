@@ -2,60 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07FD16361C9
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:30:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC85E6361D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:30:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238775AbiKWOaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 09:30:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57644 "EHLO
+        id S238750AbiKWOah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 09:30:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238645AbiKWO3l (ORCPT
+        with ESMTP id S238450AbiKWOaJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 09:29:41 -0500
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154842739;
-        Wed, 23 Nov 2022 06:27:30 -0800 (PST)
-Received: from [10.18.29.47] (10.18.29.47) by mail-sh.amlogic.com (10.18.11.5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Wed, 23 Nov
- 2022 22:27:28 +0800
-Message-ID: <3d657951-cbdf-07d6-4c73-7650381695a5@amlogic.com>
-Date:   Wed, 23 Nov 2022 22:27:28 +0800
+        Wed, 23 Nov 2022 09:30:09 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C93290580;
+        Wed, 23 Nov 2022 06:28:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 60E9E61D3B;
+        Wed, 23 Nov 2022 14:28:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B521C433D6;
+        Wed, 23 Nov 2022 14:28:28 +0000 (UTC)
+Message-ID: <0da1813a-7e37-bc35-cf8d-8c41590f3b1a@xs4all.nl>
+Date:   Wed, 23 Nov 2022 15:28:27 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH V5 4/4] arm64: dts: meson: add S4 Soc Peripheral clock
- controller in DT
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH mm-unstable v1 16/20] mm/frame-vector: remove FOLL_FORCE
+ usage
 Content-Language: en-US
-To:     <neil.armstrong@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-CC:     <kelvin.zhang@amlogic.com>
-References: <20221123021346.18136-1-yu.tu@amlogic.com>
- <20221123021346.18136-5-yu.tu@amlogic.com>
- <ae43fadf-9255-7db7-8b5e-01200e02a2c6@linaro.org>
- <9961d579-9463-c585-34a6-a3abcd4b3e52@linaro.org>
- <7f3a34a0-a5b0-3a72-8e0e-00656bd77ff6@linaro.org>
- <2153a111-d5f0-94cf-9cfc-f8ce4b084a1c@linaro.org>
-From:   Yu Tu <yu.tu@amlogic.com>
-In-Reply-To: <2153a111-d5f0-94cf-9cfc-f8ce4b084a1c@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.18.29.47]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+To:     David Hildenbrand <david@redhat.com>,
+        Tomasz Figa <tfiga@chromium.org>
+Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-kernel@vger.kernel.org
+References: <20221116102659.70287-1-david@redhat.com>
+ <20221116102659.70287-17-david@redhat.com>
+ <36dd800b-d96b-af39-d0de-a5a8ca1034dd@xs4all.nl>
+In-Reply-To: <36dd800b-d96b-af39-d0de-a5a8ca1034dd@xs4all.nl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,67 +80,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 23/11/2022 14:26, Hans Verkuil wrote:
+> Hi David, Tomasz,
+> 
+> On 16/11/2022 11:26, David Hildenbrand wrote:
+>> FOLL_FORCE is really only for ptrace access. According to commit
+>> 707947247e95 ("media: videobuf2-vmalloc: get_userptr: buffers are always
+>> writable"), get_vaddr_frames() currently pins all pages writable as a
+>> workaround for issues with read-only buffers.
+> 
+> I've decided to revert 707947247e95: I have not been able to reproduce the problem
+> described in that commit, and Tomasz reported that it caused problems with a
+> specific use-case they encountered. I'll post that patch soon and I expect it
+> to land in 6.2. It will cause a conflict with this patch, though.
+> 
+> If the problem described in that patch occurs again, then I will revisit it
+> and hopefully do a better job than I did before. That commit was not my
+> finest moment.
 
+In any case, for this patch:
 
-On 2022/11/23 22:21, neil.armstrong@linaro.org wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> On 23/11/2022 15:13, Krzysztof Kozlowski wrote:
->> On 23/11/2022 14:27, Neil Armstrong wrote:
->>> On 23/11/2022 11:10, Krzysztof Kozlowski wrote:
->>>> On 23/11/2022 03:13, Yu Tu wrote:
->>>>> Added information about the S4 SOC Peripheral Clock controller in DT.
->>>>>
->>>>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
->>>>> ---
->>>>>    arch/arm64/boot/dts/amlogic/meson-s4.dtsi | 26 
->>>>> +++++++++++++++++++++++
->>>>>    1 file changed, 26 insertions(+)
->>>>>
->>>>> diff --git a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi 
->>>>> b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
->>>>> index bd9c2ef83314..e7fab6e400be 100644
->>>>> --- a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
->>>>> +++ b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
->>>>> @@ -6,6 +6,8 @@
->>>>>    #include <dt-bindings/interrupt-controller/irq.h>
->>>>>    #include <dt-bindings/interrupt-controller/arm-gic.h>
->>>>>    #include <dt-bindings/gpio/gpio.h>
->>>>> +#include <dt-bindings/clock/amlogic,s4-pll-clkc.h>
->>>>> +#include <dt-bindings/clock/amlogic,s4-peripherals-clkc.h>
->>>>>    / {
->>>>>        cpus {
->>>>> @@ -100,6 +102,30 @@ clkc_pll: clock-controller@8000 {
->>>>>                    #clock-cells = <1>;
->>>>>                };
->>>>> +            clkc_periphs: clock-controller {
->>>>> +                compatible = "amlogic,s4-peripherals-clkc";
->>>>> +                reg = <0x0 0x0 0x0 0x49c>;
->>>>
->>>> This is broken... did you check for warnings?
->>>
->>> This is actually fine, the parent node has a ranges property:
->>> https://github.com/torvalds/linux/blob/eb7081409f94a9a8608593d0fb63a1aa3d6f95d8/arch/arm64/boot/dts/amlogic/meson-s4.dtsi#L93 
->>>
->>
->> The parent ranges do not change here anything. You cannot have a reg
->> without unit address and the tools report it. No need to use reviewers
->> for this...
-> 
-> Oh I see now, I simply looked at the reg property, not the unit address.
-> 
-> Sorry indeed it's wrong and DTC should complain.
-> 
-> Yu, you should probably update your DTC version.
+Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-Okay.
+Regards,
+
+	Hans
 
 > 
-> Neil
+> Regards,
+> 
+> 	Hans
 > 
 >>
->> Best regards,
->> Krzysztof
+>> FOLL_FORCE, however, seems to be a legacy leftover as it predates
+>> commit 707947247e95 ("media: videobuf2-vmalloc: get_userptr: buffers are
+>> always writable"). Let's just remove it.
 >>
+>> Once the read-only buffer issue has been resolved, FOLL_WRITE could
+>> again be set depending on the DMA direction.
+>>
+>> Cc: Hans Verkuil <hverkuil@xs4all.nl>
+>> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+>> Cc: Tomasz Figa <tfiga@chromium.org>
+>> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+>> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+>> Signed-off-by: David Hildenbrand <david@redhat.com>
+>> ---
+>>  drivers/media/common/videobuf2/frame_vector.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/media/common/videobuf2/frame_vector.c b/drivers/media/common/videobuf2/frame_vector.c
+>> index 542dde9d2609..062e98148c53 100644
+>> --- a/drivers/media/common/videobuf2/frame_vector.c
+>> +++ b/drivers/media/common/videobuf2/frame_vector.c
+>> @@ -50,7 +50,7 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
+>>  	start = untagged_addr(start);
+>>  
+>>  	ret = pin_user_pages_fast(start, nr_frames,
+>> -				  FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
+>> +				  FOLL_WRITE | FOLL_LONGTERM,
+>>  				  (struct page **)(vec->ptrs));
+>>  	if (ret > 0) {
+>>  		vec->got_ref = true;
 > 
-> .
+
