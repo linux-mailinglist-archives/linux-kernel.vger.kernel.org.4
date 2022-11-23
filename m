@@ -2,121 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB05C635CE5
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 13:29:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC60635CDF
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 13:29:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237089AbiKWM1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 07:27:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33304 "EHLO
+        id S237628AbiKWM3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 07:29:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237078AbiKWM0Z (ORCPT
+        with ESMTP id S237224AbiKWM24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 07:26:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE8A761BB9
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 04:25:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 534D861C58
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 12:25:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1A4AC433B5;
-        Wed, 23 Nov 2022 12:25:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669206350;
-        bh=Y2hWZN4MqMeO65hNd5mMhexY6L2mauv8s0WA0ygqM3U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ec5fMGJF0n9mfQKxQA9IBJvHbtiYdYw7iRsF4kk3Yx4TOTYRPF4t07VEXg9qaWgC1
-         c47uvrcCh+MBmwFPEvjTli7S0tIntGp98Tz0NE5Nq1kL6EiCSU+xBhTQGiS0R9IISC
-         jteSNotwaqOrhKlRiaPJublQUNk+Bq6j9ByNjc50=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Won Chung <wonchung@google.com>
-Subject: [PATCH 5/5] driver core: device_get_devnode() should take a const *
-Date:   Wed, 23 Nov 2022 13:25:23 +0100
-Message-Id: <20221123122523.1332370-5-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221123122523.1332370-1-gregkh@linuxfoundation.org>
-References: <20221123122523.1332370-1-gregkh@linuxfoundation.org>
+        Wed, 23 Nov 2022 07:28:56 -0500
+Received: from mickerik.phytec.de (mickerik.phytec.de [91.26.50.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AEA523BF5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 04:27:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; d=phytec.de; s=a4; c=relaxed/simple;
+        q=dns/txt; i=@phytec.de; t=1669206461; x=1671798461;
+        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:CC:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=EJGHdb5kUSy4eZ7uaihRWaAL5/Unjj0zF+phb9X5lU0=;
+        b=CT7yxG1oomj1RvuJUxvTG/xzzUACe5RqviJkHDZSyR8Q27omCWI5DSU9HOS7toyQ
+        SqpGRGaFR6lENnDpKpwtwZO4ALCTxIUdHuY/uIbBVED/Cr1UTV99Qw5pGAXQy1oQ
+        MWTZ97bpvkCiaJava9pF8ndqhL7pA3qszhK5mfSSB3M=;
+X-AuditID: ac14000a-833f270000003940-4b-637e11bd6ede
+Received: from berlix.phytec.de (Unknown_Domain [172.25.0.12])
+        (using TLS with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client did not present a certificate)
+        by mickerik.phytec.de (PHYTEC Mail Gateway) with SMTP id 50.03.14656.DB11E736; Wed, 23 Nov 2022 13:27:41 +0100 (CET)
+Received: from augenblix2.phytec.de (172.25.0.11) by Berlix.phytec.de
+ (172.25.0.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 23 Nov
+ 2022 13:27:41 +0100
+From:   Wadim Egorov <w.egorov@phytec.de>
+To:     <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>
+CC:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
+Subject: [PATCH v3 1/2] dt-bindings: arm: ti: Add bindings for PHYTEC AM64x based hardware
+Date:   Wed, 23 Nov 2022 13:27:31 +0100
+Message-ID: <20221123122732.3864641-1-w.egorov@phytec.de>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2551; i=gregkh@linuxfoundation.org; h=from:subject; bh=Y2hWZN4MqMeO65hNd5mMhexY6L2mauv8s0WA0ygqM3U=; b=owGbwMvMwCRo6H6F97bub03G02pJDMl1gsZu8TcMrn187L97nUqJnMi7xV9f7cop+DqLneFHduJa r+bYjlgWBkEmBlkxRZYv23iO7q84pOhlaHsaZg4rE8gQBi5OAZjIrcUM87QmN1pMZtOQmJPtWn3vSp hA1lHPhwzz7Jwu3L+re8Rv7TNnhTbhi67TvjU/AwA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [172.25.0.11]
+X-ClientProxiedBy: Berlix.phytec.de (172.25.0.12) To Berlix.phytec.de
+ (172.25.0.12)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrHLMWRmVeSWpSXmKPExsWyRpKBR3evYF2ywZspShbzj5xjtVj+eTa7
+        Rd+Lh8wWmx5fY7W4vGsOm8WbH2eZLFr3HmG3+H/2A7sDh8emVZ1sHneu7WHz2Lyk3uP4je1M
+        Hp83yQWwRnHZpKTmZJalFunbJXBltH+6xVSwjKOi/eI3pgbGg2xdjJwcEgImEve/vmQEsYUE
+        FjNJ3Gq06WLkArKfMErsWXSOHSTBJqAucWfDN1YQW0QgS+LEoassIDazQInE3EkHmUFsYYEo
+        iU+/T4ANZRFQlXjQ8wxsKK+ApcSJNftYIZbJS8y89J0dIi4ocXLmE6g58hLNW2czQ9gSEgdf
+        vGCGOEhe4sWl5SwwvdPOvWaGsEMltn7ZzjSBUWAWklGzkIyahWTUAkbmVYxCuZnJ2alFmdl6
+        BRmVJanJeimpmxhBYS7CwLWDsW+OxyFGJg7GQ4wSHMxKIrz1njXJQrwpiZVVqUX58UWlOanF
+        hxilOViUxHnv9zAlCgmkJ5akZqemFqQWwWSZODilGhgTWT6y9gfYudzZpu606myv/ur6Jr3V
+        M08eWHb5Sf73tNjO8l83PPzPJdkvDJ5zco+B8ulZ55KXlQlvTNjQ1yr7dr5+y5/ru7+lMC9b
+        Zh17kzk9WEzia57SdTbWmnOHJjbkuZS2m8sz7Dzh7t9ucoXvzTaf58flO37XPp4h2Hzq78oX
+        6zqcpskpsRRnJBpqMRcVJwIASGpShGECAAA=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-device_get_devnode() should take a constant * to struct device as it
-does not modify it in any way, so modify the function definition to do
-this and move it out of device.h as it does not need to be exposed to
-the whole kernel tree.
+Add devicetree bindings for AM64x based phyCORE-AM64 SoM
+and phyBOARD-Electra RDK.
 
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Ira Weiny <ira.weiny@intel.com>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Won Chung <wonchung@google.com>
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Wadim Egorov <w.egorov@phytec.de>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/base/base.h    | 2 ++
- drivers/base/core.c    | 2 +-
- include/linux/device.h | 2 --
- 3 files changed, 3 insertions(+), 3 deletions(-)
+v3: No changes
+v2:
+  - Add Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/arm/ti/k3.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/base/base.h b/drivers/base/base.h
-index 7d4803c03d3e..a8a119c36bdc 100644
---- a/drivers/base/base.h
-+++ b/drivers/base/base.h
-@@ -158,6 +158,8 @@ extern void device_block_probing(void);
- extern void device_unblock_probing(void);
- extern void deferred_probe_extend_timeout(void);
- extern void driver_deferred_probe_trigger(void);
-+const char *device_get_devnode(const struct device *dev, umode_t *mode,
-+			       kuid_t *uid, kgid_t *gid, const char **tmp);
+diff --git a/Documentation/devicetree/bindings/arm/ti/k3.yaml b/Documentation/devicetree/bindings/arm/ti/k3.yaml
+index 28b8232e1c5b..2b9c045e39bf 100644
+--- a/Documentation/devicetree/bindings/arm/ti/k3.yaml
++++ b/Documentation/devicetree/bindings/arm/ti/k3.yaml
+@@ -38,6 +38,12 @@ properties:
+               - ti,am642-sk
+           - const: ti,am642
  
- /* /sys/devices directory */
- extern struct kset *devices_kset;
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index a3e14143ec0c..72ec54a8a4e1 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -3739,7 +3739,7 @@ static struct device *next_device(struct klist_iter *i)
-  * a name. This memory is returned in tmp and needs to be
-  * freed by the caller.
-  */
--const char *device_get_devnode(struct device *dev,
-+const char *device_get_devnode(const struct device *dev,
- 			       umode_t *mode, kuid_t *uid, kgid_t *gid,
- 			       const char **tmp)
- {
-diff --git a/include/linux/device.h b/include/linux/device.h
-index 4ad1280713e6..e4498389e866 100644
---- a/include/linux/device.h
-+++ b/include/linux/device.h
-@@ -927,8 +927,6 @@ int device_rename(struct device *dev, const char *new_name);
- int device_move(struct device *dev, struct device *new_parent,
- 		enum dpm_order dpm_order);
- int device_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid);
--const char *device_get_devnode(struct device *dev, umode_t *mode, kuid_t *uid,
--			       kgid_t *gid, const char **tmp);
- int device_is_dependent(struct device *dev, void *target);
- 
- static inline bool device_supports_offline(struct device *dev)
++      - description: K3 AM642 SoC PHYTEC phyBOARD-Electra
++        items:
++          - const: phytec,am642-phyboard-electra-rdk
++          - const: phytec,am64-phycore-som
++          - const: ti,am642
++
+       - description: K3 AM654 SoC
+         items:
+           - enum:
 -- 
-2.38.1
+2.34.1
 
