@@ -2,118 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A9DA63665A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 17:59:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2BE2636661
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 18:00:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236510AbiKWQ7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 11:59:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49040 "EHLO
+        id S237647AbiKWRAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 12:00:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238060AbiKWQ7K (ORCPT
+        with ESMTP id S235918AbiKWRAB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 11:59:10 -0500
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79AB66CA6;
-        Wed, 23 Nov 2022 08:59:08 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 8613060009;
-        Wed, 23 Nov 2022 16:59:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1669222747;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ocNle5svEAfXW7cmp/QTXhOMQIMNm/+sptjua2c54SA=;
-        b=BwZ/6py/00KDo4z2J4uVsGL5bF1dU/Y9qkLDjp0zhlqj5DBhmsT4hq0N5batrHuJWtaBw9
-        bu1U74/50NDjhFlGFJ1gujiBCwxR0QpFnYA/sHOi1AYrEVqLjlZZ06rnqLEUy0mw3p+WCJ
-        QIP4ZfYPU+67clvVll1t/iRLH7OBc9mq49Bm/ccosWMuC1LQo92VQv3zMdlpfCwIkahg8h
-        iB8fLPmo7ROEfIJpAqeoLupgsgH0TDImjo4LtjvHOhgyOu552uMqTQv8S85BgZUwQ1j3vD
-        zWlrTmTQv/6Zs3IEKcdQKoR/6eqAuJkmX07hjWXjA71xhFlPWVAAjhwGfMFv7Q==
-Date:   Wed, 23 Nov 2022 17:59:00 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Alexander Lobakin <alobakin@pm.me>, linux-kbuild@vger.kernel.org,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Jens Axboe <axboe@kernel.dk>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Derek Chickles <dchickles@marvell.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        NXP Linux Team <linux-imx@nxp.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 12/18] mtd: tests: fix object shared between several
- modules
-Message-ID: <20221123175900.4e05a0f2@xps-13>
-In-Reply-To: <CAK7LNASni5uNFOtR-6VykBHX1Wgg-rOt=q0Lk+H2Vbn7pCsBDQ@mail.gmail.com>
-References: <20221119225650.1044591-1-alobakin@pm.me>
-        <20221119225650.1044591-13-alobakin@pm.me>
-        <CAK7LNASni5uNFOtR-6VykBHX1Wgg-rOt=q0Lk+H2Vbn7pCsBDQ@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Wed, 23 Nov 2022 12:00:01 -0500
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35AD776F5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 08:59:58 -0800 (PST)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-3938dc90ab0so161224437b3.4
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 08:59:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jayl9XfJvGWwHXVIk+ROjAbiw46GjWkW/kZXLe58Lv4=;
+        b=bAt0XaONGIclr0aqlZnlWXU7WcAtPBaQ5FrrIYNBEva6Jb5bPqwC+w5+rVMWD+38sA
+         5O1U+AaSKeb7xKFUmDFqD4dSwclkM8zyue2kefPAczf8jJWteKhqTp6wp/fhTvdXT8f9
+         BkqQ5SDK4qZfV9rysP9i/DbtuRT5XIyVTCX1/jJG0HYhrHD13j4NyJ8IfZlBlQ5t385s
+         T4AvtxZBDX/WmfXKFyP0MHkRWI3EjTJgIFrz+FVFJKJzjqoVvr9J+BJWSa3HSohood2I
+         3diHYw4J+uWTqz0ZeJfKYE5iwDz6U23mDdx2Tmrvn8+TDTQGaLo6ntDHMvfXvwDwjbbG
+         +hOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Jayl9XfJvGWwHXVIk+ROjAbiw46GjWkW/kZXLe58Lv4=;
+        b=n3T+zJCKcKYuKI5UA+pzzeWMVRxtgaRWTiOUE4hsSMmCfr3qJxxlU3c3tySFB/v0Kg
+         91F92micV6bPbur59aaq/D3HMD6TeV0tYhDBEMNwQ1wsYP37QQZPb52b1DzxbXKanzZ8
+         jKHT0AwGOZNPMfX3EvZZMtkDdXjA56Fn+PT1fGXBqKMR/99LbLQ9ZBnlecnDOEVVs1NM
+         J+vVHwANdorDTJHgqIokDofYlO1W0CxmJYT9s9BjZaJ2lsb6yXMbX9tQmSygHzfCJIRN
+         yHqBsQN32TcfD2hM//38DlJfZ3GhKoiWcpswFx8RmhAfiZ1IeKWQgW7/L2l6SX+v1Fbf
+         IQZQ==
+X-Gm-Message-State: ANoB5pnh+8McdrE91PqWrM728sXxdTWw36ulensWoNIUodIlB4xaZTpY
+        YHxJ4RegIIw8QxxZZmyn/GAHrh6c21UKMf1wj8zwPA==
+X-Google-Smtp-Source: AA0mqf53yzdME7BXpGKNx+IMODOX54r+r4qy38o90rDlX+bZwFqBAw0uj2Qpu8QlnZv7NwlRlxzRIHcWLg3QbQFjdZQ=
+X-Received: by 2002:a81:a14d:0:b0:3b1:8de1:e2b7 with SMTP id
+ y74-20020a81a14d000000b003b18de1e2b7mr2268062ywg.188.1669222797957; Wed, 23
+ Nov 2022 08:59:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221119081252.3864249-1-davidgow@google.com> <20221119081252.3864249-2-davidgow@google.com>
+ <CAGS_qxqAUiMfKe2ksnqQtyWv0BWYLA4_uGqpu76d=Oh42mAUgQ@mail.gmail.com> <CABVgOSmfcJLs76efLe1zXgZwrSXrxKCLPAhSyx3P+WEkzZNR3A@mail.gmail.com>
+In-Reply-To: <CABVgOSmfcJLs76efLe1zXgZwrSXrxKCLPAhSyx3P+WEkzZNR3A@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Wed, 23 Nov 2022 08:59:46 -0800
+Message-ID: <CAGS_qxqCshqURWThsOj+ntBP5kXqOzxhde+A-29Pe2vhr7pBNQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] kunit: Use the static key when retrieving the
+ current test
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sadiya Kazi <sadiyakazi@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-masahiroy@kernel.org wrote on Wed, 23 Nov 2022 22:11:49 +0900:
-
-> On Sun, Nov 20, 2022 at 8:08 AM Alexander Lobakin <alobakin@pm.me> wrote:
+On Mon, Nov 21, 2022 at 7:16 PM David Gow <davidgow@google.com> wrote:
+> > Reviewed-by: Daniel Latypov <dlatypov@google.com>
 > >
-> > mtd_test.o is linked to 8(!) different test modules:
-> > =20
-> > > scripts/Makefile.build:252: ./drivers/mtd/tests/Makefile: mtd_test.o
-> > > is added to multiple modules: mtd_nandbiterrs mtd_oobtest mtd_pagetest
-> > > mtd_readtest mtd_speedtest mtd_stresstest mtd_subpagetest mtd_torture=
-test =20
+> > Looks good to me, but some small optional nits about the Documentation.
 > >
-> > Although all of them share one Kconfig option
-> > (CONFIG_MTD_TESTS), it's better to not link one object file into
-> > several modules (and/or vmlinux).
-> > Under certain circumstances, such can lead to the situation fixed by
-> > commit 637a642f5ca5 ("zstd: Fixing mixed module-builtin objects").
-> > In this particular case, there's also no need to duplicate the very
-> > same object code 8 times.
-> >
-> > Convert mtd_test.o to a standalone module which will export its
-> > functions to the rest.
-> >
-> > Fixes: a995c792280d ("mtd: tests: rename sources in order to link a hel=
-per object")
-> > Suggested-by: Masahiro Yamada <masahiroy@kernel.org> =20
->=20
-> IMHO, Reported-by might be a better fit.
->=20
->=20
-> I think they can become static inline functions in mtd_test.h
-> (at least, mtdtest_relax() is a static inline there), but I am not sure.
->=20
-> Please send this to the MTD list, and consult the maintainer(s).
+> > I'm a bit sad that the kunit_fail_current_test() macro is now a bit
+> > more complicated (has two definitions).
+>
+> I'm not too happy with it either, but I think it's worth having the
+> printf() format string checking, as well as making it possible to
+> optimise the call out (without needing LTO), and I can't think of a
+> better way of doing that at the moment.
+>
+> The only other option I can think of would be to have lots of #ifdefs
+> for the _contents_ of the functions, and that seemed more ugly to me.
 
-TBH I don't really mind. These are test modules that you insert to
-harden and profile the stack, so whatever makes the robots happy is
-fine. Anyway, they are being slowly replaced by userspace tools so we
-might eventually get rid of them.
+Sorry, I should have been more clear.
+I'm fine with it as-is.
 
-Thanks,
-Miqu=C3=A8l
+It's just a bit sad that it could have remained a single definition,
+but that would sacrifice performance.
+The version in this patch can avoid the call to
+__kunit_fail_current_test() via static key, so that's more important.
+
+>
+> > Optional: perhaps it's long enough now that we should have a comment
+> > after the #endif, i.e.
+> > #endif   /* IS_BUILTIN(CONFIG_KUNIT) */
+> >
+>
+> Makes sense to me. Will add in v3.
+>
+> > <snip>
+> >
+> > >
+> > > diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
+> > > index 2737863ef365..e70014b82350 100644
+> > > --- a/Documentation/dev-tools/kunit/usage.rst
+> > > +++ b/Documentation/dev-tools/kunit/usage.rst
+> > > @@ -625,17 +625,21 @@ as shown in next section: *Accessing The Current Test*.
+> > >  Accessing The Current Test
+> > >  --------------------------
+> > >
+> > > -In some cases, we need to call test-only code from outside the test file.
+> > > -For example, see example in section *Injecting Test-Only Code* or if
+> > > -we are providing a fake implementation of an ops struct. Using
+> > > -``kunit_test`` field in ``task_struct``, we can access it via
+> > > -``current->kunit_test``.
+> > > +In some cases, we need to call test-only code from outside the test file,
+> > > +for example,  when providing a fake implementation of a function, or to fail
+> >
+> > nit: there are two spaces after "for example, "
+> >
+> > Personal preference: I'd rather keep "For example," as the start of a
+> > new sentence.
+> >
+> > > +any current test from within an error handler.
+>
+>
+> Hmm... I found it a bit ugly to keep "For example" at the start of the
+> sentence, as we then have to stick a (possibly duplicated) verb in to
+> make it actually a sentence.
+>
+> How about:
+> In some cases, we need to call test-only code from outside the test
+> file. For example, this is useful when providing a fake implementation
+> of a function, or if we wish to fail the current test from within an
+> error handler.
+
+I see what you mean. The initial wording is good as-is, I think.
+I thought I had some ideas of how to reword it, but they don't sound
+so good when I actually write them out.
+
+>
+>
+> > > +We can do this via the ``kunit_test`` field in ``task_struct``, which we can
+> > > +access using the ``kunit_get_current_test`` function in ``kunit/test-bug.h``.
+> >
+> > Personal preference: kunit_get_current_test()
+> > IMO that would make it easier to pick up when the reader is quickly
+> > scanning over.
+> >
+>
+> Agreed, will fix in v3.
+>
+> > >
+> > > -The example below includes how to implement "mocking":
+> > > +``kunit_get_current_test`` requires KUnit be built-in to the kernel, i.e.
+> > > +``CONFIG_KUNIT=y``. It is safe to call even if KUnit is not enabled, is built as a module,
+> > > +or no test is currently running, in which case it will quickly return ``NULL``.
+> >
+> > I find this sentence a bit confusing.
+> >
+> > I think it's trying to convey that
+> > * it can be called no matter how the kernel is built or what cmdline
+> > args are given
+> > * but it doesn't work properly for CONFIG_KUNIT=m
+> > * for CONFIG_KUNIT=n, it's a static inline func that just returns NULL
+> > * when booting with `kunit.enabled=0`, it's fast (thanks to static keys)
+> >
+>
+> Yeah: that's the goal.
+>
+> > But the current wording basically says "the func requires
+> > CONFIG_KUNIT=y" then says it's safe to call it even if CONFIG_KUNIT=n.
+> > It feels a bit whiplashy.
+> >
+> > Should this be reworded to say the function can be used regardless of
+> > whether KUnit is enabled but add a `note` block about how it doesn't
+> > properly for CONFIG_KUNIT=m?
+> >
+>
+> How about:
+> ``kunit_get_current_test()`` is safe to call even if KUnit is not
+> enabled. If KUnit is not enabled (or was built as a module), or no
+> test is running, it will return NULL.
+>
+> Or:
+> ``kunit_get_current_test()`` is always available, but will only return
+> a test if KUnit is built-in to the kernel (i.e, CONFIG_KUNIT=y). In
+> all other cases, it will return NULL.
+>
+> We could add a:
+> This will compile to either a no-op or a static key, so will have
+
+*static key check?
+
+> negligible performance impact when no test is running.
+>
+> Thoughts?
+>
+> Regardless, the plan is to eventually get rid of the restriction with
+> modules, so hopefully that part of the awkwardness won't last too
+> long.
+
+I think both of these work, w/ a slight preference to the first.
+I think it more clearly explains how the function behaves, even if the
+gotcha "this function won't do what you expect with moduels" is not
+immediately apparent. But hopefully we can fix that soon so this
+becomes a moot point.
+I also think it works better for the section down below about
+kunit_fail_current_test().
+
+Up to you if you want to include the bit about the static key.
+I can see arguments either way.
+
+Daniel
+
+>
+> > > +
+> > > +The example below uses this to implement a "mock" implementation of a function, ``foo``:
+> > >
+> > >  .. code-block:: c
+> > >
+> > > -       #include <linux/sched.h> /* for current */
+> > > +       #include <kunit/test-bug.h> /* for kunit_get_current_test */
+> > >
+> > >         struct test_data {
+> > >                 int foo_result;
+> > > @@ -644,7 +648,7 @@ The example below includes how to implement "mocking":
+> > >
+> > >         static int fake_foo(int arg)
+> > >         {
+> > > -               struct kunit *test = current->kunit_test;
+> > > +               struct kunit *test = kunit_get_current_test();
+> > >                 struct test_data *test_data = test->priv;
+> > >
+> > >                 KUNIT_EXPECT_EQ(test, test_data->want_foo_called_with, arg);
+> > > @@ -675,7 +679,7 @@ Each test can have multiple resources which have string names providing the same
+> > >  flexibility as a ``priv`` member, but also, for example, allowing helper
+> > >  functions to create resources without conflicting with each other. It is also
+> > >  possible to define a clean up function for each resource, making it easy to
+> > > -avoid resource leaks. For more information, see Documentation/dev-tools/kunit/api/test.rst.
+> > > +avoid resource leaks. For more information, see Documentation/dev-tools/kunit/api/resource.rst.
+> >
+> > Oops, thanks for cleaning this up.
+> > I guess I forgot to update this when splitting out resource.rst or my
+> > change raced with the rewrite of this file.
+> >
+> > >
+> > >  Failing The Current Test
+> > >  ------------------------
+> > > @@ -703,3 +707,6 @@ structures as shown below:
+> > >         static void my_debug_function(void) { }
+> > >         #endif
+> > >
+> > > +Note that ``kunit_fail_current_test`` requires KUnit be built-in to the kernel, i.e.
+> > > +``CONFIG_KUNIT=y``. It is safe to call even if KUnit is not enabled, is built as a module,
+> > > +or no test is currently running, but will do nothing.
+> >
+> > This is the same wording as above.
+> > I think it's clearer since what it's trying to convey is simpler, so
+> > it's probably fine.
+> >
+> > But if we do end up thinking of a good way to reword the previous bit,
+> > we might want to reword it here too.
+>
+> Yeah: I wrote this one first, then copied it above, so that's why this
+> one is a bit simpler. If we come up with something better for the
+> first one, we can keep it.
+>
+> _Maybe_ if we moved things to a .. note block, then we could share
+> that between both of these sections, though that has its own issues.
