@@ -2,76 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98B00636435
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:43:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3332636448
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:44:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237763AbiKWPn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 10:43:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60450 "EHLO
+        id S238475AbiKWPoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 10:44:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238078AbiKWPnv (ORCPT
+        with ESMTP id S237959AbiKWPn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 10:43:51 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A7272108
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:43:44 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1oxruY-0006tm-Dd; Wed, 23 Nov 2022 16:43:42 +0100
-Message-ID: <038cecb9-aab2-bcd7-f003-46ca637942d8@leemhuis.info>
-Date:   Wed, 23 Nov 2022 16:43:41 +0100
+        Wed, 23 Nov 2022 10:43:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A9B32B8E;
+        Wed, 23 Nov 2022 07:43:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4589061DBF;
+        Wed, 23 Nov 2022 15:43:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EA89C433D6;
+        Wed, 23 Nov 2022 15:43:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669218237;
+        bh=StrD+dB5u8Vcvhdu1J0yzbIhWxVUSSaCEXA8q6qXH6M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EAcsGtHkQu0j8o/AsR1zQOSAMoHzYiGZzCNI192tK8toJkZFTEA0nHjzpVwOAki5W
+         56d4OXjCoFbrdSL8iyRal3OFHPP6pg859dn4/blZFzsZ6+n1KVl5o3AsCJIWfZV2WB
+         0UuOOMxX8k4XhCC8Uzw9P+V2Yzdj1gNie77riZ9riRgrYBVXGr9A0EDSKOaaprmppk
+         7BLFa/SUfGSrFTlEPOo0uHvvkIwmA3T0OE15sUzNsZ61/FJlN7P0k3CAIVwEsbYToo
+         H8WF/ULVWxmqPNEXqVK7PgU/gneXdXSopvxoaSudnfnHrqh31pfiNuZrpyXxqLhuXI
+         dfGICcT33p5AQ==
+Date:   Wed, 23 Nov 2022 15:43:46 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-watchdog@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [PATCH v2 6/9] dt-bindings: drop redundant part of title (end,
+ part three)
+Message-ID: <Y34/sh0TQqyNOrZi@sirena.org.uk>
+References: <20221121110615.97962-1-krzysztof.kozlowski@linaro.org>
+ <20221121110615.97962-7-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: Re: Regression bisected: drm/display/dp_mst: Move all payload info
- into the atomic state #forregzbot
-To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Cc:     Linux Kernel <linux-kernel@vger.kernel.org>
-References: <ghwn827862.fsf@gouders.net>
- <45ca4839-fa2a-9511-fd47-2d75fa3766cd@leemhuis.info>
-Content-Language: en-US, de-DE
-In-Reply-To: <45ca4839-fa2a-9511-fd47-2d75fa3766cd@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1669218224;d86dd60e;
-X-HE-SMSGID: 1oxruY-0006tm-Dd
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="M0yaUN06E1HOYGuo"
+Content-Disposition: inline
+In-Reply-To: <20221121110615.97962-7-krzysztof.kozlowski@linaro.org>
+X-Cookie: I'm rated PG-34!!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Note: this mail is primarily send for documentation purposes and/or for
-regzbot, my Linux kernel regression tracking bot. That's why I removed
-most or all folks from the list of recipients, but left any that looked
-like a mailing lists. These mails usually contain '#forregzbot' in the
-subject, to make them easy to spot and filter out.]
 
-On 13.11.22 10:28, Thorsten Leemhuis wrote:
-> On 10.11.22 23:32, Dirk Gouders wrote:
->>
->> I noticed a regression with Linus' current tree and bisected it to
->> 4d07b0bc403403 (drm/display/dp_mst: Move all payload info into the atomic state):
->>
->> I have two monitors connected to my laptop's USB-C port and since this
->> patch, one of the monitors remains dark.
->>
->> Please let me know if I can provide additional information that could help
->> to investigate this problem.
-> 
-> Thanks for the report. To be sure below issue doesn't fall through the
-> cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
-> tracking bot:
-> 
-> #regzbot introduced 4d07b0bc403403 ^
-> https://gitlab.freedesktop.org/drm/amd/-/issues/2171
-> #regzbot title drm: amdgpu: No payload for [MST PORT:0000000006da5d29]
-> found in mst state 00000000b0e556d6" on system resume with TBT dock
-> connected.
-> #regzbot ignore-activity
+--M0yaUN06E1HOYGuo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-#regzbot fixed-by: d60b82aa
+On Mon, Nov 21, 2022 at 12:06:12PM +0100, Krzysztof Kozlowski wrote:
+> The Devicetree bindings document does not have to say in the title that
+> it is a "binding", but instead just describe the hardware.
+
+Acked-by: Mark Brown <broonie@kernel.org>
+
+--M0yaUN06E1HOYGuo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN+P7IACgkQJNaLcl1U
+h9BvLwf+MbWgPhuuE/RNAOPtXpIBFmNsCUxYdu0csUjyJgNENFj+zdwqH6yI3/v5
+sVYRJF6Ze/c9y1Pokpk0G+MobI3H0JfEA6zRId+Uxnf65RT46OZWAqStaZipWhR+
+MqQJeau+/Wkq9EliMzXIY+Z1abRsNxFpOmxQfU6Kr85gGzubG6jqMBBQHSKS9a/3
+Deso3bTySefdyuzX9lZss2JUAvomH8WP1F3J7w/FFiBXs4r+04kkd5sboUbL40Xk
+9faUc2iAuQOUXtZ1O9P/qbpUmy+LhEMICPgGMN6SeU8G1af87tErxqa0p9c34Y35
+t/bDc74sRhfEPZZhpmCN+J7XV65OAQ==
+=yi41
+-----END PGP SIGNATURE-----
+
+--M0yaUN06E1HOYGuo--
