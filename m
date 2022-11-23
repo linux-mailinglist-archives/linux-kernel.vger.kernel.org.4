@@ -2,286 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A35635C4E
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 13:01:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDE21635C51
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 13:02:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237134AbiKWMAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 07:00:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37360 "EHLO
+        id S237168AbiKWMCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 07:02:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237133AbiKWMAp (ORCPT
+        with ESMTP id S235568AbiKWMCe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 07:00:45 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36249624A
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 04:00:44 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id s8so27820396lfc.8
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 04:00:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hcR8ovYNo2My0WUKcVnNmYC5cYpEMC0rr3gdSJ74NfU=;
-        b=ZrlPHAS+WGiK3Lav2tjX9E3L3EQhNwAGul34uyaC6bhMi4CQY5elSYO++LxtQ+rIG7
-         pynaS8fphG+u0aowuVnGAGSO308yaigyNIPmgo2h9itDgHFQKi03T7NGZl+96WAr7+k1
-         OKf6GBFSb/8U0NObV+mVI5sikProfgzcwhqJoiErqM490fCODGRBD2biWQLeX63LAIT6
-         9gHBFjNOMOc5CaeR8dEZKz+2i9v0z5qpZpEep3MVS+ZoeSAmAo3SN1wnPVS6uKXFPs71
-         fqYOZt/GYlz08sOgbf1t2FvLTMExnQPPTa0b6TK1jk+wTPp1uNOznGI4Yk9le4LNWiDs
-         vwWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hcR8ovYNo2My0WUKcVnNmYC5cYpEMC0rr3gdSJ74NfU=;
-        b=TLCDroC83hHX9dRrRPu09a9hfEkH9w2YnfqNWGW9hvrYBybRbbpMXNCqiTNDSHuWIp
-         Yq0iD/5phcZk3sK7dSjteKQ6EKSEABaPCF6gee1WC11ESBKlES9pikfRcP5nbJ3y2gYU
-         hIXDPY2qRDzLvyYSFG5r+FZz/DyszAYEEyKm+fsGBQmGnJK/093HwVmRRah4DtYcMD41
-         1EseJA3FLGnJ4127NDJjHBraPoVvFe5Jkss1QwesU3PotorYvnk5G/nHsP//4HHtvdgy
-         2zatYOsvjp+EH4nl4l5MmX1BgiiAEa6bkarVIwUqY9CsPHuP6XpusE/CtiplWcvroJdt
-         kshg==
-X-Gm-Message-State: ANoB5pl4U1IWzBbCfTUPPSNspUxYc7EXIUS36MZcdIxj/SRL1wzbLUPq
-        jPLhO4c/UCW3SGPKdy0wJEEBOODMDM4=
-X-Google-Smtp-Source: AA0mqf5fQTrrGiUBe6YgPLonglnqFdXNQLBvN4RKRcZqL01u41/3wbm9cmGiL8uHKDcF+fq8QsecuA==
-X-Received: by 2002:a05:6512:68b:b0:4a8:d2b7:ed5c with SMTP id t11-20020a056512068b00b004a8d2b7ed5cmr10789411lfe.434.1669204842474;
-        Wed, 23 Nov 2022 04:00:42 -0800 (PST)
-Received: from fedora ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id o7-20020ac25e27000000b004b48c977d8dsm2892067lfg.125.2022.11.23.04.00.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 04:00:41 -0800 (PST)
-Date:   Wed, 23 Nov 2022 14:00:38 +0200
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] regulator: bd718x7: Use dev_err_probe()
-Message-ID: <fee54c2d04bb41b51381e31523f9ed31575206d2.1669203610.git.mazziesaccount@gmail.com>
-References: <cover.1669203610.git.mazziesaccount@gmail.com>
+        Wed, 23 Nov 2022 07:02:34 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A63FE60;
+        Wed, 23 Nov 2022 04:02:30 -0800 (PST)
+Date:   Wed, 23 Nov 2022 13:02:27 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669204948;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GBqote1BzkExg7MDXCmwtPPCsS+a19i+SHqr+lLca80=;
+        b=y0HTq8Y1ZNK8Wtx/oprXpMyJ2N9mqtEFNwZt5LxOb1F9SRbDb3Rhf5nS6KvVLSK2yr+chq
+        UAyUIMyIP5VBrhr2JJnGC3jFzBXDOjNtD8ugbm4sj8C/CFYUJFowIFBG8f9BuwC9O+oqlq
+        LWhr8pvgWkG7kZsIIEKSW+d4BuIGoFCa8Qgf4jXlGE1OFJgFrPJBBtd6ww4aXRoKaoNoyo
+        dl/u7FQPSCSzXHWVDTOl+c2uoYrzmGN/gfKHXj4EgtGiHmOa9gtB3YFnQpjugeSpTfRHZK
+        u90AdOsj9cTnYrqs1rXagGk5UviSpZ6RHlUBx5Kb7CQSJU4MdSeyXZBmTM36nQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669204948;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GBqote1BzkExg7MDXCmwtPPCsS+a19i+SHqr+lLca80=;
+        b=+dQr51Q/aNU9Zi95upJOwnukC6/3AeHNq7llh46X/GY39Cd4rhXeE02hvdPBokTfSOXfey
+        JuOTX+74Hbe2BNBQ==
+From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-bluetooth@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Subject: Re: [patch V2 15/17] timers: Provide timer_shutdown[_sync]()
+In-Reply-To: <20221122173648.962476045@linutronix.de>
+Message-ID: <3779da12-6da5-8f6b-ec93-f8d52e38a40@linutronix.de>
+References: <20221122171312.191765396@linutronix.de> <20221122173648.962476045@linutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="+iqplJKpcdzleyKU"
-Content-Disposition: inline
-In-Reply-To: <cover.1669203610.git.mazziesaccount@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 22 Nov 2022, Thomas Gleixner wrote:
 
---+iqplJKpcdzleyKU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> @@ -1605,6 +1629,48 @@ int timer_delete_sync(struct timer_list
+>  }
+>  EXPORT_SYMBOL(timer_delete_sync);
+>  
+> +/**
+> + * timer_shutdown_sync - Shutdown a timer and prevent rearming
+> + * @timer: The timer to be shutdown
+> + *
+> + * When the function returns it is guaranteed that:
+> + *   - @timer is not queued
+> + *   - The callback function of @timer is not running
+> + *   - @timer cannot be enqueued again. Any attempt to rearm
+> + *     @timer is silently ignored.
+> + *
+> + * See timer_delete_sync() for synchronization rules.
+> + *
+> + * This function is useful for final teardown of an infrastructure where
+> + * the timer is subject to a circular dependency problem.
+> + *
+> + * A common pattern for this is a timer and a workqueue where the timer can
+> + * schedule work and work can arm the timer. On shutdown the workqueue must
+> + * be destroyed and the timer must be prevented from rearming. Unless the
+> + * code has conditionals like 'if (mything->in_shutdown)' to prevent that
+> + * there is no way to get this correct with timer_delete_sync().
+> + *
+> + * timer_shutdown_sync() is solving the problem. The correct ordering of
+> + * calls in this case is:
+> + *
+> + *	timer_shutdown_sync(&mything->timer);
+> + *	workqueue_destroy(&mything->workqueue);
+> + *
+> + * After this 'mything' can be safely freed.
+> + *
+> + * This obviously requires that the timer is not required to be functional
+> + * for the rest of the shutdown operation.
 
-The dev_err_probe() has (at least) following benefits over dev_err()
-when printing an error print for a failed function call at a device
-driver probe:
-        - Omit error level print if error is 'EPRBE_DEFER'
-        - Standardized print format for returned error
-        - return the error value allowing shortening calls like:
+NIT... Maybe the first requires could be replaced by
+assumes/expects/presupposes to prevent double use of required?
 
-        if (ret) {
-                dev_err(...);
-                return ret;
-        }
+Thanks,
 
-        to
+	Anna-Maria
 
-        if (ret)
-                return dev_err_probe(...);
-
-Convert the ROHM BD718x7 regulator driver to use the dev_err_probe() when
-returned error is not hard-coded constant.
-
-NOTE:
-This commit also changes the error handling path to return immediately
-=66rom a spot where the error is spotted instead of using a single point
-of exit.
-
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-
----
-For many years I have preferred a single point of exit in a function
-when managing it does not require any big tricks. In my experience a
-single point of exit makes resource-leaking and lock releasing much less
-error prone. Eg, consider mistakes like:
-
-=2E..
-mutex_lock(&mtx)
-=2E..
-if (err)
-	return err;
-=2E..
-mutex_unlock(&mtx);
-
-return 0;
-
-Vs.
-
-=2E..
-mutex_lock(&mtx)
-=2E..
-if (err)
-	goto err_out;
-=2E..
-
-err_out:
-mutex_unlock(&mtx);
-
-return err;
-
-I still think a single point of exit is often a good idea. However, I am
-slowly adapting to thought that the single point of exit does not really
-play a big role in bd718x7 regulator probe and using dev_err_probe()
-allows us to avoid the extra {} after condition... So, maybe it indeed
-is a time for me to ditch the goto here. Please, let me know if you
-think othervice :)
----
- drivers/regulator/bd718x7-regulator.c | 51 ++++++++++-----------------
- 1 file changed, 19 insertions(+), 32 deletions(-)
-
-diff --git a/drivers/regulator/bd718x7-regulator.c b/drivers/regulator/bd71=
-8x7-regulator.c
-index d161b0026f33..894fab0d53d0 100644
---- a/drivers/regulator/bd718x7-regulator.c
-+++ b/drivers/regulator/bd718x7-regulator.c
-@@ -1706,20 +1706,17 @@ static int bd718xx_probe(struct platform_device *pd=
-ev)
- 		break;
- 	default:
- 		dev_err(&pdev->dev, "Unsupported chip type\n");
--		err =3D -EINVAL;
--		goto err;
-+		return -EINVAL;
- 	}
-=20
- 	/* Register LOCK release */
- 	err =3D regmap_update_bits(regmap, BD718XX_REG_REGLOCK,
- 				 (REGLOCK_PWRSEQ | REGLOCK_VREG), 0);
--	if (err) {
--		dev_err(&pdev->dev, "Failed to unlock PMIC (%d)\n", err);
--		goto err;
--	} else {
--		dev_dbg(&pdev->dev, "Unlocked lock register 0x%x\n",
--			BD718XX_REG_REGLOCK);
--	}
-+	if (err)
-+		return dev_err_probe(&pdev->dev, err, "Failed to unlock PMIC\n");
-+
-+	dev_dbg(&pdev->dev, "Unlocked lock register 0x%x\n",
-+		BD718XX_REG_REGLOCK);
-=20
- 	use_snvs =3D of_property_read_bool(pdev->dev.parent->of_node,
- 					 "rohm,reset-snvs-powered");
-@@ -1736,13 +1733,11 @@ static int bd718xx_probe(struct platform_device *pd=
-ev)
- 					 BD718XX_WDOG_POWEROFF_MASK |
- 					 BD718XX_KEY_L_POWEROFF_MASK,
- 					 BD718XX_POWOFF_TO_RDY);
--		if (err) {
--			dev_err(&pdev->dev, "Failed to change reset target\n");
--			goto err;
--		} else {
--			dev_dbg(&pdev->dev,
--				"Changed all resets from SVNS to READY\n");
--		}
-+		if (err)
-+			return dev_err_probe(&pdev->dev, err,
-+					     "Failed to change reset target\n");
-+
-+		dev_dbg(&pdev->dev, "Changed all resets from SVNS to READY\n");
- 	}
-=20
- 	config.dev =3D pdev->dev.parent;
-@@ -1778,13 +1773,10 @@ static int bd718xx_probe(struct platform_device *pd=
-ev)
- 			desc->ops =3D swops[i];
-=20
- 		rdev =3D devm_regulator_register(&pdev->dev, desc, &config);
--		if (IS_ERR(rdev)) {
--			dev_err(&pdev->dev,
--				"failed to register %s regulator\n",
--				desc->name);
--			err =3D PTR_ERR(rdev);
--			goto err;
--		}
-+		if (IS_ERR(rdev))
-+			return dev_err_probe(&pdev->dev, PTR_ERR(rdev),
-+					     "failed to register %s regulator\n",
-+					     desc->name);
-=20
- 		/*
- 		 * Regulator register gets the regulator constraints and
-@@ -1807,28 +1799,23 @@ static int bd718xx_probe(struct platform_device *pd=
-ev)
- 		    !rdev->constraints->boot_on)) {
- 			err =3D regmap_update_bits(regmap, r->init.reg,
- 						 r->init.mask, r->init.val);
--			if (err) {
--				dev_err(&pdev->dev,
-+			if (err)
-+				return dev_err_probe(&pdev->dev, err,
- 					"Failed to take control for (%s)\n",
- 					desc->name);
--				goto err;
--			}
- 		}
- 		for (j =3D 0; j < r->additional_init_amnt; j++) {
- 			err =3D regmap_update_bits(regmap,
- 						 r->additional_inits[j].reg,
- 						 r->additional_inits[j].mask,
- 						 r->additional_inits[j].val);
--			if (err) {
--				dev_err(&pdev->dev,
-+			if (err)
-+				return dev_err_probe(&pdev->dev, err,
- 					"Buck (%s) initialization failed\n",
- 					desc->name);
--				goto err;
--			}
- 		}
- 	}
-=20
--err:
- 	return err;
- }
-=20
---=20
-2.38.1
-
-
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---+iqplJKpcdzleyKU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmN+C2YACgkQeFA3/03a
-ocUWRgf/fEgNu7YYaMh5NmKk50Btq9kWI28dfnEKIa8PQAhJ6IePYvwfwAP7p4Ke
-mr+XktaBV0CQi2e4yENTKuZMk1XKGY4mHuO7rdMNYrbR6EqWmia0ijZwai4FAi9Q
-2Iga1IYdAHtuU5RX4yuFr8E8r7ZzppxBU4RjslIMt7MB8/kl/xqSdJWaSVLs0oLb
-CQ4bftM8X5LHsRoQ3swbJIRQVBt3FsZEokDARIgaUSogykSd8SoOCY9/usThzH6Q
-004f5ugNtR5XwwYyXvkDOJo4DRgcA8i3yrTZ/YpVLJMZwEBVkagnlZ18NnZqXpn6
-tjyl8BWn58Gthij524kFUh71QlhkaA==
-=47Ei
------END PGP SIGNATURE-----
-
---+iqplJKpcdzleyKU--
