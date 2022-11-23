@@ -2,106 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9CF66360A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:56:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D13C0636097
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:56:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236376AbiKWN4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 08:56:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41906 "EHLO
+        id S237322AbiKWNzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 08:55:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236766AbiKWN4V (ORCPT
+        with ESMTP id S236669AbiKWNz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 08:56:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C0485A38
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:50:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669211408;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HVSKF0YEcutduq/n8rv06TUhVfzj6CviBu1s4EiRloE=;
-        b=NB/wrhErex25DrMHSyDkGdvRKywffiK237jBryG7oHCJNBQSnSoLoEY04KuNYDL93Qx91F
-        GmF/OqZZ6K2UVSCORdsl8ECOXOKPvYVabQa3oaJY049osg0IeTU6/rlVS2onJT2qWELkkM
-        1j3dIPVJAO7LQQvVyD+ahJZ1Vawx0Mc=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-350-S2KSHkjANkyV0IukBB-UoA-1; Wed, 23 Nov 2022 08:50:07 -0500
-X-MC-Unique: S2KSHkjANkyV0IukBB-UoA-1
-Received: by mail-ej1-f71.google.com with SMTP id hb35-20020a170907162300b007ae6746f240so9906175ejc.12
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:50:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HVSKF0YEcutduq/n8rv06TUhVfzj6CviBu1s4EiRloE=;
-        b=TnQKbyzDbJVvPPWxypyt9V8Mi5rQmXByhtx8gC4xBbw5gSGuEB5inDOgnkiYczhyee
-         +h4qBR+oB9Q9boXaoSPOgO4njXb2V55KgyGHUv4Lj4w/LijPl0tScCnrZSrDxT2nLFRT
-         XrhdHFHb6in8NINY6oYANSwEOpvwGrX1UnVQvPhPhH8vlyrkMLUbSOttUlfqyFFT5ulp
-         u4yW0JpOr91pBZtNsOb5B3dVSH1MzIwpB8COsU+jcylTWnVMaP/LnLTAD565k9tdSdWw
-         BbVyDarcHl+BaGRYl/Hu1e36J3Ie8Alu3lUopeZXWPfwHPPs0PBlIj+B81rGDW52s3D5
-         jusw==
-X-Gm-Message-State: ANoB5pn1ycx9biN5PUMZ9OhL55nx0837AT7th48yjRl2tOQpMB32jdjm
-        TD/rQJ8hMxi8pTHlhzNUYtuWDJadfXXPJD9wGAqGeABrOyPzyPtFOG1zKbnX7ucyMI5e+fZqxr1
-        4E0bpPXFioLfZVGhG56k6FW3bw7A299cSiqXTgWoY
-X-Received: by 2002:a17:906:16d4:b0:7b9:f0fd:47b1 with SMTP id t20-20020a17090616d400b007b9f0fd47b1mr2402060ejd.462.1669211405873;
-        Wed, 23 Nov 2022 05:50:05 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7TcDEb99zr9yX79Qu7+GTLJM7BVi7LV+y79ONebrgHXbpuPdta2f2Ab9rl1yKFfhdFHqVDQHahSKGbYN9YYVY=
-X-Received: by 2002:a17:906:16d4:b0:7b9:f0fd:47b1 with SMTP id
- t20-20020a17090616d400b007b9f0fd47b1mr2402053ejd.462.1669211405724; Wed, 23
- Nov 2022 05:50:05 -0800 (PST)
+        Wed, 23 Nov 2022 08:55:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3A77721D;
+        Wed, 23 Nov 2022 05:49:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 06C6BB81FFA;
+        Wed, 23 Nov 2022 13:49:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E1A3C433D7;
+        Wed, 23 Nov 2022 13:49:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669211396;
+        bh=tOKgVpDb4YGEFJ3vnIjCVjTP0R5hACprgjJE1++ks5o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JdrwUSVjuZIOmtlcCA9eWQ8bGMGKmJ2H4NWLVqLwjbAeh7G1wTGKaZ+nUkHeT+YEP
+         VWY36FquxoghtFAlf9Vu0gunxbiPiqfLCWumwDRyaQw1I0Km0o61koKlLyVsxHVu/C
+         2fRzcSt6wrKssbPtUlR6llOIF30W6JF4jNRPnK/c3nTK52Bh2IP/5sUpJ60aOSGocL
+         2eXWf5a5lgJcMMw9gibzI8DokDn5RiGsCYU8YAf2Cw3p1CktQRf2sOmRsAgg0ytOKp
+         PnP8rPvmr5ZGBa8QgYcmAye48D+FhT/x9yDkSTcsBdUfwPm67Twnl7FLuDgJgyENQk
+         wmuRvK0dlAy9g==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 15D4E4034E; Wed, 23 Nov 2022 10:49:54 -0300 (-03)
+Date:   Wed, 23 Nov 2022 10:49:54 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Martin KaFai Lau <martin.lau@linux.dev>
+Cc:     Namhyung Kim <namhyung@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Song Liu <song@kernel.org>,
+        bpf@vger.kernel.org, Blake Jones <blakejones@google.com>,
+        Chris Li <chriscli@google.com>, Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [PATCH] perf lock contention: Do not use BPF task local storage
+Message-ID: <Y34lAgJzG1DvUFXw@kernel.org>
+References: <20221118190109.1512674-1-namhyung@kernel.org>
+ <dea8c3c5-0739-58c1-9a88-b989878a9b8f@linux.dev>
 MIME-Version: 1.0
-References: <20221123065319.56756-1-zhengyongjun3@huawei.com> <CAK-6q+gWK3g-g+6ox240hEmVQu2xjq4ZfxGdO9AHoqKG-5Myfw@mail.gmail.com>
-In-Reply-To: <CAK-6q+gWK3g-g+6ox240hEmVQu2xjq4ZfxGdO9AHoqKG-5Myfw@mail.gmail.com>
-From:   Alexander Aring <aahringo@redhat.com>
-Date:   Wed, 23 Nov 2022 08:49:54 -0500
-Message-ID: <CAK-6q+gb074RyyfVnbkeQWiY7FDQf0j-jwJ0LfmM8ojafwy7-w@mail.gmail.com>
-Subject: Re: [Cluster-devel] [PATCH -next] fs: dlm: Fix build error without DEBUG_LOCK_ALLOC
-To:     Zheng Yongjun <zhengyongjun3@huawei.com>
-Cc:     cluster-devel@redhat.com, linux-kernel@vger.kernel.org,
-        zhengbin13@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dea8c3c5-0739-58c1-9a88-b989878a9b8f@linux.dev>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Em Mon, Nov 21, 2022 at 09:32:56AM -0800, Martin KaFai Lau escreveu:
+> On 11/18/22 11:01 AM, Namhyung Kim wrote:
+> > It caused some troubles when a lock inside kmalloc is contended
+> > because task local storage would allocate memory using kmalloc.
+> > It'd create a recusion and even crash in my system.
+> > 
+> > There could be a couple of workarounds but I think the simplest
+> > one is to use a pre-allocated hash map.
+> 
+> Acked-by: Martin KaFai Lau <martin.lau@kernel.org>
 
-On Wed, Nov 23, 2022 at 8:39 AM Alexander Aring <aahringo@redhat.com> wrote:
->
-> Hi,
->
-> On Wed, Nov 23, 2022 at 8:37 AM Zheng Yongjun <zhengyongjun3@huawei.com> wrote:
-> >
-> > If CONFIG_DLM is y, DEBUG_LOCK_ALLOC is n, building fails:
-> >
-> > fs/dlm/lowcomms.o: In function `lowcomms_queue_rwork':
-> > lowcomms.c:(.text+0x2ac): undefined reference to `lockdep_is_held'
-> > lowcomms.c:(.text+0x308): undefined reference to `lockdep_is_held'
-> > fs/dlm/lowcomms.o: In function `lowcomms_queue_swork':
-> > lowcomms.c:(.text+0x3e0): undefined reference to `lockdep_is_held'
-> > fs/dlm/lowcomms.o: In function `restore_callbacks':
-> > lowcomms.c:(.text+0xd8c): undefined reference to `lockdep_is_held'
-> > lowcomms.c:(.text+0xdcc): undefined reference to `lockdep_is_held'
-> >
-> > Make DLM select DEBUG_LOCK_ALLOC to fix this.
-> >
->
-> Thanks, there is a different approach already in dlm/next and I think
-> we don't want to have dlm selecting a debug option.
+Thanks, applied.
 
-btw. I am curious why lockdep defines a prototype and not an
-implementation for it if LOCKDEP is not set. In my opinion there
-should be some no-op functions for it that the compiler puts it out if
-it's not set. Then we don't end in #idefs inside the implementation...
+- Arnaldo
 
-- Alex
+ 
+> > We could fix the task local storage to use the safe BPF allocator,
+> > but it takes time so let's change this until it happens actually.
+> 
+> I also got another report on the kfree_rcu path.  I am also looking into
+> this direction on using the BPF allocator.
 
+-- 
+
+- Arnaldo
