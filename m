@@ -2,130 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41067636343
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:21:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00476636354
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 16:23:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237718AbiKWPVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 10:21:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58062 "EHLO
+        id S238178AbiKWPW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 10:22:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238772AbiKWPVc (ORCPT
+        with ESMTP id S238028AbiKWPWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 10:21:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A98C920AB;
-        Wed, 23 Nov 2022 07:21:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 84969B820DD;
-        Wed, 23 Nov 2022 15:21:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6CACC433C1;
-        Wed, 23 Nov 2022 15:21:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669216867;
-        bh=XQZ/g+Sw4U+xIS3JiKRjNmg5QYe4GG7CLFMNcWE+7dg=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=Xp+Pc2frUVEZdshdbKf7x6iMGbOpkBFfpY28RhPayp1ot+dsTqVpETaB/8g7/9X0M
-         1iSwoJBLwa8h/vIhH2Zb9YfpoeNF1QjyT8xs6fdfPeH2s2LxcGl8CUuiO9li8x7ce2
-         FcA/1M+uHvUp820PhCldzR4cOjtaRks1R+EW6aRscTIajm9EBwDFTK71YvBescokKt
-         +9WYLWtiTlBCsXUfWq/sNqf4dKjr0LyB8yVaqeZ2gND1Dh4pwJes9qIct1t0a8VRX1
-         66bMDwWlnBBlVKorhQyIdHUTPy0sowjK1lQXKve+7+KXqmY1hJ8Q1e8Awz1x53w0Sd
-         iJljBQ6lqT2jg==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        =?utf-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
-        Ilja Van Sprundel <ivansprundel@ioactive.com>,
-        Joseph Tartaro <joseph.tartaro@ioactive.com>
-Subject: Re: [PATCH] USB: disable all RNDIS protocol drivers
-References: <20221123124620.1387499-1-gregkh@linuxfoundation.org>
-Date:   Wed, 23 Nov 2022 17:21:01 +0200
-In-Reply-To: <20221123124620.1387499-1-gregkh@linuxfoundation.org> (Greg
-        Kroah-Hartman's message of "Wed, 23 Nov 2022 13:46:20 +0100")
-Message-ID: <87o7sxofxe.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Wed, 23 Nov 2022 10:22:33 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7BD1134
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 07:22:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669216950; x=1700752950;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=0NIejNQpV8quIAUKsiRNP8gc7z0BU9lL3ortd8Zz/VQ=;
+  b=CEFI7BCMlSlVnj2YlznAvRxu+O24jP+fg0mq0LIE7Od/HU6ujPbp/N5Y
+   9qM29uV3jN19Vksrutzs+dyoSaFQmVw4HtQhtXJ4c+FJm6h00X1NBMusY
+   mN9s16qhcLVstJjQNb+ilCnhI8nio2Zw8Rpiyt+bLoHCnap7tH2LYQ0lW
+   Xkmqr56/DUk9yCi3J74hrjWEXAq7BY4wup6hdCycuQ/8pa7wWV7HRgYWE
+   NS8G6YlWhOtX5DZhs9BBUO4eDciqYVW5bSSa+sr3SrhGF7G5qZ/KNnTGA
+   sxF/SgrxDS98TbNA2CtZ2hMhhew2HBDXYyvC67dXpL+fjBeoa9jHk08dU
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="294478018"
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="294478018"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 07:22:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="886987956"
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="886987956"
+Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 23 Nov 2022 07:22:24 -0800
+Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oxrZw-0002qh-0v;
+        Wed, 23 Nov 2022 15:22:24 +0000
+Date:   Wed, 23 Nov 2022 23:21:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/urgent] BUILD SUCCESS
+ 4dbd6a3e90e03130973688fd79e19425f720d999
+Message-ID: <637e3a89.Zt8Syc8jB/xFgTPO%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
+branch HEAD: 4dbd6a3e90e03130973688fd79e19425f720d999  x86/ioremap: Fix page aligned size calculation in __ioremap_caller()
 
-> The Microsoft RNDIS protocol is, as designed, insecure and vulnerable on
-> any system that uses it with untrusted hosts or devices.  Because the
-> protocol is impossible to make secure, just disable all rndis drivers to
-> prevent anyone from using them again.
->
-> Windows only needed this for XP and newer systems, Windows systems older
-> than that can use the normal USB class protocols instead, which do not
-> have these problems.
->
-> Android has had this disabled for many years so there should not be any
-> real systems that still need this.
->
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Kalle Valo <kvalo@kernel.org>
-> Cc: Oleksij Rempel <linux@rempel-privat.de>
-> Cc: "Maciej =C5=BBenczykowski" <maze@google.com>
-> Cc: Neil Armstrong <neil.armstrong@linaro.org>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>
-> Cc: Jacopo Mondi <jacopo@jmondi.org>
-> Cc: "=C5=81ukasz Stelmach" <l.stelmach@samsung.com>
-> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Cc: linux-usb@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-wireless@vger.kernel.org
-> Reported-by: Ilja Van Sprundel <ivansprundel@ioactive.com>
-> Reported-by: Joseph Tartaro <joseph.tartaro@ioactive.com>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
-> Note, I'll submit patches removing the individual drivers for later, but
-> that is more complex as unwinding the interaction between the CDC
-> networking and RNDIS drivers is tricky.  For now, let's just disable all
-> of this code as it is not secure.
->
-> I can take this through the USB tree if the networking maintainers have
-> no objection.  I thought I had done this months ago, when the last round
-> of "there are bugs in the protocol!" reports happened at the end of
-> 2021, but forgot to do so, my fault.
->
->  drivers/net/usb/Kconfig           | 1 +
->  drivers/net/wireless/Kconfig      | 1 +
+elapsed time: 1661m
 
-For wireless:
+configs tested: 80
+configs skipped: 2
 
-Acked-by: Kalle Valo <kvalo@kernel.org>
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Feel free to take this via your tree.
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+s390                                defconfig
+s390                             allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+mips                             allyesconfig
+sh                               allmodconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-syz
+i386                 randconfig-a011-20221121
+i386                 randconfig-a013-20221121
+i386                 randconfig-a012-20221121
+i386                 randconfig-a014-20221121
+i386                 randconfig-a015-20221121
+i386                 randconfig-a016-20221121
+ia64                             allmodconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+x86_64               randconfig-a012-20221121
+x86_64               randconfig-a011-20221121
+m68k                             allmodconfig
+x86_64               randconfig-a013-20221121
+arc                              allyesconfig
+alpha                            allyesconfig
+x86_64               randconfig-a016-20221121
+x86_64               randconfig-a015-20221121
+m68k                             allyesconfig
+x86_64               randconfig-a014-20221121
+i386                                defconfig
+arc                  randconfig-r043-20221122
+i386                             allyesconfig
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+arc                  randconfig-r043-20221120
+riscv                randconfig-r042-20221121
+arc                  randconfig-r043-20221121
+s390                 randconfig-r044-20221121
+arm                                 defconfig
+arm                              allyesconfig
+arm64                            allyesconfig
 
---=20
-https://patchwork.kernel.org/project/linux-wireless/list/
+clang tested configs:
+x86_64               randconfig-a001-20221121
+x86_64               randconfig-a003-20221121
+x86_64               randconfig-a002-20221121
+x86_64               randconfig-a004-20221121
+x86_64               randconfig-a005-20221121
+x86_64               randconfig-a006-20221121
+hexagon              randconfig-r041-20221122
+hexagon              randconfig-r045-20221122
+s390                 randconfig-r044-20221122
+riscv                randconfig-r042-20221122
+i386                 randconfig-a001-20221121
+i386                 randconfig-a003-20221121
+i386                 randconfig-a002-20221121
+i386                 randconfig-a004-20221121
+i386                 randconfig-a005-20221121
+i386                 randconfig-a006-20221121
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64                        randconfig-a005
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+hexagon              randconfig-r041-20221120
+hexagon              randconfig-r041-20221121
+hexagon              randconfig-r045-20221120
+hexagon              randconfig-r045-20221121
+riscv                randconfig-r042-20221120
+s390                 randconfig-r044-20221120
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
-hes
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
