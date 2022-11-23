@@ -2,89 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FFBE635EDE
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:08:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C06C9635ED8
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:08:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238523AbiKWM6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 07:58:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48636 "EHLO
+        id S238615AbiKWM7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 07:59:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238390AbiKWMzo (ORCPT
+        with ESMTP id S238722AbiKWM5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 07:55:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066A1905BD;
-        Wed, 23 Nov 2022 04:45:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC08361CB0;
-        Wed, 23 Nov 2022 12:45:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74450C433B5;
-        Wed, 23 Nov 2022 12:45:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669207515;
-        bh=w6mkg3CJVGUBppMGilNVuML5L/InIe8jp+CznxbpSko=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BiVl0kaUR3vkPZ+9XSHLxwN1RGrOKaqmgM935Kd02j3phliHystIhdD2rrs5tRdI7
-         e8RiBdkmg/dUy+OAh0u2icrJNh5aFwiNmw0o75wWATe0VfX2TCM38CwbTRCORHqBf5
-         WvI6s1rDP1wqIW3uIOQdOc6hXZTJ37pc0AC0TatJV+fAzfgcQOltAN5UNvJ0ertr1t
-         uxBGXUWfZARPaz9z4XYnLAFcogE8GcTY001Sufgp1rVKtlRBbz0Rw9kqV45L/eqVlS
-         wQcc9zZ4T8vlf0HyyvXUdnn/oxpS1o5+VwWRcOwr40+ybHE+ra7M+9NpZHl7rxBnQw
-         LBbU4jq9b2RUw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Keith Busch <kbusch@kernel.org>, Mike Snitzer <snitzer@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>,
-        agk@redhat.com, dm-devel@redhat.com
-Subject: [PATCH AUTOSEL 4.19 09/11] dm-log-writes: set dma_alignment limit in io_hints
-Date:   Wed, 23 Nov 2022 07:44:54 -0500
-Message-Id: <20221123124458.266492-9-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221123124458.266492-1-sashal@kernel.org>
-References: <20221123124458.266492-1-sashal@kernel.org>
+        Wed, 23 Nov 2022 07:57:23 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344AB238;
+        Wed, 23 Nov 2022 04:45:59 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4NHLK31bmvz9xFQl;
+        Wed, 23 Nov 2022 20:38:47 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwAnDvrOFX5ju+aJAA--.57342S2;
+        Wed, 23 Nov 2022 13:45:14 +0100 (CET)
+Message-ID: <22f47b9d2cade322f9037133b0940640423f9590.camel@huaweicloud.com>
+Subject: Re: [PATCH v5 0/6] evm: Prepare for moving to the LSM infrastructure
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, mark@fasheh.com,
+        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com
+Cc:     ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Wed, 23 Nov 2022 13:44:57 +0100
+In-Reply-To: <ccf1937cfdcc5bb28dcc7a58785dd0c65d974597.camel@linux.ibm.com>
+References: <20221123095202.599252-1-roberto.sassu@huaweicloud.com>
+         <ccf1937cfdcc5bb28dcc7a58785dd0c65d974597.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwAnDvrOFX5ju+aJAA--.57342S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KrWkAFyrZr18Zw1rAr4xJFb_yoW8tr48pF
+        WfKa4YqFs5tF1xJ3s7Ar4xZ3yUC3yfGw4UKa4DCrykZ3Z0grySgryS9FWFva4kWrsYga1q
+        qF4jv34kJws8ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
+        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+        AIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU13rcDUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAFBF1jj4HJfQABsG
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Keith Busch <kbusch@kernel.org>
+On Wed, 2022-11-23 at 07:28 -0500, Mimi Zohar wrote:
+> Hi Roberto,
+> 
+> On Wed, 2022-11-23 at 10:51 +0100, Roberto Sassu wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > One of the challenges that must be tackled to move IMA and EVM to the LSM
+> > infrastructure is to ensure that EVM is capable to correctly handle
+> > multiple stacked LSMs providing an xattr at file creation. At the moment,
+> > there are few issues that would prevent a correct integration. This patch
+> > set aims at solving them.
+> 
+> Let's take a step back and understand the purpose of this patch set. 
+> Regardless of whether IMA and EVM are moved to the "LSM
+> infrastructure", EVM needs to support per LSM xattrs.  A side affect is
+> the removal of the security_old_inode_init_security hook.  This patch
+> set cover letter and patch descriptions should be limited to EVM
+> support for per LSM (multiple) xattrs.  The motivation, concerns, and
+> problems of making IMA and EVM LSMs will be documented in the patch set
+> that actual makes them LSMs.  Please remove all references to "move IMA
+> and EVM to the LSM infrastructure".
 
-[ Upstream commit 50a893359cd2643ee1afc96eedc9e7084cab49fa ]
+Hi Mimi
 
-This device mapper needs bio vectors to be sized and memory aligned to
-the logical block size. Set the minimum required queue limit
-accordingly.
+ok, will do.
 
-Signed-off-by: Keith Busch <kbusch@kernel.org>
-Reviewed-by: Mike Snitzer <snitzer@kernel.org>
-Link: https://lore.kernel.org/r/20221110184501.2451620-6-kbusch@meta.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/md/dm-log-writes.c | 1 +
- 1 file changed, 1 insertion(+)
+> When EVM was upstreamed, there were filesystem limitations on the
+> number and size of the extended attributes.  In addition there were
+> performance concerns, which resulted in staging the LSM, IMA and EVM
+> xattrs, before calling initxattrs to write them at the same time.  With
+> this patch set, not only are per LSM xattrs supported, but multiple per
+> LSM xattrs are supported as well.  Have the size limitation concerns
+> been addressed by the different filesystems?   If not, then at minimum
+> this patch set needs to at least mention it and the possible
+> ramifications.
 
-diff --git a/drivers/md/dm-log-writes.c b/drivers/md/dm-log-writes.c
-index e549392e0ea5..1857abd676c4 100644
---- a/drivers/md/dm-log-writes.c
-+++ b/drivers/md/dm-log-writes.c
-@@ -897,6 +897,7 @@ static void log_writes_io_hints(struct dm_target *ti, struct queue_limits *limit
- 	limits->logical_block_size = bdev_logical_block_size(lc->dev->bdev);
- 	limits->physical_block_size = bdev_physical_block_size(lc->dev->bdev);
- 	limits->io_min = limits->physical_block_size;
-+	limits->dma_alignment = limits->logical_block_size - 1;
- }
- 
- #if IS_ENABLED(CONFIG_DAX_DRIVER)
--- 
-2.35.1
+With your patch, 9d8f13ba3f483 ("security: new
+security_inode_init_security API adds function callback") you made it
+possible to set multiple xattrs at inode creation time.
+
+This patch set pushes further to the limits, as there could be more
+xattrs to be added to the inode. I will mention that.
+
+If there are too many xattrs, I guess the only solution would be to use
+less LSMs, or a different filesystem. The per filesystem limit could be
+increased separately case by case.
+
+Thanks
+
+Roberto
 
