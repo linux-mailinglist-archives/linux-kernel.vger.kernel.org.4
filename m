@@ -2,89 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C894636842
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:04:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0983636812
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 19:02:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239168AbiKWSEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 13:04:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54238 "EHLO
+        id S239458AbiKWSCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 13:02:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239421AbiKWSCc (ORCPT
+        with ESMTP id S239343AbiKWSCR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 13:02:32 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14960BC5;
-        Wed, 23 Nov 2022 10:02:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669226550; x=1700762550;
-  h=date:from:to:subject:message-id:references:mime-version:
-   in-reply-to;
-  bh=kivik+kPuM3WnltAjgW4IIt2Bf+IrOZ9iPY+LvRUtIY=;
-  b=atOR9RDdxv5QHCMd3CqJ3e/fg2Ebw9oBKNWDhChmLu8IwthaoZUWXgCV
-   CbSAoDG0TJGNfDdB2++GWS3qSkrbAVF0Qv+rudi/sMQyx2bW5exhyXpbg
-   9YPyDPlDTRsrgy5RmYp6SI6UU/8m/ZTtpA1bEiT8OipWW3PSWyL29DR6M
-   3Wok81PgSJCckBtIMfp0drCwKQ2vY2liiDN8hKIfCIo/12iTePUOydXbQ
-   UYE1fN9qN171oIjtAMzt47rh9L1ejL+4USfvpd6HExl2up4Abkgfy4l/O
-   OGluBKzb9afNHg2LdezgJ91t+FKFU7mCDspjdJgc2QcRhC6ruxzAjESYb
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="294516108"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="294516108"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 10:02:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="730865542"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="730865542"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by FMSMGA003.fm.intel.com with ESMTP; 23 Nov 2022 10:01:59 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oxu4L-00GOVq-1P;
-        Wed, 23 Nov 2022 20:01:57 +0200
-Date:   Wed, 23 Nov 2022 20:01:57 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] media: ipu3-cio2: Don't dereference fwnode handle
-Message-ID: <Y35gFZ7aK9JIrUWy@smile.fi.intel.com>
-References: <20221121152704.30180-1-andriy.shevchenko@linux.intel.com>
+        Wed, 23 Nov 2022 13:02:17 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5011893CC7;
+        Wed, 23 Nov 2022 10:02:17 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id y14-20020a17090a2b4e00b002189a1b84d4so2526037pjc.2;
+        Wed, 23 Nov 2022 10:02:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/XCyVoN2CehHx7RpmSNkS0ILYMPbGDge+MWsh49BZP0=;
+        b=RA6XwERAQ9oFGKRK9FwW2+BAXVuDXEcWwE98pPTTLsUP3d/uoo+JL//dsBAHnjn4YX
+         r41ok0+UGjJ+K1LT5J3SdMujw8e0BulQwi3Lcb3Cp/GjmqYJqO+VDT9wAJbV6d2rnYju
+         WGmkHN/N3eh3XepR7sYmi6x7gzb9c6dF8l5NxzN+k5SNSS8FLJHyg1lVrz/g/wzFltnh
+         Im0n53P1/kfTNowa3pf9fMXGAqer8r/eGnrCNNalZx1GRcURXPsVDNkgjBkgqeEE1Roa
+         r7RGzZB0EBZB5KcoNvu04H65LpGejG3zpHEBgWxJ3xdOiFHXNdAquYcJMz4e7Gb2nJBJ
+         7rfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=/XCyVoN2CehHx7RpmSNkS0ILYMPbGDge+MWsh49BZP0=;
+        b=e6dLkJ91kdtIrZ9W4/ilx+sXFmQpIFW+eIWnVluRccnPgYzpAwAyQNK4FfamAFVCXD
+         2xnQyZo8krq0baUDbZKbrqCqeWKRd6PD29SD1AOsWxbroEN/b1OXtr4BE+RVkMsRCkdw
+         zJM7IHrvm8fUiOqpRsXrIrr7g/uSR21oSmLMI6S8ao0pFjcr58qD1P1pvuygkIufPEKH
+         s1B8NQ692n8qbFAQMAfSofTaqLLqqQ+u63tN996qNQY4ayI8BRWxwESKRevfRwno3Vgc
+         Pi96Y8wUOjXYLpnTB+65RvH32KAhmRphUm6/74HMLfD6CqhBj/8fYCkkM7SLd70BYw/L
+         k1sg==
+X-Gm-Message-State: ANoB5pnQWiWIRqDivTc3GoytDahG87olscMZq9tb6T1Qph548Vgn5soc
+        podUpHuoBe7IO7VODbZ/eGU=
+X-Google-Smtp-Source: AA0mqf59GDhKSyTePcmHXcmPXPe4IwSZ8QKzZBWKzqgEWXanTT2rXLZgYVVcUunvq1wvsC06q3C0fg==
+X-Received: by 2002:a17:902:6847:b0:183:6555:38ef with SMTP id f7-20020a170902684700b00183655538efmr13403292pln.157.1669226536694;
+        Wed, 23 Nov 2022 10:02:16 -0800 (PST)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:a80:c968:76:254b:3790])
+        by smtp.gmail.com with ESMTPSA id i15-20020a655b8f000000b00470275c8d6dsm10792364pgr.10.2022.11.23.10.02.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 10:02:16 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        Athira Jajeev <atrajeev@linux.vnet.ibm.com>
+Subject: [PATCH 04/15] perf stat: Use scnprintf() in prepare_interval()
+Date:   Wed, 23 Nov 2022 10:01:57 -0800
+Message-Id: <20221123180208.2068936-5-namhyung@kernel.org>
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
+In-Reply-To: <20221123180208.2068936-1-namhyung@kernel.org>
+References: <20221123180208.2068936-1-namhyung@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221121152704.30180-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Cc: Petr, Sergey
+It should not use sprintf() anymore.  Let's pass the buffer size and use the
+safer scnprintf() instead.
 
-On Mon, Nov 21, 2022 at 05:27:01PM +0200, Andy Shevchenko wrote:
-> Use acpi_fwnode_handle() instead of dereferencing an fwnode handle directly,
-> which is a better coding practice.
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/util/stat-display.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-It appears that this series depends on fd070e8ceb90 ("test_printf: Refactor
-fwnode_pointer() to make it more readable") which is in PRINTK tree.
-
-Sakari, Mauro, if you are okay to route this via that tree, can we get your
-tags for that? Otherwise we need to postpone this till v6.2-rc1 (but I would
-like to decrease the chances to appear a new user of the to be removed API).
-
+diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
+index 15c88b9b5aa3..744b7a40f59a 100644
+--- a/tools/perf/util/stat-display.c
++++ b/tools/perf/util/stat-display.c
+@@ -1073,23 +1073,23 @@ static void print_metric_headers(struct perf_stat_config *config,
+ }
+ 
+ static void prepare_interval(struct perf_stat_config *config,
+-			     char *prefix, struct timespec *ts)
++			     char *prefix, size_t len, struct timespec *ts)
+ {
+ 	if (config->iostat_run)
+ 		return;
+ 
+ 	if (config->csv_output)
+-		sprintf(prefix, "%lu.%09lu%s", (unsigned long) ts->tv_sec,
+-				 ts->tv_nsec, config->csv_sep);
++		scnprintf(prefix, len, "%lu.%09lu%s",
++			  (unsigned long) ts->tv_sec, ts->tv_nsec, config->csv_sep);
+ 	else if (!config->json_output)
+-		sprintf(prefix, "%6lu.%09lu ", (unsigned long) ts->tv_sec,
+-				 ts->tv_nsec);
++		scnprintf(prefix, len, "%6lu.%09lu ",
++			  (unsigned long) ts->tv_sec, ts->tv_nsec);
+ 	else if (!config->metric_only)
+-		sprintf(prefix, "{\"interval\" : %lu.%09lu, ", (unsigned long)
+-				 ts->tv_sec, ts->tv_nsec);
++		scnprintf(prefix, len, "{\"interval\" : %lu.%09lu, ",
++			  (unsigned long) ts->tv_sec, ts->tv_nsec);
+ 	else
+-		sprintf(prefix, "{\"interval\" : %lu.%09lu}", (unsigned long)
+-				 ts->tv_sec, ts->tv_nsec);
++		scnprintf(prefix, len, "{\"interval\" : %lu.%09lu}",
++			  (unsigned long) ts->tv_sec, ts->tv_nsec);
+ }
+ 
+ static void print_header_interval_std(struct perf_stat_config *config,
+@@ -1390,7 +1390,7 @@ void evlist__print_counters(struct evlist *evlist, struct perf_stat_config *conf
+ 
+ 	if (interval) {
+ 		prefix = buf;
+-		prepare_interval(config, prefix, ts);
++		prepare_interval(config, buf, sizeof(buf), ts);
+ 	}
+ 
+ 	print_header(config, _target, evlist, argc, argv);
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.38.1.584.g0f3c55d4c2-goog
 
