@@ -2,269 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C99635842
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:54:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56E4C635854
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 10:55:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236643AbiKWJwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 04:52:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46326 "EHLO
+        id S236138AbiKWJzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 04:55:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236320AbiKWJvt (ORCPT
+        with ESMTP id S236804AbiKWJyB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 04:51:49 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EBE710FC7
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:48:52 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C7DDD21D31;
-        Wed, 23 Nov 2022 09:48:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1669196930; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HXnIT/Zuv/T9a6KrJB+Xh6C3fIWPtdkO8jUxlxm68QQ=;
-        b=YhJf3I9D2zC2cBY/PyUxqamizkk+xOpt6DDPWggzNjfKGw/ztZj5ZVRlvdtxNqbMkh9ldD
-        SmvEKDBl1Keh7KFoepi+1nN3cEJ3muFktHYiUHjQjr50yC422Q9yo+hOU8KwVwYUd03Jn8
-        y2G7uW+nq66IaOqyRfwEEnpNM6/YPHY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1669196930;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HXnIT/Zuv/T9a6KrJB+Xh6C3fIWPtdkO8jUxlxm68QQ=;
-        b=whDE5RtofSTF6F482RYSjyyVqlWmnxwr7p+bvoSr38u605fihA3+M8n8SzqQOzanUP+5/I
-        DT/HmwimlAIJCaDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 867AA13AE7;
-        Wed, 23 Nov 2022 09:48:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id yN/6H4LsfWOVGQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 23 Nov 2022 09:48:50 +0000
-Message-ID: <88abafb9-a961-a217-a95c-744258498722@suse.cz>
-Date:   Wed, 23 Nov 2022 10:48:50 +0100
+        Wed, 23 Nov 2022 04:54:01 -0500
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2561143
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:50:08 -0800 (PST)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-14263779059so19408576fac.1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 01:50:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=EoPeY+PE31bAfhQJFJXc4TC9uEyRv6R7JK5+NRqPVRI=;
+        b=bUFX93Jrgev0Jhvjdl3Y5J73mPlHpLkzykKfhp8A2I95yg7NAwB1WPxQ3eJWLDhjkW
+         iVG0Ed9rofgvyFibtDtdapqMUWS0+cm3wHvHvPxg1BGYguLHjI7q/kUNvL5ZAz0v5U6Y
+         9iKkNC97zp3TSx5b1fKH/wVVwxB/CSf9bgWxR7Ix6+a7Wfzdv+ZIAtCSuXPL52tqybMK
+         YgCUtG7Xxd95scBx8kP/0x/RD9ewg5gIxHAqo2o1BrMavMO/ZqqMZCY+j5dMgtDTs/mf
+         k7mRQT3+zdjF44BpN0vPilEGPbmzq0xctUw0DYufke45cbQqa4KIm2yaCcUP2cV756tD
+         pzVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EoPeY+PE31bAfhQJFJXc4TC9uEyRv6R7JK5+NRqPVRI=;
+        b=v+d6MFODerueBBf5ZnrjIfBG7DK/lxlHcUga+f3O9/KQ76MWfsUhtGyxEvJfu5M1v5
+         dpOYoebB6AduxXlFQGtNvlZZLYt3SpGP+P+j12yB9wwYhL4DFZZuC1xDEDV6zb2gCxml
+         yeDNJNfJoaUhCTtHJ5p8DxSB3LnXlMVs9YRuhClYKCGWJILYwu/AJh+NEg05Mi/Dvrn7
+         o+83oqalk7yxSui5ELM7O7+4+1cipwT+zGZcZvQUwOIXXrV3mCEg4TAAhSXZhVmheEya
+         Ca1BNV1uTlI8HDrjiqCm3xQFTa0AxHXHTbkbL5EL2BTX5i2hDlR5NCvD4Shq2q2tm4V5
+         H5bA==
+X-Gm-Message-State: ANoB5pkzeotbxtCZtlDSi8r5f6Q2aXPWAFhC6UuEWVGwUaVm6c2/c4Rj
+        6nX7jleRuilJs11o9ujaONhz+vAX/d2qrOmpQmdUxg==
+X-Google-Smtp-Source: AA0mqf7sBDCWWfRmb9hJycUjetavtCM+dUV8ZfIexs3YkbFjmac6AD3038Jc++C9WD6S+Jq4JrDljG54caTrNpONAlM=
+X-Received: by 2002:a05:6870:b689:b0:13c:7d1c:5108 with SMTP id
+ cy9-20020a056870b68900b0013c7d1c5108mr5669101oab.282.1669197007313; Wed, 23
+ Nov 2022 01:50:07 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v7 0/3] mm/slub: extend redzone check for kmalloc objects
-Content-Language: en-US
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>
-References: <20221021032405.1825078-1-feng.tang@intel.com>
- <f9da0749-c109-1251-8489-de3cfb50ab24@suse.cz> <Y24H998aujvYXjkV@feng-clx>
- <Y3sc1G6WEKte4Awd@feng-clx>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <Y3sc1G6WEKte4Awd@feng-clx>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000fad77705e7fd40fb@google.com> <000000000000e7513905ebf4346f@google.com>
+In-Reply-To: <000000000000e7513905ebf4346f@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Wed, 23 Nov 2022 10:49:56 +0100
+Message-ID: <CACT4Y+aHHV-+ECUux1=DR11P3Xd-apJN7ALE4GsOxq-MBGo-Lg@mail.gmail.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in task_work_run (2)
+To:     syzbot <syzbot+9228d6098455bb209ec8@syzkaller.appspotmail.com>,
+        peterz@infradead.org, Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Marco Elver <elver@google.com>
+Cc:     syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/21/22 07:38, Feng Tang wrote:
-> On Fri, Nov 11, 2022 at 04:29:43PM +0800, Tang, Feng wrote:
->> On Fri, Nov 11, 2022 at 04:16:32PM +0800, Vlastimil Babka wrote:
->> > > 	for (shift = 3; shift <= 12; shift++) {
->> > > 		size = 1 << shift;
->> > > 		buf = kmalloc(size + 4, GFP_KERNEL);
->> > > 		/* We have 96, 196 kmalloc size, which is not power of 2 */
->> > > 		if (size == 64 || size == 128)
->> > > 			oob_size = 16;
->> > > 		else
->> > > 			oob_size = size - 4;
->> > > 		memset(buf + size + 4, 0xee, oob_size);
->> > > 		kfree(buf);
->> > > 	}
->> > 
->> > Sounds like a new slub_kunit test would be useful? :) doesn't need to be
->> > that exhaustive wrt all sizes, we could just pick one and check that a write
->> > beyond requested kmalloc size is detected?
->> 
->> Just git-grepped out slub_kunit.c :), will try to add a case to it.
->> I'll also check if the case will also be caught by other sanitizer
->> tools like kasan/kfence etc.
-> 
-> Just checked, kasan has already has API to disable kasan check
-> temporarily, and I did see sometime kfence can chime in (4 out of 178
-> runs) so we need skip kfenced address.
-> 
-> Here is the draft patch, thanks!
-> 
-> From 45bf8d0072e532f43063dbda44c6bb3adcc388b6 Mon Sep 17 00:00:00 2001
-> From: Feng Tang <feng.tang@intel.com>
-> Date: Mon, 21 Nov 2022 13:17:11 +0800
-> Subject: [PATCH] mm/slub, kunit: Add a case for kmalloc redzone functionality
-> 
-> kmalloc redzone check for slub has been merged, and it's better to add
-> a kunit case for it, which is inspired by a real-world case as described
-> in commit 120ee599b5bf ("staging: octeon-usb: prevent memory corruption"):
-> 
-> "
->   octeon-hcd will crash the kernel when SLOB is used. This usually happens
->   after the 18-byte control transfer when a device descriptor is read.
->   The DMA engine is always transfering full 32-bit words and if the
->   transfer is shorter, some random garbage appears after the buffer.
->   The problem is not visible with SLUB since it rounds up the allocations
->   to word boundary, and the extra bytes will go undetected.
-> "
-> Suggested-by: Vlastimil Babka <vbabka@suse.cz>
-> Signed-off-by: Feng Tang <feng.tang@intel.com>
-> ---
->  lib/slub_kunit.c | 42 ++++++++++++++++++++++++++++++++++++++++++
->  mm/slab.h        | 15 +++++++++++++++
->  mm/slub.c        |  4 ++--
->  3 files changed, 59 insertions(+), 2 deletions(-)
-> 
-> diff --git a/lib/slub_kunit.c b/lib/slub_kunit.c
-> index 7a0564d7cb7a..0653eed19bff 100644
-> --- a/lib/slub_kunit.c
-> +++ b/lib/slub_kunit.c
-> @@ -120,6 +120,47 @@ static void test_clobber_redzone_free(struct kunit *test)
->  	kmem_cache_destroy(s);
->  }
->  
-> +
-> +/*
-> + * This case is simulating a real world case, that a device driver
-> + * requests 18 bytes buffer, but the device HW has obligation to
-> + * operate on 32 bits granularity, so it may actually read or write
-> + * 20 bytes to the buffer, and possibly pollute 2 extra bytes after
-> + * the requested space.
-> + */
-> +static void test_kmalloc_redzone_access(struct kunit *test)
-> +{
-> +	u8 *p;
-> +
-> +	if (!is_slub_debug_flags_enabled(SLAB_STORE_USER | SLAB_RED_ZONE))
-> +		kunit_skip(test, "Test required SLAB_STORE_USER & SLAB_RED_ZONE flags on");
+On Wed, 26 Oct 2022 at 20:29, syzbot
+<syzbot+9228d6098455bb209ec8@syzkaller.appspotmail.com> wrote:
+>
+> syzbot has found a reproducer for the following issue on:
+>
+> HEAD commit:    88619e77b33d net: stmmac: rk3588: Allow multiple gmac cont..
+> git tree:       bpf
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1646d6f2880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=a66c6c673fb555e8
+> dashboard link: https://syzkaller.appspot.com/bug?extid=9228d6098455bb209ec8
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12bc425e880000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1126516e880000
+>
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/f8435d5c2c21/disk-88619e77.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/551d8a013e81/vmlinux-88619e77.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/7d3f5c29064d/bzImage-88619e77.xz
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+9228d6098455bb209ec8@syzkaller.appspotmail.com
 
-Hrmm, this is not great. I didn't realize that we're testing kmalloc()
-specific code, so we can't simply create test-specific caches as in the
-other kunit tests.
-What if we did create a fake kmalloc cache with the necessary flags and used
-it with kmalloc_trace() instead of kmalloc()? We would be bypassing the
-kmalloc() inline layer so theoretically orig_size handling bugs could be
-introduced there that the test wouldn't catch, but I think that's rather
-unlikely. Importantly we would still be stressing the orig_size saving and
-the adjusted redzone check using this info.
+Should perf task work hold a reference to the event to prevent this?
 
-> +	p = kmalloc(18, GFP_KERNEL);
-> +
-> +#ifdef CONFIG_KFENCE
-> +	{
-> +		int max_retry = 10;
-> +
-> +		while (is_kfence_address(p) && max_retry--) {
-> +			kfree(p);
-> +			p = kmalloc(18, GFP_KERNEL);
-> +		}
-> +
-> +		if (!max_retry)
-> +			kunit_skip(test, "Fail to get non-kfenced memory");
-> +	}
-> +#endif
-
-With the test-specific cache we could also pass SLAB_SKIP_KFENCE there to
-handle this. BTW, don't all slub kunit test need to do that in fact?
-
-Thanks,
-Vlastimil
-
-> +
-> +	kasan_disable_current();
-> +
-> +	p[18] = 0xab;
-> +	p[19] = 0xab;
-> +	kfree(p);
-> +
-> +	KUNIT_EXPECT_EQ(test, 3, slab_errors);
-> +	kasan_enable_current();
-> +}
-> +
->  static int test_init(struct kunit *test)
->  {
->  	slab_errors = 0;
-> @@ -139,6 +180,7 @@ static struct kunit_case test_cases[] = {
->  #endif
->  
->  	KUNIT_CASE(test_clobber_redzone_free),
-> +	KUNIT_CASE(test_kmalloc_redzone_access),
->  	{}
->  };
->  
-> diff --git a/mm/slab.h b/mm/slab.h
-> index e3b3231af742..72f7a85e01ab 100644
-> --- a/mm/slab.h
-> +++ b/mm/slab.h
-> @@ -413,6 +413,17 @@ static inline bool __slub_debug_enabled(void)
->  {
->  	return static_branch_unlikely(&slub_debug_enabled);
->  }
-> +
-> +extern slab_flags_t slub_debug;
-> +
-> +/*
-> + * This should only be used in post-boot time, after 'slub_debug'
-> + * gets initialized.
-> + */
-> +static inline bool is_slub_debug_flags_enabled(slab_flags_t flags)
-> +{
-> +	return (slub_debug & flags) == flags;
-> +}
->  #else
->  static inline void print_tracking(struct kmem_cache *s, void *object)
->  {
-> @@ -421,6 +432,10 @@ static inline bool __slub_debug_enabled(void)
->  {
->  	return false;
->  }
-> +static inline bool is_slub_debug_flags_enabled(slab_flags_t flags)
-> +{
-> +	return false;
-> +}
->  #endif
->  
->  /*
-> diff --git a/mm/slub.c b/mm/slub.c
-> index a24b71041b26..6ef72b8f6291 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -638,9 +638,9 @@ static inline void *restore_red_left(struct kmem_cache *s, void *p)
->   * Debug settings:
->   */
->  #if defined(CONFIG_SLUB_DEBUG_ON)
-> -static slab_flags_t slub_debug = DEBUG_DEFAULT_FLAGS;
-> +slab_flags_t slub_debug = DEBUG_DEFAULT_FLAGS;
->  #else
-> -static slab_flags_t slub_debug;
-> +slab_flags_t slub_debug;
->  #endif
->  
->  static char *slub_debug_string;
-
+> ==================================================================
+> BUG: KASAN: use-after-free in task_work_run+0x1b0/0x270 kernel/task_work.c:178
+> Read of size 8 at addr ffff8880752b1c18 by task syz-executor361/3766
+>
+> CPU: 0 PID: 3766 Comm: syz-executor361 Not tainted 6.1.0-rc2-syzkaller-00073-g88619e77b33d #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>  print_address_description mm/kasan/report.c:284 [inline]
+>  print_report+0x15e/0x45d mm/kasan/report.c:395
+>  kasan_report+0xbb/0x1f0 mm/kasan/report.c:495
+>  task_work_run+0x1b0/0x270 kernel/task_work.c:178
+>  exit_task_work include/linux/task_work.h:38 [inline]
+>  do_exit+0xb35/0x2a20 kernel/exit.c:820
+>  do_group_exit+0xd0/0x2a0 kernel/exit.c:950
+>  get_signal+0x21a1/0x2430 kernel/signal.c:2858
+>  arch_do_signal_or_restart+0x82/0x2300 arch/x86/kernel/signal.c:869
+>  exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+>  exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:203
+>  __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+>  syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:296
+>  do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> RIP: 0033:0x7fb9f674b089
+> Code: Unable to access opcode bytes at 0x7fb9f674b05f.
+> RSP: 002b:00007fb9f66fb318 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
+> RAX: 0000000000000001 RBX: 00007fb9f67da1a8 RCX: 00007fb9f674b089
+> RDX: 00000000000f4240 RSI: 0000000000000081 RDI: 00007fb9f67da1ac
+> RBP: 00007fb9f67da1a0 R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000246 R12: 0000003100000400
+> R13: 00007fff658570cf R14: 00007fb9f66fb400 R15: 0000000000022000
+>  </TASK>
+>
+> Allocated by task 3766:
+>  kasan_save_stack+0x1e/0x40 mm/kasan/common.c:45
+>  kasan_set_track+0x21/0x30 mm/kasan/common.c:52
+>  __kasan_slab_alloc+0x7e/0x80 mm/kasan/common.c:325
+>  kasan_slab_alloc include/linux/kasan.h:201 [inline]
+>  slab_post_alloc_hook mm/slab.h:737 [inline]
+>  slab_alloc_node mm/slub.c:3398 [inline]
+>  kmem_cache_alloc_node+0x2fc/0x400 mm/slub.c:3443
+>  perf_event_alloc.part.0+0x69/0x3bc0 kernel/events/core.c:11625
+>  perf_event_alloc kernel/events/core.c:12174 [inline]
+>  __do_sys_perf_event_open+0x4ae/0x32d0 kernel/events/core.c:12272
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>
+> Freed by task 0:
+>  kasan_save_stack+0x1e/0x40 mm/kasan/common.c:45
+>  kasan_set_track+0x21/0x30 mm/kasan/common.c:52
+>  kasan_save_free_info+0x2a/0x40 mm/kasan/generic.c:511
+>  ____kasan_slab_free mm/kasan/common.c:236 [inline]
+>  ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
+>  kasan_slab_free include/linux/kasan.h:177 [inline]
+>  slab_free_hook mm/slub.c:1724 [inline]
+>  slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1750
+>  slab_free mm/slub.c:3661 [inline]
+>  kmem_cache_free+0xea/0x5b0 mm/slub.c:3683
+>  rcu_do_batch kernel/rcu/tree.c:2250 [inline]
+>  rcu_core+0x81f/0x1980 kernel/rcu/tree.c:2510
+>  __do_softirq+0x1f7/0xad8 kernel/softirq.c:571
+>
+> Last potentially related work creation:
+>  kasan_save_stack+0x1e/0x40 mm/kasan/common.c:45
+>  __kasan_record_aux_stack+0xbc/0xd0 mm/kasan/generic.c:481
+>  call_rcu+0x99/0x820 kernel/rcu/tree.c:2798
+>  put_event kernel/events/core.c:5095 [inline]
+>  perf_event_release_kernel+0x6f2/0x940 kernel/events/core.c:5210
+>  perf_release+0x33/0x40 kernel/events/core.c:5220
+>  __fput+0x27c/0xa90 fs/file_table.c:320
+>  task_work_run+0x16b/0x270 kernel/task_work.c:179
+>  resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+>  exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
+>  exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:203
+>  __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+>  syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:296
+>  do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>
+> Second to last potentially related work creation:
+>  kasan_save_stack+0x1e/0x40 mm/kasan/common.c:45
+>  __kasan_record_aux_stack+0xbc/0xd0 mm/kasan/generic.c:481
+>  task_work_add+0x7b/0x2c0 kernel/task_work.c:48
+>  event_sched_out+0xe35/0x1190 kernel/events/core.c:2294
+>  __perf_remove_from_context+0x87/0xc40 kernel/events/core.c:2359
+>  event_function+0x29e/0x3e0 kernel/events/core.c:254
+>  remote_function kernel/events/core.c:92 [inline]
+>  remote_function+0x11e/0x1a0 kernel/events/core.c:72
+>  __flush_smp_call_function_queue+0x205/0x9a0 kernel/smp.c:630
+>  __sysvec_call_function_single+0xca/0x4d0 arch/x86/kernel/smp.c:248
+>  sysvec_call_function_single+0x8e/0xc0 arch/x86/kernel/smp.c:243
+>  asm_sysvec_call_function_single+0x16/0x20 arch/x86/include/asm/idtentry.h:657
+>
+> The buggy address belongs to the object at ffff8880752b17c0
+>  which belongs to the cache perf_event of size 1392
+> The buggy address is located 1112 bytes inside of
+>  1392-byte region [ffff8880752b17c0, ffff8880752b1d30)
+>
+> The buggy address belongs to the physical page:
+> page:ffffea0001d4ac00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x752b0
+> head:ffffea0001d4ac00 order:3 compound_mapcount:0 compound_pincount:0
+> flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+> raw: 00fff00000010200 0000000000000000 dead000000000122 ffff8880118c23c0
+> raw: 0000000000000000 0000000080150015 00000001ffffffff 0000000000000000
+> page dumped because: kasan: bad access detected
+> page_owner tracks the page as allocated
+> page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 3754, tgid 3753 (syz-executor361), ts 58662170660, free_ts 58383135648
+>  prep_new_page mm/page_alloc.c:2538 [inline]
+>  get_page_from_freelist+0x10b5/0x2d50 mm/page_alloc.c:4287
+>  __alloc_pages+0x1c7/0x5a0 mm/page_alloc.c:5554
+>  alloc_pages+0x1a6/0x270 mm/mempolicy.c:2285
+>  alloc_slab_page mm/slub.c:1794 [inline]
+>  allocate_slab+0x213/0x300 mm/slub.c:1939
+>  new_slab mm/slub.c:1992 [inline]
+>  ___slab_alloc+0xa91/0x1400 mm/slub.c:3180
+>  __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3279
+>  slab_alloc_node mm/slub.c:3364 [inline]
+>  kmem_cache_alloc_node+0x189/0x400 mm/slub.c:3443
+>  perf_event_alloc.part.0+0x69/0x3bc0 kernel/events/core.c:11625
+>  perf_event_alloc kernel/events/core.c:12174 [inline]
+>  __do_sys_perf_event_open+0x4ae/0x32d0 kernel/events/core.c:12272
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> page last free stack trace:
+>  reset_page_owner include/linux/page_owner.h:24 [inline]
+>  free_pages_prepare mm/page_alloc.c:1458 [inline]
+>  free_pcp_prepare+0x65c/0xd90 mm/page_alloc.c:1508
+>  free_unref_page_prepare mm/page_alloc.c:3386 [inline]
+>  free_unref_page+0x19/0x4d0 mm/page_alloc.c:3482
+>  __unfreeze_partials+0x17c/0x1a0 mm/slub.c:2586
+>  qlink_free mm/kasan/quarantine.c:168 [inline]
+>  qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:187
+>  kasan_quarantine_reduce+0x180/0x200 mm/kasan/quarantine.c:294
+>  __kasan_slab_alloc+0x62/0x80 mm/kasan/common.c:302
+>  kasan_slab_alloc include/linux/kasan.h:201 [inline]
+>  slab_post_alloc_hook mm/slab.h:737 [inline]
+>  slab_alloc_node mm/slub.c:3398 [inline]
+>  slab_alloc mm/slub.c:3406 [inline]
+>  __kmem_cache_alloc_lru mm/slub.c:3413 [inline]
+>  kmem_cache_alloc+0x2ac/0x3c0 mm/slub.c:3422
+>  kmem_cache_zalloc include/linux/slab.h:702 [inline]
+>  alloc_buffer_head+0x20/0x140 fs/buffer.c:2899
+>  alloc_page_buffers+0x280/0x790 fs/buffer.c:829
+>  create_empty_buffers+0x2c/0xf20 fs/buffer.c:1543
+>  ext4_block_write_begin+0x10a7/0x15f0 fs/ext4/inode.c:1074
+>  ext4_da_write_begin+0x44c/0xb50 fs/ext4/inode.c:3003
+>  generic_perform_write+0x252/0x570 mm/filemap.c:3753
+>  ext4_buffered_write_iter+0x15b/0x460 fs/ext4/file.c:285
+>  ext4_file_write_iter+0x8b8/0x16e0 fs/ext4/file.c:700
+>  __kernel_write_iter+0x25e/0x730 fs/read_write.c:517
+>
+> Memory state around the buggy address:
+>  ffff8880752b1b00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>  ffff8880752b1b80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> >ffff8880752b1c00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>                             ^
+>  ffff8880752b1c80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>  ffff8880752b1d00: fb fb fb fb fb fb fc fc fc fc fc fc fc fc fc fc
+> ==================================================================
+>
