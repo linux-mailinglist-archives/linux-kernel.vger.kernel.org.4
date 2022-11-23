@@ -2,117 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF193634DD7
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 03:27:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4363634DD2
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 03:26:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235468AbiKWC1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Nov 2022 21:27:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43886 "EHLO
+        id S235550AbiKWC0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Nov 2022 21:26:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235331AbiKWC1j (ORCPT
+        with ESMTP id S234134AbiKWC0T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Nov 2022 21:27:39 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D89312ADC;
-        Tue, 22 Nov 2022 18:27:38 -0800 (PST)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NH4gK37slzqScy;
-        Wed, 23 Nov 2022 10:23:41 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 23 Nov 2022 10:27:36 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 23 Nov
- 2022 10:27:35 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <andriy.shevchenko@linux.intel.com>, <djrscally@gmail.com>,
-        <heikki.krogerus@linux.intel.com>, <sakari.ailus@linux.intel.com>,
-        <gregkh@linuxfoundation.org>, <rafael@kernel.org>
-Subject: [PATCH v3] device property: fix of node refcount leak in fwnode_graph_get_next_endpoint()
-Date:   Wed, 23 Nov 2022 10:25:42 +0800
-Message-ID: <20221123022542.2999510-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 22 Nov 2022 21:26:19 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71DFDDB879;
+        Tue, 22 Nov 2022 18:26:18 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id 7so19405978ybp.13;
+        Tue, 22 Nov 2022 18:26:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=00RzDuciGC3lT3xwhCdi5LokzQVvWdDHLPqjXqGdFJg=;
+        b=XxOYWYfkLXZKqUD3n+fJDAFgrClq2Sb81DA9yBIghAtY0oN4Nicw54fBJN26uBoMAW
+         CGE2l0OYqyl+K9YgzLCMSLDmPTBonACWL1AQ5Up02om+CQMp1m9X6OHp2UQGg1ZoJNDm
+         Gzk4QLk6AWIvfTz+i+IWzkn7gG94jmKX0BAJI/VKczV+onDlpPyEZSVe/XX5/qoS8r5i
+         zF9LRUyS0/9vEXBOXQuIV3vLk6ajTk73xwa83CRhfT7AyZQkEQulpme3Z+a++WxExI0e
+         TCDYAL/8MldvAoBL6L6IFvTle63L4kzodOdmgc8aEoxGPbGRslThdQ2XdvF6Rwm561RZ
+         zJJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=00RzDuciGC3lT3xwhCdi5LokzQVvWdDHLPqjXqGdFJg=;
+        b=pbL1jYAuFbyu410YlNfDVoDxctVrMwjJJAuagngBoM4RK6B7sIxp4U/9eFlUCYqGwV
+         cGauLETFMlaOXsxRYI28S0DqPVBJu0ttQ+hrH40kyJ3hQeXgIMruP7CblWaA9/mTMmhT
+         ceLFNAS0rQKbEaZ/4IowSoUKwSPtx+foJa7Kj6K8KtnnLgXqpmxQaKTJ3PeDXvHrCTGU
+         n63d3hlsELZvrvqo8+ptp06ZWVpLJOF790Px502x9z9ihIwtUj69aLsjmZNdP2GYFqWi
+         D0DW2EKfJdaohaKgb6xvJH32mI5kI8NWo2D1LHwHPBKIQaSVT3C44V9kgkolb0ztnMpt
+         Jw4A==
+X-Gm-Message-State: ANoB5plrwFPQas1KFGPLARigGBiBY2RAQFoL3ZcZ9t2GzZv2sFXa4zzF
+        kYMLw6oqTqSEkGoEbYtjRsDyn44JL0k7W1Na2YY=
+X-Google-Smtp-Source: AA0mqf477e8qpxV1bYLLR0R8Ks97SHy8PTkHSXaEkM6HfXKb5dxC5qoWucYbvDF6OuQ91KCwyLIaUcmFQhpCw1GYqmA=
+X-Received: by 2002:a25:e70f:0:b0:6ef:aa80:9083 with SMTP id
+ e15-20020a25e70f000000b006efaa809083mr2100761ybh.407.1669170377646; Tue, 22
+ Nov 2022 18:26:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221017202451.4951-1-vishal.moola@gmail.com> <20221017202451.4951-15-vishal.moola@gmail.com>
+ <9c01bb74-97b3-d1c0-6a5f-dc8b11113e1a@kernel.org> <CAOzc2pweRFtsUj65=U-N-+ASf3cQybwMuABoVB+ciHzD1gKWhQ@mail.gmail.com>
+In-Reply-To: <CAOzc2pweRFtsUj65=U-N-+ASf3cQybwMuABoVB+ciHzD1gKWhQ@mail.gmail.com>
+From:   Vishal Moola <vishal.moola@gmail.com>
+Date:   Tue, 22 Nov 2022 18:26:05 -0800
+Message-ID: <CAOzc2pzoG1CN3Bpx5oe37GwRv71TpTQmFH6m58kTqOmeW7KLOw@mail.gmail.com>
+Subject: Re: [f2fs-dev] [PATCH v3 14/23] f2fs: Convert f2fs_write_cache_pages()
+ to use filemap_get_folios_tag()
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
+        fengnan chang <fengnanchang@gmail.com>,
+        linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 'parent' returned by fwnode_graph_get_port_parent()
-with refcount incremented when 'prev' is not NULL, it
-needs be put when finish using it.
+On Mon, Nov 14, 2022 at 1:38 PM Vishal Moola <vishal.moola@gmail.com> wrote:
+>
+> On Sun, Nov 13, 2022 at 11:02 PM Chao Yu <chao@kernel.org> wrote:
+> >
+> > On 2022/10/18 4:24, Vishal Moola (Oracle) wrote:
+> > > Converted the function to use a folio_batch instead of pagevec. This is in
+> > > preparation for the removal of find_get_pages_range_tag().
+> > >
+> > > Also modified f2fs_all_cluster_page_ready to take in a folio_batch instead
+> > > of pagevec. This does NOT support large folios. The function currently
+> >
+> > Vishal,
+> >
+> > It looks this patch tries to revert Fengnan's change:
+> >
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=01fc4b9a6ed8eacb64e5609bab7ac963e1c7e486
+> >
+> > How about doing some tests to evaluate its performance effect?
+>
+> Yeah I'll play around with it to see how much of a difference it makes.
 
-Because the parent is const, introduce a new variable to
-store the returned fwnode, then put it before returning
-from fwnode_graph_get_next_endpoint().
+I did some testing. Looks like reverting Fengnan's change allows for
+occasional, but significant, spikes in write latency. I'll work on a variation
+of the patch that maintains the use of F2FS_ONSTACK_PAGES and send
+that in the next version of the patch series. Thanks for pointing that out!
 
-Fixes: b5b41ab6b0c1 ("device property: Check fwnode->secondary in fwnode_graph_get_next_endpoint()")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
-v2 -> v3:
-  Add a out label.
-
-v1 -> v2:
-  Introduce a new variable to store the returned fwnode.
----
- drivers/base/property.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/base/property.c b/drivers/base/property.c
-index 2a5a37fcd998..7f338cb4fb7b 100644
---- a/drivers/base/property.c
-+++ b/drivers/base/property.c
-@@ -989,26 +989,32 @@ struct fwnode_handle *
- fwnode_graph_get_next_endpoint(const struct fwnode_handle *fwnode,
- 			       struct fwnode_handle *prev)
- {
-+	struct fwnode_handle *ep, *port_parent = NULL;
- 	const struct fwnode_handle *parent;
--	struct fwnode_handle *ep;
- 
- 	/*
- 	 * If this function is in a loop and the previous iteration returned
- 	 * an endpoint from fwnode->secondary, then we need to use the secondary
- 	 * as parent rather than @fwnode.
- 	 */
--	if (prev)
--		parent = fwnode_graph_get_port_parent(prev);
--	else
-+	if (prev) {
-+		port_parent = fwnode_graph_get_port_parent(prev);
-+		parent = port_parent;
-+	} else {
- 		parent = fwnode;
-+	}
- 	if (IS_ERR_OR_NULL(parent))
- 		return NULL;
- 
- 	ep = fwnode_call_ptr_op(parent, graph_get_next_endpoint, prev);
- 	if (ep)
--		return ep;
-+		goto out_put_port_parent;
-+
-+	ep = fwnode_graph_get_next_endpoint(parent->secondary, NULL);
- 
--	return fwnode_graph_get_next_endpoint(parent->secondary, NULL);
-+out_put_port_parent:
-+	fwnode_handle_put(port_parent);
-+	return ep;
- }
- EXPORT_SYMBOL_GPL(fwnode_graph_get_next_endpoint);
- 
--- 
-2.25.1
-
+How do the remaining f2fs patches in the series look to you?
+Patch 16/23 f2fs_sync_meta_pages() in particular seems like it may
+be prone to problems. If there are any changes that need to be made to
+it I can include those in the next version as well.
