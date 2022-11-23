@@ -2,118 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B94136365D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 17:30:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04B376365E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 17:33:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237550AbiKWQaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 11:30:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56240 "EHLO
+        id S237943AbiKWQdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 11:33:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236016AbiKWQaW (ORCPT
+        with ESMTP id S235641AbiKWQdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 11:30:22 -0500
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5286221E20
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 08:30:20 -0800 (PST)
-Received: by mail-qk1-x72c.google.com with SMTP id z17so12766935qki.11
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 08:30:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vt2TI2s/ONwTSTFJrVl4zFA/mn26DOjDlB7TgOSLANM=;
-        b=gelHH9WcdQSeyZW2TipTpvkwMV0+VGmqtodQTG4dG4qWCEMZ0y6SfoZMmBl3+zrMtA
-         G363HAcjLxF8bBafLmHrj+o5EFaSR8ugndv1YzyCOG9h8h/aZutl+9Iu1KkfIicqCeTw
-         3ibKaXSzagLIYS7cRG0gYCgFmLar08h/dl/q9xNKz0eCjblvOjI4NwN0JvWBdTyMEyss
-         0sti78XhZOdFhaBE4JGus6TOalVsifJT0qvMUmOMqAQhxGYsLzOlJGV8RJ//PWOgID+8
-         BaafvpBE9mQl4zLXwbaM9JVOIHFSR5iWnBrk4RN+bEimvHWnuAP58PfpjMUBqOrbZ/dj
-         6VwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vt2TI2s/ONwTSTFJrVl4zFA/mn26DOjDlB7TgOSLANM=;
-        b=yI6pQXJSG6JnlnoU5B4qF1QqREztpXzs3td3cqIvvelNmNADGVQTzcewwEtfNXLjPl
-         sjiOG3d2/LMG/npem/AEPeqshKkNu4wfpNXDwVH4ykF/hfHMdsk74949UWDAdig4UScy
-         RpfWrbIjDzYtja5xTam0F3vV67mXFoDkcebsMtU/34IJv6GxRNEzPmcXwlnTJ2gJxrBn
-         NjwgIQ0fNNuhUvhVoRGYpIq9FnfdO1WYI3XC4YIB1UUcveS7KiIgXrSPKokfZyhNz1Wa
-         Kh63vyxnKU+NV+kqXVVKTv8G095Jbw0L6l7yL2W6fnwPf/vgVOLpB9dBJcZovsMkK+Mx
-         0gmg==
-X-Gm-Message-State: ANoB5pm/a487EPfUI7gp/65uwJq1tjOPV1eUD+0LFqhCWrWAF7jLLknS
-        S4oyUE89ibf07y6KM78Vejij+g==
-X-Google-Smtp-Source: AA0mqf62dokmczKsgWdcoJf2uWNfAwNh6i6+iKFz76k1kXUxub6M2QE9vG8qJF2eIjihESqQ9ABfSA==
-X-Received: by 2002:a37:aa81:0:b0:6fa:12a9:b327 with SMTP id t123-20020a37aa81000000b006fa12a9b327mr8788431qke.149.1669221019413;
-        Wed, 23 Nov 2022 08:30:19 -0800 (PST)
-Received: from localhost ([2620:10d:c091:480::1:bc4])
-        by smtp.gmail.com with ESMTPSA id g10-20020ac8124a000000b00399b73d06f0sm9894595qtj.38.2022.11.23.08.30.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 08:30:19 -0800 (PST)
-Date:   Wed, 23 Nov 2022 11:30:45 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        minchan@kernel.org, ngupta@vflare.org, sjenning@redhat.com,
-        ddstreet@ieee.org, vitaly.wool@konsulko.com
-Subject: Re: [PATCH v6 4/6] zsmalloc: Add a LRU to zs_pool to keep track of
- zspages in LRU order
-Message-ID: <Y35KtVaR/FKNAhKY@cmpxchg.org>
-References: <20221119001536.2086599-1-nphamcs@gmail.com>
- <20221119001536.2086599-5-nphamcs@gmail.com>
- <Y3wreqR1IRWFtSUz@google.com>
- <Y30KIbewtg+b5JTq@cmpxchg.org>
- <Y32Yl/Emcw/2a51t@google.com>
- <CAJD7tkZM1KwQpkS5fTaL0A4=VLv=HEWxCc1kd45s49-s4__e1Q@mail.gmail.com>
- <CAJD7tkaWmusZ3V0Jh-zvaW3Ypt5Jn1GvzXryDjy58HSQWW74Gg@mail.gmail.com>
+        Wed, 23 Nov 2022 11:33:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04DCD22515;
+        Wed, 23 Nov 2022 08:33:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 744EA61DF6;
+        Wed, 23 Nov 2022 16:33:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E966C433D6;
+        Wed, 23 Nov 2022 16:33:05 +0000 (UTC)
+Date:   Wed, 23 Nov 2022 11:33:04 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     Rafael Mendonca <rafaelmendsr@gmail.com>,
+        "Tzvetomir Stoyanov (VMware)" <tz.stoyanov@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        Tom Zanussi <zanussi@kernel.org>
+Subject: Re: [PATCH] tracing/eprobe: Update cond flag before enabling
+ trigger
+Message-ID: <20221123113304.3f41ff1b@gandalf.local.home>
+In-Reply-To: <20221124010152.75846db3bc63a5c6c109945f@kernel.org>
+References: <20221116192552.1066630-1-rafaelmendsr@gmail.com>
+        <20221117211726.4bbbb96a@gandalf.local.home>
+        <20221117213109.6119750e@gandalf.local.home>
+        <Y3d9KcpcwrEUUYKT@macondo>
+        <Y3eJ8GiGnEvVd8/N@macondo>
+        <20221118111940.1268da2b@gandalf.local.home>
+        <20221124010152.75846db3bc63a5c6c109945f@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJD7tkaWmusZ3V0Jh-zvaW3Ypt5Jn1GvzXryDjy58HSQWW74Gg@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 12:11:24AM -0800, Yosry Ahmed wrote:
-> On Wed, Nov 23, 2022 at 12:02 AM Yosry Ahmed <yosryahmed@google.com> wrote:
-> > On Tue, Nov 22, 2022 at 7:50 PM Sergey Senozhatsky
-> > > There are no accesses to swapped out pages yes, but zspage holds multiple
-> > > objects, which are compressed swapped out pages in this particular case.
-> > > For example, zspage in class size 176 (bytes) can hold 93 objects per-zspage,
-> > > that is 93 compressed swapped out pages. Consider ZS_FULL zspages which
-> > > is at the tail of the LRU list. Suppose that we page-faulted 20 times and
-> > > read 20 objects from that zspage, IOW zspage has been in use 20 times very
-> > > recently, while writeback still considers it to be "not-used" and will
-> > > evict it.
-> > >
-> > > So if this works for you then I'm fine. But we probably, like you suggested,
-> > > can document a couple of things here - namely why WRITE access to zspage
-> > > counts as "zspage is in use" but READ access to the same zspage does not
-> > > count as "zspage is in use".
+On Thu, 24 Nov 2022 01:01:52 +0900
+Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
 
-> Nonetheless, the fact that we refaulted an object in a zspage does not
-> necessarily mean that other objects on the same are hotter than
-> objects in other zspages IIUC.
+> On Fri, 18 Nov 2022 11:19:40 -0500
+> Steven Rostedt <rostedt@goodmis.org> wrote:
+> 
+> > On Fri, 18 Nov 2022 10:34:40 -0300
+> > Rafael Mendonca <rafaelmendsr@gmail.com> wrote:
+> >   
+> > > It did not trigger the NULL pointer issue to be more specific. When
+> > > creating event probe for all events I was unable to create any event for
+> > > the xhci-hcd system:
+> > > 
+> > > root@localhost:/sys/kernel/tracing# echo 'e xhci-hcd/xhci_add_endpoint' > dynamic_events 
+> > > -bash: echo: write error: Invalid argument
+> > > 
+> > > Debugging the issue it seems that the problem is in the is_good_name()
+> > > check, which returns false for "xhci-hcd". Should we sanitize it by  
+> > 
+> > Ouch. I didn't realize that.  
+> 
+> Maybe we need better error message so that user can notice which character
+> caused the error. 
+> 
+> >   
+> > > converting '-' into '_'?  
+> > 
+> > Actually, it's just the system name that's an issue. I tested this patch
+> > and it appears to work.  
+> 
+> Ah, the system name is more flexible than the event name because it has
+> TRACE_SYSTEM_VAR.
+> 
+> Steve, can you send me the below patch?
 
-Yes.
+I already did ;-)
 
-On allocation, we know that there is at least one hot object in the
-page. On refault, the connection between objects in a page is weak.
+  https://patchwork.kernel.org/project/linux-trace-kernel/patch/20221122122345.160f5077@gandalf.local.home/
 
-And it's weaker on zsmalloc than with other backends due to the many
-size classes making temporal grouping less likely. So I think you're
-quite right, Segey, that a per-class LRU would be more accurate.
 
-It's no-LRU < zspage-LRU < class-LRU < object-LRU.
+> 
+> BTW, TRACE_DEFINE_ENUM() and TRACE_DEFINE_SIZEOF() macros are using
+> TRACE_SYSTEM instead of TRACE_SYSTEM_VAR. Should those use TRACE_SYSTEM_VAR
+> for defining a variable?
 
-Like Yosry said, the plan is to implement an object-LRU next as part
-of the generalized LRU for zsmalloc, zbud and z3fold.
+Hmm, good question. Probably. But since nothing that has a bad name uses
+it, we can fix that whenever (but before a system with a hyphen uses those
+macros). Do you want to make the change, or shall I?
 
-For now, the zspage LRU is an improvement to no-LRU. Our production
-experiments confirmed that.
+-- Steve
