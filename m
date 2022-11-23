@@ -2,145 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C756351FE
+	by mail.lfdr.de (Postfix) with ESMTP id 5FB3A6351FF
 	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 09:11:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236333AbiKWIKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 03:10:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48834 "EHLO
+        id S236084AbiKWILd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 03:11:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235705AbiKWIKp (ORCPT
+        with ESMTP id S235705AbiKWILa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 03:10:45 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C9B98264
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 00:10:44 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id h10-20020a056e021b8a00b00302671bb5fdso12602915ili.21
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 00:10:44 -0800 (PST)
+        Wed, 23 Nov 2022 03:11:30 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA18EA12B
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 00:11:29 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id k15so16674268pfg.2
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 00:11:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NTCDnzWfKnUH4xHEjqzAK0T2MTpEXrV37vZtrLItqWs=;
+        b=nRzoejAKVDLAwaO9LdIS5khO8+7zffW/9x99UrgnvAUgQIsX8FgLOrLMVOgIY9Blt8
+         /kFL8n9zrMakBMhDmOVLLrjQTQxj/wkqKyocO1I1qtqXmlWWFbh1Gwd0JvadFXjsfhze
+         CmvhtyJtxoxmGvREJck3IcacUG3sh59lCjS4Qo/vefG71yL2TNgbu6qJoNmZc6cNKwNO
+         DBu+/oYEWF8zW6mhlDgvXXTcUnkkubjqzjTvYNimpQ63JONWB9e9OxJ1cQjHVExKfdhU
+         +QgdZf6XyyjvBjHcSjAbpqxv7cDVoDYy5UP0liTnWl9DUvw2b1SYPlvRFzwwxSoRdPKw
+         5kHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6I1W1y2x8WCoMes3YNYuaCCPghY6aiWezz6ayF0TOpI=;
-        b=EPSWgGTMC47N7hAEGL5MrtIyreBAQpwA0M6KIFO5y9QOWi7zEOF6rKbKDhnEMm2gYH
-         sGuuID+45vTX/DSidl051xfczm3EoB6Smim3FRXBEtBzg0EOhMeXaBKhcJXR5hGezYAw
-         tw1ogl03XVy/B1tBRHiT9E9qUa4tBHYy58vSPit6nj4ZRMtqfz2ki6z/gEoIMa/xNthN
-         /eGR2ISmY2DS3RmV5YBgiTpifFsO+0vMQFtSZIBA/I1LlGx89q7buWRniUX2ScmAf5bk
-         mrRlwDxpUCgREZnaa0F7XD5eIwhHfE+xH1JFxV9QVL+nxsZGcWI+jqLly3dRI8BHcfIR
-         IczA==
-X-Gm-Message-State: ANoB5plYvH3hff4Lcl+DJh11vUSEx5Pw+GdKvtmCSKUW+tVDrBQgWff8
-        K2Zq9QxeRO0Qm/Y5fZi/S9T+nXfbKb9EwcbSdbqyzx7pzabX
-X-Google-Smtp-Source: AA0mqf6lHz47qefUNe175SSyHMTEPPiuorHnQZf649VTAzEe4ThbeOrdNrjCMWkY9W0Rn2sjDa9rZDovEozLCWnV4IxxU7WhWje3
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NTCDnzWfKnUH4xHEjqzAK0T2MTpEXrV37vZtrLItqWs=;
+        b=fXL+s4kM0Nc2seS76ciLlQhhUfprGWOlHOv1JMPfM5IsWD+d93jitHrexixcn1R4ZO
+         5TSnEi/7wAMYg7ZO9Fuj6srmRPqlBes1GTcRNYWYfpnDysl1etCyyOYMZKJ/6LVemIWG
+         Y9tby2SX+1QngDQpdjUHUhQdGdCmDDsd6LYVV5VU4D9QVtx0fMQD0R/hG9wQB/bT37Kc
+         QzoBkQBRO7+gH/Dhp1FSdsHFt0SIBXt3nLxrmKZB5Vfvm6bKAJb9vmcbN+7pnxNAJV6c
+         1r2vCjXddwlA1eziAjbKvMpKC4aNKIfr0ECa6Z7gXA9/cLX/vK/Cf+2zIqehheVHPtHs
+         XPXQ==
+X-Gm-Message-State: ANoB5pkuqyLd6rG5LLLTN9Umqh9yuBWTRDtu0ny4OH0KFkPJhdl5mF+W
+        cuxCxjUJmU0P2ZrxagGXvk8RBQuXbWjK
+X-Google-Smtp-Source: AA0mqf4BXuHa+N5rUQuKScaj5YnLWOOi4fnx2R1HRVYFr4XJE7e5Ln9rR1xeDGmEcQk/OGAOsvxf6g==
+X-Received: by 2002:aa7:93c2:0:b0:56d:8145:3faa with SMTP id y2-20020aa793c2000000b0056d81453faamr7943384pff.75.1669191088650;
+        Wed, 23 Nov 2022 00:11:28 -0800 (PST)
+Received: from localhost.localdomain ([117.202.191.0])
+        by smtp.gmail.com with ESMTPSA id s10-20020a170902ea0a00b00186c3af9644sm13496840plg.273.2022.11.23.00.11.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 00:11:26 -0800 (PST)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     jacek.anaszewski@gmail.com, pavel@ucw.cz, dmurphy@ti.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-leds@vger.kernel.org, thunder.leizhen@huawei.com,
+        festevam@gmail.com,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v3] dt-bindings: leds: Document commonly used LED triggers
+Date:   Wed, 23 Nov 2022 13:41:12 +0530
+Message-Id: <20221123081112.97150-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a92:d701:0:b0:300:ca48:e52d with SMTP id
- m1-20020a92d701000000b00300ca48e52dmr11818832iln.86.1669191044114; Wed, 23
- Nov 2022 00:10:44 -0800 (PST)
-Date:   Wed, 23 Nov 2022 00:10:44 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003f315b05ee1ed3f4@google.com>
-Subject: [syzbot] kernel BUG in close_ctree
-From:   syzbot <syzbot+2665d678fffcc4608e18@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+This commit documents the LED triggers used commonly in the SoCs. Not
+all triggers are documented as some of them are very application specific.
+Most of the triggers documented here are currently used in devicetrees
+of many SoCs.
 
-syzbot found the following issue on:
+While at it, let's also sort the triggers in ascending order.
 
-HEAD commit:    eb7081409f94 Linux 6.1-rc6
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17e5b309880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5db36e7087dcccae
-dashboard link: https://syzkaller.appspot.com/bug?extid=2665d678fffcc4608e18
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/12e9c825ff47/disk-eb708140.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/107e5e091c9e/vmlinux-eb708140.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/605ab211617d/bzImage-eb708140.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2665d678fffcc4608e18@syzkaller.appspotmail.com
-
-assertion failed: list_empty(&fs_info->delayed_iputs), in fs/btrfs/disk-io.c:4664
-------------[ cut here ]------------
-kernel BUG at fs/btrfs/ctree.h:3713!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 3696 Comm: syz-executor.2 Not tainted 6.1.0-rc6-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:assertfail.constprop.0+0x27/0x29 fs/btrfs/ctree.h:3713
-Code: 3f c9 f7 41 54 41 89 f4 55 48 89 fd e8 a2 3f c9 f7 44 89 e1 48 89 ee 48 c7 c2 60 a4 95 8a 48 c7 c7 a0 a4 95 8a e8 00 76 f5 ff <0f> 0b e8 82 3f c9 f7 e8 8d 3d 15 f8 be 73 04 00 00 48 c7 c7 40 a5
-RSP: 0018:ffffc90003727be8 EFLAGS: 00010282
-RAX: 0000000000000051 RBX: ffff888027d9c000 RCX: 0000000000000000
-RDX: ffff88804a6b6280 RSI: ffffffff8164973c RDI: fffff520006e4f6f
-RBP: ffffffff8a95dac0 R08: 0000000000000051 R09: 0000000000000000
-R10: 0000000080000000 R11: 0000000000000000 R12: 0000000000001238
-R13: 0000000000000000 R14: 0000000000000000 R15: ffff88801da29200
-FS:  0000555555bec400(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f17654d56be CR3: 0000000031a82000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- close_ctree+0x502/0xdc7 fs/btrfs/disk-io.c:4664
- generic_shutdown_super+0x158/0x410 fs/super.c:492
- kill_anon_super+0x3a/0x60 fs/super.c:1086
- btrfs_kill_super+0x3c/0x50 fs/btrfs/super.c:2441
- deactivate_locked_super+0x98/0x160 fs/super.c:332
- deactivate_super+0xb1/0xd0 fs/super.c:363
- cleanup_mnt+0x2ae/0x3d0 fs/namespace.c:1186
- task_work_run+0x16f/0x270 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
- exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:203
- __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
- syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
- do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f7827a8d5f7
-Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffeef557068 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f7827a8d5f7
-RDX: 00007ffeef55713c RSI: 000000000000000a RDI: 00007ffeef557130
-RBP: 00007ffeef557130 R08: 00000000ffffffff R09: 00007ffeef556f00
-R10: 0000555555bed8b3 R11: 0000000000000246 R12: 00007f7827ae6b46
-R13: 00007ffeef5581f0 R14: 0000555555bed810 R15: 00007ffeef558230
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:assertfail.constprop.0+0x27/0x29 fs/btrfs/ctree.h:3713
-Code: 3f c9 f7 41 54 41 89 f4 55 48 89 fd e8 a2 3f c9 f7 44 89 e1 48 89 ee 48 c7 c2 60 a4 95 8a 48 c7 c7 a0 a4 95 8a e8 00 76 f5 ff <0f> 0b e8 82 3f c9 f7 e8 8d 3d 15 f8 be 73 04 00 00 48 c7 c7 40 a5
-RSP: 0018:ffffc90003727be8 EFLAGS: 00010282
-RAX: 0000000000000051 RBX: ffff888027d9c000 RCX: 0000000000000000
-RDX: ffff88804a6b6280 RSI: ffffffff8164973c RDI: fffff520006e4f6f
-RBP: ffffffff8a95dac0 R08: 0000000000000051 R09: 0000000000000000
-R10: 0000000080000000 R11: 0000000000000000 R12: 0000000000001238
-R13: 0000000000000000 R14: 0000000000000000 R15: ffff88801da29200
-FS:  0000555555bec400(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fd78dea19d8 CR3: 0000000031a82000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
+Tested-by: Zhen Lei <thunder.leizhen@huawei.com>
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Changes in v3:
+
+* Rebased on top of v6.1-rc1
+* Added WLAN Rx trigger
+* Added tested tag from Zhen Lei
+
+Changes in v2:
+
+* Added more triggers, fixed the regex
+* Sorted triggers in ascending order
+
+ .../devicetree/bindings/leds/common.yaml      | 79 ++++++++++++++-----
+ 1 file changed, 59 insertions(+), 20 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/leds/common.yaml b/Documentation/devicetree/bindings/leds/common.yaml
+index 3c14a98430e1..0ffed6bcbefd 100644
+--- a/Documentation/devicetree/bindings/leds/common.yaml
++++ b/Documentation/devicetree/bindings/leds/common.yaml
+@@ -80,26 +80,65 @@ properties:
+     $ref: /schemas/types.yaml#/definitions/string
+ 
+     oneOf:
+-      - enum:
+-            # LED will act as a back-light, controlled by the framebuffer system
+-          - backlight
+-            # LED will turn on (but for leds-gpio see "default-state" property in
+-            # Documentation/devicetree/bindings/leds/leds-gpio.yaml)
+-          - default-on
+-            # LED "double" flashes at a load average based rate
+-          - heartbeat
+-            # LED indicates disk activity
+-          - disk-activity
+-            # LED indicates IDE disk activity (deprecated), in new implementations
+-            # use "disk-activity"
+-          - ide-disk
+-            # LED flashes at a fixed, configurable rate
+-          - timer
+-            # LED alters the brightness for the specified duration with one software
+-            # timer (requires "led-pattern" property)
+-          - pattern
+-        # LED is triggered by SD/MMC activity
+-      - pattern: "^mmc[0-9]+$"
++      - items:
++          - enum:
++                # LED indicates mic mute state
++              - audio-micmute
++                # LED indicates audio mute state
++              - audio-mute
++                # LED will act as a back-light, controlled by the framebuffer system
++              - backlight
++                # LED indicates bluetooth power state
++              - bluetooth-power
++                # LED indicates activity of all CPUs
++              - cpu
++                # LED will turn on (but for leds-gpio see "default-state" property in
++                # Documentation/devicetree/bindings/leds/leds-gpio.yaml)
++              - default-on
++                # LED indicates disk activity
++              - disk-activity
++                # LED indicates disk read activity
++              - disk-read
++                # LED indicates disk write activity
++              - disk-write
++                # LED indicates camera flash state
++              - flash
++                # LED "double" flashes at a load average based rate
++              - heartbeat
++                # LED indicates IDE disk activity (deprecated), in new implementations
++                # use "disk-activity"
++              - ide-disk
++                # LED indicates MTD memory activity
++              - mtd
++                # LED indicates NAND memory activity (deprecated),
++                # in new implementations use "mtd"
++              - nand-disk
++                # No trigger assigned to the LED. This is the default mode
++                # if trigger is absent
++              - none
++                # LED alters the brightness for the specified duration with one software
++                # timer (requires "led-pattern" property)
++              - pattern
++                # LED flashes at a fixed, configurable rate
++              - timer
++                # LED indicates camera torch state
++              - torch
++                # LED indicates USB gadget activity
++              - usb-gadget
++                # LED indicates USB host activity
++              - usb-host
++      - items:
++            # LED indicates activity of [N]th CPU
++          - pattern: "^cpu[0-9]{1,2}$"
++      - items:
++            # LED indicates power status of [N]th Bluetooth HCI device
++          - pattern: "^hci[0-9]{1,2}-power$"
++      - items:
++            # LED indicates [N]th MMC storage activity
++          - pattern: "^mmc[0-9]{1,2}$"
++      - items:
++            # LED indicates [N]th WLAN Tx/Rx activity
++          - pattern: "^phy[0-9]{1,2}(tx|rx)$"
+ 
+   led-pattern:
+     description: |
+-- 
+2.25.1
+
