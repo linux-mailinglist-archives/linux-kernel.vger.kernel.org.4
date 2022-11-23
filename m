@@ -2,174 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A36D6369F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 20:38:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 744A56369FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 20:42:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236526AbiKWTiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 14:38:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34006 "EHLO
+        id S238028AbiKWTmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 14:42:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbiKWTio (ORCPT
+        with ESMTP id S235311AbiKWTmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 14:38:44 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F3B663C5
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 11:38:42 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id 83-20020a1c0256000000b003d03017c6efso1595364wmc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 11:38:42 -0800 (PST)
+        Wed, 23 Nov 2022 14:42:22 -0500
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D51890388
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 11:42:21 -0800 (PST)
+Received: by mail-vs1-xe29.google.com with SMTP id c184so12754415vsc.3
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 11:42:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qA1TxnCI4aGjZIOXtnNz0T0s8Q9jNSPBYnICWkTbI38=;
-        b=cEKZO+LqY/b+Azmi1mie8YZvHvVtdHyjovX4gtNAenqcxgFrJtJXWWtKI0FhXXBTNb
-         UlxrJKXLyd4E2xz9jKo129BwTISIEvXAGZ1/fE3/6wz5/UA7FCxJNlT1hzunXygzf00L
-         eRbkHYSKt48Qi+kwOtuKHePKVi8XPWbtzo0Q6YeAWhjTfW8Ir6Ff5hpIbjNxlq5eFRms
-         UJNyu7J3tVvqHXA1i1rakesVNrdZWIRJ/ebdkhXFRfK6KB72EbD8Oa5m1zWb1Sbc9hfb
-         ue3aq0A7ka0tHvvo9JqVClOBEeUnfqJk5jVGlAxLXbv/hIqfpoyUf2TAWlSjakd0RYxp
-         Di1A==
+        d=broadcom.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=q4PiDx8ast/ekywYAIHsdg0fsKjKUh6JJ9lPYF4yibs=;
+        b=d4rNi2NQP57XWl8ja41yQ9Z8l9/XtB9pFWE4SWEc8KDSXZjT2BhvoNGFFsND/kxFAc
+         8r5Xqp3HFnEbERtRfs0xPlUvPjbuQ54FZb6Bx0yKCM5RotixGuWzwpTVfxwHe6Q3t5Xn
+         dA+WlCQtxVa8nytJX7AnVyFYlHnisgX8mASfY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qA1TxnCI4aGjZIOXtnNz0T0s8Q9jNSPBYnICWkTbI38=;
-        b=H6twAFTu4a5M34S8eyQt2xdoHDBlML/2okPpDF2v8o2dKKT56asvtg0JGrVh/R5LX9
-         RH30OZI4SP0ii/4izkFBi18EwqWtIfgntz8k7CuFLoVAdwMmeciXCuEwjP8VQoeos0uO
-         xw7utowkRMsFtHnTYQThsHECU4bHEFafz1IDA1Zl5ONxEKarh+LIYsH/iqdS+yUWRCPq
-         kG+gXf2L1xRHUarFxWCRNYzaI682V8UVeMBp0Tol6Dp2n9YGE94t7CQUDhHbbFXzJ15s
-         0nZ7XW2zGcVfxfvJIw4oW0Ns391P7pL8afwM/79WL74XNJNFvR9u9rInC8VINLnwQOld
-         8Qbg==
-X-Gm-Message-State: ANoB5pmu4RAy4d2cI5OYtpPh57LZ6aAu6SKWippxOh26MJeb6gu6IT7c
-        BFNTgrHyoN2INPpHq0GMr1Ts3g==
-X-Google-Smtp-Source: AA0mqf7ZSt1rSGF1YqE7COxjrjursOSSTsUwt13ItIc/EsU8/0abpA3W0v7xlVBFFkakcDJUH1CxjA==
-X-Received: by 2002:a05:600c:1e1a:b0:3cf:7959:d8be with SMTP id ay26-20020a05600c1e1a00b003cf7959d8bemr13496374wmb.85.1669232320798;
-        Wed, 23 Nov 2022 11:38:40 -0800 (PST)
-Received: from linaro.org ([2a00:23c5:6809:2201:fcbc:7b5d:8d6c:43a4])
-        by smtp.gmail.com with ESMTPSA id q2-20020adff502000000b00241cfa9333fsm11222353wro.5.2022.11.23.11.38.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 11:38:39 -0800 (PST)
-From:   Mike Leach <mike.leach@linaro.org>
-To:     linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
-        linux-kernel@vger.kernel.org
-Cc:     mathieu.poirier@linaro.org, suzuki.poulose@arm.com,
-        leo.yan@linaro.org, acme@kernel.org,
-        Mike Leach <mike.leach@linaro.org>
-Subject: [PATCH] coresight: cti: Fix null pointer error on CTI init before ETM
-Date:   Wed, 23 Nov 2022 19:38:18 +0000
-Message-Id: <20221123193818.6253-1-mike.leach@linaro.org>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q4PiDx8ast/ekywYAIHsdg0fsKjKUh6JJ9lPYF4yibs=;
+        b=mvT5RHRVE30KGM1ugxJbTMuK1FE+3VXgG70M5qa31jgiDRb2/OR9XFFt/FT+XPD40Y
+         tmvf64fdWy2oBtNi9LZkf2Rg1AhVkFe897SiV44G1YuUa3sjGyYRnbnBwnRttO+bsGJf
+         AU4mBPpScoaTgMXEAfb3xEWRB0ss91r8qJG5ClsKlubbrtCQXVq9ieju54oN5MVK/qU3
+         4r+QJDljbk9aiiiv1JlwcXYIKwP4odiq7intg5DT719erAmxtqPPZEyEcvu5E8+LEqOA
+         Snetlt1QE2gf0OPm8aApVa+cczsInIC8QY/6RXWGcAdsvlFGzsZLfTgtpSnVNcrBDDtl
+         EX4g==
+X-Gm-Message-State: ANoB5plMcx+gu1XZlXN2w3MWXMpcWPOC44R2ybp4to8TMFiqppEpPd7V
+        XpIu6lZ0zyomzHB26+Xd3MLO0+jmcDtU8RElvJPWtw==
+X-Google-Smtp-Source: AA0mqf4HaTFy/xVTMwBP+hy9seNtTNNzP5nGBw4qRz7+EaZUwPRP7TaC3NT9xdwU35IFo+U9r4mSuNLtCqnf7RlyU0k=
+X-Received: by 2002:a67:1702:0:b0:3aa:3130:fbd3 with SMTP id
+ 2-20020a671702000000b003aa3130fbd3mr6324175vsx.39.1669232539774; Wed, 23 Nov
+ 2022 11:42:19 -0800 (PST)
+MIME-Version: 1.0
+References: <20221123191627.3442831-1-lixiaoyan@google.com> <20221123191627.3442831-2-lixiaoyan@google.com>
+In-Reply-To: <20221123191627.3442831-2-lixiaoyan@google.com>
+From:   Michael Chan <michael.chan@broadcom.com>
+Date:   Wed, 23 Nov 2022 11:42:07 -0800
+Message-ID: <CACKFLin=H_j6Jy+1jZJiG5xuE=C41joZ_dPS_BZmBwcf7W1rHA@mail.gmail.com>
+Subject: Re: [RFC net-next v2 2/2] bnxt: Use generic HBH removal helper in tx path
+To:     Coco Li <lixiaoyan@google.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Gospodarek <gospo@broadcom.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000009ef0d605ee287cc7"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When CTI is discovered first then the function
-coresight_set_assoc_ectdev_mutex() is called to set the association
-between CTI and ETM device. Recent lockdep fix passes a null pointer.
+--0000000000009ef0d605ee287cc7
+Content-Type: text/plain; charset="UTF-8"
 
-This patch passes the correct pointer.
+On Wed, Nov 23, 2022 at 11:16 AM Coco Li <lixiaoyan@google.com> wrote:
+>
+> Eric Dumazet implemented Big TCP that allowed bigger TSO/GRO packet sizes
+> for IPv6 traffic. See patch series:
+> 'commit 89527be8d8d6 ("net: add IFLA_TSO_{MAX_SIZE|SEGS} attributes")'
+>
+> This reduces the number of packets traversing the networking stack and
+> should usually improves performance. However, it also inserts a
+> temporary Hop-by-hop IPv6 extension header.
+>
+> Using the HBH header removal method in the previous path, the extra header
+> be removed in bnxt drivers to allow it to send big TCP packets (bigger
+> TSO packets) as well.
+>
+> Tested:
+> Compiled locally
+>
+> To further test functional correctness, update the GSO/GRO limit on the
+> physical NIC:
+>
+> ip link set eth0 gso_max_size 181000
+> ip link set eth0 gro_max_size 181000
+>
+> Note that if there are bonding or ipvan devices on top of the physical
+> NIC, their GSO sizes need to be updated as well.
+>
+> Then, IPv6/TCP packets with sizes larger than 64k can be observed.
+>
+> Signed-off-by: Coco Li <lixiaoyan@google.com>
+> ---
+>  drivers/net/ethernet/broadcom/bnxt/bnxt.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> index 0fe164b42c5d..2bfa5e9fb179 100644
+> --- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> @@ -389,6 +389,9 @@ static netdev_tx_t bnxt_start_xmit(struct sk_buff *skb, struct net_device *dev)
+>                         return NETDEV_TX_BUSY;
+>         }
+>
+> +       if (unlikely(ipv6_hopopt_jumbo_remove(skb)))
+> +               goto tx_free;
+> +
+>         length = skb->len;
+>         len = skb_headlen(skb);
+>         last_frag = skb_shinfo(skb)->nr_frags;
+> @@ -13657,6 +13660,7 @@ static int bnxt_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+>                 dev->features &= ~NETIF_F_LRO;
+>         dev->priv_flags |= IFF_UNICAST_FLT;
+>
+> +       netif_set_tso_max_size(dev, GSO_MAX_SIZE);
 
-Before patch: log of boot oops sequence with CTI discovered first:
+Our chips can only transmit TSO packets up to 64K bytes, so I think
+this won't work.
 
-[   12.424091]  cs_system_cfg: CoreSight Configuration manager initialised
-[   12.483474] coresight cti_sys0: CTI initialized
-[   12.488109] coresight cti_sys1: CTI initialized
-[   12.503594] coresight cti_cpu0: CTI initialized
-[   12.517877] coresight-cpu-debug 850000.debug: Coresight debug-CPU0 initialized
-[   12.523479] coresight-cpu-debug 852000.debug: Coresight debug-CPU1 initialized
-[   12.529926] coresight-cpu-debug 854000.debug: Coresight debug-CPU2 initialized
-[   12.541808] coresight stm0: STM32 initialized
-[   12.544421] coresight-cpu-debug 856000.debug: Coresight debug-CPU3 initialized
-[   12.585639] coresight cti_cpu1: CTI initialized
-[   12.614028] coresight cti_cpu2: CTI initialized
-[   12.631679] CSCFG registered etm0
-[   12.633920] coresight etm0: CPU0: etm v4.0 initialized
-[   12.656392] coresight cti_cpu3: CTI initialized
+--0000000000009ef0d605ee287cc7
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-...
-
-[   12.708383] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000348
-
-...
-
-[   12.755094] Internal error: Oops: 0000000096000044 [#1] SMP
-[   12.761817] Modules linked in: coresight_etm4x(+) coresight_tmc coresight_cpu_debug coresight_replicator coresight_funnel coresight_cti coresight_tpiu coresight_stm coresight
-[   12.767210] CPU: 3 PID: 1346 Comm: systemd-udevd Not tainted 6.1.0-rc3tid-v6tid-v6-235166-gf7f7d7a2204a-dirty #498
-[   12.782827] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
-[   12.793154] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[   12.800010] pc : coresight_set_assoc_ectdev_mutex+0x30/0x50 [coresight]
-[   12.806694] lr : coresight_set_assoc_ectdev_mutex+0x30/0x50 [coresight]
-
-...
-
-[   12.885064] Call trace:
-[   12.892352]  coresight_set_assoc_ectdev_mutex+0x30/0x50 [coresight]
-[   12.894693]  cti_add_assoc_to_csdev+0x144/0x1b0 [coresight_cti]
-[   12.900943]  coresight_register+0x2c8/0x320 [coresight]
-[   12.906844]  etm4_add_coresight_dev.isra.27+0x148/0x280 [coresight_etm4x]
-[   12.912056]  etm4_probe+0x144/0x1c0 [coresight_etm4x]
-[   12.918998]  etm4_probe_amba+0x40/0x78 [coresight_etm4x]
-[   12.924032]  amba_probe+0x11c/0x1f0
-
-After patch: similar log
-
-[   12.444467]  cs_system_cfg: CoreSight Configuration manager initialised
-[   12.456329] coresight-cpu-debug 850000.debug: Coresight debug-CPU0 initialized
-[   12.456754] coresight-cpu-debug 852000.debug: Coresight debug-CPU1 initialized
-[   12.469672] coresight-cpu-debug 854000.debug: Coresight debug-CPU2 initialized
-[   12.476098] coresight-cpu-debug 856000.debug: Coresight debug-CPU3 initialized
-[   12.532409] coresight stm0: STM32 initialized
-[   12.533708] coresight cti_sys0: CTI initialized
-[   12.539478] coresight cti_sys1: CTI initialized
-[   12.550106] coresight cti_cpu0: CTI initialized
-[   12.633931] coresight cti_cpu1: CTI initialized
-[   12.634664] coresight cti_cpu2: CTI initialized
-[   12.638090] coresight cti_cpu3: CTI initialized
-[   12.721136] CSCFG registered etm0
-
-...
-
-[   12.762643] CSCFG registered etm1
-[   12.762666] coresight etm1: CPU1: etm v4.0 initialized
-[   12.776258] CSCFG registered etm2
-[   12.776282] coresight etm2: CPU2: etm v4.0 initialized
-[   12.784357] CSCFG registered etm3
-[   12.785455] coresight etm3: CPU3: etm v4.0 initialized
-
-Error can also be triggered by manually starting the modules using modprobe
-in the following order:
-
-root@linaro-developer:/home/linaro/cs-mods# modprobe coresight
-root@linaro-developer:/home/linaro/cs-mods# modprobe coresight-cti
-root@linaro-developer:/home/linaro/cs-mods# modprobe coresight-etm4x
-
-Tested on Dragonboard DB410c
-Applies to coresight/next
-
-Fixes: 23722fb46725 ("coresight: Fix possible deadlock with lock dependency")
-
-Signed-off-by: Mike Leach <mike.leach@linaro.org>
----
- drivers/hwtracing/coresight/coresight-cti-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/hwtracing/coresight/coresight-cti-core.c b/drivers/hwtracing/coresight/coresight-cti-core.c
-index c6e8c6542f24..d2cf4f4848e1 100644
---- a/drivers/hwtracing/coresight/coresight-cti-core.c
-+++ b/drivers/hwtracing/coresight/coresight-cti-core.c
-@@ -564,7 +564,7 @@ static void cti_add_assoc_to_csdev(struct coresight_device *csdev)
- 			 * if we found a matching csdev then update the ECT
- 			 * association pointer for the device with this CTI.
- 			 */
--			coresight_set_assoc_ectdev_mutex(csdev->ect_dev,
-+			coresight_set_assoc_ectdev_mutex(csdev,
- 							 ect_item->csdev);
- 			break;
- 		}
--- 
-2.17.1
-
+MIIQbQYJKoZIhvcNAQcCoIIQXjCCEFoCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+gg3EMIIFDTCCA/WgAwIBAgIQeEqpED+lv77edQixNJMdADANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA5MTYwMDAwMDBaFw0yODA5MTYwMDAwMDBaMFsxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBS
+MyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
+vbCmXCcsbZ/a0fRIQMBxp4gJnnyeneFYpEtNydrZZ+GeKSMdHiDgXD1UnRSIudKo+moQ6YlCOu4t
+rVWO/EiXfYnK7zeop26ry1RpKtogB7/O115zultAz64ydQYLe+a1e/czkALg3sgTcOOcFZTXk38e
+aqsXsipoX1vsNurqPtnC27TWsA7pk4uKXscFjkeUE8JZu9BDKaswZygxBOPBQBwrA5+20Wxlk6k1
+e6EKaaNaNZUy30q3ArEf30ZDpXyfCtiXnupjSK8WU2cK4qsEtj09JS4+mhi0CTCrCnXAzum3tgcH
+cHRg0prcSzzEUDQWoFxyuqwiwhHu3sPQNmFOMwIDAQABo4IB2jCCAdYwDgYDVR0PAQH/BAQDAgGG
+MGAGA1UdJQRZMFcGCCsGAQUFBwMCBggrBgEFBQcDBAYKKwYBBAGCNxQCAgYKKwYBBAGCNwoDBAYJ
+KwYBBAGCNxUGBgorBgEEAYI3CgMMBggrBgEFBQcDBwYIKwYBBQUHAxEwEgYDVR0TAQH/BAgwBgEB
+/wIBADAdBgNVHQ4EFgQUljPR5lgXWzR1ioFWZNW+SN6hj88wHwYDVR0jBBgwFoAUj/BLf6guRSSu
+TVD6Y5qL3uLdG7wwegYIKwYBBQUHAQEEbjBsMC0GCCsGAQUFBzABhiFodHRwOi8vb2NzcC5nbG9i
+YWxzaWduLmNvbS9yb290cjMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5j
+b20vY2FjZXJ0L3Jvb3QtcjMuY3J0MDYGA1UdHwQvMC0wK6ApoCeGJWh0dHA6Ly9jcmwuZ2xvYmFs
+c2lnbi5jb20vcm9vdC1yMy5jcmwwWgYDVR0gBFMwUTALBgkrBgEEAaAyASgwQgYKKwYBBAGgMgEo
+CjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAN
+BgkqhkiG9w0BAQsFAAOCAQEAdAXk/XCnDeAOd9nNEUvWPxblOQ/5o/q6OIeTYvoEvUUi2qHUOtbf
+jBGdTptFsXXe4RgjVF9b6DuizgYfy+cILmvi5hfk3Iq8MAZsgtW+A/otQsJvK2wRatLE61RbzkX8
+9/OXEZ1zT7t/q2RiJqzpvV8NChxIj+P7WTtepPm9AIj0Keue+gS2qvzAZAY34ZZeRHgA7g5O4TPJ
+/oTd+4rgiU++wLDlcZYd/slFkaT3xg4qWDepEMjT4T1qFOQIL+ijUArYS4owpPg9NISTKa1qqKWJ
+jFoyms0d0GwOniIIbBvhI2MJ7BSY9MYtWVT5jJO3tsVHwj4cp92CSFuGwunFMzCCA18wggJHoAMC
+AQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUAMEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9v
+dCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWduMRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5
+MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEgMB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENB
+IC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzARBgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqG
+SIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0E
+XyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuul9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+J
+J5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJpij2aTv2y8gokeWdimFXN6x0FNx04Druci8u
+nPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTv
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBUwwggQ0oAMCAQICDF5AaMOe0cZvaJpCQjANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAwODIxMzhaFw0yNTA5MTAwODIxMzhaMIGO
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xFTATBgNVBAMTDE1pY2hhZWwgQ2hhbjEoMCYGCSqGSIb3DQEJ
+ARYZbWljaGFlbC5jaGFuQGJyb2FkY29tLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC
+ggEBALhEmG7egFWvPKcrDxuNhNcn2oHauIHc8AzGhPyJxU4S6ZUjHM/psoNo5XxlMSRpYE7g7vLx
+J4NBefU36XTEWVzbEkAuOSuJTuJkm98JE3+wjeO+aQTbNF3mG2iAe0AZbAWyqFxZulWitE8U2tIC
+9mttDjSN/wbltcwuti7P57RuR+WyZstDlPJqUMm1rJTbgDqkF2pnvufc4US2iexnfjGopunLvioc
+OnaLEot1MoQO7BIe5S9H4AcCEXXcrJJiAtMCl47ARpyHmvQFQFFTrHgUYEd9V+9bOzY7MBIGSV1N
+/JfsT1sZw6HT0lJkSQefhPGpBniAob62DJP3qr11tu8CAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
+AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
+c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
+AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
+TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
+bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
+L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
+BB0wG4EZbWljaGFlbC5jaGFuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
+HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQU31rAyTdZweIF0tJTFYwfOv2w
+L4QwDQYJKoZIhvcNAQELBQADggEBACcuyaGmk0NSZ7Kio7O7WSZ0j0f9xXcBnLbJvQXFYM7JI5uS
+kw5ozATEN5gfmNIe0AHzqwoYjAf3x8Dv2w7HgyrxWdpjTKQFv5jojxa3A5LVuM8mhPGZfR/L5jSk
+5xc3llsKqrWI4ov4JyW79p0E99gfPA6Waixoavxvv1CZBQ4Stu7N660kTu9sJrACf20E+hdKLoiU
+hd5wiQXo9B2ncm5P3jFLYLBmPltIn/uzdiYpFj+E9kS9XYDd+boBZhN1Vh0296zLQZobLfKFzClo
+E6IFyTTANonrXvCRgodKS+QJEH8Syu2jSKe023aVemkuZjzvPK7o9iU7BKkPG2pzLPgxggJtMIIC
+aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
+EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxeQGjDntHGb2iaQkIw
+DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILQjaUf8zPS7sMKGPym/6Tp18njdR7Al
+IVY5d2NYmm6aMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMTEy
+MzE5NDIyMFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
+SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
+ATANBgkqhkiG9w0BAQEFAASCAQBwbhx2crQCTN+dxAbs5c6aTrYDgCo8SwDy6sVW3y+OjuW/KW8G
+kVWozuzrFQwjCCiUwmP60koW7tXZQOA/juDGuBkqLWF51oaoGI5dtkHspqSNooin2bHPQD1k8rTu
+9rYIdarGyKM7h0MoH64Wf7BWc8iPzmGwhvGUk82VbV+7eaCmrbqlL+wTbIDTh5YmGPAe3lzCcXvp
+9TD/LlwLTzme9tBXua6tYoWWZeKHzKMfOKNTDe+RRpNEGfHX0Cku6g6L983z7lFLLFBmKGTYzYu2
+Bostni9LlSWMPt1kFZc0/nLjZPxmktZUIoBc6IakRWRrpfWac3ttieu1zsst9FYm
+--0000000000009ef0d605ee287cc7--
