@@ -2,98 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2554E6361FF
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:40:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2668D6361FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 15:40:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237620AbiKWOkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 09:40:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39450 "EHLO
+        id S237894AbiKWOj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 09:39:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236669AbiKWOkG (ORCPT
+        with ESMTP id S237766AbiKWOjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 09:40:06 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C9E11C02;
-        Wed, 23 Nov 2022 06:40:05 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id 136so16960069pga.1;
-        Wed, 23 Nov 2022 06:40:05 -0800 (PST)
+        Wed, 23 Nov 2022 09:39:53 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219A743AD2
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 06:39:53 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id y6so13260007iof.9
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 06:39:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=nIsQcU06AK3WRXnlabkbvw+SZ63tPowhBviS6H4nIV8=;
-        b=bhWvXZX3GpxZRORmAcForRgQzy5Xw9L2lwowGxv3sS63xcfykrdDt1E2E2gMe8bOPY
-         CdmXiLCW2OFAUoM0/HsEAGFHAOcISHZPhBkoGwaJmrQ/Gq9CXkocKo/x4/So2eY4YNIv
-         MVDqSwZ77Awmbfq0rPBAKGHCn/LisZ4LzNqWtcsEmYW5PaQs6kVEFasr5qFXQ2Zq9dzw
-         JbOXpI2hEpNhxuLGV5d2RMiGLSK37h8NYb03XSjKC8GLDtxNryKWocI0hFUz7YtG6a5H
-         LYYPUyNcIajrHFN2HJFV8O7sqvfOxQzAk2h2Iw4EI7I0jYkb+gxcdPF9KFP/9AM1hOH3
-         K38g==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=w+iYV6kI8Gk9CIv4+Wp5wKD5Vy+egVw6+4bqcYnHaKI=;
+        b=d8tw10g4jtqLpofZTzhmT1a8hePY93ZndD3gt6AV59K25N6voZ5T1SnKpVpeRsvnAI
+         DmVe3PsPkvlbaWsGELyJZ8sgzqmkFrcidEruudubyMKbZz7q7hy6LRfr4iLRgksIg1vv
+         xTynzXdHshGggqHQatqo8SUBPDsXbwp1e3b0I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nIsQcU06AK3WRXnlabkbvw+SZ63tPowhBviS6H4nIV8=;
-        b=3jXnoOeLopExwYsTqP0RtdTTVeXU4dbEqgq4E1Ux3juHj516riBhkKhu4TOmjL4rpS
-         jMW1f1NM6jLoRUholKnN/DaAosjWfsSVSKbbxkvjeoZ9TO+71hTF1LnoZwGbUv8CyfPL
-         2pSjBEb2WozQBmwSfKkpttK2JHNfduYQ+PRe7ddfEQvyEsCqItYLAnWpD3O1CLK5QJjB
-         g33ZxUwyjZ80ZoK2U40Zy+B2Q0kF8SF1CtkvsG1Yv0dsB3LkqI0Vx/rhSMgIjBuW8nBf
-         nc75/a2slC9fW7zVZCRi5Rkp1jHmUtNfTAYTLJ04BfxiHdfMd9TX1wa5HUKAfOoK6Q32
-         GfZA==
-X-Gm-Message-State: ANoB5pnMQzprb+J04jsGlKF2lE8cMSC8otnQUs7U1hyXI2fKUQua7Tka
-        5f1qhgznCOToLwF0zQ69/nY=
-X-Google-Smtp-Source: AA0mqf6naUoM/rh1taT5Ux7w7gInpiYkEdCFj6do7CRuDeYDIfjYPKDxcvNKSVs4gEulmiB9MH+LGQ==
-X-Received: by 2002:aa7:8054:0:b0:56c:4303:a93d with SMTP id y20-20020aa78054000000b0056c4303a93dmr13403671pfm.73.1669214405086;
-        Wed, 23 Nov 2022 06:40:05 -0800 (PST)
-Received: from DESKTOP-HHR6EMI.localdomain ([58.120.209.5])
-        by smtp.gmail.com with ESMTPSA id p17-20020a170902c71100b0017f5c7d3931sm14118037plp.282.2022.11.23.06.40.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 06:40:04 -0800 (PST)
-From:   void0red <void0red@gmail.com>
-To:     dsterba@suse.com
-Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        void0red <void0red@gmail.com>, eriri <1527030098@qq.com>
-Subject: [PATCH] btrfs: avoid use-after-free when return the error code
-Date:   Wed, 23 Nov 2022 22:39:45 +0800
-Message-Id: <20221123143945.2666-1-void0red@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w+iYV6kI8Gk9CIv4+Wp5wKD5Vy+egVw6+4bqcYnHaKI=;
+        b=8KqkHZ62C4J0mOfi0EeSotc62cIYKIR0+c1CNdhUfxy6CBIPjg+wQWKh2kXf0JvZVk
+         YWgqOFg4E5nX0vJ08Ds4UCq0XO1I5Ofsy3t3sJanfY7pvw8FObA5M8oPYTpi3Sx7ldxG
+         K+N489O7r/fqql0pMj6BptxIAt22zRi1oO9hSQodSYo/6U9zBeg6J6qXvXnQQF+56SUj
+         BjpLHBqb4LTHDj1Qv7gUuRxBZszgv8giAwqUna7ceUJHNLmz/qZ2XsuFe9SKWweo9LWo
+         zaNdUh/qeTDWx+wwYXTg25f6kMzXGDWW5/QD3P0crHfkumzstpjmr89J7GSpqSvvirfc
+         fFUQ==
+X-Gm-Message-State: ANoB5pkwN3888pEBavz9SY7Gyllx54Z5VCv3ouCUJdgYWXoWsg/cKwh7
+        kvwB6boPEUx9KpKsjjj25r5/2w==
+X-Google-Smtp-Source: AA0mqf7iPTcWLEFnYgztOLb+FkD7e3oqdAY4QDsam+H748gK8+kwtFePlhri9cdquk/ZyyGh5+eOeQ==
+X-Received: by 2002:a02:334d:0:b0:376:22fe:5e7c with SMTP id k13-20020a02334d000000b0037622fe5e7cmr13067604jak.126.1669214392381;
+        Wed, 23 Nov 2022 06:39:52 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id e1-20020a028601000000b003636c5dcf29sm6242823jai.176.2022.11.23.06.39.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Nov 2022 06:39:52 -0800 (PST)
+Date:   Wed, 23 Nov 2022 14:39:51 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Owen Yang <ecs.taipeikernel@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>, Harvey <hunge@google.com>,
+        Bob Moragues <moragues@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: sc7280: Add DT for
+ sc7280-herobrine-zombie
+Message-ID: <Y34wtwSlqc0y4Msz@google.com>
+References: <20221123181043.1.Idfcba5344b7995b44b7fa2e20f1aa4351defeca6@changeid>
+ <20221123181043.2.Ie435b31225d2dc284a34ac8e52fb84fffb39488c@changeid>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221123181043.2.Ie435b31225d2dc284a34ac8e52fb84fffb39488c@changeid>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-free_extent_map(em) will free em->map_lookup, so it is
-wrong to use it when return.
+On Wed, Nov 23, 2022 at 06:11:13PM +0800, Owen Yang wrote:
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216721
-Signed-off-by: void0red <void0red@gmail.com>
-Reported-by: eriri <1527030098@qq.com>
----
- fs/btrfs/volumes.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> Subject: [2/2] arm64: dts: qcom: sc7280: Add DT for sc7280-herobrine-zombie
 
-diff --git a/fs/btrfs/volumes.c b/fs/btrfs/volumes.c
-index 635f45f1a2ef..dba087ad40ea 100644
---- a/fs/btrfs/volumes.c
-+++ b/fs/btrfs/volumes.c
-@@ -7241,8 +7241,9 @@ static int read_one_chunk(struct btrfs_key *key, struct extent_buffer *leaf,
- 			map->stripes[i].dev = handle_missing_device(fs_info,
- 								    devid, uuid);
- 			if (IS_ERR(map->stripes[i].dev)) {
-+				ret = PTR_ERR(map->stripes[i].dev);
- 				free_extent_map(em);
--				return PTR_ERR(map->stripes[i].dev);
-+				return ret;
- 			}
- 		}
- 
--- 
-2.34.1
+Please in include a version number for versions >1. If my accounting is correct
+this is v3, so the next iteration should be v4.
 
+You mentioned earlier that you are using patman. Add the following tag to
+one of the patches in the series to get the version included in the subject:
+
+Series-version: 4
+
+> Add DT for sc7280-herobrine-zombie
+> 
+> Signed-off-by: Owen Yang <ecs.taipeikernel@gmail.com>
+> ---
+
+Where is the change log that I requested for v2? A change log helps reviewers to
+focus their attention and can save them time by allowing them to skip parts they
+already have reviewed.
+
+Again patman can come to your help:
+
+Commit-changes: 2
+- <change 1>
+- <change 2>
+
+Commit-changes: 3
+- none (<= example)
+
+>  arch/arm64/boot/dts/qcom/Makefile             |   2 +
+>  .../dts/qcom/sc7280-herobrine-zombie-lte.dts  |  15 +
+>  .../boot/dts/qcom/sc7280-herobrine-zombie.dts |  15 +
+>  .../dts/qcom/sc7280-herobrine-zombie.dtsi     | 310 ++++++++++++++++++
+>  4 files changed, 342 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie-lte.dts
+>  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dts
+>  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index afe496a93f94..7b0644a39062 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -114,6 +114,8 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-herobrine-r1.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-villager-r0.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-villager-r1.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-villager-r1-lte.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-zombie.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-zombie-lte.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp2.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-crd-r3.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie-lte.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie-lte.dts
+> new file mode 100644
+> index 000000000000..2f1da87e5005
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie-lte.dts
+> @@ -0,0 +1,15 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Google Zombie board device tree source
+> + *
+> + * Copyright 2022 Google LLC.
+> + */
+
+nit: add an empty line here
+
+> +/dts-v1/;
+> +
+> +#include "sc7280-herobrine-zombie.dtsi"
+> +#include "sc7280-herobrine-lte-sku.dtsi"
+> +
+> +/ {
+> +	model = "Google Zombie with LTE";
+> +	compatible = "google,zombie-sku512", "qcom,sc7280";
+> +};
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dts
+> new file mode 100644
+> index 000000000000..3fa3d441991e
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dts
+> @@ -0,0 +1,15 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Google Zombie board device tree source
+> + *
+> + * Copyright 2022 Google LLC.
+> + */
+
+You deleted an empty line here, instead of removing the unnecessary '/dts-v1/;'
+entry from the .dtsi as requested.
+
+> +/dts-v1/;
+> +
+> +#include "sc7280-herobrine-zombie.dtsi"
+> +#include "sc7280-herobrine-wifi-sku.dtsi"
+> +
+> +/ {
+> +	model = "Google Zombie";
+> +	compatible = "google,zombie", "qcom,sc7280";
+> +};
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtsi
+> new file mode 100644
+> index 000000000000..15832620ff5d
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtsi
+> @@ -0,0 +1,310 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Google Zombie board device tree source
+> + *
+> + * Copyright 2022 Google LLC.
+> + */
+> +/dts-v1/;
+
+Please drop the above line as requested in the review of v2.
