@@ -2,133 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3638E63604F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:47:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55086636051
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Nov 2022 14:47:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237394AbiKWNra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 08:47:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60144 "EHLO
+        id S236887AbiKWNrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 08:47:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238697AbiKWNrL (ORCPT
+        with ESMTP id S238755AbiKWNrN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 08:47:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D45B5A6D5
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:35:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669210523;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=fPZl80clgJEOhCWJTzGU2bHEtRGaUbcwve3HQWi3lhY=;
-        b=YtwI2PfB213+r4KqdW+fu/YtV5sw5aohj/8EJeLmDVDsdFErLIkd0QhbWq2rwc35eRnLi5
-        tnzas8TJDeJGxN9EmJuKCHVJXZkvhMA7+8XLJ0jk4MchikCHvqrQRZg1Nd38Whsh0RqyVP
-        TeJt8xtgcnEaMubXkqdBxoPGS0Or/hg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-411-WdEaAAr1MUmDkjhNT0rVJw-1; Wed, 23 Nov 2022 08:35:20 -0500
-X-MC-Unique: WdEaAAr1MUmDkjhNT0rVJw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8DF2C29DD9B1;
-        Wed, 23 Nov 2022 13:35:19 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.14])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9D8EA2028E8F;
-        Wed, 23 Nov 2022 13:35:18 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     Christoph Hellwig <hch@lst.de>, Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>
-cc:     dhowells@redhat.com, torvalds@linux-foundation.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Should iov_iter_get_pages*() be EXPORT_SYMBOL_GPL?
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1464423.1669210515.1@warthog.procyon.org.uk>
+        Wed, 23 Nov 2022 08:47:13 -0500
+Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B72BB4
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 05:36:13 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1669210562; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=Fl6C8NlVzAsWPEBN5Zu5VN9JD+iUmo2wGYPhBFG8JNOkRXAJbNNEsar2nmLxps62oT+7vQ2ZlxCgc0n4PfrJNqo5I5BBULajA2Wg/jG2BhXv0pGC9erZPMHfkTtewtWAyUQosXLRis8oJKA6x3zMQAxvL56wpIh/sAPVNravmkE=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1669210562; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=jmmp9+L79IRqXmKJpYo/LsiNpc9jXUTGtxlroOFT0zw=; 
+        b=LLLJMoVGg8/9XWLtI6vy/T0IGhP8DXIhmVGLagmKZCvYUeovQFQgCiVAg+YMwt39juHzzYhk6Pa+91dGZmtHpt86LRgBPrInvxPbAOuKWRV6nJS6FpAFdcansC3bLl5dI1JrLSr6faDTOaiVzopD4OtNQLBGnSz4UROo1S0ht48=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=icenowy.me;
+        spf=pass  smtp.mailfrom=uwu@icenowy.me;
+        dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1669210562;
+        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
+        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
+        bh=jmmp9+L79IRqXmKJpYo/LsiNpc9jXUTGtxlroOFT0zw=;
+        b=G7ZbHoy8kztiB9tz7MtYY2f/s1u7EwcanqDgruvmpxoBvDBg3ZhgWy4pkK8sa5Fx
+        oLco6zARtcqHOH8sv2NG4yXD3ine9ELucLsTBAt/fV9WLvGig9T0n1Hyldc2bMaaoog
+        4uvoaSN+u/GPhnXGOEFnNW55R9ktzXRgCAvAZ0ZM=
+Received: from edelgard.fodlan.icenowy.me (112.94.103.239 [112.94.103.239]) by mx.zohomail.com
+        with SMTPS id 1669210561991307.3321068682709; Wed, 23 Nov 2022 05:36:01 -0800 (PST)
+Message-ID: <463d5effd271c002fb18fb3b8326321501c18782.camel@icenowy.me>
+Subject: Re: [PATCH] irqchip/sifive-plic: drop quirk for two-cell variant
+From:   Icenowy Zheng <uwu@icenowy.me>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Date:   Wed, 23 Nov 2022 21:35:58 +0800
+In-Reply-To: <86h6ypol03.wl-maz@kernel.org>
+References: <20221121042026.419383-1-uwu@icenowy.me>
+         <86o7syoq4t.wl-maz@kernel.org>
+         <16d01eebc1693916fc74e1e75458d6c0f080cf37.camel@icenowy.me>
+         <86ilj5oltb.wl-maz@kernel.org>
+         <402eb920c5ca84e7d751ec7bd9b7f4f512a66921.camel@icenowy.me>
+         <86h6ypol03.wl-maz@kernel.org>
+Organization: Anthon Open-Source Community
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 23 Nov 2022 13:35:15 +0000
-Message-ID: <1464424.1669210515@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.44.4 
+MIME-Version: 1.0
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I recently posted an intended replacement[1] for iov_iter_get_pages*() whi=
-ch,
-instead of always just getting a ref on the pages it extracts from the
-iterator it is given, will pin them or leave them unaltered (but still in =
-the
-list) as appropriate.
+=E5=9C=A8 2022-11-23=E6=98=9F=E6=9C=9F=E4=B8=89=E7=9A=84 13:31 +0000=EF=BC=
+=8CMarc Zyngier=E5=86=99=E9=81=93=EF=BC=9A
+> On Wed, 23 Nov 2022 13:16:01 +0000,
+> Icenowy Zheng <uwu@icenowy.me> wrote:
+> >=20
+> > =E5=9C=A8 2022-11-23=E6=98=9F=E6=9C=9F=E4=B8=89=E7=9A=84 13:13 +0000=EF=
+=BC=8CMarc Zyngier=E5=86=99=E9=81=93=EF=BC=9A
+> > > On Wed, 23 Nov 2022 12:38:56 +0000,
+> > > Icenowy Zheng <uwu@icenowy.me> wrote:
+> > > >=20
+> > > > =E5=9C=A8 2022-11-22=E6=98=9F=E6=9C=9F=E4=BA=8C=E7=9A=84 17:28 +000=
+0=EF=BC=8CMarc Zyngier=E5=86=99=E9=81=93=EF=BC=9A
+> > > > > On Mon, 21 Nov 2022 04:20:26 +0000,
+> > > > > Icenowy Zheng <uwu@icenowy.me> wrote:
+> > > > > >=20
+> > > > > > As the special handling of edge-triggered interrupts are
+> > > > > > defined in
+> > > > > > the
+> > > > > > PLIC spec, we can assume it's not a quirk, but a feature of
+> > > > > > the
+> > > > > > PLIC
+> > > > > > spec; thus making it a quirk and use quirk-based codepath
+> > > > > > is
+> > > > > > not so
+> > > > > > necessary.
+> > > > >=20
+> > > > > It *is* necessary.
+> > > > >=20
+> > > > > >=20
+> > > > > > Move to a #interrupt-cells-based practice which will allow
+> > > > > > both
+> > > > > > device
+> > > > > > trees without interrupt flags and with interrupt flags work
+> > > > > > for
+> > > > > > all
+> > > > > > compatible strings.
+> > > > >=20
+> > > > > No. You're tying together two unrelated concepts:
+> > > > >=20
+> > > > > - Edges get dropped in some implementations (and only some).
+> > > > > You
+> > > > > can
+> > > > > =C2=A0 argue that the architecture allows it, but I see it is an
+> > > > > =C2=A0 implementation bug.
+> > > >=20
+> > > > As the specification allows it, it's not an implementation bug
+> > > > --
+> > > > and
+> > > > for those which do not show this problem, it's possible that
+> > > > it's
+> > > > just
+> > > > all using the same trigger type (e.g. Rocket).
+> > >=20
+> > > What are you against? The fact that this is flagged as a quirk?
+> > > Honestly, I don't care about that. If we can fold all
+> > > implementations
+> > > into the same scheme, that's fine by me.
+> >=20
+> > Then what should I do?
+>=20
+> Make all edge-triggered interrupts use the edge flow.
+>=20
+> >=20
+> > >=20
+> > > >=20
+> > > > >=20
+> > > > > - The need for expressing additional information in the
+> > > > > interrupt
+> > > > > =C2=A0 specifier is not necessarily related to the above. Other
+> > > > > interrupt
+> > > > > =C2=A0 controllers use extra cells to encode the interrupt
+> > > > > affinity,
+> > > > > for
+> > > > > =C2=A0 example.
+> > > >=20
+> > > > I think in these situations, if the interrupt controller does
+> > > > not
+> > > > contain any special handling for edge interrupts, we can just
+> > > > describe
+> > > > them as level ones in SW.
+> > >=20
+> > > No, that's utterly wrong. We don't describe an edge as level.
+> > > Ever.
+> > >=20
+> > > >=20
+> > > > >=20
+> > > > > I want these two things to be kept separate. Otherwise, once
+> > > > > we
+> > > > > get
+> > > > > some fancy ACPI support for RISCV (no, please...), we'll have
+> > > > > to
+> > > > > redo
+> > > > > the whole thing...
+> > > > >=20
+> > > > > > In addition, this addresses a stable version DT binding
+> > > > > > violation -
+> > > > > > -
+> > > > > > Linux v5.19 comes with "thead,c900-plic" with #interrupt-
+> > > > > > cells
+> > > > > > defined to
+> > > > > > be 1 instead of 2, this commit will allow DTs that complies
+> > > > > > to
+> > > > > > Linux
+> > > > > > v5.19 binding work (although no such DT is devliered to the
+> > > > > > public
+> > > > > > now).
+> > > > >=20
+> > > > > *That* is what should get fixed.
+> > > >=20
+> > > > Supporting all stable versions' DT binding is our promise, I
+> > > > think.
+> > >=20
+> > > Absolutely. And I'm asking you to fix it. And only that.
+> >=20
+> > Then what should I do? Mask this as another quirk that is only
+> > applicable to c900-plic?
+>=20
+> No. Make interrupts with a single cell use the level flow.
 
-However, Christoph objected[2] to my using EXPORT_SYMBOL() with it on the
-basis that:
+This sounds exactly like what we do in this patch now.
 
-	get_user_pages_fast, pin_user_pages_fast are very intentionally
-	EXPORT_SYMBOL_GPL, which should not be bypassed by an iov_* wrapper.
+Or, should we keep the quirk, and require both a flag cell containing
+IRQ_TYPE_EDGE_RISING and an interrupt controller that matches the quirk
+to use the special codepath for edge interrupts?
 
-but iov_iter_get_pages*() is EXPORT_SYMBOL(), so it's already possible to
-bypass this restriction.  He has also raised other objections[3].
-
-Should we then convert this to EXPORT_SYMBOL_GPL(), as per the attached pa=
-tch?
-
-Link: https://lore.kernel.org/r/166920902005.1461876.2786264600108839814.s=
-tgit@warthog.procyon.org.uk/ [1]
-Link: https://lore.kernel.org/r/Y3zFzdWnWlEJ8X8/@infradead.org/ [2]
-Link: https://lore.kernel.org/lkml/20221025154143.GA25128@lst.de/ [3]
----
-iov_iter: Mark iov_iter_get_pages2*() as EXPORT_SYMBOL_GPL()
-
-iov_iter_get_pages2*() should be marked EXPORT_SYMBOL_GPL() as the use
-get_user_pages_fast()[1].
-
-Reported-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Al Viro <viro@zeniv.linux.org.uk>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: linux-mm@kvack.org
-cc: linux-fsdevel@vger.kernel.org
-Link: https://lore.kernel.org/r/Y3zFzdWnWlEJ8X8/@infradead.org/ [1]
----
- iov_iter.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/lib/iov_iter.c b/lib/iov_iter.c
-index 612fc9bf9881..02b02a5fece4 100644
---- a/lib/iov_iter.c
-+++ b/lib/iov_iter.c
-@@ -1502,7 +1502,7 @@ ssize_t iov_iter_get_pages2(struct iov_iter *i,
- =
-
- 	return __iov_iter_get_pages_alloc(i, &pages, maxsize, maxpages, start);
- }
--EXPORT_SYMBOL(iov_iter_get_pages2);
-+EXPORT_SYMBOL_GPL(iov_iter_get_pages2);
- =
-
- ssize_t iov_iter_get_pages_alloc2(struct iov_iter *i,
- 		   struct page ***pages, size_t maxsize,
-@@ -1519,7 +1519,7 @@ ssize_t iov_iter_get_pages_alloc2(struct iov_iter *i=
-,
- 	}
- 	return len;
- }
--EXPORT_SYMBOL(iov_iter_get_pages_alloc2);
-+EXPORT_SYMBOL_GPL(iov_iter_get_pages_alloc2);
- =
-
- size_t csum_and_copy_from_iter(void *addr, size_t bytes, __wsum *csum,
- 			       struct iov_iter *i)
+>=20
+> > Sounds more crazy...
+>=20
+> There is obviously no accounting for taste.
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 M.
+>=20
 
