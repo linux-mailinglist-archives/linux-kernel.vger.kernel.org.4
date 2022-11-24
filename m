@@ -2,155 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72EDD637644
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:23:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BE19637646
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:23:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbiKXKXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 05:23:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37572 "EHLO
+        id S230106AbiKXKX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 05:23:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbiKXKW7 (ORCPT
+        with ESMTP id S230048AbiKXKXF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 05:22:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656F514F509
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:22:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669285323;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+9WV1qYNyaVdVQKDsAXQEGMpoN9r3x4zYBqnGJQF4uY=;
-        b=WLXUKeAEHmIHZicHmQvHkiKC5UK9hWq5DsvEiuhKMmg/d8omRVZWW0th8sueDWtEoqPyy+
-        Nz4atzpXC3KFICFIMQwEZRmjijLxcaNmoWcqv1SehbdC7fRMLFSjHVMOo9hYKknKJ5Vunr
-        WNvkwxPF1ZNcJPeU9TkE8AjMRjKjuuI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-417-8O94hoaGNjyMoucvV7lfTw-1; Thu, 24 Nov 2022 05:21:58 -0500
-X-MC-Unique: 8O94hoaGNjyMoucvV7lfTw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 840DE185A78B;
-        Thu, 24 Nov 2022 10:21:57 +0000 (UTC)
-Received: from [10.64.54.95] (vpn2-54-95.bne.redhat.com [10.64.54.95])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 67B7710197;
-        Thu, 24 Nov 2022 10:21:53 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v2] mm: migrate: Fix THP's mapcount on isolation
-To:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        william.kucharski@oracle.com, ziy@nvidia.com,
-        kirill.shutemov@linux.intel.com, zhenyzha@redhat.com,
-        apopple@nvidia.com, hughd@google.com, willy@infradead.org,
-        shan.gavin@gmail.com
-References: <20221124095523.31061-1-gshan@redhat.com>
- <3c584ce6-dc8c-e0e4-c78f-b59dfff1fc13@redhat.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <22407f18-0406-6ede-ef1e-592f03d3699e@redhat.com>
-Date:   Thu, 24 Nov 2022 18:21:50 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Thu, 24 Nov 2022 05:23:05 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D3A2D2;
+        Thu, 24 Nov 2022 02:22:26 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id ha10so3175348ejb.3;
+        Thu, 24 Nov 2022 02:22:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=stdCwGhL1mHRmXy8gxhkkhvFFywWZf8vqJUMKC2QRIs=;
+        b=oGLkjrrOidE3YmS32GPKlogmQTBiN4XUIyC8I7bF0OYljNVDivq/a+3FS5nq0Y8TUn
+         bTCI1iktkkjR1XbWWU9uZ/3boh3GzIZc8xFp2b5CQKuNU1eIy/55g+Ul9bha3C8IyhLk
+         vbq+x2veJFR7JYWOf+kB058CSQx0GaF8YDf2r/ZpsE/k9Rp8bHO0qVXhMa3MEB1rtoGi
+         qbf9EN/0iC5fCxgfd8VMdEqC/R9tHwTjIIdJ3PjAjvziFn0WGerYhdk6ePXjo707Se6a
+         +vqPijI8JRtTErRffXO4wE4C9thHmzhywQrgzmU90EsrJglOhFTitTAMtlA4IV0nNfNd
+         l0HQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=stdCwGhL1mHRmXy8gxhkkhvFFywWZf8vqJUMKC2QRIs=;
+        b=p4Fd01cCmjpVmtmfXYCoVVHVhvSTA34huw4BqNuwrGSP/Ce0C72SA9uuTOMVFcV8/4
+         XmFVlYBwH3t3raHY8TP7y4xvLVVB9mknRxZUtOBgj9Ix7GOawDdb5jw21fH6IW+nvodW
+         FHilbSjoX0otoACndZrQFU0K4bSzXLVJkZx/AzaEvCxNCKpdk/ySM7JVMKhGACQAUuMQ
+         pF6vS/id5W1wr89K5aGaRW9uN3Uiq6xLKCOG57DfQlsscn1+DyUBwxC+6zvYTfWJ3LLY
+         nHMqFRu8hv1flZ68auemExOu8BCqCoJYN+M0LB53LNaP+qgG9zxP4wqxnH69f1VLk9dt
+         jmjw==
+X-Gm-Message-State: ANoB5pm5nzvJRKY2NdStGQMsJfK7OMqaxLq9YQ72zR7QGBRsHmXfveqd
+        9c7p5YGdAUvolF30XE2vgXg=
+X-Google-Smtp-Source: AA0mqf7C/mX/HsawCOYBF9Yqmbq+WucHlUwatJgrzcc90no4pq+9Q3VhTkrYD3eMm1WDnyO9OPW+/w==
+X-Received: by 2002:a17:906:2e86:b0:7a5:f8a5:6f86 with SMTP id o6-20020a1709062e8600b007a5f8a56f86mr26183204eji.610.1669285344892;
+        Thu, 24 Nov 2022 02:22:24 -0800 (PST)
+Received: from skbuf ([188.26.57.184])
+        by smtp.gmail.com with ESMTPSA id o26-20020a170906289a00b0077d37a5d401sm278357ejd.33.2022.11.24.02.22.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Nov 2022 02:22:24 -0800 (PST)
+Date:   Thu, 24 Nov 2022 12:22:21 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Arun.Ramadoss@microchip.com
+Cc:     andrew@lunn.ch, linux-kernel@vger.kernel.org,
+        UNGLinuxDriver@microchip.com, vivien.didelot@gmail.com,
+        linux@armlinux.org.uk, Tristram.Ha@microchip.com,
+        f.fainelli@gmail.com, kuba@kernel.org, edumazet@google.com,
+        pabeni@redhat.com, richardcochran@gmail.com,
+        netdev@vger.kernel.org, Woojung.Huh@microchip.com,
+        davem@davemloft.net
+Subject: Re: [RFC Patch net-next v2 3/8] net: dsa: microchip: Initial
+ hardware time stamping support
+Message-ID: <20221124102221.2xldwevfmjbekx43@skbuf>
+References: <20221121154150.9573-1-arun.ramadoss@microchip.com>
+ <20221121154150.9573-4-arun.ramadoss@microchip.com>
+ <20221121231314.kabhej6ae6bl3qtj@skbuf>
+ <298f4117872301da3e4fe4fed221f51e9faab5d0.camel@microchip.com>
 MIME-Version: 1.0
-In-Reply-To: <3c584ce6-dc8c-e0e4-c78f-b59dfff1fc13@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <298f4117872301da3e4fe4fed221f51e9faab5d0.camel@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/24/22 6:09 PM, David Hildenbrand wrote:
-> On 24.11.22 10:55, Gavin Shan wrote:
->> The issue is reported when removing memory through virtio_mem device.
->> The transparent huge page, experienced copy-on-write fault, is wrongly
->> regarded as pinned. The transparent huge page is escaped from being
->> isolated in isolate_migratepages_block(). The transparent huge page
->> can't be migrated and the corresponding memory block can't be put
->> into offline state.
->>
->> Fix it by replacing page_mapcount() with total_mapcount(). With this,
->> the transparent huge page can be isolated and migrated, and the memory
->> block can be put into offline state. Besides, The page's refcount is
->> increased a bit earlier to avoid the page is released when the check
->> is executed.
+On Wed, Nov 23, 2022 at 01:57:47PM +0000, Arun.Ramadoss@microchip.com wrote:
+> > What's your excuse which such a horrible code pattern? What will happen
+> > so bad with the packet if it's flagged with a TX timestamp request in
+> > KSZ_SKB_CB(skb) at the same time as REG_PTP_MSG_CONF1 is written to?
+> > 
+> > Also, doesn't dev->ports[port].hwts_tx_en serve as a guard against
+> > flagging packets for TX timestamps when you shouldn't?
+> > 
 > 
-> Did you look into handling pages that are in the swapcache case as well?
-> 
-> See is_refcount_suitable() in mm/khugepaged.c.
-> 
-> Should be easy to reproduce, let me know if you need inspiration.
-> 
+> I took this configuration template routine from other driver.
 
-Nope, I didn't look into the case. Please elaborate the details so that
-I can reproduce it firstly.
+Not really a good excuse. The sja1105 driver has more hardware-specific
+issues to deal with, not necessarily the same as ksz.
 
->>
->> Fixes: 1da2f328fa64 ("mm,thp,compaction,cma: allow THP migration for CMA allocations")
->> Cc: stable@vger.kernel.org   # v5.7+
->> Reported-by: Zhenyu Zhang <zhenyzha@redhat.com>
->> Suggested-by: David Hildenbrand <david@redhat.com>
->> Signed-off-by: Gavin Shan <gshan@redhat.com>
->> ---
->> v2: Corrected fix tag and increase page's refcount before the check
->> ---
->>   mm/compaction.c | 22 +++++++++++-----------
->>   1 file changed, 11 insertions(+), 11 deletions(-)
->>
->> diff --git a/mm/compaction.c b/mm/compaction.c
->> index c51f7f545afe..1f6da31dd9a5 100644
->> --- a/mm/compaction.c
->> +++ b/mm/compaction.c
->> @@ -984,29 +984,29 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
->>               goto isolate_fail;
->>           }
->> +        /*
->> +         * Be careful not to clear PageLRU until after we're
->> +         * sure the page is not being freed elsewhere -- the
->> +         * page release code relies on it.
->> +         */
->> +        if (unlikely(!get_page_unless_zero(page)))
->> +            goto isolate_fail;
->> +
->>           /*
->>            * Migration will fail if an anonymous page is pinned in memory,
->>            * so avoid taking lru_lock and isolating it unnecessarily in an
->>            * admittedly racy check.
->>            */
->>           mapping = page_mapping(page);
->> -        if (!mapping && page_count(page) > page_mapcount(page))
->> -            goto isolate_fail;
->> +        if (!mapping && (page_count(page) - 1) > total_mapcount(page))
->> +            goto isolate_fail_put;
->>           /*
->>            * Only allow to migrate anonymous pages in GFP_NOFS context
->>            * because those do not depend on fs locks.
->>            */
->>           if (!(cc->gfp_mask & __GFP_FS) && mapping)
->> -            goto isolate_fail;
->> -
->> -        /*
->> -         * Be careful not to clear PageLRU until after we're
->> -         * sure the page is not being freed elsewhere -- the
->> -         * page release code relies on it.
->> -         */
->> -        if (unlikely(!get_page_unless_zero(page)))
->> -            goto isolate_fail;
->> +            goto isolate_fail_put;
->>           /* Only take pages on LRU: a check now makes later tests safe */
->>           if (!PageLRU(page))
+> Can I replace above snippet with
 > 
+> tagger_data->hwtstamp_set_state(dev->ds, rx_on);
+> ret = ksz_ptp_enable_mode(dev, rx_on);
+> if (ret)
+>     return ret;
 
-Thanks,
-Gavin
-
+Why do you need to call hwtstamp_set_state anyway?
