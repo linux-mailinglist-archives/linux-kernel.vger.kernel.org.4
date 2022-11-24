@@ -2,151 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 408D26375B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 10:57:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0B5C6375B1
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 10:57:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbiKXJ5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 04:57:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43088 "EHLO
+        id S229821AbiKXJ5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 04:57:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbiKXJ5r (ORCPT
+        with ESMTP id S229648AbiKXJ5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 04:57:47 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F7014001
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 01:57:46 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id e76so1274244yba.5
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 01:57:46 -0800 (PST)
+        Thu, 24 Nov 2022 04:57:43 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E80610B49
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 01:57:39 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id z24so1421078ljn.4
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 01:57:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=r/inbI+y1fhrxyLW9sS+q/7x6KkspXDB7h9KT6wBhFI=;
-        b=FsQyigU5X9Bj9xZiNwYg2vk1ek0GVhZG+zbSZ3vYiapFPlAQUN1xt3rSqtvzfV2J0o
-         xn34AJ262EZYn2nnGIyRHGnlUbJL/Ecj+cE9/nguY3T/aDuwKpTUmTkCIShYtgNJoqJ6
-         S+oSflzGcP2f6TMQwdf/Uqc3W+iufoDZ5qIrmRnn+wEJIxLZcDcvcGWYSRe8V3BNRzgl
-         X5pfGd6YRxRlZWJBqxbiE5b9oBOh4m/QQneZJjN5a90umabI+6XNKCBALBGTsy86LiFl
-         yhS7VqlNE1bn/uB9f0sMRct+oHhUAme3rh1NsgpPJVtF+ukY/BxuBNM+1XHkuRQJo8J9
-         n07A==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6I1o6volX+RUUsGHfsMyw2b887nAq2ZLugLHYOJPxlY=;
+        b=z18kdr9GDZG9iwQuRU+lJM34ZIb8yZsUN0LMmzNVGr6J8/R6dJ4ljXINp7fjjIZHpO
+         R6hABNLq65bmiFgOxY6sTkEjgV8UOVJgHI///PRjmRxRQYw9y4eqOyPRTe3FGuIdsdIp
+         crgRrj7jUCIXqQ1dWyBH47MGAOpY5rIbnM+El1aMOGkwJqIk9z+S/aIgj7zbAJAR2mB2
+         P048RNcfHuUKVsEypyRrNUYkG5PygwES0iMhVmdBD24BJydmVsY5g8ErkClFDmhS/nQl
+         ndnAJjXWUNWLp/jcwFlQnrN6ayEgYPMAPXDsEuJlvY1U6olFezDJ417kPsGDOB0fy2tI
+         e3NA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=r/inbI+y1fhrxyLW9sS+q/7x6KkspXDB7h9KT6wBhFI=;
-        b=CKiZIrMQ3MPJdAary6wA9DQ9ZvAT+Qt2HPK/K8zgErY3vhaEG1p4fNlrBK+FPspBgD
-         oPtJDw2OeyCUUYp1v8bXdkvqvHFQn1d8Blv7vAZQkGIjlQ8W1GNjp2tBAzs32C7GeXIM
-         2QoZWliXFfMigEtbdLPI1ka7NV1odYNipLQs8DbPM+6cQuM6ceCUecPiDlCexI5Mdab6
-         IIjaNRu5a0XF6JwqkS+VNXD/ahBWQDtyFX/E5xXZ9AsVrWyHakVBSUxR3ALE4dqtuWWD
-         HtgC3DwnLAWu5UFYXZLtjQwX35MWLnp5DLVb3t1o52kmJ192tmK2my+3iTjK9/kA2Ay6
-         I8JQ==
-X-Gm-Message-State: ANoB5pkp7RIWOi9XjUP83PcWdanqQUAbv9NFZ7NoHPNpqJDUjRAX2vk4
-        Ekq6TyK3gQmA8celhKqXOgb85IaY68SebcD/uUzCB4e6iKygig==
-X-Google-Smtp-Source: AA0mqf4qkrdY9iSNek494zZjiqDs6tUrY9sSvGelHCP42eGUIvgdfUL9wM1QFB3i6woY0JwsbG4QB5ulMunhWiUYhGg=
-X-Received: by 2002:a25:f302:0:b0:6dd:4825:ba8f with SMTP id
- c2-20020a25f302000000b006dd4825ba8fmr30016399ybs.103.1669283865119; Thu, 24
- Nov 2022 01:57:45 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6I1o6volX+RUUsGHfsMyw2b887nAq2ZLugLHYOJPxlY=;
+        b=SWCPpMDg2+cXF8KFLLX9tJu4BLCcFCHKkx+5nWxhS0d0iXnx3RvcFNivByI8PWkaiR
+         ntXlml3+sekJbK5WERgN5VTJ/dOSpt2Y/AQlLIiUdVELwZNC/Abr+DNc1BIwI85gZACo
+         jXr8b/tRqlMOleBKSJY1pTtuneaD2q041FqEQm43HjUq5y40spL6Ts1c393LGMkCm8tq
+         +35ntuulbFKgsIKUkslCii4fdv9Cp2fU0Ve7i3naGANnQGElKuGy9hBoTnHNrfIuoOXu
+         nClHjHDKCiBR4YIScLF4DPemZN5qryhaQBQlZpSd928Dl8ueil0D6hphdtQW+CtJKTkH
+         yXEw==
+X-Gm-Message-State: ANoB5pkA9UWaOSMK/U/cIkS6pq48sW2RnSpVOHVXqdsL8d+graHIA3HC
+        tgd38H+OaKe52KIp6ViHdHm6ANCEHGZm09sU
+X-Google-Smtp-Source: AA0mqf6Jc+qkD0wdFx7K1LD9ZggUPCtkQaVkxSK919XpFPLsgT8bVNJyrJwZKQWX9FngOW7q2+sMcA==
+X-Received: by 2002:a05:651c:119c:b0:279:7164:a0aa with SMTP id w28-20020a05651c119c00b002797164a0aamr3647679ljo.318.1669283857568;
+        Thu, 24 Nov 2022 01:57:37 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id j8-20020a2e3c08000000b0027976ad6ab6sm59512lja.58.2022.11.24.01.57.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Nov 2022 01:57:37 -0800 (PST)
+Message-ID: <c2b0686a-802c-1373-8746-dac6b42430ed@linaro.org>
+Date:   Thu, 24 Nov 2022 10:57:36 +0100
 MIME-Version: 1.0
-From:   Guillermo Rodriguez Garcia <guille.rodriguez@gmail.com>
-Date:   Thu, 24 Nov 2022 10:57:34 +0100
-Message-ID: <CABDcavYdsk-O4x3oPX4i4+T5wsoZV26_kpEq6JvpD8A_cAGHxg@mail.gmail.com>
-Subject: SOC_DOUBLE_R_SX_TLV controls broken in cs24l51 driver
-To:     linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?Q?Tan_Nay=C4=B1r?= <tannayir@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@codeaurora.org>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        David Rhodes <david.rhodes@cirrus.com>,
-        James Schulman <james.schulman@cirrus.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        Mark Brown <broonie@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 1/4] dt-bindings: pinctrl: qcom: Add SM8550 pinctrl
+Content-Language: en-US
+To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
+References: <20221123152001.694546-1-abel.vesa@linaro.org>
+ <20221123152001.694546-2-abel.vesa@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221123152001.694546-2-abel.vesa@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On 23/11/2022 16:19, Abel Vesa wrote:
+> Add device tree binding Documentation details for Qualcomm SM8550
+> TLMM device
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
+> 
+> Changes since v1:
+>  * based on recent bindings, like Krzysztof asked
+>  * changed gpio-line-names maxItems to 210
+>  * moved required and additionalProperties below
+>  * dropped *-hog since there are no such nodes yet on SM8550
+>  * switch to double quotes everywhere
+>  * dropped qcom,i2c-pull
+>  * dropped if clause for ^gpio*
+>  * added tlmm label
+> 
 
-I am using a dev board with a Cirrus Logic cs24l51 codec.
 
-This used to work fine prior to kernel version 5.x, however after 5.x
-it is not possible to set certain values for ALSA controls from
-userspace.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-I believe this is related to the input validation that is mentioned in
-this thread: https://lore.kernel.org/all/Yph8C3bRxcr6ogW7@sirena.org.uk/T/,
-and possibly in this commit: 4f1e50d6a9cf9c1b8c859d449b5031cacfa8404e
-("ASoC: ops: Reject out of bounds values in snd_soc_put_volsw_sx()")
+Best regards,
+Krzysztof
 
-For the cs24l51, all the controls that fail are using the
-SOC_DOUBLE_R_SX_TLV macro.
-
-I have traced this to the checks in snd_soc_put_volsw_sx, specifically
-the (val > max - min) check:
-
-pr_warn("Max: %d, Min: %d, Value: %d", max, min, val);
-pr_warn("platform_max: %d", mc->platform_max);
-if (mc->platform_max && val > mc->platform_max)
-{
-    return -EINVAL;
-}
-if (val > max - min){
-    pr_warn("(val > max - min) check failed");
-    return -EINVAL;
-}
-if (val < 0)
-    return -EINVAL;
-
-According to the datasheet of the CS24L51, section 6.13, page 61, the
-PCMMIXX_VOL registers accept the following range of values:
-
-Binary Code / Volume Setting
-001 1000 / +12.0 dB
-=C2=B7=C2=B7=C2=B7 =C2=B7=C2=B7=C2=B7
-000 0000 / 0 dB
-111 1111 / -0.5 dB
-111 1110 / -1.0 dB
-=C2=B7=C2=B7=C2=B7 =C2=B7=C2=B7=C2=B7
-001 1001 / -51.5 dB
-
-Minimum value is 0x19 (001 1001) corresponding to -51.5 dB, then there
-are 127 possible gain settings from -51.5 dB to +12.0 dB, in 0.5 dB
-steps.
-
-This is declared in the driver as follows:
-
-SOC_DOUBLE_R_SX_TLV("PCM Playback Volume",
-CS42L51_PCMA_VOL, CS42L51_PCMB_VOL,
-0, 0x19, 0x7F, adc_pcm_tlv),
-
-0x19 =3D min value
-0x7F =3D number of gain settings
-
-This seems to be correct according to the semantics of the
-SOC_DOUBLE_R_SX_TLV macro as described in commit
-34198710f55b5f359f43e67d9a08fe5aadfbca1b ("ASoC: Add info callback for
-SX_TLV controls").
-
-However, the (val > max - min) check in snd_soc_put_volsw_sx fails in
-the above example because val =3D 127, max - min =3D 127 - 25 =3D 102.
-
-So I am not sure how this should be fixed. Is the SX_TLV macro being
-used incorrectly here? Is the check in snd_soc_put_volsw_sx wrong?
-
-Any pointers are welcome.
-
-Thanks,
-
-(If possible, please CC me in any replies)
-
-Guillermo Rodriguez Garcia
-guille.rodriguez@gmail.com
