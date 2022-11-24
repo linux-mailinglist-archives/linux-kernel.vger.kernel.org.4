@@ -2,243 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECCFC637F55
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 19:51:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3964637F6F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 20:14:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbiKXSva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 13:51:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38678 "EHLO
+        id S229581AbiKXTOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 14:14:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiKXSv2 (ORCPT
+        with ESMTP id S229452AbiKXTOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 13:51:28 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4A5C759
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 10:51:27 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id v3so2172825pgh.4
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 10:51:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=49vt8EOGEXyKlWmjHihd7x+0GUdoUKIBLN5kNZgkz9U=;
-        b=MbMi6hWIIWqSrAk3qQ8LSanE4ykJAz414UwmVajhU8nBrQBl2OPkQplVShDqJQ9QaT
-         5vrQvCmOimLDatwKMApPC+ovCvE/DkAjVuczMYuRfCdxLNPnA9RCDg+qlnFQjlkj15BE
-         Y6VTKBDTMVjDnWT4kBoRp9DdzYXkGEtJZvLrGVpNcKg4ZmGjQLM47OoUuTa3tZ919kYa
-         oyURkh6QpYY2aBmA87D1V+/2ns64G40tt5OXXfCAMi5M/i+ClfJKimpyXXkZPrw95IKn
-         TAqUFXpuDx74IPzpzP2pH2DiigUBB2lgsN2BEGnCwFyIi0ddPE1pDT8o6eHY9BpEVYx6
-         9lqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=49vt8EOGEXyKlWmjHihd7x+0GUdoUKIBLN5kNZgkz9U=;
-        b=KwcdFW5pWShaXDqs81aFF6j/LeCXFhDWMF+pQcnbG1tseqIlLNV4KSZqYfW1JpqjYg
-         E8VPP6zxBr/BP9YM90c1F4oIJuCDm0riYV1IiR6zJvDUawuF2FPnBfEvBbbw79HaFfqe
-         Eco+UYrtF8V0mJBP6BP6tzjVMDIrSrZsXDl8z+NCyYGWWSDRvbjrzX9Iw/gaTXGJlv/x
-         W9XLBuIHJRxMqj9flBllUSjhMb6l+AEM3n3udm4GUL2oCG0YVlIxYkInwqFGmVhcXKAV
-         wv569jfIeUyr5hVPTShx8QAU5Q6VnfZl5TCtS9NquZaOgy3G58mApaZa3I99rXNrd8f/
-         0+Ew==
-X-Gm-Message-State: ANoB5plzbyBGv2rv2J9dXq69ofGldpZCAIi9s20ft9hfggFPX8iCR40U
-        06Vk8OhP6gRQD+YF7rZoYgBz
-X-Google-Smtp-Source: AA0mqf4messfpfYWh8G5GYTBO1vIksvYAOsoSXbQAjjrDxPWSheB+CIa3aacmlr3ZBQYzlMoVw4mpw==
-X-Received: by 2002:a63:117:0:b0:476:f43d:913e with SMTP id 23-20020a630117000000b00476f43d913emr13525641pgb.386.1669315886787;
-        Thu, 24 Nov 2022 10:51:26 -0800 (PST)
-Received: from thinkpad ([117.202.190.212])
-        by smtp.gmail.com with ESMTPSA id e4-20020a170902784400b00186a6b6350esm1610852pln.268.2022.11.24.10.51.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 10:51:25 -0800 (PST)
-Date:   Fri, 25 Nov 2022 00:21:16 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Frank Li <frank.li@nxp.com>
-Cc:     "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>,
-        "jdmason@kudzu.us" <jdmason@kudzu.us>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>, "kw@linux.com" <kw@linux.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "lznuaa@gmail.com" <lznuaa@gmail.com>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "ntb@lists.linux.dev" <ntb@lists.linux.dev>,
-        Peng Fan <peng.fan@nxp.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>, kishon@kernel.org
-Subject: Re: [EXT] Re: [PATCH v13 1/2] PCI: endpoint: pci-epf-vntb: change
- doorbell register offset calc mathod
-Message-ID: <20221124185116.GG5119@thinkpad>
-References: <20221124055036.1630573-1-Frank.Li@nxp.com>
- <20221124055036.1630573-2-Frank.Li@nxp.com>
- <20221124091921.GD5119@thinkpad>
- <HE1PR0401MB233169E8D223BC8809BB3DB8880F9@HE1PR0401MB2331.eurprd04.prod.outlook.com>
+        Thu, 24 Nov 2022 14:14:14 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A747581581;
+        Thu, 24 Nov 2022 11:14:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1669317246; bh=NFWnNIWqkptw3ml6zf4DoZN14+tM1IwZ1YOxSQItJOg=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=qRDGKxIB3KUwiyL5cPwS3qckpNr+fdytN1/q52WReVT+FHiy8go0kdxmp+Pwezs1l
+         oYVW2FTw62eb7Dr149j4l0e2ERhEgAHAcumG0ld1tUsd1wai9z0Fh28z+kaqb4cCbC
+         kLiZFEzjwUbnyprILH0tRR1rmzr39WmmgSN29WHwJ57+c3TqmjcPZwuli/VMAfYRBC
+         wmWuWpu63LDxrE/LOJO4OvhpnCdXWqRATbwys3sANIpMN9d4B/Z6OOyHEyNDzZmILa
+         GgUnCBYsWaRfaU2+FfMGK+oQ4aAP1rncZvtaFiI2+zmIe1g+teLBJowzI8mjQkPb3s
+         VJ2ifp8f8qEPg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([95.223.44.31]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MXXyJ-1oPM5y40J5-00Z1jI; Thu, 24
+ Nov 2022 20:14:06 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-spi@vger.kernel.org, openbmc@lists.ozlabs.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/3] Nuvoton WPCM450 FIU SPI flash controller
+Date:   Thu, 24 Nov 2022 20:13:57 +0100
+Message-Id: <20221124191400.287918-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <HE1PR0401MB233169E8D223BC8809BB3DB8880F9@HE1PR0401MB2331.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:pxBod3xIczrwLY9TifnwC2+iMmnbFLXoB3ncLDjLkc76RRm7b5V
+ DQY3on6qpKyjtMl6Tl46ZNBFCBoIDNhbQi8ihsiK3KOpORQSJBzxsihmQ6043gmqrEboUtQ
+ nxt77CW/A/A+ZRr/GjXCJLoaQ6YTihgLcc2CJpzXzEIMSwOHN297UWQWfJM3SlC3N18mHA5
+ yUv+synyMgjdNL2EWsVUA==
+UI-OutboundReport: notjunk:1;M01:P0:6rq0NvK4hUg=;9vvRmFGmZv6gIbOpnueK+q+q0Jm
+ 6ERSxohsixgTlgNiU/Xndkj/jA7u8heRAVIOQfSGEIMlr5vG/dRHKCwuJEkWb00rPjRX/mwKB
+ YlOHMpNT8k9KY+RqOzEII/DX/VF1BHW7wWbhWlJyHBHKQU4Lc8zrFXqzw+ptd0nKrAiQe8Ec1
+ KkPLAJ5c+6plhUApX9WuJjQM1sBAxozt8Djaqjw0CBEAM6AZkGcyvlwpJdPRM70mcCtPxj+Pf
+ az2zR+r1R4QWrY7K8/Iht0TBCUYbSI1uCnY83qq/DbkAHnXcZMnOssnqPLbF87FCHyucZS4ec
+ vbfR89zxtCkG/JZjZd166UyU1bQt7WaX9jcdIkB2U0oD+LhaNEUwTbLmj3wBlWH22GWFGIHk1
+ wzTMihBdAPSkd1mAwOUAHFxSlAVdEIm6PnA8OMpsa7x2mXlUu8qG62GhLAhecnDYj1aykD+Bh
+ /UvYoEqX6y7uPKB3TyBEiA0rvE21UdsCypFPyRiul8jLSVlB0+gIcb787ls2ThwW6IGqkT+V8
+ jwp1QX9h8v40tgZN/MC7+Lp49nsLZjdYxn+K7X00kMzTw9+E8se0L3S6Jz1ern6wJgTGnSyzV
+ l7QX3GFQztupKGJ/s6Qa9LOCQrAPZ5vPxLuq5PRVXRcU4iOjYnM5625OfH5vniNartVgdzcIj
+ HD8jYmKNW6u9/nMozEdvGbR2+tTPBKI/r7ua3px8wvvSRCWqXa0wFlHjmyQ+izu84UDDKPj7b
+ +BmMdBOM8BpTuzQ95hlAh60cfMi2XYDnKbTl/QjTy9xizikIHMSHWfmRdLKb7GGbzwP9fbaYy
+ CjxPv/8GtaAK4WKJwtsztTcBXbqTbqK6yk0qRYtydOBLr5nvSeiiGBnfraNht+0XC0gDVZ23F
+ uWhoxO2ymApUbZcQkPsV11qo794JYcfi1o6MAC9yoJCWGQUizrQhzTi0dr2HC+JRMqh6iGe6y
+ viIb3qA3hUNcaUR3IIfb3W2sPcs=
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 05:49:32PM +0000, Frank Li wrote:
-> 
-> 
-> > -----Original Message-----
-> > From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > Sent: Thursday, November 24, 2022 3:19 AM
-> > To: Frank Li <frank.li@nxp.com>
-> > Cc: lpieralisi@kernel.org; Aisheng Dong <aisheng.dong@nxp.com>;
-> > bhelgaas@google.com; devicetree@vger.kernel.org; festevam@gmail.com;
-> > imx@lists.linux.dev; jdmason@kudzu.us; kernel@pengutronix.de;
-> > kishon@ti.com; krzysztof.kozlowski+dt@linaro.org; kw@linux.com; linux-
-> > arm-kernel@lists.infradead.org; dl-linux-imx <linux-imx@nxp.com>; linux-
-> > kernel@vger.kernel.org; linux-pci@vger.kernel.org;
-> > lorenzo.pieralisi@arm.com; lznuaa@gmail.com; maz@kernel.org;
-> > ntb@lists.linux.dev; Peng Fan <peng.fan@nxp.com>; robh+dt@kernel.org;
-> > s.hauer@pengutronix.de; shawnguo@kernel.org; tglx@linutronix.de
-> > Subject: [EXT] Re: [PATCH v13 1/2] PCI: endpoint: pci-epf-vntb: change
-> > doorbell register offset calc mathod
-> > 
-> > Caution: EXT Email
-> > 
-> > On Thu, Nov 24, 2022 at 12:50:35AM -0500, Frank Li wrote:
-> > > In drivers/ntb/hw/epf/ntb_hw_epf.c
-> > > ntb_epf_peer_db_set()
-> > > {
-> > >    ...
-> > >    db_offset = readl(ndev->ctrl_reg + NTB_EPF_DB_OFFSET(interrupt_num));
-> > >    writel(db_data, ndev->db_reg + (db_entry_size * interrupt_num) +
-> > >                db_offset);
-> > >    ...
-> > > }
-> > >
-> > > The door register offset's formular is
-> > >       offset = db_entry_size * interrupt_num + db_offset[interrupt_number]
-> > 
-> > You did not mention the DB BAR here. Without that, this calculation doesn't
-> > make sense.
-> 
-> Doorbell register offset should means Base on DB BAR. 
-> How about "The formula of  door register offset refer to DB BAR"?
+This patchset adds DT bindings and a driver for the Flash Interface Unit
+(FIU), the SPI flash controller in the Nuvoton WPCM450 BMC SoC. It
+supports four chip selects, and direct (memory-mapped) access to 16 MiB
+per chip. Larger flash chips can be accessed by software-defined SPI
+transfers.
 
-"Doobell register offset in DB BAR is calculated using:"
+The existing NPCM7xx FIU driver is sufficitently incompatible with the
+WPCM450 FIU that I decided to write a new driver.
 
-> 
-> > 
-> > >
-> > > Previous db_entry_size is 4, all db_offset is 0.
-> > 
-> > s/Previous/Previously
-> > 
-> > >       irq | offset
-> > >        --------------
-> > >          0     0
-> > >          1     4
-> > >          2     8
-> > >         ...
-> > >
-> > > Change to db_entry_size is 0 and db_offset is 0, 4, 8, ...
-> > > So we can get the same map value between irq and offset. This will be
-> > > convenience for hardware doorbell register memory map.
-> > >
-> > 
-> > In your irq-imx-mu-msi.c driver, the msi_address is calculated as:
-> > 
-> > ```
-> > u64 addr = msi_data->msiir_addr + 4 * data->hwirq;
-> > ```
-> > 
-> > So the MSI addresses itself are of 4 bytes width. So the offsets will be
-> > separated by 8 bytes like, 0, 8, 16,... and this won't match the MSI addresses
-> > as they are 4 bytes apart.
-> 
-> Addr is absolute physical IO address, which increased by 4. But it doesn't matter.
-> It should be okay if range is between 2^32.
-> 
-> > 
-> > So you want to change the offset to 0, 4, 8,... by zeroing db_entry_size,
-> > right?
-> 
-> I want to directly using db_offset[irq] value as offset. It will be simple. 
-> 
-> I am not sure why ntb_hw_epf.c use below formular.   
->  "Db_offset[irq] + irq * db_entry_size"
-> 
-> Db_entry_size = 0 will be simple,  all offset will be controlled by db_offset[]
-> 
-> You can save db_offset[] as 0, 4, 8... or 0, 8, 16 as needs.
-> 
-> > 
-> > > Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> > > ---
-> > >  drivers/pci/endpoint/functions/pci-epf-vntb.c | 4 ++--
-> > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> > b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> > > index 04698e7995a5..0d744975f815 100644
-> > > --- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> > > +++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> > > @@ -461,11 +461,11 @@ static int epf_ntb_config_spad_bar_alloc(struct
-> > epf_ntb *ntb)
-> > >       ctrl->num_mws = ntb->num_mws;
-> > >       ntb->spad_size = spad_size;
-> > >
-> > > -     ctrl->db_entry_size = sizeof(u32);
-> > > +     ctrl->db_entry_size = 0;
-> > >
-> > >       for (i = 0; i < ntb->db_count; i++) {
-> > >               ntb->reg->db_data[i] = 1 + i;
-> > > -             ntb->reg->db_offset[i] = 0;
-> > > +             ntb->reg->db_offset[i] = sizeof(u32) * i;
-> > 
-> > If my above understanding is correct, then you could just reassign
-> > "db_entry_size" in epf_ntb_epc_msi_init().
-> 
-> Yes, that's one method.
-> I want to use one method to calc db offset for both software polling
-> and MSI.  So overall logic should be simple. 
-> 
+Changelog for v2:
 
-I think it is better to leave db_entry_size for polling as it is and modify it
-for MSI alone.
+- Dropped the patches which have been applied in the meantime, leaving
+  only three out of eight
+- Changed the binding to require both items in the reg property, because
+  there is no need to keep the second item optional, suggested by
+  Krzysztof Kozlowski
+- Various other cleanups suggested by Krzysztof Kozlowski and the kernel
+  test robot
 
-Thanks,
-Mani
 
-> Frank Li
-> 
-> > 
-> > Thanks,
-> > Mani
-> > 
-> > >       }
-> > >
-> > >       return 0;
-> > > --
-> > > 2.34.1
-> > >
-> > 
-> > --
-> > மணிவண்ணன் சதாசிவம்
+Jonathan
 
--- 
-மணிவண்ணன் சதாசிவம்
+
+Jonathan Neusch=C3=A4fer (3):
+  dt-bindings: spi: Add Nuvoton WPCM450 Flash Interface Unit (FIU)
+  spi: wpcm-fiu: Add driver for Nuvoton WPCM450 Flash Interface Unit
+    (FIU)
+  spi: wpcm-fiu: Add direct map support
+
+ .../bindings/spi/nuvoton,wpcm450-fiu.yaml     |  66 +++
+ drivers/spi/Kconfig                           |  11 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-wpcm-fiu.c                    | 508 ++++++++++++++++++
+ 4 files changed, 586 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/spi/nuvoton,wpcm450-=
+fiu.yaml
+ create mode 100644 drivers/spi/spi-wpcm-fiu.c
+
+=2D-
+2.35.1
+
