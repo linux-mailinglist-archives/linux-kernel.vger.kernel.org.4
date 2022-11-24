@@ -2,95 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0AB6636FB0
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 02:18:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2F82636FB8
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 02:18:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbiKXBSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 20:18:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49584 "EHLO
+        id S229898AbiKXBSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 20:18:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiKXBR7 (ORCPT
+        with ESMTP id S229894AbiKXBSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 20:17:59 -0500
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8368A27B07;
-        Wed, 23 Nov 2022 17:17:56 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NHg8v0M6Rz4f3v6w;
-        Thu, 24 Nov 2022 09:17:51 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgD3GthAxn5jsBE0BA--.21372S3;
-        Thu, 24 Nov 2022 09:17:53 +0800 (CST)
-Subject: Re: nbd: please don't spawn 16 threads when nbd is not even in use
-To:     Pavel Machek <pavel@ucw.cz>, Eric Blake <eblake@redhat.com>
-Cc:     kernel list <linux-kernel@vger.kernel.org>, josef@toxicpanda.com,
-        linux-block@vger.kernel.org, nbd@other.debian.org,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <Y3y4+QqOlF00X9ET@duo.ucw.cz>
- <20221123200845.cuct5euvikqksojm@redhat.com> <Y36YHNVmbozzSdxH@duo.ucw.cz>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <ccee0ff5-309c-b430-09c7-8d2081c9981d@huaweicloud.com>
-Date:   Thu, 24 Nov 2022 09:17:51 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Wed, 23 Nov 2022 20:18:45 -0500
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00F61025D3
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 17:18:43 -0800 (PST)
+Received: by mail-vs1-xe2c.google.com with SMTP id v128so204825vsb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 17:18:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=7tBUw05aOdjyO9WsFCtTrKc5G8bk3/uCIv/FSXOVjTg=;
+        b=cR5Tx2OzMDMnzLuq7r4ycWlRO2gzxpltG7WVxggQ3gkD+H3QiCLqshLPiuVxRJBFSU
+         0Dsod0ESCG9U1Y2Aqi9PF/Nv0lOtf83kNL85Mf0frsQ6U3JQ76FniUpqF2VAjwvca1/R
+         WUvPfq1mJ0L6Y7QVHxD4+iO9ze85KXFCSaLauEtk3/gSVWHeaP7bEmE8bzDOwW68Pm/7
+         8kYPeF3UpkDZOn5PVa5upr+5tIqawN9l5Kge+KTEeHp8MWMmzNnu+YgckbCx/b91yURh
+         sdLhWAYMIsjgOSUVC4+ufPavt+Btcq6W8cnHS2pv41s+tlftvvgZPEFPXzgj+qIQTbSC
+         CdTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7tBUw05aOdjyO9WsFCtTrKc5G8bk3/uCIv/FSXOVjTg=;
+        b=y9xnp9uzGjhF0F58fFrgOgFBTdwJunPybsT30byHkhKig0s9Va0ISh1NjD1WjvzKGt
+         CFaM6C7VHghUEQqpMd2unea+T8DsxTIyF6lLEZ/thqjtz3ptFXb5sUbyGtEV6G5mV8qF
+         Ml7nCZ90XR25/dyCRXxn/xecoycVT5FYF6izWz8S/Dgiq7K8ZM5Z3BczTgMoyTE4IJpU
+         pWXQ1YBYDKvbfHABLPHWP5Fde5e+Kb+pKYzB865MqIEgkpT0yveaUt28iTPoVO/WSfsC
+         nvq1kg+bumrlEED0PFYTosAeajPaKbr+Bs4b2wq9XY4u9dSq0R1NtU3ay9iph7yUaPly
+         BbiA==
+X-Gm-Message-State: ANoB5plIT5L/48qWoKWs8IVJFBTNkmf+f+2ibkI0m3zrUlkrc0xwwBSR
+        9hDxDq/FQ/mEXAljIuoiYK2RuTzNlcee+MDY0XromQ==
+X-Google-Smtp-Source: AA0mqf7tE/DJhqO/TmFy0k5UO6O+PUJ9K2GXNEe37t1kmvS+5u/3QWe/TPoislPxXNK6S3D8kkMtK+Q3OHAWXbFToEs=
+X-Received: by 2002:a67:c98e:0:b0:3ad:3d65:22b with SMTP id
+ y14-20020a67c98e000000b003ad3d65022bmr7748848vsk.65.1669252722617; Wed, 23
+ Nov 2022 17:18:42 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <Y36YHNVmbozzSdxH@duo.ucw.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgD3GthAxn5jsBE0BA--.21372S3
-X-Coremail-Antispam: 1UD129KBjvdXoW7GFy8WrWfWFyftrWfZFyxXwb_yoW3AFX_WF
-        W7ZFyDGw4UXF18Ja1qkF1rWFW8Xrs7XF4jqasxtwsrJw43W3s3uF4DWry3Zw4UGw4YyFnx
-        ur1UZay7Ar47ujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbzAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
-        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUrR6zUUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CABWYdi0G7cyNFbndM-ELTDAR3x4Ngm0AehEp5aP0tfNkXUE+Uw@mail.gmail.com>
+ <CAOUHufYd-5cqLsQvPBwcmWeph2pQyQYFRWynyg0UVpzUBWKbxw@mail.gmail.com>
+ <CAOUHufYSeTeO5ZMpnCR781esHV4QV5Th+pd=52UaM9cXNNKF9w@mail.gmail.com>
+ <Y31s/K8T85jh05wH@google.com> <Y36PF972kOK3ADvx@cmpxchg.org>
+In-Reply-To: <Y36PF972kOK3ADvx@cmpxchg.org>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Wed, 23 Nov 2022 18:18:06 -0700
+Message-ID: <CAOUHufZxguv_m3Td7e5Qt-yKpV7rmWyv_m_UFS9n19K=_=xLcA@mail.gmail.com>
+Subject: Re: Low TCP throughput due to vmpressure with swap enabled
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Ivan Babrou <ivan@cloudflare.com>
+Cc:     Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, cgroups@vger.kernel.org,
+        kernel-team <kernel-team@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Nov 23, 2022 at 2:22 PM Johannes Weiner <hannes@cmpxchg.org> wrote:
+>
+> On Tue, Nov 22, 2022 at 05:44:44PM -0700, Yu Zhao wrote:
+> > Hi Johannes,
+> >
+> > Do you think it makes sense to have the below for both the baseline and
+> > MGLRU or it's some behavior change that the baseline doesn't want to
+> > risk?
+>
+> It looks good to me. Besides the new FMODE_NOREUSE, it's also a nice
+> cleanup on the rmap side!
+>
+> It would just be good to keep the comment from folio_referenced_one() and
+> move it to the vma_has_locality() check in invalid_folio_referenced_vma().
+>
+> Otherwise,
+>
+> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
 
-在 2022/11/24 6:01, Pavel Machek 写道:
-> Hi!
-> 
->>> I see this... and it looks like there are 16 workqueues before nbd is
->>> even used. Surely there are better ways to do that?
->>
->> Yes, it would be nice to create a pool of workers that only spawns up
->> threads when actual parallel requests are made.  Are you willing to
->> help write the patch?
-> 
-> I was thinking more "only spawn a workqueue when nbd is opened" or so.
-> 
-> I have 16 of them, and I'm not using nbd. Workqueue per open device is
-> okay, current situation... not so much.
+Thanks.
 
-You can take a look at this commit:
+I've added Ivan's test case to my collection. Interestingly, after
+this patch, the download speed increased while fio was running (my
+guess is that fio pushed more cold anon into swap):
 
-e2daec488c57 ("nbd: Fix hungtask when nbd_config_put")
+$ uname
+Linux test127 6.1.0-rc6-dirty #2 SMP PREEMPT_DYNAMIC Wed Nov 23
+16:51:20 MST 2022 x86_64 x86_64 x86_64 GNU/Linux
 
-Allocation of recv_workq is moved from start device to alloc device to
-fix hungtask. You might need to be careful if you want to move this.
+$ go version
+go version go1.18.1 linux/amd64
 
-Thanks,
-Kuai
-> 
->        	       	    	  	  	    	     		Pavel
-> 
+$ fio -v
+fio-3.28
 
+$ curl --version
+curl 7.81.0 (x86_64-pc-linux-gnu) libcurl/7.81.0 OpenSSL/3.0.2
+zlib/1.2.11 brotli/1.0.9 zstd/1.4.8 libidn2/2.3.2 libpsl/0.21.0
+(+libidn2/2.3.2) libssh/0.9.6/openssl/zlib nghttp2/1.43.0 librtmp/2.3
+OpenLDAP/2.5.13
+Release-Date: 2022-01-05
+Protocols: dict file ftp ftps gopher gophers http https imap imaps
+ldap ldaps mqtt pop3 pop3s rtmp rtsp scp sftp smb smbs smtp smtps
+telnet tftp
+Features: alt-svc AsynchDNS brotli GSS-API HSTS HTTP2 HTTPS-proxy IDN
+IPv6 Kerberos Largefile libz NTLM NTLM_WB PSL SPNEGO SSL TLS-SRP
+UnixSockets zstd
+
+fio NOT running:
+
+ % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 4768M    0 4768M    0     0  83.6M      0 --:--:--  0:00:57 --:--:-- 87.0M
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 4768M    0 4768M    0     0  82.8M      0 --:--:--  0:00:57 --:--:-- 79.1M
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 4768M    0 4768M    0     0  82.7M      0 --:--:--  0:00:57 --:--:-- 89.7M
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 4768M    0 4768M    0     0  87.4M      0 --:--:--  0:00:54 --:--:-- 94.3M
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 4768M    0 4768M    0     0  88.1M      0 --:--:--  0:00:54 --:--:-- 94.7M
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 4768M    0 4768M    0     0  82.6M      0 --:--:--  0:00:57 --:--:-- 83.9M
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 4768M    0 4768M    0     0  86.4M      0 --:--:--  0:00:55 --:--:-- 90.1M
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 4768M    0 4768M    0     0  82.8M      0 --:--:--  0:00:57 --:--:-- 67.5M
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 4768M    0 4768M    0     0  83.4M      0 --:--:--  0:00:57 --:--:-- 78.7M
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 4768M    0 4768M    0     0  84.0M      0 --:--:--  0:00:56 --:--:-- 87.4M
+
+
+fio running:
+
+ % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 4768M    0 4768M    0     0  86.7M      0 --:--:--  0:01:11 --:--:-- 88.7M
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 4768M    0 4768M    0     0  87.7M      0 --:--:--  0:00:54 --:--:-- 93.5M
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 4768M    0 4768M    0     0  88.5M      0 --:--:--  0:00:53 --:--:-- 95.1M
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 4768M    0 4768M    0     0  91.6M      0 --:--:--  0:00:52 --:--:-- 94.4M
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 4768M    0 4768M    0     0  89.4M      0 --:--:--  0:00:53 --:--:-- 86.6M
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 4768M    0 4768M    0     0  88.6M      0 --:--:--  0:00:53 --:--:-- 84.8M
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 4768M    0 4768M    0     0  84.6M      0 --:--:--  0:00:56 --:--:-- 87.5M
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 4768M    0 4768M    0     0  86.9M      0 --:--:--  0:00:54 --:--:-- 81.4M
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 4768M    0 4768M    0     0  89.0M      0 --:--:--  0:00:53 --:--:-- 86.4M
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 4768M    0 4768M    0     0  91.1M      0 --:--:--  0:00:52 --:--:-- 90.6M
