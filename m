@@ -2,201 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1305F63792F
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:47:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41D5B637932
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:48:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbiKXMrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 07:47:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60114 "EHLO
+        id S229732AbiKXMsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 07:48:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiKXMrV (ORCPT
+        with ESMTP id S229506AbiKXMsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 07:47:21 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B14365E4F
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:47:20 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id 7so1677437ybp.13
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:47:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y6QLJpBSCH7lpOdOsR2ZwXVrv94Ei5Yr7j2glkp/jcA=;
-        b=c8Zwke3OdjYbjAlNEQ55zjHP22QXuVPQPkZK7G2kiM76pw6FL4oNpsukNvkZECDx7I
-         Zo1MKCffaZ/PawQmDK21Y3/Pz9Ts5OLVttQNHIzT3/j1WYqJZmSqp2B2l3uSDqXlVQVi
-         TAfySksc6o43e7PqR4IdwlIykzf87IbXkbDVzX/7oKVocv/fnC1Lgy7YF52NC/2nbLe2
-         GcDOvg/gJcd7JCpsoIfBVBj4Kz/y8YYaSgm4tey9XciaCsHpsAJsc2p8f4L+7D0HhZld
-         zVT4keR3nOZRoMb2Y26euaPUzmL7oD8zW21xj/azZQOl+vij56zc0fSQ0Kdg5R6bbiKi
-         nCAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y6QLJpBSCH7lpOdOsR2ZwXVrv94Ei5Yr7j2glkp/jcA=;
-        b=ctd9RhmCAOjOWSjy5Z9IUnAGsKDuBHu641cekpaMEma+s2yAtSmKmWbeKrV6A+osgy
-         8HDHiLdmHAyBT1HrWdKD1jVT8Xqt93ZnTK0pi5CZBX+kkzGkqTY+seRXCDJlvWsXbLi/
-         I+XkvjW+4rInNKK41523EmcO7/sqmyQfWmQ35EJerdnso84iGziR15Z6wwpM+qeufGcA
-         nY1vxIdYFV6BO5X0j2YEUmYIC7Dst45QzKiAalNEWgAejm//mmDL9TxyDzzqPqdtxVlJ
-         uQ/8J9rI71G1NumFAbhkms7t8urBjO7M1KeEdPBmU9D8jTTNyPU9CQiTYhdf5gqQMObk
-         Ibrw==
-X-Gm-Message-State: ANoB5plKIn8JXJ4O/SAuETgC/nHHQcUJ3MKzhlU/FEulRw8dl5yjDVqF
-        XWxSDvjcBUg4NTRwTqGbf5FV0ZJODZWLJpdnSie6EA==
-X-Google-Smtp-Source: AA0mqf6QBzAv5uVzptgRx7B+2rSN/gsGzHPQX8Kdpq2XZCuIOsiCUmh1PwTzXHDalSnoTK/IBxSbd/1zfcwKMQLODu0=
-X-Received: by 2002:a25:ed05:0:b0:6c4:8a9:e4d2 with SMTP id
- k5-20020a25ed05000000b006c408a9e4d2mr31702068ybh.164.1669294039388; Thu, 24
- Nov 2022 04:47:19 -0800 (PST)
+        Thu, 24 Nov 2022 07:48:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA6A15FF2;
+        Thu, 24 Nov 2022 04:48:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ACD59B827C3;
+        Thu, 24 Nov 2022 12:48:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A9A5C433D6;
+        Thu, 24 Nov 2022 12:48:11 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="lwpiMWCe"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1669294088;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/iPOoMMmL4tvnQvG7VP2tfYPchuElz8eQWQJu8d7BG8=;
+        b=lwpiMWCeo8PJ+2goZDFh5g0EJGNIrVyYCTN5EE8uPQg1v76iQP9FKkGpopHAPbGJj+rykC
+        L1yZ956qoQgV6cJ5/8i9d1aY1dmAACW54StSUMZLM10rTVVSCgrfKD1JsiysQa0/657smN
+        yNWmX/WdMjZr+wwNSzPgcwypQkfXq4I=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 9d876d02 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Thu, 24 Nov 2022 12:48:08 +0000 (UTC)
+Date:   Thu, 24 Nov 2022 13:48:06 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Florian Weimer <fweimer@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        tglx@linutronix.de, linux-crypto@vger.kernel.org, x86@kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        Carlos O'Donell <carlos@redhat.com>, linux-api@vger.kernel.org
+Subject: Re: [PATCH v6 1/3] random: add vgetrandom_alloc() syscall
+Message-ID: <Y39oBtR8t+XNPS0d@zx2c4.com>
+References: <20221121152909.3414096-1-Jason@zx2c4.com>
+ <20221121152909.3414096-2-Jason@zx2c4.com>
+ <87v8n6lzh9.fsf@oldenburg.str.redhat.com>
+ <Y37DDX5RtiGsV6MO@zx2c4.com>
+ <87a64g7wks.fsf@oldenburg.str.redhat.com>
+ <Y39djiBSmgXfgWJv@zx2c4.com>
+ <87cz9c5z1f.fsf@oldenburg.str.redhat.com>
+ <Y39iisTmUO2AaKNs@zx2c4.com>
 MIME-Version: 1.0
-References: <20221123084548.535439312@linuxfoundation.org>
-In-Reply-To: <20221123084548.535439312@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 24 Nov 2022 18:17:08 +0530
-Message-ID: <CA+G9fYsy7RaE-vMGVMQeNg0KTRBvfrg+D1cRfAtdjP5-fx3O8g@mail.gmail.com>
-Subject: Re: [PATCH 4.14 00/88] 4.14.300-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y39iisTmUO2AaKNs@zx2c4.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Nov 2022 at 14:28, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.14.300 release.
-> There are 88 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 25 Nov 2022 08:45:20 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.300-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hey again,
 
-Results from Linaro's test farm.
-No regressions on arm64, arm, x86_64, and i386.
+On Thu, Nov 24, 2022 at 01:24:42PM +0100, Jason A. Donenfeld wrote:
+> Hi Florian,
+> 
+> On Thu, Nov 24, 2022 at 01:15:24PM +0100, Florian Weimer wrote:
+> > * Jason A. Donenfeld:
+> > 
+> > > Hi Florian,
+> > >
+> > > On Thu, Nov 24, 2022 at 06:25:39AM +0100, Florian Weimer wrote:
+> > >> * Jason A. Donenfeld:
+> > >> 
+> > >> > Hi Florian,
+> > >> >
+> > >> > On Wed, Nov 23, 2022 at 11:46:58AM +0100, Florian Weimer wrote:
+> > >> >> * Jason A. Donenfeld:
+> > >> >> 
+> > >> >> > + * The vgetrandom() function in userspace requires an opaque state, which this
+> > >> >> > + * function provides to userspace, by mapping a certain number of special pages
+> > >> >> > + * into the calling process. It takes a hint as to the number of opaque states
+> > >> >> > + * desired, and returns the number of opaque states actually allocated, the
+> > >> >> > + * size of each one in bytes, and the address of the first state.
+> > >> >> > + */
+> > >> >> > +SYSCALL_DEFINE3(vgetrandom_alloc, unsigned long __user *, num,
+> > >> >> > +                unsigned long __user *, size_per_each, unsigned int, flags)
+> > >> >> 
+> > >> >> I think you should make this __u64, so that you get a consistent
+> > >> >> userspace interface on all architectures, without the need for compat
+> > >> >> system calls.
+> > >> >
+> > >> > That would be quite unconventional. Most syscalls that take lengths do
+> > >> > so with the native register size (`unsigned long`, `size_t`), rather
+> > >> > than u64. If you can point to a recent trend away from this by
+> > >> > indicating some commits that added new syscalls with u64, I'd be happy
+> > >> > to be shown otherwise. But AFAIK, that's not the way it's done.
+> > >> 
+> > >> See clone3 and struct clone_args.
+> > >
+> > > The struct is one thing. But actually, clone3 takes a `size_t`:
+> > >
+> > >     SYSCALL_DEFINE2(clone3, struct clone_args __user *, uargs, size_t, size)
+> > >
+> > > I take from this that I too should use `size_t` rather than `unsigned
+> > > long.` And it doesn't seem like there's any compat clone3.
+> > 
+> > But vgetrandom_alloc does not use unsigned long, but unsigned long *.
+> > You need to look at the contents for struct clone_args for comparison.
+> 
+> Ah! I see what you mean; that's a good point. The usual register
+> clearing thing isn't going to happen because these are addresses.
+> 
+> I still am somewhat hesitant, though, because `size_t` is really the
+> "proper" type to be used. Maybe the compat syscall thing is just a
+> necessary evil?
+> 
+> The other direction would be making this a u32, since 640k ought to be
+> enough for anybody and such, but maybe that'd be a mistake too.
+> 
+> So I'm not sure. Anybody else on the list with experience adding
+> syscalls have an opinion?
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Looks like set_mempolicy, get_mempoliy, and migrate_pages pass an
+unsigned long pointer and I don't see any compat stuff around it:
 
-## Build
-* kernel: 4.14.300-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.14.y
-* git commit: 7e961be09da0fbde0eb6b4948a0bcd12b84a1248
-* git describe: v4.14.299-89-g7e961be09da0
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14.299-89-g7e961be09da0
+    SYSCALL_DEFINE3(set_mempolicy, int, mode, const unsigned long __user *, nmask,
+                    unsigned long, maxnode)
+    
+    SYSCALL_DEFINE5(get_mempolicy, int __user *, policy,
+                    unsigned long __user *, nmask, unsigned long, maxnode,
+                    unsigned long, addr, unsigned long, flags)
 
-## Test Regressions (compared to v4.14.299)
+    SYSCALL_DEFINE4(migrate_pages, pid_t, pid, unsigned long, maxnode,
+                    const unsigned long __user *, old_nodes,
+                    const unsigned long __user *, new_nodes)
+     
 
-## Metric Regressions (compared to v4.14.299)
+In contrast sched_setaffinity and get_robust_list take a unsigned long
+pointer and does have a compat wrapper:
 
-## Test Fixes (compared to v4.14.299)
+    SYSCALL_DEFINE3(sched_setaffinity, pid_t, pid, unsigned int, len,
+                    unsigned long __user *, user_mask_ptr)
 
-## Metric Fixes (compared to v4.14.299)
+    SYSCALL_DEFINE3(get_robust_list, int, pid,
+                    struct robust_list_head __user * __user *, head_ptr,
+                    size_t __user *, len_ptr)
 
-## Test result summary
-total: 81944, pass: 71704, fail: 1341, skip: 8273, xfail: 626
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 313 total, 308 passed, 5 failed
-* arm64: 53 total, 50 passed, 3 failed
-* i386: 29 total, 28 passed, 1 failed
-* mips: 41 total, 41 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 20 total, 19 passed, 1 failed
-* s390: 15 total, 11 passed, 4 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 51 total, 50 passed, 1 failed
-
-## Test suites summary
-* boot
-* fwts
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-breakpoints
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-kvm
-* kselftest-lib
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-netfilter
-* kselftest-openat2
-* kselftest-seccomp
-* kselftest-timens
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Jason
