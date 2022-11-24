@@ -2,115 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 732BD63765B
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:27:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3978A637661
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:28:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbiKXK1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 05:27:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45238 "EHLO
+        id S229677AbiKXK2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 05:28:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbiKXK1b (ORCPT
+        with ESMTP id S229499AbiKXK2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 05:27:31 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3AFB60E1;
-        Thu, 24 Nov 2022 02:27:27 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AOA4Nnb010307;
-        Thu, 24 Nov 2022 10:27:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=bZmt9F2QFPDg9RfOcLRTpMW9cZG31Npju4rqsm0z3Nc=;
- b=Hb1tzQwuybeDfMU7qhlvC/W+oF4pRmCKcwRp4kYbZYNX/XPbDLjxJqQoAEHAT4UllTuz
- srnEua8SLe2Y4BYc6JctwWrRHzgoWvOJoWnTEfi94toOBXBMGKMW+RyHRcx7x7drJllM
- e/LCNfUTHCJSmq74BzQVWv+KbxAKqahR2cb9RmstOW1lET0qqHQdQ9Nv76acv1NXcsyr
- ooREK2S9jS1XrOydS7jl0aYJyVFKzIOTiHDMFjD6XgIkPXtF5qWCqlgDa+oTECSi66M4
- yZNvL25Dk20yh3xySAACZ/k42IrmPa6HdQ2tmaAMmmmtQyQmp9mquguDHAgaTbj/Rs6f zA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m1n2w7jbw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Nov 2022 10:27:27 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AOA4OnA010427;
-        Thu, 24 Nov 2022 10:27:26 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m1n2w7jb8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Nov 2022 10:27:26 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AOAKxkQ018760;
-        Thu, 24 Nov 2022 10:27:24 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma05fra.de.ibm.com with ESMTP id 3kxps8ns2f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Nov 2022 10:27:24 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AOARLnq59310542
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 24 Nov 2022 10:27:21 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3DC4652054;
-        Thu, 24 Nov 2022 10:27:21 +0000 (GMT)
-Received: from [9.152.224.253] (unknown [9.152.224.253])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id EF50C52050;
-        Thu, 24 Nov 2022 10:27:20 +0000 (GMT)
-Message-ID: <4d46020f-f33a-474c-b791-be11c2ce2aa6@linux.ibm.com>
-Date:   Thu, 24 Nov 2022 11:27:20 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] KVM: s390: vsie: Fix the initialization of the epoch
- extension (epdx) field
-Content-Language: en-US
-To:     Thomas Huth <thuth@redhat.com>, kvm@vger.kernel.org,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        "Collin L. Walling" <walling@linux.ibm.com>,
-        Jason J Herne <jjherne@linux.ibm.com>
-References: <20221123090833.292938-1-thuth@redhat.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-In-Reply-To: <20221123090833.292938-1-thuth@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: MsngLNbAC4-9Xn2BmNnR1dCcJ9mp15pq
-X-Proofpoint-GUID: hazaGeK5oRVNANFYWbyRBS4ILxLi7g9k
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 24 Nov 2022 05:28:04 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2085.outbound.protection.outlook.com [40.107.244.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D177742FE;
+        Thu, 24 Nov 2022 02:28:02 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BbY88Y/L4K1cQ38K3e3EuYhvzZVyBhe8o87KGvrhoLe0ZPkLyVfEwTuw3gGyuaRSVvJBQYugggniMocGtA4vZXM15Yf6iWwYQxb61865RmOkPeLnLIC/ANvBGT8Z8Im1IYwKnhpl1jdlwMtWHBBYSvT2H/dhLmyd8r8hGOhiCzby6WL0Rnhm+qKv2h6QDGAWFLzMGlj8ZMdLgqFX+7O+8Q7r391TPmBD64109NQKj52lK5trUCSEcjEus8PSBt75FpPYqJ2DO7dtS5V08k1t1VYS6sY8jbC866WWhU/w6BQanKgs/5rQq1A5YfZ4vfQ91G2emuWdiDM0Qn1T0dYGgg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UfLKqGKQx21s73uJYkviSoidiVp52HjmF2OkL3UkRhE=;
+ b=dlEJvrI3y5B8B3dx8PxC/ht75X0Onpyr0NoR6MSOWj4m58CAfVespbR0Gi0O+UJ5f46ssPnbSYC0g9BMfcrz3CrXbAskMfrqNpGAOU5guEPL3vBMqqWX/QNV8YNTlVENFMUliKtkejM4z5pL4cqJYSdtb56fTNChlUffLGNlYUIhsNrkScpKgOyXNSAIkgDZlnXdRLJoFdfnLbr8M5pO6/LWv1gf06v+tH8IDihG0sJT6M6E7ZDNIFI1YqJfoxnARzMUwhfBBUn8WFf9DWAnnYwXcBXd6fQzHatNUrDqnmTM6gY/3FjOWJGmRqz0zLh6AaXyo455SG85C8hOomGv0A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UfLKqGKQx21s73uJYkviSoidiVp52HjmF2OkL3UkRhE=;
+ b=1fiFRLRmDmpgNYwfEZANemc9EJnIwmV4BCznl7xeP2GOpEUu+w4KXN4yeOjW4W0E7UJ3HNWw0BiL+Wlff/ko7vAIVMT5vxBqT2R6fOewVsYViBL+p7me+PhzMzAsTRsMhhP9Hg6NmWro48w1VIJv9gB20OyLYJrdGlQ7kxGXVQ0=
+Received: from MW4PR04CA0085.namprd04.prod.outlook.com (2603:10b6:303:6b::30)
+ by DS7PR12MB6166.namprd12.prod.outlook.com (2603:10b6:8:99::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Thu, 24 Nov
+ 2022 10:28:00 +0000
+Received: from CO1NAM11FT022.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:6b:cafe::ac) by MW4PR04CA0085.outlook.office365.com
+ (2603:10b6:303:6b::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19 via Frontend
+ Transport; Thu, 24 Nov 2022 10:27:59 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ CO1NAM11FT022.mail.protection.outlook.com (10.13.175.199) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5834.8 via Frontend Transport; Thu, 24 Nov 2022 10:27:59 +0000
+Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 24 Nov
+ 2022 04:27:58 -0600
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB08.amd.com
+ (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 24 Nov
+ 2022 02:27:50 -0800
+Received: from xhdsneeli40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Thu, 24 Nov 2022 04:27:46 -0600
+From:   Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
+To:     <vkoul@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <lars@metafoo.de>,
+        <adrianml@alumnos.upm.es>
+CC:     <dmaengine@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <michal.simek@amd.com>,
+        <radhey.shyam.pandey@amd.com>, <anirudha.sarangi@amd.com>,
+        <harini.katakam@amd.com>, <sarath.babu.naidu.gaddam@amd.com>,
+        <git@amd.com>
+Subject: [PATCH V2 0/6] Xilinx DMA enhancements and optimization 
+Date:   Thu, 24 Nov 2022 15:57:39 +0530
+Message-ID: <20221124102745.2620370-1-sarath.babu.naidu.gaddam@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-24_07,2022-11-24_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- adultscore=0 suspectscore=0 spamscore=0 mlxscore=0 bulkscore=0
- phishscore=0 malwarescore=0 mlxlogscore=866 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211240079
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT022:EE_|DS7PR12MB6166:EE_
+X-MS-Office365-Filtering-Correlation-Id: fc3f9d98-42ca-4043-8da4-08dace068f67
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: LGsH9S9+mQpyEXcwTV3QfiaRCPM1dw9SYDiKKUiXNgR2bmanNvDYBO2RBiPv4MZxHI6l8S6sE68TV6InfJVhWrj7Ne73fQaeoSYNQg4ekPOKZF7G9gW+qK6zkiVst9HpmQ6ZKDNsI9a4KRdGE0S/Vat2hBgAIzue+TvC+jYHF3NcBj6l7Z3aPS7s/n1NTalZaJu6cf6stHN7/hei/wJMh/JSI26QyQJWE8oDhs0/NSwK8qSxPnGctcSDWTNLOpzkRCjRatixQQW2t3m+PXu1lpL0OlE6tlwJsSp5Uff8w7NkOGwmnoQkco3KeX9vv5waMZY5cz8pEJHrWYf2Q1k1qupHW+fe4QVjqAF7K3A5/b6zDlIkbogorS8V3nNc2ymiLhSo0+NNTEJjL762ic7CUE/Id53ropaDNVAJJmMasqrCPmp5/NoAfIEp52GHuzUyrfgan3sdjfiHjWsl1MgXzijeQSqQN645pMlP43wUclonkF95Al0ONoXWt5b0C5MD7Mromk7x4Y26Zr239C/P3l4lJW6fc2v0naAmXVHZQXEz/n+9NJKVQGww/sglWQIl/T2BKvG2nnN4vb52BYF5qWq06Kuv0si33Co1rt8Uz96xJwb5YxU08mUpFMz6qSDSzpODBs8KwtiwD0xp28F5HtkDo4Yt0h46I6LgERR3cHeRJm1CQVyyuBC1pULZPEa6ie2RBdKOxE9pCoJI+/jxQfajWzCVWowgc3X0kQc4s7o=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(376002)(39860400002)(136003)(346002)(451199015)(40470700004)(46966006)(36840700001)(47076005)(426003)(83380400001)(1076003)(2616005)(81166007)(336012)(82740400003)(356005)(36860700001)(40460700003)(2906002)(5660300002)(40480700001)(26005)(4743002)(186003)(41300700001)(54906003)(8676002)(70206006)(4326008)(6666004)(316002)(110136005)(478600001)(8936002)(82310400005)(70586007)(36756003)(66899015)(103116003)(86362001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2022 10:27:59.5838
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fc3f9d98-42ca-4043-8da4-08dace068f67
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT022.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6166
+X-Spam-Status: No, score=0.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/23/22 10:08, Thomas Huth wrote:
-> We recently experienced some weird huge time jumps in nested guests when
-> rebooting them in certain cases. After adding some debug code to the epoch
-> handling in vsie.c (thanks to David Hildenbrand for the idea!), it was
-> obvious that the "epdx" field (the multi-epoch extension) did not get set
-> to 0xff in case the "epoch" field was negative.
-> Seems like the code misses to copy the value from the epdx field from
-> the guest to the shadow control block. By doing so, the weird time
-> jumps are gone in our scenarios.
-> 
-> Link: https://bugzilla.redhat.com/show_bug.cgi?id=2140899
-> Fixes: 8fa1696ea781 ("KVM: s390: Multiple Epoch Facility support")
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
+Some background about the patch series: Xilinx Axi Ethernet device driver
+(xilinx_axienet_main.c) currently has axi-dma code inside it. The goal is
+to refactor axiethernet driver and use existing AXI DMA driver using
+DMAEngine API.
 
-Could you please add a test for this to the KVM unit tests?
-I'd guess you might already have some code for it from your debugging 
-sessions.
+This patchset does feature addition and optimization to support axidma
+integration with axiethernet network driver. Once axidma version is
+accepted mcdma specific changes will be added in followup version.
+
+Changes in V2: 
+1) Moved xlnx,axistream-connected optional property to under AXI DMA.
+2) Removed Acked-by: Rob Herringi for PATCH 1/6.
+3) New patch(6/6).
+ 
+Comments, suggestions are very welcome!
+
+Radhey Shyam Pandey (6):
+  dt-bindings: dmaengine: xilinx_dma:Add xlnx,axistream-connected
+    property
+  dt-bindings: dmaengine: xilinx_dma: Add xlnx,irq-delay property
+  dmaengine: xilinx_dma: Pass AXI4-Stream control words to dma client
+  dmaengine: xilinx_dma: Increase AXI DMA transaction segment count
+  dmaengine: xilinx_dma: Use tasklet_hi_schedule for timing critical
+    usecase
+  dmaengine: xilinx_dma: Program interrupt delay timeout
+
+ .../bindings/dma/xilinx/xilinx_dma.txt        |  6 ++
+ drivers/dma/xilinx/xilinx_dma.c               | 61 +++++++++++++++----
+ 2 files changed, 56 insertions(+), 11 deletions(-)
+
+-- 
+2.25.1
 
