@@ -2,122 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E99DD637BDE
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 15:51:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE355637BE2
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 15:52:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbiKXOvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 09:51:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54224 "EHLO
+        id S229672AbiKXOwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 09:52:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiKXOvE (ORCPT
+        with ESMTP id S230024AbiKXOwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 09:51:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370131369C4
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 06:50:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4B82FB8284D
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 14:50:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03FDCC433B5;
-        Thu, 24 Nov 2022 14:50:48 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.96)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1oyDYt-001X7T-0O;
-        Thu, 24 Nov 2022 09:50:47 -0500
-Message-ID: <20221124145046.999511177@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Thu, 24 Nov 2022 09:50:30 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Song Shuai <suagrfillet@gmail.com>
-Subject: [for-next][PATCH 11/11] ftrace: Avoid needless updates of the ftrace function call
-References: <20221124145019.782980678@goodmis.org>
+        Thu, 24 Nov 2022 09:52:01 -0500
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0479314F9CD
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 06:51:25 -0800 (PST)
+Received: by mail-vs1-xe36.google.com with SMTP id k67so1745749vsk.2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 06:51:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=saSlvoXli5roPdfQjc0COfGftVZoPty/RFt6GhCwe+A=;
+        b=gT/QVfsW8Jl2L3jgcVaSPpWfvSeebUi7AcuC3qu3LlVAS2DGxJdK+PnuuXxT0gD8VY
+         0oOuk5VbTWrgiO6pPWuBMVRnpuPhIcgSkiGrLNM05oeNdRkaRqh5WAAZNP2LQQWVzSKl
+         C6Mr577QeXYx8iILSUTpUXfZ/BJ3fvhqazsIx3OVr2fEhRBGVqWpvyPF2OIzVVKHCHtH
+         xMaVAowkY26QvHEIe0hxKO0Z09LWMDDMOeo9rfgGxdnwcCdr53+TMjech2S78WLA0ajr
+         s/V5naZIBTmMJ0Aqj3mmL/IY7zibk7sdBrx5QAljtihMolDjJ2ndvzmzxCaVCtBsWI4q
+         mDTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=saSlvoXli5roPdfQjc0COfGftVZoPty/RFt6GhCwe+A=;
+        b=07vfuHMO+Spa4UNo1JBgcE84m0W9cxxXgRa8heiJoQGKfSAnBcEwUKUnrEHCor9glz
+         AqoqYVL7ody5tSH/d+y1mUJKMTLlmcrBNrSfKNTPePyfZl0nv9z5M+mj+TWHFiL5SEK3
+         vlG4mOOthmkYcBjgfO0uvcpRdCYj9gHT5IkMct2EwAailWNmnpiBi9DhpvOsU/eXRKjN
+         LT3+jbE0oywLVjRSb6DanzJRgu4F0ZihliG5a81zcDSeOdfB5debJyeL/ECtvKE7wTuz
+         u3gjnd6umRr3yGCONETAWU8DcwsevqHmmutZXlEBaJ92t/dSsemTglKYwYAsejYAHnT/
+         nd8Q==
+X-Gm-Message-State: ANoB5pny1w0Xh1zIJbP2DgzAAyfMORtfDlYyXL67nYV2RHyi2k31ZLbW
+        eB+LE83eNg7VizjAF/k4mAbPmxIZmoZA9pgf1kWrPN6jZM0=
+X-Google-Smtp-Source: AA0mqf4oF0Md4QcSPaayMyHgMPSBM2LSp+i9R9Gs2DPnZ7VBAOmLy6vOz3lur+ZZfsybqDsBIkg0QgAnxYqJY4w8KqY=
+X-Received: by 2002:a67:e8d7:0:b0:3b0:767f:e291 with SMTP id
+ y23-20020a67e8d7000000b003b0767fe291mr3351904vsn.47.1669301484092; Thu, 24
+ Nov 2022 06:51:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221123110759.1836666-1-brgl@bgdev.pl> <20221123110759.1836666-9-brgl@bgdev.pl>
+ <4f4b7e8b-8017-2a6f-f756-46c60fba8a3c@kernel.org>
+In-Reply-To: <4f4b7e8b-8017-2a6f-f756-46c60fba8a3c@kernel.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 24 Nov 2022 15:51:13 +0100
+Message-ID: <CAMRc=Me2ofiOs4Ue5oa+a6ngdf-NC8JuUC77XVnucoGR=C3zag@mail.gmail.com>
+Subject: Re: [PATCH v3 08/13] tty: serial: qcom-geni-serial: refactor qcom_geni_serial_handle_tx()
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>,
+        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Thu, Nov 24, 2022 at 8:18 AM Jiri Slaby <jirislaby@kernel.org> wrote:
+>
+> On 23. 11. 22, 12:07, Bartosz Golaszewski wrote:
+> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >
+> > qcom_geni_serial_handle_tx() is pretty big, let's move the code that
+> > handles the actual writing of data to a separate function which makes
+> > sense in preparation for introducing a dma variant of handle_tx().
+> >
+> > Let's also shuffle the code a bit, drop unneeded variables and use
+> > uart_xmit_advance() instead of handling tail->xmit manually.
+> >
+> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> > ---
+> >   drivers/tty/serial/qcom_geni_serial.c | 54 +++++++++++++--------------
+> >   1 file changed, 27 insertions(+), 27 deletions(-)
+> >
+> > diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+> > index 68a1402fbe58..658b6d596f58 100644
+> > --- a/drivers/tty/serial/qcom_geni_serial.c
+> > +++ b/drivers/tty/serial/qcom_geni_serial.c
+> > @@ -704,19 +704,42 @@ static void qcom_geni_serial_start_rx(struct uart_port *uport)
+> >       writel(irq_en, uport->membase + SE_GENI_M_IRQ_EN);
+> >   }
+>
+> I know you just shuffle the code, but:
+>
+> > +static void qcom_geni_serial_send_chunk_fifo(struct uart_port *uport,
+> > +                                          unsigned int chunk)
+> > +{
+> > +     struct qcom_geni_serial_port *port = to_dev_port(uport);
+> > +     struct circ_buf *xmit = &uport->state->xmit;
+> > +     u8 buf[BYTES_PER_FIFO_WORD];
+> > +     size_t remaining = chunk;
+>
+> Why size_t when the others are uints? Well, BYTES_PER_FIFO_WORD should
+> be defined as 4U.
 
-Song Shuai reported:
+Good point.
 
-    The list func (ftrace_ops_list_func) will be patched first
-    before the transition between old and new calls are set,
-    which fixed the race described in this commit `59338f75`.
+>
+> > +     unsigned int tx_bytes;
+> > +     int c;
+> > +
+> > +     while (remaining) {
+> > +             memset(buf, 0, sizeof(buf));
+> > +             tx_bytes = min_t(size_t, remaining, BYTES_PER_FIFO_WORD);
+>
+> Then, no need for min_t.
+>
 
-    While ftrace_trace_function changes from the list func to a
-    ftrace_ops func, like unregistering the klp_ops to leave the only
-    global_ops in ftrace_ops_list, the ftrace_[regs]_call will be
-    replaced with the list func although it already exists. So there
-    should be a condition to avoid this.
+Same.
 
-And suggested using another variable to keep track of what the ftrace
-function is set to. But this could be simplified by using a helper
-function that does the same with a static variable.
+> > +
+> > +             for (c = 0; c < tx_bytes ; c++) {
+> > +                     buf[c] = xmit->buf[xmit->tail];
+> > +                     uart_xmit_advance(uport, 1);
+> > +             }
+> > +
+> > +             iowrite32_rep(uport->membase + SE_GENI_TX_FIFOn, buf, 1);
+>
+> I wonder, why is _rep variant used to transfer a single word? Only to
+> hide the cast?
+>
 
-Link: https://lore.kernel.org/lkml/20221026132039.2236233-1-suagrfillet@gmail.com/
-Link: https://lore.kernel.org/linux-trace-kernel/20221122180905.737b6f52@gandalf.local.home
+Even if - using writel() with a cast doesn't seem to improve the
+performance and this one looks prettier IMO.
 
-Reported-by: Song Shuai <suagrfillet@gmail.com>
-Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- kernel/trace/ftrace.c | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 65a5d36463e0..d04552c0c275 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -2763,6 +2763,19 @@ void __weak ftrace_arch_code_modify_post_process(void)
- {
- }
- 
-+static int update_ftrace_func(ftrace_func_t func)
-+{
-+	static ftrace_func_t save_func;
-+
-+	/* Avoid updating if it hasn't changed */
-+	if (func == save_func)
-+		return 0;
-+
-+	save_func = func;
-+
-+	return ftrace_update_ftrace_func(func);
-+}
-+
- void ftrace_modify_all_code(int command)
- {
- 	int update = command & FTRACE_UPDATE_TRACE_FUNC;
-@@ -2783,7 +2796,7 @@ void ftrace_modify_all_code(int command)
- 	 * traced.
- 	 */
- 	if (update) {
--		err = ftrace_update_ftrace_func(ftrace_ops_list_func);
-+		err = update_ftrace_func(ftrace_ops_list_func);
- 		if (FTRACE_WARN_ON(err))
- 			return;
- 	}
-@@ -2799,7 +2812,7 @@ void ftrace_modify_all_code(int command)
- 		/* If irqs are disabled, we are in stop machine */
- 		if (!irqs_disabled())
- 			smp_call_function(ftrace_sync_ipi, NULL, 1);
--		err = ftrace_update_ftrace_func(ftrace_trace_function);
-+		err = update_ftrace_func(ftrace_trace_function);
- 		if (FTRACE_WARN_ON(err))
- 			return;
- 	}
--- 
-2.35.1
-
-
+Bartosz
