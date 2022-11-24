@@ -2,38 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5F87637BD4
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 15:51:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D81FB637BDD
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 15:51:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbiKXOvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 09:51:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54238 "EHLO
+        id S229448AbiKXOvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 09:51:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbiKXOuz (ORCPT
+        with ESMTP id S229844AbiKXOvE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 09:50:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB664D9B82
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 06:50:47 -0800 (PST)
+        Thu, 24 Nov 2022 09:51:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213001369C2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 06:50:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7921862187
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 14:50:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9D20C43146;
-        Thu, 24 Nov 2022 14:50:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5AB3DB8284F
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 14:50:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08CADC433D6;
+        Thu, 24 Nov 2022 14:50:47 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1oyDYs-001X3Y-00;
+        id 1oyDYs-001X42-0S;
         Thu, 24 Nov 2022 09:50:46 -0500
-Message-ID: <20221124145045.881004349@goodmis.org>
+Message-ID: <20221124145046.017356789@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Thu, 24 Nov 2022 09:50:22 -0500
+Date:   Thu, 24 Nov 2022 09:50:23 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [for-next][PATCH 03/11] tracing: Add trace_trigger kernel command line option
+        Andrew Morton <akpm@linux-foundation.org>,
+        Song Chen <chensong_2000@189.cn>
+Subject: [for-next][PATCH 04/11] ring_buffer: Remove unused "event" parameter
 References: <20221124145019.782980678@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,176 +47,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+From: Song Chen <chensong_2000@189.cn>
 
-Allow triggers to be enabled at kernel boot up. For example:
+After commit a389d86f7fd0 ("ring-buffer: Have nested events still record
+running time stamp"), the "event" parameter is no longer used in either
+ring_buffer_unlock_commit() or rb_commit(). Best to remove it.
 
-  trace_trigger="sched_switch.stacktrace if prev_state == 2"
+Link: https://lkml.kernel.org/r/1666274811-24138-1-git-send-email-chensong_2000@189.cn
 
-The above will enable the stacktrace trigger on top of the sched_switch
-event and only trigger if its prev_state is 2 (TASK_UNINTERRUPTIBLE). Then
-at boot up, a stacktrace will trigger and be recorded in the tracing ring
-buffer every time the sched_switch happens where the previous state is
-TASK_INTERRUPTIBLE.
-
-Another useful trigger would be "traceoff" which can stop tracing on an
-event if a field of the event matches a certain value defined by the
-filter ("if" statement).
-
-Link: https://lore.kernel.org/linux-trace-kernel/20221020210056.0d8d0a5b@gandalf.local.home
-
+Signed-off-by: Song Chen <chensong_2000@189.cn>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- .../admin-guide/kernel-parameters.txt         | 19 +++++
- kernel/trace/trace_events.c                   | 72 ++++++++++++++++++-
- 2 files changed, 89 insertions(+), 2 deletions(-)
+ include/linux/ring_buffer.h          |  3 +--
+ kernel/trace/ring_buffer.c           | 12 +++++-------
+ kernel/trace/ring_buffer_benchmark.c |  2 +-
+ kernel/trace/trace.c                 |  2 +-
+ 4 files changed, 8 insertions(+), 11 deletions(-)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index a465d5242774..ccf91a4bf113 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -6257,6 +6257,25 @@
- 			See also Documentation/trace/ftrace.rst "trace options"
- 			section.
+diff --git a/include/linux/ring_buffer.h b/include/linux/ring_buffer.h
+index 3c7d295746f6..782e14f62201 100644
+--- a/include/linux/ring_buffer.h
++++ b/include/linux/ring_buffer.h
+@@ -113,8 +113,7 @@ void ring_buffer_change_overwrite(struct trace_buffer *buffer, int val);
  
-+	trace_trigger=[trigger-list]
-+			[FTRACE] Add a event trigger on specific events.
-+			Set a trigger on top of a specific event, with an optional
-+			filter.
-+
-+			The format is is "trace_trigger=<event>.<trigger>[ if <filter>],..."
-+			Where more than one trigger may be specified that are comma deliminated.
-+
-+			For example:
-+
-+			  trace_trigger="sched_switch.stacktrace if prev_state == 2"
-+
-+			The above will enable the "stacktrace" trigger on the "sched_switch"
-+			event but only trigger it if the "prev_state" of the "sched_switch"
-+			event is "2" (TASK_UNINTERUPTIBLE).
-+
-+			See also "Event triggers" in Documentation/trace/events.rst
-+
-+
- 	traceoff_on_warning
- 			[FTRACE] enable this option to disable tracing when a
- 			warning is hit. This turns off "tracing_on". Tracing can
-diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-index f71ea6e79b3c..3bfaf560ecc4 100644
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -2796,6 +2796,44 @@ trace_create_new_event(struct trace_event_call *call,
- 	return file;
+ struct ring_buffer_event *ring_buffer_lock_reserve(struct trace_buffer *buffer,
+ 						   unsigned long length);
+-int ring_buffer_unlock_commit(struct trace_buffer *buffer,
+-			      struct ring_buffer_event *event);
++int ring_buffer_unlock_commit(struct trace_buffer *buffer);
+ int ring_buffer_write(struct trace_buffer *buffer,
+ 		      unsigned long length, void *data);
+ 
+diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
+index b21bf14bae9b..843818ee4814 100644
+--- a/kernel/trace/ring_buffer.c
++++ b/kernel/trace/ring_buffer.c
+@@ -3180,8 +3180,7 @@ static inline void rb_event_discard(struct ring_buffer_event *event)
+ 		event->time_delta = 1;
  }
  
-+#ifdef CONFIG_HIST_TRIGGERS
-+#define MAX_BOOT_TRIGGERS 32
-+
-+static struct boot_triggers {
-+	const char		*event;
-+	char			*trigger;
-+} bootup_triggers[MAX_BOOT_TRIGGERS];
-+
-+static char bootup_trigger_buf[COMMAND_LINE_SIZE];
-+static int nr_boot_triggers;
-+
-+static __init int setup_trace_triggers(char *str)
-+{
-+	char *trigger;
-+	char *buf;
-+	int i;
-+
-+	strlcpy(bootup_trigger_buf, str, COMMAND_LINE_SIZE);
-+	ring_buffer_expanded = true;
-+	disable_tracing_selftest("running event triggers");
-+
-+	buf = bootup_trigger_buf;
-+	for (i = 0; i < MAX_BOOT_TRIGGERS; i++) {
-+		trigger = strsep(&buf, ",");
-+		if (!trigger)
-+			break;
-+		bootup_triggers[i].event = strsep(&trigger, ".");
-+		bootup_triggers[i].trigger = strsep(&trigger, ".");
-+		if (!bootup_triggers[i].trigger)
-+			break;
-+	}
-+
-+	nr_boot_triggers = i;
-+	return 1;
-+}
-+__setup("trace_trigger=", setup_trace_triggers);
-+#endif
-+
- /* Add an event to a trace directory */
- static int
- __trace_add_new_event(struct trace_event_call *call, struct trace_array *tr)
-@@ -2812,6 +2850,28 @@ __trace_add_new_event(struct trace_event_call *call, struct trace_array *tr)
- 		return event_define_fields(call);
- }
- 
-+#ifdef CONFIG_HIST_TRIGGERS
-+static void trace_early_triggers(struct trace_event_file *file, const char *name)
-+{
-+	int ret;
-+	int i;
-+
-+	for (i = 0; i < nr_boot_triggers; i++) {
-+		if (strcmp(name, bootup_triggers[i].event))
-+			continue;
-+		mutex_lock(&event_mutex);
-+		ret = trigger_process_regex(file, bootup_triggers[i].trigger);
-+		mutex_unlock(&event_mutex);
-+		if (ret)
-+			pr_err("Failed to register trigger '%s' on event %s\n",
-+			       bootup_triggers[i].trigger,
-+			       bootup_triggers[i].event);
-+	}
-+}
-+#else
-+static inline void trace_early_triggers(struct trace_event_file *file, const char *name) { }
-+#endif
-+
- /*
-  * Just create a descriptor for early init. A descriptor is required
-  * for enabling events at boot. We want to enable events before
-@@ -2822,12 +2882,19 @@ __trace_early_add_new_event(struct trace_event_call *call,
- 			    struct trace_array *tr)
+-static void rb_commit(struct ring_buffer_per_cpu *cpu_buffer,
+-		      struct ring_buffer_event *event)
++static void rb_commit(struct ring_buffer_per_cpu *cpu_buffer)
  {
- 	struct trace_event_file *file;
-+	int ret;
+ 	local_inc(&cpu_buffer->entries);
+ 	rb_end_commit(cpu_buffer);
+@@ -3383,15 +3382,14 @@ void ring_buffer_nest_end(struct trace_buffer *buffer)
+  *
+  * Must be paired with ring_buffer_lock_reserve.
+  */
+-int ring_buffer_unlock_commit(struct trace_buffer *buffer,
+-			      struct ring_buffer_event *event)
++int ring_buffer_unlock_commit(struct trace_buffer *buffer)
+ {
+ 	struct ring_buffer_per_cpu *cpu_buffer;
+ 	int cpu = raw_smp_processor_id();
  
- 	file = trace_create_new_event(call, tr);
- 	if (!file)
- 		return -ENOMEM;
+ 	cpu_buffer = buffer->buffers[cpu];
  
--	return event_define_fields(call);
-+	ret = event_define_fields(call);
-+	if (ret)
-+		return ret;
-+
-+	trace_early_triggers(file, trace_event_name(call));
-+
-+	return 0;
- }
+-	rb_commit(cpu_buffer, event);
++	rb_commit(cpu_buffer);
  
- struct ftrace_module_file_ops;
-@@ -3735,6 +3802,8 @@ static __init int event_trace_enable(void)
- 			list_add(&call->list, &ftrace_events);
+ 	rb_wakeups(buffer, cpu_buffer);
+ 
+@@ -3977,7 +3975,7 @@ int ring_buffer_write(struct trace_buffer *buffer,
+ 
+ 	memcpy(body, data, length);
+ 
+-	rb_commit(cpu_buffer, event);
++	rb_commit(cpu_buffer);
+ 
+ 	rb_wakeups(buffer, cpu_buffer);
+ 
+@@ -5998,7 +5996,7 @@ static __init int rb_write_something(struct rb_test_data *data, bool nested)
  	}
  
-+	register_trigger_cmds();
-+
- 	/*
- 	 * We need the top trace array to have a working set of trace
- 	 * points at early init, before the debug files and directories
-@@ -3749,7 +3818,6 @@ static __init int event_trace_enable(void)
- 
- 	register_event_cmds();
- 
--	register_trigger_cmds();
+  out:
+-	ring_buffer_unlock_commit(data->buffer, event);
++	ring_buffer_unlock_commit(data->buffer);
  
  	return 0;
  }
+diff --git a/kernel/trace/ring_buffer_benchmark.c b/kernel/trace/ring_buffer_benchmark.c
+index 78e576575b79..aef34673d79d 100644
+--- a/kernel/trace/ring_buffer_benchmark.c
++++ b/kernel/trace/ring_buffer_benchmark.c
+@@ -258,7 +258,7 @@ static void ring_buffer_producer(void)
+ 				hit++;
+ 				entry = ring_buffer_event_data(event);
+ 				*entry = smp_processor_id();
+-				ring_buffer_unlock_commit(buffer, event);
++				ring_buffer_unlock_commit(buffer);
+ 			}
+ 		}
+ 		end_time = ktime_get();
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index 5cfc95a52bc3..5c97dbef741b 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -999,7 +999,7 @@ __buffer_unlock_commit(struct trace_buffer *buffer, struct ring_buffer_event *ev
+ 		/* ring_buffer_unlock_commit() enables preemption */
+ 		preempt_enable_notrace();
+ 	} else
+-		ring_buffer_unlock_commit(buffer, event);
++		ring_buffer_unlock_commit(buffer);
+ }
+ 
+ /**
 -- 
 2.35.1
 
