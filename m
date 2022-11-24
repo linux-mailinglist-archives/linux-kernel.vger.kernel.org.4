@@ -2,277 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE66E637269
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 07:37:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68F6F63726D
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 07:39:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbiKXGhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 01:37:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43310 "EHLO
+        id S229649AbiKXGjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 01:39:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbiKXGhE (ORCPT
+        with ESMTP id S229468AbiKXGjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 01:37:04 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E0AC6BF5;
-        Wed, 23 Nov 2022 22:36:30 -0800 (PST)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ANKMCPS031354;
-        Wed, 23 Nov 2022 22:36:21 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=pfpt0220; bh=6X6je5OPwRrTxSTNAH6J16bP62LAgGN9chs2ksNVsHE=;
- b=V5eRtCGZHQqn5i9Yfiz+G42/cc3ZDmgyWgQmQL4GpT8CxM8BG0zI5YlaXvp8olb5FStC
- Ibm3ZjvPo+v49R2XGc4nfKvU3WvZd6hE5up1Z4KfrF3F5CSgR7WSDEk1mMO8MXSiMXu4
- LZA4+zMuMRKEENLNhWtudHPgicbUwNqxQWN9BeQQLZLq1uYLDFGZtog2wG6xWvjT8Ylc
- iCghwfWc7HVq6wCErRyunROcM5YxwR/HJnS4MGy0dDIfD4C2syNEAcmN77DDqDu4NuWt
- yVYVkX3IFomW8aOjVGSuwJWEVKS5xSG6BUd2kWR46NowGPBzPAQtNQxYJrdG0D8ehDD+ eA== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3m1g7jbuh0-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 23 Nov 2022 22:36:21 -0800
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 23 Nov
- 2022 22:35:54 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 23 Nov 2022 22:35:54 -0800
-Received: from localhost.localdomain (unknown [10.28.36.166])
-        by maili.marvell.com (Postfix) with ESMTP id BEF763F7097;
-        Wed, 23 Nov 2022 22:35:50 -0800 (PST)
-From:   Suman Ghosh <sumang@marvell.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <sgoutham@marvell.com>, <sbhatta@marvell.com>,
-        <jerinj@marvell.com>, <gakula@marvell.com>, <hkelam@marvell.com>,
-        <lcherian@marvell.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Suman Ghosh <sumang@marvell.com>
-Subject: [net-next PATCH V3] octeontx2-pf: Add support to filter packet based on IP fragment
-Date:   Thu, 24 Nov 2022 12:05:48 +0530
-Message-ID: <20221124063548.2831912-1-sumang@marvell.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 24 Nov 2022 01:39:37 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F321DAD12
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 22:39:36 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id s1-20020a056e021a0100b003026adad6a9so688529ild.18
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 22:39:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uWKhGwqKONv8lf/xZZq9190DxesFkjuqvGpZvKPrzrY=;
+        b=cRdGrGhE6b+iwWkQnfblOCs+UNWsxQjcuxDWRfPa759dxZWtY50A3gegtrJaLvdCFJ
+         9DzIaUQZ1i8rb1xjGs0UW69ehdUVvKfDKlxcXhZM45BuSbaIrXSYcrx1i+2Q2CeWpE6d
+         zXZa8MC2+XHj7B6c6IncL8K/mQRfbPcCg0qW5pqxPJD3k8U8WhrEeZQfWsXRtzc/dd5Z
+         cBecA19VhP3VbiqUHEfyaNb2+W/y8CYCDbrX6x33uAEY5zN/d4exNyfu2upFMlJNKkD5
+         BzFQGslFj+lOL41RDzr7yQbu9nUaKhIHTfYuQuUWTsnbw2hEHtZlTHEuZWl3MFgeIt53
+         wIbQ==
+X-Gm-Message-State: ANoB5pnH13NfomJnbbQO1QwkJgDItyjCmEOfp73Tg2yCue5o9OklFdyu
+        S9fkpPVens6cpCLxjrhihJCvjNRr9P/iAoiVPEI3yXjtNWgu
+X-Google-Smtp-Source: AA0mqf4BLaFMfuAEb3wnoMbMDrVmJ9RH3loeOz8ahJYV/DFePuUcJo/LYsy2Yc7TCvF71CiUDZh9SoPcX/9gXWjMJiPcy09VknXa
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: vKQpjn2BKh9GA1f5McJcFSWczlHBHKo-
-X-Proofpoint-GUID: vKQpjn2BKh9GA1f5McJcFSWczlHBHKo-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-24_04,2022-11-23_01,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:5a5:b0:300:d831:8c90 with SMTP id
+ k5-20020a056e0205a500b00300d8318c90mr7087177ils.21.1669271975882; Wed, 23 Nov
+ 2022 22:39:35 -0800 (PST)
+Date:   Wed, 23 Nov 2022 22:39:35 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000027f81605ee31ab88@google.com>
+Subject: [syzbot] KMSAN: uninit-value in reiserfs_new_inode (2)
+From:   syzbot <syzbot+6450929faa7a97cd42d1@syzkaller.appspotmail.com>
+To:     brauner@kernel.org, damien.lemoal@opensource.wdc.com,
+        edward.shishkin@gmail.com, glider@google.com, jack@suse.cz,
+        jlayton@kernel.org, linuszeng@tencent.com,
+        linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-1. Added support to filter packets based on IP fragment.
-For IPv4 packets check for ip_flag == 0x20 (more fragment bit set).
-For IPv6 packets check for next_header == 0x2c (next_header set to
-'fragment header for IPv6')
-2. Added configuration support from both "ethtool ntuple" and "tc flower".
+Hello,
 
-Signed-off-by: Suman Ghosh <sumang@marvell.com>
+syzbot found the following issue on:
+
+HEAD commit:    ddce02aa9c40 net: kmsan: check sk_buffs passed to __netdev..
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=1200559b880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1429f86b132e6d40
+dashboard link: https://syzkaller.appspot.com/bug?extid=6450929faa7a97cd42d1
+compiler:       clang version 15.0.0 (https://github.com/llvm/llvm-project.git 610139d2d9ce6746b3c617fb3e2f7886272d26ff), GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: i386
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/40435685a7d7/disk-ddce02aa.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/4960172e71de/vmlinux-ddce02aa.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/5d91bc515d95/bzImage-ddce02aa.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6450929faa7a97cd42d1@syzkaller.appspotmail.com
+
+=====================================================
+BUG: KMSAN: uninit-value in reiserfs_new_inode+0x193a/0x24e0 fs/reiserfs/inode.c:2050
+ reiserfs_new_inode+0x193a/0x24e0 fs/reiserfs/inode.c:2050
+ reiserfs_create+0x738/0xe60 fs/reiserfs/namei.c:668
+ lookup_open fs/namei.c:3413 [inline]
+ open_last_lookups fs/namei.c:3481 [inline]
+ path_openat+0x28e9/0x5600 fs/namei.c:3710
+ do_filp_open+0x249/0x660 fs/namei.c:3740
+ do_sys_openat2+0x1f0/0x910 fs/open.c:1310
+ do_sys_open fs/open.c:1326 [inline]
+ __do_sys_creat fs/open.c:1402 [inline]
+ __se_sys_creat fs/open.c:1396 [inline]
+ __ia32_sys_creat+0xed/0x160 fs/open.c:1396
+ do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+ __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
+ do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+ do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
+ entry_SYSENTER_compat_after_hwframe+0x70/0x82
+
+Uninit was created at:
+ __alloc_pages+0x9f1/0xe80 mm/page_alloc.c:5578
+ alloc_pages+0xaae/0xd80 mm/mempolicy.c:2285
+ alloc_slab_page mm/slub.c:1794 [inline]
+ allocate_slab+0x1b5/0x1010 mm/slub.c:1939
+ new_slab mm/slub.c:1992 [inline]
+ ___slab_alloc+0x10c3/0x2d60 mm/slub.c:3180
+ __slab_alloc mm/slub.c:3279 [inline]
+ slab_alloc_node mm/slub.c:3364 [inline]
+ slab_alloc mm/slub.c:3406 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3413 [inline]
+ kmem_cache_alloc_lru+0x6f3/0xb30 mm/slub.c:3429
+ alloc_inode_sb include/linux/fs.h:3117 [inline]
+ reiserfs_alloc_inode+0x5e/0x140 fs/reiserfs/super.c:642
+ alloc_inode+0x83/0x440 fs/inode.c:259
+ iget5_locked+0xa5/0x200 fs/inode.c:1241
+ reiserfs_fill_super+0x212b/0x3a00 fs/reiserfs/super.c:2053
+ mount_bdev+0x508/0x840 fs/super.c:1401
+ get_super_block+0x49/0x60 fs/reiserfs/super.c:2601
+ legacy_get_tree+0x10c/0x280 fs/fs_context.c:610
+ vfs_get_tree+0xa1/0x500 fs/super.c:1531
+ do_new_mount+0x694/0x1580 fs/namespace.c:3040
+ path_mount+0x71a/0x1eb0 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount+0x734/0x840 fs/namespace.c:3568
+ __ia32_sys_mount+0xdf/0x140 fs/namespace.c:3568
+ do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+ __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
+ do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+ do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
+ entry_SYSENTER_compat_after_hwframe+0x70/0x82
+
+CPU: 0 PID: 3857 Comm: syz-executor.2 Not tainted 6.1.0-rc6-syzkaller-63553-gddce02aa9c40 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+=====================================================
+
+
 ---
-Changes since v2:
-- Fixed minor review comments.
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
- .../net/ethernet/marvell/octeontx2/af/mbox.h  |  4 +++
- .../net/ethernet/marvell/octeontx2/af/npc.h   |  2 ++
- .../marvell/octeontx2/af/rvu_debugfs.c        |  8 ++++++
- .../marvell/octeontx2/af/rvu_npc_fs.c         |  8 ++++++
- .../marvell/octeontx2/nic/otx2_common.h       |  3 +++
- .../marvell/octeontx2/nic/otx2_flows.c        | 25 ++++++++++++++++---
- .../ethernet/marvell/octeontx2/nic/otx2_tc.c  | 25 +++++++++++++++++++
- 7 files changed, 71 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/mbox.h b/drivers/net/ethernet/marvell/octeontx2/af/mbox.h
-index c7c92c7510fa..d2584ebb7a70 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/mbox.h
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/mbox.h
-@@ -1440,6 +1440,10 @@ struct flow_msg {
- 	u8 tc;
- 	__be16 sport;
- 	__be16 dport;
-+	union {
-+		u8 ip_flag;
-+		u8 next_header;
-+	};
- };
- 
- struct npc_install_flow_req {
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/npc.h b/drivers/net/ethernet/marvell/octeontx2/af/npc.h
-index d027c23b8ef8..9beeead56d7b 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/npc.h
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/npc.h
-@@ -185,8 +185,10 @@ enum key_fields {
- 	NPC_VLAN_ETYPE_STAG, /* 0x88A8 */
- 	NPC_OUTER_VID,
- 	NPC_TOS,
-+	NPC_IPFRAG_IPV4,
- 	NPC_SIP_IPV4,
- 	NPC_DIP_IPV4,
-+	NPC_IPFRAG_IPV6,
- 	NPC_SIP_IPV6,
- 	NPC_DIP_IPV6,
- 	NPC_IPPROTO_TCP,
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c
-index 642e58a04da0..cdb2e6d8ffb8 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c
-@@ -2799,6 +2799,14 @@ static void rvu_dbg_npc_mcam_show_flows(struct seq_file *s,
- 			seq_printf(s, "%pI6 ", rule->packet.ip6dst);
- 			seq_printf(s, "mask %pI6\n", rule->mask.ip6dst);
- 			break;
-+		case NPC_IPFRAG_IPV6:
-+			seq_printf(s, "0x%x ", rule->packet.next_header);
-+			seq_printf(s, "mask 0x%x\n", rule->mask.next_header);
-+			break;
-+		case NPC_IPFRAG_IPV4:
-+			seq_printf(s, "0x%x ", rule->packet.ip_flag);
-+			seq_printf(s, "mask 0x%x\n", rule->mask.ip_flag);
-+			break;
- 		case NPC_SPORT_TCP:
- 		case NPC_SPORT_UDP:
- 		case NPC_SPORT_SCTP:
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_fs.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_fs.c
-index f3fecd2a4015..006beb5cf98d 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_fs.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_fs.c
-@@ -26,8 +26,10 @@ static const char * const npc_flow_names[] = {
- 	[NPC_VLAN_ETYPE_STAG] = "vlan ether type stag",
- 	[NPC_OUTER_VID]	= "outer vlan id",
- 	[NPC_TOS]	= "tos",
-+	[NPC_IPFRAG_IPV4] = "fragmented IPv4 header ",
- 	[NPC_SIP_IPV4]	= "ipv4 source ip",
- 	[NPC_DIP_IPV4]	= "ipv4 destination ip",
-+	[NPC_IPFRAG_IPV6] = "fragmented IPv6 header ",
- 	[NPC_SIP_IPV6]	= "ipv6 source ip",
- 	[NPC_DIP_IPV6]	= "ipv6 destination ip",
- 	[NPC_IPPROTO_TCP] = "ip proto tcp",
-@@ -484,8 +486,10 @@ do {									       \
- 	 * Example: Source IP is 4 bytes and starts at 12th byte of IP header
- 	 */
- 	NPC_SCAN_HDR(NPC_TOS, NPC_LID_LC, NPC_LT_LC_IP, 1, 1);
-+	NPC_SCAN_HDR(NPC_IPFRAG_IPV4, NPC_LID_LC, NPC_LT_LC_IP, 6, 1);
- 	NPC_SCAN_HDR(NPC_SIP_IPV4, NPC_LID_LC, NPC_LT_LC_IP, 12, 4);
- 	NPC_SCAN_HDR(NPC_DIP_IPV4, NPC_LID_LC, NPC_LT_LC_IP, 16, 4);
-+	NPC_SCAN_HDR(NPC_IPFRAG_IPV6, NPC_LID_LC, NPC_LT_LC_IP6_EXT, 6, 1);
- 	NPC_SCAN_HDR(NPC_SIP_IPV6, NPC_LID_LC, NPC_LT_LC_IP6, 8, 16);
- 	NPC_SCAN_HDR(NPC_DIP_IPV6, NPC_LID_LC, NPC_LT_LC_IP6, 24, 16);
- 	NPC_SCAN_HDR(NPC_SPORT_UDP, NPC_LID_LD, NPC_LT_LD_UDP, 0, 2);
-@@ -899,6 +903,8 @@ do {									      \
- 	NPC_WRITE_FLOW(NPC_ETYPE, etype, ntohs(pkt->etype), 0,
- 		       ntohs(mask->etype), 0);
- 	NPC_WRITE_FLOW(NPC_TOS, tos, pkt->tos, 0, mask->tos, 0);
-+	NPC_WRITE_FLOW(NPC_IPFRAG_IPV4, ip_flag, pkt->ip_flag, 0,
-+		       mask->ip_flag, 0);
- 	NPC_WRITE_FLOW(NPC_SIP_IPV4, ip4src, ntohl(pkt->ip4src), 0,
- 		       ntohl(mask->ip4src), 0);
- 	NPC_WRITE_FLOW(NPC_DIP_IPV4, ip4dst, ntohl(pkt->ip4dst), 0,
-@@ -919,6 +925,8 @@ do {									      \
- 	NPC_WRITE_FLOW(NPC_OUTER_VID, vlan_tci, ntohs(pkt->vlan_tci), 0,
- 		       ntohs(mask->vlan_tci), 0);
- 
-+	NPC_WRITE_FLOW(NPC_IPFRAG_IPV6, next_header, pkt->next_header, 0,
-+		       mask->next_header, 0);
- 	npc_update_ipv6_flow(rvu, entry, features, pkt, mask, output, intf);
- 	npc_update_vlan_features(rvu, entry, features, intf);
- 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
-index 282db6fe3b08..99d0da7ba750 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
-@@ -28,6 +28,9 @@
- #include "otx2_devlink.h"
- #include <rvu_trace.h>
- 
-+/* IPv4 flag more fragment bit */
-+#define IPV4_FLAG_MORE				0x20
-+
- /* PCI device IDs */
- #define PCI_DEVID_OCTEONTX2_RVU_PF              0xA063
- #define PCI_DEVID_OCTEONTX2_RVU_VF		0xA064
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
-index 13aa79efee03..684cb8ec9f21 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
-@@ -711,6 +711,11 @@ static int otx2_prepare_ipv6_flow(struct ethtool_rx_flow_spec *fsp,
- 			       sizeof(pmask->ip6dst));
- 			req->features |= BIT_ULL(NPC_DIP_IPV6);
- 		}
-+		if (ipv6_usr_hdr->l4_proto == IPPROTO_FRAGMENT) {
-+			pkt->next_header = ipv6_usr_hdr->l4_proto;
-+			pmask->next_header = ipv6_usr_mask->l4_proto;
-+			req->features |= BIT_ULL(NPC_IPFRAG_IPV6);
-+		}
- 		pkt->etype = cpu_to_be16(ETH_P_IPV6);
- 		pmask->etype = cpu_to_be16(0xFFFF);
- 		req->features |= BIT_ULL(NPC_ETYPE);
-@@ -891,10 +896,22 @@ static int otx2_prepare_flow_request(struct ethtool_rx_flow_spec *fsp,
- 			req->features |= BIT_ULL(NPC_OUTER_VID);
- 		}
- 
--		/* Not Drop/Direct to queue but use action in default entry */
--		if (fsp->m_ext.data[1] &&
--		    fsp->h_ext.data[1] == cpu_to_be32(OTX2_DEFAULT_ACTION))
--			req->op = NIX_RX_ACTION_DEFAULT;
-+		if (fsp->m_ext.data[1]) {
-+			if (flow_type == IP_USER_FLOW) {
-+				if (be32_to_cpu(fsp->h_ext.data[1]) != IPV4_FLAG_MORE)
-+					return -EINVAL;
-+
-+				pkt->ip_flag = be32_to_cpu(fsp->h_ext.data[1]);
-+				pmask->ip_flag = be32_to_cpu(fsp->m_ext.data[1]);
-+				req->features |= BIT_ULL(NPC_IPFRAG_IPV4);
-+			} else if (fsp->h_ext.data[1] ==
-+					cpu_to_be32(OTX2_DEFAULT_ACTION)) {
-+				/* Not Drop/Direct to queue but use action
-+				 * in default entry
-+				 */
-+				req->op = NIX_RX_ACTION_DEFAULT;
-+			}
-+		}
- 	}
- 
- 	if (fsp->flow_type & FLOW_MAC_EXT &&
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-index e64318c110fd..e421714524c2 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-@@ -532,6 +532,31 @@ static int otx2_tc_prepare_flow(struct otx2_nic *nic, struct otx2_tc_flow *node,
- 			req->features |= BIT_ULL(NPC_IPPROTO_ICMP6);
- 	}
- 
-+	if (flow_rule_match_key(rule, FLOW_DISSECTOR_KEY_CONTROL)) {
-+		struct flow_match_control match;
-+
-+		flow_rule_match_control(rule, &match);
-+		if (match.mask->flags & FLOW_DIS_FIRST_FRAG) {
-+			NL_SET_ERR_MSG_MOD(extack, "HW doesn't support frag first/later");
-+			return -EOPNOTSUPP;
-+		}
-+
-+		if (match.mask->flags & FLOW_DIS_IS_FRAGMENT) {
-+			if (ntohs(flow_spec->etype) == ETH_P_IP) {
-+				flow_spec->ip_flag = IPV4_FLAG_MORE;
-+				flow_mask->ip_flag = 0xff;
-+				req->features |= BIT_ULL(NPC_IPFRAG_IPV4);
-+			} else if (ntohs(flow_spec->etype) == ETH_P_IPV6) {
-+				flow_spec->next_header = IPPROTO_FRAGMENT;
-+				flow_mask->next_header = 0xff;
-+				req->features |= BIT_ULL(NPC_IPFRAG_IPV6);
-+			} else {
-+				NL_SET_ERR_MSG_MOD(extack, "flow-type should be either IPv4 and IPv6");
-+				return -EOPNOTSUPP;
-+			}
-+		}
-+	}
-+
- 	if (flow_rule_match_key(rule, FLOW_DISSECTOR_KEY_ETH_ADDRS)) {
- 		struct flow_match_eth_addrs match;
- 
--- 
-2.25.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
