@@ -2,100 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84967637C87
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 16:11:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92E3A637C8E
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 16:11:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbiKXPLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 10:11:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52788 "EHLO
+        id S229684AbiKXPLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 10:11:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiKXPLF (ORCPT
+        with ESMTP id S229959AbiKXPLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 10:11:05 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E85F1541AB
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 07:11:04 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oyDsJ-0007pU-Uy; Thu, 24 Nov 2022 16:10:52 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:5507:4aba:5e0a:4c27])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 1DA4412873B;
-        Thu, 24 Nov 2022 15:10:51 +0000 (UTC)
-Date:   Thu, 24 Nov 2022 16:10:49 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Zhang Changzhong <zhangchangzhong@huawei.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] can: sja1000_isa: add missing free_sja1000dev() in
- sja1000_isa_probe()
-Message-ID: <20221124151049.tz6mcx2fe65skmpl@pengutronix.de>
-References: <1668168521-5540-1-git-send-email-zhangchangzhong@huawei.com>
+        Thu, 24 Nov 2022 10:11:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 209AF168B34
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 07:11:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF9D6621AD
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 15:11:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E910CC433D6;
+        Thu, 24 Nov 2022 15:11:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669302679;
+        bh=WqEm0nMyQPjC7Ih6PxVMZn9+EOVGiLfH4GAfcTTRIr0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ES21AQCHdqI+F4UZC8dgHpk8oYKgfLmvwQVfvyFtykUDTcByw9W2r7B46vhrBLA+5
+         LUhxy+tXQXQL+8CHc8uDCWurrMZRJ4YRc4xSfK8b+FBWyHdQyn8/Tq9UPXS0hTkXhT
+         a2GNyvH3rp4N17sXasIZ9xtxt2sP+iGUxg0N01qsXve53UEhippMRTMp8KH6F1gxJF
+         xGgciE8s7m3RWfmjFNmEIBEuRwvJRQwsDGc5giKAMsVnmilKEuTKY/uPwC5gpxyzpZ
+         3vU97c7j+n+H09wo5nrlBynX8VRZ7BxIQzS5bdmK52E+rw6cqs1pFyWn1IWRhopyGq
+         4rm2WgHelmVFg==
+Message-ID: <9e3d185b-6453-f5d5-e1f4-bcf176c2b93c@kernel.org>
+Date:   Thu, 24 Nov 2022 23:11:16 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pesesiyv5l3isq7p"
-Content-Disposition: inline
-In-Reply-To: <1668168521-5540-1-git-send-email-zhangchangzhong@huawei.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] f2fs: set zstd compress level correctly
+Content-Language: en-US
+To:     Sheng Yong <shengyong@oppo.com>, jaegeuk@kernel.org
+Cc:     terrelln@fb.com, linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20221117151054.2232946-1-shengyong@oppo.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20221117151054.2232946-1-shengyong@oppo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/11/17 23:10, Sheng Yong wrote:
+> Fixes: cf30f6a5f0c6 ("lib: zstd: Add kernel-specific API")
+> Signed-off-by: Sheng Yong <shengyong@oppo.com>
 
---pesesiyv5l3isq7p
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Chao Yu <chao@kernel.org>
 
-On 11.11.2022 20:08:41, Zhang Changzhong wrote:
-> Add the missing free_sja1000dev() before return from sja1000_isa_probe()
-> in the register_sja1000dev() error handling case.
->=20
-> In addition, remove blanks before goto labels.
->=20
-> Fixes: 2a6ba39ad6a2 ("can: sja1000: legacy SJA1000 ISA bus driver")
-> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+Thanks,
 
-Applied to linux-can.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---pesesiyv5l3isq7p
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmN/iXYACgkQrX5LkNig
-010tfwf8CQGe92mNn5xHafQD0c50fpzbrDD0jLWVMHHQwNwrWl4dGOAUlIY6PeZe
-QUldL/UyLsleh78rYvgaU09V+WrcHXUGUZ7N0WMZ+lp1+aEJl36GKwOhC/dgx8S9
-T87T17sm1RRMn8L4nc2+R7sClPCsyYF35UIocLXqAj8xGZMN0fLvHHuNV90MTJBD
-b04O1rFzvmW8GSwVogQEDyfbHY3iaXp5jyNySwTa1ETeMtBMw8AL5W4yqtmjLVNj
-UmVRJ/NZXcUMGGQsFlPkmkeDi0aDeIMYWrfTdJqH4fPIgBJ2muXeBlA2PHktBfmS
-xmuciCZmDV84a/UlIXFV2aHcj6uO0Q==
-=IkBX
------END PGP SIGNATURE-----
-
---pesesiyv5l3isq7p--
