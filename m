@@ -2,75 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A2A463707C
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 03:36:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A87B463707F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 03:36:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbiKXCga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 21:36:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57438 "EHLO
+        id S229833AbiKXCgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 21:36:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiKXCgY (ORCPT
+        with ESMTP id S229553AbiKXCgb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 21:36:24 -0500
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3F867124;
-        Wed, 23 Nov 2022 18:36:22 -0800 (PST)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-142306beb9aso561828fac.11;
-        Wed, 23 Nov 2022 18:36:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lKu6dFZkege7gh2XFt/Jc2wITLyP+TssjbYd/0rYDtA=;
-        b=IugpXe4bF5HBztBSSTS9Bdc9NxzYLyWj1yftjniondPennQgrpCb3uHUwTUh602yEN
-         4ngb/F7oVyfDPVTLsJ0WoH5Kl7AqcYpevOveGts9KHQlsTWieg/jjZC6PlBIJQVSh56A
-         XgFe020xmpqkQF2/J0IG5cuvwZTRyIaCmsMWolUr1ngDGYPqJj5sUI/TW95Y4idDu+iX
-         RgxiC6RwEHm3mWhV1CSasFoDKI/xnnOnQbJwOnTBY++QQ1wY2jjvkYdaA1vVHXGQOWOp
-         BGkKVssQd5gO0SPq0qpiBjZGnZaYiCvoMhBqkZEzLRBTqNg89GjBtY9VPPagt5x9m0Bg
-         lF9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lKu6dFZkege7gh2XFt/Jc2wITLyP+TssjbYd/0rYDtA=;
-        b=aFAtkFTbMMJh7pMUbkBCZgOxt9WUGWBvmkI0FYpCjV0lrUWUUhTsMYdzJ8yxfFNfLm
-         b9HPkRMXgtCA1P8LK5B9wEjgtKwR8G1cR5M7wsnUsECRZm4uqXDmoDmrOaL/WZEshrSE
-         KItVUm8ViMZdiYQ70tSD+X9SDuFCpDRm9zUjKNQJewSJuNFDYUJiT76OzTen5Lf34516
-         b4KN4PRyQdqu+w1C0+hqaYSEf/tPzJj4AzJSJj2dleHBFE0kMIlrOkw9hhQf7IbRR5/j
-         IXZsTEzehZp1qx3bFvZqHdHP3lF9Opwnn5H0s5PAQrU6XUDzsXTanhOB1/ElLXe2yoio
-         xQ+w==
-X-Gm-Message-State: ANoB5pmHPKKI2qQIra6DyBUryCIHBUtt6R1sir5s4sfaQPNQZXBQ+6uw
-        ydIZKdRF2FiCye6AsrCahsE=
-X-Google-Smtp-Source: AA0mqf5B6Zjb/dYephIVdV9c5Iu6/OprCrRtwGjwTifMcC3Hp9MroBuNRg+lVMsfU37yezcroHkhlA==
-X-Received: by 2002:a05:6870:c895:b0:13a:dd7e:7bda with SMTP id er21-20020a056870c89500b0013add7e7bdamr20135013oab.222.1669257381679;
-        Wed, 23 Nov 2022 18:36:21 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h16-20020a056870171000b0012c21a64a76sm5950oae.24.2022.11.23.18.36.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 18:36:21 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 23 Nov 2022 18:36:20 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 4.19 000/114] 4.19.267-rc1 review
-Message-ID: <20221124023620.GC2576375@roeck-us.net>
-References: <20221123084551.864610302@linuxfoundation.org>
+        Wed, 23 Nov 2022 21:36:31 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC26C5E9C3;
+        Wed, 23 Nov 2022 18:36:28 -0800 (PST)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NHhqp0tmqzJnsc;
+        Thu, 24 Nov 2022 10:33:10 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 24 Nov 2022 10:36:25 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 24 Nov 2022 10:36:24 +0800
+Subject: Re: [PATCH v8 6/9] livepatch: Use kallsyms_on_each_match_symbol() to
+ improve performance
+To:     Petr Mladek <pmladek@suse.com>
+CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Masahiro Yamada" <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        <linux-modules@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Ingo Molnar" <mingo@redhat.com>,
+        David Laight <David.Laight@aculab.com>
+References: <20221102084921.1615-1-thunder.leizhen@huawei.com>
+ <20221102084921.1615-7-thunder.leizhen@huawei.com> <Y34f+IqqSGbtC82V@alley>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <45a28bcf-c6e1-8d39-613a-d30bd7b685f0@huawei.com>
+Date:   Thu, 24 Nov 2022 10:36:23 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221123084551.864610302@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <Y34f+IqqSGbtC82V@alley>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,21 +69,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 09:49:47AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.267 release.
-> There are 114 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+
+
+On 2022/11/23 21:28, Petr Mladek wrote:
+> Hi,
 > 
-> Responses should be made by Fri, 25 Nov 2022 08:45:20 +0000.
-> Anything received after that time might be too late.
+> I am sorry for the late review. I have been snowed under another
+> tasks.
+> 
+> On Wed 2022-11-02 16:49:18, Zhen Lei wrote:
+>> Based on the test results of kallsyms_on_each_match_symbol() and
+>> kallsyms_on_each_symbol(), the average performance can be improved by
+>> more than 1500 times.
+> 
+> Sounds great.
+> 
+>> --- a/kernel/livepatch/core.c
+>> +++ b/kernel/livepatch/core.c
+>> @@ -153,6 +153,24 @@ static int klp_find_callback(void *data, const char *name,
+>>  	return 0;
+>>  }
+>>  
+>> +static int klp_match_callback(void *data, unsigned long addr)
+>> +{
+>> +	struct klp_find_arg *args = data;
+>> +
+>> +	args->addr = addr;
+>> +	args->count++;
+>> +
+>> +	/*
+>> +	 * Finish the search when the symbol is found for the desired position
+>> +	 * or the position is not defined for a non-unique symbol.
+>> +	 */
+>> +	if ((args->pos && (args->count == args->pos)) ||
+>> +	    (!args->pos && (args->count > 1)))
+>> +		return 1;
+>> +
+>> +	return 0;
+> 
+> This duplicates most of the klp_find_callback(). Please, call this
+> new function in klp_find_callback() instead of the duplicated code.
+> I mean to do:
+> 
+> static int klp_find_callback(void *data, const char *name, unsigned long addr)
+> {
+> 	struct klp_find_arg *args = data;
+> 
+> 	if (strcmp(args->name, name))
+> 		return 0;
+> 
+> 	return klp_match_callback(data, addr);
+> }
+
+Good idea. But these patches have been merged into linux-next, how about I post
+a new cleanup patch after v6.2-rc1?
+
+> 
+> Otherwise, it looks good.
+> 
+> Best Regards,
+> Petr
+> .
 > 
 
-Build results:
-	total: 157 pass: 157 fail: 0
-Qemu test results:
-	total: 423 pass: 423 fail: 0
-
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-
-Guenter
+-- 
+Regards,
+  Zhen Lei
