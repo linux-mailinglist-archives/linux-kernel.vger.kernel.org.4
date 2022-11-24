@@ -2,105 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A12E6372E3
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 08:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3F556372D0
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 08:23:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbiKXHa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 02:30:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53342 "EHLO
+        id S229669AbiKXHMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 02:12:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiKXHax (ORCPT
+        with ESMTP id S229735AbiKXHMZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 02:30:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA5B27C036
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 23:29:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669274995;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bTI6njseVR+SJYrnLmEsAgR/iOZqJjjFs8hwOBW7QoE=;
-        b=dBJnxJdjiw0YdDMxV3fZi/sZT55m6LVF68ol7VQsjezUShhmMDas0J0kKXbOQprKGW52Ka
-        GxshCbC1fQUlFb2PaaPTWblYqKPqDyPnH+3jbWTaFVoA8/Sgzi2O1jMxB6Yhp47w56hKhj
-        htvRztODLJm47YjVWW3AYAh7fQQzkIw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-270-gMryAAnqPKGMWM7c5YgH5w-1; Thu, 24 Nov 2022 02:29:52 -0500
-X-MC-Unique: gMryAAnqPKGMWM7c5YgH5w-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9512585A59D;
-        Thu, 24 Nov 2022 07:29:51 +0000 (UTC)
-Received: from sirius.home.kraxel.org (unknown [10.39.192.212])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1A0FD4EA61;
-        Thu, 24 Nov 2022 07:29:50 +0000 (UTC)
-Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
-        id B8424180039D; Thu, 24 Nov 2022 07:51:48 +0100 (CET)
-Date:   Thu, 24 Nov 2022 07:51:48 +0100
-From:   Gerd Hoffmann <kraxel@redhat.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH resend v2] drm/fourcc: Add missing big-endian XRGB1555
- and RGB565 formats
-Message-ID: <20221124065148.7v4m3qli2k74mic6@sirius.home.kraxel.org>
-References: <3ee1f8144feb96c28742b22384189f1f83bcfc1a.1669221671.git.geert@linux-m68k.org>
- <Y35RCaEP0icg6San@phenom.ffwll.local>
- <CAMuHMdVgqwHjm8Hxms04rg6YXiQacEwKiaRV80nNA_OM9mvZpA@mail.gmail.com>
+        Thu, 24 Nov 2022 02:12:25 -0500
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C401A3A3;
+        Wed, 23 Nov 2022 23:02:53 -0800 (PST)
+Received: by mail-ej1-f44.google.com with SMTP id vp12so808538ejc.8;
+        Wed, 23 Nov 2022 23:02:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y3BuIHPcCEYQnF5EJCfcvp0uVQ+D0Hs/7ciNa+WMlcA=;
+        b=KzGcy01QeOdWUzgYW5tM3T+U6oEIRGhhW6noW9KkpcQ/4GIsN1IKgWOqUAWfgYxSFp
+         N2Sfo7TWynApMQ2r+OX7aR91/m2h7zPBwlvxuZmgJ3stnexTnoDGLgajZZp/wOvyTZ+h
+         yvyQ15kN3Ql9kZULCyfF5AAgP/W1aCAjEj/Hy7N3i6rdjWGvCPv6ZYEGLYTv8Vd0QTmR
+         L49pok4aKYH0FsaZR+jhGXzk7Ci4TnfMkO9g8DOlbShSZGmzioeat99tiubF+j/07lBw
+         ItB/g4pvdOY550Uif3UVzaD4ZVaCcCQ6pV22py1uPLPB/AatDkpL1BuY/NZr/cr66Ub6
+         dnOA==
+X-Gm-Message-State: ANoB5pkrzXTYzu6oAuG8I6FD96GIYGqo+bhfUuzKXvuqswQiuSr4Zzn6
+        SxAAo2KYaUHgHkhTGJctPWU=
+X-Google-Smtp-Source: AA0mqf5ze7Akj3TpX17yqe7DZ3SpaSkau61h7eALpc4C3+SAElCCuYk2/Zhq28b2wA4a7fw4Jnj1kw==
+X-Received: by 2002:a17:906:3810:b0:7b5:cab5:2ea8 with SMTP id v16-20020a170906381000b007b5cab52ea8mr10091575ejc.222.1669273372000;
+        Wed, 23 Nov 2022 23:02:52 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id bq21-20020a170906d0d500b00781be3e7badsm105054ejb.53.2022.11.23.23.02.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Nov 2022 23:02:51 -0800 (PST)
+Message-ID: <6cce2d35-3504-a600-cae6-fd4abee9afc9@kernel.org>
+Date:   Thu, 24 Nov 2022 08:02:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdVgqwHjm8Hxms04rg6YXiQacEwKiaRV80nNA_OM9mvZpA@mail.gmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v6 00/14] serial: liteuart: add IRQ support
+Content-Language: en-US
+To:     Gabriel Somlo <gsomlo@gmail.com>, linux-kernel@vger.kernel.org
+Cc:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        kgugala@antmicro.com, mholenko@antmicro.com, joel@jms.id.au,
+        david.abdurachmanov@gmail.com, florent@enjoy-digital.fr,
+        geert@linux-m68k.org, ilpo.jarvinen@linux.intel.com
+References: <20221123130500.1030189-1-gsomlo@gmail.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20221123130500.1030189-1-gsomlo@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  Hi,
+On 23. 11. 22, 14:04, Gabriel Somlo wrote:
+> Add IRQ support to the LiteX LiteUART serial interface
 
-> > > +#ifdef __BIG_ENDIAN
-> >
-> > Why do we need the #ifdef here? Iirc some hw has big endian flags in the
-> > scanout registers, so could supprt this unconditionally if there's no
-> > #ifdef around the format defines. Some drivers might then also want a
-> > DRM_FORMAT_FOO_BE define to simplify tables and stuff, but that's more a
-> > bikeshed.
-> 
->  "Limit this to big-endian platforms, as there is currently no need
->  to support these formats on little-endian platforms."
-> 
-> Will anyone make use of this? In theory, all of the 16-bpp formats
-> can have a big-endian counterpart.
+LGTM
 
-Highly unlikely.  Dealing with 16-bpp formats in non-native byte order
-is a PITA because it isn't enough to simply adjust the masks and shifts
-to pick the correct bits and be done with it.
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
 
-The qemu stdvga happens to have a register to switch framebuffer
-byteorder (so both x64 and ppc are happy), and the bochs drm driver
-actually supports that no matter what the cpu byte order is, but it
-supports only DRM_FORMAT_XRGB8888 + DRM_FORMAT_BGRX8888.
-
-Supporting 16 bpp in the driver wouldn't be that much of a problem, but
-processing the framebuffer on the host side when emulating a big endian
-guest on a little endian host is painful.  I think I can't ask pixman to
-do a conversation from DRM_FORMAT_RGB565 | DRM_FORMAT_BIG_ENDIAN to
-DRM_FORMAT_XRGB8888 on a little endian machine.
-
-take care,
-  Gerd
+thanks,
+-- 
+js
+suse labs
 
