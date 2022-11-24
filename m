@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0670637E9E
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 18:52:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64E2C637E9D
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 18:52:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbiKXRw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 12:52:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44214 "EHLO
+        id S229848AbiKXRwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 12:52:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiKXRvz (ORCPT
+        with ESMTP id S229657AbiKXRvz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 24 Nov 2022 12:51:55 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B94315B4D8
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E00415B4F7
         for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 09:51:52 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id i12so3530452wrb.0
+Received: by mail-wr1-x436.google.com with SMTP id bs21so3463261wrb.4
         for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 09:51:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PryoH4Na1cIsfvTRA0L1CZLJGcy9N2macRHvAEBFkbA=;
-        b=Zi1EzsgG2QlG4e8EUVrheaYLdBT6/+Tllun/yqv2JZmVgXyfnVeEmfmXDka2Wk866a
-         /Lp2izyg3ZbM2Nc2NiHylfQ/8ezsHALBtihO3Zzw/WqHTje5uQFE0Eakzh6DVKzJJ36A
-         N7CjtP5/N5C7eKYJW/GShrP9nMvSkc75eEBS0xsD0cCjfVKQ5Ketg8vbHy1KnE1TnM3y
-         sB4eTxdmxoeyFzCkSl66ptKIThBoJ8IleUazay2ZTIc08wCzs30zsfhDrgSIj3fcO7Iv
-         vdjkB9sxSB7i6rh878UFQhT8smdaaGyrGGH62yYZoVj4jfA+VZoJeHiySCiKhYCIcNp0
-         Hbjw==
+        bh=rylusfgUDpkkWgalnBLghu7kEy11PXXS0gvZ7chhswg=;
+        b=XPDXYp9KiAJX835BXQlDYnHHGeXq/je8vdMyi6suSfk5joz+t4t3Hi30Uqhrs5LSMY
+         ZtoieTiw+0jj5/harETzmyCF80lZt7CYCpwfWpBGEZR6rghIukacHhfWEvpKOn5iyJna
+         XN5m9TDzeklaY52nPzYMLyANOTuGGWU86Y1RcoJ4Yg2a9JdM4o6jUVqVBkyJUV8lyLpb
+         hnHJResQwXk0qcFzSht+0L5dJEpFEdr1bljA2QzFBEf8kmjV979hIT6Kb+/dNjfKEkn+
+         47FHpwUDE3Fal69YeLagMO/96ZcmCCYgRQLpiBSGA8tie10+F1g0ONa3lh249vur0mKb
+         qboA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PryoH4Na1cIsfvTRA0L1CZLJGcy9N2macRHvAEBFkbA=;
-        b=qt7sttEye179aN8SfQhtYXeKfN/0hWpzb54DTyUQmUyCQDNqn0UVEMynxEEq5+AGkr
-         yGSilpJYQc9A8TBUWf8XlHWFdGgpFW/d7RMIPFTFZQE5++1wS6zy+9rgrb1knkGpxdGr
-         6YXnpsy62y3RqagmNPapEnYHj21yTj+YeHvpowW+LB02wbVnYN8o5V34VFoXYZpwO1SU
-         mfHqKIFEOPr219QEFRYEFMe6CgPMlZY1rSHSbE2LR9kQYahS5WuvvmKZcvr5xV33UXfh
-         KoIjwVb3gmEYe6kJZvDkxiw2FyKggSmgFkHqJfYMBGqqY3hiq8x2VaXV6VB+nnknpj36
-         7KfQ==
-X-Gm-Message-State: ANoB5pk2OU6Al+M0F4kQ4J9I/6KPPNG7kwJkGztppYQkdbARzTWaaicw
-        9Wt9hM3LggELu3V8j7c6rTW9uA==
-X-Google-Smtp-Source: AA0mqf697EyavO58iiKvgzz7RcdFYMhwktje2cCID4YcWhiBqmK45iM6nDR5j2sA+kflPTP9+Sbqyw==
-X-Received: by 2002:a05:6000:18c1:b0:236:5d8c:97fd with SMTP id w1-20020a05600018c100b002365d8c97fdmr21309432wrq.473.1669312310625;
-        Thu, 24 Nov 2022 09:51:50 -0800 (PST)
+        bh=rylusfgUDpkkWgalnBLghu7kEy11PXXS0gvZ7chhswg=;
+        b=UNTmCcRYnR1UrK+lY42fD2ALTj4WbdEImi3yRYhuMchU5UDSxW8xRTO4Cgh7K5OjSX
+         mMBxezkv83MSYZjmWOBmhqbM5ruR3CFzaB2zlkf6HQbrhwJJUJOvBMtwM95qPY4dpeXe
+         loIUhI7lDctyvlE9b6nR5brQP1eGhqRmx9c7G6m4bulhXN53gIovmaLFVHd8LecDsNBR
+         /6h2JytNBms+1Jca7aGKBFLJUqaYbhBwmHLrxDuKuF8v1TR4WineONE2oNiG0kxjloBe
+         Q3Sv1mfv608VyHI8hVnd933/jR2eKqybjcshEpIK7G1E4riG7dwm6ai/obIj07txxbgT
+         2xfA==
+X-Gm-Message-State: ANoB5pmojEP8A1L1mjhEjQ8PAkTl2y0apbEm68ZlCyKVQomPM3Hh9Dyu
+        Bar2vAsNRh26w4Mm67f+uiSkxve1l3hIvw==
+X-Google-Smtp-Source: AA0mqf7YYfEU+aHSMZkd+Lg99Olb7J0LABBto9g40UcKL9A2ryrilcIhSjNUOFWh6lzsw23IoZG0mg==
+X-Received: by 2002:adf:dc02:0:b0:236:77f4:6e19 with SMTP id t2-20020adfdc02000000b0023677f46e19mr21398695wri.638.1669312311888;
+        Thu, 24 Nov 2022 09:51:51 -0800 (PST)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id bi8-20020a05600c3d8800b003c701c12a17sm6394192wmb.12.2022.11.24.09.51.49
+        by smtp.gmail.com with ESMTPSA id bi8-20020a05600c3d8800b003c701c12a17sm6394192wmb.12.2022.11.24.09.51.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 09:51:50 -0800 (PST)
+        Thu, 24 Nov 2022 09:51:51 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 10/11] misc: fastrpc: Add mmap request assigning for static PD pool
-Date:   Thu, 24 Nov 2022 17:51:24 +0000
-Message-Id: <20221124175125.418702-11-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 11/11] misc: fastrpc: Add dma_mask to fastrpc_channel_ctx
+Date:   Thu, 24 Nov 2022 17:51:25 +0000
+Message-Id: <20221124175125.418702-12-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221124175125.418702-1-srinivas.kandagatla@linaro.org>
 References: <20221124175125.418702-1-srinivas.kandagatla@linaro.org>
@@ -73,56 +73,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Abel Vesa <abel.vesa@linaro.org>
 
-If the mmap request is to add pages and thre are VMIDs associated with
-that context, do a call to SCM to reassign that memory. Do not do this
-for remote heap allocation, that is done on init create static process
-only.
+dma_set_mask_and_coherent only updates the mask to which the device
+dma_mask pointer points to. Add a dma_mask to the channel ctx and set
+the device dma_mask to point to that, otherwise the dma_set_mask will
+return an error and the dma_set_coherent_mask will be skipped too.
 
 Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 Co-developed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- drivers/misc/fastrpc.c | 19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
+ drivers/misc/fastrpc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-index 3cf76a240b7a..d3147e4313cc 100644
+index d3147e4313cc..9ddcaa4def06 100644
 --- a/drivers/misc/fastrpc.c
 +++ b/drivers/misc/fastrpc.c
-@@ -1845,8 +1845,9 @@ static int fastrpc_req_mmap(struct fastrpc_user *fl, char __user *argp)
- 	if (copy_from_user(&req, argp, sizeof(req)))
- 		return -EFAULT;
+@@ -279,6 +279,7 @@ struct fastrpc_channel_ctx {
+ 	struct list_head invoke_interrupted_mmaps;
+ 	bool secure;
+ 	bool unsigned_support;
++	u64 dma_mask;
+ };
  
--	if (req.flags != ADSP_MMAP_ADD_PAGES) {
-+	if (req.flags != ADSP_MMAP_ADD_PAGES && req.flags != ADSP_MMAP_REMOTE_HEAP_ADDR) {
- 		dev_err(dev, "flag not supported 0x%x\n", req.flags);
-+
- 		return -EINVAL;
- 	}
+ struct fastrpc_device {
+@@ -2309,6 +2310,7 @@ static int fastrpc_rpmsg_probe(struct rpmsg_device *rpdev)
+ 	kref_init(&data->refcount);
  
-@@ -1892,6 +1893,22 @@ static int fastrpc_req_mmap(struct fastrpc_user *fl, char __user *argp)
- 	/* let the client know the address to use */
- 	req.vaddrout = rsp_msg.vaddr;
- 
-+	/* Add memory to static PD pool, protection thru hypervisor */
-+	if (req.flags != ADSP_MMAP_REMOTE_HEAP_ADDR && fl->cctx->vmcount) {
-+		struct qcom_scm_vmperm perm;
-+		int err = 0;
-+
-+		perm.vmid = QCOM_SCM_VMID_HLOS;
-+		perm.perm = QCOM_SCM_PERM_RWX;
-+		err = qcom_scm_assign_mem(buf->phys, buf->size,
-+			&(fl->cctx->vmperms[0].vmid), &perm, 1);
-+		if (err) {
-+			dev_err(fl->sctx->dev, "Failed to assign memory phys 0x%llx size 0x%llx err %d",
-+					buf->phys, buf->size, err);
-+			goto err_assign;
-+		}
-+	}
-+
- 	spin_lock(&fl->lock);
- 	list_add_tail(&buf->node, &fl->mmaps);
- 	spin_unlock(&fl->lock);
+ 	dev_set_drvdata(&rpdev->dev, data);
++	rdev->dma_mask = &data->dma_mask;
+ 	dma_set_mask_and_coherent(rdev, DMA_BIT_MASK(32));
+ 	INIT_LIST_HEAD(&data->users);
+ 	INIT_LIST_HEAD(&data->invoke_interrupted_mmaps);
 -- 
 2.25.1
 
