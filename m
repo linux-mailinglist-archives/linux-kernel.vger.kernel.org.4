@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E26263758B
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 10:49:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9950563758C
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 10:50:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiKXJtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 04:49:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60576 "EHLO
+        id S229992AbiKXJui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 04:50:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiKXJtm (ORCPT
+        with ESMTP id S229479AbiKXJud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 04:49:42 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66060F72DA;
-        Thu, 24 Nov 2022 01:49:41 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id E832024E154;
-        Thu, 24 Nov 2022 17:49:39 +0800 (CST)
-Received: from EXMBX072.cuchost.com (172.16.6.82) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 24 Nov
- 2022 17:49:39 +0800
-Received: from [192.168.125.106] (183.27.97.81) by EXMBX072.cuchost.com
- (172.16.6.82) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 24 Nov
- 2022 17:49:39 +0800
-Message-ID: <fe4f04d4-04aa-895d-960f-8d27581f431e@starfivetech.com>
-Date:   Thu, 24 Nov 2022 17:50:13 +0800
+        Thu, 24 Nov 2022 04:50:33 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F78FF420
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 01:50:30 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id w23so1018679ply.12
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 01:50:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YwlHubOhSOM48f58ZZDltroPaPuhMC5Q9GaNSjd7Sr8=;
+        b=Rr+cv2/zay90nGt1EYoKkV1/qnJ4WFUmDzJC0dzJ7dUl6prsdedVzh1vZ3fDRxwpy8
+         IZLKTqQev6Rm9fzK0d3KltLsK9n6iA7dwZw8Bclgp/IlO53lNWOkD3vEvGhxZT0yFGH3
+         JT6tFihpzWmO6TKv5dTZ0yvqOgUdy1yenpBvQa2MXzZUBbpmCky7IprV2g4hswelxkKH
+         QQ5aQZs1Wm4XC/2c7xIyvztDUCuuJWhZEq8l5oEFCq2V/Sm+u9r6z3BO9GKTdVtUfIFA
+         dPMTbxXRBGFZy5iAbhT2O7ufwNgexwYogQDSRIEqAZwgR728RXoxoLVpjfL/WZatYzfl
+         tkzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YwlHubOhSOM48f58ZZDltroPaPuhMC5Q9GaNSjd7Sr8=;
+        b=0Y1fRkmAonlw0TuoAqWx94SKVRVaIx0SxBrTrEnvxcZBhT6NES4syRttQ7v8qxFP81
+         pkZDMwioqnoPZR5flTbXCqm7wRglfHpFJkVDC0DltjC4bcUK1usHjU1Tb1iKHbl9qeQO
+         Tr4AgKQsTqTSNAjypwpF614aTebTRpkLAOzR7vCDw4uv7MqYtiDTsk6scWMYkMcq7CsK
+         DXhz7afrOt3no+ytPLK32bPxBIFrHqQqdhDbTwB1mYaSe2QxLw4hCm7tQbGiDIg1xin9
+         lESgNXALdr7QjX/zDGW/TrXFPQWeEVcPZONw73wNhVr6Of1oHFxbcmLZ959lSWsdGLa5
+         kx7w==
+X-Gm-Message-State: ANoB5pl6/t4tgf2hybu0jYrFagSNXH9qVdqIxxtivatylFx4zpTQI7Bb
+        C5Y3I5mjBWvkVHWRImBJx7ytsA==
+X-Google-Smtp-Source: AA0mqf4cDnMhArUWyJreeAiUo8r0X63oCB5cDvAyvFtjKz4a2o89ybnEFOGJu83vtnixfGiLQ8HxuQ==
+X-Received: by 2002:a17:90b:4a48:b0:213:a9e6:dadf with SMTP id lb8-20020a17090b4a4800b00213a9e6dadfmr34714788pjb.108.1669283429903;
+        Thu, 24 Nov 2022 01:50:29 -0800 (PST)
+Received: from leoy-yangtze.lan (211-75-219-204.hinet-ip.hinet.net. [211.75.219.204])
+        by smtp.gmail.com with ESMTPSA id s67-20020a625e46000000b005743b5ebd7csm794090pfb.92.2022.11.24.01.50.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Nov 2022 01:50:29 -0800 (PST)
+Date:   Thu, 24 Nov 2022 17:50:23 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Ajay Kaher <akaher@vmware.com>
+Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, rostedt@goodmis.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        srivatsab@vmware.com, srivatsa@csail.mit.edu, amakhalov@vmware.com,
+        vsirnapalli@vmware.com
+Subject: Re: [PATCH] perf symbol: correction while adjusting symbol
+Message-ID: <Y38+NGjF1tZNHkwr@leoy-yangtze.lan>
+References: <1669198696-50547-1-git-send-email-akaher@vmware.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v2 1/8] dt-bindings: riscv: Add StarFive JH7110 SoC and
- VisionFive2 board
-Content-Language: en-US
-To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
-CC:     "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221118011714.70877-1-hal.feng@starfivetech.com>
- <20221118011714.70877-2-hal.feng@starfivetech.com>
- <202211190418.2AJ4IQjc072382@SH1-CSMTP-DB111.sundns.com>
- <ca3e341a-3dc3-39d6-7e26-89ba65aa9473@starfivetech.com>
- <CAJM55Z-zgR=LKqtg4ioj9Ez1CT7wchrNWWPVT5XAMPF736OcRA@mail.gmail.com>
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <CAJM55Z-zgR=LKqtg4ioj9Ez1CT7wchrNWWPVT5XAMPF736OcRA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.97.81]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX072.cuchost.com
- (172.16.6.82)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1669198696-50547-1-git-send-email-akaher@vmware.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,74 +74,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Nov 2022 10:20:32 +0100, Emil Renner Berthing wrote:
-> On Thu, 24 Nov 2022 at 06:56, Hal Feng <hal.feng@starfivetech.com> wrote:
-> >
-> > On Sat, 19 Nov 2022 01:28:48 +0800, Emil Renner Berthing wrote:
-> > > On Fri, 18 Nov 2022 at 02:17, Hal Feng <hal.feng@starfivetech.com> wrote:
-> > > >
-> > > > From: Emil Renner Berthing <kernel@esmil.dk>
-> > > >
-> > > > Add device tree bindings for the StarFive JH7110 RISC-V SoC [1]
-> > > > and the VisionFive2 board [2] equipped with it.
-> > > >
-> > > > [1]: https://doc-en.rvspace.org/Doc_Center/jh7110.html
-> > > > [2]: https://doc-en.rvspace.org/Doc_Center/visionfive_2.html
-> > > >
-> > > > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> > > > Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
-> > > > ---
-> > > >  Documentation/devicetree/bindings/riscv/starfive.yaml | 4 ++++
-> > > >  1 file changed, 4 insertions(+)
-> > > >
-> > > > diff --git a/Documentation/devicetree/bindings/riscv/starfive.yaml b/Documentation/devicetree/bindings/riscv/starfive.yaml
-> > > > index 5b36243fd674..64008c57e31f 100644
-> > > > --- a/Documentation/devicetree/bindings/riscv/starfive.yaml
-> > > > +++ b/Documentation/devicetree/bindings/riscv/starfive.yaml
-> > > > @@ -22,6 +22,10 @@ properties:
-> > > >            - const: beagle,beaglev-starlight-jh7100-r0
-> > > >            - const: starfive,jh7100
-> > > >
-> > > > +      - items:
-> > > > +          - const: starfive,visionfive-v2
-> > >
-> > > I think StarFive has switched to just calling it VisionFive 2 and not
-> > > V2. Please check up on this before committing to the compatible
-> > > string.
-> > >
-> > > Also there are going to be different revisions of the VisionFive 2
-> > > board, so maybe consider adding eg. starfive,visionfive-2-v1.1 and
-> > > starfive,visionfive-2-v1,2b early.
-> >
-> > I checked that the official name of this board is "VisionFive 2". The
-> > board has version A and version B, which are different in gmac and phy
-> > chip. The version A board has one 1000M and one 100M Ethernet ports
-> > while the version B board has two 1000M Ethernet ports. In dts, they
-> > have different configuration parameters for gmac. So I would like to
-> > distinguish them by two compatibles as below in the next version.
-> >
-> >       - items:
-> >           - enum:
-> >               - starfive,visionfive-2-va
-> >               - starfive,visionfive-2-vb
-> >           - const: starfive,jh7110
-> 
-> Cool. Though the silkscreen on my board says "VisionFive 2 V1.2B" so I
-> think it would be less confusing if you used that as the model, and
-> "starfive,visionfive-2-v1.2b" as the compatible string for the board.
+Hi Ajay,
 
-As far as I know, VisionFive 2 V1.3B is coming and all version B boards
-use the same configuration. It's unnecessary to add the detailed number
-of PCB version.
-
+On Wed, Nov 23, 2022 at 03:48:16PM +0530, Ajay Kaher wrote:
+> perf doesn't provide proper symbol information for specially crafted
+> .debug files.
 > 
+> Sometimes .debug file may not have similar program header as runtime
+> ELF file. For example if we generate .debug file using objcopy
+> --only-keep-debug resulting file will not contain .text, .data and
+> other runtime sections. That means corresponding program headers will
+> have zero FileSiz and modified Offset.
 > 
-> > Best regards,
-> > Hal
-> >
-> > >
-> > > > +          - const: starfive,jh7110
-> > > > +
-> > > >  additionalProperties: true
-> >
+> Example: program header of text section of libxxx.so:
+> 
+> Type           Offset             VirtAddr           PhysAddr
+>                FileSiz            MemSiz              Flags  Align
+> LOAD        0x00000000003d3000 0x00000000003d3000 0x00000000003d3000
+>             0x000000000055ae80 0x000000000055ae80  R E    0x1000
+> 
+> Same program header after executing:
+> objcopy --only-keep-debug libxxx.so libxxx.so.debug
+> 
+> LOAD        0x0000000000001000 0x00000000003d3000 0x00000000003d3000
+>             0x0000000000000000 0x000000000055ae80  R E    0x1000
+> 
+> Offset and FileSiz have been changed. 
+> 
+> Following formula will not provide correct value, if program header
+> taken from .debug file (syms_ss):
+> 
+>     sym.st_value -= phdr.p_vaddr - phdr.p_offset;
+> 
+> Correct program header information is located inside runtime ELF
+> file (runtime_ss).
+> 
+> Fixes: 2d86612aacb7 ("perf symbol: Correct address for bss symbols")
+> Signed-off-by: Ajay Kaher <akaher@vmware.com>
 
+
+Just curious how you can produce this issue?  IIUC, the runtime symbol
+files are copied into .debug folder and they can be found by perf tool
+by matching build ID.  Seems to me, you manully use
+"objcopy --only-keep-debug" command to strip runtime info from elf files
+under .debug folder.  Do I understand correctly?
+
+Though I have above question, this patch itself looks good to me,
+thanks for the fixing!
+
+Reviewed-by: Leo Yan <leo.yan@linaro.org>
