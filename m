@@ -2,105 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D473637C6A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 16:03:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 005F0637C68
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 16:02:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbiKXPC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 10:02:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45394 "EHLO
+        id S229803AbiKXPCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 10:02:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbiKXPCw (ORCPT
+        with ESMTP id S229749AbiKXPCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 10:02:52 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A255EFB0
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 07:02:50 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oyDkE-0006Kb-TA; Thu, 24 Nov 2022 16:02:30 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:5507:4aba:5e0a:4c27])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id E646A1286FC;
-        Thu, 24 Nov 2022 15:02:27 +0000 (UTC)
-Date:   Thu, 24 Nov 2022 16:02:26 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Zhang Changzhong <zhangchangzhong@huawei.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Raymond Tan <raymond.tan@intel.com>,
-        "Felipe Balbi (Intel)" <balbi@kernel.org>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] can: m_can: pci: add missing m_can_class_free_dev()
- in probe/remove methods
-Message-ID: <20221124150226.vxvzimlll23unt7g@pengutronix.de>
-References: <1668168684-6390-1-git-send-email-zhangchangzhong@huawei.com>
+        Thu, 24 Nov 2022 10:02:49 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7633FBB0;
+        Thu, 24 Nov 2022 07:02:45 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669302163;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=As2quWrcxzQIkDEARcYEWHVDkutncLkwzqhhKmGdvMw=;
+        b=34Yd40+UTZBp/sha+xv+rNinYpSfcwi2Jcocjjr9PpyAEm4vrBbGmg8snq/BD4uPPzcuIA
+        7SxEuVhcrY2olTmiYO+sS79nXQDdQ+qDiTL1XVwfClY3bAaNoxuQ9eVrP675PT1lBBZXGo
+        CP4CKu5omPHllJ0AUFYG/+0cG644GKBu+uKAmFg1YNR4fule5XxYIxjYVpX9I0HMOIQpim
+        DnmwfL0pRtvPmuG6+4Psiu3o7Fma8qVMSb8QM1k7RcTqH3ypeG4oxmebPQI78c0ab9NhyR
+        ZAkOc+ts2nGXfZo51d1OVLCnqR3gCrjduYbQ5r1/mrzRFc7pAADw1TOgZjXDQQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669302163;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=As2quWrcxzQIkDEARcYEWHVDkutncLkwzqhhKmGdvMw=;
+        b=w2QOB3Yjre/huurRuvL5yVUpNVJHxEd8h7mXvOwjewYm1clQcwxVDxFwyqZo4iPU84fRoX
+        c+oVdXuCP3c1bnBw==
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>
+Subject: Re: [patch V2 08/21] genirq/msi: Add pointers for per device irq
+ domains
+In-Reply-To: <86sfi8mmee.wl-maz@kernel.org>
+References: <20221121083210.309161925@linutronix.de>
+ <20221121083325.950255253@linutronix.de> <86sfi8mmee.wl-maz@kernel.org>
+Date:   Thu, 24 Nov 2022 16:02:43 +0100
+Message-ID: <8735a8cs4s.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yockql4feiyza47j"
-Content-Disposition: inline
-In-Reply-To: <1668168684-6390-1-git-send-email-zhangchangzhong@huawei.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Nov 24 2022 at 14:56, Marc Zyngier wrote:
+> On Mon, 21 Nov 2022 14:36:28 +0000,
+> Thomas Gleixner <tglx@linutronix.de> wrote:
+>>  static inline int msi_sysfs_create_group(struct device *dev);
+>>  
+>> +static inline void msi_setup_default_irqdomain(struct device *dev, struct msi_device_data *md)
+>
+> Do we really need this to be inline? I'm sure the compiler can figure
+> it out.
 
---yockql4feiyza47j
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+No. I'll fix that up.
 
-On 11.11.2022 20:11:23, Zhang Changzhong wrote:
-> In m_can_pci_remove() and error handling path of m_can_pci_probe(),
-> m_can_class_free_dev() should be called to free resource allocated by
-> m_can_class_allocate_dev(), otherwise there will be memleak.
->=20
-> Fixes: cab7ffc0324f ("can: m_can: add PCI glue driver for Intel Elkhart L=
-ake")
-> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+>> +{
+>> +	if (!dev->msi.domain)
+>> +		return;
+>> +	/*
+>> +	 * If @dev::msi::domain is a global MSI domain, copy the pointer
+>> +	 * into the domain array to avoid conditionals all over the place.
+>> +	 */
+>> +	if (!irq_domain_is_msi_parent(dev->msi.domain))
+>> +		md->__irqdomains[MSI_DEFAULT_DOMAIN] = dev->msi.domain;
+>> +}
+>> +
+>>  /**
+>>   * msi_alloc_desc - Allocate an initialized msi_desc
+>>   * @dev:	Pointer to the device for which this is allocated
+>> @@ -213,6 +225,8 @@ int msi_setup_device_data(struct device
+>>  		return ret;
+>>  	}
+>>  
+>> +	msi_setup_default_irqdomain(dev, md);
+>> +
+>
+> nit: if you move the setup below the msi.data assignment, you could
+> only pass dev as a parameter. Or pass both and move the assignment in
+> the function?
 
-Applied to linux-can.
+In which order we do that it all looks wrong :)
 
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---yockql4feiyza47j
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmN/h34ACgkQrX5LkNig
-0110kAf/awCUKjMOV4BkGa4KGpIgHzxAuo4iEfIlMEVCMK7aFdmu1ebzfWKlK5rZ
-7Y8OTjjNr6f0HHYNuSqEqQj9gZzGUXbwlNhfDefAXr268p+dMQPHEdaKYgBrbFvL
-RBAXm8PT3ppUr7chdwrE1VhPuudHNRfC8jK7LWPMj4KF0b/r0OHKi6b1KLiBUhYo
-8VmDXSc2KtFKselc7I/kOo3j5PkOp8URM+SJIpq9jtP5XxSgBNqMvS4W0Wf2MYcx
-XAe1xHcbiVSEvaqV5jxs+kiN1dky/ELyo/f2kBKPXkS76eFn+KQsfY/qIt+rNVFw
-ubIGyyIrFCry0Mv6oOORLPDgOzDwog==
-=Xd/+
------END PGP SIGNATURE-----
-
---yockql4feiyza47j--
+>>  	xa_init(&md->__store);
+>>  	mutex_init(&md->mutex);
+>>  	dev->msi.data = md;
+>> 
+>> 
+>
+> Irrespective of the above,
+>
+> Reviewed-by: Marc Zyngier <maz@kernel.org>
+>
+> 	M.
