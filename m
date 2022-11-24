@@ -2,202 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B4A6376FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:58:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5766376FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:59:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbiKXK6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 05:58:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51792 "EHLO
+        id S229820AbiKXK7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 05:59:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiKXK6h (ORCPT
+        with ESMTP id S229775AbiKXK7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 05:58:37 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2181C8481D
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:58:35 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id j196so1439536ybj.2
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:58:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=J5m6eyHzz2oRZEkKjayRaecyR0qfC3veWChX/45qfes=;
-        b=GCIqEQjFhyfcl83v0Db6+sSfKLEhtsWmPjcBa26fzAaG2Y2wfVZixl2y0UZ3eP72J7
-         LGx8rVTwMHhvUXINudqjAdK5NtEaV9dSIOlnsI7gHvNvnZvpep2kxaeF7zp/LMx9ByK3
-         pIM6UymQJ1MoGfjvEF3oiQmHB4wO4km1ql3lj75eVd9fzQdG3Ccr5CNsDUouHUhO1zMR
-         faNKS9sp4uke/r7d7IzGp/LPbsVcHode7Aq0SbiL+0ojjEKY7yK6FM3YfkjQLL3OTtso
-         9cn8Qqaw0jNnhoUtfRfnJZ7UZX1znh4s8JtZ7SzLLGy1XbsCQswxmsua+E4KRxb+LA9T
-         kLGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=J5m6eyHzz2oRZEkKjayRaecyR0qfC3veWChX/45qfes=;
-        b=5Zlwjs8ODpFPghed+WRGsBlbbOkEcedfx68z0DeDnh78vKizSWvVEmVsHVxu0KwuCS
-         elx+4+Ct0ESJYdZyG032ZYngbzcYh1hDCxAZs3XRemDRefQ3fP5j4qyxcgtYscOfQc8/
-         jxKUpgzD3vkIn1+bznt8wr06qSknie36E2vugNOxSIbdV5175poLYXGDpVghwGp+vK0Z
-         nCmDuDdod9Orh2TTWa0Y2HdgypD745rC0kvkyGS+YJ0LJuQ806liF27IM/QdKDn0vCQ1
-         pobPi8VNfUuaDnO+XGWXabILn5qtxiV+nwTMhoct3ZEV5PyD/NOL6rRZxV5BF6sXAkoB
-         Nu1A==
-X-Gm-Message-State: ANoB5pmnK7cf+TAcylD6viItQwQcEE6jKOrFj4N87vGcnYsVD8gbLQ8W
-        Q+QN1Qq4yINGRG1fet5AgR6OZoSG9mOTWw6ooYDnDA==
-X-Google-Smtp-Source: AA0mqf4cPx7Sj4K0bJ43/k/1zEvIHJVUzijbK9lWTUZL7Qu/PshqEmOWRPHZp77ZYr6WBbEpC9USXVGvHAY5UB2CPYM=
-X-Received: by 2002:a25:ed05:0:b0:6c4:8a9:e4d2 with SMTP id
- k5-20020a25ed05000000b006c408a9e4d2mr31354116ybh.164.1669287514140; Thu, 24
- Nov 2022 02:58:34 -0800 (PST)
+        Thu, 24 Nov 2022 05:59:49 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076478481D
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:59:48 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id AD2781F38D;
+        Thu, 24 Nov 2022 10:59:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669287587; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Gzt8jTwR+NxgS/gIm8RH0/+q5NKPvkljd3y17tGlyoE=;
+        b=R+7hpGQSN7xUv298CcH34JqHZDvEupABZykW3XFGobD5J9IZltFKz5f5xcdEegA/oStsYw
+        2it0RpnRmQneDb0N7BW0PWKBpzcG0hNxwSeqimE/oE8H3U/HNRlqxA7xTx0OEizUopjX6/
+        Gn0P01XvEaEQ3jSisw9Gmfg+w4jMPdw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669287587;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Gzt8jTwR+NxgS/gIm8RH0/+q5NKPvkljd3y17tGlyoE=;
+        b=EPBS1H7c9Zp9eZJxBb02FuHKQB9hwssIERiC/nNYOk7erunsduRHIXYzwNLm29kAqsnTp7
+        Kjv0dm3GlOmO45AA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6DD9113B4F;
+        Thu, 24 Nov 2022 10:59:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id GVwVGaNOf2NlUwAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Thu, 24 Nov 2022 10:59:47 +0000
+Date:   Thu, 24 Nov 2022 11:59:46 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     linux-mtd@lists.infradead.org, LKML <linux-kernel@vger.kernel.org>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Naga Sureshkumar Relli <nagasure@xilinx.com>
+Subject: [PATCH] mtd: rawnand: Drop obsolete dependencies on COMPILE_TEST
+Message-ID: <20221124115946.5edb771c@endymion.delvare>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-References: <20221123084551.864610302@linuxfoundation.org>
-In-Reply-To: <20221123084551.864610302@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 24 Nov 2022 16:28:22 +0530
-Message-ID: <CA+G9fYtNrjqVQdDhJngENrwqYO1rHod0cEGZmhWBZx5F4gwBhw@mail.gmail.com>
-Subject: Re: [PATCH 4.19 000/114] 4.19.267-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Nov 2022 at 14:33, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.19.267 release.
-> There are 114 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 25 Nov 2022 08:45:20 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.267-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
+is possible to test-build any driver which depends on OF on any
+architecture by explicitly selecting OF. Therefore depending on
+COMPILE_TEST as an alternative is no longer needed.
 
-Results from Linaro's test farm.
-No regressions on arm64, arm, x86_64, and i386.
+It is actually better to always build such drivers with OF enabled,
+so that the test builds are closer to how each driver will actually be
+built on its intended target. Building them without OF may not test
+much as the compiler will optimize out potentially large parts of the
+code. In the worst case, this could even pop false positive warnings.
+Dropping COMPILE_TEST here improves the quality of our testing and
+avoids wasting time on non-existent issues.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Vignesh Raghavendra <vigneshr@ti.com>
+Cc: Naga Sureshkumar Relli <nagasure@xilinx.com>
+---
+ drivers/mtd/nand/raw/Kconfig |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-## Build
-* kernel: 4.19.267-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.19.y
-* git commit: f65c47c3f3362b712468c9b15657d9311e998240
-* git describe: v4.19.266-115-gf65c47c3f336
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19.266-115-gf65c47c3f336
+--- linux-6.0.orig/drivers/mtd/nand/raw/Kconfig
++++ linux-6.0/drivers/mtd/nand/raw/Kconfig
+@@ -435,7 +435,7 @@ config MTD_NAND_PLATFORM
+ 
+ config MTD_NAND_CADENCE
+ 	tristate "Support Cadence NAND (HPNFC) controller"
+-	depends on (OF || COMPILE_TEST) && HAS_IOMEM
++	depends on OF && HAS_IOMEM
+ 	help
+ 	  Enable the driver for NAND flash on platforms using a Cadence NAND
+ 	  controller.
+@@ -450,7 +450,7 @@ config MTD_NAND_ARASAN
+ 
+ config MTD_NAND_INTEL_LGM
+ 	tristate "Support for NAND controller on Intel LGM SoC"
+-	depends on OF || COMPILE_TEST
++	depends on OF
+ 	depends on HAS_IOMEM
+ 	help
+ 	  Enables support for NAND Flash chips on Intel's LGM SoC.
+@@ -470,7 +470,7 @@ config MTD_NAND_ROCKCHIP
+ 
+ config MTD_NAND_PL35X
+ 	tristate "ARM PL35X NAND controller"
+-	depends on OF || COMPILE_TEST
++	depends on OF
+ 	depends on PL353_SMC
+ 	help
+ 	  Enables support for PrimeCell SMC PL351 and PL353 NAND
 
-## Test Regressions (compared to v4.19.266)
 
-## Metric Regressions (compared to v4.19.266)
-
-## Test Fixes (compared to v4.19.266)
-
-## Metric Fixes (compared to v4.19.266)
-
-## Test result summary
-total: 83846, pass: 73027, fail: 1316, skip: 8899, xfail: 604
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 323 total, 318 passed, 5 failed
-* arm64: 59 total, 58 passed, 1 failed
-* i386: 29 total, 28 passed, 1 failed
-* mips: 46 total, 46 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 63 total, 63 passed, 0 failed
-* s390: 15 total, 15 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 53 total, 52 passed, 1 failed
-
-## Test suites summary
-* boot
-* fwts
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-breakpoints
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-kvm
-* kselftest-lib
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-openat2
-* kselftest-seccomp
-* kselftest-timens
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+Jean Delvare
+SUSE L3 Support
