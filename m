@@ -2,132 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 526EB6376DF
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:55:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79BE56376E2
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:56:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbiKXKzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 05:55:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45886 "EHLO
+        id S229666AbiKXK4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 05:56:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbiKXKzO (ORCPT
+        with ESMTP id S229794AbiKXK4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 05:55:14 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C93179A98
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:55:13 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id m19so791948edj.8
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:55:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cDjZkRfpYrY5I/MR6Qn4PLWFtgP7s/Bq564G/WDROg8=;
-        b=QO7D86gaGFb5ZRyhP30L+tC9SacJbP+BnjiLVrXG1Hp1YNn8JYwTlPi5lxcrIDPR+a
-         dnPFJq1vznqQ8DZIYdMjtsTvyr6fy+fBcUwdKOZA5MOZ5EHTRGfcCK8b150A8FCivC2l
-         /xTKmQi1XygjlmKoT3qKOmrwHR+KDqrBvYfq3BMC/SfAV5Tye7wieU17VkZO08MCIh2u
-         r7W0oOo4lwfhlVeMoeiKznszaFzh4unoLaPEcwyT5s7/rELHPpC5uIlZsRRONGgs9aF0
-         6atYfxlJSfwUXrZXo4kSH9QxNUwE3yOArldb/1+BjRqS56mPUocvI5YnZlCn67l4bOCl
-         Jh6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cDjZkRfpYrY5I/MR6Qn4PLWFtgP7s/Bq564G/WDROg8=;
-        b=ofDdDzZw9w6n4YP5Z5Rc7W5YttVLujA4spQbiEASkobjD3iHknU09JC0L6S6hZJFBB
-         sBkJh+ao0AZDOJPPtgiVnX0GXXNeTzLnyjQ3HIhgr5Pk7Ue8JsiVi5LSKoe1/llJod+V
-         BTIEYA4fYjB++iF6MBhCTokAhO9GhQfYkWQDBDhqbYbMKcnYDkdggOsLzGtp99p1bbm2
-         fUZ7omGjR682CYoaPzpmV5SQUtnT/odRAonEp0vH3zwAjU8wF0GbGDZuy8Gz83jvUwpQ
-         xqrZM6kUyWLrjzQ6EeegXEhtLwmB1F1p/0H6ikyTE+hMZiM72VLaJZGRQKe92slgOEv8
-         +CnQ==
-X-Gm-Message-State: ANoB5pni3fhdx5z2SMIeNG64G6PyKjGgeVrvr/WRYkftppr7ZT0w7vTr
-        ZYYaasd5Hpm1SE2AsdptdN6Ohg==
-X-Google-Smtp-Source: AA0mqf6K3vDrC0uZkJNyI9i4bspr18Xc3wQ9f3KL4neh3mJKaDF3CSz4f3mCXc4rH7HQpdqr59HPug==
-X-Received: by 2002:aa7:c9d0:0:b0:458:ed79:ed5 with SMTP id i16-20020aa7c9d0000000b00458ed790ed5mr13691602edt.374.1669287311864;
-        Thu, 24 Nov 2022 02:55:11 -0800 (PST)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id x22-20020a1709064bd600b0078d3f96d293sm306881ejv.30.2022.11.24.02.55.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 02:55:11 -0800 (PST)
-Date:   Thu, 24 Nov 2022 11:55:09 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Atish Patra <atishp@atishpatra.org>
-Cc:     Atish Patra <atishp@rivosinc.com>, linux-kernel@vger.kernel.org,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>, Guo Ren <guoren@kernel.org>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [RFC 5/9] RISC-V: KVM: Add skeleton support for perf
-Message-ID: <20221124105509.3kwnardcxvbbkf67@kamzik>
-References: <20220718170205.2972215-1-atishp@rivosinc.com>
- <20220718170205.2972215-6-atishp@rivosinc.com>
- <20221101141329.j4qtvjf6kmqixt2r@kamzik>
- <CAOnJCULMbTp6WhVRWHxzFnUgCJJV01hcyukQxSEih-sYt5TJWg@mail.gmail.com>
- <CAOnJCUKpdV3u8X6BSC+-rhV0Q8q2tdsa8r_KTH5FWCh2LV2q8Q@mail.gmail.com>
- <20221123133636.gke3626aolfrnevy@kamzik>
- <CAOnJCULUH09HPZL6Ks-xUsiDLQPR6xOv2g+ic9Gd3uwea6hCyQ@mail.gmail.com>
+        Thu, 24 Nov 2022 05:56:08 -0500
+Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E64179A9C
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:56:07 -0800 (PST)
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 2AOAVTZc039625;
+        Thu, 24 Nov 2022 18:31:29 +0800 (GMT-8)
+        (envelope-from neal_liu@aspeedtech.com)
+Received: from localhost.localdomain (192.168.10.10) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 24 Nov
+ 2022 18:55:55 +0800
+From:   Neal Liu <neal_liu@aspeedtech.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "Chia-Wei Wang --cc=linux-kernel @ vger . kernel . org" 
+        <chiawei_wang@aspeedtech.com>
+CC:     <linux-crypto@vger.kernel.org>, <linux-aspeed@lists.ozlabs.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 0/4] Add Aspeed ACRY driver for hardware acceleration
+Date:   Thu, 24 Nov 2022 18:55:48 +0800
+Message-ID: <20221124105552.1006549-1-neal_liu@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOnJCULUH09HPZL6Ks-xUsiDLQPR6xOv2g+ic9Gd3uwea6hCyQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.10.10]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 2AOAVTZc039625
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 01:04:15AM -0800, Atish Patra wrote:
-> On Wed, Nov 23, 2022 at 5:36 AM Andrew Jones <ajones@ventanamicro.com> wrote:
-> >
-> > ...
-> > > > > > -     csr_write(CSR_HCOUNTEREN, -1UL);
-> > > > > > +     /* VS should access only TM bit. Everything else should trap */
-> > > > > > +     csr_write(CSR_HCOUNTEREN, 0x02);
-> > > > >
-> > > > > This looks like something that should be broken out into a separate patch
-> > > > > with a description of what happens now when guests try to access the newly
-> > > > > trapping counter registers. We should probably also create a TM define.
-> > > > >
-> > > >
-> > > > Done.
-> > > >
-> > >
-> > > As we allow cycles & instret for host user space now [1], should we do the same
-> > > for guests as well ? I would prefer not to but same user space
-> > > software will start to break
-> > > they will run inside a guest.
-> > >
-> > > https://lore.kernel.org/all/20220928131807.30386-1-palmer@rivosinc.com/
-> > >
-> >
-> > Yeah, it seems like we should either forbid access to unprivileged users
-> > or ensure the numbers include some random noise. For guests, a privileged
-> > KVM userspace should need to explicitly request access for them, ensuring
-> > that the creation of privileged guests is done by conscious choice.
-> >
-> 
-> If I understand you correctly, you are suggesting we only enable TM
-> bit in hcounteren ?
+Aspeed ACRY engine is designed to accelerate the throughput of
+ECDSA/RSA signature and verification.
 
-Yeah, and also that I think it'd be nice to revisit this for userspace.
+These patches aim to add Aspeed ACRY RSA driver support.
+This driver also pass the run-time self tests that take place at
+algorithm registration on both big-endian/little-endian system
+in AST2600 evaluation board .
 
-> We also need a mechanism to enable the hcounteren bits from KVM guest userspace.
-> 
-> I can think of the following approaches.
-> 
-> 1. The CYCLE, INSTRET enabling can also be via one reg interface.
-> 2. We can enable it during first virtual instruction trap if these
-> bits in guest scounteren
-> are enabled.
+Tested-by below configs:
+- CONFIG_CRYPTO_MANAGER_DISABLE_TESTS is not set
+- CONFIG_CRYPTO_MANAGER_EXTRA_TESTS=y
+- CONFIG_DMA_API_DEBUG=y
+- CONFIG_DMA_API_DEBUG_SG=y
+- CONFIG_CPU_BIG_ENDIAN=y
 
-Those sound good to me.
+Change since v2:
+- Fix format and uninitialized warning.
+- Revise binding description.
 
-Thanks,
-drew
+Change since v1:
+- Fix dt-bindings description.
+- Refine the Makefile which has been addressed.
+
+Neal Liu (4):
+  crypto: aspeed: Add ACRY RSA driver
+  ARM: dts: aspeed: Add ACRY/AHBC device controller node
+  dt-bindings: crypto: add documentation for Aspeed ACRY
+  dt-bindings: bus: add documentation for Aspeed AHBC
+
+ .../bindings/bus/aspeed,ast2600-ahbc.yaml     |  37 +
+ .../bindings/crypto/aspeed,ast2600-acry.yaml  |  49 ++
+ MAINTAINERS                                   |   2 +-
+ arch/arm/boot/dts/aspeed-g6.dtsi              |  13 +
+ drivers/crypto/aspeed/Kconfig                 |  11 +
+ drivers/crypto/aspeed/Makefile                |   2 +
+ drivers/crypto/aspeed/aspeed-acry.c           | 828 ++++++++++++++++++
+ 7 files changed, 941 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/bus/aspeed,ast2600-ahbc.yaml
+ create mode 100644 Documentation/devicetree/bindings/crypto/aspeed,ast2600-acry.yaml
+ create mode 100644 drivers/crypto/aspeed/aspeed-acry.c
+
+-- 
+2.25.1
+
