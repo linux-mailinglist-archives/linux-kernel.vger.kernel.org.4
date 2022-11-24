@@ -2,150 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 373EE637267
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 07:35:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE66E637269
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 07:37:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbiKXGfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 01:35:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42942 "EHLO
+        id S229555AbiKXGhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 01:37:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiKXGf1 (ORCPT
+        with ESMTP id S229748AbiKXGhE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 01:35:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9F99371E
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 22:34:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669271672;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XW4QocPZ/IX7iF7xzjKQbsxjhbLSPlgpn0gsT7pmGR8=;
-        b=Y4Z2nr7nBfKoUi4MDzp+i+WNy4E1UU4WMqLhAag2Rov6yKpnHEuClJGb0WZyxgrLj2zJkQ
-        G0AG5PX+XYyFGZ4mXcWHcJop1CE+i5IAnWmDz+OpvC8goic+5VcHox+YWt6MWmgAEZQk6l
-        Q3dloE2KIeaQSqlMrqlUqcaItvXsLTw=
-Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com
- [209.85.160.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-551-GRuDyWLwPX-_rfe4B7Zysw-1; Thu, 24 Nov 2022 01:34:30 -0500
-X-MC-Unique: GRuDyWLwPX-_rfe4B7Zysw-1
-Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-14261bd9123so454812fac.21
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 22:34:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XW4QocPZ/IX7iF7xzjKQbsxjhbLSPlgpn0gsT7pmGR8=;
-        b=A/bK/Y7uNw4ecdrrrhaxmNTnESykYaYLDYPU9/pAe/2+8thO5zjiTUi9VUDIjPGDyQ
-         pxGgcTxiktbRGnN0L7q2X44RmCEqw2bbP5/8G/lGHOCVfJfR2/FDxV0uvRhPB+FW4SzQ
-         6eqIFtotvweWXQqocI+CWRTr7aPPTngEA/Js4nussELcrECJplD5UFTEUFd5/HHYK8KJ
-         xuPq6/iLgGbm/Jl8muZFGrX8vqxKP/aLgKvnkzEHKFqEfajp6Iqndp8538eETgwB8jyi
-         camBeJt5vAuVf3SVvCelpeSGR4bO0c8CsnOy0GMw0+eK9XKfoqDxOhRBipay/Ol74kfg
-         wOHQ==
-X-Gm-Message-State: ANoB5pnlc3FqJCiTQUoP0veM80h4oq685WBUjhwlQ4yRTjOb5TdsVMQn
-        2uySQafunHmDnRovI40GKH7oG775SmwDa/hoTNP1CwSKlZ4aMPk8VTG6gpqiZrEOal0sYbWKzjN
-        ELZiLDZ7+JUmRVX/JNiMRIH/ywwZK5UIpjQHRdnoE
-X-Received: by 2002:a4a:b145:0:b0:49f:449a:5f6c with SMTP id e5-20020a4ab145000000b0049f449a5f6cmr5553710ooo.93.1669271669790;
-        Wed, 23 Nov 2022 22:34:29 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7IyosG5Zgp1L1z/dEd/7W1lJHYNVRxsPXQn0yG8lUKOd7B4LRcDGirgFhy/2cx3irMqDkKK2cq6cTryykNnxQ=
-X-Received: by 2002:a4a:b145:0:b0:49f:449a:5f6c with SMTP id
- e5-20020a4ab145000000b0049f449a5f6cmr5553705ooo.93.1669271669534; Wed, 23 Nov
- 2022 22:34:29 -0800 (PST)
+        Thu, 24 Nov 2022 01:37:04 -0500
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E0AC6BF5;
+        Wed, 23 Nov 2022 22:36:30 -0800 (PST)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ANKMCPS031354;
+        Wed, 23 Nov 2022 22:36:21 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=pfpt0220; bh=6X6je5OPwRrTxSTNAH6J16bP62LAgGN9chs2ksNVsHE=;
+ b=V5eRtCGZHQqn5i9Yfiz+G42/cc3ZDmgyWgQmQL4GpT8CxM8BG0zI5YlaXvp8olb5FStC
+ Ibm3ZjvPo+v49R2XGc4nfKvU3WvZd6hE5up1Z4KfrF3F5CSgR7WSDEk1mMO8MXSiMXu4
+ LZA4+zMuMRKEENLNhWtudHPgicbUwNqxQWN9BeQQLZLq1uYLDFGZtog2wG6xWvjT8Ylc
+ iCghwfWc7HVq6wCErRyunROcM5YxwR/HJnS4MGy0dDIfD4C2syNEAcmN77DDqDu4NuWt
+ yVYVkX3IFomW8aOjVGSuwJWEVKS5xSG6BUd2kWR46NowGPBzPAQtNQxYJrdG0D8ehDD+ eA== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3m1g7jbuh0-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 23 Nov 2022 22:36:21 -0800
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 23 Nov
+ 2022 22:35:54 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 23 Nov 2022 22:35:54 -0800
+Received: from localhost.localdomain (unknown [10.28.36.166])
+        by maili.marvell.com (Postfix) with ESMTP id BEF763F7097;
+        Wed, 23 Nov 2022 22:35:50 -0800 (PST)
+From:   Suman Ghosh <sumang@marvell.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <sgoutham@marvell.com>, <sbhatta@marvell.com>,
+        <jerinj@marvell.com>, <gakula@marvell.com>, <hkelam@marvell.com>,
+        <lcherian@marvell.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Suman Ghosh <sumang@marvell.com>
+Subject: [net-next PATCH V3] octeontx2-pf: Add support to filter packet based on IP fragment
+Date:   Thu, 24 Nov 2022 12:05:48 +0530
+Message-ID: <20221124063548.2831912-1-sumang@marvell.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221124062309.2081720-1-lulu@redhat.com>
-In-Reply-To: <20221124062309.2081720-1-lulu@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Thu, 24 Nov 2022 14:34:18 +0800
-Message-ID: <CACGkMEupFLwNFvGkU_vgDmhzY9K=b0KFC4BkWGVfO3s+GEWaKQ@mail.gmail.com>
-Subject: Re: [PATCH] vhost_vdpa: fix the crash in unmap a large memory
-To:     Cindy Lu <lulu@redhat.com>
-Cc:     mst@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: vKQpjn2BKh9GA1f5McJcFSWczlHBHKo-
+X-Proofpoint-GUID: vKQpjn2BKh9GA1f5McJcFSWczlHBHKo-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-24_04,2022-11-23_01,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 2:23 PM Cindy Lu <lulu@redhat.com> wrote:
->
-> While testing in vIOMMU, sometimes guest will unmap very large memory,
-> which will cause the crash.
+1. Added support to filter packets based on IP fragment.
+For IPv4 packets check for ip_flag == 0x20 (more fragment bit set).
+For IPv6 packets check for next_header == 0x2c (next_header set to
+'fragment header for IPv6')
+2. Added configuration support from both "ethtool ntuple" and "tc flower".
 
-Would you mind to post the calltrace?
+Signed-off-by: Suman Ghosh <sumang@marvell.com>
+---
+Changes since v2:
+- Fixed minor review comments.
 
-> To fix this,Move the iommu_unmap to
-> vhost_vdpa_pa_unmap/vhost_vdpa_va_unmap and only unmap the memory
-> that saved in iotlb.
->
-> Signed-off-by: Cindy Lu <lulu@redhat.com>
+ .../net/ethernet/marvell/octeontx2/af/mbox.h  |  4 +++
+ .../net/ethernet/marvell/octeontx2/af/npc.h   |  2 ++
+ .../marvell/octeontx2/af/rvu_debugfs.c        |  8 ++++++
+ .../marvell/octeontx2/af/rvu_npc_fs.c         |  8 ++++++
+ .../marvell/octeontx2/nic/otx2_common.h       |  3 +++
+ .../marvell/octeontx2/nic/otx2_flows.c        | 25 ++++++++++++++++---
+ .../ethernet/marvell/octeontx2/nic/otx2_tc.c  | 25 +++++++++++++++++++
+ 7 files changed, 71 insertions(+), 4 deletions(-)
 
-Let's add a fixes tag which I believe should be the first commit that
-introduces vhost-vDPA. And let's cc stable as well.
-
-> ---
->  drivers/vhost/vdpa.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> index 166044642fd5..c392979702cf 100644
-> --- a/drivers/vhost/vdpa.c
-> +++ b/drivers/vhost/vdpa.c
-> @@ -692,6 +692,8 @@ static void vhost_vdpa_pa_unmap(struct vhost_vdpa *v,
->         struct vhost_iotlb_map *map;
->         struct page *page;
->         unsigned long pfn, pinned;
-> +       struct vdpa_device *vdpa = v->vdpa;
-> +       const struct vdpa_config_ops *ops = vdpa->config;
->
->         while ((map = vhost_iotlb_itree_first(iotlb, start, last)) != NULL) {
->                 pinned = PFN_DOWN(map->size);
-> @@ -703,6 +705,8 @@ static void vhost_vdpa_pa_unmap(struct vhost_vdpa *v,
->                         unpin_user_page(page);
->                 }
->                 atomic64_sub(PFN_DOWN(map->size), &dev->mm->pinned_vm);
-> +               if ((ops->dma_map == NULL) && (ops->set_map == NULL))
-> +                       iommu_unmap(v->domain, map->start, map->size);
->                 vhost_iotlb_map_free(iotlb, map);
->         }
->  }
-> @@ -713,11 +717,15 @@ static void vhost_vdpa_va_unmap(struct vhost_vdpa *v,
->  {
->         struct vhost_iotlb_map *map;
->         struct vdpa_map_file *map_file;
-> +       struct vdpa_device *vdpa = v->vdpa;
-> +       const struct vdpa_config_ops *ops = vdpa->config;
->
->         while ((map = vhost_iotlb_itree_first(iotlb, start, last)) != NULL) {
->                 map_file = (struct vdpa_map_file *)map->opaque;
->                 fput(map_file->file);
->                 kfree(map_file);
-> +               if ((ops->dma_map == NULL) && (ops->set_map == NULL))
-> +                       iommu_unmap(v->domain, map->start, map->size);
-
-I wonder if it's better to move at least dma_map() here.
-
-Thanks
-
->                 vhost_iotlb_map_free(iotlb, map);
->         }
->  }
-> @@ -805,8 +813,6 @@ static void vhost_vdpa_unmap(struct vhost_vdpa *v,
->         } else if (ops->set_map) {
->                 if (!v->in_batch)
->                         ops->set_map(vdpa, asid, iotlb);
-> -       } else {
-> -               iommu_unmap(v->domain, iova, size);
->         }
->
->         /* If we are in the middle of batch processing, delay the free
-> --
-> 2.34.3
->
+diff --git a/drivers/net/ethernet/marvell/octeontx2/af/mbox.h b/drivers/net/ethernet/marvell/octeontx2/af/mbox.h
+index c7c92c7510fa..d2584ebb7a70 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/af/mbox.h
++++ b/drivers/net/ethernet/marvell/octeontx2/af/mbox.h
+@@ -1440,6 +1440,10 @@ struct flow_msg {
+ 	u8 tc;
+ 	__be16 sport;
+ 	__be16 dport;
++	union {
++		u8 ip_flag;
++		u8 next_header;
++	};
+ };
+ 
+ struct npc_install_flow_req {
+diff --git a/drivers/net/ethernet/marvell/octeontx2/af/npc.h b/drivers/net/ethernet/marvell/octeontx2/af/npc.h
+index d027c23b8ef8..9beeead56d7b 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/af/npc.h
++++ b/drivers/net/ethernet/marvell/octeontx2/af/npc.h
+@@ -185,8 +185,10 @@ enum key_fields {
+ 	NPC_VLAN_ETYPE_STAG, /* 0x88A8 */
+ 	NPC_OUTER_VID,
+ 	NPC_TOS,
++	NPC_IPFRAG_IPV4,
+ 	NPC_SIP_IPV4,
+ 	NPC_DIP_IPV4,
++	NPC_IPFRAG_IPV6,
+ 	NPC_SIP_IPV6,
+ 	NPC_DIP_IPV6,
+ 	NPC_IPPROTO_TCP,
+diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c
+index 642e58a04da0..cdb2e6d8ffb8 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c
++++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_debugfs.c
+@@ -2799,6 +2799,14 @@ static void rvu_dbg_npc_mcam_show_flows(struct seq_file *s,
+ 			seq_printf(s, "%pI6 ", rule->packet.ip6dst);
+ 			seq_printf(s, "mask %pI6\n", rule->mask.ip6dst);
+ 			break;
++		case NPC_IPFRAG_IPV6:
++			seq_printf(s, "0x%x ", rule->packet.next_header);
++			seq_printf(s, "mask 0x%x\n", rule->mask.next_header);
++			break;
++		case NPC_IPFRAG_IPV4:
++			seq_printf(s, "0x%x ", rule->packet.ip_flag);
++			seq_printf(s, "mask 0x%x\n", rule->mask.ip_flag);
++			break;
+ 		case NPC_SPORT_TCP:
+ 		case NPC_SPORT_UDP:
+ 		case NPC_SPORT_SCTP:
+diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_fs.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_fs.c
+index f3fecd2a4015..006beb5cf98d 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_fs.c
++++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_fs.c
+@@ -26,8 +26,10 @@ static const char * const npc_flow_names[] = {
+ 	[NPC_VLAN_ETYPE_STAG] = "vlan ether type stag",
+ 	[NPC_OUTER_VID]	= "outer vlan id",
+ 	[NPC_TOS]	= "tos",
++	[NPC_IPFRAG_IPV4] = "fragmented IPv4 header ",
+ 	[NPC_SIP_IPV4]	= "ipv4 source ip",
+ 	[NPC_DIP_IPV4]	= "ipv4 destination ip",
++	[NPC_IPFRAG_IPV6] = "fragmented IPv6 header ",
+ 	[NPC_SIP_IPV6]	= "ipv6 source ip",
+ 	[NPC_DIP_IPV6]	= "ipv6 destination ip",
+ 	[NPC_IPPROTO_TCP] = "ip proto tcp",
+@@ -484,8 +486,10 @@ do {									       \
+ 	 * Example: Source IP is 4 bytes and starts at 12th byte of IP header
+ 	 */
+ 	NPC_SCAN_HDR(NPC_TOS, NPC_LID_LC, NPC_LT_LC_IP, 1, 1);
++	NPC_SCAN_HDR(NPC_IPFRAG_IPV4, NPC_LID_LC, NPC_LT_LC_IP, 6, 1);
+ 	NPC_SCAN_HDR(NPC_SIP_IPV4, NPC_LID_LC, NPC_LT_LC_IP, 12, 4);
+ 	NPC_SCAN_HDR(NPC_DIP_IPV4, NPC_LID_LC, NPC_LT_LC_IP, 16, 4);
++	NPC_SCAN_HDR(NPC_IPFRAG_IPV6, NPC_LID_LC, NPC_LT_LC_IP6_EXT, 6, 1);
+ 	NPC_SCAN_HDR(NPC_SIP_IPV6, NPC_LID_LC, NPC_LT_LC_IP6, 8, 16);
+ 	NPC_SCAN_HDR(NPC_DIP_IPV6, NPC_LID_LC, NPC_LT_LC_IP6, 24, 16);
+ 	NPC_SCAN_HDR(NPC_SPORT_UDP, NPC_LID_LD, NPC_LT_LD_UDP, 0, 2);
+@@ -899,6 +903,8 @@ do {									      \
+ 	NPC_WRITE_FLOW(NPC_ETYPE, etype, ntohs(pkt->etype), 0,
+ 		       ntohs(mask->etype), 0);
+ 	NPC_WRITE_FLOW(NPC_TOS, tos, pkt->tos, 0, mask->tos, 0);
++	NPC_WRITE_FLOW(NPC_IPFRAG_IPV4, ip_flag, pkt->ip_flag, 0,
++		       mask->ip_flag, 0);
+ 	NPC_WRITE_FLOW(NPC_SIP_IPV4, ip4src, ntohl(pkt->ip4src), 0,
+ 		       ntohl(mask->ip4src), 0);
+ 	NPC_WRITE_FLOW(NPC_DIP_IPV4, ip4dst, ntohl(pkt->ip4dst), 0,
+@@ -919,6 +925,8 @@ do {									      \
+ 	NPC_WRITE_FLOW(NPC_OUTER_VID, vlan_tci, ntohs(pkt->vlan_tci), 0,
+ 		       ntohs(mask->vlan_tci), 0);
+ 
++	NPC_WRITE_FLOW(NPC_IPFRAG_IPV6, next_header, pkt->next_header, 0,
++		       mask->next_header, 0);
+ 	npc_update_ipv6_flow(rvu, entry, features, pkt, mask, output, intf);
+ 	npc_update_vlan_features(rvu, entry, features, intf);
+ 
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+index 282db6fe3b08..99d0da7ba750 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+@@ -28,6 +28,9 @@
+ #include "otx2_devlink.h"
+ #include <rvu_trace.h>
+ 
++/* IPv4 flag more fragment bit */
++#define IPV4_FLAG_MORE				0x20
++
+ /* PCI device IDs */
+ #define PCI_DEVID_OCTEONTX2_RVU_PF              0xA063
+ #define PCI_DEVID_OCTEONTX2_RVU_VF		0xA064
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
+index 13aa79efee03..684cb8ec9f21 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
+@@ -711,6 +711,11 @@ static int otx2_prepare_ipv6_flow(struct ethtool_rx_flow_spec *fsp,
+ 			       sizeof(pmask->ip6dst));
+ 			req->features |= BIT_ULL(NPC_DIP_IPV6);
+ 		}
++		if (ipv6_usr_hdr->l4_proto == IPPROTO_FRAGMENT) {
++			pkt->next_header = ipv6_usr_hdr->l4_proto;
++			pmask->next_header = ipv6_usr_mask->l4_proto;
++			req->features |= BIT_ULL(NPC_IPFRAG_IPV6);
++		}
+ 		pkt->etype = cpu_to_be16(ETH_P_IPV6);
+ 		pmask->etype = cpu_to_be16(0xFFFF);
+ 		req->features |= BIT_ULL(NPC_ETYPE);
+@@ -891,10 +896,22 @@ static int otx2_prepare_flow_request(struct ethtool_rx_flow_spec *fsp,
+ 			req->features |= BIT_ULL(NPC_OUTER_VID);
+ 		}
+ 
+-		/* Not Drop/Direct to queue but use action in default entry */
+-		if (fsp->m_ext.data[1] &&
+-		    fsp->h_ext.data[1] == cpu_to_be32(OTX2_DEFAULT_ACTION))
+-			req->op = NIX_RX_ACTION_DEFAULT;
++		if (fsp->m_ext.data[1]) {
++			if (flow_type == IP_USER_FLOW) {
++				if (be32_to_cpu(fsp->h_ext.data[1]) != IPV4_FLAG_MORE)
++					return -EINVAL;
++
++				pkt->ip_flag = be32_to_cpu(fsp->h_ext.data[1]);
++				pmask->ip_flag = be32_to_cpu(fsp->m_ext.data[1]);
++				req->features |= BIT_ULL(NPC_IPFRAG_IPV4);
++			} else if (fsp->h_ext.data[1] ==
++					cpu_to_be32(OTX2_DEFAULT_ACTION)) {
++				/* Not Drop/Direct to queue but use action
++				 * in default entry
++				 */
++				req->op = NIX_RX_ACTION_DEFAULT;
++			}
++		}
+ 	}
+ 
+ 	if (fsp->flow_type & FLOW_MAC_EXT &&
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+index e64318c110fd..e421714524c2 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+@@ -532,6 +532,31 @@ static int otx2_tc_prepare_flow(struct otx2_nic *nic, struct otx2_tc_flow *node,
+ 			req->features |= BIT_ULL(NPC_IPPROTO_ICMP6);
+ 	}
+ 
++	if (flow_rule_match_key(rule, FLOW_DISSECTOR_KEY_CONTROL)) {
++		struct flow_match_control match;
++
++		flow_rule_match_control(rule, &match);
++		if (match.mask->flags & FLOW_DIS_FIRST_FRAG) {
++			NL_SET_ERR_MSG_MOD(extack, "HW doesn't support frag first/later");
++			return -EOPNOTSUPP;
++		}
++
++		if (match.mask->flags & FLOW_DIS_IS_FRAGMENT) {
++			if (ntohs(flow_spec->etype) == ETH_P_IP) {
++				flow_spec->ip_flag = IPV4_FLAG_MORE;
++				flow_mask->ip_flag = 0xff;
++				req->features |= BIT_ULL(NPC_IPFRAG_IPV4);
++			} else if (ntohs(flow_spec->etype) == ETH_P_IPV6) {
++				flow_spec->next_header = IPPROTO_FRAGMENT;
++				flow_mask->next_header = 0xff;
++				req->features |= BIT_ULL(NPC_IPFRAG_IPV6);
++			} else {
++				NL_SET_ERR_MSG_MOD(extack, "flow-type should be either IPv4 and IPv6");
++				return -EOPNOTSUPP;
++			}
++		}
++	}
++
+ 	if (flow_rule_match_key(rule, FLOW_DISSECTOR_KEY_ETH_ADDRS)) {
+ 		struct flow_match_eth_addrs match;
+ 
+-- 
+2.25.1
 
