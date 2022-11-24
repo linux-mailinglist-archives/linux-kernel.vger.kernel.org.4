@@ -2,112 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF416379E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 14:24:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9606379E6
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 14:25:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbiKXNYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 08:24:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48948 "EHLO
+        id S229870AbiKXNZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 08:25:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiKXNYo (ORCPT
+        with ESMTP id S229627AbiKXNZe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 08:24:44 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A48491511;
-        Thu, 24 Nov 2022 05:24:44 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id DDCB31F6E6;
-        Thu, 24 Nov 2022 13:24:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1669296282; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=3sHrd/CIXLaxPVPFYkey2aLygTwReIqBgayVF3Dh5rg=;
-        b=hXqn2mtY8XQ+fW5GvD41k822VrknMcvZN/Qsid55UEs2Q5m45d79ioWNHXSYde9jc2ki6N
-        /+8Cb5XsOHP31EQHum9YlhmmSHPZlLqmeRTQRxYr0rNz/3lZH+VwUvD79Tu0h7EAcLq/Lb
-        4EO+96KihNs3+Z8r1/lweg5P3VZZaSQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1669296282;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=3sHrd/CIXLaxPVPFYkey2aLygTwReIqBgayVF3Dh5rg=;
-        b=rv6rTKwl61rZVy7OYY94PbipR4JZ9/ukBTcVQ0yRSnM+SjX6wB3QOL/jny89ohTtCker11
-        qePJ7Lle2Iuo8OBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 95A7013B4F;
-        Thu, 24 Nov 2022 13:24:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FGvzIppwf2MqJQAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Thu, 24 Nov 2022 13:24:42 +0000
-Date:   Thu, 24 Nov 2022 14:24:41 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        "Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?=" <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Michal Simek <michal.simek@xilinx.com>
-Subject: [PATCH] PCI: xilinx: Drop obsolete dependency on COMPILE_TEST
-Message-ID: <20221124142441.3a230524@endymion.delvare>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        Thu, 24 Nov 2022 08:25:34 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 470DE13D3A;
+        Thu, 24 Nov 2022 05:25:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1669296307; bh=JR+1ymxijyNQgUsQNpDrkTDOpk2Q7NlTPJlOhYAB4iU=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=UqAqvFZ1zmGr72/X9y28SR33gHSzIxDfUIRk9JdkEyqjmwa9immmulXPebxsCJK0j
+         7bLlMUmyGPJ9mvW2XOn5/BM1pceSyknKW0Lc3tz53aQfOVjLiPEDzbMtZaPRhQNr/9
+         VluzZXmQHlJKQlhyiPKziC4K7flROfBXRX2PP4ZpMqNZL6o+XfH9jce97T4/uPFjVR
+         n29ZJIXjj3Ppd4gbTefOU8VMibwG54eRfb8P++7VsPoqzEsqnGAcY/nWtuowlVjYb7
+         ulIcSzQ2Vu8KFVrOdl8v+V6uabcOHwcLJEek180kq703U6Z0WOej8xnkO/lbT3dAnn
+         +YO+0hWTYvmag==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.2.37] ([84.162.7.17]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MwwZd-1p8Qwb3UMd-00ySke; Thu, 24
+ Nov 2022 14:25:06 +0100
+Subject: Re: [PATCH v10 04/14] tpm, tpm_tis: Do not skip reset of original
+ interrupt vector
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jandryuk@gmail.com,
+        pmenzel@molgen.mpg.de, l.sanfilippo@kunbus.com, lukas@wunner.de,
+        p.rosenberger@kunbus.com
+References: <20221120133134.28926-1-LinoSanfilippo@gmx.de>
+ <20221120133134.28926-5-LinoSanfilippo@gmx.de> <Y38V/7kXkWt9Fhy0@kernel.org>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Message-ID: <ce85d555-ae60-d7c1-70b1-b762997e9c94@gmx.de>
+Date:   Thu, 24 Nov 2022 14:25:05 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <Y38V/7kXkWt9Fhy0@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:ewnx8TV3SRMzArWaDc4NLeLmH85rw76r2BRp5Gth2V5mS5DPFQZ
+ 1VrQRLftH6rB8fUJngG0IAhf5hw5af2gdrZ3vFTlTbpZoUVuUZqNcuv+GSkKSyO4PDbJ4mU
+ 3WV9vqTCdMqnyeZJ+BAmUWta7b87yYCo9pJ26XbIj0O+2SXu+XFZ50BiJ3ip2XMrPpkHOlL
+ 75OE7TSpyx4giRMTE9ApQ==
+UI-OutboundReport: notjunk:1;M01:P0:UdQFGZP+bKo=;NEL2K/2lEfx8QICLNOyjJ4H2pJZ
+ aVPciSeQD7Z7MCQdV4maN8vgZ7U7Fmg/+iPw1YzAlF0u4s4vWUNrpPXLLGHZIbbno6SvuRwU9
+ rXuOmRRWa8i7JQnHiXXTUwLSx2PU7PrQgmlVVcbgWZoRdiZ6sn/1RiDHblZ/cYEI/uHL8A1aA
+ iQTaL7oigT51nJzeta1uqtOfrtMSLFKon96YjdWqrXysS4me9kNwUqnTWHCVUlJpe/vzsjMgP
+ sk14BLCbqejioYXfiXjpoqWrI44/bnzEQoeJbtiBqqZ0dadj96EK9MGgvb/awYCp80c16cfuG
+ IMgM/4YNyH/9bR+Wjx7ht4bClICsLnxruqI2f8BYLJAzsCeKpMZJwzevjVF13Zml1l3ukRTnk
+ LojYWbaDS1jL37Z2Q7RAOPWGibRS0QgnPieyd1m9nzDssMBQrCZJTp9c7ktzKpjBfMyE6D+Au
+ CQia5apBnu/V+bML6Au6eq9WNBRdRxUIjRQqSpstSpUa6C/IeQM6PjxegWt26Kdf46kDFsFQt
+ CULSjccgzsFhP1QSmoPD5rLZAFi1eDlqIgftzhAV7Z6Xx6bbM9DlCdxCyJ7kmKhiT8nlGObEG
+ 1Iasq18l7TuSU/tp27xr/ne9iJc0VHlwRNSsPZJdDijsSQa1jb3OY2xm0IbNMq+DnIsg4YLyZ
+ STJcO0XDXgFypy+KbdMXavuf/fwtNT1xgJwDuS/JCnKGomPrzOB6EKYejsSvJovbeMWrz9FeY
+ GzTpOySdfmOnqf/MqNHz/K+bgVjYE4plTZ/ti3+MzPolrIaZLEBZbkpnorx3ZTWuMgiAXlV1l
+ yETlp9DHVYOhC3lhTvDxYXbbcTlDdmCJf9DsplaUF6zpS0i4/5WK91lDRwPyiHohLxxN2OPwH
+ yiW0iP9JAHUItFkeoiVIdkc5MljqUJPSTiNTKqU8QYlOMP2nnGl4P2d/9W7B/mcok26qYxm+3
+ ynNr0A==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
-is possible to test-build any driver which depends on OF on any
-architecture by explicitly selecting OF. Therefore depending on
-COMPILE_TEST as an alternative is no longer needed.
+On 24.11.22 at 07:58, Jarkko Sakkinen wrote:
+> On Sun, Nov 20, 2022 at 02:31:24PM +0100, Lino Sanfilippo wrote:
+>> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+>>
+>> If in tpm_tis_probe_irq_single() an error occurs after the original
+>> interrupt vector has been read, restore the interrupts before the error=
+ is
+>> returned.
+>>
+>> Since the caller does not check the error value, return -1 in any case =
+that
+>> the TPM_CHIP_FLAG_IRQ flag is not set. Since the return value of functi=
+on
+>> tpm_tis_gen_interrupt() is not longer used, make it a void function.
+>>
+>> Fixes: 1107d065fdf1 ("tpm_tis: Introduce intermediate layer for TPM acc=
+ess")
+>> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+>> ---
+>>  drivers/char/tpm/tpm_tis_core.c | 33 +++++++++++++--------------------
+>>  1 file changed, 13 insertions(+), 20 deletions(-)
+>>
+>> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis=
+_core.c
+>> index 603b82ca56da..1eac1279594d 100644
+>> --- a/drivers/char/tpm/tpm_tis_core.c
+>> +++ b/drivers/char/tpm/tpm_tis_core.c
+>> @@ -729,7 +729,7 @@ static irqreturn_t tis_int_handler(int dummy, void =
+*dev_id)
+>>  	return IRQ_HANDLED;
+>>  }
+>>
+>> -static int tpm_tis_gen_interrupt(struct tpm_chip *chip)
+>> +static void tpm_tis_gen_interrupt(struct tpm_chip *chip)
+>>  {
+>>  	const char *desc =3D "attempting to generate an interrupt";
+>>  	u32 cap2;
+>> @@ -738,16 +738,14 @@ static int tpm_tis_gen_interrupt(struct tpm_chip =
+*chip)
+>>
+>>  	ret =3D request_locality(chip, 0);
+>>  	if (ret < 0)
+>> -		return ret;
+>> +		return;
+>>
+>>  	if (chip->flags & TPM_CHIP_FLAG_TPM2)
+>> -		ret =3D tpm2_get_tpm_pt(chip, 0x100, &cap2, desc);
+>> +		tpm2_get_tpm_pt(chip, 0x100, &cap2, desc);
+>
+> In a successive patch:
+>
+> -               tpm2_get_tpm_pt(chip, 0x100, &cap2, desc);
+> +               ret =3D tpm2_get_tpm_pt(chip, 0x100, &cap2, desc);
+> `
+>
+> BR, Jarkko
+>
 
-It is actually better to always build such drivers with OF enabled,
-so that the test builds are closer to how each driver will actually be
-built on its intended target. Building them without OF may not test
-much as the compiler will optimize out potentially large parts of the
-code. In the worst case, this could even pop false positive warnings.
-Dropping COMPILE_TEST here improves the quality of our testing and
-avoids wasting time on non-existent issues.
-
-Signed-off-by: Jean Delvare <jdelvare@suse.de>
-Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc: Rob Herring <robh@kernel.org>
-Cc: "Krzysztof Wilczy=C5=84ski" <kw@linux.com>
-Cc: Bjorn Helgaas <bhelgaas@google.com>
-Cc: Michal Simek <michal.simek@xilinx.com>
-Cc: Bharat Kumar Gogada <bharat.kumar.gogada@amd.com>
----
- drivers/pci/controller/Kconfig |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- linux-6.0.orig/drivers/pci/controller/Kconfig
-+++ linux-6.0/drivers/pci/controller/Kconfig
-@@ -98,7 +98,7 @@ config PCI_HOST_GENERIC
-=20
- config PCIE_XILINX
- 	bool "Xilinx AXI PCIe host bridge support"
--	depends on OF || COMPILE_TEST
-+	depends on OF
- 	depends on PCI_MSI_IRQ_DOMAIN
- 	help
- 	  Say 'Y' here if you want kernel to support the Xilinx AXI PCIe
+If it was a single patch it would be IMHO correct to remove ret, since at =
+this point it
+is not needed any more. But as part of a series it is admittedly a bit odd=
+ to remove the value only
+to re-add it in a later patch of the same series. I will fix this and send=
+ a v11.
 
 
---=20
-Jean Delvare
-SUSE L3 Support
+Regards,
+Lino
+
