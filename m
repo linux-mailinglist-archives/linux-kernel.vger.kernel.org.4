@@ -2,140 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F678637293
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 07:53:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E362637296
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 07:56:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbiKXGx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 01:53:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57866 "EHLO
+        id S229728AbiKXG40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 01:56:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiKXGxz (ORCPT
+        with ESMTP id S229572AbiKXG4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 01:53:55 -0500
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37202C4B48;
-        Wed, 23 Nov 2022 22:53:54 -0800 (PST)
-Received: by mail-ed1-f54.google.com with SMTP id s12so1288882edd.5;
-        Wed, 23 Nov 2022 22:53:54 -0800 (PST)
+        Thu, 24 Nov 2022 01:56:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6639C2A8
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 22:55:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669272930;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tejdroVaE+DmvJLuZIiydGkuFxW1u1MHaoKXEp3xDjQ=;
+        b=COJcXF0u4mji+wx97QW0MuPYz2Qr5XaSfwLXdWQjTRZQAS1MB03c0opQBW8Bw3NsbAUrmv
+        OebVKVcVH6HZivHw0WtsnrNJV8yh1PdED1tawTrLnAqoSrKYGd+0r8HXYFyo4Xhf8NoIDz
+        R0EDWkToAAW77ON2y7ZmGvPWRENL1xA=
+Received: from mail-vk1-f199.google.com (mail-vk1-f199.google.com
+ [209.85.221.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-26-xjKmdPcwO_at9Bt5jdY_sQ-1; Thu, 24 Nov 2022 01:55:29 -0500
+X-MC-Unique: xjKmdPcwO_at9Bt5jdY_sQ-1
+Received: by mail-vk1-f199.google.com with SMTP id c144-20020a1f1c96000000b003bc20c37566so290050vkc.10
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 22:55:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iY6ZcqTTzxn4fRkMMwseAbYXc9/C12zRHdPoC7nG4+o=;
-        b=bEqqMoDVcv5J/XOkGre/RGj0X7KQTLtpnBpy+lt+873JXMTZeXO7qTux8rU2STn2Cj
-         5ebttfOD6b2zwp7jzOGRnvwKbgbchUJGEb9+lyHMCNDm1JakHEhvH6VT2E/AK+xiuE5B
-         UzRfPJbE2jMYix9D6aIheV+dvzKukaH8i9wK1yV49TP05mc22Nru/eiE+UoV0aIxWs/D
-         kmDdklqo6xLquPAjpeukk1fv1KKvHnuKbJ+J/YfiEnyrzwfwDdU5pLz17SRty/kO3Kr/
-         Ry0Ljhj53jfMrTE0fDVZQ8w6LSLy9D2m2DOz2gS+nC1/4rEayqTH6Ywtkz7Ijbfhy0rr
-         Ubwg==
-X-Gm-Message-State: ANoB5pkkFWVDk3C53WanvDJuyM/RNgMhg+AawSRgnsqWj2hlY/x2lImf
-        V6C+VbbXDHFeW20mlYO8XvhshDnhhBI=
-X-Google-Smtp-Source: AA0mqf4K7o5VSk7GHDPYog09RKIoAm6TRMYBZNhaDqjolSQDmdfEO0Q0jeZA+d8g42ipSTA45J8tPQ==
-X-Received: by 2002:a05:6402:1655:b0:46a:80cc:d5bd with SMTP id s21-20020a056402165500b0046a80ccd5bdmr1546199edx.210.1669272832529;
-        Wed, 23 Nov 2022 22:53:52 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
-        by smtp.gmail.com with ESMTPSA id t18-20020a056402021200b00463a83ce063sm150395edv.96.2022.11.23.22.53.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 22:53:51 -0800 (PST)
-Message-ID: <562c1505-d3bc-6422-9598-15c399e6fbba@kernel.org>
-Date:   Thu, 24 Nov 2022 07:53:50 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tejdroVaE+DmvJLuZIiydGkuFxW1u1MHaoKXEp3xDjQ=;
+        b=ga5JotzhqZu2/7nRn3YhaNymKCQaLSefT42GnetwuZdLMl5f7d05WvDhY78lOQhQU7
+         qCZKISF3uueUQuTP3HVNBUXhammmAVt2dlLmeqbnOzEXbUO5hxLjv+nNfMjnRmlTJS0C
+         j+Fm8mYrMbejSC1vK6qy58srh2LhuowewDyFZ76pSps9qEvezSAd0+PekVss1XYrZsCQ
+         rkQPb6PJ+Nskmg5EG9glm2yIiZLpZEECsQ0uEUiAZIVYseeR8GspuuJpwxLu3hqll4eN
+         hSrjmz1uE/KMgkJqJ0wWi7PaWtwSxCgOQRoSxtz1WNfnvLYG/oOhV2KCHjRykLSnsTml
+         SQVw==
+X-Gm-Message-State: ANoB5pmbd28AMFvskDfrUUahZo5MMVTA4p90DsAGaieMmGXkM27SqDmZ
+        CmONKcu6ObUeB8kEdlRwpRaXvmZCogE5pdGaphMPcuWKcKVFqW6vmqxCTO29q01S+z5vRTqJ7mS
+        CPbWUrNSKfSHAPRJql6zKXw6CgL2n5e3NEmrJV7TZ
+X-Received: by 2002:a1f:4317:0:b0:3b8:b112:5edb with SMTP id q23-20020a1f4317000000b003b8b1125edbmr17704851vka.39.1669272928582;
+        Wed, 23 Nov 2022 22:55:28 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf53SDHGBIzjDGwRZ4+TwK4JBN+i5sgy+8RkRx7InaUNztD+CfDyYRDnJWkzVk4XOt/EYgkZHoLDm7IYR1p7O1Q=
+X-Received: by 2002:a1f:4317:0:b0:3b8:b112:5edb with SMTP id
+ q23-20020a1f4317000000b003b8b1125edbmr17704842vka.39.1669272928297; Wed, 23
+ Nov 2022 22:55:28 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Content-Language: en-US
-To:     Tony Lindgren <tony@atomide.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
-        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-serial@vger.kernel.org, linux-omap@vger.kernel.org,
+References: <20221124062309.2081720-1-lulu@redhat.com> <CACGkMEupFLwNFvGkU_vgDmhzY9K=b0KFC4BkWGVfO3s+GEWaKQ@mail.gmail.com>
+In-Reply-To: <CACGkMEupFLwNFvGkU_vgDmhzY9K=b0KFC4BkWGVfO3s+GEWaKQ@mail.gmail.com>
+From:   Cindy Lu <lulu@redhat.com>
+Date:   Thu, 24 Nov 2022 14:54:52 +0800
+Message-ID: <CACLfguVdprDi=KUPiBzoTQtRkL29z=e79ku+tMYC7AhpekeQKQ@mail.gmail.com>
+Subject: Re: [PATCH] vhost_vdpa: fix the crash in unmap a large memory
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     mst@redhat.com, virtualization@lists.linux-foundation.org,
         linux-kernel@vger.kernel.org
-References: <20220615062455.15490-1-tony@atomide.com>
- <Yrmfr3GfXYhclKXA@kroah.com> <Yrm1HaUtjTMcSIE+@atomide.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH v2 1/1] serial: core: Start managing serial controllers to
- enable runtime PM
-In-Reply-To: <Yrm1HaUtjTMcSIE+@atomide.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, 24 Nov 2022 at 14:34, Jason Wang <jasowang@redhat.com> wrote:
+>
+> On Thu, Nov 24, 2022 at 2:23 PM Cindy Lu <lulu@redhat.com> wrote:
+> >
+> > While testing in vIOMMU, sometimes guest will unmap very large memory,
+> > which will cause the crash.
+>
+> Would you mind to post the calltrace?
+>
+Sure, Will add this, Thanks Jason
 
-I am returning to v2, as I managed to read only v3 and only now. But 
-here was already the point below.
-
-On 27. 06. 22, 15:48, Tony Lindgren wrote:
->>> Considering the above, let's improve the serial core layer so we can
->>> manage the serial port controllers better. Let's register the controllers
->>> with the serial core layer in addition to the serial ports.
->>
->> Why can't controllers be a device as well?
-> 
-> The controllers are devices already probed by the serial port drivers.
-> What's missing is mapping the ports (as devices based on the comments
-> above) to the controller devices. I don't think we need another struct
-> device for the serial controller in addition to the serial port driver
-> device and it's child port devices.
-
-To be honest, I don't like the patch (even v3). We have uart_state which 
-I already hate and now we have another structure holding *some* other 
-info about a serial device (apart from uart_port). It's mess already and 
-hard to follow, esp. to newcomers.
-
-AFAIU, what Greg suggests would be:
-
-PCI/platform/acpi/whatever struct dev
-   -> serial controller 1 struct dev
-      -> serial port 1 struct dev (tty_port instance exists for this)
-      -> serial port 2 struct dev (tty_port instance exists for this)
-      -> ...
-   -> serial controller 2 struct dev
-      -> serial port 1 struct dev (tty_port instance exists for this)
-      -> serial port 2 struct dev (tty_port instance exists for this)
-      -> ...
-
-And you are objecting that mostly (or in all cases?), there will never 
-be "serial controller 2"?
-
-But given your description, I believe you need it anyway -- side note: 
-does really the PM layer/or you need it or would you be fine with 
-"serial port N" dev children? But provided you don't have the 
-controller, you work around it by struct serial_controller. So what's 
-actually the point of the workaround instead of sticking to proper 
-driver model? With the workaround you seem you have to implement all the 
-binding, lookup and such yourself anyway. And that renders the serial 
-even worse :P. Let's do the reverse instead.
-
-The only thing I am not sure about, whether tty_port should be struct 
-dev too -- and if it should have serial port 1 as a parent. But likely 
-so. And then with pure tty (i.e. tty_driver's, not uart_driver's), it 
-would have PCI/platform/acpi/whatever as a parent directly.
-
-In sum, the above structure makes perfect sense to me. There has only 
-been noone to do the real work yet. And having tty_port was a hard 
-prerequisite for this to happen. And that happened long time ago. All 
-this would need a lot of work initially¹⁾, but it paid off a lot in long 
-term.
-
-¹⁾I know what I am writing about -- I converted HID. After all, the core 
-was only 1000 lines patch (cf 85cdaf524b7d) + patches to convert all the 
-drivers incrementally (like 8c19a51591).
-
-thanks,
--- 
-js
-suse labs
+> > To fix this,Move the iommu_unmap to
+> > vhost_vdpa_pa_unmap/vhost_vdpa_va_unmap and only unmap the memory
+> > that saved in iotlb.
+> >
+> > Signed-off-by: Cindy Lu <lulu@redhat.com>
+>
+> Let's add a fixes tag which I believe should be the first commit that
+> introduces vhost-vDPA. And let's cc stable as well.
+>
+sure, will do.
+> > ---
+> >  drivers/vhost/vdpa.c | 10 ++++++++--
+> >  1 file changed, 8 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> > index 166044642fd5..c392979702cf 100644
+> > --- a/drivers/vhost/vdpa.c
+> > +++ b/drivers/vhost/vdpa.c
+> > @@ -692,6 +692,8 @@ static void vhost_vdpa_pa_unmap(struct vhost_vdpa *v,
+> >         struct vhost_iotlb_map *map;
+> >         struct page *page;
+> >         unsigned long pfn, pinned;
+> > +       struct vdpa_device *vdpa = v->vdpa;
+> > +       const struct vdpa_config_ops *ops = vdpa->config;
+> >
+> >         while ((map = vhost_iotlb_itree_first(iotlb, start, last)) != NULL) {
+> >                 pinned = PFN_DOWN(map->size);
+> > @@ -703,6 +705,8 @@ static void vhost_vdpa_pa_unmap(struct vhost_vdpa *v,
+> >                         unpin_user_page(page);
+> >                 }
+> >                 atomic64_sub(PFN_DOWN(map->size), &dev->mm->pinned_vm);
+> > +               if ((ops->dma_map == NULL) && (ops->set_map == NULL))
+> > +                       iommu_unmap(v->domain, map->start, map->size);
+> >                 vhost_iotlb_map_free(iotlb, map);
+> >         }
+> >  }
+> > @@ -713,11 +717,15 @@ static void vhost_vdpa_va_unmap(struct vhost_vdpa *v,
+> >  {
+> >         struct vhost_iotlb_map *map;
+> >         struct vdpa_map_file *map_file;
+> > +       struct vdpa_device *vdpa = v->vdpa;
+> > +       const struct vdpa_config_ops *ops = vdpa->config;
+> >
+> >         while ((map = vhost_iotlb_itree_first(iotlb, start, last)) != NULL) {
+> >                 map_file = (struct vdpa_map_file *)map->opaque;
+> >                 fput(map_file->file);
+> >                 kfree(map_file);
+> > +               if ((ops->dma_map == NULL) && (ops->set_map == NULL))
+> > +                       iommu_unmap(v->domain, map->start, map->size);
+>
+> I wonder if it's better to move at least dma_map() here.
+>
+> Thanks
+>
+sure, will remove this , thanks will provide a new version soon
+> >                 vhost_iotlb_map_free(iotlb, map);
+> >         }
+> >  }
+> > @@ -805,8 +813,6 @@ static void vhost_vdpa_unmap(struct vhost_vdpa *v,
+> >         } else if (ops->set_map) {
+> >                 if (!v->in_batch)
+> >                         ops->set_map(vdpa, asid, iotlb);
+> > -       } else {
+> > -               iommu_unmap(v->domain, iova, size);
+> >         }
+> >
+> >         /* If we are in the middle of batch processing, delay the free
+> > --
+> > 2.34.3
+> >
+>
 
