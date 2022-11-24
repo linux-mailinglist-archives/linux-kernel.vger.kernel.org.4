@@ -2,60 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE3163793B
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:49:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B921063793E
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:50:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbiKXMth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 07:49:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34694 "EHLO
+        id S229623AbiKXMui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 07:50:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiKXMtg (ORCPT
+        with ESMTP id S229506AbiKXMuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 07:49:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8022A420;
-        Thu, 24 Nov 2022 04:49:34 -0800 (PST)
+        Thu, 24 Nov 2022 07:50:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B158E2BC;
+        Thu, 24 Nov 2022 04:50:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B59D62111;
-        Thu, 24 Nov 2022 12:49:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E033AC433C1;
-        Thu, 24 Nov 2022 12:49:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 076CA6204E;
+        Thu, 24 Nov 2022 12:50:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59DB3C433D6;
+        Thu, 24 Nov 2022 12:50:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669294173;
-        bh=cY0zoRDBBqP3t4FgqnJqWRlOpTVPEPD40LQxnSFLXD4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AAyWKZIRRxmldjMLNe4g1TIt/dn3auYo4I2AlIXGwLzFkcsgexSJ3DuPsyn1zzhM9
-         1nVGQ3VIiLxtrLwHWqAqXPPB1bGEIPtSJg23ODXIVfh7qPGVufYazyyJnVWn3iYgub
-         EXvh9r7+eqC2Glz2aJWPzNbhxb2dD54/8YAvtLFH1T7QEe8MnDTKDuq/6E0fgHohlu
-         Wo0bdNR+0CPShkYNEnQtxKVec9ym46Gev1N+vQ3e9SjUvYVDviLyTIpGETnd7679in
-         2mKMUDknZihL4Vd3XAw/pHlDlE0c4CaXXKlQw92O9Ozt+r9cV4FL4wBwUOL4PrfwHj
-         M4du5bKF6EgrA==
-Date:   Thu, 24 Nov 2022 13:49:27 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Florian Weimer <fweimer@redhat.com>, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, tglx@linutronix.de,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
+        s=k20201202; t=1669294233;
+        bh=owQPJcgBJ5OE4TDSQWZ6ga1q1Y8+GA4UPgz3kR3CBZs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=r8p6qHo11zmmmbirwEPcToktZTwKXgo62jlbvLF0KF7rZ6PTHYdnDmdyjpQ9jhmpw
+         v7UhUUeJwtpqN+F9/mrhQ1iatWS9LrknsnRXQcqetisi2bE+SDOJj6B9I0BXuhvEHN
+         XiSJaKW9F/uJFfjqW/LsGP6HlVgFctpGhXz+XWOZcYNJgY+2z7K6Mn6NMe20qmMg8s
+         ekWG/nqZsWlBMPYt+h89KWeBRxotyXt655870ZDqrvqYu76C+yRCIF0v8M0RMRBWgq
+         LhWBCWPbZEjpf3nEsc9iknImf5g2N4xYvQDkhbng2uQJ4x4+VcOwOnUt6UxY2GDjjx
+         nS/3Ik87sf8ng==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oyBgU-008NK8-Tq;
+        Thu, 24 Nov 2022 12:50:31 +0000
+Date:   Thu, 24 Nov 2022 12:50:30 +0000
+Message-ID: <868rk0o6sp.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Will Deacon <will@kernel.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Carlos O'Donell <carlos@redhat.com>, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arnd.de>
-Subject: Re: [PATCH v6 1/3] random: add vgetrandom_alloc() syscall
-Message-ID: <20221124124927.argohuob2bslolbt@wittgenstein>
-References: <20221121152909.3414096-1-Jason@zx2c4.com>
- <20221121152909.3414096-2-Jason@zx2c4.com>
- <87v8n6lzh9.fsf@oldenburg.str.redhat.com>
- <Y37DDX5RtiGsV6MO@zx2c4.com>
- <87a64g7wks.fsf@oldenburg.str.redhat.com>
- <Y39djiBSmgXfgWJv@zx2c4.com>
- <87cz9c5z1f.fsf@oldenburg.str.redhat.com>
- <Y39iisTmUO2AaKNs@zx2c4.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y39iisTmUO2AaKNs@zx2c4.com>
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Vinod Koul <vkoul@kernel.org>, Sinan Kaya <okaya@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Shameerali Kolothum Thodi 
+        <shameerali.kolothum.thodi@huawei.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+Subject: Re: [patch V2 01/40] irqchip/irq-mvebu-icu: Fix works by chance pointer assignment
+In-Reply-To: <20221121140048.344525618@linutronix.de>
+References: <20221121135653.208611233@linutronix.de>
+        <20221121140048.344525618@linutronix.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: tglx@linutronix.de, linux-kernel@vger.kernel.org, will@kernel.org, linux-pci@vger.kernel.org, bhelgaas@google.com, lorenzo.pieralisi@arm.com, gregkh@linuxfoundation.org, jgg@mellanox.com, andrew@lunn.ch, gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com, ammarfaizi2@gnuweeb.org, robin.murphy@arm.com, lpieralisi@kernel.org, nm@ti.com, kristo@kernel.org, ssantosh@kernel.org, linux-arm-kernel@lists.infradead.org, vkoul@kernel.org, okaya@kernel.org, agross@kernel.org, andersson@kernel.org, mark.rutland@arm.com, shameerali.kolothum.thodi@huawei.com, yuzenghui@huawei.com, shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -65,83 +88,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 01:24:42PM +0100, Jason A. Donenfeld wrote:
-> Hi Florian,
+On Mon, 21 Nov 2022 14:39:29 +0000,
+Thomas Gleixner <tglx@linutronix.de> wrote:
 > 
-> On Thu, Nov 24, 2022 at 01:15:24PM +0100, Florian Weimer wrote:
-> > * Jason A. Donenfeld:
-> > 
-> > > Hi Florian,
-> > >
-> > > On Thu, Nov 24, 2022 at 06:25:39AM +0100, Florian Weimer wrote:
-> > >> * Jason A. Donenfeld:
-> > >> 
-> > >> > Hi Florian,
-> > >> >
-> > >> > On Wed, Nov 23, 2022 at 11:46:58AM +0100, Florian Weimer wrote:
-> > >> >> * Jason A. Donenfeld:
-> > >> >> 
-> > >> >> > + * The vgetrandom() function in userspace requires an opaque state, which this
-> > >> >> > + * function provides to userspace, by mapping a certain number of special pages
-> > >> >> > + * into the calling process. It takes a hint as to the number of opaque states
-> > >> >> > + * desired, and returns the number of opaque states actually allocated, the
-> > >> >> > + * size of each one in bytes, and the address of the first state.
-> > >> >> > + */
-> > >> >> > +SYSCALL_DEFINE3(vgetrandom_alloc, unsigned long __user *, num,
-> > >> >> > +		unsigned long __user *, size_per_each, unsigned int, flags)
-> > >> >> 
-> > >> >> I think you should make this __u64, so that you get a consistent
-> > >> >> userspace interface on all architectures, without the need for compat
-> > >> >> system calls.
-> > >> >
-> > >> > That would be quite unconventional. Most syscalls that take lengths do
-> > >> > so with the native register size (`unsigned long`, `size_t`), rather
-> > >> > than u64. If you can point to a recent trend away from this by
-> > >> > indicating some commits that added new syscalls with u64, I'd be happy
-> > >> > to be shown otherwise. But AFAIK, that's not the way it's done.
-> > >> 
-> > >> See clone3 and struct clone_args.
-
-For system calls that take structs as arguments we use u64 in the struct
-for proper alignment so we can extend structs without regressing old
-kernels. We have a few of those extensible struct system calls.
-
-But we don't really have a lot system calls that pass u64 as a pointer
-outside of a structure so far. Neither as register and nor as pointer
-iirc. Passing them as a register arg is problematic because of 32bit
-arches. But passing as pointer should be fine but it is indeed uncommon.
-
-> > >
-> > > The struct is one thing. But actually, clone3 takes a `size_t`:
-> > >
-> > >     SYSCALL_DEFINE2(clone3, struct clone_args __user *, uargs, size_t, size)
-> > >
-> > > I take from this that I too should use `size_t` rather than `unsigned
-> > > long.` And it doesn't seem like there's any compat clone3.
-> > 
-> > But vgetrandom_alloc does not use unsigned long, but unsigned long *.
-> > You need to look at the contents for struct clone_args for comparison.
+> Assigning a void pointer which points to a struct to two different data
+> types only works by chance if the second type is the first member of the
+> struct.
 > 
-> Ah! I see what you mean; that's a good point. The usual register
-> clearing thing isn't going to happen because these are addresses.
+> Replace this works by chance code by using the primary struct pointer.
 > 
-> I still am somewhat hesitant, though, because `size_t` is really the
-> "proper" type to be used. Maybe the compat syscall thing is just a
-> necessary evil?
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Andrew Lunn <andrew@lunn.ch>
+> Cc: Gregory Clement <gregory.clement@bootlin.com>
+> Cc: Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
 
-We try to avoid adding new compat-requiring syscalls like the plague
-usually. (At least for new syscalls that don't need to inherit behavior
-from earlier syscalls they are a revisions of.)
+Acked-by: Marc Zyngier <maz@kernel.org>
 
-> 
-> The other direction would be making this a u32, since 640k ought to be
-> enough for anybody and such, but maybe that'd be a mistake too.
+	M.
 
-I think making this a size_t is fine. We haven't traditionally used u32
-for sizes. All syscalls that pass structs versioned by size use size_t.
-So I would recommend to stick with that.
-
-Alternatively, you could also introduce a simple struct versioned by
-size for this system call similar to mount_setatt() and clone3() and so
-on. This way you don't need to worry about future extensibilty. Just a
-thought.
+-- 
+Without deviation from the norm, progress is not possible.
