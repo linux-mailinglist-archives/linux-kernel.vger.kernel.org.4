@@ -2,71 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 970DA636ECC
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 01:16:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B70C6636EDF
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 01:18:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbiKXAQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 19:16:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
+        id S229639AbiKXASf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 19:18:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiKXAQj (ORCPT
+        with ESMTP id S229787AbiKXASU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 19:16:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F756316C;
-        Wed, 23 Nov 2022 16:16:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3B62AB81042;
-        Thu, 24 Nov 2022 00:16:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0BA3C433D6;
-        Thu, 24 Nov 2022 00:16:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1669248996;
-        bh=BJpI8cu3aBF909BUlZ6G7HuETg7K4NMY9tzCOEMZO6k=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Hpvp7k/4tu+VIpOMGjSN9J1bYv4fuodJaF+83BL0aNLPG9K7g65xDvznd2Uhy9kBC
-         SDb3Shhcg3N1PxnfND9cAPuzZ11ptONKE1DqU/5599Ua6wGLo1CCFMfuvZZ2LoOpvS
-         dPQTYUEX5JrSQt3KS9kxtoh9PN7HfyMvm8TAF4ZM=
-Date:   Wed, 23 Nov 2022 16:16:33 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Li Zetao <lizetao1@huawei.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the mm tree
-Message-Id: <20221123161633.b3db4fb41510fadc9db512d4@linux-foundation.org>
-In-Reply-To: <20221124091315.56ca5235@canb.auug.org.au>
-References: <20221124091315.56ca5235@canb.auug.org.au>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Wed, 23 Nov 2022 19:18:20 -0500
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6734763CE6;
+        Wed, 23 Nov 2022 16:18:08 -0800 (PST)
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1oxzwL-0000Gk-KX; Thu, 24 Nov 2022 01:18:05 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1oxzwL-000Vk9-2M; Thu, 24 Nov 2022 01:18:05 +0100
+Subject: Re: [PATCH bpf v2] bpf: Update bpf_{g,s}etsockopt() documentation
+To:     Ji Rongfeng <SikoJobs@outlook.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     ast@kernel.org, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, joannelkoong@gmail.com, kuifeng@fb.com,
+        lorenzo@kernel.org, maximmi@nvidia.com, quentin@isovalent.com
+References: <DU0P192MB15479B86200B1216EC90E162D6099@DU0P192MB1547.EURP192.PROD.OUTLOOK.COM>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <0977584d-8aff-624d-4cf8-a6e4868958c5@iogearbox.net>
+Date:   Thu, 24 Nov 2022 01:18:04 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
+MIME-Version: 1.0
+In-Reply-To: <DU0P192MB15479B86200B1216EC90E162D6099@DU0P192MB1547.EURP192.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.7/26729/Wed Nov 23 09:18:01 2022)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Nov 2022 09:13:15 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On 11/18/22 9:18 AM, Ji Rongfeng wrote:
+> * append missing optnames to the end
+> * simplify bpf_getsockopt()'s doc
+> 
+> Signed-off-by: Ji Rongfeng <SikoJobs@outlook.com>
+> ---
+>   include/uapi/linux/bpf.h       | 20 ++++++++++++--------
+>   tools/include/uapi/linux/bpf.h | 20 ++++++++++++--------
+>   2 files changed, 24 insertions(+), 16 deletions(-)
+> 
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 51b9aa640ad2..14f29d95ea71 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -2576,14 +2576,19 @@ union bpf_attr {
+>    * 		* **SOL_SOCKET**, which supports the following *optname*\ s:
+>    * 		  **SO_RCVBUF**, **SO_SNDBUF**, **SO_MAX_PACING_RATE**,
+>    * 		  **SO_PRIORITY**, **SO_RCVLOWAT**, **SO_MARK**,
+> - * 		  **SO_BINDTODEVICE**, **SO_KEEPALIVE**.
+> + * 		  **SO_BINDTODEVICE**, **SO_KEEPALIVE**, **SO_REUSEADDR**,
+> + * 		  **SO_REUSEPORT**, **SO_BINDTOIFINDEX**, **SO_TXREHASH**.
+>    * 		* **IPPROTO_TCP**, which supports the following *optname*\ s:
+>    * 		  **TCP_CONGESTION**, **TCP_BPF_IW**,
+>    * 		  **TCP_BPF_SNDCWND_CLAMP**, **TCP_SAVE_SYN**,
+>    * 		  **TCP_KEEPIDLE**, **TCP_KEEPINTVL**, **TCP_KEEPCNT**,
+> - *		  **TCP_SYNCNT**, **TCP_USER_TIMEOUT**, **TCP_NOTSENT_LOWAT**.
+> + * 		  **TCP_SYNCNT**, **TCP_USER_TIMEOUT**, **TCP_NOTSENT_LOWAT**,
+> + * 		  **TCP_NODELAY**, **TCP_MAXSEG**, **TCP_WINDOW_CLAMP**,
+> + * 		  **TCP_THIN_LINEAR_TIMEOUTS**, **TCP_BPF_DELACK_MAX**,
+> + * 		  **TCP_BPF_RTO_MIN**.
+>    * 		* **IPPROTO_IP**, which supports *optname* **IP_TOS**.
+> - * 		* **IPPROTO_IPV6**, which supports *optname* **IPV6_TCLASS**.
+> + * 		* **IPPROTO_IPV6**, which supports the following *optname*\ s:
+> + * 		  **IPV6_TCLASS**, **IPV6_AUTOFLOWLABEL**.
+>    * 	Return
+>    * 		0 on success, or a negative error in case of failure.
+>    *
+> @@ -2800,12 +2805,11 @@ union bpf_attr {
+>    * 		  and **BPF_CGROUP_INET6_CONNECT**.
+>    *
+>    * 		This helper actually implements a subset of **getsockopt()**.
+> - * 		It supports the following *level*\ s:
+> + * 		It supports the same set of *optname*\ s that supported by
 
-> Hi all,
-> 
-> Commit
-> 
->   55847dd3e622 ("ocfs2: fix memory leak in ocfs2_mount_volume()")
-> 
-> is missing a Signed-off-by from its author.
-> 
-> Another one routed via a mailing list :-(
-> 
-> Maybe we need something like "if the From: address includes ' via '
-> and there is a Reply-To: header, then use that address as the author"?
+nit: that is supported by
 
-The ocfs2-devel list is a nightmanre.
+> + * 		**bpf_setsockopt**\ () helper with a few exceptions:
+>    *
+> - * 		* **IPPROTO_TCP**, which supports *optname*
+> - * 		  **TCP_CONGESTION**.
+> - * 		* **IPPROTO_IP**, which supports *optname* **IP_TOS**.
+> - * 		* **IPPROTO_IPV6**, which supports *optname* **IPV6_TCLASS**.
+> + * 		* **bpf_setsockopt**\ () helper only: **TCP_BPF_***.
+> + * 		* **bpf_getsockopt**\ () helper only: **TCP_SAVED_SYNC**.
 
-I added a check for "^From:.* via " to my script - that should prevent.
+I think from a user PoV the above is a bit hard to follow, maybe take Martin's
+earlier feedback into account and add a proper sentence; it will be much easier
+to understand.
+
+>    * 	Return
+>    * 		0 on success, or a negative error in case of failure.
+>    *
+[...]
