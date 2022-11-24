@@ -2,149 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9C2636F3F
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 01:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B889E636F13
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 01:48:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbiKXAs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 19:48:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42872 "EHLO
+        id S229514AbiKXAsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 19:48:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbiKXAs3 (ORCPT
+        with ESMTP id S229436AbiKXAsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 19:48:29 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C70ED723;
-        Wed, 23 Nov 2022 16:48:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669250896; x=1700786896;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=aTDswLwxnrT1m4Bb2RWu3He8hrN2rQUrmQl5QgIYb3c=;
-  b=iKJvu7fLirYeMGa5TtlgVuOTLcV4M7muj9TK0i22nuHTcHEPlqu56yJ9
-   u4582E2Wxt036y7+5ae4JiA5q0EHfPab8eV5m2VC8LIuz5i23Q/X6qcif
-   3aEoE3pzLegAnLS0VBT2JRyBvv07B8IFBt02R/NuYvjxYcwDnI/+1AGvK
-   raRoBTv3nrmZRm1u02fwNVqfWMaKcd3+2mkcUv+FADP6YtYK6MkA8zWGh
-   h4//lw3RdXS3WjRvYACG1Ke1CzP45CfL/B70Satxy9/kq36+4KwrpCwGW
-   wGa3POT9KcvlCH6Hhk/dMIvVG/H8nylanoNGSJ+7JxwkHL2MxT3b8TIZV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="293892611"
-X-IronPort-AV: E=Sophos;i="5.96,189,1665471600"; 
-   d="scan'208";a="293892611"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 16:48:16 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="673057198"
-X-IronPort-AV: E=Sophos;i="5.96,189,1665471600"; 
-   d="scan'208";a="673057198"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 16:48:11 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-Subject: Re: [PATCH v7 10/20] x86/virt/tdx: Use all system memory when
- initializing TDX module as TDX memory
-References: <cover.1668988357.git.kai.huang@intel.com>
-        <9b545148275b14a8c7edef1157f8ec44dc8116ee.1668988357.git.kai.huang@intel.com>
-        <87cz9gvpej.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <a6ecf5f1a1202f428961a5f8422d5fff61ce1d9a.camel@intel.com>
-        <87sfibpxda.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <973ca04b3323d28a31dbc1cfeb52bd10bd9d9bf3.camel@intel.com>
-Date:   Thu, 24 Nov 2022 08:47:07 +0800
-In-Reply-To: <973ca04b3323d28a31dbc1cfeb52bd10bd9d9bf3.camel@intel.com> (Kai
-        Huang's message of "Tue, 22 Nov 2022 17:16:11 +0800")
-Message-ID: <87o7sxp4ac.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 23 Nov 2022 19:48:07 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB13A49B7B
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 16:48:05 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id l39-20020a05600c1d2700b003cf93c8156dso169536wms.4
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 16:48:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6YPFVF1eY9/ODmDT3NI20gj5TL4wvhdUoa/GdSB6uN4=;
+        b=xImOnWP2Who9GsW9wL7MuY5SPWwHsdXGlbna50GyteErWTOSAbyGsn3tezjS4/ck90
+         GnaFwjmMSkvh34UHnZK1NWBPojYS1lPgt9nxKR3hONxSTCLTxARB+HKMNnA1dL7cvDIZ
+         O+j95kq753YJ8pW28FA4SFvagHOk+MRGVu26bVoyCTbKMixaNh4066PbLD6bv2rtKPwv
+         fqbk2GOQzbxwEwSIl/QYo3vbhTHzPf4AvvPYgpwuoc98f/+fuQD1d1m0gXO5EbZ1mLqO
+         Hkg8q7oNlvfN+f4gwEZ2CLW8/ZOz5+DxRgzHdk1B1xcg6h1ETVarRldUuUi/XgPpLHJt
+         3SxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6YPFVF1eY9/ODmDT3NI20gj5TL4wvhdUoa/GdSB6uN4=;
+        b=dZhHk0nwTIEqqyu3SFMRg5XVmX8nmkKg7pJK8N7JWWHIR+o+t4UFPCbo2H/qQck+cM
+         qSW2GnD2f9J+TwwNCDRELlxs4i7UoYyRrkD5ThdPBemmGP3zc/XOquI3/iwd2Kg3INY4
+         3NsjLzGQ3CaCKA6SX5qM9k7tPooaiHcAvZfPVORRteraSUeGjL4dLQ1KB3dUghFdLXQ9
+         x/cojNuKb8BasMskRveJYwN7RDEjRlRhXP6I+HU+ZYX8bw7948dwP6QzZ95XEDIwLUL5
+         dTO0v+7PI3pu+P+HeyZysMohHqaJAQgO6/iVbmI46TnESDE6G0F/vKj8IP3pnBLIFELG
+         fr5w==
+X-Gm-Message-State: ANoB5pkaPzPcA6mFlavxqTQkEXeJlo/qgTZvDrZK4tKiynCyPOw6pc+D
+        jOquo7X3xAa3Svazx74R+OWXS562laGxgg==
+X-Google-Smtp-Source: AA0mqf6/zD7eXqbSH9mq7KMYXonPKLW5ymPGsayC+jRgJPCp6lQRRjSgVHkc8u7NgQMmKGrIxMBHKA==
+X-Received: by 2002:a7b:cb83:0:b0:3cf:96da:3846 with SMTP id m3-20020a7bcb83000000b003cf96da3846mr24532549wmi.10.1669250884374;
+        Wed, 23 Nov 2022 16:48:04 -0800 (PST)
+Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id n38-20020a05600c3ba600b003c6bbe910fdsm5245076wms.9.2022.11.23.16.48.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 16:48:03 -0800 (PST)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
+        dmitry.baryshkov@linaro.org, sean@poorly.run, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org, dianders@chromium.org,
+        david@ixit.cz, krzysztof.kozlowski+dt@linaro.org,
+        swboyd@chromium.org, konrad.dybcio@somainline.org,
+        agross@kernel.org, andersson@kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        bryan.odonoghue@linaro.org
+Subject: [PATCH v3 00/18] mdss-dsi-ctrl binding and dts fixes
+Date:   Thu, 24 Nov 2022 00:47:43 +0000
+Message-Id: <20221124004801.361232-1-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Huang, Kai" <kai.huang@intel.com> writes:
+V3:
+- Moves declaration of mdss-dsi-ctrl into compat string declaration
+  patch - Krzysztof, Dmitry
+- Renames qcm-2290 compat string to agreed compat "qcom,socname-dsi-ctrl"
+  Dmirty, Krzysztof
+- Adds empty line after if clause in yaml control flow section - Dmirty
+- Adds Rb/Ack - Krzysztof, Dmitry, Doug, David
+- vdd*
+  Looking into this some more, I don't believe vdd, vdda, vddio ought to be
+  required properties. Its up to the PCB manufacturer and the panel in-use
+  how that panel is powered. Powering the panel is not something that
+  even necessarily needs to be done from the dsi-ctrl driver.
+  Originally marking vdd* as required in the .txt was an error, its not a
+  SoC level dtsi requirement.
+- clock-names
+  Rather than replicate the clock-name in each if block I listed them with
+  a specific description from a similar reference in usb/qcom,dwc3.yaml.
+ 
+https://lore.kernel.org/linux-arm-msm/eb80681f-2e0b-605f-0444-ec65562f74b8@linaro.org/
 
->> > > > +/*
->> > > > + * Add all memblock memory regions to the @tdx_memlist as TDX memory.
->> > > > + * Must be called when get_online_mems() is called by the caller.
->> > > > + */
->> > > > +static int build_tdx_memory(void)
->> > > > +{
->> > > > +   unsigned long start_pfn, end_pfn;
->> > > > +   int i, nid, ret;
->> > > > +
->> > > > +   for_each_mem_pfn_range(i, MAX_NUMNODES, &start_pfn, &end_pfn, &nid) {
->> > > > +           /*
->> > > > +            * The first 1MB may not be reported as TDX convertible
->> > > > +            * memory.  Manually exclude them as TDX memory.
->> > > > +            *
->> > > > +            * This is fine as the first 1MB is already reserved in
->> > > > +            * reserve_real_mode() and won't end up to ZONE_DMA as
->> > > > +            * free page anyway.
->> > > > +            */
->> > > > +           start_pfn = max(start_pfn, (unsigned long)SZ_1M >> PAGE_SHIFT);
->> > > > +           if (start_pfn >= end_pfn)
->> > > > +                   continue;
->> > >
->> > > How about check whether first 1MB is reserved instead of depending on
->> > > the corresponding code isn't changed?  Via for_each_reserved_mem_range()?
->> >
->> > IIUC, some reserved memory can be freed to page allocator directly, i.e. kernel
->> > init code/data.  I feel it's not safe to just treat reserved memory will never
->> > be in page allocator.  Otherwise we have for_each_free_mem_range() can use.
->>
->> Yes.  memblock reverse information isn't perfect.  But I still think
->> that it is still better than just assumption to check whether the frist
->> 1MB is reserved in memblock.  Or, we can check whether the pages of the
->> first 1MB is reversed via checking struct page directly?
->>
->
-> Sorry I am a little bit confused what you want to achieve here.  Do you want to
-> make some sanity check to make sure the first 1MB is indeed not in the page
-> allocator?
->
-> IIUC, it is indeed true.  Please see the comment of calling reserve_real_mode()
-> in setup_arch().  Also please see efi_free_boot_services(), which doesn't free
-> the boot service if it is below 1MB.
->
-> Also, my understanding is kernel's intention is to always reserve the first 1MB:
->
->                 /*
->                  * Don't free memory under 1M for two reasons:
->                  * - BIOS might clobber it
->                  * - Crash kernel needs it to be reserved
->                  */
->
-> So if any page in first 1MB ended up to the page allocator, it should be the
-> kernel bug which is not related to TDX, correct?
+V2:
+https://www.spinics.net/lists/linux-arm-msm/msg116326.html
 
-I suggest to add some code to verify this.  It's possible for the code
-to be changed in the future (although possibility is low).  And TDX may
-not be changed at the same time.  Then the verifying code here can catch
-that.  So, we can make change accordingly.
+- Moves the DSI PHY changes to a different later series.
+  There are enough dsi-controller-main changes to justify its own
+  standalone series.
 
-Best Regards,
-Huang, Ying
+- The original phy-name binding change given discussion with Rob and
+  Krzysztof became its own standalone series that has since been merged.
+  https://www.mail-archive.com/dri-devel@lists.freedesktop.org/msg403214.html
+
+- Retains the drop of power-domain from yaml as a required property.
+  I dug into the available dtsi. The apq8064 doesn't appear to have any
+  GDSC which can be attached as a power-domain, which means the
+  power-domain requirement is not universal across the various silicon
+  versions.
+
+- Adds Dmitry's RB to power-domain drop
+
+- For the clock declarations I've
+  * I noticed that the simple change I had worked for msm8939 but
+    subsquently broke other dtsi which drove a bigger change to document
+    the clocks on a per compatible basis.
+  * Added compat strings in yaml.
+  * Moved the allOf down later in the file to acomodate the if/then.
+  * Number of clocks validated on a per compatible basis
+  * The driver code which doesn't care about the number of clocks
+    can still operate on the mdss-dsi-ctrl compat but the dts checks will
+    validate against the compat string and yaml.
+
+- vdd descriptions
+  Took the previous text I missed from the .txt file - Krzysztof, Dmitry
+  Adds vdd, vdda and vddio to the required list. This exposes warnings in
+  existing dtsi but the previous .txt declared these regulators as
+  required. - Krzysztof
+ 
+V1:
+This series fixes up a number of dtbs checks which are being flagged adding
+in the msm8939 dtsi.
+
+
+When converting from .txt to .yaml a number of the parameters for the older
+msm8916 silicon were not transmitted into the yaml.
+
+Adding in the msm8939 which is a near 1:1 copy of the msm8916 in terms of
+dtsi triggers a rake of dtbs checks as a result.
+
+https://www.mail-archive.com/dri-devel@lists.freedesktop.org/msg403211.html
+
+Bryan O'Donoghue (18):
+  dt-bindings: msm: dsi-controller-main: Fix operating-points-v2
+    constraint
+  dt-bindings: msm: dsi-controller-main: Fix power-domain constraint
+  dt-bindings: msm: dsi-controller-main: Rename qcom,dsi-ctrl-6g-qcm2290
+    to qcom,qcm2290-dsi-ctrl
+  dt-bindings: msm: dsi-controller-main: Add compatible strings for
+    every current SoC
+  dt-bindings: msm: dsi-controller-main: Document clocks on a per
+    compatible basis
+  dt-bindings: msm: dsi-controller-main: Fix description of core clock
+  dt-bindings: msm: dsi-controller-main: Fix clock declarations
+  dt-bindings: msm: dsi-controller-main: Add vdd* descriptions back in
+  ARM: dts: qcom: apq8064: add compat qcom,apq8064-dsi-ctrl
+  ARM: dts: qcom: msm8974: Add compat qcom,msm8974-dsi-ctrl
+  arm64: dts: qcom: msm8916: Add compat qcom,msm8916-dsi-ctrl
+  arm64: dts: qcom: msm8996: Add compat qcom,msm8996-dsi-ctrl
+  arm64: dts: qcom: sc7180: Add compat qcom,sc7180-dsi-ctrl
+  arm64: dts: qcom: sc7280: Add compat qcom,sc7280-dsi-ctrl
+  arm64: dts: qcom: sdm630: Add compat qcom,sdm630-dsi-ctrl
+  arm64: dts: qcom: sdm660: Add compat qcom,sdm660-dsi-ctrl
+  arm64: dts: qcom: sdm845: Add compat qcom,sdm845-dsi-ctrl
+  arm64: dts: qcom: sm8250: Add compat qcom,sm8250-dsi-ctrl
+
+ .../display/msm/dsi-controller-main.yaml      | 205 ++++++++++++++++--
+ arch/arm/boot/dts/qcom-apq8064.dtsi           |   3 +-
+ arch/arm/boot/dts/qcom-msm8974.dtsi           |   3 +-
+ arch/arm64/boot/dts/qcom/msm8916.dtsi         |   3 +-
+ arch/arm64/boot/dts/qcom/msm8996.dtsi         |   6 +-
+ arch/arm64/boot/dts/qcom/sc7180.dtsi          |   3 +-
+ arch/arm64/boot/dts/qcom/sc7280.dtsi          |   3 +-
+ arch/arm64/boot/dts/qcom/sdm630.dtsi          |   3 +-
+ arch/arm64/boot/dts/qcom/sdm660.dtsi          |   3 +-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |   6 +-
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          |   6 +-
+ 11 files changed, 208 insertions(+), 36 deletions(-)
+
+-- 
+2.38.1
+
