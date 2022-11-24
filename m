@@ -2,192 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D06463724F
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 07:22:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED5AA637252
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 07:23:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbiKXGWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 01:22:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57894 "EHLO
+        id S229491AbiKXGXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 01:23:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiKXGWW (ORCPT
+        with ESMTP id S229463AbiKXGXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 01:22:22 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2C793CD7;
-        Wed, 23 Nov 2022 22:22:17 -0800 (PST)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NHnvS00dqzHvsZ;
-        Thu, 24 Nov 2022 14:21:39 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 24 Nov 2022 14:22:17 +0800
-Received: from thunder-town.china.huawei.com (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 24 Nov 2022 14:22:16 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        "Josh Triplett" <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        <linux-next@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: [PATCH v3] doc: Fix htmldocs build warnings of stallwarn.rst
-Date:   Thu, 24 Nov 2022 14:22:03 +0800
-Message-ID: <20221124062204.1932-1-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.37.3.windows.1
+        Thu, 24 Nov 2022 01:23:04 -0500
+Received: from mx.msync.work (mx.msync.work [185.250.0.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B683B27CDF;
+        Wed, 23 Nov 2022 22:22:56 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 647292AB88;
+        Thu, 24 Nov 2022 06:22:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lexina.in; s=dkim;
+        t=1669270976; h=from:subject:date:message-id:to:mime-version:content-type:
+         content-transfer-encoding:content-language:in-reply-to:references;
+        bh=Jtkb8FsWa/xNXgK1fxfSzbSkqlyxfm+DrIrqY+1P7xA=;
+        b=excDdHXccoor+/ly4WQAAdddOMnCppJSjYZ+UA68KkBk4+F+Esr1QzonlhXwo3wqbMPIXM
+        GruVSUr6XCcxMvp6Efwj8YRh8iaurZhlF3GgaSCTHF/n7gChplhO3nykIx/s0+5buDsGs+
+        F7MARCewOgtRQZerb7SnMwfLfsxYEQKoKfHATh+4f312E6cLn+Xcmyk1HI8dDGnr6Yd4u4
+        FZU1D+GKOg+JWS9J0cqkf/qLNUObfdUcIXY5xgHsi0IyQ9drhM1aOsJQLCMaPjHLep+S69
+        KLENDe2wfgvLG8MeBRxYY3GsMn6nivs0vSpt19OGGG4chbWUwQxOrGyo5m8QDw==
+Message-ID: <c31cc8a3-8adc-3e93-f6fe-73cd7482429d@lexina.in>
+Date:   Thu, 24 Nov 2022 09:22:52 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 0/4] arm64: amlogic: mmc: meson-gx: Add core, tx, rx
+Content-Language: en-MW
+To:     Jerome Brunet <jbrunet@baylibre.com>, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+References: <20221110150035.2824580-1-adeep@lexina.in>
+ <1jk03y37vs.fsf@starbuckisacylon.baylibre.com>
+From:   Vyacheslav <adeep@lexina.in>
+In-Reply-To: <1jk03y37vs.fsf@starbuckisacylon.baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Documentation/RCU/stallwarn.rst:
-401: WARNING: Literal block expected; none found.
-428: WARNING: Literal block expected; none found.
-445: WARNING: Literal block expected; none found.
-459: WARNING: Literal block expected; none found.
-468: WARNING: Literal block expected; none found.
+Hi!
+Thanks for reply. Sorry for delay.
 
-The literal block need to be indented, so add two spaces to each line.
 
-In addition, ':', which is used as a boundary in the literal block, is
-replaced by '|'.
+13.11.2022 23:06, Jerome Brunet wrote:
+> 
+> On Thu 10 Nov 2022 at 18:00, Vyacheslav Bocharov <adeep@lexina.in> wrote:
+> 
+>> The mmc driver use the same phase values (core - 180, tx/rx - 0) for all
+>> meson64 platforms. However, some platforms (and even some boards) require
+>> different values
+> 
+> Where does it stops ? Trying to solve the instabilities of this
+> IP/driver by tweaking the phase has proven to be dead-end.
 
-Link: https://lore.kernel.org/linux-next/20221123163255.48653674@canb.auug.org.au/
-Fixes: 3d2788ba4573 ("doc: Document CONFIG_RCU_CPU_STALL_CPUTIME=y stall information")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
----
- Documentation/RCU/stallwarn.rst | 56 ++++++++++++++++++---------------
- 1 file changed, 30 insertions(+), 26 deletions(-)
+As a result, there is now a stalemate and various real-world operating 
+system projects use patches to change clock phases.
 
-v2 --> v3:
-1. Add "Link:", "Fixes:", "Reported-by:".
-2. Remove a orphaned pipe (|).
-3. Change ". ::" to "::"
 
-v1 --> v2:
-For the case that both colons need to be deleted, change "::" to expanded
-form or partially minimized form.
+> 
+> Soon, you'll end up tweaking these settings depending on the on
+> particular version of the device because it ships with a different eMMC
+> manufacturer. Then comes multi sourcing, sdio modules, sdcards ...
+> 
+>> (axg for example use 270 degree for core clock).
+> 
+> Where ? Upstream linux does not
 
-diff --git a/Documentation/RCU/stallwarn.rst b/Documentation/RCU/stallwarn.rst
-index c1e92dfef40d501..ca7b7cd806a16c9 100644
---- a/Documentation/RCU/stallwarn.rst
-+++ b/Documentation/RCU/stallwarn.rst
-@@ -398,9 +398,9 @@ In kernels built with CONFIG_RCU_CPU_STALL_CPUTIME=y or booted with
- rcupdate.rcu_cpu_stall_cputime=1, the following additional information
- is supplied with each RCU CPU stall warning::
- 
--rcu:          hardirqs   softirqs   csw/system
--rcu:  number:      624         45            0
--rcu: cputime:       69          1         2425   ==> 2500(ms)
-+  rcu:          hardirqs   softirqs   csw/system
-+  rcu:  number:      624         45            0
-+  rcu: cputime:       69          1         2425   ==> 2500(ms)
- 
- These statistics are collected during the sampling period. The values
- in row "number:" are the number of hard interrupts, number of soft
-@@ -412,22 +412,24 @@ in milliseconds.  Because user-mode tasks normally do not cause RCU CPU
- stalls, these tasks are typically kernel tasks, which is why only the
- system CPU time are considered.
- 
--The sampling period is shown as follows:
--:<------------first timeout---------->:<-----second timeout----->:
--:<--half timeout-->:<--half timeout-->:                          :
--:                  :<--first period-->:                          :
--:                  :<-----------second sampling period---------->:
--:                  :                  :                          :
--:          snapshot time point    1st-stall                  2nd-stall
-+The sampling period is shown as follows::
- 
-+  |<------------first timeout---------->|<-----second timeout----->|
-+  |<--half timeout-->|<--half timeout-->|                          |
-+  |                  |<--first period-->|                          |
-+  |                  |<-----------second sampling period---------->|
-+  |                  |                  |                          |
-+             snapshot time point    1st-stall                  2nd-stall
- 
- The following describes four typical scenarios:
- 
--1. A CPU looping with interrupts disabled.::
-+1. A CPU looping with interrupts disabled.
- 
--   rcu:          hardirqs   softirqs   csw/system
--   rcu:  number:        0          0            0
--   rcu: cputime:        0          0            0   ==> 2500(ms)
-+   ::
-+
-+     rcu:          hardirqs   softirqs   csw/system
-+     rcu:  number:        0          0            0
-+     rcu: cputime:        0          0            0   ==> 2500(ms)
- 
-    Because interrupts have been disabled throughout the measurement
-    interval, there are no interrupts and no context switches.
-@@ -440,11 +442,11 @@ The following describes four typical scenarios:
- 
-    This is similar to the previous example, but with non-zero number of
-    and CPU time consumed by hard interrupts, along with non-zero CPU
--   time consumed by in-kernel execution.::
-+   time consumed by in-kernel execution::
- 
--   rcu:          hardirqs   softirqs   csw/system
--   rcu:  number:      624          0            0
--   rcu: cputime:       49          0         2446   ==> 2500(ms)
-+     rcu:          hardirqs   softirqs   csw/system
-+     rcu:  number:      624          0            0
-+     rcu: cputime:       49          0         2446   ==> 2500(ms)
- 
-    The fact that there are zero softirqs gives a hint that these were
-    disabled, perhaps via local_bh_disable().  It is of course possible
-@@ -454,20 +456,22 @@ The following describes four typical scenarios:
- 
- 3. A CPU looping with preemption disabled.
- 
--   Here, only the number of context switches is zero.::
-+   Here, only the number of context switches is zero::
- 
--   rcu:          hardirqs   softirqs   csw/system
--   rcu:  number:      624         45            0
--   rcu: cputime:       69          1         2425   ==> 2500(ms)
-+     rcu:          hardirqs   softirqs   csw/system
-+     rcu:  number:      624         45            0
-+     rcu: cputime:       69          1         2425   ==> 2500(ms)
- 
-    This situation hints that the stalled CPU was looping with preemption
-    disabled.
- 
--4. No looping, but massive hard and soft interrupts.::
-+4. No looping, but massive hard and soft interrupts.
-+
-+   ::
- 
--   rcu:          hardirqs   softirqs   csw/system
--   rcu:  number:       xx         xx            0
--   rcu: cputime:       xx         xx            0   ==> 2500(ms)
-+     rcu:          hardirqs   softirqs   csw/system
-+     rcu:  number:       xx         xx            0
-+     rcu: cputime:       xx         xx            0   ==> 2500(ms)
- 
-    Here, the number and CPU time of hard interrupts are all non-zero,
-    but the number of context switches and the in-kernel CPU time consumed
+Armbian/Home Assistant OS use core phase 270 for axg/g12/sm1 boards 
+(patches by Neil). On JetHub devices phase 270 is need with eMMC more 
+than 16Gb size.
+
+> 
+> u-boot does something of the sort for sm1 and I'm not entirely sure this
+> appropriate either.
+
+U-boot in Armbian/HAOS use same phase 270 or/and force low speed mode 
+for eMMC (limit clock freq).
+
+> 
+> IMO, this setting has more to do with the mode the mmc device is
+> operating at - not the platform or board.
+> 
+> We had some discussions with the HW designers at AML and they recommended
+> to keep a phase shift of 180 between the Core and Tx. They also
+> recommended to leave Rx alone (actually, starting from the v3, the Rx
+> field has no effect. It is not even wired to actual HW)
+
+I do not have access to AML engineers :)
+I can only test settings on several different boards. And it seems that 
+the phase settings depend not only on the board layout, but also on the 
+eMMC chip used. What to do about this (if not to use the magic of the 
+driver from AML) other than providing the ability to change the value in 
+devicetree for each board I can't think of yet.
+
+> 
+> Funnily, that is not what the vendor driver does. It also does A LOT of
+> extremely complex and 'debatable' things, which mostly mask how much the
+> driver is unstable.
+
+As far as I understand they just go through all possible values until 
+the first successful attempt to initialize the device.
+What do you think of the idea to implement such a variant for the 
+meson-gx driver?
+
+> 
+> With the upstream drivers, modes up to SDR50 and HS200 have been stable
+> lately. SDR104 and DDR modes (DDR52 or HS400) remains problematic.
+
+I have troubles with HS200, for example:
+Card Type [CARD_TYPE: 0x57]
+  HS200 Single Data Rate eMMC @200MHz 1.8VI/O
+  HS Dual Data Rate eMMC @52MHz 1.8V or 3VI/O
+  HS eMMC @52MHz - at rated device voltage(s)
+  HS eMMC @26MHz - at rated device voltage(s)
+
+> 
+> Changing the settings further would require more discussion with AML.
+> Blindly poking these value until you get something stablish for 1
+> particular use case is a recipe for disaster.
+
+I assumed the idea that the dts are edited by the maintainers or the 
+board developers and will be able to choose the values themselves.
+
+
+> 
+>> This patch
+>> transfers the values from the code to the variables in the device-tree files.
+>> If not set in dts, use old default values.
+> 
+> I think going that way is opening a big can of worms.
+> I don't think this should be applied
+> 
+>>
+>> Vyacheslav Bocharov (4):
+>>    arm64: amlogic: mmc: meson-gx: Add core, tx, rx eMMC/SD/SDIO phase
+>>      clock settings from devicetree data
+>>    arm64: amlogic: mmc: meson-gx: Add dts binding include for core, tx,
+>>      rx eMMC/SD/SDIO phase clock settings from devicetree data
+>>    arm64: amlogic: dts: meson: update meson-axg device-tree for new core,
+>>      tx, rx phase clock settings.
+>>    arm64: dts: docs: Update mmc meson-gx documentation for new config
+>>      option amlogic,mmc-phase
+>>
+>>   .../bindings/mmc/amlogic,meson-gx.txt         |  7 ++++
+>>   arch/arm64/boot/dts/amlogic/meson-axg.dtsi    |  3 ++
+>>   drivers/mmc/host/meson-gx-mmc.c               | 18 +++++++---
+>>   include/dt-bindings/mmc/meson-gx-mmc.h        | 35 +++++++++++++++++++
+>>   4 files changed, 58 insertions(+), 5 deletions(-)
+>>   create mode 100644 include/dt-bindings/mmc/meson-gx-mmc.h
+> 
+> 
+> _______________________________________________
+> linux-amlogic mailing list
+> linux-amlogic@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-amlogic
+
 -- 
-2.25.1
-
+Vyacheslav Bocharov
