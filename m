@@ -2,90 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E73ED637827
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 12:55:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F20B637824
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 12:55:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbiKXLzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 06:55:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33704 "EHLO
+        id S229891AbiKXLzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 06:55:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbiKXLz3 (ORCPT
+        with ESMTP id S229661AbiKXLzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 06:55:29 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F6EBC5B62;
-        Thu, 24 Nov 2022 03:55:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669290928; x=1700826928;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=55nH4LmzDK+5WNB9MoXsKRknvVrM2IQDWXw3Al5UU80=;
-  b=EDy6qYR8OiqLFY9zK45oL63khFfMVHFVedyC8cO4xaHg3udrXdxyeSU8
-   xQSjz1mnID1Q+wNM3flz+a9zk88mUh5AbRPCKaiUbJ0on0Ly1Y7YHlEsn
-   IyhBMbGj2MW0eaMmmL1f5HRQrWjvV0BZ1ATDNrHLDQf//H0TQu4blVmQy
-   XGS8N3UGxbigQNr/UFk7C9F4DZiAdJLCdxknozEXVNb+2y8Sj6/T+XCpP
-   5YnRIruMCKnwRccuUvbGkVFe9ypLrzBoXFO0YmUuS9g1XbgXrn8kLHs40
-   wiUt1QWhRWIU4BR2Mz8S9yP94mmEGBWIyCeQWt6Y0hkau1sA0u4LsEp+R
-   g==;
-X-IronPort-AV: E=Sophos;i="5.96,190,1665471600"; 
-   d="scan'208";a="124940786"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Nov 2022 04:55:27 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Thu, 24 Nov 2022 04:55:23 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Thu, 24 Nov 2022 04:55:20 -0700
-Date:   Thu, 24 Nov 2022 11:55:01 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Samuel Ortiz <sameo@rivosinc.com>
-CC:     "Hongren (Zenithal) Zheng" <i@zenithal.me>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <anup@brainfault.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>, <linux-mm@kvack.org>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-api@vger.kernel.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        <linux-man@vger.kernel.org>, Jiatai He <jiatai2021@iscas.ac.cn>,
-        Heiko Stuebner <heiko@sntech.de>
-Subject: Re: [PATCH v3 2/3] RISC-V: uapi: add HWCAP for Bitmanip/Scalar Crypto
-Message-ID: <Y39blUaC/jHiOYCk@wendy>
-References: <YqYz+xDsXr/tNaNu@Sun>
- <YqY0i22SdbHjB/MX@Sun>
- <Y385rS/5zDaDJ3Os@vermeer>
- <Y39AXYPFzSiBngwI@wendy>
- <Y39Lwp4rQc3Qkl0i@vermeer>
+        Thu, 24 Nov 2022 06:55:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6163CC5B67
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 03:55:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F3EC4620F6
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 11:55:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF5F2C433C1;
+        Thu, 24 Nov 2022 11:55:05 +0000 (UTC)
+Date:   Thu, 24 Nov 2022 11:55:02 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Sibi Sankar <quic_sibis@quicinc.com>
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>, amit.pundir@linaro.org,
+        andersson@kernel.org, sumit.semwal@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Revert "arm64: dma: Drop cache invalidation from
+ arch_dma_prep_coherent()"
+Message-ID: <Y39blgEueyegkz6C@arm.com>
+References: <20221114110329.68413-1-manivannan.sadhasivam@linaro.org>
+ <20221114141109.GG30263@willie-the-truck>
+ <1659929b-1372-cea6-5840-c58369a4252d@arm.com>
+ <Y3J8+O7Y3f3onH0P@arm.com>
+ <20221118105402.GA184726@thinkpad>
+ <20221118123349.GC3697@willie-the-truck>
+ <20221121064224.GB11945@thinkpad>
+ <018517b8-0ae0-54f5-f342-dcf1b3330a13@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y39Lwp4rQc3Qkl0i@vermeer>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <018517b8-0ae0-54f5-f342-dcf1b3330a13@quicinc.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 11:47:30AM +0100, Samuel Ortiz wrote:
+On Mon, Nov 21, 2022 at 03:42:27PM +0530, Sibi Sankar wrote:
+> On 11/21/22 12:12, Manivannan Sadhasivam wrote:
+> > On Fri, Nov 18, 2022 at 12:33:49PM +0000, Will Deacon wrote:
+> > > On Fri, Nov 18, 2022 at 04:24:02PM +0530, Manivannan Sadhasivam wrote:
+> > > > On Mon, Nov 14, 2022 at 05:38:00PM +0000, Catalin Marinas wrote:
+> > > > > On Mon, Nov 14, 2022 at 03:14:21PM +0000, Robin Murphy wrote:
+> > > > > > Clearly that driver is completely broken though. If the DMA allocation came
+> > > > > > from a no-map carveout vma_dma_alloc_from_dev_coherent() then the vmap()
+> > > > > > shenanigans wouldn't work, so if it backed by struct pages then the whole
+> > > > > > dance is still pointless because *a cacheable linear mapping exists*, and
+> > > > > > it's just relying on the reduced chance that anything's going to re-fetch
+> > > > > > the linear map address after those pages have been allocated, exactly as I
+> > > > > > called out previously[1].
+> > > > > 
+> > > > > So I guess a DMA pool that's not mapped in the linear map, together with
+> > > > > memremap() instead of vmap(), would work around the issue. But the
+> > > > > driver needs fixing, not the arch code.
+> > > > 
+> > > > Okay, thanks for the hint. Can you share how to allocate the dma-pool that's
+> > > > not part of the kernel's linear map? I looked into it but couldn't find a way.
+> > > 
+> > > The no-map property should take care of this iirc
+> > 
+> > Yeah, we have been using it in other places of the same driver. But as per
+> > Sibi, we used dynamic allocation for metadata validation since there was no
+> > memory reserved statically for that.
+> 
+> Unlike the other portions in the driver that required statically defined
+> no-map carveouts, metadata just needed a contiguous memory for
+> authentication. Re-using existing carveouts for this metadata region
+> may not work due to modem FW limitations and declaring a new carveout for
+> metadata will break the device tree bindings. That's the reason for
+> using DMA_ATTR_NO_KERNEL_MAPPING for dma_alloc_attr and vmpa/vunmap with
+> VM_FLUSH_RESET_PERMS before passing the memory onto modem. Are there other
+> suggestions for achieving the same without breaking bindings?
 
-> Patch #1 is definitely needed regardless of which interface we pick for
-> exposing the ISA strings to userspace.
+Your DMA_ATTR_NO_KERNEL_MAPPING workaround doesn't work, it only makes
+the failure rate smaller. All this attribute does is avoiding creating a
+non-cacheable mapping but you still have the kernel linear mapping in
+place that may be speculatively accessed by the CPU. You were just lucky
+so far not to have hit the issue. So I'd rather see this fixed properly
+with a no-map carveout. Maybe you can reuse an existing carveout if the
+driver already needs some and avoid changing the DT. More complicated
+options include allocating memory and unmapping it from the linear map
+with set_memory_valid(), though that's not exported to modules and it
+also requires the linear map to be pages only, not block mappings.
 
-I took another look at #1, and I feel more confused about what
-constitutes canonical order than I did before! If you know better than
-I, and you probably do since you're interested in these 6 month old
-patches, some insight would be appreciated!
+Yet another option is to have the swiotlb buffer unmapped from the
+kernel linear map and use the bounce buffer for this. That's more
+involved (Robin has some patches, though for a different reason and they
+may not make it upstream).
 
-Thanks,
-Conor.
-
+-- 
+Catalin
