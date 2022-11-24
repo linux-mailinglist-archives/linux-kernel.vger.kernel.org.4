@@ -2,77 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C326E6377C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 12:39:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83EF06377CE
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 12:41:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbiKXLjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 06:39:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44560 "EHLO
+        id S230201AbiKXLlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 06:41:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiKXLjF (ORCPT
+        with ESMTP id S230167AbiKXLlE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 06:39:05 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25AA4876A
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 03:39:02 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id 136so1376809pga.1
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 03:39:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+5EcPqvErNguuUSXQjM4Gsm5NRO9cAbvO2IWMkYz6pI=;
-        b=SOJw3pGmknQGOs+cKA4lwYKRAW23GcKLpXI9bEcqXWNIZQmj6qZgdaeAgW05Rnk5dc
-         WhjgRoHta5X4f1roJmi0k+NF6085ffRp8wWbmxxYvuOoIjK9sr5+LvgZzdqjfMl6yIg+
-         Xf8hDCmBAfcJ209YFFw0LR09iN2AQ+/+2K4/BuHnK7hymbqFRZa3aCGBW+KbAGkgX8Ir
-         7TYe9cW84y2OSlc6te7WF3uPvtw/VwhP5V+eJ1+34SQ12F9m5BlSCk24SXS/howNODnc
-         5pUXdgbG4YKP8ViGGHEvYP69ji6BO1ElS1MW+4CXwbAxFUxPUpVdRmQiSzEjQn+UuitS
-         sxsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+5EcPqvErNguuUSXQjM4Gsm5NRO9cAbvO2IWMkYz6pI=;
-        b=Ko0MOyGGBu0kQNZ+1KnY119AGhzaXwmNkh22uy20s355EPaTmPV/s8eIaATTs61AJo
-         yaK0AEQPmhbFTgmYjD9yt2VCc68Yo/mwi46bRi9eyBv+yWktbRK6kvaj5nG19w04TZpV
-         P5oi3nEtXI0CrSKEn540I1ON+BxkisrAnuSaO66dVpcpQgo2h9CWKkWF3bLmrdMlbqFx
-         8cudvWk/uKDTNu3YCxSm+Of9u9hirZyfnq23pDUqq+AN5XpgpBqTOIYau9d8cv8xJVnd
-         zopdX5krIdet4DqZXRySX/QD/YzbSf62qyB35Czuz5vHQG7RfvY1jWnmZYRsaBMjTflk
-         GZdQ==
-X-Gm-Message-State: ANoB5pkdiPn8ejiRyID79pr+TiQ9yBHYPU+XDsMt7ljp9TdPIg5fBPis
-        Z20R77/DtZjEV7eC54FGlOoQ2QFZkt7IL+VU
-X-Google-Smtp-Source: AA0mqf6DoxIbI42ZFR91whRSV72DkyTzPOXE08yKJHXysCt+s0YkgN8Huvbe8ojyWrwoVjgC2BICdA==
-X-Received: by 2002:a62:6083:0:b0:56d:3180:c7fc with SMTP id u125-20020a626083000000b0056d3180c7fcmr16238203pfb.41.1669289942391;
-        Thu, 24 Nov 2022 03:39:02 -0800 (PST)
-Received: from hyeyoo ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id f15-20020a170902684f00b00177e5d83d3esm1098955pln.88.2022.11.24.03.38.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 03:39:01 -0800 (PST)
-Date:   Thu, 24 Nov 2022 20:38:55 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>, patches@lists.linux.dev,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 04/12] mm, slub: retain no free slabs on partial list
- with CONFIG_SLUB_TINY
-Message-ID: <Y39Xz9VbI2A8+bfe@hyeyoo>
-References: <20221121171202.22080-1-vbabka@suse.cz>
- <20221121171202.22080-5-vbabka@suse.cz>
+        Thu, 24 Nov 2022 06:41:04 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663226A68D
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 03:40:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669290009;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xeJPL0Q85hFYyjMF/QRY1ECHSUxO12v86yg+wbAbiJk=;
+        b=f2kXo9LabiT8ER2/BiMdS2gKetYlPBKRBmid2k3FIw3Kj27g8KvWe35kc1K9O2NNmno52q
+        6ipRBbKVk6QDWqyPn0IaISfZmUqO4SWdzIi7Y03ENTMTZyUxZhb2XQuLpv4IN8EwemN0uw
+        FXkoctiVG7MD8LdiYkVy4M/EGbxfaNs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-632-XQ-oJRN_PeGzZkyfDOT27A-1; Thu, 24 Nov 2022 06:40:06 -0500
+X-MC-Unique: XQ-oJRN_PeGzZkyfDOT27A-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 80DB43826A45;
+        Thu, 24 Nov 2022 11:40:05 +0000 (UTC)
+Received: from rotkaeppchen (unknown [10.39.193.142])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D2CC42166B26;
+        Thu, 24 Nov 2022 11:40:03 +0000 (UTC)
+Date:   Thu, 24 Nov 2022 12:40:00 +0100
+From:   Philipp Rudo <prudo@redhat.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
+        Ross Zwisler <zwisler@kernel.org>, linux-doc@vger.kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH v1 2/2] kexec: Introduce kexec_reboot_disabled
+Message-ID: <20221124124000.5af23cad@rotkaeppchen>
+In-Reply-To: <CANiDSCtqYykAjRinx9r4O+DxdTBA=OQSjF8URmM6X54nN7pDUA@mail.gmail.com>
+References: <20221114-disable-kexec-reset-v1-0-fb51d20cf871@chromium.org>
+        <20221114-disable-kexec-reset-v1-2-fb51d20cf871@chromium.org>
+        <20221117160650.16e06b37@rotkaeppchen>
+        <CANiDSCvyQ66mXbhEgj_qnE_zR4frsxtu1bXaukDrEG0FjrE4yw@mail.gmail.com>
+        <20221121150948.6f7c1f1f@rotkaeppchen>
+        <CANiDSCtqYykAjRinx9r4O+DxdTBA=OQSjF8URmM6X54nN7pDUA@mail.gmail.com>
+Organization: Red Hat inc.
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221121171202.22080-5-vbabka@suse.cz>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,46 +72,243 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 06:11:54PM +0100, Vlastimil Babka wrote:
-> SLUB will leave a number of slabs on the partial list even if they are
-> empty, to avoid some slab freeing and reallocation. The goal of
-> CONFIG_SLUB_TINY is to minimize memory overhead, so set the limits to 0
-> for immediate slab page freeing.
+Hi Ricardo,
+
+On Wed, 23 Nov 2022 09:58:08 +0100
+Ricardo Ribalda <ribalda@chromium.org> wrote:
+
+> Hi Philipp
 > 
-> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
-> ---
->  mm/slub.c | 5 +++++
->  1 file changed, 5 insertions(+)
+> Thanks for your review.
 > 
-> diff --git a/mm/slub.c b/mm/slub.c
-> index ab085aa2f1f0..917b79278bad 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -241,6 +241,7 @@ static inline bool kmem_cache_has_cpu_partial(struct kmem_cache *s)
->  /* Enable to log cmpxchg failures */
->  #undef SLUB_DEBUG_CMPXCHG
->  
-> +#ifndef CONFIG_SLUB_TINY
->  /*
->   * Minimum number of partial slabs. These will be left on the partial
->   * lists even if they are empty. kmem_cache_shrink may reclaim them.
-> @@ -253,6 +254,10 @@ static inline bool kmem_cache_has_cpu_partial(struct kmem_cache *s)
->   * sort the partial list by the number of objects in use.
->   */
->  #define MAX_PARTIAL 10
-> +#else
-> +#define MIN_PARTIAL 0
-> +#define MAX_PARTIAL 0
-> +#endif
->  
->  #define DEBUG_DEFAULT_FLAGS (SLAB_CONSISTENCY_CHECKS | SLAB_RED_ZONE | \
->  				SLAB_POISON | SLAB_STORE_USER)
-> -- 
-> 2.38.1
+> My scenario is a trusted system, where even if you are root, your
+> access to the system is very limited.
+> 
+> Let's assume LOADPIN and verity are enabled.
+
+My point is that on such systems I expect that a sysadmin also wants to
+control the crash kernel including its initramfs (which also has to be part
+of the signed kernel?). But if that's the case a sysadmin can simply arm
+kdump early during boot and then toggle kexec_load_disabled. With that
+LINUX_REBOOT_CMD_KEXEC also gets disabled as no kexec kernel can be loaded
+while kdump works. Thus there is no need to add the new interface. Or am
+I missing anything?
+
+Thanks
+Philipp
+
+> 
+> On Mon, 21 Nov 2022 at 15:10, Philipp Rudo <prudo@redhat.com> wrote:
+> >
+> > Hi Ricardo,
+> >
+> > On Thu, 17 Nov 2022 16:15:07 +0100
+> > Ricardo Ribalda <ribalda@chromium.org> wrote:
+> >  
+> > > Hi Philipp
+> > >
+> > > Thanks for your review!  
+> >
+> > happy to help.
+> >  
+> > >
+> > > On Thu, 17 Nov 2022 at 16:07, Philipp Rudo <prudo@redhat.com> wrote:  
+> > > >
+> > > > Hi Ricardo,
+> > > >
+> > > > all in all I think this patch makes sense. However, there is one point
+> > > > I don't like...
+> > > >
+> > > > On Mon, 14 Nov 2022 14:18:39 +0100
+> > > > Ricardo Ribalda <ribalda@chromium.org> wrote:
+> > > >  
+> > > > > Create a new toogle that disables LINUX_REBOOT_CMD_KEXEC, reducing the
+> > > > > attack surface to a system.
+> > > > >
+> > > > > Without this toogle, an attacker can only reboot into a different kernel
+> > > > > if they can create a panic().
+> > > > >
+> > > > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > > > >
+> > > > > diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+> > > > > index 97394bd9d065..25d019682d33 100644
+> > > > > --- a/Documentation/admin-guide/sysctl/kernel.rst
+> > > > > +++ b/Documentation/admin-guide/sysctl/kernel.rst
+> > > > > @@ -462,6 +462,17 @@ altered.
+> > > > >  Generally used together with the `modules_disabled`_ sysctl.
+> > > > >
+> > > > >
+> > > > > +kexec_reboot_disabled
+> > > > > +=====================
+> > > > > +
+> > > > > +A toggle indicating if ``LINUX_REBOOT_CMD_KEXEC`` has been disabled.
+> > > > > +This value defaults to 0 (false: ``LINUX_REBOOT_CMD_KEXEC`` enabled),
+> > > > > +but can be set to 1 (true: ``LINUX_REBOOT_CMD_KEXEC`` disabled).
+> > > > > +Once true, kexec can no longer be used for reboot and the toggle
+> > > > > +cannot be set back to false.
+> > > > > +This toggle does not affect the use of kexec during a crash.
+> > > > > +
+> > > > > +
+> > > > >  kptr_restrict
+> > > > >  =============
+> > > > >
+> > > > > diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+> > > > > index 41a686996aaa..15c3fad8918b 100644
+> > > > > --- a/include/linux/kexec.h
+> > > > > +++ b/include/linux/kexec.h
+> > > > > @@ -407,6 +407,7 @@ extern int kimage_crash_copy_vmcoreinfo(struct kimage *image);
+> > > > >  extern struct kimage *kexec_image;
+> > > > >  extern struct kimage *kexec_crash_image;
+> > > > >  extern int kexec_load_disabled;
+> > > > > +extern int kexec_reboot_disabled;
+> > > > >
+> > > > >  #ifndef kexec_flush_icache_page
+> > > > >  #define kexec_flush_icache_page(page)
+> > > > > diff --git a/kernel/kexec.c b/kernel/kexec.c
+> > > > > index cb8e6e6f983c..43063f803d81 100644
+> > > > > --- a/kernel/kexec.c
+> > > > > +++ b/kernel/kexec.c
+> > > > > @@ -196,6 +196,10 @@ static inline int kexec_load_check(unsigned long nr_segments,
+> > > > >       if (!capable(CAP_SYS_BOOT) || kexec_load_disabled)
+> > > > >               return -EPERM;
+> > > > >
+> > > > > +     /* Check if the system admin has disabled kexec reboot. */
+> > > > > +     if (!(flags & KEXEC_ON_CRASH) && kexec_reboot_disabled)
+> > > > > +             return -EPERM;  
+> > > >
+> > > > ... Allowing to load a crashkernel doesn't make sense in my opinion. If
+> > > > an attacker is capable of creating a malicious kernel, planting it on
+> > > > the victims system and then find a way to boot it via kexec this
+> > > > attacker also knows how to load the malicious kernel as crashkernel and
+> > > > trigger a panic. So you haven't really gained anything. That's why I
+> > > > would simply drop this hunk (and the corresponding one from
+> > > > kexec_file_load) and let users who worry about this use a combination of
+> > > > kexec_load_disabled and kexec_reboot_disabled.  
+> > >
+> > > If for whatever reason your sysadmin configured kexec_reboot_disabed
+> > > it can be nice that when a user try to load it they get a warning.
+> > > It is easier to debug than waiting two steps later when they run kexec -e....  
+> >
+> > I'm having second thoughts about this patch. My main problem is that I
+> > don't see a real use case where kexec_reboot_disabled is advantageous
+> > over kexec_load_disabled. The point is that disabling
+> > LINUX_REBOOT_CMD_KEXEC is almost identical to toggling kexec_load_disabled without
+> > a loaded kernel (when you don't have a kernel loaded you cannot reboot
+> > into it). With this the main use case of kexec_reboot_disabled is
+> > already covered by kexec_load_disabled.  
+> 
+> >
+> > However, there are two differences
+> >
+> > 1) with kexec_reboot_disable you can still (re-)load a crash kernel
+> > e.g. to update the initramfs after a config change. But as discussed in
+> > my first mail this comes on the cost that an attacker could still load a
+> > malicious crash kernel and then 'panic into it'.  
+> 
+> That crash kernel must be already in the signed malicious kernel.
+> which reduces the chances of attack.
+> Plus an attacker must be able to panic the current kernel at will,
+> instead of just call reset.
+> 
+> >
+> > 2) kexec_load_disabled also prevents unloading of a loaded kernel. So
+> > once loaded kexec_load_disabled cannot prevent the reboot into this
+> > kernel.
+> >
+> >
+> > For 1) I doubt that this is desired at all. My expectation is that on
+> > systems where a sysadmin restricts a user to reboot via kexec the
+> > sysadmin also wants to prevent the user to load an arbitrary crash
+> > kernel. Especially as this still keeps the loophole open you are trying
+> > to close.
+> >
+> > So only 2) is left as real benefit. But that is an extremely specific
+> > scenario. How often does this scenario happen in real life? What
+> > problem does kexec_reboot_disable solve different implementation
+> > (also in userspace) cannot?
+> >
+> > Sorry about being this pedantic but you want to introduce some new uapi
+> > which will be hard if not impossible to change once introduced. That's
+> > why I want to be a 100% sure it is really needed.  
+> 
+> No worries. Completely understand :). Thanks for taking this seriously..
+> 
+> 
+> Best regards!
+> >
+> > Thanks
+> > Philipp
+> >
+> >  
+> > > That is why I added it. But i am also ok removing it
+> > >  
+> > > >
+> > > > Thanks
+> > > > Philipp
+> > > >  
+> > > > > +
+> > > > >       /* Permit LSMs and IMA to fail the kexec */
+> > > > >       result = security_kernel_load_data(LOADING_KEXEC_IMAGE, false);
+> > > > >       if (result < 0)
+> > > > > diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+> > > > > index ca2743f9c634..fe82e2525705 100644
+> > > > > --- a/kernel/kexec_core.c
+> > > > > +++ b/kernel/kexec_core.c
+> > > > > @@ -929,6 +929,7 @@ int kimage_load_segment(struct kimage *image,
+> > > > >  struct kimage *kexec_image;
+> > > > >  struct kimage *kexec_crash_image;
+> > > > >  int kexec_load_disabled;
+> > > > > +int kexec_reboot_disabled;
+> > > > >  #ifdef CONFIG_SYSCTL
+> > > > >  static struct ctl_table kexec_core_sysctls[] = {
+> > > > >       {
+> > > > > @@ -941,6 +942,16 @@ static struct ctl_table kexec_core_sysctls[] = {
+> > > > >               .extra1         = SYSCTL_ONE,
+> > > > >               .extra2         = SYSCTL_ONE,
+> > > > >       },
+> > > > > +     {
+> > > > > +             .procname       = "kexec_reboot_disabled",
+> > > > > +             .data           = &kexec_reboot_disabled,
+> > > > > +             .maxlen         = sizeof(int),
+> > > > > +             .mode           = 0644,
+> > > > > +             /* only handle a transition from default "0" to "1" */
+> > > > > +             .proc_handler   = proc_dointvec_minmax,
+> > > > > +             .extra1         = SYSCTL_ONE,
+> > > > > +             .extra2         = SYSCTL_ONE,
+> > > > > +     },
+> > > > >       { }
+> > > > >  };
+> > > > >
+> > > > > @@ -1138,7 +1149,7 @@ int kernel_kexec(void)
+> > > > >
+> > > > >       if (!kexec_trylock())
+> > > > >               return -EBUSY;
+> > > > > -     if (!kexec_image) {
+> > > > > +     if (!kexec_image || kexec_reboot_disabled) {
+> > > > >               error = -EINVAL;
+> > > > >               goto Unlock;
+> > > > >       }
+> > > > > diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+> > > > > index 45637511e0de..583fba6de5cb 100644
+> > > > > --- a/kernel/kexec_file.c
+> > > > > +++ b/kernel/kexec_file.c
+> > > > > @@ -333,6 +333,11 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
+> > > > >       if (!capable(CAP_SYS_BOOT) || kexec_load_disabled)
+> > > > >               return -EPERM;
+> > > > >
+> > > > > +     /* Check if the system admin has disabled kexec reboot. */
+> > > > > +     if (!(flags & (KEXEC_FILE_ON_CRASH | KEXEC_FILE_UNLOAD))
+> > > > > +         && kexec_reboot_disabled)
+> > > > > +             return -EPERM;
+> > > > > +
+> > > > >       /* Make sure we have a legal set of flags */
+> > > > >       if (flags != (flags & KEXEC_FILE_FLAGS))
+> > > > >               return -EINVAL;
+> > > > >  
+> > > >  
+> > >
+> > >  
+> >  
+> 
 > 
 
-Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-
--- 
-Thanks,
-Hyeonggon
