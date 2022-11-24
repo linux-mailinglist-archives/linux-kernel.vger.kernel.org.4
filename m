@@ -2,152 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C45A637EA7
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 18:55:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B606637EA9
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 18:55:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbiKXRzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 12:55:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45442 "EHLO
+        id S229717AbiKXRzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 12:55:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiKXRyy (ORCPT
+        with ESMTP id S229754AbiKXRyz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 12:54:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A476550;
-        Thu, 24 Nov 2022 09:54:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0CF51B8287B;
-        Thu, 24 Nov 2022 17:54:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9263AC433C1;
-        Thu, 24 Nov 2022 17:54:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669312444;
-        bh=He3Pd8IkhWybpRjkE2MQUgnr0yhm6m/2ss8+4XAeJEQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=mxXZ8xLhnUMUDo7BZKZ1qjitMkHand9xKrfnOrc1LhD0+YmIs0C+8lGkhpT+8uyIU
-         Y3YUnrYy6puecAW7EvhucIYSZboj5N1Ho+dLMCq6h5QdvGh7ppDVPbJaYbIU/xAlpz
-         rOUtJ9kp9c/eIKh3vFcKZ0iH2DL/Dahths77alCoXqdlsioTKus2T80QMnjgi5EIFQ
-         1fUSxEL0E6BKLRQtZ7wyhC2tbPe5W1o36jKYj7wajylsB5MiKaByqvmOvhbhR9r96K
-         uiPo3ApkYRJZUSAvclVFiGNT8h+wM8FzY1YCCJD68dVY3DbXSBU2tq/Cmzs629VT+D
-         gmS6TFWqytxUg==
-Message-ID: <27d0de3e-1006-dd3a-0e91-ae8025ef8426@kernel.org>
-Date:   Thu, 24 Nov 2022 17:54:00 +0000
+        Thu, 24 Nov 2022 12:54:55 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A5C12D39;
+        Thu, 24 Nov 2022 09:54:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669312458; x=1700848458;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=sXnKN/YXOdlrt4gQi4aLdKbmQKzlc0Sj2MoBA1aMjMg=;
+  b=YwyNlSxmNLWmFxuwYCI9dVUAwwQwoe+yLi8a6K4Aqr6kuLg7ur+LjaCv
+   YphQQFd3YbRcTjGlW9zN9Iv6+2UTBIXUHQZTS0/xCNX9L3mJf9uR8p2j2
+   BauOe3r6wFgBCmGppi8amxLyPOkRux0dcUTsLnKtorqrrowfpOyAt7wI1
+   yYp+8Ukf000l2VWu9ZAcEj/2mauXwNZdYze7FR3i7/rMFlgfhhT8VWEeA
+   l9C592lYpPjxvBKIYX65C3YbDmfEuoGloqUP9FhD0uKOL3wmxYg1+pjOs
+   OgDhNTcU+51HRWhPQUMVzb0Xl+CqDrH2v7rBXqtJrDaLmD5oFFlCEJmbx
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="316166681"
+X-IronPort-AV: E=Sophos;i="5.96,190,1665471600"; 
+   d="scan'208";a="316166681"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2022 09:54:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="767146960"
+X-IronPort-AV: E=Sophos;i="5.96,190,1665471600"; 
+   d="scan'208";a="767146960"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga004.jf.intel.com with ESMTP; 24 Nov 2022 09:54:15 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 2AOHsDbM003592;
+        Thu, 24 Nov 2022 17:54:13 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Felix Fietkau <nbd@nbd.name>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        netdev@vger.kernel.org, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/5] net: ethernet: mtk_eth_soc: work around issue with sending small fragments
+Date:   Thu, 24 Nov 2022 18:54:10 +0100
+Message-Id: <20221124175410.5684-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221123095754.36821-3-nbd@nbd.name>
+References: <20221123095754.36821-1-nbd@nbd.name> <20221123095754.36821-3-nbd@nbd.name>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 2/3] RISC-V: uapi: add HWCAP for Bitmanip/Scalar Crypto
-Content-Language: en-US
-To:     Samuel Ortiz <sameo@rivosinc.com>
-Cc:     "Hongren (Zenithal) Zheng" <i@zenithal.me>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <anup@brainfault.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>, linux-mm@kvack.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        linux-man@vger.kernel.org, Jiatai He <jiatai2021@iscas.ac.cn>,
-        Heiko Stuebner <heiko@sntech.de>
-References: <YqYz+xDsXr/tNaNu@Sun> <YqY0i22SdbHjB/MX@Sun>
- <Y385rS/5zDaDJ3Os@vermeer> <Y39AXYPFzSiBngwI@wendy>
- <Y39Lwp4rQc3Qkl0i@vermeer> <Y39blUaC/jHiOYCk@wendy>
- <Y3+mBAV8oxphjHcJ@vermeer> <c9ae9644-5cd0-29c2-a25c-bb497dfcb1c8@kernel.org>
- <Y3+rE6j/CzTpINi+@vermeer>
-From:   Conor Dooley <conor@kernel.org>
-In-Reply-To: <Y3+rE6j/CzTpINi+@vermeer>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/11/2022 17:34, Samuel Ortiz wrote:
-> On Thu, Nov 24, 2022 at 05:20:37PM +0000, Conor Dooley wrote:
->> On 24/11/2022 17:12, Samuel Ortiz wrote:
->>> [You don't often get email from sameo@rivosinc.com. Learn why this is important at https://aka.ms/LearnAboutSenderIdentification ]
->>>
->>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->>>
->>> On Thu, Nov 24, 2022 at 11:55:01AM +0000, Conor Dooley wrote:
->>>> On Thu, Nov 24, 2022 at 11:47:30AM +0100, Samuel Ortiz wrote:
->>>>
->>>>> Patch #1 is definitely needed regardless of which interface we pick for
->>>>> exposing the ISA strings to userspace.
->>>>
->>>> I took another look at #1, and I feel more confused about what
->>>> constitutes canonical order than I did before! If you know better than
->>>> I, and you probably do since you're interested in these 6 month old
->>>> patches, some insight would be appreciated!
->>>
->>> Assuming we don't go with hwcap, I dont think the order of the
->>> riscv_isa_ext_id enum matters that much?
->>
->> The chief put it in canonical order so that's good enough for me!
->>
->>>
->>> iiuc we're building the cpuinfo string from the riscv_isa_ext_data
->>> array, and I think the current code is incorrect:
->>>
->>> static struct riscv_isa_ext_data isa_ext_arr[] = {
->>>     __RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
->>>     __RISCV_ISA_EXT_DATA(sstc, RISCV_ISA_EXT_SSTC),
->>>     __RISCV_ISA_EXT_DATA(svinval, RISCV_ISA_EXT_SVINVAL),
->>>     __RISCV_ISA_EXT_DATA(svpbmt, RISCV_ISA_EXT_SVPBMT),
->>>     __RISCV_ISA_EXT_DATA(zicbom, RISCV_ISA_EXT_ZICBOM),
->>>     __RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
->>>     __RISCV_ISA_EXT_DATA("", RISCV_ISA_EXT_MAX),
->>> };
->>>
->>> zicbom and zihintpause should come before supervisor level extensions.
->>> I'm going to send a patch for that.
->>
->> idk, Palmer explicitly re-ordered this:
->> https://lore.kernel.org/linux-riscv/20220920204518.10988-1-palmer@rivosinc.com/
->>
->> By my reading of the isa manual, what Palmer did is correct as
->> those are not "Additional Standard Extensions". /shrug
+From: Felix Fietkau <nbd@nbd.name>
+Date: Wed, 23 Nov 2022 10:57:52 +0100
+
+> When frames are sent with very small fragments, the DMA engine appears to
+> lock up and transmit attempts time out. Fix this by detecting the presence
+> of small fragments and use skb_gso_segment + skb_linearize to deal with
+> them
+
+Nit: all of your commit messages don't have a trailing dot (.), not
+sure if it's important, but my eye is missing it definitely :D
+
+skb_gso_segment() and skb_linearize() are slow as hell. I think you
+can do it differently. I guess only the first (head) and the last
+frag can be so small, right?
+
+So, if a frag from shinfo->frags is less than 16, get a new frag of
+the minimum acceptable size via netdev_alloc_frag(), copy the data
+to it and pad the rest with zeroes. Then increase skb->len and
+skb->data_len, skb_frag_unref() the current, "invalid" frag and
+replace the pointer to the new frag. I didn't miss anything I
+believe... Zero padding the tail is usual thing for NICs. skb frag
+substitution is less common, but should be legit.
+
+If skb_headlen() is less than 16, try doing pskb_may_pull() +
+__skb_pull() at first. The argument would be `16 - headlen`. If
+pskb_may_pull() returns false, then yeah, you have no choice other
+than segmenting and linearizing ._.
+
 > 
-> Hmm, by their name (Z[a-b]+) they are Additional Standard Extensions.
-> What am I missing?
+> Signed-off-by: Felix Fietkau <nbd@nbd.name>
+> ---
+>  drivers/net/ethernet/mediatek/mtk_eth_soc.c | 36 +++++++++++++++++++--
+>  1 file changed, 34 insertions(+), 2 deletions(-)
 
-Right, and this is where I get confused. Zam and Ztso *are* Additional
-Standard Extensions, I think we can agree on that one? For those
-extensions:
-\chapter{``Ztso'' Standard Extension for Total Store Ordering, v0.1}
-\chapter{``Zam'' Standard Extension for Misaligned Atomics, v0.1}
+[...]
 
-They're also called out specifically in the table:
-https://github.com/riscv/riscv-isa-manual/blob/master/src/naming.tex#L147
+>  	if (unlikely(atomic_read(&ring->free_count) <= ring->thresh))
+>  		netif_tx_stop_all_queues(dev);
+> -- 
+> 2.38.1
 
-For Zihintpause however:
-\chapter{``Zihintpause'' Pause Hint, Version 2.0}
-
-See what I mean? I looked at the specs for the bitmanip stuff and for
-crypto, which both never mention being standard.
-
-That table has the caption:
-> The table also defines the canonical order in which extension names
-> must appear in the name string, with top-to-bottom in table
-> indicating first-to-last in the name string. 
-
-It only calls out Zicsr, Zifencei, Zam and Ztso are being permitted
-before Sdef, but as I said I am not a specs person, so perhaps some
-of the extensions in question are intended to go there but have not
-yet been merged into the isa manual doc. Zihintpause *is* in the
-isa manual though but not specifically called out.
-
-Anyways, hopefully that at least helps with my line of thinking!
-
-Conor.
-
+Thanks,
+Olek
