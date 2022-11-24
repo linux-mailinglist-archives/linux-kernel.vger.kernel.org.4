@@ -2,264 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C48637D1C
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 16:38:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55045637D21
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 16:39:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiKXPiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 10:38:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55036 "EHLO
+        id S229712AbiKXPjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 10:39:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiKXPiw (ORCPT
+        with ESMTP id S229677AbiKXPjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 10:38:52 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69CCB30562;
-        Thu, 24 Nov 2022 07:38:51 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id b3so3082087lfv.2;
-        Thu, 24 Nov 2022 07:38:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=D+oPkZf+GhfgQrKgiZPW3MBbJ+ctJWRY4GDqWnQ3KJw=;
-        b=pAd5o1mDKoJlLHYuEBrsAdp97sFCOalRl7ZCuIjJ5TJeysxEpSt0XnQTZQNpAWfRxD
-         l+OwBw38RqoTdZqummg3ixL4VK2aGhoUF05LvfvJ6IH0w2vMk1mCMdBUKYq3JjVl5ZGX
-         63X/lcyXIwwW7NS+XsC37pKsONBwJsH7JqCJlxe5nE2OCh/Tu5gzxvFMxZ2M0RiPRZZ+
-         hxoXQEbOdd5FT/5+JZUX9qYhUS0n+1QLIyCo0vm0SCIyGwC2m0jb9PPuqSxybCJCL/8S
-         7Hk6RiLMSznbCDMmqjusKWoFoMQTzBiyp8YbkNpxd+b0Ql7etJWE3YTB+XiKf+Fx1xY7
-         G/Gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=D+oPkZf+GhfgQrKgiZPW3MBbJ+ctJWRY4GDqWnQ3KJw=;
-        b=mCA6ntUbCxZlJ3Xj1tzFia5i2SnHzxPspbiD0OgKwylpSjZ+OdJY7N2LX/gBqNcka+
-         GzuAubXujUEPpy+ecdIr+0O32rmUK7LT9cmpi0Hclafg3o+w6do/0C46iRKyzd4gTwfB
-         Vn76EU/LdmLvrn6CRFni05rjmYr95hPEJuYZirhItoN3W0iP5/scwXdfYzuU0tNUfR0S
-         Iz+ROH7aUvAJp3nXlhaX57d8t1jnoIc40Il9TPg+ggj99IyZWUfgmi6WLCTZ/6Izvl5z
-         2wr9cjwsHVITjaDgl8GPhyCB3dqP84XwyIl2kLANt1XeZDammmaA5lIc76XbyTYgMvPD
-         aJGQ==
-X-Gm-Message-State: ANoB5pm+rNjeXhlawbYohKz5J4dV8MSGUyXpbJIrTGUn567IxziUOqjD
-        OJwpExpFTLxTCkVDEcTTaViRlbd6VSryn4bNBnU=
-X-Google-Smtp-Source: AA0mqf6HsXQhF0DuR+7Wf3ySK3+lEUJMnOoMStylksqgUclTIEYHWGoDP2vvobF8sQuaz0QLvF326DqzQon/i2S9fnw=
-X-Received: by 2002:a05:6512:2116:b0:4b4:b904:a310 with SMTP id
- q22-20020a056512211600b004b4b904a310mr10492674lfr.576.1669304329613; Thu, 24
- Nov 2022 07:38:49 -0800 (PST)
+        Thu, 24 Nov 2022 10:39:42 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FAE26DCD3;
+        Thu, 24 Nov 2022 07:39:41 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AOD0fmw010871;
+        Thu, 24 Nov 2022 15:39:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=mQc0L8cZEGlhu1QSByQkkxeahmkseStXK0uV8bbap98=;
+ b=jue90TkDU/VAEMYOy2J6tLZBgeARjBRHBI/0ZZfxyqfJHdjIF2V2o19Pgv+tv0Rh6Kh4
+ 0sD3v9S16KMpazj5JXcw4qa+cuLHVbj3sTraYUVzd5cmvrtajrQvMdu5I+3a9A7YDobm
+ fL9rKTyCoMnn6JP71UcdTW8aeE7ND+u25Q3QPc5XsZyuSNIbE3zbuYxIa0fUnF1nKjQk
+ 6kRYe6KdvM5M6ujUqQlTI0V+lSv7D4RKOFXvALLZ95RtwUaM35usXMkyazzzhUi6Ri/H
+ 6gLzKOO1+kNeV385kMxGkCo3JrdEjs89Um+NkRoGDfrdvGuR3h15TUX409JwNVAr+3wz 8Q== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m21mb9q0f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 24 Nov 2022 15:39:33 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AOFdVVJ019826
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 24 Nov 2022 15:39:31 GMT
+Received: from [10.50.29.33] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 24 Nov
+ 2022 07:39:27 -0800
+Message-ID: <351fa466-90cb-b73f-a2a4-749bc3529e22@quicinc.com>
+Date:   Thu, 24 Nov 2022 21:09:20 +0530
 MIME-Version: 1.0
-References: <20221122201232.107065-1-tmaimon77@gmail.com> <20221122201232.107065-2-tmaimon77@gmail.com>
- <cedc0013-f0c0-3180-6995-477b77b919f8@linaro.org>
-In-Reply-To: <cedc0013-f0c0-3180-6995-477b77b919f8@linaro.org>
-From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Thu, 24 Nov 2022 17:38:38 +0200
-Message-ID: <CAP6Zq1iGwqOVOnhmF0ijYw=KoTRJj5CUpFv6WDouZmjVxXhQ-g@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] dt-binding: soc: nuvoton: Add NPCM BPC LPC documentation
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        arnd@arndb.de, hasegawa-hitomi@fujitsu.com, marcan@marcan.st,
-        nicolas.ferre@microchip.com, conor.dooley@microchip.com,
-        heiko@sntech.de, sven@svenpeter.dev, briannorris@chromium.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v2 02/10] arm64: dts: qcom: Add base SM8550 dtsi
+To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
+References: <20221124135646.1952727-1-abel.vesa@linaro.org>
+ <20221124135646.1952727-3-abel.vesa@linaro.org>
+From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+In-Reply-To: <20221124135646.1952727-3-abel.vesa@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: cYRHJtyrqKAAKp49DMTCPX1LEX59uoRp
+X-Proofpoint-GUID: cYRHJtyrqKAAKp49DMTCPX1LEX59uoRp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-24_11,2022-11-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=942 lowpriorityscore=0 mlxscore=0 spamscore=0 malwarescore=0
+ impostorscore=0 priorityscore=1501 bulkscore=0 phishscore=0 clxscore=1011
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211240116
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+Hi,
 
-Thanks a lot for your comments.
+On 11/24/2022 7:26 PM, Abel Vesa wrote:
+> Add base dtsi for SM8550 SoC and includes base description of
+> CPUs, GCC, RPMHCC, UART, interrupt controller, TLMM, reserved
+> memory, RPMh PD, TCSRCC, ITS, IPCC, AOSS QMP, LLCC, cpufreq,
+> interconnect, thermal sensor, cpu cooling maps and SMMU nodes
+> which helps boot to shell with console on boards with this SoC.
+> 
+> Co-developed-by: Neil Armstrong <neil.armstrong@linaro.org>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
 
-On Wed, 23 Nov 2022 at 12:03, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 22/11/2022 21:12, Tomer Maimon wrote:
->
-> 1. Subject: drop second, redundant "documentation" (dt-bindings are
-> documentation).
-O.K.
->
-> 2. Use subject prefixes matching the subsystem (git log --oneline -- ...).
-this is what I did dt-binding: soc: nuvoton... do you mean dt-binding: nuvoton.
->
-> > Added device tree binding documentation for Nuvoton BMC NPCM BIOS Post
-> > Code (BPC).
-> >
-> > The NPCM BPC monitoring two configurable I/O addresses written by the
-> > host on Low Pin Count (LPC) bus.
-> >
-> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> > ---
-> >  .../bindings/soc/nuvoton/npcm-lpc-bpc.yaml    | 112 ++++++++++++++++++
-> >  1 file changed, 112 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/soc/nuvoton/npcm-lpc-bpc.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/soc/nuvoton/npcm-lpc-bpc.yaml b/Documentation/devicetree/bindings/soc/nuvoton/npcm-lpc-bpc.yaml
-> > new file mode 100644
-> > index 000000000000..2c8e66546891
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/soc/nuvoton/npcm-lpc-bpc.yaml
->
-> Filename should match compatibles, at least in the "vendor,device"
-> style, so for example: nuvoton,lpc.yaml
->
-> > @@ -0,0 +1,112 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/soc/nuvoton/npcm-lpc-bpc.yaml#
->
-> LPC is a generic bus, so this should not be in "soc" directory. Where?
-> Depends what is this... Generic bus bindings could be in "bus" directory
-> or dedicated "lpc", if we have more of these.
-The BPC can run also on the eSPI bus therefore I think it better to
-remove the LPC and describe only the BPC module it self.
->
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Nuvoton Low Pin Count (LPC) Bus Controller
-> > +
-> > +maintainers:
-> > +  - Tomer Maimon <tmaimon77@gmail.com>
-> > +
-> > +description:
-> > +  The Low Pin Count (LPC) is a low bandwidth bus that is used to connect
-> > +  peripherals around the CPU and to replace the Industry Standard Architecture
-> > +  (ISA) bus.
->
-> You need to decide whether you describe here bus, bus controller or
-> device on the bus.
->
-> > +
-> > +  The Nuvoton NPCM LPC bus is a bridge of host CPU to a several of peripheral
-> > +  devices.
->
-> LPC bus is a bridge? It's either incorrect or so generic that every bus
-> is a "bridge"?
->
-> > +
-> > +properties:
-> > +  compatible:
-> > +    items:
-> > +      - enum:
-> > +          - nuvoton,npcm750-lpc
-> > +          - nuvoton,npcm845-lpc
-> > +      - const: simple-mfd
-> > +      - const: syscon
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  "#address-cells":
-> > +    const: 1
-> > +
-> > +  "#size-cells":
-> > +    const: 1
-> > +
-> > +  ranges: true
-> > +
-> > +patternProperties:
-> > +  "^lpc_bpc@[0-9a-f]+$":
->
-> No underscores in node names. Generic node names, so maybe "bpc"
->
-> This also does not match your example at all.
->
->
-> > +    type: object
-> > +    additionalProperties: false
-> > +
-> > +    description:
-> > +      Nuvoton BMC NPCM BIOS Post Code (BPC) monitoring two configurable I/O
-> > +      addresses written by the host on the Low Pin Count (LPC) bus, the capure
->
-> typo: capture
->
-> > +      data stored in 128-word FIFO.
-> > +
-> > +      NPCM BPC supports capture double words, when using capture
-> > +      double word only I/O address 1 is monitored.
->
-> This sentence is not grammatically correct. BPC supports capturing
-> double words when using double word capturing? Aren't these two sentences?
->
-> > +
-> > +    properties:
-> > +      compatible:
-> > +        items:
->
-> No items here.
->
-> > +          - enum:
-> > +              - nuvoton,npcm750-lpc-bpc
-> > +              - nuvoton,npcm845-lpc-bpc
-> > +
-> > +      reg:
-> > +        maxItems: 1
-> > +
-> > +      interrupts:
-> > +        maxItems: 1
-> > +
-> > +      nuvoton,monitor-ports:
-> > +        $ref: /schemas/types.yaml#/definitions/uint32-array
-> > +        description:
-> > +          Contain monitor I/O addresses, at least one monitor I/O address
->
-> Contains
->
-> But you need to explain what are these... I/O addresses on the bus?
->
-> > +          required.
-> > +
-> > +      nuvoton,bpc-en-dwcapture:
-> > +        description: If present, Enable capture double words support.
->
-> Is it the same as reg-io-width?
->
-> > +        type: boolean
-> > +
-> > +    required:
-> > +      - compatible
-> > +      - reg
-> > +      - interrupts
-> > +      - nuvoton,monitor-ports
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - "#address-cells"
-> > +  - "#size-cells"
-> > +  - ranges
-> > +
-> > +additionalProperties:
-> > +  type: object
->
-> No, only bus schemas could have it. Here additionalProperties: false.
->
-> It seems there are already few LPC controllers and all are put in
-> different places:
-> Documentation/devicetree/bindings/mfd/aspeed-lpc.yaml
-> Documentation/devicetree/bindings/arm/hisilicon/low-pin-count.yaml
->
-> Maybe Rob why this was made not really as two bindings - for bus
-> controller and devices?
-As mention above, next patch I will describe only the BPC device.
->
-> Best regards,
-> Krzysztof
->
+<snip>...
 
-In general, I waiting for Arnd approval for adding the NPCM BPC driver to SoC.
-After Arnd approval, I will send a new patch revision.
+> +	timer {
+> +		compatible = "arm,armv8-timer";
+> +		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
+> +			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
+> +			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
+> +			     <GIC_PPI 12 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>;
 
-Best regards,
+This last interrupt must be Hypervisor physical irq(10) and 12 is Hyp 
+virtual irq, so please change it to 10. I guess you got this from 
+downstream but it's not right and they don't boot kernel in EL2.
 
-Tomer
+Thanks,
+Sai
