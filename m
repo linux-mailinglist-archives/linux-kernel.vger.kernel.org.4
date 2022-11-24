@@ -2,110 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D7DA637EEB
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 19:30:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DD2B637EEE
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 19:30:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbiKXSaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 13:30:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50200 "EHLO
+        id S229740AbiKXSai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 13:30:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbiKXSaS (ORCPT
+        with ESMTP id S229848AbiKXSaa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 13:30:18 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057F7827CC
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 10:30:13 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id BE17A21AC2;
-        Thu, 24 Nov 2022 18:30:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1669314611; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3kTbFRyfWHcbzHx3yVRWYiE5rqpeYo8YEGSgadCWbj0=;
-        b=Vkg90M4mNhJcUl8QrsNVtnjzD/xy95JD1njwwPURIS2xbYKAak3pq91OyUEEWIgE8igZ7e
-        O774eKRuLMLhykcqjKfT9k7H8GqoFCJNav+XePn1gCNenOFEVRzBs/DZtFbkXMLj0S9LE7
-        h5erYl1fgbAu9caSEDDMQSKuoxW+4uk=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 893A42C141;
-        Thu, 24 Nov 2022 18:30:11 +0000 (UTC)
+        Thu, 24 Nov 2022 13:30:30 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F0A88B74;
+        Thu, 24 Nov 2022 10:30:25 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1oyGzE-0007Jc-Tu; Thu, 24 Nov 2022 19:30:12 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Jisheng Zhang <jszhang@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v4 7/7] soc: renesas: Add L2 cache management for RZ/Five SoC
 Date:   Thu, 24 Nov 2022 19:30:11 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: OFFLIST: Re: [PATCH printk v2 6/7] printk: Use an output buffer
- descriptor struct for emit
-Message-ID: <Y3+4MzIed3yLG4LE@alley>
-References: <20221123231400.614679-1-john.ogness@linutronix.de>
- <20221123231400.614679-7-john.ogness@linutronix.de>
- <Y3+xK7hHmUIlzq9w@alley>
+Message-ID: <5382916.ejJDZkT8p0@diego>
+In-Reply-To: <20221124172207.153718-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20221124172207.153718-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20221124172207.153718-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3+xK7hHmUIlzq9w@alley>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2022-11-24 19:00:14, Petr Mladek wrote:
-> PS: Please, wait a bit with updating the patches. I have got yet
->     another idea when seeing the code around dropped messages.
->     But I have to sleep over it.
+Am Donnerstag, 24. November 2022, 18:22:07 CET schrieb Prabhakar:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > 
->     My concern is that the message about dropped messages need not
->     fit into the smaller "cbufs->text" buffer. It might be better
->     to put it into the bigger one.
+> On the AX45MP core, cache coherency is a specification option so it may
+> not be supported. In this case DMA will fail. As a workaround, firstly we
+> allocate a global dma coherent pool from which DMA allocations are taken
+> and marked as non-cacheable + bufferable using the PMA region as specified
+> in the device tree. Synchronization callbacks are implemented to
+> synchronize when doing DMA transactions.
 > 
->     We might actually always use the bigger buffer as the output
->     buffer. The smaller buffer might be only temporary when formatting
->     the extended messages.
+> The Andes AX45MP core has a Programmable Physical Memory Attributes (PMA)
+> block that allows dynamic adjustment of memory attributes in the runtime.
+> It contains a configurable amount of PMA entries implemented as CSR
+> registers to control the attributes of memory locations in interest.
 > 
->      We could replace
+> Below are the memory attributes supported:
+> * Device, Non-bufferable
+> * Device, bufferable
+> * Memory, Non-cacheable, Non-bufferable
+> * Memory, Non-cacheable, Bufferable
+> * Memory, Write-back, No-allocate
+> * Memory, Write-back, Read-allocate
+> * Memory, Write-back, Write-allocate
+> * Memory, Write-back, Read and Write-allocate
 > 
-> 	struct console_buffers {
-> 		char	ext_text[CONSOLE_EXT_LOG_MAX];
-> 		char	text[CONSOLE_LOG_MAX];
-> 	};
+> This patch adds support to configure the memory attributes of the memory
+> regions as passed from the l2 cache node and exposes the cache management
+> ops.
 > 
->     with
+> More info about PMA (section 10.3):
+> Link: http://www.andestech.com/wp-content/uploads/AX45MP-1C-Rev.-5.0.0-Datasheet.pdf
 > 
-> 	struct console_buffers {
-> 		char	outbuf[CONSOLE_EXT_LOG_MAX];
-> 		char	readbuf[CONSOLE_LOG_MAX];
-> 	};
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> RFC v3 -> v4
+> * Made use of runtime patching instead of compile time
+> * Now just exposing single function ax45mp_no_iocp_cmo() for CMO handling
+> * Added a check to make sure cache line size is always 64 bytes
+> * Renamed folder rzf -> rzfive
+> * Improved Kconfig description
+> * Dropped L2 cache configuration
+> * Dropped unnecessary casts
+> * Fixed comments pointed by Geert, apart from use of PTR_ALIGN_XYZ() macros.
+> ---
+>  arch/riscv/include/asm/cacheflush.h       |   8 +
+>  arch/riscv/include/asm/errata_list.h      |  32 +-
+>  drivers/soc/renesas/Kconfig               |   7 +
+>  drivers/soc/renesas/Makefile              |   2 +
+>  drivers/soc/renesas/rzfive/Kconfig        |   6 +
+>  drivers/soc/renesas/rzfive/Makefile       |   3 +
+>  drivers/soc/renesas/rzfive/ax45mp_cache.c | 415 ++++++++++++++++++++++
+>  drivers/soc/renesas/rzfive/ax45mp_sbi.h   |  29 ++
+>  8 files changed, 496 insertions(+), 6 deletions(-)
+>  create mode 100644 drivers/soc/renesas/rzfive/Kconfig
+>  create mode 100644 drivers/soc/renesas/rzfive/Makefile
+>  create mode 100644 drivers/soc/renesas/rzfive/ax45mp_cache.c
+>  create mode 100644 drivers/soc/renesas/rzfive/ax45mp_sbi.h
 > 
->      Normal consoles would use only @outbuf. Only the extended console
->      would need the @readbuf to read the messages before they are formatted.
-> 
->      I guess that struct console_message won't be needed then at all.
-> 
->      It might help to remove several twists in the code.
-> 
->      I am sorry that I have not got this idea when reviewing v1.
->      Well, the code was even more complicated at that time.
+> diff --git a/arch/riscv/include/asm/cacheflush.h b/arch/riscv/include/asm/cacheflush.h
+> index 4a04d1be7c67..3226f3aceafe 100644
+> --- a/arch/riscv/include/asm/cacheflush.h
+> +++ b/arch/riscv/include/asm/cacheflush.h
+> @@ -61,6 +61,14 @@ static inline void riscv_noncoherent_supported(void) {}
+>  #define SYS_RISCV_FLUSH_ICACHE_LOCAL 1UL
+>  #define SYS_RISCV_FLUSH_ICACHE_ALL   (SYS_RISCV_FLUSH_ICACHE_LOCAL)
+>  
+> +#ifdef CONFIG_AX45MP_L2_CACHE
+> +extern asmlinkage void ax45mp_no_iocp_cmo(unsigned int cache_size, void *vaddr,
+> +					  size_t size, int dir, int ops);
+> +#else
+> +inline void ax45mp_no_iocp_cmo(unsigned int cache_size, void *vaddr,
+> +			       size_t size, int dir, int ops) {}
+> +#endif
+> +
+>  #include <asm-generic/cacheflush.h>
+>  
+>  #endif /* _ASM_RISCV_CACHEFLUSH_H */
+> diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
+> index 48e899a8e7a9..300fed3bfd80 100644
+> --- a/arch/riscv/include/asm/errata_list.h
+> +++ b/arch/riscv/include/asm/errata_list.h
+> @@ -125,8 +125,8 @@ asm volatile(ALTERNATIVE(						\
+>  #define THEAD_SYNC_S	".long 0x0190000b"
+>  
+>  #define ALT_CMO_OP(_op, _start, _size, _cachesize, _dir, _ops)		\
+> -asm volatile(ALTERNATIVE_2(						\
+> -	__nops(6),							\
+> +asm volatile(ALTERNATIVE_3(						\
+> +	__nops(14),							\
+>  	"mv a0, %1\n\t"							\
+>  	"j 2f\n\t"							\
+>  	"3:\n\t"							\
+> @@ -134,7 +134,7 @@ asm volatile(ALTERNATIVE_2(						\
+>  	"add a0, a0, %0\n\t"						\
+>  	"2:\n\t"							\
+>  	"bltu a0, %2, 3b\n\t"						\
+> -	"nop", 0, CPUFEATURE_ZICBOM, CONFIG_RISCV_ISA_ZICBOM,		\
+> +	__nops(8), 0, CPUFEATURE_ZICBOM, CONFIG_RISCV_ISA_ZICBOM,	\
+>  	"mv a0, %1\n\t"							\
+>  	"j 2f\n\t"							\
+>  	"3:\n\t"							\
+> @@ -142,8 +142,28 @@ asm volatile(ALTERNATIVE_2(						\
+>  	"add a0, a0, %0\n\t"						\
+>  	"2:\n\t"							\
+>  	"bltu a0, %2, 3b\n\t"						\
+> -	THEAD_SYNC_S, THEAD_VENDOR_ID,					\
+> -			ERRATA_THEAD_CMO, CONFIG_ERRATA_THEAD_CMO)	\
+> +	THEAD_SYNC_S "\n\t"						\
+> +	__nops(8), THEAD_VENDOR_ID,					\
+> +			ERRATA_THEAD_CMO, CONFIG_ERRATA_THEAD_CMO,	\
+> +	".option push\n\t\n\t"						\
+> +	".option norvc\n\t"						\
+> +	".option norelax\n\t">						\
 
-Honestly, I haven't looked if you extended struct console_messages in
-later patches that added the atomic consoles. It is possible that
-the structure will be needed in the end anyway.
+alternatives already do the norvc + norelax options anyway for old and new instructions,
+so the .option stuff shouldn't be necessary I guess?
 
-This was just an idea. You know, I always try to simplify things.
-And many layers, pointers to the same buffers with different names,
-makes things complicated.
 
-Well, there are always many ways how to design the code and I do not
-want to delay it too much with trying them all. Please, tell me
-when you think that some changes are not worth the effort.
+> +	"addi sp,sp,-16\n\t"						\
+> +	"sd s0,0(sp)\n\t"						\
+> +	"sd ra,8(sp)\n\t"						\
+> +	"addi s0,sp,16\n\t"						\
+> +	"mv a4,%6\n\t"							\
+> +	"mv a3,%5\n\t"							\
+> +	"mv a2,%4\n\t"							\
+> +	"mv a1,%3\n\t"							\
+> +	"mv a0,%0\n\t"							\
+> +	"call ax45mp_no_iocp_cmo\n\t"					\
+> +	"ld ra,8(sp)\n\t"						\
+> +	"ld s0,0(sp)\n\t"						\
+> +	"addi sp,sp,16\n\t"						\
+> +	".option pop\n\t",						\
+> +	ANDESTECH_VENDOR_ID, ERRATA_ANDESTECH_NO_IOCP,			\
+> +	CONFIG_ERRATA_ANDES_CMO)					\
+>  	: : "r"(_cachesize),						\
+>  	    "r"((unsigned long)(_start) & ~((_cachesize) - 1UL)),	\
+>  	    "r"((unsigned long)(_start) + (_size)),			\
+> @@ -151,7 +171,7 @@ asm volatile(ALTERNATIVE_2(						\
+>  	    "r"((unsigned long)(_size)),				\
+>  	    "r"((unsigned long)(_dir)),					\
+>  	    "r"((unsigned long)(_ops))					\
+> -	: "a0")
+> +	: "a0", "a1", "a2", "a3", "a4", "memory")
+>  
+>  #define THEAD_C9XX_RV_IRQ_PMU			17
+>  #define THEAD_C9XX_CSR_SCOUNTEROF		0x5c5
 
-Best Regards,
-Petr
+[...]
+
+> +static int ax45mp_configure_l2_cache(struct device_node *np)
+> +{
+> +	int ret;
+> +
+> +	ret = of_property_read_u32(np, "cache-line-size", &ax45mp_priv->ax45mp_cache_line_size);
+> +	if (ret) {
+> +		pr_err("Failed to get cache-line-size defaulting to 64 bytes\n");
+> +		ax45mp_priv->ax45mp_cache_line_size = SZ_64;
+> +	}
+> +
+> +	if (ax45mp_priv->ax45mp_cache_line_size != SZ_64) {
+> +		pr_err("Expected cache-line-size to 64 bytes (found:%u). Defaulting to 64 bytes\n",
+> +		       ax45mp_priv->ax45mp_cache_line_size);
+> +		ax45mp_priv->ax45mp_cache_line_size = SZ_64;
+> +	}
+> +
+> +	ax45mp_priv->ucctl_ok = ax45mp_cpu_cache_controlable();
+> +	ax45mp_priv->l2cache_enabled = ax45mp_cpu_l2c_ctl_status() & AX45MP_L2_CACHE_CTL_CEN_MASK;
+> +
+> +	return 0;
+> +}
+> +
+> +static int ax45mp_l2c_probe(struct platform_device *pdev)
+> +{
+> +	struct device_node *np = pdev->dev.of_node;
+> +	int ret;
+> +
+> +	ax45mp_priv = devm_kzalloc(&pdev->dev, sizeof(*ax45mp_priv), GFP_KERNEL);
+> +	if (!ax45mp_priv)
+> +		return -ENOMEM;
+> +
+> +	ax45mp_priv->l2c_base = devm_of_iomap(&pdev->dev, pdev->dev.of_node, 0, NULL);
+> +	if (!ax45mp_priv->l2c_base) {
+> +		ret = -ENOMEM;
+> +		goto l2c_err;
+> +	}
+> +
+> +	ret = ax45mp_configure_l2_cache(np);
+> +	if (ret)
+> +		goto l2c_err;
+> +
+> +	ret = ax45mp_configure_pma_regions(np);
+> +	if (ret)
+> +		goto l2c_err;
+> +
+> +	static_branch_disable(&ax45mp_l2c_configured);
+> +
+> +	return 0;
+> +
+> +l2c_err:
+> +	devm_kfree(&pdev->dev, ax45mp_priv);
+> +	ax45mp_priv = NULL;
+> +	return ret;
+> +}
+> +
+> +static const struct of_device_id ax45mp_cache_ids[] = {
+> +	{ .compatible = "andestech,ax45mp-cache" },
+> +	{ /* sentinel */ }
+> +};
+> +
+> +static struct platform_driver ax45mp_l2c_driver = {
+> +	.driver = {
+> +		.name = "ax45mp-l2c",
+> +		.of_match_table = ax45mp_cache_ids,
+> +	},
+> +	.probe = ax45mp_l2c_probe,
+> +};
+> +
+> +static int __init ax45mp_cache_init(void)
+> +{
+> +	static_branch_enable(&ax45mp_l2c_configured);
+> +	return platform_driver_register(&ax45mp_l2c_driver);
+
+the ordering is racy I think.
+
+I.e. in the function called from the cmo operations (ax45mp*_range)
+you need to access ax45mp_priv and its line-size element.
+
+But when you enable the static branch the driver is not yet registered
+but even more important, also not probed yet.
+
+So I guess the static-branch-enable should be living at the end of
+ax45mp_l2c_probe()
+
+
+Heiko
+
+
