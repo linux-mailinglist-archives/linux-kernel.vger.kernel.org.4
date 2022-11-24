@@ -2,81 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E91A0637A90
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 14:55:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F223637AAE
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 14:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbiKXNzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 08:55:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48632 "EHLO
+        id S230234AbiKXN5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 08:57:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiKXNzb (ORCPT
+        with ESMTP id S230121AbiKXN4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 08:55:31 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29CB1E0B7E
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 05:55:30 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id 5so1370185wmo.1
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 05:55:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pN+fMTXIbwkvTVCL6teMynvLqCQ1zb8psy5cG5agjcI=;
-        b=o29ZVKlW0hg+wTr5SNdc59ZTn7GtkgIjvdfNuhfZ9Go5RYF0bUJQaqw5oksOVSlXKZ
-         gcP9TNLHnjIxApSzZCFmyVSHsnHp5d8nqgupDXaf2I2GRs9KooJHuWeafVn03RAPJtr/
-         0qkPSxuCTWSkaFU8OuSG1Uq66QpY8nhn69mWWtcNAOe2IaA095kW57glzfzcSggluPjv
-         gM2S+9x9+HeAxzpzkyPXaxArRwLN7K37FBGUiotrf5SRPQRRIGyY0GrWM/F6EFK1MOFE
-         SuMysdzefbRAZ6CgZjQ+ih+yQp1V+6yCvXoo5pkoW/Kg6aWhZ65xv+8aFUSMN8tbrBJG
-         aQPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pN+fMTXIbwkvTVCL6teMynvLqCQ1zb8psy5cG5agjcI=;
-        b=OOW2ozHP8ljQDhoXf0YJBQ1MpOtrlXPxGlwUqwr6D2iSDUcH/f8LubFMEYiLLybjtm
-         hbkf76cWHkFE0qeoB2pUTu/xWph+1uyUOeGFcq2dMjEK8bPe7/GBg9y21VqhDu4ZxmxV
-         tJrnzqODh2/WMVKpRAsVSd8cMQ4FLJZnBwvaqeG8QgwpZn2Jn06DpjkbUrdL8lHDHWyY
-         2p0DnNtKSqHQ26KV8Y8q21vQJon9i5fJU8+FpKraKVDnffGITh5N03bnyBAji0yPdrwN
-         R+XWlwzaIb6jd8BSPDsOfgUUO74EJKKarMzqIwuhTBLia9T0CGTtAo74wpcEL3MsvtN5
-         RDkA==
-X-Gm-Message-State: ANoB5pnr+xp90nr7iQyiXRRhJpNYT7HPt+7FsIfnWwVxa1FS1g8991/i
-        7aTYBHLrVMmOfzCD4hrH+VT+oj/ncrHNLg==
-X-Google-Smtp-Source: AA0mqf7LmgqnY5TT62nL6QBBImocwCh9tlDp2Ug4ekB8tl5kFgZ55ulOqFa7jWHsk4HR1gTXeY+Y4A==
-X-Received: by 2002:a1c:a381:0:b0:3cf:4d14:5705 with SMTP id m123-20020a1ca381000000b003cf4d145705mr12126137wme.35.1669298128503;
-        Thu, 24 Nov 2022 05:55:28 -0800 (PST)
-Received: from ?IPV6:2a02:6b6a:b4d7:0:f0b8:522f:5d6e:d788? ([2a02:6b6a:b4d7:0:f0b8:522f:5d6e:d788])
-        by smtp.gmail.com with ESMTPSA id h20-20020a05600c351400b003b4935f04a4sm2479548wmq.5.2022.11.24.05.55.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Nov 2022 05:55:28 -0800 (PST)
-Message-ID: <95efd030-27f6-5668-a25e-9fbf210bfa1c@bytedance.com>
-Date:   Thu, 24 Nov 2022 13:55:27 +0000
+        Thu, 24 Nov 2022 08:56:36 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959531144A0;
+        Thu, 24 Nov 2022 05:56:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1669298171; bh=ptF3+UGs4RT73xf2t1eIkj3kEEU2mVqh+94Ww0mBJ/Y=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=AnW4r+OsnxZ+EYbiLrZC1GEfrkwBMKkGjVbunHu9MVuFBEg8tJv4TkeXrSLD8HVib
+         2pL4ZWpLDB/eD/XjdwtKOR9haHd/ygJ6ThKqgy9/vfglCvO6Pbo1kuqmRc0bZj3mQY
+         /f8di0hXImAOFVtsTfmQx+PYBCWY2sP79gtebkLS9Z4HuOd91+qjJX3OJKePk60qeQ
+         l8hDjg7fSqtIjxHmL9x1u2WHIQXjKaouDYKWr11xC6htp67F/b/morily0q26F37N9
+         RYQ40TQZ6JMYnsIVae5hINasFXYcMTIQYx0F+Yxz/OBSLs/U80QpK6RTlJydrAY71c
+         /6JnRskhZrXug==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from Venus.speedport.ip ([84.162.7.17]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MjS9I-1pLxfF1RgQ-00kulG; Thu, 24
+ Nov 2022 14:56:11 +0100
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
+Cc:     stefanb@linux.vnet.ibm.com, linux@mniewoehner.de,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jandryuk@gmail.com, pmenzel@molgen.mpg.de, l.sanfilippo@kunbus.com,
+        LinoSanfilippo@gmx.de, lukas@wunner.de, p.rosenberger@kunbus.com
+Subject: [PATCH v11 04/14] tpm, tpm_tis: Do not skip reset of original interrupt vector
+Date:   Thu, 24 Nov 2022 14:55:28 +0100
+Message-Id: <20221124135538.31020-5-LinoSanfilippo@gmx.de>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20221124135538.31020-1-LinoSanfilippo@gmx.de>
+References: <20221124135538.31020-1-LinoSanfilippo@gmx.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [External] Re: [v2 0/6] KVM: arm64: implement vcpu_is_preempted
- check
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, linux@armlinux.org.uk,
-        yezengruan@huawei.com, catalin.marinas@arm.com, will@kernel.org,
-        steven.price@arm.com, mark.rutland@arm.com, bagasdotme@gmail.com,
-        fam.zheng@bytedance.com, liangma@liangbit.com,
-        punit.agrawal@bytedance.com
-References: <20221104062105.4119003-1-usama.arif@bytedance.com>
- <87k048f3cm.wl-maz@kernel.org>
- <180b91af-a2aa-2cfd-eb7f-b2825c4e3dbe@bytedance.com>
- <86r0y1nmep.wl-maz@kernel.org>
-From:   Usama Arif <usama.arif@bytedance.com>
-In-Reply-To: <86r0y1nmep.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:xa3nABt20tkSDNQZTlmJqGyJFMR+Hbk/kMbprAIaZ7AODF6LfDJ
+ Ga0c6+Iat/fGjI8FJXKlN6Y9C2aNPvUmcmx5LzMenvb2JTFxXVDHdC6ureaQ7UKKFobQMW7
+ XZbwotp3OCfIyfy9i35yO3DFlo9WhGXR1BKBPiDVYPyWupMdSJaUjIlU3aMBqdP2chOexIU
+ kCDWZSOL7frbQ5qM+piSg==
+UI-OutboundReport: notjunk:1;M01:P0:2Hr5OHt1gBo=;NUhu4G4cDfH7sTC3pjO8cBUfk7h
+ tZCb0PHuDXpJsMonJd/CvI5LHnzBltvRtPHblBrRTMe5zFPGZSBmlWjqTefk1dH/wNHET60lr
+ MrAaRG4l1xqlw+AEztk4wr1UoiS6tI2dwXuae9XpRuOE3eZVLYJ2J0O86eHVn1ZZBQ6tmQPJ0
+ Ge7zmvA0ZYoWmruFXMO7b8+rIhuMzo1aXOvI8IIHY0jLKvemekT3PSHPNOzntqA3SwPG+7lUc
+ mVX+T0njRTLcGoWJSiuJFFH4RJrCgwST+L0/cINzUydQbzfJbN1YfpstXTvd8FE9NeHEhbqaI
+ bkG7d8K7NKmauHaF+dZ1tSDhMsn1Qt2zCcNRZgXZ0NcN75qE8OR9x35gWfmKgAA3snMok0kl4
+ fPJinvr5oX6R/ZrNrqJ7sU0B3xbNsAnzneaCcHxCdTR2jO5VMiXN6U3PG6xjxlUwprDeXoNE4
+ FUZMvVyz90wGq+t0BSgnjFgMPIHh3oJChdWNRrghoX3GjFFEFqVvEAUJGGbPqnptk5dfkiirr
+ RNdt/t65fxSfRF+HhsZqF8x3SYQMfD24J7pfbAOihuafH3q3z5le9d+juhl/puqHxTjG5QOqb
+ 4hpAjCxlS/ELD80617vknBZlTnXp/49vAQfqJVjEKRx5kFiYHZIC+HMUnWJZd8RkWGTpuhHWD
+ bLfwdAKSTe26fFaf449kTB6P+D080NwhGsgde3udeqt3o/H5V2wbiL0MHDmgxOkCu2nrpSGZG
+ B5UwJmzvN47wxJWSOMXE0mcxWjPENKu/8C57BAXYUCL1XHBrlWi5zZC47PqWil4BLb6Q76cKs
+ hg2Jbw47bupIuN4sC9OOsHMJiCZkdw9Z1qfqqNTbQROvsUxxA86weCLHZ+T9xA1Uo5gOa8ARg
+ vMuYmSUIxQaxA1qjmg1zDKADcCxzIxg397Ivy4DzgSzzACqQg73a84aE1+/+NVZM2ZNaz8NvS
+ OmIYpA==
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,MIME_BASE64_TEXT,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,102 +71,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 18/11/2022 00:20, Marc Zyngier wrote:
-> On Mon, 07 Nov 2022 12:00:44 +0000,
-> Usama Arif <usama.arif@bytedance.com> wrote:
->>
->>
->>
->> On 06/11/2022 16:35, Marc Zyngier wrote:
->>> On Fri, 04 Nov 2022 06:20:59 +0000,
->>> Usama Arif <usama.arif@bytedance.com> wrote:
->>>>
->>>> This patchset adds support for vcpu_is_preempted in arm64, which
->>>> allows the guest to check if a vcpu was scheduled out, which is
->>>> useful to know incase it was holding a lock. vcpu_is_preempted can
->>>> be used to improve performance in locking (see owner_on_cpu usage in
->>>> mutex_spin_on_owner, mutex_can_spin_on_owner, rtmutex_spin_on_owner
->>>> and osq_lock) and scheduling (see available_idle_cpu which is used
->>>> in several places in kernel/sched/fair.c for e.g. in wake_affine to
->>>> determine which CPU can run soonest):
->>>
->>> [...]
->>>
->>>> pvcy shows a smaller overall improvement (50%) compared to
->>>> vcpu_is_preempted (277%).  Host side flamegraph analysis shows that
->>>> ~60% of the host time when using pvcy is spent in kvm_handle_wfx,
->>>> compared with ~1.5% when using vcpu_is_preempted, hence
->>>> vcpu_is_preempted shows a larger improvement.
->>>
->>> And have you worked out *why* we spend so much time handling WFE?
->>>
->>> 	M.
->>
->> Its from the following change in pvcy patchset:
->>
->> diff --git a/arch/arm64/kvm/handle_exit.c b/arch/arm64/kvm/handle_exit.c
->> index e778eefcf214..915644816a85 100644
->> --- a/arch/arm64/kvm/handle_exit.c
->> +++ b/arch/arm64/kvm/handle_exit.c
->> @@ -118,7 +118,12 @@ static int kvm_handle_wfx(struct kvm_vcpu *vcpu)
->>          }
->>
->>          if (esr & ESR_ELx_WFx_ISS_WFE) {
->> -               kvm_vcpu_on_spin(vcpu, vcpu_mode_priv(vcpu));
->> +               int state;
->> +               while ((state = kvm_pvcy_check_state(vcpu)) == 0)
->> +                       schedule();
->> +
->> +               if (state == -1)
->> +                       kvm_vcpu_on_spin(vcpu, vcpu_mode_priv(vcpu));
->>          } else {
->>                  if (esr & ESR_ELx_WFx_ISS_WFxT)
->>                          vcpu_set_flag(vcpu, IN_WFIT);
->>
->>
->> If my understanding is correct of the pvcy changes, whenever pvcy
->> returns an unchanged vcpu state, we would schedule to another
->> vcpu. And its the constant scheduling where the time is spent. I guess
->> the affects are much higher when the lock contention is very
->> high. This can be seem from the pvcy host side flamegraph as well with
->> (~67% of the time spent in the schedule() call in kvm_handle_wfx), For
->> reference, I have put the graph at:
->> https://uarif1.github.io/pvlock/perf_host_pvcy_nmi.svg
-> 
-> The real issue here is that we don't try to pick the right vcpu to
-> run, and strictly rely on schedule() to eventually pick something that
-> can run.
-> 
-> An interesting to do would be to try and fit the directed yield
-> mechanism there. It would be a lot more interesting than the one-off
-> vcpu_is_preempted hack, as it gives us a low-level primitive on which
-> to construct things (pvcy is effectively a mwait-like primitive).
-
-We could use kvm_vcpu_yield_to to yield to a specific vcpu, but how 
-would we determine which vcpu to yield to?
-
-IMO vcpu_is_preempted is very well integrated in a lot of core kernel 
-code, i.e. mutex, rtmutex, rwsem and osq_lock. It is also used in 
-scheduler to determine better which vCPU we can run on soonest, select 
-idle core, etc. I am not sure if all of these cases will be optimized by 
-pvcy? Also, with vcpu_is_preempted, some of the lock heavy benchmarks 
-come down from spending around 50% of the time in lock to less than 1% 
-(so not sure how much more room is there for improvement).
-
-We could also use vcpu_is_preempted to optimize IPI performance (along 
-with directed yield to target IPI vCPU) similar to how its done in x86 
-(https://lore.kernel.org/all/1560255830-8656-2-git-send-email-wanpengli@tencent.com/). 
-This case definitely wont be covered by pvcy.
-
-Considering all the above, i.e. the core kernel integration already 
-present and possible future usecases of vcpu_is_preempted, maybe its 
-worth making vcpu_is_preempted work on arm independently of pvcy?
-
-Thanks,
-Usama
-
-> 
-> 	M.
-> 
+RnJvbTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlwcG9Aa3VuYnVzLmNvbT4KCklmIGluIHRw
+bV90aXNfcHJvYmVfaXJxX3NpbmdsZSgpIGFuIGVycm9yIG9jY3VycyBhZnRlciB0aGUgb3JpZ2lu
+YWwKaW50ZXJydXB0IHZlY3RvciBoYXMgYmVlbiByZWFkLCByZXN0b3JlIHRoZSBpbnRlcnJ1cHRz
+IGJlZm9yZSB0aGUgZXJyb3IgaXMKcmV0dXJuZWQuCgpTaW5jZSB0aGUgY2FsbGVyIGRvZXMgbm90
+IGNoZWNrIHRoZSBlcnJvciB2YWx1ZSwgcmV0dXJuIC0xIGluIGFueSBjYXNlIHRoYXQKdGhlIFRQ
+TV9DSElQX0ZMQUdfSVJRIGZsYWcgaXMgbm90IHNldC4gU2luY2UgdGhlIHJldHVybiB2YWx1ZSBv
+ZiBmdW5jdGlvbgp0cG1fdGlzX2dlbl9pbnRlcnJ1cHQoKSBpcyBub3QgbG9uZ2VyIHVzZWQsIG1h
+a2UgaXQgYSB2b2lkIGZ1bmN0aW9uLgoKRml4ZXM6IDExMDdkMDY1ZmRmMSAoInRwbV90aXM6IElu
+dHJvZHVjZSBpbnRlcm1lZGlhdGUgbGF5ZXIgZm9yIFRQTSBhY2Nlc3MiKQpTaWduZWQtb2ZmLWJ5
+OiBMaW5vIFNhbmZpbGlwcG8gPGwuc2FuZmlsaXBwb0BrdW5idXMuY29tPgotLS0KIGRyaXZlcnMv
+Y2hhci90cG0vdHBtX3Rpc19jb3JlLmMgfCAyOSArKysrKysrKysrKy0tLS0tLS0tLS0tLS0tLS0t
+LQogMSBmaWxlIGNoYW5nZWQsIDExIGluc2VydGlvbnMoKyksIDE4IGRlbGV0aW9ucygtKQoKZGlm
+ZiAtLWdpdCBhL2RyaXZlcnMvY2hhci90cG0vdHBtX3Rpc19jb3JlLmMgYi9kcml2ZXJzL2NoYXIv
+dHBtL3RwbV90aXNfY29yZS5jCmluZGV4IDYwM2I4MmNhNTZkYS4uODFiOTcyNmQzZWQyIDEwMDY0
+NAotLS0gYS9kcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29yZS5jCisrKyBiL2RyaXZlcnMvY2hh
+ci90cG0vdHBtX3Rpc19jb3JlLmMKQEAgLTcyOSw3ICs3MjksNyBAQCBzdGF0aWMgaXJxcmV0dXJu
+X3QgdGlzX2ludF9oYW5kbGVyKGludCBkdW1teSwgdm9pZCAqZGV2X2lkKQogCXJldHVybiBJUlFf
+SEFORExFRDsKIH0KIAotc3RhdGljIGludCB0cG1fdGlzX2dlbl9pbnRlcnJ1cHQoc3RydWN0IHRw
+bV9jaGlwICpjaGlwKQorc3RhdGljIHZvaWQgdHBtX3Rpc19nZW5faW50ZXJydXB0KHN0cnVjdCB0
+cG1fY2hpcCAqY2hpcCkKIHsKIAljb25zdCBjaGFyICpkZXNjID0gImF0dGVtcHRpbmcgdG8gZ2Vu
+ZXJhdGUgYW4gaW50ZXJydXB0IjsKIAl1MzIgY2FwMjsKQEAgLTczOCw3ICs3MzgsNyBAQCBzdGF0
+aWMgaW50IHRwbV90aXNfZ2VuX2ludGVycnVwdChzdHJ1Y3QgdHBtX2NoaXAgKmNoaXApCiAKIAly
+ZXQgPSByZXF1ZXN0X2xvY2FsaXR5KGNoaXAsIDApOwogCWlmIChyZXQgPCAwKQotCQlyZXR1cm4g
+cmV0OworCQlyZXR1cm47CiAKIAlpZiAoY2hpcC0+ZmxhZ3MgJiBUUE1fQ0hJUF9GTEFHX1RQTTIp
+CiAJCXJldCA9IHRwbTJfZ2V0X3RwbV9wdChjaGlwLCAweDEwMCwgJmNhcDIsIGRlc2MpOwpAQCAt
+NzQ2LDggKzc0Niw2IEBAIHN0YXRpYyBpbnQgdHBtX3Rpc19nZW5faW50ZXJydXB0KHN0cnVjdCB0
+cG1fY2hpcCAqY2hpcCkKIAkJcmV0ID0gdHBtMV9nZXRjYXAoY2hpcCwgVFBNX0NBUF9QUk9QX1RJ
+U19USU1FT1VULCAmY2FwLCBkZXNjLCAwKTsKIAogCXJlbGVhc2VfbG9jYWxpdHkoY2hpcCwgMCk7
+Ci0KLQlyZXR1cm4gcmV0OwogfQogCiAvKiBSZWdpc3RlciB0aGUgSVJRIGFuZCBpc3N1ZSBhIGNv
+bW1hbmQgdGhhdCB3aWxsIGNhdXNlIGFuIGludGVycnVwdC4gSWYgYW4KQEAgLTc3Nyw0MiArNzc1
+LDM3IEBAIHN0YXRpYyBpbnQgdHBtX3Rpc19wcm9iZV9pcnFfc2luZ2xlKHN0cnVjdCB0cG1fY2hp
+cCAqY2hpcCwgdTMyIGludG1hc2ssCiAKIAlyYyA9IHRwbV90aXNfd3JpdGU4KHByaXYsIFRQTV9J
+TlRfVkVDVE9SKHByaXYtPmxvY2FsaXR5KSwgaXJxKTsKIAlpZiAocmMgPCAwKQotCQlyZXR1cm4g
+cmM7CisJCWdvdG8gcmVzdG9yZV9pcnFzOwogCiAJcmMgPSB0cG1fdGlzX3JlYWQzMihwcml2LCBU
+UE1fSU5UX1NUQVRVUyhwcml2LT5sb2NhbGl0eSksICZpbnRfc3RhdHVzKTsKIAlpZiAocmMgPCAw
+KQotCQlyZXR1cm4gcmM7CisJCWdvdG8gcmVzdG9yZV9pcnFzOwogCiAJLyogQ2xlYXIgYWxsIGV4
+aXN0aW5nICovCiAJcmMgPSB0cG1fdGlzX3dyaXRlMzIocHJpdiwgVFBNX0lOVF9TVEFUVVMocHJp
+di0+bG9jYWxpdHkpLCBpbnRfc3RhdHVzKTsKIAlpZiAocmMgPCAwKQotCQlyZXR1cm4gcmM7Ci0K
+KwkJZ290byByZXN0b3JlX2lycXM7CiAJLyogVHVybiBvbiAqLwogCXJjID0gdHBtX3Rpc193cml0
+ZTMyKHByaXYsIFRQTV9JTlRfRU5BQkxFKHByaXYtPmxvY2FsaXR5KSwKIAkJCSAgICAgaW50bWFz
+ayB8IFRQTV9HTE9CQUxfSU5UX0VOQUJMRSk7CiAJaWYgKHJjIDwgMCkKLQkJcmV0dXJuIHJjOwor
+CQlnb3RvIHJlc3RvcmVfaXJxczsKIAogCWNsZWFyX2JpdChUUE1fVElTX0lSUV9URVNURUQsICZw
+cml2LT5mbGFncyk7CiAKIAkvKiBHZW5lcmF0ZSBhbiBpbnRlcnJ1cHQgYnkgaGF2aW5nIHRoZSBj
+b3JlIGNhbGwgdGhyb3VnaCB0bwogCSAqIHRwbV90aXNfc2VuZAogCSAqLwotCXJjID0gdHBtX3Rp
+c19nZW5faW50ZXJydXB0KGNoaXApOwotCWlmIChyYyA8IDApCi0JCXJldHVybiByYzsKKwl0cG1f
+dGlzX2dlbl9pbnRlcnJ1cHQoY2hpcCk7CiAKK3Jlc3RvcmVfaXJxczoKIAkvKiB0cG1fdGlzX3Nl
+bmQgd2lsbCBlaXRoZXIgY29uZmlybSB0aGUgaW50ZXJydXB0IGlzIHdvcmtpbmcgb3IgaXQKIAkg
+KiB3aWxsIGNhbGwgZGlzYWJsZV9pcnEgd2hpY2ggdW5kb2VzIGFsbCBvZiB0aGUgYWJvdmUuCiAJ
+ICovCiAJaWYgKCEoY2hpcC0+ZmxhZ3MgJiBUUE1fQ0hJUF9GTEFHX0lSUSkpIHsKLQkJcmMgPSB0
+cG1fdGlzX3dyaXRlOChwcml2LCBvcmlnaW5hbF9pbnRfdmVjLAotCQkJCVRQTV9JTlRfVkVDVE9S
+KHByaXYtPmxvY2FsaXR5KSk7Ci0JCWlmIChyYyA8IDApCi0JCQlyZXR1cm4gcmM7Ci0KLQkJcmV0
+dXJuIDE7CisJCXRwbV90aXNfd3JpdGU4KHByaXYsIG9yaWdpbmFsX2ludF92ZWMsCisJCQkgICAg
+ICAgVFBNX0lOVF9WRUNUT1IocHJpdi0+bG9jYWxpdHkpKTsKKwkJcmV0dXJuIC0xOwogCX0KIAog
+CXJldHVybiAwOwotLSAKMi4zNi4xCgo=
