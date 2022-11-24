@@ -2,313 +2,455 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7FD5636EB5
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 01:06:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04E98636EB7
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 01:07:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbiKXAGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 19:06:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35544 "EHLO
+        id S229498AbiKXAHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 19:07:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbiKXAFn (ORCPT
+        with ESMTP id S229475AbiKXAHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 19:05:43 -0500
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2045.outbound.protection.outlook.com [40.107.212.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40ADF10EA29;
-        Wed, 23 Nov 2022 16:05:36 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZYAqrC56U85Sk/25TAP1s2h6CbC9oXKakTzePJnzdFg1NdCBK6G5GY4g6s5ndjp2GqXEzyr3HcPpXdsbDvSfehq1PKLls5KLWQSaaAB51lYjTYCw7h8USem8JXWP7ItIomfhnPPQQboMoe8abAiHBcWvUijJqMwkHd4qsPxkE3kLMNc9/Tew9E+LtxLTzIanO9eIbXxymyFlPTvbpO38yVEcoAnEb1yoPNxg1um1Ue6MBrLpJQUm6zXQGHKrQSuOs+x05CJASzXbcvQvAsXVACYJIcQYveoHAWWqAVcnv9JmCscIFgrV1lhYYu0uAfmelE+9c7VjBXn4kW5umZVRXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rEiENljY2DWeh3xsSsE+g4k7imsrnt3rwwOWJRnz7KI=;
- b=V4usQiQAoUE+kB7BHU8+uIrw5chST5hKqenL4Ib1cI1R8062r85UHT3uSR1N0h5WBcdNtumr9+QJAnldvNpG0p7cL8D1KgnwQf83fBoXk8whnpIwV+gNrbwBJOfNVABZ22Z1a5bKZqQFP93itBwZy2TZx9MT4T5S4+yxHYboe/tGKoJ7evagjKH57MhqcOjKyXKAlngu2rvSJEkEb+pE+/rurkUG/7R0I7oSN07ubCBt6daq8Kqtp+hwJqK4OhEeR1Y4ZyTqTYwVuCY1t/YsWGxCJcqMpdxx26FyqMm3D/RFMQTv61ta35VmG36Xh6JPruzOvPP7+b0ZWdyqEsJ0Jw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rEiENljY2DWeh3xsSsE+g4k7imsrnt3rwwOWJRnz7KI=;
- b=h538IsmcBxcN0XWD8OEyw+WEOW1tYiIIlewB89XKD3nZj7bFmOrvxW4tHR/sihTNx6eOddjkefN7FyZU2nIY9ntFtUAptpj/mVvhKDqQOIkKHqBrNer897ROH5bs2RDnHB96rjJ2xRfYKUtY5fyhEZkT/KVBAXxG8Tic5wZIp7w=
-Received: from MW4PR04CA0135.namprd04.prod.outlook.com (2603:10b6:303:84::20)
- by LV2PR12MB5799.namprd12.prod.outlook.com (2603:10b6:408:179::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Thu, 24 Nov
- 2022 00:05:33 +0000
-Received: from CO1NAM11FT071.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:84:cafe::93) by MW4PR04CA0135.outlook.office365.com
- (2603:10b6:303:84::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.18 via Frontend
- Transport; Thu, 24 Nov 2022 00:05:32 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT071.mail.protection.outlook.com (10.13.175.56) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5857.18 via Frontend Transport; Thu, 24 Nov 2022 00:05:32 +0000
-Received: from fritz.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 23 Nov
- 2022 18:05:30 -0600
-From:   Kim Phillips <kim.phillips@amd.com>
-To:     <x86@kernel.org>
-CC:     Kim Phillips <kim.phillips@amd.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        Borislav Petkov <bp@alien8.de>, Borislav Petkov <bp@suse.de>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Konrad Rzeszutek Wilk" <konrad.wilk@oracle.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>, <kvm@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 2/2] x86/cpu, kvm: Support AMD Automatic IBRS
-Date:   Wed, 23 Nov 2022 18:04:49 -0600
-Message-ID: <20221124000449.79014-3-kim.phillips@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221124000449.79014-1-kim.phillips@amd.com>
-References: <20221124000449.79014-1-kim.phillips@amd.com>
+        Wed, 23 Nov 2022 19:07:35 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C74614C
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 16:07:33 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id c7so233555iof.13
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 16:07:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=f93CNSs/bb0duRcRxceAhtecknVBrTpxaSJ0Rte3cDk=;
+        b=fnpre3cmjZqZhJB/oiMkXRNq9yCwpe9XuPE1VbfpqNDWqW5wTWdZYW4cdODhgldRv9
+         37NH1+eMxNfa7YWNv+poJiL0tIYQFBUVDRtHlHxa2lo6N4kOgDGqWMK2BraynUAWGcfT
+         odYeAset59Ga2yt29aoG9F8S8ceoy+HoGFO3Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=f93CNSs/bb0duRcRxceAhtecknVBrTpxaSJ0Rte3cDk=;
+        b=g3+TKIOeDINv9Z1t2iu4+seR45ppwkSWoFzzOg6ohLH7lQqxJGzKHLjYTKInACNr8F
+         LUJjpllq5xlNSr6jiNrbr/Eho764iMBAfQBFgc4KI8qzBZm8VqQRaJSwgZAPPrl6w/1y
+         GkHIKX5mK1SejWyzr7PozMXG2slqJgpNSgUjJ5PPIng3uq63HI8B4o8WXfxhXhm0Emoa
+         nMAWwP1iY1erVmUGWlZLP1NUg7V01cShfzu9V3QTnUgcEMiS6Zod8YjOMOInfuTdgq+D
+         02PuaUjfAN0XHO994x713lyOChpL/Fb186CYLoj1Mf8sQxkaJsqn4LWwqQTnudVferAQ
+         v3QA==
+X-Gm-Message-State: ANoB5pmloJPg1DMHjXsIuCru69AFiOzLGe6hijG40lO8UPBa1rUjztVy
+        fcIWxn1bd4FuXY/LxuD73q5LEQ==
+X-Google-Smtp-Source: AA0mqf6RkgyNknlsY5xxmtX5cYMwNFeDmH6DPbxSVDT2USA73X9uj0LbCb0tLdq2FA4XYbEjS6DkBg==
+X-Received: by 2002:a02:cf35:0:b0:388:cda3:8d72 with SMTP id s21-20020a02cf35000000b00388cda38d72mr51462jar.82.1669248452370;
+        Wed, 23 Nov 2022 16:07:32 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id e32-20020a026d60000000b003733e2ce4e8sm6599603jaf.59.2022.11.23.16.07.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Nov 2022 16:07:31 -0800 (PST)
+Date:   Thu, 24 Nov 2022 00:07:31 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     "Kenneth R. Crudup" <kenny@panix.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Vidya Sagar <vidyas@nvidia.com>, bhelgaas@google.com,
+        lorenzo.pieralisi@arm.com, hkallweit1@gmail.com,
+        wangxiongfeng2@huawei.com, mika.westerberg@linux.intel.com,
+        kai.heng.feng@canonical.com, chris.packham@alliedtelesis.co.nz,
+        yangyicong@hisilicon.com, treding@nvidia.com, jonathanh@nvidia.com,
+        abhsahu@nvidia.com, sagupta@nvidia.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kthota@nvidia.com,
+        mmaddireddy@nvidia.com, sagar.tv@gmail.com,
+        Ricky Wu <ricky_wu@realtek.com>,
+        Rajat Jain <rajatja@google.com>,
+        Prasad Malisetty <quic_pmaliset@quicinc.com>,
+        Victor Ding <victording@google.com>
+Subject: Re: [PATCH V1] PCI/ASPM: Save/restore L1SS Capability for
+ suspend/resume
+Message-ID: <Y361w1uiTPDmA2nM@google.com>
+References: <0d8cc8c0-31a1-0290-5aa5-0c7b16db1edb@nvidia.com>
+ <20220412225047.GA627910@bhelgaas>
+ <Y36UJu4Ho54KBaHF@google.com>
+ <695cd29-dd66-e87d-9c67-73f8416b26ef@panix.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT071:EE_|LV2PR12MB5799:EE_
-X-MS-Office365-Filtering-Correlation-Id: 48245d85-916a-4f44-f47c-08dacdaf9ae7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uFGfkzmg23z+kWXmRKAAMT+LzkT7U5PLPEUL64Fy397sIUI7/PXDLoAcx0eUdSaGhqbhmVlOOn9bxSHOauOGQ8WNeisiKSRthdp9YaHp+FsyP/a8k+d9p38vLbLrDo3NpfHbt3XaUtu60us512nJPnLyTOXEQzc6+r+V5IEsSGGKd/fpu1aOSGpzMtv5ztmSZtq8/FQTarVeQ18+hoktO46gIS8s+/tf5A2DhrLeCjkDWveyzEoMtYu2EvO14NYBR948+TEvzkQ/rUdLbQktxF5MZV7swnCn+nCTLzwj9MNpzogz6DEJ2NOb3ONDISrzJ7szXHOVMoeVr22xL8v+pjup7StYP67DozWjrBTmCDkupnr0MojH7Iu89xGU9kedu8oVaLe+5twhhMuVj6E2Wb94+vXiRpxTCls9aJEQojBx9qEZcopjgfCPvghmplqGgtGMtfzmIKP0vrc+hoJCTrfPjueRqeCtoxWpuD2XuYnIr02Istpn3uGMBTbR/Ul9C2egAGBDPEBW6P9mBXxtpETyY7dFkcphHfRt8SHjD73GxU66Pbavy6HfYnmCGsgx8+lzAoWBiW4MU6Xx+CT4m4zjI3TIdZKqMGenqKGzUjQ+kUoDatoQe1bd74OjwxXh4lGpt0Ogirccw3sFXL68Avb0tgGEhomfYI4R/G+5FcP5O2KqGVoO2DhfctsNTITqKKwQAhsl5YyYIYaviP+F+Dzu7IsBujhK16ag/Dko1MV0zRAxlztlsX2e8rHnWP3MY08vwg+xnXev3PHCZCP+Pg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(136003)(39860400002)(396003)(451199015)(40470700004)(36840700001)(46966006)(8676002)(6916009)(8936002)(82310400005)(40460700003)(36756003)(70206006)(4326008)(36860700001)(356005)(26005)(70586007)(478600001)(6666004)(316002)(5660300002)(7416002)(40480700001)(81166007)(82740400003)(86362001)(54906003)(966005)(44832011)(7696005)(83380400001)(41300700001)(426003)(186003)(336012)(47076005)(2616005)(2906002)(1076003)(16526019)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2022 00:05:32.6491
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 48245d85-916a-4f44-f47c-08dacdaf9ae7
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT071.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5799
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <695cd29-dd66-e87d-9c67-73f8416b26ef@panix.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The AMD Zen4 core supports a new feature called Automatic IBRS.
+On Wed, Nov 23, 2022 at 02:01:59PM -0800, Kenneth R. Crudup wrote:
+> 
+> For #2, you mean "S3 suspend"?
 
-It is a "set-and-forget" feature that means that, like
-Intel's Enhanced IBRS, h/w manages its IBRS mitigation
-resources automatically across CPL transitions.
+Yes
 
-The feature is advertised by CPUID_Fn80000021_EAX bit 8 and is
-enabled by setting MSR C000_0080 (EFER) bit 21.
+> My normally solid machine is hit-or- miss on coming out of S3
+> suspend lately but that could be related to me running Linus'
+> master.
 
-Enable Automatic IBRS by default if the CPU feature is present.
-It typically provides greater performance over the incumbent
-generic retpolines mitigation.
+Interesting. Did this suspend/resume flakiness only (re)appear
+recently?
 
-Reuse the SPECTRE_V2_EIBRS spectre_v2_mitigation enum.
-AMD Automatic IBRS and Intel Enhanced IBRS have similar
-bugs.c enablement.
+> Should I try out "Dubious Patch #1"? I lose a %age/hr in S3.
 
-Also allow for spectre_v2=autoibrs on the kernel command line.
-'spectre_v2=autoibrs,retpoline' and 'autoibrs,lfence' are
-honoured but not required.  AutoIBRS will also be enabled if
-the =eibrs[,{lfence,retpoline}] variants are specified.
+If you are seeing high power consumption of the NVMe the patch
+might help. On my system it goes from values in the 400mW range
+to <10mW in S3. S0 power consumption is also reduced
+significantly.
 
-Signed-off-by: Kim Phillips <kim.phillips@amd.com>
----
-v1: https://lore.kernel.org/lkml/20221104213651.141057-3-kim.phillips@amd.com/
-v2: Address v1 comments:
-    - Reuse SPECTRE_V2_EIBRS spectre_v2_mitigation enum [Boris, PeterZ, D.Hansen]
-      - Change from Boris' diff:
-        Moved setting X86_FEATURE_IBRS_ENHANCED to after BUG_EIBRS_PBRSB
-        so PBRSB mitigations wouldn't be enabled.
-    - Allow for users to specify "autoibrs,lfence/retpoline" instead
-      of actively preventing the extra protections.  AutoIBRS doesn't
-      require the extra protection, but we allow it anyway.
+The implementation of the patch is incorrect even for what it
+claims to do, but it still has the desired impact on the power
+consumption of the Kioxia. Alternatively you could also just
+set 'scale' and 'value' to 0 (possibly just 'value' would be
+enough) instead of the values set by encode_l12_threshold(),
+which is essentially what the patch does.
 
- .../admin-guide/kernel-parameters.txt         |  9 +++++---
- arch/x86/include/asm/msr-index.h              |  2 ++
- arch/x86/kernel/cpu/bugs.c                    | 23 ++++++++++++-------
- arch/x86/kernel/cpu/common.c                  |  8 +++++++
- arch/x86/kvm/svm/svm.c                        |  3 +++
- arch/x86/kvm/x86.c                            |  3 +++
- 6 files changed, 37 insertions(+), 11 deletions(-)
+If messing with LTR_L1.2_THRESHOLD isn't enough for stabilizing
+suspend/resume add an msleep of 200ms to the suspend() handler
+of your PCIe driver and see if that helps. Not a proper
+solution obviously, but could be a good data point, especially
+if it helps.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index a465d5242774..880016d06a8a 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -5698,9 +5698,12 @@
- 			retpoline,generic - Retpolines
- 			retpoline,lfence  - LFENCE; indirect branch
- 			retpoline,amd     - alias for retpoline,lfence
--			eibrs		  - enhanced IBRS
--			eibrs,retpoline   - enhanced IBRS + Retpolines
--			eibrs,lfence      - enhanced IBRS + LFENCE
-+			eibrs		  - Enhanced/Auto IBRS
-+			autoibrs	  - Enhanced/Auto IBRS
-+			eibrs,retpoline   - Enhanced/Auto IBRS + Retpolines
-+			autoibrs,retpoline- Enhanced/Auto IBRS + Retpolines
-+			eibrs,lfence      - Enhanced/Auto IBRS + LFENCE
-+			autoibrs,lfence   - Enhanced/Auto IBRS + LFENCE
- 			ibrs		  - use IBRS to protect kernel
- 
- 			Not specifying this option is equivalent to
-diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index 8519191c6409..88fdd75f6a2f 100644
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -30,6 +30,7 @@
- #define _EFER_SVME		12 /* Enable virtualization */
- #define _EFER_LMSLE		13 /* Long Mode Segment Limit Enable */
- #define _EFER_FFXSR		14 /* Enable Fast FXSAVE/FXRSTOR */
-+#define _EFER_AUTOIBRS		21 /* Enable Automatic IBRS */
- 
- #define EFER_SCE		(1<<_EFER_SCE)
- #define EFER_LME		(1<<_EFER_LME)
-@@ -38,6 +39,7 @@
- #define EFER_SVME		(1<<_EFER_SVME)
- #define EFER_LMSLE		(1<<_EFER_LMSLE)
- #define EFER_FFXSR		(1<<_EFER_FFXSR)
-+#define EFER_AUTOIBRS		(1<<_EFER_AUTOIBRS)
- 
- /* Intel MSRs. Some also available on other CPUs */
- 
-diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-index aa0819252c88..5f48dd4dbc48 100644
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -1222,9 +1222,9 @@ static const char * const spectre_v2_strings[] = {
- 	[SPECTRE_V2_NONE]			= "Vulnerable",
- 	[SPECTRE_V2_RETPOLINE]			= "Mitigation: Retpolines",
- 	[SPECTRE_V2_LFENCE]			= "Mitigation: LFENCE",
--	[SPECTRE_V2_EIBRS]			= "Mitigation: Enhanced IBRS",
--	[SPECTRE_V2_EIBRS_LFENCE]		= "Mitigation: Enhanced IBRS + LFENCE",
--	[SPECTRE_V2_EIBRS_RETPOLINE]		= "Mitigation: Enhanced IBRS + Retpolines",
-+	[SPECTRE_V2_EIBRS]			= "Mitigation: Enhanced / Automatic IBRS",
-+	[SPECTRE_V2_EIBRS_LFENCE]		= "Mitigation: Enhanced / Automatic IBRS + LFENCE",
-+	[SPECTRE_V2_EIBRS_RETPOLINE]		= "Mitigation: Enhanced / Automatic IBRS + Retpolines",
- 	[SPECTRE_V2_IBRS]			= "Mitigation: IBRS",
- };
- 
-@@ -1240,8 +1240,11 @@ static const struct {
- 	{ "retpoline,lfence",	SPECTRE_V2_CMD_RETPOLINE_LFENCE,  false },
- 	{ "retpoline,generic",	SPECTRE_V2_CMD_RETPOLINE_GENERIC, false },
- 	{ "eibrs",		SPECTRE_V2_CMD_EIBRS,		  false },
-+	{ "autoibrs",		SPECTRE_V2_CMD_EIBRS,		  false },
- 	{ "eibrs,lfence",	SPECTRE_V2_CMD_EIBRS_LFENCE,	  false },
-+	{ "autoibrs,lfence",	SPECTRE_V2_CMD_EIBRS_LFENCE,	  false },
- 	{ "eibrs,retpoline",	SPECTRE_V2_CMD_EIBRS_RETPOLINE,	  false },
-+	{ "autoibrs,retpoline",	SPECTRE_V2_CMD_EIBRS_RETPOLINE,	  false },
- 	{ "auto",		SPECTRE_V2_CMD_AUTO,		  false },
- 	{ "ibrs",		SPECTRE_V2_CMD_IBRS,              false },
- };
-@@ -1293,7 +1296,7 @@ static enum spectre_v2_mitigation_cmd __init spectre_v2_parse_cmdline(void)
- 	     cmd == SPECTRE_V2_CMD_EIBRS_LFENCE ||
- 	     cmd == SPECTRE_V2_CMD_EIBRS_RETPOLINE) &&
- 	    !boot_cpu_has(X86_FEATURE_IBRS_ENHANCED)) {
--		pr_err("%s selected but CPU doesn't have eIBRS. Switching to AUTO select\n",
-+		pr_err("%s selected but CPU doesn't have Enhanced or Automatic IBRS. Switching to AUTO select\n",
- 		       mitigation_options[i].option);
- 		return SPECTRE_V2_CMD_AUTO;
- 	}
-@@ -1479,8 +1482,12 @@ static void __init spectre_v2_select_mitigation(void)
- 		pr_err(SPECTRE_V2_EIBRS_EBPF_MSG);
- 
- 	if (spectre_v2_in_ibrs_mode(mode)) {
--		x86_spec_ctrl_base |= SPEC_CTRL_IBRS;
--		write_spec_ctrl_current(x86_spec_ctrl_base, true);
-+		if (boot_cpu_has(X86_FEATURE_AUTOIBRS)) {
-+			msr_set_bit(MSR_EFER, _EFER_AUTOIBRS);
-+		} else {
-+			x86_spec_ctrl_base |= SPEC_CTRL_IBRS;
-+			write_spec_ctrl_current(x86_spec_ctrl_base, true);
-+		}
- 	}
- 
- 	switch (mode) {
-@@ -1564,8 +1571,8 @@ static void __init spectre_v2_select_mitigation(void)
- 	/*
- 	 * Retpoline protects the kernel, but doesn't protect firmware.  IBRS
- 	 * and Enhanced IBRS protect firmware too, so enable IBRS around
--	 * firmware calls only when IBRS / Enhanced IBRS aren't otherwise
--	 * enabled.
-+	 * firmware calls only when IBRS / Enhanced / Automatic IBRS aren't
-+	 * otherwise enabled.
- 	 *
- 	 * Use "mode" to check Enhanced IBRS instead of boot_cpu_has(), because
- 	 * the user might select retpoline on the kernel command line and if
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 73cc546e024d..6506024f97e9 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -1406,6 +1406,14 @@ static void __init cpu_set_bug_bits(struct cpuinfo_x86 *c)
- 	    !(ia32_cap & ARCH_CAP_PBRSB_NO))
- 		setup_force_cpu_bug(X86_BUG_EIBRS_PBRSB);
- 
-+	/*
-+	 * AMD's AutoIBRS is equivalent to Intel's eIBRS - use the Intel flag only
-+	 * after IBRS_ENHANCED bugs such as BUG_EIBRS_PBRSB above have been
-+	 * determined.
-+	 */
-+	if (cpu_has(c, X86_FEATURE_AUTOIBRS))
-+		setup_force_cpu_cap(X86_FEATURE_IBRS_ENHANCED);
-+
- 	if (cpu_matches(cpu_vuln_whitelist, NO_MELTDOWN))
- 		return;
- 
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 4b6d2b050e57..3ac3d4cfce24 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -4960,6 +4960,9 @@ static __init int svm_hardware_setup(void)
- 
- 	tsc_aux_uret_slot = kvm_add_user_return_msr(MSR_TSC_AUX);
- 
-+	if (boot_cpu_has(X86_FEATURE_AUTOIBRS))
-+		kvm_enable_efer_bits(EFER_AUTOIBRS);
-+
- 	/* Check for pause filtering support */
- 	if (!boot_cpu_has(X86_FEATURE_PAUSEFILTER)) {
- 		pause_filter_count = 0;
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 490ec23c8450..db0f522fd597 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -1682,6 +1682,9 @@ static int do_get_msr_feature(struct kvm_vcpu *vcpu, unsigned index, u64 *data)
- 
- static bool __kvm_valid_efer(struct kvm_vcpu *vcpu, u64 efer)
- {
-+	if (efer & EFER_AUTOIBRS && !guest_cpuid_has(vcpu, X86_FEATURE_AUTOIBRS))
-+		return false;
-+
- 	if (efer & EFER_FFXSR && !guest_cpuid_has(vcpu, X86_FEATURE_FXSR_OPT))
- 		return false;
- 
--- 
-2.34.1
+I'm interested to learn about your findings!
 
+m.
+
+> On Wed, 23 Nov 2022, Matthias Kaehlcke wrote:
+> 
+> > Hi,
+> >
+> > not sure this is the best thread to reply to, but we are also
+> > observing suspend issues with the same Kioxia NVMe on a platform
+> > with a Qualcomm sc7280 SoC. The system runs a v5.15 downstream
+> > kernel which includes most (post v5.15) ASPM patches from
+> > upstream.
+> >
+> > There are two issues with the Kioxia NVMe:
+> >
+> > 1. Power consumption is high unless a LTR_L1.2_THRESHOLD of 0ns
+> >    is configured (related dubious patch: [1])
+> >
+> > 2. The system often hangs on resume unless a longer delay is
+> >    added in the suspend pass. QC engineers say that the NVMe is
+> >    taking so much time to settle in L1ss.
+> >
+> > Other NVMe models don't exhibit power or suspend issues on this
+> > platform, except for one model which also needs a shorter
+> > delay during suspend, otherwise the system will hang
+> > occasionally upon resume.
+> >
+> > The second issue could possibly be 'fixed' with a quirk for
+> > the Kioxia NVMe model, though it seems the issue is not seen on
+> > all platforms, apparently the delay is not needed on Kenny's
+> > system.
+> >
+> > I'm currently a bit at a loss with the first issue. The patch
+> > mentioned above claims that the (no-)snoop latencies are
+> > involved, which may or may not be true. In this thread I saw
+> > Kenny posting 'lspci' output from his (now) working system.
+> > I noticed max (no-)snoop values of 3145728ns, which seems to
+> > be some sort of default (programmed) max. On my system these
+> > values are 0ns, which is the default value of the registers.
+> > I tried to set these to 3146us from the kernel to see if that
+> > makes a difference, but could only successfully update the max
+> > snoop latency, but not non-snoop (maybe this can be only done
+> > at early initialization time?). With just the max snoop latency
+> > set to 3146us power consumption of the NVMe remains high.
+> >
+> > The output of lspci from my system is attached.
+> >
+> > In this thread it was mentioned that possibly a BIOS update
+> > fixed the issue Kenny was seeing. What kind of values is
+> > the BIOS supposed to adjust (I'm a PCI n00b)?
+> >
+> > Any suggestions about what else to try?
+> >
+> > Thanks
+> >
+> > m.
+> >
+> > [1] https://patchwork.kernel.org/project/linux-arm-msm/patch/1663315719-21563-1-git-send-email-quic_krichai@quicinc.com/
+> >
+> > ---
+> >
+> > 0001:00:00.0 PCI bridge: Qualcomm Device 010b (prog-if 00 [Normal decode])
+> > 	Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR+ FastB2B- DisINTx+
+> > 	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
+> > 	Latency: 0
+> > 	Interrupt: pin A routed to IRQ 183
+> > 	IOMMU group: 0
+> > 	Region 0: Memory at 40700000 (32-bit, non-prefetchable) [size=4K]
+> > 	Bus: primary=00, secondary=01, subordinate=ff, sec-latency=0
+> > 	I/O behind bridge: 00001000-00001fff [size=4K]
+> > 	Memory behind bridge: 40300000-404fffff [size=2M]
+> > 	Prefetchable memory behind bridge: 0000000040500000-00000000406fffff [size=2M]
+> > 	Secondary status: 66MHz- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- <SERR- <PERR-
+> > 	BridgeCtl: Parity- SERR+ NoISA- VGA- VGA16- MAbort- >Reset- FastB2B-
+> > 		PriDiscTmr- SecDiscTmr- DiscTmrStat- DiscTmrSERREn-
+> > 	Capabilities: [40] Power Management version 3
+> > 		Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA PME(D0+,D1-,D2-,D3hot+,D3cold+)
+> > 		Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
+> > 	Capabilities: [50] MSI: Enable+ Count=1/32 Maskable+ 64bit+
+> > 		Address: 00000000fffff000  Data: 0000
+> > 		Masking: fffffffe  Pending: 00000000
+> > 	Capabilities: [70] Express (v2) Root Port (Slot+), MSI 00
+> > 		DevCap:	MaxPayload 128 bytes, PhantFunc 0
+> > 			ExtTag- RBE+
+> > 		DevCtl:	CorrErr- NonFatalErr- FatalErr- UnsupReq-
+> > 			RlxdOrd+ ExtTag- PhantFunc- AuxPwr- NoSnoop+
+> > 			MaxPayload 128 bytes, MaxReadReq 512 bytes
+> > 		DevSta:	CorrErr- NonFatalErr- FatalErr- UnsupReq- AuxPwr+ TransPend-
+> > 		LnkCap:	Port #0, Speed 8GT/s, Width x2, ASPM L0s L1, Exit Latency L0s <1us, L1 <64us
+> > 			ClockPM- Surprise- LLActRep+ BwNot- ASPMOptComp+
+> > 		LnkCtl:	ASPM L0s L1 Enabled; RCB 128 bytes, Disabled- CommClk+
+> > 			ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
+> > 		LnkSta:	Speed 8GT/s (ok), Width x2 (ok)
+> > 			TrErr- Train- SlotClk+ DLActive+ BWMgmt- ABWMgmt-
+> > 		SltCap:	AttnBtn+ PwrCtrl+ MRL+ AttnInd+ PwrInd+ HotPlug+ Surprise+
+> > 			Slot #0, PowerLimit 0.000W; Interlock+ NoCompl-
+> > 		SltCtl:	Enable: AttnBtn- PwrFlt- MRL- PresDet- CmdCplt- HPIrq- LinkChg-
+> > 			Control: AttnInd Off, PwrInd Off, Power- Interlock-
+> > 		SltSta:	Status: AttnBtn- PowerFlt- MRL- CmdCplt- PresDet- Interlock-
+> > 			Changed: MRL- PresDet- LinkState-
+> > 		RootCap: CRSVisible-
+> > 		RootCtl: ErrCorrectable- ErrNon-Fatal- ErrFatal- PMEIntEna+ CRSVisible-
+> > 		RootSta: PME ReqID 0000, PMEStatus- PMEPending-
+> > 		DevCap2: Completion Timeout: Range ABCD, TimeoutDis+ NROPrPrP+ LTR+
+> > 			 10BitTagComp- 10BitTagReq- OBFF Not Supported, ExtFmt- EETLPPrefix-
+> > 			 EmergencyPowerReduction Not Supported, EmergencyPowerReductionInit-
+> > 			 FRS- LN System CLS Not Supported, TPHComp+ ExtTPHComp- ARIFwd-
+> > 			 AtomicOpsCap: Routing- 32bit- 64bit- 128bitCAS-
+> > 		DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis- LTR+ OBFF Disabled, ARIFwd-
+> > 			 AtomicOpsCtl: ReqEn- EgressBlck-
+> > 		LnkCap2: Supported Link Speeds: 2.5-8GT/s, Crosslink- Retimer- 2Retimers- DRS-
+> > 		LnkCtl2: Target Link Speed: 8GT/s, EnterCompliance- SpeedDis-
+> > 			 Transmit Margin: Normal Operating Range, EnterModifiedCompliance- ComplianceSOS-
+> > 			 Compliance De-emphasis: -6dB
+> > 		LnkSta2: Current De-emphasis Level: -6dB, EqualizationComplete+ EqualizationPhase1+
+> > 			 EqualizationPhase2+ EqualizationPhase3+ LinkEqualizationRequest-
+> > 			 Retimer- 2Retimers- CrosslinkRes: unsupported
+> > 	Capabilities: [100 v2] Advanced Error Reporting
+> > 		UESta:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
+> > 		UEMsk:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
+> > 		UESvrt:	DLP+ SDES+ TLP- FCP+ CmpltTO- CmpltAbrt- UnxCmplt- RxOF+ MalfTLP+ ECRC- UnsupReq- ACSViol-
+> > 		CESta:	RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr-
+> > 		CEMsk:	RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr+
+> > 		AERCap:	First Error Pointer: 00, ECRCGenCap+ ECRCGenEn- ECRCChkCap+ ECRCChkEn-
+> > 			MultHdrRecCap- MultHdrRecEn- TLPPfxPres- HdrLogCap-
+> > 		HeaderLog: 00000000 00000000 00000000 00000000
+> > 		RootCmd: CERptEn- NFERptEn- FERptEn-
+> > 		RootSta: CERcvd- MultCERcvd- UERcvd- MultUERcvd-
+> > 			 FirstFatal- NonFatalMsg- FatalMsg- IntMsg 0
+> > 		ErrorSrc: ERR_COR: 0000 ERR_FATAL/NONFATAL: 0000
+> > 	Capabilities: [148 v1] Secondary PCI Express
+> > 		LnkCtl3: LnkEquIntrruptEn- PerformEqu-
+> > 		LaneErrStat: 0
+> > 	Capabilities: [168 v1] Transaction Processing Hints
+> > 		No steering table available
+> > 	Capabilities: [1fc v1] L1 PM Substates
+> > 		L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_L1.1+ L1_PM_Substates+
+> > 			  PortCommonModeRestoreTime=70us PortTPowerOnTime=0us
+> > 		L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1- ASPM_L1.2+ ASPM_L1.1-
+> > 			   T_CommonMode=70us LTR1.2_Threshold=86016ns
+> > 		L1SubCtl2: T_PwrOn=10us
+> > 	Kernel driver in use: pcieport
+> >
+> > 0001:01:00.0 Non-Volatile memory controller: KIOXIA Corporation Device 0001 (prog-if 02 [NVM Express])
+> > 	Subsystem: KIOXIA Corporation Device 0001
+> > 	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
+> > 	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
+> > 	Latency: 0
+> > 	Interrupt: pin A routed to IRQ 182
+> > 	IOMMU group: 0
+> > 	Region 0: Memory at 40300000 (64-bit, non-prefetchable) [size=16K]
+> > 	Capabilities: [40] Express (v2) Endpoint, MSI 00
+> > 		DevCap:	MaxPayload 256 bytes, PhantFunc 0, Latency L0s unlimited, L1 unlimited
+> > 			ExtTag- AttnBtn- AttnInd- PwrInd- RBE+ FLReset+ SlotPowerLimit 0.000W
+> > 		DevCtl:	CorrErr- NonFatalErr- FatalErr- UnsupReq-
+> > 			RlxdOrd- ExtTag- PhantFunc- AuxPwr- NoSnoop- FLReset-
+> > 			MaxPayload 128 bytes, MaxReadReq 512 bytes
+> > 		DevSta:	CorrErr- NonFatalErr- FatalErr- UnsupReq- AuxPwr- TransPend-
+> > 		LnkCap:	Port #0, Speed 8GT/s, Width x4, ASPM L0s L1, Exit Latency L0s <2us, L1 <32us
+> > 			ClockPM- Surprise- LLActRep- BwNot- ASPMOptComp+
+> > 		LnkCtl:	ASPM L0s L1 Enabled; RCB 64 bytes, Disabled- CommClk+
+> > 			ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
+> > 		LnkSta:	Speed 8GT/s (ok), Width x2 (downgraded)
+> > 			TrErr- Train- SlotClk+ DLActive- BWMgmt- ABWMgmt-
+> > 		DevCap2: Completion Timeout: Range AB, TimeoutDis+ NROPrPrP- LTR+
+> > 			 10BitTagComp- 10BitTagReq- OBFF Not Supported, ExtFmt+ EETLPPrefix-
+> > 			 EmergencyPowerReduction Not Supported, EmergencyPowerReductionInit-
+> > 			 FRS- TPHComp- ExtTPHComp-
+> > 			 AtomicOpsCap: 32bit- 64bit- 128bitCAS-
+> > 		DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis- LTR+ OBFF Disabled,
+> > 			 AtomicOpsCtl: ReqEn-
+> > 		LnkCap2: Supported Link Speeds: 2.5-8GT/s, Crosslink- Retimer- 2Retimers- DRS-
+> > 		LnkCtl2: Target Link Speed: 8GT/s, EnterCompliance- SpeedDis-
+> > 			 Transmit Margin: Normal Operating Range, EnterModifiedCompliance- ComplianceSOS-
+> > 			 Compliance De-emphasis: -6dB
+> > 		LnkSta2: Current De-emphasis Level: -6dB, EqualizationComplete+ EqualizationPhase1+
+> > 			 EqualizationPhase2+ EqualizationPhase3+ LinkEqualizationRequest-
+> > 			 Retimer- 2Retimers- CrosslinkRes: unsupported
+> > 	Capabilities: [80] Power Management version 3
+> > 		Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA PME(D0+,D1-,D2-,D3hot+,D3cold-)
+> > 		Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
+> > 	Capabilities: [90] MSI: Enable- Count=1/32 Maskable+ 64bit+
+> > 		Address: 0000000000000000  Data: 0000
+> > 		Masking: 00000000  Pending: 00000000
+> > 	Capabilities: [b0] MSI-X: Enable+ Count=32 Masked-
+> > 		Vector table: BAR=0 offset=00002000
+> > 		PBA: BAR=0 offset=00003000
+> > 	Capabilities: [100 v2] Advanced Error Reporting
+> > 		UESta:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
+> > 		UEMsk:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
+> > 		UESvrt:	DLP+ SDES- TLP- FCP+ CmpltTO- CmpltAbrt- UnxCmplt- RxOF+ MalfTLP+ ECRC- UnsupReq- ACSViol-
+> > 		CESta:	RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr-
+> > 		CEMsk:	RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr+
+> > 		AERCap:	First Error Pointer: 00, ECRCGenCap- ECRCGenEn- ECRCChkCap- ECRCChkEn-
+> > 			MultHdrRecCap- MultHdrRecEn- TLPPfxPres- HdrLogCap-
+> > 		HeaderLog: 00000000 00000000 00000000 00000000
+> > 	Capabilities: [150 v1] Virtual Channel
+> > 		Caps:	LPEVC=0 RefClk=100ns PATEntryBits=1
+> > 		Arb:	Fixed- WRR32- WRR64- WRR128-
+> > 		Ctrl:	ArbSelect=Fixed
+> > 		Status:	InProgress-
+> > 		VC0:	Caps:	PATOffset=00 MaxTimeSlots=1 RejSnoopTrans-
+> > 			Arb:	Fixed- WRR32- WRR64- WRR128- TWRR128- WRR256-
+> > 			Ctrl:	Enable+ ID=0 ArbSelect=Fixed TC/VC=ff
+> > 			Status:	NegoPending- InProgress-
+> > 	Capabilities: [260 v1] Latency Tolerance Reporting
+> > 		Max snoop latency: 0ns
+> > 		Max no snoop latency: 0ns
+> > 	Capabilities: [300 v1] Secondary PCI Express
+> > 		LnkCtl3: LnkEquIntrruptEn- PerformEqu-
+> > 		LaneErrStat: 0
+> > 	Capabilities: [400 v1] L1 PM Substates
+> > 		L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1- ASPM_L1.2+ ASPM_L1.1- L1_PM_Substates+
+> > 			  PortCommonModeRestoreTime=60us PortTPowerOnTime=10us
+> > 		L1SubCtl1: PCI-PM_L1.2+ PCI-PM_L1.1- ASPM_L1.2+ ASPM_L1.1-
+> > 			   T_CommonMode=0us LTR1.2_Threshold=86016ns
+> > 		L1SubCtl2: T_PwrOn=10us
+> > 	Kernel driver in use: nvme
+> >
+> >
+> > On Tue, Apr 12, 2022 at 05:50:47PM -0500, Bjorn Helgaas wrote:
+> > > [+cc Ricky for rtsx_pci ASPM behavior, Rajat, Prasad for L1 SS stuff,
+> > > Victor for interest in disabling ASPM during save/restore]
+> > >
+> > > On Wed, Feb 16, 2022 at 06:41:39PM +0530, Vidya Sagar wrote:
+> > > > On 2/16/2022 11:30 AM, Kenneth R. Crudup wrote:
+> > > > > On Wed, 16 Feb 2022, Vidya Sagar wrote:
+> > > > >
+> > > > > > I see that the ASPM-L1 state of Realtek NIC which was in
+> > > > > > disabled state before hibernate got enabled after hibernate.
+> > > > >
+> > > > > That's actually my SD-Card reader; there's a good chance the BIOS
+> > > > > does "something" to it at boot time, as it's possible to boot from
+> > > > > SD-Card on my laptop.
+> > > > >
+> > > > > > This patch doesn't do anything to LnkCtl register which has
+> > > > > > control for ASPM L1 state.
+> > > > >
+> > > > > > Could you please check why ASPM L1 got enabled post hibernation?
+> > > > >
+> > > > > I wouldn't know how to do that; if you're still interested in that
+> > > > > let me know what to do to determine that.
+> > >
+> > > > I would like Bjorn to take a call on it.
+> > > > At this point, there are contradictions in observations.
+> > >
+> > > Remind me what contradictions you see?  I know Kenny saw NVMe errors
+> > > on a kernel that included 4257f7e008ea ("PCI/ASPM: Save/restore L1SS
+> > > Capability for suspend/resume") in December 2020 [1], and that he did
+> > > *not* see those errors on 4257f7e008ea in February 2022 [2].  Is that
+> > > what you mean?
+> > >
+> > > > Just to summarize,
+> > > > - The root ports in your laptop don't have support for L1SS
+> > > > - With the same old code base with which the errors were observed plus my
+> > > > patch on top of it, I see that ASPM-L1 state getting enabled for one of the
+> > > > endpoints (Realtek SD-Card reader) after system comes out of hibernation
+> > > > even though ASPM-L1 was disabled before the system enter into hibernation.
+> > > > No errors are reported now.
+> > >
+> > > I assume you refer to [2], where on 4257f7e008ea ("PCI/ASPM:
+> > > Save/restore L1SS Capability for suspend/resume"), Kenny saw ASPM L1
+> > > disabled before hibernate and enabled afterwards:
+> > >
+> > >   --- pre-hibernate
+> > >   +++ post-hibernate
+> > >     00:1d.7 PCI bridge [0604]: Intel [8086:34b7]
+> > >       Bus: primary=00, secondary=58, subordinate=58
+> > > 	LnkCtl: ASPM Disabled; RCB 64 bytes, Disabled- CommClk+
+> > >     58:00.0 RTS525A PCI Express Card Reader [10ec:525a]
+> > >   -     LnkCtl: ASPM Disabled; RCB 64 bytes, Disabled- CommClk-
+> > >   -             ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
+> > >   +     LnkCtl: ASPM L1 Enabled; RCB 64 bytes, Disabled- CommClk-
+> > >   +             ExtSynch- ClockPM+ AutWidDis- BWInt- AutBWInt-
+> > >
+> > > Per PCIe r6.0, sec 7.5.3.7, "ASPM L1 must be enabled by software in
+> > > the Upstream component on a Link prior to enabling ASPM L1 in the
+> > > Downstream component on that Link," so this definitely seems broken,
+> > > but wouldn't explain the NVMe issue.
+> > >
+> > > The PCI core (pcie_config_aspm_link()) always enables L1 in the
+> > > upstream component before the downstream one, but 58:00.0 uses the
+> > > rtsx_pci driver, which does a lot of its own ASPM fiddling, so my
+> > > guess is that it's doing something wrong here.
+> > >
+> > > > - With the linux-next top of the tree plus my patch, no change in the ASPM
+> > > > states and no errors also reported.
+> > >
+> > > I don't know which report this refers to.
+> > >
+> > > > This points to BIOS being buggy (both old and new with new one being less
+> > > > problematic)
+> > >
+> > > I agree that a BIOS change between [1] and [2] seems plausible, but I
+> > > don't think we can prove that yet.  I'm slightly queasy because while
+> > > Kenny may have updated his BIOS, most people will not have.
+> > >
+> > > I think we should try this patch again with some changes and maybe
+> > > some debug logging:
+> > >
+> > >   - I wonder if we should integrate the LTR, L1 SS, and Link Control
+> > >     ASPM restore instead of having them spread around through
+> > >     pci_restore_ltr_state(), pci_restore_aspm_l1ss_state(), and
+> > >     pci_restore_pcie_state().  Maybe a new pci_restore_aspm() that
+> > >     would be called from pci_restore_pcie_state()?
+> > >
+> > >   - For L1 PM Substates configuration, sec 5.5.4 says that both ports
+> > >     must be configured while ASPM L1 is disabled, but I don't think we
+> > >     currently guarantee this: we restore all the upstream component
+> > >     state first, and we don't know the ASPM state of the downstream
+> > >     one.  Maybe we need to:
+> > >
+> > >       * When restoring upstream component,
+> > >           + disable its ASPM
+> > >
+> > >       * When restoring downstream component,
+> > >           + disable its ASPM
+> > > 	  + restore upstream component's LTR, L1SS
+> > > 	  + restore downstream component's LTR, L1SS
+> > > 	  + restore upstream component's ASPM
+> > > 	  + restore downstream component's ASPM
+> > >
+> > >       This seems pretty messy, but seems like what the spec requires.
+> > >
+> > >     - Add some pci_dbg() logging of all these save/restore values to
+> > >       help debug any issues.
+> > >
+> > > Bjorn
+> > >
+> > > [1] https://lore.kernel.org/r/20201228040513.GA611645@bjorn-Precision-5520
+> > > [2] https://lore.kernel.org/r/3ca14a7-b726-8430-fe61-a3ac183a1088@panix.com
+> > >
+> >
+> >
+> 
+> -- 
+> Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange County CA
