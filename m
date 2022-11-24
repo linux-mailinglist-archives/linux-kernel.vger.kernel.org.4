@@ -2,135 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A02A6377AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 12:30:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D21966377AF
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 12:30:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbiKXLah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 06:30:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36124 "EHLO
+        id S230130AbiKXLao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 06:30:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiKXLaf (ORCPT
+        with ESMTP id S229770AbiKXLaj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 06:30:35 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65072BF52;
-        Thu, 24 Nov 2022 03:30:33 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id F136A496;
-        Thu, 24 Nov 2022 12:30:30 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1669289431;
-        bh=6iBaI/QCGoo2ZY32zk5Z6cIBXzXMw3aWSd+M5LBjEro=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hDoOGVB9NV/+PAaVf6hnJ3gmE64oNM0totgTZe2GeQCKZshBs217M279RbgCpXq/M
-         M8VKPO/ZwyrrPPgxuMJ0b0Nt7EIBlSNngDZhAw4aLU3ZtDOjxt+4/GYpIaYy1e+vft
-         xdPGIncIclM3C/judVqykvC5qA2N1Q1HpdOGOFGg=
-Date:   Thu, 24 Nov 2022 13:30:15 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
-Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@puri.sm, phone-devel@vger.kernel.org
-Subject: Re: [PATCHv3 1/1 RESEND] media: imx: Round line size to 4 bytes
-Message-ID: <Y39Vx6L7MovBxOfs@pendragon.ideasonboard.com>
-References: <20221016163928.1ef0a4fe.dorota.czaplejewicz@puri.sm>
- <Y00SSRMFuL3Drjd4@pendragon.ideasonboard.com>
- <20221017163059.377ac677.dorota.czaplejewicz@puri.sm>
- <20221101133834.0c1a20db.dorota.czaplejewicz@puri.sm>
+        Thu, 24 Nov 2022 06:30:39 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CAB7353EF2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 03:30:38 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EB80023A;
+        Thu, 24 Nov 2022 03:30:44 -0800 (PST)
+Received: from [10.1.197.1] (ewhatever.cambridge.arm.com [10.1.197.1])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8B1573F587;
+        Thu, 24 Nov 2022 03:30:37 -0800 (PST)
+Message-ID: <a7eb525a-3c96-7477-d5eb-7f93a1b49cb8@arm.com>
+Date:   Thu, 24 Nov 2022 11:30:36 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221101133834.0c1a20db.dorota.czaplejewicz@puri.sm>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] coresight: trbe: remove cpuhp instance node before remove
+ cpuhp state
+Content-Language: en-US
+To:     Yang Shen <shenyang39@huawei.com>, mathieu.poirier@linaro.org,
+        mike.leach@linaro.org, leo.yan@linaro.org
+Cc:     linux-kernel@vger.kernel.org, coresight@lists.linaro.org
+References: <20221122090355.23533-1-shenyang39@huawei.com>
+From:   Suzuki Kuruppassery Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20221122090355.23533-1-shenyang39@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dorota,
-
-On Tue, Nov 01, 2022 at 01:38:34PM +0100, Dorota Czaplejewicz wrote:
-> On Mon, 17 Oct 2022 16:30:59 +0200 Dorota Czaplejewicz wrote:
-> > On Mon, 17 Oct 2022 11:28:57 +0300 Laurent Pinchart wrote:
+On 22/11/2022 09:03, Yang Shen wrote:
+> cpuhp_state_add_instance() and cpuhp_state_remove_instance() should
+> be used in pairs. Or there will lead to the warn on
+> cpuhp_remove_multi_state() since the cpuhp_step list is not empty.
 > 
-> [snip]
+> The following is the error log with 'rmmod coresight-trbe':
+> Error: Removing state 215 which has instances left.
+> Call trace:
+>    __cpuhp_remove_state_cpuslocked+0x144/0x160
+>    __cpuhp_remove_state+0xac/0x100
+>    arm_trbe_device_remove+0x2c/0x60 [coresight_trbe]
+>    platform_remove+0x34/0x70
+>    device_remove+0x54/0x90
+>    device_release_driver_internal+0x1e4/0x250
+>    driver_detach+0x5c/0xb0
+>    bus_remove_driver+0x64/0xc0
+>    driver_unregister+0x3c/0x70
+>    platform_driver_unregister+0x20/0x30
+>    arm_trbe_exit+0x1c/0x658 [coresight_trbe]
+>    __arm64_sys_delete_module+0x1ac/0x24c
+>    invoke_syscall+0x50/0x120
+>    el0_svc_common.constprop.0+0x58/0x1a0
+>    do_el0_svc+0x38/0xd0
+>    el0_svc+0x2c/0xc0
+>    el0t_64_sync_handler+0x1ac/0x1b0
+>    el0t_64_sync+0x19c/0x1a0
+>   ---[ end trace 0000000000000000 ]---
 > 
-> > > I would also very much appreciate feedback from NXP on this. There's a
-> > > risk of ill side-effects that I would prefer ruling out very clearly.  
-> > 
-> > I posted a question on the NXP forum: https://community.nxp.com/t5/i-MX-Processors/i-MX8MQ-CSI-line-size-constraint-documentation-mistake/m-p/1538629#M196448
-> > 
+> Fixes: 3fbf7f011f24 ("coresight: sink: Add TRBE driver")
+> Signed-off-by: Yang Shen <shenyang39@huawei.com>
+> ---
+>   drivers/hwtracing/coresight/coresight-trbe.c | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> This question received a reply from NXP today: https://community.nxp.com/t5/i-MX-Processors/i-MX8MQ-CSI-line-size-constraint-documentation-mistake/m-p/1546872/highlight/true#M197067
+> diff --git a/drivers/hwtracing/coresight/coresight-trbe.c b/drivers/hwtracing/coresight/coresight-trbe.c
+> index 2b386bb848f8..1fc4fd79a1c6 100644
+> --- a/drivers/hwtracing/coresight/coresight-trbe.c
+> +++ b/drivers/hwtracing/coresight/coresight-trbe.c
+> @@ -1434,6 +1434,7 @@ static int arm_trbe_probe_cpuhp(struct trbe_drvdata *drvdata)
 > 
-> Quoting NXP's answer:
+>   static void arm_trbe_remove_cpuhp(struct trbe_drvdata *drvdata)
+>   {
+> +	cpuhp_state_remove_instance(drvdata->trbe_online, &drvdata->hotplug_node);
+>   	cpuhp_remove_multi_state(drvdata->trbe_online);
+>   }
 > 
-> > Do I understand correctly, that streams divisible by 4×4 will work on other i.MX8 hardware too? - Yes
-> > Will those kind of resolutions work on i.MX7 series CSI hardware? - Yes
+
+Applied to coresight next.
+
+https://git.kernel.org/coresight/c/5fefef85b0d3
+
+Thanks
+Suzuki
+
+> --
+> 2.24.0
 > 
-> which implies no bad side effects the way I read it. Is this
-> sufficient for the kernel?
 
-Ideally I'd like to test that on i.MX7 but I don't think I'll have time
-to do so in the near future. I don't want to block the patch on this, so
-I'm fine merging it, but I'd like a comment in the code that explains
-why it's safe to depart from the documentation.
-
-Also, the discussion on the NXP forum said that a width that is a
-multiple of 4 bytes but not a multiple of 8 bytes works only if the
-height is also a multiple of 4. I don't see that constraint being
-enforced in the code, am I missing something ?
-
-You mentioned in the forum that you tried 1052x779 and that failed. How
-did it fail ? Have you also tried 1052x778 ?
-
-> > > > Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
-> > > > ---
-> > > > Hello,
-> > > > 
-> > > > the Librem 5 is using an out-of-tree driver for s5k3l6xx, and
-> > > > rounding to 4 is optimal to operate it.
-> > > > 
-> > > > This revision improves the commit message.
-> > > > 
-> > > > Cheers,
-> > > > Dorota Czaplejewicz
-> > > > 
-> > > >  drivers/staging/media/imx/imx7-media-csi.c | 4 ++--
-> > > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
-> > > > index a0553c24cce4..af821b410c3f 100644
-> > > > --- a/drivers/staging/media/imx/imx7-media-csi.c
-> > > > +++ b/drivers/staging/media/imx/imx7-media-csi.c
-> > > > @@ -999,10 +999,10 @@ static int imx7_csi_mbus_fmt_to_pix_fmt(struct v4l2_pix_format *pix,
-> > > >  	}
-> > > >  
-> > > >  	/* Round up width for minimum burst size */
-> > > > -	width = round_up(mbus->width, 8);
-> > > > +	width = round_up(mbus->width, 4);
-> > > >  
-> > > >  	/* Round up stride for IDMAC line start address alignment */
-> > > > -	stride = round_up((width * cc->bpp) >> 3, 8);
-> > > > +	stride = round_up((width * cc->bpp) >> 3, 4);
-> > > >  
-> > > >  	pix->width = width;
-> > > >  	pix->height = mbus->height;    
-
--- 
-Regards,
-
-Laurent Pinchart
