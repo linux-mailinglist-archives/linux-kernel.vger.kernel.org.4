@@ -2,77 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8629637455
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:45:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1B9B63745B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:46:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiKXIpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 03:45:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47046 "EHLO
+        id S229863AbiKXIqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 03:46:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbiKXIpX (ORCPT
+        with ESMTP id S229504AbiKXIqw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 03:45:23 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A10BA107E4A
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:45:22 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id t10so1267212ljj.0
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:45:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=o+bou2Eqve5CvNCEe8A4y27WMBYElKaquLsQIo7P2JQ=;
-        b=Eqfk1RGF9j3RdprJYIXx7HGeIq9xPFflC0DBHFZv84z8rXJQ5/vglbRa3wWOGKWGIQ
-         gLftpjDA8F2d9p131D/taQD+L1ualWywLsR9jmFpVeUEmOyx3skcNVLbLGmxUv01Ccs1
-         h8hoaQCg3vx1YFG8Tv7hav6GCcfU3oehhr9h4Za3ef5AV/vCOoMBq1g36K8bi4XB0fMz
-         v5tqdMn4k68ROH2+hh2ygTIlS1j0bf0Y31Iv9IyMpkN5hK6rGEl5kftjMe56NRobUhlc
-         CY3p8z8pvDn+c0fA/4z7p97JFRmkc4RMljDdiyIZ86cIR8ax3Xoh4vis9omLr9B5CBQ9
-         KUSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o+bou2Eqve5CvNCEe8A4y27WMBYElKaquLsQIo7P2JQ=;
-        b=KWLkWl8QQmCip5zFcxZ8e7ef8o0/XYWVwtcxO8IGN20dWa3pQ+E1UviVy4Dy1jxai1
-         U4saCfUDQNmhVBdBFEvYtn/SVlA6hOUMmqIG6JcN7TNxUXGKhTzSb80xdLUb+qqM+RGJ
-         +jaiFL5mOssHfvnH/tKEW2/+u47vtu9iDCWSw5lM5WLg2hS7gx9nS5Clou6xmnGyml+P
-         w1qQuSwx+B1GutijTl29yiMT3lYNszftuxMlzDZthypI6HnwsJfM45P7KdwIJXKuoDoS
-         4QXZbRbEWN1dUyRYJtcfn9X+Zy63uQ9PzXMcQoYqlcbA6/+7motmkf9+vG0Qm54wV3i9
-         OBWg==
-X-Gm-Message-State: ANoB5plB/T8KqaABWbbHMhZKnNBmGuQnliU5go6yY3Dn1ze2uFzVouM8
-        ewZyChYPVrVs8QPu+YW6PiB/Cw==
-X-Google-Smtp-Source: AA0mqf6Z3tWCtGpuP577dWMuvzhmVrpzGUmuDSeOU43vilip13LGn5V10NAdwcMHcLQV3aLfRXGe8Q==
-X-Received: by 2002:a05:651c:c89:b0:26f:bd61:ac4f with SMTP id bz9-20020a05651c0c8900b0026fbd61ac4fmr5219103ljb.396.1669279520992;
-        Thu, 24 Nov 2022 00:45:20 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id z8-20020a2e8848000000b0026b2094f6fcsm48669ljj.73.2022.11.24.00.45.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Nov 2022 00:45:20 -0800 (PST)
-Message-ID: <0b203c11-851c-fd6c-faeb-e283b158f1c8@linaro.org>
-Date:   Thu, 24 Nov 2022 09:45:19 +0100
+        Thu, 24 Nov 2022 03:46:52 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12D1107E6E;
+        Thu, 24 Nov 2022 00:46:50 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 524C71F749;
+        Thu, 24 Nov 2022 08:46:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669279609; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9qza448ucCDLGXGUlE/3bEGm8MMmtXTkWkq9TnW9DtE=;
+        b=GEi96S4SyfecsiFxaE86ihxeSvR1D03MtusDH0XjWuuQ0wX+uN3kBdrfpcsgtLppq8SmI9
+        90hVukRxwjbQ5HrMhF5dzGHJHuWs+TpoEgCrMuVBsU3CeBWzwUmHqaZXHGGb0eKCQpBCz7
+        ZHIpEWsJOTxu5bRQjza/6IIdSmdJEjY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669279609;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9qza448ucCDLGXGUlE/3bEGm8MMmtXTkWkq9TnW9DtE=;
+        b=+m8YSErwN+RnQrPIRCfV4LFRiLWRc1ityUpYueX5fm9YznSxtbKgSNWf4Dj0zna+23H+FB
+        JAdj7MHMOyVdJCAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0ABB613B1A;
+        Thu, 24 Nov 2022 08:46:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id T9acAXkvf2P/cwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 24 Nov 2022 08:46:49 +0000
+Message-ID: <e2ef753e-8527-1fc6-f2f0-bc10aa744463@suse.de>
+Date:   Thu, 24 Nov 2022 09:46:48 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH 1/3] dt-bindings: PHY: P2U: Add PCIe lane margining
- support
-To:     Manikanta Maddireddy <mmaddireddy@nvidia.com>, vkoul@kernel.org,
-        kishon@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, vidyas@nvidia.com
-Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, bhelgaas@google.com,
-        lpieralisi@kernel.org, nkristam@nvidia.com
-References: <20221124083510.3008139-1-mmaddireddy@nvidia.com>
- <20221124083510.3008139-2-mmaddireddy@nvidia.com>
+Subject: Re: [PATCH resend v2] drm/fourcc: Add missing big-endian XRGB1555 and
+ RGB565 formats
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Gerd Hoffmann <kraxel@redhat.com>
+Cc:     linux-fbdev@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <3ee1f8144feb96c28742b22384189f1f83bcfc1a.1669221671.git.geert@linux-m68k.org>
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221124083510.3008139-2-mmaddireddy@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <3ee1f8144feb96c28742b22384189f1f83bcfc1a.1669221671.git.geert@linux-m68k.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------XjylbMlXxkAsWPRzXxAOvfvO"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,77 +79,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/11/2022 09:35, Manikanta Maddireddy wrote:
-> Tegra234 supports PCIe lane margining. P2U HW acts as a relay to exchange
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------XjylbMlXxkAsWPRzXxAOvfvO
+Content-Type: multipart/mixed; boundary="------------XoyofduipLwRhZAo4vf0knVq";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Geert Uytterhoeven <geert@linux-m68k.org>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Gerd Hoffmann <kraxel@redhat.com>
+Cc: linux-fbdev@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Message-ID: <e2ef753e-8527-1fc6-f2f0-bc10aa744463@suse.de>
+Subject: Re: [PATCH resend v2] drm/fourcc: Add missing big-endian XRGB1555 and
+ RGB565 formats
+References: <3ee1f8144feb96c28742b22384189f1f83bcfc1a.1669221671.git.geert@linux-m68k.org>
+In-Reply-To: <3ee1f8144feb96c28742b22384189f1f83bcfc1a.1669221671.git.geert@linux-m68k.org>
 
-typo: merging?
+--------------XoyofduipLwRhZAo4vf0knVq
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-> margin control data and margin status between PCIe controller and UPHY.
+SGkNCg0KQW0gMjMuMTEuMjIgdW0gMTc6NDMgc2NocmllYiBHZWVydCBVeXR0ZXJob2V2ZW46
+DQo+IEFzIG9mIGNvbW1pdCBlYWUwNjEyMGYxOTc0ZTFhICgiZHJtOiByZWZ1c2UgQURERkIy
+IGlvY3RsIGZvciBicm9rZW4NCj4gYmlnZW5kaWFuIGRyaXZlcnMiKSwgZHJpdmVycyBtdXN0
+IHNldCB0aGUNCj4gcXVpcmtfYWRkZmJfcHJlZmVyX2hvc3RfYnl0ZV9vcmRlciBxdWlyayB0
+byBtYWtlIHRoZSBkcm1fbW9kZV9hZGRmYigpDQo+IGNvbXBhdCBjb2RlIHdvcmsgY29ycmVj
+dGx5IG9uIGJpZy1lbmRpYW4gbWFjaGluZXMuDQo+IA0KPiBXaGlsZSB0aGF0IHdvcmtzIGZp
+bmUgZm9yIGJpZy1lbmRpYW4gWFJHQjg4ODggYW5kIEFSR0I4ODg4LCB3aGljaCBhcmUNCj4g
+bWFwcGVkIHRvIHRoZSBleGlzdGluZyBsaXR0bGUtZW5kaWFuIEJHUlg4ODg4IGFuZCBCR1JB
+ODg4OCBmb3JtYXRzLCBpdA0KPiBkb2VzIG5vdCB3b3JrIGZvciBiaWctZW5kaWFuIFhSR0Ix
+NTU1IGFuZCBSR0I1NjUsIGFzIHRoZSBsYXR0ZXIgYXJlIG5vdA0KPiBsaXN0ZWQgaW4gdGhl
+IGZvcm1hdCBkYXRhYmFzZS4NCj4gDQo+IEZpeCB0aGlzIGJ5IGFkZGluZyB0aGUgbWlzc2lu
+ZyBmb3JtYXRzLiAgTGltaXQgdGhpcyB0byBiaWctZW5kaWFuDQo+IHBsYXRmb3JtcywgYXMg
+dGhlcmUgaXMgY3VycmVudGx5IG5vIG5lZWQgdG8gc3VwcG9ydCB0aGVzZSBmb3JtYXRzIG9u
+DQo+IGxpdHRsZS1lbmRpYW4gcGxhdGZvcm1zLg0KPiANCj4gRml4ZXM6IDY5NjBlNmRhOWNl
+YzNmNjYgKCJkcm06IGZpeCBkcm1fbW9kZV9hZGRmYigpIG9uIGJpZyBlbmRpYW4gbWFjaGlu
+ZXMuIikNCj4gU2lnbmVkLW9mZi1ieTogR2VlcnQgVXl0dGVyaG9ldmVuIDxnZWVydEBsaW51
+eC1tNjhrLm9yZz4NCj4gLS0tDQo+IHYyOg0KPiAgICAtIFVzZSAiRFJNX0ZPUk1BVF9mb28g
+fCBEUk1fRk9STUFUX0JJR19FTkRJQU4iIGluc3RlYWQgb2YNCj4gICAgICAiRFJNX0ZPUk1B
+VF9IT1NUX2ZvbyIsDQo+ICAgIC0gVHVybiBpbnRvIGEgbG9uZSBwYXRjaCwgYXMgYWxsIG90
+aGVyIHBhdGNoZXMgZnJvbSBzZXJpZXMNCj4gICAgICBodHRwczovL2xvcmUua2VybmVsLm9y
+Zy9yL2NvdmVyLjE2NTczMDA1MzIuZ2l0LmdlZXJ0QGxpbnV4LW02OGsub3JnDQo+ICAgICAg
+d2VyZSBhcHBsaWVkIHRvIGRybS1taXNjL2Zvci1saW51eC1uZXh0Lg0KPiAtLS0NCj4gICBk
+cml2ZXJzL2dwdS9kcm0vZHJtX2ZvdXJjYy5jIHwgNCArKysrDQo+ICAgMSBmaWxlIGNoYW5n
+ZWQsIDQgaW5zZXJ0aW9ucygrKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2Ry
+bS9kcm1fZm91cmNjLmMgYi9kcml2ZXJzL2dwdS9kcm0vZHJtX2ZvdXJjYy5jDQo+IGluZGV4
+IGUwOTMzMWJiM2JjNzNmMjEuLjI2NTY3MWE3ZjkxMzRjMWYgMTAwNjQ0DQo+IC0tLSBhL2Ry
+aXZlcnMvZ3B1L2RybS9kcm1fZm91cmNjLmMNCj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL2Ry
+bV9mb3VyY2MuYw0KPiBAQCAtMTkwLDYgKzE5MCwxMCBAQCBjb25zdCBzdHJ1Y3QgZHJtX2Zv
+cm1hdF9pbmZvICpfX2RybV9mb3JtYXRfaW5mbyh1MzIgZm9ybWF0KQ0KPiAgIAkJeyAuZm9y
+bWF0ID0gRFJNX0ZPUk1BVF9CR1JBNTU1MSwJLmRlcHRoID0gMTUsIC5udW1fcGxhbmVzID0g
+MSwgLmNwcCA9IHsgMiwgMCwgMCB9LCAuaHN1YiA9IDEsIC52c3ViID0gMSwgLmhhc19hbHBo
+YSA9IHRydWUgfSwNCj4gICAJCXsgLmZvcm1hdCA9IERSTV9GT1JNQVRfUkdCNTY1LAkJLmRl
+cHRoID0gMTYsIC5udW1fcGxhbmVzID0gMSwgLmNwcCA9IHsgMiwgMCwgMCB9LCAuaHN1YiA9
+IDEsIC52c3ViID0gMSB9LA0KPiAgIAkJeyAuZm9ybWF0ID0gRFJNX0ZPUk1BVF9CR1I1NjUs
+CQkuZGVwdGggPSAxNiwgLm51bV9wbGFuZXMgPSAxLCAuY3BwID0geyAyLCAwLCAwIH0sIC5o
+c3ViID0gMSwgLnZzdWIgPSAxIH0sDQo+ICsjaWZkZWYgX19CSUdfRU5ESUFODQo+ICsJCXsg
+LmZvcm1hdCA9IERSTV9GT1JNQVRfWFJHQjE1NTUgfCBEUk1fRk9STUFUX0JJR19FTkRJQU4s
+IC5kZXB0aCA9IDE1LCAubnVtX3BsYW5lcyA9IDEsIC5jcHAgPSB7IDIsIDAsIDAgfSwgLmhz
+dWIgPSAxLCAudnN1YiA9IDEgfSwNCj4gKwkJeyAuZm9ybWF0ID0gRFJNX0ZPUk1BVF9SR0I1
+NjUgfCBEUk1fRk9STUFUX0JJR19FTkRJQU4sIC5kZXB0aCA9IDE2LCAubnVtX3BsYW5lcyA9
+IDEsIC5jcHAgPSB7IDIsIDAsIDAgfSwgLmhzdWIgPSAxLCAudnN1YiA9IDEgfSwNCg0KR2V0
+dGluZyBiYWNrIHRvIHRoZSBkaXNjdXNzaW9uIG9uIGVuZGlhbmVzcywgSSBkb24ndCB1bmRl
+cnN0YW5kIHdoeSB0aGUgDQpCSUdfRU5ESUFOIGZsYWcgaXMgc2V0IGhlcmUuICBBRkFJSyB0
+aGVzZSBmb3JtYXRzIGFyZSBhbHdheXMgbGl0dGxlIA0KZW5kaWFuLiAgQW5kIHRoZSBCRSBm
+bGFnIGlzIHNldCBieSBkcml2ZXJzL3VzZXJzcGFjZSBpZiBhIGZyYW1lYnVmZmVyIA0KaGFz
+IGEgQkUgb3JkZXJpbmcuDQoNCkl0IHdvdWxkIGJlIGJldHRlciB0byBmaWx0ZXIgdGhlIEJF
+IGZsYWcgaW4gX19kcm1fZm9ybWF0X2luZm8oKSBiZWZvcmUgDQp0aGUgZnVuY3Rpb24gZG9l
+cyB0aGUgbG9va3VwLg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+ICsjZW5kaWYNCj4g
+ICAJCXsgLmZvcm1hdCA9IERSTV9GT1JNQVRfUkdCODg4LAkJLmRlcHRoID0gMjQsIC5udW1f
+cGxhbmVzID0gMSwgLmNwcCA9IHsgMywgMCwgMCB9LCAuaHN1YiA9IDEsIC52c3ViID0gMSB9
+LA0KPiAgIAkJeyAuZm9ybWF0ID0gRFJNX0ZPUk1BVF9CR1I4ODgsCQkuZGVwdGggPSAyNCwg
+Lm51bV9wbGFuZXMgPSAxLCAuY3BwID0geyAzLCAwLCAwIH0sIC5oc3ViID0gMSwgLnZzdWIg
+PSAxIH0sDQo+ICAgCQl7IC5mb3JtYXQgPSBEUk1fRk9STUFUX1hSR0I4ODg4LAkuZGVwdGgg
+PSAyNCwgLm51bV9wbGFuZXMgPSAxLCAuY3BwID0geyA0LCAwLCAwIH0sIC5oc3ViID0gMSwg
+LnZzdWIgPSAxIH0sDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZl
+ciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4
+ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBO
+w7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC.  It might happen, that command when run on an older
-kernel, gives you outdated entries.  Therefore please be sure you base
-your patches on recent Linux kernel.
+--------------XoyofduipLwRhZAo4vf0knVq--
 
+--------------XjylbMlXxkAsWPRzXxAOvfvO
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-> 
-> Signed-off-by: Manikanta Maddireddy <mmaddireddy@nvidia.com>
-> ---
->  .../bindings/phy/phy-tegra194-p2u.yaml        | 50 +++++++++++++++++++
->  1 file changed, 50 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/phy-tegra194-p2u.yaml b/Documentation/devicetree/bindings/phy/phy-tegra194-p2u.yaml
-> index 4dc5205d893b..0ba3f6a0b474 100644
-> --- a/Documentation/devicetree/bindings/phy/phy-tegra194-p2u.yaml
-> +++ b/Documentation/devicetree/bindings/phy/phy-tegra194-p2u.yaml
-> @@ -40,6 +40,51 @@ properties:
->    '#phy-cells':
->      const: 0
->  
-> +  interrupts:
-> +    items:
-> +      description: P2U interrupt for Gen4 lane margining functionality.
+-----BEGIN PGP SIGNATURE-----
 
-typo: merging?
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmN/L3gFAwAAAAAACgkQlh/E3EQov+Dl
+Ng/+M9NIvPFL7BpWwOAQiETFFLv006djr/agkCRGf84E4Ae4D8HQ6dkXUSRigJK5v1coZnsHQ/Dy
+Md8ArPuDTQhS3XTJVgy+JjTbDFaBUiBYXuRYHOsMMom4iojYTt77ff3HvteUVOCo4VwoRwjyfS4z
+AiRkyoQgqOOUVU/+Bq8NVjEPncbRnSzvNp5zWXh6C+X4fAMjhfeNM1dVgKCmroyvoOH7hH8DPYxJ
+O8ViAVkIS9c/lg1At15h7eOyaiPoGMxq7h224Li4tkD1cU7jGs0qmoLMtGADHQqta22S4m5SUSwB
+t8vdc4lElo0gU6Sva62LPLWYbSRa1roxDRbwXbnyI8Pmj2Ok+z0MUBmE7Pnm3lCENTHUkzKLZFgF
+5oj5Vp5k77oKi5PtOpIGpHDe+fwllLJCDfAfUa17wIX9BlHjHuzy/r7mS6BBz10fFfbigIECZI+h
+BeBHVpj3HtR450pAZ6XFDZw0Eorhz4ivutBKezkk+ikFapIy4cJb3eJiCd29ibOqyB1nWeHeUOuK
+s2hrxzTCgsDcAZB/tKVVZ59dTIJSQW7Pv/kQPOMjioS/8Z8sz5AODxKmZ22aYqg+v2peOGkcPSKK
+nSyjxCUa/MI4U9a4NXVbDNPzJCBIT0BSPVspajo8qyF9m6+vNp9Q3PdQSAej2Tq/BLg8yWK8fA9j
+PRs=
+=Ezd/
+-----END PGP SIGNATURE-----
 
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: intr
-
-Drop entire property, not really useful.
-
-> +
-> +  nvidia,bpmp:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description: Must contain a pair of phandles to BPMP controller node followed by P2U ID.
-> +    items:
-> +      - items:
-> +          - description: phandle to BPMP controller node
-> +          - description: P2U instance ID
-> +            maximum: 24
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - nvidia,tegra194-p2u
-> +    then:
-> +      required:
-> +        - reg
-> +        - reg-names
-> +        - '#phy-cells'
-
-That's not how it should be done. You have only two variants here, so
-add a "required:" block with above and only one if:then: clause for
-interrupts and nvidia,bpmp.
-
-Requiring reg/reg-names/phy-cells should be in separate patch with its
-own reasoning.
-
-
-Best regards,
-Krzysztof
-
+--------------XjylbMlXxkAsWPRzXxAOvfvO--
