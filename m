@@ -2,314 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABE69637970
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:57:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E18F7637975
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:57:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbiKXM5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 07:57:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
+        id S229657AbiKXM54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 07:57:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiKXM5A (ORCPT
+        with ESMTP id S229497AbiKXM5y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 07:57:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9AF6314F
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:56:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669294561;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:in-reply-to:in-reply-to:  references:references;
-        bh=im+KQDw98I7aQbweUIZ/s+siMDXWPzriAvUlGj+1GaQ=;
-        b=LSd4GV4788pcgxWhKPbUnaRlB/u+KLdBhfZnBb0gGiy3iqL2yLMrnHzvt9TyRTG6hDVkO3
-        lQzsKzFuCaPAOAStUT5JnLCQ0/nUEC+/FBzBW1esf2KcBw72f8EMRirH7Std/jhzNZpGxP
-        g1KcqOjL9/rHSGLyQT2TgqOJ2xgDnBQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-267-KicfeEEVNyKSU146mt5iTw-1; Thu, 24 Nov 2022 07:55:57 -0500
-X-MC-Unique: KicfeEEVNyKSU146mt5iTw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 24 Nov 2022 07:57:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA02B2BB28;
+        Thu, 24 Nov 2022 04:57:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4DC78101A52A;
-        Thu, 24 Nov 2022 12:55:56 +0000 (UTC)
-Received: from [10.64.54.95] (vpn2-54-95.bne.redhat.com [10.64.54.95])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 42214C15BA5;
-        Thu, 24 Nov 2022 12:55:41 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v2] mm: migrate: Fix THP's mapcount on isolation
-To:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        william.kucharski@oracle.com, ziy@nvidia.com,
-        kirill.shutemov@linux.intel.com, zhenyzha@redhat.com,
-        apopple@nvidia.com, hughd@google.com, willy@infradead.org,
-        shan.gavin@gmail.com
-References: <20221124095523.31061-1-gshan@redhat.com>
- <3c584ce6-dc8c-e0e4-c78f-b59dfff1fc13@redhat.com>
- <22407f18-0406-6ede-ef1e-592f03d3699e@redhat.com>
- <31bda0ab-a185-340d-b96b-b1cfed7c3910@redhat.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <da854e1c-c876-b2f3-a2cb-56664da541bf@redhat.com>
-Date:   Thu, 24 Nov 2022 20:55:39 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 600E96211E;
+        Thu, 24 Nov 2022 12:57:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CD85C433D6;
+        Thu, 24 Nov 2022 12:57:50 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="fTaIQZQc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1669294668;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=i+qfzrjPpTg7l95a1LUNnDUw+egwKvhI2kFeU80Ity4=;
+        b=fTaIQZQc1zt7FFg/pS1WD3gaYyipr6aQNCfVsAmAIcYjzAE41MO+gerG6SOdKR8prVJTLk
+        LMhAfD331KmLeKvQH0Q9EvnBnC3TM/24a5eI1rg/N9gXxFh03rAp+XQwvLD2um/MIhNcCd
+        hISDUTgB7DLNG3cA1hjTys+f/6UOeBg=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 4751f210 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Thu, 24 Nov 2022 12:57:48 +0000 (UTC)
+Date:   Thu, 24 Nov 2022 13:57:45 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Florian Weimer <fweimer@redhat.com>, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, tglx@linutronix.de,
+        linux-crypto@vger.kernel.org, x86@kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
+        Carlos O'Donell <carlos@redhat.com>, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arnd.de>
+Subject: Re: [PATCH v6 1/3] random: add vgetrandom_alloc() syscall
+Message-ID: <Y39qSe30VYa0ftK4@zx2c4.com>
+References: <20221121152909.3414096-1-Jason@zx2c4.com>
+ <20221121152909.3414096-2-Jason@zx2c4.com>
+ <87v8n6lzh9.fsf@oldenburg.str.redhat.com>
+ <Y37DDX5RtiGsV6MO@zx2c4.com>
+ <87a64g7wks.fsf@oldenburg.str.redhat.com>
+ <Y39djiBSmgXfgWJv@zx2c4.com>
+ <87cz9c5z1f.fsf@oldenburg.str.redhat.com>
+ <Y39iisTmUO2AaKNs@zx2c4.com>
+ <20221124124927.argohuob2bslolbt@wittgenstein>
 MIME-Version: 1.0
-In-Reply-To: <31bda0ab-a185-340d-b96b-b1cfed7c3910@redhat.com>
-Content-Type: multipart/mixed;
- boundary="------------D09D3DE0D6C0E967E2ED20DE"
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221124124927.argohuob2bslolbt@wittgenstein>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------D09D3DE0D6C0E967E2ED20DE
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Hi Christian,
 
-On 11/24/22 6:43 PM, David Hildenbrand wrote:
-> On 24.11.22 11:21, Gavin Shan wrote:
->> On 11/24/22 6:09 PM, David Hildenbrand wrote:
->>> On 24.11.22 10:55, Gavin Shan wrote:
->>>> The issue is reported when removing memory through virtio_mem device.
->>>> The transparent huge page, experienced copy-on-write fault, is wrongly
->>>> regarded as pinned. The transparent huge page is escaped from being
->>>> isolated in isolate_migratepages_block(). The transparent huge page
->>>> can't be migrated and the corresponding memory block can't be put
->>>> into offline state.
->>>>
->>>> Fix it by replacing page_mapcount() with total_mapcount(). With this,
->>>> the transparent huge page can be isolated and migrated, and the memory
->>>> block can be put into offline state. Besides, The page's refcount is
->>>> increased a bit earlier to avoid the page is released when the check
->>>> is executed.
->>>
->>> Did you look into handling pages that are in the swapcache case as well?
->>>
->>> See is_refcount_suitable() in mm/khugepaged.c.
->>>
->>> Should be easy to reproduce, let me know if you need inspiration.
->>>
->>
->> Nope, I didn't look into the case. Please elaborate the details so that
->> I can reproduce it firstly.
+Thanks a bunch for chiming in.
+
+On Thu, Nov 24, 2022 at 01:49:27PM +0100, Christian Brauner wrote:
+> Alternatively, you could also introduce a simple struct versioned by
+> size for this system call similar to mount_setatt() and clone3() and so
+> on. This way you don't need to worry about future extensibilty. Just a
+> thought.
+
+Briefly considered that, but it seemed a bit heavy for something like
+this. I'm not super heavily opposed, but just seemed like a bit much.
+
+> > > >> >> > +SYSCALL_DEFINE3(vgetrandom_alloc, unsigned long __user *, num,
+> > > >> >> > +		unsigned long __user *, size_per_each, unsigned int, flags)
+> > > >> >> 
+> > > >> >> I think you should make this __u64, so that you get a consistent
+> > > >> >> userspace interface on all architectures, without the need for compat
+> > > >> >> system calls.
+> > > >> >
+> > > >> > That would be quite unconventional. Most syscalls that take lengths do
+> > > >> > so with the native register size (`unsigned long`, `size_t`), rather
+> > > >> > than u64. If you can point to a recent trend away from this by
+> > > >> > indicating some commits that added new syscalls with u64, I'd be happy
+> > > >> > to be shown otherwise. But AFAIK, that's not the way it's done.
+> > > >> 
+> > > >> See clone3 and struct clone_args.
 > 
+> For system calls that take structs as arguments we use u64 in the struct
+> for proper alignment so we can extend structs without regressing old
+> kernels. We have a few of those extensible struct system calls.
 > 
-> A simple reproducer would be (on a system with ordinary swap (not zram))
-> 
-> 1) mmap a region (MAP_ANON|MAP_PRIVATE) that can hold a THP
-> 
-> 2) Enable THP for that region (MADV_HUGEPAGE)
-> 
-> 3) Populate a THP (e.g., write access)
-> 
-> 4) PTE-map the THP, for example, using MADV_FREE on the last subpage
-> 
-> 5) Trigger swapout of the THP, for example, using MADV_PAGEOUT
-> 
-> 6) Read-access to some subpages to fault them in from the swapcache
-> 
-> 
-> Now you'd have a THP, which
-> 
-> 1) Is partially PTE-mapped into the page table
-> 2) Is in the swapcache (each subpage should have one reference from the swapache)
-> 
-> 
-> Now we could test, if alloc_contig_range() will still succeed (e.g., using virtio-mem).
-> 
+> But we don't really have a lot system calls that pass u64 as a pointer
+> outside of a structure so far. Neither as register and nor as pointer
+> iirc.
 
-Thanks for the details. Step (4) and (5) can be actually combined. To swap part of
-the THP (e.g. one sub-page) will force the THP to be split.
+Right, the __u64_aligned business seemed to be mostly about
+extensibility.
 
-I followed your steps in the attached program, there is no issue to do memory hot-remove
-through virtio-mem with or without this patch.
+> > > > The struct is one thing. But actually, clone3 takes a `size_t`:
+> > > >
+> > > >     SYSCALL_DEFINE2(clone3, struct clone_args __user *, uargs, size_t, size)
+> > > >
+> > > > I take from this that I too should use `size_t` rather than `unsigned
+> > > > long.` And it doesn't seem like there's any compat clone3.
+> > > 
+> > > But vgetrandom_alloc does not use unsigned long, but unsigned long *.
+> > > You need to look at the contents for struct clone_args for comparison.
+> > 
+> > Ah! I see what you mean; that's a good point. The usual register
+> > clearing thing isn't going to happen because these are addresses.
+> > 
+> > I still am somewhat hesitant, though, because `size_t` is really the
+> > "proper" type to be used. Maybe the compat syscall thing is just a
+> > necessary evil?
+>
+> I think making this a size_t is fine. We haven't traditionally used u32
+> for sizes. All syscalls that pass structs versioned by size use size_t.
+> So I would recommend to stick with that.
 
-    # numactl -p 1 testsuite mm swap -k
-    Any key to split THP
-    Any key to swap sub-pages
-    Any key to read the swapped sub-pages
-        Page[000]: 0xffffffffffffffff
-        Page[001]: 0xffffffffffffffff
-          :
-        Page[255]: 0xffffffffffffffff
-    Any key to exit                                // hold here and the program doesn't exit
+This isn't quite a struct versioned by size. This is:
 
-    (qemu) qom-set vm1 requested-size 0
-    [  356.005396] virtio_mem virtio1: plugged size: 0x40000000
-    [  356.005996] virtio_mem virtio1: requested size: 0x0
-    [  356.350299] Fallback order for Node 0: 0 1
-    [  356.350810] Fallback order for Node 1: 1 0
-    [  356.351260] Built 2 zonelists, mobility grouping on.  Total pages: 491343
-    [  356.351998] Policy zone: DMA
+    void *vgetrandom_alloc([inout] size_t *num, [out] size_t *size_per_each, unsigned int flags);
 
-Thanks,
-Gavin
+You give it an input 'num' and some flags (currently flags=0), and it
+gives you back an output 'num' size, an output 'size_per_each' size, and
+an opaque pointer value mapping as its return value.
 
---------------D09D3DE0D6C0E967E2ED20DE
-Content-Type: text/x-csrc; charset=UTF-8;
- name="swap.c"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="swap.c"
+I do like the idea of keeping size_t so that the type is "right". But
+the other arguments are equally compelling as well, so not sure.
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/wait.h>
-#include <fcntl.h>
-#include <sys/mman.h>
-#include <errno.h>
-
-#include "inc/testsuite.h"
-
-struct swap_struct {
-	int		page_size;
-
-	int		fd;
-	int		flags;
-	void		*buf;
-	unsigned long 	len;
-
-	int		key_break;
-};
-
-#define SWAP_DEFAULT_SIZE	0x200000	/* 2MB */
-#define SWAP_PAGE_TO_SPLIT	511
-#define SWAP_PAGE_TO_SWAP	1
-#define SWAP_PAGE_TO_SWAP_NUM	256
-
-#ifndef MADV_PAGEOUT
-#define MADV_PAGEOUT		21
-#endif
-
-
-static void usage(void)
-{
-	fprintf(stdout, "testsuite mm swap -l <size> -k\n");
-	fprintf(stdout, "\n");
-	fprintf(stdout, "-l: Length of memory to be mapped\n");
-	fprintf(stdout, "-w: Length of memory to be copied-on-write\n");
-	fprintf(stdout, "-k: Stop at various stages\n");
-	fprintf(stdout, "\n");
-}
-
-static int swap_init_data(struct swap_struct *m)
-{
-	m->page_size	= getpagesize();
-
-	m->fd		= -1;
-	m->flags	= (MAP_PRIVATE | MAP_ANONYMOUS);
-	m->len		= SWAP_DEFAULT_SIZE;
-	m->key_break	= 0;
-
-	return 0;
-}
-
-static int swap_handler(int argc, char **argv)
-{
-	struct swap_struct m;
-	unsigned long *pval;
-	int i, opt, ret;
-
-	ret = swap_init_data(&m);
-	if (ret)
-		return ret;
-
-	while ((opt = getopt(argc, argv, "l:w:kh")) != -1) {
-		switch (opt) {
-		case 'l':
-			m.len = util_memory_parse_size(optarg);
-			if (m.len <= SWAP_DEFAULT_SIZE) {
-				fprintf(stderr, "%s: length 0x%lx less than 0x%x\n",
-					__func__, m.len, SWAP_DEFAULT_SIZE);
-				return -1;
-			}
-
-			break;
-		case 'k':
-			m.key_break = 1;
-			break;
-		case 'h':
-			usage();
-			return 0;
-		}
-	}
-
-	/*
-	 * Setup the area. The area should be backed up with huge pages
-	 * if it suits. Write to the area to ensure the area is populted
-	 * completely.
-	 */
-	m.buf = mmap(NULL, m.len, PROT_READ | PROT_WRITE, m.flags, m.fd, 0);
-	if (m.buf == (void *)-1) {
-		fprintf(stderr, "Unable do mmap()\n");
-		goto out;
-	}
-
-        memset(m.buf, 0xff, m.len);
-
-	/* Force to split the huge page */
-	util_misc_key_press(m.key_break, "  ", "Any key to split THP");
-	ret = madvise(m.buf + SWAP_PAGE_TO_SPLIT * m.page_size,
-		      m.page_size, MADV_FREE);
-	if (ret) {
-		fprintf(stderr, "Error %d to split THP\n", ret); 
-		goto out;
-	}
-
-	/* Swap one sub-page */
-	util_misc_key_press(m.key_break, "  ", "Any key to swap sub-pages");
-	ret = madvise(m.buf + SWAP_PAGE_TO_SWAP * m.page_size,
-		      SWAP_PAGE_TO_SWAP_NUM * m.page_size,
-		      MADV_PAGEOUT);
-	if (ret) {
-		fprintf(stderr, "Error %d to swap one sub-page\n", ret);
-		goto out;
-	}
-
-	/* Read the swapped sub-page */
-	util_misc_key_press(m.key_break, "  ", "Any key to read the swapped sub-pages");
-	for (i = 0; i < SWAP_PAGE_TO_SWAP_NUM; i++) {
-		pval = (unsigned long *)(m.buf + (SWAP_PAGE_TO_SWAP + i) * m.page_size);
-		fprintf(stdout, "  Page[%03d]: 0x%016lx\n", i, *pval);
-	}
-
-	/* Exit */
-	util_misc_key_press(m.key_break, "  ", "Any key to exit");
-
-out:
-	if (m.buf != (void *)-1)
-		munmap(m.buf, m.len);
-	if (m.fd > 0)
-		close(m.fd);
-
-	return 0;
-}
-
-static struct command swap_command = {
-	.name		= "swap",
-	.handler	= swap_handler,
-	.children	= LIST_HEAD_INIT(swap_command.children),
-	.link		= LIST_HEAD_INIT(swap_command.link),
-};
-
-int mm_swap_init(void)
-{
-	return command_add(&mm_command, &swap_command);
-}
-
-
---------------D09D3DE0D6C0E967E2ED20DE--
-
+Jason
