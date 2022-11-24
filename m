@@ -2,244 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F3F16378ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:30:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C434D6378EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:31:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiKXMa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 07:30:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43950 "EHLO
+        id S229671AbiKXMbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 07:31:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiKXMaX (ORCPT
+        with ESMTP id S229547AbiKXMbi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 07:30:23 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29BEFBCA4
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:30:22 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id s12so2353973edd.5
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:30:22 -0800 (PST)
+        Thu, 24 Nov 2022 07:31:38 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4DC1BCA4
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:31:37 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id 5so1208818wmo.1
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:31:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O3ToCxHFkrbDmCA2BRprg5ULzLvGItBwucRXFh126ws=;
-        b=tFXlfbFI2uobL9a5FjnUW4JP5jEhtHmYu+qgNQta37prpc/H9l//pMxC0gZC6yodqp
-         o/uCt4XtLanHT/tNzARWSzH2jE1sgjvT+KAymMz+6hGHW2FqToVtsn/Rfh2tL5U1Yr0v
-         x2U39psemo8NZxsDn66w2YhpkjQ59SAZqBjymWKRKVv/4e7wIaQMq+bruP3IMG+WW7Y/
-         o9XmgMMoVA7Hu3TMCgL8ZDUpjb7Ndaz1uHQ4Y+1i407i55ZDWdiq7i4j3U40q8ajbtAC
-         jwRZlRDja5cWcamrqFJnQ3Jvnd1GnhDFWDfl+R/qIwe2/2LSQwOQwhGMMn+WSsperKOc
-         CEpA==
+        d=google.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5JU48m0AZrUyT2++X8e6FIEgULoXPLA3Dizh2n0L4e4=;
+        b=nJ6yamWSxD9zSs4XqTzdk3DVALEFwHbQ3n1O5P4YrQfjn7uW1WBF2+YyK6k3jZK4MZ
+         etuI3RTbnbLC0iU9XyYt8yClLsJlp9Viq8LoTQyTUtNJbeB4JDj9yjLFGfdox3Pc5Typ
+         l4XQ/1dSAgwU3MOnNfO2Pn8vl5jEQ5CzWgWliSG2++AriiPRCYvAeU4swi6mAZ1559/3
+         1X0yRZSjGVAfN8SvohzUT6MS7YY0GUnjSUdvknH4RNjKimLWcf+Y8pOFxbuHwV08CGdW
+         zBccIBYo8UHXCrf3rXKWno1qTO9YJ7Qh/KNDKAM16F+uB4vNag3UrdygWjjUaQ6fMCtw
+         QIXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O3ToCxHFkrbDmCA2BRprg5ULzLvGItBwucRXFh126ws=;
-        b=0HyotNo9CH3Qneq7V5XHSrM96H0mbswlDhvuJsLbzHdyQ1GKwA0KEbONY9y48V6exA
-         eqApyEnCGbtodu/r0N92yi67BEAcRPMwjDtWPQVLCfWP1pqDTi4hYKsWGjGitQfuj8Ss
-         GOpquzIKEYpKWNk8Lb1f7T/jAk2GbwI5mAk/eGuwi5Eu+FvgDhw/RrQ504mo0X3FipgT
-         R9dtbmfRBwM9fDegIPDfBO5D0D+DXPr1LoVjIopJUXn6r7ccM2Id0zQdLCBctr8s9Hm7
-         D9RPKCUeJ+hHWzHlyiDHIGZKrdB+y+958O23elTOVcDV3tOfZbjyP/A86q9k7emhUIef
-         q/bQ==
-X-Gm-Message-State: ANoB5pnou7CUPpRd0sAatN95GpxsDobDwLojOhDf9oTFEna2+LtOiS5J
-        OGgIeeP6Ssl3GRHZsZ4X8U6ISqtzSICt8yS7mCNdVg==
-X-Google-Smtp-Source: AA0mqf5TFuoIP9GTOnmyF9Xfb1ZGnFvrjlgOAixvsyKc3HTIuiBZKi7XJjXSPd7s4e8e/YExCrPnFzZf3hKKHC0lrz4=
-X-Received: by 2002:aa7:db90:0:b0:459:aa70:d4fd with SMTP id
- u16-20020aa7db90000000b00459aa70d4fdmr28864721edt.162.1669293020539; Thu, 24
- Nov 2022 04:30:20 -0800 (PST)
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5JU48m0AZrUyT2++X8e6FIEgULoXPLA3Dizh2n0L4e4=;
+        b=IZwJ64u7G3QLBB1JtW4+Kyf3+1TzmO7HE5r9BnuiRTa8LFeGQdT1pv3i7uEusvMXGk
+         y8E+cXmLFTxDEMf3CKzAG1PCUuFYZO8FW0UfQZ/gVRvzcFzUE3tRr9Erlb4/VSPkYbeP
+         mJPAE4ugIDa4A2w1HZEGU7nu4WZCZwiA7Lo1qQQYsZ0S1mhsmJBRTyJ4HlF5qgKlEUrJ
+         XwLjTDes1BtvKApGBdVRAW5LxfE0QDCs3cIMiexyhGMc6WzEzF8cYIcKoE1ko8RP2lg6
+         GGLegCUgug3aZPU3kLjfC1kcjH9nTvniYQGZI6hhDyZvdvXbXDxbuhj3YOB0U87ls0Hr
+         e7RA==
+X-Gm-Message-State: ANoB5pn5cPLiP2bi2lMNhEmtFvGBbACOxvE1xQrXbVPCPMQ1a/thG50o
+        0aWng0MQAtXQFC7sjtoH3YThEQ==
+X-Google-Smtp-Source: AA0mqf4ONt6wFJvL1KocMtvj2hyw+ebBrslVU+JVZ/egvfjZFFv6tWRwHRPExuFK5D7UQ6tFo8BDWQ==
+X-Received: by 2002:a05:600c:3d0c:b0:3cf:f66c:9246 with SMTP id bh12-20020a05600c3d0c00b003cff66c9246mr11340007wmb.27.1669293096142;
+        Thu, 24 Nov 2022 04:31:36 -0800 (PST)
+Received: from google.com (65.0.187.35.bc.googleusercontent.com. [35.187.0.65])
+        by smtp.gmail.com with ESMTPSA id s3-20020a5d4243000000b00241e4bff85asm1180970wrr.100.2022.11.24.04.31.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Nov 2022 04:31:35 -0800 (PST)
+Date:   Thu, 24 Nov 2022 12:31:31 +0000
+From:   Vincent Donnefort <vdonnefort@google.com>
+To:     llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc:     samitolvanen@google.com, nhuck@google.com, ndesaulniers@google.com,
+        kernel-team@android.com
+Subject: Bug: MODPOST mismatch ignored due to LTO
+Message-ID: <Y39kI3MOtVI5BAnV@google.com>
 MIME-Version: 1.0
-References: <20221123182558.2203639-1-rmoar@google.com> <20221123182558.2203639-2-rmoar@google.com>
-In-Reply-To: <20221123182558.2203639-2-rmoar@google.com>
-From:   Anders Roxell <anders.roxell@linaro.org>
-Date:   Thu, 24 Nov 2022 13:30:09 +0100
-Message-ID: <CADYN=9LOKq-Zf2Z_QnEvt6iB==fJdSnNbnH4k1SYe5VPs0k5Sw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] kunit: improve KTAP compliance of KUnit test output
-To:     Rae Moar <rmoar@google.com>
-Cc:     brendanhiggins@google.com, davidgow@google.com,
-        dlatypov@google.com, skhan@linuxfoundation.org,
-        mauro.chehab@linux.intel.com, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        isabbasso@riseup.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Nov 2022 at 19:26, Rae Moar <rmoar@google.com> wrote:
->
-> Change KUnit test output to better comply with KTAP v1 specifications
-> found here: https://kernel.org/doc/html/latest/dev-tools/ktap.html.
-> 1) Use "KTAP version 1" instead of "TAP version 14" as test output header
-> 2) Remove '-' between test number and test name on test result lines
-> 2) Add KTAP version lines to each subtest header as well
->
-> Note that the new KUnit output still includes the =E2=80=9C# Subtest=E2=
-=80=9D line now
-> located after the KTAP version line. This does not completely match the
-> KTAP v1 spec but since it is classified as a diagnostic line, it is not
-> expected to be disruptive or break any existing parsers. This
-> =E2=80=9C# Subtest=E2=80=9D line comes from the TAP 14 spec
-> (https://testanything.org/tap-version-14-specification.html) and it is
-> used to define the test name before the results.
->
-> Original output:
->
->  TAP version 14
->  1..1
->    # Subtest: kunit-test-suite
->    1..3
->    ok 1 - kunit_test_1
->    ok 2 - kunit_test_2
->    ok 3 - kunit_test_3
->  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
->  # Totals: pass:3 fail:0 skip:0 total:3
->  ok 1 - kunit-test-suite
->
-> New output:
->
->  KTAP version 1
->  1..1
->    KTAP version 1
->    # Subtest: kunit-test-suite
->    1..3
->    ok 1 kunit_test_1
->    ok 2 kunit_test_2
->    ok 3 kunit_test_3
->  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
->  # Totals: pass:3 fail:0 skip:0 total:3
->  ok 1 kunit-test-suite
->
-> Signed-off-by: Rae Moar <rmoar@google.com>
-> Reviewed-by: Daniel Latypov <dlatypov@google.com>
-> Reviewed-by: David Gow <davidgow@google.com>
+Hi all,
 
-Tested-by: Anders Roxell <anders.roxell@linaro.org>
+It seems that enabling LTO breaks the check for section mismatch in modpost.
 
-Cheers,
-Anders
-> ---
->
-> Changes since v2:
-> https://lore.kernel.org/all/20221121184743.1123556-2-rmoar@google.com/
-> - Made fixes discussed on the v2 patch to now correctly output test
->   results after second level testing
->
-> Changes since v1:
-> https://lore.kernel.org/all/20221104194705.3245738-1-rmoar@google.com/
-> - Switch order of patches to make changes to the parser before making
->   changes to the test output
-> - Change location of the new KTAP version line in subtest header to be
->   before the subtest header line
->
->  lib/kunit/debugfs.c  | 2 +-
->  lib/kunit/executor.c | 6 +++---
->  lib/kunit/test.c     | 9 ++++++---
->  3 files changed, 10 insertions(+), 7 deletions(-)
->
-> diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
-> index 1048ef1b8d6e..de0ee2e03ed6 100644
-> --- a/lib/kunit/debugfs.c
-> +++ b/lib/kunit/debugfs.c
-> @@ -63,7 +63,7 @@ static int debugfs_print_results(struct seq_file *seq, =
-void *v)
->         kunit_suite_for_each_test_case(suite, test_case)
->                 debugfs_print_result(seq, suite, test_case);
->
-> -       seq_printf(seq, "%s %d - %s\n",
-> +       seq_printf(seq, "%s %d %s\n",
->                    kunit_status_to_ok_not_ok(success), 1, suite->name);
->         return 0;
->  }
-> diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-> index 9bbc422c284b..74982b83707c 100644
-> --- a/lib/kunit/executor.c
-> +++ b/lib/kunit/executor.c
-> @@ -166,7 +166,7 @@ static void kunit_exec_run_tests(struct suite_set *su=
-ite_set)
->  {
->         size_t num_suites =3D suite_set->end - suite_set->start;
->
-> -       pr_info("TAP version 14\n");
-> +       pr_info("KTAP version 1\n");
->         pr_info("1..%zu\n", num_suites);
->
->         __kunit_test_suites_init(suite_set->start, num_suites);
-> @@ -177,8 +177,8 @@ static void kunit_exec_list_tests(struct suite_set *s=
-uite_set)
->         struct kunit_suite * const *suites;
->         struct kunit_case *test_case;
->
-> -       /* Hack: print a tap header so kunit.py can find the start of KUn=
-it output. */
-> -       pr_info("TAP version 14\n");
-> +       /* Hack: print a ktap header so kunit.py can find the start of KU=
-nit output. */
-> +       pr_info("KTAP version 1\n");
->
->         for (suites =3D suite_set->start; suites < suite_set->end; suites=
-++)
->                 kunit_suite_for_each_test_case((*suites), test_case) {
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index 90640a43cf62..1c9d8d962d67 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -149,6 +149,7 @@ EXPORT_SYMBOL_GPL(kunit_suite_num_test_cases);
->
->  static void kunit_print_suite_start(struct kunit_suite *suite)
->  {
-> +       kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "KTAP version 1\=
-n");
->         kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "# Subtest: %s",
->                   suite->name);
->         kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "1..%zd",
-> @@ -175,13 +176,13 @@ static void kunit_print_ok_not_ok(void *test_or_sui=
-te,
->          * representation.
->          */
->         if (suite)
-> -               pr_info("%s %zd - %s%s%s\n",
-> +               pr_info("%s %zd %s%s%s\n",
->                         kunit_status_to_ok_not_ok(status),
->                         test_number, description, directive_header,
->                         (status =3D=3D KUNIT_SKIPPED) ? directive : "");
->         else
->                 kunit_log(KERN_INFO, test,
-> -                         KUNIT_SUBTEST_INDENT "%s %zd - %s%s%s",
-> +                         KUNIT_SUBTEST_INDENT "%s %zd %s%s%s",
->                           kunit_status_to_ok_not_ok(status),
->                           test_number, description, directive_header,
->                           (status =3D=3D KUNIT_SKIPPED) ? directive : "")=
-;
-> @@ -542,6 +543,8 @@ int kunit_run_tests(struct kunit_suite *suite)
->                         /* Get initial param. */
->                         param_desc[0] =3D '\0';
->                         test.param_value =3D test_case->generate_params(N=
-ULL, param_desc);
-> +                       kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT =
-KUNIT_SUBTEST_INDENT
-> +                                 "KTAP version 1\n");
->                         kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT =
-KUNIT_SUBTEST_INDENT
->                                   "# Subtest: %s", test_case->name);
->
-> @@ -555,7 +558,7 @@ int kunit_run_tests(struct kunit_suite *suite)
->
->                                 kunit_log(KERN_INFO, &test,
->                                           KUNIT_SUBTEST_INDENT KUNIT_SUBT=
-EST_INDENT
-> -                                         "%s %d - %s",
-> +                                         "%s %d %s",
->                                           kunit_status_to_ok_not_ok(test.=
-status),
->                                           test.param_index + 1, param_des=
-c);
->
-> --
-> 2.38.1.584.g0f3c55d4c2-goog
->
+If I create on purpose a mismatch here's the output without LTO
+
+check_section_mismatch()
+  fromsec=.text
+  tosec=.init.text
+  sym=kvm_arch_vcpu_create
+
+=> section mismatch in reference: kvm_vm_ioctl_create_vcpu (section: .text) -> kvm_arch_vcpu_create (section: .init.text)
+
+While with LTO:
+
+check_section_mismatch()
+  fromsec=.text.kvm_vm_ioctl_create_vcpu 
+  tosec=.init.text
+  sym=kvm_arch_vcpu_create
+
+=> mismatch ignored, the section ".text.kvm_vm_ioctl_create_vcpu" is
+unsurprisingly unknown
+
+LTO seems to append the symbol name to the section which is a problem for
+modpost.
+
+Is that a known issue?
+
+Thanks,
+Vincent
