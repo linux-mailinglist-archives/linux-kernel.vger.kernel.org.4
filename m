@@ -2,241 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FFDA638044
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 21:40:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CE31638049
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 21:44:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbiKXUku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 15:40:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59488 "EHLO
+        id S229538AbiKXUon convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 24 Nov 2022 15:44:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiKXUkr (ORCPT
+        with ESMTP id S229450AbiKXUol (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 15:40:47 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA7E6F0F9;
-        Thu, 24 Nov 2022 12:40:46 -0800 (PST)
-Date:   Thu, 24 Nov 2022 20:40:43 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669322444;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZZ4epoRQ2zVfah+JpJhEtCKyEqBItJutIh76m0Wbb8M=;
-        b=zBnU5w5fDAbtos3LNBlWwfftdkiSlHFqXge3Zl79fOYCUGVE/4h+bnry9fpN6uyBrsS+Fo
-        0AbzKGXXsvUTiy1s/xvGx7Kn8hRZKbyZH0FDzmjsdEeT065jN/TSk3fCekkCHzj6L1N7wP
-        tx1fx+eYGBLMNRZ5hx2qoqV6cMiV9IVO+mFCH2AW6HAWz9EAxgbwbhuOjIG0LgxchD537c
-        aDeagg3qqcKytK5y7iY13DFqip1A567SlozXVkqB/au8/9ojawN/qThhD56Lkc76Dt1o47
-        99UZmTp/mP6y3sjLIjCzFa7XmEZmn3RzGgD06A2X+dYhzyZpOwFTLJyaYDsxVw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669322444;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZZ4epoRQ2zVfah+JpJhEtCKyEqBItJutIh76m0Wbb8M=;
-        b=qYOeFIG6YacUFVG7wGjhbPY5P2t3lOzKDHh2wqikqk4Qv/gsIK35SrTWif0n9gzuT/D0Y7
-        CvGmJr85JNNUCHAw==
-From:   "tip-bot2 for Kees Cook" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] x86/paravirt: Remove clobber bitmask from .parainstructions
-Cc:     Kees Cook <keescook@chromium.org>, Borislav Petkov <bp@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juergen Gross <jgross@suse.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220903073706.3193746-1-keescook@chromium.org>
-References: <20220903073706.3193746-1-keescook@chromium.org>
+        Thu, 24 Nov 2022 15:44:41 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1990281F9A;
+        Thu, 24 Nov 2022 12:44:39 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1oyJ59-0007px-11; Thu, 24 Nov 2022 21:44:27 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Conor Dooley <conor@kernel.org>, Conor Dooley <conor@kernel.org>
+Cc:     Prabhakar <prabhakar.csengg@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Guo Ren <guoren@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v4 1/7] riscv: asm: alternative-macros: Introduce ALTERNATIVE_3() macro
+Date:   Thu, 24 Nov 2022 21:44:25 +0100
+Message-ID: <3307993.NgBsaNRSFp@diego>
+In-Reply-To: <59aea5e5-25f1-de8c-9982-5db226f8bda5@kernel.org>
+References: <20221124172207.153718-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <Y3/OlKI1jyi0eoCJ@spud> <59aea5e5-25f1-de8c-9982-5db226f8bda5@kernel.org>
 MIME-Version: 1.0
-Message-ID: <166932244330.4906.12220898230115738164.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/core branch of tip:
+Am Donnerstag, 24. November 2022, 21:08:17 CET schrieb Conor Dooley:
+> On 24/11/2022 20:05, Conor Dooley wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > 
+> > On Thu, Nov 24, 2022 at 08:58:41PM +0100, Heiko Stübner wrote:
+> >> Am Donnerstag, 24. November 2022, 20:52:33 CET schrieb Conor Dooley:
+> >>> On Thu, Nov 24, 2022 at 05:22:01PM +0000, Prabhakar wrote:
+> >>>> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >>>>
+> >>>> Introduce ALTERNATIVE_3() macro.
+> >>>
+> >>> Bit perfunctory I think! There's a lovely comment down below that would
+> >>> make for a better commit message if you were to yoink it.
+> >>> Content looks about what I'd expect to see though.
+> >>
+> >> Also both the comment on the original ALTERNATIVE_2 and the new ALTERNATIVE_3
+> >> should probably be merged into a single comment explaining this once for all
+> >> ALTERNATIVE_x variants.
+> >>
+> >> Especially with the dma stuff, I'm pretty sure we'll get at least an ALTERNATIVE_4
+> >> if not even more ;-) . So we defnitly don't want to repeat this multiple times.
+> > 
+> > Oh I can promise you that there'll be a #4 ;) I do find the comment's
+> > wording to be quite odd though..
+> > 
+> >> + * A vendor wants to replace an old_content, but another vendor has used
+> >> + * ALTERNATIVE_2() to patch its customized content at the same location. In
+> > 
+> > In particular this bit about "at the same location" does not make all
+> > that much sense. What "at the same location" means in this context
+> > should be expanded on imo. Effectively it boils down to someone else is
+> > already replacing the same things you want to replace - it's just the
+> > word "location" that might make sense if you're an old hand but not
+> > otherwise?
+> 
+> Or maybe I am just biased because I tried to explain this to someone
+> recently and the language in the comments didn't make sense to them,
+> and anyone meddling with this code should be able to understand it?
 
-Commit-ID:     5736b1b70170e15d66ec02e500db917ef42ade83
-Gitweb:        https://git.kernel.org/tip/5736b1b70170e15d66ec02e500db917ef42ade83
-Author:        Kees Cook <keescook@chromium.org>
-AuthorDate:    Sat, 03 Sep 2022 00:37:06 -07:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Thu, 24 Nov 2022 13:53:54 +01:00
+When I first looked at the whole alternatives / patching thing, the whole thing
+looked like dark magic to me ;-) .
 
-x86/paravirt: Remove clobber bitmask from .parainstructions
+But yeah, the comment here, but also the original one above ALTERNATIVE_2
+could use improvements to explain better what it tries to do.
 
-The u16 "clobber" value is not used in .parainstructions since commit
-27876f3882fd ("x86/paravirt: Remove clobbers from struct paravirt_patch_site")
 
-Remove the u16 from the section macro, the argument from all macros, and
-all now-unused CLBR_* macros.
+> >> + * this case, this vendor can create a new macro ALTERNATIVE_3() based
+> > 
+> > Also, using the word "can". Is it not a "must" rather than a "can",
+> > since this stuff needs to be multiplatform?
+> > 
+> >> + * on the following sample code and then replace ALTERNATIVE_2() with
+> >> + * ALTERNATIVE_3() to append its customized content.
+> > 
+> > 
+> 
+> 
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Signed-off-by: Peter Zijlstra <peterz@infradead.org>
-Reviewed-by: Juergen Gross <jgross@suse.com>
-Link: https://lore.kernel.org/r/20220903073706.3193746-1-keescook@chromium.org
----
- arch/x86/include/asm/paravirt_types.h | 61 +++++---------------------
- 1 file changed, 12 insertions(+), 49 deletions(-)
 
-diff --git a/arch/x86/include/asm/paravirt_types.h b/arch/x86/include/asm/paravirt_types.h
-index 27c6927..8c1da41 100644
---- a/arch/x86/include/asm/paravirt_types.h
-+++ b/arch/x86/include/asm/paravirt_types.h
-@@ -20,37 +20,6 @@ enum paravirt_lazy_mode {
- 
- #ifdef CONFIG_PARAVIRT
- 
--/* Bitmask of what can be clobbered: usually at least eax. */
--#define CLBR_EAX  (1 << 0)
--#define CLBR_ECX  (1 << 1)
--#define CLBR_EDX  (1 << 2)
--#define CLBR_EDI  (1 << 3)
--
--#ifdef CONFIG_X86_32
--/* CLBR_ANY should match all regs platform has. For i386, that's just it */
--#define CLBR_ANY  ((1 << 4) - 1)
--
--#define CLBR_ARG_REGS	(CLBR_EAX | CLBR_EDX | CLBR_ECX)
--#define CLBR_RET_REG	(CLBR_EAX | CLBR_EDX)
--#else
--#define CLBR_RAX  CLBR_EAX
--#define CLBR_RCX  CLBR_ECX
--#define CLBR_RDX  CLBR_EDX
--#define CLBR_RDI  CLBR_EDI
--#define CLBR_RSI  (1 << 4)
--#define CLBR_R8   (1 << 5)
--#define CLBR_R9   (1 << 6)
--#define CLBR_R10  (1 << 7)
--#define CLBR_R11  (1 << 8)
--
--#define CLBR_ANY  ((1 << 9) - 1)
--
--#define CLBR_ARG_REGS	(CLBR_RDI | CLBR_RSI | CLBR_RDX | \
--			 CLBR_RCX | CLBR_R8 | CLBR_R9)
--#define CLBR_RET_REG	(CLBR_RAX)
--
--#endif /* X86_64 */
--
- #ifndef __ASSEMBLY__
- 
- #include <asm/desc_defs.h>
-@@ -297,27 +266,23 @@ extern struct paravirt_patch_template pv_ops;
- #define paravirt_type(op)				\
- 	[paravirt_typenum] "i" (PARAVIRT_PATCH(op)),	\
- 	[paravirt_opptr] "m" (pv_ops.op)
--#define paravirt_clobber(clobber)		\
--	[paravirt_clobber] "i" (clobber)
--
- /*
-  * Generate some code, and mark it as patchable by the
-  * apply_paravirt() alternate instruction patcher.
-  */
--#define _paravirt_alt(insn_string, type, clobber)	\
-+#define _paravirt_alt(insn_string, type)		\
- 	"771:\n\t" insn_string "\n" "772:\n"		\
- 	".pushsection .parainstructions,\"a\"\n"	\
- 	_ASM_ALIGN "\n"					\
- 	_ASM_PTR " 771b\n"				\
- 	"  .byte " type "\n"				\
- 	"  .byte 772b-771b\n"				\
--	"  .short " clobber "\n"			\
- 	_ASM_ALIGN "\n"					\
- 	".popsection\n"
- 
- /* Generate patchable code, with the default asm parameters. */
- #define paravirt_alt(insn_string)					\
--	_paravirt_alt(insn_string, "%c[paravirt_typenum]", "%c[paravirt_clobber]")
-+	_paravirt_alt(insn_string, "%c[paravirt_typenum]")
- 
- /* Simple instruction patching code. */
- #define NATIVE_LABEL(a,x,b) "\n\t.globl " a #x "_" #b "\n" a #x "_" #b ":\n\t"
-@@ -469,20 +434,19 @@ int paravirt_disable_iospace(void);
- 	})
- 
- 
--#define ____PVOP_CALL(ret, op, clbr, call_clbr, extra_clbr, ...)	\
-+#define ____PVOP_CALL(ret, op, call_clbr, extra_clbr, ...)	\
- 	({								\
- 		PVOP_CALL_ARGS;						\
- 		PVOP_TEST_NULL(op);					\
- 		asm volatile(paravirt_alt(PARAVIRT_CALL)		\
- 			     : call_clbr, ASM_CALL_CONSTRAINT		\
- 			     : paravirt_type(op),			\
--			       paravirt_clobber(clbr),			\
- 			       ##__VA_ARGS__				\
- 			     : "memory", "cc" extra_clbr);		\
- 		ret;							\
- 	})
- 
--#define ____PVOP_ALT_CALL(ret, op, alt, cond, clbr, call_clbr,		\
-+#define ____PVOP_ALT_CALL(ret, op, alt, cond, call_clbr,		\
- 			  extra_clbr, ...)				\
- 	({								\
- 		PVOP_CALL_ARGS;						\
-@@ -491,45 +455,44 @@ int paravirt_disable_iospace(void);
- 					 alt, cond)			\
- 			     : call_clbr, ASM_CALL_CONSTRAINT		\
- 			     : paravirt_type(op),			\
--			       paravirt_clobber(clbr),			\
- 			       ##__VA_ARGS__				\
- 			     : "memory", "cc" extra_clbr);		\
- 		ret;							\
- 	})
- 
- #define __PVOP_CALL(rettype, op, ...)					\
--	____PVOP_CALL(PVOP_RETVAL(rettype), op, CLBR_ANY,		\
-+	____PVOP_CALL(PVOP_RETVAL(rettype), op,				\
- 		      PVOP_CALL_CLOBBERS, EXTRA_CLOBBERS, ##__VA_ARGS__)
- 
- #define __PVOP_ALT_CALL(rettype, op, alt, cond, ...)			\
--	____PVOP_ALT_CALL(PVOP_RETVAL(rettype), op, alt, cond, CLBR_ANY,\
-+	____PVOP_ALT_CALL(PVOP_RETVAL(rettype), op, alt, cond,		\
- 			  PVOP_CALL_CLOBBERS, EXTRA_CLOBBERS,		\
- 			  ##__VA_ARGS__)
- 
- #define __PVOP_CALLEESAVE(rettype, op, ...)				\
--	____PVOP_CALL(PVOP_RETVAL(rettype), op.func, CLBR_RET_REG,	\
-+	____PVOP_CALL(PVOP_RETVAL(rettype), op.func,			\
- 		      PVOP_CALLEE_CLOBBERS, , ##__VA_ARGS__)
- 
- #define __PVOP_ALT_CALLEESAVE(rettype, op, alt, cond, ...)		\
- 	____PVOP_ALT_CALL(PVOP_RETVAL(rettype), op.func, alt, cond,	\
--			  CLBR_RET_REG, PVOP_CALLEE_CLOBBERS, , ##__VA_ARGS__)
-+			  PVOP_CALLEE_CLOBBERS, , ##__VA_ARGS__)
- 
- 
- #define __PVOP_VCALL(op, ...)						\
--	(void)____PVOP_CALL(, op, CLBR_ANY, PVOP_VCALL_CLOBBERS,	\
-+	(void)____PVOP_CALL(, op, PVOP_VCALL_CLOBBERS,			\
- 		       VEXTRA_CLOBBERS, ##__VA_ARGS__)
- 
- #define __PVOP_ALT_VCALL(op, alt, cond, ...)				\
--	(void)____PVOP_ALT_CALL(, op, alt, cond, CLBR_ANY,		\
-+	(void)____PVOP_ALT_CALL(, op, alt, cond,			\
- 				PVOP_VCALL_CLOBBERS, VEXTRA_CLOBBERS,	\
- 				##__VA_ARGS__)
- 
- #define __PVOP_VCALLEESAVE(op, ...)					\
--	(void)____PVOP_CALL(, op.func, CLBR_RET_REG,			\
-+	(void)____PVOP_CALL(, op.func,					\
- 			    PVOP_VCALLEE_CLOBBERS, , ##__VA_ARGS__)
- 
- #define __PVOP_ALT_VCALLEESAVE(op, alt, cond, ...)			\
--	(void)____PVOP_ALT_CALL(, op.func, alt, cond, CLBR_RET_REG,	\
-+	(void)____PVOP_ALT_CALL(, op.func, alt, cond,			\
- 				PVOP_VCALLEE_CLOBBERS, , ##__VA_ARGS__)
- 
- 
+
+
