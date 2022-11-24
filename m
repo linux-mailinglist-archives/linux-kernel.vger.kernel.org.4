@@ -2,251 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3214E6373D1
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:22:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71F366373D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:23:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbiKXIWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 03:22:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48760 "EHLO
+        id S229666AbiKXIXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 03:23:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiKXIWk (ORCPT
+        with ESMTP id S229480AbiKXIXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 03:22:40 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D26CE25;
-        Thu, 24 Nov 2022 00:22:38 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669278157;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=s+nIC3djla2eCKjxSXpIFMphkhy9KsLIp+C+/UiDTis=;
-        b=WnnDkWqesDTvoW0XJWpjXbyMRQFAJEH0gsTD+Vx8b1Veh8xDVHTxzRy23zLdxjs62rP2q+
-        aproFYAw5kBxG/hlnkTjE/1pKUe6sb+MIJIp9SeTtpSQc8QSs8HrlJNYxJ0DartOx91aW6
-        Hm1e5Std3/+gkfZrVxCE6p+qcOXqmRMEYHIgXk1OCe+32RJnxT3njZOn8pW/TCVZ6W0JU4
-        EBYgElc67FYlN1woXMHsxmeS7Vq+n7FRNRallduWcfiBM4PckOrDFFJHrSVRFKdWdua9O3
-        mFYlNUTiMm5ZYNseMfjsylX0PIjnLbgfdXakYNH3Es3GDkNGDLkZzvty7BklwQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669278157;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=s+nIC3djla2eCKjxSXpIFMphkhy9KsLIp+C+/UiDTis=;
-        b=KLKAKLpPJ0MEuWXdektcZAmtHEhsjdXjfi0MPD+kxV+TF5H5O7xH61chkV/YtffDHzfx6T
-        IrK1S6d26MYxYxAg==
-To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        linux-bluetooth@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Jacob Keller <jacob.e.keller@intel.com>
-Subject: [patch V3.1 12/17] timers: Silently ignore timers with a NULL function
-In-Reply-To: <87zgcgdau1.ffs@tglx>
-References: <20221123201306.823305113@linutronix.de>
- <20221123201625.135055320@linutronix.de>
- <644695b9-f343-7fb7-ed8e-763e5fe3d158@linutronix.de> <87zgcgdau1.ffs@tglx>
-Date:   Thu, 24 Nov 2022 09:22:36 +0100
-Message-ID: <87wn7kdann.ffs@tglx>
+        Thu, 24 Nov 2022 03:23:06 -0500
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7C12B260
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:23:05 -0800 (PST)
+Received: by mail-vs1-xe34.google.com with SMTP id 124so879601vsv.4
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:23:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5qmRgK6iHDDD9jUd+afLu/0d0Ew0cdPS8bY9iC3x34M=;
+        b=wrIlOBoMs6QQSclG7dH6GjVcfyrqXV0yQ1u3aG+e1sAqHH9Y+hHttWomM3LZqUw32k
+         nkJkU1eMPUhvTLG6ds11eZR6MuazdqHYrPsVYBbaVDditxbUQVOrm1O2ywORTCwjS7EP
+         +U7cMnomLkAZQb/5Hfdo/iUhj+31WBKdr6OnrupJVbqcemQ4R3q87icWxkahNWilgqtU
+         S06UZIzovWkovRY41VSUfHF03vkQYG4LDoLdIbNpzbEcEX8Dv0jYLZN/DJrlEYW+e+Gn
+         mO3WdJO1WCkFBf5RZT4w8Do+nJXlo5dFYteduLDUxfR0RvZ/pWDjKcIcvFVb46fCWxfs
+         r11A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5qmRgK6iHDDD9jUd+afLu/0d0Ew0cdPS8bY9iC3x34M=;
+        b=rSaWMl2g9XJAnCWygq/0pYR6M/Rg7+Vm7ZNOa1uDYPwCLsUwyTpi3SrO8Y6L5SqF5I
+         mHMb0qTG9Oy3A3JM8/i5vb2qlEUVTMqM1kxr2F+U1yfrwFkQOALWkVPqoL75FOJ6pRyC
+         tOerKXiCvB2/E6I8aO2XmDTLiQiGuTk/5XLSdA/WQsBro6HyI4NQJ0LG7GtxNnAmcqRT
+         7B1td5zAFsVG7HasUt0n6y5Nx87x8bgL/3z05RyLjLamUWshUo7IShQSRlXSYxMIXwsC
+         a3j0im/g8wfs3t/LLiXc0Q23pt/w3gnew2GaQw2RMJk5ZuTW4MpJX3vrK410shn0hyot
+         8pJQ==
+X-Gm-Message-State: ANoB5pk0EGRHb3yk4IMWWmX6XCW+OQKDVBb/RKl3SkeDyUHx4CKhkxnF
+        1eQWK4EvwQjk/SLfKEUG5xNRRCrxOvIxQ+4EUOUNVw==
+X-Google-Smtp-Source: AA0mqf5soPczq85B7Su9wnMaQiQuhCvUW6GSUbGBrWPQb6CMzXdAbt/bQwCjTHuBblb7HRlAv3kudwdSeixLE4PUChQ=
+X-Received: by 2002:a05:6102:829:b0:3b0:6449:baba with SMTP id
+ k9-20020a056102082900b003b06449babamr6403999vsb.61.1669278184524; Thu, 24 Nov
+ 2022 00:23:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-12-uwe@kleine-koenig.org> <CAMRc=Mfjcs-BBFhr8O1O956f4jdvAzY9ofZs1fme8+Ki=T60JA@mail.gmail.com>
+ <CAMRc=MfwSabay==DcyONc4AVgOPETsA5x3wuLX05Ndvfwiv4bg@mail.gmail.com> <20221123164132.gfglkwgknqkwywnq@pengutronix.de>
+In-Reply-To: <20221123164132.gfglkwgknqkwywnq@pengutronix.de>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 24 Nov 2022 09:22:53 +0100
+Message-ID: <CAMRc=Mf=h_nVAzRhY_YEuiur+9Wbx+kEwPj-iB=PqHn3ULYJ6A@mail.gmail.com>
+Subject: Re: [PATCH 011/606] gpio: max732x: Convert to i2c's .probe_new()
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <uwe@kleine-koenig.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        linux-gpio@vger.kernel.org,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Grant Likely <grant.likely@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tearing down timers which have circular dependencies to other
-functionality, e.g. workqueues, where the timer can schedule work and work
-can arm timers, is not trivial.
+On Wed, Nov 23, 2022 at 5:41 PM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> wrote:
+>
+> On Wed, Nov 23, 2022 at 04:49:05PM +0100, Bartosz Golaszewski wrote:
+> > On Wed, Nov 23, 2022 at 10:47 AM Bartosz Golaszewski <brgl@bgdev.pl> wr=
+ote:
+> > >
+> > > On Fri, Nov 18, 2022 at 11:46 PM Uwe Kleine-K=C3=B6nig <uwe@kleine-ko=
+enig.org> wrote:
+> > > >
+> > > > From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> > > >
+> > > > .probe_new() doesn't get the i2c_device_id * parameter, so determin=
+e
+> > > > that explicitly in the probe function.
+> > > >
+> > > > Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.d=
+e>
+> > > > ---
+> > > >  drivers/gpio/gpio-max732x.c | 6 +++---
+> > > >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > > >
+> > > > diff --git a/drivers/gpio/gpio-max732x.c b/drivers/gpio/gpio-max732=
+x.c
+> > > > index da6972117030..68e982cdee73 100644
+> > > > --- a/drivers/gpio/gpio-max732x.c
+> > > > +++ b/drivers/gpio/gpio-max732x.c
+> > > > @@ -608,9 +608,9 @@ static struct max732x_platform_data *of_gpio_ma=
+x732x(struct device *dev)
+> > > >         return pdata;
+> > > >  }
+> > > >
+> > > > -static int max732x_probe(struct i2c_client *client,
+> > > > -                                  const struct i2c_device_id *id)
+> > > > +static int max732x_probe(struct i2c_client *client)
+> > > >  {
+> > > > +       const struct i2c_device_id *id =3D i2c_client_get_device_id=
+(client);
+> > > >         struct max732x_platform_data *pdata;
+> > > >         struct device_node *node;
+> > > >         struct max732x_chip *chip;
+> > > > @@ -707,7 +707,7 @@ static struct i2c_driver max732x_driver =3D {
+> > > >                 .name           =3D "max732x",
+> > > >                 .of_match_table =3D of_match_ptr(max732x_of_table),
+> > > >         },
+> > > > -       .probe          =3D max732x_probe,
+> > > > +       .probe_new      =3D max732x_probe,
+> > > >         .id_table       =3D max732x_id,
+> > > >  };
+> > > >
+> > > > --
+> > > > 2.38.1
+> > > >
+> > >
+> > > Applied, thanks!
+> > >
+> > > Bartosz
+> >
+> > Ugh, backing it out, I thought these patches were independent.
+>
+> They depend on i2c_client_get_device_id which you can get into your tree
+> either by pulling in
+>
+>         https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c=
+/client_device_id_helper-immutable
+>
+> or by waiting until this hits Linus Torvald's tree and updating to that.
+>
+> I'd like to see the gpio patches go in via the gpio tree. If you choose
+> not to pull in the above and apply now, I will resend (per subsystem)
+> the remaining patches based on the next -rc1 containing that function.
+>
 
-In those cases it is desired to shutdown the timer in a way which prevents
-rearming of the timer. The mechanism to do so is to set timer->function to
-NULL and use this as an indicator for the timer arming functions to ignore
-the (re)arm request.
+That's alright, I pulled Wolfram's branch and re-applied the three patches.
 
-In preparation for that replace the warnings in the relevant code paths
-with checks for timer->function == NULL. If the pointer is NULL, then
-discard the rearm request silently.
-
-Add debug_assert_init() instead of the WARN_ON_ONCE(!timer->function)
-checks so that debug objects can warn about non-initialized timers.
-
-The warning of debug objects does not warn if timer->function == NULL.  It
-warns when timer was not initialized using timer_setup[_on_stack]() or via
-DEFINE_TIMER(). If developers fail to enable debug objects and then waste
-lots of time to figure out why their non-initialized timer is not firing,
-they deserve it. Same for initializing a timer with a NULL function.
-
-Co-developed-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
-Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home
-Link: https://lore.kernel.org/all/20221110064101.429013735@goodmis.org
----
-V2: Use continue instead of return and amend the return value docs (Steven)
-V3: Changelog and comment updates (Anna-Maria)
-V3.1: Fix it for real
----
- kernel/time/timer.c |   57 +++++++++++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 52 insertions(+), 5 deletions(-)
-
---- a/kernel/time/timer.c
-+++ b/kernel/time/timer.c
-@@ -1017,7 +1017,7 @@ static inline int
- 	unsigned int idx = UINT_MAX;
- 	int ret = 0;
- 
--	BUG_ON(!timer->function);
-+	debug_assert_init(timer);
- 
- 	/*
- 	 * This is a common optimization triggered by the networking code - if
-@@ -1044,6 +1044,14 @@ static inline int
- 		 * dequeue/enqueue dance.
- 		 */
- 		base = lock_timer_base(timer, &flags);
-+		/*
-+		 * Has @timer been shutdown? This needs to be evaluated
-+		 * while holding base lock to prevent a race against the
-+		 * shutdown code.
-+		 */
-+		if (!timer->function)
-+			goto out_unlock;
-+
- 		forward_timer_base(base);
- 
- 		if (timer_pending(timer) && (options & MOD_TIMER_REDUCE) &&
-@@ -1070,6 +1078,14 @@ static inline int
- 		}
- 	} else {
- 		base = lock_timer_base(timer, &flags);
-+		/*
-+		 * Has @timer been shutdown? This needs to be evaluated
-+		 * while holding base lock to prevent a race against the
-+		 * shutdown code.
-+		 */
-+		if (!timer->function)
-+			goto out_unlock;
-+
- 		forward_timer_base(base);
- 	}
- 
-@@ -1128,8 +1144,12 @@ static inline int
-  * mod_timer_pending() is the same for pending timers as mod_timer(), but
-  * will not activate inactive timers.
-  *
-+ * If @timer->function == NULL then the start operation is silently
-+ * discarded.
-+ *
-  * Return:
-- * * %0 - The timer was inactive and not modified
-+ * * %0 - The timer was inactive and not modified or was in
-+ *	  shutdown state and the operation was discarded
-  * * %1 - The timer was active and requeued to expire at @expires
-  */
- int mod_timer_pending(struct timer_list *timer, unsigned long expires)
-@@ -1155,8 +1175,12 @@ EXPORT_SYMBOL(mod_timer_pending);
-  * same timer, then mod_timer() is the only safe way to modify the timeout,
-  * since add_timer() cannot modify an already running timer.
-  *
-+ * If @timer->function == NULL then the start operation is silently
-+ * discarded. In this case the return value is 0 and meaningless.
-+ *
-  * Return:
-- * * %0 - The timer was inactive and started
-+ * * %0 - The timer was inactive and started or was in shutdown
-+ *	  state and the operation was discarded
-  * * %1 - The timer was active and requeued to expire at @expires or
-  *	  the timer was active and not modified because @expires did
-  *	  not change the effective expiry time
-@@ -1176,8 +1200,12 @@ EXPORT_SYMBOL(mod_timer);
-  * modify an enqueued timer if that would reduce the expiration time. If
-  * @timer is not enqueued it starts the timer.
-  *
-+ * If @timer->function == NULL then the start operation is silently
-+ * discarded.
-+ *
-  * Return:
-- * * %0 - The timer was inactive and started
-+ * * %0 - The timer was inactive and started or was in shutdown
-+ *	  state and the operation was discarded
-  * * %1 - The timer was active and requeued to expire at @expires or
-  *	  the timer was active and not modified because @expires
-  *	  did not change the effective expiry time such that the
-@@ -1200,6 +1228,9 @@ EXPORT_SYMBOL(timer_reduce);
-  * The @timer->expires and @timer->function fields must be set prior
-  * to calling this function.
-  *
-+ * If @timer->function == NULL then the start operation is silently
-+ * discarded.
-+ *
-  * If @timer->expires is already in the past @timer will be queued to
-  * expire at the next timer tick.
-  *
-@@ -1228,7 +1259,9 @@ void add_timer_on(struct timer_list *tim
- 	struct timer_base *new_base, *base;
- 	unsigned long flags;
- 
--	if (WARN_ON_ONCE(timer_pending(timer) || !timer->function))
-+	debug_assert_init(timer);
-+
-+	if (WARN_ON_ONCE(timer_pending(timer)))
- 		return;
- 
- 	new_base = get_timer_cpu_base(timer->flags, cpu);
-@@ -1239,6 +1272,13 @@ void add_timer_on(struct timer_list *tim
- 	 * wrong base locked.  See lock_timer_base().
- 	 */
- 	base = lock_timer_base(timer, &flags);
-+	/*
-+	 * Has @timer been shutdown? This needs to be evaluated while
-+	 * holding base lock to prevent a race against the shutdown code.
-+	 */
-+	if (!timer->function)
-+		goto out_unlock;
-+
- 	if (base != new_base) {
- 		timer->flags |= TIMER_MIGRATING;
- 
-@@ -1252,6 +1292,7 @@ void add_timer_on(struct timer_list *tim
- 
- 	debug_timer_activate(timer);
- 	internal_add_timer(base, timer);
-+out_unlock:
- 	raw_spin_unlock_irqrestore(&base->lock, flags);
- }
- EXPORT_SYMBOL_GPL(add_timer_on);
-@@ -1541,6 +1582,12 @@ static void expire_timers(struct timer_b
- 
- 		fn = timer->function;
- 
-+		if (WARN_ON_ONCE(!fn)) {
-+			/* Should never happen. Emphasis on should! */
-+			base->running_timer = NULL;
-+			continue;
-+		}
-+
- 		if (timer->flags & TIMER_IRQSAFE) {
- 			raw_spin_unlock(&base->lock);
- 			call_timer_fn(timer, fn, baseclk);
+Bart
