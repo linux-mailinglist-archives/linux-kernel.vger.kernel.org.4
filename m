@@ -2,86 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D351F63784C
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:02:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D00637851
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:02:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbiKXMCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 07:02:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39200 "EHLO
+        id S230129AbiKXMCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 07:02:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbiKXMCK (ORCPT
+        with ESMTP id S229471AbiKXMCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 07:02:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31FCACB9EC
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:01:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669291276;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=f7HcxW31PlGqZ7LlVewBN3n/M3SlRfqDtsg/jo2QUmA=;
-        b=bOmzpeg2yvMvk3B5f3xZtyRUDItBwCdy3OdO9NJsf2pPa/zIOeLiWPeEQh11/rGrcpRhjV
-        ISG/1/ScKb2aGkMeeHCaCSTVa74e2xUlnrYgIPnPhmMIAjvR7GGJVZ3PN03RidyYFwcOYH
-        kKwieQo44//OYum7WwX29b9ayIQ9fcQ=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-340-OncNju1zPcihagbHZT9-mQ-1; Thu, 24 Nov 2022 07:01:15 -0500
-X-MC-Unique: OncNju1zPcihagbHZT9-mQ-1
-Received: by mail-ej1-f70.google.com with SMTP id qa14-20020a170907868e00b007ae24f77742so1074509ejc.8
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:01:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f7HcxW31PlGqZ7LlVewBN3n/M3SlRfqDtsg/jo2QUmA=;
-        b=z2kbn14Ioq7BYXDB7wiMeRik2lRHhSTUHWmS81BYg0foXY8rNE4Ne+8svsvbKkOpCQ
-         2k6Wjfn9FGPiVAK7kjZdFC0n/RyF0IW4elODClhReXvYE0IPBBIxeFMuPiKrR3NLIvGB
-         asLLJ1uCyQK4GgQqI1lXaUmV2FwZn1w5MUHZhfFjJWGqvMXGCASH5GU5HMkLphEy67Hx
-         gsmtMoH52IDmSCGITwKuv8x+YS6bj8KLWY8noTT/UKhVPVUX6dULIY+P1+bohJxZfn6s
-         bJsIR0BE3D5+36C0J7HjgufzESue6+27vRyu0jciLm3n+MNHD/KMg9E6KIcgjUkPc2Xo
-         +Hgg==
-X-Gm-Message-State: ANoB5pkVAql/9uicVZMnbve2TawHD9jI7Xga/RBYO040Uc1tIXP+AeTi
-        TMmHyd3nNXya9UU8BEJsEin6uOEpqI27dwVRAb9yiz1SyY+zrmOIqT22g3CBvsL6rd9aJMnhLi/
-        sY7r7E9dU4uj5hYOmR1/YwSY9
-X-Received: by 2002:a17:906:d297:b0:7b8:4c22:2d6c with SMTP id ay23-20020a170906d29700b007b84c222d6cmr10938681ejb.144.1669291274165;
-        Thu, 24 Nov 2022 04:01:14 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4x9Sj81lq09gOSoHAzFPNhr4rAt+DBUjnmtvn9lIcQAf+nTTggjtPgq7oHPmWJVGJcaL1OIw==
-X-Received: by 2002:a17:906:d297:b0:7b8:4c22:2d6c with SMTP id ay23-20020a170906d29700b007b84c222d6cmr10938668ejb.144.1669291273909;
-        Thu, 24 Nov 2022 04:01:13 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id g8-20020a1709064e4800b007a97a616f3fsm344759ejw.196.2022.11.24.04.01.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Nov 2022 04:01:13 -0800 (PST)
-Message-ID: <72d5aa86-c097-d022-942a-f7299e8aa1ef@redhat.com>
-Date:   Thu, 24 Nov 2022 13:01:12 +0100
+        Thu, 24 Nov 2022 07:02:43 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E2D413DF4;
+        Thu, 24 Nov 2022 04:02:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669291361; x=1700827361;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=ByzyqHT0pWydKIz/KfDxD+ECkFTq6Ws31EHvLEzI37U=;
+  b=Hc/mN8HJcCm7MvtKVQwGpzPbJVJld8o229vvaQuEGFxP+zymVnmxmm6D
+   ecZtH+sXCDFpxITNk6FhmqwIyUQ4Bg8IAfSjPYRvcaINlIDvpha3yJAoX
+   /uUzsS/mB+tWz76VHGGDGAPwFL5lTLlfzUKYCM9KkSBnQCaf5PspYl6Kt
+   2AFCC3S4XwcJKNRgIaj6yui9mfbebuOj4lmfBnrmbhrd4eJu+wrFrXRXU
+   +k0oLNCjjYwl9qSD9lGdonDirOMiRRnlFxnl8w7J+rghAEeCPXx6AfBsU
+   n+U4xZTavcB8GbvjV+heUUZKpZQ2PjsVXeQ4/P0sdij6lB/vmNFJ1OIWf
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="315437366"
+X-IronPort-AV: E=Sophos;i="5.96,190,1665471600"; 
+   d="scan'208";a="315437366"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2022 04:02:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="784610437"
+X-IronPort-AV: E=Sophos;i="5.96,190,1665471600"; 
+   d="scan'208";a="784610437"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga001.fm.intel.com with ESMTP; 24 Nov 2022 04:02:40 -0800
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 24 Nov 2022 04:02:40 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 24 Nov 2022 04:02:40 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Thu, 24 Nov 2022 04:02:40 -0800
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.105)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Thu, 24 Nov 2022 04:02:39 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MaC11gu43Uv+55j+HIIqDhtBLKJOAVbrmHxpMCnA/NqLAUZ+yVBCXrdpm49o69QcWHowrMlfcSLHIkm0+c+O+U91nGFlSyc2amj2JGq+9ELbqXTn+PAmNYMgLVz55POKa80npVqVJPfJMCRVP5/UMzGECtKpPidjPbGu6TVMLfHqSplSUssettUHui5f9rVCOX6E35aJ6tSffQiNgkgWZ/zfs+4Bryp3o2uTI1uDklMnxSkCDM5un0Ac3gHT3nLK8SAFzzl5/8olajZQUGghw0Ji909RaD5gGr+XaJGXtYeBTgdCOCRaiLfUrD76pszc5XGUmOkdDrSVnXxQEzfBYg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ByzyqHT0pWydKIz/KfDxD+ECkFTq6Ws31EHvLEzI37U=;
+ b=k+4T8vjUnkEqAXNnTLpXpKjhMgw1sf4XbKS+eUV+6t5a1sYApB+Jtk9fTy7GQeKwxfgl2OshSBPCzT/UOBXfFFqviD7IWY97jBS9OLTrmPFpTT9nyDXd8dcAE7k6FtXiHlSm2tyYqAdhg78YHu3dsxAu+S/lguJAxWbFlTknE1CKcdWqrIcumcb4uyAGPEc6jI2i7KiU/8GbsuyOY6dOri7TDlxjrwC/2oNG7gp+vgg0qzBjmRcQAfASXTC6V2KC7zrHzDCtMvs8ndQFOayy073fuixWph6qkJqZ8eqVl4+NW0Q4tlRbNdlTqq5ZF16CHnUuYy9vuxcqtjL4Y07rwg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
+ by DS7PR11MB6294.namprd11.prod.outlook.com (2603:10b6:8:96::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19; Thu, 24 Nov
+ 2022 12:02:36 +0000
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::2fb7:be18:a20d:9b6e]) by BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::2fb7:be18:a20d:9b6e%8]) with mapi id 15.20.5834.015; Thu, 24 Nov 2022
+ 12:02:36 +0000
+From:   "Huang, Kai" <kai.huang@intel.com>
+To:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "Luck, Tony" <tony.luck@intel.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+Subject: Re: [PATCH v7 11/20] x86/virt/tdx: Add placeholder to construct TDMRs
+ to cover all TDX memory regions
+Thread-Topic: [PATCH v7 11/20] x86/virt/tdx: Add placeholder to construct
+ TDMRs to cover all TDX memory regions
+Thread-Index: AQHY/T3ORWilVlKW4kyc0A5kdGk0eq5NGDiAgADmkYA=
+Date:   Thu, 24 Nov 2022 12:02:36 +0000
+Message-ID: <35aee96c1bb56322191ae442f3928d7dff064a92.camel@intel.com>
+References: <cover.1668988357.git.kai.huang@intel.com>
+         <32c1968fe34c8cf3cb834e3a9966cd2a201efc5b.1668988357.git.kai.huang@intel.com>
+         <6d4d429a-ade2-771d-0e4c-788bef45041a@intel.com>
+In-Reply-To: <6d4d429a-ade2-771d-0e4c-788bef45041a@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|DS7PR11MB6294:EE_
+x-ms-office365-filtering-correlation-id: cf5d9485-ab73-42d0-2c8a-08dace13c738
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: U1gVJkCi1eXK2j1j0Caz0PoNUYrDML7BeSO/cyDChS+7W6ljrlZZw+6rx0bEk6aMTcdjuMLyFv6bvKv2xr45DmLVlhF+9aqwp3qXUB+VlpmYjHIoxE7fQAhgGAS3pMrOhy9EhanVsRp66mPYdBfRLgaizJsRVyHuvVjFWmRTbA7nj2S/TaGLTJvvJMv8OBi9Tsnqo2hP4YEkkw2B91Y03rb4DXZ4lYjyT5dB1A4GolJTcBjAoiG/offCut5CWPxcWliuMBz2l/gxWoh7hR849LIYDqKkqwYZRhkWRt7fSe4zG5cohFY2kuMxX0MfJ4YEnioWKqlasHX5CK/dMYBbYi1DIXHyuIXbe6cke/XmVsZsDqOZUgYwA6iVvT4FAKK+rmVAFA0T8GvolT3uGeYO5lKEpIIkYoHbYP1EMoyLgvsoAeYmEGBOry0uLjjufwwGlji2x2z2e+xvggqdcNSIaKPvTfwcpJZANsvUdcV0x8ey99O+ZZQbzEKRegeKCNPVTyJqMd2uqjp8Yz5QSoxrH5jQppgfWtWfKHVuk/Gcf7XfkCInWgVdu9nfVmmsLQI+uxBdOLD7nt3ieVvQ6w+jeSuUQIzjSMfaBoQkWQzXmemdSt3mIRcZVjLxa5gq3Oxk5IHb6Lbvpfj68B+BhVMvUyFdXXG8dpCV7jw1YRt1wWmwmleD2Ys8s4GvdM6VVUlf4nc5SPBuOV5S32WC1Cy+vVNnBY+2Siz1bGJ/M1Vqats=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(39860400002)(376002)(346002)(136003)(396003)(451199015)(82960400001)(122000001)(38100700002)(38070700005)(86362001)(26005)(8676002)(91956017)(4326008)(66446008)(66476007)(66556008)(71200400001)(66946007)(64756008)(76116006)(316002)(54906003)(7416002)(4744005)(110136005)(5660300002)(2906002)(4001150100001)(41300700001)(8936002)(6486002)(966005)(186003)(6506007)(2616005)(83380400001)(478600001)(6512007)(36756003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RlZUQ0dRWWRacGZySW9xT3hueTUrZWFkVTJWM3pkOVNhbjc4UzhnSjArcytu?=
+ =?utf-8?B?T0V2V0VpWGp3SGJNak93WnBqZTRIUGtlRE9NZ0RJWkZZVWhyQzZQTjl3ZXNT?=
+ =?utf-8?B?VjN0ZHNTWEFRRW5sb2lSdU1JSUpIQnlSSFo4TlFST09JK3Zzd0lRR0E5K21Y?=
+ =?utf-8?B?QzIzRzJDLzZ6bEpWL1dCM2VjUW1vblpFcGlmK3FFZ3pZK0JRVjJESVBhOEZY?=
+ =?utf-8?B?WmNIeFdvSCtvL000dktyOFNtUWt5QWZZRFA2ZmJ0cmdjVjJqbVF1bnBxb3dE?=
+ =?utf-8?B?eUkzRGU4VkVSVENZWFZRYTFQK1h6QW92UENGQlVraWVJUHJDb2xpUnVUY1c3?=
+ =?utf-8?B?RkdRMFg2aU9yK0EvVmE3NXpHellRRWxCdkoreHc0eWtyM3Z4WWRIaXcvZEx5?=
+ =?utf-8?B?dFVGYlExMCsvWUhxcS8vOS9iQm82Q1pvMjlCMEpWM2E0UWl3NkdxYXJLdXBz?=
+ =?utf-8?B?Q3YvUDJWcHdjbllralBzaXltbUxzQ1lwd05IRTNMV3ZXVFdFS3pxSkFIYk1k?=
+ =?utf-8?B?VlNLUzB1TFROTEhZalhSSWRycGZGdlZic0tKMS9qak56Z05ZTkRseURYdTdM?=
+ =?utf-8?B?a2VFMWdLUmhOMjRWSXpjVFhYUUplYlRWRHcrdFM0MVp2TUNidHBveGNtcURs?=
+ =?utf-8?B?c0ZvaFNZb0REWjV4djJPclVERjlycTE3T1pXVzk2bURsU0ZpbVpQaG9FeUY3?=
+ =?utf-8?B?N0JzY2N4MU9VUEZhWENSckdFMHhNRU83TWcvRkMzRm00dnRUNDJ0c1hnMUsz?=
+ =?utf-8?B?M2lsSCtzK2N4ZytqUWJEc0U4amZEaTIyaUM4MmZNZHkzWGZUZ0pEaXFsV25J?=
+ =?utf-8?B?ZnlKOUlJYjV4azg1S0FoTDdaNHIwMjcveGRaOWdtazVnYlFINlEralN6WUZE?=
+ =?utf-8?B?NWZNYWlJOGpLR1NLU2xqRnF2d2tZZWNSY3JvY2FHcUNTUE9waXMwd2Y2V0NG?=
+ =?utf-8?B?MkxNMmV4bUFOVUtJUnpmRS9YMzZ3c1hESkY4M3EzdHlXTjcvRFhtR1lzaVhV?=
+ =?utf-8?B?TW5ERGdrTElhbDBVOWRISmlhSHBXR3E2ckRhNEJ6dWM1WVpwUWx5bXhhZ2Rw?=
+ =?utf-8?B?MlM4c0k4aGgzYm5XRjdJNzhaaU1rRlIzczBkOTZRTGNGNkVlaVRBa2Z3akhl?=
+ =?utf-8?B?Z0NMOHk0NkRGbHJiQWMxbTd5cXlGTFNVaEJtQXppMmIybUhOcDVXdWtRVWVT?=
+ =?utf-8?B?RmgxTTVqNW1lRGNFQW9BS2t4ZnlaaVpWZ0lFVXlLSXBROHJ4eWxmOEFYREx3?=
+ =?utf-8?B?WGU0YTR2VG05VkFSUER3ZWMrNHh5SUg5TTBqYXZtbE12d2p4TEZkNmhFZmRZ?=
+ =?utf-8?B?eUJtNUV0NXZoQjdVS3dHb290TGNpaGVmMHcwOFRXSXBwSkRNTkIyR0ZkMUNv?=
+ =?utf-8?B?WnRqNVBnRkc5eHN2QjJ0NEdnR2tEVk1hMVlQK2dydGdvL1JsdE1tNnk4ZEFw?=
+ =?utf-8?B?ZncvbFR3bmlzc3BQTmxHQ2pJMkZKUnRzNzQzM0dpeUxVSkY0MGNnaHBSL1hN?=
+ =?utf-8?B?eWl3bFRDWElTMFlEZmhzdjNGYnhjam9wbVZzb0liV3BaL3JaMDg5NFhObjZv?=
+ =?utf-8?B?eldKYmhQQXNkaWVYQ0svK2MvdW5rbllyUlMrRm1ZSFlXeHdTVGsrakJ2d2Iz?=
+ =?utf-8?B?TXRGMnBrdEFNdThKOGNCRnB5WEozcW14SFJBWTNpTDliRTNwOXR0S1VtK0tw?=
+ =?utf-8?B?d3c2K3dJcnVyTlhkYjF3UUIvMXh3aW5VNndDRUY0cXFrck9FMmxaYnhjR1dO?=
+ =?utf-8?B?MmlzZFFnYVJXTEhySFpXVXlMWjhpelVkeVJnNWltL1JZUWthZEtHSC9zeGlE?=
+ =?utf-8?B?Ry9UK3NsTGp0TnlqYS9EQmo1VTh0YVNpRkRKY3BlUFUxbXN3QTVtazcwQ0R1?=
+ =?utf-8?B?c3hRclNadEdpTmlLZ0FGV0ZTUUZnNTZyZFNNeHk1TFA5TEN5TEFqRmNUNTNr?=
+ =?utf-8?B?OGRrMGhMU3RRckV0VStwN1RsNC9FZ3d6czdvWElhZHE2dkFUT24rQ1Q1cEZ2?=
+ =?utf-8?B?eTUzUEhDSEhnU2t4QUJoT1NCdTl6NjBWU0kzdkRqK0pGaHRXT3hKUkQ4SEQr?=
+ =?utf-8?B?OWRxam01OHdYL0RmbEZCN25ocEIvZXJUTVIyQVUvTXJXcFRFSjZFZS9iWURh?=
+ =?utf-8?B?VEc4VkkwVk1LRC9GdWtUeUdJc0R4amhybjlwSzV6bmNrdTNqMktEazgrUkNY?=
+ =?utf-8?B?THc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <FFF0A2D5429D514BA166FA859BA77B79@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v1 1/2] platform/x86: serial-multi-instantiate: Set fwnode
- for i2c
-Content-Language: en-US, nl
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Stefan Binding <sbinding@opensource.cirrus.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mark Gross <markgross@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com
-References: <20221124110718.3925934-1-sbinding@opensource.cirrus.com>
- <20221124110718.3925934-2-sbinding@opensource.cirrus.com>
- <1b548284-baa3-26e0-2e8f-a8d853788e5c@redhat.com>
-In-Reply-To: <1b548284-baa3-26e0-2e8f-a8d853788e5c@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cf5d9485-ab73-42d0-2c8a-08dace13c738
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Nov 2022 12:02:36.7925
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: CBnDloKa2rfuaJMffNZ7XtLglEE1kxQN8xItrPj02QXVfh2xaEvDzC97zUJDECWLe2oxsocfMkcO7Et0dUBQag==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB6294
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,135 +188,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 11/24/22 12:47, Hans de Goede wrote:
-> Hi Stefan,
-> 
-> On 11/24/22 12:07, Stefan Binding wrote:
->> This allows the i2c driver to obtain the ACPI_COMPANION.
->>
->> Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
->> ---
->>  drivers/platform/x86/serial-multi-instantiate.c | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/platform/x86/serial-multi-instantiate.c b/drivers/platform/x86/serial-multi-instantiate.c
->> index 5362f1a7b77c..15ef2f3c442e 100644
->> --- a/drivers/platform/x86/serial-multi-instantiate.c
->> +++ b/drivers/platform/x86/serial-multi-instantiate.c
->> @@ -194,6 +194,7 @@ static int smi_i2c_probe(struct platform_device *pdev, struct smi *smi,
->>  		strscpy(board_info.type, inst_array[i].type, I2C_NAME_SIZE);
->>  		snprintf(name, sizeof(name), "%s-%s.%d", dev_name(dev), inst_array[i].type, i);
->>  		board_info.dev_name = name;
->> +		board_info.fwnode = acpi_fwnode_handle(adev);
->>  
->>  		ret = smi_get_irq(pdev, adev, &inst_array[i]);
->>  		if (ret < 0)
-> 
-> I'm afraid that making this change is not as straight forward as it looks.
-> 
-> I know that I have tried to do this in the past and it failed.
-> 
-> IIRC there were 3 problems:
-> 
-> 1. I was expecting this to also allow the driver for the instantiated
-> i2c-client to be able to bind using an acpi_match_table but that
-> unfortunately does not work. acpi_match_table matches only work for
-> the first physical_node linked under
-> /sys/bus/acpi/devices/xxxx:xx/physical_node and that is the platform
-> device to which serial-multi-instantiate.c binds. The i2c_client becomes
-> the second physical node.  Note this is not really an issue,
-> just something to be aware of.
-> 
-> 
-> 2. This causes the i2c-core to use the first IRQ resource in the ACPI
-> fwnode as client->irq for any clients for which we do not set an
-> IRQ when instantiating. Which may very well be wrong. Sometimes that
-> IRQ is only valid for the first i2c-client which we instantiate; and
-> not for the others! And sometimes it is a problem because it may
-> point to an irqchip for which we never wrote a driver leading to
-> all probes of the i2c-client failing with -EPROBE_DEFER, see:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d1d84bb95364ed604015c2b788caaf3dbca0262f
-> 
-> Note that patch has been reverted since that specific -EPROBE_DEFER
-> issue has been solved by making the ACPI core instantiate a
-> platform_device instead of an i2c_client (in this case we
-> did not need the actual i2c_client at all).
-> 
-> The current i2c-core code has a (!client-irq) test guarding its
-> code of trying to use the first ACPI fwnode IRQ resource.
-> 
-> So we could disable this by setting client->irq = -ENOENT in
-> serial-multi-instantiate.c when (inst->flags & IRQ_RESOURCE_TYPE) ==
-> IRQ_RESOURCE_NONE). But that will introduce a new problem. Many
-> i2c-drivers check if there is an IRQ for them to use by doing:
-> "if (client->irq) request_irq(client->irq, ...)" but then with
-> error checking/so setting client->irq to -ENOENT will cause
-> the request_irq to fail, leading the probe to fail.
-> 
-> So before you can write a patch setting client->irq = -ENOENT
-> when (inst->flags & IRQ_RESOURCE_TYPE) == IRQ_RESOURCE_NONE),
-> you would first need to patch all i2c-drivers for clients
-> instantiated through serial-multi-instantiate.c changing:
-> 
-> 	if (client->irq) {
-> 		...
-> 	}
-> 
-> to:
-> 
-> 	if (client->irq > 0) {
-> 		...
-> 	}
-> 
-> Note this is not as bad as it sounds, since there are only
-> a few drivers for clients instantiated by serial-multi-instantiate.c .
-
-Possibly a  nicer way to fix this would be to make the i2c-core change
-client->irq to 0 if it is -ENOENT before calling the i2c_driver's
-probe method, thus fixing things centrally for all i2c-drivers without
-needing to audit/patch them all. Specifically in:
-
-drivers/i2c/i2c-core-base.c: i2c_device_probe() change:
-
-	if (!client->irq) {
-		...
-	}
-
-to:
-
-	if (!client->irq) {
-		...
-	} else if (client->irq == -ENOENT) {
-		client->irq = 0; /* Drivers expect 0 for "no-IRQ" */
-	}
-
-And maybe as Andy suggested, handle at least the IRQ in
-i2c_acpi_new_device_by_fwnode() by adding something like that there:
-
-	/* Disable the i2c-core attempting to get an IRQ from ACPI itself */
-	if (!board_info->irq)
-		board_info->irq= -ENOENT;
-
-I also agree with Andy that setting board_info->fw_node would be done
-there ideally too. But then you would need to extend the audit of
-impacted drivers mentioned below to also include drivers for
-i2c-clients instantiated through other code-paths calling
-i2c_acpi_new_device_by_fwnode()  (of which there are not many,
-but there are a few others).
-
-> 3. Some drivers may check for an ACPI companion device and then
-> change their behavior. So all drivers for clients instantiated
-> through serial-multi-instantiate.c will need to be audited for
-> this (and a summary of this audit needs to be added to the commit
-> msg).
-
-Regards,
-
-Hans
-
-
-
-
+T24gV2VkLCAyMDIyLTExLTIzIGF0IDE0OjE3IC0wODAwLCBEYXZlIEhhbnNlbiB3cm90ZToNCj4g
+Rmlyc3QsIEkgdGhpbmsgJ3RkeF9zeXNpbmZvJyBzaG91bGQgcHJvYmFibHkgYmUgYSBsb2NhbCB2
+YXJpYWJsZSBpbg0KPiBpbml0X3RkeF9tb2R1bGUoKSBhbmQgaGF2ZSBpdHMgYWRkcmVzcyBwYXNz
+ZWQgaW4gaGVyZS7CoCBIYXZpbmcgZ2xvYmFsDQo+IHZhcmlhYmxlcyBhbHdheXMgbWFrZXMgaXQg
+bW9yZSBvcGFxdWUgYWJvdXQgd2hvIGlzIGluaXRpYWxpemluZyBpdC4NCg0KU29ycnkgSSBtaXNz
+ZWQgdG8gcmVzcG9uZCB0aGlzLg0KDQpVc2luZyBsb2NhbCB2YXJpYWJsZSBmb3IgJ3RkeF9zeXNp
+bmZvJyB3aWxsIGNhdXNlIGEgYnVpbGQgd2FybmluZzoNCg0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5v
+cmcvbGttbC9hNjY5NGM4MWI0ZTk2YTIyNTU3ZmQwYWY3MGE4MWJkMmMyZTRlM2U3LmNhbWVsQGlu
+dGVsLmNvbS8NCg0KU28gaW5zdGVhZCB3ZSBjYW4gaGF2ZSBhIGxvY2FsIHZhcmlhYmxlIGZvciB0
+aGUgcG9pbnRlciBvZiAndGR4X3N5c2luZm8nLCBhbmQNCmR5bmFtaWNhbGx5IGFsbG9jYXRlIG1l
+bW9yeSBmb3IgaXQuDQoNCktWTSB3aWxsIG5lZWQgdG8gdXNlIGl0LCB0aG91Z2guICBTbyBJIHRo
+aW5rIGV2ZW50dWFsbHkgd2Ugd2lsbCBuZWVkIHRvIGhhdmUgYQ0KZ2xvYmFsIHZhcmlhYmxlIChl
+aXRoZXIgdGR4X3N5c2luZm8gaXRzZWxmLCBvciB0aGUgcG9pbnRlciBvZiBpdCkuICBCdXQgdGhp
+cyBjYW4NCmJlIGRvbmUgaW4gYSBzZXBhcmF0ZSBwYXRjaC4NCg0KQ01ScyBjYW4gYmUgZG9uZSBp
+biB0aGUgc2FtZSB3YXkgKEtWTSBkb2Vzbid0IG5lZWQgdG8gdXNlIENNUnMsIGJ1dCBwZXJoYXBz
+IHNvbWUNCmRheSB3ZSBtYXkgd2FudCB0byBleHBvc2UgdGhlbSB0byAvc3lzZnMsIGV0YykuDQoN
+CldoYXQncyB5b3VyIHByZWZlcmVuY2U/DQo=
