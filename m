@@ -2,86 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4CFD636F9A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 02:08:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A38B8636F9B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 02:08:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbiKXBIL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 23 Nov 2022 20:08:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37172 "EHLO
+        id S229754AbiKXBIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 20:08:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbiKXBIH (ORCPT
+        with ESMTP id S229598AbiKXBIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 20:08:07 -0500
-Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1592763B9A
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 17:08:06 -0800 (PST)
-Received: from omf14.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay06.hostedemail.com (Postfix) with ESMTP id 5A72CAB37A;
-        Thu, 24 Nov 2022 01:08:05 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf14.hostedemail.com (Postfix) with ESMTPA id AC1C92D;
-        Thu, 24 Nov 2022 01:07:35 +0000 (UTC)
-Message-ID: <1820d317cd8447d88d666c7d8c3e47c89a8324bb.camel@perches.com>
-Subject: Re: [PATCH v2 5/5] checkpatch: ignore a file named b
-From:   Joe Perches <joe@perches.com>
-To:     Robert Elliott <elliott@hpe.com>, apw@canonical.com,
-        dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com
-Cc:     linux-kernel@vger.kernel.org
-Date:   Wed, 23 Nov 2022 17:08:01 -0800
-In-Reply-To: <20221123011202.939319-6-elliott@hpe.com>
-References: <20220815041548.43744-1-elliott@hpe.com>
-         <20221123011202.939319-1-elliott@hpe.com>
-         <20221123011202.939319-6-elliott@hpe.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Wed, 23 Nov 2022 20:08:35 -0500
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB32F6454B
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 17:08:34 -0800 (PST)
+Date:   Wed, 23 Nov 2022 17:08:29 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1669252113;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HbGKRpnmQ412qgzjYpg5qAefunJk3cmUerajjIaJjns=;
+        b=i293Z+eNKoC7A7TGvOYCGKnkEZnA8XUTscB7PnvZQ/+kDgqxcKXRGARFMehN60cyDmpMy/
+        VKH4YPhmRJi2FmfnPtR7Ci6Yb3cL0y9fsUKdQeLcoNV3oHN5Rp5qzVhMPgcbxLkAofJXTq
+        /vA1DQNNPQdC85s07wVF/DxxlL5SUZ0=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, patches@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 02/12] mm, slub: add CONFIG_SLUB_TINY
+Message-ID: <Y37EDVJekrtaxSow@P9FQF9L96D.corp.robot.car>
+References: <20221121171202.22080-1-vbabka@suse.cz>
+ <20221121171202.22080-3-vbabka@suse.cz>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Rspamd-Server: rspamout06
-X-Rspamd-Queue-Id: AC1C92D
-X-Stat-Signature: jdc75kdrqtccebmzzqgwycmh754du8kd
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/0O2so2WHCRtGPPrnnUhwKomdAUBg0znE=
-X-HE-Tag: 1669252055-328934
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221121171202.22080-3-vbabka@suse.cz>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-11-22 at 19:12 -0600, Robert Elliott wrote:
-> If a file named "b" happens to exist, checkpatch complains
-> as it parses the patch lines specifying the filenames.
+On Mon, Nov 21, 2022 at 06:11:52PM +0100, Vlastimil Babka wrote:
+> For tiny systems that have used SLOB until now, SLUB might be
+> impractical due to its higher memory usage. To help with that, introduce
+> an option CONFIG_SLUB_TINY that modifies SLUB to use less memory.
+> This is done by sacrificing scalability, security and debugging
+> features, therefore not recommended for any system with more than 16MB
+> RAM.
 > 
-> 	WARNING: patch prefix 'b' exists, appears to be a -p0 patch
+> This commit introduces the option and uses it to set other related
+> options in a way that reduces memory usage.
 > 
-> Squelch that by only complaining if that is a directory,
-> not a regular file, and print the whole path causing concern.
-> 	WARNING: patch prefix './b' exists, appears to be a -p0 patch
+> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 
-Seems OK
+Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
 
-> 
-> Signed-off-by: Robert Elliott <elliott@hpe.com>
-> ---
->  scripts/checkpatch.pl | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-> index d11d58e36ee9..5a0252265d3f 100755
-> --- a/scripts/checkpatch.pl
-> +++ b/scripts/checkpatch.pl
-> @@ -2834,9 +2834,9 @@ sub process {
->  
->  			$p1_prefix = $1;
->  			if (!$file && $tree && $p1_prefix ne '' &&
-> -			    -e "$root/$p1_prefix") {
-> +			    -d "$root/$p1_prefix") {
->  				WARN("PATCH_PREFIX",
-> -				     "patch prefix '$p1_prefix' exists, appears to be a -p0 patch\n");
-> +				     "patch prefix '$root/$p1_prefix' exists, appears to be a -p0 patch\n");
->  			}
->  
->  			if ($realfile =~ m@^include/asm/@) {
-
+Thanks!
