@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D74BB637B3D
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 15:16:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33DDE637B3E
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 15:16:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230251AbiKXOQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 09:16:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45014 "EHLO
+        id S230265AbiKXOQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 09:16:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230112AbiKXOQJ (ORCPT
+        with ESMTP id S230139AbiKXOQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 09:16:09 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DDEFDDA5;
-        Thu, 24 Nov 2022 06:16:08 -0800 (PST)
-Date:   Thu, 24 Nov 2022 14:16:05 -0000
+        Thu, 24 Nov 2022 09:16:10 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54BF1E0B62;
+        Thu, 24 Nov 2022 06:16:09 -0800 (PST)
+Date:   Thu, 24 Nov 2022 14:16:06 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669299366;
+        s=2020; t=1669299368;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=prqWh8x87Z9i0sCWIZ3jUWF2BEKvL7LDbUcut8qxMCQ=;
-        b=rg1OC/X+120Ieo+yhOziBaM1PirXaA9qRC6Wr3NQENIhBB/O0Tw2+OJdxmTL3EcbRQ+rLS
-        J2uyBZhsGEYwzJcfRO5cgs0qqpSaBVkYmp656pZGhWRypDkdDnf1nkn6jEJi/kJBbziPO3
-        owFUG20BLle+r73do8talPfZul4QlzaD7L9G2gLnFHQa5/rImtetgTNEFLcdYxeJf15wl1
-        YqdNqnwurVU/8+FBWeP+1CQKaJVX/cM8fKH7o04/Gi3VKBlQ4VTaFXfLN0o6UlPFiXAHnY
-        IF2cDvGFnfvg0IFTfG5zMTRTKaTtF2gDmtzwvp3bSM+0GKKuEf4ozc19ppwmJQ==
+        bh=FqujO4rYZqigQGWFDiVACoUNy9ibpZJ+guS7rMcbWaQ=;
+        b=iashBbX7527t7ilCIzhSHjavLdNeHdu/d4rCTi8tbaZHmspEK247/FIaAbMbRRFpKSyF+V
+        3I0E1lJGdEmpnr99Smz22jY7MNIvgSlGDLHQhCX/LIV26adTBqR+9irMDEK68Ud9dYIEYj
+        ktrJJKmpKXC6Wmmaja/jl83PzuzFjBUdvoQBjLm10oiaviFq+ElwPukN25puCMnqDP6BQ/
+        zs7Oj3FFFzdEVnm+dIDChZNsbzwdMPXvLcwpcYM5vEwQH1cKciVQsjJ4NKDtOjGZLSg7FP
+        3heSH8B4yQ7PEAZ1gKiuYOCL+zJkaS8yJDsE88K9iUuR+lULvj8SouKJ5mu82Q==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669299366;
+        s=2020e; t=1669299368;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=prqWh8x87Z9i0sCWIZ3jUWF2BEKvL7LDbUcut8qxMCQ=;
-        b=JGyK9xjT3dm0Icv4GH853I6DSyv+FxefAQUqz/Br16ZkQv8MrLs//xPMkwvB5Jd6RxmDaM
-        ZWouJ4pXGjKsYJAg==
+        bh=FqujO4rYZqigQGWFDiVACoUNy9ibpZJ+guS7rMcbWaQ=;
+        b=2QIqB5ssd9mNqLQCFFBSFVD0aAYEtDMFvo9c8pF9KICu0rtLWrpET+jL+/kvVKGme0Tu6k
+        0i7chvXSAO+0dVAw==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] timers: Silently ignore timers with a NULL function
+Subject: [tip: timers/core] Documentation: Replace del_timer/del_timer_sync()
 Cc:     Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Guenter Roeck <linux@roeck-us.net>,
         Jacob Keller <jacob.e.keller@intel.com>,
         "Anna-Maria Behnsen" <anna-maria@linutronix.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220407161745.7d6754b3@gandalf.local.home>
-References: <20220407161745.7d6754b3@gandalf.local.home>
+In-Reply-To: <20221123201625.075320635@linutronix.de>
+References: <20221123201625.075320635@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <166929936557.4906.9844753145307379681.tip-bot2@tip-bot2>
+Message-ID: <166929936667.4906.14143095640946298807.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -69,189 +68,194 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     d02e382cef06cc73561dd32dfdc171c00dcc416d
-Gitweb:        https://git.kernel.org/tip/d02e382cef06cc73561dd32dfdc171c00dcc416d
+Commit-ID:     87bdd932e85881895d4720255b40ac28749c4e32
+Gitweb:        https://git.kernel.org/tip/87bdd932e85881895d4720255b40ac28749=
+c4e32
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Thu, 24 Nov 2022 09:22:36 +01:00
+AuthorDate:    Wed, 23 Nov 2022 21:18:47 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Thu, 24 Nov 2022 15:09:11 +01:00
 
-timers: Silently ignore timers with a NULL function
+Documentation: Replace del_timer/del_timer_sync()
 
-Tearing down timers which have circular dependencies to other
-functionality, e.g. workqueues, where the timer can schedule work and work
-can arm timers, is not trivial.
+Adjust to the new preferred function names.
 
-In those cases it is desired to shutdown the timer in a way which prevents
-rearming of the timer. The mechanism to do so is to set timer->function to
-NULL and use this as an indicator for the timer arming functions to ignore
-the (re)arm request.
-
-In preparation for that replace the warnings in the relevant code paths
-with checks for timer->function == NULL. If the pointer is NULL, then
-discard the rearm request silently.
-
-Add debug_assert_init() instead of the WARN_ON_ONCE(!timer->function)
-checks so that debug objects can warn about non-initialized timers.
-
-The warning of debug objects does not warn if timer->function == NULL.  It
-warns when timer was not initialized using timer_setup[_on_stack]() or via
-DEFINE_TIMER(). If developers fail to enable debug objects and then waste
-lots of time to figure out why their non-initialized timer is not firing,
-they deserve it. Same for initializing a timer with a NULL function.
-
-Co-developed-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
+Suggested-by: Steven Rostedt <rostedt@goodmis.org>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Guenter Roeck <linux@roeck-us.net>
 Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
 Reviewed-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
-Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home
-Link: https://lore.kernel.org/all/20221110064101.429013735@goodmis.org
-Link: https://lore.kernel.org/r/87wn7kdann.ffs@tglx
+Link: https://lore.kernel.org/r/20221123201625.075320635@linutronix.de
 
 ---
- kernel/time/timer.c | 57 ++++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 52 insertions(+), 5 deletions(-)
+ Documentation/RCU/Design/Requirements/Requirements.rst      |  2 +-
+ Documentation/core-api/local_ops.rst                        |  2 +-
+ Documentation/kernel-hacking/locking.rst                    | 11 +++----
+ Documentation/timers/hrtimers.rst                           |  2 +-
+ Documentation/translations/it_IT/kernel-hacking/locking.rst | 10 +++---
+ Documentation/translations/zh_CN/core-api/local_ops.rst     |  2 +-
+ 6 files changed, 14 insertions(+), 15 deletions(-)
 
-diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index 2b5e8c2..e4fcf56 100644
---- a/kernel/time/timer.c
-+++ b/kernel/time/timer.c
-@@ -1017,7 +1017,7 @@ __mod_timer(struct timer_list *timer, unsigned long expires, unsigned int option
- 	unsigned int idx = UINT_MAX;
- 	int ret = 0;
- 
--	BUG_ON(!timer->function);
-+	debug_assert_init(timer);
- 
- 	/*
- 	 * This is a common optimization triggered by the networking code - if
-@@ -1044,6 +1044,14 @@ __mod_timer(struct timer_list *timer, unsigned long expires, unsigned int option
- 		 * dequeue/enqueue dance.
- 		 */
- 		base = lock_timer_base(timer, &flags);
-+		/*
-+		 * Has @timer been shutdown? This needs to be evaluated
-+		 * while holding base lock to prevent a race against the
-+		 * shutdown code.
-+		 */
-+		if (!timer->function)
-+			goto out_unlock;
-+
- 		forward_timer_base(base);
- 
- 		if (timer_pending(timer) && (options & MOD_TIMER_REDUCE) &&
-@@ -1070,6 +1078,14 @@ __mod_timer(struct timer_list *timer, unsigned long expires, unsigned int option
- 		}
- 	} else {
- 		base = lock_timer_base(timer, &flags);
-+		/*
-+		 * Has @timer been shutdown? This needs to be evaluated
-+		 * while holding base lock to prevent a race against the
-+		 * shutdown code.
-+		 */
-+		if (!timer->function)
-+			goto out_unlock;
-+
- 		forward_timer_base(base);
- 	}
- 
-@@ -1128,8 +1144,12 @@ out_unlock:
-  * mod_timer_pending() is the same for pending timers as mod_timer(), but
-  * will not activate inactive timers.
-  *
-+ * If @timer->function == NULL then the start operation is silently
-+ * discarded.
-+ *
-  * Return:
-- * * %0 - The timer was inactive and not modified
-+ * * %0 - The timer was inactive and not modified or was in
-+ *	  shutdown state and the operation was discarded
-  * * %1 - The timer was active and requeued to expire at @expires
-  */
- int mod_timer_pending(struct timer_list *timer, unsigned long expires)
-@@ -1155,8 +1175,12 @@ EXPORT_SYMBOL(mod_timer_pending);
-  * same timer, then mod_timer() is the only safe way to modify the timeout,
-  * since add_timer() cannot modify an already running timer.
-  *
-+ * If @timer->function == NULL then the start operation is silently
-+ * discarded. In this case the return value is 0 and meaningless.
-+ *
-  * Return:
-- * * %0 - The timer was inactive and started
-+ * * %0 - The timer was inactive and started or was in shutdown
-+ *	  state and the operation was discarded
-  * * %1 - The timer was active and requeued to expire at @expires or
-  *	  the timer was active and not modified because @expires did
-  *	  not change the effective expiry time
-@@ -1176,8 +1200,12 @@ EXPORT_SYMBOL(mod_timer);
-  * modify an enqueued timer if that would reduce the expiration time. If
-  * @timer is not enqueued it starts the timer.
-  *
-+ * If @timer->function == NULL then the start operation is silently
-+ * discarded.
-+ *
-  * Return:
-- * * %0 - The timer was inactive and started
-+ * * %0 - The timer was inactive and started or was in shutdown
-+ *	  state and the operation was discarded
-  * * %1 - The timer was active and requeued to expire at @expires or
-  *	  the timer was active and not modified because @expires
-  *	  did not change the effective expiry time such that the
-@@ -1200,6 +1228,9 @@ EXPORT_SYMBOL(timer_reduce);
-  * The @timer->expires and @timer->function fields must be set prior
-  * to calling this function.
-  *
-+ * If @timer->function == NULL then the start operation is silently
-+ * discarded.
-+ *
-  * If @timer->expires is already in the past @timer will be queued to
-  * expire at the next timer tick.
-  *
-@@ -1228,7 +1259,9 @@ void add_timer_on(struct timer_list *timer, int cpu)
- 	struct timer_base *new_base, *base;
- 	unsigned long flags;
- 
--	if (WARN_ON_ONCE(timer_pending(timer) || !timer->function))
-+	debug_assert_init(timer);
-+
-+	if (WARN_ON_ONCE(timer_pending(timer)))
- 		return;
- 
- 	new_base = get_timer_cpu_base(timer->flags, cpu);
-@@ -1239,6 +1272,13 @@ void add_timer_on(struct timer_list *timer, int cpu)
- 	 * wrong base locked.  See lock_timer_base().
- 	 */
- 	base = lock_timer_base(timer, &flags);
-+	/*
-+	 * Has @timer been shutdown? This needs to be evaluated while
-+	 * holding base lock to prevent a race against the shutdown code.
-+	 */
-+	if (!timer->function)
-+		goto out_unlock;
-+
- 	if (base != new_base) {
- 		timer->flags |= TIMER_MIGRATING;
- 
-@@ -1252,6 +1292,7 @@ void add_timer_on(struct timer_list *timer, int cpu)
- 
- 	debug_timer_activate(timer);
- 	internal_add_timer(base, timer);
-+out_unlock:
- 	raw_spin_unlock_irqrestore(&base->lock, flags);
- }
- EXPORT_SYMBOL_GPL(add_timer_on);
-@@ -1541,6 +1582,12 @@ static void expire_timers(struct timer_base *base, struct hlist_head *head)
- 
- 		fn = timer->function;
- 
-+		if (WARN_ON_ONCE(!fn)) {
-+			/* Should never happen. Emphasis on should! */
-+			base->running_timer = NULL;
-+			continue;
-+		}
-+
- 		if (timer->flags & TIMER_IRQSAFE) {
- 			raw_spin_unlock(&base->lock);
- 			call_timer_fn(timer, fn, baseclk);
+diff --git a/Documentation/RCU/Design/Requirements/Requirements.rst b/Documen=
+tation/RCU/Design/Requirements/Requirements.rst
+index a0f8164..546f23a 100644
+--- a/Documentation/RCU/Design/Requirements/Requirements.rst
++++ b/Documentation/RCU/Design/Requirements/Requirements.rst
+@@ -1858,7 +1858,7 @@ unloaded. After a given module has been unloaded, any a=
+ttempt to call
+ one of its functions results in a segmentation fault. The module-unload
+ functions must therefore cancel any delayed calls to loadable-module
+ functions, for example, any outstanding mod_timer() must be dealt
+-with via del_timer_sync() or similar.
++with via timer_delete_sync() or similar.
+=20
+ Unfortunately, there is no way to cancel an RCU callback; once you
+ invoke call_rcu(), the callback function is eventually going to be
+diff --git a/Documentation/core-api/local_ops.rst b/Documentation/core-api/lo=
+cal_ops.rst
+index 2ac3f9f..a84f8b0 100644
+--- a/Documentation/core-api/local_ops.rst
++++ b/Documentation/core-api/local_ops.rst
+@@ -191,7 +191,7 @@ Here is a sample module which implements a basic per cpu =
+counter using
+=20
+     static void __exit test_exit(void)
+     {
+-            del_timer_sync(&test_timer);
++            timer_delete_sync(&test_timer);
+     }
+=20
+     module_init(test_init);
+diff --git a/Documentation/kernel-hacking/locking.rst b/Documentation/kernel-=
+hacking/locking.rst
+index b26e4a3..c5b8678 100644
+--- a/Documentation/kernel-hacking/locking.rst
++++ b/Documentation/kernel-hacking/locking.rst
+@@ -967,7 +967,7 @@ you might do the following::
+=20
+             while (list) {
+                     struct foo *next =3D list->next;
+-                    del_timer(&list->timer);
++                    timer_delete(&list->timer);
+                     kfree(list);
+                     list =3D next;
+             }
+@@ -981,7 +981,7 @@ the lock after we spin_unlock_bh(), and then try to free
+ the element (which has already been freed!).
+=20
+ This can be avoided by checking the result of
+-del_timer(): if it returns 1, the timer has been deleted.
++timer_delete(): if it returns 1, the timer has been deleted.
+ If 0, it means (in this case) that it is currently running, so we can
+ do::
+=20
+@@ -990,7 +990,7 @@ do::
+=20
+                     while (list) {
+                             struct foo *next =3D list->next;
+-                            if (!del_timer(&list->timer)) {
++                            if (!timer_delete(&list->timer)) {
+                                     /* Give timer a chance to delete this */
+                                     spin_unlock_bh(&list_lock);
+                                     goto retry;
+@@ -1005,8 +1005,7 @@ do::
+ Another common problem is deleting timers which restart themselves (by
+ calling add_timer() at the end of their timer function).
+ Because this is a fairly common case which is prone to races, you should
+-use del_timer_sync() (``include/linux/timer.h``) to
+-handle this case.
++use timer_delete_sync() (``include/linux/timer.h``) to handle this case.
+=20
+ Locking Speed
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+@@ -1334,7 +1333,7 @@ lock.
+=20
+ -  kfree()
+=20
+--  add_timer() and del_timer()
++-  add_timer() and timer_delete()
+=20
+ Mutex API reference
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+diff --git a/Documentation/timers/hrtimers.rst b/Documentation/timers/hrtimer=
+s.rst
+index c1c20a6..7ac4489 100644
+--- a/Documentation/timers/hrtimers.rst
++++ b/Documentation/timers/hrtimers.rst
+@@ -118,7 +118,7 @@ existing timer wheel code, as it is mature and well suite=
+d. Sharing code
+ was not really a win, due to the different data structures. Also, the
+ hrtimer functions now have clearer behavior and clearer names - such as
+ hrtimer_try_to_cancel() and hrtimer_cancel() [which are roughly
+-equivalent to del_timer() and del_timer_sync()] - so there's no direct
++equivalent to timer_delete() and timer_delete_sync()] - so there's no direct
+ 1:1 mapping between them on the algorithmic level, and thus no real
+ potential for code sharing either.
+=20
+diff --git a/Documentation/translations/it_IT/kernel-hacking/locking.rst b/Do=
+cumentation/translations/it_IT/kernel-hacking/locking.rst
+index eddfba8..b8ecf41 100644
+--- a/Documentation/translations/it_IT/kernel-hacking/locking.rst
++++ b/Documentation/translations/it_IT/kernel-hacking/locking.rst
+@@ -990,7 +990,7 @@ potreste fare come segue::
+=20
+             while (list) {
+                     struct foo *next =3D list->next;
+-                    del_timer(&list->timer);
++                    timer_delete(&list->timer);
+                     kfree(list);
+                     list =3D next;
+             }
+@@ -1003,7 +1003,7 @@ e prender=C3=A0 il *lock* solo dopo spin_unlock_bh(), e=
+ cercher=C3=A0
+ di eliminare il suo oggetto (che per=C3=B2 =C3=A8 gi=C3=A0 stato eliminato).
+=20
+ Questo pu=C3=B2 essere evitato controllando il valore di ritorno di
+-del_timer(): se ritorna 1, il temporizzatore =C3=A8 stato gi=C3=A0
++timer_delete(): se ritorna 1, il temporizzatore =C3=A8 stato gi=C3=A0
+ rimosso. Se 0, significa (in questo caso) che il temporizzatore =C3=A8 in
+ esecuzione, quindi possiamo fare come segue::
+=20
+@@ -1012,7 +1012,7 @@ esecuzione, quindi possiamo fare come segue::
+=20
+                     while (list) {
+                             struct foo *next =3D list->next;
+-                            if (!del_timer(&list->timer)) {
++                            if (!timer_delete(&list->timer)) {
+                                     /* Give timer a chance to delete this */
+                                     spin_unlock_bh(&list_lock);
+                                     goto retry;
+@@ -1026,7 +1026,7 @@ esecuzione, quindi possiamo fare come segue::
+ Un altro problema =C3=A8 l'eliminazione dei temporizzatori che si riavviano
+ da soli (chiamando add_timer() alla fine della loro esecuzione).
+ Dato che questo =C3=A8 un problema abbastanza comune con una propensione
+-alle corse critiche, dovreste usare del_timer_sync()
++alle corse critiche, dovreste usare timer_delete_sync()
+ (``include/linux/timer.h``) per gestire questo caso.
+=20
+ Velocit=C3=A0 della sincronizzazione
+@@ -1372,7 +1372,7 @@ contesto, o trattenendo un qualsiasi *lock*.
+=20
+ -  kfree()
+=20
+--  add_timer() e del_timer()
++-  add_timer() e timer_delete()
+=20
+ Riferimento per l'API dei Mutex
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+diff --git a/Documentation/translations/zh_CN/core-api/local_ops.rst b/Docume=
+ntation/translations/zh_CN/core-api/local_ops.rst
+index 41e4525..22493b9 100644
+--- a/Documentation/translations/zh_CN/core-api/local_ops.rst
++++ b/Documentation/translations/zh_CN/core-api/local_ops.rst
+@@ -185,7 +185,7 @@ UP=E4=B9=8B=E9=97=B4=E6=B2=A1=E6=9C=89=E4=B8=8D=E5=90=8C=
+=E7=9A=84=E8=A1=8C=E4=B8=BA=EF=BC=8C=E5=9C=A8=E4=BD=A0=E7=9A=84=E6=9E=B6=E6=
+=9E=84=E7=9A=84 ``local.h`` =E4=B8=AD=E5=8C=85=E6=8B=AC ``asm-g
+=20
+     static void __exit test_exit(void)
+     {
+-            del_timer_sync(&test_timer);
++            timer_delete_sync(&test_timer);
+     }
+=20
+     module_init(test_init);
