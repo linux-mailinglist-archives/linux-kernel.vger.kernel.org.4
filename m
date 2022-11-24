@@ -2,155 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 484AE6370B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 03:59:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E4236370A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 03:52:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbiKXC7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 21:59:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51272 "EHLO
+        id S229833AbiKXCwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 21:52:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiKXC7q (ORCPT
+        with ESMTP id S229499AbiKXCwt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 21:59:46 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2706360EB4
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 18:59:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669258785; x=1700794785;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=IufW+4kjNCCmY+c/Fvrz1m8hLDQrCXBRYM8ney2fuHY=;
-  b=AS194wPdk5WKTfes2IhPyAw9YkxUtAvrVdZTn4iIXdc2zaVtAEC6cag6
-   d7GJ51zBN7mMuZjjqOl2L6NdaVW4k4h97gf9aUANPfeZuKpKrP3MlxKh+
-   LbE3XY1VIqLEdBIzWmPcXniKvLumUOp1bhqI3rszyXtJK4B/tiAd2MHwS
-   VS8mvcZ/nfRdhHJ9RVSl2njhPfoGEdkM9K1gybns+o2JjvQrjdICbL1t1
-   vD7jTdnjI3YL4k10rRyZ4E/cDFnqQaqrRbVfcZ+gw9CZzEF9yumX2JjMG
-   w7QCRALAAf6VbVrCSPlb+NX5P2STMwoysZ83WZ9Qjqn5esziJzPwi5WMg
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="297562764"
-X-IronPort-AV: E=Sophos;i="5.96,189,1665471600"; 
-   d="scan'208";a="297562764"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 18:59:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="644327084"
-X-IronPort-AV: E=Sophos;i="5.96,189,1665471600"; 
-   d="scan'208";a="644327084"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
-  by fmsmga007.fm.intel.com with ESMTP; 23 Nov 2022 18:59:38 -0800
-Message-ID: <992ba86c-73e6-8db0-0216-c2a8b7d1f58f@linux.intel.com>
-Date:   Thu, 24 Nov 2022 10:52:32 +0800
+        Wed, 23 Nov 2022 21:52:49 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1FF2D759
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 18:52:46 -0800 (PST)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NHj9r2fjfzqSXT;
+        Thu, 24 Nov 2022 10:48:48 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 24 Nov 2022 10:52:44 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 24 Nov 2022 10:52:43 +0800
+Subject: Re: [PATCH] kernfs: fix potential null-ptr-deref in
+ kernfs_path_from_node_locked()
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+To:     Tejun Heo <tj@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221123020419.1867-1-thunder.leizhen@huawei.com>
+ <Y35Qgw4Q8XYD5Did@slm.duckdns.org>
+ <ba083b44-93d5-37c4-380c-8e0249b2333c@huawei.com>
+ <ba46adff-3604-9ccf-b1c5-83411f6652d9@huawei.com>
+Message-ID: <55041efe-7443-d576-287b-49d1221fced2@huawei.com>
+Date:   Thu, 24 Nov 2022 10:52:43 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Cc:     baolu.lu@linux.intel.com, Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Luo, Yuzhang" <yuzhang.luo@intel.com>
-Subject: Re: [PATCH] iommu/vt-d: Add a fix for devices need extra dtlb flush
+In-Reply-To: <ba46adff-3604-9ccf-b1c5-83411f6652d9@huawei.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Robin Murphy <robin.murphy@arm.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Joerg Roedel <joro@8bytes.org>
-References: <20221122034529.3311562-1-jacob.jun.pan@linux.intel.com>
- <bc647ceb-b14b-dc5b-ba83-4f8befd188c5@arm.com>
- <BN9PR11MB527620902046A4339EAACD3F8C0C9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <c085f67d-7874-4a83-a12c-703d1638d940@linux.intel.com>
- <BN9PR11MB527642B1DA920C78742036FD8C0C9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <53678e27-1bbc-a7e8-a1b0-0427fc0e5b62@arm.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <53678e27-1bbc-a7e8-a1b0-0427fc0e5b62@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/23/22 7:32 PM, Robin Murphy wrote:
-> On 2022-11-23 05:18, Tian, Kevin wrote:
->>> From: Baolu Lu <baolu.lu@linux.intel.com>
->>> Sent: Wednesday, November 23, 2022 1:04 PM
->>>
->>> On 2022/11/23 9:02, Tian, Kevin wrote:
->>>>> From: Robin Murphy <robin.murphy@arm.com>
->>>>> Sent: Wednesday, November 23, 2022 1:49 AM
->>>>>
->>>>>> +
->>>>>> +/* Impacted QAT device IDs ranging from 0x4940 to 0x4943 */
->>>>>> +#define BUGGY_QAT_DEVID_MASK 0x494c
->>>>>> +static bool dev_needs_extra_dtlb_flush(struct pci_dev *pdev)
->>>>>> +{
->>>>>> +    if (pdev->vendor != PCI_VENDOR_ID_INTEL)
->>>>>> +        return false;
->>>>>> +
->>>>>> +    if ((pdev->device & 0xfffc) != BUGGY_QAT_DEVID_MASK)
->>>>>> +        return false;
->>>>>> +
->>>>>> +    if (risky_device(pdev))
->>>>>> +        return false;
->>>>>
->>>>> Hmm, I'm not sure that that makes much sense to me - what privilege 
->>>>> can
->>>>> the device gain from being told to invalidate things twice? Why 
->>>>> would we
->>>>> want to implicitly *allow* a device to potentially keep using a stale
->>>>> translation if for some bizarre reason firmware has marked it as
->>>>> external, surely that's worse?
->>>
->>>   From the perspective of IOMMU, any quirk is only applicable to trusted
->>> devices. If the IOMMU driver detects that a quirk is being applied to an
->>> untrusted device, it is already buggy or malicious. The IOMMU driver
->>> should let the users know by:
->>>
->>>     pci_info(pdev,
->>>          "Skipping IOMMU quirk for dev [%04X:%04X] on untrusted
->>> PCI link\n",
->>>          pdev->vendor, pdev->device);
->>>     pci_info(pdev, "Please check with your BIOS/Platform vendor about
->>> this\n");
->>>
->>> and stop applying any quirk.
->>>
->>
->> A quirk usually relaxes something then you want it only on trusted 
->> devices.
->>
->> but the quirk in this patch is trying to fix a vulnerability. In 
->> concept it's
->> weird to skip it on untrusted devices. This iiuc was the part causing 
->> confusion
->> to Robin.
+
+
+On 2022/11/24 10:28, Leizhen (ThunderTown) wrote:
 > 
-> Right, it's that reasoning in general that seems bogus to me. Clearly 
-> any quirk that effectively grants additional privileges, like an 
-> identity mapping quirk, should not be applied to untrusted external 
-> devices which may be spoofing an affected VID/DID to gain that 
-> privilege, but not all quirks imply privilege. If, say, a WiFI 
-> controller needs something innocuous like a DMA alias or address width 
-> quirk to function correctly, it will still need that regardless of 
-> whether it's soldered to a motherboard or to a removable expansion card, 
-> and it would do nobody any good to deny correct functionality based on 
-> that unnecessary distinction. Yes, I appreciate that in practice many of 
-> those kind of quirks will be applied in other layers anyway, but I still 
-> think it's wrong to make a sweeping assumption that all IOMMU-level 
-> quirks are precious treasure not to be shared with outsiders, rather 
-> than assess their impact individually. The detriment in this case is 
-> small (just needless code churn), but even that's still not nothing.
+> 
+> On 2022/11/24 10:24, Leizhen (ThunderTown) wrote:
+>>
+>>
+>> On 2022/11/24 0:55, Tejun Heo wrote:
+>>> On Wed, Nov 23, 2022 at 10:04:19AM +0800, Zhen Lei wrote:
+>>>> Ensure that the 'buf' is not empty before strlcpy() uses it.
+>>>>
+>>>> Commit bbe70e4e4211 ("fs: kernfs: Fix possible null-pointer dereferences
+>>>> in kernfs_path_from_node_locked()") first noticed this, but it didn't
+>>>> fix it completely.
+>>>>
+>>>> Fixes: 9f6df573a404 ("kernfs: Add API to generate relative kernfs path")
+>>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>>>
+>>> I think the right thing to do is removing that if. It makes no sense to call
+>>> that function with NULL buf and the fact that nobody reported crashes on
+>>> NULL buf indicates that we in fact never do.
+>>
+>> OK.
+>>
+>> How about I remove "buf[0] = '\0';" too? It seems to be a useless operation.
+>> When 'kn_from' and 'kn_to' have a common ancestor, there must be a path from
+>> 'kn_from' to 'kn_to', and strlcpy() always fills in the terminator correctly,
+>> even if the buf is too small to save the first path node.
+> 
+> Sorry, I misanalyzed. The length used by "len < buflen ? buflen - len : 0" may
+> be zero.
 
-Fair enough. I agreed here.
+Ah, my brain is unstable today. The initial value of len is 0. So "buf[0] = '\0';"
+can still be safely removed.
 
-Can we put some comments here so that people can still easily read the
-discussion here after a long time?
+> 
+>>
+>> static void test(void)
+>> {
+>>         char buf[4];
+>>         int i, n, buflen;
+>>
+>>         buflen = 1;
+>>         n = strlcpy(buf, "string", buflen);
+>>         for (i = 0; i < buflen; i++)
+>>                 printk("%d: %02x\n", i, buf[i]);
+>>         printk("n=%d\n\n", n);
+>>
+>>         buflen = sizeof(buf);
+>>         n = strlcpy(buf, "string", buflen);
+>>         for (i = 0; i < buflen; i++)
+>>                 printk("%d: %02x\n", i, buf[i]);
+>>         printk("n=%d\n", n);
+>> }
+>>
+>> Output:
+>> [   33.691497] 0: 00
+>> [   33.691569] n=6
+>>
+>> [   33.691595] 0: 73
+>> [   33.691622] 1: 74
+>> [   33.691630] 2: 72
+>> [   33.691637] 3: 00
+>> [   33.691650] n=6
+>>
+>>>
+>>> Thanks.
+>>>
+>>
+> 
 
-Best regards,
-baolu
+-- 
+Regards,
+  Zhen Lei
