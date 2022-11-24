@@ -2,118 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24B056380F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 23:46:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50FDF638145
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 00:01:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbiKXWqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 17:46:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
+        id S229541AbiKXXB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 18:01:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiKXWqq (ORCPT
+        with ESMTP id S229436AbiKXXB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 17:46:46 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20AA285ED4;
-        Thu, 24 Nov 2022 14:46:45 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 24 Nov 2022 18:01:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE79086FDC
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 15:00:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669330831;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oeuZHzT4EOHz8tiIWkvz6nWvsD7aaG1MkDoma4AjWr0=;
+        b=dIt5fDuUD3kbgPkPKhgqsKKizh5R8SXlwlqQoJurV2SuoW275xD4XQbVDsY6Hr2Waiam37
+        gT3Y1ByNLE4XnsKRVWw0qMspgQwyKT3XLInkMUA0Bb8HV4PScG/oZCAuYiwIHzDdcNar3W
+        BinfEkX2Ffs8/7lPSBx1aimicDG2tKI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-378-4QIxZktDODuVUBuAbt12hg-1; Thu, 24 Nov 2022 18:00:27 -0500
+X-MC-Unique: 4QIxZktDODuVUBuAbt12hg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NJCly4n2wz4wgr;
-        Fri, 25 Nov 2022 09:46:38 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1669329999;
-        bh=/61EB3InfPZNQkzeBQ1PJC8S/jDdwtaKgy/iFS5fl6c=;
-        h=Date:From:To:Cc:Subject:From;
-        b=W2WteE0X6vFyFdxvVkeM57ob/pf9TskIJJ8xXjcQVkHNSS9gFgMrpiUgTjf9Sd0Ov
-         p2UTAsqXdXRzJG69qo5KNXM8zH2j3XIRjAChqLgwFIBkT/04FdsgrM7doNDGG8cGSr
-         FqZiLYV7LxoLeI7/KEc7OYr5T+UPRtJHyvwYiGKCEPIn3x/lHn3DUPzHTgc1J++isL
-         8feaM6jbc7/XPgRqnLn1TzV5d7gQk5HEyfXxrJXBKJY2XdL5+GB+c5imybXxyud5Im
-         E7ehdgE9QVWqCXSPLXhn5XaJKIVLqvPZdslEk1rTXUn4I6ccyE31tYBS+ZE0hX/vcu
-         6lx2gMNut8pKg==
-Date:   Fri, 25 Nov 2022 09:46:34 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>
-Cc:     Jean Delvare <jdelvare@suse.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the nand tree with the mtd-fixes tree
-Message-ID: <20221125094634.665b079c@canb.auug.org.au>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 283EC833AEC;
+        Thu, 24 Nov 2022 23:00:27 +0000 (UTC)
+Received: from [10.22.32.81] (unknown [10.22.32.81])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 82EC72166B26;
+        Thu, 24 Nov 2022 23:00:26 +0000 (UTC)
+Message-ID: <1a997ea7-bb63-1710-14d6-c3b88a22bdb3@redhat.com>
+Date:   Thu, 24 Nov 2022 18:00:24 -0500
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/z1rHAK78n=lgjS..EJ06kCf";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] cgroup/cpuset: Optimize update_tasks_nodemask()
+Content-Language: en-US
+To:     Haifeng Xu <haifeng.xu@shopee.com>
+Cc:     lizefan.x@bytedance.com, tj@kernel.org, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221123082157.71326-1-haifeng.xu@shopee.com>
+ <2ac6f207-e08a-2a7f-01ae-dfaf15eefaf6@redhat.com>
+ <4de8821b-e0c0-bf63-4d76-b0ce208cce3b@shopee.com>
+ <dfcbffb9-b58a-6d25-2174-39394eb0ccde@redhat.com>
+ <21e73dad-c6d0-21ea-dcdf-355b71c8537b@shopee.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <21e73dad-c6d0-21ea-dcdf-355b71c8537b@shopee.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/z1rHAK78n=lgjS..EJ06kCf
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 11/24/22 02:49, Haifeng Xu wrote:
+>
+> On 2022/11/24 12:24, Waiman Long wrote:
+>> On 11/23/22 22:33, Haifeng Xu wrote:
+>>> On 2022/11/24 04:23, Waiman Long wrote:
+>>>> On 11/23/22 03:21, haifeng.xu wrote:
+>>>>> When change the 'cpuset.mems' under some cgroup, system will hung
+>>>>> for a long time. From the dmesg, many processes or theads are
+>>>>> stuck in fork/exit. The reason is show as follows.
+>>>>>
+>>>>> thread A:
+>>>>> cpuset_write_resmask /* takes cpuset_rwsem */
+>>>>>      ...
+>>>>>        update_tasks_nodemask
+>>>>>          mpol_rebind_mm /* waits mmap_lock */
+>>>>>
+>>>>> thread B:
+>>>>> worker_thread
+>>>>>      ...
+>>>>>        cpuset_migrate_mm_workfn
+>>>>>          do_migrate_pages /* takes mmap_lock */
+>>>>>
+>>>>> thread C:
+>>>>> cgroup_procs_write /* takes cgroup_mutex and
+>>>>> cgroup_threadgroup_rwsem */
+>>>>>      ...
+>>>>>        cpuset_can_attach
+>>>>>          percpu_down_write /* waits cpuset_rwsem */
+>>>>>
+>>>>> Once update the nodemasks of cpuset, thread A wakes up thread B to
+>>>>> migrate mm. But when thread A iterates through all tasks, including
+>>>>> child threads and group leader, it has to wait the mmap_lock which
+>>>>> has been take by thread B. Unfortunately, thread C wants to migrate
+>>>>> tasks into cgroup at this moment, it must wait thread A to release
+>>>>> cpuset_rwsem. If thread B spends much time to migrate mm, the
+>>>>> fork/exit which acquire cgroup_threadgroup_rwsem also need to
+>>>>> wait for a long time.
+>>>>>
+>>>>> There is no need to migrate the mm of child threads which is
+>>>>> shared with group leader. Just iterate through the group
+>>>>> leader only.
+>>>>>
+>>>>> Signed-off-by: haifeng.xu <haifeng.xu@shopee.com>
+>>>>> ---
+>>>>>     kernel/cgroup/cpuset.c | 3 +++
+>>>>>     1 file changed, 3 insertions(+)
+>>>>>
+>>>>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+>>>>> index 589827ccda8b..43cbd09546d0 100644
+>>>>> --- a/kernel/cgroup/cpuset.c
+>>>>> +++ b/kernel/cgroup/cpuset.c
+>>>>> @@ -1968,6 +1968,9 @@ static void update_tasks_nodemask(struct cpuset
+>>>>> *cs)
+>>>>>               cpuset_change_task_nodemask(task, &newmems);
+>>>>>     +        if (!thread_group_leader(task))
+>>>>> +            continue;
+>>>>> +
+>>>>>             mm = get_task_mm(task);
+>>>>>             if (!mm)
+>>>>>                 continue;
+>>>> Could you try the attached test patch to see if it can fix your problem?
+>>>> Something along the line of this patch will be more acceptable.
+>>>>
+>>>> Thanks,
+>>>> Longman
+>>>>
+>>> Hi, Longman.
+>>> Thanks for your patch, but there are still some problems.
+>>>
+>>> 1）
+>>>     (group leader, node: 0,1)
+>>>            cgroup0
+>>>            /     \
+>>>           /       \
+>>>       cgroup1   cgroup2
+>>>      (threads)  (threads)
+>>>
+>>> If set node 0 in cgroup1 and node 1 in cgroup2, both of them will update
+>>> the mm. And the nodemask of mm depends on who set the node last.
+>> Yes, that is the existing behavior. It was not that well defined in the
+>> past and so it is somewhat ambiguous as to what we need to do about it.
+>>
+> The test patch works if the child threads are in same cpuset with group
+> leader which has same logic with my patch. But if they are in different
+> cpusets, the test patch will fail because the contention of mmap_lock
+> still exsits and seems similar to the original logic.
 
-Hi all,
+That is true. I am thinking about adding a nodemask to mm_struct so that 
+we can figure out if we need to propagate the changes down to all the 
+VMAs and do the migration. That will enable us to avoid doing wasteful 
+work.
 
-Today's linux-next merge of the nand tree got a conflict in:
+Current node mask handling isn't that efficient especially for distros 
+that have a relatively large NODES_SHIFT value. Some work may also be 
+need in this area.
 
-  drivers/mtd/nand/onenand/Kconfig
+>> BTW, cgroup1 has a memory_migrate flag which will force page migration
+>> if set. I guess you may have it set in your case as it will introduce a
+>> lot more delay as page migration takes time. That is probably the reason
+>> why you are seeing a long delay. So one possible solution is to turn
+>> this flag off. Cgroup v2 doesn't have this flag.
+>>
+> Dou you mean 'CS_MEMORY_MIGRATE'? This flag can be turn off in Cgroup
+> v1, but it has been set in Cgroup v2 (cpuset_css_alloc) in default and
+> couldn't be changed.
+You are right. Cgroup v2 has CS_MEMORY_MIGRATE enabled by default and 
+can't be turned off.
+>
+>>> 2）
+>>>      (process, node: 0,1)
+>>>            cgroup0
+>>>            /     \
+>>>           /       \
+>>>       cgroup1   cgroup2
+>>>      (node: 0)  (node: 1)
+>>>
+>>> If migrate thread from cgroup0 to cgroup1 or cgroup2, cpuset_attach
+>>> won't update the mm. So the nodemask of thread, including mems_allowed
+>>> and mempolicy（updated in cpuset_change_task_nodemask）, is different
+>>> from
+>>> the vm_policy in vma(updated in mpol_rebind_mm).
+>> Yes, that can be the case.
+>>
+>>>
+>>> In a word, if threads have different cpusets with different nodemask, it
+>>> will cause inconsistent memory behavior.
+>> So do you have suggestion of what we need to do going forward?
+> Should we prevent thread from migrating to those cgroups which have
+> different nodemask with the cgroup that contains the group leader?
+>
+> In addition, the group leader and child threads should be in same cgroup
+> tree, also the level of cgroup containes group leader must be higher
+> than these cgroups contain child threads, so update_nodemask will work.
+>
+> Or just disable thread migration in cpuset？It's easy to achieve but will
+> affect cpu bind.
 
-between commit:
+As said above, my current inclination is to add a nodemask to mm_struct 
+and revise the way nodemask is being handled. That will take some time.
 
-  c717b9b7d6de ("mtd: onenand: omap2: add dependency on GPMC")
-
-from the mtd-fixes tree and commit:
-
-  b46ff0780f17 ("mtd: onenand: omap2: Drop obsolete dependency on COMPILE_T=
-EST")
-
-from the nand tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
 Cheers,
-Stephen Rothwell
+Longman
 
-diff --cc drivers/mtd/nand/onenand/Kconfig
-index c94bf483541e,5c240533cea4..000000000000
---- a/drivers/mtd/nand/onenand/Kconfig
-+++ b/drivers/mtd/nand/onenand/Kconfig
-@@@ -25,8 -25,7 +25,8 @@@ config MTD_ONENAND_GENERI
-  config MTD_ONENAND_OMAP2
-  	tristate "OneNAND on OMAP2/OMAP3 support"
-  	depends on ARCH_OMAP2 || ARCH_OMAP3 || (COMPILE_TEST && ARM)
-- 	depends on OF || COMPILE_TEST
-+ 	depends on OF
- +	depends on OMAP_GPMC
-  	help
-  	  Support for a OneNAND flash device connected to an OMAP2/OMAP3 SoC
-  	  via the GPMC memory controller.
-
---Sig_/z1rHAK78n=lgjS..EJ06kCf
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN/9EoACgkQAVBC80lX
-0GwTwgf8D2FXPFrLgdJAjh9a/6Ei2diysleqo4EJ6DELMQkV6CIR7ekaCh3VcG8K
-zfvZGuQGi9Xi7+C93lJ+SdDqI8Be0ttrPl+7FGMuzF/Yxa1foCDPYQG3DxEDlT8n
-GDL3M7oOCrNGIRnpvWrDtbflM9r0fffoYC4PXqcRW36GrC8FS1q7MWc89ebLgwJY
-r55Qapm+z52YHQ6k3c58bp0bDEY0Fxa3JMHUDm/LHg/GxbuErJB+jU3O7WaPd2Et
-v/kEBFKXJTWrKAH3wZMoRkTeCVTb0oPqJ22u/wA8HJGjHbevNxkU3OoqnLv6ybRU
-H6Ee9jlRCDP8YroqJ5VrB0A2EIORvQ==
-=FFOT
------END PGP SIGNATURE-----
-
---Sig_/z1rHAK78n=lgjS..EJ06kCf--
