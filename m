@@ -2,239 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A573636F0D
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 01:42:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A9C2636F3F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 01:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbiKXAmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 19:42:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39040 "EHLO
+        id S229754AbiKXAs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 19:48:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiKXAmV (ORCPT
+        with ESMTP id S229676AbiKXAs3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 19:42:21 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE845B70CF;
-        Wed, 23 Nov 2022 16:42:20 -0800 (PST)
+        Wed, 23 Nov 2022 19:48:29 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C70ED723;
+        Wed, 23 Nov 2022 16:48:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669250540; x=1700786540;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=rwf2kOewvRWuB3KO93AmVzqlch5DrL4wzyL2Tt+r8ro=;
-  b=kxQYCIqiehVuVh9xDHn81PuJos+FokHxv/1iiORLYeyUdIvSHB1MTEb5
-   S1VT25Ja6a+wjpfcBmNdUgKKmHv5TlrEJsP6ECmUeM9VASIWCmxXhYpqy
-   Z4BCcHajOQkG3I5QIX3pRbt8W+0gIdF5k5NK3zLKtpgNqHarmUaAtt9yb
-   UCCwxiU47t4stWFIfyklqROPYJ+V/x/1lp2cZNTU0dcIhdLAOJ8QxlLR/
-   xZVkqzfPnIgD52AH13OQkWiMmIil89ZnSD3Vkj5O/jrmuRmUpHffqbxNz
-   ed5rfVm6GG7Z/WyBUcQ+Qs+vP5CZ1GxO0QH6T0gSnriqVQVVc6g6QTABx
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="341074056"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="341074056"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 16:42:20 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="784436506"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="784436506"
-Received: from vcbudden-mobl3.amr.corp.intel.com (HELO [10.212.129.67]) ([10.212.129.67])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 16:42:19 -0800
-Message-ID: <4e19a7e1-9088-21d6-d521-a76c340d8179@intel.com>
-Date:   Wed, 23 Nov 2022 16:42:17 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v7 18/20] x86/virt/tdx: Initialize all TDMRs
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     linux-mm@kvack.org, seanjc@google.com, pbonzini@redhat.com,
-        dan.j.williams@intel.com, rafael.j.wysocki@intel.com,
-        kirill.shutemov@linux.intel.com, ying.huang@intel.com,
-        reinette.chatre@intel.com, len.brown@intel.com,
-        tony.luck@intel.com, peterz@infradead.org, ak@linux.intel.com,
-        isaku.yamahata@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
-        sagis@google.com, imammedo@redhat.com
+  t=1669250896; x=1700786896;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=aTDswLwxnrT1m4Bb2RWu3He8hrN2rQUrmQl5QgIYb3c=;
+  b=iKJvu7fLirYeMGa5TtlgVuOTLcV4M7muj9TK0i22nuHTcHEPlqu56yJ9
+   u4582E2Wxt036y7+5ae4JiA5q0EHfPab8eV5m2VC8LIuz5i23Q/X6qcif
+   3aEoE3pzLegAnLS0VBT2JRyBvv07B8IFBt02R/NuYvjxYcwDnI/+1AGvK
+   raRoBTv3nrmZRm1u02fwNVqfWMaKcd3+2mkcUv+FADP6YtYK6MkA8zWGh
+   h4//lw3RdXS3WjRvYACG1Ke1CzP45CfL/B70Satxy9/kq36+4KwrpCwGW
+   wGa3POT9KcvlCH6Hhk/dMIvVG/H8nylanoNGSJ+7JxwkHL2MxT3b8TIZV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="293892611"
+X-IronPort-AV: E=Sophos;i="5.96,189,1665471600"; 
+   d="scan'208";a="293892611"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 16:48:16 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="673057198"
+X-IronPort-AV: E=Sophos;i="5.96,189,1665471600"; 
+   d="scan'208";a="673057198"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 16:48:11 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+Subject: Re: [PATCH v7 10/20] x86/virt/tdx: Use all system memory when
+ initializing TDX module as TDX memory
 References: <cover.1668988357.git.kai.huang@intel.com>
- <2337c8e9086a006aaa2c4b99caf478420d1fc640.1668988357.git.kai.huang@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <2337c8e9086a006aaa2c4b99caf478420d1fc640.1668988357.git.kai.huang@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        <9b545148275b14a8c7edef1157f8ec44dc8116ee.1668988357.git.kai.huang@intel.com>
+        <87cz9gvpej.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <a6ecf5f1a1202f428961a5f8422d5fff61ce1d9a.camel@intel.com>
+        <87sfibpxda.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <973ca04b3323d28a31dbc1cfeb52bd10bd9d9bf3.camel@intel.com>
+Date:   Thu, 24 Nov 2022 08:47:07 +0800
+In-Reply-To: <973ca04b3323d28a31dbc1cfeb52bd10bd9d9bf3.camel@intel.com> (Kai
+        Huang's message of "Tue, 22 Nov 2022 17:16:11 +0800")
+Message-ID: <87o7sxp4ac.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/20/22 16:26, Kai Huang wrote:
-> Initialize TDMRs via TDH.SYS.TDMR.INIT as the last step to complete the
-> TDX initialization.
-> 
-> All TDMRs need to be initialized using TDH.SYS.TDMR.INIT SEAMCALL before
-> the memory pages can be used by the TDX module.  The time to initialize
-> TDMR is proportional to the size of the TDMR because TDH.SYS.TDMR.INIT
-> internally initializes the PAMT entries using the global KeyID.
-> 
-> To avoid long latency caused in one SEAMCALL, TDH.SYS.TDMR.INIT only
-> initializes an (implementation-specific) subset of PAMT entries of one
-> TDMR in one invocation.  The caller needs to call TDH.SYS.TDMR.INIT
-> iteratively until all PAMT entries of the given TDMR are initialized.
-> 
-> TDH.SYS.TDMR.INITs can run concurrently on multiple CPUs as long as they
-> are initializing different TDMRs.  To keep it simple, just initialize
-> all TDMRs one by one.  On a 2-socket machine with 2.2G CPUs and 64GB
-> memory, each TDH.SYS.TDMR.INIT roughly takes couple of microseconds on
-> average, and it takes roughly dozens of milliseconds to complete the
-> initialization of all TDMRs while system is idle.
+"Huang, Kai" <kai.huang@intel.com> writes:
 
-Any chance you could say TDH.SYS.TDMR.INIT a few more times in there? ;)
+>> > > > +/*
+>> > > > + * Add all memblock memory regions to the @tdx_memlist as TDX memory.
+>> > > > + * Must be called when get_online_mems() is called by the caller.
+>> > > > + */
+>> > > > +static int build_tdx_memory(void)
+>> > > > +{
+>> > > > +   unsigned long start_pfn, end_pfn;
+>> > > > +   int i, nid, ret;
+>> > > > +
+>> > > > +   for_each_mem_pfn_range(i, MAX_NUMNODES, &start_pfn, &end_pfn, &nid) {
+>> > > > +           /*
+>> > > > +            * The first 1MB may not be reported as TDX convertible
+>> > > > +            * memory.  Manually exclude them as TDX memory.
+>> > > > +            *
+>> > > > +            * This is fine as the first 1MB is already reserved in
+>> > > > +            * reserve_real_mode() and won't end up to ZONE_DMA as
+>> > > > +            * free page anyway.
+>> > > > +            */
+>> > > > +           start_pfn = max(start_pfn, (unsigned long)SZ_1M >> PAGE_SHIFT);
+>> > > > +           if (start_pfn >= end_pfn)
+>> > > > +                   continue;
+>> > >
+>> > > How about check whether first 1MB is reserved instead of depending on
+>> > > the corresponding code isn't changed?  Via for_each_reserved_mem_range()?
+>> >
+>> > IIUC, some reserved memory can be freed to page allocator directly, i.e. kernel
+>> > init code/data.  I feel it's not safe to just treat reserved memory will never
+>> > be in page allocator.  Otherwise we have for_each_free_mem_range() can use.
+>>
+>> Yes.  memblock reverse information isn't perfect.  But I still think
+>> that it is still better than just assumption to check whether the frist
+>> 1MB is reserved in memblock.  Or, we can check whether the pages of the
+>> first 1MB is reversed via checking struct page directly?
+>>
+>
+> Sorry I am a little bit confused what you want to achieve here.  Do you want to
+> make some sanity check to make sure the first 1MB is indeed not in the page
+> allocator?
+>
+> IIUC, it is indeed true.  Please see the comment of calling reserve_real_mode()
+> in setup_arch().  Also please see efi_free_boot_services(), which doesn't free
+> the boot service if it is below 1MB.
+>
+> Also, my understanding is kernel's intention is to always reserve the first 1MB:
+>
+>                 /*
+>                  * Don't free memory under 1M for two reasons:
+>                  * - BIOS might clobber it
+>                  * - Crash kernel needs it to be reserved
+>                  */
+>
+> So if any page in first 1MB ended up to the page allocator, it should be the
+> kernel bug which is not related to TDX, correct?
 
-Seriously, please try to trim that down.  If you talk about the
-implementation in detail in the code comments, don't cover it in detail
-in the changelog too.
+I suggest to add some code to verify this.  It's possible for the code
+to be changed in the future (although possibility is low).  And TDX may
+not be changed at the same time.  Then the verifying code here can catch
+that.  So, we can make change accordingly.
 
-Also, this is a momentous patch, right?  It's the last piece.  Maybe
-worth calling that out.
-
-> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
-> index 99d1be5941a7..9bcdb30b7a80 100644
-> --- a/arch/x86/virt/vmx/tdx/tdx.c
-> +++ b/arch/x86/virt/vmx/tdx/tdx.c
-> @@ -1066,6 +1066,65 @@ static int config_global_keyid(void)
->  	return seamcall_on_each_package_serialized(&sc);
->  }
->  
-> +/* Initialize one TDMR */
-
-Does this comment add value?  Even if it does, it is better than naming
-the dang function init_one_tdmr()?
-
-> +static int init_tdmr(struct tdmr_info *tdmr)
-> +{
-> +	u64 next;
-> +
-> +	/*
-> +	 * Initializing PAMT entries might be time-consuming (in
-> +	 * proportion to the size of the requested TDMR).  To avoid long
-> +	 * latency in one SEAMCALL, TDH.SYS.TDMR.INIT only initializes
-> +	 * an (implementation-defined) subset of PAMT entries in one
-> +	 * invocation.
-> +	 *
-> +	 * Call TDH.SYS.TDMR.INIT iteratively until all PAMT entries
-> +	 * of the requested TDMR are initialized (if next-to-initialize
-> +	 * address matches the end address of the TDMR).
-> +	 */
-
-The PAMT discussion here is, IMNHO silly.  If this were about
-initializing PAMT's then it should be renamed init_pamts() and the
-SEAMCALL should be called PAMT_INIT or soemthing.  It's not, and the ABI
-is built around the TDMR and *its* addresses.
-
-Let's chop this comment down:
-
-	/*
-	 * Initializing a TDMR can be time consuming.  To avoid long
-	 * SEAMCALLs, the TDX module may only initialize a part of the
-	 * TDMR in each call.
-	 */
-
-Talk about the looping logic in the loop.
-
-> +	do {
-> +		struct tdx_module_output out;
-> +		int ret;
-> +
-> +		ret = seamcall(TDH_SYS_TDMR_INIT, tdmr->base, 0, 0, 0, NULL,
-> +				&out);
-> +		if (ret)
-> +			return ret;
-> +		/*
-> +		 * RDX contains 'next-to-initialize' address if
-> +		 * TDH.SYS.TDMR.INT succeeded.
-> +		 */
-> +		next = out.rdx;
-> +		/* Allow scheduling when needed */
-
-That comment is a wee bit superfluous, don't you think?
-
-> +		cond_resched();
-
-		/* Keep making SEAMCALLs until the TDMR is done */
-
-> +	} while (next < tdmr->base + tdmr->size);
-> +
-> +	return 0;
-> +}
-> +
-> +/* Initialize all TDMRs */
-
-Does this comment add value?
-
-> +static int init_tdmrs(struct tdmr_info *tdmr_array, int tdmr_num)
-> +{
-> +	int i;
-> +
-> +	/*
-> +	 * Initialize TDMRs one-by-one for simplicity, though the TDX
-> +	 * architecture does allow different TDMRs to be initialized in
-> +	 * parallel on multiple CPUs.  Parallel initialization could
-> +	 * be added later when the time spent in the serialized scheme
-> +	 * becomes a real concern.
-> +	 */
-
-Trim down the comment:
-
-	/*
-	 * This operation is costly.  It can be parallelized,
-	 * but keep it simple for now.
-	 */
-
-> +	for (i = 0; i < tdmr_num; i++) {
-> +		int ret;
-> +
-> +		ret = init_tdmr(tdmr_array_entry(tdmr_array, i));
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  /*
->   * Detect and initialize the TDX module.
->   *
-> @@ -1172,11 +1231,11 @@ static int init_tdx_module(void)
->  	if (ret)
->  		goto out_free_pamts;
->  
-> -	/*
-> -	 * Return -EINVAL until all steps of TDX module initialization
-> -	 * process are done.
-> -	 */
-> -	ret = -EINVAL;
-> +	/* Initialize TDMRs to complete the TDX module initialization */
-> +	ret = init_tdmrs(tdmr_array, tdmr_num);
-> +	if (ret)
-> +		goto out_free_pamts;
-> +
->  out_free_pamts:
->  	if (ret) {
->  		/*
-> diff --git a/arch/x86/virt/vmx/tdx/tdx.h b/arch/x86/virt/vmx/tdx/tdx.h
-> index 768d097412ab..891691b1ea50 100644
-> --- a/arch/x86/virt/vmx/tdx/tdx.h
-> +++ b/arch/x86/virt/vmx/tdx/tdx.h
-> @@ -19,6 +19,7 @@
->  #define TDH_SYS_INFO		32
->  #define TDH_SYS_INIT		33
->  #define TDH_SYS_LP_INIT		35
-> +#define TDH_SYS_TDMR_INIT	36
->  #define TDH_SYS_LP_SHUTDOWN	44
->  #define TDH_SYS_CONFIG		45
->  
-
+Best Regards,
+Huang, Ying
