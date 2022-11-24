@@ -2,107 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD9C06375E7
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:06:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B70026375E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:06:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbiKXKGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 05:06:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51444 "EHLO
+        id S229787AbiKXKG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 05:06:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbiKXKGR (ORCPT
+        with ESMTP id S229653AbiKXKGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 05:06:17 -0500
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12531B9F9;
-        Thu, 24 Nov 2022 02:06:16 -0800 (PST)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id D5B641C09DB; Thu, 24 Nov 2022 11:06:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1669284374;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=capoMoyAoTRj+QhymNjy9DjDy54aOgbbJqtTNS98/nQ=;
-        b=apDGjOxrfVjgw3aF/04OkmIsnhtrCyjo6MrJ4rcit4SWicJfR1qXNVdIuE6asqhticv22R
-        M+VmZTXsmk7cSwRVDVSlbmb2xXp1Td3LXsEkJpqnka+yXADMcqikuw2OuYNZNWBDy/WNeW
-        VVjbKXbc45uomNEG2UQd2yoHFVcLJxw=
-Date:   Thu, 24 Nov 2022 11:06:14 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     Eric Blake <eblake@redhat.com>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        josef@toxicpanda.com, linux-block@vger.kernel.org,
-        nbd@other.debian.org, "yukuai (C)" <yukuai3@huawei.com>
-Subject: Re: nbd: please don't spawn 16 threads when nbd is not even in use
-Message-ID: <Y39CFnRwNGBGIsCH@duo.ucw.cz>
-References: <Y3y4+QqOlF00X9ET@duo.ucw.cz>
- <20221123200845.cuct5euvikqksojm@redhat.com>
- <Y36YHNVmbozzSdxH@duo.ucw.cz>
- <ccee0ff5-309c-b430-09c7-8d2081c9981d@huaweicloud.com>
+        Thu, 24 Nov 2022 05:06:25 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58EAE86A4F
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:06:24 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id i10so3044982ejg.6
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:06:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=grg1WkorBBI5i++s0cNc3EAJO6tnj2pMI+gCkQrn5+o=;
+        b=DAglP0Q1TxZviwF+1OIbZJpTWrwiHeIvDNcWQUii2/BXS+2rEi52nLomWwJCXe0zir
+         4nmTpj+MJAlfPGtYlFfuIKHZwRiL/pv5ZLTbFAE8tPDRzefOjb9JRBI6A7WEKfuMq4Yy
+         kSNsC2KizrKAUtUQF6vpsmhrv9mxAPVIkLZQGviqEWCI6yV8ttF0zb65beekBjZnchcR
+         ZJdanQJgaiGDIlUQlsVhZ/GXmGnfumRCtZkSwu5lNVBigd2nMhE1w59sLtYt1cmt2Hwp
+         85z3gMzbUB1UGGUxXHYglJW30b5FHdw2JOY8hswgGNP0fSAel3iNahS/TqRBnleYQG8U
+         JzXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=grg1WkorBBI5i++s0cNc3EAJO6tnj2pMI+gCkQrn5+o=;
+        b=WL6OHgVSx8ZyQOy4DNqLS1/F/lXiYDcZ6h3TQLftBRNA6X0VvGeN6cXdGFRxbX7yfv
+         BZ0OfH7tMzRueW9WwT5ElwhdxFo2rgMD1S46bbeWWO/OZUGHM+FCiOglqGB6r/8biZLZ
+         IJS1FcZa5pCUIFRJWnfUoe9tTbHIVrCDmOmWKbIfUBR9e4uk9pFv9JDlKuaOm4/C587x
+         szYw8WWRK56i0pujBO10ccDySC1FKWKuiasAZkTzryOKNac5r9l1usb+SdoVllmiWXol
+         /wY2hRIXe7k0IpEMtDBTgGZOAN95xWE4flz+y2kPqK6gqJxyPXjYWcFDZKLsp9m2uRiO
+         6v5A==
+X-Gm-Message-State: ANoB5plzwTAnULbnRfoAoVcR8pFl7FbeU92BrmWX9a/kdKqUxdg80x7E
+        uo61NuaWFggP+kZhQEbOzM4=
+X-Google-Smtp-Source: AA0mqf6lavqU4v6hJFt7dj6yuv7s9X/kGRPWan21pna2MxmvAuzqwTP1dmkLcFoifxUnLOHO3Ofz7A==
+X-Received: by 2002:a17:907:11cb:b0:7a6:598f:1fb1 with SMTP id va11-20020a17090711cb00b007a6598f1fb1mr27280535ejb.606.1669284382937;
+        Thu, 24 Nov 2022 02:06:22 -0800 (PST)
+Received: from [192.168.178.21] (p5b0ea229.dip0.t-ipconnect.de. [91.14.162.41])
+        by smtp.gmail.com with ESMTPSA id k26-20020a17090632da00b0073022b796a7sm258321ejk.93.2022.11.24.02.06.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Nov 2022 02:06:22 -0800 (PST)
+Message-ID: <df96d87d-bc39-abaf-f567-f5b94e0905fe@gmail.com>
+Date:   Thu, 24 Nov 2022 11:06:20 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="HZjYMFTE2RCR7pyM"
-Content-Disposition: inline
-In-Reply-To: <ccee0ff5-309c-b430-09c7-8d2081c9981d@huaweicloud.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] drm/amdgpu: add mb for si
+Content-Language: en-US
+To:     "Quan, Evan" <Evan.Quan@amd.com>,
+        =?UTF-8?B?5p2O55yf6IO9?= <lizhenneng@kylinos.cn>,
+        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>
+Cc:     "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>
+References: <20221118074810.380368-1-lizhenneng@kylinos.cn>
+ <ecd9d251-8941-b2db-71b2-e4ac06f860a3@amd.com>
+ <800a1207-8ff6-4cfa-60f3-6ff456874890@mailbox.org>
+ <4adc40d1-e775-c480-bb35-23fe9c63e05e@kylinos.cn>
+ <DM6PR12MB26196C35AC2F28FD50ECCAF0E40F9@DM6PR12MB2619.namprd12.prod.outlook.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <DM6PR12MB26196C35AC2F28FD50ECCAF0E40F9@DM6PR12MB2619.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+That's not a patch but some binary file?
 
---HZjYMFTE2RCR7pyM
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Christian.
 
-On Thu 2022-11-24 09:17:51, Yu Kuai wrote:
-> Hi,
->=20
-> =E5=9C=A8 2022/11/24 6:01, Pavel Machek =E5=86=99=E9=81=93:
-> > Hi!
-> >=20
-> > > > I see this... and it looks like there are 16 workqueues before nbd =
-is
-> > > > even used. Surely there are better ways to do that?
-> > >=20
-> > > Yes, it would be nice to create a pool of workers that only spawns up
-> > > threads when actual parallel requests are made.  Are you willing to
-> > > help write the patch?
-> >=20
-> > I was thinking more "only spawn a workqueue when nbd is opened" or so.
-> >=20
-> > I have 16 of them, and I'm not using nbd. Workqueue per open device is
-> > okay, current situation... not so much.
->=20
-> You can take a look at this commit:
->=20
-> e2daec488c57 ("nbd: Fix hungtask when nbd_config_put")
->=20
-> Allocation of recv_workq is moved from start device to alloc device to
-> fix hungtask. You might need to be careful if you want to move this.
+Am 24.11.22 um 11:04 schrieb Quan, Evan:
+> [AMD Official Use Only - General]
+>
+> Could the attached patch help?
+>
+> Evan
+>> -----Original Message-----
+>> From: amd-gfx <amd-gfx-bounces@lists.freedesktop.org> On Behalf Of ???
+>> Sent: Friday, November 18, 2022 5:25 PM
+>> To: Michel Dänzer <michel.daenzer@mailbox.org>; Koenig, Christian
+>> <Christian.Koenig@amd.com>; Deucher, Alexander
+>> <Alexander.Deucher@amd.com>
+>> Cc: amd-gfx@lists.freedesktop.org; Pan, Xinhui <Xinhui.Pan@amd.com>;
+>> linux-kernel@vger.kernel.org; dri-devel@lists.freedesktop.org
+>> Subject: Re: [PATCH] drm/amdgpu: add mb for si
+>>
+>>
+>> 在 2022/11/18 17:18, Michel Dänzer 写道:
+>>> On 11/18/22 09:01, Christian König wrote:
+>>>> Am 18.11.22 um 08:48 schrieb Zhenneng Li:
+>>>>> During reboot test on arm64 platform, it may failure on boot, so add
+>>>>> this mb in smc.
+>>>>>
+>>>>> The error message are as follows:
+>>>>> [    6.996395][ 7] [  T295] [drm:amdgpu_device_ip_late_init
+>>>>> [amdgpu]] *ERROR*
+>>>>>                   late_init of IP block <si_dpm> failed -22 [
+>>>>> 7.006919][ 7] [  T295] amdgpu 0000:04:00.0:
+>>>>> amdgpu_device_ip_late_init failed [    7.014224][ 7] [  T295] amdgpu
+>>>>> 0000:04:00.0: Fatal error during GPU init
+>>>> Memory barries are not supposed to be sprinkled around like this, you
+>> need to give a detailed explanation why this is necessary.
+>>>> Regards,
+>>>> Christian.
+>>>>
+>>>>> Signed-off-by: Zhenneng Li <lizhenneng@kylinos.cn>
+>>>>> ---
+>>>>>     drivers/gpu/drm/amd/pm/legacy-dpm/si_smc.c | 2 ++
+>>>>>     1 file changed, 2 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/gpu/drm/amd/pm/legacy-dpm/si_smc.c
+>>>>> b/drivers/gpu/drm/amd/pm/legacy-dpm/si_smc.c
+>>>>> index 8f994ffa9cd1..c7656f22278d 100644
+>>>>> --- a/drivers/gpu/drm/amd/pm/legacy-dpm/si_smc.c
+>>>>> +++ b/drivers/gpu/drm/amd/pm/legacy-dpm/si_smc.c
+>>>>> @@ -155,6 +155,8 @@ bool amdgpu_si_is_smc_running(struct
+>>>>> amdgpu_device *adev)
+>>>>>         u32 rst = RREG32_SMC(SMC_SYSCON_RESET_CNTL);
+>>>>>         u32 clk = RREG32_SMC(SMC_SYSCON_CLOCK_CNTL_0);
+>>>>>     +    mb();
+>>>>> +
+>>>>>         if (!(rst & RST_REG) && !(clk & CK_DISABLE))
+>>>>>             return true;
+>>> In particular, it makes no sense in this specific place, since it cannot directly
+>> affect the values of rst & clk.
+>>
+>> I thinks so too.
+>>
+>> But when I do reboot test using nine desktop machines,  there maybe report
+>> this error on one or two machines after Hundreds of times or Thousands of
+>> times reboot test, at the beginning, I use msleep() instead of mb(), these
+>> two methods are all works, but I don't know what is the root case.
+>>
+>> I use this method on other verdor's oland card, this error message are
+>> reported again.
+>>
+>> What could be the root reason?
+>>
+>> test environmen:
+>>
+>> graphics card: OLAND 0x1002:0x6611 0x1642:0x1869 0x87
+>>
+>> driver: amdgpu
+>>
+>> os: ubuntu 2004
+>>
+>> platform: arm64
+>>
+>> kernel: 5.4.18
+>>
 
-Can we get that reverted?
-
-That is rather obscure bug (how many GFP_KERNEL failures do you
-normally see?) and it costs, dunno, 100KB? of unswappable memory.
-
-Best regards,
-								Pavel
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
-
---HZjYMFTE2RCR7pyM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY39CFgAKCRAw5/Bqldv6
-8vWYAJ9yQ6drFnNpEutVeHvEesUcP4FckgCgvgMVBq1JANQNm02eRF+IlRzW0uc=
-=IyCl
------END PGP SIGNATURE-----
-
---HZjYMFTE2RCR7pyM--
