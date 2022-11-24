@@ -2,103 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B82646370AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 03:56:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D30066370AF
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 03:56:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbiKXC4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 21:56:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48300 "EHLO
+        id S229715AbiKXC4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 21:56:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiKXC4U (ORCPT
+        with ESMTP id S229457AbiKXC4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 21:56:20 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547ABC8C9F;
-        Wed, 23 Nov 2022 18:56:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=e4KULWN+ZwfHIUE2sfuFtMqgfdF1EyMRrdnKcRnZMuw=; b=mNVi1D7v0ERTQoziOMxBZ94Nrc
-        iGjXC4gZQMnAUFWj6Fq3tGXKhKyrqckwMbPl+os4yez501ZUG5SQm2dM6ES6DwTjWdYneAmyaOeJZ
-        cxRd9o0nVAF24dz7jgaJ6WFqZweFeMMNXShZ1dnXL2HDOXiZf4wsc6c7ifohFD75/6n8wfydfoOeW
-        XruJH1USc4/OAIpUFlx/PwarNZNd7mFLQ5sUxXfrQ3gpguYpsAfwv1n8RC1tgr/NuGgMUH2pPQxQb
-        UMzvhVRVupcCdwtS0/KhVKGZDO1e5DZHVzLe/4WqaDXLRFGe1F1KWTYVwQwHQPt16eUeLiU3Hv5LD
-        1nWVOHjg==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oy2PO-0043N2-5M; Thu, 24 Nov 2022 02:56:14 +0000
-Message-ID: <0a3648cd-4ff8-e72a-f7d1-72d34a7ff754@infradead.org>
-Date:   Wed, 23 Nov 2022 18:56:13 -0800
+        Wed, 23 Nov 2022 21:56:49 -0500
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68703C8CA1;
+        Wed, 23 Nov 2022 18:56:48 -0800 (PST)
+Received: by mail-qv1-xf36.google.com with SMTP id p12so224289qvu.5;
+        Wed, 23 Nov 2022 18:56:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dI1MZvZaLiip1FFejTpEVVfZhR5T2i7rmYdZdskI5es=;
+        b=oYoQiOuVQ0gpcQdhJ3u28N9sp8IFfK7CK/z+otstKcii5bZXTbe11zLBBcydM95MWR
+         jYsr+EjuJV+7c7ax31pfbajTA64dFwNJXOK0USwIfdxXti85Aa7A7MgLm9z95E5sw6Zl
+         GfOQCt4d+8DJZRyWf2w4JbW8uUebuXU07vimdsdLIeWIm1gWl0F1dOotjj0/AqDccsp4
+         yywRp5TsHzqNPjQs8VpbT1999TsQXrs7mmz5RbGpKp38e49sdEX54Nq+iY07qC69jP9j
+         W/pjiVk1EfyOFaOT52Oj7QzIzE6cMRpfXfpmzjCEbHc6dhE/zU2ifzn38WLf5+uZh/7J
+         3XWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dI1MZvZaLiip1FFejTpEVVfZhR5T2i7rmYdZdskI5es=;
+        b=eLjHWj2q49vzq2fBq0XD1qlKWHgph/6HeZzwfOUanl+HfaWSEO+FLMiDhlUqiH2MFD
+         XuFbQFZQpLoHouMYk5InRsd1L1er2vJteBXeRtWExy7UGRbBAFfuhXKqrevNczeY68rR
+         J5xBKyG+nmLASEgUTZhJ3pqk1KSfHSy/aw3aDM1wS/tQaaT8nW2aIP+SGvw6QTVOEW/z
+         54kgrMHRUm+UvviiG94MiT4aQfGlJgTXc8icAR8c/po+dKxQtqccox24TMeY0Iyfrv2B
+         L19tdAFwkoWYE8eHy6wc7jYlxIydfN0tSQtZWvXVCLBQhvTjSYeZmGtTSnLW6OtLAtZV
+         LHPw==
+X-Gm-Message-State: ANoB5pmpR7VQwu7sg8XxB7OTI4/cxEvpEILctKZmji86rwVEVxfM57i5
+        sgfPnMtGP/vFfL4GnRRZnkY5YHNN99cGSQ7eA/dZVVu7F1avCg==
+X-Google-Smtp-Source: AA0mqf4c0TpD7QVDCcuTskoOoVy5YGvqtUoUqVj0BfCQPXEQb2xxIcg8HNaOhby4C2AFtnha0fVSCrCEyKjpbKD2Olc=
+X-Received: by 2002:ad4:50ac:0:b0:4bb:ce03:5714 with SMTP id
+ d12-20020ad450ac000000b004bbce035714mr17761676qvq.30.1669258607544; Wed, 23
+ Nov 2022 18:56:47 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: ERROR: modpost: "__divsi3_table" [lib/lz4/lz4_compress.ko]
- undefined!
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-References: <202209201648.P4wwSNCv-lkp@intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <202209201648.P4wwSNCv-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221118054725.80414-1-michael@allwinnertech.com>
+ <CA+Da2qxP2gvUc2=n5xW7_YEcgevGpDhqbcVFWVbF0c6DqXDXHA@mail.gmail.com> <23c0a4ae-d714-cfb1-aeb5-68b66b5bf0ee@allwinnertech.com>
+In-Reply-To: <23c0a4ae-d714-cfb1-aeb5-68b66b5bf0ee@allwinnertech.com>
+From:   Wenchao Chen <wenchao.chen666@gmail.com>
+Date:   Thu, 24 Nov 2022 10:56:36 +0800
+Message-ID: <CA+Da2qwXLapwUDX+GrFkNQE9so2Tj=ymY1YS396J_N_c+9EHYw@mail.gmail.com>
+Subject: Re: [PATCH] mmc:mmc-hsq:use fifo to dispatch mmc_request
+To:     Michael Wu <michael@allwinnertech.com>
+Cc:     ulf.hansson@linaro.org, wenchao.chen@unisoc.com,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[adding NIOS2 maintainer]
+On Mon, Nov 21, 2022 at 2:19 PM Michael Wu <michael@allwinnertech.com> wrote:
+>
+> On 11/18/2022 7:43 PM, Wenchao Chen wrote:
+> > On Fri, Nov 18, 2022 at 1:52 PM Michael Wu <michael@allwinnertech.com> wrote:
+> >>
+> >> Current next_tag selection will cause a large delay in some requests and
+> >> destroy the scheduling results of the block scheduling layer. Because the
+> >> issued mrq tags cannot ensure that each time is sequential, especially when
+> >> the IO load is heavy. In the fio performance test, we found that 4k random
+> >> read data was sent to mmc_hsq to start calling request_atomic It takes
+> >> nearly 200ms to process the request, while mmc_hsq has processed thousands
+> >> of other requests. So we use fifo here to ensure the first in, first out
+> >> feature of the request and avoid adding additional delay to the request.
+> >>
+> >
+> > Hi Michael
+> > Is the test device an eMMC?
+> > Could you share the fio test command if you want?
+> > Can you provide more logs?
+> >
+> Hi Wenchao,
+> Yes, the tested device is emmc.
+> The test command we used is `./fio -name=Rand_Read_IOPS_Test
+> -group_reporting -rw=random -bs=4K -numjobs=8 -directory=/data/data
+> -size=1G -io_size=64M -nrfiles=1 -direct=1 -thread && rm
+> /data/Rand_Read_IOPS_Test *`,  which replaces the io performance random
+> read performance test of androidbench, and the file size is set to 1G, 8
+> thread test configuration. Where /data uses f2fs and /data/data is a
+> file encrypted path.
+>
+> After enabling the hsq configuration, we can clearly see from below fio
+> test log that the minimum value of random reading is 3175 iops and the
+> maximum value is 8554iops, and the maximum delay of io completion is
+> about 200ms.
+> ```
+>      clat percentiles (usec):
+>       |  1.00th=[   498],  5.00th=[   865], 10.00th=[   963], 20.00th=[
+>   1045],
+>       | 30.00th=[  1090], 40.00th=[  1139], 50.00th=[  1172], 60.00th=[
+>   1221],
+>       | 70.00th=[  1254], 80.00th=[  1319], 90.00th=[  1401], 95.00th=[
+>   1614],
+>       | 99.00th=[  2769], 99.50th=[  3589], 99.90th=[ 31589], 99.95th=[
+> 66323],
+>       | 99.99th=[200279]
+>     bw (  KiB/s): min=12705, max=34225, per=100.00%, avg=23931.79,
+> stdev=497.40, samples=345
+>     iops        : min= 3175, max= 8554, avg=5981.67, stdev=124.38,
+> samples=345
+> ```
+>
+>
+> ```
+>      clat percentiles (usec):
+>       |  1.00th=[  799],  5.00th=[  938], 10.00th=[  963], 20.00th=[  979],
+>       | 30.00th=[  996], 40.00th=[ 1004], 50.00th=[ 1020], 60.00th=[ 1045],
+>       | 70.00th=[ 1074], 80.00th=[ 1106], 90.00th=[ 1172], 95.00th=[ 1237],
+>       | 99.00th=[ 1450], 99.50th=[ 1516], 99.90th=[ 1762], 99.95th=[ 2180],
+>       | 99.99th=[ 9503]
+>     bw (  KiB/s): min=29200, max=30944, per=100.00%, avg=30178.91,
+> stdev=53.45, samples=272
+>     iops        : min= 7300, max= 7736, avg=7544.62, stdev=13.38,
+> samples=272
+> ```
+> When NOT enabling hsq, the minimum value of random reading is 7300 iops
+> and the maximum value is 7736 iops, and the maximum delay of io is only
+> 9 ms. Finally, we added debug to the mmc driver. The reason for locating
+> the 200ms delay of hsq is due to the next tag selection of hsq.
+>
 
-On 9/20/22 01:33, kernel test robot wrote:
-> Hi Randy,
-> 
-> First bad commit (maybe != root cause):
+Thank you very much for your Log. This patch can reduce latency, but I
+have some questions:
+1. FIO -rw does not have random, but it does have randread. Do you use
+randread? In addition, "IO_SIZE=64M" means only 64M data is tested?
+Refer to FIO:
+https://fio.readthedocs.io/en/latest/fio_doc.html?highlight=io_size#cmdoption-arg-io-size
+2. The style of "tag_tail" should remain the same as that of
+"next_tag". Would "tail_tag" be better?
+3. It is better to provide a comparison of sequential read, sequential
+write and random write.
 
-Yes, not related.
-
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   521a547ced6477c54b4b0cc206000406c221b4d6
-> commit: 81e005842d0b8167c059553a1c29c36d8a7a9329 media: isl7998x: select V4L2_FWNODE to fix build error
-> date:   3 months ago
-> config: nios2-buildonly-randconfig-r001-20220919
-> compiler: nios2-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=81e005842d0b8167c059553a1c29c36d8a7a9329
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 81e005842d0b8167c059553a1c29c36d8a7a9329
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=nios2 SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>, old ones prefixed by <<):
-> 
->>> ERROR: modpost: "__divsi3_table" [lib/lz4/lz4_compress.ko] undefined!
-
-Due to -O3 optimization in lib/lz4/Makefile:
-
-# SPDX-License-Identifier: GPL-2.0-only
-ccflags-y += -O3
-
-obj-$(CONFIG_LZ4_COMPRESS) += lz4_compress.o
-obj-$(CONFIG_LZ4HC_COMPRESS) += lz4hc_compress.o
-obj-$(CONFIG_LZ4_DECOMPRESS) += lz4_decompress.o
-
-It builds fine without -O3.
--- 
-~Randy
+> ---
+> Michael Wu
