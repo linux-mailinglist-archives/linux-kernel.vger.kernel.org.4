@@ -2,156 +2,371 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47DD76372B9
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 08:22:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 341116372B5
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 08:22:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbiKXHMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 02:12:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44130 "EHLO
+        id S229599AbiKXHMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 02:12:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiKXHMO (ORCPT
+        with ESMTP id S229502AbiKXHMN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 02:12:14 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D4ECDFE4;
-        Wed, 23 Nov 2022 23:14:12 -0800 (PST)
-Received: from leknes.fjasle.eu ([46.142.96.241]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MA88C-1oma1f1qQM-00BdGQ; Thu, 24 Nov 2022 08:08:13 +0100
-Received: from localhost.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:6f0:21ff:fe91:394])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by leknes.fjasle.eu (Postfix) with ESMTPS id D27F83C080;
-        Thu, 24 Nov 2022 08:08:11 +0100 (CET)
-Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
-Received: by localhost.fjasle.eu (Postfix, from userid 1000)
-        id 3B75E463; Thu, 24 Nov 2022 08:08:10 +0100 (CET)
-Date:   Thu, 24 Nov 2022 08:08:10 +0100
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH v2 5/5] kbuild: check Make version
-Message-ID: <Y38YWrlPTpB7LoIY@bergen.fjasle.eu>
-References: <20221123151828.509565-1-masahiroy@kernel.org>
- <20221123151828.509565-5-masahiroy@kernel.org>
- <Y36OZVnAZBqxcrBw@bergen.fjasle.eu>
+        Thu, 24 Nov 2022 02:12:13 -0500
+Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162D0CEBB5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 23:16:18 -0800 (PST)
+X-QQ-mid: bizesmtpipv603t1669273772t53h
+Received: from localhost ( [255.97.187.15])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 24 Nov 2022 15:09:31 +0800 (CST)
+X-QQ-SSF: 01400000002000506000B00A0000000
+X-QQ-FEAT: lO87fmWkX3EhOYKGIcNAVg2np+9aHKZcDBznuwONjf3kOrIu+wm+usOljGs2Q
+        22k5qNe3UdSqeq6C6EraOV0yrMYFk1S3ilUPTlct8i/aQw6HWNCUQV1N1U2KcaCRceEwZWT
+        5V+fFOaoEryPhzPDmuKP28ZU27MQcre7PD6gpFsIyjlbVxvPjFPsw7ckP6EtTJBAkJy4SSL
+        Z35IXadyJ+59gpGmTFXAigG+H6f24ykRIjCejTQZuZdcEqVnRT0tTN7E+ykBePhEHKqXSeR
+        XO6YyyKfGR6iP9Q36+LOiFY13nJ1VKJ/0KbikJCSdRkDLxbQ39VEIRzZWUFMr2LXQNggfV9
+        5/f4B0xVZNKxHCn5qV9k9c7IwBlP+QOdTygl6+7xAU0oT3ixCIBnPidVwP3iw==
+X-QQ-GoodBg: 2
+Date:   Thu, 24 Nov 2022 15:09:31 +0800
+From:   Wang Honghui <honghui.wang@ucas.com.cn>
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Maruss <cristian.marussi@arm.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 3/3] arm_scpi: modify to support acpi
+Message-ID: <F813BC8072CDDB25+Y38Yq2QKFefSupZV@TP-P15V.lan>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="OSEL46hI/6K+vX1j"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y36OZVnAZBqxcrBw@bergen.fjasle.eu>
-Jabber-ID: nicolas@fjasle.eu
-X-Operating-System: Debian GNU/Linux bookworm/sid
-X-Provags-ID: V03:K1:JX0I0lhJDp/CMa7drMJI6pazmnCf088UlK1G+QrVL67D+eF5SJc
- N/DcD1e/du76JKVq/x72l0nXn7vmiDzCnqDD3fM2dtuCqwyWaFbImocZtW8pd8Hc2yC0Wms
- iLbZd9emRJJ58UgCWXXn/z1t5pwc1PIzCtkdUutZLAOd7edU1Uoqw0Js7PWwMXOcACFVRWO
- GveM51/dM/qjnM4ZAlg/w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:yKOmiwQGI24=:11a/5aiIz094OY6CGEU3gv
- HKtRSpYVx5XxiKT4Jd/0bzUUVBeGqbUt2K8kOXnilvnJa1sY3F42L67M11ysF1qglI4FX1c0I
- yrKCOtRHeAcSWixtoezt5DYPGzPGDsQygt4p2Icj7v8DJ8kzHlfJEzEAGjXDe4HkT7b4npr8f
- gizpUxUBfl3ovsB14CzSuD4PALDLk1mwrS0odU/K4ocsOQTy8Xc23Tlwg4shZGveXX1aJzh4s
- lzKR2V1Ufv8fnqGWuSwgjpDhs0RGEan+Rqy6eJf03EKhqN9onShXcs4AbwZOLZQK6AEb2Fi1i
- yiZwy0DSrEdwjwjuh/kooJzPP4XI2g9IPRqxHWAhAKcZei5ZklFfxWWDTdShO2nVUT90+zF8L
- DZoHUADnxVd48h4rICEkWPUxBF2PutsQOQkQwL+oPYqDOS1kSwHnkHieL8zgR7q/I3ZtxGbFV
- i/M7jzMcEvTJNUy2qald+Gf7JQSWXF2xF9oMDbHYz96l1IfqtkrU86zUszRlKuszfGwODGXYi
- iC+ngnyZXyhVcbpe7/lh/xPRgcDX79t+8sPr49NtoPtr3Tz+acY60kB4vpJGUcmM4Ft83/tpr
- x648NV0FdSyEwNCkQ1yi/wCJpzFBSThOlRpqfexG45d86bzbyVPC/yrD3iRlZriuhqdHDoDXX
- 4UIC2OE3Qdqms5U09dqrKlpBfvX2qPVSHoCN/nccJBEgyopUJldx4jfeH5dod3y+lNO3Axlv5
- YR/uGJRKGcamBHRI+IrJ1ZwYynX4IIz88iO4wAURSNcBltiBQjLP/JQb6VjtQBbCQa5uN4KhS
- cU7FEN5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtpipv:ucas.com.cn:qybglogicsvr:qybglogicsvr6
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,RCVD_ILLEGAL_IP,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+arm_scpi: modify to support acpi
 
---OSEL46hI/6K+vX1j
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Wang Honghui <honghui.wang@ucas.com.cn>
+---
+ drivers/firmware/arm_scpi.c       | 188 +++++++++++++++++++++---------
+ drivers/mailbox/phytium_mailbox.c |  44 +++++++
+ 2 files changed, 180 insertions(+), 52 deletions(-)
 
-On Wed 23 Nov 2022 22:19:33 GMT, Nicolas Schier wrote:
-> On Thu 24 Nov 2022 00:18:28 GMT, Masahiro Yamada wrote:
-> > This is implemented based on test-le. It will work until GNU Make 10
-> > is released.
->=20
-> ... and as long as nobody uses make versions w/ minor version numbers,=20
-> cp. patch 3/5.
->=20
+diff --git a/drivers/firmware/arm_scpi.c b/drivers/firmware/arm_scpi.c
+index 435d0e2658a4..e2e90dcc38bd 100644
+--- a/drivers/firmware/arm_scpi.c
++++ b/drivers/firmware/arm_scpi.c
+@@ -34,6 +34,7 @@
+ #include <linux/slab.h>
+ #include <linux/sort.h>
+ #include <linux/spinlock.h>
++#include <linux/acpi.h>
+ 
+ #define CMD_ID_MASK		GENMASK(6, 0)
+ #define CMD_TOKEN_ID_MASK	GENMASK(15, 8)
+@@ -907,6 +908,8 @@ static const struct of_device_id shmem_of_match[] __maybe_unused = {
+ 	{ }
+ };
+ 
++extern struct mbox_chan *phytium_mbox_request_channel(struct mbox_client *cl);
++
+ static int scpi_probe(struct platform_device *pdev)
+ {
+ 	int count, idx, ret;
+@@ -914,18 +917,30 @@ static int scpi_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct device_node *np = dev->of_node;
+ 	struct scpi_drvinfo *scpi_drvinfo;
++	const struct acpi_device_id *match;
+ 
+ 	scpi_drvinfo = devm_kzalloc(dev, sizeof(*scpi_drvinfo), GFP_KERNEL);
+ 	if (!scpi_drvinfo)
+ 		return -ENOMEM;
+ 
+-	if (of_match_device(legacy_scpi_of_match, &pdev->dev))
+-		scpi_drvinfo->is_legacy = true;
++	/* Wang Honghui modified to support acpi */
++	if (dev->of_node) {
++		if (of_match_device(legacy_scpi_of_match, &pdev->dev))
++			scpi_drvinfo->is_legacy = true;
+ 
+-	count = of_count_phandle_with_args(np, "mboxes", "#mbox-cells");
+-	if (count < 0) {
+-		dev_err(dev, "no mboxes property in '%pOF'\n", np);
+-		return -ENODEV;
++		count = of_count_phandle_with_args(np, "mboxes", "#mbox-cells");
++		if (count < 0) {
++			dev_err(dev, "no mboxes property in '%pOF'\n", np);
++			return -ENODEV;
++		}
++	} else {
++		match = acpi_match_device(dev->driver->acpi_match_table, dev);
++                if (!match) {
++                        dev_err(dev, "scpi: Error ACPI match data is missing\n");
++                        return -ENODEV;
++                }
++
++                count = 1;
+ 	}
+ 
+ 	scpi_drvinfo->channels =
+@@ -937,55 +952,116 @@ static int scpi_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
+-	for (; scpi_drvinfo->num_chans < count; scpi_drvinfo->num_chans++) {
+-		resource_size_t size;
+-		int idx = scpi_drvinfo->num_chans;
+-		struct scpi_chan *pchan = scpi_drvinfo->channels + idx;
+-		struct mbox_client *cl = &pchan->cl;
+-		struct device_node *shmem = of_parse_phandle(np, "shmem", idx);
+-
+-		if (!of_match_node(shmem_of_match, shmem))
+-			return -ENXIO;
++	/* Wang Honghui modified to support acpi */
++	if (dev->of_node) {
++		for (; scpi_drvinfo->num_chans < count; scpi_drvinfo->num_chans++) {
++			resource_size_t size;
++			int idx = scpi_drvinfo->num_chans;
++			struct scpi_chan *pchan = scpi_drvinfo->channels + idx;
++			struct mbox_client *cl = &pchan->cl;
++			struct device_node *shmem = of_parse_phandle(np, "shmem", idx);
++	
++			if (!of_match_node(shmem_of_match, shmem))
++				return -ENXIO;
++	
++			ret = of_address_to_resource(shmem, 0, &res);
++			of_node_put(shmem);
++			if (ret) {
++				dev_err(dev, "failed to get SCPI payload mem resource\n");
++				return ret;
++			}
+ 
+-		ret = of_address_to_resource(shmem, 0, &res);
+-		of_node_put(shmem);
+-		if (ret) {
+-			dev_err(dev, "failed to get SCPI payload mem resource\n");
++			size = resource_size(&res);
++			pchan->rx_payload = devm_ioremap(dev, res.start, size);
++			if (!pchan->rx_payload) {
++				dev_err(dev, "failed to ioremap SCPI payload\n");
++				return -EADDRNOTAVAIL;
++			}
++			pchan->tx_payload = pchan->rx_payload + (size >> 1);
++
++			cl->dev = dev;
++			cl->rx_callback = scpi_handle_remote_msg;
++			cl->tx_prepare = scpi_tx_prepare;
++			cl->tx_block = true;
++			cl->tx_tout = 20;
++			cl->knows_txdone = false; /* controller can't ack */
++
++			INIT_LIST_HEAD(&pchan->rx_pending);
++			INIT_LIST_HEAD(&pchan->xfers_list);
++			spin_lock_init(&pchan->rx_lock);
++			mutex_init(&pchan->xfers_lock);
++	
++			ret = scpi_alloc_xfer_list(dev, pchan);
++			if (!ret) {
++				pchan->chan = mbox_request_channel(cl, idx);
++				if (!IS_ERR(pchan->chan))
++					continue;
++				ret = PTR_ERR(pchan->chan);
++				if (ret != -EPROBE_DEFER)
++					dev_err(dev, "failed to get channel%d err %d\n",
++						idx, ret);
++			}
+ 			return ret;
+ 		}
+-
+-		size = resource_size(&res);
+-		pchan->rx_payload = devm_ioremap(dev, res.start, size);
+-		if (!pchan->rx_payload) {
+-			dev_err(dev, "failed to ioremap SCPI payload\n");
+-			return -EADDRNOTAVAIL;
+-		}
+-		pchan->tx_payload = pchan->rx_payload + (size >> 1);
+-
+-		cl->dev = dev;
+-		cl->rx_callback = scpi_handle_remote_msg;
+-		cl->tx_prepare = scpi_tx_prepare;
+-		cl->tx_block = true;
+-		cl->tx_tout = 20;
+-		cl->knows_txdone = false; /* controller can't ack */
+-
+-		INIT_LIST_HEAD(&pchan->rx_pending);
+-		INIT_LIST_HEAD(&pchan->xfers_list);
+-		spin_lock_init(&pchan->rx_lock);
+-		mutex_init(&pchan->xfers_lock);
+-
+-		ret = scpi_alloc_xfer_list(dev, pchan);
+-		if (!ret) {
+-			pchan->chan = mbox_request_channel(cl, idx);
+-			if (!IS_ERR(pchan->chan))
+-				continue;
+-			ret = PTR_ERR(pchan->chan);
+-			if (ret != -EPROBE_DEFER)
+-				dev_err(dev, "failed to get channel%d err %d\n",
+-					idx, ret);
+-		}
+-		return ret;
+-	}
++	} else {
++		for (; scpi_info->num_chans < count; scpi_info->num_chans++) {
++                        u32 size;
++                        u32 addr;
++                        int idx = scpi_info->num_chans;
++                        struct scpi_chan *pchan = scpi_info->channels + idx;
++                        struct mbox_client *cl = &pchan->cl;
++                        struct fwnode_handle *fn;
++
++                        fn = dev_fwnode(&(pdev->dev));
++                        ret = fwnode_property_read_u32(fn, "shmem_start",  &addr);
++                        if (ret < 0) {
++                                dev_err(dev, "failed to get SCPI payload mem resource\n");
++                                return ret;
++                        }
++
++                        ret = fwnode_property_read_u32(fn, "shmem_size",  &size);
++                        if (ret < 0) {
++                                dev_err(dev, "failed to ioremap SCPI payload\n");
++                                return -EADDRNOTAVAIL;
++                        }
++
++                        pchan->rx_payload = devm_ioremap(dev, (resource_size_t)addr, (resource_size_t)size);
++
++                        if (!pchan->rx_payload) {
++                                dev_err(dev, "failed to ioremap SCPI payload\n");
++                                return -EADDRNOTAVAIL;
++                        }
++                        pchan->tx_payload = pchan->rx_payload + (size >> 1);
++
++                        cl->dev = dev;
++                        cl->rx_callback = scpi_handle_remote_msg;
++                        cl->tx_prepare = scpi_tx_prepare;
++                        cl->tx_block = true;
++                        cl->tx_tout = 20;
++                        cl->knows_txdone = false; /* controller can't ack */
++
++                        INIT_LIST_HEAD(&pchan->rx_pending);
++                        INIT_LIST_HEAD(&pchan->xfers_list);
++                        spin_lock_init(&pchan->rx_lock);
++                        mutex_init(&pchan->xfers_lock);
++
++                        ret = scpi_alloc_xfer_list(dev, pchan);
++
++                        if (!ret) {
++                                pchan->chan = phytium_mbox_request_channel(cl);
++
++                                if (!IS_ERR(pchan->chan))
++                                        continue;
++
++                                ret = PTR_ERR(pchan->chan);
++                                if (ret != -EPROBE_DEFER)
++                                        dev_err(dev, "failed to get channel%d err %d\n",
++                                                idx, ret);
++                        }
++
++                        return ret;
++                }
++        }
+ 
+ 	scpi_drvinfo->commands = scpi_std_commands;
+ 
+@@ -1044,11 +1120,19 @@ static const struct of_device_id scpi_of_match[] = {
+ 
+ MODULE_DEVICE_TABLE(of, scpi_of_match);
+ 
++/* Wang Honghui add to support Phytium FT2000/4 CPU for acpi */
++static const struct acpi_device_id scpi_acpi_match[] = {
++        { "PHYT0008", 0 },
++        { }
++};
++MODULE_DEVICE_TABLE(acpi, scpi_acpi_match);
++
+ static struct platform_driver scpi_driver = {
+ 	.driver = {
+ 		.name = "scpi_protocol",
+ 		.of_match_table = scpi_of_match,
+ 		.dev_groups = versions_groups,
++		.acpi_match_table = ACPI_PTR(scpi_acpi_match),
+ 	},
+ 	.probe = scpi_probe,
+ 	.remove = scpi_remove,
+diff --git a/drivers/mailbox/phytium_mailbox.c b/drivers/mailbox/phytium_mailbox.c
+index c797d4b4769f..e5ee3d4e7d5f 100644
+--- a/drivers/mailbox/phytium_mailbox.c
++++ b/drivers/mailbox/phytium_mailbox.c
+@@ -23,6 +23,10 @@
+ #include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ 
++/* Wang Honghui add */
++#include <linux/mailbox_client.h>
++#include "mailbox.h"
++
+ #define INTR_STAT	0x0
+ #define INTR_SET	0x8
+ #define INTR_CLR	0x10
+@@ -31,6 +35,9 @@
+ 
+ #define NR_CHANS	1
+ 
++/* Wang Honghui add */
++static struct mbox_chan *phytium_mbox_chan;
++
+ struct phytium_mbox_link {
+ 	unsigned irq;
+ 	void __iomem *tx_reg;
+@@ -183,6 +190,43 @@ static int phytium_mbox_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++/*
++** Wang Honghui add for scpi to request mbox chan
++*/
++struct mbox_chan *phytium_mbox_request_channel(struct mbox_client *cl)
++{
++        struct device *dev = cl->dev;
++        struct mbox_chan *chan = phytium_mbox_chan;
++        unsigned long flags;
++        int ret;
++    
++        if(!chan)    
++                return ERR_PTR(-EPROBE_DEFER);
++    
++        spin_lock_irqsave(&chan->lock, flags);
++        chan->msg_free = 0;
++        chan->msg_count = 0;
++        chan->active_req = NULL;
++        chan->cl = cl; 
++        init_completion(&chan->tx_complete);
++    
++        if (chan->txdone_method == TXDONE_BY_POLL && cl->knows_txdone)
++                chan->txdone_method = TXDONE_BY_ACK;
++
++        spin_unlock_irqrestore(&chan->lock, flags);
++    
++        if (chan->mbox->ops->startup) {
++                ret = chan->mbox->ops->startup(chan);
++
++                if (ret) {
++    
++                        dev_err(dev, "Unable to startup the chan (%d)\n", ret);
++                        chan = ERR_PTR(ret);
++                }
++        }
++        return chan;
++}
++
+ static struct platform_driver phytium_mbox_driver = {
+ 	.probe = phytium_mbox_probe,
+ 	.remove = phytium_mbox_remove,
+-- 
+2.34.1
 
-I had a wrong understanding of the ASCII sort and forgot to re-check my=20
-own assumptions.
-
-Thanks for that whole patch set!
-
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
-
-
->=20
-> >=20
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > ---
-> >=20
-> > (no changes since v1)
-> >=20
-> >  Makefile | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >=20
-> > diff --git a/Makefile b/Makefile
-> > index 60ce9dcafc72..797fafbc1b45 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -368,6 +368,9 @@ else # !mixed-build
-> > =20
-> >  include $(srctree)/scripts/Kbuild.include
-> > =20
-> > +# Check for the minimal Make version
-> > +$(if $(call test-lt, $(MAKE_VERSION), 3.82), $(error Make $(MAKE_VERSI=
-ON) is too old))
-> > +
-> >  # Read KERNELRELEASE from include/config/kernel.release (if it exists)
-> >  KERNELRELEASE =3D $(call read-file, include/config/kernel.release)
-> >  KERNELVERSION =3D $(VERSION)$(if $(PATCHLEVEL),.$(PATCHLEVEL)$(if $(SU=
-BLEVEL),.$(SUBLEVEL)))$(EXTRAVERSION)
-> > --=20
-> > 2.34.1
->=20
-> --=20
-> epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-> =E2=86=B3 gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
->      -- frykten for herren er opphav til kunnskap --
-
-
-
---=20
-epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-=E2=86=B3 gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
-     -- frykten for herren er opphav til kunnskap --
-
---OSEL46hI/6K+vX1j
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmN/GFUACgkQB1IKcBYm
-EmlIyw/+Idg8UnMhykjqhkYbuAoQX6yYOWfIZ9HyPHVkn4RuFJgiZnzjsDGOsfY9
-H1dthbFSDhuyet1/cnns7NwPiSJx4nhHIHKe0hxUkQgjjmoFoUUUGbx/q7cS6nNX
-V1FN9rD/M5xfCxJKkresr8NNifvyy1POZFt0b8hE0wWx1cWEtN9p/0r0+C5hSHwU
-uNDQiv6IbL0GtUgBRogfx5w3kXSk0ja86SNcumcKJHCnAf3SlAAORvynpzfsZ0Ea
-NQjLlUx0ZczIL+O4koBo5tyo2QV4v9ChOhsjVH4QaPz6oXpHUG35+qiKH6GQEgCK
-Nfgjv9UzcsNarbOHAn/DGCk/u5p2k8zmJbr0KeMlZ4dab9l7k+ySzT31DccvL55W
-4Qxa7yJcpgMgJ3Il/p4eldCo+6rWRL5uDs4NELYjPS4bCi49dzXuqu2qE2fZoDwK
-sCrRv45IRjRzIlN85mjxvlFXB4FSOGgB5V035McTcJh+mbyQCUh8jLeJ4uvM3sUD
-zk6fgb5N6xU4iVsfEbMavfRzHlsyuv294XLGOz9Gg+usu1ZpWO5xVEoMZlk1aY1o
-+PDUjtvuKVhYWp7wal1WegyBOX7nwsfwrqY83boEjd5RwhMV7xe5LBjpvMnyF2IC
-Plktpd1qfQ6ex3Keh0xrkQUKLMn+DSu9BnlsXTMZ5TYrq4w4USI=
-=+eIc
------END PGP SIGNATURE-----
-
---OSEL46hI/6K+vX1j--
