@@ -2,95 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76AE8637AB4
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 14:57:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AB91637AB3
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 14:57:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbiKXN5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 08:57:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50286 "EHLO
+        id S230334AbiKXN5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 08:57:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbiKXN44 (ORCPT
+        with ESMTP id S230221AbiKXN44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 24 Nov 2022 08:56:56 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0151165B7;
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28BB7116589;
         Thu, 24 Nov 2022 05:56:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1669298175; bh=tNxzriKju7X09wVvY3INkMxvkZLtq7M5+64P/eal/h4=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Ays7wa/uQDWJNn3ep6L/CDUcb4ZbmIcHpU+KmoMdvXBjKvK83GtjGEsyvd2qG0sIQ
-         jXqfKpVOGzay688FLBVMEJRiKT2OV7HQ36O5Mkn6qQaVq7Zp7zHHdQX1bM+Qp/Lvjk
-         P3RigZ7k0WeJWKs7u/gRcPTBe6BYpTP1ttD+kc4A5gPfl86ZDL0UcfGAVpnoMIGAn0
-         lN7SXSViEGsg6FMjYIMhIA1UYbXzdgnY+F3ixchd/bWFnHSKBju6+SvJPwT0XgqAHv
-         bED6lKWY+e10CibuVdHMKIFk2XgZebcpcIpYr+0GoLrqN2ev56/+dqlfI0U51PgQD6
-         xWyhCwaiuS+ug==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from Venus.speedport.ip ([84.162.7.17]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MQe9s-1oaSkq35Hy-00Nkbe; Thu, 24
- Nov 2022 14:56:14 +0100
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
-Cc:     stefanb@linux.vnet.ibm.com, linux@mniewoehner.de,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jandryuk@gmail.com, pmenzel@molgen.mpg.de, l.sanfilippo@kunbus.com,
-        LinoSanfilippo@gmx.de, lukas@wunner.de, p.rosenberger@kunbus.com
-Subject: [PATCH v11 14/14] tpm, tpm_tis: Enable interrupt test
-Date:   Thu, 24 Nov 2022 14:55:38 +0100
-Message-Id: <20221124135538.31020-15-LinoSanfilippo@gmx.de>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20221124135538.31020-1-LinoSanfilippo@gmx.de>
-References: <20221124135538.31020-1-LinoSanfilippo@gmx.de>
+Date:   Thu, 24 Nov 2022 14:56:35 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669298196;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=L38wN5RSHd5FCEARF7VhEM6L+ZXyHvAmeQENCVMiFLY=;
+        b=hc9zgftn9z12KNvF8vJKaZZVk8vf1B4vcVAismXLpbvgf2eck3Q6kvc8ETKIZqg4OAEXGY
+        tbz0eq5xH9edMm9Rqgba2HaJAH5dK87MhCH2RnlcAdmjwheMFpuy4tA51Ij9frOoKN0lyd
+        TyYdAIplmL/hFOvdRVD+aqEMTelik6YxRT3bOwjFOeI23LYGPHaxOXpu4ia/MQetNSwM2c
+        V56Wp+MJPkPSoVTpZaBzj3oYlpdqGG/1LI8+JmKnmyPOJF1tl7Et4cEPkOvfV9QbOO+W57
+        51v21CqNNg/KONJ6bm/hneK8GvjFATO64OlwqNko3N+7X0UV6ixGwD3z8z4q3g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669298196;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=L38wN5RSHd5FCEARF7VhEM6L+ZXyHvAmeQENCVMiFLY=;
+        b=Z5KNNOk+gsBVb3LEJODz/5FwbcRsWDNMomH9vIslRMdYdscg1beV7gcH9Z+xhUcp4eZOEM
+        I1PIcSOufCO9sgBA==
+From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-bluetooth@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Jacob Keller <jacob.e.keller@intel.com>
+Subject: Re: [patch V3 17/17] Bluetooth: hci_qca: Fix the teardown problem
+ for real
+In-Reply-To: <20221123201625.435907114@linutronix.de>
+Message-ID: <21108e77-f67d-528-dd61-249c5ebe217f@linutronix.de>
+References: <20221123201306.823305113@linutronix.de> <20221123201625.435907114@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Provags-ID: V03:K1:xfdO2tuW/H6iYYoumuTl2JI/87L4z6XQerQt8f+R27hsPCrO64Z
- JwwfgAMboMKyAW+te2wxvETCWMQl9n7oGkgVUgttVuzOj8mppqb7n8fDCtqi3gU1NkCuN4I
- 8LP8lBZUixMLA2IPpHG9hkg1CYcxXkcQZMY7SDAVvbLzkKFnCKKLNHH388WCpvJ3+iHELmx
- 06AlFwwV950PY1Vn1fsLQ==
-UI-OutboundReport: notjunk:1;M01:P0:1X7tueyk1qI=;cI7BBTNCszsaJNj810LcBY0NURn
- uUcFyWg8EsV5Iz5QF46XdeZhniFC8uMWGw4gXOHAXbzn+q8gbtvSsKKV8eY4hK7RlJnn9sRSg
- 2Ug/tnVjG+HSmx+j0z5Jii9oE/m7TF16M41Qt4mmYGiWEhWk+pMaiSwHSyHDmNnfGHBtr5QE3
- aRmggsoxFYZGsrlmfRojCDjLiASKcpDPrwFqhAmievr+2HXfPCf2ACnTjrqaqgsg75FrQ1UGg
- dLNV+2O3sfYKhceOcfAkqr7XJtQNksALkXcxOhUOx3mWWGATFG1byaXFGkCac1Zfu4gUSAxiB
- 23Z7j60SLUP+vqMLOqXMObULp2xJr/DkpYzpFkcnR5FzirSHIqUs7Pz+68xJDCEOODT8zaiwv
- OTMQlt8uwu6Qu87Mu++czibfjbBzRh9be+rjxCNbMZd3jZoyalXQcLtE3M8H0Nyf8/1JF2sys
- UKUnrQ9qUyPv/RVFD10Au9zn/+i2+ZEzYFjjUaO2czM2lHwtd89NiKaipU+WRBl3zeZC/iK7o
- jxgeWrECkTBMowMMQ2ReCtRE6Zbn310uahyYwGzdxlVcAghq/nZcTfz8eu4Ouwx6xwZ7psZgU
- 2mfmUyLmxOv64aKvNOUIaQvqWdndXP96qZkIRgdzix4FVQBFgCOSwoMH5TzxHuMO+X4fcEbSL
- lf17I0Cdkj27nlqBJci2Ps12+NnlmUNf7vlshbiXT5R1WUXs/kZBxA54+N9kALIQyKuWScJvf
- 4Z1fdDg8JMBuw7INIZ1c1a4DxQ4SFJQySCkDa7/+1fxNSn0qMYwT9Cc98EJHoysAjzlSHo8EF
- Epy6CrgVvaNX5HwwH6bC0WDZ5UqMxEYDPV0H3gOvMA3aKIxoZTcyytTP3wju1pYUPXCHsu3G7
- jsW4BqTXcX/5Ot24Wdww+BJCDeUCNE4N+sesPYPF8FkSqU1Qps1oNWjWpnQt56Vd4tkLRWerF
- 6GPs7ot75nofwZMUtwA+18S73Co=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlwcG9Aa3VuYnVzLmNvbT4KClRoZSB0ZXN0
-IGZvciBpbnRlcnJ1cHRzIGluIHRwbV90aXNfc2VuZCgpIGlzIHNraXBwZWQgaWYgdGhlIGZsYWcK
-VFBNX0NISVBfRkxBR19JUlEgaXMgbm90IHNldC4gU2luY2UgdGhlIGN1cnJlbnQgY29kZSBuZXZl
-ciBzZXRzIHRoZSBmbGFnCmluaXRpYWxseSB0aGUgdGVzdCBpcyBuZXZlciBleGVjdXRlZC4KCkZp
-eCB0aGlzIGJ5IHNldHRpbmcgdGhlIGZsYWcgaW4gdHBtX3Rpc19nZW5faW50ZXJydXB0KCkgcmln
-aHQgYWZ0ZXIKaW50ZXJydXB0cyBoYXZlIGJlZW4gZW5hYmxlZCBhbmQgYmVmb3JlIHRoZSB0ZXN0
-IGlzIGV4ZWN1dGVkLgoKU2lnbmVkLW9mZi1ieTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlw
-cG9Aa3VuYnVzLmNvbT4KVGVzdGVkLWJ5OiBNaWNoYWVsIE5pZXfDtmhuZXIgPGxpbnV4QG1uaWV3
-b2VobmVyLmRlPgpSZXZpZXdlZC1ieTogSmFya2tvIFNha2tpbmVuIDxqYXJra29Aa2VybmVsLm9y
-Zz4KLS0tCiBkcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29yZS5jIHwgNSArKysrKwogMSBmaWxl
-IGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvY2hhci90cG0v
-dHBtX3Rpc19jb3JlLmMgYi9kcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29yZS5jCmluZGV4IDk0
-YTJiZmIyNDRiMy4uNjAyY2E0YmI4ZTJmIDEwMDY0NAotLS0gYS9kcml2ZXJzL2NoYXIvdHBtL3Rw
-bV90aXNfY29yZS5jCisrKyBiL2RyaXZlcnMvY2hhci90cG0vdHBtX3Rpc19jb3JlLmMKQEAgLTc4
-OSwxMCArNzg5LDE1IEBAIHN0YXRpYyB2b2lkIHRwbV90aXNfZ2VuX2ludGVycnVwdChzdHJ1Y3Qg
-dHBtX2NoaXAgKmNoaXApCiAJY2FwX3QgY2FwOwogCWludCByZXQ7CiAKKwljaGlwLT5mbGFncyB8
-PSBUUE1fQ0hJUF9GTEFHX0lSUTsKKwogCWlmIChjaGlwLT5mbGFncyAmIFRQTV9DSElQX0ZMQUdf
-VFBNMikKIAkJcmV0ID0gdHBtMl9nZXRfdHBtX3B0KGNoaXAsIDB4MTAwLCAmY2FwMiwgZGVzYyk7
-CiAJZWxzZQogCQlyZXQgPSB0cG0xX2dldGNhcChjaGlwLCBUUE1fQ0FQX1BST1BfVElTX1RJTUVP
-VVQsICZjYXAsIGRlc2MsIDApOworCisJaWYgKHJldCkKKwkJY2hpcC0+ZmxhZ3MgJj0gflRQTV9D
-SElQX0ZMQUdfSVJROwogfQogCiAvKiBSZWdpc3RlciB0aGUgSVJRIGFuZCBpc3N1ZSBhIGNvbW1h
-bmQgdGhhdCB3aWxsIGNhdXNlIGFuIGludGVycnVwdC4gSWYgYW4KLS0gCjIuMzYuMQoK
+On Wed, 23 Nov 2022, Thomas Gleixner wrote:
+
+> While discussing solutions for the teardown problem which results from
+> circular dependencies between timers and workqueues, where timers schedule
+> work from their timer callback and workqueues arm the timers from work
+> items, it was discovered that the recent fix to the QCA code is incorrect.
+> 
+> That commit fixes the obvious problem of using del_timer() instead of
+> del_timer_sync() and reorders the teardown calls to
+> 
+>    destroy_workqueue(wq);
+>    del_timer_sync(t);
+> 
+> This makes it less likely to explode, but it's still broken:
+> 
+>    destroy_workqueue(wq);
+>    /* After this point @wq cannot be touched anymore */
+> 
+>    ---> timer expires
+>          queue_work(wq) <---- Results in a NULl pointer dereference
+
+The last NIT (for now...): s/NULl/NULL
+
+Thanks,
+
+	Anna-Maria
+
