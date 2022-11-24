@@ -2,255 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85485637249
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 07:17:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3910263724B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 07:19:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiKXGRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 01:17:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53416 "EHLO
+        id S229518AbiKXGTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 01:19:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiKXGRB (ORCPT
+        with ESMTP id S229445AbiKXGTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 01:17:01 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6007654FA;
-        Wed, 23 Nov 2022 22:16:58 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 3AB2624E20A;
-        Thu, 24 Nov 2022 14:16:57 +0800 (CST)
-Received: from EXMBX072.cuchost.com (172.16.6.82) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 24 Nov
- 2022 14:16:57 +0800
-Received: from [192.168.125.106] (183.27.97.81) by EXMBX072.cuchost.com
- (172.16.6.82) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 24 Nov
- 2022 14:16:56 +0800
-Message-ID: <049f07d3-3e1c-3f52-e125-671f66bc432e@starfivetech.com>
-Date:   Thu, 24 Nov 2022 14:17:30 +0800
+        Thu, 24 Nov 2022 01:19:31 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D549372C
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 22:19:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=P23NM4nqAWcCFp4nIBC+iBFsGGXl6v5G4NOLEXdr/Fo=; b=ALEa6F/KeLi9otJnpTEIXidIiY
+        BFrnoWsAtTXugJqm+QRWGfg9/rmGmGBu/LbDgTioAVHHxH7fJDhZH35Gm4pyekz7M8+ErAUzlM7bz
+        ufs3lnyNUorX6063iEGamdHk5TXDnowAkWn1qbcvt0RE0FBxE6haf0IUhO165E3eAyAiAN6vHr6su
+        v3ROavVTG594onRGtOezIurHgM4IjcxYilnTs1MZMWmU7W2Gpg1abgB8KM+g7OUxjVGiniJH4IGV5
+        c45CFGDxaDagLvx+PsEUMyYX4zjFcozktjd4Al17U1CUS9RQSKenqP2ceJXmmvlDmzI0hBm0mal4E
+        BtrwWUTQ==;
+Received: from [2601:1c2:d80:3110::a2e7] (helo=casper.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oy5a6-008RmS-7B; Thu, 24 Nov 2022 06:19:30 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        John Bonesio <bones@secretlab.ca>,
+        Anatolij Gustschin <agust@denx.de>,
+        linuxppc-dev@lists.ozlabs.org,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH] powerpc/mpc52xx_lpbfifo: fix all kernel-doc warnings
+Date:   Wed, 23 Nov 2022 22:19:18 -0800
+Message-Id: <20221124061918.1967-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v2 7/8] riscv: dts: starfive: Add StarFive JH7110
- VisionFive2 board device tree
-Content-Language: en-US
-To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
-CC:     "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221118011714.70877-1-hal.feng@starfivetech.com>
- <20221118011714.70877-8-hal.feng@starfivetech.com>
- <CAJM55Z-rdicV69otq=YFsTSUNsg==Svf18b+3w-cMfb_BYcbGg@mail.gmail.com>
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <CAJM55Z-rdicV69otq=YFsTSUNsg==Svf18b+3w-cMfb_BYcbGg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.97.81]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX072.cuchost.com
- (172.16.6.82)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 19 Nov 2022 01:55:40 +0800, Emil Renner Berthing wrote:
-> On Fri, 18 Nov 2022 at 02:17, Hal Feng <hal.feng@starfivetech.com> wrote:
->>
->> From: Emil Renner Berthing <kernel@esmil.dk>
->>
->> Add a minimal device tree for StarFive JH7110 VisionFive2 board.
-> Missing space between VisionFive and 2.
+Fix multiple kernel-doc warnings in mpc52xx_lpbfifo.c:
 
-Will fix accordingly.
+arch/powerpc/platforms/52xx/mpc52xx_lpbfifo.c:377: warning: expecting prototype for mpc52xx_lpbfifo_bcom_poll(). Prototype was for mpc52xx_lpbfifo_poll() instead
 
-> 
->> Support booting and basic clock/reset/pinctrl/uart drivers.
->>
->> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
->> Co-developed-by: Jianlong Huang <jianlong.huang@starfivetech.com>
->> Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
->> Co-developed-by: Hal Feng <hal.feng@starfivetech.com>
->> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
->> ---
->>  arch/riscv/boot/dts/starfive/Makefile         |   1 +
->>  .../jh7110-starfive-visionfive-v2.dts         | 116 ++++++++++++++++++
->>  2 files changed, 117 insertions(+)
->>  create mode 100644 arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
->>
->> diff --git a/arch/riscv/boot/dts/starfive/Makefile b/arch/riscv/boot/dts/starfive/Makefile
->> index 0ea1bc15ab30..e1237dbc6aac 100644
->> --- a/arch/riscv/boot/dts/starfive/Makefile
->> +++ b/arch/riscv/boot/dts/starfive/Makefile
->> @@ -1,2 +1,3 @@
->>  # SPDX-License-Identifier: GPL-2.0
->>  dtb-$(CONFIG_SOC_STARFIVE) += jh7100-beaglev-starlight.dtb
->> +dtb-$(CONFIG_SOC_STARFIVE) += jh7110-starfive-visionfive-v2.dtb
->> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
->> new file mode 100644
->> index 000000000000..c8946cf3a268
->> --- /dev/null
->> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
->> @@ -0,0 +1,116 @@
->> +// SPDX-License-Identifier: GPL-2.0 OR MIT
->> +/*
->> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
->> + * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
->> + */
->> +
->> +/dts-v1/;
->> +#include "jh7110.dtsi"
->> +#include <dt-bindings/gpio/gpio.h>
->> +#include <dt-bindings/pinctrl/pinctrl-starfive-jh7110.h>
->> +
->> +/ {
->> +       model = "StarFive VisionFive V2";
->> +       compatible = "starfive,visionfive-v2", "starfive,jh7110";
-> 
-> Again, please consult your colleagues if you're calling the board
-> "VisionFive 2" or "VisionFive V2" and name the file, model and board
-> accordingly.
+mpc52xx_lpbfifo.c:221: warning: No description found for return value of 'mpc52xx_lpbfifo_irq'
+mpc52xx_lpbfifo.c:327: warning: No description found for return value of 'mpc52xx_lpbfifo_bcom_irq'
+mpc52xx_lpbfifo.c:398: warning: No description found for return value of 'mpc52xx_lpbfifo_submit'
 
-Will fix accordingly. Please see the record of patch 1.
+mpc52xx_lpbfifo.c:64: warning: Function parameter or member 'req' not described in 'mpc52xx_lpbfifo_kick'
+mpc52xx_lpbfifo.c:220: warning: contents before sections
+mpc52xx_lpbfifo.c:223: warning: Function parameter or member 'irq' not described in 'mpc52xx_lpbfifo_irq'
+mpc52xx_lpbfifo.c:223: warning: Function parameter or member 'dev_id' not described in 'mpc52xx_lpbfifo_irq'
+mpc52xx_lpbfifo.c:328: warning: contents before sections
+mpc52xx_lpbfifo.c:331: warning: Function parameter or member 'irq' not described in 'mpc52xx_lpbfifo_bcom_irq'
+mpc52xx_lpbfifo.c:331: warning: Function parameter or member 'dev_id' not described in 'mpc52xx_lpbfifo_bcom_irq'
 
-> 
->> +       aliases {
->> +               serial0 = &uart0;
->> +       };
->> +
->> +       chosen {
->> +               linux,initrd-start = <0x46100000>;
->> +               linux,initrd-end = <0x4c000000>;
-> 
-> These two lines don't belong here. They're added by the bootloader dynamically.
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: John Bonesio <bones@secretlab.ca>
+Cc: Anatolij Gustschin <agust@denx.de>
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+---
+ arch/powerpc/platforms/52xx/mpc52xx_lpbfifo.c |   14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-OK, will delete. Thanks.
-
-> 
->> +               stdout-path = "serial0:115200";
-> 
-> You're missing a n8.
-
-Will fix.
-
-> 
->> +       };
->> +
->> +       cpus {
->> +               timebase-frequency = <4000000>;
->> +       };
->> +
->> +       memory@40000000 {
->> +               device_type = "memory";
->> +               reg = <0x0 0x40000000 0x1 0x0>;
->> +       };
->> +
->> +       gpio-restart {
->> +               compatible = "gpio-restart";
->> +               gpios = <&gpio 35 GPIO_ACTIVE_HIGH>;
->> +               priority = <224>;
->> +       };
->> +};
->> +
->> +&osc {
->> +       clock-frequency = <24000000>;
->> +};
->> +
->> +&clk_rtc {
->> +       clock-frequency = <32768>;
->> +};
->> +
->> +&gmac0_rmii_refin {
->> +       clock-frequency = <50000000>;
->> +};
->> +
->> +&gmac0_rgmii_rxin {
->> +       clock-frequency = <125000000>;
->> +};
->> +
->> +&gmac1_rmii_refin {
->> +       clock-frequency = <50000000>;
->> +};
->> +
->> +&gmac1_rgmii_rxin {
->> +       clock-frequency = <125000000>;
->> +};
->> +
->> +&i2stx_bclk_ext {
->> +       clock-frequency = <12288000>;
->> +};
->> +
->> +&i2stx_lrck_ext {
->> +       clock-frequency = <192000>;
->> +};
->> +
->> +&i2srx_bclk_ext {
->> +       clock-frequency = <12288000>;
->> +};
->> +
->> +&i2srx_lrck_ext {
->> +       clock-frequency = <192000>;
->> +};
->> +
->> +&tdm_ext {
->> +       clock-frequency = <49152000>;
->> +};
->> +
->> +&mclk_ext {
->> +       clock-frequency = <12288000>;
->> +};
->> +
->> +&gpio {
->> +       uart0_pins: uart0-0 {
->> +               tx-pins {
->> +                       pinmux = <GPIOMUX(5, GPOUT_SYS_UART0_TX, GPOEN_ENABLE, GPI_NONE)>;
->> +                       bias-disable;
->> +                       drive-strength = <12>;
->> +                       input-disable;
->> +                       input-schmitt-disable;
->> +                       slew-rate = <0>;
->> +               };
->> +
->> +               rx-pins {
->> +                       pinmux = <GPIOMUX(6, GPOUT_LOW, GPOEN_DISABLE, GPI_SYS_UART0_RX)>;
->> +                       bias-pull-up;
-> 
-> There are external pull-ups, so maybe change this line to
-> 
-> bias-disable; /* external pull-up */
-
-Good job. Will fix it later.
-
-Best regards,
-Hal
-
-> 
->> +                       drive-strength = <2>;
->> +                       input-enable;
->> +                       input-schmitt-enable;
->> +                       slew-rate = <0>;
->> +               };
->> +       };
->> +};
->> +
->> +&uart0 {
->> +       pinctrl-names = "default";
->> +       pinctrl-0 = <&uart0_pins>;
->> +       status = "okay";
->> +};
-
+diff -- a/arch/powerpc/platforms/52xx/mpc52xx_lpbfifo.c b/arch/powerpc/platforms/52xx/mpc52xx_lpbfifo.c
+--- a/arch/powerpc/platforms/52xx/mpc52xx_lpbfifo.c
++++ b/arch/powerpc/platforms/52xx/mpc52xx_lpbfifo.c
+@@ -59,6 +59,8 @@ static struct mpc52xx_lpbfifo lpbfifo;
+ 
+ /**
+  * mpc52xx_lpbfifo_kick - Trigger the next block of data to be transferred
++ *
++ * @req: Pointer to request structure
+  */
+ static void mpc52xx_lpbfifo_kick(struct mpc52xx_lpbfifo_request *req)
+ {
+@@ -178,6 +180,8 @@ static void mpc52xx_lpbfifo_kick(struct
+ 
+ /**
+  * mpc52xx_lpbfifo_irq - IRQ handler for LPB FIFO
++ * @irq: IRQ number to be handled
++ * @dev_id: device ID cookie
+  *
+  * On transmit, the dma completion irq triggers before the fifo completion
+  * triggers.  Handle the dma completion here instead of the LPB FIFO Bestcomm
+@@ -216,6 +220,8 @@ static void mpc52xx_lpbfifo_kick(struct
+  * or nested spinlock condition.  The out path is non-trivial, so
+  * extra fiddling is done to make sure all paths lead to the same
+  * outbound code.
++ *
++ * Return: irqreturn code (%IRQ_HANDLED)
+  */
+ static irqreturn_t mpc52xx_lpbfifo_irq(int irq, void *dev_id)
+ {
+@@ -320,8 +326,12 @@ static irqreturn_t mpc52xx_lpbfifo_irq(i
+ 
+ /**
+  * mpc52xx_lpbfifo_bcom_irq - IRQ handler for LPB FIFO Bestcomm task
++ * @irq: IRQ number to be handled
++ * @dev_id: device ID cookie
+  *
+  * Only used when receiving data.
++ *
++ * Return: irqreturn code (%IRQ_HANDLED)
+  */
+ static irqreturn_t mpc52xx_lpbfifo_bcom_irq(int irq, void *dev_id)
+ {
+@@ -372,7 +382,7 @@ static irqreturn_t mpc52xx_lpbfifo_bcom_
+ }
+ 
+ /**
+- * mpc52xx_lpbfifo_bcom_poll - Poll for DMA completion
++ * mpc52xx_lpbfifo_poll - Poll for DMA completion
+  */
+ void mpc52xx_lpbfifo_poll(void)
+ {
+@@ -393,6 +403,8 @@ EXPORT_SYMBOL(mpc52xx_lpbfifo_poll);
+ /**
+  * mpc52xx_lpbfifo_submit - Submit an LPB FIFO transfer request.
+  * @req: Pointer to request structure
++ *
++ * Return: %0 on success, -errno code on error
+  */
+ int mpc52xx_lpbfifo_submit(struct mpc52xx_lpbfifo_request *req)
+ {
