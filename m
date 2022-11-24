@@ -2,110 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52257637920
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:42:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4CF863791F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:42:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiKXMm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 07:42:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52318 "EHLO
+        id S229675AbiKXMmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 07:42:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbiKXMmJ (ORCPT
+        with ESMTP id S229903AbiKXMmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 24 Nov 2022 07:42:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5EF0D92F2;
-        Thu, 24 Nov 2022 04:41:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 56ABA62117;
-        Thu, 24 Nov 2022 12:41:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E8EEC433C1;
-        Thu, 24 Nov 2022 12:41:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669293718;
-        bh=1iJR7svHch/4T42w9H9emz8bEDSlGXspdjOx/hxrm0c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ohhfNIJXuUoO96qIbvqJlGPesY8HIlSJOzb2cUIWs7/NdrX6dhZqzdkKAE1TjgpVI
-         a5pigHiHTlg8wK+6+UdKBHqGuYXizkS093Y/DGiffBgCZK97ChCZbpzRJxuYkJD4ZQ
-         mPn9BUyz0PPjP6OssoOg//mRfoJCceH7lewJ0GmdgdM6J+LLICEO/dVMiQk70A6Ror
-         fZpIitc6pV/SzM911YLTqOj0mimRzwbm5yqkFYaYIfxcnD0JQaqjCJxqkFKL4X8EM0
-         T8GCVCGpeQLwC8THzWXr+eTYEB/Eja+NJNK8Wn4OHl1BW3r2GPUrJQi0mSOlLqtfgc
-         RGQZaJFyobbaA==
-Date:   Thu, 24 Nov 2022 12:41:54 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Dhruva Gole <d-gole@ti.com>
-Cc:     Nathan Barrett-Morrison <nathan.morrison@timesys.com>,
-        greg.malysa@timesys.com,
-        "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] spi: cadence-quadspi: Add upper limit safety check to
- baudrate divisor
-Message-ID: <Y39mkl+9W8S6ZzOk@sirena.org.uk>
-References: <20221123211705.126900-1-nathan.morrison@timesys.com>
- <9e5264fa-db1a-ed96-5fd8-cbfa4694b8bd@ti.com>
- <Y39XFzYJL3EmxSFF@sirena.org.uk>
- <88b6dab2-87b1-34ef-b267-43933d79ab8e@ti.com>
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F7B7D9BA7
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:42:01 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id d20so1362096plr.10
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:42:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/spAceZjGo7hEwRbpkX1KXC8t1LyoBwzTnObopY/QLY=;
+        b=bc+/VoTvLSj8qpcR780fhdqPwG1579XbYK3lu8jvAJ/Klr2rqweYFdvI2S4lM/FKzm
+         e9LWTXB238YjFMnGPF8u7z7mH4OETeoVSk9kQf+qpxDO0TkTrKkfOM0dxhM5qIIsHc2W
+         V760Rvk2Anzt0EoO4MvE3KuuRM8Mra1eraGX1srDasFWyY6UksDXXS+PC1CGsN/iljcw
+         JgLL1jt1FZyDxnAEiRiL4gvCrtThBW1YmntMva1itV4ylq10w4bHX+zmBZZydKsANMdZ
+         T8ja6GOdUnoRCaENMXRDBGhal3VjWmZJz2sBYNowJFwD+uFw5fUndjp2xZ7FRkXJC0KG
+         wFHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/spAceZjGo7hEwRbpkX1KXC8t1LyoBwzTnObopY/QLY=;
+        b=JbggwJ1FDiE835BnSjZHHy2yh/Atu3TuqCwIfayPFmBsgVcaiwy5foo6Y6nPSOsB03
+         XspSoMVED33NVr69817MFatwiC11KPZgCWuLrBnYT4HpcgrNGO8exRBqX0Fh+Ca0rB12
+         Td90qMp1wa3+jPnzlmIljT3GoiBzlt9/ZFP3zeJZJwVDjBoG0UfUMpPtwCw6My8uGL7l
+         9vH2X4keJproLqG8q1tm2vjSWeNtfC60Tt8j42rTewcXCXHiNYD4nhMI/e5C/BlftaX0
+         7EoBFUQ7oN8GmqD+yd4798gk0SICHfXMCL1TrGvp74ghZIMxK7kpt9hZ+7cyh2mBIhKa
+         Jw3A==
+X-Gm-Message-State: ANoB5ploZiu2AaFdJ78I+mEyzsFypq96nf+M27MngdsxN3+SaEM1w99/
+        a+5QVECHeCtKYohWBCWvp1so3ZwbrnGtMkGOxXM=
+X-Google-Smtp-Source: AA0mqf5qHthsmOnntxNBJChWGaan7irEWOn6A+GRwC9Ee7Up94heyvl6P0crNSA25vrc8dDHVupPEDwonEyfKXsrm0w=
+X-Received: by 2002:a17:902:d34a:b0:188:f0cb:9ac0 with SMTP id
+ l10-20020a170902d34a00b00188f0cb9ac0mr16602856plk.112.1669293720670; Thu, 24
+ Nov 2022 04:42:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BSJOWebIfHRbS2Ss"
-Content-Disposition: inline
-In-Reply-To: <88b6dab2-87b1-34ef-b267-43933d79ab8e@ti.com>
-X-Cookie: Apply only to affected area.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6a11:3ef1:b0:34f:db24:ef0b with HTTP; Thu, 24 Nov 2022
+ 04:42:00 -0800 (PST)
+Reply-To: attorneyjoel4ever.tg@gmail.com
+From:   Felix Joel <felixjoel477@gmail.com>
+Date:   Thu, 24 Nov 2022 12:42:00 +0000
+Message-ID: <CAE2R5QSkjEehrZynNq_w=v7qx-QRmUhdwNJJHnqqU2f9b0_G8Q@mail.gmail.com>
+Subject: =?UTF-8?Q?jeg_venter_p=C3=A5_svaret_ditt?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---BSJOWebIfHRbS2Ss
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Thu, Nov 24, 2022 at 05:57:10PM +0530, Dhruva Gole wrote:
-> On 24/11/22 17:05, Mark Brown wrote:
-
-> > As far as I can tell the issue here is that the device is asking for a
-> > rate which requires a larger divisor than the controller can support but
-> > the driver doesn't do any bounds checking so it just writes the
-> > calculated divisor out to the hardware, corrupting any adjacent fields.
-
-> but, I am not sure it would anyway corrupt any adjacent bits,
-
-> The code
-> reg |= (div & CQSPI_REG_CONFIG_BAUD_MASK) << CQSPI_REG_CONFIG_BAUD_LSB
-
-> does mask the div value to ensure bits ONLY in CQSPI_REG_CONFIG_BAUD_MASK
-> region are set and nothing else right?
-
-Yes, that'd avoid corrupting adjacent bits (though it'd still be making
-things worse in that it makes the divider smaller).
-
-> I believe a simple warning is enough, and better not touch the div variable
-> because it seems unnecessary. We already have a mask to take care of masking
-> the appropriate bits.
-
-That'd still leave the clock driven too fast which could break things,
-going for the maximum divider would mitigate this (though an error would
-be even safer).
-
---BSJOWebIfHRbS2Ss
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN/ZpEACgkQJNaLcl1U
-h9AvPAf9G6Ky3lmquOrNVgL0eNAxmRCd4YVvOTlKeIHNJrNv6TT320J/DzrVN4w+
-9ktTV3ZW4wsBcN1P3zz6nz8lwIofuAK+exw90LI2BduuLQ99UWguHRTZ5Boe9LDf
-xnFPHZmYF3HwIDC+S854MAKeEv99++By+wMtrhTBzv/OMF1OPynedrcmhNLYDZF6
-V8Hca5elzIKlOI0jF8GZ1tYllW50vvdNbgsCVpD5cUxtlsZDOuqLuH40xmS6DZ6A
-87YYdtrvk4LbTpVumgtypvnzECMDx+Jya1OSjqcRrEY9UDFklb2EX0RUJspLMpA7
-A2qJeq9A2Gf0/ULY7DAUK3T2I34JeA==
-=ZHIr
------END PGP SIGNATURE-----
-
---BSJOWebIfHRbS2Ss--
+--=20
+Hallo,
+V=C3=A6r s=C3=A5 snill, godta mine unnskyldninger. Jeg =C3=B8nsker ikke =C3=
+=A5 invadere
+privatlivet ditt, jeg er Felix Joel, en advokat av yrke. Jeg har
+skrevet en tidligere e-post til deg, men uten svar, og i min f=C3=B8rste
+e-post nevnte jeg til deg om min avd=C3=B8de klient, som har samme
+etternavn som deg. Siden hans d=C3=B8d har jeg mottatt flere brev fra
+banken hans hvor han gjorde et innskudd f=C3=B8r hans d=C3=B8d, banken har =
+bedt
+meg om =C3=A5 gi hans n=C3=A6rmeste p=C3=A5r=C3=B8rende eller noen av hans =
+slektninger som
+kan gj=C3=B8re krav p=C3=A5 hans midler, ellers vil de bli konfiskert og si=
+den
+Jeg kunne ikke finne noen av hans slektninger. Jeg bestemte meg for =C3=A5
+kontakte deg for denne p=C3=A5standen, derfor har du samme etternavn med
+ham. kontakt meg snarest for mer informasjon.
+Vennlig hilsen,
+Barrister Felix Joel.
