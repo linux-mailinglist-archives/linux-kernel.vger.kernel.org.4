@@ -2,65 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE1F563719D
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 05:53:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83C8E6371A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 05:57:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbiKXExv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 23:53:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55884 "EHLO
+        id S229552AbiKXE5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 23:57:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiKXExp (ORCPT
+        with ESMTP id S229495AbiKXE5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 23:53:45 -0500
+        Wed, 23 Nov 2022 23:57:49 -0500
 Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A42554B03
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 20:53:41 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id 140so644931pfz.6
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 20:53:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1BF410046
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 20:57:47 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id b4so640533pfb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 20:57:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=R1Wg6FTenY9DFHsl9mPn4muGkPnhlT6iCDc5PSEwMCY=;
-        b=ANrMaolJrh7zPSDCADpsNG5QqXz2Kzd7eWFi733lh4w05eMhVrBllnw6LXQVmHbjCe
-         BLcCNRRlJke8SqdTjrTzw74831CWlE+rkzmRtfwQV6NBimGG+1QKHf/eJc804AhOgXxA
-         00PQchEQqDL7QCdorjFD0n1U6iKbmvfsrl9eQ=
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=oPlwUNcv4Dplvh3fEfrO40YMYkUc7XawQh7JimisJjE=;
+        b=NBOCpe8Rzc+E27R754CDSyf6DIbW+o78QsHtuC/eHZYj81jKsAVZWrXZZWlVopzy5n
+         2U89qwvZh5PleKd2Qotgp+6QTyjYPenLmBVBaujw1exFWhP5AZfm3KwgTPpGp6TUIr+I
+         O6ke1yZiR7ar5WD1HrpGGqv0xG8AeXe9vkbjFebLQNeQbENC1PCDS1IK3YU/5rJ4i9hG
+         vMkA3eTDpxGkjZmkg2q5x/M+bnu9Asa6UC9zB6CSbsBff77MVWPWAR3ql+cVcd7Fh3wO
+         q6SZvU9CZZS7eEC0JML0fEODM4oU03Z0XC6XFouEYWd9+6ca7LEf51gva918yY+L3HKE
+         bFkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=R1Wg6FTenY9DFHsl9mPn4muGkPnhlT6iCDc5PSEwMCY=;
-        b=F0qVXoRCzZhSH53EQF2cOwVtGYRyu3tGNceVRbEPF2FjdG4PrZMt3wYYKAna0Gs6io
-         F2TudAn62OHftRYUD+8u21ckrbC+MPk+RKjgaMBfjtjM1D79EbSEPzKVPdQDKUS/WxZP
-         snAXnVN4Yu8/MkwSdRazew002OX1eIbrwza7oMkKbQxr5Q+jr4J77AMdQl4+9nZ02NfL
-         Zm0felp7HJ5gVk/UgDh4eEwoxFdn+PTfFgs2F0tD3A9TFvB9zlJR6AaJAPDqC95f9kdM
-         wOEqrybmIxWoG5hFtAQatGv/cWIFdhRIf+sRqOShnh0OkbOaBOljvVreAp4SaC3JYIsL
-         VwNg==
-X-Gm-Message-State: ANoB5pkwsrHzmLp9xuiYN48fqHf/qh4ZYzEKKd4q79tL5YoANssGJP9D
-        CVXgptgCylActaufV+xLRff4+DgGU/zpbDO39gk4rnRKIB0=
-X-Google-Smtp-Source: AA0mqf7CW/gCjn46bMWgQdQpDpW0NEoRga5KPr+WLmnXVq3uDYjYSg7xvl7VicC9BJYo66qrIgm0yzzj1QSAoWtksS0=
-X-Received: by 2002:a63:4e57:0:b0:477:ae2f:3cd7 with SMTP id
- o23-20020a634e57000000b00477ae2f3cd7mr8099861pgl.44.1669265620935; Wed, 23
- Nov 2022 20:53:40 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oPlwUNcv4Dplvh3fEfrO40YMYkUc7XawQh7JimisJjE=;
+        b=c214oxGnR3qaLlzgV4HTTWAlFH4Cf/rmgHWOP4tGrbd/cOUuA8L2NWeYukKXRbG6Y9
+         SfN0HJ5Xx1DtSTvk89aT2D+YUUwHkfhQhqC440OZ73Qs0jFtbZewq48ZgDxFK10jRvii
+         vAxiUvRv82q3+yiymDFqAX7hZiWhZ/857RCjt0d9RruTteUeFaTeU8prlJbc3ZDOsFwU
+         tkUj7k9/N/T0i6Ixxdifpb0QnKmdTQt+tepTyLJ1sWZi6f2bhaiV/MyyQoDnQFWK4Ey4
+         wWwr/zjg4a4/OKxIlJcq4uf7ZiuGscSggPLnWPkgwdDzGctB93vbzwmp/mapS/9+BLGp
+         291g==
+X-Gm-Message-State: ANoB5pkHE68ud1PPMORGoSpPhahOXoCI9TuFExRjQfBduERJdSxikGgr
+        kw/WEX+/Z27IivbXqFlxJghqtw==
+X-Google-Smtp-Source: AA0mqf76WrgsB2cg75zm5R0XIKlk5DaFEEo6/NzuGVFrpmGhUVNepyLh5g05/llP99EutH0qToVESQ==
+X-Received: by 2002:a63:fb04:0:b0:476:7faf:e0bf with SMTP id o4-20020a63fb04000000b004767fafe0bfmr10224951pgh.80.1669265867387;
+        Wed, 23 Nov 2022 20:57:47 -0800 (PST)
+Received: from localhost ([122.172.85.60])
+        by smtp.gmail.com with ESMTPSA id t10-20020a170902e84a00b001869efb722csm73843plg.215.2022.11.23.20.57.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 20:57:47 -0800 (PST)
+Date:   Thu, 24 Nov 2022 10:27:45 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "xiaowu.ding" <xiaowu.ding@jaguarmicro.com>
+Cc:     Tushar.Khandelwal@arm.com, jassisinghbrar@gmail.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] driver:mhuv2:Fix data mode rx startup problem
+Message-ID: <20221124045745.yycyoxw2drk4rw6k@vireshk-i7>
+References: <20221124032701.2163-1-xiaowu.ding@jaguarmicro.com>
 MIME-Version: 1.0
-References: <20221123100529.3943662-1-hsinyi@chromium.org> <20221123100529.3943662-3-hsinyi@chromium.org>
- <Y35/pfy0QqP7l4Ru@art_vandelay>
-In-Reply-To: <Y35/pfy0QqP7l4Ru@art_vandelay>
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-Date:   Thu, 24 Nov 2022 12:53:14 +0800
-Message-ID: <CAJMQK-htF_8xPj6_pv+=3=e1+KcH75Jtr72UYAFSeikfZXXwPA@mail.gmail.com>
-Subject: Re: [PATCH v7 3/3] drm/bridge: it6505: handle HDCP request
-To:     Sean Paul <sean@poorly.run>
-Cc:     Sean Paul <seanpaul@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Allen Chen <allen.chen@ite.com.tw>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221124032701.2163-1-xiaowu.ding@jaguarmicro.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,176 +70,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 4:16 AM Sean Paul <sean@poorly.run> wrote:
->
-> On Wed, Nov 23, 2022 at 10:05:29AM +0000, Hsin-Yi Wang wrote:
-> > it6505 supports HDCP 1.3, but current implementation lacks the update of
-> > HDCP status through drm_hdcp_update_content_protection().
-> >
-> > it6505 default enables the HDCP. Remove this and only turn on when user
-> > requests it.
-> >
-> > Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> > Reviewed-by: allen chen <allen.chen@ite.com.tw>
-> > ---
-> > v6->v7: remove enable hdcp by default.
-> > ---
-> >  drivers/gpu/drm/bridge/ite-it6505.c | 60 +++++++++++++++++++++++++++--
-> >  1 file changed, 57 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
-> > index 21a9b8422bda..93626698c31e 100644
-> > --- a/drivers/gpu/drm/bridge/ite-it6505.c
-> > +++ b/drivers/gpu/drm/bridge/ite-it6505.c
-> > @@ -423,6 +423,7 @@ struct it6505 {
-> >       struct extcon_dev *extcon;
-> >       struct work_struct extcon_wq;
-> >       int extcon_state;
-> > +     struct drm_connector *connector;
-> >       enum drm_connector_status connector_status;
-> >       enum link_train_status link_state;
-> >       struct work_struct link_works;
-> > @@ -2159,9 +2160,6 @@ static void it6505_link_train_ok(struct it6505 *it6505)
-> >               DRM_DEV_DEBUG_DRIVER(dev, "Enable audio!");
-> >               it6505_enable_audio(it6505);
-> >       }
-> > -
-> > -     if (it6505->hdcp_desired)
-> > -             it6505_start_hdcp(it6505);
-> >  }
-> >
-> >  static void it6505_link_step_train_process(struct it6505 *it6505)
-> > @@ -2399,6 +2397,14 @@ static void it6505_irq_hdcp_done(struct it6505 *it6505)
-> >
-> >       DRM_DEV_DEBUG_DRIVER(dev, "hdcp done interrupt");
-> >       it6505->hdcp_status = HDCP_AUTH_DONE;
-> > +     if (it6505->connector) {
-> > +             struct drm_device *drm_dev = it6505->connector->dev;
-> > +
-> > +             drm_modeset_lock(&drm_dev->mode_config.connection_mutex, NULL);
-> > +             drm_hdcp_update_content_protection(it6505->connector,
-> > +                                                DRM_MODE_CONTENT_PROTECTION_ENABLED);
-> > +             drm_modeset_unlock(&drm_dev->mode_config.connection_mutex);
-> > +     }
-> >       it6505_show_hdcp_info(it6505);
-> >  }
-> >
-> > @@ -2931,6 +2937,7 @@ static void it6505_bridge_atomic_enable(struct drm_bridge *bridge,
-> >       if (WARN_ON(!connector))
-> >               return;
-> >
-> > +     it6505->connector = connector;
-> >       conn_state = drm_atomic_get_new_connector_state(state, connector);
-> >
-> >       if (WARN_ON(!conn_state))
-> > @@ -2974,6 +2981,7 @@ static void it6505_bridge_atomic_disable(struct drm_bridge *bridge,
-> >
-> >       DRM_DEV_DEBUG_DRIVER(dev, "start");
-> >
-> > +     it6505->connector = NULL;
-> >       if (it6505->powered) {
-> >               it6505_drm_dp_link_set_power(&it6505->aux, &it6505->link,
-> >                                            DP_SET_POWER_D3);
-> > @@ -3028,6 +3036,50 @@ static struct edid *it6505_bridge_get_edid(struct drm_bridge *bridge,
-> >       return edid;
-> >  }
-> >
-> > +static int it6505_connector_atomic_check(struct it6505 *it6505,
-> > +                                      struct drm_connector_state *state)
-> > +{
-> > +     struct device *dev = &it6505->client->dev;
-> > +     int cp = state->content_protection;
-> > +
-> > +     DRM_DEV_DEBUG_DRIVER(dev, "hdcp connector state:%d, curr hdcp state:%d",
-> > +                          cp, it6505->hdcp_status);
-> > +
-> > +     if (!it6505->hdcp_desired) {
-> > +             DRM_DEV_DEBUG_DRIVER(dev, "sink not support hdcp");
-> > +             return 0;
-> > +     }
-> > +
-> > +     if (it6505->hdcp_status == HDCP_AUTH_GOING)
-> > +             return -EINVAL;
-> > +
-> > +     if (cp == DRM_MODE_CONTENT_PROTECTION_UNDESIRED) {
-> > +             if (it6505->hdcp_status == HDCP_AUTH_DONE)
-> > +                     it6505_stop_hdcp(it6505);
->
-> You shouldn't touch the hardware in atomic_check, this should be done in the
-> commit.
->
-Since it6505 is a bridge, do you have suggested callbacks in
-drm_bridge_funcs similar to commit?
+On 24-11-22, 11:27, xiaowu.ding wrote:
+> From: Xiaowu Ding <xiaowu.ding@jaguarmicro.com>
+> 
+> When using the arm mhuv2 data transfer mode , sometimes the sender can
+> not send data anymore ,and sender will blocking because of receiver did not
+> clear the stat_clear.
+> 
+> The test scene:
+> A is sender(poll mode) ; B is receiver (interrupt mode)
+> When A send msg to B ,but B did not have register the mailbox . The B will
+> miss the message ,and will not clear the stat_clear. So the sender A will
+>  be send blocking status and can not send again anymore.
+> 
+> So the patch just clear the stat_clear within the rx startup function. Just
+> Drop the last message before receiver will not be ready for receiver .
+> 
+> Signed-off-by: Xiaowu Ding <xiaowu.ding@jaguarmicro.com>
+> ---
+>  drivers/mailbox/arm_mhuv2.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/mailbox/arm_mhuv2.c b/drivers/mailbox/arm_mhuv2.c
+> index a47aef8df52f..7aef458f0b18 100644
+> --- a/drivers/mailbox/arm_mhuv2.c
+> +++ b/drivers/mailbox/arm_mhuv2.c
+> @@ -327,6 +327,14 @@ static int mhuv2_data_transfer_rx_startup(struct mhuv2 *mhu,
+>  {
+>  	struct mhuv2_mbox_chan_priv *priv = chan->con_priv;
+>  	int i = priv->ch_wn_idx + priv->windows - 1;
+> +	const int windows = priv->windows;
+> +	int j, idx;
+> +
+> +	/* clear the rx stat_clear */
+> +	for (j = 0; j < windows; j++) {
+> +		idx = priv->ch_wn_idx + j;
+> +		writel_relaxed(0xFFFFFFFF, &mhu->recv->ch_wn[idx].stat_clear);
+> +	}
 
-> > +     } else if (cp == DRM_MODE_CONTENT_PROTECTION_DESIRED) {
-> > +             if (it6505->hdcp_status == HDCP_AUTH_IDLE &&
-> > +                 it6505->link_state == LINK_OK)
-> > +                     it6505_start_hdcp(it6505);
->
-> Same here
->
-> > +     } else {
-> > +             if (it6505->hdcp_status == HDCP_AUTH_IDLE) {
-> > +                     DRM_DEV_DEBUG_DRIVER(dev, "invalid to set hdcp enabled");
-> > +                     return -EINVAL;
-> > +             }
-> > +     }
->
-> In general, I think there are a number of locking and state issues with this
-> approach. I had pulled all of this logic into a set of helpers [1], but the
-> patchset has gotten stale on the list. You might consider looking at patches 1-4
-> to see how the state and locking should be handled to avoid races.
->
+Since this is already done in mhuv2_data_transfer_read_data(), I am not sure why
+it is required again.
 
-After checking the series, all the hdcp controls are done in dp
-controller instead of bridges. Is it proper for the bridge to update
-the HDCP state?
-- If it's not, then this series might be going in the wrong direction.
-- If it is, since the current it6505 enables HDCP in the hardware
-(it6505_start_hdcp() is called ) all the time, can we just update the
-state without turning it off?
+>  
+>  	/*
+>  	 * The protocol mandates that all but the last status register must be
 
-
-> Sean
->
-> [1] - https://lore.kernel.org/all/20220411204741.1074308-1-sean@poorly.run/
->
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int it6505_bridge_atomic_check(struct drm_bridge *bridge,
-> > +                                   struct drm_bridge_state *bridge_state,
-> > +                                   struct drm_crtc_state *crtc_state,
-> > +                                   struct drm_connector_state *conn_state)
-> > +{
-> > +     struct it6505 *it6505 = bridge_to_it6505(bridge);
-> > +
-> > +     return it6505_connector_atomic_check(it6505, conn_state);
-> > +}
-> > +
-> >  static const struct drm_bridge_funcs it6505_bridge_funcs = {
-> >       .atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
-> >       .atomic_destroy_state = drm_atomic_helper_bridge_destroy_state,
-> > @@ -3035,6 +3087,7 @@ static const struct drm_bridge_funcs it6505_bridge_funcs = {
-> >       .attach = it6505_bridge_attach,
-> >       .detach = it6505_bridge_detach,
-> >       .mode_valid = it6505_bridge_mode_valid,
-> > +     .atomic_check = it6505_bridge_atomic_check,
-> >       .atomic_enable = it6505_bridge_atomic_enable,
-> >       .atomic_disable = it6505_bridge_atomic_disable,
-> >       .atomic_pre_enable = it6505_bridge_atomic_pre_enable,
-> > @@ -3354,6 +3407,7 @@ static int it6505_i2c_probe(struct i2c_client *client,
-> >       it6505->bridge.type = DRM_MODE_CONNECTOR_DisplayPort;
-> >       it6505->bridge.ops = DRM_BRIDGE_OP_DETECT | DRM_BRIDGE_OP_EDID |
-> >                            DRM_BRIDGE_OP_HPD;
-> > +     it6505->bridge.support_hdcp = true;
-> >       drm_bridge_add(&it6505->bridge);
-> >
-> >       return 0;
-> > --
-> > 2.38.1.584.g0f3c55d4c2-goog
-> >
->
-> --
-> Sean Paul, Software Engineer, Google / Chromium OS
+-- 
+viresh
