@@ -2,123 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA2646375FD
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:13:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66E97637600
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:14:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbiKXKNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 05:13:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56406 "EHLO
+        id S229878AbiKXKO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 05:14:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiKXKNS (ORCPT
+        with ESMTP id S229649AbiKXKO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 05:13:18 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E04094A6D
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:13:16 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id a1-20020a17090abe0100b00218a7df7789so4704976pjs.5
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:13:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=k2dr7Cgu4oJVGxGU1Y/2qFukYAZmH/+X4Fm9CRZLrY8=;
-        b=P9EOPeyXPx8GBJUYiq9uOyAn/qCWcWTGvL6Wha5DJLhTpCMmeXU8Qwr+VvfGYTryoM
-         0tUJDO5CfhLJ3URozTuKhk7INuvCw7+W74GbRlWy9SKKytlYp1sb0F9FzanRATTnkLyI
-         Yp53dXTE6HyC/L2c3UhFnhXXKUJiwP6/FINdzAf/0o9w+IoX9bJ90qSXgmlvZfhnPisN
-         FT8feH4EmP3pVlGqPUb2mgQRozoam3WpwGfb/nF/hr/ChS15K5bu0nbnkazVjdyLWhi8
-         Dv3WpK4QujOTOytec+yPzPzU14p2UnmmkE1JqnPzOVjjKDxWlvtvlKS79H2QlaSxb2b5
-         yOKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k2dr7Cgu4oJVGxGU1Y/2qFukYAZmH/+X4Fm9CRZLrY8=;
-        b=br7qCSQNwRigMI4E6bivQHV+qOugKpsZ40SNGD1FnrE2FZJ5R74hWnFKYe+B+CbOgL
-         URKBoqmVCIvoTjsepvXzTTBpQUKA14nk8ywHr1FMNlr6jIeEnq1+qETGtC3DAFbghfV+
-         Cy0KAIWuRgkguBlJ1NTE28B8I/FpkY/1Vl82pGJ6oSxq0Cu7zRlu8zlSbF0TOSr4n6XM
-         TGfzcptxet7XHFAdcMicHnKUUAPCMso1rrOlLglH5tnOkbXNoUa9qwzDMWo+gh3g5YxS
-         m7YA280iS1fUMJNArRh1Yxto5MY037OZZJCiYG42cbbgxIREB5PqUdMgfrb8XIU4Z6Jo
-         5AHQ==
-X-Gm-Message-State: ANoB5plGubHUcXOgdbwseGW+ePrl9kV/BBnbqhvUsXFVOYAd8Mogwaor
-        YEv8MIdhd9AylYhdPbR588se
-X-Google-Smtp-Source: AA0mqf4t6fAJ8A/JX49OHFGtob0Y2bkzouwdtsvSrPv9mEsKtqsl4IbjvZwzfzqw9F0zT26bCyhhsw==
-X-Received: by 2002:a17:90b:f04:b0:218:8ec2:a4e2 with SMTP id br4-20020a17090b0f0400b002188ec2a4e2mr27805083pjb.174.1669284796009;
-        Thu, 24 Nov 2022 02:13:16 -0800 (PST)
-Received: from thinkpad ([59.92.97.13])
-        by smtp.gmail.com with ESMTPSA id pl18-20020a17090b269200b00218f830c63esm842600pjb.1.2022.11.24.02.13.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 02:13:14 -0800 (PST)
-Date:   Thu, 24 Nov 2022 15:43:09 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     martin.petersen@oracle.com, jejb@linux.ibm.com,
-        andersson@kernel.org, vkoul@kernel.org, quic_cang@quicinc.com,
-        quic_asutoshd@quicinc.com, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-scsi@vger.kernel.org, dmitry.baryshkov@linaro.org,
-        ahalaney@redhat.com, abel.vesa@linaro.org
-Subject: Re: [PATCH v3 20/20] MAINTAINERS: Add myself as the maintainer for
- Qcom UFS driver
-Message-ID: <20221124101309.GE5119@thinkpad>
-References: <20221123074826.95369-1-manivannan.sadhasivam@linaro.org>
- <20221123074826.95369-21-manivannan.sadhasivam@linaro.org>
- <Y35nBIIRmu3w9C1C@gmail.com>
+        Thu, 24 Nov 2022 05:14:26 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBBFFC0503;
+        Thu, 24 Nov 2022 02:14:25 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AOAAN3s014389;
+        Thu, 24 Nov 2022 10:13:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : mime-version : message-id :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=/jYKHwVqi5Bb3zOWYzhgtzks4VPghnmXgxJb0Lk/TDg=;
+ b=r0Nb51Prs0/h6RY+oQv+0Ue7AEzG4ORNOilG007yr3PZnQtLmLV2amBOlDCyh56hVQwF
+ TvZfGdooH2Ro/9V/mEA4hqzSEAr9VWBh9EJ5JvDlCEXpVN6q6+RVAWbhrF5N0Yp1r9/u
+ nGV7UTokh3flXlQ2H8gpebqNBY3/CLgErWy9afnCPkfFzLBMNA+boibcaCpiSnxdLYxF
+ D7qrF1c9JESy/VdOq+lbT1NIOr821VNrVwBuL/HqVBa9km/Zvqxgcrhh3L8o9hUaPsl5
+ KVK1g1QnAbCLXcb8D92AcHPgJ4bkrucCX20in0Sakj+KyqiJRMKJhPuu9LeaV4B6fdtP Nw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m10ph0k8a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 24 Nov 2022 10:13:58 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AO9N3YQ031846;
+        Thu, 24 Nov 2022 10:13:57 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m10ph0k7b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 24 Nov 2022 10:13:57 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AOA7e57009899;
+        Thu, 24 Nov 2022 10:13:55 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3kxpdj00b4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 24 Nov 2022 10:13:54 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AOADqgt42139944
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 24 Nov 2022 10:13:52 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8F58D42042;
+        Thu, 24 Nov 2022 10:13:52 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 272A74203F;
+        Thu, 24 Nov 2022 10:13:52 +0000 (GMT)
+Received: from localhost (unknown [9.43.36.53])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 24 Nov 2022 10:13:52 +0000 (GMT)
+Date:   Thu, 24 Nov 2022 15:43:50 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
+Subject: Re: [PATCH] powerpc/bpf: Only update ldimm64 during extra pass when
+ it is an address
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hao Luo <haoluo@google.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>, KP Singh <kpsingh@kernel.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Stanislav Fomichev <sdf@google.com>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>
+References: <3f6d302a2068d9e357efda2d92c8da99a0f2d0b2.1669278892.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <3f6d302a2068d9e357efda2d92c8da99a0f2d0b2.1669278892.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y35nBIIRmu3w9C1C@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1669284441.66eunvaboi.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: _MbERAMhLbV9ShnTyyIoUxaOAONes4jL
+X-Proofpoint-GUID: RZOUyJmB4of1rqkOBNDGVb-Jn9vO60P5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-24_07,2022-11-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ priorityscore=1501 adultscore=0 spamscore=0 phishscore=0 mlxscore=0
+ lowpriorityscore=0 bulkscore=0 malwarescore=0 clxscore=1011
+ impostorscore=0 mlxlogscore=770 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2210170000 definitions=main-2211240079
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 06:31:32PM +0000, Eric Biggers wrote:
-> On Wed, Nov 23, 2022 at 01:18:26PM +0530, Manivannan Sadhasivam wrote:
-> > Qcom UFS driver has been left un-maintained till now. I'd like to step
-> > up to maintain the driver and its binding.
-> > 
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >  MAINTAINERS | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> > 
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index cf0f18502372..149fd6daf52b 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -21097,6 +21097,14 @@ L:	linux-mediatek@lists.infradead.org (moderated for non-subscribers)
-> >  S:	Maintained
-> >  F:	drivers/ufs/host/ufs-mediatek*
-> >  
-> > +UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER QUALCOMM HOOKS
-> > +M:	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > +L:	linux-arm-msm@vger.kernel.org
-> > +L:	linux-scsi@vger.kernel.org
-> > +S:	Maintained
-> > +F:	Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-> > +F:	drivers/ufs/host/ufs-qcom.c
-> 
-> Thanks for volunteering to maintain this driver!
-> 
-> What about ufs-qcom.h and ufs-qcom-ice.c?  Those are part of this driver too.
-> 
-> The pattern drivers/ufs/host/ufs-qcom* would cover all these files.
-> 
+Christophe Leroy wrote:
+> ldimm64 is not only used for loading function addresses, and
 
-Sorry, forgot the wildcard! Will fix it in next revision.
+That's probably true today, but I worry that that can change upstream=20
+and we may not notice at all.
 
-Thanks,
-Mani
+> the NOPs added for padding are impacting performance, so avoid
+> them when not necessary.
+>=20
+> On QEMU mac99, with the patch:
+>=20
+> test_bpf: #829 ALU64_MOV_K: all immediate value magnitudes jited:1 167436=
+810 PASS
+> test_bpf: #831 ALU64_OR_K: all immediate value magnitudes jited:1 1707029=
+40 PASS
+>=20
+> Without the patch:
+>=20
+> test_bpf: #829 ALU64_MOV_K: all immediate value magnitudes jited:1 173012=
+360 PASS
+> test_bpf: #831 ALU64_OR_K: all immediate value magnitudes jited:1 1764240=
+90 PASS
+>=20
+> That's a 3.5% performance improvement.
 
-> - Eric
+A better approach would be to do a full JIT during the extra pass.=20
+That's what most other architectures do today. And, as long as we can=20
+ensure that the JIT'ed program size can never increase during the=20
+extra pass, we should be ok to do a single extra pass.
 
--- 
-மணிவண்ணன் சதாசிவம்
+
+- Naveen
