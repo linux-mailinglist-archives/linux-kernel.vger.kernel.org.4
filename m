@@ -2,86 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A57206377A3
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 12:27:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FDF56377AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 12:29:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbiKXL1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 06:27:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60102 "EHLO
+        id S229893AbiKXL3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 06:29:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229976AbiKXL1e (ORCPT
+        with ESMTP id S229553AbiKXL3K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 06:27:34 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FAB62D8
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 03:27:31 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id c1so2103180lfi.7
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 03:27:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=g/RcUCBSrTzcNlLdWw7otlBZrxfGPBbiRBBDWc0XP4A=;
-        b=HbCrXU+SzUJguUIe4zXMLiPiGN8Oa9EjS1Wu35u/YBnJoq5/8xUuNLz2b3USLgdr+2
-         fskMhE4MJ5Ruiu3AdZOwN6d8Byd1ObVR5Rlhj0nwTcgG8u3GntM0xJd3R7pzRoRqqb2H
-         9bttEo22Xwo5MJnldX0IRdQdv89MyyXoeCVvrlNBAhvYphYA1EqOXMQlmGmqs5NZAJqu
-         e4kIOQQFuQPDzfgxyKRcvc+gWwu5aJ85pec7iG/JWtLwPcF08OuND1ggAaemojQmVVxJ
-         cvB9J2HFyOoinRUqGRvrmhqpfStr3Xm/fui8TxtpCJgusJpG8VN3Jx/y5Fhm02Uc9fJG
-         O5bA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g/RcUCBSrTzcNlLdWw7otlBZrxfGPBbiRBBDWc0XP4A=;
-        b=NMtkEtHLxt5rguD/LnOWja2qNdg0ySFrtlwsHU9obnfQ2wVsEWobKIsOXz9l2AOYK1
-         hYf4kFmNFIpiUrua99HZoKx/sv+Ia4h2DsD7XSN4LLwzHVFkR/gpPOupITNbBfXd6LU4
-         uq8eBoyB6R49XIt49IEvH2eaUStm6gimbo9lwlDsbWm734Cmee6Aje6zXJmxINQiwIOh
-         SYwS+qubbTVnNwj6G9EdzsxVLgcxiijPUJEVNDWKbiLAtMo9D05XtyZq9kWpNumDIBOx
-         I+5pLtxV5TJLcsTZ7vNMlkfwr6Aofzn1WzotFAC7EMti35d8a6494WkgjfL5PS9/8TpJ
-         dtaw==
-X-Gm-Message-State: ANoB5pkS4di4+ZIyQ0oESZVNLERfX49lpvabMlr8an1fpZJBhxjq8nFW
-        KmzVGFu1FDEpigaKAIgAwuM+nw==
-X-Google-Smtp-Source: AA0mqf6XG2yxSA16v4PWoQHaCgxxnQd1h0fWdr0Q6o7i6UnADvTLM9Oqi2ogidxtB+hSXcoYiodb9w==
-X-Received: by 2002:a05:6512:3416:b0:498:f589:c1b3 with SMTP id i22-20020a056512341600b00498f589c1b3mr5473600lfr.406.1669289250094;
-        Thu, 24 Nov 2022 03:27:30 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id bg25-20020a05651c0b9900b0027708462fe5sm77157ljb.120.2022.11.24.03.27.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Nov 2022 03:27:29 -0800 (PST)
-Message-ID: <b54cd0a4-7ee8-e8c0-ceda-18b29588d535@linaro.org>
-Date:   Thu, 24 Nov 2022 12:27:28 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v4 1/2] dt-bindings: arm: qcom: Add zombie
-Content-Language: en-US
-To:     =?UTF-8?B?5qWK5a6X57+w?= <ecs.taipeikernel@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bob Moragues <moragues@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>, Harvey <hunge@google.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, Gavin.Lee@ecs.com.tw,
-        Darren.Chen@ecs.com.tw, Abner.Yen@ecs.com.tw, Vicy.Lee@ecs.com.tw,
-        Jason.Huang@ecs.com.tw
-References: <20221124115712.v4.1.Idfcba5344b7995b44b7fa2e20f1aa4351defeca6@changeid>
- <CAPao8GK93KMrtaXw7mNWOCE60zk=uCENLfBXhNRVxJXEnnaGFg@mail.gmail.com>
- <f58866c8-0164-2e59-4ff3-f9a4f9334e49@linaro.org>
- <CAPao8GKbdK79Z7w91x0T6JW9v6VFoeYSaXGGAuzB_=ukR9g0_w@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAPao8GKbdK79Z7w91x0T6JW9v6VFoeYSaXGGAuzB_=ukR9g0_w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        Thu, 24 Nov 2022 06:29:10 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E731114C
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 03:29:09 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NHwkD3fDHz5BNRf;
+        Thu, 24 Nov 2022 19:29:08 +0800 (CST)
+Received: from szxlzmapp01.zte.com.cn ([10.5.231.85])
+        by mse-fl1.zte.com.cn with SMTP id 2AOBSw5F026946;
+        Thu, 24 Nov 2022 19:28:58 +0800 (+08)
+        (envelope-from yang.yang29@zte.com.cn)
+Received: from mapi (szxlzmapp02[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Thu, 24 Nov 2022 19:29:01 +0800 (CST)
+Date:   Thu, 24 Nov 2022 19:29:01 +0800 (CST)
+X-Zmail-TransId: 2b04637f557d190ecad6
+X-Mailer: Zmail v1.0
+Message-ID: <202211241929015476424@zte.com.cn>
+Mime-Version: 1.0
+From:   <yang.yang29@zte.com.cn>
+To:     <akpm@linux-foundation.org>
+Cc:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <xu.panda@zte.com.cn>, <yang.yang29@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHQgXSBtbTogdm1zY2FuOiB1c2Ugc3lzZnNfZW1pdCgpIHRvIGluc3RlYWQgb2Ygc2NucHJpbnRmKCk=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 2AOBSw5F026946
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 637F5584.000 by FangMail milter!
+X-FangMail-Envelope: 1669289348/4NHwkD3fDHz5BNRf/637F5584.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<yang.yang29@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 637F5584.000/4NHwkD3fDHz5BNRf
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,21 +54,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/11/2022 12:20, 楊宗翰 wrote:
-> Hi Krzysztof, Matthias,
-> 
-> How to use "get_maintainers.pl"?
-> 
-> I find this script in path "<MyCodebase>/kernel/v5.15/script", and output
+From: Xu Panda <xu.panda@zte.com.cn>
 
-This looks like v5.15 kernel which is heavily outdated. Please never
-work on such kernels when interacting with upstream. The rule is you
-work on either last mainline kernel (v6.1-rc6), maintainers for-next
-branch (you should know who is the maintainer of subsystem you submit
-to, get_maintainers.pl gives this information) or on moderately recent
-linux-next. For bigger patchsets there might be exceptions for these
-rules, but it's not the case here.
+Replace the open-code with sysfs_emit() to simplify the code.
 
-Best regards,
-Krzysztof
+Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+Signed-off-by: Yang Yang <yang.yang29@zte.com>
+---
+ mm/vmscan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index 1147034c86a2..ac494806ee51 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -5404,7 +5404,7 @@ static ssize_t show_enabled(struct kobject *kobj, struct kobj_attribute *attr, c
+ 	if (IS_ENABLED(CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG) && get_cap(LRU_GEN_NONLEAF_YOUNG))
+ 		caps |= BIT(LRU_GEN_NONLEAF_YOUNG);
+
+-	return snprintf(buf, PAGE_SIZE, "0x%04x\n", caps);
++	return sysfs_emit(buf, "0x%04x\n", caps);
+ }
+
+ /* see Documentation/admin-guide/mm/multigen_lru.rst for details */
+-- 
+2.15.2
