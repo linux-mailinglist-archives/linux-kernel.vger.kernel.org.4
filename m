@@ -2,153 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B231F6377EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 12:48:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1C116377F4
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 12:49:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230212AbiKXLsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 06:48:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54474 "EHLO
+        id S230218AbiKXLtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 06:49:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbiKXLsX (ORCPT
+        with ESMTP id S229581AbiKXLta (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 06:48:23 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5363C12D12
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 03:48:21 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id d6so2163682lfs.10
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 03:48:21 -0800 (PST)
+        Thu, 24 Nov 2022 06:49:30 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A66193F9;
+        Thu, 24 Nov 2022 03:49:29 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id t25-20020a1c7719000000b003cfa34ea516so4362011wmi.1;
+        Thu, 24 Nov 2022 03:49:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=N2HKGTSGqqVFsCX/081YYxGW7i7DJTZQgpoCnaIwzdY=;
-        b=Sj+Lgjkh68ggiTzrpmbB3Sm+Y9MsE5iHEDvY4odizpycBHXvNlpArV5Uv1HNQk7SVq
-         0g1g/26u5u+68CwK34lbARrC0+xHiVoW/90osPr/IPTXvTv4INxpOmNRqw/JgYcqnmqb
-         iJDKbN+owA3pqbH0MRb5A12zUUgYpefduN/NxXHwEarRmUXf6QNwhsJ4YPfjy6Bwa/nK
-         AE1J9GOcJbt8h0rqPbHMKRcAuW+LtDCyeqcWRSG7fCSwJzMVZ5zX7S+w1rVE9FGeXv1E
-         qREnI1sga7NY8wJdV4ayuYAsRT1NQgMsN8TakfwcUdcRJj3H2h3R8xEHA6U8aogHncL9
-         vPyQ==
+        d=gmail.com; s=20210112;
+        h=user-agent:content-disposition:mime-version:message-id:subject:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KWfj56pFXj1HTsSt2vtLzvRq7ahqzIR48ZMo4DRqEeY=;
+        b=I7f0FQe64ZYl5Lvmn1JKId9c+MghKklHNQtOPw1msJG0fE40JL2mXsujNZNlvgiS+6
+         ljQeF5b1coULk1oz0gI1nDd5GCd8oF0pD9dk6N/QrIPVibX+BsSi3eQ1osAx4hZ0KMj5
+         RF/w8ay2QDO7hgAfEOh7VJ8g3Q4OQBFBLP42Qba3SWPWb+ay9MqixKjgMalUoxOzofpd
+         o2+XD3vqFZU0xszWit8exEzymNAWdE1x8agJiF2KlrcLPnbbyClKOpG4GeE5AlV79fzv
+         sfGlJnOs08oTfC+/pU/clhI+vMrSQjP+14sdSmXLG7TXkbsZ1X4/G3agoxyjdOu226OE
+         G2ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=N2HKGTSGqqVFsCX/081YYxGW7i7DJTZQgpoCnaIwzdY=;
-        b=zifISGWpkRtbktwG8pN6v8AYO4XfzxGoz+7EXcaXs3QYsSOzvlt7qikjaFuWsiVV2f
-         Ba6b4h2HwXY/WXo/x3SN3BAXiPLDG+/Lxq7x5A+lFh8t57X9h+smSOUU8xWluN3pVtWV
-         4/cbxw5L0wq9d/SEj9GyOvqhM1nljvsDc3U1ChMVQyV0lm/eNOyek4lvLSsPpKbKJfLg
-         x7/AjQl1zD8eQj9o9LixHP0VtPH65geZgiK8BM7FU5oPRwzCZZdTUOvXS4EkxOWeZqM/
-         Abybvgis3BDLM/+skJ+/9g84Qc+vcnGY6rwo+mMht0wQEjzJLK+tD55t8hwGdjdtPHyy
-         NeMg==
-X-Gm-Message-State: ANoB5pk+daKd3Ab6ATNJUiVpQ5NfCw4vUNsDvPEyCFiP92sCyUQCyGcC
-        l1msbM2GenbXtB1X58EVlhjH8vBFzkDb8vjv
-X-Google-Smtp-Source: AA0mqf6tMtlpmOneA7Hh0wom7iAN9hJaITM2oQA4FbiF9KPqqfkvJpZ94SmKrlz0TMIh8vZvDF0+ww==
-X-Received: by 2002:a19:4316:0:b0:4a2:2c37:e1bb with SMTP id q22-20020a194316000000b004a22c37e1bbmr7728147lfa.487.1669290499715;
-        Thu, 24 Nov 2022 03:48:19 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id x3-20020a056512078300b004ad5f5c2b28sm98868lfr.119.2022.11.24.03.48.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Nov 2022 03:48:19 -0800 (PST)
-Message-ID: <1078fdea-bbb4-2a07-85f9-a81bc876dcbe@linaro.org>
-Date:   Thu, 24 Nov 2022 12:48:18 +0100
+        h=user-agent:content-disposition:mime-version:message-id:subject:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KWfj56pFXj1HTsSt2vtLzvRq7ahqzIR48ZMo4DRqEeY=;
+        b=xG81gWnbgAmjV7dquv2oppyjikHRn27+DxOH9uFglg8lsyiHSWmi+9VnSlG+pKDG5F
+         2ndV85z/ik2TO/TcUNK4YZAkx98AwvpPN3iTlywDbypZKEy9rq1MerMSLVTwly+xDi1l
+         sDrDd123tcR2bnrV7RI3SdTL5owJw3Q0drDSDrh59a0EYqBbNMET0NeiaQxthNlIugXq
+         c/Yz0LzH6Q/4GDJyKqo/mNhl0k0StsvZnUG5Vt8OY2lB0LGFnb/Er89jV0Oj4wt53uPD
+         DM9bizKNH6nh8j2kaq0edYc//QMljdIvqHikbwSV5SkOt9+HhPqV1Pj5AvVzrtGWuLZz
+         T5Cw==
+X-Gm-Message-State: ANoB5pkdSGztQVTft88wxnAa/Eafi5/1VTdHVZyHDar7Ds7bMwX0qcTP
+        L2dewqQBMaFCddWExzZQZCme60s1Jyk=
+X-Google-Smtp-Source: AA0mqf5sC1IJZpUnd2RiJHs5ipNZyZyCV6ATcBIL0NgqHymWFFEyOq3K2NkU5jL7Wa729EL58ORVhg==
+X-Received: by 2002:a05:600c:3d16:b0:3c6:de4a:d768 with SMTP id bh22-20020a05600c3d1600b003c6de4ad768mr10082720wmb.61.1669290567905;
+        Thu, 24 Nov 2022 03:49:27 -0800 (PST)
+Received: from debian ([89.238.191.199])
+        by smtp.gmail.com with ESMTPSA id p11-20020a05600c468b00b003cfd10a33afsm5727643wmo.11.2022.11.24.03.48.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Nov 2022 03:49:26 -0800 (PST)
+Date:   Thu, 24 Nov 2022 12:48:23 +0100
+From:   Richard Gobert <richardbgobert@gmail.com>
+To:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] net: setsockopt: fix IPV6_UNICAST_IF option for connected
+ sockets
+Message-ID: <20221124114713.GA73129@debian>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 1/9] dt-bindings: clock: Add SM8550 GCC clocks
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org
-References: <20221123142009.594781-1-abel.vesa@linaro.org>
- <20221123142009.594781-2-abel.vesa@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221123142009.594781-2-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/11/2022 15:20, Abel Vesa wrote:
-> Add device tree bindings for global clock controller on SM8550 SoCs.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
-> 
-> Changes since v1:
->  * dropped clock-names since driver uses IDs now
->  * based on recent bindings, like Krzysztof asked
->  * used qcom,gcc.yaml and dropped redundant properties
->  * renamed qcom,gcc-sm8550.h to qcom,sm8550-gcc.h, to match
->    compatible
->  * dropped "Optional", like Krzysztof asked
-> 
->  .../bindings/clock/qcom,sm8550-gcc.yaml       |  56 +++++
->  include/dt-bindings/clock/qcom,sm8550-gcc.h   | 231 ++++++++++++++++++
->  2 files changed, 287 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/qcom,sm8550-gcc.yaml
->  create mode 100644 include/dt-bindings/clock/qcom,sm8550-gcc.h
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,sm8550-gcc.yaml b/Documentation/devicetree/bindings/clock/qcom,sm8550-gcc.yaml
-> new file mode 100644
-> index 000000000000..acc540aa137d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/qcom,sm8550-gcc.yaml
-> @@ -0,0 +1,56 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/qcom,sm8550-gcc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Global Clock & Reset Controller on SM8550
-> +
-> +maintainers:
-> +  - Bjorn Andersson <andersson@kernel.org>
-> +
-> +description: |
-> +  Qualcomm global clock control module provides the clocks, resets and power
-> +  domains on SM8550
-> +
-> +  See also:: include/dt-bindings/clock/qcom,sm8550-gcc.h
-> +
-> +properties:
-> +  compatible:
-> +    const: qcom,sm8550-gcc
-> +
-> +  clocks:
-> +    items:
-> +      - description: Board XO source
-> +      - description: Sleep clock source
-> +      - description: PCIE 0 Pipe clock source
-> +      - description: PCIE 1 Pipe clock source
-> +      - description: PCIE 1 Phy Auxiliary clock source
-> +      - description: UFS Phy Rx symbol 0 clock source
-> +      - description: UFS Phy Rx symbol 1 clock source
-> +      - description: UFS Phy Tx symbol 0 clock source
-> +      - description: USB3 Phy wrapper pipe clock source
-> +    minItems: 2
+Change the behaviour of ip6_datagram_connect to consider the interface
+set by the IPV6_UNICAST_IF socket option, similarly to udpv6_sendmsg.
 
-I didn't mention in your v1 this explicitly (although I asked Melody to
-drop it), so apologies for this. Based on my understand and our IRC
-discussion, these clocks are needed for the driver (even if optional in
-some states of hardware). If driver needs them, let's make them
-required, so please drop "minItems: 2".
+This change is the IPv6 counterpart of the fix for IP_UNICAST_IF.
+The tests introduced by that patch showed that the incorrect
+behavior is present in IPv6 as well.
+This patch fixes the broken test.
 
-Best regards,
-Krzysztof
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Link: https://lore.kernel.org/r/202210062117.c7eef1a3-oliver.sang@intel.com
+
+Signed-off-by: Richard Gobert <richardbgobert@gmail.com>
+---
+ net/ipv6/datagram.c | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
+
+diff --git a/net/ipv6/datagram.c b/net/ipv6/datagram.c
+index 7c7155b48f17..c3999f9e3545 100644
+--- a/net/ipv6/datagram.c
++++ b/net/ipv6/datagram.c
+@@ -42,24 +42,30 @@ static void ip6_datagram_flow_key_init(struct flowi6 *fl6, struct sock *sk)
+ {
+ 	struct inet_sock *inet = inet_sk(sk);
+ 	struct ipv6_pinfo *np = inet6_sk(sk);
++	int oif;
+ 
+ 	memset(fl6, 0, sizeof(*fl6));
+ 	fl6->flowi6_proto = sk->sk_protocol;
+ 	fl6->daddr = sk->sk_v6_daddr;
+ 	fl6->saddr = np->saddr;
+-	fl6->flowi6_oif = sk->sk_bound_dev_if;
++	oif = sk->sk_bound_dev_if;
+ 	fl6->flowi6_mark = sk->sk_mark;
+ 	fl6->fl6_dport = inet->inet_dport;
+ 	fl6->fl6_sport = inet->inet_sport;
+ 	fl6->flowlabel = np->flow_label;
+ 	fl6->flowi6_uid = sk->sk_uid;
+ 
+-	if (!fl6->flowi6_oif)
+-		fl6->flowi6_oif = np->sticky_pktinfo.ipi6_ifindex;
++	if (!oif)
++		oif = np->sticky_pktinfo.ipi6_ifindex;
+ 
+-	if (!fl6->flowi6_oif && ipv6_addr_is_multicast(&fl6->daddr))
+-		fl6->flowi6_oif = np->mcast_oif;
++	if (!oif) {
++		if (ipv6_addr_is_multicast(&fl6->daddr))
++			oif = np->mcast_oif;
++		else
++			oif = np->ucast_oif;
++	}
+ 
++	fl6->flowi6_oif = oif;
+ 	security_sk_classify_flow(sk, flowi6_to_flowi_common(fl6));
+ }
+ 
+-- 
+2.36.1
 
