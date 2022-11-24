@@ -2,129 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9F6563796D
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:55:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3299163796E
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:56:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbiKXMz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 07:55:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40336 "EHLO
+        id S229896AbiKXMzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 07:55:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiKXMzm (ORCPT
+        with ESMTP id S229583AbiKXMzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 24 Nov 2022 07:55:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B521105AAE;
-        Thu, 24 Nov 2022 04:55:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A1442B827DB;
-        Thu, 24 Nov 2022 12:55:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D973C433D6;
-        Thu, 24 Nov 2022 12:55:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669294516;
-        bh=xlfV1TNMGUSVn1obIYOe5CMVSNYkPspSlOooLiZNgOA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SzCMtXT24GlkN5uPeNTsY2hlept4nKLRHt6AvMxyv//tekOWQE5DX6K7OhxR9b1EC
-         fZ0V8kGQYkLwfXRerzRl3RRTXn1ddgkFFyJT3aYKaehN703WnO6qB348jLmfA3+dXL
-         7aAbgv2+kVPpMt9SZUiem4rTxLKlkoygx5gctQm5pkQhzQsOQC5Icw6KDZz1kfxUnZ
-         b6KKVY1e4ayMhYKI/HNC1WnXa4PKEoc02AvFOuvhFnOW/PfLFj24+KfjPiJOU9+VrQ
-         q2u18SZmGoQ07OjrATqe8CSn4UtyyLG4iofS/vJH08GkoDLGvYxivga7/Zd0g2hKmI
-         ia/BS8MRkoUCw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 53C0E4034E; Thu, 24 Nov 2022 09:55:13 -0300 (-03)
-Date:   Thu, 24 Nov 2022 09:55:13 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Ajay Kaher <akaher@vmware.com>, peterz@infradead.org,
-        mingo@redhat.com, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, rostedt@goodmis.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        srivatsab@vmware.com, srivatsa@csail.mit.edu, amakhalov@vmware.com,
-        vsirnapalli@vmware.com
-Subject: Re: [PATCH] perf symbol: correction while adjusting symbol
-Message-ID: <Y39psTnUYxwWt1qo@kernel.org>
-References: <1669198696-50547-1-git-send-email-akaher@vmware.com>
- <Y38+NGjF1tZNHkwr@leoy-yangtze.lan>
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B1B21789F
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:55:23 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id q71so1495720pgq.8
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:55:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9gtzrOrsoNCV5o2QC8fgzxtE8ANXsxJSKoxo24IyFcc=;
+        b=RINqxyHQ1+PlMbJe7syJQm04IztogY5hCRUwRAOi2i6WrIByZqpDK/LPRjeplsTdtt
+         KmV0QCeI7hNtnElUTudG0rFIOCSmDz0TIEzLxL0dqiMXf5WqexjgDYpG04EqvRDOKN+A
+         hHGG54Gxkoxp5bX1FZuVUR+ZL2jp60VVAzJmgruSqKBm2U9UWswEHBwaNGnPpy3yScY3
+         Nd7FcA4BcRX0No/2vhLV0sttRpn69iZeRUtlXCFRXC8W0Vgz6kL1WigkyZ5Gr0mMT1KF
+         H6fK8w5WDLioJaJWJZcuGwt3lfRGfKbscQfk4Fq85TjYkZ7SOBS67RgtSGY7Fvdbb/uT
+         hFUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9gtzrOrsoNCV5o2QC8fgzxtE8ANXsxJSKoxo24IyFcc=;
+        b=rA3nS5LuhS73Pd6cRKZivdj1Of66gI80Gu33t/lYPZFqmL4AlfqqaDyE8wJy7TOOj4
+         3YndRxcEmxGiSZfWcPRpEuLz4tvaemFpsppoZ+0esA09ESZny8fLmYntRG91obZ2hM/W
+         RF30nd7pTTfnsegNqMVJs3bY/StFVXTtH2F3ZsN0r+Exu5JSjYFsw+RBtBUmVrr9S0M/
+         uTKf5GCerl+UqkIeSz85JkFdqlMvxI21R4bkenF3P/4MBjFCjHFuoozzcQOmPIemT036
+         cSvKpTHq8ldhFoCiXJFaUB+9caLRNVNJETAH7XV4bB6Tg2b2plMhtoOaJhOCHNBnOVBx
+         /Jlw==
+X-Gm-Message-State: ANoB5pmCJWq9FgOGBaLwZ324qONNS13D85RChRz5epbwn4KQ+gZPzvOb
+        ImE/f7GTenXhumhnnfMkTMQ=
+X-Google-Smtp-Source: AA0mqf4rEBDF5wX9BJnHhW0nfowVburVfHmQhsIXGzqgWOWAmaPXelMP15ZuJXhvQFBMs9Sb+5x4Pg==
+X-Received: by 2002:a63:ea52:0:b0:46f:9c0c:8673 with SMTP id l18-20020a63ea52000000b0046f9c0c8673mr13642591pgk.154.1669294522593;
+        Thu, 24 Nov 2022 04:55:22 -0800 (PST)
+Received: from hyeyoo ([114.29.91.56])
+        by smtp.gmail.com with ESMTPSA id y8-20020a17090a390800b0020d48bc6661sm3120211pjb.31.2022.11.24.04.55.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Nov 2022 04:55:21 -0800 (PST)
+Date:   Thu, 24 Nov 2022 21:55:15 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, patches@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 06/12] mm, slub: don't create kmalloc-rcl caches with
+ CONFIG_SLUB_TINY
+Message-ID: <Y39psxclH4QEAzN+@hyeyoo>
+References: <20221121171202.22080-1-vbabka@suse.cz>
+ <20221121171202.22080-7-vbabka@suse.cz>
+ <d77498f8-b15f-9dae-1803-2d2bbb99da50@suse.cz>
+ <Y39eLaW0mDNrHI6i@hyeyoo>
+ <4fb214a4-0535-2d4a-fcde-bc2ab71329e3@suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y38+NGjF1tZNHkwr@leoy-yangtze.lan>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <4fb214a4-0535-2d4a-fcde-bc2ab71329e3@suse.cz>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Nov 24, 2022 at 05:50:23PM +0800, Leo Yan escreveu:
-> Hi Ajay,
+On Thu, Nov 24, 2022 at 01:12:13PM +0100, Vlastimil Babka wrote:
+> On 11/24/22 13:06, Hyeonggon Yoo wrote:
+> > On Wed, Nov 23, 2022 at 02:53:43PM +0100, Vlastimil Babka wrote:
+> >> On 11/21/22 18:11, Vlastimil Babka wrote:
+> >> > Distinguishing kmalloc(__GFP_RECLAIMABLE) can help against fragmentation
+> >> > by grouping pages by mobility, but on tiny systems the extra memory
+> >> > overhead of separate set of kmalloc-rcl caches will probably be worse,
+> >> > and mobility grouping likely disabled anyway.
+> >> > 
+> >> > Thus with CONFIG_SLUB_TINY, don't create kmalloc-rcl caches and use the
+> >> > regular ones.
+> >> > 
+> >> > Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+> >> 
+> >> Fixed up in response to lkp report for a MEMCG_KMEM+SLUB_TINY combo:
+> >> ---8<---
+> >> From c1ec0b924850a2863d061f316615d596176f15bb Mon Sep 17 00:00:00 2001
+> >> From: Vlastimil Babka <vbabka@suse.cz>
+> >> Date: Tue, 15 Nov 2022 18:19:28 +0100
+> >> Subject: [PATCH 06/12] mm, slub: don't create kmalloc-rcl caches with
+> >>  CONFIG_SLUB_TINY
+> >> 
+> >> Distinguishing kmalloc(__GFP_RECLAIMABLE) can help against fragmentation
+> >> by grouping pages by mobility, but on tiny systems the extra memory
+> >> overhead of separate set of kmalloc-rcl caches will probably be worse,
+> >> and mobility grouping likely disabled anyway.
+> >> 
+> >> Thus with CONFIG_SLUB_TINY, don't create kmalloc-rcl caches and use the
+> >> regular ones.
+> >> 
+> >> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+> >> ---
+> >>  include/linux/slab.h |  9 +++++++--
+> >>  mm/slab_common.c     | 10 ++++++++--
+> >>  2 files changed, 15 insertions(+), 4 deletions(-)
+> >> 
+> >> diff --git a/include/linux/slab.h b/include/linux/slab.h
+> >> index 45efc6c553b8..ae2d19ec8467 100644
+> >> --- a/include/linux/slab.h
+> >> +++ b/include/linux/slab.h
+> >> @@ -336,12 +336,17 @@ enum kmalloc_cache_type {
+> >>  #endif
+> >>  #ifndef CONFIG_MEMCG_KMEM
+> >>  	KMALLOC_CGROUP = KMALLOC_NORMAL,
+> >> -#else
+> >> -	KMALLOC_CGROUP,
+> >>  #endif
+> >> +#ifdef CONFIG_SLUB_TINY
+> >> +	KMALLOC_RECLAIM = KMALLOC_NORMAL,
+> >> +#else
+> >>  	KMALLOC_RECLAIM,
+> >> +#endif
+> >>  #ifdef CONFIG_ZONE_DMA
+> >>  	KMALLOC_DMA,
+> >> +#endif
+> >> +#ifdef CONFIG_MEMCG_KMEM
+> >> +	KMALLOC_CGROUP,
+> >>  #endif
+> >>  	NR_KMALLOC_TYPES
+> >>  };
+> > 
+> > Can you please elaborate what the lkp report was about
+> > and how you fixed it? I'm not getting what the problem of previous
+> > version is.
 > 
-> On Wed, Nov 23, 2022 at 03:48:16PM +0530, Ajay Kaher wrote:
-> > perf doesn't provide proper symbol information for specially crafted
-> > .debug files.
-> > 
-> > Sometimes .debug file may not have similar program header as runtime
-> > ELF file. For example if we generate .debug file using objcopy
-> > --only-keep-debug resulting file will not contain .text, .data and
-> > other runtime sections. That means corresponding program headers will
-> > have zero FileSiz and modified Offset.
-> > 
-> > Example: program header of text section of libxxx.so:
-> > 
-> > Type           Offset             VirtAddr           PhysAddr
-> >                FileSiz            MemSiz              Flags  Align
-> > LOAD        0x00000000003d3000 0x00000000003d3000 0x00000000003d3000
-> >             0x000000000055ae80 0x000000000055ae80  R E    0x1000
-> > 
-> > Same program header after executing:
-> > objcopy --only-keep-debug libxxx.so libxxx.so.debug
-> > 
-> > LOAD        0x0000000000001000 0x00000000003d3000 0x00000000003d3000
-> >             0x0000000000000000 0x000000000055ae80  R E    0x1000
-> > 
-> > Offset and FileSiz have been changed. 
-> > 
-> > Following formula will not provide correct value, if program header
-> > taken from .debug file (syms_ss):
-> > 
-> >     sym.st_value -= phdr.p_vaddr - phdr.p_offset;
-> > 
-> > Correct program header information is located inside runtime ELF
-> > file (runtime_ss).
-> > 
-> > Fixes: 2d86612aacb7 ("perf symbol: Correct address for bss symbols")
-> > Signed-off-by: Ajay Kaher <akaher@vmware.com>
+> Report here:
+> https://lore.kernel.org/all/202211231949.nIyAWKam-lkp@intel.com/
 > 
+> Problem is that if the preprocessing results in e.g.
+> KMALLOC_NORMAL = 0,
+> KMALLOC_DMA = KMALLOC_NORMAL
+> KMALLOC_CGROUP,
+> KMALLOC_RECLAIM = KMALLOC_NORMAL,
+> NR_KMALLOC_TYPES
 > 
-> Just curious how you can produce this issue?  IIUC, the runtime symbol
-> files are copied into .debug folder and they can be found by perf tool
-> by matching build ID.  Seems to me, you manully use
-> "objcopy --only-keep-debug" command to strip runtime info from elf files
-> under .debug folder.  Do I understand correctly?
-> 
-> Though I have above question, this patch itself looks good to me,
-> thanks for the fixing!
-> 
-> Reviewed-by: Leo Yan <leo.yan@linaro.org>
+> then NR_KMALLOC_TYPES is not 2, but 1, because the enum's internal counter
+> got reset to 0 by KMALLOC_RECLAIM = KMALLOC_NORMAL. A common gotcha :/
 
-Had to apply it manually, as it was done on a codebase older than this:
+Thanks for quick and kind explanation :)
+That was easy to be missed.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6d518ac7be6223811ab947897273b1bbef846180
-
-author	Ian Rogers <irogers@google.com>	2022-07-31 09:49:23 -0700
-committer	Arnaldo Carvalho de Melo <acme@redhat.com>	2022-08-01 09:30:36 -0300
-
-@@ -1305,16 +1305,29 @@ dso__load_sym_internal(struct dso *dso, struct map *map, struct symsrc *syms_ss,
-
- 			if (elf_read_program_header(syms_ss->elf,
- 						    (u64)sym.st_value, &phdr)) {
--				pr_warning("%s: failed to find program header for "
-+				pr_debug4("%s: failed to find program header for "
- 					   "symbol: %s st_value: %#" PRIx64 "\n",
- 					   __func__, elf_name, (u64)sym.st_value);
+-- 
+Thanks,
+Hyeonggon
