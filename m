@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D5C7637484
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:54:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73407637485
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:55:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiKXIyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 03:54:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
+        id S229960AbiKXIy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 03:54:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiKXIyv (ORCPT
+        with ESMTP id S229642AbiKXIyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 24 Nov 2022 03:54:51 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E7810CEB0
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7346A10B43C
         for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:54:45 -0800 (PST)
-X-UUID: e1b7fc8b92984f0fa217638546b67cf1-20221124
+X-UUID: 4eec1624fe3e4ac1bd1052dd37f46a9b-20221124
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=81wfVrFGa0F5KGBMwUe92UrzpoG4Khjj+9dv7Pe3cgc=;
-        b=kB4Qv7ibiO9k/frbhoqa7DgVCF89awdOxRkSP2zROwQ2WicpCMu7e7TUfqHthkWqjsM+Kxw8awRbNs7YKMbS4UQpsI10ArRoJmotb+HXn+Z5kEp8f2HoBxLy/wwFVRF/fZuRl6+KKtn5EnLmrNl2UOnQLSAe2vcL4sSGeVxC5tU=;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=Se93twhCnANzbyfAp19LflQ7H378k9rkCrI1fa1AgUY=;
+        b=kaE5lrXdlSx/NNQjmuyyQJ7mZv2iZcS635v/rxTauMCA/80UDzSNnVpPucgo7AJXsPuck7eaWhnC9RhND4RbsIwvwLuHawXEmuEEYSOfy1a0708AunRnAL0+tmHnMEcRl8P1wRajLKZn7k/8YbZQ8joNfIdgAwmhrItkXahRLWg=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.14,REQID:1fedf52b-3988-48a4-9aba-8a4b487942be,IP:0,U
+X-CID-O-INFO: VERSION:1.1.14,REQID:016c2cf5-489e-4d9c-939f-472d708d3b4a,IP:0,U
         RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
         release,TS:0
-X-CID-META: VersionHash:dcaaed0,CLOUDID:4df031f9-3a34-4838-abcf-dfedf9dd068e,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:1,EDM:-3,IP:nil,U
+X-CID-META: VersionHash:dcaaed0,CLOUDID:7bc4b52f-2938-482e-aafd-98d66723b8a9,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
         RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: e1b7fc8b92984f0fa217638546b67cf1-20221124
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+X-UUID: 4eec1624fe3e4ac1bd1052dd37f46a9b-20221124
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
         (envelope-from <jiaxin.yu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 12059189; Thu, 24 Nov 2022 16:54:40 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 177122599; Thu, 24 Nov 2022 16:54:41 +0800
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 24 Nov 2022 16:54:38 +0800
+ 15.2.792.15; Thu, 24 Nov 2022 16:54:39 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Thu, 24 Nov 2022 16:54:37 +0800
+ Transport; Thu, 24 Nov 2022 16:54:38 +0800
 From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
 To:     <broonie@kernel.org>, <andrzej.hajda@intel.com>,
         <neil.armstrong@linaro.org>, <robert.foss@linaro.org>,
@@ -54,10 +54,12 @@ CC:     <chunxu.li@mediatek.com>,
         <linux-kernel@vger.kernel.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         Jiaxin Yu <jiaxin.yu@mediatek.com>
-Subject: [PATCH 0/3] ASoC: mediatek:mt8186: fix both the speaker and hdmi
-Date:   Thu, 24 Nov 2022 16:54:33 +0800
-Message-ID: <20221124085436.24900-1-jiaxin.yu@mediatek.com>
+Subject: [PATCH 1/3] drm: bridge: it6505: bridge to hdmi-codec
+Date:   Thu, 24 Nov 2022 16:54:34 +0800
+Message-ID: <20221124085436.24900-2-jiaxin.yu@mediatek.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221124085436.24900-1-jiaxin.yu@mediatek.com>
+References: <20221124085436.24900-1-jiaxin.yu@mediatek.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -72,23 +74,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The speaker and hdmi of mt8186 platform are shared the same port of I2S,
-when connect the external display, use build-in speakers to play audio,
-they both playback at the same time. So we want to manage the playback
-device through DAPM events.
+1. Bridge to hdmi-codec to support audio feature. At the same time,
+   the function of automatically detecting audio is removed.
+2. It is observed that some DP-to-HDMI dongles will get into bad
+   states if sending InfoFrame without audio data. Defer to enable
+   it6505's audio feature when PCM triggers START or RESUME.
 
-Jiaxin Yu (3):
-  drm: bridge: it6505: bridge to hdmi-codec
-  ASoC: hdmi-codec: Add event handler for hdmi TX
-  ASoC: mediatek: mt8186: correct the HDMI widgets
+Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
+---
+ drivers/gpu/drm/bridge/ite-it6505.c | 36 ++++++++++++++++++++++++-----
+ 1 file changed, 30 insertions(+), 6 deletions(-)
 
- drivers/gpu/drm/bridge/ite-it6505.c           | 36 +++++++++++++++---
- include/sound/hdmi-codec.h                    |  6 +++
- sound/soc/codecs/hdmi-codec.c                 | 37 +++++++++++++++++--
- .../mt8186/mt8186-mt6366-da7219-max98357.c    |  2 +-
- .../mt8186/mt8186-mt6366-rt1019-rt5682s.c     |  2 +-
- 5 files changed, 71 insertions(+), 12 deletions(-)
-
+diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
+index dfe4351c9bdd..f4e1a1d94ed8 100644
+--- a/drivers/gpu/drm/bridge/ite-it6505.c
++++ b/drivers/gpu/drm/bridge/ite-it6505.c
+@@ -2159,7 +2159,6 @@ static void it6505_stop_link_train(struct it6505 *it6505)
+ 
+ static void it6505_link_train_ok(struct it6505 *it6505)
+ {
+-	struct device *dev = &it6505->client->dev;
+ 
+ 	it6505->link_state = LINK_OK;
+ 	/* disalbe mute enable avi info frame */
+@@ -2167,11 +2166,6 @@ static void it6505_link_train_ok(struct it6505 *it6505)
+ 	it6505_set_bits(it6505, REG_INFOFRAME_CTRL,
+ 			EN_VID_CTRL_PKT, EN_VID_CTRL_PKT);
+ 
+-	if (it6505_audio_input(it6505)) {
+-		DRM_DEV_DEBUG_DRIVER(dev, "Enable audio!");
+-		it6505_enable_audio(it6505);
+-	}
+-
+ 	if (it6505->hdcp_desired)
+ 		it6505_start_hdcp(it6505);
+ }
+@@ -2823,6 +2817,36 @@ static void __maybe_unused it6505_audio_shutdown(struct device *dev, void *data)
+ 		it6505_disable_audio(it6505);
+ }
+ 
++static int __maybe_unused it6505_audio_setup_trigger(struct it6505 *it6505, int cmd)
++{
++	struct device *dev = &it6505->client->dev;
++
++	DRM_DEV_DEBUG_DRIVER(dev, "event: %d", cmd);
++
++	switch (cmd) {
++	case SNDRV_PCM_TRIGGER_START:
++	case SNDRV_PCM_TRIGGER_RESUME:
++		queue_delayed_work(system_wq, &it6505->delayed_audio,
++				   msecs_to_jiffies(180));
++		break;
++	case SNDRV_PCM_TRIGGER_STOP:
++	case SNDRV_PCM_TRIGGER_SUSPEND:
++		cancel_delayed_work(&it6505->delayed_audio);
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int __maybe_unused it6505_audio_trigger(struct device *dev, int cmd)
++{
++	struct it6505 *it6505 = dev_get_drvdata(dev);
++
++	return it6505_audio_setup_trigger(it6505, cmd);
++}
++
+ static int __maybe_unused it6505_audio_hook_plugged_cb(struct device *dev,
+ 						       void *data,
+ 						       hdmi_codec_plugged_cb fn,
 -- 
 2.18.0
 
