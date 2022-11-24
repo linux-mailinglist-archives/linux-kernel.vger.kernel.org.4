@@ -2,78 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81EFB637F82
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 20:16:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA2B637F98
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 20:18:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbiKXTQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 14:16:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58660 "EHLO
+        id S229538AbiKXTSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 14:18:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiKXTQe (ORCPT
+        with ESMTP id S229500AbiKXTSb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 14:16:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5790E87A78;
-        Thu, 24 Nov 2022 11:16:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0E2D0B828CC;
-        Thu, 24 Nov 2022 19:16:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BBA8DC433D6;
-        Thu, 24 Nov 2022 19:16:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669317389;
-        bh=bAhsQsbumyLiUXdtQPY1//XoFduq0FSOMtUuRyCzq9s=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=j3aQIx96E6ciqrq+lhU0IOglTBVRrYwMWooB6WnANS9K4hHgX1jvYKMgtylcG/hw5
-         uof2JX2+r2+gSw8BYc9/VIKLj9I4P0mwJUj7uSO+XczyfbXwu4zq1t5seX7xEvBds3
-         4OVo6ouNIO3XE+IamGKTjB5/5Af7D9wyjrJCB9+R7RQDr7hZKsW/zHuGvbIYxVBO84
-         MH+lvhAGYoWoQ8yIXPOTC+meu6MSbmZZLPvyWwCcJUfQRmOQBidska+qnjMio8tQR8
-         b11VYR6LCWRB/3ugF+pbsdq3pFxkrNUOSC0FDxDtodxGFWtOa7XkmStdId2H0Mu9H+
-         vxSah3LtFiDAA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AA2B7E21EFD;
-        Thu, 24 Nov 2022 19:16:29 +0000 (UTC)
-Subject: Re: [GIT PULL] LoongArch fixes for v6.1-rc7
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221124095120.3116780-1-chenhuacai@loongson.cn>
-References: <20221124095120.3116780-1-chenhuacai@loongson.cn>
-X-PR-Tracked-List-Id: <linux-arch.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221124095120.3116780-1-chenhuacai@loongson.cn>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.1-2
-X-PR-Tracked-Commit-Id: fa0e381290b134da53e65fb421b65825f23221b4
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 3bfd8fcab548659e3a77000b2302c62a47ab2824
-Message-Id: <166931738968.15670.1849929994501511702.pr-tracker-bot@kernel.org>
-Date:   Thu, 24 Nov 2022 19:16:29 +0000
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 24 Nov 2022 14:18:31 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB9A623B5;
+        Thu, 24 Nov 2022 11:18:29 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id vp12so4671202ejc.8;
+        Thu, 24 Nov 2022 11:18:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kWoRrNDgHDvAiElkaM9ey/BkEhFNRR4kcdpp5ftZc90=;
+        b=G6I0pdiG9+FJ7AxQvCRN/NCC8/HyD532a5M1tG0c8SFT1MMsNlNonirbr35ya3fR3r
+         iLSMHGD9O6zi6qyr7i52EQSIUFiCNdRI8IEDO38DEu9lI7EQ/gUlC1SAmbfWV69Q59Gj
+         3fSriUJ0BIPNLg6zDRx5PFXqzZekfhMX8hYdMoR3mVXpe6HBFBbOGFizMVwAdwqQ5Yl0
+         Wd63uFtzx7e1A7Hb1bCKue9IybJXneMGgvlDbGBDzbzVIzYYowCZ47pCvtFmrjOJXbJo
+         Xwqd8OQEkiB+25DrGT6GycGV/WF/HqgGXqXEX+7VnF/GNai1+R51464iBbVlLnem2Juh
+         ASHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kWoRrNDgHDvAiElkaM9ey/BkEhFNRR4kcdpp5ftZc90=;
+        b=PFVms1/wJH3wZKjM+edKyIvstxZIzbu5OD3w+sz7dQUcUkhskiZq1TZmtNKd0P5gqY
+         cTv2k8yMPoTCkkOCJNyKM6+280tJBtERfoViKecnGAVeLWU04zK3gTzE0OIHg9ueYukT
+         K+xj7m7J2jPm+27lDK/4l4bqxdKz4CvODR1Ix/wZj3sm+iOYItfWag57ZG2x3ojWereb
+         NsBFAmG0IgK2aS6bm7suxbHZfJO1wYH+T41XLbaP7s34PH6sDicMEMfZe4FkK6jqwqeQ
+         d6EhOlP2UVsHgvhT7hh3gX8XnyPFGhOV+zi81P+aLR+ZsBtsERoIiO9iyN7Ia+A1ZNCg
+         nW2w==
+X-Gm-Message-State: ANoB5pnseS8j1iDoR7ZU0pUdz6QDAmrLURDshZIiAEpq32mCdIBtbHF0
+        1MYW2V0cRNrToKHw8aJJ7h64BTJI7ONruOvHA4E=
+X-Google-Smtp-Source: AA0mqf4WrZ/GykWiZqfe3oroUEIfEHqNDi9z0Lnip9PJsnUGxVHzil2Hb+kFxbeVynw2bI+m/BgujuTA2L1DS5ybuk8=
+X-Received: by 2002:a17:906:560c:b0:7ae:5884:81b1 with SMTP id
+ f12-20020a170906560c00b007ae588481b1mr14232995ejq.155.1669317508056; Thu, 24
+ Nov 2022 11:18:28 -0800 (PST)
+MIME-Version: 1.0
+References: <20221124172207.153718-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221124172207.153718-6-prabhakar.mahadev-lad.rj@bp.renesas.com> <3689906.Lt9SDvczpP@diego>
+In-Reply-To: <3689906.Lt9SDvczpP@diego>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Thu, 24 Nov 2022 19:18:01 +0000
+Message-ID: <CA+V-a8uQh=q8ksTe8ttHkJThcoYtggSU-AXUqPGYnam0CiqZWw@mail.gmail.com>
+Subject: Re: [PATCH v4 5/7] riscv: mm: dma-noncoherent: Pass direction and
+ operation to ALT_CMO_OP()
+To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 24 Nov 2022 17:51:20 +0800:
+Hi Heiko,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.1-2
+Thank you for the review.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/3bfd8fcab548659e3a77000b2302c62a47ab2824
+On Thu, Nov 24, 2022 at 6:29 PM Heiko St=C3=BCbner <heiko@sntech.de> wrote:
+>
+> Am Donnerstag, 24. November 2022, 18:22:05 CET schrieb Prabhakar:
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >
+> > Pass direction and operation to ALT_CMO_OP() macro.
+> >
+> > This is in preparation for adding errata for the Andes CPU core.
+>
+> can you provide more explanation why that is necessary please?
+> I guess you want to use different cache operations for some cases?
+>
+Yes basically to call different cache operations based on the dir and
+operations (and also this allows to export just one function to handle
+the errata). I'll update the commit message in the next version.
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Cheers,
+Prabhakar
