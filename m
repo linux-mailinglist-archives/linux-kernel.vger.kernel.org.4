@@ -2,109 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E2C637E9D
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 18:52:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5644D637EA1
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 18:53:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbiKXRwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 12:52:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44424 "EHLO
+        id S229871AbiKXRxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 12:53:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiKXRvz (ORCPT
+        with ESMTP id S229806AbiKXRww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 12:51:55 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E00415B4F7
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 09:51:52 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id bs21so3463261wrb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 09:51:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rylusfgUDpkkWgalnBLghu7kEy11PXXS0gvZ7chhswg=;
-        b=XPDXYp9KiAJX835BXQlDYnHHGeXq/je8vdMyi6suSfk5joz+t4t3Hi30Uqhrs5LSMY
-         ZtoieTiw+0jj5/harETzmyCF80lZt7CYCpwfWpBGEZR6rghIukacHhfWEvpKOn5iyJna
-         XN5m9TDzeklaY52nPzYMLyANOTuGGWU86Y1RcoJ4Yg2a9JdM4o6jUVqVBkyJUV8lyLpb
-         hnHJResQwXk0qcFzSht+0L5dJEpFEdr1bljA2QzFBEf8kmjV979hIT6Kb+/dNjfKEkn+
-         47FHpwUDE3Fal69YeLagMO/96ZcmCCYgRQLpiBSGA8tie10+F1g0ONa3lh249vur0mKb
-         qboA==
+        Thu, 24 Nov 2022 12:52:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A07B170273
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 09:51:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669312312;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=fSdsuSrgjDopfALOvm1rrQFXbKKGllyvaK04VepISNM=;
+        b=ROZhYJSnMBkW7V74pFqn0WJV7L9KGyDe5wMJ2rwgPLq3obJDQKZHMQkEXL3GIYM3eyl8Xl
+        fDqPFEs7poIT1o0Ix44Nw08To1A4xu58VjQQ5TZ//9bQWtGDmnZLjBHmTMTjMKb0OvquHk
+        vZwuAvEmG5GxKPeYY4mVQ4tBMgKfyJc=
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com
+ [209.85.210.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-209-x-k7W7wLO9KVxWu-S-i31w-1; Thu, 24 Nov 2022 12:51:51 -0500
+X-MC-Unique: x-k7W7wLO9KVxWu-S-i31w-1
+Received: by mail-pf1-f198.google.com with SMTP id f189-20020a6238c6000000b0056e3400fdc0so1524492pfa.10
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 09:51:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rylusfgUDpkkWgalnBLghu7kEy11PXXS0gvZ7chhswg=;
-        b=UNTmCcRYnR1UrK+lY42fD2ALTj4WbdEImi3yRYhuMchU5UDSxW8xRTO4Cgh7K5OjSX
-         mMBxezkv83MSYZjmWOBmhqbM5ruR3CFzaB2zlkf6HQbrhwJJUJOvBMtwM95qPY4dpeXe
-         loIUhI7lDctyvlE9b6nR5brQP1eGhqRmx9c7G6m4bulhXN53gIovmaLFVHd8LecDsNBR
-         /6h2JytNBms+1Jca7aGKBFLJUqaYbhBwmHLrxDuKuF8v1TR4WineONE2oNiG0kxjloBe
-         Q3Sv1mfv608VyHI8hVnd933/jR2eKqybjcshEpIK7G1E4riG7dwm6ai/obIj07txxbgT
-         2xfA==
-X-Gm-Message-State: ANoB5pmojEP8A1L1mjhEjQ8PAkTl2y0apbEm68ZlCyKVQomPM3Hh9Dyu
-        Bar2vAsNRh26w4Mm67f+uiSkxve1l3hIvw==
-X-Google-Smtp-Source: AA0mqf7YYfEU+aHSMZkd+Lg99Olb7J0LABBto9g40UcKL9A2ryrilcIhSjNUOFWh6lzsw23IoZG0mg==
-X-Received: by 2002:adf:dc02:0:b0:236:77f4:6e19 with SMTP id t2-20020adfdc02000000b0023677f46e19mr21398695wri.638.1669312311888;
-        Thu, 24 Nov 2022 09:51:51 -0800 (PST)
-Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id bi8-20020a05600c3d8800b003c701c12a17sm6394192wmb.12.2022.11.24.09.51.50
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fSdsuSrgjDopfALOvm1rrQFXbKKGllyvaK04VepISNM=;
+        b=aT2rpHUnhyILLb2tp4t18q5jfKUg+6PFN9sVdbLIRFMCucg34ujG2ZnJYqz5WY9D8I
+         vabMiS1YWA5Ei14wanY+cquCyUuMKPluev9ksUPowos43/HS2j0xE0+TK1IV7sgwkQ9j
+         /z4q7pVYTqV6Jskc08oHH+SCh1jYSGoGK07+VjYSRv/gqT7GNfSvlpLu69UDV+bejjQe
+         nABRS4u8sv1XHSaMKLu1FhrMAvKL1CP5JwjC5EevGAWTaUucdvQrb5QAdiYKb15a3B2E
+         1czUqRugkIo1XkK2xemrwd88bo5r8L0joAnDZmkQ+Z5xBWyu8Ahci6e7KKW/SMucJsVK
+         Votg==
+X-Gm-Message-State: ANoB5pnKjz+DnVoPYzICXGQfYKc3iLujK0k33hb9zWt12IuMMfay64pK
+        Vq0APWMKKYxV9CD8gBhiP7owl8MfwmWc1yp/4JIUyQH2HAYhxVQNiWfVlQFPP6/j5cUbU+J76iw
+        3SzFP8/+ZQ58FEy8P9Xc/ZQSb
+X-Received: by 2002:a17:902:ce0e:b0:172:86a2:8e68 with SMTP id k14-20020a170902ce0e00b0017286a28e68mr15973651plg.27.1669312309288;
+        Thu, 24 Nov 2022 09:51:49 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7QJlepYjWsZ1z1GX6KIUy8Kfes+LstjyEEIEoRwJESdyt5NKcP15Q7qZbt8DdJt0ShoBwspw==
+X-Received: by 2002:a17:902:ce0e:b0:172:86a2:8e68 with SMTP id k14-20020a170902ce0e00b0017286a28e68mr15973615plg.27.1669312308591;
+        Thu, 24 Nov 2022 09:51:48 -0800 (PST)
+Received: from ryzen.. ([240d:1a:c0d:9f00:fc9c:8ee9:e32c:2d9])
+        by smtp.gmail.com with ESMTPSA id y75-20020a62644e000000b0056ee49d6e95sm1484968pfb.86.2022.11.24.09.51.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 09:51:51 -0800 (PST)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 11/11] misc: fastrpc: Add dma_mask to fastrpc_channel_ctx
-Date:   Thu, 24 Nov 2022 17:51:25 +0000
-Message-Id: <20221124175125.418702-12-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221124175125.418702-1-srinivas.kandagatla@linaro.org>
-References: <20221124175125.418702-1-srinivas.kandagatla@linaro.org>
+        Thu, 24 Nov 2022 09:51:48 -0800 (PST)
+From:   Shigeru Yoshida <syoshida@redhat.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, jasowang@redhat.com,
+        Shigeru Yoshida <syoshida@redhat.com>,
+        syzbot+106f9b687cd64ee70cd1@syzkaller.appspotmail.com
+Subject: [PATCH v3] net: tun: Fix use-after-free in tun_detach()
+Date:   Fri, 25 Nov 2022 02:51:34 +0900
+Message-Id: <20221124175134.1589053-1-syoshida@redhat.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Abel Vesa <abel.vesa@linaro.org>
+syzbot reported use-after-free in tun_detach() [1].  This causes call
+trace like below:
 
-dma_set_mask_and_coherent only updates the mask to which the device
-dma_mask pointer points to. Add a dma_mask to the channel ctx and set
-the device dma_mask to point to that, otherwise the dma_set_mask will
-return an error and the dma_set_coherent_mask will be skipped too.
+==================================================================
+BUG: KASAN: use-after-free in notifier_call_chain+0x1ee/0x200 kernel/notifier.c:75
+Read of size 8 at addr ffff88807324e2a8 by task syz-executor.0/3673
 
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-Co-developed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+CPU: 0 PID: 3673 Comm: syz-executor.0 Not tainted 6.1.0-rc5-syzkaller-00044-gcc675d22e422 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:284 [inline]
+ print_report+0x15e/0x461 mm/kasan/report.c:395
+ kasan_report+0xbf/0x1f0 mm/kasan/report.c:495
+ notifier_call_chain+0x1ee/0x200 kernel/notifier.c:75
+ call_netdevice_notifiers_info+0x86/0x130 net/core/dev.c:1942
+ call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
+ call_netdevice_notifiers net/core/dev.c:1997 [inline]
+ netdev_wait_allrefs_any net/core/dev.c:10237 [inline]
+ netdev_run_todo+0xbc6/0x1100 net/core/dev.c:10351
+ tun_detach drivers/net/tun.c:704 [inline]
+ tun_chr_close+0xe4/0x190 drivers/net/tun.c:3467
+ __fput+0x27c/0xa90 fs/file_table.c:320
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0xb3d/0x2a30 kernel/exit.c:820
+ do_group_exit+0xd4/0x2a0 kernel/exit.c:950
+ get_signal+0x21b1/0x2440 kernel/signal.c:2858
+ arch_do_signal_or_restart+0x86/0x2300 arch/x86/kernel/signal.c:869
+ exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+ exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:203
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+ syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
+ do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+The cause of the issue is that sock_put() from __tun_detach() drops
+last reference count for struct net, and then notifier_call_chain()
+from netdev_state_change() accesses that struct net.
+
+This patch fixes the issue by calling sock_put() from tun_detach()
+after all necessary accesses for the struct net has done.
+
+Fixes: 83c1f36f9880 ("tun: send netlink notification when the device is modified")
+Reported-by: syzbot+106f9b687cd64ee70cd1@syzkaller.appspotmail.com
+Link: https://syzkaller.appspot.com/bug?id=96eb7f1ce75ef933697f24eeab928c4a716edefe [1]
+Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
 ---
- drivers/misc/fastrpc.c | 2 ++
- 1 file changed, 2 insertions(+)
+v3:
+- Remove redundant synchronize_rcu()
+v2:
+- Include symbolic stack trace
+- Add Fixes and Reported-by tags
+v1: https://lore.kernel.org/all/20221119075615.723290-1-syoshida@redhat.com/
+---
+ drivers/net/tun.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-index d3147e4313cc..9ddcaa4def06 100644
---- a/drivers/misc/fastrpc.c
-+++ b/drivers/misc/fastrpc.c
-@@ -279,6 +279,7 @@ struct fastrpc_channel_ctx {
- 	struct list_head invoke_interrupted_mmaps;
- 	bool secure;
- 	bool unsigned_support;
-+	u64 dma_mask;
- };
+diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+index 7a3ab3427369..24001112c323 100644
+--- a/drivers/net/tun.c
++++ b/drivers/net/tun.c
+@@ -686,7 +686,6 @@ static void __tun_detach(struct tun_file *tfile, bool clean)
+ 		if (tun)
+ 			xdp_rxq_info_unreg(&tfile->xdp_rxq);
+ 		ptr_ring_cleanup(&tfile->tx_ring, tun_ptr_free);
+-		sock_put(&tfile->sk);
+ 	}
+ }
  
- struct fastrpc_device {
-@@ -2309,6 +2310,7 @@ static int fastrpc_rpmsg_probe(struct rpmsg_device *rpdev)
- 	kref_init(&data->refcount);
+@@ -702,6 +701,9 @@ static void tun_detach(struct tun_file *tfile, bool clean)
+ 	if (dev)
+ 		netdev_state_change(dev);
+ 	rtnl_unlock();
++
++	if (clean)
++		sock_put(&tfile->sk);
+ }
  
- 	dev_set_drvdata(&rpdev->dev, data);
-+	rdev->dma_mask = &data->dma_mask;
- 	dma_set_mask_and_coherent(rdev, DMA_BIT_MASK(32));
- 	INIT_LIST_HEAD(&data->users);
- 	INIT_LIST_HEAD(&data->invoke_interrupted_mmaps);
+ static void tun_detach_all(struct net_device *dev)
 -- 
-2.25.1
+2.38.1
 
