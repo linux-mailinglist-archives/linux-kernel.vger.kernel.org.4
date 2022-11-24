@@ -2,72 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB0D863711B
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 04:33:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2716F63711D
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 04:34:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbiKXDdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 22:33:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53278 "EHLO
+        id S229707AbiKXDeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 22:34:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbiKXDdx (ORCPT
+        with ESMTP id S229455AbiKXDeU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 22:33:53 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A82C6579
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 19:33:50 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id ci10so369428pjb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 19:33:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shopee.com; s=shopee.com;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0A6IGdis8UFb2G4Z4L2JyFM1cHNL6BHSqh/4YAf0zi4=;
-        b=kujSbxlTKyrW4i9i1/6mTJGpSMZE0X6OJ5IPMp3RRmF7qSCPjYv+2bVxe8n5Z8h/1g
-         bJGk7Cy/wlCFbrYiAvpjMcNitplpF2Irh4BVshd+J0kP2wCcUImQPf7nRdWE0KFTBCBA
-         lUI3rkT+qdxxs4B5g9tz4i2utI3kBEdq2Z51ez6CUhh/TLH5lZGFJlLxdgiXfecaVzJR
-         TOJx8T7q5eFaM7U0Lm/aFpSPHRnULvKj6FlOBrG6m8NdlPkNBKxV+tDtgNgcv0Kf4Fpg
-         9O/nQtv9++vzQ8l/n6hQMNKzXkEgHwAAHgN6yKPHGneCTt+7qdcfdgrJ8uepOPM1Q7kM
-         RAdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=0A6IGdis8UFb2G4Z4L2JyFM1cHNL6BHSqh/4YAf0zi4=;
-        b=pdJvhUsm5yiRLimMNGTfKY6uLGK1TjG05Y7hOiFr2F1iLf8M9tzvoTtxruMXzH2x7N
-         CN0POdR/WH6xaeCYw7hkjgIxZu6xlSx5pWfjqoIvPQZcJ7IsWeca7crP6Gvk2tARgtRH
-         DIK1uv63IMcaNZ0UQ1K9/NeGZs3ptnb+EmcWqUpAC8lOoAHiRvLWHLcrFNneGjDPSoSy
-         NRv2nbfVuHXNzSjE3vfLNO9OILOu3QQQZEjBOz5vzO3wKYR51oHYOVZ9CDPhxb6YeuLr
-         4EbOZzLesWmyruVyDWt3WTAfw/+2Ga/mKKbmvjOpHTFm5qaVEfLapb197m3p4VLuxZuk
-         3VaQ==
-X-Gm-Message-State: ANoB5pnmio58ZffjjpG9XSpjwYHJzwlSp/0o+V0ccKKdyPdVUzkSVsxX
-        gDtvzzMyy/UiLsJxflEyosMyRw==
-X-Google-Smtp-Source: AA0mqf6TFuqVrxr7UJmls3+J/pP7Y0nu9EDSLYgEWnCPCi0hiUFNc0AibJoUBv/4x0cfITAjgPAKxw==
-X-Received: by 2002:a17:902:6b89:b0:188:bb79:4892 with SMTP id p9-20020a1709026b8900b00188bb794892mr14662401plk.60.1669260829624;
-        Wed, 23 Nov 2022 19:33:49 -0800 (PST)
-Received: from [10.54.24.49] (static-ip-147-99-134-202.rev.dyxnet.com. [202.134.99.147])
-        by smtp.gmail.com with ESMTPSA id ik18-20020a170902ab1200b001767f6f04efsm4416322plb.242.2022.11.23.19.33.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 19:33:48 -0800 (PST)
-Message-ID: <4de8821b-e0c0-bf63-4d76-b0ce208cce3b@shopee.com>
-Date:   Thu, 24 Nov 2022 11:33:39 +0800
+        Wed, 23 Nov 2022 22:34:20 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85D3C6205;
+        Wed, 23 Nov 2022 19:34:18 -0800 (PST)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NHk5n0CHwzqSLx;
+        Thu, 24 Nov 2022 11:30:21 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 24 Nov 2022 11:34:17 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 24 Nov 2022 11:34:16 +0800
+Subject: Re: [PATCH v2] doc: Fix htmldocs build warnings of stallwarn.rst
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+CC:     "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        "Josh Triplett" <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        <linux-next@vger.kernel.org>
+References: <20221123120238.1904-1-thunder.leizhen@huawei.com>
+ <Y34mIhHYjFFzywsk@debian.me>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <32e46feb-20ee-b3b4-8c36-e6f8c295a4d6@huawei.com>
+Date:   Thu, 24 Nov 2022 11:34:15 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.0
-Subject: Re: [PATCH] cgroup/cpuset: Optimize update_tasks_nodemask()
-To:     Waiman Long <longman@redhat.com>
-Cc:     lizefan.x@bytedance.com, tj@kernel.org, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221123082157.71326-1-haifeng.xu@shopee.com>
- <2ac6f207-e08a-2a7f-01ae-dfaf15eefaf6@redhat.com>
-From:   Haifeng Xu <haifeng.xu@shopee.com>
-In-Reply-To: <2ac6f207-e08a-2a7f-01ae-dfaf15eefaf6@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y34mIhHYjFFzywsk@debian.me>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -76,101 +66,196 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2022/11/24 04:23, Waiman Long wrote:
-> On 11/23/22 03:21, haifeng.xu wrote:
->> When change the 'cpuset.mems' under some cgroup, system will hung
->> for a long time. From the dmesg, many processes or theads are
->> stuck in fork/exit. The reason is show as follows.
+On 2022/11/23 21:54, Bagas Sanjaya wrote:
+> On Wed, Nov 23, 2022 at 08:02:38PM +0800, Zhen Lei wrote:
+>> Documentation/RCU/stallwarn.rst:
+>> 401: WARNING: Literal block expected; none found.
+>> 428: WARNING: Literal block expected; none found.
+>> 445: WARNING: Literal block expected; none found.
+>> 459: WARNING: Literal block expected; none found.
+>> 468: WARNING: Literal block expected; none found.
 >>
->> thread A:
->> cpuset_write_resmask /* takes cpuset_rwsem */
->>    ...
->>      update_tasks_nodemask
->>        mpol_rebind_mm /* waits mmap_lock */
->>
->> thread B:
->> worker_thread
->>    ...
->>      cpuset_migrate_mm_workfn
->>        do_migrate_pages /* takes mmap_lock */
->>
->> thread C:
->> cgroup_procs_write /* takes cgroup_mutex and cgroup_threadgroup_rwsem */
->>    ...
->>      cpuset_can_attach
->>        percpu_down_write /* waits cpuset_rwsem */
->>
->> Once update the nodemasks of cpuset, thread A wakes up thread B to
->> migrate mm. But when thread A iterates through all tasks, including
->> child threads and group leader, it has to wait the mmap_lock which
->> has been take by thread B. Unfortunately, thread C wants to migrate
->> tasks into cgroup at this moment, it must wait thread A to release
->> cpuset_rwsem. If thread B spends much time to migrate mm, the
->> fork/exit which acquire cgroup_threadgroup_rwsem also need to
->> wait for a long time.
->>
->> There is no need to migrate the mm of child threads which is
->> shared with group leader. Just iterate through the group
->> leader only.
->>
->> Signed-off-by: haifeng.xu <haifeng.xu@shopee.com>
->> ---
->>   kernel/cgroup/cpuset.c | 3 +++
->>   1 file changed, 3 insertions(+)
->>
->> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->> index 589827ccda8b..43cbd09546d0 100644
->> --- a/kernel/cgroup/cpuset.c
->> +++ b/kernel/cgroup/cpuset.c
->> @@ -1968,6 +1968,9 @@ static void update_tasks_nodemask(struct cpuset
->> *cs)
->>             cpuset_change_task_nodemask(task, &newmems);
->>   +        if (!thread_group_leader(task))
->> +            continue;
+>> The literal block need to be indented, so add two spaces to each line.
+> 
+> Indenting to match alignment of lists texts?
+
+It's required by reStructuredText Markup Specification.
+
+Indented Literal Blocks
+Indented literal blocks are indicated by indentation relative to the
+surrounding text (leading whitespace on each line). The literal block
+ends with the end of the indentation.
+
+The surrounding text need to be indented, relative to the paragraphs
+above and below it and at the same level.
+
+> 
+>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> 
+> You miss crediting linux-next list, so please add:
+> 
+> Link: https://lore.kernel.org/linux-next/20221123163255.48653674@canb.auug.org.au/
+> Fixes: 3d2788ba4573 ("doc: Document CONFIG_RCU_CPU_STALL_CPUTIME=y stall information")
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+
+OK, thanks.
+
+> 
+>> -The sampling period is shown as follows:
+>> -:<------------first timeout---------->:<-----second timeout----->:
+>> -:<--half timeout-->:<--half timeout-->:                          :
+>> -:                  :<--first period-->:                          :
+>> -:                  :<-----------second sampling period---------->:
+>> -:                  :                  :                          :
+>> -:          snapshot time point    1st-stall                  2nd-stall
+>> +The sampling period is shown as follows::
+>>  
+>> +  |<------------first timeout---------->|<-----second timeout----->|
+>> +  |<--half timeout-->|<--half timeout-->|                          |
+>> +  |                  |<--first period-->|                          |
+>> +  |                  |<-----------second sampling period---------->|
+>> +  |                  |                  |                          |
+>> +  |          snapshot time point    1st-stall                  2nd-stall
+> 
+> The beginning pipe (|) on the last line of diagram above shouldn't be there
+> (axis label?).
+
+OK, it might look better to delete it.
+
+The text in literal block is treated as plain text.
+
+
+> 
+>>  
+>>  The following describes four typical scenarios:
+>>  
+>> -1. A CPU looping with interrupts disabled.::
+>> +1. A CPU looping with interrupts disabled.
+>>  
+>> -   rcu:          hardirqs   softirqs   csw/system
+>> -   rcu:  number:        0          0            0
+>> -   rcu: cputime:        0          0            0   ==> 2500(ms)
+>> +   ::
 >> +
->>           mm = get_task_mm(task);
->>           if (!mm)
->>               continue;
+>> +     rcu:          hardirqs   softirqs   csw/system
+>> +     rcu:  number:        0          0            0
+>> +     rcu: cputime:        0          0            0   ==> 2500(ms)
+>>  
+>>     Because interrupts have been disabled throughout the measurement
+>>     interval, there are no interrupts and no context switches.
+>> @@ -440,11 +442,11 @@ The following describes four typical scenarios:
+>>  
+>>     This is similar to the previous example, but with non-zero number of
+>>     and CPU time consumed by hard interrupts, along with non-zero CPU
+>> -   time consumed by in-kernel execution.::
+>> +   time consumed by in-kernel execution. ::
+>>  
+>> -   rcu:          hardirqs   softirqs   csw/system
+>> -   rcu:  number:      624          0            0
+>> -   rcu: cputime:       49          0         2446   ==> 2500(ms)
+>> +     rcu:          hardirqs   softirqs   csw/system
+>> +     rcu:  number:      624          0            0
+>> +     rcu: cputime:       49          0         2446   ==> 2500(ms)
+>>  
+>>     The fact that there are zero softirqs gives a hint that these were
+>>     disabled, perhaps via local_bh_disable().  It is of course possible
+>> @@ -454,20 +456,22 @@ The following describes four typical scenarios:
+>>  
+>>  3. A CPU looping with preemption disabled.
+>>  
+>> -   Here, only the number of context switches is zero.::
+>> +   Here, only the number of context switches is zero. ::
+>>  
+>> -   rcu:          hardirqs   softirqs   csw/system
+>> -   rcu:  number:      624         45            0
+>> -   rcu: cputime:       69          1         2425   ==> 2500(ms)
+>> +     rcu:          hardirqs   softirqs   csw/system
+>> +     rcu:  number:      624         45            0
+>> +     rcu: cputime:       69          1         2425   ==> 2500(ms)
+>>  
+>>     This situation hints that the stalled CPU was looping with preemption
+>>     disabled.
+>>  
+>> -4. No looping, but massive hard and soft interrupts.::
+>> +4. No looping, but massive hard and soft interrupts.
+>> +
+>> +   ::
+>>  
+>> -   rcu:          hardirqs   softirqs   csw/system
+>> -   rcu:  number:       xx         xx            0
+>> -   rcu: cputime:       xx         xx            0   ==> 2500(ms)
+>> +     rcu:          hardirqs   softirqs   csw/system
+>> +     rcu:  number:       xx         xx            0
+>> +     rcu: cputime:       xx         xx            0   ==> 2500(ms)
+>>  
+>>     Here, the number and CPU time of hard interrupts are all non-zero,
+>>     but the number of context switches and the in-kernel CPU time consumed
+>>
 > 
-> Could you try the attached test patch to see if it can fix your problem?
-> Something along the line of this patch will be more acceptable.
+> Because paragraphs below the snippets directly refers to them,just use colon: 
+
+This makes the style inconsistent when viewed on the web page. So I decided not
+to change it.
+
+Take your advice and the end result will be as follows: (1 and 4 followed by a
+colon, 2 and 4 followed by a dot)
+
+1. A CPU looping with interrupts disabled:
+2. A CPU looping with bottom halves disabled.
+3. A CPU looping with preemption disabled.
+4. No looping, but massive hard and soft interrupts:
+
 > 
-> Thanks,
-> Longman
+> ---- >8 ----
+> 
+> diff --git a/Documentation/RCU/stallwarn.rst b/Documentation/RCU/stallwarn.rst
+> index f15b766d39b8d9..4f6b91be03cfe0 100644
+> --- a/Documentation/RCU/stallwarn.rst
+> +++ b/Documentation/RCU/stallwarn.rst
+> @@ -423,9 +423,7 @@ The sampling period is shown as follows::
+>  
+>  The following describes four typical scenarios:
+>  
+> -1. A CPU looping with interrupts disabled.
+> -
+> -   ::
+> +1. A CPU looping with interrupts disabled::
+>  
+>       rcu:          hardirqs   softirqs   csw/system
+>       rcu:  number:        0          0            0
+> @@ -442,7 +440,7 @@ The following describes four typical scenarios:
+>  
+>     This is similar to the previous example, but with non-zero number of
+>     and CPU time consumed by hard interrupts, along with non-zero CPU
+> -   time consumed by in-kernel execution. ::
+> +   time consumed by in-kernel execution::
+>  
+>       rcu:          hardirqs   softirqs   csw/system
+>       rcu:  number:      624          0            0
+> @@ -456,7 +454,7 @@ The following describes four typical scenarios:
+>  
+>  3. A CPU looping with preemption disabled.
+>  
+> -   Here, only the number of context switches is zero. ::
+> +   Here, only the number of context switches is zero::
+>  
+>       rcu:          hardirqs   softirqs   csw/system
+>       rcu:  number:      624         45            0
+> @@ -465,9 +463,7 @@ The following describes four typical scenarios:
+>     This situation hints that the stalled CPU was looping with preemption
+>     disabled.
+>  
+> -4. No looping, but massive hard and soft interrupts.
+> -
+> -   ::
+> +4. No looping, but massive hard and soft interrupts::
+>  
+>       rcu:          hardirqs   softirqs   csw/system
+>       rcu:  number:       xx         xx            0
+> 
+> Thanks.
 > 
 
-Hi, Longman.
-Thanks for your patch, but there are still some problems.
-
-1）
-  (group leader, node: 0,1)
-         cgroup0
-         /     \
-        /       \
-    cgroup1   cgroup2
-   (threads)  (threads)
-
-If set node 0 in cgroup1 and node 1 in cgroup2, both of them will update
-the mm. And the nodemask of mm depends on who set the node last.
-
-2）
-   (process, node: 0,1)
-         cgroup0
-         /     \
-        /       \
-    cgroup1   cgroup2
-   (node: 0)  (node: 1)
-
-If migrate thread from cgroup0 to cgroup1 or cgroup2, cpuset_attach
-won't update the mm. So the nodemask of thread, including mems_allowed
-and mempolicy（updated in cpuset_change_task_nodemask）, is different from
-the vm_policy in vma(updated in mpol_rebind_mm).
-
-
-In a word, if threads have different cpusets with different nodemask, it
-will cause inconsistent memory behavior.
-
-Thanks,
-Haifeng.
-
-
+-- 
+Regards,
+  Zhen Lei
