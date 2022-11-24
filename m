@@ -2,182 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 185A0637B81
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 15:33:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B82E6637B85
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 15:35:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbiKXOdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 09:33:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37604 "EHLO
+        id S229502AbiKXOft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 09:35:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiKXOc6 (ORCPT
+        with ESMTP id S229476AbiKXOfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 09:32:58 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0F3776DC
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 06:32:56 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id r12so2842938lfp.1
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 06:32:56 -0800 (PST)
+        Thu, 24 Nov 2022 09:35:47 -0500
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14BDE85EF4;
+        Thu, 24 Nov 2022 06:35:47 -0800 (PST)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1432a5f6468so2128088fac.12;
+        Thu, 24 Nov 2022 06:35:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:to
+         :content-language:user-agent:mime-version:date:message-id:sender
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=zYPcwuN0ixxBPz8vi1NczLJaDfU7Jd6IdhNMvi6HWb0=;
-        b=D5u8AgJcYgd5joOZvehXrdY4ax0HefmPst5qs2Ll24ByNjMvjqsM24UzcM0L+o2bid
-         P4VCmAsFX1QmnRolJ1Tg+FTWF4GbcWeyKmUZvi0vz0cIfhO/z1HjrwinN/QH0DAJfCq7
-         eFFtorRUmIZ54wbGWkjBY8derySIAwdBDtB67k8k+xo+b9gcMpbUETbsTLXR+3/g2/U0
-         6Wc+XqlOUCs3t8AbW7C3kt7N4uVgdurS6xudUx46ATHi2J0GXrw3sxBBNIKNqMrc9TDF
-         70lhe03Q/wiT1N/TpkFdcSKgVS8TAwtOYVWkEh8P+D1AO/IyZSTX4QG591EtepYD8ET2
-         97CQ==
+        bh=Y6xD/F0jYBC276f58xCfsGqi3f/gw81uLwWLcRF5aus=;
+        b=QXC8pTTXNAGpslmkmCnNdQbVBhAcMj+ubcWVDmVbl7uVO2Z0Al2CEmCBAsKzZwgDIx
+         Kq2XYH0MqCSevs7zc5HEFYST6qkLENfgC8zgxzGEyDqpGFEjCoSsYOFao8h0N6BiY7vy
+         Lfh1hDPOiBBkZa+GJZnj6pQKr79XjTVE/1ZxslChbDZw3KZQEyxASNHqVgonSintx9LS
+         PK3WpNEetWOL8GU+YDWLvVQfREqbReW811e//FyQOjctqP70af6iaTJ32KHns7Wt2jol
+         ynMQusAFzwjop7DbLLpH+563bVlRdbftYo0f0ERKkYowslYfJ7E3fPQY8bcz0JM8zvfr
+         dDJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:subject:from:references:to
+         :content-language:user-agent:mime-version:date:message-id:sender
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zYPcwuN0ixxBPz8vi1NczLJaDfU7Jd6IdhNMvi6HWb0=;
-        b=PW+HS+ed1vJ/oSQLSA/7gOAgn6oLs+C94qPPbBVRMc0JOVWueTBzF+MoaOdyEAhlKq
-         TCSSBceHSb6MhRBuqlEElt124xUZbDDZYra91IVVS9oSe1MTWQIfU7Jj895SSI8ed8P+
-         gJlEjGLtP2vuV1fZAymZZB02wXRBE0pB/BEXHPwwJ9atJfizGvoj1/OaoHAi68iLL7r0
-         5YWjVWkrPhNZC1Qq/+fb41nRcA4YIBbMz8YMXvmViVI4hS8LqQFK/Cp2vWtbFhiee+Uc
-         pPHQfqBgbvkscbueGwSdCHXSjEfbOFtqej4MyUzGaheSemt7EAHVIu7DVwe5NFvt+RQ+
-         diSA==
-X-Gm-Message-State: ANoB5pmva4XBQpL8ztkYCZhW+UtWUC3N+CCsIeji68AqIzHeoi7CyFOr
-        eZTJwuNPMMZacIjhO5TSu7n/hA==
-X-Google-Smtp-Source: AA0mqf4bKcysvolziy0EL4RTYdY5BJl7S8gZPvthaVbhBr9/keBrnI2vpdR0tAfaU7q/p4iv+lD0hw==
-X-Received: by 2002:ac2:44ac:0:b0:4b4:efec:b4c9 with SMTP id c12-20020ac244ac000000b004b4efecb4c9mr1963916lfm.276.1669300374556;
-        Thu, 24 Nov 2022 06:32:54 -0800 (PST)
-Received: from [192.168.1.101] (95.49.32.48.neoplus.adsl.tpnet.pl. [95.49.32.48])
-        by smtp.gmail.com with ESMTPSA id e8-20020ac24e08000000b00492ceda336fsm133145lfr.278.2022.11.24.06.32.50
+        bh=Y6xD/F0jYBC276f58xCfsGqi3f/gw81uLwWLcRF5aus=;
+        b=itOdwisGv1PXThtwi2Ev5moSGvRXFybUABFi1qzmVMr5362C/BpQlk1MHWeY23i1YL
+         vGNMpdYpL09AbaRux/v6t5LE3G/be0wfsmvNsdVPEHltPYdeGUDqe7AoOVzYrv0iGPLA
+         QuaTGIGZHwlZ9ut0nBvSKWQ3INh3FnCwnLkxoUFcliVAh8fCEj3dbxYTcx6RRvSU2SUY
+         m7MCHuM432NLIwhJpLC25+iAWkfYKwiLuDDk5cMrS+jj2l2BlCxGyBJABIxORcRp0aYw
+         NDrI/meZntk1u9dFb4mWX8DiPvwTHXfGYLO6sF04uPMp3n85cjkMTABJJU+6L5AKDKPO
+         NN7Q==
+X-Gm-Message-State: ANoB5pmqcDrVnBhXDM+n4bdbQYv4Cj7IYPQW62VubeOj6QCRV+pyfNZw
+        TaDACdfBSZA6sVGnadDrAj4=
+X-Google-Smtp-Source: AA0mqf45TumtbNTfIwWJbVngsAlUqVKKQwsD3NLEt804oI6bTmViiwEdph3/3BRPGaab0EQU3q5P8A==
+X-Received: by 2002:a05:6871:4211:b0:132:354d:71ac with SMTP id li17-20020a056871421100b00132354d71acmr7510413oab.107.1669300546383;
+        Thu, 24 Nov 2022 06:35:46 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id cy26-20020a056870b69a00b0012779ba00fesm639254oab.2.2022.11.24.06.35.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Nov 2022 06:32:53 -0800 (PST)
-Message-ID: <9016a729-4c7a-4252-a667-3c6536eb2038@linaro.org>
-Date:   Thu, 24 Nov 2022 15:32:48 +0100
+        Thu, 24 Nov 2022 06:35:46 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <6315d4e8-c3f4-6df7-b529-54f34e4e2194@roeck-us.net>
+Date:   Thu, 24 Nov 2022 06:35:44 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp: fix PCIe DMA coherency
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221124142501.29314-1-johan+linaro@kernel.org>
+ Thunderbird/102.2.2
 Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221124142501.29314-1-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Wang Honghui <honghui.wang@ucas.com.cn>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1CD578BA572E3037+Y37fk/eKlI3u5+77@TP-P15V.lan>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 1/3]hwmon: Modify to support Phytium FT2000/4 CPU for acpi
+In-Reply-To: <1CD578BA572E3037+Y37fk/eKlI3u5+77@TP-P15V.lan>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 24.11.2022 15:25, Johan Hovold wrote:
-> The devices on the SC8280XP PCIe buses are cache coherent and must be
-> marked as such to avoid data corruption.
+On 11/23/22 19:05, Wang Honghui wrote:
+> Modify to support Phytium FT2000/4 CPU for acpi
 > 
-> A coherent device can, for example, end up snooping stale data from the
-> caches instead of using data written by the CPU through the
-> non-cacheable mapping which is used for consistent DMA buffers for
-> non-coherent devices.
-> 
-> Note that this is much more likely to happen since commit c44094eee32f
-> ("arm64: dma: Drop cache invalidation from arch_dma_prep_coherent()")
-> that was added in 6.1 and which removed the cache invalidation when
-> setting up the non-cacheable mapping.
-> 
-> Marking the PCIe devices as coherent specifically fixes the intermittent
-> NVMe probe failures observed on the Thinkpad X13s, which was due to
-> corruption of the submission and completion queues. This was typically
-> observed as corruption of the admin submission queue (with well-formed
-> completion):
-> 
-> 	could not locate request for tag 0x0
-> 	nvme nvme0: invalid id 0 completed on queue 0
-> 
-> or corruption of the admin or I/O completion queues (malformed
-> completion):
-> 
-> 	could not locate request for tag 0x45f
-> 	nvme nvme0: invalid id 25695 completed on queue 25965
-> 
-> presumably as these queues are small enough to not be allocated using
-> CMA which in turn make them more likely to be cached (e.g. due to
-> accesses to nearby pages through the cacheable linear map). Increasing
-> the buffer sizes to two pages to force CMA allocation also appears to
-> make the problem go away.
-> 
-> Fixes: 813e83157001 ("arm64: dts: qcom: sc8280xp/sa8540p: add PCIe2-4 nodes")
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> Signed-off-by: Wang Honghui <honghui.wang@ucas.com.cn>
 > ---
-Looks like 8450 should also be like this, good catch!
-
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+>   drivers/hwmon/scpi-hwmon.c | 30 +++++++++++++++++++++++++-----
+>   1 file changed, 25 insertions(+), 5 deletions(-)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index 27f5c2f82338..7748cd29276d 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> @@ -854,6 +854,8 @@ pcie4: pcie@1c00000 {
->  				 <0x02000000 0x0 0x30300000 0x0 0x30300000 0x0 0x1d00000>;
->  			bus-range = <0x00 0xff>;
->  
-> +			dma-coherent;
+> diff --git a/drivers/hwmon/scpi-hwmon.c b/drivers/hwmon/scpi-hwmon.c
+> index 4d75385f7d5e..6021ae00b334 100644
+> --- a/drivers/hwmon/scpi-hwmon.c
+> +++ b/drivers/hwmon/scpi-hwmon.c
+> @@ -14,6 +14,7 @@
+>   #include <linux/slab.h>
+>   #include <linux/sysfs.h>
+>   #include <linux/thermal.h>
+> +#include <linux/acpi.h>
+>   
+Alphabetic include file order, please.
+
+>   struct sensor_data {
+>   	unsigned int scale;
+> @@ -132,6 +133,13 @@ static const struct of_device_id scpi_of_match[] = {
+>   };
+>   MODULE_DEVICE_TABLE(of, scpi_of_match);
+>   
+> +/* Wang Honghui add to support Phytium FT2000/4 CPU for acpi */
+
+Irrelevant comment.
+
+> +static const struct acpi_device_id scpi_sensors_acpi_match[] = {
+> +        { .id = "PHYT000D" },
+> +        { }
+> +};
+> +MODULE_DEVICE_TABLE(acpi, scpi_sensors_acpi_match);
 > +
->  			linux,pci-domain = <6>;
->  			num-lanes = <1>;
->  
-> @@ -951,6 +953,8 @@ pcie3b: pcie@1c08000 {
->  				 <0x02000000 0x0 0x32300000 0x0 0x32300000 0x0 0x1d00000>;
->  			bus-range = <0x00 0xff>;
->  
-> +			dma-coherent;
+>   static int scpi_hwmon_probe(struct platform_device *pdev)
+>   {
+>   	u16 nr_sensors, i;
+> @@ -141,6 +149,7 @@ static int scpi_hwmon_probe(struct platform_device *pdev)
+>   	struct scpi_ops *scpi_ops;
+>   	struct device *hwdev, *dev = &pdev->dev;
+>   	struct scpi_sensors *scpi_sensors;
+> +	const struct acpi_device_id *match;
+>   	int idx, ret;
+>   
+>   	scpi_ops = get_scpi_ops();
+> @@ -170,11 +179,22 @@ static int scpi_hwmon_probe(struct platform_device *pdev)
+>   
+>   	scpi_sensors->scpi_ops = scpi_ops;
+>   
+> -	scale = of_device_get_match_data(&pdev->dev);
+> -	if (!scale) {
+> -		dev_err(&pdev->dev, "Unable to initialize scpi-hwmon data\n");
+> -		return -ENODEV;
+> -	}
+> +	/* Wang Honghui modified to support Phytium FT2000/4 CPU for acpi */
+
+Irrelevant comment.
+
+> +	if (dev->of_node) {
+> +		scale = of_device_get_match_data(&pdev->dev);
+> +		if (!scale) {
+> +			dev_err(&pdev->dev, "Unable to initialize scpi-hwmon data\n");
+> +			return -ENODEV;
+> +		}
+> +	} else {
+> +                match = acpi_match_device(dev->driver->acpi_match_table, dev);
+> +                if (!match) {
+> +                        dev_err(dev, "scpi-hwmon: Error ACPI match data is missing\n");
+> +                        return -ENODEV;
+> +                }
 > +
->  			linux,pci-domain = <5>;
->  			num-lanes = <2>;
->  
-> @@ -1046,6 +1050,8 @@ pcie3a: pcie@1c10000 {
->  				 <0x02000000 0x0 0x34300000 0x0 0x34300000 0x0 0x1d00000>;
->  			bus-range = <0x00 0xff>;
->  
-> +			dma-coherent;
-> +
->  			linux,pci-domain = <4>;
->  			num-lanes = <4>;
->  
-> @@ -1144,6 +1150,8 @@ pcie2b: pcie@1c18000 {
->  				 <0x02000000 0x0 0x38300000 0x0 0x38300000 0x0 0x1d00000>;
->  			bus-range = <0x00 0xff>;
->  
-> +			dma-coherent;
-> +
->  			linux,pci-domain = <3>;
->  			num-lanes = <2>;
->  
-> @@ -1239,6 +1247,8 @@ pcie2a: pcie@1c20000 {
->  				 <0x02000000 0x0 0x3c300000 0x0 0x3c300000 0x0 0x1d00000>;
->  			bus-range = <0x00 0xff>;
->  
-> +			dma-coherent;
-> +
->  			linux,pci-domain = <2>;
->  			num-lanes = <4>;
->  
+> +                scale = scpi_scale;
+> +        }
+
+	scale = device_get_match_data(&pdev->dev);
+
+should do after setting it in the acpi_device_id array.
+
+Guenter
+
+>   
+>   	for (i = 0, idx = 0; i < nr_sensors; i++) {
+>   		struct sensor_data *sensor = &scpi_sensors->data[idx];
+
