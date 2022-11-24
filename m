@@ -2,120 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DDB0637C01
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 15:54:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BAA1637C1D
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 15:55:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiKXOyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 09:54:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35518 "EHLO
+        id S229885AbiKXOz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 09:55:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbiKXOyg (ORCPT
+        with ESMTP id S229669AbiKXOzO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 09:54:36 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD02FA1A0
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 06:54:35 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1oyDcB-00049Y-5E; Thu, 24 Nov 2022 15:54:11 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:5507:4aba:5e0a:4c27])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 9A1041286A3;
-        Thu, 24 Nov 2022 14:54:07 +0000 (UTC)
-Date:   Thu, 24 Nov 2022 15:54:05 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vivek Yadav <vivek.2311@samsung.com>
-Cc:     rcsekar@samsung.com, krzysztof.kozlowski+dt@linaro.org,
-        wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, pankaj.dubey@samsung.com,
-        ravi.patel@samsung.com, alim.akhtar@samsung.com,
-        linux-fsd@tesla.com, robh+dt@kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        aswani.reddy@samsung.com, sriranjani.p@samsung.com
-Subject: Re: RE: [PATCH v3 1/2] can: m_can: Move mram init to mcan device
- setup
-Message-ID: <20221124145405.d67cb6xmoiqfdsq3@pengutronix.de>
-References: <20221122105455.39294-1-vivek.2311@samsung.com>
- <CGME20221122105022epcas5p3f5db1c5790b605bac8d319fe06ad915b@epcas5p3.samsung.com>
- <20221122105455.39294-2-vivek.2311@samsung.com>
- <20221123224146.iic52cuhhnwqk2te@pengutronix.de>
- <01a101d8ffe4$1797f290$46c7d7b0$@samsung.com>
+        Thu, 24 Nov 2022 09:55:14 -0500
+Received: from mail1.bemta34.messagelabs.com (mail1.bemta34.messagelabs.com [195.245.231.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500A525E8B;
+        Thu, 24 Nov 2022 06:55:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+        s=170520fj; t=1669301711; i=@fujitsu.com;
+        bh=alQ7R5Jh0NErV3HrxzICAC/+0mUOPP9X/aFaPsHC9FA=;
+        h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=FLsiwZGfCHP45lQpVpgj6eO4NpEeQgX9uPYR97QjHyJ5ijI+t2qWitMp4oPx8cWQ9
+         D7GNOe11wh9E4pAw5dMsmHAZe8FcbNfU9XQo/Cyn7+Fr6L8onY9A7+2xc5VmfTihua
+         uhDeiNt52ackZGCTBCzl3iHQlpHJIZIkZWDknRUPVmzdCmyM3ykPmSLx+M103Egb9G
+         SM6IBsbOxg5JDvO9RWJnGZhFyQU40Th3w7798NQRN6d2xfrLIQPawKhJDdkDDC0aq1
+         VknjI7wEnzfkG8QwmPSHJckUsgx7KygMZZngVfOWissO0FlB+0r7TuaSE55e6f6aLN
+         +DcT1/B2a02Kg==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrLIsWRWlGSWpSXmKPExsViZ8ORpHu+tT7
+  ZYEMTp8X0qRcYLbYcu8docfkJn8WevSdZLC7vmsNmsevPDnaLlT/+sDqwe5xaJOGxeM9LJo9N
+  qzrZPF5snsno8XmTXABrFGtmXlJ+RQJrxq4b7AXfOCturNzO2sDYwdHFyMUhJLCRUWLq+eeME
+  M4SJok/G95AOXsZJSY8/s7axcjJwSagI3FhwV8gm4NDRKBa4tZSNpAws4CXxNrXG5hBbGEBE4
+  lNa2aC2SwCqhLTV30Hs3kFXCQ+Xp3BBGJLCChITHn4HiouKHFy5hMWiDkSEgdfvGAGGS8hoCQ
+  xszseorxCYtasNqhWNYmr5zYxT2Dkn4WkexaS7gWMTKsYzYpTi8pSi3QNzfSSijLTM0pyEzNz
+  9BKrdBP1Ukt1y1OLS3SN9BLLi/VSi4v1iitzk3NS9PJSSzYxAsM8pVhx6w7GG8v+6B1ilORgU
+  hLlvZVTnyzEl5SfUpmRWJwRX1Sak1p8iFGGg0NJgtejHignWJSanlqRlpkDjDmYtAQHj5IIr3
+  s5UJq3uCAxtzgzHSJ1itGYY23Dgb3MHJP+XNvLLMSSl5+XKiXO+7IJqFQApDSjNA9uECwVXGK
+  UlRLmZWRgYBDiKUgtys0sQZV/xSjOwagkzKvRAjSFJzOvBG7fK6BTmIBOeapTB3JKSSJCSqqB
+  6Shj+s97PB/L3Vev+1p0PC3pW5py+qmkd7OrL1qVvz0lO6m4brt+7FH3fNbUL6pb79+cwvp1R
+  /qquOeOmy0fu2zZafxbPTUn7UThTa6GK39v6a28cDkmLKvh7Q+vs1s4b957YPvUymD39gQJpS
+  SxB/aHLM+05xu3lgnWLv3j//uUuZufE+/Kbb/9DmUfZvpg63jh0Upd8+cpF93cJfh6ghZKbVA
+  Xkaj0fH74+L5a+8cn9jY27G5PWcq/3+hJ4/k1ifOn2c5xdLoUNCNqv/3VszmO89bcXdCQJLgr
+  rOesSUOFRNPZ2KTlSqZtG3IOLbB/EtsscE02gH1O+oWJ64sV68v/ZelzaKX/MJv2cG5WmxJLc
+  UaioRZzUXEiAPCOJaKAAwAA
+X-Env-Sender: ruansy.fnst@fujitsu.com
+X-Msg-Ref: server-16.tower-565.messagelabs.com!1669301710!39516!1
+X-Originating-IP: [62.60.8.98]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.101.1; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 16235 invoked from network); 24 Nov 2022 14:55:11 -0000
+Received: from unknown (HELO n03ukasimr03.n03.fujitsu.local) (62.60.8.98)
+  by server-16.tower-565.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 24 Nov 2022 14:55:11 -0000
+Received: from n03ukasimr03.n03.fujitsu.local (localhost [127.0.0.1])
+        by n03ukasimr03.n03.fujitsu.local (Postfix) with ESMTP id C9C411AE;
+        Thu, 24 Nov 2022 14:55:10 +0000 (GMT)
+Received: from R01UKEXCASM126.r01.fujitsu.local (R01UKEXCASM126 [10.183.43.178])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by n03ukasimr03.n03.fujitsu.local (Postfix) with ESMTPS id BE7F41AD;
+        Thu, 24 Nov 2022 14:55:10 +0000 (GMT)
+Received: from localhost.localdomain (10.167.225.141) by
+ R01UKEXCASM126.r01.fujitsu.local (10.183.43.178) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.32; Thu, 24 Nov 2022 14:55:07 +0000
+From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
+        <nvdimm@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>
+CC:     <djwong@kernel.org>, <david@fromorbit.com>,
+        <dan.j.williams@intel.com>
+Subject: [PATCH 0/2] fsdax,xfs: fix warning messages
+Date:   Thu, 24 Nov 2022 14:54:52 +0000
+Message-ID: <1669301694-16-1-git-send-email-ruansy.fnst@fujitsu.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7molxfrf5k54fpwk"
-Content-Disposition: inline
-In-Reply-To: <01a101d8ffe4$1797f290$46c7d7b0$@samsung.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.167.225.141]
+X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
+ R01UKEXCASM126.r01.fujitsu.local (10.183.43.178)
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Many testcases failed in dax+reflink mode with warning message in dmesg.
+This also effects dax+noreflink mode if we run the test after a
+dax+reflink test.  So, the most urgent thing is solving the warning
+messages.
 
---7molxfrf5k54fpwk
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Patch 1 fixes some mistakes and adds handling of CoW cases not
+previously considered (srcmap is HOLE or UNWRITTEN).
+Patch 2 adds the implementation of unshare for fsdax.
 
-On 24.11.2022 14:36:48, Vivek Yadav wrote:
-> > Why not call the RAM init directly from m_can_chip_config()?
-> >=20
-> m_can_chip_config function is called from m_can open.
->=20
-> Configuring RAM init every time we open the CAN instance is not
-> needed, I think only once during the probe is enough.
+With these fixes, most warning messages in dax_associate_entry() are
+gone.  But honestly, generic/388 will randomly failed with the warning.
+The case shutdown the xfs when fsstress is running, and do it for many
+times.  I think the reason is that dax pages in use are not able to be
+invalidated in time when fs is shutdown.  The next time dax page to be
+associated, it still remains the mapping value set last time.  I'll keep
+on solving it.
 
-That probably depends on you power management. If I add a regulator to
-power the external tcan4x5x chip and power it up during open(), I need
-to initialize the RAM.
+The warning message in dax_writeback_one() can also be fixed because of
+the dax unshare.
 
-> If message RAM init failed then fifo Transmit and receive will fail
-> and there will be no communication. So there is no point to "open and
-> Configure CAN chip".
 
-For mmio devices the RAM init will probably not fail. There are return
-values and error checking for the SPI attached devices. Where the SPI
-communication will fail. However if this is problem, I assume the chip
-will not be detected in the first place.
+Shiyang Ruan (2):
+  fsdax,xfs: fix warning messages at dax_[dis]associate_entry()
+  fsdax,xfs: port unshare to fsdax
 
-> From my understanding it's better to keep RAM init inside the probe
-> and if there is a failure happened goes to CAN probe failure.
+ fs/dax.c             | 166 ++++++++++++++++++++++++++++++-------------
+ fs/xfs/xfs_iomap.c   |   6 +-
+ fs/xfs/xfs_reflink.c |   8 ++-
+ include/linux/dax.h  |   2 +
+ 4 files changed, 129 insertions(+), 53 deletions(-)
 
-Marc
+-- 
+2.38.1
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---7molxfrf5k54fpwk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmN/hYsACgkQrX5LkNig
-01087Qf9Gx/Nk41SCCj7+rrggRE7qKHXE5G+Qk02d7IXfzxLbUmsgUk5dsi29H/Z
-P7czNTvipDDshilhlAfYDGZKD01XfogCP2DAwVIBE0kCxRAfpBpC1xmEhGSG7mtV
-SHlKTj8cHNQ7J+IFmzCUq9R3ywgRyrX+PYgwg9danzR1dv049+kP/ptoTSUBOjqk
-OWbU4BsTtl/iIs/3pOxfoq9NMEXnS44zAHgJlkA10LGESj7wCfTMX2oG2V/10C+J
-/odw2rODOYOdcE30Lk5xEKvbbiHwIpMwQ2+8LSBckoqYhklPuC8H9oGrE0sIkCz8
-T4zcFCce6yQGR1tpOZ2JxMXb0qDsTQ==
-=rGjh
------END PGP SIGNATURE-----
-
---7molxfrf5k54fpwk--
