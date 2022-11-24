@@ -2,221 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2017E637483
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:54:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D5C7637484
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:54:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbiKXIyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 03:54:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56234 "EHLO
+        id S229890AbiKXIyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 03:54:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbiKXIya (ORCPT
+        with ESMTP id S229696AbiKXIyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 03:54:30 -0500
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479EE8756F
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:54:29 -0800 (PST)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-3938dc90ab0so9581947b3.4
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:54:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kYkoA/GomV2J1R+NfO0IwXHjKjxsC0Vb0ETBF00zbXI=;
-        b=ulH5JJlEBiyEJOyyzmDJEuovb470lZAyDOB5qNe/r+VBdnVulYNBQnNUSszcmHgA3r
-         bkj8uWQEGyLTC9K961wA9Hd37J/TC5kQb7emkDeK9EoFNll5qYS4vk6heKtzV7LtZ5Ig
-         yEM+B8eR3YKZQb7tMff3yRiIpfoqPEMZU1M0rBZ1BBG4FpNGBYtOtylj9MBmV5uQb/jY
-         9OwNpq12jh2E0hIEl+Pn5X2NNRtgABUL0VAmJBQrPdTXaJaPvRJetpCOVks/qeuMyj4a
-         G22/QjplaRtlbys6YMYSk5ljss+0SOoE6UMMY/RSLZfaElD1FEaXtS0xkEtbkRn18RxP
-         IGDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kYkoA/GomV2J1R+NfO0IwXHjKjxsC0Vb0ETBF00zbXI=;
-        b=8OWpvtt0F4UhNHwE91VURnkhA99vR5BKkYEh//GZ1/tPGjkNH5ywWX1GaoaIpsO7G1
-         o7yTorhmlZgLDtzpQG85FjtYB8rCkf090O/sIcYZcXKiL38yK8VvbL2mAObKQ0fApCMY
-         socfFsLwjP+HKfu4GCLSVrpN1TayyVkkGrrHuxankydEcgKRdbsv7eKHNFIF0/dMI5a+
-         vTX+jlavsR17zHNDYfmu7LkpciF8sA4Uf3DL1WqRKaQphnLaJm5G4JSdOw/yVlzQnVUA
-         ZoOLVgKRc3WEVDyNITmUB/LLKv+8BN1nCQrUIluDt/HKr63PgxO6Q5i+04I8Ci9dmlTc
-         Qv4Q==
-X-Gm-Message-State: ANoB5plYXHPjfoQzUUDfj0KkOuSsjPkaMQSJkIOCFroa/CaFt2iT+5Cp
-        POKnx//ARd+E/VwBkxNBwEvbkxgU7EmdHVZJHglzOg==
-X-Google-Smtp-Source: AA0mqf7PUjfLOTXJ/tlxRold+GNACKzGQPvC5qgYTBuKsbjof9rmRRzeEIro6Uscs431x2P0gTzIHHNWktmr0hWQxqU=
-X-Received: by 2002:a81:5945:0:b0:369:5494:75c0 with SMTP id
- n66-20020a815945000000b00369549475c0mr30631265ywb.448.1669280068349; Thu, 24
- Nov 2022 00:54:28 -0800 (PST)
+        Thu, 24 Nov 2022 03:54:51 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E7810CEB0
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:54:45 -0800 (PST)
+X-UUID: e1b7fc8b92984f0fa217638546b67cf1-20221124
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=81wfVrFGa0F5KGBMwUe92UrzpoG4Khjj+9dv7Pe3cgc=;
+        b=kB4Qv7ibiO9k/frbhoqa7DgVCF89awdOxRkSP2zROwQ2WicpCMu7e7TUfqHthkWqjsM+Kxw8awRbNs7YKMbS4UQpsI10ArRoJmotb+HXn+Z5kEp8f2HoBxLy/wwFVRF/fZuRl6+KKtn5EnLmrNl2UOnQLSAe2vcL4sSGeVxC5tU=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.14,REQID:1fedf52b-3988-48a4-9aba-8a4b487942be,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:dcaaed0,CLOUDID:4df031f9-3a34-4838-abcf-dfedf9dd068e,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:1,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: e1b7fc8b92984f0fa217638546b67cf1-20221124
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <jiaxin.yu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 12059189; Thu, 24 Nov 2022 16:54:40 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 24 Nov 2022 16:54:38 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Thu, 24 Nov 2022 16:54:37 +0800
+From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
+To:     <broonie@kernel.org>, <andrzej.hajda@intel.com>,
+        <neil.armstrong@linaro.org>, <robert.foss@linaro.org>,
+        <Laurent.pinchart@ideasonboard.com>,
+        <kuninori.morimoto.gx@renesas.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <nfraprado@collabora.com>
+CC:     <chunxu.li@mediatek.com>,
+        <ajye_huang@compal.corp-partner.google.com>,
+        <allen-kh.cheng@mediatek.com>, <dri-devel@lists.freedesktop.org>,
+        <alsa-devel@alsa-project.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>
+Subject: [PATCH 0/3] ASoC: mediatek:mt8186: fix both the speaker and hdmi
+Date:   Thu, 24 Nov 2022 16:54:33 +0800
+Message-ID: <20221124085436.24900-1-jiaxin.yu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221123084602.707860461@linuxfoundation.org>
-In-Reply-To: <20221123084602.707860461@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 24 Nov 2022 14:24:16 +0530
-Message-ID: <CA+G9fYtnHTdCS=RWNULkzENX=mtRrJzc6e++PfeprmFqrQBr9g@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/181] 5.15.80-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Nov 2022 at 14:59, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.80 release.
-> There are 181 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 25 Nov 2022 08:45:20 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.80-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+The speaker and hdmi of mt8186 platform are shared the same port of I2S,
+when connect the external display, use build-in speakers to play audio,
+they both playback at the same time. So we want to manage the playback
+device through DAPM events.
 
-Results from Linaro's test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Jiaxin Yu (3):
+  drm: bridge: it6505: bridge to hdmi-codec
+  ASoC: hdmi-codec: Add event handler for hdmi TX
+  ASoC: mediatek: mt8186: correct the HDMI widgets
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+ drivers/gpu/drm/bridge/ite-it6505.c           | 36 +++++++++++++++---
+ include/sound/hdmi-codec.h                    |  6 +++
+ sound/soc/codecs/hdmi-codec.c                 | 37 +++++++++++++++++--
+ .../mt8186/mt8186-mt6366-da7219-max98357.c    |  2 +-
+ .../mt8186/mt8186-mt6366-rt1019-rt5682s.c     |  2 +-
+ 5 files changed, 71 insertions(+), 12 deletions(-)
 
-NOTE:
-As other reported arm: allmodconfig build failed due to
+-- 
+2.18.0
 
-rtc: cmos: fix build on non-ACPI platforms
-[ Upstream commit db4e955ae333567dea02822624106c0b96a2f84f ]
-
-Build error:
-drivers/rtc/rtc-cmos.c:1299:13: error: 'rtc_wake_setup' defined but
-not used [-Werror=unused-function]
- 1299 | static void rtc_wake_setup(struct device *dev)
-      |             ^~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
-
-## Build
-* kernel: 5.15.80-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.15.y
-* git commit: 1ac88d934860fc481995accb27454e4fe906d4f6
-* git describe: v5.15.79-182-g1ac88d934860
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.79-182-g1ac88d934860
-
-## Test Regressions (compared to v5.15.79)
-
-## Metric Regressions (compared to v5.15.79)
-
-## Test Fixes (compared to v5.15.79)
-
-## Metric Fixes (compared to v5.15.79)
-
-## Test result summary
-total: 145866, pass: 126226, fail: 3335, skip: 15985, xfail: 320
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 147 total, 146 passed, 1 failed
-* arm64: 45 total, 43 passed, 2 failed
-* i386: 35 total, 33 passed, 2 failed
-* mips: 27 total, 27 passed, 0 failed
-* parisc: 6 total, 6 passed, 0 failed
-* powerpc: 30 total, 30 passed, 0 failed
-* riscv: 10 total, 10 passed, 0 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 12 total, 12 passed, 0 failed
-* sparc: 6 total, 6 passed, 0 failed
-* x86_64: 38 total, 36 passed, 2 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-breakpoints
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-kvm
-* kselftest-lib
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-openat2
-* kselftest-seccomp
-* kselftest-timens
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simpl
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
