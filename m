@@ -2,77 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEBBB63751F
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 10:26:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E67A637521
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 10:26:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbiKXJ02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 04:26:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37020 "EHLO
+        id S229487AbiKXJ0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 04:26:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiKXJ0Y (ORCPT
+        with ESMTP id S229648AbiKXJ0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 04:26:24 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF6311605A;
-        Thu, 24 Nov 2022 01:26:23 -0800 (PST)
-Received: from fraeml742-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NHsxL6xqQz6HJTS;
-        Thu, 24 Nov 2022 17:23:34 +0800 (CST)
-Received: from lhrpeml500004.china.huawei.com (7.191.163.9) by
- fraeml742-chm.china.huawei.com (10.206.15.223) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 24 Nov 2022 10:26:21 +0100
-Received: from mscphis00759.huawei.com (10.123.66.134) by
- lhrpeml500004.china.huawei.com (7.191.163.9) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 24 Nov 2022 09:26:20 +0000
-From:   Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
-To:     <jejb@linux.ibm.com>
-CC:     <martin.petersen@oracle.com>, <damien.lemoal@wdc.com>,
-        <john.garry@huawei.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yusongping@huawei.com>,
-        <hukeping@huawei.com>, <artem.kuzin@huawei.com>
-Subject: [PATCH] scsi:aic94xx: Fix self assignment
-Date:   Thu, 24 Nov 2022 17:26:05 +0800
-Message-ID: <20221124092605.1677082-1-konstantin.meskhidze@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 24 Nov 2022 04:26:35 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4291111605A;
+        Thu, 24 Nov 2022 01:26:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=SQZFDjndEHG3J/gZQ4hoB38UGRP7fGtXudSzN0rEezs=; b=wJdaVrg+LdaOfZl/BWnSKP3ydA
+        UfFD3UMOwMOgDqdguC3qJaLTJxU5N2Wyfpn567fFuQ7IoSIa5+t+uYlm/sIcNKNpCLizneI9lP750
+        ak4fAmyZLock5gyuzPhODX+p0Y8q5oFRybW8iiE1/94zoJy9QjMdZytVdt436o+bzsdWBQ5y+cVZ9
+        PmRLPFtDpzsV5nmiZTzAvDq7qvRVYrIw3adfPR53tfJCZLHpAbXm2I/owg8xXLUBXv3tF5sJ3xcG1
+        2xZb6yfC43G1/A1W6PO5dvFQSD9tXgT+JGLhrElM6ZlbSNNjqnESyP++iVxDOovGWy6HqtqSQaR+d
+        6grxBkFA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oy8V2-008ZN0-Ps; Thu, 24 Nov 2022 09:26:28 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 04B6F300202;
+        Thu, 24 Nov 2022 10:26:21 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id DD8E9203CF645; Thu, 24 Nov 2022 10:26:20 +0100 (CET)
+Date:   Thu, 24 Nov 2022 10:26:20 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-mm@kvack.org, seanjc@google.com,
+        pbonzini@redhat.com, dave.hansen@intel.com,
+        rafael.j.wysocki@intel.com, kirill.shutemov@linux.intel.com,
+        ying.huang@intel.com, reinette.chatre@intel.com,
+        len.brown@intel.com, tony.luck@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
+        sagis@google.com, imammedo@redhat.com
+Subject: Re: [PATCH v7 10/20] x86/virt/tdx: Use all system memory when
+ initializing TDX module as TDX memory
+Message-ID: <Y384vDcfTpTnFxx+@hirez.programming.kicks-ass.net>
+References: <cover.1668988357.git.kai.huang@intel.com>
+ <9b545148275b14a8c7edef1157f8ec44dc8116ee.1668988357.git.kai.huang@intel.com>
+ <637ecded7b0f9_160eb329418@dwillia2-xfh.jf.intel.com.notmuch>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.123.66.134]
-X-ClientProxiedBy: mscpeml100001.china.huawei.com (7.188.26.227) To
- lhrpeml500004.china.huawei.com (7.191.163.9)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <637ecded7b0f9_160eb329418@dwillia2-xfh.jf.intel.com.notmuch>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit fixes self assignment of scb->ssp_task.retry_count
-in asd_build_ssp_asc() function.
+On Wed, Nov 23, 2022 at 05:50:37PM -0800, Dan Williams wrote:
 
-Signed-off-by: Konstantin Meskhidze <konstantin.meskhidze@huawei.com>
----
- drivers/scsi/aic94xx/aic94xx_task.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> arch_add_memory() does not add memory to the page allocator.  For
+> example, memremap_pages() uses arch_add_memory() and explicitly does not
+> release the memory to the page allocator. This check belongs in
+> add_memory_resource() to prevent new memory that violates TDX from being
+> onlined. Hopefully there is also an option to disable TDX from the
+> kernel boot command line to recover memory-hotplug without needing to
+> boot into the BIOS to toggle TDX.
 
-diff --git a/drivers/scsi/aic94xx/aic94xx_task.c b/drivers/scsi/aic94xx/aic94xx_task.c
-index ed119a3f6f2e..5a588e9f7d0a 100644
---- a/drivers/scsi/aic94xx/aic94xx_task.c
-+++ b/drivers/scsi/aic94xx/aic94xx_task.c
-@@ -493,7 +493,7 @@ static int asd_build_ssp_ascb(struct asd_ascb *ascb, struct sas_task *task,
- 	scb->ssp_task.conn_handle = cpu_to_le16(
- 		(u16)(unsigned long)dev->lldd_dev);
- 	scb->ssp_task.data_dir = data_dir_flags[task->data_dir];
--	scb->ssp_task.retry_count = scb->ssp_task.retry_count;
-+	scb->ssp_task.retry_count = task->ssp_task.retry_count;
- 
- 	ascb->tasklet_complete = asd_task_tasklet_complete;
- 
--- 
-2.25.1
+So I've been pushing for all this to either require: tdx=force on the
+cmdline to boot-time enable, or delay all the memory allocation to the
+first KVM/TDX instance being created.
+
+That is, by default, none of this crud should ever trigger and consume
+memory if you're not using TDX (most of us really).
+
+(every machine I have loads kvm.ko unconditionally -- even if I never
+user KVM, so kvm.ko load time is not a valid point in time to do TDX
+enablement).
+
 
