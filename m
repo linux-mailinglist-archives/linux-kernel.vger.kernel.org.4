@@ -2,78 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACB0E637D0C
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 16:33:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB236637D0D
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 16:35:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbiKXPdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 10:33:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48882 "EHLO
+        id S229617AbiKXPfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 10:35:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiKXPdU (ORCPT
+        with ESMTP id S229507AbiKXPfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 10:33:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A98E676F;
-        Thu, 24 Nov 2022 07:33:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 24 Nov 2022 10:35:13 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A41E8725
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 07:35:13 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e75b329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e75b:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 32CE96219E;
-        Thu, 24 Nov 2022 15:33:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAC7AC433D6;
-        Thu, 24 Nov 2022 15:33:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669303998;
-        bh=Ir4muPjBKsPcyktJyw/fUL6Kv3BECljIo7S6hUAHENk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M9lQnAte63QviEpIGUt8Q7smUNS5lfe3WHwPlg1V8bDYXgMGcpkX0dQN6oO26ve0V
-         rM/0u6oDkhwzf7u1mJcjgXbgZCtlvkxBdRHnzMxdlaA0vTCiyDjd3BSXOdaqSdMW2g
-         OMcxqV4whlN/HG4x+Ve8KG9SluJr9GzjsEWwz96SP7hsTnPJYaya92Tc1bb0CXwfaY
-         NL0ZGZd4+Fl1xpFkRqvTNylTdl17+zi7qCjkBcyM1xewuipMDslaFiNeatoLpQQwUU
-         JjlRWYobqNAmk9Auc98xmhN1CWFurD4fnYgqx8qmpYTt1maOjYqb3jR+n49nPyjWfI
-         S8RcftBzeN1AQ==
-Date:   Thu, 24 Nov 2022 21:03:14 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/6] phy: qcom-qmp-combo: preparatory fixes (set 1/3)
-Message-ID: <Y3+Oupd55ZEEX+jx@matsya>
-References: <20221114081346.5116-1-johan+linaro@kernel.org>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8157A1EC0495;
+        Thu, 24 Nov 2022 16:35:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1669304111;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=uMdYplkUhfbHCUEJKpVOLbcUaHxlg1ZFtwfDCnP26Bg=;
+        b=WIgJDIo+92EfSC2B053Gj/BryQ7+Y+NS138sgK/+xOVLE8AHeSHvMJvtcHBo1QIMUG6/xL
+        kkKiZ2CObE7ZikcuycW7R3451oknrVPhB8NnY9vrnxKus9T15Bcxd01BfrN94x4zMdgLqF
+        +BGpYYVLkK6KtrFXUA4+tmgrj88uFhM=
+Date:   Thu, 24 Nov 2022 16:35:07 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org
+Subject: Re: [PATCH v3] x86/boot: skip realmode init code when running as Xen
+ PV guest
+Message-ID: <Y3+PK23tdXIMtuSE@zn.tnic>
+References: <20221123114523.3467-1-jgross@suse.com>
+ <Y39xcnKCkbYQZjaE@zn.tnic>
+ <a1fc1d88-2112-2b81-52bc-cbfb6736edf0@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221114081346.5116-1-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <a1fc1d88-2112-2b81-52bc-cbfb6736edf0@suse.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14-11-22, 09:13, Johan Hovold wrote:
-> Here's a set of fixes for bugs founds while fixing the devicetree
-> binding and adding (proper) support for SC8280XP to the combo driver.
-> 
-> The full series is over forty patches and I'll be posting these in three
-> parts of which this is the first. In an effort to get all of these into
-> 6.2, I'll also be submitting all three series before waiting for the
-> previous ones to be applied.
-> 
-> The first fix below could possibly be considered 6.1-rc material, but I
-> believe it's be fine to take all of these for 6.2.
-> 
-> Note that the next part of the series will do away with some of problems
-> with this driver that led to the issues being fixed here (e.g. the split
-> driver data and configuration).
+On Thu, Nov 24, 2022 at 02:30:39PM +0100, Juergen Gross wrote:
+> Looking at the date when 084ee1c641a0 went in I don't think it _needs_
+> to go in now, but I wouldn't complain ...
 
-Applied, thanks
+So if you don't have a particular and specific reason, I won't queue it
+for stable at all.
 
 -- 
-~Vinod
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
