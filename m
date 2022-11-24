@@ -2,122 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD288637DD9
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 17:57:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8252637DF3
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 18:02:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbiKXQ5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 11:57:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55810 "EHLO
+        id S229678AbiKXRCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 12:02:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiKXQ5k (ORCPT
+        with ESMTP id S229612AbiKXRCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 11:57:40 -0500
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70138.outbound.protection.outlook.com [40.107.7.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601CA19025
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 08:57:38 -0800 (PST)
+        Thu, 24 Nov 2022 12:02:49 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2B418B3C;
+        Thu, 24 Nov 2022 09:02:47 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=M7vvZCd25Fmpgqco4qd7pyEEkoi6c4YSGsUczvini8YuOv6CPKz9qw2Ufu5nXQQvbJ8ktiIYQAn0DrwtIx6ApjuwkSO4LftTrswDzB8ax/N2q2C8nUBNmFAfHEvWrCXWT6uJFtkIdsMe8OXDg9jd2VZIOm0BA9jgJc25TfnCMKo0j4i2ZAg4IWsbTa6VJx5T+V8hKlR9KKnNzjLn5bTmyybfKtPRypCC59T2Xu2YNaCv88GFKD3RecPo+nUaROY2JNH9+Bipt6lJSv39gqYJsy0zeUuXbxFbz/0RpYqZj/zoZOBXerPOZyD4+JxQe0TVDjlUf3kyOO5g0mR5Zvqgcw==
+ b=R8iIkGQtInmgMcF70nWYBJUkqGKcuw1qB8NkJBkR4Il4RaUe/blB6xcyz3TIWtcytN78tbbyhPdUHm5J5YmRkIbD3aa9B2AOqcoiMcSfEVUXWaNmFF65EgcDFkTW6lIrXZA/fxrKx9k1DmmO3e2yYgeYS90tE9pJT0R6JMbuig0mXb6Yb3oGInobB5JNdXd1s047Sf/162TSn0G4XsXemDmjajrxcmvIrPPywIdvd1SrApVh9+pb8xO/rBxSww41cmCe1XPauL78j8mwqoLfZbfNbIOYzx83dTcg2kN94VPWL1FlxU00t0IGnT+bco6gMUqaVKRd0jHamNAc/g6GrA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ps+MmI7qpyQuhyJADB9Mcwnkj2bX3JzgUnOXFL9zBt0=;
- b=EHJbeSxy9Wu6ts1GSBBTIgYbAZjboJf7phxhKfv221w6hh8EibE3232DqQrgCA33XWnPQjW8JTZXX+d1MGFGp+9hfMm9TgvDI/hNHasclmOyM3Jaxqvd5yE5Oq/qh9qGdybJRXQDJXxWTiNLWyEV9ethmOROiwGn99RB1H7aa+8dlo1YQO09bfOLyytzb/gI3qgmJCpfj6m2CQqlfeXkGnUHCpGEA+D21+2jJhWSF3WNVtnWbb9h07rWzH8UQs1eHUpBgwxiKr0iv44mF/WCE4ErbeBk88ip4O7YKf4rivCjHJ6p4Tu2tgPoFqs6mg2vvuuUQ1vTvhenbK4Sm7iMuw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nokia.com; dmarc=pass action=none header.from=nokia.com;
- dkim=pass header.d=nokia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia.onmicrosoft.com;
- s=selector1-nokia-onmicrosoft-com;
+ bh=m99/gTo0KTRMi9E6+WP4aRTN979Dzrg1RBvg3C6icM8=;
+ b=R3k6Gcckh0hH6Rk6Y6IFjg6wAVKk4sTynp9n3eTMqAVQJLCX3TexiKPvaCrZRdZHxl9RyLjfm6n4GvuC9SgIpCnstJs9L1vmlFvVY7lzAghgUkYplKQ0GJGiWizWFWucMheIe4AzJ5ZxScjUPOSWTOp+erT1yOAjWzY0lnT7CCcLVTejKpAbIDaoklWBwV78F+X2quathduaU/q+AyZllIyUHIiqsyJ7APlT5X9g+8egjVkFFnBHv6wTJHVxxxRd4tX/fo8aRR1F6jkV0HVcAz3DuOo1RO3H4am9kjImK7XaxjFcFXecpeoYPxXRlH5OYYZ/kpc6NvKBvM9uNtGDSw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=lwn.net smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ps+MmI7qpyQuhyJADB9Mcwnkj2bX3JzgUnOXFL9zBt0=;
- b=mGe6i84Mt3bs/rEqBOLhshHtVBmBT3OlQUGTgDLXVCp6GiCrzTCrgKeCP7Huah4tkn2oLP+4Zn/ToekyYEzP1jrcWSyanZK8ndMRNRgERNdBkhW1R+fE28nhBWyJh9EapfmLZ9o+s9XYAKwhwf5NnxZ+VPwPHo6n6onxd2JGNJw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nokia.com;
-Received: from VI1PR0701MB3005.eurprd07.prod.outlook.com
- (2603:10a6:800:87::19) by DB5PR07MB9514.eurprd07.prod.outlook.com
- (2603:10a6:10:48f::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19; Thu, 24 Nov
- 2022 16:57:35 +0000
-Received: from VI1PR0701MB3005.eurprd07.prod.outlook.com
- ([fe80::bacd:11a2:15e2:7339]) by VI1PR0701MB3005.eurprd07.prod.outlook.com
- ([fe80::bacd:11a2:15e2:7339%11]) with mapi id 15.20.5857.019; Thu, 24 Nov
- 2022 16:57:34 +0000
-Message-ID: <af226986-c6ba-5192-4544-b878fd3140c8@nokia.com>
-Date:   Thu, 24 Nov 2022 17:57:30 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Content-Language: en-US
-To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>, hpa@zytor.com
-From:   Matija Glavinic Pecotic <matija.glavinic-pecotic.ext@nokia.com>
-Subject: [PATCH v3] x86/rtc: Remove __init for runtime functions
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: HE1PR0902CA0042.eurprd09.prod.outlook.com
- (2603:10a6:7:15::31) To VI1PR0701MB3005.eurprd07.prod.outlook.com
- (2603:10a6:800:87::19)
+ bh=m99/gTo0KTRMi9E6+WP4aRTN979Dzrg1RBvg3C6icM8=;
+ b=TKgzYfdLejaovmUzE0HmxfB3sJnP45Gk7dnfMGnUQh5fVmOJmM0fZSvofAIkIC5v9IkJMg95HgeQfgfQcMk5mXA+VItgD0vml1FpqCTwqj8IJkLe9aoB5PNcfe5yVt/BmhmEeuFM7vx2MRJwpEckTtQ/zRT+tFPzGuAjdxfGogI=
+Received: from DM5PR07CA0082.namprd07.prod.outlook.com (2603:10b6:4:ad::47) by
+ MW4PR12MB7144.namprd12.prod.outlook.com (2603:10b6:303:21b::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Thu, 24 Nov
+ 2022 17:02:45 +0000
+Received: from DM6NAM11FT004.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:4:ad:cafe::ae) by DM5PR07CA0082.outlook.office365.com
+ (2603:10b6:4:ad::47) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19 via Frontend
+ Transport; Thu, 24 Nov 2022 17:02:45 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ DM6NAM11FT004.mail.protection.outlook.com (10.13.172.217) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5834.8 via Frontend Transport; Thu, 24 Nov 2022 17:02:44 +0000
+Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 24 Nov
+ 2022 11:02:43 -0600
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB06.amd.com
+ (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 24 Nov
+ 2022 11:02:43 -0600
+Received: from iron-maiden.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Thu, 24 Nov 2022 11:02:43 -0600
+From:   Carlos Bilbao <carlos.bilbao@amd.com>
+To:     <corbet@lwn.net>, <lukas.bulwahn@gmail.com>, <ojeda@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <bilbao@vt.edu>, Carlos Bilbao <carlos.bilbao@amd.com>
+Subject: [PATCH 0/6] docs: Update kernel-docs and progress translating Spanish
+Date:   Thu, 24 Nov 2022 11:02:36 -0600
+Message-ID: <20221124170242.1892751-1-carlos.bilbao@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR0701MB3005:EE_|DB5PR07MB9514:EE_
-X-MS-Office365-Filtering-Correlation-Id: 88386094-14b0-4fd7-ec2d-08dace3cfbb9
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT004:EE_|MW4PR12MB7144:EE_
+X-MS-Office365-Filtering-Correlation-Id: a71f7cb2-3d3d-4080-68f1-08dace3db4ca
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oA2G8sbhSCX9qRzNdQJg0UtTJaVe/1Gl6I/x9FpOwoLa8Vjo9X8SN3mHr/s97iabto+u045SZGG0Xj0NjebacYpEha1qNYTU/AD9u+y42HdFnvyfcga8aH6IYIXxcTCOfECQvTDIUTqk70c3rkuIj8ovx+XgoJ6LaMFof/ms/r2e1GFE+PK/bX9medTeqDeC0oDWH1oKMe8s/nNoGHktG+TQ/nkiSWD0qWYdUq9WxWeaG5Nvei/ucFCK5mVhIHKfQwUXdCQH8IbUiEhv7eB03iRmITSy0pU+BwfvvaBwCXJ7rm6Y+2MYkVLbj1akT27LITVKXxX7KGP7/+LUCr6bUafHptTrynH2BbmlxglCuygl2frBSIpVc6C7cQzdB9SxojAk91dSM5kaJDZmeLmarpfWKfdhgfmKnr6HsAnC7uhEIZiFlwWYs6sIcSnSiGI+2cRT2vDHdwxT0xDCbwPGr+vlkhJMIVarg9BroEsYMltQtGFAxy/FgTnGkVIpXLknPglVymMVcW1mboubTetTl0zicY9ExulqQ0PWJ5VdOuSx2tPFHxlJRvsctYO9C13XhtuFsevTGHvLBXPUi23e9aQ6QVuBTGiZYcCmrVhYAYm4M2O5RTm1kfab5HM3I6SOd+phW5sDC5SC4kVw4YAnRZ7YTrHbSFYljJQMZ4LGtp0Ev+z0Vr4LHozX2+CBBNtyQaOftQxH2ehR8h64Gp/lW9jU0DxIss5JJ/P6DMJVjFA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0701MB3005.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(346002)(396003)(376002)(136003)(451199015)(6506007)(26005)(6486002)(36756003)(6666004)(110136005)(41300700001)(2616005)(5660300002)(186003)(2906002)(83380400001)(8936002)(66476007)(6512007)(66556008)(316002)(86362001)(55236004)(8676002)(31696002)(66946007)(82960400001)(478600001)(31686004)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UWdTSjkzSEw3cmtwYlRQVENydllzUzR2Q0xlN2IzSFR0Yld5Z3U4U3JXdkNB?=
- =?utf-8?B?V1oxTGVBUkNpWHQycTIyMUNpcWMzT1Y0aGdPdHcxN1dGZDEzZ1Y0MDBybnlW?=
- =?utf-8?B?akRrNTRIZDB1bHBXeUhXS1lnR25BeGtUbWZsNk5wQmtQQWZZWkh1TmloNE8v?=
- =?utf-8?B?cmF3VlNBQXJqM3NEZFBzRjVDTjhDZllaRGlPTWxZVWp5QmdTczFtaTRMaWxQ?=
- =?utf-8?B?VHFxcXpoem5ZaEhsKzlMenoxN3JnZzV1UjMyb25zS1V3K0VxWjhWbUNaNFlz?=
- =?utf-8?B?dnBDcFFyUDNXMU5sZUZnYTgwL3JhK1dnL0xRMzZLOHBGRks4QmFlUEsyNGM4?=
- =?utf-8?B?QkhUcnFDdUc1NENGOVovSi9KMHB4ODJTcGhUa1ZkbHp3OWhZN0cxK0JTeE4v?=
- =?utf-8?B?bjUxdXJEV2w5SlNYVUI4dFgxZUZhMHp3b3lsSkZRNkpraVBxdXFPdUZuUmxW?=
- =?utf-8?B?ckZhUWIrY2w1d0RZZ0RtaXc2OHl2Uk05cWRvK3N3V1NlYVBwbldYUnMrRjAx?=
- =?utf-8?B?OVdCdW1ZeHNSNWNvODBSY0lQKy8yR3BXWE80cHJ2eFFPV2pQSGtYdENkTEdv?=
- =?utf-8?B?NTRJTWlLTC9Lb0pMVTR1SThEa0Jnclp0bzZwUWlMK1dKbU4yRUkydk14Q0Qv?=
- =?utf-8?B?L1YvMjlZSy9CUWJ4ZE9vcjBUeFkzWXY5K3VGSitFQ0FSS3JSUExGeWdTMjlr?=
- =?utf-8?B?b1R0cjhKeTNhSDY4YnBkcW5OZk95OVpVL3hqMEtySmxJOURJRnFCN0MyZUxt?=
- =?utf-8?B?R3N1QmlicXZuU0dQYkwxbzRYWnJWd3hFeXU0RU4yNndOVUh0ZUg5Vi9ndWNv?=
- =?utf-8?B?aithZXA4RDd4VG9CZ3JFTVpZYWkzTDhKVHl4M3pLOVBjZHUySG5QRS9Ia3VD?=
- =?utf-8?B?aU05RnhEYk9aNW0wcFk4YW5aelZnYkF0VEZVcjR0ajE3dGhHNHd2NCtPSXVj?=
- =?utf-8?B?blZYdHp6eEMzM1dkYWxIdmJ6K3oreWIyZnJVRGM0SWRWVlpGQSs5elZtMkpG?=
- =?utf-8?B?MXoyUFMvRVBDSG5ORlZWK1NTQjlwZGxCVnA4T3ZCeXdTOTNrTXZoV2tlQXVY?=
- =?utf-8?B?OXRCNm1hbzFLemJRMGMrdEN2NDdLdDZ5ejZacGhDUkV3ZW40c0FCQUJockhS?=
- =?utf-8?B?Y2w3bmwrNWN5T2hMZ1pCM0hUbnBTNnJkdjZkb1V2Y3BMZURITUV4Tk85VWpF?=
- =?utf-8?B?ZkQ4bm5ROXNVamkrYVpvakR1Q01RbFNmRjFxRnhiWDhjd2tKVk84ellnK3dW?=
- =?utf-8?B?aGR3VldON2pIR0hFUDllcWFmTDVVUzBnc2ZCcDdJWHJEQTUyS2xFRGZHYXIw?=
- =?utf-8?B?SGVDMXlPRi9NNWRlMkVmdFFxTjJacTFRemxrK25ISmdXU0d2MU9ZTG42L0ZV?=
- =?utf-8?B?dGd6NDhKeXkvelNZMC92bjlwTkZQOEVQeVVKNmhVcHVlWkJtK1Bpb0kzMFNm?=
- =?utf-8?B?aHNWYnd1ajdDbnNnQUdGMVV4MUY2S3dZWWVIMEdYRTJoQ3RlTkpMV1lZL1p4?=
- =?utf-8?B?Y3BHMy9IVGpMV1RZM3JWMUxRNkIwY3VSTUtyTXE3ZjFja0FEdXdscEpwckcw?=
- =?utf-8?B?SFBBMWEyNkc2UVBGa3NoTXRXYmo2RXZNdEtYTzBCZGtuTjF4d1V4NVVVSHdL?=
- =?utf-8?B?ZlM2ZjQrcXlkcHpJOTh2alhtN0JWbFVFaEdSb1Z4TzdoZU0yWTJBQ3VUWE9r?=
- =?utf-8?B?cnJKcThic0lTN0RKdGxTaEdzTWx3eVExQWt5YWhHT2s4VStBQ25jQm9PS2xM?=
- =?utf-8?B?Sm1SM2ZJQ1pHbytzSERDeWUyODJCN3YwazhIblRkSG5wazM3a0cvN3RvYTVn?=
- =?utf-8?B?WkJrbjFLcVdRa3FHMzJ0QUdJbjVQUCtpcC9rWUE3NjhTdTNvZmhKb2JuR0x6?=
- =?utf-8?B?OVNkeFZUemZKRlkrRGk5dlAyM0FZZE9pZERBa041UXA3bDlSeDVsWERJRVdD?=
- =?utf-8?B?bmduSFAvZldKRCs4Q2E4UlFLd0EzZTJLdFo0UHFxMlRtVEJpMkl0Q2tyK2g5?=
- =?utf-8?B?ME9TbWhJQzBKYWhvRTkyUFd0S3ZkTlZPbUhhYU42a0MwcEZEYTRieVdLNG8x?=
- =?utf-8?B?VUQ3SFIxL2d5aDRXVytmSm1hbFgxZkhzbUllYnRzaTM3YStsSWF5VFRVcmta?=
- =?utf-8?B?RzRDNEpTaW5Jb3NsYzJhOXptMzVVQzRzUURGS3NVbm1DdDJRSHlnUDRIV3o5?=
- =?utf-8?Q?QNOdrkxLd54x0A1PYxPy3QM=3D?=
-X-OriginatorOrg: nokia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 88386094-14b0-4fd7-ec2d-08dace3cfbb9
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR0701MB3005.eurprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2022 16:57:34.4378
+X-Microsoft-Antispam-Message-Info: /vFgysH90LeEmfunAKPkb/5/ABOZ730fG+c1iYjV/FLkkP/lp+Tn3pwEoWH6nQctAtoBrYrwm2rR7WW8Exskn6TrjZ1gfJA5YA9QsZhmW7izno3kgzOr00/ddLwCke1orE7ady3pYIRz2zN8EMLfjV9obC2hTFAhSZmF2aW57GwaCe0zwTAZ66WoOpMgo2kZt9siWqIcfjO1uQt5M+/XG738i/xP8s2a7gkLQWf+pRAFmoLtt2mjCBQrp8zaxYLdFMhtsmoSzp/1M27kts2060hvW7P71kBldLXy6y0uBhBYxt78gGG85EpsuO/syrQG6LKOc16ivMQRSRcdsaCA+AxgZ490T5MZn4/SGl9uKZvxzDL5Khedpfrq3DrJz+U3CtrsgSacDBCrcAVfM8QmgGVzJjLp2oM+LxaG8SVY02G4/XnidjmNgzXVexy4ozUGqEdmg0aMKGaYs+QlcQjp6ZcCHeacrIEtPGUGEi8Y51PWiTXT0AEvqdkO35+mRkmsQnqj2VzcmIS1sns8BalRfu3xCMDfdiWoD85jLMJCUWyHdBqhBIeNl3FZcxNZt7SnvOr/uYv2QkUAJODWGMPHXy+nezv6qEC0zU4WzhZkLS1+gdpC4MMen3+kIKzVLsuyjPUx8n6+lV/lBz65WNMm/+GYNANs4zG8Ca+FdA2IUWt9sK4gOuXFOyQYS6UWUJufKDZC+JPVxRGW+AceubDART8NbCwIVxKfTOXZQefQGSI7Wzg9y4LADVfC7CV2EHfB/Q8J+pKY4KpU0RuzNm2j7Q==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(396003)(376002)(136003)(451199015)(46966006)(40470700004)(36840700001)(36756003)(336012)(5660300002)(83380400001)(2616005)(7696005)(54906003)(44832011)(186003)(1076003)(70586007)(316002)(8676002)(70206006)(4326008)(8936002)(26005)(36860700001)(426003)(82310400005)(356005)(81166007)(82740400003)(2906002)(86362001)(40460700003)(15650500001)(110136005)(47076005)(40480700001)(6666004)(41300700001)(966005)(478600001)(66899015)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2022 17:02:44.7056
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Lx++tWupuyoO07+JSzLaO9CLef3Z5ij0t+fHAMvb3wWjwT04wbgxHv6CrMo1MuaTItpVjPgeOFyp7eKkvthrqxht7tLrCQcFknGBHiiF8gcw0qIMFnPIKrEiNiWW6aZb
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB5PR07MB9514
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=no
+X-MS-Exchange-CrossTenant-Network-Message-Id: a71f7cb2-3d3d-4080-68f1-08dace3db4ca
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT004.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7144
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -125,43 +101,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-set_rtc_noop, get_rtc_noop are used runtime, therefore need init removed.
-Crash was observed on x86 platform where cmos rtc is unused and disabled
-via device tree. Function was triggered from ntp: sync_hw_clock, although
-CONFIG_RTC_SYSTOHC=n, however sync_cmos_clock doesn't honour that.
+This patch set:
 
-  Workqueue: events_power_efficient sync_hw_clock
-  RIP: 0010:set_rtc_noop
-  Call Trace:
-   update_persistent_clock64
-   sync_hw_clock
+1. Updates the maintainer of kernel-docs.rst. Retires its outdated
+resources and adds new material. More context on [1].
 
-Fix by dropping __init and making set/get_rtc_noop available runtime.
+2. Makes progress translating kernel documentation to Spanish. In
+particular, it creates translations/sp_SP/process/ and moves documents that
+should go there. It also offers translations of kernel-docs.rst and
+coding-style.rst. 
 
-Fixes: c311ed6183f4 ("x86/init: Allow DT configured systems to disable RTC at boot time")
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Matija Glavinic Pecotic <matija.glavinic-pecotic.ext@nokia.com>
+Carlos Bilbao (6):
+ docs: Update maintainer of kernel-docs.rst
+ docs: Retire old resources from kernel-docs.rst
+ docs: Add book to process/kernel-docs.rst
+ docs: Create translations/sp_SP/process/, move submitting-patches.rst
+ docs/sp_SP: Add kernel-docs.rst Spanish translation
+ docs/sp_SP: Add process coding-style translation
+
+[1] https://lore.kernel.org/lkml/20221118170942.2588412-1-carlos.bilbao@amd.com/
+
 ---
-v3: Update commit message based on Andy's comments (further trim to backtrace, proper tag)
-v2: Update commit message based on Andy's comments
+ Documentation/process/kernel-docs.rst         |  477 +-----
+ Documentation/translations/sp_SP/index.rst    |    3 +-
+ .../sp_SP/process/coding-style.rst            | 1315 +++++++++++++++++
+ .../translations/sp_SP/process/index.rst      |   15 +
+ .../sp_SP/process/kernel-docs.rst             |  187 +++
+ .../{ => process}/submitting-patches.rst      |    2 +-
+ MAINTAINERS                                   |    5 +
+ 7 files changed, 1540 insertions(+), 464 deletions(-)
+ create mode 100644 Documentation/translations/sp_SP/process/coding-style.rst
+ create mode 100644 Documentation/translations/sp_SP/process/index.rst
+ create mode 100644 Documentation/translations/sp_SP/process/kernel-docs.rst
+ rename Documentation/translations/sp_SP/{ => process}/submitting-patches.rst (99%)
 
- arch/x86/kernel/x86_init.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/kernel/x86_init.c b/arch/x86/kernel/x86_init.c
-index 57353519bc11..0ab707bbefe2 100644
---- a/arch/x86/kernel/x86_init.c
-+++ b/arch/x86/kernel/x86_init.c
-@@ -32,8 +32,8 @@ static int __init iommu_init_noop(void) { return 0; }
- static void iommu_shutdown_noop(void) { }
- bool __init bool_x86_init_noop(void) { return false; }
- void x86_op_int_noop(int cpu) { }
--static __init int set_rtc_noop(const struct timespec64 *now) { return -EINVAL; }
--static __init void get_rtc_noop(struct timespec64 *now) { }
-+static int set_rtc_noop(const struct timespec64 *now) { return -EINVAL; }
-+static void get_rtc_noop(struct timespec64 *now) { }
- 
- static __initconst const struct of_device_id of_cmos_match[] = {
- 	{ .compatible = "motorola,mc146818" },
--- 
-2.31.0
