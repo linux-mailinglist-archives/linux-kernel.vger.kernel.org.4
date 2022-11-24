@@ -2,99 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2FA8637D09
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 16:31:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 619DF637D0A
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 16:31:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbiKXPbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 10:31:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46228 "EHLO
+        id S229541AbiKXPbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 10:31:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiKXPa7 (ORCPT
+        with ESMTP id S229525AbiKXPb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 10:30:59 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7248CB2204;
-        Thu, 24 Nov 2022 07:30:57 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id ud5so4908090ejc.4;
-        Thu, 24 Nov 2022 07:30:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gLpOQFyv43x+gsdGRezusBMfoHWe+be0UwpYAvtMKbs=;
-        b=czchCmsY/APqH5hCblPcH0XTjeKai6phl0U1bvNnUZrvrwXEDWFA3sXcC/8tdp3Ohx
-         HHlOfyKnbwua46+Q+PN5JQuJC7b2mAX25dCxWNnI2wU3Sk7wDONiXV2y35vjr2GB3Hx+
-         Qq2kW0+E+8sc2/gnwCA/zQkV0Ummzs8KrQ0H1a80T/yTZqnvOGiosijxKnC1Cug96dxG
-         V3sx3nQJFn9o8ovtbPjQWZI/+l4tzXmbn5+WZ6XjVkvt0ljGDHOZQFF6WstqaPTx0PtI
-         wAsVUQ80S4YSuknsANlxyENSy+P+LRzOU6usVY1sezZONIJaey0l2TYiAvf/5xXtLBVa
-         Mneg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gLpOQFyv43x+gsdGRezusBMfoHWe+be0UwpYAvtMKbs=;
-        b=zGLYeOFsRoQpKrc0+9lVu80Hne1R/3KkaITK5VHMAX6C6/1acAblhDs9hO3SgLsN6v
-         9Qw/jKWY+c+FBijP2Wir3onrIsbWWX4qTVIjTDKJ0hsgoOy+m9h2VeZhSfOFi2Bi/tmo
-         qs2CvUYp1I85jpHNxm4zgfpmvtYdOaSE3Mtijk8gWzqqRIgTSVyE54Tz8uP92OkTZawJ
-         hvv2jQyF5F4OP2kQPgtcVrXyl9006T3tr8BrM0XSFW9lrGDOqSeW/6CHmM3kP/RhiwrF
-         L9WBTQFplehL5cb18osv3p4QF/yUT4lqHCM7fCgI5gHpsLCFDwvbWTIEoIZUHV+LOmkv
-         C0yA==
-X-Gm-Message-State: ANoB5pmivFuDax7SyMj/TWKhRUCOt8pqWr0cnWJz1krXLVdpSCiqEyZB
-        pCtLpBa0lHV6VPsq6MoRHWA=
-X-Google-Smtp-Source: AA0mqf6Agx8tZhSjJfA1nk58eghkuWk7G6SREIslZc7eZOrEIUVKExqHdLFBWIHu66OwTCcFvjx79Q==
-X-Received: by 2002:a17:906:ca2:b0:7b9:eef3:4435 with SMTP id k2-20020a1709060ca200b007b9eef34435mr6488715ejh.696.1669303855988;
-        Thu, 24 Nov 2022 07:30:55 -0800 (PST)
-Received: from demon-pc.localdomain ([188.24.13.177])
-        by smtp.gmail.com with ESMTPSA id mj22-20020a170906af9600b007ba705f8f90sm539377ejb.79.2022.11.24.07.30.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 07:30:55 -0800 (PST)
-From:   Cosmin Tanislav <demonsingur@gmail.com>
-X-Google-Original-From: Cosmin Tanislav <cosmin.tanislav@analog.com>
-Cc:     Cosmin Tanislav <cosmin.tanislav@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] iio: addac: ad74413r: fix blank line after declaration warning
-Date:   Thu, 24 Nov 2022 17:30:49 +0200
-Message-Id: <20221124153049.8851-1-cosmin.tanislav@analog.com>
-X-Mailer: git-send-email 2.38.1
+        Thu, 24 Nov 2022 10:31:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090AF11370F
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 07:31:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 98AC8621AF
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 15:31:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F16F1C433D6
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 15:31:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669303886;
+        bh=TDMuBu38U1AMrW3mcmFNJeSUQwnbe0WArXcInbl7bVw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ZuYiUni2iJILK+gszXOLekonZV+0uIJj/L/WPxCoRl+yYv+dFpQvc5+SydWxHv3Xw
+         69QWcf3PR0TTYDpWHctJdPxiYnFr3FukFy5ekJvYvxt/sS2odZPp3Zm3xpKxzNsKcN
+         hRwkIM+oh1NslDAowSJ4RfXqsk/o3RNIh3YV7CTpFIgjMq6JPciXbor8NwOU+6vLMu
+         iAOnzrtchM0YNLI34AyZ2qKDIBX3AeGn4cld6Y9u7LqRkRkZGw93UIf0lTwAHXhHrj
+         EEkyflTgbEcStMh4UyKigVSuWI9klRDPOxNeEi6w7DhZuZM1rJZTW/SjbsS4ZXrEOG
+         SQOjVnTno5TCQ==
+Received: by mail-ej1-f47.google.com with SMTP id n21so4856207ejb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 07:31:25 -0800 (PST)
+X-Gm-Message-State: ANoB5pkhRvOh+6IWtk1qXLkyGWtVRSuTFHJTlugGs57Ax9zyGjhGE+5t
+        bciRBnNAHFyFesKdAuS7L1Rq1MA6FT3Sfn1iDYc=
+X-Google-Smtp-Source: AA0mqf5uEZ6EnzDTd1z6S1Ab2kydukpFXBLZV5kE7YxTMsmWCnZlk8uwjby79zF1TP73le5ESnqyrMl96pMNQAAuw/M=
+X-Received: by 2002:a17:906:19d7:b0:7b2:b782:e1df with SMTP id
+ h23-20020a17090619d700b007b2b782e1dfmr23920529ejd.308.1669303884230; Thu, 24
+ Nov 2022 07:31:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221123142025.1504030-1-suagrfillet@gmail.com>
+ <20221123142025.1504030-2-suagrfillet@gmail.com> <CAJF2gTTwvApRaGhZJxOrdcjWUC9DN-WF_7EKcHXx5HZ9Jkd5EA@mail.gmail.com>
+ <CAAYs2=ghhMmmrM4Bktvw9iGiajS5PLd1=Z61j2ZfhbhGUi4ekg@mail.gmail.com>
+In-Reply-To: <CAAYs2=ghhMmmrM4Bktvw9iGiajS5PLd1=Z61j2ZfhbhGUi4ekg@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Thu, 24 Nov 2022 23:31:11 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTWSr0qYTnRORSexEHMqUt-Lj6xZd0O-fUgC+f74FfCZA@mail.gmail.com>
+Message-ID: <CAJF2gTTWSr0qYTnRORSexEHMqUt-Lj6xZd0O-fUgC+f74FfCZA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] riscv/ftrace: add DYNAMIC_FTRACE_WITH_DIRECT_CALLS support
+To:     Song Shuai <suagrfillet@gmail.com>
+Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, rostedt@goodmis.org, mhiramat@kernel.org,
+        mark.rutland@arm.com, peterz@infradead.org, jolsa@redhat.com,
+        bp@suse.de, jpoimboe@kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Checkpatch wants a blank line after all declarations. Add it now,
-even though the patch has already been submitted.
+On Thu, Nov 24, 2022 at 1:27 AM Song Shuai <suagrfillet@gmail.com> wrote:
+>
+> Guo Ren <guoren@kernel.org> =E4=BA=8E2022=E5=B9=B411=E6=9C=8823=E6=97=A5=
+=E5=91=A8=E4=B8=89 23:02=E5=86=99=E9=81=93=EF=BC=9A
+> >
+> > Cool job, thx.
+> >
+> > On Wed, Nov 23, 2022 at 10:20 PM Song Shuai <suagrfillet@gmail.com> wro=
+te:
+> >>
+> >> This patch adds DYNAMIC_FTRACE_WITH_DIRECT_CALLS support for RISC-V.
+> >>
+> >> select the DYNAMIC_FTRACE_WITH_DIRECT_CALLS to provide the
+> >> register_ftrace_direct[_multi] interfaces allowing users to register
+> >> the customed trampoline (direct_caller) as the mcount for one or
+> >> more target functions. And modify_ftrace_direct[_multi] are also
+> >> provided for modifying direct_caller.
+> >>
+> >> To make the direct_caller and the other ftrace hooks (eg. function/fgr=
+aph
+> >> tracer, k[ret]probes) co-exist, a temporary register is nominated to
+> >> store the address of direct_caller in ftrace_regs_caller. After the
+> >> setting of the address direct_caller by direct_ops->func and the
+> >> RESTORE_REGS in ftrace_regs_caller, direct_caller will be jumped to
+> >> by the `jr` inst.
+> >>
+> >> Signed-off-by: Song Shuai <suagrfillet@gmail.com>
+> >> ---
+> >>  arch/riscv/Kconfig              | 1 +
+> >>  arch/riscv/include/asm/ftrace.h | 6 ++++++
+> >>  arch/riscv/kernel/mcount-dyn.S  | 4 ++++
+> >>  3 files changed, 11 insertions(+)
+> >>
+> >> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> >> index 39ec8d628cf6..d083ec08d0b6 100644
+> >> --- a/arch/riscv/Kconfig
+> >> +++ b/arch/riscv/Kconfig
+> >> @@ -278,6 +278,7 @@ config ARCH_RV64I
+> >>         select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
+> >>         select HAVE_DYNAMIC_FTRACE if !XIP_KERNEL && MMU && $(cc-optio=
+n,-fpatchable-function-entry=3D8)
+> >>         select HAVE_DYNAMIC_FTRACE_WITH_REGS if HAVE_DYNAMIC_FTRACE
+> >> +       select HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+> >>         select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
+> >>         select HAVE_FUNCTION_GRAPH_TRACER
+> >>         select HAVE_FUNCTION_TRACER if !XIP_KERNEL && !PREEMPTION
+> >> diff --git a/arch/riscv/include/asm/ftrace.h b/arch/riscv/include/asm/=
+ftrace.h
+> >> index 01bebb28eabe..be4d57566139 100644
+> >> --- a/arch/riscv/include/asm/ftrace.h
+> >> +++ b/arch/riscv/include/asm/ftrace.h
+> >> @@ -114,6 +114,12 @@ struct ftrace_regs;
+> >>  void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
+> >>                        struct ftrace_ops *op, struct ftrace_regs *freg=
+s);
+> >>  #define ftrace_graph_func ftrace_graph_func
+> >> +
+> >> +static inline void arch_ftrace_set_direct_caller(struct pt_regs *regs=
+, unsigned long addr)
+> >> +{
+> >> +               regs->t1 =3D addr;
+> >
+> > How about regs->t0 =3D addr; ?
+> > And delete all mcount-dyn.S modification.
+> >
+> The direct_caller has the same program layout as the ftrace_caller, which=
+ means
+> the reg t0 will never be changed when direct_caller returns.
+>
+> If regs->t0 changes here and ftrace_regs_caller executes `jr t0`,
+> direct_caller will enter the dead loop.
+>
+> Actually the reg t0 always saves the address of function entry with 8B
+> offset, it should only
+> changed by the IPMODIFY ops instead of the direct_ops.
+How about:
+static inline void arch_ftrace_set_direct_caller(struct pt_regs *regs,
+unsigned long addr)
+{
+               regs->t1 =3D regs->t0;
+               regs->t0 =3D addr;
 
-Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
-Fixes: 7b2366008125 ("iio: addac: ad74413r: add spi_device_id table")
----
- drivers/iio/addac/ad74413r.c | 1 +
- 1 file changed, 1 insertion(+)
+direct_caller:
+add sp,sp,-?
+sd t1,?(sp)
+sd ra,?(sp)
+call foo
+ld t1,?(sp)
+ld ra,?(sp)
+add sp,sp,?
+jr t1 // <- back to function entry
 
-diff --git a/drivers/iio/addac/ad74413r.c b/drivers/iio/addac/ad74413r.c
-index 61030053cbea..f32c8c2fb26d 100644
---- a/drivers/iio/addac/ad74413r.c
-+++ b/drivers/iio/addac/ad74413r.c
-@@ -1315,6 +1315,7 @@ static int ad74413r_probe(struct spi_device *spi)
- 	st->chip_info = device_get_match_data(&spi->dev);
- 	if (!st->chip_info) {
- 		const struct spi_device_id *id = spi_get_device_id(spi);
-+
- 		if (id)
- 			st->chip_info =
- 				(struct ad74413r_chip_info *)id->driver_data;
--- 
-2.38.1
+And delete all mcount-dyn.S modification.
 
+> >>
+> >> +}
+> >> +
+> >>  #endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
+> >>
+> >>  #endif /* __ASSEMBLY__ */
+> >> diff --git a/arch/riscv/kernel/mcount-dyn.S b/arch/riscv/kernel/mcount=
+-dyn.S
+> >> index 466c6ef217b1..b89c85a58569 100644
+> >> --- a/arch/riscv/kernel/mcount-dyn.S
+> >> +++ b/arch/riscv/kernel/mcount-dyn.S
+> >> @@ -233,6 +233,7 @@ ENDPROC(ftrace_caller)
+> >>  #else /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
+> >>  ENTRY(ftrace_regs_caller)
+> >>         SAVE_ABI_REGS 1
+> >> +       REG_S   x0, PT_T1(sp)
+> >>         PREPARE_ARGS
+> >>
+> >>  ftrace_regs_call:
+> >> @@ -241,7 +242,10 @@ ftrace_regs_call:
+> >>
+> >>
+> >>         RESTORE_ABI_REGS 1
+> >> +       bnez    t1,.Ldirect
+> >>         jr t0
+> >> +.Ldirect:
+> >> +       jr t1
+> >>  ENDPROC(ftrace_regs_caller)
+> >>
+> >>  ENTRY(ftrace_caller)
+> >> --
+> >> 2.20.1
+> >>
+> >
+> >
+> > --
+> > Best Regards
+> >  Guo Ren
+
+
+
+--=20
+Best Regards
+ Guo Ren
