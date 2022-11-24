@@ -2,181 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89DEE637505
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 10:20:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26D6B637507
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 10:21:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbiKXJUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 04:20:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57122 "EHLO
+        id S230144AbiKXJVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 04:21:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbiKXJUg (ORCPT
+        with ESMTP id S230152AbiKXJUz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 04:20:36 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5B11173CF
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 01:20:35 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oy8P4-000651-P6; Thu, 24 Nov 2022 10:20:18 +0100
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oy8P4-0001iy-5Z; Thu, 24 Nov 2022 10:20:18 +0100
-Date:   Thu, 24 Nov 2022 10:20:18 +0100
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Ping-Ke Shih <pkshih@realtek.com>
-Cc:     Bernie Huang <phhuang@realtek.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        Hans Ulli Kroll <linux@ulli-kroll.de>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Kalle Valo <kvalo@kernel.org>,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Viktor Petrenko <g0000ga@gmail.com>,
-        Neo Jou <neojou@gmail.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Alexander Hochbaum <alex@appudo.com>,
-        Da Xue <da@libre.computer>
-Subject: Re: [PATCH v3 00/11] RTW88: Add support for USB variants
-Message-ID: <20221124092018.GG29978@pengutronix.de>
-References: <20221122145226.4065843-1-s.hauer@pengutronix.de>
- <20221122145527.GA29978@pengutronix.de>
- <015051d9a5b94bbca5135c58d2cfebf3@realtek.com>
- <20221124082158.GE29978@pengutronix.de>
+        Thu, 24 Nov 2022 04:20:55 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5C911DA3E
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 01:20:52 -0800 (PST)
+Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com [209.85.128.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 4B7603F470
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 09:20:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1669281650;
+        bh=VRx51K+Grac4imHy1DHLCU82k/uWawM5zQfqB1/2368=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=BTSb5oDPfk5kVdVNwh/WPgxbI/s03ycVt3H5olgJTv9wwLfLdHt+lPsGUA1RYeRrr
+         E+QELyzw7H9wkP6y64I6UlTd9z4511LRkY9EsWZ3sKZrfDF0hY8rAx5Q4XHNDuJaxR
+         6uD28+ZjNaZerOIbKO33njc0E5A0XyiuYi9jTrykz5g1cVgWBFfCafTOtnn427W2pa
+         3b9mfcDffeaTqB6MQb8HnSpEKSO8r3+Z6+QjACugugQrd5KxD4Jah5SgGHW7lb9uRm
+         hgOueE+0qB0KF6yzt4oNdmqRLD1/k5YurnzaAaxAsh9WFzI5dneKAM4jrCq3vTybq6
+         Omvj4AS2I7vnA==
+Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-36810cfa61fso10925487b3.6
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 01:20:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VRx51K+Grac4imHy1DHLCU82k/uWawM5zQfqB1/2368=;
+        b=63MGifviAmY9Q/mS35R9d10OZhaLHBBmFqtf7KTXN4ALr3eWiWWjVMsE5r0CFwLsy2
+         0XwbZWsklZW5yGuV9yLi0thU4AzjCWK7xlm3QkZsu13LuBrPtF2oBc0HRFmuQXk96HJi
+         bhdzN5cCQVUM4iRviU9d8wRdSIE8riZrtgg495rHGBlAo5fOVqgCZIJ0Va60eOq2axKK
+         zAi439KW4MPERaj1FOhaGqEqkhy2w3s9+2XrMuDaQSTDlT0rLl8Pu2mpFFu5X1khcS7R
+         Ow4w4UoqcSJ//lJTo5xb7b9fUYrw9xTQSFqjVGycv00+RTLMpxRXminyIbE55lSYGQXa
+         GwKg==
+X-Gm-Message-State: ANoB5pkQBj37hIgUDWEjx5iqBL6IdvnaFzmOJUkzRA1QWFNN2R3+jQuU
+        h/tildTj7+M9SRZOO+T/qkjniTAN6AU2Iw/wr5v5ZxX0qmLskBEs4Q/9jX0Xw913Z9oPh6t7cqk
+        PAEqoIFtk2jV8KZWbnb4z8jFyBGBGxNqLrWlD0B87+oK33LEFqQt2vMvkyA==
+X-Received: by 2002:a25:4a86:0:b0:6f1:215a:2dbe with SMTP id x128-20020a254a86000000b006f1215a2dbemr3191225yba.469.1669281648220;
+        Thu, 24 Nov 2022 01:20:48 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4H7k0go2dHlua8ClKkvM8qah93F0sS9CYUiwz8DhwGeE2xOLmvodSBoY+vtCQ2wxqkd5uAMT6yRu2cukAu/Qc=
+X-Received: by 2002:a25:4a86:0:b0:6f1:215a:2dbe with SMTP id
+ x128-20020a254a86000000b006f1215a2dbemr3191211yba.469.1669281648005; Thu, 24
+ Nov 2022 01:20:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221124082158.GE29978@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221118011714.70877-1-hal.feng@starfivetech.com>
+ <20221118011714.70877-2-hal.feng@starfivetech.com> <202211190418.2AJ4IQjc072382@SH1-CSMTP-DB111.sundns.com>
+ <ca3e341a-3dc3-39d6-7e26-89ba65aa9473@starfivetech.com>
+In-Reply-To: <ca3e341a-3dc3-39d6-7e26-89ba65aa9473@starfivetech.com>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Thu, 24 Nov 2022 10:20:32 +0100
+Message-ID: <CAJM55Z-zgR=LKqtg4ioj9Ez1CT7wchrNWWPVT5XAMPF736OcRA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/8] dt-bindings: riscv: Add StarFive JH7110 SoC and
+ VisionFive2 board
+To:     Hal Feng <hal.feng@starfivetech.com>
+Cc:     "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 09:21:58AM +0100, Sascha Hauer wrote:
-> On Thu, Nov 24, 2022 at 06:48:23AM +0000, Ping-Ke Shih wrote:
-> > 
-> > > -----Original Message-----
-> > > From: Sascha Hauer <s.hauer@pengutronix.de>
-> > > Sent: Tuesday, November 22, 2022 10:55 PM
-> > > To: Bernie Huang <phhuang@realtek.com>
-> > > Cc: linux-wireless@vger.kernel.org; Ping-Ke Shih <pkshih@realtek.com>; Hans Ulli Kroll
-> > > <linux@ulli-kroll.de>; Martin Blumenstingl <martin.blumenstingl@googlemail.com>; netdev@vger.kernel.org;
-> > > Kalle Valo <kvalo@kernel.org>; Yan-Hsuan Chuang <tony0620emma@gmail.com>; linux-kernel@vger.kernel.org;
-> > > Viktor Petrenko <g0000ga@gmail.com>; Neo Jou <neojou@gmail.com>; Bernie Huang <phhuang@realtek.com>;
-> > > kernel@pengutronix.de; Johannes Berg <johannes@sipsolutions.net>; Alexander Hochbaum <alex@appudo.com>;
-> > > Da Xue <da@libre.computer>
-> > > Subject: Re: [PATCH v3 00/11] RTW88: Add support for USB variants
-> > > 
-> > > On Tue, Nov 22, 2022 at 03:52:15PM +0100, Sascha Hauer wrote:
-> > > > This is the third round of adding support for the USB variants to the
-> > > > RTW88 driver. There are a few changes to the last version which make it
-> > > > worth looking at this version.
-> > > >
-> > > > First of all RTL8723du and RTL8821cu are tested working now. The issue
-> > > > here was that the txdesc checksum calculation was wrong. I found the
-> > > > correct calculation in various downstream drivers found on github.
-> > > >
-> > > > The second big issue was that TX packet aggregation was wrong. When
-> > > > aggregating packets each packet start has to be aligned to eight bytes.
-> > > > The necessary alignment was added to the total URB length before
-> > > > checking if there is another packet to aggregate, so the URB length
-> > > > included that padding after the last packet, which is wrong.  Fixing
-> > > > this makes the driver work much more reliably.
-> > > >
-> > > > I added all people to Cc: who showed interest in this driver and I want
-> > > > to welcome you for testing and reviewing.
-> > > 
-> > > There still is a problem with the RTL8822cu chipset I have here.  When
-> > > using NetworkManager I immediately lose the connection to the AP after
-> > > it has been connected:
-> > > 
-> > > [  376.213846] wlan0: authenticate with 76:83:c2:ce:81:b1
-> > > [  380.085463] wlan0: send auth to 76:83:c2:ce:81:b1 (try 1/3)
-> > > [  380.091446] wlan0: authenticated
-> > > [  380.108864] wlan0: associate with 76:83:c2:ce:81:b1 (try 1/3)
-> > > [  380.136448] wlan0: RX AssocResp from 76:83:c2:ce:81:b1 (capab=0x1411 status=0 aid=2)
-> > > [  380.202955] wlan0: associated
-> > > [  380.268140] IPv6: ADDRCONF(NETDEV_CHANGE): wlan0: link becomes ready
-> > > [  380.275328] wlan0: Connection to AP 76:83:c2:ce:81:b1 lost
-> > > 
-> > > That doesn't happen when using plain wpa_supplicant. This seems to go
-> > > down to cd96e22bc1da ("rtw88: add beacon filter support"). After being
-> > > connected I get a BCN_FILTER_CONNECTION_LOSS beacon. Plain
-> > > wpa_supplicant seems to go another code patch and doesn't activate
-> > > connection quality monitoring.
-> > > 
-> > > The connection to the AP works fluently also with NetworkManager though
-> > > when I just ignore the BCN_FILTER_CONNECTION_LOSS beacon.
-> > > 
-> > > Any idea what may be wrong here?
-> > > 
-> > 
-> > Please reference to below patch to see if it can work to you.
-> > 
-> > https://lore.kernel.org/linux-wireless/20221124064442.28042-1-pkshih@realtek.com/T/#u
-> 
-> Great! That solves this issue \o/
+On Thu, 24 Nov 2022 at 06:56, Hal Feng <hal.feng@starfivetech.com> wrote:
+>
+> On Sat, 19 Nov 2022 01:28:48 +0800, Emil Renner Berthing wrote:
+> > On Fri, 18 Nov 2022 at 02:17, Hal Feng <hal.feng@starfivetech.com> wrote:
+> > >
+> > > From: Emil Renner Berthing <kernel@esmil.dk>
+> > >
+> > > Add device tree bindings for the StarFive JH7110 RISC-V SoC [1]
+> > > and the VisionFive2 board [2] equipped with it.
+> > >
+> > > [1]: https://doc-en.rvspace.org/Doc_Center/jh7110.html
+> > > [2]: https://doc-en.rvspace.org/Doc_Center/visionfive_2.html
+> > >
+> > > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> > > Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+> > > ---
+> > >  Documentation/devicetree/bindings/riscv/starfive.yaml | 4 ++++
+> > >  1 file changed, 4 insertions(+)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/riscv/starfive.yaml b/Documentation/devicetree/bindings/riscv/starfive.yaml
+> > > index 5b36243fd674..64008c57e31f 100644
+> > > --- a/Documentation/devicetree/bindings/riscv/starfive.yaml
+> > > +++ b/Documentation/devicetree/bindings/riscv/starfive.yaml
+> > > @@ -22,6 +22,10 @@ properties:
+> > >            - const: beagle,beaglev-starlight-jh7100-r0
+> > >            - const: starfive,jh7100
+> > >
+> > > +      - items:
+> > > +          - const: starfive,visionfive-v2
+> >
+> > I think StarFive has switched to just calling it VisionFive 2 and not
+> > V2. Please check up on this before committing to the compatible
+> > string.
+> >
+> > Also there are going to be different revisions of the VisionFive 2
+> > board, so maybe consider adding eg. starfive,visionfive-2-v1.1 and
+> > starfive,visionfive-2-v1,2b early.
+>
+> I checked that the official name of this board is "VisionFive 2". The
+> board has version A and version B, which are different in gmac and phy
+> chip. The version A board has one 1000M and one 100M Ethernet ports
+> while the version B board has two 1000M Ethernet ports. In dts, they
+> have different configuration parameters for gmac. So I would like to
+> distinguish them by two compatibles as below in the next version.
+>
+>       - items:
+>           - enum:
+>               - starfive,visionfive-2-va
+>               - starfive,visionfive-2-vb
+>           - const: starfive,jh7110
 
-I am also happy to say that this patch is a real performance boost.
-Here are some numbers:
+Cool. Though the silkscreen on my board says "VisionFive 2 V1.2B" so I
+think it would be less confusing if you used that as the model, and
+"starfive,visionfive-2-v1.2b" as the compatible string for the board.
 
-RTL8723DU, no patch
-===================
-tx [  5]   0.00-10.00  sec  1.08 MBytes   903 Kbits/sec    1 sender
-rx [  5]   0.00-10.26  sec  10.3 MBytes  8.41 Mbits/sec    0 sender
 
-RTL8723DU, with patch
-=====================
-tx [  5]   0.00-10.00  sec  34.7 MBytes  29.1 Mbits/sec    9 sender
-rx [  5]   0.00-10.05  sec  34.4 MBytes  28.7 Mbits/sec    5 sender
-
-RTL8821CU, no patch
-===================
-tx [  5]   0.00-10.00  sec  6.01 MBytes  5.04 Mbits/sec    0 sender
-rx [  5]   0.00-10.44  sec  53.4 MBytes  42.9 Mbits/sec    0 sender
-
-RTL8821CU, with patch
-===================
-tx [  5]   0.00-10.00  sec  57.9 MBytes  48.6 Mbits/sec    0 sender
-rx [  5]   0.00-10.15  sec  66.3 MBytes  54.8 Mbits/sec  419 sender
-
-RTL8822CU, no patch
-===================
-tx [  5]   0.00-10.00  sec  11.8 MBytes  9.91 Mbits/sec    1 sender
-rx [  5]   0.00-10.18  sec   105 MBytes  86.3 Mbits/sec  805 sender
-
-RTL8822CU, with patch
-===================
-tx [  5]   0.00-10.01  sec  80.0 MBytes  67.1 Mbits/sec    0 sender
-rx [  5]   0.00-10.12  sec   117 MBytes  97.2 Mbits/sec  658 sender
-
-Tested with:
-
-tx: iperf3 -c 192.168.0.57 -i0
-rx: iperf3 -c 192.168.0.57 -i0 -R
-
-Especially the RTL8723DU now starts being useful.
-
-Sascha
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+> Best regards,
+> Hal
+>
+> >
+> > > +          - const: starfive,jh7110
+> > > +
+> > >  additionalProperties: true
+>
