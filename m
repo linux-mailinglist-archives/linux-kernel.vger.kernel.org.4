@@ -2,70 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D885637F73
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 20:14:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37ED5637F7D
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 20:15:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiKXTO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 14:14:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56310 "EHLO
+        id S229676AbiKXTP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 14:15:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiKXTOS (ORCPT
+        with ESMTP id S229664AbiKXTPY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 14:14:18 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD08287574;
-        Thu, 24 Nov 2022 11:14:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1669317250; bh=3d5wRu8H4rV67y0AcOBjPXJoU2peJtLzij7b7I+rk+E=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=AHL1Snn1Vm7i2/aVQdLF4IOE8e6Emt2n8GJq4hhGCRo7W84WAj0lzNSs19P9nPz0d
-         MtPAobnGdOcJL5PLVM5VvciM4xnJUhzMTk3nNc2QYA0XZTdNtOwJOA0k5JByXZcJ/D
-         6Naz04BTGYa/mwo4Aplg1GkvvWxKm73YkObQJO9JFTN1H9fOgRaJBA2V5TCuSmsFo2
-         iqW6AjOJx1fa0BCD0enYWaGDyZPN0muE4wPZmAoVmIWQDvleP25saEVVBS6xawDAon
-         h8+NPdxMDBLHD0Qc6v2xn9/cYnxNt0eAhEFbGVrMbvwE213A+GsH5H9IWi2iuWbDP6
-         qGj6JFWRVh4dg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([95.223.44.31]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N9dsb-1p19wy493t-015WKW; Thu, 24
- Nov 2022 20:14:10 +0100
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     linux-spi@vger.kernel.org, openbmc@lists.ozlabs.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH v2 3/3] spi: wpcm-fiu: Add direct map support
-Date:   Thu, 24 Nov 2022 20:14:00 +0100
-Message-Id: <20221124191400.287918-4-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221124191400.287918-1-j.neuschaefer@gmx.net>
-References: <20221124191400.287918-1-j.neuschaefer@gmx.net>
+        Thu, 24 Nov 2022 14:15:24 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167A487A5D;
+        Thu, 24 Nov 2022 11:15:23 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id ho10so6001766ejc.1;
+        Thu, 24 Nov 2022 11:15:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FWeAC6tVqoQ6bNA7whBca/Z25C/J+Qx03REs2nGyD7A=;
+        b=lPSQbOINQxMXT+unJ0mshlxYmnlkNXq1M658zJNMI6XNi60l8MdT4SqaAKByvLexEt
+         L81yxMT3JA8b+ku9YUOab8bjrQ2S+DwYX3DjsefZzvwKHDZmFpeE50l8/w32qvrAZiYg
+         efhZr0c7YGbjYQ+3Fo6cayGSIU1jEE1BzjGmqxBhZUXYrkx2+8ryQCKl5ICk4VWI0gzj
+         HqUjUHKvYS8KLqPa5rwwfFKBD7FKmZtC8USRuA09eXEZ94+GQFoi+3QIT1gPfRhI3OGT
+         HDPbFqPKnCeTSKFT7/c+e5G7ph6Dg3pGl7/7ArPE4gHQ6LakyEiq/74acw0OnlB+JW2w
+         1V4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FWeAC6tVqoQ6bNA7whBca/Z25C/J+Qx03REs2nGyD7A=;
+        b=M6RaW5eBVZBTIwYLLjYs4V5toYH37YmaqEkARqMbx1g4AsM+E6hQRDHWXpRc/84LDy
+         q2e/OLtsu5wM2p52D4GrOelAioDZppBOJ1Lyypd3rguTP+LM6un+YhTDLIMfsP7+vv2M
+         6gA+9rRPgSr64qW1joAAknzW0YaauUg4a9ZNBnzq2XhFMoGDz3Ci2vnR/qraCaeIz5Rx
+         ojSgEmKx5IitYunl60A4ZvQimebUq2NJK4FydLVY75Ubf+vHuA2E4xOBPxLNedS3HgXP
+         JeFDqISlykshxFGVxTFXjIChbEp0NUr1aXKd851PATJRoP1jkLzKEwrS2FeWX06K3+Fm
+         S19g==
+X-Gm-Message-State: ANoB5pnV7e4US6WoWRBogqdgATVo/PcFZ2qt0F5TIopserpvSWVxhp+F
+        l0XeAs+aWDYYXSYP/h9GxYkWvFsYmVhbD85TtfQ=
+X-Google-Smtp-Source: AA0mqf5ok9xKhUigClOCzJ/g0cQ1rY0k5p19eoRhweDVXGsjFwjIINpC/tel64cTzP0N5/jVCdXGqfEtPHiuLf8z7zE=
+X-Received: by 2002:a17:906:79c4:b0:778:e3e2:8311 with SMTP id
+ m4-20020a17090679c400b00778e3e28311mr14512080ejo.342.1669317321518; Thu, 24
+ Nov 2022 11:15:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+References: <20221124172207.153718-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221124172207.153718-4-prabhakar.mahadev-lad.rj@bp.renesas.com> <4542837.QJadu78ljV@diego>
+In-Reply-To: <4542837.QJadu78ljV@diego>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Thu, 24 Nov 2022 19:14:54 +0000
+Message-ID: <CA+V-a8uB8LVc4rPehYOYM2OKa4hW2TPegB2zmm5xV-ZcznqNQA@mail.gmail.com>
+Subject: Re: [PATCH v4 3/7] riscv: errata: Add Andes alternative ports
+To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:t39AaDJmFgdivvbDoFkLkv/flCQ4QNQrXQ2seNnr38jxbz8uLGN
- JD5xXUQIO3bnfEZqbhcRCCIQ7El0WW/RjX68OSU1BTf4yRQmWiuiBh5cynZYZNGPp+ZXuAq
- jUobt8Pk/6DCZUVg+Qkzytu+B72pAH86tu5NN0Fm4aEiA5OkEdYTgfIGH4gjNswKxHjN8hy
- x7AT8dVbmva2t2HUQDN8w==
-UI-OutboundReport: notjunk:1;M01:P0:DSc4kqUiQ7M=;FiW4VAxGlixqn7OX9WfgMCy5tx+
- 2oAG/ANhk0sOGSzuKDGhfJlQKLYfHl0xMBP6zguUlv4VAx775fS9BDJ2DBFw+1HmYWZPxcsDI
- udtzt1BzbYNodInMXUL3zq593vuqK2mJULpIyinQ0W4crSXJSIm/LGNKOLLrpDTg2UJoNYCRV
- CEGs4jYQ1Gf/sUyTDskQpQRLPOG+ShwPQabTi2go+jRBbit0ZmTvS1/erKJgrmUlR4MxAK2go
- h5MOt9mbOUQERi9ujqm5yYzQk5V1z18h56HGvMDGR0WSOObAkZxxqk3ZV8qZu/03TxmABRVHE
- 44wML3KRU0luG0PWJSZq9pHR2qWeN8cXxnKnb8YxBQdptXUzZ9fByV0GW/VwM/Fw010NeXW3e
- LUKFSWkvytsWUWX1jKjTB21DlF01pr+OgRAHUyfAx/d+k4Eq1aN3jYvXxHKHMN/U7FRbO90m7
- It9e+b+E/0C3GVqhpMshViU2E32CYWPPUxlVoKq41UaEEbWPTipSz/etR/A/JrKAQ5Zdyd6Vz
- IoxMNkZuxz1COLQw1lR59BEPjL1Jm09tWeLC8po6K/QFzxasx0cm+VCaRhdcCwkjZfWJhSRH4
- qKq5BFSTL1rpQ9yYapDK4kxpadGD1tQhzzF5mvmvIJuxaILpFTd8SQzrLEKwQ0SB9FASxPlfQ
- D+NPkF5syRHmnETUYlncYBjTjnB/aXh80CewmfWS8g1hF6qZLqswaqd3zy9HDXl5yZY8xIq3t
- 1xAm9vn3otlFzCWFzCSCiaj5XztwqOCUzdZRMEPfxB86/lM1rZ/uDjs46+TMofkrELGaFNq6r
- Dh2viJeBV5ovODz/8ionBN6tyCyO9irM/HvT9MAQxGNJAzUdJNlmUpZylnyQduRlsKloTZU+u
- LyGr20/QujC6HZGZJZiz0nDODqazXh6M+/anxi1KSDZMwph4SffihQrSnV9MpJ7Q2dcBuvjua
- AbJ0vO8ivqIpH0kXMbcPZ2jyKiI=
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,155 +87,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Besides software controlled SPI transfers (UMA, "user mode access"), FIU
-also supports a 16 MiB mapping window per attached flash chip.
+Hi Heiko,
 
-This patch implements direct mapped read access, to speed up flash reads.
+Thank you for the review.
 
+On Thu, Nov 24, 2022 at 6:25 PM Heiko St=C3=BCbner <heiko@sntech.de> wrote:
+>
+> Am Donnerstag, 24. November 2022, 18:22:03 CET schrieb Prabhakar:
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >
+> > Add required ports of the Alternative scheme for Andes CPU cores.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> > RFC v3 -> v4
+> > * New patch
+> > ---
+>
+> > diff --git a/arch/riscv/errata/Makefile b/arch/riscv/errata/Makefile
+> > index a1055965fbee..81828e80f6dc 100644
+> > --- a/arch/riscv/errata/Makefile
+> > +++ b/arch/riscv/errata/Makefile
+> > @@ -1,2 +1,3 @@
+> >  obj-$(CONFIG_ERRATA_SIFIVE) +=3D sifive/
+> >  obj-$(CONFIG_ERRATA_THEAD) +=3D thead/
+> > +obj-$(CONFIG_ERRATA_ANDES) +=3D andes/
+>
+> alphabetical sorting please
+>
+>
+> > diff --git a/arch/riscv/errata/andes/errata.c b/arch/riscv/errata/andes=
+/errata.c
+> > new file mode 100644
+> > index 000000000000..ec3e052ca8c7
+> > --- /dev/null
+> > +++ b/arch/riscv/errata/andes/errata.c
+> > @@ -0,0 +1,68 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Erratas to be applied for Andes CPU cores
+> > + *
+> > + *  Copyright (C) 2022 Renesas Electronics Corporation.
+> > + *
+> > + * Author: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > + */
+> > +
+> > +#include <linux/kernel.h>
+> > +#include <linux/module.h>
+> > +
+> > +#include <asm/alternative.h>
+> > +#include <asm/cacheflush.h>
+> > +#include <asm/errata_list.h>
+> > +#include <asm/patch.h>
+> > +#include <asm/vendorid_list.h>
+> > +
+> > +static bool errata_probe_iocp(unsigned int stage, unsigned long arch_i=
+d, unsigned long impid)
+> > +{
+> > +     if (!IS_ENABLED(CONFIG_ERRATA_ANDES_CMO))
+> > +             return false;
+> > +
+> > +     if (arch_id !=3D 0x8000000000008a45 || impid !=3D 0x500)
+> > +             return false;
+> > +
+> > +     riscv_cbom_block_size =3D 1;
+>
+> as this is mainly to make the core cbo code happy, maybe add a comment
+> above that line to explain.
+>
+Agreed, I'll add a comment here.
 
-Without direct mapping:
+>
+> > +     riscv_noncoherent_supported();
+> > +
+> > +     return true;
+> > +}
+> > +
+>
+> > diff --git a/arch/riscv/include/asm/alternative.h b/arch/riscv/include/=
+asm/alternative.h
+> > index 6511dd73e812..d8012af30cbd 100644
+> > --- a/arch/riscv/include/asm/alternative.h
+> > +++ b/arch/riscv/include/asm/alternative.h
+> > @@ -46,6 +46,9 @@ void sifive_errata_patch_func(struct alt_entry *begin=
+, struct alt_entry *end,
+> >  void thead_errata_patch_func(struct alt_entry *begin, struct alt_entry=
+ *end,
+> >                            unsigned long archid, unsigned long impid,
+> >                            unsigned int stage);
+> > +void andes_errata_patch_func(struct alt_entry *begin, struct alt_entry=
+ *end,
+> > +                          unsigned long archid, unsigned long impid,
+> > +                          unsigned int stage);
+>
+> again alphabetical please (i.e. above sifive)
+>
+>
+> > diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/=
+asm/errata_list.h
+> > index 4180312d2a70..2ba7e6e74540 100644
+> > --- a/arch/riscv/include/asm/errata_list.h
+> > +++ b/arch/riscv/include/asm/errata_list.h
+> > @@ -9,6 +9,11 @@
+> >  #include <asm/csr.h>
+> >  #include <asm/vendorid_list.h>
+> >
+> > +#ifdef CONFIG_ERRATA_ANDES
+> > +#define ERRATA_ANDESTECH_NO_IOCP     0
+> > +#define ERRATA_ANDESTECH_NUMBER              1
+> > +#endif
+> > +
+> >  #ifdef CONFIG_ERRATA_SIFIVE
+> >  #define      ERRATA_SIFIVE_CIP_453 0
+> >  #define      ERRATA_SIFIVE_CIP_1200 1
+> > diff --git a/arch/riscv/kernel/alternative.c b/arch/riscv/kernel/altern=
+ative.c
+> > index a7d26a00beea..4ded3e9aa3bc 100644
+> > --- a/arch/riscv/kernel/alternative.c
+> > +++ b/arch/riscv/kernel/alternative.c
+> > @@ -47,6 +47,11 @@ static void __init_or_module riscv_fill_cpu_mfr_info=
+(struct cpu_manufacturer_inf
+> >       case THEAD_VENDOR_ID:
+> >               cpu_mfr_info->patch_func =3D thead_errata_patch_func;
+> >               break;
+> > +#endif
+> > +#ifdef CONFIG_ERRATA_ANDES
+> > +     case ANDESTECH_VENDOR_ID:
+> > +             cpu_mfr_info->patch_func =3D andes_errata_patch_func;
+> > +             break;
+>
+> and again alphabetical please
+>
+Oops I missed that, I'll sort this and all the above.
 
-	# time dd if=3D/dev/mtd0ro of=3Ddump bs=3D1M
-	16+0 records in
-	16+0 records out
-	real    1m 47.74s
-	user    0m 0.00s
-	sys     1m 47.75s
-
-
-With direct mapping:
-
-	# time dd if=3D/dev/mtd0ro of=3Ddump bs=3D1M
-	16+0 records in
-	16+0 records out
-	real    0m 30.81s
-	user    0m 0.00s
-	sys     0m 30.81s
-
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
-
-v2:
-- Fix a few nits from the kernel test robot
-- Fix check for fiu->memory mapping error
-
-v1:
-- https://lore.kernel.org/lkml/20221105185911.1547847-9-j.neuschaefer@gmx.=
-net/
-=2D--
- drivers/spi/spi-wpcm-fiu.c | 64 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 64 insertions(+)
-
-diff --git a/drivers/spi/spi-wpcm-fiu.c b/drivers/spi/spi-wpcm-fiu.c
-index e525fe074f883..ab33710d50ac8 100644
-=2D-- a/drivers/spi/spi-wpcm-fiu.c
-+++ b/drivers/spi/spi-wpcm-fiu.c
-@@ -51,10 +51,16 @@
-  */
- #define UMA_WAIT_ITERATIONS 100
-
-+/* The memory-mapped view of flash is 16 MiB long */
-+#define MAX_MEMORY_SIZE_PER_CS	(16 << 20)
-+#define MAX_MEMORY_SIZE_TOTAL	(4 * MAX_MEMORY_SIZE_PER_CS)
-+
- struct wpcm_fiu_spi {
- 	struct device *dev;
- 	struct clk *clk;
- 	void __iomem *regs;
-+	void __iomem *memory;
-+	size_t memory_size;
- 	struct regmap *shm_regmap;
- };
-
-@@ -367,14 +373,64 @@ static int wpcm_fiu_adjust_op_size(struct spi_mem *m=
-em, struct spi_mem_op *op)
- 	return 0;
- }
-
-+static int wpcm_fiu_dirmap_create(struct spi_mem_dirmap_desc *desc)
-+{
-+	struct wpcm_fiu_spi *fiu =3D spi_controller_get_devdata(desc->mem->spi->=
-controller);
-+	int cs =3D desc->mem->spi->chip_select;
-+
-+	if (desc->info.op_tmpl.data.dir !=3D SPI_MEM_DATA_IN)
-+		return -ENOTSUPP;
-+
-+	/*
-+	 * Unfortunately, FIU only supports a 16 MiB direct mapping window (per
-+	 * attached flash chip), but the SPI MEM core doesn't support partial
-+	 * direct mappings. This means that we can't support direct mapping on
-+	 * flashes that are bigger than 16 MiB.
-+	 */
-+	if (desc->info.offset + desc->info.length > MAX_MEMORY_SIZE_PER_CS)
-+		return -ENOTSUPP;
-+
-+	/* Don't read past the memory window */
-+	if (cs * MAX_MEMORY_SIZE_PER_CS + desc->info.offset + desc->info.length =
-> fiu->memory_size)
-+		return -ENOTSUPP;
-+
-+	return 0;
-+}
-+
-+static ssize_t wpcm_fiu_direct_read(struct spi_mem_dirmap_desc *desc, u64=
- offs, size_t len, void *buf)
-+{
-+	struct wpcm_fiu_spi *fiu =3D spi_controller_get_devdata(desc->mem->spi->=
-controller);
-+	int cs =3D desc->mem->spi->chip_select;
-+
-+	if (offs >=3D MAX_MEMORY_SIZE_PER_CS)
-+		return -ENOTSUPP;
-+
-+	offs +=3D cs * MAX_MEMORY_SIZE_PER_CS;
-+
-+	if (!fiu->memory || offs >=3D fiu->memory_size)
-+		return -ENOTSUPP;
-+
-+	len =3D min_t(size_t, len, fiu->memory_size - offs);
-+	memcpy_fromio(buf, fiu->memory + offs, len);
-+
-+	return len;
-+}
-+
- static const struct spi_controller_mem_ops wpcm_fiu_mem_ops =3D {
- 	.adjust_op_size =3D wpcm_fiu_adjust_op_size,
- 	.supports_op =3D wpcm_fiu_supports_op,
- 	.exec_op =3D wpcm_fiu_exec_op,
-+	.dirmap_create =3D wpcm_fiu_dirmap_create,
-+	.dirmap_read =3D wpcm_fiu_direct_read,
- };
-
- static void wpcm_fiu_hw_init(struct wpcm_fiu_spi *fiu)
- {
-+	/* Configure memory-mapped flash access */
-+	writeb(FIU_BURST_CFG_R16, fiu->regs + FIU_BURST_BFG);
-+	writeb(MAX_MEMORY_SIZE_TOTAL / (512 << 10), fiu->regs + FIU_CFG);
-+	writeb(MAX_MEMORY_SIZE_PER_CS / (512 << 10) | BIT(6), fiu->regs + FIU_SP=
-I_FL_CFG);
-+
- 	/* Deassert all manually asserted chip selects */
- 	writeb(0x0f, fiu->regs + FIU_UMA_ECTS);
- }
-@@ -404,6 +460,14 @@ static int wpcm_fiu_probe(struct platform_device *pde=
-v)
- 	if (IS_ERR(fiu->clk))
- 		return PTR_ERR(fiu->clk);
-
-+	res =3D platform_get_resource_byname(pdev, IORESOURCE_MEM, "memory");
-+	fiu->memory =3D devm_ioremap_resource(dev, res);
-+	fiu->memory_size =3D min_t(size_t, resource_size(res), MAX_MEMORY_SIZE_T=
-OTAL);
-+	if (IS_ERR(fiu->memory)) {
-+		dev_err(dev, "Failed to map flash memory window\n");
-+		return PTR_ERR(fiu->memory);
-+	}
-+
- 	fiu->shm_regmap =3D syscon_regmap_lookup_by_phandle_optional(dev->of_nod=
-e, "nuvoton,shm");
-
- 	wpcm_fiu_hw_init(fiu);
-=2D-
-2.35.1
-
+Cheers,
+Prabhakar
