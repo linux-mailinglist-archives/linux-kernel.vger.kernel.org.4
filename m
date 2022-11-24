@@ -2,208 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 949A863766A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:28:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A6AA637680
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:30:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229455AbiKXK24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 05:28:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48276 "EHLO
+        id S229878AbiKXKai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 05:30:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbiKXK2x (ORCPT
+        with ESMTP id S229538AbiKXKaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 05:28:53 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83FF4A13C2;
-        Thu, 24 Nov 2022 02:28:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9A9DACE29E0;
-        Thu, 24 Nov 2022 10:28:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26949C433D6;
-        Thu, 24 Nov 2022 10:28:45 +0000 (UTC)
-Message-ID: <d8595ab3-93ad-e852-ceaf-cc11a09c1784@xs4all.nl>
-Date:   Thu, 24 Nov 2022 11:28:44 +0100
+        Thu, 24 Nov 2022 05:30:15 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9749814F9C5
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:30:05 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id j16so1860404lfe.12
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:30:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/YGzB1m+A8t24Wyv5LyOx5oUGq5pgFjmcOjHEeeQKKE=;
+        b=P4r8ejXZ4Eg9YNX6ILD2RSHKALTZZ8W/0BRIkyRGGH0Te77UjQKe0yFJNG2u0iOytO
+         P7Ou21TenDgggLj4HVD7H2Wi64jHe369AGMSZ0VC6897W7apN0DYRll4z5n4FKNs0eAZ
+         8h7iQ4ZS7/zSNWfM0Dm9da7UIN8QMhUmEb6w5uDidqX+x1wGVONjkS4wivwkV4jBKayp
+         PJKNHH+CMVoBYIi1BGBZ+c+2k3GmTbqyPe5JMwjcTTf9CiGRc3kLtJeSMaG8QMtY1zD/
+         MhGeJgyoyrNErWBwfhZBs1ByXh6bEAjqob0yVnNjl8krHAcPZJLfrUBo1mnvJJgnJqfe
+         nw4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/YGzB1m+A8t24Wyv5LyOx5oUGq5pgFjmcOjHEeeQKKE=;
+        b=eXorDAEvH+NmeX0pN23k93ICoittppnSRxH6KzeWQjvhnWF91niH/9/+H6pbxlaoeZ
+         ElQsQ/FY51LEgkAidDF9Rjb/fXDrk7mkpGDGQugbwMgWgALN4SOOiSKfKNF6i1Ub5jI+
+         hcrskKZR2ojyHUn5LByLXMer9ouH99/+YKQYzUD53B2M+hN9fVtKSLuchDvTfvfHhUIs
+         KxZOWFrjj5XFzsdlM1nRi2Ws+Vftm967PFA98bnMBTyR7hKpZS1NY0LQWMuvTUm1YV/1
+         xXhWozQszt2X5F1Cl8CSN7iO5S6STpr9dPtf+NJSUiGGtLy+8dwBfWnRcw8I0r6UYHNW
+         DVog==
+X-Gm-Message-State: ANoB5pniENCpzDdA477EwdmwXNXe0sIKHjEnrK0f8O4vJT1iU2gjAJ0T
+        6Y32s8Y/I+18M1pKBehnNQe12g==
+X-Google-Smtp-Source: AA0mqf6s5rfKEkFzvxg78RSbw5JHvfM0tIBJH7b0tkR3JUz6rMn6ooziH19gylVOxdcjatJAbJ3jhQ==
+X-Received: by 2002:a05:6512:3da3:b0:4aa:f992:28aa with SMTP id k35-20020a0565123da300b004aaf99228aamr4887349lfv.459.1669285803993;
+        Thu, 24 Nov 2022 02:30:03 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id u21-20020a196a15000000b00498f570aef2sm78922lfu.209.2022.11.24.02.30.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Nov 2022 02:30:03 -0800 (PST)
+Message-ID: <333a240a-2c97-8b19-91d1-315d00e1f438@linaro.org>
+Date:   Thu, 24 Nov 2022 11:30:02 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v4 1/3] dt-bindings: interconnect: Add rpmh virt devices
 Content-Language: en-US
-To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        linux-media@vger.kernel.org,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kernel@collabora.com, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220610125215.240539-1-nicolas.dufresne@collabora.com>
- <20220610125215.240539-3-nicolas.dufresne@collabora.com>
- <fed8b2cf-3098-0690-dc40-796dbe0ff424@xs4all.nl>
- <46211420a76c7608c34cd6b3569f41accdfd08a1.camel@collabora.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: Re: [PATCH v1 2/5] media: rkvdec: Add an ops to check for decode
- errors
-In-Reply-To: <46211420a76c7608c34cd6b3569f41accdfd08a1.camel@collabora.com>
+To:     Melody Olvera <quic_molvera@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Odelu Kukatla <quic_okukatla@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221118182245.31035-1-quic_molvera@quicinc.com>
+ <20221118182245.31035-2-quic_molvera@quicinc.com>
+ <536af0d9-aa00-ddf1-753d-670ec2adef91@linaro.org>
+ <3ada611b-96e0-5cf0-d79d-b90ca4202ddb@quicinc.com>
+ <b7cc4f5d-c1d6-919c-9604-7855ea802d17@linaro.org>
+ <e6ae7c01-47ca-f1da-3b0b-1f17d9e862bf@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <e6ae7c01-47ca-f1da-3b0b-1f17d9e862bf@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nicolas,
+On 22/11/2022 18:57, Melody Olvera wrote:
+>>>>> +
+>>>>> +maintainers:
+>>>>> +  - Georgi Djakov <georgi.djakov@linaro.org>
+>>>>> +  - Odelu Kukatla <quic_okukatla@quicinc.com>
+>>>>> +
+>>>>> +description: |
+>>>>> +   RPMh interconnect providers support system bandwidth requirements through
+>>>>> +   RPMh hardware accelerators known as Bus Clock Manager (BCM). The provider is
+>>>>> +   able to communicate with the BCM through the Resource State Coordinator (RSC)
+>>>>> +   associated with each execution environment. Provider nodes must point to at
+>>>>> +   least one RPMh device child node pertaining to their RSC and each provider
+>>>>> +   can map to multiple RPMh resources. Virtual interconnect providers are not
+>>>>> +   controlled by AP and do not support QoS; they should not have associated
+>>>>> +   register regions.
+>>>>> +
+>>>>> +allOf:
+>>>>> +  - $ref: qcom,rpmh-common.yaml#
+>>>>> +
+>>>>> +properties:
+>>>>> +  compatible:
+>>>>> +    enum:
+>>>>> +      - qcom,qdu1000-clk-virt
+>>>>> +      - qcom,qdu1000-mc-virt
+>>>>> +      - qcom,sm8450-clk-virt
+>>>>> +      - qcom,sm8450-mc-virt
+>>>> You should also move qcom,sdx65-mc-virt, qcom,sc8280xp-mc-virt,
+>>>> qcom,sc8280xp-clk-virt and more.
+>>> Ok. I wasn't sure since some of these entries don't seem to conform to
+>>> these bindings, even though it seems they should.
+>> I have impression that devices I listed conform to these bindings, this
+>> is why I listed them. But if you are sure that they do not, then they
+>> should not be moved.
+> 
+> You're correct; those you listed do conform to the new bindings and should be moved.
+> I also caught qcom,sc7280-clk-virt which needs to be moved. I'll add to the new bindings.
 
-On 14/06/2022 18:14, Nicolas Dufresne wrote:
-> Le mardi 14 juin 2022 à 16:44 +0200, Hans Verkuil a écrit :
->> On 6/10/22 14:52, Nicolas Dufresne wrote:
->>> This optional internal ops allow each codec to do their own
->>> error status checking. The presence of an error is reported
->>> using the ERROR buffer state. This patch have no functional
->>> changes.
->>
->> If a buffer is returned with state ERROR, then that means that it is
->> seriously corrupt and userspace is expected to drop it. You might still
->> want to show it for debugging purposes, but the normal action is to drop it.
-> 
-> The discussion should be around the ERROR flag, and not the error state. Error
-> state is just an internal thing that have no meaning API wise, but turns out to
-> be the only way to get the ERROR flag to be set. With that in mind, this is not
-> what V4L2_BUF_FLAG_ERROR specification says:
-> 
->> When this flag is set, the buffer has been dequeued successfully, although
->> the data might have been corrupted. This is recoverable, streaming may
->> continue as normal and the buffer may be reused normally. Drivers set 
->> this flag when the VIDIOC_DQBUF ioctl is called.
-> 
-> For me "seriously corrupt" and "might have been corrupted" is very different.
+Actually let's wait a bit with this. For SM8550 we had an idea to move
+interconnect to their own bindings file, because they will grow a bit
+with allOf:if:then clauses.
 
-So I did some more digging (better late than never): the documentation for
-the stateful/stateless codecs explicitly states that ERROR should be used
-to indicate de/encoding errors.
+Maybe SM8450 and QDU1000 should also go to their own files which will
+describe all their interconnects (the virt and the ones requiring clocks)?
 
-I am actually not that happy about that, since the original purpose of ERROR
-was really to indicate that there is something seriously wrong with the
-captured data, and applications should skip it, except for debugging purposes.
+Apologies for bringing it late for your patches, but SM8550 is also
+happening right now, so new things pop-up :)
 
-But since it has been adopted in the codec documentation I have to accept this
-behavior for codecs.
-
-So I am OK with this series. There were some comments about some typos, so
-I will mark it as 'Changes Requested' in patchwork, but if you post a v2, then
-I'll take it.
-
-Regards,
-
-	Hans
-
-> 
->>
->> So this is not a valid approach for a decoder that can still produce a
->> decent picture, albeit with macroblock artifacts.
->>
->> A separate control that can be returned as part of the request and contains
->> some sort of error indication would be more appropriate.
->>
->> Buffer state ERROR is really meant for e.g. DMA errors and it shouldn't
->> be mixed with decode errors that still produce a valid picture.
-> 
-> The ERROR flag has been used for many years by the UVC driver to indicate a
-> partially received image (possibly due to DMA error). That driver went even
-> further and set the bytesused to the amount of bytes that was received. How this
-> have been interpreted (mostly due to how the spec around ERROR flag is written)
-> in GStreamer is that the buffer contains "some valid" data unless payload size
-> is 0.
-> 
-> As explained earlier, the decision to display "some valid" data is not something
-> we should decided for our users. This should be left to the application to
-> decide. Same goes for GStreamer, if a buffer exist but has "some valid data", we
-> have a GST_BUFFER_FLAG_CORRUPTED flag for it. It is then up for the application
-> to drop if needed for the application. I'm pretty sure some stateful decoders
-> also behaves like this (simply because an error is an error, regardless of the
-> nature of it).
-> 
-> It might be different today, but few years ago, dropping or not dropping was the
-> main difference between Apple Facetime (dropping) and the other video streaming
-> applications. One would freeze, the other would show "some valid data".
-> 
-> If you look at the outcome of a partially corrupted decoded images and the
-> outcome of a mid-frame DMA error (typically from a camera stream), you'll find
-> that these are visually the same. So it is unfair to consider these two error so
-> different that a new mechanism must be added. In my opinion, adding RO controls
-> to signal these corruption only make sense if the hardware can provide detailed
-> reports of what is corrupted (list/range of macro-blocks, or CTU that are
-> affected). Then you could measure the level of corruption, but in reality, I
-> doubt there would be a vast usage of this, specially that the report will likely
-> be inconsistent due to limited HW support.
-> 
-> Finally, in the bitstream decoder world, including all software decoders I've
-> worked with, the decode is a success only if all bits are perfectly decoded.
-> This is the baseline for good vs bad. Userland expected an image, and whatever
-> happened, in real-time scenario, it must send an image. Sending a corrupted
-> image, or sending the previously good image remains a decision to be made by
-> application. As application exist around the implemented mechanism here, I'd
-> prefer to go for that rather then adding a new API.
-> 
-> Nicolas
-> 
->>
->> Regards,
->>
->> 	Hans
->>
->>>
->>> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
->>> ---
->>>  drivers/staging/media/rkvdec/rkvdec.c | 10 ++++++----
->>>  drivers/staging/media/rkvdec/rkvdec.h |  2 ++
->>>  2 files changed, 8 insertions(+), 4 deletions(-)
->>>
->>> diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
->>> index 7bab7586918c..7e76f8b72885 100644
->>> --- a/drivers/staging/media/rkvdec/rkvdec.c
->>> +++ b/drivers/staging/media/rkvdec/rkvdec.c
->>> @@ -950,6 +950,7 @@ static void rkvdec_v4l2_cleanup(struct rkvdec_dev *rkvdec)
->>>  static irqreturn_t rkvdec_irq_handler(int irq, void *priv)
->>>  {
->>>  	struct rkvdec_dev *rkvdec = priv;
->>> +	struct rkvdec_ctx *ctx;
->>>  	enum vb2_buffer_state state;
->>>  	u32 status;
->>>  
->>> @@ -958,12 +959,13 @@ static irqreturn_t rkvdec_irq_handler(int irq, void *priv)
->>>  		VB2_BUF_STATE_DONE : VB2_BUF_STATE_ERROR;
->>>  
->>>  	writel(0, rkvdec->regs + RKVDEC_REG_INTERRUPT);
->>> -	if (cancel_delayed_work(&rkvdec->watchdog_work)) {
->>> -		struct rkvdec_ctx *ctx;
->>> +	ctx = v4l2_m2m_get_curr_priv(rkvdec->m2m_dev);
->>>  
->>> -		ctx = v4l2_m2m_get_curr_priv(rkvdec->m2m_dev);
->>> +	if (ctx->coded_fmt_desc->ops->check_error_info)
->>> +		state = ctx->coded_fmt_desc->ops->check_error_info(ctx);
->>> +
->>> +	if (cancel_delayed_work(&rkvdec->watchdog_work))
->>>  		rkvdec_job_finish(ctx, state);
->>> -	}
->>>  
->>>  	return IRQ_HANDLED;
->>>  }
->>> diff --git a/drivers/staging/media/rkvdec/rkvdec.h b/drivers/staging/media/rkvdec/rkvdec.h
->>> index 633335ebb9c4..4ae8e6c6b03c 100644
->>> --- a/drivers/staging/media/rkvdec/rkvdec.h
->>> +++ b/drivers/staging/media/rkvdec/rkvdec.h
->>> @@ -73,6 +73,8 @@ struct rkvdec_coded_fmt_ops {
->>>  		     struct vb2_v4l2_buffer *dst_buf,
->>>  		     enum vb2_buffer_state result);
->>>  	int (*try_ctrl)(struct rkvdec_ctx *ctx, struct v4l2_ctrl *ctrl);
->>> +	/* called from IRQ handler */
->>> +	int (*check_error_info)(struct rkvdec_ctx *ctx);
->>>  };
->>>  
->>>  struct rkvdec_coded_fmt_desc {
->>
-> 
+Best regards,
+Krzysztof
 
