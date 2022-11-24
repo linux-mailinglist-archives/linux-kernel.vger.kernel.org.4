@@ -2,47 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADCCA63717A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 05:25:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB8D63717F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 05:30:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbiKXEZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 23:25:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35642 "EHLO
+        id S229767AbiKXEaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 23:30:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiKXEZn (ORCPT
+        with ESMTP id S229673AbiKXEaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 23:25:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E766C9ABD
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 20:25:41 -0800 (PST)
+        Wed, 23 Nov 2022 23:30:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F318FC5B49;
+        Wed, 23 Nov 2022 20:30:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BFDBAB826C9
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:25:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60DC5C433C1;
-        Thu, 24 Nov 2022 04:25:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1669263938;
-        bh=vOnl+PAW/vecWK18KoII+NqVjfMzySB3kHa1v947VSI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=f12NgdMoqauyCN2r9JRF0Ir96lgqOqdfJ7CMAfTzO+fTRgdOTXCfPeN32qIu+0POw
-         bWUOzS5b0oHKt1lrqcF84EKQbrYA8bClwjGgAFpZVTTGzgKlXO8pXTU1Of9zYc5+Io
-         WARqe5d/TFWiuX7HqxX2DfYExit7SNCneSzGJJhI=
-Date:   Wed, 23 Nov 2022 20:25:37 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/vmalloc: Add check for KMEM_CACHE
-Message-Id: <20221123202537.3378bf960c01f9773f6a4675@linux-foundation.org>
-In-Reply-To: <20221124040226.17953-1-jiasheng@iscas.ac.cn>
-References: <20221124040226.17953-1-jiasheng@iscas.ac.cn>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        by ams.source.kernel.org (Postfix) with ESMTPS id A9D97B826C4;
+        Thu, 24 Nov 2022 04:30:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 66F6FC433D7;
+        Thu, 24 Nov 2022 04:30:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669264215;
+        bh=XUXiYeP4N9pnP2cqE1lGv8knsNbWK1QXgjYRJ0XSCaA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=jYjaSJG63SKboMsrjgVy/Fypfcur69MxZeJdTNNUxRFdloiO2JD8fS12iuAyGph8j
+         ujK3MH35WB5iqGLuzfactdZt+vq6vjOevxHd+MhhbrFM/OCKLyEo7sZzdvbWKgVtbx
+         4soP92CD9S/ukpQerYVLuHU4DktINhr7JuOjukNl2WjiOriXUs1kchS4xX0UvhRJ8t
+         XiEICG16mXvCQ2rAKiZWt8w62Z7z3GxtrOAqyS0jqwsKVrHT7X1cLMIU9jzGi2uTdZ
+         kL2yMRBDSDmbxSZUKMSz3TAv/GBTdePxe6/2qB2r/rpJH5CTP6YbdVCfRGYaf21RbV
+         upQ21/615IQtA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4CBF2C395EE;
+        Thu, 24 Nov 2022 04:30:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] net: enetc: preserve TX ring priority across
+ reconfiguration
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166926421531.27044.935878443390847890.git-patchwork-notify@kernel.org>
+Date:   Thu, 24 Nov 2022 04:30:15 +0000
+References: <20221122130936.1704151-1-vladimir.oltean@nxp.com>
+In-Reply-To: <20221122130936.1704151-1-vladimir.oltean@nxp.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, claudiu.manoil@nxp.com,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,18 +58,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Nov 2022 12:02:26 +0800 Jiasheng Jiang <jiasheng@iscas.ac.cn> wrote:
+Hello:
 
-> As KMEM_CACHE may return NULL pointer, it should
-> be better to check the return value in order to
-> avoid NULL pointer dereference in kmem_cache_zalloc.
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Tue, 22 Nov 2022 15:09:36 +0200 you wrote:
+> In the blamed commit, a rudimentary reallocation procedure for RX buffer
+> descriptors was implemented, for the situation when their format changes
+> between normal (no PTP) and extended (PTP).
 > 
-> ...
->
-> @@ -2426,15 +2426,17 @@ void __init vmalloc_init(void)
+> enetc_hwtstamp_set() calls enetc_close() and enetc_open() in a sequence,
+> and this sequence loses information which was previously configured in
+> the TX BDR Mode Register, specifically via the enetc_set_bdr_prio() call.
+> The TX ring priority is configured by tc-mqprio and tc-taprio, and
+> affects important things for TSN such as the TX time of packets. The
+> issue manifests itself most visibly by the fact that isochron --txtime
+> reports premature packet transmissions when PTP is first enabled on an
+> enetc interface.
+> 
+> [...]
 
-Linux assumes that allocation attempts from __init code will succeed.
+Here is the summary with links:
+  - [net] net: enetc: preserve TX ring priority across reconfiguration
+    https://git.kernel.org/netdev/net/c/290b5fe096e7
 
-Because if they fail so early in the boot process, the system is so
-utterly messed up that we may as well just go oops.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
