@@ -2,53 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01A0663779E
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 12:26:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 734776377A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 12:26:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbiKXL0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 06:26:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59024 "EHLO
+        id S229769AbiKXL0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 06:26:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiKXL0U (ORCPT
+        with ESMTP id S229606AbiKXL0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 06:26:20 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB9B2529C;
-        Thu, 24 Nov 2022 03:26:19 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 24 Nov 2022 06:26:44 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659A2240AA
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 03:26:43 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NHwfx2tNGz5BNRf;
-        Thu, 24 Nov 2022 19:26:17 +0800 (CST)
-Received: from szxlzmapp04.zte.com.cn ([10.5.231.166])
-        by mse-fl2.zte.com.cn with SMTP id 2AOBQAQp098428;
-        Thu, 24 Nov 2022 19:26:10 +0800 (+08)
-        (envelope-from yang.yang29@zte.com.cn)
-Received: from mapi (szxlzmapp02[null])
-        by mapi (Zmail) with MAPI id mid14;
-        Thu, 24 Nov 2022 19:26:13 +0800 (CST)
-Date:   Thu, 24 Nov 2022 19:26:13 +0800 (CST)
-X-Zmail-TransId: 2b04637f54d5ffffffffd03e764f
-X-Mailer: Zmail v1.0
-Message-ID: <202211241926133236370@zte.com.cn>
-Mime-Version: 1.0
-From:   <yang.yang29@zte.com.cn>
-To:     <sumit.semwal@linaro.org>
-Cc:     <christian.koenig@amd.com>, <linux-media@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>,
-        <linaro-mm-sig@lists.linaro.org>, <linux-kernel@vger.kernel.org>,
-        <xu.panda@zte.com.cn>, <yang.yang29@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIGRtYS1idWY6IHVzZSBzdHJzY3B5KCkgdG8gaW5zdGVhZCBvZiBzdHJsY3B5KCk=?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2AOBQAQp098428
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 637F54D9.000 by FangMail milter!
-X-FangMail-Envelope: 1669289177/4NHwfx2tNGz5BNRf/637F54D9.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<yang.yang29@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 637F54D9.000/4NHwfx2tNGz5BNRf
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        by smtp-out2.suse.de (Postfix) with ESMTPS id EF9891F38D;
+        Thu, 24 Nov 2022 11:26:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1669289201; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ghl8pz0023I9HjGlunSrLG6YT8beQ1/ZChOc8kYxn10=;
+        b=rIeXXCIldod+fSwdIB8Hm4YrFZw7XlW0nl3dvw1KvRXSpNMC6w6mFGDxE5r7rECi+jGwH+
+        5Vb389rbCvTPtLcY83CJLfZKnwjFq+W+XJXtzJNlSCX5zo+H6MS1yNOQN4nn/AAUPHVbaj
+        4NBMJ90Lz9KWbl7wnPBfKGYX+43ZUr8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1669289201;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ghl8pz0023I9HjGlunSrLG6YT8beQ1/ZChOc8kYxn10=;
+        b=jzhQoJTTjFx/oM4vMTIpSsNj/0pF6cBxA8irCorgksRzNosKsYxyvIfrvecGgiSmbQ048c
+        4eW17KcyzN+8j4Bg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B6EDB13B4F;
+        Thu, 24 Nov 2022 11:26:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id tSXvK/FUf2MNYQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 24 Nov 2022 11:26:41 +0000
+Message-ID: <dcde302f-faa7-5e55-1e67-f8c7386119d4@suse.cz>
+Date:   Thu, 24 Nov 2022 12:26:41 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 01/12] mm, slab: ignore hardened usercopy parameters when
+ disabled
+Content-Language: en-US
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Kees Cook <kees@kernel.org>, Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, patches@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>
+References: <20221121171202.22080-1-vbabka@suse.cz>
+ <20221121171202.22080-2-vbabka@suse.cz>
+ <206E0154-63A6-45CF-8E19-BD01B35AEF0B@kernel.org>
+ <0058169a-1659-7ab1-edff-de9ebadcf236@suse.cz> <Y39Sq8vReXouviyn@hyeyoo>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <Y39Sq8vReXouviyn@hyeyoo>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,29 +86,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Panda <xu.panda@zte.com.cn>
+On 11/24/22 12:16, Hyeonggon Yoo wrote:
+>>  	/* Fail closed on bad usersize of useroffset values. */
+>> -	if (WARN_ON(!usersize && useroffset) ||
+>> +	if (!IS_ENABLED(CONFIG_HARDENED_USERCOPY) ||
+>> +	    WARN_ON(!usersize && useroffset) ||
+>>  	    WARN_ON(size < usersize || size - usersize < useroffset))
+>>  		usersize = useroffset = 0;
+> 
+> I think this change is no longer needed as slab_unmergeable()
+> now does not check usersize when CONFIG_HARDENED_USERCOPY=n?
 
-The implementation of strscpy() is more robust and safer.
-That's now the recommended way to copy NUL terminated strings.
+True, but the code here still follows by
 
-Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-Signed-off-by: Yang Yang <yang.yang29@zte.com>
----
- drivers/dma-buf/dma-buf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+if (!usersize)
+    s = __kmem_cache_alias(name, size, align, flags, ctor);
 
-diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index b6c36914e7c6..485cf4f3431e 100644
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@ -51,7 +51,7 @@ static char *dmabuffs_dname(struct dentry *dentry, char *buffer, int buflen)
- 	dmabuf = dentry->d_fsdata;
- 	spin_lock(&dmabuf->name_lock);
- 	if (dmabuf->name)
--		ret = strlcpy(name, dmabuf->name, DMA_BUF_NAME_LEN);
-+		ret = strscpy(name, dmabuf->name, DMA_BUF_NAME_LEN);
- 	spin_unlock(&dmabuf->name_lock);
+So it seemed simplest just to leave it like that.
 
- 	return dynamic_dname(buffer, buflen, "/%s:%s",
--- 
-2.15.2
+
