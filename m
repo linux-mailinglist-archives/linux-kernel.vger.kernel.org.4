@@ -2,86 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B64836373C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:20:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82FA26373CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:22:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbiKXIUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 03:20:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45696 "EHLO
+        id S229626AbiKXIWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 03:22:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbiKXIUT (ORCPT
+        with ESMTP id S229476AbiKXIWP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 03:20:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9891BEAD2;
-        Thu, 24 Nov 2022 00:20:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AC495B825F3;
-        Thu, 24 Nov 2022 08:20:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6C92BC433D7;
-        Thu, 24 Nov 2022 08:20:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669278016;
-        bh=X32JTPYRJMxhErnYPnzKq45BMq7dyhDObQUBJXOiB6U=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=h58r5Q8pkQgZq4oyQqbXc4foVpZGGR+OjqFzH87a/pw95nGjyWsohTQ/XqanAJKEA
-         +X5DNge0zMIfi90kYTFGFTemaFIx1Nr+lup0+1upTlJobB5SaY6bImW98VDfauP6+Z
-         pM0qYkQu7ob+SulAyenllQhRZAGYo3+QsE+rkrNUKLNFl2kwxJqL9ma1sXxcIE8XKF
-         xyJc5dDHG1RqhknvbmSUPWigTcaYLQjmZsu/lCpZKYlaPW0MjGmBs3sDmPb9M66PF/
-         73HPveNhjI85Z0WAHktWxptU/md2RVv5ADpli/Lu/5xLbrkVVSkAocXHppGiUbYw69
-         XxuOUnK/7vtqw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4E0CFC5C7C6;
-        Thu, 24 Nov 2022 08:20:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 24 Nov 2022 03:22:15 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A9F2D752
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:22:14 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1oy7Ue-0006Qm-Na; Thu, 24 Nov 2022 09:22:00 +0100
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1oy7Uc-0005xp-CG; Thu, 24 Nov 2022 09:21:58 +0100
+Date:   Thu, 24 Nov 2022 09:21:58 +0100
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Ping-Ke Shih <pkshih@realtek.com>
+Cc:     Bernie Huang <phhuang@realtek.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        Hans Ulli Kroll <linux@ulli-kroll.de>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Kalle Valo <kvalo@kernel.org>,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Viktor Petrenko <g0000ga@gmail.com>,
+        Neo Jou <neojou@gmail.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Alexander Hochbaum <alex@appudo.com>,
+        Da Xue <da@libre.computer>
+Subject: Re: [PATCH v3 00/11] RTW88: Add support for USB variants
+Message-ID: <20221124082158.GE29978@pengutronix.de>
+References: <20221122145226.4065843-1-s.hauer@pengutronix.de>
+ <20221122145527.GA29978@pengutronix.de>
+ <015051d9a5b94bbca5135c58d2cfebf3@realtek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: wwan: t7xx: Fix the ACPI memory leak
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166927801631.21134.5563511038557206086.git-patchwork-notify@kernel.org>
-Date:   Thu, 24 Nov 2022 08:20:16 +0000
-References: <1669119580-28977-1-git-send-email-guohanjun@huawei.com>
-In-Reply-To: <1669119580-28977-1-git-send-email-guohanjun@huawei.com>
-To:     Hanjun Guo <guohanjun@huawei.com>
-Cc:     chandrashekar.devegowda@intel.com,
-        chiranjeevi.rapolu@linux.intel.com, haijun.liu@mediatek.com,
-        m.chetan.kumar@linux.intel.com, ricardo.martinez@linux.intel.com,
-        loic.poulain@linaro.org, ryazanov.s.a@gmail.com,
-        davem@davemloft.net, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <015051d9a5b94bbca5135c58d2cfebf3@realtek.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Tue, 22 Nov 2022 20:19:40 +0800 you wrote:
-> The ACPI buffer memory (buffer.pointer) should be freed as the
-> buffer is not used after acpi_evaluate_object(), free it to
-> prevent memory leak.
+On Thu, Nov 24, 2022 at 06:48:23AM +0000, Ping-Ke Shih wrote:
 > 
-> Fixes: 13e920d93e37 ("net: wwan: t7xx: Add core components")
-> Signed-off-by: Hanjun Guo <guohanjun@huawei.com>
+> > -----Original Message-----
+> > From: Sascha Hauer <s.hauer@pengutronix.de>
+> > Sent: Tuesday, November 22, 2022 10:55 PM
+> > To: Bernie Huang <phhuang@realtek.com>
+> > Cc: linux-wireless@vger.kernel.org; Ping-Ke Shih <pkshih@realtek.com>; Hans Ulli Kroll
+> > <linux@ulli-kroll.de>; Martin Blumenstingl <martin.blumenstingl@googlemail.com>; netdev@vger.kernel.org;
+> > Kalle Valo <kvalo@kernel.org>; Yan-Hsuan Chuang <tony0620emma@gmail.com>; linux-kernel@vger.kernel.org;
+> > Viktor Petrenko <g0000ga@gmail.com>; Neo Jou <neojou@gmail.com>; Bernie Huang <phhuang@realtek.com>;
+> > kernel@pengutronix.de; Johannes Berg <johannes@sipsolutions.net>; Alexander Hochbaum <alex@appudo.com>;
+> > Da Xue <da@libre.computer>
+> > Subject: Re: [PATCH v3 00/11] RTW88: Add support for USB variants
+> > 
+> > On Tue, Nov 22, 2022 at 03:52:15PM +0100, Sascha Hauer wrote:
+> > > This is the third round of adding support for the USB variants to the
+> > > RTW88 driver. There are a few changes to the last version which make it
+> > > worth looking at this version.
+> > >
+> > > First of all RTL8723du and RTL8821cu are tested working now. The issue
+> > > here was that the txdesc checksum calculation was wrong. I found the
+> > > correct calculation in various downstream drivers found on github.
+> > >
+> > > The second big issue was that TX packet aggregation was wrong. When
+> > > aggregating packets each packet start has to be aligned to eight bytes.
+> > > The necessary alignment was added to the total URB length before
+> > > checking if there is another packet to aggregate, so the URB length
+> > > included that padding after the last packet, which is wrong.  Fixing
+> > > this makes the driver work much more reliably.
+> > >
+> > > I added all people to Cc: who showed interest in this driver and I want
+> > > to welcome you for testing and reviewing.
+> > 
+> > There still is a problem with the RTL8822cu chipset I have here.  When
+> > using NetworkManager I immediately lose the connection to the AP after
+> > it has been connected:
+> > 
+> > [  376.213846] wlan0: authenticate with 76:83:c2:ce:81:b1
+> > [  380.085463] wlan0: send auth to 76:83:c2:ce:81:b1 (try 1/3)
+> > [  380.091446] wlan0: authenticated
+> > [  380.108864] wlan0: associate with 76:83:c2:ce:81:b1 (try 1/3)
+> > [  380.136448] wlan0: RX AssocResp from 76:83:c2:ce:81:b1 (capab=0x1411 status=0 aid=2)
+> > [  380.202955] wlan0: associated
+> > [  380.268140] IPv6: ADDRCONF(NETDEV_CHANGE): wlan0: link becomes ready
+> > [  380.275328] wlan0: Connection to AP 76:83:c2:ce:81:b1 lost
+> > 
+> > That doesn't happen when using plain wpa_supplicant. This seems to go
+> > down to cd96e22bc1da ("rtw88: add beacon filter support"). After being
+> > connected I get a BCN_FILTER_CONNECTION_LOSS beacon. Plain
+> > wpa_supplicant seems to go another code patch and doesn't activate
+> > connection quality monitoring.
+> > 
+> > The connection to the AP works fluently also with NetworkManager though
+> > when I just ignore the BCN_FILTER_CONNECTION_LOSS beacon.
+> > 
+> > Any idea what may be wrong here?
+> > 
 > 
-> [...]
+> Please reference to below patch to see if it can work to you.
+> 
+> https://lore.kernel.org/linux-wireless/20221124064442.28042-1-pkshih@realtek.com/T/#u
 
-Here is the summary with links:
-  - net: wwan: t7xx: Fix the ACPI memory leak
-    https://git.kernel.org/netdev/net/c/08e8a949f684
+Great! That solves this issue \o/
 
-You are awesome, thank you!
+Sascha
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
