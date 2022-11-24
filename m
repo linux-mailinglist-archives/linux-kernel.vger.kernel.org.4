@@ -2,183 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 450A7637D0F
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 16:36:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64FFF637D14
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 16:37:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiKXPgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 10:36:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50100 "EHLO
+        id S229715AbiKXPhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 10:37:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiKXPgI (ORCPT
+        with ESMTP id S229572AbiKXPhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 10:36:08 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0227E8725
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 07:36:07 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 6EDE321AB4;
-        Thu, 24 Nov 2022 15:36:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1669304166; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wKNi5deH4BoIskVZCgDsQzQoFbLRzsokztAH6oXCNrk=;
-        b=BQhdgH4R+2aMiZMoj20bRKy1LmbIg/I+hE8wPh/4+hYACFWGwQE6m97ds6PMNqgQJrng1P
-        iv1cmDdFh8Q6aLioEDSZy/XpDOj9hm9hlaKUt9xbCmqIBbtmkQxDC8usr7+JuZtcqQOvWw
-        oKD+LiJu81BYWwo239arLn4XCdVfxzA=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 29B3013B4F;
-        Thu, 24 Nov 2022 15:36:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id IffBCGaPf2PibgAAMHmgww
-        (envelope-from <jgross@suse.com>); Thu, 24 Nov 2022 15:36:06 +0000
-Message-ID: <a0a366d7-0634-0e19-d8fb-1505ff041f7f@suse.com>
-Date:   Thu, 24 Nov 2022 16:36:05 +0100
+        Thu, 24 Nov 2022 10:37:12 -0500
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B9481113FF6;
+        Thu, 24 Nov 2022 07:37:09 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id C667A80AF;
+        Thu, 24 Nov 2022 15:37:08 +0000 (UTC)
+Date:   Thu, 24 Nov 2022 17:37:07 +0200
+From:   Tony Lindgren <tony@atomide.com>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-serial@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] serial: core: Start managing serial controllers
+ to enable runtime PM
+Message-ID: <Y3+PoxJNJm0Pe+Xm@atomide.com>
+References: <20220615062455.15490-1-tony@atomide.com>
+ <Yrmfr3GfXYhclKXA@kroah.com>
+ <Yrm1HaUtjTMcSIE+@atomide.com>
+ <562c1505-d3bc-6422-9598-15c399e6fbba@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v3] x86/boot: skip realmode init code when running as Xen
- PV guest
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org
-References: <20221123114523.3467-1-jgross@suse.com> <Y39xcnKCkbYQZjaE@zn.tnic>
- <a1fc1d88-2112-2b81-52bc-cbfb6736edf0@suse.com> <Y3+PK23tdXIMtuSE@zn.tnic>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <Y3+PK23tdXIMtuSE@zn.tnic>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------CpSuLEDiqmV6m0VZTCdrJczW"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <562c1505-d3bc-6422-9598-15c399e6fbba@kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------CpSuLEDiqmV6m0VZTCdrJczW
-Content-Type: multipart/mixed; boundary="------------0QEft5VLZuvNdepsITW01X4u";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
- Boris Ostrovsky <boris.ostrovsky@oracle.com>, xen-devel@lists.xenproject.org
-Message-ID: <a0a366d7-0634-0e19-d8fb-1505ff041f7f@suse.com>
-Subject: Re: [PATCH v3] x86/boot: skip realmode init code when running as Xen
- PV guest
-References: <20221123114523.3467-1-jgross@suse.com> <Y39xcnKCkbYQZjaE@zn.tnic>
- <a1fc1d88-2112-2b81-52bc-cbfb6736edf0@suse.com> <Y3+PK23tdXIMtuSE@zn.tnic>
-In-Reply-To: <Y3+PK23tdXIMtuSE@zn.tnic>
+Hi,
 
---------------0QEft5VLZuvNdepsITW01X4u
-Content-Type: multipart/mixed; boundary="------------bxSL8Rx0Pqxi7ireBdmCyZ1b"
+* Jiri Slaby <jirislaby@kernel.org> [221124 06:53]:
+> Hi,
+> 
+> I am returning to v2, as I managed to read only v3 and only now. But here
+> was already the point below.
+> 
+> On 27. 06. 22, 15:48, Tony Lindgren wrote:
+> > > > Considering the above, let's improve the serial core layer so we can
+> > > > manage the serial port controllers better. Let's register the controllers
+> > > > with the serial core layer in addition to the serial ports.
+> > > 
+> > > Why can't controllers be a device as well?
+> > 
+> > The controllers are devices already probed by the serial port drivers.
+> > What's missing is mapping the ports (as devices based on the comments
+> > above) to the controller devices. I don't think we need another struct
+> > device for the serial controller in addition to the serial port driver
+> > device and it's child port devices.
+> 
+> To be honest, I don't like the patch (even v3). We have uart_state which I
+> already hate and now we have another structure holding *some* other info
+> about a serial device (apart from uart_port). It's mess already and hard to
+> follow, esp. to newcomers.
 
---------------bxSL8Rx0Pqxi7ireBdmCyZ1b
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Yup the serial code sure is hard to follow..
 
-T24gMjQuMTEuMjIgMTY6MzUsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gVGh1LCBO
-b3YgMjQsIDIwMjIgYXQgMDI6MzA6MzlQTSArMDEwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
-Cj4+IExvb2tpbmcgYXQgdGhlIGRhdGUgd2hlbiAwODRlZTFjNjQxYTAgd2VudCBpbiBJIGRv
-bid0IHRoaW5rIGl0IF9uZWVkc18NCj4+IHRvIGdvIGluIG5vdywgYnV0IEkgd291bGRuJ3Qg
-Y29tcGxhaW4gLi4uDQo+IA0KPiBTbyBpZiB5b3UgZG9uJ3QgaGF2ZSBhIHBhcnRpY3VsYXIg
-YW5kIHNwZWNpZmljIHJlYXNvbiwgSSB3b24ndCBxdWV1ZSBpdA0KPiBmb3Igc3RhYmxlIGF0
-IGFsbC4NCj4gDQoNClllcywgSSB0aGluayB0aGlzIGlzIGZpbmUuDQoNCg0KSnVlcmdlbg0K
+> AFAIU, what Greg suggests would be:
+> 
+> PCI/platform/acpi/whatever struct dev
+>   -> serial controller 1 struct dev
+>      -> serial port 1 struct dev (tty_port instance exists for this)
+>      -> serial port 2 struct dev (tty_port instance exists for this)
+>      -> ...
+>   -> serial controller 2 struct dev
+>      -> serial port 1 struct dev (tty_port instance exists for this)
+>      -> serial port 2 struct dev (tty_port instance exists for this)
+>      -> ...
 
---------------bxSL8Rx0Pqxi7ireBdmCyZ1b
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Oh you want the serial controller struct device as a child of the
+hardware controller struct device. Yeah that makes sense to put it there.
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+I was kind of thinking we want the port devices be direct children of
+the hardware struct device, but I guess there is no such need.
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+> And you are objecting that mostly (or in all cases?), there will never be
+> "serial controller 2"?
 
---------------bxSL8Rx0Pqxi7ireBdmCyZ1b--
+I'm was not aware of the need for multiple serial port controllers
+connected to a single hardware controller struct device. Is there an
+example for that somewhere?
 
---------------0QEft5VLZuvNdepsITW01X4u--
+Not that multiple serial controller struct devices matters with your
+suggestion, just wondering.
 
---------------CpSuLEDiqmV6m0VZTCdrJczW
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+> But given your description, I believe you need it anyway -- side note: does
+> really the PM layer/or you need it or would you be fine with "serial port N"
+> dev children? But provided you don't have the controller, you work around it
+> by struct serial_controller. So what's actually the point of the workaround
+> instead of sticking to proper driver model? With the workaround you seem you
+> have to implement all the binding, lookup and such yourself anyway. And that
+> renders the serial even worse :P. Let's do the reverse instead.
 
------BEGIN PGP SIGNATURE-----
+To me it seems your suggestion actually makes things easier for runtime
+PM :)
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmN/j2UFAwAAAAAACgkQsN6d1ii/Ey84
-ZAgAhcKWf06iOffRhSIt2t/DqoRYFnETjfoOw1Swpb00p2sCECLDMJL6WUaOAsl+XsNb2ed+dztj
-p8cCEcOmeybTRfx7kOYyJm+ZY7GX470fjeH2nGgRKVzUTvUbLvJjB4O+RviUd1y4RDK0RmHU31+Y
-u2xJKOWUPAbVVbmCsA7KgVI9d2WIKG5ZHN1AoChNaC5npufm6ok06KJgIwVuLFAIRWty6bJkHeSc
-JlfO4SnqPHvCQIBJTldsCm2C97JyYvAh10N1So79zywqZ8nwrPO2PszO/9OzvxUh1iiRTQdwbViU
-Q5tN/q7FKa+60IUn7u+tddrzCZ2xLZoHa0YVWBbHbw==
-=vXBS
------END PGP SIGNATURE-----
+We can just enable runtime PM for the serial controller struct device
+without tinkering with the parent hardware controller struct device.
 
---------------CpSuLEDiqmV6m0VZTCdrJczW--
+> The only thing I am not sure about, whether tty_port should be struct dev
+> too -- and if it should have serial port 1 as a parent. But likely so. And
+> then with pure tty (i.e. tty_driver's, not uart_driver's), it would have
+> PCI/platform/acpi/whatever as a parent directly.
+
+That seems like a separate set of patches, no? Or is there some need right
+now to have some child struct device as a direct child of the hardware
+controller struct device?
+
+> In sum, the above structure makes perfect sense to me. There has only been
+> noone to do the real work yet. And having tty_port was a hard prerequisite
+> for this to happen. And that happened long time ago. All this would need a
+> lot of work initially¹⁾, but it paid off a lot in long term.
+> 
+> ¹⁾I know what I am writing about -- I converted HID. After all, the core was
+> only 1000 lines patch (cf 85cdaf524b7d) + patches to convert all the drivers
+> incrementally (like 8c19a51591).
+
+Cool, thanks for your suggestions.
+
+Regards,
+
+Tony
