@@ -2,166 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4CAE637101
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 04:28:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 938C4637104
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 04:28:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbiKXD2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 22:28:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
+        id S229957AbiKXD2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 22:28:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbiKXD2K (ORCPT
+        with ESMTP id S229572AbiKXD2q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 22:28:10 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B24E31F80;
-        Wed, 23 Nov 2022 19:28:04 -0800 (PST)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AO2iKDo028162;
-        Thu, 24 Nov 2022 03:27:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2022-7-12;
- bh=Z1BdZ7X7hAt/rW0J4UDpLrJTXkhEOYZad21hXJI6TUY=;
- b=sOOfQ/zpGsRIxcSwWWSraLP9BLrhjOgvUGmkrxvhrV3bgMiG/SEubJoWGXkH5VdMzI0f
- +Haq2jrQBAd7P9LICFli6Igj5blFCTZ2cG6wA9TNIriJeDLLW9iuz4S9ZJX0+W6GH/Hv
- /SEhvcJqN3mwyxwl+4xUi6DImV+gJdjJjGvFGQuF2IQ1xK5fda+frhPE9xEitiDLLbxL
- LP/UkTj3gHP8Pu6yD6vuKPCFqCsf1EfK63N/Kem4oBaNyYo+b/P+Bpbq+5X0zb1TZICA
- z4CG3g4Hkoef4ccL+s+4ESfE+M6Le6iPAePjieBRKb2EuKTA/JF76O8bQUBTqt1TSWgk DQ== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3m1p5fhgu9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 24 Nov 2022 03:27:50 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2AO0I1UF010837;
-        Thu, 24 Nov 2022 03:27:49 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2170.outbound.protection.outlook.com [104.47.56.170])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3kxnkdxxc5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 24 Nov 2022 03:27:49 +0000
+        Wed, 23 Nov 2022 22:28:46 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on20626.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e89::626])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB27D56D41;
+        Wed, 23 Nov 2022 19:28:44 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KZsD9Xvqy4PwID7Q7nHsE66yLNj7ajn0kE2mmQCTtJe3qqR52IQJVayPWXaS4nTsCTjLfkDXS7pt/6tVdtkLSUcUYQhFELiiBiO1ASicKzpzYND5ZI2DUAh5J4jytFnicOrW9Hj2yoz+EtpNyPbGH5IeabittBwGsHL+LBt78T7UeDDjIGWSDMYzCHprAu17Mo9PwzoB0bMa2EqOMvKcrElf/iUIgBe0Xl+RudZiT31JK/FeLPROvJ0awke9Wow7L6rhauQZaBvXYhvhK4ACEFO8+eue4Pu2uL0jUVF3nqBOdMquSBos63Lh9pDUWJjJ++WWbkSn1KS2P+4vKRIEsg==
+ b=gesCOb80HiPyxOhrikXpv2wB2qs92Kxiy/kPmKn8JeL7DW1GDoLT9LtTUo+CXmB+vGpZNYcIjlygpNpsDyoxSsiiAzZrWQN0mJyLWcC0G8s8TvU9lV3xmUeOQ3CjxXL/gehMd57HNvWKu1KFg6yVIsEvhOvIKu1yTzdEGlo9JQAxI6cKZCQFkcgjSwD6fxPLguVeBSShEby+VEnowPqU7kjr9mO4CNt7cIMAPbYMoAAWud6G/UJSQ+8nRJwM3vDzdCzY4GUuwsfn/q2fmc9OIfy7MiN+13JRXxreUWwGvQMXdpCgE6L+5EeKrMUM7zdbGcP+IooOxbeevXrALSR4fg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Z1BdZ7X7hAt/rW0J4UDpLrJTXkhEOYZad21hXJI6TUY=;
- b=e3jM9l2nVcMc0J78hlTAJbsp9d/Jw7t7vtt2bbIlkwi5V4n53p1y84SOnHSjrJwGjTFXj/2LRBEaHwQsRV8ZiWWHQXP9MozSC3UHj47HfF3/DMUJTu8YDdchfffVTWE/ZQc4TT8l7J2Qim2AD78qNO7uCPAROyFHdeA6TeTzc/KR1vuRnltdubgKN21nER8C5fGIyl3pVbTkENmw5RovtjrMr/YGBcwnXnMSBDmerK1Kno+YSTTsRoxZ3pf/IMv2Pm3xRsI32UOPEEHYjGpgafqK0Se+thvcINb48PaIgftNo7UM0CynzeVN3MlBFP2y4NOtjbI6bTR7aTyLgqSfyg==
+ bh=DpuTgbPwmEooBS+88CZQxaDe2vTOtu3JCUtXzdrtvNY=;
+ b=Zn5twJFsE+vJs3c223MD2CAdvoVdLv6fiHNZBxfw74Y/9fLEBlA+VAXDCbHhNIX/ttzl1PKM+TfgTzrHYerfxpDiIt6th9bNdENSlNLCa/lfyIJBQxlk6UGN9HKnKuGQEJoz8qmjQj3eDxNDkhO65RIWPfDksA8DGccVATEs4znPhOfW4wOBG8eoXEFuSeqVVLL5QBu2Iw+LLEv8/2IlhD9aO6gC/yUXxEyCf9uYlNVlCq63KCU0GGXFLAqvyCFDBHTeJ6DBoZBPTiVqWmH28Lo7JmYYvTCf7mtVdwESzmkpbJarlk8lPcZspk0Q+DkI4asPGxTN7GD1hu26/2qNkg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+ smtp.mailfrom=synaptics.com; dmarc=pass action=none
+ header.from=synaptics.com; dkim=pass header.d=synaptics.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Z1BdZ7X7hAt/rW0J4UDpLrJTXkhEOYZad21hXJI6TUY=;
- b=p/rfJ3B04kxacoAqEDhOyJDwKABRFPfesRLUDWL/zJRanJ3XSfFgRNGHz3iFAEshpeWx9B4m/ZpH+0dgycat9reVjdyWlo7fZLFe/2+OblzF+fVK4CcRVsIprNL7vHX/ENyG1l6mCCsyb6tMXN54dvL6mlhgersxJ2RePXPnhsM=
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
- by PH7PR10MB6553.namprd10.prod.outlook.com (2603:10b6:510:204::11) with
+ bh=DpuTgbPwmEooBS+88CZQxaDe2vTOtu3JCUtXzdrtvNY=;
+ b=TLUhoLLY3YERqdjzpQp9tVTSp/ZbJutp1//bgyhYBA2Lpxc14f/7jYQSPOWetCbAE5Z2+kS2gtbgjnRqxIPvic3pPyHVSpq8b6aZYnYlMWfPdwU1gKC1RhIioEi5VharjXf2Lcndhg9+i8kh8cajN0VW+zx9oIN+d7EHqZUa1dM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=synaptics.com;
+Received: from DM6PR03MB5196.namprd03.prod.outlook.com (2603:10b6:5:24a::19)
+ by BLAPR03MB5476.namprd03.prod.outlook.com (2603:10b6:208:29b::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.18; Thu, 24 Nov
- 2022 03:27:47 +0000
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::b32e:78d8:ef63:470a]) by PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::b32e:78d8:ef63:470a%8]) with mapi id 15.20.5857.019; Thu, 24 Nov 2022
- 03:27:47 +0000
-To:     Wenchao Hao <haowenchao@huawei.com>
-Cc:     Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
-        "Mike Christie" <michael.christie@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        <open-iscsi@googlegroups.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <liuzhiqiang26@huawei.com>,
-        <linfeilong@huawei.com>
-Subject: Re: [PATCH] scsi:iscsi: rename iscsi_set_param to iscsi_if_set_param
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1bkoxt4k5.fsf@ca-mkp.ca.oracle.com>
-References: <20221122181105.4123935-1-haowenchao@huawei.com>
-Date:   Wed, 23 Nov 2022 22:27:45 -0500
-In-Reply-To: <20221122181105.4123935-1-haowenchao@huawei.com> (Wenchao Hao's
-        message of "Tue, 22 Nov 2022 18:11:05 +0000")
-Content-Type: text/plain
-X-ClientProxiedBy: SN6PR05CA0030.namprd05.prod.outlook.com
- (2603:10b6:805:de::43) To PH0PR10MB4759.namprd10.prod.outlook.com
- (2603:10b6:510:3d::12)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19; Thu, 24 Nov
+ 2022 03:28:41 +0000
+Received: from DM6PR03MB5196.namprd03.prod.outlook.com
+ ([fe80::a132:66d9:ed0f:e5c1]) by DM6PR03MB5196.namprd03.prod.outlook.com
+ ([fe80::a132:66d9:ed0f:e5c1%6]) with mapi id 15.20.5834.015; Thu, 24 Nov 2022
+ 03:28:41 +0000
+Message-ID: <801bea69-fd52-40a9-8ac4-8be5b7e425eb@synaptics.com>
+Date:   Thu, 24 Nov 2022 11:28:32 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v4] drm/fourcc: Add Synaptics VideoSmart tiled modifiers
+To:     daniel@ffwll.ch
+References: <Y35Nbhd/fhESOFeU@phenom.ffwll.local>
+ <48867317-C751-4339-ADA6-6AF88A7FB9AC@synaptics.com>
+ <Y35YDXZ5G7l2EWRa@phenom.ffwll.local>
+Content-Language: en-US
+Cc:     Jisheng Zhang <jszhang@kernel.org>, airlied@linux.ie,
+        ayaka <ayaka@soulik.info>, sakari.ailus@linux.intel.com,
+        ezequiel@vanguardiasur.com.ar, tzimmermann@suse.de,
+        linux-kernel@vger.kernel.org, laurent.pinchart@ideasonboard.com,
+        mchehab@kernel.org, tfiga@chromium.org, mripard@kernel.org,
+        ribalda@chromium.org, maarten.lankhorst@linux.intel.com,
+        linux-media@vger.kernel.org, sebastian.hesselbarth@gmail.com,
+        helen.koike@collabora.com, linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, nicolas@ndufresne.ca
+From:   Hsia-Jun Li <Randy.Li@synaptics.com>
+In-Reply-To: <Y35YDXZ5G7l2EWRa@phenom.ffwll.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SJ0PR03CA0211.namprd03.prod.outlook.com
+ (2603:10b6:a03:39f::6) To DM6PR03MB5196.namprd03.prod.outlook.com
+ (2603:10b6:5:24a::19)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|PH7PR10MB6553:EE_
-X-MS-Office365-Filtering-Correlation-Id: 62b42cf2-a0fe-44b0-33bc-08dacdcbdb73
+X-MS-TrafficTypeDiagnostic: DM6PR03MB5196:EE_|BLAPR03MB5476:EE_
+X-MS-Office365-Filtering-Correlation-Id: e1ab2c5c-bb9d-4ccd-ce6c-08dacdcbfbaa
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2Dac/yHYfRdktVb9OZLG7lJ32YT4Zben/t1zxu1+IQCxyDz2zxqugPNQ4Ayx/OEKrDSekdv8JXgcbo7/PRT6uAULfvNw6Qh/qPu2XHQe5BfUQWkpKzxQ7xr1FBbC3NdkLI5HDSBVT6cqsrWGHWuBkjE+WPPXtUFlDJHIxycTcSPQH9+RhOiYAhvnQNge+AltAtZ2/TL0mcJ3ANw9db4FFmVi4/RGOoJaCNqDxzq/a8fcAnVRrJUzL+hJI+9rjt4vPpNnNI4yFHCbcAJI4Vhw2bS1sneoNgvyme5vb+fzByiss4iZ5dyDl4rLl2kcrzrlMjJ3ORHIyCq2kny1LAifl9K8yQMdVZU813ejVSoP0ONRzPO1+yOA9ZRyzRaa5/2ys4MELNzRKAHAsrARj0Lmb6YbIrhukPfunndfVdzuzmRtv6A8kUVdc6fiTP+cfcRfAQIVzBPGGxAkqi2QKXB1MG6Pnm6k3Co1fMGChPqcLbkWQ8xgDAoOInxOwwPZg3ZUjl4CS45/x39jd+fyQYLI2DnIqM1n7aARWHYkqrjKajF8q3p+/LZlv9C1H45vGFaulXUC8UXSAXFJyHqJ2D/rQqSlRgz3Q7V2ZT5ncJVYTTZSQV3cufqRnFwLo1bruOe5wbAEze0UUTRkoP8b/db72A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(39860400002)(366004)(376002)(396003)(346002)(451199015)(66946007)(8676002)(66476007)(5660300002)(186003)(66556008)(478600001)(4326008)(6486002)(38100700002)(41300700001)(86362001)(558084003)(316002)(6916009)(8936002)(54906003)(2906002)(26005)(6512007)(6506007)(36916002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: GvJEPjs1VC65E8FBqgpFiZ0c8ZBk7tdAYo0S89vXYNV9I9fXfiutbsEiglThi7VpZTCrbV8NUT3gxUjUY6IysHQhIUCs2D1ByOT8c7WzkOrWteXqqLl01SL9HcpDKVa4JlVu8wgFBhc01Mi7ssVPWiRIyuw51F8CSqN3oJ5triWSuQSPBWNmuCgnh4DsxIPhWptKsJf2uVt+tlKeYri085N8U+xRCpomkHXWvftfQMrNpCB+M/3/4yCScxK3U7CqZ6ehlFa0anNn/fjZbjmh/6XxNVLmPsI3i8TrDANnOPNdFqfkZxOQ5g6kgVXzFFiKlNov6MWZZ/jbwyk1OA9U3AMZCv38QTb1XSwrv9WGM4/2u66zewCD4kJ6x81zxDKr/NRP+nVS+4XRL8sLS4blK0TrFyAfDlkyPl/s9XJ7iu0NmYZuOfLS3yYVyaFzTvwxxpPYz77kPcMdYtbjBdWF5tKZI457QYmnejE1SqUkbTocrUkLWq9Q20+vdLohgBCfljQAJQlyEMCXOgO/VldE5rRPBd7RLsDKjOgPtWtPdHobx5jCMli6+vBNcPsZlFrrUsYpBCi/mJBTau08+arRISFgxVK1FipyrlpKLO32hB+oEswpy7T2xrOVSY0i+eQYkndI0bUX1YzBvPg57rTru89tGoutBSYg2IdVA4LMo0cckfMilbBcWeL+lmOHuVEGSAiZMLu8dVONCYesaqG1U6PckRvrNXqNB0um9PyXXxoBUIbeYljIuQ2BeWhHbt7Dx8RaSIHH6YQ5nNVT14NefOriDLTRlo9C2xSm916nsCc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR03MB5196.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(396003)(366004)(39850400004)(136003)(376002)(451199015)(2906002)(86362001)(31696002)(316002)(83380400001)(54906003)(6512007)(6916009)(6666004)(53546011)(52116002)(26005)(6506007)(6486002)(966005)(186003)(2616005)(478600001)(8936002)(7416002)(5660300002)(41300700001)(38100700002)(4326008)(38350700002)(66476007)(8676002)(66556008)(66946007)(31686004)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1hoEysorudcAJ/3IFkeKg6IJE5XSGP0Ow2QreFdp9Tr74D7pwX4nJz1N8nf6?=
- =?us-ascii?Q?/rdId8nTMgGOzsTSxKaQ60sciRn/A67Uo1b2pGjDzgrZfaEHI4wZyp2QI+UY?=
- =?us-ascii?Q?QrfnkFldwZgh9ltEc1BZxKkMpJvlCMnKxNmVR2/T9tbOG0giWiVGOHORlmUS?=
- =?us-ascii?Q?NHZ5IwVDiHYEhNqtGnIuTMF/JafgxLH88sc7OOhFFWijTZJMdjRJA5ioKcTh?=
- =?us-ascii?Q?9cdF3SLAE2fXRlv0PMqdLpxaix2r0k9RZsgxxAtdmuKwQz4DBNYbckISAZXO?=
- =?us-ascii?Q?MczKXSbKb14mSSVkxuBS2+Fb//RRfY2KylsBt1KdThpxCmnKnXE/j0k+VHt+?=
- =?us-ascii?Q?os66X2/9kSDv8pRNrvijPQRT9PKBT2K+j5ZQa+JrFgE9ZPMBrgH/jlumLLb1?=
- =?us-ascii?Q?V2HCwUgYTS1b7GwfuHdiforYu0fH5AJaje2zmiVgUccR5Xti4bZuAyUSvFQO?=
- =?us-ascii?Q?S5tTVSSAPe+KehZ9NCsGCfYdQYPyOLJKqowULNXiix3OE3gu22a0neJN2uZc?=
- =?us-ascii?Q?wdNHPBOb/ura2Ui552ns3dJWO7BmLAGgOGxXfk2Y75gijQAKV9kjchTP9CET?=
- =?us-ascii?Q?9Vhj0hTnnIoXD2xFEp9AyEr33M8+JVHUC1TClW4wmcLE9I8WFoHkgNo1bnq7?=
- =?us-ascii?Q?XXYubHwt/r1ox7yBUb9r7fWL54O6gcQMxIQtz8FKumtl3/2e+gaBDkfvgz0B?=
- =?us-ascii?Q?8XKP0VDJirhcTh/ExG7Qb+1bTiML5NJqdgim54p7xVMmoyA0pzLkBdFsXDSG?=
- =?us-ascii?Q?yHGoF5mdo58U1ntGpH1zXn6xYzqwISN5rCT2FJbSTeAj9CszqB9G6nJbg1KD?=
- =?us-ascii?Q?qmcfGKupKq3vuGig+d2hWPF30JIObr/1aP76cH34eJ2paarzSXJ72hQwq3D7?=
- =?us-ascii?Q?5N6jDrWohdi6LqRLkIMApU1/MMPN5gzsiyZ4kZVYcr2syTTW60RAeSv1Ndzf?=
- =?us-ascii?Q?ufY3gIdBlQP8BVjZgBFJhgs0aVchthoPgizsCU5BzYsh/FWOX5nKjgx6vmv6?=
- =?us-ascii?Q?9nloX+NenwFz4WVg9ntslW1ttJ7Pgc0FEL/VL9eOV9nB1G3zrgGzPpkfIeR7?=
- =?us-ascii?Q?C0tVjxFE52+1dVO6rWI6IJyMhhcfMrX0X4KsT/jIf4dWCn0Wf41ggaCBjTIj?=
- =?us-ascii?Q?eQKf812VHAF9TIw+UyPNGgmOKvG6/TvctNedBS6yIrAS992yxZMsOm6d5cyP?=
- =?us-ascii?Q?/bEPVhtHpcCsT1uQyFakLp8ycNxNyAJHRYVUfw39R9KJTwpGGfpYm0NtRQZw?=
- =?us-ascii?Q?09Pj+rUF9Sj7dyfsh5XFy3oCilUHsFI65teWH4t3Q3LkIc/VX5cNWy1OWKbn?=
- =?us-ascii?Q?59c+2hQypJVAxZB7F9XuH1JQoyGMUj/WRTa5qk3cUhSAe5nW/yVJFQGhw9J5?=
- =?us-ascii?Q?sOHHal+YbTOnOj5xWtyIm7iIKxu2c+ITTpM3xFcKP26rjVUiQ3xlV9Wkim8f?=
- =?us-ascii?Q?B1H6BkrI4S55VJqDhmtIKzXLj3U/+a6lHfuNorqBIfKL2ZUe32R7MmiR+sPC?=
- =?us-ascii?Q?V6yBdsIE6ZNZ7YQJVrpqBi3z9jhTqi9xFQbXllIxAwNX9PxCWzWRNqK2r2IP?=
- =?us-ascii?Q?i07k1xQj8YA39Bco9VSxPGBLPk+WAp8Ov1T6Qd8tlYJOQ9ywz4zL4Mp2mZhv?=
- =?us-ascii?Q?5w=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?nF6X1eTwXKElpSNMXdJhiE/bshg4p2Z8YMLgjnvDih0pL52nIwKYmJ39HnRw?=
- =?us-ascii?Q?yL4ovicZM6m74xbhqBL+9E/0hHfj2/h7YM9nhTen7PthWfiEjEdS3gnWuQ1u?=
- =?us-ascii?Q?ugouY4UgiwKmK1Ggm6mvUMyEuLgwOQXqG393uSAHR1PR2SsULp3lLtkhiGgO?=
- =?us-ascii?Q?5OdkWFHEX4pn8vwENrA/I3a7DOtzFfKtMhTT7dDEtirAbdrLHQIzCmWnrIpj?=
- =?us-ascii?Q?o/4vcOFVOjHlRYmYF//06/qMlyO8dvdWeqyaePa9XSPDLmwKjQjLLLq+5VKy?=
- =?us-ascii?Q?foUjpNTOrTuhjAdf/wjX1vMIyea23nV3gmoFpWC+gddQ2R90dzzVtClg6hkw?=
- =?us-ascii?Q?c8CHB4LIS3c2d8OQF1of8ZJ+JgfzTgNE5qkt9yXfC+CDkrcrEb5DOrUOoB/e?=
- =?us-ascii?Q?OKR3DrpimvblXEzLjQRzKViKDLoe65ZKsmxspeickpTiqxACcPQMDVe7dS9/?=
- =?us-ascii?Q?B9pyCbWnoR/S+s6r2sE62rN3lamYKCv7LM4Luo3uyX/CBRXqRYxTxU4v5cxy?=
- =?us-ascii?Q?NNcQQj/rIa62TZq3HTx5oVRHurtt+rDgBpHZXp2KNbW6/qSWMSRfwf/Yf0ow?=
- =?us-ascii?Q?F6XNitRrPoaFK9E5R1PSDOwozc+qcR7XVXD0KEfe2tTv5dsMY2qUxCMc3eQp?=
- =?us-ascii?Q?uLL99E14rRE7Oj0PacG6uFrtawvHFiewtnwW33FFU7+tibN+O2fERxTuMQL1?=
- =?us-ascii?Q?M83aUpjfcKjF/pq2Gz7bcW5iLv7FcmRUCPmjPDOHDd+WF0DBG4ec7j5i3o7l?=
- =?us-ascii?Q?itW/KPmkuqKnDYA7cBOYjwijuJ0dDG4WfdzMdB9/c4CPgLbU96Sfj+gwTeJJ?=
- =?us-ascii?Q?qlWzg2od0KjM3ogxVLfvEFOzVSwgA2+Y3EbuUo3Tb2wOTMpIoNE6vSBOGniz?=
- =?us-ascii?Q?SynxqL630GcQSBh2LIIKiJNm7fjhnqTEo4I1K3ayYsLzZnWGBDhzWEaWubJM?=
- =?us-ascii?Q?H/r15UE608Z2rGyCb8QyiLmF5SijdhyCpS66CbFGQlnSJ+g3AW4tNs4VrjVW?=
- =?us-ascii?Q?MY5KVSk5nlB5iHIlsg4P7Xre+Q=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 62b42cf2-a0fe-44b0-33bc-08dacdcbdb73
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?LzJHa0d3N01rdFQ4dEVTWExMc3hFd1ZKcUlxbi9YakEwdVBXQlZFcGZ3YWJ2?=
+ =?utf-8?B?bEN1T1l6dTkwRTBqTStwMytlVGcveHZzdjM0bjZkVlR5cE12bENxMFJ6R2dy?=
+ =?utf-8?B?VTBzK0pYdERGc01rQk5pYytyM3VtRjdZc255V2dvcktlckI2ZnNQYkRLRk15?=
+ =?utf-8?B?S3FzOVhHRTNXQ2RsN1g0L1BUclJtNWhkRVk3RnFrYy9TZWxwNHBQSWx3ZXl0?=
+ =?utf-8?B?aDI4TjcyeGdMWFNERm5mUW9MUzF2YlREUVRTZC9NajdFdkRZYXMwZ0cyanRl?=
+ =?utf-8?B?RkVTNEZKSGFwMlRhVUFJNi9mbUdoNU81L2pxdjRuaFVvaVFMdS9hTjBmV3cw?=
+ =?utf-8?B?Qkk4RHYrdXovcnp3cTRDNS9vWHNaSHNvcHA4OGpLeHErV0phKzFzaE1CeFY3?=
+ =?utf-8?B?R2EyUTZpS3JwWW5OK0hTTkwweEFoME1GYnUrQUVMeDA1bjZWYkVOVllSRUFv?=
+ =?utf-8?B?cjZaa3RCTEZWN1M5MVhsVU95dnhmdFc3a0NqVmdJZWRXcEY1a0x4U0RtVXhh?=
+ =?utf-8?B?ci94R2FRa1Z6am1QMWl3ZlVlZHdXTFpHbTNNMUNhQkNyR0ZvZEVmZXFHMlF2?=
+ =?utf-8?B?em5pVEZSMVg1WkR2bE1KWGRmRlVxT3N6YlBkWTJqOFR0OW9zaGRqVkhxMUUv?=
+ =?utf-8?B?NU5uV1dwMW9MZ1pCalFhK0dtZ0hVZ3NVbS9nNXZ1RVdtdDZYZlp3SXdNTFBK?=
+ =?utf-8?B?MnlRSXBZT1FIOGkrcVZKeW5qUTFsUiszNkNPU0dISE9MbXVZcVNSdlU4RENW?=
+ =?utf-8?B?Mjc1VDFERGpsNTlRUkt3TVFudGk1a3l5SCt0UEhBYTJaT2t3aVBqNURqamxR?=
+ =?utf-8?B?SldGMU1BL1VyQkNKSlFQa1ZnaHRvMnpueHhVZktJWjNlaStlU2Q3RVNVVDJT?=
+ =?utf-8?B?UENCanVZeVZoT1luL1JyZWZoTWQ4ZDhEWUFSZ0pBRnJpejBIaCtRaUhCbFZl?=
+ =?utf-8?B?TDBmdDVKYXovT0swUnZVVUZRT1RJcjdCSlIwMkdwNHZERysvdFVBR3RiWTQv?=
+ =?utf-8?B?YVc0V09nL3I2anUwNDI0RHVQK3ZGNERSenRVUVlUcFNhWk9xN0x0YTkwWnhV?=
+ =?utf-8?B?UTRIZEIyRHFtVUdFVVBXZGQ4eThlWXN0YXZHNVhqL1dFS2V1TG1oNG55QTBo?=
+ =?utf-8?B?T1JCaTZkLzYvU3hPdVM5SUltbzZKZmhNR1V5dHBGbjVnZjVLRHh6NU10cXh6?=
+ =?utf-8?B?Rk9BV3Y3NnM1TWVXZnRJdkc3Yk1hOW5VK3kwRnRHQTZSd2hjWTBwRHVOQTRL?=
+ =?utf-8?B?TGJsZm5uMXg2Z0Y3N3BsM1hsMzA5cDZWS1hBLzh1dDBjclpFOVhSd0ZkOHpK?=
+ =?utf-8?B?S1I2K1FLRGdLamtWZUl3Uk5TUW0zOHdqRURwOTQ5eTdkQjVNRlUvdUZQODgw?=
+ =?utf-8?B?emp3bDUxcVpHNFJvdUhjYXpKQVFiSVM4cWxNOE9Fd3AxM0RPT3pKcVlLUHVD?=
+ =?utf-8?B?K040VFdxMHZMdE9wMzlPMkNsK0Jha0NyNmxFcVQ4Zm1VdjZFK0dlbmtHVEFI?=
+ =?utf-8?B?bGFGVjI5QkphTWgwZER6ditPaGVRekNobkJlS3hvZlBiNlAydDRBZVlrSjFD?=
+ =?utf-8?B?NUVRNjFXME5lUnVyMEpQdG85c2lpYkw3MGVlTHBLRjJpVVl5QllkSXc4Yld3?=
+ =?utf-8?B?TnFONy92QzZmeGk0MUJDSGlmR3U1SjNrOE4vRUNQN0I1cTZzY3E4S3VnY2pu?=
+ =?utf-8?B?MEVEMUFsWWRuQnVGYWMyRzJYZDlBRWJZMDYzYWVCdjYwdDlIbnF6clovRElp?=
+ =?utf-8?B?aG5NRFN6enBNUWZ3M01MZi9wdjFmRzNCSDgvRjZ4UE56VFhuaEkzK2MydEdY?=
+ =?utf-8?B?dHVWaXZoK3YwSDJPbzBYRkZoYWYrSTQ5NjIvRWdZWTgrRkN2SVpGNUczcVRF?=
+ =?utf-8?B?bHZWTFNSbXpyYVVKQjVDV2ZXWUZnY0VMSzRsdlpMaHdpeFpFeUd5eEhNMHZ1?=
+ =?utf-8?B?ZkthNjZPamZxQUZ3Tk1RUlY1Nm9JcmVqVklnSzdOd0JFMVNqS1djY3FtZmRl?=
+ =?utf-8?B?eDJETzdQTHhkd3J0TW1FakJkWlFOZkg0RVp3R3RFYlc5OFN3Y3BDbXd6Y2U2?=
+ =?utf-8?B?SXlzTHlpQWx2RTdUNkdVYTRYZUM3bkZtbFVzZmJkdThReTJhaE5EME4vbUxk?=
+ =?utf-8?Q?t42YkTOFMDcXnBmV4xQDv9ucN?=
+X-OriginatorOrg: synaptics.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e1ab2c5c-bb9d-4ccd-ce6c-08dacdcbfbaa
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR03MB5196.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2022 03:27:47.2973
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2022 03:28:41.2395
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 335d1fbc-2124-4173-9863-17e7051a2a0e
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CP/ocI5krsJdzLMiqGBCL+u9OUKMFyECIlc00TJHb/T2w+1jItroUeLb8fabh82FpUGoAVZB6QchIz0As4cqc5oYEAGlllVEu7YA58G2nfA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB6553
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-24_02,2022-11-23_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 phishscore=0
- adultscore=0 suspectscore=0 mlxscore=0 mlxlogscore=901 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211240025
-X-Proofpoint-ORIG-GUID: dBnXe2n1SilzqkojtScbfGKoFWNNCxPi
-X-Proofpoint-GUID: dBnXe2n1SilzqkojtScbfGKoFWNNCxPi
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-MS-Exchange-CrossTenant-UserPrincipalName: K+HMo2C3I8QSj5/h0xKlY2y+cN1ZrZNTdOlIWv2sHLWPJfmnJkSElcRk+2OpTJmNq6BNLcnDtU9zHCAmQRI8Cw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR03MB5476
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -170,12 +134,195 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Wenchao,
 
-> There are two iscsi_set_param() functions individually defined in
-> libiscsi.c and scsi_transport_iscsi.c which is confused.
+On 11/24/22 01:27, Daniel Vetter wrote:
+> CAUTION: Email originated externally, do not click links or open attachments unless you recognize the sender and know the content is safe.
+> 
+> 
+> On Thu, Nov 24, 2022 at 01:14:48AM +0800, Randy Li wrote:
+>>
+>>> On Nov 24, 2022, at 12:42 AM, Daniel Vetter <daniel@ffwll.ch> wrote:
+>>>
+>>> ﻿On Wed, Nov 23, 2022 at 10:58:11PM +0800, Jisheng Zhang wrote:
+>>>>> On Wed, Nov 23, 2022 at 05:19:57PM +0800, Hsia-Jun Li wrote:
+>>>>> From: "Hsia-Jun(Randy) Li" <randy.li@synaptics.com>
+>>>>> Memory Traffic Reduction(MTR) is a module in Synaptics
+>>>>> VideoSmart platform could process lossless compression image
+>>>>> and cache the tile memory line.
+>>>>> Those modifiers only record the parameters would effort pixel
+>>>>> layout or memory layout. Whether physical memory page mapping
+>>>>> is used is not a part of format.
+>>>>> We would allocate the same size of memory for uncompressed
+>>>>> and compressed luma and chroma data, while the compressed buffer
+>>>>> would request two extra planes holding the metadata for
+>>>>> the decompression.
+>>>>> Signed-off-by: Hsia-Jun(Randy) Li <randy.li@synaptics.com>
+>>>>> ---
+>>>>> include/uapi/drm/drm_fourcc.h | 75 +++++++++++++++++++++++++++++++++++
+>>>>> 1 file changed, 75 insertions(+)
+>>>>> diff --git a/include/uapi/drm/drm_fourcc.h b/include/uapi/drm/drm_fourcc.h
+>>>>> index bc056f2d537d..ca0b4ca70b36 100644
+>>>>> --- a/include/uapi/drm/drm_fourcc.h
+>>>>> +++ b/include/uapi/drm/drm_fourcc.h
+>>>>> @@ -407,6 +407,7 @@ extern "C" {
+>>>>> #define DRM_FORMAT_MOD_VENDOR_ARM     0x08
+>>>>> #define DRM_FORMAT_MOD_VENDOR_ALLWINNER 0x09
+>>>>> #define DRM_FORMAT_MOD_VENDOR_AMLOGIC 0x0a
+>>>>> +#define DRM_FORMAT_MOD_VENDOR_SYNAPTICS 0x0b
+>>>> Any users in the mainline tree?
+>> Not yet. I believe a V4L2 codec would be the first one.
+>> Still there are many patches are requested for v4l2 which currently does
+>> not support format modifier. You could find discussion in linux media
+>> list.
+>>
+>> This does need the agreement from drm maintainers, three of us tend to
+>> drop the pixel formats in video4linux2.h only keeping those codec
+>> formats in new extended v4l2 format negotiation interface. All the pixel
+>> formats should go to drm_fourcc.h while we can’t decide how to present
+>> those hardware requests contiguous memory.
+> 
+> Uh no.
+> 
+> These enums are maintained in drm_fourcc.h, by drm maintainers. You
+> _cannot_ mix them up with the fourcc enums that video4linux2.h has, that's
+> a completely different enum space because fourcc codes are _not_ a
+> standard.
+> 
 
-Applied to 6.2/scsi-staging, thanks!
+Things us in v4l2 try to solve is the those non contiguous memory planes 
+in v4l2, we don’t want to increase them anymore. Besides the values for 
+pixel formats are the same between V4L2 and DRM.
+> Please do not ever mix up drm_fourcc format modifiers with v4l2 fourcc
+> codes, that will result in complete chaos. There's a reason why there's
+> only one authoritative source for these.
+> 
+
+In the previous version, it would fail in building, because a driver’s 
+header(ipu-v3) would included both v4l2 and drm. I can’t add another 
+format modifier macro to v4l2.
+If DRM doesn’t like the idea that v4l2 use the fourcc from DRM, I should 
+inform people about that.
+>> We don’t bring those NV12M into drm_fourcc.h, we hate that.
+>>> Note that drm_fourcc.h serves as the vendor-neutral registry for these
+>>> numbers, and they're referenced in both gl and vk extensions. So this is
+>>> the one case where we do _not_ require in-kernel users or open source
+>>> userspace.
+>>>
+>> The first user for these pixel formats would be the software pixel reader for Gstreamer, I am planning to add the unpacker for the two uncompressed pixel formats.
+>>> If there is someone interested in an in-kernel or open userspace driver
+>>> though it would be really great to have their acks before merging. Just to
+>>> make sure that the modifiers will work with both upstream and downstream
+>>> driver stacks.
+>> This patch have been reviewed internally, it is good enough to describe our pixel formats.
+>>>
+>>> I just realized that we've failed to document this, I'll type up a patch.
+>>
+>> About the format itself, I have sent the document to the mesa, you could find a MR there.
+> 
+> Please include the link to that MR in the patch description.
+mesa !19921
+
+https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/19921
+
+I would like to do that when the document got more reviewed.
+> -Daniel
+> 
+>>> -Daniel
+>>>
+>>>
+>>>>> /* add more to the end as needed */
+>>>>> @@ -1507,6 +1508,80 @@ drm_fourcc_canonicalize_nvidia_format_mod(__u64 modifier)
+>>>>> #define AMD_FMT_MOD_CLEAR(field) \
+>>>>>    (~((__u64)AMD_FMT_MOD_##field##_MASK << AMD_FMT_MOD_##field##_SHIFT))
+>>>>> +/*
+>>>>> + * Synaptics VideoSmart modifiers
+>>>>> + *
+>>>>> + * Tiles could be arranged in Groups of Tiles (GOTs), it is a small tile
+>>>>> + * within a tile. GOT size and layout varies based on platform and
+>>>>> + * performance concern. When the compression is applied, it is possible
+>>>>> + * that we would have two tile type in the GOT, these parameters can't
+>>>>> + * tell the secondary tile type.
+>>>>> + *
+>>>>> + * Besides, an 8 size 4 bytes arrary (32 bytes) would be need to store
+>>>>> + * some compression parameters for a compression meta data plane.
+>>>>> + *
+>>>>> + *       Macro
+>>>>> + * Bits  Param Description
+>>>>> + * ----  ----- -----------------------------------------------------------------
+>>>>> + *
+>>>>> + *  7:0  f     Scan direction description.
+>>>>> + *
+>>>>> + *               0 = Invalid
+>>>>> + *               1 = V4, the scan would always start from vertical for 4 pixel
+>>>>> + *                   then move back to the start pixel of the next horizontal
+>>>>> + *                   direction.
+>>>>> + *               2 = Reserved for future use.
+>>>>> + *
+>>>>> + * 15:8  m     The times of pattern repeat in the right angle direction from
+>>>>> + *             the first scan direction.
+>>>>> + *
+>>>>> + * 19:16 p     The padding bits after the whole scan, could be zero.
+>>>>> + *
+>>>>> + * 20:20 g     GOT packing flag.
+>>>>> + *
+>>>>> + * 23:21 -     Reserved for future use.  Must be zero.
+>>>>> + *
+>>>>> + * 27:24 h     log2(horizontal) of bytes, in GOTs.
+>>>>> + *
+>>>>> + * 31:28 v     log2(vertical) of bytes, in GOTs.
+>>>>> + *
+>>>>> + * 35:32 -     Reserved for future use.  Must be zero.
+>>>>> + *
+>>>>> + * 36:36 c     Compression flag.
+>>>>> + *
+>>>>> + * 55:37 -     Reserved for future use.  Must be zero.
+>>>>> + *
+>>>>> + */
+>>>>> +
+>>>>> +#define DRM_FORMAT_MOD_SYNA_V4_TILED        fourcc_mod_code(SYNAPTICS, 1)
+>>>>> +
+>>>>> +#define DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(f, m, p, g, h, v, c) \
+>>>>> +    fourcc_mod_code(SYNAPTICS, ((__u64)((f) & 0xff) | \
+>>>>> +                 ((__u64)((m) & 0xff) << 8) | \
+>>>>> +                 ((__u64)((p) & 0xf) << 16) | \
+>>>>> +                 ((__u64)((g) & 0x1) << 20) | \
+>>>>> +                 ((__u64)((h) & 0xf) << 24) | \
+>>>>> +                 ((__u64)((v) & 0xf) << 28) | \
+>>>>> +                 ((__u64)((c) & 0x1) << 36)))
+>>>>> +
+>>>>> +#define DRM_FORMAT_MOD_SYNA_V4H1 \
+>>>>> +    DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 1, 0, 0, 0, 0, 0)
+>>>>> +
+>>>>> +#define DRM_FORMAT_MOD_SYNA_V4H3P8 \
+>>>>> +    DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 3, 8, 0, 0, 0, 0)
+>>>>> +
+>>>>> +#define DRM_FORMAT_MOD_SYNA_V4H1_64L4_COMPRESSED \
+>>>>> +    DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 1, 0, 1, 6, 2, 1)
+>>>>> +
+>>>>> +#define DRM_FORMAT_MOD_SYNA_V4H3P8_64L4_COMPRESSED \
+>>>>> +    DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 3, 8, 1, 6, 2, 1)
+>>>>> +
+>>>>> +#define DRM_FORMAT_MOD_SYNA_V4H1_128L128_COMPRESSED \
+>>>>> +    DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 1, 0, 1, 7, 7, 1)
+>>>>> +
+>>>>> +#define DRM_FORMAT_MOD_SYNA_V4H3P8_128L128_COMPRESSED \
+>>>>> +    DRM_FORMAT_MOD_SYNA_MTR_LINEAR_2D(1, 3, 8, 1, 7, 7, 1)
+>>>>> +
+>>>>> #if defined(__cplusplus)
+>>>>> }
+>>>>> #endif
+>>>>> --
+>>>>> 2.17.1
+>>>
+>>> --
+>>> Daniel Vetter
+>>> Software Engineer, Intel Corporation
+>>> https://urldefense.proofpoint.com/v2/url?u=http-3A__blog.ffwll.ch&d=DwIDaQ&c=7dfBJ8cXbWjhc0BhImu8wVIoUFmBzj1s88r8EGyM0UY&r=P4xb2_7biqBxD4LGGPrSV6j-jf3C3xlR7PXU-mLTeZE&m=MGl40tua4_XwHXeBMgk_8hffHo5og9goZOWs0NTaFEOVNt4EnfL6XjISa0JSiK_j&s=FeAOQAovXW3Vm03VKTY8ysPZY5rW-2Jd_vgrxgIgGo0&e=
+> 
+> --
+> Daniel Vetter
+> Software Engineer, Intel Corporation
+> https://urldefense.proofpoint.com/v2/url?u=http-3A__blog.ffwll.ch&d=DwIDaQ&c=7dfBJ8cXbWjhc0BhImu8wVIoUFmBzj1s88r8EGyM0UY&r=P4xb2_7biqBxD4LGGPrSV6j-jf3C3xlR7PXU-mLTeZE&m=MGl40tua4_XwHXeBMgk_8hffHo5og9goZOWs0NTaFEOVNt4EnfL6XjISa0JSiK_j&s=FeAOQAovXW3Vm03VKTY8ysPZY5rW-2Jd_vgrxgIgGo0&e=
 
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+Hsia-Jun(Randy) Li
