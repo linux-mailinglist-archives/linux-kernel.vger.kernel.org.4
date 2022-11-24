@@ -2,281 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AD146381BD
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 00:31:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C439F6381C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 00:37:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbiKXXbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 18:31:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54456 "EHLO
+        id S230129AbiKXXhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 18:37:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbiKXXaw (ORCPT
+        with ESMTP id S229954AbiKXXhi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 18:30:52 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75F8D299C;
-        Thu, 24 Nov 2022 15:28:08 -0800 (PST)
-Message-ID: <20221124232327.198240498@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669332398;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=EjoFLIGfNIA85CvW/O+W8Se9j0RMzVdkCn2NwApFDRE=;
-        b=jgyffkKHDkbJoARDjoHthE3u0MAXN/BVa0tu/GAlDc7R50l6+QsuPYEfoFT5CebVZRN0Hp
-        UaWj1D3sIt+HWBnt3RBkhLeoXythirkm0JK6SDHGlFnXZ4PwT61PCYuvMiVVMGzRBVot31
-        lX88p10JiYjeKCi59GPnsHZH783gYDaFnIYfZ9bKtfMPI9cR3usJIMpDv67eqpgVJ5eCnC
-        tOg5QSiCGIlzPIpZsgKRC8iqDMuhDF1MRfjHB3gRzmwkD02sofDld9SfRDWHtN5YxtXcHv
-        uL9reTreRhr7gWpZDN25p5L9XwcOuURSP8mjXN5r6DF0jNPVmAZ4sRHydDeCuw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669332398;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=EjoFLIGfNIA85CvW/O+W8Se9j0RMzVdkCn2NwApFDRE=;
-        b=cqUYLb50xujiv8NfIza/XagWhZ6YBCcxANZRUAxMaKIVDPb0pi7DZuONkZ9/qY94cybCKY
-        yrMPMy9oQMhG6UCQ==
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     x86@kernel.org, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>, linux-pci@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>
-Subject: [patch V3 33/33] irqchip: Add IDXD Interrupt Message Store driver
-References: <20221124230505.073418677@linutronix.de>
+        Thu, 24 Nov 2022 18:37:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84CD331FAE;
+        Thu, 24 Nov 2022 15:35:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BD773B828FD;
+        Thu, 24 Nov 2022 23:30:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 71813C433D6;
+        Thu, 24 Nov 2022 23:30:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669332616;
+        bh=Z9yUZa4U9UgBEHy8xYQRS04iHfkW2jbGjpKVxRd8HEk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=i+sVmx+qQ7echEisdy5UCq88vKoeuuMI7DmJcnxRDMPzip9IKKzqqqCmAWPvQChIa
+         ec/s8nJEbCWLaxx/WI8X2U2kOg1QbtgH667PXq6usOs6HmFv73HsBlEhVQnCF5+9G5
+         3b8f1jflZmQ2iG7S+SS1CDl3vrCJigCOvLyfTcwdsQk9XpOqBH3exviUZplJgEMXHi
+         W6fRbhuBOWmtJIzkgZru01vYdaltQcvocCZKU0LnyZ5tnlSGYjOuAJIwV0s1baN9VO
+         kcdcxdTDp2F9L8F98ON4W6hLMIIyS3QgVnIemn5EJkxOyTRBlOnxzG8gMXb/0tvnAu
+         xkJnhbd9b/PqA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 541DFE270C7;
+        Thu, 24 Nov 2022 23:30:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 25 Nov 2022 00:26:37 +0100 (CET)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] samples/bpf: xdp_router_ipv4_user: Fix write
+ overflow
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166933261633.8867.4416066132556284849.git-patchwork-notify@kernel.org>
+Date:   Thu, 24 Nov 2022 23:30:16 +0000
+References: <tencent_F9E2E81922B0C181D05B96DAE5AB0ACE6B06@qq.com>
+In-Reply-To: <tencent_F9E2E81922B0C181D05B96DAE5AB0ACE6B06@qq.com>
+To:     Rong Tao <rtoax@foxmail.com>
+Cc:     ast@kernel.org, rongtao@cestc.cn, daniel@iogearbox.net,
+        davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
+        john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Provide a driver for the Intel IDXD IMS implementation. The implementation
-uses a large message store array in device memory.
+Hello:
 
-The IMS domain implementation is minimal and just provides the required
-irq_chip callbacks and one domain callback which prepares the MSI
-descriptor for easy usage in the irq_chip callbacks.
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-The necessary iobase is stored in the irqdomain and the PASID which is
-required for operation is handed in via msi_instance_cookie in the
-allocation function.
+On Tue, 22 Nov 2022 10:32:56 +0800 you wrote:
+> From: Rong Tao <rongtao@cestc.cn>
+> 
+> prefix_key->data allocates three bytes using alloca(), but four bytes are
+> accessed in the program.
+> 
+> Signed-off-by: Rong Tao <rongtao@cestc.cn>
+> 
+> [...]
 
-Not much to see here. A few lines of code and a filled in template is all
-what's needed.
+Here is the summary with links:
+  - [bpf-next] samples/bpf: xdp_router_ipv4_user: Fix write overflow
+    https://git.kernel.org/bpf/bpf-next/c/19a2bdbaaddc
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
----
-V3: Update changelog/comments (Kevin)
----
- drivers/irqchip/Kconfig                    |    7 +
- drivers/irqchip/Makefile                   |    1 
- drivers/irqchip/irq-pci-intel-idxd.c       |  143 +++++++++++++++++++++++++++++
- include/linux/irqchip/irq-pci-intel-idxd.h |   22 ++++
- 4 files changed, 173 insertions(+)
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -695,4 +695,11 @@ config SUNPLUS_SP7021_INTC
- 	  chained controller, routing all interrupt source in P-Chip to
- 	  the primary controller on C-Chip.
- 
-+config PCI_INTEL_IDXD_IMS
-+	tristate "Intel IDXD Interrupt Message Store controller"
-+	depends on PCI_MSI
-+	help
-+	  Support for Intel IDXD Interrupt Message Store (IMS) controller
-+	  with IMS slot storage in a slot array in device memory
-+
- endmenu
---- a/drivers/irqchip/Makefile
-+++ b/drivers/irqchip/Makefile
-@@ -121,3 +121,4 @@ obj-$(CONFIG_IRQ_IDT3243X)		+= irq-idt32
- obj-$(CONFIG_APPLE_AIC)			+= irq-apple-aic.o
- obj-$(CONFIG_MCHP_EIC)			+= irq-mchp-eic.o
- obj-$(CONFIG_SUNPLUS_SP7021_INTC)	+= irq-sp7021-intc.o
-+obj-$(CONFIG_PCI_INTEL_IDXD_IMS)	+= irq-pci-intel-idxd.o
---- /dev/null
-+++ b/drivers/irqchip/irq-pci-intel-idxd.c
-@@ -0,0 +1,143 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Interrupt chip and domain for Intel IDXD with hardware array based
-+ * interrupt message store (IMS).
-+ */
-+#include <linux/device.h>
-+#include <linux/irq.h>
-+#include <linux/irqdomain.h>
-+#include <linux/msi.h>
-+#include <linux/pci.h>
-+
-+#include <linux/irqchip/irq-pci-intel-idxd.h>
-+
-+MODULE_LICENSE("GPL");
-+
-+/**
-+ * struct ims_slot - The hardware layout of a slot in the memory table
-+ * @address_lo:	Lower 32bit address
-+ * @address_hi:	Upper 32bit address
-+ * @data:	Message data
-+ * @ctrl:	Control word
-+ */
-+struct ims_slot {
-+	u32	address_lo;
-+	u32	address_hi;
-+	u32	data;
-+	u32	ctrl;
-+} __packed;
-+
-+/* Bit to mask the interrupt in the control word */
-+#define CTRL_VECTOR_MASKBIT	BIT(0)
-+/* Bit to enable PASID in the control word */
-+#define CTRL_PASID_ENABLE	BIT(3)
-+/* Position of PASID.LSB in the control word */
-+#define CTRL_PASID_SHIFT	12
-+
-+static inline void iowrite32_and_flush(u32 value, void __iomem *addr)
-+{
-+	iowrite32(value, addr);
-+	ioread32(addr);
-+}
-+
-+static void idxd_mask(struct irq_data *data)
-+{
-+	struct msi_desc *desc = irq_data_get_msi_desc(data);
-+	struct ims_slot __iomem *slot = desc->data.dcookie.iobase;
-+	u32 cval = (u32)desc->data.icookie.value;
-+
-+	iowrite32_and_flush(cval | CTRL_VECTOR_MASKBIT, &slot->ctrl);
-+}
-+
-+static void idxd_unmask(struct irq_data *data)
-+{
-+	struct msi_desc *desc = irq_data_get_msi_desc(data);
-+	struct ims_slot __iomem *slot = desc->data.dcookie.iobase;
-+	u32 cval = (u32)desc->data.icookie.value;
-+
-+	iowrite32_and_flush(cval, &slot->ctrl);
-+}
-+
-+static void idxd_write_msi_msg(struct irq_data *data, struct msi_msg *msg)
-+{
-+	struct msi_desc *desc = irq_data_get_msi_desc(data);
-+	struct ims_slot __iomem *slot = desc->data.dcookie.iobase;
-+
-+	iowrite32(msg->address_lo, &slot->address_lo);
-+	iowrite32(msg->address_hi, &slot->address_hi);
-+	iowrite32_and_flush(msg->data, &slot->data);
-+}
-+
-+static void idxd_shutdown(struct irq_data *data)
-+{
-+	struct msi_desc *desc = irq_data_get_msi_desc(data);
-+	struct ims_slot __iomem *slot = desc->data.dcookie.iobase;
-+
-+	iowrite32(0, &slot->address_lo);
-+	iowrite32(0, &slot->address_hi);
-+	iowrite32(0, &slot->data);
-+	iowrite32_and_flush(CTRL_VECTOR_MASKBIT, &slot->ctrl);
-+}
-+
-+static void idxd_prepare_desc(struct irq_domain *domain, msi_alloc_info_t *arg,
-+			      struct msi_desc *desc)
-+{
-+	struct msi_domain_info *info = domain->host_data;
-+	struct ims_slot __iomem *slot;
-+
-+	/* Set up the slot address for the irq_chip callbacks */
-+	slot = (__force struct ims_slot __iomem *) info->data;
-+	slot += desc->msi_index;
-+	desc->data.dcookie.iobase = slot;
-+
-+	/* Mask the interrupt for paranoia sake */
-+	iowrite32_and_flush(CTRL_VECTOR_MASKBIT, &slot->ctrl);
-+
-+	/*
-+	 * The caller provided PASID. Shift it to the proper position
-+	 * and set the PASID enable bit.
-+	 */
-+	desc->data.icookie.value <<= CTRL_PASID_SHIFT;
-+	desc->data.icookie.value |= CTRL_PASID_ENABLE;
-+
-+	arg->hwirq = desc->msi_index;
-+}
-+
-+static const struct msi_domain_template idxd_ims_template = {
-+	.chip = {
-+		.name			= "PCI-IDXD",
-+		.irq_mask		= idxd_mask,
-+		.irq_unmask		= idxd_unmask,
-+		.irq_write_msi_msg	= idxd_write_msi_msg,
-+		.irq_shutdown		= idxd_shutdown,
-+		.flags			= IRQCHIP_ONESHOT_SAFE,
-+	},
-+
-+	.ops = {
-+		.prepare_desc		= idxd_prepare_desc,
-+	},
-+
-+	.info = {
-+		.flags			= MSI_FLAG_ALLOC_SIMPLE_MSI_DESCS |
-+					  MSI_FLAG_FREE_MSI_DESCS |
-+					  MSI_FLAG_PCI_IMS,
-+		.bus_token		= DOMAIN_BUS_PCI_DEVICE_IMS,
-+	},
-+};
-+
-+/**
-+ * pci_intel_idxd_create_ims_domain - Create a IDXD IMS domain
-+ * @pdev:	IDXD PCI device to operate on
-+ * @slots:	Pointer to the mapped slot memory array
-+ * @nr_slots:	The number of slots in the array
-+ *
-+ * Returns: True on success, false otherwise
-+ *
-+ * The domain is automatically destroyed when the @pdev is destroyed
-+ */
-+bool pci_intel_idxd_create_ims_domain(struct pci_dev *pdev, void __iomem *slots,
-+				      unsigned int nr_slots)
-+{
-+	return pci_create_ims_domain(pdev, &idxd_ims_template, nr_slots, (__force void *)slots);
-+}
-+EXPORT_SYMBOL_GPL(pci_intel_idxd_create_ims_domain);
---- /dev/null
-+++ b/include/linux/irqchip/irq-pci-intel-idxd.h
-@@ -0,0 +1,22 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* (C) Copyright 2022 Thomas Gleixner <tglx@linutronix.de> */
-+
-+#ifndef _LINUX_IRQCHIP_IRQ_PCI_INTEL_IDXD_H
-+#define _LINUX_IRQCHIP_IRQ_PCI_INTEL_IDXD_H
-+
-+#include <linux/msi_api.h>
-+#include <linux/bits.h>
-+#include <linux/types.h>
-+
-+/*
-+ * Conveniance macro to wrap the PASID for interrupt allocation
-+ * via pci_ims_alloc_irq(pdev, INTEL_IDXD_DEV_COOKIE(pasid))
-+ */
-+#define INTEL_IDXD_DEV_COOKIE(pasid)	(union msi_instance_cookie) { .value = (pasid), }
-+
-+struct pci_dev;
-+
-+bool pci_intel_idxd_create_ims_domain(struct pci_dev *pdev, void __iomem *slots,
-+				      unsigned int nr_slots);
-+
-+#endif
 
