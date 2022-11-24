@@ -2,110 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89D2263778B
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 12:23:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD35F637785
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 12:22:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbiKXLXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 06:23:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54780 "EHLO
+        id S229693AbiKXLWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 06:22:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbiKXLXB (ORCPT
+        with ESMTP id S229606AbiKXLWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 06:23:01 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2957240AA
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 03:22:59 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id v1so1988007wrt.11
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 03:22:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gXR2AhxG13+su5ph3WglxB5pxGBwrnq58ytBv+rrwnQ=;
-        b=s3US92QdLLiTMQq2vvm4ejtfW2frUdHcQJUrvMlTD/PRGTszNAARD1E1+L6K/oEqUN
-         YHMn6C5RZ00of9L/Le1ayFE5GjNATlrFu7bsYiBzHct54FLEzGaAFH19AdcuFowabMcu
-         L9XGanVRI5rVn1i1FwFvjjJmeqqfrDQZj76v1coXpnGiYb9rgMOLsO44uq3KAex1mlKd
-         JhWLQDnIuVBmxd6iG/otEC2nbdjzQkQ9Xaaws2U5n2onqlsYmfGCVXUYzdwK4FC44yaR
-         rCsfyDZdpqJ5ABNs/GD4LUo128oIB0/fg2M7HdA8qkuH0iYBZQ8fE7qyg5uhb1zw7FrZ
-         Rp9Q==
+        Thu, 24 Nov 2022 06:22:44 -0500
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EAA011478;
+        Thu, 24 Nov 2022 03:22:42 -0800 (PST)
+Received: by mail-ej1-f52.google.com with SMTP id e27so3416616ejc.12;
+        Thu, 24 Nov 2022 03:22:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gXR2AhxG13+su5ph3WglxB5pxGBwrnq58ytBv+rrwnQ=;
-        b=UOpukpawFguvVNk/yGTld37kgJ03rGSEOkT/ZTv/2JgkTXWnPljBeCdR6HH6qImTaN
-         dgtC15eVpWidRt79BTUcS8eSZuqtc8Fxd9Fe+oMueRDQe6+Bz5xUW7ai47pbSZf3/gv2
-         n25WYgcJVa548fTV1zHiheRcRR6CoLBe4n6nmR/63ifnOl9F3uDAeJrtg4lLptQWhiJ0
-         nc/K1giD/r7HJykKTM4nPxpU5O3rkBodVnt25u8rLo0CG0cRccLpDFLm0qOMxyNNmGPi
-         iTzsXs75B93PpFzvhzIInNQuU1VhalG4Eb7bTrrrQ3RSe9R0ep1eXDKgvoLtcMJmWII4
-         4U+A==
-X-Gm-Message-State: ANoB5pkYpsnXKy4CN7qMeZfw2XmQe61PL8nmKMx6jvGxagVPpXx5ARa2
-        Vhe1Q6EOxrd8O2cxqmZuhMTljVyMRp3Ppw==
-X-Google-Smtp-Source: AA0mqf6YluD+y7nO/iNhOLHGQigKyvQkBKWEiM9UOPWWBerS+tO/fQRkdMNV1F6/mmkknY8Lpsvxdg==
-X-Received: by 2002:adf:cf0f:0:b0:241:bf8f:789f with SMTP id o15-20020adfcf0f000000b00241bf8f789fmr17400056wrj.684.1669288978195;
-        Thu, 24 Nov 2022 03:22:58 -0800 (PST)
-Received: from localhost.localdomain ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id j23-20020a05600c1c1700b003cf57329221sm5839461wms.14.2022.11.24.03.22.57
+        bh=TQJAcBaQ4iWBQtMTkg02XF1PTNjJUIHH8kGGgI0Jy94=;
+        b=I1mxj9FyD0I1zXVD4592+OKpvxOiaMFhOAkNCetf1ZXYlMEa1foyN2p/cDGypaacMM
+         iXBoEjbGbDhE9g/65VJjxABVO94M2+vZ2kwhz96xnkBDlN/zvbTSNec/zQto7Aqdoa7i
+         TDrinTWdc7JIEV07F1tfp9ZdER5w3XBmVPw22+eO1UGWnuzBHfsvOarD/8FQwTd67i+n
+         yI+OifTARGIKWtV4/KC+2bE6p+3N78STIc2y9AKR0jT2CdepGd2pvJLP4LtY98ZZ7XK7
+         4Z3+cYJ2V2nDzzyT6/7D0+0INBbZsEPizEFuNFLzyIRa8lbdvlTV7miprzwjTHwN4jpE
+         8GSQ==
+X-Gm-Message-State: ANoB5pm5THL5p6jd626az8yhCTZDsdFl1MKvgNLt+u3mOCNSPSKbaDm9
+        WOofMyBtmnXwlQp91T1IFo8=
+X-Google-Smtp-Source: AA0mqf6A3y6EKamNPmbP7DEbCyDPEnE34oMCCxkxUPu+0/nPEKln4QgRTaneT1bEOihsQTW//c8lFA==
+X-Received: by 2002:a17:906:e2cb:b0:7ad:c35a:ad76 with SMTP id gr11-20020a170906e2cb00b007adc35aad76mr27578205ejb.705.1669288960912;
+        Thu, 24 Nov 2022 03:22:40 -0800 (PST)
+Received: from localhost (fwdproxy-cln-017.fbsv.net. [2a03:2880:31ff:11::face:b00c])
+        by smtp.gmail.com with ESMTPSA id e19-20020a170906315300b007803083a36asm318771eje.115.2022.11.24.03.22.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 03:22:57 -0800 (PST)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Odelu Kukatla <okukatla@codeaurora.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Melody Olvera <quic_molvera@quicinc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v2 0/3] interconnect: qcom: Add support for SM8550
-Date:   Thu, 24 Nov 2022 13:22:29 +0200
-Message-Id: <20221124112232.1704144-1-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 24 Nov 2022 03:22:40 -0800 (PST)
+From:   Breno Leitao <leitao@debian.org>
+To:     edumazet@google.com, davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, leit@fb.com, yoshfuji@linux-ipv6.org,
+        pabeni@redhat.com, dsahern@kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND net-next] tcp: socket-specific version of WARN_ON_ONCE()
+Date:   Thu, 24 Nov 2022 03:22:29 -0800
+Message-Id: <20221124112229.789975-1-leitao@debian.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset adds interconnect support for SM8550.
+There are cases where we need information about the socket during a
+warning, so, it could help us to find bugs that happens and do not have
+an easy repro.
 
-First version was here:
-https://lore.kernel.org/all/20221116114526.2679041-1-abel.vesa@linaro.org/
+This diff creates a TCP socket-specific version of WARN_ON_ONCE(), which
+dumps more information about the TCP socket.
 
-Changes since v1:
- * dropped the changes in qcom,rpmh.yaml
- * added dedicated schema file for sm8550
- * dropped the extra spaces/tabs from the bindings header
- * added const where necessary in the driver file
- * switched to dev_err_probe, like Krzysztof suggested
+This new warning is not only useful to give more insight about kernel bugs, but,
+it is also helpful to expose information that might be coming from buggy
+BPF applications, such as BPF applications that sets invalid
+tcp_sock->snd_cwnd values.
 
-Abel Vesa (3):
-  dt-bindings: interconnect: Add schema for SM8550
-  dt-bindings: interconnect: Add Qualcomm SM8550
-  interconnect: qcom: Add SM8550 interconnect provider driver
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ include/net/tcp.h       |  3 ++-
+ include/net/tcp_debug.h | 10 ++++++++++
+ net/ipv4/tcp.c          | 30 ++++++++++++++++++++++++++++++
+ 3 files changed, 42 insertions(+), 1 deletion(-)
+ create mode 100644 include/net/tcp_debug.h
 
- .../interconnect/qcom,sm8550-rpmh.yaml        |  141 +
- drivers/interconnect/qcom/Kconfig             |    9 +
- drivers/interconnect/qcom/Makefile            |    2 +
- drivers/interconnect/qcom/sm8550.c            | 2319 +++++++++++++++++
- drivers/interconnect/qcom/sm8550.h            |  178 ++
- .../dt-bindings/interconnect/qcom,sm8550.h    |  190 ++
- 6 files changed, 2839 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm8550-rpmh.yaml
- create mode 100644 drivers/interconnect/qcom/sm8550.c
- create mode 100644 drivers/interconnect/qcom/sm8550.h
- create mode 100644 include/dt-bindings/interconnect/qcom,sm8550.h
-
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index 14d45661a84d..e490af8e6fdc 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -40,6 +40,7 @@
+ #include <net/inet_ecn.h>
+ #include <net/dst.h>
+ #include <net/mptcp.h>
++#include <net/tcp_debug.h>
+ 
+ #include <linux/seq_file.h>
+ #include <linux/memcontrol.h>
+@@ -1229,7 +1230,7 @@ static inline u32 tcp_snd_cwnd(const struct tcp_sock *tp)
+ 
+ static inline void tcp_snd_cwnd_set(struct tcp_sock *tp, u32 val)
+ {
+-	WARN_ON_ONCE((int)val <= 0);
++	TCP_SOCK_WARN_ON_ONCE(tp, (int)val <= 0);
+ 	tp->snd_cwnd = val;
+ }
+ 
+diff --git a/include/net/tcp_debug.h b/include/net/tcp_debug.h
+new file mode 100644
+index 000000000000..50e96d87d335
+--- /dev/null
++++ b/include/net/tcp_debug.h
+@@ -0,0 +1,10 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_TCP_DEBUG_H
++#define _LINUX_TCP_DEBUG_H
++
++void tcp_sock_warn(const struct tcp_sock *tp);
++
++#define TCP_SOCK_WARN_ON_ONCE(tcp_sock, condition) \
++		DO_ONCE_LITE_IF(condition, tcp_sock_warn, tcp_sock)
++
++#endif  /* _LINUX_TCP_DEBUG_H */
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index 54836a6b81d6..dd682f60c7cb 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -4705,6 +4705,36 @@ int tcp_abort(struct sock *sk, int err)
+ }
+ EXPORT_SYMBOL_GPL(tcp_abort);
+ 
++void tcp_sock_warn(const struct tcp_sock *tp)
++{
++	const struct sock *sk = (const struct sock *)tp;
++	struct inet_sock *inet = inet_sk(sk);
++	struct inet_connection_sock *icsk = inet_csk(sk);
++
++	WARN_ON(1);
++
++	if (!tp)
++		return;
++
++	pr_warn("Socket Info: family=%u state=%d sport=%u dport=%u ccname=%s cwnd=%u",
++		sk->sk_family, sk->sk_state, ntohs(inet->inet_sport),
++		ntohs(inet->inet_dport), icsk->icsk_ca_ops->name, tcp_snd_cwnd(tp));
++
++	switch (sk->sk_family) {
++	case AF_INET:
++		pr_warn("saddr=%pI4 daddr=%pI4", &inet->inet_saddr,
++			&inet->inet_daddr);
++		break;
++#if IS_ENABLED(CONFIG_IPV6)
++	case AF_INET6:
++		pr_warn("saddr=%pI6 daddr=%pI6", &sk->sk_v6_rcv_saddr,
++			&sk->sk_v6_daddr);
++		break;
++#endif
++	}
++}
++EXPORT_SYMBOL_GPL(tcp_sock_warn);
++
+ extern struct tcp_congestion_ops tcp_reno;
+ 
+ static __initdata unsigned long thash_entries;
 -- 
-2.34.1
+2.30.2
 
