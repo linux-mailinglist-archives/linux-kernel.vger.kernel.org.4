@@ -2,91 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F11726374EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 10:16:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3086374F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 10:18:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbiKXJQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 04:16:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52212 "EHLO
+        id S229987AbiKXJSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 04:18:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiKXJQU (ORCPT
+        with ESMTP id S229730AbiKXJSj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 04:16:20 -0500
-Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E4A9B7C8;
-        Thu, 24 Nov 2022 01:16:19 -0800 (PST)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 526B2C021; Thu, 24 Nov 2022 10:16:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1669281384; bh=fYK7x/HVlerQ23GUYyPIC3fExRNhf08M/ieWtcdPBaU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1g5nuPdhzJD/GkzC0n8BVpLRwMHqctNyzHWuXnHbIRgSdRg5WvtNsJ1XXuG8agRZr
-         zxIg4yy3ZZ1jd7ipVbMnXIBgH2/pCsVny9d3Jgled84C3Itij7gD+14+oeKJMSrkmQ
-         Men+YV9uCUEBB6gkh+BvSg0tl2FPljjQkbaEmfVCfP2HJ42V1ww1FZxb4tXBUDjpQ1
-         /GUao+dZa3uQLTksW45w6Lpjk93KLgOqbJ1dBnt5W/mdqlTedeFg+Y4gEGocC6GS5P
-         g3XXznFJYLWpNm3Tg+wrCm/2RqLT0tcqMHl95NKFSSbTf7TXf03qtO0sa95jd82AnO
-         2REc39M3j/1Fg==
+        Thu, 24 Nov 2022 04:18:39 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928D010B439;
+        Thu, 24 Nov 2022 01:18:34 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id B6C9324E252;
+        Thu, 24 Nov 2022 17:18:27 +0800 (CST)
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 24 Nov
+ 2022 17:18:23 +0800
+Received: from [192.168.125.96] (183.27.97.81) by EXMBX068.cuchost.com
+ (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 24 Nov
+ 2022 17:18:22 +0800
+Message-ID: <ae660806-9136-ab75-5bee-8fef534795ba@starfivetech.com>
+Date:   Thu, 24 Nov 2022 17:18:22 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v1 0/4] JH7110 Power Domain Support
+Content-Language: en-US
+To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
+CC:     <linux-riscv@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221118133216.17037-1-walker.chen@starfivetech.com>
+ <CAJM55Z_OGDrCHs++9w4FhG-mZzGzOsnHZT77Q6BDJOGWX7eXJQ@mail.gmail.com>
+From:   Walker Chen <walker.chen@starfivetech.com>
+In-Reply-To: <CAJM55Z_OGDrCHs++9w4FhG-mZzGzOsnHZT77Q6BDJOGWX7eXJQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [183.27.97.81]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX068.cuchost.com
+ (172.16.6.68)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 0621EC009;
-        Thu, 24 Nov 2022 10:16:19 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1669281383; bh=fYK7x/HVlerQ23GUYyPIC3fExRNhf08M/ieWtcdPBaU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=avBJQWG8xUErxoDHN+z/ITJqMCgszKmNs4fnPIdhhIc9+SfeOb70sirpQZLi2Uz6Y
-         HAHGYh2GXqt23vAxe8bbWl6p6MdnQqdHIzaWTOuRigxWC/gez4eULisReRp86HVqSM
-         BPP22jEE+mfGnVuwXZbhh672wYDW7QthBbo9d2EHJHCuPLVL0DO0EiOzYLUpXoANwQ
-         PD1Jz2WSZvtRECzhM6EhupWV2QW7XqBkxBL8J97LihwEJoe+uAdXpU0ODhd+Bn2EQB
-         jMm0JZgyTI11kli7vRvRCA2xKJGi+fVhBvx4xoZnB+lyP5KQBWyf/QfsncxPbbLW6X
-         TqW9ndofVBLNA==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 0f5d5d5a;
-        Thu, 24 Nov 2022 09:16:09 +0000 (UTC)
-Date:   Thu, 24 Nov 2022 18:15:54 +0900
-From:   asmadeus@codewreck.org
-To:     Wang Hai <wanghai38@huawei.com>
-Cc:     ericvh@gmail.com, lucho@ionkov.net, linux_oss@crudebyte.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, viro@zeniv.linux.org.uk,
-        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH net] net/9p: Fix a potential socket leak in p9_socket_open
-Message-ID: <Y382Spkkzt+i86e8@codewreck.org>
-References: <20221124081005.66579-1-wanghai38@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221124081005.66579-1-wanghai38@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wang Hai wrote on Thu, Nov 24, 2022 at 04:10:05PM +0800:
-> Both p9_fd_create_tcp() and p9_fd_create_unix() will call
-> p9_socket_open(). If the creation of p9_trans_fd fails,
-> p9_fd_create_tcp() and p9_fd_create_unix() will return an
-> error directly instead of releasing the cscoket, which will
-
-(typo, socket or csocket -- I'll fix this on applying)
-
-> result in a socket leak.
+On 2022/11/19 2:38, Emil Renner Berthing wrote:
+> On Fri, 18 Nov 2022 at 14:34, Walker Chen <walker.chen@starfivetech.com> wrote:
+>>
+>> This patchset adds power domain controller driver for the StarFive JH7110 SoC.
+>> The series has been tested on the VisionFive 2 board.
 > 
-> This patch adds sock_release() to fix the leak issue.
+> Hi Walker,
+> 
+> Thanks for upstreaming this! I've left some comments on the individual patches.
 
-Thanks, it looks good to me.
-A bit confusing that sock_alloc_files() calls sock_release() itself on
-failure, but that means this one's safe at least...
+Sorry for late reply. Thank you for taking the time to review this driver!
+Your advice is very helpful to me.
 
-> Fixes: 6b18662e239a ("9p connect fixes")
+Best Regards,
+Walker Chen
 
-(the leak was present before that commit so I guess that's not really
-correct -- but it might help figure out up to which point stable folks
-will be able to backport so I guess it's useful either way)
 
--- 
-Dominique
+
