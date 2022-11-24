@@ -2,57 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC04637647
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:24:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19E3563764D
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:24:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbiKXKYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 05:24:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38258 "EHLO
+        id S229763AbiKXKYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 05:24:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbiKXKXu (ORCPT
+        with ESMTP id S229628AbiKXKYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 05:23:50 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C688B14A2D4
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:23:12 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 18D596602B19;
-        Thu, 24 Nov 2022 10:23:11 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1669285391;
-        bh=ep0/8WFmmF1DLAjStgRC+286Uemc17K0xldJybIShBc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=awkyrvSeqIxToj4LbnERqzihnB06rBYL1VQ8mappgQrBM8rxkeA7GHzEVFAoTZ44g
-         YaYyRFSzIJ1E6UsjmG5dKkPujzeDcPfNqMcU/gsIlCReMvv9nsANFPvM4+MiwnkY3H
-         nX8PUc55Kmw2f+BdY78sCZag5dQPJWLOOY0Xu3ZTtUK+nnjnHmOl2uVre+ek9sBBIF
-         9o3/SgLy5Qk9mUrg5Uv8RDfclM7ABCfpAxFWRY3MbRUANNVYsXm5/4F6/6v0erU23D
-         I3Er7mbzYdneoDgn12Rp1whvWCCG86C3pjqi9XhlaUcGeXAwPktI6txYKno1sQzb+M
-         SAAMrTM8s07Hg==
-Message-ID: <38ac71ce-b38a-4fb1-ba21-aa5c91283bd9@collabora.com>
-Date:   Thu, 24 Nov 2022 11:23:08 +0100
-MIME-Version: 1.0
+        Thu, 24 Nov 2022 05:24:41 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89AF811D;
+        Thu, 24 Nov 2022 02:24:40 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AO9nLhM002011;
+        Thu, 24 Nov 2022 10:24:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=vfM1wUbauvbiVxYAwqDD2o4RuMM2aASDuQbC4RNVAoQ=;
+ b=cK2P0v95Uit2bhcqLPL5S51x6P3kJzs1or11yca6c3pFPw1QGfD2qD5MBAIOFtj7SzxD
+ 4YIgpNy+kJnIgcukjivjFv5M3vV7/NuV1p6wKyr9Ho8szCNrC5YHRjUUgjRyOKCtm02X
+ Exmn0KsBcujZgOZ8DxgNiyFo726zeSb9ULg9itLaXJDbsS0/3TKPizICX2vcOaYmTdO/
+ yqarJ18D1iTq7YF4tzfqtM8oR727Ay8Yaa/3Prle41izMzk6lUtULFz905+wOmZYCqhi
+ dSnOxfnm9p4Z39wt5RuVNu98lvftYOjPmG+D9572CN/W3o3UIzp6+/Rh/IBfuPW4MlB2 KQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m10w6nmwe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 24 Nov 2022 10:24:39 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AOABepJ021262;
+        Thu, 24 Nov 2022 10:24:39 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m10w6nmvn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 24 Nov 2022 10:24:38 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AOAL7c3015728;
+        Thu, 24 Nov 2022 10:24:37 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04fra.de.ibm.com with ESMTP id 3kxps8wsfh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 24 Nov 2022 10:24:36 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AOAOXrY53084512
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 24 Nov 2022 10:24:33 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BFCEC5204F;
+        Thu, 24 Nov 2022 10:24:33 +0000 (GMT)
+Received: from [9.152.224.253] (unknown [9.152.224.253])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 7E14752090;
+        Thu, 24 Nov 2022 10:24:33 +0000 (GMT)
+Message-ID: <ee3999a2-7ae6-e72c-0a47-0890972bbd23@linux.ibm.com>
+Date:   Thu, 24 Nov 2022 11:24:33 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH v2] ASoC: mediatek: mt8186: Correct I2S shared clocks
+Subject: Re: [PATCH] KVM: s390: vsie: Fix the initialization of the epoch
+ extension (epdx) field
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Thomas Huth <thuth@redhat.com>, kvm@vger.kernel.org,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        "Collin L. Walling" <walling@linux.ibm.com>,
+        Jason J Herne <jjherne@linux.ibm.com>
+References: <20221123090833.292938-1-thuth@redhat.com>
+ <e7f84070-aeec-99d6-8ac0-cf90ad61ba88@linux.ibm.com>
 Content-Language: en-US
-To:     Jiaxin Yu <jiaxin.yu@mediatek.com>, broonie@kernel.org,
-        nfraprado@collabora.com
-Cc:     chunxu.li@mediatek.com, ajye_huang@compal.corp-partner.google.com,
-        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20221124023050.4470-1-jiaxin.yu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221124023050.4470-1-jiaxin.yu@mediatek.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+In-Reply-To: <e7f84070-aeec-99d6-8ac0-cf90ad61ba88@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: n11ZI6OXbf3wC4oPmQ7kIKS3I6A6vnfy
+X-Proofpoint-ORIG-GUID: RwMtsp3JyDl8lBa-K2XKoMb2keUB5ixs
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-24_07,2022-11-23_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ bulkscore=0 adultscore=0 mlxscore=0 lowpriorityscore=0 suspectscore=0
+ impostorscore=0 priorityscore=1501 spamscore=0 phishscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211240079
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,16 +97,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 24/11/22 03:30, Jiaxin Yu ha scritto:
-> In mt8186 platform, I2S2 should be the main I2S port that provide
-> the clock, on the contrary I2S3 should be the second I2S port that
-> use this clock.
+On 11/23/22 10:41, Christian Borntraeger wrote:
 > 
-> Fixes: 9986bdaee477 ("ASoC: mediatek: mt8186: Configure shared clocks")
-> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
+> 
+> Am 23.11.22 um 10:08 schrieb Thomas Huth:
+>> We recently experienced some weird huge time jumps in nested guests when
+>> rebooting them in certain cases. After adding some debug code to the epoch
+>> handling in vsie.c (thanks to David Hildenbrand for the idea!), it was
+>> obvious that the "epdx" field (the multi-epoch extension) did not get set
+>> to 0xff in case the "epoch" field was negative.
+>> Seems like the code misses to copy the value from the epdx field from
+>> the guest to the shadow control block. By doing so, the weird time
+>> jumps are gone in our scenarios.
+>>
+>> Link: https://bugzilla.redhat.com/show_bug.cgi?id=2140899
+>> Fixes: 8fa1696ea781 ("KVM: s390: Multiple Epoch Facility support")
+> 
+> We might want to add cc stable, just in case.
 
-Sorry, had both versions open and I've sent the R-b tag to the wrong one.
-I meant to send that only to v2.
+I'm pushing this to devel for the CI with the following additions:
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+Cc: stable@vger.kernel.org # 4.19+
+
+> 
+> Reviewed-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+> 
+> 
+>> Signed-off-by: Thomas Huth <thuth@redhat.com>
+>> ---
+>>    arch/s390/kvm/vsie.c | 4 +++-
+>>    1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/s390/kvm/vsie.c b/arch/s390/kvm/vsie.c
+>> index 94138f8f0c1c..ace2541ababd 100644
+>> --- a/arch/s390/kvm/vsie.c
+>> +++ b/arch/s390/kvm/vsie.c
+>> @@ -546,8 +546,10 @@ static int shadow_scb(struct kvm_vcpu *vcpu, struct vsie_page *vsie_page)
+>>    	if (test_kvm_cpu_feat(vcpu->kvm, KVM_S390_VM_CPU_FEAT_CEI))
+>>    		scb_s->eca |= scb_o->eca & ECA_CEI;
+>>    	/* Epoch Extension */
+>> -	if (test_kvm_facility(vcpu->kvm, 139))
+>> +	if (test_kvm_facility(vcpu->kvm, 139)) {
+>>    		scb_s->ecd |= scb_o->ecd & ECD_MEF;
+>> +		scb_s->epdx = scb_o->epdx;
+>> +	}
+>>    
+>>    	/* etoken */
+>>    	if (test_kvm_facility(vcpu->kvm, 156))
 
