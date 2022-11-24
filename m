@@ -2,107 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D705F63743B
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:41:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5863863744B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:43:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230042AbiKXIlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 03:41:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39848 "EHLO
+        id S229986AbiKXInm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 03:43:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbiKXIls (ORCPT
+        with ESMTP id S230093AbiKXInf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 03:41:48 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F79BCA9;
-        Thu, 24 Nov 2022 00:41:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669279307; x=1700815307;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sjWDb836xFTamN2ETa2XyR2Y3MbHGsy8VxBoR88LjKU=;
-  b=eOnwKnFK9tFsC2tWIaq9FQFML2y+hFvf2YaoaZSn8s31m4QBQI2JBHNl
-   dWFX88pv+QCNGhlC3tjalUTC13DjexXnwNdYgJv0n+XHoJey8YdT0qPHm
-   C5kth9kViNEqK+7oKQJgTvwSdj33WkeUyU6p44oEoR6MX+lXtaxSzJwQM
-   4szCS+qnaUcV84Mgn67HtCo50chrP2vH6XQnJwMFGyGs1Zd2PW5YjIa7O
-   0Tb2zE15SF7SJZpT8xIyfWFBsKpmKkOnGj+phH47lj1sSr9em50BsgnHu
-   wg7GeGE/pLqXhy8wtvP+OB3G5VdKQQK6z7u10PxcMGdQvzQ7cwNCOt1Q9
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="312953017"
-X-IronPort-AV: E=Sophos;i="5.96,189,1665471600"; 
-   d="scan'208";a="312953017"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2022 00:41:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="705674601"
-X-IronPort-AV: E=Sophos;i="5.96,189,1665471600"; 
-   d="scan'208";a="705674601"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga008.fm.intel.com with ESMTP; 24 Nov 2022 00:41:44 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1oy7ni-00Gf8f-2S;
-        Thu, 24 Nov 2022 10:41:42 +0200
-Date:   Thu, 24 Nov 2022 10:41:42 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-serial@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] serial: core: Add port port device to flush TX on
- runtime resume
-Message-ID: <Y38uRqAFjKpAPy8J@smile.fi.intel.com>
-References: <20221123082825.32820-1-tony@atomide.com>
- <20221123082825.32820-2-tony@atomide.com>
- <Y35oT9/3OKRciWCP@smile.fi.intel.com>
- <Y38UQXbzw54Jo93s@atomide.com>
+        Thu, 24 Nov 2022 03:43:35 -0500
+Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.133.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8E712AE2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:42:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxlinear.com;
+        s=selector; t=1669279353;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OKxjoXJRVhUevg2ny6svax9/xOJH1NA1wD73iH6x5No=;
+        b=jlPE16zy1/+6oBXj2yf7Bj1h24mT5oZyQM7r+pEFIDRAqJ2U8kb4jjJXGejvoJVh7l6453
+        EOFy0JKUG3qc2WRL03hlPnC8sOMMrI9C4ZUY8q1OaLUyHVJxSKSVsr2H3gqdD+ehLBBObV
+        Lyycte+SJB1Wf/atFHji+BCwoUs8+GBFAEeQ8zcHTBMfhvQ/lDjBflkZb0wTaNNePSmfZs
+        Y4hsETFNN4Gc5j5QYV3q/2l4V7WIH5xvDCuxx4/lF5aDJYDDStB19Htw/5UAkbzs2QbJ74
+        p1V9guoVKfKstaGoJab3AXJcMC6CmK7amVI4k/wBMOkc2X3lta4uCKyBAKqtOA==
+Received: from mail.maxlinear.com (174-47-1-84.static.ctl.one [174.47.1.84])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ us-mta-140-D7sP0d26MK-eDxU0Y_y5qg-1; Thu, 24 Nov 2022 03:42:32 -0500
+X-MC-Unique: D7sP0d26MK-eDxU0Y_y5qg-1
+Received: from sgsxdev001.isng.phoenix.local (10.226.81.111) by
+ mail.maxlinear.com (10.23.38.119) with Microsoft SMTP Server id 15.1.2375.24;
+ Thu, 24 Nov 2022 00:42:27 -0800
+From:   Rahul Tanwar <rtanwar@maxlinear.com>
+To:     Rahul Tanwar <rtanwar@maxlinear.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Borislav Petkov" <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, <linux-lgm-soc@maxlinear.com>
+Subject: [PATCH v5 4/4] x86/of: Add support for boot time interrupt delivery mode configuration
+Date:   Thu, 24 Nov 2022 16:41:43 +0800
+Message-ID: <20221124084143.21841-5-rtanwar@maxlinear.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20221124084143.21841-1-rtanwar@maxlinear.com>
+References: <20221124084143.21841-1-rtanwar@maxlinear.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y38UQXbzw54Jo93s@atomide.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: maxlinear.com
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 08:50:41AM +0200, Tony Lindgren wrote:
-> * Andy Shevchenko <andriy.shevchenko@intel.com> [221123 18:37]:
-> > On Wed, Nov 23, 2022 at 10:28:25AM +0200, Tony Lindgren wrote:
-> > > +EXPORT_SYMBOL(serial_port_get);
-> > 
-> > Can we move these to namespace from day 1?
-> 
-> Assuming you mean EXPORT_SYMBOL_NS(), sure.
-> 
-> But we might be better off doing the following:
-> 
-> - Move already exported uart_add_one_port() and uart_remove_one_port()
->   from serial_core to serial_port as wrapper functions for serial_core
-> 
-> - Export new functions in serial_core for serial_core_register_port()
->   and serial_core_unregister_port() for serial_port to call
-> 
-> This would ensure both serial_core and serial_port modules are
-> always loaded when a hardware specific serial port driver is
-> loaded.
-> 
-> This should also leave out the need for serial_port_get() and
-> serial_port_put().
+Presently, init/boot time interrupt delivery mode is enumerated
+only for ACPI enabled systems by parsing MADT table or for older
+systems by parsing MP table. But for OF based x86 systems, it is
+assumed & hardcoded to legacy PIC mode. This causes boot time crash
+for platforms which do not use 8259 compliant legacy PIC.
 
-Yes, this is good idea!
+Add support for configuration of init time interrupt delivery mode
+for x86 OF based systems by introducing a new optional boolean
+property 'intel,virtual-wire-mode' for interrupt-controller node
+of local APIC. This property emulates IMCRP Bit 7 of MP feature
+info byte 2 of MP floating pointer structure.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Defaults to legacy PIC mode if absent. Configures it to virtual
+wire compatibility mode if present.
 
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Rahul Tanwar <rtanwar@maxlinear.com>
+---
+ arch/x86/kernel/devicetree.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/devicetree.c b/arch/x86/kernel/devicetree.c
+index fcc6f1b7818f..458e43490414 100644
+--- a/arch/x86/kernel/devicetree.c
++++ b/arch/x86/kernel/devicetree.c
+@@ -167,7 +167,14 @@ static void __init dtb_lapic_setup(void)
+ =09=09=09return;
+ =09}
+ =09smp_found_config =3D 1;
+-=09pic_mode =3D 1;
++=09if (of_property_read_bool(dn, "intel,virtual-wire-mode")) {
++=09=09pr_info("Virtual Wire compatibility mode.\n");
++=09=09pic_mode =3D 0;
++=09} else {
++=09=09pr_info("IMCR and PIC compatibility mode.\n");
++=09=09pic_mode =3D 1;
++=09}
++
+ =09register_lapic_address(lapic_addr);
+ }
+=20
+--=20
+2.17.1
 
