@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A07637392
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:13:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2EDD63738B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:13:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiKXINn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 03:13:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57390 "EHLO
+        id S229966AbiKXINk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 03:13:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbiKXIMl (ORCPT
+        with ESMTP id S229845AbiKXIMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 24 Nov 2022 03:12:41 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B114EE6EC1;
-        Thu, 24 Nov 2022 00:12:10 -0800 (PST)
-Date:   Thu, 24 Nov 2022 08:12:08 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C4EE6765;
+        Thu, 24 Nov 2022 00:12:11 -0800 (PST)
+Date:   Thu, 24 Nov 2022 08:12:09 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669277529;
+        s=2020; t=1669277530;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=bZA3r4xX60909xKbjniykBa/ValZx1V4CxaWSuQe6NA=;
-        b=lzKqu+fPG5fMbNSmyQ/8uwfE0wlt6ki3fWCLhIJ5Vi0TTU+kWAD2hOYVHq7BSeHlGTYZ1e
-        HmePinx19HfxoziRxg6FHJl5vzfglH2kQrtflhttMo/Hn3JmQa2CfOcuwx1Bcwo15nvrKB
-        Xv4MBVB35UV340qH1PGMk3w6QhKQsaKY4XFRGllAEd+MWIedetfLjTuTxvWzq8pss3ZbVZ
-        3vi4i/p14Djjrm0Zex5gZdIZ1jCkA86M/N/cmqmrEaHE907W8o6trPrpiHRijhdVMK7XtH
-        7xhJ01IsMGstB/Ysm14MmDgeyvnPleHQ7uwYri3Smaa0SVjZYp0+IicB23JGRw==
+        bh=qajjax1eWC2REHTJna7moQ3d6iO4svH4XKI/B4cd6qg=;
+        b=bY9B3pZe0gcWm8FmivB9O+m+D+5SgfN5HzhIkg5vIx743E7XKus4bDln/WsAW8g6iHDE9R
+        jDZ9cuC41RPgNa8y5xuaDlhU1brQbdZISyxOS4RWeTpi88nLoHmWQNv4eCj1N362dET9Mh
+        VSqxdZCSeVhIL8M0DapoRXFWaqY3kjLBi6D5cbOS85zJA3ZnGyEG2ffg+ikofy7bVZEqGL
+        N2FTlr/iNoCAxQbWvcEe9SGE2Gg39ukS8RD6mX2A7HzWPDEs5RjwWmpM0iccqyrBfV288q
+        vGNTY8xiNPJ9Y7r+g7ljf5+WwZtmcA0G+kcieZgEKXkGXsxO7keHeW2poPLwGQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669277529;
+        s=2020e; t=1669277530;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=bZA3r4xX60909xKbjniykBa/ValZx1V4CxaWSuQe6NA=;
-        b=HaF7m81BrBn7AIr2Txj5CLPN1gM5A4u0qOdyWyJnzhQ9QtDDVqqSrjIIbR1na83np1Th4i
-        PpSJxp6ai1LVcxAw==
+        bh=qajjax1eWC2REHTJna7moQ3d6iO4svH4XKI/B4cd6qg=;
+        b=O6Q1ZUA8tqKcb1xFeaVF+/uOtt1LCXji7OVdflAS68u+uJy05pW293ebAf+Wylr54Ec0BA
+        47a42b4A2p/1iwCw==
 From:   "tip-bot2 for Ard Biesheuvel" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/boot] x86/boot/compressed: Simplify IDT/GDT
- preserve/restore in the EFI thunk
+Subject: [tip: x86/boot] x86/boot/compressed, efi: Merge multiple definitions
+ of image_offset into one
 Cc:     Ard Biesheuvel <ardb@kernel.org>, Borislav Petkov <bp@suse.de>,
         x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20221122161017.2426828-9-ardb@kernel.org>
-References: <20221122161017.2426828-9-ardb@kernel.org>
+In-Reply-To: <20221122161017.2426828-8-ardb@kernel.org>
+References: <20221122161017.2426828-8-ardb@kernel.org>
 MIME-Version: 1.0
-Message-ID: <166927752814.4906.11164193821370869607.tip-bot2@tip-bot2>
+Message-ID: <166927752922.4906.5158541220917207422.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,68 +66,80 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/boot branch of tip:
 
-Commit-ID:     630f337f0c4fd80390e8600adcab31550aea33df
-Gitweb:        https://git.kernel.org/tip/630f337f0c4fd80390e8600adcab31550aea33df
+Commit-ID:     4b52016247aeaa55ca3e3bc2e03cd91114c145c2
+Gitweb:        https://git.kernel.org/tip/4b52016247aeaa55ca3e3bc2e03cd91114c145c2
 Author:        Ard Biesheuvel <ardb@kernel.org>
-AuthorDate:    Tue, 22 Nov 2022 17:10:08 +01:00
+AuthorDate:    Tue, 22 Nov 2022 17:10:07 +01:00
 Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Thu, 24 Nov 2022 08:57:41 +01:00
+CommitterDate: Thu, 24 Nov 2022 08:55:55 +01:00
 
-x86/boot/compressed: Simplify IDT/GDT preserve/restore in the EFI thunk
+x86/boot/compressed, efi: Merge multiple definitions of image_offset into one
 
-Tweak the asm and remove some redundant instructions. While at it,
-fix the associated comment for style and correctness.
+There is no need for head_32.S and head_64.S both declaring a copy of
+the global 'image_offset' variable, so drop those and make the extern C
+declaration the definition.
+
+When image_offset is moved to the .c file, it needs to be placed
+particularly in the .data section because it lands by default in the
+.bss section which is cleared too late, in .Lrelocated, before the first
+access to it and thus garbage gets read, leading to SEV guests exploding
+in early boot.
+
+This happens only when the SEV guest kernel is loaded through grub. If
+supplied with qemu's -kernel command line option, that memory is always
+cleared upfront by qemu and all is fine there.
+
+  [ bp: Expand commit message with SEV aspect. ]
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20221122161017.2426828-9-ardb@kernel.org
+Link: https://lore.kernel.org/r/20221122161017.2426828-8-ardb@kernel.org
 ---
- arch/x86/boot/compressed/efi_mixed.S | 20 +++++++-------------
- 1 file changed, 7 insertions(+), 13 deletions(-)
+ arch/x86/boot/compressed/head_32.S      | 4 ----
+ arch/x86/boot/compressed/head_64.S      | 4 ----
+ drivers/firmware/efi/libstub/x86-stub.c | 2 +-
+ 3 files changed, 1 insertion(+), 9 deletions(-)
 
-diff --git a/arch/x86/boot/compressed/efi_mixed.S b/arch/x86/boot/compressed/efi_mixed.S
-index 8844d8e..8b02e50 100644
---- a/arch/x86/boot/compressed/efi_mixed.S
-+++ b/arch/x86/boot/compressed/efi_mixed.S
-@@ -96,24 +96,20 @@ SYM_FUNC_START(__efi64_thunk)
+diff --git a/arch/x86/boot/compressed/head_32.S b/arch/x86/boot/compressed/head_32.S
+index 3b354eb..6589ddd 100644
+--- a/arch/x86/boot/compressed/head_32.S
++++ b/arch/x86/boot/compressed/head_32.S
+@@ -208,10 +208,6 @@ SYM_DATA_START_LOCAL(gdt)
+ 	.quad	0x00cf92000000ffff	/* __KERNEL_DS */
+ SYM_DATA_END_LABEL(gdt, SYM_L_LOCAL, gdt_end)
  
- 	leaq	0x20(%rsp), %rbx
- 	sgdt	(%rbx)
+-#ifdef CONFIG_EFI_STUB
+-SYM_DATA(image_offset, .long 0)
+-#endif
 -
--	addq	$16, %rbx
--	sidt	(%rbx)
-+	sidt	16(%rbx)
+ /*
+  * Stack and heap for uncompression
+  */
+diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
+index 36f37f9..34d0395 100644
+--- a/arch/x86/boot/compressed/head_64.S
++++ b/arch/x86/boot/compressed/head_64.S
+@@ -718,10 +718,6 @@ SYM_DATA_START(boot32_idt)
+ SYM_DATA_END_LABEL(boot32_idt, SYM_L_GLOBAL, boot32_idt_end)
+ #endif
  
- 	leaq	1f(%rip), %rbp
- 
- 	/*
--	 * Switch to IDT and GDT with 32-bit segments. This is the firmware GDT
--	 * and IDT that was installed when the kernel started executing. The
--	 * pointers were saved by the efi32_entry() routine below.
-+	 * Switch to IDT and GDT with 32-bit segments. These are the firmware
-+	 * GDT and IDT that were installed when the kernel started executing.
-+	 * The pointers were saved by the efi32_entry() routine below.
- 	 *
- 	 * Pass the saved DS selector to the 32-bit code, and use far return to
- 	 * restore the saved CS selector.
- 	 */
--	leaq	efi32_boot_idt(%rip), %rax
--	lidt	(%rax)
--	leaq	efi32_boot_gdt(%rip), %rax
--	lgdt	(%rax)
-+	lidt	efi32_boot_idt(%rip)
-+	lgdt	efi32_boot_gdt(%rip)
- 
- 	movzwl	efi32_boot_ds(%rip), %edx
- 	movzwq	efi32_boot_cs(%rip), %rax
-@@ -187,9 +183,7 @@ SYM_FUNC_START_LOCAL(efi_enter32)
- 	 */
- 	cli
- 
--	lidtl	(%ebx)
--	subl	$16, %ebx
+-#ifdef CONFIG_EFI_STUB
+-SYM_DATA(image_offset, .long 0)
+-#endif
 -
-+	lidtl	16(%ebx)
- 	lgdtl	(%ebx)
+ #ifdef CONFIG_AMD_MEM_ENCRYPT
+ 	__HEAD
+ 	.code32
+diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
+index 33a7811..a0bfd31 100644
+--- a/drivers/firmware/efi/libstub/x86-stub.c
++++ b/drivers/firmware/efi/libstub/x86-stub.c
+@@ -23,7 +23,7 @@
  
- 	movl	%cr4, %eax
+ const efi_system_table_t *efi_system_table;
+ const efi_dxe_services_table_t *efi_dxe_table;
+-extern u32 image_offset;
++u32 image_offset __section(".data");
+ static efi_loaded_image_t *image = NULL;
+ 
+ static efi_status_t
