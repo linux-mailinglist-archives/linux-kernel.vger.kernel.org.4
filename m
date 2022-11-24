@@ -2,212 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50FDF638145
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 00:01:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55AFB63814D
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 00:10:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbiKXXB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 18:01:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58594 "EHLO
+        id S229583AbiKXXKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 18:10:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiKXXB0 (ORCPT
+        with ESMTP id S229436AbiKXXKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 18:01:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE79086FDC
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 15:00:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669330831;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oeuZHzT4EOHz8tiIWkvz6nWvsD7aaG1MkDoma4AjWr0=;
-        b=dIt5fDuUD3kbgPkPKhgqsKKizh5R8SXlwlqQoJurV2SuoW275xD4XQbVDsY6Hr2Waiam37
-        gT3Y1ByNLE4XnsKRVWw0qMspgQwyKT3XLInkMUA0Bb8HV4PScG/oZCAuYiwIHzDdcNar3W
-        BinfEkX2Ffs8/7lPSBx1aimicDG2tKI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-378-4QIxZktDODuVUBuAbt12hg-1; Thu, 24 Nov 2022 18:00:27 -0500
-X-MC-Unique: 4QIxZktDODuVUBuAbt12hg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 24 Nov 2022 18:10:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5BF7DEFD;
+        Thu, 24 Nov 2022 15:10:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 283EC833AEC;
-        Thu, 24 Nov 2022 23:00:27 +0000 (UTC)
-Received: from [10.22.32.81] (unknown [10.22.32.81])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 82EC72166B26;
-        Thu, 24 Nov 2022 23:00:26 +0000 (UTC)
-Message-ID: <1a997ea7-bb63-1710-14d6-c3b88a22bdb3@redhat.com>
-Date:   Thu, 24 Nov 2022 18:00:24 -0500
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7ED22B8293C;
+        Thu, 24 Nov 2022 23:10:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 163B2C433D6;
+        Thu, 24 Nov 2022 23:10:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669331416;
+        bh=/HDv+mAESp1hPabQrG6CtweWqU3lEkCgOtLj6ltj3qI=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Hg5Xjr+sSxFEdZvNvCXxu6Saikb0sLfHAkk2zo5fXn8hEGCvphiCirwThQoll074J
+         DoGfUXW5a6vXKxSrKFK7/61hM7mxVh8/Z9BqEm21ywGjLqWrIPe/jyqRdyQc0Adj2o
+         ClUXcrd/ml+1RE9UkyNtdxzgf6h0SwQqey9kt8gadC5HIAykPKHfQVwnU5v0N7np2B
+         7mvcp7lAnZefuxBKh830F/K4PychpkRA7mKzbKUaUJcIzwB3gHyY6rIjDQY4EiGbBx
+         yzDCZbmh8wZ0pFMEIpBrHS8giXBKSdOCEEM3jrKQS0hizyHL+ryqBooJudVuC9Vr1g
+         YM7WbvksgD+ZQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id ECEB2E270C7;
+        Thu, 24 Nov 2022 23:10:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH] cgroup/cpuset: Optimize update_tasks_nodemask()
-Content-Language: en-US
-To:     Haifeng Xu <haifeng.xu@shopee.com>
-Cc:     lizefan.x@bytedance.com, tj@kernel.org, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221123082157.71326-1-haifeng.xu@shopee.com>
- <2ac6f207-e08a-2a7f-01ae-dfaf15eefaf6@redhat.com>
- <4de8821b-e0c0-bf63-4d76-b0ce208cce3b@shopee.com>
- <dfcbffb9-b58a-6d25-2174-39394eb0ccde@redhat.com>
- <21e73dad-c6d0-21ea-dcdf-355b71c8537b@shopee.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <21e73dad-c6d0-21ea-dcdf-355b71c8537b@shopee.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH bpf-next v4] docs/bpf: Update btf selftests program and add
+ link
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166933141596.31829.17958400614612608344.git-patchwork-notify@kernel.org>
+Date:   Thu, 24 Nov 2022 23:10:15 +0000
+References: <tencent_1FA6904156E8E599CAE4ABDBE80F22830106@qq.com>
+In-Reply-To: <tencent_1FA6904156E8E599CAE4ABDBE80F22830106@qq.com>
+To:     Rong Tao <rtoax@foxmail.com>
+Cc:     void@manifault.com, andrii@kernel.org, ast@kernel.org,
+        bpf@vger.kernel.org, corbet@lwn.net, daniel@iogearbox.net,
+        haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org,
+        kpsingh@kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, martin.lau@linux.dev,
+        rongtao@cestc.cn, sdf@google.com, song@kernel.org, yhs@fb.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/24/22 02:49, Haifeng Xu wrote:
->
-> On 2022/11/24 12:24, Waiman Long wrote:
->> On 11/23/22 22:33, Haifeng Xu wrote:
->>> On 2022/11/24 04:23, Waiman Long wrote:
->>>> On 11/23/22 03:21, haifeng.xu wrote:
->>>>> When change the 'cpuset.mems' under some cgroup, system will hung
->>>>> for a long time. From the dmesg, many processes or theads are
->>>>> stuck in fork/exit. The reason is show as follows.
->>>>>
->>>>> thread A:
->>>>> cpuset_write_resmask /* takes cpuset_rwsem */
->>>>>      ...
->>>>>        update_tasks_nodemask
->>>>>          mpol_rebind_mm /* waits mmap_lock */
->>>>>
->>>>> thread B:
->>>>> worker_thread
->>>>>      ...
->>>>>        cpuset_migrate_mm_workfn
->>>>>          do_migrate_pages /* takes mmap_lock */
->>>>>
->>>>> thread C:
->>>>> cgroup_procs_write /* takes cgroup_mutex and
->>>>> cgroup_threadgroup_rwsem */
->>>>>      ...
->>>>>        cpuset_can_attach
->>>>>          percpu_down_write /* waits cpuset_rwsem */
->>>>>
->>>>> Once update the nodemasks of cpuset, thread A wakes up thread B to
->>>>> migrate mm. But when thread A iterates through all tasks, including
->>>>> child threads and group leader, it has to wait the mmap_lock which
->>>>> has been take by thread B. Unfortunately, thread C wants to migrate
->>>>> tasks into cgroup at this moment, it must wait thread A to release
->>>>> cpuset_rwsem. If thread B spends much time to migrate mm, the
->>>>> fork/exit which acquire cgroup_threadgroup_rwsem also need to
->>>>> wait for a long time.
->>>>>
->>>>> There is no need to migrate the mm of child threads which is
->>>>> shared with group leader. Just iterate through the group
->>>>> leader only.
->>>>>
->>>>> Signed-off-by: haifeng.xu <haifeng.xu@shopee.com>
->>>>> ---
->>>>>     kernel/cgroup/cpuset.c | 3 +++
->>>>>     1 file changed, 3 insertions(+)
->>>>>
->>>>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->>>>> index 589827ccda8b..43cbd09546d0 100644
->>>>> --- a/kernel/cgroup/cpuset.c
->>>>> +++ b/kernel/cgroup/cpuset.c
->>>>> @@ -1968,6 +1968,9 @@ static void update_tasks_nodemask(struct cpuset
->>>>> *cs)
->>>>>               cpuset_change_task_nodemask(task, &newmems);
->>>>>     +        if (!thread_group_leader(task))
->>>>> +            continue;
->>>>> +
->>>>>             mm = get_task_mm(task);
->>>>>             if (!mm)
->>>>>                 continue;
->>>> Could you try the attached test patch to see if it can fix your problem?
->>>> Something along the line of this patch will be more acceptable.
->>>>
->>>> Thanks,
->>>> Longman
->>>>
->>> Hi, Longman.
->>> Thanks for your patch, but there are still some problems.
->>>
->>> 1）
->>>     (group leader, node: 0,1)
->>>            cgroup0
->>>            /     \
->>>           /       \
->>>       cgroup1   cgroup2
->>>      (threads)  (threads)
->>>
->>> If set node 0 in cgroup1 and node 1 in cgroup2, both of them will update
->>> the mm. And the nodemask of mm depends on who set the node last.
->> Yes, that is the existing behavior. It was not that well defined in the
->> past and so it is somewhat ambiguous as to what we need to do about it.
->>
-> The test patch works if the child threads are in same cpuset with group
-> leader which has same logic with my patch. But if they are in different
-> cpusets, the test patch will fail because the contention of mmap_lock
-> still exsits and seems similar to the original logic.
+Hello:
 
-That is true. I am thinking about adding a nodemask to mm_struct so that 
-we can figure out if we need to propagate the changes down to all the 
-VMAs and do the migration. That will enable us to avoid doing wasteful 
-work.
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-Current node mask handling isn't that efficient especially for distros 
-that have a relatively large NODES_SHIFT value. Some work may also be 
-need in this area.
+On Tue, 22 Nov 2022 08:50:42 +0800 you wrote:
+> From: Rong Tao <rongtao@cestc.cn>
+> 
+> commit c64779e24e88("selftests/bpf: Merge most of test_btf into
+> test_progs") rename selftests/bpf btf test from 'test_btf.c' to
+> 'prog_tests/btf.c'.
+> 
+> Signed-off-by: Rong Tao <rongtao@cestc.cn>
+> 
+> [...]
 
->> BTW, cgroup1 has a memory_migrate flag which will force page migration
->> if set. I guess you may have it set in your case as it will introduce a
->> lot more delay as page migration takes time. That is probably the reason
->> why you are seeing a long delay. So one possible solution is to turn
->> this flag off. Cgroup v2 doesn't have this flag.
->>
-> Dou you mean 'CS_MEMORY_MIGRATE'? This flag can be turn off in Cgroup
-> v1, but it has been set in Cgroup v2 (cpuset_css_alloc) in default and
-> couldn't be changed.
-You are right. Cgroup v2 has CS_MEMORY_MIGRATE enabled by default and 
-can't be turned off.
->
->>> 2）
->>>      (process, node: 0,1)
->>>            cgroup0
->>>            /     \
->>>           /       \
->>>       cgroup1   cgroup2
->>>      (node: 0)  (node: 1)
->>>
->>> If migrate thread from cgroup0 to cgroup1 or cgroup2, cpuset_attach
->>> won't update the mm. So the nodemask of thread, including mems_allowed
->>> and mempolicy（updated in cpuset_change_task_nodemask）, is different
->>> from
->>> the vm_policy in vma(updated in mpol_rebind_mm).
->> Yes, that can be the case.
->>
->>>
->>> In a word, if threads have different cpusets with different nodemask, it
->>> will cause inconsistent memory behavior.
->> So do you have suggestion of what we need to do going forward?
-> Should we prevent thread from migrating to those cgroups which have
-> different nodemask with the cgroup that contains the group leader?
->
-> In addition, the group leader and child threads should be in same cgroup
-> tree, also the level of cgroup containes group leader must be higher
-> than these cgroups contain child threads, so update_nodemask will work.
->
-> Or just disable thread migration in cpuset？It's easy to achieve but will
-> affect cpu bind.
+Here is the summary with links:
+  - [bpf-next,v4] docs/bpf: Update btf selftests program and add link
+    https://git.kernel.org/bpf/bpf-next/c/b74344cbede2
 
-As said above, my current inclination is to add a nodemask to mm_struct 
-and revise the way nodemask is being handled. That will take some time.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Cheers,
-Longman
 
