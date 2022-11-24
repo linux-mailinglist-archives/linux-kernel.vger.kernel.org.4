@@ -2,112 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F72C6379C5
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 14:17:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BF356379D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 14:21:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbiKXNRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 08:17:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36816 "EHLO
+        id S229828AbiKXNVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 08:21:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiKXNRF (ORCPT
+        with ESMTP id S229798AbiKXNVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 08:17:05 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B6AFCDD0;
-        Thu, 24 Nov 2022 05:17:02 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669295820;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3t5mTJ+9oFfobjpYgyouD4WEP6J1TnkxH7WUrKI7neU=;
-        b=r0ITR9n291YHgrcpgT7yxfWBidJlwshxk+RhFkqCt8z9X5UuofbLPhrEVm7DHSvAFh3ocE
-        o/co3Buen7CWOH3URbPFP3aszYUG2FxcDQU2eEQFzqjLePyUTnVzHVh4PllmxfLnMnta1R
-        +GwsN+xcyklyIvI0NkjZSnyMvpmap4k2nfB8XGRaGeUtexlMEmdGSmnUT5vjESDRp8BK+C
-        LclDHFvy1EimsWQ9d7J3Axfn/u4WSynshR6pTJ3X74JuJk+0xKVwgqG62N78P51oII+Wej
-        b+eQn4HsKtGOG87sbyCVKKLdK3os1x5sTdu3e7s8YYt0cc8buWWgQNa8FS9y+w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669295820;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3t5mTJ+9oFfobjpYgyouD4WEP6J1TnkxH7WUrKI7neU=;
-        b=rQf0pQYAyyksuqVLLAylWKVzaRi5KPD4K5oquK0iInHKBuHiV0y45FTcVlTpUJT7w3PNGL
-        7SXhum3QgfsvvTCQ==
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Will Deacon <will@kernel.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Vinod Koul <vkoul@kernel.org>, Sinan Kaya <okaya@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Shameerali Kolothum Thodi 
-        <shameerali.kolothum.thodi@huawei.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-Subject: Re: [patch V2 06/40] PCI/MSI: Provide static key for parent
- mask/unmask
-In-Reply-To: <8635a8o65q.wl-maz@kernel.org>
-References: <20221121135653.208611233@linutronix.de>
- <20221121140048.659849460@linutronix.de> <8635a8o65q.wl-maz@kernel.org>
-Date:   Thu, 24 Nov 2022 14:17:00 +0100
-Message-ID: <87bkowcx0z.ffs@tglx>
+        Thu, 24 Nov 2022 08:21:49 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EECD87210B;
+        Thu, 24 Nov 2022 05:21:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669296108; x=1700832108;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=Gbs0pJDzc/tagX8P07oSo6k68mvIwwsUtrxMBVb54fM=;
+  b=lKy/8U/EMRlaYlJxAzoTd4FU+D/8exdZDHiXdY8XZgEmbV/eB4KQ2IFq
+   EtMWYL8e8fJhQnI1B7eKWApjsRqIg+png+/ZQqeOny9BGVSikIzpqdvwt
+   GkuAnOy6+Ud2wjmvJ3+/aBH26ZmY7stzb8cCMKHjz8YojXMFJZ9KwwsQH
+   hu58S/mzq0hhty3389k36G+ocifzlR+PwtXQfHuTg5AOXDXwKEmAKV7iN
+   6/7Pzn45H0s+IFzyrq2ZbSpxdTSmX+95GHmo77ZzyzW6Xt2PR7X44KOci
+   JILWkru37oQh03BMkqZ0I+AGO80p7LXtZDITNeRtntAE5J+xNXKXdTo/5
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="376443342"
+X-IronPort-AV: E=Sophos;i="5.96,190,1665471600"; 
+   d="scan'208";a="376443342"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2022 05:21:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="705760358"
+X-IronPort-AV: E=Sophos;i="5.96,190,1665471600"; 
+   d="scan'208";a="705760358"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by fmsmga008.fm.intel.com with ESMTP; 24 Nov 2022 05:21:34 -0800
+Date:   Thu, 24 Nov 2022 21:17:12 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Vishal Annapurve <vannapurve@google.com>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
+        aaronlewis@google.com, wei.w.wang@intel.com,
+        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
+        jlayton@kernel.org, bfields@fieldses.org,
+        akpm@linux-foundation.org, yu.c.zhang@linux.intel.com,
+        jun.nakajima@intel.com, dave.hansen@intel.com,
+        michael.roth@amd.com, qperret@google.com, steven.price@arm.com,
+        ak@linux.intel.com, david@redhat.com, luto@kernel.org,
+        vbabka@suse.cz, marcorr@google.com, erdemaktas@google.com,
+        pgonda@google.com, nikunj@amd.com, diviness@google.com,
+        maz@kernel.org, dmatlack@google.com, axelrasmussen@google.com,
+        maciej.szmigiero@oracle.com, mizhang@google.com,
+        bgardon@google.com, ackerleytng@google.com
+Subject: Re: [V1 PATCH 1/6] KVM: x86: Add support for testing private memory
+Message-ID: <20221124131712.GA689510@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20221111014244.1714148-1-vannapurve@google.com>
+ <20221111014244.1714148-2-vannapurve@google.com>
+ <20221122100705.GA619277@chaop.bj.intel.com>
+ <Y30rqWwDRbH7nQaQ@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y30rqWwDRbH7nQaQ@google.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24 2022 at 13:04, Marc Zyngier wrote:
-> On Mon, 21 Nov 2022 14:39:36 +0000,
->>  static void pci_mask_msi(struct irq_data *data)
->>  {
->>  	struct msi_desc *desc = irq_data_get_msi_desc(data);
->>  
->>  	pci_msi_mask(desc, BIT(data->irq - desc->irq));
->> +	cond_mask_parent(data);
->
-> I find this a bit odd. If anything, I'd rather drop the masking at the
-> PCI level and keep it local to the interrupt controller, because this
-> is likely to be more universal than the equivalent PCI operation
-> (think multi-MSI, for example, which cannot masks individual MSIs).
->
-> Another thing is that the static key is a global state. Nothing says
-> that masking one way or the other is a universal thing, specially when
-> you have multiple interrupt controllers dealing with MSIs in different
-> ways. For example, GICv3 can use both the ITS and the GICv3-MBI frame
-> at the same time for different PCI RC. OK, they happen to deal with
-> MSIs in the same way, but you hopefully get my point.
+On Tue, Nov 22, 2022 at 08:06:01PM +0000, Sean Christopherson wrote:
+> On Tue, Nov 22, 2022, Chao Peng wrote:
+> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > > index 10017a9f26ee..b3118d00b284 100644
+> > > --- a/arch/x86/kvm/mmu/mmu.c
+> > > +++ b/arch/x86/kvm/mmu/mmu.c
+> > > @@ -4280,6 +4280,10 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+> > >  
+> > >  	fault->gfn = fault->addr >> PAGE_SHIFT;
+> > >  	fault->slot = kvm_vcpu_gfn_to_memslot(vcpu, fault->gfn);
+> > > +#ifdef CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING
+> > > +	fault->is_private = kvm_slot_can_be_private(fault->slot) &&
+> > > +			kvm_mem_is_private(vcpu->kvm, fault->gfn);
+> > > +#endif
+> > >  
+> > >  	if (page_fault_handle_page_track(vcpu, fault))
+> > >  		return RET_PF_EMULATE;
+> > > diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
+> > > index 5cdff5ca546c..2e759f39c2c5 100644
+> > > --- a/arch/x86/kvm/mmu/mmu_internal.h
+> > > +++ b/arch/x86/kvm/mmu/mmu_internal.h
+> > > @@ -188,7 +188,6 @@ struct kvm_page_fault {
+> > >  
+> > >  	/* Derived from mmu and global state.  */
+> > >  	const bool is_tdp;
+> > > -	const bool is_private;
+> > >  	const bool nx_huge_page_workaround_enabled;
+> > >  
+> > >  	/*
+> > > @@ -221,6 +220,9 @@ struct kvm_page_fault {
+> > >  	/* The memslot containing gfn. May be NULL. */
+> > >  	struct kvm_memory_slot *slot;
+> > >  
+> > > +	/* Derived from encryption bits of the faulting GPA for CVMs. */
+> > > +	bool is_private;
+> > 
+> > Either we can wrap it with the CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING or if
+> > it looks ugly I can remove the "const" in my code.
+> 
+> Hmm, I think we can keep the const.  Similar to the bug in kvm_faultin_pfn()[*],
+> the kvm_slot_can_be_private() is bogus.  A fault should be considered private if
+> it's marked as private, whether or not userspace has configured the slot to be
+> private is irrelevant.  I.e. the xarray is the single source of truth, memslots
+> are just plumbing.
 
-I'm fine with dropping that. I did this because basically all of the
-various ARM PCI/MSI domain implementation have a copy of the same
-functions. Some of them have pointlessly the wrong order because copy &
-pasta is so wonderful....
+That makes sense to me. Thanks.
 
-So the alternative solution is to provide _ONE_ set of correct callbacks
-and let the domain initialization code override the irq chip callbacks
-of the default PCI/MSI template.
-
-Thanks,
-
-        tglx
+> 
+> Then kvm_mmu_do_page_fault() can do something like:
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
+> index dbaf6755c5a7..456a9daa36e5 100644
+> --- a/arch/x86/kvm/mmu/mmu_internal.h
+> +++ b/arch/x86/kvm/mmu/mmu_internal.h
+> @@ -260,6 +260,8 @@ enum {
+>  static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+>                                         u32 err, bool prefetch)
+>  {
+> +       bool is_tdp = likely(vcpu->arch.mmu->page_fault == kvm_tdp_page_fault);
+> +
+>         struct kvm_page_fault fault = {
+>                 .addr = cr2_or_gpa,
+>                 .error_code = err,
+> @@ -269,13 +271,15 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+>                 .rsvd = err & PFERR_RSVD_MASK,
+>                 .user = err & PFERR_USER_MASK,
+>                 .prefetch = prefetch,
+> -               .is_tdp = likely(vcpu->arch.mmu->page_fault == kvm_tdp_page_fault),
+> +               .is_tdp = is_tdp,
+>                 .nx_huge_page_workaround_enabled =
+>                         is_nx_huge_page_enabled(vcpu->kvm),
+>  
+>                 .max_level = KVM_MAX_HUGEPAGE_LEVEL,
+>                 .req_level = PG_LEVEL_4K,
+>                 .goal_level = PG_LEVEL_4K,
+> +               .private = IS_ENABLED(CONFIG_HAVE_KVM_PRIVATE_MEM_TESTING) && is_tdp &&
+> +                          kvm_mem_is_private(vcpu->kvm, cr2_or_gpa >> PAGE_SHIFT),
+>         };
+>         int r;
+> 
+> [*] https://lore.kernel.org/all/Y3Vgc5KrNRA8r6vh@google.com
