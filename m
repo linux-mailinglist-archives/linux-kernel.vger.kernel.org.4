@@ -2,191 +2,310 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC65637541
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 10:35:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D2A063753F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 10:35:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiKXJfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 04:35:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45390 "EHLO
+        id S229529AbiKXJfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 04:35:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiKXJfq (ORCPT
+        with ESMTP id S229475AbiKXJfo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 04:35:46 -0500
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3F6109589;
-        Thu, 24 Nov 2022 01:35:45 -0800 (PST)
-Received: by mail-qv1-f43.google.com with SMTP id mx15so667261qvb.1;
-        Thu, 24 Nov 2022 01:35:45 -0800 (PST)
+        Thu, 24 Nov 2022 04:35:44 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23A110CE86
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 01:35:40 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id w9-20020a056e021c8900b0030247910269so909346ill.4
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 01:35:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1XR49b+yg+C7gT3kofJlHlh8rfvgaOOr3pljl0Lz0OA=;
-        b=pTgY5YTemo0SS1SA++wQa9aBqz4szE8ZRPYApc/BkMvYxD42eTdSFnrptEXyMmGIgL
-         xCSGeCNtcKKDnUk2DZMt3R3GxL5D6W0XnFFjEqeVkXCDfF5eQ1J9hpSVWILFun0cE+0/
-         UAR5tvxNzpIh8MyyfNMIeEltYYNuDizm8G6wdPk6h7utxSxWlKicYeAyjIH5kmUMzkFp
-         oQYWUQB0uJUXYL6Md12B2iH7rHxC20ZyED2WkkrEdW1DpNv9Kd4aE8A75bxgC0+FK5Xc
-         fEQNTHQu04Gq7PAWyv7MZIhtVlcrc20aOdX7GFxYNgfLzMtkzN1F+5X9ifrJz9JRYBgC
-         LBeA==
-X-Gm-Message-State: ANoB5plZZ68ucQFTD8XcEpcB7zhS4mO5mT7+VYHDp1vOOHwI8Zw0Hhoh
-        6CISV1EM9JGBU58SbtEM/3E0l3tg0duZyQ==
-X-Google-Smtp-Source: AA0mqf5OXrkcoug+ETkL2tfd7wHOroW7L2LnDfgn4tExxQflkJPI9JMeWFwuy4mMFyioPukYtmbk9A==
-X-Received: by 2002:a05:6214:5693:b0:4bb:59c1:3ded with SMTP id lm19-20020a056214569300b004bb59c13dedmr13531240qvb.68.1669282544283;
-        Thu, 24 Nov 2022 01:35:44 -0800 (PST)
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
-        by smtp.gmail.com with ESMTPSA id s14-20020a05620a29ce00b006cf38fd659asm559378qkp.103.2022.11.24.01.35.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Nov 2022 01:35:43 -0800 (PST)
-Received: by mail-yb1-f181.google.com with SMTP id z192so1261734yba.0;
-        Thu, 24 Nov 2022 01:35:43 -0800 (PST)
-X-Received: by 2002:a25:ad8b:0:b0:6de:6c43:3991 with SMTP id
- z11-20020a25ad8b000000b006de6c433991mr11015229ybi.604.1669282543207; Thu, 24
- Nov 2022 01:35:43 -0800 (PST)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FbHAeu8qZKyYCKZr5sAHM/3CSGxCDCesjZ/Fy33E3MA=;
+        b=XxBTu0NIwzAowpUUw5eCp2YQywzac6DQ+TZaU1Pwys9Ggb2e+JNrvxJg+Os2Poup4s
+         lbKpEY1R0UO9Ifvhs2E7TH0Pn1LZc2ft58AdyDS3At+VeLbbYQ7KueRRNQ/rWTyBLHOC
+         1i9KNtO0eyTcLY9NDxBnniczuZutgWSntVbf27A7q+aCDz33GqMe8XbBzBNNcJ6Z/ArF
+         LMTQK7MJ0UlTEtpRDjNKxiCO9SOqbIYD/x6xgear3MAIBAHHflFWJpoEq8g42y4HTi5Z
+         ciJN2a5e83B2mwwuaG3ixVgHRfwdPHcHO9w97idjcqsRlQed1k4MPbhPf5sEXJKKeO6r
+         VnlA==
+X-Gm-Message-State: ANoB5pnSeCzM0I5Xu84igCiCL2krsViPsAz/nOcR0Oi1F0RShOk8i8C0
+        6zlMApoQVzkqMHi+7FqNJoLgeLl+x0w1DR8U1AqJZIa7L6RK
+X-Google-Smtp-Source: AA0mqf7u+qaeuGXd8xksklfMnXCIQ8sdeNtaeWGOXrvA903TbnJ+9tplDNKRvGkYKOR6jVBKViW+UMvrFFW1XHbWwHVD3sFM4Stt
 MIME-Version: 1.0
-References: <3ee1f8144feb96c28742b22384189f1f83bcfc1a.1669221671.git.geert@linux-m68k.org>
- <e2ef753e-8527-1fc6-f2f0-bc10aa744463@suse.de> <CAMuHMdXHOGz6Q9jsp9+Y6Op5qw3E-qUnHzYv3rxkVO5Bd2bKjw@mail.gmail.com>
- <Y38znirlUpFoQRqX@phenom.ffwll.local> <9f069800-f536-e262-1914-bec03e11f57c@suse.de>
-In-Reply-To: <9f069800-f536-e262-1914-bec03e11f57c@suse.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 24 Nov 2022 10:35:31 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXD38dYwYqDV8sSyoAmFF8haMYVH3r5y-5jnNeJtBWqbg@mail.gmail.com>
-Message-ID: <CAMuHMdXD38dYwYqDV8sSyoAmFF8haMYVH3r5y-5jnNeJtBWqbg@mail.gmail.com>
-Subject: Re: [PATCH resend v2] drm/fourcc: Add missing big-endian XRGB1555 and
- RGB565 formats
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Gerd Hoffmann <kraxel@redhat.com>, linux-fbdev@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
+X-Received: by 2002:a02:cc12:0:b0:386:3792:8569 with SMTP id
+ n18-20020a02cc12000000b0038637928569mr3961632jap.76.1669282540359; Thu, 24
+ Nov 2022 01:35:40 -0800 (PST)
+Date:   Thu, 24 Nov 2022 01:35:40 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d916f405ee34206b@google.com>
+Subject: [syzbot] possible deadlock in btrfs_join_transaction
+From:   syzbot <syzbot+6eb64eace626d6222d2a@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+Hello,
 
-On Thu, Nov 24, 2022 at 10:20 AM Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> Am 24.11.22 um 10:04 schrieb Daniel Vetter:
-> > On Thu, Nov 24, 2022 at 09:55:18AM +0100, Geert Uytterhoeven wrote:
-> >> Hi Thomas,
-> >>
-> >> On Thu, Nov 24, 2022 at 9:47 AM Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> >>> Am 23.11.22 um 17:43 schrieb Geert Uytterhoeven:
-> >>>> As of commit eae06120f1974e1a ("drm: refuse ADDFB2 ioctl for broken
-> >>>> bigendian drivers"), drivers must set the
-> >>>> quirk_addfb_prefer_host_byte_order quirk to make the drm_mode_addfb()
-> >>>> compat code work correctly on big-endian machines.
-> >>>>
-> >>>> While that works fine for big-endian XRGB8888 and ARGB8888, which are
-> >>>> mapped to the existing little-endian BGRX8888 and BGRA8888 formats, it
-> >>>> does not work for big-endian XRGB1555 and RGB565, as the latter are not
-> >>>> listed in the format database.
-> >>>>
-> >>>> Fix this by adding the missing formats.  Limit this to big-endian
-> >>>> platforms, as there is currently no need to support these formats on
-> >>>> little-endian platforms.
-> >>>>
-> >>>> Fixes: 6960e6da9cec3f66 ("drm: fix drm_mode_addfb() on big endian machines.")
-> >>>> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> >>>> ---
-> >>>> v2:
-> >>>>     - Use "DRM_FORMAT_foo | DRM_FORMAT_BIG_ENDIAN" instead of
-> >>>>       "DRM_FORMAT_HOST_foo",
-> >>>>     - Turn into a lone patch, as all other patches from series
-> >>>>       https://lore.kernel.org/r/cover.1657300532.git.geert@linux-m68k.org
-> >>>>       were applied to drm-misc/for-linux-next.
-> >>>> ---
-> >>>>    drivers/gpu/drm/drm_fourcc.c | 4 ++++
-> >>>>    1 file changed, 4 insertions(+)
-> >>>>
-> >>>> diff --git a/drivers/gpu/drm/drm_fourcc.c b/drivers/gpu/drm/drm_fourcc.c
-> >>>> index e09331bb3bc73f21..265671a7f9134c1f 100644
-> >>>> --- a/drivers/gpu/drm/drm_fourcc.c
-> >>>> +++ b/drivers/gpu/drm/drm_fourcc.c
-> >>>> @@ -190,6 +190,10 @@ const struct drm_format_info *__drm_format_info(u32 format)
-> >>>>                { .format = DRM_FORMAT_BGRA5551,        .depth = 15, .num_planes = 1, .cpp = { 2, 0, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true },
-> >>>>                { .format = DRM_FORMAT_RGB565,          .depth = 16, .num_planes = 1, .cpp = { 2, 0, 0 }, .hsub = 1, .vsub = 1 },
-> >>>>                { .format = DRM_FORMAT_BGR565,          .depth = 16, .num_planes = 1, .cpp = { 2, 0, 0 }, .hsub = 1, .vsub = 1 },
-> >>>> +#ifdef __BIG_ENDIAN
-> >>>> +             { .format = DRM_FORMAT_XRGB1555 | DRM_FORMAT_BIG_ENDIAN, .depth = 15, .num_planes = 1, .cpp = { 2, 0, 0 }, .hsub = 1, .vsub = 1 },
-> >>>> +             { .format = DRM_FORMAT_RGB565 | DRM_FORMAT_BIG_ENDIAN, .depth = 16, .num_planes = 1, .cpp = { 2, 0, 0 }, .hsub = 1, .vsub = 1 },
-> >>>
-> >>> Getting back to the discussion on endianess, I don't understand why the
-> >>> BIG_ENDIAN flag is set here.  AFAIK these formats are always little
-> >>> endian.  And the BE flag is set by drivers/userspace if a framebuffer
-> >>> has a BE ordering.
-> >>>
-> >>> It would be better to filter the BE flag in __drm_format_info() before
-> >>> the function does the lookup.
-> >>
-> >> I mentioned that alternative in [2], but rejected it because of the
-> >> disadvantages:
-> >>    - {,__}drm_format_info() returns a pointer to a const object,
-> >>      whose .format field won't have the DRM_FORMAT_BIG_ENDIAN flag set,
-> >>      complicating callers,
-> >>    - All callers need to be updated,
-> >>    - It is difficult to know which big-endian formats are really
-> >>      supported, especially as only a few are needed.
-> >
-> > fwiw this last point is why I think this is the right approach. Long term
-> > we might want to add _BE variants of these #defines so that they can be
-> > used everywhere and are easy to grep. As long as it's just a handful of
-> > places then the very verboy | DRM_FORMAT_BIG_ENDIAN is ok too.
->
-> Doesn't that contradict the comment at [1] to some extend? 'DRM formats
-> are little endian.' and extra defines are only made for simplifying drivers.
->
-> [1]
-> https://elixir.bootlin.com/linux/latest/source/include/drm/drm_fourcc.h#L33
->
-> >
-> > With this approach we can make it _very_ explicit what big endian formats
-> > are supported by a driver or other piece in the stack (like fbdev
-> > emulation), and I think explicit is what we want with be because it's
-> > become such an exception. Otherwise we'll just end up with more terrible
-> > cruft like the host endian hacks in the addfb compat code.
->
-> To give a different perspective, with format-conversion helpers the
-> destination buffer is usually a hardware buffer that can have big-endian
-> ordering. So we sometimes have to swap byteorder to make output colors
-> look correct. That is the easiest if all formats are in LE and the
-> BIG_ENDIAN flag tells us when the swap. With the current multitude of
-> formats and B_E flags that can describe the same result, it's all just
-> more complicated.
+syzbot found the following issue on:
 
-I'm happy to _not_ export the big-endian RGB565 format in atari_drm, and
-just do the byte swapping when copying to the hardware frame buffer ;-)
-(although that would preclude some (future) optimization handing out
-buffers allocated from graphics memory to avoid any copying at all)
+HEAD commit:    9500fc6e9e60 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=173a95f9880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b25c9f218686dd5e
+dashboard link: https://syzkaller.appspot.com/bug?extid=6eb64eace626d6222d2a
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
 
-But currently, drivers on big-endian platforms must set the
-quirk_addfb_prefer_host_byte_order quirk flag, and doing so forces
-the frame buffer console emulation to use big-endian RGB565, requiring
-the big-endian RGB565 format to be present in the formats[] array.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-P.S. Ext2fs used have a big-endian variant.  It was dropped, and
-     everyone settled on the little-endian variant, as it was much
-     faster to always do the byte swapping on big-endian, than to handle
-     both the little-endian and big-endian variants dynamically.
-     Likewise, XFS stayed big-endian.
-     DRM settled on little-endian-with-exceptions...
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/1363e60652f7/disk-9500fc6e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/fcc4da811bb6/vmlinux-9500fc6e.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/0b554298f1fa/Image-9500fc6e.gz.xz
 
-Gr{oetje,eeting}s,
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6eb64eace626d6222d2a@syzkaller.appspotmail.com
 
-                        Geert
+======================================================
+WARNING: possible circular locking dependency detected
+6.1.0-rc5-syzkaller-32269-g9500fc6e9e60 #0 Not tainted
+------------------------------------------------------
+syz-executor.4/30618 is trying to acquire lock:
+ffff0000d3bca650 (sb_internal#2){.+.+}-{0:0}, at: btrfs_join_transaction+0x30/0x40 fs/btrfs/transaction.c:764
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+but task is already holding lock:
+ffff0000d3bca558 (sb_pagefaults#2){.+.+}-{0:0}, at: do_page_mkwrite+0x74/0x288 mm/memory.c:2978
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #5 (sb_pagefaults#2){.+.+}-{0:0}:
+       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
+       __sb_start_write include/linux/fs.h:1826 [inline]
+       sb_start_pagefault include/linux/fs.h:1930 [inline]
+       btrfs_page_mkwrite+0xb4/0x6fc fs/btrfs/inode.c:8415
+       do_page_mkwrite+0x74/0x288 mm/memory.c:2978
+       do_shared_fault mm/memory.c:4619 [inline]
+       do_fault+0x274/0x550 mm/memory.c:4687
+       handle_pte_fault mm/memory.c:4955 [inline]
+       __handle_mm_fault mm/memory.c:5097 [inline]
+       handle_mm_fault+0x78c/0xa48 mm/memory.c:5218
+       __do_page_fault arch/arm64/mm/fault.c:512 [inline]
+       do_page_fault+0x428/0x79c arch/arm64/mm/fault.c:612
+       do_translation_fault+0x78/0x194 arch/arm64/mm/fault.c:695
+       do_mem_abort+0x54/0x130 arch/arm64/mm/fault.c:831
+       el0_da+0x70/0x16c arch/arm64/kernel/entry-common.c:515
+       el0t_64_sync_handler+0xcc/0xf0 arch/arm64/kernel/entry-common.c:658
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+
+-> #4 (&mm->mmap_lock){++++}-{3:3}:
+       __might_fault+0x7c/0xb4 mm/memory.c:5646
+       _copy_to_user include/linux/uaccess.h:143 [inline]
+       copy_to_user include/linux/uaccess.h:169 [inline]
+       btrfs_ioctl_get_subvol_rootref+0x3a8/0x4bc fs/btrfs/ioctl.c:3203
+       btrfs_ioctl+0xa08/0xa64 fs/btrfs/ioctl.c:5556
+       vfs_ioctl fs/ioctl.c:51 [inline]
+       __do_sys_ioctl fs/ioctl.c:870 [inline]
+       __se_sys_ioctl fs/ioctl.c:856 [inline]
+       __arm64_sys_ioctl+0xd0/0x140 fs/ioctl.c:856
+       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+
+-> #3 (btrfs-root-00){++++}-{3:3}:
+       down_read_nested+0x64/0x84 kernel/locking/rwsem.c:1634
+       __btrfs_tree_read_lock fs/btrfs/locking.c:134 [inline]
+       btrfs_tree_read_lock fs/btrfs/locking.c:140 [inline]
+       btrfs_read_lock_root_node+0x13c/0x1c0 fs/btrfs/locking.c:279
+       btrfs_search_slot_get_root+0x8c/0x374 fs/btrfs/ctree.c:1665
+       btrfs_search_slot+0x1dc/0x107c fs/btrfs/ctree.c:1985
+       btrfs_del_root+0x50/0xd0 fs/btrfs/root-tree.c:317
+       btrfs_clear_free_space_tree+0x268/0x49c fs/btrfs/free-space-tree.c:1273
+       btrfs_start_pre_rw_mount+0x128/0x380 fs/btrfs/disk-io.c:3210
+       open_ctree+0xb70/0xdc8 fs/btrfs/disk-io.c:3792
+       btrfs_fill_super+0xc0/0x174 fs/btrfs/super.c:1461
+       btrfs_mount_root+0x4a4/0x558 fs/btrfs/super.c:1829
+       legacy_get_tree+0x30/0x74 fs/fs_context.c:610
+       vfs_get_tree+0x40/0x140 fs/super.c:1531
+       fc_mount fs/namespace.c:1043 [inline]
+       vfs_kern_mount+0xe0/0x140 fs/namespace.c:1073
+       btrfs_mount+0x20c/0x5e8 fs/btrfs/super.c:1889
+       legacy_get_tree+0x30/0x74 fs/fs_context.c:610
+       vfs_get_tree+0x40/0x140 fs/super.c:1531
+       do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
+       path_mount+0x358/0x890 fs/namespace.c:3370
+       do_mount fs/namespace.c:3383 [inline]
+       __do_sys_mount fs/namespace.c:3591 [inline]
+       __se_sys_mount fs/namespace.c:3568 [inline]
+       __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
+       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+
+-> #2 (btrfs_trans_num_extwriters){++++}-{0:0}:
+       join_transaction+0x10c/0x65c fs/btrfs/transaction.c:299
+       start_transaction+0x460/0x944 fs/btrfs/transaction.c:658
+       btrfs_join_transaction+0x30/0x40 fs/btrfs/transaction.c:764
+       btrfs_commit_super+0x64/0xa0 fs/btrfs/disk-io.c:4496
+       close_ctree+0x1dc/0x60c fs/btrfs/disk-io.c:4653
+       btrfs_put_super+0x20/0x30 fs/btrfs/super.c:394
+       generic_shutdown_super+0x94/0x198 fs/super.c:492
+       kill_anon_super+0x24/0x44 fs/super.c:1086
+       btrfs_kill_super+0x24/0x3c fs/btrfs/super.c:2441
+       deactivate_locked_super+0x70/0xe8 fs/super.c:332
+       deactivate_super+0xd0/0xd4 fs/super.c:363
+       cleanup_mnt+0x184/0x1c0 fs/namespace.c:1186
+       __cleanup_mnt+0x20/0x30 fs/namespace.c:1193
+       task_work_run+0x100/0x148 kernel/task_work.c:179
+       resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+       do_notify_resume+0x174/0x1f0 arch/arm64/kernel/signal.c:1127
+       prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
+       exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
+       el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:638
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+
+-> #1 (btrfs_trans_num_writers){++++}-{0:0}:
+       join_transaction+0xe8/0x65c fs/btrfs/transaction.c:298
+       start_transaction+0x460/0x944 fs/btrfs/transaction.c:658
+       btrfs_join_transaction+0x30/0x40 fs/btrfs/transaction.c:764
+       btrfs_commit_super+0x64/0xa0 fs/btrfs/disk-io.c:4496
+       close_ctree+0x1dc/0x60c fs/btrfs/disk-io.c:4653
+       btrfs_put_super+0x20/0x30 fs/btrfs/super.c:394
+       generic_shutdown_super+0x94/0x198 fs/super.c:492
+       kill_anon_super+0x24/0x44 fs/super.c:1086
+       btrfs_kill_super+0x24/0x3c fs/btrfs/super.c:2441
+       deactivate_locked_super+0x70/0xe8 fs/super.c:332
+       deactivate_super+0xd0/0xd4 fs/super.c:363
+       cleanup_mnt+0x184/0x1c0 fs/namespace.c:1186
+       __cleanup_mnt+0x20/0x30 fs/namespace.c:1193
+       task_work_run+0x100/0x148 kernel/task_work.c:179
+       resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+       do_notify_resume+0x174/0x1f0 arch/arm64/kernel/signal.c:1127
+       prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
+       exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
+       el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:638
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+
+-> #0 (sb_internal#2){.+.+}-{0:0}:
+       check_prev_add kernel/locking/lockdep.c:3097 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+       validate_chain kernel/locking/lockdep.c:3831 [inline]
+       __lock_acquire+0x1530/0x3084 kernel/locking/lockdep.c:5055
+       lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
+       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
+       __sb_start_write include/linux/fs.h:1826 [inline]
+       sb_start_intwrite include/linux/fs.h:1948 [inline]
+       start_transaction+0x360/0x944 fs/btrfs/transaction.c:652
+       btrfs_join_transaction+0x30/0x40 fs/btrfs/transaction.c:764
+       btrfs_dirty_inode+0x4c/0x13c fs/btrfs/inode.c:6085
+       btrfs_update_time+0x120/0x138 fs/btrfs/inode.c:6127
+       inode_update_time fs/inode.c:1871 [inline]
+       __file_update_time fs/inode.c:2088 [inline]
+       file_update_time+0x194/0x2c0 fs/inode.c:2119
+       btrfs_page_mkwrite+0x204/0x6fc fs/btrfs/inode.c:8431
+       do_page_mkwrite+0x74/0x288 mm/memory.c:2978
+       do_shared_fault mm/memory.c:4619 [inline]
+       do_fault+0x274/0x550 mm/memory.c:4687
+       handle_pte_fault mm/memory.c:4955 [inline]
+       __handle_mm_fault mm/memory.c:5097 [inline]
+       handle_mm_fault+0x78c/0xa48 mm/memory.c:5218
+       __do_page_fault arch/arm64/mm/fault.c:512 [inline]
+       do_page_fault+0x428/0x79c arch/arm64/mm/fault.c:612
+       do_translation_fault+0x78/0x194 arch/arm64/mm/fault.c:695
+       do_mem_abort+0x54/0x130 arch/arm64/mm/fault.c:831
+       el0_da+0x70/0x16c arch/arm64/kernel/entry-common.c:515
+       el0t_64_sync_handler+0xcc/0xf0 arch/arm64/kernel/entry-common.c:658
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+
+other info that might help us debug this:
+
+Chain exists of:
+  sb_internal#2 --> &mm->mmap_lock --> sb_pagefaults#2
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(sb_pagefaults#2);
+                               lock(&mm->mmap_lock);
+                               lock(sb_pagefaults#2);
+  lock(sb_internal#2);
+
+ *** DEADLOCK ***
+
+2 locks held by syz-executor.4/30618:
+ #0: ffff0000c0e15648 (&mm->mmap_lock){++++}-{3:3}, at: mmap_read_lock include/linux/mmap_lock.h:117 [inline]
+ #0: ffff0000c0e15648 (&mm->mmap_lock){++++}-{3:3}, at: do_page_fault+0x3c8/0x79c arch/arm64/mm/fault.c:597
+ #1: ffff0000d3bca558 (sb_pagefaults#2){.+.+}-{0:0}, at: do_page_mkwrite+0x74/0x288 mm/memory.c:2978
+
+stack backtrace:
+CPU: 0 PID: 30618 Comm: syz-executor.4 Not tainted 6.1.0-rc5-syzkaller-32269-g9500fc6e9e60 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+Call trace:
+ dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
+ show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
+ dump_stack+0x1c/0x58 lib/dump_stack.c:113
+ print_circular_bug+0x2c4/0x2c8 kernel/locking/lockdep.c:2055
+ check_noncircular+0x14c/0x154 kernel/locking/lockdep.c:2177
+ check_prev_add kernel/locking/lockdep.c:3097 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+ validate_chain kernel/locking/lockdep.c:3831 [inline]
+ __lock_acquire+0x1530/0x3084 kernel/locking/lockdep.c:5055
+ lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
+ percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
+ __sb_start_write include/linux/fs.h:1826 [inline]
+ sb_start_intwrite include/linux/fs.h:1948 [inline]
+ start_transaction+0x360/0x944 fs/btrfs/transaction.c:652
+ btrfs_join_transaction+0x30/0x40 fs/btrfs/transaction.c:764
+ btrfs_dirty_inode+0x4c/0x13c fs/btrfs/inode.c:6085
+ btrfs_update_time+0x120/0x138 fs/btrfs/inode.c:6127
+ inode_update_time fs/inode.c:1871 [inline]
+ __file_update_time fs/inode.c:2088 [inline]
+ file_update_time+0x194/0x2c0 fs/inode.c:2119
+ btrfs_page_mkwrite+0x204/0x6fc fs/btrfs/inode.c:8431
+ do_page_mkwrite+0x74/0x288 mm/memory.c:2978
+ do_shared_fault mm/memory.c:4619 [inline]
+ do_fault+0x274/0x550 mm/memory.c:4687
+ handle_pte_fault mm/memory.c:4955 [inline]
+ __handle_mm_fault mm/memory.c:5097 [inline]
+ handle_mm_fault+0x78c/0xa48 mm/memory.c:5218
+ __do_page_fault arch/arm64/mm/fault.c:512 [inline]
+ do_page_fault+0x428/0x79c arch/arm64/mm/fault.c:612
+ do_translation_fault+0x78/0x194 arch/arm64/mm/fault.c:695
+ do_mem_abort+0x54/0x130 arch/arm64/mm/fault.c:831
+ el0_da+0x70/0x16c arch/arm64/kernel/entry-common.c:515
+ el0t_64_sync_handler+0xcc/0xf0 arch/arm64/kernel/entry-common.c:658
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
