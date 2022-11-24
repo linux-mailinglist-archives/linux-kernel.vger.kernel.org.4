@@ -2,81 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33DC46379A3
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 14:04:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DF8D6379A5
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 14:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbiKXNEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 08:04:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55906 "EHLO
+        id S229879AbiKXNEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 08:04:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiKXNEL (ORCPT
+        with ESMTP id S229775AbiKXNEW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 08:04:11 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03B385A30
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 05:04:10 -0800 (PST)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NHylH3Ky6zqSgh;
-        Thu, 24 Nov 2022 21:00:11 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 24 Nov 2022 21:04:07 +0800
-Received: from [10.67.111.205] (10.67.111.205) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 24 Nov 2022 21:04:07 +0800
-Subject: Re: [PATCH] tracing: Fix infinite loop in tracing_read_pipe on
- overflowed print_trace_line
-To:     Steven Rostedt <rostedt@goodmis.org>
-CC:     <mhiramat@kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221114022946.66255-1-yangjihong1@huawei.com>
- <20221117164003.6e655615@gandalf.local.home>
- <188a48b7-f426-6348-086e-22e56bb07206@huawei.com>
- <20221120144956.30bb1725@rorschach.local.home>
-From:   Yang Jihong <yangjihong1@huawei.com>
-Message-ID: <894153aa-0dab-dc26-7c31-2bdda7c665b4@huawei.com>
-Date:   Thu, 24 Nov 2022 21:04:06 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
-MIME-Version: 1.0
-In-Reply-To: <20221120144956.30bb1725@rorschach.local.home>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 24 Nov 2022 08:04:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDE7C5B51;
+        Thu, 24 Nov 2022 05:04:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 10EBD62123;
+        Thu, 24 Nov 2022 13:04:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F762C433D6;
+        Thu, 24 Nov 2022 13:04:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669295060;
+        bh=K0spZ237Ij4bnG8ES++EsmCNrt83UGBNa9SuA8ANQo4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=oBnc7By1HOVo2awPOJXd3ZwuGruOuod4kcUfDYXHNqg9TplObGExnJmQdT7FmvUE/
+         s9rJ1VV/Vh2Wwu+yQwmKNmFxu2fdMhEvZ6ThcCN95nYO5yipXrb8VDqfN7ZygL5wkn
+         4L4RQqumygls+h/MBkBkXOPGpUXby62JBmKbGvQDOO/ZKZHak+fEP8hfUQvoDVeA3C
+         QRT0s6AVWkjXwlcbexXuwWYZ0zcWPog1VSRmWdFgUu1zR+gASfdjqg2zx4jgVr3ijB
+         ihPhECxu1WzzW1RizFxTTOv2uxNCtwxQj0Pk2QC8DZXODlwpiMc6H8Qxkf/d4QNgEY
+         HHh+9dUBSMQ3w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oyBtq-008NWc-5w;
+        Thu, 24 Nov 2022 13:04:18 +0000
+Date:   Thu, 24 Nov 2022 13:04:17 +0000
+Message-ID: <8635a8o65q.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Will Deacon <will@kernel.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Vinod Koul <vkoul@kernel.org>, Sinan Kaya <okaya@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Shameerali Kolothum Thodi 
+        <shameerali.kolothum.thodi@huawei.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+Subject: Re: [patch V2 06/40] PCI/MSI: Provide static key for parent mask/unmask
+In-Reply-To: <20221121140048.659849460@linutronix.de>
+References: <20221121135653.208611233@linutronix.de>
+        <20221121140048.659849460@linutronix.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: tglx@linutronix.de, linux-kernel@vger.kernel.org, will@kernel.org, linux-pci@vger.kernel.org, bhelgaas@google.com, lorenzo.pieralisi@arm.com, gregkh@linuxfoundation.org, jgg@mellanox.com, andrew@lunn.ch, gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com, ammarfaizi2@gnuweeb.org, robin.murphy@arm.com, lpieralisi@kernel.org, nm@ti.com, kristo@kernel.org, ssantosh@kernel.org, linux-arm-kernel@lists.infradead.org, vkoul@kernel.org, okaya@kernel.org, agross@kernel.org, andersson@kernel.org, mark.rutland@arm.com, shameerali.kolothum.thodi@huawei.com, yuzenghui@huawei.com, shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, 21 Nov 2022 14:39:36 +0000,
+Thomas Gleixner <tglx@linutronix.de> wrote:
+> 
+> Most ARM(64) PCI/MSI domains mask and unmask in the parent domain after or
+> before the PCI mask/unmask operation takes place. So there are more than a
+> dozen of the same wrapper implementation all over the place.
+> 
+> Don't make the same mistake with the new per device PCI/MSI domains and
+> provide a static key which lets the domain implementation enable this
+> sequence in the PCI/MSI code.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> ---
+>  drivers/pci/msi/irqdomain.c |   30 ++++++++++++++++++++++++++++++
+>  include/linux/msi.h         |    2 ++
+>  2 files changed, 32 insertions(+)
+> 
+> --- a/drivers/pci/msi/irqdomain.c
+> +++ b/drivers/pci/msi/irqdomain.c
+> @@ -148,17 +148,45 @@ static void pci_device_domain_set_desc(m
+>  	arg->hwirq = desc->msi_index;
+>  }
+>  
+> +static DEFINE_STATIC_KEY_FALSE(pci_msi_mask_unmask_parent);
+> +
+> +/**
+> + * pci_device_msi_mask_unmask_parent_enable - Enable propagation of mask/unmask
+> + *					      to the parent interrupt chip
+> + *
+> + * For MSI parent interrupt domains which want to mask at the parent interrupt
+> + * chip too.
+> + */
+> +void pci_device_msi_mask_unmask_parent_enable(void)
+> +{
+> +	static_branch_enable(&pci_msi_mask_unmask_parent);
+> +}
+> +
+> +static __always_inline void cond_mask_parent(struct irq_data *data)
+> +{
+> +	if (static_branch_unlikely(&pci_msi_mask_unmask_parent))
+> +		irq_chip_mask_parent(data);
+> +}
+> +
+> +static __always_inline void cond_unmask_parent(struct irq_data *data)
+> +{
+> +	if (static_branch_unlikely(&pci_msi_mask_unmask_parent))
+> +		irq_chip_unmask_parent(data);
+> +}
+> +
+>  static void pci_mask_msi(struct irq_data *data)
+>  {
+>  	struct msi_desc *desc = irq_data_get_msi_desc(data);
+>  
+>  	pci_msi_mask(desc, BIT(data->irq - desc->irq));
+> +	cond_mask_parent(data);
 
-On 2022/11/21 3:49, Steven Rostedt wrote:
-> On Fri, 18 Nov 2022 18:21:12 +0800
-> Yang Jihong <yangjihong1@huawei.com> wrote:
-> 
->>> That way we can see the broken trace event and not just silently drop it.
->>>    
->> Ok, will change in next version.(Because iter->seq.seq.len may be
->> smaller than strlen(dots), direct subtraction here may not be appropriate.)
-> 
-> We should only need to do this if the len is maxed out.
-> 
-> Hmm, len is only updated if it did actually copy it.
-> 
-> Perhaps we could just add:
-> 
-> 	trace_seq_puts(&iter->seq, "[LINE TOO BIG]\n");
-> 
-The v3 patch has been sent according to this solution.
+I find this a bit odd. If anything, I'd rather drop the masking at the
+PCI level and keep it local to the interrupt controller, because this
+is likely to be more universal than the equivalent PCI operation
+(think multi-MSI, for example, which cannot masks individual MSIs).
+
+Another thing is that the static key is a global state. Nothing says
+that masking one way or the other is a universal thing, specially when
+you have multiple interrupt controllers dealing with MSIs in different
+ways. For example, GICv3 can use both the ITS and the GICv3-MBI frame
+at the same time for different PCI RC. OK, they happen to deal with
+MSIs in the same way, but you hopefully get my point.
 
 Thanks,
-Yang
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
