@@ -2,93 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD901637EA2
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 18:54:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C45A637EA7
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 18:55:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbiKXRyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 12:54:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45990 "EHLO
+        id S229733AbiKXRzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 12:55:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiKXRyW (ORCPT
+        with ESMTP id S229646AbiKXRyy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 12:54:22 -0500
+        Thu, 24 Nov 2022 12:54:54 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3256314
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 09:53:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A476550;
+        Thu, 24 Nov 2022 09:54:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E2A0DB82898
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 17:53:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 229FAC433D6;
-        Thu, 24 Nov 2022 17:53:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0CF51B8287B;
+        Thu, 24 Nov 2022 17:54:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9263AC433C1;
+        Thu, 24 Nov 2022 17:54:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669312406;
-        bh=0CkHSWHK0YdycIG/SfO26rBNHInfTiEV4KS+PF+SzUw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W4jWlBBlJByIYSN68t3DNK9LN4bNW0O1ifsqo9VkFJLLrC8uN//iE2yD6G/S1yKpl
-         Fuu+Y9PIYBwOQ73akQvI/cr6IuvrGOXMwmwS1tx86yUsz8v058DYX1rZYx35J1q7kP
-         KgQ7C8K4rHPsddgGm6S1KyOsoBg1YEc6oTK7RnWC81RMSM8pdkfg5y90Egs5yNCiiX
-         qIBwuTHHbkyU/eQJmUulWj+Im7BPDdhB6+htPyPyBgnNQhPYkWi9gIrSth1bFBLd1u
-         9X74AQvCXrOEX4aXgDU5ICH0nGqX6Zv9+gCOJI+b87wOScjooUQMMutWCbPbzg0JOb
-         o5E9LuV+BqOyQ==
-Date:   Thu, 24 Nov 2022 23:23:22 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     ye.xingchen@zte.com.cn
-Cc:     kishon@kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] phy: use devm_platform_get_and_ioremap_resource()
-Message-ID: <Y3+vklHsXk+FftOe@matsya>
-References: <202211171411439883050@zte.com.cn>
+        s=k20201202; t=1669312444;
+        bh=He3Pd8IkhWybpRjkE2MQUgnr0yhm6m/2ss8+4XAeJEQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mxXZ8xLhnUMUDo7BZKZ1qjitMkHand9xKrfnOrc1LhD0+YmIs0C+8lGkhpT+8uyIU
+         Y3YUnrYy6puecAW7EvhucIYSZboj5N1Ho+dLMCq6h5QdvGh7ppDVPbJaYbIU/xAlpz
+         rOUtJ9kp9c/eIKh3vFcKZ0iH2DL/Dahths77alCoXqdlsioTKus2T80QMnjgi5EIFQ
+         1fUSxEL0E6BKLRQtZ7wyhC2tbPe5W1o36jKYj7wajylsB5MiKaByqvmOvhbhR9r96K
+         uiPo3ApkYRJZUSAvclVFiGNT8h+wM8FzY1YCCJD68dVY3DbXSBU2tq/Cmzs629VT+D
+         gmS6TFWqytxUg==
+Message-ID: <27d0de3e-1006-dd3a-0e91-ae8025ef8426@kernel.org>
+Date:   Thu, 24 Nov 2022 17:54:00 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202211171411439883050@zte.com.cn>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 2/3] RISC-V: uapi: add HWCAP for Bitmanip/Scalar Crypto
+Content-Language: en-US
+To:     Samuel Ortiz <sameo@rivosinc.com>
+Cc:     "Hongren (Zenithal) Zheng" <i@zenithal.me>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <anup@brainfault.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>, linux-mm@kvack.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        linux-man@vger.kernel.org, Jiatai He <jiatai2021@iscas.ac.cn>,
+        Heiko Stuebner <heiko@sntech.de>
+References: <YqYz+xDsXr/tNaNu@Sun> <YqY0i22SdbHjB/MX@Sun>
+ <Y385rS/5zDaDJ3Os@vermeer> <Y39AXYPFzSiBngwI@wendy>
+ <Y39Lwp4rQc3Qkl0i@vermeer> <Y39blUaC/jHiOYCk@wendy>
+ <Y3+mBAV8oxphjHcJ@vermeer> <c9ae9644-5cd0-29c2-a25c-bb497dfcb1c8@kernel.org>
+ <Y3+rE6j/CzTpINi+@vermeer>
+From:   Conor Dooley <conor@kernel.org>
+In-Reply-To: <Y3+rE6j/CzTpINi+@vermeer>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17-11-22, 14:11, ye.xingchen@zte.com.cn wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
+On 24/11/2022 17:34, Samuel Ortiz wrote:
+> On Thu, Nov 24, 2022 at 05:20:37PM +0000, Conor Dooley wrote:
+>> On 24/11/2022 17:12, Samuel Ortiz wrote:
+>>> [You don't often get email from sameo@rivosinc.com. Learn why this is important at https://aka.ms/LearnAboutSenderIdentification ]
+>>>
+>>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>>>
+>>> On Thu, Nov 24, 2022 at 11:55:01AM +0000, Conor Dooley wrote:
+>>>> On Thu, Nov 24, 2022 at 11:47:30AM +0100, Samuel Ortiz wrote:
+>>>>
+>>>>> Patch #1 is definitely needed regardless of which interface we pick for
+>>>>> exposing the ISA strings to userspace.
+>>>>
+>>>> I took another look at #1, and I feel more confused about what
+>>>> constitutes canonical order than I did before! If you know better than
+>>>> I, and you probably do since you're interested in these 6 month old
+>>>> patches, some insight would be appreciated!
+>>>
+>>> Assuming we don't go with hwcap, I dont think the order of the
+>>> riscv_isa_ext_id enum matters that much?
+>>
+>> The chief put it in canonical order so that's good enough for me!
+>>
+>>>
+>>> iiuc we're building the cpuinfo string from the riscv_isa_ext_data
+>>> array, and I think the current code is incorrect:
+>>>
+>>> static struct riscv_isa_ext_data isa_ext_arr[] = {
+>>>     __RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
+>>>     __RISCV_ISA_EXT_DATA(sstc, RISCV_ISA_EXT_SSTC),
+>>>     __RISCV_ISA_EXT_DATA(svinval, RISCV_ISA_EXT_SVINVAL),
+>>>     __RISCV_ISA_EXT_DATA(svpbmt, RISCV_ISA_EXT_SVPBMT),
+>>>     __RISCV_ISA_EXT_DATA(zicbom, RISCV_ISA_EXT_ZICBOM),
+>>>     __RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
+>>>     __RISCV_ISA_EXT_DATA("", RISCV_ISA_EXT_MAX),
+>>> };
+>>>
+>>> zicbom and zihintpause should come before supervisor level extensions.
+>>> I'm going to send a patch for that.
+>>
+>> idk, Palmer explicitly re-ordered this:
+>> https://lore.kernel.org/linux-riscv/20220920204518.10988-1-palmer@rivosinc.com/
+>>
+>> By my reading of the isa manual, what Palmer did is correct as
+>> those are not "Additional Standard Extensions". /shrug
 > 
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
+> Hmm, by their name (Z[a-b]+) they are Additional Standard Extensions.
+> What am I missing?
 
-Applied, thanks
+Right, and this is where I get confused. Zam and Ztso *are* Additional
+Standard Extensions, I think we can agree on that one? For those
+extensions:
+\chapter{``Ztso'' Standard Extension for Total Store Ordering, v0.1}
+\chapter{``Zam'' Standard Extension for Misaligned Atomics, v0.1}
 
-> 
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
-> ---
->  drivers/phy/marvell/phy-mmp3-hsic.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/phy/marvell/phy-mmp3-hsic.c b/drivers/phy/marvell/phy-mmp3-hsic.c
-> index 7cccf01848d8..f2537fdcc3ab 100644
-> --- a/drivers/phy/marvell/phy-mmp3-hsic.c
-> +++ b/drivers/phy/marvell/phy-mmp3-hsic.c
-> @@ -41,12 +41,10 @@ static int mmp3_hsic_phy_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
->  	struct phy_provider *provider;
-> -	struct resource *resource;
->  	void __iomem *base;
->  	struct phy *phy;
-> 
-> -	resource = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	base = devm_ioremap_resource(dev, resource);
-> +	base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
->  	if (IS_ERR(base))
->  		return PTR_ERR(base);
-> 
-> -- 
-> 2.25.1
+They're also called out specifically in the table:
+https://github.com/riscv/riscv-isa-manual/blob/master/src/naming.tex#L147
 
--- 
-~Vinod
+For Zihintpause however:
+\chapter{``Zihintpause'' Pause Hint, Version 2.0}
+
+See what I mean? I looked at the specs for the bitmanip stuff and for
+crypto, which both never mention being standard.
+
+That table has the caption:
+> The table also defines the canonical order in which extension names
+> must appear in the name string, with top-to-bottom in table
+> indicating first-to-last in the name string. 
+
+It only calls out Zicsr, Zifencei, Zam and Ztso are being permitted
+before Sdef, but as I said I am not a specs person, so perhaps some
+of the extensions in question are intended to go there but have not
+yet been merged into the isa manual doc. Zihintpause *is* in the
+isa manual though but not specifically called out.
+
+Anyways, hopefully that at least helps with my line of thinking!
+
+Conor.
+
