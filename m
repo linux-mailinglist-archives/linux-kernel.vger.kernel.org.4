@@ -2,77 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15BEC63756E
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 10:43:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D850F637573
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 10:44:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbiKXJnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 04:43:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53218 "EHLO
+        id S229959AbiKXJoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 04:44:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbiKXJnd (ORCPT
+        with ESMTP id S229609AbiKXJoT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 04:43:33 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3774DE9176;
-        Thu, 24 Nov 2022 01:43:31 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id f18so2933676ejz.5;
-        Thu, 24 Nov 2022 01:43:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2RPW8A8622IBfO1EX5iRm8HxiUyxrUE7FK5Jnq+yG/M=;
-        b=otDsLaoj6m8sjFQenn/qaHPEk1row/8usasDE1e9/mvhHyyjyZEdx9XgDl6enKOHbJ
-         PLCkcrz+c4/IWc5w1MwZ7weH5EBbibB381Mc7rUd4zvCUguLSb4eipvJhuWCHCpFQjBg
-         6MkyzCGj4taZ98hndmuRbKBeTwQ194I4ZeIm+NcA03AuvtXUFsitoKsEruswn+57zM8J
-         LZNvPI+k2NJ78HS2IyS8CeKNuAiuLHseG3snx5mVjtgKuAsktsFfdbA4Ne/n1D03gL2e
-         a9Ki40VRxMD1AvXOX/70LW1KD/OgrnPJPqZEtQrcSj7YxmHnP9X0mjtY8hqMGOOvoYpi
-         o0OA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2RPW8A8622IBfO1EX5iRm8HxiUyxrUE7FK5Jnq+yG/M=;
-        b=ByZFlbHPO1q8mC0cHjB+yq+Lqb1I7daPNU1BoijGHe0H95ImIJyVla8rVOx4q2A8y3
-         qFgFoQs4mJXovKPBbOwkn87HzljQBk5vykm/qHu1/Ao35/iHE2Ln/mTIMWfeElq/5Ryz
-         XYBKFnNGULvZHdu4ETmtHRui78NvPkipul0FjLlEmmemY039gBuzxc0K9dJDvolSTL9L
-         FuunG3Wvfz2AaN0728vER3Ulr4BHo9BE2KQwfRg6UlYjCjnlLRIK67xgPFTStgwRKwTZ
-         vquUfzKzoxhwbUJ2QBFT5ZaZy3lMJH4eJbNeXHjdEnHAHKAu8QZJgTaLKFvno34RvbdT
-         IBEg==
-X-Gm-Message-State: ANoB5pnY/2DfsIbfqm8aQFiDncaufyri3EvLcRnKUOcxcWkVO/1JEM3g
-        DdyHmvsGxa9e3Snf/ipNPEU=
-X-Google-Smtp-Source: AA0mqf6Rch2fQrPwnw9noSmJ5cc6rZAo9kXxOVzWmvs3GZ5yxKzJEnZh47tcO3zkLZ8JM8YTUyrsTw==
-X-Received: by 2002:a17:906:3c4d:b0:78d:f2d8:4623 with SMTP id i13-20020a1709063c4d00b0078df2d84623mr28003859ejg.274.1669283009642;
-        Thu, 24 Nov 2022 01:43:29 -0800 (PST)
-Received: from [192.168.178.21] (p5b0ea229.dip0.t-ipconnect.de. [91.14.162.41])
-        by smtp.gmail.com with ESMTPSA id 11-20020a170906300b00b00781e7d364ebsm230155ejz.144.2022.11.24.01.43.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Nov 2022 01:43:28 -0800 (PST)
-Message-ID: <63972059-1c23-ceb9-841c-1cfee29a1c77@gmail.com>
-Date:   Thu, 24 Nov 2022 10:43:26 +0100
+        Thu, 24 Nov 2022 04:44:19 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1478654CD;
+        Thu, 24 Nov 2022 01:44:16 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 0F58D24E2E7;
+        Thu, 24 Nov 2022 17:44:15 +0800 (CST)
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 24 Nov
+ 2022 17:44:15 +0800
+Received: from [192.168.125.96] (183.27.97.81) by EXMBX068.cuchost.com
+ (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 24 Nov
+ 2022 17:44:14 +0800
+Message-ID: <eeffbdd3-51d3-87cb-dda1-81b99ab51698@starfivetech.com>
+Date:   Thu, 24 Nov 2022 17:44:14 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [Linaro-mm-sig] Re: [PATCH] dma-buf: A collection of typo and
- documentation fixes
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v1 3/4] soc: starfive: Add StarFive JH71XX pmu driver
 Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "T.J. Mercier" <tjmercier@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org
-References: <20221123193519.3948105-1-tjmercier@google.com>
- <260a86f0-057e-e235-ac38-abeb922d0dc1@amd.com>
- <Y38z6A5IF/BlXVPp@phenom.ffwll.local>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <Y38z6A5IF/BlXVPp@phenom.ffwll.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+To:     Conor Dooley <conor.dooley@microchip.com>
+CC:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        <linux-riscv@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221118133216.17037-1-walker.chen@starfivetech.com>
+ <20221118133216.17037-4-walker.chen@starfivetech.com>
+ <CAJM55Z9jfpOW49Z5cdR18T0w4Ae6CQAYF-AsCD8eOcPczwgoZA@mail.gmail.com>
+ <6303c341-a691-fd52-2861-74e9d3ea09c9@starfivetech.com>
+ <Y385J2m5YByyAz0g@wendy>
+From:   Walker Chen <walker.chen@starfivetech.com>
+In-Reply-To: <Y385J2m5YByyAz0g@wendy>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [183.27.97.81]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX068.cuchost.com
+ (172.16.6.68)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,121 +62,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 24.11.22 um 10:05 schrieb Daniel Vetter:
-> On Thu, Nov 24, 2022 at 08:03:09AM +0100, Christian König wrote:
->> Am 23.11.22 um 20:35 schrieb T.J. Mercier:
->>> I've been collecting these typo fixes for a while and it feels like
->>> time to send them in.
->>>
->>> Signed-off-by: T.J. Mercier <tjmercier@google.com>
->> Acked-by: Christian König <christian.koenig@amd.com>
-> Will you also push this? I think tj doesn't have commit rights yet, and I
-> somehow can't see the patch locally (I guess it's stuck in moderation).
+On 2022/11/24 17:28, Conor Dooley wrote:
+> Hey Walker,
+> Just jumping in here...
+> 
+> On Thu, Nov 24, 2022 at 05:08:57PM +0800, Walker Chen wrote:
+>> On 2022/11/19 2:31, Emil Renner Berthing wrote:
+>> > On Fri, 18 Nov 2022 at 14:35, Walker Chen <walker.chen@starfivetech.com> wrote:
+> 
+>> >> diff --git a/include/soc/starfive/pm_domains.h b/include/soc/starfive/pm_domains.h
+>> >> new file mode 100644
+>> >> index 000000000000..a20e28e9baf3
+>> >> --- /dev/null
+>> >> +++ b/include/soc/starfive/pm_domains.h
+>> >> @@ -0,0 +1,15 @@
+>> >> +/* SPDX-License-Identifier: GPL-2.0 */
+>> >> +/*
+>> >> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
+>> >> + * Author: Walker Chen <walker.chen@starfivetech.com>
+>> >> + */
+>> >> +
+>> >> +#ifndef __SOC_STARFIVE_PMDOMAINS_H__
+>> >> +#define __SOC_STARFIVE_PMDOMAINS_H__
+>> >> +
+>> >> +#include <linux/types.h>
+>> >> +
+>> >> +void starfive_pmu_hw_event_turn_on(u32 mask);
+>> >> +void starfive_pmu_hw_event_turn_off(u32 mask);
+>> >> +
+>> >> +#endif /* __SOC_STARFIVE_PMDOMAINS_H__ */
+>> > 
+>> > The header and functions within are named very generic, but
+>> > implemented by the jh71xx-specific driver.
+>> > 
+>> > Also who should use this header? These functions are never called by
+>> > anything in this series.
+>> 
+>> These two functions will be used by the GPU module. Only the power-off
+>> of the GPU is not controlled by the software through PMU module. So
+>> here the functions are needed to export.
+> 
+> ...the general policy is to avoid adding things without users. I think
+> they should be kept as static functions for now & when your GPU driver
+> is being upstreamed you can expose these functions. That way your usage
+> of them can be reviewed with the appropriate context.
+> 
 
-I was just about to complain that this doesn't apply cleanly to 
-drm-misc-next.
+OK, thank you for your advice. I will modify the code according to your suggestion
+ in the next version of patch.
 
-Trivial problem, one of the typos was just removed by Dimitry a few 
-weeks ago.
-
-I've fixed that up locally and pushed the result, but nevertheless 
-please make sure that DMA-buf patches are based on the drm branches.
-
-Thanks,
-Christian.
-
-> -Daniel
->
->>> ---
->>>    drivers/dma-buf/dma-buf.c | 14 +++++++-------
->>>    include/linux/dma-buf.h   |  6 +++---
->>>    2 files changed, 10 insertions(+), 10 deletions(-)
->>>
->>> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
->>> index dd0f83ee505b..614ccd208af4 100644
->>> --- a/drivers/dma-buf/dma-buf.c
->>> +++ b/drivers/dma-buf/dma-buf.c
->>> @@ -1141,7 +1141,7 @@ EXPORT_SYMBOL_NS_GPL(dma_buf_unmap_attachment, DMA_BUF);
->>>     *
->>>     * @dmabuf:	[in]	buffer which is moving
->>>     *
->>> - * Informs all attachmenst that they need to destroy and recreated all their
->>> + * Informs all attachments that they need to destroy and recreate all their
->>>     * mappings.
->>>     */
->>>    void dma_buf_move_notify(struct dma_buf *dmabuf)
->>> @@ -1159,11 +1159,11 @@ EXPORT_SYMBOL_NS_GPL(dma_buf_move_notify, DMA_BUF);
->>>    /**
->>>     * DOC: cpu access
->>>     *
->>> - * There are mutliple reasons for supporting CPU access to a dma buffer object:
->>> + * There are multiple reasons for supporting CPU access to a dma buffer object:
->>>     *
->>>     * - Fallback operations in the kernel, for example when a device is connected
->>>     *   over USB and the kernel needs to shuffle the data around first before
->>> - *   sending it away. Cache coherency is handled by braketing any transactions
->>> + *   sending it away. Cache coherency is handled by bracketing any transactions
->>>     *   with calls to dma_buf_begin_cpu_access() and dma_buf_end_cpu_access()
->>>     *   access.
->>>     *
->>> @@ -1190,7 +1190,7 @@ EXPORT_SYMBOL_NS_GPL(dma_buf_move_notify, DMA_BUF);
->>>     *   replace ION buffers mmap support was needed.
->>>     *
->>>     *   There is no special interfaces, userspace simply calls mmap on the dma-buf
->>> - *   fd. But like for CPU access there's a need to braket the actual access,
->>> + *   fd. But like for CPU access there's a need to bracket the actual access,
->>>     *   which is handled by the ioctl (DMA_BUF_IOCTL_SYNC). Note that
->>>     *   DMA_BUF_IOCTL_SYNC can fail with -EAGAIN or -EINTR, in which case it must
->>>     *   be restarted.
->>> @@ -1264,10 +1264,10 @@ static int __dma_buf_begin_cpu_access(struct dma_buf *dmabuf,
->>>     * preparations. Coherency is only guaranteed in the specified range for the
->>>     * specified access direction.
->>>     * @dmabuf:	[in]	buffer to prepare cpu access for.
->>> - * @direction:	[in]	length of range for cpu access.
->>> + * @direction:	[in]	direction of access.
->>>     *
->>>     * After the cpu access is complete the caller should call
->>> - * dma_buf_end_cpu_access(). Only when cpu access is braketed by both calls is
->>> + * dma_buf_end_cpu_access(). Only when cpu access is bracketed by both calls is
->>>     * it guaranteed to be coherent with other DMA access.
->>>     *
->>>     * This function will also wait for any DMA transactions tracked through
->>> @@ -1307,7 +1307,7 @@ EXPORT_SYMBOL_NS_GPL(dma_buf_begin_cpu_access, DMA_BUF);
->>>     * actions. Coherency is only guaranteed in the specified range for the
->>>     * specified access direction.
->>>     * @dmabuf:	[in]	buffer to complete cpu access for.
->>> - * @direction:	[in]	length of range for cpu access.
->>> + * @direction:	[in]	direction of access.
->>>     *
->>>     * This terminates CPU access started with dma_buf_begin_cpu_access().
->>>     *
->>> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
->>> index 71731796c8c3..1d61a4f6db35 100644
->>> --- a/include/linux/dma-buf.h
->>> +++ b/include/linux/dma-buf.h
->>> @@ -330,7 +330,7 @@ struct dma_buf {
->>>    	 * @lock:
->>>    	 *
->>>    	 * Used internally to serialize list manipulation, attach/detach and
->>> -	 * vmap/unmap. Note that in many cases this is superseeded by
->>> +	 * vmap/unmap. Note that in many cases this is superseded by
->>>    	 * dma_resv_lock() on @resv.
->>>    	 */
->>>    	struct mutex lock;
->>> @@ -365,7 +365,7 @@ struct dma_buf {
->>>    	 */
->>>    	const char *name;
->>> -	/** @name_lock: Spinlock to protect name acces for read access. */
->>> +	/** @name_lock: Spinlock to protect name access for read access. */
->>>    	spinlock_t name_lock;
->>>    	/**
->>> @@ -402,7 +402,7 @@ struct dma_buf {
->>>    	 *   anything the userspace API considers write access.
->>>    	 *
->>>    	 * - Drivers may just always add a write fence, since that only
->>> -	 *   causes unecessarily synchronization, but no correctness issues.
->>> +	 *   causes unnecessary synchronization, but no correctness issues.
->>>    	 *
->>>    	 * - Some drivers only expose a synchronous userspace API with no
->>>    	 *   pipelining across drivers. These do not set any fences for their
+Best Regards,
+Walker Chen
 
