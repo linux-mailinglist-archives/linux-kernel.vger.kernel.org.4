@@ -2,74 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71F366373D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:23:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4D296373D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:26:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbiKXIXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 03:23:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49400 "EHLO
+        id S229581AbiKXI0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 03:26:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiKXIXG (ORCPT
+        with ESMTP id S229480AbiKXI0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 03:23:06 -0500
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7C12B260
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:23:05 -0800 (PST)
-Received: by mail-vs1-xe34.google.com with SMTP id 124so879601vsv.4
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:23:05 -0800 (PST)
+        Thu, 24 Nov 2022 03:26:17 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99538DA4E0
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:26:15 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id k7so859245pll.6
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:26:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5qmRgK6iHDDD9jUd+afLu/0d0Ew0cdPS8bY9iC3x34M=;
-        b=wrIlOBoMs6QQSclG7dH6GjVcfyrqXV0yQ1u3aG+e1sAqHH9Y+hHttWomM3LZqUw32k
-         nkJkU1eMPUhvTLG6ds11eZR6MuazdqHYrPsVYBbaVDditxbUQVOrm1O2ywORTCwjS7EP
-         +U7cMnomLkAZQb/5Hfdo/iUhj+31WBKdr6OnrupJVbqcemQ4R3q87icWxkahNWilgqtU
-         S06UZIzovWkovRY41VSUfHF03vkQYG4LDoLdIbNpzbEcEX8Dv0jYLZN/DJrlEYW+e+Gn
-         mO3WdJO1WCkFBf5RZT4w8Do+nJXlo5dFYteduLDUxfR0RvZ/pWDjKcIcvFVb46fCWxfs
-         r11A==
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iq+4pfpVj2YEkmw3BdrSeu5qIO7TFnvAEvQVd61pySI=;
+        b=c9D3h9my8OzUH9sGDlOD2tEvIgNEtuRwLd5yV0iddgrBlQ6Vd/kkD/2cOnt/qJGtHl
+         hwB+GCmeBHg6jpsWCCpSx9B1vLeir0CF3rStUqkQDDwL/W+c1tD34kFkDQsnUd7odEIl
+         b3/WnZhkr8aFhMRhFpnrGwW3DZsGQd5f4vZxD77drUNjVnVvRgK+VkrfryBQc/skVA1y
+         nY1yscS3s7/BCgvaMtXZLnowbEhUAX35ZJGD57/5oQSppZPBuEr3PM9mcJCeBJT0behS
+         COV0ZMk8jSdHFpYzeGDAacRJr8FRCdnGkhjHPwM/tCiDTHY2Y3/u0bHyFADgqJ0jL8Dg
+         vKog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5qmRgK6iHDDD9jUd+afLu/0d0Ew0cdPS8bY9iC3x34M=;
-        b=rSaWMl2g9XJAnCWygq/0pYR6M/Rg7+Vm7ZNOa1uDYPwCLsUwyTpi3SrO8Y6L5SqF5I
-         mHMb0qTG9Oy3A3JM8/i5vb2qlEUVTMqM1kxr2F+U1yfrwFkQOALWkVPqoL75FOJ6pRyC
-         tOerKXiCvB2/E6I8aO2XmDTLiQiGuTk/5XLSdA/WQsBro6HyI4NQJ0LG7GtxNnAmcqRT
-         7B1td5zAFsVG7HasUt0n6y5Nx87x8bgL/3z05RyLjLamUWshUo7IShQSRlXSYxMIXwsC
-         a3j0im/g8wfs3t/LLiXc0Q23pt/w3gnew2GaQw2RMJk5ZuTW4MpJX3vrK410shn0hyot
-         8pJQ==
-X-Gm-Message-State: ANoB5pk0EGRHb3yk4IMWWmX6XCW+OQKDVBb/RKl3SkeDyUHx4CKhkxnF
-        1eQWK4EvwQjk/SLfKEUG5xNRRCrxOvIxQ+4EUOUNVw==
-X-Google-Smtp-Source: AA0mqf5soPczq85B7Su9wnMaQiQuhCvUW6GSUbGBrWPQb6CMzXdAbt/bQwCjTHuBblb7HRlAv3kudwdSeixLE4PUChQ=
-X-Received: by 2002:a05:6102:829:b0:3b0:6449:baba with SMTP id
- k9-20020a056102082900b003b06449babamr6403999vsb.61.1669278184524; Thu, 24 Nov
- 2022 00:23:04 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iq+4pfpVj2YEkmw3BdrSeu5qIO7TFnvAEvQVd61pySI=;
+        b=qb2veD0yeAQXW9RVEtKPQRgpb/jRI9l02YxGOHNIeGizavSWtFp/2Fjt3ptku0yys/
+         I6jqX3WBboVsRAfDFDZEy07ZLe7c94RauZsN1KdouTyAI2TmHU/10t+XjJertCxQ/c2r
+         vvC+yz//KvbYnLa66CAnsPNt/9u7MNjVhICc3V+oIbO0laXv9nrf3JEVG0+7+h57Gm4N
+         tAwxT9OAfNvXY80Nc2Jtk96Y/mylmT5RKLSVozzAHhDTXBrChH+IEvjRQ9ziaNzjlwuo
+         uTzjHDBngWPc1cfoc4ddotvpUgiusD1Qws671/I6k75vDAkiD4qml3szzW5w2wBmDXB8
+         Nc7w==
+X-Gm-Message-State: ANoB5pmxz5svVqVfH/MPaLEENKQ6D+0jYrZFKrgiYDoHr0XERRwr2Dv9
+        mwlvaUnWrCs7l6R/hXFYgQ9bUzKFyi43nA==
+X-Google-Smtp-Source: AA0mqf5MGYHuYsuRjUW2rJsuasqSdOayajlDgv8RqUu8ILUS+dhJ7O4r/rxC1MiPkD7GHc5HNv84eg==
+X-Received: by 2002:a17:90a:a381:b0:218:6dc3:55b8 with SMTP id x1-20020a17090aa38100b002186dc355b8mr34448206pjp.189.1669278375137;
+        Thu, 24 Nov 2022 00:26:15 -0800 (PST)
+Received: from debug.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id x11-20020a170902a38b00b0017849a2b56asm638907pla.46.2022.11.24.00.26.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Nov 2022 00:26:14 -0800 (PST)
+Date:   Thu, 24 Nov 2022 00:26:12 -0800
+From:   Deepak Gupta <debug@rivosinc.com>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     palmer@dabbelt.com, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
+        Jisheng Zhang <jszhang@kernel.org>
+Subject: Re: [PATCH] riscv: VMAP_STACK overflow detection thread-safe
+Message-ID: <20221124082612.GC1149630@debug.ba.rivosinc.com>
+References: <20221124005006.1788315-1-debug@rivosinc.com>
+ <CAJF2gTSwMZQvSNxb2_5GNrVG0pwfXWsHmp8zZG=gFHnhc95bjQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-12-uwe@kleine-koenig.org> <CAMRc=Mfjcs-BBFhr8O1O956f4jdvAzY9ofZs1fme8+Ki=T60JA@mail.gmail.com>
- <CAMRc=MfwSabay==DcyONc4AVgOPETsA5x3wuLX05Ndvfwiv4bg@mail.gmail.com> <20221123164132.gfglkwgknqkwywnq@pengutronix.de>
-In-Reply-To: <20221123164132.gfglkwgknqkwywnq@pengutronix.de>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 24 Nov 2022 09:22:53 +0100
-Message-ID: <CAMRc=Mf=h_nVAzRhY_YEuiur+9Wbx+kEwPj-iB=PqHn3ULYJ6A@mail.gmail.com>
-Subject: Re: [PATCH 011/606] gpio: max732x: Convert to i2c's .probe_new()
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <uwe@kleine-koenig.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        linux-gpio@vger.kernel.org,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        Grant Likely <grant.likely@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <CAJF2gTSwMZQvSNxb2_5GNrVG0pwfXWsHmp8zZG=gFHnhc95bjQ@mail.gmail.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,79 +72,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 5:41 PM Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
->
-> On Wed, Nov 23, 2022 at 04:49:05PM +0100, Bartosz Golaszewski wrote:
-> > On Wed, Nov 23, 2022 at 10:47 AM Bartosz Golaszewski <brgl@bgdev.pl> wr=
-ote:
-> > >
-> > > On Fri, Nov 18, 2022 at 11:46 PM Uwe Kleine-K=C3=B6nig <uwe@kleine-ko=
-enig.org> wrote:
-> > > >
-> > > > From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> > > >
-> > > > .probe_new() doesn't get the i2c_device_id * parameter, so determin=
-e
-> > > > that explicitly in the probe function.
-> > > >
-> > > > Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.d=
-e>
-> > > > ---
-> > > >  drivers/gpio/gpio-max732x.c | 6 +++---
-> > > >  1 file changed, 3 insertions(+), 3 deletions(-)
-> > > >
-> > > > diff --git a/drivers/gpio/gpio-max732x.c b/drivers/gpio/gpio-max732=
-x.c
-> > > > index da6972117030..68e982cdee73 100644
-> > > > --- a/drivers/gpio/gpio-max732x.c
-> > > > +++ b/drivers/gpio/gpio-max732x.c
-> > > > @@ -608,9 +608,9 @@ static struct max732x_platform_data *of_gpio_ma=
-x732x(struct device *dev)
-> > > >         return pdata;
-> > > >  }
-> > > >
-> > > > -static int max732x_probe(struct i2c_client *client,
-> > > > -                                  const struct i2c_device_id *id)
-> > > > +static int max732x_probe(struct i2c_client *client)
-> > > >  {
-> > > > +       const struct i2c_device_id *id =3D i2c_client_get_device_id=
-(client);
-> > > >         struct max732x_platform_data *pdata;
-> > > >         struct device_node *node;
-> > > >         struct max732x_chip *chip;
-> > > > @@ -707,7 +707,7 @@ static struct i2c_driver max732x_driver =3D {
-> > > >                 .name           =3D "max732x",
-> > > >                 .of_match_table =3D of_match_ptr(max732x_of_table),
-> > > >         },
-> > > > -       .probe          =3D max732x_probe,
-> > > > +       .probe_new      =3D max732x_probe,
-> > > >         .id_table       =3D max732x_id,
-> > > >  };
-> > > >
-> > > > --
-> > > > 2.38.1
-> > > >
-> > >
-> > > Applied, thanks!
-> > >
-> > > Bartosz
-> >
-> > Ugh, backing it out, I thought these patches were independent.
->
-> They depend on i2c_client_get_device_id which you can get into your tree
-> either by pulling in
->
->         https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c=
-/client_device_id_helper-immutable
->
-> or by waiting until this hits Linus Torvald's tree and updating to that.
->
-> I'd like to see the gpio patches go in via the gpio tree. If you choose
-> not to pull in the above and apply now, I will resend (per subsystem)
-> the remaining patches based on the next -rc1 containing that function.
->
+On Thu, Nov 24, 2022 at 09:32:19AM +0800, Guo Ren wrote:
+>> +.macro asm_per_cpu dst sym tmp
+>> +       REG_L \tmp, TASK_TI_CPU_NUM(tp)
+>> +       slli \tmp, \tmp, 0x3
+>> +       la \dst, __per_cpu_offset
+>> +       add \dst, \dst, \tmp
+>> +       REG_L \tmp, 0(\dst)
+>> +       la \dst, \sym
+>> +       add \dst, \dst, \tmp
+>Another tricky asm code of using percpu, I don't know how the percpu
+>maintenance guy thinks.
 
-That's alright, I pulled Wolfram's branch and re-applied the three patches.
-
-Bart
+On this, if you can point me to someone, I would like to get their feedback.
+While discussing this, one issue that comes in my mind is if the shift of 0x3 
+is correct or not on 32bit systems. I don't know what's the size of each entry
+in `__per_cpu_offset`. On 64bit it's 8 bytes and thus 3 bit shift.
