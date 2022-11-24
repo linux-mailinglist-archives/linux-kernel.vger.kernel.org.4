@@ -2,171 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35AEB637A0B
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 14:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC6F9637A0D
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 14:36:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230016AbiKXNgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 08:36:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57374 "EHLO
+        id S230071AbiKXNgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 08:36:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbiKXNgC (ORCPT
+        with ESMTP id S230052AbiKXNgw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 08:36:02 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31075A6F3
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 05:36:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669296960; x=1700832960;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jQQPQduFTRGPE6LuYI/cCbmJH48WxAJL8qGvr7aICxI=;
-  b=HMlGtYZRTskO/7jgGNqHazIzChB1jhwwXjdfFej1CI96SUOj+6NmnBUV
-   qp8ozLJIBjqvuaZI5tl/DdryEi0uCab3pdqc/x+tvG/dMX4pm77ptEbIw
-   75+v4MrEVfD68MBBIqEkyVpKNPqZoAsKe7/Bxf7iT9t4HBKTbvn3dHuBy
-   AlfLkiVu01bX5z8XaFs8A+QDZiYiYKUEVzSBFSh58/K27Gmobl7tejMy4
-   MbsFEEIMgrDXe0hkB0F71N2Z0NldDl6hpQ00qjlBVdse0V2/JP/+VRchw
-   pGuL+RQy395rosEZ+yH225ZJmeNRUitrMpXS/ZRGS1qxUXnHZ+D+yPQrI
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,190,1665471600"; 
-   d="scan'208";a="124960126"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Nov 2022 06:36:00 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Thu, 24 Nov 2022 06:35:53 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Thu, 24 Nov 2022 06:35:51 -0700
-Date:   Thu, 24 Nov 2022 13:35:33 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Anup Patel <anup@brainfault.org>
-CC:     Dan Carpenter <error27@gmail.com>, <oe-kbuild@lists.linux.dev>,
-        Randy Dunlap <rdunlap@infradead.org>, <lkp@intel.com>,
-        <oe-kbuild-all@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: drivers/cpuidle/cpuidle-riscv-sbi.c:506 sbi_genpd_probe() warn:
- missing error code 'ret'
-Message-ID: <Y39zJaTMWQk376zN@wendy>
-References: <202211220541.Ck9NkitJ-lkp@intel.com>
- <CAAhSdy2A26U5gF_WSfzcdT7v-Fg9aaKXLyT4M=4ba_=WboupzA@mail.gmail.com>
+        Thu, 24 Nov 2022 08:36:52 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057F96E552
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 05:36:51 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id x21so1996144ljg.10
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 05:36:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Vs9L6vGU7gC9jaDFCTKoT90tKFWWGxX97DU2d9lHvF4=;
+        b=d19D0fF+coPGhp8VVzw2altAjkhl/3oiBDfric6mOBmWmj87Pr9zJM3PGTekhD4sVt
+         wFuj7kgQTet2qXYdXMRmPesUdIEJ0JsEVgcD+XCMFp0f8OXbShyiex8jAJ0a2igFi5fu
+         TPQRHCg4eMdv5tXuoljajuukZ2/cQ2Jff4PonTZMrviDZ7fs65BOMKvaHrMcJp9Iq0tP
+         v8UXM9n7u42WRUN4C4+C0Wx9cvefTWZ3wyVnYQeMEninGQId9i1yf9XD/FTwTbfeXSuh
+         ow9tIMUjgfDMqWvtu6JLLqZbXmhNEjCeA4JbVVbExpxpU1NM64DdPMTV/7AlgXhXeN5h
+         Wi5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vs9L6vGU7gC9jaDFCTKoT90tKFWWGxX97DU2d9lHvF4=;
+        b=zSZcMN31yPTO8yoDsMJKwpl0JUyykTr4e+P47FdnNAJidD26caRMb8Ax0I0YZP9PNW
+         glgCIVKTB3A6AOSKJ90v14tLwgLTK6Lh5sypzhzRLRfqt/DNNw5UEBCtBuA5fkBXWGzp
+         YYkci93qUzKpgeyNJHqwk/kOxf9R6mGzv2YXRHnQ7k5TC9DcCqXAua4GH3luozn+6lDo
+         E9Qm0skRV6Ola2UYYJ1pQHkb+ijprVd7ETGoOgkkjIjdo7+pgk0hlMoXkdAMP/rENLgK
+         IylsUD5a6ISwfnP0Tz+odCYJMGByC+/TrgXIdZsJiSz68x8gvneEEudYbF0lY2mNhEGk
+         dC+Q==
+X-Gm-Message-State: ANoB5pm83ebAO/evG/t5GVSxC73dadIF9iz66Ebc1QmJb9Vq8wrY1szu
+        Y56qYbdf6gDVe+Oz8vync0txjQ==
+X-Google-Smtp-Source: AA0mqf6F/C4OYtDNr0WNh3JV00/TLQhx8VoEtP0tW4T703ElKtETYuElav0seRbBQaAaC7+ghamOjg==
+X-Received: by 2002:a2e:a988:0:b0:276:de0b:ce2d with SMTP id x8-20020a2ea988000000b00276de0bce2dmr4270430ljq.212.1669297009323;
+        Thu, 24 Nov 2022 05:36:49 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id q21-20020a0565123a9500b0049936272173sm123058lfu.204.2022.11.24.05.36.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Nov 2022 05:36:48 -0800 (PST)
+Message-ID: <93cc4e4b-4135-8a1f-c7b4-62c5da87bd8b@linaro.org>
+Date:   Thu, 24 Nov 2022 14:36:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAAhSdy2A26U5gF_WSfzcdT7v-Fg9aaKXLyT4M=4ba_=WboupzA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v1 2/2] memory: renesas-rpc-if: Add Octal DTR mode support
+Content-Language: en-US
+To:     JaimeLiao <jaimeliao.tw@gmail.com>, broonie@kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     jaimeliao@mxic.com.tw
+References: <20221124073957.22471-1-jaimeliao.tw@gmail.com>
+ <20221124073957.22471-3-jaimeliao.tw@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221124073957.22471-3-jaimeliao.tw@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Anup,
+On 24/11/2022 08:39, JaimeLiao wrote:
+> 1. Support Octal DTR manual mode (Program & Erase & register)
+> 2. Support diramap read (enable external address space read mode)
 
-On Tue, Nov 22, 2022 at 01:43:38PM +0530, Anup Patel wrote:
-> On Tue, Nov 22, 2022 at 12:41 PM Dan Carpenter <error27@gmail.com> wrote:
-> >
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > head:   eb7081409f94a9a8608593d0fb63a1aa3d6f95d8
-> > commit: f81f7861ee2aaa6f652f18e8f622547bdd379724 cpuidle: riscv: support non-SMP config
-> > date:   7 months ago
-> > config: riscv-randconfig-m031-20221121
-> > compiler: riscv64-linux-gcc (GCC) 12.1.0
-> >
-> > If you fix the issue, kindly add following tag where applicable
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Reported-by: Dan Carpenter <error27@gmail.com>
-> >
-> > smatch warnings:
-> > drivers/cpuidle/cpuidle-riscv-sbi.c:506 sbi_genpd_probe() warn: missing error code 'ret'
-> >
-> > vim +/ret +506 drivers/cpuidle/cpuidle-riscv-sbi.c
-> >
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  481  static int sbi_genpd_probe(struct device_node *np)
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  482  {
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  483       struct device_node *node;
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  484       int ret = 0, pd_count = 0;
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  485
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  486       if (!np)
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  487               return -ENODEV;
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  488
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  489       /*
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  490        * Parse child nodes for the "#power-domain-cells" property and
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  491        * initialize a genpd/genpd-of-provider pair when it's found.
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  492        */
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  493       for_each_child_of_node(np, node) {
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  494               if (!of_find_property(node, "#power-domain-cells", NULL))
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  495                       continue;
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  496
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  497               ret = sbi_pd_init(node);
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  498               if (ret)
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  499                       goto put_node;
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  500
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  501               pd_count++;
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  502       }
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  503
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  504       /* Bail out if not using the hierarchical CPU topology. */
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  505       if (!pd_count)
-> > 6abf32f1d9c500 Anup Patel 2022-02-10 @506               goto no_pd;
-> >
-> > Error code?
+If these are two separate features, you need two separate commits.
+
 > 
-> Yes, we intentionally "return 0" when there are no
-> generic power-domains defined for the CPUs, the
-> sbi_cpuidle_probe() continue further and try traditional
-> DT cpuidle states.
+> Signed-off-by: JaimeLiao <jaimeliao.tw@gmail.com>
+> ---
+>  drivers/memory/renesas-rpc-if.c | 56 +++++++++++++++++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+> 
+> diff --git a/drivers/memory/renesas-rpc-if.c b/drivers/memory/renesas-rpc-if.c
+> index bdf0a7f68ff2..db5019a7190e 100644
+> --- a/drivers/memory/renesas-rpc-if.c
+> +++ b/drivers/memory/renesas-rpc-if.c
+> @@ -462,6 +462,43 @@ void rpcif_prepare(struct rpcif *rpc, const struct rpcif_op *op, u64 *offs,
+>  
+>  		rpc->enable |= RPCIF_SMENR_SPIDB(rpcif_bit_size(op->data.buswidth));
+>  	}
+> +       /* Fixup in Octal DTR mode */
+> +	if (op->cmd.buswidth == 8 && op->cmd.ddr) {
+> +		rpc->bus_size = 2;
+> +
+> +		regmap_update_bits(rpc->regmap, RPCIF_PHYCNT,
+> +				   RPCIF_PHYCNT_OCTA(0x2) | RPCIF_PHYCNT_OCT |
+> +				   RPCIF_PHYCNT_PHYMEM(0x1) ,
+> +				   RPCIF_PHYCNT_OCTA(0x2) | RPCIF_PHYCNT_OCT |
+> +				   RPCIF_PHYCNT_PHYMEM(0x1));
+> +		regmap_update_bits(rpc->regmap, RPCIF_CMNCR, RPCIF_CMNCR_BSZ(1),
+> +				   RPCIF_CMNCR_BSZ(1));
+> +
+> +		regmap_update_bits(rpc->regmap, RPCIF_PHYOFFSET1,
+> +				   RPCIF_PHYOFFSET1_DDRTMG(3),
+> +				   RPCIF_PHYOFFSET1_DDRTMG(2));
+> +		regmap_update_bits(rpc->regmap, RPCIF_PHYOFFSET2,
+> +				   RPCIF_PHYOFFSET2_OCTTMG(7),
+> +				   RPCIF_PHYOFFSET2_OCTTMG(3));
+> +
+> +		if (op->ocmd.buswidth == 8 && RPCIF_SMENR_OCDE)
+> +			rpc->enable &= ~RPCIF_SMENR_OCDE;
+> +
+> +		if (op->addr.ddr)
+> +			rpc->enable &= ~RPCIF_SMENR_ADE(0xF) |
+> +					RPCIF_SMENR_ADE(0xc);
+> +
+> +		if (op->dummy.buswidth == 8)
+> +			rpc->dummy =
+> +				RPCIF_SMDMCR_DMCYC(op->dummy.ncycles / 2);
+> +
+> +		if (op->data.dir == RPCIF_DATA_IN)
+> +			/* Set Extenal Address space Read mode */
+> +			if (op->data.buswidth == 8 && op->data.ddr) {
+> +				regmap_update_bits(rpc->regmap, RPCIF_PHYCNT,
+> +					RPCIF_PHYCNT_EXDS, RPCIF_PHYCNT_EXDS);
+> +			}
 
-Happened upon this when looking for our other cpuidle conversation on
-lore earlier, would it not make more sense from a readability PoV to
-just return zero here?
-
-ret has to be zero at this point since:
-	ret = sbi_pd_init(node);
-	if (ret)
-		goto put_node;
-and the `goto no_pd` does not do any cleanup.
-
-Certainly, it'd look more intentional that way, no?
+Wrap it in {}. It's quite error-prone in such syntax.
 
 
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  507
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  508       /* Link genpd masters/subdomains to model the CPU topology. */
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  509       ret = dt_idle_pd_init_topology(np);
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  510       if (ret)
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  511               goto remove_pd;
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  512
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  513       return 0;
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  514
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  515  put_node:
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  516       of_node_put(node);
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  517  remove_pd:
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  518       sbi_pd_remove();
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  519       pr_err("failed to create CPU PM domains ret=%d\n", ret);
-
-I do find this cleanup a bit confusing though.
-It's probably just me not following, but I'd usually expect the teardown
-to get more complicated the later you leave the function, not simpler.
-
-How come, if sbi_od_init() fails, you need to call sbi_pd_remove()?
-Does it not clean up after itself, or is calling sbi_pd_remove() always
-a safe thing to do, even if, say, dt_idle_pd_alloc() failed?
-
-Similarly, how come the of_node_put() in the later failure cases?
-IIUC for_each_child_of_node() will leave us with a dangling of_node
-reference except if sbi_pd_init() fails.
-
-I'm probably missing something here, but it was at least non-obvious
-from the code. If I have missing something, and I probably have, please
-let me know what it is, I'd appreciate it!
-
-Thanks,
-Conor.
-
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  520  no_pd:
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  521       return ret;
-> > 6abf32f1d9c500 Anup Patel 2022-02-10  522  }
+Best regards,
+Krzysztof
 
