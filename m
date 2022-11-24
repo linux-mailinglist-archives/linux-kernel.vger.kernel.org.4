@@ -2,105 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C93C637B9F
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 15:44:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A782637BAA
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 15:45:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbiKXOoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 09:44:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47354 "EHLO
+        id S229518AbiKXOpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 09:45:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiKXOoE (ORCPT
+        with ESMTP id S229807AbiKXOpF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 09:44:04 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E25ECCDC;
-        Thu, 24 Nov 2022 06:44:02 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Thu, 24 Nov 2022 09:45:05 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92463F2C05
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 06:45:02 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1oyDT7-0002eW-QH; Thu, 24 Nov 2022 15:44:49 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:5507:4aba:5e0a:4c27])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E5E5021AA9;
-        Thu, 24 Nov 2022 14:44:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1669301040; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=RSDxCIZj7tP6iDUeSK5bmzG9DBH4ukrgrNleI3RTxE4=;
-        b=laECmwk+hSEsA59l592NOPSYuVa6/2QEtY41YRV6ec4hGKFiawqycHJQ8JkarnS3kdA639
-        LPIRjVQSjEn5ByBYHfXtuDbks6+hYSK+O34nVEffb9wdSS8K4ncai8RxlbChZZAomeqbOz
-        7FWhyUKdmozAxUsvyUo63FuNfFMagoE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1669301040;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=RSDxCIZj7tP6iDUeSK5bmzG9DBH4ukrgrNleI3RTxE4=;
-        b=tMRinWGU3xkK1Sk9EQfROj8VNADPWQdWoqbiOsBhN2hxBK4nqfbGdc1a3svnJxTlfTYKld
-        SUIRhrYNPEB7c9CA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B8F4513488;
-        Thu, 24 Nov 2022 14:44:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id hUWGKzCDf2OtUAAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Thu, 24 Nov 2022 14:44:00 +0000
-Date:   Thu, 24 Nov 2022 15:43:59 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     linux-rtc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH] rtc: isl12026: drop obsolete dependency on COMPILE_TEST
-Message-ID: <20221124154359.039be06c@endymion.delvare>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id D24DC128665;
+        Thu, 24 Nov 2022 14:44:46 +0000 (UTC)
+Date:   Thu, 24 Nov 2022 15:44:45 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     rcsekar@samsung.com, wg@grandegger.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] can: m_can: Add check for devm_clk_get
+Message-ID: <20221124144445.edeuxa4ryzcxgkkh@pengutronix.de>
+References: <20221123063651.26199-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zadcz6b2upk7mjl4"
+Content-Disposition: inline
+In-Reply-To: <20221123063651.26199-1-jiasheng@iscas.ac.cn>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
-is possible to test-build any driver which depends on OF on any
-architecture by explicitly selecting OF. Therefore depending on
-COMPILE_TEST as an alternative is no longer needed.
 
-It is actually better to always build such drivers with OF enabled,
-so that the test builds are closer to how each driver will actually be
-built on its intended target. Building them without OF may not test
-much as the compiler will optimize out potentially large parts of the
-code. In the worst case, this could even pop false positive warnings.
-Dropping COMPILE_TEST here improves the quality of our testing and
-avoids wasting time on non-existent issues.
+--zadcz6b2upk7mjl4
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Jean Delvare <jdelvare@suse.de>
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
----
- drivers/rtc/Kconfig |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 23.11.2022 14:36:51, Jiasheng Jiang wrote:
+> Since the devm_clk_get may return error,
+> it should be better to add check for the cdev->hclk,
+> as same as cdev->cclk.
+>=20
+> Fixes: f524f829b75a ("can: m_can: Create a m_can platform framework")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
---- linux-6.0.orig/drivers/rtc/Kconfig
-+++ linux-6.0/drivers/rtc/Kconfig
-@@ -432,7 +432,7 @@ config RTC_DRV_ISL12022
- 
- config RTC_DRV_ISL12026
- 	tristate "Intersil ISL12026"
--	depends on OF || COMPILE_TEST
-+	depends on OF
- 	help
- 	  If you say yes here you get support for the
- 	  Intersil ISL12026 RTC chip.
+Applied to linux-can.
 
+Thanks,
+Marc
 
--- 
-Jean Delvare
-SUSE L3 Support
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--zadcz6b2upk7mjl4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmN/g1oACgkQrX5LkNig
+011GKQf7BR7XYcW+ucxkt3SH3QKy+EH85aPtVwFIvzH1EJ4jpMvTK7aiXPne7kUP
+JYtIjuM9Zt11IRUnEdmarM8JAekwrzz+MJGlnFAohkv/cvccFZ2UZRdIFE/bAtIL
+DX34tFfXzeOiVNxuIjE5jQFitX8BH10b+Sq+ku93QhAzZjFxO815k3dohh6xFCRT
+eRH+Lo4uffXF6adwJcO0yoyOu/w4ADfm2DTL81MEGkSoAQZaRFavtsHZ9k5Y4YRh
+hIY7UEOSHeA7By9pH/Dw/HqHarIE3fJ6HvDVwwizyoqd9aP2FJFBt5lZkSUJ3tac
+UmBEKFXVzuR03t2OKzr07BAdXQAH6g==
+=mv3O
+-----END PGP SIGNATURE-----
+
+--zadcz6b2upk7mjl4--
