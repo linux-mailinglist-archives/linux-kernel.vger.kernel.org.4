@@ -2,138 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4454C637848
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:01:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D351F63784C
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:02:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbiKXMBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 07:01:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38854 "EHLO
+        id S230077AbiKXMCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 07:02:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiKXMBA (ORCPT
+        with ESMTP id S229662AbiKXMCK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 07:01:00 -0500
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A673B9607;
-        Thu, 24 Nov 2022 04:00:59 -0800 (PST)
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oyAuX-0007HF-2K; Thu, 24 Nov 2022 13:00:57 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oyAuW-000Ueg-Rz; Thu, 24 Nov 2022 13:00:56 +0100
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Subject: FOSDEM: 2023 CFP for Kernel Devroom
-To:     linux-kernel@vger.kernel.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, brauner@kernel.org,
-        stgraber@ubuntu.com
-Message-ID: <365c4da0-202b-a96e-0476-b17cd6f9c8b6@iogearbox.net>
-Date:   Thu, 24 Nov 2022 13:00:56 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Thu, 24 Nov 2022 07:02:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31FCACB9EC
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:01:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669291276;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=f7HcxW31PlGqZ7LlVewBN3n/M3SlRfqDtsg/jo2QUmA=;
+        b=bOmzpeg2yvMvk3B5f3xZtyRUDItBwCdy3OdO9NJsf2pPa/zIOeLiWPeEQh11/rGrcpRhjV
+        ISG/1/ScKb2aGkMeeHCaCSTVa74e2xUlnrYgIPnPhmMIAjvR7GGJVZ3PN03RidyYFwcOYH
+        kKwieQo44//OYum7WwX29b9ayIQ9fcQ=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-340-OncNju1zPcihagbHZT9-mQ-1; Thu, 24 Nov 2022 07:01:15 -0500
+X-MC-Unique: OncNju1zPcihagbHZT9-mQ-1
+Received: by mail-ej1-f70.google.com with SMTP id qa14-20020a170907868e00b007ae24f77742so1074509ejc.8
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:01:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f7HcxW31PlGqZ7LlVewBN3n/M3SlRfqDtsg/jo2QUmA=;
+        b=z2kbn14Ioq7BYXDB7wiMeRik2lRHhSTUHWmS81BYg0foXY8rNE4Ne+8svsvbKkOpCQ
+         2k6Wjfn9FGPiVAK7kjZdFC0n/RyF0IW4elODClhReXvYE0IPBBIxeFMuPiKrR3NLIvGB
+         asLLJ1uCyQK4GgQqI1lXaUmV2FwZn1w5MUHZhfFjJWGqvMXGCASH5GU5HMkLphEy67Hx
+         gsmtMoH52IDmSCGITwKuv8x+YS6bj8KLWY8noTT/UKhVPVUX6dULIY+P1+bohJxZfn6s
+         bJsIR0BE3D5+36C0J7HjgufzESue6+27vRyu0jciLm3n+MNHD/KMg9E6KIcgjUkPc2Xo
+         +Hgg==
+X-Gm-Message-State: ANoB5pkVAql/9uicVZMnbve2TawHD9jI7Xga/RBYO040Uc1tIXP+AeTi
+        TMmHyd3nNXya9UU8BEJsEin6uOEpqI27dwVRAb9yiz1SyY+zrmOIqT22g3CBvsL6rd9aJMnhLi/
+        sY7r7E9dU4uj5hYOmR1/YwSY9
+X-Received: by 2002:a17:906:d297:b0:7b8:4c22:2d6c with SMTP id ay23-20020a170906d29700b007b84c222d6cmr10938681ejb.144.1669291274165;
+        Thu, 24 Nov 2022 04:01:14 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4x9Sj81lq09gOSoHAzFPNhr4rAt+DBUjnmtvn9lIcQAf+nTTggjtPgq7oHPmWJVGJcaL1OIw==
+X-Received: by 2002:a17:906:d297:b0:7b8:4c22:2d6c with SMTP id ay23-20020a170906d29700b007b84c222d6cmr10938668ejb.144.1669291273909;
+        Thu, 24 Nov 2022 04:01:13 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id g8-20020a1709064e4800b007a97a616f3fsm344759ejw.196.2022.11.24.04.01.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Nov 2022 04:01:13 -0800 (PST)
+Message-ID: <72d5aa86-c097-d022-942a-f7299e8aa1ef@redhat.com>
+Date:   Thu, 24 Nov 2022 13:01:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.7/26730/Thu Nov 24 09:18:49 2022)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v1 1/2] platform/x86: serial-multi-instantiate: Set fwnode
+ for i2c
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Stefan Binding <sbinding@opensource.cirrus.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mark Gross <markgross@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com
+References: <20221124110718.3925934-1-sbinding@opensource.cirrus.com>
+ <20221124110718.3925934-2-sbinding@opensource.cirrus.com>
+ <1b548284-baa3-26e0-2e8f-a8d853788e5c@redhat.com>
+In-Reply-To: <1b548284-baa3-26e0-2e8f-a8d853788e5c@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey everyone,
+Hi,
 
-We are pleased to announce the Call for Participation (CFP) for the FOSDEM 2023
-Kernel Devroom.
+On 11/24/22 12:47, Hans de Goede wrote:
+> Hi Stefan,
+> 
+> On 11/24/22 12:07, Stefan Binding wrote:
+>> This allows the i2c driver to obtain the ACPI_COMPANION.
+>>
+>> Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
+>> ---
+>>  drivers/platform/x86/serial-multi-instantiate.c | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/platform/x86/serial-multi-instantiate.c b/drivers/platform/x86/serial-multi-instantiate.c
+>> index 5362f1a7b77c..15ef2f3c442e 100644
+>> --- a/drivers/platform/x86/serial-multi-instantiate.c
+>> +++ b/drivers/platform/x86/serial-multi-instantiate.c
+>> @@ -194,6 +194,7 @@ static int smi_i2c_probe(struct platform_device *pdev, struct smi *smi,
+>>  		strscpy(board_info.type, inst_array[i].type, I2C_NAME_SIZE);
+>>  		snprintf(name, sizeof(name), "%s-%s.%d", dev_name(dev), inst_array[i].type, i);
+>>  		board_info.dev_name = name;
+>> +		board_info.fwnode = acpi_fwnode_handle(adev);
+>>  
+>>  		ret = smi_get_irq(pdev, adev, &inst_array[i]);
+>>  		if (ret < 0)
+> 
+> I'm afraid that making this change is not as straight forward as it looks.
+> 
+> I know that I have tried to do this in the past and it failed.
+> 
+> IIRC there were 3 problems:
+> 
+> 1. I was expecting this to also allow the driver for the instantiated
+> i2c-client to be able to bind using an acpi_match_table but that
+> unfortunately does not work. acpi_match_table matches only work for
+> the first physical_node linked under
+> /sys/bus/acpi/devices/xxxx:xx/physical_node and that is the platform
+> device to which serial-multi-instantiate.c binds. The i2c_client becomes
+> the second physical node.  Note this is not really an issue,
+> just something to be aware of.
+> 
+> 
+> 2. This causes the i2c-core to use the first IRQ resource in the ACPI
+> fwnode as client->irq for any clients for which we do not set an
+> IRQ when instantiating. Which may very well be wrong. Sometimes that
+> IRQ is only valid for the first i2c-client which we instantiate; and
+> not for the others! And sometimes it is a problem because it may
+> point to an irqchip for which we never wrote a driver leading to
+> all probes of the i2c-client failing with -EPROBE_DEFER, see:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d1d84bb95364ed604015c2b788caaf3dbca0262f
+> 
+> Note that patch has been reverted since that specific -EPROBE_DEFER
+> issue has been solved by making the ACPI core instantiate a
+> platform_device instead of an i2c_client (in this case we
+> did not need the actual i2c_client at all).
+> 
+> The current i2c-core code has a (!client-irq) test guarding its
+> code of trying to use the first ACPI fwnode IRQ resource.
+> 
+> So we could disable this by setting client->irq = -ENOENT in
+> serial-multi-instantiate.c when (inst->flags & IRQ_RESOURCE_TYPE) ==
+> IRQ_RESOURCE_NONE). But that will introduce a new problem. Many
+> i2c-drivers check if there is an IRQ for them to use by doing:
+> "if (client->irq) request_irq(client->irq, ...)" but then with
+> error checking/so setting client->irq to -ENOENT will cause
+> the request_irq to fail, leading the probe to fail.
+> 
+> So before you can write a patch setting client->irq = -ENOENT
+> when (inst->flags & IRQ_RESOURCE_TYPE) == IRQ_RESOURCE_NONE),
+> you would first need to patch all i2c-drivers for clients
+> instantiated through serial-multi-instantiate.c changing:
+> 
+> 	if (client->irq) {
+> 		...
+> 	}
+> 
+> to:
+> 
+> 	if (client->irq > 0) {
+> 		...
+> 	}
+> 
+> Note this is not as bad as it sounds, since there are only
+> a few drivers for clients instantiated by serial-multi-instantiate.c .
 
-FOSDEM 2023 will be over the weekend of the 4th and 5th of February in Brussels,
-Belgium. FOSDEM is a free and non-commercial event organized by the community for
-the community. The goal is to provide free and open source software developers and
-communities a place to meet to:
+Possibly a  nicer way to fix this would be to make the i2c-core change
+client->irq to 0 if it is -ENOENT before calling the i2c_driver's
+probe method, thus fixing things centrally for all i2c-drivers without
+needing to audit/patch them all. Specifically in:
 
-* Get in touch with other developers and projects;
-* Be informed about the latest developments in the free software world;
-* Be informed about the latest developments in the open source world;
-* Attend interesting talks and presentations on various topics by project leaders
-   and committers;
-* To promote the development and benefits of free software and open source solutions.
-* Participation and attendance is totally free, though the organizers gratefully
-   accept donations and sponsorship.
+drivers/i2c/i2c-core-base.c: i2c_device_probe() change:
 
-## Format
+	if (!client->irq) {
+		...
+	}
 
-The Kernel Devroom will be running all day on Sunday, 5 February, starting at 9am
-and finishing at 5pm.
+to:
 
-We're looking for talk or demo proposals in one of the following 4 sizes:
+	if (!client->irq) {
+		...
+	} else if (client->irq == -ENOENT) {
+		client->irq = 0; /* Drivers expect 0 for "no-IRQ" */
+	}
 
-   10 minutes (e.g., a short demo)
-   20 minutes (e.g., a project update)
-   30 minutes (e.g., introduction to a new technology or a deep dive on a complex feature)
-   40 minutes (e.g., a deep dive on a complex feature)
+And maybe as Andy suggested, handle at least the IRQ in
+i2c_acpi_new_device_by_fwnode() by adding something like that there:
 
-In all cases, please allow for at least 5 minutes of questions (10 min preferred for
-the 30 min slots). In general, shorter content will be more likely to get approved as
-we want to cover a wide range of topics.
+	/* Disable the i2c-core attempting to get an IRQ from ACPI itself */
+	if (!board_info->irq)
+		board_info->irq= -ENOENT;
 
-## Proposals
+I also agree with Andy that setting board_info->fw_node would be done
+there ideally too. But then you would need to extend the audit of
+impacted drivers mentioned below to also include drivers for
+i2c-clients instantiated through other code-paths calling
+i2c_acpi_new_device_by_fwnode()  (of which there are not many,
+but there are a few others).
 
-Proposals should be sent through the FOSDEM scheduling system at:
-https://penta.fosdem.org/submission/FOSDEM23/ Note that if you submitted a proposal to
-FOSDEM in the past, you can and should re-use your existing account rather than register
-a new one. If you have no account yet please create a new one. Make sure to fill in your
-speaker bio.
+> 3. Some drivers may check for an ACPI companion device and then
+> change their behavior. So all drivers for clients instantiated
+> through serial-multi-instantiate.c will need to be audited for
+> this (and a summary of this audit needs to be added to the commit
+> msg).
 
-Please select the "Kernel" as the track and ensure you include the following information
-when submitting a proposal:
+Regards,
 
-| Section | Field	| Notes                                                                           |
-| ------- | ----------- | ------------------------------------------------------------------------------- |
-| Person  | Name(s)	| Your first, last and public names.                                              |
-| Person  | Abstract	| A short bio.                                                                    |
-| Person  | Photo	| Please provide a photo.                                                         |
-| Event	  | Event Title	| This is the title of your talk - please be descriptive to encourage attendance. |
-| Event	  | Abstract	| Short abstract of one or two paragraphs.                                        |
-| Event	  | Duration	| Please indicate the length of your talk; 10 min, 20 min, 30, or 40 min          |
+Hans
 
-The CFP deadline is Saturday, 10 December 2022.
 
-## Topics
 
-The Kernel Devroom aims to cover a wide range of different topics so don't be shy. The following
-list should just serve as an inspiration:
 
-   * Filesystems and Storage
-   * io_uring
-   * Tracing
-   * eBPF
-   * Fuzzing
-   * System Boot
-   * Security
-   * Networking
-   * Namespaces and Cgroups
-   * Virtualization
-   * Rust in the Linux Kernel
-
-## Code of Conduct
-
-We'd like to remind all speakers and attendees that all of the presentations and discussions in
-our devroom are held under the guidelines set in the FOSDEM Code of Conduct and we expect attendees,
-speakers, and volunteers to follow the CoC at all times.
-
-If you submit a proposal and it is accepted, you will be required to confirm that you accept the
-FOSDEM CoC. If you have any questions about the CoC or wish to have one of the devroom organizers
-review your presentation slides or any other content for CoC compliance, please email us and we will
-do our best to assist you.
-
-Thanks!
-Christian Brauner
-Stéphane Graber
-Daniel Borkmann
