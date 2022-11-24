@@ -2,115 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ABA7637762
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 12:16:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91574637767
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 12:17:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbiKXLQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 06:16:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45034 "EHLO
+        id S230134AbiKXLRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 06:17:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbiKXLQi (ORCPT
+        with ESMTP id S230213AbiKXLRF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 06:16:38 -0500
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19345146F8D;
-        Thu, 24 Nov 2022 03:16:21 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id BB3351C0019;
-        Thu, 24 Nov 2022 11:16:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1669288580;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=s42uM41w9ysmCNZE9IaonrxU6NJPatbC7hYnvHselLY=;
-        b=HCXhEKvsJrrzmpZ6OKhK9SABZxwycYvZjnfneAz5D7wWn4u74NVgS6KdAXFKxJbpDp2/z7
-        r65VnNGRgNSxE5YVkr8TvbkzUBcoHyLc0+xtGQGfHNIE8INTy3fKN+7VDEBb8Ugmf0OaHY
-        /NFcd5FDP4v8zxfCoMxMaOEkWfs2E6PUUUUQseKALeXpwSq1JjYnFN1uy3Qg+OogXpJH7w
-        8lIJsNRNci3dc11gMMqiitnnrVp4V43sRQTMi41gkAnAAy6voQeUvLOafpB2Fm4QPaFSn5
-        yeRUm/AhHBjeBMx2vY9bV1PHXtlYId5m0LZqQoczoTIRPQnTeKg+csxB3042uQ==
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org, Robert Marko <robert.marko@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Michael Walle <michael@walle.cc>,
-        Marcin Wojtas <mw@semihalf.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Vadym Kochan <vadym.kochan@plvision.eu>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH net-next v2 7/7] net: mvpp2: Consider NVMEM cells as possible MAC address source
-Date:   Thu, 24 Nov 2022 12:15:56 +0100
-Message-Id: <20221124111556.264647-8-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221124111556.264647-1-miquel.raynal@bootlin.com>
-References: <20221124111556.264647-1-miquel.raynal@bootlin.com>
+        Thu, 24 Nov 2022 06:17:05 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92F67D2A7;
+        Thu, 24 Nov 2022 03:16:44 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id 83-20020a1c0256000000b003d03017c6efso3013277wmc.4;
+        Thu, 24 Nov 2022 03:16:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hhE3haZb45CNFULsHmxwy6vNCZW7lpy6GOVrdTfivPU=;
+        b=a9W2owUCiWIJEl1zC8SQpHH6xMsKDPL6Zhomc9tVZyDc1RJPSLlEnSCj5e9zHhgxl+
+         64x8vTJM9xRuDe9jbUmdmhR+1XeUwkJZMTgRt3PwC5lIv1AZqV0h7iGR9rzmstycsIXa
+         B3aZZhkeK0K4qANLbOIoibhUS/WoOQLdXAv0nDHgkqrpstdpy9pkcG3zUj4NSQ41y/S2
+         Y1HJ/+0Y1UJfp0wxxYcS9FQBxcIWu+1WdEDiDU3w9+AKZvUAqFrUZqaZjHqolTsrrlo2
+         HSu0Lc54FOGorUS2iIpVEJbppZBeHxgZQKxqyjAuH/WbFwPdNpIDC1cnsNwIi4fWXXwY
+         vhww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hhE3haZb45CNFULsHmxwy6vNCZW7lpy6GOVrdTfivPU=;
+        b=V6F381ONCDan8o+TJQrWPku6O4zSoNcXb8ahLZDFeKVzaB1EfBY0IBcSFS5AmkG1xA
+         IUwIE5Pc4wqeYHJv+jOR72nD3sZLQULQ/JGQA/dW0eGxwJyqwIeNkPQtIjw9qaxmWEoF
+         5FTFXcmbgcCriOK9rcTuxt0Eh4mxbdz5tLJhg9+b1DJzTjWEwzaUaKe/8AGpb9ZZ+JeT
+         7ImpRgMcDAKqN09bbtLN/uNiNOBnWNEnjWr4uCwoyEe5YMf01hSLrPt/Secz3tHPYQbI
+         hINLpVwcld3Ru59ona3zu/i39JZYjF6ZYyqZqJnCL8bvzCzLG4PIJxEg+FmyRM5GQ2mb
+         g0WQ==
+X-Gm-Message-State: ANoB5plHsWF89LHge2HzSrnPrzAap7vaRfrgLy+LcDrAWWL1rQjkc4Ew
+        /QScZA1TSpa+26tRGjEib78=
+X-Google-Smtp-Source: AA0mqf4XBviurARzZqb6Yq7Pcs2grnbACeQWURwUcnvS+y6QDCrwTpM00ImOHe4vAL6jd5TymyL0pg==
+X-Received: by 2002:a05:600c:4894:b0:3b4:91f1:da83 with SMTP id j20-20020a05600c489400b003b491f1da83mr12754098wmp.127.1669288603060;
+        Thu, 24 Nov 2022 03:16:43 -0800 (PST)
+Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
+        by smtp.gmail.com with ESMTPSA id w16-20020a5d5450000000b00241db7deb57sm1057267wrv.114.2022.11.24.03.16.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Nov 2022 03:16:42 -0800 (PST)
+Date:   Thu, 24 Nov 2022 11:16:40 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
+        rwarsow@gmx.de
+Subject: Re: [PATCH 6.0 000/314] 6.0.10-rc1 review
+Message-ID: <Y39SmCRcY7EUhkhA@debian>
+References: <20221123084625.457073469@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221123084625.457073469@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ONIE standard describes the organization of tlv (type-length-value)
-arrays commonly stored within NVMEM devices on common networking
-hardware.
+Hi Greg,
 
-Several drivers already make use of NVMEM cells for purposes like
-retrieving a default MAC address provided by the manufacturer.
+On Wed, Nov 23, 2022 at 09:47:25AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.10 release.
+> There are 314 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 25 Nov 2022 08:45:20 +0000.
+> Anything received after that time might be too late.
 
-What made ONIE tables unusable so far was the fact that the information
-where "dynamically" located within the table depending on the
-manufacturer wishes, while Linux NVMEM support only allowed statically
-defined NVMEM cells. Fortunately, this limitation was eventually tackled
-with the introduction of discoverable cells through the use of NVMEM
-layouts, making it possible to extract and consistently use the content
-of tables like ONIE's tlv arrays.
+Build test (gcc version 12.2.1 20221016):
+mips: 52 configs -> 1 failure
+arm: 100 configs -> 2 failures
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+csky allmodconfig -> no failure
+powerpc allmodconfig -> 1 failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
-Parsing this table at runtime in order to get various information is now
-possible. So, because many Marvell networking switches already follow
-this standard, let's consider using NVMEM cells as a new valid source of
-information when looking for a base MAC address, which is one of the
-primary uses of these new fields. Indeed, manufacturers following the
-ONIE standard are encouraged to provide a default MAC address there, so
-let's eventually use it if no other MAC address has been found using the
-existing methods.
+Note:
+1. As reported by others arm mips and powerpc allmodconfig fails with:
+drivers/rtc/rtc-cmos.c:1299:13: error: 'rtc_wake_setup' defined but not used [-Werror=unused-function]
+ 1299 | static void rtc_wake_setup(struct device *dev)
+      |             ^~~~~~~~~~~~~~
 
-Link: https://opencomputeproject.github.io/onie/design-spec/hw_requirements.html
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
----
- drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c | 7 +++++++
- 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-index eb0fb8128096..12f0b5ad8cee 100644
---- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-+++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-@@ -6104,6 +6104,13 @@ static void mvpp2_port_copy_mac_addr(struct net_device *dev, struct mvpp2 *priv,
- 		}
- 	}
- 
-+	/* Only valid on OF enabled platforms */
-+	if (!of_get_mac_address_nvmem(to_of_node(fwnode), fw_mac_addr)) {
-+		*mac_from = "nvmem cell";
-+		eth_hw_addr_set(dev, fw_mac_addr);
-+		return;
-+	}
-+
- 	*mac_from = "random";
- 	eth_hw_addr_random(dev);
- }
+2. arm imxrt_defconfig fails with:
+
+In file included from ./include/linux/bpf-cgroup.h:5,
+                 from security/device_cgroup.c:8:
+./include/linux/bpf.h:2310:20: error: static declaration of 'bpf_prog_inc_misses_counter' follows non-static declaration
+ 2310 | static inline void bpf_prog_inc_misses_counter(struct bpf_prog *prog)
+      |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+./include/linux/bpf.h:1970:14: note: previous declaration of 'bpf_prog_inc_misses_counter' with type 'void(struct bpf_prog *)'
+ 1970 | void notrace bpf_prog_inc_misses_counter(struct bpf_prog *prog);
+      |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Caused by a1ba348f5325 ("bpf: Prevent bpf program recursion for raw tracepoint probes").
+
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+mips: Booted on ci20 board. No regression. [3]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/2210
+[2]. https://openqa.qa.codethink.co.uk/tests/2214
+[3]. https://openqa.qa.codethink.co.uk/tests/2216
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
 -- 
-2.34.1
-
+Regards
+Sudip
