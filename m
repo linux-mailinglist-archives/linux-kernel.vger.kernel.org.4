@@ -2,62 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49377637D45
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 16:51:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA76E637D5C
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 16:54:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbiKXPvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 10:51:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38388 "EHLO
+        id S229758AbiKXPye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 10:54:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiKXPvT (ORCPT
+        with ESMTP id S229555AbiKXPye (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 10:51:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F9913C735;
-        Thu, 24 Nov 2022 07:51:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 361AAB82870;
-        Thu, 24 Nov 2022 15:51:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5DE7C433D6;
-        Thu, 24 Nov 2022 15:51:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669305068;
-        bh=s+OXtssHmkAV/8o5aF5tW5Nh7Fk9Rc3WObTGHXe16+A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YA4gD3oKppDGX2Co0Q/Uy/hSzkCs8LcBN9zRrgTorOh9jjK8b0IZxUgwlhxyZUXrw
-         qsVUcWlospWJrpHYtDLxyIBGFgy2WcjgTU/kUD5mMLq1GiBV3u2IxQGBtcc/59k5sy
-         FYankUYfq1X1MtN1c0o1lWpIFJcO3xKveaoVi3mjQjmNmi+Zkkc2VUkBLiGf8DyzGy
-         WpkD3gVHMLD5xkw+qjMGbXGTtGz+EC0B/Ucyo7DYPUS5gUdp1hMv0VqfE9CnKy/wOP
-         b3eIYNxnpQCHBUd/S4mr6o1DyhP5NhVO7ICOjRXJt71ucKRFBi53APphtFygcPswKa
-         ORQQaABm6ymiA==
-Date:   Thu, 24 Nov 2022 10:51:06 -0500
-From:   Sasha Levin <sashal@kernel.org>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH AUTOSEL 6.0 13/44] clocksource/drivers/hyperv: add data
- structure for reference TSC MSR
-Message-ID: <Y3+S6j4GW0RrHgB2@sashalap>
-References: <20221119021124.1773699-1-sashal@kernel.org>
- <20221119021124.1773699-13-sashal@kernel.org>
- <SN6PR2101MB1693A83DF44A95B439532F9DD7089@SN6PR2101MB1693.namprd21.prod.outlook.com>
+        Thu, 24 Nov 2022 10:54:34 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B72E9C;
+        Thu, 24 Nov 2022 07:54:33 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AOFIvje017461;
+        Thu, 24 Nov 2022 15:54:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=2BIvH7iayCMWg8gb27+0elQiVMFXFEltpHJSRz2KlDk=;
+ b=aA0EkP+k130IMBZeo2tTvnIgvtitKEzGQRNlxlCdCXEcnUmdwE5wL9O6tKtFjbHfnTky
+ TOdeoQSQiezv1mUTvhl8GWoMICvetd+yIFfNZWABIUjNu10zL/SwJMGis9Wjc7MlnLMR
+ E6PePpCMNc5DoEsDCiiE+ltVy5GhSupYyUwTOxsgOmsCoh7784ifvFduVB0a+fvoqbed
+ 3SF1usUT/VshB+ZFznBWSmOPfjHg/Mmh2W+0Xl40eAZT8pA6zPyhVxOTNo8HHxrnuPjP
+ CwH3AS/iJbQVE4n/gE8funRkIcVVgoNOzdFF0Pr/b2zTjKW0pFImbzyeMIY37A1A14EF +g== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m1gxemxru-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 24 Nov 2022 15:54:30 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AOFsTgm016016
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 24 Nov 2022 15:54:29 GMT
+Received: from [10.50.29.33] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 24 Nov
+ 2022 07:54:23 -0800
+Message-ID: <896278fb-1af8-609b-cd64-f3f59530e9b0@quicinc.com>
+Date:   Thu, 24 Nov 2022 21:24:18 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <SN6PR2101MB1693A83DF44A95B439532F9DD7089@SN6PR2101MB1693.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v2 02/10] arm64: dts: qcom: Add base SM8550 dtsi
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
+References: <20221124135646.1952727-1-abel.vesa@linaro.org>
+ <20221124135646.1952727-3-abel.vesa@linaro.org>
+ <351fa466-90cb-b73f-a2a4-749bc3529e22@quicinc.com>
+ <0a119446-4ec1-46ce-68e5-f177f9cb49e3@linaro.org>
+From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+In-Reply-To: <0a119446-4ec1-46ce-68e5-f177f9cb49e3@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: AF6WOsy388_CatpevdHadwR-eBCPZTuv
+X-Proofpoint-ORIG-GUID: AF6WOsy388_CatpevdHadwR-eBCPZTuv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-24_11,2022-11-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 adultscore=0 mlxlogscore=960 malwarescore=0
+ lowpriorityscore=0 spamscore=0 impostorscore=0 phishscore=0 bulkscore=0
+ mlxscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211240119
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,27 +86,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 19, 2022 at 05:37:16AM +0000, Michael Kelley (LINUX) wrote:
->From: Sasha Levin <sashal@kernel.org> Sent: Friday, November 18, 2022 6:11 PM
+On 11/24/2022 9:10 PM, Konrad Dybcio wrote:
+> 
+> 
+> On 24.11.2022 16:39, Sai Prakash Ranjan wrote:
+>> Hi,
 >>
->> From: Anirudh Rayabharam <anrayabh@linux.microsoft.com>
+>> On 11/24/2022 7:26 PM, Abel Vesa wrote:
+>>> Add base dtsi for SM8550 SoC and includes base description of
+>>> CPUs, GCC, RPMHCC, UART, interrupt controller, TLMM, reserved
+>>> memory, RPMh PD, TCSRCC, ITS, IPCC, AOSS QMP, LLCC, cpufreq,
+>>> interconnect, thermal sensor, cpu cooling maps and SMMU nodes
+>>> which helps boot to shell with console on boards with this SoC.
+>>>
+>>> Co-developed-by: Neil Armstrong <neil.armstrong@linaro.org>
+>>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>>> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+>>> ---
 >>
->> [ Upstream commit 4ad1aa571214e8d6468a1806794d987b374b5a08 ]
+>> <snip>...
 >>
->> Add a data structure to represent the reference TSC MSR similar to
->> other MSRs. This simplifies the code for updating the MSR.
+>>> +    timer {
+>>> +        compatible = "arm,armv8-timer";
+>>> +        interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
+>>> +                 <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
+>>> +                 <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
+>>> +                 <GIC_PPI 12 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>;
 >>
->> Signed-off-by: Anirudh Rayabharam <anrayabh@linux.microsoft.com>
->> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
->> Link: https://lore.kernel.org/all/20221027095729.1676394-2-anrayabh@linux.microsoft.com/
->> Signed-off-by: Wei Liu <wei.liu@kernel.org>
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
->
->Sasha -- I don't think this patch needs to be backported to any stable versions.  Anirudh
->or Wei Liu, can you confirm?  The patch is more about enabling a new scenario than fixing a bug.
+>> This last interrupt must be Hypervisor physical irq(10) and 12 is Hyp virtual irq, so please change it to 10. I guess you got this from downstream but it's not right and they don't boot kernel in EL2.
+> Does non-CrOS 8550 FW allow Linux to boot in EL2?
+> 
 
-Ack, I'll drop both of the patches you've pointed out. Thanks!
+Sadly no, which is why this entry always gets wrong downstream.
 
--- 
 Thanks,
-Sasha
+Sai
+
