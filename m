@@ -2,107 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF7D63701D
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 02:57:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4523637021
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 02:57:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbiKXB5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 20:57:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52882 "EHLO
+        id S229687AbiKXB5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 20:57:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbiKXB5D (ORCPT
+        with ESMTP id S229681AbiKXB52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 20:57:03 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F00E0743;
-        Wed, 23 Nov 2022 17:57:02 -0800 (PST)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NHh1M6rGhzHw5L;
-        Thu, 24 Nov 2022 09:56:23 +0800 (CST)
-Received: from localhost.localdomain (10.175.104.82) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 24 Nov 2022 09:57:00 +0800
-From:   Ziyang Xuan <william.xuanziyang@huawei.com>
-To:     <sgoutham@marvell.com>, <gakula@marvell.com>,
-        <sbhatta@marvell.com>, <hkelam@marvell.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>
-CC:     <naveenm@marvell.com>, <rsaladi2@marvell.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH net 2/2] octeontx2-vf: Fix possible memory leak in otx2vf_probe()
-Date:   Thu, 24 Nov 2022 09:56:56 +0800
-Message-ID: <3828ba413173643c0e04d33f09754eec03c43cfc.1669253985.git.william.xuanziyang@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1669253985.git.william.xuanziyang@huawei.com>
-References: <cover.1669253985.git.william.xuanziyang@huawei.com>
+        Wed, 23 Nov 2022 20:57:28 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1D2E0DD6;
+        Wed, 23 Nov 2022 17:57:24 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 3CCD724E15C;
+        Thu, 24 Nov 2022 09:57:16 +0800 (CST)
+Received: from EXMBX072.cuchost.com (172.16.6.82) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 24 Nov
+ 2022 09:57:16 +0800
+Received: from [192.168.125.106] (183.27.97.81) by EXMBX072.cuchost.com
+ (172.16.6.82) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 24 Nov
+ 2022 09:57:15 +0800
+Message-ID: <f26a5b7e-4329-67fe-5179-f8cd255de032@starfivetech.com>
+Date:   Thu, 24 Nov 2022 09:57:48 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.82]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v2 1/8] dt-bindings: riscv: Add StarFive JH7110 SoC and
+ VisionFive2 board
+Content-Language: en-US
+To:     Conor Dooley <conor@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20221118011714.70877-1-hal.feng@starfivetech.com>
+ <20221118011714.70877-2-hal.feng@starfivetech.com>
+ <202211190418.2AJ4ImtE072425@SH1-CSMTP-DB111.sundns.com>
+From:   Hal Feng <hal.feng@starfivetech.com>
+In-Reply-To: <202211190418.2AJ4ImtE072425@SH1-CSMTP-DB111.sundns.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [183.27.97.81]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX072.cuchost.com
+ (172.16.6.82)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In otx2vf_probe(), there are several possible memory leak bugs
-in exception paths as follows:
-1. Do not release vf->otx2_wq when excute otx2vf_mcam_flow_init() and
-   otx2_init_tc() failed.
-2. Do not unregister devlink when excute otx2_dcbnl_set_ops() failed.
+On Fri, 18 Nov 2022 19:31:36 +0800, Conor Dooley wrote:
+> On Fri, Nov 18, 2022 at 09:17:07AM +0800, Hal Feng wrote:
+> > From: Emil Renner Berthing <kernel@esmil.dk>
+> > 
+> > Add device tree bindings for the StarFive JH7110 RISC-V SoC [1]
+> > and the VisionFive2 board [2] equipped with it.
+> > 
+> > [1]: https://doc-en.rvspace.org/Doc_Center/jh7110.html
+> > [2]: https://doc-en.rvspace.org/Doc_Center/visionfive_2.html
+> 
+> Could you make these two into "Link:" tags please?
+> Otherwise,
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-Fixes: 4b0385bc8e6a ("octeontx2-pf: Add TC feature for VFs")
-Fixes: 8e67558177f8 ("octeontx2-pf: PFC config support with DCBx")
-Fixes: 3cffaed2136c ("octeontx2-pf: Ntuple filters support for VF netdev")
-Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
----
- drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+OK, will fix it in the next version. Thanks.
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
-index 86653bb8e403..f1b47fecd379 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
-@@ -684,11 +684,11 @@ static int otx2vf_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 
- 	err = otx2vf_mcam_flow_init(vf);
- 	if (err)
--		goto err_unreg_netdev;
-+		goto err_destroy_wq;
- 
- 	err = otx2_init_tc(vf);
- 	if (err)
--		goto err_unreg_netdev;
-+		goto err_destroy_wq;
- 
- 	err = otx2_register_dl(vf);
- 	if (err)
-@@ -697,13 +697,19 @@ static int otx2vf_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- #ifdef CONFIG_DCB
- 	err = otx2_dcbnl_set_ops(netdev);
- 	if (err)
--		goto err_shutdown_tc;
-+		goto err_unreg_dl;
- #endif
- 
- 	return 0;
- 
-+#ifdef CONFIG_DCB
-+err_unreg_dl:
-+	otx2_unregister_dl(vf);
-+#endif
- err_shutdown_tc:
- 	otx2_shutdown_tc(vf);
-+err_destroy_wq:
-+	destroy_workqueue(vf->otx2_wq);
- err_unreg_netdev:
- 	unregister_netdev(netdev);
- err_ptp_destroy:
--- 
-2.25.1
-
+Best regards,
+Hal
