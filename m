@@ -2,123 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 681536377BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 12:34:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C506377C2
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 12:36:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbiKXLet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 06:34:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39942 "EHLO
+        id S230166AbiKXLgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 06:36:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbiKXLer (ORCPT
+        with ESMTP id S230174AbiKXLgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 06:34:47 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B9138B12E
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 03:34:46 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id u2so1692621ljl.3
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 03:34:46 -0800 (PST)
+        Thu, 24 Nov 2022 06:36:08 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5923797AB8;
+        Thu, 24 Nov 2022 03:36:07 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id e15so892505qts.1;
+        Thu, 24 Nov 2022 03:36:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8/RFwEGuR78ga6A8No+0+FWED3HfOqZwgwrM9a/6eaU=;
-        b=ug9JzISkSPoKkDvuCLvaZQvVolwBg+L1KEO86bspPo7ZC3xY8MCixqRcj5xWRGvjTT
-         WPXbtvaKdTry4UafgN4iCNweG+5neNVPdohuYlz95sWjtbZthOJR2P+IbH8mswtsfLTH
-         DQ87hzNk08u6nf2wHGIKQ98i+iYb+e8qYHpkZmqh99qJQh10cHQsaYnmOgkJIPoesKrt
-         7FoWdrj8o2+jAia/8xugZuTWYY4i8KZhTP8R5mhMZF6vidKvWLkU0lYi+U0t9ZHwMKtX
-         vrzhgHWjNrn9Rc7PFQme89/WbhJmuLiBq9ZN8dTJqkwaJVMf9McLtM5mpGx4xnwcEpd2
-         yuEw==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=R8BPplO7UlHzk5yo9FOzqotniwR7y6QrBugM8+AwrSQ=;
+        b=LbypaNLt3I8EKendSm8Ba65FJIvtubs5gAuW3xGDHqOAfoeX1Hmk9OZI2F/7FEDdYx
+         Qcc3c6HfKuCzbn6ji+HsvkUbLRLMpB5hP3nnKRBNPuUdJtrc28TJ6MLZH9f7o06NUlbi
+         Hvl9kK7N9VGCdb5n6/VNxsXgF6XcfTmWZ3IMf0s4umGt194DCudkY16GlJeUmIXtrfqA
+         lyvZ6pkAVWUXrom3u+RuIxme0er08h5UyHGiawIAMx1ydF7++Jz/R9JPMQINCUbBaKkP
+         hD28P+tFhj5TfQr5dzL7iDwFXG9htX+S/N/B2n2nwUBKNMWJ4sdsMdeA7iGZakXSlKaJ
+         jcgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8/RFwEGuR78ga6A8No+0+FWED3HfOqZwgwrM9a/6eaU=;
-        b=frjaaJZ08CBgwGIJgTOIKUkWGKrDLS8qsC3i9yM/HELEm+y1Xi9UPDpvxm+QIDvLH+
-         BglGmaQbe72ZZ2KG+Z1TQ6OFOAHl96VdaUd90aqxkLMMP52Aimtcj82JcxGHCZ5Nsu6A
-         gAgIklgs+titDp5QM3bdCjWGI0AaiGaVloPLJIQSdRRytNr9tTepsQXsoT8DDVO4kKsL
-         hUTbwJDUjDc4BnWIYvrKlbB6NvZxV5t7gFH/4Xw1iaGOVJFJNfI6g8fQzuDoMtY3Cm1W
-         N5aNxoko750LWSfQ/T74Gfe6hiGsSR958cAX1OiOXP4buarmeEQCcDCi+ygJ9HNmPVBa
-         ALng==
-X-Gm-Message-State: ANoB5plOUN4s+EOUF5QCsMs7z7iilPrOzo/Uz0S0ldOSbXyweS3XwoPQ
-        g9pMf2B7fOpe44KP7BZki3BpHozKgJuliFey
-X-Google-Smtp-Source: AA0mqf4rmYkk3455tjXUIfT3vZxQDg6BfnTJ5RdJR4IFJ3TDTq8hzgnQPEctELIlMUuWbHWfI0P7lA==
-X-Received: by 2002:a05:651c:902:b0:26d:e3ae:886a with SMTP id e2-20020a05651c090200b0026de3ae886amr5065796ljq.531.1669289684685;
-        Thu, 24 Nov 2022 03:34:44 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id j7-20020a056512344700b004b4f2a30e6csm102398lfr.0.2022.11.24.03.34.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Nov 2022 03:34:44 -0800 (PST)
-Message-ID: <2a27c32d-b013-e914-62ae-393af3987716@linaro.org>
-Date:   Thu, 24 Nov 2022 12:34:43 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=R8BPplO7UlHzk5yo9FOzqotniwR7y6QrBugM8+AwrSQ=;
+        b=LjX6oMfeW7HDkvIzS4OQ80xrgThmJEL6FcOxsAy8oKy8WMQDKbE6I96GeJKhCP5rGR
+         1Q7y0fVUPOzdRSAjNICeBAde8AnlWUppn+vaK4XMvESQGPCh5s08CJF9kcbCXAsV5/gq
+         B3VNS9qgByOuGlpRCVO1Kb5yc2cpoO8RpuemiyOzKb9YhRKa5w+YMoLwe6FcPWVlwZv2
+         p+wc42vT9vX6d/qrG+crgWH20ByqEfz9Kw31I4tBVaP9djHK85jJKfsRnyUMxhdMTi/f
+         b/UDzsJTWqXlbWe9VspZmKDKH0MuSBnu60yO9bTRpWpcNibyBVLTOqDVZTLu9qKzLddc
+         0ucg==
+X-Gm-Message-State: ANoB5pkaWF4B4dM/USstJ4dgv406w3oGmzHpEoMWEoVK+ZOWatIk0UMz
+        SlIUWGfSQs7YzCqPeydnlHG/x1+0SaOPFUX+Wqg=
+X-Google-Smtp-Source: AA0mqf7M/JAbmhM35ZrYv+M8CxU6vmyIv6WkHYgF71vj9U14wRfDHw8RbyhLhPBoGOyOO7XlkK+mIf89b1QuhD8s71c=
+X-Received: by 2002:ac8:4cd1:0:b0:3a5:1940:a027 with SMTP id
+ l17-20020ac84cd1000000b003a51940a027mr29417932qtv.195.1669289766424; Thu, 24
+ Nov 2022 03:36:06 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [Patch V2] memory: tegra: Remove clients SID override programming
-Content-Language: en-US
-To:     Ashish Mhetre <amhetre@nvidia.com>, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, dmitry.osipenko@collabora.com,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <20221122053103.17895-1-amhetre@nvidia.com>
- <cf5422a7-351a-6780-ff7f-e20bc81f94c7@linaro.org>
- <df879efe-cbae-603a-1d1c-1ac63ac9c12a@nvidia.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <df879efe-cbae-603a-1d1c-1ac63ac9c12a@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20221124110718.3925934-1-sbinding@opensource.cirrus.com> <20221124110718.3925934-2-sbinding@opensource.cirrus.com>
+In-Reply-To: <20221124110718.3925934-2-sbinding@opensource.cirrus.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 24 Nov 2022 13:35:30 +0200
+Message-ID: <CAHp75VfUqkxyB7J8fbfQKCMaSa55q4zqt7btNb_n5E3-NWhQyg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] platform/x86: serial-multi-instantiate: Set fwnode
+ for i2c
+To:     Stefan Binding <sbinding@opensource.cirrus.com>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        patches@opensource.cirrus.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/11/2022 11:20, Ashish Mhetre wrote:
-> 
-> On 11/22/2022 4:44 PM, Krzysztof Kozlowski wrote:
->> External email: Use caution opening links or attachments
->>
->>
->> On 22/11/2022 06:31, Ashish Mhetre wrote:
->>> On newer Tegra releases, early boot SID override programming and SID
->>> override programming during resume is handled by bootloader.
->>> Also, SID override is programmed on-demand during probe_finalize() call
->>> of IOMMU which is done in tegra186_mc_client_sid_override() in this same
->>> file. This function does it more correctly by checking if write is
->>> permitted on SID override register. It also checks if SID override
->>> register is already written with correct value and skips re-writing it
->>> in that case.
->>> Hence, removing the SID override programming of all clients.
->>>
->>> Fixes: 393d66fd2cac ("memory: tegra: Implement SID override programming")
->> I could not get from commit msg what is the bug being fixed. You just
->> said "more correctly", but usually things are either correct or not.
->> What are visible effects of the bug?
->>
->> Otherwise it sounds more like optimization or a bit better approach, but
->> not a bugfix.
->>
->> Best regards,
->> Krzysztof
-> 
-> Thanks for the review. In the function tegra186_mc_program_sid() which is
-> getting removed, SID override register of all clients is written without
-> checking if secure firmware has allowed write on it or not. If write is
-> disabled by secure firmware then it can lead to errors coming from secure
-> firmware and hang in kernel boot. So, that's a possible bug.
+On Thu, Nov 24, 2022 at 1:07 PM Stefan Binding
+<sbinding@opensource.cirrus.com> wrote:
+>
+> This allows the i2c driver to obtain the ACPI_COMPANION.
 
-Please add it to commit msg, because it justifies Fixes tag and probably
-backport.
+As far as I get how it's done in the SPI case the real fix should lie
+among i2c_acpi_new_device_by_fwnode(), right?
 
-> Also, it's an optimization over current approach because it saves time by
-> removing re-writing of these SID override registers as in new Tegra releases
-> SID override of all clients is programmed by bootloader. So, MC driver don't
-> need to program them again.
-
-Best regards,
-Krzysztof
-
+-- 
+With Best Regards,
+Andy Shevchenko
