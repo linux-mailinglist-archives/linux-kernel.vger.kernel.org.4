@@ -2,111 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E449B6375A2
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 10:54:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 549BF6375A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 10:55:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbiKXJyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 04:54:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40022 "EHLO
+        id S229493AbiKXJz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 04:55:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiKXJyi (ORCPT
+        with ESMTP id S230054AbiKXJzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 04:54:38 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3CE12F414;
-        Thu, 24 Nov 2022 01:54:37 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id p12so1051632plq.4;
-        Thu, 24 Nov 2022 01:54:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XIgPTakbw0hwKBNbkmD4l8Qc3Gi4AwORlTsSds71r68=;
-        b=BsVxydxBs9aa9qznlYR6MOpRqa+u8uFxiB2ZSUV2ZqJJjea+BTD88tv/TydzWSYKZw
-         y61O5a77M6UpIz2D9skWnej+1q1TaK6Zzhfs4Nqp9dqXsIvn6jTPCfPMz5F4BfWwkJK2
-         FizNA4s251QUQ7nrTbCLROW9StO58D5bf7zWydMwLqoHWVXDz38gZEdFBq7DRzd9Nqxe
-         ZwjTvLpTuFUMhWP77QE3zbk6KlUUH2Aqaw9cirjp+FcXcZj8zSSIBrsGUzjcdf+iXr6n
-         JggchEHjCJhbJuIErHC2MZrm2njvRWCWE6naWrbPWnKGiioXtO76e5o8s3V4Z9wEnLkE
-         XWPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XIgPTakbw0hwKBNbkmD4l8Qc3Gi4AwORlTsSds71r68=;
-        b=b27iAqbR+CUYM6Empx1RdCjmaMz948mmMBpdFd5INf3/NgOsjhK9vENxPemmwY++4G
-         jZc0s1ejPOXBXlO1zPZhR1A4tUzDY8hHZFngsx/dyI84+qJEf24LsiQ4huD149BcYWNK
-         cr/WT1QStEhnFfUeQweWzOPEaIdNscb2eTi4DJRDkls4Oyge+ZPIRwSwop2JLnK1BaC0
-         h7vNXDy2rTit9Tn9D0rK7/u+x4K54TKG3d8MlaIvh1zv2ZL2w1tmg6oHpxeMF2b7h3Fq
-         21CjYBGSZPbSBz+qpMYyohmLlqF7DCPHgHjSNsVldoFbkoTDAJ+2XvD+UV4eVOvRa+Kw
-         zimw==
-X-Gm-Message-State: ANoB5plB7Exk42BTR+S+C7wKHPOOtfdHAUh6VX0apADZyoGQDzHaSRqC
-        k5sjpbKN/VT7mniDHYpzEmOWH5ZYx9PnzAAF8cqNN0kBIjk=
-X-Google-Smtp-Source: AA0mqf4fbm1xuFTG/tN/aKXkrNjqCIFMW6GMVvWfx1PI3bE9KWxnr1m3qJg+KAhUu7XhrDR1mYl5f3bwltqE49y0F8A=
-X-Received: by 2002:a17:902:aa04:b0:17f:6fee:3334 with SMTP id
- be4-20020a170902aa0400b0017f6fee3334mr12975525plb.10.1669283676615; Thu, 24
- Nov 2022 01:54:36 -0800 (PST)
+        Thu, 24 Nov 2022 04:55:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C096133957;
+        Thu, 24 Nov 2022 01:55:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CBD2DB8273E;
+        Thu, 24 Nov 2022 09:55:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8261EC433D7;
+        Thu, 24 Nov 2022 09:55:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669283708;
+        bh=5kaoiogge2CYIRkqs7Z6Uu8+iginiulfFRFqfLUtw0g=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Oji2yPLYW7Lu/Or6kTo49asVjl4SI3j0UlBjpUg3bqJCUkx1Z+scI4jdQLep66Rhj
+         M3eLxaMpJKjcH+Vbo3/0AsB9W08VyKnaLeG2ksn4CLFXw7BRAwf++qjuxdMHii2wT3
+         HU/PjU5+XDUCuB0gn6g/FMJhVojIbRg4oHr/Fy85jrvwVuacWyaz1kX1j1L9K9xqiq
+         AVtXSUCT2APz2ZMCltBOeUd0Utn3w5PIFCbqrCahQ4gFWydgwfPyzADXrFfxvU9sPb
+         K0220O8TRH0s+Qi/mVNoGoRvCHDItM1i7Lhum09nIY8+WPiUMpFvRvGAhezzH0OTSZ
+         Ct/TK5axZChYQ==
+Received: by mail-ed1-f54.google.com with SMTP id z18so1812303edb.9;
+        Thu, 24 Nov 2022 01:55:08 -0800 (PST)
+X-Gm-Message-State: ANoB5pktl7a3vOGp549AelxMbkkYeIAPPayJYz1ShumyxfrbU4YayGSy
+        CiZw5x2BnVmJEeAwDYFBWWB8f0CCfvuGuY41NBA=
+X-Google-Smtp-Source: AA0mqf6uCf7DOW+G4EorXIvJeHLYegfrRCikQfgD6PTITzF4WYxsHRL/hxCaLiQi8oHYLJbosvZBptwkLJT2qgHdxlk=
+X-Received: by 2002:a05:6402:10d1:b0:467:7508:89ca with SMTP id
+ p17-20020a05640210d100b00467750889camr14616991edu.284.1669283706749; Thu, 24
+ Nov 2022 01:55:06 -0800 (PST)
 MIME-Version: 1.0
-References: <20221123194406.80575-1-yashi@spacecubics.com> <CAMZ6RqJ2L6YntT23rsYEEUK=YDF2LrhB8hXwvYjciu3vzjx2hQ@mail.gmail.com>
- <CAELBRWLOKW8NCLpV=MG0_=XY4N3BaozsZCacfgaXEs-tyfzoAA@mail.gmail.com>
-In-Reply-To: <CAELBRWLOKW8NCLpV=MG0_=XY4N3BaozsZCacfgaXEs-tyfzoAA@mail.gmail.com>
-From:   Vincent Mailhol <vincent.mailhol@gmail.com>
-Date:   Thu, 24 Nov 2022 18:54:25 +0900
-Message-ID: <CAMZ6Rq+-ya9VxSGUD4aP=N58gZ1CmDbFFGQ9Oys0aTKm1rWN0A@mail.gmail.com>
-Subject: Re: [PATCH] can: mcba_usb: Fix termination command argument
-To:     Yasushi SHOJI <yasushi.shoji@gmail.com>
-Cc:     Yasushi SHOJI <yashi@spacecubics.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1669123257-18550-1-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1669123257-18550-1-git-send-email-yangtiezhu@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Thu, 24 Nov 2022 17:54:54 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5=BB3=AJ9K=u_6pqxAz9Orr0zBFM7nOafEtkL-PjttUw@mail.gmail.com>
+Message-ID: <CAAhV-H5=BB3=AJ9K=u_6pqxAz9Orr0zBFM7nOafEtkL-PjttUw@mail.gmail.com>
+Subject: Re: [PATCH] docs/zh_CN/LoongArch: Fix wrong description of FPRs Note
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     WANG Xuerui <kernel@xen0n.name>, Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Jonathan Corbet <corbet@lwn.net>, loongarch@lists.linux.dev,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu. 24 Nov. 2022 at 18:52, Yasushi SHOJI <yasushi.shoji@gmail.com> wrote:
-> On Thu, Nov 24, 2022 at 9:53 AM Vincent Mailhol
-> <vincent.mailhol@gmail.com> wrote:
-> > > diff --git a/drivers/net/can/usb/mcba_usb.c b/drivers/net/can/usb/mcba_usb.c
-> > > index 218b098b261d..67beff1a3876 100644
-> > > --- a/drivers/net/can/usb/mcba_usb.c
-> > > +++ b/drivers/net/can/usb/mcba_usb.c
-> > > @@ -785,9 +785,9 @@ static int mcba_set_termination(struct net_device *netdev, u16 term)
-> > >         };
-> > >
-> > >         if (term == MCBA_TERMINATION_ENABLED)
-> > > -               usb_msg.termination = 1;
-> > > -       else
-> > >                 usb_msg.termination = 0;
-> > > +       else
-> > > +               usb_msg.termination = 1;
-> > >
-> > >         mcba_usb_xmit_cmd(priv, (struct mcba_usb_msg *)&usb_msg);
-> >
-> > Nitpick: does it make sense to rename the field to something like
-> > usb_msg.termination_disable or usb_msg.termination_off? This would
-> > make it more explicit that this is a "reverse" boolean.
->
-> I'd rather define the values like
->
-> #define TERMINATION_ON (0)
-> #define TERMINATION_OFF (1)
->
-> So the block becomes
->
-> if (term == MCBA_TERMINATION_ENABLED)
->     usb_msg.termination = TERMINATION_ON;
-> else
->     usb_msg.termination = TERMINATION_OFF;
-
-That also works! Thank you.
+QXBwbGllZCB0byBsb29uZ2FyY2gtZml4ZXMsIHRoYW5rcy4NCg0KT24gVHVlLCBOb3YgMjIsIDIw
+MjIgYXQgOToyMSBQTSBUaWV6aHUgWWFuZyA8eWFuZ3RpZXpodUBsb29uZ3Nvbi5jbj4gd3JvdGU6
+DQo+DQo+IFRoZSBDaGluZXNlIHRyYW5zbGF0aW9uIG9mIEZQUnMgTm90ZSBpcyBub3QgY29uc2lz
+dGVudCB3aXRoIHRoZSBvcmlnaW5hbA0KPiBFbmdsaXNoIHZlcnNpb24sICR2MC8kdjEgc2hvdWxk
+IGJlICRmdjAvJGZ2MSwgJGEwLyRhMSBzaG91bGQgYmUgJGZhMC8kZmExLA0KPiBmaXggdGhlbS4N
+Cj4NCj4gU2lnbmVkLW9mZi1ieTogVGllemh1IFlhbmcgPHlhbmd0aWV6aHVAbG9vbmdzb24uY24+
+DQo+IC0tLQ0KPiAgRG9jdW1lbnRhdGlvbi90cmFuc2xhdGlvbnMvemhfQ04vbG9vbmdhcmNoL2lu
+dHJvZHVjdGlvbi5yc3QgfCA0ICsrLS0NCj4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMo
+KyksIDIgZGVsZXRpb25zKC0pDQo+DQo+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL3RyYW5z
+bGF0aW9ucy96aF9DTi9sb29uZ2FyY2gvaW50cm9kdWN0aW9uLnJzdCBiL0RvY3VtZW50YXRpb24v
+dHJhbnNsYXRpb25zL3poX0NOL2xvb25nYXJjaC9pbnRyb2R1Y3Rpb24ucnN0DQo+IGluZGV4IDEy
+ODg3OGYuLmYzZWMyNWIgMTAwNjQ0DQo+IC0tLSBhL0RvY3VtZW50YXRpb24vdHJhbnNsYXRpb25z
+L3poX0NOL2xvb25nYXJjaC9pbnRyb2R1Y3Rpb24ucnN0DQo+ICsrKyBiL0RvY3VtZW50YXRpb24v
+dHJhbnNsYXRpb25zL3poX0NOL2xvb25nYXJjaC9pbnRyb2R1Y3Rpb24ucnN0DQo+IEBAIC03MCw4
+ICs3MCw4IEBAIExBNjTkuK3mr4/kuKrlr4TlrZjlmajkuLo2NOS9jeWuveOAgiBgYCRyMGBgIOea
+hOWGheWuueaAu+aYr+WbuuWumuS4ujDvvIzogIzlhbYNCj4gID09PT09PT09PT09PT09PT09ID09
+PT09PT09PT09PT09PT09PSA9PT09PT09PT09PT09PT09PT09ID09PT09PT09PT0NCj4NCj4gIC4u
+IG5vdGU6Og0KPiAtICAgIOazqOaEj++8muWcqOS4gOS6m+mBl+eVmeS7o+eggeS4reacieaXtuWP
+r+iDveingeWIsCBgYCR2MGBgIOWSjCBgYCR2MWBgIO+8jOWug+S7rOaYrw0KPiAtICAgIGBgJGEw
+YGAg5ZKMIGBgJGExYGAg55qE5Yir5ZCN77yM5bGe5LqO5bey57uP5bqf5byD55qE55So5rOV44CC
+DQo+ICsgICAg5rOo5oSP77ya5Zyo5LiA5Lqb6YGX55WZ5Luj56CB5Lit5pyJ5pe25Y+v6IO96KeB
+5YiwIGBgJGZ2MGBgIOWSjCBgYCRmdjFgYCDvvIzlroPku6zmmK8NCj4gKyAgICBgYCRmYTBgYCDl
+kowgYGAkZmExYGAg55qE5Yir5ZCN77yM5bGe5LqO5bey57uP5bqf5byD55qE55So5rOV44CCDQo+
+DQo+DQo+ICDlkJHph4/lr4TlrZjlmagNCj4gLS0NCj4gMi4xLjANCj4NCg==
