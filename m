@@ -2,121 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49020637DBA
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 17:51:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24AB7637DBC
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 17:51:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbiKXQvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 11:51:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46682 "EHLO
+        id S229452AbiKXQvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 11:51:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiKXQvA (ORCPT
+        with ESMTP id S229499AbiKXQvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 11:51:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7E5114B88;
-        Thu, 24 Nov 2022 08:50:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DBFBB621AA;
-        Thu, 24 Nov 2022 16:50:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17275C433D6;
-        Thu, 24 Nov 2022 16:50:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669308658;
-        bh=LqTeO6gNFJ8QzpGc7p1Ojhk4LXQvlTeE1H7lbaBY37I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R6PpUCqscN7vv03f6DE3nnqQRkJ5f7xJXkmEn1/A6TX2DB2jIzeVWC2nrmvuWnfd7
-         v7d/Yxm+73wnzbXxeL7wmPULHybcYkWnkKeSihr0wl0qqWQayeDcQXX5Plsk4JlVZf
-         pC9MmgxljQ0mbjIMW/uvP7uVvf7+a34eFOaarpWpQzFfsIMl36agB7P2ytbY6xMWbX
-         PRvmi2dKf/gZHmT9aBf0lfpKaGEHkN9PsIlityYeq4SMlFJ2DicV58Du5BA7g1Xyjw
-         GDbE4j4Rn+s6BbSg5oY3azaJ3+UEGiSGasyggnfi1XzZW20JeuTUQy4bJydpxw86Jv
-         AbI0OjCWy4hvg==
-Date:   Thu, 24 Nov 2022 11:50:56 -0500
-From:   Sasha Levin <sashal@kernel.org>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     Michel =?iso-8859-1?Q?D=E4nzer?= <michel.daenzer@mailbox.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Philip Yang <Philip.Yang@amd.com>, Xinhui.Pan@amd.com,
-        amd-gfx@lists.freedesktop.org, luben.tuikov@amd.com,
-        dri-devel@lists.freedesktop.org, daniel@ffwll.ch,
-        Alex Deucher <alexander.deucher@amd.com>, airlied@gmail.com
-Subject: Re: [PATCH AUTOSEL 6.0 38/44] drm/amdgpu: Unlock bo_list_mutex after
- error handling
-Message-ID: <Y3+g8KpFuNG/SqaR@sashalap>
-References: <20221119021124.1773699-1-sashal@kernel.org>
- <20221119021124.1773699-38-sashal@kernel.org>
- <e08c0d60-45d1-85a6-9c55-38c8e87b56c3@mailbox.org>
- <0916abd9-265d-e4ed-819b-9dfa05e8d746@amd.com>
+        Thu, 24 Nov 2022 11:51:09 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 28F16116043;
+        Thu, 24 Nov 2022 08:51:08 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 461A323A;
+        Thu, 24 Nov 2022 08:51:14 -0800 (PST)
+Received: from [10.57.5.133] (unknown [10.57.5.133])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EA0613F587;
+        Thu, 24 Nov 2022 08:51:04 -0800 (PST)
+Message-ID: <2a64150d-8282-ccda-c5e5-91fe61438315@arm.com>
+Date:   Thu, 24 Nov 2022 16:51:03 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [External] : [RFC PATCH v2 1/6] perf vendor events arm64: Add
+ topdown L1 metrics for neoverse-n2
+To:     Jing Zhang <renyu.zj@linux.alibaba.com>,
+        John Garry <john.g.garry@oracle.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Zhuo Song <zhuo.song@linux.alibaba.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Will Deacon <will@kernel.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, Ian Rogers <irogers@google.com>,
+        Nick Forrington <Nick.Forrington@arm.com>
+References: <1667214694-89839-1-git-send-email-renyu.zj@linux.alibaba.com>
+ <1668411720-3581-2-git-send-email-renyu.zj@linux.alibaba.com>
+ <590ff032-d271-48ee-a4d8-141cc070c335@oracle.com>
+ <f3823c3e-d45e-40ce-1981-e726b4b6be62@linux.alibaba.com>
+ <f6e26e2d-2f10-e973-6c9f-47594da2fc99@oracle.com>
+ <cd016aa9-d43d-c585-0b77-a2e112777ec1@linux.alibaba.com>
+ <abebb42b-62c1-30d7-ad9a-5fbf6c0edce1@oracle.com>
+ <d904734a-e7c1-ca8e-7705-63fc4864ac4f@linux.alibaba.com>
+ <75c4f0e6-3f28-a748-e891-7be6016ca28e@oracle.com>
+ <57315669-e6e7-08b8-a252-bc35d4fecc01@arm.com>
+ <180a34c2-f68d-6f4d-da74-7bbb80e9e65c@linux.alibaba.com>
+ <279545ee-1758-c60d-fdc3-2b15bcc4be6d@arm.com>
+ <50d46dcf-5e30-cd3d-82a2-51e527ff641f@linux.alibaba.com>
+Content-Language: en-US
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <50d46dcf-5e30-cd3d-82a2-51e527ff641f@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <0916abd9-265d-e4ed-819b-9dfa05e8d746@amd.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 12:07:40PM +0100, Christian König wrote:
->Am 21.11.22 um 10:57 schrieb Michel Dänzer:
->>On 11/19/22 03:11, Sasha Levin wrote:
->>>From: Philip Yang <Philip.Yang@amd.com>
->>>
->>>[ Upstream commit 64f65135c41a75f933d3bca236417ad8e9eb75de ]
->>>
->>>Get below kernel WARNING backtrace when pressing ctrl-C to kill kfdtest
->>>application.
->>>
->>>If amdgpu_cs_parser_bos returns error after taking bo_list_mutex, as
->>>caller amdgpu_cs_ioctl will not unlock bo_list_mutex, this generates the
->>>kernel WARNING.
->>>
->>>Add unlock bo_list_mutex after amdgpu_cs_parser_bos error handling to
->>>cleanup bo_list userptr bo.
->>>
->>>  WARNING: kfdtest/2930 still has locks held!
->>>  1 lock held by kfdtest/2930:
->>>   (&list->bo_list_mutex){+.+.}-{3:3}, at: amdgpu_cs_ioctl+0xce5/0x1f10 [amdgpu]
->>>   stack backtrace:
->>>    dump_stack_lvl+0x44/0x57
->>>    get_signal+0x79f/0xd00
->>>    arch_do_signal_or_restart+0x36/0x7b0
->>>    exit_to_user_mode_prepare+0xfd/0x1b0
->>>    syscall_exit_to_user_mode+0x19/0x40
->>>    do_syscall_64+0x40/0x80
->>>
->>>Signed-off-by: Philip Yang <Philip.Yang@amd.com>
->>>Reviewed-by: Christian König <christian.koenig@amd.com>
->>>Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
->>>Signed-off-by: Sasha Levin <sashal@kernel.org>
->>>---
->>>  drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c | 1 +
->>>  1 file changed, 1 insertion(+)
->>>
->>>diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
->>>index b7bae833c804..9d59f83c8faa 100644
->>>--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
->>>+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
->>>@@ -655,6 +655,7 @@ static int amdgpu_cs_parser_bos(struct amdgpu_cs_parser *p,
->>>  		}
->>>  		mutex_unlock(&p->bo_list->bo_list_mutex);
->>>  	}
->>>+	mutex_unlock(&p->bo_list->bo_list_mutex);
->>>  	return r;
->>>  }
->>Looks doubtful that this is a correct backport — there's an identical mutex_unlock call just above.
->
->
->Oh, yes good point. This patch doesn't needs to be backported at all 
->because it just fixes a problem introduced in the same cycle:
 
-Dropping it, thanks!
 
--- 
-Thanks,
-Sasha
+On 24/11/2022 16:32, Jing Zhang wrote:
+> 
+> 
+> 在 2022/11/23 下午10:26, James Clark 写道:
+>>
+>>
+>> On 22/11/2022 15:41, Jing Zhang wrote:
+>>>
+>>>
+>>> 在 2022/11/22 下午10:00, James Clark 写道:
+>>>>
+>>>>
+>>>> On 21/11/2022 17:55, John Garry wrote:
+>>>>> On 21/11/2022 15:17, Jing Zhang wrote:
+>>>>>> I'm sorry that I misunderstood the purpose of putting metric as
+>>>>>> arch_std_event at first,
+>>>>>> and now it works after the modification over your suggestion.
+>>>>>>
+>>>>>> But there are also a few questions:
+>>>>>>
+>>>>>> 1. The value of the slot in the topdownL1 is various in different
+>>>>>> architectures, for example,
+>>>>>> the slot is 5 on neoverse-n2. If I put topdownL1 metric as
+>>>>>> arch_std_event, then I need to
+>>>>>> specify the slot to 5 in n2. I can specify slot values in metric like
+>>>>>> below, but is there any
+>>>>>> other concise way to do this?
+>>>>>>
+>>>>>> diff --git
+>>>>>> a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
+>>>>>> b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
+>>>>>> index 8ff1dfe..b473baf 100644
+>>>>>> --- a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
+>>>>>> +++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
+>>>>>> @@ -1,4 +1,23 @@
+>>>>>> [
+>>>>>> +       {
+>>>>>> +               "MetricExpr": "5",
+>>>>>> +               "PublicDescription": "A pipeline slot represents the
+>>>>>> hardware resources needed to process one uOp",
+>>>>>> +               "BriefDescription": "A pipeline slot represents the
+>>>>>> hardware resources needed to process one uOp",
+>>>>>> +               "MetricName": "slot"
+>>>>>
+>>>>> Ehhh....I'm not sure if that is a good idea. Ian or anyone else have an
+>>>>> opinion on this? It is possible to reuse metrics, so it should work, but...
+>>>>>
+>>>>> One problem is that "slot" would show up as a metric, which you would
+>>>>> not want.
+>>>>>
+>>>>> Alternatively I was going to suggest that you can overwrite specific std
+>>>>> arch event attributes. So for example of frontend_bound, you could have:
+>>>>
+>>>> I would agree with not having this and just hard coding the 5 wherever
+>>>> it's needed. Once we have a few different sets of metrics in place maybe
+>>>> we can start to look at deduplication, but for now I don't see the value.
+>>>>
+>>>>>
+>>>>> + b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
+>>>>> @@ -0,0 +1,30 @@
+>>>>> [
+>>>>>     {
+>>>>>     "ArchStdEvent": "FRONTEND_BOUND",
+>>>>>         "MetricExpr": "(stall_slot_frontend - cpu_cycles) / (5 *
+>>>>> cpu_cycles)",
+>>>>>     },
+>>>>>
+>>>>>> +       }
+>>>>>> +       {
+>>>>>> +               "ArchStdEvent": "FRONTEND_BOUND"
+>>>>>> +       },
+>>>>>> +       {
+>>>>>> +               "ArchStdEvent": "BACKEND_BOUND"
+>>>>>> +       },
+>>>>>> +       {
+>>>>>> +               "ArchStdEvent": "WASTED"
+>>>>>> +       },
+>>>>>> +       {
+>>>>>> +               "ArchStdEvent": "RETIRING"
+>>>>>> +       },
+>>>>>>
+>>>>>>
+>>>>>> 2. Should I add the topdownL1 metric to
+>>>>>> tools/perf/pmu-event/recommended.json,
+>>>>>> or create a new json file to place the general metric?
+>>>>>
+>>>>> It would not belong in recommended.json as that is specifically for
+>>>>> arch-recommended events. It would really just depend on where the value
+>>>>> comes from, i.e. arm arm or sbsa.
+>>>>>
+>>>>
+>>>> For what we're going to publish shortly we'll be generating a
+>>>> metrics.json file for each CPU. It will be autogenerated so I don't
+>>>> think duplication will be an issue and I'm expecting that there will be
+>>>> differences in the topdown metrics between CPUs anyway. So I would also
+>>>> vote to not put it in recommended.json
+>>>>
+>>>
+>>> I will create a new sbsa.json file in tools/perf/pmu-events/arch/arm64/
+>>> to place metrics that may be common between some CPUs, just like arch_std_event.
+>>
+>> Because this would apply to all CPUs rather than just N2, I still think
+>> it's best to wait for our metrics repo to be published. Otherwise Arm
+>> will start publishing metrics with names and group names for all future
+>> CPUs that have different names to the common ones added as part of this
+>> change.
+>>
+>> It's something that we've been working on for quite a while and we've
+>> taken care to make sure that it applies to future products and is scalable.
+>>
+>> It would be easier to add these right now only for N2, and then
+>> afterwards we can start to look at what is common and could be factored
+>> out into the top level folder.
+>>
+>>> If the topdown metrics are different in other CPUs, we can overwrite the
+>>> metric expression.
+>>
+>> True, but with different group names and metric names and units it could
+>> get slightly complicated.
+>>
+>>>
+>>> For example:
+>>>
+>>> +++ b/tools/perf/pmu-events/arch/arm64/sbsa.json
+>>> @@ -0,0 +1,9 @@
+>>> +[
+>>> +    {
+>>> +        "MetricExpr": "stall_slot_frontend / (slot * cpu_cycles)",
+>>> +        "PublicDescription": "Frontend bound L1 topdown metric",
+>>> +        "BriefDescription": "Frontend bound L1 topdown metric",
+>>> +        "MetricGroup": "TopDownL1",
+>>> +        "MetricName": "FRONTEND_BOUND"
+>>> +    }
+>>> +]
+>>>
+>>> + b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
+>>> @@ -0,0 +1,30 @@
+>>> +[
+>>> +   {
+>>> +   	"ArchStdEvent": "FRONTEND_BOUND",
+>>> +        "MetricExpr": "(stall_slot_frontend - cpu_cycles) / (5 * cpu_cycles)",
+>>> +   }
+>>> +]
+>>>
+>>
+>> With the auto generation of metrics file I don't really see too much
+>> benefit of doing it this way.
+>>
+>> You also run into the issue where if a platform happens to define all of
+>> the events required by a metric, will that metric appear automatically,
+>> even if it's not valid?
+>>
+> 
+> Ok, I agree to put the topdown metric in the n2 metric instead of arch_std_event.
+> There is no unified formula for the topdown metric currently, and the slots of each
+> CPU may be different.
+> 
+> After the standard are pubulished in the future, please consider what John said, and
+> use the general metric as arch_std_event.
+
+Yep that sounds good, will do!
+
