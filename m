@@ -2,379 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F1E637664
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:28:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 949A863766A
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:28:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiKXK2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 05:28:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47344 "EHLO
+        id S229455AbiKXK24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 05:28:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiKXK2G (ORCPT
+        with ESMTP id S229679AbiKXK2x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 05:28:06 -0500
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C0C676141;
-        Thu, 24 Nov 2022 02:28:02 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 5396BFF803;
-        Thu, 24 Nov 2022 10:27:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1669285681;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QuXxXHjsO6Qesz4Cd2esIPDdydm9CuuV9DYveil89fw=;
-        b=Gbee6iBj/3Wqjolgg5a/+mE+XtaS7VFrOtuhrRXLd5CNdIdVuSc77J9xGc/XQmZ7AU+p4M
-        V3+6xVNZIWY1zIty5niZ3SoeiQgjYsby8gNJBrkGyS4WH93C6cjIKWUVRoHI34VWyX7Z37
-        Ts6HVrpPwm22YTZTNd9lMKlJBupCnuyl6QPYAAvi6pHWmN6e1GOUi4h+UHTKA1tnQWdWpK
-        GmN5VYNdsoj7J7H932oy/agi714eYInEkI2ljly25kWapR+gH8DwJmlBJ9bw/LHUd041sW
-        gM8iYCCZKPV7y7b7DFFIVGAQ7DJeMvceEzRaNZ2stAkfCYtsFqr3Fuj9ewhzAQ==
-Date:   Thu, 24 Nov 2022 11:27:57 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Herve Codina <herve.codina@bootlin.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 2/7] dt-bindings: clock: renesas,r9a06g032-sysctrl:
- Add h2mode property
-Message-ID: <20221124112757.13f200c4@xps-13>
-In-Reply-To: <d203a6ce-7032-a423-5158-fa551922dea1@linaro.org>
-References: <20221114111513.1436165-1-herve.codina@bootlin.com>
-        <20221115150417.513955a7@bootlin.com>
-        <20221118112349.7f09eefb@bootlin.com>
-        <d9bd5075-9d06-888d-36a9-911e2d7ec5af@linaro.org>
-        <20221121165921.559d6538@bootlin.com>
-        <4e54bfb4-bb67-73b8-f58f-56797c5925d3@linaro.org>
-        <CAMuHMdU=-ZUzHSb0Z8P3wsLK9cgGVCPdMi6AcjTH23tUQEeEBA@mail.gmail.com>
-        <a3e1332e-fc15-8a78-0ddd-6d5b26197f11@linaro.org>
-        <CAMuHMdXzqZB4sKMmroriq5oPp7z=yXiHk=+eQKwSyPhNbYqgYA@mail.gmail.com>
-        <1f12883b-1e37-7f2b-f9e9-c8bad290a133@linaro.org>
-        <CAMuHMdVbzg8y2So+A=z8nUwHMoL+XKUrvoXp9QdbCnUve1_Atw@mail.gmail.com>
-        <191a7f3e-0733-8058-5829-fe170a06dd5a@linaro.org>
-        <20221122100706.739cec4d@bootlin.com>
-        <3856e2d8-1c16-a69f-4ac5-34b8e7f18c2b@linaro.org>
-        <CAMuHMdXPndkt=+k1CAcDbH7eK=TFfS6wMu+xdqWZSCz1+hyhEA@mail.gmail.com>
-        <02db6a5d-ae9d-68b5-f5c5-bebb471e0f70@linaro.org>
-        <20221124103633.4fbf483f@xps-13>
-        <d203a6ce-7032-a423-5158-fa551922dea1@linaro.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Thu, 24 Nov 2022 05:28:53 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83FF4A13C2;
+        Thu, 24 Nov 2022 02:28:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9A9DACE29E0;
+        Thu, 24 Nov 2022 10:28:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26949C433D6;
+        Thu, 24 Nov 2022 10:28:45 +0000 (UTC)
+Message-ID: <d8595ab3-93ad-e852-ceaf-cc11a09c1784@xs4all.nl>
+Date:   Thu, 24 Nov 2022 11:28:44 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Content-Language: en-US
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        linux-media@vger.kernel.org,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kernel@collabora.com, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220610125215.240539-1-nicolas.dufresne@collabora.com>
+ <20220610125215.240539-3-nicolas.dufresne@collabora.com>
+ <fed8b2cf-3098-0690-dc40-796dbe0ff424@xs4all.nl>
+ <46211420a76c7608c34cd6b3569f41accdfd08a1.camel@collabora.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: Re: [PATCH v1 2/5] media: rkvdec: Add an ops to check for decode
+ errors
+In-Reply-To: <46211420a76c7608c34cd6b3569f41accdfd08a1.camel@collabora.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+Hi Nicolas,
 
-krzysztof.kozlowski@linaro.org wrote on Thu, 24 Nov 2022 10:46:14 +0100:
+On 14/06/2022 18:14, Nicolas Dufresne wrote:
+> Le mardi 14 juin 2022 à 16:44 +0200, Hans Verkuil a écrit :
+>> On 6/10/22 14:52, Nicolas Dufresne wrote:
+>>> This optional internal ops allow each codec to do their own
+>>> error status checking. The presence of an error is reported
+>>> using the ERROR buffer state. This patch have no functional
+>>> changes.
+>>
+>> If a buffer is returned with state ERROR, then that means that it is
+>> seriously corrupt and userspace is expected to drop it. You might still
+>> want to show it for debugging purposes, but the normal action is to drop it.
+> 
+> The discussion should be around the ERROR flag, and not the error state. Error
+> state is just an internal thing that have no meaning API wise, but turns out to
+> be the only way to get the ERROR flag to be set. With that in mind, this is not
+> what V4L2_BUF_FLAG_ERROR specification says:
+> 
+>> When this flag is set, the buffer has been dequeued successfully, although
+>> the data might have been corrupted. This is recoverable, streaming may
+>> continue as normal and the buffer may be reused normally. Drivers set 
+>> this flag when the VIDIOC_DQBUF ioctl is called.
+> 
+> For me "seriously corrupt" and "might have been corrupted" is very different.
 
-> On 24/11/2022 10:36, Miquel Raynal wrote:
-> > Hi Krzysztof,
-> >=20
-> > krzysztof.kozlowski@linaro.org wrote on Wed, 23 Nov 2022 10:39:41 +0100:
-> >  =20
-> >> On 22/11/2022 11:47, Geert Uytterhoeven wrote: =20
-> >>> Hi Krzysztof,
-> >>>
-> >>> On Tue, Nov 22, 2022 at 11:30 AM Krzysztof Kozlowski
-> >>> <krzysztof.kozlowski@linaro.org> wrote:   =20
-> >>>> On 22/11/2022 10:07, Herve Codina wrote:   =20
-> >>>>> On Tue, 22 Nov 2022 09:42:48 +0100
-> >>>>> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> >>>>>   =20
-> >>>>>> On 22/11/2022 09:25, Geert Uytterhoeven wrote:   =20
-> >>>>>>> Hi Krzysztof,
-> >>>>>>>
-> >>>>>>> On Tue, Nov 22, 2022 at 8:45 AM Krzysztof Kozlowski
-> >>>>>>> <krzysztof.kozlowski@linaro.org> wrote:   =20
-> >>>>>>>> On 21/11/2022 21:46, Geert Uytterhoeven wrote:   =20
-> >>>>>>>>>> This does not change anything. Herve wrote:
-> >>>>>>>>>>   =20
-> >>>>>>>>>>> probe some devices (USB host and probably others)   =20
-> >>>>>>>>>>
-> >>>>>>>>>> Why some can be probed earlier and some not, if there are no
-> >>>>>>>>>> dependencies? If there are dependencies, it's the same case wi=
-th sysctrl
-> >>>>>>>>>> touching the register bit and the USB controller touching it (=
-as well
-> >>>>>>>>>> via syscon, but that's obvious, I assume).
-> >>>>>>>>>>
-> >>>>>>>>>> Where is the synchronization problem?   =20
-> >>>>>>>>>
-> >>>>>>>>> The h2mode bit (and probably a few other controls we haven't fi=
-gured out
-> >>>>>>>>> yet) in the sysctrl must be set before any of the USB devices i=
-s active.
-> >>>>>>>>> Hence it's safest for the sysctrl to do this before any of the =
-USB drivers
-> >>>>>>>>> probes.   =20
-> >>>>>>>>
-> >>>>>>>> Again, this does not differ from many, many of other devices. Al=
-l of
-> >>>>>>>> them must set something in system controller block, before they =
-start
-> >>>>>>>> operating (or at specific time). It's exactly the same everywher=
-e.   =20
-> >>>>>>>
-> >>>>>>> The issue here is that there are two _different drivers_ (USB host
-> >>>>>>> and device). When both are modular, and the driver that depends o=
-n the
-> >>>>>>> sysctrl setting is loaded second, you have a problem: the sysctrl=
- change
-> >>>>>>> must not be done when the first driver is already using the hardw=
-are.
-> >>>>>>>
-> >>>>>>> Hence the sysctrl driver should take care of it itself during ear=
-ly
-> >>>>>>> initialization (it's the main clock controller, so it's a depende=
-ncy
-> >>>>>>> for all other I/O device drivers).   =20
-> >>>>>>
-> >>>>>> I assumed you have there bit for the first device (which can switch
-> >>>>>> between USB host and USB device) to choose appropriate mode. The
-> >>>>>> bindings also expressed this - "the USBs are". Never said anything=
- about
-> >>>>>> dependency between these USBs.
-> >>>>>>
-> >>>>>> Are you saying that the mode for first device cannot be changed on=
-ce the
-> >>>>>> second device (which is only host) is started? IOW, the mode setup=
- must
-> >>>>>> happen before any of these devices are started?
-> >>>>>>
-> >>>>>> Anyway with sysctrl approach you will have dependency and you cann=
-ot
-> >>>>>> rely on clock provider-consumer relationship to order that depende=
-ncy.
-> >>>>>> What if you make all clocks on and do not take any clocks in USB d=
-evice?
-> >>>>>> Broken dependency. What if you want to use this in a different SoC,
-> >>>>>> where the sysctrl does not provide clocks? Broken dependency.   =20
-> >>>>>
-> >>>>> The issue is really related to the Renesas sysctrl itself and not r=
-elated
-> >>>>> to the USB drivers themselves.
-> >>>>> From the drivers themselves, the issue is not seen (I mean the driv=
-er
-> >>>>> takes no specific action related to this issue).
-> >>>>> If we change the SOC, the issue will probably not exist anymore.   =
-=20
-> >>>>
-> >>>> Yeah, and in the next SoC you will bring 10 of such properties to
-> >>>> sysctrl arguing that if one was approved, 10 is also fine. Somehow
-> >>>> people on the lists like to use that argument - I saw it somewhere, =
-so I
-> >>>> am allowed to do here the same.   =20
-> >>>
-> >>> Like pin control properties? ;-)
-> >>> This property represents a wiring on the board...
-> >>> I.e. a system integration issue.
-> >>>    =20
-> >>>> I understand that the registers responsible for configuration are in
-> >>>> sysctrl block, but it does not mean that it should be described as p=
-art
-> >>>> of sysctrl Devicetree node. If there was no synchronization problem,
-> >>>> this would be regular example of register in syscon which is handled
-> >>>> (toggled) by the device (so USB device/host controller). Since there=
- is
-> >>>> synchronization problem, you argue that it is correct representation=
- of
-> >>>> hardware. No, it is not, because logically in DT you do not describe
-> >>>> mode or existence of other devices in some other node and it still d=
-oes
-> >>>> not describe this ordering.   =20
-> >>>
-> >>> So we have to drop the property, and let the sysctrl block look
-> >>> for <name>@<reg> nodes, and check which ones are enabled?
-> >>>
-> >>> Running out of ideas...   =20
-> >=20
-> > I'm stepping in, hopefully I won't just be bikeshedding on something
-> > that has already been discussed but here is my grain of salt.
-> >  =20
-> >> One solution could be making USB nodes children of the sysctrl block w=
-hich:
-> >> 1. Gives proper ordering (children cannot start before parent)
-> >> regardless of any other shared resources,
-> >> 2. Allows to drop this mode property and instead check what type of
-> >> children you have and configure mode depending on them.
-> >>
-> >> However this also might not be correct representation of hardware
-> >> (dunno...), so I am also running out of ideas. =20
-> >=20
-> > I see what you mean here, but AFAICS that is clearly a wrong
-> > representation of the hardware. Sorting nodes by bus seems the aim of
-> > device tree because there is a physical relationship, that's why we
-> > have (i2c as an example):
-> >=20
-> > 	ahb {
-> > 		foo-controller@xxx {
-> > 			reg =3D <xxx>;
-> > 		};
-> > 	};
-> >=20
-> > But what you are describing now is conceptually closer to:
-> >=20
-> > 	clk-controller {
-> > 		foo-controller {
-> > 			reg =3D ?
-> > 		};
-> > 	}; =20
->=20
-> Which is not a problem. reg can be anything - offset from sysctrl node
-> or absolute offset. We have it in many places already. What's the issue
-> here?
->
-> > Not mentioning that this only works once, because foo-controller might
-> > also need other blocks to be ready before probing and those might
-> > be different blocks (they are the same in the rzn1 case, but
-> > more generally, they are not). =20
->=20
-> But what is the problem of needing other blocks? All devices need
-> something and we solve it...
+So I did some more digging (better late than never): the documentation for
+the stateful/stateless codecs explicitly states that ERROR should be used
+to indicate de/encoding errors.
 
-What I am saying is that parenting only works once. All the other
-dependencies must be described by properties.
+I am actually not that happy about that, since the original purpose of ERROR
+was really to indicate that there is something seriously wrong with the
+captured data, and applications should skip it, except for debugging purposes.
 
-The h2mode register, no matter its content, should be set early in the
-boot process, at least before any of the concerned controllers, which
-are totally independent hardware blocks, probe. If one of them has
-started, a change to the h2mode property could just stall the system.
-The USB controllers do not *need* this property nor want to change it
-(see below).
+But since it has been adopted in the codec documentation I have to accept this
+behavior for codecs.
 
-The fact that the USB controllers are totally independent hardware
-blocks make me thing that they should *not* be children of the sysctrl.
-In our case one of them even is a PCI device! Would you represent a PCI
-device within the sysctrl node? The other is somehow memory mapped
-behind a bridge. Again, this has to be described somewhere, and
-parenting usually is the right fit for that.
+So I am OK with this series. There were some comments about some typos, so
+I will mark it as 'Changes Requested' in patchwork, but if you post a v2, then
+I'll take it.
 
-Hence, the only real thing that remains to be described, as you
-rightly pointed out in your earlier reviews, is the probe order which
-is nothing related to any kind of parenting in this case.
+Regards,
 
-> > So in the end I am not in favor of this
-> > solution.
-> >=20
-> > If we compare the dependency between the USB device controller and the
-> > sysctrl block which contains the h2mode register to existing
-> > dependencies, they are all treated with properties. These properties,
-> > eg:
-> >=20
-> > 	foo-controller {
-> > 		clocks =3D <&provider [index]>;
-> > 	};
-> >=20
-> > were initially used to just tell the consumer which resource it should
-> > grab/enable. If the device was not yet ready, we would rely on the
-> > probe deferral mechanism to try again later. Not optimal, but not
-> > bad either as it made things work. Since v5.11 and the addition of
-> > automatic device links, the probe order is explicitly ordered.
-> > <provider> could always get probed before <foo-controller>. So, isn't
-> > what we need here? What about the following:
-> >=20
-> > 	sysctrl {
-> > 		h2mode =3D "something";
-> > 	};
-> >=20
-> > 	usb-device {
-> > 		h2mode-provider =3D <&sysctrl>;
-> > 	}; =20
->=20
-> No, because next time one will add 10 of such properties:
-> sysctrl {
-> 	h2mode =3D ""
-> 	g2mode =3D ""
-> 	i2mode =3D ""
-> 	....
-> }
->=20
-> and keep arguing that because these registers are in sysctrl, so they
-> should have their own property in sysctrl mode.
->=20
-> That's not correct representation of hardware.
+	Hans
 
-Actually my main focus here was more on the "sysctrl-provider" logic.
-We need a probe dependency so we have two choices:
-- pointing
-- parenting
-For the reasons above, I bet the former is the most accurate approach.
+> 
+>>
+>> So this is not a valid approach for a decoder that can still produce a
+>> decent picture, albeit with macroblock artifacts.
+>>
+>> A separate control that can be returned as part of the request and contains
+>> some sort of error indication would be more appropriate.
+>>
+>> Buffer state ERROR is really meant for e.g. DMA errors and it shouldn't
+>> be mixed with decode errors that still produce a valid picture.
+> 
+> The ERROR flag has been used for many years by the UVC driver to indicate a
+> partially received image (possibly due to DMA error). That driver went even
+> further and set the bytesused to the amount of bytes that was received. How this
+> have been interpreted (mostly due to how the spec around ERROR flag is written)
+> in GStreamer is that the buffer contains "some valid" data unless payload size
+> is 0.
+> 
+> As explained earlier, the decision to display "some valid" data is not something
+> we should decided for our users. This should be left to the application to
+> decide. Same goes for GStreamer, if a buffer exist but has "some valid data", we
+> have a GST_BUFFER_FLAG_CORRUPTED flag for it. It is then up for the application
+> to drop if needed for the application. I'm pretty sure some stateful decoders
+> also behaves like this (simply because an error is an error, regardless of the
+> nature of it).
+> 
+> It might be different today, but few years ago, dropping or not dropping was the
+> main difference between Apple Facetime (dropping) and the other video streaming
+> applications. One would freeze, the other would show "some valid data".
+> 
+> If you look at the outcome of a partially corrupted decoded images and the
+> outcome of a mid-frame DMA error (typically from a camera stream), you'll find
+> that these are visually the same. So it is unfair to consider these two error so
+> different that a new mechanism must be added. In my opinion, adding RO controls
+> to signal these corruption only make sense if the hardware can provide detailed
+> reports of what is corrupted (list/range of macro-blocks, or CTU that are
+> affected). Then you could measure the level of corruption, but in reality, I
+> doubt there would be a vast usage of this, specially that the report will likely
+> be inconsistent due to limited HW support.
+> 
+> Finally, in the bitstream decoder world, including all software decoders I've
+> worked with, the decode is a success only if all bits are perfectly decoded.
+> This is the baseline for good vs bad. Userland expected an image, and whatever
+> happened, in real-time scenario, it must send an image. Sending a corrupted
+> image, or sending the previously good image remains a decision to be made by
+> application. As application exist around the implemented mechanism here, I'd
+> prefer to go for that rather then adding a new API.
+> 
+> Nicolas
+> 
+>>
+>> Regards,
+>>
+>> 	Hans
+>>
+>>>
+>>> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+>>> ---
+>>>  drivers/staging/media/rkvdec/rkvdec.c | 10 ++++++----
+>>>  drivers/staging/media/rkvdec/rkvdec.h |  2 ++
+>>>  2 files changed, 8 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/drivers/staging/media/rkvdec/rkvdec.c b/drivers/staging/media/rkvdec/rkvdec.c
+>>> index 7bab7586918c..7e76f8b72885 100644
+>>> --- a/drivers/staging/media/rkvdec/rkvdec.c
+>>> +++ b/drivers/staging/media/rkvdec/rkvdec.c
+>>> @@ -950,6 +950,7 @@ static void rkvdec_v4l2_cleanup(struct rkvdec_dev *rkvdec)
+>>>  static irqreturn_t rkvdec_irq_handler(int irq, void *priv)
+>>>  {
+>>>  	struct rkvdec_dev *rkvdec = priv;
+>>> +	struct rkvdec_ctx *ctx;
+>>>  	enum vb2_buffer_state state;
+>>>  	u32 status;
+>>>  
+>>> @@ -958,12 +959,13 @@ static irqreturn_t rkvdec_irq_handler(int irq, void *priv)
+>>>  		VB2_BUF_STATE_DONE : VB2_BUF_STATE_ERROR;
+>>>  
+>>>  	writel(0, rkvdec->regs + RKVDEC_REG_INTERRUPT);
+>>> -	if (cancel_delayed_work(&rkvdec->watchdog_work)) {
+>>> -		struct rkvdec_ctx *ctx;
+>>> +	ctx = v4l2_m2m_get_curr_priv(rkvdec->m2m_dev);
+>>>  
+>>> -		ctx = v4l2_m2m_get_curr_priv(rkvdec->m2m_dev);
+>>> +	if (ctx->coded_fmt_desc->ops->check_error_info)
+>>> +		state = ctx->coded_fmt_desc->ops->check_error_info(ctx);
+>>> +
+>>> +	if (cancel_delayed_work(&rkvdec->watchdog_work))
+>>>  		rkvdec_job_finish(ctx, state);
+>>> -	}
+>>>  
+>>>  	return IRQ_HANDLED;
+>>>  }
+>>> diff --git a/drivers/staging/media/rkvdec/rkvdec.h b/drivers/staging/media/rkvdec/rkvdec.h
+>>> index 633335ebb9c4..4ae8e6c6b03c 100644
+>>> --- a/drivers/staging/media/rkvdec/rkvdec.h
+>>> +++ b/drivers/staging/media/rkvdec/rkvdec.h
+>>> @@ -73,6 +73,8 @@ struct rkvdec_coded_fmt_ops {
+>>>  		     struct vb2_v4l2_buffer *dst_buf,
+>>>  		     enum vb2_buffer_state result);
+>>>  	int (*try_ctrl)(struct rkvdec_ctx *ctx, struct v4l2_ctrl *ctrl);
+>>> +	/* called from IRQ handler */
+>>> +	int (*check_error_info)(struct rkvdec_ctx *ctx);
+>>>  };
+>>>  
+>>>  struct rkvdec_coded_fmt_desc {
+>>
+> 
 
-If the h2mode property bothers you, it's fine, we can just drop it. The
-USB device controller can do without it:
-- either it just probes without knowing the mode, its bus will remain
-  empty so the device is useless, but nothing will break.
-- or (this is my favorite) we add another sysctrl helper that exposes
-  the h2mode, very much like we've done with the dmamux [2] and we just
-  avoid probing if the mode that we receive does not ask for a USB
-  device controller. Speeds-up the boot process.
-
-[2] https://lore.kernel.org/all/20220427095653.91804-5-miquel.raynal@bootli=
-n.com/
-
-Either ways, we would still need the probe order to be enforced,
-which might be achieved on Linux side with the below explanations.
-
-> > We can initially just make this work with some additional logic on both
-> > sides. The USB device controller would manually check whether sysctrl
-> > has been probed or not (in practice, because of the clocks and power
-> > domains being described this will always be a yes, but IIUC we want to
-> > avoid relying on it) and otherwise, defer its probe. On the sysctrl side
-> > it is just a matter of checking (like we already do):
-> >=20
-> > 	if (!sysctrl_priv)
-> > 		return -EPROBE_DEFER;
-> >=20
-> > To be honest I would love to see the device link mechanism extended to
-> > "custom" phandle properties like that, it would avoid the burden of
-> > checking for deferrals manually, aside with boot time improvements. If
-> > we go this way, we shall decide whether we want to:
-> > * extend the list of properties that will lead to a dependency creation=
- [1]
-> > * or maybe settle on a common suffix that could always be used,
-> >   especially for specific cases like this one where there is an
-> >   explicit provider-consumer dependency that must be fulfilled:
-> >=20
-> > 	DEFINE_SUFFIX_PROP(provider, "-provider", "#provider-cells")
-> >=20
-> > * or perhaps extend struct of_device_id to contain the name of the
-> >   properties pointing to phandles that describe probe dependencies with:
-> >=20
-> > 	char *provider_prop_name;
-> > 	char *provider_cells_prop_name;
-> >=20
-> >   and use them from of/property.c to generate the links when relevant.
-> >=20
-> > [1] https://elixir.bootlin.com/linux/v6.0/source/drivers/of/property.c#=
-L1298
-> >=20
-> >=20
-> > Thanks,
-> > Miqu=C3=A8l =20
->=20
-> Best regards,
-> Krzysztof
->=20
-
-Thanks,
-Miqu=C3=A8l
