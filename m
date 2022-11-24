@@ -2,138 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A6AA637680
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:30:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E31E63768A
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:33:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbiKXKai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 05:30:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49454 "EHLO
+        id S229502AbiKXKdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 05:33:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiKXKaP (ORCPT
+        with ESMTP id S229436AbiKXKdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 05:30:15 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9749814F9C5
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:30:05 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id j16so1860404lfe.12
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:30:05 -0800 (PST)
+        Thu, 24 Nov 2022 05:33:00 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B55F88F85
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:32:58 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id s5so1922330edc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:32:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/YGzB1m+A8t24Wyv5LyOx5oUGq5pgFjmcOjHEeeQKKE=;
-        b=P4r8ejXZ4Eg9YNX6ILD2RSHKALTZZ8W/0BRIkyRGGH0Te77UjQKe0yFJNG2u0iOytO
-         P7Ou21TenDgggLj4HVD7H2Wi64jHe369AGMSZ0VC6897W7apN0DYRll4z5n4FKNs0eAZ
-         8h7iQ4ZS7/zSNWfM0Dm9da7UIN8QMhUmEb6w5uDidqX+x1wGVONjkS4wivwkV4jBKayp
-         PJKNHH+CMVoBYIi1BGBZ+c+2k3GmTbqyPe5JMwjcTTf9CiGRc3kLtJeSMaG8QMtY1zD/
-         MhGeJgyoyrNErWBwfhZBs1ByXh6bEAjqob0yVnNjl8krHAcPZJLfrUBo1mnvJJgnJqfe
-         nw4Q==
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/Fwv0fBaAtUGyjSvz8Eubu4WI6tfxvAGSEBjrtHfM94=;
+        b=R+veBmryJx4bjvNU4yQpLYI4xOGK5WSei4TFOGSsJ6CxLP27d+kxKBz3iUR9fA4IxX
+         SMnZEu7CLp3KwyXQKgWs+zSP6Ch9iM8GB3nikg+wvH3zL8+5+RqnJaFIDM5q50FmmaWy
+         WBi/got/nDXWVhECiF7GU3BYildUNLZmiZMQvsZmXcGs1F307/YNgKlHzUwMT7MwlsNa
+         CIgjFYBTVRnp91Om5Kurv7dmm1BT1yENpGc100kF7xxVMpQ22cfQnt0FEqv/FssI/6mC
+         Pz1lRORynIO5fCYwPKJ0BHL+uKSV/zZRLrShQdE7QZ05s+dJ1O/1uA7moSbqYz0jMZKx
+         hPJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/YGzB1m+A8t24Wyv5LyOx5oUGq5pgFjmcOjHEeeQKKE=;
-        b=eXorDAEvH+NmeX0pN23k93ICoittppnSRxH6KzeWQjvhnWF91niH/9/+H6pbxlaoeZ
-         ElQsQ/FY51LEgkAidDF9Rjb/fXDrk7mkpGDGQugbwMgWgALN4SOOiSKfKNF6i1Ub5jI+
-         hcrskKZR2ojyHUn5LByLXMer9ouH99/+YKQYzUD53B2M+hN9fVtKSLuchDvTfvfHhUIs
-         KxZOWFrjj5XFzsdlM1nRi2Ws+Vftm967PFA98bnMBTyR7hKpZS1NY0LQWMuvTUm1YV/1
-         xXhWozQszt2X5F1Cl8CSN7iO5S6STpr9dPtf+NJSUiGGtLy+8dwBfWnRcw8I0r6UYHNW
-         DVog==
-X-Gm-Message-State: ANoB5pniENCpzDdA477EwdmwXNXe0sIKHjEnrK0f8O4vJT1iU2gjAJ0T
-        6Y32s8Y/I+18M1pKBehnNQe12g==
-X-Google-Smtp-Source: AA0mqf6s5rfKEkFzvxg78RSbw5JHvfM0tIBJH7b0tkR3JUz6rMn6ooziH19gylVOxdcjatJAbJ3jhQ==
-X-Received: by 2002:a05:6512:3da3:b0:4aa:f992:28aa with SMTP id k35-20020a0565123da300b004aaf99228aamr4887349lfv.459.1669285803993;
-        Thu, 24 Nov 2022 02:30:03 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id u21-20020a196a15000000b00498f570aef2sm78922lfu.209.2022.11.24.02.30.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Nov 2022 02:30:03 -0800 (PST)
-Message-ID: <333a240a-2c97-8b19-91d1-315d00e1f438@linaro.org>
-Date:   Thu, 24 Nov 2022 11:30:02 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/Fwv0fBaAtUGyjSvz8Eubu4WI6tfxvAGSEBjrtHfM94=;
+        b=k5697yXGPuiziu7C7gDh5WJx3l2JUAcOCCrLks+NflC6ZF99SniGrYlzk+RJISqtJO
+         WZRem0e5CA+UVi79ibu/Fx1gTsBtBYTOno+QzEACnOXZkQ68hOz2Xr0TdFMHAQc6//nD
+         HOOV200Hg9dUD9Iq2OfiIi9rjjelyJ9Vb5N4egJpyFTfurSm62y8/DKtiYQlqO2rYn+G
+         xOVssgrcU7PlK/PjTSNMK1Va9FF5gVl2s8Rj3R7VD0SSC5A0BbMdeV0/qnxxUJiWL1GJ
+         DYCEGYBLJjNNAbe9HMQhj8ukY3BtW2pIvBgM7xxTIRq9iVGOKQBP1nsEncoOd0Wm1Nvs
+         v0tw==
+X-Gm-Message-State: ANoB5pmd1jnU592iiHZddEob4n9ffwK5EBarWyXgUnQlLZcOayfCbv1s
+        YKuv2F25eRkOqBXSdrdoZdz9Bg==
+X-Google-Smtp-Source: AA0mqf6l3YnM1QkmkvtGrkaGbUvKvN03fiMpWHkPotubU8vmj+xb1xgCJEkB80pFtKPXCbX1K3IyGA==
+X-Received: by 2002:a05:6402:1f03:b0:468:7be6:55e7 with SMTP id b3-20020a0564021f0300b004687be655e7mr29511275edb.345.1669285976903;
+        Thu, 24 Nov 2022 02:32:56 -0800 (PST)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id 18-20020a170906201200b0077f20a722dfsm266341ejo.165.2022.11.24.02.32.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Nov 2022 02:32:56 -0800 (PST)
+Date:   Thu, 24 Nov 2022 11:32:55 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] riscv: vdso: remove hardcoded 0x800 .text section
+ start addr
+Message-ID: <20221124103255.33prhf3gf6xtwlsk@kamzik>
+References: <20221123161805.1579-1-jszhang@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v4 1/3] dt-bindings: interconnect: Add rpmh virt devices
-Content-Language: en-US
-To:     Melody Olvera <quic_molvera@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Odelu Kukatla <quic_okukatla@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221118182245.31035-1-quic_molvera@quicinc.com>
- <20221118182245.31035-2-quic_molvera@quicinc.com>
- <536af0d9-aa00-ddf1-753d-670ec2adef91@linaro.org>
- <3ada611b-96e0-5cf0-d79d-b90ca4202ddb@quicinc.com>
- <b7cc4f5d-c1d6-919c-9604-7855ea802d17@linaro.org>
- <e6ae7c01-47ca-f1da-3b0b-1f17d9e862bf@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <e6ae7c01-47ca-f1da-3b0b-1f17d9e862bf@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221123161805.1579-1-jszhang@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/11/2022 18:57, Melody Olvera wrote:
->>>>> +
->>>>> +maintainers:
->>>>> +  - Georgi Djakov <georgi.djakov@linaro.org>
->>>>> +  - Odelu Kukatla <quic_okukatla@quicinc.com>
->>>>> +
->>>>> +description: |
->>>>> +   RPMh interconnect providers support system bandwidth requirements through
->>>>> +   RPMh hardware accelerators known as Bus Clock Manager (BCM). The provider is
->>>>> +   able to communicate with the BCM through the Resource State Coordinator (RSC)
->>>>> +   associated with each execution environment. Provider nodes must point to at
->>>>> +   least one RPMh device child node pertaining to their RSC and each provider
->>>>> +   can map to multiple RPMh resources. Virtual interconnect providers are not
->>>>> +   controlled by AP and do not support QoS; they should not have associated
->>>>> +   register regions.
->>>>> +
->>>>> +allOf:
->>>>> +  - $ref: qcom,rpmh-common.yaml#
->>>>> +
->>>>> +properties:
->>>>> +  compatible:
->>>>> +    enum:
->>>>> +      - qcom,qdu1000-clk-virt
->>>>> +      - qcom,qdu1000-mc-virt
->>>>> +      - qcom,sm8450-clk-virt
->>>>> +      - qcom,sm8450-mc-virt
->>>> You should also move qcom,sdx65-mc-virt, qcom,sc8280xp-mc-virt,
->>>> qcom,sc8280xp-clk-virt and more.
->>> Ok. I wasn't sure since some of these entries don't seem to conform to
->>> these bindings, even though it seems they should.
->> I have impression that devices I listed conform to these bindings, this
->> is why I listed them. But if you are sure that they do not, then they
->> should not be moved.
+On Thu, Nov 24, 2022 at 12:18:05AM +0800, Jisheng Zhang wrote:
+> It seems the hardcoded 0x800 isn't necessary, but removing it brings a
+
+s/, but/and/
+
+> small vdso.so and aligns with other architectures.
+
+This commit message didn't really satisfy my desire to understand why
+the comment and '. = 0x800' were there in the first place and if its safe
+to remove now, so I tried to do some of my own digging. I found
+
+commit 5b9304933730 ("x86 vDSO: generate vdso-syms.lds")
+commit f6b46ebf904f ("x86 vDSO: new layout")
+
+which removes the comment and hard coding for x86 by changing the vdso
+Makefile. Then looking at
+
+commit 9031fefde6f2 ("arm64: VDSO support")
+
+we see that it starts with the new Makefile approach and doesn't bother
+with the hard coding from the start. As riscv also started with the new
+Makefile approach it also could have dropped the hard coding from the
+start (I guess).
+
 > 
-> You're correct; those you listed do conform to the new bindings and should be moved.
-> I also caught qcom,sc7280-clk-virt which needs to be moved. I'll add to the new bindings.
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> ---
+>  arch/riscv/kernel/vdso/vdso.lds.S | 8 +-------
+>  1 file changed, 1 insertion(+), 7 deletions(-)
+> 
+> diff --git a/arch/riscv/kernel/vdso/vdso.lds.S b/arch/riscv/kernel/vdso/vdso.lds.S
+> index 150b1a572e61..7be7e618d59c 100644
+> --- a/arch/riscv/kernel/vdso/vdso.lds.S
+> +++ b/arch/riscv/kernel/vdso/vdso.lds.S
+> @@ -31,13 +31,7 @@ SECTIONS
+>  
+>  	.rodata		: { *(.rodata .rodata.* .gnu.linkonce.r.*) }
+>  
+> -	/*
+> -	 * This linker script is used both with -r and with -shared.
+> -	 * For the layouts to match, we need to skip more than enough
+> -	 * space for the dynamic symbol table, etc. If this amount is
+> -	 * insufficient, ld -shared will error; simply increase it here.
+> -	 */
+> -	. = 0x800;
+> +	. = ALIGN(4);
 
-Actually let's wait a bit with this. For SM8550 we had an idea to move
-interconnect to their own bindings file, because they will grow a bit
-with allOf:if:then clauses.
+I realize 4 is used here now because I questioned the 16, but after doing
+my digging I think a larger alignment may be better. Loading the text may
+be done with 8 byte or larger reads, so having the section aligned to a
+larger size would be better reading it. We might as well use 16, like
+arm64 does, and like you had before?
 
-Maybe SM8450 and QDU1000 should also go to their own files which will
-describe all their interconnects (the virt and the ones requiring clocks)?
+Also, having enough separation between data and text seems to be
+important for cache reasons, based on the comment in
+./arch/x86/entry/vdso/vdso-layout.lds.S and other vdso history.
+Maybe we should move .note, .eh_frame_hdr, and .eh_frame below
+.rodata like x86 has it?
 
-Apologies for bringing it late for your patches, but SM8550 is also
-happening right now, so new things pop-up :)
+Thanks,
+drew
 
-Best regards,
-Krzysztof
-
+>  	.text		: { *(.text .text.*) }		:text
+>  
+>  	.data		: {
+> -- 
+> 2.37.2
+> 
