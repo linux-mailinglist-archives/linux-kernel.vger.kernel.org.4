@@ -2,177 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63E20637405
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:34:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B26463740B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:35:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiKXIew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 03:34:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57884 "EHLO
+        id S229888AbiKXIfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 03:35:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbiKXIeu (ORCPT
+        with ESMTP id S229536AbiKXIfi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 03:34:50 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88173CEB9C
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:34:49 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id q1so997730pgl.11
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:34:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=W5ccKx8fizG4gCscMAGllzhhGT1asbD46ZbtRMN7NAQ=;
-        b=NaWt9gAey74YX97MIcdsLCn1TP41z+UNuwg9OtGNLyX+60MqAG3WXZorgpUxG4fGR4
-         tJPrYRQhsuMC9lfocuTF19x7DKZ1PVSx5CAScNk2LVDFBUdtNO5DJMaeY38/gAd2Nh3d
-         DCIb1BSzCMukm/v/MgXpViy8d8f4Yjg8pUraZnFx8qkBagdpo/L3BAh9noM4WZx0vIt6
-         8Rh90JIbrg2fOk763xeNf81wRGJtZzIYcKk1l2WaifDPfiig9YuNceghGkjs0h+mj1JG
-         81h5JzuFYfeJZTXTQINku6Y2sK3J2imw2gTzHoQz5dkG7dM7FPR6XiQjQ4h9WK3HB51/
-         gy6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W5ccKx8fizG4gCscMAGllzhhGT1asbD46ZbtRMN7NAQ=;
-        b=ME3dc9J1F4jlvj8NEOSmNKopJJGVtFceUQbcCmJNJeOWBQJlZyB81QiQFYrKotMnY2
-         pwhxuLo9WnmxAi4xyERbg21ErLZGM6jTEppWktA5ngyRCsX1roRlwiHTDfN7CoqP9POp
-         uyMB9xvC/3vNfSH8VaiuB62IffByFuYxo9iXnMAylmsUTgbqsrv1vYgZhPr5akbGjeyw
-         Ax26gpUdE6T7z29lAv8qgHVA8rnfaoJrUyciviqz9zllDzTZYIcRwMlrLVmDM9Yss1uu
-         BUT6YDAMQtja07D8yfdU3f6+nTNQspD4w259txJN6PXvlSKxwIj+VarG5aY0tBhkD0fR
-         2gPQ==
-X-Gm-Message-State: ANoB5pk8UR8rFOq8bzfZU6DaKU3LCLgpa62i3p4vIRi0b+eLe+oz+59U
-        lf3ZyaSH9mvNsp/eYInKvZwJ4w==
-X-Google-Smtp-Source: AA0mqf4DAzzZjePiOdegknXnqqa9pAMSzXuDf5861QUnn4iLF0a1NGsDAmotvzNuKDt77HW+x7FFOg==
-X-Received: by 2002:a62:6142:0:b0:56c:cde:1a49 with SMTP id v63-20020a626142000000b0056c0cde1a49mr13274150pfb.9.1669278888988;
-        Thu, 24 Nov 2022 00:34:48 -0800 (PST)
-Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
-        by smtp.gmail.com with ESMTPSA id ne12-20020a17090b374c00b00218d55b33d9sm2759511pjb.8.2022.11.24.00.34.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Nov 2022 00:34:48 -0800 (PST)
-Message-ID: <f158bc8a-8351-49a7-3246-91b8a1413ccd@9elements.com>
-Date:   Thu, 24 Nov 2022 14:04:46 +0530
+        Thu, 24 Nov 2022 03:35:38 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2053.outbound.protection.outlook.com [40.107.223.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80CDCB9EE;
+        Thu, 24 Nov 2022 00:35:37 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DcAZfKnp4SubgXmw+Fm7t2DMgAUh8rroaM/z9188KY1D16sRATu5GiNpTm+p5DdQ5S4IWXoFcEXJEGSQOsqqGWvFXCD1IleCKfQgzyUId6nRC5uTTDHTcMS5jadqD4Ex+2zlNeWc2AMt2UYk5N92IzZ3Jb/jOXOUDocC3/SnZcLE+fcMN2t16jgXoJKe8Kf5DqbwmLrEiIskjio+opps03G7SwWFJ4/4XS0u12PNq73h7+s46BfXh5TQkI7FsuS1mxtlrYuOEa9vYZSD9g6VCu3tUx1WxFbUbaBrNdOdWokdcn4CaIenOuwPAJqLyljhVKtg0kBDNL9Nd6DR0edu1g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jrb96oJ1XTaWs7uDXw8gzrA2RJOuAdcPo0OCdKbIUJg=;
+ b=FMQFlbBEVEV67iOjpxpW4QhPtpRbDUwRXW0Kwk/0tLIAi6zgdbjQnrlH/Sr8nkoWz4qdilxLZbzPqSNJ3i5fM4PMbCU3VlAu7bOCUQfqLUVqv+ghOO3Q3eR41iMh8gPZTrq2lWGEbQJD1WcGj8xpgWOM42se01FE2GRVCFP1XwB1+eYwxy/CyVZ5h30ZTGtuz38hBS+wMUn76nw+KJb7zBUxsFDveChxbOw3cHbD96o0kUlMeJAnGu10irFh3+rWIUfW+/0wNk8GlmEcrWq9/KSi0fg/dEIOIz5A3j4FU5QrGis9utHIlIojZQ+ZEc30Olriz4oCjlgHAT5a1GdJLg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jrb96oJ1XTaWs7uDXw8gzrA2RJOuAdcPo0OCdKbIUJg=;
+ b=PLnwFNrgP0cvEq+ZAk5oSZVfSACsc3KHOXMVGMFbuvS99GzhV53dVSeJQsXJVz6SM5GtlA3iQXtJMMFU5RfjXResIs1rTK4QC2wmGFCfgGE7X987DMiu7esE9peAp5OvS3PBb7EKGzIQHrATeNsheGfhbzWOiRlJ9rvmyqxVxTV0GUxZ2W89HgsnFu6V0gqHHqUlRxpaSlia+pprCTa0NBjkwguBERULvSkPyOXImOgCYT+xLBJIsofrUUDQcvN71UrEmzVovqxv44HAx40rWdPiI9pdjkYxzlv0ENzJSNm4I5qn+FYFJWBh0hGuYlqPmXrRoUZbvCiIL41xIZySZg==
+Received: from DM5PR08CA0026.namprd08.prod.outlook.com (2603:10b6:4:60::15) by
+ CH2PR12MB4230.namprd12.prod.outlook.com (2603:10b6:610:aa::23) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5857.19; Thu, 24 Nov 2022 08:35:36 +0000
+Received: from DM6NAM11FT061.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:4:60:cafe::4a) by DM5PR08CA0026.outlook.office365.com
+ (2603:10b6:4:60::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15 via Frontend
+ Transport; Thu, 24 Nov 2022 08:35:36 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DM6NAM11FT061.mail.protection.outlook.com (10.13.173.138) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5857.19 via Frontend Transport; Thu, 24 Nov 2022 08:35:35 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 24 Nov
+ 2022 00:35:23 -0800
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 24 Nov
+ 2022 00:35:22 -0800
+Received: from mmaddireddy-ubuntu.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server id 15.2.986.36 via Frontend
+ Transport; Thu, 24 Nov 2022 00:35:18 -0800
+From:   Manikanta Maddireddy <mmaddireddy@nvidia.com>
+To:     <vkoul@kernel.org>, <kishon@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <vidyas@nvidia.com>
+CC:     <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>, <bhelgaas@google.com>,
+        <lpieralisi@kernel.org>, <nkristam@nvidia.com>,
+        Manikanta Maddireddy <mmaddireddy@nvidia.com>
+Subject: [IP REVIEW PATCH 0/3] Add support for Lane Margining at Receiver
+Date:   Thu, 24 Nov 2022 14:05:07 +0530
+Message-ID: <20221124083510.3008139-1-mmaddireddy@nvidia.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v4] hwmon: (pmbus/core): Implement regulator get_status
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        broonie@kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-kernel@vger.kernel.org
-References: <20221122090302.3053092-1-Naresh.Solanki@9elements.com>
- <20221122184828.GA554748@roeck-us.net>
-Content-Language: en-US
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-In-Reply-To: <20221122184828.GA554748@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT061:EE_|CH2PR12MB4230:EE_
+X-MS-Office365-Filtering-Correlation-Id: 14bdc38a-e70c-49d0-0139-08dacdf6dbda
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +J+oaT5e6No6OnCSNcfO6GP0u3QDh705N5eoUzXEZOkYlS9Ih2llusGfed5gxakx5Ut6cgNu9tCEav3aPtAQKlqg6ISPbYA4c4UQcpA6wQZG97WbOSj7YkkI9GdX1ixooKlELEftjL6SD91S7iTmETCkcUt39IVoO9r5SaB0w//UZCBWLzV4J07XEgpqOJMzxb9yGKOdu8kPWYjErbQBeLKdod7HHDhAZnMkeQPoRORYq/bkIkTL3uv0vJwf5zcLVo3kuyYuMlPyz7D2p0RVpHS5Brt8dAIc2B8nxeE4eR9ZPvW4S3MqFB9+9w6hH9gMeig4Iqjmos3Ck96FDnLks8A7xnlqxEcWFYEtETsrWvu4Wit7NcN1Lsl3R2vokbcMNwSyMchSp9bO/LAPnjSG/d+pptGHzzd3Pmg9Zy0wVQW1LeE3AlCK9OkEGiwQNTO3gYObcevkeSz+qcxJHgSKU2Y74ECQYeol5IeshrxwVtBzfLXa3Oh12lkNqSNjrBS3QFDzSAgEjZz03UuLUMxlS8pCU2337LzwUilZccgHkC3cqqxk6785DFZae9nI6wQT+zTT2muaEaK2R9vImBd9KFLM0nqlgkXwTfuEzvTRFnDzJbg+TMS8+TsaF8tqahyhnS1UE5CfaN7YqBeMFIRs2A/WPvg3qNcCgbdgzk0O4sevxfpaDVJxTYw2mQpXgFC0zW/YttlbFQbVlHr1h3ncttixDBgAyW1iScb9Xp0uJP8=
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(346002)(136003)(376002)(451199015)(36840700001)(40470700004)(46966006)(1076003)(47076005)(426003)(2616005)(186003)(336012)(110136005)(54906003)(107886003)(82310400005)(6666004)(478600001)(36756003)(7696005)(26005)(40480700001)(356005)(7636003)(40460700003)(36860700001)(82740400003)(316002)(6636002)(4744005)(5660300002)(7416002)(8936002)(2906002)(70586007)(70206006)(8676002)(41300700001)(86362001)(4326008)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2022 08:35:35.9086
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 14bdc38a-e70c-49d0-0139-08dacdf6dbda
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT061.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4230
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guenter,
+Tegra234 supports Lane Margining at Receiver feature. However, this
+requires programming of per lane PIPE2UPHY hardware instance to relay
+the lane margin control and margin status information between PCIe
+controller and UPHY modules. This series adds this support in PIPE2UPHY
+driver.
 
-On 23-11-2022 12:18 am, Guenter Roeck wrote:
-> On Tue, Nov 22, 2022 at 10:03:02AM +0100, Naresh Solanki wrote:
->> From: Patrick Rudolph <patrick.rudolph@9elements.com>
->>
->> Add get_status for pmbus_regulator_ops.
->> ---
->> Changes:
->> - use lock throughout the function
->> - Avoid line continuation upto 100 column
->> - Optimize use of & and | operator
->> - Check for VOUT, IOUT, TEMPERATURE bit in status word before checking
->>    respective status register for fault.
->> - Report regulator current status.
->> - Utilize get_error_flag to check for regulator errors.
->>
->> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
->> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->> ---
->>   drivers/hwmon/pmbus/pmbus_core.c | 41 ++++++++++++++++++++++++++++++++
->>   1 file changed, 41 insertions(+)
->>
->>
->> base-commit: 27fea302952d8c90cafbdbee96bafeca03544401
->>
->> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
->> index 7ec04934747e..5df2aee549e6 100644
->> --- a/drivers/hwmon/pmbus/pmbus_core.c
->> +++ b/drivers/hwmon/pmbus/pmbus_core.c
->> @@ -2851,6 +2851,46 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->>   	return 0;
->>   }
->>   
->> +static int pmbus_regulator_get_status(struct regulator_dev *rdev)
->> +{
->> +	struct device *dev = rdev_get_dev(rdev);
->> +	struct i2c_client *client = to_i2c_client(dev->parent);
->> +	struct pmbus_data *data = i2c_get_clientdata(client);
->> +	u8 page = rdev_get_id(rdev);
->> +	int status, ret;
->> +
->> +	mutex_lock(&data->update_lock);
->> +	status = pmbus_get_status(client, page, PMBUS_STATUS_WORD);
->> +	if (status < 0) {
->> +		ret = status;
->> +		goto unlock;
->> +	}
->> +
->> +	if (status & PB_STATUS_OFF) {
->> +		ret = REGULATOR_STATUS_OFF;
->> +		goto unlock;
->> +	}
->> +
->> +	/* If regulator is ON & reports power good then return ON */
->> +	if (!(status & PB_STATUS_POWER_GOOD_N)) {
->> +		ret = REGULATOR_STATUS_ON;
->> +		goto unlock;
->> +	}
->> +
->> +	if (rdev->desc->ops->get_error_flags)
->> +		ret = rdev->desc->ops->get_error_flags(rdev, &status);
->> +
-> 
-> What about checking ret ?
-Fixed in next revision.
-> 
->> +	if (status & (REGULATOR_ERROR_UNDER_VOLTAGE | REGULATOR_ERROR_OVER_CURRENT |
->> +	   REGULATOR_ERROR_REGULATION_OUT | REGULATOR_ERROR_FAIL | REGULATOR_ERROR_OVER_TEMP))
->> +		ret = REGULATOR_STATUS_ERROR;
->> +	else
->> +		ret = REGULATOR_STATUS_UNDEFINED;
-> 
-> This part has to be inside "if (rdev->desc->ops->get_error_flags)"
-> or status will still contain the status word.
-Yes. fixed in next version.
-> 
-> Guenter
-> 
->> +
->> +unlock:
->> +	mutex_unlock(&data->update_lock);
->> +	return ret;
->> +}
->> +
->>   static int pmbus_regulator_get_low_margin(struct i2c_client *client, int page)
->>   {
->>   	struct pmbus_data *data = i2c_get_clientdata(client);
->> @@ -2991,6 +3031,7 @@ const struct regulator_ops pmbus_regulator_ops = {
->>   	.disable = pmbus_regulator_disable,
->>   	.is_enabled = pmbus_regulator_is_enabled,
->>   	.get_error_flags = pmbus_regulator_get_error_flags,
->> +	.get_status = pmbus_regulator_get_status,
->>   	.get_voltage = pmbus_regulator_get_voltage,
->>   	.set_voltage = pmbus_regulator_set_voltage,
->>   	.list_voltage = pmbus_regulator_list_voltage,
+Manikanta Maddireddy (3):
+  phy: tegra: p2u: Add lane margin support
+  dts: soc: t234: Add uphy lane number and intr in p2u nodes
+  dt-bindings: PHY: P2U: Add PCIe lane margining support
 
-Regards,
-Naresh
+ .../bindings/phy/phy-tegra194-p2u.yaml        |  50 ++++
+ arch/arm64/boot/dts/nvidia/tegra234.dtsi      | 120 ++++++++
+ drivers/phy/tegra/phy-tegra194-p2u.c          | 274 ++++++++++++++++++
+ 3 files changed, 444 insertions(+)
+
+-- 
+2.25.1
+
