@@ -2,160 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD35F637785
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 12:22:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B3463778F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 12:23:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbiKXLWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 06:22:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54134 "EHLO
+        id S230084AbiKXLXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 06:23:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbiKXLWo (ORCPT
+        with ESMTP id S229997AbiKXLXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 06:22:44 -0500
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EAA011478;
-        Thu, 24 Nov 2022 03:22:42 -0800 (PST)
-Received: by mail-ej1-f52.google.com with SMTP id e27so3416616ejc.12;
-        Thu, 24 Nov 2022 03:22:42 -0800 (PST)
+        Thu, 24 Nov 2022 06:23:03 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB541286FA
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 03:23:00 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id z4so2034487wrr.3
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 03:23:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lrWdJkF3q0bol/WSUFZ/oRfO3LX4B45L735/TAnHh7g=;
+        b=Eul8gF1lGwAFf+MsLr3E/VFVRY0A3ENg9EgWOJEdJg+hprwIRpaI8mYoDaV7ftCVWY
+         HX301ofEZzb0HCUII84zm6BEOmcyMaDA/AbxgqYog79sKb2iNMN7rCPGRFqnNjxXDDnh
+         AYhQhBm3JsAEbFx/DOppy4fWfdQzcIpfeMS5pYevLO7/kBLL2fyEOW5+tNfZ8YF3nk+E
+         DV+WlvTKqYhE1K2SXsasUhy0DpUceVCPNyhatQ/Nb3bjYnXq23vyVcJbAp9+sOpwDAVN
+         mroFur9vnORgWReHTtfnaWiWZFYfwiOikROwiGTjVSkcJsbolnPs+QBdpGp09Yg28Chd
+         x1sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TQJAcBaQ4iWBQtMTkg02XF1PTNjJUIHH8kGGgI0Jy94=;
-        b=I1mxj9FyD0I1zXVD4592+OKpvxOiaMFhOAkNCetf1ZXYlMEa1foyN2p/cDGypaacMM
-         iXBoEjbGbDhE9g/65VJjxABVO94M2+vZ2kwhz96xnkBDlN/zvbTSNec/zQto7Aqdoa7i
-         TDrinTWdc7JIEV07F1tfp9ZdER5w3XBmVPw22+eO1UGWnuzBHfsvOarD/8FQwTd67i+n
-         yI+OifTARGIKWtV4/KC+2bE6p+3N78STIc2y9AKR0jT2CdepGd2pvJLP4LtY98ZZ7XK7
-         4Z3+cYJ2V2nDzzyT6/7D0+0INBbZsEPizEFuNFLzyIRa8lbdvlTV7miprzwjTHwN4jpE
-         8GSQ==
-X-Gm-Message-State: ANoB5pm5THL5p6jd626az8yhCTZDsdFl1MKvgNLt+u3mOCNSPSKbaDm9
-        WOofMyBtmnXwlQp91T1IFo8=
-X-Google-Smtp-Source: AA0mqf6A3y6EKamNPmbP7DEbCyDPEnE34oMCCxkxUPu+0/nPEKln4QgRTaneT1bEOihsQTW//c8lFA==
-X-Received: by 2002:a17:906:e2cb:b0:7ad:c35a:ad76 with SMTP id gr11-20020a170906e2cb00b007adc35aad76mr27578205ejb.705.1669288960912;
-        Thu, 24 Nov 2022 03:22:40 -0800 (PST)
-Received: from localhost (fwdproxy-cln-017.fbsv.net. [2a03:2880:31ff:11::face:b00c])
-        by smtp.gmail.com with ESMTPSA id e19-20020a170906315300b007803083a36asm318771eje.115.2022.11.24.03.22.40
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lrWdJkF3q0bol/WSUFZ/oRfO3LX4B45L735/TAnHh7g=;
+        b=Lp4+yuGfvC4/u5pg7cl7vdFPBXUHuWldNKVelIXYf3dawXv4X5gcYo+LuYMUxZov1v
+         PmFixSDv0sYo2tosLhhS1X+InQ1PPkOQvRzNjcM+eiaNviPkLfM9cUnZfBgOV0TmBzq1
+         0fVgJFBPDiwGPrDqx4USynvgbe974zPgLk3NyQKcoYVF/PRD8u7+IffnlwyVXomt32vX
+         ehDVUi53muJb4mSkKP+1mc7P8DMuaw+aZyhG4LyxrWvyPo7IqdIOsjsyEEn/8e6CjkPT
+         I82viTr9dJc7HRnSOMoy1x3D6yXGydi2gSUjQJQlT/U18XKpDkuhaKWQN6AVhY6SASfb
+         ptgw==
+X-Gm-Message-State: ANoB5pm1qHCJ4ZZ4VVWnuAlbaiX2IxP4TqXrMXZZXESjgnYiCEHTWmHK
+        pbIf2GjYKWa8X2JbZjlXb+NS8A==
+X-Google-Smtp-Source: AA0mqf6wOwj290X0Le+ISghpD0AwmElyWN+dwJu2DLWVQh3n4GtNOJo+IXNf+Yk7apsKcobwNi/9uw==
+X-Received: by 2002:a05:6000:50f:b0:241:ee78:b109 with SMTP id a15-20020a056000050f00b00241ee78b109mr3933807wrf.203.1669288979426;
+        Thu, 24 Nov 2022 03:22:59 -0800 (PST)
+Received: from localhost.localdomain ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id j23-20020a05600c1c1700b003cf57329221sm5839461wms.14.2022.11.24.03.22.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 03:22:40 -0800 (PST)
-From:   Breno Leitao <leitao@debian.org>
-To:     edumazet@google.com, davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, leit@fb.com, yoshfuji@linux-ipv6.org,
-        pabeni@redhat.com, dsahern@kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND net-next] tcp: socket-specific version of WARN_ON_ONCE()
-Date:   Thu, 24 Nov 2022 03:22:29 -0800
-Message-Id: <20221124112229.789975-1-leitao@debian.org>
-X-Mailer: git-send-email 2.30.2
+        Thu, 24 Nov 2022 03:22:59 -0800 (PST)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Odelu Kukatla <okukatla@codeaurora.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Melody Olvera <quic_molvera@quicinc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v2 1/3] dt-bindings: interconnect: Add schema for SM8550
+Date:   Thu, 24 Nov 2022 13:22:30 +0200
+Message-Id: <20221124112232.1704144-2-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221124112232.1704144-1-abel.vesa@linaro.org>
+References: <20221124112232.1704144-1-abel.vesa@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are cases where we need information about the socket during a
-warning, so, it could help us to find bugs that happens and do not have
-an easy repro.
+Add dedicated schema file for SM8500. This allows better constraining
+of reg property, depending on the type of the NOC node. Also allows
+better constraining of the clocks property. All of the above while
+keeping the file itself comprehensible.
 
-This diff creates a TCP socket-specific version of WARN_ON_ONCE(), which
-dumps more information about the TCP socket.
-
-This new warning is not only useful to give more insight about kernel bugs, but,
-it is also helpful to expose information that might be coming from buggy
-BPF applications, such as BPF applications that sets invalid
-tcp_sock->snd_cwnd values.
-
-Signed-off-by: Breno Leitao <leitao@debian.org>
+Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 ---
- include/net/tcp.h       |  3 ++-
- include/net/tcp_debug.h | 10 ++++++++++
- net/ipv4/tcp.c          | 30 ++++++++++++++++++++++++++++++
- 3 files changed, 42 insertions(+), 1 deletion(-)
- create mode 100644 include/net/tcp_debug.h
+ .../interconnect/qcom,sm8550-rpmh.yaml        | 141 ++++++++++++++++++
+ 1 file changed, 141 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm8550-rpmh.yaml
 
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index 14d45661a84d..e490af8e6fdc 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -40,6 +40,7 @@
- #include <net/inet_ecn.h>
- #include <net/dst.h>
- #include <net/mptcp.h>
-+#include <net/tcp_debug.h>
- 
- #include <linux/seq_file.h>
- #include <linux/memcontrol.h>
-@@ -1229,7 +1230,7 @@ static inline u32 tcp_snd_cwnd(const struct tcp_sock *tp)
- 
- static inline void tcp_snd_cwnd_set(struct tcp_sock *tp, u32 val)
- {
--	WARN_ON_ONCE((int)val <= 0);
-+	TCP_SOCK_WARN_ON_ONCE(tp, (int)val <= 0);
- 	tp->snd_cwnd = val;
- }
- 
-diff --git a/include/net/tcp_debug.h b/include/net/tcp_debug.h
+diff --git a/Documentation/devicetree/bindings/interconnect/qcom,sm8550-rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,sm8550-rpmh.yaml
 new file mode 100644
-index 000000000000..50e96d87d335
+index 000000000000..9627b629d4ce
 --- /dev/null
-+++ b/include/net/tcp_debug.h
-@@ -0,0 +1,10 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_TCP_DEBUG_H
-+#define _LINUX_TCP_DEBUG_H
++++ b/Documentation/devicetree/bindings/interconnect/qcom,sm8550-rpmh.yaml
+@@ -0,0 +1,141 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/interconnect/qcom,sm8550-rpmh.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+void tcp_sock_warn(const struct tcp_sock *tp);
++title: Qualcomm RPMh Network-On-Chip Interconnect on SM8550
 +
-+#define TCP_SOCK_WARN_ON_ONCE(tcp_sock, condition) \
-+		DO_ONCE_LITE_IF(condition, tcp_sock_warn, tcp_sock)
++maintainers:
++  - Georgi Djakov <djakov@kernel.org>
++  - Odelu Kukatla <okukatla@codeaurora.org>
 +
-+#endif  /* _LINUX_TCP_DEBUG_H */
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 54836a6b81d6..dd682f60c7cb 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -4705,6 +4705,36 @@ int tcp_abort(struct sock *sk, int err)
- }
- EXPORT_SYMBOL_GPL(tcp_abort);
- 
-+void tcp_sock_warn(const struct tcp_sock *tp)
-+{
-+	const struct sock *sk = (const struct sock *)tp;
-+	struct inet_sock *inet = inet_sk(sk);
-+	struct inet_connection_sock *icsk = inet_csk(sk);
++description: |
++   RPMh interconnect providers support system bandwidth requirements through
++   RPMh hardware accelerators known as Bus Clock Manager (BCM). The provider is
++   able to communicate with the BCM through the Resource State Coordinator (RSC)
++   associated with each execution environment. Provider nodes must point to at
++   least one RPMh device child node pertaining to their RSC and each provider
++   can map to multiple RPMh resources.
 +
-+	WARN_ON(1);
++properties:
++  compatible:
++    enum:
++      - qcom,sm8550-aggre1-noc
++      - qcom,sm8550-aggre2-noc
++      - qcom,sm8550-clk-virt
++      - qcom,sm8550-cnoc-main
++      - qcom,sm8550-config-noc
++      - qcom,sm8550-gem-noc
++      - qcom,sm8550-lpass-ag-noc
++      - qcom,sm8550-lpass-lpiaon-noc
++      - qcom,sm8550-lpass-lpicx-noc
++      - qcom,sm8550-mc-virt
++      - qcom,sm8550-mmss-noc
++      - qcom,sm8550-nsp-noc
++      - qcom,sm8550-pcie-anoc
++      - qcom,sm8550-system-noc
 +
-+	if (!tp)
-+		return;
++allOf:
++  - $ref: qcom,rpmh-common.yaml#
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,sm8550-aggre1-noc
++              - qcom,sm8550-aggre2-noc
++              - qcom,sm8550-cnoc-main
++              - qcom,sm8550-config-noc
++              - qcom,sm8550-gem-noc
++              - qcom,sm8550-lpass-ag-noc
++              - qcom,sm8550-lpass-lpiaon-noc
++              - qcom,sm8550-lpass-lpicx-noc
++              - qcom,sm8550-mmss-noc
++              - qcom,sm8550-nsp-noc
++              - qcom,sm8550-pcie-anoc
++              - qcom,sm8550-system-noc
++    then:
++      properties:
++        reg:
++          minItems: 1
++          maxItems: 1
 +
-+	pr_warn("Socket Info: family=%u state=%d sport=%u dport=%u ccname=%s cwnd=%u",
-+		sk->sk_family, sk->sk_state, ntohs(inet->inet_sport),
-+		ntohs(inet->inet_dport), icsk->icsk_ca_ops->name, tcp_snd_cwnd(tp));
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,sm8550-pcie-anoc
++    then:
++      properties:
++        clocks:
++          items:
++            - description: aggre-NOC PCIe AXI clock
++            - description: cfg-NOC PCIe a-NOC AHB clock
 +
-+	switch (sk->sk_family) {
-+	case AF_INET:
-+		pr_warn("saddr=%pI4 daddr=%pI4", &inet->inet_saddr,
-+			&inet->inet_daddr);
-+		break;
-+#if IS_ENABLED(CONFIG_IPV6)
-+	case AF_INET6:
-+		pr_warn("saddr=%pI6 daddr=%pI6", &sk->sk_v6_rcv_saddr,
-+			&sk->sk_v6_daddr);
-+		break;
-+#endif
-+	}
-+}
-+EXPORT_SYMBOL_GPL(tcp_sock_warn);
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,sm8550-aggre1-noc
++    then:
++      properties:
++        clocks:
++          items:
++            - description: aggre UFS PHY AXI clock
++            - description: aggre USB3 PRIM AXI clock
 +
- extern struct tcp_congestion_ops tcp_reno;
- 
- static __initdata unsigned long thash_entries;
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,sm8550-aggre2-noc
++    then:
++      properties:
++        clocks:
++          items:
++            - description: RPMH CC IPA clock
++
++required:
++  - compatible
++
++unevaluatedProperties: false
++
++examples:
++  - |
++      #include <dt-bindings/clock/qcom,gcc-sm8550.h>
++      #include <dt-bindings/interconnect/qcom,sm8550.h>
++      #include <dt-bindings/clock/qcom,rpmh.h>
++
++      clk_virt: interconnect-0 {
++             compatible = "qcom,sm8550-clk-virt";
++             #interconnect-cells = <2>;
++             qcom,bcm-voters = <&apps_bcm_voter>;
++      };
++
++      cnoc_main: interconnect@1500000 {
++             compatible = "qcom,sm8550-cnoc-main";
++             reg = <0x01500000 0x13080>;
++             #interconnect-cells = <2>;
++             qcom,bcm-voters = <&apps_bcm_voter>;
++      };
++
++      aggre1_noc: interconnect@16e0000 {
++             compatible = "qcom,sm8550-aggre1-noc";
++             reg = <0x016e0000 0x14400>;
++             #interconnect-cells = <2>;
++             clocks = <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
++                      <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>;
++             qcom,bcm-voters = <&apps_bcm_voter>;
++      };
++
++      aggre2_noc: interconnect@1700000 {
++             compatible = "qcom,sm8550-aggre2-noc";
++             reg = <0x01700000 0x1E400>;
++             #interconnect-cells = <2>;
++             clocks = <&rpmhcc RPMH_IPA_CLK>;
++             qcom,bcm-voters = <&apps_bcm_voter>;
++      };
 -- 
-2.30.2
+2.34.1
 
