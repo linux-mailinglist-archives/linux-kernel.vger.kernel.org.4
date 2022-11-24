@@ -2,300 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 094F2636F74
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 01:51:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E93B636F7D
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 01:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbiKXAv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 19:51:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43690 "EHLO
+        id S229730AbiKXAyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 19:54:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiKXAva (ORCPT
+        with ESMTP id S229842AbiKXAyV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 19:51:30 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD9A106109
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 16:50:14 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id y203so253257pfb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 16:50:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=EFVX7IjWP0c79lsJGrRm2jvWXUzxDjvdpRDfkfpbljI=;
-        b=GCQrp8pkTvpVjyYZmDT5U+FNuw+gMF7z2qwCL8AUJZd++4Ofwj7Ws1XMuHq/6fGCKi
-         DvNjdbYJlY7Iu+VIBg3gQmaqS44QUZjjxl7AY4zHWvzz7VOFrQpZtDJGmOYrhEveUYM9
-         0OGSJJOzqzM+YBLja0CYK8MqzON1AmFN2AcKqmt6maDiDcMU8ufBPJPEx1SMApFWbulC
-         +GrzSqu06kU9YqV2CqQUWtD1obx8O8M7MeO6w8WDOxK6EgQZEarTtfI7N/Z+N/LlyRRb
-         6sbqdHUgkOLWcnFoIdhkajOxHccfKsLhaVsZnnbRkenQXdwQJFYgtPcavrNoDS7AzPOq
-         Mmkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EFVX7IjWP0c79lsJGrRm2jvWXUzxDjvdpRDfkfpbljI=;
-        b=kadqogYbqiSR5NTjQE5LwEFeh76wj6idDI06qbL0ZWLa5zU4wLIbQrd+eWw1qcGNoE
-         qUYexophcQjvhaNqAimrNcEv7rn63OexaEmL9c+p2pwSQtODeOC3OGaS2qSUqmQ23dwE
-         6Rcx6NeR+/LoWMdCMy5yHhD8wEqjCMy1DbEfyqyx3CNT8S1qmQUED4bB1BJ7H6WaX/Fe
-         ilC5rAWMeIsmKX9dJBrumHpz9HvebeL3I30IK5jxiGYFfmM8kYPycQsf5gV24UnkO5E9
-         dT/0xhIUd+zyiHTHpyaQL+C6NZtlL5b9YEjZQuurrBixkjC8B7v7iDe7IG3kyct3HQW4
-         Y8NQ==
-X-Gm-Message-State: ANoB5pmPQo6gkjQz7vKZT7q+COhQFAATC3O5Z1BwJPmhkm3xYiPtzXIU
-        RqJgWeOEFpDg95waELNZqGzK2w==
-X-Google-Smtp-Source: AA0mqf6yKvrOITf/V6YHOBdKLFuRauJBDqwqBhSDC/Q9q1t8t1HyNouFBUOgscULb8VEwjYjMDWFtA==
-X-Received: by 2002:aa7:8d0e:0:b0:574:6a48:3fd9 with SMTP id j14-20020aa78d0e000000b005746a483fd9mr3784738pfe.36.1669251013891;
-        Wed, 23 Nov 2022 16:50:13 -0800 (PST)
-Received: from debug.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id t15-20020a170902b20f00b00188ef2314b0sm14789698plr.39.2022.11.23.16.50.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 16:50:13 -0800 (PST)
-From:   Deepak Gupta <debug@rivosinc.com>
-To:     palmer@dabbelt.com
-Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        paul.walmsley@sifive.com, Deepak Gupta <debug@rivosinc.com>,
-        Guo Ren <guoren@kernel.org>, Jisheng Zhang <jszhang@kernel.org>
-Subject: [PATCH] riscv: VMAP_STACK overflow detection thread-safe
-Date:   Wed, 23 Nov 2022 16:50:06 -0800
-Message-Id: <20221124005006.1788315-1-debug@rivosinc.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 23 Nov 2022 19:54:21 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A6CD32B8;
+        Wed, 23 Nov 2022 16:54:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669251251; x=1700787251;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=s7cGAyOPGtdv8GMXyOMpgeobL8sQ2pHnknCF2QXSRIk=;
+  b=QCv8JKJMdl9pQuy6AeoyMr+kG2CcpGyX0HoYXKJ/zjTYlQ5JL4sObh5P
+   LxfqkYGm2T7JyxHJbtVOJCrjAz8wNFvXqggGpRRNr2cncYS6yDWCvQ8Dx
+   c2NJQJ9CZFV2SgTKQN5saUtPJN6CU4nHp5XSIglx5GMqxGwcDHC4YIEVm
+   vkygUM+7WZYDNYRj4dMx99BaA7oAARI8c37CCQ/twlVmq7d5vTGtkBM2l
+   jp+0kcvTCW20XOibZfDqLJxt5C1e+V9jdcidlkDP8Mxyq3zAChvLObkEE
+   ugQZdhws0CQj3SEqjqdkyGceo1KK4BXOQ5S268MIEXnXSxGdFlA5ezi/o
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="315339416"
+X-IronPort-AV: E=Sophos;i="5.96,189,1665471600"; 
+   d="scan'208";a="315339416"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 16:54:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="592715310"
+X-IronPort-AV: E=Sophos;i="5.96,189,1665471600"; 
+   d="scan'208";a="592715310"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga003.jf.intel.com with ESMTP; 23 Nov 2022 16:53:48 -0800
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 23 Nov 2022 16:53:48 -0800
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 23 Nov 2022 16:53:47 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Wed, 23 Nov 2022 16:53:47 -0800
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.44) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Wed, 23 Nov 2022 16:53:37 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=S+Zqod0NEoEMCjXulniW9c6sDlCRYcHh7VXgkyJ3zQsNtwf8q7yCS90zTaks1joAnCLpPsn3Lp4jtD6gfQ/fykycLw8hqOmv5L6yOPq99oF5lV+eKzqwoN5o7FDg/IjmD9E87RT5EAGqfRsLOOYCNqT/HpkNfmKpTS4gr54QtOK8SpxabzmtqsO50EeX6XCTdabhcR/gJzFj0YJdb6bllNZiSY2SMRnf6PCEwotvlAUg9ZNWDrtTAucxG4rS4mSamjVyiwDKjrntG46bd1wcT+am8kBXxcfWABQZ3sVGfmD6CDO8HF/IFfAlUoPr61RHtgqU/2OkOmxDfJtORVQ8Kg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/t+xKrHgrcFb0iVpY7/s2VrwBCa06JstTHJ9+XNqbMc=;
+ b=aSm8FZ968EmJ75HE7uKw3C37rzXa+W8hkEymbCupftwVoyWs1ps8w0BBTaB2HWLBaEsHXsJhwfQBgK80PBzdlJELq2T/op5DxFGOokFpTf/P8Uv/OZUrDLtMLOSSzsyr6s8jF+Xhb8re+4xrBrG+Kuwt9dtKSn3GehwMKW02E0rX4aW23E5TVDUV51M4vNFwH46jyWyWtq+OKnI5ydqCrhXUVghoAksr4GD6kytWZ0w+BAP9QvdAf+EEUb5ItwzjO6GOibJW2nZlYi6sO23A34wikWbOWVnBBstpqnjb0FWn8cYKrPgmNC4pJMrEMy4ZVUaod1unVFQ8MdUBrL9PRQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by PH8PR11MB6777.namprd11.prod.outlook.com (2603:10b6:510:1c8::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Thu, 24 Nov
+ 2022 00:53:36 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::d30c:c435:9b26:7dde]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::d30c:c435:9b26:7dde%8]) with mapi id 15.20.5857.018; Thu, 24 Nov 2022
+ 00:53:30 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+CC:     "x86@kernel.org" <x86@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        "Will Deacon" <will@kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Lorenzo Pieralisi" <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>
+Subject: RE: [patch V2 02/33] genirq/msi: Provide struct msi_parent_ops
+Thread-Topic: [patch V2 02/33] genirq/msi: Provide struct msi_parent_ops
+Thread-Index: AQHY/bbfZgnIzHqDcU+i9IUI1W3Xhq5MB7NAgABaboCAAOBlEA==
+Date:   Thu, 24 Nov 2022 00:53:29 +0000
+Message-ID: <BN9PR11MB52763BEF1A4C88368B8A9E448C0F9@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20221121083657.157152924@linutronix.de>
+ <20221121091326.604272160@linutronix.de>
+ <BN9PR11MB52768F0E5B9A4D8E2CF9C5578C0C9@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <878rk1gb9g.ffs@tglx>
+In-Reply-To: <878rk1gb9g.ffs@tglx>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|PH8PR11MB6777:EE_
+x-ms-office365-filtering-correlation-id: 3d0f62a0-a2f4-4185-b0d7-08dacdb64dc9
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: RwYca+s6dKVs8jQDc7F6jFn00+cECSWwFBZbi3PtNtoZOnCF03y9Fy2ECYaMGqc3yFDE6JepUyM9rxBSJh/njZ4VKM4Wu8+ilmUXpsBOrnwIWknC3YOovCAtM2emef3R7HD4avGpoXGQN0+OcwsDrcCBa/z+gE2gQopljt2l6ebVLylA9qRj9riVyk7HjX3ztkjounrGGTashcP3CjPlrTAWgtpUfDTz6y6vBsoiLAEtGpvnx4+MR781pwqSfkr2jXxxFRMj7mR18C2uaXzqMIpWNORB3URBcxdrDKA8+3VtkkWyvoGA5uUD57aED9AGZ2S+F1mvENWQAkhTFbLOZF5ZvPjRk511J9Ldw1atA067+xTariL6jUtJN7a5xQnUJL5Yh1ZzTe8e1Xzx7D4dBADMdyrhAYeQcscSx+q+KkhqST0BbvOSCovyhhvY3zXjLVXblUvvSFK92nN2f/5w933hD+6lMZbnTDT9A9lgo1GyFOkGPEZidXOojpHfNyk1XzCG9maf5aOdmlhMXxxHzB422G/hcAa+BTERNonI0kkzU9ACke6j7T74lLUInlZrYjfzd4G2VvQhBkLm693RRlJv4Fx2DX6Rg4+zC0g/RJMezp8Q+01S9HP2PMIosR+Hkg5+N5i0kQEya5KAo4H18+0ypzEePHz36D7OPNgi6IX5D/SLCTG7b3RD+a1yuIW9W7fiYSQfohTLaqSwJ49tUA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(39860400002)(366004)(396003)(376002)(136003)(451199015)(478600001)(71200400001)(66556008)(41300700001)(64756008)(8676002)(66446008)(66476007)(9686003)(7416002)(66946007)(4326008)(52536014)(186003)(26005)(8936002)(54906003)(316002)(33656002)(7696005)(6506007)(5660300002)(110136005)(55016003)(2906002)(83380400001)(76116006)(82960400001)(86362001)(38070700005)(38100700002)(122000001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?pR9gdYzBOpxtNbvTM/KaSQxmxfr6rkGetBFG2nkbDen8k2m82X8KzPRzI7FE?=
+ =?us-ascii?Q?3xZ9oI1GGyTuup70S4JTUpUeisxaEcSyNGxtQN2+H1ATr4YtKKgTyg/DsSy6?=
+ =?us-ascii?Q?wIw5aNGpgKxOZ7O2Bw3TOFDfy1AhQZqYZBxGAJUUhPMNtnbL+frIECkMMfcC?=
+ =?us-ascii?Q?a7QYeW8ktO/uoIFO+TNJurWcwOTv8inrB2k/yAG5QJ5YftzEtYU4P6DBnNqT?=
+ =?us-ascii?Q?QEW4Ai+lyF3JiThTja2sBSaaCwTjpVRD8zeJ5LIO9hAnY/Mn+KP41fO7GZHu?=
+ =?us-ascii?Q?aFVyImcfzj41Bm84JJeCFEJJ5dTePZkpLO6QPTPl8ZGcl5Z8CLZQkWdNUkf2?=
+ =?us-ascii?Q?Xda3tCeCMh5Y7FURPv8mnIToGV97Mm20P4Zu2erhfulXJ0BUMqXrrI+02IDE?=
+ =?us-ascii?Q?6NVzbiP+JaQrGb+TZKGdGVWtLLrergh6/1YPd33J7WqjCUnX/jHEyCwfRQpx?=
+ =?us-ascii?Q?q6z1/UfjGbZvxtV1LP36+12iNrOZccw1L/tr0y58ozvPE1VBlHnRUCSpr0jh?=
+ =?us-ascii?Q?fD5N/JEU1PjrF+OgIsfWOGeHcT5ep/3rGvr9NzGMducJdKWDLQOMuQdH2xW/?=
+ =?us-ascii?Q?qcxtcfwKLi/+WmeYKkJYzfYKkD2z+SL7CynOS17tG2NYIybVd3jbmCO5c62E?=
+ =?us-ascii?Q?tM1PKbL1e9l8gaF42xfXk22b9DMHwJxk37uhqnHMTRzbSe/2o0j2eaArk4Pj?=
+ =?us-ascii?Q?FeXnnCn/TxqiOV6QcWhg6+ofpipvIX1EKZ7CWxLh2pttScUVL7zXGhCyu+s0?=
+ =?us-ascii?Q?Kk7Th4UMIJGS5PPcRSSrf0BOKZBOaca69ht0wKu1D6UjPe/psGgm8a5ugBnj?=
+ =?us-ascii?Q?Gs9dmNA9NznD3gWZavbDg4qJyO45KabRcpbF0em/BGkRPMLkqqxwA/1YE7xc?=
+ =?us-ascii?Q?IwRJ2tYRWZSfUJ341mVuby8yHt7RAoesGqKYTLP9UWNItx3gC94SfN3vXr70?=
+ =?us-ascii?Q?1XYidYVFGmxcCZeixLR8AL0ixaUlCgZFT0aiAUuTsdP9SC1JDJoRiLvnK/5L?=
+ =?us-ascii?Q?HX1WhIizR11iaWF5zW/NGoBgAF1NHjozxr9tLLFdEFyx4mNJK/JZjR5Z0c3D?=
+ =?us-ascii?Q?OuzYjmsLSEjVr+Zl8k+qp4F7+jPEBVnq5rd1lUlkOYImb7C5PRT3QiLCNue3?=
+ =?us-ascii?Q?xkv01U3nJSNWFhakSw++p/ShnZ9QzPDW8AoPNjMd2KtCC3OQ9AhoYR7At4ve?=
+ =?us-ascii?Q?cywyLJqYsOwTgwr1+srzceUP/hYtiTgAZzhvyRUQiZwnOdDTJ1W04P4fqefr?=
+ =?us-ascii?Q?4EwWkw74UQfQ98l66MXDxIfVl8sIYx2H2o9NFBVq1PixtUYHCJgNjw90t2M1?=
+ =?us-ascii?Q?OVlSB2BZ7V19ugrEuhE1AAA3CG1F4P1isd7J+aX7l588G2bE9J0rCglxt19t?=
+ =?us-ascii?Q?JJPtqGsqZieUt0Wm2AJLmvLsfzQWqwot5qf88Xc/gh/jBC6mP0EDwk4PfEEv?=
+ =?us-ascii?Q?DzvgFxYPrAqgaQbm98xSVV+wxD+mRkLOZ8h4s0Dj/fXww/Q3nLBxIqH0aFic?=
+ =?us-ascii?Q?tc4IacG7vcnsb0lYOcShv4KdmxiO1lF991T4cPonRXvAChUFymDds3NLZo6N?=
+ =?us-ascii?Q?DbVV2avogw9d/ToCHN6ElSnZAezp8WNPkj6uTu/F?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d0f62a0-a2f4-4185-b0d7-08dacdb64dc9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Nov 2022 00:53:29.8995
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: hfxvB3aVSshmDKxK+7+WAjOBOPT94MWxgh5QODjEP61pw0A5ak8wse3kvGgik2a/Bka39URhHft70e8+Rxm7hA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB6777
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 31da94c25aea835ceac00575a9fd206c5a833fed added support for
-CONFIG_VMAP_STACK. If overflow is detected, CPU switches to `shadow_stack`
-temporarily before switching finally to per-cpu `overflow_stack`.
+> From: Thomas Gleixner <tglx@linutronix.de>
+> Sent: Wednesday, November 23, 2022 7:29 PM
+>=20
+> On Wed, Nov 23 2022 at 07:57, Kevin Tian wrote:
+> >> From: Thomas Gleixner <tglx@linutronix.de>
+> >> + * One solution is to let the root domain handle the initialization t=
+hat's
+> >> + * why there is the @domain and the @msi_parent_domain pointer.
+> >
+> > This is the part which I don't quite understand (sorry with limited
+> knowledge
+> > in this area).
+> >
+> > In concept a hierarchical model has restrictions added up when moving
+> > down to lower layers i.e. presumably the root domain decides the minima=
+l
+> > supported capabilities. In this case there is no need of a real parent =
+pointer
+> > as long as every domain in the stack incrementally adds its restriction=
+s to
+> > info->flags.
+> >
+> > I can see why this is required for x86 given that MULTI_MSI is supporte=
+d
+> > only with IR. and we cannot make vector domain inclusively claiming
+> > MULTI_MSI since it's completely broken when the vector domain becomes
+> > the parent itself, in absence of IR.
+> >
+> > Just be curious whether this intermediate-parent-deciding-restrictions
+> > is generic instead of x86 specific, e.g. is it possible to have a 4-lay=
+ers
+> > hierarchy where the root parent wants to check both two intermediate
+> > parents?
+>=20
+> Sure. Nothing prevents you from doing so:
+>=20
+> dom4:
+>     .init... =3D dom4_init
+>=20
+> dom4_init()
+>     do_stuff()
+>     invoke parent init
+>=20
+> dom3:
+>     .init... =3D parent_init
+>=20
+> dom2:
+>     .init... =3D dom2_init
+>=20
+> dom2_init()
+>     do_stuff()
+>     invoke parent init
+>=20
+> ....
+>=20
+> See?
+>=20
 
-If two CPUs/harts are racing and end up in over flowing kernel stack, one
-or both will end up corrupting each other state because `shadow_stack` is
-not per-cpu.
-
-Following are the changes in this patch
-
- - Defines an asm macro to obtain per-cpu symbols in destination
-   register.
- - Computing per-cpu symbol requires a temporary register. When stack is
-   out of question, a place is needed to spill a register. `thread_info`
-   is good location to have spill register.
- - In entry.S when overflow is detected x31 is spilled into thread_info.
-   x31 is used as temp reg for asm macro to locate per-cpu overflow stack
-
-Other relevant disccussion on this
-https://lore.kernel.org/linux-riscv/Y347B0x4VUNOd6V7@xhacker/T/#t
-
-Tested by `echo EXHAUST_STACK > /sys/kernel/debug/provoke-crash/DIRECT`
-
-[  286.223273] Insufficient stack space to handle exception!/debug/provoke-crash/DIRECT
-[  286.223878] Task stack:     [0xff20000010a98000..0xff20000010a9c000]
-[  286.224411] Overflow stack: [0xff600001f7d98370..0xff600001f7d99370]
-[  286.226057] CPU: 1 PID: 205 Comm: bash Not tainted 6.1.0-rc2-00001-g328a1f96f7b9 #34
-[  286.227139] Hardware name: riscv-virtio,qemu (DT)
-[  286.228000] epc : __memset+0x60/0xfc
-[  286.229299]  ra : recursive_loop+0x48/0xc6 [lkdtm]
-[  286.231457] epc : ffffffff808de0e4 ra : ffffffff0163a752 sp : ff20000010a97e80
-[  286.232207]  gp : ffffffff815c0330 tp : ff600000820ea280 t0 : ff20000010a97e88
-[  286.233584]  t1 : 000000000000002e t2 : 3233206874706564 s0 : ff20000010a982b0
-[  286.234293]  s1 : 0000000000000012 a0 : ff20000010a97e88 a1 : 0000000000000000
-[  286.234998]  a2 : 0000000000000400 a3 : ff20000010a98288 a4 : 0000000000000000
-[  286.235697]  a5 : 0000000000000000 a6 : fffffffffffe43f0 a7 : 00007fffffffffff
-[  286.236384]  s2 : ff20000010a97e88 s3 : ffffffff01644680 s4 : ff20000010a9be90
-[  286.237743]  s5 : ff600000842ba6c0 s6 : 00aaaaaac29e42b0 s7 : 00fffffff0aa3684
-[  286.238691]  s8 : 00aaaaaac2978040 s9 : 0000000000000065 s10: 00ffffff8a7cad10
-[  286.239591]  s11: 00ffffff8a76a4e0 t3 : ffffffff815dbaf4 t4 : ffffffff815dbaf4
-[  286.240537]  t5 : ffffffff815dbab8 t6 : ff20000010a9bb48
-[  286.241540] status: 0000000200000120 badaddr: ff20000010a97e88 cause: 000000000000000f
-[  286.242979] Kernel panic - not syncing: Kernel stack overflow
-[  286.244106] CPU: 1 PID: 205 Comm: bash Not tainted 6.1.0-rc2-00001-g328a1f96f7b9 #34
-[  286.245276] Hardware name: riscv-virtio,qemu (DT)
-[  286.245929] Call Trace:
-[  286.246954] [<ffffffff80006754>] dump_backtrace+0x30/0x38
-[  286.247813] [<ffffffff808de798>] show_stack+0x40/0x4c
-[  286.248429] [<ffffffff808ea2a8>] dump_stack_lvl+0x44/0x5c
-[  286.249439] [<ffffffff808ea2d8>] dump_stack+0x18/0x20
-[  286.250056] [<ffffffff808dec06>] panic+0x126/0x2fe
-[  286.250642] [<ffffffff800065ea>] walk_stackframe+0x0/0xf0
-[  286.251357] [<ffffffff0163a752>] recursive_loop+0x48/0xc6 [lkdtm]
-[  286.253321] SMP: stopping secondary CPUs
-[  286.256724] ---[ end Kernel panic - not syncing: Kernel stack overflow ]---
-
-Fixes: 31da94c25aea835ceac00575a9fd206c5a833fed
-Cc: Guo Ren <guoren@kernel.org>
-Cc: Jisheng Zhang <jszhang@kernel.org>
-
-Signed-off-by: Deepak Gupta <debug@rivosinc.com>
----
- arch/riscv/include/asm/asm.h         | 11 ++++++
- arch/riscv/include/asm/thread_info.h |  3 ++
- arch/riscv/kernel/asm-offsets.c      |  4 +++
- arch/riscv/kernel/entry.S            | 54 ++++------------------------
- arch/riscv/kernel/traps.c            | 12 +------
- 5 files changed, 26 insertions(+), 58 deletions(-)
-
-diff --git a/arch/riscv/include/asm/asm.h b/arch/riscv/include/asm/asm.h
-index 1b471ff73178..373eba843331 100644
---- a/arch/riscv/include/asm/asm.h
-+++ b/arch/riscv/include/asm/asm.h
-@@ -69,6 +69,7 @@
- 
- #ifdef __ASSEMBLY__
- 
-+#include <asm/asm-offsets.h>
- /* Common assembly source macros */
- 
- /*
-@@ -80,6 +81,16 @@
- 	.endr
- .endm
- 
-+.macro asm_per_cpu dst sym tmp
-+	REG_L \tmp, TASK_TI_CPU_NUM(tp)
-+	slli \tmp, \tmp, 0x3
-+	la \dst, __per_cpu_offset
-+	add \dst, \dst, \tmp
-+	REG_L \tmp, 0(\dst)
-+	la \dst, \sym
-+	add \dst, \dst, \tmp
-+.endm
-+
- #endif /* __ASSEMBLY__ */
- 
- #endif /* _ASM_RISCV_ASM_H */
-diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
-index 67322f878e0d..7e17dc07cf11 100644
---- a/arch/riscv/include/asm/thread_info.h
-+++ b/arch/riscv/include/asm/thread_info.h
-@@ -65,6 +65,9 @@ struct thread_info {
- 	 */
- 	long			kernel_sp;	/* Kernel stack pointer */
- 	long			user_sp;	/* User stack pointer */
-+#ifdef CONFIG_VMAP_STACK
-+	long			spill_reg;      /* per cpu scratch space to spill a single register */
-+#endif
- 	int			cpu;
- };
- 
-diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
-index df9444397908..bed3c83bfb8f 100644
---- a/arch/riscv/kernel/asm-offsets.c
-+++ b/arch/riscv/kernel/asm-offsets.c
-@@ -38,6 +38,10 @@ void asm_offsets(void)
- 	OFFSET(TASK_TI_KERNEL_SP, task_struct, thread_info.kernel_sp);
- 	OFFSET(TASK_TI_USER_SP, task_struct, thread_info.user_sp);
- 
-+	OFFSET(TASK_TI_CPU_NUM, task_struct, thread_info.cpu);
-+#ifdef CONFIG_VMAP_STACK
-+	OFFSET(TASK_TI_SPILL_REG, task_struct, thread_info.spill_reg);
-+#endif
- 	OFFSET(TASK_THREAD_F0,  task_struct, thread.fstate.f[0]);
- 	OFFSET(TASK_THREAD_F1,  task_struct, thread.fstate.f[1]);
- 	OFFSET(TASK_THREAD_F2,  task_struct, thread.fstate.f[2]);
-diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-index b9eda3fcbd6d..12f285cec136 100644
---- a/arch/riscv/kernel/entry.S
-+++ b/arch/riscv/kernel/entry.S
-@@ -10,9 +10,11 @@
- #include <asm/asm.h>
- #include <asm/csr.h>
- #include <asm/unistd.h>
-+#include <asm/page.h>
- #include <asm/thread_info.h>
- #include <asm/asm-offsets.h>
- #include <asm/errata_list.h>
-+#include <linux/sizes.h>
- 
- #if !IS_ENABLED(CONFIG_PREEMPTION)
- .set resume_kernel, restore_all
-@@ -404,54 +406,12 @@ handle_syscall_trace_exit:
- 
- #ifdef CONFIG_VMAP_STACK
- handle_kernel_stack_overflow:
--	la sp, shadow_stack
--	addi sp, sp, SHADOW_OVERFLOW_STACK_SIZE
-+	REG_S x31, TASK_TI_SPILL_REG(tp)
-+	asm_per_cpu sp, overflow_stack, x31
-+	li x31, OVERFLOW_STACK_SIZE
-+	add sp, sp, x31
-+	REG_L x31, TASK_TI_SPILL_REG(tp)
- 
--	//save caller register to shadow stack
--	addi sp, sp, -(PT_SIZE_ON_STACK)
--	REG_S x1,  PT_RA(sp)
--	REG_S x5,  PT_T0(sp)
--	REG_S x6,  PT_T1(sp)
--	REG_S x7,  PT_T2(sp)
--	REG_S x10, PT_A0(sp)
--	REG_S x11, PT_A1(sp)
--	REG_S x12, PT_A2(sp)
--	REG_S x13, PT_A3(sp)
--	REG_S x14, PT_A4(sp)
--	REG_S x15, PT_A5(sp)
--	REG_S x16, PT_A6(sp)
--	REG_S x17, PT_A7(sp)
--	REG_S x28, PT_T3(sp)
--	REG_S x29, PT_T4(sp)
--	REG_S x30, PT_T5(sp)
--	REG_S x31, PT_T6(sp)
--
--	la ra, restore_caller_reg
--	tail get_overflow_stack
--
--restore_caller_reg:
--	//save per-cpu overflow stack
--	REG_S a0, -8(sp)
--	//restore caller register from shadow_stack
--	REG_L x1,  PT_RA(sp)
--	REG_L x5,  PT_T0(sp)
--	REG_L x6,  PT_T1(sp)
--	REG_L x7,  PT_T2(sp)
--	REG_L x10, PT_A0(sp)
--	REG_L x11, PT_A1(sp)
--	REG_L x12, PT_A2(sp)
--	REG_L x13, PT_A3(sp)
--	REG_L x14, PT_A4(sp)
--	REG_L x15, PT_A5(sp)
--	REG_L x16, PT_A6(sp)
--	REG_L x17, PT_A7(sp)
--	REG_L x28, PT_T3(sp)
--	REG_L x29, PT_T4(sp)
--	REG_L x30, PT_T5(sp)
--	REG_L x31, PT_T6(sp)
--
--	//load per-cpu overflow stack
--	REG_L sp, -8(sp)
- 	addi sp, sp, -(PT_SIZE_ON_STACK)
- 
- 	//save context to overflow stack
-diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-index f3e96d60a2ff..eef3a87514c7 100644
---- a/arch/riscv/kernel/traps.c
-+++ b/arch/riscv/kernel/traps.c
-@@ -208,18 +208,8 @@ int is_valid_bugaddr(unsigned long pc)
- #endif /* CONFIG_GENERIC_BUG */
- 
- #ifdef CONFIG_VMAP_STACK
--static DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)],
-+DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)],
- 		overflow_stack)__aligned(16);
--/*
-- * shadow stack, handled_ kernel_ stack_ overflow(in kernel/entry.S) is used
-- * to get per-cpu overflow stack(get_overflow_stack).
-- */
--long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE/sizeof(long)];
--asmlinkage unsigned long get_overflow_stack(void)
--{
--	return (unsigned long)this_cpu_ptr(overflow_stack) +
--		OVERFLOW_STACK_SIZE;
--}
- 
- asmlinkage void handle_bad_stack(struct pt_regs *regs)
- {
--- 
-2.25.1
-
+yes. with the hierarchy being arch specific those dependencies
+can be easily figured out.
