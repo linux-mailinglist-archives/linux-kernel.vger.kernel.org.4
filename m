@@ -2,142 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EDC96372F3
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 08:37:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF09C6372F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 08:39:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbiKXHhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 02:37:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60950 "EHLO
+        id S229585AbiKXHjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 02:39:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiKXHhi (ORCPT
+        with ESMTP id S229500AbiKXHjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 02:37:38 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B05F95AC;
-        Wed, 23 Nov 2022 23:37:34 -0800 (PST)
-Date:   Thu, 24 Nov 2022 08:37:27 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669275452;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=R7IPR3D+2Uj3z9wyAmJvuyCVbX35tyzgdGaPWhfMVFU=;
-        b=cyK3yXtZPH/MmeCGW9/Y7sa0S8j3U4V3cbZvcG7kljTMBRfM0Y0QkdauTW+7DBjoQjZtTr
-        Smv7dXzSJykzTNJSGc8sLgPdzbbDlfoTKd/C8NOokzgmUYyb8tklUcrtDDn4C15je2/t5S
-        qZ1JQCGr47d8HQHaAaN8lAer6OE19hnNpyB1jgifOrlEnW6D7thcZgBd7eWn+yIeCGQbN8
-        JAwvmeLK9L9DAYhNk5u69q40Gq9krI/dQFO6xIn3O7kgU2+P46t20owVpLaEAWKInjhFqR
-        wlWQJvdR2QKQazhoXmXtNlH26Ho7CMc2H6AHQCb4EHtFSJuPBzjiNZwLJTi/Yg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669275452;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=R7IPR3D+2Uj3z9wyAmJvuyCVbX35tyzgdGaPWhfMVFU=;
-        b=upalo9fPCSzAMl+wEAxT8iWIYDUFQBY6xP1a37mssQ+s+quUZB6ymRcbfF4PbBXUAt2ltk
-        VvbgJt/W+r7rfFDQ==
-From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
-To:     Thomas Gleixner <tglx@linutronix.de>
-cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        linux-bluetooth@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Jacob Keller <jacob.e.keller@intel.com>
-Subject: Re: [patch V3 12/17] timers: Silently ignore timers with a NULL
- function
-In-Reply-To: <20221123201625.135055320@linutronix.de>
-Message-ID: <644695b9-f343-7fb7-ed8e-763e5fe3d158@linutronix.de>
-References: <20221123201306.823305113@linutronix.de> <20221123201625.135055320@linutronix.de>
+        Thu, 24 Nov 2022 02:39:22 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF4A8F3D5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 23:39:19 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id x13-20020a17090a46cd00b00218f611b6e9so912297pjg.1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 23:39:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UA260AehhLAfEdYE8BrfOKBXPadjTQ0oWHspkp4L4Pc=;
+        b=THuBqC89Jfusdgra3SZeu6/RBNnEtIs/tTKvTH8yxdB18c9vUDS+zRq6xrOyWqh4hS
+         xGE4Z1fM91uGAk3sufgV/Q9eUlIm8FIfA/Rflnldf2N4xF23JrUfcoVEMeGS/8kY+d5O
+         lrJCf3pvvFPqEiz2WWTCZu1wS1IeVOgasgx0LGdw5+osuoqdusRDC566uvIu16h+VEZp
+         649/HfnJLyJkpFKwysz9c7sBh94ZMe7XSvN25TVrYTrSTDmKQHbYkDOCJ6IGvOMIH2SS
+         ZauloVy1YaoQIMYT4GklJ+lb4Vp3I/92qvaHBLiX1hDKpQ35LxBFe92kuYTdNhWknTzI
+         /iAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UA260AehhLAfEdYE8BrfOKBXPadjTQ0oWHspkp4L4Pc=;
+        b=sC4xzL0iRw8rx2UrjXgc2kf6q8gZ6R5swFuLkACK4CHFJh8AdVDuiZTgELGgTa/xI8
+         Lfz3Xw8GMxmDgT6/8NJyaYBxpF2cfvh6AayZ4MHBxFU2ji0mh8LoHLLx7NKdl5OU5mFa
+         e8KeQP/lSQDO3LTdMx6BxJY4p+2rDRFA3yQlkBrCczfFlGTYca8n8F0B91yf6NAXJ/my
+         +krVHyTjfeGuMCbiTBZiWJtKbemA0SJ+Yl4VMp0aMB3G5o4qEU4qVzM2su0Qqgk7VIZV
+         7U0dRHd0K/NVpFn8xvb4L1KbmEJ7GvRkPXvVWHTpuXVKBSKIL+9i1Ntx6dkCY6gCWPCA
+         46zw==
+X-Gm-Message-State: ANoB5pm+18UV7cCd76CbrWS40epH46p/vMfBIcT1/h41/HPdboH1udb8
+        rAQbMmOmesI+zTMcxqOMzDlm1A==
+X-Google-Smtp-Source: AA0mqf6LieQTxv4TzvKYyWHggvMNThPG0+krCHoy6rIfYkaS2QNm19YP/LmtqfBerLYrAL7swFXDfQ==
+X-Received: by 2002:a17:90a:db52:b0:212:d2c2:8e1a with SMTP id u18-20020a17090adb5200b00212d2c28e1amr40767868pjx.54.1669275558683;
+        Wed, 23 Nov 2022 23:39:18 -0800 (PST)
+Received: from C02DW0BEMD6R.bytedance.net ([139.177.225.245])
+        by smtp.gmail.com with ESMTPSA id m7-20020a170902db0700b0018862b7f8besm503510plx.160.2022.11.23.23.39.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 23:39:18 -0800 (PST)
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+To:     dan.j.williams@intel.com, akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: [PATCH linux-next] mm: memremap: delete static key devmap_managed_key
+Date:   Thu, 24 Nov 2022 15:39:09 +0800
+Message-Id: <20221124073909.15489-1-zhengqi.arch@bytedance.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Nov 2022, Thomas Gleixner wrote:
+The static key devmap_managed_key has no users since we
+deleted put_devmap_managed_page_refs(). So delete it too.
 
-> Tearing down timers which have circular dependencies to other
-> functionality, e.g. workqueues, where the timer can schedule work and work
-> can arm timers, is not trivial.
-> 
-> In those cases it is desired to shutdown the timer in a way which prevents
-> rearming of the timer. The mechanism to do so is to set timer->function to
-> NULL and use this as an indicator for the timer arming functions to ignore
-> the (re)arm request.
-> 
-> In preparation for that replace the warnings in the relevant code paths
-> with checks for timer->function == NULL. If the pointer is NULLL, then
+Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+---
+ mm/memremap.c | 27 ---------------------------
+ 1 file changed, 27 deletions(-)
 
-s/NULLL/NULL
-
-> discard the rearm request silently.
-> 
-> Add debug_assert_init() instead of the WARN_ON_ONCE(!timer->function)
-> checks so that debug objects can warn about non-initialized timers.
-> 
-> The warning of debug objects does warn if timer->function == NULL.  It
-
-does NOT warn
-
-> warns when timer was not initialized using timer_setup[_on_stack]() or via
-> DEFINE_TIMER(). If developers fail to enable debug objects and then waste
-> lots of time to figure out why their non-initialized timer is not firing,
-> they deserve it. Same for initializing a timer with a NULL function.
-> 
-> Co-developed-by: Steven Rostedt <rostedt@goodmis.org>
-> Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Tested-by: Guenter Roeck <linux@roeck-us.net>
-> Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
-> Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home
-> Link: https://lore.kernel.org/all/20221110064101.429013735@goodmis.org
-> ---
-> V2: Use continue instead of return and amend the return value docs (Steven)
-> V3: Changelog and comment updates (Anna-Maria)
-> ---
->  kernel/time/timer.c |   57 +++++++++++++++++++++++++++++++++++++++++++++++-----
->  1 file changed, 52 insertions(+), 5 deletions(-)
-> 
-> --- a/kernel/time/timer.c
-> +++ b/kernel/time/timer.c
-> @@ -1128,8 +1144,12 @@ static inline int
->   * mod_timer_pending() is the same for pending timers as mod_timer(), but
->   * will not activate inactive timers.
->   *
-> + * If @timer->function == NULL then the start operation is silently
-> + * discarded.
-> + *
->   * Return:
-> - * * %0 - The timer was inactive and not modified
-> + * * %0 - The timer was inactive and not modified or was is in
-> + *	  shutdown state and the operation was discarded
-
-You forgot to update this "was is" mistake. All other places are fine.
-
->   * * %1 - The timer was active and requeued to expire at @expires
->   */
->  int mod_timer_pending(struct timer_list *timer, unsigned long expires)
-
-Thanks,
-
-	Anna-Maria
+diff --git a/mm/memremap.c b/mm/memremap.c
+index 0d714adadbfb..67749f74be4e 100644
+--- a/mm/memremap.c
++++ b/mm/memremap.c
+@@ -38,30 +38,6 @@ unsigned long memremap_compat_align(void)
+ EXPORT_SYMBOL_GPL(memremap_compat_align);
+ #endif
+ 
+-#ifdef CONFIG_FS_DAX
+-DEFINE_STATIC_KEY_FALSE(devmap_managed_key);
+-EXPORT_SYMBOL(devmap_managed_key);
+-
+-static void devmap_managed_enable_put(struct dev_pagemap *pgmap)
+-{
+-	if (pgmap->type == MEMORY_DEVICE_FS_DAX)
+-		static_branch_dec(&devmap_managed_key);
+-}
+-
+-static void devmap_managed_enable_get(struct dev_pagemap *pgmap)
+-{
+-	if (pgmap->type == MEMORY_DEVICE_FS_DAX)
+-		static_branch_inc(&devmap_managed_key);
+-}
+-#else
+-static void devmap_managed_enable_get(struct dev_pagemap *pgmap)
+-{
+-}
+-static void devmap_managed_enable_put(struct dev_pagemap *pgmap)
+-{
+-}
+-#endif /* CONFIG_FS_DAX */
+-
+ static void pgmap_array_delete(struct range *range)
+ {
+ 	xa_store_range(&pgmap_array, PHYS_PFN(range->start), PHYS_PFN(range->end),
+@@ -133,7 +109,6 @@ void memunmap_pages(struct dev_pagemap *pgmap)
+ 	percpu_ref_exit(&pgmap->ref);
+ 
+ 	WARN_ONCE(pgmap->altmap.alloc, "failed to free all reserved pages\n");
+-	devmap_managed_enable_put(pgmap);
+ }
+ EXPORT_SYMBOL_GPL(memunmap_pages);
+ 
+@@ -333,8 +308,6 @@ void *memremap_pages(struct dev_pagemap *pgmap, int nid)
+ 	if (error)
+ 		return ERR_PTR(error);
+ 
+-	devmap_managed_enable_get(pgmap);
+-
+ 	/*
+ 	 * Clear the pgmap nr_range as it will be incremented for each
+ 	 * successfully processed range. This communicates how many
+-- 
+2.20.1
 
