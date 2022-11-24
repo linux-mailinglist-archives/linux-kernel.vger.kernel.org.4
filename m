@@ -2,73 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 899E7637B7E
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 15:32:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 185A0637B81
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 15:33:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229531AbiKXOci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 09:32:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36078 "EHLO
+        id S229672AbiKXOdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 09:33:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiKXOcg (ORCPT
+        with ESMTP id S229497AbiKXOc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 09:32:36 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF540186C7;
-        Thu, 24 Nov 2022 06:32:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669300351; x=1700836351;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=qsOe7kr5bqAeEs2k/WY123wWj03USp72QHcrBt6ZUWY=;
-  b=YdWcf41fq39Ivhh7dLTW1aIq1dwOroSpPnFVu93vZTPkOyC7K7G4s4gK
-   Dx4VDW1LgW7tN/7Vf8FKZyGvJ59kCf0f078XBW1QNWzwgVpk2hEpMKk07
-   rgMQH9e5PkQd+v6xn0pob1hpncibFwQATmaZmJ6Xt8iaeaZ0Z5g7qByQQ
-   iZAgc4Ec3nr2AJqlM6MT7w+gZ96t8yjIIhxOlHBQsK2nG1jySxN6hlX9C
-   xnPwJ0ayNdCoi5Yo65pyaot1S3/byRetZwC/erQYDsWY32Uu08UO4NmJB
-   XtmHY+3sRfu7KVO5IsrQyY7a5n0HQkDh2x/disLFz+I6wJF7xhZLShbRc
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="311948854"
-X-IronPort-AV: E=Sophos;i="5.96,190,1665471600"; 
-   d="scan'208";a="311948854"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2022 06:32:31 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="644511115"
-X-IronPort-AV: E=Sophos;i="5.96,190,1665471600"; 
-   d="scan'208";a="644511115"
-Received: from smurr10x-mobl1.amr.corp.intel.com (HELO [10.213.209.98]) ([10.213.209.98])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2022 06:32:27 -0800
-Message-ID: <30f42096-3f42-594e-8ff1-c09341925518@linux.intel.com>
-Date:   Thu, 24 Nov 2022 14:32:25 +0000
+        Thu, 24 Nov 2022 09:32:58 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0F3776DC
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 06:32:56 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id r12so2842938lfp.1
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 06:32:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zYPcwuN0ixxBPz8vi1NczLJaDfU7Jd6IdhNMvi6HWb0=;
+        b=D5u8AgJcYgd5joOZvehXrdY4ax0HefmPst5qs2Ll24ByNjMvjqsM24UzcM0L+o2bid
+         P4VCmAsFX1QmnRolJ1Tg+FTWF4GbcWeyKmUZvi0vz0cIfhO/z1HjrwinN/QH0DAJfCq7
+         eFFtorRUmIZ54wbGWkjBY8derySIAwdBDtB67k8k+xo+b9gcMpbUETbsTLXR+3/g2/U0
+         6Wc+XqlOUCs3t8AbW7C3kt7N4uVgdurS6xudUx46ATHi2J0GXrw3sxBBNIKNqMrc9TDF
+         70lhe03Q/wiT1N/TpkFdcSKgVS8TAwtOYVWkEh8P+D1AO/IyZSTX4QG591EtepYD8ET2
+         97CQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zYPcwuN0ixxBPz8vi1NczLJaDfU7Jd6IdhNMvi6HWb0=;
+        b=PW+HS+ed1vJ/oSQLSA/7gOAgn6oLs+C94qPPbBVRMc0JOVWueTBzF+MoaOdyEAhlKq
+         TCSSBceHSb6MhRBuqlEElt124xUZbDDZYra91IVVS9oSe1MTWQIfU7Jj895SSI8ed8P+
+         gJlEjGLtP2vuV1fZAymZZB02wXRBE0pB/BEXHPwwJ9atJfizGvoj1/OaoHAi68iLL7r0
+         5YWjVWkrPhNZC1Qq/+fb41nRcA4YIBbMz8YMXvmViVI4hS8LqQFK/Cp2vWtbFhiee+Uc
+         pPHQfqBgbvkscbueGwSdCHXSjEfbOFtqej4MyUzGaheSemt7EAHVIu7DVwe5NFvt+RQ+
+         diSA==
+X-Gm-Message-State: ANoB5pmva4XBQpL8ztkYCZhW+UtWUC3N+CCsIeji68AqIzHeoi7CyFOr
+        eZTJwuNPMMZacIjhO5TSu7n/hA==
+X-Google-Smtp-Source: AA0mqf4bKcysvolziy0EL4RTYdY5BJl7S8gZPvthaVbhBr9/keBrnI2vpdR0tAfaU7q/p4iv+lD0hw==
+X-Received: by 2002:ac2:44ac:0:b0:4b4:efec:b4c9 with SMTP id c12-20020ac244ac000000b004b4efecb4c9mr1963916lfm.276.1669300374556;
+        Thu, 24 Nov 2022 06:32:54 -0800 (PST)
+Received: from [192.168.1.101] (95.49.32.48.neoplus.adsl.tpnet.pl. [95.49.32.48])
+        by smtp.gmail.com with ESMTPSA id e8-20020ac24e08000000b00492ceda336fsm133145lfr.278.2022.11.24.06.32.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Nov 2022 06:32:53 -0800 (PST)
+Message-ID: <9016a729-4c7a-4252-a667-3c6536eb2038@linaro.org>
+Date:   Thu, 24 Nov 2022 15:32:48 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [RFC 11/13] cgroup/drm: Introduce weight based drm cgroup control
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp: fix PCIe DMA coherency
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221124142501.29314-1-johan+linaro@kernel.org>
 Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Intel-gfx@lists.freedesktop.org, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Rob Clark <robdclark@chromium.org>,
-        =?UTF-8?Q?St=c3=a9phane_Marchesin?= <marcheu@chromium.org>,
-        "T . J . Mercier" <tjmercier@google.com>, Kenny.Ho@amd.com,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Brian Welty <brian.welty@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-References: <20221109161141.2987173-1-tvrtko.ursulin@linux.intel.com>
- <20221109161141.2987173-12-tvrtko.ursulin@linux.intel.com>
- <Y30/MIsLmVAZ7pQi@slm.duckdns.org>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <Y30/MIsLmVAZ7pQi@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221124142501.29314-1-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -76,121 +85,99 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 22/11/2022 21:29, Tejun Heo wrote:
-> On Wed, Nov 09, 2022 at 04:11:39PM +0000, Tvrtko Ursulin wrote:
->> +DRM scheduling soft limits
->> +~~~~~~~~~~~~~~~~~~~~~~~~~~
->> +
->> +Because of the heterogenous hardware and driver DRM capabilities, soft limits
->> +are implemented as a loose co-operative (bi-directional) interface between the
->> +controller and DRM core.
->> +
->> +The controller configures the GPU time allowed per group and periodically scans
->> +the belonging tasks to detect the over budget condition, at which point it
->> +invokes a callback notifying the DRM core of the condition.
->> +
->> +DRM core provides an API to query per process GPU utilization and 2nd API to
->> +receive notification from the cgroup controller when the group enters or exits
->> +the over budget condition.
->> +
->> +Individual DRM drivers which implement the interface are expected to act on this
->> +in the best-effort manner only. There are no guarantees that the soft limits
->> +will be respected.
+
+On 24.11.2022 15:25, Johan Hovold wrote:
+> The devices on the SC8280XP PCIe buses are cache coherent and must be
+> marked as such to avoid data corruption.
 > 
-> Soft limits is a bit of misnomer and can be confused with best-effort limits
-> such as memory.high. Prolly best to not use the term.
-
-Are you suggesting "best effort limits" or "best effort <something>"? It 
-would sounds good to me if we found the right <something>. Best effort 
-budget perhaps?
-
->> +static bool
->> +__start_scanning(struct drm_cgroup_state *root, unsigned int period_us)
->> +{
->> +	struct cgroup_subsys_state *node;
->> +	bool ok = false;
->> +
->> +	rcu_read_lock();
->> +
->> +	css_for_each_descendant_post(node, &root->css) {
->> +		struct drm_cgroup_state *drmcs = css_to_drmcs(node);
->> +
->> +		if (!css_tryget_online(node))
->> +			goto out;
->> +
->> +		drmcs->active_us = 0;
->> +		drmcs->sum_children_weights = 0;
->> +
->> +		if (node == &root->css)
->> +			drmcs->per_s_budget_ns =
->> +				DIV_ROUND_UP_ULL(NSEC_PER_SEC * period_us,
->> +						 USEC_PER_SEC);
->> +		else
->> +			drmcs->per_s_budget_ns = 0;
->> +
->> +		css_put(node);
->> +	}
->> +
->> +	css_for_each_descendant_post(node, &root->css) {
->> +		struct drm_cgroup_state *drmcs = css_to_drmcs(node);
->> +		struct drm_cgroup_state *parent;
->> +		u64 active;
->> +
->> +		if (!css_tryget_online(node))
->> +			goto out;
->> +		if (!node->parent) {
->> +			css_put(node);
->> +			continue;
->> +		}
->> +		if (!css_tryget_online(node->parent)) {
->> +			css_put(node);
->> +			goto out;
->> +		}
->> +		parent = css_to_drmcs(node->parent);
->> +
->> +		active = drmcs_get_active_time_us(drmcs);
->> +		if (active > drmcs->prev_active_us)
->> +			drmcs->active_us += active - drmcs->prev_active_us;
->> +		drmcs->prev_active_us = active;
->> +
->> +		parent->active_us += drmcs->active_us;
->> +		parent->sum_children_weights += drmcs->weight;
->> +
->> +		css_put(node);
->> +		css_put(&parent->css);
->> +	}
->> +
->> +	ok = true;
->> +
->> +out:
->> +	rcu_read_unlock();
->> +
->> +	return ok;
->> +}
+> A coherent device can, for example, end up snooping stale data from the
+> caches instead of using data written by the CPU through the
+> non-cacheable mapping which is used for consistent DMA buffers for
+> non-coherent devices.
 > 
-> A more conventional and scalable way to go about this would be using an
-> rbtree keyed by virtual time. Both CFS and blk-iocost are examples of this,
-> but I think for drm, it can be a lot simpler.
+> Note that this is much more likely to happen since commit c44094eee32f
+> ("arm64: dma: Drop cache invalidation from arch_dma_prep_coherent()")
+> that was added in 6.1 and which removed the cache invalidation when
+> setting up the non-cacheable mapping.
+> 
+> Marking the PCIe devices as coherent specifically fixes the intermittent
+> NVMe probe failures observed on the Thinkpad X13s, which was due to
+> corruption of the submission and completion queues. This was typically
+> observed as corruption of the admin submission queue (with well-formed
+> completion):
+> 
+> 	could not locate request for tag 0x0
+> 	nvme nvme0: invalid id 0 completed on queue 0
+> 
+> or corruption of the admin or I/O completion queues (malformed
+> completion):
+> 
+> 	could not locate request for tag 0x45f
+> 	nvme nvme0: invalid id 25695 completed on queue 25965
+> 
+> presumably as these queues are small enough to not be allocated using
+> CMA which in turn make them more likely to be cached (e.g. due to
+> accesses to nearby pages through the cacheable linear map). Increasing
+> the buffer sizes to two pages to force CMA allocation also appears to
+> make the problem go away.
+> 
+> Fixes: 813e83157001 ("arm64: dts: qcom: sc8280xp/sa8540p: add PCIe2-4 nodes")
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+Looks like 8450 should also be like this, good catch!
 
-It's well impressive you were able to figure out what I am doing there. 
-:) And probably you can see that this is the first time I am attempting 
-an algorithm like this one. I think I made it /dtrt/ with a few post/pre 
-walks so the right pieces of data propagate correctly.
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Are you suggesting a parallel/shadow tree to be kept in the drm 
-controller (which would shadow the cgroup hierarchy)? Or something else? 
-The mention of rbtree is not telling me much, but I will look into the 
-referenced examples. (Although I will refrain from major rework until 
-more people start "biting" into all this.)
-
-Also, when you mention scalability you are concerned about multiple tree 
-walks I have per iteration? I wasn't so much worried about that, 
-definitely not for the RFC, but even in general due relatively low 
-frequency of scanning and a good amount of less trivial cost being 
-outside the actual tree walks (drm client walks, GPU utilisation 
-calculations, maybe more). But perhaps I don't have the right idea on 
-how big cgroups hierarchies can be compared to number of drm clients etc.
-
-Regards,
-
-Tvrtko
+Konrad
+>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> index 27f5c2f82338..7748cd29276d 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> @@ -854,6 +854,8 @@ pcie4: pcie@1c00000 {
+>  				 <0x02000000 0x0 0x30300000 0x0 0x30300000 0x0 0x1d00000>;
+>  			bus-range = <0x00 0xff>;
+>  
+> +			dma-coherent;
+> +
+>  			linux,pci-domain = <6>;
+>  			num-lanes = <1>;
+>  
+> @@ -951,6 +953,8 @@ pcie3b: pcie@1c08000 {
+>  				 <0x02000000 0x0 0x32300000 0x0 0x32300000 0x0 0x1d00000>;
+>  			bus-range = <0x00 0xff>;
+>  
+> +			dma-coherent;
+> +
+>  			linux,pci-domain = <5>;
+>  			num-lanes = <2>;
+>  
+> @@ -1046,6 +1050,8 @@ pcie3a: pcie@1c10000 {
+>  				 <0x02000000 0x0 0x34300000 0x0 0x34300000 0x0 0x1d00000>;
+>  			bus-range = <0x00 0xff>;
+>  
+> +			dma-coherent;
+> +
+>  			linux,pci-domain = <4>;
+>  			num-lanes = <4>;
+>  
+> @@ -1144,6 +1150,8 @@ pcie2b: pcie@1c18000 {
+>  				 <0x02000000 0x0 0x38300000 0x0 0x38300000 0x0 0x1d00000>;
+>  			bus-range = <0x00 0xff>;
+>  
+> +			dma-coherent;
+> +
+>  			linux,pci-domain = <3>;
+>  			num-lanes = <2>;
+>  
+> @@ -1239,6 +1247,8 @@ pcie2a: pcie@1c20000 {
+>  				 <0x02000000 0x0 0x3c300000 0x0 0x3c300000 0x0 0x1d00000>;
+>  			bus-range = <0x00 0xff>;
+>  
+> +			dma-coherent;
+> +
+>  			linux,pci-domain = <2>;
+>  			num-lanes = <4>;
+>  
