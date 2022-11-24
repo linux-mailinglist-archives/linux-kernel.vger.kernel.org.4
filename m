@@ -2,147 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19E3563764D
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:24:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62BF6637657
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:26:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiKXKYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 05:24:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43406 "EHLO
+        id S229799AbiKXK04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 05:26:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiKXKYl (ORCPT
+        with ESMTP id S229882AbiKXK0x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 05:24:41 -0500
+        Thu, 24 Nov 2022 05:26:53 -0500
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89AF811D;
-        Thu, 24 Nov 2022 02:24:40 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AF1C745;
+        Thu, 24 Nov 2022 02:26:52 -0800 (PST)
 Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AO9nLhM002011;
-        Thu, 24 Nov 2022 10:24:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=vfM1wUbauvbiVxYAwqDD2o4RuMM2aASDuQbC4RNVAoQ=;
- b=cK2P0v95Uit2bhcqLPL5S51x6P3kJzs1or11yca6c3pFPw1QGfD2qD5MBAIOFtj7SzxD
- 4YIgpNy+kJnIgcukjivjFv5M3vV7/NuV1p6wKyr9Ho8szCNrC5YHRjUUgjRyOKCtm02X
- Exmn0KsBcujZgOZ8DxgNiyFo726zeSb9ULg9itLaXJDbsS0/3TKPizICX2vcOaYmTdO/
- yqarJ18D1iTq7YF4tzfqtM8oR727Ay8Yaa/3Prle41izMzk6lUtULFz905+wOmZYCqhi
- dSnOxfnm9p4Z39wt5RuVNu98lvftYOjPmG+D9572CN/W3o3UIzp6+/Rh/IBfuPW4MlB2 KQ== 
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AO954h0008036;
+        Thu, 24 Nov 2022 10:26:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : mime-version : message-id :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=h0OaRJdxPrOEvjS/JN+gFuwD0ahqFo+ShpVhiflB7sc=;
+ b=R7SmWUVYN8xdq4fdRJtRVTCYFkcwAG3HLaXrOJAcbs7DJYKRTd7fnphTuCPl4InPbVRn
+ SLAL1BBcRRhgM1ZrXKZi/qdhQgcXeDMpi9FYknG/h5dhF5KfuCPrrjHmPIhXYstVGUPk
+ 2Wsz5BX8l7heLSrzWQG/j5sMx3O5Tsc6AIwbGGc6TdHxbq1v7/w8iJGDd7phLgr6H9vf
+ oxelAQDN12tWAsyv6rAifXQ2xmuuBDDEFqJmvDtIez2mmy0btERCKNzD734Kj5Qhieg1
+ JHqu187yFMLQmw2feZVxO/YBPqxIhia/x8lnai2SMHl+Re0YeOfSAc4Rjxb4Rk/4znxY MA== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m10w6nmwe-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m10w6np16-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Nov 2022 10:24:39 +0000
+        Thu, 24 Nov 2022 10:26:23 +0000
 Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AOABepJ021262;
-        Thu, 24 Nov 2022 10:24:39 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m10w6nmvn-1
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AOABepN021262;
+        Thu, 24 Nov 2022 10:26:22 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m10w6np0k-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Nov 2022 10:24:38 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AOAL7c3015728;
-        Thu, 24 Nov 2022 10:24:37 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04fra.de.ibm.com with ESMTP id 3kxps8wsfh-1
+        Thu, 24 Nov 2022 10:26:22 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AOALCnx002733;
+        Thu, 24 Nov 2022 10:26:20 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04ams.nl.ibm.com with ESMTP id 3kxps8yyud-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Nov 2022 10:24:36 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AOAOXrY53084512
+        Thu, 24 Nov 2022 10:26:20 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AOAQIKZ37618238
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 24 Nov 2022 10:24:33 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BFCEC5204F;
-        Thu, 24 Nov 2022 10:24:33 +0000 (GMT)
-Received: from [9.152.224.253] (unknown [9.152.224.253])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 7E14752090;
-        Thu, 24 Nov 2022 10:24:33 +0000 (GMT)
-Message-ID: <ee3999a2-7ae6-e72c-0a47-0890972bbd23@linux.ibm.com>
-Date:   Thu, 24 Nov 2022 11:24:33 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] KVM: s390: vsie: Fix the initialization of the epoch
- extension (epdx) field
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Thomas Huth <thuth@redhat.com>, kvm@vger.kernel.org,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        "Collin L. Walling" <walling@linux.ibm.com>,
-        Jason J Herne <jjherne@linux.ibm.com>
-References: <20221123090833.292938-1-thuth@redhat.com>
- <e7f84070-aeec-99d6-8ac0-cf90ad61ba88@linux.ibm.com>
-Content-Language: en-US
-From:   Janosch Frank <frankja@linux.ibm.com>
-In-Reply-To: <e7f84070-aeec-99d6-8ac0-cf90ad61ba88@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: n11ZI6OXbf3wC4oPmQ7kIKS3I6A6vnfy
-X-Proofpoint-ORIG-GUID: RwMtsp3JyDl8lBa-K2XKoMb2keUB5ixs
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 24 Nov 2022 10:26:18 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 05CB2A404D;
+        Thu, 24 Nov 2022 10:26:18 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 613BEA4040;
+        Thu, 24 Nov 2022 10:26:17 +0000 (GMT)
+Received: from localhost (unknown [9.43.36.53])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 24 Nov 2022 10:26:17 +0000 (GMT)
+Date:   Thu, 24 Nov 2022 15:56:15 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
+Subject: Re: [PATCH v2] powerpc/bpf/32: Fix Oops on tail call tests
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hao Luo <haoluo@google.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>, KP Singh <kpsingh@kernel.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Stanislav Fomichev <sdf@google.com>,
+        Song Liu <song@kernel.org>, stable@vger.kernel.org,
+        Yonghong Song <yhs@fb.com>
+References: <757acccb7fbfc78efa42dcf3c974b46678198905.1669278887.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <757acccb7fbfc78efa42dcf3c974b46678198905.1669278887.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1669285523.t5gbams47i.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 7Et1NJoogkaVUd8SzfCTQ0cNFQr_Dw7B
+X-Proofpoint-ORIG-GUID: MaI_DwSJSsWRn0AvUqHpwdA-DhJ90lHU
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-24_07,2022-11-23_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
  bulkscore=0 adultscore=0 mlxscore=0 lowpriorityscore=0 suspectscore=0
  impostorscore=0 priorityscore=1501 spamscore=0 phishscore=0
  mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2210170000 definitions=main-2211240079
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/23/22 10:41, Christian Borntraeger wrote:
-> 
-> 
-> Am 23.11.22 um 10:08 schrieb Thomas Huth:
->> We recently experienced some weird huge time jumps in nested guests when
->> rebooting them in certain cases. After adding some debug code to the epoch
->> handling in vsie.c (thanks to David Hildenbrand for the idea!), it was
->> obvious that the "epdx" field (the multi-epoch extension) did not get set
->> to 0xff in case the "epoch" field was negative.
->> Seems like the code misses to copy the value from the epdx field from
->> the guest to the shadow control block. By doing so, the weird time
->> jumps are gone in our scenarios.
->>
->> Link: https://bugzilla.redhat.com/show_bug.cgi?id=2140899
->> Fixes: 8fa1696ea781 ("KVM: s390: Multiple Epoch Facility support")
-> 
-> We might want to add cc stable, just in case.
+Christophe Leroy wrote:
+> test_bpf tail call tests end up as:
+>=20
+>   test_bpf: #0 Tail call leaf jited:1 85 PASS
+>   test_bpf: #1 Tail call 2 jited:1 111 PASS
+>   test_bpf: #2 Tail call 3 jited:1 145 PASS
+>   test_bpf: #3 Tail call 4 jited:1 170 PASS
+>   test_bpf: #4 Tail call load/store leaf jited:1 190 PASS
+>   test_bpf: #5 Tail call load/store jited:1
+>   BUG: Unable to handle kernel data access on write at 0xf1b4e000
+>   Faulting instruction address: 0xbe86b710
+>   Oops: Kernel access of bad area, sig: 11 [#1]
+>   BE PAGE_SIZE=3D4K MMU=3DHash PowerMac
+>   Modules linked in: test_bpf(+)
+>   CPU: 0 PID: 97 Comm: insmod Not tainted 6.1.0-rc4+ #195
+>   Hardware name: PowerMac3,1 750CL 0x87210 PowerMac
+>   NIP:  be86b710 LR: be857e88 CTR: be86b704
+>   REGS: f1b4df20 TRAP: 0300   Not tainted  (6.1.0-rc4+)
+>   MSR:  00009032 <EE,ME,IR,DR,RI>  CR: 28008242  XER: 00000000
+>   DAR: f1b4e000 DSISR: 42000000
+>   GPR00: 00000001 f1b4dfe0 c11d2280 00000000 00000000 00000000 00000002 0=
+0000000
+>   GPR08: f1b4e000 be86b704 f1b4e000 00000000 00000000 100d816a f2440000 f=
+e73baa8
+>   GPR16: f2458000 00000000 c1941ae4 f1fe2248 00000045 c0de0000 f2458030 0=
+0000000
+>   GPR24: 000003e8 0000000f f2458000 f1b4dc90 3e584b46 00000000 f24466a0 c=
+1941a00
+>   NIP [be86b710] 0xbe86b710
+>   LR [be857e88] __run_one+0xec/0x264 [test_bpf]
+>   Call Trace:
+>   [f1b4dfe0] [00000002] 0x2 (unreliable)
+>   Instruction dump:
+>   XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX
+>   XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX
+>   ---[ end trace 0000000000000000 ]---
+>=20
+> This is a tentative to write above the stack. The problem is encoutered
+> with tests added by commit 38608ee7b690 ("bpf, tests: Add load store
+> test case for tail call")
+>=20
+> This happens because tail call is done to a BPF prog with a different
+> stack_depth. At the time being, the stack is kept as is when the caller
+> tail calls its callee. But at exit, the callee restores the stack based
+> on its own properties. Therefore here, at each run, r1 is erroneously
+> increased by 32 - 16 =3D 16 bytes.
+>=20
+> This was done that way in order to pass the tail call count from caller
+> to callee through the stack. As powerpc32 doesn't have a red zone in
+> the stack, it was necessary the maintain the stack as is for the tail
+> call. But it was not anticipated that the BPF frame size could be
+> different.
+>=20
+> Let's take a new approach. Use register r4 to carry the tail call count
+> during the tail call, and save it into the stack at function entry if
+> required. This means the input parameter must be in r3, which is more
+> correct as it is a 32 bits parameter, then tail call better match with
+> normal BPF function entry, the down side being that we move that input
+> parameter back and forth between r3 and r4. That can be optimised later.
+>=20
+> Doing that also has the advantage of maximising the common parts between
+> tail calls and a normal function exit.
+>=20
+> With the fix, tail call tests are now successfull:
+>=20
+>   test_bpf: #0 Tail call leaf jited:1 53 PASS
+>   test_bpf: #1 Tail call 2 jited:1 115 PASS
+>   test_bpf: #2 Tail call 3 jited:1 154 PASS
+>   test_bpf: #3 Tail call 4 jited:1 165 PASS
+>   test_bpf: #4 Tail call load/store leaf jited:1 101 PASS
+>   test_bpf: #5 Tail call load/store jited:1 141 PASS
+>   test_bpf: #6 Tail call error path, max count reached jited:1 994 PASS
+>   test_bpf: #7 Tail call count preserved across function calls jited:1 14=
+0975 PASS
+>   test_bpf: #8 Tail call error path, NULL target jited:1 110 PASS
+>   test_bpf: #9 Tail call error path, index out of range jited:1 69 PASS
+>   test_bpf: test_tail_calls: Summary: 10 PASSED, 0 FAILED, [10/10 JIT'ed]
+>=20
+> Suggested-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+> Fixes: 51c66ad849a7 ("powerpc/bpf: Implement extended BPF on PPC32")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-I'm pushing this to devel for the CI with the following additions:
+Tested-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com
 
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
-Cc: stable@vger.kernel.org # 4.19+
 
-> 
-> Reviewed-by: Christian Borntraeger <borntraeger@linux.ibm.com>
-> 
-> 
->> Signed-off-by: Thomas Huth <thuth@redhat.com>
->> ---
->>    arch/s390/kvm/vsie.c | 4 +++-
->>    1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/s390/kvm/vsie.c b/arch/s390/kvm/vsie.c
->> index 94138f8f0c1c..ace2541ababd 100644
->> --- a/arch/s390/kvm/vsie.c
->> +++ b/arch/s390/kvm/vsie.c
->> @@ -546,8 +546,10 @@ static int shadow_scb(struct kvm_vcpu *vcpu, struct vsie_page *vsie_page)
->>    	if (test_kvm_cpu_feat(vcpu->kvm, KVM_S390_VM_CPU_FEAT_CEI))
->>    		scb_s->eca |= scb_o->eca & ECA_CEI;
->>    	/* Epoch Extension */
->> -	if (test_kvm_facility(vcpu->kvm, 139))
->> +	if (test_kvm_facility(vcpu->kvm, 139)) {
->>    		scb_s->ecd |= scb_o->ecd & ECD_MEF;
->> +		scb_s->epdx = scb_o->epdx;
->> +	}
->>    
->>    	/* etoken */
->>    	if (test_kvm_facility(vcpu->kvm, 156))
-
+Thanks,
+Naveen
