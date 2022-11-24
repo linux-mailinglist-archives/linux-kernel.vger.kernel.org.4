@@ -2,173 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 011EA637557
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 10:37:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1797463755A
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 10:37:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbiKXJhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 04:37:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46748 "EHLO
+        id S229712AbiKXJh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 04:37:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbiKXJhM (ORCPT
+        with ESMTP id S229459AbiKXJhz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 04:37:12 -0500
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7ECE125214
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 01:37:09 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=zelin.deng@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VVaaGVU_1669282625;
-Received: from 30.97.48.192(mailfrom:zelin.deng@linux.alibaba.com fp:SMTPD_---0VVaaGVU_1669282625)
-          by smtp.aliyun-inc.com;
-          Thu, 24 Nov 2022 17:37:06 +0800
-Message-ID: <e85a4a5a-cbd9-8773-fcad-43f0f490a189@linux.alibaba.com>
-Date:   Thu, 24 Nov 2022 17:37:04 +0800
+        Thu, 24 Nov 2022 04:37:55 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C561A1F62F;
+        Thu, 24 Nov 2022 01:37:54 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669282673;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Tjizbh8hWoBsQRunZtQQh9g5OJSznOxQIsaJyKhrvY4=;
+        b=C9MBI36lXTOK5rNSl4tj3DGptwslIqTgmLItfx0CKyB3ne+Dd0tmdMIfiz209fcA9vixlx
+        2teLzuNjJ8ljmoIvc7Xy1N2SYBSUgRWzvAlTjDHemyxp0BsUJarg1y+wCqCVqn+JcQu/Ti
+        qnaDwwdOar5iGkhrs8YwASq6UweHRtprwNGW5v5TkHd8ghGTJIpIYU+1bAYh5ALMRY7k7v
+        s8CJ0i2EMsuZ7cn8F3OuXqa9AxR4WdK5iG8gYhcWjvoAeOZlXdlJNPfNvW7ZTVirlCKiAS
+        OUt2Bz+zaiepmEr8bANxSA3/kA9+qm9vFhqRVw9qwLzimcENlYADSD85oa7JOQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669282673;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Tjizbh8hWoBsQRunZtQQh9g5OJSznOxQIsaJyKhrvY4=;
+        b=302zCTmDM6qHG2AccjtKzwe2xp7tI80vPQ9FLQhiYOUW7KQ0JmmNLbD94Oq9fCUBCFgotm
+        jDHDMlJDWpl50xBw==
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     "x86@kernel.org" <x86@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>
+Subject: RE: [patch V2 31/33] iommu/vt-d: Enable PCI/IMS
+In-Reply-To: <BN9PR11MB527650A018BE7BF422BDA2F58C0F9@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20221121083657.157152924@linutronix.de>
+ <20221121091328.184455059@linutronix.de>
+ <BN9PR11MB527650A018BE7BF422BDA2F58C0F9@BN9PR11MB5276.namprd11.prod.outlook.com>
+Date:   Thu, 24 Nov 2022 10:37:53 +0100
+Message-ID: <87ilj4d766.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: [PATCH 2/2] x86/setup: Preserve _ENC flag when initrd is being
- relocated
-To:     x86@kernel.org, linux-kernel@vger.kernel.org
-Cc:     Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>
-References: <20221124091246.4957-1-zelin.deng@linux.alibaba.com>
- <20221124091246.4957-3-zelin.deng@linux.alibaba.com>
-From:   Zelin Deng <zelin.deng@linux.alibaba.com>
-In-Reply-To: <20221124091246.4957-3-zelin.deng@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-在 2022/11/24 17:12, Zelin Deng 写道:
-> Commit 107cd2532181 ("Encrypt the initrd earlier for BSP microcode update")
-> when SME is enabled, initrd will be encrypted at earlier stage. If
-> initrd is located at e820 reserved area the initrd will be copied to
-> direct mapping area in relocate_initrd().
+On Thu, Nov 24 2022 at 03:17, Kevin Tian wrote:
+>>  static const struct msi_parent_ops dmar_msi_parent_ops = {
+>> -	.supported_flags	= X86_VECTOR_MSI_FLAGS_SUPPORTED |
+>> MSI_FLAG_MULTI_PCI_MSI,
+>> +	.supported_flags	= X86_VECTOR_MSI_FLAGS_SUPPORTED |
+>> +				  MSI_FLAG_MULTI_PCI_MSI |
+>> +				  MSI_FLAG_PCI_IMS,
+>>  	.prefix			= "IR-",
+>>  	.init_dev_msi_info	= msi_parent_init_dev_msi_info,
+>>  };
 >
-> In this case source address of initrd should be mapped as encrypted
-> while copy_from_early_mem() will clear encrypted attribute as the source
-> address is not in kernel usable area, therefore relocated initrd is
-> encrypted data and is not able to be unpacked later.
+> vIR is already available on vIOMMU today [1].
 >
-> Add new function copy_early_initrd() to preserve _ENC flag in setup.c
-> and remove copy_from_early_mem() as it's only used once here by x86.
+> Fortunately both intel/amd IOMMU has a way to detect whether it's a vIOMMU.
 >
-> Signed-off-by: Zelin Deng <zelin.deng@linux.alibaba.com>
-> ---
->   arch/x86/kernel/setup.c             | 30 ++++++++++++++++++++++++++++-
->   include/asm-generic/early_ioremap.h |  6 ------
->   mm/early_ioremap.c                  | 21 --------------------
->   3 files changed, 29 insertions(+), 28 deletions(-)
+> For intel it's cap_caching_mode().
 >
-> diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-> index 56deaf37e508..f9996982f026 100644
-> --- a/arch/x86/kernel/setup.c
-> +++ b/arch/x86/kernel/setup.c
-> @@ -260,6 +260,34 @@ static u64 __init get_ramdisk_size(void)
->   	return ramdisk_size;
->   }
->   
-> +#define MAX_MAP_CHUNK	(NR_FIX_BTMAPS << PAGE_SHIFT)
-> +
-> +static void __init copy_early_initrd(void *dest, phys_addr_t src,
-> +				     unsigned long size)
-> +{
-> +	unsigned long slop, clen;
-> +	char *p;
-> +
-> +	while (size) {
-> +		slop = offset_in_page(src);
-> +		clen = size;
-> +		if (clen > MAX_MAP_CHUNK - slop)
-> +			clen = MAX_MAP_CHUNK - slop;
-> +		/*
-> +		 * _ENC flag should be preserved so that when SME is enabled initrd
-> +		 * can be mapped as encrypted, as it had been encrypted earlier.
-> +		 * This flag won't impact on other platforms like TDX/SEV enabled.
-> +		 */
-> +		p = early_memremap_prot(src & PAGE_MASK, clen + slop,
-> +					pgprot_val(FIXMAP_PAGE_NORMAL));
+> For AMD it's amd_iommu_np_cache.
+>
+> Then MSI_FLAG_PCI_IMS should be set only on physical IOMMU.
 
-Sorry my mistake, perhaps cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT) 
-should be added here to determine if we are in guest to adjust the pgprot.
+Ok. Let me fix that then.
 
-The scenarios in which initrd should not be encrypted are "SME not 
-enabled" and in tdx host? Looks like _ENC flag is not enough.
+But that made me read back some more.
 
-> +		memcpy(dest, p + slop, clen);
-> +		early_memunmap(p, clen + slop);
-> +		dest += clen;
-> +		src += clen;
-> +		size -= clen;
-> +	}
-> +}
-> +
->   static void __init relocate_initrd(void)
->   {
->   	/* Assume only end is not page aligned */
-> @@ -279,7 +307,7 @@ static void __init relocate_initrd(void)
->   	printk(KERN_INFO "Allocated new RAMDISK: [mem %#010llx-%#010llx]\n",
->   	       relocated_ramdisk, relocated_ramdisk + ramdisk_size - 1);
->   
-> -	copy_from_early_mem((void *)initrd_start, ramdisk_image, ramdisk_size);
-> +	copy_early_initrd((void *)initrd_start, ramdisk_image, ramdisk_size);
->   
->   	printk(KERN_INFO "Move RAMDISK from [mem %#010llx-%#010llx] to"
->   		" [mem %#010llx-%#010llx]\n",
-> diff --git a/include/asm-generic/early_ioremap.h b/include/asm-generic/early_ioremap.h
-> index 9d0479f50f97..be1ce406f481 100644
-> --- a/include/asm-generic/early_ioremap.h
-> +++ b/include/asm-generic/early_ioremap.h
-> @@ -32,12 +32,6 @@ extern void early_ioremap_setup(void);
->    */
->   extern void early_ioremap_reset(void);
->   
-> -/*
-> - * Early copy from unmapped memory to kernel mapped memory.
-> - */
-> -extern void copy_from_early_mem(void *dest, phys_addr_t src,
-> -				unsigned long size);
-> -
->   #else
->   static inline void early_ioremap_init(void) { }
->   static inline void early_ioremap_setup(void) { }
-> diff --git a/mm/early_ioremap.c b/mm/early_ioremap.c
-> index 9bc12e526ed0..86b68d63ad35 100644
-> --- a/mm/early_ioremap.c
-> +++ b/mm/early_ioremap.c
-> @@ -245,27 +245,6 @@ early_memremap_prot(resource_size_t phys_addr, unsigned long size,
->   }
->   #endif
->   
-> -#define MAX_MAP_CHUNK	(NR_FIX_BTMAPS << PAGE_SHIFT)
-> -
-> -void __init copy_from_early_mem(void *dest, phys_addr_t src, unsigned long size)
-> -{
-> -	unsigned long slop, clen;
-> -	char *p;
-> -
-> -	while (size) {
-> -		slop = offset_in_page(src);
-> -		clen = size;
-> -		if (clen > MAX_MAP_CHUNK - slop)
-> -			clen = MAX_MAP_CHUNK - slop;
-> -		p = early_memremap(src & PAGE_MASK, clen + slop);
-> -		memcpy(dest, p + slop, clen);
-> -		early_memunmap(p, clen + slop);
-> -		dest += clen;
-> -		src += clen;
-> -		size -= clen;
-> -	}
-> -}
-> -
->   #else /* CONFIG_MMU */
->   
->   void __init __iomem *
+Jason said, that the envisioned Mellanox use case does not depend on the
+IOMMU because the card itself has one which takes care of the
+protections.
+
+How are we going to resolve that dilemma?
+
+Thanks,
+
+        tglx
