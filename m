@@ -2,113 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3638D63741B
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:36:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC2B637427
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:38:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbiKXIgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 03:36:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59296 "EHLO
+        id S229502AbiKXIh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 03:37:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbiKXIgS (ORCPT
+        with ESMTP id S229541AbiKXIhb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 03:36:18 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EDAFEC084;
-        Thu, 24 Nov 2022 00:36:17 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669278976;
+        Thu, 24 Nov 2022 03:37:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABB8EC084
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:36:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669278988;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=TORikMNpewqjUSTSg8RHjgWS+OHYnHpL2PiWb9zaLNw=;
-        b=QJZP8YxtpyCumHuuAH40WhwEe4M+TuoKfhJU8CC+MtQ8PtWpLGnw8paE1F7LepoXBovQaH
-        95sYVITaB9bGF63n9pQCbtUgmbIKiiEBlN4cBa4cDTesGj453DxJnHEdZT8Lk/fVODXAYc
-        T2nGvYuV2vFe7YcirCwFE9Zf0IJWESejj+qNuM2BknW9w97dCXfQHYRuhjeK7kTgiAmF2e
-        HAIbU1l9hrER2TQVavNJt2VBbDQGtxUn4dI8U8rZzZeUV8RkPZNlZoiPUATcepZcmEMj3K
-        ml8vfkCqWasg2uLwlbdp8kJ6lCxf2Tlz7aHXnFIWL18PnJiX4y3Jpp1wW5Aq1w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669278976;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TORikMNpewqjUSTSg8RHjgWS+OHYnHpL2PiWb9zaLNw=;
-        b=5p4PBhK3Q5TwSJczVi1PHywg3VLU3Se4ga9MoTivLrMQWgm8OpgAQ4BK/DGYexWkrA7Wiv
-        o+sYJ5ci4Bl9fdCA==
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     "x86@kernel.org" <x86@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>
-Subject: RE: [patch V2 07/33] genirq/msi: Provide
- msi_create/free_device_irq_domain()
-In-Reply-To: <BN9PR11MB5276EE7F109A251141E936308C0F9@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20221121083657.157152924@linutronix.de>
- <20221121091326.879869866@linutronix.de>
- <BN9PR11MB527604DE2A881FF615B7D0748C0C9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <8735a9gau7.ffs@tglx>
- <BN9PR11MB5276EE7F109A251141E936308C0F9@BN9PR11MB5276.namprd11.prod.outlook.com>
-Date:   Thu, 24 Nov 2022 09:36:15 +0100
-Message-ID: <87tu2oda0w.ffs@tglx>
+        bh=u4GmOx2q5gJKD6SYU/1vAHoiNYQRo9PSyRAuDnoBM64=;
+        b=BzPLwuGon6bPexchG+58y7GY4+/hitHHWvORjJtLGbEe1URrz3P+VqMUlxPrPrEirW4VCq
+        nzBWO3aAiGPjVzh7A+7IjKXXAjGUp5O+GNtr1zwNC/938fXtkwNXWDUkFitDgqVXODMiuP
+        7QHYlbF0cPHD4TZDYwochpmRkbwkPD8=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-367-1f4IjRiaONGImp1dR8pGFA-1; Thu, 24 Nov 2022 03:36:27 -0500
+X-MC-Unique: 1f4IjRiaONGImp1dR8pGFA-1
+Received: by mail-ej1-f72.google.com with SMTP id oz34-20020a1709077da200b007adc8d68e90so780340ejc.11
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:36:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u4GmOx2q5gJKD6SYU/1vAHoiNYQRo9PSyRAuDnoBM64=;
+        b=saUzi0us86wMfP7n+ovCXEpVU5NxCKQRf0FY8WhYK9fh5WsyI7IEP8bgNT+BA3RzLI
+         h1P4S1RQ7QftHmZRkR1gVhFEVLj/yG+Pe1wXSiI3M8Zk1VMjk6yvvQnrUt1Y/7cIYPMu
+         V4AZKN44MbScL+4NJtJsawht+4VSwE9pbc2aBCRRsLGbwEDJruFLjKC78E15lwm/3jZD
+         ATw/L+HW0Jl6xo/sHqakT3Jo+WyEQAgVy/rEnIkJ6DWkUUvu7C+3n1balxB8FTB1xoag
+         ZPt9RTDZiJcK/ypMUsdi5uUKR4AesDwLKDcv7YBD8QsKywZ4twG/WB7LX4GTwBdmyiuQ
+         h+Ag==
+X-Gm-Message-State: ANoB5pmZyQc9xeFOS5KVSUiWI/+HHP2OW7GZsMYDxBfLZeiPt/YQejCq
+        jeEMCkPkCYc1AK8JO/QMzvt8j41hL/xz6puCL/Elqdl1OMXaoJH5IzQhiAkS5XpsfIqy0mxOLMa
+        L3vVJTACcBDEgPkqjEUDdk4R2
+X-Received: by 2002:a17:906:f281:b0:7ae:3b9e:1d8a with SMTP id gu1-20020a170906f28100b007ae3b9e1d8amr25550224ejb.581.1669278986165;
+        Thu, 24 Nov 2022 00:36:26 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7eHOEJUopgc22MypWWRx0CICuyjIBgS4yczrp7s+2iDwN26cU+AeKzwAHAkrk0kb4IXGlKMQ==
+X-Received: by 2002:a17:906:f281:b0:7ae:3b9e:1d8a with SMTP id gu1-20020a170906f28100b007ae3b9e1d8amr25550213ejb.581.1669278985941;
+        Thu, 24 Nov 2022 00:36:25 -0800 (PST)
+Received: from ovpn-192-146.brq.redhat.com (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id z21-20020aa7cf95000000b004614fd33789sm254331edx.18.2022.11.24.00.36.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Nov 2022 00:36:25 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        seanjc@google.com, pbonzini@redhat.com, dmatlack@google.com
+Subject: Re: [PATCH v2 2/6] KVM: x86: hyper-v: Add extended hypercall
+ support in Hyper-v
+In-Reply-To: <CAHVum0eW4WMHe1vNsWn-2xbMxgckFwu_pOQR7hs0NbFj3sM8Tg@mail.gmail.com>
+References: <20221121234026.3037083-1-vipinsh@google.com>
+ <20221121234026.3037083-3-vipinsh@google.com>
+ <87bkozosvh.fsf@ovpn-194-185.brq.redhat.com>
+ <CAHVum0eW4WMHe1vNsWn-2xbMxgckFwu_pOQR7hs0NbFj3sM8Tg@mail.gmail.com>
+Date:   Thu, 24 Nov 2022 09:36:24 +0100
+Message-ID: <87wn7koik7.fsf@ovpn-192-146.brq.redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24 2022 at 01:07, Kevin Tian wrote:
->> From: Thomas Gleixner <tglx@linutronix.de>
-> I looked at it from the outmost invocation:
+Vipin Sharma <vipinsh@google.com> writes:
+
+> On Tue, Nov 22, 2022 at 8:29 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+>>
+>> Vipin Sharma <vipinsh@google.com> writes:
+>>
+>> > +/*
+>> > + * The TLFS carves out 64 possible extended hypercalls, numbered sequentially
+>> > + * after the base capabilities extended hypercall.
+>> > + */
+>> > +#define HV_EXT_CALL_MAX (HV_EXT_CALL_QUERY_CAPABILITIES + 64)
+>> > +
+>>
+>> First, I thought there's an off-by-one here (and should be '63') but
+>> then I checked with TLFS and figured out that the limit comes from
+>> HvExtCallQueryCapabilities's response which doesn't include itself
+>> (0x8001) in the mask, this means it can encode
+>>
+>> 0x8002 == bit0
+>> 0x8003 == bit1
+>> ..
+>> 0x8041 == bit63
+>>
+>> so indeed, the last one supported is 0x8041 == 0x8001 + 64
+>>
+>> maybe it's worth extending the commont on where '64' comes from.
+>>
 >
-> @@ -436,6 +436,9 @@ int __pci_enable_msi_range(struct pci_de
->  	if (rc)
->  		return rc;
->  
-> +	if (!pci_setup_msi_device_domain(dev))
-> +		return -ENODEV;
-> +
+> Yeah, I will expand comments.
 >
-> the current style kind of converts meaningful -EINVAL/-ENOMEM/etc.
-> into -ENODEV.
+>> >  static void stimer_mark_pending(struct kvm_vcpu_hv_stimer *stimer,
+>> >                               bool vcpu_kick);
+>> >
+>> > @@ -2411,6 +2417,9 @@ static bool hv_check_hypercall_access(struct kvm_vcpu_hv *hv_vcpu, u16 code)
+>> >       case HVCALL_SEND_IPI:
+>> >               return hv_vcpu->cpuid_cache.enlightenments_eax &
+>> >                       HV_X64_CLUSTER_IPI_RECOMMENDED;
+>> > +     case HV_EXT_CALL_QUERY_CAPABILITIES ... HV_EXT_CALL_MAX:
+>> > +             return hv_vcpu->cpuid_cache.features_ebx &
+>> > +                             HV_ENABLE_EXTENDED_HYPERCALLS;
+>> >       default:
+>> >               break;
+>> >       }
+>> > @@ -2564,6 +2573,12 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
+>> >               }
+>> >               goto hypercall_userspace_exit;
+>> >       }
+>> > +     case HV_EXT_CALL_QUERY_CAPABILITIES ... HV_EXT_CALL_MAX:
+>> > +             if (unlikely(hc.fast)) {
+>> > +                     ret = HV_STATUS_INVALID_PARAMETER;
+>>
+>> I wasn't able to find any statement in TLFS stating whether extended
+>> hypercalls can be 'fast', I can imagine e.g. MemoryHeatHintAsync using
+>> it. Unfortunatelly, our userspace exit will have to be modified to
+>> handle such stuff. This can stay for the time being I guess..
+>>
+>
+> I agree TLFS doesn't state anything about "fast" extended hypercall
+> but nothing stops in future for some call to be "fast". I think this
+> condition should also be handled by userspace as it is handling
+> everything else.
+>
+> I will remove it in the next version of the patch. I don't see any
+> value in verification here.
 
-But go to the call sites of the various places in drivers which set up
-MSI or MSI-X and check whether anything evaluates those error codes in a
-meaningful way.
+The problem is that we don't currently pass 'fast' flag to userspace,
+let alone XMM registers. This means that it won't be able to handle fast
+hypercalls anyway, I guess it's better to keep your check but add a
+comment saying that it's an implementation shortcoming and not a TLFS
+requirement.
 
-Some of them print the error code, but that does not help much because
-the error code does not allow you to pin point the place which returns
-that. If you just analyze the pci_alloc_irq_vectors_affinity() call then
-you find at least 10 places, which can return -ENOMEM. So how is that
-meaningful and helpful?
 
-All it tells you is that some memory allocation failed. In that case the
-failure of the PCI/MSI[-X] setup is the least of the problems.
+>
+>> > +                     break;
+>> > +             }
+>> > +             goto hypercall_userspace_exit;
+>> >       default:
+>> >               ret = HV_STATUS_INVALID_HYPERCALL_CODE;
+>> >               break;
+>> > @@ -2722,6 +2737,7 @@ int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid,
+>> >
+>> >                       ent->ebx |= HV_POST_MESSAGES;
+>> >                       ent->ebx |= HV_SIGNAL_EVENTS;
+>> > +                     ent->ebx |= HV_ENABLE_EXTENDED_HYPERCALLS;
+>> >
+>> >                       ent->edx |= HV_X64_HYPERCALL_XMM_INPUT_AVAILABLE;
+>> >                       ent->edx |= HV_FEATURE_FREQUENCY_MSRS_AVAILABLE;
+>>
+>> Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+>>
+>> --
+>> Vitaly
+>>
+>
 
-Where error codes are mandatory are user space interfaces, but in the
-kernel a simple fail/success like we have with many interfaces which
-just return a NULL pointer on fail is sufficient.
-
-Just because the kernel historically propagated error codes all over the
-place does not make them useful or meaningful.
-
-Thanks,
-
-        tglx
-
+-- 
+Vitaly
 
