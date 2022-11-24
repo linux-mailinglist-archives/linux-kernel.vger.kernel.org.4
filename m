@@ -2,178 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FC2B637427
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:38:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6EED637426
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:37:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbiKXIh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 03:37:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
+        id S230006AbiKXIhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 03:37:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiKXIhb (ORCPT
+        with ESMTP id S230085AbiKXIhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 03:37:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABB8EC084
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:36:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669278988;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=u4GmOx2q5gJKD6SYU/1vAHoiNYQRo9PSyRAuDnoBM64=;
-        b=BzPLwuGon6bPexchG+58y7GY4+/hitHHWvORjJtLGbEe1URrz3P+VqMUlxPrPrEirW4VCq
-        nzBWO3aAiGPjVzh7A+7IjKXXAjGUp5O+GNtr1zwNC/938fXtkwNXWDUkFitDgqVXODMiuP
-        7QHYlbF0cPHD4TZDYwochpmRkbwkPD8=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-367-1f4IjRiaONGImp1dR8pGFA-1; Thu, 24 Nov 2022 03:36:27 -0500
-X-MC-Unique: 1f4IjRiaONGImp1dR8pGFA-1
-Received: by mail-ej1-f72.google.com with SMTP id oz34-20020a1709077da200b007adc8d68e90so780340ejc.11
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:36:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u4GmOx2q5gJKD6SYU/1vAHoiNYQRo9PSyRAuDnoBM64=;
-        b=saUzi0us86wMfP7n+ovCXEpVU5NxCKQRf0FY8WhYK9fh5WsyI7IEP8bgNT+BA3RzLI
-         h1P4S1RQ7QftHmZRkR1gVhFEVLj/yG+Pe1wXSiI3M8Zk1VMjk6yvvQnrUt1Y/7cIYPMu
-         V4AZKN44MbScL+4NJtJsawht+4VSwE9pbc2aBCRRsLGbwEDJruFLjKC78E15lwm/3jZD
-         ATw/L+HW0Jl6xo/sHqakT3Jo+WyEQAgVy/rEnIkJ6DWkUUvu7C+3n1balxB8FTB1xoag
-         ZPt9RTDZiJcK/ypMUsdi5uUKR4AesDwLKDcv7YBD8QsKywZ4twG/WB7LX4GTwBdmyiuQ
-         h+Ag==
-X-Gm-Message-State: ANoB5pmZyQc9xeFOS5KVSUiWI/+HHP2OW7GZsMYDxBfLZeiPt/YQejCq
-        jeEMCkPkCYc1AK8JO/QMzvt8j41hL/xz6puCL/Elqdl1OMXaoJH5IzQhiAkS5XpsfIqy0mxOLMa
-        L3vVJTACcBDEgPkqjEUDdk4R2
-X-Received: by 2002:a17:906:f281:b0:7ae:3b9e:1d8a with SMTP id gu1-20020a170906f28100b007ae3b9e1d8amr25550224ejb.581.1669278986165;
-        Thu, 24 Nov 2022 00:36:26 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7eHOEJUopgc22MypWWRx0CICuyjIBgS4yczrp7s+2iDwN26cU+AeKzwAHAkrk0kb4IXGlKMQ==
-X-Received: by 2002:a17:906:f281:b0:7ae:3b9e:1d8a with SMTP id gu1-20020a170906f28100b007ae3b9e1d8amr25550213ejb.581.1669278985941;
-        Thu, 24 Nov 2022 00:36:25 -0800 (PST)
-Received: from ovpn-192-146.brq.redhat.com (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id z21-20020aa7cf95000000b004614fd33789sm254331edx.18.2022.11.24.00.36.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 00:36:25 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        seanjc@google.com, pbonzini@redhat.com, dmatlack@google.com
-Subject: Re: [PATCH v2 2/6] KVM: x86: hyper-v: Add extended hypercall
- support in Hyper-v
-In-Reply-To: <CAHVum0eW4WMHe1vNsWn-2xbMxgckFwu_pOQR7hs0NbFj3sM8Tg@mail.gmail.com>
-References: <20221121234026.3037083-1-vipinsh@google.com>
- <20221121234026.3037083-3-vipinsh@google.com>
- <87bkozosvh.fsf@ovpn-194-185.brq.redhat.com>
- <CAHVum0eW4WMHe1vNsWn-2xbMxgckFwu_pOQR7hs0NbFj3sM8Tg@mail.gmail.com>
-Date:   Thu, 24 Nov 2022 09:36:24 +0100
-Message-ID: <87wn7koik7.fsf@ovpn-192-146.brq.redhat.com>
+        Thu, 24 Nov 2022 03:37:20 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D3CEE0DC0
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:37:18 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1oy7j6-0008NG-9d; Thu, 24 Nov 2022 09:36:56 +0100
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1oy7j5-0006W1-Tq; Thu, 24 Nov 2022 09:36:55 +0100
+Date:   Thu, 24 Nov 2022 09:36:55 +0100
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Ping-Ke Shih <pkshih@realtek.com>
+Cc:     Bernie Huang <phhuang@realtek.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        Hans Ulli Kroll <linux@ulli-kroll.de>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Kalle Valo <kvalo@kernel.org>,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Viktor Petrenko <g0000ga@gmail.com>,
+        Neo Jou <neojou@gmail.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Alexander Hochbaum <alex@appudo.com>,
+        Da Xue <da@libre.computer>
+Subject: Re: [PATCH v3 00/11] RTW88: Add support for USB variants
+Message-ID: <20221124083655.GF29978@pengutronix.de>
+References: <20221122145226.4065843-1-s.hauer@pengutronix.de>
+ <20221122145527.GA29978@pengutronix.de>
+ <015051d9a5b94bbca5135c58d2cfebf3@realtek.com>
+ <20221124082158.GE29978@pengutronix.de>
+ <be8781b95e934617b33f338c84665677@realtek.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <be8781b95e934617b33f338c84665677@realtek.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Vipin Sharma <vipinsh@google.com> writes:
+On Thu, Nov 24, 2022 at 08:26:23AM +0000, Ping-Ke Shih wrote:
+> 
+> 
+> > -----Original Message-----
+> > From: Sascha Hauer <s.hauer@pengutronix.de>
+> > Sent: Thursday, November 24, 2022 4:22 PM
+> > To: Ping-Ke Shih <pkshih@realtek.com>
+> > Cc: Bernie Huang <phhuang@realtek.com>; linux-wireless@vger.kernel.org; Hans Ulli Kroll
+> > <linux@ulli-kroll.de>; Martin Blumenstingl <martin.blumenstingl@googlemail.com>; netdev@vger.kernel.org;
+> > Kalle Valo <kvalo@kernel.org>; Yan-Hsuan Chuang <tony0620emma@gmail.com>; linux-kernel@vger.kernel.org;
+> > Viktor Petrenko <g0000ga@gmail.com>; Neo Jou <neojou@gmail.com>; kernel@pengutronix.de; Johannes Berg
+> > <johannes@sipsolutions.net>; Alexander Hochbaum <alex@appudo.com>; Da Xue <da@libre.computer>
+> > Subject: Re: [PATCH v3 00/11] RTW88: Add support for USB variants
+> > 
+> > On Thu, Nov 24, 2022 at 06:48:23AM +0000, Ping-Ke Shih wrote:
+> > >
+> > > > -----Original Message-----
+> > > > From: Sascha Hauer <s.hauer@pengutronix.de>
+> > > > Sent: Tuesday, November 22, 2022 10:55 PM
+> > > > To: Bernie Huang <phhuang@realtek.com>
+> > > > Cc: linux-wireless@vger.kernel.org; Ping-Ke Shih <pkshih@realtek.com>; Hans Ulli Kroll
+> > > > <linux@ulli-kroll.de>; Martin Blumenstingl <martin.blumenstingl@googlemail.com>;
+> > netdev@vger.kernel.org;
+> > > > Kalle Valo <kvalo@kernel.org>; Yan-Hsuan Chuang <tony0620emma@gmail.com>;
+> > linux-kernel@vger.kernel.org;
+> > > > Viktor Petrenko <g0000ga@gmail.com>; Neo Jou <neojou@gmail.com>; Bernie Huang <phhuang@realtek.com>;
+> > > > kernel@pengutronix.de; Johannes Berg <johannes@sipsolutions.net>; Alexander Hochbaum
+> > <alex@appudo.com>;
+> > > > Da Xue <da@libre.computer>
+> > > > Subject: Re: [PATCH v3 00/11] RTW88: Add support for USB variants
+> > > >
+> > > > On Tue, Nov 22, 2022 at 03:52:15PM +0100, Sascha Hauer wrote:
+> > > > > This is the third round of adding support for the USB variants to the
+> > > > > RTW88 driver. There are a few changes to the last version which make it
+> > > > > worth looking at this version.
+> > > > >
+> > > > > First of all RTL8723du and RTL8821cu are tested working now. The issue
+> > > > > here was that the txdesc checksum calculation was wrong. I found the
+> > > > > correct calculation in various downstream drivers found on github.
+> > > > >
+> > > > > The second big issue was that TX packet aggregation was wrong. When
+> > > > > aggregating packets each packet start has to be aligned to eight bytes.
+> > > > > The necessary alignment was added to the total URB length before
+> > > > > checking if there is another packet to aggregate, so the URB length
+> > > > > included that padding after the last packet, which is wrong.  Fixing
+> > > > > this makes the driver work much more reliably.
+> > > > >
+> > > > > I added all people to Cc: who showed interest in this driver and I want
+> > > > > to welcome you for testing and reviewing.
+> > > >
+> > > > There still is a problem with the RTL8822cu chipset I have here.  When
+> > > > using NetworkManager I immediately lose the connection to the AP after
+> > > > it has been connected:
+> > > >
+> > > > [  376.213846] wlan0: authenticate with 76:83:c2:ce:81:b1
+> > > > [  380.085463] wlan0: send auth to 76:83:c2:ce:81:b1 (try 1/3)
+> > > > [  380.091446] wlan0: authenticated
+> > > > [  380.108864] wlan0: associate with 76:83:c2:ce:81:b1 (try 1/3)
+> > > > [  380.136448] wlan0: RX AssocResp from 76:83:c2:ce:81:b1 (capab=0x1411 status=0 aid=2)
+> > > > [  380.202955] wlan0: associated
+> > > > [  380.268140] IPv6: ADDRCONF(NETDEV_CHANGE): wlan0: link becomes ready
+> > > > [  380.275328] wlan0: Connection to AP 76:83:c2:ce:81:b1 lost
+> > > >
+> > > > That doesn't happen when using plain wpa_supplicant. This seems to go
+> > > > down to cd96e22bc1da ("rtw88: add beacon filter support"). After being
+> > > > connected I get a BCN_FILTER_CONNECTION_LOSS beacon. Plain
+> > > > wpa_supplicant seems to go another code patch and doesn't activate
+> > > > connection quality monitoring.
+> > > >
+> > > > The connection to the AP works fluently also with NetworkManager though
+> > > > when I just ignore the BCN_FILTER_CONNECTION_LOSS beacon.
+> > > >
+> > > > Any idea what may be wrong here?
+> > > >
+> > >
+> > > Please reference to below patch to see if it can work to you.
+> > >
+> > > https://lore.kernel.org/linux-wireless/20221124064442.28042-1-pkshih@realtek.com/T/#u
+> > 
+> > Great! That solves this issue \o/
+> > 
+> 
+> Do you mind to add "Tested-by:" tag to the patch?  :-)
 
-> On Tue, Nov 22, 2022 at 8:29 AM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
->>
->> Vipin Sharma <vipinsh@google.com> writes:
->>
->> > +/*
->> > + * The TLFS carves out 64 possible extended hypercalls, numbered sequentially
->> > + * after the base capabilities extended hypercall.
->> > + */
->> > +#define HV_EXT_CALL_MAX (HV_EXT_CALL_QUERY_CAPABILITIES + 64)
->> > +
->>
->> First, I thought there's an off-by-one here (and should be '63') but
->> then I checked with TLFS and figured out that the limit comes from
->> HvExtCallQueryCapabilities's response which doesn't include itself
->> (0x8001) in the mask, this means it can encode
->>
->> 0x8002 == bit0
->> 0x8003 == bit1
->> ..
->> 0x8041 == bit63
->>
->> so indeed, the last one supported is 0x8041 == 0x8001 + 64
->>
->> maybe it's worth extending the commont on where '64' comes from.
->>
->
-> Yeah, I will expand comments.
->
->> >  static void stimer_mark_pending(struct kvm_vcpu_hv_stimer *stimer,
->> >                               bool vcpu_kick);
->> >
->> > @@ -2411,6 +2417,9 @@ static bool hv_check_hypercall_access(struct kvm_vcpu_hv *hv_vcpu, u16 code)
->> >       case HVCALL_SEND_IPI:
->> >               return hv_vcpu->cpuid_cache.enlightenments_eax &
->> >                       HV_X64_CLUSTER_IPI_RECOMMENDED;
->> > +     case HV_EXT_CALL_QUERY_CAPABILITIES ... HV_EXT_CALL_MAX:
->> > +             return hv_vcpu->cpuid_cache.features_ebx &
->> > +                             HV_ENABLE_EXTENDED_HYPERCALLS;
->> >       default:
->> >               break;
->> >       }
->> > @@ -2564,6 +2573,12 @@ int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
->> >               }
->> >               goto hypercall_userspace_exit;
->> >       }
->> > +     case HV_EXT_CALL_QUERY_CAPABILITIES ... HV_EXT_CALL_MAX:
->> > +             if (unlikely(hc.fast)) {
->> > +                     ret = HV_STATUS_INVALID_PARAMETER;
->>
->> I wasn't able to find any statement in TLFS stating whether extended
->> hypercalls can be 'fast', I can imagine e.g. MemoryHeatHintAsync using
->> it. Unfortunatelly, our userspace exit will have to be modified to
->> handle such stuff. This can stay for the time being I guess..
->>
->
-> I agree TLFS doesn't state anything about "fast" extended hypercall
-> but nothing stops in future for some call to be "fast". I think this
-> condition should also be handled by userspace as it is handling
-> everything else.
->
-> I will remove it in the next version of the patch. I don't see any
-> value in verification here.
+You should already find it in your inbox. Thank you very much for the
+fast response :)
 
-The problem is that we don't currently pass 'fast' flag to userspace,
-let alone XMM registers. This means that it won't be able to handle fast
-hypercalls anyway, I guess it's better to keep your check but add a
-comment saying that it's an implementation shortcoming and not a TLFS
-requirement.
-
-
->
->> > +                     break;
->> > +             }
->> > +             goto hypercall_userspace_exit;
->> >       default:
->> >               ret = HV_STATUS_INVALID_HYPERCALL_CODE;
->> >               break;
->> > @@ -2722,6 +2737,7 @@ int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid,
->> >
->> >                       ent->ebx |= HV_POST_MESSAGES;
->> >                       ent->ebx |= HV_SIGNAL_EVENTS;
->> > +                     ent->ebx |= HV_ENABLE_EXTENDED_HYPERCALLS;
->> >
->> >                       ent->edx |= HV_X64_HYPERCALL_XMM_INPUT_AVAILABLE;
->> >                       ent->edx |= HV_FEATURE_FREQUENCY_MSRS_AVAILABLE;
->>
->> Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
->>
->> --
->> Vitaly
->>
->
+Sascha
 
 -- 
-Vitaly
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
