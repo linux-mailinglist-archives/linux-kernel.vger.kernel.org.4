@@ -2,75 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79EDF637EB5
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 18:57:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8D05637EB9
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 18:59:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbiKXR5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 12:57:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52256 "EHLO
+        id S229767AbiKXR76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 12:59:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbiKXR5G (ORCPT
+        with ESMTP id S229542AbiKXR75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 12:57:06 -0500
-Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF282EA;
-        Thu, 24 Nov 2022 09:57:04 -0800 (PST)
-Received: by mail-oo1-xc29.google.com with SMTP id j1-20020a4ad181000000b0049e6e8c13b4so358040oor.1;
-        Thu, 24 Nov 2022 09:57:04 -0800 (PST)
+        Thu, 24 Nov 2022 12:59:57 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614AD69AA9;
+        Thu, 24 Nov 2022 09:59:56 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id i64-20020a1c3b43000000b003d016c21100so4447885wma.3;
+        Thu, 24 Nov 2022 09:59:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EWkI3BxKgt1nZH4lZZdqPXwCE/u/6qD30xSf8+fdkEQ=;
-        b=qKt15BbemeisSsBLoAZH1nJmUbhQjqlYvWZVfXxFOAKDzcMaxI3T8kUrEFvd+HkjVB
-         0+F6ZhuH4GfMtnWhYIAk1nYGUvJJ3Ml6zQINWJ9/PLvuFVvIEQW0NGAW5m4E3hQHfuv2
-         WVyQ76BSbaHUh+IA1Nh3+oWtCEcJcQ+ILngnvl/Jx7m8+WgXmj5uNNoBubJZHywvpglV
-         eTY4pJraGxbkGbJNRK9Nxn1aFW+HU4fCT7ubvUXdpN96GDXid4QR2sb3C2gBw2lyPa+q
-         vETlqgj4PBimJnSmDGK8LTsUf2i6RSDYziELTd+i0EAE0Hs/L6wAwND6Y6QYMZjwSUWl
-         JNYA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wFryhuzqqlfrdXm8Yqe5E1QW6Qi9B17446w+hn0n96Q=;
+        b=LEYOK0dHustuLUDHHcTB+Blka+IkUMFLAk5sceqqAXbwR/fHgOJ8ZbpeSPDJnubZLP
+         hc38ufRiCsnYSdPqCYCG76UZyFw+/W90abU5qAwqJfsqgIzf6GtcqhXi2wAH4ry/ifyi
+         FytyuYp0sjEQ/+AbMTgUFvLg5wVhfbTkmSSvVHjA1K/cWisi34dBeEWVrqNqR8aJHBb8
+         zraAPlEBeodHjKjm0C02vqnAawkR4vgY8KxzvDua/Z8iBDOF/1hk9OddxXnHiukVjgbc
+         MM3Bbka37QFYelzXv7wwtdAQcIAXYVEhCP1ij1N2A3lfKhzsadiW/pOhcANoWusGOBW5
+         g0FQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EWkI3BxKgt1nZH4lZZdqPXwCE/u/6qD30xSf8+fdkEQ=;
-        b=stx4U8IQAn+GfBhhpEKnA66wmEnsUFTCALiZjSdaZ5Cvdbqu9yE05OZLsFOpAJj+gC
-         +aZJU4cstLaZX9/2mEVy+ZYMPXOn8a8dN8aRHFDPo4dLa9YIFniQ3t7TV/enBdg7Q6ib
-         xY7sGpA93Q1nnryznapGCacmODC0w8G5kyuHWsSUKFomDL8Aznk8RRDEYRcXKjx0yna9
-         YT4PIi3P8et3bP/o6FZH+gAjNMPcg0CkG/nvIzostGkwejogoy7z/OsU1+lvcZ4wIaKP
-         QRtJr8PjyziUpBCZKriKGlx9rST7jXR8UrKSMvrI4kHE94t1qMX58ilHQVznIr17dlOM
-         jq5A==
-X-Gm-Message-State: ANoB5pmdL1eR+9c/K0gqAywlhFQPl6hM6JB/8sHVIzPqloRDHi1UNmIp
-        eRCY2INWngTeoQtF68f9XtA=
-X-Google-Smtp-Source: AA0mqf7a4uLgVcn0JmjTvstBjq0EIIUSBDC01bgTBMPR3u5p0U9n71kv1/Y48w7CAJagGYCiCQDX1g==
-X-Received: by 2002:a4a:ded5:0:b0:49e:e931:11f7 with SMTP id w21-20020a4aded5000000b0049ee93111f7mr7953271oou.73.1669312623449;
-        Thu, 24 Nov 2022 09:57:03 -0800 (PST)
-Received: from t14s.localdomain ([2001:1284:f013:8471:4ef9:baca:5f1a:c3fc])
-        by smtp.gmail.com with ESMTPSA id t12-20020a056870e74c00b001375188dae9sm857836oak.16.2022.11.24.09.57.01
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wFryhuzqqlfrdXm8Yqe5E1QW6Qi9B17446w+hn0n96Q=;
+        b=2xrH1HXoU/IswUG0H3VNxlxHS2k0xtXO8a2SNlxYtrWTfgUbjOh099i7RI9a+Mo0Sg
+         78OcfUjStcM5di1YS3ODMUvAm/2ZGQOUd9A512RJyMkH0FHYXvbQrfldZbWYZcyDhHPc
+         LKlGkBHp+0Cfoz3xUChbuJ7rxT/FM2/zDgo8kokcBwn3yALewpxDO37DsAblk7wB3N2O
+         oY+xZe3UJ7gT/V6duNMfmoEcmZBoqR/jf2QzpNI0GXb3loL1FCOvu+Vx+DRkBQf63Wfp
+         IheiQfYg1jzjl+jjBDDTIXi36ffU2H6/noyc4d//kLzi2yPc83wbaOYudkzEHSlTX/it
+         IeyQ==
+X-Gm-Message-State: ANoB5pm944RJSuZkgEOAfzZvo30MwMNzyjhR53wdOaMSOkUxGV6Nupfc
+        yMFMzOQXUnEyW86e4SBGeuY=
+X-Google-Smtp-Source: AA0mqf6NKrLGQaoCPEEtEULQxb/N1IQWGU26OzYoZlqaV4vK37zjZaEJU+AUim4ZE5eqTy5m3fH+0w==
+X-Received: by 2002:a05:600c:4fd6:b0:3cf:d952:db2b with SMTP id o22-20020a05600c4fd600b003cfd952db2bmr8469774wmq.19.1669312794852;
+        Thu, 24 Nov 2022 09:59:54 -0800 (PST)
+Received: from localhost.localdomain ([94.73.35.229])
+        by smtp.gmail.com with ESMTPSA id l1-20020a05600c4f0100b003c6f3f6675bsm7094865wmq.26.2022.11.24.09.59.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 09:57:02 -0800 (PST)
-Received: by t14s.localdomain (Postfix, from userid 1000)
-        id 45FA64678A4; Thu, 24 Nov 2022 14:57:00 -0300 (-03)
-Date:   Thu, 24 Nov 2022 14:57:00 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Firo Yang <firo.yang@suse.com>
-Cc:     vyasevich@gmail.com, nhorman@tuxdriver.com, mkubecek@suse.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        firogm@gmail.com
-Subject: Re: [PATCH 1/1] sctp: sysctl: referring the correct net namespace
-Message-ID: <Y3+wbPhEAyPIUpbM@t14s.localdomain>
-References: <20221123094406.32654-1-firo.yang@suse.com>
- <Y34ZVEeSryB0UTFD@t14s.localdomain>
- <Y38PUmjeFWApHnrh@suse.com>
+        Thu, 24 Nov 2022 09:59:54 -0800 (PST)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     jikos@kernel.org
+Cc:     benjamin.tissoires@redhat.com, rydberg@bitmath.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Subject: [PATCH RESEND 0/1] HID: input: map battery system charging
+Date:   Thu, 24 Nov 2022 18:59:36 +0100
+Message-Id: <20221124175937.7631-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y38PUmjeFWApHnrh@suse.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,133 +71,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 02:29:38PM +0800, Firo Yang wrote:
-> The 11/23/2022 10:00, Marcelo Ricardo Leitner wrote:
-> > On Wed, Nov 23, 2022 at 05:44:06PM +0800, Firo Yang wrote:
-> > > Recently, a customer reported that from their container whose
-> > > net namespace is different to the host's init_net, they can't set
-> > > the container's net.sctp.rto_max to any value smaller than
-> > > init_net.sctp.rto_min.
-> > > 
-> > > For instance,
-> > > Host:
-> > > sudo sysctl net.sctp.rto_min
-> > > net.sctp.rto_min = 1000
-> > > 
-> > > Container:
-> > > echo 100 > /mnt/proc-net/sctp/rto_min
-> > > echo 400 > /mnt/proc-net/sctp/rto_max
-> > > echo: write error: Invalid argument
-> > > 
-> > > This is caused by the check made from this'commit 4f3fdf3bc59c
-> > > ("sctp: add check rto_min and rto_max in sysctl")'
-> > > When validating the input value, it's always referring the boundary
-> > > value set for the init_net namespace.
-> > > 
-> > > Having container's rto_max smaller than host's init_net.sctp.rto_min
-> > > does make sense. Considering that the rto between two containers on the
-> > > same host is very likely smaller than it for two hosts.
-> > 
-> > Makes sense. And also, here, it is not using the init_net as
-> > boundaries for the values themselves. I mean, rto_min in init_net
-> > won't be the minimum allowed for rto_min in other netns. Ditto for
-> > rto_max.
-> > 
-> > More below.
-> > 
-> > > 
-> > > So to fix this problem, just referring the boundary value from the net
-> > > namespace where the new input value came from shold be enough.
-> > > 
-> > > Signed-off-by: Firo Yang <firo.yang@suse.com>
-> > > ---
-> > >  net/sctp/sysctl.c | 6 ++++++
-> > >  1 file changed, 6 insertions(+)
-> > > 
-> > > diff --git a/net/sctp/sysctl.c b/net/sctp/sysctl.c
-> > > index b46a416787ec..e167df4dc60b 100644
-> > > --- a/net/sctp/sysctl.c
-> > > +++ b/net/sctp/sysctl.c
-> > > @@ -429,6 +429,9 @@ static int proc_sctp_do_rto_min(struct ctl_table *ctl, int write,
-> > >  	else
-> > >  		tbl.data = &net->sctp.rto_min;
-> > >  
-> > > +	if (net != &init_net)
-> > > +		max = net->sctp.rto_max;
-> > 
-> > This also affects other sysctls:
-> > 
-> > $ grep -e procname -e extra sysctl.c | grep -B1 extra.*init_net
-> >                 .extra1         = SYSCTL_ONE,
-> >                 .extra2         = &init_net.sctp.rto_max
-> >                 .procname       = "rto_max",
-> >                 .extra1         = &init_net.sctp.rto_min,
-> > --
-> >                 .extra1         = SYSCTL_ZERO,
-> >                 .extra2         = &init_net.sctp.ps_retrans,
-> >                 .procname       = "ps_retrans",
-> >                 .extra1         = &init_net.sctp.pf_retrans,
-> > 
-> > And apparently, SCTP is the only one doing such dynamic limits. At
-> > least in networking.
-> > 
-> > While the issue you reported is fixable this way, for ps/pf_retrans,
-> > it is not, as it is using proc_dointvec_minmax() and it will simply
-> > consume those values (with no netns translation).
-> > 
-> > So what about patching sctp_sysctl_net_register() instead, to update
-> > these pointers during netns creation? Right after where it update the
-> > 'data' one in there:
-> > 
-> >         for (i = 0; table[i].data; i++)
-> >                 table[i].data += (char *)(&net->sctp) - (char *)&init_net.sctp;
-> 
-> Thanks Marcelo. It's better. So you mean something like the following?
+Hi everyone,
 
-Yes,
+This patch adds support for reporting battery status (charging/discharging)
+for devices with a charging usage in their HID descriptor:
 
-> 
-> --- a/net/sctp/sysctl.c
-> +++ b/net/sctp/sysctl.c
-> @@ -586,6 +586,11 @@ int sctp_sysctl_net_register(struct net *net)
->         for (i = 0; table[i].data; i++)
->                 table[i].data += (char *)(&net->sctp) - (char *)&init_net.sctp;
->  
-> +#define SCTP_RTO_MIN_IDX 1
-> +#define SCTP_RTO_MAX_IDX 2
+	0x05, 0x85,         /*      Usage Page (Battery System),    */
+	0x09, 0x44,         /*      Usage Page (Charging),          */
 
-But these should be together with the sysctl table definition, so we
-don't forget to update it later on if needed.
+I tested it on Apple hardware (mouse, trackpad and keyboard) as well as
+on UCLogic tablets with battery [1].
 
-> +       table[SCTP_RTO_MIN_IDX].extra2 = &net->sctp.rto_max;
-> +       table[SCTP_RTO_MAX_IDX].extra1 = &net->sctp.rto_min;
+On other hardware (HID_DC_BATTERYSTRENGTH or digitizers with battery)
+discharging should be reported for backwards compatibility.
+I did my best to keep the old behaviour by adding KUnit tests; However,
+I don't own any of those devices, so I'd appreciate any help testing
+the patch from someone with the actual hardware.
 
-And also the ps/pf_retrans. :-)
+Best wishes,
+José Expósito
 
-> +
->         net->sctp.sysctl_header = register_net_sysctl(net, "net/sctp", table);
->         if (net->sctp.sysctl_header == NULL) {
->                 kfree(table);
-> 
-> 
-> > 
-> > Thanks,
-> > Marcelo
-> > 
-> > > +
-> > >  	ret = proc_dointvec(&tbl, write, buffer, lenp, ppos);
-> > >  	if (write && ret == 0) {
-> > >  		if (new_value > max || new_value < min)
-> > > @@ -457,6 +460,9 @@ static int proc_sctp_do_rto_max(struct ctl_table *ctl, int write,
-> > >  	else
-> > >  		tbl.data = &net->sctp.rto_max;
-> > >  
-> > > +	if (net != &init_net)
-> > > +		min = net->sctp.rto_min;
-> > > +
-> > >  	ret = proc_dointvec(&tbl, write, buffer, lenp, ppos);
-> > >  	if (write && ret == 0) {
-> > >  		if (new_value > max || new_value < min)
-> > > -- 
-> > > 2.26.2
-> > > 
+[1] https://lore.kernel.org/linux-input/20221029161240.15548-2-jose.exposito89@gmail.com/
+
+José Expósito (1):
+  HID: input: map battery system charging
+
+ drivers/hid/.kunitconfig     |  1 +
+ drivers/hid/Kconfig          |  1 +
+ drivers/hid/hid-input-test.c | 80 ++++++++++++++++++++++++++++++++++++
+ drivers/hid/hid-input.c      | 36 +++++++++++++++-
+ include/linux/hid.h          |  2 +
+ 5 files changed, 118 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/hid/hid-input-test.c
+
+-- 
+2.38.1
+
