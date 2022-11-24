@@ -2,121 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 680166376CF
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:50:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97B116376D2
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:51:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbiKXKus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 05:50:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41902 "EHLO
+        id S229653AbiKXKvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 05:51:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiKXKur (ORCPT
+        with ESMTP id S229728AbiKXKu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 05:50:47 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A8411E72A;
-        Thu, 24 Nov 2022 02:50:43 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id z4so1909159wrr.3;
-        Thu, 24 Nov 2022 02:50:43 -0800 (PST)
+        Thu, 24 Nov 2022 05:50:57 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9645216FB11
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:50:54 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id f18so3306842ejz.5
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:50:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=ventanamicro.com; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dLlm8KqzipM9Q047KqhTM7vH+Kqb0gcpAOfLuCPwI4Y=;
-        b=JIoxB3XVeJXPld6rLAP2jzXSrMu7w0RwNHILgmVKn8GXP3KVQirTMGrc2RU+43iB/C
-         GO8Pgah9n6E3WW4vNcSB0/43bCw/k3jKwJX3SZ3GbbTVsdsXv4fHKQ9NWJKDNKgD4Sma
-         ksHrRbTBFCMa8NDWPgLAYbWifsEH+FomzNsosXQqJta1kJD0LGG5KoV1iHYJLow+Hw+l
-         qVVaTMFLoYWdVyDfxQ8sdOWfB5+Nxjvrinb8fZ1nNqti+y6VnuiLRijm7dwGQ0MI1lsM
-         I92KDcJQH/AE3siWqGSNI+G7A6dJjT+JNCTGMf032a3BdwkoumWpoyq3qVtYua2o//FW
-         s6fA==
+        bh=7EpHqZSb89Ze6YQ2yo72O8+0pB4IQzPJGKW2B32FbcY=;
+        b=Pk8qWjYgThmkUH55ahwT7r++QkroUX2mKPPGCB42y6xGyBk7NGPZEyJyTGUbo2V93l
+         JTvGPrRRG29bpeUV8227yH/wQ++vwqMTyYmcg0atcAcfp9+0aaC4W9a3uV9b1FAMan1c
+         PNG72cPrt8etKQ8upv4zZu9f+apnL3mx1jbIiK6Dy0yVm4HQaz2jY8vfWzgmJWF+OvNu
+         5lbhAP6N0mcfXspdTYpvMrdcCNe5Sk6ka7+E9lW+0Q8Uh9xpYOoBEemceeDJEPasWqpg
+         eApbOaHuKFvcXXqFCC1lCuwGuKcMa4MZ/6fYlycda8Nh7S0gpX1LP6TkCsxAfzl/4497
+         GMWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dLlm8KqzipM9Q047KqhTM7vH+Kqb0gcpAOfLuCPwI4Y=;
-        b=ZSC98PFlg8g8IrzYt5NZJKvqq3dZR6Gl9vSLl8G45zpDTJzjLn78R/bdjS9t8FekZQ
-         3Ha2S8+DUF8Y4GgDtwI534kwkd9MzjX4TVbNimOIRb46sI92PUUuWH5QGAlO4LyOUXG9
-         jG31lAsnEXujh6WdTDm0jGY8iUKBwAYt9kVCYZNenJe2YVYYHzYPHP8JBuXWfJXxrxRt
-         538RwkrThMmwTSSl/iKTihsplZ9hZ6CR97q9LrN7OJE29R8q9VbqQsHB9jgkkrRhHE2p
-         nMSq4Mwr7KRYcA4tro94gqcLBsIEPCvpqlB3MRRrqzY6e+M80Rh2uqsiK30bOX03VvQA
-         oNTQ==
-X-Gm-Message-State: ANoB5pmVjdNHR7doJtKaTa5HxEdKel7pQChL4wo+HZwRrdmjUViBzUv3
-        hnn/nt56AOfcAoU8FPtR8Ts=
-X-Google-Smtp-Source: AA0mqf53MR0iYRoPSz5P+x8tgEGk/g0FMK5KFYG1ymhnpN2jUn3FTRSzqqHDLuGCwsNkbacjRicXRw==
-X-Received: by 2002:a05:6000:783:b0:241:bc34:3149 with SMTP id bu3-20020a056000078300b00241bc343149mr14131522wrb.351.1669287041820;
-        Thu, 24 Nov 2022 02:50:41 -0800 (PST)
-Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id hg27-20020a05600c539b00b003a3170a7af9sm1393128wmb.4.2022.11.24.02.50.41
+        bh=7EpHqZSb89Ze6YQ2yo72O8+0pB4IQzPJGKW2B32FbcY=;
+        b=Jy91LNGjZMpIxPK3AAU4x6pdTyg0Ji09Pt0B/nSaLVc1p4pPONuFsUwrNJ+7hdQxlr
+         /vk4iaY9kjCvAPVqfDVKYvikBWiEciMmgvLI5zOBkhud2+3RxgiGIkmmErOnAxNWmbTy
+         7LBGEsBeJZEoAD1e6UC867hwhTx/m+ETV343S7CUNIt9EAx5bs3x/RWST/oT53cWFV7M
+         s4B1itBaP+PLZY6GQuTTUx06na94j8euuGZiZGpb9a15x4KCKlaMQpBd4OtblO7cWiH1
+         PdwKtezNuSZuBJIyrYhntJXD03VvtUDU0fO1eqgoPpre+wkMAYZzTTXhLqw0uTPTdmzS
+         Llpw==
+X-Gm-Message-State: ANoB5pk9U8BJQDz9pfC540LqJ81oB2JcUZUClq1MhInytxylChZlHx/U
+        MuHhT/5ZrHSPzPo0EhfxVPJ+oQ==
+X-Google-Smtp-Source: AA0mqf4C7a8msWcEL+e4aUXZWxwRSJFXJSxQmq0StXpEkqceLuWKrbz0d7MQc7OQXqOX4aChnNPp6w==
+X-Received: by 2002:a17:907:c20d:b0:7b8:882d:43fc with SMTP id ti13-20020a170907c20d00b007b8882d43fcmr10034499ejc.0.1669287053134;
+        Thu, 24 Nov 2022 02:50:53 -0800 (PST)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id f15-20020a50fc8f000000b00462e1d8e914sm365978edq.68.2022.11.24.02.50.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 02:50:41 -0800 (PST)
-Date:   Thu, 24 Nov 2022 10:50:39 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
-        rwarsow@gmx.de
-Subject: Re: [PATCH 5.15 000/181] 5.15.80-rc1 review
-Message-ID: <Y39MfyXJr2HgYElm@debian>
-References: <20221123084602.707860461@linuxfoundation.org>
+        Thu, 24 Nov 2022 02:50:52 -0800 (PST)
+Date:   Thu, 24 Nov 2022 11:50:51 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Atish Patra <atishp@atishpatra.org>
+Cc:     Atish Patra <atishp@rivosinc.com>, linux-kernel@vger.kernel.org,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>, Guo Ren <guoren@kernel.org>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [RFC 6/9] RISC-V: KVM: Add SBI PMU extension support
+Message-ID: <20221124105051.hbsavj3bgf4mvlzb@kamzik>
+References: <20220718170205.2972215-1-atishp@rivosinc.com>
+ <20220718170205.2972215-7-atishp@rivosinc.com>
+ <20221101142631.du54p4kyhlgf54cr@kamzik>
+ <CAOnJCUJfakcoiWh4vFk5_BcTKfoSDbx+wtmh7MW4cPYog7q4BQ@mail.gmail.com>
+ <20221123135842.uyw46kbybgb7unm2@kamzik>
+ <CAOnJCUKZV+0Xts6C4QY7X+Wak0ZR_f8wPtEAtH4PEmh2-_AcWw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221123084602.707860461@linuxfoundation.org>
+In-Reply-To: <CAOnJCUKZV+0Xts6C4QY7X+Wak0ZR_f8wPtEAtH4PEmh2-_AcWw@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Wed, Nov 23, 2022 at 09:49:23AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.80 release.
-> There are 181 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Thu, Nov 24, 2022 at 02:18:26AM -0800, Atish Patra wrote:
+> On Wed, Nov 23, 2022 at 5:58 AM Andrew Jones <ajones@ventanamicro.com> wrote:
+> >
+> > On Tue, Nov 22, 2022 at 03:08:34PM -0800, Atish Patra wrote:
+...
+> > > Currently, ARM64 enables pmu from user space using device control APIs
+> > > on vcpu fd.
+> > > Are you suggesting we should do something like that ?
+> >
+> > Yes. Although choosing which KVM API should be used could probably be
+> > thought-out again. x86 uses VM ioctls.
+> >
 > 
-> Responses should be made by Fri, 25 Nov 2022 08:45:20 +0000.
-> Anything received after that time might be too late.
+> How does it handle hetergenous systems in per VM ioctls ?
 
-Build test (gcc version 12.2.1 20221016):
-mips: 62 configs -> 1 failure
-arm: 99 configs -> 1 failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> no failure
-powerpc allmodconfig -> 1 failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+I don't think it does, but neither does arm64. Afaik, the only way to run
+KVM VMs on heterogeneous systems is to pin the VM to one set of the CPUs,
+i.e. make sure the system it runs on is homogeneous.
 
-Note:
-As reported by others, arm mips and powerpc allmodconfig fails with the error:
-drivers/rtc/rtc-cmos.c:1299:13: error: 'rtc_wake_setup' defined but not used [-Werror=unused-function]
- 1299 | static void rtc_wake_setup(struct device *dev)
-      |       
+I agree we shouldn't paint ourselves into a homogeneous-only corner for
+riscv, though, so if it's possible to use VCPU APIs, then I guess we
+should. Although, one thing to keep in mind is that if the same ioctl
+needs to be run on each VCPU, then, when we start building VMs with
+hundreds of VCPUs, we'll see slow VM starts.
 
+> 
+> > >
+> > > If PMU needs to have device control APIs (either via vcpu fd or its
+> > > own), we can retrieve
+> > > the hpmcounter width and count from there as well.
+> >
+> > Right. We need to decide how the VM/VCPU + PMU user interface should look.
+> > A separate PMU device, like arm64 has, sounds good, but the ioctl
+> > sequences for initialization may get more tricky.
+> >
+> 
+> Do we really need a per VM interface ? I was thinking we can just
+> continue to use
+> one reg interface for PMU as well. We probably need two of them.
+> 
+> 1. To enable/disable SBI extension
+>     -- The probe function will depend on this
+> 2. PMU specific get/set
+>     -- Number of hpmcounters
+>     -- hpmcounter width
+>     -- enable PMU
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-mips: Booted on ci20 board. No regression. [3]
+ONE_REG is good for registers and virtual registers, which means the
+number of hpmcounters and the hpmcounter width are probably good
+candidates, but I'm not sure we should use it for enable/init types of
+purposes.
 
-[1]. https://openqa.qa.codethink.co.uk/tests/2209
-[2]. https://openqa.qa.codethink.co.uk/tests/2213
-[3]. https://openqa.qa.codethink.co.uk/tests/2215
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
--- 
-Regards
-Sudip
+Thanks,
+drew
