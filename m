@@ -2,314 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85533637EBB
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 19:00:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF29637EBC
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 19:00:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbiKXSAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 13:00:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57108 "EHLO
+        id S229542AbiKXSA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 13:00:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiKXR77 (ORCPT
+        with ESMTP id S229832AbiKXSAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 12:59:59 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D9A69AB0;
-        Thu, 24 Nov 2022 09:59:57 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id i12so3555495wrb.0;
-        Thu, 24 Nov 2022 09:59:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eLas5OIIcvGq9KaW1hfmH7/xf4z+eL8e9b9O9VZyGJE=;
-        b=qwdmlyLl6nnkZ49N+bfWGUcyHJYIcJzrS//fcqMz+PUUPBt2ohEAQ1fFQbXJhiKWRe
-         BtnwCPrMawoa4AvsM2SJOxFvfSKjaeOdttobV69uNvCI/1w3E38qGzjUTrkbsYKZ53ux
-         SHpNPRnOOs2R+MIY7cM6i6/mCjwl820iM2qf/kgt3A6iKudMzgitcjoIV6aSvvGWgyPk
-         wZVb3TEAvnsZfNgtps6RMjSTdDuWY0vzdXQJ0VsELDO/NPyHkTLJ1/v5qFtEsU2nkn8y
-         KkG3gdDQUeb6VoXQTPVoL5xbwf2lRStIkvfGG6bXXUt2ABzRhdBO7mO2s3+RN39ia/S7
-         xZWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eLas5OIIcvGq9KaW1hfmH7/xf4z+eL8e9b9O9VZyGJE=;
-        b=6hk+Jt9ehjUztwKBLegYtNVBKjI5RtrMv202zlMnfGysm10FcMIJf2tP2BUdkQB4uB
-         mf/oEMs/NdpmAsf5WtcxduZbeBzHTMFN9buw4L8oM/IWi5+wORdmB7qswafH1ck9e+EN
-         rcqlHJ1agHTEkqpLIkAo8ZoSJXN79IHFPkOrGZuivwR0XbeTnXetQ9rY9IuZcZxTT331
-         CO01n4/WUv58zRJEJXtYSD1qY9KEHGB8jMxusPyoWge1FXl2mC5mRWXalDn/06OLnsIL
-         vVs3ic9cL/4VtZOHjdrqDRBin6WtH3MMWfIL0S3WRcGOb7MR9Z99Ur8CZM018KfQVzFu
-         W1VA==
-X-Gm-Message-State: ANoB5pkkqibINA0B97czFKnCBR8E+Frp8avadTk2DNRVI0+5KzuBxie4
-        L2YX1WvNSl8EqyYdVwGXnIE=
-X-Google-Smtp-Source: AA0mqf7D9CXPnkjesHDDFFYroMnMl5i+Ub1vEzzhBvTYnWZD8ZtWN2S+l6twFBDy2Jjm76KV5rQzzA==
-X-Received: by 2002:adf:dc0f:0:b0:241:e7b4:e10 with SMTP id t15-20020adfdc0f000000b00241e7b40e10mr7196733wri.423.1669312796155;
-        Thu, 24 Nov 2022 09:59:56 -0800 (PST)
-Received: from localhost.localdomain ([94.73.35.229])
-        by smtp.gmail.com with ESMTPSA id l1-20020a05600c4f0100b003c6f3f6675bsm7094865wmq.26.2022.11.24.09.59.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 09:59:55 -0800 (PST)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     jikos@kernel.org
-Cc:     benjamin.tissoires@redhat.com, rydberg@bitmath.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH RESEND 1/1] HID: input: map battery system charging
-Date:   Thu, 24 Nov 2022 18:59:37 +0100
-Message-Id: <20221124175937.7631-2-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221124175937.7631-1-jose.exposito89@gmail.com>
-References: <20221124175937.7631-1-jose.exposito89@gmail.com>
+        Thu, 24 Nov 2022 13:00:20 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755216CA3E
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 10:00:15 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 953721F8A4;
+        Thu, 24 Nov 2022 18:00:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1669312814; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PBGtiOjF7/rW+pK3caQ9Y3sl76cT3s0S40LymP7KrKo=;
+        b=W4UHep6VTyffJZxgqIuEl4dvSYXUk0e214WZ5pPGvO51Q+BR53rYGyDjGwcWVIbYHCPF6G
+        eTuEV/bXBFCAoCfref3oZkBNn02lR3x0o50vtzo7ORjMfCXiN6DxoEQ0HsOe3N1UNOgL9Z
+        nEH7J0bYFU5fcwQH48E4Qm/Ko9/zTdg=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 5AAD72C15F;
+        Thu, 24 Nov 2022 18:00:14 +0000 (UTC)
+Date:   Thu, 24 Nov 2022 19:00:11 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH printk v2 6/7] printk: Use an output buffer descriptor
+ struct for emit
+Message-ID: <Y3+xK7hHmUIlzq9w@alley>
+References: <20221123231400.614679-1-john.ogness@linutronix.de>
+ <20221123231400.614679-7-john.ogness@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221123231400.614679-7-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HID descriptors with Battery System (0x85) Charging (0x44) usage are
-ignored and POWER_SUPPLY_STATUS_DISCHARGING is always reported to user
-space, even when the device is charging.
+On Thu 2022-11-24 00:19:59, John Ogness wrote:
+> From: Thomas Gleixner <tglx@linutronix.de>
+> 
+> To prepare for a new console infrastructure that is independent of
+> the console BKL, wrap the output mode into a descriptor struct so
+> the new infrastructure can share the emit code that dumps the
+> ringbuffer record into the output text buffers.
+> 
+> --- a/kernel/printk/printk.c
+> +++ b/kernel/printk/printk.c
+> @@ -2741,11 +2741,76 @@ static void __console_unlock(void)
+>  	up_console_sem();
+>  }
+>  
+> +/**
+> + * console_get_next_message - Fill the output buffer with the next record
+> + * @con:	The console to print on
+> + * @cmsg:	Pointer to the output buffer descriptor
+> + *
+> + * Return: False if there is no pending record in the ringbuffer.
+> + *	   True if there is a pending record in the ringbuffer.
+> + *
+> + * When the return value is true, then the caller must check
+> + * @cmsg->outbuf. If not NULL it points to the first character to write
+> + * to the device and @cmsg->outbuf_len contains the length of the message.
+> + * If it is NULL then the record will be skipped.
+> + */
+> +static bool console_get_next_message(struct console *con, struct console_message *cmsg)
+> +{
 
-Map this usage and when it is reported set the right charging status.
+I wish, this change was done in two patches. 1st introducing and
+using struct console_message. 2nd moving the code into separate
+console_get_next_message().
 
-In addition, add KUnit tests to make sure that the charging status is
-correctly set and reported. They can be run with the usual command:
+I do not resist on it but it might help to see what exactly has changed.
 
-    $ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/hid
+> +	struct console_buffers *cbufs = cmsg->cbufs;
+> +	static int panic_console_dropped;
+> +	struct printk_info info;
+> +	struct printk_record r;
+> +	size_t write_text_size;
+> +	char *write_text;
+> +	size_t len;
+> +
+> +	cmsg->outbuf = NULL;
+> +	cmsg->outbuf_len = 0;
+> +
+> +	prb_rec_init_rd(&r, &info, &cbufs->text[0], sizeof(cbufs->text));
+> +
+> +	if (!prb_read_valid(prb, con->seq, &r))
+> +		return false;
+> +
+> +	if (con->seq != r.info->seq) {
+> +		con->dropped += r.info->seq - con->seq;
+> +		con->seq = r.info->seq;
+> +		if (panic_in_progress() && panic_console_dropped++ > 10) {
+> +			suppress_panic_printk = 1;
+> +			pr_warn_once("Too many dropped messages. Suppress messages on non-panic CPUs to prevent livelock.\n");
+> +		}
+> +	}
+> +
+> +	/*
+> +	 * Skip record that has level above the console loglevel.
+> +	 * Return true so the caller knows a record exists and
+> +	 * leave cmsg->outbuf NULL so the caller knows the record
+> +	 * is being skipped.
+> +	 */
+> +	if (suppress_message_printing(r.info->level))
+> +		return true;
+> +
+> +	if (cmsg->is_extmsg) {
+> +		write_text = &cbufs->ext_text[0];
+> +		write_text_size = sizeof(cbufs->ext_text);
+> +		len = info_print_ext_header(write_text, write_text_size, r.info);
+> +		len += msg_print_ext_body(write_text + len, write_text_size - len,
+> +					  &r.text_buf[0], r.info->text_len, &r.info->dev_info);
+> +	} else {
+> +		write_text = &cbufs->text[0];
+> +		len = record_print_text(&r, console_msg_format & MSG_FORMAT_SYSLOG, printk_time);
+> +	}
+> +
+> +	cmsg->outbuf = write_text;
+> +	cmsg->outbuf_len = len;
 
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
----
- drivers/hid/.kunitconfig     |  1 +
- drivers/hid/Kconfig          |  1 +
- drivers/hid/hid-input-test.c | 80 ++++++++++++++++++++++++++++++++++++
- drivers/hid/hid-input.c      | 36 +++++++++++++++-
- include/linux/hid.h          |  2 +
- 5 files changed, 118 insertions(+), 2 deletions(-)
- create mode 100644 drivers/hid/hid-input-test.c
+Please, remove "write_text" variable and use cmsg->outbuf directly.
+It would safe one mental transition of buffer names:
 
-diff --git a/drivers/hid/.kunitconfig b/drivers/hid/.kunitconfig
-index 04daeff5c970..675a8209c7ae 100644
---- a/drivers/hid/.kunitconfig
-+++ b/drivers/hid/.kunitconfig
-@@ -1,5 +1,6 @@
- CONFIG_KUNIT=y
- CONFIG_USB=y
- CONFIG_USB_HID=y
-+CONFIG_HID_BATTERY_STRENGTH=y
- CONFIG_HID_UCLOGIC=y
- CONFIG_HID_KUNIT_TEST=y
-diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index 185a077d59cd..644b4913d4d8 100644
---- a/drivers/hid/Kconfig
-+++ b/drivers/hid/Kconfig
-@@ -1263,6 +1263,7 @@ config HID_MCP2221
- config HID_KUNIT_TEST
- 	tristate "KUnit tests for HID" if !KUNIT_ALL_TESTS
- 	depends on KUNIT=y
-+	depends on HID_BATTERY_STRENGTH
- 	depends on HID_UCLOGIC
- 	default KUNIT_ALL_TESTS
- 	help
-diff --git a/drivers/hid/hid-input-test.c b/drivers/hid/hid-input-test.c
-new file mode 100644
-index 000000000000..77c2d45ac62a
---- /dev/null
-+++ b/drivers/hid/hid-input-test.c
-@@ -0,0 +1,80 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ *  HID to Linux Input mapping
-+ *
-+ *  Copyright (c) 2022 José Expósito <jose.exposito89@gmail.com>
-+ */
-+
-+#include <kunit/test.h>
-+
-+static void hid_test_input_set_battery_charge_status(struct kunit *test)
-+{
-+	struct hid_device *dev;
-+	bool handled;
-+
-+	dev = kunit_kzalloc(test, sizeof(*dev), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, dev);
-+
-+	handled = hidinput_set_battery_charge_status(dev, HID_DG_HEIGHT, 0);
-+	KUNIT_EXPECT_FALSE(test, handled);
-+	KUNIT_EXPECT_EQ(test, dev->battery_charge_status, POWER_SUPPLY_STATUS_UNKNOWN);
-+
-+	handled = hidinput_set_battery_charge_status(dev, HID_BAT_CHARGING, 0);
-+	KUNIT_EXPECT_TRUE(test, handled);
-+	KUNIT_EXPECT_EQ(test, dev->battery_charge_status, POWER_SUPPLY_STATUS_DISCHARGING);
-+
-+	handled = hidinput_set_battery_charge_status(dev, HID_BAT_CHARGING, 1);
-+	KUNIT_EXPECT_TRUE(test, handled);
-+	KUNIT_EXPECT_EQ(test, dev->battery_charge_status, POWER_SUPPLY_STATUS_CHARGING);
-+}
-+
-+static void hid_test_input_get_battery_property(struct kunit *test)
-+{
-+	struct power_supply *psy;
-+	struct hid_device *dev;
-+	union power_supply_propval val;
-+	int ret;
-+
-+	dev = kunit_kzalloc(test, sizeof(*dev), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, dev);
-+	dev->battery_avoid_query = true;
-+
-+	psy = kunit_kzalloc(test, sizeof(*psy), GFP_KERNEL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, psy);
-+	psy->drv_data = dev;
-+
-+	dev->battery_status = HID_BATTERY_UNKNOWN;
-+	dev->battery_charge_status = POWER_SUPPLY_STATUS_CHARGING;
-+	ret = hidinput_get_battery_property(psy, POWER_SUPPLY_PROP_STATUS, &val);
-+	KUNIT_EXPECT_EQ(test, ret, 0);
-+	KUNIT_EXPECT_EQ(test, val.intval, POWER_SUPPLY_STATUS_UNKNOWN);
-+
-+	dev->battery_status = HID_BATTERY_REPORTED;
-+	dev->battery_charge_status = POWER_SUPPLY_STATUS_CHARGING;
-+	ret = hidinput_get_battery_property(psy, POWER_SUPPLY_PROP_STATUS, &val);
-+	KUNIT_EXPECT_EQ(test, ret, 0);
-+	KUNIT_EXPECT_EQ(test, val.intval, POWER_SUPPLY_STATUS_CHARGING);
-+
-+	dev->battery_status = HID_BATTERY_REPORTED;
-+	dev->battery_charge_status = POWER_SUPPLY_STATUS_DISCHARGING;
-+	ret = hidinput_get_battery_property(psy, POWER_SUPPLY_PROP_STATUS, &val);
-+	KUNIT_EXPECT_EQ(test, ret, 0);
-+	KUNIT_EXPECT_EQ(test, val.intval, POWER_SUPPLY_STATUS_DISCHARGING);
-+}
-+
-+static struct kunit_case hid_input_tests[] = {
-+	KUNIT_CASE(hid_test_input_set_battery_charge_status),
-+	KUNIT_CASE(hid_test_input_get_battery_property),
-+	{ }
-+};
-+
-+static struct kunit_suite hid_input_test_suite = {
-+	.name = "hid_input",
-+	.test_cases = hid_input_tests,
-+};
-+
-+kunit_test_suite(hid_input_test_suite);
-+
-+MODULE_DESCRIPTION("HID input KUnit tests");
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("José Expósito <jose.exposito89@gmail.com>");
-diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
-index 859aeb07542e..587112e9efe2 100644
---- a/drivers/hid/hid-input.c
-+++ b/drivers/hid/hid-input.c
-@@ -477,7 +477,7 @@ static int hidinput_get_battery_property(struct power_supply *psy,
- 		if (dev->battery_status == HID_BATTERY_UNKNOWN)
- 			val->intval = POWER_SUPPLY_STATUS_UNKNOWN;
- 		else
--			val->intval = POWER_SUPPLY_STATUS_DISCHARGING;
-+			val->intval = dev->battery_charge_status;
- 		break;
- 
- 	case POWER_SUPPLY_PROP_SCOPE:
-@@ -545,6 +545,7 @@ static int hidinput_setup_battery(struct hid_device *dev, unsigned report_type,
- 	dev->battery_max = max;
- 	dev->battery_report_type = report_type;
- 	dev->battery_report_id = field->report->id;
-+	dev->battery_charge_status = POWER_SUPPLY_STATUS_DISCHARGING;
- 
- 	/*
- 	 * Stylus is normally not connected to the device and thus we
-@@ -608,6 +609,20 @@ static void hidinput_update_battery(struct hid_device *dev, int value)
- 		power_supply_changed(dev->battery);
- 	}
- }
-+
-+static bool hidinput_set_battery_charge_status(struct hid_device *dev,
-+					       unsigned int usage, int value)
-+{
-+	switch (usage) {
-+	case HID_BAT_CHARGING:
-+		dev->battery_charge_status = value ?
-+					     POWER_SUPPLY_STATUS_CHARGING :
-+					     POWER_SUPPLY_STATUS_DISCHARGING;
-+		return true;
-+	}
-+
-+	return false;
-+}
- #else  /* !CONFIG_HID_BATTERY_STRENGTH */
- static int hidinput_setup_battery(struct hid_device *dev, unsigned report_type,
- 				  struct hid_field *field, bool is_percentage)
-@@ -622,6 +637,12 @@ static void hidinput_cleanup_battery(struct hid_device *dev)
- static void hidinput_update_battery(struct hid_device *dev, int value)
- {
- }
-+
-+static bool hidinput_set_battery_charge_status(struct hid_device *dev,
-+					       unsigned int usage, int value)
-+{
-+	return false;
-+}
- #endif	/* CONFIG_HID_BATTERY_STRENGTH */
- 
- static bool hidinput_field_in_collection(struct hid_device *device, struct hid_field *field,
-@@ -1208,6 +1229,9 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
- 			hidinput_setup_battery(device, HID_INPUT_REPORT, field, true);
- 			usage->type = EV_PWR;
- 			return;
-+		case HID_BAT_CHARGING:
-+			usage->type = EV_PWR;
-+			return;
- 		}
- 		goto unknown;
- 
-@@ -1450,7 +1474,11 @@ void hidinput_hid_event(struct hid_device *hid, struct hid_field *field, struct
- 		return;
- 
- 	if (usage->type == EV_PWR) {
--		hidinput_update_battery(hid, value);
-+		bool handled = hidinput_set_battery_charge_status(hid, usage->hid, value);
-+
-+		if (!handled)
-+			hidinput_update_battery(hid, value);
-+
- 		return;
- 	}
- 
-@@ -2306,3 +2334,7 @@ void hidinput_disconnect(struct hid_device *hid)
- 	cancel_work_sync(&hid->led_work);
- }
- EXPORT_SYMBOL_GPL(hidinput_disconnect);
-+
-+#ifdef CONFIG_HID_KUNIT_TEST
-+#include "hid-input-test.c"
-+#endif
-diff --git a/include/linux/hid.h b/include/linux/hid.h
-index 8677ae38599e..1eb5408599cd 100644
---- a/include/linux/hid.h
-+++ b/include/linux/hid.h
-@@ -312,6 +312,7 @@ struct hid_item {
- #define HID_DG_LATENCYMODE	0x000d0060
- 
- #define HID_BAT_ABSOLUTESTATEOFCHARGE	0x00850065
-+#define HID_BAT_CHARGING		0x00850044
- 
- #define HID_VD_ASUS_CUSTOM_MEDIA_KEYS	0xff310076
- 
-@@ -611,6 +612,7 @@ struct hid_device {							/* device report descriptor */
- 	__s32 battery_max;
- 	__s32 battery_report_type;
- 	__s32 battery_report_id;
-+	__s32 battery_charge_status;
- 	enum hid_battery_status battery_status;
- 	bool battery_avoid_query;
- 	ktime_t battery_ratelimit_time;
--- 
-2.38.1
+   cbufs->text -> write_text -> cmsg->outbuf
 
+vs.
+
+   cbufs->text -> cmsg->outbuf
+
+Best Regards,
+Petr
+
+PS: Please, wait a bit with updating the patches. I have got yet
+    another idea when seeing the code around dropped messages.
+    But I have to sleep over it.
+
+    My concern is that the message about dropped messages need not
+    fit into the smaller "cbufs->text" buffer. It might be better
+    to put it into the bigger one.
+
+    We might actually always use the bigger buffer as the output
+    buffer. The smaller buffer might be only temporary when formatting
+    the extended messages.
+
+     We could replace
+
+	struct console_buffers {
+		char	ext_text[CONSOLE_EXT_LOG_MAX];
+		char	text[CONSOLE_LOG_MAX];
+	};
+
+    with
+
+	struct console_buffers {
+		char	outbuf[CONSOLE_EXT_LOG_MAX];
+		char	readbuf[CONSOLE_LOG_MAX];
+	};
+
+     Normal consoles would use only @outbuf. Only the extended console
+     would need the @readbuf to read the messages before they are formatted.
+
+     I guess that struct console_message won't be needed then at all.
+
+     It might help to remove several twists in the code.
+
+     I am sorry that I have not got this idea when reviewing v1.
+     Well, the code was even more complicated at that time.
