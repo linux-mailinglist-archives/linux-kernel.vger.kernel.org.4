@@ -2,64 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D11A6637215
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 06:57:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F20D9637221
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 07:00:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbiKXF5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 00:57:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40238 "EHLO
+        id S229650AbiKXGA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 01:00:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbiKXF5F (ORCPT
+        with ESMTP id S229463AbiKXGAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 00:57:05 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC398433C
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 21:57:03 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id z20so1107728edc.13
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 21:57:03 -0800 (PST)
+        Thu, 24 Nov 2022 01:00:25 -0500
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FE1C6963;
+        Wed, 23 Nov 2022 22:00:25 -0800 (PST)
+Received: by mail-pf1-x442.google.com with SMTP id v28so736365pfi.12;
+        Wed, 23 Nov 2022 22:00:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=s5TZvg/WnM6/irFzV09ADRKCy96Qkd4eG09kJOgMggU=;
-        b=CXv4RV7Y+qWU3VluarR1njxUkL2sdenDUy8a5wnO0oz2EuuaOhlgvvT4EtTTt00jcf
-         laKafjn67qTnNcmDBJtasYDt24uj/nDpjurCFio+BFEyeFZZr+ltR7mEWi9VjUkNwOKw
-         Oit8qzobTh7ZyrFmJBgqVPUWHBTOoQ+jM92Qv25XctBl+wR1TsCiOiFhcCZABSZQp9Gf
-         ZLmDAKqEl8LUMI5AOrySWCFdWYpwoDMybtRIzmXUJ73gcuhr3JP0sy+mQBxMBpsOke0q
-         mRRe5989W1EeaHOCr7iGCSSGn4dm82ebXz3uU2MpDHFja+KG3egcdjFKGIJzobswX/Q/
-         WNKg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WAHp5qCPTZ8K1yZRoCUQaJtAs4jsVFjCKksyNhA51CU=;
+        b=g+AmRf/lnRgQbwl2mXxjZelx0mevNmKoLXYDXm4DLHEHwTdK2VjQYmh90w77WStM6D
+         6xcEKEuI6rliXnztGajuG4b4756LNtAtJpsCJYxf5gtmbaEBlU6ThWiIuvkth6ncVadC
+         8GAMlW5s2XXAb8SE7YqI2Lpvh9jNHkYIvBfU/DjHWw1zu8qEEYYqidUiGaP1btF8tRBn
+         XVkUqyobn8A8/aAXVm7rXmktTm7l22vFagTjppLSUD11jPVD7RXQBGZzV4L13CUJxEQL
+         5/DttRVtS9KfruyPufbeT8ouWGG5pC6HgnHfSkMBFYrZOkq0Zop9JTWmZ8FcrECstfRt
+         X/1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=s5TZvg/WnM6/irFzV09ADRKCy96Qkd4eG09kJOgMggU=;
-        b=qLUloOtGCLg9B+gnPcsdduOsYZYJyesgG+fmRTUb86jScJ8HQqwxbm7hLgUFDoBPzu
-         fLdP9kVGE5zwHkt95Jh7vxHNTNDYD1TSV4GNKQpwXzpTRFhrPBL4ovzhgCDmC3tDHuTh
-         A8j3WvZTynSnrfdmnHv4g85xNH4ogjVi2nkYbvk5QTcWUKnTE1iGfWTunceyq8W/2uLH
-         OWoEqHXe9Wc1ciiyK85GrC+koFUPHuDnk2q8//AWkYEoLd8dg6UbuKi2pS7WfBEmg9sm
-         2SiYhe+LKHsVwlhEoaL3GxrrIvFufEuIdW7qMwnYOGcfMhNJbPwAl9axbMQP6F32J2AE
-         uR7Q==
-X-Gm-Message-State: ANoB5pnWt49ZzoFHyhAN14TnGA6dSEwFDqYykxGGQrLYPIl3SdRngT/q
-        ksQSKWqK5LAwXmUvwPOrOcqpQboVSpaz0U+NI2ptBA==
-X-Google-Smtp-Source: AA0mqf6xSpyeo5IHgikPWBoghGrn040MLtiHmMJ+Y6W0CxizmNRv09blQemwcGZUhOdafAzEV5WRhJbnoDt6PL5mY4g=
-X-Received: by 2002:aa7:c754:0:b0:469:1ddf:9251 with SMTP id
- c20-20020aa7c754000000b004691ddf9251mr24027086eds.110.1669269422364; Wed, 23
- Nov 2022 21:57:02 -0800 (PST)
+        bh=WAHp5qCPTZ8K1yZRoCUQaJtAs4jsVFjCKksyNhA51CU=;
+        b=Pece9TJxJtyBmLSZ3yJ/HZ2nFFLzKDkVt3ILsn65l2Lg4OdwcHLsdTH0Fr6DNOixsc
+         zLtcQYoBN/gAIB6owYpdsqVjqTNQedCz/nA9loe+VQpYmVAQRMFSiKjwL8LWBIPagSbV
+         E3nYetOv6twF428kwLEEzXu7JUVogYuUDciFARvfvFDNN9tkrKRGBisIZqQ+oEKoCsC7
+         m11LfVxlhr95uRb8mDYLwG+Lavf6rpzkKXmD1ZMXxR9dMCklVJe+yOeRJOSJOMGXriT3
+         L/cbCdi4exIYwjznch0tYtwb+D3DYU/fxv20O3k5v48YAylbGXuphHjEC0jNRZO1Uw1g
+         xPIw==
+X-Gm-Message-State: ANoB5pkLbq5LrwPj4GBAUYPaPuY7ndzwLMf6d5OZ+q4oOvRIhb3qGN+d
+        0a2Kzrhqw2RH8XCDFwE7v7GVuff6v/XJkw==
+X-Google-Smtp-Source: AA0mqf4IJFTQoMphoJhmGYaDWWkEvp/q+FhM6VEh56udXD/CrkmE8PrZoDcgrkX9eOhL43hRuhRLvg==
+X-Received: by 2002:a05:6a00:1515:b0:56b:abf4:f77c with SMTP id q21-20020a056a00151500b0056babf4f77cmr15234736pfu.37.1669269624383;
+        Wed, 23 Nov 2022 22:00:24 -0800 (PST)
+Received: from localhost.localdomain ([50.7.59.154])
+        by smtp.gmail.com with ESMTPSA id a9-20020a170902ecc900b001886ff82680sm248554plh.127.2022.11.23.22.00.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 22:00:23 -0800 (PST)
+From:   Genjian <zhanggenjian123@gmail.com>
+X-Google-Original-From: Genjian <zhanggenjian@kylinos.cn>
+To:     tsbogend@alpha.franken.de
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhanggenjian123@gmail.com, Genjian Zhang <zhanggenjian@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>
+Subject: [PATCH] MIPS: Restore symbol versions for copy_page_cpu and clear_page_cpu
+Date:   Thu, 24 Nov 2022 13:58:16 +0800
+Message-Id: <20221124055816.1803770-1-zhanggenjian@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221124005006.1788315-1-debug@rivosinc.com> <CAJF2gTQ=Vr6neABtz9JSCei6oPEsyWTpb-Y=Rxt5jy6n1VEtGA@mail.gmail.com>
-In-Reply-To: <CAJF2gTQ=Vr6neABtz9JSCei6oPEsyWTpb-Y=Rxt5jy6n1VEtGA@mail.gmail.com>
-From:   Deepak Gupta <debug@rivosinc.com>
-Date:   Wed, 23 Nov 2022 21:56:51 -0800
-Message-ID: <CAKC1njRfxNx8r5SP7qsbouCFfb1L4w63paQibb=cFCBhWDXNXA@mail.gmail.com>
-Subject: Re: [PATCH] riscv: VMAP_STACK overflow detection thread-safe
-To:     Guo Ren <guoren@kernel.org>
-Cc:     palmer@dabbelt.com, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
-        Jisheng Zhang <jszhang@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,290 +71,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Inline.
+From: Genjian Zhang <zhanggenjian@kylinos.cn>
 
-On Wed, Nov 23, 2022 at 5:28 PM Guo Ren <guoren@kernel.org> wrote:
->
->
->
-> On Thu, Nov 24, 2022 at 8:50 AM Deepak Gupta <debug@rivosinc.com> wrote:
->>
->> commit 31da94c25aea835ceac00575a9fd206c5a833fed added support for
->> CONFIG_VMAP_STACK. If overflow is detected, CPU switches to `shadow_stack`
->> temporarily before switching finally to per-cpu `overflow_stack`.
->>
->> If two CPUs/harts are racing and end up in over flowing kernel stack, one
->> or both will end up corrupting each other state because `shadow_stack` is
->> not per-cpu.
->>
->> Following are the changes in this patch
->>
->>  - Defines an asm macro to obtain per-cpu symbols in destination
->>    register.
->>  - Computing per-cpu symbol requires a temporary register. When stack is
->>    out of question, a place is needed to spill a register. `thread_info`
->>    is good location to have spill register.
->>  - In entry.S when overflow is detected x31 is spilled into thread_info.
->>    x31 is used as temp reg for asm macro to locate per-cpu overflow stack
->>
->> Other relevant disccussion on this
->> https://lore.kernel.org/linux-riscv/Y347B0x4VUNOd6V7@xhacker/T/#t
->>
->> Tested by `echo EXHAUST_STACK > /sys/kernel/debug/provoke-crash/DIRECT`
->>
->> [  286.223273] Insufficient stack space to handle exception!/debug/provoke-crash/DIRECT
->> [  286.223878] Task stack:     [0xff20000010a98000..0xff20000010a9c000]
->> [  286.224411] Overflow stack: [0xff600001f7d98370..0xff600001f7d99370]
->> [  286.226057] CPU: 1 PID: 205 Comm: bash Not tainted 6.1.0-rc2-00001-g328a1f96f7b9 #34
->> [  286.227139] Hardware name: riscv-virtio,qemu (DT)
->> [  286.228000] epc : __memset+0x60/0xfc
->> [  286.229299]  ra : recursive_loop+0x48/0xc6 [lkdtm]
->> [  286.231457] epc : ffffffff808de0e4 ra : ffffffff0163a752 sp : ff20000010a97e80
->> [  286.232207]  gp : ffffffff815c0330 tp : ff600000820ea280 t0 : ff20000010a97e88
->> [  286.233584]  t1 : 000000000000002e t2 : 3233206874706564 s0 : ff20000010a982b0
->> [  286.234293]  s1 : 0000000000000012 a0 : ff20000010a97e88 a1 : 0000000000000000
->> [  286.234998]  a2 : 0000000000000400 a3 : ff20000010a98288 a4 : 0000000000000000
->> [  286.235697]  a5 : 0000000000000000 a6 : fffffffffffe43f0 a7 : 00007fffffffffff
->> [  286.236384]  s2 : ff20000010a97e88 s3 : ffffffff01644680 s4 : ff20000010a9be90
->> [  286.237743]  s5 : ff600000842ba6c0 s6 : 00aaaaaac29e42b0 s7 : 00fffffff0aa3684
->> [  286.238691]  s8 : 00aaaaaac2978040 s9 : 0000000000000065 s10: 00ffffff8a7cad10
->> [  286.239591]  s11: 00ffffff8a76a4e0 t3 : ffffffff815dbaf4 t4 : ffffffff815dbaf4
->> [  286.240537]  t5 : ffffffff815dbab8 t6 : ff20000010a9bb48
->> [  286.241540] status: 0000000200000120 badaddr: ff20000010a97e88 cause: 000000000000000f
->> [  286.242979] Kernel panic - not syncing: Kernel stack overflow
->> [  286.244106] CPU: 1 PID: 205 Comm: bash Not tainted 6.1.0-rc2-00001-g328a1f96f7b9 #34
->> [  286.245276] Hardware name: riscv-virtio,qemu (DT)
->> [  286.245929] Call Trace:
->> [  286.246954] [<ffffffff80006754>] dump_backtrace+0x30/0x38
->> [  286.247813] [<ffffffff808de798>] show_stack+0x40/0x4c
->> [  286.248429] [<ffffffff808ea2a8>] dump_stack_lvl+0x44/0x5c
->> [  286.249439] [<ffffffff808ea2d8>] dump_stack+0x18/0x20
->> [  286.250056] [<ffffffff808dec06>] panic+0x126/0x2fe
->> [  286.250642] [<ffffffff800065ea>] walk_stackframe+0x0/0xf0
->> [  286.251357] [<ffffffff0163a752>] recursive_loop+0x48/0xc6 [lkdtm]
->> [  286.253321] SMP: stopping secondary CPUs
->> [  286.256724] ---[ end Kernel panic - not syncing: Kernel stack overflow ]---
->>
->> Fixes: 31da94c25aea835ceac00575a9fd206c5a833fed
->
-> The patch gives more significant change than the Fixes, and Fixes would expand to the previous stable versions. Please don't set it as a Fixes, but an improved OVERSTACK dead path performance feature.
->
+The mips build generates two warnings:
 
-Not a performance feature but more like correctness.
-If kernel died and two CPUs raced to kernel stack overflow,
-death post-mortem should be straightforward.
+WARNING: modpost: EXPORT symbol "clear_page_cpu" [vmlinux] version generation failed, symbol will not be versioned.
+WARNING: modpost: EXPORT symbol "copy_page_cpu" [vmlinux] version generation failed, symbol will not be versioned.
 
->>
->> Cc: Guo Ren <guoren@kernel.org>
->> Cc: Jisheng Zhang <jszhang@kernel.org>
->>
->> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
->> ---
->>  arch/riscv/include/asm/asm.h         | 11 ++++++
->>  arch/riscv/include/asm/thread_info.h |  3 ++
->>  arch/riscv/kernel/asm-offsets.c      |  4 +++
->>  arch/riscv/kernel/entry.S            | 54 ++++------------------------
->>  arch/riscv/kernel/traps.c            | 12 +------
->>  5 files changed, 26 insertions(+), 58 deletions(-)
->>
->> diff --git a/arch/riscv/include/asm/asm.h b/arch/riscv/include/asm/asm.h
->> index 1b471ff73178..373eba843331 100644
->> --- a/arch/riscv/include/asm/asm.h
->> +++ b/arch/riscv/include/asm/asm.h
->> @@ -69,6 +69,7 @@
->>
->>  #ifdef __ASSEMBLY__
->>
->> +#include <asm/asm-offsets.h>
->>  /* Common assembly source macros */
->>
->>  /*
->> @@ -80,6 +81,16 @@
->>         .endr
->>  .endm
->>
->> +.macro asm_per_cpu dst sym tmp
->> +       REG_L \tmp, TASK_TI_CPU_NUM(tp)
->> +       slli \tmp, \tmp, 0x3
->> +       la \dst, __per_cpu_offset
->> +       add \dst, \dst, \tmp
->> +       REG_L \tmp, 0(\dst)
->> +       la \dst, \sym
->> +       add \dst, \dst, \tmp
->
-> Another tricky asm code of using percpu, I don't know how the percpu maintenance guy thinks.
+Add their prototypes to be defined in asm-prototypes.h, so that
+genksyms knows the types of these symbols and can generate CRCs for
+them.
 
-Pretty much the same exists for arm64 as well.
-I don't see anything tricky here.
+Reported-by: k2ci <kernel-bot@kylinos.cn>
+Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
+---
+ arch/mips/include/asm/asm-prototypes.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
->
-> Percpu is really complex to be used here. That's why I don't like Jisheng's previous idea, although I haven't given an explicitly opposed comment.
->
+diff --git a/arch/mips/include/asm/asm-prototypes.h b/arch/mips/include/asm/asm-prototypes.h
+index f901ed043c71..8e8fc38b0941 100644
+--- a/arch/mips/include/asm/asm-prototypes.h
++++ b/arch/mips/include/asm/asm-prototypes.h
+@@ -6,3 +6,6 @@
+ #include <linux/uaccess.h>
+ #include <asm/ftrace.h>
+ #include <asm/mmu_context.h>
++
++extern void clear_page_cpu(void *page);
++extern void copy_page_cpu(void *to, void *from);
+-- 
+2.25.1
 
-Why is per-cpu really complex here?
-That's why per-cpu exists, right?
-Compiler generates pretty much same code everywhere for C.
-
-> Keep simple and direct.
->
->>
->> +.endm
->> +
->>  #endif /* __ASSEMBLY__ */
->>
->>  #endif /* _ASM_RISCV_ASM_H */
->> diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
->> index 67322f878e0d..7e17dc07cf11 100644
->> --- a/arch/riscv/include/asm/thread_info.h
->> +++ b/arch/riscv/include/asm/thread_info.h
->> @@ -65,6 +65,9 @@ struct thread_info {
->>          */
->>         long                    kernel_sp;      /* Kernel stack pointer */
->>         long                    user_sp;        /* User stack pointer */
->> +#ifdef CONFIG_VMAP_STACK
->> +       long                    spill_reg;      /* per cpu scratch space to spill a single register */
->> +#endif
->
-> Is it worth expanding "struct thread_info" with another reg size? A dead path performance issue affects living cost. May we give a cheap funeral for the OVERFLOW_STACK death?
->
-
-Yes I had been thinking over it and your point is quite valid.
-There is a death's charge (in a corner case) to living structures
-(particularly to all threads)
-Andrew Bresticker (abrestic@rivosinc.com) suggested using `sscratch`
-to spill into.
-I think that makes sense.
-
-I'll send a revised patch.
-
->>
->>         int                     cpu;
->>  };
->>
->> diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
->> index df9444397908..bed3c83bfb8f 100644
->> --- a/arch/riscv/kernel/asm-offsets.c
->> +++ b/arch/riscv/kernel/asm-offsets.c
->> @@ -38,6 +38,10 @@ void asm_offsets(void)
->>         OFFSET(TASK_TI_KERNEL_SP, task_struct, thread_info.kernel_sp);
->>         OFFSET(TASK_TI_USER_SP, task_struct, thread_info.user_sp);
->>
->> +       OFFSET(TASK_TI_CPU_NUM, task_struct, thread_info.cpu);
->> +#ifdef CONFIG_VMAP_STACK
->> +       OFFSET(TASK_TI_SPILL_REG, task_struct, thread_info.spill_reg);
->> +#endif
->>         OFFSET(TASK_THREAD_F0,  task_struct, thread.fstate.f[0]);
->>         OFFSET(TASK_THREAD_F1,  task_struct, thread.fstate.f[1]);
->>         OFFSET(TASK_THREAD_F2,  task_struct, thread.fstate.f[2]);
->> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
->> index b9eda3fcbd6d..12f285cec136 100644
->> --- a/arch/riscv/kernel/entry.S
->> +++ b/arch/riscv/kernel/entry.S
->> @@ -10,9 +10,11 @@
->>  #include <asm/asm.h>
->>  #include <asm/csr.h>
->>  #include <asm/unistd.h>
->> +#include <asm/page.h>
->>  #include <asm/thread_info.h>
->>  #include <asm/asm-offsets.h>
->>  #include <asm/errata_list.h>
->> +#include <linux/sizes.h>
->>
->>  #if !IS_ENABLED(CONFIG_PREEMPTION)
->>  .set resume_kernel, restore_all
->> @@ -404,54 +406,12 @@ handle_syscall_trace_exit:
->>
->>  #ifdef CONFIG_VMAP_STACK
->>  handle_kernel_stack_overflow:
->> -       la sp, shadow_stack
->> -       addi sp, sp, SHADOW_OVERFLOW_STACK_SIZE
->> +       REG_S x31, TASK_TI_SPILL_REG(tp)
->> +       asm_per_cpu sp, overflow_stack, x31
->> +       li x31, OVERFLOW_STACK_SIZE
->> +       add sp, sp, x31
->> +       REG_L x31, TASK_TI_SPILL_REG(tp)
->>
->> -       //save caller register to shadow stack
->> -       addi sp, sp, -(PT_SIZE_ON_STACK)
->> -       REG_S x1,  PT_RA(sp)
->> -       REG_S x5,  PT_T0(sp)
->> -       REG_S x6,  PT_T1(sp)
->> -       REG_S x7,  PT_T2(sp)
->> -       REG_S x10, PT_A0(sp)
->> -       REG_S x11, PT_A1(sp)
->> -       REG_S x12, PT_A2(sp)
->> -       REG_S x13, PT_A3(sp)
->> -       REG_S x14, PT_A4(sp)
->> -       REG_S x15, PT_A5(sp)
->> -       REG_S x16, PT_A6(sp)
->> -       REG_S x17, PT_A7(sp)
->> -       REG_S x28, PT_T3(sp)
->> -       REG_S x29, PT_T4(sp)
->> -       REG_S x30, PT_T5(sp)
->> -       REG_S x31, PT_T6(sp)
->> -
->> -       la ra, restore_caller_reg
->> -       tail get_overflow_stack
->> -
->> -restore_caller_reg:
->> -       //save per-cpu overflow stack
->> -       REG_S a0, -8(sp)
->> -       //restore caller register from shadow_stack
->> -       REG_L x1,  PT_RA(sp)
->> -       REG_L x5,  PT_T0(sp)
->> -       REG_L x6,  PT_T1(sp)
->> -       REG_L x7,  PT_T2(sp)
->> -       REG_L x10, PT_A0(sp)
->> -       REG_L x11, PT_A1(sp)
->> -       REG_L x12, PT_A2(sp)
->> -       REG_L x13, PT_A3(sp)
->> -       REG_L x14, PT_A4(sp)
->> -       REG_L x15, PT_A5(sp)
->> -       REG_L x16, PT_A6(sp)
->> -       REG_L x17, PT_A7(sp)
->> -       REG_L x28, PT_T3(sp)
->> -       REG_L x29, PT_T4(sp)
->> -       REG_L x30, PT_T5(sp)
->> -       REG_L x31, PT_T6(sp)
->> -
->> -       //load per-cpu overflow stack
->> -       REG_L sp, -8(sp)
->
-> Yes, your patch gives a good performance here. But what do we gain?
->
->>
->>         addi sp, sp, -(PT_SIZE_ON_STACK)
->>
->>         //save context to overflow stack
->> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
->> index f3e96d60a2ff..eef3a87514c7 100644
->> --- a/arch/riscv/kernel/traps.c
->> +++ b/arch/riscv/kernel/traps.c
->> @@ -208,18 +208,8 @@ int is_valid_bugaddr(unsigned long pc)
->>  #endif /* CONFIG_GENERIC_BUG */
->>
->>  #ifdef CONFIG_VMAP_STACK
->> -static DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)],
->> +DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)],
->>                 overflow_stack)__aligned(16);
->> -/*
->> - * shadow stack, handled_ kernel_ stack_ overflow(in kernel/entry.S) is used
->> - * to get per-cpu overflow stack(get_overflow_stack).
->> - */
->> -long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE/sizeof(long)];
->> -asmlinkage unsigned long get_overflow_stack(void)
->> -{
->> -       return (unsigned long)this_cpu_ptr(overflow_stack) +
->> -               OVERFLOW_STACK_SIZE;
->> -}
->>
->>  asmlinkage void handle_bad_stack(struct pt_regs *regs)
->>  {
->> --
->> 2.25.1
->>
->
->
-> --
-> Best Regards
->  Guo Ren
