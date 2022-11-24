@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C325E638088
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 22:21:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBD5663808E
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 22:21:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbiKXVVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 16:21:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
+        id S229681AbiKXVVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 16:21:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiKXVVV (ORCPT
+        with ESMTP id S229581AbiKXVVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 16:21:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DDF293CDD;
-        Thu, 24 Nov 2022 13:21:20 -0800 (PST)
+        Thu, 24 Nov 2022 16:21:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A98293CF7
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 13:21:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AFC86224C;
-        Thu, 24 Nov 2022 21:21:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6AF5C433C1;
-        Thu, 24 Nov 2022 21:21:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 59CB3B82905
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 21:21:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DDB0C433B5;
+        Thu, 24 Nov 2022 21:21:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669324879;
-        bh=4iOIwt/vynOObx+cbBTS/yCN/FRzhSwQ034ah3adW3M=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Y4OVe31iOdgEV546xa8aCvA/8VfNJZZopP38yfSn1Dgq6j0Udifv2qZz7axHqP5cu
-         6Ug5iJ544MYbrGCFtRcBvk4iG/AFauBfSaOTfn0+wyn1bJv3CxtiAJKfjda6KwNami
-         5+K6dJTsg+chpyzH7qXQBSUuXmoG5rm1rl4paeg5MJpN+4IL2q+VitKuQiscMK/Hql
-         Ysg4k0x7PcpdMbvxLPQ3hiz14dE1RmouOccLKGPZ/ExmVKMWAZ+JNuJbABgBG0Mxi0
-         YkRJOBpHLszfu+o/QluuewE1MRqZSTMaOHkHQzEt1+jijxj3KfRQ+KtJtvVdNghFnS
-         xpZ3uRNpNaMvw==
+        s=k20201202; t=1669324880;
+        bh=YFde7Cg3Hj4Ke5ExGefyiTVasYPENA1m1IEZnM/nGhM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Gl6EnRqJBxFjy18Iah9VqcR0bmZ1Jn/wwqzkIsrbgqDx/IfCPgTt5d9a94tbDkXFD
+         60k1/8ZNp/Fkiw63+YfOHXZ7Xj55J6NotdbVC9PyEiWAsI1JwE25fT9AxNm1lekOr0
+         vEMatfZS+8MRHgx/BkTGNHINHRcbDf/sLiI9w3F0MXtYND2uDCttF/8KFLaVgbRufU
+         tzFfvm9f8yrvTC1sB6FcSMkgjooYlbTwwh4imj/W+Dd348xuySRGnTvlSuU9f72346
+         Rn/16RrolIPWiQ6RK2b9fxuiskaDMxnknY9Fq32EfifYbqCFzJTCG2gFLevrp7IXai
+         6wlagUCiBncwQ==
 From:   SeongJae Park <sj@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     SeongJae Park <sj@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, damon@lists.linux.dev,
-        linux-mm@kvack.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 00/11] implement DAMOS filtering for anon pages and
-Date:   Thu, 24 Nov 2022 21:21:03 +0000
-Message-Id: <20221124212114.136863-1-sj@kernel.org>
+Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
+Subject: [RFC PATCH 01/11] mm/damon/core: implement damos filter
+Date:   Thu, 24 Nov 2022 21:21:04 +0000
+Message-Id: <20221124212114.136863-2-sj@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221124212114.136863-1-sj@kernel.org>
+References: <20221124212114.136863-1-sj@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -53,7 +53,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DAMOS let users do system operations in a data access pattern oriented
+DAMOS let users do system operation in a data access pattern oriented
 way.  The data access pattern, which is extracted by DAMON, is somewhat
 accurate more than what user space could know in many cases.  However,
 in some situation, users could know something more than the kernel about
@@ -75,51 +75,184 @@ to DAMON kernel API (damon.h).  At the moment, it supports filtering
 anonymous pages and/or specific memory cgroups in or out for each DAMOS
 scheme.
 
-This patchset adds the support for all DAMOS actions that 'paddr'
-monitoring operations set supports ('pageout', 'lru_prio', and
-'lru_deprio'), and the functionality is exposed via DAMON kernel API
-(damon.h) the DAMON sysfs interface (/sys/kernel/mm/damon/admins/), and
-DAMON_RECLAIM module parameters.
+Note that this commit adds only the interface to the DAMON kernel API.
+The impelmentation should be made in the monitoring operations sets, and
+following commits will add that.
 
-Patches Sequence
-----------------
+Signed-off-by: SeongJae Park <sj@kernel.org>
+---
+ include/linux/damon.h | 51 +++++++++++++++++++++++++++++++++++++++++++
+ mm/damon/core.c       | 39 +++++++++++++++++++++++++++++++++
+ 2 files changed, 90 insertions(+)
 
-First patch implements DAMOS filter interface to DAMON kernel API.
-Second patch makes the physical address space monitoring operations set
-to support the filters from all supporting DAMOS actions.  Third patch
-adds anonymous pages filter support to DAMON_RECLAIM, and the fourth
-patch documents the DAMON_RECLAIM's new feature.  Fifth to seventh
-patches implement DAMON sysfs files for support of the filters, and
-eighth patch connects the file to use DAMOS filters feature.  Ninth
-patch adds simple self test cases for DAMOS filters of the sysfs
-interface.  Finally, following two patches (tenth and eleventh) document
-the new features and interfaces.
-
-SeongJae Park (11):
-  mm/damon/core: implement damos filter
-  mm/damon/paddr: support DAMOS filters
-  mm/damon/reclaim: add a parameter called skip_anon for avoiding
-    anonymous pages reclamation
-  Docs/admin-guide/damon/reclaim: document 'skip_anon' parameter
-  mm/damon/sysfs-schemes: implement filters directory
-  mm/damon/sysfs-schemes: implement filter directory
-  mm/damon/sysfs-schemes: connect filter directory and filters directory
-  mm/damon/sysfs-schemes: implement scheme filters
-  selftests/damon/sysfs: test filters directory
-  Docs/admin-guide/mm/damon/usage: document DAMOS filters of sysfs
-  Docs/ABI/damon: document scheme filters files
-
- .../ABI/testing/sysfs-kernel-mm-damon         |  29 ++
- .../admin-guide/mm/damon/reclaim.rst          |   9 +
- Documentation/admin-guide/mm/damon/usage.rst  |  48 ++-
- include/linux/damon.h                         |  51 +++
- mm/damon/core.c                               |  39 ++
- mm/damon/paddr.c                              |  71 +++-
- mm/damon/reclaim.c                            |  19 +
- mm/damon/sysfs-schemes.c                      | 365 +++++++++++++++++-
- tools/testing/selftests/damon/sysfs.sh        |  29 ++
- 9 files changed, 647 insertions(+), 13 deletions(-)
-
+diff --git a/include/linux/damon.h b/include/linux/damon.h
+index 35630634d790..42cea3bf7319 100644
+--- a/include/linux/damon.h
++++ b/include/linux/damon.h
+@@ -8,6 +8,7 @@
+ #ifndef _DAMON_H_
+ #define _DAMON_H_
+ 
++#include <linux/memcontrol.h>
+ #include <linux/mutex.h>
+ #include <linux/time64.h>
+ #include <linux/types.h>
+@@ -215,6 +216,39 @@ struct damos_stat {
+ 	unsigned long qt_exceeds;
+ };
+ 
++/**
++ * enum damos_filter_type - Type of memory for &struct damos_filter
++ * @DAMOS_FILTER_TYPE_ANON:	Anonymous pages.
++ * @DAMOS_FILTER_TYPE_MEMCG:	Specific memcg's pages.
++ * @NR_DAMOS_FILTER_TYPES:	Number of filter types.
++ */
++enum damos_filter_type {
++	DAMOS_FILTER_TYPE_ANON,
++	DAMOS_FILTER_TYPE_MEMCG,
++	NR_DAMOS_FILTER_TYPES,
++};
++
++/**
++ * struct damos_filter - DAMOS action target memory filter.
++ * @type:	Type of the page.
++ * @matching:	If the matching page should filtered out or in.
++ * @memcg_id:	Memcg id of the question if @type is DAMOS_FILTER_MEMCG.
++ * @list:	List head for siblings.
++ *
++ * Before applying the &damos->action to a memory region, DAMOS checks if each
++ * page of the region matches to this and avoid applying the action if so.
++ * Note that the check support is up to &struct damon_operations
++ * implementation.
++ */
++struct damos_filter {
++	enum damos_filter_type type;
++	bool matching;
++	union {
++		unsigned short memcg_id;
++	};
++	struct list_head list;
++};
++
+ /**
+  * struct damos_access_pattern - Target access pattern of the given scheme.
+  * @min_sz_region:	Minimum size of target regions.
+@@ -239,6 +273,7 @@ struct damos_access_pattern {
+  * @action:		&damo_action to be applied to the target regions.
+  * @quota:		Control the aggressiveness of this scheme.
+  * @wmarks:		Watermarks for automated (in)activation of this scheme.
++ * @filters:		Additional set of &struct damos_filter for &action.
+  * @stat:		Statistics of this scheme.
+  * @list:		List head for siblings.
+  *
+@@ -254,6 +289,10 @@ struct damos_access_pattern {
+  * If all schemes that registered to a &struct damon_ctx are inactive, DAMON
+  * stops monitoring and just repeatedly checks the watermarks.
+  *
++ * Before applying the &action to a memory region, &struct damon_operations
++ * implementation could check pages of the region and skip &action to respect
++ * &filters
++ *
+  * After applying the &action to each region, &stat_count and &stat_sz is
+  * updated to reflect the number of regions and total size of regions that the
+  * &action is applied.
+@@ -263,6 +302,7 @@ struct damos {
+ 	enum damos_action action;
+ 	struct damos_quota quota;
+ 	struct damos_watermarks wmarks;
++	struct list_head filters;
+ 	struct damos_stat stat;
+ 	struct list_head list;
+ };
+@@ -516,6 +556,12 @@ static inline unsigned long damon_sz_region(struct damon_region *r)
+ #define damon_for_each_scheme_safe(s, next, ctx) \
+ 	list_for_each_entry_safe(s, next, &(ctx)->schemes, list)
+ 
++#define damos_for_each_filter(f, scheme) \
++	list_for_each_entry(f, &(scheme)->filters, list)
++
++#define damos_for_each_filter_safe(f, next, scheme) \
++	list_for_each_entry_safe(f, next, &(scheme)->filters, list)
++
+ #ifdef CONFIG_DAMON
+ 
+ struct damon_region *damon_new_region(unsigned long start, unsigned long end);
+@@ -536,6 +582,11 @@ void damon_destroy_region(struct damon_region *r, struct damon_target *t);
+ int damon_set_regions(struct damon_target *t, struct damon_addr_range *ranges,
+ 		unsigned int nr_ranges);
+ 
++struct damos_filter *damos_new_filter(enum damos_filter_type type,
++		bool matching);
++void damos_add_filter(struct damos *s, struct damos_filter *f);
++void damos_destroy_filter(struct damos_filter *f);
++
+ struct damos *damon_new_scheme(struct damos_access_pattern *pattern,
+ 			enum damos_action action, struct damos_quota *quota,
+ 			struct damos_watermarks *wmarks);
+diff --git a/mm/damon/core.c b/mm/damon/core.c
+index 9cbcc143179e..d924657ad622 100644
+--- a/mm/damon/core.c
++++ b/mm/damon/core.c
+@@ -273,6 +273,40 @@ int damon_set_regions(struct damon_target *t, struct damon_addr_range *ranges,
+ 	return 0;
+ }
+ 
++struct damos_filter *damos_new_filter(enum damos_filter_type type,
++		bool matching)
++{
++	struct damos_filter *filter;
++
++	filter = kmalloc(sizeof(*filter), GFP_KERNEL);
++	if (!filter)
++		return NULL;
++	filter->type = type;
++	filter->matching = matching;
++	return filter;
++}
++
++void damos_add_filter(struct damos *s, struct damos_filter *f)
++{
++	list_add_tail(&f->list, &s->filters);
++}
++
++static void damos_del_filter(struct damos_filter *f)
++{
++	list_del(&f->list);
++}
++
++static void damos_free_filter(struct damos_filter *f)
++{
++	kfree(f);
++}
++
++void damos_destroy_filter(struct damos_filter *f)
++{
++	damos_del_filter(f);
++	damos_free_filter(f);
++}
++
+ /* initialize private fields of damos_quota and return the pointer */
+ static struct damos_quota *damos_quota_init_priv(struct damos_quota *quota)
+ {
+@@ -297,6 +331,7 @@ struct damos *damon_new_scheme(struct damos_access_pattern *pattern,
+ 		return NULL;
+ 	scheme->pattern = *pattern;
+ 	scheme->action = action;
++	INIT_LIST_HEAD(&scheme->filters);
+ 	scheme->stat = (struct damos_stat){};
+ 	INIT_LIST_HEAD(&scheme->list);
+ 
+@@ -325,6 +360,10 @@ static void damon_free_scheme(struct damos *s)
+ 
+ void damon_destroy_scheme(struct damos *s)
+ {
++	struct damos_filter *f, *next;
++
++	damos_for_each_filter_safe(f, next, s)
++		damos_destroy_filter(f);
+ 	damon_del_scheme(s);
+ 	damon_free_scheme(s);
+ }
 -- 
 2.25.1
 
