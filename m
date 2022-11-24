@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E152637E97
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 18:51:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE344637E99
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 18:52:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbiKXRvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 12:51:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44182 "EHLO
+        id S229784AbiKXRwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 12:52:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbiKXRvo (ORCPT
+        with ESMTP id S229649AbiKXRvp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 12:51:44 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B4F107E52
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 09:51:43 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id s5so3483168wru.1
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 09:51:43 -0800 (PST)
+        Thu, 24 Nov 2022 12:51:45 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F1D13F4BE
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 09:51:45 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id bs21so3462920wrb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 09:51:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=e5v771DEFc9rL1zQ1Yv2p2JInBg9pG0PvBjFvduECqo=;
-        b=nl6Qpc9LUPQ1/U+y2XCzvo51QK9XwuwvEhKETGkJYvSmHGfJmLem2BjLxkPV81S6C8
-         sflcIw+PJuN5V3OCspIoG5mfVv8g7kRbjarRhvx7R7EaS1Hrwmm7x4cNtu2lpqQ5iIEP
-         +Gx/Cab+AyLnqnQkh+YRW9dtOhpKRrU+tOqw+Nw4HZ699yZ94aJcFPT3HzoL4DkxJN//
-         upYqbp2nA+8RH0iLaRRAfbun+PczTc+5MP0lKhuvXSpKK7k9yG5/wiNqitXgit73TsNo
-         FAhleGi8iV3rZ+t05LJj0oE8JBUbbIZacQnBd7yM2s2WJ6zvKm/QDSWFBv6/ItF7Bp2r
-         aP8w==
+        bh=cTmLcUHM8TPUmaE0W/RaZtsLjw1tkQ7u3GK43vuBULU=;
+        b=fO7DrylENu6t49oXq95ToTkrDPr9tSDxEM4MDfbVOrz7CbItBaACnnq6/eHUViKrje
+         nZpa2kMdsY+ri9PUm/kdFP4UhMQDGAlABXG47GqzQ/01TzfsszJ2iP8irOGLb/0ggec3
+         j3P7jXOKA8vMg0JBPDC3r+3w+V6U41xK5q4624MDGlcYM18iRBAHNmIm3A7ZqgTfGU0h
+         /JOmxc2znQVFJ7EcveBmG6R251GG2aKpTP3hB5s6MsuzppAez+ItEVxnx2GkwtkXFQ95
+         j233D917ZlzGwcOQIH0CprdE4Sddyg4Sl0FnkYZ0shS8K17MSCmDa4rSjUqjDUq/CRKY
+         PhtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=e5v771DEFc9rL1zQ1Yv2p2JInBg9pG0PvBjFvduECqo=;
-        b=yQY8kenFwDa7PUsihCnqs/QB1mSvO+UzFE8NnYFQgPhog3byx0pLnUwWQ81xmJ2i4b
-         f2Lhopqora/m0HyEenR5jvkkvzZL0+BlrV70XpDyqXvk4FLt0ljfdKzIMhYLxAr5DDaE
-         SzFkbHF66LNoqK5dPd/HTSpOfxyuGHj7vaY6sjCpMl6TTFXPHHXur826+1DnSXYMAhtK
-         rvfBz92R8oqF8S4Se7hkAWFyYvwLY70ArKuXVj4IajBIwNeIyB5XtfB4YLEgc6S58PA7
-         XL7eU43q1CUAe1ngrQSaf12xm546p40K/wV9Flc95FGakKTa41HIE090HepdmWFeJ11i
-         A/+A==
-X-Gm-Message-State: ANoB5pkwvrY4dOlKp0cB463sjgSzwIwc53fmBUJ5/JZhc/PXrS3MIOBU
-        hKhBYGSRNg5Vv9avB8gzP0XV6g==
-X-Google-Smtp-Source: AA0mqf6UKLk9Lk4qE9FWHgQJ14qRqLHCPhurA3KE5Y0uih28Sgoe+Tqt3S+qP2v8BXY2U8XPV4Zh0w==
-X-Received: by 2002:a5d:6486:0:b0:241:ba9c:cc65 with SMTP id o6-20020a5d6486000000b00241ba9ccc65mr20343872wri.443.1669312302331;
-        Thu, 24 Nov 2022 09:51:42 -0800 (PST)
+        bh=cTmLcUHM8TPUmaE0W/RaZtsLjw1tkQ7u3GK43vuBULU=;
+        b=Om8zcpeBT65ttxoQKy7ofotFQs2w8O1AOvE58ni/wM+asuFSKUedfGehRQ+S4jhBY1
+         JBa55FK9LeB1HwlnDTK+/4DtUQ2K+QKwy28L08Dd8ZBOqGVwHvGZIiYzsCaUJ4YsI/Ul
+         FUKQ9nnv/qTQ5GilckxV8cG2m5kQj8Ep0yJBw7LeYZvya1FOGCBmfdE/HoLKdra55xJK
+         oz/t9EuMkjg0XKGymM/8PRPYFep6cHAj++h3OkaUbCFGfccZXWrz0mYChgFNkxEAGnOl
+         xb1knlmSygZZqNO1KPgqXRZXnHBvJ86+R7mTcOmegQc0X6ttWEuEmm6s9bV1Gm3prkzU
+         mkrQ==
+X-Gm-Message-State: ANoB5pmVqc0Tyu4jYKNMPCvFOGd1Ol0vUZwwauD8QVUppBRi2lyaRWSu
+        arNGVa1814IqPpEvJRPoQmvqJQ==
+X-Google-Smtp-Source: AA0mqf6JkG5XG2ut6luCUpi8fkJP/8kW9Ro0altTUIpC1y+0sl7prGtJQWrtDGVDSfg+5TgI6Dfimw==
+X-Received: by 2002:adf:f48f:0:b0:236:715c:aaa6 with SMTP id l15-20020adff48f000000b00236715caaa6mr14334046wro.25.1669312303538;
+        Thu, 24 Nov 2022 09:51:43 -0800 (PST)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id bi8-20020a05600c3d8800b003c701c12a17sm6394192wmb.12.2022.11.24.09.51.41
+        by smtp.gmail.com with ESMTPSA id bi8-20020a05600c3d8800b003c701c12a17sm6394192wmb.12.2022.11.24.09.51.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 09:51:41 -0800 (PST)
+        Thu, 24 Nov 2022 09:51:43 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 04/11] misc: fastrpc: Add reserved mem support
-Date:   Thu, 24 Nov 2022 17:51:18 +0000
-Message-Id: <20221124175125.418702-5-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 05/11] misc: fastrpc: Add fastrpc_remote_heap_alloc
+Date:   Thu, 24 Nov 2022 17:51:19 +0000
+Message-Id: <20221124175125.418702-6-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221124175125.418702-1-srinivas.kandagatla@linaro.org>
 References: <20221124175125.418702-1-srinivas.kandagatla@linaro.org>
@@ -73,38 +73,69 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Abel Vesa <abel.vesa@linaro.org>
 
-The reserved mem support is needed for CMA heap support, which will be
-used by AUDIOPD.
+Split fastrpc_buf_alloc in such a way it allows allocation of remote
+heap too and add fastrpc_remote_heap_alloc to do so.
 
 Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 Co-developed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- drivers/misc/fastrpc.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/misc/fastrpc.c | 29 ++++++++++++++++++++++++++---
+ 1 file changed, 26 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-index 545b7dea68bc..86d11ffadf29 100644
+index 86d11ffadf29..0ddad976a4d2 100644
 --- a/drivers/misc/fastrpc.c
 +++ b/drivers/misc/fastrpc.c
-@@ -20,6 +20,7 @@
- #include <linux/slab.h>
- #include <linux/qcom_scm.h>
- #include <uapi/misc/fastrpc.h>
-+#include <linux/of_reserved_mem.h>
+@@ -380,7 +380,7 @@ static void fastrpc_buf_free(struct fastrpc_buf *buf)
+ 	kfree(buf);
+ }
  
- #define ADSP_DOMAIN_ID (0)
- #define MDSP_DOMAIN_ID (1)
-@@ -2071,6 +2072,9 @@ static int fastrpc_rpmsg_probe(struct rpmsg_device *rpdev)
- 		return -EINVAL;
+-static int fastrpc_buf_alloc(struct fastrpc_user *fl, struct device *dev,
++static int __fastrpc_buf_alloc(struct fastrpc_user *fl, struct device *dev,
+ 			     u64 size, struct fastrpc_buf **obuf)
+ {
+ 	struct fastrpc_buf *buf;
+@@ -408,14 +408,37 @@ static int fastrpc_buf_alloc(struct fastrpc_user *fl, struct device *dev,
+ 		return -ENOMEM;
  	}
  
-+	if (of_reserved_mem_device_init_by_idx(rdev, rdev->of_node, 0))
-+		dev_info(rdev, "no reserved DMA memory for FASTRPC\n");
++	*obuf = buf;
 +
- 	vmcount = of_property_read_variable_u32_array(rdev->of_node,
- 				"qcom,vmids", &vmids[0], 0, FASTRPC_MAX_VMIDS);
- 	if (vmcount < 0)
++	return 0;
++}
++
++static int fastrpc_buf_alloc(struct fastrpc_user *fl, struct device *dev,
++			     u64 size, struct fastrpc_buf **obuf)
++{
++	int ret;
++	struct fastrpc_buf *buf;
++
++	ret = __fastrpc_buf_alloc(fl, dev, size, obuf);
++	if (ret)
++		return ret;
++
++	buf = *obuf;
++
+ 	if (fl->sctx && fl->sctx->sid)
+ 		buf->phys += ((u64)fl->sctx->sid << 32);
+ 
+-	*obuf = buf;
+-
+ 	return 0;
+ }
+ 
++static int fastrpc_remote_heap_alloc(struct fastrpc_user *fl, struct device *dev,
++				     u64 size, struct fastrpc_buf **obuf)
++{
++	struct device *rdev = &fl->cctx->rpdev->dev;
++
++	return  __fastrpc_buf_alloc(fl, rdev, size, obuf);
++}
++
+ static void fastrpc_channel_ctx_free(struct kref *ref)
+ {
+ 	struct fastrpc_channel_ctx *cctx;
 -- 
 2.25.1
 
