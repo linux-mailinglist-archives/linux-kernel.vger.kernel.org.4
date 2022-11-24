@@ -2,59 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4127637314
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 08:48:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CC7C637317
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 08:49:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbiKXHsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 02:48:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39940 "EHLO
+        id S229648AbiKXHtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 02:49:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbiKXHs0 (ORCPT
+        with ESMTP id S229652AbiKXHtI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 02:48:26 -0500
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64CB28E3D;
-        Wed, 23 Nov 2022 23:48:17 -0800 (PST)
-Received: from quatroqueijos.cascardo.eti.br (1.general.cascardo.us.vpn [10.172.70.58])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id C18C941D19;
-        Thu, 24 Nov 2022 07:48:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1669276095;
-        bh=8uiv7qtZwPv5Ax7DFnLsvbaxEDQrQ7aC1xDdNwezPI4=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=nGPs2YcPuElQVdstHCfyzz4FMkovMEsoPWE1KYRjHOsdawrcDMq4fbACf/KtXuvc9
-         OY6Fir46VR7cuDemmUVKru+A7Jb36GENnPTPtnANqi6DEosQ+wPYNgBtzXvQ29WBkz
-         kJi3VZ8FWCsTlQMnlhdB1cZwY9qUty5bbZlx86HlXUtcf2cfZPeneivfkNFr20wAVq
-         D5qcvtkJdg6TGNcc06aVxqcojdswGufDa5lwk642u/m2pj5k948teAAB4x3feUiQP0
-         2ME/m+emrBQlMV3QavQ2Q1UBO7k+m+LD1asr1HwQwew6HIOXyxjr8H+uBow8l9nRfO
-         6McimC2/J+4hg==
-Date:   Thu, 24 Nov 2022 04:48:07 -0300
-From:   Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-To:     Rishabh Bhatnagar <risbhat@amazon.com>
-Cc:     gregkh@linuxfoundation.org, shakeelb@google.com,
-        viro@zeniv.linux.org.uk, bsegall@google.com, mdecandia@gmail.com,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Roman Penyaev <rpenyaev@suse.de>,
-        Jason Baron <jbaron@akamai.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Khazhismel Kumykov <khazhy@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH 5.4 1/2] epoll: call final ep_events_available() check
- under the lock
-Message-ID: <Y38ht+WvJF4ahygT@quatroqueijos.cascardo.eti.br>
-References: <20221124001123.3248571-1-risbhat@amazon.com>
- <20221124001123.3248571-2-risbhat@amazon.com>
+        Thu, 24 Nov 2022 02:49:08 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2DB9240A0
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 23:49:07 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id x66so965748pfx.3
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 23:49:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shopee.com; s=shopee.com;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G7mIOYx5XpbGQFlC8Ida0reEU5Je0qsdFez1FBYqNyg=;
+        b=NjotXgc97HbmEPcoHrS+QOmRpacOKDb6QdXBznUNud1zfBEYbcLcS0Xt2g3PItbFnr
+         h2QU44T4XntjX+yX5aGFm63L8ScVMzk1QnKOSbFWpMjeDfEt7yvCS4NDOuIXfg82fZnh
+         DZzGBg5gfIpGza1QU53WZ6sK/ar+0Nz7Mf6oySCBTtb8gXxzc2hXUes7f3Je+8/5ietR
+         9h/mbj4vZ4lepK0FPHfAd8Y215fWJxhs+X16DRMm8Nj8EduGiaUZuO9UvZWHyabH7cNa
+         kqGuLQR40VQZmVKmSTG+2MvAwq4nPCFJCV8Pos7IuGYCwARs3J6QL7bZBK6+bnipJ8iM
+         coPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=G7mIOYx5XpbGQFlC8Ida0reEU5Je0qsdFez1FBYqNyg=;
+        b=trrVy4vY6DUkCei9zGUkrRXK6MD9+F0ZUfCNaooLaV0gvDuU8t83BEHF7leetx36lt
+         cIJZpuRwAt5pekxfsZxpNhzbxV3YR5gVigUg/zzA2bBjm89sTsjZCL9Rcl9IsJoUbwOU
+         JYVudZX8i0avGFBP0WVIbYdS/6NVy3Aa36wN6bgKtIBIMba8mxrHri+OMkz5uV/RPxVG
+         NiUQZ0DIIyWvIn0+oyl9d+V26sabgjsxZNMpbBkkBaA2cF0uAoScM46ySsfoO1ZuOSlq
+         UFR2Zqb60PHKs6Y5tNnkPmW5t5OIuAlUL1kG7tJeIJplOo0grBCx8gSHhX31h6B6HNs3
+         q4zQ==
+X-Gm-Message-State: ANoB5pkNtYapsBgsd3HoaFlvIabBkv8I6Wi8F39Ssxfp1yuU/CFzjoiC
+        qo15uHgeSLq/G8hqtozXpegcng==
+X-Google-Smtp-Source: AA0mqf5pzoo6QD8W/O4UzNRjG/dH8mFcNXz4MwupnYm372vlZ08PSLVbYtDXpowYkklRamgw7dATgg==
+X-Received: by 2002:a63:ff63:0:b0:477:8d4f:3dda with SMTP id s35-20020a63ff63000000b004778d4f3ddamr13055439pgk.552.1669276146630;
+        Wed, 23 Nov 2022 23:49:06 -0800 (PST)
+Received: from [10.54.24.49] ([143.92.118.2])
+        by smtp.gmail.com with ESMTPSA id p5-20020a170902e74500b0018691ce1696sm532146plf.131.2022.11.23.23.49.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Nov 2022 23:49:06 -0800 (PST)
+Message-ID: <21e73dad-c6d0-21ea-dcdf-355b71c8537b@shopee.com>
+Date:   Thu, 24 Nov 2022 15:49:02 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221124001123.3248571-2-risbhat@amazon.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.0
+Subject: Re: [PATCH] cgroup/cpuset: Optimize update_tasks_nodemask()
+To:     Waiman Long <longman@redhat.com>
+Cc:     lizefan.x@bytedance.com, tj@kernel.org, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221123082157.71326-1-haifeng.xu@shopee.com>
+ <2ac6f207-e08a-2a7f-01ae-dfaf15eefaf6@redhat.com>
+ <4de8821b-e0c0-bf63-4d76-b0ce208cce3b@shopee.com>
+ <dfcbffb9-b58a-6d25-2174-39394eb0ccde@redhat.com>
+From:   Haifeng Xu <haifeng.xu@shopee.com>
+In-Reply-To: <dfcbffb9-b58a-6d25-2174-39394eb0ccde@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,141 +76,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 12:11:22AM +0000, Rishabh Bhatnagar wrote:
-> From: Roman Penyaev <rpenyaev@suse.de>
-> 
-> Commit 65759097d804d2a9ad2b687db436319704ba7019 upstream.
-> 
-> There is a possible race when ep_scan_ready_list() leaves ->rdllist and
-> ->obflist empty for a short period of time although some events are
-> pending.  It is quite likely that ep_events_available() observes empty
-> lists and goes to sleep.
-> 
-> Since commit 339ddb53d373 ("fs/epoll: remove unnecessary wakeups of
-> nested epoll") we are conservative in wakeups (there is only one place
-> for wakeup and this is ep_poll_callback()), thus ep_events_available()
-> must always observe correct state of two lists.
-> 
-> The easiest and correct way is to do the final check under the lock.
-> This does not impact the performance, since lock is taken anyway for
-> adding a wait entry to the wait queue.
-> 
-> The discussion of the problem can be found here:
-> 
->    https://lore.kernel.org/linux-fsdevel/a2f22c3c-c25a-4bda-8339-a7bdaf17849e@akamai.com/
-> 
-> In this patch barrierless __set_current_state() is used.  This is safe
-> since waitqueue_active() is called under the same lock on wakeup side.
-> 
-> Short-circuit for fatal signals (i.e.  fatal_signal_pending() check) is
-> moved to the line just before actual events harvesting routine.  This is
-> fully compliant to what is said in the comment of the patch where the
-> actual fatal_signal_pending() check was added: c257a340ede0 ("fs, epoll:
-> short circuit fetching events if thread has been killed").
-> 
-> Fixes: 339ddb53d373 ("fs/epoll: remove unnecessary wakeups of nested epoll")
-> Reported-by: Jason Baron <jbaron@akamai.com>
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Roman Penyaev <rpenyaev@suse.de>
-> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-> Reviewed-by: Jason Baron <jbaron@akamai.com>
-> Cc: Khazhismel Kumykov <khazhy@google.com>
-> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-> Cc: <stable@vger.kernel.org>
-> Link: http://lkml.kernel.org/r/20200505145609.1865152-1-rpenyaev@suse.de
-> Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Signed-off-by: Rishabh Bhatnagar <risbhat@amazon.com>
-
-Acked-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-
-I ended up picking these two fixes to our kernels as well, even though we could
-not pinpoint the process kernel stacktrace as you did as a way to determine the
-failure has happened. We are still testing that this is really fixed with these
-two commits.
-
-On the other hand,
-tools/testing/selftests/filesystems/epoll/epoll_wakeup_test.c epoll61 test
-starts passing once these two commits are applied.
-
-Cascardo.
 
 
-> ---
->  fs/eventpoll.c | 47 +++++++++++++++++++++++++++--------------------
->  1 file changed, 27 insertions(+), 20 deletions(-)
+On 2022/11/24 12:24, Waiman Long wrote:
+> On 11/23/22 22:33, Haifeng Xu wrote:
+>>
+>> On 2022/11/24 04:23, Waiman Long wrote:
+>>> On 11/23/22 03:21, haifeng.xu wrote:
+>>>> When change the 'cpuset.mems' under some cgroup, system will hung
+>>>> for a long time. From the dmesg, many processes or theads are
+>>>> stuck in fork/exit. The reason is show as follows.
+>>>>
+>>>> thread A:
+>>>> cpuset_write_resmask /* takes cpuset_rwsem */
+>>>>     ...
+>>>>       update_tasks_nodemask
+>>>>         mpol_rebind_mm /* waits mmap_lock */
+>>>>
+>>>> thread B:
+>>>> worker_thread
+>>>>     ...
+>>>>       cpuset_migrate_mm_workfn
+>>>>         do_migrate_pages /* takes mmap_lock */
+>>>>
+>>>> thread C:
+>>>> cgroup_procs_write /* takes cgroup_mutex and
+>>>> cgroup_threadgroup_rwsem */
+>>>>     ...
+>>>>       cpuset_can_attach
+>>>>         percpu_down_write /* waits cpuset_rwsem */
+>>>>
+>>>> Once update the nodemasks of cpuset, thread A wakes up thread B to
+>>>> migrate mm. But when thread A iterates through all tasks, including
+>>>> child threads and group leader, it has to wait the mmap_lock which
+>>>> has been take by thread B. Unfortunately, thread C wants to migrate
+>>>> tasks into cgroup at this moment, it must wait thread A to release
+>>>> cpuset_rwsem. If thread B spends much time to migrate mm, the
+>>>> fork/exit which acquire cgroup_threadgroup_rwsem also need to
+>>>> wait for a long time.
+>>>>
+>>>> There is no need to migrate the mm of child threads which is
+>>>> shared with group leader. Just iterate through the group
+>>>> leader only.
+>>>>
+>>>> Signed-off-by: haifeng.xu <haifeng.xu@shopee.com>
+>>>> ---
+>>>>    kernel/cgroup/cpuset.c | 3 +++
+>>>>    1 file changed, 3 insertions(+)
+>>>>
+>>>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+>>>> index 589827ccda8b..43cbd09546d0 100644
+>>>> --- a/kernel/cgroup/cpuset.c
+>>>> +++ b/kernel/cgroup/cpuset.c
+>>>> @@ -1968,6 +1968,9 @@ static void update_tasks_nodemask(struct cpuset
+>>>> *cs)
+>>>>              cpuset_change_task_nodemask(task, &newmems);
+>>>>    +        if (!thread_group_leader(task))
+>>>> +            continue;
+>>>> +
+>>>>            mm = get_task_mm(task);
+>>>>            if (!mm)
+>>>>                continue;
+>>> Could you try the attached test patch to see if it can fix your problem?
+>>> Something along the line of this patch will be more acceptable.
+>>>
+>>> Thanks,
+>>> Longman
+>>>
+>> Hi, Longman.
+>> Thanks for your patch, but there are still some problems.
+>>
+>> 1）
+>>    (group leader, node: 0,1)
+>>           cgroup0
+>>           /     \
+>>          /       \
+>>      cgroup1   cgroup2
+>>     (threads)  (threads)
+>>
+>> If set node 0 in cgroup1 and node 1 in cgroup2, both of them will update
+>> the mm. And the nodemask of mm depends on who set the node last.
 > 
-> diff --git a/fs/eventpoll.c b/fs/eventpoll.c
-> index 7e11135bc915..e5496483a882 100644
-> --- a/fs/eventpoll.c
-> +++ b/fs/eventpoll.c
-> @@ -1905,33 +1905,31 @@ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
->  		init_wait(&wait);
->  		wait.func = ep_autoremove_wake_function;
->  		write_lock_irq(&ep->lock);
-> -		__add_wait_queue_exclusive(&ep->wq, &wait);
-> -		write_unlock_irq(&ep->lock);
-> -
->  		/*
-> -		 * We don't want to sleep if the ep_poll_callback() sends us
-> -		 * a wakeup in between. That's why we set the task state
-> -		 * to TASK_INTERRUPTIBLE before doing the checks.
-> +		 * Barrierless variant, waitqueue_active() is called under
-> +		 * the same lock on wakeup ep_poll_callback() side, so it
-> +		 * is safe to avoid an explicit barrier.
->  		 */
-> -		set_current_state(TASK_INTERRUPTIBLE);
-> +		__set_current_state(TASK_INTERRUPTIBLE);
-> +
->  		/*
-> -		 * Always short-circuit for fatal signals to allow
-> -		 * threads to make a timely exit without the chance of
-> -		 * finding more events available and fetching
-> -		 * repeatedly.
-> +		 * Do the final check under the lock. ep_scan_ready_list()
-> +		 * plays with two lists (->rdllist and ->ovflist) and there
-> +		 * is always a race when both lists are empty for short
-> +		 * period of time although events are pending, so lock is
-> +		 * important.
->  		 */
-> -		if (fatal_signal_pending(current)) {
-> -			res = -EINTR;
-> -			break;
-> +		eavail = ep_events_available(ep);
-> +		if (!eavail) {
-> +			if (signal_pending(current))
-> +				res = -EINTR;
-> +			else
-> +				__add_wait_queue_exclusive(&ep->wq, &wait);
->  		}
-> +		write_unlock_irq(&ep->lock);
->  
-> -		eavail = ep_events_available(ep);
-> -		if (eavail)
-> -			break;
-> -		if (signal_pending(current)) {
-> -			res = -EINTR;
-> +		if (eavail || res)
->  			break;
-> -		}
->  
->  		if (!schedule_hrtimeout_range(to, slack, HRTIMER_MODE_ABS)) {
->  			timed_out = 1;
-> @@ -1952,6 +1950,15 @@ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
->  	}
->  
->  send_events:
-> +	if (fatal_signal_pending(current)) {
-> +		/*
-> +		 * Always short-circuit for fatal signals to allow
-> +		 * threads to make a timely exit without the chance of
-> +		 * finding more events available and fetching
-> +		 * repeatedly.
-> +		 */
-> +		res = -EINTR;
-> +	}
->  	/*
->  	 * Try to transfer events to user space. In case we get 0 events and
->  	 * there's still timeout left over, we go trying again in search of
-> -- 
-> 2.37.1
+> Yes, that is the existing behavior. It was not that well defined in the
+> past and so it is somewhat ambiguous as to what we need to do about it.
+> 
+
+The test patch works if the child threads are in same cpuset with group
+leader which has same logic with my patch. But if they are in different
+cpusets, the test patch will fail because the contention of mmap_lock
+still exsits and seems similar to the original logic.
+
+> BTW, cgroup1 has a memory_migrate flag which will force page migration
+> if set. I guess you may have it set in your case as it will introduce a
+> lot more delay as page migration takes time. That is probably the reason
+> why you are seeing a long delay. So one possible solution is to turn
+> this flag off. Cgroup v2 doesn't have this flag.
+> 
+
+Dou you mean 'CS_MEMORY_MIGRATE'? This flag can be turn off in Cgroup
+v1, but it has been set in Cgroup v2 (cpuset_css_alloc) in default and
+couldn't be changed.
+
+>>
+>> 2）
+>>     (process, node: 0,1)
+>>           cgroup0
+>>           /     \
+>>          /       \
+>>      cgroup1   cgroup2
+>>     (node: 0)  (node: 1)
+>>
+>> If migrate thread from cgroup0 to cgroup1 or cgroup2, cpuset_attach
+>> won't update the mm. So the nodemask of thread, including mems_allowed
+>> and mempolicy（updated in cpuset_change_task_nodemask）, is different
+>> from
+>> the vm_policy in vma(updated in mpol_rebind_mm).
+> 
+> Yes, that can be the case.
+> 
+>>
+>>
+>> In a word, if threads have different cpusets with different nodemask, it
+>> will cause inconsistent memory behavior.
+> 
+> So do you have suggestion of what we need to do going forward?
+
+Should we prevent thread from migrating to those cgroups which have
+different nodemask with the cgroup that contains the group leader?
+
+In addition, the group leader and child threads should be in same cgroup
+tree, also the level of cgroup containes group leader must be higher
+than these cgroups contain child threads, so update_nodemask will work.
+
+Or just disable thread migration in cpuset？It's easy to achieve but will
+affect cpu bind.
+> 
+> Cheers,
+> Longman
+> 
 > 
