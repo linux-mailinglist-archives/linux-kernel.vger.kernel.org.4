@@ -2,95 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09676637312
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 08:48:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4127637314
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 08:48:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbiKXHsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 02:48:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
+        id S229645AbiKXHsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 02:48:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiKXHsI (ORCPT
+        with ESMTP id S229729AbiKXHs0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 02:48:08 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F8825C62
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 23:47:59 -0800 (PST)
-Date:   Thu, 24 Nov 2022 08:47:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669276077;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=H8MkVKqMFPY7RVtK+U9IsLl419c2sAFoJ/y3MjxQSoQ=;
-        b=KhL5m+1qGMnIkw8GjP8ewX0gISSmUyVAsbmCuMEUb3IPn9NjBvgT7N3Z4Q/dBB4LdzGnO6
-        6A5kFXLqXGsuoU2cWJKos/zqdnLgT5Isuu/kROKIYqgVqUpZ9bLknGY8S+a1wWsoEYprzc
-        8V9XouzbKBN37oBM1Po7dbE+jBKHgss3TlKtq3/zAeg/zl0TIK8s1RIK1vg2/t9HbgFIlF
-        Xx1zBAtEoxb2th0xwpER+wM5KHlQwIwDrP1ev1QRHj/kveO+Zgh0Q+/9jDt3TyPpDtzhgc
-        kWl/0v9MzCM2T1kZ5ohlAwT1HA4kLXdiSox3Oi5LPii/T+/vgB+tc9YKwyjJoA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669276077;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=H8MkVKqMFPY7RVtK+U9IsLl419c2sAFoJ/y3MjxQSoQ=;
-        b=dm1HTwTzfb14QhOpvzna5A+QlMZCATo5SjpzrHiVdvrmBDfMiRk+VG4Xt63Q19hmvvibZW
-        EWq6mQqjOW/OZyDw==
-From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
-To:     Frederic Weisbecker <frederic@kernel.org>
-cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Eric Dumazet <edumazet@google.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Arjan van de Ven <arjan@infradead.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Rik van Riel <riel@surriel.com>
-Subject: Re: [PATCH v4 14/16] timer: Implement the hierarchical pull model
-In-Reply-To: <20221115113152.GH590078@lothringen>
-Message-ID: <e2b4a90-2d9-f2db-8c85-2e64caed5d0@linutronix.de>
-References: <20221104145737.71236-1-anna-maria@linutronix.de> <20221104145737.71236-15-anna-maria@linutronix.de> <20221115113152.GH590078@lothringen>
+        Thu, 24 Nov 2022 02:48:26 -0500
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64CB28E3D;
+        Wed, 23 Nov 2022 23:48:17 -0800 (PST)
+Received: from quatroqueijos.cascardo.eti.br (1.general.cascardo.us.vpn [10.172.70.58])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id C18C941D19;
+        Thu, 24 Nov 2022 07:48:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1669276095;
+        bh=8uiv7qtZwPv5Ax7DFnLsvbaxEDQrQ7aC1xDdNwezPI4=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=nGPs2YcPuElQVdstHCfyzz4FMkovMEsoPWE1KYRjHOsdawrcDMq4fbACf/KtXuvc9
+         OY6Fir46VR7cuDemmUVKru+A7Jb36GENnPTPtnANqi6DEosQ+wPYNgBtzXvQ29WBkz
+         kJi3VZ8FWCsTlQMnlhdB1cZwY9qUty5bbZlx86HlXUtcf2cfZPeneivfkNFr20wAVq
+         D5qcvtkJdg6TGNcc06aVxqcojdswGufDa5lwk642u/m2pj5k948teAAB4x3feUiQP0
+         2ME/m+emrBQlMV3QavQ2Q1UBO7k+m+LD1asr1HwQwew6HIOXyxjr8H+uBow8l9nRfO
+         6McimC2/J+4hg==
+Date:   Thu, 24 Nov 2022 04:48:07 -0300
+From:   Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+To:     Rishabh Bhatnagar <risbhat@amazon.com>
+Cc:     gregkh@linuxfoundation.org, shakeelb@google.com,
+        viro@zeniv.linux.org.uk, bsegall@google.com, mdecandia@gmail.com,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Roman Penyaev <rpenyaev@suse.de>,
+        Jason Baron <jbaron@akamai.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Khazhismel Kumykov <khazhy@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH 5.4 1/2] epoll: call final ep_events_available() check
+ under the lock
+Message-ID: <Y38ht+WvJF4ahygT@quatroqueijos.cascardo.eti.br>
+References: <20221124001123.3248571-1-risbhat@amazon.com>
+ <20221124001123.3248571-2-risbhat@amazon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221124001123.3248571-2-risbhat@amazon.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Nov 2022, Frederic Weisbecker wrote:
-
-> On Fri, Nov 04, 2022 at 03:57:35PM +0100, Anna-Maria Behnsen wrote:
-> > +static int tmigr_cpu_offline(unsigned int cpu)
-> > +{
-> > +	struct tmigr_cpu *tmc = this_cpu_ptr(&tmigr_cpu);
-> > +
-> > +	raw_spin_lock_irq(&tmc->lock);
-> > +	tmc->online = 0;
-> > +	__tmigr_cpu_deactivate(tmc, KTIME_MAX);
+On Thu, Nov 24, 2022 at 12:11:22AM +0000, Rishabh Bhatnagar wrote:
+> From: Roman Penyaev <rpenyaev@suse.de>
 > 
-> This means that if the CPU is going idle for some time during
-> the hotplug process (ie: at some point between CPUHP_AP_TMIGR_ONLINE
-> and CPUHP_TEARDOWN_CPU), then a global timer may be delayed for that long.
+> Commit 65759097d804d2a9ad2b687db436319704ba7019 upstream.
 > 
-> I guess it shouldn't be too bad but worth mentioning...
+> There is a possible race when ep_scan_ready_list() leaves ->rdllist and
+> ->obflist empty for a short period of time although some events are
+> pending.  It is quite likely that ep_events_available() observes empty
+> lists and goes to sleep.
 > 
-> Although if it happens to be a problem it could be solved with simply allowing
-> tmigr_cpu_deactivate() when !tmc->online.
+> Since commit 339ddb53d373 ("fs/epoll: remove unnecessary wakeups of
+> nested epoll") we are conservative in wakeups (there is only one place
+> for wakeup and this is ep_poll_callback()), thus ep_events_available()
+> must always observe correct state of two lists.
+> 
+> The easiest and correct way is to do the final check under the lock.
+> This does not impact the performance, since lock is taken anyway for
+> adding a wait entry to the wait queue.
+> 
+> The discussion of the problem can be found here:
+> 
+>    https://lore.kernel.org/linux-fsdevel/a2f22c3c-c25a-4bda-8339-a7bdaf17849e@akamai.com/
+> 
+> In this patch barrierless __set_current_state() is used.  This is safe
+> since waitqueue_active() is called under the same lock on wakeup side.
+> 
+> Short-circuit for fatal signals (i.e.  fatal_signal_pending() check) is
+> moved to the line just before actual events harvesting routine.  This is
+> fully compliant to what is said in the comment of the patch where the
+> actual fatal_signal_pending() check was added: c257a340ede0 ("fs, epoll:
+> short circuit fetching events if thread has been killed").
+> 
+> Fixes: 339ddb53d373 ("fs/epoll: remove unnecessary wakeups of nested epoll")
+> Reported-by: Jason Baron <jbaron@akamai.com>
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Signed-off-by: Roman Penyaev <rpenyaev@suse.de>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+> Reviewed-by: Jason Baron <jbaron@akamai.com>
+> Cc: Khazhismel Kumykov <khazhy@google.com>
+> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> Cc: <stable@vger.kernel.org>
+> Link: http://lkml.kernel.org/r/20200505145609.1865152-1-rpenyaev@suse.de
+> Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Signed-off-by: Rishabh Bhatnagar <risbhat@amazon.com>
 
-The plan was (and I broke it) to let the CPU handle global timers by itself
-as long as timer migration hierarchy is not completely initialized and as
-long as CPU is marked offline in timer migration hierarchy. Otherwise
-global timers might be delayed during this period. The proper way would be
-that tmigr_cpu_deactivate(nextexp) directly returns nextexp if !tmc->online
-and tmigr hierarchy is not in place yet. I will have a deeper look if there
-was a reason why I changed the return to KTIME_MAX...
+Acked-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 
-Thanks,
+I ended up picking these two fixes to our kernels as well, even though we could
+not pinpoint the process kernel stacktrace as you did as a way to determine the
+failure has happened. We are still testing that this is really fixed with these
+two commits.
 
-	Anna-Maria
+On the other hand,
+tools/testing/selftests/filesystems/epoll/epoll_wakeup_test.c epoll61 test
+starts passing once these two commits are applied.
 
+Cascardo.
+
+
+> ---
+>  fs/eventpoll.c | 47 +++++++++++++++++++++++++++--------------------
+>  1 file changed, 27 insertions(+), 20 deletions(-)
+> 
+> diff --git a/fs/eventpoll.c b/fs/eventpoll.c
+> index 7e11135bc915..e5496483a882 100644
+> --- a/fs/eventpoll.c
+> +++ b/fs/eventpoll.c
+> @@ -1905,33 +1905,31 @@ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
+>  		init_wait(&wait);
+>  		wait.func = ep_autoremove_wake_function;
+>  		write_lock_irq(&ep->lock);
+> -		__add_wait_queue_exclusive(&ep->wq, &wait);
+> -		write_unlock_irq(&ep->lock);
+> -
+>  		/*
+> -		 * We don't want to sleep if the ep_poll_callback() sends us
+> -		 * a wakeup in between. That's why we set the task state
+> -		 * to TASK_INTERRUPTIBLE before doing the checks.
+> +		 * Barrierless variant, waitqueue_active() is called under
+> +		 * the same lock on wakeup ep_poll_callback() side, so it
+> +		 * is safe to avoid an explicit barrier.
+>  		 */
+> -		set_current_state(TASK_INTERRUPTIBLE);
+> +		__set_current_state(TASK_INTERRUPTIBLE);
+> +
+>  		/*
+> -		 * Always short-circuit for fatal signals to allow
+> -		 * threads to make a timely exit without the chance of
+> -		 * finding more events available and fetching
+> -		 * repeatedly.
+> +		 * Do the final check under the lock. ep_scan_ready_list()
+> +		 * plays with two lists (->rdllist and ->ovflist) and there
+> +		 * is always a race when both lists are empty for short
+> +		 * period of time although events are pending, so lock is
+> +		 * important.
+>  		 */
+> -		if (fatal_signal_pending(current)) {
+> -			res = -EINTR;
+> -			break;
+> +		eavail = ep_events_available(ep);
+> +		if (!eavail) {
+> +			if (signal_pending(current))
+> +				res = -EINTR;
+> +			else
+> +				__add_wait_queue_exclusive(&ep->wq, &wait);
+>  		}
+> +		write_unlock_irq(&ep->lock);
+>  
+> -		eavail = ep_events_available(ep);
+> -		if (eavail)
+> -			break;
+> -		if (signal_pending(current)) {
+> -			res = -EINTR;
+> +		if (eavail || res)
+>  			break;
+> -		}
+>  
+>  		if (!schedule_hrtimeout_range(to, slack, HRTIMER_MODE_ABS)) {
+>  			timed_out = 1;
+> @@ -1952,6 +1950,15 @@ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
+>  	}
+>  
+>  send_events:
+> +	if (fatal_signal_pending(current)) {
+> +		/*
+> +		 * Always short-circuit for fatal signals to allow
+> +		 * threads to make a timely exit without the chance of
+> +		 * finding more events available and fetching
+> +		 * repeatedly.
+> +		 */
+> +		res = -EINTR;
+> +	}
+>  	/*
+>  	 * Try to transfer events to user space. In case we get 0 events and
+>  	 * there's still timeout left over, we go trying again in search of
+> -- 
+> 2.37.1
+> 
