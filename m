@@ -2,127 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5766376FD
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:59:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22DBF637700
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 12:01:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbiKXK7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 05:59:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
+        id S229677AbiKXLA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 06:00:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbiKXK7t (ORCPT
+        with ESMTP id S229583AbiKXLAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 05:59:49 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076478481D
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:59:48 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Thu, 24 Nov 2022 06:00:54 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B085297348
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 03:00:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1669287652; x=1700823652;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=TKsmYGKYqQviZJozhSmWaRTpNKVgkOaOV5+wyTY4lf4=;
+  b=PqzuJuSBcZIeTxi3+dO14op7fSnmnaavS12lXXa2m1UOsQAFqTzPm3Cd
+   y17/ixXnHJvHjnawq0OdRl1geIN1sQlzqEoueb0Qj3ddJs2rKTyciUZCR
+   +64nEtMPtV724gWTRZD4mtTOo4Uim0J6Mvutujop8SynHbj4h2JqFO8mz
+   qI5viDoJeKnYKIYg6lPiz/hDGQZbUK86oBz0WU7Ermzbv/nj4NVq/D1Xi
+   0/GR39aaCi4LmVJoBbwUAORFcxX49QNtoYbhkdLoXhmrAWf6urXdbU7sw
+   UXUvBDkJA0oStbpnkBvj0R1vvcZoz2+Q5Xd5XwSkZ85WCTmT/neiC9vZ3
+   w==;
+X-IronPort-AV: E=Sophos;i="5.96,190,1665439200"; 
+   d="scan'208";a="27559212"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 24 Nov 2022 12:00:50 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Thu, 24 Nov 2022 12:00:50 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Thu, 24 Nov 2022 12:00:50 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1669287650; x=1700823650;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=TKsmYGKYqQviZJozhSmWaRTpNKVgkOaOV5+wyTY4lf4=;
+  b=lAvHyzOo6Pjn32Y9f9SKk7orxpl0h4UIhBVAXqEoUtTJixflj802qCxj
+   51wxjUkLMoNdTsxouXcPmaNOy1RU3gumpOD0W2lR+9En+kOKMRs8aSY0F
+   u8rAaz8FUpKZMB/eZaeFeVGy3mrr77ldOrSkM5HLg07eHMFph5ke1cCsh
+   2TyedO30gaNur/3ECF5LwvvgKyWJFkdh6Q/Vaa1oWyZv6x4Xdx1YMRbtG
+   tSOcqxA9BRGEwTSh7BBPnA8uk+fomj6s3EAaeC0sN8iCvosSuclsg8M9o
+   mNPJZi6PBm8d11SKOOHzwwf32jvT1qwPCP9G5sJFfcJh6+m9DVVpn6IwU
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.96,190,1665439200"; 
+   d="scan'208";a="27559210"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 24 Nov 2022 12:00:50 +0100
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id AD2781F38D;
-        Thu, 24 Nov 2022 10:59:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1669287587; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Gzt8jTwR+NxgS/gIm8RH0/+q5NKPvkljd3y17tGlyoE=;
-        b=R+7hpGQSN7xUv298CcH34JqHZDvEupABZykW3XFGobD5J9IZltFKz5f5xcdEegA/oStsYw
-        2it0RpnRmQneDb0N7BW0PWKBpzcG0hNxwSeqimE/oE8H3U/HNRlqxA7xTx0OEizUopjX6/
-        Gn0P01XvEaEQ3jSisw9Gmfg+w4jMPdw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1669287587;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Gzt8jTwR+NxgS/gIm8RH0/+q5NKPvkljd3y17tGlyoE=;
-        b=EPBS1H7c9Zp9eZJxBb02FuHKQB9hwssIERiC/nNYOk7erunsduRHIXYzwNLm29kAqsnTp7
-        Kjv0dm3GlOmO45AA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6DD9113B4F;
-        Thu, 24 Nov 2022 10:59:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id GVwVGaNOf2NlUwAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Thu, 24 Nov 2022 10:59:47 +0000
-Date:   Thu, 24 Nov 2022 11:59:46 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     linux-mtd@lists.infradead.org, LKML <linux-kernel@vger.kernel.org>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Naga Sureshkumar Relli <nagasure@xilinx.com>
-Subject: [PATCH] mtd: rawnand: Drop obsolete dependencies on COMPILE_TEST
-Message-ID: <20221124115946.5edb771c@endymion.delvare>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 0B7B7280056;
+        Thu, 24 Nov 2022 12:00:50 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org, Marek Vasut <marex@denx.de>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Frieder Schrempf <frieder@fris.de>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?ISO-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Ville =?ISO-8859-1?Q?Syrj=E4l=E4?= 
+        <ville.syrjala@linux.intel.com>
+Subject: Re: [PATCH] drm/bridge: ti-sn65dsi83: Fix delay after reset deassert to match spec
+Date:   Thu, 24 Nov 2022 12:00:48 +0100
+Message-ID: <9079928.rMLUfLXkoz@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20221122081219.20143-1-frieder@fris.de>
+References: <20221122081219.20143-1-frieder@fris.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
-is possible to test-build any driver which depends on OF on any
-architecture by explicitly selecting OF. Therefore depending on
-COMPILE_TEST as an alternative is no longer needed.
+Am Dienstag, 22. November 2022, 09:12:18 CET schrieb Frieder Schrempf:
+> From: Frieder Schrempf <frieder.schrempf@kontron.de>
+> 
+> The datasheet specifies a delay of 10 milliseconds, but the current
+> driver only waits for 1 ms. Fix this to make sure the initialization
+> sequence meets the spec.
+> 
+> Fixes: ceb515ba29ba ("drm/bridge: ti-sn65dsi83: Add TI SN65DSI83 and
+> SN65DSI84 driver") Signed-off-by: Frieder Schrempf
+> <frieder.schrempf@kontron.de>
+> ---
+>  drivers/gpu/drm/bridge/ti-sn65dsi83.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi83.c
+> b/drivers/gpu/drm/bridge/ti-sn65dsi83.c index 7ba9467fff12..047c14ddbbf1
+> 100644
+> --- a/drivers/gpu/drm/bridge/ti-sn65dsi83.c
+> +++ b/drivers/gpu/drm/bridge/ti-sn65dsi83.c
+> @@ -346,7 +346,7 @@ static void sn65dsi83_atomic_enable(struct drm_bridge
+> *bridge,
+> 
+>  	/* Deassert reset */
+>  	gpiod_set_value_cansleep(ctx->enable_gpio, 1);
+> -	usleep_range(1000, 1100);
+> +	usleep_range(10000, 11000);
+> 
+>  	/* Get the LVDS format from the bridge state. */
+>  	bridge_state = drm_atomic_get_new_bridge_state(state, bridge);
 
-It is actually better to always build such drivers with OF enabled,
-so that the test builds are closer to how each driver will actually be
-built on its intended target. Building them without OF may not test
-much as the compiler will optimize out potentially large parts of the
-code. In the worst case, this could even pop false positive warnings.
-Dropping COMPILE_TEST here improves the quality of our testing and
-avoids wasting time on non-existent issues.
+How about using fsleep?
 
-Signed-off-by: Jean Delvare <jdelvare@suse.de>
-Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Richard Weinberger <richard@nod.at>
-Cc: Vignesh Raghavendra <vigneshr@ti.com>
-Cc: Naga Sureshkumar Relli <nagasure@xilinx.com>
----
- drivers/mtd/nand/raw/Kconfig |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
---- linux-6.0.orig/drivers/mtd/nand/raw/Kconfig
-+++ linux-6.0/drivers/mtd/nand/raw/Kconfig
-@@ -435,7 +435,7 @@ config MTD_NAND_PLATFORM
- 
- config MTD_NAND_CADENCE
- 	tristate "Support Cadence NAND (HPNFC) controller"
--	depends on (OF || COMPILE_TEST) && HAS_IOMEM
-+	depends on OF && HAS_IOMEM
- 	help
- 	  Enable the driver for NAND flash on platforms using a Cadence NAND
- 	  controller.
-@@ -450,7 +450,7 @@ config MTD_NAND_ARASAN
- 
- config MTD_NAND_INTEL_LGM
- 	tristate "Support for NAND controller on Intel LGM SoC"
--	depends on OF || COMPILE_TEST
-+	depends on OF
- 	depends on HAS_IOMEM
- 	help
- 	  Enables support for NAND Flash chips on Intel's LGM SoC.
-@@ -470,7 +470,7 @@ config MTD_NAND_ROCKCHIP
- 
- config MTD_NAND_PL35X
- 	tristate "ARM PL35X NAND controller"
--	depends on OF || COMPILE_TEST
-+	depends on OF
- 	depends on PL353_SMC
- 	help
- 	  Enables support for PrimeCell SMC PL351 and PL353 NAND
+Either way:
+Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 
 
--- 
-Jean Delvare
-SUSE L3 Support
