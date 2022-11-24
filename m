@@ -2,262 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5BA063739F
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:14:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13938637377
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:13:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbiKXIOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 03:14:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58832 "EHLO
+        id S229756AbiKXINA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 03:13:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbiKXIMm (ORCPT
+        with ESMTP id S229814AbiKXIML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 03:12:42 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91627E11;
-        Thu, 24 Nov 2022 00:12:29 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4NHrCK0l9zz9xFQd;
-        Thu, 24 Nov 2022 16:05:33 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwCHufVFJ39jjHaNAA--.33470S2;
-        Thu, 24 Nov 2022 09:12:01 +0100 (CET)
-Message-ID: <44de9254c7abf1c836142cf3262450de1912bbc0.camel@huaweicloud.com>
-Subject: Re: [PATCH v5 2/6] ocfs2: Switch to security_inode_init_security()
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>, mark@fasheh.com,
-        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, Casey Schaufler <casey@schaufler-ca.com>
-Cc:     ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Thu, 24 Nov 2022 09:11:44 +0100
-In-Reply-To: <052d91687e813110cc1e1d762ea086cc8085114a.camel@linux.ibm.com>
-References: <20221123095202.599252-1-roberto.sassu@huaweicloud.com>
-         <20221123095202.599252-3-roberto.sassu@huaweicloud.com>
-         <052d91687e813110cc1e1d762ea086cc8085114a.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Thu, 24 Nov 2022 03:12:11 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102C7D237B;
+        Thu, 24 Nov 2022 00:12:01 -0800 (PST)
+Date:   Thu, 24 Nov 2022 08:11:57 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669277519;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PkboDhnIm8nCsSCjlZpVh9iMQ8Wke4eddVhfLMFSwcc=;
+        b=ZfRmp5AmvzpFPDbb2tnH5EnvqO3CRdtsAp7GsdIlvnsfDC+4uyEQfTcIRrzBTfDFRh6tqu
+        x7xKnU2qcBhaAQKy89mqqGOqImmm4JRQXYo+NTcF6JMswUwhoFPYXWxxXMAIxE96hJ/wJi
+        Ei/43mOToTwUo6dUbpmQMPN693qpMdns9CgVsIc34hvas/BHp5rmNwADKkTcKSruxFHfOc
+        iKkVERhyRyQxVqqUfL5sicDqxrb3u3gNVBx/ORGehH/wvJgWG4kZ/Dk3Xr9emapjpBNVfc
+        gl5kjZq9F7rlgxc0a1TDLNydFHatHWBU6RFxhDtikOqYo2UjpxehDGzI19mnnw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669277519;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PkboDhnIm8nCsSCjlZpVh9iMQ8Wke4eddVhfLMFSwcc=;
+        b=dHNcxjQRCy6WYgA3IUSMur7ft8H8kA0jEDQ2gFS0hX6m+UwIXpKC6ZxaXN7X6wJE+JiBY9
+        skDcvpLfWfHgnqDA==
+From:   "tip-bot2 for Ard Biesheuvel" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/boot] x86/efi: Make the deprecated EFI handover protocol optional
+Cc:     Ard Biesheuvel <ardb@kernel.org>, Borislav Petkov <bp@suse.de>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20221122161017.2426828-18-ardb@kernel.org>
+References: <20221122161017.2426828-18-ardb@kernel.org>
 MIME-Version: 1.0
+Message-ID: <166927751790.4906.9771581383533870976.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwCHufVFJ39jjHaNAA--.33470S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxKr15AF1UJr1xtF45uF1Dtrb_yoWxZF4xpF
-        W8KFnxKr1rJFyUWrWfta13ua1S9rWrGrZrJrs3G347ZF1DCr1ftry0yr15ua45XrW8JFyk
-        tw48Arsxuan8J3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAGBF1jj4HQvgACsc
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-11-23 at 12:46 -0500, Mimi Zohar wrote:
-> On Wed, 2022-11-23 at 10:51 +0100, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > In preparation for removing security_old_inode_init_security(), switch to
-> > security_inode_init_security().
-> > 
-> > Extend the existing ocfs2_initxattrs() to take the
-> > ocfs2_security_xattr_info structure from fs_info, and populate the
-> > name/value/len triple with the first xattr provided by LSMs. Supporting
-> > multiple xattrs is not currently supported, as it requires non-trivial
-> > changes that can be done at a later time.
-> 
-> ocfs2 already defines ocfs2_init_security_get() as a wrapper around
-> calling either security_old_inode_init_security() or
-> security_inode_init_security().  Based on "si" one or the other hook is
-> called.  ocfs2_initxattrs is already defined.
-> 
->         struct ocfs2_security_xattr_info si = {
->                 .name = NULL,
->                 .enable = 1,
->         };
-> 
-> The main difference between calling security_old_inode_init_security or
-> security_inode_init_security() is whether or not security.evm is
-> calculated and written.
+The following commit has been merged into the x86/boot branch of tip:
 
-Uhm, it seems unfortunately more complicated.
+Commit-ID:     cc3fdda2876e58a7e83e558ab51853cf106afb6a
+Gitweb:        https://git.kernel.org/tip/cc3fdda2876e58a7e83e558ab51853cf106afb6a
+Author:        Ard Biesheuvel <ardb@kernel.org>
+AuthorDate:    Tue, 22 Nov 2022 17:10:17 +01:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Thu, 24 Nov 2022 08:57:41 +01:00
 
-Calling security_old_inode_init_security() allows filesystems to get
-the xattr, do some calculations (e.g. for reservation) and then write
-the xattr.
+x86/efi: Make the deprecated EFI handover protocol optional
 
-The initxattrs() callback to be passed to
-security_inode_init_security() is meant to let filesystems provide a
-filesystem-specific way of writing the xattrs, just after LSMs provided
-them. This seems incompatible with the old behavior, as a filesystem
-might need to do the calculations in the middle before writing the
-xattrs.
+The EFI handover protocol permits a bootloader to invoke the kernel as a
+EFI PE/COFF application, while passing a bootparams struct as a third
+argument to the entrypoint function call.
 
-The initxattrs() callback, when security_old_inode_init_security() was
-used, is just a way of emulating the old behavior, i.e. returning the
-xattr to the caller.
+This has no basis in the UEFI specification, and there are better ways
+to pass additional data to a UEFI application (UEFI configuration
+tables, UEFI variables, UEFI protocols) than going around the
+StartImage() boot service and jumping to a fixed offset in the loaded
+image, just to call a different function that takes a third parameter.
 
-It should be possible, I guess, to handle more xattrs but if the code
-was designed to handle one, it would be better if the filesystem
-maintainers add support for it.
+The reason for handling struct bootparams in the bootloader was that the
+EFI stub could only load initrd images from the EFI system partition,
+and so passing it via struct bootparams was needed for loaders like
+GRUB, which pass the initrd in memory, and may load it from anywhere,
+including from the network. Another motivation was EFI mixed mode, which
+could not use the initrd loader in the EFI stub at all due to 32/64 bit
+incompatibilities (which will be fixed shortly [0]), and could not
+invoke the ordinary PE/COFF entry point either, for the same reasons.
 
-Thanks
+Given that loaders such as GRUB already carried the bootparams handling
+in order to implement non-EFI boot, retaining that code and just passing
+bootparams to the EFI stub was a reasonable choice (although defining an
+alternate entrypoint could have been avoided.) However, the GRUB side
+changes never made it upstream, and are only shipped by some of the
+distros in their downstream versions.
 
-Roberto
+In the meantime, EFI support has been added to other Linux architecture
+ports, as well as to U-boot and systemd, including arch-agnostic methods
+for passing initrd images in memory [1], and for doing mixed mode boot
+[2], none of them requiring anything like the EFI handover protocol. So
+given that only out-of-tree distro GRUB relies on this, let's permit it
+to be omitted from the build, in preparation for retiring it completely
+at a later date. (Note that systemd-boot does have an implementation as
+well, but only uses it as a fallback for booting images that do not
+implement the LoadFile2 based initrd loading method, i.e., v5.8 or older)
 
-> Perhaps it is time to remove the call to
-> security_old_inode_init_security() in ocfs2_init_security_get().  We
-> need to hear back from the ocfs2 community.  Mark?  Joel?
-> 
-> As noted previously this change affects mknod and symlinks.
-> 
-> Mimi
-> 
-> > As fs_info was not used before, ocfs2_initxattrs() can now handle the case
-> > of replicating the behavior of security_old_inode_init_security(), i.e.
-> > just obtaining the xattr, in addition to setting all xattrs provided by
-> > LSMs.
-> > 
-> > Finally, modify the handling of the return value from
-> > ocfs2_init_security_get(). As security_inode_init_security() does not
-> > return -EOPNOTSUPP, remove this case and directly handle the error if the
-> > return value is not zero.
-> > 
-> > However, the previous case of receiving -EOPNOTSUPP should be still
-> > taken into account, as security_inode_init_security() could return zero
-> > without setting xattrs and ocfs2 would consider it as if the xattr was set.
-> > 
-> > Instead, if security_inode_init_security() returned zero, look at the xattr
-> > if it was set, and behave accordingly, i.e. set si->enable to zero to
-> > notify to the functions following ocfs2_init_security_get() that the xattr
-> > is not available (same as if security_old_inode_init_security() returned
-> > -EOPNOTSUPP).
-> > 
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > ---
-> >  fs/ocfs2/namei.c | 18 ++++++------------
-> >  fs/ocfs2/xattr.c | 30 ++++++++++++++++++++++++++----
-> >  2 files changed, 32 insertions(+), 16 deletions(-)
-> > 
-> > diff --git a/fs/ocfs2/namei.c b/fs/ocfs2/namei.c
-> > index 05f32989bad6..55fba81cd2d1 100644
-> > --- a/fs/ocfs2/namei.c
-> > +++ b/fs/ocfs2/namei.c
-> > @@ -242,6 +242,7 @@ static int ocfs2_mknod(struct user_namespace *mnt_userns,
-> >  	int want_meta = 0;
-> >  	int xattr_credits = 0;
-> >  	struct ocfs2_security_xattr_info si = {
-> > +		.name = NULL,
-> >  		.enable = 1,
-> >  	};
-> >  	int did_quota_inode = 0;
-> > @@ -315,12 +316,8 @@ static int ocfs2_mknod(struct user_namespace *mnt_userns,
-> >  	/* get security xattr */
-> >  	status = ocfs2_init_security_get(inode, dir, &dentry->d_name, &si);
-> >  	if (status) {
-> > -		if (status == -EOPNOTSUPP)
-> > -			si.enable = 0;
-> > -		else {
-> > -			mlog_errno(status);
-> > -			goto leave;
-> > -		}
-> > +		mlog_errno(status);
-> > +		goto leave;
-> >  	}
-> >  
-> >  	/* calculate meta data/clusters for setting security and acl xattr */
-> > @@ -1805,6 +1802,7 @@ static int ocfs2_symlink(struct user_namespace *mnt_userns,
-> >  	int want_clusters = 0;
-> >  	int xattr_credits = 0;
-> >  	struct ocfs2_security_xattr_info si = {
-> > +		.name = NULL,
-> >  		.enable = 1,
-> >  	};
-> >  	int did_quota = 0, did_quota_inode = 0;
-> > @@ -1875,12 +1873,8 @@ static int ocfs2_symlink(struct user_namespace *mnt_userns,
-> >  	/* get security xattr */
-> >  	status = ocfs2_init_security_get(inode, dir, &dentry->d_name, &si);
-> >  	if (status) {
-> > -		if (status == -EOPNOTSUPP)
-> > -			si.enable = 0;
-> > -		else {
-> > -			mlog_errno(status);
-> > -			goto bail;
-> > -		}
-> > +		mlog_errno(status);
-> > +		goto bail;
-> >  	}
-> >  
-> >  	/* calculate meta data/clusters for setting security xattr */
-> > diff --git a/fs/ocfs2/xattr.c b/fs/ocfs2/xattr.c
-> > index 95d0611c5fc7..55699c573541 100644
-> > --- a/fs/ocfs2/xattr.c
-> > +++ b/fs/ocfs2/xattr.c
-> > @@ -7259,9 +7259,21 @@ static int ocfs2_xattr_security_set(const struct xattr_handler *handler,
-> >  static int ocfs2_initxattrs(struct inode *inode, const struct xattr *xattr_array,
-> >  		     void *fs_info)
-> >  {
-> > +	struct ocfs2_security_xattr_info *si = fs_info;
-> >  	const struct xattr *xattr;
-> >  	int err = 0;
-> >  
-> > +	if (si) {
-> > +		si->value = kmemdup(xattr_array->value, xattr_array->value_len,
-> > +				    GFP_KERNEL);
-> > +		if (!si->value)
-> > +			return -ENOMEM;
-> > +
-> > +		si->name = xattr_array->name;
-> > +		si->value_len = xattr_array->value_len;
-> > +		return 0;
-> > +	}
-> > +
-> >  	for (xattr = xattr_array; xattr->name != NULL; xattr++) {
-> >  		err = ocfs2_xattr_set(inode, OCFS2_XATTR_INDEX_SECURITY,
-> >  				      xattr->name, xattr->value,
-> > @@ -7277,13 +7289,23 @@ int ocfs2_init_security_get(struct inode *inode,
-> >  			    const struct qstr *qstr,
-> >  			    struct ocfs2_security_xattr_info *si)
-> >  {
-> > +	int ret;
-> > +
-> >  	/* check whether ocfs2 support feature xattr */
-> >  	if (!ocfs2_supports_xattr(OCFS2_SB(dir->i_sb)))
-> >  		return -EOPNOTSUPP;
-> > -	if (si)
-> > -		return security_old_inode_init_security(inode, dir, qstr,
-> > -							&si->name, &si->value,
-> > -							&si->value_len);
-> > +	if (si) {
-> > +		ret = security_inode_init_security(inode, dir, qstr,
-> > +						   &ocfs2_initxattrs, si);
-> > +		/*
-> > +		 * security_inode_init_security() does not return -EOPNOTSUPP,
-> > +		 * we have to check the xattr ourselves.
-> > +		 */
-> > +		if (!ret && !si->name)
-> > +			si->enable = 0;
-> > +
-> > +		return ret;
-> > +	}
-> >  
-> >  	return security_inode_init_security(inode, dir, qstr,
-> >  					    &ocfs2_initxattrs, NULL);
+[0] https://lore.kernel.org/all/20220927085842.2860715-1-ardb@kernel.org/
+[1] ec93fc371f01 ("efi/libstub: Add support for loading the initrd from a device path")
+[2] 97aa276579b2 ("efi/x86: Add true mixed mode entry point into .compat section")
 
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20221122161017.2426828-18-ardb@kernel.org
+---
+ arch/x86/Kconfig                   | 17 +++++++++++++++++
+ arch/x86/boot/compressed/head_64.S |  4 +++-
+ arch/x86/boot/header.S             |  2 +-
+ arch/x86/boot/tools/build.c        |  2 ++
+ 4 files changed, 23 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 67745ce..a0fb836 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -1980,6 +1980,23 @@ config EFI_STUB
+ 
+ 	  See Documentation/admin-guide/efi-stub.rst for more information.
+ 
++config EFI_HANDOVER_PROTOCOL
++	bool "EFI handover protocol (DEPRECATED)"
++	depends on EFI_STUB
++	default y
++	help
++	  Select this in order to include support for the deprecated EFI
++	  handover protocol, which defines alternative entry points into the
++	  EFI stub.  This is a practice that has no basis in the UEFI
++	  specification, and requires a priori knowledge on the part of the
++	  bootloader about Linux/x86 specific ways of passing the command line
++	  and initrd, and where in memory those assets may be loaded.
++
++	  If in doubt, say Y. Even though the corresponding support is not
++	  present in upstream GRUB or other bootloaders, most distros build
++	  GRUB with numerous downstream patches applied, and may rely on the
++	  handover protocol as as result.
++
+ config EFI_MIXED
+ 	bool "EFI mixed-mode support"
+ 	depends on EFI_STUB && X86_64
+diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
+index 6ba2c21..d4c4281 100644
+--- a/arch/x86/boot/compressed/head_64.S
++++ b/arch/x86/boot/compressed/head_64.S
+@@ -286,7 +286,7 @@ SYM_FUNC_START(startup_32)
+ 	lret
+ SYM_FUNC_END(startup_32)
+ 
+-#ifdef CONFIG_EFI_MIXED
++#if IS_ENABLED(CONFIG_EFI_MIXED) && IS_ENABLED(CONFIG_EFI_HANDOVER_PROTOCOL)
+ 	.org 0x190
+ SYM_FUNC_START(efi32_stub_entry)
+ 	add	$0x4, %esp		/* Discard return address */
+@@ -516,7 +516,9 @@ trampoline_return:
+ SYM_CODE_END(startup_64)
+ 
+ #ifdef CONFIG_EFI_STUB
++#ifdef CONFIG_EFI_HANDOVER_PROTOCOL
+ 	.org 0x390
++#endif
+ SYM_FUNC_START(efi64_stub_entry)
+ 	and	$~0xf, %rsp			/* realign the stack */
+ 	movq	%rdx, %rbx			/* save boot_params pointer */
+diff --git a/arch/x86/boot/header.S b/arch/x86/boot/header.S
+index f912d77..d319825 100644
+--- a/arch/x86/boot/header.S
++++ b/arch/x86/boot/header.S
+@@ -406,7 +406,7 @@ xloadflags:
+ # define XLF1 0
+ #endif
+ 
+-#ifdef CONFIG_EFI_STUB
++#ifdef CONFIG_EFI_HANDOVER_PROTOCOL
+ # ifdef CONFIG_EFI_MIXED
+ #  define XLF23 (XLF_EFI_HANDOVER_32|XLF_EFI_HANDOVER_64)
+ # else
+diff --git a/arch/x86/boot/tools/build.c b/arch/x86/boot/tools/build.c
+index a3725ad..bd24769 100644
+--- a/arch/x86/boot/tools/build.c
++++ b/arch/x86/boot/tools/build.c
+@@ -290,6 +290,7 @@ static void efi_stub_entry_update(void)
+ {
+ 	unsigned long addr = efi32_stub_entry;
+ 
++#ifdef CONFIG_EFI_HANDOVER_PROTOCOL
+ #ifdef CONFIG_X86_64
+ 	/* Yes, this is really how we defined it :( */
+ 	addr = efi64_stub_entry - 0x200;
+@@ -299,6 +300,7 @@ static void efi_stub_entry_update(void)
+ 	if (efi32_stub_entry != addr)
+ 		die("32-bit and 64-bit EFI entry points do not match\n");
+ #endif
++#endif
+ 	put_unaligned_le32(addr, &buf[0x264]);
+ }
+ 
