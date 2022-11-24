@@ -2,73 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F28E8637F49
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 19:45:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 504A3637F4C
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 19:46:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbiKXSpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 13:45:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59232 "EHLO
+        id S230016AbiKXSqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 13:46:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbiKXSoe (ORCPT
+        with ESMTP id S230085AbiKXSp7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 13:44:34 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104D4134110
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 10:44:01 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id a29so3680552lfj.9
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 10:44:01 -0800 (PST)
+        Thu, 24 Nov 2022 13:45:59 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754C74EC05
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 10:45:02 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id y14-20020a17090a2b4e00b002189a1b84d4so2246006pjc.2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 10:45:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qVrcHr8M8g+X+IjIamBy7xJQroBzKdxIzP2voTF9VV0=;
-        b=hDXo6BZhUv/y2cwG63DN+/++48ELKOiqMPH8mrPvSvGT6vNs+wDJQAUQ6YV05qiTJ0
-         vExfY3dsgfYBpm5CXbOeHgImIsM6RyTF1neUfPi1IliquK2XerIEA2D8Nwy56l1yBM5V
-         0/0gG4hREL9dm13097+9vX4fSHDcimf+d2rP7SEP6hCrE0hRLE67f0+PnI79Pl7g3Jr0
-         MezRE4HUJZ+xZ0jdV8oQBPS4AsoUC0HHX2ua7AxhX3JJNLmly1+u+n5vhvqtzMnYMXCM
-         SzE5vqU3LOlyxm7wOEEEkZptGaqP72vnLuAHME+rnwqqQrtreGrMo2UrGXn/xPVeb0Vb
-         Tv/A==
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=5mUc7Hj+XQfjTjlDIFjVYP+TraLI2iMKH19WfjbmoCU=;
+        b=qrssbKT0+X3S2a2vA11xfRsFFE4GBXlNnE3Zh83wyE/w7BcnXA8O3tKMV+MsNTedd5
+         o2mVKqmODuotSHR59IgWUSH7zyL9r+dwGCTFvGwDKbxkauQMab+S2T5Xs9LFCwVVdM9j
+         WkqgWig6tXHfByOjZfNwAeyBf+1vh+Mo9PGTt+HkZbpWqABdUpLksBLyvCf+ZhhWeyGs
+         MyoeWSKhjiXt95/TxHXXFXJ6T3stbaWbvDWF8SAxiNYpxnIr+awhB3hb1Pdep/8Ho6cP
+         BqQw87mzNiLP6hXkkFbJNy1ty49OtCtlsq7XDbZL9zMxLQ0IhbpTfHkIXSpmNfWPIMU7
+         OdKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qVrcHr8M8g+X+IjIamBy7xJQroBzKdxIzP2voTF9VV0=;
-        b=hNKv4gmgqVLygd4Mw1ezYah8HQBUpRvQxJ1rI+fQdGUpxf2ldio+avSyK9xQU8ORjT
-         2goJMkTd7U60+kOa5CK6RAbmNst2shj+fyc1a2b78M0/HvkXughRX0x+j0OQVUCOJA1T
-         WhVWyvByA+d6ILO4+E7IGb13ZB3aG18QR8/IWbaG2c3bVpT2zrc4pejvpb289Phc9p2/
-         bN+Ec6xeG44WgZVg1FqGz8gS0DGJ+ihBp2sFKSjN1Q7sjdIVGZrzSsggL5sROlM3WlrZ
-         ev1rNJhydeKw//4NXtu5qqwbKvYPtExIS8xZvVaQb1WuZeitFjqKWJ0M/Ug1eI8NpsSI
-         y9KQ==
-X-Gm-Message-State: ANoB5pkxcdnntYHDosZYDVn/Ca3rCl/sHtbuS2b5+WqVziMBfxNrVAC5
-        7kNIO4fhXLD/w6qeoxuKD12YaA==
-X-Google-Smtp-Source: AA0mqf4JvI3oYpINOWGsJnFaudDZbsRl7z2AV+MaaauJxlKO80rZ13T5Dgrxk2+SNVpf9mDyJ9JdFQ==
-X-Received: by 2002:ac2:5f42:0:b0:4a2:645b:15cd with SMTP id 2-20020ac25f42000000b004a2645b15cdmr6213235lfz.308.1669315441409;
-        Thu, 24 Nov 2022 10:44:01 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id v7-20020a2ea607000000b0026e0434eb1esm159098ljp.67.2022.11.24.10.44.00
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5mUc7Hj+XQfjTjlDIFjVYP+TraLI2iMKH19WfjbmoCU=;
+        b=r+nMOJ5y2sQjJgbGXSASXpNoOR84yB34CgSMFpjv2ZijiE7frh1H+XSJTx/XQxp4nU
+         RipVBWsnNM5lp6vX73hfJgKEs+6hzVMKGvLEBGvT0nR+2U9LA58zxJLwHNrZgAoQSIMI
+         yD0l8X3dmwLBQlLU9IlWyMAS8dQCCqEoUy13vywqwEbV+ZdJa8SpfcdV7MltaR794JlM
+         +AKVnm2mbH81cktTheU5bp0YFMwUpc+g5mp8hQTaJcSqQFe8XN2lm3SdAiMxwp8NRpB2
+         LoQqtVh4lH5tMc88GVYi6o50iPHxcsigpTnC4czcMnGlxxjxwpOwVQPkGCl9u8TNP2RJ
+         uUow==
+X-Gm-Message-State: ANoB5pmOo+5UmXCwLa615VZT/KvMo8WUP32bHbWHg45/NQt04aBSpdyc
+        iSwxXR7/UgD8oxB9WF3F1mjk
+X-Google-Smtp-Source: AA0mqf5MMfxGvtucAaoiCKcufA3lnsdQsAgasNIMeAFqC8DNifHVxaNFhZZEDb+GN87gxeUCiAxbxw==
+X-Received: by 2002:a17:90b:358a:b0:218:c490:33f6 with SMTP id mm10-20020a17090b358a00b00218c49033f6mr17801949pjb.83.1669315498433;
+        Thu, 24 Nov 2022 10:44:58 -0800 (PST)
+Received: from thinkpad ([117.202.190.212])
+        by smtp.gmail.com with ESMTPSA id b12-20020aa7950c000000b0056c349f5c70sm1539156pfp.79.2022.11.24.10.44.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 10:44:00 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 15/15] dt-bindings: remoteproc: qcom,adsp: correct msm8996-slpi-pil clocks
-Date:   Thu, 24 Nov 2022 19:43:33 +0100
-Message-Id: <20221124184333.133911-16-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221124184333.133911-1-krzysztof.kozlowski@linaro.org>
-References: <20221124184333.133911-1-krzysztof.kozlowski@linaro.org>
+        Thu, 24 Nov 2022 10:44:57 -0800 (PST)
+Date:   Fri, 25 Nov 2022 00:14:48 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Frank Li <frank.li@nxp.com>
+Cc:     "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "imx@lists.linux.dev" <imx@lists.linux.dev>,
+        "jdmason@kudzu.us" <jdmason@kudzu.us>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "kishon@ti.com" <kishon@ti.com>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>, "kw@linux.com" <kw@linux.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "lznuaa@gmail.com" <lznuaa@gmail.com>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "ntb@lists.linux.dev" <ntb@lists.linux.dev>,
+        Peng Fan <peng.fan@nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>
+Subject: Re: [EXT] Re: [PATCH v13 2/2] PCI: endpoint: pci-epf-vntb: using
+ platform MSI as doorbell
+Message-ID: <20221124184448.GF5119@thinkpad>
+References: <20221124055036.1630573-1-Frank.Li@nxp.com>
+ <20221124055036.1630573-3-Frank.Li@nxp.com>
+ <20221124090028.GC5119@thinkpad>
+ <HE1PR0401MB2331D3964AE6ABEA4AAEFC87880F9@HE1PR0401MB2331.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <HE1PR0401MB2331D3964AE6ABEA4AAEFC87880F9@HE1PR0401MB2331.eurprd04.prod.outlook.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -79,42 +100,217 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to DTS and Linux driver, the MSM8996 SLPI PIL takes two clocks
-- xo and aggre2:
+On Thu, Nov 24, 2022 at 06:03:40PM +0000, Frank Li wrote:
+> 
+> 
+> > -----Original Message-----
+> > From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > Sent: Thursday, November 24, 2022 3:00 AM
+> > To: Frank Li <frank.li@nxp.com>
+> > Cc: lpieralisi@kernel.org; Aisheng Dong <aisheng.dong@nxp.com>;
+> > bhelgaas@google.com; devicetree@vger.kernel.org; festevam@gmail.com;
+> > imx@lists.linux.dev; jdmason@kudzu.us; kernel@pengutronix.de;
+> > kishon@ti.com; krzysztof.kozlowski+dt@linaro.org; kw@linux.com; linux-
+> > arm-kernel@lists.infradead.org; dl-linux-imx <linux-imx@nxp.com>; linux-
+> > kernel@vger.kernel.org; linux-pci@vger.kernel.org;
+> > lorenzo.pieralisi@arm.com; lznuaa@gmail.com; maz@kernel.org;
+> > ntb@lists.linux.dev; Peng Fan <peng.fan@nxp.com>; robh+dt@kernel.org;
+> > s.hauer@pengutronix.de; shawnguo@kernel.org; tglx@linutronix.de
+> > Subject: [EXT] Re: [PATCH v13 2/2] PCI: endpoint: pci-epf-vntb: using platform
+> > MSI as doorbell
+> > 
+> > Caution: EXT Email
+> > 
+> > On Thu, Nov 24, 2022 at 12:50:36AM -0500, Frank Li wrote:
+> > > ┌────────────┐   ┌───────────────
+> > ────────────────────┐   ┌─────────
+> > ───────┐
+> > > │            │   │                                   │   │                │
+> > > │            │   │ PCI Endpoint                      │   │ PCI Host       │
+> > > │            │   │                                   │   │                │
+> > > │            │◄──┤ 1.platform_msi_domain_alloc_irqs()│   │
+> > │
+> > > │            │   │                                   │   │                │
+> > > │ MSI        ├──►│ 2.write_msi_msg()                 ├──►├─BAR<n>
+> > │
+> > > │ Controller │   │   update doorbell register address│   │                │
+> > > │            │   │   for BAR                         │   │                │
+> > > │            │   │                                   │   │ 3. Write BAR<n>│
+> > > │            │◄──┼──────────────────────
+> > ─────────────┼───┤                │
+> > > │            │   │                                   │   │                │
+> > > │            ├──►│ 4.Irq Handle                      │   │                │
+> > > │            │   │                                   │   │                │
+> > > │            │   │                                   │   │                │
+> > > └────────────┘   └───────────────
+> > ────────────────────┘   └─────────
+> > ───────┘
+> > >
+> > 
+> > There are at least couple of BAR regions used in this patch but they were not
+> > mentioned in the above diagram.
+> 
+> This patch just affected one BAR regions.  Do you like "BAR[DB]"?
+> 
+> Do you want to me draw other BARs, which used by this function?
+> 
 
-  qcom/msm8996-oneplus3t.dtb: remoteproc@1c00000: clocks: [[20], [3, 64]] is too long
-  qcom/msm8996-oneplus3t.dtb: remoteproc@1c00000: clock-names: ['xo', 'aggre2'] is too long
+It'd be good to just mention DB BAR.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > 
+> > The subject should be:
+> > 
+> > "PCI: endpoint: pci-epf-vntb: Use EP MSI controller to handle DB from host"
+> > 
+> > > Using platform MSI interrupt controller as endpoint(EP)'s doorbell.
+> > >
+> > 
+> > Above line is not needed.
+> > 
+> > > The memory assigned for BAR region by the PCI host is mapped to the
+> > 
+> > Which BAR? (BAR 1 aka. DB BAR)? There are multiple BAR regions exposed by
+> > this function driver.
+> > 
+> > > message address of platform msi interrupt controller in PCI Endpoint.
+> > 
+> > s/msi/MSI. Also, use either Endpoint or EP, pick one but not both.
+> > 
+> > > Such that, whenever the PCI host writes to the BAR region, it will
+> > > trigger an IRQ in the EP.
+> > >
+> > > Basic working follow as
+> > 
+> > "work flow is"?
+> > 
+> > > 1. EP function driver call platform_msi_domain_alloc_irqs() alloc a
+> > 
+> > pci-epf-vntb function driver calls platform_msi_domain_alloc_irqs() to
+> > allocate
+> > MSI's from the platform MSI controller.
+> > 
+> > > MSI irq from MSI controller with call back function write_msi_msg();
+> > > 2. write_msg_msg will config BAR and map to address defined in msi_msg;
+> > 
+> > The epf_ntb_write_msi_msg() passed as a callback will write the offset of the
+> > MSI controller's MSI address dedicated for each MSI to the doorbell register
+> > db_offset and also writes the MSI data to db_data register in the CTRL BAR
+> > region.
+> > 
+> > > 3. Host side trigger an IRQ at Endpoint by write to BAR region.
+> > >
+> > 
+> > Finally, the host can trigger doorbell by reading the offset of the doorbell
+> > from db_offset register and writing the data read from db_data register in
+> > CTRL
+> > BAR region to the computed address in the DB BAR region.
+> > 
+> > > Add MSI doorbell support for pci-epf-vntb. Query if system has an MSI
+> > > controller. Set up doorbell address according to struct msi_msg.
+> > >
+> > > So PCI host can write this doorbell address to trigger EP side's IRQ.
+> > >
+> > > If no MSI controller exists, fall back to software polling.
+> > >
+> > 
+> > "Add doorbell support to pci-epf-vntb function driver making use of the
+> > platform
+> > MSI controller. If the MSI controller is not available, fallback to the polling
+> > method."
+> > 
+> > Also, please move this paragraph to the beginning of the description.
+> > 
+> > > Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> > > ---
+> > >  drivers/pci/endpoint/functions/pci-epf-vntb.c | 146 +++++++++++++++---
+> > >  1 file changed, 125 insertions(+), 21 deletions(-)
+> > >
+> > > diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c
+> > b/drivers/pci/endpoint/functions/pci-epf-vntb.c
+> > > index 0d744975f815..f770a068e58c 100644
+> > > --- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
+> > > +++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
+> > > @@ -44,6 +44,7 @@
+> > >  #include <linux/pci-epc.h>
+> > >  #include <linux/pci-epf.h>
+> > >  #include <linux/ntb.h>
+> > > +#include <linux/msi.h>
+> > >
+> > >  static struct workqueue_struct *kpcintb_workqueue;
+> > >
+> > > @@ -137,11 +138,14 @@ struct epf_ntb {
+> > >       struct epf_ntb_ctrl *reg;
+> > >
+> > >       u32 *epf_db;
+> > > +     phys_addr_t epf_db_phys;
+> > >
+> > >       phys_addr_t vpci_mw_phy[MAX_MW];
+> > >       void __iomem *vpci_mw_addr[MAX_MW];
+> > >
+> > >       struct delayed_work cmd_handler;
+> > > +
+> > > +     int msi_virqbase;
+> > >  };
+> > 
+> > You should add kernel doc comments for this struct in a separate patch. It
+> > will
+> > help in understanding the driver better.
+> > 
+> > >
+> > >  #define to_epf_ntb(epf_group) container_of((epf_group), struct epf_ntb,
+> > group)
+> > > @@ -256,11 +260,13 @@ static void epf_ntb_cmd_handler(struct
+> > work_struct *work)
+> > >
+> > >       ntb = container_of(work, struct epf_ntb, cmd_handler.work);
+> > >
+> > > -     for (i = 1; i < ntb->db_count; i++) {
+> > > -             if (ntb->epf_db[i]) {
+> > > -                     ntb->db |= 1 << (i - 1);
+> > > -                     ntb_db_event(&ntb->ntb, i);
+> > > -                     ntb->epf_db[i] = 0;
+> > 
+> > A comment here stating that polling is implemented would be better.
+> > 
+> > > +     if (!ntb->epf_db_phys) {
+> > > +             for (i = 1; i < ntb->db_count; i++) {
+> > > +                     if (ntb->epf_db[i]) {
+> > > +                             ntb->db |= 1 << (i - 1);
+> > > +                             ntb_db_event(&ntb->ntb, i);
+> > > +                             ntb->epf_db[i] = 0;
+> > > +                     }
+> > >               }
+> > >       }
+> > >
+> > > @@ -518,6 +524,28 @@ static int epf_ntb_configure_interrupt(struct
+> > epf_ntb *ntb)
+> > >       return 0;
+> > >  }
+> > >
+> > > +static int epf_ntb_db_size(struct epf_ntb *ntb)
+> > > +{
+> > > +     const struct pci_epc_features *epc_features;
+> > > +     size_t size = sizeof(u32) * ntb->db_count;
+> > > +     u32 align;
+> > > +
+> > > +     epc_features = pci_epc_get_features(ntb->epf->epc,
+> > > +                                         ntb->epf->func_no,
+> > > +                                         ntb->epf->vfunc_no);
+> > > +     align = epc_features->align;
+> > > +
+> > > +     if (size < 128)
+> > 
+> > Shouldn't this be (size > 128)?
+>  
+> This is one coming from pci-epf-ntb.c.
+> Not sure there are some EP hardware have such limitation.
+>  
 
----
+I'm not sure if that is correct though. drivers/ntb/hw/epf/ntb_hw_epf.c sets
+the upper limit to 32 (NTB_EPF_MAX_DB_COUNT + 1) DBs, in that case the size
+cannot go beyond 128.
 
-Changes since v2:
-1. New patch.
----
- Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-index 7848d1d658f4..9af2db72b337 100644
---- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-+++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-@@ -54,7 +54,6 @@ allOf:
-               - qcom,msm8226-adsp-pil
-               - qcom,msm8974-adsp-pil
-               - qcom,msm8996-adsp-pil
--              - qcom,msm8996-slpi-pil
-               - qcom,msm8998-adsp-pas
-               - qcom,sdm845-adsp-pas
-               - qcom,sdm845-cdsp-pas
-@@ -72,6 +71,7 @@ allOf:
-         compatible:
-           contains:
-             enum:
-+              - qcom,msm8996-slpi-pil
-               - qcom,msm8998-slpi-pas
-     then:
-       properties:
+Thanks,
+Mani
 -- 
-2.34.1
-
+மணிவண்ணன் சதாசிவம்
