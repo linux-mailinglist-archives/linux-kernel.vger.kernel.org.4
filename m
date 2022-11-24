@@ -2,151 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9922563782D
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 12:55:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97F5663782C
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 12:55:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbiKXLzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 06:55:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34108 "EHLO
+        id S230062AbiKXLzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 06:55:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbiKXLzt (ORCPT
+        with ESMTP id S229874AbiKXLzt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 24 Nov 2022 06:55:49 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0D6C663A;
-        Thu, 24 Nov 2022 03:55:48 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id m7-20020a05600c090700b003cf8a105d9eso1064036wmp.5;
-        Thu, 24 Nov 2022 03:55:48 -0800 (PST)
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98692C661D
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 03:55:48 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id t17so1207731pjo.3
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 03:55:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:content-disposition:mime-version:message-id:subject:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uFPDvjtCbP4Fl3gQ9OrK16yYyHn0B4VM0PaF8ZquGSE=;
-        b=T/FnsTcT2xkrA3yQ7Q2zthHnE2uoosNgSDeCjWjQkBX7Sael4MOqvmSL5UuvyvnV7z
-         ah1rVgohqfDCitHE0id8Jw8unFHfZjGV5Bd/dljfEMHnKuIBpFNjyWhU92sovQ+I3yWQ
-         WnNUD/4H6Rn0tuBOaz4v987chDB6Da8qOZVz9wd/oNsolUFLTY6u78vmf7m6UUmw79da
-         ORmHnrQdrcGbj+V5gxg+n9M8lkCaOiMuVbxG0o879IVDyHJkd8F1htwsmHvYW4wtl2Kw
-         ktFaT2SZwWCpdN/oKjfr6JsO/laMimQHBxSzGwAiLPtCN/fjQzj/T+i85VaMrWpP1jvy
-         Pf4g==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5tFoaZJ9Zngdk5YXFm9CRQu0l0Dt7f+Q0OVbqus0B9g=;
+        b=Szq1aC9Wra2IsZFqObHsGmeRI22JZDC77KB/fn/y5FDl1j/mH9t1bt2oRO2s/VsJg7
+         7++YyfrZAapEEDfLW0AwNAOxQj2JqhfS2eyYXsf83BRjBsaGqzALFQUn9U/JszeJRktf
+         4HqbJk+4e6lzOTNxBu3E14KsUMxicRA6V93jEnLg9JNNLXUcDSEIbwXmlHdBRVR0b9IJ
+         89QLi93nA9G6E7Cy9sfDxGpbYmsM/TtKM6qMLLLbwwcP7FdsCcg8PzWXqNKRVlzBaN7s
+         zesRFiiIFCpF7es4an9DB8E4QRu/X6DYVBbH4mUAbiePl2Xh9xTnkMT+Js/iC/OTZk0z
+         LILA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:content-disposition:mime-version:message-id:subject:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uFPDvjtCbP4Fl3gQ9OrK16yYyHn0B4VM0PaF8ZquGSE=;
-        b=Jb9oTydA/nyQgAWiuYzTg95WkWt3JcwoMBvLWhmbL7XQvW/5OcB1WTxM/cKeeqaTyj
-         2/RYmQXz/HA0nqgiyKkCWrIuNAx7Bsqz507ctGl37Xuk+NlwHLSk+iFFUBlrxvWeRX71
-         ZoxDnplXDDEUfTECPoNYy/2P/wEhlvfAmePq+KD8XPSjtVXIg+b6FuC5TnMMuoNyE5ca
-         9DPQsT+IQvpheLwAf4D4r2MgnQhYbsDjorabsB1keOnIOd14lBzeMEvTX6xoOu/xcwyo
-         8nwNVVpIbZKmscQDsrgJZjBfgC3iDiRhNmON55E9kKl2ue2F7mLHtmz5eJksCbFwo9s5
-         5cUA==
-X-Gm-Message-State: ANoB5pncX9h0g/8tCW8KMu+2umtLqhwfpVKrbD+gLehgntwUaq7ajGVQ
-        0wg8iojt0w/kVU5rCT72/xs=
-X-Google-Smtp-Source: AA0mqf4iTbXVexLP7EAep4whGHAwXJHtThiCt5FXGGd/CojQ6kmwtgWiR+L/juTpZyQfSB/AUKHgZw==
-X-Received: by 2002:a05:600c:288:b0:3cf:758f:161f with SMTP id 8-20020a05600c028800b003cf758f161fmr21979270wmk.54.1669290947271;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5tFoaZJ9Zngdk5YXFm9CRQu0l0Dt7f+Q0OVbqus0B9g=;
+        b=2kwd+4nvzlNxGrXc4eGU8LG7Gj3Nqn8r6NUnuYHPhcYfZ+sjXtu8WGm7LBCOmOaAm7
+         /VCOQHoth1ptrSBJBGhXb7kQpdmwZpvqxJrWGajenLpQkPM7R7DUKJYa1Mjr67r67Acw
+         sZIiad+cMFFmDHTtyFn5a2VPqXUVNlfAoblYE2Ncra9RXeShGiTGGdRMQiSTYaQFq+e4
+         t5ucyhR3qgqqNi7SWDtqLFPFmIxL3hc7C2gMA6PdjK+KNu5lYmbUDo1P8a1GtPKWmdh4
+         V3Lfqp567xbZC5E/i3B+8OPeilgy+tyMgLqk2pV3UaqDelpXk2gdiUqEii0vdoseuEt/
+         ZMAA==
+X-Gm-Message-State: ANoB5plXu9KFYe3wzG3tTQix08jNv0wCyZvnlNu9NXT+23XUD9ftoYN2
+        O11TIppePafNBnN18Zsd8wfDwQ==
+X-Google-Smtp-Source: AA0mqf5ErK/yTLbHh6wS925owcGQFojLs0Qt5kfkDM8yW/n5AlgaTkNUM7UboZPZKsKTOdXfrMbQOA==
+X-Received: by 2002:a17:902:e294:b0:17c:620f:13ac with SMTP id o20-20020a170902e29400b0017c620f13acmr16312497plc.9.1669290948065;
+        Thu, 24 Nov 2022 03:55:48 -0800 (PST)
+Received: from [10.255.190.159] ([139.177.225.236])
+        by smtp.gmail.com with ESMTPSA id ij13-20020a170902ab4d00b0018685257c0dsm1139212plb.58.2022.11.24.03.55.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Thu, 24 Nov 2022 03:55:47 -0800 (PST)
-Received: from debian ([89.238.191.199])
-        by smtp.gmail.com with ESMTPSA id l22-20020a05600c4f1600b003cffd3c3d6csm1717612wmq.12.2022.11.24.03.55.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 03:55:46 -0800 (PST)
-Date:   Thu, 24 Nov 2022 12:55:27 +0100
-From:   Richard Gobert <richardbgobert@gmail.com>
-To:     edumazet@google.com, davem@davemloft.net, yoshfuji@linux-ipv6.org,
-        dsahern@kernel.org, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 2/2] gro: change confusing use of flush variable
-Message-ID: <20221124115507.GA73719@debian>
+Message-ID: <af5c0fb7-0de7-7ca4-4dab-16f41e1d8ec6@bytedance.com>
+Date:   Thu, 24 Nov 2022 19:55:39 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.0
+Subject: Re: [PATCH v3 0/9] PCI/AER: Fix and optimize usage of status clearing
+ api
+Content-Language: en-US
+From:   Zhuo Chen <chenzhuo.1@bytedance.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     ruscur@russell.cc, oohall@gmail.com, fancer.lancer@gmail.com,
+        jdmason@kudzu.us, dave.jiang@intel.com, allenbh@gmail.com,
+        james.smart@broadcom.com, dick.kennedy@broadcom.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        bhelgaas@google.com, linuxppc-dev@lists.ozlabs.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ntb@lists.linux.dev, linux-scsi@vger.kernel.org
+References: <20220928105946.12469-1-chenzhuo.1@bytedance.com>
+ <17b88750-53c2-0653-045a-dde921e37e0c@bytedance.com>
+In-Reply-To: <17b88750-53c2-0653-045a-dde921e37e0c@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variable "flush" in tcp_gro_received is confusingly used for two different
-purposes. The first use is to keep track whether we are going to flush the SKB
-at the end of the function (the same use as in other GRO receive functions). The
-second use is just after the "found" label, where it is used to keep track
-whether we are going to skip the call to skb_gro_receive that merges the SKBs.
-This is entirely not related to the previous use, but uses the same variable.
 
-To make the code more readable, this patch moves the second use to a separate
-variable called "dont_merge".
+Ping. Gentle reminder
 
-Signed-off-by: Richard Gobert <richardbgobert@gmail.com>
----
- net/ipv4/tcp_offload.c | 23 ++++++++++++-----------
- 1 file changed, 12 insertions(+), 11 deletions(-)
 
-diff --git a/net/ipv4/tcp_offload.c b/net/ipv4/tcp_offload.c
-index f17271e5c7c5..7ca6be2f56df 100644
---- a/net/ipv4/tcp_offload.c
-+++ b/net/ipv4/tcp_offload.c
-@@ -191,6 +191,7 @@ struct sk_buff *tcp_gro_receive(struct list_head *head, struct sk_buff *skb)
- 	unsigned int hlen;
- 	unsigned int off;
- 	int flush = 1;
-+	int dont_merge;
- 	int i;
- 
- 	off = skb_gro_offset(skb);
-@@ -234,13 +235,13 @@ struct sk_buff *tcp_gro_receive(struct list_head *head, struct sk_buff *skb)
- 
- found:
- 	/* Include the IP ID check below from the inner most IP hdr */
--	flush = NAPI_GRO_CB(p)->flush;
--	flush |= (__force int)(flags & TCP_FLAG_CWR);
--	flush |= (__force int)((flags ^ tcp_flag_word(th2)) &
-+	dont_merge = NAPI_GRO_CB(p)->flush;
-+	dont_merge |= (__force int)(flags & TCP_FLAG_CWR);
-+	dont_merge |= (__force int)((flags ^ tcp_flag_word(th2)) &
- 		  ~(TCP_FLAG_CWR | TCP_FLAG_FIN | TCP_FLAG_PSH));
--	flush |= (__force int)(th->ack_seq ^ th2->ack_seq);
-+	dont_merge |= (__force int)(th->ack_seq ^ th2->ack_seq);
- 	for (i = sizeof(*th); i < thlen; i += 4)
--		flush |= *(u32 *)((u8 *)th + i) ^
-+		dont_merge |= *(u32 *)((u8 *)th + i) ^
- 			 *(u32 *)((u8 *)th2 + i);
- 
- 	/* When we receive our second frame we can made a decision on if we
-@@ -250,7 +251,7 @@ struct sk_buff *tcp_gro_receive(struct list_head *head, struct sk_buff *skb)
- 	if (NAPI_GRO_CB(p)->flush_id != 1 ||
- 	    NAPI_GRO_CB(p)->count != 1 ||
- 	    !NAPI_GRO_CB(p)->is_atomic)
--		flush |= NAPI_GRO_CB(p)->flush_id;
-+		dont_merge |= NAPI_GRO_CB(p)->flush_id;
- 	else
- 		NAPI_GRO_CB(p)->is_atomic = false;
- 
-@@ -261,16 +262,16 @@ struct sk_buff *tcp_gro_receive(struct list_head *head, struct sk_buff *skb)
- 	 * is bigger than our mss.
- 	 */
- 	if (unlikely(skb_is_gso(skb)))
--		flush |= (mss != skb_shinfo(skb)->gso_size);
-+		dont_merge |= (mss != skb_shinfo(skb)->gso_size);
- 	else
--		flush |= (len - 1) >= mss;
-+		dont_merge |= (len - 1) >= mss;
- 
--	flush |= (ntohl(th2->seq) + skb_gro_len(p)) ^ ntohl(th->seq);
-+	dont_merge |= (ntohl(th2->seq) + skb_gro_len(p)) ^ ntohl(th->seq);
- #ifdef CONFIG_TLS_DEVICE
--	flush |= p->decrypted ^ skb->decrypted;
-+	dont_merge |= p->decrypted ^ skb->decrypted;
- #endif
- 
--	if (flush || skb_gro_receive(p, skb)) {
-+	if (dont_merge || skb_gro_receive(p, skb)) {
- 		flush = 0;
- 		goto out_check_final;
- 	}
+On 11/5/22 1:20 AM, Zhuo Chen wrote:
+> Hi Bjorn, a gentle reminder.
+> 
+> Thanks and regards.
+> 
+> On 9/28/22 6:59 PM, Zhuo Chen wrote:
+>> Hello.
+>>
+>> Here comes patch v3, which contains some fixes and optimizations of
+>> aer api usage. The v1 and v2 can be found on the mailing list.
+>>
+>> v3:
+>> - Modifications to comments proposed by Sathyanarayanan. Remove
+>>    pci_aer_clear_nonfatal_status() call in NTB and improve commit log.
+>>
+>> v2:
+>> - Modifications to comments proposed by Bjorn. Split patch into more
+>>    obvious parts.
+>>
+>> Zhuo Chen (9):
+>>    PCI/AER: Add pci_aer_clear_uncorrect_error_status() to PCI core
+>>    PCI/DPC: Use pci_aer_clear_uncorrect_error_status() to clear
+>>      uncorrectable error status
+>>    NTB: Remove pci_aer_clear_nonfatal_status() call
+>>    scsi: lpfc: Change to use pci_aer_clear_uncorrect_error_status()
+>>    PCI/AER: Unexport pci_aer_clear_nonfatal_status()
+>>    PCI/AER: Move check inside pcie_clear_device_status().
+>>    PCI/AER: Use pcie_aer_is_native() to judge whether OS owns AER
+>>    PCI/ERR: Clear fatal error status when pci_channel_io_frozen
+>>    PCI/AER: Refine status clearing process with api
+>>
+>>   drivers/ntb/hw/idt/ntb_hw_idt.c |  2 --
+>>   drivers/pci/pci.c               |  7 +++--
+>>   drivers/pci/pci.h               |  2 ++
+>>   drivers/pci/pcie/aer.c          | 45 +++++++++++++++++++--------------
+>>   drivers/pci/pcie/dpc.c          |  3 +--
+>>   drivers/pci/pcie/err.c          | 15 ++++-------
+>>   drivers/pci/pcie/portdrv_core.c |  3 +--
+>>   drivers/scsi/lpfc/lpfc_attr.c   |  4 +--
+>>   include/linux/aer.h             |  4 +--
+>>   9 files changed, 44 insertions(+), 41 deletions(-)
+>>
+> 
+
 -- 
-2.36.1
-
+Zhuo Chen
