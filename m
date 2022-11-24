@@ -2,54 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE64637042
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 03:10:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C25E637044
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 03:10:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbiKXCKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 21:10:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34248 "EHLO
+        id S229555AbiKXCKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 21:10:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiKXCKT (ORCPT
+        with ESMTP id S229811AbiKXCKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 21:10:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB537A36B;
-        Wed, 23 Nov 2022 18:10:18 -0800 (PST)
+        Wed, 23 Nov 2022 21:10:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A668E2BC
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 18:10:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3A4B0B82478;
-        Thu, 24 Nov 2022 02:10:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D7EABC433D7;
-        Thu, 24 Nov 2022 02:10:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E52C61F90
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:10:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F071C4314A
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:10:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669255815;
-        bh=mgwXJoRszeN/zrBrz05Bo2C6euIBBlbKHCEqjpNAdAg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=D0QZg4kAP99SFb7dhUG3QdxvGE8nxN4cOPyNVMpRv14V2m0mMbBSOXnC/ug/O20Hy
-         zQIp4XWl3sKCND5VhoeSIEyAk2/xGsQ6NcBGOB9zQ+R+EiYaeRQkwC8e19G4vJPXP8
-         OzU1BJCjbsLk4PETDwkAlm7wRxZmX4wC1w2/rY8zE775dHoO2hKNNb9owq0Yp67KlN
-         33xO/7BdZxgu6AuYKDxpVu4G9CBfYoaPMuVEuKCUxw+/iZjV4e2HfqVq9TDbbnn7zY
-         N8dLnRzROd2lgf6w4PoCZ3ziddOqSlh6dy1cvI1zTSmMZMghIeJ6Yh5+GxfwlALf01
-         x25p3yTBME2Xw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B8473C395EE;
-        Thu, 24 Nov 2022 02:10:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1669255843;
+        bh=c9UdDpmuSX8C2v9Fvfsgma0HGHdxBqm/WGUiMAoGwYo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=VvMk2EdcB/JEOwaACLaobDK0LM6aSZsv05+QJOQVurIilX3a86ec2z7dNQvXEVAlZ
+         Q2CWCvIVwCRZWCRxKDGxp7vCelwKFVkb8Igbr1YqjI1Zwnv9a3XeMsK9OyXxpx4Yhv
+         DOa2MqTm4mN+Rv3ZDbyD4YEjApXeGzxw2tg+DJeBn0sl+u6oLQ3NuQNel+52TvGPR3
+         iidAH8+uMf4T4bWdn2pZCRaLGTaWuFBg1t6+U5pJ7/Nvi9n/18MRXySOCO/kTxIAWO
+         B91SRXLFMhLeHA0YEYhFKB+RozESS+hWpSw9xKOiWpZ/7DYOFIC4HojFmESX0FWlAm
+         rZVat8eD1zt1A==
+Received: by mail-ed1-f45.google.com with SMTP id z63so735931ede.1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 18:10:43 -0800 (PST)
+X-Gm-Message-State: ANoB5pkwDpJTjCRv8hEDnrnt/5n7O7TkXjW8ijwwwwT/HaGVK0SxR9Qn
+        N0kiZzn5RnwQMQcogzH++iQwVZnoyw5Dz7QLoBM=
+X-Google-Smtp-Source: AA0mqf7MS5mBZeSUrHoSEyV74Sek3FEghp4uaQK/VbW8jtQyx7r3Uu9BLluaul+nOfZ4ky6g9FT8jZB3FVPUTSyDoNA=
+X-Received: by 2002:a05:6402:19a:b0:460:7413:5d46 with SMTP id
+ r26-20020a056402019a00b0046074135d46mr28223123edv.47.1669255841778; Wed, 23
+ Nov 2022 18:10:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next 0/2] Add kfunc for doing pid -> task lookup
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166925581574.23700.5716179637470412822.git-patchwork-notify@kernel.org>
-Date:   Thu, 24 Nov 2022 02:10:15 +0000
-References: <20221122145300.251210-1-void@manifault.com>
-In-Reply-To: <20221122145300.251210-1-void@manifault.com>
-To:     David Vernet <void@manifault.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, yhs@fb.com,
-        song@kernel.org, sdf@google.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, jolsa@kernel.org, haoluo@google.com,
-        tj@kernel.org, kernel-team@fb.com, linux-kernel@vger.kernel.org
+References: <20221123153950.2911981-1-guoren@kernel.org> <20221123153950.2911981-2-guoren@kernel.org>
+ <Y359eOOrm/lpDHjt@spud>
+In-Reply-To: <Y359eOOrm/lpDHjt@spud>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Thu, 24 Nov 2022 10:10:30 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRvSkXD+dmVGfObrKE6ZsJdQdcH1G-hRxmYsMSoMbm8vg@mail.gmail.com>
+Message-ID: <CAJF2gTRvSkXD+dmVGfObrKE6ZsJdQdcH1G-hRxmYsMSoMbm8vg@mail.gmail.com>
+Subject: Re: [PATCH V3 1/5] riscv: ftrace: Fixup panic by disabling preemption
+To:     Conor Dooley <conor@kernel.org>
+Cc:     anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        conor.dooley@microchip.com, heiko@sntech.de, rostedt@goodmis.org,
+        mhiramat@kernel.org, jolsa@redhat.com, bp@suse.de,
+        jpoimboe@kernel.org, suagrfillet@gmail.com, andy.chiu@sifive.com,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,32 +65,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Thu, Nov 24, 2022 at 4:07 AM Conor Dooley <conor@kernel.org> wrote:
+>
+> On Wed, Nov 23, 2022 at 10:39:46AM -0500, guoren@kernel.org wrote:
+> > From: Andy Chiu <andy.chiu@sifive.com>
+> >
+> > In RISCV, we must use an AUIPC + JALR pair to encode an immediate,
+> > forming a jump that jumps to an address over 4K. This may cause errors
+> > if we want to enable kernel preemption and remove dependency from
+> > patching code with stop_machine(). For example, if a task was switched
+> > out on auipc. And, if we changed the ftrace function before it was
+> > switched back, then it would jump to an address that has updated 11:0
+> > bits mixing with previous XLEN:12 part.
+> >
+> > p: patched area performed by dynamic ftrace
+> > ftrace_prologue:
+> > p|      REG_S   ra, -SZREG(sp)
+> > p|      auipc   ra, 0x? ------------> preempted
+> >                                       ...
+> >                               change ftrace function
+> >                                       ...
+> > p|      jalr    -?(ra) <------------- switched back
+> > p|      REG_L   ra, -SZREG(sp)
+> > func:
+> >       xxx
+> >       ret
+> >
+> > Fixes: fc76b8b8011 ("riscv: Using PATCHABLE_FUNCTION_ENTRY instead of MCOUNT")
+>
+> ==========
+> verify_fixes - FAILED
+>
+> Commit: be26b864dac9 ("riscv: ftrace: Fixup panic by disabling preemption")
+>         Fixes tag: Fixes: fc76b8b8011 ("riscv: Using PATCHABLE_FUNCTION_ENTRY instead of MCOUNT")
+>         Has these problem(s):
+>                 - Target SHA1 does not exist
+>
+> This should instead be:
+> Fixes: afc76b8b8011 ("riscv: Using PATCHABLE_FUNCTION_ENTRY instead of MCOUNT")
+Thank you! Sorry, I missed the first letter :P
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+>
+> Thanks,
+> Conor.
+>
 
-On Tue, 22 Nov 2022 08:52:58 -0600 you wrote:
-> A series of prior patches added support for storing struct task_struct *
-> objects as kptrs. This patch set proposes extending this with another
-> kfunc called bpf_task_from_pid() which performs a lookup of a task from
-> its pid, from the root pid namespace idr.
-> 
-> This allows BPF programs that don't have a kptr to a task, to instead
-> perform a lookup by pid. This will be useful for programs that are
-> tracking pids and want, e.g., to do a lookup to find task->comm.
-> 
-> [...]
 
-Here is the summary with links:
-  - [bpf-next,1/2] bpf: Add bpf_task_from_pid() kfunc
-    https://git.kernel.org/bpf/bpf-next/c/3f0e6f2b41d3
-  - [bpf-next,2/2] selftests/bpf: Add selftests for bpf_task_from_pid()
-    https://git.kernel.org/bpf/bpf-next/c/f471748b7fe5
-
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Best Regards
+ Guo Ren
