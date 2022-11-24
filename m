@@ -2,165 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B0B6374F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 10:19:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6853B6374FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 10:20:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbiKXJTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 04:19:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56126 "EHLO
+        id S230093AbiKXJT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 04:19:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbiKXJTe (ORCPT
+        with ESMTP id S229684AbiKXJT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 04:19:34 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B3011607F
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 01:19:33 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id ci10so929604pjb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 01:19:33 -0800 (PST)
+        Thu, 24 Nov 2022 04:19:57 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07FC1122DA
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 01:19:56 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id j16so1610525lfe.12
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 01:19:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=5MaYzrsKaOUsi6MQmV9y7yVqR3tMclv0waDqtUyim+g=;
-        b=tft3yg81KscY4rqgi3gLlrBZExjeXAYKm4lMoVl6h2a9wKoYqNTQ24JMQ3b+Yoo7HD
-         KlLRk+3fHiUZticy3xPRebIC+ScjEG/UEnBB7qX05MZwl6M8vPjqERA2rdcPeUgmczwF
-         7f1L7hMy+LrCdvNdiMiIwBxNslMFGkzYZX3bN3RGkdyE6b7vrErz8Zhz++RMHmrjD783
-         Az33vstBw4zqkVWs9mJP6dMvzXOcM7ShoWjmgMWSuFE9kYpQuhn8aOZEKsUn4n3jnTWy
-         quUXwc/Wvb1NdBsfcFjns9NK+sc4cFjHzJqFh0fZ+AdQhmU9QIszZwRGK6mZqQV0l50u
-         Otpw==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XJccgccyb+EDgilHyzIVzUT8LWA3KCS4EFgVZgSZ4m8=;
+        b=hSyzXlBj6dz9FcnrVQ1MXRdS72trSrlT7/unwCu9LrWu6Uk9YsScLFyt+TE9+69002
+         EIpOoDfQTXizwfBQfUiU+3ap9jA/S7U4PNkaPIfSmwevLcCIEDyGxb9hcvm/soYld08k
+         +ETnz9/3EwWekX9AEAsa3ppnrdhknjLDCH+VSNU/sHcuRSxAA94Mo0e//qljYbEgzWnK
+         EcY+yakAz2rHlJ9D4QsEGAuSkP6f8bzxEohvlN4dwnz8aRas1sOUFS8SOC+GyWH0MVdn
+         /j7Td/I2xrudjmHHvSJijZXqd556caVXMc4l3ZddgBCsxvDXiHHkpChz75DbHfJhzCJx
+         kCIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5MaYzrsKaOUsi6MQmV9y7yVqR3tMclv0waDqtUyim+g=;
-        b=Ys5Y30mOadgW02qv0BH0qYdIm8UrpyFOauWN3V8tdoBnCef9VYd1QoDqz3kyyOwQ0R
-         exqmQ32UUZm3ds3ATQI4zMJp46hQyoW8obxA7MjYmYhlcjtwdrDfPHjQ28EBmXr0bm8G
-         HFlmthG0xrr8NmTe8lx6IEijLMRIsbPJ2vuDytJJZvBSiuy3UN0m71oSKsg9SPD7AzpA
-         YrN9P/nokEfuMq7pltaFjJ+bcPnW0HXDr60LXzHAhNdf8tM6MUWlpKBdmjj4Ec3LjtMl
-         xPqOjfq7Kf4P4gu3q6J2rBSgONJKAyLluHQfiHeRKndtLuFjPcBNN3ri4YsVXpM7PVK0
-         v6iA==
-X-Gm-Message-State: ANoB5plLjSy0bL4Vo8ROGUtZEqcdE8icaSsENRE+SneL3K/5Wlp3nBl8
-        CBp9p3WIRJYuJc6rLWLCBLB6
-X-Google-Smtp-Source: AA0mqf7bQu1RigIIFc6rH9iH8QZPqzGJwIPGNwOQ99KG6wgrm6TUgNaS+V9f68CDfw4mETtLc7Qzow==
-X-Received: by 2002:a17:903:258b:b0:189:1b50:f9e with SMTP id jb11-20020a170903258b00b001891b500f9emr13744776plb.74.1669281572754;
-        Thu, 24 Nov 2022 01:19:32 -0800 (PST)
-Received: from thinkpad ([59.92.97.13])
-        by smtp.gmail.com with ESMTPSA id z3-20020a626503000000b0056bee23a80bsm699118pfb.137.2022.11.24.01.19.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 01:19:31 -0800 (PST)
-Date:   Thu, 24 Nov 2022 14:49:21 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Frank Li <Frank.Li@nxp.com>
-Cc:     lpieralisi@kernel.org, aisheng.dong@nxp.com, bhelgaas@google.com,
-        devicetree@vger.kernel.org, festevam@gmail.com,
-        imx@lists.linux.dev, jdmason@kudzu.us, kernel@pengutronix.de,
-        kishon@ti.com, krzysztof.kozlowski+dt@linaro.org, kw@linux.com,
-        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        lorenzo.pieralisi@arm.com, lznuaa@gmail.com, maz@kernel.org,
-        ntb@lists.linux.dev, peng.fan@nxp.com, robh+dt@kernel.org,
-        s.hauer@pengutronix.de, shawnguo@kernel.org, tglx@linutronix.de
-Subject: Re: [PATCH v13 1/2] PCI: endpoint: pci-epf-vntb: change doorbell
- register offset calc mathod
-Message-ID: <20221124091921.GD5119@thinkpad>
-References: <20221124055036.1630573-1-Frank.Li@nxp.com>
- <20221124055036.1630573-2-Frank.Li@nxp.com>
+        bh=XJccgccyb+EDgilHyzIVzUT8LWA3KCS4EFgVZgSZ4m8=;
+        b=z7V2Apof5/lM8mwmdwL+7Pb8PP9K2hlEwwbND1nyW0HHs75oqMm6vgOeO1z5/d0QVy
+         WEWvwKuXtfHwxaavEvbdKD9WUj62s9oQGLlDuVd1uvS/y/9VT9YnDM070+dDpfiXtf+W
+         zO8ZPhqHlEzcURXAE97LFKFtVNDsklo7SfahwpNqly8FM7e/eoTiGuD05Qy6Y7HnO6g3
+         JTU18PBXXlA2iCBnuuYgNbht8rprO1L9OaT7ImrJnmF3OXbvJcSd0zgQ/BRgI7RkkDAJ
+         mbsfgF7DQKWP84CjZNNty2P/teQwegxS+rTPC0aBbvQ5277x58GPEgFyzzztv/ZtSodz
+         fPzw==
+X-Gm-Message-State: ANoB5pnsFxvGaNErjaADYAWKsftodKwwfelrrmByiitYtWdYAi6DFhWC
+        wOhzOpnkLOpJlDgTQB8Y01/Yyw==
+X-Google-Smtp-Source: AA0mqf4aV9JDNfBISW/b7TmLrMhFaWYBJYE8Sf8k5oWOic6aPYZ5a1sxNm/fL4qPU+UDMV6fRU1YDg==
+X-Received: by 2002:a05:6512:3ed:b0:4b4:f696:6dbc with SMTP id n13-20020a05651203ed00b004b4f6966dbcmr342182lfq.593.1669281594943;
+        Thu, 24 Nov 2022 01:19:54 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id u25-20020a196a19000000b00498fd423cc3sm60108lfu.295.2022.11.24.01.19.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Nov 2022 01:19:54 -0800 (PST)
+Message-ID: <2751584a-782e-2bdd-b72d-4a726e6ede8d@linaro.org>
+Date:   Thu, 24 Nov 2022 10:19:53 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221124055036.1630573-2-Frank.Li@nxp.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 2/2] arm64: dts: fsd: add sysreg device node
+Content-Language: en-US
+To:     Sriranjani P <sriranjani.p@samsung.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        devicetree@vger.kernel.org, alim.akhtar@samsung.com,
+        pankaj.dubey@samsung.com, ravi.patel@samsung.com
+Cc:     linux-kernel@vger.kernel.org
+References: <20221121091118.48628-1-sriranjani.p@samsung.com>
+ <CGME20221121090647epcas5p439dc84f0c4f435a703a1f8396a11202f@epcas5p4.samsung.com>
+ <20221121091118.48628-3-sriranjani.p@samsung.com>
+ <a98ac5d7-0c0e-110e-5405-83a09c77ceac@linaro.org>
+ <000001d8ff32$c8b78e30$5a26aa90$@samsung.com>
+ <03a26971-e54b-a8e7-c02f-ae5a8feba71a@linaro.org>
+ <001601d8ff41$231deaf0$6959c0d0$@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <001601d8ff41$231deaf0$6959c0d0$@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 12:50:35AM -0500, Frank Li wrote:
-> In drivers/ntb/hw/epf/ntb_hw_epf.c
-> ntb_epf_peer_db_set()
-> {
->    ...
->    db_offset = readl(ndev->ctrl_reg + NTB_EPF_DB_OFFSET(interrupt_num));
->    writel(db_data, ndev->db_reg + (db_entry_size * interrupt_num) +
->                db_offset);
->    ...
-> }
+On 23/11/2022 14:40, Sriranjani P wrote:
+>>
+>>>
+>>> So I can think of following two approaches:
+>>> 1: For the time being I will put this sysreg node in between
+>>> clock_peric node and clock_fysys0 node and clock_fsys1 node as per
+>>> increasing unit address. I will clean up other exynos and FSD DTSI
+>>> files and post a new patch
+>>
+>> Not sure what cleaning you have in mind.
+>>
+>>> 2: First I will clean up exynos and FSD DTSI files and then post this sysreg
+>> patch keeping it at appropriate place.
+>>
+>> What cleaning?
 > 
-> The door register offset's formular is
-> 	offset = db_entry_size * interrupt_num + db_offset[interrupt_number]
+> By cleaning I meant fixing these dtsi files to have the device nodes in the order of ascending unit address.
 
-You did not mention the DB BAR here. Without that, this calculation doesn't
-make sense.
+Such cleanup is fine.
 
-> 
-> Previous db_entry_size is 4, all db_offset is 0.
+Best regards,
+Krzysztof
 
-s/Previous/Previously
-
-> 	irq | offset
->        --------------
->          0     0
->          1     4
->          2     8
->         ...
-> 
-> Change to db_entry_size is 0 and db_offset is 0, 4, 8, ...
-> So we can get the same map value between irq and offset. This will be
-> convenience for hardware doorbell register memory map.
-> 
-
-In your irq-imx-mu-msi.c driver, the msi_address is calculated as:
-
-```
-u64 addr = msi_data->msiir_addr + 4 * data->hwirq;
-```
-
-So the MSI addresses itself are of 4 bytes width. So the offsets will be
-separated by 8 bytes like, 0, 8, 16,... and this won't match the MSI addresses
-as they are 4 bytes apart.
-
-So you want to change the offset to 0, 4, 8,... by zeroing db_entry_size,
-right?
-
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
->  drivers/pci/endpoint/functions/pci-epf-vntb.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> index 04698e7995a5..0d744975f815 100644
-> --- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> +++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> @@ -461,11 +461,11 @@ static int epf_ntb_config_spad_bar_alloc(struct epf_ntb *ntb)
->  	ctrl->num_mws = ntb->num_mws;
->  	ntb->spad_size = spad_size;
->  
-> -	ctrl->db_entry_size = sizeof(u32);
-> +	ctrl->db_entry_size = 0;
->  
->  	for (i = 0; i < ntb->db_count; i++) {
->  		ntb->reg->db_data[i] = 1 + i;
-> -		ntb->reg->db_offset[i] = 0;
-> +		ntb->reg->db_offset[i] = sizeof(u32) * i;
-
-If my above understanding is correct, then you could just reassign
-"db_entry_size" in epf_ntb_epc_msi_init().
-
-Thanks,
-Mani
-
->  	}
->  
->  	return 0;
-> -- 
-> 2.34.1
-> 
-
--- 
-மணிவண்ணன் சதாசிவம்
