@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EBCC6372FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 08:40:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E82786372FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 08:40:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbiKXHkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 02:40:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34962 "EHLO
+        id S229452AbiKXHke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 02:40:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbiKXHkX (ORCPT
+        with ESMTP id S229606AbiKXHk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 02:40:23 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB98A92B4F;
-        Wed, 23 Nov 2022 23:40:22 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id g5so738131pjd.4;
-        Wed, 23 Nov 2022 23:40:22 -0800 (PST)
+        Thu, 24 Nov 2022 02:40:28 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F241092B4F;
+        Wed, 23 Nov 2022 23:40:27 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id n17so907130pgh.9;
+        Wed, 23 Nov 2022 23:40:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=ntQsNf8zm4lWqRn9BkJdl7bMzEje8hk+raBCmuyyoyU=;
-        b=EvZ6sxVvHZ9FNiVlfhZ/0/wKev71SxwmYh95TK9nvnWUG+OMIoROivIDj8dVWhDa+x
-         VGpsJq2hDbmkutZzF6jkmMhH/klb4eTsTr9Rq5jb1Y8dFKJ1Zf6IJA7rUVwZGcpjCr9+
-         Mjd6J3ScIudfUXNm1YokAmG5qEmA/g3DNIwRIoICX7QUuhdA/FBz1XzotcWmUo3rCuu+
-         sMAugdQQv0jmujoGkCA8KHRRgs91f1Lia0SIotMECvMsUv3a1UBmXkPvqPd2y6mWvbCE
-         G6hz0E7wIrD/N+Pny8p+0BwMQo38q/ID41PUaHwCCJd9CTQWObRo8aPmWEfbvQLHAYfB
-         Q4eQ==
+        bh=7S1seOnibUlw6OdzLDbRM1IZ6rta3D5eLOPFyKSRo60=;
+        b=OikolcwKLyDm6Gm9nYajldTnbUzGDkqZ6RKM7j7kQG5cQM4Kc64p3MVfFNbshYbBER
+         uXVgUdCgSAbErevyhpOQ1DYLpnaDesR8jDA9S4q8CKW2Fj9CO2XlYjtdfeW7H2TgNb2W
+         uYvwQYYfVdpqtcIrLG5lX8vhKl2m/U6oeZydUJfRcJaaN2pa6SbbdiyXNBanC3kZYoaj
+         vzgneTCkkeUtog4t0p83zBwNF+quGxuXGNAYgSvtlghWDNFuGBbBucrKKiQY8EMGHMcd
+         b8xmpi7P6LdVe9MXivmqcFP9nbTmP6XhqJZlU9K93BALlkIflwNLTytqgyqq3hswugJk
+         tdxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=references:in-reply-to:message-id:date:subject:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ntQsNf8zm4lWqRn9BkJdl7bMzEje8hk+raBCmuyyoyU=;
-        b=sDmnQ23YB6tR7KH5Euk8tEmDRIB149wntgnlO+c9kbR8AU0VAlg9wMbMt4A+pYv45u
-         RItyul1qucVC+91YICEWr6CMHCPT5IL+Wjoz4sH+DAWTUqgepqiHqiNa5+Q+oFH7qc/i
-         6TF66hRlbEu07GxLERYA3XuZAmyfG9hX20Z0t9QaIWezgmbYpCOZFS04KEfY+4OOBnGD
-         jH91XQ2pcP0jWt70QP2S+SYVdGztqpmzs0m3tsBQznGZxmiOALhFyrwwmR4j7iviuQER
-         WNM16cEfg4w1eJejkcqJgdrA0MuDvz/POdiNXrrDKiWcaCDy79TneoMWjaYejxBHM/tU
-         i/bg==
-X-Gm-Message-State: ANoB5pnb7nrIDl2VvD07eE8+Ta7ELRS8sQnO36UHCaKFkq1+lsKDo3db
-        bHqEKLRyNET692UkFd1W2s0=
-X-Google-Smtp-Source: AA0mqf6txd8G8TMjLTc+inFFt3+nKiIE+X5oYL0KbcUpFbeHVw3oBinDWQkBU52BYlt6vJOKmAMOIQ==
-X-Received: by 2002:a17:902:ab8b:b0:176:7852:dae3 with SMTP id f11-20020a170902ab8b00b001767852dae3mr12403977plr.25.1669275622506;
-        Wed, 23 Nov 2022 23:40:22 -0800 (PST)
+        bh=7S1seOnibUlw6OdzLDbRM1IZ6rta3D5eLOPFyKSRo60=;
+        b=pv4Hx5+KM41x/TU89HE4YCFXiod1nE41NuNHAv5BuZ4GkdbmaLHMFfIFY5J+Di126l
+         JKVak/MwjdmT8BMM9Pdi45Llfk8foVNsmmtQzJsQgq2heByuzMHF5fHZNZN83vgrJjlU
+         19Yc1PZ7Sa76xcVU76zEUE5VNQGg5mgPOY6OCyqJUduFMxsAMcPPGYxSfs/ByFA3vok1
+         +qKo6pNL7GVK1DRrlECE0D+b9aS3cOVrKnjNEZ6ta/uAP45ODiqObXXF7AVTvF8xvhSh
+         p7pbsgZ7aKaJ5EIcYhXEV/jI/vFE+mbDbH82+tQXJ9m1xXfsD9V/5IfaXfMIbj2nsNv/
+         3SHw==
+X-Gm-Message-State: ANoB5pkKdrctlFo2JsVSmsSL74xqjfkzF+oEsB3AUFPU3vPD9oW+2KWv
+        sCUy8nDEwKnr3T5PT6HsIwYhCOwcFvc=
+X-Google-Smtp-Source: AA0mqf67xCuJAZiXjOWHBFYcxdW2WL1LKeI5w3+b9yO6m3a0ZfN5pMwVuzPZ1uhx5L5IkH6Hm4AX5A==
+X-Received: by 2002:aa7:92c7:0:b0:574:39dd:f162 with SMTP id k7-20020aa792c7000000b0057439ddf162mr8180973pfa.44.1669275627508;
+        Wed, 23 Nov 2022 23:40:27 -0800 (PST)
 Received: from localhost.localdomain ([123.51.145.88])
-        by smtp.gmail.com with ESMTPSA id s5-20020a632c05000000b0047781f8ac17sm503143pgs.77.2022.11.23.23.40.21
+        by smtp.gmail.com with ESMTPSA id s5-20020a632c05000000b0047781f8ac17sm503143pgs.77.2022.11.23.23.40.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 23:40:22 -0800 (PST)
+        Wed, 23 Nov 2022 23:40:27 -0800 (PST)
 From:   JaimeLiao <jaimeliao.tw@gmail.com>
 To:     broonie@kernel.org, krzysztof.kozlowski@linaro.org,
         linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     jaimeliao@mxic.com.tw, JaimeLiao <jaimeliao.tw@gmail.com>
-Subject: [PATCH v1 1/2] spi: spi-rpc-if: Add support for Octal DTR mode
-Date:   Thu, 24 Nov 2022 15:39:56 +0800
-Message-Id: <20221124073957.22471-2-jaimeliao.tw@gmail.com>
+Subject: [PATCH v1 2/2] memory: renesas-rpc-if: Add Octal DTR mode support
+Date:   Thu, 24 Nov 2022 15:39:57 +0800
+Message-Id: <20221124073957.22471-3-jaimeliao.tw@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20221124073957.22471-1-jaimeliao.tw@gmail.com>
 References: <20221124073957.22471-1-jaimeliao.tw@gmail.com>
@@ -68,68 +68,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Octal DTR mode support
+1. Support Octal DTR manual mode (Program & Erase & register)
+2. Support diramap read (enable external address space read mode)
 
 Signed-off-by: JaimeLiao <jaimeliao.tw@gmail.com>
 ---
- drivers/spi/spi-rpc-if.c | 19 ++++++++++++++++---
- 1 file changed, 16 insertions(+), 3 deletions(-)
+ drivers/memory/renesas-rpc-if.c | 56 +++++++++++++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
 
-diff --git a/drivers/spi/spi-rpc-if.c b/drivers/spi/spi-rpc-if.c
-index 24ec1c83f379..f2c365c10610 100644
---- a/drivers/spi/spi-rpc-if.c
-+++ b/drivers/spi/spi-rpc-if.c
-@@ -26,10 +26,20 @@ static void rpcif_spi_mem_prepare(struct spi_device *spi_dev,
- 	rpc_op.cmd.opcode = spi_op->cmd.opcode;
- 	rpc_op.cmd.buswidth = spi_op->cmd.buswidth;
+diff --git a/drivers/memory/renesas-rpc-if.c b/drivers/memory/renesas-rpc-if.c
+index bdf0a7f68ff2..db5019a7190e 100644
+--- a/drivers/memory/renesas-rpc-if.c
++++ b/drivers/memory/renesas-rpc-if.c
+@@ -462,6 +462,43 @@ void rpcif_prepare(struct rpcif *rpc, const struct rpcif_op *op, u64 *offs,
  
-+	if (spi_op->cmd.dtr) {
-+		rpc_op.cmd.opcode = spi_op->cmd.opcode >> 8;
-+		rpc_op.ocmd.opcode = spi_op->cmd.opcode;
-+		rpc_op.ocmd.buswidth = spi_op->cmd.buswidth;
-+		rpc_op.cmd.ddr = spi_op->cmd.dtr;
-+		rpc_op.ocmd.ddr = spi_op->cmd.dtr;
-+	}
-+
- 	if (spi_op->addr.nbytes) {
- 		rpc_op.addr.buswidth = spi_op->addr.buswidth;
- 		rpc_op.addr.nbytes = spi_op->addr.nbytes;
- 		rpc_op.addr.val = spi_op->addr.val;
-+		if (spi_op->addr.dtr)
-+			rpc_op.addr.ddr = spi_op->addr.dtr;
+ 		rpc->enable |= RPCIF_SMENR_SPIDB(rpcif_bit_size(op->data.buswidth));
  	}
++       /* Fixup in Octal DTR mode */
++	if (op->cmd.buswidth == 8 && op->cmd.ddr) {
++		rpc->bus_size = 2;
++
++		regmap_update_bits(rpc->regmap, RPCIF_PHYCNT,
++				   RPCIF_PHYCNT_OCTA(0x2) | RPCIF_PHYCNT_OCT |
++				   RPCIF_PHYCNT_PHYMEM(0x1) ,
++				   RPCIF_PHYCNT_OCTA(0x2) | RPCIF_PHYCNT_OCT |
++				   RPCIF_PHYCNT_PHYMEM(0x1));
++		regmap_update_bits(rpc->regmap, RPCIF_CMNCR, RPCIF_CMNCR_BSZ(1),
++				   RPCIF_CMNCR_BSZ(1));
++
++		regmap_update_bits(rpc->regmap, RPCIF_PHYOFFSET1,
++				   RPCIF_PHYOFFSET1_DDRTMG(3),
++				   RPCIF_PHYOFFSET1_DDRTMG(2));
++		regmap_update_bits(rpc->regmap, RPCIF_PHYOFFSET2,
++				   RPCIF_PHYOFFSET2_OCTTMG(7),
++				   RPCIF_PHYOFFSET2_OCTTMG(3));
++
++		if (op->ocmd.buswidth == 8 && RPCIF_SMENR_OCDE)
++			rpc->enable &= ~RPCIF_SMENR_OCDE;
++
++		if (op->addr.ddr)
++			rpc->enable &= ~RPCIF_SMENR_ADE(0xF) |
++					RPCIF_SMENR_ADE(0xc);
++
++		if (op->dummy.buswidth == 8)
++			rpc->dummy =
++				RPCIF_SMDMCR_DMCYC(op->dummy.ncycles / 2);
++
++		if (op->data.dir == RPCIF_DATA_IN)
++			/* Set Extenal Address space Read mode */
++			if (op->data.buswidth == 8 && op->data.ddr) {
++				regmap_update_bits(rpc->regmap, RPCIF_PHYCNT,
++					RPCIF_PHYCNT_EXDS, RPCIF_PHYCNT_EXDS);
++			}
++	}
+ }
+ EXPORT_SYMBOL(rpcif_prepare);
  
- 	if (spi_op->dummy.nbytes) {
-@@ -41,6 +51,8 @@ static void rpcif_spi_mem_prepare(struct spi_device *spi_dev,
- 	if (spi_op->data.nbytes || (offs && len)) {
- 		rpc_op.data.buswidth = spi_op->data.buswidth;
- 		rpc_op.data.nbytes = spi_op->data.nbytes;
-+		if (spi_op->data.dtr)
-+			rpc_op.data.ddr = spi_op->data.dtr;
- 		switch (spi_op->data.dir) {
- 		case SPI_MEM_DATA_IN:
- 			rpc_op.data.dir = RPCIF_DATA_IN;
-@@ -67,8 +79,8 @@ static bool rpcif_spi_mem_supports_op(struct spi_mem *mem,
- 	if (!spi_mem_default_supports_op(mem, op))
- 		return false;
+@@ -501,10 +538,24 @@ int rpcif_manual_xfer(struct rpcif *rpc)
+ 			rpc->xfer_size = nbytes;
  
--	if (op->data.buswidth > 4 || op->addr.buswidth > 4 ||
--	    op->dummy.buswidth > 4 || op->cmd.buswidth > 4 ||
-+	if (op->data.buswidth > 8 || op->addr.buswidth > 8 ||
-+	    op->dummy.buswidth > 8 || op->cmd.buswidth > 8 ||
- 	    op->addr.nbytes > 4)
- 		return false;
+ 			memcpy(data, rpc->buffer + pos, nbytes);
++			if (rpc->bus_size == 2) {
++				data[0] = (data[0] & 0x00f000f0) << 8 |
++					  (data[0] & 0xf000f000) >> 4 |
++					  (data[0] & 0x000f000f) << 4 |
++					  (data[0] & 0x0f000f00) >> 8;
++
++				data[1] = (data[1] & 0x00f000f0) << 8 |
++					  (data[1] & 0xf000f000) >> 4 |
++					  (data[1] & 0x000f000f) << 4 |
++					  (data[1] & 0x0f000f00) >> 8;
++			}
+ 			if (nbytes == 8)
+ 				regmap_write(rpc->regmap, RPCIF_SMWDR1, *p++);
+ 			regmap_write(rpc->regmap, RPCIF_SMWDR0, *p);
  
-@@ -153,7 +165,8 @@ static int rpcif_spi_probe(struct platform_device *pdev)
- 	ctlr->mem_ops = &rpcif_spi_mem_ops;
++			regmap_write(rpc->regmap, RPCIF_SMADR,
++				     rpc->smadr + pos);
++			regmap_write(rpc->regmap, RPCIF_SMENR, smenr);
+ 			regmap_write(rpc->regmap, RPCIF_SMCR, smcr);
+ 			ret = wait_msg_xfer_end(rpc);
+ 			if (ret)
+@@ -652,9 +703,14 @@ ssize_t rpcif_dirmap_read(struct rpcif *rpc, u64 offs, size_t len, void *buf)
+ 	regmap_write(rpc->regmap, RPCIF_DROPR, rpc->option);
+ 	regmap_write(rpc->regmap, RPCIF_DRENR,
+ 		     rpc->enable & ~RPCIF_SMENR_SPIDE(0xF));
++	regmap_write(rpc->regmap, RPCIF_SMENR,
++		     rpc->enable & ~RPCIF_SMENR_SPIDE(0xF));
+ 	regmap_write(rpc->regmap, RPCIF_DRDMCR, rpc->dummy);
+ 	regmap_write(rpc->regmap, RPCIF_DRDRENR, rpc->ddr);
  
- 	ctlr->bits_per_word_mask = SPI_BPW_MASK(8);
--	ctlr->mode_bits = SPI_CPOL | SPI_CPHA | SPI_TX_QUAD | SPI_RX_QUAD;
-+	ctlr->mode_bits = SPI_CPOL | SPI_CPHA | SPI_TX_QUAD | SPI_RX_QUAD |
-+			  SPI_TX_OCTAL | SPI_RX_OCTAL;
- 	ctlr->flags = SPI_CONTROLLER_HALF_DUPLEX;
- 
- 	error = rpcif_hw_init(rpc, false);
++	regmap_update_bits(rpc->regmap, RPCIF_DRENR, RPCIF_DRENR_ADE(0xF),
++			   RPCIF_DRENR_ADE(0xF));
++
+ 	if (rpc->bus_size == 2)
+ 		memcpy_fromio_readw(buf, rpc->dirmap + from, len);
+ 	else
 -- 
 2.17.1
 
