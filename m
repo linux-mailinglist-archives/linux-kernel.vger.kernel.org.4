@@ -2,135 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D93EF6376EA
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:57:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61B4A6376FB
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:58:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbiKXK5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 05:57:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47634 "EHLO
+        id S229739AbiKXK6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 05:58:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiKXK5N (ORCPT
+        with ESMTP id S229583AbiKXK6h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 05:57:13 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A814C4840B
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:57:12 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id v28so1317545pfi.12
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:57:12 -0800 (PST)
+        Thu, 24 Nov 2022 05:58:37 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2181C8481D
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:58:35 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id j196so1439536ybj.2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:58:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DvR5jjAQ32QrpwiKXRFx0nsQpDhgkCSnhCfnlCZrw8c=;
-        b=Wt6hrqGpXslJn3dEbv8BymwvP+VI2XLUb9ku4DeGKq5iPG6tvu2eeNGM2v19yYxZXK
-         2iRnR7/jW1ANAb4yTmd1xxYGCbojc9uaB4EyDb+7msZO5ciVsPX8KaEtiMImXEuB575P
-         EvK04nIJoHOWmIkM4fg5vHxRr89C0WSBB+4qsb57cIuudRRGfwtytv8DdDGufjPLRI95
-         MYHi3IHE+zkQ6tYCFbOB5HTfStJyBDWh05kT39T+0XrdQkiVodFxX0Nw/bmbWzem4FjR
-         5zpjg4uGJAn+5G8dND+4BdxAo+OC4ytYQfKYo5L2rq9w3u82tLTrrW+tMMZ/5gChi15/
-         HdZg==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=J5m6eyHzz2oRZEkKjayRaecyR0qfC3veWChX/45qfes=;
+        b=GCIqEQjFhyfcl83v0Db6+sSfKLEhtsWmPjcBa26fzAaG2Y2wfVZixl2y0UZ3eP72J7
+         LGx8rVTwMHhvUXINudqjAdK5NtEaV9dSIOlnsI7gHvNvnZvpep2kxaeF7zp/LMx9ByK3
+         pIM6UymQJ1MoGfjvEF3oiQmHB4wO4km1ql3lj75eVd9fzQdG3Ccr5CNsDUouHUhO1zMR
+         faNKS9sp4uke/r7d7IzGp/LPbsVcHode7Aq0SbiL+0ojjEKY7yK6FM3YfkjQLL3OTtso
+         9cn8Qqaw0jNnhoUtfRfnJZ7UZX1znh4s8JtZ7SzLLGy1XbsCQswxmsua+E4KRxb+LA9T
+         kLGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DvR5jjAQ32QrpwiKXRFx0nsQpDhgkCSnhCfnlCZrw8c=;
-        b=mx2yktvkvk7epw5TBZvbRRYbOi42GuwqEr8c9/S8FRIAhKhCmr4Q5rCvm+6/C/RJlv
-         7OCgOyRU/ihIq/v6WHTCCt+JkslL64ekKUc+Ur+n6QPYYWHFTwEyA5H++UvjqpiDJ3j0
-         wNblA/Tpxjl3MNQpzMRcENQu0yflo+2HvtPTbU8yD6U2pRAwZ3OOVxMMXdyPlmPI7xrE
-         SL+MFfVJpoU8I4zG/FjiIqJnOSJ6WQxWWcpoJ7WESQ8XM/PuC8RLxblZcOzu0RazPLlJ
-         Dn+2mQcCr6/4pZNSdUNJfGybyleYwbhKb/ZuYBdZqzNTfOM79tsAK7Uk2Cp25MpY3/sq
-         nv5w==
-X-Gm-Message-State: ANoB5pmmwQfMkifsBdVcTPKeuuFflZQfq/oDOQVgu4QwB8TNjZwq9gyk
-        C3l+8w1bAVvDW1xoXqP9+bs=
-X-Google-Smtp-Source: AA0mqf6D82FN1B5B23pjKABFefH7BTG3GceAoR8ZpAUG4D18G+QXjdKVYpNq9NM9NhJrNfj8+fqa6A==
-X-Received: by 2002:a62:54c2:0:b0:56b:fb4f:3d7c with SMTP id i185-20020a6254c2000000b0056bfb4f3d7cmr34951232pfb.54.1669287432162;
-        Thu, 24 Nov 2022 02:57:12 -0800 (PST)
-Received: from hyeyoo ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id c4-20020a17090a674400b002189ab866bfsm2956687pjm.5.2022.11.24.02.57.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 02:57:11 -0800 (PST)
-Date:   Thu, 24 Nov 2022 19:57:04 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-mm@kvack.org, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 -next 1/2] mm/slb: add is_kmalloc_cache() helper
- function
-Message-ID: <Y39OAFcm6svORad4@hyeyoo>
-References: <20221123123159.2325763-1-feng.tang@intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=J5m6eyHzz2oRZEkKjayRaecyR0qfC3veWChX/45qfes=;
+        b=5Zlwjs8ODpFPghed+WRGsBlbbOkEcedfx68z0DeDnh78vKizSWvVEmVsHVxu0KwuCS
+         elx+4+Ct0ESJYdZyG032ZYngbzcYh1hDCxAZs3XRemDRefQ3fP5j4qyxcgtYscOfQc8/
+         jxKUpgzD3vkIn1+bznt8wr06qSknie36E2vugNOxSIbdV5175poLYXGDpVghwGp+vK0Z
+         nCmDuDdod9Orh2TTWa0Y2HdgypD745rC0kvkyGS+YJ0LJuQ806liF27IM/QdKDn0vCQ1
+         pobPi8VNfUuaDnO+XGWXabILn5qtxiV+nwTMhoct3ZEV5PyD/NOL6rRZxV5BF6sXAkoB
+         Nu1A==
+X-Gm-Message-State: ANoB5pmnK7cf+TAcylD6viItQwQcEE6jKOrFj4N87vGcnYsVD8gbLQ8W
+        Q+QN1Qq4yINGRG1fet5AgR6OZoSG9mOTWw6ooYDnDA==
+X-Google-Smtp-Source: AA0mqf4cPx7Sj4K0bJ43/k/1zEvIHJVUzijbK9lWTUZL7Qu/PshqEmOWRPHZp77ZYr6WBbEpC9USXVGvHAY5UB2CPYM=
+X-Received: by 2002:a25:ed05:0:b0:6c4:8a9:e4d2 with SMTP id
+ k5-20020a25ed05000000b006c408a9e4d2mr31354116ybh.164.1669287514140; Thu, 24
+ Nov 2022 02:58:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221123123159.2325763-1-feng.tang@intel.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20221123084551.864610302@linuxfoundation.org>
+In-Reply-To: <20221123084551.864610302@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 24 Nov 2022 16:28:22 +0530
+Message-ID: <CA+G9fYtNrjqVQdDhJngENrwqYO1rHod0cEGZmhWBZx5F4gwBhw@mail.gmail.com>
+Subject: Re: [PATCH 4.19 000/114] 4.19.267-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 08:31:58PM +0800, Feng Tang wrote:
-> commit 6edf2576a6cc ("mm/slub: enable debugging memory wasting of
-> kmalloc") introduces 'SLAB_KMALLOC' bit specifying whether a
-> kmem_cache is a kmalloc cache for slab/slub (slob doesn't have
-> dedicated kmalloc caches).
-> 
-> Add a helper inline function for other components like kasan to
-> simplify code.
-> 
-> Signed-off-by: Feng Tang <feng.tang@intel.com>
-> ---
-> changlog:
->   
->   since v1:
->   * don't use macro for the helper (Andrew Morton)
->   * place the inline function in mm/slb.h to solve data structure
->     definition issue (Vlastimil Babka)
-> 
->  mm/slab.h | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/mm/slab.h b/mm/slab.h
-> index e3b3231af742..0d72fd62751a 100644
-> --- a/mm/slab.h
-> +++ b/mm/slab.h
-> @@ -325,6 +325,14 @@ static inline slab_flags_t kmem_cache_flags(unsigned int object_size,
->  }
->  #endif
->  
-> +static inline bool is_kmalloc_cache(struct kmem_cache *s)
-> +{
-> +#ifndef CONFIG_SLOB
-> +	return (s->flags & SLAB_KMALLOC);
-> +#else
-> +	return false;
-> +#endif
-> +}
->  
->  /* Legal flag mask for kmem_cache_create(), for various configurations */
->  #define SLAB_CORE_FLAGS (SLAB_HWCACHE_ALIGN | SLAB_CACHE_DMA | \
-> -- 
-> 2.34.1
+On Wed, 23 Nov 2022 at 14:33, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.19.267 release.
+> There are 114 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 25 Nov 2022 08:45:20 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.267-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-With Vlastimil's comment:
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Acked-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
--- 
-Thanks,
-Hyeonggon
+## Build
+* kernel: 4.19.267-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.19.y
+* git commit: f65c47c3f3362b712468c9b15657d9311e998240
+* git describe: v4.19.266-115-gf65c47c3f336
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19.266-115-gf65c47c3f336
+
+## Test Regressions (compared to v4.19.266)
+
+## Metric Regressions (compared to v4.19.266)
+
+## Test Fixes (compared to v4.19.266)
+
+## Metric Fixes (compared to v4.19.266)
+
+## Test result summary
+total: 83846, pass: 73027, fail: 1316, skip: 8899, xfail: 604
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 323 total, 318 passed, 5 failed
+* arm64: 59 total, 58 passed, 1 failed
+* i386: 29 total, 28 passed, 1 failed
+* mips: 46 total, 46 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 63 total, 63 passed, 0 failed
+* s390: 15 total, 15 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 53 total, 52 passed, 1 failed
+
+## Test suites summary
+* boot
+* fwts
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-kvm
+* kselftest-lib
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-openat2
+* kselftest-seccomp
+* kselftest-timens
+* kunit
+* kvm-unit-tests
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
