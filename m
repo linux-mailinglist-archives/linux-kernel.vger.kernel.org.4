@@ -2,74 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1833637981
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:58:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58B0A63799F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 14:02:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiKXM65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 07:58:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49576 "EHLO
+        id S230048AbiKXNCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 08:02:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbiKXM6z (ORCPT
+        with ESMTP id S230218AbiKXNCB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 07:58:55 -0500
+        Thu, 24 Nov 2022 08:02:01 -0500
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795447CB94;
-        Thu, 24 Nov 2022 04:58:54 -0800 (PST)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NHyj75XmDzRpG4;
-        Thu, 24 Nov 2022 20:58:19 +0800 (CST)
-Received: from [10.174.178.129] (10.174.178.129) by
- kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794058754A
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 05:02:00 -0800 (PST)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NHymc5ScCzHw3R;
+        Thu, 24 Nov 2022 21:01:20 +0800 (CST)
+Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 24 Nov 2022 20:58:50 +0800
-Subject: Re: [PATCH 09/11] blk-throttle: remove unnecessary check for
- validation of limit index
-To:     Tejun Heo <tj@kernel.org>
-CC:     <josef@toxicpanda.com>, <axboe@kernel.dk>,
-        <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
+ 15.1.2375.31; Thu, 24 Nov 2022 21:01:52 +0800
+Received: from ubuntu1804.huawei.com (10.67.174.61) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 24 Nov 2022 21:01:52 +0800
+From:   Yang Jihong <yangjihong1@huawei.com>
+To:     <rostedt@goodmis.org>, <mhiramat@kernel.org>,
         <linux-kernel@vger.kernel.org>
-References: <20221123060401.20392-1-shikemeng@huawei.com>
- <20221123060401.20392-10-shikemeng@huawei.com>
- <Y35nG1CguzXf0GX8@slm.duckdns.org>
-From:   Kemeng Shi <shikemeng@huawei.com>
-Message-ID: <95ff6d32-7f4e-8ae3-8c95-4ce8ff111330@huawei.com>
+CC:     <yangjihong1@huawei.com>
+Subject: [PATCH v3] tracing: Fix infinite loop in tracing_read_pipe on overflowed print_trace_line
 Date:   Thu, 24 Nov 2022 20:58:50 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.0
+Message-ID: <20221124125850.155449-1-yangjihong1@huawei.com>
+X-Mailer: git-send-email 2.30.GIT
 MIME-Version: 1.0
-In-Reply-To: <Y35nG1CguzXf0GX8@slm.duckdns.org>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.129]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500016.china.huawei.com (7.221.188.220)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.61]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+print_trace_line may overflow seq_file buffer. If the event is not
+consumed, the while loop keeps peeking this event, causing a infinite loop.
 
+Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+---
+ kernel/trace/trace.c | 22 +++++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
 
-on 11/24/2022 2:31 AM, Tejun Heo wrote:
-> On Wed, Nov 23, 2022 at 02:03:59PM +0800, Kemeng Shi wrote:
->> We always keep limit index valid as following:
->> Max limit is always valid and low limit can only be invalidated in
->> blk_throtl_update_limit_valid. Each time low limit may become invalid
->> after blk_throtl_update_limit_valid is called, we will check and make
->> sure current limit index is valid.
->>
->> It's reasonable to always keep limit index valid, so we can remove this
->> check.
-> 
-> It's not obvious to me that it's correct and I'm not sure what we're gaining
-> by removing this while risking subtle breakages.
-I will remove this patch in next version.
-
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index a7fe0e115272..55733224fa88 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -6787,7 +6787,27 @@ tracing_read_pipe(struct file *filp, char __user *ubuf,
+ 
+ 		ret = print_trace_line(iter);
+ 		if (ret == TRACE_TYPE_PARTIAL_LINE) {
+-			/* don't print partial lines */
++			/*
++			 * If one trace_line of the tracer overflows seq_file
++			 * buffer, trace_seq_to_user returns -EBUSY.
++			 * In this case, we need to consume it, otherwise,
++			 * while loop will peek this event next time,
++			 * resulting in an infinite loop.
++			 */
++			if (trace_seq_has_overflowed(&iter->seq)) {
++				/*
++				 * Here we only consider the case that one
++				 * print_trace_line() fills the entire trace_seq
++				 * in one shot, in that case, iter->seq.seq.len is zero,
++				 * we simply output a log of too long line to inform the user.
++				 */
++				iter->seq.full = 0;
++				trace_seq_puts(&iter->seq, "[LINE TOO BIG]\n");
++				trace_consume(iter);
++				break;
++			}
++
++			/* In other cases, don't print partial lines */
+ 			iter->seq.seq.len = save_len;
+ 			break;
+ 		}
 -- 
-Best wishes
-Kemeng Shi
+2.30.GIT
+
