@@ -2,143 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64FFF637D14
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 16:37:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC9B637D15
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 16:38:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiKXPhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 10:37:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50612 "EHLO
+        id S229554AbiKXPiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 10:38:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiKXPhM (ORCPT
+        with ESMTP id S229436AbiKXPiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 10:37:12 -0500
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B9481113FF6;
-        Thu, 24 Nov 2022 07:37:09 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id C667A80AF;
-        Thu, 24 Nov 2022 15:37:08 +0000 (UTC)
-Date:   Thu, 24 Nov 2022 17:37:07 +0200
-From:   Tony Lindgren <tony@atomide.com>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-serial@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] serial: core: Start managing serial controllers
- to enable runtime PM
-Message-ID: <Y3+PoxJNJm0Pe+Xm@atomide.com>
-References: <20220615062455.15490-1-tony@atomide.com>
- <Yrmfr3GfXYhclKXA@kroah.com>
- <Yrm1HaUtjTMcSIE+@atomide.com>
- <562c1505-d3bc-6422-9598-15c399e6fbba@kernel.org>
+        Thu, 24 Nov 2022 10:38:01 -0500
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551C72E9C9
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 07:38:00 -0800 (PST)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-381662c78a9so18638697b3.7
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 07:38:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=+9+t5BCEz2/cOATY8b1f1ZAF/h7b08cMGTn/gwCEHcM=;
+        b=uqy6I8rFSXZ7T+0oxJPrQrZb1rD5KZFZS0UsiTPqAst7mHOW4CYPTWaktZapM/5+nF
+         WTBUVPLyrreyASEYTmcAe18mictzVkmPWGw9uGCNKJVPo7oMu/wI3btQ4DXNFub0DZ7B
+         re3zNlPS++ZT/+EccQl5cqTRQCxHrYCgET4P1r87/AVOz/S/ebHKTIhD6AYf+I5vD/aT
+         RuSzWeuMmTyz0qFwS5PBCqWp0PVM+2DEIg3XyE5fZ0O4mic7xK2nbglBF57jVa3h0NWm
+         CnOLEjuc+D0UkMOyQjNUAHp2Q102jaImw/BWLD3cQ910Ok6oPNW41ZeNzTI267Rl83bx
+         TWqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+9+t5BCEz2/cOATY8b1f1ZAF/h7b08cMGTn/gwCEHcM=;
+        b=tS3IeLnyKMkQqc1M+xUx+HKi3AlPwHnnPrJTPLIDLB2/HU/DBOcIDyEBxnpI/Sqzxp
+         11/qsNkOUEvR10BRwR/RjWTj6bf9SB65nfQzFmzDONbkXxpETzRr52KyWaUYtLDSbTGA
+         VZ4vpy5E6iwCi10NYVuQLMhF9XKIxF5+cddTh03d3NHDTDob1HcUHW4lzou/3EBBb4L6
+         EojLDnWsHooJ/2DXemu6Y53xkHp8alcXas5Qn8mAomc12m0r5UVPasfQxb1CRIcPlXR2
+         JqeBUxjPaNqcrxIixZqfgjDg9nPf13XMFM0gMiWe1RJkteHprJHLG7005UZ3uUTKanRW
+         qx1w==
+X-Gm-Message-State: ANoB5pmWhImoc/bMQbDbE7ufMAZJS849j7xZaxkgMDfdPmEqTLLi9bHx
+        +PY2pA73lufUYXpx89kMkypOpY7UQn28w9ZVJUC0vg==
+X-Google-Smtp-Source: AA0mqf4e0pqZj2Su1ieUS51maEc7fAR4/V3WqT4wVlDMaB9yE7UkTBhoD4iH5GzzwqUaZvnrtE+BKyxQkNd54zC9AUM=
+X-Received: by 2002:a0d:db8d:0:b0:3b5:ea43:e343 with SMTP id
+ d135-20020a0ddb8d000000b003b5ea43e343mr2430329ywe.259.1669304279374; Thu, 24
+ Nov 2022 07:37:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <562c1505-d3bc-6422-9598-15c399e6fbba@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 24 Nov 2022 21:07:48 +0530
+Message-ID: <CA+G9fYtMoRLC0-9hnpw6+fb_i-6jqLNQH83Q90JqyXO7aCJwNw@mail.gmail.com>
+Subject: next: x86: clang: mm/khugepaged.c:1428:45: error: variable 'pmd' is
+ uninitialized when used here
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
+        regressions@lists.linux.dev, lkft-triage@lists.linaro.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>, vishal.moola@gmail.com,
+        Matthew Wilcox <willy@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+LKFT CI system noticed clang-15 build failures on x86_64 and i386.
 
-* Jiri Slaby <jirislaby@kernel.org> [221124 06:53]:
-> Hi,
-> 
-> I am returning to v2, as I managed to read only v3 and only now. But here
-> was already the point below.
-> 
-> On 27. 06. 22, 15:48, Tony Lindgren wrote:
-> > > > Considering the above, let's improve the serial core layer so we can
-> > > > manage the serial port controllers better. Let's register the controllers
-> > > > with the serial core layer in addition to the serial ports.
-> > > 
-> > > Why can't controllers be a device as well?
-> > 
-> > The controllers are devices already probed by the serial port drivers.
-> > What's missing is mapping the ports (as devices based on the comments
-> > above) to the controller devices. I don't think we need another struct
-> > device for the serial controller in addition to the serial port driver
-> > device and it's child port devices.
-> 
-> To be honest, I don't like the patch (even v3). We have uart_state which I
-> already hate and now we have another structure holding *some* other info
-> about a serial device (apart from uart_port). It's mess already and hard to
-> follow, esp. to newcomers.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Yup the serial code sure is hard to follow..
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
+ARCH=x86_64 SRCARCH=x86 CROSS_COMPILE=x86_64-linux-gnu-
+'HOSTCC=sccache clang' 'CC=sccache clang'
+mm/khugepaged.c:1428:45: error: variable 'pmd' is uninitialized when
+used here [-Werror,-Wuninitialized]
+        page_table_check_pte_clear_range(mm, addr, pmd);
+                                                   ^~~
+mm/khugepaged.c:1415:2: note: variable 'pmd' is declared here
+        pmd_t pmd;
+        ^
+1 error generated.
+make[3]: *** [scripts/Makefile.build:252: mm/khugepaged.o] Error 1
 
-> AFAIU, what Greg suggests would be:
-> 
-> PCI/platform/acpi/whatever struct dev
->   -> serial controller 1 struct dev
->      -> serial port 1 struct dev (tty_port instance exists for this)
->      -> serial port 2 struct dev (tty_port instance exists for this)
->      -> ...
->   -> serial controller 2 struct dev
->      -> serial port 1 struct dev (tty_port instance exists for this)
->      -> serial port 2 struct dev (tty_port instance exists for this)
->      -> ...
+steps to reproduce:
+------------------
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
+#
+# See https://docs.tuxmake.org/ for complete documentation.
+# Original tuxmake command with fragments listed below.
+# tuxmake --runtime podman --target-arch x86_64 --toolchain clang-15
+--kconfig defconfig --kconfig-add
+https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/lkft.config
+--kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/lkft-crypto.config
+--kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/distro-overrides.config
+--kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/systemd.config
+--kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/virtio.config
+--kconfig-add CONFIG_IGB=y --kconfig-add
+CONFIG_UNWINDER_FRAME_POINTER=y LLVM=1 LLVM_IAS=1
 
-Oh you want the serial controller struct device as a child of the
-hardware controller struct device. Yeah that makes sense to put it there.
 
-I was kind of thinking we want the port devices be direct children of
-the hardware struct device, but I guess there is no such need.
+Build results compare:
+https://qa-reports.linaro.org/lkft/linux-next-master-sanity/build/next-20221124/testrun/13170041/suite/build/test/clang-lkftconfig/history/
 
-> And you are objecting that mostly (or in all cases?), there will never be
-> "serial controller 2"?
+Build log link,
+https://builds.tuxbuild.com/2Hz2wymTKCJRrwkDTV5zeM4SkJ0/
 
-I'm was not aware of the need for multiple serial port controllers
-connected to a single hardware controller struct device. Is there an
-example for that somewhere?
-
-Not that multiple serial controller struct devices matters with your
-suggestion, just wondering.
-
-> But given your description, I believe you need it anyway -- side note: does
-> really the PM layer/or you need it or would you be fine with "serial port N"
-> dev children? But provided you don't have the controller, you work around it
-> by struct serial_controller. So what's actually the point of the workaround
-> instead of sticking to proper driver model? With the workaround you seem you
-> have to implement all the binding, lookup and such yourself anyway. And that
-> renders the serial even worse :P. Let's do the reverse instead.
-
-To me it seems your suggestion actually makes things easier for runtime
-PM :)
-
-We can just enable runtime PM for the serial controller struct device
-without tinkering with the parent hardware controller struct device.
-
-> The only thing I am not sure about, whether tty_port should be struct dev
-> too -- and if it should have serial port 1 as a parent. But likely so. And
-> then with pure tty (i.e. tty_driver's, not uart_driver's), it would have
-> PCI/platform/acpi/whatever as a parent directly.
-
-That seems like a separate set of patches, no? Or is there some need right
-now to have some child struct device as a direct child of the hardware
-controller struct device?
-
-> In sum, the above structure makes perfect sense to me. There has only been
-> noone to do the real work yet. And having tty_port was a hard prerequisite
-> for this to happen. And that happened long time ago. All this would need a
-> lot of work initially¹⁾, but it paid off a lot in long term.
-> 
-> ¹⁾I know what I am writing about -- I converted HID. After all, the core was
-> only 1000 lines patch (cf 85cdaf524b7d) + patches to convert all the drivers
-> incrementally (like 8c19a51591).
-
-Cool, thanks for your suggestions.
-
-Regards,
-
-Tony
+--
+Linaro LKFT
+https://lkft.linaro.org
