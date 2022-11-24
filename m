@@ -2,118 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61ED96374E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 10:14:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F6E36374E0
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 10:13:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbiKXJOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 04:14:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50840 "EHLO
+        id S229677AbiKXJNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 04:13:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbiKXJOF (ORCPT
+        with ESMTP id S229502AbiKXJNK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 04:14:05 -0500
-Received: from wedge009.net.lu.se (wedge009.net.lu.se [130.235.56.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA89A113FD4;
-        Thu, 24 Nov 2022 01:13:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; d=control.lth.se; s=edge;
-        c=relaxed/relaxed; t=1669281233; h=from:subject:to:date:message-id;
-        bh=rdM9hfr5frWjVSYLhSHzBcEzoQqV/1jhiWP1nUfsnkM=;
-        b=JnX2V072VXgpgO4U9rQNCjmGPZn/2bg0wGKL5xhCd0EAFCUgPTtHA9AmTCh9FfVNMEKbbzhyBJS
-        QZ/Tau1aTUrk9JyYcZ/2Qz6ILs7xqxaBPZDU9S9S3qZQWIqVhLEMleR6/ID1ZIjerodthnxqwOFqa
-        xOdWtta7+GHbP3M7+soQGRSHOVH2rc2MT66ZMGv28z1t7nOTySJG1OdRLa2M39iHLd2D4xQrcJLPi
-        VLLIx5KZX2busxShxTidPkOG30GXQ8scZemv52TQF6/lBfux2fUd2CN4r1Uus5HBxEBTWT3b9bKGb
-        pPw0wA2IX4Ef1/Dgpq0wq8EOwBcfBEaOaEKw==
-Received: from wexc007.uw.lu.se (130.235.59.251) by mail.lu.se
- (130.235.56.199) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P256) id 15.1.2507.13; Thu, 24
- Nov 2022 10:13:47 +0100
-Received: from [130.235.83.196] (130.235.139.100) by wexc007.uw.lu.se
- (130.235.59.251) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P521) id 15.1.2507.13; Thu, 24
- Nov 2022 10:12:10 +0100
-Message-ID: <065b8a56-9546-b2d2-695c-7d56df0eab6d@control.lth.se>
-Date:   Thu, 24 Nov 2022 10:12:10 +0100
+        Thu, 24 Nov 2022 04:13:10 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2569AA7C20
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 01:13:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=rYKETZNIw+pj0LXb2Wyi36GtM0KwamzRnevtcxyrblE=; b=BE2GJmWj8FcFlJeGphp0U+CMdU
+        Ek4OwVIY+0wgIOZFoXZ1RhRwL8uMpwUVwAfIgASOchavvWe+DyMhNb2FJJjJTj24TRJAVBAxLWkGP
+        3fOn+pXhfg+87MR7GHIKI0KrdaNvBXFHhJ7CDXIqOHLSW22Gelmi50qdFT7zSP5tcH+oF48RpODAq
+        TrRApHUGFYRCiaoMvKfn+XMe0+LuHXjXgOKd55paAr321SX7k9xkBGrhBEu7SGQ/TJPZyMCJAM34i
+        d0cbHaR4POdUO7QF86KBvc6zgCXrnLJGatP33Za+50svtNZnBRyY13a+qO7oIx1Qzj9/Yq5yziER6
+        s3UFpMbw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oy8Hl-0047dR-Jm; Thu, 24 Nov 2022 09:12:45 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 03129300202;
+        Thu, 24 Nov 2022 10:12:43 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id DA96E2B974B5C; Thu, 24 Nov 2022 10:12:43 +0100 (CET)
+Date:   Thu, 24 Nov 2022 10:12:43 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Josh Don <joshdon@google.com>
+Cc:     Aaron Lu <aaron.lu@intel.com>, Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org, Tejun Heo <tj@kernel.org>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>
+Subject: Re: [PATCH v3] sched: async unthrottling for cfs bandwidth
+Message-ID: <Y381i3/BwtW6edlS@hirez.programming.kicks-ass.net>
+References: <20221117005418.3499691-1-joshdon@google.com>
+ <Y3d+1a9AEnWaxFwq@hirez.programming.kicks-ass.net>
+ <CABk29NtSmXVCvkdpymeam7AYmXhZy2JLYLPFTdKpk5g6AN1-zg@mail.gmail.com>
+ <Y3xnUhjSb56ex9XX@ziqianlu-desk2>
+ <CABk29Ntdztkv4jT87vFgTtC99d49iUu9CcHPruh9MxDazaAW7A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: Kernel 6.0.5 breaks virtual machines that boot from nfs mounted
- qcow2 images
-Content-Language: en-US
-From:   Anders Blomdell <anders.blomdell@control.lth.se>
-To:     Chuck Lever III <chuck.lever@oracle.com>,
-        Benjamin Coddington <bcodding@redhat.com>
-CC:     Jeff Layton <jlayton@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Anna Schumaker <anna@kernel.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>
-References: <65115206-ec17-443e-8495-91661a2fd9be@control.lth.se>
- <0abaa41e-79e1-3c0c-6d1b-47d4e21f2296@control.lth.se>
- <A0F05ED3-14B0-4AE7-B4F7-82398033CA34@redhat.com>
- <90DACFB9-2854-4688-8822-936C6EEB1FD3@oracle.com>
- <d2d80dc2-2ac9-809f-635d-a8c2f2bfdb69@control.lth.se>
-In-Reply-To: <d2d80dc2-2ac9-809f-635d-a8c2f2bfdb69@control.lth.se>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [130.235.139.100]
-X-ClientProxiedBy: wexc011.uw.lu.se (130.235.59.233) To wexc007.uw.lu.se
- (130.235.59.251)
-X-CrossPremisesHeadersFilteredBySendConnector: wexc007.uw.lu.se
-X-OrganizationHeadersPreserved: wexc007.uw.lu.se
-Received-SPF: Pass (wedge009.net.lu.se: domain of
- anders.blomdell@control.lth.se designates 130.235.59.251 as permitted sender)
- receiver=wedge009.net.lu.se; client-ip=130.235.59.251; helo=wexc007.uw.lu.se;
-X-CrossPremisesHeadersFilteredBySendConnector: wedge009.net.lu.se
-X-OrganizationHeadersPreserved: wedge009.net.lu.se
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABk29Ntdztkv4jT87vFgTtC99d49iUu9CcHPruh9MxDazaAW7A@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022-11-23 18:57, Anders Blomdell wrote:
+On Tue, Nov 22, 2022 at 11:41:04AM -0800, Josh Don wrote:
+> > > +        */
+> > > +       if (local_unthrottle) {
+> > > +               rq = cpu_rq(this_cpu);
+> > > +               rq_lock_irqsave(rq, &rf);
+> >
+> > Should we add:
+> >                 if (cfs_rq_throttled(local_unthrottle))
+> >
+> > before calling into unthrottle_cfs_rq_async(local_unthrottle) to avoid a
+> > potential WARN?
+> >
+> > As for whether the local cfs_rq can be unthrottled now after rq lock is
+> > re-acquired, I suppose it can be. e.g. another user sets a new quota to
+> > this task group during the window of rq lock gets dropped in the above
+> > loop and re-acquired here IIUC.
+> >
+> > > +               unthrottle_cfs_rq_async(local_unthrottle);
+> > > +               rq_unlock_irqrestore(rq, &rf);
+> > > +       }
+> > > +
+> > >         return throttled;
+> > >  }
 > 
-> 
-> On 2022-11-23 18:51, Chuck Lever III wrote:
->>
->>> On Nov 23, 2022, at 12:49 PM, Benjamin Coddington <bcodding@redhat.com> wrote:
->>>
->>> On 23 Nov 2022, at 5:08, Anders Blomdell wrote:
->>>
->>>> Our problems turned out to be a fallout of Al Viros's splice rework, where nfsd reads with non-zero offsets and not ending
->>>> on a page boundary failed to remap the last page. I belive that this is a decent fix for that problem (tested on v6.1-rc6,
->>>> 6.0.7 and 6.0.9)
->>>>
->>>> ---- a/fs/nfsd/vfs.c
->>>> +++ b/fs/nfsd/vfs.c
->>>> @@ -873,7 +873,7 @@ nfsd_splice_actor(struct pipe_inode_info *pipe, struct pipe_buffer *buf,
->>>>         unsigned offset = buf->offset;
->>>>          page += offset / PAGE_SIZE;
->>>> -       for (int i = sd->len; i > 0; i -= PAGE_SIZE)
->>>> +       for (int i = sd->len + offset % PAGE_SIZE; i > 0; i -= PAGE_SIZE)
->>>>                 svc_rqst_replace_page(rqstp, page++);
->>>>         if (rqstp->rq_res.page_len == 0)        // first call
->>>>                 rqstp->rq_res.page_base = offset % PAGE_SIZE;
->>>
->>>
->>> Does anyone have insight into how we could possibly have caught this in testing?
->>
->> Was also wondering this. I had though fstests (via fsx) would have exercised
->> this usage scenario.
-> My guess is that one has to look very hard at qcow2 handling in qemu...
-aio_read seems to trigger the problem, but there is a lot of buffering going on that I don't understand
-(e.g even short aio_reads leads to 16384 bytes read)
+> Yes, we should add that check due to the case you described with a
+> user concurrently configuring bandwidth. And as long as we're doing
+> that, we might as well make this unthrottle_cfs_rq() instead and snip
+> the comment. Peter, would you mind adding that delta?
 
-/Anders
--- 
-Anders Blomdell                  Email: anders.blomdell@control.lth.se
-Department of Automatic Control
-Lund University                  Phone:    +46 46 222 4625
-P.O. Box 118
-SE-221 00 Lund, Sweden
+Done, should be pushed into the queue.git thing momentarily.
