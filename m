@@ -2,209 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E78D6377F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 12:50:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79EF263780A
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 12:52:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbiKXLuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 06:50:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56036 "EHLO
+        id S229940AbiKXLw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 06:52:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbiKXLt6 (ORCPT
+        with ESMTP id S229787AbiKXLwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 06:49:58 -0500
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7A5BCDD0
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 03:49:52 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id C2B395802A8;
-        Thu, 24 Nov 2022 06:49:49 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Thu, 24 Nov 2022 06:49:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1669290589; x=1669297789; bh=OHFx68nmnn
-        /ceAUAI4qgZcV6iBa2E8isOTaxL9ONytc=; b=HJiPVgLyhrcSJIoI5oHBuPCtif
-        7TkeOKloNPGFr9G7HpxETWIMqUwKFx7SL0JFIN+tCq7qTefMU73nDb1kgWY9jEvg
-        jju8MAnU/W05uYdGIOo0suZbsbnlpf6AARruwbjhh7i0zHTNROi8w9fsLR+/J+uI
-        f2k5Yn79Z5tPdt/6/Tx5DUQUAY3F5CNLACZt2EWIfOpA2BxKKAkED9sTiNGG8t9j
-        Ox5M/iBawaCECjHYxKQvyUSfQyE/k6FerKXCxUwZkCogrOqHhSOaKWZH4RLP+9tU
-        K9c2QGBt55ntYGJaWExIy1fpWtiPMjl7R3S+X29r22VUVBPgRlMssonXNFcQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1669290589; x=1669297789; bh=OHFx68nmnn/ceAUAI4qgZcV6iBa2
-        E8isOTaxL9ONytc=; b=J0uwUwXhLVqUyKTozkwlimGquvlzDQkdPFAmgu6P/Gva
-        zBEet87p11qgTrBX3XIePgLUa6o0iKWmbAijtdFm3m6jX3sFI2A+XANbsS1ziNUc
-        lB1dYIjGgsVTV4IIPiOiEDdo72Kist/8YrNKcpBaW+cALs27xmBxozD8SL6UYZNs
-        +PSczmcvdsS5ZGV6QwesmFhMwp3QdWmxb1SNwavWw6LKO74i71QmKgTebKxG2UrZ
-        bivRxY+dD9UYez5vVu3mFzjEzKc3lHRmhR9f9T8XucrUoG0/WclxpqyBYZIRslpn
-        HvOE5Y2B8QvhuF7QywZXFyxGQuKjkQUdc6NGRTprMg==
-X-ME-Sender: <xms:XFp_YxcMrWb8n-7P5fAeiUYAsgh26CSiWBsgCf3KrLVVASwV4u0iUw>
-    <xme:XFp_Y_PrtI9LCp8UWiNwOa49Qea0CFSD10inJjTBFPprJ2vvNM_wRZmpq4SL8m5tt
-    sM5WCZDIZ5sSWH-AKA>
-X-ME-Received: <xmr:XFp_Y6ggafGBm88t5XNCsk2-eoh9GC_OwW-s8w-5lBh1bq9dDqWfplLg7ibOTVoI0H_65Q4nKRdDkUOEjJ_-lxEvRwZlMZzfzdKhur7M7v13fg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrieefgdefgecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
-    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
-    gvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeg
-    udenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
-    igihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:XFp_Y69D3UxIMiHcjBhcNgGcI_vtmaXUBKR1J3I1LFHX9YAowc5Z3w>
-    <xmx:XFp_Y9vPnOgjw_XUJ0TgWbXcJMELQ1lNGpIcQBbNvNcSq2anOAWENg>
-    <xmx:XFp_Y5HeTfb_pHMpSfPaCgvSzqwRBDN3n-KJSdN2d39Ch-L8LltJ2Q>
-    <xmx:XVp_Y_vwd2w_-Jrg_wGS8bAYZv791C3i0PIK5SIB19VZ2BGQc-TwGQ>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 24 Nov 2022 06:49:47 -0500 (EST)
-Date:   Thu, 24 Nov 2022 12:49:45 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>, Chen-Yu Tsai <wens@csie.org>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Emma Anholt <emma@anholt.net>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        dri-devel@lists.freedesktop.org,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, Dom Cobley <dom@raspberrypi.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH v10 00/19] drm: Analog TV Improvements
-Message-ID: <20221124114945.oqilsc7zjth4jwso@houat>
-References: <20220728-rpi-analog-tv-properties-v10-0-256dad125326@cerno.tech>
- <Y3uQbuQotGxh+XPS@phenom.ffwll.local>
+        Thu, 24 Nov 2022 06:52:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93A620377
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 03:51:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669290682;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Upa7JOhV8Luz6o/HTdRR+MHYLEnrm6+OGyDErM/vu0g=;
+        b=KBiG2Tzc+P5XywPrOGi1RpKOgO/2juZGZ5ZjGyM/jScPAP52ulQcChBG/xnYwvxE3L9Ecn
+        u5iliIcrn7n7knLp1rSSdjUDAE9XlwawG6mELyyLu6GBOKdLdvSOLENilZ1M7eyQxCabIY
+        gmV0YQ858eia3ocYqiOQYXwiedXeUk4=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-133-jjex_hpwOzKzEgr6YfvXgA-1; Thu, 24 Nov 2022 06:51:20 -0500
+X-MC-Unique: jjex_hpwOzKzEgr6YfvXgA-1
+Received: by mail-ed1-f72.google.com with SMTP id b13-20020a056402350d00b00464175c3f1eso832464edd.11
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 03:51:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Upa7JOhV8Luz6o/HTdRR+MHYLEnrm6+OGyDErM/vu0g=;
+        b=DpmqHhqEkmN/otod7ZeIKIpa9W9Iyk5HwYMSOFIgc3W5E3uKz0/zCyZE8tFsjbAu1m
+         3mShr6slgdFOcjalIU+6hZa8FNiUWl+LgHaXxRgUZmGFyYndb5PoE2y/+nriX04XnSAa
+         AYMvbJzBWkRpJx+iEYakSq0KavGwjo+kZgfv5mTjRgazMQwXpz+y6ZVw6q+EVdSKg49P
+         q5lr9Y86BqFpXK+q8zKWTcqnX3iiCBF98Y/u/9kJ6XwSSHD7ii2pYeYEUrHgwMXEOp4S
+         wK/9HbK+yA/ELCwHL5TfhqCMQ3Fhij1h8xqXBbTDNC8IMeXpPv4RxRoYm0IjePP4TGdl
+         sZlA==
+X-Gm-Message-State: ANoB5pl9OVI1uaZeHFjXmBxxOioFejDN18LidpbVUfNNaM3k9/JUL5wF
+        /g7KLl++tMdAclnZBaJVYcqQJmdHJdxn78WAxNxc/HfwExYpLrnpHQcykR98pHnELheB28dFNLz
+        +4hUj4EnZ9BCfC6tAAl2H70yA
+X-Received: by 2002:a17:907:c208:b0:7ad:79c0:547a with SMTP id ti8-20020a170907c20800b007ad79c0547amr17271773ejc.41.1669290679388;
+        Thu, 24 Nov 2022 03:51:19 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7zp90EmFXWu2AS+2jsyvw0RuEY/wCJ10Tp+dpiidAQoL7O6kxjm7Rv5tek7hY2r2UaBlb51g==
+X-Received: by 2002:a17:907:c208:b0:7ad:79c0:547a with SMTP id ti8-20020a170907c20800b007ad79c0547amr17271757ejc.41.1669290679217;
+        Thu, 24 Nov 2022 03:51:19 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id hs32-20020a1709073ea000b007a8de84ce36sm337523ejc.206.2022.11.24.03.51.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Nov 2022 03:51:18 -0800 (PST)
+Message-ID: <51f80121-2e8c-0e8e-6f89-a7dc214207b0@redhat.com>
+Date:   Thu, 24 Nov 2022 12:51:17 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="apvrjccnplb3u7fu"
-Content-Disposition: inline
-In-Reply-To: <Y3uQbuQotGxh+XPS@phenom.ffwll.local>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v1 1/2] platform/x86: serial-multi-instantiate: Set fwnode
+ for i2c
+Content-Language: en-US, nl
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mark Gross <markgross@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        patches@opensource.cirrus.com
+References: <20221124110718.3925934-1-sbinding@opensource.cirrus.com>
+ <20221124110718.3925934-2-sbinding@opensource.cirrus.com>
+ <CAHp75VfUqkxyB7J8fbfQKCMaSa55q4zqt7btNb_n5E3-NWhQyg@mail.gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <CAHp75VfUqkxyB7J8fbfQKCMaSa55q4zqt7btNb_n5E3-NWhQyg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---apvrjccnplb3u7fu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 11/24/22 12:35, Andy Shevchenko wrote:
+> On Thu, Nov 24, 2022 at 1:07 PM Stefan Binding
+> <sbinding@opensource.cirrus.com> wrote:
+>>
+>> This allows the i2c driver to obtain the ACPI_COMPANION.
+> 
+> As far as I get how it's done in the SPI case the real fix should lie
+> among i2c_acpi_new_device_by_fwnode(), right?
 
-On Mon, Nov 21, 2022 at 03:51:26PM +0100, Daniel Vetter wrote:
-> On Thu, Nov 17, 2022 at 10:28:43AM +0100, Maxime Ripard wrote:
-> > Hi,
-> >=20
-> > Here's a series aiming at improving the command line named modes suppor=
-t,
-> > and more importantly how we deal with all the analog TV variants.
-> >=20
-> > The named modes support were initially introduced to allow to specify t=
-he
-> > analog TV mode to be used.
-> >=20
-> > However, this was causing multiple issues:
-> >=20
-> >   * The mode name parsed on the command line was passed directly to the
-> >     driver, which had to figure out which mode it was suppose to match;
-> >=20
-> >   * Figuring that out wasn't really easy, since the video=3D argument o=
-r what
-> >     the userspace might not even have a name in the first place, but
-> >     instead could have passed a mode with the same timings;
-> >=20
-> >   * The fallback to matching on the timings was mostly working as long =
-as
-> >     we were supporting one 525 lines (most likely NSTC) and one 625 lin=
-es
-> >     (PAL), but couldn't differentiate between two modes with the same
-> >     timings (NTSC vs PAL-M vs NSTC-J for example);
-> >=20
-> >   * There was also some overlap with the tv mode property registered by
-> >     drm_mode_create_tv_properties(), but named modes weren't interacting
-> >     with that property at all.
-> >=20
-> >   * Even though that property was generic, its possible values were
-> >     specific to each drivers, which made some generic support difficult.
-> >=20
-> > Thus, I chose to tackle in multiple steps:
-> >=20
-> >   * A new TV mode property was introduced, with generic values, each dr=
-iver
-> >     reporting through a bitmask what standard it supports to the usersp=
-ace;
-> >=20
-> >   * This option was added to the command line parsing code to be able to
-> >     specify it on the kernel command line, and new atomic_check and res=
-et
-> >     helpers were created to integrate properly into atomic KMS;
-> >=20
-> >   * The named mode parsing code is now creating a proper display mode f=
-or
-> >     the given named mode, and the TV standard will thus be part of the
-> >     connector state;
-> >=20
-> >   * Two drivers were converted and tested for now (vc4 and sun4i), with
-> >     some backward compatibility code to translate the old TV mode to the
-> >     new TV mode;
-> >=20
-> > Unit tests were created along the way.
-> >=20
-> > One can switch from NTSC to PAL now using (on vc4)
-> >=20
-> > modetest -M vc4  -s 53:720x480i -w 53:'TV mode':1 # NTSC
-> > modetest -M vc4  -s 53:720x576i -w 53:'TV mode':4 # PAL
-> >=20
-> > Let me know what you think,
-> > Maxime
->=20
-> Maxime asked me to drop an Ack-in-principle on this, and I'm not sure I
-> have any useful input here with my utter lack of understanding for TV
-> things (I never even had one in my entire life, that's how much I don't
-> care). But it seems to check all the design boxes around solving annoying
-> uapi/kms-config issues properly, so
->=20
-> Acked-in-principle-or-something-like-that-by: Daniel Vetter <daniel.vette=
-r@ffwll.ch>
+Eventually maybe, but not for the initial change.
 
-Thanks!
+It is complicated, making this change has side-effects
+and we want to limit those side-effects to only i2c-clients
+instantiated from serial-multi-instantiate for now, see
+my other reply to this patch.
 
-I jumped the gun a bit too fast and forgot to amend the TV property
-commit message before pushing it out.
+I do believe that we eventually want to make this change,
+to easily give drivers access to all sorts of info
+(e.g. _DSM methods) from the matching ACPI fw-node,
+but as I said it is complicated...
 
-For the record though, that property is usable through xrandr, xorg.conf
-or any equivalent compositor mechanism
+Regards,
 
-Maxime
+Hans
 
---apvrjccnplb3u7fu
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY39aWQAKCRDj7w1vZxhR
-xacgAP9NPkwQFyz0CvvFS5SzvELVnj6t9GBuTq/qrHpTLaRyaAD9GJpLyjLeg7Jy
-Z0pnBngL2vXGtvYVUCMQy5VhVkMtuAg=
-=fhxt
------END PGP SIGNATURE-----
-
---apvrjccnplb3u7fu--
