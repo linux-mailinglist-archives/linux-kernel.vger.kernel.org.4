@@ -2,40 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87EE0637BBA
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 15:48:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8A88637BBC
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 15:48:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbiKXOsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 09:48:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52340 "EHLO
+        id S229751AbiKXOsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 09:48:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiKXOs2 (ORCPT
+        with ESMTP id S229477AbiKXOs2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 24 Nov 2022 09:48:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B958D906B
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 06:48:27 -0800 (PST)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D85E0740;
+        Thu, 24 Nov 2022 06:48:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 38BCCB82839
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 14:48:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB67CC4347C;
-        Thu, 24 Nov 2022 14:48:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 724B9B8283D;
+        Thu, 24 Nov 2022 14:48:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AFE2C43148;
+        Thu, 24 Nov 2022 14:48:25 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1oyDWZ-001WrT-2p;
-        Thu, 24 Nov 2022 09:48:23 -0500
-Message-ID: <20221124144823.750570677@goodmis.org>
+        id 1oyDWa-001Wrx-03;
+        Thu, 24 Nov 2022 09:48:24 -0500
+Message-ID: <20221124144823.893546314@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Thu, 24 Nov 2022 09:47:54 -0500
+Date:   Thu, 24 Nov 2022 09:47:55 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>,
-        Beau Belgrave <beaub@linux.microsoft.com>
-Subject: [for-linus][PATCH 2/6] tracing/user_events: Fix memory leak in user_event_create()
+        stable@vger.kernel.org,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: [for-linus][PATCH 3/6] tracing/osnoise: Fix duration type
 References: <20221124144752.427194398@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,38 +49,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiu Jianfeng <xiujianfeng@huawei.com>
+From: Daniel Bristot de Oliveira <bristot@kernel.org>
 
-Before current_user_event_group(), it has allocated memory and save it
-in @name, this should freed before return error.
+The duration type is a 64 long value, not an int. This was
+causing some long noise to report wrong values.
 
-Link: https://lkml.kernel.org/r/20221115014445.158419-1-xiujianfeng@huawei.com
+Change the duration to a 64 bits value.
 
-Fixes: e5d271812e7a ("tracing/user_events: Move pages/locks into groups to prepare for namespaces")
-Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+Link: https://lkml.kernel.org/r/a93d8a8378c7973e9c609de05826533c9e977939.1668692096.git.bristot@kernel.org
+
+Cc: stable@vger.kernel.org
+Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Fixes: bce29ac9ce0b ("trace: Add osnoise tracer")
+Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Acked-by: Beau Belgrave <beaub@linux.microsoft.com>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/trace/trace_events_user.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ kernel/trace/trace_osnoise.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-index ae78c2d53c8a..539b08ae7020 100644
---- a/kernel/trace/trace_events_user.c
-+++ b/kernel/trace/trace_events_user.c
-@@ -1100,8 +1100,10 @@ static int user_event_create(const char *raw_command)
+diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
+index 78d536d3ff3d..4300c5dc4e5d 100644
+--- a/kernel/trace/trace_osnoise.c
++++ b/kernel/trace/trace_osnoise.c
+@@ -917,7 +917,7 @@ void osnoise_trace_irq_entry(int id)
+ void osnoise_trace_irq_exit(int id, const char *desc)
+ {
+ 	struct osnoise_variables *osn_var = this_cpu_osn_var();
+-	int duration;
++	s64 duration;
  
- 	group = current_user_event_group();
+ 	if (!osn_var->sampling)
+ 		return;
+@@ -1048,7 +1048,7 @@ static void trace_softirq_entry_callback(void *data, unsigned int vec_nr)
+ static void trace_softirq_exit_callback(void *data, unsigned int vec_nr)
+ {
+ 	struct osnoise_variables *osn_var = this_cpu_osn_var();
+-	int duration;
++	s64 duration;
  
--	if (!group)
-+	if (!group) {
-+		kfree(name);
- 		return -ENOENT;
-+	}
+ 	if (!osn_var->sampling)
+ 		return;
+@@ -1144,7 +1144,7 @@ thread_entry(struct osnoise_variables *osn_var, struct task_struct *t)
+ static void
+ thread_exit(struct osnoise_variables *osn_var, struct task_struct *t)
+ {
+-	int duration;
++	s64 duration;
  
- 	mutex_lock(&group->reg_mutex);
- 
+ 	if (!osn_var->sampling)
+ 		return;
 -- 
 2.35.1
 
