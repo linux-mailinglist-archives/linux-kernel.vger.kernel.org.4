@@ -2,58 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 921A2637087
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 03:38:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06C4C63708A
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 03:38:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbiKXCib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 21:38:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60754 "EHLO
+        id S229820AbiKXCio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 21:38:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiKXCi3 (ORCPT
+        with ESMTP id S229790AbiKXCik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 21:38:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91175E3D9
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 18:38:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 53174B82698
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:38:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 039B4C433C1;
-        Thu, 24 Nov 2022 02:38:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669257505;
-        bh=kqWpotENKxr+q1qoYeeXTTyZvtStzZg7ftMSFzg/1cg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=CC505dBpTLU+XRjWvIr5EjVP6+gWE8fXNlarcdQd9/Hd7lUl4qFiOhJPiMUQQOH1t
-         PXs6XFdBRS/9b2lSQIfiVD0xzhzX9KTL8QTwp6A6KH/GFEHqlChqX9B3W+tn3hDlga
-         hb9EP7P9fSn8xGYJwSNqZ3xn670a7+BHjoP655Dmf30zqG5KoCfP8eR8yaAO7CtFF2
-         9PNdixDwV2HPHlu5BLQFOlAH6utV6qInG3IA0rHIxVwOs7CccGHVHyzIZeiwKdmxK0
-         kUy2G6JyBki75C725o0/GTZlRrBS9yMfzxjdWJLqqAJSGQrfLQsKIQN5SNtNB9V0Xf
-         nfh2f9Sjl1BVg==
-Message-ID: <63c416b9-b5cc-7c7d-1dad-ef00d0512d93@kernel.org>
-Date:   Thu, 24 Nov 2022 10:38:21 +0800
+        Wed, 23 Nov 2022 21:38:40 -0500
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B8A6204C;
+        Wed, 23 Nov 2022 18:38:39 -0800 (PST)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-12c8312131fso597316fac.4;
+        Wed, 23 Nov 2022 18:38:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ienSnmYCrgek258e+ZJSHsCrXp4Z8ixedL6+majQKqI=;
+        b=MIUDvjjrffXPR3iuKDOxkwYikhKDg5EMVkSd2LyOmIlECRF9COb90JCropA6I/Nbml
+         KTJDcIoEBSVrP7SuG8vBZ6o1mngq5osfQ3SEsItaSyZEWdL6IgBGzKN5XkcswxPErtrn
+         OLM7UtV2RNxx9fz/hNx4hhQ9SIj+D2DnLheTzfUGF5feesh3OxuhPuPNd7Q/UWNyMDsq
+         VowyokzDz2oSzHQHfnrHznc3EueKREO8knnCawWhoTvSo8k6KtGMATZx2lelI+grxGQq
+         12WLTjAcdRzVw+MebaabT3B6HdueOfxptAYUwkCAkWI0yQvC9/XiLQ24BFgcbCSZoPyw
+         5qxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ienSnmYCrgek258e+ZJSHsCrXp4Z8ixedL6+majQKqI=;
+        b=LJyXMCrxlwq13u7oIiLyvplq0jhcD4YFZpEJXKylWrHI1pu84Hc1eVuNekpjtmpGTF
+         l0+x/IUQtzZjy+t9JC5HlFdSe1nsQr4MD9Hf/lm/8hfsaz2zGiN1HwmGUHOqdsHsxfiA
+         Y9Wsre6lq1CqJdJnFErah+aSlSFSHDJK4+c2lF0txTW3pTGztOQZdmPw63d4gmWCnZ32
+         jB8x5/qYDAlE/J+drCokamERUHZhtA60DTNPj6oKsPuM4ojbcMqKhSS8CzBO3Ag6DPbW
+         prx9c90CpvHTIVRwpv9e3rUupmda99uanZsB9wX5+WITKNSHZSFPtl3nt2I9VERyFjbX
+         47Kw==
+X-Gm-Message-State: ANoB5pkV2gUIChGNAwdZ+if3VDbzag/posD8+m2ZXJFQ1Tza9bVW93Of
+        RREGekG9YMN2nvAhaSzwnUM=
+X-Google-Smtp-Source: AA0mqf4jHmc41MB6MLKAyTTdfgojFkTOmYlEpcWfCkFgC7e0drwgP/fbTbE6yoyXYj7IymIDS2bcyw==
+X-Received: by 2002:a05:6870:788a:b0:13c:f9d:e75 with SMTP id hc10-20020a056870788a00b0013c0f9d0e75mr7879938oab.27.1669257518460;
+        Wed, 23 Nov 2022 18:38:38 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u2-20020a4ac982000000b004807de5c302sm4888ooq.17.2022.11.23.18.38.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 18:38:37 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 23 Nov 2022 18:38:37 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.15 000/181] 5.15.80-rc1 review
+Message-ID: <20221124023837.GF2576375@roeck-us.net>
+References: <20221123084602.707860461@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v4] f2fs: fix to enable compress for newly created file if
- extension matches
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, Sheng Yong <shengyong@oppo.com>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <f508dea8-5dc3-e29e-0d8b-4d64735817ac@kernel.org>
- <20221115160155.1037163-1-shengyong@oppo.com> <Y3WKmvpz61K9pwqO@google.com>
- <cc76bc01-b1c8-e52d-02f0-daaae81306f1@kernel.org>
- <Y36QoFTGTbAAJpdX@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <Y36QoFTGTbAAJpdX@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221123084602.707860461@linuxfoundation.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,25 +78,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/24 5:29, Jaegeuk Kim wrote:
->>> +	if (S_ISDIR(inode->i_mode))
->>> +		goto inherit_comp;
->>
->> Documentation/filesystems/f2fs.rst
->>
->> - Priority in between FS_COMPR_FL, FS_NOCOMP_FS, extensions:
->>
->>    * compress_extension=so; nocompress_extension=zip; chattr +c dir; touch
->>      dir/foo.so; touch dir/bar.zip; touch dir/baz.txt; then foo.so and baz.txt
->>      should be compresse, bar.zip should be non-compressed. chattr +c dir/bar.zip
->>      can enable compress on bar.zip.
->>
->> It looks nocompress_extension has higher priority than flag inheriting?
+On Wed, Nov 23, 2022 at 09:49:23AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.80 release.
+> There are 181 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> I think so.
+> Responses should be made by Fri, 25 Nov 2022 08:45:20 +0000.
+> Anything received after that time might be too late.
+> 
 
-Hi Sheng, Jaegeuk,
+Build results:
+	total: 159 pass: 154 fail: 5
+Failed builds:
+	arm:allmodconfig
+	mips:allmodconfig
+	powerpc:allmodconfig
+	powerpc:ppc32_allmodconfig
+	sparc64:allmodconfig
+Qemu test results:
+	total: 489 pass: 489 fail: 0
 
-Yup, I guess I misunderstand the code. :)
+As already reported, the error is:
 
-Thanks,
+Error log:
+drivers/rtc/rtc-cmos.c:1299:13: error: 'rtc_wake_setup' defined but not used [-Werror=unused-function]
+ 1299 | static void rtc_wake_setup(struct device *dev)
+
+Guenter
