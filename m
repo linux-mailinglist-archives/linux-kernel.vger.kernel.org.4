@@ -2,71 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 421A363733C
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:00:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC6DD63733E
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:00:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiKXH77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 02:59:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48740 "EHLO
+        id S229712AbiKXIAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 03:00:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiKXH7z (ORCPT
+        with ESMTP id S229697AbiKXIAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 02:59:55 -0500
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD39DC6611;
-        Wed, 23 Nov 2022 23:59:48 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R241e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VVa7Khj_1669276784;
-Received: from 30.25.224.158(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VVa7Khj_1669276784)
-          by smtp.aliyun-inc.com;
-          Thu, 24 Nov 2022 15:59:45 +0800
-Message-ID: <0d47da05-9818-e6ed-c778-b1ad90688125@linux.alibaba.com>
-Date:   Thu, 24 Nov 2022 15:59:43 +0800
+        Thu, 24 Nov 2022 03:00:20 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C5FC6064;
+        Thu, 24 Nov 2022 00:00:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BD21ECE298C;
+        Thu, 24 Nov 2022 08:00:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AB2C6C433B5;
+        Thu, 24 Nov 2022 08:00:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669276815;
+        bh=/qNBsDTaHcljjq9Gf7eJCqP+uBYQ5t64e+CpE/i6I5M=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ghBksp+74vVxbhckgvG5nHjA+GjvFODlr+2daLfaRTto6cTD9As/y6m515dAlXv8o
+         yI48mc6EeVA4AA7mE5YMzc8JfSRqI2QXkZZydrO8sLxXdOSjVySvMaCC42Dlj+HqxK
+         NH5zo1xVyZKU7CS+Z9lDZmg2Dq3kw035OWrzJkcBVJ+dwC0eKWBkiVVVvKuHCn73bd
+         hDt30jwiajc1os9lRrCFtNOs1LNlnpqbUIOVI/Jb1GOvad6DhvcUP+INIYE073mVsW
+         o/UAdJ7o4EjOcLcb7d7mRnkmDegkTsrZTiCZSYjPsj2v8iUpaijaXbpr7Yr9QaRa1A
+         IH2TQv/wJjgIA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 877CFE29F53;
+        Thu, 24 Nov 2022 08:00:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.1
-Subject: Re: [PATCH v2 2/2] fscrypt: Add SM4 XTS/CTS symmetric algorithm
- support
-Content-Language: en-US
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     "Theodore Y. Ts o" <tytso@mit.edu>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        linux-fscrypt@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
-References: <20221122070632.21910-1-tianjia.zhang@linux.alibaba.com>
- <20221122070632.21910-3-tianjia.zhang@linux.alibaba.com>
- <Y30hjJq1Vwl4k1dJ@sol.localdomain>
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-In-Reply-To: <Y30hjJq1Vwl4k1dJ@sol.localdomain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] octeontx2-pf: Add check for devm_kcalloc
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166927681554.9063.5857727937448326747.git-patchwork-notify@kernel.org>
+Date:   Thu, 24 Nov 2022 08:00:15 +0000
+References: <20221122055449.31247-1-jiasheng@iscas.ac.cn>
+In-Reply-To: <20221122055449.31247-1-jiasheng@iscas.ac.cn>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     sgoutham@marvell.com, lcherian@marvell.com, gakula@marvell.com,
+        jerinj@marvell.com, hkelam@marvell.com, sbhatta@marvell.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, richardcochran@gmail.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
+Hello:
 
-On 11/23/22 3:22 AM, Eric Biggers wrote:
-> On Tue, Nov 22, 2022 at 03:06:32PM +0800, Tianjia Zhang wrote:
->> SM4 is a symmetric algorithm widely used in China, this patch enables
->> to use SM4-XTS mode to encrypt file content, and use SM4-CBC-CTS to
->> encrypt filename.
->>
->> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+This patch was applied to netdev/net.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
+
+On Tue, 22 Nov 2022 13:54:49 +0800 you wrote:
+> As the devm_kcalloc may return NULL pointer,
+> it should be better to add check for the return
+> value, as same as the others.
 > 
-> There is still no explanation here about why you believe this algorithm is
-> useful to support in fscrypt.
+> Fixes: e8e095b3b370 ("octeontx2-af: cn10k: Bandwidth profiles config support")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 > 
-> - Eric
+> [...]
 
-Sorry, I will send a new version of patch to add these information.
+Here is the summary with links:
+  - octeontx2-pf: Add check for devm_kcalloc
+    https://git.kernel.org/netdev/net/c/cd07eadd5147
 
-Best regards,
-Tianjia
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
