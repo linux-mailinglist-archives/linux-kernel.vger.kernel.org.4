@@ -2,124 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A07637E14
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 18:12:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF232637E17
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 18:15:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbiKXRMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 12:12:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38448 "EHLO
+        id S229702AbiKXRPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 12:15:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiKXRMn (ORCPT
+        with ESMTP id S229453AbiKXRPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 12:12:43 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D6D49095
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 09:12:41 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id cl5so3321000wrb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 09:12:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=E/WsFYZRX1AeNR+4gh8Ss2sIErXOewqR12PDDkr/27w=;
-        b=vacYD0NQanWjuA3GOSjTYVZDBMGvfmF6Vd904OJHK9xcny70dfoX+cUOp7d6mejteg
-         YO9NR4cjc28uDp/GqopCEMys2azE+iluRicx11RgU4nLC/RuWcAOK/yZIrJYHYkFXgSk
-         7+Ig+KgaSF0c9G+v77P1qUvuk74Qwmq3CfMOXlVVOp8pXXnpnsZnM2cjDyyNiVC/aeug
-         yE4ZycTnCAJ1QWBWeyI63GW1BggJOXMNZG0/vb3Yn9SbI4kcj3ffT4B1rwJNWUpmmInP
-         d8E3XF9mS3Pn7qPQn+TadLMYt6w+QjQCx1Zr+S41tOU0RohrnaPpNllIqrshfs6gTZrC
-         1lEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E/WsFYZRX1AeNR+4gh8Ss2sIErXOewqR12PDDkr/27w=;
-        b=xAPSAc7UbIMnrGQCQsz1tu+2pxOFUyL9E6YzhUPutMYZSgkhbP140ZgDqYDmY1OmCA
-         ZBN5EYLxZ040VwK8n7SB0HX0VkvtMaBd6bGqaj/dgMV/Nc0oXcphg1eP2hT3PmiRHOzB
-         kOXQeF9zqD4FEX8V8tvdfW3b5LYoEPpZnIh9ljSXbjVKK90cp41//HvFKezk1+yre1sU
-         CNGr+U4H0Rj1LgcypwKvyV5sqXYsl7/IhlsH9cr0tpGTIq8/neDHKAMt7XDRf6LRZ6ps
-         cfLByj5iKdefhbYzj28MeFuEzyU1RtVk4j4pDPgB+idOnnoyX10qUBe4mipIm3Tj6Pbp
-         FxZA==
-X-Gm-Message-State: ANoB5pknXnOIkz6UAPlrtvUdbbzaR1ZTX32FYX1rjXfd+P/ICu3jFr5l
-        WmmKO+6xI2atc8AOa4qyvTPBqQ==
-X-Google-Smtp-Source: AA0mqf4EkcQPK/TpqP3c+qIXAMQp7K3u644h34Pd4fKfm/kHZIk0PLwVnfI5L6Hmb2D87tZnsQYcxQ==
-X-Received: by 2002:a05:6000:156e:b0:241:cbe9:78a9 with SMTP id 14-20020a056000156e00b00241cbe978a9mr14665805wrz.529.1669309960015;
-        Thu, 24 Nov 2022 09:12:40 -0800 (PST)
-Received: from vermeer ([145.224.92.100])
-        by smtp.gmail.com with ESMTPSA id n9-20020a5d4849000000b00228692033dcsm1750909wrs.91.2022.11.24.09.12.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 09:12:39 -0800 (PST)
-Date:   Thu, 24 Nov 2022 18:12:36 +0100
-From:   Samuel Ortiz <sameo@rivosinc.com>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     "Hongren (Zenithal) Zheng" <i@zenithal.me>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <anup@brainfault.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>, linux-mm@kvack.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        linux-man@vger.kernel.org, Jiatai He <jiatai2021@iscas.ac.cn>,
-        Heiko Stuebner <heiko@sntech.de>
-Subject: Re: [PATCH v3 2/3] RISC-V: uapi: add HWCAP for Bitmanip/Scalar Crypto
-Message-ID: <Y3+mBAV8oxphjHcJ@vermeer>
-References: <YqYz+xDsXr/tNaNu@Sun>
- <YqY0i22SdbHjB/MX@Sun>
- <Y385rS/5zDaDJ3Os@vermeer>
- <Y39AXYPFzSiBngwI@wendy>
- <Y39Lwp4rQc3Qkl0i@vermeer>
- <Y39blUaC/jHiOYCk@wendy>
+        Thu, 24 Nov 2022 12:15:02 -0500
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E960C12F423;
+        Thu, 24 Nov 2022 09:15:00 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VVbtc4t_1669310090;
+Received: from j66e01291.sqa.eu95.tbsite.net(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VVbtc4t_1669310090)
+          by smtp.aliyun-inc.com;
+          Fri, 25 Nov 2022 01:14:56 +0800
+From:   Jing Zhang <renyu.zj@linux.alibaba.com>
+To:     John Garry <john.g.garry@oracle.com>,
+        Ian Rogers <irogers@google.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Zhuo Song <zhuo.song@linux.alibaba.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>
+Subject: [PATCH v3 0/6] Add metrics for neoverse-n2
+Date:   Fri, 25 Nov 2022 01:14:42 +0800
+Message-Id: <1669310088-13482-1-git-send-email-renyu.zj@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1668411720-3581-1-git-send-email-renyu.zj@linux.alibaba.com>
+References: <1668411720-3581-1-git-send-email-renyu.zj@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y39blUaC/jHiOYCk@wendy>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=y
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 11:55:01AM +0000, Conor Dooley wrote:
-> On Thu, Nov 24, 2022 at 11:47:30AM +0100, Samuel Ortiz wrote:
-> 
-> > Patch #1 is definitely needed regardless of which interface we pick for
-> > exposing the ISA strings to userspace.
-> 
-> I took another look at #1, and I feel more confused about what
-> constitutes canonical order than I did before! If you know better than
-> I, and you probably do since you're interested in these 6 month old
-> patches, some insight would be appreciated!
+Changes since v2:
+- Correct the furmula of Branch metrics;
+- Add more PE utilization metrics;
+- Add more TLB metrics;
+- Add “ScaleUnit” for some metrics;
+- Add a newline at the end of the file;
+- Link: https://lore.kernel.org/all/1668411720-3581-1-git-send-email-renyu.zj@linux.alibaba.com/
 
-Assuming we don't go with hwcap, I dont think the order of the
-riscv_isa_ext_id enum matters that much?
+Changes since v1: 
+- Corrected formula for topdown L1 due to wrong counts for stall_slot and
+  stall_slot_frontend; 
+- Link: https://lore.kernel.org/all/1667214694-89839-1-git-send-email-renyu.zj@linux.alibaba.com/
 
-iiuc we're building the cpuinfo string from the riscv_isa_ext_data
-array, and I think the current code is incorrect:
+This series add six metricgroups for neoverse-n2, among which, the formula of
+topdown L1 is from ARM sbsa7.0 platform design document [0], D37-38.
 
-static struct riscv_isa_ext_data isa_ext_arr[] = {
-    __RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
-    __RISCV_ISA_EXT_DATA(sstc, RISCV_ISA_EXT_SSTC),
-    __RISCV_ISA_EXT_DATA(svinval, RISCV_ISA_EXT_SVINVAL),
-    __RISCV_ISA_EXT_DATA(svpbmt, RISCV_ISA_EXT_SVPBMT),
-    __RISCV_ISA_EXT_DATA(zicbom, RISCV_ISA_EXT_ZICBOM),
-    __RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
-    __RISCV_ISA_EXT_DATA("", RISCV_ISA_EXT_MAX),
-};
+However, due to the wrong count of stall_slot and stall_slot_frontend on
+neoverse-n2, the real stall_slot and real stall_slot_frontend need to
+subtract cpu_cycles,  so correct the expression of topdown metrics.
+Reference from ARM neoverse-n2 errata notice [1], D117.
 
-zicbom and zihintpause should come before supervisor level extensions.
-I'm going to send a patch for that.
+Since neoverse-n2 does not yet support topdown L2, metricgroups such as Cache,
+TLB, Branch, InstructionsMix, and PEutilization are added to help further
+analysis of performance bottlenecks.
+Reference from ARM PMU guide [2][3].
 
-And the Zb/Zk ones should come after the Zi ones, and before the
-supervisor level ones (The I category comes before the B or the K one).
-So we should check that when patch #1 is rebased.
+[0] https://documentation-service.arm.com/static/60250c7395978b529036da86?token=
+[1] https://documentation-service.arm.com/static/636a66a64e6cf12278ad89cb?token=
+[2] https://documentation-service.arm.com/static/628f8fa3dfaf015c2b76eae8?token=
+[3] https://documentation-service.arm.com/static/62cfe21e31ea212bb6627393?token=
 
-Cheers,
-Samuel.
+$./perf list
+
+...
+Metric Groups:
+
+Branch:
+  branch_miss_pred_rate
+       [The rate of branches mis-predited to the overall branches]
+  branch_mpki
+       [The rate of branches mis-predicted per kilo instructions]
+  branch_pki
+       [The rate of branches retired per kilo instructions]
+Cache:
+  l1d_cache_miss_rate
+       [The rate of L1 D-Cache misses to the overall L1 D-Cache]
+  l1d_cache_mpki
+       [The rate of L1 D-Cache misses per kilo instructions]
+...
+
+$sudo ./perf stat -M TLB false_sharing 2
+
+ Performance counter stats for '/home/yaoxing/beetest/beecases/beeusers/spe/false_sharing 2':
+
+            31,561      L2D_TLB                          #     18.8 %  l2_tlb_miss_rate      (43.23%)
+             5,944      L2D_TLB_REFILL                                                       (43.23%)
+             2,248      L1I_TLB_REFILL                   #      0.1 %  l1i_tlb_miss_rate     (43.85%)
+         2,203,195      L1I_TLB                                                              (43.85%)
+       328,647,380      L1D_TLB                          #      0.0 %  l1d_tlb_miss_rate     (44.32%)
+            26,347      L1D_TLB_REFILL                                                       (44.32%)
+           747,319      L1I_TLB                          #      0.0 %  itlb_walk_rate        (43.74%)
+               310      ITLB_WALK                                                            (43.74%)
+       839,420,454      INST_RETIRED                     #     0.00 itlb_mpki                (42.77%)
+               212      ITLB_WALK                                                            (42.77%)
+               468      DTLB_WALK                        #      0.0 %  dtlb_walk_rate        (42.28%)
+       265,405,802      L1D_TLB                                                              (42.28%)
+       790,874,367      INST_RETIRED                     #     0.00 dtlb_mpki                (42.33%)
+                23      DTLB_WALK                                                            (42.33%)
+
+       0.515904553 seconds time elapsed
+
+       1.410313000 seconds user
+       0.000000000 seconds sys
+
+
+$sudo ./perf stat -M TopDownL1 false_sharing 2
+
+ Performance counter stats for '/home/yaoxing/beetest/beecases/beeusers/spe/false_sharing 2':
+
+     4,310,905,590      cpu_cycles                       #      0.0 %  bad_speculation
+                                                  #      4.0 %  retiring              (66.87%)
+    25,009,763,735      stall_slot                                                           (66.87%)
+       855,659,327      op_spec                                                              (66.87%)
+       854,335,288      op_retired                                                           (66.87%)
+     4,330,308,058      cpu_cycles                       #     27.1 %  frontend_bound        (66.99%)
+    10,207,186,460      stall_slot_frontend                                                  (66.99%)
+     4,316,583,673      cpu_cycles                       #     69.4 %  backend_bound         (66.65%)
+    14,979,136,808      stall_slot_backend                                                   (66.65%)
+
+       0.572056818 seconds time elapsed
+
+       1.572143000 seconds user
+       0.004010000 seconds sys
+
+
+Jing Zhang (6):
+  perf vendor events arm64: Add topdown L1 metrics for neoverse-n2
+  perf vendor events arm64: Add TLB metrics for neoverse-n2
+  perf vendor events arm64: Add cache metrics for neoverse-n2
+  perf vendor events arm64: Add branch metrics for neoverse-n2
+  perf vendor events arm64: Add PE utilization metrics for neoverse-n2
+  perf vendor events arm64: Add instruction mix metrics for neoverse-n2
+
+ .../arch/arm64/arm/neoverse-n2/metrics.json        | 310 +++++++++++++++++++++
+ 1 file changed, 310 insertions(+)
+ create mode 100644 tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
+
+-- 
+1.8.3.1
 
