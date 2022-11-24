@@ -2,138 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5590637983
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:59:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3C74637988
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 14:00:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbiKXM7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 07:59:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50036 "EHLO
+        id S229913AbiKXNAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 08:00:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiKXM7Q (ORCPT
+        with ESMTP id S229497AbiKXNAB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 07:59:16 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE96F94A60
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:59:15 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id q186so1475768oia.9
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:59:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jWhjZ8Ik6udAxmU7OrnkH0fp8I0zGCvkX7BlR9Epea8=;
-        b=IC3tTQJtWUJQyjZrGL6F6TYNH5H29hlmfBUQkgCMCV/wz5PfN4ovrgjSXVW62CedRi
-         QARU0pDSP2eRrKKPXeyJVL5Iuo2p7Zgxd0GtDE4j3fmQPMr/6YYTg+O0YkBYsab8T/tQ
-         pdrDU0ljJOb85kDxDoU/GNjcYFxJO1APG9R/aaVJCCRqNw0NUld3q0P/3gDEugJqw80c
-         1zYvWHi2PK9FyJt+tN8GjidSP+kggtDWAnklLwAyHXuXhK5SarF7ki1tYcWBkMXe6zFa
-         pp+4OsdhAzd2LNEfaXIYcD5Tu5tx4Xx0y8u3fEBmG6CsIi6hg8GmIRZO5kqq6DeG7Xcy
-         FJMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jWhjZ8Ik6udAxmU7OrnkH0fp8I0zGCvkX7BlR9Epea8=;
-        b=maU+BJvoiVdAxU/Q8Xn2nHdNEYF1CAjJCujyDis5+AeofUPKZgTcxxM2LcZH2jA6Q3
-         G3N2WIVx/YvxL3uTa8UbXTeCfx7AI3SEVs2lrUOAJMh0Gm91fVZJhBw1oB2uirHo3WQC
-         yt9h4bc5up6FeaZ3HRzUUqnPE0zOMfg3RyE5xaQDUsfxhR50vXZIXVllroEkBOnB/YAO
-         a6kbJz8cFDKv2tK5z/ftqw3pLJg00ggc8kZ2YqCpa1tzNUGdzTKldzYNqWx+oPONG6JF
-         U6WbJl0eepLEnNo1cs2HBDXeEzV4yBwt51AYbEV7wcmMM8Fx4Wr5qDyA3PbhOMGIyhvv
-         Xulw==
-X-Gm-Message-State: ANoB5pkuPNM4+/IzrRt5c8lZB4si1uhjlntKkqZHZbbzaaNlZJIu3BNg
-        jqamlLzE3y3by6iMUAbc2RaS2GOmuSkJDXf5Hu/AX5peXLM=
-X-Google-Smtp-Source: AA0mqf58ktcA3pHdBUjrxW6zFt+WYodi0RAr78fTSZX+SH39xGLFckk74X32aAuTirPTsS6SUqgoUXYBSEubV3jo5Ec=
-X-Received: by 2002:a05:6808:2102:b0:359:ac8d:4227 with SMTP id
- r2-20020a056808210200b00359ac8d4227mr6186334oiw.17.1669294754893; Thu, 24 Nov
- 2022 04:59:14 -0800 (PST)
+        Thu, 24 Nov 2022 08:00:01 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0982D1E1;
+        Thu, 24 Nov 2022 05:00:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669294801; x=1700830801;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=T7DGfIQYASFIJXluenM17UH1kYkhH74aAzpWc3A8ROs=;
+  b=BoypodCG0B48NuSBHtQFMURFFgqiLb+EozhCewACVk6LmwNFKHx5mz+q
+   nJcVz++TatlymgajtTEQlflkVtm5moNN/zJOvep2xQ68ZQzLNuG6Sq0QL
+   gF32atGC3eHPRu8BQQLqI3ORXVIgeo1frZv7nAcrw1u8tn3tj5ROl2YJL
+   gZhTP0uvoqCC+zDs7iPfFKnk98sRfTlgAJjkl3pL8LlIU6Tp03LAQAS+d
+   tjfcr6r86Oqlo24YMZeAH8w7gwtvroqGaMCWjZbWuxGsFy4g12JC2knN/
+   c54pWf5X1R352x25dKVidR2RgG5dM35ikHriWmrN1zHzpWMKnzfV35ex9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="311932025"
+X-IronPort-AV: E=Sophos;i="5.96,190,1665471600"; 
+   d="scan'208";a="311932025"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2022 05:00:00 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="887367515"
+X-IronPort-AV: E=Sophos;i="5.96,190,1665471600"; 
+   d="scan'208";a="887367515"
+Received: from msharawy-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.48.147])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2022 04:59:59 -0800
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 0/6] serial: Cleanup literals
+Date:   Thu, 24 Nov 2022 14:59:42 +0200
+Message-Id: <20221124125948.23432-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220718170205.2972215-1-atishp@rivosinc.com> <20220718170205.2972215-7-atishp@rivosinc.com>
- <20221101142631.du54p4kyhlgf54cr@kamzik> <CAOnJCUJfakcoiWh4vFk5_BcTKfoSDbx+wtmh7MW4cPYog7q4BQ@mail.gmail.com>
- <20221123135842.uyw46kbybgb7unm2@kamzik> <CAOnJCUKZV+0Xts6C4QY7X+Wak0ZR_f8wPtEAtH4PEmh2-_AcWw@mail.gmail.com>
- <20221124105051.hbsavj3bgf4mvlzb@kamzik>
-In-Reply-To: <20221124105051.hbsavj3bgf4mvlzb@kamzik>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Thu, 24 Nov 2022 18:29:04 +0530
-Message-ID: <CAK9=C2XifUiOdA4cTFbQq7SNVJn+1Xup_giw4jo_z6bRdng4hQ@mail.gmail.com>
-Subject: Re: [RFC 6/9] RISC-V: KVM: Add SBI PMU extension support
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Atish Patra <atishp@atishpatra.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        linux-kernel@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>, Guo Ren <guoren@kernel.org>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Will Deacon <will@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 4:21 PM Andrew Jones <ajones@ventanamicro.com> wrote:
->
-> On Thu, Nov 24, 2022 at 02:18:26AM -0800, Atish Patra wrote:
-> > On Wed, Nov 23, 2022 at 5:58 AM Andrew Jones <ajones@ventanamicro.com> wrote:
-> > >
-> > > On Tue, Nov 22, 2022 at 03:08:34PM -0800, Atish Patra wrote:
-> ...
-> > > > Currently, ARM64 enables pmu from user space using device control APIs
-> > > > on vcpu fd.
-> > > > Are you suggesting we should do something like that ?
-> > >
-> > > Yes. Although choosing which KVM API should be used could probably be
-> > > thought-out again. x86 uses VM ioctls.
-> > >
-> >
-> > How does it handle hetergenous systems in per VM ioctls ?
->
-> I don't think it does, but neither does arm64. Afaik, the only way to run
-> KVM VMs on heterogeneous systems is to pin the VM to one set of the CPUs,
-> i.e. make sure the system it runs on is homogeneous.
->
-> I agree we shouldn't paint ourselves into a homogeneous-only corner for
-> riscv, though, so if it's possible to use VCPU APIs, then I guess we
-> should. Although, one thing to keep in mind is that if the same ioctl
-> needs to be run on each VCPU, then, when we start building VMs with
-> hundreds of VCPUs, we'll see slow VM starts.
->
-> >
-> > > >
-> > > > If PMU needs to have device control APIs (either via vcpu fd or its
-> > > > own), we can retrieve
-> > > > the hpmcounter width and count from there as well.
-> > >
-> > > Right. We need to decide how the VM/VCPU + PMU user interface should look.
-> > > A separate PMU device, like arm64 has, sounds good, but the ioctl
-> > > sequences for initialization may get more tricky.
-> > >
-> >
-> > Do we really need a per VM interface ? I was thinking we can just
-> > continue to use
-> > one reg interface for PMU as well. We probably need two of them.
-> >
-> > 1. To enable/disable SBI extension
-> >     -- The probe function will depend on this
-> > 2. PMU specific get/set
-> >     -- Number of hpmcounters
-> >     -- hpmcounter width
-> >     -- enable PMU
->
-> ONE_REG is good for registers and virtual registers, which means the
-> number of hpmcounters and the hpmcounter width are probably good
-> candidates, but I'm not sure we should use it for enable/init types of
-> purposes.
+Convert plenty of register write literals to use the proper defines. In
+most of the cases the defines already exist but a few new defines are
+added too for combined sets of flags.
 
-We are already using ONE_REG interface to enable/disable
-ISA extensions so we should follow the same pattern and have
-ONE_REG interface to enable/disable SBI extensions as well.
+Ilpo Järvinen (6):
+  serial: 8250: Use defined IER bits
+  serial: 8250: Name MSR literals
+  serial: 8250: Cleanup MCR literals
+  serial: 8250: Add IIR FIFOs enabled field properly
+  serial: 8250: Define IIR 64 byte bit & cleanup related code
+  serial: 8250_early: Convert literals to use defines
 
-Regards,
-Anup
+ drivers/tty/serial/8250/8250_early.c |  4 +--
+ drivers/tty/serial/8250/8250_port.c  | 47 ++++++++++++++--------------
+ include/linux/serial.h               | 10 ++++++
+ include/uapi/linux/serial_reg.h      |  5 +++
+ 4 files changed, 41 insertions(+), 25 deletions(-)
+
+-- 
+2.30.2
+
