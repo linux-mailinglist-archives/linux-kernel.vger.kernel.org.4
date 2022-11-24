@@ -2,112 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2053E6376C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:47:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 077E06376C1
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:47:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbiKXKrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 05:47:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37784 "EHLO
+        id S229851AbiKXKrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 05:47:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbiKXKrm (ORCPT
+        with ESMTP id S229816AbiKXKrD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 05:47:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE931647A9
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:46:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669286803;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=meOlUg5MwMVHhaGR+idYAm5TqDEXqBJj0zANbpF8wbk=;
-        b=SvswAlx1GhLqE1a0gq9TVQKkmYZkJrxG8RttmdB868AwLKR9Ih/ZFMFTTaOOCOC+rstyZV
-        /nIqlgpHIgOlTrj1nGfKHcKD9yzZQS/kFQxiFV3F9fAemCRg/vvkst5Y795hXOt5FLZL4j
-        lPBBMKkIxIhfN8ovF5aafajRp4hCkC0=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-102-fxUXaI-POM2IOd5Fs3tYwA-1; Thu, 24 Nov 2022 05:46:42 -0500
-X-MC-Unique: fxUXaI-POM2IOd5Fs3tYwA-1
-Received: by mail-wm1-f70.google.com with SMTP id p14-20020a05600c204e00b003cf4cce4da5so491184wmg.0
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:46:41 -0800 (PST)
+        Thu, 24 Nov 2022 05:47:03 -0500
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B5114F9F3
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:47:02 -0800 (PST)
+Received: by mail-ej1-f46.google.com with SMTP id bj12so3206369ejb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:47:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=meOlUg5MwMVHhaGR+idYAm5TqDEXqBJj0zANbpF8wbk=;
-        b=8RLxZ47RVvCeqA5qlXfD6jYUFcwtTEqf0JFmYYJ7MtaLmaxWrCWOQDaLFp67cQS/Oi
-         dMI9EbpmRt2KKupRorrujQSfZBP36wibdeB3Fj5bC48rBYHjKHQoXtUsVYLqsDPyO/Fi
-         DVc8+MNx6h41RNUQLT9nbpt9idmVxprjrLRQG+Fz6EmUD/ZeeXKafSRWCiuKoKgAq2O5
-         lSjcenlyYfWKDS5zthu5JXvVDiAe9dbLSvaUd6vMKepxE8gVf6yj3vCiuAFnovn1Xeki
-         OwQ9qZhp5CF2KuPjy/bAdYRoeAJyBIppzSQlPXulcMMPbmyutdBKe2FNXIqB3bwbzXJB
-         zplA==
-X-Gm-Message-State: ANoB5pl+/jcDbXWtf0wQimNkguUOVnkTMouXlTe18L/Aznlm3XCooOV6
-        K58e5yOEGZ3eQEr8RwYg+U48Nkf+BvFIVJ8tfxOK2GiWFdUv7/eOw39yPd0z025T0VmS2S+ZSq1
-        fQ27lDsshyqi2y8CWNzaqRw/m
-X-Received: by 2002:a5d:4ec7:0:b0:241:e27f:840e with SMTP id s7-20020a5d4ec7000000b00241e27f840emr7459989wrv.690.1669286801108;
-        Thu, 24 Nov 2022 02:46:41 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5pwj5K0xvKVmdTQVnmmXoBI1L5Ykv5hwXvwBuBFvXNl68vB2n20Hl/zZh/FDl0FMsQUPjmcQ==
-X-Received: by 2002:a5d:4ec7:0:b0:241:e27f:840e with SMTP id s7-20020a5d4ec7000000b00241e27f840emr7459977wrv.690.1669286800876;
-        Thu, 24 Nov 2022 02:46:40 -0800 (PST)
-Received: from [192.168.0.5] (ip-109-43-177-190.web.vodafone.de. [109.43.177.190])
-        by smtp.gmail.com with ESMTPSA id n8-20020a05600c4f8800b003cfd64b6be1sm6445455wmq.27.2022.11.24.02.46.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Nov 2022 02:46:40 -0800 (PST)
-Message-ID: <ef6d7ca6-e896-b554-6a30-05113114713d@redhat.com>
-Date:   Thu, 24 Nov 2022 11:46:38 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jOCeRbpoEibDw8trfgXnocJq/MAqJBN4CTGMZxhpixQ=;
+        b=YWEjm0ODQL33o4hiCzXihF9SPErgV2X+LRC719qWE/NEacZXgLXRqEjcsfS91O4Yb4
+         IoFB5XA1TAObzkHtcqYNsi3zlz4lwAueHbKOFcqas4TnYR2vstB8r4Z4TYI60qtNXumR
+         0vQXjiJDheXVwITKaxWgN9oPkG5gy61aYCLt7o9mGYAVOR70cC50i6p1lVNX0McfPP/+
+         PWMUnCBRwWQ/oFQ++ayoG83rZHHHfPAHST9HV1t2ee+xhAYXg7aKUYKovEfokGAPOL5u
+         2brTXuDaSUFNiN82N+/90xAFWZYszBy6+nJQVo9E38uFNWMmDHnSiSmWmzHdS/95Eu8p
+         rdpw==
+X-Gm-Message-State: ANoB5pkhUiP+qSiF1vDrlK+qpwEuh5H/iE7GcuYurdHrVSKJXvGYsS+x
+        F7l0AmKIc6oPH3wj3kzodNU=
+X-Google-Smtp-Source: AA0mqf5bLmfxHjwrpYUSwp1q5H+TjWBAR+hJPToV2Q8wyT/E0SCsJfTpz0QDg31YJ4kC1m1A0dtfaQ==
+X-Received: by 2002:a17:906:1b48:b0:78d:a136:732b with SMTP id p8-20020a1709061b4800b0078da136732bmr12033426ejg.135.1669286820516;
+        Thu, 24 Nov 2022 02:47:00 -0800 (PST)
+Received: from localhost (fwdproxy-cln-120.fbsv.net. [2a03:2880:31ff:78::face:b00c])
+        by smtp.gmail.com with ESMTPSA id o17-20020a17090637d100b007aece68483csm278722ejc.193.2022.11.24.02.46.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Nov 2022 02:46:59 -0800 (PST)
+From:   Breno Leitao <leitao@debian.org>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, jpoimboe@kernel.org,
+        peterz@infradead.org, pawan.kumar.gupta@linux.intel.com
+Cc:     x86@kernel.org, cascardo@canonical.com, leit@meta.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] x86/bugs: Explicitly clear speculative MSR bits
+Date:   Thu, 24 Nov 2022 02:46:50 -0800
+Message-Id: <20221124104650.533427-1-leitao@debian.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] KVM: s390: vsie: Fix the initialization of the epoch
- extension (epdx) field
-Content-Language: en-US
-To:     Janosch Frank <frankja@linux.ibm.com>, kvm@vger.kernel.org,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        "Collin L. Walling" <walling@linux.ibm.com>,
-        Jason J Herne <jjherne@linux.ibm.com>
-References: <20221123090833.292938-1-thuth@redhat.com>
- <4d46020f-f33a-474c-b791-be11c2ce2aa6@linux.ibm.com>
-From:   Thomas Huth <thuth@redhat.com>
-In-Reply-To: <4d46020f-f33a-474c-b791-be11c2ce2aa6@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/11/2022 11.27, Janosch Frank wrote:
-> On 11/23/22 10:08, Thomas Huth wrote:
->> We recently experienced some weird huge time jumps in nested guests when
->> rebooting them in certain cases. After adding some debug code to the epoch
->> handling in vsie.c (thanks to David Hildenbrand for the idea!), it was
->> obvious that the "epdx" field (the multi-epoch extension) did not get set
->> to 0xff in case the "epoch" field was negative.
->> Seems like the code misses to copy the value from the epdx field from
->> the guest to the shadow control block. By doing so, the weird time
->> jumps are gone in our scenarios.
->>
->> Link: https://bugzilla.redhat.com/show_bug.cgi?id=2140899
->> Fixes: 8fa1696ea781 ("KVM: s390: Multiple Epoch Facility support")
->> Signed-off-by: Thomas Huth <thuth@redhat.com>
-> 
-> Could you please add a test for this to the KVM unit tests?
-> I'd guess you might already have some code for it from your debugging sessions.
+Currently x86_spec_ctrl_base is read at boot time, and speculative bits
+are set if configs are enable, such as MSR[SPEC_CTRL_IBRS] is enabled if
+CONFIG_CPU_IBRS_ENTRY is configured. These MSR bits are not cleared if
+the mitigations are disabled.
 
-I don't have some test code for this yet - I was only testing with the 
-scenario that is described in the bugzilla ticket. But sure, I can have a 
-try to come up with a k-u-t test.
+This is a problem when kexec-ing a kernel that has the mitigation
+disabled, from a kernel that has the mitigation enabled. In this case,
+the MSR bits are carried forward and not cleared at the boot of the new
+kernel. This might have some performance degradation that is hard to
+find.
 
-  Thomas
+This problem does not happen if the machine is (hard) rebooted, because
+the bit will be cleared by default.
+
+This patch also defines a SPEC_CTRL_MASK macro, so, we can easily track
+and clear if eventually some new mitigation shows up.
+
+Suggested-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ arch/x86/include/asm/msr-index.h | 3 +++
+ arch/x86/kernel/cpu/bugs.c       | 9 ++++++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+index 4a2af82553e4..704f49580ee1 100644
+--- a/arch/x86/include/asm/msr-index.h
++++ b/arch/x86/include/asm/msr-index.h
+@@ -54,6 +54,9 @@
+ #define SPEC_CTRL_RRSBA_DIS_S_SHIFT	6	   /* Disable RRSBA behavior */
+ #define SPEC_CTRL_RRSBA_DIS_S		BIT(SPEC_CTRL_RRSBA_DIS_S_SHIFT)
+ 
++#define SPEC_CTRL_MASK			(SPEC_CTRL_IBRS | SPEC_CTRL_STIBP | SPEC_CTRL_SSBD \
++							| SPEC_CTRL_RRSBA_DIS_S)
++
+ #define MSR_IA32_PRED_CMD		0x00000049 /* Prediction Command */
+ #define PRED_CMD_IBPB			BIT(0)	   /* Indirect Branch Prediction Barrier */
+ 
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index 3e3230cccaa7..88957da1029b 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -137,8 +137,15 @@ void __init check_bugs(void)
+ 	 * have unknown values. AMD64_LS_CFG MSR is cached in the early AMD
+ 	 * init code as it is not enumerated and depends on the family.
+ 	 */
+-	if (boot_cpu_has(X86_FEATURE_MSR_SPEC_CTRL))
++	if (boot_cpu_has(X86_FEATURE_MSR_SPEC_CTRL)) {
+ 		rdmsrl(MSR_IA32_SPEC_CTRL, x86_spec_ctrl_base);
++		/*
++		 * Previously running software may have some controls turned ON.
++		 * Clear them and let kernel decide which controls to use.
++		 */
++		x86_spec_ctrl_base &= ~SPEC_CTRL_MASK;
++		wrmsrl(MSR_IA32_SPEC_CTRL, x86_spec_ctrl_base);
++	}
+ 
+ 	/* Select the proper CPU mitigations before patching alternatives: */
+ 	spectre_v1_select_mitigation();
+-- 
+2.30.2
 
