@@ -2,103 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F79637D33
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 16:47:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 326BB637D35
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 16:47:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbiKXPrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 10:47:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34958 "EHLO
+        id S229745AbiKXPrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 10:47:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiKXPrM (ORCPT
+        with ESMTP id S229671AbiKXPrv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 10:47:12 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7DA93CF6;
-        Thu, 24 Nov 2022 07:47:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669304830; x=1700840830;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=3Jq2Ya7j+dCP/5S6u7y8siYW5FauuShQoOmL5T0kS2c=;
-  b=xc3HfUaNpQl3QQq1ddDJr6k2lkwSRH+JYv+4l1jicjoVkrLwY8HTKaXw
-   ivpxQQg/TzgBdC+D0UifjDXEA2+ak6zZxzA2xOrA5OJGMRYUUUC8TAUNu
-   C7M1sc7Rce4XH6MwFw8CgH8+Hf1HTwZ5aD4XUGsbtcNsuvtR2zX8rcNPB
-   /31z9HUQhpOXDaKpqhVbCkYXBp5BeYnMOtFkB2eCgGNSU+EgtvPeq35/N
-   sIyfN48Sp8QdBIRwINbhKHGl28+Fg6lyidVrgVlKBQXVm0C9Bhv1dh5HH
-   eHZmaUG0aN0x6r5mZ3sxmt3w6r61z9N2ovSeaQp/hcU6J4LgM/SFWMYeO
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,190,1665471600"; 
-   d="scan'208";a="124978161"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Nov 2022 08:47:09 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Thu, 24 Nov 2022 08:47:08 -0700
-Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Thu, 24 Nov 2022 08:47:07 -0700
-From:   Eugen Hristev <eugen.hristev@microchip.com>
-To:     <robh+dt@kernel.org>, <claudiu.beznea@microchip.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Eugen Hristev <eugen.hristev@microchip.com>
-Subject: [PATCH] ARM: dts: at91: sama7g5ek: align power rails for sdmmc0/1
-Date:   Thu, 24 Nov 2022 17:46:10 +0200
-Message-ID: <20221124154610.246790-1-eugen.hristev@microchip.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 24 Nov 2022 10:47:51 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A17CC1FCDF
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 07:47:48 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id b73so2220055yba.4
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 07:47:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=h4SSPuvhYffhFxePiwJ39RwPGg7tQbtiVDjXCFISW8g=;
+        b=LsbRhfvUIWkKiDqkYWNoaVfGGGmdnrw2/hWFF6wuZr6aOhLs75ccrr8mys9fid0xyP
+         ZtAWcd5VCQMrmfDx6SMNWGWwINeFFL/MHgpxCZny0dMc/B9OsIRAexstOZIgM7gK/q5f
+         kGRkEMohMduN2R5W2ZqF7WzqTteeMYYoEsKH57gm1iBQQVvYKCGdCiTTE1edsZLPmoap
+         37x3JLMBouAUxW2AOzzDAKb/oK8/Pc/TtQkUbtrVix0G85Sr3hCDUD0NMxshPkrvSk6M
+         7GHoy+DdE4/zzWxVCnEvWRukfe7l/DzoPrr/u3YdJkU85XP6+tkYb6jrbB6kQ5eMQLWw
+         bnnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h4SSPuvhYffhFxePiwJ39RwPGg7tQbtiVDjXCFISW8g=;
+        b=b8ZFiYYZJjtTEgeF39/J4sPkY21zCwp8OEj4lJ40RdpdvA0hQqbwdLQR2fqRcsfyLo
+         c8QfGHPNwzz6PL/oPbA4T8zo+WRl08I7u8oNvYb8vNCw6QFrmZgpa03+kot7UtisNUSQ
+         +2g+x7sp0Sx1RJdOiLY/8LbCGkmayz0FkvA3fYMU7YwlADCGkPaYw1bLkwQjtOTCHr+o
+         bb4dclLvilL1ajq5Pq2baPMETFDwmQrPcaNzC3nA0MtYhXSl2m5CG0eU3DPaKiT+JERa
+         B7khoPZwaEwtV97lbaDiZdDNtTO+72y43H3o1jBPFIJh3iR3JMvnfQ5tCdPhEJEyf0A1
+         qylg==
+X-Gm-Message-State: ANoB5pnE7jqUGETqBpew0lVjSvu3y5jEHi1lYMAjrdWODG2tYPmo2rs3
+        +Js5sAXUTCye5zm8iP8TuQ82hVV6KdOK2MZSuHWHJw==
+X-Google-Smtp-Source: AA0mqf5kc8lHtLyUfaXXXit+VFn6RsjS45esjbJUMBQ3kt/egSQtBW3It5ZQsDAj2Mmdm6OXhRf/Ub3gqeuh4oaeSsg=
+X-Received: by 2002:a5b:f0f:0:b0:6d2:5835:301f with SMTP id
+ x15-20020a5b0f0f000000b006d25835301fmr21381074ybr.336.1669304867700; Thu, 24
+ Nov 2022 07:47:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221123084557.945845710@linuxfoundation.org> <CA+G9fYvKfbJHcMZtybf_0Ru3+6fKPg9HwWTOhdCLrOBXMaeG1A@mail.gmail.com>
+In-Reply-To: <CA+G9fYvKfbJHcMZtybf_0Ru3+6fKPg9HwWTOhdCLrOBXMaeG1A@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 24 Nov 2022 21:17:36 +0530
+Message-ID: <CA+G9fYvgaNKbr_EhWsh9hjnzCeVXGJoXX4to72ytdvZi8W0svA@mail.gmail.com>
+Subject: Re: [PATCH 5.10 000/149] 5.10.156-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        Netdev <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On this board SDMMC0 has a 1.8 signaled eMMC device powered at
-3.3 V .
-Hence, correctly describe the connected rails from the PMIC.
+On Wed, 23 Nov 2022 at 19:30, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+>
+> On Wed, 23 Nov 2022 at 14:50, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > This is the start of the stable review cycle for the 5.10.156 release.
+> > There are 149 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> >
+> > Responses should be made by Fri, 25 Nov 2022 08:45:20 +0000.
+> > Anything received after that time might be too late.
+> >
+> > The whole patch series can be found in one patch at:
+> >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.156-rc1.gz
+> > or in the git tree and branch at:
+> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> > and the diffstat can be found below.
+> >
+> > thanks,
+> >
+> > greg k-h
+>
+>
+> With stable rc 5.10.156-rc1 Raspberry Pi 4 Model B failed to boot due to
+> following warnings / errors [1]. The NFS mount failed and failed to boot.
+>
+> I have to bisect this problem.
 
-SDMMC1 is connected to a voltage switch that can change from
-3.3V to 1.8V by a hardware controlled pin.
-However SDMMC1 at the moment works only 3.3V mode (default speed,
-no UHS-I modes), thus connect the signaling to the 3.3V rail.
+Daniel bisected this reported problem and found the first bad commit,
 
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
----
- arch/arm/boot/dts/at91-sama7g5ek.dts | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+YueHaibing <yuehaibing@huawei.com>
+    net: broadcom: Fix BCMGENET Kconfig
 
-diff --git a/arch/arm/boot/dts/at91-sama7g5ek.dts b/arch/arm/boot/dts/at91-sama7g5ek.dts
-index 3b25c67795dd..aa5cc0e98bba 100644
---- a/arch/arm/boot/dts/at91-sama7g5ek.dts
-+++ b/arch/arm/boot/dts/at91-sama7g5ek.dts
-@@ -764,8 +764,9 @@ &rtt {
- &sdmmc0 {
- 	bus-width = <8>;
- 	non-removable;
--	no-1-8-v;
- 	sdhci-caps-mask = <0x0 0x00200000>;
-+	vmmc-supply = <&vdd_3v3>;
-+	vqmmc-supply = <&vldo1>;
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_sdmmc0_default>;
- 	status = "okay";
-@@ -775,6 +776,8 @@ &sdmmc1 {
- 	bus-width = <4>;
- 	no-1-8-v;
- 	sdhci-caps-mask = <0x0 0x00200000>;
-+	vmmc-supply = <&vdd_3v3>;
-+	vqmmc-supply = <&vdd_3v3>;
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_sdmmc1_default>;
- 	status = "okay";
--- 
-2.25.1
 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>
+>
+> [    0.000000] Linux version 5.10.156-rc1 (tuxmake@tuxmake)
+> (aarch64-linux-gnu-gcc (Debian 11.3.0-6) 11.3.0, GNU ld (GNU Binutils
+> for Debian) 2.39) #1 SMP PREEMPT @1669194931
+> [    0.000000] Machine model: Raspberry Pi 4 Model B
+> ---
+> [    3.253965] mmc0: new high speed SDIO card at address 0001
+> [    7.229502] bcmgenet fd580000.ethernet eth0: Link is Up -
+> 1Gbps/Full - flow control off
+> [    7.237710] IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
+> [    7.253259] Sending DHCP requests ......
+> [   81.086546] DHCP/BOOTP: Reply not for us on eth0, op[2] xid[42e6766b]
+> [   89.106504] DHCP/BOOTP: Reply not for us on eth0, op[2] xid[42e6766b]
+> [   98.657252]  timed out!
+> [   98.683997] bcmgenet fd580000.ethernet eth0: Link is Down
+> [   98.691276] IP-Config: Retrying forever (NFS root)...
+> [   98.698404] bcmgenet fd580000.ethernet: configuring instance for
+> external RGMII (RX delay)
+> [   98.707190] bcmgenet fd580000.ethernet eth0: Link is Down
+> [  102.813504] bcmgenet fd580000.ethernet eth0: Link is Up -
+> 1Gbps/Full - flow control off
+> [  102.821680] IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
+> [  102.841257] Sending DHCP requests ....
+> [  119.840915] DHCP/BOOTP: Reply not for us on eth0, op[2] xid[34e6766b]
+> [  127.860148] DHCP/BOOTP: Reply not for us on eth0, op[2] xid[34e6766b]
+> [  132.513252] .. timed out!
+>
+> [1] https://lkft.validation.linaro.org/scheduler/job/5880584#L392
+>
+> --
+> Linaro LKFT
+> https://lkft.linaro.org
