@@ -2,174 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00DDE6376A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:42:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8071E6376AF
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:44:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbiKXKmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 05:42:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34974 "EHLO
+        id S229764AbiKXKoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 05:44:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiKXKmi (ORCPT
+        with ESMTP id S229497AbiKXKoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 05:42:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D293E0A0;
-        Thu, 24 Nov 2022 02:42:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 82775B8274B;
-        Thu, 24 Nov 2022 10:42:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4626C433D6;
-        Thu, 24 Nov 2022 10:42:29 +0000 (UTC)
-Message-ID: <15ba9b9e-f3f6-7f30-c200-d7c9593a4735@xs4all.nl>
-Date:   Thu, 24 Nov 2022 11:42:28 +0100
+        Thu, 24 Nov 2022 05:44:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20865D92E7
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:43:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669286592;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2Y4Whve7954lqLzvpAWCYgQmo37A2Kkr5rk2IyTQcoE=;
+        b=E8c+AgyYyG9Ls0069UTqbhwC3nU765LzUKXU6g5QqueFyM5COkubyD35SV52ooJK0tdLOO
+        9HGryzP7LlAU9LurSrhk6qP6OB0KNa5gWcmD4eEftCJvP5B2FtgkcMubIMQHz60Vi4u/Xi
+        dUh/J5vQuh+HAo+rGjcI7I4tA/Umk2A=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-340-XgsFvMtwNmuvVYY9q237Gw-1; Thu, 24 Nov 2022 05:43:10 -0500
+X-MC-Unique: XgsFvMtwNmuvVYY9q237Gw-1
+Received: by mail-wm1-f69.google.com with SMTP id az40-20020a05600c602800b003cfa26c40easo2700549wmb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:43:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2Y4Whve7954lqLzvpAWCYgQmo37A2Kkr5rk2IyTQcoE=;
+        b=4I8ntd3iu2D+2y0F/99CHLbeOHDgHvOzj8x2pfgx+MOF7T7ABshNGSLeOP4xRe+NdG
+         3KRwIN+nfGtM5dLB31y0nOaWzxyH/fakKFLdUi2xcMj6B36HYW5cstnkYHocCFWYYYtN
+         ITETg9etAPxYCpK8v8vvBvYIZQDIL9freMd2avTlvp0Bhkiqi5++QLxKShQcs18zJEE/
+         Iy8DdW3BJ2l1Pm9g//vAUgC4FlZKqPrZBuwva/0ElhBUoB/6N0F3B9YI6/KwghXFP+CO
+         F0ExmAlLJM/iqHm8++QwKTxNh1Ju8icUgZBzs1WvCfczA2CDqyMuDVJAEWAtCB/CvDx9
+         TiKw==
+X-Gm-Message-State: ANoB5pmR9uUSRJvthvjjLrqKzLGU9OIvCHjC+xeo1Y3K2o/9g6ffaZr/
+        uFVmhrNJzC5FGX4N0zMkZ9mSTDBhB7ExqzI857nloC/omy088MQsdmvwJm7qZHbMhL4kxFMfRZ7
+        piNZA9gQP9Wfi0wwe7yGTHZ3C
+X-Received: by 2002:a1c:7219:0:b0:3cf:77b7:61e6 with SMTP id n25-20020a1c7219000000b003cf77b761e6mr11909983wmc.162.1669286589466;
+        Thu, 24 Nov 2022 02:43:09 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4yATwvqcAiRSd2ogA9zvNkwcQpJPUOYsq2REuxCRQmJ2yu8iducuNJCkm3pbdnmx9zR7q5cQ==
+X-Received: by 2002:a1c:7219:0:b0:3cf:77b7:61e6 with SMTP id n25-20020a1c7219000000b003cf77b761e6mr11909958wmc.162.1669286589138;
+        Thu, 24 Nov 2022 02:43:09 -0800 (PST)
+Received: from ?IPV6:2003:cb:c704:2200:bfcb:7212:1370:de13? (p200300cbc7042200bfcb72121370de13.dip0.t-ipconnect.de. [2003:cb:c704:2200:bfcb:7212:1370:de13])
+        by smtp.gmail.com with ESMTPSA id q10-20020a05600c46ca00b003c6bd91caa5sm1397502wmo.17.2022.11.24.02.43.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Nov 2022 02:43:08 -0800 (PST)
+Message-ID: <31bda0ab-a185-340d-b96b-b1cfed7c3910@redhat.com>
+Date:   Thu, 24 Nov 2022 11:43:07 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.1
-Subject: Re: [PATCH] media: videobuf2: add V4L2_BUF_FLAG_HEADERS_ONLY flag
 Content-Language: en-US
-To:     Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org
-Cc:     shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Tomasz Figa <tfiga@chromium.org>
-References: <20220712093754.23370-1-ming.qian@nxp.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20220712093754.23370-1-ming.qian@nxp.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Gavin Shan <gshan@redhat.com>, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        william.kucharski@oracle.com, ziy@nvidia.com,
+        kirill.shutemov@linux.intel.com, zhenyzha@redhat.com,
+        apopple@nvidia.com, hughd@google.com, willy@infradead.org,
+        shan.gavin@gmail.com
+References: <20221124095523.31061-1-gshan@redhat.com>
+ <3c584ce6-dc8c-e0e4-c78f-b59dfff1fc13@redhat.com>
+ <22407f18-0406-6ede-ef1e-592f03d3699e@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v2] mm: migrate: Fix THP's mapcount on isolation
+In-Reply-To: <22407f18-0406-6ede-ef1e-592f03d3699e@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+CC Nicolas and Tomasz.
-
-I would like some feedback for this patch.
-
-On 12/07/2022 11:37, Ming Qian wrote:
-> By setting the V4L2_BUF_FLAG_HEADERS_ONLY flag,
-> hint the vb2 only contains stream header,
-> but does not contain any frame data.
+On 24.11.22 11:21, Gavin Shan wrote:
+> On 11/24/22 6:09 PM, David Hildenbrand wrote:
+>> On 24.11.22 10:55, Gavin Shan wrote:
+>>> The issue is reported when removing memory through virtio_mem device.
+>>> The transparent huge page, experienced copy-on-write fault, is wrongly
+>>> regarded as pinned. The transparent huge page is escaped from being
+>>> isolated in isolate_migratepages_block(). The transparent huge page
+>>> can't be migrated and the corresponding memory block can't be put
+>>> into offline state.
+>>>
+>>> Fix it by replacing page_mapcount() with total_mapcount(). With this,
+>>> the transparent huge page can be isolated and migrated, and the memory
+>>> block can be put into offline state. Besides, The page's refcount is
+>>> increased a bit earlier to avoid the page is released when the check
+>>> is executed.
+>>
+>> Did you look into handling pages that are in the swapcache case as well?
+>>
+>> See is_refcount_suitable() in mm/khugepaged.c.
+>>
+>> Should be easy to reproduce, let me know if you need inspiration.
+>>
 > 
-> This flag needs to be used when header mode is set to
-> V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE.
-> 
-> Signed-off-by: Ming Qian <ming.qian@nxp.com>
-> ---
->  Documentation/userspace-api/media/v4l/buffer.rst      | 11 +++++++++++
->  .../userspace-api/media/v4l/ext-ctrls-codec.rst       | 10 +++++++---
->  include/uapi/linux/videodev2.h                        |  2 ++
->  3 files changed, 20 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/buffer.rst b/Documentation/userspace-api/media/v4l/buffer.rst
-> index 4638ec64db00..18a6f5fcc822 100644
-> --- a/Documentation/userspace-api/media/v4l/buffer.rst
-> +++ b/Documentation/userspace-api/media/v4l/buffer.rst
-> @@ -607,6 +607,17 @@ Buffer Flags
->  	the format. Any subsequent call to the
->  	:ref:`VIDIOC_DQBUF <VIDIOC_QBUF>` ioctl will not block anymore,
->  	but return an ``EPIPE`` error code.
-> +    * .. _`V4L2-BUF-FLAG-HEADERS-ONLY`:
-> +
-> +      - ``V4L2_BUF_FLAG_HEADERS_ONLY``
-> +      - 0x00200000
-> +      - This flag may be set when the buffer only contains codec
+> Nope, I didn't look into the case. Please elaborate the details so that
+> I can reproduce it firstly.
 
-Set by the driver or userspace? Or either, depending on whether it is
-an encoder or decoder?
 
-codec -> the codec
+A simple reproducer would be (on a system with ordinary swap (not zram))
 
-> +	header, but does not contain any frame data. Usually the codec
-> +	header is merged to the next idr frame, with the flag
+1) mmap a region (MAP_ANON|MAP_PRIVATE) that can hold a THP
 
-to -> with
-idr -> IDR
+2) Enable THP for that region (MADV_HUGEPAGE)
 
-> +	``V4L2_BUF_FLAG_KEYFRAME``, but there is still some scenes that will
+3) Populate a THP (e.g., write access)
 
-is -> are
+4) PTE-map the THP, for example, using MADV_FREE on the last subpage
 
-scenes: do you mean 'scenarios'?
+5) Trigger swapout of the THP, for example, using MADV_PAGEOUT
 
-> +	split the header and queue it separately. This flag can set only when
+6) Read-access to some subpages to fault them in from the swapcache
 
-"split the header and queue it separately" -> queue the header in a separate buffer
 
-can -> can be
+Now you'd have a THP, which
 
-> +	codec support V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE,
+1) Is partially PTE-mapped into the page table
+2) Is in the swapcache (each subpage should have one reference from the 
+swapache)
 
-codec -> the codec
-support -> supports
 
-> +	and the header mode is set to V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE
->      * .. _`V4L2-BUF-FLAG-REQUEST-FD`:
->  
->        - ``V4L2_BUF_FLAG_REQUEST_FD``
-> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> index 6183f43f4d73..478b6af4205d 100644
-> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> @@ -1386,8 +1386,12 @@ enum v4l2_mpeg_video_intra_refresh_period_type -
->      (enum)
->  
->  enum v4l2_mpeg_video_header_mode -
-> -    Determines whether the header is returned as the first buffer or is
-> -    it returned together with the first frame. Applicable to encoders.
-> +    Determines whether the header is returned as the first buffer
-> +    with flag V4L2_BUF_FLAG_HEADERS_ONLY or is
+Now we could test, if alloc_contig_range() will still succeed (e.g., 
+using virtio-mem).
 
-or is it -> or if it is
+-- 
+Thanks,
 
-> +    it returned together with the first frame.
-> +    Applicable to encoders and decoders.
-> +    If it's not implemented in a driver,
-> +    V4L2_MPEG_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME is to be assumed,
->      Possible values are:
->  
->  .. raw:: latex
-> @@ -1401,7 +1405,7 @@ enum v4l2_mpeg_video_header_mode -
->      :stub-columns: 0
->  
->      * - ``V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE``
-> -      - The stream header is returned separately in the first buffer.
-> +      - The stream header is returned separately in the first buffer with the flag V4L2_BUF_FLAG_HEADERS_ONLY.
->      * - ``V4L2_MPEG_VIDEO_HEADER_MODE_JOINED_WITH_1ST_FRAME``
->        - The stream header is returned together with the first encoded
->  	frame.
-> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-> index 5311ac4fde35..6fd96acd6080 100644
-> --- a/include/uapi/linux/videodev2.h
-> +++ b/include/uapi/linux/videodev2.h
-> @@ -1131,6 +1131,8 @@ static inline __u64 v4l2_timeval_to_ns(const struct timeval *tv)
->  #define V4L2_BUF_FLAG_TSTAMP_SRC_SOE		0x00010000
->  /* mem2mem encoder/decoder */
->  #define V4L2_BUF_FLAG_LAST			0x00100000
-> +/* Buffer only contains codec header */
+David / dhildenb
 
-codec -> the codec
-
-> +#define V4L2_BUF_FLAG_HEADERS_ONLY		0x00200000
->  /* request_fd is valid */
->  #define V4L2_BUF_FLAG_REQUEST_FD		0x00800000
->  
-
-Of course, there needs to be a driver that uses this as well. And drivers that support
-V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE would need to add support for this flag as well,
-I guess.
-
-And what I haven't seen here is *why* you need this flag. There are already drivers that
-support V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE, and they managed fine without it.
-
-Regards,
-
-	Hans
