@@ -2,56 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B8BB63714F
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 04:56:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA0E8637151
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 04:57:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbiKXD42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 22:56:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42530 "EHLO
+        id S229846AbiKXD5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 22:57:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiKXD40 (ORCPT
+        with ESMTP id S229535AbiKXD5d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 22:56:26 -0500
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC4328430A;
-        Wed, 23 Nov 2022 19:56:24 -0800 (PST)
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 2AO3u4Hp002867;
-        Thu, 24 Nov 2022 12:56:05 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 2AO3u4Hp002867
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1669262165;
-        bh=DmgnDVDiiUf2g4oKI+oYEIgmMNACi/xWZ5iyXzLQYtk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WXws+UhnRbFVDXMt35oAIl6UqcS23RbTh++qCbQZzXSwuE1VQdOhLCkynAper7wlf
-         CkSsfZQVi/1OrwXWodILo3bvUoFh/of3j3HhFqwQBMi43dEhV4cH2oKujUYuLr1EjY
-         N7OnAi/Fe//k2U1LOGRMaf0KIxemYUOQJgSIzSAyomd7Gl9OYjWk6odoq2zXCtZZFY
-         GNwSAK4YmaFY/M1TCKtleF8GsXYYyE4I0SVFr6UvgL6+Qawug3XsUPKspwEtLoOik3
-         4fXo+3oe4Y2WAK4lKPRGQafwj76haoKnkv6I6U7dXq1ht3ipkQiGyfMh4amMGqVRcq
-         8yNU+eVkFuOng==
-X-Nifty-SrcIP: [209.85.160.42]
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-1432a5f6468so699883fac.12;
-        Wed, 23 Nov 2022 19:56:05 -0800 (PST)
-X-Gm-Message-State: ANoB5pl8efU3HCEZ3BbgyiTyUH63swkLyuuyCXIIqD9U7qvvhf7yjJzf
-        flmMeYREPOXPYi52zLtX1lw0EBxR+aGKy17Z0oQ=
-X-Google-Smtp-Source: AA0mqf49deRpTa5nOSQLTS7MVUEmw8tp6B0lu7Ey9T5i1tMD4jr9hzqSCutxN3kZP4LT4Mz7o+es09OsX7TIDYkZWuk=
-X-Received: by 2002:a05:6870:3b06:b0:13b:5d72:d2c6 with SMTP id
- gh6-20020a0568703b0600b0013b5d72d2c6mr6489409oab.287.1669262164299; Wed, 23
- Nov 2022 19:56:04 -0800 (PST)
+        Wed, 23 Nov 2022 22:57:33 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A079B33;
+        Wed, 23 Nov 2022 19:57:28 -0800 (PST)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NHkdF3hDjzJnqy;
+        Thu, 24 Nov 2022 11:54:09 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 24 Nov 2022 11:57:26 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 24 Nov 2022 11:57:25 +0800
+Subject: Re: [PATCH v2] doc: Fix htmldocs build warnings of stallwarn.rst
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+CC:     "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        "Josh Triplett" <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        <linux-next@vger.kernel.org>
+References: <20221123120238.1904-1-thunder.leizhen@huawei.com>
+ <Y34mIhHYjFFzywsk@debian.me>
+ <32e46feb-20ee-b3b4-8c36-e6f8c295a4d6@huawei.com>
+Message-ID: <6c5d82bc-f0bf-5cff-2eaa-58acd6aa78cd@huawei.com>
+Date:   Thu, 24 Nov 2022 11:57:24 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-References: <20221124032053.10627-1-rdunlap@infradead.org>
-In-Reply-To: <20221124032053.10627-1-rdunlap@infradead.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 24 Nov 2022 12:55:28 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARfULFwt9RGq34dXSwchCWMrwauh_PfMKPCSBAqhCOHzg@mail.gmail.com>
-Message-ID: <CAK7LNARfULFwt9RGq34dXSwchCWMrwauh_PfMKPCSBAqhCOHzg@mail.gmail.com>
-Subject: Re: [PATCH] nios2: add FORCE for vmlinuz.gz
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
-        linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+In-Reply-To: <32e46feb-20ee-b3b4-8c36-e6f8c295a4d6@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,47 +65,205 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 12:21 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> Add FORCE to placate a warning from make:
->
-> arch/nios2/boot/Makefile:24: FORCE prerequisite is missing
->
-> Fixes: 2fc8483fdcde ("nios2: Build infrastructure")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Dinh Nguyen <dinguyen@kernel.org>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: linux-kbuild@vger.kernel.org
 
 
-Assuming this will go to the NIOS2 tree,
+On 2022/11/24 11:34, Leizhen (ThunderTown) wrote:
+> 
+> 
+> On 2022/11/23 21:54, Bagas Sanjaya wrote:
+>> On Wed, Nov 23, 2022 at 08:02:38PM +0800, Zhen Lei wrote:
+>>> Documentation/RCU/stallwarn.rst:
+>>> 401: WARNING: Literal block expected; none found.
+>>> 428: WARNING: Literal block expected; none found.
+>>> 445: WARNING: Literal block expected; none found.
+>>> 459: WARNING: Literal block expected; none found.
+>>> 468: WARNING: Literal block expected; none found.
+>>>
+>>> The literal block need to be indented, so add two spaces to each line.
+>>
+>> Indenting to match alignment of lists texts?
+> 
+> It's required by reStructuredText Markup Specification.
+> 
+> Indented Literal Blocks
+> Indented literal blocks are indicated by indentation relative to the
+> surrounding text (leading whitespace on each line). The literal block
+> ends with the end of the indentation.
+> 
+> The surrounding text need to be indented, relative to the paragraphs
+> above and below it and at the same level.
+> 
+>>
+>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>>
+>> You miss crediting linux-next list, so please add:
+>>
+>> Link: https://lore.kernel.org/linux-next/20221123163255.48653674@canb.auug.org.au/
+>> Fixes: 3d2788ba4573 ("doc: Document CONFIG_RCU_CPU_STALL_CPUTIME=y stall information")
+>> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> 
+> OK, thanks.
+> 
+>>
+>>> -The sampling period is shown as follows:
+>>> -:<------------first timeout---------->:<-----second timeout----->:
+>>> -:<--half timeout-->:<--half timeout-->:                          :
+>>> -:                  :<--first period-->:                          :
+>>> -:                  :<-----------second sampling period---------->:
+>>> -:                  :                  :                          :
+>>> -:          snapshot time point    1st-stall                  2nd-stall
+>>> +The sampling period is shown as follows::
+>>>  
+>>> +  |<------------first timeout---------->|<-----second timeout----->|
+>>> +  |<--half timeout-->|<--half timeout-->|                          |
+>>> +  |                  |<--first period-->|                          |
+>>> +  |                  |<-----------second sampling period---------->|
+>>> +  |                  |                  |                          |
+>>> +  |          snapshot time point    1st-stall                  2nd-stall
+>>
+>> The beginning pipe (|) on the last line of diagram above shouldn't be there
+>> (axis label?).
+> 
+> OK, it might look better to delete it.
+> 
+> The text in literal block is treated as plain text.
+> 
+> 
+>>
+>>>  
+>>>  The following describes four typical scenarios:
+>>>  
+>>> -1. A CPU looping with interrupts disabled.::
+>>> +1. A CPU looping with interrupts disabled.
+>>>  
+>>> -   rcu:          hardirqs   softirqs   csw/system
+>>> -   rcu:  number:        0          0            0
+>>> -   rcu: cputime:        0          0            0   ==> 2500(ms)
+>>> +   ::
+>>> +
+>>> +     rcu:          hardirqs   softirqs   csw/system
+>>> +     rcu:  number:        0          0            0
+>>> +     rcu: cputime:        0          0            0   ==> 2500(ms)
+>>>  
+>>>     Because interrupts have been disabled throughout the measurement
+>>>     interval, there are no interrupts and no context switches.
+>>> @@ -440,11 +442,11 @@ The following describes four typical scenarios:
+>>>  
+>>>     This is similar to the previous example, but with non-zero number of
+>>>     and CPU time consumed by hard interrupts, along with non-zero CPU
+>>> -   time consumed by in-kernel execution.::
+>>> +   time consumed by in-kernel execution. ::
+>>>  
+>>> -   rcu:          hardirqs   softirqs   csw/system
+>>> -   rcu:  number:      624          0            0
+>>> -   rcu: cputime:       49          0         2446   ==> 2500(ms)
+>>> +     rcu:          hardirqs   softirqs   csw/system
+>>> +     rcu:  number:      624          0            0
+>>> +     rcu: cputime:       49          0         2446   ==> 2500(ms)
+>>>  
+>>>     The fact that there are zero softirqs gives a hint that these were
+>>>     disabled, perhaps via local_bh_disable().  It is of course possible
+>>> @@ -454,20 +456,22 @@ The following describes four typical scenarios:
+>>>  
+>>>  3. A CPU looping with preemption disabled.
+>>>  
+>>> -   Here, only the number of context switches is zero.::
+>>> +   Here, only the number of context switches is zero. ::
+>>>  
+>>> -   rcu:          hardirqs   softirqs   csw/system
+>>> -   rcu:  number:      624         45            0
+>>> -   rcu: cputime:       69          1         2425   ==> 2500(ms)
+>>> +     rcu:          hardirqs   softirqs   csw/system
+>>> +     rcu:  number:      624         45            0
+>>> +     rcu: cputime:       69          1         2425   ==> 2500(ms)
+>>>  
+>>>     This situation hints that the stalled CPU was looping with preemption
+>>>     disabled.
+>>>  
+>>> -4. No looping, but massive hard and soft interrupts.::
+>>> +4. No looping, but massive hard and soft interrupts.
+>>> +
+>>> +   ::
+>>>  
+>>> -   rcu:          hardirqs   softirqs   csw/system
+>>> -   rcu:  number:       xx         xx            0
+>>> -   rcu: cputime:       xx         xx            0   ==> 2500(ms)
+>>> +     rcu:          hardirqs   softirqs   csw/system
+>>> +     rcu:  number:       xx         xx            0
+>>> +     rcu: cputime:       xx         xx            0   ==> 2500(ms)
+>>>  
+>>>     Here, the number and CPU time of hard interrupts are all non-zero,
+>>>     but the number of context switches and the in-kernel CPU time consumed
+>>>
+>>
+>> Because paragraphs below the snippets directly refers to them,just use colon: 
+> 
+> This makes the style inconsistent when viewed on the web page. So I decided not
+> to change it.
+> 
+> Take your advice and the end result will be as follows: (1 and 4 followed by a
+> colon, 2 and 3 followed by a dot)
+> 
+> 1. A CPU looping with interrupts disabled:
+> 2. A CPU looping with bottom halves disabled.
+> 3. A CPU looping with preemption disabled.
+> 4. No looping, but massive hard and soft interrupts:
 
-Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
+Oh, I accept the suggestions for items 2 and 3.
 
-
-
-Please let me know if I should apply this to kbuild tree.
-
-
-
-> ---
->  arch/nios2/boot/Makefile |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff -- a/arch/nios2/boot/Makefile b/arch/nios2/boot/Makefile
-> --- a/arch/nios2/boot/Makefile
-> +++ b/arch/nios2/boot/Makefile
-> @@ -20,7 +20,7 @@ $(obj)/vmlinux.bin: vmlinux FORCE
->  $(obj)/vmlinux.gz: $(obj)/vmlinux.bin FORCE
->         $(call if_changed,gzip)
->
-> -$(obj)/vmImage: $(obj)/vmlinux.gz
-> +$(obj)/vmImage: $(obj)/vmlinux.gz FORCE
->         $(call if_changed,uimage)
->         @$(kecho) 'Kernel: $@ is ready'
->
-
+> 
+>>
+>> ---- >8 ----
+>>
+>> diff --git a/Documentation/RCU/stallwarn.rst b/Documentation/RCU/stallwarn.rst
+>> index f15b766d39b8d9..4f6b91be03cfe0 100644
+>> --- a/Documentation/RCU/stallwarn.rst
+>> +++ b/Documentation/RCU/stallwarn.rst
+>> @@ -423,9 +423,7 @@ The sampling period is shown as follows::
+>>  
+>>  The following describes four typical scenarios:
+>>  
+>> -1. A CPU looping with interrupts disabled.
+>> -
+>> -   ::
+>> +1. A CPU looping with interrupts disabled::
+>>  
+>>       rcu:          hardirqs   softirqs   csw/system
+>>       rcu:  number:        0          0            0
+>> @@ -442,7 +440,7 @@ The following describes four typical scenarios:
+>>  
+>>     This is similar to the previous example, but with non-zero number of
+>>     and CPU time consumed by hard interrupts, along with non-zero CPU
+>> -   time consumed by in-kernel execution. ::
+>> +   time consumed by in-kernel execution::
+>>  
+>>       rcu:          hardirqs   softirqs   csw/system
+>>       rcu:  number:      624          0            0
+>> @@ -456,7 +454,7 @@ The following describes four typical scenarios:
+>>  
+>>  3. A CPU looping with preemption disabled.
+>>  
+>> -   Here, only the number of context switches is zero. ::
+>> +   Here, only the number of context switches is zero::
+>>  
+>>       rcu:          hardirqs   softirqs   csw/system
+>>       rcu:  number:      624         45            0
+>> @@ -465,9 +463,7 @@ The following describes four typical scenarios:
+>>     This situation hints that the stalled CPU was looping with preemption
+>>     disabled.
+>>  
+>> -4. No looping, but massive hard and soft interrupts.
+>> -
+>> -   ::
+>> +4. No looping, but massive hard and soft interrupts::
+>>  
+>>       rcu:          hardirqs   softirqs   csw/system
+>>       rcu:  number:       xx         xx            0
+>>
+>> Thanks.
+>>
+> 
 
 -- 
-Best Regards
-Masahiro Yamada
+Regards,
+  Zhen Lei
