@@ -2,88 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2268D637355
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:08:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2B5F63735A
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:10:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiKXIIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 03:08:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55860 "EHLO
+        id S229729AbiKXIKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 03:10:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbiKXIIi (ORCPT
+        with ESMTP id S229491AbiKXIKU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 03:08:38 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2296397344
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:08:37 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id 189so336625ybe.8
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:08:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1H8eACwsPHCorcFfJu+1RNheIDT08lbVO89iT+IwrnE=;
-        b=hcvgfywrs5CNQciRKRok+L2IOwPt9pTi98wn0IlvOxeiwBYuar9JGTQ2hv4dCeko7M
-         ZBp13zhDouAH4H5ECU0rGau8v+fdckbM7MJ9GpMrCJImdG9wrE3G3Rn/B2lXzeZj4Aqa
-         i9Ocixhl+jm3HmWdBvG29olLeMYvewUdacS45whUJ0/oeDIcjU7ZRgkx/XHIIc7oCjcr
-         UwrhwSKungivUzxn29AlDs3wEtz5pe4aSHNPOqX/xAdFHlVHvOqkUU3+KgWzlPcw3cjD
-         3bprMUoOubz2SOrxrtB8biAA5z2xwfZ0bl4gqJR2HqGhPAGYHNBH6I5qy2mawLlHTHjh
-         A0GA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1H8eACwsPHCorcFfJu+1RNheIDT08lbVO89iT+IwrnE=;
-        b=DYmZk9xrWuOwsZgNztUViul2lmtN5L7QqcS/F8ahLgEn/VTEgJp3tAq4zpD8BIWgbF
-         XQ84mi/etrNXX47qzinHE6/dXJzINCZ8f9z1x68D43ba1s0AJouGaP40Ay/A3YntTW7T
-         bNGlv8rl3pdEZoeD6eOfgWTDiLoSmgPRF6gx+3vqf+tXYPXhbu6hm7Ogyp2K8rZqNB3a
-         6AH5m95/tfrLGlqB8tcsAjw9r2THhCMV85zG4MLL1v/O9c27a4wTAll9Bxw6BDhVdjx9
-         DaUPGOTcGIlWApIboNzorIW5C0ZK1/EOZ9QBCx+bF0rEwAY7Xt1P5OQ2wKKyNySmpDuz
-         s0ng==
-X-Gm-Message-State: ANoB5pnL0ruw7rHg9jV4lvvMED8/dO/XeJ1GiFCQ5CeHRvf/TmAWdhkf
-        5v0Nr864teNlcSJsCSoftHkq7HMIwOtuM11qJrZHfT/nY1s=
-X-Google-Smtp-Source: AA0mqf6Hbdl6bOW3lnt8Z2632YBw3AlpSzi59Dc46vuxtwqXTS9h2hH8z8cCGrtUctrK50at+cr6iD8ez62zNLmX+ss=
-X-Received: by 2002:a5b:b43:0:b0:6de:1554:867b with SMTP id
- b3-20020a5b0b43000000b006de1554867bmr11396138ybr.16.1669277316282; Thu, 24
- Nov 2022 00:08:36 -0800 (PST)
+        Thu, 24 Nov 2022 03:10:20 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26998C6234;
+        Thu, 24 Nov 2022 00:10:17 -0800 (PST)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NHrJ81PZ5zRpRG;
+        Thu, 24 Nov 2022 16:09:44 +0800 (CST)
+Received: from kwepemm600001.china.huawei.com (7.193.23.3) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 24 Nov 2022 16:10:15 +0800
+Received: from huawei.com (10.175.113.133) by kwepemm600001.china.huawei.com
+ (7.193.23.3) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 24 Nov
+ 2022 16:10:14 +0800
+From:   Wang Hai <wanghai38@huawei.com>
+To:     <ericvh@gmail.com>, <lucho@ionkov.net>, <asmadeus@codewreck.org>,
+        <linux_oss@crudebyte.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <viro@zeniv.linux.org.uk>
+CC:     <v9fs-developer@lists.sourceforge.net>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+Subject: [PATCH net] net/9p: Fix a potential socket leak in p9_socket_open
+Date:   Thu, 24 Nov 2022 16:10:05 +0800
+Message-ID: <20221124081005.66579-1-wanghai38@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <00000000000063536805ee0769d8@google.com> <20221122043504.GR3600936@dread.disaster.area>
-In-Reply-To: <20221122043504.GR3600936@dread.disaster.area>
-From:   Marco Elver <elver@google.com>
-Date:   Thu, 24 Nov 2022 09:07:59 +0100
-Message-ID: <CANpmjNNH0woaJEzviEj5sfzeOyFXCcE4U-UwUcgjL97aU7LVxg@mail.gmail.com>
-Subject: Re: [syzbot] kernel BUG in assfail
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     syzbot <syzbot+1d8c82e66f2e76b6b427@syzkaller.appspotmail.com>,
-        djwong@kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.113.133]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600001.china.huawei.com (7.193.23.3)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-#syz invalid
+Both p9_fd_create_tcp() and p9_fd_create_unix() will call
+p9_socket_open(). If the creation of p9_trans_fd fails,
+p9_fd_create_tcp() and p9_fd_create_unix() will return an
+error directly instead of releasing the cscoket, which will
+result in a socket leak.
 
-On Tue, 22 Nov 2022 at 05:35, Dave Chinner <david@fromorbit.com> wrote:
-...
-> Turn off CONFIG_XFS_DEBUG, and this failure will return
-> -EFSCORRUPTED as expected because syzbot fed it a corrupt log. THe
-> mount will simply fail as you'd expect given the malicious
-> corruption that syzbot has performed.
->
-> If syzbot is going to maliciously corrupt XFS filesytsems and then
-> try to abuse them, then syzbot has two choices. Either:
->
-> 1. do not enable CONFIG_XFS_DEBUG; or
+This patch adds sock_release() to fix the leak issue.
 
-We've disabled CONFIG_XFS_DEBUG - reports like this should no longer be sent.
+Fixes: 6b18662e239a ("9p connect fixes")
+Signed-off-by: Wang Hai <wanghai38@huawei.com>
+---
+ net/9p/trans_fd.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Thanks,
--- Marco
+diff --git a/net/9p/trans_fd.c b/net/9p/trans_fd.c
+index 56a186768750..f834726d21ea 100644
+--- a/net/9p/trans_fd.c
++++ b/net/9p/trans_fd.c
+@@ -860,8 +860,10 @@ static int p9_socket_open(struct p9_client *client, struct socket *csocket)
+ 	struct file *file;
+ 
+ 	p = kzalloc(sizeof(struct p9_trans_fd), GFP_KERNEL);
+-	if (!p)
++	if (!p) {
++		sock_release(csocket);
+ 		return -ENOMEM;
++	}
+ 
+ 	csocket->sk->sk_allocation = GFP_NOIO;
+ 	file = sock_alloc_file(csocket, 0, NULL);
+-- 
+2.17.1
+
