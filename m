@@ -2,164 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3321E6374E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 10:13:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 660226374E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 10:13:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbiKXJNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 04:13:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50578 "EHLO
+        id S229833AbiKXJNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 04:13:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbiKXJNv (ORCPT
+        with ESMTP id S229700AbiKXJNm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 04:13:51 -0500
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E199D1122E3
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 01:13:49 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R251e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=zelin.deng@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VVaTOzS_1669281187;
-Received: from alinux-host.hz.ali.com(mailfrom:zelin.deng@linux.alibaba.com fp:SMTPD_---0VVaTOzS_1669281187)
-          by smtp.aliyun-inc.com;
-          Thu, 24 Nov 2022 17:13:07 +0800
-From:   Zelin Deng <zelin.deng@linux.alibaba.com>
-To:     x86@kernel.org, linux-kernel@vger.kernel.org
-Cc:     Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Zelin Deng <zelin.deng@linux.alibaba.com>
-Subject: [PATCH 2/2] x86/setup: Preserve _ENC flag when initrd is being relocated
-Date:   Thu, 24 Nov 2022 17:12:46 +0800
-Message-Id: <20221124091246.4957-3-zelin.deng@linux.alibaba.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20221124091246.4957-1-zelin.deng@linux.alibaba.com>
-References: <20221124091246.4957-1-zelin.deng@linux.alibaba.com>
+        Thu, 24 Nov 2022 04:13:42 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E384DB34BE
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 01:13:41 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id k21-20020a5e8915000000b006de391b332fso614617ioj.4
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 01:13:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=K3v76XqUN0O34ow25tfS2F7/z8dx2+wNXyI/9WKpb8w=;
+        b=w+MuLIKN+KiA4Ma27yrtAn5g9z4YPtkJ2WK6keReBmWKG8xcR+KO/nL4tI8KOWVfxo
+         F/cnubhKwdLJiEnFnVzVdPDTMuSHZpFRa8NEPthus26vOpShr/i5y8uLcMZrB2H46EaR
+         h39T9YoUhinOoNXP2j5KDWWGIcXQH1c1pgUYiyV/DwV5PbhDO+CcSNcjaygh5c5SbZCv
+         FKMX+IgGCbygIZyaTm62yZJq0pAY93sRQXV3gwtYzgLypG7/hyQ8oOBCEGG2PcqKftdW
+         i7iS5jP/T1FhbqPNBPkFUDx6YVyYimCiSJgvNRANz6dLToY3LTuwR0QQTCuBPDsMsTEj
+         F/gQ==
+X-Gm-Message-State: ANoB5pmaUd4+5CJsg0SUW4QFft2LdaorLXzgI6X+nigHxF9Y37joQeFM
+        n/cLVXv+sS4S7uACn2qO3mjU988PsgbFML7NOyKA00bjz/WH
+X-Google-Smtp-Source: AA0mqf6ggOLVH6/6MwvjUEYQJfG5uxows8ComOx+XoHLnPE2UiwNUSDvqV26jTBp0RMp45cOz8G2Pv1bMtqH0t/gyOtpEotHDyMh
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:8796:0:b0:378:8e28:1f8a with SMTP id
+ t22-20020a028796000000b003788e281f8amr11343421jai.283.1669281221177; Thu, 24
+ Nov 2022 01:13:41 -0800 (PST)
+Date:   Thu, 24 Nov 2022 01:13:41 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000037f84b05ee33d2b4@google.com>
+Subject: [syzbot] possible deadlock in btrfs_search_forward
+From:   syzbot <syzbot+3cf137e672e75b602171@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 107cd2532181 ("Encrypt the initrd earlier for BSP microcode update")
-when SME is enabled, initrd will be encrypted at earlier stage. If
-initrd is located at e820 reserved area the initrd will be copied to
-direct mapping area in relocate_initrd().
+Hello,
 
-In this case source address of initrd should be mapped as encrypted
-while copy_from_early_mem() will clear encrypted attribute as the source
-address is not in kernel usable area, therefore relocated initrd is
-encrypted data and is not able to be unpacked later.
+syzbot found the following issue on:
 
-Add new function copy_early_initrd() to preserve _ENC flag in setup.c
-and remove copy_from_early_mem() as it's only used once here by x86.
+HEAD commit:    4312098baf37 Merge tag 'spi-fix-v6.1-rc6' of git://git.ker..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=17166e3d880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8d01b6e3197974dd
+dashboard link: https://syzkaller.appspot.com/bug?extid=3cf137e672e75b602171
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Signed-off-by: Zelin Deng <zelin.deng@linux.alibaba.com>
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/4b7073d20a37/disk-4312098b.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/36a0367a5593/vmlinux-4312098b.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/265bedb3086b/bzImage-4312098b.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3cf137e672e75b602171@syzkaller.appspotmail.com
+
+BTRFS info (device loop2): enabling ssd optimizations
+======================================================
+WARNING: possible circular locking dependency detected
+6.1.0-rc6-syzkaller-00012-g4312098baf37 #0 Not tainted
+------------------------------------------------------
+syz-executor.2/11489 is trying to acquire lock:
+ffff88801927df98 (&mm->mmap_lock#2){++++}-{3:3}, at: __might_fault+0x8f/0x110 mm/memory.c:5645
+
+but task is already holding lock:
+ffff888024223838 (btrfs-root-00){++++}-{3:3}, at: __btrfs_tree_read_lock fs/btrfs/locking.c:134 [inline]
+ffff888024223838 (btrfs-root-00){++++}-{3:3}, at: btrfs_tree_read_lock fs/btrfs/locking.c:140 [inline]
+ffff888024223838 (btrfs-root-00){++++}-{3:3}, at: btrfs_read_lock_root_node+0x2b4/0x400 fs/btrfs/locking.c:279
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #3 (btrfs-root-00){++++}-{3:3}:
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       down_read_nested+0x3c/0x50 kernel/locking/rwsem.c:1634
+       __btrfs_tree_read_lock fs/btrfs/locking.c:134 [inline]
+       btrfs_tree_read_lock fs/btrfs/locking.c:140 [inline]
+       btrfs_read_lock_root_node+0x2b4/0x400 fs/btrfs/locking.c:279
+       btrfs_search_forward+0x10f/0xe70 fs/btrfs/ctree.c:4488
+       btrfs_uuid_scan_kthread+0x25e/0xbc0 fs/btrfs/volumes.c:4654
+       kthread+0x266/0x300 kernel/kthread.c:376
+       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+
+-> #2 (btrfs_trans_num_extwriters){++++}-{0:0}:
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       join_transaction+0x19f/0xe60 fs/btrfs/transaction.c:299
+       start_transaction+0x6fb/0x1180 fs/btrfs/transaction.c:658
+       btrfs_create_common+0x2c6/0x420 fs/btrfs/inode.c:6633
+       lookup_open fs/namei.c:3413 [inline]
+       open_last_lookups fs/namei.c:3481 [inline]
+       path_openat+0x12d0/0x2df0 fs/namei.c:3710
+       do_filp_open+0x264/0x4f0 fs/namei.c:3740
+       do_sys_openat2+0x124/0x4e0 fs/open.c:1310
+       do_sys_open fs/open.c:1326 [inline]
+       __do_sys_open fs/open.c:1334 [inline]
+       __se_sys_open fs/open.c:1330 [inline]
+       __x64_sys_open+0x221/0x270 fs/open.c:1330
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #1 (btrfs_trans_num_writers){++++}-{0:0}:
+       reacquire_held_locks+0x386/0x650 kernel/locking/lockdep.c:5193
+       __lock_release kernel/locking/lockdep.c:5382 [inline]
+       lock_release+0x2e2/0x820 kernel/locking/lockdep.c:5688
+       percpu_up_read include/linux/percpu-rwsem.h:99 [inline]
+       __sb_end_write include/linux/fs.h:1821 [inline]
+       sb_end_intwrite+0x1e/0x1a0 include/linux/fs.h:1877
+       __btrfs_end_transaction+0x388/0x790 fs/btrfs/transaction.c:995
+       btrfs_dirty_inode+0x177/0x1c0 fs/btrfs/inode.c:6099
+       inode_update_time fs/inode.c:1871 [inline]
+       touch_atime+0x315/0x630 fs/inode.c:1944
+       file_accessed include/linux/fs.h:2521 [inline]
+       btrfs_file_mmap+0xbb/0x120 fs/btrfs/file.c:2333
+       call_mmap include/linux/fs.h:2196 [inline]
+       mmap_region+0xfe6/0x1e20 mm/mmap.c:2625
+       do_mmap+0x8d9/0xf30 mm/mmap.c:1412
+       vm_mmap_pgoff+0x19e/0x2b0 mm/util.c:520
+       ksys_mmap_pgoff+0x48c/0x6d0 mm/mmap.c:1458
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (&mm->mmap_lock#2){++++}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3097 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+       validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
+       __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       __might_fault+0xb2/0x110 mm/memory.c:5646
+       _copy_to_user+0x26/0x130 lib/usercopy.c:29
+       copy_to_user include/linux/uaccess.h:169 [inline]
+       btrfs_ioctl_get_subvol_rootref+0x8cf/0xa90 fs/btrfs/ioctl.c:3203
+       btrfs_ioctl+0xb7c/0xc10 fs/btrfs/ioctl.c:5556
+       vfs_ioctl fs/ioctl.c:51 [inline]
+       __do_sys_ioctl fs/ioctl.c:870 [inline]
+       __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+Chain exists of:
+  &mm->mmap_lock#2 --> btrfs_trans_num_extwriters --> btrfs-root-00
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(btrfs-root-00);
+                               lock(btrfs_trans_num_extwriters);
+                               lock(btrfs-root-00);
+  lock(&mm->mmap_lock#2);
+
+ *** DEADLOCK ***
+
+1 lock held by syz-executor.2/11489:
+ #0: ffff888024223838 (btrfs-root-00){++++}-{3:3}, at: __btrfs_tree_read_lock fs/btrfs/locking.c:134 [inline]
+ #0: ffff888024223838 (btrfs-root-00){++++}-{3:3}, at: btrfs_tree_read_lock fs/btrfs/locking.c:140 [inline]
+ #0: ffff888024223838 (btrfs-root-00){++++}-{3:3}, at: btrfs_read_lock_root_node+0x2b4/0x400 fs/btrfs/locking.c:279
+
+stack backtrace:
+CPU: 0 PID: 11489 Comm: syz-executor.2 Not tainted 6.1.0-rc6-syzkaller-00012-g4312098baf37 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+ check_noncircular+0x2cc/0x390 kernel/locking/lockdep.c:2177
+ check_prev_add kernel/locking/lockdep.c:3097 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+ validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
+ __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
+ lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+ __might_fault+0xb2/0x110 mm/memory.c:5646
+ _copy_to_user+0x26/0x130 lib/usercopy.c:29
+ copy_to_user include/linux/uaccess.h:169 [inline]
+ btrfs_ioctl_get_subvol_rootref+0x8cf/0xa90 fs/btrfs/ioctl.c:3203
+ btrfs_ioctl+0xb7c/0xc10 fs/btrfs/ioctl.c:5556
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f1731e8c0d9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f1732ba2168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f1731fabf80 RCX: 00007f1731e8c0d9
+RDX: 0000000020049dc0 RSI: 00000000d000943d RDI: 0000000000000004
+RBP: 00007f1731ee7ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffd2e5e53af R14: 00007f1732ba2300 R15: 0000000000022000
+ </TASK>
+
+
 ---
- arch/x86/kernel/setup.c             | 30 ++++++++++++++++++++++++++++-
- include/asm-generic/early_ioremap.h |  6 ------
- mm/early_ioremap.c                  | 21 --------------------
- 3 files changed, 29 insertions(+), 28 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index 56deaf37e508..f9996982f026 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -260,6 +260,34 @@ static u64 __init get_ramdisk_size(void)
- 	return ramdisk_size;
- }
- 
-+#define MAX_MAP_CHUNK	(NR_FIX_BTMAPS << PAGE_SHIFT)
-+
-+static void __init copy_early_initrd(void *dest, phys_addr_t src,
-+				     unsigned long size)
-+{
-+	unsigned long slop, clen;
-+	char *p;
-+
-+	while (size) {
-+		slop = offset_in_page(src);
-+		clen = size;
-+		if (clen > MAX_MAP_CHUNK - slop)
-+			clen = MAX_MAP_CHUNK - slop;
-+		/*
-+		 * _ENC flag should be preserved so that when SME is enabled initrd
-+		 * can be mapped as encrypted, as it had been encrypted earlier.
-+		 * This flag won't impact on other platforms like TDX/SEV enabled.
-+		 */
-+		p = early_memremap_prot(src & PAGE_MASK, clen + slop,
-+					pgprot_val(FIXMAP_PAGE_NORMAL));
-+		memcpy(dest, p + slop, clen);
-+		early_memunmap(p, clen + slop);
-+		dest += clen;
-+		src += clen;
-+		size -= clen;
-+	}
-+}
-+
- static void __init relocate_initrd(void)
- {
- 	/* Assume only end is not page aligned */
-@@ -279,7 +307,7 @@ static void __init relocate_initrd(void)
- 	printk(KERN_INFO "Allocated new RAMDISK: [mem %#010llx-%#010llx]\n",
- 	       relocated_ramdisk, relocated_ramdisk + ramdisk_size - 1);
- 
--	copy_from_early_mem((void *)initrd_start, ramdisk_image, ramdisk_size);
-+	copy_early_initrd((void *)initrd_start, ramdisk_image, ramdisk_size);
- 
- 	printk(KERN_INFO "Move RAMDISK from [mem %#010llx-%#010llx] to"
- 		" [mem %#010llx-%#010llx]\n",
-diff --git a/include/asm-generic/early_ioremap.h b/include/asm-generic/early_ioremap.h
-index 9d0479f50f97..be1ce406f481 100644
---- a/include/asm-generic/early_ioremap.h
-+++ b/include/asm-generic/early_ioremap.h
-@@ -32,12 +32,6 @@ extern void early_ioremap_setup(void);
-  */
- extern void early_ioremap_reset(void);
- 
--/*
-- * Early copy from unmapped memory to kernel mapped memory.
-- */
--extern void copy_from_early_mem(void *dest, phys_addr_t src,
--				unsigned long size);
--
- #else
- static inline void early_ioremap_init(void) { }
- static inline void early_ioremap_setup(void) { }
-diff --git a/mm/early_ioremap.c b/mm/early_ioremap.c
-index 9bc12e526ed0..86b68d63ad35 100644
---- a/mm/early_ioremap.c
-+++ b/mm/early_ioremap.c
-@@ -245,27 +245,6 @@ early_memremap_prot(resource_size_t phys_addr, unsigned long size,
- }
- #endif
- 
--#define MAX_MAP_CHUNK	(NR_FIX_BTMAPS << PAGE_SHIFT)
--
--void __init copy_from_early_mem(void *dest, phys_addr_t src, unsigned long size)
--{
--	unsigned long slop, clen;
--	char *p;
--
--	while (size) {
--		slop = offset_in_page(src);
--		clen = size;
--		if (clen > MAX_MAP_CHUNK - slop)
--			clen = MAX_MAP_CHUNK - slop;
--		p = early_memremap(src & PAGE_MASK, clen + slop);
--		memcpy(dest, p + slop, clen);
--		early_memunmap(p, clen + slop);
--		dest += clen;
--		src += clen;
--		size -= clen;
--	}
--}
--
- #else /* CONFIG_MMU */
- 
- void __init __iomem *
--- 
-2.27.0
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
