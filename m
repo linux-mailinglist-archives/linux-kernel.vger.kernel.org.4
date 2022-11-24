@@ -2,293 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E38696378F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:33:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F08C36378F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:36:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbiKXMdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 07:33:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47004 "EHLO
+        id S229630AbiKXMgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 07:36:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiKXMdR (ORCPT
+        with ESMTP id S229450AbiKXMf5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 07:33:17 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD79D54B3F
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:33:16 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id s196so1471359pgs.3
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:33:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Quv6TMBzkc3UUUbbJrq3QGuUoQYufo/Oq650F1/qMrI=;
-        b=heDVlR5Dn1z5kZ8D5R39SrSt7bwu7FzD1Nv4YfOm5jCygUt+mdhkpngNMRc8GU/w3V
-         SvIN7bu290HDyqOHUYQKIV0PGkOgHq7U3EqJHxtIOyQfet8RaX7Xl1kbE+fkYso0IQ2+
-         vDVRW7iOeLAjysw2HMaRyvusNEunq9Z1Zj0y7YDE5YszOXR2opynwz3HB0XLX7pXHvc1
-         rnJTusKztBIA3LLmZRVfb21mcekpaVEXAFpqHMNwEiw55snQBwkK9j/BuAl515bF33Qj
-         Nn8fBbUDmmQZhWOrFaR2ricsjGdNTRujV0ZprCKy0AqQ20lCEFHA/yzOllpoLJ3SXbyl
-         1AJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Quv6TMBzkc3UUUbbJrq3QGuUoQYufo/Oq650F1/qMrI=;
-        b=rfc2pvsRTzMBHxOWC350isz4FgtAv18h9QYREAtCO7qkn9PuFLzz9qg4yue03U9lu8
-         vJwLVc17Kxr4ia7Ehs4VgB2r7THs5h7JkIdgeTpRR02XFgHT/Rc0oaYX5zv5IIBX8nFw
-         ZWarzaS5MZtgDXp7yzSUYrcuflkhfBenIioMtjb2c/XJh44+8byBmClFnabxiP+xwGtB
-         y+yt4icNZxZh/pAM06hjrj6J1kQupRpDKCGtzhxyNpTOb+s4WqO9odWa6I+leJTW5xIk
-         eQ6U/VRCB3ijsifjrVoykOgtPzLI2iiQTE9wWtmG0Vft9GB0GldaIfXjpE0y9T+8XC2C
-         mbIg==
-X-Gm-Message-State: ANoB5pnFkAZQc8SHeKSbDsyB9+wsYhcnZzOIhLk8t56/ozzCwditBlM+
-        xIa8V5mlCOJw8r5MxbaTefI=
-X-Google-Smtp-Source: AA0mqf7x6sFPa/ZpV9mrih0Y6ON5XSBgGE7tQPlyxowj7vdIVhiugqM1WzpDFvafwPdiwgdN45A7zg==
-X-Received: by 2002:a63:d43:0:b0:477:cc1f:3f97 with SMTP id 3-20020a630d43000000b00477cc1f3f97mr3131562pgn.331.1669293196203;
-        Thu, 24 Nov 2022 04:33:16 -0800 (PST)
-Received: from hyeyoo ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id x80-20020a633153000000b004308422060csm967312pgx.69.2022.11.24.04.33.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 04:33:15 -0800 (PST)
-Date:   Thu, 24 Nov 2022 21:33:08 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Kees Cook <kees@kernel.org>, Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>, patches@lists.linux.dev,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH 01/12] mm, slab: ignore hardened usercopy parameters when
- disabled
-Message-ID: <Y39khFc7wKQ3qQLv@hyeyoo>
-References: <20221121171202.22080-1-vbabka@suse.cz>
- <20221121171202.22080-2-vbabka@suse.cz>
- <206E0154-63A6-45CF-8E19-BD01B35AEF0B@kernel.org>
- <0058169a-1659-7ab1-edff-de9ebadcf236@suse.cz>
+        Thu, 24 Nov 2022 07:35:57 -0500
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C2FD898E1;
+        Thu, 24 Nov 2022 04:35:56 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 3BD8DEC9DF;
+        Thu, 24 Nov 2022 04:35:56 -0800 (PST)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id oW5luY8rDfud; Thu, 24 Nov 2022 04:35:55 -0800 (PST)
+Date:   Thu, 24 Nov 2022 13:35:33 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
+        t=1669293355; bh=RgJG5Oidxh068x+5k52+UvIseZv630peSoQN5/PYCPI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iFsi2/PVDljgfb1nr8mziG0gyeBx8cDqZjgkthRQ27i0jmfzIYDIGtzA3t9orfNZR
+         uvXk9Aaax8wuxnLts44dS9tCrj8yEHC7mqP9u5ps8U6xdoiJV5NvdbU/cfKG58y2lX
+         iKC9EE2Hmg4PJhv2r1OHdEYfi0VbXiM/gJYJ+3L4FNiUPeG9wM/UKjlXeZ5M2+SNAf
+         zJnW49PpncLiAcPvxQslziVBetIFjqaeRFXwVwuj3PDg45NkKVl1VHcZVlyfTyHJ3j
+         JWS6LDX/zLnCU/+RJDh2JtPZ2cCgQZjnPyKl0clE4ccOuB26ix/m1SYCzFN8DFjEb8
+         et6ydzTNzp9tg==
+From:   Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@puri.sm, phone-devel@vger.kernel.org
+Subject: Re: [PATCHv3 1/1 RESEND] media: imx: Round line size to 4 bytes
+Message-ID: <20221124133533.1041f1b1.dorota.czaplejewicz@puri.sm>
+In-Reply-To: <Y39Vx6L7MovBxOfs@pendragon.ideasonboard.com>
+References: <20221016163928.1ef0a4fe.dorota.czaplejewicz@puri.sm>
+        <Y00SSRMFuL3Drjd4@pendragon.ideasonboard.com>
+        <20221017163059.377ac677.dorota.czaplejewicz@puri.sm>
+        <20221101133834.0c1a20db.dorota.czaplejewicz@puri.sm>
+        <Y39Vx6L7MovBxOfs@pendragon.ideasonboard.com>
+Organization: Purism
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0058169a-1659-7ab1-edff-de9ebadcf236@suse.cz>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/0w4EGCp0VVCKoSCDIxcxR1Z";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 03:23:15PM +0100, Vlastimil Babka wrote:
-> 
-> On 11/21/22 22:35, Kees Cook wrote:
-> > On November 21, 2022 9:11:51 AM PST, Vlastimil Babka <vbabka@suse.cz> wrote:
-> >>With CONFIG_HARDENED_USERCOPY not enabled, there are no
-> >>__check_heap_object() checks happening that would use the kmem_cache
-> >>useroffset and usersize fields. Yet the fields are still initialized,
-> >>preventing merging of otherwise compatible caches. Thus ignore the
-> >>values passed to cache creation and leave them zero when
-> >>CONFIG_HARDENED_USERCOPY is disabled.
-> >>
-> >>In a quick virtme boot test, this has reduced the number of caches in
-> >>/proc/slabinfo from 131 to 111.
-> >>
-> >>Cc: Kees Cook <keescook@chromium.org>
-> >>Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
-> >>---
-> >> mm/slab_common.c | 6 +++++-
-> >> 1 file changed, 5 insertions(+), 1 deletion(-)
-> >>
-> >>diff --git a/mm/slab_common.c b/mm/slab_common.c
-> >>index 0042fb2730d1..a8cb5de255fc 100644
-> >>--- a/mm/slab_common.c
-> >>+++ b/mm/slab_common.c
-> >>@@ -317,7 +317,8 @@ kmem_cache_create_usercopy(const char *name,
-> >> 	flags &= CACHE_CREATE_MASK;
-> >> 
-> >> 	/* Fail closed on bad usersize of useroffset values. */
-> >>-	if (WARN_ON(!usersize && useroffset) ||
-> >>+	if (!IS_ENABLED(CONFIG_HARDENED_USERCOPY) ||
-> >>+	    WARN_ON(!usersize && useroffset) ||
-> >> 	    WARN_ON(size < usersize || size - usersize < useroffset))
-> >> 		usersize = useroffset = 0;
-> >> 
-> >>@@ -640,6 +641,9 @@ void __init create_boot_cache(struct kmem_cache *s, const char *name,
-> >> 		align = max(align, size);
-> >> 	s->align = calculate_alignment(flags, align, size);
-> >> 
-> >>+	if (!IS_ENABLED(CONFIG_HARDENED_USERCOPY))
-> >>+		useroffset = usersize = 0;
-> >>+
-> >> 	s->useroffset = useroffset;
-> >> 	s->usersize = usersize;
-> >> 
-> > 
-> > "Always non-mergeable" is intentional here, but I do see the argument
-> > for not doing it under hardened-usercopy.
-> > 
-> > That said, if you keep this part, maybe go the full step and ifdef away
-> > useroffset/usersize's struct member definition and other logic, especially
-> > for SLUB_TINY benefits, so 2 ulongs are dropped from the cache struct?
-> 
-> Okay, probably won't make much difference in practice, but for consistency...
-> ----8<----
-> From 3cdb7b6ad16a9d95603b482969fa870f996ac9dc Mon Sep 17 00:00:00 2001
-> From: Vlastimil Babka <vbabka@suse.cz>
-> Date: Wed, 16 Nov 2022 15:56:32 +0100
-> Subject: [PATCH] mm, slab: ignore hardened usercopy parameters when disabled
-> 
-> With CONFIG_HARDENED_USERCOPY not enabled, there are no
-> __check_heap_object() checks happening that would use the struct
-> kmem_cache useroffset and usersize fields. Yet the fields are still
-> initialized, preventing merging of otherwise compatible caches.
-> 
-> Also the fields contribute to struct kmem_cache size unnecessarily when
-> unused. Thus #ifdef them out completely when CONFIG_HARDENED_USERCOPY is
-> disabled.
-> 
-> In a quick virtme boot test, this has reduced the number of caches in
-> /proc/slabinfo from 131 to 111.
-> 
-> Cc: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
-> ---
->  include/linux/slab_def.h | 2 ++
->  include/linux/slub_def.h | 2 ++
->  mm/slab.h                | 2 --
->  mm/slab_common.c         | 9 ++++++++-
->  mm/slub.c                | 4 ++++
->  5 files changed, 16 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/slab_def.h b/include/linux/slab_def.h
-> index f0ffad6a3365..5834bad8ad78 100644
-> --- a/include/linux/slab_def.h
-> +++ b/include/linux/slab_def.h
-> @@ -80,8 +80,10 @@ struct kmem_cache {
->  	unsigned int *random_seq;
->  #endif
->  
-> +#ifdef CONFIG_HARDENED_USERCOPY
->  	unsigned int useroffset;	/* Usercopy region offset */
->  	unsigned int usersize;		/* Usercopy region size */
-> +#endif
->  
->  	struct kmem_cache_node *node[MAX_NUMNODES];
->  };
-> diff --git a/include/linux/slub_def.h b/include/linux/slub_def.h
-> index f9c68a9dac04..7ed5e455cbf4 100644
-> --- a/include/linux/slub_def.h
-> +++ b/include/linux/slub_def.h
-> @@ -136,8 +136,10 @@ struct kmem_cache {
->  	struct kasan_cache kasan_info;
->  #endif
->  
-> +#ifdef CONFIG_HARDENED_USERCOPY
->  	unsigned int useroffset;	/* Usercopy region offset */
->  	unsigned int usersize;		/* Usercopy region size */
-> +#endif
->  
->  	struct kmem_cache_node *node[MAX_NUMNODES];
->  };
-> diff --git a/mm/slab.h b/mm/slab.h
-> index 0202a8c2f0d2..db9a7984e22e 100644
-> --- a/mm/slab.h
-> +++ b/mm/slab.h
-> @@ -207,8 +207,6 @@ struct kmem_cache {
->  	unsigned int size;	/* The aligned/padded/added on size  */
->  	unsigned int align;	/* Alignment as calculated */
->  	slab_flags_t flags;	/* Active flags on the slab */
-> -	unsigned int useroffset;/* Usercopy region offset */
-> -	unsigned int usersize;	/* Usercopy region size */
->  	const char *name;	/* Slab name for sysfs */
->  	int refcount;		/* Use counter */
->  	void (*ctor)(void *);	/* Called on object slot creation */
-> diff --git a/mm/slab_common.c b/mm/slab_common.c
-> index 0042fb2730d1..4339c839a452 100644
-> --- a/mm/slab_common.c
-> +++ b/mm/slab_common.c
-> @@ -143,8 +143,10 @@ int slab_unmergeable(struct kmem_cache *s)
->  	if (s->ctor)
->  		return 1;
->  
-> +#ifdef CONFIG_HARDENED_USERCOPY
->  	if (s->usersize)
->  		return 1;
-> +#endif
->  
->  	/*
->  	 * We may have set a slab to be unmergeable during bootstrap.
-> @@ -223,8 +225,10 @@ static struct kmem_cache *create_cache(const char *name,
->  	s->size = s->object_size = object_size;
->  	s->align = align;
->  	s->ctor = ctor;
-> +#ifdef CONFIG_HARDENED_USERCOPY
->  	s->useroffset = useroffset;
->  	s->usersize = usersize;
-> +#endif
->  
->  	err = __kmem_cache_create(s, flags);
->  	if (err)
-> @@ -317,7 +321,8 @@ kmem_cache_create_usercopy(const char *name,
->  	flags &= CACHE_CREATE_MASK;
->  
->  	/* Fail closed on bad usersize of useroffset values. */
-> -	if (WARN_ON(!usersize && useroffset) ||
-> +	if (!IS_ENABLED(CONFIG_HARDENED_USERCOPY) ||
-> +	    WARN_ON(!usersize && useroffset) ||
->  	    WARN_ON(size < usersize || size - usersize < useroffset))
->  		usersize = useroffset = 0;
->  
-> @@ -640,8 +645,10 @@ void __init create_boot_cache(struct kmem_cache *s, const char *name,
->  		align = max(align, size);
->  	s->align = calculate_alignment(flags, align, size);
->  
-> +#ifdef CONFIG_HARDENED_USERCOPY
->  	s->useroffset = useroffset;
->  	s->usersize = usersize;
-> +#endif
->  
->  	err = __kmem_cache_create(s, flags);
->  
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 157527d7101b..e32db8540767 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -5502,11 +5502,13 @@ static ssize_t cache_dma_show(struct kmem_cache *s, char *buf)
->  SLAB_ATTR_RO(cache_dma);
->  #endif
->  
-> +#ifdef CONFIG_HARDENED_USERCOPY
->  static ssize_t usersize_show(struct kmem_cache *s, char *buf)
->  {
->  	return sysfs_emit(buf, "%u\n", s->usersize);
->  }
->  SLAB_ATTR_RO(usersize);
-> +#endif
->  
->  static ssize_t destroy_by_rcu_show(struct kmem_cache *s, char *buf)
->  {
-> @@ -5803,7 +5805,9 @@ static struct attribute *slab_attrs[] = {
->  #ifdef CONFIG_FAILSLAB
->  	&failslab_attr.attr,
->  #endif
-> +#ifdef CONFIG_HARDENED_USERCOPY
->  	&usersize_attr.attr,
-> +#endif
->  #ifdef CONFIG_KFENCE
->  	&skip_kfence_attr.attr,
->  #endif
-> -- 
-> 2.38.1
->
+--Sig_/0w4EGCp0VVCKoSCDIxcxR1Z
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Looks good to me,
-Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Hello,
 
--- 
-Thanks,
-Hyeonggon
+On Thu, 24 Nov 2022 13:30:15 +0200
+Laurent Pinchart <laurent.pinchart@ideasonboard.com> wrote:
+
+> Hi Dorota,
+>=20
+> On Tue, Nov 01, 2022 at 01:38:34PM +0100, Dorota Czaplejewicz wrote:
+> > On Mon, 17 Oct 2022 16:30:59 +0200 Dorota Czaplejewicz wrote: =20
+> > > On Mon, 17 Oct 2022 11:28:57 +0300 Laurent Pinchart wrote: =20
+> >=20
+> > [snip]
+> >  =20
+> > > > I would also very much appreciate feedback from NXP on this. There'=
+s a
+> > > > risk of ill side-effects that I would prefer ruling out very clearl=
+y.   =20
+> > >=20
+> > > I posted a question on the NXP forum: https://community.nxp.com/t5/i-=
+MX-Processors/i-MX8MQ-CSI-line-size-constraint-documentation-mistake/m-p/15=
+38629#M196448
+> > >  =20
+> >=20
+> > This question received a reply from NXP today: https://community.nxp.co=
+m/t5/i-MX-Processors/i-MX8MQ-CSI-line-size-constraint-documentation-mistake=
+/m-p/1546872/highlight/true#M197067
+> >=20
+> > Quoting NXP's answer:
+> >  =20
+> > > Do I understand correctly, that streams divisible by 4=C3=974 will wo=
+rk on other i.MX8 hardware too? - Yes
+> > > Will those kind of resolutions work on i.MX7 series CSI hardware? - Y=
+es =20
+> >=20
+> > which implies no bad side effects the way I read it. Is this
+> > sufficient for the kernel? =20
+>=20
+> Ideally I'd like to test that on i.MX7 but I don't think I'll have time
+> to do so in the near future. I don't want to block the patch on this, so
+> I'm fine merging it, but I'd like a comment in the code that explains
+> why it's safe to depart from the documentation.
+>=20
+> Also, the discussion on the NXP forum said that a width that is a
+> multiple of 4 bytes but not a multiple of 8 bytes works only if the
+> height is also a multiple of 4. I don't see that constraint being
+> enforced in the code, am I missing something ?
+
+Thanks for pointing it out, I'll have to double-check it.
+>=20
+> You mentioned in the forum that you tried 1052x779 and that failed. How
+> did it fail ? Have you also tried 1052x778 ?
+
+I tried with many resolutions when I was checking out the sensor, and came =
+to the conclusion that the line count must be even. Otherwise the last 4 by=
+tes of the buffer would end up corrupted.
+
+My guess is that the copy engine can indeed only do bursts of 8 bytes, but =
+that the whole buffer is copied at once rather than line-by-line.
+>=20
+> > > > > Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+> > > > > ---
+> > > > > Hello,
+> > > > >=20
+> > > > > the Librem 5 is using an out-of-tree driver for s5k3l6xx, and
+> > > > > rounding to 4 is optimal to operate it.
+> > > > >=20
+> > > > > This revision improves the commit message.
+> > > > >=20
+> > > > > Cheers,
+> > > > > Dorota Czaplejewicz
+> > > > >=20
+> > > > >  drivers/staging/media/imx/imx7-media-csi.c | 4 ++--
+> > > > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > > >=20
+> > > > > diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers=
+/staging/media/imx/imx7-media-csi.c
+> > > > > index a0553c24cce4..af821b410c3f 100644
+> > > > > --- a/drivers/staging/media/imx/imx7-media-csi.c
+> > > > > +++ b/drivers/staging/media/imx/imx7-media-csi.c
+> > > > > @@ -999,10 +999,10 @@ static int imx7_csi_mbus_fmt_to_pix_fmt(str=
+uct v4l2_pix_format *pix,
+> > > > >  	}
+> > > > > =20
+> > > > >  	/* Round up width for minimum burst size */
+> > > > > -	width =3D round_up(mbus->width, 8);
+> > > > > +	width =3D round_up(mbus->width, 4);
+> > > > > =20
+> > > > >  	/* Round up stride for IDMAC line start address alignment */
+> > > > > -	stride =3D round_up((width * cc->bpp) >> 3, 8);
+> > > > > +	stride =3D round_up((width * cc->bpp) >> 3, 4);
+> > > > > =20
+> > > > >  	pix->width =3D width;
+> > > > >  	pix->height =3D mbus->height;     =20
+>=20
+
+
+--Sig_/0w4EGCp0VVCKoSCDIxcxR1Z
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEExKRqtqfFqmh+lu1oADBpX4S8ZncFAmN/ZRUACgkQADBpX4S8
+ZncZgg/+M00zWn+qqaDOzjU/5vY0xfnGbBLJutiOhKbc6PJnYAJKk3Kxm1EDpRKK
+h/Ux3rgC8FAo8nJXcL0nrromadYRwBK62ph4cszlOM4P1Yz9FxV7qA0ePvoNk+qY
+vJEEwSeHjKwiyls8knSEcLPNeynR7zNndWTmL9lKkiWIkXHYJcfj5hEl/f8GllPj
+tMN4tPFxlDtyDwBn3+Fcn/Q1577Z/u16h+/93U0PZjMwgV3hOTnxbvsvcKyKWQz4
+3jHKx8vRgYxkKABqlR30TaBcxUXm/+Mg2ThvjBJjpdu+3agNFhsi4FC+kUrZ2LFn
+nnQzJ2QjHtiSVNLABjeVWRnn0PscnmGguMv5SAygDAxzAqFGWSWuFwHLNPExd5nN
+9rGxC0ndbQe6IV8pz3I87DBQ0Q92RgH8noI9UHoRhJDhqLCP/M0vMZf2yca5YDH6
+/k5z8Hg8H/IUGw9nYJ+u0pUUaMY2El/vTPmtwooEsaxBgUAoEbrBCiQiGXDMWCiW
+qPfdjiN+sMjpbYWxMMuOn+EaOPk5GUmssOF3WSezxVnQHpcMRx9Zz+Vudhak1n21
+3xk4fce95luLiEwnPivkvXYBsOWyFHA8ba7yKqSd4YKzy5WvackN6169EQhoEomp
+0YjTbktaA0AOxXHSar2QeaMJ7T5lu4ZdA+0wem7hfySVXbgNsvw=
+=2qyk
+-----END PGP SIGNATURE-----
+
+--Sig_/0w4EGCp0VVCKoSCDIxcxR1Z--
