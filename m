@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2742F637B4A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 15:17:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A983637B4B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 15:17:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbiKXORG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 09:17:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46018 "EHLO
+        id S230338AbiKXORJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 09:17:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbiKXOQu (ORCPT
+        with ESMTP id S230077AbiKXOQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 24 Nov 2022 09:16:50 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83720FFAA4;
-        Thu, 24 Nov 2022 06:16:19 -0800 (PST)
-Date:   Thu, 24 Nov 2022 14:16:16 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5336EFAE95;
+        Thu, 24 Nov 2022 06:16:20 -0800 (PST)
+Date:   Thu, 24 Nov 2022 14:16:17 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669299377;
+        s=2020; t=1669299378;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vPM4GtgkPikyO8undmf32MjZA2sKaffe2O+gLIOF3sc=;
-        b=SjjEg0E7f4JsemG0UMkRweLi+fsg+AMox6nVTViSGJEdZgxTXHbD5sBpOy66N2KpEn4PzB
-        BtTfrfhCWFgan4P8J0iqMpXXZx2gZ7sOzslbw+bOQlsCX4vXydJrw/0PPfZ23nj1mDPHbN
-        UjZdcXRRR7cwoxEPErfPmRKTXzVTydMk9rKMx4ZvxelCK5dKkcZFZWUNXPzuNSItAP1UhF
-        fSO+E1eRt373Ogl0OgAuMo3r2Tp9ruKGVkUgIXMmwhpxErxScqaQbcRv6Zocts/Qvl4Pcp
-        hyliQuVvNfr2S3mux0QcJ3cDB6al+LzkQZg81gaigBm5dJEdiOUaV96tIQJh9g==
+        bh=p9nhhOC0dmoguyhyQWVzllAlYJbOLqoahHX54fy0N1U=;
+        b=sKwSzXc4wVjHB6HsXJtnmOVZzBz1HMrcMneALJw/J3W94LyENbe/NotcKSMt1Gs7K/lrhS
+        4sSs0h2kBWB6BZPQ6DEL+4IyCbG4zFJpHcM5+PF1x/uH02/+KX4yYa2/Fs//W3l/e44KJe
+        8KSb641i1aIIUMaG9fJMKteqdWnIBcd+0lixlbLcXeMVNpoR8jENXq0QTTzKnG5oaj3WfX
+        uVdcJg8BOvC3QJgJxvHpQgf1WI+hWp5UFkarWARjuRksEr9O8qQ5Jd3JsAOtXYj9gpYTYA
+        uI4x9tA/rkP39nZ1G7P/OwjboZz6kXKetEzP0J4BxNoWUUVR0i1zVv2KMSXZXA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669299377;
+        s=2020e; t=1669299378;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vPM4GtgkPikyO8undmf32MjZA2sKaffe2O+gLIOF3sc=;
-        b=3aaEAoecxa/t4n0BQgq/QvWvowA3PQZDSM7fNL947qYo+XMqodb7yr02s6lrZX8GN+Y7jX
-        S7ux1EjQ9ffBpACw==
+        bh=p9nhhOC0dmoguyhyQWVzllAlYJbOLqoahHX54fy0N1U=;
+        b=M1E7mvJBTCVp2MhQv+qcy1B8J5oVCgWSPTgIR6H2kdJzxN3Y27qkAodaBIthhG9NRDMSjj
+        5YwMkB7KOBjVN8Dg==
 From:   "tip-bot2 for Steven Rostedt (Google)" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] clocksource/drivers/arm_arch_timer: Do not use
- timer namespace for timer_shutdown() function
+Subject: [tip: timers/core] ARM: spear: Do not use timer namespace for
+ timer_shutdown() function
 Cc:     "Steven Rostedt (Google)" <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Guenter Roeck <linux@roeck-us.net>,
         Jacob Keller <jacob.e.keller@intel.com>,
         "Anna-Maria Behnsen" <anna-maria@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, x86@kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Viresh Kumar <viresh.kumar@linaro.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20221106212702.002251651@goodmis.org>
-References: <20221106212702.002251651@goodmis.org>
+In-Reply-To: <20221106212701.822440504@goodmis.org>
+References: <20221106212701.822440504@goodmis.org>
 MIME-Version: 1.0
-Message-ID: <166929937647.4906.15326210430381406447.tip-bot2@tip-bot2>
+Message-ID: <166929937763.4906.10502292339325011964.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -71,21 +72,21 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     73737a5833ace25a8408b0d3b783637cb6bf29d1
-Gitweb:        https://git.kernel.org/tip/73737a5833ace25a8408b0d3b783637cb6bf29d1
+Commit-ID:     80b55772d41d8afec68dbc4ff0368a9fe5d1f390
+Gitweb:        https://git.kernel.org/tip/80b55772d41d8afec68dbc4ff0368a9fe5d1f390
 Author:        Steven Rostedt (Google) <rostedt@goodmis.org>
-AuthorDate:    Wed, 23 Nov 2022 21:18:34 +01:00
+AuthorDate:    Wed, 23 Nov 2022 21:18:32 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Thu, 24 Nov 2022 15:09:10 +01:00
 
-clocksource/drivers/arm_arch_timer: Do not use timer namespace for timer_shutdown() function
+ARM: spear: Do not use timer namespace for timer_shutdown() function
 
 A new "shutdown" timer state is being added to the generic timer code. One
 of the functions to change the timer into the state is called
-"timer_shutdown()". This means that there can not be other functions
-called "timer_shutdown()" as the timer code owns the "timer_*" name space.
+"timer_shutdown()". This means that there can not be other functions called
+"timer_shutdown()" as the timer code owns the "timer_*" name space.
 
-Rename timer_shutdown() to arch_timer_shutdown() to avoid this conflict.
+Rename timer_shutdown() to spear_timer_shutdown() to avoid this conflict.
 
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
@@ -93,57 +94,54 @@ Tested-by: Guenter Roeck <linux@roeck-us.net>
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
 Reviewed-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
-Acked-by: Marc Zyngier <maz@kernel.org>
-Link: https://lkml.kernel.org/r/20221106212702.002251651@goodmis.org
-Link: https://lore.kernel.org/all/20221105060155.409832154@goodmis.org/
-Link: https://lore.kernel.org/r/20221110064146.981725531@goodmis.org
-Link: https://lore.kernel.org/r/20221123201624.574672568@linutronix.de
-
-
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Link: https://lkml.kernel.org/r/20221106212701.822440504@goodmis.org
+Link: https://lore.kernel.org/all/20221105060155.228348078@goodmis.org/
+Link: https://lore.kernel.org/r/20221110064146.810953418@goodmis.org
+Link: https://lore.kernel.org/r/20221123201624.513863211@linutronix.de
 
 ---
- drivers/clocksource/arm_arch_timer.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ arch/arm/mach-spear/time.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/clocksource/arm_arch_timer.c b/drivers/clocksource/arm_arch_timer.c
-index a7ff775..9c3420a 100644
---- a/drivers/clocksource/arm_arch_timer.c
-+++ b/drivers/clocksource/arm_arch_timer.c
-@@ -687,8 +687,8 @@ static irqreturn_t arch_timer_handler_virt_mem(int irq, void *dev_id)
- 	return timer_handler(ARCH_TIMER_MEM_VIRT_ACCESS, evt);
+diff --git a/arch/arm/mach-spear/time.c b/arch/arm/mach-spear/time.c
+index e979e21..5371c82 100644
+--- a/arch/arm/mach-spear/time.c
++++ b/arch/arm/mach-spear/time.c
+@@ -90,7 +90,7 @@ static void __init spear_clocksource_init(void)
+ 		200, 16, clocksource_mmio_readw_up);
  }
  
--static __always_inline int timer_shutdown(const int access,
--					  struct clock_event_device *clk)
-+static __always_inline int arch_timer_shutdown(const int access,
-+					       struct clock_event_device *clk)
+-static inline void timer_shutdown(struct clock_event_device *evt)
++static inline void spear_timer_shutdown(struct clock_event_device *evt)
  {
- 	unsigned long ctrl;
+ 	u16 val = readw(gpt_base + CR(CLKEVT));
  
-@@ -701,22 +701,22 @@ static __always_inline int timer_shutdown(const int access,
+@@ -101,7 +101,7 @@ static inline void timer_shutdown(struct clock_event_device *evt)
  
- static int arch_timer_shutdown_virt(struct clock_event_device *clk)
+ static int spear_shutdown(struct clock_event_device *evt)
  {
--	return timer_shutdown(ARCH_TIMER_VIRT_ACCESS, clk);
-+	return arch_timer_shutdown(ARCH_TIMER_VIRT_ACCESS, clk);
+-	timer_shutdown(evt);
++	spear_timer_shutdown(evt);
+ 
+ 	return 0;
  }
+@@ -111,7 +111,7 @@ static int spear_set_oneshot(struct clock_event_device *evt)
+ 	u16 val;
  
- static int arch_timer_shutdown_phys(struct clock_event_device *clk)
- {
--	return timer_shutdown(ARCH_TIMER_PHYS_ACCESS, clk);
-+	return arch_timer_shutdown(ARCH_TIMER_PHYS_ACCESS, clk);
- }
+ 	/* stop the timer */
+-	timer_shutdown(evt);
++	spear_timer_shutdown(evt);
  
- static int arch_timer_shutdown_virt_mem(struct clock_event_device *clk)
- {
--	return timer_shutdown(ARCH_TIMER_MEM_VIRT_ACCESS, clk);
-+	return arch_timer_shutdown(ARCH_TIMER_MEM_VIRT_ACCESS, clk);
- }
+ 	val = readw(gpt_base + CR(CLKEVT));
+ 	val |= CTRL_ONE_SHOT;
+@@ -126,7 +126,7 @@ static int spear_set_periodic(struct clock_event_device *evt)
+ 	u16 val;
  
- static int arch_timer_shutdown_phys_mem(struct clock_event_device *clk)
- {
--	return timer_shutdown(ARCH_TIMER_MEM_PHYS_ACCESS, clk);
-+	return arch_timer_shutdown(ARCH_TIMER_MEM_PHYS_ACCESS, clk);
- }
+ 	/* stop the timer */
+-	timer_shutdown(evt);
++	spear_timer_shutdown(evt);
  
- static __always_inline void set_next_event(const int access, unsigned long evt,
+ 	period = clk_get_rate(gpt_clk) / HZ;
+ 	period >>= CTRL_PRESCALER16;
