@@ -2,118 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83C8E6371A0
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 05:57:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4769B6371A2
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 05:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbiKXE5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 23:57:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57450 "EHLO
+        id S229598AbiKXE7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 23:59:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiKXE5t (ORCPT
+        with ESMTP id S229495AbiKXE7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 23:57:49 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1BF410046
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 20:57:47 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id b4so640533pfb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 20:57:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oPlwUNcv4Dplvh3fEfrO40YMYkUc7XawQh7JimisJjE=;
-        b=NBOCpe8Rzc+E27R754CDSyf6DIbW+o78QsHtuC/eHZYj81jKsAVZWrXZZWlVopzy5n
-         2U89qwvZh5PleKd2Qotgp+6QTyjYPenLmBVBaujw1exFWhP5AZfm3KwgTPpGp6TUIr+I
-         O6ke1yZiR7ar5WD1HrpGGqv0xG8AeXe9vkbjFebLQNeQbENC1PCDS1IK3YU/5rJ4i9hG
-         vMkA3eTDpxGkjZmkg2q5x/M+bnu9Asa6UC9zB6CSbsBff77MVWPWAR3ql+cVcd7Fh3wO
-         q6SZvU9CZZS7eEC0JML0fEODM4oU03Z0XC6XFouEYWd9+6ca7LEf51gva918yY+L3HKE
-         bFkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oPlwUNcv4Dplvh3fEfrO40YMYkUc7XawQh7JimisJjE=;
-        b=c214oxGnR3qaLlzgV4HTTWAlFH4Cf/rmgHWOP4tGrbd/cOUuA8L2NWeYukKXRbG6Y9
-         SfN0HJ5Xx1DtSTvk89aT2D+YUUwHkfhQhqC440OZ73Qs0jFtbZewq48ZgDxFK10jRvii
-         vAxiUvRv82q3+yiymDFqAX7hZiWhZ/857RCjt0d9RruTteUeFaTeU8prlJbc3ZDOsFwU
-         tkUj7k9/N/T0i6Ixxdifpb0QnKmdTQt+tepTyLJ1sWZi6f2bhaiV/MyyQoDnQFWK4Ey4
-         wWwr/zjg4a4/OKxIlJcq4uf7ZiuGscSggPLnWPkgwdDzGctB93vbzwmp/mapS/9+BLGp
-         291g==
-X-Gm-Message-State: ANoB5pkHE68ud1PPMORGoSpPhahOXoCI9TuFExRjQfBduERJdSxikGgr
-        kw/WEX+/Z27IivbXqFlxJghqtw==
-X-Google-Smtp-Source: AA0mqf76WrgsB2cg75zm5R0XIKlk5DaFEEo6/NzuGVFrpmGhUVNepyLh5g05/llP99EutH0qToVESQ==
-X-Received: by 2002:a63:fb04:0:b0:476:7faf:e0bf with SMTP id o4-20020a63fb04000000b004767fafe0bfmr10224951pgh.80.1669265867387;
-        Wed, 23 Nov 2022 20:57:47 -0800 (PST)
-Received: from localhost ([122.172.85.60])
-        by smtp.gmail.com with ESMTPSA id t10-20020a170902e84a00b001869efb722csm73843plg.215.2022.11.23.20.57.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 20:57:47 -0800 (PST)
-Date:   Thu, 24 Nov 2022 10:27:45 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "xiaowu.ding" <xiaowu.ding@jaguarmicro.com>
-Cc:     Tushar.Khandelwal@arm.com, jassisinghbrar@gmail.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] driver:mhuv2:Fix data mode rx startup problem
-Message-ID: <20221124045745.yycyoxw2drk4rw6k@vireshk-i7>
-References: <20221124032701.2163-1-xiaowu.ding@jaguarmicro.com>
+        Wed, 23 Nov 2022 23:59:23 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6F85B854;
+        Wed, 23 Nov 2022 20:59:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1669265960; bh=psBO+i21VCwSK9h56JDgWkn2kNzroqWw4HGlKBjuHVE=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+        b=PPpEK/LMbqSSI+Kg4Ujuc8lgCzkX1iOe2ZIFmPMA3YydBF4HdG2ywhjphCXMRDisv
+         HooZjDHdBhvEIAOjrxHVvuH7NuD+DwbHhYvZd9+aztRU4jOUdtd/wbijy9IqM+JdVH
+         6cCtlmtD9SoWV9qfcDqcTda0Y0HARZ1NIDv6EwQGyQTVjjMD9qHPZPyDmAe84FTNGR
+         GmE0XvdYYfjuwRozzSmazixCdlauzi/LjksujGESh6L5g+qMClAswdLeIprA6F7ogc
+         Qwp0OVDJO0RuKOXIjsdSUQC5ChQuj8cfMOFI+nRvSN5aRmtEbtH4Wtvdu0Q+8VqrmC
+         VW3yNiSsedXSQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.100.20] ([46.142.32.211]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N4Qwg-1p4yrO2zSw-011UAi; Thu, 24
+ Nov 2022 05:59:20 +0100
+Message-ID: <864c4420-2ebd-4b44-72c4-359c4949d819@gmx.de>
+Date:   Thu, 24 Nov 2022 05:59:20 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221124032701.2163-1-xiaowu.ding@jaguarmicro.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+From:   Ronald Warsow <rwarsow@gmx.de>
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Content-Language: de-DE
+Subject: Re: [PATCH 6.0 000/314] 6.0.10-rc1 review
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:tFE/vUls/3xulMD1MFcKcEROOtvnbisINpq5fJlFwYi4Q1l3mvO
+ wd63O22WSwDXNShkgYU4BewiAW/S/0tkixg01R4zGoF6PbejB8bpH3laec/B85szIrPKTRj
+ f24xi979d+d0sdZMxvZ4IWuCLWgB9nRPRNiFzpn9XOGOGgvudwfUT+8TvuySLxG1EcS9OUk
+ Meoy0hsgLyXYymYp8rYfA==
+UI-OutboundReport: notjunk:1;M01:P0:V+Wd0Aw9HsI=;/HX76oIawC+68itqrQwD6z2d6U4
+ 4emGh5UEFi3ZfgfUH1eghD8ZBtTcgQjVE6ZhAX1QBZpK+sSr614doDxmmuTZ9se3SFdJe9twS
+ MX+2EhsAPoCP7VbbveeYljhLo4yHHgjua7i5OxfLmSihWk0jnLLUvr1E3w47izRy+UEeIS/he
+ KEborZi9lIEXqhHRN/rI6XTIUtCJaB0nMjuDfx1cLRrgjqT+AkplNfDiFOGUs8bNsQf4uzrEZ
+ q8uwzSVDVHq7Sesa0CpYbKXRyLOexh3z7h2v0spXz68c0Duu+8bXFXfbiq7YzUrDF07asB2ER
+ +2rcIxUNBgw6mjd0TWU5beVTAvtOtA4FNUX0ltJAnkKwVd9HET3D9REdZdkVxVkBiaLkwOpla
+ XkrKRKthFOiH8Ikop7ENZ8pPmPuYsayqugqgp59AFRK+qKWuBYFxkWcPusO5fCmJECwujkuKe
+ SR8Ia6mbMdCt+tA456UcQmIJVlGoKnM0kLSR79cBHwgUisT6apz/U6vlUPgoadnC0VH07Y1yh
+ r6ZVTYIQph3vOfBtqRuPBz+WqoVgsAD+kZwaJZMvu690oTbtiS+SqnxoPctiVNwVHiJfF1kUi
+ 4VyZ0kihBZR/zjAQM0lIBma8WByZZo3CzNdd4HvW4shsgsR6qRBBa2cnJduu79PjDrIVycweU
+ INqs/xYGkml03cvPmCxB5h6+Paao+ylpIRc2B8YQRRn5dAtL6E8S1o9/VmixEz0csUBPndPcu
+ OorqJ4T8C27F8lZgeW5M6cJ7ydfWFUxT7nmsmoGrFrtwounCx+oiEoTJSYPxrC3vMaTDW2zI7
+ 5YP85wPRCTTfp3q0yRNhTFcKzP7PdPjbegTVJYV9AZbMKaAv2PJfTEwNGY/EUi1B6lB1jLbcn
+ WvMiJLqk4gxsTkLk5FGYFMmng795ehuVqSfGDsBG7qN79TPF9O+tY2vQMizMwmQSZxRAvUPeW
+ TiuPxQaIjglOouiLNVjqZbwXTU4=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24-11-22, 11:27, xiaowu.ding wrote:
-> From: Xiaowu Ding <xiaowu.ding@jaguarmicro.com>
-> 
-> When using the arm mhuv2 data transfer mode , sometimes the sender can
-> not send data anymore ,and sender will blocking because of receiver did not
-> clear the stat_clear.
-> 
-> The test scene:
-> A is sender(poll mode) ; B is receiver (interrupt mode)
-> When A send msg to B ,but B did not have register the mailbox . The B will
-> miss the message ,and will not clear the stat_clear. So the sender A will
->  be send blocking status and can not send again anymore.
-> 
-> So the patch just clear the stat_clear within the rx startup function. Just
-> Drop the last message before receiver will not be ready for receiver .
-> 
-> Signed-off-by: Xiaowu Ding <xiaowu.ding@jaguarmicro.com>
-> ---
->  drivers/mailbox/arm_mhuv2.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/mailbox/arm_mhuv2.c b/drivers/mailbox/arm_mhuv2.c
-> index a47aef8df52f..7aef458f0b18 100644
-> --- a/drivers/mailbox/arm_mhuv2.c
-> +++ b/drivers/mailbox/arm_mhuv2.c
-> @@ -327,6 +327,14 @@ static int mhuv2_data_transfer_rx_startup(struct mhuv2 *mhu,
->  {
->  	struct mhuv2_mbox_chan_priv *priv = chan->con_priv;
->  	int i = priv->ch_wn_idx + priv->windows - 1;
-> +	const int windows = priv->windows;
-> +	int j, idx;
-> +
-> +	/* clear the rx stat_clear */
-> +	for (j = 0; j < windows; j++) {
-> +		idx = priv->ch_wn_idx + j;
-> +		writel_relaxed(0xFFFFFFFF, &mhu->recv->ch_wn[idx].stat_clear);
-> +	}
+Hi Greg
 
-Since this is already done in mhuv2_data_transfer_read_data(), I am not sure why
-it is required again.
+6.0.10-rc1
 
->  
->  	/*
->  	 * The protocol mandates that all but the last status register must be
+compiles, boots and runs here on x86_64
+(Intel i5-11400, Fedora 37)
 
--- 
-viresh
+Thanks
+
+Tested-by: Ronald Warsow <rwarsow@gmx.de>
+
