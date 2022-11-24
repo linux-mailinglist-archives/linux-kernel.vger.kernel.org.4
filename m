@@ -2,116 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 033F963705F
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 03:24:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEAD663706F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 03:29:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiKXCY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 21:24:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47812 "EHLO
+        id S229762AbiKXC3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 21:29:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiKXCYZ (ORCPT
+        with ESMTP id S229475AbiKXC3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 21:24:25 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51ED2E121B
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 18:24:24 -0800 (PST)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NHhYs5cfYzJnpy;
-        Thu, 24 Nov 2022 10:21:05 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 24 Nov 2022 10:24:22 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 24 Nov 2022 10:24:22 +0800
-Subject: Re: [PATCH] kernfs: fix potential null-ptr-deref in
- kernfs_path_from_node_locked()
-To:     Tejun Heo <tj@kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221123020419.1867-1-thunder.leizhen@huawei.com>
- <Y35Qgw4Q8XYD5Did@slm.duckdns.org>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <ba083b44-93d5-37c4-380c-8e0249b2333c@huawei.com>
-Date:   Thu, 24 Nov 2022 10:24:21 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Wed, 23 Nov 2022 21:29:01 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1548C2ED75
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 18:29:01 -0800 (PST)
+Received: from kwepemi500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NHhkM07kXzmW0w;
+        Thu, 24 Nov 2022 10:28:26 +0800 (CST)
+Received: from huawei.com (10.67.175.34) by kwepemi500022.china.huawei.com
+ (7.221.188.64) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 24 Nov
+ 2022 10:28:59 +0800
+From:   Ren Zhijie <renzhijie2@huawei.com>
+To:     <catalin.marinas@arm.com>, <will@kernel.org>,
+        <mark.rutland@arm.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <yusongping@huawei.com>,
+        Ren Zhijie <renzhijie2@huawei.com>
+Subject: [PATCH v2] arm64: armv8_deprecated: fix unused-function error
+Date:   Thu, 24 Nov 2022 02:24:29 +0000
+Message-ID: <20221124022429.19024-1-renzhijie2@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <Y35Qgw4Q8XYD5Did@slm.duckdns.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.175.34]
 X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500006.china.huawei.com (7.185.36.236)
+ kwepemi500022.china.huawei.com (7.221.188.64)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+If CONFIG_SWP_EMULATION is not set and
+CONFIG_CP15_BARRIER_EMULATION is not set,
+aarch64-linux-gnu complained about unused-function :
 
+arch/arm64/kernel/armv8_deprecated.c:67:21: error: ‘aarch32_check_condition’ defined but not used [-Werror=unused-function]
+ static unsigned int aarch32_check_condition(u32 opcode, u32 psr)
+                     ^~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
 
-On 2022/11/24 0:55, Tejun Heo wrote:
-> On Wed, Nov 23, 2022 at 10:04:19AM +0800, Zhen Lei wrote:
->> Ensure that the 'buf' is not empty before strlcpy() uses it.
->>
->> Commit bbe70e4e4211 ("fs: kernfs: Fix possible null-pointer dereferences
->> in kernfs_path_from_node_locked()") first noticed this, but it didn't
->> fix it completely.
->>
->> Fixes: 9f6df573a404 ("kernfs: Add API to generate relative kernfs path")
->> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> 
-> I think the right thing to do is removing that if. It makes no sense to call
-> that function with NULL buf and the fact that nobody reported crashes on
-> NULL buf indicates that we in fact never do.
+To fix this warning, modify aarch32_check_condition() with __maybe_unused.
 
-OK.
+Fixes: 0c5f416219da ("arm64: armv8_deprecated: move aarch32 helper earlier")
+Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
+---
+Changes in v2:
+- modify aarch32_check_condition() with __maybe_unused.
 
-How about I remove "buf[0] = '\0';" too? It seems to be a useless operation.
-When 'kn_from' and 'kn_to' have a common ancestor, there must be a path from
-'kn_from' to 'kn_to', and strlcpy() always fills in the terminator correctly,
-even if the buf is too small to save the first path node.
+ arch/arm64/kernel/armv8_deprecated.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-static void test(void)
-{
-        char buf[4];
-        int i, n, buflen;
-
-        buflen = 1;
-        n = strlcpy(buf, "string", buflen);
-        for (i = 0; i < buflen; i++)
-                printk("%d: %02x\n", i, buf[i]);
-        printk("n=%d\n\n", n);
-
-        buflen = sizeof(buf);
-        n = strlcpy(buf, "string", buflen);
-        for (i = 0; i < buflen; i++)
-                printk("%d: %02x\n", i, buf[i]);
-        printk("n=%d\n", n);
-}
-
-Output:
-[   33.691497] 0: 00
-[   33.691569] n=6
-
-[   33.691595] 0: 73
-[   33.691622] 1: 74
-[   33.691630] 2: 72
-[   33.691637] 3: 00
-[   33.691650] n=6
-
-> 
-> Thanks.
-> 
-
+diff --git a/arch/arm64/kernel/armv8_deprecated.c b/arch/arm64/kernel/armv8_deprecated.c
+index ed0788cf6bbb..8a9052cf3013 100644
+--- a/arch/arm64/kernel/armv8_deprecated.c
++++ b/arch/arm64/kernel/armv8_deprecated.c
+@@ -64,7 +64,7 @@ struct insn_emulation {
+ 
+ #define	ARM_OPCODE_CONDITION_UNCOND	0xf
+ 
+-static unsigned int aarch32_check_condition(u32 opcode, u32 psr)
++static unsigned int __maybe_unused aarch32_check_condition(u32 opcode, u32 psr)
+ {
+ 	u32 cc_bits  = opcode >> 28;
+ 
 -- 
-Regards,
-  Zhen Lei
+2.17.1
+
