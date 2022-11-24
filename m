@@ -2,405 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B52116380EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 23:32:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79A966380F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 23:39:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbiKXWcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 17:32:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42238 "EHLO
+        id S229610AbiKXWjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 17:39:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiKXWcv (ORCPT
+        with ESMTP id S229536AbiKXWji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 17:32:51 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 185D6421B2
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 14:32:49 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id z3so1990676iof.3
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 14:32:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hIAvL/izjpO+2uGGPdB3hG0A996ekY/SUzBE6N+50z8=;
-        b=LnqvZ1SGx7/tRUrO7a3qrnw8xR1Xxnd2OG+S5dnzTF8fN89yYLHZMZs8Lk2ht2BLG3
-         gXgf5QEyHKdQrda9OzQI80poLA7vkcx5W+XzpqviGDxTXTFHYbVIhHF+UXSrIR3UNxG8
-         vQ90toP/DMqAudEsLwBXLqYokJmterj1Qn5pY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hIAvL/izjpO+2uGGPdB3hG0A996ekY/SUzBE6N+50z8=;
-        b=uiqRerC/FiJK5rTnA2CxjuKoSj1HD5OmPYWRYN2SxjS7SWRULxJWTS6ICM1TL72/vl
-         Thp+QOv8E5DLi4tJA8iMPOJ3iachVtsnOGl289keu2mkbz/D36CwYGd2jTpFBvT8vXIi
-         6l63fVy3qDR1JM5r4+JMtK06J4uTpH6MUMcP5AHHLIO2LSVxsKQRQz6rjWEocjFa85uB
-         rrxQ6zyZzlUrNixOYR/QqnoL0wHD2b31wnO8Uk2nW4fC3zcJ4v5faQVXDW08dnGb8Ql6
-         ZggHPQ4yNW53xi2Ow8dfYrSBfnn7gIc3pkxzjQaF/tfejuF6jn0//ApeF692Auixtxph
-         tAfg==
-X-Gm-Message-State: ANoB5pkwDUIoZOmiYG2eBzzMjpr4CLzH7zrYAtMTZqkJ1z5GERN64AGR
-        Z70PL8WzC1LWQIXf2YQ6rlUOOET1VBl0V7us
-X-Google-Smtp-Source: AA0mqf4pvcEbZd/t8eACNz6ocz5Fyh9CtV2Lq0efoH2/7/Hh9PVkA1GnstVqJfNw3H2KT3sFZLabwg==
-X-Received: by 2002:a02:5487:0:b0:375:16d:2eaf with SMTP id t129-20020a025487000000b00375016d2eafmr15965569jaa.10.1669329168115;
-        Thu, 24 Nov 2022 14:32:48 -0800 (PST)
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com. [209.85.166.175])
-        by smtp.gmail.com with ESMTPSA id e16-20020a0566380cd000b003728cd8bc7csm814635jak.38.2022.11.24.14.32.46
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Nov 2022 14:32:46 -0800 (PST)
-Received: by mail-il1-f175.google.com with SMTP id bp12so1276557ilb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 14:32:46 -0800 (PST)
-X-Received: by 2002:a92:cb85:0:b0:302:624e:e49b with SMTP id
- z5-20020a92cb85000000b00302624ee49bmr15188788ilo.172.1669329165500; Thu, 24
- Nov 2022 14:32:45 -0800 (PST)
+        Thu, 24 Nov 2022 17:39:38 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7740E9DBBB;
+        Thu, 24 Nov 2022 14:39:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669329576; x=1700865576;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=O/yZD16+ow6xa2tYM2kMwgyF6dFqp5DKxYl22j0dLiE=;
+  b=Y/OIHwex7dNgr4RMjkRVQOvM0MJUYi2uvxCRriGw94VO6WanKxMf3fjp
+   038zO0BjDG6meuBVbAiz750JaCCUGtYlYHkVWTmxdzisT3RYzsvdsh1eX
+   x4SIh6erAqs5H2hZWJDtbBMfUpYbPDQ1xqybKx0kK0QdX6gSUVQhmUQ9u
+   w5OZJEK1WKcy/EuwN7HmiH0+dhUVOk/B77wyAQMJwivJfBWCYxbT3IrFt
+   8tGgyq2qVzEVardbqGS8tyP/IJ/jfyEsdz4MxKRU4cjwUuV1CUGZdRqHI
+   D2U+v8WkJBD7pGhHinLgv6HQAocb/MJ73N2UnYIs7+lYnpzyu2JhIEqj0
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="314408552"
+X-IronPort-AV: E=Sophos;i="5.96,191,1665471600"; 
+   d="scan'208";a="314408552"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2022 14:39:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="675210771"
+X-IronPort-AV: E=Sophos;i="5.96,191,1665471600"; 
+   d="scan'208";a="675210771"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga001.jf.intel.com with ESMTP; 24 Nov 2022 14:39:36 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 24 Nov 2022 14:39:35 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 24 Nov 2022 14:39:35 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Thu, 24 Nov 2022 14:39:35 -0800
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.101)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Thu, 24 Nov 2022 14:39:34 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cg79secgKGc8Iljt0n2kfA6wCy34zJVY5D37jEWo00WKH+Z+j+NXkZF9PV6e9snL2TcXRcg3rqfNtz1p7Ajdjt4BxEkOH2pXJzKCu3BWFQh+1Kz5ZF+Vxgrl24xVxAn07o4G+zTdKMBNibAEZ/Drdq+RoDsm1RxNGGhOF9ehSBnFES8dRWDjCUjQaN3GndCsXr4kcRg78Qr1XMrsZyuD9VsA3oE5+uLTrWvhQDD2auA2praVM6+kSG0XaOXVXjXS5Jk0bNPN8h6/tVLiU6wfPFr3xGpAaEPqzZ5J+ProOkLA/hqMIyKSsu2N4IWieDKMQyi7D/qZGpNMftte64rocQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=O/yZD16+ow6xa2tYM2kMwgyF6dFqp5DKxYl22j0dLiE=;
+ b=lRQ0ZI6UXDMZvWcenktX3SZIRyoB1uUL2GDeLTWRDrxUec+i8f+vjR4Iu9vGCCTHpg7HUwm8Nk7xwVPQs/JIcZl1HlOwJAwXWkehNSXXf8Khrjt2WMqmZRR/4yqn287yc6FQbaBfjYK3OEorFdATLekjlUt9l9pYtot6NwCfgmRi1CDPTzVJS31/RwToqzT71991CVUNV1j1euRu4jZ2yHI4b4zzaFfkAJ2RqUo14OXCORr0bdYzEtWpPK9MemVlayTzmjKwMM2RTnPpBZGfeDhDusJeCrtUaB7aKZFJLC9MGUI8x1lXkiDgxD2j7NASjJITGCG+fbRgsQ3dFSOtsw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
+ by SJ0PR11MB5133.namprd11.prod.outlook.com (2603:10b6:a03:2ac::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19; Thu, 24 Nov
+ 2022 22:39:31 +0000
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::2fb7:be18:a20d:9b6e]) by BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::2fb7:be18:a20d:9b6e%8]) with mapi id 15.20.5834.015; Thu, 24 Nov 2022
+ 22:39:30 +0000
+From:   "Huang, Kai" <kai.huang@intel.com>
+To:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "Luck, Tony" <tony.luck@intel.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+Subject: Re: [PATCH v7 15/20] x86/virt/tdx: Reserve TDX module global KeyID
+Thread-Topic: [PATCH v7 15/20] x86/virt/tdx: Reserve TDX module global KeyID
+Thread-Index: AQHY/T3MNBi/d00vWkGyDsvL+6pjqq5NL36AgAGBQIA=
+Date:   Thu, 24 Nov 2022 22:39:30 +0000
+Message-ID: <529a22d05e21b9218dc3f29c17ac5a176334cac1.camel@intel.com>
+References: <cover.1668988357.git.kai.huang@intel.com>
+         <fec007c0193e5f0509450de78052346da1045b23.1668988357.git.kai.huang@intel.com>
+         <9c36d878-db83-5c0e-90f3-8f19dd25801c@intel.com>
+In-Reply-To: <9c36d878-db83-5c0e-90f3-8f19dd25801c@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|SJ0PR11MB5133:EE_
+x-ms-office365-filtering-correlation-id: 576633ef-d0b9-4f8d-b738-08dace6cc022
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ndPyu6n3pnOivKMn34YjTJgAn0znCPb4KycTY2loppwlTFhhZyZUmiutHKe/rWSULgufSiqX/Wt/hAp0R/NHGRdBhfCO8AE/XQTNJFanIiz9udub/i0PBOA63LaDiwEN5fOV+InFSsqdhxGsgtV8UCX3WycV9OPp+sM6t0aVFgC7QiS8YOB9G0pneZSxDV8gub/Q0q3kQfhWMwpsCG55Ee0o4stRRWRu/yHFpRgGqp+s5OyOUAoykpAivCjXlUjhWhq03z1FhnpQQOH6+2hZhu7sUw0mAVa0hl5px0V367k7XRD13ZCcAzsh+bXU8/IoSNSmGCllkdJF6dCcT30BZWpaMpYLKb7QlYCT9JmuN8OOZXtCgg2Nnb83wDzWWzQvG+cWf96g6P5GAANoAVmvEaaIBP6ut7uc3Eum+YlTt3i+KfkyZXjP5+C+wPC8bUvK4u0D9dd31xbgMw08jYqEKYSK4I68AHa3oved2fA6EozMXXFYkeQf9wOm2FEuaU+qcBAIP/9asRos2biUZiSVi7jRMs2F1mlN9V1f56y20tRIF/xYLADlb5F0fStO7zfm5E/ooeMQaNKcK5m+EWNdtjPyUskRIWwQIMbCeozsZLaZOXpbtInHJ5HuML4Tq4G4ZxuyT4/zaFkaR+BTaJoKlL9T5SUjAyCa3fs4iSGIJKuHqj+TF3m9fEvRKpRQAstDQqVPgGYdKTFr2p9wrAP1PA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(39860400002)(136003)(366004)(376002)(396003)(451199015)(36756003)(4001150100001)(2906002)(2616005)(41300700001)(4744005)(5660300002)(7416002)(186003)(8936002)(38100700002)(86362001)(122000001)(38070700005)(82960400001)(53546011)(6506007)(6512007)(26005)(110136005)(6486002)(316002)(54906003)(71200400001)(91956017)(4326008)(66476007)(66446008)(66556008)(64756008)(478600001)(66946007)(76116006)(8676002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Qk03YmF1N0h2VDlFckNueTRFYkJSa2VxZXV2cmd3VlV0UmlDTi9YOXVtaFFY?=
+ =?utf-8?B?aGYrTWQ5OS8rejFqNmVRL2tUSm0yZ2lGV3VYT2kzanZaZnFzTkdjcFVqbEhH?=
+ =?utf-8?B?UVhXd3djcnlwYXRrellZKzlGQkRFaG5OQ0QrbHpXeWsxY2h6SW1FUnNKZ0JH?=
+ =?utf-8?B?TDlBRjdLY2dwVld3YThQRmpyV1pWVDlva01WSUxvRmFwRVBrSkdaNmJWMnB6?=
+ =?utf-8?B?eGk3WWJDV1ZYMCs5clgwMlcycE03bis1V1czS1RuRDVvR2lMZTZIamZNOXJa?=
+ =?utf-8?B?YmlnenZ4Skp6ODRNbnl5WFMxOHB5Y0FBOEZBcmdmZHVNOHdOOG9qTmpQVWF1?=
+ =?utf-8?B?OHNyMlJNNVZEMExlUXJNWUtkNktyaHpUVFo1YW1YcGlFdXh1d2U0SVhCL0k1?=
+ =?utf-8?B?VzhQSDBLVHBVS25lT0UyVjY4cTJ0ajVIUlZiTmNob3R5ZlZKUStLUEYzL2ky?=
+ =?utf-8?B?OUVpTGkxdkVJUjc1d1JSeWxtazlTTEV5YVZvVWp2WEtJblFkbzUrenVqbFVJ?=
+ =?utf-8?B?YmZxOENudVl3NnEzZ09nM0V1RlJzSllvQ1BWMVNCeU5INnJYcHBIT2RKL2d5?=
+ =?utf-8?B?VzFaVGd3VkQ3U1hyS0dyVnU4RkRtNkNPanN2UFRNRnVRaklmWklZTTl4L3RG?=
+ =?utf-8?B?S21ZbS9LMEtpQ0FLZVgwcXdXOUNzalhldVpRcUJVQWFWNE5nNVNnS05FNWQ3?=
+ =?utf-8?B?Y0g5QkRGamRVZVNFejQreGJKUlBaSDgxTGRvVXF5cmM0Sm9WVUdXc3BxUURm?=
+ =?utf-8?B?YkRod3UwcnhHRkNLVkpUT2dTVmVxK1BMRzlWRjVpMFBhZ3EySm45d1FKalNk?=
+ =?utf-8?B?S0hCWUQ4OHdIeHFpSmJQU09MT05OWjlxVURjSUpXV0Zwdmk5dEs1Q2NRbnVh?=
+ =?utf-8?B?S1RxTlZQT3ZUUkJJQ1JDeXZZZXRSY0E2cm1xbHRhQndxeUx2djc2SCsyU09L?=
+ =?utf-8?B?VUVWSkJMWUJWKzRTODRENEhhVW41RU5PTkdQUkZXMmlOazVnQ0kvYzNSRXhL?=
+ =?utf-8?B?MDJJa0ZNdWRRdjkxMmNpYytudEtHRWJIb3JkcXd3bkpFdlNjNTluS2t3bHQy?=
+ =?utf-8?B?WWQxRnNOcng2a09wSitwbERldnZRWCs2MFVpblU3NHhKMWxUTlBmN3AyVGpk?=
+ =?utf-8?B?bUw3OE9zSEFjeThtY2tlcVlnWlF6V3dWQ243TFVyVkU5VHNPS3lSM1pUM2Nq?=
+ =?utf-8?B?NnFQSjUwRmFPMHJYNWRvVUdKRFhQODM1UFEyUXJDWmpKZ1FDNVIrTXN4V1Ji?=
+ =?utf-8?B?OENGZWFrTWpVMTR1WjcvLzZwcDJodXBCSm9RRUUyaU4zN01rMlhMajVycmt5?=
+ =?utf-8?B?cTIvR0ZnUEdQb3dwcmJRRC9zNVErTm5mK21MTzJTSnZpMStNbVlwUU0xT05L?=
+ =?utf-8?B?TWJ2aTVmRnQxVHBuS0llYmVLVlFyNzc4YUlRYk1oc0xPMDNzYTFiUEVhRTVN?=
+ =?utf-8?B?VHYrVDF2V1B6SmpPYmpFRkpHVVV3eURFOHl5eGpyT3o5dFB3ZUNuWXBpWVVM?=
+ =?utf-8?B?WW4xNWYraHNUSVQwQzZhQVFKSzU1N2lCMzc3bGNWUDBMZDhrNjhRUDhzUEVT?=
+ =?utf-8?B?cHZWOFdzN0dtYm02d0x6SHBxNHdMaFByN3Q1ZzFSNFZVNHFUWlcxVmlkMTN3?=
+ =?utf-8?B?VnlSTEc1NEVjWTNPdEF2TzFBb3l3SkhwYjdIcmJub0ZqKzhVdTBzNVNLbkN6?=
+ =?utf-8?B?MXp2QVYvVHRhOElhMDVxSEZOOWw3aG5NbGVFOVZNNWRSWitXbSs0Z2RJZ3Q0?=
+ =?utf-8?B?OUJNMHM4TUQ3bHFEdnFoVDlPUEFOVU1IamN6UU5nUDh2OXUrNHljQlhvUXJv?=
+ =?utf-8?B?ZWRRWThhY3poT3Vtc3hrK3IvNTB0NVFyazQrVUxZeHFybUxoZmNtRnJrWHky?=
+ =?utf-8?B?QjladGVyb1hBWi9TMHdDZVEwbHBsSHc1alA3dyszMFF1dnN6UzcvWnF1N054?=
+ =?utf-8?B?YzhucE0yb1ZRdThPVEsrZzV3REtmNFlmV3RaN1o0OXpiU3NTemcySUI5N3pl?=
+ =?utf-8?B?M29BMnViL2U5Q215dExBbjhNeWVnYWpCbmpkUFpJRDBlSEhZOTFHeTBjRE5t?=
+ =?utf-8?B?K214R1dFVEQwdmJob3o0S1lodzIrb1l5bXAvMXpMTEoyTUVFd0hIZTdrY0Vz?=
+ =?utf-8?B?OERJVGFUN2tDTGxWT3RCSFpOZlFOU09LY3hQbTQzUEpCRlczMURuMXVtdktu?=
+ =?utf-8?B?eFE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <3A026EC67F6BC045BD64D6871255A7A7@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20221114-disable-kexec-reset-v1-0-fb51d20cf871@chromium.org>
- <20221114-disable-kexec-reset-v1-2-fb51d20cf871@chromium.org>
- <20221117160650.16e06b37@rotkaeppchen> <CANiDSCvyQ66mXbhEgj_qnE_zR4frsxtu1bXaukDrEG0FjrE4yw@mail.gmail.com>
- <20221121150948.6f7c1f1f@rotkaeppchen> <CANiDSCtqYykAjRinx9r4O+DxdTBA=OQSjF8URmM6X54nN7pDUA@mail.gmail.com>
- <20221124124000.5af23cad@rotkaeppchen> <CANiDSCvO+6TrM900Z_Jr4QL=c1uHS21deto7cU9W4mr7KimhJQ@mail.gmail.com>
- <20221124160115.23ae7928@rotkaeppchen>
-In-Reply-To: <20221124160115.23ae7928@rotkaeppchen>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Thu, 24 Nov 2022 23:32:34 +0100
-X-Gmail-Original-Message-ID: <CANiDSCvJqPogBXWUvQq6ZZaX_bonLBLhJXFyNQbULb0WnJw5UQ@mail.gmail.com>
-Message-ID: <CANiDSCvJqPogBXWUvQq6ZZaX_bonLBLhJXFyNQbULb0WnJw5UQ@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] kexec: Introduce kexec_reboot_disabled
-To:     Philipp Rudo <prudo@redhat.com>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
-        Ross Zwisler <zwisler@kernel.org>, linux-doc@vger.kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 576633ef-d0b9-4f8d-b738-08dace6cc022
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Nov 2022 22:39:30.1324
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: tACgSFjH+26u5nBnl5/TKGw4mutDaBAZJULHYcMgvCAB6lvuCaZoP4KxTmjQIVhMWfuSDW9DFfq+pJ/od9HoHA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5133
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Philipp
-
-
-On Thu, 24 Nov 2022 at 16:01, Philipp Rudo <prudo@redhat.com> wrote:
->
-> On Thu, 24 Nov 2022 13:52:58 +0100
-> Ricardo Ribalda <ribalda@chromium.org> wrote:
->
-> > On Thu, 24 Nov 2022 at 12:40, Philipp Rudo <prudo@redhat.com> wrote:
-> > >
-> > > Hi Ricardo,
-> > >
-> > > On Wed, 23 Nov 2022 09:58:08 +0100
-> > > Ricardo Ribalda <ribalda@chromium.org> wrote:
-> > >
-> > > > Hi Philipp
-> > > >
-> > > > Thanks for your review.
-> > > >
-> > > > My scenario is a trusted system, where even if you are root, your
-> > > > access to the system is very limited.
-> > > >
-> > > > Let's assume LOADPIN and verity are enabled.
-> > >
-> > > My point is that on such systems I expect that a sysadmin also wants to
-> > > control the crash kernel including its initramfs (which also has to be part
-> > > of the signed kernel?). But if that's the case a sysadmin can simply arm
-> > > kdump early during boot and then toggle kexec_load_disabled. With that
-> > > LINUX_REBOOT_CMD_KEXEC also gets disabled as no kexec kernel can be loaded
-> > > while kdump works. Thus there is no need to add the new interface. Or am
-> > > I missing anything?
-> >
-> > Let's say that you have a script that does something like this
-> >
-> >
-> > kexec -p dump_kernel
-> > echo 1 > /proc/sys/kernel/kexec_load_disabled
-> >
-> > If an attacker can DDos the system and make that script crash... then
-> > kexec is still accessible
-> >
-> > On the other hand, if you load the kernel with the commandline
-> >
-> > sysctl.kernel.kexec_load_disabled=1
->                       ^^^^
->                       reboot?
-
-yes :)  thanks!
-
-> Otherwise you shouldn't be able to load the crash kernel at all.
->
-> > Then even if the script crashes, the only way to abuse kexec is by
-> > panicing the running kernel....
->
-> True. But  when an attacker can DDos the system the final workload is
-> already running. So wouldn't it be enough to make sure that the script
-> above has finished before starting you workload. E.g. by setting an
-> appropriate Before=/After= in the systemd.unit?
-
-What if the kexec binary crashes and the unit will never succeed?
-
-Or worse, your distro does not use systemd !!!
-
->
-> Furthermore, I don't think that restricting kexec reboot alone is
-> sufficient when the attacker can still control the crash kernel. At
-> least my assumption is that triggering a panic instead of just
-> rebooting is just a mild inconvenience for somebody who is able to pull
-> off an attack like that.
-
-The attacker does not control the crash kernel completely. loadpin is
-still in place.
-Yes, they can downgrade the whole system to a vulnerable kernel image.
-But the choices are limited :)
-
-With physical access to the device panicing a kernel is easily doable
-(but not trivial). But remotely, it is more challenging.
-
->
-> > Would it make you more comfortable if I model this as a kernel config
-> > instead of a runtime option?
->
-> No, I think the implementation is fine. I'm currently only struggling
-> to understand what problem kexec_reboot_disabled solves that cannot be
-> solved by kexec_load_disabled.
->
-> > Thanks!
->
-> Happy to help.
->
-> Thanks
-> Philipp
->
-> >
-> >
-> > >
-> > > Thanks
-> > > Philipp
-> > >
-> > > >
-> > > > On Mon, 21 Nov 2022 at 15:10, Philipp Rudo <prudo@redhat.com> wrote:
-> > > > >
-> > > > > Hi Ricardo,
-> > > > >
-> > > > > On Thu, 17 Nov 2022 16:15:07 +0100
-> > > > > Ricardo Ribalda <ribalda@chromium.org> wrote:
-> > > > >
-> > > > > > Hi Philipp
-> > > > > >
-> > > > > > Thanks for your review!
-> > > > >
-> > > > > happy to help.
-> > > > >
-> > > > > >
-> > > > > > On Thu, 17 Nov 2022 at 16:07, Philipp Rudo <prudo@redhat.com> wrote:
-> > > > > > >
-> > > > > > > Hi Ricardo,
-> > > > > > >
-> > > > > > > all in all I think this patch makes sense. However, there is one point
-> > > > > > > I don't like...
-> > > > > > >
-> > > > > > > On Mon, 14 Nov 2022 14:18:39 +0100
-> > > > > > > Ricardo Ribalda <ribalda@chromium.org> wrote:
-> > > > > > >
-> > > > > > > > Create a new toogle that disables LINUX_REBOOT_CMD_KEXEC, reducing the
-> > > > > > > > attack surface to a system.
-> > > > > > > >
-> > > > > > > > Without this toogle, an attacker can only reboot into a different kernel
-> > > > > > > > if they can create a panic().
-> > > > > > > >
-> > > > > > > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > > > > > > >
-> > > > > > > > diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
-> > > > > > > > index 97394bd9d065..25d019682d33 100644
-> > > > > > > > --- a/Documentation/admin-guide/sysctl/kernel.rst
-> > > > > > > > +++ b/Documentation/admin-guide/sysctl/kernel.rst
-> > > > > > > > @@ -462,6 +462,17 @@ altered.
-> > > > > > > >  Generally used together with the `modules_disabled`_ sysctl.
-> > > > > > > >
-> > > > > > > >
-> > > > > > > > +kexec_reboot_disabled
-> > > > > > > > +=====================
-> > > > > > > > +
-> > > > > > > > +A toggle indicating if ``LINUX_REBOOT_CMD_KEXEC`` has been disabled.
-> > > > > > > > +This value defaults to 0 (false: ``LINUX_REBOOT_CMD_KEXEC`` enabled),
-> > > > > > > > +but can be set to 1 (true: ``LINUX_REBOOT_CMD_KEXEC`` disabled).
-> > > > > > > > +Once true, kexec can no longer be used for reboot and the toggle
-> > > > > > > > +cannot be set back to false.
-> > > > > > > > +This toggle does not affect the use of kexec during a crash.
-> > > > > > > > +
-> > > > > > > > +
-> > > > > > > >  kptr_restrict
-> > > > > > > >  =============
-> > > > > > > >
-> > > > > > > > diff --git a/include/linux/kexec.h b/include/linux/kexec.h
-> > > > > > > > index 41a686996aaa..15c3fad8918b 100644
-> > > > > > > > --- a/include/linux/kexec.h
-> > > > > > > > +++ b/include/linux/kexec.h
-> > > > > > > > @@ -407,6 +407,7 @@ extern int kimage_crash_copy_vmcoreinfo(struct kimage *image);
-> > > > > > > >  extern struct kimage *kexec_image;
-> > > > > > > >  extern struct kimage *kexec_crash_image;
-> > > > > > > >  extern int kexec_load_disabled;
-> > > > > > > > +extern int kexec_reboot_disabled;
-> > > > > > > >
-> > > > > > > >  #ifndef kexec_flush_icache_page
-> > > > > > > >  #define kexec_flush_icache_page(page)
-> > > > > > > > diff --git a/kernel/kexec.c b/kernel/kexec.c
-> > > > > > > > index cb8e6e6f983c..43063f803d81 100644
-> > > > > > > > --- a/kernel/kexec.c
-> > > > > > > > +++ b/kernel/kexec.c
-> > > > > > > > @@ -196,6 +196,10 @@ static inline int kexec_load_check(unsigned long nr_segments,
-> > > > > > > >       if (!capable(CAP_SYS_BOOT) || kexec_load_disabled)
-> > > > > > > >               return -EPERM;
-> > > > > > > >
-> > > > > > > > +     /* Check if the system admin has disabled kexec reboot. */
-> > > > > > > > +     if (!(flags & KEXEC_ON_CRASH) && kexec_reboot_disabled)
-> > > > > > > > +             return -EPERM;
-> > > > > > >
-> > > > > > > ... Allowing to load a crashkernel doesn't make sense in my opinion. If
-> > > > > > > an attacker is capable of creating a malicious kernel, planting it on
-> > > > > > > the victims system and then find a way to boot it via kexec this
-> > > > > > > attacker also knows how to load the malicious kernel as crashkernel and
-> > > > > > > trigger a panic. So you haven't really gained anything. That's why I
-> > > > > > > would simply drop this hunk (and the corresponding one from
-> > > > > > > kexec_file_load) and let users who worry about this use a combination of
-> > > > > > > kexec_load_disabled and kexec_reboot_disabled.
-> > > > > >
-> > > > > > If for whatever reason your sysadmin configured kexec_reboot_disabed
-> > > > > > it can be nice that when a user try to load it they get a warning.
-> > > > > > It is easier to debug than waiting two steps later when they run kexec -e....
-> > > > >
-> > > > > I'm having second thoughts about this patch. My main problem is that I
-> > > > > don't see a real use case where kexec_reboot_disabled is advantageous
-> > > > > over kexec_load_disabled. The point is that disabling
-> > > > > LINUX_REBOOT_CMD_KEXEC is almost identical to toggling kexec_load_disabled without
-> > > > > a loaded kernel (when you don't have a kernel loaded you cannot reboot
-> > > > > into it). With this the main use case of kexec_reboot_disabled is
-> > > > > already covered by kexec_load_disabled.
-> > > >
-> > > > >
-> > > > > However, there are two differences
-> > > > >
-> > > > > 1) with kexec_reboot_disable you can still (re-)load a crash kernel
-> > > > > e.g. to update the initramfs after a config change. But as discussed in
-> > > > > my first mail this comes on the cost that an attacker could still load a
-> > > > > malicious crash kernel and then 'panic into it'.
-> > > >
-> > > > That crash kernel must be already in the signed malicious kernel.
-> > > > which reduces the chances of attack.
-> > > > Plus an attacker must be able to panic the current kernel at will,
-> > > > instead of just call reset.
-> > > >
-> > > > >
-> > > > > 2) kexec_load_disabled also prevents unloading of a loaded kernel. So
-> > > > > once loaded kexec_load_disabled cannot prevent the reboot into this
-> > > > > kernel.
-> > > > >
-> > > > >
-> > > > > For 1) I doubt that this is desired at all. My expectation is that on
-> > > > > systems where a sysadmin restricts a user to reboot via kexec the
-> > > > > sysadmin also wants to prevent the user to load an arbitrary crash
-> > > > > kernel. Especially as this still keeps the loophole open you are trying
-> > > > > to close.
-> > > > >
-> > > > > So only 2) is left as real benefit. But that is an extremely specific
-> > > > > scenario. How often does this scenario happen in real life? What
-> > > > > problem does kexec_reboot_disable solve different implementation
-> > > > > (also in userspace) cannot?
-> > > > >
-> > > > > Sorry about being this pedantic but you want to introduce some new uapi
-> > > > > which will be hard if not impossible to change once introduced. That's
-> > > > > why I want to be a 100% sure it is really needed.
-> > > >
-> > > > No worries. Completely understand :). Thanks for taking this seriously..
-> > > >
-> > > >
-> > > > Best regards!
-> > > > >
-> > > > > Thanks
-> > > > > Philipp
-> > > > >
-> > > > >
-> > > > > > That is why I added it. But i am also ok removing it
-> > > > > >
-> > > > > > >
-> > > > > > > Thanks
-> > > > > > > Philipp
-> > > > > > >
-> > > > > > > > +
-> > > > > > > >       /* Permit LSMs and IMA to fail the kexec */
-> > > > > > > >       result = security_kernel_load_data(LOADING_KEXEC_IMAGE, false);
-> > > > > > > >       if (result < 0)
-> > > > > > > > diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-> > > > > > > > index ca2743f9c634..fe82e2525705 100644
-> > > > > > > > --- a/kernel/kexec_core.c
-> > > > > > > > +++ b/kernel/kexec_core.c
-> > > > > > > > @@ -929,6 +929,7 @@ int kimage_load_segment(struct kimage *image,
-> > > > > > > >  struct kimage *kexec_image;
-> > > > > > > >  struct kimage *kexec_crash_image;
-> > > > > > > >  int kexec_load_disabled;
-> > > > > > > > +int kexec_reboot_disabled;
-> > > > > > > >  #ifdef CONFIG_SYSCTL
-> > > > > > > >  static struct ctl_table kexec_core_sysctls[] = {
-> > > > > > > >       {
-> > > > > > > > @@ -941,6 +942,16 @@ static struct ctl_table kexec_core_sysctls[] = {
-> > > > > > > >               .extra1         = SYSCTL_ONE,
-> > > > > > > >               .extra2         = SYSCTL_ONE,
-> > > > > > > >       },
-> > > > > > > > +     {
-> > > > > > > > +             .procname       = "kexec_reboot_disabled",
-> > > > > > > > +             .data           = &kexec_reboot_disabled,
-> > > > > > > > +             .maxlen         = sizeof(int),
-> > > > > > > > +             .mode           = 0644,
-> > > > > > > > +             /* only handle a transition from default "0" to "1" */
-> > > > > > > > +             .proc_handler   = proc_dointvec_minmax,
-> > > > > > > > +             .extra1         = SYSCTL_ONE,
-> > > > > > > > +             .extra2         = SYSCTL_ONE,
-> > > > > > > > +     },
-> > > > > > > >       { }
-> > > > > > > >  };
-> > > > > > > >
-> > > > > > > > @@ -1138,7 +1149,7 @@ int kernel_kexec(void)
-> > > > > > > >
-> > > > > > > >       if (!kexec_trylock())
-> > > > > > > >               return -EBUSY;
-> > > > > > > > -     if (!kexec_image) {
-> > > > > > > > +     if (!kexec_image || kexec_reboot_disabled) {
-> > > > > > > >               error = -EINVAL;
-> > > > > > > >               goto Unlock;
-> > > > > > > >       }
-> > > > > > > > diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-> > > > > > > > index 45637511e0de..583fba6de5cb 100644
-> > > > > > > > --- a/kernel/kexec_file.c
-> > > > > > > > +++ b/kernel/kexec_file.c
-> > > > > > > > @@ -333,6 +333,11 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
-> > > > > > > >       if (!capable(CAP_SYS_BOOT) || kexec_load_disabled)
-> > > > > > > >               return -EPERM;
-> > > > > > > >
-> > > > > > > > +     /* Check if the system admin has disabled kexec reboot. */
-> > > > > > > > +     if (!(flags & (KEXEC_FILE_ON_CRASH | KEXEC_FILE_UNLOAD))
-> > > > > > > > +         && kexec_reboot_disabled)
-> > > > > > > > +             return -EPERM;
-> > > > > > > > +
-> > > > > > > >       /* Make sure we have a legal set of flags */
-> > > > > > > >       if (flags != (flags & KEXEC_FILE_FLAGS))
-> > > > > > > >               return -EINVAL;
-> > > > > > > >
-> > > > > > >
-> > > > > >
-> > > > > >
-> > > > >
-> > > >
-> > > >
-> > >
-> >
-> >
->
-
-
--- 
-Ricardo Ribalda
+T24gV2VkLCAyMDIyLTExLTIzIGF0IDE1OjQwIC0wODAwLCBEYXZlIEhhbnNlbiB3cm90ZToNCj4g
+T24gMTEvMjAvMjIgMTY6MjYsIEthaSBIdWFuZyB3cm90ZToNCj4gPiBAQCAtMTA1Myw2ICsxMDU2
+LDEyIEBAIHN0YXRpYyBpbnQgaW5pdF90ZHhfbW9kdWxlKHZvaWQpDQo+ID4gIAlpZiAocmV0KQ0K
+PiA+ICAJCWdvdG8gb3V0X2ZyZWVfdGRtcnM7DQo+ID4gIA0KPiA+ICsJLyoNCj4gPiArCSAqIFJl
+c2VydmUgdGhlIGZpcnN0IFREWCBLZXlJRCBhcyBnbG9iYWwgS2V5SUQgdG8gcHJvdGVjdA0KPiA+
+ICsJICogVERYIG1vZHVsZSBtZXRhZGF0YS4NCj4gPiArCSAqLw0KPiA+ICsJdGR4X2dsb2JhbF9r
+ZXlpZCA9IHRkeF9rZXlpZF9zdGFydDsNCj4gDQo+IFRoaXMgZG9lc24ndCAicmVzZXJ2ZSIgc3F1
+YXQuDQo+IA0KPiBZb3UgY291bGQgYXJndWUgdGhhdCBpdCAicGlja3MiLCAiY2hvb3NlcyIsIG9y
+ICJkZXNpZ25hdGVzIiB0aGUNCj4gJ3RkeF9nbG9iYWxfa2V5aWQnLCBidXQgd2hlcmUgaXMgdGhl
+ICJyZXNlcnZhdGlvbiI/DQoNClJpZ2h0LiAgSSdsbCBjaGFuZ2UgdG8gdXNlICJjaG9vc2UiLg0K
