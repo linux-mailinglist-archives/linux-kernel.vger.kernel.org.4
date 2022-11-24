@@ -2,61 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2716F63711D
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 04:34:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D3FB637120
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 04:37:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbiKXDeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 22:34:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54656 "EHLO
+        id S229672AbiKXDhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 22:37:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiKXDeU (ORCPT
+        with ESMTP id S229620AbiKXDh0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 22:34:20 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85D3C6205;
-        Wed, 23 Nov 2022 19:34:18 -0800 (PST)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NHk5n0CHwzqSLx;
-        Thu, 24 Nov 2022 11:30:21 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 24 Nov 2022 11:34:17 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 24 Nov 2022 11:34:16 +0800
-Subject: Re: [PATCH v2] doc: Fix htmldocs build warnings of stallwarn.rst
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-CC:     "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        "Josh Triplett" <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        <linux-next@vger.kernel.org>
-References: <20221123120238.1904-1-thunder.leizhen@huawei.com>
- <Y34mIhHYjFFzywsk@debian.me>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <32e46feb-20ee-b3b4-8c36-e6f8c295a4d6@huawei.com>
-Date:   Thu, 24 Nov 2022 11:34:15 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Wed, 23 Nov 2022 22:37:26 -0500
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2110.outbound.protection.outlook.com [40.107.117.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFCDFD32B1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 19:37:20 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=R8fjib7JF6/PZH6xG3IIASg6S+hiNXq/b5rvEmqDAOraNNzqrGrN9Wi9LYFWC7pATT+4+p/5k3+c6D1Hgk1kWi2zscTDvp0u2H94HCsdCSSDDdzSVsPsmhEkMtPgT3XPIn7dhNu7YgLSqa+tC7R/sOrUDTFnp36sEVsJpP7yxN2EZGXm8idk1xFH3GfmYOSQcQ3IfOH2ZAKDMd5+v9NsM1IV1eCOCK0J2cY4srHnBldJ0UYzG8uzdk/NYBeI9wCrvr75wivmfkkd7ZGpbnzcVD1iqfD5yYv7TfiUA1ceNbQI/R1J2W0v+EC6RuQ5OE0YFOXBxGOoto6IimUUw2DxDQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FuQdlCLS4U5lKkdddD+BypX2RuHXnpjHr1bfgBWLB5Y=;
+ b=HaAsLXuYE1npLamCLOLC7ATteYmynHL+1rW+uPARWA4cdQuvOZ5VHZYVvY0/WY7GPpfIKnJxzTPTw55DkejRQoLV23PiqNC1Ijg2oLhin77+06rdlcHvnR6r9pGgFY4Pm6Z7YLhczXv63TpZT9FZr0/WSow6Vq2A8n+/dl+b38gudBgJEEf7GM6XKvqcM0uFiIMkb2lryyin0fnGOB8KUOMt+VTW2jVlmrhs44GwA8F2YF3MQTBCK/hk2cY7jUp7ZaCeaRFv/1c6J/aznWw4WDQpmB+Qtaeba+5QAWbOGkjf2+X4+NptbYLyGBc997JJfFDHpnhl7eaTjGbY8kD06w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FuQdlCLS4U5lKkdddD+BypX2RuHXnpjHr1bfgBWLB5Y=;
+ b=LUrzeG7E/o+71FjQ88JWA4khf4uE3TsY1sJ2tFjF1HoUv8qabRn+3Aikmas8zfDVeioSl5hpHTqAl6b/a1dY1iqMjTJ1hYSpxed3x+kN2W2k4VvjIaHT5x5Usy49GnDYv5/ZRdhN/WPIcKUdLxCePtNfr+brKRjwu2xLRoghe4Ez5X0+3jjtEuDS1sMiw3tk6LX0AV/ibdBazTqBOHy1AvuHobuShDxTuBI86war80pxcJLMD6/dkE/fLC5XEODT8X2mQQy8iPXcPsIeDgJ+XAwym0qx1TEShpwNuqndvWM09/ZOo0kvFoi77GEtJRA5iAGSG0FKL15g1N6VaWZoaA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by KL1PR0601MB4514.apcprd06.prod.outlook.com (2603:1096:820:72::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19; Thu, 24 Nov
+ 2022 03:37:17 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::1230:5f04:fe98:d139]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::1230:5f04:fe98:d139%7]) with mapi id 15.20.5834.015; Thu, 24 Nov 2022
+ 03:37:17 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
+Subject: [PATCH] f2fs: remove F2FS_SET_FEATURE() and F2FS_CLEAR_FEATURE() macro
+Date:   Thu, 24 Nov 2022 11:37:08 +0800
+Message-Id: <20221124033708.10580-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2P153CA0004.APCP153.PROD.OUTLOOK.COM
+ (2603:1096:4:140::23) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-In-Reply-To: <Y34mIhHYjFFzywsk@debian.me>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|KL1PR0601MB4514:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7964d4b7-307f-4f5c-fa69-08dacdcd2f8a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +/NneDr6vjFIjWjl0IRtm9gx+BzJjnxof+HN70HWUFCa8IWsablmHp0UYxyrejQXi+zpT1x0woWS52qecj6biUA0U9wIwcHqUfrfG0UsJHPiGPUmPvKHx3iXFfKCTOKM1qV7iEOzUwBh1/KwsGgkRHio2iX+o4E4l+Hf2SEtITjxJLhmITcsRD9QrwqcB5G1iYHWD7MYJmIJggP6JTKSlIBAHAGcH2TIvAyors6U9CgSgmJ4JV9zyJ6vCyCRQbmPBKZ3r1x9LRnXp1S9yEVuSR+aRHj4dJXQwdUeU9E6WYgjNs2kJJWqD/n+8DIYoJGjZSh7sne4ZJYoz/xdW7RjR4EAjgrUPieOMNonlU00cL5DQLfzQ2cqgs8dM2j9eriIrKs8Fbw4K0Y8D9+eODDex6Le5utdWTkZ0BUTqcFQKpIvtXxBRCWyIrhzNJ0jj5dUcX+ir3O7DKHCreKqrewPx78JNApP/imY6AbjlkBjhdgEW9pdLpl2Z7nQD9mCxzVEUzRbN6OiqdENXBAW1a2vjv3hIHbAC/d7VYIwHzvl5o21nBAGgowXx0dRTLhMOXqJIfHpqSzsg0Hgpuuors2yTuD0/hd3NriCrOOctmDJUJ86vqHmjs5hhHVuOPBqLHT7TUYecUQFA0agiicB+MqS9h0qpYad6P3tVEmRAVUCdFuf+lCIV+kNrEMimmc7ARdS
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(136003)(376002)(366004)(39860400002)(451199015)(52116002)(38350700002)(38100700002)(6486002)(66556008)(66946007)(83380400001)(6666004)(107886003)(5660300002)(8936002)(2906002)(4326008)(6506007)(8676002)(186003)(1076003)(36756003)(478600001)(26005)(316002)(66476007)(86362001)(2616005)(41300700001)(6512007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?A5/rFk2L0Zo+H+h67pATrsgbWKs+iXQORCHL2iyMY1f2Q+ZpVToNWL99Dbvr?=
+ =?us-ascii?Q?9EjjkW+QtHrTDKz0NeyXAh4RPjY/oihRrotbRIu9VnYuHxMaBhwyUvLKE5g+?=
+ =?us-ascii?Q?T1ENyZ9clCKbjMf3S5AfP3gmbwicouXgAiHo35A5RXDhjxRaSFV47WrIFc4T?=
+ =?us-ascii?Q?5Rbz12iKbLDrxnbfBXaVerKffgw3H6aHNo/qKuDGb9RXxhrImA/TBwpxdpum?=
+ =?us-ascii?Q?vXtvFFhMTdp/yP4tdKlWsBnt8URv6RwAhtAgj+bfqWwmy4ZEOrZUqk60rRc9?=
+ =?us-ascii?Q?nQqyE5mFdCWuPm309n4leUwX1wbX7AGPBlbg5wLtuAzi/NhMKhBlCTtlaLqO?=
+ =?us-ascii?Q?+ais+hDHAm01h1b5bGMoGo1A+qnwGuk3I31d3fuU14FG2exHIlbKZjOxDhUB?=
+ =?us-ascii?Q?f2hNcZNbmKbaVNfrY7e56+Xl54UKTwPqtScL2//mnwBKbQmCr22wWEsaQi0G?=
+ =?us-ascii?Q?4s0UaAA8CFbVck/wWNiRJX2lweMFRJbcf0UI4mXuxtPURB86Dj3wGP3aH10J?=
+ =?us-ascii?Q?Qy4SS7OHD1ljTa7iki04x6S4NuwHWWJS1LIJt/XAPVOxm+2J+V8xEr8OyQHp?=
+ =?us-ascii?Q?RdWub3RPf/yaGDtXsoDOVwjYSBJrkta/P5V9KiPgykSCyd6B5Ktvo38bqPmT?=
+ =?us-ascii?Q?wadQcyBKlAi6A7pkzADu0sGBSg/taZWa2Y8dVpe0tZnUhJXMLw3hzwyEGprA?=
+ =?us-ascii?Q?AqQrhDmi1ocrKNuxg60hM468fwW1qW/y4XOeIUVwqfIdgi5rFI+CPm+RkDEu?=
+ =?us-ascii?Q?ADocLETukFemMTEk5Eyl9Ds81cAjyEBR85l3muCfJ+due6uAmBwDT7HxOvT2?=
+ =?us-ascii?Q?hLYEIiSNdq8f2SlU+f5XpTsLaZ1VCuWby263a4kcXTt3vJlRFDLYYVcTudYF?=
+ =?us-ascii?Q?cpu0RgXFsk2Pa/HL5aLZaMBRJcFjoxEjAAQK6bMJ8uDEom3ecmZrLqJPqmhn?=
+ =?us-ascii?Q?hczZ0pfsUkDBS7B7XC5b5xtBcOE//bd/yiWjc3ftwDKnga8dl3t5kHvFmqhk?=
+ =?us-ascii?Q?QzUTrQQUSb1giV3M6t1hA4HN07Dc62IaOVSUjcxDG1HJgT5nnewmDxhvHfUb?=
+ =?us-ascii?Q?C3JWGu7U0SqEQ5qY3nPmgaOZmD+pKKCWy2ygdtpweGJzfO1vHCGpQlSTI/7h?=
+ =?us-ascii?Q?LeRIfeF+Sl1JPOlNBQCSE1MC8CLexhXTcRnDHEQi2u72R6GskYa5jU990n2h?=
+ =?us-ascii?Q?eit4Ry7TINg2rCmJbQaf6SwHJbvQNPfdQxK4+4m5GQbqhNz3uX1LZvGTbG9b?=
+ =?us-ascii?Q?bVofuF2tdJeq9lSDLjv/Orq/2x9Gja4phNBOIVxv9bLUz5NKRFvZLEPW5wyQ?=
+ =?us-ascii?Q?UPicYiKKaoSygskgtV1UhYQ4pHpkLXCNeSnqBED4D2V3BKWmJXjNwR3VwlPE?=
+ =?us-ascii?Q?S0XwGbpMTu39Wv52WpD9YQVWcsVJc52hWdpWGjc+w4RRLYgcitKT388Q2j9s?=
+ =?us-ascii?Q?2cdv49nRqgEQnXTf2aeCKeGeo0kRO8ijtG+dBUpZQrwSmMVwZOFRwL0TnDRE?=
+ =?us-ascii?Q?Vld5KgrVNEsDtufbYvobRVkxT/qBvh+cR1eZMofPDK5Fi/K8qYyeVKtYihIK?=
+ =?us-ascii?Q?DNU0rzE3Rrh4RdMwPF/4iC17YoKpA+QeKAnymOt8?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7964d4b7-307f-4f5c-fa69-08dacdcd2f8a
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2022 03:37:17.8316
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NYEHZlJXwRw5LkB8LFi4i2I6E5Lh/A3jYZdA3VTG1qmOPuwoQvAf4dzYmJc65r8xkPVzAwfkI6/ujEpBcZbxiA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB4514
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,198 +111,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+F2FS_SET_FEATURE() and F2FS_CLEAR_FEATURE() have never
+been used since they were introduced by this commit
+76f105a2dbcd("f2fs: add feature facility in superblock").
 
+So let's remove them. BTW, convert f2fs_sb_has_##name to return bool.
 
-On 2022/11/23 21:54, Bagas Sanjaya wrote:
-> On Wed, Nov 23, 2022 at 08:02:38PM +0800, Zhen Lei wrote:
->> Documentation/RCU/stallwarn.rst:
->> 401: WARNING: Literal block expected; none found.
->> 428: WARNING: Literal block expected; none found.
->> 445: WARNING: Literal block expected; none found.
->> 459: WARNING: Literal block expected; none found.
->> 468: WARNING: Literal block expected; none found.
->>
->> The literal block need to be indented, so add two spaces to each line.
-> 
-> Indenting to match alignment of lists texts?
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+ fs/f2fs/f2fs.h | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-It's required by reStructuredText Markup Specification.
-
-Indented Literal Blocks
-Indented literal blocks are indicated by indentation relative to the
-surrounding text (leading whitespace on each line). The literal block
-ends with the end of the indentation.
-
-The surrounding text need to be indented, relative to the paragraphs
-above and below it and at the same level.
-
-> 
->> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> 
-> You miss crediting linux-next list, so please add:
-> 
-> Link: https://lore.kernel.org/linux-next/20221123163255.48653674@canb.auug.org.au/
-> Fixes: 3d2788ba4573 ("doc: Document CONFIG_RCU_CPU_STALL_CPUTIME=y stall information")
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-
-OK, thanks.
-
-> 
->> -The sampling period is shown as follows:
->> -:<------------first timeout---------->:<-----second timeout----->:
->> -:<--half timeout-->:<--half timeout-->:                          :
->> -:                  :<--first period-->:                          :
->> -:                  :<-----------second sampling period---------->:
->> -:                  :                  :                          :
->> -:          snapshot time point    1st-stall                  2nd-stall
->> +The sampling period is shown as follows::
->>  
->> +  |<------------first timeout---------->|<-----second timeout----->|
->> +  |<--half timeout-->|<--half timeout-->|                          |
->> +  |                  |<--first period-->|                          |
->> +  |                  |<-----------second sampling period---------->|
->> +  |                  |                  |                          |
->> +  |          snapshot time point    1st-stall                  2nd-stall
-> 
-> The beginning pipe (|) on the last line of diagram above shouldn't be there
-> (axis label?).
-
-OK, it might look better to delete it.
-
-The text in literal block is treated as plain text.
-
-
-> 
->>  
->>  The following describes four typical scenarios:
->>  
->> -1. A CPU looping with interrupts disabled.::
->> +1. A CPU looping with interrupts disabled.
->>  
->> -   rcu:          hardirqs   softirqs   csw/system
->> -   rcu:  number:        0          0            0
->> -   rcu: cputime:        0          0            0   ==> 2500(ms)
->> +   ::
->> +
->> +     rcu:          hardirqs   softirqs   csw/system
->> +     rcu:  number:        0          0            0
->> +     rcu: cputime:        0          0            0   ==> 2500(ms)
->>  
->>     Because interrupts have been disabled throughout the measurement
->>     interval, there are no interrupts and no context switches.
->> @@ -440,11 +442,11 @@ The following describes four typical scenarios:
->>  
->>     This is similar to the previous example, but with non-zero number of
->>     and CPU time consumed by hard interrupts, along with non-zero CPU
->> -   time consumed by in-kernel execution.::
->> +   time consumed by in-kernel execution. ::
->>  
->> -   rcu:          hardirqs   softirqs   csw/system
->> -   rcu:  number:      624          0            0
->> -   rcu: cputime:       49          0         2446   ==> 2500(ms)
->> +     rcu:          hardirqs   softirqs   csw/system
->> +     rcu:  number:      624          0            0
->> +     rcu: cputime:       49          0         2446   ==> 2500(ms)
->>  
->>     The fact that there are zero softirqs gives a hint that these were
->>     disabled, perhaps via local_bh_disable().  It is of course possible
->> @@ -454,20 +456,22 @@ The following describes four typical scenarios:
->>  
->>  3. A CPU looping with preemption disabled.
->>  
->> -   Here, only the number of context switches is zero.::
->> +   Here, only the number of context switches is zero. ::
->>  
->> -   rcu:          hardirqs   softirqs   csw/system
->> -   rcu:  number:      624         45            0
->> -   rcu: cputime:       69          1         2425   ==> 2500(ms)
->> +     rcu:          hardirqs   softirqs   csw/system
->> +     rcu:  number:      624         45            0
->> +     rcu: cputime:       69          1         2425   ==> 2500(ms)
->>  
->>     This situation hints that the stalled CPU was looping with preemption
->>     disabled.
->>  
->> -4. No looping, but massive hard and soft interrupts.::
->> +4. No looping, but massive hard and soft interrupts.
->> +
->> +   ::
->>  
->> -   rcu:          hardirqs   softirqs   csw/system
->> -   rcu:  number:       xx         xx            0
->> -   rcu: cputime:       xx         xx            0   ==> 2500(ms)
->> +     rcu:          hardirqs   softirqs   csw/system
->> +     rcu:  number:       xx         xx            0
->> +     rcu: cputime:       xx         xx            0   ==> 2500(ms)
->>  
->>     Here, the number and CPU time of hard interrupts are all non-zero,
->>     but the number of context switches and the in-kernel CPU time consumed
->>
-> 
-> Because paragraphs below the snippets directly refers to them,just use colon: 
-
-This makes the style inconsistent when viewed on the web page. So I decided not
-to change it.
-
-Take your advice and the end result will be as follows: (1 and 4 followed by a
-colon, 2 and 4 followed by a dot)
-
-1. A CPU looping with interrupts disabled:
-2. A CPU looping with bottom halves disabled.
-3. A CPU looping with preemption disabled.
-4. No looping, but massive hard and soft interrupts:
-
-> 
-> ---- >8 ----
-> 
-> diff --git a/Documentation/RCU/stallwarn.rst b/Documentation/RCU/stallwarn.rst
-> index f15b766d39b8d9..4f6b91be03cfe0 100644
-> --- a/Documentation/RCU/stallwarn.rst
-> +++ b/Documentation/RCU/stallwarn.rst
-> @@ -423,9 +423,7 @@ The sampling period is shown as follows::
->  
->  The following describes four typical scenarios:
->  
-> -1. A CPU looping with interrupts disabled.
-> -
-> -   ::
-> +1. A CPU looping with interrupts disabled::
->  
->       rcu:          hardirqs   softirqs   csw/system
->       rcu:  number:        0          0            0
-> @@ -442,7 +440,7 @@ The following describes four typical scenarios:
->  
->     This is similar to the previous example, but with non-zero number of
->     and CPU time consumed by hard interrupts, along with non-zero CPU
-> -   time consumed by in-kernel execution. ::
-> +   time consumed by in-kernel execution::
->  
->       rcu:          hardirqs   softirqs   csw/system
->       rcu:  number:      624          0            0
-> @@ -456,7 +454,7 @@ The following describes four typical scenarios:
->  
->  3. A CPU looping with preemption disabled.
->  
-> -   Here, only the number of context switches is zero. ::
-> +   Here, only the number of context switches is zero::
->  
->       rcu:          hardirqs   softirqs   csw/system
->       rcu:  number:      624         45            0
-> @@ -465,9 +463,7 @@ The following describes four typical scenarios:
->     This situation hints that the stalled CPU was looping with preemption
->     disabled.
->  
-> -4. No looping, but massive hard and soft interrupts.
-> -
-> -   ::
-> +4. No looping, but massive hard and soft interrupts::
->  
->       rcu:          hardirqs   softirqs   csw/system
->       rcu:  number:       xx         xx            0
-> 
-> Thanks.
-> 
-
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index f0833638f59e..0640c703cd5d 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -203,10 +203,6 @@ struct f2fs_mount_info {
+ #define __F2FS_HAS_FEATURE(raw_super, mask)				\
+ 	((raw_super->feature & cpu_to_le32(mask)) != 0)
+ #define F2FS_HAS_FEATURE(sbi, mask)	__F2FS_HAS_FEATURE(sbi->raw_super, mask)
+-#define F2FS_SET_FEATURE(sbi, mask)					\
+-	(sbi->raw_super->feature |= cpu_to_le32(mask))
+-#define F2FS_CLEAR_FEATURE(sbi, mask)					\
+-	(sbi->raw_super->feature &= ~cpu_to_le32(mask))
+ 
+ /*
+  * Default values for user and/or group using reserved blocks
+@@ -4384,7 +4380,7 @@ static inline bool f2fs_disable_compressed_file(struct inode *inode)
+ }
+ 
+ #define F2FS_FEATURE_FUNCS(name, flagname) \
+-static inline int f2fs_sb_has_##name(struct f2fs_sb_info *sbi) \
++static inline bool f2fs_sb_has_##name(struct f2fs_sb_info *sbi) \
+ { \
+ 	return F2FS_HAS_FEATURE(sbi, F2FS_FEATURE_##flagname); \
+ }
 -- 
-Regards,
-  Zhen Lei
+2.25.1
+
