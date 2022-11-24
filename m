@@ -2,226 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48CDC637C92
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 16:12:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AC4A637C97
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 16:14:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbiKXPMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 10:12:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54256 "EHLO
+        id S229944AbiKXPNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 10:13:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiKXPM3 (ORCPT
+        with ESMTP id S229538AbiKXPNy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 10:12:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25747B43
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 07:12:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CC83DB827FF
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 15:12:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FD06C433D6;
-        Thu, 24 Nov 2022 15:12:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669302744;
-        bh=OtLRvA4YMC+HsHOS+DjoSGWEC2yDF5c6xjThOmpeUiw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=LExguQ8/5p1rEte9Om550OXwVQL5KHe3B8Aq6oOUB0i4QIWInzh1bHmLp08Uy56YS
-         UKOyC7u8Kddlv9bkFq/gQtfaD+H4DC4FF+RZjvTRxHGYSNIO/txXbOFRrHV73on9us
-         gF2ZR1IS6rn13RKF4KX1F2xA9Lr4/L+BhCk5Abk8yhus4a+r14SALefvfNudaSKwnH
-         C2Yn5GVZLArSjz2irlIRCK/8efBmgOLrjGxZIYtdbpr32fu1SYKTQORaKO6XkiTK8K
-         CIwYHvVrREyGZtv2XxdrSCCTThMEcye/wP5t+ZrDActpqHu2gdegV6szTKpOkNOM8R
-         6Xu64UO3ZuuGw==
-Message-ID: <1faee1c5-33ca-2d1f-0079-0e7bcbd3df21@kernel.org>
-Date:   Thu, 24 Nov 2022 23:12:21 +0800
+        Thu, 24 Nov 2022 10:13:54 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302A315AAB4;
+        Thu, 24 Nov 2022 07:13:53 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id bp15so2933603lfb.13;
+        Thu, 24 Nov 2022 07:13:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XPUoBYfcFjyl7FwxKw5AFCfnK5DVVfvD4huQjq4ERM0=;
+        b=AkPWvGH7j6VUvs4P98n6tnaY9J6JAvXPdd/8I4dDqfahyZkB9/YF9YbpwSTldp2f3X
+         jP6cM8a7DgYWkMkvFtxggc6GWfTNC4vjntqRqniI6jqUqUqENSM/mvV5VCGA25hKBIsu
+         AFQVcKd4OGc5b9LF6tF+BLmlbMhvqku4+CLbq4eJg8SJcXZ9olxRuk1PwX5UectHJU6h
+         hMuzXIJIXfjKwB91kTU6RVFs7gcA5CmrgQvbXdN1mi4g3ri55lsaoKb0479D2z+fSdDJ
+         ne4NwNnw/tBB0jh+CbdKrYYRDVZgIWRnBgOxL23yIyGAOMZurS5GWwZ9F9NYyYHPLgdx
+         Rpow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XPUoBYfcFjyl7FwxKw5AFCfnK5DVVfvD4huQjq4ERM0=;
+        b=5uJC2YQNPyR8TFBcuQZBAR8T6/qU8BL9dQaoSP6enIpcApyGZA76xzYJuzpw3v6SWW
+         fzOPHemahlrPPWEmYvToFIMfonCTH7AHSnZeos10rdQqqzBdC0/IZyWc7eN3oH6Siza/
+         +l0UlyeR2UWIW3kVHRNKwHLQwQNVg2HhHOfkYIqFWkfpHW4f2w2NrVcUA9PJz2eHBQiu
+         LCn/XG7GiI+NvJ+6iZmnxAoSwpjXPimJPpi8cqyZa7kOqh+mhNR8+aSlmzS3gvGxHtxw
+         VqscaRcxMX5LrE+Qyraow8T9hIZN51s3fM50w9jTFEESr0AzMz9d3zyuAtPgk1dP5CWN
+         RVxQ==
+X-Gm-Message-State: ANoB5pnjSw63WHTbWrm8ytmGWmynIyNcklnCRBCNHbElBAK5s79qvX5M
+        ZTdH1nbr+El3VXW42lTlP/RdIAcTxq5lU9X6
+X-Google-Smtp-Source: AA0mqf4k0uXoT2d9p9bR4yGYvChWpenmHBP0KZLaPEZf8Nogjyhp2jYojmpP1532YnbY3Tqz7QTaNg==
+X-Received: by 2002:ac2:5331:0:b0:4ab:35a8:2fa0 with SMTP id f17-20020ac25331000000b004ab35a82fa0mr8789857lfh.233.1669302831294;
+        Thu, 24 Nov 2022 07:13:51 -0800 (PST)
+Received: from [192.168.0.103] ([77.220.140.242])
+        by smtp.gmail.com with ESMTPSA id u25-20020ac25199000000b00494a8fecacesm145435lfi.192.2022.11.24.07.13.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Nov 2022 07:13:50 -0800 (PST)
+Message-ID: <03d74a68-91a3-04dd-613b-33e232937cbc@gmail.com>
+Date:   Thu, 24 Nov 2022 18:13:49 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [f2fs-dev] [PATCH v7] f2fs: introduce
- F2FS_IOC_START_ATOMIC_REPLACE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v4] virtio/vsock: replace virtio_vsock_pkt with sk_buff
 Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     Daeho Jeong <daeho43@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com,
-        Daeho Jeong <daehojeong@google.com>
-References: <20221111170406.1086745-1-daeho43@gmail.com>
- <6e26eb7d-8b9e-5a91-b66f-a6f8cf1d53ce@kernel.org>
- <Y36Xis5vGsfzVS8l@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <Y36Xis5vGsfzVS8l@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Stefano Garzarella <sgarzare@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>
+Cc:     Bobby Eshleman <bobbyeshleman@gmail.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Jiang Wang <jiang.wang@bytedance.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, AVKrasnov@sberdevices.ru
+References: <20221124060750.48223-1-bobby.eshleman@bytedance.com>
+ <20221124150005.vchk6ieoacrcu2gb@sgarzare-redhat>
+From:   Arseniy Krasnov <oxffffaa@gmail.com>
+In-Reply-To: <20221124150005.vchk6ieoacrcu2gb@sgarzare-redhat>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/24 5:58, Jaegeuk Kim wrote:
-> On 11/23, Chao Yu wrote:
->> On 2022/11/12 1:04, Daeho Jeong wrote:
->>> From: Daeho Jeong <daehojeong@google.com>
->>>
->>> introduce a new ioctl to replace the whole content of a file atomically,
->>> which means it induces truncate and content update at the same time.
->>> We can start it with F2FS_IOC_START_ATOMIC_REPLACE and complete it with
->>> F2FS_IOC_COMMIT_ATOMIC_WRITE. Or abort it with
->>> F2FS_IOC_ABORT_ATOMIC_WRITE.
->>>
->>> Signed-off-by: Daeho Jeong <daehojeong@google.com>
->>> ---
->>> v7: changed where to clear FI_ATOMIC_REPLACE
->>>       fixed tentative race condition in f2fs_ioc_start_atomic_write()
->>> v3: move i_size change after setting atomic write flag
->>> v2: add undefined ioctl number reported by <lkp@intel.com>
->>> ---
->>>    fs/f2fs/data.c            |  3 +++
->>>    fs/f2fs/f2fs.h            |  1 +
->>>    fs/f2fs/file.c            | 21 +++++++++++++++------
->>>    fs/f2fs/segment.c         | 13 ++++++++++++-
->>>    include/uapi/linux/f2fs.h |  1 +
->>>    5 files changed, 32 insertions(+), 7 deletions(-)
->>>
->>> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
->>> index 5f895ddcd64a..bce4dcc3ad78 100644
->>> --- a/fs/f2fs/data.c
->>> +++ b/fs/f2fs/data.c
->>> @@ -3457,6 +3457,9 @@ static int prepare_atomic_write_begin(struct f2fs_sb_info *sbi,
->>>    	else if (*blk_addr != NULL_ADDR)
->>>    		return 0;
->>> +	if (is_inode_flag_set(inode, FI_ATOMIC_REPLACE))
->>> +		goto reserve_block;
->>> +
->>>    	/* Look for the block in the original inode */
->>>    	err = __find_data_block(inode, index, &ori_blk_addr);
->>>    	if (err)
->>> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
->>> index e29f9adf60ca..d513ecd17550 100644
->>> --- a/fs/f2fs/f2fs.h
->>> +++ b/fs/f2fs/f2fs.h
->>> @@ -765,6 +765,7 @@ enum {
->>>    	FI_ALIGNED_WRITE,	/* enable aligned write */
->>>    	FI_COW_FILE,		/* indicate COW file */
->>>    	FI_ATOMIC_COMMITTED,	/* indicate atomic commit completed except disk sync */
->>> +	FI_ATOMIC_REPLACE,	/* indicate atomic replace */
->>>    	FI_MAX,			/* max flag, never be used */
->>>    };
->>> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
->>> index 7ce629c95f4a..f9a04f6d76cb 100644
->>> --- a/fs/f2fs/file.c
->>> +++ b/fs/f2fs/file.c
->>> @@ -1984,7 +1984,7 @@ static int f2fs_ioc_getversion(struct file *filp, unsigned long arg)
->>>    	return put_user(inode->i_generation, (int __user *)arg);
->>>    }
->>> -static int f2fs_ioc_start_atomic_write(struct file *filp)
->>> +static int f2fs_ioc_start_atomic_write(struct file *filp, bool truncate)
->>>    {
->>>    	struct inode *inode = file_inode(filp);
->>>    	struct user_namespace *mnt_userns = file_mnt_user_ns(filp);
->>> @@ -2053,15 +2053,22 @@ static int f2fs_ioc_start_atomic_write(struct file *filp)
->>>    	f2fs_write_inode(inode, NULL);
->>> -	isize = i_size_read(inode);
->>> -	fi->original_i_size = isize;
->>> -	f2fs_i_size_write(fi->cow_inode, isize);
->>> -
->>>    	stat_inc_atomic_inode(inode);
->>>    	set_inode_flag(inode, FI_ATOMIC_FILE);
->>>    	set_inode_flag(fi->cow_inode, FI_COW_FILE);
->>>    	clear_inode_flag(fi->cow_inode, FI_INLINE_DATA);
->>> +
->>> +	isize = i_size_read(inode);
->>> +	fi->original_i_size = isize;
->>> +	if (truncate) {
->>> +		set_inode_flag(inode, FI_ATOMIC_REPLACE);
->>> +		truncate_inode_pages_final(inode->i_mapping);
->>> +		f2fs_i_size_write(inode, 0);
->>> +		isize = 0;
->>> +	}
->>> +	f2fs_i_size_write(fi->cow_inode, isize);
->>> +
->>>    	f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
->>>    	f2fs_update_time(sbi, REQ_TIME);
->>> @@ -4089,7 +4096,9 @@ static long __f2fs_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
->>>    	case FS_IOC_GETVERSION:
->>>    		return f2fs_ioc_getversion(filp, arg);
->>>    	case F2FS_IOC_START_ATOMIC_WRITE:
->>> -		return f2fs_ioc_start_atomic_write(filp);
->>> +		return f2fs_ioc_start_atomic_write(filp, false);
->>> +	case F2FS_IOC_START_ATOMIC_REPLACE:
->>> +		return f2fs_ioc_start_atomic_write(filp, true);
->>>    	case F2FS_IOC_COMMIT_ATOMIC_WRITE:
->>>    		return f2fs_ioc_commit_atomic_write(filp);
->>>    	case F2FS_IOC_ABORT_ATOMIC_WRITE:
->>> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
->>> index 9cbf88092c78..f2930fffbc7d 100644
->>> --- a/fs/f2fs/segment.c
->>> +++ b/fs/f2fs/segment.c
->>> @@ -197,6 +197,7 @@ void f2fs_abort_atomic_write(struct inode *inode, bool clean)
->>>    	fi->cow_inode = NULL;
->>>    	release_atomic_write_cnt(inode);
->>>    	clear_inode_flag(inode, FI_ATOMIC_COMMITTED);
->>> +	clear_inode_flag(inode, FI_ATOMIC_REPLACE);
->>>    	clear_inode_flag(inode, FI_ATOMIC_FILE);
->>>    	stat_dec_atomic_inode(inode);
->>> @@ -261,14 +262,24 @@ static void __complete_revoke_list(struct inode *inode, struct list_head *head,
->>>    					bool revoke)
->>>    {
->>>    	struct revoke_entry *cur, *tmp;
->>> +	pgoff_t start_index = 0;
->>> +	bool truncate = is_inode_flag_set(inode, FI_ATOMIC_REPLACE);
->>>    	list_for_each_entry_safe(cur, tmp, head, list) {
->>> -		if (revoke)
->>> +		if (revoke) {
->>>    			__replace_atomic_write_block(inode, cur->index,
->>>    						cur->old_addr, NULL, true);
->>> +		} else if (truncate) {
->>> +			f2fs_truncate_hole(inode, start_index, cur->index);
->>> +			start_index = cur->index + 1;
->>
->> Do we try to truncate from page #0 to page #(index of last page in chain)?
->>
->> If so, how about calling f2fs_truncate_hole(, 0, last_index) after the loop?
+Hello Stefano
+
+On 24.11.2022 18:00, Stefano Garzarella wrote:
+> This is a net-next material, please remember to use net-next tag:
+> https://www.kernel.org/doc/html/v6.0/process/maintainer-netdev.html#netdev-faq
 > 
-> I think either would be fine. Could you please send a separate patch for this?
-
-Fine, let me add a new patch to clean up it.
-
-Reviewed-by: Chao Yu <chao@kernel.org>
-
-Thanks,
-
+> On Wed, Nov 23, 2022 at 10:07:49PM -0800, Bobby Eshleman wrote:
+>> This commit changes virtio/vsock to use sk_buff instead of
+>> virtio_vsock_pkt. Beyond better conforming to other net code, using
+>> sk_buff allows vsock to use sk_buff-dependent features in the future
+>> (such as sockmap) and improves throughput.
+>>
+>> This patch introduces the following performance changes:
+>>
+>> Tool/Config: uperf w/ 64 threads, SOCK_STREAM
+>> Test Runs: 5, mean of results
+>> Before: commit 95ec6bce2a0b ("Merge branch 'net-ipa-more-endpoints'")
+>>
+>> Test: 64KB, g2h
+>> Before: 21.63 Gb/s
+>> After: 25.59 Gb/s (+18%)
+>>
+>> Test: 16B, g2h
+>> Before: 11.86 Mb/s
+>> After: 17.41 Mb/s (+46%)
+>>
+>> Test: 64KB, h2g
+>> Before: 2.15 Gb/s
+>> After: 3.6 Gb/s (+67%)
+>>
+>> Test: 16B, h2g
+>> Before: 14.38 Mb/s
+>> After: 18.43 Mb/s (+28%)
+>>
+>> Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+>> ---
 > 
->>
->> Thanks,
->>
->>> +		}
->>> +
->>>    		list_del(&cur->list);
->>>    		kmem_cache_free(revoke_entry_slab, cur);
->>>    	}
->>> +
->>> +	if (!revoke && truncate)
->>> +		f2fs_do_truncate_blocks(inode, start_index * PAGE_SIZE, false);
->>>    }
->>>    static int __f2fs_commit_atomic_write(struct inode *inode)
->>> diff --git a/include/uapi/linux/f2fs.h b/include/uapi/linux/f2fs.h
->>> index 3121d127d5aa..955d440be104 100644
->>> --- a/include/uapi/linux/f2fs.h
->>> +++ b/include/uapi/linux/f2fs.h
->>> @@ -42,6 +42,7 @@
->>>    						struct f2fs_comp_option)
->>>    #define F2FS_IOC_DECOMPRESS_FILE	_IO(F2FS_IOCTL_MAGIC, 23)
->>>    #define F2FS_IOC_COMPRESS_FILE		_IO(F2FS_IOCTL_MAGIC, 24)
->>> +#define F2FS_IOC_START_ATOMIC_REPLACE	_IO(F2FS_IOCTL_MAGIC, 25)
->>>    /*
->>>     * should be same as XFS_IOC_GOINGDOWN.
->>
->>
->> _______________________________________________
->> Linux-f2fs-devel mailing list
->> Linux-f2fs-devel@lists.sourceforge.net
->> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+> The patch LGTM. I run several tests (iperf3, vsock_test,
+> vsock_diag_test, vhost-user-vsock, tcpdump) and IMO we are okay.
+> 
+> I found the following problems that I would like to report:
+> 
+> - vhost-user-vsock [1] is failing, but it is not an issue of this patch,
+>   but a spec violation in the rust-vmm/vm-virtio/virtio-vsock crate as I
+>   reported here [2]. We will fix it there, this patch is fine, indeed
+>   trying a guest with the new layout (1 descriptor for both header and
+>   data) with vhost-vsock in Linux 6.0, everything works perfectly.
+> 
+> - the new "SOCK_SEQPACKET msg bounds" [3] reworked by Arseniy fails
+>   intermittently with this patch.
+> 
+>   Using the tests currently in the kernel tree everything is fine, so
+>   I don't understand if it's a problem in the new test or in this
+>   patch. I've looked at the code again and don't seem to see any
+>   criticisms.
+> 
+>   @Arseniy @Bobby can you take a look?
+Seems i've found this problem here:
+
+https://lkml.org/lkml/2022/11/24/708
+
+Being fixed - all tests passes
+
+Thank You!
+> 
+>   I'll try to take a closer look too, and before I give my R-b I'd like
+>   to make sure it's a problem in the test and not in this patch.
+> 
+>   This is what I have (some times, not always) with both host and guest
+>   with this patch and the series of [3] applied:
+> 
+>   host$ ./vsock_test --control-host=192.168.133.3 --control-port=12345 \
+>                      --mode=client --peer-cid=4
+>   Control socket connected to 192.168.133.3:12345.
+>   0 - SOCK_STREAM connection reset...ok
+>   1 - SOCK_STREAM bind only...ok
+>   2 - SOCK_STREAM client close...ok
+>   3 - SOCK_STREAM server close...ok
+>   4 - SOCK_STREAM multiple connections...ok
+>   5 - SOCK_STREAM MSG_PEEK...ok
+>   6 - SOCK_SEQPACKET msg bounds...ok
+>   7 - SOCK_SEQPACKET MSG_TRUNC flag...recv: Connection reset by peer
+> 
+>   guest$ ./vsock_test --control-port=12345 --mode=server --peer-cid=2
+>   Control socket listening on 0.0.0.0:12345
+>   Control socket connection accepted...
+>   0 - SOCK_STREAM connection reset...ok
+>   1 - SOCK_STREAM bind only...ok
+>   2 - SOCK_STREAM client close...ok
+>   3 - SOCK_STREAM server close...ok
+>   4 - SOCK_STREAM multiple connections...ok
+>   5 - SOCK_STREAM MSG_PEEK...ok
+>   6 - SOCK_SEQPACKET msg bounds...Message bounds broken
+> 
+> Thanks,
+> Stefano
+> 
+> [1] https://github.com/rust-vmm/vhost-device/tree/main/crates/vsock
+> [2] https://github.com/rust-vmm/vm-virtio/issues/204
+> [3] https://lore.kernel.org/lkml/c991dffd-1dbc-e1d1-b682-a3c71f6ce51c@sberdevices.ru/
+> 
