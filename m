@@ -2,78 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91C13637A2D
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 14:45:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1A8637B15
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 15:08:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbiKXNpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 08:45:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36680 "EHLO
+        id S229795AbiKXOIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 09:08:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbiKXNp3 (ORCPT
+        with ESMTP id S229648AbiKXOH7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 08:45:29 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE29A1095A0;
-        Thu, 24 Nov 2022 05:45:23 -0800 (PST)
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NHzkh4cHKzHw1P;
-        Thu, 24 Nov 2022 21:44:44 +0800 (CST)
-Received: from dggpeml500003.china.huawei.com (7.185.36.200) by
- dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 24 Nov 2022 21:45:22 +0800
-Received: from huawei.com (10.175.127.227) by dggpeml500003.china.huawei.com
- (7.185.36.200) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 24 Nov
- 2022 21:45:21 +0800
-From:   Li Nan <linan122@huawei.com>
-To:     <tj@kernel.org>, <josef@toxicpanda.com>, <axboe@kernel.dk>
-CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linan122@huawei.com>,
-        <yukuai3@huawei.com>, <yi.zhang@huawei.com>
-Subject: [PATCH -next 2/2] blk-iocost: change div64_u64 to DIV64_U64_ROUND_UP in ioc_refresh_params()
-Date:   Thu, 24 Nov 2022 22:06:35 +0800
-Message-ID: <20221124140635.695205-2-linan122@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20221124140635.695205-1-linan122@huawei.com>
-References: <20221124140635.695205-1-linan122@huawei.com>
+        Thu, 24 Nov 2022 09:07:59 -0500
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A351D1DDE6;
+        Thu, 24 Nov 2022 06:07:58 -0800 (PST)
+Received: by mail-ot1-x32c.google.com with SMTP id g51-20020a9d12b6000000b0066dbea0d203so983953otg.6;
+        Thu, 24 Nov 2022 06:07:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=tbKJ66k3bEJ2YgpscZ/J58iV2a3Uob0SyXOVW95BgtM=;
+        b=m/LWoLXUnEffELHxU7yDpDmQ8Ip9NdwaMHpYsBHax6A2Ml08pQcgIYKU/X6BOxVxMM
+         nVb82LCBlMoaILtaSOu/YAnh8281nkLsXHGlAqdS7g1Ekh+jAc6fRxO78TspJ6WnMmcW
+         rv8VfGm90PMNjZE9D6pBHqWm6/0vlWSy+exezJ04xvcmv3XvA6tQ3LezvfcTFmHwOZhQ
+         UzZ96gHeXR0qBw5LG+dHb1fe5TEkKmtZzxyYYlLcQEef88lT949XrP95rE3c5npaTkwF
+         bap/8pKdimerWzLCvxsWA4IbI1Z2W/KY/Cp5cFMvdm7ZkTEJan/v0IXUeVy2dQhSqhO+
+         4ONQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tbKJ66k3bEJ2YgpscZ/J58iV2a3Uob0SyXOVW95BgtM=;
+        b=7Mg0v7dRLkm+qQU2i0PvjIna7P9XB89gR/4DHIZ1GImT6sTTcXRDA4qFwCPymm4y0U
+         crp2wh5yyZ9hHtdjUjI4RzUL5w2xSazc3hrnXtRguLAyC87bWGFxG77eOFyZIy7RlozO
+         vqzaPCsEUER5TqowDdnV1kF/AxS/gSOdBf+87NcWuxr88fZ2ZB/+xYerYUuEWv8CSwD8
+         DcJsxgcLmBr+k9hun9V6xwtlLLv652OAAO6+ME7yxoNmNC7A4e6lRTI4KsyBxT0Ubgbk
+         mG0L9PQWTEvbXbVc6BoWcEix1PrHhYD6YteANc29JNyy2LV0P+vnzUnA2DGTdsLP12V+
+         lK4Q==
+X-Gm-Message-State: ANoB5pmC3pzAFfThxlFbn2LM18//CGsa4L+WW6xiQoXdw5Jws/HKG1Kv
+        OPPbzW6x1oQmLbvjG6jShy8=
+X-Google-Smtp-Source: AA0mqf7v6W0bA6cY5L4SrYMRjySoqn3wivMj+us5T81g6PKyNHae/SN5xnBZ83dlawUlYuOcITjxvQ==
+X-Received: by 2002:a05:6830:168b:b0:661:91c9:7d81 with SMTP id k11-20020a056830168b00b0066191c97d81mr17459829otr.164.1669298877980;
+        Thu, 24 Nov 2022 06:07:57 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o133-20020acabe8b000000b0035ab03d9153sm416900oif.47.2022.11.24.06.07.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Nov 2022 06:07:57 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <7ce64ea0-f595-a5b6-a810-2bc9133b5386@roeck-us.net>
+Date:   Thu, 24 Nov 2022 06:07:55 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500003.china.huawei.com (7.185.36.200)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 3/3] hwmon: (pmbus/core): Implement IRQ support
+Content-Language: en-US
+To:     Naresh Solanki <naresh.solanki@9elements.com>,
+        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
+Cc:     broonie@kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-kernel@vger.kernel.org
+References: <20221122135014.3504094-1-Naresh.Solanki@9elements.com>
+ <20221122135014.3504094-3-Naresh.Solanki@9elements.com>
+ <1724dbac-024a-2758-a030-c07352b536fc@roeck-us.net>
+ <df8201b0-414e-4daf-0dae-bd3ce790304c@9elements.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <df8201b0-414e-4daf-0dae-bd3ce790304c@9elements.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vrate_min is calculated by DIV64_U64_ROUND_UP, but vrate_max is calculated
-by div64_u64. Vrate_min may be 1 greater than vrate_max if the input
-values min and max of cost.qos are equal.
+On 11/24/22 00:56, Naresh Solanki wrote:
+> Hi Guenter,
+> 
+> On 22-11-2022 10:32 pm, Guenter Roeck wrote:
+>> On 11/22/22 05:50, Naresh Solanki wrote:
+>>> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+>>>
+>>> Implement IRQ support to monitor PMBUS regulator events.
+>>>
+>>> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+>>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+>>
+>> Adding a PMBus interrupt handler should be generic and also handle hwmon
+>> specific events. It should report any status changes as sysfs attribute
+>> notifications.
+> This handler scope is to address regulator faults.
+> 
 
-Signed-off-by: Li Nan <linan122@huawei.com>
----
- block/blk-iocost.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Maybe that is the use case from your perspective, but this is primarily
+a hardware monitoring driver and needs to primarily serve its hardware
+monitoring functionality.
 
-diff --git a/block/blk-iocost.c b/block/blk-iocost.c
-index a38a5324bf10..9030ad8672f3 100644
---- a/block/blk-iocost.c
-+++ b/block/blk-iocost.c
-@@ -926,7 +926,7 @@ static bool ioc_refresh_params(struct ioc *ioc, bool force)
- 
- 	ioc->vrate_min = DIV64_U64_ROUND_UP((u64)ioc->params.qos[QOS_MIN] *
- 					    VTIME_PER_USEC, MILLION);
--	ioc->vrate_max = div64_u64((u64)ioc->params.qos[QOS_MAX] *
-+	ioc->vrate_max = DIV64_U64_ROUND_UP((u64)ioc->params.qos[QOS_MAX] *
- 				   VTIME_PER_USEC, MILLION);
- 
- 	return true;
--- 
-2.31.1
+Guenter
+
 
