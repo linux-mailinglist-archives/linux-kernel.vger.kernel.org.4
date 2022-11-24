@@ -2,168 +2,314 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3299163796E
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:56:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABE69637970
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:57:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbiKXMzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 07:55:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37096 "EHLO
+        id S229712AbiKXM5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 07:57:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiKXMzm (ORCPT
+        with ESMTP id S229455AbiKXM5A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 07:55:42 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B1B21789F
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:55:23 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id q71so1495720pgq.8
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:55:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9gtzrOrsoNCV5o2QC8fgzxtE8ANXsxJSKoxo24IyFcc=;
-        b=RINqxyHQ1+PlMbJe7syJQm04IztogY5hCRUwRAOi2i6WrIByZqpDK/LPRjeplsTdtt
-         KmV0QCeI7hNtnElUTudG0rFIOCSmDz0TIEzLxL0dqiMXf5WqexjgDYpG04EqvRDOKN+A
-         hHGG54Gxkoxp5bX1FZuVUR+ZL2jp60VVAzJmgruSqKBm2U9UWswEHBwaNGnPpy3yScY3
-         Nd7FcA4BcRX0No/2vhLV0sttRpn69iZeRUtlXCFRXC8W0Vgz6kL1WigkyZ5Gr0mMT1KF
-         H6fK8w5WDLioJaJWJZcuGwt3lfRGfKbscQfk4Fq85TjYkZ7SOBS67RgtSGY7Fvdbb/uT
-         hFUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9gtzrOrsoNCV5o2QC8fgzxtE8ANXsxJSKoxo24IyFcc=;
-        b=rA3nS5LuhS73Pd6cRKZivdj1Of66gI80Gu33t/lYPZFqmL4AlfqqaDyE8wJy7TOOj4
-         3YndRxcEmxGiSZfWcPRpEuLz4tvaemFpsppoZ+0esA09ESZny8fLmYntRG91obZ2hM/W
-         RF30nd7pTTfnsegNqMVJs3bY/StFVXTtH2F3ZsN0r+Exu5JSjYFsw+RBtBUmVrr9S0M/
-         uTKf5GCerl+UqkIeSz85JkFdqlMvxI21R4bkenF3P/4MBjFCjHFuoozzcQOmPIemT036
-         cSvKpTHq8ldhFoCiXJFaUB+9caLRNVNJETAH7XV4bB6Tg2b2plMhtoOaJhOCHNBnOVBx
-         /Jlw==
-X-Gm-Message-State: ANoB5pmCJWq9FgOGBaLwZ324qONNS13D85RChRz5epbwn4KQ+gZPzvOb
-        ImE/f7GTenXhumhnnfMkTMQ=
-X-Google-Smtp-Source: AA0mqf4rEBDF5wX9BJnHhW0nfowVburVfHmQhsIXGzqgWOWAmaPXelMP15ZuJXhvQFBMs9Sb+5x4Pg==
-X-Received: by 2002:a63:ea52:0:b0:46f:9c0c:8673 with SMTP id l18-20020a63ea52000000b0046f9c0c8673mr13642591pgk.154.1669294522593;
-        Thu, 24 Nov 2022 04:55:22 -0800 (PST)
-Received: from hyeyoo ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id y8-20020a17090a390800b0020d48bc6661sm3120211pjb.31.2022.11.24.04.55.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 04:55:21 -0800 (PST)
-Date:   Thu, 24 Nov 2022 21:55:15 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>, patches@lists.linux.dev,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 06/12] mm, slub: don't create kmalloc-rcl caches with
- CONFIG_SLUB_TINY
-Message-ID: <Y39psxclH4QEAzN+@hyeyoo>
-References: <20221121171202.22080-1-vbabka@suse.cz>
- <20221121171202.22080-7-vbabka@suse.cz>
- <d77498f8-b15f-9dae-1803-2d2bbb99da50@suse.cz>
- <Y39eLaW0mDNrHI6i@hyeyoo>
- <4fb214a4-0535-2d4a-fcde-bc2ab71329e3@suse.cz>
+        Thu, 24 Nov 2022 07:57:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9AF6314F
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:56:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669294561;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:in-reply-to:in-reply-to:  references:references;
+        bh=im+KQDw98I7aQbweUIZ/s+siMDXWPzriAvUlGj+1GaQ=;
+        b=LSd4GV4788pcgxWhKPbUnaRlB/u+KLdBhfZnBb0gGiy3iqL2yLMrnHzvt9TyRTG6hDVkO3
+        lQzsKzFuCaPAOAStUT5JnLCQ0/nUEC+/FBzBW1esf2KcBw72f8EMRirH7Std/jhzNZpGxP
+        g1KcqOjL9/rHSGLyQT2TgqOJ2xgDnBQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-267-KicfeEEVNyKSU146mt5iTw-1; Thu, 24 Nov 2022 07:55:57 -0500
+X-MC-Unique: KicfeEEVNyKSU146mt5iTw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4DC78101A52A;
+        Thu, 24 Nov 2022 12:55:56 +0000 (UTC)
+Received: from [10.64.54.95] (vpn2-54-95.bne.redhat.com [10.64.54.95])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 42214C15BA5;
+        Thu, 24 Nov 2022 12:55:41 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v2] mm: migrate: Fix THP's mapcount on isolation
+To:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        william.kucharski@oracle.com, ziy@nvidia.com,
+        kirill.shutemov@linux.intel.com, zhenyzha@redhat.com,
+        apopple@nvidia.com, hughd@google.com, willy@infradead.org,
+        shan.gavin@gmail.com
+References: <20221124095523.31061-1-gshan@redhat.com>
+ <3c584ce6-dc8c-e0e4-c78f-b59dfff1fc13@redhat.com>
+ <22407f18-0406-6ede-ef1e-592f03d3699e@redhat.com>
+ <31bda0ab-a185-340d-b96b-b1cfed7c3910@redhat.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <da854e1c-c876-b2f3-a2cb-56664da541bf@redhat.com>
+Date:   Thu, 24 Nov 2022 20:55:39 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4fb214a4-0535-2d4a-fcde-bc2ab71329e3@suse.cz>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <31bda0ab-a185-340d-b96b-b1cfed7c3910@redhat.com>
+Content-Type: multipart/mixed;
+ boundary="------------D09D3DE0D6C0E967E2ED20DE"
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 01:12:13PM +0100, Vlastimil Babka wrote:
-> On 11/24/22 13:06, Hyeonggon Yoo wrote:
-> > On Wed, Nov 23, 2022 at 02:53:43PM +0100, Vlastimil Babka wrote:
-> >> On 11/21/22 18:11, Vlastimil Babka wrote:
-> >> > Distinguishing kmalloc(__GFP_RECLAIMABLE) can help against fragmentation
-> >> > by grouping pages by mobility, but on tiny systems the extra memory
-> >> > overhead of separate set of kmalloc-rcl caches will probably be worse,
-> >> > and mobility grouping likely disabled anyway.
-> >> > 
-> >> > Thus with CONFIG_SLUB_TINY, don't create kmalloc-rcl caches and use the
-> >> > regular ones.
-> >> > 
-> >> > Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
-> >> 
-> >> Fixed up in response to lkp report for a MEMCG_KMEM+SLUB_TINY combo:
-> >> ---8<---
-> >> From c1ec0b924850a2863d061f316615d596176f15bb Mon Sep 17 00:00:00 2001
-> >> From: Vlastimil Babka <vbabka@suse.cz>
-> >> Date: Tue, 15 Nov 2022 18:19:28 +0100
-> >> Subject: [PATCH 06/12] mm, slub: don't create kmalloc-rcl caches with
-> >>  CONFIG_SLUB_TINY
-> >> 
-> >> Distinguishing kmalloc(__GFP_RECLAIMABLE) can help against fragmentation
-> >> by grouping pages by mobility, but on tiny systems the extra memory
-> >> overhead of separate set of kmalloc-rcl caches will probably be worse,
-> >> and mobility grouping likely disabled anyway.
-> >> 
-> >> Thus with CONFIG_SLUB_TINY, don't create kmalloc-rcl caches and use the
-> >> regular ones.
-> >> 
-> >> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
-> >> ---
-> >>  include/linux/slab.h |  9 +++++++--
-> >>  mm/slab_common.c     | 10 ++++++++--
-> >>  2 files changed, 15 insertions(+), 4 deletions(-)
-> >> 
-> >> diff --git a/include/linux/slab.h b/include/linux/slab.h
-> >> index 45efc6c553b8..ae2d19ec8467 100644
-> >> --- a/include/linux/slab.h
-> >> +++ b/include/linux/slab.h
-> >> @@ -336,12 +336,17 @@ enum kmalloc_cache_type {
-> >>  #endif
-> >>  #ifndef CONFIG_MEMCG_KMEM
-> >>  	KMALLOC_CGROUP = KMALLOC_NORMAL,
-> >> -#else
-> >> -	KMALLOC_CGROUP,
-> >>  #endif
-> >> +#ifdef CONFIG_SLUB_TINY
-> >> +	KMALLOC_RECLAIM = KMALLOC_NORMAL,
-> >> +#else
-> >>  	KMALLOC_RECLAIM,
-> >> +#endif
-> >>  #ifdef CONFIG_ZONE_DMA
-> >>  	KMALLOC_DMA,
-> >> +#endif
-> >> +#ifdef CONFIG_MEMCG_KMEM
-> >> +	KMALLOC_CGROUP,
-> >>  #endif
-> >>  	NR_KMALLOC_TYPES
-> >>  };
-> > 
-> > Can you please elaborate what the lkp report was about
-> > and how you fixed it? I'm not getting what the problem of previous
-> > version is.
-> 
-> Report here:
-> https://lore.kernel.org/all/202211231949.nIyAWKam-lkp@intel.com/
-> 
-> Problem is that if the preprocessing results in e.g.
-> KMALLOC_NORMAL = 0,
-> KMALLOC_DMA = KMALLOC_NORMAL
-> KMALLOC_CGROUP,
-> KMALLOC_RECLAIM = KMALLOC_NORMAL,
-> NR_KMALLOC_TYPES
-> 
-> then NR_KMALLOC_TYPES is not 2, but 1, because the enum's internal counter
-> got reset to 0 by KMALLOC_RECLAIM = KMALLOC_NORMAL. A common gotcha :/
+This is a multi-part message in MIME format.
+--------------D09D3DE0D6C0E967E2ED20DE
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thanks for quick and kind explanation :)
-That was easy to be missed.
+On 11/24/22 6:43 PM, David Hildenbrand wrote:
+> On 24.11.22 11:21, Gavin Shan wrote:
+>> On 11/24/22 6:09 PM, David Hildenbrand wrote:
+>>> On 24.11.22 10:55, Gavin Shan wrote:
+>>>> The issue is reported when removing memory through virtio_mem device.
+>>>> The transparent huge page, experienced copy-on-write fault, is wrongly
+>>>> regarded as pinned. The transparent huge page is escaped from being
+>>>> isolated in isolate_migratepages_block(). The transparent huge page
+>>>> can't be migrated and the corresponding memory block can't be put
+>>>> into offline state.
+>>>>
+>>>> Fix it by replacing page_mapcount() with total_mapcount(). With this,
+>>>> the transparent huge page can be isolated and migrated, and the memory
+>>>> block can be put into offline state. Besides, The page's refcount is
+>>>> increased a bit earlier to avoid the page is released when the check
+>>>> is executed.
+>>>
+>>> Did you look into handling pages that are in the swapcache case as well?
+>>>
+>>> See is_refcount_suitable() in mm/khugepaged.c.
+>>>
+>>> Should be easy to reproduce, let me know if you need inspiration.
+>>>
+>>
+>> Nope, I didn't look into the case. Please elaborate the details so that
+>> I can reproduce it firstly.
+> 
+> 
+> A simple reproducer would be (on a system with ordinary swap (not zram))
+> 
+> 1) mmap a region (MAP_ANON|MAP_PRIVATE) that can hold a THP
+> 
+> 2) Enable THP for that region (MADV_HUGEPAGE)
+> 
+> 3) Populate a THP (e.g., write access)
+> 
+> 4) PTE-map the THP, for example, using MADV_FREE on the last subpage
+> 
+> 5) Trigger swapout of the THP, for example, using MADV_PAGEOUT
+> 
+> 6) Read-access to some subpages to fault them in from the swapcache
+> 
+> 
+> Now you'd have a THP, which
+> 
+> 1) Is partially PTE-mapped into the page table
+> 2) Is in the swapcache (each subpage should have one reference from the swapache)
+> 
+> 
+> Now we could test, if alloc_contig_range() will still succeed (e.g., using virtio-mem).
+> 
 
--- 
+Thanks for the details. Step (4) and (5) can be actually combined. To swap part of
+the THP (e.g. one sub-page) will force the THP to be split.
+
+I followed your steps in the attached program, there is no issue to do memory hot-remove
+through virtio-mem with or without this patch.
+
+    # numactl -p 1 testsuite mm swap -k
+    Any key to split THP
+    Any key to swap sub-pages
+    Any key to read the swapped sub-pages
+        Page[000]: 0xffffffffffffffff
+        Page[001]: 0xffffffffffffffff
+          :
+        Page[255]: 0xffffffffffffffff
+    Any key to exit                                // hold here and the program doesn't exit
+
+    (qemu) qom-set vm1 requested-size 0
+    [  356.005396] virtio_mem virtio1: plugged size: 0x40000000
+    [  356.005996] virtio_mem virtio1: requested size: 0x0
+    [  356.350299] Fallback order for Node 0: 0 1
+    [  356.350810] Fallback order for Node 1: 1 0
+    [  356.351260] Built 2 zonelists, mobility grouping on.  Total pages: 491343
+    [  356.351998] Policy zone: DMA
+
 Thanks,
-Hyeonggon
+Gavin
+
+--------------D09D3DE0D6C0E967E2ED20DE
+Content-Type: text/x-csrc; charset=UTF-8;
+ name="swap.c"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="swap.c"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/wait.h>
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <errno.h>
+
+#include "inc/testsuite.h"
+
+struct swap_struct {
+	int		page_size;
+
+	int		fd;
+	int		flags;
+	void		*buf;
+	unsigned long 	len;
+
+	int		key_break;
+};
+
+#define SWAP_DEFAULT_SIZE	0x200000	/* 2MB */
+#define SWAP_PAGE_TO_SPLIT	511
+#define SWAP_PAGE_TO_SWAP	1
+#define SWAP_PAGE_TO_SWAP_NUM	256
+
+#ifndef MADV_PAGEOUT
+#define MADV_PAGEOUT		21
+#endif
+
+
+static void usage(void)
+{
+	fprintf(stdout, "testsuite mm swap -l <size> -k\n");
+	fprintf(stdout, "\n");
+	fprintf(stdout, "-l: Length of memory to be mapped\n");
+	fprintf(stdout, "-w: Length of memory to be copied-on-write\n");
+	fprintf(stdout, "-k: Stop at various stages\n");
+	fprintf(stdout, "\n");
+}
+
+static int swap_init_data(struct swap_struct *m)
+{
+	m->page_size	= getpagesize();
+
+	m->fd		= -1;
+	m->flags	= (MAP_PRIVATE | MAP_ANONYMOUS);
+	m->len		= SWAP_DEFAULT_SIZE;
+	m->key_break	= 0;
+
+	return 0;
+}
+
+static int swap_handler(int argc, char **argv)
+{
+	struct swap_struct m;
+	unsigned long *pval;
+	int i, opt, ret;
+
+	ret = swap_init_data(&m);
+	if (ret)
+		return ret;
+
+	while ((opt = getopt(argc, argv, "l:w:kh")) != -1) {
+		switch (opt) {
+		case 'l':
+			m.len = util_memory_parse_size(optarg);
+			if (m.len <= SWAP_DEFAULT_SIZE) {
+				fprintf(stderr, "%s: length 0x%lx less than 0x%x\n",
+					__func__, m.len, SWAP_DEFAULT_SIZE);
+				return -1;
+			}
+
+			break;
+		case 'k':
+			m.key_break = 1;
+			break;
+		case 'h':
+			usage();
+			return 0;
+		}
+	}
+
+	/*
+	 * Setup the area. The area should be backed up with huge pages
+	 * if it suits. Write to the area to ensure the area is populted
+	 * completely.
+	 */
+	m.buf = mmap(NULL, m.len, PROT_READ | PROT_WRITE, m.flags, m.fd, 0);
+	if (m.buf == (void *)-1) {
+		fprintf(stderr, "Unable do mmap()\n");
+		goto out;
+	}
+
+        memset(m.buf, 0xff, m.len);
+
+	/* Force to split the huge page */
+	util_misc_key_press(m.key_break, "  ", "Any key to split THP");
+	ret = madvise(m.buf + SWAP_PAGE_TO_SPLIT * m.page_size,
+		      m.page_size, MADV_FREE);
+	if (ret) {
+		fprintf(stderr, "Error %d to split THP\n", ret); 
+		goto out;
+	}
+
+	/* Swap one sub-page */
+	util_misc_key_press(m.key_break, "  ", "Any key to swap sub-pages");
+	ret = madvise(m.buf + SWAP_PAGE_TO_SWAP * m.page_size,
+		      SWAP_PAGE_TO_SWAP_NUM * m.page_size,
+		      MADV_PAGEOUT);
+	if (ret) {
+		fprintf(stderr, "Error %d to swap one sub-page\n", ret);
+		goto out;
+	}
+
+	/* Read the swapped sub-page */
+	util_misc_key_press(m.key_break, "  ", "Any key to read the swapped sub-pages");
+	for (i = 0; i < SWAP_PAGE_TO_SWAP_NUM; i++) {
+		pval = (unsigned long *)(m.buf + (SWAP_PAGE_TO_SWAP + i) * m.page_size);
+		fprintf(stdout, "  Page[%03d]: 0x%016lx\n", i, *pval);
+	}
+
+	/* Exit */
+	util_misc_key_press(m.key_break, "  ", "Any key to exit");
+
+out:
+	if (m.buf != (void *)-1)
+		munmap(m.buf, m.len);
+	if (m.fd > 0)
+		close(m.fd);
+
+	return 0;
+}
+
+static struct command swap_command = {
+	.name		= "swap",
+	.handler	= swap_handler,
+	.children	= LIST_HEAD_INIT(swap_command.children),
+	.link		= LIST_HEAD_INIT(swap_command.link),
+};
+
+int mm_swap_init(void)
+{
+	return command_add(&mm_command, &swap_command);
+}
+
+
+--------------D09D3DE0D6C0E967E2ED20DE--
+
