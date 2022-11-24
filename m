@@ -2,299 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 035BF63788A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:07:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9740637895
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:08:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbiKXMHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 07:07:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44100 "EHLO
+        id S229558AbiKXMIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 07:08:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbiKXMGq (ORCPT
+        with ESMTP id S229978AbiKXMH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 07:06:46 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E69A64A09
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:05:21 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id j4so2299421lfk.0
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:05:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4UD2+BwrM4OIYmxXfGtMiwHH7M/T9FxMPWGUo8Plx2Y=;
-        b=VOuR003ZOkZqtUtOjQfaqRbWh1fGzpthkUs9mPEzG+CeS6IetDR+RDBJVqTVW0zttw
-         VJ0L4YifpbSC7AFZxSuBzblLjHetdBS+QvacdWj/e1rHe8OOKILmEEQySuqnn9xNrCei
-         vYZofeCLig9GHuhZJGUKehoX2eHTYC3R8iFtXlXYx1FHQbiB+BFl8Ql22UHIZOon2L/F
-         jdsmlYaqfEMqIePQeqLbpqkWt0ocJAmGN3Cfy0yZCfsA533j1v8Lmo6+IMIBMUCpks0r
-         kK6B/NmLA7QFkOaCra0dqNpRZ02vyvJcvqmXvFX+cev6QtaHbXJrH+lyqkxkBMkLbWVS
-         XOPw==
+        Thu, 24 Nov 2022 07:07:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED610ED73E
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:05:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669291546;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=G7LQd7RRPNUeESAr+1LKMJrjT4VQDOqKGjXqPqUPd5c=;
+        b=LDq0zFBBARvSTN8XKShhAvho03MgaqSquh7Q6aWmRhCqD64y/ed1WAFVVXjEJm1yhPHoCx
+        NtpTDPt5xSp/IlpUZ6SOj2v6JgowSKDBc4QRzdNlRD50GLMCLtSW4AhUeIu7f9dYIdO+fi
+        qbP4jZHyZ1E7ZEc2L2fbLfhgWJ5UR1c=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-338-IeaTbViAMI2oE3R_SppxJg-1; Thu, 24 Nov 2022 07:05:45 -0500
+X-MC-Unique: IeaTbViAMI2oE3R_SppxJg-1
+Received: by mail-ed1-f69.google.com with SMTP id e15-20020a056402190f00b00461b0576620so855860edz.2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:05:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4UD2+BwrM4OIYmxXfGtMiwHH7M/T9FxMPWGUo8Plx2Y=;
-        b=czV9m77LGHA78zRlE2bd8JMdhktBc3Z5dODqK7XvMOINECSFUpZKHq0Z+VJvt3QdJX
-         +iPybfBlG/aDnzoQcVssPQ5mkYEBBk6eJ+bJJZCbd9H23TlQVagOXIpbW5uuWjEdyGtk
-         bzYN54eK67Zy6IO5aS9DI59BOTTFbGvWSixe4lHBCtS5ttI4Ecrl9dVCulFpRwp4LDky
-         qC5ykw2dUXLHX5htdGrIL+Sdfzoa+m4bedEPpV3bTUmPxx658tENhlT1hoVMP39t3AIQ
-         xNpgbZDi0jp4eYilfbiSrx6+yRJaUFp5dExcuVlZ0y15EKIXjccbKpF+ZXi/aqv5NANS
-         mkyg==
-X-Gm-Message-State: ANoB5pl17Mb9CSwGMHurIiBAAsr2fMR/TRTTxWx+QjicAq22oCDLznAO
-        F3FT76/MzX/PNUqpmY6hb4E15w==
-X-Google-Smtp-Source: AA0mqf6H5h0Qk3gTJm8eqtQ17NGa3DDlAZJvzsKd6eCbSR2Aj7QnE3MnIEWCQ8MX/Lc4QGAxh1hkPg==
-X-Received: by 2002:a19:4f56:0:b0:4af:cd2:f8df with SMTP id a22-20020a194f56000000b004af0cd2f8dfmr10508208lfk.586.1669291518289;
-        Thu, 24 Nov 2022 04:05:18 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id p22-20020a056512313600b00498f871f33fsm103879lfd.86.2022.11.24.04.05.17
+        bh=G7LQd7RRPNUeESAr+1LKMJrjT4VQDOqKGjXqPqUPd5c=;
+        b=noYF6/8Yax5/3pUdCKYBQVya4ZCCM5NQA4RvjT56FZvkW/tL7iw4p+hACjx0Knl5ES
+         B31mGWUOQMBx99P4zu3IqlauxkDvZeJ+8+WKk+2l3SXhASbPdhRahvO52p8mKZrH2NDD
+         xDBRkwiKjqc55gPnBRgxGlZ1hIUuCryBlQo9Gv+kGfZ5ukpfWqc7fuVkIZf8HQizzHwM
+         aHs1ZNH16agOG8MP4cE4vPLBfwg35gmx6HGRgyIjhW9Y0JQR+0hlRYweT0S65pLcm8Az
+         N75nYbinGTxqmJylReaFG4W/gO8KmqLWDwXHcZD7eKHeDQJcA7dLXmxjDSVHVg4xHlr7
+         9aaA==
+X-Gm-Message-State: ANoB5pmh87ETs0B0Ff1qCT93ZPuzME94+SzyCXIgaG68/wAGBG4bTX6E
+        H6vbAwbBxEMVGCSBMz0d69AvpC7/6MiCjDCTvnVEpp4mUe3ECN9Ia/1GqfVeD5nglWC49fZzUSC
+        j4hdROvpFlPmpSLf+0iNIAUE0
+X-Received: by 2002:a17:906:850d:b0:7ae:21bc:89f0 with SMTP id i13-20020a170906850d00b007ae21bc89f0mr27278515ejx.132.1669291543985;
+        Thu, 24 Nov 2022 04:05:43 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6g9TJYi8s+6j8RI3ddhpDUwVfztYD6fUpPOggYB3f55bxdVlHPVJ4aBETtbEQU7Xvh6Rkc6Q==
+X-Received: by 2002:a17:906:850d:b0:7ae:21bc:89f0 with SMTP id i13-20020a170906850d00b007ae21bc89f0mr27278494ejx.132.1669291543758;
+        Thu, 24 Nov 2022 04:05:43 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id gc34-20020a1709072b2200b00772061034dbsm342285ejc.182.2022.11.24.04.05.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Nov 2022 04:05:17 -0800 (PST)
-Message-ID: <80417bba-2ddb-2730-c9fd-6879d38bf126@linaro.org>
-Date:   Thu, 24 Nov 2022 13:05:16 +0100
+        Thu, 24 Nov 2022 04:05:43 -0800 (PST)
+Message-ID: <b1aae548-e18c-9b81-4d00-0a41b23c19e4@redhat.com>
+Date:   Thu, 24 Nov 2022 13:05:42 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: interconnect: Add schema for SM8550
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Odelu Kukatla <okukatla@codeaurora.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Melody Olvera <quic_molvera@quicinc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20221124112232.1704144-1-abel.vesa@linaro.org>
- <20221124112232.1704144-2-abel.vesa@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221124112232.1704144-2-abel.vesa@linaro.org>
+Subject: Re: [PATCH v1 2/2] ALSA: hda: cs35l41: Use ACPI_COMPANION to read
+ acpi properties
+Content-Language: en-US, nl
+To:     Stefan Binding <sbinding@opensource.cirrus.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mark Gross <markgross@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com
+References: <20221124110718.3925934-1-sbinding@opensource.cirrus.com>
+ <20221124110718.3925934-3-sbinding@opensource.cirrus.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20221124110718.3925934-3-sbinding@opensource.cirrus.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/11/2022 12:22, Abel Vesa wrote:
-> Add dedicated schema file for SM8500. This allows better constraining
-> of reg property, depending on the type of the NOC node. Also allows
-> better constraining of the clocks property. All of the above while
-> keeping the file itself comprehensible.
+Hi,
+
+On 11/24/22 12:07, Stefan Binding wrote:
+> Currently the driver finds the acpi_device used to read certain
+> properties using the HID, however, this is not necessary, as the
+> acpi_device can be obtained from the device itself.
 > 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> With the ACPI_COMPANION correctly set, we can also simplify how
+> we obtain the reset gpio.
+
+Typically when you write "also do ..." in a commit message
+that is a hint to yourself that it might be better to split
+the commit into 2 commits which each do only 1 thing, for easier
+review. But e.g. also to easier see what is going on if a bisect
+points out the commit as being the first bad one.
+
+So once the issues with patch 1/2 are resolved, please consider
+splitting this patch into 2 smaller patches.
+
+Regards,
+
+Hans
+
+
+> 
+> Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
 > ---
->  .../interconnect/qcom,sm8550-rpmh.yaml        | 141 ++++++++++++++++++
->  1 file changed, 141 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm8550-rpmh.yaml
+>  sound/pci/hda/cs35l41_hda.c | 50 ++++++++++++++++---------------------
+>  1 file changed, 21 insertions(+), 29 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,sm8550-rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,sm8550-rpmh.yaml
-> new file mode 100644
-> index 000000000000..9627b629d4ce
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,sm8550-rpmh.yaml
-> @@ -0,0 +1,141 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/interconnect/qcom,sm8550-rpmh.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> diff --git a/sound/pci/hda/cs35l41_hda.c b/sound/pci/hda/cs35l41_hda.c
+> index e5f0549bf06d..50cbbcce4946 100644
+> --- a/sound/pci/hda/cs35l41_hda.c
+> +++ b/sound/pci/hda/cs35l41_hda.c
+> @@ -1214,16 +1214,15 @@ static int cs35l41_get_speaker_id(struct device *dev, int amp_index,
+>   * And devm functions expect that the device requesting the resource has the correct
+>   * fwnode.
+>   */
+> -static int cs35l41_no_acpi_dsd(struct cs35l41_hda *cs35l41, struct device *physdev, int id,
+> -			       const char *hid)
+> +static int cs35l41_no_acpi_dsd(struct cs35l41_hda *cs35l41, int id, const char *hid)
+>  {
+>  	struct cs35l41_hw_cfg *hw_cfg = &cs35l41->hw_cfg;
+>  
+>  	/* check I2C address to assign the index */
+>  	cs35l41->index = id == 0x40 ? 0 : 1;
+>  	cs35l41->channel_index = 0;
+> -	cs35l41->reset_gpio = gpiod_get_index(physdev, NULL, 0, GPIOD_OUT_HIGH);
+> -	cs35l41->speaker_id = cs35l41_get_speaker_id(physdev, 0, 0, 2);
+> +	cs35l41->reset_gpio = gpiod_get_index(cs35l41->dev, NULL, 0, GPIOD_OUT_HIGH);
+> +	cs35l41->speaker_id = cs35l41_get_speaker_id(cs35l41->dev, 0, 0, 2);
+>  	hw_cfg->spk_pos = cs35l41->index;
+>  	hw_cfg->gpio2.func = CS35L41_INTERRUPT;
+>  	hw_cfg->gpio2.valid = true;
+> @@ -1255,39 +1254,36 @@ static int cs35l41_hda_read_acpi(struct cs35l41_hda *cs35l41, const char *hid, i
+>  	struct cs35l41_hw_cfg *hw_cfg = &cs35l41->hw_cfg;
+>  	u32 values[HDA_MAX_COMPONENTS];
+>  	struct acpi_device *adev;
+> -	struct device *physdev;
 > +
-> +title: Qualcomm RPMh Network-On-Chip Interconnect on SM8550
+>  	const char *sub;
+>  	char *property;
+>  	size_t nval;
+>  	int i, ret;
+>  
+> -	adev = acpi_dev_get_first_match_dev(hid, NULL, -1);
+> +	adev = ACPI_COMPANION(cs35l41->dev);
+>  	if (!adev) {
+> -		dev_err(cs35l41->dev, "Failed to find an ACPI device for %s\n", hid);
+> +		dev_err(cs35l41->dev, "Failed to find an ACPI device for %s\n",
+> +			dev_name(cs35l41->dev));
+>  		return -ENODEV;
+>  	}
+>  
+> -	physdev = get_device(acpi_get_first_physical_node(adev));
+> -	acpi_dev_put(adev);
+> -
+> -	sub = acpi_get_subsystem_id(ACPI_HANDLE(physdev));
+> +	sub = acpi_get_subsystem_id(ACPI_HANDLE(cs35l41->dev));
+>  	if (IS_ERR(sub))
+>  		sub = NULL;
+>  	cs35l41->acpi_subsystem_id = sub;
+>  
+>  	property = "cirrus,dev-index";
+> -	ret = device_property_count_u32(physdev, property);
+> -	if (ret <= 0) {
+> -		ret = cs35l41_no_acpi_dsd(cs35l41, physdev, id, hid);
+> -		goto err_put_physdev;
+> -	}
+> +	ret = device_property_count_u32(cs35l41->dev, property);
+> +	if (ret <= 0)
+> +		return cs35l41_no_acpi_dsd(cs35l41, id, hid);
 > +
-> +maintainers:
-> +  - Georgi Djakov <djakov@kernel.org>
-> +  - Odelu Kukatla <okukatla@codeaurora.org>
-
-I think this is not accurate email. Georgi also might not be interested
-in SM8550 itself, so I propose add here yourself and Neil.
-
-> +
-> +description: |
-> +   RPMh interconnect providers support system bandwidth requirements through
-> +   RPMh hardware accelerators known as Bus Clock Manager (BCM). The provider is
-> +   able to communicate with the BCM through the Resource State Coordinator (RSC)
-> +   associated with each execution environment. Provider nodes must point to at
-> +   least one RPMh device child node pertaining to their RSC and each provider
-> +   can map to multiple RPMh resources.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,sm8550-aggre1-noc
-> +      - qcom,sm8550-aggre2-noc
-> +      - qcom,sm8550-clk-virt
-> +      - qcom,sm8550-cnoc-main
-> +      - qcom,sm8550-config-noc
-> +      - qcom,sm8550-gem-noc
-> +      - qcom,sm8550-lpass-ag-noc
-> +      - qcom,sm8550-lpass-lpiaon-noc
-> +      - qcom,sm8550-lpass-lpicx-noc
-> +      - qcom,sm8550-mc-virt
-> +      - qcom,sm8550-mmss-noc
-> +      - qcom,sm8550-nsp-noc
-> +      - qcom,sm8550-pcie-anoc
-> +      - qcom,sm8550-system-noc
-> +
-
-reg:
-  maxItems: 1
-
-> +allOf:
-> +  - $ref: qcom,rpmh-common.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,sm8550-aggre1-noc
-> +              - qcom,sm8550-aggre2-noc
-> +              - qcom,sm8550-cnoc-main
-> +              - qcom,sm8550-config-noc
-> +              - qcom,sm8550-gem-noc
-> +              - qcom,sm8550-lpass-ag-noc
-> +              - qcom,sm8550-lpass-lpiaon-noc
-> +              - qcom,sm8550-lpass-lpicx-noc
-> +              - qcom,sm8550-mmss-noc
-> +              - qcom,sm8550-nsp-noc
-> +              - qcom,sm8550-pcie-anoc
-> +              - qcom,sm8550-system-noc
-> +    then:
-> +      properties:
-> +        reg:
-> +          minItems: 1
-> +          maxItems: 1
-
-Instead:
-
-  if:
-     ....
-
-     enum:
-       - virt interconnects
-  then:
-    properties:
-      reg: false
-  else:
-    required:
-      - reg
-
-
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,sm8550-pcie-anoc
-> +    then:
-> +      properties:
-> +        clocks:
-> +          items:
-> +            - description: aggre-NOC PCIe AXI clock
-> +            - description: cfg-NOC PCIe a-NOC AHB clock
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,sm8550-aggre1-noc
-> +    then:
-> +      properties:
-> +        clocks:
-> +          items:
-> +            - description: aggre UFS PHY AXI clock
-> +            - description: aggre USB3 PRIM AXI clock
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,sm8550-aggre2-noc
-> +    then:
-> +      properties:
-> +        clocks:
-> +          items:
-> +            - description: RPMH CC IPA clock
-
-This part is in general fine, but I propose to do it differently -
-mentioning clocks in top-level properties, because it's defining
-properties in allOf:if:then is error prone and easy to miss. Better to
-have one definition and customization in if:then:.
-
-Therefore:
-1. in top-level properties:
-  clocks:
-    minItems: 1
-    maxItems: 2
-
-2. All your ifs stay the same.
-
-3. One more if: compatible: enum: pcie/aggre1/aggre2
-
-  then:
-    required:
-      - clocks
-  else:
-    properties:
-      clocks: false
-
-
-> +
-> +required:
-> +  - compatible
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +      #include <dt-bindings/clock/qcom,gcc-sm8550.h>
-> +      #include <dt-bindings/interconnect/qcom,sm8550.h>
-> +      #include <dt-bindings/clock/qcom,rpmh.h>
-> +
-> +      clk_virt: interconnect-0 {
-> +             compatible = "qcom,sm8550-clk-virt";
-> +             #interconnect-cells = <2>;
-> +             qcom,bcm-voters = <&apps_bcm_voter>;
-> +      };
-> +
-> +      cnoc_main: interconnect@1500000 {
-> +             compatible = "qcom,sm8550-cnoc-main";
-> +             reg = <0x01500000 0x13080>;
-> +             #interconnect-cells = <2>;
-> +             qcom,bcm-voters = <&apps_bcm_voter>;
-> +      };
-> +
-> +      aggre1_noc: interconnect@16e0000 {
-> +             compatible = "qcom,sm8550-aggre1-noc";
-> +             reg = <0x016e0000 0x14400>;
-> +             #interconnect-cells = <2>;
-> +             clocks = <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
-> +                      <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>;
-> +             qcom,bcm-voters = <&apps_bcm_voter>;
-> +      };
-> +
-> +      aggre2_noc: interconnect@1700000 {
-> +             compatible = "qcom,sm8550-aggre2-noc";
-> +             reg = <0x01700000 0x1E400>;
-> +             #interconnect-cells = <2>;
-> +             clocks = <&rpmhcc RPMH_IPA_CLK>;
-> +             qcom,bcm-voters = <&apps_bcm_voter>;
-> +      };
-
-and keep just two examples (e.g. virt and aggre1) - they differ only by
-one or two properties, so it's a bit too much...
-
-Best regards,
-Krzysztof
+>  	if (ret > ARRAY_SIZE(values)) {
+>  		ret = -EINVAL;
+>  		goto err;
+>  	}
+>  	nval = ret;
+>  
+> -	ret = device_property_read_u32_array(physdev, property, values, nval);
+> +	ret = device_property_read_u32_array(cs35l41->dev, property, values, nval);
+>  	if (ret)
+>  		goto err;
+>  
+> @@ -1307,11 +1303,10 @@ static int cs35l41_hda_read_acpi(struct cs35l41_hda *cs35l41, const char *hid, i
+>  	/* To use the same release code for all laptop variants we can't use devm_ version of
+>  	 * gpiod_get here, as CLSA010* don't have a fully functional bios with an _DSD node
+>  	 */
+> -	cs35l41->reset_gpio = fwnode_gpiod_get_index(acpi_fwnode_handle(adev), "reset", cs35l41->index,
+> -						     GPIOD_OUT_LOW, "cs35l41-reset");
+> +	cs35l41->reset_gpio = gpiod_get_index(cs35l41->dev, "reset", cs35l41->index, GPIOD_OUT_LOW);
+>  
+>  	property = "cirrus,speaker-position";
+> -	ret = device_property_read_u32_array(physdev, property, values, nval);
+> +	ret = device_property_read_u32_array(cs35l41->dev, property, values, nval);
+>  	if (ret)
+>  		goto err;
+>  	hw_cfg->spk_pos = values[cs35l41->index];
+> @@ -1322,41 +1317,41 @@ static int cs35l41_hda_read_acpi(struct cs35l41_hda *cs35l41, const char *hid, i
+>  			cs35l41->channel_index++;
+>  
+>  	property = "cirrus,gpio1-func";
+> -	ret = device_property_read_u32_array(physdev, property, values, nval);
+> +	ret = device_property_read_u32_array(cs35l41->dev, property, values, nval);
+>  	if (ret)
+>  		goto err;
+>  	hw_cfg->gpio1.func = values[cs35l41->index];
+>  	hw_cfg->gpio1.valid = true;
+>  
+>  	property = "cirrus,gpio2-func";
+> -	ret = device_property_read_u32_array(physdev, property, values, nval);
+> +	ret = device_property_read_u32_array(cs35l41->dev, property, values, nval);
+>  	if (ret)
+>  		goto err;
+>  	hw_cfg->gpio2.func = values[cs35l41->index];
+>  	hw_cfg->gpio2.valid = true;
+>  
+>  	property = "cirrus,boost-peak-milliamp";
+> -	ret = device_property_read_u32_array(physdev, property, values, nval);
+> +	ret = device_property_read_u32_array(cs35l41->dev, property, values, nval);
+>  	if (ret == 0)
+>  		hw_cfg->bst_ipk = values[cs35l41->index];
+>  	else
+>  		hw_cfg->bst_ipk = -1;
+>  
+>  	property = "cirrus,boost-ind-nanohenry";
+> -	ret = device_property_read_u32_array(physdev, property, values, nval);
+> +	ret = device_property_read_u32_array(cs35l41->dev, property, values, nval);
+>  	if (ret == 0)
+>  		hw_cfg->bst_ind = values[cs35l41->index];
+>  	else
+>  		hw_cfg->bst_ind = -1;
+>  
+>  	property = "cirrus,boost-cap-microfarad";
+> -	ret = device_property_read_u32_array(physdev, property, values, nval);
+> +	ret = device_property_read_u32_array(cs35l41->dev, property, values, nval);
+>  	if (ret == 0)
+>  		hw_cfg->bst_cap = values[cs35l41->index];
+>  	else
+>  		hw_cfg->bst_cap = -1;
+>  
+> -	cs35l41->speaker_id = cs35l41_get_speaker_id(physdev, cs35l41->index, nval, -1);
+> +	cs35l41->speaker_id = cs35l41_get_speaker_id(cs35l41->dev, cs35l41->index, nval, -1);
+>  
+>  	if (hw_cfg->bst_ind > 0 || hw_cfg->bst_cap > 0 || hw_cfg->bst_ipk > 0)
+>  		hw_cfg->bst_type = CS35L41_INT_BOOST;
+> @@ -1364,14 +1359,11 @@ static int cs35l41_hda_read_acpi(struct cs35l41_hda *cs35l41, const char *hid, i
+>  		hw_cfg->bst_type = CS35L41_EXT_BOOST;
+>  
+>  	hw_cfg->valid = true;
+> -	put_device(physdev);
+>  
+>  	return 0;
+>  
+>  err:
+>  	dev_err(cs35l41->dev, "Failed property %s: %d\n", property, ret);
+> -err_put_physdev:
+> -	put_device(physdev);
+>  
+>  	return ret;
+>  }
 
