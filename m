@@ -2,67 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAEE9637A32
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 14:46:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA278637A34
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 14:46:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbiKXNqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 08:46:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37854 "EHLO
+        id S229558AbiKXNqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 08:46:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbiKXNq0 (ORCPT
+        with ESMTP id S230105AbiKXNqo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 08:46:26 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0632A100B3E
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 05:46:25 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 50B8623A;
-        Thu, 24 Nov 2022 05:46:31 -0800 (PST)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CB5873F73B;
-        Thu, 24 Nov 2022 05:46:23 -0800 (PST)
-Date:   Thu, 24 Nov 2022 13:46:21 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     =?utf-8?B?546L5rSq6L6J?= <honghui.wang@ucas.com.cn>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Cristian Maruss <cristian.marussi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/3] arm_scpi: modify to support acpi
-Message-ID: <20221124134621.tmlfk7pqbmbkmzal@bogus>
-References: <F813BC8072CDDB25+Y38Yq2QKFefSupZV@TP-P15V.lan>
- <Y39PetDhm9fpycwo@FVFF77S0Q05N>
- <tencent_049E1A8275A0742F2374507E@qq.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <tencent_049E1A8275A0742F2374507E@qq.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 24 Nov 2022 08:46:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC02115D27;
+        Thu, 24 Nov 2022 05:46:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 347BFB81EA7;
+        Thu, 24 Nov 2022 13:46:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B32B2C433C1;
+        Thu, 24 Nov 2022 13:46:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669297596;
+        bh=1mjbf4wNzg4ntJqgMZcpJm5kDRm8pvEmrLegYMkX0rg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Dbc522+9I+6j1u8wNFUQpssOVuHL9km/kMS12TE1cYptPZ/OnB4IypYph5WgL1tgd
+         Ac3l1L1yoKVpv2XzjcLko1+MigI2jdfQI/rUMF6gVjd7GCKYzdAeLYJFC6RO322Jqi
+         xR9kQrb2eR8JfqNorIIhx6QuMo6RbNF0BGV0KIFuYYHzKsub1r9QDtqUlZehxgmK+W
+         IYTA7IWs1aA8tFCD+A7oNxHU8De3mToHVGlqjIpmb2z61nalSZpuLG6W83LdkmuxId
+         rkRgOk/2UOzkCONs0GaPDkgmSqgLebbIOGaYHToGDfyJIEqiHpr6GJlczr3eKBp2FM
+         BJ5TTUG8Foxrg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oyCYk-008O0V-Ou;
+        Thu, 24 Nov 2022 13:46:34 +0000
+Date:   Thu, 24 Nov 2022 13:46:34 +0000
+Message-ID: <86v8n4mpmt.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: Re: [patch V2 03/21] genirq/irqdomain: Rename irq_domain::dev to irq_domain::pm_dev
+In-Reply-To: <20221121083325.684903415@linutronix.de>
+References: <20221121083210.309161925@linutronix.de>
+        <20221121083325.684903415@linutronix.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: tglx@linutronix.de, linux-kernel@vger.kernel.org, x86@kernel.org, joro@8bytes.org, will@kernel.org, linux-pci@vger.kernel.org, bhelgaas@google.com, lorenzo.pieralisi@arm.com, gregkh@linuxfoundation.org, jgg@mellanox.com, dave.jiang@intel.com, alex.williamson@redhat.com, kevin.tian@intel.com, dan.j.williams@intel.com, logang@deltatee.com, ashok.raj@intel.com, jdmason@kudzu.us, allenbh@gmail.com, jgg@nvidia.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 08:23:58PM +0800, 王洪辉 wrote:
-> When boot from uefi on phytium ft2004(arm64) platform, can't show temp &
-> freq of cpu, but well if boot from uboot for same kernel binary file.
+On Mon, 21 Nov 2022 14:36:22 +0000,
+Thomas Gleixner <tglx@linutronix.de> wrote:
+> 
+> irq_domain::dev is a misnomer as it's usually the rule that a device
+> pointer points to something which is directly related to the instance.
+> 
+> irq_domain::dev can point to some other device for power management to
+> ensure that this underlying device is not powered down when an interrupt is
+> allocated.
+> 
+> The upcoming per device MSI domains really require a pointer to the device
+> which instantiated the irq domain and not to some random other device which
+> is required for power management down the chain.
+> 
+> Rename irq_domain::dev to irq_domain::pm_dev and fixup the few sites which
+> use that pointer.
+> 
+> Conversion was done with the help of coccinelle.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> ---
+>  drivers/irqchip/irq-gic.c |    4 ++--
+>  include/linux/irqdomain.h |    6 +++---
+>  kernel/irq/chip.c         |    8 ++++----
+>  3 files changed, 9 insertions(+), 9 deletions(-)
 
-Yes the same binary must work if you use right ACPI methods/AML/tables.
-Everything needed is there in the kernel, you need to write correct ACPI
-firmware/tables.
+Reviewed-by: Marc Zyngier <maz@kernel.org>
 
-> So i modified arm_scpi.c and scpi-hwmon.c as patch, and tested ok.
->
-
-Yes tested to be OK, but definitely not acceptable. Please look at the
-ACPI spec and improve your firmware to use what you need here. I have
-given all the pointers now.
+	M.
 
 -- 
-Regards,
-Sudeep
+Without deviation from the norm, progress is not possible.
