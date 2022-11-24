@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF560637E46
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 18:23:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE61C637E47
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 18:23:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229829AbiKXRXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 12:23:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48220 "EHLO
+        id S229500AbiKXRXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 12:23:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbiKXRWu (ORCPT
+        with ESMTP id S229812AbiKXRWu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 24 Nov 2022 12:22:50 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC3861770;
-        Thu, 24 Nov 2022 09:22:46 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id v1so3336356wrt.11;
-        Thu, 24 Nov 2022 09:22:46 -0800 (PST)
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16BA71740C;
+        Thu, 24 Nov 2022 09:22:48 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id v7so1775941wmn.0;
+        Thu, 24 Nov 2022 09:22:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JvgWfL4HI/QgKyNL1kR3QOr26Xuun8VUqB/AbzIo99c=;
-        b=A+faFO7PyjtwbJVGQsiRq8Iod0sOFBjJO5hAzsbz8lwsfBMsPCTZOkzuj3p1JBEpnh
-         D0Oa+O1YwjUDIhm1AFvCZ02AvD+aOrLequEPSQTaBqZDS7tTDzHjg6RZ5B2IlOeKnxYF
-         7nt06jE9icHEZ/fRXeq/dNTOtCgP9YFagD852Nebh8Gi/ZXYmYopUrq9iBKFRH1a49aD
-         NKYAg51LVzMO2HcgErVoSXJ4D8x/qesbyJKY+WHbMxGL90qtUsonC8sw3ke04aqNQkmE
-         FqG6nHTQlNBoOnautNel3wWvcAlGF1etoIWs7rZHqaBOOLzMn3JDGcctzeApwm3AbvPy
-         mOEQ==
+        bh=6pVq/7Up2ay5U3igFGOv4evJBykOn5gce8qJ7iJVARg=;
+        b=VkDha0/y1YroAoUc12D0j4O8KV1nd0kU2H6cs0j6bnou9/NzJ5M8TOk/BeWgCMudeH
+         Jn2ChNGVTcQUXWao9Mlm6D+Yvuo7XSUuttSixS58iqpf1SJ0gARfYzmAkEWRGLUrW57k
+         V72ywOMPN0+0t6X9epAS8KXtOiwKdGV1FA9RCfg2Grmawoa7bV3aitwDQP2hFYMp84hk
+         VUtvKnten+3jTgK3kMWhI6e3kxa14k+BK4Nq4ioMdSmhamLEgeASv+o00GexKVfLIWIr
+         LL4B11Yl4PvJnZyCUE6Hw+RlJr9aBa3xEeBkOoTyB7GVXEjubBiVUYeed7+wh7QIGJrY
+         JjJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JvgWfL4HI/QgKyNL1kR3QOr26Xuun8VUqB/AbzIo99c=;
-        b=oyoyzzlu1OlxpINPwKdF0G9vyhEnpf2NueZvG2rU+eGQo46PNJ8RlqMBALtZ2+OmRy
-         PlatrLUe6lBIZxmBKT3K+Tc62MLM5uxnNWmA9C0y7N20Hnp5YEVbzdZ5fwGDtcOwgxhR
-         0Ugt1y194SLCwPYzMO+oaT5F1dOVAjMn2oH703mAzqHv5Rl6r7nW1V4Wsg6fjxAAE0eB
-         jgr+QXcfAwMkxL3Lyus9vJZN9mAdrs7Wyb4oNOv+jl2SdwV0L4y5zzXYd/2pmz6oacaR
-         Ec2cxl0mm6QeAF4dM0DiBAb/7oxkicVhm/N2WaXIDxPYA2AXry/TlTkBdCNZnnGdDIER
-         2xug==
-X-Gm-Message-State: ANoB5pkmFBeDZNz5TYlMPt0sBWOth3dPQRyWdN6y208RAv9tMJwYDm3f
-        tDfl+eRoOvtF43Cb/lAGupo=
-X-Google-Smtp-Source: AA0mqf7G2aWca5qucK+oikgDePhg68/fqggGGElJZNwed81giUpGn+yWkND+InHRlX0jtNqHe4zr4g==
-X-Received: by 2002:a5d:5e87:0:b0:241:e7a6:db08 with SMTP id ck7-20020a5d5e87000000b00241e7a6db08mr7017188wrb.349.1669310565021;
-        Thu, 24 Nov 2022 09:22:45 -0800 (PST)
+        bh=6pVq/7Up2ay5U3igFGOv4evJBykOn5gce8qJ7iJVARg=;
+        b=QmkIUDlTzvpVUjUCJVv9RKr0LOcgQSuFASK0Xw3JpKCykWNTPtSxSgqTXGYp/+/gin
+         ZYqEhm8KI0lB2CNxnywRpZ1qjx5w+5J4/3YySvBm9YH9t1+/HyXwK2fPYiJ88JQiI2+5
+         mwM78HIM7HWqh9JTCf879r4Uw68wI5IEqMsRJmvhU8bt7kN5NYsbhSuDd/3B+cKZi5J4
+         /3YFs6tjmOz8KUH8m1Fd+DyQjsuImDtMyGTHR20IAcAd0xQSgFvkRfPJ52uB6ltXIQG0
+         U4Sg0J0teUusDS4nZTTbq2EVaLM3PfjDJItFKfyZ204iA7eN5pm9V+FTFeq6AlWs6dFQ
+         2OZg==
+X-Gm-Message-State: ANoB5pkbyjoTvQx3Ye+u8bCrRwi9c5xQwMFRQaxJZMhnLTTh78OTN1gO
+        1aipWvNxquTJPSwNUTpR8so=
+X-Google-Smtp-Source: AA0mqf44h28x8D3Kz4FZq8tJ6Tjsx+IjiDmKprEJ7QCdnZzDVqibUn3iDgIcixYS2XyhHS0NCgTh3A==
+X-Received: by 2002:a7b:cc85:0:b0:3bf:d1e2:1d9 with SMTP id p5-20020a7bcc85000000b003bfd1e201d9mr17967480wma.115.1669310566585;
+        Thu, 24 Nov 2022 09:22:46 -0800 (PST)
 Received: from prasmi.home ([2a00:23c8:2501:c701:89ee:3f5d:1c99:35d8])
-        by smtp.gmail.com with ESMTPSA id v17-20020a05600c445100b003c64c186206sm2698086wmn.16.2022.11.24.09.22.43
+        by smtp.gmail.com with ESMTPSA id v17-20020a05600c445100b003c64c186206sm2698086wmn.16.2022.11.24.09.22.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 09:22:44 -0800 (PST)
+        Thu, 24 Nov 2022 09:22:45 -0800 (PST)
 From:   Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
@@ -73,9 +73,9 @@ Cc:     Jisheng Zhang <jszhang@kernel.org>,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v4 5/7] riscv: mm: dma-noncoherent: Pass direction and operation to ALT_CMO_OP()
-Date:   Thu, 24 Nov 2022 17:22:05 +0000
-Message-Id: <20221124172207.153718-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v4 6/7] dt-bindings: cache: r9a07g043f-l2-cache: Add DT binding documentation for L2 cache controller
+Date:   Thu, 24 Nov 2022 17:22:06 +0000
+Message-Id: <20221124172207.153718-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221124172207.153718-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20221124172207.153718-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -93,105 +93,168 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Pass direction and operation to ALT_CMO_OP() macro.
+Add DT binding documentation for L2 cache controller found on RZ/Five SoC.
 
-This is in preparation for adding errata for the Andes CPU core.
+The Renesas RZ/Five microprocessor includes a RISC-V CPU Core (AX45MP
+Single) from Andes. The AX45MP core has an L2 cache controller, this patch
+describes the L2 cache block.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 ---
 RFC v3 -> v4
-* New patch
+* Dropped l2 cache configuration parameters
+* s/larger/large
+* Added minItems/maxItems for andestech,pma-regions
 ---
- arch/riscv/include/asm/cacheflush.h  |  4 ++++
- arch/riscv/include/asm/errata_list.h |  8 ++++++--
- arch/riscv/mm/dma-noncoherent.c      | 15 ++++++++++-----
- 3 files changed, 20 insertions(+), 7 deletions(-)
+ .../cache/andestech,ax45mp-cache.yaml         | 93 +++++++++++++++++++
+ .../cache/andestech,ax45mp-cache.h            | 38 ++++++++
+ 2 files changed, 131 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/cache/andestech,ax45mp-cache.yaml
+ create mode 100644 include/dt-bindings/cache/andestech,ax45mp-cache.h
 
-diff --git a/arch/riscv/include/asm/cacheflush.h b/arch/riscv/include/asm/cacheflush.h
-index f6fbe7042f1c..4a04d1be7c67 100644
---- a/arch/riscv/include/asm/cacheflush.h
-+++ b/arch/riscv/include/asm/cacheflush.h
-@@ -8,6 +8,10 @@
- 
- #include <linux/mm.h>
- 
-+#define NON_COHERENT_SYNC_DMA_FOR_DEVICE	0
-+#define NON_COHERENT_SYNC_DMA_FOR_CPU		1
-+#define NON_COHERENT_DMA_PREP			2
+diff --git a/Documentation/devicetree/bindings/cache/andestech,ax45mp-cache.yaml b/Documentation/devicetree/bindings/cache/andestech,ax45mp-cache.yaml
+new file mode 100644
+index 000000000000..bf255b177d0a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/cache/andestech,ax45mp-cache.yaml
+@@ -0,0 +1,93 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++# Copyright (C) 2022 Renesas Electronics Corp.
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/cache/andestech,ax45mp-cache.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- static inline void local_flush_icache_all(void)
- {
- 	asm volatile ("fence.i" ::: "memory");
-diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
-index 2ba7e6e74540..48e899a8e7a9 100644
---- a/arch/riscv/include/asm/errata_list.h
-+++ b/arch/riscv/include/asm/errata_list.h
-@@ -124,7 +124,7 @@ asm volatile(ALTERNATIVE(						\
- #define THEAD_flush_A0	".long 0x0275000b"
- #define THEAD_SYNC_S	".long 0x0190000b"
- 
--#define ALT_CMO_OP(_op, _start, _size, _cachesize)			\
-+#define ALT_CMO_OP(_op, _start, _size, _cachesize, _dir, _ops)		\
- asm volatile(ALTERNATIVE_2(						\
- 	__nops(6),							\
- 	"mv a0, %1\n\t"							\
-@@ -146,7 +146,11 @@ asm volatile(ALTERNATIVE_2(						\
- 			ERRATA_THEAD_CMO, CONFIG_ERRATA_THEAD_CMO)	\
- 	: : "r"(_cachesize),						\
- 	    "r"((unsigned long)(_start) & ~((_cachesize) - 1UL)),	\
--	    "r"((unsigned long)(_start) + (_size))			\
-+	    "r"((unsigned long)(_start) + (_size)),			\
-+	    "r"((unsigned long)(_start)),				\
-+	    "r"((unsigned long)(_size)),				\
-+	    "r"((unsigned long)(_dir)),					\
-+	    "r"((unsigned long)(_ops))					\
- 	: "a0")
- 
- #define THEAD_C9XX_RV_IRQ_PMU			17
-diff --git a/arch/riscv/mm/dma-noncoherent.c b/arch/riscv/mm/dma-noncoherent.c
-index d919efab6eba..e2b82034f504 100644
---- a/arch/riscv/mm/dma-noncoherent.c
-+++ b/arch/riscv/mm/dma-noncoherent.c
-@@ -19,13 +19,16 @@ void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
- 
- 	switch (dir) {
- 	case DMA_TO_DEVICE:
--		ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
-+		ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size,
-+			   dir, NON_COHERENT_SYNC_DMA_FOR_DEVICE);
- 		break;
- 	case DMA_FROM_DEVICE:
--		ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
-+		ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size,
-+			   dir, NON_COHERENT_SYNC_DMA_FOR_DEVICE);
- 		break;
- 	case DMA_BIDIRECTIONAL:
--		ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
-+		ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size,
-+			   dir, NON_COHERENT_SYNC_DMA_FOR_DEVICE);
- 		break;
- 	default:
- 		break;
-@@ -42,7 +45,8 @@ void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
- 		break;
- 	case DMA_FROM_DEVICE:
- 	case DMA_BIDIRECTIONAL:
--		ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size);
-+		ALT_CMO_OP(flush, vaddr, size, riscv_cbom_block_size,
-+			   dir, NON_COHERENT_SYNC_DMA_FOR_CPU);
- 		break;
- 	default:
- 		break;
-@@ -53,7 +57,8 @@ void arch_dma_prep_coherent(struct page *page, size_t size)
- {
- 	void *flush_addr = page_address(page);
- 
--	ALT_CMO_OP(flush, flush_addr, size, riscv_cbom_block_size);
-+	ALT_CMO_OP(flush, flush_addr, size, riscv_cbom_block_size,
-+		   0, NON_COHERENT_DMA_PREP);
- }
- 
- void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
++title: Andestech AX45MP L2 Cache Controller
++
++maintainers:
++  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
++
++description:
++  A level-2 cache (L2C) is used to improve the system performance by providing
++  a large amount of cache line entries and reasonable access delays. The L2C
++  is shared between cores, and a non-inclusive non-exclusive policy is used.
++
++select:
++  properties:
++    compatible:
++      contains:
++        enum:
++          - andestech,ax45mp-cache
++
++  required:
++    - compatible
++
++properties:
++  compatible:
++    items:
++      - const: andestech,ax45mp-cache
++      - const: cache
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  cache-line-size:
++    const: 64
++
++  cache-level:
++    const: 2
++
++  cache-sets:
++    const: 1024
++
++  cache-size:
++    enum: [131072, 262144, 524288, 1048576, 2097152]
++
++  cache-unified: true
++
++  next-level-cache: true
++
++  andestech,pma-regions:
++    $ref: /schemas/types.yaml#/definitions/uint32-matrix
++    minItems: 1
++    maxItems: 16
++    items:
++      minItems: 3
++      maxItems: 3
++    description: Optional array of memory regions to be set in the PMA.
++
++additionalProperties: false
++
++required:
++  - compatible
++  - cache-line-size
++  - cache-level
++  - cache-sets
++  - cache-size
++  - cache-unified
++  - interrupts
++  - reg
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/cache/andestech,ax45mp-cache.h>
++
++    cache-controller@2010000 {
++        reg = <0x13400000 0x100000>;
++        compatible = "andestech,ax45mp-cache", "cache";
++        interrupts = <508 IRQ_TYPE_LEVEL_HIGH>;
++        cache-line-size = <64>;
++        cache-level = <2>;
++        cache-sets = <1024>;
++        cache-size = <262144>;
++        cache-unified;
++        andestech,pma-regions = <0x58000000 0x08000000
++                                 (AX45MP_PMACFG_ETYP_NAPOT | AX45MP_PMACFG_MTYP_MEM_NON_CACHE_BUF)>;
++    };
+diff --git a/include/dt-bindings/cache/andestech,ax45mp-cache.h b/include/dt-bindings/cache/andestech,ax45mp-cache.h
+new file mode 100644
+index 000000000000..aa1cad24075d
+--- /dev/null
++++ b/include/dt-bindings/cache/andestech,ax45mp-cache.h
+@@ -0,0 +1,38 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++/*
++ * This header provides constants for Andes AX45MP PMA configuration
++ *
++ * Copyright (C) 2022 Renesas Electronics Corp.
++ */
++
++#ifndef __DT_BINDINGS_ANDESTECH_AX45MP_CACHE_H
++#define __DT_BINDINGS_ANDESTECH_AX45MP_CACHE_H
++
++/* OFF: PMA entry is disabled */
++#define AX45MP_PMACFG_ETYP_DISABLED			0
++/* Naturally aligned power of 2 region */
++#define AX45MP_PMACFG_ETYP_NAPOT			3
++
++/* Device, Non-bufferable */
++#define AX45MP_PMACFG_MTYP_DEV_NON_BUF			(0 << 2)
++/* Device, bufferable */
++#define AX45MP_PMACFG_MTYP_DEV_BUF			(1 << 2)
++/* Memory, Non-cacheable, Non-bufferable */
++#define AX45MP_PMACFG_MTYP_MEM_NON_CACHE_NON_BUF	(2 << 2)
++/* Memory, Non-cacheable, Bufferable */
++#define AX45MP_PMACFG_MTYP_MEM_NON_CACHE_BUF		(3 << 2)
++/* Memory, Write-back, No-allocate */
++#define AX45MP_PMACFG_MTYP_MEM_WB_NA			(8 << 2)
++/* Memory, Write-back, Read-allocate */
++#define AX45MP_PMACFG_MTYP_MEM_WB_RA			(9 << 2)
++/* Memory, Write-back, Write-allocate */
++#define AX45MP_PMACFG_MTYP_MEM_WB_WA			(10 << 2)
++/* Memory, Write-back, Read and Write-allocate */
++#define AX45MP_PMACFG_MTYP_MEM_WB_R_WA			(11 << 2)
++
++/* AMO instructions are supported */
++#define AX45MP_PMACFG_NAMO_AMO_SUPPORT			(0 << 6)
++/* AMO instructions are not supported */
++#define AX45MP_PMACFG_NAMO_AMO_NO_SUPPORT		(1 << 6)
++
++#endif /* __DT_BINDINGS_ANDESTECH_AX45MP_CACHE_H */
 -- 
 2.25.1
 
