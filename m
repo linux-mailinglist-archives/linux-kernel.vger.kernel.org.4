@@ -2,138 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F203637117
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 04:32:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97C0B637119
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 04:33:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbiKXDc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 22:32:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49980 "EHLO
+        id S229613AbiKXDdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 22:33:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiKXDcx (ORCPT
+        with ESMTP id S229448AbiKXDde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 22:32:53 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA2C1C412
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 19:32:51 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id k7so342756pll.6
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 19:32:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6BBzplv4usyuEIMVAm0qSmS4cJi8RTr3YYpBQBevHpg=;
-        b=Cj7WMrasPvkvyAb/qeIh9ngQl6+RCuho//7eFZusoZVJ+Dg6U4nya27EHYYL9dHEOt
-         wp3QavtAJPimFmg+vgztmtcV0c0QobHpI/wSh5hI6++bBO3RJwFp6wEXjjjBh+MaOGZa
-         p41Qf5Kc/CgTRiL31j8YucyoUcuQminmXTDRg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6BBzplv4usyuEIMVAm0qSmS4cJi8RTr3YYpBQBevHpg=;
-        b=gLkAgmwUiwsRiKwcYu1vbIV+BdD+BabO6dg3npRj3qNOOS40yvzRv4B0L8YPbHewOI
-         UgmgMKzs6tLdRAEaB6ymJovKpDxpFuXUnpqqHpZ3WuHklgdxjPAtB/n0D0eneX0T8pnS
-         mJC1yRwmwMGELhWQBL2rzy0U1zcRjbY9O6FsrcYgQGPDxSFGd5rOZuoAbQ8A7grRwnwV
-         PFur3sL9i0ly/uZ+QyAE+SF6ATKMUiA54UEnkfhKFUe6V2jPEDnKwHGlbFoaA6jdRIu/
-         7PZL1UJLLAG3WlzK5cquPHqoDSd2uCsdklZ2FxixClwZkz9xxMy43ZBxD2UnA7EJkvJj
-         rAnQ==
-X-Gm-Message-State: ANoB5pkXXXToY7ylHZxeDA+afAkots7vXexS38nu+0tz0QvU5+9KevCf
-        AXXbueMkVD0DGbj2vSifqv8hdg==
-X-Google-Smtp-Source: AA0mqf4fe4gZPOdvRZh5wCh+8bjwt8ps/uLJ8zufhsVLYPfKWMDwdrHoEcEuOPcAieWUxRD0uL3SqQ==
-X-Received: by 2002:a17:903:264c:b0:186:6fde:e9f5 with SMTP id je12-20020a170903264c00b001866fdee9f5mr17083278plb.139.1669260770615;
-        Wed, 23 Nov 2022 19:32:50 -0800 (PST)
-Received: from google.com ([240f:75:7537:3187:438d:8b02:662d:50b3])
-        by smtp.gmail.com with ESMTPSA id f11-20020a65550b000000b00460c67afbd5sm122401pgr.7.2022.11.23.19.32.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 19:32:50 -0800 (PST)
-Date:   Thu, 24 Nov 2022 12:32:45 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Johannes Weiner <hannes@cmpxchg.org>, Nhat Pham <nphamcs@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Seth Jennings <sjenning@redhat.com>,
-        Dan Streetman <ddstreet@ieee.org>,
-        Vitaly Wool <vitaly.wool@konsulko.com>,
-        Minchan Kim <minchan@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: Re: [PATCH] zswap: do not allocate from atomic pool
-Message-ID: <Y37l3Xxb172q632L@google.com>
-References: <20221122013338.3696079-1-senozhatsky@chromium.org>
- <Y3w/DFTAypX7L2mp@cmpxchg.org>
- <Y3xCTr6ikbtcUr/y@google.com>
+        Wed, 23 Nov 2022 22:33:34 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71309C607F
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 19:33:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=SiYzGWsRarEdt81Og2LTbZsHP1GWYUw0h1JMLzGK6gc=; b=rWgR4hAalUnGhNvEqX826xzxNB
+        K4oSWO0gcBRj+m4eI4DUB8xXzQmbQbVC1L4TCRMe9n+8t8EqVLyXLrMdFcnRb7yUmv4c4gPYKFlhY
+        VoO1DFAyA5IhXAc7Yln76y40O3ok5lfnVACt4nq6k+BJ08meFBD9tZyo9vptBQFqYmDAt6suEdqmj
+        ri8conSsbCyAf9i0HtJhTB5Fx/iC59MDaKsyxbij1y6G5BNhwFv74bjhcFyPffZvAAi5gMbN52XRy
+        ELp3UPyvx4jLBihtwHYg/ci9KOIIoAchx7k1knEUucZS+RTd/Jj3o20u09jIW/+gudAskJVN9jBpz
+        D4h0odvg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oy2zT-008LGP-Sl; Thu, 24 Nov 2022 03:33:31 +0000
+Date:   Thu, 24 Nov 2022 03:33:31 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Gavin Shan <gshan@redhat.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, william.kucharski@oracle.com,
+        ziy@nvidia.com, kirill.shutemov@linux.intel.com,
+        zhenyzha@redhat.com, shan.gavin@gmail.com, riel@surriel.com
+Subject: Re: [PATCH] mm: migrate: Fix THP's mapcount on isolation
+Message-ID: <Y37mC1+LQscJaOk4@casper.infradead.org>
+References: <20221123005752.161003-1-gshan@redhat.com>
+ <e8a64b11-98f9-b571-dce9-a60df98e3e5@google.com>
+ <c61612f7-b861-39cf-3e73-dbe4d134eec0@redhat.com>
+ <871qptrvsw.fsf@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y3xCTr6ikbtcUr/y@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <871qptrvsw.fsf@nvidia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/11/22 12:30), Sergey Senozhatsky wrote:
-> zswap_frontswap_load() should be called from preemptible
-> context (we even call mutex_lock() there) and it does not
-> look like we need to do GFP_ATOMIC allocaion for temp
-> buffer. The same applies to zswap_writeback_entry().
+On Thu, Nov 24, 2022 at 12:06:56PM +1100, Alistair Popple wrote:
 > 
-> Use GFP_KERNEL for temporary buffer allocation in both
-> cases.
+> David Hildenbrand <david@redhat.com> writes:
 > 
-> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
-> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
-> Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-> ---
-
-Folks, how do we want to proceed with this? One of the hunks here
-conflicts with https://lore.kernel.org/lkml/20221119001536.2086599-2-nphamcs@gmail.com/
-
-Do we want to remove conflicting hunk from "[PATCH 1/6] zswap: fix writeback
-lock ordering for zsmalloc" and pick this patch up?
-
-> diff --git a/mm/zpool.c b/mm/zpool.c
-> index 68facc193496..f46c0d5e766c 100644
-> --- a/mm/zpool.c
-> +++ b/mm/zpool.c
-> @@ -387,6 +387,13 @@ bool zpool_evictable(struct zpool *zpool)
->   * zpool_can_sleep_mapped - Test if zpool can sleep when do mapped.
->   * @zpool:	The zpool to test
->   *
-> + * Some allocators enter non-preemptible context in ->map() callback (e.g.
-> + * disable pagefaults) and exit that context in ->unmap(), which limits what
-> + * we can do with the mapped object. For instance, we cannot wait for
-> + * asynchronous crypto API to decompress such an object or take mutexes
-> + * since those will call into the scheduler. This function tells us whether
-> + * we use such an allocator.
-> + *
->   * Returns: true if zpool can sleep; false otherwise.
->   */
->  bool zpool_can_sleep_mapped(struct zpool *zpool)
-> diff --git a/mm/zswap.c b/mm/zswap.c
-> index 2d48fd59cc7a..3019f0bde194 100644
-> --- a/mm/zswap.c
-> +++ b/mm/zswap.c
-> @@ -958,7 +958,7 @@ static int zswap_writeback_entry(struct zpool *pool, unsigned long handle)
->  	};
->  
->  	if (!zpool_can_sleep_mapped(pool)) {
-> -		tmp = kmalloc(PAGE_SIZE, GFP_ATOMIC);
-> +		tmp = kmalloc(PAGE_SIZE, GFP_KERNEL);
->  		if (!tmp)
->  			return -ENOMEM;
->  	}
-> @@ -1311,7 +1311,7 @@ static int zswap_frontswap_load(unsigned type, pgoff_t offset,
->  	}
->  
->  	if (!zpool_can_sleep_mapped(entry->pool->zpool)) {
-> -		tmp = kmalloc(entry->length, GFP_ATOMIC);
-> +		tmp = kmalloc(entry->length, GFP_KERNEL);
->  		if (!tmp) {
->  			ret = -ENOMEM;
->  			goto freeentry;
-> -- 
-> 2.38.1.584.g0f3c55d4c2-goog
+> > On 23.11.22 06:14, Hugh Dickins wrote:
+> >> On Wed, 23 Nov 2022, Gavin Shan wrote:
+> >> 
+> >>> The issue is reported when removing memory through virtio_mem device.
+> >>> The transparent huge page, experienced copy-on-write fault, is wrongly
+> >>> regarded as pinned. The transparent huge page is escaped from being
+> >>> isolated in isolate_migratepages_block(). The transparent huge page
+> >>> can't be migrated and the corresponding memory block can't be put
+> >>> into offline state.
+> >>>
+> >>> Fix it by replacing page_mapcount() with total_mapcount(). With this,
+> >>> the transparent huge page can be isolated and migrated, and the memory
+> >>> block can be put into offline state.
+> >>>
+> >>> Fixes: 3917c80280c9 ("thp: change CoW semantics for anon-THP")
+> >>> Cc: stable@vger.kernel.org   # v5.8+
+> >>> Reported-by: Zhenyu Zhang <zhenyzha@redhat.com>
+> >>> Suggested-by: David Hildenbrand <david@redhat.com>
+> >>> Signed-off-by: Gavin Shan <gshan@redhat.com>
+> >> Interesting, good catch, looked right to me: except for the Fixes
+> >> line
+> >> and mention of v5.8.  That CoW change may have added a case which easily
+> >> demonstrates the problem, but it would have been the wrong test on a THP
+> >> for long before then - but only in v5.7 were compound pages allowed
+> >> through at all to reach that test, so I think it should be
+> >> Fixes: 1da2f328fa64 ("mm,thp,compaction,cma: allow THP migration for
+> >> CMA allocations")
+> >> Cc: stable@vger.kernel.org   # v5.7+
+> >> Oh, no, stop: this is not so easy, even in the latest tree.
+> >> Because at the time of that "admittedly racy check", we have no hold
+> >> at all on the page in question: and if it's PageLRU or PageCompound
+> >> at one instant, it may be different the next instant.  Which leaves it
+> >> vulnerable to whatever BUG_ON()s there may be in the total_mapcount()
+> >> path - needs research.  *Perhaps* there are no more BUG_ON()s in the
+> >> total_mapcount() path than in the existing page_mapcount() path.
+> >> I suspect that for this to be safe (before your patch and more so
+> >> after),
+> >> it will be necessary to shift the "admittedly racy check" down after the
+> >> get_page_unless_zero() (and check the sequence of operations when a
+> >> compound page is initialized).
+> >
+> > Grabbing a reference first sounds like the right approach to me.
 > 
+> I think you're right. Without a page reference I don't think it is even
+> safe to look at struct page, at least not without synchronisation
+> against memory hot unplug which could remove the struct page. From a
+> quick glance I didn't see anything here that obviously did that though.
+
+Memory hotplug is the offending party here.  It has to make sure that
+everything else is definitely quiescent before removing the struct pages.
+Otherwise you can't even try_get a refcount.
