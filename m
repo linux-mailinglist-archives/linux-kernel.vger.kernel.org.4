@@ -2,103 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73ECD636F8A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 01:59:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AAE9636F8C
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 02:00:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbiKXA7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 19:59:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57728 "EHLO
+        id S229602AbiKXBAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 20:00:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiKXA7E (ORCPT
+        with ESMTP id S229553AbiKXBAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 19:59:04 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF10786D2;
-        Wed, 23 Nov 2022 16:59:03 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id x13-20020a17090a46cd00b00218f611b6e9so248257pjg.1;
-        Wed, 23 Nov 2022 16:59:03 -0800 (PST)
+        Wed, 23 Nov 2022 20:00:22 -0500
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 503FA78D68
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 17:00:21 -0800 (PST)
+Received: by mail-qv1-xf35.google.com with SMTP id h7so94884qvs.3
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 17:00:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wNgqx4nOvBacXRcfWNIQEwnOw2cT8o68pm9m7IwR/gg=;
-        b=X3BErgYpy3+uysZbtcDsNZ7XGMi6VDJ4M2UpEJYTm2ZIcAzzgdUC31pzHYDnTPm5hl
-         xa+LgejTMwdOrl77sTGNP1dKTS7ltBeMIH2JfPfx36d0ToxxDblWx8abnihFZH4tGIyB
-         9vOcAavA+bj2hLk+vQG/JmsWoFwMIawmWdh6Ieu/+vfctje3iQhwdHGadmXzWxI6dmnK
-         pwBsMIzYxOMSCcZb2QTykFPIdahII9cFshRZFCmPfo5Ab+Vu2MFcC0rD3dYZdGoinLXL
-         vc7Emew/hGDDJN/jGoia7AnARhpwR5maKxMJ2ObUKvej1siq+om/ymzlZZRxFyti6hAO
-         hP7A==
+        d=joelfernandes.org; s=google;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OZUox7da7NgS3v6hjso4mfE8wJf8mF4cfDLgIf1o1rM=;
+        b=a7cgmhJvfmdaSZgsxIp7YCdK5xR1KnroUd195Ydv21xGaGj4YRxD3fVqeq2Bjx/yBM
+         YpT70gEvl8jLyu9CvdrP78Sxdw9zP7xJOnVQOneeseOj/TQb0sPiH+ZPqMX4fvs64XuD
+         QxcnmEsTnnysOOOCBybe0XWLd0IGWeQUecDWA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wNgqx4nOvBacXRcfWNIQEwnOw2cT8o68pm9m7IwR/gg=;
-        b=G9lA+4wO/kZgTv59waDAGXf8C/ZaFRr8CO7hMi+c3PS1VYhn2u236L3CMjFgnh6nQh
-         8sryjP0nvqDuLi1mjsNXVzgU8qbZdKEzGavHSe0E7zP8+BEAT5XEIMZJL1zZtl4kYkl/
-         zTSSwqxldaltQzzE7DwoiNKE4mA28phBO40x9rnRpp5hZCy0gRJfbL61+qR2z2JXsver
-         2VF2szWbWyjKk7RxGt4xG98b1vL5aQXhfc/GoyZV6TRCVreCtbLV1Csq3x5VcHyeiDb3
-         2oZf6rXSxdpXl6oQ/HBnYbj2PPIiHG9llXemRJD4KrfcKu66X/ip/9b2TMkSsFMBYRC7
-         jk4A==
-X-Gm-Message-State: ANoB5pk3GydgTR0rn+i+BEbFGHEA2umduVoJf9uBGmuwkFMsqmKcOJ83
-        BnfxGRzy6I3GAqg7ZjaGosE=
-X-Google-Smtp-Source: AA0mqf4daN8aZClSbe8nBcobYR0Zu0b8N4WjefmWi2EiezYKHFju1/+LYi14eFnabt/fV8Egy3TuZA==
-X-Received: by 2002:a17:90b:3944:b0:214:1df0:fe53 with SMTP id oe4-20020a17090b394400b002141df0fe53mr38368187pjb.214.1669251543001;
-        Wed, 23 Nov 2022 16:59:03 -0800 (PST)
-Received: from [192.168.1.5] ([159.192.254.122])
-        by smtp.googlemail.com with ESMTPSA id d7-20020a17090abf8700b00218e5959bfbsm1897336pjs.20.2022.11.23.16.58.56
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OZUox7da7NgS3v6hjso4mfE8wJf8mF4cfDLgIf1o1rM=;
+        b=i3wEiZ/oFnWb8BiInuv7yrLmm4HVsOmNsFpJIA5Uc+4vg+R0AxxEeTGsEdDlFjygYZ
+         m9Cxr6UE3KHdxBHCWAdV+xs8I4IjrWA6nY+KZfTzmGE0Oro5TRX/3eT1iY+yVpVZf1C5
+         HstCh+NgwOegUULJ6jZUeNw9qsLbtfm0Cx/924jHCbQi6+GAz4w0J2dg9mhmpaaBbvc5
+         W9XASmHUYSQYQdL/CZhFsyS4LAZqRNOTgoUc8UStWURGWfmX/RgTGAhZX2nLOVHK9qhS
+         bj2BAoZaK70VIdnvPNeCC7kFiVq6zSMb/d15axoTFEfFfAoaToGPkUmc8kYoNCfUiPyO
+         olnQ==
+X-Gm-Message-State: ANoB5plJlF+fPuNkdyGg6/YRwb29DqfH7u/GzHW4o37S/KKAoUhVjgks
+        JF4GLntT1P65mgTcVaQR6H2Zek14t80Zng==
+X-Google-Smtp-Source: AA0mqf4xkVWmMgFzLI8NzSImgfx/kKA1XoFMQq7ed5TI5PiwsRUgFgYbhvxOUGgn8+4PPOo9dLQXYw==
+X-Received: by 2002:ad4:534b:0:b0:4b1:8429:a8a7 with SMTP id v11-20020ad4534b000000b004b18429a8a7mr10833373qvs.52.1669251619580;
+        Wed, 23 Nov 2022 17:00:19 -0800 (PST)
+Received: from smtpclient.apple (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
+        by smtp.gmail.com with ESMTPSA id fv11-20020a05622a4a0b00b003a526675c07sm10692431qtb.52.2022.11.23.17.00.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 16:59:02 -0800 (PST)
-Message-ID: <360394e3-91c0-9a47-4046-1f7635ebf312@gmail.com>
-Date:   Thu, 24 Nov 2022 07:58:54 +0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] USB: disable all RNDIS protocol drivers
-To:     Nicolas Cavallari <nicolas.cavallari@green-communications.fr>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        =?UTF-8?Q?Maciej_=c5=bbenczykowski?= <maze@google.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        =?UTF-8?Q?=c5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
-        Ilja Van Sprundel <ivansprundel@ioactive.com>,
-        Joseph Tartaro <joseph.tartaro@ioactive.com>
-References: <04ea37cc-d97a-3e00-8a99-135ab38860f2@green-communications.fr>
-Content-Language: en-US
-From:   Lars Melin <larsm17@gmail.com>
-In-Reply-To: <04ea37cc-d97a-3e00-8a99-135ab38860f2@green-communications.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 23 Nov 2022 17:00:19 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Joel Fernandes <joel@joelfernandes.org>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH v2 rcu 05/16] rcu: Refactor code a bit in rcu_nocb_do_flush_bypass()
+Date:   Wed, 23 Nov 2022 20:00:18 -0500
+Message-Id: <F3FB7417-0E5F-487A-A880-15964B676020@joelfernandes.org>
+References: <20221123175437.GA4001@paulmck-ThinkPad-P17-Gen-1>
+Cc:     Frederic Weisbecker <frederic@kernel.org>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        rostedt@goodmis.org
+In-Reply-To: <20221123175437.GA4001@paulmck-ThinkPad-P17-Gen-1>
+To:     paulmck@kernel.org
+X-Mailer: iPhone Mail (19G82)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/23/2022 22:40, Nicolas Cavallari wrote:
-> There are also probably cellular dongles that uses rndis by default.
 
-Yes, there is a whole bunch of them and new ones are still coming out.
-Some USB dongle mfgr prefer to implement RNDIS instead of MBIM because 
-the same dongle can then be used for both old and new WIN versions.
-I do agree that the RNDIS protocol is crap but removing RNDIS_HOST will 
-be a regression for many linux users.
 
-/Lars
+> On Nov 23, 2022, at 12:54 PM, Paul E. McKenney <paulmck@kernel.org> wrote:=
 
+>=20
+> =EF=BB=BFOn Wed, Nov 23, 2022 at 04:59:29PM +0100, Frederic Weisbecker wro=
+te:
+>>> On Mon, Nov 21, 2022 at 05:04:10PM -0800, Paul E. McKenney wrote:
+>>> From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
+>>>=20
+>>> This consolidates the code a bit and makes it cleaner. Functionally it
+>>> is the same.
+>>>=20
+>>> Reported-by: Paul E. McKenney <paulmck@kernel.org>
+>>> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+>>> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+>>> ---
+>>> kernel/rcu/tree_nocb.h | 17 +++++++++--------
+>>> 1 file changed, 9 insertions(+), 8 deletions(-)
+>>>=20
+>>> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+>>> index d6e4c076b0515..213daf81c057f 100644
+>>> --- a/kernel/rcu/tree_nocb.h
+>>> +++ b/kernel/rcu/tree_nocb.h
+>>> @@ -327,10 +327,11 @@ static void wake_nocb_gp_defer(struct rcu_data *rd=
+p, int waketype,
+>>>  *
+>>>  * Note that this function always returns true if rhp is NULL.
+>>>  */
+>>> -static bool rcu_nocb_do_flush_bypass(struct rcu_data *rdp, struct rcu_h=
+ead *rhp,
+>>> +static bool rcu_nocb_do_flush_bypass(struct rcu_data *rdp, struct rcu_h=
+ead *rhp_in,
+>>>                     unsigned long j, bool lazy)
+>>> {
+>>>    struct rcu_cblist rcl;
+>>> +    struct rcu_head *rhp =3D rhp_in;
+>>=20
+>> Why that intermediate rhp_in?
+>=20
+> To avoid modifying the formal parameter, should the original value prove
+> useful, for example, for tracing or debugging.
+
+So as to not re assign function parameter and introduce bugs down the line (=
+someone reading code thinks they passed a certain rhp but code is using some=
+thing else later in the function).
+
+Thanks.
+
+
+
+>=20
+>>>    WARN_ON_ONCE(!rcu_rdp_is_offloaded(rdp));
+>>>    rcu_lockdep_assert_cblist_protected(rdp);
+>>> @@ -345,16 +346,16 @@ static bool rcu_nocb_do_flush_bypass(struct rcu_da=
+ta *rdp, struct rcu_head *rhp,
+>>>=20
+>>>    /*
+>>>     * If the new CB requested was a lazy one, queue it onto the main
+>>> -     * ->cblist so we can take advantage of a sooner grade period.
+>>> +     * ->cblist so that we can take advantage of the grace-period that w=
+ill
+>>> +     * happen regardless. But queue it onto the bypass list first so th=
+at
+>>> +     * the lazy CB is ordered with the existing CBs in the bypass list.=
+
+>>>     */
+>>>    if (lazy && rhp) {
+>>> -        rcu_cblist_flush_enqueue(&rcl, &rdp->nocb_bypass, NULL);
+>>> -        rcu_cblist_enqueue(&rcl, rhp);
+>>> -        WRITE_ONCE(rdp->lazy_len, 0);
+>>> -    } else {
+>>> -        rcu_cblist_flush_enqueue(&rcl, &rdp->nocb_bypass, rhp);
+>>> -        WRITE_ONCE(rdp->lazy_len, 0);
+>>> +        rcu_cblist_enqueue(&rdp->nocb_bypass, rhp);
+>>> +        rhp =3D NULL;
+>>>    }
+>>> +    rcu_cblist_flush_enqueue(&rcl, &rdp->nocb_bypass, rhp);
+>>> +    WRITE_ONCE(rdp->lazy_len, 0);
+>>=20
+>> Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+>=20
+> Thank you!  I will apply this on my next rebase.
+>=20
+>                            Thanx, Paul
+>=20
+>> Thanks.
+>>=20
+>>>=20
+>>>    rcu_segcblist_insert_pend_cbs(&rdp->cblist, &rcl);
+>>>    WRITE_ONCE(rdp->nocb_bypass_first, j);
+>>> --=20
+>>> 2.31.1.189.g2e36527f23
+>>>=20
