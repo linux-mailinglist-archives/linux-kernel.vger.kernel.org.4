@@ -2,58 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD4176375AA
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 10:56:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 408D26375B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 10:57:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbiKXJ4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 04:56:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41154 "EHLO
+        id S230017AbiKXJ5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 04:57:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiKXJ4q (ORCPT
+        with ESMTP id S229706AbiKXJ5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 04:56:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C677912EBE5
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 01:55:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669283749;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=60QDRRHbYW5CIGKF/Qr6kydVK9e2+lWs3YQKxRzQMXc=;
-        b=S9wj6D3XPLSoazx33TkWn8VTdWPEXHFZmi2kDwuPOfedqqSlXSjthL2+Kymy6GqM34jYEK
-        NlStzKQ0GCU39MtBzvV11Jj5STTZtjsZvvN92JDWhIQYgtPPQcqmxOLhuVF8NgfByYLJkM
-        qsu3by9FtmtYbPyMcNUGaJWTwxmiU+Q=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-499-By9IKOSyMZuvRh8Ile7czA-1; Thu, 24 Nov 2022 04:55:44 -0500
-X-MC-Unique: By9IKOSyMZuvRh8Ile7czA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C8C2B29AB3E5;
-        Thu, 24 Nov 2022 09:55:43 +0000 (UTC)
-Received: from gshan.redhat.com (vpn2-54-95.bne.redhat.com [10.64.54.95])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6303140C6DC7;
-        Thu, 24 Nov 2022 09:55:39 +0000 (UTC)
-From:   Gavin Shan <gshan@redhat.com>
-To:     linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        william.kucharski@oracle.com, ziy@nvidia.com,
-        kirill.shutemov@linux.intel.com, david@redhat.com,
-        zhenyzha@redhat.com, apopple@nvidia.com, hughd@google.com,
-        willy@infradead.org, shan.gavin@gmail.com
-Subject: [PATCH v2] mm: migrate: Fix THP's mapcount on isolation
-Date:   Thu, 24 Nov 2022 17:55:23 +0800
-Message-Id: <20221124095523.31061-1-gshan@redhat.com>
+        Thu, 24 Nov 2022 04:57:47 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F7014001
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 01:57:46 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id e76so1274244yba.5
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 01:57:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=r/inbI+y1fhrxyLW9sS+q/7x6KkspXDB7h9KT6wBhFI=;
+        b=FsQyigU5X9Bj9xZiNwYg2vk1ek0GVhZG+zbSZ3vYiapFPlAQUN1xt3rSqtvzfV2J0o
+         xn34AJ262EZYn2nnGIyRHGnlUbJL/Ecj+cE9/nguY3T/aDuwKpTUmTkCIShYtgNJoqJ6
+         S+oSflzGcP2f6TMQwdf/Uqc3W+iufoDZ5qIrmRnn+wEJIxLZcDcvcGWYSRe8V3BNRzgl
+         X5pfGd6YRxRlZWJBqxbiE5b9oBOh4m/QQneZJjN5a90umabI+6XNKCBALBGTsy86LiFl
+         yhS7VqlNE1bn/uB9f0sMRct+oHhUAme3rh1NsgpPJVtF+ukY/BxuBNM+1XHkuRQJo8J9
+         n07A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=r/inbI+y1fhrxyLW9sS+q/7x6KkspXDB7h9KT6wBhFI=;
+        b=CKiZIrMQ3MPJdAary6wA9DQ9ZvAT+Qt2HPK/K8zgErY3vhaEG1p4fNlrBK+FPspBgD
+         oPtJDw2OeyCUUYp1v8bXdkvqvHFQn1d8Blv7vAZQkGIjlQ8W1GNjp2tBAzs32C7GeXIM
+         2QoZWliXFfMigEtbdLPI1ka7NV1odYNipLQs8DbPM+6cQuM6ceCUecPiDlCexI5Mdab6
+         IIjaNRu5a0XF6JwqkS+VNXD/ahBWQDtyFX/E5xXZ9AsVrWyHakVBSUxR3ALE4dqtuWWD
+         HtgC3DwnLAWu5UFYXZLtjQwX35MWLnp5DLVb3t1o52kmJ192tmK2my+3iTjK9/kA2Ay6
+         I8JQ==
+X-Gm-Message-State: ANoB5pkp7RIWOi9XjUP83PcWdanqQUAbv9NFZ7NoHPNpqJDUjRAX2vk4
+        Ekq6TyK3gQmA8celhKqXOgb85IaY68SebcD/uUzCB4e6iKygig==
+X-Google-Smtp-Source: AA0mqf4qkrdY9iSNek494zZjiqDs6tUrY9sSvGelHCP42eGUIvgdfUL9wM1QFB3i6woY0JwsbG4QB5ulMunhWiUYhGg=
+X-Received: by 2002:a25:f302:0:b0:6dd:4825:ba8f with SMTP id
+ c2-20020a25f302000000b006dd4825ba8fmr30016399ybs.103.1669283865119; Thu, 24
+ Nov 2022 01:57:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+From:   Guillermo Rodriguez Garcia <guille.rodriguez@gmail.com>
+Date:   Thu, 24 Nov 2022 10:57:34 +0100
+Message-ID: <CABDcavYdsk-O4x3oPX4i4+T5wsoZV26_kpEq6JvpD8A_cAGHxg@mail.gmail.com>
+Subject: SOC_DOUBLE_R_SX_TLV controls broken in cs24l51 driver
+To:     linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?Q?Tan_Nay=C4=B1r?= <tannayir@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@codeaurora.org>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        James Schulman <james.schulman@cirrus.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        Mark Brown <broonie@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,75 +74,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The issue is reported when removing memory through virtio_mem device.
-The transparent huge page, experienced copy-on-write fault, is wrongly
-regarded as pinned. The transparent huge page is escaped from being
-isolated in isolate_migratepages_block(). The transparent huge page
-can't be migrated and the corresponding memory block can't be put
-into offline state.
+Hi all,
 
-Fix it by replacing page_mapcount() with total_mapcount(). With this,
-the transparent huge page can be isolated and migrated, and the memory
-block can be put into offline state. Besides, The page's refcount is
-increased a bit earlier to avoid the page is released when the check
-is executed.
+I am using a dev board with a Cirrus Logic cs24l51 codec.
 
-Fixes: 1da2f328fa64 ("mm,thp,compaction,cma: allow THP migration for CMA allocations")
-Cc: stable@vger.kernel.org   # v5.7+
-Reported-by: Zhenyu Zhang <zhenyzha@redhat.com>
-Suggested-by: David Hildenbrand <david@redhat.com>
-Signed-off-by: Gavin Shan <gshan@redhat.com>
----
-v2: Corrected fix tag and increase page's refcount before the check
----
- mm/compaction.c | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+This used to work fine prior to kernel version 5.x, however after 5.x
+it is not possible to set certain values for ALSA controls from
+userspace.
 
-diff --git a/mm/compaction.c b/mm/compaction.c
-index c51f7f545afe..1f6da31dd9a5 100644
---- a/mm/compaction.c
-+++ b/mm/compaction.c
-@@ -984,29 +984,29 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
- 			goto isolate_fail;
- 		}
- 
-+		/*
-+		 * Be careful not to clear PageLRU until after we're
-+		 * sure the page is not being freed elsewhere -- the
-+		 * page release code relies on it.
-+		 */
-+		if (unlikely(!get_page_unless_zero(page)))
-+			goto isolate_fail;
-+
- 		/*
- 		 * Migration will fail if an anonymous page is pinned in memory,
- 		 * so avoid taking lru_lock and isolating it unnecessarily in an
- 		 * admittedly racy check.
- 		 */
- 		mapping = page_mapping(page);
--		if (!mapping && page_count(page) > page_mapcount(page))
--			goto isolate_fail;
-+		if (!mapping && (page_count(page) - 1) > total_mapcount(page))
-+			goto isolate_fail_put;
- 
- 		/*
- 		 * Only allow to migrate anonymous pages in GFP_NOFS context
- 		 * because those do not depend on fs locks.
- 		 */
- 		if (!(cc->gfp_mask & __GFP_FS) && mapping)
--			goto isolate_fail;
--
--		/*
--		 * Be careful not to clear PageLRU until after we're
--		 * sure the page is not being freed elsewhere -- the
--		 * page release code relies on it.
--		 */
--		if (unlikely(!get_page_unless_zero(page)))
--			goto isolate_fail;
-+			goto isolate_fail_put;
- 
- 		/* Only take pages on LRU: a check now makes later tests safe */
- 		if (!PageLRU(page))
--- 
-2.23.0
+I believe this is related to the input validation that is mentioned in
+this thread: https://lore.kernel.org/all/Yph8C3bRxcr6ogW7@sirena.org.uk/T/,
+and possibly in this commit: 4f1e50d6a9cf9c1b8c859d449b5031cacfa8404e
+("ASoC: ops: Reject out of bounds values in snd_soc_put_volsw_sx()")
 
+For the cs24l51, all the controls that fail are using the
+SOC_DOUBLE_R_SX_TLV macro.
+
+I have traced this to the checks in snd_soc_put_volsw_sx, specifically
+the (val > max - min) check:
+
+pr_warn("Max: %d, Min: %d, Value: %d", max, min, val);
+pr_warn("platform_max: %d", mc->platform_max);
+if (mc->platform_max && val > mc->platform_max)
+{
+    return -EINVAL;
+}
+if (val > max - min){
+    pr_warn("(val > max - min) check failed");
+    return -EINVAL;
+}
+if (val < 0)
+    return -EINVAL;
+
+According to the datasheet of the CS24L51, section 6.13, page 61, the
+PCMMIXX_VOL registers accept the following range of values:
+
+Binary Code / Volume Setting
+001 1000 / +12.0 dB
+=C2=B7=C2=B7=C2=B7 =C2=B7=C2=B7=C2=B7
+000 0000 / 0 dB
+111 1111 / -0.5 dB
+111 1110 / -1.0 dB
+=C2=B7=C2=B7=C2=B7 =C2=B7=C2=B7=C2=B7
+001 1001 / -51.5 dB
+
+Minimum value is 0x19 (001 1001) corresponding to -51.5 dB, then there
+are 127 possible gain settings from -51.5 dB to +12.0 dB, in 0.5 dB
+steps.
+
+This is declared in the driver as follows:
+
+SOC_DOUBLE_R_SX_TLV("PCM Playback Volume",
+CS42L51_PCMA_VOL, CS42L51_PCMB_VOL,
+0, 0x19, 0x7F, adc_pcm_tlv),
+
+0x19 =3D min value
+0x7F =3D number of gain settings
+
+This seems to be correct according to the semantics of the
+SOC_DOUBLE_R_SX_TLV macro as described in commit
+34198710f55b5f359f43e67d9a08fe5aadfbca1b ("ASoC: Add info callback for
+SX_TLV controls").
+
+However, the (val > max - min) check in snd_soc_put_volsw_sx fails in
+the above example because val =3D 127, max - min =3D 127 - 25 =3D 102.
+
+So I am not sure how this should be fixed. Is the SX_TLV macro being
+used incorrectly here? Is the check in snd_soc_put_volsw_sx wrong?
+
+Any pointers are welcome.
+
+Thanks,
+
+(If possible, please CC me in any replies)
+
+Guillermo Rodriguez Garcia
+guille.rodriguez@gmail.com
