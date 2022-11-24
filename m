@@ -2,114 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C8B6378AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:16:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00B096378B0
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:16:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbiKXMQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 07:16:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60860 "EHLO
+        id S229662AbiKXMQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 07:16:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiKXMQ3 (ORCPT
+        with ESMTP id S229653AbiKXMQc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 07:16:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3687597EC5
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:15:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669292133;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LhtIcas2JvUNRz550Pp/W/2twet/oq84mZGa4a40f8g=;
-        b=gyAIDQNLCFpz+ZVFnQt3rakvc9VzNGbvyQP4ZlhFWDces0IwHMc0h5C3yleWrlbzAbPoXO
-        wxuS9L8pfxrhzNGAsuxygu9Bky2ymHt/fFXkkIbwHrDTeS64RQ0BCjDizfqPcDBbqXq3f7
-        gHI9gOi32Ki7b/TgLeF38IefUdAtGZ8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-530-hMsbhpb2MNSqF7_u8UQDNw-1; Thu, 24 Nov 2022 07:15:30 -0500
-X-MC-Unique: hMsbhpb2MNSqF7_u8UQDNw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ACA9C8027FE;
-        Thu, 24 Nov 2022 12:15:29 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.2.16.44])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id DE4B22166B33;
-        Thu, 24 Nov 2022 12:15:27 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        tglx@linutronix.de, linux-crypto@vger.kernel.org, x86@kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Carlos O'Donell <carlos@redhat.com>
-Subject: Re: [PATCH v6 1/3] random: add vgetrandom_alloc() syscall
-References: <20221121152909.3414096-1-Jason@zx2c4.com>
-        <20221121152909.3414096-2-Jason@zx2c4.com>
-        <87v8n6lzh9.fsf@oldenburg.str.redhat.com> <Y37DDX5RtiGsV6MO@zx2c4.com>
-        <87a64g7wks.fsf@oldenburg.str.redhat.com> <Y39djiBSmgXfgWJv@zx2c4.com>
-Date:   Thu, 24 Nov 2022 13:15:24 +0100
-In-Reply-To: <Y39djiBSmgXfgWJv@zx2c4.com> (Jason A. Donenfeld's message of
-        "Thu, 24 Nov 2022 13:03:26 +0100")
-Message-ID: <87cz9c5z1f.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        Thu, 24 Nov 2022 07:16:32 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D6699EBF
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:16:31 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id l127so1386690oia.8
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:16:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bBkJiLuPHjOc9NWEYiRCYWyb3Lk5w/JeF/xlR5gs4hs=;
+        b=xkgOOoR55naEVrK40Wadm7CKSFaP+TtjkA0V95FFtQig0FqjBXoxg5AczLVoZABCSI
+         RKW+UZFs07r/8QbajkgkbARvMuCkxDkgTHACQAdEs6i3yGxWMGfORA6R/BHx3bjurpC9
+         yuVRsAlQZlkPDBVZ3gzMbMY2/wop4cN6tNjay/yF1Y2BzJfOEslh+km+OdQPdiRL6QZA
+         mXfg4XyRuCDWI5JHyIzMxdGeE4v9QLuVwRNeCBnNnlMwdAIAlWqY9tFbxdseCU6ymGIL
+         JQX0iU9sZAciqoAHQXOsQV8b20/9kd8xyx60QXeohdoSdICogiNPxup0bL9LDSpubZn2
+         kuaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bBkJiLuPHjOc9NWEYiRCYWyb3Lk5w/JeF/xlR5gs4hs=;
+        b=4RTUCIh3BuaJOkx3//0wLpse+EBdI/mS+4XpL8sXccqzpPQXA7++anBbvSA6HZMtAZ
+         +p+0KoGwYP/c2U8heeGTq6TpP2WK7ndlCfBZJo4fQ0FdlneZA4qL34LS53m/b8MC8wBD
+         XZPlXb80b+NWLk8EpF3/9d+r9MW6AD2igh0WffDd8BE3KJHCnVd4oS6o0MrfgCXUezWH
+         20oOJadoARyNTEXS/OMCAg55aM1IlHfwxq8FR8mQZAetvqd7ie6qpOnIWW6hRGtjKp8S
+         6flN0T4KZnquSzd+B3Hd/wH4mI2KHjHw4nLmEfY0t48zn3NjErXYyEF+0pLDhQVyTDCB
+         UQNQ==
+X-Gm-Message-State: ANoB5pkDCpOapPj7HpJOMujttE3xgn4EHBY32StexAReHdH8RzJyx7z8
+        LJse8lLoJAsjszqCyTLSjfX3rEcc4Qe0b0TXv4LU9g==
+X-Google-Smtp-Source: AA0mqf5L9+lrul1I/1+IDLi94tm9hWpUFUpDXBQmzSQdIXIUp8plQRGnsolhUNGiRLT/zlEFKPJLP+FVe3zMEWIotRU=
+X-Received: by 2002:aca:5bc4:0:b0:35a:7056:4f9c with SMTP id
+ p187-20020aca5bc4000000b0035a70564f9cmr19837991oib.72.1669292190923; Thu, 24
+ Nov 2022 04:16:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221122081219.20143-1-frieder@fris.de> <9079928.rMLUfLXkoz@steina-w>
+ <7761d66c-a8a7-c11a-9c09-a47f57bd1311@kontron.de>
+In-Reply-To: <7761d66c-a8a7-c11a-9c09-a47f57bd1311@kontron.de>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Thu, 24 Nov 2022 13:16:20 +0100
+Message-ID: <CAG3jFytse8xcyFe-1F95tqdixeZy5ivYd=vxXUBVkiwUu-yjWA@mail.gmail.com>
+Subject: Re: [PATCH] drm/bridge: ti-sn65dsi83: Fix delay after reset deassert
+ to match spec
+To:     Frieder Schrempf <frieder.schrempf@kontron.de>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org, Marek Vasut <marex@denx.de>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Frieder Schrempf <frieder@fris.de>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Jason A. Donenfeld:
-
-> Hi Florian,
->
-> On Thu, Nov 24, 2022 at 06:25:39AM +0100, Florian Weimer wrote:
->> * Jason A. Donenfeld:
->> 
->> > Hi Florian,
->> >
->> > On Wed, Nov 23, 2022 at 11:46:58AM +0100, Florian Weimer wrote:
->> >> * Jason A. Donenfeld:
->> >> 
->> >> > + * The vgetrandom() function in userspace requires an opaque state, which this
->> >> > + * function provides to userspace, by mapping a certain number of special pages
->> >> > + * into the calling process. It takes a hint as to the number of opaque states
->> >> > + * desired, and returns the number of opaque states actually allocated, the
->> >> > + * size of each one in bytes, and the address of the first state.
->> >> > + */
->> >> > +SYSCALL_DEFINE3(vgetrandom_alloc, unsigned long __user *, num,
->> >> > +		unsigned long __user *, size_per_each, unsigned int, flags)
->> >> 
->> >> I think you should make this __u64, so that you get a consistent
->> >> userspace interface on all architectures, without the need for compat
->> >> system calls.
->> >
->> > That would be quite unconventional. Most syscalls that take lengths do
->> > so with the native register size (`unsigned long`, `size_t`), rather
->> > than u64. If you can point to a recent trend away from this by
->> > indicating some commits that added new syscalls with u64, I'd be happy
->> > to be shown otherwise. But AFAIK, that's not the way it's done.
->> 
->> See clone3 and struct clone_args.
->
-> The struct is one thing. But actually, clone3 takes a `size_t`:
->
->     SYSCALL_DEFINE2(clone3, struct clone_args __user *, uargs, size_t, size)
->
-> I take from this that I too should use `size_t` rather than `unsigned
-> long.` And it doesn't seem like there's any compat clone3.
-
-But vgetrandom_alloc does not use unsigned long, but unsigned long *.
-You need to look at the contents for struct clone_args for comparison.
-
-Thanks,
-Florian
-
+Applied to drm-misc-next.
