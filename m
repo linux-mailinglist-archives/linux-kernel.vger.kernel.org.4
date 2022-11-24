@@ -2,142 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E31E63768A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:33:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 944F263768C
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbiKXKdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 05:33:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53862 "EHLO
+        id S229518AbiKXKeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 05:34:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiKXKdA (ORCPT
+        with ESMTP id S229436AbiKXKeW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 05:33:00 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B55F88F85
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:32:58 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id s5so1922330edc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:32:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/Fwv0fBaAtUGyjSvz8Eubu4WI6tfxvAGSEBjrtHfM94=;
-        b=R+veBmryJx4bjvNU4yQpLYI4xOGK5WSei4TFOGSsJ6CxLP27d+kxKBz3iUR9fA4IxX
-         SMnZEu7CLp3KwyXQKgWs+zSP6Ch9iM8GB3nikg+wvH3zL8+5+RqnJaFIDM5q50FmmaWy
-         WBi/got/nDXWVhECiF7GU3BYildUNLZmiZMQvsZmXcGs1F307/YNgKlHzUwMT7MwlsNa
-         CIgjFYBTVRnp91Om5Kurv7dmm1BT1yENpGc100kF7xxVMpQ22cfQnt0FEqv/FssI/6mC
-         Pz1lRORynIO5fCYwPKJ0BHL+uKSV/zZRLrShQdE7QZ05s+dJ1O/1uA7moSbqYz0jMZKx
-         hPJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/Fwv0fBaAtUGyjSvz8Eubu4WI6tfxvAGSEBjrtHfM94=;
-        b=k5697yXGPuiziu7C7gDh5WJx3l2JUAcOCCrLks+NflC6ZF99SniGrYlzk+RJISqtJO
-         WZRem0e5CA+UVi79ibu/Fx1gTsBtBYTOno+QzEACnOXZkQ68hOz2Xr0TdFMHAQc6//nD
-         HOOV200Hg9dUD9Iq2OfiIi9rjjelyJ9Vb5N4egJpyFTfurSm62y8/DKtiYQlqO2rYn+G
-         xOVssgrcU7PlK/PjTSNMK1Va9FF5gVl2s8Rj3R7VD0SSC5A0BbMdeV0/qnxxUJiWL1GJ
-         DYCEGYBLJjNNAbe9HMQhj8ukY3BtW2pIvBgM7xxTIRq9iVGOKQBP1nsEncoOd0Wm1Nvs
-         v0tw==
-X-Gm-Message-State: ANoB5pmd1jnU592iiHZddEob4n9ffwK5EBarWyXgUnQlLZcOayfCbv1s
-        YKuv2F25eRkOqBXSdrdoZdz9Bg==
-X-Google-Smtp-Source: AA0mqf6l3YnM1QkmkvtGrkaGbUvKvN03fiMpWHkPotubU8vmj+xb1xgCJEkB80pFtKPXCbX1K3IyGA==
-X-Received: by 2002:a05:6402:1f03:b0:468:7be6:55e7 with SMTP id b3-20020a0564021f0300b004687be655e7mr29511275edb.345.1669285976903;
-        Thu, 24 Nov 2022 02:32:56 -0800 (PST)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id 18-20020a170906201200b0077f20a722dfsm266341ejo.165.2022.11.24.02.32.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 02:32:56 -0800 (PST)
-Date:   Thu, 24 Nov 2022 11:32:55 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] riscv: vdso: remove hardcoded 0x800 .text section
- start addr
-Message-ID: <20221124103255.33prhf3gf6xtwlsk@kamzik>
-References: <20221123161805.1579-1-jszhang@kernel.org>
+        Thu, 24 Nov 2022 05:34:22 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5565CF72D6
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:34:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=B+aYhj6mJgZyjtT6amKhJNb34Op/BURtXrqh3ehtpEg=; b=SCTHoQRT//4wfF/fbwAYC3GB2M
+        xY1Gn7m7b0RjklR3O+3jGfrwUPYYTkmRmGpHZHS9/0h/w4uhKShwvTP9MA/zvN6IQiEshvbbiJFsJ
+        UHiuIaiPMoxGgjVN0LYm/DksgINaB8wtMFcSE+qt5J7oAMiDr8k8H/kjMJ93QTgS6IjkxXBLKiyJ9
+        LQuq28u01Z/FvN5LlFZttEmqTr395cWCJztIPHMq1CfkZ0N12TbAnAo0TrAXoskIyhXuAyUZgjWgP
+        DU3ZTzAR+7gzQNZP5VzmPclH4uPj0RUeIUprYL+MkXOr1C/g3uWk7zkSZGI+CnNDQZaeTTeUbkWOI
+        KyL3zikA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oy9Yg-008cBM-7t; Thu, 24 Nov 2022 10:34:18 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 58DE230004F;
+        Thu, 24 Nov 2022 11:34:08 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id E4F262C47F17D; Thu, 24 Nov 2022 11:34:07 +0100 (CET)
+Date:   Thu, 24 Nov 2022 11:34:07 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Marco Elver <elver@google.com>
+Cc:     Pengfei Xu <pengfei.xu@intel.com>, peter.zijlstra@intel.com,
+        linux-kernel@vger.kernel.org, heng.su@intel.com,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [Syzkaller & bisect] There is "__perf_event_overflow" WARNING in
+ v6.1-rc5 kernel in guest
+Message-ID: <Y39InxmwK88yKkyp@hirez.programming.kicks-ass.net>
+References: <Y3RbiRmAKrDlVCxC@xpf.sh.intel.com>
+ <Y3Z5WTk+cvHSt0lf@hirez.programming.kicks-ass.net>
+ <Y3hDYiXwRnJr8RYG@xpf.sh.intel.com>
+ <Y342qkDw7yqA1VOD@hirez.programming.kicks-ass.net>
+ <CANpmjNOfF92cGPbWxQy9zj__uBgoeuimWjt4ZH9v35Q=PJ3LXQ@mail.gmail.com>
+ <Y38ylOkbhoBEYZjD@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221123161805.1579-1-jszhang@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y38ylOkbhoBEYZjD@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 12:18:05AM +0800, Jisheng Zhang wrote:
-> It seems the hardcoded 0x800 isn't necessary, but removing it brings a
-
-s/, but/and/
-
-> small vdso.so and aligns with other architectures.
-
-This commit message didn't really satisfy my desire to understand why
-the comment and '. = 0x800' were there in the first place and if its safe
-to remove now, so I tried to do some of my own digging. I found
-
-commit 5b9304933730 ("x86 vDSO: generate vdso-syms.lds")
-commit f6b46ebf904f ("x86 vDSO: new layout")
-
-which removes the comment and hard coding for x86 by changing the vdso
-Makefile. Then looking at
-
-commit 9031fefde6f2 ("arm64: VDSO support")
-
-we see that it starts with the new Makefile approach and doesn't bother
-with the hard coding from the start. As riscv also started with the new
-Makefile approach it also could have dropped the hard coding from the
-start (I guess).
-
+On Thu, Nov 24, 2022 at 10:00:04AM +0100, Peter Zijlstra wrote:
+> On Thu, Nov 24, 2022 at 09:31:10AM +0100, Marco Elver wrote:
+> > On Wed, 23 Nov 2022 at 16:05, Peter Zijlstra <peterz@infradead.org> wrote:
 > 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->  arch/riscv/kernel/vdso/vdso.lds.S | 8 +-------
->  1 file changed, 1 insertion(+), 7 deletions(-)
+> > > Subject: perf: Consider OS filter fail
+> > > From: Peter Zijlstra <peterz@infradead.org>
+> > > Date: Sat, 19 Nov 2022 10:45:54 +0800
+> > >
+> > > Some PMUs (notably the traditional hardware kind) have boundary issues
+> > > with the OS filter. Specifically, it is possible for
+> > > perf_event_attr::exclude_kernel=1 events to trigger in-kernel due to
+> > > SKID or errata.
+> > >
+> > > This can upset the sigtrap logic some and trigger the WARN.
+> > >
+> > > However, if this invalid sample is the first we must not loose the
+> > > SIGTRAP, OTOH if it is the second, it must not override the
+> > > pending_addr with an invalid one.
+> > >
+> > > Fixes: ca6c21327c6a ("perf: Fix missing SIGTRAPs")
+> > > Reported-by: Pengfei Xu <pengfei.xu@intel.com>
+> > > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > > Tested-by: Pengfei Xu <pengfei.xu@intel.com>
+> > > Link: https://lkml.kernel.org/r/Y3hDYiXwRnJr8RYG@xpf.sh.intel.com
+> > 
+> > Thanks, FWIW
+> > 
+> > Reviewed-by: Marco Elver <elver@google.com>
+> > 
+> > One thing I wondered was, if the event fired in the kernel due to
+> > skid, is the addr always some kernel address, or does this also depend
+> > on the type of PMU? In any case, we don't even want to risk leaking
+> > kernel addresses this way, so this looks sane.
 > 
-> diff --git a/arch/riscv/kernel/vdso/vdso.lds.S b/arch/riscv/kernel/vdso/vdso.lds.S
-> index 150b1a572e61..7be7e618d59c 100644
-> --- a/arch/riscv/kernel/vdso/vdso.lds.S
-> +++ b/arch/riscv/kernel/vdso/vdso.lds.S
-> @@ -31,13 +31,7 @@ SECTIONS
->  
->  	.rodata		: { *(.rodata .rodata.* .gnu.linkonce.r.*) }
->  
-> -	/*
-> -	 * This linker script is used both with -r and with -shared.
-> -	 * For the layouts to match, we need to skip more than enough
-> -	 * space for the dynamic symbol table, etc. If this amount is
-> -	 * insufficient, ld -shared will error; simply increase it here.
-> -	 */
-> -	. = 0x800;
-> +	. = ALIGN(4);
-
-I realize 4 is used here now because I questioned the 16, but after doing
-my digging I think a larger alignment may be better. Loading the text may
-be done with 8 byte or larger reads, so having the section aligned to a
-larger size would be better reading it. We might as well use 16, like
-arm64 does, and like you had before?
-
-Also, having enough separation between data and text seems to be
-important for cache reasons, based on the comment in
-./arch/x86/entry/vdso/vdso-layout.lds.S and other vdso history.
-Maybe we should move .note, .eh_frame_hdr, and .eh_frame below
-.rodata like x86 has it?
-
-Thanks,
-drew
-
->  	.text		: { *(.text .text.*) }		:text
->  
->  	.data		: {
-> -- 
-> 2.37.2
+> That very much depends on the PMU and event. Most events will not fill
+> out ->addr at all, some memop specific events can, but only when
+> combined with PERF_SAMPLE_ADDR.
 > 
+> Typically it will then retain the address of the memop. On Intel it's
+> mostly just PEBS events that can provide the ADDR and they'll have less
+> such trouble. On AMD we have IBS that can do ADDR but I've forgotten
+> much about IBS. PowerPC64 also can do ADDR and there I've no clue.
+
+This is also not taking CPU Errata into consideration; there's plenty of
+them where the OS filter is 'delayed', in which case you get actual
+kernel samples in your 'user only' stream.
