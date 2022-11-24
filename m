@@ -2,171 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B70026375E9
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:06:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E3056375FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:10:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbiKXKG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 05:06:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51516 "EHLO
+        id S229598AbiKXKKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 05:10:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbiKXKGZ (ORCPT
+        with ESMTP id S229653AbiKXKKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 05:06:25 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58EAE86A4F
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:06:24 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id i10so3044982ejg.6
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:06:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=grg1WkorBBI5i++s0cNc3EAJO6tnj2pMI+gCkQrn5+o=;
-        b=DAglP0Q1TxZviwF+1OIbZJpTWrwiHeIvDNcWQUii2/BXS+2rEi52nLomWwJCXe0zir
-         4nmTpj+MJAlfPGtYlFfuIKHZwRiL/pv5ZLTbFAE8tPDRzefOjb9JRBI6A7WEKfuMq4Yy
-         kSNsC2KizrKAUtUQF6vpsmhrv9mxAPVIkLZQGviqEWCI6yV8ttF0zb65beekBjZnchcR
-         ZJdanQJgaiGDIlUQlsVhZ/GXmGnfumRCtZkSwu5lNVBigd2nMhE1w59sLtYt1cmt2Hwp
-         85z3gMzbUB1UGGUxXHYglJW30b5FHdw2JOY8hswgGNP0fSAel3iNahS/TqRBnleYQG8U
-         JzXw==
+        Thu, 24 Nov 2022 05:10:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0FBB9607
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:09:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669284584;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3kAYquvyXCoEwzo0E+846zCjz/I/oFJHnxyQt8aQxnE=;
+        b=CZ0k5cyC/4fESQvmDVkX+yXUSL1tCDwzWdtlDL8JtIN7avTIklpMuDWGQPi7TybI47H2ZZ
+        oid1KiY9mZfCz/s8EbpDLMCVp5zrwjP/U/jfx4KEVTfxy+IfgMKIRvdYyX7CXdOWDj+jgO
+        wQgyCacr6KUwmR7yazD6N5bXtwLxfYI=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-652-StVpu-4DPdKYW7pFIIwKKg-1; Thu, 24 Nov 2022 05:09:42 -0500
+X-MC-Unique: StVpu-4DPdKYW7pFIIwKKg-1
+Received: by mail-wm1-f69.google.com with SMTP id c126-20020a1c3584000000b003cfffcf7c1aso2424474wma.0
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 02:09:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=grg1WkorBBI5i++s0cNc3EAJO6tnj2pMI+gCkQrn5+o=;
-        b=WL6OHgVSx8ZyQOy4DNqLS1/F/lXiYDcZ6h3TQLftBRNA6X0VvGeN6cXdGFRxbX7yfv
-         BZ0OfH7tMzRueW9WwT5ElwhdxFo2rgMD1S46bbeWWO/OZUGHM+FCiOglqGB6r/8biZLZ
-         IJS1FcZa5pCUIFRJWnfUoe9tTbHIVrCDmOmWKbIfUBR9e4uk9pFv9JDlKuaOm4/C587x
-         szYw8WWRK56i0pujBO10ccDySC1FKWKuiasAZkTzryOKNac5r9l1usb+SdoVllmiWXol
-         /wY2hRIXe7k0IpEMtDBTgGZOAN95xWE4flz+y2kPqK6gqJxyPXjYWcFDZKLsp9m2uRiO
-         6v5A==
-X-Gm-Message-State: ANoB5plzwTAnULbnRfoAoVcR8pFl7FbeU92BrmWX9a/kdKqUxdg80x7E
-        uo61NuaWFggP+kZhQEbOzM4=
-X-Google-Smtp-Source: AA0mqf6lavqU4v6hJFt7dj6yuv7s9X/kGRPWan21pna2MxmvAuzqwTP1dmkLcFoifxUnLOHO3Ofz7A==
-X-Received: by 2002:a17:907:11cb:b0:7a6:598f:1fb1 with SMTP id va11-20020a17090711cb00b007a6598f1fb1mr27280535ejb.606.1669284382937;
-        Thu, 24 Nov 2022 02:06:22 -0800 (PST)
-Received: from [192.168.178.21] (p5b0ea229.dip0.t-ipconnect.de. [91.14.162.41])
-        by smtp.gmail.com with ESMTPSA id k26-20020a17090632da00b0073022b796a7sm258321ejk.93.2022.11.24.02.06.21
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3kAYquvyXCoEwzo0E+846zCjz/I/oFJHnxyQt8aQxnE=;
+        b=tpS89gg4tatPXYIEkY8mbVXp6+azRmdzM/US6RwteHt2NZtlPn8tz6SL6/YwKz1QTn
+         88CItqwzeZu6iNCBEz4On47V1wfJlv7HsIwz9scOHfSPyaZfOTvWW/vs8IkCCEF7BFnj
+         YRpKb0/tAKBBQTZaJD1VeNpbNWZWoa9/NPCQhNS/iyVh+jzzViOAVFdIIXpGYG8G8wDe
+         037Hio3j/a+xGjrXhsPRiwQ+guKHXQZOIee242a7mnLsbHuXjGr3dcNICFmgJQnntPv+
+         MLN8czUWKJ810zCgril5iiXLnt933Iv29d65Rn7n+gAn4wd+hYkfxzCLz5rN+qFHTjYH
+         OZ+w==
+X-Gm-Message-State: ANoB5pmrIwKhg999737TVqYN2PmU+grNn1t6Xdi9IFZZ+BybkGklbVwx
+        D25h/UDBA3NLS+H/+LD/nDQk9CLyRuC6yWDzJ7sji3s0KNiJVmHZZo6zzjA43H7tjWBgWTd1Ozj
+        znawbUzNHfPL55LZnazDgWN7q
+X-Received: by 2002:a05:600c:5541:b0:3cf:8896:e1d0 with SMTP id iz1-20020a05600c554100b003cf8896e1d0mr12515852wmb.177.1669284581735;
+        Thu, 24 Nov 2022 02:09:41 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5IiZfBe8A2j1NQ2KOLuiJeEg4fjtIovyFu3MMuo6cT8u7xmm5WMD3j+Z35QMr44JBCleOkOA==
+X-Received: by 2002:a05:600c:5541:b0:3cf:8896:e1d0 with SMTP id iz1-20020a05600c554100b003cf8896e1d0mr12515823wmb.177.1669284581266;
+        Thu, 24 Nov 2022 02:09:41 -0800 (PST)
+Received: from ?IPV6:2003:cb:c704:2200:bfcb:7212:1370:de13? (p200300cbc7042200bfcb72121370de13.dip0.t-ipconnect.de. [2003:cb:c704:2200:bfcb:7212:1370:de13])
+        by smtp.gmail.com with ESMTPSA id k17-20020a05600c1c9100b003c6b874a0dfsm1582715wms.14.2022.11.24.02.09.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Nov 2022 02:06:22 -0800 (PST)
-Message-ID: <df96d87d-bc39-abaf-f567-f5b94e0905fe@gmail.com>
-Date:   Thu, 24 Nov 2022 11:06:20 +0100
+        Thu, 24 Nov 2022 02:09:40 -0800 (PST)
+Message-ID: <3c584ce6-dc8c-e0e4-c78f-b59dfff1fc13@redhat.com>
+Date:   Thu, 24 Nov 2022 11:09:39 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] drm/amdgpu: add mb for si
+ Thunderbird/102.4.1
 Content-Language: en-US
-To:     "Quan, Evan" <Evan.Quan@amd.com>,
-        =?UTF-8?B?5p2O55yf6IO9?= <lizhenneng@kylinos.cn>,
-        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>
-Cc:     "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>
-References: <20221118074810.380368-1-lizhenneng@kylinos.cn>
- <ecd9d251-8941-b2db-71b2-e4ac06f860a3@amd.com>
- <800a1207-8ff6-4cfa-60f3-6ff456874890@mailbox.org>
- <4adc40d1-e775-c480-bb35-23fe9c63e05e@kylinos.cn>
- <DM6PR12MB26196C35AC2F28FD50ECCAF0E40F9@DM6PR12MB2619.namprd12.prod.outlook.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <DM6PR12MB26196C35AC2F28FD50ECCAF0E40F9@DM6PR12MB2619.namprd12.prod.outlook.com>
+To:     Gavin Shan <gshan@redhat.com>, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        william.kucharski@oracle.com, ziy@nvidia.com,
+        kirill.shutemov@linux.intel.com, zhenyzha@redhat.com,
+        apopple@nvidia.com, hughd@google.com, willy@infradead.org,
+        shan.gavin@gmail.com
+References: <20221124095523.31061-1-gshan@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v2] mm: migrate: Fix THP's mapcount on isolation
+In-Reply-To: <20221124095523.31061-1-gshan@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-That's not a patch but some binary file?
+On 24.11.22 10:55, Gavin Shan wrote:
+> The issue is reported when removing memory through virtio_mem device.
+> The transparent huge page, experienced copy-on-write fault, is wrongly
+> regarded as pinned. The transparent huge page is escaped from being
+> isolated in isolate_migratepages_block(). The transparent huge page
+> can't be migrated and the corresponding memory block can't be put
+> into offline state.
+> 
+> Fix it by replacing page_mapcount() with total_mapcount(). With this,
+> the transparent huge page can be isolated and migrated, and the memory
+> block can be put into offline state. Besides, The page's refcount is
+> increased a bit earlier to avoid the page is released when the check
+> is executed.
 
-Christian.
+Did you look into handling pages that are in the swapcache case as well?
 
-Am 24.11.22 um 11:04 schrieb Quan, Evan:
-> [AMD Official Use Only - General]
->
-> Could the attached patch help?
->
-> Evan
->> -----Original Message-----
->> From: amd-gfx <amd-gfx-bounces@lists.freedesktop.org> On Behalf Of ???
->> Sent: Friday, November 18, 2022 5:25 PM
->> To: Michel Dänzer <michel.daenzer@mailbox.org>; Koenig, Christian
->> <Christian.Koenig@amd.com>; Deucher, Alexander
->> <Alexander.Deucher@amd.com>
->> Cc: amd-gfx@lists.freedesktop.org; Pan, Xinhui <Xinhui.Pan@amd.com>;
->> linux-kernel@vger.kernel.org; dri-devel@lists.freedesktop.org
->> Subject: Re: [PATCH] drm/amdgpu: add mb for si
->>
->>
->> 在 2022/11/18 17:18, Michel Dänzer 写道:
->>> On 11/18/22 09:01, Christian König wrote:
->>>> Am 18.11.22 um 08:48 schrieb Zhenneng Li:
->>>>> During reboot test on arm64 platform, it may failure on boot, so add
->>>>> this mb in smc.
->>>>>
->>>>> The error message are as follows:
->>>>> [    6.996395][ 7] [  T295] [drm:amdgpu_device_ip_late_init
->>>>> [amdgpu]] *ERROR*
->>>>>                   late_init of IP block <si_dpm> failed -22 [
->>>>> 7.006919][ 7] [  T295] amdgpu 0000:04:00.0:
->>>>> amdgpu_device_ip_late_init failed [    7.014224][ 7] [  T295] amdgpu
->>>>> 0000:04:00.0: Fatal error during GPU init
->>>> Memory barries are not supposed to be sprinkled around like this, you
->> need to give a detailed explanation why this is necessary.
->>>> Regards,
->>>> Christian.
->>>>
->>>>> Signed-off-by: Zhenneng Li <lizhenneng@kylinos.cn>
->>>>> ---
->>>>>     drivers/gpu/drm/amd/pm/legacy-dpm/si_smc.c | 2 ++
->>>>>     1 file changed, 2 insertions(+)
->>>>>
->>>>> diff --git a/drivers/gpu/drm/amd/pm/legacy-dpm/si_smc.c
->>>>> b/drivers/gpu/drm/amd/pm/legacy-dpm/si_smc.c
->>>>> index 8f994ffa9cd1..c7656f22278d 100644
->>>>> --- a/drivers/gpu/drm/amd/pm/legacy-dpm/si_smc.c
->>>>> +++ b/drivers/gpu/drm/amd/pm/legacy-dpm/si_smc.c
->>>>> @@ -155,6 +155,8 @@ bool amdgpu_si_is_smc_running(struct
->>>>> amdgpu_device *adev)
->>>>>         u32 rst = RREG32_SMC(SMC_SYSCON_RESET_CNTL);
->>>>>         u32 clk = RREG32_SMC(SMC_SYSCON_CLOCK_CNTL_0);
->>>>>     +    mb();
->>>>> +
->>>>>         if (!(rst & RST_REG) && !(clk & CK_DISABLE))
->>>>>             return true;
->>> In particular, it makes no sense in this specific place, since it cannot directly
->> affect the values of rst & clk.
->>
->> I thinks so too.
->>
->> But when I do reboot test using nine desktop machines,  there maybe report
->> this error on one or two machines after Hundreds of times or Thousands of
->> times reboot test, at the beginning, I use msleep() instead of mb(), these
->> two methods are all works, but I don't know what is the root case.
->>
->> I use this method on other verdor's oland card, this error message are
->> reported again.
->>
->> What could be the root reason?
->>
->> test environmen:
->>
->> graphics card: OLAND 0x1002:0x6611 0x1642:0x1869 0x87
->>
->> driver: amdgpu
->>
->> os: ubuntu 2004
->>
->> platform: arm64
->>
->> kernel: 5.4.18
->>
+See is_refcount_suitable() in mm/khugepaged.c.
+
+Should be easy to reproduce, let me know if you need inspiration.
+
+> 
+> Fixes: 1da2f328fa64 ("mm,thp,compaction,cma: allow THP migration for CMA allocations")
+> Cc: stable@vger.kernel.org   # v5.7+
+> Reported-by: Zhenyu Zhang <zhenyzha@redhat.com>
+> Suggested-by: David Hildenbrand <david@redhat.com>
+> Signed-off-by: Gavin Shan <gshan@redhat.com>
+> ---
+> v2: Corrected fix tag and increase page's refcount before the check
+> ---
+>   mm/compaction.c | 22 +++++++++++-----------
+>   1 file changed, 11 insertions(+), 11 deletions(-)
+> 
+> diff --git a/mm/compaction.c b/mm/compaction.c
+> index c51f7f545afe..1f6da31dd9a5 100644
+> --- a/mm/compaction.c
+> +++ b/mm/compaction.c
+> @@ -984,29 +984,29 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+>   			goto isolate_fail;
+>   		}
+>   
+> +		/*
+> +		 * Be careful not to clear PageLRU until after we're
+> +		 * sure the page is not being freed elsewhere -- the
+> +		 * page release code relies on it.
+> +		 */
+> +		if (unlikely(!get_page_unless_zero(page)))
+> +			goto isolate_fail;
+> +
+>   		/*
+>   		 * Migration will fail if an anonymous page is pinned in memory,
+>   		 * so avoid taking lru_lock and isolating it unnecessarily in an
+>   		 * admittedly racy check.
+>   		 */
+>   		mapping = page_mapping(page);
+> -		if (!mapping && page_count(page) > page_mapcount(page))
+> -			goto isolate_fail;
+> +		if (!mapping && (page_count(page) - 1) > total_mapcount(page))
+> +			goto isolate_fail_put;
+>   
+>   		/*
+>   		 * Only allow to migrate anonymous pages in GFP_NOFS context
+>   		 * because those do not depend on fs locks.
+>   		 */
+>   		if (!(cc->gfp_mask & __GFP_FS) && mapping)
+> -			goto isolate_fail;
+> -
+> -		/*
+> -		 * Be careful not to clear PageLRU until after we're
+> -		 * sure the page is not being freed elsewhere -- the
+> -		 * page release code relies on it.
+> -		 */
+> -		if (unlikely(!get_page_unless_zero(page)))
+> -			goto isolate_fail;
+> +			goto isolate_fail_put;
+>   
+>   		/* Only take pages on LRU: a check now makes later tests safe */
+>   		if (!PageLRU(page))
+
+-- 
+Thanks,
+
+David / dhildenb
 
