@@ -2,208 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C3E3637C24
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 15:56:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BA5F637C2C
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 15:57:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229569AbiKXO4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 09:56:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36438 "EHLO
+        id S229748AbiKXO5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 09:57:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiKXO4b (ORCPT
+        with ESMTP id S229757AbiKXO4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 09:56:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1831B827DF;
-        Thu, 24 Nov 2022 06:56:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF0986219D;
-        Thu, 24 Nov 2022 14:56:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1828DC433C1;
-        Thu, 24 Nov 2022 14:56:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669301789;
-        bh=4ZTYBdgCLzsXOsSCItv0xvxw64IzWm2GzGfVZWPLYl0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Mvb47uwHPhgA+36dMpA/V8iqG5Wfglh6VjTrBTeYa5OhxWqwfYsLlZl26Xt7ux/Bf
-         Sy8cEH453/FiuonpLlhcL3o1RLpTMn7FLDvGw1728E1gnntJyVq/PznvgGIFPSGrg3
-         ZMfKZci7wL7pQJhiKMZt5dVfTT09K6AiD/lXavZ9/QDYTwUpODwApqSfM6+wWG/LtW
-         7pcIzQedDfqw25MQykyJwAWWOlrIIjQEBx2v1iiSgpx7CfpnfHbqr+szD9MJAFEaj8
-         jFha/FZUtgY4HlndX1UmeeJrwCVyH8mhLkLZMAcAZBfaNy0o0a4PvMpR65uLX97XYp
-         JApzWZd1R6sRw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1oyDeM-008P1i-Pr;
-        Thu, 24 Nov 2022 14:56:26 +0000
-Date:   Thu, 24 Nov 2022 14:56:25 +0000
-Message-ID: <86sfi8mmee.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Thu, 24 Nov 2022 09:56:49 -0500
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC002C11A;
+        Thu, 24 Nov 2022 06:56:44 -0800 (PST)
+Received: from booty (unknown [77.244.183.192])
+        (Authenticated sender: luca.ceresoli@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 4B58820004;
+        Thu, 24 Nov 2022 14:56:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1669301802;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DHCQJ7ZAuuzC6UG49hSRfKeMxjBT7Ylpk7GBcGZRErE=;
+        b=CVo66w0Atcxwn8aG3nTnKq12p3m+IrxlyisSdyRW1FupbUNbjU0oG74obbqTQhTSaY9oFS
+        iusK80KUYBZbwkvG3b5V4NSZv5Z5qjNZL9KgPbPzL9ugR6BcqtooqsvBolXaTAoMIW9Ef8
+        PJrRd+Vymz7xOEXFd/lNJf83UfaQCe/bVy6et+JqxjuQbJws4xdSlLetXfiNps6PKdEW9b
+        PHOGdohwZGk43SIc+ERg4RIbHYp9cvbJLZCaqOzUyIRnqY22ZT7TpHGZiQLxaQ13PJxb4Q
+        D9X5YL3d6O82VAVCsAIT6fyLe1ZDm76d0E0y9SCTFy8xjvRmbCdhJc4AQYg/hw==
+Date:   Thu, 24 Nov 2022 15:56:34 +0100
+From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>
-Subject: Re: [patch V2 08/21] genirq/msi: Add pointers for per device irq domains
-In-Reply-To: <20221121083325.950255253@linutronix.de>
-References: <20221121083210.309161925@linutronix.de>
-        <20221121083325.950255253@linutronix.de>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Richard Leitner <richard.leitner@skidata.com>
+Subject: Re: [PATCH 00/23] Add Tegra20 parallel video input capture
+Message-ID: <20221124155634.5bc2a423@booty>
+In-Reply-To: <3ecd7c3d-b013-18b8-ea12-ca3c673de22c@xs4all.nl>
+References: <20221109141852.729246-1-luca.ceresoli@bootlin.com>
+        <3ecd7c3d-b013-18b8-ea12-ca3c673de22c@xs4all.nl>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: tglx@linutronix.de, linux-kernel@vger.kernel.org, x86@kernel.org, joro@8bytes.org, will@kernel.org, linux-pci@vger.kernel.org, bhelgaas@google.com, lorenzo.pieralisi@arm.com, gregkh@linuxfoundation.org, jgg@mellanox.com, dave.jiang@intel.com, alex.williamson@redhat.com, kevin.tian@intel.com, dan.j.williams@intel.com, logang@deltatee.com, ashok.raj@intel.com, jdmason@kudzu.us, allenbh@gmail.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Nov 2022 14:36:28 +0000,
-Thomas Gleixner <tglx@linutronix.de> wrote:
-> 
-> With the upcoming per device MSI interrupt domain support it is necessary
-> to store the domain pointers per device.
-> 
-> Instead of delegating that storage to device drivers or subsystems create a
-> storage array in struct msi_device_data which will also take care of
-> tearing down the irq domains when msi_device_data is cleaned up via devres.
-> 
-> The interfaces into the MSI core will be changed from irqdomain pointer
-> based interfaces to domain id based interfaces to support multiple MSI
-> domains on a single device (e.g. PCI/MSI[-X] and PCI/IMS.
-> 
-> Once the per device domain support is complete the irq domain pointer in
-> struct device::msi.domain will not longer contain a pointer to the "global"
-> MSI domain. It will contain a pointer to the MSI parent domain instead.
-> 
-> It would be a horrible maze of conditionals to evaluate all over the place
-> which domain pointer should be used, i.e. the "global" one in
-> device::msi::domain or one from the internal pointer array.
-> 
-> To avoid this evaluate in msi_setup_device_data() whether the irq domain
-> which is associated to a device is a "global" or a parent MSI domain. If it
-> is global then copy the pointer into the first entry in the irqdomain
-> pointer array.
-> 
-> This allows to convert interfaces and implementation to domain ids while
-> keeping everything existing working.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> ---
->  include/linux/msi.h     |    3 +++
->  include/linux/msi_api.h |    8 ++++++++
->  kernel/irq/msi.c        |   14 ++++++++++++++
->  3 files changed, 25 insertions(+)
-> 
-> --- a/include/linux/msi.h
-> +++ b/include/linux/msi.h
-> @@ -77,6 +77,7 @@ struct msi_desc;
->  struct pci_dev;
->  struct platform_msi_priv_data;
->  struct device_attribute;
-> +struct irq_domain;
->  
->  void __get_cached_msi_msg(struct msi_desc *entry, struct msi_msg *msg);
->  #ifdef CONFIG_GENERIC_MSI_IRQ
-> @@ -180,6 +181,7 @@ enum msi_desc_filter {
->   * @mutex:		Mutex protecting the MSI descriptor store
->   * @__store:		Xarray for storing MSI descriptor pointers
->   * @__iter_idx:		Index to search the next entry for iterators
-> + * @__irqdomains:	Per device interrupt domains
->   */
->  struct msi_device_data {
->  	unsigned long			properties;
-> @@ -187,6 +189,7 @@ struct msi_device_data {
->  	struct mutex			mutex;
->  	struct xarray			__store;
->  	unsigned long			__iter_idx;
-> +	struct irq_domain		*__irqdomains[MSI_MAX_DEVICE_IRQDOMAINS];
->  };
->  
->  int msi_setup_device_data(struct device *dev);
-> --- a/include/linux/msi_api.h
-> +++ b/include/linux/msi_api.h
-> @@ -10,6 +10,14 @@
->  
->  struct device;
->  
-> +/*
-> + * Per device interrupt domain related constants.
-> + */
-> +enum msi_domain_ids {
-> +	MSI_DEFAULT_DOMAIN,
-> +	MSI_MAX_DEVICE_IRQDOMAINS,
-> +};
-> +
->  unsigned int msi_get_virq(struct device *dev, unsigned int index);
->  
->  #endif
-> --- a/kernel/irq/msi.c
-> +++ b/kernel/irq/msi.c
-> @@ -21,6 +21,18 @@
->  
->  static inline int msi_sysfs_create_group(struct device *dev);
->  
-> +static inline void msi_setup_default_irqdomain(struct device *dev, struct msi_device_data *md)
+HI Hans,
 
-Do we really need this to be inline? I'm sure the compiler can figure
-it out.
+On Thu, 24 Nov 2022 09:36:14 +0100
+Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
 
-> +{
-> +	if (!dev->msi.domain)
-> +		return;
-> +	/*
-> +	 * If @dev::msi::domain is a global MSI domain, copy the pointer
-> +	 * into the domain array to avoid conditionals all over the place.
-> +	 */
-> +	if (!irq_domain_is_msi_parent(dev->msi.domain))
-> +		md->__irqdomains[MSI_DEFAULT_DOMAIN] = dev->msi.domain;
-> +}
-> +
->  /**
->   * msi_alloc_desc - Allocate an initialized msi_desc
->   * @dev:	Pointer to the device for which this is allocated
-> @@ -213,6 +225,8 @@ int msi_setup_device_data(struct device
->  		return ret;
->  	}
->  
-> +	msi_setup_default_irqdomain(dev, md);
-> +
-
-nit: if you move the setup below the msi.data assignment, you could
-only pass dev as a parameter. Or pass both and move the assignment in
-the function?
-
->  	xa_init(&md->__store);
->  	mutex_init(&md->mutex);
->  	dev->msi.data = md;
+> Hi Luca,
 > 
+> On 09/11/2022 15:18, luca.ceresoli@bootlin.com wrote:
+> > From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> > 
+> > Tegra20 and other Tegra SoCs have a video input (VI) peripheral that can
+> > receive from either MIPI CSI-2 or parallel video (called respectively "CSI"
+> > and "VIP" in the documentation). The kernel currently has a staging driver
+> > for Tegra210 CSI capture. This patch set adds support for Tegra20 VIP
+> > capture.
+> > 
+> > Unfortunately I had no real documentation available to base this work on,
+> > and I started from a working downstream 3.1 kernel, that I have heavily
+> > reworked to fit into the existing tegra-video driver. The existing code
+> > appears written with the intent of being modular and allow adding new input
+> > mechanisms and new SoCs while keeping a unique VI core module. However its
+> > modularity and extensibility was not enough to add Tegra20 VIP support, so
+> > I added some hooks to turn hard-coded behaviour into per-SoC or per-bus
+> > customizable code. There are also some fixes, some generic cleanups and DT
+> > bindings.  
 > 
+> I plan on testing this series (esp. making sure it keeps working on non-tegra210
+> hardware), but I have to find time for that. This is on my TODO list, so I will
+> get to it, but it might time.
 
-Irrespective of the above,
+Thanks for letting me know!
 
-Reviewed-by: Marc Zyngier <maz@kernel.org>
+Indeed, with respect to what you wrote, even testing on tegra210
+hardware would be useful in case you have any, as all the hardware I
+can access is tegra20.
 
-	M.
-
+Kind regards.
 -- 
-Without deviation from the norm, progress is not possible.
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
