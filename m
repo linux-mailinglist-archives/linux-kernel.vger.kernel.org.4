@@ -2,43 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5151D6379FC
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 14:32:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3ED56379FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 14:33:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbiKXNcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 08:32:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54586 "EHLO
+        id S229919AbiKXNdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 08:33:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiKXNcl (ORCPT
+        with ESMTP id S229822AbiKXNdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 08:32:41 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4428D101FA
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 05:32:39 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7F80C23A;
-        Thu, 24 Nov 2022 05:32:45 -0800 (PST)
-Received: from [10.57.37.242] (unknown [10.57.37.242])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D86283F73B;
-        Thu, 24 Nov 2022 05:32:37 -0800 (PST)
-Message-ID: <f1bf0342-20e3-0a98-d6e4-1ee6e128b902@arm.com>
-Date:   Thu, 24 Nov 2022 13:32:36 +0000
+        Thu, 24 Nov 2022 08:33:05 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD3258BF0;
+        Thu, 24 Nov 2022 05:33:03 -0800 (PST)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NHzNd0s6xzqSdR;
+        Thu, 24 Nov 2022 21:29:05 +0800 (CST)
+Received: from dggpeml500002.china.huawei.com (7.185.36.158) by
+ dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 24 Nov 2022 21:33:01 +0800
+Received: from [10.67.103.44] (10.67.103.44) by dggpeml500002.china.huawei.com
+ (7.185.36.158) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 24 Nov
+ 2022 21:33:01 +0800
+Subject: Re: [PATCH v14 1/2] drivers/coresight: Add UltraSoc System Memory
+ Buffer driver
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        <mathieu.poirier@linaro.org>, <mike.leach@linaro.org>,
+        <leo.yan@linaro.org>, <jonathan.cameron@huawei.com>,
+        <john.garry@huawei.com>
+References: <20221123123823.27973-1-hejunhao3@huawei.com>
+ <20221123123823.27973-2-hejunhao3@huawei.com>
+ <9f5f66fa-0388-6a76-25c9-cacef0e7a4e2@arm.com>
+CC:     <coresight@lists.linaro.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-doc@vger.kernel.org>, <lpieralisi@kernel.org>,
+        <linuxarm@huawei.com>, <yangyicong@huawei.com>,
+        <liuqi6124@gmail.com>, <f.fangjian@huawei.com>,
+        <prime.zeng@hisilicon.com>
+From:   hejunhao <hejunhao3@huawei.com>
+Message-ID: <0eb32726-2054-ee00-4b7a-d7a2f0121efd@huawei.com>
+Date:   Thu, 24 Nov 2022 21:33:01 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.0
-Subject: Re: [PATCH] coresight: cti: Fix null pointer error on CTI init before
- ETM
-To:     Mike Leach <mike.leach@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
-        linux-kernel@vger.kernel.org
-Cc:     mathieu.poirier@linaro.org, leo.yan@linaro.org, acme@kernel.org
-References: <20221123193818.6253-1-mike.leach@linaro.org>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20221123193818.6253-1-mike.leach@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <9f5f66fa-0388-6a76-25c9-cacef0e7a4e2@arm.com>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.103.44]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500002.china.huawei.com (7.185.36.158)
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,92 +63,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/11/2022 19:38, Mike Leach wrote:
-> When CTI is discovered first then the function
-> coresight_set_assoc_ectdev_mutex() is called to set the association
-> between CTI and ETM device. Recent lockdep fix passes a null pointer. >
-> This patch passes the correct pointer.
-> 
-> Before patch: log of boot oops sequence with CTI discovered first:
-> 
-> [   12.424091]  cs_system_cfg: CoreSight Configuration manager initialised
-> [   12.483474] coresight cti_sys0: CTI initialized
-> [   12.488109] coresight cti_sys1: CTI initialized
-> [   12.503594] coresight cti_cpu0: CTI initialized
-> [   12.517877] coresight-cpu-debug 850000.debug: Coresight debug-CPU0 initialized
-> [   12.523479] coresight-cpu-debug 852000.debug: Coresight debug-CPU1 initialized
-> [   12.529926] coresight-cpu-debug 854000.debug: Coresight debug-CPU2 initialized
-> [   12.541808] coresight stm0: STM32 initialized
-> [   12.544421] coresight-cpu-debug 856000.debug: Coresight debug-CPU3 initialized
-> [   12.585639] coresight cti_cpu1: CTI initialized
-> [   12.614028] coresight cti_cpu2: CTI initialized
-> [   12.631679] CSCFG registered etm0
-> [   12.633920] coresight etm0: CPU0: etm v4.0 initialized
-> [   12.656392] coresight cti_cpu3: CTI initialized
-> 
-> ...
-> 
-> [   12.708383] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000348
-> 
-> ...
-> 
-> [   12.755094] Internal error: Oops: 0000000096000044 [#1] SMP
-> [   12.761817] Modules linked in: coresight_etm4x(+) coresight_tmc coresight_cpu_debug coresight_replicator coresight_funnel coresight_cti coresight_tpiu coresight_stm coresight
-> [   12.767210] CPU: 3 PID: 1346 Comm: systemd-udevd Not tainted 6.1.0-rc3tid-v6tid-v6-235166-gf7f7d7a2204a-dirty #498
-> [   12.782827] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
-> [   12.793154] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [   12.800010] pc : coresight_set_assoc_ectdev_mutex+0x30/0x50 [coresight]
-> [   12.806694] lr : coresight_set_assoc_ectdev_mutex+0x30/0x50 [coresight]
-> 
-> ...
-> 
-> [   12.885064] Call trace:
-> [   12.892352]  coresight_set_assoc_ectdev_mutex+0x30/0x50 [coresight]
-> [   12.894693]  cti_add_assoc_to_csdev+0x144/0x1b0 [coresight_cti]
-> [   12.900943]  coresight_register+0x2c8/0x320 [coresight]
-> [   12.906844]  etm4_add_coresight_dev.isra.27+0x148/0x280 [coresight_etm4x]
-> [   12.912056]  etm4_probe+0x144/0x1c0 [coresight_etm4x]
-> [   12.918998]  etm4_probe_amba+0x40/0x78 [coresight_etm4x]
-> [   12.924032]  amba_probe+0x11c/0x1f0
-> 
-> After patch: similar log
-> 
-> [   12.444467]  cs_system_cfg: CoreSight Configuration manager initialised
-> [   12.456329] coresight-cpu-debug 850000.debug: Coresight debug-CPU0 initialized
-> [   12.456754] coresight-cpu-debug 852000.debug: Coresight debug-CPU1 initialized
-> [   12.469672] coresight-cpu-debug 854000.debug: Coresight debug-CPU2 initialized
-> [   12.476098] coresight-cpu-debug 856000.debug: Coresight debug-CPU3 initialized
-> [   12.532409] coresight stm0: STM32 initialized
-> [   12.533708] coresight cti_sys0: CTI initialized
-> [   12.539478] coresight cti_sys1: CTI initialized
-> [   12.550106] coresight cti_cpu0: CTI initialized
-> [   12.633931] coresight cti_cpu1: CTI initialized
-> [   12.634664] coresight cti_cpu2: CTI initialized
-> [   12.638090] coresight cti_cpu3: CTI initialized
-> [   12.721136] CSCFG registered etm0
-> 
-> ...
-> 
-> [   12.762643] CSCFG registered etm1
-> [   12.762666] coresight etm1: CPU1: etm v4.0 initialized
-> [   12.776258] CSCFG registered etm2
-> [   12.776282] coresight etm2: CPU2: etm v4.0 initialized
-> [   12.784357] CSCFG registered etm3
-> [   12.785455] coresight etm3: CPU3: etm v4.0 initialized
-> 
-> Error can also be triggered by manually starting the modules using modprobe
-> in the following order:
-> 
-> root@linaro-developer:/home/linaro/cs-mods# modprobe coresight
-> root@linaro-developer:/home/linaro/cs-mods# modprobe coresight-cti
-> root@linaro-developer:/home/linaro/cs-mods# modprobe coresight-etm4x
-> 
-> Tested on Dragonboard DB410c
-> Applies to coresight/next
-> 
 
-It is not just the NULL pointer reference, but also the code is using
-wrong "device" as csdev. The patch looks good to me. I will queue this
+On 2022/11/23 22:03, Suzuki K Poulose wrote:
+> On 23/11/2022 12:38, Junhao He wrote:
+>> From: Qi Liu <liuqi115@huawei.com>
+>>
+>> Add driver for UltraSoc SMB(System Memory Buffer) device.
+>> SMB provides a way to buffer messages from ETM, and store
+>> these "CPU instructions trace" in system memory.
+>> The SMB device is identifier as ACPI HID "HISI03A1". Device
+>> system memory address resources are allocated using the _CRS
+>> method and buffer modes is the circular buffer mode.
+>>
+>> SMB is developed by UltraSoc technology, which is acquired by
+>> Siemens, and we still use "UltraSoc" to name driver.
+>>
+>> Signed-off-by: Qi Liu <liuqi115@huawei.com>
+>> Signed-off-by: Junhao He <hejunhao3@huawei.com>
+>> Tested-by: JunHao He <hejunhao3@huawei.com>
+>> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>> ---
+>>   drivers/hwtracing/coresight/Kconfig        |  12 +
+>>   drivers/hwtracing/coresight/Makefile       |   1 +
+>>   drivers/hwtracing/coresight/ultrasoc-smb.c | 658 +++++++++++++++++++++
+>>   drivers/hwtracing/coresight/ultrasoc-smb.h | 129 ++++
+>>   4 files changed, 800 insertions(+)
+>>   create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.c
+>>   create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.h
+>>
+>
+>> +static void smb_sync_perf_buffer(struct smb_drv_data *drvdata,
+>> +                 struct cs_buffers *buf,
+>> +                 unsigned long head,
+>> +                 unsigned long data_size)
+>> +{
+>> +    struct smb_data_buffer *sdb = &drvdata->sdb;
+>> +    char **dst_pages = (char **)buf->data_pages;
+>> +    unsigned long to_copy;
+>> +    long pg_idx, pg_offset;
+>> +
+>> +    pg_idx = head >> PAGE_SHIFT;
+>> +    pg_offset = head & (PAGE_SIZE - 1);
+>> +
+>> +    while (data_size) {
+>> +        unsigned long pg_space = PAGE_SIZE - pg_offset;
+>> +
+>> +        /* Copy parts of trace data when read pointer wrap around */
+>> +        if (sdb->rd_offset + pg_space > sdb->buf_size)
+>> +            to_copy = sdb->buf_size - sdb->rd_offset;
+>> +        else
+>> +            to_copy = min(data_size, pg_space);
+>> +
+>> +        memcpy(dst_pages[pg_idx] + pg_offset,
+>> +                  sdb->buf_base + sdb->rd_offset, to_copy);
+>> +
+>> +        pg_offset += to_copy;
+>> +        if (pg_offset >= PAGE_SIZE) {
+>> +            pg_offset = 0;
+>> +            pg_idx++;
+>> +            pg_idx %= buf->nr_pages;
+>> +        }
+>> +        data_size -= to_copy;
+>> +        sdb->rd_offset += to_copy;
+>> +        sdb->rd_offset %= sdb->buf_size;
+>> +    }
+>> +
+>> +    sdb->data_size = 0;
+>
+>
+> --8>-- cut here --<8--
+>
+>> +    writel(sdb->start_addr + sdb->rd_offset,
+>> +        drvdata->base + SMB_LB_RD_ADDR_REG);
+>> +
+>> +    /*
+>> +     * Data remained in link cannot be purged when SMB is full, so
+>> +     * synchronize the read pointer to write pointer, to make sure
+>> +     * these remained data won't influence next trace.
+>> +     */
+>> +    if (sdb->full) {
+>> +        smb_purge_data(drvdata);
+>> +        writel(readl(drvdata->base + SMB_LB_WR_ADDR_REG),
+>> +               drvdata->base + SMB_LB_RD_ADDR_REG);
+>> +    }
+>
+> --<8-- end here --8>--
+>
+> As pointed out in the last review, we must do this step
+> everytime for perf mode irrespective of whether the buffer
+> was "FULL" or not.
+>
+> i.e, the above block should simply be:
+>
+>     if (sdb->full)
+>         smb_purge_data(drvdata);
+>
+>     /*
+>      * The uncollected Data must be discarded for perf,
+>      * as it cannot be clubbed with next schedule. We
+>      * any way TRUNCATE the buffer in this case.
+>      */
+>     writel(readl(drvdata->base + SMB_LB_WR_ADDR_REG),
+>         drvdata->base + SMB_LB_RD_ADDR_REG);
+>
+> Suzuki
 
-Suzuki
+Hi Suzuki,
+
+We need to update SMB_LB_RD_ADDR_REG register first, then
+check the "full" flag, whether the register needs to be
+updated again.
+
+If we don`t update the value of SMB_LB_RD_ADDR_REG register
+or reset buffer state, the buffer state will still be "full".
+The buffer has not free area,so the data will still remain
+in link.
+
+Thanks.
+HeJunhao.
+
+> _______________________________________________
+> CoreSight mailing list -- coresight@lists.linaro.org
+> To unsubscribe send an email to coresight-leave@lists.linaro.org
+>
+> .
+>
 
