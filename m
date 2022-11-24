@@ -2,75 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7331637487
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:55:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F6F463748C
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:55:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbiKXIzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 03:55:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56528 "EHLO
+        id S229953AbiKXIzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 03:55:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbiKXIyw (ORCPT
+        with ESMTP id S229949AbiKXIy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 03:54:52 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820C410CE8B
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:54:49 -0800 (PST)
-X-UUID: 79ec29ffe0a04ef1b3784846e65cc590-20221124
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=ViGNiKiDlpdTwQms22X0e/YbhcaMRLoQ4ODpbxaV73U=;
-        b=c9YszU9huKp+SyvUw8kjCHgS2Lsb02TS8Peq257WeYi+i6yf5Mph7VqEabURiLNRmiu1w4HFLqWBGnL6ahRopPYzn6njB48NZN4NBnZUyCkUAGx4pNiN1CpefOa4sdsghYtdS4pJEx0vs4jJnUo7inVSlcgr2fd+AJiV+EnigG4=;
-X-CID-UNFAMILIAR: 1
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.14,REQID:5d14ae8f-31e1-46c9-a318-7adf258747d3,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-        ON:release,TS:95
-X-CID-INFO: VERSION:1.1.14,REQID:5d14ae8f-31e1-46c9-a318-7adf258747d3,IP:0,URL
-        :0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
-        ON:quarantine,TS:95
-X-CID-META: VersionHash:dcaaed0,CLOUDID:c8c4b52f-2938-482e-aafd-98d66723b8a9,B
-        ulkID:221124165445AUVM93DU,BulkQuantity:0,Recheck:0,SF:38|28|16|19|48,TC:n
-        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 79ec29ffe0a04ef1b3784846e65cc590-20221124
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <jiaxin.yu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1815254158; Thu, 24 Nov 2022 16:54:43 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 24 Nov 2022 16:54:42 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Thu, 24 Nov 2022 16:54:40 +0800
-From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
-To:     <broonie@kernel.org>, <andrzej.hajda@intel.com>,
-        <neil.armstrong@linaro.org>, <robert.foss@linaro.org>,
-        <Laurent.pinchart@ideasonboard.com>,
-        <kuninori.morimoto.gx@renesas.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <nfraprado@collabora.com>
-CC:     <chunxu.li@mediatek.com>,
-        <ajye_huang@compal.corp-partner.google.com>,
-        <allen-kh.cheng@mediatek.com>, <dri-devel@lists.freedesktop.org>,
-        <alsa-devel@alsa-project.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>
-Subject: [PATCH 3/3] ASoC: mediatek: mt8186: correct the HDMI widgets
-Date:   Thu, 24 Nov 2022 16:54:36 +0800
-Message-ID: <20221124085436.24900-4-jiaxin.yu@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221124085436.24900-1-jiaxin.yu@mediatek.com>
-References: <20221124085436.24900-1-jiaxin.yu@mediatek.com>
+        Thu, 24 Nov 2022 03:54:57 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F29A10CE94
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:54:56 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id 189so446121ybe.8
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:54:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l8R3F5kALGt7fZIFbbdQLZusILmf2AipY3tz1OkoyZg=;
+        b=BoTT++1ZJhXWkMbqvMW/FRK8+Jp2xAbHiq27Xk1WEsyCZ7YGMXSoiYjXndFPTgLW3E
+         Ak39gt1gk7HkJXwvl1ze3jPLtMdIGBkXI3TD6mJazIm5soc2L/KIXoktqhUnYB7k3AQO
+         KG1FZND6mzdGbeZJcgp5NydoulbO1aJlSobDLYBYcFhiuvo+RXDBHhq4BJZm3yE8BZgN
+         I5G/E5r2fLHt1x+F6ZSSRS9XeYFfiCEbobbo8jrrucKv3IHG/S65AHc3Onjwy2SWLsNy
+         VHQs63G8Pxalw2RYjcDYGG1XwzMT0fcZaklDmBMHeJGkteMnQ8zmkk6t27JTibOCODaC
+         H84A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=l8R3F5kALGt7fZIFbbdQLZusILmf2AipY3tz1OkoyZg=;
+        b=bcbkb3f9aK4l5m0Gp+D9SYgUWY/5tqxXcJ6gRFnCfcDDUNkxVunuonLTUEFvgzPx3j
+         VsHa7NaPkvENwCFYAvopS810RyLahjjwnpjLRjBo6/y18S/FlcYvFG08mbpsGD7oFwML
+         Nz7x9AUnEnOIJM+H+HgcoV8/5kKD20IerWLKZw66NEATypXw+tEbxKPmt8bhAAQMBB91
+         uWbEuD/l73OS2pyfyc3ClWqmP+sfpSiYkkRSCyv/g/wLK/VMrKGLhqwf/SfwKzXfJJ7q
+         9wYu4Hbjf3OSJ/ziPwO2AFPZnnOG+bslApuL+G0gM/XsG1UHQDb3o65bwhetzdJqzEo0
+         vEiA==
+X-Gm-Message-State: ANoB5plOu5gFkioAUEXx4gHSBj0PdWpcB774Nv/rl42LSL1JlXadqNSX
+        KIKr5wpk1myv7FcrdFqkeW2o0q48fFK/11kKw0jc6A==
+X-Google-Smtp-Source: AA0mqf7HBKYpljZej6bXe7Ojnqxlh65R7Qj4zpxpnR7ZPi1/Wnuyt44OyTeMDenQUWF4/SbRV3buTCxQI4MkWFzQ1DI=
+X-Received: by 2002:a25:d8d4:0:b0:6f0:36e2:5fc2 with SMTP id
+ p203-20020a25d8d4000000b006f036e25fc2mr5552927ybg.52.1669280095520; Thu, 24
+ Nov 2022 00:54:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
+References: <20221121123803.3786-1-zhuyinbo@loongson.cn> <20221121123803.3786-2-zhuyinbo@loongson.cn>
+ <CACRpkda1adiNwbTZHdAyHKny3r5FFMP_XXVGbo1vnCdw9U1gNg@mail.gmail.com>
+ <8a7abd77-9540-efa8-6f67-908530e85399@loongson.cn> <CACRpkdb=wdydOYCcrpjLSyvfVO--_ezXsFQ46qwfVCiiTd5fNw@mail.gmail.com>
+ <4c02570e-03d5-85f1-73fb-b66d6170c875@loongson.cn>
+In-Reply-To: <4c02570e-03d5-85f1-73fb-b66d6170c875@loongson.cn>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 24 Nov 2022 09:54:43 +0100
+Message-ID: <CACRpkdbgP9m40t_Ky4H+SQi9TELikomT2M-JpF7+auKmzOxQdg@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] gpio: loongson: add gpio driver support
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        Arnaud Patard <apatard@mandriva.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,41 +86,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use SND_SOC_DAPM_LINE instead of SND_SOC_DAPM_OUTPUT to trigger
-DAPM events to hdmi-codec when userspace control the DPAM pin.
+On Thu, Nov 24, 2022 at 3:22 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
+> =E5=9C=A8 2022/11/24 =E4=B8=8A=E5=8D=886:05, Linus Walleij =E5=86=99=E9=
+=81=93:
 
-Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
----
- sound/soc/mediatek/mt8186/mt8186-mt6366-da7219-max98357.c | 2 +-
- sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> > But these drivers can not rely on the .gpio_to_irq() callback
+> > to be called before an IRQ is requested and used.
+>
+> I may not have made it clear before that the gpio irq chip for other
+> platforms may need to be implemented, but the loongson platform may be
+> special.
+>
+> I mean that the loongson platform use gpio irq does not need to rely on
+> gpio_to_irq, because loongson interrupt controller driver has covered
+> gpio irq.  The specific reason is my above explanation.
+>
+> so, Can I not realize gpio irq chip?
 
-diff --git a/sound/soc/mediatek/mt8186/mt8186-mt6366-da7219-max98357.c b/sound/soc/mediatek/mt8186/mt8186-mt6366-da7219-max98357.c
-index d8c93d66b4e6..f4960b0c8298 100644
---- a/sound/soc/mediatek/mt8186/mt8186-mt6366-da7219-max98357.c
-+++ b/sound/soc/mediatek/mt8186/mt8186-mt6366-da7219-max98357.c
-@@ -965,7 +965,7 @@ mt8186_mt6366_da7219_max98357_widgets[] = {
- 	SND_SOC_DAPM_SPK("Speakers", NULL),
- 	SND_SOC_DAPM_HP("Headphones", NULL),
- 	SND_SOC_DAPM_MIC("Headset Mic", NULL),
--	SND_SOC_DAPM_OUTPUT("HDMI1"),
-+	SND_SOC_DAPM_LINE("HDMI1", NULL),
- 	SND_SOC_DAPM_MIXER(SOF_DMA_DL1, SND_SOC_NOPM, 0, 0, NULL, 0),
- 	SND_SOC_DAPM_MIXER(SOF_DMA_DL2, SND_SOC_NOPM, 0, 0, NULL, 0),
- 	SND_SOC_DAPM_MIXER(SOF_DMA_UL1, SND_SOC_NOPM, 0, 0, NULL, 0),
-diff --git a/sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c b/sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c
-index e59d92e2afa3..c61e9bb419d4 100644
---- a/sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c
-+++ b/sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c
-@@ -1033,7 +1033,7 @@ mt8186_mt6366_rt1019_rt5682s_widgets[] = {
- 	SND_SOC_DAPM_SPK("Speakers", NULL),
- 	SND_SOC_DAPM_HP("Headphone", NULL),
- 	SND_SOC_DAPM_MIC("Headset Mic", NULL),
--	SND_SOC_DAPM_OUTPUT("HDMI1"),
-+	SND_SOC_DAPM_LINE("HDMI1", NULL),
- 	SND_SOC_DAPM_MIXER(SOF_DMA_DL1, SND_SOC_NOPM, 0, 0, NULL, 0),
- 	SND_SOC_DAPM_MIXER(SOF_DMA_DL2, SND_SOC_NOPM, 0, 0, NULL, 0),
- 	SND_SOC_DAPM_MIXER(SOF_DMA_UL1, SND_SOC_NOPM, 0, 0, NULL, 0),
--- 
-2.18.0
+Isn't this a hierarchical irqchip then?
 
+Please consult the following from
+Documentation/driver-api/gpio/driver.rst:
+
+---------------------------------
+
+GPIO drivers providing IRQs
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+
+It is custom that GPIO drivers (GPIO chips) are also providing interrupts,
+most often cascaded off a parent interrupt controller, and in some special
+cases the GPIO logic is melded with a SoC's primary interrupt controller.
+
+The IRQ portions of the GPIO block are implemented using an irq_chip, using
+the header <linux/irq.h>. So this combined driver is utilizing two sub-
+systems simultaneously: gpio and irq.
+
+It is legal for any IRQ consumer to request an IRQ from any irqchip even if=
+ it
+is a combined GPIO+IRQ driver. The basic premise is that gpio_chip and
+irq_chip are orthogonal, and offering their services independent of each
+other.
+
+gpiod_to_irq() is just a convenience function to figure out the IRQ for a
+certain GPIO line and should not be relied upon to have been called before
+the IRQ is used.
+
+Always prepare the hardware and make it ready for action in respective
+callbacks from the GPIO and irq_chip APIs. Do not rely on gpiod_to_irq() ha=
+ving
+been called first.
+
+We can divide GPIO irqchips in two broad categories:
+
+- CASCADED INTERRUPT CHIPS: this means that the GPIO chip has one common
+  interrupt output line, which is triggered by any enabled GPIO line on tha=
+t
+  chip. The interrupt output line will then be routed to an parent interrup=
+t
+  controller one level up, in the most simple case the systems primary
+  interrupt controller. This is modeled by an irqchip that will inspect bit=
+s
+  inside the GPIO controller to figure out which line fired it. The irqchip
+  part of the driver needs to inspect registers to figure this out and it
+  will likely also need to acknowledge that it is handling the interrupt
+  by clearing some bit (sometime implicitly, by just reading a status
+  register) and it will often need to set up the configuration such as
+  edge sensitivity (rising or falling edge, or high/low level interrupt for
+  example).
+
+- HIERARCHICAL INTERRUPT CHIPS: this means that each GPIO line has a dedica=
+ted
+  irq line to a parent interrupt controller one level up. There is no need
+  to inquire the GPIO hardware to figure out which line has fired, but it
+  may still be necessary to acknowledge the interrupt and set up configurat=
+ion
+  such as edge sensitivity.
+
+---------------------------------
+
+You find an example of a hierarchical GPIO irqchip using the
+GPIOLIB_IRQCHIP in drivers/gpio/gpio-ixp4xx.c.
+
+Yours,
+Linus Walleij
