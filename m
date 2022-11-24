@@ -2,73 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CC7C637317
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 08:49:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E152A637319
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 08:49:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbiKXHtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 02:49:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40400 "EHLO
+        id S229685AbiKXHt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 02:49:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbiKXHtI (ORCPT
+        with ESMTP id S229662AbiKXHtX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 02:49:08 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2DB9240A0
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 23:49:07 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id x66so965748pfx.3
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 23:49:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shopee.com; s=shopee.com;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G7mIOYx5XpbGQFlC8Ida0reEU5Je0qsdFez1FBYqNyg=;
-        b=NjotXgc97HbmEPcoHrS+QOmRpacOKDb6QdXBznUNud1zfBEYbcLcS0Xt2g3PItbFnr
-         h2QU44T4XntjX+yX5aGFm63L8ScVMzk1QnKOSbFWpMjeDfEt7yvCS4NDOuIXfg82fZnh
-         DZzGBg5gfIpGza1QU53WZ6sK/ar+0Nz7Mf6oySCBTtb8gXxzc2hXUes7f3Je+8/5ietR
-         9h/mbj4vZ4lepK0FPHfAd8Y215fWJxhs+X16DRMm8Nj8EduGiaUZuO9UvZWHyabH7cNa
-         kqGuLQR40VQZmVKmSTG+2MvAwq4nPCFJCV8Pos7IuGYCwARs3J6QL7bZBK6+bnipJ8iM
-         coPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=G7mIOYx5XpbGQFlC8Ida0reEU5Je0qsdFez1FBYqNyg=;
-        b=trrVy4vY6DUkCei9zGUkrRXK6MD9+F0ZUfCNaooLaV0gvDuU8t83BEHF7leetx36lt
-         cIJZpuRwAt5pekxfsZxpNhzbxV3YR5gVigUg/zzA2bBjm89sTsjZCL9Rcl9IsJoUbwOU
-         JYVudZX8i0avGFBP0WVIbYdS/6NVy3Aa36wN6bgKtIBIMba8mxrHri+OMkz5uV/RPxVG
-         NiUQZ0DIIyWvIn0+oyl9d+V26sabgjsxZNMpbBkkBaA2cF0uAoScM46ySsfoO1ZuOSlq
-         UFR2Zqb60PHKs6Y5tNnkPmW5t5OIuAlUL1kG7tJeIJplOo0grBCx8gSHhX31h6B6HNs3
-         q4zQ==
-X-Gm-Message-State: ANoB5pkNtYapsBgsd3HoaFlvIabBkv8I6Wi8F39Ssxfp1yuU/CFzjoiC
-        qo15uHgeSLq/G8hqtozXpegcng==
-X-Google-Smtp-Source: AA0mqf5pzoo6QD8W/O4UzNRjG/dH8mFcNXz4MwupnYm372vlZ08PSLVbYtDXpowYkklRamgw7dATgg==
-X-Received: by 2002:a63:ff63:0:b0:477:8d4f:3dda with SMTP id s35-20020a63ff63000000b004778d4f3ddamr13055439pgk.552.1669276146630;
-        Wed, 23 Nov 2022 23:49:06 -0800 (PST)
-Received: from [10.54.24.49] ([143.92.118.2])
-        by smtp.gmail.com with ESMTPSA id p5-20020a170902e74500b0018691ce1696sm532146plf.131.2022.11.23.23.49.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 23:49:06 -0800 (PST)
-Message-ID: <21e73dad-c6d0-21ea-dcdf-355b71c8537b@shopee.com>
-Date:   Thu, 24 Nov 2022 15:49:02 +0800
+        Thu, 24 Nov 2022 02:49:23 -0500
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52422286E9;
+        Wed, 23 Nov 2022 23:49:22 -0800 (PST)
+Received: from quatroqueijos.cascardo.eti.br (1.general.cascardo.us.vpn [10.172.70.58])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 040673F1C2;
+        Thu, 24 Nov 2022 07:49:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1669276159;
+        bh=TVUCi+GUR+3L+hwsSYw2wjNWpr9vB+c6Ivyh3fy1Vz0=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=bbBh06+rsP/f0k8tdL2qiZbmQ/DUgMC3YYJF8r3RASHEkDNMXSLAHfHpbqT1WyuGR
+         xzrAgk+JpzQlCz6KlExRdY4KGoNzsg1vK4Wu+bsy2vJfxrgw7bnhKOC5V+uTCTAMyQ
+         eWNVtQrAIu+Ul755J3HhYYq0PFkfH7KkYlZbifyduPY4lTI9Zu9sLtG0QKYJgLVR3Z
+         OHRyAWahSdP/rNTJaN8vPvPRz8yB+TNEoxbT9vPcmYfd8FwhViQNivZBSsCFb6xOi2
+         esSQRJhWQDeQm5lipZlMEN31Fk7OFQh9lQrjrfdsOvip7TtXzqhz2JAf09eyS/WtOp
+         06AerE+r3IY6A==
+Date:   Thu, 24 Nov 2022 04:49:10 -0300
+From:   Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+To:     Rishabh Bhatnagar <risbhat@amazon.com>
+Cc:     gregkh@linuxfoundation.org, shakeelb@google.com,
+        viro@zeniv.linux.org.uk, bsegall@google.com, mdecandia@gmail.com,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        Guantao Liu <guantaol@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Khazhismel Kumykov <khazhy@google.com>,
+        Davidlohr Bueso <dbueso@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH 2/2] epoll: check for events when removing a timed out
+ thread from the wait queue
+Message-ID: <Y38h9oe4ZEGNd7Zx@quatroqueijos.cascardo.eti.br>
+References: <20221124001123.3248571-1-risbhat@amazon.com>
+ <20221124001123.3248571-3-risbhat@amazon.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.0
-Subject: Re: [PATCH] cgroup/cpuset: Optimize update_tasks_nodemask()
-To:     Waiman Long <longman@redhat.com>
-Cc:     lizefan.x@bytedance.com, tj@kernel.org, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221123082157.71326-1-haifeng.xu@shopee.com>
- <2ac6f207-e08a-2a7f-01ae-dfaf15eefaf6@redhat.com>
- <4de8821b-e0c0-bf63-4d76-b0ce208cce3b@shopee.com>
- <dfcbffb9-b58a-6d25-2174-39394eb0ccde@redhat.com>
-From:   Haifeng Xu <haifeng.xu@shopee.com>
-In-Reply-To: <dfcbffb9-b58a-6d25-2174-39394eb0ccde@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221124001123.3248571-3-risbhat@amazon.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,142 +64,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/11/24 12:24, Waiman Long wrote:
-> On 11/23/22 22:33, Haifeng Xu wrote:
->>
->> On 2022/11/24 04:23, Waiman Long wrote:
->>> On 11/23/22 03:21, haifeng.xu wrote:
->>>> When change the 'cpuset.mems' under some cgroup, system will hung
->>>> for a long time. From the dmesg, many processes or theads are
->>>> stuck in fork/exit. The reason is show as follows.
->>>>
->>>> thread A:
->>>> cpuset_write_resmask /* takes cpuset_rwsem */
->>>>     ...
->>>>       update_tasks_nodemask
->>>>         mpol_rebind_mm /* waits mmap_lock */
->>>>
->>>> thread B:
->>>> worker_thread
->>>>     ...
->>>>       cpuset_migrate_mm_workfn
->>>>         do_migrate_pages /* takes mmap_lock */
->>>>
->>>> thread C:
->>>> cgroup_procs_write /* takes cgroup_mutex and
->>>> cgroup_threadgroup_rwsem */
->>>>     ...
->>>>       cpuset_can_attach
->>>>         percpu_down_write /* waits cpuset_rwsem */
->>>>
->>>> Once update the nodemasks of cpuset, thread A wakes up thread B to
->>>> migrate mm. But when thread A iterates through all tasks, including
->>>> child threads and group leader, it has to wait the mmap_lock which
->>>> has been take by thread B. Unfortunately, thread C wants to migrate
->>>> tasks into cgroup at this moment, it must wait thread A to release
->>>> cpuset_rwsem. If thread B spends much time to migrate mm, the
->>>> fork/exit which acquire cgroup_threadgroup_rwsem also need to
->>>> wait for a long time.
->>>>
->>>> There is no need to migrate the mm of child threads which is
->>>> shared with group leader. Just iterate through the group
->>>> leader only.
->>>>
->>>> Signed-off-by: haifeng.xu <haifeng.xu@shopee.com>
->>>> ---
->>>>    kernel/cgroup/cpuset.c | 3 +++
->>>>    1 file changed, 3 insertions(+)
->>>>
->>>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->>>> index 589827ccda8b..43cbd09546d0 100644
->>>> --- a/kernel/cgroup/cpuset.c
->>>> +++ b/kernel/cgroup/cpuset.c
->>>> @@ -1968,6 +1968,9 @@ static void update_tasks_nodemask(struct cpuset
->>>> *cs)
->>>>              cpuset_change_task_nodemask(task, &newmems);
->>>>    +        if (!thread_group_leader(task))
->>>> +            continue;
->>>> +
->>>>            mm = get_task_mm(task);
->>>>            if (!mm)
->>>>                continue;
->>> Could you try the attached test patch to see if it can fix your problem?
->>> Something along the line of this patch will be more acceptable.
->>>
->>> Thanks,
->>> Longman
->>>
->> Hi, Longman.
->> Thanks for your patch, but there are still some problems.
->>
->> 1）
->>    (group leader, node: 0,1)
->>           cgroup0
->>           /     \
->>          /       \
->>      cgroup1   cgroup2
->>     (threads)  (threads)
->>
->> If set node 0 in cgroup1 and node 1 in cgroup2, both of them will update
->> the mm. And the nodemask of mm depends on who set the node last.
+On Thu, Nov 24, 2022 at 12:11:23AM +0000, Rishabh Bhatnagar wrote:
+> From: Soheil Hassas Yeganeh <soheil@google.com>
 > 
-> Yes, that is the existing behavior. It was not that well defined in the
-> past and so it is somewhat ambiguous as to what we need to do about it.
+> Commit 289caf5d8f6c61c6d2b7fd752a7f483cd153f182 upstream.
 > 
-
-The test patch works if the child threads are in same cpuset with group
-leader which has same logic with my patch. But if they are in different
-cpusets, the test patch will fail because the contention of mmap_lock
-still exsits and seems similar to the original logic.
-
-> BTW, cgroup1 has a memory_migrate flag which will force page migration
-> if set. I guess you may have it set in your case as it will introduce a
-> lot more delay as page migration takes time. That is probably the reason
-> why you are seeing a long delay. So one possible solution is to turn
-> this flag off. Cgroup v2 doesn't have this flag.
+> Patch series "simplify ep_poll".
 > 
-
-Dou you mean 'CS_MEMORY_MIGRATE'? This flag can be turn off in Cgroup
-v1, but it has been set in Cgroup v2 (cpuset_css_alloc) in default and
-couldn't be changed.
-
->>
->> 2）
->>     (process, node: 0,1)
->>           cgroup0
->>           /     \
->>          /       \
->>      cgroup1   cgroup2
->>     (node: 0)  (node: 1)
->>
->> If migrate thread from cgroup0 to cgroup1 or cgroup2, cpuset_attach
->> won't update the mm. So the nodemask of thread, including mems_allowed
->> and mempolicy（updated in cpuset_change_task_nodemask）, is different
->> from
->> the vm_policy in vma(updated in mpol_rebind_mm).
+> This patch series is a followup based on the suggestions and feedback by
+> Linus:
+> https://lkml.kernel.org/r/CAHk-=wizk=OxUyQPbO8MS41w2Pag1kniUV5WdD5qWL-gq1kjDA@mail.gmail.com
 > 
-> Yes, that can be the case.
+> The first patch in the series is a fix for the epoll race in presence of
+> timeouts, so that it can be cleanly backported to all affected stable
+> kernels.
 > 
->>
->>
->> In a word, if threads have different cpusets with different nodemask, it
->> will cause inconsistent memory behavior.
+> The rest of the patch series simplify the ep_poll() implementation.  Some
+> of these simplifications result in minor performance enhancements as well.
+> We have kept these changes under self tests and internal benchmarks for a
+> few days, and there are minor (1-2%) performance enhancements as a result.
 > 
-> So do you have suggestion of what we need to do going forward?
+> This patch (of 8):
+> 
+> After abc610e01c66 ("fs/epoll: avoid barrier after an epoll_wait(2)
+> timeout"), we break out of the ep_poll loop upon timeout, without checking
+> whether there is any new events available.  Prior to that patch-series we
+> always called ep_events_available() after exiting the loop.
+> 
+> This can cause races and missed wakeups.  For example, consider the
+> following scenario reported by Guantao Liu:
+> 
+> Suppose we have an eventfd added using EPOLLET to an epollfd.
+> 
+> Thread 1: Sleeps for just below 5ms and then writes to an eventfd.
+> Thread 2: Calls epoll_wait with a timeout of 5 ms. If it sees an
+>           event of the eventfd, it will write back on that fd.
+> Thread 3: Calls epoll_wait with a negative timeout.
+> 
+> Prior to abc610e01c66, it is guaranteed that Thread 3 will wake up either
+> by Thread 1 or Thread 2.  After abc610e01c66, Thread 3 can be blocked
+> indefinitely if Thread 2 sees a timeout right before the write to the
+> eventfd by Thread 1.  Thread 2 will be woken up from
+> schedule_hrtimeout_range and, with evail 0, it will not call
+> ep_send_events().
+> 
+> To fix this issue:
+> 1) Simplify the timed_out case as suggested by Linus.
+> 2) while holding the lock, recheck whether the thread was woken up
+>    after its time out has reached.
+> 
+> Note that (2) is different from Linus' original suggestion: It do not set
+> "eavail = ep_events_available(ep)" to avoid unnecessary contention (when
+> there are too many timed-out threads and a small number of events), as
+> well as races mentioned in the discussion thread.
+> 
+> This is the first patch in the series so that the backport to stable
+> releases is straightforward.
+> 
+> Link: https://lkml.kernel.org/r/20201106231635.3528496-1-soheil.kdev@gmail.com
+> Link: https://lkml.kernel.org/r/CAHk-=wizk=OxUyQPbO8MS41w2Pag1kniUV5WdD5qWL-gq1kjDA@mail.gmail.com
+> Link: https://lkml.kernel.org/r/20201106231635.3528496-2-soheil.kdev@gmail.com
+> Fixes: abc610e01c66 ("fs/epoll: avoid barrier after an epoll_wait(2) timeout")
+> Signed-off-by: Soheil Hassas Yeganeh <soheil@google.com>
+> Tested-by: Guantao Liu <guantaol@google.com>
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Reported-by: Guantao Liu <guantaol@google.com>
+> Reviewed-by: Eric Dumazet <edumazet@google.com>
+> Reviewed-by: Willem de Bruijn <willemb@google.com>
+> Reviewed-by: Khazhismel Kumykov <khazhy@google.com>
+> Reviewed-by: Davidlohr Bueso <dbueso@suse.de>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+> Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Signed-off-by: Rishabh Bhatnagar <risbhat@amazon.com>
 
-Should we prevent thread from migrating to those cgroups which have
-different nodemask with the cgroup that contains the group leader?
+Acked-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 
-In addition, the group leader and child threads should be in same cgroup
-tree, also the level of cgroup containes group leader must be higher
-than these cgroups contain child threads, so update_nodemask will work.
-
-Or just disable thread migration in cpuset？It's easy to achieve but will
-affect cpu bind.
+> ---
+>  fs/eventpoll.c | 25 ++++++++++++++++---------
+>  1 file changed, 16 insertions(+), 9 deletions(-)
 > 
-> Cheers,
-> Longman
-> 
+> diff --git a/fs/eventpoll.c b/fs/eventpoll.c
+> index e5496483a882..877f9f61a4e8 100644
+> --- a/fs/eventpoll.c
+> +++ b/fs/eventpoll.c
+> @@ -1928,23 +1928,30 @@ static int ep_poll(struct eventpoll *ep, struct epoll_event __user *events,
+>  		}
+>  		write_unlock_irq(&ep->lock);
+>  
+> -		if (eavail || res)
+> -			break;
+> +		if (!eavail && !res)
+> +			timed_out = !schedule_hrtimeout_range(to, slack,
+> +							      HRTIMER_MODE_ABS);
+>  
+> -		if (!schedule_hrtimeout_range(to, slack, HRTIMER_MODE_ABS)) {
+> -			timed_out = 1;
+> -			break;
+> -		}
+> -
+> -		/* We were woken up, thus go and try to harvest some events */
+> +		/*
+> +		 * We were woken up, thus go and try to harvest some events.
+> +		 * If timed out and still on the wait queue, recheck eavail
+> +		 * carefully under lock, below.
+> +		 */
+>  		eavail = 1;
+> -
+>  	} while (0);
+>  
+>  	__set_current_state(TASK_RUNNING);
+>  
+>  	if (!list_empty_careful(&wait.entry)) {
+>  		write_lock_irq(&ep->lock);
+> +		/*
+> +		 * If the thread timed out and is not on the wait queue, it
+> +		 * means that the thread was woken up after its timeout expired
+> +		 * before it could reacquire the lock. Thus, when wait.entry is
+> +		 * empty, it needs to harvest events.
+> +		 */
+> +		if (timed_out)
+> +			eavail = list_empty(&wait.entry);
+>  		__remove_wait_queue(&ep->wq, &wait);
+>  		write_unlock_irq(&ep->lock);
+>  	}
+> -- 
+> 2.37.1
 > 
