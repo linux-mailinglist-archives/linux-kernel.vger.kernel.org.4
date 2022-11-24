@@ -2,86 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E3A163786F
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:03:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58EF8637869
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:03:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbiKXMDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 07:03:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41566 "EHLO
+        id S230153AbiKXMDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 07:03:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbiKXMDK (ORCPT
+        with ESMTP id S230245AbiKXMDB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 07:03:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5205C766;
-        Thu, 24 Nov 2022 04:03:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0900B62113;
-        Thu, 24 Nov 2022 12:03:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6DD9C433D6;
-        Thu, 24 Nov 2022 12:02:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669291380;
-        bh=gbD+gwaWELI1psMNav8kNexZAyrqnAE9FQIf70UWePw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Rr0r+/u1NBk/sOQMdFN8wcDOa/jwuOcPDeKx5yCI1cEIedd+AkLTnSYa9adB9O90+
-         n8u+W1RwbhKiaTJDB7nqJcH1SAfuoK/7o40EKvXlter1PkES4WIYp/Ty7cUk95xQ+r
-         aN27ywGjSGeDEWDyEiu6CbxImwbZHZCeG1GDA12NFP2XTxVfytjsoraTLjjRDo4SfN
-         gPnQQnhv9EqTJvG6SmQQq7ZrosYSphbZLkWqKJ2ez3tyNJ+IjxLZuZvVaOJjVVIGsh
-         8A1aXVzD1kcO71Jj5aFuhB0fNdJMJ2GPpnU6oa1KWHsAACj0QKG0MpN7gP1Gb08Aol
-         7AxVc7Y+ezNsg==
-Date:   Thu, 24 Nov 2022 12:02:55 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Nathan Barrett-Morrison <nathan.morrison@timesys.com>
-Cc:     greg.malysa@timesys.com, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH] spi: cadence-quadspi: Add upper limit safety check to
- baudrate divisor
-Message-ID: <Y39db5XIGm8xBaWK@sirena.org.uk>
-References: <Y39YJL02jFbkEMqw@sirena.org.uk>
- <20221124115354.132832-1-nathan.morrison@timesys.com>
+        Thu, 24 Nov 2022 07:03:01 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9182A5ADE8;
+        Thu, 24 Nov 2022 04:02:59 -0800 (PST)
+Date:   Thu, 24 Nov 2022 12:02:56 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669291378;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8ef96xZAPR2NhzOZjjgPf5exhDtysRveXtabXSfWMkk=;
+        b=UHrRhu40rWAAf5CrOQZQM831XdVhtrbeqdeX9tYXqPTwbg99HB35E6PRcxVG9XrQ34U+hI
+        n3svGd8fyISr5aRhHLXp0gt3AHbUQDnUGskYhF/KgTNPscDxKUlmlo9MjFHFyJ0uB3RH43
+        eZwLJEC1prXvUeH6tyiWzOmNE7XpD1MBTxPM2viRSdUF/HWTW65CNuY9lAJ5weML0mdG7S
+        MoxVXosbGS1FLjOyDhLA8GzpVbdSYP2N+zowHJr6ZZbPNqw7XpF/utbC/vOgcyh4olf7ZI
+        D4xnzskkzVNJdmnooM3PgQ/McSqr5N9eOjxNHE+8vjxHuXPc1asCdATmTN1/IQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669291378;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8ef96xZAPR2NhzOZjjgPf5exhDtysRveXtabXSfWMkk=;
+        b=Ylaq+xJPy9f8U5GNZVcE9maFkUfoJrDZz8L5y2hwNKwCYu6riFRM0VtoZZcModH9qNI5Sm
+        VAGE0L/tU5RgtiCg==
+From:   "tip-bot2 for Alexander Antonov" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: perf/core] perf/x86/intel/uncore: Generalize get_topology() for
+ SKX PMUs
+Cc:     Alexander Antonov <alexander.antonov@linux.intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Kan Liang <kan.liang@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20221117122833.3103580-6-alexander.antonov@linux.intel.com>
+References: <20221117122833.3103580-6-alexander.antonov@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="a5yZmZ0pobTLGZ9G"
-Content-Disposition: inline
-In-Reply-To: <20221124115354.132832-1-nathan.morrison@timesys.com>
-X-Cookie: Apply only to affected area.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <166929137695.4906.15833482649561923555.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following commit has been merged into the perf/core branch of tip:
 
---a5yZmZ0pobTLGZ9G
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Commit-ID:     07813e2a59c93f10716ffa33d608d2c0685cf85b
+Gitweb:        https://git.kernel.org/tip/07813e2a59c93f10716ffa33d608d2c0685cf85b
+Author:        Alexander Antonov <alexander.antonov@linux.intel.com>
+AuthorDate:    Thu, 17 Nov 2022 12:28:27 
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Thu, 24 Nov 2022 11:09:22 +01:00
 
-On Thu, Nov 24, 2022 at 06:53:54AM -0500, Nathan Barrett-Morrison wrote:
+perf/x86/intel/uncore: Generalize get_topology() for SKX PMUs
 
-> Would you like me to add a dev_err (or such) bailout error condition and resubmit?
+Factor out a generic code from skx_iio_get_topology() to skx_pmu_get_topology()
+to avoid code duplication. This code will be used by get_topology() procedure
+for SKX UPI PMUs in the further patch.
 
-Yes, please.  A bit of rewording to clarify the commit log might help as
-well.
+Signed-off-by: Alexander Antonov <alexander.antonov@linux.intel.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+Link: https://lore.kernel.org/r/20221117122833.3103580-6-alexander.antonov@linux.intel.com
+---
+ arch/x86/events/intel/uncore_snbep.c | 38 +++++++++++++++++++--------
+ 1 file changed, 28 insertions(+), 10 deletions(-)
 
---a5yZmZ0pobTLGZ9G
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN/XW4ACgkQJNaLcl1U
-h9Bsowf+KsLdfbJN4X9p4Qcs6DVVPq+l0/knHJmXfpHMqwF0dF7ZVYaUCSpZoz64
-hiz4L5rEolEDjEyVicWYgvkOGatcg2xyAWB2tWtv/KzMOkQB3Xm3NefM8G/UVd65
-8kJysB82VA9q3YQ39vrq8ARQaVRvAzOG4i8nlo2BXk4Xtk2iMZ0dt4wRAsu6fT1F
-2GVnST/CMR9upEfZ7A9ZEg3gzhm2cldIwfr+8q6j9y28xrE0F/owIlkTiz7slcXN
-nEMI03dpmS/ZYpSpznZVWcRoUSgUsUu9ibuRUSbivZS6JMpp+g44o9pKDvBrujRF
-gR9PcFWTlmMmzk/R2didsgjzcyCFTQ==
-=HM3F
------END PGP SIGNATURE-----
-
---a5yZmZ0pobTLGZ9G--
+diff --git a/arch/x86/events/intel/uncore_snbep.c b/arch/x86/events/intel/uncore_snbep.c
+index e14b963..254ba0a 100644
+--- a/arch/x86/events/intel/uncore_snbep.c
++++ b/arch/x86/events/intel/uncore_snbep.c
+@@ -3837,14 +3837,14 @@ static void pmu_free_topology(struct intel_uncore_type *type)
+ 	}
+ }
+ 
+-static int skx_iio_get_topology(struct intel_uncore_type *type)
++static int skx_pmu_get_topology(struct intel_uncore_type *type,
++				 int (*topology_cb)(struct intel_uncore_type*, int, int, u64))
+ {
+ 	int die, ret = -EPERM;
+-	u64 configuration;
+-	int idx;
++	u64 cpu_bus_msr;
+ 
+ 	for (die = 0; die < uncore_max_dies(); die++) {
+-		ret = skx_msr_cpu_bus_read(die_to_cpu(die), &configuration);
++		ret = skx_msr_cpu_bus_read(die_to_cpu(die), &cpu_bus_msr);
+ 		if (ret)
+ 			break;
+ 
+@@ -3852,17 +3852,35 @@ static int skx_iio_get_topology(struct intel_uncore_type *type)
+ 		if (ret < 0)
+ 			break;
+ 
+-		for (idx = 0; idx < type->num_boxes; idx++) {
+-			type->topology[die][idx].pmu_idx = idx;
+-			type->topology[die][idx].iio->segment = ret;
+-			type->topology[die][idx].iio->pci_bus_no =
+-				(configuration >> (idx * BUS_NUM_STRIDE)) & 0xff;
+-		}
++		ret = topology_cb(type, ret, die, cpu_bus_msr);
++		if (ret)
++			break;
+ 	}
+ 
+ 	return ret;
+ }
+ 
++static int skx_iio_topology_cb(struct intel_uncore_type *type, int segment,
++				int die, u64 cpu_bus_msr)
++{
++	int idx;
++	struct intel_uncore_topology *t;
++
++	for (idx = 0; idx < type->num_boxes; idx++) {
++		t = &type->topology[die][idx];
++		t->pmu_idx = idx;
++		t->iio->segment = segment;
++		t->iio->pci_bus_no = (cpu_bus_msr >> (idx * BUS_NUM_STRIDE)) & 0xff;
++	}
++
++	return 0;
++}
++
++static int skx_iio_get_topology(struct intel_uncore_type *type)
++{
++	return skx_pmu_get_topology(type, skx_iio_topology_cb);
++}
++
+ static struct attribute_group skx_iio_mapping_group = {
+ 	.is_visible	= skx_iio_mapping_visible,
+ };
