@@ -2,100 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E3D63748D
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:55:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2017E637483
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:54:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbiKXIzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 03:55:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55986 "EHLO
+        id S229871AbiKXIyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 03:54:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiKXIy6 (ORCPT
+        with ESMTP id S229642AbiKXIya (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 03:54:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709919BA30
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:54:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669280039;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uiwYY0ArmcwNEs3ZnhJIxu5/iohIROkA/VLDy8Y5Zqg=;
-        b=Has6Qu/i+lKk3KKB/AMhFF1dZvlO3Uj6A8nWAVrfSbOahIgNnDbl+UsSUbp00dup6iJTP/
-        x+LTV1vaq24FBrl5+frLuEM73xYaS7J1XwHHcX1TImTMIi4mmVeqx/ZsPkN7LWkMGWbswd
-        1aivPkgm76libjk0LoJJjL0yytbrpdA=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-631-qsOcMBMvN3GaejeDQuudXw-1; Thu, 24 Nov 2022 03:53:58 -0500
-X-MC-Unique: qsOcMBMvN3GaejeDQuudXw-1
-Received: by mail-wm1-f69.google.com with SMTP id v188-20020a1cacc5000000b003cf76c4ae66so2306853wme.7
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:53:58 -0800 (PST)
+        Thu, 24 Nov 2022 03:54:30 -0500
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479EE8756F
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:54:29 -0800 (PST)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-3938dc90ab0so9581947b3.4
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:54:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kYkoA/GomV2J1R+NfO0IwXHjKjxsC0Vb0ETBF00zbXI=;
+        b=ulH5JJlEBiyEJOyyzmDJEuovb470lZAyDOB5qNe/r+VBdnVulYNBQnNUSszcmHgA3r
+         bkj8uWQEGyLTC9K961wA9Hd37J/TC5kQb7emkDeK9EoFNll5qYS4vk6heKtzV7LtZ5Ig
+         yEM+B8eR3YKZQb7tMff3yRiIpfoqPEMZU1M0rBZ1BBG4FpNGBYtOtylj9MBmV5uQb/jY
+         9OwNpq12jh2E0hIEl+Pn5X2NNRtgABUL0VAmJBQrPdTXaJaPvRJetpCOVks/qeuMyj4a
+         G22/QjplaRtlbys6YMYSk5ljss+0SOoE6UMMY/RSLZfaElD1FEaXtS0xkEtbkRn18RxP
+         IGDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uiwYY0ArmcwNEs3ZnhJIxu5/iohIROkA/VLDy8Y5Zqg=;
-        b=N+HT2a235S2zOi9NnUniwMbNd5A8n6tBrcJcnfbYuvJkZIxAde/WGvrM7Tebjdh5uK
-         eYHHJgIe+5+PfTB+h2XitAH5ABy+tvn2CwiX7FiDa1bJ+wrqv8SfK5eGTQAFtQoRyTT6
-         cRqd3Wq6/G+Qc6WyDo2ElM6u+sSQhr6J4Pj4ufgYTRfEzAe/4DUFBTq7Tw0f+5+T2Uf+
-         uHrHH/kS8M5+4/69qgKaTbYJlJw5E2rH+0J0YYpBbuia/jP/wLvVvrAg0Jd7f/7PEjXr
-         OobbjlHxFa42ohocRKZoENcDKkRvcB4YeRej1/DZ54Z3wijbDQ7CwWQvYFpLOr0B7e9a
-         U4UA==
-X-Gm-Message-State: ANoB5pnPZzeJqwqQQdXMbmRoiSR+SAQnSudmSeYLkLwmv901SCoBiiqy
-        Zo8R80OAe5g03p77cqnkF53XM2l0cxoFF20wNqgRit35CS89OzUxICaGCl+uJ9dMVIGiWX7esFu
-        evyfsRAZY0xO8HTfzjUm5rN9G
-X-Received: by 2002:adf:eb8a:0:b0:22e:31b2:ecb9 with SMTP id t10-20020adfeb8a000000b0022e31b2ecb9mr19913568wrn.693.1669280037227;
-        Thu, 24 Nov 2022 00:53:57 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5Q3UK1gtwV9Cl6cT5+gn6Q35c0U9XtUClfYgVPHs0+t78TenmzqkMgjcKnXNrJF1yXjR6ieg==
-X-Received: by 2002:adf:eb8a:0:b0:22e:31b2:ecb9 with SMTP id t10-20020adfeb8a000000b0022e31b2ecb9mr19913554wrn.693.1669280036964;
-        Thu, 24 Nov 2022 00:53:56 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-120-203.dyn.eolo.it. [146.241.120.203])
-        by smtp.gmail.com with ESMTPSA id n6-20020a1ca406000000b003d005aab31asm4802235wme.40.2022.11.24.00.53.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 00:53:56 -0800 (PST)
-Message-ID: <cf297dd17750f988128df88c824f956f2a4bb719.camel@redhat.com>
-Subject: Re: [PATCH net] net: hsr: Fix potential use-after-free
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     YueHaibing <yuehaibing@huawei.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, arvid.brodin@alten.se
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 24 Nov 2022 09:53:55 +0100
-In-Reply-To: <20221123063057.25952-1-yuehaibing@huawei.com>
-References: <20221123063057.25952-1-yuehaibing@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kYkoA/GomV2J1R+NfO0IwXHjKjxsC0Vb0ETBF00zbXI=;
+        b=8OWpvtt0F4UhNHwE91VURnkhA99vR5BKkYEh//GZ1/tPGjkNH5ywWX1GaoaIpsO7G1
+         o7yTorhmlZgLDtzpQG85FjtYB8rCkf090O/sIcYZcXKiL38yK8VvbL2mAObKQ0fApCMY
+         socfFsLwjP+HKfu4GCLSVrpN1TayyVkkGrrHuxankydEcgKRdbsv7eKHNFIF0/dMI5a+
+         vTX+jlavsR17zHNDYfmu7LkpciF8sA4Uf3DL1WqRKaQphnLaJm5G4JSdOw/yVlzQnVUA
+         ZoOLVgKRc3WEVDyNITmUB/LLKv+8BN1nCQrUIluDt/HKr63PgxO6Q5i+04I8Ci9dmlTc
+         Qv4Q==
+X-Gm-Message-State: ANoB5plYXHPjfoQzUUDfj0KkOuSsjPkaMQSJkIOCFroa/CaFt2iT+5Cp
+        POKnx//ARd+E/VwBkxNBwEvbkxgU7EmdHVZJHglzOg==
+X-Google-Smtp-Source: AA0mqf7PUjfLOTXJ/tlxRold+GNACKzGQPvC5qgYTBuKsbjof9rmRRzeEIro6Uscs431x2P0gTzIHHNWktmr0hWQxqU=
+X-Received: by 2002:a81:5945:0:b0:369:5494:75c0 with SMTP id
+ n66-20020a815945000000b00369549475c0mr30631265ywb.448.1669280068349; Thu, 24
+ Nov 2022 00:54:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221123084602.707860461@linuxfoundation.org>
+In-Reply-To: <20221123084602.707860461@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 24 Nov 2022 14:24:16 +0530
+Message-ID: <CA+G9fYtnHTdCS=RWNULkzENX=mtRrJzc6e++PfeprmFqrQBr9g@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/181] 5.15.80-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, 23 Nov 2022 at 14:59, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.80 release.
+> There are 181 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 25 Nov 2022 08:45:20 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.80-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-On Wed, 2022-11-23 at 14:30 +0800, YueHaibing wrote:
-> The skb is delivered to netif_rx() which may free it, after calling this,
-> dereferencing skb may trigger use-after-free.
-> 
-> Fixes: f266a683a480 ("net/hsr: Better frame dispatch")
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-The code looks good, but the above is not the commit introducing the
-issue, it just move the netif_rx() and later skb access from somewhere
-else.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Please go deeper in git history and find the change that originated the
-issue.
+NOTE:
+As other reported arm: allmodconfig build failed due to
 
-Thanks,
+rtc: cmos: fix build on non-ACPI platforms
+[ Upstream commit db4e955ae333567dea02822624106c0b96a2f84f ]
 
-Paolo
+Build error:
+drivers/rtc/rtc-cmos.c:1299:13: error: 'rtc_wake_setup' defined but
+not used [-Werror=unused-function]
+ 1299 | static void rtc_wake_setup(struct device *dev)
+      |             ^~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
 
+## Build
+* kernel: 5.15.80-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: 1ac88d934860fc481995accb27454e4fe906d4f6
+* git describe: v5.15.79-182-g1ac88d934860
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.79-182-g1ac88d934860
+
+## Test Regressions (compared to v5.15.79)
+
+## Metric Regressions (compared to v5.15.79)
+
+## Test Fixes (compared to v5.15.79)
+
+## Metric Fixes (compared to v5.15.79)
+
+## Test result summary
+total: 145866, pass: 126226, fail: 3335, skip: 15985, xfail: 320
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 147 total, 146 passed, 1 failed
+* arm64: 45 total, 43 passed, 2 failed
+* i386: 35 total, 33 passed, 2 failed
+* mips: 27 total, 27 passed, 0 failed
+* parisc: 6 total, 6 passed, 0 failed
+* powerpc: 30 total, 30 passed, 0 failed
+* riscv: 10 total, 10 passed, 0 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 12 total, 12 passed, 0 failed
+* sparc: 6 total, 6 passed, 0 failed
+* x86_64: 38 total, 36 passed, 2 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-kvm
+* kselftest-lib
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-openat2
+* kselftest-seccomp
+* kselftest-timens
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simpl
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
