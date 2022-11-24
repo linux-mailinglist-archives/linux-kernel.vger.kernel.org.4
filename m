@@ -2,55 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E316A637433
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:40:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CEBC63743F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbiKXIkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 03:40:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39240 "EHLO
+        id S230009AbiKXIm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 03:42:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbiKXIkV (ORCPT
+        with ESMTP id S229599AbiKXImv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 03:40:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96ACA729AC;
-        Thu, 24 Nov 2022 00:40:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 39330B8271A;
-        Thu, 24 Nov 2022 08:40:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B42E1C433D6;
-        Thu, 24 Nov 2022 08:40:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669279216;
-        bh=eCa8ATWCbYBvLvbnjFk+znnfL+9RvDhTXanoNMS+5Sk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=UeruFnrsEcUUNzDwvOAVawvGPxbPT/m6GU9bT+/PiiysiM+iRywmd5dPgWkkpIOtj
-         NPAw+7t16rXJ4k+GEtCJfb3Zrnc0qBRu9+iipb7vJHVr+dQgkwPaYbt0JtvQ0E7oqu
-         c2Ua1yva0K32PH0AElE0MkpkdbdQo/LP5b4IUFY2L3VakalkAF+ME0Tt3V5ljKqjbl
-         J/xCYEiqF6rFrjs3SFulFo95WI1jvQj6iVpF0manU0igFaSUdw9QvNrClyO11Oixtp
-         8iR2Qm/v1sr0anODLphMH/NfPCrzAwUUg5MdFLusJ9dJlvPdQ7e/VQR6lbU9edXpt0
-         8y+XrEiZM670A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 92589E29F53;
-        Thu, 24 Nov 2022 08:40:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 24 Nov 2022 03:42:51 -0500
+Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.133.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CFA21055B6
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:41:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxlinear.com;
+        s=selector; t=1669279314;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=eibPOUkJAoL2LMOgdFxDmKoJ3GU1p5kR2R+KXQJhNYE=;
+        b=hc3iQPd+2PkvpE98h1TmMKQ0iS8vFDj5M/46qdDmvYB/zotnWGxXQWOKFYouZYm5et75J1
+        FgSxKOLsdVDklicb+wLPFT7/uqPclpWybX8Ug8ViqpW6giGOlHFbxiCZ61B2hDoLgz2DEG
+        /evqU5+OLJ4Rbj/89zaUrl3Bs8xmY8TpABRRqVV36RZ2Iy69GkbdMbuYbVHxuK4bjD2VEa
+        ef0sB2jYIf5MQNzlxDj+3AwvFYCa4G37Cq7U5YKACu4Khh04FoimotZEe3YyBtuuyMmyRm
+        L/iiIMTnnEL2L8k++SJs5WulL6x/ezKrADlQy7RYomM4gPlkofpD6XevFlZzEA==
+Received: from mail.maxlinear.com (174-47-1-84.static.ctl.one [174.47.1.84])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ us-mta-624-YSb2AeOxPVyLJWoaJZTHyg-1; Thu, 24 Nov 2022 03:41:52 -0500
+X-MC-Unique: YSb2AeOxPVyLJWoaJZTHyg-1
+Received: from sgsxdev001.isng.phoenix.local (10.226.81.111) by
+ mail.maxlinear.com (10.23.38.119) with Microsoft SMTP Server id 15.1.2375.24;
+ Thu, 24 Nov 2022 00:41:46 -0800
+From:   Rahul Tanwar <rtanwar@maxlinear.com>
+To:     Rahul Tanwar <rtanwar@maxlinear.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Borislav Petkov" <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, <linux-lgm-soc@maxlinear.com>
+Subject: [PATCH v5 0/4] x86/of: Add support for interrupt mode config for x86 OF systems
+Date:   Thu, 24 Nov 2022 16:41:39 +0800
+Message-ID: <20221124084143.21841-1-rtanwar@maxlinear.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] virtio_net: Fix probe failed when modprobe virtio_net
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166927921658.31457.16681019043491426856.git-patchwork-notify@kernel.org>
-Date:   Thu, 24 Nov 2022 08:40:16 +0000
-References: <20221122150046.3910638-1-lizetao1@huawei.com>
-In-Reply-To: <20221122150046.3910638-1-lizetao1@huawei.com>
-To:     Li Zetao <lizetao1@huawei.com>
-Cc:     davem@davemloft.net, edumazet@google.com, jasowang@redhat.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org, mst@redhat.com,
-        netdev@vger.kernel.org, pabeni@redhat.com, rusty@rustcorp.com.au,
-        cornelia.huck@de.ibm.com, virtualization@lists.linux-foundation.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: maxlinear.com
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,45 +64,200 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi All,
 
-This patch was applied to netdev/net.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
+This patch series mainly adds a boot time interrupt delivery mode
+configuration option for OF based x86 platforms. Presently,
+boot time interrupt delivery mode is hardcoded to legacy PIC mode
+with no option to configure it to virtual wire mode. This patch
+series aims to extend it by introducing a new optional boolean
+property for lapic devicetree node which can be used to configure
+it to virtual wire mode where applicable. Please find below detailed
+rationale behind it.
 
-On Tue, 22 Nov 2022 23:00:46 +0800 you wrote:
-> When doing the following test steps, an error was found:
->   step 1: modprobe virtio_net succeeded
->     # modprobe virtio_net        <-- OK
-> 
->   step 2: fault injection in register_netdevice()
->     # modprobe -r virtio_net     <-- OK
->     # ...
->       FAULT_INJECTION: forcing a failure.
->       name failslab, interval 1, probability 0, space 0, times 0
->       CPU: 0 PID: 3521 Comm: modprobe
->       Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
->       Call Trace:
->        <TASK>
->        ...
->        should_failslab+0xa/0x20
->        ...
->        dev_set_name+0xc0/0x100
->        netdev_register_kobject+0xc2/0x340
->        register_netdevice+0xbb9/0x1320
->        virtnet_probe+0x1d72/0x2658 [virtio_net]
->        ...
->        </TASK>
->       virtio_net: probe of virtio0 failed with error -22
-> 
-> [...]
+Rationale:
 
-Here is the summary with links:
-  - [v2] virtio_net: Fix probe failed when modprobe virtio_net
-    https://git.kernel.org/netdev/net/c/b06865659463
+References [1], [2] & [6]
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+For SMP systems, Intel defines three (logically four) interrupt modes
+during boot/init time while BIOS/bootloader boots & switches to linux
+kernel.
 
+  1. PIC mode - Legacy 8259 PIC interrupt controller.
+  2. Virtual wire mode via Local APIC - uses local APIC as virtual wire
+  3. Virtual wire mode via I/O APIC - uses I/O APIC as virtual wire
+  4. Symmetric I/O mode - final one used by linux for SMP systems.=20
+
+BIOS/bootloaders are supposed to boot in either #1 or #2 or #3 and then
+switch to #4 in linux for SMP systems.
+
+For our platform, we use #2.
+
+Detection of which interrupt mode the system is booting in is made by using
+below global variable in apic.c
+
+int pic_mode __ro_after_init;=20
+
+Here pic_mode =3D 1 means #1 (PIC mode) above.
+And pic_mode =3D 0 means #2 or #3 (basically virtual wire mode via apic).
+
+And apic.c while doing setup_local_APIC() uses below code [3]:
+
+        value =3D apic_read(APIC_LVT0) & APIC_LVT_MASKED;
+        if (!cpu && (pic_mode || !value || skip_ioapic_setup)) {
+                value =3D APIC_DM_EXTINT;
+                apic_printk(APIC_VERBOSE, "enabled ExtINT on CPU#%d\n", cpu=
+);
+        } else {
+                value =3D APIC_DM_EXTINT | APIC_LVT_MASKED;
+                apic_printk(APIC_VERBOSE, "masked ExtINT on CPU#%d\n", cpu)=
+;
+        }
+        apic_write(APIC_LVT0, value);
+
+What i understand from above is that if at this point of time, as long as
+it is cpu0 & pic_mode=3D1, it will set delivery mode to ExtINT (causes the
+processor to respond to the interrupt as if the interrupt originated in an
+externally connected (8259A-compatible) interrupt controller) and enables/
+unmask the interrupts. This causes kernel boot crash for platforms which
+does not support 8259 compatible external PIC.
+
+pic_mode is presently set/populated/initialized at only two places:
+ 1. In  mpparse.c [4]
+ 2. In devicetree.c [7]
+
+For #1 MPPARSE Kconfig definition is as below:
+
+=09config X86_MPPARSE
+        =09bool "Enable MPS table" if ACPI
+        =09default y
+        =09depends on X86_LOCAL_APIC
+        =09help
+          =09For old smp systems that do not have proper acpi support. Newe=
+r systems
+          =09(esp with 64bit cpus) with acpi support, MADT and DSDT will ov=
+erride it
+
+As seen above, if ACPI is not enabled, then mpparse by default is always
+enabled. Presently, there is no way to disable MPPARSE (if ACPI is not
+enabled). This to me appears to be a bug which needs fixing. As per
+theory, MPPARSE was to support MPS spec [1] as a temporary solution to
+support SMP systems until a final ACPI standard was added. But now if ACPI
+is not enabled, it will rely on MPPARSE driver to read MP floating pointer
+structure's IMCRP Bit 7 of MP feature info byte 2 [5] to figure out if it
+supports PIC mode or virtual wire mode and initialize pic_mode variable
+accordingly. If ACPI is enabled, the ACPI code overrides it by using the
+MADT table spec'ed in ACPI spec [2].=20
+
+For #2 devicetree.c presently hardcodes pic_mode =3D 1 (PIC Mode). There is
+no support to configure virtual wire mode via devicetree path for OF based
+systems.
+
+Now we have a platform which is OF based & does not use legacy 8259 PIC
+interrupt controller. Non ACPI compliant as well as non MPPARSE compliant.
+
+For such platforms, it appears to me that hardcoding pic_mode =3D 1 (PIC Mo=
+de)
+and giving no other choice to choose virtual wire mode is a lacking feature=
+.
+
+Just like mpparse relies on IMCRP bit 7 of MP feature info byte2 [5] to
+select pic_mode to PIC mode or virtual wire mode. arch/x86/kernel/devicetre=
+e.c
+should also provide some similar configurability to choose interrupt
+delivery mode & not hardcode it to PIC mode.
+
+This patch is to add above mentioned interrupt mode configurability in x86/=
+of
+controlled via a new optional bool property.
+
+Please let me know if you find any mistake in above understanding or if you
+have a alternative better suggestion to solve it or if you find anything od=
+d
+here in our platform/system. TIA.
+
+The patch is baselined on below git tree (linux-v6.1.0-rc6):
+git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+
+[1] https://pdos.csail.mit.edu/6.828/2008/readings/ia32/MPspec.pdf
+[2] https://uefi.org/sites/default/files/resources/ACPI_6_3_final_Jan30.pdf
+[3] https://elixir.bootlin.com/linux/v6.1-rc5/source/arch/x86/kernel/apic/a=
+pic.c#L1691
+[4] https://elixir.bootlin.com/linux/v6.1-rc5/source/arch/x86/kernel/mppars=
+e.c#L517
+[5] https://www.manualslib.com/manual/77733/Intel-Multiprocessor.html?page=
+=3D40#manual
+[6] https://www.intel.com/content/www/us/en/developer/articles/technical/in=
+tel-sdm.html
+[7] https://elixir.bootlin.com/linux/v6.1-rc5/source/arch/x86/kernel/device=
+tree.c#L170
+
+v5:
+- Fix make dt_binding_check error.
+- Address review concerns from Rob Herring
+  * Add interrupt-controller & #interrupt-cells properties in lapic binding=
+ schema.
+  * Fix some indentation issues.
+- Add Reviewed-by tag from Andy for patch 4/4.
+
+v4:
+- Address review concerns from Andy Shevchenko
+  * Update maintainers in binding files.
+  * Place URL in YAML schema properly as reference.
+  * Remove some unnecessary comments from YAML description.
+  * Remove fixes tag & not treat it as a bug. Treat it as new feature addit=
+ion instead.
+  * Use proper prefixes for bindings file (dt-bindings: x86: ioapic:)
+  * Add Reviewed-by tag from Andy for patch 3/4.
+
+v3:
+- Address review concerns from Andy Shevchenko
+  * Reshuffle patch series changes to make it more logical.
+  * Patch 1 just converts existing intel,ce4100-ioapic.txt into
+    YAML schema and separates out ioapic & lapic.
+  * Patch 2 adds new optional property for lapic.
+  * Patch 3 replaces older printk(KERN_LVL) to newer pr_lvl()
+  * Patch 4 adds code changes in devicetree.c to support newly
+    added property.
+- Fix 'make DT_CHECKER_FLAGS=3D-m dt_binding_check' errors reported
+  by Rob Herring's bot.
+
+v2:
+- Address review concern from Andy - rename property name to make
+  it a bit more positive & self explanatory.
+- Found that the bindings document for these HW's (APIC) are a bit
+  off/obsolete and still in text format. Created new YAML schemas
+  one for each - lapic & ioapic. Updated these schemas with latest
+  info and add in new optional property details in the updated
+  schema for lapic. Delete/let go of the text binding doc.
+- CC devicetree@vger.kernel.org as these changes appear to be
+  mainly targeted for devicetree maintainers review & approval.
+- Increase CCed list to include all possible people who touched
+  and were involved this part of code/feature addition.
+
+v1:
+- Initial draft
+
+
+Rahul Tanwar (4):
+  dt-bindings: x86: apic: Convert Intel's APIC bindings to YAML schema
+  dt-bindings: x86: apic: Introduce new optional bool property for lapic
+  x86/of: Replace printk(KERN_LVL) with pr_lvl()
+  x86/of: Add support for boot time interrupt delivery mode
+    configuration
+
+ .../intel,ce4100-ioapic.txt                   | 26 -------
+ .../intel,ce4100-ioapic.yaml                  | 60 ++++++++++++++++
+ .../intel,ce4100-lapic.yaml                   | 71 +++++++++++++++++++
+ arch/x86/kernel/devicetree.c                  | 13 +++-
+ 4 files changed, 141 insertions(+), 29 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/=
+intel,ce4100-ioapic.txt
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/=
+intel,ce4100-ioapic.yaml
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/=
+intel,ce4100-lapic.yaml
+
+--=20
+2.17.1
 
