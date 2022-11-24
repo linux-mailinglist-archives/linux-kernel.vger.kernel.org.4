@@ -2,115 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 498736371F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 06:52:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A8456371F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 06:53:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbiKXFwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 00:52:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59526 "EHLO
+        id S229595AbiKXFxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 00:53:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiKXFwQ (ORCPT
+        with ESMTP id S229493AbiKXFxO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 00:52:16 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C26A627EA;
-        Wed, 23 Nov 2022 21:52:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669269135; x=1700805135;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=6G7nnH68EGLhd5S/EKcOEOe5slAPl+r6rFU7g2dJ4Z8=;
-  b=Npo54Z8yRkPyCdpPwpwFxFJVtkQIIFMp33BhLHwbrHOZrzvW0lcQnHjj
-   u2GpjVdBjFJUEu07WGee9+xEG8fo0XgXXT2aVzzXrzLj1FQ6/kj0h7Fkw
-   YhhFYfKD91w3l+DZHutE6ZE+k/yeVsumwI0DmnG6MRJlB3hHBKgPFERcy
-   43DSLEL3YnAe+/Yr1PiCU62mDTNlaOdUp2KHz42ppfDrGvYGy4DeV1gFA
-   5kWFKiuy6CociveVI2ny/4YdYHrfB2eXpAeNdKM84LdRnid3MZAga1jI5
-   idasOP0yZseugaz7H0lWqc7B4VwKdvkS2eZITvkSgwCIS4Pe4waodpd7d
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="311858645"
-X-IronPort-AV: E=Sophos;i="5.96,189,1665471600"; 
-   d="scan'208";a="311858645"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 21:52:15 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="644367190"
-X-IronPort-AV: E=Sophos;i="5.96,189,1665471600"; 
-   d="scan'208";a="644367190"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 21:52:10 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Mina Almasry <almasrymina@google.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>, weixugc@google.com,
-        shakeelb@google.com, gthelen@google.com, fvdl@google.com,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [RFC PATCH V1] mm: Disable demotion from proactive reclaim
-References: <20221122203850.2765015-1-almasrymina@google.com>
-        <Y35fw2JSAeAddONg@cmpxchg.org>
-        <CAHS8izN+xqM67XLT4y5qyYnGQMUWRQCJrdvf2gjTHd8nZ_=0sw@mail.gmail.com>
-        <Y36XchdgTCsMP4jT@cmpxchg.org>
-Date:   Thu, 24 Nov 2022 13:51:20 +0800
-In-Reply-To: <Y36XchdgTCsMP4jT@cmpxchg.org> (Johannes Weiner's message of
-        "Wed, 23 Nov 2022 16:58:10 -0500")
-Message-ID: <874juonbmv.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 24 Nov 2022 00:53:14 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 124B31D32B;
+        Wed, 23 Nov 2022 21:53:13 -0800 (PST)
+Received: from jinankjain-dranzer.zrrkmle5drku1h0apvxbr2u2ee.ix.internal.cloudapp.net (unknown [20.188.121.5])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 8071020B6C40;
+        Wed, 23 Nov 2022 21:53:08 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8071020B6C40
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1669269192;
+        bh=3cySG9haYsoJ6p0W88BJ02lNEMjUVZWpQgClbO06Ftg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=GMhfprFouulREloL7gUXOLxvsC9Xyt74yYtB7Mk4ew9EVUqZdPpXOkTtnBwVD0H4h
+         jqJbbpK3kQK/FlurimPvMGB4UUo2qnaZu8ljQWBIYvmmZL0eTr4tN3qtoONm1utzBD
+         qejNrSWzQCtbJN/vZhc3/GSktHelpPHSHSl6t1KY=
+From:   Jinank Jain <jinankjain@linux.microsoft.com>
+To:     jinankjain@microsoft.com
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, arnd@arndb.de, peterz@infradead.org,
+        jpoimboe@kernel.org, jinankjain@linux.microsoft.com,
+        seanjc@google.com, kirill.shutemov@linux.intel.com,
+        ak@linux.intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, anrayabh@linux.microsoft.com,
+        mikelley@microsoft.com
+Subject: [PATCH v5 0/5] Add support running nested Microsoft Hypervisor
+Date:   Thu, 24 Nov 2022 05:53:01 +0000
+Message-Id: <cover.1669007822.git.jinankjain@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1667394408.git.jinankjain@microsoft.com>
+References: <cover.1667394408.git.jinankjain@microsoft.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Johannes,
+This patch series plans to add support for running nested Microsoft
+Hypervisor. In case of nested Microsoft Hypervisor there are few
+privileged hypercalls which need to go L0 Hypervisor instead of L1
+Hypervisor. This patches series basically identifies such hypercalls and
+replace them with nested hypercalls.
 
-Johannes Weiner <hannes@cmpxchg.org> writes:
-[...]
->
-> The fallback to reclaim actually strikes me as wrong.
->
-> Think of reclaim as 'demoting' the pages to the storage tier. If we
-> have a RAM -> CXL -> storage hierarchy, we should demote from RAM to
-> CXL and from CXL to storage. If we reclaim a page from RAM, it means
-> we 'demote' it directly from RAM to storage, bypassing potentially a
-> huge amount of pages colder than it in CXL. That doesn't seem right.
->
-> If demotion fails, IMO it shouldn't satisfy the reclaim request by
-> breaking the layering. Rather it should deflect that pressure to the
-> lower layers to make room. This makes sure we maintain an aging
-> pipeline that honors the memory tier hierarchy.
+Jinank Jain (5):
+  x86/hyperv: Add support for detecting nested hypervisor
+  Drivers: hv: Setup synic registers in case of nested root partition
+  x86/hyperv: Add an interface to do nested hypercalls
+  Drivers: hv: Enable vmbus driver for nested root partition
+  x86/hyperv: Change interrupt vector for nested root partition
 
-Yes.  I think that we should avoid to fall back to reclaim as much as
-possible too.  Now, when we allocate memory for demotion
-(alloc_demote_page()), __GFP_KSWAPD_RECLAIM is used.  So, we will trigger
-kswapd reclaim on lower tier node to free some memory to avoid fall back
-to reclaim on current (higher tier) node.  This may be not good enough,
-for example, the following patch from Hasan may help via waking up
-kswapd earlier.
+[v4]
+- Fix ARM64 compilation
 
-https://lore.kernel.org/linux-mm/b45b9bf7cd3e21bca61d82dcd1eb692cd32c122c.1637778851.git.hasanalmaruf@fb.com/
+[v5]
+- Fix comments from Michael Kelly
 
-Do you know what is the next step plan for this patch?
+ arch/arm64/hyperv/mshyperv.c       |  6 +++
+ arch/x86/include/asm/hyperv-tlfs.h | 17 ++++++-
+ arch/x86/include/asm/idtentry.h    |  2 +
+ arch/x86/include/asm/irq_vectors.h |  6 +++
+ arch/x86/include/asm/mshyperv.h    | 68 ++++++++++++++++------------
+ arch/x86/kernel/cpu/mshyperv.c     | 71 ++++++++++++++++++++++++++++++
+ arch/x86/kernel/idt.c              |  9 ++++
+ drivers/hv/hv.c                    | 18 +++++---
+ drivers/hv/hv_common.c             |  7 ++-
+ drivers/hv/vmbus_drv.c             |  5 ++-
+ include/asm-generic/hyperv-tlfs.h  |  1 +
+ include/asm-generic/mshyperv.h     |  1 +
+ 12 files changed, 173 insertions(+), 38 deletions(-)
 
-Should we do even more?
+-- 
+2.25.1
 
-From another point of view, I still think that we can use falling back
-to reclaim as the last resort to avoid OOM in some special situations,
-for example, most pages in the lowest tier node are mlock() or too hot
-to be reclaimed.
-
-> So I'm hesitant to design cgroup controls around the current behavior.
->
-
-Best Regards,
-Huang, Ying
