@@ -2,343 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD8C7637905
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:39:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBA716378FE
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:39:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbiKXMjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 07:39:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51230 "EHLO
+        id S229728AbiKXMjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 07:39:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiKXMjM (ORCPT
+        with ESMTP id S229580AbiKXMjG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 07:39:12 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB1182BF9;
-        Thu, 24 Nov 2022 04:39:08 -0800 (PST)
-X-UUID: fb1b4545e530464e87fcf857a668c98c-20221124
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=NbPBO3XofCZnvE8MJ00/ODH8w117f7m9bV8bhNWeOD8=;
-        b=nO8bDJ/K1qiiO94ZnMsIAvuD59W2h214OaInlIMVFzIjzJBPZdCOH5j/TBBwORcuPGmFA/dUsCUv/lf6ql+y42AZkFhCQ+OdnjeKKWTa8VwxhLlpv0F0seHoFmjdQvAKf3eeghbLs4RIGSwoXO8W0GkiBx09o7U/4vlzCvwfyeo=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.14,REQID:af5d8c8b-6c95-4f39-bd44-100dfa651b7d,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:dcaaed0,CLOUDID:9d8c25dc-6ad4-42ff-91f3-18e0272db660,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:1,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: fb1b4545e530464e87fcf857a668c98c-20221124
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
-        (envelope-from <moudy.ho@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 22483342; Thu, 24 Nov 2022 20:39:02 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 24 Nov 2022 20:39:02 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Thu, 24 Nov 2022 20:39:02 +0800
-From:   Moudy Ho <moudy.ho@mediatek.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        <linux-media@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Moudy Ho <moudy.ho@mediatek.com>
-Subject: [PATCH v4 7/9] media: platform: mtk-mdp3: extend mdp_color format for compressed mode
-Date:   Thu, 24 Nov 2022 20:38:57 +0800
-Message-ID: <20221124123859.24395-8-moudy.ho@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20221124123859.24395-1-moudy.ho@mediatek.com>
-References: <20221124123859.24395-1-moudy.ho@mediatek.com>
+        Thu, 24 Nov 2022 07:39:06 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2071.outbound.protection.outlook.com [40.107.93.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1923429A2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:39:05 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Sweyf1mLHid4fyQBEk4uJuzqpW/gyCFWiAd+HRqAXPdJyTCLN+5+8DipJN85FE8GS1h7Wl1DE8KuYdUJ4RFg5HQNCTRyx8+JqZSeHfEH9bb+Pm3lL1GBlIrGz3OepLs9G+iMvcbWCgnLt68NvQKtTZs+2ldvGj0Q1//bKhcLbzCjdBINMJgasmvy/lbfxZx6734at29oLVJ/kqMvUT8QAbfF1pSRc/xfbLR3PcMeMUgnQeU45/zv0U1MYJEwmEPC7mz4MArgYevE29JErA2SUamFjGlLh1jxN+Dnqt31OLN0GJ9nojhlT2GoUeoojfOD1i2f4qgoIaiKmWD6FoaRdQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GrJ3bZLzEVd+DEpdVrkeIXcpUwpBnVbq6t8o4scaA7k=;
+ b=FDFJL8hCsptrE7bJfaKH4a+GGo2T+d6igU9CJbxA5m+UAez4aGIn0DB4UOFhl9LJoW1pkLzhnTjme23lMcMA/HC7xKEUzD/3neMSafGWkskwiOL/kAGXAXPXceIGjQx0Cm2C65LrexIOP7fN1oGWKAOWwiNCAo3DbjMd+fv1eE5Xix+8dS1bQmhph9y5iHJQAgpZJITdmJa3IPSNeh5ZwbjahTxzFte5uypNIGXPMX3J2p+uav+EOiGVcQI6N5Gf82DuZP8wMsqeymBXwFaLDoIAx8unnOXXa4U01hxQ5ll5plQmdH1dA6Lf4J5RE05H1kLvFeMZKWIHs3uzs9UzHA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GrJ3bZLzEVd+DEpdVrkeIXcpUwpBnVbq6t8o4scaA7k=;
+ b=cb/jX/ejjhaqtKgHB6kPGLF7atmCYTz88tUMNzdtz8jNdZKiAOLUmNplPS8PtJtWJnlq0POgMdqFwF+J7M0dAnstbpxec4a6qOaj4SZw06pwCTWyZfbKd4ayE0TXjgh7vSCGtSEhXSQwTNp9g1Z4ZW7tMKYL02P0Y6Jj8zPdlEN/aBGgDUKE44isthFWxnSjngnUNR74Fdzj1afqpxCtdiYBy76OMGtOm5lyN8LK5qRvYt4i3M9j8WDRt/cAlUIKCmaPx6SgE9IaQ6F2ez7ia7S4tyd2+di3qZAvr8T38yEzje49z38DRR9RYXiwd4Agz4HMMMstQOrLqXgnmPp/lQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) by
+ MN2PR12MB4206.namprd12.prod.outlook.com (2603:10b6:208:1d5::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19; Thu, 24 Nov
+ 2022 12:39:03 +0000
+Received: from DS7PR12MB5744.namprd12.prod.outlook.com
+ ([fe80::738e:939b:4b58:9857]) by DS7PR12MB5744.namprd12.prod.outlook.com
+ ([fe80::738e:939b:4b58:9857%4]) with mapi id 15.20.5834.015; Thu, 24 Nov 2022
+ 12:39:02 +0000
+From:   Zi Yan <ziy@nvidia.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Gavin Shan <gshan@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        william.kucharski@oracle.com, kirill.shutemov@linux.intel.com,
+        zhenyzha@redhat.com, apopple@nvidia.com, hughd@google.com,
+        willy@infradead.org, shan.gavin@gmail.com,
+        Huang Ying <ying.huang@intel.com>
+Subject: Re: [PATCH v2] mm: migrate: Fix THP's mapcount on isolation
+Date:   Thu, 24 Nov 2022 07:38:58 -0500
+X-Mailer: MailMate (1.14r5918)
+Message-ID: <D3D4DD02-F16F-4E9E-B1F0-65491F5B7207@nvidia.com>
+In-Reply-To: <31bda0ab-a185-340d-b96b-b1cfed7c3910@redhat.com>
+References: <20221124095523.31061-1-gshan@redhat.com>
+ <3c584ce6-dc8c-e0e4-c78f-b59dfff1fc13@redhat.com>
+ <22407f18-0406-6ede-ef1e-592f03d3699e@redhat.com>
+ <31bda0ab-a185-340d-b96b-b1cfed7c3910@redhat.com>
+Content-Type: multipart/signed;
+ boundary="=_MailMate_42A13E90-6CFB-424A-B4CA-C5EFF4F67114_=";
+ micalg=pgp-sha1; protocol="application/pgp-signature"
+X-ClientProxiedBy: BL1PR13CA0239.namprd13.prod.outlook.com
+ (2603:10b6:208:2bf::34) To DS7PR12MB5744.namprd12.prod.outlook.com
+ (2603:10b6:8:73::18)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,UPPERCASE_50_75 autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB5744:EE_|MN2PR12MB4206:EE_
+X-MS-Office365-Filtering-Correlation-Id: b57757d8-da4e-4536-5c19-08dace18de1a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: LdcPgLVSbmTiunFgUYC7pyPoMPLDI4zI8W5Guasad8CAOIlUi/oGbMtXGrsrJh9+IpXx79MtMsEI8emN8z74vHpG8xA8OhkyY3XdTFGq40DitWLi22WlJVffk2o/fm+ikqWCO99AgQrOOftpUD1zAoREpCZTRvx7YLq7CHAvxWzgr7R8jbPJSSIUeofIkT9pEM8FAX8Avg9zwu1OW3r4ZixGLU68S9Zy3Ksoh4UVeWcLnFospiipMTimNw76mWsOoLj8/RcqH8ztn8pDpdqh4edx3rhrHqwiF2wAUDL0nlUJVAMoS3l9Gtalco1XuxJp3WXhrQXiYR8j9winzb4LXw0i+dpa1AdjHHoUCVBwcgwYI+YfZq9mIEkJeIViT6zwyT+tiBR0o1nBIZnE68WWdQKa0m5O5+OzKk4BgYon4nBgEgYX47CTkR/O2vk7SH77XXmRwnBxrUR37N9KxugNwGCMsvp3OGpisZATUJuBHiz765cjifbPlQue7IVfMVFoSi1yEysS5Un/0IEqUyeOK+d7lbcRaHYLtqJl+VFIsGioozec/Juk2QFC5D9r8Lidj3tKyrPvYIedK1VLRwKC7U0sTLy8xUXygRgjnzmWKn2bovzYX7NuhmVYLStpSo+dyaSREQz1LIBAiFePZ3sdnBM0P68Ca7OBmr6RL+q8TuztAdgAU5TrgS7dSa3WbD81cik6imy+TQLnlWY1LnaJU/XSQbyE6bxf4axNyUK/ofsjKbEPNtKA0qMjT2oDU5eKo3D9zE7Axq4b8RC7YbpTBqSeIBmfYjoMI6RbdXgIWpw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5744.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(366004)(396003)(346002)(39860400002)(451199015)(6512007)(26005)(36756003)(38100700002)(54906003)(966005)(66556008)(8676002)(4326008)(41300700001)(66476007)(33656002)(86362001)(66946007)(2616005)(53546011)(186003)(478600001)(6506007)(6666004)(6486002)(6916009)(316002)(8936002)(83380400001)(2906002)(5660300002)(7416002)(235185007)(72826004)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jM6QqlnLk34kFg7rLiChc2yCsZ9mJDqlfd5eofec5wTyhvuXa8Hk5rWuhOSx?=
+ =?us-ascii?Q?80p2QxgjJJuZAqO47mpXdpPIytoKWra86fIS2Lj3KqNb06MqYuu7v1fql/GZ?=
+ =?us-ascii?Q?uvWdxo1+OICdh9FDw6X9gbGrQjopTpCPWYBXZsYtXSsM/UJVKK8A59JRen8k?=
+ =?us-ascii?Q?FrplJFHJWahzL1asM6EF1x9ZzFcsMwfAOgmZeAxOinuSQEgiqdaueD/qIqT/?=
+ =?us-ascii?Q?7yEzaBXsWS0n9bpFU92cGzYBB4+ubsi8SXiBPjcDr42fLRxx0n2DHVH3cvaz?=
+ =?us-ascii?Q?Ko8Ha3moJiBupaJse+QL+nWI5iCYSEAS/wn2CWocPG9CIZHJPyPpqzk+u1U5?=
+ =?us-ascii?Q?WrbD15BZL/hpwIqeyBLe2Hb3/CUgV7+7kr3VOKFW2aXqIqkR9A982oWHbbZp?=
+ =?us-ascii?Q?t4ZfK4GnbeJ4YZnanA1YbIvfG4OsqfQjER6HPcu6hj9b95zXTHeQ98sSPc8T?=
+ =?us-ascii?Q?jnTJbNiqmz6Fqn5vvm1pwZrLgfi3M9UYEHfPT+zDjl0+gBiiA8C/5ATjNmAP?=
+ =?us-ascii?Q?e4hgj2vc0RKl8aLwP7HvuqLtxHfvU1WwNq9rlVv2eTo/F2+npn2BOTnmmNVn?=
+ =?us-ascii?Q?ynpjG7ILqsoGF5YQXw+Eegho6JgNVSP9iAI/yAivXEwRIWUAwQYuq8ad7NdI?=
+ =?us-ascii?Q?AUUZovoYTXBJ79kgrQuF7X69DCwHN7faiSVJqx05sf1t2I9Z6PmicUmZ1RsL?=
+ =?us-ascii?Q?J6FWuK/wuF/HaD8WwTDqYOOV/CjL3lXEiAx+FQwgUHgzYHwAn+7AfOiia8Js?=
+ =?us-ascii?Q?+T5Ius6ZrnfijzLrwwIAcGfqaQ7OglghNXVHXdHkQbAh/QrOBoZSH0DR8MQ0?=
+ =?us-ascii?Q?bfAGU304SkP07wJHtLe3i2Fvq4+8mGiUmhwj9JPRNLCZNF/Kk1lO6ZG6fqPy?=
+ =?us-ascii?Q?RoWyYiFPaWYDiqnif6WSLxY9HTgbyv0s4fLvzqXtCTlisE3sDUjTFXHG/Mc/?=
+ =?us-ascii?Q?3lF1sO2wZxUGaGKDLCDl9pjfMSWmDR5xQMCi1Rn4kgx+d+h6Hc/So67IkOh7?=
+ =?us-ascii?Q?zRh2Ejm3ZOk/bxq66Xzcwy4ZeaI6fq7Hap8DOTb1EgYuGgGN0XqzSIqFOft9?=
+ =?us-ascii?Q?R6Wpd/OBm9ZlWnFnpHHdDIEjnBQwGs7fPVCWVS5TjgFIUrwapX+dfrZ9gt/o?=
+ =?us-ascii?Q?VRtrrPNp8QM5zurIu5qxPwAejr9LM5kOwIN7sInt6x4CbXYvyTFJHyvCmzof?=
+ =?us-ascii?Q?+CbQ71tfuAdVJVP7t/j+y4iKxltSbPz9MxEJesHnWlqQIOJgK9uPRcayFieR?=
+ =?us-ascii?Q?2RcVzbEI5w6BVFKDo8WHVkxAzdzNb6CfWpi+r752n2WO9s8Q52TXQnfubiaE?=
+ =?us-ascii?Q?YvgbA7CtBymrBGx7GIyViQy4vdueABr51lHp5xLhbUUnBN3nhUwi0D8m3OgH?=
+ =?us-ascii?Q?X42xxnG9Ea/PGc4mnNt6hqxPsqcO0x/iy1iPJ09qv6Hc/IApjXKhXoT3jQC9?=
+ =?us-ascii?Q?YWraH9ekgMd3LAmxOXxZQ2B2RHbpvucYopyoUZyvNW1sXXEu3MOI3l2HL0/9?=
+ =?us-ascii?Q?EAA+SA4OMy9MKKcli0HFT7udKG4alNd+BnOf0UwDfOkMRa3NUGfY29PTHWSY?=
+ =?us-ascii?Q?qqdOgDOd/H/WW3XxJlXxK8xYt6j3ofzuQ5ILe+9u?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b57757d8-da4e-4536-5c19-08dace18de1a
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5744.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2022 12:39:02.8558
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: k2X6zG+xo4p4F/LSfGEjRZTWXqpT+044eaqCLaJdCbRRo0Hd5Lc7PYpSNyVnMUsB
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4206
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to future support for hardware compression formats, the MDP3
-internal color format expression needs to be extended.
+--=_MailMate_42A13E90-6CFB-424A-B4CA-C5EFF4F67114_=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
----
- .../platform/mediatek/mdp3/mtk-mdp3-regs.h    | 205 +++++++++---------
- 1 file changed, 103 insertions(+), 102 deletions(-)
 
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.h b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.h
-index 8e91bcb094e0..e9ab8ac2c0e8 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.h
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-regs.h
-@@ -18,11 +18,12 @@
-  * V-subsample: 0, 1
-  * Color group: 0-RGB, 1-YUV, 2-raw
-  */
--#define MDP_COLOR(PACKED, LOOSE, VIDEO, PLANE, HF, VF, BITS, GROUP, SWAP, ID)\
--	(((PACKED) << 27) | ((LOOSE) << 26) | ((VIDEO) << 23) |\
-+#define MDP_COLOR(COMPRESS, PACKED, LOOSE, VIDEO, PLANE, HF, VF, BITS, GROUP, SWAP, ID)\
-+	(((COMPRESS) << 29) | ((PACKED) << 27) | ((LOOSE) << 26) | ((VIDEO) << 23) |\
- 	 ((PLANE) << 21) | ((HF) << 19) | ((VF) << 18) | ((BITS) << 8) |\
- 	 ((GROUP) << 6) | ((SWAP) << 5) | ((ID) << 0))
- 
-+#define MDP_COLOR_IS_COMPRESS(c)        ((0x20000000 & (c)) >> 29)
- #define MDP_COLOR_IS_10BIT_PACKED(c)	((0x08000000 & (c)) >> 27)
- #define MDP_COLOR_IS_10BIT_LOOSE(c)	(((0x0c000000 & (c)) >> 26) == 1)
- #define MDP_COLOR_IS_10BIT_TILE(c)	(((0x0c000000 & (c)) >> 26) == 3)
-@@ -44,144 +45,144 @@
- enum mdp_color {
- 	MDP_COLOR_UNKNOWN	= 0,
- 
--	//MDP_COLOR_FULLG8,
--	MDP_COLOR_FULLG8_RGGB	= MDP_COLOR(0, 0, 0, 1, 0, 0,  8, 2,  0, 21),
--	MDP_COLOR_FULLG8_GRBG	= MDP_COLOR(0, 0, 0, 1, 0, 1,  8, 2,  0, 21),
--	MDP_COLOR_FULLG8_GBRG	= MDP_COLOR(0, 0, 0, 1, 1, 0,  8, 2,  0, 21),
--	MDP_COLOR_FULLG8_BGGR	= MDP_COLOR(0, 0, 0, 1, 1, 1,  8, 2,  0, 21),
-+	/* MDP_COLOR_FULLG8 */
-+	MDP_COLOR_FULLG8_RGGB	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0,  8, 2,  0, 21),
-+	MDP_COLOR_FULLG8_GRBG	= MDP_COLOR(0, 0, 0, 0, 1, 0, 1,  8, 2,  0, 21),
-+	MDP_COLOR_FULLG8_GBRG	= MDP_COLOR(0, 0, 0, 0, 1, 1, 0,  8, 2,  0, 21),
-+	MDP_COLOR_FULLG8_BGGR	= MDP_COLOR(0, 0, 0, 0, 1, 1, 1,  8, 2,  0, 21),
- 	MDP_COLOR_FULLG8	= MDP_COLOR_FULLG8_BGGR,
- 
--	//MDP_COLOR_FULLG10,
--	MDP_COLOR_FULLG10_RGGB	= MDP_COLOR(0, 0, 0, 1, 0, 0, 10, 2,  0, 21),
--	MDP_COLOR_FULLG10_GRBG	= MDP_COLOR(0, 0, 0, 1, 0, 1, 10, 2,  0, 21),
--	MDP_COLOR_FULLG10_GBRG	= MDP_COLOR(0, 0, 0, 1, 1, 0, 10, 2,  0, 21),
--	MDP_COLOR_FULLG10_BGGR	= MDP_COLOR(0, 0, 0, 1, 1, 1, 10, 2,  0, 21),
-+	/* MDP_COLOR_FULLG10 */
-+	MDP_COLOR_FULLG10_RGGB	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 10, 2,  0, 21),
-+	MDP_COLOR_FULLG10_GRBG	= MDP_COLOR(0, 0, 0, 0, 1, 0, 1, 10, 2,  0, 21),
-+	MDP_COLOR_FULLG10_GBRG	= MDP_COLOR(0, 0, 0, 0, 1, 1, 0, 10, 2,  0, 21),
-+	MDP_COLOR_FULLG10_BGGR	= MDP_COLOR(0, 0, 0, 0, 1, 1, 1, 10, 2,  0, 21),
- 	MDP_COLOR_FULLG10	= MDP_COLOR_FULLG10_BGGR,
- 
--	//MDP_COLOR_FULLG12,
--	MDP_COLOR_FULLG12_RGGB	= MDP_COLOR(0, 0, 0, 1, 0, 0, 12, 2,  0, 21),
--	MDP_COLOR_FULLG12_GRBG	= MDP_COLOR(0, 0, 0, 1, 0, 1, 12, 2,  0, 21),
--	MDP_COLOR_FULLG12_GBRG	= MDP_COLOR(0, 0, 0, 1, 1, 0, 12, 2,  0, 21),
--	MDP_COLOR_FULLG12_BGGR	= MDP_COLOR(0, 0, 0, 1, 1, 1, 12, 2,  0, 21),
-+	/* MDP_COLOR_FULLG12 */
-+	MDP_COLOR_FULLG12_RGGB	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 12, 2,  0, 21),
-+	MDP_COLOR_FULLG12_GRBG	= MDP_COLOR(0, 0, 0, 0, 1, 0, 1, 12, 2,  0, 21),
-+	MDP_COLOR_FULLG12_GBRG	= MDP_COLOR(0, 0, 0, 0, 1, 1, 0, 12, 2,  0, 21),
-+	MDP_COLOR_FULLG12_BGGR	= MDP_COLOR(0, 0, 0, 0, 1, 1, 1, 12, 2,  0, 21),
- 	MDP_COLOR_FULLG12	= MDP_COLOR_FULLG12_BGGR,
- 
--	//MDP_COLOR_FULLG14,
--	MDP_COLOR_FULLG14_RGGB	= MDP_COLOR(0, 0, 0, 1, 0, 0, 14, 2,  0, 21),
--	MDP_COLOR_FULLG14_GRBG	= MDP_COLOR(0, 0, 0, 1, 0, 1, 14, 2,  0, 21),
--	MDP_COLOR_FULLG14_GBRG	= MDP_COLOR(0, 0, 0, 1, 1, 0, 14, 2,  0, 21),
--	MDP_COLOR_FULLG14_BGGR	= MDP_COLOR(0, 0, 0, 1, 1, 1, 14, 2,  0, 21),
-+	/* MDP_COLOR_FULLG14 */
-+	MDP_COLOR_FULLG14_RGGB	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 14, 2,  0, 21),
-+	MDP_COLOR_FULLG14_GRBG	= MDP_COLOR(0, 0, 0, 0, 1, 0, 1, 14, 2,  0, 21),
-+	MDP_COLOR_FULLG14_GBRG	= MDP_COLOR(0, 0, 0, 0, 1, 1, 0, 14, 2,  0, 21),
-+	MDP_COLOR_FULLG14_BGGR	= MDP_COLOR(0, 0, 0, 0, 1, 1, 1, 14, 2,  0, 21),
- 	MDP_COLOR_FULLG14	= MDP_COLOR_FULLG14_BGGR,
- 
--	MDP_COLOR_UFO10		= MDP_COLOR(0, 0, 0, 1, 0, 0, 10, 2,  0, 24),
-+	MDP_COLOR_UFO10		= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 10, 2,  0, 24),
- 
--	//MDP_COLOR_BAYER8,
--	MDP_COLOR_BAYER8_RGGB	= MDP_COLOR(0, 0, 0, 1, 0, 0,  8, 2,  0, 20),
--	MDP_COLOR_BAYER8_GRBG	= MDP_COLOR(0, 0, 0, 1, 0, 1,  8, 2,  0, 20),
--	MDP_COLOR_BAYER8_GBRG	= MDP_COLOR(0, 0, 0, 1, 1, 0,  8, 2,  0, 20),
--	MDP_COLOR_BAYER8_BGGR	= MDP_COLOR(0, 0, 0, 1, 1, 1,  8, 2,  0, 20),
-+	/* MDP_COLOR_BAYER8 */
-+	MDP_COLOR_BAYER8_RGGB	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0,  8, 2,  0, 20),
-+	MDP_COLOR_BAYER8_GRBG	= MDP_COLOR(0, 0, 0, 0, 1, 0, 1,  8, 2,  0, 20),
-+	MDP_COLOR_BAYER8_GBRG	= MDP_COLOR(0, 0, 0, 0, 1, 1, 0,  8, 2,  0, 20),
-+	MDP_COLOR_BAYER8_BGGR	= MDP_COLOR(0, 0, 0, 0, 1, 1, 1,  8, 2,  0, 20),
- 	MDP_COLOR_BAYER8	= MDP_COLOR_BAYER8_BGGR,
- 
--	//MDP_COLOR_BAYER10,
--	MDP_COLOR_BAYER10_RGGB	= MDP_COLOR(0, 0, 0, 1, 0, 0, 10, 2,  0, 20),
--	MDP_COLOR_BAYER10_GRBG	= MDP_COLOR(0, 0, 0, 1, 0, 1, 10, 2,  0, 20),
--	MDP_COLOR_BAYER10_GBRG	= MDP_COLOR(0, 0, 0, 1, 1, 0, 10, 2,  0, 20),
--	MDP_COLOR_BAYER10_BGGR	= MDP_COLOR(0, 0, 0, 1, 1, 1, 10, 2,  0, 20),
-+	/* MDP_COLOR_BAYER10 */
-+	MDP_COLOR_BAYER10_RGGB	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 10, 2,  0, 20),
-+	MDP_COLOR_BAYER10_GRBG	= MDP_COLOR(0, 0, 0, 0, 1, 0, 1, 10, 2,  0, 20),
-+	MDP_COLOR_BAYER10_GBRG	= MDP_COLOR(0, 0, 0, 0, 1, 1, 0, 10, 2,  0, 20),
-+	MDP_COLOR_BAYER10_BGGR	= MDP_COLOR(0, 0, 0, 0, 1, 1, 1, 10, 2,  0, 20),
- 	MDP_COLOR_BAYER10	= MDP_COLOR_BAYER10_BGGR,
- 
--	//MDP_COLOR_BAYER12,
--	MDP_COLOR_BAYER12_RGGB	= MDP_COLOR(0, 0, 0, 1, 0, 0, 12, 2,  0, 20),
--	MDP_COLOR_BAYER12_GRBG	= MDP_COLOR(0, 0, 0, 1, 0, 1, 12, 2,  0, 20),
--	MDP_COLOR_BAYER12_GBRG	= MDP_COLOR(0, 0, 0, 1, 1, 0, 12, 2,  0, 20),
--	MDP_COLOR_BAYER12_BGGR	= MDP_COLOR(0, 0, 0, 1, 1, 1, 12, 2,  0, 20),
-+	/* MDP_COLOR_BAYER12 */
-+	MDP_COLOR_BAYER12_RGGB	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 12, 2,  0, 20),
-+	MDP_COLOR_BAYER12_GRBG	= MDP_COLOR(0, 0, 0, 0, 1, 0, 1, 12, 2,  0, 20),
-+	MDP_COLOR_BAYER12_GBRG	= MDP_COLOR(0, 0, 0, 0, 1, 1, 0, 12, 2,  0, 20),
-+	MDP_COLOR_BAYER12_BGGR	= MDP_COLOR(0, 0, 0, 0, 1, 1, 1, 12, 2,  0, 20),
- 	MDP_COLOR_BAYER12	= MDP_COLOR_BAYER12_BGGR,
- 
--	//MDP_COLOR_BAYER14,
--	MDP_COLOR_BAYER14_RGGB	= MDP_COLOR(0, 0, 0, 1, 0, 0, 14, 2,  0, 20),
--	MDP_COLOR_BAYER14_GRBG	= MDP_COLOR(0, 0, 0, 1, 0, 1, 14, 2,  0, 20),
--	MDP_COLOR_BAYER14_GBRG	= MDP_COLOR(0, 0, 0, 1, 1, 0, 14, 2,  0, 20),
--	MDP_COLOR_BAYER14_BGGR	= MDP_COLOR(0, 0, 0, 1, 1, 1, 14, 2,  0, 20),
-+	/* MDP_COLOR_BAYER14 */
-+	MDP_COLOR_BAYER14_RGGB	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 14, 2,  0, 20),
-+	MDP_COLOR_BAYER14_GRBG	= MDP_COLOR(0, 0, 0, 0, 1, 0, 1, 14, 2,  0, 20),
-+	MDP_COLOR_BAYER14_GBRG	= MDP_COLOR(0, 0, 0, 0, 1, 1, 0, 14, 2,  0, 20),
-+	MDP_COLOR_BAYER14_BGGR	= MDP_COLOR(0, 0, 0, 0, 1, 1, 1, 14, 2,  0, 20),
- 	MDP_COLOR_BAYER14	= MDP_COLOR_BAYER14_BGGR,
- 
--	MDP_COLOR_RGB48		= MDP_COLOR(0, 0, 0, 1, 0, 0, 48, 0,  0, 23),
-+	MDP_COLOR_RGB48		= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 48, 0,  0, 23),
- 	/* For bayer+mono raw-16 */
--	MDP_COLOR_RGB565_RAW	= MDP_COLOR(0, 0, 0, 1, 0, 0, 16, 2,  0, 0),
-+	MDP_COLOR_RGB565_RAW	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 16, 2,  0, 0),
- 
--	MDP_COLOR_BAYER8_UNPAK	= MDP_COLOR(0, 0, 0, 1, 0, 0,  8, 2,  0, 22),
--	MDP_COLOR_BAYER10_UNPAK	= MDP_COLOR(0, 0, 0, 1, 0, 0, 10, 2,  0, 22),
--	MDP_COLOR_BAYER12_UNPAK	= MDP_COLOR(0, 0, 0, 1, 0, 0, 12, 2,  0, 22),
--	MDP_COLOR_BAYER14_UNPAK	= MDP_COLOR(0, 0, 0, 1, 0, 0, 14, 2,  0, 22),
-+	MDP_COLOR_BAYER8_UNPAK	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0,  8, 2,  0, 22),
-+	MDP_COLOR_BAYER10_UNPAK	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 10, 2,  0, 22),
-+	MDP_COLOR_BAYER12_UNPAK	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 12, 2,  0, 22),
-+	MDP_COLOR_BAYER14_UNPAK	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 14, 2,  0, 22),
- 
- 	/* Unified formats */
--	MDP_COLOR_GREY		= MDP_COLOR(0, 0, 0, 1, 0, 0,  8, 1,  0, 7),
--
--	MDP_COLOR_RGB565	= MDP_COLOR(0, 0, 0, 1, 0, 0, 16, 0,  0, 0),
--	MDP_COLOR_BGR565	= MDP_COLOR(0, 0, 0, 1, 0, 0, 16, 0,  1, 0),
--	MDP_COLOR_RGB888	= MDP_COLOR(0, 0, 0, 1, 0, 0, 24, 0,  1, 1),
--	MDP_COLOR_BGR888	= MDP_COLOR(0, 0, 0, 1, 0, 0, 24, 0,  0, 1),
--	MDP_COLOR_RGBA8888	= MDP_COLOR(0, 0, 0, 1, 0, 0, 32, 0,  1, 2),
--	MDP_COLOR_BGRA8888	= MDP_COLOR(0, 0, 0, 1, 0, 0, 32, 0,  0, 2),
--	MDP_COLOR_ARGB8888	= MDP_COLOR(0, 0, 0, 1, 0, 0, 32, 0,  1, 3),
--	MDP_COLOR_ABGR8888	= MDP_COLOR(0, 0, 0, 1, 0, 0, 32, 0,  0, 3),
--
--	MDP_COLOR_UYVY		= MDP_COLOR(0, 0, 0, 1, 1, 0, 16, 1,  0, 4),
--	MDP_COLOR_VYUY		= MDP_COLOR(0, 0, 0, 1, 1, 0, 16, 1,  1, 4),
--	MDP_COLOR_YUYV		= MDP_COLOR(0, 0, 0, 1, 1, 0, 16, 1,  0, 5),
--	MDP_COLOR_YVYU		= MDP_COLOR(0, 0, 0, 1, 1, 0, 16, 1,  1, 5),
--
--	MDP_COLOR_I420		= MDP_COLOR(0, 0, 0, 3, 1, 1,  8, 1,  0, 8),
--	MDP_COLOR_YV12		= MDP_COLOR(0, 0, 0, 3, 1, 1,  8, 1,  1, 8),
--	MDP_COLOR_I422		= MDP_COLOR(0, 0, 0, 3, 1, 0,  8, 1,  0, 9),
--	MDP_COLOR_YV16		= MDP_COLOR(0, 0, 0, 3, 1, 0,  8, 1,  1, 9),
--	MDP_COLOR_I444		= MDP_COLOR(0, 0, 0, 3, 0, 0,  8, 1,  0, 10),
--	MDP_COLOR_YV24		= MDP_COLOR(0, 0, 0, 3, 0, 0,  8, 1,  1, 10),
--
--	MDP_COLOR_NV12		= MDP_COLOR(0, 0, 0, 2, 1, 1,  8, 1,  0, 12),
--	MDP_COLOR_NV21		= MDP_COLOR(0, 0, 0, 2, 1, 1,  8, 1,  1, 12),
--	MDP_COLOR_NV16		= MDP_COLOR(0, 0, 0, 2, 1, 0,  8, 1,  0, 13),
--	MDP_COLOR_NV61		= MDP_COLOR(0, 0, 0, 2, 1, 0,  8, 1,  1, 13),
--	MDP_COLOR_NV24		= MDP_COLOR(0, 0, 0, 2, 0, 0,  8, 1,  0, 14),
--	MDP_COLOR_NV42		= MDP_COLOR(0, 0, 0, 2, 0, 0,  8, 1,  1, 14),
-+	MDP_COLOR_GREY		= MDP_COLOR(0, 0, 0, 0, 1, 0, 0,  8, 1,  0, 7),
-+
-+	MDP_COLOR_RGB565	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 16, 0,  0, 0),
-+	MDP_COLOR_BGR565	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 16, 0,  1, 0),
-+	MDP_COLOR_RGB888	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 24, 0,  1, 1),
-+	MDP_COLOR_BGR888	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 24, 0,  0, 1),
-+	MDP_COLOR_RGBA8888	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 32, 0,  1, 2),
-+	MDP_COLOR_BGRA8888	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 32, 0,  0, 2),
-+	MDP_COLOR_ARGB8888	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 32, 0,  1, 3),
-+	MDP_COLOR_ABGR8888	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 32, 0,  0, 3),
-+
-+	MDP_COLOR_UYVY		= MDP_COLOR(0, 0, 0, 0, 1, 1, 0, 16, 1,  0, 4),
-+	MDP_COLOR_VYUY		= MDP_COLOR(0, 0, 0, 0, 1, 1, 0, 16, 1,  1, 4),
-+	MDP_COLOR_YUYV		= MDP_COLOR(0, 0, 0, 0, 1, 1, 0, 16, 1,  0, 5),
-+	MDP_COLOR_YVYU		= MDP_COLOR(0, 0, 0, 0, 1, 1, 0, 16, 1,  1, 5),
-+
-+	MDP_COLOR_I420		= MDP_COLOR(0, 0, 0, 0, 3, 1, 1,  8, 1,  0, 8),
-+	MDP_COLOR_YV12		= MDP_COLOR(0, 0, 0, 0, 3, 1, 1,  8, 1,  1, 8),
-+	MDP_COLOR_I422		= MDP_COLOR(0, 0, 0, 0, 3, 1, 0,  8, 1,  0, 9),
-+	MDP_COLOR_YV16		= MDP_COLOR(0, 0, 0, 0, 3, 1, 0,  8, 1,  1, 9),
-+	MDP_COLOR_I444		= MDP_COLOR(0, 0, 0, 0, 3, 0, 0,  8, 1,  0, 10),
-+	MDP_COLOR_YV24		= MDP_COLOR(0, 0, 0, 0, 3, 0, 0,  8, 1,  1, 10),
-+
-+	MDP_COLOR_NV12		= MDP_COLOR(0, 0, 0, 0, 2, 1, 1,  8, 1,  0, 12),
-+	MDP_COLOR_NV21		= MDP_COLOR(0, 0, 0, 0, 2, 1, 1,  8, 1,  1, 12),
-+	MDP_COLOR_NV16		= MDP_COLOR(0, 0, 0, 0, 2, 1, 0,  8, 1,  0, 13),
-+	MDP_COLOR_NV61		= MDP_COLOR(0, 0, 0, 0, 2, 1, 0,  8, 1,  1, 13),
-+	MDP_COLOR_NV24		= MDP_COLOR(0, 0, 0, 0, 2, 0, 0,  8, 1,  0, 14),
-+	MDP_COLOR_NV42		= MDP_COLOR(0, 0, 0, 0, 2, 0, 0,  8, 1,  1, 14),
- 
- 	/* MediaTek proprietary formats */
- 	/* UFO encoded block mode */
--	MDP_COLOR_420_BLK_UFO	= MDP_COLOR(0, 0, 5, 2, 1, 1, 256, 1, 0, 12),
-+	MDP_COLOR_420_BLK_UFO	= MDP_COLOR(0, 0, 0, 5, 2, 1, 1, 256, 1, 0, 12),
- 	/* Block mode */
--	MDP_COLOR_420_BLK	= MDP_COLOR(0, 0, 1, 2, 1, 1, 256, 1, 0, 12),
-+	MDP_COLOR_420_BLK	= MDP_COLOR(0, 0, 0, 1, 2, 1, 1, 256, 1, 0, 12),
- 	/* Block mode + field mode */
--	MDP_COLOR_420_BLKI	= MDP_COLOR(0, 0, 3, 2, 1, 1, 256, 1, 0, 12),
-+	MDP_COLOR_420_BLKI	= MDP_COLOR(0, 0, 0, 3, 2, 1, 1, 256, 1, 0, 12),
- 	/* Block mode */
--	MDP_COLOR_422_BLK	= MDP_COLOR(0, 0, 1, 1, 1, 0, 512, 1, 0, 4),
-+	MDP_COLOR_422_BLK	= MDP_COLOR(0, 0, 0, 1, 1, 1, 0, 512, 1, 0, 4),
- 
--	MDP_COLOR_IYU2		= MDP_COLOR(0, 0, 0, 1, 0, 0, 24,  1, 0, 25),
--	MDP_COLOR_YUV444	= MDP_COLOR(0, 0, 0, 1, 0, 0, 24,  1, 0, 30),
-+	MDP_COLOR_IYU2		= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 24,  1, 0, 25),
-+	MDP_COLOR_YUV444	= MDP_COLOR(0, 0, 0, 0, 1, 0, 0, 24,  1, 0, 30),
- 
- 	/* Packed 10-bit formats */
--	MDP_COLOR_RGBA1010102	= MDP_COLOR(1, 0, 0, 1, 0, 0, 32,  0, 1, 2),
--	MDP_COLOR_BGRA1010102	= MDP_COLOR(1, 0, 0, 1, 0, 0, 32,  0, 0, 2),
-+	MDP_COLOR_RGBA1010102	= MDP_COLOR(0, 1, 0, 0, 1, 0, 0, 32,  0, 1, 2),
-+	MDP_COLOR_BGRA1010102	= MDP_COLOR(0, 1, 0, 0, 1, 0, 0, 32,  0, 0, 2),
- 	/* Packed 10-bit UYVY */
--	MDP_COLOR_UYVY_10P	= MDP_COLOR(1, 0, 0, 1, 1, 0, 20,  1, 0, 4),
-+	MDP_COLOR_UYVY_10P	= MDP_COLOR(0, 1, 0, 0, 1, 1, 0, 20,  1, 0, 4),
- 	/* Packed 10-bit NV21 */
--	MDP_COLOR_NV21_10P	= MDP_COLOR(1, 0, 0, 2, 1, 1, 10,  1, 1, 12),
-+	MDP_COLOR_NV21_10P	= MDP_COLOR(0, 1, 0, 0, 2, 1, 1, 10,  1, 1, 12),
- 	/* 10-bit block mode */
--	MDP_COLOR_420_BLK_10_H	= MDP_COLOR(1, 0, 1, 2, 1, 1, 320, 1, 0, 12),
-+	MDP_COLOR_420_BLK_10_H	= MDP_COLOR(0, 1, 0, 1, 2, 1, 1, 320, 1, 0, 12),
- 	/* 10-bit HEVC tile mode */
--	MDP_COLOR_420_BLK_10_V	= MDP_COLOR(1, 1, 1, 2, 1, 1, 320, 1, 0, 12),
-+	MDP_COLOR_420_BLK_10_V	= MDP_COLOR(0, 1, 1, 1, 2, 1, 1, 320, 1, 0, 12),
- 	/* UFO encoded 10-bit block mode */
--	MDP_COLOR_420_BLK_U10_H	= MDP_COLOR(1, 0, 5, 2, 1, 1, 320, 1, 0, 12),
-+	MDP_COLOR_420_BLK_U10_H	= MDP_COLOR(0, 1, 0, 5, 2, 1, 1, 320, 1, 0, 12),
- 	/* UFO encoded 10-bit HEVC tile mode */
--	MDP_COLOR_420_BLK_U10_V	= MDP_COLOR(1, 1, 5, 2, 1, 1, 320, 1, 0, 12),
-+	MDP_COLOR_420_BLK_U10_V	= MDP_COLOR(0, 1, 1, 5, 2, 1, 1, 320, 1, 0, 12),
- 
- 	/* Loose 10-bit formats */
--	MDP_COLOR_UYVY_10L	= MDP_COLOR(0, 1, 0, 1, 1, 0, 20,  1, 0, 4),
--	MDP_COLOR_VYUY_10L	= MDP_COLOR(0, 1, 0, 1, 1, 0, 20,  1, 1, 4),
--	MDP_COLOR_YUYV_10L	= MDP_COLOR(0, 1, 0, 1, 1, 0, 20,  1, 0, 5),
--	MDP_COLOR_YVYU_10L	= MDP_COLOR(0, 1, 0, 1, 1, 0, 20,  1, 1, 5),
--	MDP_COLOR_NV12_10L	= MDP_COLOR(0, 1, 0, 2, 1, 1, 10,  1, 0, 12),
--	MDP_COLOR_NV21_10L	= MDP_COLOR(0, 1, 0, 2, 1, 1, 10,  1, 1, 12),
--	MDP_COLOR_NV16_10L	= MDP_COLOR(0, 1, 0, 2, 1, 0, 10,  1, 0, 13),
--	MDP_COLOR_NV61_10L	= MDP_COLOR(0, 1, 0, 2, 1, 0, 10,  1, 1, 13),
--	MDP_COLOR_YV12_10L	= MDP_COLOR(0, 1, 0, 3, 1, 1, 10,  1, 1, 8),
--	MDP_COLOR_I420_10L	= MDP_COLOR(0, 1, 0, 3, 1, 1, 10,  1, 0, 8),
-+	MDP_COLOR_UYVY_10L	= MDP_COLOR(0, 0, 1, 0, 1, 1, 0, 20,  1, 0, 4),
-+	MDP_COLOR_VYUY_10L	= MDP_COLOR(0, 0, 1, 0, 1, 1, 0, 20,  1, 1, 4),
-+	MDP_COLOR_YUYV_10L	= MDP_COLOR(0, 0, 1, 0, 1, 1, 0, 20,  1, 0, 5),
-+	MDP_COLOR_YVYU_10L	= MDP_COLOR(0, 0, 1, 0, 1, 1, 0, 20,  1, 1, 5),
-+	MDP_COLOR_NV12_10L	= MDP_COLOR(0, 0, 1, 0, 2, 1, 1, 10,  1, 0, 12),
-+	MDP_COLOR_NV21_10L	= MDP_COLOR(0, 0, 1, 0, 2, 1, 1, 10,  1, 1, 12),
-+	MDP_COLOR_NV16_10L	= MDP_COLOR(0, 0, 1, 0, 2, 1, 0, 10,  1, 0, 13),
-+	MDP_COLOR_NV61_10L	= MDP_COLOR(0, 0, 1, 0, 2, 1, 0, 10,  1, 1, 13),
-+	MDP_COLOR_YV12_10L	= MDP_COLOR(0, 0, 1, 0, 3, 1, 1, 10,  1, 1, 8),
-+	MDP_COLOR_I420_10L	= MDP_COLOR(0, 0, 1, 0, 3, 1, 1, 10,  1, 0, 8),
- };
- 
- static inline bool MDP_COLOR_IS_UV_COPLANE(enum mdp_color c)
--- 
-2.18.0
+On 24 Nov 2022, at 5:43, David Hildenbrand wrote:
 
+> On 24.11.22 11:21, Gavin Shan wrote:
+>> On 11/24/22 6:09 PM, David Hildenbrand wrote:
+>>> On 24.11.22 10:55, Gavin Shan wrote:
+>>>> The issue is reported when removing memory through virtio_mem device=
+=2E
+>>>> The transparent huge page, experienced copy-on-write fault, is wrong=
+ly
+>>>> regarded as pinned. The transparent huge page is escaped from being
+>>>> isolated in isolate_migratepages_block(). The transparent huge page
+>>>> can't be migrated and the corresponding memory block can't be put
+>>>> into offline state.
+>>>>
+>>>> Fix it by replacing page_mapcount() with total_mapcount(). With this=
+,
+>>>> the transparent huge page can be isolated and migrated, and the memo=
+ry
+>>>> block can be put into offline state. Besides, The page's refcount is=
+
+>>>> increased a bit earlier to avoid the page is released when the check=
+
+>>>> is executed.
+>>>
+>>> Did you look into handling pages that are in the swapcache case as we=
+ll?
+>>>
+>>> See is_refcount_suitable() in mm/khugepaged.c.
+>>>
+>>> Should be easy to reproduce, let me know if you need inspiration.
+>>>
+>>
+>> Nope, I didn't look into the case. Please elaborate the details so tha=
+t
+>> I can reproduce it firstly.
+>
+>
+> A simple reproducer would be (on a system with ordinary swap (not zram)=
+)
+>
+> 1) mmap a region (MAP_ANON|MAP_PRIVATE) that can hold a THP
+>
+> 2) Enable THP for that region (MADV_HUGEPAGE)
+>
+> 3) Populate a THP (e.g., write access)
+>
+> 4) PTE-map the THP, for example, using MADV_FREE on the last subpage
+>
+> 5) Trigger swapout of the THP, for example, using MADV_PAGEOUT
+
+Added the original THP swapout code author, Ying.
+
+At this step, the THP will be split, right?
+
+https://elixir.bootlin.com/linux/latest/source/mm/vmscan.c#L1786
+
+Even if a THP has PMD mapping, IIRC, it is split in the add_to_swap()
+then swapped out. But I cannot find that split code now.
+
+
+>
+> 6) Read-access to some subpages to fault them in from the swapcache
+>
+>
+> Now you'd have a THP, which
+>
+> 1) Is partially PTE-mapped into the page table
+> 2) Is in the swapcache (each subpage should have one reference from the=
+ swapache)
+>
+>
+> Now we could test, if alloc_contig_range() will still succeed (e.g., us=
+ing virtio-mem).
+>
+> -- =
+
+> Thanks,
+>
+> David / dhildenb
+
+--
+Best Regards,
+Yan Zi
+
+--=_MailMate_42A13E90-6CFB-424A-B4CA-C5EFF4F67114_=
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename=signature.asc
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJDBAEBAgAtFiEEh7yFAW3gwjwQ4C9anbJR82th+ooFAmN/ZeIPHHppeUBudmlk
+aWEuY29tAAoJEJ2yUfNrYfqKAEAQAKJkzpES3ErPEOZmGntHBHU4Y2Vbky1mQVNt
+Vd7lvoHAkCbIYlYYdOhtr57p1PmgRAAQmtOitV3QOPgM5Mt95TMdPx4NjcLCOMGi
+UvCeo75tWHG92e7BQpaC/Acn4tO35MoPRbUtqHVV4y7i/wEASAL1p3lls0GAcc56
+aV7/EjJp7e8dT2ev1t72Lb42GGWsM8pqXevblegInVIwK3FS88NHA1PgPXQyjpbn
+hMB8kzAipwTpYkDksHi2wz0wD9DATsZ0RDO/IKBwcKkL9qIngw2qiiZPKhD6F4DJ
+Lrbmjpx19CPGqbdquH2nFEW2uGDqCSwgatKffbD85mgfN6xfOcCImyc8O/CVM8CE
+5MQv1snUv9h9xjlNCeca6AWfdlo2GRl5yApFWHbaKk8fD+g6tRQWPBQHgLUokorg
+YFLbI12XA/113RvP1B519v641vWRLe8fvKnTlKOUgX4qROCMvV+1TsQZL8CLiIst
+ppL0iAMorbtJbBtUssdA8ulmRMmkj5DoumNtik8zjKbJn2zLrqlX0KWrUD/vJ2Ni
+NhGbZsbNHnppVL4K0stSb8UUyltop2XnUiX/KzDX3azwSSeynCn3pkhnWLnk8aI1
+GYdYYvB9iVL6M5UaW8Its4eWcpveCTV00QJSim73dDkTEOR7nabr4SaRJWwRBkHI
+UQvx5vId
+=YefA
+-----END PGP SIGNATURE-----
+
+--=_MailMate_42A13E90-6CFB-424A-B4CA-C5EFF4F67114_=--
