@@ -2,143 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76FB7636F04
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 01:40:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E49636F07
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 01:41:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbiKXAk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 19:40:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37986 "EHLO
+        id S229542AbiKXAlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 19:41:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiKXAkY (ORCPT
+        with ESMTP id S229449AbiKXAk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 19:40:24 -0500
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F420AAEBCE
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 16:40:22 -0800 (PST)
-Date:   Wed, 23 Nov 2022 16:40:16 -0800
+        Wed, 23 Nov 2022 19:40:57 -0500
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A74B08DB;
+        Wed, 23 Nov 2022 16:40:56 -0800 (PST)
+Message-ID: <6fbd8c35-04de-c379-5062-a0b9d4a8ebbe@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1669250421;
+        t=1669250455;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dwKCZVTaet+r/Ao/ZZyGQNy9e/1DBVJOZrEH4BYHHXA=;
-        b=DvDw1lgMAEhgIPzyJDHrphzocWaHSHpaxMoAJWxNDG0JB9f5yrrepPUFBpHfslDY5exXP8
-        4CGbgE2B2ARew1YWgwca686mUrPI6sIUHWKQcHpY6Of5uj4LHsumDVEAO1Qm2ODRfcqi8R
-        jSrVtVSzhwB/15z9GneY/ZSneiQAbKQ=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Shakeel Butt <shakeelb@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>, Yu Zhao <yuzhao@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Chris Down <chris@chrisdown.name>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2 1/3] mm: memcg: fix stale protection of reclaim target
- memcg
-Message-ID: <Y369cNnRWkoymF1G@P9FQF9L96D.corp.robot.car>
-References: <20221123092132.2521764-1-yosryahmed@google.com>
- <20221123092132.2521764-2-yosryahmed@google.com>
+        bh=RW4s5qZP7iLYjFXDb8iCZpuHhmvYZDpwBBjWfBk4ed8=;
+        b=YrgziNJVFPBsbTQxrMK/WQfPldsgHqCpbYNfxIcUFm/ZAF5C8WmynY8/SHpzKk5akTx2Ew
+        rCmJi1N7pJYvoASWQfzC/5hU6TxIl6nM4eIBRX9vlIs6XRYrpqpvs/dKhAJq/iIIG/MqmJ
+        D3HrLD6mUGEhRXTNGn3IDirN9momOZc=
+Date:   Wed, 23 Nov 2022 16:40:50 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221123092132.2521764-2-yosryahmed@google.com>
+Subject: Re: [PATCH bpf v2] bpf: Update bpf_{g,s}etsockopt() documentation
+Content-Language: en-US
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Ji Rongfeng <SikoJobs@outlook.com>
+Cc:     ast@kernel.org, andrii@kernel.org, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, joannelkoong@gmail.com,
+        kuifeng@fb.com, lorenzo@kernel.org, maximmi@nvidia.com,
+        quentin@isovalent.com, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <DU0P192MB15479B86200B1216EC90E162D6099@DU0P192MB1547.EURP192.PROD.OUTLOOK.COM>
+ <0977584d-8aff-624d-4cf8-a6e4868958c5@iogearbox.net>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <0977584d-8aff-624d-4cf8-a6e4868958c5@iogearbox.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 09:21:30AM +0000, Yosry Ahmed wrote:
-> During reclaim, mem_cgroup_calculate_protection() is used to determine
-> the effective protection (emin and elow) values of a memcg. The
-> protection of the reclaim target is ignored, but we cannot set their
-> effective protection to 0 due to a limitation of the current
-> implementation (see comment in mem_cgroup_protection()). Instead,
-> we leave their effective protection values unchaged, and later ignore it
-> in mem_cgroup_protection().
+On 11/23/22 4:18 PM, Daniel Borkmann wrote:
+> On 11/18/22 9:18 AM, Ji Rongfeng wrote:
+>> * append missing optnames to the end
+>> * simplify bpf_getsockopt()'s doc
+>>
+>> Signed-off-by: Ji Rongfeng <SikoJobs@outlook.com>
+>> ---
+>>   include/uapi/linux/bpf.h       | 20 ++++++++++++--------
+>>   tools/include/uapi/linux/bpf.h | 20 ++++++++++++--------
+>>   2 files changed, 24 insertions(+), 16 deletions(-)
+>>
+>> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+>> index 51b9aa640ad2..14f29d95ea71 100644
+>> --- a/include/uapi/linux/bpf.h
+>> +++ b/include/uapi/linux/bpf.h
+>> @@ -2576,14 +2576,19 @@ union bpf_attr {
+>>    *         * **SOL_SOCKET**, which supports the following *optname*\ s:
+>>    *           **SO_RCVBUF**, **SO_SNDBUF**, **SO_MAX_PACING_RATE**,
+>>    *           **SO_PRIORITY**, **SO_RCVLOWAT**, **SO_MARK**,
+>> - *           **SO_BINDTODEVICE**, **SO_KEEPALIVE**.
+>> + *           **SO_BINDTODEVICE**, **SO_KEEPALIVE**, **SO_REUSEADDR**,
+>> + *           **SO_REUSEPORT**, **SO_BINDTOIFINDEX**, **SO_TXREHASH**.
+>>    *         * **IPPROTO_TCP**, which supports the following *optname*\ s:
+>>    *           **TCP_CONGESTION**, **TCP_BPF_IW**,
+>>    *           **TCP_BPF_SNDCWND_CLAMP**, **TCP_SAVE_SYN**,
+>>    *           **TCP_KEEPIDLE**, **TCP_KEEPINTVL**, **TCP_KEEPCNT**,
+>> - *          **TCP_SYNCNT**, **TCP_USER_TIMEOUT**, **TCP_NOTSENT_LOWAT**.
+>> + *           **TCP_SYNCNT**, **TCP_USER_TIMEOUT**, **TCP_NOTSENT_LOWAT**,
+>> + *           **TCP_NODELAY**, **TCP_MAXSEG**, **TCP_WINDOW_CLAMP**,
+>> + *           **TCP_THIN_LINEAR_TIMEOUTS**, **TCP_BPF_DELACK_MAX**,
+>> + *           **TCP_BPF_RTO_MIN**.
+>>    *         * **IPPROTO_IP**, which supports *optname* **IP_TOS**.
+>> - *         * **IPPROTO_IPV6**, which supports *optname* **IPV6_TCLASS**.
+>> + *         * **IPPROTO_IPV6**, which supports the following *optname*\ s:
+>> + *           **IPV6_TCLASS**, **IPV6_AUTOFLOWLABEL**.
+>>    *     Return
+>>    *         0 on success, or a negative error in case of failure.
+>>    *
+>> @@ -2800,12 +2805,11 @@ union bpf_attr {
+>>    *           and **BPF_CGROUP_INET6_CONNECT**.
+>>    *
+>>    *         This helper actually implements a subset of **getsockopt()**.
+>> - *         It supports the following *level*\ s:
+>> + *         It supports the same set of *optname*\ s that supported by
 > 
-> However, mem_cgroup_protection() is called later in
-> shrink_lruvec()->get_scan_count(), which is after the
-> mem_cgroup_below_{min/low}() checks in shrink_node_memcgs(). As a
-> result, the stale effective protection values of the target memcg may
-> lead us to skip reclaiming from the target memcg entirely, before
-> calling shrink_lruvec(). This can be even worse with recursive
-> protection, where the stale target memcg protection can be higher than
-> its standalone protection. See two examples below (a similar version of
-> example (a) is added to test_memcontrol in a later patch).
+> nit: that is supported by
 > 
-> (a) A simple example with proactive reclaim is as follows. Consider the
-> following hierarchy:
-> ROOT
->  |
->  A
->  |
->  B (memory.min = 10M)
+>> + *         **bpf_setsockopt**\ () helper with a few exceptions:
+>>    *
+>> - *         * **IPPROTO_TCP**, which supports *optname*
+>> - *           **TCP_CONGESTION**.
+>> - *         * **IPPROTO_IP**, which supports *optname* **IP_TOS**.
+>> - *         * **IPPROTO_IPV6**, which supports *optname* **IPV6_TCLASS**.
+>> + *         * **bpf_setsockopt**\ () helper only: **TCP_BPF_***.
+>> + *         * **bpf_getsockopt**\ () helper only: **TCP_SAVED_SYNC**.
 > 
-> Consider the following scenario:
-> - B has memory.current = 10M.
-> - The system undergoes global reclaim (or memcg reclaim in A).
-> - In shrink_node_memcgs():
->   - mem_cgroup_calculate_protection() calculates the effective min (emin)
->     of B as 10M.
->   - mem_cgroup_below_min() returns true for B, we do not reclaim from B.
-> - Now if we want to reclaim 5M from B using proactive reclaim
->   (memory.reclaim), we should be able to, as the protection of the
->   target memcg should be ignored.
-> - In shrink_node_memcgs():
->   - mem_cgroup_calculate_protection() immediately returns for B without
->     doing anything, as B is the target memcg, relying on
->     mem_cgroup_protection() to ignore B's stale effective min (still 10M).
->   - mem_cgroup_below_min() reads the stale effective min for B and we
->     skip it instead of ignoring its protection as intended, as we never
->     reach mem_cgroup_protection().
-> 
-> (b) An more complex example with recursive protection is as follows.
-> Consider the following hierarchy with memory_recursiveprot:
-> ROOT
->  |
->  A (memory.min = 50M)
->  |
->  B (memory.min = 10M, memory.high = 40M)
-> 
-> Consider the following scenario:
-> - B has memory.current = 35M.
-> - The system undergoes global reclaim (target memcg is NULL).
-> - B will have an effective min of 50M (all of A's unclaimed protection).
-> - B will not be reclaimed from.
-> - Now allocate 10M more memory in B, pushing it above it's high limit.
-> - The system undergoes memcg reclaim from B (target memcg is B).
-> - Like example (a), we do nothing in mem_cgroup_calculate_protection(),
->   then call mem_cgroup_below_min(), which will read the stale effective
->   min for B (50M) and skip it. In this case, it's even worse because we
->   are not just considering B's standalone protection (10M), but we are
->   reading a much higher stale protection (50M) which will cause us to not
->   reclaim from B at all.
-> 
-> This is an artifact of commit 45c7f7e1ef17 ("mm, memcg: decouple
-> e{low,min} state mutations from protection checks") which made
-> mem_cgroup_calculate_protection() only change the state without
-> returning any value. Before that commit, we used to return
-> MEMCG_PROT_NONE for the target memcg, which would cause us to skip the
-> mem_cgroup_below_{min/low}() checks. After that commit we do not return
-> anything and we end up checking the min & low effective protections for
-> the target memcg, which are stale.
-> 
-> Update mem_cgroup_supports_protection() to also check if we are
-> reclaiming from the target, and rename it to mem_cgroup_unprotected()
-> (now returns true if we should not protect the memcg, much simpler logic).
-> 
-> Fixes: 45c7f7e1ef17 ("mm, memcg: decouple e{low,min} state mutations from protection checks")
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> I think from a user PoV the above is a bit hard to follow, maybe take Martin's
+> earlier feedback into account and add a proper sentence; it will be much easier
+> to understand.
 
-Reviewed-by: Roman Gushchin <roman.gushchin@linux.dev>
++1  Made the change and also fixed TCP_SAVED_SYNC with s/SYNC/SYN/ while 
+applying.  Thanks!
 
-Thank you!
+
