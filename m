@@ -2,89 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8FB5637F9A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 20:19:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF127637F66
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 20:12:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbiKXTT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 14:19:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34146 "EHLO
+        id S229472AbiKXTMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 14:12:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiKXTTX (ORCPT
+        with ESMTP id S229379AbiKXTMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 14:19:23 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C22069AAB
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 11:19:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669317563; x=1700853563;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nCqV1mFvyRu7XjdUWbRQ79shM3wrEYQXSkya+tsZ/cg=;
-  b=TVop2ZZq11XxoU7FDOqq1P0C1xeYCy1wM6h+NUc2gMJDrnYCVEON773M
-   zAh+hGZk+sx/QdB0BNwZuYPHbZMB6a52lC0JqGLw8RLNgnH7CWVVlXo6d
-   mPufbBa8VubSAEsST4sMklzkNCS0o3w0+1drCYlcpyuXCMFPZRHSVAHc3
-   rQNtMMEPc7MnG9HvwnKuFwKIyIzQcuRzURq+YwslSD8yDyd6+w7If/T2S
-   23BQq1281iQdziE2QQBZb7okEQUrGMYEhlnRtpiqt2zZNg46qBzeChpsN
-   HQQcQl1ISWz8KBXx8OWgTspToAWJiSkyLDEXZ0yJ0iZ3Rc3xh4Y9HwAtb
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="313055117"
-X-IronPort-AV: E=Sophos;i="5.96,191,1665471600"; 
-   d="scan'208";a="313055117"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2022 11:19:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="767163501"
-X-IronPort-AV: E=Sophos;i="5.96,191,1665471600"; 
-   d="scan'208";a="767163501"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 24 Nov 2022 11:19:20 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1oyHkl-00GuyM-2a;
-        Thu, 24 Nov 2022 21:19:19 +0200
-Date:   Thu, 24 Nov 2022 21:19:19 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Jianglei Nie <niejianglei2021@163.com>
-Cc:     ojeda@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] auxdisplay: hd44780: Fix potential memory leak in
- hd44780_remove()
-Message-ID: <Y3/Dt3f4edPqPFqb@smile.fi.intel.com>
-References: <20220907070735.56488-1-niejianglei2021@163.com>
+        Thu, 24 Nov 2022 14:12:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F14C663DC;
+        Thu, 24 Nov 2022 11:12:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 15DE4621FC;
+        Thu, 24 Nov 2022 19:12:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05400C433D6;
+        Thu, 24 Nov 2022 19:12:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669317139;
+        bh=fm5hOY1yL5EyiRszJuhpXBvb/9VJ/KPDtI6wze+nQP0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UDOzl5ePCO7sbcRg6ZQAGDYW/Qlx4j2W5Tz71b4rTPSJHpS7fnxYGTmdFhYvqmGD3
+         mmtgd7C8CxX5WbkBOVTHorfOdajrdZiaB7GGWPtpnuBr2GtmIDwqiej1pdtI3rJxaY
+         MGV08wfTlylbnFuD8jK4GArnVdpTI80vj0IUUiTPPA+RLKVhnLX8Gh9e86A62xD3VD
+         6dU54VPJ0gO2XVLX8PpycESIS7AVgNjlrDgKU2cdm53Ai5FrlImW42S6QWm88TJw9e
+         fzrrKcKE4Br1ubJgvTANG07iKQGXiP/Vc7pc3JbrWudlogMb6uZrM0zqXZHFL1mBqR
+         Fq8IR2h3taXCw==
+Date:   Thu, 24 Nov 2022 19:24:53 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iio: addac: ad74413r: fix blank line after declaration
+ warning
+Message-ID: <20221124192453.13cf0d1c@jic23-huawei>
+In-Reply-To: <20221124153049.8851-1-cosmin.tanislav@analog.com>
+References: <20221124153049.8851-1-cosmin.tanislav@analog.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220907070735.56488-1-niejianglei2021@163.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Sep 07, 2022 at 03:07:35PM +0800, Jianglei Nie wrote:
-> hd44780_probe() allocates a memory chunk for hd with kzalloc() and
-> makes "lcd->drvdata->hd44780" point to it. When we call hd44780_remove(),
-> we should release all relevant memory and resource. But "lcd->drvdata
-> ->hd44780" is not released, which will lead to a memory leak.
+On Thu, 24 Nov 2022 17:30:49 +0200
+Cosmin Tanislav <demonsingur@gmail.com> wrote:
+
+> Checkpatch wants a blank line after all declarations. Add it now,
+> even though the patch has already been submitted.
 > 
-> We should release the "lcd->drvdata->hd44780" in hd44780_remove() to fix
-> the memory leak bug.
+> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+> Fixes: 7b2366008125 ("iio: addac: ad74413r: add spi_device_id table")
+Dropped fixes tag as this is just cosmetic.
 
-It's pity you haven't compiled your stuff, while the analysis seems valid
-to me.
-
-What you need to do is:
-1) compile on your side _before_ sending and be sure it compiles;
-2) in this particular case you need an additional level of typing;
-3) add Fixes tag;
-4) resubmit as v2 the new version.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+Applied.
+> ---
+>  drivers/iio/addac/ad74413r.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/iio/addac/ad74413r.c b/drivers/iio/addac/ad74413r.c
+> index 61030053cbea..f32c8c2fb26d 100644
+> --- a/drivers/iio/addac/ad74413r.c
+> +++ b/drivers/iio/addac/ad74413r.c
+> @@ -1315,6 +1315,7 @@ static int ad74413r_probe(struct spi_device *spi)
+>  	st->chip_info = device_get_match_data(&spi->dev);
+>  	if (!st->chip_info) {
+>  		const struct spi_device_id *id = spi_get_device_id(spi);
+> +
+>  		if (id)
+>  			st->chip_info =
+>  				(struct ad74413r_chip_info *)id->driver_data;
 
