@@ -2,102 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F6E36374E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 10:13:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 000106374E1
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 10:13:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbiKXJNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 04:13:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
+        id S229775AbiKXJNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 04:13:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiKXJNK (ORCPT
+        with ESMTP id S229490AbiKXJNN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 04:13:10 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2569AA7C20
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 01:13:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=rYKETZNIw+pj0LXb2Wyi36GtM0KwamzRnevtcxyrblE=; b=BE2GJmWj8FcFlJeGphp0U+CMdU
-        Ek4OwVIY+0wgIOZFoXZ1RhRwL8uMpwUVwAfIgASOchavvWe+DyMhNb2FJJjJTj24TRJAVBAxLWkGP
-        3fOn+pXhfg+87MR7GHIKI0KrdaNvBXFHhJ7CDXIqOHLSW22Gelmi50qdFT7zSP5tcH+oF48RpODAq
-        TrRApHUGFYRCiaoMvKfn+XMe0+LuHXjXgOKd55paAr321SX7k9xkBGrhBEu7SGQ/TJPZyMCJAM34i
-        d0cbHaR4POdUO7QF86KBvc6zgCXrnLJGatP33Za+50svtNZnBRyY13a+qO7oIx1Qzj9/Yq5yziER6
-        s3UFpMbw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oy8Hl-0047dR-Jm; Thu, 24 Nov 2022 09:12:45 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 03129300202;
-        Thu, 24 Nov 2022 10:12:43 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id DA96E2B974B5C; Thu, 24 Nov 2022 10:12:43 +0100 (CET)
-Date:   Thu, 24 Nov 2022 10:12:43 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Don <joshdon@google.com>
-Cc:     Aaron Lu <aaron.lu@intel.com>, Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>
-Subject: Re: [PATCH v3] sched: async unthrottling for cfs bandwidth
-Message-ID: <Y381i3/BwtW6edlS@hirez.programming.kicks-ass.net>
-References: <20221117005418.3499691-1-joshdon@google.com>
- <Y3d+1a9AEnWaxFwq@hirez.programming.kicks-ass.net>
- <CABk29NtSmXVCvkdpymeam7AYmXhZy2JLYLPFTdKpk5g6AN1-zg@mail.gmail.com>
- <Y3xnUhjSb56ex9XX@ziqianlu-desk2>
- <CABk29Ntdztkv4jT87vFgTtC99d49iUu9CcHPruh9MxDazaAW7A@mail.gmail.com>
+        Thu, 24 Nov 2022 04:13:13 -0500
+Received: from out199-6.us.a.mail.aliyun.com (out199-6.us.a.mail.aliyun.com [47.90.199.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD1910B40F
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 01:13:11 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=zelin.deng@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VVaTOuf_1669281177;
+Received: from alinux-host.hz.ali.com(mailfrom:zelin.deng@linux.alibaba.com fp:SMTPD_---0VVaTOuf_1669281177)
+          by smtp.aliyun-inc.com;
+          Thu, 24 Nov 2022 17:13:06 +0800
+From:   Zelin Deng <zelin.deng@linux.alibaba.com>
+To:     x86@kernel.org, linux-kernel@vger.kernel.org
+Cc:     Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Zelin Deng <zelin.deng@linux.alibaba.com>
+Subject: [PATCH 0/2] Map initrd as encrypted when relocating if SME is enabled
+Date:   Thu, 24 Nov 2022 17:12:44 +0800
+Message-Id: <20221124091246.4957-1-zelin.deng@linux.alibaba.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABk29Ntdztkv4jT87vFgTtC99d49iUu9CcHPruh9MxDazaAW7A@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 11:41:04AM -0800, Josh Don wrote:
-> > > +        */
-> > > +       if (local_unthrottle) {
-> > > +               rq = cpu_rq(this_cpu);
-> > > +               rq_lock_irqsave(rq, &rf);
-> >
-> > Should we add:
-> >                 if (cfs_rq_throttled(local_unthrottle))
-> >
-> > before calling into unthrottle_cfs_rq_async(local_unthrottle) to avoid a
-> > potential WARN?
-> >
-> > As for whether the local cfs_rq can be unthrottled now after rq lock is
-> > re-acquired, I suppose it can be. e.g. another user sets a new quota to
-> > this task group during the window of rq lock gets dropped in the above
-> > loop and re-acquired here IIUC.
-> >
-> > > +               unthrottle_cfs_rq_async(local_unthrottle);
-> > > +               rq_unlock_irqrestore(rq, &rf);
-> > > +       }
-> > > +
-> > >         return throttled;
-> > >  }
-> 
-> Yes, we should add that check due to the case you described with a
-> user concurrently configuring bandwidth. And as long as we're doing
-> that, we might as well make this unthrottle_cfs_rq() instead and snip
-> the comment. Peter, would you mind adding that delta?
+I found an issue on SME enabled AMD machine when initrd is relocated if
+it was located in e820 reserved area.
+For example key dmesg output:
+...
+[mem 0x000000005aafe000-0x000000006005ffff] reserved //e820 mapping
+Move RAMDISK from [mem 0x5aafe000-0x5ccd5167] //relocate_initrd()
+...
 
-Done, should be pushed into the queue.git thing momentarily.
+Early initrd will be copied by copy_from_early_mem() which will clear
+encrypted pgprot flag as initrd source address is not in kernel usable
+area. As initrd has been encrypted at earlier stage, encrypted data is
+copied, which leads new initrd cannot be unpacked, then rootfs cannot be
+mounted.
+dmesg output:
+...
+[   11.296725] Trying to unpack rootfs image as initramfs...
+[   11.302127] Initramfs unpacking failed: invalid magic at start of compressed archive
+...
+[   16.698152] /dev/root: Can't open blockdev
+[   16.702255] VFS: Cannot open root device "PARTUUID=0ad58d87-05c7-43f8-b147-93140ad315e5" or unknown-block(0,0): error -6
+[   16.713114] Please append a correct "root=" boot option; here are the available partitions:
+[   16.721462] Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0)
+[   16.729716] CPU: 9 PID: 1 Comm: swapper/0 Not tainted 6.1.0-rc5-next-20221114 #3
+[   16.737099] Hardware name: AMD Corporation DAYTONA_X/DAYTONA_X, BIOS RYM1008B 01/19/2022
+[   16.745175] Call Trace:
+[   16.747623]  <TASK>
+[   16.749727]  dump_stack_lvl+0x38/0x4c
+[   16.753393]  panic+0xfb/0x28a
+[   16.771999]  ? _printk+0x4c/0x52
+[   16.775224]  mount_block_root+0x143/0x1dd
+[   16.779237]  prepare_namespace+0x13f/0x16e
+[   16.783334]  kernel_init_freeable+0x15a/0x164
+[   16.787687]  ? __pfx_kernel_init+0x10/0x10
+[   16.791785]  kernel_init+0x1a/0x130
+[   16.795268]  ret_from_fork+0x29/0x50
+[   16.798840]  </TASK>
+
+To fix this issue, early initrd must be mapped as encrypted when it is
+being relocated.
+
+Zelin Deng (2):
+  mm/early_ioremap.c: Always build early_memremap_prot() in x86
+  x86/setup: Preserve _ENC flag when initrd is being relocated
+
+ arch/x86/Kconfig                    |  1 +
+ arch/x86/kernel/setup.c             | 30 ++++++++++++++++++++++++++++-
+ include/asm-generic/early_ioremap.h |  6 ------
+ mm/early_ioremap.c                  | 21 --------------------
+ 4 files changed, 30 insertions(+), 28 deletions(-)
+
+-- 
+2.27.0
+
