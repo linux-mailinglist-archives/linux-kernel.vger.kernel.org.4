@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C49F637B36
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 15:16:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED26637B3A
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 15:16:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230199AbiKXOQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 09:16:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44948 "EHLO
+        id S230222AbiKXOQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 09:16:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbiKXOQF (ORCPT
+        with ESMTP id S229996AbiKXOQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 09:16:05 -0500
+        Thu, 24 Nov 2022 09:16:07 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C12EE0B62;
-        Thu, 24 Nov 2022 06:16:03 -0800 (PST)
-Date:   Thu, 24 Nov 2022 14:16:00 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808B3E1BFE;
+        Thu, 24 Nov 2022 06:16:04 -0800 (PST)
+Date:   Thu, 24 Nov 2022 14:16:01 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669299361;
+        s=2020; t=1669299362;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=aoV3AFMGO8ondSC4f0jCTV9tLxBQy1OhE1Yrhn7xh+0=;
-        b=md7ONus0jMF1BpPfrBcDMg+sY16nvrhmQvwJUvFELAQ91XOLvDhYjnUfB13KC9EAYqyTyD
-        IvSu9MKAyNBRTP7rFkxi6wiViQOvpXrCMX/C53tBA3vPt49VcC+tHdAPhqS9ESUmlLEbSs
-        SIEMk6x6dPGjgotThXlZSn3VvHaCcTb2gxoP1blGvseeLV/VkuhIcyK/MwDMP1fEakXBXz
-        xcAz0+SeEMd0SchTmxIAE5Bb2hRAiJr0nmcW8ck7npBI1ib1JLbMtzPZ1CuTRQRU+9Y0Jx
-        CfPgmK9cKlCGW1Y3ho39GOryxyrhU+tRB3DZkM/X2x2oA+WiLO5l3i5XGrnzBQ==
+        bh=jstBFKJYrlKM5IBe+Kd8tSZGsiZAFSxp+NsE8vYs0tc=;
+        b=gurjz5rYkmkxuGvV5rRuPbS/ebQTOw6pNJruzcV1BofU8UzcfxwEJ8sGmde4VSEzyFvcn1
+        RUdSCB6yAx60u3YD3bz1f/9ZqrqI9M7DYswS7apdXzUs1DwQf+xK+OE1jYV9XEI3Y3vQCg
+        bG+KnyT/Xd9yOa0lImaHJARwjpsnRhMeaY70yJ8VPNMRT6yR0fkllsxL5NZ9o4n2wOFPaq
+        q24uPh6DkDKSdJ1AnDAqDYkt/S1LdJSG8uj0h6E6s/O9MPv/wQuvj6jSwhsLJHoixvzmQK
+        tZicrfRQUJjgRYrVNnSoT7SXUvFVpuj6R8z9ZCeH18e/iQ2Tnc1CPQ/KhAuX0w==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669299361;
+        s=2020e; t=1669299362;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=aoV3AFMGO8ondSC4f0jCTV9tLxBQy1OhE1Yrhn7xh+0=;
-        b=91Y2vD/SQjt9Pjjp4ojoz7TqzUmtmIyf7s2f8Eq3rXdbqeROicaD8p1jLbTO9iGQgBBh8s
-        JaPxRtHkVlZ/1rBw==
-From:   "tip-bot2 for Steven Rostedt (Google)" <tip-bot2@linutronix.de>
+        bh=jstBFKJYrlKM5IBe+Kd8tSZGsiZAFSxp+NsE8vYs0tc=;
+        b=4p6Rxp5QwfACcyPwxwZANRvsExcBvJy82+Z0tsVf44VwGuMSui3Qehh8818iuGvk/XEu70
+        bPewQ0iA5eQ0jOCQ==
+From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] timers: Update the documentation to reflect on the
- new timer_shutdown() API
-Cc:     "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+Subject: [tip: timers/core] timers: Provide timer_shutdown[_sync]()
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Guenter Roeck <linux@roeck-us.net>,
         Jacob Keller <jacob.e.keller@intel.com>,
         "Anna-Maria Behnsen" <anna-maria@linutronix.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20221110064147.712934793@goodmis.org>
-References: <20221110064147.712934793@goodmis.org>
+In-Reply-To: <20220407161745.7d6754b3@gandalf.local.home>
+References: <20220407161745.7d6754b3@gandalf.local.home>
 MIME-Version: 1.0
-Message-ID: <166929936027.4906.15038032251708772543.tip-bot2@tip-bot2>
+Message-ID: <166929936145.4906.16764857196527632817.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -70,101 +69,151 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     a31323bef2b66455920d054b160c17d4240f8fd4
-Gitweb:        https://git.kernel.org/tip/a31323bef2b66455920d054b160c17d4240=
-f8fd4
-Author:        Steven Rostedt (Google) <rostedt@goodmis.org>
-AuthorDate:    Wed, 23 Nov 2022 21:18:55 +01:00
+Commit-ID:     f571faf6e443b6011ccb585d57866177af1f643c
+Gitweb:        https://git.kernel.org/tip/f571faf6e443b6011ccb585d57866177af1f643c
+Author:        Thomas Gleixner <tglx@linutronix.de>
+AuthorDate:    Wed, 23 Nov 2022 21:18:53 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Thu, 24 Nov 2022 15:09:12 +01:00
 
-timers: Update the documentation to reflect on the new timer_shutdown() API
+timers: Provide timer_shutdown[_sync]()
 
-In order to make sure that a timer is not re-armed after it is stopped
-before freeing, a new shutdown state is added to the timer code. The API
-timer_shutdown_sync() and timer_shutdown() must be called before the
-object that holds the timer can be freed.
+Tearing down timers which have circular dependencies to other
+functionality, e.g. workqueues, where the timer can schedule work and work
+can arm timers, is not trivial.
 
-Update the documentation to reflect this new workflow.
+In those cases it is desired to shutdown the timer in a way which prevents
+rearming of the timer. The mechanism to do so is to set timer->function to
+NULL and use this as an indicator for the timer arming functions to ignore
+the (re)arm request.
 
-[ tglx: Updated to the new semantics and updated the zh_CN version ]
+Expose new interfaces for this: timer_shutdown_sync() and timer_shutdown().
 
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+timer_shutdown_sync() has the same functionality as timer_delete_sync()
+plus the NULL-ification of the timer function.
+
+timer_shutdown() has the same functionality as timer_delete() plus the
+NULL-ification of the timer function.
+
+In both cases the rearming of the timer is prevented by silently discarding
+rearm attempts due to timer->function being NULL.
+
+Co-developed-by: Steven Rostedt <rostedt@goodmis.org>
+Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Tested-by: Guenter Roeck <linux@roeck-us.net>
 Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
 Reviewed-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
-Link: https://lore.kernel.org/r/20221110064147.712934793@goodmis.org
-Link: https://lore.kernel.org/r/20221123201625.375284489@linutronix.de
+Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home
+Link: https://lore.kernel.org/all/20221110064101.429013735@goodmis.org
+Link: https://lore.kernel.org/r/20221123201625.314230270@linutronix.de
 
 ---
- Documentation/RCU/Design/Requirements/Requirements.rst  | 2 +-
- Documentation/core-api/local_ops.rst                    | 2 +-
- Documentation/kernel-hacking/locking.rst                | 5 +++++
- Documentation/translations/zh_CN/core-api/local_ops.rst | 2 +-
- 4 files changed, 8 insertions(+), 3 deletions(-)
+ include/linux/timer.h |  2 +-
+ kernel/time/timer.c   | 66 ++++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 68 insertions(+)
 
-diff --git a/Documentation/RCU/Design/Requirements/Requirements.rst b/Documen=
-tation/RCU/Design/Requirements/Requirements.rst
-index 546f23a..49387d8 100644
---- a/Documentation/RCU/Design/Requirements/Requirements.rst
-+++ b/Documentation/RCU/Design/Requirements/Requirements.rst
-@@ -1858,7 +1858,7 @@ unloaded. After a given module has been unloaded, any a=
-ttempt to call
- one of its functions results in a segmentation fault. The module-unload
- functions must therefore cancel any delayed calls to loadable-module
- functions, for example, any outstanding mod_timer() must be dealt
--with via timer_delete_sync() or similar.
-+with via timer_shutdown_sync() or similar.
-=20
- Unfortunately, there is no way to cancel an RCU callback; once you
- invoke call_rcu(), the callback function is eventually going to be
-diff --git a/Documentation/core-api/local_ops.rst b/Documentation/core-api/lo=
-cal_ops.rst
-index a84f8b0..0b42cea 100644
---- a/Documentation/core-api/local_ops.rst
-+++ b/Documentation/core-api/local_ops.rst
-@@ -191,7 +191,7 @@ Here is a sample module which implements a basic per cpu =
-counter using
-=20
-     static void __exit test_exit(void)
-     {
--            timer_delete_sync(&test_timer);
-+            timer_shutdown_sync(&test_timer);
-     }
-=20
-     module_init(test_init);
-diff --git a/Documentation/kernel-hacking/locking.rst b/Documentation/kernel-=
-hacking/locking.rst
-index c5b8678..c756786 100644
---- a/Documentation/kernel-hacking/locking.rst
-+++ b/Documentation/kernel-hacking/locking.rst
-@@ -1007,6 +1007,11 @@ calling add_timer() at the end of their timer function=
-).
- Because this is a fairly common case which is prone to races, you should
- use timer_delete_sync() (``include/linux/timer.h``) to handle this case.
-=20
-+Before freeing a timer, timer_shutdown() or timer_shutdown_sync() should be
-+called which will keep it from being rearmed. Any subsequent attempt to
-+rearm the timer will be silently ignored by the core code.
+diff --git a/include/linux/timer.h b/include/linux/timer.h
+index e338e17..9162f27 100644
+--- a/include/linux/timer.h
++++ b/include/linux/timer.h
+@@ -184,6 +184,8 @@ extern void add_timer(struct timer_list *timer);
+ extern int try_to_del_timer_sync(struct timer_list *timer);
+ extern int timer_delete_sync(struct timer_list *timer);
+ extern int timer_delete(struct timer_list *timer);
++extern int timer_shutdown_sync(struct timer_list *timer);
++extern int timer_shutdown(struct timer_list *timer);
+ 
+ /**
+  * del_timer_sync - Delete a pending timer and wait for a running callback
+diff --git a/kernel/time/timer.c b/kernel/time/timer.c
+index 167e43c..63a8ce7 100644
+--- a/kernel/time/timer.c
++++ b/kernel/time/timer.c
+@@ -1363,6 +1363,27 @@ int timer_delete(struct timer_list *timer)
+ EXPORT_SYMBOL(timer_delete);
+ 
+ /**
++ * timer_shutdown - Deactivate a timer and prevent rearming
++ * @timer:	The timer to be deactivated
++ *
++ * The function does not wait for an eventually running timer callback on a
++ * different CPU but it prevents rearming of the timer. Any attempt to arm
++ * @timer after this function returns will be silently ignored.
++ *
++ * This function is useful for teardown code and should only be used when
++ * timer_shutdown_sync() cannot be invoked due to locking or context constraints.
++ *
++ * Return:
++ * * %0 - The timer was not pending
++ * * %1 - The timer was pending
++ */
++int timer_shutdown(struct timer_list *timer)
++{
++	return __timer_delete(timer, true);
++}
++EXPORT_SYMBOL_GPL(timer_shutdown);
 +
++/**
+  * __try_to_del_timer_sync - Internal function: Try to deactivate a timer
+  * @timer:	Timer to deactivate
+  * @shutdown:	If true, this indicates that the timer is about to be
+@@ -1595,6 +1616,9 @@ static int __timer_delete_sync(struct timer_list *timer, bool shutdown)
+  * lock. If there is the possibility of a concurrent rearm then the return
+  * value of the function is meaningless.
+  *
++ * If such a guarantee is needed, e.g. for teardown situations then use
++ * timer_shutdown_sync() instead.
++ *
+  * Return:
+  * * %0	- The timer was not pending
+  * * %1	- The timer was pending and deactivated
+@@ -1605,6 +1629,48 @@ int timer_delete_sync(struct timer_list *timer)
+ }
+ EXPORT_SYMBOL(timer_delete_sync);
+ 
++/**
++ * timer_shutdown_sync - Shutdown a timer and prevent rearming
++ * @timer: The timer to be shutdown
++ *
++ * When the function returns it is guaranteed that:
++ *   - @timer is not queued
++ *   - The callback function of @timer is not running
++ *   - @timer cannot be enqueued again. Any attempt to rearm
++ *     @timer is silently ignored.
++ *
++ * See timer_delete_sync() for synchronization rules.
++ *
++ * This function is useful for final teardown of an infrastructure where
++ * the timer is subject to a circular dependency problem.
++ *
++ * A common pattern for this is a timer and a workqueue where the timer can
++ * schedule work and work can arm the timer. On shutdown the workqueue must
++ * be destroyed and the timer must be prevented from rearming. Unless the
++ * code has conditionals like 'if (mything->in_shutdown)' to prevent that
++ * there is no way to get this correct with timer_delete_sync().
++ *
++ * timer_shutdown_sync() is solving the problem. The correct ordering of
++ * calls in this case is:
++ *
++ *	timer_shutdown_sync(&mything->timer);
++ *	workqueue_destroy(&mything->workqueue);
++ *
++ * After this 'mything' can be safely freed.
++ *
++ * This obviously implies that the timer is not required to be functional
++ * for the rest of the shutdown operation.
++ *
++ * Return:
++ * * %0 - The timer was not pending
++ * * %1 - The timer was pending
++ */
++int timer_shutdown_sync(struct timer_list *timer)
++{
++	return __timer_delete_sync(timer, true);
++}
++EXPORT_SYMBOL_GPL(timer_shutdown_sync);
 +
- Locking Speed
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
-diff --git a/Documentation/translations/zh_CN/core-api/local_ops.rst b/Docume=
-ntation/translations/zh_CN/core-api/local_ops.rst
-index 22493b9..eb5423f 100644
---- a/Documentation/translations/zh_CN/core-api/local_ops.rst
-+++ b/Documentation/translations/zh_CN/core-api/local_ops.rst
-@@ -185,7 +185,7 @@ UP=E4=B9=8B=E9=97=B4=E6=B2=A1=E6=9C=89=E4=B8=8D=E5=90=8C=
-=E7=9A=84=E8=A1=8C=E4=B8=BA=EF=BC=8C=E5=9C=A8=E4=BD=A0=E7=9A=84=E6=9E=B6=E6=
-=9E=84=E7=9A=84 ``local.h`` =E4=B8=AD=E5=8C=85=E6=8B=AC ``asm-g
-=20
-     static void __exit test_exit(void)
-     {
--            timer_delete_sync(&test_timer);
-+            timer_shutdown_sync(&test_timer);
-     }
-=20
-     module_init(test_init);
+ static void call_timer_fn(struct timer_list *timer,
+ 			  void (*fn)(struct timer_list *),
+ 			  unsigned long baseclk)
