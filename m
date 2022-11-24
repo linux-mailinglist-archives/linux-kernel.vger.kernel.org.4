@@ -2,144 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F8C6637CCF
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 16:20:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E5B2637CA5
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 16:17:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbiKXPT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 10:19:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59678 "EHLO
+        id S229900AbiKXPRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 10:17:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbiKXPTH (ORCPT
+        with ESMTP id S229468AbiKXPRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 10:19:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4908E16FB01
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 07:16:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669302993;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EX0J0sgPn3/VZ/zS9HOQelAJB+dUZIbAy2+CqEVbXFE=;
-        b=SE8+o1eWKTEthGDfI8cEkyaK9bb/Ubg2go9XbOUjULyrYabOImHSm6ZehSK9/yYbAVY1xJ
-        e2YS3q3rZ4zdAwgBsBXFVf4OJ5bJhpE4+ofuTI8+YqcEd9iLZspKRSRNFatEGFJKoeiEc9
-        atgEAP0KEptiu3/XtZdty/mhS2+xvqU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-518-6XjPAMALPxCvtgClpPRx1Q-1; Thu, 24 Nov 2022 10:16:30 -0500
-X-MC-Unique: 6XjPAMALPxCvtgClpPRx1Q-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 24 Nov 2022 10:17:09 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5270316E8D9
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 07:16:21 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B6B801C05B0E;
-        Thu, 24 Nov 2022 15:16:29 +0000 (UTC)
-Received: from plouf.redhat.com (unknown [10.39.193.200])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 01A3B40C2064;
-        Thu, 24 Nov 2022 15:16:27 +0000 (UTC)
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [RFC hid v1 10/10] wip: vmtest aarch64
-Date:   Thu, 24 Nov 2022 16:16:03 +0100
-Message-Id: <20221124151603.807536-11-benjamin.tissoires@redhat.com>
-In-Reply-To: <20221124151603.807536-1-benjamin.tissoires@redhat.com>
-References: <20221124151603.807536-1-benjamin.tissoires@redhat.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 112C621AAE;
+        Thu, 24 Nov 2022 15:16:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669302980; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=lFWIP7ovUYBT8Xkxu4psBSN8B2MwPFxyKnu9NZvDse8=;
+        b=h5dS5qqvRG1CQZDiISI0EJAo07yH6fMI3KCARQnzvdnaSo1MajGwR1WnW1+vNnhUZuzjwT
+        rR8XHJ19Wy+/a7Aclkw3rdlQ9bPu+4ZzeckQYUamOzpB3pgbALzPxafyyofxqqDyDRTnNC
+        DNtp6V//zgSlRXcPXuQsVjjJ0Fu3j3c=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669302980;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=lFWIP7ovUYBT8Xkxu4psBSN8B2MwPFxyKnu9NZvDse8=;
+        b=iostWWR3qeJpqnrd2mviUerTNOOPeK0J82ozf4ZChq+tCpDONx/7rVFfpJseDGFv6Dqgj9
+        0DXiTBNxRP+NFrDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D567B13488;
+        Thu, 24 Nov 2022 15:16:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ZE2HMsOKf2PzYwAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Thu, 24 Nov 2022 15:16:19 +0000
+Date:   Thu, 24 Nov 2022 16:16:18 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Gabriel Somlo <gsomlo@gmail.com>, Joel Stanley <joel@jms.id.au>
+Subject: [PATCH] drivers/soc/litex: drop obsolete dependency on COMPILE_TEST
+Message-ID: <20221124161618.34ca07b3@endymion.delvare>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-untested
+Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
+is possible to test-build any driver which depends on OF on any
+architecture by explicitly selecting OF. Therefore depending on
+COMPILE_TEST as an alternative is no longer needed.
 
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+It is actually better to always build such drivers with OF enabled,
+so that the test builds are closer to how each driver will actually be
+built on its intended target. Building them without OF may not test
+much as the compiler will optimize out potentially large parts of the
+code. In the worst case, this could even pop false positive warnings.
+Dropping COMPILE_TEST here improves the quality of our testing and
+avoids wasting time on non-existent issues.
+
+As a minor optimization, this also lets us drop of_match_ptr() and
+ifdef-guarding, as we now know what they will resolve to, we might as
+well save cpp some work.
+
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Cc: Karol Gugala <kgugala@antmicro.com>
+Cc: Mateusz Holenko <mholenko@antmicro.com>
+Cc: Gabriel Somlo <gsomlo@gmail.com>
+Cc: Joel Stanley <joel@jms.id.au>
 ---
- tools/testing/selftests/hid/config.aarch64 | 39 ++++++++++++++++++++++
- tools/testing/selftests/hid/vmtest.sh      |  6 +++-
- 2 files changed, 44 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/hid/config.aarch64
+ drivers/soc/litex/Kconfig          |    2 +-
+ drivers/soc/litex/litex_soc_ctrl.c |    4 +---
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/hid/config.aarch64 b/tools/testing/selftests/hid/config.aarch64
-new file mode 100644
-index 000000000000..76581bc6395b
---- /dev/null
-+++ b/tools/testing/selftests/hid/config.aarch64
-@@ -0,0 +1,39 @@
-+# EFI
-+CONFIG_EFI_PARAMS_FROM_FDT=y
-+CONFIG_EFI_GENERIC_STUB=y
-+CONFIG_EFI_ARMSTUB_DTB_LOADER=y
-+
-+# Disable unsupported AARCH64 platforms
-+CONFIG_ARCH_ACTIONS=n
-+CONFIG_ARCH_SUNXI=n
-+CONFIG_ARCH_ALPINE=n
-+CONFIG_ARCH_APPLE=n
-+CONFIG_ARCH_BERLIN=n
-+CONFIG_ARCH_EXYNOS=n
-+CONFIG_ARCH_K3=n
-+CONFIG_ARCH_LAYERSCAPE=n
-+CONFIG_ARCH_LG1K=n
-+CONFIG_ARCH_HISI=n
-+CONFIG_ARCH_KEEMBAY=n
-+CONFIG_ARCH_MEDIATEK=n
-+CONFIG_ARCH_MESON=n
-+CONFIG_ARCH_MVEBU=n
-+CONFIG_ARCH_MXC=n
-+CONFIG_ARCH_QCOM=n
-+CONFIG_ARCH_RENESAS=n
-+CONFIG_ARCH_S32=n
-+CONFIG_ARCH_SEATTLE=n
-+CONFIG_ARCH_INTEL_SOCFPGA=n
-+CONFIG_ARCH_SYNQUACER=n
-+CONFIG_ARCH_TEGRA=n
-+CONFIG_ARCH_TESLA_FSD=n
-+CONFIG_ARCH_SPRD=n
-+CONFIG_ARCH_THUNDER=n
-+CONFIG_ARCH_THUNDER2=n
-+CONFIG_ARCH_UNIPHIER=n
-+CONFIG_ARCH_VEXPRESS=n
-+CONFIG_ARCH_VISCONTI=n
-+CONFIG_ARCH_XGENE=n
-+CONFIG_ARCH_ZYNQMP=n
-+
-+CONFIG_NET_VENDOR_MELLANOX=n
-diff --git a/tools/testing/selftests/hid/vmtest.sh b/tools/testing/selftests/hid/vmtest.sh
-index bd60f65acb72..d9e4a4c0557a 100755
---- a/tools/testing/selftests/hid/vmtest.sh
-+++ b/tools/testing/selftests/hid/vmtest.sh
-@@ -4,9 +4,13 @@
- set -u
- set -e
+--- linux-6.0.orig/drivers/soc/litex/Kconfig
++++ linux-6.0/drivers/soc/litex/Kconfig
+@@ -7,7 +7,7 @@ config LITEX
  
--# This script currently only works for x86_64
-+# This script currently only works for x86_64 and aarch64.
- ARCH="$(uname -m)"
- case "${ARCH}" in
-+aarch64)
-+	QEMU_BINARY=qemu-system-aarch64
-+	BZIMAGE="arch/aarch64/boot/bzImage"
-+	;;
- x86_64)
- 	QEMU_BINARY=qemu-system-x86_64
- 	BZIMAGE="arch/x86/boot/bzImage"
--- 
-2.38.1
+ config LITEX_SOC_CONTROLLER
+ 	tristate "Enable LiteX SoC Controller driver"
+-	depends on OF || COMPILE_TEST
++	depends on OF
+ 	depends on HAS_IOMEM
+ 	select LITEX
+ 	help
+--- linux-6.0.orig/drivers/soc/litex/litex_soc_ctrl.c
++++ linux-6.0/drivers/soc/litex/litex_soc_ctrl.c
+@@ -82,13 +82,11 @@ static int litex_reset_handler(struct no
+ 	return NOTIFY_DONE;
+ }
+ 
+-#ifdef CONFIG_OF
+ static const struct of_device_id litex_soc_ctrl_of_match[] = {
+ 	{.compatible = "litex,soc-controller"},
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, litex_soc_ctrl_of_match);
+-#endif /* CONFIG_OF */
+ 
+ static int litex_soc_ctrl_probe(struct platform_device *pdev)
+ {
+@@ -131,7 +129,7 @@ static int litex_soc_ctrl_remove(struct
+ static struct platform_driver litex_soc_ctrl_driver = {
+ 	.driver = {
+ 		.name = "litex-soc-controller",
+-		.of_match_table = of_match_ptr(litex_soc_ctrl_of_match)
++		.of_match_table = litex_soc_ctrl_of_match,
+ 	},
+ 	.probe = litex_soc_ctrl_probe,
+ 	.remove = litex_soc_ctrl_remove,
 
+
+-- 
+Jean Delvare
+SUSE L3 Support
