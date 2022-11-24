@@ -2,169 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72573636F86
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 01:58:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73ECD636F8A
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 01:59:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229449AbiKXA6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 19:58:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56222 "EHLO
+        id S229677AbiKXA7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 19:59:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiKXA6H (ORCPT
+        with ESMTP id S229531AbiKXA7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 19:58:07 -0500
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115022494C
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 16:58:05 -0800 (PST)
-Received: by mail-io1-xd2f.google.com with SMTP id h206so299580iof.10
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 16:58:05 -0800 (PST)
+        Wed, 23 Nov 2022 19:59:04 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF10786D2;
+        Wed, 23 Nov 2022 16:59:03 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id x13-20020a17090a46cd00b00218f611b6e9so248257pjg.1;
+        Wed, 23 Nov 2022 16:59:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vKAhmy3Js54RkUFkCFQDhybaQelynL8wunygu7WtJ7k=;
-        b=lKtcr8wSxZPXVcAdQly6CwaGgbk9WSX9Rty8S/EEcr5/Ezv8lvvjehm1nmbjWDxyN+
-         2qrCmaHcKJPXO5npXP1FRYDDvK1AHNvESB0BIsu7n4IVH+ZbxEYyTpkuqFXtsmTWH33m
-         M6luOKfKeCtord9LZWurm0dC0w/U65kLkyz+02j1vBoKEVCDKQia9Ko2PQ26NpI9+DoJ
-         RQFaAsGRC5bo7JE7lww1pahwzWQpuzuRp0Ner/zWplgSHz7DUs5qF6mtgBUcGq3shAAH
-         Va7Q7h4aP/dw3ob2JUlCfCj6/Nys47uDcoHSmTskPPj0IEn9Su4VXcLn9QaodmTv2lcl
-         jahQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wNgqx4nOvBacXRcfWNIQEwnOw2cT8o68pm9m7IwR/gg=;
+        b=X3BErgYpy3+uysZbtcDsNZ7XGMi6VDJ4M2UpEJYTm2ZIcAzzgdUC31pzHYDnTPm5hl
+         xa+LgejTMwdOrl77sTGNP1dKTS7ltBeMIH2JfPfx36d0ToxxDblWx8abnihFZH4tGIyB
+         9vOcAavA+bj2hLk+vQG/JmsWoFwMIawmWdh6Ieu/+vfctje3iQhwdHGadmXzWxI6dmnK
+         pwBsMIzYxOMSCcZb2QTykFPIdahII9cFshRZFCmPfo5Ab+Vu2MFcC0rD3dYZdGoinLXL
+         vc7Emew/hGDDJN/jGoia7AnARhpwR5maKxMJ2ObUKvej1siq+om/ymzlZZRxFyti6hAO
+         hP7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vKAhmy3Js54RkUFkCFQDhybaQelynL8wunygu7WtJ7k=;
-        b=BdnrRYDBe6DHB1zjWdmDiD7RoxSj8T1GEss26YKIrmFMIKKzkvlHkn4hc8AOP6lZoq
-         UM0QxWG7m/c0YUmJoRTXeUS39PsA+l01I0Xv7LJwQGF9+xykooEXRP00ZkxdE1eGh5Qw
-         lvC0dB+wmQMv4dIb0QhvAtsQrUxJhNHYBuEryeQtqiDT7RdHtJ4aC32elWAMtv3NN5Q1
-         JLN3VsSSBAyH0KJygAsaTfsvXlCN9LmZyOGphdrjORSlwNxPfl0zXWcWNc/pFekZbleq
-         +AczXDh5Qs3ApJmz8ZgoVyKFlUyavjOL5QWbY3lkpiQ5N1icHWEvaRy+G/yPoQe+d7ku
-         nxfg==
-X-Gm-Message-State: ANoB5pnvdJZUNQQ79oZgf89cVy3pr+twfe5uhzhMs3TuacwdSEFoh6ej
-        EvJJYh2kyvl1rU7pZPPIu9JPyU7lzR+YHeMuQgoa5g==
-X-Google-Smtp-Source: AA0mqf6AKDS0mcqu8CCznRX9jF/xLj+pT86SSfP7/+9zPH2e0CfnFxSYzmWpNEIVPhyVbDLdnAiWuNdZDxQUNsDrnJE=
-X-Received: by 2002:a5d:9684:0:b0:6de:18b2:1025 with SMTP id
- m4-20020a5d9684000000b006de18b21025mr14206355ion.102.1669251484289; Wed, 23
- Nov 2022 16:58:04 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wNgqx4nOvBacXRcfWNIQEwnOw2cT8o68pm9m7IwR/gg=;
+        b=G9lA+4wO/kZgTv59waDAGXf8C/ZaFRr8CO7hMi+c3PS1VYhn2u236L3CMjFgnh6nQh
+         8sryjP0nvqDuLi1mjsNXVzgU8qbZdKEzGavHSe0E7zP8+BEAT5XEIMZJL1zZtl4kYkl/
+         zTSSwqxldaltQzzE7DwoiNKE4mA28phBO40x9rnRpp5hZCy0gRJfbL61+qR2z2JXsver
+         2VF2szWbWyjKk7RxGt4xG98b1vL5aQXhfc/GoyZV6TRCVreCtbLV1Csq3x5VcHyeiDb3
+         2oZf6rXSxdpXl6oQ/HBnYbj2PPIiHG9llXemRJD4KrfcKu66X/ip/9b2TMkSsFMBYRC7
+         jk4A==
+X-Gm-Message-State: ANoB5pk3GydgTR0rn+i+BEbFGHEA2umduVoJf9uBGmuwkFMsqmKcOJ83
+        BnfxGRzy6I3GAqg7ZjaGosE=
+X-Google-Smtp-Source: AA0mqf4daN8aZClSbe8nBcobYR0Zu0b8N4WjefmWi2EiezYKHFju1/+LYi14eFnabt/fV8Egy3TuZA==
+X-Received: by 2002:a17:90b:3944:b0:214:1df0:fe53 with SMTP id oe4-20020a17090b394400b002141df0fe53mr38368187pjb.214.1669251543001;
+        Wed, 23 Nov 2022 16:59:03 -0800 (PST)
+Received: from [192.168.1.5] ([159.192.254.122])
+        by smtp.googlemail.com with ESMTPSA id d7-20020a17090abf8700b00218e5959bfbsm1897336pjs.20.2022.11.23.16.58.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Nov 2022 16:59:02 -0800 (PST)
+Message-ID: <360394e3-91c0-9a47-4046-1f7635ebf312@gmail.com>
+Date:   Thu, 24 Nov 2022 07:58:54 +0700
 MIME-Version: 1.0
-References: <20221123092132.2521764-1-yosryahmed@google.com>
- <20221123092132.2521764-2-yosryahmed@google.com> <Y369cNnRWkoymF1G@P9FQF9L96D.corp.robot.car>
-In-Reply-To: <Y369cNnRWkoymF1G@P9FQF9L96D.corp.robot.car>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Wed, 23 Nov 2022 16:57:28 -0800
-Message-ID: <CAJD7tkY4QtVTJe5cxSKzKj0gOROD4a+o=Rt-wfvG1gcxSQC8Pg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] mm: memcg: fix stale protection of reclaim target memcg
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Shakeel Butt <shakeelb@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>, Yu Zhao <yuzhao@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Chris Down <chris@chrisdown.name>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] USB: disable all RNDIS protocol drivers
+To:     Nicolas Cavallari <nicolas.cavallari@green-communications.fr>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        =?UTF-8?Q?Maciej_=c5=bbenczykowski?= <maze@google.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        =?UTF-8?Q?=c5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org,
+        Ilja Van Sprundel <ivansprundel@ioactive.com>,
+        Joseph Tartaro <joseph.tartaro@ioactive.com>
+References: <04ea37cc-d97a-3e00-8a99-135ab38860f2@green-communications.fr>
+Content-Language: en-US
+From:   Lars Melin <larsm17@gmail.com>
+In-Reply-To: <04ea37cc-d97a-3e00-8a99-135ab38860f2@green-communications.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 4:40 PM Roman Gushchin <roman.gushchin@linux.dev> wrote:
->
-> On Wed, Nov 23, 2022 at 09:21:30AM +0000, Yosry Ahmed wrote:
-> > During reclaim, mem_cgroup_calculate_protection() is used to determine
-> > the effective protection (emin and elow) values of a memcg. The
-> > protection of the reclaim target is ignored, but we cannot set their
-> > effective protection to 0 due to a limitation of the current
-> > implementation (see comment in mem_cgroup_protection()). Instead,
-> > we leave their effective protection values unchaged, and later ignore it
-> > in mem_cgroup_protection().
-> >
-> > However, mem_cgroup_protection() is called later in
-> > shrink_lruvec()->get_scan_count(), which is after the
-> > mem_cgroup_below_{min/low}() checks in shrink_node_memcgs(). As a
-> > result, the stale effective protection values of the target memcg may
-> > lead us to skip reclaiming from the target memcg entirely, before
-> > calling shrink_lruvec(). This can be even worse with recursive
-> > protection, where the stale target memcg protection can be higher than
-> > its standalone protection. See two examples below (a similar version of
-> > example (a) is added to test_memcontrol in a later patch).
-> >
-> > (a) A simple example with proactive reclaim is as follows. Consider the
-> > following hierarchy:
-> > ROOT
-> >  |
-> >  A
-> >  |
-> >  B (memory.min = 10M)
-> >
-> > Consider the following scenario:
-> > - B has memory.current = 10M.
-> > - The system undergoes global reclaim (or memcg reclaim in A).
-> > - In shrink_node_memcgs():
-> >   - mem_cgroup_calculate_protection() calculates the effective min (emin)
-> >     of B as 10M.
-> >   - mem_cgroup_below_min() returns true for B, we do not reclaim from B.
-> > - Now if we want to reclaim 5M from B using proactive reclaim
-> >   (memory.reclaim), we should be able to, as the protection of the
-> >   target memcg should be ignored.
-> > - In shrink_node_memcgs():
-> >   - mem_cgroup_calculate_protection() immediately returns for B without
-> >     doing anything, as B is the target memcg, relying on
-> >     mem_cgroup_protection() to ignore B's stale effective min (still 10M).
-> >   - mem_cgroup_below_min() reads the stale effective min for B and we
-> >     skip it instead of ignoring its protection as intended, as we never
-> >     reach mem_cgroup_protection().
-> >
-> > (b) An more complex example with recursive protection is as follows.
-> > Consider the following hierarchy with memory_recursiveprot:
-> > ROOT
-> >  |
-> >  A (memory.min = 50M)
-> >  |
-> >  B (memory.min = 10M, memory.high = 40M)
-> >
-> > Consider the following scenario:
-> > - B has memory.current = 35M.
-> > - The system undergoes global reclaim (target memcg is NULL).
-> > - B will have an effective min of 50M (all of A's unclaimed protection).
-> > - B will not be reclaimed from.
-> > - Now allocate 10M more memory in B, pushing it above it's high limit.
-> > - The system undergoes memcg reclaim from B (target memcg is B).
-> > - Like example (a), we do nothing in mem_cgroup_calculate_protection(),
-> >   then call mem_cgroup_below_min(), which will read the stale effective
-> >   min for B (50M) and skip it. In this case, it's even worse because we
-> >   are not just considering B's standalone protection (10M), but we are
-> >   reading a much higher stale protection (50M) which will cause us to not
-> >   reclaim from B at all.
-> >
-> > This is an artifact of commit 45c7f7e1ef17 ("mm, memcg: decouple
-> > e{low,min} state mutations from protection checks") which made
-> > mem_cgroup_calculate_protection() only change the state without
-> > returning any value. Before that commit, we used to return
-> > MEMCG_PROT_NONE for the target memcg, which would cause us to skip the
-> > mem_cgroup_below_{min/low}() checks. After that commit we do not return
-> > anything and we end up checking the min & low effective protections for
-> > the target memcg, which are stale.
-> >
-> > Update mem_cgroup_supports_protection() to also check if we are
-> > reclaiming from the target, and rename it to mem_cgroup_unprotected()
-> > (now returns true if we should not protect the memcg, much simpler logic).
-> >
-> > Fixes: 45c7f7e1ef17 ("mm, memcg: decouple e{low,min} state mutations from protection checks")
-> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
->
-> Reviewed-by: Roman Gushchin <roman.gushchin@linux.dev>
->
-> Thank you!
+On 11/23/2022 22:40, Nicolas Cavallari wrote:
+> There are also probably cellular dongles that uses rndis by default.
 
-Thanks for reviewing!
+Yes, there is a whole bunch of them and new ones are still coming out.
+Some USB dongle mfgr prefer to implement RNDIS instead of MBIM because 
+the same dongle can then be used for both old and new WIN versions.
+I do agree that the RNDIS protocol is crap but removing RNDIS_HOST will 
+be a regression for many linux users.
 
-Do you think we need a CC to stable here?
+/Lars
+
