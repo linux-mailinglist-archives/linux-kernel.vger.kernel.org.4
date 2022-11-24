@@ -2,117 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2F006378A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:11:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAAA06378A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 13:12:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbiKXML6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 07:11:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54350 "EHLO
+        id S229999AbiKXMMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 07:12:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbiKXMLy (ORCPT
+        with ESMTP id S229954AbiKXMMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 07:11:54 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B1C74A81;
-        Thu, 24 Nov 2022 04:11:53 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.94.2)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1oyB50-0000iC-Sv; Thu, 24 Nov 2022 13:11:47 +0100
-Date:   Thu, 24 Nov 2022 12:11:39 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pwm@vger.kernel.or,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Zhi Mao <zhi.mao@mediatek.com>,
-        Sam Shih <sam.shih@mediatek.com>
-Subject: Re: [PATCH RESEND v2] dt-bindings: pwm: mediatek: Add compatible for
- MT7986
-Message-ID: <Y39fe3oHgMTyAHBm@makrotopia.org>
-References: <Y39PjU1BqBB8tZ98@makrotopia.org>
- <e5e87795-12d7-699e-1539-2e60b8b51957@linaro.org>
+        Thu, 24 Nov 2022 07:12:15 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED98274AA5
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 04:12:14 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9E01D218E9;
+        Thu, 24 Nov 2022 12:12:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1669291933; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DJVmOWQbiMAmWnWW4hlsAe4eeK/zWKppLW8xti306l8=;
+        b=C3UPthb+tD9RGQ86R6MIG3nJNUfLpmtD8GzpC0MULOIMRvXck3rGJ7N8WvDuWRchFXatXT
+        ULasH5JgLkCdzxDxk7Q5GrEK+ruHD5YYxSCXQPdfYmOaxzpn1XrbxwejNNSaqUtxu1aqxw
+        3Flj/3W9ATaZ45Pv+U2mpPNmzTPwuqQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1669291933;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DJVmOWQbiMAmWnWW4hlsAe4eeK/zWKppLW8xti306l8=;
+        b=9XLkuKC8yJHZDxVcaB5ZpfD0f920D7i+Gcssv1hh335LdEK2mc/ILRj0MWGsQCS2OSo8lk
+        72c75DcYoI8hErCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 66CEE13488;
+        Thu, 24 Nov 2022 12:12:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id EFQ4GJ1ff2M7egAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 24 Nov 2022 12:12:13 +0000
+Message-ID: <4fb214a4-0535-2d4a-fcde-bc2ab71329e3@suse.cz>
+Date:   Thu, 24 Nov 2022 13:12:13 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e5e87795-12d7-699e-1539-2e60b8b51957@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 06/12] mm, slub: don't create kmalloc-rcl caches with
+ CONFIG_SLUB_TINY
+Content-Language: en-US
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, patches@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20221121171202.22080-1-vbabka@suse.cz>
+ <20221121171202.22080-7-vbabka@suse.cz>
+ <d77498f8-b15f-9dae-1803-2d2bbb99da50@suse.cz> <Y39eLaW0mDNrHI6i@hyeyoo>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <Y39eLaW0mDNrHI6i@hyeyoo>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 12:30:44PM +0100, Krzysztof Kozlowski wrote:
-> On 24/11/2022 12:03, Daniel Golle wrote:
-> > Add new compatible string for MT7986 PWM and list compatible units for
-> > existing entries. Also make sure the number of pwm1-X clocks is listed
-> > for all supported units.
-> > 
-> > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> > ---
-> > Changes since v1: list compatibles, fix pwm1-n clocks for all SoCs
-> > 
-> > Rebased on linux-next and re-run scripts/get_maintainers.pl on patch to
-> > makes sure dt maintainers are included. This has been requested by
-> > Krzysztof Kozlowski.
-> > 
-> >  .../devicetree/bindings/pwm/pwm-mediatek.txt  | 20 +++++++++++--------
-> >  1 file changed, 12 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt b/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt
-> > index 554c96b6d0c3..952a338e06e7 100644
-> > --- a/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt
-> > +++ b/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt
-> > @@ -2,14 +2,15 @@ MediaTek PWM controller
-> >  
-> >  Required properties:
-> >   - compatible: should be "mediatek,<name>-pwm":
-> > -   - "mediatek,mt2712-pwm": found on mt2712 SoC.
-> > +   - "mediatek,mt2712-pwm", "mediatek,mt6795-pwm": found on mt2712 SoC.
-> >     - "mediatek,mt6795-pwm": found on mt6795 SoC.
-> > -   - "mediatek,mt7622-pwm": found on mt7622 SoC.
-> > -   - "mediatek,mt7623-pwm": found on mt7623 SoC.
-> > +   - "mediatek,mt7622-pwm", "mediatek,mt8195-pwm", "mediatek,mt8183-pwm", "mediatek,mt7986-pwm": found on mt7622 SoC.
+On 11/24/22 13:06, Hyeonggon Yoo wrote:
+> On Wed, Nov 23, 2022 at 02:53:43PM +0100, Vlastimil Babka wrote:
+>> On 11/21/22 18:11, Vlastimil Babka wrote:
+>> > Distinguishing kmalloc(__GFP_RECLAIMABLE) can help against fragmentation
+>> > by grouping pages by mobility, but on tiny systems the extra memory
+>> > overhead of separate set of kmalloc-rcl caches will probably be worse,
+>> > and mobility grouping likely disabled anyway.
+>> > 
+>> > Thus with CONFIG_SLUB_TINY, don't create kmalloc-rcl caches and use the
+>> > regular ones.
+>> > 
+>> > Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+>> 
+>> Fixed up in response to lkp report for a MEMCG_KMEM+SLUB_TINY combo:
+>> ---8<---
+>> From c1ec0b924850a2863d061f316615d596176f15bb Mon Sep 17 00:00:00 2001
+>> From: Vlastimil Babka <vbabka@suse.cz>
+>> Date: Tue, 15 Nov 2022 18:19:28 +0100
+>> Subject: [PATCH 06/12] mm, slub: don't create kmalloc-rcl caches with
+>>  CONFIG_SLUB_TINY
+>> 
+>> Distinguishing kmalloc(__GFP_RECLAIMABLE) can help against fragmentation
+>> by grouping pages by mobility, but on tiny systems the extra memory
+>> overhead of separate set of kmalloc-rcl caches will probably be worse,
+>> and mobility grouping likely disabled anyway.
+>> 
+>> Thus with CONFIG_SLUB_TINY, don't create kmalloc-rcl caches and use the
+>> regular ones.
+>> 
+>> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+>> ---
+>>  include/linux/slab.h |  9 +++++++--
+>>  mm/slab_common.c     | 10 ++++++++--
+>>  2 files changed, 15 insertions(+), 4 deletions(-)
+>> 
+>> diff --git a/include/linux/slab.h b/include/linux/slab.h
+>> index 45efc6c553b8..ae2d19ec8467 100644
+>> --- a/include/linux/slab.h
+>> +++ b/include/linux/slab.h
+>> @@ -336,12 +336,17 @@ enum kmalloc_cache_type {
+>>  #endif
+>>  #ifndef CONFIG_MEMCG_KMEM
+>>  	KMALLOC_CGROUP = KMALLOC_NORMAL,
+>> -#else
+>> -	KMALLOC_CGROUP,
+>>  #endif
+>> +#ifdef CONFIG_SLUB_TINY
+>> +	KMALLOC_RECLAIM = KMALLOC_NORMAL,
+>> +#else
+>>  	KMALLOC_RECLAIM,
+>> +#endif
+>>  #ifdef CONFIG_ZONE_DMA
+>>  	KMALLOC_DMA,
+>> +#endif
+>> +#ifdef CONFIG_MEMCG_KMEM
+>> +	KMALLOC_CGROUP,
+>>  #endif
+>>  	NR_KMALLOC_TYPES
+>>  };
 > 
-> This does not look right. What you are saying is mt7622 is compatible
-> with mt8195, which is compatible with mt8183, which is compatible with
-> mt7986. It could be true, but I feel you wanted to say something else -
-> mt7622 is compatible with one SoC which is generic and common to all
-> other implementations.
+> Can you please elaborate what the lkp report was about
+> and how you fixed it? I'm not getting what the problem of previous
+> version is.
 
-MT7622 has 6 PWM channels, it does have CK_26M_SEL register and does
-not need pwm45_fixup. Hence, when using a driver made for MT8195, only
-4 out of 6 channels woukd work. MT8183 PWM is identical to MT8195,
-hence also compatible. When using driver for MT7986, only 2 channels
-would work, but otherwise it is also compatible.
+Report here:
+https://lore.kernel.org/all/202211231949.nIyAWKam-lkp@intel.com/
 
-So unfortunately, that one generic implementation ("common ancestor")
-does not exist and development of the PWM unit found in MediaTek SoCs
-did not necessarily increase features in more recent iterations, but
-rather just reduce or increase the number of PWM channels available.
-Ironically, the unit with least features (only 2 channels) is found in
-the most recent SoC (MT7986).
+Problem is that if the preprocessing results in e.g.
+KMALLOC_NORMAL = 0,
+KMALLOC_DMA = KMALLOC_NORMAL
+KMALLOC_CGROUP,
+KMALLOC_RECLAIM = KMALLOC_NORMAL,
+NR_KMALLOC_TYPES
 
-> 
-> > +   - "mediatek,mt7623-pwm", "mediatek,mt7628-pwm": found on mt7623 SoC.
-> >     - "mediatek,mt7628-pwm": found on mt7628 SoC.
-> >     - "mediatek,mt7629-pwm": found on mt7629 SoC.
-> > -   - "mediatek,mt8183-pwm": found on mt8183 SoC.
-> > -   - "mediatek,mt8195-pwm", "mediatek,mt8183-pwm": found on mt8195 SoC.
-> > +   - "mediatek,mt7986-pwm": found on mt7986 SoC.
-> > +   - "mediatek,mt8183-pwm", "mediatek,mt7986-pwm": found on mt8183 SoC.
-> > +   - "mediatek,mt8195-pwm", "mediatek,mt8183-pwm", "mediatek,mt7986-pwm": found on mt8195 SoC.
-> 
-> This as well looks excessive.
+then NR_KMALLOC_TYPES is not 2, but 1, because the enum's internal counter
+got reset to 0 by KMALLOC_RECLAIM = KMALLOC_NORMAL. A common gotcha :/
 
-I agree. But it's difficult to say which one should be ommitted.
