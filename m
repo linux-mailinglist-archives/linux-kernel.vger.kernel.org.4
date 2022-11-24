@@ -2,72 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F6D6637D8B
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 17:20:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6DB637D91
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 17:21:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbiKXQUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 11:20:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55528 "EHLO
+        id S229749AbiKXQVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 11:21:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiKXQUR (ORCPT
+        with ESMTP id S229495AbiKXQVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 11:20:17 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB15169039
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 08:20:16 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id d19-20020a056e020c1300b00300b5a12c44so1403883ile.15
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 08:20:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BLu57xj1JC82H0XXz+GNssdmQJiC9qe/YgctFzNmVG4=;
-        b=2gAE+eVtBKMRTX4vctPAklCM1NOJUkf2l5CpZquW1DGPkTX/4VHhfSkwdm8NrmidPJ
-         cVvfttv8W16GgCk0Ubfe/a3D18F8AakCXOhG/+jkCzIaxkBFSxOUFVYgOpBDGAzNzM7S
-         sgoT9NrrPeNkmSjQ7UV2SRKIfEWHRukcC4l7FcBckOJI1P8kssg9lv74T8twjmZ0wKxg
-         Lphltg1tln3n/zHpoEInXMgftoazoKAE3LjmgTTKqVMspeK8UJvzqfqXwd7LGhUj8JM5
-         1raSWplVpvFB5deuZxtrgSgr+jfsz9jAasfeNwJobpDFbtqyJ5Yo6aWuFRc5fCjOPCdZ
-         Fllg==
-X-Gm-Message-State: ANoB5pkgWKxTAhJklMBhf1j+MiZZh1vHLYTRK8fS3b0zQEQZUvmn9yar
-        Nze2PgkNjp+hTGrdm58nWpp5W7Gt1v/fhxnpoMjF8tFuT6IW
-X-Google-Smtp-Source: AA0mqf4SJAQZVT4Jwk7/+fz5PzSbbTOB+9yCW80SQJofgTk2Q1JpUZ6ITjSAqpEq12edrM6PcQ2CYn2mBv5fHDzsVoZBesMnImOs
+        Thu, 24 Nov 2022 11:21:45 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774E816F0E1;
+        Thu, 24 Nov 2022 08:21:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=FGjzuXAIl+wHDnB9X06Lj741Z1ohvCHZzEDHufjgoPA=; b=TdfHq33K0iHRvayUCiTchGcsns
+        dQfP4CvpGuk/CioBXk1AvcvjsZKIR9oDbLWGmTqtFpddFjkzn3MFNF4PcC5eoFzmZJ1kRqTzqVtKd
+        JzIN0cDJLD47KiZTybbsOGWD2ysOHOKZEJhy6VSWSL8JoDlNj/LWJc3pucDObBYSYW2nvphz7A1sM
+        08Bqpeb9DePDC3PcLqU715jUKJAtHYeHToklPMDaWYBJknUQ5PNrkxtRgLNwvCyQ1L54Srj6Zyo1G
+        5s5eqQ5MphEj0WnAEWaGgJzyR6zDnBrlNJeeJf6UC7MHQXmHwu5S9kjEMNuj6lIiVuJrzW3+71cG0
+        ZMitPOWQ==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oyEyn-00A3Ox-N0; Thu, 24 Nov 2022 16:21:37 +0000
+Message-ID: <387ebede-048b-203c-ffe7-7f0ff2014d3c@infradead.org>
+Date:   Thu, 24 Nov 2022 08:21:35 -0800
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1c0a:b0:386:8261:ab08 with SMTP id
- ca10-20020a0566381c0a00b003868261ab08mr4116458jab.21.1669306816155; Thu, 24
- Nov 2022 08:20:16 -0800 (PST)
-Date:   Thu, 24 Nov 2022 08:20:16 -0800
-In-Reply-To: <CAJfpeguD4Ai8_PiRnDO8dRFauHPdwLimWrB6xsxsyn8yFLgL6w@mail.gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000cc587705ee39c75c@google.com>
-Subject: Re: [syzbot] general protection fault in ovl_dentry_upper
-From:   syzbot <syzbot+a4055c78774bbf3498bb@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        miklos@szeredi.hu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] scsi: megaraid_sas: fix some spelling mistakes in comment
+Content-Language: en-US
+To:     Yu Zhe <yuzhe@nfschina.com>, kashyap.desai@broadcom.com,
+        sumit.saxena@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        liqiong@nfschina.com
+References: <20221124092514.32032-1-yuzhe@nfschina.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20221124092514.32032-1-yuzhe@nfschina.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi--
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+These changes all look good.
+One small nit below:
 
-Reported-and-tested-by: syzbot+a4055c78774bbf3498bb@syzkaller.appspotmail.com
+On 11/24/22 01:25, Yu Zhe wrote:
+> Fix typos in comment.
+> 
+> Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
+> ---
+>  drivers/scsi/megaraid/megaraid_sas_fusion.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+> index 6650f8c8e9b0..c53c29a0a018 100644
+> --- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
+> +++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+> @@ -80,7 +80,7 @@ static void megasas_fusion_crash_dump(struct megasas_instance *instance);
+>   * @ocr_context:			If called from OCR context this will
+>   *					be set to 1, else 0
+>   *
+> - * This function initates a chip reset followed by a wait for controller to
+> + * This function initiates a chip reset followed by a wait for controller to
+>   * transition to ready state.
+>   * During this, driver will block all access to PCI config space from userspace
+>   */
+> @@ -334,7 +334,7 @@ megasas_fire_cmd_fusion(struct megasas_instance *instance,
+>   *
+>   * This function is only for fusion controllers.
+>   * Update host can queue, if firmware downgrade max supported firmware commands.
+> - * Firmware upgrade case will be skiped because underlying firmware has
+> + * Firmware upgrade case will be skipped because underlying firmware has
+>   * more resource than exposed to the OS.
+>   *
+>   */
+> @@ -2588,7 +2588,7 @@ static void megasas_stream_detect(struct megasas_instance *instance,
+>  			if ((io_info->ldStartBlock != current_sd->next_seq_lba)	&&
+>  			    ((!io_info->isRead) || (!is_read_ahead)))
+>  				/*
+> -				 * Once the API availible we need to change this.
+> +				 * Once the API available we need to change this.
 
-Tested on:
+				 * Once the API is available we need to change this.
 
-commit:         c3eb11fb Merge tag 'pci-v6.1-fixes-3' of git://git.ker..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=14a0ec05880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8cdf448d3b35234
-dashboard link: https://syzkaller.appspot.com/bug?extid=a4055c78774bbf3498bb
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=16b17403880000
+>  				 * At this point we are not allowing any gap
+>  				 */
+>  				continue;
+> @@ -4650,7 +4650,7 @@ megasas_issue_tm(struct megasas_instance *instance, u16 device_handle,
+>  }
+>  
+>  /*
+> - * megasas_fusion_smid_lookup : Look for fusion command correpspodning to SCSI
+> + * megasas_fusion_smid_lookup : Look for fusion command corresponding to SCSI
+>   * @instance: per adapter struct
+>   *
+>   * Return Non Zero index, if SMID found in outstanding commands
 
-Note: testing is done by a robot and is best-effort only.
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+
+Thanks.
+-- 
+~Randy
