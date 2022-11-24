@@ -2,106 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89342637448
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:43:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D705F63743B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:41:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbiKXIn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 03:43:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40550 "EHLO
+        id S230042AbiKXIlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 03:41:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiKXInZ (ORCPT
+        with ESMTP id S229790AbiKXIls (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 03:43:25 -0500
-Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.133.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C46D80
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:42:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxlinear.com;
-        s=selector; t=1669279349;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AkBrFNa8JXU1rnG3IW0QD6QbjBzAOYoAULmyjQGwhog=;
-        b=pxayFnwuIfFEMe13+NffWtMWNE+wX1XXb40o1mXhQ9Ouy/VHGXJqSGITgVwurM9J9QYN4E
-        RwOy+oDJOi7FSn438APH6WP5/YSi6zQzylVC/KMst5W2G8RSm1xFUkZ73k7M9Knp5i3Zam
-        8kJ8RZdkGI+oPebG0TD5lBAuVC5wV1sC2mJgXFPmpD0LG94HCRSdV7iYEX2NMg85lgzTrp
-        cAJg7Iy+pDASRk0Elrfafcf0mhJuX508uq0mhU1bzmUcKWtDiTHUQkYv/V1kFT8KfTyEJ5
-        dwz9dqvVoXmRL6rIFefHoc50X9H7KgHCUxLT3HgnJZh/G07v08AvdHu39+WtQg==
-Received: from mail.maxlinear.com (174-47-1-84.static.ctl.one [174.47.1.84])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- us-mta-594-ojRMO8yHPlqWmQuCPzaiqQ-1; Thu, 24 Nov 2022 03:42:27 -0500
-X-MC-Unique: ojRMO8yHPlqWmQuCPzaiqQ-1
-Received: from sgsxdev001.isng.phoenix.local (10.226.81.111) by
- mail.maxlinear.com (10.23.38.119) with Microsoft SMTP Server id 15.1.2375.24;
- Thu, 24 Nov 2022 00:42:22 -0800
-From:   Rahul Tanwar <rtanwar@maxlinear.com>
-To:     Rahul Tanwar <rtanwar@maxlinear.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Borislav Petkov" <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, <linux-lgm-soc@maxlinear.com>
-Subject: [PATCH v5 3/4] x86/of: Replace printk(KERN_LVL) with pr_lvl()
-Date:   Thu, 24 Nov 2022 16:41:42 +0800
-Message-ID: <20221124084143.21841-4-rtanwar@maxlinear.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221124084143.21841-1-rtanwar@maxlinear.com>
-References: <20221124084143.21841-1-rtanwar@maxlinear.com>
+        Thu, 24 Nov 2022 03:41:48 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F79BCA9;
+        Thu, 24 Nov 2022 00:41:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669279307; x=1700815307;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sjWDb836xFTamN2ETa2XyR2Y3MbHGsy8VxBoR88LjKU=;
+  b=eOnwKnFK9tFsC2tWIaq9FQFML2y+hFvf2YaoaZSn8s31m4QBQI2JBHNl
+   dWFX88pv+QCNGhlC3tjalUTC13DjexXnwNdYgJv0n+XHoJey8YdT0qPHm
+   C5kth9kViNEqK+7oKQJgTvwSdj33WkeUyU6p44oEoR6MX+lXtaxSzJwQM
+   4szCS+qnaUcV84Mgn67HtCo50chrP2vH6XQnJwMFGyGs1Zd2PW5YjIa7O
+   0Tb2zE15SF7SJZpT8xIyfWFBsKpmKkOnGj+phH47lj1sSr9em50BsgnHu
+   wg7GeGE/pLqXhy8wtvP+OB3G5VdKQQK6z7u10PxcMGdQvzQ7cwNCOt1Q9
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="312953017"
+X-IronPort-AV: E=Sophos;i="5.96,189,1665471600"; 
+   d="scan'208";a="312953017"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2022 00:41:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="705674601"
+X-IronPort-AV: E=Sophos;i="5.96,189,1665471600"; 
+   d="scan'208";a="705674601"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008.fm.intel.com with ESMTP; 24 Nov 2022 00:41:44 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1oy7ni-00Gf8f-2S;
+        Thu, 24 Nov 2022 10:41:42 +0200
+Date:   Thu, 24 Nov 2022 10:41:42 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-serial@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] serial: core: Add port port device to flush TX on
+ runtime resume
+Message-ID: <Y38uRqAFjKpAPy8J@smile.fi.intel.com>
+References: <20221123082825.32820-1-tony@atomide.com>
+ <20221123082825.32820-2-tony@atomide.com>
+ <Y35oT9/3OKRciWCP@smile.fi.intel.com>
+ <Y38UQXbzw54Jo93s@atomide.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: maxlinear.com
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y38UQXbzw54Jo93s@atomide.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use latest available pr_lvl() instead of older printk(KERN_LVL)
-Just a upgrade of print utilities usage no functional changes.
+On Thu, Nov 24, 2022 at 08:50:41AM +0200, Tony Lindgren wrote:
+> * Andy Shevchenko <andriy.shevchenko@intel.com> [221123 18:37]:
+> > On Wed, Nov 23, 2022 at 10:28:25AM +0200, Tony Lindgren wrote:
+> > > +EXPORT_SYMBOL(serial_port_get);
+> > 
+> > Can we move these to namespace from day 1?
+> 
+> Assuming you mean EXPORT_SYMBOL_NS(), sure.
+> 
+> But we might be better off doing the following:
+> 
+> - Move already exported uart_add_one_port() and uart_remove_one_port()
+>   from serial_core to serial_port as wrapper functions for serial_core
+> 
+> - Export new functions in serial_core for serial_core_register_port()
+>   and serial_core_unregister_port() for serial_port to call
+> 
+> This would ensure both serial_core and serial_port modules are
+> always loaded when a hardware specific serial port driver is
+> loaded.
+> 
+> This should also leave out the need for serial_port_get() and
+> serial_port_put().
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Rahul Tanwar <rtanwar@maxlinear.com>
----
- arch/x86/kernel/devicetree.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Yes, this is good idea!
 
-diff --git a/arch/x86/kernel/devicetree.c b/arch/x86/kernel/devicetree.c
-index 5cd51f25f446..fcc6f1b7818f 100644
---- a/arch/x86/kernel/devicetree.c
-+++ b/arch/x86/kernel/devicetree.c
-@@ -248,7 +248,7 @@ static void __init dtb_add_ioapic(struct device_node *d=
-n)
-=20
- =09ret =3D of_address_to_resource(dn, 0, &r);
- =09if (ret) {
--=09=09printk(KERN_ERR "Can't obtain address from device node %pOF.\n", dn)=
-;
-+=09=09pr_err("Can't obtain address from device node %pOF.\n", dn);
- =09=09return;
- =09}
- =09mp_register_ioapic(++ioapic_id, r.start, gsi_top, &cfg);
-@@ -265,7 +265,7 @@ static void __init dtb_ioapic_setup(void)
- =09=09of_ioapic =3D 1;
- =09=09return;
- =09}
--=09printk(KERN_ERR "Error: No information about IO-APIC in OF.\n");
-+=09pr_err("Error: No information about IO-APIC in OF.\n");
- }
- #else
- static void __init dtb_ioapic_setup(void) {}
---=20
-2.17.1
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
