@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68D93637385
+	by mail.lfdr.de (Postfix) with ESMTP id B5846637386
 	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:13:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbiKXINZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 03:13:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57714 "EHLO
+        id S229940AbiKXIN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 03:13:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbiKXIMh (ORCPT
+        with ESMTP id S229844AbiKXIMh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 24 Nov 2022 03:12:37 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89208ED738;
-        Thu, 24 Nov 2022 00:12:08 -0800 (PST)
-Date:   Thu, 24 Nov 2022 08:12:06 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C09E6740;
+        Thu, 24 Nov 2022 00:12:09 -0800 (PST)
+Date:   Thu, 24 Nov 2022 08:12:07 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669277527;
+        s=2020; t=1669277528;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8Hctjbwsd0uBSMqUV8yljvfkYsL5QCM1MfC9VCsHYa8=;
-        b=x620PPjqof6ZOEWpPmGKXwl5XRfzK2nFOCJ2/rKvj7kJSx3TougSLeIUO4plDl2pd1O5g6
-        eaQVism2RV0hHrES5hR5RYenqxZL3S7IUghOAwe/GQ9dDp2pX0f0UqH04pUeZEj7CMWYT3
-        zPP2A3bEm1QbEAJ8UV1p8yp7GrCaUBJi5slI9NKU4HkfQ/D+fPzb39dF2MHouIVxz6TcOo
-        nnPsU/1eIgeRjAGNbm5Htpr7QpWGpwQAuSGXrWRuF5npYYDqLr9DHe/JNbBuSz5rt3owfU
-        WRjWLob4FCrupuVgFKjqYv43WMIWA4c/VxCciNAaOI77cdMjmziWPKQiRcfa1w==
+        bh=N6HscZAVCY8KRoZ6LIF2oha+45Vzc6klE8SeCIiiTso=;
+        b=ATQ+0A8vW6zNEWv/ZQgkiZqdCZGp6lLxbomoWEaU/0kJI43vUAx2eJp72v6vfAasO49BYl
+        4WupwJxz1QYREDvjHpHL0NPsvEyDZXGOT4H9q9mrH3FYzHT2YkclKpvSb/Qa35ljENuZvJ
+        4/uTY3yCrK85fmwRbdg7Nd4corpjF0Q4yWmZ3yMrQz2MKAEfAmyB0NoSn3gtB6AiAFMtgo
+        ibaC3X5lrrtCVtzkbC9BYA70/6na90qjQUViTp2SbKkmU0hMs0G3XMeJBm8nzzJvW5WNZH
+        67kZe+X68vyCRZeFRGy4i8QV8k5J7OJPbPr5kTuroj6rXtpFM3zXc9Qogyq2HA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669277527;
+        s=2020e; t=1669277528;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8Hctjbwsd0uBSMqUV8yljvfkYsL5QCM1MfC9VCsHYa8=;
-        b=tTDucwqd530QlJ6Rqfi/1VMxqy6u0urXXasU49ZxMk4ZGW+shLbqEJ0QcZG1K7z8oVY2xG
-        lC9l8unxWnL38xCQ==
+        bh=N6HscZAVCY8KRoZ6LIF2oha+45Vzc6klE8SeCIiiTso=;
+        b=BKqJLw2/1MoGTCjrRMULp92NtiPhMF5moLVSS+zdo2C3nNv3Z0+LrJJdH1OYj4d8fQpljv
+        CJRd9YAMZqdQSQAw==
 From:   "tip-bot2 for Ard Biesheuvel" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/boot] x86/boot/compressed: Pull global variable reference
- into startup32_load_idt()
+Subject: [tip: x86/boot] x86/boot/compressed: Avoid touching ECX in
+ startup32_set_idt_entry()
 Cc:     Ard Biesheuvel <ardb@kernel.org>, Borislav Petkov <bp@suse.de>,
         x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20221122161017.2426828-11-ardb@kernel.org>
-References: <20221122161017.2426828-11-ardb@kernel.org>
+In-Reply-To: <20221122161017.2426828-10-ardb@kernel.org>
+References: <20221122161017.2426828-10-ardb@kernel.org>
 MIME-Version: 1.0
-Message-ID: <166927752601.4906.14123818251261144320.tip-bot2@tip-bot2>
+Message-ID: <166927752707.4906.15976854475607977987.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,81 +66,59 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/boot branch of tip:
 
-Commit-ID:     d73a257f7f86871c3aac24dc20538e3983096647
-Gitweb:        https://git.kernel.org/tip/d73a257f7f86871c3aac24dc20538e3983096647
+Commit-ID:     6aac80a8da46d70f2ae7ff97c9f45a15c7c9b3ef
+Gitweb:        https://git.kernel.org/tip/6aac80a8da46d70f2ae7ff97c9f45a15c7c9b3ef
 Author:        Ard Biesheuvel <ardb@kernel.org>
-AuthorDate:    Tue, 22 Nov 2022 17:10:10 +01:00
+AuthorDate:    Tue, 22 Nov 2022 17:10:09 +01:00
 Committer:     Borislav Petkov <bp@suse.de>
 CommitterDate: Thu, 24 Nov 2022 08:57:41 +01:00
 
-x86/boot/compressed: Pull global variable reference into startup32_load_idt()
+x86/boot/compressed: Avoid touching ECX in startup32_set_idt_entry()
 
-In preparation for moving startup32_load_idt() out of head_64.S and
-turning it into an ordinary function using the ordinary 32-bit calling
-convention, pull the global variable reference to boot32_idt up into
-startup32_load_idt() so that startup32_set_idt_entry() does not need to
-discover its own runtime physical address, which will no longer be
-correlated with startup_32 once this code is moved into .text.
+Avoid touching register %ecx in startup32_set_idt_entry(), by folding
+the MOV, SHL and ORL instructions into a single ORL which no longer
+requires a temp register.
 
-While at it, give startup32_set_idt_entry() static linkage.
+This permits ECX to be used as a function argument in a subsequent
+patch.
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20221122161017.2426828-11-ardb@kernel.org
+Link: https://lore.kernel.org/r/20221122161017.2426828-10-ardb@kernel.org
 ---
- arch/x86/boot/compressed/head_64.S | 20 ++++++++------------
- 1 file changed, 8 insertions(+), 12 deletions(-)
+ arch/x86/boot/compressed/head_64.S | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
 diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
-index a2d1c03..f9926b3 100644
+index 34d0395..a2d1c03 100644
 --- a/arch/x86/boot/compressed/head_64.S
 +++ b/arch/x86/boot/compressed/head_64.S
-@@ -728,16 +728,11 @@ SYM_DATA_END_LABEL(boot32_idt, SYM_L_GLOBAL, boot32_idt_end)
-  *
-  * %eax:	Handler address
-  * %edx:	Vector number
-- *
-- * Physical offset is expected in %ebp
-+ * %ecx:	IDT address
+@@ -733,7 +733,6 @@ SYM_DATA_END_LABEL(boot32_idt, SYM_L_GLOBAL, boot32_idt_end)
   */
--SYM_FUNC_START(startup32_set_idt_entry)
--	push    %ebx
--
--	/* IDT entry address to %ebx */
--	leal    rva(boot32_idt)(%ebp), %ebx
--	shl	$3, %edx
--	addl    %edx, %ebx
-+SYM_FUNC_START_LOCAL(startup32_set_idt_entry)
-+	/* IDT entry address to %ecx */
-+	leal	(%ecx, %edx, 8), %ecx
+ SYM_FUNC_START(startup32_set_idt_entry)
+ 	push    %ebx
+-	push    %ecx
+ 
+ 	/* IDT entry address to %ebx */
+ 	leal    rva(boot32_idt)(%ebp), %ebx
+@@ -742,10 +741,8 @@ SYM_FUNC_START(startup32_set_idt_entry)
  
  	/* Build IDT entry, lower 4 bytes */
  	movl    %eax, %edx
-@@ -745,7 +740,7 @@ SYM_FUNC_START(startup32_set_idt_entry)
- 	orl	$(__KERNEL32_CS << 16), %edx	# Target code segment selector
+-	andl    $0x0000ffff, %edx	# Target code segment offset [15:0]
+-	movl    $__KERNEL32_CS, %ecx	# Target code segment selector
+-	shl     $16, %ecx
+-	orl     %ecx, %edx
++	andl    $0x0000ffff, %edx		# Target code segment offset [15:0]
++	orl	$(__KERNEL32_CS << 16), %edx	# Target code segment selector
  
  	/* Store lower 4 bytes to IDT */
--	movl    %edx, (%ebx)
-+	movl    %edx, (%ecx)
- 
- 	/* Build IDT entry, upper 4 bytes */
- 	movl    %eax, %edx
-@@ -753,15 +748,16 @@ SYM_FUNC_START(startup32_set_idt_entry)
- 	orl     $0x00008e00, %edx	# Present, Type 32-bit Interrupt Gate
- 
+ 	movl    %edx, (%ebx)
+@@ -758,7 +755,6 @@ SYM_FUNC_START(startup32_set_idt_entry)
  	/* Store upper 4 bytes to IDT */
--	movl    %edx, 4(%ebx)
-+	movl    %edx, 4(%ecx)
+ 	movl    %edx, 4(%ebx)
  
--	pop     %ebx
+-	pop     %ecx
+ 	pop     %ebx
  	RET
  SYM_FUNC_END(startup32_set_idt_entry)
- #endif
- 
- SYM_FUNC_START(startup32_load_idt)
- #ifdef CONFIG_AMD_MEM_ENCRYPT
-+	leal    rva(boot32_idt)(%ebp), %ecx
-+
- 	/* #VC handler */
- 	leal    rva(startup32_vc_handler)(%ebp), %eax
- 	movl    $X86_TRAP_VC, %edx
