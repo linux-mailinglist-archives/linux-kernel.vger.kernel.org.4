@@ -2,72 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25952637E4B
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 18:24:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01E55637E4D
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 18:32:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbiKXRYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 12:24:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49372 "EHLO
+        id S229500AbiKXRba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 12:31:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiKXRYf (ORCPT
+        with ESMTP id S229379AbiKXRb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 12:24:35 -0500
+        Thu, 24 Nov 2022 12:31:29 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B480A55A8D;
-        Thu, 24 Nov 2022 09:24:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD6C134108
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 09:31:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 51DA2620DD;
-        Thu, 24 Nov 2022 17:24:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 049CEC433C1;
-        Thu, 24 Nov 2022 17:24:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C1C00621B1
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 17:31:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DA77C433C1;
+        Thu, 24 Nov 2022 17:31:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669310650;
-        bh=sLYI5P+ZMh6NxKkyycCPNxF1W3y95huQkPC5wh9Z+BU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CHDCmUPTpdPyA5Tg3IK3OXznFOan1VCT1MRQ7qhxKjwENU5j79bPbPmpg52mY7V4Q
-         HyCBH9cYFLtacgn5jrDMs8doE+XfDPwtPAPrWi7RcA1ZoQ1Fx5OXFZJDXMtXyh/xbS
-         2ZbP5pyTgRsoSQamSIRkehcXlvAuvN0XRMWZZHLfqpQGmcWOC0N2BGiJgf7nLGzm/Q
-         e7leJylr/PZeYM4kyxbyHQ3VbLIsyNTNr9bzy1DPRGX0XnLppzqjJnZR8j8bbG6aGA
-         TWuXq1D33eelYRx2froKY8e/SJ54Bq5+TOcvcy30IqDpsLjHcIJ3Ynm8Dc0PpKUSj2
-         fNSP+pVlolX/g==
-Date:   Thu, 24 Nov 2022 22:54:06 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] phy: qcom-qmp-usb: drop sc8280xp reference-clock
- source
-Message-ID: <Y3+otgofTu8izmgz@matsya>
-References: <20221111093857.11360-1-johan+linaro@kernel.org>
+        s=k20201202; t=1669311087;
+        bh=VppZ7d9iMOH7sKJH9n8k65LOO/8jSDoMVN0wLOIpdNE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=jlWYUTkAwr5it7ct0sKRZToUsswIvtTWcrHijxlecPnBBUOUTQL0F7iIQNWkIN4o1
+         L1IvRUAaYq7Nm4NpdyCYoKLZGIsV3CnIOFLs/bsRqmF1OqJev9y2qJUAau7yytBZHX
+         t7/6sZugPAAKDx+TQPaPM2R3q/uZPm5bhfnq3YAScZVeyfIAjenQEfxVFo5Ig3XT7R
+         1lwCikOcXkfHLg+GxTWUCXwfJQnzljTEOhhhbSIFdokkChHqrxJgAnUXBWGyE1nS0m
+         FrjG4wgpEoGRkGBH5CXUoMNvi2N0Yn/oAy81N+18KneDcD9sqY60i4XsZJOSmjhOQv
+         /uroPFrZrjJcw==
+Message-ID: <8cc1c8a0-7d2c-e653-2ab9-40d040eebbb3@kernel.org>
+Date:   Thu, 24 Nov 2022 18:31:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221111093857.11360-1-johan+linaro@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [for-next][PATCH 05/11] tracing/osnoise: Add osnoise/options file
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>
+References: <20221124145019.782980678@goodmis.org>
+ <20221124145046.156919074@goodmis.org>
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <20221124145046.156919074@goodmis.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11-11-22, 10:38, Johan Hovold wrote:
-> The source clock for the reference clock is not used by the PHY directly
-> and should not have been included in the devicetree binding.
+On 11/24/22 15:50, Steven Rostedt wrote:
+> From: Daniel Bristot de Oliveira <bristot@kernel.org>
 > 
-> As the new SC8280XP binding has been merged for 6.2, we should get this
-> fixed as soon as possible.
+> Add the tracing/osnoise/options file to control
+> osnoise/timerlat tracer features. It is a single
+> file to contain multiple features, similar to
+> the sched/features file.
+> 
+> Reading the file displays a list of options. Writing
+> the OPTION_NAME enables it, writing NO_OPTION_NAME disables
+> it.
+> 
+> The DEAFULTS is a particular option that resets the options
+> to the default ones.
+> 
+> It uses a bitmask to keep track of the status of the option. When
+> needed, we can add a list of static keys, but for now
+> it does not justify the memory increase.
+> 
+> Link: https://lkml.kernel.org/r/f8d34aefdb225d2603fcb4c02a120832a0cd3339.1668692096.git.bristot@kernel.org
 
-Applied, thanks
 
--- 
-~Vinod
+Hi Steve,
+
+Yesterday I sent a v2 of this patch series, adding some more options [1].
+
+But as you already queued these, and as there is no real difference from the
+v1 and v2 in these code patches, I think the best way is for me to send a v3
+with the additional patches, build on top of the ftrace/core.
+
+(Is it a bad idea? let me know :-))
+
+[1] https://lore.kernel.org/lkml/cover.1669115208.git.bristot@kernel.org/ 
+
+-- Daniel
+
