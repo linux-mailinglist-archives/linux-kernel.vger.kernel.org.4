@@ -2,106 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B07A63767A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:29:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6F1E637664
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 11:28:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229927AbiKXK3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 05:29:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49358 "EHLO
+        id S229763AbiKXK2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 05:28:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiKXK3r (ORCPT
+        with ESMTP id S229499AbiKXK2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 05:29:47 -0500
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2074.outbound.protection.outlook.com [40.107.101.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7DE14A2C5;
-        Thu, 24 Nov 2022 02:29:36 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kzOpKUI6HH1cyUE7L4XLudkKUVsPEOW5SwF4vuITpy6c+qxsETSPzqvG1qL7HcPJFiIjoU3iA80q/nWFFSCzGa/5qY+aN/onWWlvQkyPKKUqxSH+nBaaX5lF9gw1zNkGbelOyim2TdvKs0Bk7DzvLhhUqoj+/AQJSutwIVjuSfpaQ4+126jf+HbrbDaA+0VcaLMs2Qcd2nhjPoVo17+kHc/9IgfBKHb+h834SHzVOqgjcnbH+M6zAzrmI06LjbwEM3Ugp9Ch/oIUtewopIcv9JfDyfcYSC7Hb1HIhPE56frOjx2cy1oC9w+O7jN+M+62Ybm1zTsRsrJVft/4JDvlnA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MK98sISiu20IUkwpbdgv25SGP2dEfMvoSR5tMNcuguM=;
- b=bKMRBWJhThRyeTzjN7h9YS3Y0JM1CYWPDaDIIbhX0n+nzxejao3g78MMTFUk1BRwTDA3GgNmnevmIqrYQ/EBlE4WmxRxdqtwGqJsObex10NQxc/bRhGtByYYw8og2M2g21Gj4E3bQi9T2MFkFK87uMeADebaZ+8hc25hu8ccxTRwA++mX+a0KJGI9CT6xH7PJSxnpJ3vrrYqLCVZu+cv1PSQCux8mWIMxwbsN+ZOSp7haTu4foVUqxfwVx/ih1rEoqRnmlo3lRba5PUXI6gGJu7wE+FLed5tYPhEnYj1wQtxooFs26nz1dOJxaO9ABlaTw8qnf7Fk5FGHy37phVQrQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MK98sISiu20IUkwpbdgv25SGP2dEfMvoSR5tMNcuguM=;
- b=p9eqCQzRIStCbZbxycmjdFmEDvHNajgvBSeqHqu0QEFAFnd46oL7lKLJRrDrupClGisYhCjgZE8xS4rHub6oKUrjmLEETQMYm9lG9csQPO5d6rL1CuJLiAVdP1A5DSGSd92O5Ji8pXUff/rj4+OTZgXYnsQcChDXmDOcDmLXN1k=
-Received: from MW4PR04CA0032.namprd04.prod.outlook.com (2603:10b6:303:6a::7)
- by DM6PR12MB4044.namprd12.prod.outlook.com (2603:10b6:5:21d::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19; Thu, 24 Nov
- 2022 10:29:34 +0000
-Received: from CO1NAM11FT046.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:6a:cafe::ea) by MW4PR04CA0032.outlook.office365.com
- (2603:10b6:303:6a::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19 via Frontend
- Transport; Thu, 24 Nov 2022 10:29:34 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- CO1NAM11FT046.mail.protection.outlook.com (10.13.174.203) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5834.8 via Frontend Transport; Thu, 24 Nov 2022 10:29:33 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 24 Nov
- 2022 04:29:21 -0600
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
- (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 24 Nov
- 2022 04:29:00 -0600
-Received: from xhdsneeli40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Thu, 24 Nov 2022 04:28:57 -0600
-From:   Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
-To:     <vkoul@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <lars@metafoo.de>,
-        <adrianml@alumnos.upm.es>
-CC:     <dmaengine@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <michal.simek@amd.com>,
-        <radhey.shyam.pandey@amd.com>, <anirudha.sarangi@amd.com>,
-        <harini.katakam@amd.com>, <sarath.babu.naidu.gaddam@amd.com>,
-        <git@amd.com>
-Subject: [PATCH V2 6/6] dmaengine: xilinx_dma: Program interrupt delay timeout
-Date:   Thu, 24 Nov 2022 15:57:45 +0530
-Message-ID: <20221124102745.2620370-7-sarath.babu.naidu.gaddam@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221124102745.2620370-1-sarath.babu.naidu.gaddam@amd.com>
-References: <20221124102745.2620370-1-sarath.babu.naidu.gaddam@amd.com>
+        Thu, 24 Nov 2022 05:28:06 -0500
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C0C676141;
+        Thu, 24 Nov 2022 02:28:02 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 5396BFF803;
+        Thu, 24 Nov 2022 10:27:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1669285681;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QuXxXHjsO6Qesz4Cd2esIPDdydm9CuuV9DYveil89fw=;
+        b=Gbee6iBj/3Wqjolgg5a/+mE+XtaS7VFrOtuhrRXLd5CNdIdVuSc77J9xGc/XQmZ7AU+p4M
+        V3+6xVNZIWY1zIty5niZ3SoeiQgjYsby8gNJBrkGyS4WH93C6cjIKWUVRoHI34VWyX7Z37
+        Ts6HVrpPwm22YTZTNd9lMKlJBupCnuyl6QPYAAvi6pHWmN6e1GOUi4h+UHTKA1tnQWdWpK
+        GmN5VYNdsoj7J7H932oy/agi714eYInEkI2ljly25kWapR+gH8DwJmlBJ9bw/LHUd041sW
+        gM8iYCCZKPV7y7b7DFFIVGAQ7DJeMvceEzRaNZ2stAkfCYtsFqr3Fuj9ewhzAQ==
+Date:   Thu, 24 Nov 2022 11:27:57 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Herve Codina <herve.codina@bootlin.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 2/7] dt-bindings: clock: renesas,r9a06g032-sysctrl:
+ Add h2mode property
+Message-ID: <20221124112757.13f200c4@xps-13>
+In-Reply-To: <d203a6ce-7032-a423-5158-fa551922dea1@linaro.org>
+References: <20221114111513.1436165-1-herve.codina@bootlin.com>
+        <20221115150417.513955a7@bootlin.com>
+        <20221118112349.7f09eefb@bootlin.com>
+        <d9bd5075-9d06-888d-36a9-911e2d7ec5af@linaro.org>
+        <20221121165921.559d6538@bootlin.com>
+        <4e54bfb4-bb67-73b8-f58f-56797c5925d3@linaro.org>
+        <CAMuHMdU=-ZUzHSb0Z8P3wsLK9cgGVCPdMi6AcjTH23tUQEeEBA@mail.gmail.com>
+        <a3e1332e-fc15-8a78-0ddd-6d5b26197f11@linaro.org>
+        <CAMuHMdXzqZB4sKMmroriq5oPp7z=yXiHk=+eQKwSyPhNbYqgYA@mail.gmail.com>
+        <1f12883b-1e37-7f2b-f9e9-c8bad290a133@linaro.org>
+        <CAMuHMdVbzg8y2So+A=z8nUwHMoL+XKUrvoXp9QdbCnUve1_Atw@mail.gmail.com>
+        <191a7f3e-0733-8058-5829-fe170a06dd5a@linaro.org>
+        <20221122100706.739cec4d@bootlin.com>
+        <3856e2d8-1c16-a69f-4ac5-34b8e7f18c2b@linaro.org>
+        <CAMuHMdXPndkt=+k1CAcDbH7eK=TFfS6wMu+xdqWZSCz1+hyhEA@mail.gmail.com>
+        <02db6a5d-ae9d-68b5-f5c5-bebb471e0f70@linaro.org>
+        <20221124103633.4fbf483f@xps-13>
+        <d203a6ce-7032-a423-5158-fa551922dea1@linaro.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT046:EE_|DM6PR12MB4044:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3ce5d549-7cc9-43f3-c932-08dace06c7ac
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Jols/puiB8QKDCOMujL03pwlp+GKZ7+QUBU9JzB3QNBxXcB9gDVM988cLdocVxOTn5HawUK/VsW0i1miJ2uU1R5foyfqOPb71NLYupot4uU3tyXs5gb8htGSYeKUJ0Pafj+KmLNg+P/7C7Tb1sbBPE4Po5C6KqW+HX/bSbmB8J7mnXbh3hHPMa7pij2CoZw1M5ir7StAh8eIdoVK7W7XHGuRlY+rnbugZLh47NmcsjNLVY2UHcWR7cZ4upzNA20XwgZjLASeVCuwVjkT0IgFY6XrskwMTSnC27BCQAvWAb/n8kbaij0bD+5ZJjUo/oU3uUgfmQcxC3AH/wlaFA0z4oVDbLA9ek0v8NeATQ2OBIhXD7WDjg0vMFlk2Zem44kkeXXZbGxkEL/+9E6ub4ZPHyIr5lQfdDaEsUJtLl2CMz+YOasQqKLVTSaC7YTMaXqErRt1qlW8v5hY4tRnVVuYNBJP4i+NKUl6h6aQmZO7i/HSn18K9i5voGcNRbc3JRGBIIzjW6VNC+kkkeiOC+6x88PoIM/rQ/cKMnagNH56Bf2EAwg5BOxkyHvnlS/X/Z65OQDsalsOk/+EklsZUWf3SHo/99hYMjMkuE46cM+eusWifyuqjYqJJ+P7/Kte1+Fysshc/ar3C/GfNvTZmcrNtzp1u4Sa4C+xXV+NOT2WFl1mfDrwnQMFQkfifG7eLiX19+5J+jIzvSUAnhWBEckpRL4o1d6IDkAqnk3fDLQJ2O4=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(39860400002)(346002)(136003)(451199015)(46966006)(40470700004)(36840700001)(2616005)(426003)(1076003)(186003)(336012)(47076005)(82310400005)(36756003)(5660300002)(8936002)(6666004)(41300700001)(26005)(103116003)(86362001)(316002)(54906003)(110136005)(8676002)(4326008)(40460700003)(478600001)(70586007)(70206006)(36860700001)(2906002)(82740400003)(40480700001)(356005)(81166007)(83380400001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2022 10:29:33.9899
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3ce5d549-7cc9-43f3-c932-08dace06c7ac
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT046.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4044
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,90 +83,298 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+Hi Krzysztof,
 
-Program IRQDelay for AXI DMA. The interrupt timeout mechanism causes
-the DMA engine to generate an interrupt after the delay time period
-has expired. It enables dmaengine to respond in real-time even though
-interrupt coalescing is configured. It also remove the placeholder
-for delay interrupt and merge it with frame completion interrupt.
-Since by default interrupt delay timeout is disabled this feature
-addition has no functional impact on VDMA and CDMA IP's.
+krzysztof.kozlowski@linaro.org wrote on Thu, 24 Nov 2022 10:46:14 +0100:
 
-Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-Signed-off-by: Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
----
- drivers/dma/xilinx/xilinx_dma.c | 20 +++++++++++---------
- 1 file changed, 11 insertions(+), 9 deletions(-)
+> On 24/11/2022 10:36, Miquel Raynal wrote:
+> > Hi Krzysztof,
+> >=20
+> > krzysztof.kozlowski@linaro.org wrote on Wed, 23 Nov 2022 10:39:41 +0100:
+> >  =20
+> >> On 22/11/2022 11:47, Geert Uytterhoeven wrote: =20
+> >>> Hi Krzysztof,
+> >>>
+> >>> On Tue, Nov 22, 2022 at 11:30 AM Krzysztof Kozlowski
+> >>> <krzysztof.kozlowski@linaro.org> wrote:   =20
+> >>>> On 22/11/2022 10:07, Herve Codina wrote:   =20
+> >>>>> On Tue, 22 Nov 2022 09:42:48 +0100
+> >>>>> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> >>>>>   =20
+> >>>>>> On 22/11/2022 09:25, Geert Uytterhoeven wrote:   =20
+> >>>>>>> Hi Krzysztof,
+> >>>>>>>
+> >>>>>>> On Tue, Nov 22, 2022 at 8:45 AM Krzysztof Kozlowski
+> >>>>>>> <krzysztof.kozlowski@linaro.org> wrote:   =20
+> >>>>>>>> On 21/11/2022 21:46, Geert Uytterhoeven wrote:   =20
+> >>>>>>>>>> This does not change anything. Herve wrote:
+> >>>>>>>>>>   =20
+> >>>>>>>>>>> probe some devices (USB host and probably others)   =20
+> >>>>>>>>>>
+> >>>>>>>>>> Why some can be probed earlier and some not, if there are no
+> >>>>>>>>>> dependencies? If there are dependencies, it's the same case wi=
+th sysctrl
+> >>>>>>>>>> touching the register bit and the USB controller touching it (=
+as well
+> >>>>>>>>>> via syscon, but that's obvious, I assume).
+> >>>>>>>>>>
+> >>>>>>>>>> Where is the synchronization problem?   =20
+> >>>>>>>>>
+> >>>>>>>>> The h2mode bit (and probably a few other controls we haven't fi=
+gured out
+> >>>>>>>>> yet) in the sysctrl must be set before any of the USB devices i=
+s active.
+> >>>>>>>>> Hence it's safest for the sysctrl to do this before any of the =
+USB drivers
+> >>>>>>>>> probes.   =20
+> >>>>>>>>
+> >>>>>>>> Again, this does not differ from many, many of other devices. Al=
+l of
+> >>>>>>>> them must set something in system controller block, before they =
+start
+> >>>>>>>> operating (or at specific time). It's exactly the same everywher=
+e.   =20
+> >>>>>>>
+> >>>>>>> The issue here is that there are two _different drivers_ (USB host
+> >>>>>>> and device). When both are modular, and the driver that depends o=
+n the
+> >>>>>>> sysctrl setting is loaded second, you have a problem: the sysctrl=
+ change
+> >>>>>>> must not be done when the first driver is already using the hardw=
+are.
+> >>>>>>>
+> >>>>>>> Hence the sysctrl driver should take care of it itself during ear=
+ly
+> >>>>>>> initialization (it's the main clock controller, so it's a depende=
+ncy
+> >>>>>>> for all other I/O device drivers).   =20
+> >>>>>>
+> >>>>>> I assumed you have there bit for the first device (which can switch
+> >>>>>> between USB host and USB device) to choose appropriate mode. The
+> >>>>>> bindings also expressed this - "the USBs are". Never said anything=
+ about
+> >>>>>> dependency between these USBs.
+> >>>>>>
+> >>>>>> Are you saying that the mode for first device cannot be changed on=
+ce the
+> >>>>>> second device (which is only host) is started? IOW, the mode setup=
+ must
+> >>>>>> happen before any of these devices are started?
+> >>>>>>
+> >>>>>> Anyway with sysctrl approach you will have dependency and you cann=
+ot
+> >>>>>> rely on clock provider-consumer relationship to order that depende=
+ncy.
+> >>>>>> What if you make all clocks on and do not take any clocks in USB d=
+evice?
+> >>>>>> Broken dependency. What if you want to use this in a different SoC,
+> >>>>>> where the sysctrl does not provide clocks? Broken dependency.   =20
+> >>>>>
+> >>>>> The issue is really related to the Renesas sysctrl itself and not r=
+elated
+> >>>>> to the USB drivers themselves.
+> >>>>> From the drivers themselves, the issue is not seen (I mean the driv=
+er
+> >>>>> takes no specific action related to this issue).
+> >>>>> If we change the SOC, the issue will probably not exist anymore.   =
+=20
+> >>>>
+> >>>> Yeah, and in the next SoC you will bring 10 of such properties to
+> >>>> sysctrl arguing that if one was approved, 10 is also fine. Somehow
+> >>>> people on the lists like to use that argument - I saw it somewhere, =
+so I
+> >>>> am allowed to do here the same.   =20
+> >>>
+> >>> Like pin control properties? ;-)
+> >>> This property represents a wiring on the board...
+> >>> I.e. a system integration issue.
+> >>>    =20
+> >>>> I understand that the registers responsible for configuration are in
+> >>>> sysctrl block, but it does not mean that it should be described as p=
+art
+> >>>> of sysctrl Devicetree node. If there was no synchronization problem,
+> >>>> this would be regular example of register in syscon which is handled
+> >>>> (toggled) by the device (so USB device/host controller). Since there=
+ is
+> >>>> synchronization problem, you argue that it is correct representation=
+ of
+> >>>> hardware. No, it is not, because logically in DT you do not describe
+> >>>> mode or existence of other devices in some other node and it still d=
+oes
+> >>>> not describe this ordering.   =20
+> >>>
+> >>> So we have to drop the property, and let the sysctrl block look
+> >>> for <name>@<reg> nodes, and check which ones are enabled?
+> >>>
+> >>> Running out of ideas...   =20
+> >=20
+> > I'm stepping in, hopefully I won't just be bikeshedding on something
+> > that has already been discussed but here is my grain of salt.
+> >  =20
+> >> One solution could be making USB nodes children of the sysctrl block w=
+hich:
+> >> 1. Gives proper ordering (children cannot start before parent)
+> >> regardless of any other shared resources,
+> >> 2. Allows to drop this mode property and instead check what type of
+> >> children you have and configure mode depending on them.
+> >>
+> >> However this also might not be correct representation of hardware
+> >> (dunno...), so I am also running out of ideas. =20
+> >=20
+> > I see what you mean here, but AFAICS that is clearly a wrong
+> > representation of the hardware. Sorting nodes by bus seems the aim of
+> > device tree because there is a physical relationship, that's why we
+> > have (i2c as an example):
+> >=20
+> > 	ahb {
+> > 		foo-controller@xxx {
+> > 			reg =3D <xxx>;
+> > 		};
+> > 	};
+> >=20
+> > But what you are describing now is conceptually closer to:
+> >=20
+> > 	clk-controller {
+> > 		foo-controller {
+> > 			reg =3D ?
+> > 		};
+> > 	}; =20
+>=20
+> Which is not a problem. reg can be anything - offset from sysctrl node
+> or absolute offset. We have it in many places already. What's the issue
+> here?
+>
+> > Not mentioning that this only works once, because foo-controller might
+> > also need other blocks to be ready before probing and those might
+> > be different blocks (they are the same in the rzn1 case, but
+> > more generally, they are not). =20
+>=20
+> But what is the problem of needing other blocks? All devices need
+> something and we solve it...
 
-diff --git a/drivers/dma/xilinx/xilinx_dma.c b/drivers/dma/xilinx/xilinx_dma.c
-index ce0c151d8f61..333d68ee3559 100644
---- a/drivers/dma/xilinx/xilinx_dma.c
-+++ b/drivers/dma/xilinx/xilinx_dma.c
-@@ -173,8 +173,10 @@
- #define XILINX_DMA_MAX_TRANS_LEN_MAX	23
- #define XILINX_DMA_V2_MAX_TRANS_LEN_MAX	26
- #define XILINX_DMA_CR_COALESCE_MAX	GENMASK(23, 16)
-+#define XILINX_DMA_CR_DELAY_MAX		GENMASK(31, 24)
- #define XILINX_DMA_CR_CYCLIC_BD_EN_MASK	BIT(4)
- #define XILINX_DMA_CR_COALESCE_SHIFT	16
-+#define XILINX_DMA_CR_DELAY_SHIFT	24
- #define XILINX_DMA_BD_SOP		BIT(27)
- #define XILINX_DMA_BD_EOP		BIT(26)
- #define XILINX_DMA_COALESCE_MAX		255
-@@ -410,6 +412,7 @@ struct xilinx_dma_tx_descriptor {
-  * @stop_transfer: Differentiate b/w DMA IP's quiesce
-  * @tdest: TDEST value for mcdma
-  * @has_vflip: S2MM vertical flip
-+ * @irq_delay: Interrupt delay timeout
-  */
- struct xilinx_dma_chan {
- 	struct xilinx_dma_device *xdev;
-@@ -448,6 +451,7 @@ struct xilinx_dma_chan {
- 	int (*stop_transfer)(struct xilinx_dma_chan *chan);
- 	u16 tdest;
- 	bool has_vflip;
-+	u8 irq_delay;
- };
- 
- /**
-@@ -1560,6 +1564,9 @@ static void xilinx_dma_start_transfer(struct xilinx_dma_chan *chan)
- 	if (chan->has_sg)
- 		xilinx_write(chan, XILINX_DMA_REG_CURDESC,
- 			     head_desc->async_tx.phys);
-+	reg  &= ~XILINX_DMA_CR_DELAY_MAX;
-+	reg  |= chan->irq_delay << XILINX_DMA_CR_DELAY_SHIFT;
-+	dma_ctrl_write(chan, XILINX_DMA_REG_DMACR, reg);
- 
- 	xilinx_dma_start(chan);
- 
-@@ -1887,15 +1894,8 @@ static irqreturn_t xilinx_dma_irq_handler(int irq, void *data)
- 		}
- 	}
- 
--	if (status & XILINX_DMA_DMASR_DLY_CNT_IRQ) {
--		/*
--		 * Device takes too long to do the transfer when user requires
--		 * responsiveness.
--		 */
--		dev_dbg(chan->dev, "Inter-packet latency too long\n");
--	}
--
--	if (status & XILINX_DMA_DMASR_FRM_CNT_IRQ) {
-+	if (status & (XILINX_DMA_DMASR_FRM_CNT_IRQ |
-+		      XILINX_DMA_DMASR_DLY_CNT_IRQ)) {
- 		spin_lock(&chan->lock);
- 		xilinx_dma_complete_descriptor(chan);
- 		chan->idle = true;
-@@ -2822,6 +2822,8 @@ static int xilinx_dma_chan_probe(struct xilinx_dma_device *xdev,
- 	/* Retrieve the channel properties from the device tree */
- 	has_dre = of_property_read_bool(node, "xlnx,include-dre");
- 
-+	of_property_read_u8(node, "xlnx,irq-delay", &chan->irq_delay);
-+
- 	chan->genlock = of_property_read_bool(node, "xlnx,genlock-mode");
- 
- 	err = of_property_read_u32(node, "xlnx,datawidth", &value);
--- 
-2.25.1
+What I am saying is that parenting only works once. All the other
+dependencies must be described by properties.
 
+The h2mode register, no matter its content, should be set early in the
+boot process, at least before any of the concerned controllers, which
+are totally independent hardware blocks, probe. If one of them has
+started, a change to the h2mode property could just stall the system.
+The USB controllers do not *need* this property nor want to change it
+(see below).
+
+The fact that the USB controllers are totally independent hardware
+blocks make me thing that they should *not* be children of the sysctrl.
+In our case one of them even is a PCI device! Would you represent a PCI
+device within the sysctrl node? The other is somehow memory mapped
+behind a bridge. Again, this has to be described somewhere, and
+parenting usually is the right fit for that.
+
+Hence, the only real thing that remains to be described, as you
+rightly pointed out in your earlier reviews, is the probe order which
+is nothing related to any kind of parenting in this case.
+
+> > So in the end I am not in favor of this
+> > solution.
+> >=20
+> > If we compare the dependency between the USB device controller and the
+> > sysctrl block which contains the h2mode register to existing
+> > dependencies, they are all treated with properties. These properties,
+> > eg:
+> >=20
+> > 	foo-controller {
+> > 		clocks =3D <&provider [index]>;
+> > 	};
+> >=20
+> > were initially used to just tell the consumer which resource it should
+> > grab/enable. If the device was not yet ready, we would rely on the
+> > probe deferral mechanism to try again later. Not optimal, but not
+> > bad either as it made things work. Since v5.11 and the addition of
+> > automatic device links, the probe order is explicitly ordered.
+> > <provider> could always get probed before <foo-controller>. So, isn't
+> > what we need here? What about the following:
+> >=20
+> > 	sysctrl {
+> > 		h2mode =3D "something";
+> > 	};
+> >=20
+> > 	usb-device {
+> > 		h2mode-provider =3D <&sysctrl>;
+> > 	}; =20
+>=20
+> No, because next time one will add 10 of such properties:
+> sysctrl {
+> 	h2mode =3D ""
+> 	g2mode =3D ""
+> 	i2mode =3D ""
+> 	....
+> }
+>=20
+> and keep arguing that because these registers are in sysctrl, so they
+> should have their own property in sysctrl mode.
+>=20
+> That's not correct representation of hardware.
+
+Actually my main focus here was more on the "sysctrl-provider" logic.
+We need a probe dependency so we have two choices:
+- pointing
+- parenting
+For the reasons above, I bet the former is the most accurate approach.
+
+If the h2mode property bothers you, it's fine, we can just drop it. The
+USB device controller can do without it:
+- either it just probes without knowing the mode, its bus will remain
+  empty so the device is useless, but nothing will break.
+- or (this is my favorite) we add another sysctrl helper that exposes
+  the h2mode, very much like we've done with the dmamux [2] and we just
+  avoid probing if the mode that we receive does not ask for a USB
+  device controller. Speeds-up the boot process.
+
+[2] https://lore.kernel.org/all/20220427095653.91804-5-miquel.raynal@bootli=
+n.com/
+
+Either ways, we would still need the probe order to be enforced,
+which might be achieved on Linux side with the below explanations.
+
+> > We can initially just make this work with some additional logic on both
+> > sides. The USB device controller would manually check whether sysctrl
+> > has been probed or not (in practice, because of the clocks and power
+> > domains being described this will always be a yes, but IIUC we want to
+> > avoid relying on it) and otherwise, defer its probe. On the sysctrl side
+> > it is just a matter of checking (like we already do):
+> >=20
+> > 	if (!sysctrl_priv)
+> > 		return -EPROBE_DEFER;
+> >=20
+> > To be honest I would love to see the device link mechanism extended to
+> > "custom" phandle properties like that, it would avoid the burden of
+> > checking for deferrals manually, aside with boot time improvements. If
+> > we go this way, we shall decide whether we want to:
+> > * extend the list of properties that will lead to a dependency creation=
+ [1]
+> > * or maybe settle on a common suffix that could always be used,
+> >   especially for specific cases like this one where there is an
+> >   explicit provider-consumer dependency that must be fulfilled:
+> >=20
+> > 	DEFINE_SUFFIX_PROP(provider, "-provider", "#provider-cells")
+> >=20
+> > * or perhaps extend struct of_device_id to contain the name of the
+> >   properties pointing to phandles that describe probe dependencies with:
+> >=20
+> > 	char *provider_prop_name;
+> > 	char *provider_cells_prop_name;
+> >=20
+> >   and use them from of/property.c to generate the links when relevant.
+> >=20
+> > [1] https://elixir.bootlin.com/linux/v6.0/source/drivers/of/property.c#=
+L1298
+> >=20
+> >=20
+> > Thanks,
+> > Miqu=C3=A8l =20
+>=20
+> Best regards,
+> Krzysztof
+>=20
+
+Thanks,
+Miqu=C3=A8l
