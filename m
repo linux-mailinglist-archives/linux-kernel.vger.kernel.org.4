@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C04C6379AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 14:06:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C1546379B1
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 14:06:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbiKXNGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 08:06:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57034 "EHLO
+        id S230071AbiKXNGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 08:06:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbiKXNGC (ORCPT
+        with ESMTP id S230056AbiKXNGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 08:06:02 -0500
+        Thu, 24 Nov 2022 08:06:47 -0500
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C30212D32;
-        Thu, 24 Nov 2022 05:05:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E721025CA;
+        Thu, 24 Nov 2022 05:06:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669295159; x=1700831159;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=dvTX+Ug67Rydtz7WIYzbSx40KvDV6tXZ/nyLRF8t6Ng=;
-  b=yP120Q3c0/M65ulgzq19/YJF++/5ugHCp3yJt8jQzj08uOg+I8Z1vu3F
-   /VGFUN0vPeZ5g9YWl7nb1mm8GwQKzzwF5wMk9qT7zJ2E1szZpxiwT7vCT
-   RNe7+kuNf4VDP55Wm4BUbibDCWVj/W+xHn6H973km68y6rWaP8j1hT37v
-   +xWCDas1fjsjQp3cUQRbE6SEEmvHh057til5FWku030Ql1KD3ACK5JTGt
-   YlINPC/alsEmfVzO0dm0kJG9uEqGPUL5wGuO3L9frbNP5/BzZQTHlM/ai
-   Na628WlP32wgaZSDmn2iJnCWvPiwpzHsNg4vsRm4FeqKTNMB8Yn/3ErYl
+  t=1669295206; x=1700831206;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=jkht1lqZ+yao+3lR7ZjiS5rsmbUp+VlY/aGj4tz6xiw=;
+  b=vZSRB/vrqLIKAW0wvTSHPdSH/gGIgAcFy/pmppL0b/Szcidir6NFsiKN
+   ZXqDcOTXy/jDGZwPXRPM84EP5lO482xaxpzmAlmjEiRmLqFD0DZEY5P3n
+   q+nu4nvLZM2d4VHwxVfb8ig2gPG3RnlIv73gpw3E/sAyuqf8T+CbRfCkQ
+   J9X+Npl5xG+M8XsqVru6v7Zv76hLm5hnbCNuq6fKfvXxtsYbRwgO6RQrx
+   ooEJTlXcnyKhJl111zYNPiZgZTfI+V1elQ9EZU+NhL6jSeM5o6sDav7Os
+   jIDbf37vl0t+bzW00IvBx/r9YAqLTnveBt1DSsGIGzDaieq2uI/FSyYEN
    A==;
 X-IronPort-AV: E=Sophos;i="5.96,190,1665471600"; 
-   d="scan'208";a="185029281"
+   d="scan'208";a="185029556"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Nov 2022 06:05:58 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Nov 2022 06:06:45 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Thu, 24 Nov 2022 06:05:36 -0700
+ 15.1.2507.12; Thu, 24 Nov 2022 06:06:44 -0700
 Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex02.mchp-main.com
  (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Thu, 24 Nov 2022 06:05:34 -0700
+ Transport; Thu, 24 Nov 2022 06:06:42 -0700
 From:   Conor Dooley <conor.dooley@microchip.com>
 To:     <linux-riscv@lists.infradead.org>
 CC:     Conor Dooley <conor.dooley@microchip.com>,
@@ -52,10 +52,12 @@ CC:     Conor Dooley <conor.dooley@microchip.com>,
         Andrew Jones <ajones@ventanamicro.com>,
         Guo Ren <guoren@kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH 0/2] riscv,isa fixups
-Date:   Thu, 24 Nov 2022 13:04:39 +0000
-Message-ID: <20221124130440.306771-1-conor.dooley@microchip.com>
+Subject: [PATCH 1/2] dt-bindings: riscv: fix underscore requirement for addtional standard extensions
+Date:   Thu, 24 Nov 2022 13:04:40 +0000
+Message-ID: <20221124130440.306771-2-conor.dooley@microchip.com>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221124130440.306771-1-conor.dooley@microchip.com>
+References: <20221124130440.306771-1-conor.dooley@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -68,36 +70,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I noticed today while looking at the isa manual that I had not accounted
-for another couple of edge cases with my regex. As before, I think
-attempting to validate the canonical order for multiletter stuff makes
-no sense - but we should totally try to avoid false-positives for
-combinations that are known to be valid.
+The RISC-V ISA Manual allows for the first Additional Standard
+Extension having no leading underscore. Only if there are multiple
+Additional Standard Extensions is it needed to have an underscore.
 
-Thanks,
-Conor.
+The dt-binding does not validate that a multi-letter extension is
+canonically ordered, as that'd need an even worse regex than is here,
+but it should not fail validation for valid ISA strings.
 
-CC: Conor Dooley <conor@kernel.org>
-CC: Rob Herring <robh+dt@kernel.org>
-CC: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC: Paul Walmsley <paul.walmsley@sifive.com>
-CC: Palmer Dabbelt <palmer@dabbelt.com>
-CC: Albert Ou <aou@eecs.berkeley.edu>
-CC: Heiko Stuebner <heiko@sntech.de>
-CC: Andrew Jones <ajones@ventanamicro.com>
-CC: Guo Ren <guoren@kernel.org>
-CC: linux-riscv@lists.infradead.org
-CC: devicetree@vger.kernel.org
-CC: linux-kernel@vger.kernel.org
+Allow the first Z multi-letter extension to appear immediately prior
+after the single-letter extensions.
 
-Conor Dooley (2):
-  dt-bindings: riscv: fix underscore requirement for addtional standard
-    extensions
-  dt-bindings: riscv: fix single letter canonical order
-
+Link: https://github.com/riscv/riscv-isa-manual/releases/tag/riscv-unpriv-pdf-from-asciidoc-15112022 # Chapter 29.5
+Fixes: 299824e68bd0 ("dt-bindings: riscv: add new riscv,isa strings for emulators")
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
  Documentation/devicetree/bindings/riscv/cpus.yaml | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
+index 90a7cabf58fe..e80c967a4fa4 100644
+--- a/Documentation/devicetree/bindings/riscv/cpus.yaml
++++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
+@@ -80,7 +80,7 @@ properties:
+       insensitive, letters in the riscv,isa string must be all
+       lowercase to simplify parsing.
+     $ref: "/schemas/types.yaml#/definitions/string"
+-    pattern: ^rv(?:64|32)imaf?d?q?c?b?v?k?h?(?:_[hsxz](?:[a-z])+)*$
++    pattern: ^rv(?:64|32)imaf?d?q?c?b?v?k?h?(?:z(?:[a-z])+)?(?:_[hsxz](?:[a-z])+)*$
+ 
+   # RISC-V requires 'timebase-frequency' in /cpus, so disallow it here
+   timebase-frequency: false
 -- 
 2.38.1
 
