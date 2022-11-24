@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ED26637B3A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 15:16:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25167637B3B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 15:16:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbiKXOQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 09:16:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44962 "EHLO
+        id S230240AbiKXOQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 09:16:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbiKXOQH (ORCPT
+        with ESMTP id S230063AbiKXOQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 24 Nov 2022 09:16:07 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808B3E1BFE;
-        Thu, 24 Nov 2022 06:16:04 -0800 (PST)
-Date:   Thu, 24 Nov 2022 14:16:01 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4ADF3922;
+        Thu, 24 Nov 2022 06:16:05 -0800 (PST)
+Date:   Thu, 24 Nov 2022 14:16:02 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669299362;
+        s=2020; t=1669299364;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jstBFKJYrlKM5IBe+Kd8tSZGsiZAFSxp+NsE8vYs0tc=;
-        b=gurjz5rYkmkxuGvV5rRuPbS/ebQTOw6pNJruzcV1BofU8UzcfxwEJ8sGmde4VSEzyFvcn1
-        RUdSCB6yAx60u3YD3bz1f/9ZqrqI9M7DYswS7apdXzUs1DwQf+xK+OE1jYV9XEI3Y3vQCg
-        bG+KnyT/Xd9yOa0lImaHJARwjpsnRhMeaY70yJ8VPNMRT6yR0fkllsxL5NZ9o4n2wOFPaq
-        q24uPh6DkDKSdJ1AnDAqDYkt/S1LdJSG8uj0h6E6s/O9MPv/wQuvj6jSwhsLJHoixvzmQK
-        tZicrfRQUJjgRYrVNnSoT7SXUvFVpuj6R8z9ZCeH18e/iQ2Tnc1CPQ/KhAuX0w==
+        bh=l9/9VVNhPfMLZ0KpU0KK40qpUVbN3+y9Zu04pnH/wMM=;
+        b=4otQaBI//9OT1lMD0gGn4dCqa9IvYqUEaBKCOEKV5J0jKoHzvZB86ugtfF1Xua+CBdy+B5
+        JeAiuOYZNdQiHKXwRJQEnAfR5jP4Smsyozzp6N5yq4b/2ZbTXAov4OLF98GQAVxU6ctR5o
+        iCx9dqBpHREXz3Ih6p+Ivn30Zhg5RdX3wG2fxUirjULgpCpkTYLWxUEVkMyJhBcSsyBN7D
+        Mmfpjhc+aLSacyUAOfKKYX5BOLHNaqVOxkstbPPqtk18isi0CULA3VX5QntmzvWll5Z4MB
+        Fp1VgGlB2/FWoHWw6E8aY/LqqtqQisc1FApq6AaxbCDtSAhccOYZMw6/229xiw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669299362;
+        s=2020e; t=1669299364;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jstBFKJYrlKM5IBe+Kd8tSZGsiZAFSxp+NsE8vYs0tc=;
-        b=4p6Rxp5QwfACcyPwxwZANRvsExcBvJy82+Z0tsVf44VwGuMSui3Qehh8818iuGvk/XEu70
-        bPewQ0iA5eQ0jOCQ==
+        bh=l9/9VVNhPfMLZ0KpU0KK40qpUVbN3+y9Zu04pnH/wMM=;
+        b=weA4HlGHrwNT73ZX03g1FB6C6klCEIvblaSZnjiBjAb9MBPlni9kzkFgkWiOznp1HRdWdp
+        FJS8TG76RGWaBsAg==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] timers: Provide timer_shutdown[_sync]()
+Subject: [tip: timers/core] timers: Add shutdown mechanism to the internal functions
 Cc:     Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -53,7 +53,7 @@ Cc:     Steven Rostedt <rostedt@goodmis.org>,
 In-Reply-To: <20220407161745.7d6754b3@gandalf.local.home>
 References: <20220407161745.7d6754b3@gandalf.local.home>
 MIME-Version: 1.0
-Message-ID: <166929936145.4906.16764857196527632817.tip-bot2@tip-bot2>
+Message-ID: <166929936276.4906.5093007911218305596.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,14 +69,14 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     f571faf6e443b6011ccb585d57866177af1f643c
-Gitweb:        https://git.kernel.org/tip/f571faf6e443b6011ccb585d57866177af1f643c
+Commit-ID:     0cc04e80458a822300b93f82ed861a513edde194
+Gitweb:        https://git.kernel.org/tip/0cc04e80458a822300b93f82ed861a513edde194
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Wed, 23 Nov 2022 21:18:53 +01:00
+AuthorDate:    Wed, 23 Nov 2022 21:18:52 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Thu, 24 Nov 2022 15:09:12 +01:00
 
-timers: Provide timer_shutdown[_sync]()
+timers: Add shutdown mechanism to the internal functions
 
 Tearing down timers which have circular dependencies to other
 functionality, e.g. workqueues, where the timer can schedule work and work
@@ -87,16 +87,9 @@ rearming of the timer. The mechanism to do so is to set timer->function to
 NULL and use this as an indicator for the timer arming functions to ignore
 the (re)arm request.
 
-Expose new interfaces for this: timer_shutdown_sync() and timer_shutdown().
-
-timer_shutdown_sync() has the same functionality as timer_delete_sync()
-plus the NULL-ification of the timer function.
-
-timer_shutdown() has the same functionality as timer_delete() plus the
-NULL-ification of the timer function.
-
-In both cases the rearming of the timer is prevented by silently discarding
-rearm attempts due to timer->function being NULL.
+Add a shutdown argument to the relevant internal functions which makes the
+actual deactivation code set timer->function to NULL which in turn prevents
+rearming of the timer.
 
 Co-developed-by: Steven Rostedt <rostedt@goodmis.org>
 Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
@@ -106,114 +99,155 @@ Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
 Reviewed-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
 Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home
 Link: https://lore.kernel.org/all/20221110064101.429013735@goodmis.org
-Link: https://lore.kernel.org/r/20221123201625.314230270@linutronix.de
+Link: https://lore.kernel.org/r/20221123201625.253883224@linutronix.de
 
 ---
- include/linux/timer.h |  2 +-
- kernel/time/timer.c   | 66 ++++++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 68 insertions(+)
+ kernel/time/timer.c | 62 ++++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 54 insertions(+), 8 deletions(-)
 
-diff --git a/include/linux/timer.h b/include/linux/timer.h
-index e338e17..9162f27 100644
---- a/include/linux/timer.h
-+++ b/include/linux/timer.h
-@@ -184,6 +184,8 @@ extern void add_timer(struct timer_list *timer);
- extern int try_to_del_timer_sync(struct timer_list *timer);
- extern int timer_delete_sync(struct timer_list *timer);
- extern int timer_delete(struct timer_list *timer);
-+extern int timer_shutdown_sync(struct timer_list *timer);
-+extern int timer_shutdown(struct timer_list *timer);
- 
- /**
-  * del_timer_sync - Delete a pending timer and wait for a running callback
 diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index 167e43c..63a8ce7 100644
+index e635bb5..167e43c 100644
 --- a/kernel/time/timer.c
 +++ b/kernel/time/timer.c
-@@ -1363,6 +1363,27 @@ int timer_delete(struct timer_list *timer)
+@@ -1300,12 +1300,19 @@ EXPORT_SYMBOL_GPL(add_timer_on);
+ /**
+  * __timer_delete - Internal function: Deactivate a timer
+  * @timer:	The timer to be deactivated
++ * @shutdown:	If true, this indicates that the timer is about to be
++ *		shutdown permanently.
++ *
++ * If @shutdown is true then @timer->function is set to NULL under the
++ * timer base lock which prevents further rearming of the time. In that
++ * case any attempt to rearm @timer after this function returns will be
++ * silently ignored.
+  *
+  * Return:
+  * * %0 - The timer was not pending
+  * * %1 - The timer was pending and deactivated
+  */
+-static int __timer_delete(struct timer_list *timer)
++static int __timer_delete(struct timer_list *timer, bool shutdown)
+ {
+ 	struct timer_base *base;
+ 	unsigned long flags;
+@@ -1313,9 +1320,22 @@ static int __timer_delete(struct timer_list *timer)
+ 
+ 	debug_assert_init(timer);
+ 
+-	if (timer_pending(timer)) {
++	/*
++	 * If @shutdown is set then the lock has to be taken whether the
++	 * timer is pending or not to protect against a concurrent rearm
++	 * which might hit between the lockless pending check and the lock
++	 * aquisition. By taking the lock it is ensured that such a newly
++	 * enqueued timer is dequeued and cannot end up with
++	 * timer->function == NULL in the expiry code.
++	 *
++	 * If timer->function is currently executed, then this makes sure
++	 * that the callback cannot requeue the timer.
++	 */
++	if (timer_pending(timer) || shutdown) {
+ 		base = lock_timer_base(timer, &flags);
+ 		ret = detach_if_pending(timer, base, true);
++		if (shutdown)
++			timer->function = NULL;
+ 		raw_spin_unlock_irqrestore(&base->lock, flags);
+ 	}
+ 
+@@ -1338,20 +1358,31 @@ static int __timer_delete(struct timer_list *timer)
+  */
+ int timer_delete(struct timer_list *timer)
+ {
+-	return __timer_delete(timer);
++	return __timer_delete(timer, false);
+ }
  EXPORT_SYMBOL(timer_delete);
  
  /**
-+ * timer_shutdown - Deactivate a timer and prevent rearming
-+ * @timer:	The timer to be deactivated
-+ *
-+ * The function does not wait for an eventually running timer callback on a
-+ * different CPU but it prevents rearming of the timer. Any attempt to arm
-+ * @timer after this function returns will be silently ignored.
-+ *
-+ * This function is useful for teardown code and should only be used when
-+ * timer_shutdown_sync() cannot be invoked due to locking or context constraints.
-+ *
-+ * Return:
-+ * * %0 - The timer was not pending
-+ * * %1 - The timer was pending
-+ */
-+int timer_shutdown(struct timer_list *timer)
-+{
-+	return __timer_delete(timer, true);
-+}
-+EXPORT_SYMBOL_GPL(timer_shutdown);
-+
-+/**
   * __try_to_del_timer_sync - Internal function: Try to deactivate a timer
   * @timer:	Timer to deactivate
-  * @shutdown:	If true, this indicates that the timer is about to be
-@@ -1595,6 +1616,9 @@ static int __timer_delete_sync(struct timer_list *timer, bool shutdown)
-  * lock. If there is the possibility of a concurrent rearm then the return
-  * value of the function is meaningless.
-  *
-+ * If such a guarantee is needed, e.g. for teardown situations then use
-+ * timer_shutdown_sync() instead.
++ * @shutdown:	If true, this indicates that the timer is about to be
++ *		shutdown permanently.
 + *
++ * If @shutdown is true then @timer->function is set to NULL under the
++ * timer base lock which prevents further rearming of the timer. Any
++ * attempt to rearm @timer after this function returns will be silently
++ * ignored.
++ *
++ * This function cannot guarantee that the timer cannot be rearmed
++ * right after dropping the base lock if @shutdown is false. That
++ * needs to be prevented by the calling code if necessary.
+  *
+  * Return:
+  * * %0  - The timer was not pending
+  * * %1  - The timer was pending and deactivated
+  * * %-1 - The timer callback function is running on a different CPU
+  */
+-static int __try_to_del_timer_sync(struct timer_list *timer)
++static int __try_to_del_timer_sync(struct timer_list *timer, bool shutdown)
+ {
+ 	struct timer_base *base;
+ 	unsigned long flags;
+@@ -1363,6 +1394,8 @@ static int __try_to_del_timer_sync(struct timer_list *timer)
+ 
+ 	if (base->running_timer != timer)
+ 		ret = detach_if_pending(timer, base, true);
++	if (shutdown)
++		timer->function = NULL;
+ 
+ 	raw_spin_unlock_irqrestore(&base->lock, flags);
+ 
+@@ -1387,7 +1420,7 @@ static int __try_to_del_timer_sync(struct timer_list *timer)
+  */
+ int try_to_del_timer_sync(struct timer_list *timer)
+ {
+-	return __try_to_del_timer_sync(timer);
++	return __try_to_del_timer_sync(timer, false);
+ }
+ EXPORT_SYMBOL(try_to_del_timer_sync);
+ 
+@@ -1468,12 +1501,25 @@ static inline void del_timer_wait_running(struct timer_list *timer) { }
+  * __timer_delete_sync - Internal function: Deactivate a timer and wait
+  *			 for the handler to finish.
+  * @timer:	The timer to be deactivated
++ * @shutdown:	If true, @timer->function will be set to NULL under the
++ *		timer base lock which prevents rearming of @timer
++ *
++ * If @shutdown is not set the timer can be rearmed later. If the timer can
++ * be rearmed concurrently, i.e. after dropping the base lock then the
++ * return value is meaningless.
++ *
++ * If @shutdown is set then @timer->function is set to NULL under timer
++ * base lock which prevents rearming of the timer. Any attempt to rearm
++ * a shutdown timer is silently ignored.
++ *
++ * If the timer should be reused after shutdown it has to be initialized
++ * again.
+  *
   * Return:
   * * %0	- The timer was not pending
   * * %1	- The timer was pending and deactivated
-@@ -1605,6 +1629,48 @@ int timer_delete_sync(struct timer_list *timer)
+  */
+-static int __timer_delete_sync(struct timer_list *timer)
++static int __timer_delete_sync(struct timer_list *timer, bool shutdown)
+ {
+ 	int ret;
+ 
+@@ -1503,7 +1549,7 @@ static int __timer_delete_sync(struct timer_list *timer)
+ 		lockdep_assert_preemption_enabled();
+ 
+ 	do {
+-		ret = __try_to_del_timer_sync(timer);
++		ret = __try_to_del_timer_sync(timer, shutdown);
+ 
+ 		if (unlikely(ret < 0)) {
+ 			del_timer_wait_running(timer);
+@@ -1555,7 +1601,7 @@ static int __timer_delete_sync(struct timer_list *timer)
+  */
+ int timer_delete_sync(struct timer_list *timer)
+ {
+-	return __timer_delete_sync(timer);
++	return __timer_delete_sync(timer, false);
  }
  EXPORT_SYMBOL(timer_delete_sync);
  
-+/**
-+ * timer_shutdown_sync - Shutdown a timer and prevent rearming
-+ * @timer: The timer to be shutdown
-+ *
-+ * When the function returns it is guaranteed that:
-+ *   - @timer is not queued
-+ *   - The callback function of @timer is not running
-+ *   - @timer cannot be enqueued again. Any attempt to rearm
-+ *     @timer is silently ignored.
-+ *
-+ * See timer_delete_sync() for synchronization rules.
-+ *
-+ * This function is useful for final teardown of an infrastructure where
-+ * the timer is subject to a circular dependency problem.
-+ *
-+ * A common pattern for this is a timer and a workqueue where the timer can
-+ * schedule work and work can arm the timer. On shutdown the workqueue must
-+ * be destroyed and the timer must be prevented from rearming. Unless the
-+ * code has conditionals like 'if (mything->in_shutdown)' to prevent that
-+ * there is no way to get this correct with timer_delete_sync().
-+ *
-+ * timer_shutdown_sync() is solving the problem. The correct ordering of
-+ * calls in this case is:
-+ *
-+ *	timer_shutdown_sync(&mything->timer);
-+ *	workqueue_destroy(&mything->workqueue);
-+ *
-+ * After this 'mything' can be safely freed.
-+ *
-+ * This obviously implies that the timer is not required to be functional
-+ * for the rest of the shutdown operation.
-+ *
-+ * Return:
-+ * * %0 - The timer was not pending
-+ * * %1 - The timer was pending
-+ */
-+int timer_shutdown_sync(struct timer_list *timer)
-+{
-+	return __timer_delete_sync(timer, true);
-+}
-+EXPORT_SYMBOL_GPL(timer_shutdown_sync);
-+
- static void call_timer_fn(struct timer_list *timer,
- 			  void (*fn)(struct timer_list *),
- 			  unsigned long baseclk)
