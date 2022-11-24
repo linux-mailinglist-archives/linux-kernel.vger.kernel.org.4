@@ -2,193 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 196B9637373
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:12:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5BA063739F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 09:14:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbiKXIMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 03:12:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57942 "EHLO
+        id S230003AbiKXIOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 03:14:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbiKXILv (ORCPT
+        with ESMTP id S229878AbiKXIMm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 03:11:51 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316E1DDFB5
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:11:30 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id i10so2435026ejg.6
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 00:11:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6YHJgPorhOUbyl8qXKZ/Y1Fb0whHUGXa2Cr+bH3NpKM=;
-        b=B4nBu20bW7mnUL2BeHRcg59KXuEcGTlAVaR5iapLDCicXnF3jFRGL0KaCd3/+h9Tdw
-         vY9pRcqoKoWybtisYS+ZxcgaQKr5iVDQ7zAsYRhTzvbjh9N+7LqU/5PuYXAq73/SPu5K
-         lK1a6zcpRASRjG7B8xKq1P1Np87iRH6szFwH0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6YHJgPorhOUbyl8qXKZ/Y1Fb0whHUGXa2Cr+bH3NpKM=;
-        b=EeVjT+WyESgSeqMQ5ybrrak1zTsFYDR4xeMDh9AMnVsqMFXtn7yNFyIdn1qaaLkNTZ
-         Vf4JG/8TZjtUr2Pu4rEh6h/ACUwY8nKDZvsYdOI9NYKoTQctzxEBD5gGdNC1CK6lZi0y
-         4kqZ3SpZM/nLQye+VrdEtPMfPhd04UDVbDgP+HS8QayfAnYzvu2KfmYwzfFDZriiZ9y9
-         wLycKP+4eUUPtvV/c8C6XQ5bapmwCs8KIcS5RGko2nCiHUQ4RLMc8EQssF5BwQfwR2Se
-         Ux5WLcUTitiED3ToyVTdt/kKdK+5YJfE6QOUuFXTgq2EixQ+sh/OK7hZIIqIiNb1HBHK
-         J6ig==
-X-Gm-Message-State: ANoB5pml9Fi7cMztivTv0k2ILPGs37yhMu6pZ3arqH3KhOyUIQSmm6m9
-        dZNgNlOa/+B2+IPCyYXYBgOO4Q==
-X-Google-Smtp-Source: AA0mqf7aVZbVSFuG+L8Eyzm7AhG74w3bgdJjvzEEZlZQFKaZUtPxj3jnE/eIs0+1qpSwdBYG5TXoFA==
-X-Received: by 2002:a17:906:245a:b0:78d:857d:b4a8 with SMTP id a26-20020a170906245a00b0078d857db4a8mr5069511ejb.495.1669277488639;
-        Thu, 24 Nov 2022 00:11:28 -0800 (PST)
-Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-55-94.cust.vodafonedsl.it. [188.217.55.94])
-        by smtp.gmail.com with ESMTPSA id wl3-20020a170907310300b007b4bc423b41sm145907ejb.190.2022.11.24.00.11.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 00:11:27 -0800 (PST)
-Date:   Thu, 24 Nov 2022 09:11:26 +0100
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-To:     "T.J. Mercier" <tjmercier@google.com>
-Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dma-buf: A collection of typo and documentation fixes
-Message-ID: <20221124081126.GA607444@tom-ThinkPad-T14s-Gen-2i>
-References: <20221123193519.3948105-1-tjmercier@google.com>
+        Thu, 24 Nov 2022 03:12:42 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91627E11;
+        Thu, 24 Nov 2022 00:12:29 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4NHrCK0l9zz9xFQd;
+        Thu, 24 Nov 2022 16:05:33 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwCHufVFJ39jjHaNAA--.33470S2;
+        Thu, 24 Nov 2022 09:12:01 +0100 (CET)
+Message-ID: <44de9254c7abf1c836142cf3262450de1912bbc0.camel@huaweicloud.com>
+Subject: Re: [PATCH v5 2/6] ocfs2: Switch to security_inode_init_security()
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, mark@fasheh.com,
+        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, Casey Schaufler <casey@schaufler-ca.com>
+Cc:     ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Thu, 24 Nov 2022 09:11:44 +0100
+In-Reply-To: <052d91687e813110cc1e1d762ea086cc8085114a.camel@linux.ibm.com>
+References: <20221123095202.599252-1-roberto.sassu@huaweicloud.com>
+         <20221123095202.599252-3-roberto.sassu@huaweicloud.com>
+         <052d91687e813110cc1e1d762ea086cc8085114a.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221123193519.3948105-1-tjmercier@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwCHufVFJ39jjHaNAA--.33470S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxKr15AF1UJr1xtF45uF1Dtrb_yoWxZF4xpF
+        W8KFnxKr1rJFyUWrWfta13ua1S9rWrGrZrJrs3G347ZF1DCr1ftry0yr15ua45XrW8JFyk
+        tw48Arsxuan8J3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAGBF1jj4HQvgACsc
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi T.J,
-
-On Wed, Nov 23, 2022 at 07:35:18PM +0000, T.J. Mercier wrote:
-> I've been collecting these typo fixes for a while and it feels like
-> time to send them in.
+On Wed, 2022-11-23 at 12:46 -0500, Mimi Zohar wrote:
+> On Wed, 2022-11-23 at 10:51 +0100, Roberto Sassu wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > In preparation for removing security_old_inode_init_security(), switch to
+> > security_inode_init_security().
+> > 
+> > Extend the existing ocfs2_initxattrs() to take the
+> > ocfs2_security_xattr_info structure from fs_info, and populate the
+> > name/value/len triple with the first xattr provided by LSMs. Supporting
+> > multiple xattrs is not currently supported, as it requires non-trivial
+> > changes that can be done at a later time.
 > 
-> Signed-off-by: T.J. Mercier <tjmercier@google.com>
-> ---
->  drivers/dma-buf/dma-buf.c | 14 +++++++-------
->  include/linux/dma-buf.h   |  6 +++---
->  2 files changed, 10 insertions(+), 10 deletions(-)
+> ocfs2 already defines ocfs2_init_security_get() as a wrapper around
+> calling either security_old_inode_init_security() or
+> security_inode_init_security().  Based on "si" one or the other hook is
+> called.  ocfs2_initxattrs is already defined.
 > 
-> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-> index dd0f83ee505b..614ccd208af4 100644
-> --- a/drivers/dma-buf/dma-buf.c
-> +++ b/drivers/dma-buf/dma-buf.c
-> @@ -1141,7 +1141,7 @@ EXPORT_SYMBOL_NS_GPL(dma_buf_unmap_attachment, DMA_BUF);
->   *
->   * @dmabuf:	[in]	buffer which is moving
->   *
-> - * Informs all attachmenst that they need to destroy and recreated all their
-> + * Informs all attachments that they need to destroy and recreate all their
->   * mappings.
->   */
->  void dma_buf_move_notify(struct dma_buf *dmabuf)
-> @@ -1159,11 +1159,11 @@ EXPORT_SYMBOL_NS_GPL(dma_buf_move_notify, DMA_BUF);
->  /**
->   * DOC: cpu access
->   *
-> - * There are mutliple reasons for supporting CPU access to a dma buffer object:
-> + * There are multiple reasons for supporting CPU access to a dma buffer object:
->   *
->   * - Fallback operations in the kernel, for example when a device is connected
->   *   over USB and the kernel needs to shuffle the data around first before
-> - *   sending it away. Cache coherency is handled by braketing any transactions
-> + *   sending it away. Cache coherency is handled by bracketing any transactions
->   *   with calls to dma_buf_begin_cpu_access() and dma_buf_end_cpu_access()
->   *   access.
->   *
-> @@ -1190,7 +1190,7 @@ EXPORT_SYMBOL_NS_GPL(dma_buf_move_notify, DMA_BUF);
->   *   replace ION buffers mmap support was needed.
->   *
->   *   There is no special interfaces, userspace simply calls mmap on the dma-buf
-> - *   fd. But like for CPU access there's a need to braket the actual access,
-> + *   fd. But like for CPU access there's a need to bracket the actual access,
->   *   which is handled by the ioctl (DMA_BUF_IOCTL_SYNC). Note that
->   *   DMA_BUF_IOCTL_SYNC can fail with -EAGAIN or -EINTR, in which case it must
->   *   be restarted.
-> @@ -1264,10 +1264,10 @@ static int __dma_buf_begin_cpu_access(struct dma_buf *dmabuf,
->   * preparations. Coherency is only guaranteed in the specified range for the
->   * specified access direction.
->   * @dmabuf:	[in]	buffer to prepare cpu access for.
-> - * @direction:	[in]	length of range for cpu access.
-> + * @direction:	[in]	direction of access.
->   *
->   * After the cpu access is complete the caller should call
-> - * dma_buf_end_cpu_access(). Only when cpu access is braketed by both calls is
-> + * dma_buf_end_cpu_access(). Only when cpu access is bracketed by both calls is
->   * it guaranteed to be coherent with other DMA access.
->   *
->   * This function will also wait for any DMA transactions tracked through
-> @@ -1307,7 +1307,7 @@ EXPORT_SYMBOL_NS_GPL(dma_buf_begin_cpu_access, DMA_BUF);
->   * actions. Coherency is only guaranteed in the specified range for the
->   * specified access direction.
->   * @dmabuf:	[in]	buffer to complete cpu access for.
-> - * @direction:	[in]	length of range for cpu access.
-> + * @direction:	[in]	direction of access.
->   *
->   * This terminates CPU access started with dma_buf_begin_cpu_access().
->   *
-> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-> index 71731796c8c3..1d61a4f6db35 100644
-> --- a/include/linux/dma-buf.h
-> +++ b/include/linux/dma-buf.h
-> @@ -330,7 +330,7 @@ struct dma_buf {
->  	 * @lock:
->  	 *
->  	 * Used internally to serialize list manipulation, attach/detach and
-> -	 * vmap/unmap. Note that in many cases this is superseeded by
-> +	 * vmap/unmap. Note that in many cases this is superseded by
->  	 * dma_resv_lock() on @resv.
->  	 */
->  	struct mutex lock;
-> @@ -365,7 +365,7 @@ struct dma_buf {
->  	 */
->  	const char *name;
->  
-> -	/** @name_lock: Spinlock to protect name acces for read access. */
-> +	/** @name_lock: Spinlock to protect name access for read access. */
->  	spinlock_t name_lock;
->  
->  	/**
-> @@ -402,7 +402,7 @@ struct dma_buf {
->  	 *   anything the userspace API considers write access.
->  	 *
->  	 * - Drivers may just always add a write fence, since that only
-> -	 *   causes unecessarily synchronization, but no correctness issues.
-> +	 *   causes unnecessary synchronization, but no correctness issues.
->  	 *
->  	 * - Some drivers only expose a synchronous userspace API with no
->  	 *   pipelining across drivers. These do not set any fences for their
-> -- 
-> 2.38.1.584.g0f3c55d4c2-goog
+>         struct ocfs2_security_xattr_info si = {
+>                 .name = NULL,
+>                 .enable = 1,
+>         };
 > 
+> The main difference between calling security_old_inode_init_security or
+> security_inode_init_security() is whether or not security.evm is
+> calculated and written.
 
-Looks good to me.
+Uhm, it seems unfortunately more complicated.
 
-Reviewed-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Calling security_old_inode_init_security() allows filesystems to get
+the xattr, do some calculations (e.g. for reservation) and then write
+the xattr.
 
-Thanks & Regards,
-Tommaso
+The initxattrs() callback to be passed to
+security_inode_init_security() is meant to let filesystems provide a
+filesystem-specific way of writing the xattrs, just after LSMs provided
+them. This seems incompatible with the old behavior, as a filesystem
+might need to do the calculations in the middle before writing the
+xattrs.
 
--- 
-Tommaso Merciai
-Embedded Linux Engineer
-tommaso.merciai@amarulasolutions.com
-__________________________________
+The initxattrs() callback, when security_old_inode_init_security() was
+used, is just a way of emulating the old behavior, i.e. returning the
+xattr to the caller.
 
-Amarula Solutions SRL
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-T. +39 042 243 5310
-info@amarulasolutions.com
-www.amarulasolutions.com
+It should be possible, I guess, to handle more xattrs but if the code
+was designed to handle one, it would be better if the filesystem
+maintainers add support for it.
+
+Thanks
+
+Roberto
+
+> Perhaps it is time to remove the call to
+> security_old_inode_init_security() in ocfs2_init_security_get().  We
+> need to hear back from the ocfs2 community.  Mark?  Joel?
+> 
+> As noted previously this change affects mknod and symlinks.
+> 
+> Mimi
+> 
+> > As fs_info was not used before, ocfs2_initxattrs() can now handle the case
+> > of replicating the behavior of security_old_inode_init_security(), i.e.
+> > just obtaining the xattr, in addition to setting all xattrs provided by
+> > LSMs.
+> > 
+> > Finally, modify the handling of the return value from
+> > ocfs2_init_security_get(). As security_inode_init_security() does not
+> > return -EOPNOTSUPP, remove this case and directly handle the error if the
+> > return value is not zero.
+> > 
+> > However, the previous case of receiving -EOPNOTSUPP should be still
+> > taken into account, as security_inode_init_security() could return zero
+> > without setting xattrs and ocfs2 would consider it as if the xattr was set.
+> > 
+> > Instead, if security_inode_init_security() returned zero, look at the xattr
+> > if it was set, and behave accordingly, i.e. set si->enable to zero to
+> > notify to the functions following ocfs2_init_security_get() that the xattr
+> > is not available (same as if security_old_inode_init_security() returned
+> > -EOPNOTSUPP).
+> > 
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > ---
+> >  fs/ocfs2/namei.c | 18 ++++++------------
+> >  fs/ocfs2/xattr.c | 30 ++++++++++++++++++++++++++----
+> >  2 files changed, 32 insertions(+), 16 deletions(-)
+> > 
+> > diff --git a/fs/ocfs2/namei.c b/fs/ocfs2/namei.c
+> > index 05f32989bad6..55fba81cd2d1 100644
+> > --- a/fs/ocfs2/namei.c
+> > +++ b/fs/ocfs2/namei.c
+> > @@ -242,6 +242,7 @@ static int ocfs2_mknod(struct user_namespace *mnt_userns,
+> >  	int want_meta = 0;
+> >  	int xattr_credits = 0;
+> >  	struct ocfs2_security_xattr_info si = {
+> > +		.name = NULL,
+> >  		.enable = 1,
+> >  	};
+> >  	int did_quota_inode = 0;
+> > @@ -315,12 +316,8 @@ static int ocfs2_mknod(struct user_namespace *mnt_userns,
+> >  	/* get security xattr */
+> >  	status = ocfs2_init_security_get(inode, dir, &dentry->d_name, &si);
+> >  	if (status) {
+> > -		if (status == -EOPNOTSUPP)
+> > -			si.enable = 0;
+> > -		else {
+> > -			mlog_errno(status);
+> > -			goto leave;
+> > -		}
+> > +		mlog_errno(status);
+> > +		goto leave;
+> >  	}
+> >  
+> >  	/* calculate meta data/clusters for setting security and acl xattr */
+> > @@ -1805,6 +1802,7 @@ static int ocfs2_symlink(struct user_namespace *mnt_userns,
+> >  	int want_clusters = 0;
+> >  	int xattr_credits = 0;
+> >  	struct ocfs2_security_xattr_info si = {
+> > +		.name = NULL,
+> >  		.enable = 1,
+> >  	};
+> >  	int did_quota = 0, did_quota_inode = 0;
+> > @@ -1875,12 +1873,8 @@ static int ocfs2_symlink(struct user_namespace *mnt_userns,
+> >  	/* get security xattr */
+> >  	status = ocfs2_init_security_get(inode, dir, &dentry->d_name, &si);
+> >  	if (status) {
+> > -		if (status == -EOPNOTSUPP)
+> > -			si.enable = 0;
+> > -		else {
+> > -			mlog_errno(status);
+> > -			goto bail;
+> > -		}
+> > +		mlog_errno(status);
+> > +		goto bail;
+> >  	}
+> >  
+> >  	/* calculate meta data/clusters for setting security xattr */
+> > diff --git a/fs/ocfs2/xattr.c b/fs/ocfs2/xattr.c
+> > index 95d0611c5fc7..55699c573541 100644
+> > --- a/fs/ocfs2/xattr.c
+> > +++ b/fs/ocfs2/xattr.c
+> > @@ -7259,9 +7259,21 @@ static int ocfs2_xattr_security_set(const struct xattr_handler *handler,
+> >  static int ocfs2_initxattrs(struct inode *inode, const struct xattr *xattr_array,
+> >  		     void *fs_info)
+> >  {
+> > +	struct ocfs2_security_xattr_info *si = fs_info;
+> >  	const struct xattr *xattr;
+> >  	int err = 0;
+> >  
+> > +	if (si) {
+> > +		si->value = kmemdup(xattr_array->value, xattr_array->value_len,
+> > +				    GFP_KERNEL);
+> > +		if (!si->value)
+> > +			return -ENOMEM;
+> > +
+> > +		si->name = xattr_array->name;
+> > +		si->value_len = xattr_array->value_len;
+> > +		return 0;
+> > +	}
+> > +
+> >  	for (xattr = xattr_array; xattr->name != NULL; xattr++) {
+> >  		err = ocfs2_xattr_set(inode, OCFS2_XATTR_INDEX_SECURITY,
+> >  				      xattr->name, xattr->value,
+> > @@ -7277,13 +7289,23 @@ int ocfs2_init_security_get(struct inode *inode,
+> >  			    const struct qstr *qstr,
+> >  			    struct ocfs2_security_xattr_info *si)
+> >  {
+> > +	int ret;
+> > +
+> >  	/* check whether ocfs2 support feature xattr */
+> >  	if (!ocfs2_supports_xattr(OCFS2_SB(dir->i_sb)))
+> >  		return -EOPNOTSUPP;
+> > -	if (si)
+> > -		return security_old_inode_init_security(inode, dir, qstr,
+> > -							&si->name, &si->value,
+> > -							&si->value_len);
+> > +	if (si) {
+> > +		ret = security_inode_init_security(inode, dir, qstr,
+> > +						   &ocfs2_initxattrs, si);
+> > +		/*
+> > +		 * security_inode_init_security() does not return -EOPNOTSUPP,
+> > +		 * we have to check the xattr ourselves.
+> > +		 */
+> > +		if (!ret && !si->name)
+> > +			si->enable = 0;
+> > +
+> > +		return ret;
+> > +	}
+> >  
+> >  	return security_inode_init_security(inode, dir, qstr,
+> >  					    &ocfs2_initxattrs, NULL);
+
