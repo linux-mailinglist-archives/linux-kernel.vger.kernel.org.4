@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AB8F637F14
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 19:43:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21BEC637F1A
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 19:43:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbiKXSnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 13:43:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58338 "EHLO
+        id S229582AbiKXSn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 13:43:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbiKXSnr (ORCPT
+        with ESMTP id S229740AbiKXSns (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 13:43:47 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ADB5FA71C
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 10:43:46 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id q7so2830330ljp.9
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 10:43:46 -0800 (PST)
+        Thu, 24 Nov 2022 13:43:48 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309BC10CEBD
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 10:43:47 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id c1so3682748lfi.7
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 10:43:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2nRilXNMejATHqCRSqUdhVZuc5XWTnwhyCKI7xkZLMk=;
-        b=U+Q/ZGQRh+ciARUPs8rBICHV5ApE1U7SEvrBSdJ5qjUPyWHlGhFBnvKX5TmLQmc0Y8
-         YbmHuFewD5VFAnPFA4LcvDanVlN9rArajfpN+SlVHKiVmL4I9cE2FhapmeV/+9vHHreS
-         JeRiDsXfG+/EZOluHIsbKXGsZ7XdiBltUZLlc20aY02lp7I4n9+Vo/dOiKobzHd34uKy
-         GirAXRa7vnrBNr4tmpY3mQTi4MhSOFl9nJKfEflTgJ3zu5MYx/lbo2/uT6aP7ywWjPw1
-         yqZR460mxQYiYzlKfdfg1DzmA7K1mSZ3pLZH24CtTe+iug5L7glEkMsUdVlcwy4eWof2
-         l5yg==
+        bh=w7fAfdGZJ4QQ0eAIGZU6uPWE4+p29HD6e1RtlTmr/Hk=;
+        b=KwaG+BwTeIrxnQVvMPAylzBNcKGaHh2obrbXAQfyROv8ySuEeR1leKfufof4yzbKBZ
+         cv6P8aIYOdD+I8uZiKyVEZXMaE2rvMgeNLuR/nQNRAa4ledJ2JWYdiBaZThgmS1u7nQb
+         mZ6Wbz7mNt+TtQ58tpGQZeuY0tzmQncevopsdcTKVk6yRX2IBiE/yPk/ZCu6vHGF9P0Z
+         o1Wq/haHociLwqBMtth8Q8WyLI3wA/lI32yJHdIsJsAqLM7T2CUoIQlMpRBJ7TPnF1SF
+         nBbgdFQMZQQ2S59ex5qe9yjMbqmzhzBTKF+FDdqsOqw9ox9e41XRCqhuOUzFFdn6NRN5
+         yHdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2nRilXNMejATHqCRSqUdhVZuc5XWTnwhyCKI7xkZLMk=;
-        b=PviCpd1+alVqvVOs96FAuY4u/l6NYrS8dOn1JXeb/P0mbW0ONqPPRHeKKnG/dtfuJn
-         RDEWM96lcUpyaEqirqMJEhZFdkGoadwlGMvNkFZDBwHFZOX5mOZWRkDpYsziN60jW4Vz
-         RtZaGGYshsSOuuxoV7gEQ1P3+kVoi+CV2ggMbQJqJHbbXC6J39qalQNYvlbQ+0kghOUx
-         ViyTo7bALC0wniddn+b8C4rGEFRSmsglCBUEloq3IfLvVzzb/oRKyPnmHUKZbETF3f2e
-         BpT0KU7Vmbx6R7tEncERcgW+UegYd9Ym3SwziBfKMBed1j7EkkrzvgJZYqusL61pGd/3
-         GIDg==
-X-Gm-Message-State: ANoB5plOMrxzWF1mQ09ocFIaLBi1NWAFkvZzvZFhhrZ1yMupgCo4x9vr
-        rK0TW0CqjOl2d2f4xDTN3g67tg==
-X-Google-Smtp-Source: AA0mqf5bLcnGSFfnThKEl7E9M7Oag927/C28/iLbqEtG5ebaSXT1G6t4nwsznoEkOEdXPf1v8oZdtw==
-X-Received: by 2002:a05:651c:213:b0:277:e01:610e with SMTP id y19-20020a05651c021300b002770e01610emr10427702ljn.181.1669315424541;
-        Thu, 24 Nov 2022 10:43:44 -0800 (PST)
+        bh=w7fAfdGZJ4QQ0eAIGZU6uPWE4+p29HD6e1RtlTmr/Hk=;
+        b=C1SNBV3r+iLrhq6o2Ov8rvOfgwkihPOZ9GuUhTnbLWWknKsEOvYlbf0Zuz8jpnkgaz
+         g9pjthQkIlP0GojM5QtW0H1q/pQibGm8CxZqke226vj+tXnLsBjuIU1mGE0JlN+uIdow
+         DLxUukl2yNQ4YndNXJXyAlh/fgs5mZ70tNh2DB/Kt5LjzoLAg5vaNd9mxLE5B89uvtEZ
+         ynm+d5ntzOX7a5NJ1/XXl3sRBI67M0OFsJ6Eki79Txz4LqX2yCG3P6yIcqiSuHjep6cF
+         QtVi8tbFitXRYJGgSx84in02vYa88rm1FwspBxuG3Jun1CCirFLtcg9vYEmXnWN1z2eX
+         VX/g==
+X-Gm-Message-State: ANoB5pkP9GuNUk+GL1VQtfgY2VuROmo6Bg8AlZqfEbRBUho53XAUSdH4
+        xjHCXiueYe+jXY+h1jCTb9bdNg==
+X-Google-Smtp-Source: AA0mqf4n6MC+K6mEwOwYA68QWwZSJvaV1aQhiNG9r04ux2Jbn/LZYoRnb0/wyh92uuRu6jaZUOOZ6w==
+X-Received: by 2002:ac2:47ec:0:b0:4a7:8b6b:2320 with SMTP id b12-20020ac247ec000000b004a78b6b2320mr4818704lfp.267.1669315425554;
+        Thu, 24 Nov 2022 10:43:45 -0800 (PST)
 Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id v7-20020a2ea607000000b0026e0434eb1esm159098ljp.67.2022.11.24.10.43.43
+        by smtp.gmail.com with ESMTPSA id v7-20020a2ea607000000b0026e0434eb1esm159098ljp.67.2022.11.24.10.43.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 10:43:44 -0800 (PST)
+        Thu, 24 Nov 2022 10:43:45 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -61,9 +61,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 01/15] arm64: dts: qcom: msm8996: drop address/size cells from smd-edge
-Date:   Thu, 24 Nov 2022 19:43:19 +0100
-Message-Id: <20221124184333.133911-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 02/15] arm64: dts: qcom: qcs404: align CDSP PAS node with bindings
+Date:   Thu, 24 Nov 2022 19:43:20 +0100
+Message-Id: <20221124184333.133911-3-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221124184333.133911-1-krzysztof.kozlowski@linaro.org>
 References: <20221124184333.133911-1-krzysztof.kozlowski@linaro.org>
@@ -79,9 +79,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The smd-edge node does not have children with unit addresses:
+The QCS404 CDSP remote processor can be brought to life using two
+different bindings:
+1. qcom,qcs404-cdsp-pas - currently used in DTSI.
+2. qcom,qcs404-cdsp-pil.
 
-  qcom/msm8996-oneplus3.dtb: remoteproc@9300000: smd-edge: '#address-cells', '#size-cells' do not match any of the regexes: 'pinctrl-[0-9]+'
+Comment out the properties related to qcom,qcs404-cdsp-pil
+(qcom,halt-regs, resets and additional clocks), to silence DT schema
+warnings.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
@@ -90,23 +95,66 @@ Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Changes since v2:
 1. New patch.
 ---
- arch/arm64/boot/dts/qcom/msm8996.dtsi | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ arch/arm64/boot/dts/qcom/qcs404.dtsi | 46 +++++++++++++++-------------
+ 1 file changed, 25 insertions(+), 21 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-index d31464204f69..cc65f52bb80f 100644
---- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-@@ -3426,8 +3426,7 @@ smd-edge {
- 				mboxes = <&apcs_glb 8>;
- 				qcom,smd-edge = <1>;
- 				qcom,remote-pid = <2>;
--				#address-cells = <1>;
--				#size-cells = <0>;
+diff --git a/arch/arm64/boot/dts/qcom/qcs404.dtsi b/arch/arm64/boot/dts/qcom/qcs404.dtsi
+index a5324eecb50a..78a8ab29a0a9 100644
+--- a/arch/arm64/boot/dts/qcom/qcs404.dtsi
++++ b/arch/arm64/boot/dts/qcom/qcs404.dtsi
+@@ -485,27 +485,31 @@ remoteproc_cdsp: remoteproc@b00000 {
+ 			interrupt-names = "wdog", "fatal", "ready",
+ 					  "handover", "stop-ack";
+ 
+-			clocks = <&xo_board>,
+-				 <&gcc GCC_CDSP_CFG_AHB_CLK>,
+-				 <&gcc GCC_CDSP_TBU_CLK>,
+-				 <&gcc GCC_BIMC_CDSP_CLK>,
+-				 <&turingcc TURING_WRAPPER_AON_CLK>,
+-				 <&turingcc TURING_Q6SS_AHBS_AON_CLK>,
+-				 <&turingcc TURING_Q6SS_AHBM_AON_CLK>,
+-				 <&turingcc TURING_Q6SS_Q6_AXIM_CLK>;
+-			clock-names = "xo",
+-				      "sway",
+-				      "tbu",
+-				      "bimc",
+-				      "ahb_aon",
+-				      "q6ss_slave",
+-				      "q6ss_master",
+-				      "q6_axim";
+-
+-			resets = <&gcc GCC_CDSP_RESTART>;
+-			reset-names = "restart";
+-
+-			qcom,halt-regs = <&tcsr 0x19004>;
++			clocks = <&xo_board>;
++			clock-names = "xo";
 +
- 				apr {
- 					power-domains = <&gcc HLOS1_VOTE_LPASS_ADSP_GDSC>;
- 					compatible = "qcom,apr-v2";
++			/*
++			 * If the node was using the PIL binding, then include properties:
++			 * clocks = <&xo_board>,
++			 *          <&gcc GCC_CDSP_CFG_AHB_CLK>,
++			 *          <&gcc GCC_CDSP_TBU_CLK>,
++			 *          <&gcc GCC_BIMC_CDSP_CLK>,
++			 *          <&turingcc TURING_WRAPPER_AON_CLK>,
++			 *          <&turingcc TURING_Q6SS_AHBS_AON_CLK>,
++			 *          <&turingcc TURING_Q6SS_AHBM_AON_CLK>,
++			 *          <&turingcc TURING_Q6SS_Q6_AXIM_CLK>;
++			 * clock-names = "xo",
++			 *               "sway",
++			 *               "tbu",
++			 *               "bimc",
++			 *               "ahb_aon",
++			 *               "q6ss_slave",
++			 *               "q6ss_master",
++			 *               "q6_axim";
++			 * resets = <&gcc GCC_CDSP_RESTART>;
++			 * reset-names = "restart";
++			 * qcom,halt-regs = <&tcsr 0x19004>;
++			 */
+ 
+ 			memory-region = <&cdsp_fw_mem>;
+ 
 -- 
 2.34.1
 
