@@ -2,121 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B30AE6372EE
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 08:36:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EDC96372F3
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 08:37:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbiKXHg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 02:36:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59526 "EHLO
+        id S229553AbiKXHhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 02:37:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiKXHgY (ORCPT
+        with ESMTP id S229539AbiKXHhi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 02:36:24 -0500
-Received: from qproxy5-pub.mail.unifiedlayer.com (qproxy5-pub.mail.unifiedlayer.com [69.89.21.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0528C920A9
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 23:36:23 -0800 (PST)
-Received: from gproxy2-pub.mail.unifiedlayer.com (gproxy2-pub.mail.unifiedlayer.com [69.89.18.3])
-        by qproxy5.mail.unifiedlayer.com (Postfix) with ESMTP id 889188036F6C
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 07:36:03 +0000 (UTC)
-Received: from cmgw12.mail.unifiedlayer.com (unknown [10.0.90.127])
-        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id 46E45100485D0
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 07:35:00 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id y6lAoBdtQmSzky6lAoVcd2; Thu, 24 Nov 2022 07:35:00 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=PKDKRdmC c=1 sm=1 tr=0 ts=637f1ea4
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=9xFQ1JgjjksA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=stBHJ3v7mzwZDZzio/25E1Pw1FjTcHMVJMLxUpt+Mkw=; b=qASubVrSmiuaY8MjEpXZoDX/tf
-        ZveWo3i43KUtVGu0drVxdT5PIH4w604igxfuLNfGr12xnzbyNsnBORigDweaqHopfXvNBH3suoJyy
-        rdDP0/d5BukCD2AAn/eNv6YtUxLB0VgBD6mGuIWySBjOzIv7FJPGzxRsO8xYWt63QmNTwDfKzl0TG
-        jmwfpU+tlUS5nf1qyH+mwx0umQxuoZvsVg0Q9pXRr2B/kw3lDy15ix1gvQklA3S+S3mmznhcn4eid
-        go96mzY2+RQ8hdlQIM8W+yWCqcTkwtXfxRwgHgs41uJUIzlXZPwIYZlrZrDpQeDbD07fWLQLcCor6
-        jrjbXyQA==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:58888 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1oy6l8-003gou-P9;
-        Thu, 24 Nov 2022 00:34:58 -0700
-Subject: Re: [PATCH 5.15 000/181] 5.15.80-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20221123084602.707860461@linuxfoundation.org>
-In-Reply-To: <20221123084602.707860461@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <4875b14b-4a59-487f-2afe-580be8fadece@w6rz.net>
-Date:   Wed, 23 Nov 2022 23:34:55 -0800
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 24 Nov 2022 02:37:38 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B05F95AC;
+        Wed, 23 Nov 2022 23:37:34 -0800 (PST)
+Date:   Thu, 24 Nov 2022 08:37:27 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1669275452;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=R7IPR3D+2Uj3z9wyAmJvuyCVbX35tyzgdGaPWhfMVFU=;
+        b=cyK3yXtZPH/MmeCGW9/Y7sa0S8j3U4V3cbZvcG7kljTMBRfM0Y0QkdauTW+7DBjoQjZtTr
+        Smv7dXzSJykzTNJSGc8sLgPdzbbDlfoTKd/C8NOokzgmUYyb8tklUcrtDDn4C15je2/t5S
+        qZ1JQCGr47d8HQHaAaN8lAer6OE19hnNpyB1jgifOrlEnW6D7thcZgBd7eWn+yIeCGQbN8
+        JAwvmeLK9L9DAYhNk5u69q40Gq9krI/dQFO6xIn3O7kgU2+P46t20owVpLaEAWKInjhFqR
+        wlWQJvdR2QKQazhoXmXtNlH26Ho7CMc2H6AHQCb4EHtFSJuPBzjiNZwLJTi/Yg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1669275452;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=R7IPR3D+2Uj3z9wyAmJvuyCVbX35tyzgdGaPWhfMVFU=;
+        b=upalo9fPCSzAMl+wEAxT8iWIYDUFQBY6xP1a37mssQ+s+quUZB6ymRcbfF4PbBXUAt2ltk
+        VvbgJt/W+r7rfFDQ==
+From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-bluetooth@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Jacob Keller <jacob.e.keller@intel.com>
+Subject: Re: [patch V3 12/17] timers: Silently ignore timers with a NULL
+ function
+In-Reply-To: <20221123201625.135055320@linutronix.de>
+Message-ID: <644695b9-f343-7fb7-ed8e-763e5fe3d158@linutronix.de>
+References: <20221123201306.823305113@linutronix.de> <20221123201625.135055320@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1oy6l8-003gou-P9
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:58888
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/23/22 12:49 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.80 release.
-> There are 181 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 25 Nov 2022 08:45:20 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.80-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Wed, 23 Nov 2022, Thomas Gleixner wrote:
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+> Tearing down timers which have circular dependencies to other
+> functionality, e.g. workqueues, where the timer can schedule work and work
+> can arm timers, is not trivial.
+> 
+> In those cases it is desired to shutdown the timer in a way which prevents
+> rearming of the timer. The mechanism to do so is to set timer->function to
+> NULL and use this as an indicator for the timer arming functions to ignore
+> the (re)arm request.
+> 
+> In preparation for that replace the warnings in the relevant code paths
+> with checks for timer->function == NULL. If the pointer is NULLL, then
 
-Tested-by: Ron Economos <re@w6rz.net>
+s/NULLL/NULL
+
+> discard the rearm request silently.
+> 
+> Add debug_assert_init() instead of the WARN_ON_ONCE(!timer->function)
+> checks so that debug objects can warn about non-initialized timers.
+> 
+> The warning of debug objects does warn if timer->function == NULL.  It
+
+does NOT warn
+
+> warns when timer was not initialized using timer_setup[_on_stack]() or via
+> DEFINE_TIMER(). If developers fail to enable debug objects and then waste
+> lots of time to figure out why their non-initialized timer is not firing,
+> they deserve it. Same for initializing a timer with a NULL function.
+> 
+> Co-developed-by: Steven Rostedt <rostedt@goodmis.org>
+> Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Tested-by: Guenter Roeck <linux@roeck-us.net>
+> Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
+> Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home
+> Link: https://lore.kernel.org/all/20221110064101.429013735@goodmis.org
+> ---
+> V2: Use continue instead of return and amend the return value docs (Steven)
+> V3: Changelog and comment updates (Anna-Maria)
+> ---
+>  kernel/time/timer.c |   57 +++++++++++++++++++++++++++++++++++++++++++++++-----
+>  1 file changed, 52 insertions(+), 5 deletions(-)
+> 
+> --- a/kernel/time/timer.c
+> +++ b/kernel/time/timer.c
+> @@ -1128,8 +1144,12 @@ static inline int
+>   * mod_timer_pending() is the same for pending timers as mod_timer(), but
+>   * will not activate inactive timers.
+>   *
+> + * If @timer->function == NULL then the start operation is silently
+> + * discarded.
+> + *
+>   * Return:
+> - * * %0 - The timer was inactive and not modified
+> + * * %0 - The timer was inactive and not modified or was is in
+> + *	  shutdown state and the operation was discarded
+
+You forgot to update this "was is" mistake. All other places are fine.
+
+>   * * %1 - The timer was active and requeued to expire at @expires
+>   */
+>  int mod_timer_pending(struct timer_list *timer, unsigned long expires)
+
+Thanks,
+
+	Anna-Maria
 
