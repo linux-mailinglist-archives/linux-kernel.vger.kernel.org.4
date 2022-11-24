@@ -2,181 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2312637724
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 12:07:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D267163772B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 12:08:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbiKXLHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 06:07:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36678 "EHLO
+        id S229885AbiKXLIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 06:08:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiKXLHk (ORCPT
+        with ESMTP id S229991AbiKXLIJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 06:07:40 -0500
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2119.outbound.protection.outlook.com [40.107.22.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C476CDFD8
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 03:07:38 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bGArxtKZIzlDKb2tbWkyk5jI39MDzF5D2hTE1nY9iMRS8KkzWOq1OQXlEc2Flz2ksWfDamTjdFjR/kTszsKAA4gPmOJxRSt61XCbhP4HC946C+SHYlfgfbAXod99UzsTqKMj9IqTSl0ActSTJdV5KDJ9MBnMzgLSqVRpS2gMvVndoLi4Zx9CQcH01gTK/YoaxclZzPpjZ0wL10FcqZJzF43ljduX0RuhYsYJxww5suhOQ9BQxef7vhD6f5l7PMJ/a3redgdEP8oJvjiletSY0iOUPje15ziuPwm15YBi4DDlSWiy/hxSoWQsxLnTEPUQA2LXNCGaCfHm/RRGTIMCJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=u3KCeUxHu+9yXiuqYH6U2/Fhmu/Gc233exheznak8po=;
- b=L2AyRCvXRdP35e6MiCbNdhudqR7j7BrAvcGD2i6Kq9+e+yUDcrgW3NoZ0ewtaLuADBcHy8Iz24ufHAlahijhzYPqOb33FCaiJt88DbZCwSe9VsIxe0sw710OcPoOEuYq75NMgyyY5Q6KIuaBB4hZZpgL1pqi31JGxxagj7NsFS95zB+IiO98QK4ALlvzYafVMT3mqIggVzuw9Yda5uFd6WFalOX8DRr813+rq8owpPefelJ9X8AVp0lGshcN/wcZJN71Tv1Ca2o3YEU0TxKXw9RUgzQUfIkw0UmGPfefM9rpnPjqmxcZJXx3YY35ctuSeH7NEDuaTyVuBfM2FjMPkQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kontron.de; dmarc=pass action=none header.from=kontron.de;
- dkim=pass header.d=kontron.de; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mysnt.onmicrosoft.com;
- s=selector2-mysnt-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=u3KCeUxHu+9yXiuqYH6U2/Fhmu/Gc233exheznak8po=;
- b=XJGKDdxqG1jFuQZpIFFIQC795stwYjN9cfwp2flhO2jMzDxZBsMEGbb2rWo4SJp/SCNUhIS67bW/WCWqSQTe2ONxes7HLsrVd7txlCeDzpp63ObaSCKPHRPwZR2DT1UiGI9kY5OHV7uPuBRQ6BeiJQgXA6tDAcQnfuDGixTeceQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=kontron.de;
-Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:263::10)
- by AS4PR10MB5394.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:4bc::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19; Thu, 24 Nov
- 2022 11:07:36 +0000
-Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::f209:bc86:3574:2ae6]) by PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::f209:bc86:3574:2ae6%4]) with mapi id 15.20.5834.015; Thu, 24 Nov 2022
- 11:07:36 +0000
-Message-ID: <7761d66c-a8a7-c11a-9c09-a47f57bd1311@kontron.de>
-Date:   Thu, 24 Nov 2022 12:07:33 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] drm/bridge: ti-sn65dsi83: Fix delay after reset deassert
- to match spec
-Content-Language: en-US
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org, Marek Vasut <marex@denx.de>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Frieder Schrempf <frieder@fris.de>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
-References: <20221122081219.20143-1-frieder@fris.de>
- <9079928.rMLUfLXkoz@steina-w>
-From:   Frieder Schrempf <frieder.schrempf@kontron.de>
-In-Reply-To: <9079928.rMLUfLXkoz@steina-w>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM0PR01CA0117.eurprd01.prod.exchangelabs.com
- (2603:10a6:208:168::22) To PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:102:263::10)
+        Thu, 24 Nov 2022 06:08:09 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5724E627EC
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 03:08:03 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id n3so1968541wrp.5
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 03:08:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FPB19jMhZvyEVpBKn475+Cr5xWHotqcvvsxXAViZaPU=;
+        b=IO1pN6Vibkb1R1OXiyH+6B69g6wuY7De8RS4j+IZAzelcUe5kls4IEzLsERyHvomF7
+         WYTU2v13hkY887ycwQNlJQ6JwUqMCTsaFFAfllHoqtb0avEKhW710EL6L6ny5eaS5AVv
+         2mS5bCorzVib5qAL/NYKF90ieAQEEGA8T5AdmmWGwVDNxeocoAOtdwQMu/i3w3lHI9zM
+         o7O3hppPzsR7XQhXHQs7TV2eK8e59UKB5ckS8ZAkidKhJLgLalIjcJgoTx0F5F+hcuww
+         qaUFt5Vw6KmZIhTteI+5rHGgtnB6EOtjdWtaNEObcfLMXnihFWq2O8gAZFWoQX95MIa0
+         Cc9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FPB19jMhZvyEVpBKn475+Cr5xWHotqcvvsxXAViZaPU=;
+        b=wfoote8bQBL4m5tUdwe6JrT6agVQwZMatsWRaLhLNt4itG7HoApIDmI/dV9zZMCTYJ
+         Yn/Ypd/0LJ47m3ibWnr+7ROH07zJSXARbDznMVSnLnTY81iJ/Eb8d/aP0bPYcg24PJui
+         f6v1NDNo4uefD5CuP96jRSGTiupON9Qi+fKnwUT8gGB/hguUVXhl3nyPzbVmmmjcrEXY
+         HnbvHS1IB7O6p2yFePLQpUc5iI6oG2FGMjBFxQM/vVpC//6QUXRDKGL4InQ+4roTdVsv
+         zRGOBboimO91mymcuxyR0Adj8AxtciNivzM9fr4Bx9ToIOSWaM9MeED5uR2wvuVVT5SS
+         FF/Q==
+X-Gm-Message-State: ANoB5pnMc1Jshka6muZveSCd1H6esc8pHB4zKmls/K8tYQVHk1infkmv
+        MOtLrmCjJP8NaDz0MhxbeYP/XQ==
+X-Google-Smtp-Source: AA0mqf5SBvq8eqFA1uFxwfZGOf2choXZwu1RhElPM+LaHZM2Un9OM42jwAmLZOz65pYdK+c+UdmU4Q==
+X-Received: by 2002:a05:6000:12d1:b0:236:71fe:c9c5 with SMTP id l17-20020a05600012d100b0023671fec9c5mr19264996wrx.677.1669288081537;
+        Thu, 24 Nov 2022 03:08:01 -0800 (PST)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id bd9-20020a05600c1f0900b003c6bd12ac27sm1382131wmb.37.2022.11.24.03.08.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Nov 2022 03:08:00 -0800 (PST)
+Message-ID: <83a961ef-132e-6b9a-37e0-182ea2025be4@linaro.org>
+Date:   Thu, 24 Nov 2022 11:07:55 +0000
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR10MB5681:EE_|AS4PR10MB5394:EE_
-X-MS-Office365-Filtering-Correlation-Id: ba3ca9bc-9b96-4d99-6df6-08dace0c17c4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CNMQAk/Rh/YW9SsoW89BoUfBPibd7ENb9MiGrHxK5EhkJAKhz0MA/VpGw4JGfZ/mOTIUgLruB958sIj7x6IOPrRnX/pD4H6jLQHoPibi/KnVbpEHaEhsDCM3cOaWBiliXqecv+PQqzBTAzBX2qtml+y5BseliV/e2IEapgqUpsVJC3mejdvHRuJS4/GGtaKrB/VqeM2nWU+u2j19wh5D7FxhrBoN4m1B41WaHsnckmbJaK4ukIgv0ToCoO4wDml5A9zIsmJtzuAav/FPmo5U28V3fTdsdBFiMd4Xq+9ZCKkWELiHgo1EHIHqpZjEJhVQcJ+bSKOsEp4pavZ1o5n3LQhl5JHyGe9wlSHX7Hs0wZ49fjsX3UKfDDgeDXvm1DLD4RAlCG7Fpn0fZ0sKoNtIbfX5Uz/bTYA4ZhPLv3hQFE46j2bhdnkxgytnKjHZZmyMBl0Zfklhkqe8gW3Oyps6L60R0inyOk1txflC1S3moioez+c1/iGAKkMQWZbOEGf9yHMWXhrS4OhRboVT/FvbpxKiBcxWcirC/qiWXQ6+CdkAXTBVlwT/tYRGOXAwk3g5lESDZdR229bodwYIsVZoerM16/HBhifa+eBdY7jJZFz1H3ZBz1KqVD2h/AS88PkrkJdFMrBANvg/6qUU+YycyledDsnzolfBAU/2QwqLQaJfgILqpFRMLzotEdzv9IykB2pd4+5+x+OUBwuMF9RVRbZMcilf2Sgs7TK2nAXpvDxZMuwQuVSm+6/9VOM8902D
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(396003)(346002)(136003)(366004)(451199015)(6486002)(478600001)(38100700002)(31686004)(110136005)(921005)(83380400001)(6512007)(6666004)(2906002)(44832011)(36756003)(6506007)(7416002)(2616005)(31696002)(8936002)(53546011)(54906003)(186003)(316002)(86362001)(5660300002)(66946007)(8676002)(4326008)(41300700001)(66556008)(66476007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TlBueWhudUNYa1l0cmtIbkVGcm5VM1grTHdWUWMrM1U3MURML3FhYlkyeXIy?=
- =?utf-8?B?Z1RzeGJNZHpqaUJXdDd2VnUwL0ZCeDU4aHBVMVd1djdkNjB3Tkl4dHg1L081?=
- =?utf-8?B?ZitNWG0zdE1FaDdTUmpPUFFKcE9ZR2ROQlU4aDBGeDY5V2J2SW9sRnRZbGU4?=
- =?utf-8?B?Y2Rna1ZJQ2Q4MXpCZWpNU3ZIZndSTS9NWnhjU1pJTGI2SittVllnTkIyajhz?=
- =?utf-8?B?ZG01YkdIVmowTjBucURzMis2dlhUbGlOUm9MdmZrMmo5ZlM5MEk1YXU0amZB?=
- =?utf-8?B?M3RWNVhQT2tsQTM4dHIrK1Viais1TXVrSis3ZFFaUE0raGV3K2dRSWZXcXVP?=
- =?utf-8?B?K0VFNDErcGJDekFlSnh3Wk9NVXdycmR4MTQzMXdBeVhwZlJyeVNoWmErM2lX?=
- =?utf-8?B?VjhadG9DK0ZpRHAvczljeGFja2hpZVplVlNscTM0Y1FEa2JSNTBUQ05NZHVZ?=
- =?utf-8?B?YmtJeHBIV1BuOUFkeklIdElKQVNabGhYdkc3UStVK0pJVEp3aTlXQUxFOWRk?=
- =?utf-8?B?OU1aVlhycGpoTTlZT2VZb04vQlNsSUwxUTh4eVhzdVdaUEY4VFZZS3BBM0o4?=
- =?utf-8?B?eHozRGsxY01PelRGV1NsbXlUQlRCblNXSDlkZE14YVVKY0JVbWRSZ1R2UCtQ?=
- =?utf-8?B?MzVoQjFpTjJNaWd3R21ISjdLVE9aOE5CdGZ4NnBGalJ1VDQ1MU5BRDJXZDZ5?=
- =?utf-8?B?TXc0TWlleTFrUDNUSU5UZHVoa0FsMGZxd3VTSndCZHBJd0hIaTJtN2FHbVpn?=
- =?utf-8?B?dDJMVEF3RmJNU3VlNXdqSGdsdzRhMDBkdnVlRThPTjhQU091SUZZT3FNeTFV?=
- =?utf-8?B?V00rd01HTFVoc0JXb0VDcUJ3dnBQZ05OL2t5TzF5M2dpbGhLMXlPWnlySFFN?=
- =?utf-8?B?emF6NDI3dy9idjZUU1p6aHd1YjRUaFVzdGh6TTJpWS9DejZ6TDhvbWlvWjJj?=
- =?utf-8?B?Z3Z4N2l4KytaVzZtdXBBNzFxWXF4Mk1WZzFLTDZSVVgybkJwaDNEN3g0R044?=
- =?utf-8?B?M1gra0NydFU4a21IWi93bFZTT3FPWVk4cU14b3llWEpMVnErUEwvRVZRVHl3?=
- =?utf-8?B?aGwxNHh0NHp5MWRWRTE0QThQZkdqazFmU1hnNG9yVU9VLzZJakN4d0x6UTlM?=
- =?utf-8?B?aHVheVpYd0dRL1VrR1NIZWNNYjZIckpiYWxnK0pTYWFVMHlQSzNlREVINUNw?=
- =?utf-8?B?UU5QcElQR1J3Q1d3R2ZBdzF1WDEvS2I2dU9OS3A2TWdrUnVQdDkvSFdGbGtH?=
- =?utf-8?B?YmVka3BCbWdYVGFSS0lsdXVOUHFVdkJTTjJmc3B1S203cXV1TWVqZ1g5OWVO?=
- =?utf-8?B?Q1BDV1NYOHNIbW93U28xVXNhU0Y4UXpQZlF4VEMzT281RTMyODc5TDBQUHVJ?=
- =?utf-8?B?UlFWSldtaXhKbVB6TVR5Qm9LamNyZnZBcXJDcnREanFGUmE1S3BNSjJSNjRZ?=
- =?utf-8?B?aGcxd3ZPQnFSSy9vaEdzZDNKME5uK25nYy9Wc2svUjRiNXUzRloxK3RZb053?=
- =?utf-8?B?VVgyNi9Vd1lVd0VXK1FqUFk0Z2Q5SjFVZ08rSzNXYkp5R3N6TGd0cEMzY29m?=
- =?utf-8?B?U3FYYmtlYWk0ZWd5LzdUR2orenpFa1ZIT1I0b05xRG9BcDhSdDcyWDBmVEVj?=
- =?utf-8?B?YS9Zb0Z1bmRpVk5GYzJ2WmdPaStSbXFDRlhWeDh6Y212TnJ6aU9Mc0kwbzN1?=
- =?utf-8?B?eW82Rmx4aTRKMTJJaWVSUjcrSVFLdWtVa3RRQmFYcDVWWGVrRm51WnZqRUVM?=
- =?utf-8?B?TjREOTlDKytlS1Z5OXpvdWhoaUE4bjNzSUdlVVRCN1RWSDh4M00wMlFsZ1E5?=
- =?utf-8?B?cmdvTDhRZ3ptdjVoWk9iL0hIdTZtd291YjNZMW1BUDVjSjhaRGZDUXllUnhQ?=
- =?utf-8?B?ODhIVG53N1RQNit3aGRuQnBpa1poNU9QZmFSMytBUDZEU0Q1aUtYbjFxbzZj?=
- =?utf-8?B?NGtDdDdtOEQwYzBzQVVPaTJ0MFRTM21DanJic1B2VDFuZDRObmxVZVl0eXhZ?=
- =?utf-8?B?UDVIRG40V3lKTmF0Z202eXFEVFA3MHFQSlVKaHcyMHh5U2NvRVBhSHR4YW1x?=
- =?utf-8?B?NVd5U1RSN0tkb1NweUtIbFhqZlhZT0FvZ3ErbHp0MEVSNys1aEYzQmdaSmJH?=
- =?utf-8?B?VGxuRTBiNzVucnB6aDFFcHFKQVFTMFlsby9XdXcxR1BRS01pVmhadzYyRGhV?=
- =?utf-8?Q?+lnwdj0Ag7RgUrRG1l9hHnLdAgnbGeA6JxVU/Dtd+Vf2?=
-X-OriginatorOrg: kontron.de
-X-MS-Exchange-CrossTenant-Network-Message-Id: ba3ca9bc-9b96-4d99-6df6-08dace0c17c4
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2022 11:07:36.1118
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8c9d3c97-3fd9-41c8-a2b1-646f3942daf1
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: P7RgX/UHvTaUWmPx/CiwiCMi00MzrXoqj+n0XzVeJQ38xqVUBHDDjTPmcKs6W64urlryyWPWnSnAaAGT+Fmcrcl9uoaCMW0TvijOXO9f91Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR10MB5394
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 00/10] misc: fastrpc: Add audiopd support
+Content-Language: en-US
+To:     Abel Vesa <abel.vesa@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Ekansh Gupta <ekangupt@qti.qualcomm.com>,
+        Bharath Kumar <bkumar@qti.qualcomm.com>,
+        Himateja Reddy <hmreddy@quicinc.com>,
+        Anirudh Raghavendra <araghave@quicinc.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org
+References: <20220909133938.3518520-1-abel.vesa@linaro.org>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20220909133938.3518520-1-abel.vesa@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24.11.22 12:00, Alexander Stein wrote:
-> Am Dienstag, 22. November 2022, 09:12:18 CET schrieb Frieder Schrempf:
->> From: Frieder Schrempf <frieder.schrempf@kontron.de>
->>
->> The datasheet specifies a delay of 10 milliseconds, but the current
->> driver only waits for 1 ms. Fix this to make sure the initialization
->> sequence meets the spec.
->>
->> Fixes: ceb515ba29ba ("drm/bridge: ti-sn65dsi83: Add TI SN65DSI83 and
->> SN65DSI84 driver") Signed-off-by: Frieder Schrempf
->> <frieder.schrempf@kontron.de>
->> ---
->>  drivers/gpu/drm/bridge/ti-sn65dsi83.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi83.c
->> b/drivers/gpu/drm/bridge/ti-sn65dsi83.c index 7ba9467fff12..047c14ddbbf1
->> 100644
->> --- a/drivers/gpu/drm/bridge/ti-sn65dsi83.c
->> +++ b/drivers/gpu/drm/bridge/ti-sn65dsi83.c
->> @@ -346,7 +346,7 @@ static void sn65dsi83_atomic_enable(struct drm_bridge
->> *bridge,
->>
->>  	/* Deassert reset */
->>  	gpiod_set_value_cansleep(ctx->enable_gpio, 1);
->> -	usleep_range(1000, 1100);
->> +	usleep_range(10000, 11000);
->>
->>  	/* Get the LVDS format from the bridge state. */
->>  	bridge_state = drm_atomic_get_new_bridge_state(state, bridge);
-> 
-> How about using fsleep?
-> 
-> Either way:
-> Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Hi Greg,
 
-Thanks for the review! I didn't know about fsleep. Anyway this would
-probably be a separate change as the driver currently uses usleep
-everywhere else. But I will keep it in mind for the future.
+On 09/09/2022 14:39, Abel Vesa wrote:
+> This patchset adds audiopd support to fastrpc.
+> 
+> The v2 of this patchset is here:
+> https://lore.kernel.org/all/20220902154900.3404524-1-abel.vesa@linaro.org/
+> 
+> Abel Vesa (10):
+>    misc: fastrpc: Rename audio protection domain to root
+>    misc: fastrpc: Add reserved mem support
+>    dt-bindings: misc: fastrpc: Document memory-region property
+>    misc: fastrpc: Add fastrpc_remote_heap_alloc
+>    misc: fastrpc: Use fastrpc_map_put in fastrpc_map_create on fail
+>    misc: fastrpc: Rework fastrpc_req_munmap
+>    misc: fastrpc: Add support for audiopd
+>    misc: fastrpc: Safekeep mmaps on interrupted invoke
+>    misc: fastrpc: Add mmap request assigning for static PD pool
+>    misc: fastrpc: Add dma_mask to fastrpc_channel_ctx
+> 
+
+Do you think you could pick these fastrpc patches as it is or should I 
+collect these patches with other fastrpc patches on the list and send them?
+
+As there are few more of fastrpc patches that could go in 6.2.
+
+thanks,
+Srini
+
+
+
+>   .../bindings/misc/qcom,fastrpc.yaml           |   5 +
+>   drivers/misc/fastrpc.c                        | 260 +++++++++++++++---
+>   include/uapi/misc/fastrpc.h                   |   7 +
+>   3 files changed, 240 insertions(+), 32 deletions(-)
+> 
