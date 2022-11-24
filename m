@@ -2,416 +2,312 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C9A0636FE4
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 02:32:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 060C2636FE5
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Nov 2022 02:32:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbiKXBcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Nov 2022 20:32:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60874 "EHLO
+        id S229728AbiKXBcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Nov 2022 20:32:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiKXBcQ (ORCPT
+        with ESMTP id S229937AbiKXBch (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Nov 2022 20:32:16 -0500
-Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E9888FBB
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 17:32:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1669253535; x=1700789535;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ica/S8uPZzawejTcseAyPlFWfKZju02n4YiJspQ8f2A=;
-  b=cPSoGqZrmaV/GAIKBONVA3zGyIth7RDvbE26TvYk7aAdoaJo1+t6TyLx
-   HSaV0aKmDmmMcdZegMcwWGoc5uNfNARvTLzyJiZXW5MISMaRtPkUqU0fs
-   yzMmptcfPFPuUiDcmwtnxJhnb6wB8z+yNPIVXrtUEfPUuZctnfC+cU4RM
-   FG7MHbOYreoVSI2zZpzVsHVHufT+NF79nnfdAPxttK4VPmMOFLvn3x1nB
-   2hRWkjjN+epoi/iBHmLes61pab7mlLQwXmRlIlUXD0IodM2fBsFpbp+BH
-   bltRcDtxZWV1tbjXwaM7o6qK7IXtKN8BAzQsWvT0MHMaCSmU2Kmt9vW/5
-   w==;
-X-IronPort-AV: E=Sophos;i="5.96,189,1665417600"; 
-   d="scan'208";a="329148108"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 24 Nov 2022 09:32:13 +0800
-IronPort-SDR: 0wfLy/PUrGcDp+TGsgQWUh/tC9s5EQp//PlVMqn46qMbBKTvyGR1rkbyRl3Le4GrHXhtdSe4G6
- DfYrgWlka54ATVUEO1y6cezvUTwqaf1pcMZiATofGjWVTw6WmvC/MyBl/5vmbaaYPD5TaVw79u
- 5tJPRddAHfinHZfpRzCvau2JgG8Ec0AukpVg+IMPLWoH3/sdUN0pYSm62sako1ZcV9JpKBvisA
- q+zdG35Wt4YMY7SerXecK7yxQjVUvlwXBvMln7STzChVyfdW5uvrEsvSzlBRVR0Rzp362N0GLi
- DdA=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 Nov 2022 16:51:00 -0800
-IronPort-SDR: Bz6TQGtw6zFTYOFo1DvVWIWaRJ2vCMgoec8qGRZH9t8YJLZji5SmRaeH+m2W2EulYgPBkPfGYm
- dEFBnDiVGVQTgGXvX10hO9HVI0gv4HTidoTttWB/V4aQrMLh9DHqjLfZqQ7HQz+ru+a5ROOmlA
- FAHKRXXKZAmzet9iw1heF5trMHl0xrOXh271DjJ8QouYQUheblKpSory+i9zrhpxGAdoR9Tctg
- oEy5xVe0vzWTiyfQwtXuuaGiJn6oKNCWRmqIgGS6OLZPr7yU1d8MrO2yDH85HgfV7LPkjhFXEN
- eXs=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 Nov 2022 17:32:14 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4NHgTT0V4pz1RwvL
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 17:32:12 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1669253530; x=1671845531; bh=ica/S8uPZzawejTcseAyPlFWfKZju02n4Yi
-        JspQ8f2A=; b=GzqMRl0UShXbYDCj4a6+8IeU1jodBd44ysKFkz88v7CcQN5Hs54
-        vZqvbCQ4+MlPOGbUhuzR0K9cRgMwnqEKXyohgtE6ehuUp+gPug8q1Cn6YqGSV8TZ
-        UmeDatGFC0xohs161PDLA4csy9V32HPM15T8AhqDB9c+qKkAl5VAWhKOXIVWUvyK
-        ePgXBwfLbxZGEJHqWbbWaFmcbDp2vcybdfSIzTs28x/K3iNkhdfeRDqBFlCnWK6Q
-        Xq9xfH/GoRy1oaE1nfaNeC/HHiJoPhAtHiZyBNrhBIwLjIq0bd5stZ2oeB4sqEwt
-        20SaisiRNML6Yfnwokfun5hqBeDn36+WKZg==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 0Q4fm2QiuLun for <linux-kernel@vger.kernel.org>;
-        Wed, 23 Nov 2022 17:32:10 -0800 (PST)
-Received: from [10.225.163.55] (unknown [10.225.163.55])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4NHgTL2TNbz1RvLy;
-        Wed, 23 Nov 2022 17:32:06 -0800 (PST)
-Message-ID: <729254f8-2468-e694-715e-72bcbef80ff3@opensource.wdc.com>
-Date:   Thu, 24 Nov 2022 10:32:04 +0900
+        Wed, 23 Nov 2022 20:32:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6E0DFB5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 17:32:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 61EED61F90
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 01:32:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1258C433C1
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 01:32:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669253553;
+        bh=4nSnxwdUPmYAGT6duIaIO31mScbmF3wIMYLMmaAncQc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WzjFNoyE3mMqNk0VtbxdnD2jUKqAPq2IlLivuTbMqRRdPZpOlS1nsCl15KNVvtDv5
+         xVGafrNn7O5Wxwtp15p516QWUJfQ0wrQe6VoJADQdupv1LIL9SyVHP20FRNQjvJieX
+         AZ6MWSmlj9YY1onis+V3Cjnnn/gWzpAbChMDEnk9+Xmw7sQqRY7+HqN57Kiu0R7eTn
+         2rer4yZT8gflqOrzWgtc96pSJWJdEsk3389eeFXhy79a6SU9Y7l3VEBIGCbUXTUWEe
+         4hryfFbGeVCp4KCq2V0erk1H2wsyTYjtE2tqUpCZ7QHr2QShIey/U+ycRKvdADGwOX
+         QbDw2v4aOEQwA==
+Received: by mail-ed1-f51.google.com with SMTP id z63so658179ede.1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Nov 2022 17:32:33 -0800 (PST)
+X-Gm-Message-State: ANoB5pm27XFNPYpI9CJvVvQeuThoeSaVQxEW0nwBPhM8Azy9yHu+N76u
+        qUGB+H9hmC5josqEHGqpRXXbYrEkUgoYHumXvAU=
+X-Google-Smtp-Source: AA0mqf58AFGmGZGjyXPc1soHaRYEklfndJj062EieeeH9C3P1zt3Js6YdW6ncZXcEGaxWBeLeFdfWxNeRybXJQf5gKY=
+X-Received: by 2002:a05:6402:1a:b0:467:30ad:c4ca with SMTP id
+ d26-20020a056402001a00b0046730adc4camr28191161edu.285.1669253551967; Wed, 23
+ Nov 2022 17:32:31 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v5 10/10] fs: add support for copy file range in zonefs
-Content-Language: en-US
-To:     Nitesh Shetty <nj.shetty@samsung.com>, axboe@kernel.dk,
-        agk@redhat.com, snitzer@kernel.org, dm-devel@redhat.com,
-        kbusch@kernel.org, hch@lst.de, sagi@grimberg.me,
-        james.smart@broadcom.com, kch@nvidia.com, naohiro.aota@wdc.com,
-        jth@kernel.org, viro@zeniv.linux.org.uk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        anuj20.g@samsung.com, joshi.k@samsung.com, p.raghav@samsung.com,
-        nitheshshetty@gmail.com, gost.dev@samsung.com
-References: <20221123055827.26996-1-nj.shetty@samsung.com>
- <CGME20221123061044epcas5p2ac082a91fc8197821f29e84278b6203c@epcas5p2.samsung.com>
- <20221123055827.26996-11-nj.shetty@samsung.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20221123055827.26996-11-nj.shetty@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221124005006.1788315-1-debug@rivosinc.com>
+In-Reply-To: <20221124005006.1788315-1-debug@rivosinc.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Thu, 24 Nov 2022 09:32:19 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSwMZQvSNxb2_5GNrVG0pwfXWsHmp8zZG=gFHnhc95bjQ@mail.gmail.com>
+Message-ID: <CAJF2gTSwMZQvSNxb2_5GNrVG0pwfXWsHmp8zZG=gFHnhc95bjQ@mail.gmail.com>
+Subject: Re: [PATCH] riscv: VMAP_STACK overflow detection thread-safe
+To:     Deepak Gupta <debug@rivosinc.com>
+Cc:     palmer@dabbelt.com, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
+        Jisheng Zhang <jszhang@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/23/22 14:58, Nitesh Shetty wrote:
-> copy_file_range is implemented using copy offload,
-> copy offloading to device is always enabled.
-> To disable copy offloading mount with "no_copy_offload" mount option.
+On Thu, Nov 24, 2022 at 8:50 AM Deepak Gupta <debug@rivosinc.com> wrote:
+>
+> commit 31da94c25aea835ceac00575a9fd206c5a833fed added support for
+> CONFIG_VMAP_STACK. If overflow is detected, CPU switches to `shadow_stack`
+> temporarily before switching finally to per-cpu `overflow_stack`.
+>
+> If two CPUs/harts are racing and end up in over flowing kernel stack, one
+> or both will end up corrupting each other state because `shadow_stack` is
+> not per-cpu.
+>
+> Following are the changes in this patch
+>
+>  - Defines an asm macro to obtain per-cpu symbols in destination
+>    register.
+>  - Computing per-cpu symbol requires a temporary register. When stack is
+>    out of question, a place is needed to spill a register. `thread_info`
+>    is good location to have spill register.
+>  - In entry.S when overflow is detected x31 is spilled into thread_info.
+>    x31 is used as temp reg for asm macro to locate per-cpu overflow stack
+>
+> Other relevant disccussion on this
+> https://lore.kernel.org/linux-riscv/Y347B0x4VUNOd6V7@xhacker/T/#t
+>
+> Tested by `echo EXHAUST_STACK > /sys/kernel/debug/provoke-crash/DIRECT`
+>
+> [  286.223273] Insufficient stack space to handle exception!/debug/provoke-crash/DIRECT
+> [  286.223878] Task stack:     [0xff20000010a98000..0xff20000010a9c000]
+> [  286.224411] Overflow stack: [0xff600001f7d98370..0xff600001f7d99370]
+> [  286.226057] CPU: 1 PID: 205 Comm: bash Not tainted 6.1.0-rc2-00001-g328a1f96f7b9 #34
+> [  286.227139] Hardware name: riscv-virtio,qemu (DT)
+> [  286.228000] epc : __memset+0x60/0xfc
+> [  286.229299]  ra : recursive_loop+0x48/0xc6 [lkdtm]
+> [  286.231457] epc : ffffffff808de0e4 ra : ffffffff0163a752 sp : ff20000010a97e80
+> [  286.232207]  gp : ffffffff815c0330 tp : ff600000820ea280 t0 : ff20000010a97e88
+> [  286.233584]  t1 : 000000000000002e t2 : 3233206874706564 s0 : ff20000010a982b0
+> [  286.234293]  s1 : 0000000000000012 a0 : ff20000010a97e88 a1 : 0000000000000000
+> [  286.234998]  a2 : 0000000000000400 a3 : ff20000010a98288 a4 : 0000000000000000
+> [  286.235697]  a5 : 0000000000000000 a6 : fffffffffffe43f0 a7 : 00007fffffffffff
+> [  286.236384]  s2 : ff20000010a97e88 s3 : ffffffff01644680 s4 : ff20000010a9be90
+> [  286.237743]  s5 : ff600000842ba6c0 s6 : 00aaaaaac29e42b0 s7 : 00fffffff0aa3684
+> [  286.238691]  s8 : 00aaaaaac2978040 s9 : 0000000000000065 s10: 00ffffff8a7cad10
+> [  286.239591]  s11: 00ffffff8a76a4e0 t3 : ffffffff815dbaf4 t4 : ffffffff815dbaf4
+> [  286.240537]  t5 : ffffffff815dbab8 t6 : ff20000010a9bb48
+> [  286.241540] status: 0000000200000120 badaddr: ff20000010a97e88 cause: 000000000000000f
+> [  286.242979] Kernel panic - not syncing: Kernel stack overflow
+> [  286.244106] CPU: 1 PID: 205 Comm: bash Not tainted 6.1.0-rc2-00001-g328a1f96f7b9 #34
+> [  286.245276] Hardware name: riscv-virtio,qemu (DT)
+> [  286.245929] Call Trace:
+> [  286.246954] [<ffffffff80006754>] dump_backtrace+0x30/0x38
+> [  286.247813] [<ffffffff808de798>] show_stack+0x40/0x4c
+> [  286.248429] [<ffffffff808ea2a8>] dump_stack_lvl+0x44/0x5c
+> [  286.249439] [<ffffffff808ea2d8>] dump_stack+0x18/0x20
+> [  286.250056] [<ffffffff808dec06>] panic+0x126/0x2fe
+> [  286.250642] [<ffffffff800065ea>] walk_stackframe+0x0/0xf0
+> [  286.251357] [<ffffffff0163a752>] recursive_loop+0x48/0xc6 [lkdtm]
+> [  286.253321] SMP: stopping secondary CPUs
+> [  286.256724] ---[ end Kernel panic - not syncing: Kernel stack overflow ]---
+>
+> Fixes: 31da94c25aea835ceac00575a9fd206c5a833fed
+The patch gives more significant change than the Fixes, and Fixes
+would expand to the previous stable versions. Please don't set it as a
+Fixes, but an improved OVERSTACK dead path performance feature.
 
-And were is the code that handle this option ?
-
-> At present copy offload is only used, if the source and destination files
-> are on same block device, otherwise copy file range is completed by
-> generic copy file range.
-> 
-> copy file range implemented as following:
-> 	- write pending writes on the src and dest files
-> 	- drop page cache for dest file if its conv zone
-> 	- copy the range using offload
-> 	- update dest file info
-> 
-> For all failure cases we fallback to generic file copy range
-
-For all cases ? That would be weird. What would be the point of trying to
-copy again if e.g. the dest zone has gone offline or read only ?
-
-> At present this implementation does not support conv aggregation
-
-Please check this commit message overall: the grammar and punctuation
-could really be improved.
-
-> 
-> Signed-off-by: Nitesh Shetty <nj.shetty@samsung.com>
-> Signed-off-by: Anuj Gupta <anuj20.g@samsung.com>
+> Cc: Guo Ren <guoren@kernel.org>
+> Cc: Jisheng Zhang <jszhang@kernel.org>
+>
+> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
 > ---
->  fs/zonefs/super.c | 179 ++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 179 insertions(+)
-> 
-> diff --git a/fs/zonefs/super.c b/fs/zonefs/super.c
-> index abc9a85106f2..15613433d4ae 100644
-> --- a/fs/zonefs/super.c
-> +++ b/fs/zonefs/super.c
-> @@ -1223,6 +1223,183 @@ static int zonefs_file_release(struct inode *inode, struct file *file)
->  	return 0;
->  }
->  
-> +static int zonefs_is_file_copy_offset_ok(struct inode *src_inode,
-> +		struct inode *dst_inode, loff_t src_off, loff_t dst_off,
-> +		size_t *len)
-> +{
-> +	loff_t size, endoff;
-> +	struct zonefs_inode_info *dst_zi = ZONEFS_I(dst_inode);
+>  arch/riscv/include/asm/asm.h         | 11 ++++++
+>  arch/riscv/include/asm/thread_info.h |  3 ++
+>  arch/riscv/kernel/asm-offsets.c      |  4 +++
+>  arch/riscv/kernel/entry.S            | 54 ++++------------------------
+>  arch/riscv/kernel/traps.c            | 12 +------
+>  5 files changed, 26 insertions(+), 58 deletions(-)
+>
+> diff --git a/arch/riscv/include/asm/asm.h b/arch/riscv/include/asm/asm.h
+> index 1b471ff73178..373eba843331 100644
+> --- a/arch/riscv/include/asm/asm.h
+> +++ b/arch/riscv/include/asm/asm.h
+> @@ -69,6 +69,7 @@
+>
+>  #ifdef __ASSEMBLY__
+>
+> +#include <asm/asm-offsets.h>
+>  /* Common assembly source macros */
+>
+>  /*
+> @@ -80,6 +81,16 @@
+>         .endr
+>  .endm
+>
+> +.macro asm_per_cpu dst sym tmp
+> +       REG_L \tmp, TASK_TI_CPU_NUM(tp)
+> +       slli \tmp, \tmp, 0x3
+> +       la \dst, __per_cpu_offset
+> +       add \dst, \dst, \tmp
+> +       REG_L \tmp, 0(\dst)
+> +       la \dst, \sym
+> +       add \dst, \dst, \tmp
+Another tricky asm code of using percpu, I don't know how the percpu
+maintenance guy thinks.
+Percpu is really complex to be used here. That's why I don't like
+Jisheng's previous idea, although I haven't given an explicitly
+opposed comment.
+Keep simple and direct.
+> +.endm
 > +
-> +	inode_lock(src_inode);
-> +	size = i_size_read(src_inode);
-> +	inode_unlock(src_inode);
-> +	/* Don't copy beyond source file EOF. */
-> +	if (src_off < size) {
-> +		if (src_off + *len > size)
-> +			*len = (size - (src_off + *len));
-> +	} else
-> +		*len = 0;
-
-Missing curly brackets for the else.
-
-> +
-> +	mutex_lock(&dst_zi->i_truncate_mutex);
-> +	if (dst_zi->i_ztype == ZONEFS_ZTYPE_SEQ) {
-> +		if (*len > dst_zi->i_max_size - dst_zi->i_wpoffset)
-> +			*len -= dst_zi->i_max_size - dst_zi->i_wpoffset;
-> +
-> +		if (dst_off != dst_zi->i_wpoffset)
-> +			goto err;
-> +	}
-> +	mutex_unlock(&dst_zi->i_truncate_mutex);
-> +
-> +	endoff = dst_off + *len;
-> +	inode_lock(dst_inode);
-> +	if (endoff > dst_zi->i_max_size ||
-> +			inode_newsize_ok(dst_inode, endoff)) {
-> +		inode_unlock(dst_inode);
-> +		goto err;
-
-And here truncate mutex is not locked, but goto err will unlock it. This
-is broken...
-
-> +	}
-> +	inode_unlock(dst_inode);
-
-...The locking is completely broken in this function anyway. You take the
-lock, look at something, then release the lock. Then what if a write or a
-trunctate comes in when the inode is not locked ? This is completely
-broken. The inode should be locked with no dio pending when this function
-is called. This is only to check if everything is ok. This has no business
-playing with the inode and truncate locks.
-
-> +
-> +	return 0;
-> +err:
-> +	mutex_unlock(&dst_zi->i_truncate_mutex);
-> +	return -EINVAL;
-> +}
-> +
-> +static ssize_t zonefs_issue_copy(struct zonefs_inode_info *src_zi,
-> +		loff_t src_off, struct zonefs_inode_info *dst_zi,
-> +		loff_t dst_off, size_t len)
-> +{
-> +	struct block_device *src_bdev = src_zi->i_vnode.i_sb->s_bdev;
-> +	struct block_device *dst_bdev = dst_zi->i_vnode.i_sb->s_bdev;
-> +	struct range_entry *rlist = NULL;
-> +	int ret = len;
-> +
-> +	rlist = kmalloc(sizeof(*rlist), GFP_KERNEL);
-
-GFP_NOIO ?
-
-> +	if (!rlist)
-> +		return -ENOMEM;
-> +
-> +	rlist[0].dst = (dst_zi->i_zsector << SECTOR_SHIFT) + dst_off;
-> +	rlist[0].src = (src_zi->i_zsector << SECTOR_SHIFT) + src_off;
-> +	rlist[0].len = len;
-> +	rlist[0].comp_len = 0;
-> +	ret = blkdev_issue_copy(src_bdev, dst_bdev, rlist, 1, NULL, NULL,
-> +			GFP_KERNEL);
-> +	if (rlist[0].comp_len > 0)
-> +		ret = rlist[0].comp_len;
-> +	kfree(rlist);
-> +
-> +	return ret;
-> +}
-> +
-> +/* Returns length of possible copy, else returns error */
-> +static ssize_t zonefs_copy_file_checks(struct file *src_file, loff_t src_off,
-> +					struct file *dst_file, loff_t dst_off,
-> +					size_t *len, unsigned int flags)
-> +{
-> +	struct inode *src_inode = file_inode(src_file);
-> +	struct inode *dst_inode = file_inode(dst_file);
-> +	struct zonefs_inode_info *src_zi = ZONEFS_I(src_inode);
-> +	struct zonefs_inode_info *dst_zi = ZONEFS_I(dst_inode);
-> +	ssize_t ret;
-> +
-> +	if (src_inode->i_sb != dst_inode->i_sb)
-> +		return -EXDEV;
-> +
-> +	/* Start by sync'ing the source and destination files for conv zones */
-> +	if (src_zi->i_ztype == ZONEFS_ZTYPE_CNV) {
-> +		ret = file_write_and_wait_range(src_file, src_off,
-> +				(src_off + *len));
-> +		if (ret < 0)
-> +			goto io_error;
-> +	}
-> +	inode_dio_wait(src_inode);
-
-That is not a "check". So having this in a function called
-zonefs_copy_file_checks() is a little strange.
-
-> +
-> +	/* Start by sync'ing the source and destination files ifor conv zones */
-
-Same comment repeated, with typos.
-
-> +	if (dst_zi->i_ztype == ZONEFS_ZTYPE_CNV) {
-> +		ret = file_write_and_wait_range(dst_file, dst_off,
-> +				(dst_off + *len));
-> +		if (ret < 0)
-> +			goto io_error;
-> +	}
-> +	inode_dio_wait(dst_inode);
-> +
-> +	/* Drop dst file cached pages for a conv zone*/
-> +	if (dst_zi->i_ztype == ZONEFS_ZTYPE_CNV) {
-> +		ret = invalidate_inode_pages2_range(dst_inode->i_mapping,
-> +				dst_off >> PAGE_SHIFT,
-> +				(dst_off + *len) >> PAGE_SHIFT);
-> +		if (ret < 0)
-> +			goto io_error;
-> +	}
-> +
-> +	ret = zonefs_is_file_copy_offset_ok(src_inode, dst_inode, src_off,
-> +			dst_off, len);
-> +	if (ret < 0)
-
-if (ret)
-
-> +		return ret;
-> +
-> +	return *len;
-> +
-> +io_error:
-> +	zonefs_io_error(dst_inode, true);
-> +	return ret;
-> +}
-> +
-> +static ssize_t zonefs_copy_file(struct file *src_file, loff_t src_off,
-> +		struct file *dst_file, loff_t dst_off,
-> +		size_t len, unsigned int flags)
-> +{
-> +	struct inode *src_inode = file_inode(src_file);
-> +	struct inode *dst_inode = file_inode(dst_file);
-> +	struct zonefs_inode_info *src_zi = ZONEFS_I(src_inode);
-> +	struct zonefs_inode_info *dst_zi = ZONEFS_I(dst_inode);
-> +	ssize_t ret = 0, bytes;
-> +
-> +	inode_lock(src_inode);
-> +	inode_lock(dst_inode);
-
-So you did zonefs_copy_file_checks() outside of these locks, which mean
-that everything about the source and destination files may have changed.
-This does not work.
-
-> +	bytes = zonefs_issue_copy(src_zi, src_off, dst_zi, dst_off, len);
-> +	if (bytes < 0)
-> +		goto unlock_exit;
-> +
-> +	ret += bytes;
-> +
-> +	file_update_time(dst_file);
-> +	mutex_lock(&dst_zi->i_truncate_mutex);
-> +	zonefs_update_stats(dst_inode, dst_off + bytes);
-> +	zonefs_i_size_write(dst_inode, dst_off + bytes);
-> +	dst_zi->i_wpoffset += bytes;
-
-This is wierd. iszie for dst will be dst_zi->i_wpoffset. So please do:
-
-	dst_zi->i_wpoffset += bytes;
-	zonefs_i_size_write(dst_inode, dst_zi->i_wpoffset);
-
-> +	mutex_unlock(&dst_zi->i_truncate_mutex);
-
-And you are not taking care of the accounting for active zones here. If
-the copy made the dst zone full, it is not active anymore. You need to
-call zonefs_account_active();
-
-> +	/* if we still have some bytes left, do splice copy */
-> +	if (bytes && (bytes < len)) {
-> +		bytes = do_splice_direct(src_file, &src_off, dst_file,
-> +					 &dst_off, len, flags);
-
-No way.
-
-> +		if (bytes > 0)
-> +			ret += bytes;
-> +	}
-> +unlock_exit:
-> +	if (ret < 0)
-> +		zonefs_io_error(dst_inode, true);
-
-How can you be sure that you even did an IO when you get an error ?
-zonefs_issue_copy() may have failed on its kmalloc() and no IO was done.
-
-> +	inode_unlock(src_inode);
-> +	inode_unlock(dst_inode);
-> +	return ret;
-> +}
-> +
-> +static ssize_t zonefs_copy_file_range(struct file *src_file, loff_t src_off,
-> +				      struct file *dst_file, loff_t dst_off,
-> +				      size_t len, unsigned int flags)
-> +{
-> +	ssize_t ret = -EIO;
-
-This does not need to be initialized.
-
-> +
-> +	ret = zonefs_copy_file_checks(src_file, src_off, dst_file, dst_off,
-> +				     &len, flags);
-
-These checks need to be done for the generic implementation too, no ? Why
-would checking this automatically trigger the offload ? What if the device
-does not support offloading ?
-
-> +	if (ret > 0)
-> +		ret = zonefs_copy_file(src_file, src_off, dst_file, dst_off,
-> +				     len, flags);
-
-return here, then no need for the else. But see above. This seems all
-broken to me.
-
-> +	else if (ret < 0 && ret == -EXDEV)
-> +		ret = generic_copy_file_range(src_file, src_off, dst_file,
-> +					      dst_off, len, flags);
-> +	return ret;
-> +}
-> +
->  static const struct file_operations zonefs_file_operations = {
->  	.open		= zonefs_file_open,
->  	.release	= zonefs_file_release,
-> @@ -1234,6 +1411,7 @@ static const struct file_operations zonefs_file_operations = {
->  	.splice_read	= generic_file_splice_read,
->  	.splice_write	= iter_file_splice_write,
->  	.iopoll		= iocb_bio_iopoll,
-> +	.copy_file_range = zonefs_copy_file_range,
+>  #endif /* __ASSEMBLY__ */
+>
+>  #endif /* _ASM_RISCV_ASM_H */
+> diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
+> index 67322f878e0d..7e17dc07cf11 100644
+> --- a/arch/riscv/include/asm/thread_info.h
+> +++ b/arch/riscv/include/asm/thread_info.h
+> @@ -65,6 +65,9 @@ struct thread_info {
+>          */
+>         long                    kernel_sp;      /* Kernel stack pointer */
+>         long                    user_sp;        /* User stack pointer */
+> +#ifdef CONFIG_VMAP_STACK
+> +       long                    spill_reg;      /* per cpu scratch space to spill a single register */
+> +#endif
+>         int                     cpu;
 >  };
->  
->  static struct kmem_cache *zonefs_inode_cachep;
-> @@ -1804,6 +1982,7 @@ static int zonefs_fill_super(struct super_block *sb, void *data, int silent)
->  	atomic_set(&sbi->s_active_seq_files, 0);
->  	sbi->s_max_active_seq_files = bdev_max_active_zones(sb->s_bdev);
->  
-> +	/* set copy support by default */
+>
+> diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
+> index df9444397908..bed3c83bfb8f 100644
+> --- a/arch/riscv/kernel/asm-offsets.c
+> +++ b/arch/riscv/kernel/asm-offsets.c
+> @@ -38,6 +38,10 @@ void asm_offsets(void)
+>         OFFSET(TASK_TI_KERNEL_SP, task_struct, thread_info.kernel_sp);
+>         OFFSET(TASK_TI_USER_SP, task_struct, thread_info.user_sp);
+>
+> +       OFFSET(TASK_TI_CPU_NUM, task_struct, thread_info.cpu);
+> +#ifdef CONFIG_VMAP_STACK
+> +       OFFSET(TASK_TI_SPILL_REG, task_struct, thread_info.spill_reg);
+> +#endif
+>         OFFSET(TASK_THREAD_F0,  task_struct, thread.fstate.f[0]);
+>         OFFSET(TASK_THREAD_F1,  task_struct, thread.fstate.f[1]);
+>         OFFSET(TASK_THREAD_F2,  task_struct, thread.fstate.f[2]);
+> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> index b9eda3fcbd6d..12f285cec136 100644
+> --- a/arch/riscv/kernel/entry.S
+> +++ b/arch/riscv/kernel/entry.S
+> @@ -10,9 +10,11 @@
+>  #include <asm/asm.h>
+>  #include <asm/csr.h>
+>  #include <asm/unistd.h>
+> +#include <asm/page.h>
+>  #include <asm/thread_info.h>
+>  #include <asm/asm-offsets.h>
+>  #include <asm/errata_list.h>
+> +#include <linux/sizes.h>
+>
+>  #if !IS_ENABLED(CONFIG_PREEMPTION)
+>  .set resume_kernel, restore_all
+> @@ -404,54 +406,12 @@ handle_syscall_trace_exit:
+>
+>  #ifdef CONFIG_VMAP_STACK
+>  handle_kernel_stack_overflow:
+> -       la sp, shadow_stack
+> -       addi sp, sp, SHADOW_OVERFLOW_STACK_SIZE
+> +       REG_S x31, TASK_TI_SPILL_REG(tp)
+> +       asm_per_cpu sp, overflow_stack, x31
+> +       li x31, OVERFLOW_STACK_SIZE
+> +       add sp, sp, x31
+> +       REG_L x31, TASK_TI_SPILL_REG(tp)
+>
+> -       //save caller register to shadow stack
+> -       addi sp, sp, -(PT_SIZE_ON_STACK)
+> -       REG_S x1,  PT_RA(sp)
+> -       REG_S x5,  PT_T0(sp)
+> -       REG_S x6,  PT_T1(sp)
+> -       REG_S x7,  PT_T2(sp)
+> -       REG_S x10, PT_A0(sp)
+> -       REG_S x11, PT_A1(sp)
+> -       REG_S x12, PT_A2(sp)
+> -       REG_S x13, PT_A3(sp)
+> -       REG_S x14, PT_A4(sp)
+> -       REG_S x15, PT_A5(sp)
+> -       REG_S x16, PT_A6(sp)
+> -       REG_S x17, PT_A7(sp)
+> -       REG_S x28, PT_T3(sp)
+> -       REG_S x29, PT_T4(sp)
+> -       REG_S x30, PT_T5(sp)
+> -       REG_S x31, PT_T6(sp)
+> -
+> -       la ra, restore_caller_reg
+> -       tail get_overflow_stack
+> -
+> -restore_caller_reg:
+> -       //save per-cpu overflow stack
+> -       REG_S a0, -8(sp)
+> -       //restore caller register from shadow_stack
+> -       REG_L x1,  PT_RA(sp)
+> -       REG_L x5,  PT_T0(sp)
+> -       REG_L x6,  PT_T1(sp)
+> -       REG_L x7,  PT_T2(sp)
+> -       REG_L x10, PT_A0(sp)
+> -       REG_L x11, PT_A1(sp)
+> -       REG_L x12, PT_A2(sp)
+> -       REG_L x13, PT_A3(sp)
+> -       REG_L x14, PT_A4(sp)
+> -       REG_L x15, PT_A5(sp)
+> -       REG_L x16, PT_A6(sp)
+> -       REG_L x17, PT_A7(sp)
+> -       REG_L x28, PT_T3(sp)
+> -       REG_L x29, PT_T4(sp)
+> -       REG_L x30, PT_T5(sp)
+> -       REG_L x31, PT_T6(sp)
+> -
+> -       //load per-cpu overflow stack
+> -       REG_L sp, -8(sp)
+Yes, your patch gives a good performance here. But what do we gain?
 
-What is this comment supposed to be for ?
+>         addi sp, sp, -(PT_SIZE_ON_STACK)
+>
+>         //save context to overflow stack
+> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+> index f3e96d60a2ff..eef3a87514c7 100644
+> --- a/arch/riscv/kernel/traps.c
+> +++ b/arch/riscv/kernel/traps.c
+> @@ -208,18 +208,8 @@ int is_valid_bugaddr(unsigned long pc)
+>  #endif /* CONFIG_GENERIC_BUG */
+>
+>  #ifdef CONFIG_VMAP_STACK
+> -static DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)],
+> +DEFINE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)],
+>                 overflow_stack)__aligned(16);
+> -/*
+> - * shadow stack, handled_ kernel_ stack_ overflow(in kernel/entry.S) is used
+> - * to get per-cpu overflow stack(get_overflow_stack).
+> - */
+> -long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE/sizeof(long)];
+> -asmlinkage unsigned long get_overflow_stack(void)
+> -{
+> -       return (unsigned long)this_cpu_ptr(overflow_stack) +
+> -               OVERFLOW_STACK_SIZE;
+> -}
+>
+>  asmlinkage void handle_bad_stack(struct pt_regs *regs)
+>  {
+> --
+> 2.25.1
+>
 
->  	ret = zonefs_read_super(sb);
->  	if (ret)
->  		return ret;
 
 -- 
-Damien Le Moal
-Western Digital Research
-
+Best Regards
+ Guo Ren
