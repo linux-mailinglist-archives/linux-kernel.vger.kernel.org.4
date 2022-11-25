@@ -2,101 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7067B638986
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 13:17:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F253638980
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 13:17:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbiKYMRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 07:17:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
+        id S229718AbiKYMRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 07:17:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiKYMRD (ORCPT
+        with ESMTP id S229676AbiKYMRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 25 Nov 2022 07:17:03 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEDA24A06C;
-        Fri, 25 Nov 2022 04:16:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669378616; x=1700914616;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xSFOXCUtd8kCT1EOBLk19+HwBikY8iOKRD/WMkWE6uU=;
-  b=XRpFUAy4SmzINlLQgse1uU8xSiOqevuxPW2JvptmjuhriawNzat+uqZk
-   NTm9hbHi/yhQFhSI4TmPzt3t9sCux5XJkHLsJc5T8tXhnugDiTm4U+4lJ
-   7Z8kQDfCUbePlUFta6/U+5I8wu7pX9W1GAX2Dwa0pJQgiyWAxnaRyy+5F
-   6oXWAragmJnxCW61L3LJZz8zjTx8LokLcPH1wxX6NnGCXpI2PmZnQchAF
-   78AWRLh9dJKN/GYK7Wu+UReSOLN17vYg5HHZlX5DlybRF1Jgv67eD3I+J
-   86Uod0pKYMkvdQTw+vP4cbOn2bGEK3YlJ2SETbtYLSaiiO74bMDJ8XFqj
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,193,1665471600"; 
-   d="scan'208";a="188647684"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Nov 2022 05:16:40 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Fri, 25 Nov 2022 05:16:39 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Fri, 25 Nov 2022 05:16:36 -0700
-Date:   Fri, 25 Nov 2022 12:16:18 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-CC:     Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Guo Ren <guoren@kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>,
-        <linux-renesas-soc@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v4 7/7] soc: renesas: Add L2 cache management for RZ/Five
- SoC
-Message-ID: <Y4CyEkzn2rqRqx+t@wendy>
-References: <20221124172207.153718-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221124172207.153718-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <Y3/ivrvx4A+OImtW@spud>
- <CA+V-a8uBrx-+S59_zMz6kyLurVs4z0f+WxuUKc8k3VQWuZYWWA@mail.gmail.com>
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341414A079;
+        Fri, 25 Nov 2022 04:16:57 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VVfOHkY_1669378595;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VVfOHkY_1669378595)
+          by smtp.aliyun-inc.com;
+          Fri, 25 Nov 2022 20:16:36 +0800
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+To:     Eric Biggers <ebiggers@kernel.org>,
+        "Theodore Y. Ts o" <tytso@mit.edu>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-fscrypt@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
+Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Subject: [PATCH v3 0/2] Add SM4 XTS symmetric algorithm for blk-crypto and fscrypt
+Date:   Fri, 25 Nov 2022 20:16:28 +0800
+Message-Id: <20221125121630.87793-1-tianjia.zhang@linux.alibaba.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CA+V-a8uBrx-+S59_zMz6kyLurVs4z0f+WxuUKc8k3VQWuZYWWA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022 at 10:50:01AM +0000, Lad, Prabhakar wrote:
-> Hi Conor,
-> 
-> Thank you for the review.
-> 
-> On Thu, Nov 24, 2022 at 9:31 PM Conor Dooley <conor@kernel.org> wrote:
+SM4 is widely used in China's data encryption software and hardware.
+these algoritms are mandatory in many scenarios. This serial of
+patches enables the SM4-XTS algorithm in blk-crypto and enables the
+SM4-XTS/CTS algorithm in fscrypt to encrypt file content and filename.
 
-> > But yeah, this is basically the sort of stuff that'd be nice to have in
-> > the previous patch!
-> >
-> Agreed, I'll include this in the binding patch too.
+v3 change:
+  - update git commit message
 
-I said "the previous patch" but I meant "the previous patch that I
-commented on the commit message for". I can hardly expect telepathy, so
-sorry for the poor wording.
+v2 change:
+  - As Eric said, the new FSCRYPT_MODE is defined for the unused numbers 7 and 8
+
+Tianjia Zhang (2):
+  blk-crypto: Add support for SM4-XTS blk crypto mode
+  fscrypt: Add SM4 XTS/CTS symmetric algorithm support
+
+ Documentation/filesystems/fscrypt.rst |  1 +
+ block/blk-crypto.c                    |  6 ++++++
+ fs/crypto/keysetup.c                  | 15 +++++++++++++++
+ fs/crypto/policy.c                    |  4 ++++
+ include/linux/blk-crypto.h            |  1 +
+ include/uapi/linux/fscrypt.h          |  2 ++
+ 6 files changed, 29 insertions(+)
+
+-- 
+2.24.3 (Apple Git-128)
 
