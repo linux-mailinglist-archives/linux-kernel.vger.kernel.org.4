@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1A38639124
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 22:37:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39548639125
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 22:37:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbiKYVhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 16:37:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41284 "EHLO
+        id S230104AbiKYVhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 16:37:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbiKYVhu (ORCPT
+        with ESMTP id S230102AbiKYVhu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 25 Nov 2022 16:37:50 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9FDD101C4
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 13:37:46 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id cl5so8508359wrb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 13:37:46 -0800 (PST)
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7512FC745
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 13:37:48 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id q7so7627492wrr.8
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 13:37:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SXD6TekHCwWyaJjEnEUCIQwhKm8R4syqj2EShSG9CG4=;
-        b=LbycPTZagQ51nPLmloFB/7NtnvTiSeUQAuZZ2EkPPlQgtWmKZxxpz1La+0Sg5Wa4Rr
-         QPK0+z28OGsP2RhtKkhY6uwU9FRTAt/NqXjZ7MjCe3YETc37AnNoh2YcVnwLSIA/A2in
-         ozUtyauDDVkAhz9m29tRAE0JI3b3myHPK1RVcbBAl0asvNRR5Vy+CDZXCw/8tuXxqhjS
-         yrv6noxZgbshgZx84/f8bQc2LkkMA/Z9vXXk6Bo0tqg2j/ykUC5HaVHtCvv4sb+G8fPj
-         1eJ657mhGUY43wuEPXURLQhISq427MEO8FteYgZbLF00C0vgmD5VPh021QAYYnfkDmNV
-         3Caw==
+        bh=NOnwsTARUoatlgwSRumO8KX+asIUrP0Tz9G19w9mrYE=;
+        b=F18wqhUOYlIX6J6ZsQFtBJSCT9eGiwguPQmjVFDZS7DKaV/hKfBW3zmQdVbyWmz0uh
+         1qn6FwsVbEYLb+xyfH7ZZDkMM6uZzqnljapoiX58tD5RA3MCm3fzaxHGzkfPd3KCl72H
+         eLo3OgIuOrR6ZHT0e5Vs6f3N7tbNhtobUBQo7V1CM1IAM8bmN6iM8aOJPykUrX6giarR
+         xd4kwOdZ+Eq1KakuVhnZd5qSnVHmGaIw7gDT+yJUNeydDyPLcBSlzYbaId82H7eBHzlc
+         fn5z8Iu3LtcKkbFACMjoo5wH0GZrIpPMcDx6MXGiwHzlNQBftGPREzMGphe0eLA01xqh
+         4L7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SXD6TekHCwWyaJjEnEUCIQwhKm8R4syqj2EShSG9CG4=;
-        b=MLE4Ci77Q8PNMjsKox8N5BRgmBjNoqqQoku45H7Mc5zJVhiRL7zPZtur6UjaYdBLq7
-         e2dTsG4zSogod1v8T4rsP92tu//0wGnDw0Uyxx6DfF9wdxBe6L7Y/K3TPWvIXkB7vAdH
-         QIXQ8jLr899lLkvqhzsvNHoukxfiEGO2Fe57Z8f+SiakTcKb1DivZm8ps0028QJiU7Qq
-         DoVvt9ACgut1aDKBu2g8I9fmP6v6coE0Xe3VIi+SaxgSlioHbINiI0bzwcZQR1WOdW8x
-         VhNgqhwqUWM8MdOV8MrDJ08b+2b0WYl5fcNZ/NsYBGw8ReCNx8YjgN/uWqClmHEARZFD
-         WFRA==
-X-Gm-Message-State: ANoB5pnL9gaOT7mhlsZevx8LViVtJZSZAp1++BY4zDzUJn7rVKi4nBKG
-        LVByXgd5wvCaqKyDAe0jf4wpaw==
-X-Google-Smtp-Source: AA0mqf5MLHrAyzs+7KAfomgqrFtT5xPA83/WPLEYaIucLGWlV7Rf/Y2a73erzIdA6X9yklrsVtx2Nw==
-X-Received: by 2002:a05:6000:235:b0:241:bd2b:f718 with SMTP id l21-20020a056000023500b00241bd2bf718mr23371777wrz.89.1669412265015;
-        Fri, 25 Nov 2022 13:37:45 -0800 (PST)
+        bh=NOnwsTARUoatlgwSRumO8KX+asIUrP0Tz9G19w9mrYE=;
+        b=B1q7HXoj8ohQVxaNwv3QcBQD+c3V8mVl3OkRUvoPe4lcaLqUxPFX/KuVnSWvKZjAKD
+         q+SByo2z2qt6Azw2uK9aIqYcxsCVQ9oAlqRoisQZhTwyZl59NikqSdSicr6yj1JAFEgf
+         /FJi8IuntgC4PrsXxDnqxUVNvxE9Dm7jvb8tlCyp/W9cVGfLhXhjykrRuTahqKtr73Wx
+         QQf2Pl6UNC8U1w/frIm5b/lBIa6uPezmozjQMnV1yGhmAHqAw8U+KGr2OBepnFWePzGG
+         Cqvpev+Sh6Kutw/xY+hSNazbhlAPkTm70H+claP9N7n1jDRHuyAENqj9kz8JgRfOLrYe
+         Br0w==
+X-Gm-Message-State: ANoB5plctGCZoPmWZ+SvAE23htHysZ03ndv7SlsF1NX1phDSPuCNHXY6
+        4NiNT8trBI0NUKdd7SWnoXFpxQ==
+X-Google-Smtp-Source: AA0mqf7a8Vcy4n5comCXosZv/VZNsAUlq9hK2P6zFM9IR6J9bTMU0oSmYK5q5Wf0ZQYoI23b3wkX4Q==
+X-Received: by 2002:a5d:6f02:0:b0:241:fdb5:50f7 with SMTP id ay2-20020a5d6f02000000b00241fdb550f7mr6563623wrb.170.1669412266904;
+        Fri, 25 Nov 2022 13:37:46 -0800 (PST)
 Received: from localhost ([2a00:79e0:9d:4:9104:e316:5846:858e])
-        by smtp.gmail.com with ESMTPSA id o5-20020a05600c510500b003b4ff30e566sm16931581wms.3.2022.11.25.13.37.44
+        by smtp.gmail.com with ESMTPSA id z6-20020adfe546000000b0023655e51c33sm4675291wrm.4.2022.11.25.13.37.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Nov 2022 13:37:44 -0800 (PST)
+        Fri, 25 Nov 2022 13:37:46 -0800 (PST)
 From:   Jann Horn <jannh@google.com>
 To:     security@kernel.org, Andrew Morton <akpm@linux-foundation.org>
 Cc:     Yang Shi <shy828301@gmail.com>,
@@ -57,9 +57,9 @@ Cc:     Yang Shi <shy828301@gmail.com>,
         Peter Xu <peterx@redhat.com>,
         John Hubbard <jhubbard@nvidia.com>,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v3 2/3] mm/khugepaged: Fix GUP-fast interaction by sending IPI
-Date:   Fri, 25 Nov 2022 22:37:13 +0100
-Message-Id: <20221125213714.4115729-2-jannh@google.com>
+Subject: [PATCH v3 3/3] mm/khugepaged: Invoke MMU notifiers in shmem/file collapse paths
+Date:   Fri, 25 Nov 2022 22:37:14 +0100
+Message-Id: <20221125213714.4115729-3-jannh@google.com>
 X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
 In-Reply-To: <20221125213714.4115729-1-jannh@google.com>
 References: <20221125213714.4115729-1-jannh@google.com>
@@ -76,89 +76,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 70cbc3cc78a99 ("mm: gup: fix the fast GUP race against THP
-collapse"), the lockless_pages_from_mm() fastpath rechecks the pmd_t to
-ensure that the page table was not removed by khugepaged in between.
+Any codepath that zaps page table entries must invoke MMU notifiers to
+ensure that secondary MMUs (like KVM) don't keep accessing pages which
+aren't mapped anymore. Secondary MMUs don't hold their own references to
+pages that are mirrored over, so failing to notify them can lead to page
+use-after-free.
 
-However, lockless_pages_from_mm() still requires that the page table is not
-concurrently freed. Fix it by sending IPIs (if the architecture uses
-semi-RCU-style page table freeing) before freeing/reusing page tables.
+I'm marking this as addressing an issue introduced in commit f3f0e1d2150b
+("khugepaged: add support of collapse for tmpfs/shmem pages"), but most of
+the security impact of this only came in commit 27e1f8273113 ("khugepaged:
+enable collapse pmd for pte-mapped THP"), which actually omitted flushes
+for the removal of present PTEs, not just for the removal of empty page
+tables.
 
 Cc: stable@kernel.org
-Fixes: ba76149f47d8 ("thp: khugepaged")
+Fixes: f3f0e1d2150b ("khugepaged: add support of collapse for tmpfs/shmem pages")
 Signed-off-by: Jann Horn <jannh@google.com>
 ---
-replaced the mmu_gather-based scheme with an RCU call as suggested by
-Peter Xu
+ mm/khugepaged.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
- include/asm-generic/tlb.h | 4 ++++
- mm/khugepaged.c           | 2 ++
- mm/mmu_gather.c           | 4 +---
- 3 files changed, 7 insertions(+), 3 deletions(-)
-
-diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
-index 492dce43236ea..cab7cfebf40bd 100644
---- a/include/asm-generic/tlb.h
-+++ b/include/asm-generic/tlb.h
-@@ -222,12 +222,16 @@ extern void tlb_remove_table(struct mmu_gather *tlb, void *table);
- #define tlb_needs_table_invalidate() (true)
- #endif
- 
-+void tlb_remove_table_sync_one(void);
-+
- #else
- 
- #ifdef tlb_needs_table_invalidate
- #error tlb_needs_table_invalidate() requires MMU_GATHER_RCU_TABLE_FREE
- #endif
- 
-+static inline void tlb_remove_table_sync_one(void) { }
-+
- #endif /* CONFIG_MMU_GATHER_RCU_TABLE_FREE */
- 
- 
 diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index 674b111a24fa7..c3d3ce596bff7 100644
+index c3d3ce596bff7..49eb4b4981d88 100644
 --- a/mm/khugepaged.c
 +++ b/mm/khugepaged.c
-@@ -1057,6 +1057,7 @@ static int collapse_huge_page(struct mm_struct *mm, unsigned long address,
- 	_pmd = pmdp_collapse_flush(vma, address, pmd);
- 	spin_unlock(pmd_ptl);
- 	mmu_notifier_invalidate_range_end(&range);
-+	tlb_remove_table_sync_one();
+@@ -1404,6 +1404,7 @@ static void collapse_and_free_pmd(struct mm_struct *mm, struct vm_area_struct *v
+ 				  unsigned long addr, pmd_t *pmdp)
+ {
+ 	pmd_t pmd;
++	struct mmu_notifier_range range;
  
- 	spin_lock(pte_ptl);
- 	result =  __collapse_huge_page_isolate(vma, address, pte, cc,
-@@ -1415,6 +1416,7 @@ static void collapse_and_free_pmd(struct mm_struct *mm, struct vm_area_struct *v
+ 	mmap_assert_write_locked(mm);
+ 	if (vma->vm_file)
+@@ -1415,8 +1416,12 @@ static void collapse_and_free_pmd(struct mm_struct *mm, struct vm_area_struct *v
+ 	if (vma->anon_vma)
  		lockdep_assert_held_write(&vma->anon_vma->root->rwsem);
  
++	mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, NULL, mm, addr,
++				addr + HPAGE_PMD_SIZE);
++	mmu_notifier_invalidate_range_start(&range);
  	pmd = pmdp_collapse_flush(vma, addr, pmdp);
-+	tlb_remove_table_sync_one();
+ 	tlb_remove_table_sync_one();
++	mmu_notifier_invalidate_range_end(&range);
  	mm_dec_nr_ptes(mm);
  	page_table_check_pte_clear_range(mm, addr, pmd);
  	pte_free(mm, pmd_pgtable(pmd));
-diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
-index add4244e5790d..3a2c3f8cad2fe 100644
---- a/mm/mmu_gather.c
-+++ b/mm/mmu_gather.c
-@@ -153,7 +153,7 @@ static void tlb_remove_table_smp_sync(void *arg)
- 	/* Simply deliver the interrupt */
- }
- 
--static void tlb_remove_table_sync_one(void)
-+void tlb_remove_table_sync_one(void)
- {
- 	/*
- 	 * This isn't an RCU grace period and hence the page-tables cannot be
-@@ -177,8 +177,6 @@ static void tlb_remove_table_free(struct mmu_table_batch *batch)
- 
- #else /* !CONFIG_MMU_GATHER_RCU_TABLE_FREE */
- 
--static void tlb_remove_table_sync_one(void) { }
--
- static void tlb_remove_table_free(struct mmu_table_batch *batch)
- {
- 	__tlb_remove_table_free(batch);
 -- 
 2.38.1.584.g0f3c55d4c2-goog
 
