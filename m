@@ -2,109 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 537896390F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 22:03:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF4BF6390F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 22:05:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbiKYVDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 16:03:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48238 "EHLO
+        id S229988AbiKYVFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 16:05:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiKYVDV (ORCPT
+        with ESMTP id S229495AbiKYVFb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 16:03:21 -0500
-Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF9E442C5
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 13:03:18 -0800 (PST)
-Received: by mail-ua1-x932.google.com with SMTP id e24so1917345uam.10
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 13:03:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OVEFqwCX0va+VfJ7c+eGlux97SoQeyh4xYOkEeZpCiI=;
-        b=5kpozuC8hYlXhFyeFbWRwWNpcWQ04RgM5YwI8JPfPklrr+LrcPKGJq6P5tqWAr2OGB
-         j9Z4/lUd3QB0P76YCwSM6krQPxjiDz96rOa9tN0lUEgEL8Fn2ekZcK0pM7iwvgNaWhlY
-         Td+Q6iOGsoykmpBC/aF4spDDi82QSnQ0Yd+H3K0VPWP0eyj9yKQQrsqMwiiThQh5OpDR
-         7w9z6M8/t9TkxmiwQ6oCJ3RZLIfTX8Z4Ttz+9oQo8nNSLNLFmAp6nSwl0ETbEppyNofL
-         y+5anKUiY2u0eePOQo2Cy2jtuGdRzKnq1MaBG6izLxAVt35uNUUrF0qumnAL2JbHcqfe
-         UG7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OVEFqwCX0va+VfJ7c+eGlux97SoQeyh4xYOkEeZpCiI=;
-        b=CW3+nEvSrTkgKsAmyhxGiNxu2SYs7vVwVeshrZZ5dqqpTfu6veqlrFKCZ3kM3WzZaW
-         oCnBeWg0js0BQUQ1kwCGjpWhrpJAOI0WlYUhdSP+GpFeDue2GwjL3Mjp7KPGB/HkMuMl
-         3A9XdhGoj0OkNlZ5HtOEm+2o33Rbubz7nHUSyeBQjFNIVRtCulE8QhS2GI1LQnTp5JXw
-         Oo5yhbyrcfGbpuylvpOyfepIZMbW/YKIBYnK5wjAxWp3jLDqA2qPvWMj26fSl4TVTskP
-         E+25qjWztfDwY2zorQT1zS297WQ94KXSeq7oDLDn5JoaD2VfjRkf6RLSj2eALwn85TIx
-         CXhw==
-X-Gm-Message-State: ANoB5pmrnMuN+7uwX+7OlrakCIhGmAuQ5gN1C9Dfhy6NFZSWu76YhODs
-        LJ6hQrUYSnTFyeSIhARQ6s17iTIxMBB1IUSL7SysDQ==
-X-Google-Smtp-Source: AA0mqf67ml0/y5Y6L0uB229FME78wZM/z+mBuVEXKMVNFI9Rv0NZ/gTWjiZKnZ5pNjCI7CxDjsDgzvDXrqcFxcDotaY=
-X-Received: by 2002:ab0:6015:0:b0:418:c2fa:f8a6 with SMTP id
- j21-20020ab06015000000b00418c2faf8a6mr15600391ual.119.1669410197837; Fri, 25
- Nov 2022 13:03:17 -0800 (PST)
-MIME-Version: 1.0
-References: <20221125153257.528826-1-brgl@bgdev.pl> <Y4DsTxPH1tv5eEwf@sol>
- <CAMRc=Me83-_oiGEmwy4BUrzLEMT6ZsoMwWYsb6iXwg19yHMHdQ@mail.gmail.com> <Y4EBubusGqo4IroP@smile.fi.intel.com>
-In-Reply-To: <Y4EBubusGqo4IroP@smile.fi.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 25 Nov 2022 22:03:06 +0100
-Message-ID: <CAMRc=MdHtJC4Tmn3KgcnefmHTrpXy=ROAAXJLN9uv=ouJ-hQSw@mail.gmail.com>
-Subject: Re: [PATCH] gpiolib: cdev: fix NULL-pointer dereferences
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 25 Nov 2022 16:05:31 -0500
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19630442C5;
+        Fri, 25 Nov 2022 13:05:30 -0800 (PST)
+Received: from hednb3.intra.ispras.ru (unknown [10.10.2.52])
+        by mail.ispras.ru (Postfix) with ESMTPSA id B7E39419E9E1;
+        Fri, 25 Nov 2022 21:05:25 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru B7E39419E9E1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1669410325;
+        bh=gv0SXRdsM8PzdgCeoPT9rv4Jtt/qWR7XgDFUEPFsVV8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=o20EMoupgJpijvO6b6lw/bNuICKYfkb3olBc7A1d8BKLSH5aVCwYeYo3xHxSalorG
+         nTanv9X7HWhNaq+oTEhkNtETtVoV1oFJgFLkOBTd5Xtk1eeF/yjQXZawvtN/jNN/8b
+         tb0e88srbHB65ohvkuVzpien8Y56wDhiUpw+gvnU=
+From:   Alexey Khoroshilov <khoroshilov@ispras.ru>
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org,
+        Semyon Verchenko <semverchenko@factor-ts.ru>
+Subject: [PATCH] scsi: initio: Add checks for errors in initio_msgin()
+Date:   Sat, 26 Nov 2022 00:04:04 +0300
+Message-Id: <1669410244-5565-1-git-send-email-khoroshilov@ispras.ru>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022 at 6:56 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Fri, Nov 25, 2022 at 05:48:02PM +0100, Bartosz Golaszewski wrote:
-> > On Fri, Nov 25, 2022 at 5:24 PM Kent Gibson <warthog618@gmail.com> wrote:
->
-> ...
->
-> > Then at the subsystem level, the GPIO device struct would need a lock
-> > that would be taken by every user-space operation AND the code
-> > unregistering the device so that we don't do what you described (i.e.
-> > if there's a thread doing a read(), then let's wait until it returns
-> > before we drop the device).
->
-> It's called a reference counting, basically you need to get device and then
-> put when it makes sense.
->
+The initio_msgin() calls initio_msgin_accept(), initio_msgin_reject()
+and initio_msgin_extend(), but does not check if they are succeed.
+It is not consistent with the other code of the driver.
 
-Andy: I am aware of struct device reference counting but this isn't
-it. You can count references all you want, but when I disconnect my
-CP2112, the USB bus calls gpiochip_remove(), struct gpio_chip * inside
-struct gpio_device is set to NULL and while the underlying struct
-device itself is still alive, the GPIO chip is no longer usable.
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-Reference counting won't help because the device is no longer there,
-so this behavior is correct but there's an issue with user-space still
-being able to hold certain resources and we need to make sure that
-when it tries to use them, we return an error instead of crashing.
+Fixes: 72d39fea9017 ("[SCSI] initio: Convert into a real Linux driver and update to modern style")
+Signed-off-by: Semyon Verchenko <semverchenko@factor-ts.ru>
+Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+---
+ drivers/scsi/initio.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-I think that a good solution is to make sure, we cannot set gdev->gc
-to NULL as long as there are user-space operations in progress. After
-all, it's better to try to send a USB request to an unplugged device
-than to dereference a NULL pointer. To that end, we could have a
-user-space lock that would also be taken by gpiochip_remove().
+diff --git a/drivers/scsi/initio.c b/drivers/scsi/initio.c
+index 375261d67619..ee451aa34143 100644
+--- a/drivers/scsi/initio.c
++++ b/drivers/scsi/initio.c
+@@ -2065,7 +2065,8 @@ static int initio_msgin(struct initio_host * host)
+ 		case SAVE_POINTERS:
+ 		case RESTORE_POINTERS:
+ 		case NOP:
+-			initio_msgin_accept(host);
++			if (initio_msgin_accept(host) == -1)
++				return -1;
+ 			break;
+ 		case MESSAGE_REJECT:	/* Clear ATN first              */
+ 			outb((inb(host->addr + TUL_SSignal) & (TSC_SET_ACK | 7)),
+@@ -2074,20 +2075,24 @@ static int initio_msgin(struct initio_host * host)
+ 			if ((active_tc->flags & (TCF_SYNC_DONE | TCF_NO_SYNC_NEGO)) == 0)	/* do sync nego */
+ 				outb(((inb(host->addr + TUL_SSignal) & (TSC_SET_ACK | 7)) | TSC_SET_ATN),
+ 					host->addr + TUL_SSignal);
+-			initio_msgin_accept(host);
++			if (initio_msgin_accept(host) == -1)
++				return -1;
+ 			break;
+ 		case EXTENDED_MESSAGE:	/* extended msg */
+-			initio_msgin_extend(host);
++			if (initio_msgin_extend(host) == -1)
++				return -1;
+ 			break;
+ 		case IGNORE_WIDE_RESIDUE:
+-			initio_msgin_accept(host);
++			if (initio_msgin_accept(host) == -1)
++				return -1;
+ 			break;
+ 		case COMMAND_COMPLETE:
+ 			outb(TSC_FLUSH_FIFO, host->addr + TUL_SCtrl0);
+ 			outb(TSC_MSG_ACCEPT, host->addr + TUL_SCmd);
+ 			return initio_wait_done_disc(host);
+ 		default:
+-			initio_msgout_reject(host);
++			if (initio_msgout_reject(host) == -1)
++				return -1;
+ 			break;
+ 		}
+ 		if (host->phase != MSG_IN)
+-- 
+2.7.4
 
-But this is still a per-subsystem solution. Most other subsystems
-suffer from the same issue.
-
-Bartosz
