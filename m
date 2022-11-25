@@ -2,102 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70AB56387B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 11:41:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C0B6387B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 11:42:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbiKYKlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 05:41:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37258 "EHLO
+        id S230154AbiKYKmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 05:42:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiKYKlQ (ORCPT
+        with ESMTP id S229529AbiKYKmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 05:41:16 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476063AC07
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 02:41:15 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id x5so6145713wrt.7
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 02:41:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ppMSaTEj4JL58q2duGJ/6acd9q7ZP86JJkM9tAtSfh0=;
-        b=MYDCkD4ZKosaTKM+1ztRC5mZZvCt0jkr5wf0nCrOVjuvqg4ovtP/UKzDKPTzjqrgIu
-         0I6ZvI7nHR58nDG6OdvUS9XZdTr8MUh47wFeQ+btM0c09UBCip71sRMow1wFbS3GFvSn
-         FXsIg0n5KjU001zbq5Kr3aIMKHqzXXER1H967AJqS091zPfCDO41U1dzjcagNI8l3c4S
-         CDS49lbzwf2MkIK+4pKElJlPwfF9JIIEJwQ/Nc+lAEkjHduFpDT0L6tVoTAAQGIxzK/y
-         DW6VJqU1PNFrCj1xEinoGR7IBvL0kHiSULoDnU1Sebo1MzhjTjtsd+BUjwvDUxDdHDW4
-         sBzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ppMSaTEj4JL58q2duGJ/6acd9q7ZP86JJkM9tAtSfh0=;
-        b=eiaQftZofzgFt0XuPX+KjB480n/UqE/Eg5nU4CrMW3HWqqCTp2D/9oI71QNXdRPm2S
-         rahzLTRaUcIlptbC9nJyT6No85tBD1gOfB8qcl43iJ6jZCCsQksARwIG9BlWt6vU1Qwf
-         m/FB/u6bxWc5v83GsJbw4pHLowRlaAnhVJjT3i5Y4uO9JKETuArc3gEbA8TFhHMHXMNY
-         AfaXxj4e2yBT3Xq8B5KKH6PeiTp6FLjP3H5rWov+IHxNKAPhq1BgPhnwZdGEVT7oOLre
-         FaL90XHAl5zA9iVyq9Y6U+941MIO73KvdG72Oe3KYtBnyWU5znT46AXhJsULZgQDjdW9
-         ZyHg==
-X-Gm-Message-State: ANoB5pmZGXT9BnChbNfMrzKBFKULsN9XmQJvRAi5dDFTMqaBkJqNmgag
-        Sc8lDb+3k588Dn2PcHka+Wk6kg==
-X-Google-Smtp-Source: AA0mqf7NsPtcSryNW/VkDRJPbLE9ZBSRTkp41ZEr6j8k7tYEXijdlwfhFoMvjr3i3jHW019YC7kLZA==
-X-Received: by 2002:a5d:69c4:0:b0:236:c206:b2b1 with SMTP id s4-20020a5d69c4000000b00236c206b2b1mr11995097wrw.624.1669372873824;
-        Fri, 25 Nov 2022 02:41:13 -0800 (PST)
-Received: from nicolas-Precision-3551.home ([2001:861:5180:dcc0:fdd9:1fe6:bff6:fb20])
-        by smtp.gmail.com with ESMTPSA id w5-20020adfde85000000b00241cbb7f15csm3366974wrl.106.2022.11.25.02.41.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Nov 2022 02:41:13 -0800 (PST)
-From:   Nicolas Frayer <nfrayer@baylibre.com>
-To:     nm@ti.com, kristo@kernel.org, ssantosh@kernel.org,
-        linux-arm-kernel@lists.infradead.org, jassisinghbrar@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     khilman@baylibre.com, glaroque@baylibre.com, nfrayer@baylibre.com
-Subject: [PATCH v2] arm64: arch_k3: Replace select with imply for TI mailbox and TI SCI
-Date:   Fri, 25 Nov 2022 11:41:06 +0100
-Message-Id: <20221125104106.488118-1-nfrayer@baylibre.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 25 Nov 2022 05:42:07 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410FC4664F;
+        Fri, 25 Nov 2022 02:42:07 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2APARASg028857;
+        Fri, 25 Nov 2022 10:41:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=KdosrhN5XdljozFCn1bQZylSOF7bQ1SODAs6gTMeRWE=;
+ b=EVc8j9PvPdNdRALd3lCx9cKJab0la9RUYkg94ZEseXvw2CkcD5RjeRT0cuMNC6G/MGq6
+ j7KXYO8VXI07z5CjoKWg/vSxtgO/lsyU8J8qzhxLCDXsQxVi7EeUkcgVDfuDxuINmamy
+ cftqr22Xsz8C+AyX9JGckTgAVF0ZtCGfe0qLcni+tJ1ej3mTPmr9XihosBUIsaM11k6J
+ wZAuQyN+TmFsjp9nIs6AG89o3ORQ4D+kVQcXANSpzaVWhnajhJiYCZj5JAaR9/Ys2pNh
+ CfEDD6sjGZvY1cm2bMfP72xhKe7HCbMGAWu10pzEtzxDwLgRXokhTx1Ac4LthsFhmPZP 6Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m2uye896n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Nov 2022 10:41:45 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2APATqh2006474;
+        Fri, 25 Nov 2022 10:41:45 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m2uye895p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Nov 2022 10:41:45 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2APAZKKr016784;
+        Fri, 25 Nov 2022 10:41:42 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04ams.nl.ibm.com with ESMTP id 3kxps91dwx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Nov 2022 10:41:42 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2APAZLaQ3474136
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 25 Nov 2022 10:35:21 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 62E99AE051;
+        Fri, 25 Nov 2022 10:41:40 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D6010AE045;
+        Fri, 25 Nov 2022 10:41:38 +0000 (GMT)
+Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.171.94.96])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Fri, 25 Nov 2022 10:41:38 +0000 (GMT)
+Date:   Fri, 25 Nov 2022 11:41:37 +0100
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH] perf build: Fix LIBTRACEEVENT_DYNAMIC
+Message-ID: <Y4Cb4feK/9q+Wzmt@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+References: <20221116224631.207631-1-irogers@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221116224631.207631-1-irogers@google.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: WpKiEY4QRQZXaJx4X4kt9_r6cj_vRYGz
+X-Proofpoint-ORIG-GUID: BsZ2JV9HYOBMmRIcXbMrEUDl7AyMnV7A
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-25_02,2022-11-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ lowpriorityscore=0 suspectscore=0 mlxlogscore=999 adultscore=0 mlxscore=0
+ bulkscore=0 priorityscore=1501 phishscore=0 malwarescore=0 impostorscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211250083
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to build TI mailbox and TI SCI as modules, replace
-select with imply.
+On Wed, Nov 16, 2022 at 02:46:31PM -0800, Ian Rogers wrote:
 
-Signed-off-by: Nicolas Frayer <nfrayer@baylibre.com>
----
-v1->v2:
-Use imply instead of removing select altogether and dropped
-patches 2/3 and 3/3 from previous series as using imply makes
-them redundant.
+Hi Ian,
 
- arch/arm64/Kconfig.platforms | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> The tools/lib includes fixes break LIBTRACEVENT_DYNAMIC as the
+> makefile erroneously had depdendencies on building libtraceevent even
+> when not linking with it. This change fixes the issues with
+> LIBTRACEEVENT_DYNAMIC by making the built files optional.
 
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index 912529ac58b38..288935638c7ad 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -126,8 +126,8 @@ config ARCH_K3
- 	select PM_GENERIC_DOMAINS if PM
- 	select MAILBOX
- 	select SOC_TI
--	select TI_MESSAGE_MANAGER
--	select TI_SCI_PROTOCOL
-+	imply TI_MESSAGE_MANAGER
-+	imply TI_SCI_PROTOCOL
- 	select TI_SCI_INTR_IRQCHIP
- 	select TI_SCI_INTA_IRQCHIP
- 	help
--- 
-2.25.1
+It kernel-next on s390 somehow libtraceevent seems to be bypassed, which leads 
+to make -C tools/perf install-bin failure. While it does not hit in every
+envoronment, could you please hint what could be a reason for that?
 
+...
+make FIXDEP=1 -f Makefile.perf install-bin
+Makefile.config:1030: No numa.h found, disables 'perf bench numa mem' benchmark, please install numactl-devel/libnuma-devel/libnuma-dev
+Auto-detecting system features:
+...                                   dwarf: [ on  ]
+...                      dwarf_getlocations: [ on  ]
+...                                   glibc: [ on  ]
+...                                  libbfd: [ on  ]
+...                          libbfd-buildid: [ on  ]
+...                                  libcap: [ on  ]
+...                                  libelf: [ on  ]
+...                                 libnuma: [ OFF ]
+...                  numa_num_possible_cpus: [ OFF ]
+...                                 libperl: [ on  ]
+...                               libpython: [ on  ]
+...                               libcrypto: [ on  ]
+...                               libunwind: [ OFF ]
+...                      libdw-dwarf-unwind: [ on  ]
+...                                    zlib: [ on  ]
+...                                    lzma: [ on  ]
+...                               get_cpuid: [ OFF ]
+...                                     bpf: [ on  ]
+...                                  libaio: [ on  ]
+...                                 libzstd: [ on  ]
+$(:)
+make -C /builddir/build/BUILD/kernel-6.0.fc36/linux-6.0/tools/lib/api/ O=/builddir/build/BUILD/kernel-6.0.fc36/linux-6.0/tools/perf/libapi \
+ DESTDIR=/builddir/build/BUILD/kernel-6.0.fc36/linux-6.0/tools/perf/libapi prefix= \
+ /builddir/build/BUILD/kernel-6.0.fc36/linux-6.0/tools/perf/libapi/libapi.a install_headers
+make -C /builddir/build/BUILD/kernel-6.0.fc36/linux-6.0/tools/lib/perf/ O=/builddir/build/BUILD/kernel-6.0.fc36/linux-6.0/tools/perf/libperf \
+ DESTDIR=/builddir/build/BUILD/kernel-6.0.fc36/linux-6.0/tools/perf/libperf prefix= \
+ /builddir/build/BUILD/kernel-6.0.fc36/linux-6.0/tools/perf/libperf/libperf.a install_headers
+make -C /builddir/build/BUILD/kernel-6.0.fc36/linux-6.0/tools/lib/subcmd/ O=/builddir/build/BUILD/kernel-6.0.fc36/linux-6.0/tools/perf/libsubcmd \
+ DESTDIR=/builddir/build/BUILD/kernel-6.0.fc36/linux-6.0/tools/perf/libsubcmd prefix= \
+ /builddir/build/BUILD/kernel-6.0.fc36/linux-6.0/tools/perf/libsubcmd/libsubcmd.a install_headers
+make -C /builddir/build/BUILD/kernel-6.0.fc36/linux-6.0/tools/lib/symbol/ O=/builddir/build/BUILD/kernel-6.0.fc36/linux-6.0/tools/perf/libsymbol \
+ DESTDIR=/builddir/build/BUILD/kernel-6.0.fc36/linux-6.0/tools/perf/libsymbol prefix= \
+ /builddir/build/BUILD/kernel-6.0.fc36/linux-6.0/tools/perf/libsymbol/libsymbol.a install_headers
+make -C /builddir/build/BUILD/kernel-6.0.fc36/linux-6.0/tools/lib/bpf/ FEATURES_DUMP=/builddir/build/BUILD/kernel-6.0.fc36/linux-6.0/tools/perf/FEATURE-DUMP \
+ O= OUTPUT=/builddir/build/BUILD/kernel-6.0.fc36/linux-6.0/tools/perf/libbpf/ DESTDIR=/builddir/build/BUILD/kernel-6.0.fc36/linux-6.0/tools/perf/libbpf prefix= \
+ /builddir/build/BUILD/kernel-6.0.fc36/linux-6.0/tools/perf/libbpf/libbpf.a install_headers
+/bin/sh util/PERF-VERSION-GEN
+make -C /builddir/build/BUILD/kernel-6.0.fc36/linux-6.0/tools/perf/tests/shell/coresight
+make[2]: *** No rule to make target 'install-traceevent-plugins', needed by 'install-bin'.  Stop.
+
+
+Thanks!
