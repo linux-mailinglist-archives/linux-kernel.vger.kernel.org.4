@@ -2,100 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06F68638870
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 12:15:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73EBD638871
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 12:15:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230394AbiKYLPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 06:15:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42320 "EHLO
+        id S230377AbiKYLPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 06:15:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiKYLPH (ORCPT
+        with ESMTP id S229899AbiKYLPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 06:15:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7024824958;
-        Fri, 25 Nov 2022 03:15:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0ADDD6239A;
-        Fri, 25 Nov 2022 11:15:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D478DC433C1;
-        Fri, 25 Nov 2022 11:15:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669374905;
-        bh=jbz6wVa+XiyBRVRh8XiIiRYL5nN8ly7IaofiEJMqw7E=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=Kmiwn3hXLX57+xwkCq9XvrTQcY1dFIep1GSam6l0m0xxAXkkvdJwavbhxAbtpfLY7
-         p1j20js7sgvD4E83SNqWtFAS6ra8FxPnxdEZ4CQLkwj0fZ6l1Rm0NpVtQ8ePBJIjwF
-         x0IKGasRu93eUlbJh2edStvAWRKofoisTSu+067pMy9HVMDbKdnMYTo2sJL5J1vbUz
-         jMxEr7wXOSfVoOyHVOwWotw0vGjt+xRbqJfax8h/qw53VjmTLAVzxmYNcwd8BIysAb
-         hvth31sCYMXd3AfV4TDXHWRsN26tObifhA+aEkhhUsqqgAZ1F4eaXBBCImSRYA10v2
-         k/syhCfUnFqXg==
-Content-Type: text/plain; charset="utf-8"
+        Fri, 25 Nov 2022 06:15:53 -0500
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399E7286C1
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 03:15:53 -0800 (PST)
+Received: by mail-pf1-x443.google.com with SMTP id l7so1404344pfl.7
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 03:15:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YUyfOwVtIYzBrMOM6aE47q/ey8wjAn3R1rFZ/EdItnU=;
+        b=QOK5WYKDlMApI8vZbjbog5nGHUS9CaccZHsRuH/oldjqKAopXEScKa+OqiDcnwbQ6C
+         XyAT8/Ax1HEfyO4yofTrO34QBC/El3caW1hwLwiSHfdjl2WLvstFrb9l90GyGkqz8gdv
+         hVSwfWHy14PG57ZRypp95smXkgDPzx8mrNghADKumt3Z4n4AXWv+8OUpDyef3P56gLLH
+         j9F3hO04n7MsSvzHA/+fzlQIRGVyJ+O6cRGm7KmuVZCA3v6wOkWPr4Z4v6H3MlJadndg
+         7Pc1mNZzfLrF/y0K0/Jntt5vQGPKn7hL8VLF9ce132GyoXCjXx2ZOBno9TnlwJGsilvT
+         umsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YUyfOwVtIYzBrMOM6aE47q/ey8wjAn3R1rFZ/EdItnU=;
+        b=UwVcno6GcfIg/zIxfiKuQft6wXTqIIvkB4nXwG17aN0j7NXzEi2oPQgckWwltxOzn5
+         t7HkyQ6iGc5zQxF0L8cdqd2dS+ed+8qcH0YmQNDewoMN+RhhIiEP6rt1dr3jappTOwSt
+         uSG7/8u4vUhbW+4QI2Mn1m1f9Aek75fFyOUXk6KhmqMTfiuBCCyC5vAY8D6m1woqOQXY
+         0qD+U9ETcWJDJYpwhaooCjlf8BuqrhhV7Eb8D7tjt4d5nR3WpCWbUPXBnC3J2DKQbyeN
+         OrRhV691ljhqj3inWlDI7QvLR93waHC4oBWw74VLRWQZH8+TxSeoyV4wd+GibAwjS7V9
+         xCoQ==
+X-Gm-Message-State: ANoB5pmF0Nd9qy0ImT8ilXf6NcuHnjjXORA8pM7ztLFhjefgEe64AO55
+        HgZwQ45W3EI7O+ctStH+7gAkMjhHtueBo7dUYsA=
+X-Google-Smtp-Source: AA0mqf6tiwddKJBsWNPjLWIoSMkbHP7yy2k04lb3kF+zjGZhcMYOsJCESvLTs7H4qYqZ6x7yNDhkVD4UuG6x4mEcMD8=
+X-Received: by 2002:a63:e442:0:b0:477:bfab:5a81 with SMTP id
+ i2-20020a63e442000000b00477bfab5a81mr9213287pgk.64.1669374952308; Fri, 25 Nov
+ 2022 03:15:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] carl9170: Replace zero-length array of trailing structs
- with
- flex-array
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20221118211146.never.395-kees@kernel.org>
-References: <20221118211146.never.395-kees@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Christian Lamparter <chunkeey@googlemail.com>,
-        Kees Cook <keescook@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <166937490066.28196.15714498796045859464.kvalo@kernel.org>
-Date:   Fri, 25 Nov 2022 11:15:02 +0000 (UTC)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6a06:1b8f:b0:587:289e:8c0d with HTTP; Fri, 25 Nov 2022
+ 03:15:51 -0800 (PST)
+Reply-To: philipsjohnsongoodp@gmail.com
+From:   philips <robertandersongood5@gmail.com>
+Date:   Fri, 25 Nov 2022 11:15:51 +0000
+Message-ID: <CAD7QbCCoD852N87eTMwW00_wwEtfT0CERuJGD48+iTfzVg=9JQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNDISC_FREEM,UPPERCASE_50_75 autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> wrote:
-
-> Zero-length arrays are deprecated[1] and are being replaced with
-> flexible array members in support of the ongoing efforts to tighten the
-> FORTIFY_SOURCE routines on memcpy(), correctly instrument array indexing
-> with UBSAN_BOUNDS, and to globally enable -fstrict-flex-arrays=3.
-> 
-> Replace zero-length array with flexible-array member.
-> 
-> This results in no differences in binary output.
-> 
-> [1] https://github.com/KSPP/linux/issues/78
-> 
-> Cc: Christian Lamparter <chunkeey@googlemail.com>
-> Cc: Kalle Valo <kvalo@kernel.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Cc: linux-wireless@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> Acked-by: Christian Lamparter <chunkeey@gmail.com>
-> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-
-Patch applied to ath-next branch of ath.git, thanks.
-
-7256f28767fa wifi: carl9170: Replace zero-length array of trailing structs with flex-array
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20221118211146.never.395-kees@kernel.org/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
-
+0J/QntCS0JXQoNCV0J3QndCr0Jkg0Jgg0J3QntCi0JDQoNCY0KPQoQ0KINCb0J7QndCU0J7QnS3Q
+ktC10LvQuNC60L7QsdGA0LjRgtCw0L3QuNGPDQoNCtCS0LDRiNC10LzRgyDQstC90LjQvNCw0L3Q
+uNGOOiDQtNC+0YDQvtCz0L7QuSDQtNGA0YPQsw0KDQrQn9C+0LbQsNC70YPQudGB0YLQsCwg0L3Q
+tSDQvtCx0LjQttCw0LnRgtC10YHRjCwg0LXRgdC70Lgg0Y3RgtC+INGB0L7QvtCx0YnQtdC90LjQ
+tSDQv9GA0LjQtNC10YIg0Log0LLQsNC8LCDQv9C+0YHQutC+0LvRjNC60YMNCtGPINC00L7Qu9C2
+0LXQvSDQsdGL0Lsg0L/QvtC70YPRh9C40YLRjCDQstCw0YjQtSDRgdC+0LPQu9Cw0YHQuNC1INC4
+INC+0LTQvtCx0YDQtdC90LjQtSwg0L/RgNC10LbQtNC1INGH0LXQvCDQvtGC0L/RgNCw0LLQuNGC
+0YwNCtGN0YLQviDQv9GA0LXQtNC70L7QttC10L3QuNC1INC/0L4g0Y3Qu9C10LrRgtGA0L7QvdC9
+0L7QuSDQv9C+0YfRgtC1LiDQryDQtNC10LnRgdGC0LLQvtCy0LDQuyDRgtCw0LosINC60LDQuiDR
+jyDRgdC00LXQu9Cw0LssDQrQuNC3LdC30LAg0LLQsNC20L3QvtGB0YLQuCDQuCDRgdGA0L7Rh9C9
+0L7RgdGC0Lgg0Y3RgtC+0LPQviDQtNC10LvQsC4g0KEg0LrQsNC60L7QuSDQsdGLINGB0YLQvtGA
+0L7QvdGLINCy0Ysg0L3QuA0K0YHQvNC+0YLRgNC10LvQuCDQvdCwINGN0YLQviwg0L/Rg9GB0YLR
+jCDQstCw0Lwg0LHRg9C00LXRgiDQv9GA0LjRj9GC0L3QviDQsdGL0YHRgtGA0L4g0L7RgtCy0LXR
+gtC40YLRjCDQu9C40LHQvg0K0L7RgtGA0LjRhtCw0YLQtdC70YzQvdC+LCDQu9C40LHQviDQv9C+
+0LvQvtC20LjRgtC10LvRjNC90L4uDQoNCtCc0LXQvdGPINC30L7QstGD0YIg0KTQuNC70LjQv9GB
+INCU0LbQvtC90YHQvtC9LiDQryDQvtGC0L/RgNCw0LLQuNC7INCy0LDQvCDRjdC70LXQutGC0YDQ
+vtC90L3QvtC1INC/0LjRgdGM0LzQviDRgNCw0L3QtdC1INCx0LXQtw0K0L7RgtCy0LXRgtCwLCDQ
+siDQvNC+0LXQvCDQv9C10YDQstC+0Lwg0Y3Qu9C10LrRgtGA0L7QvdC90L7QvCDQv9C40YHRjNC8
+0LUg0Y8g0YPQv9C+0LzRj9C90YPQuyDQviDQvNC+0LXQvCDQutC70LjQtdC90YLQtSwNCtC60L7R
+gtC+0YDRi9C5INGD0LzQtdGAIDE1INGB0LXQvdGC0Y/QsdGA0Y8gMjAxNSDQs9C+0LTQsC4g0K8g
+0YHQtNC10LvQsNC7INC90LXRgdC60L7Qu9GM0LrQviDQt9Cw0L/RgNC+0YHQvtCyLCDRh9GC0L7Q
+sdGLDQrQvdCw0LnRgtC4INC60L7Qs9C+LdC70LjQsdC+INC40Lcg0LTQsNC70YzQvdC40YUg0YDQ
+vtC00YHRgtCy0LXQvdC90LjQutC+0LIg0LzQvtC10LPQviDQutC70LjQtdC90YLQsCwg0L3QviDR
+jdGC0L4NCtC+0LrQsNC30LDQu9C+0YHRjCDQsdC10LfRg9GB0L/QtdGI0L3Ri9C8LCDRjyDRgtGA
+0LXQsdGD0Y4g0LLQsNGI0LXQs9C+INGB0L7Qs9C70LDRgdC40Y8g0L/RgNC10LTRgdGC0LDQstC4
+0YLRjCDQstCw0YEg0LrQsNC6DQrQsdC70LjQt9C60L7Qs9C+INGA0L7QtNGB0YLQstC10L3QvdC4
+0LrQsCDQkdCb0JjQltCd0JXQk9CeINCg0J7QlNCh0KLQktCV0J3QndCY0JrQkCDQnNCe0JXQk9Ce
+INCf0J7QodCb0JXQlNCd0JXQk9CeINCa0JvQmNCV0J3QotCQLA0K0J/QntCi0J7QnNCjINCn0KLQ
+niDQoyDQktCQ0KEg0J7QlNCY0J3QkNCa0J7QktCr0JUg0JjQnNCV0J3QkCDRgSDQv9C+0LrQvtC5
+0L3Ri9C8LCDRg9C90LDRgdC70LXQtNC+0LLQsNGC0Ywg0LTQtdC/0L7Qt9C40YLQvdGL0LkNCtGE
+0L7QvdC0INC90LAg0YHRg9C80LzRgyAyIDcwMCAwMDAsMDAg0YTRg9C90YLQvtCyINGB0YLQtdGA
+0LvQuNC90LPQvtCyICjRgtC+0LvRjNC60L4g0LTQstCwINC80LjQu9C70LjQvtC90LANCtGB0LXQ
+vNGM0YHQvtGCINGC0YvRgdGP0Ycg0LHRgNC40YLQsNC90YHQutC40YUg0YTRg9C90YLQvtCyINGB
+0YLQtdGA0LvQuNC90LPQvtCyLCDQsiBGU1QtQkFOSyBMb25kb24sDQrQvtGB0YLQsNCy0LvQtdC9
+0L3Ri9C5INC60LvQuNC10L3RgtC+0Lwg0LTQviDRgtC+0LPQviwg0LrQsNC6INC+0L0g0LHRg9C0
+0LXRgiDQutC+0L3RhNC40YHQutC+0LLQsNC9LA0KDQrQkdCw0L3QuiDQstGL0LTQsNC7INC80L3Q
+tSDRg9Cy0LXQtNC+0LzQu9C10L3QuNC1LCDRh9GC0L7QsdGLINGPINC/0YDQtdC00L7RgdGC0LDQ
+stC40Lsg0LXQs9C+INGA0L7QtNGB0YLQstC10L3QvdC40LrQvtCyINCyDQrQutCw0YfQtdGB0YLQ
+stC1INGB0LLQvtC10LPQviDQsNC00LLQvtC60LDRgtCwLCDQuNC90LDRh9C1INC+0L3QuCDQv9GA
+0L7RgtC+0LvQutC90YPRgiDRhNC+0L3QtCDQsiDQs9C+0YHRg9C00LDRgNGB0YLQstC10L3QvdGD
+0Y4NCtC60LDQt9C90YMg0LrQsNC6INC90LXQstC+0YHRgtGA0LXQsdC+0LLQsNC90L3Ri9C5INCy
+0LXQutGB0LXQu9GMLiDQryDQvdCw0LTQtdGP0LvRgdGPLCDRh9GC0L4g0LLRiyDQvdC1INGA0LDQ
+t9C+0LHQu9Cw0YfQuNGC0LUNCtC4INC90LUg0L/RgNC10LTQsNC00LjRgtC1INGN0YLQviDQtNC+
+0LLQtdGA0LjQtSDQuCDRg9Cy0LXRgNC10L3QvdC+0YHRgtGMLCDQutC+0YLQvtGA0YvQtSDRjyDQ
+v9GL0YLQsNGO0YHRjCDRg9GB0YLQsNC90L7QstC40YLRjA0K0YEg0LLQsNC80Lgg0LTQu9GPINC9
+0LDRiNC10Lkg0LLQt9Cw0LjQvNC90L7QuSDQstGL0LPQvtC00YssINGPINC90LUg0YXQvtGH0YMs
+INGH0YLQvtCx0Ysg0YEg0L3QsNC80Lgg0LHRi9C70LAg0YLRgNC10YLRjNGPDQrRgdGC0L7RgNC+
+0L3QsCwg0Y3RgtC+INC00L7Qu9C20L3QviDQsdGL0YLRjCDRgdC10LrRgNC10YLQvtC8INC80LXQ
+ttC00YMg0LzQvdC+0Lkg0Lgg0LLQsNC80LguINCvINC30LDQstC10YDRj9GOINC4DQrQs9Cw0YDQ
+sNC90YLQuNGA0YPRjiwg0YfRgtC+INGN0YLQviDQsdGD0LTQtdGCINCy0YvQv9C+0LvQvdC10L3Q
+viDQsiDRgdC+0L7RgtCy0LXRgtGB0YLQstC40Lgg0YEg0LfQsNC60L7QvdC90YvQvA0K0YHQvtCz
+0LvQsNGI0LXQvdC40LXQvCwg0LrQvtGC0L7RgNC+0LUg0LfQsNGJ0LjRgtC40YIg0LLQsNGBINC+
+0YIg0LvRjtCx0L7Qs9C+INC90LDRgNGD0YjQtdC90LjRjyDQt9Cw0LrQvtC90LAuINCS0YHQtSwg
+0YfRgtC+DQrRjyDRgtGA0LXQsdGD0Y4g0L7RgiDQstCw0YEsIC0g0Y3RgtC+INCy0LDRiNC1INGH
+0LXRgdGC0L3QvtC1INGB0L7RgtGA0YPQtNC90LjRh9C10YHRgtCy0L4sINGH0YLQvtCx0Ysg0LzR
+iyDQvNC+0LPQu9C4DQrQv9GA0L7QstC10YHRgtC4INGN0YLRgyDRgtGA0LDQvdC30LDQutGG0LjR
+ji4NCg0K0JTQu9GPINC/0L7Qu9GD0YfQtdC90LjRjyDQsdC+0LvQtdC1INC/0L7QtNGA0L7QsdC9
+0L7QuSDQuNC90YTQvtGA0LzQsNGG0LjQuCwg0L/QvtC20LDQu9GD0LnRgdGC0LAsINGB0LLRj9C2
+0LjRgtC10YHRjCDRgdC+DQrQvNC90L7QuSwg0L7QttC40LTQsNGPINCy0LDRiNC10LPQviDRgdGA
+0L7Rh9C90L7Qs9C+INC+0YLQstC10YLQsC4NCg0K0JfQsNGA0LDQvdC10LUg0YHQv9Cw0YHQuNCx
+0L4g0Lgg0YXRgNCw0L3QuCDQstCw0YEg0JHQvtCzLA0KDQrQnNC40YHRgtC10YAg0KTQuNC70LjQ
+v9GBINCU0LbQvtC90YHQvtC9LCDRjdGB0LrQstCw0LnRgC4NCtCj0YHQsNC00YzQsdCwIDIsINCd
+0YzRji3QrtC90LjQvtC9LdGB0YLRgNC40YIsIExEMSAyUEYNCtCb0J7QndCU0J7QnS3QktC10LvQ
+uNC60L7QsdGA0LjRgtCw0L3QuNGPDQpQT1ZFUkVOTllZIEkgTk9UQVJJVVMNCiBMT05ET04tVmVs
+aWtvYnJpdGFuaXlhDQo=
