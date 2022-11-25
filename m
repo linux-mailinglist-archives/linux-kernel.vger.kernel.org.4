@@ -2,156 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5166C63877C
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 11:25:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1896B63877A
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 11:25:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230212AbiKYKZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 05:25:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52328 "EHLO
+        id S230197AbiKYKZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 05:25:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230198AbiKYKZX (ORCPT
+        with ESMTP id S229753AbiKYKZS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 05:25:23 -0500
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7807242196;
-        Fri, 25 Nov 2022 02:25:22 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id E07E45C0154;
-        Fri, 25 Nov 2022 05:25:21 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Fri, 25 Nov 2022 05:25:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1669371921; x=1669458321; bh=rY4W1dwJTv
-        +7EqlIrBEc1PJGaHApFihTX1HhUWVmKHU=; b=jwXk+t+HjoV7NboSBXE+eI/R+3
-        pUHlqzlr3+KK6FB0aOdgXLrC5tTlFW50fLjZx1eBNMWpjRp6N8W0siJ3QpHO8rQQ
-        8W2SteprfGGvI7t/JzCrma20Debs5QPJGQL3+UDA266iMf7dqT0nVidoPnSAJi36
-        mLuHDn1QovlgzFoEPmquszV1+yB/1b4716JXmYK6rqQIsEPTUqQZFN99P1fDLnZA
-        a5KrlFtVG1/4a6ZMAF3lHrqfCqHBA5BlTKvqJO1FGdSGZ1FuqyNypu8dAG0zlPuO
-        OelbTlPM/FXxWsUtomWrD3FFamNBCVA6rw1ANlpJT3kSnyoJyDKzfxeOzcVw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1669371921; x=1669458321; bh=rY4W1dwJTv+7EqlIrBEc1PJGaHAp
-        FihTX1HhUWVmKHU=; b=GeqqJwl0MVa8Hkk3rHnpTBkIqBYjjSnihYFE0c3MrdQq
-        ghay5KSp+VV6LH0jWEgWMa2tgdFURWkx6jBjhBKL9Q27i/DfAWcz3ucxz1197EO2
-        lVPDVA5T0zaEU7SQEtz/fXaX0Uj6Z0vcJ5cDz1E53hkoVQe0osJch5lCZQ/94AWe
-        AAqSpgg6zlNj2Mtupnqi4UaHZR0lUO3hCtfCBYzznQxLpOtUGlG5MjyvTUXN/WAL
-        C7ElOoFMfsLoePaYurvlzGXaO15VccbpZUE2vSTpK8JADu7fVYNY++OStSX3es83
-        2zG3hXwUhq78eJPupysZKV6ecugs0J7uDSildB/W0w==
-X-ME-Sender: <xms:EZiAY76xgaByiZDlDlzn0VJIsd5U9WtpGLOOzTqflpsdNRSKB0Xc0A>
-    <xme:EZiAYw5-B8RdxM5cbUEwfp1BijinPw5KpnQ9kNpew5mCO1W3TdkabefnpUa8u_7Qm
-    ILDFHiXOxPxOSbyaL0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrieehgdduiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeejvddvvdduleduheejiedtheehiedvjefgleelffeigfevhffhueduhfegfeef
-    heenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:EZiAYyeYuYL3d6oKfiL8By3dN-1oFQ23B29_6cnQi6a2OmQMXL9rFw>
-    <xmx:EZiAY8I-kMKyvzwJ5imNvi0Hu5Yu-oRiJ5j66jfpB-UN822knu5ucQ>
-    <xmx:EZiAY_LI6MISvV2AQ7k7mXGFxnfTmsGxfmDe53g1YlMSrYUMCf227A>
-    <xmx:EZiAY45BJNqJJscKAANt0ZnRUCbWz7tLKK78JI0IHrL3XltYEAjEWw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id F1BDAB60086; Fri, 25 Nov 2022 05:25:20 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <7f43febb-0a89-4313-9c85-a7a44c231b45@app.fastmail.com>
-In-Reply-To: <CAP6Zq1ikqtKOGUZX-VAdyhs+nsvy7ah4gqRrbXVA8Gp9L46hXQ@mail.gmail.com>
-References: <20221122201232.107065-1-tmaimon77@gmail.com>
- <20221122201232.107065-3-tmaimon77@gmail.com>
- <577e273d-ff9b-4d8d-b797-d7275ab8374f@app.fastmail.com>
- <CAP6Zq1ikqtKOGUZX-VAdyhs+nsvy7ah4gqRrbXVA8Gp9L46hXQ@mail.gmail.com>
-Date:   Fri, 25 Nov 2022 11:25:00 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Tomer Maimon" <tmaimon77@gmail.com>
-Cc:     avifishman70@gmail.com, tali.perry1@gmail.com,
-        "Joel Stanley" <joel@jms.id.au>, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com,
-        "Hitomi Hasegawa" <hasegawa-hitomi@fujitsu.com>,
-        "Hector Martin" <marcan@marcan.st>,
-        "Nicolas Ferre" <nicolas.ferre@microchip.com>,
-        "Conor.Dooley" <conor.dooley@microchip.com>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        "Sven Peter" <sven@svenpeter.dev>,
-        "Brian Norris" <briannorris@chromium.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, openbmc@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] soc: nuvoton: add NPCM LPC BPC driver
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 25 Nov 2022 05:25:18 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C745F209AE;
+        Fri, 25 Nov 2022 02:25:17 -0800 (PST)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NJWBF3vkKzJnw0;
+        Fri, 25 Nov 2022 18:21:57 +0800 (CST)
+Received: from [10.174.179.215] (10.174.179.215) by
+ canpemm500007.china.huawei.com (7.192.104.62) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 25 Nov 2022 18:25:14 +0800
+Subject: Re: [PATCH 5.10 000/149] 5.10.156-rc1 review
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <stable@vger.kernel.org>, <patches@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>, <shuah@kernel.org>,
+        <patches@kernelci.org>, <lkft-triage@lists.linaro.org>,
+        Pavel Machek <pavel@denx.de>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        <srw@sladewatkins.net>, <rwarsow@gmx.de>,
+        Netdev <netdev@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
+References: <20221123084557.945845710@linuxfoundation.org>
+ <CA+G9fYvKfbJHcMZtybf_0Ru3+6fKPg9HwWTOhdCLrOBXMaeG1A@mail.gmail.com>
+ <CA+G9fYvgaNKbr_EhWsh9hjnzCeVXGJoXX4to72ytdvZi8W0svA@mail.gmail.com>
+ <Y4BuUU5yMI6PqCbb@kroah.com>
+ <CA+G9fYsXomPXcecPDzDydO3=i2qHDM2RTtGxr0p2YOS6=YcWng@mail.gmail.com>
+ <a1652617-9da5-4a29-9711-9d3b3cf66597@app.fastmail.com>
+From:   YueHaibing <yuehaibing@huawei.com>
+Message-ID: <23b0fa9c-d041-8c56-ec4b-04991fa340d4@huawei.com>
+Date:   Fri, 25 Nov 2022 18:25:13 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
+MIME-Version: 1.0
+In-Reply-To: <a1652617-9da5-4a29-9711-9d3b3cf66597@app.fastmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022, at 19:01, Tomer Maimon wrote:
-> On Wed, 23 Nov 2022 at 12:58, Arnd Bergmann <arnd@arndb.de> wrote:
+On 2022/11/25 18:02, Arnd Bergmann wrote:
+> On Fri, Nov 25, 2022, at 09:05, Naresh Kamboju wrote:
+>> On Fri, 25 Nov 2022 at 12:57, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+>>> On Thu, Nov 24, 2022 at 09:17:36PM +0530, Naresh Kamboju wrote:
+>>>>
+>>>> Daniel bisected this reported problem and found the first bad commit,
+>>>>
+>>>> YueHaibing <yuehaibing@huawei.com>
+>>>>     net: broadcom: Fix BCMGENET Kconfig
+>>>
+>>> But that is in 5.10.155, 5.15.79, 6.0.9, and 6.1-rc5.  It is not new to
+>>> this -rc release.
 >>
->> On Tue, Nov 22, 2022, at 21:12, Tomer Maimon wrote:
->> > Add Nuvoton BMC NPCM LPC BIOS post code (BPC) driver.
->> >
->> > The NPCM BPC monitoring two configurable I/O address written by the host
->> > on the Low Pin Count (LPC) bus.
->> >
->> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
->> > ---
->> >  drivers/soc/Kconfig                |   1 +
->> >  drivers/soc/Makefile               |   1 +
->> >  drivers/soc/nuvoton/Kconfig        |  24 ++
->> >  drivers/soc/nuvoton/Makefile       |   3 +
->> >  drivers/soc/nuvoton/npcm-lpc-bpc.c | 396 +++++++++++++++++++++++++++++
->>
->> In general, I try to keep drivers/soc/ for drivers that are
->> used purely inside of the kernel and don't provide their
->> own user space ABI, those should normally be part of
->> some subsystem grouped by functionality.
->>
->> It appears that we have similar drivers for aspeed already,
->> so there is some precedent, but I would still like to ask
->> you and Joel to try to make sure the two are compatible,
->> or ideally share the code for the user-facing part of the
->> LPC driver.
-> Nuvoton and Aspeed use the same user-facing code to manage the host snooping.
-> https://github.com/openbmc/phosphor-host-postd
+>> It started from 5.10.155 and this is only seen on 5.10 and other
+>> branches 5.15, 6.0 and mainline are looking good.
+> 
+> I think the original patch is wrong and should be fixed upstream.
+> The backported patch in question is a one-line Kconfig change doing
 
-Ok, great!
+It seems lts 5.10 do not contain commit e5f31552674e ("ethernet: fix PTP_1588_CLOCK dependencies"),
+there is not PTP_1588_CLOCK_OPTIONAL option.
 
->> The implementation of npcm-lpc-bpc looks fine otherwise, I only
->> noticed one minor detail that I would change:
->>
->> > +     np = pdev->dev.parent->of_node;
->> > +     if (!of_device_is_compatible(np, "nuvoton,npcm750-lpc") &&
->> > +         !of_device_is_compatible(np, "nuvoton,npcm845-lpc")) {
->> > +             dev_err(dev, "unsupported LPC device binding\n");
->> > +             return -ENODEV;
->> > +     }
->>
->> This check doesn't seem to make sense here, since those are
->> the only two types you support.
-> About the LPC, I like to double check with our architectures on it
-> because the BPC should working on eSPI as well.
-> Maybe I should remove the LPC part.
-
-The version you posted only has LPC support, not eSPI, so that
-wouldn't work. I'm not sure how eSPI is normally represented
-in device drivers, does that show up the same way as an LPC
-device, or do you need to register a separate spi_driver?
-
-If it's part of the same platform driver with different
-OF compatible strings, the normal way to handle this would
-be to use the .data field in the of_device_id to pass
-model specific information to other parts of the driver.
-
-     Arnd
+> 
+> diff --git a/drivers/net/ethernet/broadcom/Kconfig b/drivers/net/ethernet/broadcom/Kconfig
+> index f4e1ca68d831..55dfdb34e37b 100644
+> --- a/drivers/net/ethernet/broadcom/Kconfig
+> +++ b/drivers/net/ethernet/broadcom/Kconfig
+> @@ -77,7 +77,7 @@ config BCMGENET
+>         select BCM7XXX_PHY
+>         select MDIO_BCM_UNIMAC
+>         select DIMLIB
+> -       select BROADCOM_PHY if ARCH_BCM2835
+> +       select BROADCOM_PHY if (ARCH_BCM2835 && PTP_1588_CLOCK_OPTIONAL)
+>         help
+>           This driver supports the built-in Ethernet MACs found in the
+>           Broadcom BCM7xxx Set Top Box family chipset.
+> 
+> which fixes the build on kernels that contain 99addbe31f55 ("net:
+> broadcom: Select BROADCOM_PHY for BCMGENET") and enable
+> BCMGENET=y but PTP_1588_CLOCK_OPTIONAL=m, which otherwise
+> leads to a link failure.
+> 
+> The patch unfortunately solves it by replacing it with a runtime
+> failure by no longer linking in the PHY driver (as found by Naresh).
+> 
+> I think the correct fix would be to propagate the dependency down
+> to BCMGENET:
+> 
+> diff --git a/drivers/net/ethernet/broadcom/Kconfig b/drivers/net/ethernet/broadcom/Kconfig
+> index f4e1ca68d831..f4ca0c6c0f51 100644
+> --- a/drivers/net/ethernet/broadcom/Kconfig
+> +++ b/drivers/net/ethernet/broadcom/Kconfig
+> @@ -71,6 +71,7 @@ config BCM63XX_ENET
+>  config BCMGENET
+>  	tristate "Broadcom GENET internal MAC support"
+>  	depends on HAS_IOMEM
+> +	depends on PTP_1588_CLOCK_OPTIONAL || !ARCH_BCM2835
+>  	select MII
+>  	select PHYLIB
+>  	select FIXED_PHY
+> 
+> With this change, the broken config is no longer possible, instead
+> forcing BCMGENET to be =m when building for ARCH_BCM2835 with
+> PTP_1588_CLOCK=m.
+> 
+>      Arnd
+> .
+> 
