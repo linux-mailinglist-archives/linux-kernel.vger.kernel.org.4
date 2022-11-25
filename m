@@ -2,163 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F41F6391A2
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 23:53:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 104336391A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 23:55:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbiKYWxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 17:53:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58036 "EHLO
+        id S229850AbiKYWzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 17:55:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbiKYWw6 (ORCPT
+        with ESMTP id S229454AbiKYWzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 17:52:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781313AC3E
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 14:52:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669416720;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SzvRXW76btfy/JOc5ym9c3+SoFVqAx5jbHxLD+PWPus=;
-        b=DijFfRYkbAcuv5UG1A6At11DydSB+c8m6bDlvAueqMFMZpMS51LJrqrfls6Ht7bfL2f3Lm
-        wEiV+bSOJuUpSSCclS+wCwljk+BA7EVicOdc6wTwIwKl2b9TryYu2y7scCvzfgrkOclQ98
-        u7PMfT1Jr5kqUkpz4YOyQm1c0Zz+g9k=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-537-CMzuFlNZO6C7D_bc4tueXA-1; Fri, 25 Nov 2022 17:51:57 -0500
-X-MC-Unique: CMzuFlNZO6C7D_bc4tueXA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A6410101A528;
-        Fri, 25 Nov 2022 22:51:56 +0000 (UTC)
-Received: from [10.22.16.41] (unknown [10.22.16.41])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 18BA39E70;
-        Fri, 25 Nov 2022 22:51:56 +0000 (UTC)
-Message-ID: <991abacd-ba35-f06c-6f25-793d3e45926e@redhat.com>
-Date:   Fri, 25 Nov 2022 17:51:53 -0500
+        Fri, 25 Nov 2022 17:55:17 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45D73C6D7;
+        Fri, 25 Nov 2022 14:55:16 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id bj12so13059086ejb.13;
+        Fri, 25 Nov 2022 14:55:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=r8n7cTPNZg+gBSjW3LwUxqp6QcotcNdrtpswWKit6NQ=;
+        b=QsjwIiL2BKGfbrsY6iWFH3OeV9uUQl+VFQ1BL5HfO86NuuAIbUlAbesa/Pt2nw0oKR
+         BqowAmt0Nlt0PxhYXl8aLfYr0M0V4owkPDTOQuZ2TVG89WfD9LFfEsAB/p2T9sAycinE
+         FsSxJMo8v9MrTnkLZFMoLGEhNCMEXLnhASamLwb4F/tJkKvx0Kmj/8P3bKGjB7R7Ojgu
+         NWt0QGr9f2lnvIBOx6T7qmwQEvKjlaiITm1Bnxkzq81YJXv00hpfbnEhyp5+/OFZCB65
+         MlkO3VS/WOxz3rELIQksXxtJsTf4AI2qSrmXsey3LQPE19A7qp46SXs6JvTM0kDnrC0I
+         XknQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=r8n7cTPNZg+gBSjW3LwUxqp6QcotcNdrtpswWKit6NQ=;
+        b=o/Cu1bSHbK6+NBw7WNVMk+QcaBGJIWK+KxVUjCXJcsdMTS8+lHhpJUuFPMls0ULQ9W
+         v7xFzEPuwYW/pMJw3IH8St+AdjuFruWKhfwS/ai6cb26rvJQNaD4iJqTcDLDWPAJnS0n
+         5HymTwoG/N1dgVNR31YboSnAZZdIdnBKzmpQJiCokPkgbr1OS9BJFtsqc+5pfLvVvy9E
+         qAEGu9sk8ppRQONGn0KlsbZbAhu4i4g34jb+aBHmwkv+nnTHce+OVMkMv47EHqhgf32S
+         /8GPAzn9CtbdWS82RF7nV1QThiRmOx3AYSpNAJEMyHCGpqn0g1ePphM4+/ZXPgO7gMj3
+         uBGg==
+X-Gm-Message-State: ANoB5plOH43tGGjre62jwtVSfBQzKDu5FT7QV3xaDqBAdqEAGE1Fg+KT
+        wd2BmJmxIBGp2VvYawy9OG20l0GFj6u6T37YLWE=
+X-Google-Smtp-Source: AA0mqf7rDupHIfq5Tr1gc/4+5fP9g3XcKelMvrs7nNr+BWKZQ9m5y1L0sEKlG1FfvRuY97ZSi1hyufQKetoBfSLHjQU=
+X-Received: by 2002:a17:906:6bd8:b0:78b:a8d:e76a with SMTP id
+ t24-20020a1709066bd800b0078b0a8de76amr35145152ejs.725.1669416915294; Fri, 25
+ Nov 2022 14:55:15 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH] cgroup/cpuset: Clean up cpuset_task_status_allowed
-Content-Language: en-US
-To:     "haifeng.xu" <haifeng.xu@shopee.com>
-Cc:     lizefan.x@bytedance.com, tj@kernel.org, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221125075133.12718-1-haifeng.xu@shopee.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20221125075133.12718-1-haifeng.xu@shopee.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221125144120.476933-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221125144120.476933-1-krzysztof.kozlowski@linaro.org>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Fri, 25 Nov 2022 23:55:04 +0100
+Message-ID: <CAFBinCCD5pTUre_QpMqW0KY8PLLhgBbaRkx9XSZq-8b5etpRHA@mail.gmail.com>
+Subject: Re: [PATCH] ARM: dts: meson: align LED node names with dtschema
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/25/22 02:51, haifeng.xu wrote:
-> cpuset_task_status_allowed just shows mems_allowed status, so
-> rename it to task_mems_allowed. Moreover, it's only used in
-> proc_pid_status, so move it to fs/proc/array.c. There is no
-> intentional function change.
+On Fri, Nov 25, 2022 at 3:41 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> Signed-off-by: haifeng.xu <haifeng.xu@shopee.com>
-> ---
->   fs/proc/array.c        | 13 +++++++++++--
->   include/linux/cpuset.h |  7 -------
->   kernel/cgroup/cpuset.c |  9 ---------
->   3 files changed, 11 insertions(+), 18 deletions(-)
+> The node names should be generic and DT schema expects certain pattern:
 >
-> diff --git a/fs/proc/array.c b/fs/proc/array.c
-> index 49283b8103c7..e6cdef8387e6 100644
-> --- a/fs/proc/array.c
-> +++ b/fs/proc/array.c
-> @@ -80,7 +80,6 @@
->   #include <linux/file.h>
->   #include <linux/fdtable.h>
->   #include <linux/times.h>
-> -#include <linux/cpuset.h>
->   #include <linux/rcupdate.h>
->   #include <linux/delayacct.h>
->   #include <linux/seq_file.h>
-> @@ -413,6 +412,16 @@ static void task_cpus_allowed(struct seq_file *m, struct task_struct *task)
->   		   cpumask_pr_args(&task->cpus_mask));
->   }
->   
-> +static void task_mems_allowed(struct seq_file *m, struct task_struct *task)
-> +{
-> +#ifdef CONFIG_CPUSETS
-> +	seq_printf(m, "Mems_allowed:\t%*pb\n",
-> +		   nodemask_pr_args(&task->mems_allowed));
-> +	seq_printf(m, "Mems_allowed_list:\t%*pbl\n",
-> +		   nodemask_pr_args(&task->mems_allowed));
-> +#endif
-> +}
-> +
->   static inline void task_core_dumping(struct seq_file *m, struct task_struct *task)
->   {
->   	seq_put_decimal_ull(m, "CoreDumping:\t", !!task->signal->core_state);
-> @@ -449,7 +458,7 @@ int proc_pid_status(struct seq_file *m, struct pid_namespace *ns,
->   	task_cap(m, task);
->   	task_seccomp(m, task);
->   	task_cpus_allowed(m, task);
-> -	cpuset_task_status_allowed(m, task);
-> +	task_mems_allowed(m, task);
->   	task_context_switch_counts(m, task);
->   	return 0;
->   }
-> diff --git a/include/linux/cpuset.h b/include/linux/cpuset.h
-> index d58e0476ee8e..30b91116dd2f 100644
-> --- a/include/linux/cpuset.h
-> +++ b/include/linux/cpuset.h
-> @@ -112,8 +112,6 @@ extern int cpuset_mems_allowed_intersects(const struct task_struct *tsk1,
->   extern int cpuset_memory_pressure_enabled;
->   extern void __cpuset_memory_pressure_bump(void);
->   
-> -extern void cpuset_task_status_allowed(struct seq_file *m,
-> -					struct task_struct *task);
->   extern int proc_cpuset_show(struct seq_file *m, struct pid_namespace *ns,
->   			    struct pid *pid, struct task_struct *tsk);
->   
-> @@ -246,11 +244,6 @@ static inline int cpuset_mems_allowed_intersects(const struct task_struct *tsk1,
->   
->   static inline void cpuset_memory_pressure_bump(void) {}
->   
-> -static inline void cpuset_task_status_allowed(struct seq_file *m,
-> -						struct task_struct *task)
-> -{
-> -}
-> -
->   static inline int cpuset_mem_spread_node(void)
->   {
->   	return 0;
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index 589827ccda8b..5798d4231662 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -4045,12 +4045,3 @@ int proc_cpuset_show(struct seq_file *m, struct pid_namespace *ns,
->   	return retval;
->   }
->   #endif /* CONFIG_PROC_PID_CPUSET */
-> -
-> -/* Display task mems_allowed in /proc/<pid>/status file. */
-> -void cpuset_task_status_allowed(struct seq_file *m, struct task_struct *task)
-> -{
-> -	seq_printf(m, "Mems_allowed:\t%*pb\n",
-> -		   nodemask_pr_args(&task->mems_allowed));
-> -	seq_printf(m, "Mems_allowed_list:\t%*pbl\n",
-> -		   nodemask_pr_args(&task->mems_allowed));
-> -}
-
-It is just a minor cleanup. I think that is OK.
-
-Acked-by: Waiman Long <longman@redhat.com>
-
+>   meson8-minix-neo-x8.dtb: gpio-leds: 'blue' does not match any of the regexes: '(^led-[0-9a-f]$|led)', 'pinctrl-[0-9]+'
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Thank you for this patch! It's:
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
