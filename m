@@ -2,47 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93601638421
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 07:54:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99F84638427
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 07:55:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbiKYGyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 01:54:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56472 "EHLO
+        id S229624AbiKYGz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 01:55:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiKYGyx (ORCPT
+        with ESMTP id S229541AbiKYGzZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 01:54:53 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2CD72B609
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 22:54:51 -0800 (PST)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NJQZd1Nw0zRnvL;
-        Fri, 25 Nov 2022 14:54:17 +0800 (CST)
-Received: from dggpemm500014.china.huawei.com (7.185.36.153) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 25 Nov 2022 14:54:49 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 25 Nov 2022 14:54:49 +0800
-From:   Wupeng Ma <mawupeng1@huawei.com>
-To:     <naoya.horiguchi@nec.com>
-CC:     <linmiaohe@huawei.com>, <akpm@linux-foundation.org>,
-        <pizhenwei@bytedance.com>, <linux-mm@kvack.org>,
-        <mawupeng1@huawei.com>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next 1/1] mm/memory-failure.c: Cleanup in unpoison_memory
-Date:   Fri, 25 Nov 2022 14:54:44 +0800
-Message-ID: <20221125065444.3462681-1-mawupeng1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 25 Nov 2022 01:55:25 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685652C10C
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 22:55:24 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id r26so3056638edc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 22:55:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ur6CY0ehyWvIsSYgBrRBd989RwDC6T3QUcqOKa4M1B4=;
+        b=jNnSsHNcd023P83kMILxiDJDJgirzXk5J8n8FkSm4NyIFaVmXexpO0DEMEkYn4Oedc
+         euDEkry9V94wGcq3+3lQ6Mi2B+iMeAkFXyijmtRixfRM1DB4eAtFMzcxbOYsl6nm+fvX
+         C5HULIDB1sjSdqQ16R3LmA6SplmEqmUPXk2Sc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ur6CY0ehyWvIsSYgBrRBd989RwDC6T3QUcqOKa4M1B4=;
+        b=QeoL/0Q1Z5XBSLOPawxy8YKuNDyeUppRc57Mjy7t/ZlpgK0sPLfgFBq23f4SgHxh5n
+         AuhpvobRcyaVC50+1TcrHHLWdMcO6hMWp684lpm1OhHrhfNGS/CGRWxY94uqbqwECiNI
+         9WkQkaWHPSPQa8tCFSxKQUykA9ks+4oqA3VA6Xqtc8q4zOPfQ1eTQk5aw8bxz/aLsrvu
+         QDJs0WB0UZGC8LDwy9qF590HnkKEv1wWZhtUMcjGgLWPHkQ+sQ03LaWJlLKblhdOilHv
+         4w9chbr6GSKGyyUcD4SiKXJX11RowpFGn+fE/RC5iwiWtRJTGto3fTeUGaACl6B4/8bf
+         EV9g==
+X-Gm-Message-State: ANoB5pnLIvrqm6a4+WxGQdrqStyCS7y3SS9klG3WnqkBeqD4YwyUSVgB
+        VhZKMMsGqTWrcTCCZqm1vonzF+xTA1cJgU1cnZktkQ==
+X-Google-Smtp-Source: AA0mqf4R8vHrUUtgiwRXIkgosxHPQdIJFXKZT/SzNXwg5A6W3v+N2FteQiZNLGKekFOJ/0gOvKS6maAvZvkhLIhd3Co=
+X-Received: by 2002:a05:6402:3895:b0:468:15f1:54b5 with SMTP id
+ fd21-20020a056402389500b0046815f154b5mr15230966edb.8.1669359322947; Thu, 24
+ Nov 2022 22:55:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500014.china.huawei.com (7.185.36.153)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+References: <20221124102056.393220-1-treapking@chromium.org>
+ <20221124102056.393220-8-treapking@chromium.org> <Y39iRg2TZCljOyNN@smile.fi.intel.com>
+In-Reply-To: <Y39iRg2TZCljOyNN@smile.fi.intel.com>
+From:   Pin-yen Lin <treapking@chromium.org>
+Date:   Fri, 25 Nov 2022 14:55:11 +0800
+Message-ID: <CAEXTbpfU1EBD7QYZLeRFk9Kz7+J1wamzaVuwVpa8M9WxWtCe-g@mail.gmail.com>
+Subject: Re: [PATCH v6 7/7] drm/bridge: it6505: Register Type C mode switches
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        dri-devel@lists.freedesktop.org,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
+        linux-acpi@vger.kernel.org, Marek Vasut <marex@denx.de>,
+        Xin Ji <xji@analogixsemi.com>, Lyude Paul <lyude@redhat.com>,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-kernel@vger.kernel.org, Allen Chen <allen.chen@ite.com.tw>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,51 +93,160 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ma Wupeng <mawupeng1@huawei.com>
+Hi Andy,
 
-If freeit it true, the value of ret must be zero, there is no need to
-check the value of freeit after label unlock_mutex.
+Thanks for reviewing the patch.
 
-We can drop variable freeit to do this cleanup.
+On Thu, Nov 24, 2022 at 8:23 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Thu, Nov 24, 2022 at 06:20:56PM +0800, Pin-yen Lin wrote:
+> > Register USB Type-C mode switches when the "mode-switch" property and
+> > relevant port are available in Device Tree. Configure the "lane_swap"
+> > state based on the entered alternate mode for a specific Type-C
+> > connector, which ends up updating the lane swap registers of the it6505
+> > chip.
+>
+> ...
+>
+> >  config DRM_ITE_IT6505
+> >          tristate "ITE IT6505 DisplayPort bridge"
+> >          depends on OF
+> > +     depends on TYPEC || TYPEC=n
+> >       select DRM_DISPLAY_DP_HELPER
+> >       select DRM_DISPLAY_HDCP_HELPER
+> >       select DRM_DISPLAY_HELPER
+>
+> Something went wrong with the indentation. Perhaps you need to fix it first.
+>
+> ...
+>
+> >  #include <drm/drm_edid.h>
+> >  #include <drm/drm_print.h>
+> >  #include <drm/drm_probe_helper.h>
+> > +#include <drm/drm_of.h>
+>
+> Make it ordered?
 
-Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
----
- mm/memory-failure.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+Will fix it in v7.
 
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 2e62940c7bae..c77a9e37e27e 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -2338,7 +2338,6 @@ int unpoison_memory(unsigned long pfn)
- 	struct page *page;
- 	struct page *p;
- 	int ret = -EBUSY;
--	int freeit = 0;
- 	unsigned long count = 1;
- 	bool huge = false;
- 	static DEFINE_RATELIMIT_STATE(unpoison_rs, DEFAULT_RATELIMIT_INTERVAL,
-@@ -2413,10 +2412,9 @@ int unpoison_memory(unsigned long pfn)
- 				goto unlock_mutex;
- 			}
- 		}
--		freeit = !!TestClearPageHWPoison(p);
- 
- 		put_page(page);
--		if (freeit) {
-+		if (TestClearPageHWPoison(p)) {
- 			put_page(page);
- 			ret = 0;
- 		}
-@@ -2424,7 +2422,7 @@ int unpoison_memory(unsigned long pfn)
- 
- unlock_mutex:
- 	mutex_unlock(&mf_mutex);
--	if (!ret || freeit) {
-+	if (!ret) {
- 		if (!huge)
- 			num_poisoned_pages_sub(pfn, 1);
- 		unpoison_pr_info("Unpoison: Software-unpoisoned page %#lx\n",
--- 
-2.25.1
+>
+> ...
+>
+> > +struct it6505_port_data {
+>
+> > +     bool dp_connected;
+>
+> Perhaps make it last?
 
+Will fix it in v7.
+
+>
+> > +     struct typec_mux_dev *typec_mux;
+> > +     struct it6505 *it6505;
+> > +};
+>
+> ...
+>
+> > +static void it6505_typec_ports_update(struct it6505 *it6505)
+> > +{
+> > +     usleep_range(3000, 4000);
+> > +
+> > +     if (it6505->typec_ports[0].dp_connected && it6505->typec_ports[1].dp_connected)
+> > +             /* Both ports available, do nothing to retain the current one. */
+> > +             return;
+> > +     else if (it6505->typec_ports[0].dp_connected)
+> > +             it6505->lane_swap = false;
+> > +     else if (it6505->typec_ports[1].dp_connected)
+> > +             it6505->lane_swap = true;
+> > +
+> > +     usleep_range(3000, 4000);
+> > +}
+>
+> As per previous patch comments.
+
+Will update it in v7.
+
+>
+> Also, comment out these long sleeps. Why they are needed.
+
+Actually, it turns out that these sleeps are not needed. I'll remove it in v7.
+
+>
+> ...
+>
+> > +             int ret = pm_runtime_get_sync(dev);
+> > +
+> > +             /*
+> > +              * On system resume, mux_set can be triggered before
+> > +              * pm_runtime_force_resume re-enables runtime power management.
+>
+> We refer to the functions as func().
+
+Will fix this in v7.
+
+>
+> > +              * Handling the error here to make sure the bridge is powered on.
+> > +              */
+> > +             if (ret < 0)
+> > +                     it6505_poweron(it6505);
+>
+> This seems needed a bit more of explanation, esp. why you leave PM runtime
+> reference count bumped up.
+
+pm_runtime_force_suspend() disables runtime PM when the device enters
+suspend, and sometime it6505_typec_mux_set() is called before
+pm_runtime_force_resume brings runtime PM back. We force power up the
+bridge in this case and leave the ref count incremented to make the
+future pm_runtime_(get|put)_sync() calls balanced.
+
+I'll include more explanations around this in v7.
+
+>
+> ...
+>
+> > +     num_lanes = drm_of_get_data_lanes_count(node, 0, 2);
+> > +     if (num_lanes <= 0) {
+> > +             dev_err(dev, "Error on getting data lanes count: %d\n",
+> > +                     num_lanes);
+> > +             return num_lanes;
+> > +     }
+> > +
+> > +     ret = of_property_read_u32_array(node, "data-lanes", dp_lanes, num_lanes);
+> > +     if (ret) {
+> > +             dev_err(dev, "Failed to read the data-lanes variable: %d\n",
+> > +                     ret);
+> > +             return ret;
+> > +     }
+> > +
+> > +     for (i = 0; i < num_lanes; i++) {
+> > +             if (port_num != -1 && port_num != dp_lanes[i] / 2) {
+> > +                     dev_err(dev, "Invalid data lane numbers\n");
+> > +                     return -EINVAL;
+> > +             }
+>
+> As per previous patch comments.
+
+I'll remove this part in v7 and try to figure out how to do similar
+checking with schemas.
+>
+> > +             port_num = dp_lanes[i] / 2;
+> > +     }
+>
+> The above seems like tons of duplicating code that drivers need to implement.
+> Can we shrink that burden by adding some library functions?
+
+Could you advise where this lib file should go, and what the namings
+can be? The "port-switching" logic is specific to some of the DP
+bridges, and I'm not sure what kinds of naming/structure fit into this
+case.
+
+Thanks and regards,
+Pin-yen
+
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
