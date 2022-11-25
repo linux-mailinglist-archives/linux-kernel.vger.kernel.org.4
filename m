@@ -2,204 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DAC06385CA
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 10:01:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54943638785
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 11:29:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiKYJBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 04:01:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47130 "EHLO
+        id S229817AbiKYK3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 05:29:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiKYJBm (ORCPT
+        with ESMTP id S229563AbiKYK3d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 04:01:42 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADA531FAC
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 01:01:40 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 6098721AAD;
-        Fri, 25 Nov 2022 09:01:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1669366899; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8KBBxMgrMdqbWWjnCjbmhEDCO2E0mxKk+X1L9Pdof78=;
-        b=dDZkK6MFpqk1iBum5NBrbZ8A+c/Y8y0RFsUbfTWAdOe7B6e5/JBlEwck7nch1LSNtVKYAb
-        pOhfamKHZIbCRL6ZReq88DII4qRDFFfKCLwmb1bf9qohbvWiCDJfLTBJTSn5ltMFVd0tfw
-        Pzqh/KaIguLNwVaoYgHWEB6E2T2Oql4=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 2C4302C141;
-        Fri, 25 Nov 2022 09:01:39 +0000 (UTC)
-Date:   Fri, 25 Nov 2022 10:01:35 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH printk v2 6/7] printk: Use an output buffer descriptor
- struct for emit
-Message-ID: <Y4CEb7a57PpFpDni@alley>
-References: <20221123231400.614679-1-john.ogness@linutronix.de>
- <20221123231400.614679-7-john.ogness@linutronix.de>
- <Y3+xK7hHmUIlzq9w@alley>
- <87o7swkqar.fsf@jogness.linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87o7swkqar.fsf@jogness.linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 25 Nov 2022 05:29:33 -0500
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D6A1F606
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 02:29:30 -0800 (PST)
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20221125102925epoutp046604d171ef9f908aa2553806a552691d~qzSPMlvAt1930519305epoutp04r
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 10:29:25 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20221125102925epoutp046604d171ef9f908aa2553806a552691d~qzSPMlvAt1930519305epoutp04r
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1669372165;
+        bh=e22VHG7Ev48w/+fcrRlFL+uyDahpGUOfBXkdzCxPlaA=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=liKlPjjgM2S78XIGRjdX2rXnKxPrdNIaSbmw84Wo99ZE0vuEdWHf8O7e5+Fd68s2P
+         0d/1KPaxFLQF1X/q5Sby8nfHOIQiHwIxzo6yo3/J24Ye0OoH+bUcRrKyN9IwJgRYQK
+         /pSBoapqZSpabpYbDgp2w3YoTJClq+FK7elishD0=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20221125102925epcas5p4577e17e5146fb2f1bf1e4fb0130a5809~qzSO2MSG10873108731epcas5p4i;
+        Fri, 25 Nov 2022 10:29:25 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.182]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4NJWLq43WMz4x9Pv; Fri, 25 Nov
+        2022 10:29:23 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        45.F9.39477.30990836; Fri, 25 Nov 2022 19:29:23 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20221125070706epcas5p4a0a136ac916f69381817197c88ad9ad8~qwhlcWL-G2013820138epcas5p4F;
+        Fri, 25 Nov 2022 07:07:06 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20221125070706epsmtrp1363db4adf8ae6ee9c336b9699ceb2ab7~qwhlbmr0r1701217012epsmtrp1X;
+        Fri, 25 Nov 2022 07:07:06 +0000 (GMT)
+X-AuditID: b6c32a4a-259fb70000019a35-c0-63809903d3d5
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E4.3B.18644.99960836; Fri, 25 Nov 2022 16:07:05 +0900 (KST)
+Received: from cheetah.sa.corp.samsungelectronics.net (unknown
+        [107.109.115.53]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20221125070704epsmtip138a9f757291c41ddc50daca087234dac~qwhkKLuV50174001740epsmtip13;
+        Fri, 25 Nov 2022 07:07:04 +0000 (GMT)
+From:   Sriranjani P <sriranjani.p@samsung.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee@kernel.org, devicetree@vger.kernel.org,
+        alim.akhtar@samsung.com, pankaj.dubey@samsung.com,
+        ravi.patel@samsung.com
+Cc:     linux-kernel@vger.kernel.org,
+        Sriranjani P <sriranjani.p@samsung.com>
+Subject: [PATCH v2 0/2] arm64: dts: Add SYSREG nodes for FSD SoC
+Date:   Fri, 25 Nov 2022 12:36:55 +0530
+Message-Id: <20221125070657.28335-1-sriranjani.p@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrBKsWRmVeSWpSXmKPExsWy7bCmui7zzIZkgyt3JC0ezNvGZjH/yDlW
+        i74XD5ktdrQtZLG4vGsOm8WirV/YLR5+2MNu0br3CLvF7TfrWB04PTat6mTzuHNtD5tH35ZV
+        jB6fN8kFsERl22SkJqakFimk5iXnp2TmpdsqeQfHO8ebmhkY6hpaWpgrKeQl5qbaKrn4BOi6
+        ZeYA3aKkUJaYUwoUCkgsLlbSt7Mpyi8tSVXIyC8usVVKLUjJKTAp0CtOzC0uzUvXy0stsTI0
+        MDAyBSpMyM7Y8OEwY8FRjoolB9YyNzC+Y+ti5OCQEDCROHZKvYuRi0NIYDejRMflLcwQzidG
+        idl/WlggnM+MEm+X3GbtYuQE61g0o5kRIrGLUeLh0m3sEE4rk0TT2cvMIFVsAroSrdc+M4Ek
+        RAS2MEqsPL+TCSTBLOApceDKczBbWMBB4veel+wgNouAqsTLc1eYQY7iFbCVaPqfCbFNXmL1
+        hgNgN0kI7GKXODl3JQtEwkVi2pkT7BC2sMSr41ugbCmJl/1tUHa6xOYjm6HOzpHoaGpmhrDt
+        gW6YwwKyi1lAU2L9Ln2IsKzE1FProM7kk+j9/YQJIs4rsWMejK0msfhRJ5QtI7H20Seo8R4S
+        +xq+gZ0mJBArcfRIL9sERtlZCBsWMDKuYpRMLSjOTU8tNi0wyksth0dUcn7uJkZwEtPy2sH4
+        8MEHvUOMTByMhxglOJiVRHhF7BqShXhTEiurUovy44tKc1KLDzGaAoNsIrOUaHI+MI3mlcQb
+        mlgamJiZmZlYGpsZKonzLp6hlSwkkJ5YkpqdmlqQWgTTx8TBKdXAFHE6f40rQ4VrwKuvEuWN
+        6uw/DvT7Waz32qVeF7SEp+mTFp/ljG0PooXlvZ42Ok174m9S4JB/uDBLr/3FsoriCvGb0j8y
+        Ao4oPWQtv1f8PyHSsX0G++kMcWur6QXaCc/v1jDZ63NazV7ymPf+RJlH6n6TLlfE171hcuTg
+        iWbj81Lmc1ukk2Uiaz7Z4bPY07sXl50Ncz1Yrf4oZc0DYU7TokPCKb+89zZdcxR7w+KsIvNv
+        pT3vBLEJxbEbzueUzz7vOrtzymarPCUGfanrGXwTq76uC7i5gEnpgYe+iF+hS1+Fzfuz1V7T
+        cw0WPDJ4tuX1YrPI3c6/hc9Fsz3/MzNx7c2WjP+Kcb0xGuvWvlRiKc5INNRiLipOBABrR4r9
+        6wMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpmluLIzCtJLcpLzFFi42LZdlhJTndmZkOywYM7NhYP5m1js5h/5Byr
+        Rd+Lh8wWO9oWslhc3jWHzWLR1i/sFg8/7GG3aN17hN3i9pt1rA6cHptWdbJ53Lm2h82jb8sq
+        Ro/Pm+QCWKK4bFJSczLLUov07RK4MjZ8OMxYcJSjYsmBtcwNjO/Yuhg5OSQETCQWzWhm7GLk
+        4hAS2MEo8azvAhNEQkbi5IMlzBC2sMTKf8/ZIYqamSRaL4B0cHKwCehKtF77zASSEBHYwyjx
+        bvoJ1i5GDg5mAW+JKb/VQGqEBRwkfu95yQ5iswioSrw8d4UZpIRXwFai6X8mxHx5idUbDjBP
+        YORZwMiwilEytaA4Nz232LDAKC+1XK84Mbe4NC9dLzk/dxMjOJy0tHYw7ln1Qe8QIxMH4yFG
+        CQ5mJRFeEbuGZCHelMTKqtSi/Pii0pzU4kOM0hwsSuK8F7pOxgsJpCeWpGanphakFsFkmTg4
+        pRqYmM0LOHt3zVhsP/m+XXNj0VyNoK2zbzY8NA2uMIpy3H+i6vzj+OgzDAJnI/vEQsTYnGPO
+        PL67vNtQ7vEfLW3nF1e1w7qmi6y2T5giVVy02eHkkdbACQYC+jyHY8QDJRtPPGt5GMJodSHh
+        xPVt0i5Zryzkkhcv9o06x2kgsibU/UEYxyINXYUbH37xP5jD9f7K0zu95jdXszR3H7frKmDJ
+        klm1amNDc9Luyf2KR1u1zzGwa2YHnn7YqvS05tShyVdfGN/quXYueBJTdVL/fb2ueUandJ9s
+        3bXq+4F5m1u//zzxpDpv7+uHDyXnCd/Zdnynie7Oq4FvXB92lejtv+O+p+/u3H1BGfI/j9tO
+        2FvDocRSnJFoqMVcVJwIAO4AsAiWAgAA
+X-CMS-MailID: 20221125070706epcas5p4a0a136ac916f69381817197c88ad9ad8
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20221125070706epcas5p4a0a136ac916f69381817197c88ad9ad8
+References: <CGME20221125070706epcas5p4a0a136ac916f69381817197c88ad9ad8@epcas5p4.samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2022-11-24 22:21:08, John Ogness wrote:
-> On 2022-11-24, Petr Mladek <pmladek@suse.com> wrote:
-> > I wish, this change was done in two patches. 1st introducing and
-> > using struct console_message. 2nd moving the code into separate
-> > console_get_next_message().
-> 
-> OK.
-> 
-> >> +	if (cmsg->is_extmsg) {
-> >> +		write_text = &cbufs->ext_text[0];
-> >> +		write_text_size = sizeof(cbufs->ext_text);
-> >> +		len = info_print_ext_header(write_text, write_text_size, r.info);
-> >> +		len += msg_print_ext_body(write_text + len, write_text_size - len,
-> >> +					  &r.text_buf[0], r.info->text_len, &r.info->dev_info);
-> >> +	} else {
-> >> +		write_text = &cbufs->text[0];
-> >> +		len = record_print_text(&r, console_msg_format & MSG_FORMAT_SYSLOG, printk_time);
-> >> +	}
-> >> +
-> >> +	cmsg->outbuf = write_text;
-> >> +	cmsg->outbuf_len = len;
-> >
-> > Please, remove "write_text" variable and use cmsg->outbuf directly.
-> > It would safe one mental transition of buffer names:
-> >
-> >    cbufs->text -> write_text -> cmsg->outbuf
-> >
-> > vs.
-> >
-> >    cbufs->text -> cmsg->outbuf
-> 
-> I originally had the non-extended case without @write_text. I felt like
-> it was harder to follow what actually got set. Really the main objective
-> of the function is to set @outbuf and @outbuf_len. I felt like moving
-> that outside of the if/else block made it clearer what is going on. But
-> I can go back to having each if/else branch set those fields in their
-> own way.
+FSD has few system controller register blocks. This patch series intends to
+add support of device node for system controller registers group that
+resides in PERIC, FSYS0 and FSYS1 blocks of FSD SoC. As these will be used
+by PCIE and EQoS module. Patches for adding support for PCIE and EQoS are
+already under review at [1] and [2].
 
-I am not sure if we are talking about the same thing. My idea was to do:
+Also this patch series add required DT bindings for such system controller
+of FSD SoC.
 
-	if (cmsg->is_extmsg) {
-		cmsg->outbuf = &cbufs->ext_text[0];
-		outbuf_size = sizeof(cbufs->ext_text);
-		len = info_print_ext_header(cmsg->outbuf, outbuf_size, r.info);
-		len += msg_print_ext_body(cmsg->outbuf + len, outbuf_size - len,
-				  &r.text_buf[0], r.info->text_len, &r.info->dev_info);
-	} else {
-		cmsg->outbuf = &cbufs->text[0];
-		/* &r points to &cbufs->text[0], changes are done inline */
-		len = record_print_text(&r, console_msg_format & MSG_FORMAT_SYSLOG, printk_time);
-	}
+[1]: https://lkml.org/lkml/2022/11/21/463
+[2]: https://lkml.org/lkml/2022/11/4/420
 
-> > PS: Please, wait a bit with updating the patches. I have got yet
-> >     another idea when seeing the code around dropped messages.
-> >     But I have to sleep over it.
-> 
-> Don't worry. I always wait until you finish the full review before
-> touching anything. ;-)
-> 
-> >     My concern is that the message about dropped messages need not
-> >     fit into the smaller "cbufs->text" buffer. It might be better
-> >     to put it into the bigger one.
-> 
-> This series _does_ put the dropped messages in the bigger one.
+Changes since v1:
+1. Fixed SoB in [PATCH 1/2] dt-bindings: mfd: syscon: Add tesla compatibles
+found on FSD SoC.
+2. Address review comments from Krzysztof on [PATCH 2/2] and aligned sysreg
+node near to respective blocks sorted in order of unit address.
 
-Ah, I have overlooked this. It might actually be a motivation to avoid
-all these shuffles and really use:
+Sriranjani P (2):
+  dt-bindings: mfd: syscon: Add tesla compatibles found on FSD SoC
+  arm64: dts: fsd: add sysreg device node
 
-	struct console_buffers {
-		char	outbuf[CONSOLE_EXT_LOG_MAX];
-		char	readbuf[CONSOLE_LOG_MAX];
-	};
-> >
-> >      Normal consoles would use only @outbuf. Only the extended console
-> >      would need the @readbuf to read the messages before they are
-> >      formatted.
-> 
-> The "problem" with this idea is that record_print_text() creates the
-> normal output in-place within the readbuf. So for normal messages with
-> no dropped messages, we still end up writing out the readbuf.
+ Documentation/devicetree/bindings/mfd/syscon.yaml |  1 +
+ arch/arm64/boot/dts/tesla/fsd.dtsi                | 15 +++++++++++++++
+ 2 files changed, 16 insertions(+)
 
-We handle this this in console_get_next_message() by reading the
-messages into the right buffer:
+-- 
+2.17.1
 
-	boot is_extcon = console_srcu_read_flags(con) & CON_EXTENDED;
-
-	/*
-	 * Normal consoles might read the message into the outbuf directly.
-	 * Console headers are added inplace.
-	 */
-	if (is_extcon)
-		prb_rec_init_rd(&r, &info, &cbufs->readbuf[0], sizeof(cbufs->readbuf));
-	else
-		prb_rec_init_rd(&r, &info, &cbufs->outbuf[0], sizeof(cbufs->outbuf));
-
-	if (!prb_read_valid(prb, con->seq, &r))
-		return false;
-
-	...
-
-
-	if (is_extcon) {
-		len = info_print_ext_header(cbufs->outbuf, sizeof(cbufs->outbuf, r.info);
-		len += msg_print_ext_body(cbufs->outbuf + len, sizeof(cbufs->outbuf) - len,
-				  &r.text_buf[0], r.info->text_len, &r.info->dev_info);
-	} else {
-		len = record_print_text(&r, console_msg_format & MSG_FORMAT_SYSLOG, printk_time);
-	}
-
-
-
-> >      I guess that struct console_message won't be needed then at all.
-> 
-> Since we sometimes output the in-place readbuf and sometimes a newly
-> written buffer, it is nice that console_message can abstract that out.
-> 
-> Also, right now @is_extmsg is the only input variable. For thread/atomic
-> consoles, the input variables @seq and @dropped will be added.
-> console_message will then have its own copy of all the information
-> needed to let itself get filled and console_get_next_message() will no
-> longer require the console as an argument.
-> 
-> This is important for the thread/atomic consoles because it removes all
-> locking constraints from console_get_next_message(). For _this_ series,
-> console_get_next_message() still requires holding the console_lock
-> because it is accessing con->seq and con->dropped.
-> 
-> I could have added @seq and @dropped to console_message for this series,
-> but for the legacy consoles it looks like a lot of unnecessary
-> copying. Only with the thread/atomic consoles does the benefit become
-> obvious.
-
-I could imagine adding these metadata into the struct console_buffers.
-Or we could call it struct console_messages from the beginning.
-
-We could even completely move con->seq, con->dropped into this new
-structure. It would safe even more copies.
-
-IMHO, the less structures and the less copying the better.
-Especially when the values have different name in each structure
-that makes it even more complicated.
-
-Best Regards,
-Petr
