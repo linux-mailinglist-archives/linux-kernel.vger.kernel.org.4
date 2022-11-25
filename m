@@ -2,138 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 101FD638760
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 11:22:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF33C638777
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 11:24:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbiKYKWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 05:22:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48528 "EHLO
+        id S230192AbiKYKYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 05:24:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbiKYKWg (ORCPT
+        with ESMTP id S230214AbiKYKY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 05:22:36 -0500
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31019BCB0
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 02:22:32 -0800 (PST)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-14286d5ebc3so4673543fac.3
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 02:22:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dFk4/TyXFVH4omq0MKPCZJW7VRN5MWFd1VLeZHQ4myQ=;
-        b=O13X7eQnbmmZ5OZqc1v+Nq5wiHmRFlOakztg4v4kVKzbkp9A2YhxSxn700wHfwQgHj
-         jtL4ZvMsa4P4eCx3kHERQVZdyN5zMzG56fIXBLxVYZQ4xAUnftJ8E2hMwey7QHEHYTBy
-         wp9WzqOq0Gq/2vaXu/AjhjkkuOFzNZ1N/QzaxJ4OEbwT0srBV76yrEy8VyGdoNUgoBlZ
-         UAj99FE9mas+xMxsdohu26gc/ZjZ2KrH/RfUmuZznSQM71QlIJCwRGw9Cc54yyF3L140
-         9OyC6ojt8/4ZJ28HRhAXVPwy3kxFwYw3Sp6rS36NcIB8kLmQbASBByv40OmbsOI0KC6F
-         AfVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dFk4/TyXFVH4omq0MKPCZJW7VRN5MWFd1VLeZHQ4myQ=;
-        b=ckHD2NTt7A4nEtDVdr49sGARoKHqKfaDhvt7aaax1nALFmk2IfbWh2Lx7LJMACoedU
-         VqHsx3De+RK44+FbjeJW8AifBiPzbynO6h6Y0iCD+BXOIgu1uhTUv46bBuyFBtYKfaih
-         c0zokTYa7MahfxbF5AV99ZxynURJ98FRlAFP/UdtZbb/COUNSugzE9WD+utKmEkTL4H1
-         TAvMx6cVu/Gqv29ejE5lG997y0PXBKG8NmTBJZE5qUJEPdBorT2l2RZdyxpuKQhV1TwF
-         eWOIPOHybyN5mJxW44HIreVGPGMA1rL0R0MzIc76xWfPHkDg9nmwDpdN6I3HOmvvWSh3
-         2hhw==
-X-Gm-Message-State: ANoB5pmBpnkNucwcgsJ6cbmXZNHwrcLwtAWQjt/qTLNWj41tGDQ+od29
-        qN1Z35rIs5l4CJS8qO74uoGjJLlSMbMaDMssvZ/2Lw==
-X-Google-Smtp-Source: AA0mqf4iZUnbBKSrM1flPegAiAXqzZPEmIYY3e6KEyG/6IvzCjm2R7eG2INLEOUcWbubEOlM2BPZ3p+zihoAbed/kJI=
-X-Received: by 2002:a05:6870:b689:b0:13c:7d1c:5108 with SMTP id
- cy9-20020a056870b68900b0013c7d1c5108mr11030408oab.282.1669371751235; Fri, 25
- Nov 2022 02:22:31 -0800 (PST)
+        Fri, 25 Nov 2022 05:24:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74FB045EC1;
+        Fri, 25 Nov 2022 02:24:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F2C262354;
+        Fri, 25 Nov 2022 10:24:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D75A7C433D6;
+        Fri, 25 Nov 2022 10:24:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669371854;
+        bh=UZVGoBnwbqgX7QHkA+XxraCebfb9ih7yV/82oceIMgI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kAbBEKzxQW3BJZfTG3aYOohUWiAEpSVowGD+CqfEjT8iYkTbMJEAsEKTliV/+bqc1
+         xxb9OJelnz/cJhh3L0D5Uz8EKycRJhlfH6T1vn2tOHn+YRcBMhlWIvc4ADNjpPpFW/
+         gGCnr/UkoQ6/V7bjzt17DnpvC1acTDhrsqhX4sftEnHDIe19vcxaQQ1KRnQZz/FvWl
+         4M/h/My7xpHg3YWA6UKLx+ISzvzs5uWGi0/O7FpL/Te4XIMIy0S/Zb0Q7KWzmTm0Kv
+         /Uo9y+M9o27zetPCwtL1sNeJrwIQXRvzrEzrBx+FFAcSfyB4Cmz5vG7GZUgps4CTAF
+         mnC9lixd0c2uA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oyVs6-0002aK-Av; Fri, 25 Nov 2022 11:23:50 +0100
+Date:   Fri, 25 Nov 2022 11:23:50 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Luca Weiss <luca.weiss@fairphone.com>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 2/3] phy: qcom-qmp-combo: Add config for SM6350
+Message-ID: <Y4CXtn/o3aNvBNh5@hovoldconsulting.com>
+References: <20221125092749.46073-1-luca.weiss@fairphone.com>
+ <20221125092749.46073-2-luca.weiss@fairphone.com>
+ <Y4CSYZE+3fZCV4Z3@hovoldconsulting.com>
+ <COLAQH772WXW.P442ICY46TDR@otso>
 MIME-Version: 1.0
-References: <000000000000706e6f05edfb4ce0@google.com> <Y3uULqIZ31at0aIX@hog>
- <20221121171513.GB704954@gauss3.secunet.de> <Y3vwpcJcUgqn22Fw@hog> <20221122062657.GE704954@gauss3.secunet.de>
-In-Reply-To: <20221122062657.GE704954@gauss3.secunet.de>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Fri, 25 Nov 2022 11:22:20 +0100
-Message-ID: <CACT4Y+b4xCFFjNKQ51q_JsvbkVNFpG3YBnK4iarcD+u0-Nsobg@mail.gmail.com>
-Subject: Re: [syzbot] linux-next test error: general protection fault in xfrm_policy_lookup_bytype
-To:     Steffen Klassert <steffen.klassert@secunet.com>
-Cc:     Sabrina Dubroca <sd@queasysnail.net>,
-        syzbot <syzbot+bfb2bee01b9c01fff864@syzkaller.appspotmail.com>,
-        davem@davemloft.net, edumazet@google.com,
-        herbert@gondor.apana.org.au, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <COLAQH772WXW.P442ICY46TDR@otso>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Nov 2022 at 07:27, Steffen Klassert
-<steffen.klassert@secunet.com> wrote:
->
-> On Mon, Nov 21, 2022 at 10:41:57PM +0100, Sabrina Dubroca wrote:
-> > 2022-11-21, 18:15:13 +0100, Steffen Klassert wrote:
-> > > On Mon, Nov 21, 2022 at 04:07:26PM +0100, Sabrina Dubroca wrote:
-> > > > 2022-11-21, 05:47:38 -0800, syzbot wrote:
-> > > > > Hello,
-> > > > >
-> > > > > syzbot found the following issue on:
-> > > > >
-> > > > > HEAD commit:    e4cd8d3ff7f9 Add linux-next specific files for 20221121
-> > > > > git tree:       linux-next
-> > > > > console output: https://syzkaller.appspot.com/x/log.txt?x=1472370d880000
-> > > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=a0ebedc6917bacc1
-> > > > > dashboard link: https://syzkaller.appspot.com/bug?extid=bfb2bee01b9c01fff864
-> > > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > > >
-> > > > > Downloadable assets:
-> > > > > disk image: https://storage.googleapis.com/syzbot-assets/b59eb967701d/disk-e4cd8d3f.raw.xz
-> > > > > vmlinux: https://storage.googleapis.com/syzbot-assets/37a7b43e6e84/vmlinux-e4cd8d3f.xz
-> > > > > kernel image: https://storage.googleapis.com/syzbot-assets/ebfb0438e6a2/bzImage-e4cd8d3f.xz
-> > > > >
-> > > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > > > Reported-by: syzbot+bfb2bee01b9c01fff864@syzkaller.appspotmail.com
-> > > > >
-> > > > > general protection fault, probably for non-canonical address 0xdffffc0000000019: 0000 [#1] PREEMPT SMP KASAN
-> > > > > KASAN: null-ptr-deref in range [0x00000000000000c8-0x00000000000000cf]
-> > > > > CPU: 0 PID: 5295 Comm: kworker/0:3 Not tainted 6.1.0-rc5-next-20221121-syzkaller #0
-> > > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-> > > > > Workqueue: ipv6_addrconf addrconf_dad_work
-> > > > > RIP: 0010:xfrm_policy_lookup_bytype.cold+0x1c/0x54 net/xfrm/xfrm_policy.c:2139
-> > > >
-> > > > That's the printk at the end of the function, when
-> > > > xfrm_policy_lookup_bytype returns NULL. It seems to have snuck into
-> > > > commit c39f95aaf6d1 ("xfrm: Fix oops in __xfrm_state_delete()"), we
-> > > > can just remove it:
-> > > >
-> > > > diff --git a/net/xfrm/xfrm_policy.c b/net/xfrm/xfrm_policy.c
-> > > > index 3a203c59a11b..e392d8d05e0c 100644
-> > > > --- a/net/xfrm/xfrm_policy.c
-> > > > +++ b/net/xfrm/xfrm_policy.c
-> > > > @@ -2135,9 +2135,6 @@ static struct xfrm_policy *xfrm_policy_lookup_bytype(struct net *net, u8 type,
-> > > >  fail:
-> > > >   rcu_read_unlock();
-> > > >
-> > > > - if (!IS_ERR(ret))
-> > > > -         printk("xfrm_policy_lookup_bytype: policy if_id %d, wanted if_id  %d\n", ret->if_id, if_id);
-> > > > -
-> > > >   return ret;
-> > >
-> > > Hm, this was not in the original patch. Maybe my tree was not
-> > > clean when I applied it. Do you want to send a patch, or should
-> > > I just remove it?
+On Fri, Nov 25, 2022 at 11:14:53AM +0100, Luca Weiss wrote:
+> Hi Johan,
+> 
+> On Fri Nov 25, 2022 at 11:01 AM CET, Johan Hovold wrote:
+> > On Fri, Nov 25, 2022 at 10:27:48AM +0100, Luca Weiss wrote:
+> > > Add the tables and config for the combo phy found on SM6350.
+> > > 
+> > > Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> > > ---
+> > > @Johan Hovold, here I've added dp_txa & dp_txb, I believe otherwise
+> > > qmp->dp_tx would be wrong. Is this different on sc8280xp or was this a
+> > > mistake on your side? I think this should probably be split out to
+> > > another patch to not mix things up too much.
 > >
-> > Go ahead, I guess it's more convenient for you.
->
-> I just did a forced push to remove that hunk.
+> > Yeah, that's a difference in sc8280xp which does not have dedicated TX
+> > registers for DP.
+> 
+> Good to know.
+> 
+> >
+> > This is probably best handled explicitly when parsing the DT by using
+> > dp_txa/b if they are set and otherwise fallback to txa/txb (e.g.
+> > instead of hiding it in the v5 table by using the same offset in two
+> > places).
+> 
+> Are you thinking about something like this?
+> 
+> if (offs->dp_txa)
+>     qmp->dp_tx = base + offs->dp_txa
+> else
+>     qmp->dp_tx = base + offs->txa;
+> 
+> if (offs->dp_txb)
+>     qmp->dp_tx2 = base + offs->dp_txb;
+> else
+>     qmp->dp_tx2 = base + offs->txb;
+> 
+> This wouldn't handle ".dp_txa = 0x0000" but I don't think this should be
+> a problem, right?
 
-Let's tell syzbot about the fix, so that it reports similarly looking
-crashes in future:
+Yeah, that should be fine. I'd even merge the branches:
 
-#syz fix: xfrm: Fix oops in __xfrm_state_delete()
+	if (offs->dp_txa) {
+		qmp->dp_tx = base + offs->dp_txa;
+		qmp->dp_tx2 = base + offs->dp_txb;
+	} else {
+		qmp->dp_tx = base + offs->txa;
+		qmp->dp_tx2 = base + offs->txb;
+	}
+
+Johan
