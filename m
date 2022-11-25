@@ -2,155 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C06C4638B86
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 14:47:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAB50638B88
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 14:47:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbiKYNrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 08:47:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44412 "EHLO
+        id S229849AbiKYNrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 08:47:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbiKYNrb (ORCPT
+        with ESMTP id S229564AbiKYNrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 08:47:31 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5671DD7F;
-        Fri, 25 Nov 2022 05:47:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669384049; x=1700920049;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=ciPA93NZvx8QoHd2lw74Ax7rd/eVNIC+4jhl5kXJHok=;
-  b=r6d/LN5hyscehySz0eGIep1q/xMSpck/caB+yXHq9lFvGxTs1JrgCINs
-   4wlqiz4k3V/CdMQ//1aBvTwm6bA8p5513zfO0AfV2H1NxpYNDey61AhpT
-   U6ppKNQmi4yNOyK+1/ipUWoLEKW54jxO9pjyCYFayNEz7q+sKTDO7aew9
-   TAK+LMMU8w7lWeUhUFdFCLSltBjf4kQEW8BxkJLJXc4bsmHkPDKp7xWo2
-   61MtQ0I/fk8t11OA/4SuuB1W/5pEyyoV0wWt0wQyyz7bjUXAP8yBu9d0V
-   79evkQ2Yg4JjFhWXSNp9Hf1fZzH0JgjLsJrfVL6JFEXXWXyeS6JebdPSn
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.96,193,1665471600"; 
-   d="scan'208";a="190545439"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Nov 2022 06:47:29 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Fri, 25 Nov 2022 06:47:28 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12 via Frontend Transport; Fri, 25 Nov 2022 06:47:28 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hLDePDxre7p//uR+gYLRPse3kFY1V15kHHeD3kra5c48ZXSuZVe+oYQ1L1RNeUU+37WFdP/5n+xMTHwOtWearhl0J7vvwDjuJhDurjYbL8TTF60Ys89rrHaTNfZGO+AkL/Q6mQJP7enX42HK8ONg7O3NukGMXxWDqyVZi0X72IMX2bepuibyqbR+M2buG4AyB+gkm/QLdEisP2ZDrWljsvpE2KtHjtaY7RPDrh+UP1h9Q9eTS3ZE6pqu+qwOS/Oz5zXYS9eqFS8ZJkSM9+UP3QWTQ4HUqm8FkqBgaYYGHt/+me7qBeEJ3Wo/1XvdvEgLZQjAHOD1daHmnWipL76dNg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ciPA93NZvx8QoHd2lw74Ax7rd/eVNIC+4jhl5kXJHok=;
- b=KhDbRcsjYCUP/X0nJSlo+j0aStLzVK2qF5VpU15wHJG9HlhFb2/eutBmo1eQM3Iu0n3ZBHcFjaIR0Haa0TWWUexVcIcIt77ak9xAAaNjHnEpchnYycW/nyzbltA04gHF+injGSIUpRx7b1CMXNDWDWD/G6XqzaIED8pM+r4Zt1hwpxG1sUb0tF1C54adqrVK7mpCV6weAlW1Klzo1tOLD2BbMLWDY7rMA+r5xrVSjEwPko2XGuxOOxB2HhyexlqmmX+7DJDSiCqM/yfWRZ8PhHJ38WFo53s0rQSOSlrholKaQE20iUVq30i7X5CbRqgD81w52KsfOY3IsD4DCSwS0Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ciPA93NZvx8QoHd2lw74Ax7rd/eVNIC+4jhl5kXJHok=;
- b=gfYNG0FQv7A8wMtpMwyGPQqS6ANNC4kmKc6CDkWy0oyNtY3lEH2tNwjY+24PlsYp2L1PPuxHSdFRyTwJMHDHNutnLAo2MI0bPVcg0/zL7XwMQLHhboQ++kB6DnUg3tmez7pXpj9h8l8Q9XgZ1kTAk7zfjJbsy7CyzZC44yPphg0=
-Received: from BN6PR11MB1953.namprd11.prod.outlook.com (2603:10b6:404:105::14)
- by DM4PR11MB6237.namprd11.prod.outlook.com (2603:10b6:8:a9::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19; Fri, 25 Nov
- 2022 13:47:27 +0000
-Received: from BN6PR11MB1953.namprd11.prod.outlook.com
- ([fe80::98f6:c9d1:bb68:1c15]) by BN6PR11MB1953.namprd11.prod.outlook.com
- ([fe80::98f6:c9d1:bb68:1c15%10]) with mapi id 15.20.5857.017; Fri, 25 Nov
- 2022 13:47:27 +0000
-From:   <Claudiu.Beznea@microchip.com>
-To:     <Eugen.Hristev@microchip.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] ARM: configs: multi_v7: switch to new
- MICROCHIP_ISC driver
-Thread-Topic: [PATCH v2 2/2] ARM: configs: multi_v7: switch to new
- MICROCHIP_ISC driver
-Thread-Index: AQHZANR0m+bUj4H6M062HyytjBUCaQ==
-Date:   Fri, 25 Nov 2022 13:47:26 +0000
-Message-ID: <561fbce8-a920-2791-26dc-d834edbcabd9@microchip.com>
-References: <20221125130646.454084-1-eugen.hristev@microchip.com>
- <20221125130646.454084-2-eugen.hristev@microchip.com>
-In-Reply-To: <20221125130646.454084-2-eugen.hristev@microchip.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN6PR11MB1953:EE_|DM4PR11MB6237:EE_
-x-ms-office365-filtering-correlation-id: 95e2a524-6589-47f9-930d-08daceeb96e2
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: jmfHcSDH6OTyimvSddwsgmPU0npjlOeURXKkGrPjzSmeyFj3bGQBxocyIy/ZzP2ZAbsThX0I2o587GVEIBpZEqWBACNBQ24/WFjJm1LhW3rzwjtDMlJWXpDLScbR5tLSd/2eF8BkxNZAZiv7A8dkDWYHEYUpw5rXM4eW7N8p7hCSFLOxfY0lDzVD7Nn+JFabhoW+hrUKq3eX6CUgPHvLPpk13B9dBkiFo3p6FoRIokI4Fu+EC/0b0IK6k6aB24DCpANmjWiqSUxX6KuOhnudDuaRiS/v1bPbHRF+CtJ8d00ynVcMIweaOBU24R1BIC3hrhMjSTA6JDDsQ41BNeGuMeMnYXcFb62+1JobijVyCUO6w4YAkcWEJBVuEsM0o/7zUQXDelcEdohFOIuCpCAc/bcdy4vt9GPwrFFaqRLqqzUMnKpisxBd0d/9pvJdfr/6dqcoYD7nmvI1lL8m/+tYL7fHH8qNnRbArZTNFNbW+7SqcyGuv/QUBBFDPRe7c6zSgS21o8EWHz2jagRFt+Jzv31DurD3FOtkDVSt3nDfyT7wSPNaQm9ordU/qx59VfVNMR5mXLoKmGZ9btylRvA+lgAxQPOso4P0+fR9PGiCtbCdWw3Jq8PxQA5JjOIQ3l9hBPDel7c6n6F7hsJTarSDePnjJBHW70p1kGRlX2gEiAm5jSspUqmE6e3a3eNSMkysT/CrgnCm935P4n2tiK6andAVfUw4j6BAT3O7q3DpCr41jDISC2whdabSWwRVxXL/7jB/0goF7zVqlKt3dtoLjQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR11MB1953.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(396003)(39860400002)(136003)(366004)(376002)(451199015)(31696002)(86362001)(76116006)(66556008)(64756008)(66476007)(66446008)(66946007)(8676002)(4326008)(91956017)(41300700001)(38100700002)(54906003)(6636002)(316002)(6506007)(8936002)(6486002)(5660300002)(2906002)(6862004)(83380400001)(37006003)(71200400001)(38070700005)(186003)(478600001)(2616005)(53546011)(122000001)(6512007)(26005)(31686004)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?T3JDZ0oyVFVKRnB3KzQ3d0FESHZodVVsZDk2RGVxbENJTkRGVVpIaUx3S25U?=
- =?utf-8?B?SjVWUlZJck5Ib3NwODBPS0hoUWxoMmFqUTYyd0pwejlQNFgxR2xLRHBvMkJR?=
- =?utf-8?B?Z1kzaG9Jd3Y4Skt1ak92WGJVOTR1N3NyS1lQeTF0d0FKZFJwNU1FNlRPK2V1?=
- =?utf-8?B?dExFZnAyMGR0QTRBU20xQ1lpaHYxRS9EZFZXSVZlRXBWaHBzMXFxNlYzZ3Rx?=
- =?utf-8?B?RWJrRVdycGFrbDFiMlV6TDhLd2N4KzErUVU2MEptaVU2WWhiSTQ4NDg3ZTU0?=
- =?utf-8?B?MFEveGdKeXlMaW9tT2xyNXN2bW5Ua0VBSHBka2VTRWVGTmlCUWlaY0toeVU1?=
- =?utf-8?B?WmFvaEhVb282NFBYWnJUeEd0Z2RWYXZDREkzSmNaeVpYSmFnM2lTT25jVDdE?=
- =?utf-8?B?aFZmeG9vUmJHUW9IcjFHenBmeGF1YzBnYjRtOVhJV3V2K3dvdGI3VmpKVEZV?=
- =?utf-8?B?RlRJTTlqYW0wT3dXS0lncTRCLzl5emhFL0FjKzBLZDNZbXdKN3p6bHRKY2oy?=
- =?utf-8?B?dTRZbFhob2RqSzRTRVVVeS82cStsRjZ3VkZ3ZFhJR0pyTXpEbTJQc3c2Ny83?=
- =?utf-8?B?OWI2eUtDblFoQkFCVm5QVFZBek9zdDF5T0FUdUVpa0RWTHMwVzQxcktMamNx?=
- =?utf-8?B?VUh4VVA0UjdVRjdSb09nU2pyaGpXZUx5cGhJR3RJZkRFOWVSSUR3QXVkQjEr?=
- =?utf-8?B?SHhTMEdKdGZnSGxVMXB5WkZwNG8yMDB2MGJWei9ncmovZXpBbHMvWnpSTWFr?=
- =?utf-8?B?eitESkZPWk5FZGc3Qk9vM1ljNXNFbUNDUWNBNk5WZHR4dk8ycVJNRlVQU1Ar?=
- =?utf-8?B?WC9tR2JIeFlYNVJmSENLbVptMkhoUmhCOFN1c3RRYlJxcTEwQVVmSzVNSEFv?=
- =?utf-8?B?aStmV2xyVG9vYURLMS85dXlhWnNLV3B3OTY3ZmsxY1pZY0dicG5kVHB2Q1VO?=
- =?utf-8?B?TzRGNWx4Uzl5L1gyVmtnc2g5SEtCendJUmFJSEdmcUVaYTVrZm0zaUJSaE9z?=
- =?utf-8?B?YmZJUk54RWZ1V0pnUDJxWVJjYTVLdG0zV1FvQ1VyMitlWFIvd2tsWkdIZEZo?=
- =?utf-8?B?ZTN2VkVoZlRqNjFEQ00yd0xUZ2lOVXo5aWRWVzc5eCt5K0RRdEFib3RvL0VB?=
- =?utf-8?B?a2dKdVNNb0VkUTlEa09CUVJzTUljcURMT29GSklQV1JVSVFvcGg4Ri94YlAy?=
- =?utf-8?B?OFpOY0V1YTJHYnFtWTdQN3oveEFaQlhMMkFoTmlQODBWdDcvbnpPMGJqUncw?=
- =?utf-8?B?czM5Y2RYenB2QXhXYnVHeXJlL2JqWkZwTVFyQjR2U0dzVDFFcDFlWW1VeU9U?=
- =?utf-8?B?eFFzMkgwS1p5YUpYdWhGNE1qRnMvMkljKy94VGgzWlpzSEl6L2t1Q2VsNXNH?=
- =?utf-8?B?YmQ1WWZSbk5ralNnVWtnbTNYUkU3cWxncGtWSGdqS0ZtTmIrV0lBdzVSS05s?=
- =?utf-8?B?bzhPcDNOUmxxZjk2cTNuMUxOSEJIUGtSM3AwN1k1WWtNd3FWMjBBU3pBRlRE?=
- =?utf-8?B?RVZheWpoek43Um53U3ZNOGttdHF5bjFFTFFUMXNsbG9nU1NBWEdnWC9McWU1?=
- =?utf-8?B?M0V5M3dRS3psZ1pGWGI2K2Z0VEl5cVVhUXVsWkYyTVhJTll6dzJ0QUpOcXhR?=
- =?utf-8?B?bUJ0cXlMTW10bnBSMGZENy91TGM2SkNOTnd6TUt5TTVQN3U1Z0NHSFVFZGJ0?=
- =?utf-8?B?aXlZc3RVUjRqSGE0UWxHbDNHb3FWSmh5cmhFeFA2SGdqdUlabVN4amxwb3A5?=
- =?utf-8?B?aHQ4bXU5eVpaQ2ZEdk9WSGF0UUJFZVJiSWF1NFlQSHZPc3dselZybmo3K0hn?=
- =?utf-8?B?MGhOZENFTSsxc2ZJMlhxcWJzalNFV1EyUEs2SzVuclRhZ1F3VmRsTHFnU3hh?=
- =?utf-8?B?bHVLWVBXejl0SkZrRTIyVnluNDRUeGY2alErM3RMbWZBUGNVWlhxVTlMQTVp?=
- =?utf-8?B?MVhuUkF0RHkzTUlkQUdteVlWVXhhSGJ5MThFeUVsQXNsQWxlQ0g2RGhwcDBu?=
- =?utf-8?B?SjZIZmI1bnNJalhDVVVaU2lpYlBSVnc1bjdXUjZBajEyaUNRM3JBUys4ckRo?=
- =?utf-8?B?REh2MEdYVWZtQUVGa1hlUUtyN2hyUThWSG5PbnpyQ2FrZ2wzSnlqSXg5bGpa?=
- =?utf-8?B?S3ZQdkdvdnhMZ3pKcGpyM0VJanRnbmR1Nk9mWE9RL2F4emlVK3ArUU9nK1NN?=
- =?utf-8?B?TFE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <02EEA0F1010FA741805ECF4FA679CF51@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Fri, 25 Nov 2022 08:47:53 -0500
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED681150
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 05:47:50 -0800 (PST)
+Received: (Authenticated sender: alex@ghiti.fr)
+        by mail.gandi.net (Postfix) with ESMTPSA id 56C071BF20F;
+        Fri, 25 Nov 2022 13:47:47 +0000 (UTC)
+Message-ID: <e90289af-f557-58f2-f4c8-f79feab4f185@ghiti.fr>
+Date:   Fri, 25 Nov 2022 14:47:46 +0100
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN6PR11MB1953.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 95e2a524-6589-47f9-930d-08daceeb96e2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Nov 2022 13:47:27.0101
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: DK9D0DvQSmfgE23qq1FXGSSmyVneR9YWXf9+hqoK0AshDrSshRxt4y0MIZ8jxEyIIknil19HurKswpk+JjyDZd9ysYCgKqoqtHH7LMAar4k=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6237
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] riscv: increase boot command line size to 1K
+Content-Language: en-US
+To:     Andrea Righi <andrea.righi@canonical.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221125133713.314796-1-andrea.righi@canonical.com>
+ <6fee29f8-8150-e6ec-e2ec-210610a7e27d@ghiti.fr>
+ <Y4DGxWLIVx9p9TS+@righiandr-XPS-13-7390>
+From:   Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <Y4DGxWLIVx9p9TS+@righiandr-XPS-13-7390>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -158,26 +46,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMjUuMTEuMjAyMiAxNTowNiwgRXVnZW4gSHJpc3RldiB3cm90ZToNCj4gVGhlIEFUTUVMX0lT
-QyBhbmQgQVRNRUxfWElTQyBoYXZlIGJlZW4gZGVwcmVjYXRlZCBhbmQgbW92ZWQgdG8gc3RhZ2lu
-Zy4NCj4gVXNlIHRoZSBuZXcgTUlDUk9DSElQX0lTQy9NSUNST0NISVBfWElTQyBzeW1ib2xzIHdo
-aWNoIGFyZSB0aGUNCj4gcmVwbGFjZW1lbnQgZHJpdmVycy4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6
-IEV1Z2VuIEhyaXN0ZXYgPGV1Z2VuLmhyaXN0ZXZAbWljcm9jaGlwLmNvbT4NCg0KQXBwbGllZCB0
-byBhdDkxLWRlZmNvbmZpZyAoYWZ0ZXIgcmUtd29ya2VkIGEgYml0IHRvIGtlZXAgZW50cmllcw0K
-YWxwaGFiZXRpY2FsbHkgc29ydGVkKSwgdGhhbmtzIQ0KDQo+IC0tLQ0KPiANCj4gY2hhbmdlcyBp
-biB2MjoNCj4gLSBzcGxpdCB0aGUgbXVsdGkgdjcgaW50byBzZXBhcmF0ZSBwYXRjaA0KPiANCj4g
-IGFyY2gvYXJtL2NvbmZpZ3MvbXVsdGlfdjdfZGVmY29uZmlnIHwgNiArKystLS0NCj4gIDEgZmls
-ZSBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0t
-Z2l0IGEvYXJjaC9hcm0vY29uZmlncy9tdWx0aV92N19kZWZjb25maWcgYi9hcmNoL2FybS9jb25m
-aWdzL211bHRpX3Y3X2RlZmNvbmZpZw0KPiBpbmRleCBiNjFiMmUzZDExNmIuLmQxNjg2YmM0MGU1
-ZCAxMDA2NDQNCj4gLS0tIGEvYXJjaC9hcm0vY29uZmlncy9tdWx0aV92N19kZWZjb25maWcNCj4g
-KysrIGIvYXJjaC9hcm0vY29uZmlncy9tdWx0aV92N19kZWZjb25maWcNCj4gQEAgLTY2MywxMSAr
-NjYzLDExIEBAIENPTkZJR19VU0JfVklERU9fQ0xBU1M9bQ0KPiAgQ09ORklHX1Y0TF9QTEFURk9S
-TV9EUklWRVJTPXkNCj4gIENPTkZJR19WNExfTUVNMk1FTV9EUklWRVJTPXkNCj4gIENPTkZJR19W
-SURFT19BU1BFRUQ9bQ0KPiAtQ09ORklHX1ZJREVPX0FUTUVMX0lTQz1tDQo+IC1DT05GSUdfVklE
-RU9fQVRNRUxfWElTQz1tDQo+ICBDT05GSUdfVklERU9fQVRNRUxfSVNJPW0NCj4gLUNPTkZJR19W
-SURFT19NSUNST0NISVBfQ1NJMkRDPW0NCj4gIENPTkZJR19WSURFT19NTVBfQ0FNRVJBPW0NCj4g
-K0NPTkZJR19WSURFT19NSUNST0NISVBfSVNDPW0NCj4gK0NPTkZJR19WSURFT19NSUNST0NISVBf
-WElTQz1tDQo+ICtDT05GSUdfVklERU9fTUlDUk9DSElQX0NTSTJEQz1tDQo+ICBDT05GSUdfVklE
-RU9fVEVHUkFfVkRFPW0NCj4gIENPTkZJR19WSURFT19SRU5FU0FTX0NFVT1tDQo+ICBDT05GSUdf
-VklERU9fUkNBUl9WSU49bQ0KDQo=
+On 11/25/22 14:44, Andrea Righi wrote:
+> On Fri, Nov 25, 2022 at 02:41:11PM +0100, Alexandre Ghiti wrote:
+>> Hi Andrea,
+>>
+>> On 11/25/22 14:37, Andrea Righi wrote:
+>>> Kernel parameters string is limited to 512 characters on riscv (using
+>>> the default from include/uapi/asm-generic/setup.h).
+>>>
+>>> In some testing environments (e.g., qemu with long kernel parameters
+>>> string) we may exceed this limit, triggering errors like the following:
+>>>
+>>> [    3.331893] Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000000
+>>> [    3.332625] CPU: 2 PID: 1 Comm: sh Not tainted 6.1.0-rc6-kc #1
+>>> [    3.333233] Hardware name: riscv-virtio,qemu (DT)
+>>> [    3.333550] Call Trace:
+>>> [    3.333736] [<ffffffff800062b6>] dump_backtrace+0x1c/0x24
+>>> [    3.334053] [<ffffffff806e8f54>] show_stack+0x2c/0x38
+>>> [    3.334260] [<ffffffff806f2d06>] dump_stack_lvl+0x5a/0x7c
+>>> [    3.334483] [<ffffffff806f2d3c>] dump_stack+0x14/0x1c
+>>> [    3.334687] [<ffffffff806e92fa>] panic+0x116/0x2d0
+>>> [    3.334878] [<ffffffff8001b0aa>] do_exit+0x80a/0x810
+>>> [    3.335079] [<ffffffff8001b1d0>] do_group_exit+0x24/0x70
+>>> [    3.335287] [<ffffffff8001b234>] __wake_up_parent+0x0/0x20
+>>> [    3.335502] [<ffffffff80003cee>] ret_from_syscall+0x0/0x2
+>>> [    3.335857] SMP: stopping secondary CPUs
+>>> [    3.337561] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000000 ]---
+>>>
+>>> It seems reasonable enough to increase the default command line size to
+>>> 1024, like arm, to prevent issues like the one reported above.
+>>>
+>>> Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+>>> ---
+>>>    arch/riscv/include/asm/setup.h      | 7 +++++++
+>>>    arch/riscv/include/uapi/asm/setup.h | 7 +++++++
+>>>    2 files changed, 14 insertions(+)
+>>>    create mode 100644 arch/riscv/include/asm/setup.h
+>>>    create mode 100644 arch/riscv/include/uapi/asm/setup.h
+>>>
+>>> diff --git a/arch/riscv/include/asm/setup.h b/arch/riscv/include/asm/setup.h
+>>> new file mode 100644
+>>> index 000000000000..f4fe549aab40
+>>> --- /dev/null
+>>> +++ b/arch/riscv/include/asm/setup.h
+>>> @@ -0,0 +1,7 @@
+>>> +/* SPDX-License-Identifier: GPL-2.0-only */
+>>> +#ifndef __ASMRISCV_SETUP_H
+>>> +#define __ASMRISCV_SETUP_H
+>>> +
+>>> +#include <uapi/asm/setup.h>
+>>> +
+>>> +#endif /* __ASMRISCV_SETUP_H */
+>>> diff --git a/arch/riscv/include/uapi/asm/setup.h b/arch/riscv/include/uapi/asm/setup.h
+>>> new file mode 100644
+>>> index 000000000000..5738f93ae437
+>>> --- /dev/null
+>>> +++ b/arch/riscv/include/uapi/asm/setup.h
+>>> @@ -0,0 +1,7 @@
+>>> +/* SPDX-License-Identifier: GPL-2.0 */
+>>> +#ifndef _UAPI__ASMRISCV_SETUP_H
+>>> +#define _UAPI__ASMRISCV_SETUP_H
+>>> +
+>>> +#define COMMAND_LINE_SIZE 1024
+>>> +
+>>> +#endif /* _UAPI__ASMRISCV_SETUP_H */
+>>
+>> Just for reference to previous discussions regarding this: https://lore.kernel.org/lkml/CACT4Y+YYAfTafFk7DE0B=qQFgkPXS7492AhBdY_CP1WdB8CGfA@mail.gmail.com/T/
+>>
+>> Thanks,
+>>
+>> Alex
+> Ah! It has been address/discussed already, great! Thanks for pointing
+> that out and sorry for the unnecessary patch. :)
+
+
+Not unnecessary at all, that will hopefully trigger a new discussion 
+because no progress was made so far :)
+
+
+> -Andrea
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
