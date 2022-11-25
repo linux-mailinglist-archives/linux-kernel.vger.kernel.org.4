@@ -2,89 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F3F638822
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 12:02:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDFE76387B9
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 11:42:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230377AbiKYLBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 06:01:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56398 "EHLO
+        id S229762AbiKYKmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 05:42:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230361AbiKYLBt (ORCPT
+        with ESMTP id S229538AbiKYKmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 06:01:49 -0500
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EEC14A5A5;
-        Fri, 25 Nov 2022 03:01:47 -0800 (PST)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id E9F251C09FE; Fri, 25 Nov 2022 12:01:44 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1669374104;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GXyqDQQ59BVTr+7aAy1Rwv26TeRNfyoVwKWF9sq8TvQ=;
-        b=LfVQeZ+Vqc3GiXbUjfGtEg3jUKc72YGGE/57LCZtwvdesX4F72nbLabbLJGAF5L884nDRP
-        TLz2TT/iaGKg8n6YUhtgbfqjn3oVU8Myzd1W9i1B9JQ5cMLLhWq6NNYFFks3s318lQ3RqX
-        TbpRQElT8qRfoLw3jMlX8WExsScxXD0=
-Date:   Fri, 25 Nov 2022 12:01:44 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Olliver Schinagl <oliver@schinagl.nl>
-Subject: Re: [PATCH] leds: MAINTAINERS: include dt-bindings headers
-Message-ID: <Y4CgmOqhF12UtG+Q@duo.ucw.cz>
-References: <20220830083625.281462-1-krzysztof.kozlowski@linaro.org>
- <93f128ce-5229-5163-841a-66d3cd54130a@linaro.org>
+        Fri, 25 Nov 2022 05:42:52 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74EF91AF03
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 02:42:48 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NJWfB5jWqz4f3nTX
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 18:42:42 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP4 (Coremail) with SMTP id gCh0CgB3m9ginIBjiyyDBA--.17322S4;
+        Fri, 25 Nov 2022 18:42:44 +0800 (CST)
+From:   Hou Tao <houtao@huaweicloud.com>
+To:     linux-erofs@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, Gao Xiang <xiang@kernel.org>,
+        Chao Yu <chao@kernel.org>, Yue Hu <huyue2@coolpad.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Jia Zhu <zhujia.zj@bytedance.com>, houtao1@huawei.com
+Subject: [PATCH v2] erofs: check the uniqueness of fsid in shared domain in advance
+Date:   Fri, 25 Nov 2022 19:08:22 +0800
+Message-Id: <20221125110822.3812942-1-houtao@huaweicloud.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="yBUrESvZpahUzmxj"
-Content-Disposition: inline
-In-Reply-To: <93f128ce-5229-5163-841a-66d3cd54130a@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgB3m9ginIBjiyyDBA--.17322S4
+X-Coremail-Antispam: 1UD129KBjvJXoW3AF1Dury8ur4xWF48JFyxZrb_yoW3Cr4kpa
+        yfCw1SqrWkXry5ua1fXF4DXFyfK3s7ta1DGw18J3sYyw48Jr18GryvyFyYyF47G34DArW2
+        qF12v3WUuw48Ar7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUgKb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Y
+        z7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zV
+        AF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4l
+        IxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s
+        0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
+        daVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Hou Tao <houtao1@huawei.com>
 
---yBUrESvZpahUzmxj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+When shared domain is enabled, doing mount twice with the same fsid and
+domain_id will trigger sysfs warning as shown below:
 
-On Fri 2022-11-25 11:52:59, Krzysztof Kozlowski wrote:
-> On 30/08/2022 10:36, Krzysztof Kozlowski wrote:
-> > Include the Devicetree binding headers in LED SUBSYSTEM entry.
-> >=20
-> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > ---
-> >  MAINTAINERS | 1 +
-> >  1 file changed, 1 insertion(+)
-> >=20
->=20
-> Anyone is going to pick it up?
+ sysfs: cannot create duplicate filename '/fs/erofs/d0,meta.bin'
+ CPU: 15 PID: 1051 Comm: mount Not tainted 6.1.0-rc6+ #1
+ Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
+ Call Trace:
+  <TASK>
+  dump_stack_lvl+0x38/0x49
+  dump_stack+0x10/0x12
+  sysfs_warn_dup.cold+0x17/0x27
+  sysfs_create_dir_ns+0xb8/0xd0
+  kobject_add_internal+0xb1/0x240
+  kobject_init_and_add+0x71/0xa0
+  erofs_register_sysfs+0x89/0x110
+  erofs_fc_fill_super+0x98c/0xaf0
+  vfs_get_super+0x7d/0x100
+  get_tree_nodev+0x16/0x20
+  erofs_fc_get_tree+0x20/0x30
+  vfs_get_tree+0x24/0xb0
+  path_mount+0x2fa/0xa90
+  do_mount+0x7c/0xa0
+  __x64_sys_mount+0x8b/0xe0
+  do_syscall_64+0x30/0x60
+  entry_SYSCALL_64_after_hwframe+0x46/0xb0
 
-That's for me, I guess.
+The reason is erofs_fscache_register_cookie() doesn't guarantee the primary
+data blob (aka fsid) is unique in the shared domain and
+erofs_register_sysfs() invoked by the second mount will fail due to the
+duplicated fsid in the shared domain and report warning.
 
-Best regards,
-							Pavel
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
+It would be better to check the uniqueness of fsid before doing
+erofs_register_sysfs(), so adding a new flags parameter for
+erofs_fscache_register_cookie() and doing the uniqueness check if
+EROFS_REG_COOKIE_NEED_NOEXIST is enabled.
 
---yBUrESvZpahUzmxj
-Content-Type: application/pgp-signature; name="signature.asc"
+After the patch, the error in dmesg for the duplicated mount would be:
 
------BEGIN PGP SIGNATURE-----
+ erofs: ...: erofs_domain_register_cookie: XX already exists in domain YY
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY4CgmAAKCRAw5/Bqldv6
-8vNpAKCo1MRJ/StIB+ns+ZRbFLKs9DPBfgCgv9BwGlOdxYs5dgodtEQF0FdOKP8=
-=I5nw
------END PGP SIGNATURE-----
+Reviewed-by: Jia Zhu <zhujia.zj@bytedance.com>
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+v2:
+ * Do tab-alignment for EROFS_REG_COOKIE_NEED_xxx (Suggested by Jia Zhu)
+ * Add Reviewed-by tag
 
---yBUrESvZpahUzmxj--
+v1: https://lore.kernel.org/linux-erofs/20221125074057.2229083-1-houtao@huaweicloud.com/
+ fs/erofs/fscache.c  | 47 +++++++++++++++++++++++++++++++++------------
+ fs/erofs/internal.h | 10 ++++++++--
+ fs/erofs/super.c    |  2 +-
+ 3 files changed, 44 insertions(+), 15 deletions(-)
+
+diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
+index af5ed6b9c54d..6a792a513d6b 100644
+--- a/fs/erofs/fscache.c
++++ b/fs/erofs/fscache.c
+@@ -494,7 +494,8 @@ static int erofs_fscache_register_domain(struct super_block *sb)
+ 
+ static
+ struct erofs_fscache *erofs_fscache_acquire_cookie(struct super_block *sb,
+-						    char *name, bool need_inode)
++						   char *name,
++						   unsigned int flags)
+ {
+ 	struct fscache_volume *volume = EROFS_SB(sb)->volume;
+ 	struct erofs_fscache *ctx;
+@@ -516,7 +517,7 @@ struct erofs_fscache *erofs_fscache_acquire_cookie(struct super_block *sb,
+ 	fscache_use_cookie(cookie, false);
+ 	ctx->cookie = cookie;
+ 
+-	if (need_inode) {
++	if (flags & EROFS_REG_COOKIE_NEED_INODE) {
+ 		struct inode *const inode = new_inode(sb);
+ 
+ 		if (!inode) {
+@@ -554,14 +555,15 @@ static void erofs_fscache_relinquish_cookie(struct erofs_fscache *ctx)
+ 
+ static
+ struct erofs_fscache *erofs_fscache_domain_init_cookie(struct super_block *sb,
+-		char *name, bool need_inode)
++						       char *name,
++						       unsigned int flags)
+ {
+ 	int err;
+ 	struct inode *inode;
+ 	struct erofs_fscache *ctx;
+ 	struct erofs_domain *domain = EROFS_SB(sb)->domain;
+ 
+-	ctx = erofs_fscache_acquire_cookie(sb, name, need_inode);
++	ctx = erofs_fscache_acquire_cookie(sb, name, flags);
+ 	if (IS_ERR(ctx))
+ 		return ctx;
+ 
+@@ -589,7 +591,8 @@ struct erofs_fscache *erofs_fscache_domain_init_cookie(struct super_block *sb,
+ 
+ static
+ struct erofs_fscache *erofs_domain_register_cookie(struct super_block *sb,
+-						   char *name, bool need_inode)
++						   char *name,
++						   unsigned int flags)
+ {
+ 	struct inode *inode;
+ 	struct erofs_fscache *ctx;
+@@ -602,23 +605,30 @@ struct erofs_fscache *erofs_domain_register_cookie(struct super_block *sb,
+ 		ctx = inode->i_private;
+ 		if (!ctx || ctx->domain != domain || strcmp(ctx->name, name))
+ 			continue;
+-		igrab(inode);
++		if (!(flags & EROFS_REG_COOKIE_NEED_NOEXIST)) {
++			igrab(inode);
++		} else {
++			erofs_err(sb, "%s already exists in domain %s", name,
++				  domain->domain_id);
++			ctx = ERR_PTR(-EEXIST);
++		}
+ 		spin_unlock(&psb->s_inode_list_lock);
+ 		mutex_unlock(&erofs_domain_cookies_lock);
+ 		return ctx;
+ 	}
+ 	spin_unlock(&psb->s_inode_list_lock);
+-	ctx = erofs_fscache_domain_init_cookie(sb, name, need_inode);
++	ctx = erofs_fscache_domain_init_cookie(sb, name, flags);
+ 	mutex_unlock(&erofs_domain_cookies_lock);
+ 	return ctx;
+ }
+ 
+ struct erofs_fscache *erofs_fscache_register_cookie(struct super_block *sb,
+-						    char *name, bool need_inode)
++						    char *name,
++						    unsigned int flags)
+ {
+ 	if (EROFS_SB(sb)->domain_id)
+-		return erofs_domain_register_cookie(sb, name, need_inode);
+-	return erofs_fscache_acquire_cookie(sb, name, need_inode);
++		return erofs_domain_register_cookie(sb, name, flags);
++	return erofs_fscache_acquire_cookie(sb, name, flags);
+ }
+ 
+ void erofs_fscache_unregister_cookie(struct erofs_fscache *ctx)
+@@ -647,6 +657,7 @@ int erofs_fscache_register_fs(struct super_block *sb)
+ 	int ret;
+ 	struct erofs_sb_info *sbi = EROFS_SB(sb);
+ 	struct erofs_fscache *fscache;
++	unsigned int flags;
+ 
+ 	if (sbi->domain_id)
+ 		ret = erofs_fscache_register_domain(sb);
+@@ -655,8 +666,20 @@ int erofs_fscache_register_fs(struct super_block *sb)
+ 	if (ret)
+ 		return ret;
+ 
+-	/* acquired domain/volume will be relinquished in kill_sb() on error */
+-	fscache = erofs_fscache_register_cookie(sb, sbi->fsid, true);
++	/*
++	 * When shared domain is enabled, using NEED_NOEXIST to guarantee
++	 * the primary data blob (aka fsid) is unique in the shared domain.
++	 *
++	 * For non-shared-domain case, fscache_acquire_volume() invoked by
++	 * erofs_fscache_register_volume() has already guaranteed
++	 * the uniqueness of primary data blob.
++	 *
++	 * Acquired domain/volume will be relinquished in kill_sb() on error.
++	 */
++	flags = EROFS_REG_COOKIE_NEED_INODE;
++	if (sbi->domain_id)
++		flags |= EROFS_REG_COOKIE_NEED_NOEXIST;
++	fscache = erofs_fscache_register_cookie(sb, sbi->fsid, flags);
+ 	if (IS_ERR(fscache))
+ 		return PTR_ERR(fscache);
+ 
+diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+index 05dc68627722..e51f27b6bde1 100644
+--- a/fs/erofs/internal.h
++++ b/fs/erofs/internal.h
+@@ -604,13 +604,18 @@ static inline int z_erofs_load_lzma_config(struct super_block *sb,
+ }
+ #endif	/* !CONFIG_EROFS_FS_ZIP */
+ 
++/* flags for erofs_fscache_register_cookie() */
++#define EROFS_REG_COOKIE_NEED_INODE	1
++#define EROFS_REG_COOKIE_NEED_NOEXIST	2
++
+ /* fscache.c */
+ #ifdef CONFIG_EROFS_FS_ONDEMAND
+ int erofs_fscache_register_fs(struct super_block *sb);
+ void erofs_fscache_unregister_fs(struct super_block *sb);
+ 
+ struct erofs_fscache *erofs_fscache_register_cookie(struct super_block *sb,
+-						     char *name, bool need_inode);
++						    char *name,
++						    unsigned int flags);
+ void erofs_fscache_unregister_cookie(struct erofs_fscache *fscache);
+ 
+ extern const struct address_space_operations erofs_fscache_access_aops;
+@@ -623,7 +628,8 @@ static inline void erofs_fscache_unregister_fs(struct super_block *sb) {}
+ 
+ static inline
+ struct erofs_fscache *erofs_fscache_register_cookie(struct super_block *sb,
+-						     char *name, bool need_inode)
++						     char *name,
++						     unsigned int flags)
+ {
+ 	return ERR_PTR(-EOPNOTSUPP);
+ }
+diff --git a/fs/erofs/super.c b/fs/erofs/super.c
+index 1c7dcca702b3..481788c24a68 100644
+--- a/fs/erofs/super.c
++++ b/fs/erofs/super.c
+@@ -245,7 +245,7 @@ static int erofs_init_device(struct erofs_buf *buf, struct super_block *sb,
+ 	}
+ 
+ 	if (erofs_is_fscache_mode(sb)) {
+-		fscache = erofs_fscache_register_cookie(sb, dif->path, false);
++		fscache = erofs_fscache_register_cookie(sb, dif->path, 0);
+ 		if (IS_ERR(fscache))
+ 			return PTR_ERR(fscache);
+ 		dif->fscache = fscache;
+-- 
+2.29.2
+
