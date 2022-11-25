@@ -2,90 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2464638BED
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 15:15:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80C13638BF1
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 15:15:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbiKYOPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 09:15:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38068 "EHLO
+        id S229943AbiKYOPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 09:15:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbiKYOPC (ORCPT
+        with ESMTP id S229957AbiKYOPS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 09:15:02 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A8720F7F;
-        Fri, 25 Nov 2022 06:15:02 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id z26so4292458pff.1;
-        Fri, 25 Nov 2022 06:15:02 -0800 (PST)
+        Fri, 25 Nov 2022 09:15:18 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9F921E01
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 06:15:17 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id w129so4270915pfb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 06:15:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5KzGXVYN4vmEuI7SNB+5orsczk7XvMecFi6EmJ09e0Y=;
-        b=b15yVOSIToO/Qd/EqL6wKJ/T3apIQzi6Sm6FvD1VDA7l+Mn6egT167LmmF+g7fdQMg
-         ZwuMsARTdI6kYZuvVEKt71fZnCokd9EBsRssooubPOy7/P9lEU8mBvQl14wp2SsPQHLN
-         +aputDjR31fUtG96TuB0gy9JyRe5LAxcNm5NJwJV9dz0bWimH0CoK+Jd+zfuImmh2YHD
-         jIHVoTNfTBiBlZjeZChiueto0EGvxuX4UmOLP6s49/mnSKGrPAEUdkP6OVqF3tQUasgZ
-         EZ+oomXoGhVxp7qi/Z+2MwcJQQFT96g7Nnv5Bi2DsOMHsR3Cq3qgr54RbSmW/h63GQTo
-         SmFg==
+        bh=J/617BJR3AxAjX3NPAcECKk88uzgNNQZ7+/ymtVAJWc=;
+        b=DPX8gA6Ixvj1sHraj9uVz4imnR0p5it1SKCFly7A8rT/+jeI8P++q7KgmKFvAl7wsB
+         k+cxZ+AUlBupu11cyAcf9ic+7nTqhXcYXVKqEhnD8J6ald4lh+JZcxap/Ky7CYsVpx75
+         XY1sFYO6ERrlamhK1IO+ptAEhN3Yg0upfb9eN4pu31I/uwZ1CMliBYpWeuMvygLljbVb
+         86qdzpcU27r5dcl7m1+sRWizykhPaRWFDzl+EPClI1j8gsimqtOytP4MF+VNPtQFwBWE
+         zJEK8ew9VJCjeDrYp6aPEMTbZ46JR0D19flwOfINlpPc7S8Z2ubksjJciIERsgfr5RFl
+         ZIGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5KzGXVYN4vmEuI7SNB+5orsczk7XvMecFi6EmJ09e0Y=;
-        b=aV9Qfaf000jfsT259QAJotDoynR3dCL30ka+MbUz1vhVhN80+mUV8+S+3fOga3MXUq
-         4ffsYqxCDikFvbv6iLHmHLQhdL6YBLFv2qqtEKJdhs616KaQQWVjJ0/PP6qRdZMOc7uR
-         WUT/T7Si5hNDsoQXvNLKvTypUZMO05Q3Pq88h1K+TxOOh6UyqXwz2vz+w14tqaIpvmmm
-         9p33kvB0fGF/OPJXHNXT5Ze4bYTDdMt2iWlgYTWDxz8dviMrcmPlneVYnTiXsiHxp+kV
-         d6Y2yVpsCEeCpqKofpwCma7tCkJNFmIjjej/9qi7qN4DLOppsW9r1CXgGyJyp3+gFXt/
-         fZbw==
-X-Gm-Message-State: ANoB5pkvX6aynAoJ/txix6VdtdEv/eHwejpZO72u0vSmavSZIQigLr5J
-        LWpxtiKS3JITQQsmxMmrSvF9ZPPAtdicWMQBk9Y=
-X-Google-Smtp-Source: AA0mqf4cc1knI5Pqqcgkt0vNUXenfxo1PzcEuuURfi1pfus1dcl0kkFJiXeCFA60BwsGhQX1CHgVMphyhxGISQ/l1JE=
-X-Received: by 2002:a63:4d09:0:b0:477:7dc8:57a8 with SMTP id
- a9-20020a634d09000000b004777dc857a8mr16055958pgb.506.1669385701910; Fri, 25
- Nov 2022 06:15:01 -0800 (PST)
+        bh=J/617BJR3AxAjX3NPAcECKk88uzgNNQZ7+/ymtVAJWc=;
+        b=uVnsWqJE6gaeOTwQo+No/AwyuC+/Fr0oB2SgvSXFSIg9ajLM9V7PTYmxaw0k8w7OnN
+         gudxIt08veEypQEVJLZV1cTV5pX7tOmtMDnbVAvq6/2ShFdQV88jjbNqURSZRn1HKtQQ
+         sBDvqaH20U9yVkwUJF1HIa8IGFwMsfmulFxtKtoygs6HRR75gNsnbptQ0dkS4hQHT5QX
+         POqSWsD7mlgucgUTz4b8HmEs1cmwdQhf8N4xysQiqZ9ITaiUbxCrnj5lejD+lXB2D21e
+         L94twjWu+xYCF9QqgAZawohESBA34yFgq8anG8Y0mHIYAJhqIdTLyeZANiru1BNUkwml
+         ZyXw==
+X-Gm-Message-State: ANoB5pkBomqO0TjLzsbpMJQ1jeKqqTWQolzICTBYR8uoYe0GCGeansbi
+        QSCTu5gpubgemcp67wlJuCJTi4Tk+3XwJajwhwT/2A==
+X-Google-Smtp-Source: AA0mqf6So6cRie6HhEzWSdJFgpZqNm19ZkFCQzm+lGVQCAAKnnMaxEf1S6OPjfhwzgUBpH8Z/S6USXAk+TjUuigh+DA=
+X-Received: by 2002:aa7:854d:0:b0:56d:6e51:60ee with SMTP id
+ y13-20020aa7854d000000b0056d6e5160eemr18571535pfn.25.1669385717125; Fri, 25
+ Nov 2022 06:15:17 -0800 (PST)
 MIME-Version: 1.0
-References: <20221125092601.3703-1-abelova@astralinux.ru>
-In-Reply-To: <20221125092601.3703-1-abelova@astralinux.ru>
-From:   Jonas Gorski <jonas.gorski@gmail.com>
-Date:   Fri, 25 Nov 2022 15:14:50 +0100
-Message-ID: <CAOiHx=nc46Hj4wDGC0ci8+SrAkJZ9i_7-yZU1D8cWkpS6prGoQ@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: BCM63xx: Add check for NULL for clk in clk_enable
-To:     Anastasia Belova <abelova@astralinux.ru>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Maxime Bizon <mbizon@freebox.fr>,
-        Ralf Baechle <ralf@linux-mips.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+References: <20221125112201.240178-1-krzysztof.kozlowski@linaro.org> <20221125112201.240178-2-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221125112201.240178-2-krzysztof.kozlowski@linaro.org>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Fri, 25 Nov 2022 08:15:04 -0600
+Message-ID: <CAPLW+4keg-bxpMs0HZmy8W7V9rZHeaTUc_GQvyvhNx5JcqE8YQ@mail.gmail.com>
+Subject: Re: [PATCH 2/4] dt-bindings: soc: samsung: exynos-sysreg: split from syscon
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        Sriranjani P <sriranjani.p@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Nov 2022 at 10:28, Anastasia Belova <abelova@astralinux.ru> wrote:
+On Fri, 25 Nov 2022 at 05:22, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> Check clk for NULL before calling clk_enable_unlocked where clk
-> is dereferenced. There is such check in other implementations
-> of clk_enable.
+> Split Samsung Exynos SoC SYSREG bindings to own file to narrow the
+> bindings and do not allow other parts of syscon.yaml.  This allows
+> further customization of Samsung SoC bindings.
 >
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> Fixes: e7300d04bd08 ("MIPS: BCM63xx: Add support for the Broadcom BCM63xx family of SOCs.")
-> Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>
 > ---
->  arch/mips/bcm63xx/clk.c | 3 +++
->  1 file changed, 3 insertions(+)
+>
+> Cc: Sriranjani P <sriranjani.p@samsung.com>
+> Cc: Chanho Park <chanho61.park@samsung.com>
+> Cc: Sam Protsenko <semen.protsenko@linaro.org>
+> ---
 
-Makes sense, especially since clk_disable() already has a NULL check
-(in case anybody else wonders).
+Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
 
-Reviewed-by: Jonas Gorski <jonas.gorski@gmail.com>
+>  .../devicetree/bindings/mfd/syscon.yaml       |  6 ---
+>  .../soc/samsung/samsung,exynos-sysreg.yaml    | 39 +++++++++++++++++++
+>  2 files changed, 39 insertions(+), 6 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
+> index 1b01bd010431..b73ba1ea08f7 100644
+> --- a/Documentation/devicetree/bindings/mfd/syscon.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
+> @@ -64,12 +64,6 @@ properties:
+>                - rockchip,rk3568-qos
+>                - rockchip,rk3588-qos
+>                - rockchip,rv1126-qos
+> -              - samsung,exynos3-sysreg
+> -              - samsung,exynos4-sysreg
+> -              - samsung,exynos5-sysreg
+> -              - samsung,exynos5433-sysreg
+> -              - samsung,exynos850-sysreg
+> -              - samsung,exynosautov9-sysreg
+>
+>            - const: syscon
+>
+> diff --git a/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml b/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
+> new file mode 100644
+> index 000000000000..68064a5e339c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
+> @@ -0,0 +1,39 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/samsung/samsung,exynos-sysreg.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Samsung Exynos SoC series System Registers (SYSREG)
+> +
+> +maintainers:
+> +  - Krzysztof Kozlowski <krzk@kernel.org>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - samsung,exynos3-sysreg
+> +              - samsung,exynos4-sysreg
+> +              - samsung,exynos5-sysreg
+> +              - samsung,exynos5433-sysreg
+> +              - samsung,exynos850-sysreg
+> +              - samsung,exynosautov9-sysreg
+> +          - const: syscon
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    system-controller@10010000 {
+> +        compatible = "samsung,exynos4-sysreg", "syscon";
+> +        reg = <0x10010000 0x400>;
+> +    };
+> --
+> 2.34.1
+>
