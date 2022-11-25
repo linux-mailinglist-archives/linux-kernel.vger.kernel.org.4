@@ -2,132 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3F076385C1
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 09:59:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC8A6385C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 09:59:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbiKYI7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 03:59:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45794 "EHLO
+        id S229909AbiKYI7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 03:59:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiKYI7d (ORCPT
+        with ESMTP id S229502AbiKYI7p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 03:59:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C1431EE7;
-        Fri, 25 Nov 2022 00:59:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 16CBB6230E;
-        Fri, 25 Nov 2022 08:59:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DEB7C433B5;
-        Fri, 25 Nov 2022 08:59:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669366771;
-        bh=tKXgzOEam9Y7w9Zqw7Ty+4SAeHCvrSV+lqu7ZnYbTtI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pvhygxmhUCTu+f6JE2uHMB7CNVv5IukUss7nahMmOqRKCGt6kEjpHhRdgTb4YFMxx
-         PlvHWP+v3slpb6HpMTl9U3DQhMb1NVdPTwxdJO3bw9b8fFyd2q8VcnUWO1L3e0xvVr
-         IU+WdCTTzVQokyJOVQwW9gPFol0Z+CbgWuSvhix4mWDMEUl7wZx2hgo3zeopKQG94l
-         dBjCRGgyg4R2iZP3xlkQQl3tMAt45Gx9p0nr9l0wGNj/59rMgvGwqknHOOpyQJXned
-         7xqnAb/fz/jsQzpw9qKvk72NOAZnrYgx4Wd9zLJHMlLBw00ZIY4GOjTj4AwAz2IqdX
-         cgoF78LTD5U2g==
-Received: by mail-lf1-f41.google.com with SMTP id d6so5873598lfs.10;
-        Fri, 25 Nov 2022 00:59:31 -0800 (PST)
-X-Gm-Message-State: ANoB5pl0zR4nelQO+k4xRRfrhQLEsBH3LpPMVO4b/OMJyBoWPdE0KgBR
-        enj/10Ytw7Zai+CdZFDJ7SNZcSMWF8UFz0Z8ar0=
-X-Google-Smtp-Source: AA0mqf44IKuFZlXXXK76VmqsA+wAMZKlXyS6SzEypeShQA6TRiuieO+jnCBpVN0qzYlUNO5+ASmmIRDppfH6JfeoGog=
-X-Received: by 2002:ac2:488e:0:b0:4b4:cf32:e105 with SMTP id
- x14-20020ac2488e000000b004b4cf32e105mr9000508lfc.110.1669366769424; Fri, 25
- Nov 2022 00:59:29 -0800 (PST)
+        Fri, 25 Nov 2022 03:59:45 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BA032040
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 00:59:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=vZoNCJjY0Q3X4k84Vewd1QspSTLiUHiINRsOJnCDUeY=; b=G0TWOUnL2Bs1HNe8xv88rMjAHi
+        SS4KNfHDy7Wv5OaTWxtfd8Xr3lfyQdgugh3Wmo111XYvkC04P3QEkixYCdMj4O9aLzImlSjTjH7ns
+        EH5k1KDmAEU68mhpLKRsAw7nb34q9gDSvVVoPq0l2Hsmxg/Ye/GWGbIZfMwuxVhms0A4gAVFScu7/
+        //geUu1wRuegtMi15Bls0u+jVl9F2GwBfqCjhak/KH2hyVA0JTieikhNxcOciIUW98IjyZ5lTBdib
+        loNZ/9vNfpaLiBohBE4rMpBG7b5bK1c4yJec6W+N7J6/DOmrXWKlkCFoQUt5DEKG1ie5g4nRV3MPK
+        +wXgqOTw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oyUYP-004Tc0-FC; Fri, 25 Nov 2022 08:59:25 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 08931300422;
+        Fri, 25 Nov 2022 09:59:24 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id DA4AE2BB639CD; Fri, 25 Nov 2022 09:59:23 +0100 (CET)
+Date:   Fri, 25 Nov 2022 09:59:23 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Josh Don <joshdon@google.com>
+Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org, Tejun Heo <tj@kernel.org>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        anna-maria@linutronix.de
+Subject: Re: [PATCH v3] sched: async unthrottling for cfs bandwidth
+Message-ID: <Y4CD615rYurnV6h7@hirez.programming.kicks-ass.net>
+References: <20221117005418.3499691-1-joshdon@google.com>
+ <Y3d+1a9AEnWaxFwq@hirez.programming.kicks-ass.net>
+ <CABk29NtSmXVCvkdpymeam7AYmXhZy2JLYLPFTdKpk5g6AN1-zg@mail.gmail.com>
+ <094299a3-f039-04c1-d749-2bea0bc14246@linux.dev>
+ <Y3tn5wz6TjsqfGTA@hirez.programming.kicks-ass.net>
+ <CABk29Nuyp=Ba=qiJAospx-SR2ZQM9GrKW0pDUeJ3sfgNB4uLFg@mail.gmail.com>
+ <Y3ymBOfRikUci/PD@hirez.programming.kicks-ass.net>
+ <Y4CDZXZJpPB0J1BV@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <20221103042740.6556-1-elliott@hpe.com> <20221116041342.3841-1-elliott@hpe.com>
- <20221116041342.3841-11-elliott@hpe.com> <Y3TF7/+DejcnN0eV@zx2c4.com> <Y4B/kjS0lgzdUJHG@gondor.apana.org.au>
-In-Reply-To: <Y4B/kjS0lgzdUJHG@gondor.apana.org.au>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 25 Nov 2022 09:59:17 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHHm+L=qE5opDXhjoWZt+1eKXFeGVS=OdvyF0VNFZivCA@mail.gmail.com>
-Message-ID: <CAMj1kXHHm+L=qE5opDXhjoWZt+1eKXFeGVS=OdvyF0VNFZivCA@mail.gmail.com>
-Subject: Re: [PATCH v4 10/24] crypto: x86/poly - limit FPU preemption
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Robert Elliott <elliott@hpe.com>, davem@davemloft.net,
-        tim.c.chen@linux.intel.com, ap420073@gmail.com,
-        David.Laight@aculab.com, ebiggers@kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y4CDZXZJpPB0J1BV@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Nov 2022 at 09:41, Herbert Xu <herbert@gondor.apana.org.au> wrote:
->
-> On Wed, Nov 16, 2022 at 12:13:51PM +0100, Jason A. Donenfeld wrote:
-> > On Tue, Nov 15, 2022 at 10:13:28PM -0600, Robert Elliott wrote:
-> > > +/* avoid kernel_fpu_begin/end scheduler/rcu stalls */
-> > > +static const unsigned int bytes_per_fpu = 337 * 1024;
-> > > +
-> >
-> > Use an enum for constants like this:
-> >
-> >     enum { BYTES_PER_FPU = ... };
-> >
-> > You can even make it function-local, so it's near the code that uses it,
-> > which will better justify its existence.
-> >
-> > Also, where did you get this number? Seems kind of weird.
->
-> These numbers are highly dependent on hardware and I think having
-> them hard-coded is wrong.
->
-> Perhaps we should try a different approach.  How about just limiting
-> the size to 4K, and then depending on need_resched we break out of
-> the loop? Something like:
->
->         if (!len)
->                 return 0;
->
->         kernel_fpu_begin();
->         for (;;) {
->                 unsigned int chunk = min(len, 4096);
->
->                 sha1_base_do_update(desc, data, chunk, sha1_xform);
->
->                 len -= chunk;
->                 data += chunk;
->
->                 if (!len)
->                         break;
->
->                 if (need_resched()) {
->                         kernel_fpu_end();
->                         cond_resched();
->                         kernel_fpu_begin();
->                 }
->         }
->         kernel_fpu_end();
->
+On Fri, Nov 25, 2022 at 09:57:09AM +0100, Peter Zijlstra wrote:
+> On Tue, Nov 22, 2022 at 11:35:48AM +0100, Peter Zijlstra wrote:
+> > On Mon, Nov 21, 2022 at 11:37:14AM -0800, Josh Don wrote:
+> > > Yep, this tradeoff feels "best", but there are some edge cases where
+> > > this could potentially disrupt fairness. For example, if we have
+> > > non-trivial W, a lot of cpus to iterate through for dispatching remote
+> > > unthrottle, and quota is small. Doesn't help that the timer is pinned
+> > > so that this will continually hit the same cpu.
+> > 
+> > We could -- if we wanted to -- manually rotate the timer around the
+> > relevant CPUs. Doing that sanely would require a bit of hrtimer surgery
+> > though I'm afraid.
+> 
+> Here; something like so should enable us to cycle the bandwidth timer.
+> Just need to figure out a way to find another CPU or something.
 
-On arm64, this is implemented in an assembler macro 'cond_yield' so we
-don't need to preserve/restore the SIMD state state at all if the
-yield is not going to result in a call to schedule(). For example, the
-SHA3 code keeps 400 bytes of state in registers, which we don't want
-to save and reload unless needed. (5f6cb2e617681 'crypto:
-arm64/sha512-ce - simplify NEON yield')
+Some more preparation...
 
-So the asm routines will call cond_yield, and return early if a yield
-is required, with the number of blocks or bytes left to process as the
-return value. The C wrapper just calls the asm routine in a loop until
-the return value becomes 0.
-
-That way, we don't need magic values at all, and the yield will occur
-as soon as the asm inner loop observes the yield condition so the
-latency should be much lower as well.
-
-Note that it is only used in shash implementations, given that they
-are the only ones that may receive unbounded inputs.
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -5617,7 +5617,7 @@ static int do_sched_cfs_period_timer(str
+ 	if (!throttled) {
+ 		/* mark as potentially idle for the upcoming period */
+ 		cfs_b->idle = 1;
+-		return 0;
++		return HRTIMER_RESTART;
+ 	}
+ 
+ 	/* account preceding periods in which throttling occurred */
+@@ -5641,10 +5641,10 @@ static int do_sched_cfs_period_timer(str
+ 	 */
+ 	cfs_b->idle = 0;
+ 
+-	return 0;
++	return HRTIMER_RESTART;
+ 
+ out_deactivate:
+-	return 1;
++	return HRTIMER_NORESTART;
+ }
+ 
+ /* a cfs_rq won't donate quota below this amount */
+@@ -5836,9 +5836,9 @@ static enum hrtimer_restart sched_cfs_pe
+ {
+ 	struct cfs_bandwidth *cfs_b =
+ 		container_of(timer, struct cfs_bandwidth, period_timer);
++	int restart = HRTIMER_RESTART;
+ 	unsigned long flags;
+ 	int overrun;
+-	int idle = 0;
+ 	int count = 0;
+ 
+ 	raw_spin_lock_irqsave(&cfs_b->lock, flags);
+@@ -5847,7 +5847,7 @@ static enum hrtimer_restart sched_cfs_pe
+ 		if (!overrun)
+ 			break;
+ 
+-		idle = do_sched_cfs_period_timer(cfs_b, overrun, flags);
++		restart = do_sched_cfs_period_timer(cfs_b, overrun, flags);
+ 
+ 		if (++count > 3) {
+ 			u64 new, old = ktime_to_ns(cfs_b->period);
+@@ -5880,11 +5880,11 @@ static enum hrtimer_restart sched_cfs_pe
+ 			count = 0;
+ 		}
+ 	}
+-	if (idle)
++	if (restart == HRTIMER_NORESTART)
+ 		cfs_b->period_active = 0;
+ 	raw_spin_unlock_irqrestore(&cfs_b->lock, flags);
+ 
+-	return idle ? HRTIMER_NORESTART : HRTIMER_RESTART;
++	return restart;
+ }
+ 
+ void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b)
