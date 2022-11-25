@@ -2,85 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FABE638F0F
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 18:31:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AF12638F17
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 18:32:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbiKYRbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 12:31:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59500 "EHLO
+        id S229650AbiKYRcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 12:32:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiKYRbh (ORCPT
+        with ESMTP id S229629AbiKYRcB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 12:31:37 -0500
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D6751C1E;
-        Fri, 25 Nov 2022 09:31:36 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id E4C9132000CC;
-        Fri, 25 Nov 2022 12:31:31 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Fri, 25 Nov 2022 12:31:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1669397491; x=1669483891; bh=+leDIuPs7f
-        QXw329RvJWgef6ZwT3WBuLmTH9nW4gLAk=; b=ShILbuhBCZgaHKv7ZfKA+JbS07
-        hrl/E8Y8C4XwssWYaa1/x2GShXoOqzEBMZhLwKMQQiMzqrcVKthKn/9D9VCo4d31
-        jeAASbrjthQnxzGeJc/1vD/DKFxmRjnHf9+IjLUeH5nhRFA1igUAmpOag/5Aw3VN
-        m1zOnVfMBLUAlqbexvfar2V7CF01bF13HsnAIXV4IADqX4RYcVw2eWZ9ApIRtsdR
-        AtqVi4+owhgURcmrlvXFXHMntYanjV7CJNHjKFyOfmZEDdEH8zacEB+0okw9Iswf
-        CuQFcTKP/x8kOUkr//6FZ3Bl4THf4nvN4bc00akLRSXmEkGVeotswYJFGQ9Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1669397491; x=1669483891; bh=+leDIuPs7fQXw329RvJWgef6ZwT3
-        WBuLmTH9nW4gLAk=; b=Kyf6sxOUmnRFRbeU2ALr0Hi1AU6i9LOKZl2/B32RZ/K0
-        jSlUM18EDFNux6X8MpPk8xY7mD9jNZUs8rvfxuU/8eUFPCCjDbaUkwH4Yc6aNYMx
-        CJap43/+crz0PlBKkeSXAy217DiSPSypsWo2mhwL88uRyC1Sc0fQikjzib4Opxk7
-        ujRy6jkdn4CAhDXrg11m4Gqax/m/MypAWNsP1vDZXVp0pDq9SiEnUh1xNLgzTW4b
-        TKMJ4jNIxVOGu/0MjqyA66fRgI/EvoRWmOvlz5hjQoMgcJn1niXEtS0vvcX6PXuX
-        /UURyqMQHEWLIwZpPwu84caVFOLnXHMlTGEzdHGO4g==
-X-ME-Sender: <xms:8vuAYx8vDIV9p14-hyiURNEXaQ5c0qCloxOSdMhczLGT3GVhLNvrpw>
-    <xme:8vuAY1sGEDPBPT5iAmRbn1rvzCY-AizovfJASD6rJMJqK4s9wUrXIzgJoygvRzarE
-    X-MfBRihdsj1Q>
-X-ME-Received: <xmr:8vuAY_DOzOD4QJT8ah2YzjvVS05hMYKqg6G_IeQ9_rrep0GhCi0g1nZ2NAMSdxacIbrwzCAiVWyiB03wEvHquut6VDzWwsJ7>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrieehgddutddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:8vuAY1coQ-Pw1f3lE81xBbfHteTxQs-ovVuEvs0kICB5kQ0FKcqyBQ>
-    <xmx:8vuAY2MbTvgDnEbEEUkev5fgCnqA5jxlP_3xLV2OfeL2pEBoBgzsNQ>
-    <xmx:8vuAY3k3B4C2ZqVYKeiI_VlhR96mqOpGzwK8aK0YhA6hVmecYpi9gw>
-    <xmx:8_uAYyl_QHHqHRKizaeleJfNMjproDzlBI8iJUtVvllocuySJrN74Q>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 25 Nov 2022 12:31:29 -0500 (EST)
-Date:   Fri, 25 Nov 2022 18:31:26 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Yuan Can <yuancan@huawei.com>
-Subject: Re: linux-next: manual merge of the char-misc tree with the broadcom
- tree
-Message-ID: <Y4D77ktgpDOLggM4@kroah.com>
-References: <20221125112542.466ebc42@canb.auug.org.au>
+        Fri, 25 Nov 2022 12:32:01 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A3252167;
+        Fri, 25 Nov 2022 09:32:00 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id z20so7237049edc.13;
+        Fri, 25 Nov 2022 09:32:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-language:to:subject:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BS344EZ01Swu2ynnOXhwyOBzth0IMIZXcxGTSI686xc=;
+        b=XpcMQbiaFOJya7+qzk3tnkNJAE8KKxSFEXhrvtyFqav0cioW2lMSpRfguFb7I1aa4A
+         lioHIqrmVRCYOUMFDWf61SAhSWxCIGfwgQfMjs0y6N5bBm9vjb2ts1xUJfKQ8//WATah
+         LmIBVB9FqZj3yoLKuSrquIe4J+0V3dbXwcjlumFQLphwRAVsCq6R605AIPJbzLdJrxJ6
+         P35u+du2aQakbPkN+M3/6G5t3Of8Hz/K74V3T4/3G75B9m1K8ssYpciBhJsAji53S0K5
+         9tOFtdLxxEXfDWS1/UuOv02+0L3ZGjs+EEh/lWKaaxX67keIAIVQKW7iF6GQrF4+gElx
+         ZmEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:content-language:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=BS344EZ01Swu2ynnOXhwyOBzth0IMIZXcxGTSI686xc=;
+        b=o4Pu6wATt82WTs9xFMTAWHX5lPX94/D1N9BVzymdPIee8qg1Jejot0HgneZhrS03ka
+         5+uGDpOBTtdu4rjW0gZPDQ4ccI2hV2sCaxl2jEHlv1ii3Z+ub1a2mLSOxheWpmm+NIml
+         1MQMQgw1hStefuIVkV+iXpB7cJeNj5JswNyNW3SJ18kPmle6XOfTDKMA1UHYTWx96cRV
+         NYFtopHBLjQcm4vD7Yf2EJ0CWY/aR3o2KwrUKMl3l09ELyLzv675yiY5T5ru6upKDl5P
+         3fQCUTZRtm0YS0YkkkR8MVmKbGF/zbZ0MvdIu+CE/xYJpXpPApq7Py8KMNsDaNJhGbHg
+         RQhg==
+X-Gm-Message-State: ANoB5pnfPckZjDGbBxiEB/umywXLddOfFojyom/ILTo5T3vRJXm6e7h3
+        TCVxn2uk5Y4lFhGfMacFVhE9d+fM9NZ/Hw==
+X-Google-Smtp-Source: AA0mqf4izwakw2gafJPDqWGogXbrDNIRO5y3QcetsRjPQBUysZcYUXpN2rDFH3P7EnbYBJUJ5FfGXw==
+X-Received: by 2002:a05:6402:1a28:b0:469:7546:60fe with SMTP id be8-20020a0564021a2800b00469754660femr21831195edb.408.1669397519015;
+        Fri, 25 Nov 2022 09:31:59 -0800 (PST)
+Received: from [192.168.178.2] (dslb-092-072-004-196.092.072.pools.vodafone-ip.de. [92.72.4.196])
+        by smtp.gmail.com with ESMTPSA id j9-20020a1709066dc900b007ba46867e6asm1823024ejt.16.2022.11.25.09.31.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Nov 2022 09:31:58 -0800 (PST)
+Message-ID: <f5668d69-806a-f8c6-5279-7e84b824bd7a@gmail.com>
+Date:   Fri, 25 Nov 2022 18:31:56 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221125112542.466ebc42@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+From:   =?UTF-8?Q?Otto_Pfl=c3=bcger?= <affenull2345@gmail.com>
+Subject: [PATCH 1/4] drm/mipi-dbi: Support separate I/O regulator
+To:     =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,58 +82,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022 at 11:25:42AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the char-misc tree got a conflict in:
-> 
->   drivers/firmware/raspberrypi.c
-> 
-> between commit:
-> 
->   117bd98daca0 ("firmware: raspberrypi: Use dev_err_probe() to simplify code")
-> 
-> from the broadcom tree and commit:
-> 
->   7b51161696e8 ("firmware: raspberrypi: fix possible memory leak in rpi_firmware_probe()")
-> 
-> from the char-misc tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc drivers/firmware/raspberrypi.c
-> index ec07bf26e5eb,dba315f675bc..000000000000
-> --- a/drivers/firmware/raspberrypi.c
-> +++ b/drivers/firmware/raspberrypi.c
-> @@@ -288,9 -268,13 +288,11 @@@ static int rpi_firmware_probe(struct pl
->   	fw->cl.tx_block = true;
->   
->   	fw->chan = mbox_request_channel(&fw->cl, 0);
-> - 	if (IS_ERR(fw->chan))
-> - 		return dev_err_probe(dev, PTR_ERR(fw->chan),
-> - 				     "Failed to get mbox channel\n");
-> + 	if (IS_ERR(fw->chan)) {
-> + 		int ret = PTR_ERR(fw->chan);
->  -		if (ret != -EPROBE_DEFER)
->  -			dev_err(dev, "Failed to get mbox channel: %d\n", ret);
-> + 		kfree(fw);
->  -		return ret;
-> ++		return dev_err_probe(dev, ret, "Failed to get mbox channel\n");
-> + 	}
->   
->   	init_completion(&fw->c);
->   	kref_init(&fw->consumers);
+The MIPI DBI specification defines separate vdd (panel power) and
+vddi (I/O power) supplies. Displays that require different voltages
+for the different supplies do exist, so the supplies cannot be
+combined into one as they are now. Add a new io_regulator property to
+the mipi_dbi_dev struct which can be set by the panel driver along
+with the regulator property.
 
-Looks good to me, thanks!
+Signed-off-by: Otto Pflüger <affenull2345@gmail.com>
+---
+  drivers/gpu/drm/drm_mipi_dbi.c | 14 ++++++++++++++
+  include/drm/drm_mipi_dbi.h     |  7 ++++++-
+  2 files changed, 20 insertions(+), 1 deletion(-)
 
-greg k-h
+diff --git a/drivers/gpu/drm/drm_mipi_dbi.c b/drivers/gpu/drm/drm_mipi_dbi.c
+index a6ac56580876..047cab93a041 100644
+--- a/drivers/gpu/drm/drm_mipi_dbi.c
++++ b/drivers/gpu/drm/drm_mipi_dbi.c
+@@ -427,6 +427,8 @@ void mipi_dbi_pipe_disable(struct 
+drm_simple_display_pipe *pipe)
+
+  	if (dbidev->regulator)
+  		regulator_disable(dbidev->regulator);
++	if (dbidev->io_regulator)
++		regulator_disable(dbidev->io_regulator);
+  }
+  EXPORT_SYMBOL(mipi_dbi_pipe_disable);
+
+@@ -652,6 +654,16 @@ static int 
+mipi_dbi_poweron_reset_conditional(struct mipi_dbi_dev *dbidev, bool
+  		}
+  	}
+
++	if (dbidev->io_regulator) {
++		ret = regulator_enable(dbidev->io_regulator);
++		if (ret) {
++			DRM_DEV_ERROR(dev, "Failed to enable I/O regulator (%d)\n", ret);
++			if (dbidev->regulator)
++				regulator_disable(dbidev->regulator);
++			return ret;
++		}
++	}
++
+  	if (cond && mipi_dbi_display_is_on(dbi))
+  		return 1;
+
+@@ -661,6 +673,8 @@ static int mipi_dbi_poweron_reset_conditional(struct 
+mipi_dbi_dev *dbidev, bool
+  		DRM_DEV_ERROR(dev, "Failed to send reset command (%d)\n", ret);
+  		if (dbidev->regulator)
+  			regulator_disable(dbidev->regulator);
++		if (dbidev->io_regulator)
++			regulator_disable(dbidev->io_regulator);
+  		return ret;
+  	}
+
+diff --git a/include/drm/drm_mipi_dbi.h b/include/drm/drm_mipi_dbi.h
+index 14eaecb1825c..e4efbd8ffc9d 100644
+--- a/include/drm/drm_mipi_dbi.h
++++ b/include/drm/drm_mipi_dbi.h
+@@ -122,10 +122,15 @@ struct mipi_dbi_dev {
+  	struct backlight_device *backlight;
+
+  	/**
+-	 * @regulator: power regulator (optional)
++	 * @regulator: power regulator (Vdd) (optional)
+  	 */
+  	struct regulator *regulator;
+
++	/**
++	 * @io_regulator: I/O power regulator (Vddi) (optional)
++	 */
++	struct regulator *io_regulator;
++
+  	/**
+  	 * @dbi: MIPI DBI interface
+  	 */
+-- 
+2.30.2
 
