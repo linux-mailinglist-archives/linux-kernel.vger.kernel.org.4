@@ -2,78 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30CBC6389AD
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 13:24:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AB056389AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 13:25:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbiKYMYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 07:24:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49454 "EHLO
+        id S230003AbiKYMZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 07:25:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbiKYMYT (ORCPT
+        with ESMTP id S229743AbiKYMYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 07:24:19 -0500
-Received: from smtp.smtpout.orange.fr (smtp-14.smtpout.orange.fr [80.12.242.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E004A9C2
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 04:24:14 -0800 (PST)
-Received: from pop-os.home ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id yXkRoPBKkY4XVyXkaoE21L; Fri, 25 Nov 2022 13:24:13 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 25 Nov 2022 13:24:13 +0100
-X-ME-IP: 86.243.100.34
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Sunil Goutham <sgoutham@marvell.com>,
-        Linu Cherian <lcherian@marvell.com>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Jerin Jacob <jerinj@marvell.com>,
-        hariprasad <hkelam@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
+        Fri, 25 Nov 2022 07:24:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EDF74C273;
+        Fri, 25 Nov 2022 04:24:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2911C62371;
+        Fri, 25 Nov 2022 12:24:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41C99C433C1;
+        Fri, 25 Nov 2022 12:24:34 +0000 (UTC)
+Date:   Fri, 25 Nov 2022 12:24:31 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, Will Deacon <will@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        netdev@vger.kernel.org
-Subject: [PATCH 5/5] octeontx2-af: Simplify a size computation in rvu_npc_exact_init()
-Date:   Fri, 25 Nov 2022 13:24:01 +0100
-Message-Id: <5230dabe27f48948a9fd0f50a62e2437b65e6a6e.1669378798.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1669378798.git.christophe.jaillet@wanadoo.fr>
-References: <cover.1669378798.git.christophe.jaillet@wanadoo.fr>
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
+Subject: Re: [v2 PATCH 3/9] crypto: aead - Add ctx helpers with DMA alignment
+Message-ID: <Y4Cz/xJKYbdOyjiB@arm.com>
+References: <Y4BGC2BPesy3qsEm@gondor.apana.org.au>
+ <E1oyQS1-000djS-65@formenos.hmeau.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <E1oyQS1-000djS-65@formenos.hmeau.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We know that table_size = table->mem_table.depth * table->mem_table.ways,
-so use it instead, it is less verbose.
+On Fri, Nov 25, 2022 at 12:36:33PM +0800, Herbert Xu wrote:
+> diff --git a/include/crypto/internal/aead.h b/include/crypto/internal/aead.h
+> index d482017f3e20..cd8cb1e921b7 100644
+> --- a/include/crypto/internal/aead.h
+> +++ b/include/crypto/internal/aead.h
+> @@ -39,6 +39,11 @@ static inline void *crypto_aead_ctx(struct crypto_aead *tfm)
+>  	return crypto_tfm_ctx(&tfm->base);
+>  }
+>  
+> +static inline void *crypto_aead_ctx_dma(struct crypto_aead *tfm)
+> +{
+> +	return crypto_tfm_ctx_dma(&tfm->base);
+> +}
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I wonder, if drivers end up calling this, isn't it easier to do the
+alignment in crypto_aead_ctx() directly? There are over 300 callers (not
+sure about the padding though, it may need still driver changes unless
+we can add it to something like crypto_tfm_alg_alignmask()). Or is the
+expectation that not all drivers need a DMA alignment?
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c
-index ae34746341c4..00aef8f5ac29 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c
-@@ -1913,7 +1913,7 @@ int rvu_npc_exact_init(struct rvu *rvu)
- 
- 	dev_dbg(rvu->dev, "%s: Allocated bitmap for 32 entry cam\n", __func__);
- 
--	table->tot_ids = (table->mem_table.depth * table->mem_table.ways) + table->cam_table.depth;
-+	table->tot_ids = table_size + table->cam_table.depth;
- 	table->id_bmap = devm_bitmap_zalloc(rvu->dev, table->tot_ids,
- 					    GFP_KERNEL);
- 
 -- 
-2.34.1
-
+Catalin
