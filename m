@@ -2,120 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DB8C638B5C
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 14:37:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71ED4638B5E
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 14:37:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbiKYNhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 08:37:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37020 "EHLO
+        id S229795AbiKYNhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 08:37:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229784AbiKYNhf (ORCPT
+        with ESMTP id S229819AbiKYNhp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 08:37:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA54A5F73
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 05:37:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B133B82ABC
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 13:37:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 812E5C433D6;
-        Fri, 25 Nov 2022 13:37:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669383448;
-        bh=YFnzICYwYE02ku4GDz5bDZqCn0purKRO5AmdK14XXzw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kAxqAXFDYR/CKr29EHHHk9SuAKCVmSOirOnHmcDf6PjOvMwqXtWo9FJm8ort8DTeY
-         n2XW6Di6plj88gm67lOoemK/8D7T0jPNSlYFGZjF4upbBqyYQm3pFk4qQ/rKI5cFUa
-         JSaWrWKfdlArNV0B9JYF3rbR8kzEmuJjDLvJz7JmCjxoVJwFpzVdttJenq4Oy3P8f8
-         MC6tuXb4Qs7ZCvDJT/3bCX0ivycsPFTOkyuImUH6YV4ee9d2sAwQeEEwxlSVaUVIu7
-         zC2AcPLJ4FQgo5oV+A3zbXzxXNGZzRAwbIkICuFVnNEr8mqVXysUYhKdfOFlXj71Tn
-         n1kR0JT2HYgGg==
-Date:   Fri, 25 Nov 2022 22:37:24 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>
-Subject: Re: [PATCH -tip] x86/kprobes: Handle removed INT3 in do_int3()
-Message-Id: <20221125223724.3c338a81ace95c7fbbca4378@kernel.org>
-In-Reply-To: <Y4Bxnw1xev8r7gJY@hirez.programming.kicks-ass.net>
-References: <166933854220.2683864.10006153553442313230.stgit@devnote3>
-        <Y4Bxnw1xev8r7gJY@hirez.programming.kicks-ass.net>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 25 Nov 2022 08:37:45 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE84FCE9
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 05:37:43 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id o15-20020a6bf80f000000b006de313e5cfeso2070449ioh.6
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 05:37:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MylCb3p+Ls6myJyGJs1nv54tAD4Nw5G5SgxoxqrICpQ=;
+        b=AyHxVtmw660vJbi4k8tuUWn9SRHIuY2ozHXjcvGPr6AQebDKXdE7DjZurBFg3Qglkd
+         cAiTVz93tbYWrlMJilJB7UEztEVk8d/rM3tV+RAREdXYdadLr7ao+t8tvSS+hKFAvFX1
+         WPPE36caw06H2CHWKUh7HAA7hfM+d3ZicLDa4iTW23j/Ob5fq9nVC1bCy4SBXL+0JNts
+         Q/whv9JwqxQ9lNOz2HR49p/6I4cG2O4EodSHgsUdOnQtWj8SrUoGi3lr8x3a9k37+R+c
+         8i3hZfEGroulopSXV9ICae3R+J0gBj7RmSM3pXrqh19x008QES/nWjzjgY9gGN/jYBSL
+         XBGw==
+X-Gm-Message-State: ANoB5pnM1jr+kfQB0hnB9TQ+PkuDS/nv1T7svLcGTcdw4qepSkqBBr4Y
+        3hHITUpMpumJUDNtuQGhSarrymis5s0T7Mrza8F6TKLBWU0y
+X-Google-Smtp-Source: AA0mqf5sxHXLzFtKueDQg2b5fadddVGPga7WERR+IPad9WPKkIILVUC6WdR5P06FlOc0vfVE+YDnO1HPRp3QWtQFH3dhVORgZcYg
+MIME-Version: 1.0
+X-Received: by 2002:a05:6e02:f52:b0:302:b44f:a09 with SMTP id
+ y18-20020a056e020f5200b00302b44f0a09mr10193988ilj.227.1669383463212; Fri, 25
+ Nov 2022 05:37:43 -0800 (PST)
+Date:   Fri, 25 Nov 2022 05:37:43 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000519d0205ee4ba094@google.com>
+Subject: [syzbot] WARNING in iov_iter_revert (3)
+From:   syzbot <syzbot+8c7a4ca1cc31b7ce7070@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com, willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Nov 2022 08:41:19 +0100
-Peter Zijlstra <peterz@infradead.org> wrote:
+Hello,
 
-> On Fri, Nov 25, 2022 at 10:09:02AM +0900, Masami Hiramatsu (Google) wrote:
-> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > 
-> > Since x86 doesn't use stop_machine() to patch the kernel text,
-> > there is a small chance that the another CPU removes the INT3
-> > during do_int3(). In this case, if no INT3 notifier callbacks
-> > handled that, the kernel calls die() because of a stray INT3.
-> 
-> Please clarify; how would that happen? Should not everybody modifying
-> text take text_mutex ?
+syzbot found the following issue on:
 
-The text_mutex doesn't stop executing do_int3() since do_int3() is
-an exception and must not be blocked. That mutex is only blocking
-the other kernel text modifiers, not INT3 handling.
+HEAD commit:    eb7081409f94 Linux 6.1-rc6
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=105ff881880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8cdf448d3b35234
+dashboard link: https://syzkaller.appspot.com/bug?extid=8c7a4ca1cc31b7ce7070
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 
-If there is only kprobe using INT3, this must not happen because
-kprobe_int3_handler() always find a struct kprobe corresponding
-to the INT3 address. (from this reason, the current code is wrong too)
+Unfortunately, I don't have any reproducer for this issue yet.
 
-However, if there are other INT3 callbacks (e.g. alternatives and
-ftrace via text_poke_bp*()) managing the INT3, this can happen.
-The possible scenario is here;
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/4a019f55c517/disk-eb708140.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/eb36e890aa8b/vmlinux-eb708140.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/feee2c23ec64/bzImage-eb708140.xz
 
-1. CPU0 hits an INT3 which is managed by text_poke_bp().
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8c7a4ca1cc31b7ce7070@syzkaller.appspotmail.com
 
-2. CPU1 removes the INT3 from the text and *start* calling
-   text_poke_sync(). (note that text_poke_sync() will sync core to
-    serialize pipeline, thus the memory and dcache already updated)
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 7897 at lib/iov_iter.c:918 iov_iter_revert+0x394/0x850
+Modules linked in:
+CPU: 0 PID: 7897 Comm: syz-executor.2 Not tainted 6.1.0-rc6-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:iov_iter_revert+0x394/0x850 lib/iov_iter.c:918
+Code: 80 3c 01 00 48 8b 5c 24 20 74 08 48 89 df e8 e3 c9 a3 fd 4c 89 2b 48 83 c4 68 5b 41 5c 41 5d 41 5e 41 5f 5d c3 e8 5c b1 4f fd <0f> 0b eb e8 48 8d 6b 18 48 89 e8 48 c1 e8 03 42 80 3c 28 00 74 08
+RSP: 0018:ffffc90015fe7ac8 EFLAGS: 00010287
+RAX: ffffffff843ae714 RBX: ffffc90015fe7e40 RCX: 0000000000040000
+RDX: ffffc9000c1cc000 RSI: 000000000003ef70 RDI: 000000000003ef71
+RBP: fffffffffff80e18 R08: ffffffff843ae3bc R09: fffffbfff1d2f2de
+R10: fffffbfff1d2f2de R11: 1ffffffff1d2f2dd R12: fffffffffff80e18
+R13: ffffc90015fe7e40 R14: ffffc90015fe7e50 R15: 000000007fefef0c
+FS:  00007f212fd7e700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000000c00c59ffb8 CR3: 000000007dc32000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ generic_file_read_iter+0x3d4/0x540 mm/filemap.c:2804
+ do_iter_read+0x6e3/0xc10 fs/read_write.c:796
+ vfs_readv fs/read_write.c:916 [inline]
+ do_preadv+0x1f4/0x330 fs/read_write.c:1008
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f212f08b639
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f212fd7e168 EFLAGS: 00000246 ORIG_RAX: 0000000000000147
+RAX: ffffffffffffffda RBX: 00007f212f1ac1f0 RCX: 00007f212f08b639
+RDX: 0000000000000001 RSI: 0000000020000100 RDI: 0000000000000003
+RBP: 00007f212f0e6ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffdc886837f R14: 00007f212fd7e300 R15: 0000000000022000
+ </TASK>
 
-3. CPU0 calls kprobe_int3_handler(), but it can not find the
-   corresponding kprobe from the address. Thus it reads the instruction
-   at the address, and find it is not INT3 anymore.
 
-4. CPU0's kprobe_int3_handler() sets the address to the regs->ip,
-   and returns 1, which means "this INT3 is handled".
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-5. CPU0 returns from do_int3() and exit the exception, then it
-   handles the do_sync_core() via IPI.
-
-6. CPU1 finish the text_poke_sync().
-
-This works fine, but it is not handled by the INT3 owner's callback.
-
-Oh! maybe we don't need to handle remove INT3 case, because all
-callback MUST handle its own INT3. This can be done simply using
-text_poke_sync() because it use an IPI, and the IPI is not handled
-until all running INT3 handlers exit.
-
-OK, let me update the patch to just drop the removed INT3 handling
-from kprobes.
-
-Thank you,
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
