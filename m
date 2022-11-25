@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B282C63888E
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 12:20:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09F9F63888F
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 12:20:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbiKYLTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 06:19:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46182 "EHLO
+        id S230437AbiKYLT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 06:19:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbiKYLTs (ORCPT
+        with ESMTP id S230074AbiKYLTt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 06:19:48 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A61E28E17;
-        Fri, 25 Nov 2022 03:19:45 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id cl5so6270649wrb.9;
-        Fri, 25 Nov 2022 03:19:45 -0800 (PST)
+        Fri, 25 Nov 2022 06:19:49 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389D228E04;
+        Fri, 25 Nov 2022 03:19:47 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id x5so6291787wrt.7;
+        Fri, 25 Nov 2022 03:19:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=H4DbuMCnCKfZ/X33NVzzgb/ifknYJFeQAyg/fDbKILM=;
-        b=MJTopbFMxXVgGa3ngdb1kcHRAh4vMZ7fbyu1UeoKxPOAleRmO4pX76dgm81YUUB17L
-         F8E/IUYa937tek8muSzdgfgLC+gchdb/UUJ1fizl22ErU4DeH9Qomk838IG7xCMgCTXn
-         noBYTatzIC89Wa0fx7WmDnBuvOVY2w01/ynG1veOgO2OsK/JRwkBhq57e4umTHkyEXQ+
-         QHdpiG60Cl11EtDF5+aqQPkZavx1VKTJqzKjWsOmnVKUoPlOtrmmE6M/yMtl06qb3mpL
-         I3UJeAxD5tVLP7ktD1CevI9ga+4W640YEFsV3HXPg3XPbez2c1fp7B6jH6+USJQp9S0+
-         ZW5g==
+        bh=7PfQ2W7+jfq13mv60YI0ZFUsMp5wOyJ2UsW2Qs+puQY=;
+        b=SbOHS903mNOpnILtR4C6Hka3wbt9VO8ZuT7xkiYlMrLPpfzFTRq/BYRgVS/iJ8W9cy
+         DvWv19s6RhNIRBpVLu8cwh1cDiYGNe6tGXBnRrlNI978OeboQKWWz2bF0fgIZt1W5Stf
+         mE02QjarGeHFH8aLwY/H9J4EzBPZDBgFlSfewGntNzf7EHZodWIE8G+gv6jT6CRvICW5
+         qzZUtGHrDaMGlqXsNb0o4uS51N5omZkkcQA+ERrSSFeNPd2W1cOSNoXaYJvbwHAbeiv2
+         yBZ0wZIF86RreFLmbDlM8pU8lL8haqJo1C40g3y4eNxwvHzRn5NTyHXDJSGPG+OP82x0
+         BQQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=H4DbuMCnCKfZ/X33NVzzgb/ifknYJFeQAyg/fDbKILM=;
-        b=PzI7Zj/y/kx+7JzIJVZLYcZM6ccXHSFIH5VCXdKPAoLGocMTmS+go1/eKIckmd34lB
-         9EcCVFgFc5JH7L2kIXhO9IvXO82737aVI2UP67uFbtcEbosTTMf/U76lUSXRx2z+bIrd
-         4MvZjkFI6ufcyBJ59IfD64XDXCezo2YvDiuyEC0JfFv1rk8lhCMyJRPe6aGmEeWd7jiJ
-         6isDhpJQN4A3BxmhK6Ur+jvyT6BIrX6iTndIsa3xhW1y7zcHbB291p405cIBv9LnZEU3
-         BQ+WnZt49iN7aMdKh/bHl8DXHZBc4P6C0YpdnkYZgR91MHBfd3zgTGxihdbea27/Vays
-         ASAw==
-X-Gm-Message-State: ANoB5pltrTk9H1M/BYSwYPZLvWccsYJSfrnmdr2Tvg1zD+T2W70o+TmS
-        VfbG7DyayyYOGAlZaivpQEw=
-X-Google-Smtp-Source: AA0mqf7R0O/iMKw+/pY3QRSPGLMqpoZMk6Y+6iqjJv+P2qnYsq8Eff8A9TxL5wfpOu5YfjJ8gs1hYw==
-X-Received: by 2002:a5d:6dcf:0:b0:236:78b7:87c9 with SMTP id d15-20020a5d6dcf000000b0023678b787c9mr22664039wrz.556.1669375184088;
-        Fri, 25 Nov 2022 03:19:44 -0800 (PST)
+        bh=7PfQ2W7+jfq13mv60YI0ZFUsMp5wOyJ2UsW2Qs+puQY=;
+        b=rV3uJ4mfyh5Op9/voduhEfOehbLXGPg2iFVVBX9o6lr3otchxcvahBxVBbXpCIZpbb
+         uYU/VVnheVavG6DDEaVhufwjVKSA2s+hdI7tPhN1NUxzFeKYr51wfmYJArboFSPMgicw
+         xLDL5913ZV/wqHHj/oExYLJQ9I8JHHnxDiIx5UK7Ri1PaZ4J7GmfU9NXQbXJgMoAnmLU
+         tjia9+M1//VxV2SE+ukPnTgaoZ3wXMQ8qnRfFvnTo5ASncMV5QXSzMnHPbGr45AuMg40
+         WuHmtEfF85+9wMDf6UAntnJc4vWLNSwPdjMRQwhH9nx9XAFIQvb/7DK6bgxHLQTAUOVn
+         Vwrw==
+X-Gm-Message-State: ANoB5plwdKfsgZx3fXzEgd9qfkNf+ASYpDY4hRuFeytc1KgUWobDtv1b
+        hwFFpwE9WHk7FXpVLaEPCxQ=
+X-Google-Smtp-Source: AA0mqf5PgDcWrGG/qlTS1d5khO1RXvIht00dzCgwzfFVqj3/zuybOqlxIFU+3NcsYBK3ngzF7dm6Ng==
+X-Received: by 2002:adf:e8c9:0:b0:22e:33dc:3bf1 with SMTP id k9-20020adfe8c9000000b0022e33dc3bf1mr23477456wrn.316.1669375185693;
+        Fri, 25 Nov 2022 03:19:45 -0800 (PST)
 Received: from cizrna.home (cst-prg-44-69.cust.vodafone.cz. [46.135.44.69])
-        by smtp.gmail.com with ESMTPSA id v11-20020a5d4b0b000000b002368f6b56desm4207406wrq.18.2022.11.25.03.19.42
+        by smtp.gmail.com with ESMTPSA id v11-20020a5d4b0b000000b002368f6b56desm4207406wrq.18.2022.11.25.03.19.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Nov 2022 03:19:43 -0800 (PST)
+        Fri, 25 Nov 2022 03:19:45 -0800 (PST)
 Sender: Tomeu Vizoso <tomeu.vizoso@gmail.com>
 From:   Tomeu Vizoso <tomeu.vizoso@collabora.com>
 Cc:     Tomeu Vizoso <tomeu.vizoso@collabora.com>,
@@ -65,9 +65,9 @@ Cc:     Tomeu Vizoso <tomeu.vizoso@collabora.com>,
         SoC support),
         linux-amlogic@lists.infradead.org (open list:ARM/Amlogic Meson SoC
         support), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 4/6] arm64: dts: meson-g12-common: Add reference to NNA reset to pwrc
-Date:   Fri, 25 Nov 2022 12:19:17 +0100
-Message-Id: <20221125111921.37261-5-tomeu.vizoso@collabora.com>
+Subject: [PATCH 5/6] arm64: dts: Add DT node for the VIPNano-QI on the A311D
+Date:   Fri, 25 Nov 2022 12:19:18 +0100
+Message-Id: <20221125111921.37261-6-tomeu.vizoso@collabora.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221125111921.37261-1-tomeu.vizoso@collabora.com>
 References: <20221125111921.37261-1-tomeu.vizoso@collabora.com>
@@ -84,31 +84,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Based on the power sequence in the downstream driver.
+This "NPU" is very similar to the Vivante GPUs and Etnaviv works well
+with it with just a few small changes.
 
 Signed-off-by: Tomeu Vizoso <tomeu.vizoso@collabora.com>
 ---
- arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi      | 10 ++++++++++
+ .../boot/dts/amlogic/meson-g12b-a311d-khadas-vim3.dts  |  4 ++++
+ 2 files changed, 14 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
-index 45947c1031c4..fa96fddf4633 100644
+index fa96fddf4633..13c79676a356 100644
 --- a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
 +++ b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
-@@ -1625,10 +1625,11 @@ pwrc: power-controller {
- 							 <&reset RESET_VDAC>,
- 							 <&reset RESET_VDI6>,
- 							 <&reset RESET_VENCL>,
--							 <&reset RESET_VID_LOCK>;
-+							 <&reset RESET_VID_LOCK>,
-+							 <&reset RESET_NNA>;
- 						reset-names = "viu", "venc", "vcbus", "bt656",
- 							      "rdma", "venci", "vencp", "vdac",
--							      "vdi6", "vencl", "vid_lock";
-+							      "vdi6", "vencl", "vid_lock", "nna";
- 						clocks = <&clkc CLKID_VPU>,
- 							 <&clkc CLKID_VAPB>;
- 						clock-names = "vpu", "vapb";
+@@ -11,6 +11,7 @@
+ #include <dt-bindings/interrupt-controller/arm-gic.h>
+ #include <dt-bindings/reset/amlogic,meson-g12a-reset.h>
+ #include <dt-bindings/thermal/thermal.h>
++#include <dt-bindings/power/meson-g12a-power.h>
+ 
+ / {
+ 	interrupt-parent = <&gic>;
+@@ -2485,4 +2486,13 @@ xtal: xtal-clk {
+ 		#clock-cells = <0>;
+ 	};
+ 
++	npu: npu@ff100000 {
++		compatible = "vivante,gc";
++		reg = <0x0 0xff100000 0x0 0x20000>;
++		interrupts = <0 147 4>;
++		clocks = <&clkc CLKID_NNA_CORE_CLK>,
++			<&clkc CLKID_NNA_AXI_CLK>;
++		clock-names = "core", "bus";
++		power-domains = <&pwrc PWRC_G12A_NNA_ID>;
++	};
+ };
+diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-a311d-khadas-vim3.dts b/arch/arm64/boot/dts/amlogic/meson-g12b-a311d-khadas-vim3.dts
+index 124a80901084..73f3d87dcefd 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-g12b-a311d-khadas-vim3.dts
++++ b/arch/arm64/boot/dts/amlogic/meson-g12b-a311d-khadas-vim3.dts
+@@ -15,6 +15,10 @@ / {
+ 	compatible = "khadas,vim3", "amlogic,a311d", "amlogic,g12b";
+ };
+ 
++&npu {
++	status = "okay";
++};
++
+ /*
+  * The VIM3 on-board  MCU can mux the PCIe/USB3.0 shared differential
+  * lines using a FUSB340TMX USB 3.1 SuperSpeed Data Switch between
 -- 
 2.38.1
 
