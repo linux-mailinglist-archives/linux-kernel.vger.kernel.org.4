@@ -2,158 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17737638739
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 11:19:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6665638744
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 11:20:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbiKYKTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 05:19:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46334 "EHLO
+        id S230116AbiKYKUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 05:20:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiKYKTa (ORCPT
+        with ESMTP id S229572AbiKYKUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 05:19:30 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662D821887
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 02:19:29 -0800 (PST)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1oyVnn-0004RC-Ta; Fri, 25 Nov 2022 11:19:24 +0100
-Message-ID: <9ea3b053cf20d0f3564ccd6152b258ddf0cc8d1e.camel@pengutronix.de>
-Subject: Re: [PATCH v1] PCI: imx6: Set MSI enable bit of RC in resume
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Hongxing Zhu <hongxing.zhu@nxp.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>
-Cc:     "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>
-Date:   Fri, 25 Nov 2022 11:19:22 +0100
-In-Reply-To: <AS8PR04MB8676A61A8C554EB0F0162C998C0E9@AS8PR04MB8676.eurprd04.prod.outlook.com>
-References: <1667289595-12440-1-git-send-email-hongxing.zhu@nxp.com>
-         <AS8PR04MB8676A61A8C554EB0F0162C998C0E9@AS8PR04MB8676.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        Fri, 25 Nov 2022 05:20:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C03AA3FBA4
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 02:19:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669371585;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bY19rPV8ppg6ZUdn2yxRqF47aTG2fFJ0ZNtqig4Q8uo=;
+        b=GKZEQYHwBtT0I7Nt6YqDVZvUfrtodsXenJ/vU/TfAbqidrwC4g67w4lmVgjR7yuWCki6u3
+        +8S76Q30NhzHJJY1ATn2rvomdpHSDZHRa/u9O+W0QkJUDi0ED8CLYlGJBryEYVMJGLpWRx
+        1OJjhVFps4TCNROx16mGo4SA1WkPOWY=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-587-y1rxzPk3MrSSrEP-z18TUA-1; Fri, 25 Nov 2022 05:19:43 -0500
+X-MC-Unique: y1rxzPk3MrSSrEP-z18TUA-1
+Received: by mail-wm1-f70.google.com with SMTP id v188-20020a1cacc5000000b003cf76c4ae66so3981017wme.7
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 02:19:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bY19rPV8ppg6ZUdn2yxRqF47aTG2fFJ0ZNtqig4Q8uo=;
+        b=iPjg73L17Dnnx2TrL9f4NERL3aJkw0MPt9+HM1hR/u62r93QVx8/MFAfAT11Az4YDT
+         WGSWocdhl64KWVK5AdZRf2LHRJ6qYhBl03pC4tapcXtfk+zzgpIlaEvAUJgqzmOxuNUb
+         YtIpZeY8Jc/U2AkT0qHCrpfi4LmBszl+zx7Zu1sCNj1R8Ap3qoA2vdlJ+pP0GV9IiOKL
+         02Iznu/HEv8EL4nbICG93yeHxCH5IiySnYff0HE26+r3GXZmVNdvZIloASDv208qTK6m
+         LqU3IkOrLG96CvnjUlHRqpBZq6DZgELwHEY0O3beYdgzAAbI3b5FWzGY+sCTeW+xb5Uv
+         U5Ew==
+X-Gm-Message-State: ANoB5pmfvVd5ScZsQI5za0y/2fTgyQzIM7jmt483ifReiIONyPkpxrWi
+        dUvxoDVlWHCaim7OsHrQt18EMo81With+q1zfqixDVkjaJRicUcWrCZTMYrU4oOirq9c/VypH0U
+        cLeVHf/irvLxhYc5z7LMUGaC9
+X-Received: by 2002:adf:f189:0:b0:241:bc9e:a238 with SMTP id h9-20020adff189000000b00241bc9ea238mr12437037wro.558.1669371581918;
+        Fri, 25 Nov 2022 02:19:41 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf733o27EIhWoSlUjNsa9tcFhysJWN14yjguQxBT++y7CLSBTY7xXokXb5BEj/8z8JRbucHxIA==
+X-Received: by 2002:adf:f189:0:b0:241:bc9e:a238 with SMTP id h9-20020adff189000000b00241bc9ea238mr12437025wro.558.1669371581684;
+        Fri, 25 Nov 2022 02:19:41 -0800 (PST)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id u10-20020a05600c19ca00b003c5571c27a1sm6216386wmq.32.2022.11.25.02.19.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Nov 2022 02:19:41 -0800 (PST)
+Message-ID: <68ad39a2-e47c-ffcb-34ad-ea680beac59c@redhat.com>
+Date:   Fri, 25 Nov 2022 11:19:39 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 05/24] drm/tests: helpers: Make sure the device is bound
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Maxime Ripard <mripard@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     David Gow <davidgow@google.com>, linaro-mm-sig@lists.linaro.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
+        linux-media@vger.kernel.org, kunit-dev@googlegroups.com,
+        dri-devel@lists.freedesktop.org,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        linux-kernel@vger.kernel.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>
+References: <20221123-rpi-kunit-tests-v1-0-051a0bb60a16@cerno.tech>
+ <20221123-rpi-kunit-tests-v1-5-051a0bb60a16@cerno.tech>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20221123-rpi-kunit-tests-v1-5-051a0bb60a16@cerno.tech>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Freitag, dem 25.11.2022 um 02:07 +0000 schrieb Hongxing Zhu:
-> Friendly ping.
-> Anymore comments are very appreciated.
+On 11/23/22 16:25, Maxime Ripard wrote:
+> The device managed resources are freed when the device is detached, so
+> it has to be bound in the first place.
 > 
-> BTW, I had verified on i.MX7D/i.MX6QP platforms that MSI wouldn’t be functional
->  after resume without this patch.
-
-Instead of playing whack-a-mole and restoring individual config setting
-after resume, shouldn't we just do a pci_save_state() on suspend and
-then restore the complete config by calling pci_restore_state() on
-resume?
-
-Regards,
-Lucas
-
+> Let's create a fake driver that we will bind to our fake device to
+> benefit from the device managed cleanups in our tests.
 > 
-> Best Regards
-> Richard Zhu
-> 
-> > -----Original Message-----
-> > From: Richard Zhu <hongxing.zhu@nxp.com>
-> > Sent: 2022年11月1日 16:00
-> > To: l.stach@pengutronix.de; bhelgaas@google.com;
-> > lorenzo.pieralisi@arm.com
-> > Cc: Hongxing Zhu <hongxing.zhu@nxp.com>; linux-pci@vger.kernel.org;
-> > linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
-> > kernel@pengutronix.de; dl-linux-imx <linux-imx@nxp.com>
-> > Subject: [PATCH v1] PCI: imx6: Set MSI enable bit of RC in resume
-> > 
-> > The MSI Enable bit controls delivery of MSI interrupts from components below
-> > the Root Port. This bit might lost during the suspend, should be re-configured
-> > during resume.
-> > 
-> > Encapsulate the MSI enable set into a standalone function, and invoke it in
-> > both probe and resume.
-> > 
-> > Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-> > ---
-> >  drivers/pci/controller/dwc/pci-imx6.c | 24 +++++++++++++++++-------
-> >  1 file changed, 17 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/drivers/pci/controller/dwc/pci-imx6.c
-> > b/drivers/pci/controller/dwc/pci-imx6.c
-> > index 2616585ca5f8..dba15546075f 100644
-> > --- a/drivers/pci/controller/dwc/pci-imx6.c
-> > +++ b/drivers/pci/controller/dwc/pci-imx6.c
-> > @@ -1041,6 +1041,21 @@ static void imx6_pcie_pm_turnoff(struct
-> > imx6_pcie *imx6_pcie)
-> >  	usleep_range(1000, 10000);
-> >  }
-> > 
-> > +static void pci_imx_set_msi_en(struct dw_pcie *pci) {
-> > +	u8 offset;
-> > +	u16 val;
-> > +
-> > +	if (pci_msi_enabled()) {
-> > +		offset = dw_pcie_find_capability(pci, PCI_CAP_ID_MSI);
-> > +		dw_pcie_dbi_ro_wr_en(pci);
-> > +		val = dw_pcie_readw_dbi(pci, offset + PCI_MSI_FLAGS);
-> > +		val |= PCI_MSI_FLAGS_ENABLE;
-> > +		dw_pcie_writew_dbi(pci, offset + PCI_MSI_FLAGS, val);
-> > +		dw_pcie_dbi_ro_wr_dis(pci);
-> > +	}
-> > +}
-> > +
-> >  static int imx6_pcie_suspend_noirq(struct device *dev)  {
-> >  	struct imx6_pcie *imx6_pcie = dev_get_drvdata(dev); @@ -1073,6
-> > +1088,7 @@ static int imx6_pcie_resume_noirq(struct device *dev)
-> >  	if (imx6_pcie->link_is_up)
-> >  		imx6_pcie_start_link(imx6_pcie->pci);
-> > 
-> > +	pci_imx_set_msi_en(imx6_pcie->pci);
-> >  	return 0;
-> >  }
-> > 
-> > @@ -1090,7 +1106,6 @@ static int imx6_pcie_probe(struct platform_device
-> > *pdev)
-> >  	struct resource *dbi_base;
-> >  	struct device_node *node = dev->of_node;
-> >  	int ret;
-> > -	u16 val;
-> > 
-> >  	imx6_pcie = devm_kzalloc(dev, sizeof(*imx6_pcie), GFP_KERNEL);
-> >  	if (!imx6_pcie)
-> > @@ -1282,12 +1297,7 @@ static int imx6_pcie_probe(struct platform_device
-> > *pdev)
-> >  	if (ret < 0)
-> >  		return ret;
-> > 
-> > -	if (pci_msi_enabled()) {
-> > -		u8 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_MSI);
-> > -		val = dw_pcie_readw_dbi(pci, offset + PCI_MSI_FLAGS);
-> > -		val |= PCI_MSI_FLAGS_ENABLE;
-> > -		dw_pcie_writew_dbi(pci, offset + PCI_MSI_FLAGS, val);
-> > -	}
-> > +	pci_imx_set_msi_en(pci);
-> > 
-> >  	return 0;
-> >  }
-> > --
-> > 2.25.1
-> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> ---
+>  drivers/gpu/drm/tests/drm_kunit_helpers.c | 60 +++++++++++++++++++++++++++++++
+>  1 file changed, 60 insertions(+)
+>
 
+If I understood the platform core code correctly, the probe is always sync in
+the case of platform drivers. Unless .probe_type = PROBE_PREFER_ASYNCHRONOUS is
+set or a module is loaded using with the "async_probe=1" parameter. So I believe
+the wait queue won't be needed. The only DRM driver that forces an async probe is
+drivers/gpu/drm/hyperv/hyperv_drm_drv.c AFAICT.
+
+So I would drop this patch from the set for now.
+
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
 
