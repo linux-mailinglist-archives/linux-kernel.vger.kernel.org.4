@@ -2,164 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CF3F6383BE
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 07:05:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 987466383C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 07:08:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbiKYGFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 01:05:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43296 "EHLO
+        id S229671AbiKYGIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 01:08:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiKYGFk (ORCPT
+        with ESMTP id S229664AbiKYGIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 01:05:40 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30EB1FCF4;
-        Thu, 24 Nov 2022 22:05:39 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AP50kUP032652;
-        Fri, 25 Nov 2022 06:05:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=95nu3QZwoiCm+Mik9Bjpaa1JAMoaDGnyaT/b8apUHYA=;
- b=WLc2B0kpr12ZAA0Hk1Uj/oORduNjzHLOXO3z/pFZo+U+GytOyLLmLk2GcGAc0tWgUlFG
- UFPD9bSK8mzXdleG2zqEV+FtfJ7gw2eXwQ9Zm8L5L+j4/g95FvtFHY02A+tVT2GauF/R
- NKNNqzHMiJdrl1unKvNmS1ORdeMm4beevshlj2z3Ll700LUM4wQUV9OLMS8cXn9g52FJ
- jR0pNitr2w3KHm4bkzLNBW62CoViZVNygqX9qZHqFM76Pncyenwz6R9iYMycJCmzBCVH
- vxQvGCnPoOpqFnGT7HlE0fKMXYi5xZHVpDGYm4rWCoFvE5+JBjN4/4LnaLzkrPiWJNND IQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m21mbbc2q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Nov 2022 06:05:28 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AP65Ruf027697
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Nov 2022 06:05:27 GMT
-Received: from [10.216.38.33] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 24 Nov
- 2022 22:05:19 -0800
-Message-ID: <6753d5a3-e46b-2cf1-c807-333093ff3fdf@quicinc.com>
-Date:   Thu, 24 Nov 2022 22:05:16 -0800
+        Fri, 25 Nov 2022 01:08:07 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E951FFB6
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 22:08:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669356485; x=1700892485;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=y/akn5msuvN9Nkygx05J5LbdcnZH8ElmQx+X7UMtEvY=;
+  b=ERZ+mHUrXZ4SqN5+zBT9S/82YlxaWKZyNOY1K/LALxj0tLgWr2bdwgTs
+   yaIhgUuVqByGMEHg6WskEwCrySPhyp6/rPhMqNIPjXkmChuxvEW9TC6C2
+   dyd7DWtmngXL2RvNAJR++Fc5UrEZNtC2HWW+fSasE1rnXWGs4U483DN41
+   E4oJykZNsWAOAjF2fPEe9NLy6QPcOec+Scz4nIjvR23SW02f99McVk8oe
+   No7ndmPPdGOU+x94rEqT8/wJqBlvLlVZg1aNV8iDYZ+vuv2RUl9oGv4+b
+   vj+iLb9BYo+WSVZZN8XH5Vw8oZAV4nHj6E2at6nvM2sUO0/i/7UpFehQu
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="316239474"
+X-IronPort-AV: E=Sophos;i="5.96,192,1665471600"; 
+   d="scan'208";a="316239474"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2022 22:08:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="817047562"
+X-IronPort-AV: E=Sophos;i="5.96,192,1665471600"; 
+   d="scan'208";a="817047562"
+Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 24 Nov 2022 22:07:58 -0800
+Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oyRsU-0004kE-0r;
+        Fri, 25 Nov 2022 06:07:58 +0000
+Date:   Fri, 25 Nov 2022 14:07:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2022.11.22a] BUILD SUCCESS
+ 92cc9d759e41acfeaacc577aba0128dc4b06dab6
+Message-ID: <63805ba3.UuLsQPMueiV6RhdU%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [Freedreno] [PATCH v2 03/12] drm/msm/dpu: Refactor sc7280_pp
- location
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Robert Foss <robert.foss@linaro.org>, <robdclark@gmail.com>,
-        <dmitry.baryshkov@linaro.org>, <sean@poorly.run>,
-        <airlied@linux.ie>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <agross@kernel.org>,
-        <bjorn.andersson@linaro.org>, <quic_kalyant@quicinc.com>,
-        <swboyd@chromium.org>, <angelogioacchino.delregno@somainline.org>,
-        <loic.poulain@linaro.org>, <quic_khsieh@quicinc.com>,
-        <quic_vpolimer@quicinc.com>, <vkoul@kernel.org>,
-        <dianders@chromium.org>, <linux-arm-msm@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Jonathan Marek <jonathan@marek.ca>,
-        <vinod.koul@linaro.org>, <quic_jesszhan@quicinc.com>,
-        <andersson@kernel.org>
-References: <20221115133105.980877-1-robert.foss@linaro.org>
- <20221115133105.980877-4-robert.foss@linaro.org>
- <d85a5d66-d54b-29cb-3ced-69c75f6f7802@somainline.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <d85a5d66-d54b-29cb-3ced-69c75f6f7802@somainline.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: dy2vjxEGi9Y89OT7Lgm1pPSd_OzBv1mD
-X-Proofpoint-GUID: dy2vjxEGi9Y89OT7Lgm1pPSd_OzBv1mD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-25_02,2022-11-24_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=999 lowpriorityscore=0 mlxscore=0 spamscore=0 malwarescore=0
- impostorscore=0 priorityscore=1501 bulkscore=0 phishscore=0 clxscore=1015
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211250049
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.11.22a
+branch HEAD: 92cc9d759e41acfeaacc577aba0128dc4b06dab6  docs/RCU/rcubarrier: Right-adjust line numbers in code snippets
 
+elapsed time: 2041m
 
-On 11/15/2022 5:33 AM, Konrad Dybcio wrote:
-> 
-> 
-> On 15/11/2022 14:30, Robert Foss wrote:
->> The sc7280_pp declaration is not located by the other _pp
->> declarations, but rather hidden around the _merge_3d
->> declarations. Let's fix this to avoid confusion.
->>
->> Signed-off-by: Robert Foss <robert.foss@linaro.org>
->> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->> ---
-> This is already merged.
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=1a5b5372e3b0a4cc65a0cbb724b1b0859f4ac63c 
-> 
-> 
-> Konrad
+configs tested: 48
+configs skipped: 2
 
-Its part of linux-next but a PR hasnt been sent with it.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-That being said, since this particular change has been taken separately, 
-this series should now be rebased without this change and addressing 
-some of the other comments given by konrad.
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+mips                             allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+alpha                               defconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+s390                                defconfig
+s390                             allmodconfig
+m68k                             allmodconfig
+alpha                            allyesconfig
+arc                              allyesconfig
+m68k                             allyesconfig
+s390                             allyesconfig
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+ia64                             allmodconfig
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+arc                  randconfig-r043-20221124
+i386                          randconfig-a001
+x86_64                        randconfig-a006
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+i386                                defconfig
+i386                             allyesconfig
+arm                                 defconfig
+arm64                            allyesconfig
+arm                              allyesconfig
 
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 14 +++++++-------
->>   1 file changed, 7 insertions(+), 7 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c 
->> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> index 4dac90ee5b8a..8f2d634f7b6b 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> @@ -1294,6 +1294,13 @@ static const struct dpu_pingpong_cfg 
->> sm8150_pp[] = {
->>               -1),
->>   };
->> +static const struct dpu_pingpong_cfg sc7280_pp[] = {
->> +    PP_BLK("pingpong_0", PINGPONG_0, 0x59000, 0, sc7280_pp_sblk, -1, 
->> -1),
->> +    PP_BLK("pingpong_1", PINGPONG_1, 0x6a000, 0, sc7280_pp_sblk, -1, 
->> -1),
->> +    PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, 0, sc7280_pp_sblk, -1, 
->> -1),
->> +    PP_BLK("pingpong_3", PINGPONG_3, 0x6c000, 0, sc7280_pp_sblk, -1, 
->> -1),
->> +};
->> +
->>   static struct dpu_pingpong_cfg qcm2290_pp[] = {
->>       PP_BLK("pingpong_0", PINGPONG_0, 0x70000, 0, sdm845_pp_sblk,
->>           DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
->> @@ -1352,13 +1359,6 @@ static const struct dpu_merge_3d_cfg 
->> sm8450_merge_3d[] = {
->>       MERGE_3D_BLK("merge_3d_3", MERGE_3D_3, 0x65f00),
->>   };
->> -static const struct dpu_pingpong_cfg sc7280_pp[] = {
->> -    PP_BLK("pingpong_0", PINGPONG_0, 0x59000, 0, sc7280_pp_sblk, -1, 
->> -1),
->> -    PP_BLK("pingpong_1", PINGPONG_1, 0x6a000, 0, sc7280_pp_sblk, -1, 
->> -1),
->> -    PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, 0, sc7280_pp_sblk, -1, 
->> -1),
->> -    PP_BLK("pingpong_3", PINGPONG_3, 0x6c000, 0, sc7280_pp_sblk, -1, 
->> -1),
->> -};
->> -
->>   /*************************************************************
->>    * DSC sub blocks config
->>    *************************************************************/
+clang tested configs:
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+hexagon              randconfig-r041-20221124
+hexagon              randconfig-r045-20221124
+s390                 randconfig-r044-20221124
+riscv                randconfig-r042-20221124
+x86_64                        randconfig-a016
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
