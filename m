@@ -2,35 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 634E5638692
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 10:48:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27AF76386B3
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 10:50:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbiKYJsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 04:48:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60126 "EHLO
+        id S230143AbiKYJtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 04:49:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbiKYJrA (ORCPT
+        with ESMTP id S229915AbiKYJsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 04:47:00 -0500
+        Fri, 25 Nov 2022 04:48:16 -0500
 Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14613E0BE;
-        Fri, 25 Nov 2022 01:45:48 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5D03F042;
+        Fri, 25 Nov 2022 01:46:36 -0800 (PST)
 Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
         by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1oyVHC-000hy0-VO; Fri, 25 Nov 2022 17:45:44 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 25 Nov 2022 17:45:42 +0800
-Date:   Fri, 25 Nov 2022 17:45:42 +0800
+        id 1oyVHe-000hyz-0F; Fri, 25 Nov 2022 17:46:11 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 25 Nov 2022 17:46:10 +0800
+Date:   Fri, 25 Nov 2022 17:46:09 +0800
 From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Daniel Jordan <daniel.m.jordan@oracle.com>
-Cc:     Steffen Klassert <steffen.klassert@secunet.com>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] padata: Fix list iterator in padata_do_serial()
-Message-ID: <Y4COxhOZk1wcEbzy@gondor.apana.org.au>
-References: <20221117012804.62514-1-daniel.m.jordan@oracle.com>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-crypto@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 006/606] crypto: atmel-ecc - Convert to i2c's .probe_new()
+Message-ID: <Y4CO4c1vA6UZGnpU@gondor.apana.org.au>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-7-uwe@kleine-koenig.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20221117012804.62514-1-daniel.m.jordan@oracle.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221118224540.619276-7-uwe@kleine-koenig.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -39,20 +52,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 08:28:04PM -0500, Daniel Jordan wrote:
-> list_for_each_entry_reverse() assumes that the iterated list is nonempty
-> and that every list_head is embedded in the same type, but its use in
-> padata_do_serial() breaks both rules.
+On Fri, Nov 18, 2022 at 11:35:40PM +0100, Uwe Kleine-König wrote:
+> From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 > 
-> This doesn't cause any issues now because padata_priv and padata_list
-> happen to have their list fields at the same offset, but we really
-> shouldn't be relying on that.
+> .probe_new() doesn't get the i2c_device_id * parameter, so determine
+> that explicitly in the probe function.
 > 
-> Fixes: bfde23ce200e ("padata: unbind parallel jobs from specific CPUs")
-> Signed-off-by: Daniel Jordan <daniel.m.jordan@oracle.com>
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 > ---
->  kernel/padata.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
+>  drivers/crypto/atmel-ecc.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
 Patch applied.  Thanks.
 -- 
