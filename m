@@ -2,136 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33B4F638592
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 09:52:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51B1B638596
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 09:52:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbiKYIwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 03:52:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35780 "EHLO
+        id S229608AbiKYIw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 03:52:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiKYIwb (ORCPT
+        with ESMTP id S229554AbiKYIwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 03:52:31 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866BBCE9;
-        Fri, 25 Nov 2022 00:52:28 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AP8nmiJ006687;
-        Fri, 25 Nov 2022 08:52:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
- mime-version : content-transfer-encoding : in-reply-to : references :
- subject : to : cc : from : message-id : date; s=pp1;
- bh=7RGeCEHG1G53Xom7o/juk/OP7d5IJEctJeBMolf8ohE=;
- b=jtXj+Qa0Hw49rdLzDKaQKmWe6taT9UacpCAKpRHwij/B3D8wIrJKqMMcgVCIIAgf19k9
- T77Jev2X23zV8KN2aUovjCQG3CjwXtrD5kig7Cb7j1UWRqZWg9iR0GowUNnDPAztnzB1
- zDxmZz0Fodtw8uqtd+PS2ezUEnnWDnVY80ftIiZ1pZi6/vp+pkfs+7o3L7uNRBgL0Z1M
- t+c7p70gKAsnciqPCRauo5MPozEo/wvaQUwLEyXGd1o61hqzxgJr70MSGAVZEvAdbq99
- oDGNNX4RsspzR1OBTwNAxLLxUS03V+yXjyw1wXlszudVyXyTHbPUWN7vhv8pOBTP90sk lA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m2thrr1ny-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Nov 2022 08:52:25 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AP8oqN1009927;
-        Fri, 25 Nov 2022 08:52:24 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m2thrr1nf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Nov 2022 08:52:24 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AP8pOZC017679;
-        Fri, 25 Nov 2022 08:52:22 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03ams.nl.ibm.com with ESMTP id 3kxps91ar3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Nov 2022 08:52:22 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AP8qI8c63766992
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 25 Nov 2022 08:52:18 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CD47B42042;
-        Fri, 25 Nov 2022 08:52:18 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A76B04203F;
-        Fri, 25 Nov 2022 08:52:18 +0000 (GMT)
-Received: from t14-nrb (unknown [9.171.26.223])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 25 Nov 2022 08:52:18 +0000 (GMT)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 25 Nov 2022 03:52:55 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6EC1F2DE
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 00:52:54 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id b3so5881277lfv.2
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 00:52:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2HOoSTuq4XmGVlN86fKAOkleTlxcvh89psdCg1LMg4A=;
+        b=xVID0zJQJp2QJkmW1SBo32zh8XH3xzkv8aG8WeB96TzyJI45ZN8ROc4yikA+WlfIQN
+         YyIXuVTCii3kyRz0MzUiFJkPtWFp3OSIoMcY+xY6bX/spvJbiHZjhTZ31geefUTYZaKu
+         9prcSyg5At5TqqA6ZDHeBr16S13v/28Jipge+rEqVwMZjZYR+DkWKtTc+lN7WNvNuivO
+         CSlDphVEdhoaW3N2m6mUg8mLGMCOIXVZ9w3N80Cwwctel85dPOwdX6IDsvlyvqOzmTuv
+         ROPNdfwidvk4XXRFmBoIWpbL5H3G6YblZCZiLyVWpytqTSCBPNLuZCjWrgGX05b6RKel
+         q5Hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2HOoSTuq4XmGVlN86fKAOkleTlxcvh89psdCg1LMg4A=;
+        b=But20/nmV5c8YWoqQT0O066oKc0PeTphkrjSCthgDS9yPmuvXTPNFVPr3cnY9qHHYm
+         D/n6KNr7S8PPAksSgAtqrW/ZCtNiEdy9h4JWRkoLawjBYsvzue8KQMzjqWEr1SWfsHZi
+         DRh6zGSjb2suXgjbfX5wCT2pbQydaByYRHzoQ9cFZ85enmkufEK7BZJI29elOJQrfrNH
+         0Qo9M/Q8odOl1R52bLawQ0QNZw1W/6xvmJiENbbQVFAA/mo7SH2S9b28udHxLm4BrDkY
+         PRpq77Dde5xlbejCxvWzaxTkR5T/kIQh1MtemrFR10z9Ulr1BZk4CcLvvEyJhLMGlb29
+         r63g==
+X-Gm-Message-State: ANoB5plmiAp+bICNONQptmZuxKQXNxDVNna7baY8wV2AjvuF+UKkbyt+
+        bMgYAUiXLALfiNLc2thppDRLxg==
+X-Google-Smtp-Source: AA0mqf5hdKwX1Jr/0xm1ekWXXWPH7sNyiUXb+ircocZn1YbXicl7J/ecMU+IwqFeLH/p3Uc4Rr4QNw==
+X-Received: by 2002:a19:381c:0:b0:4ae:d4db:9f89 with SMTP id f28-20020a19381c000000b004aed4db9f89mr8034920lfa.174.1669366373160;
+        Fri, 25 Nov 2022 00:52:53 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id a4-20020a2eb164000000b0026dd24dc4ecsm294276ljm.82.2022.11.25.00.52.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Nov 2022 00:52:52 -0800 (PST)
+Message-ID: <7f5cf3d8-4a3b-41eb-fed9-1ade4ba1e4e2@linaro.org>
+Date:   Fri, 25 Nov 2022 09:52:51 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <e735fa2cde6e9c92dda134634cb3d67b64b23fe9.camel@linux.ibm.com>
-References: <20221117221758.66326-1-scgl@linux.ibm.com> <20221117221758.66326-3-scgl@linux.ibm.com> <f96b50e2-24ac-4016-d3f1-ffc375516e7c@redhat.com> <e735fa2cde6e9c92dda134634cb3d67b64b23fe9.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 2/9] Documentation: KVM: s390: Describe KVM_S390_MEMOP_F_CMPXCHG
-To:     Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Thomas Huth <thuth@redhat.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>
-From:   Nico Boehr <nrb@linux.ibm.com>
-Message-ID: <166936633695.19077.13372353298394327779@t14-nrb.local>
-User-Agent: alot/0.8.1
-Date:   Fri, 25 Nov 2022 09:52:18 +0100
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: tHcF3P8PfsqF7PEYaJjzK5zOowVa2Wef
-X-Proofpoint-GUID: FNGyPJvbxGrMU8e6_jYyAt9gb_ciObwx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-25_02,2022-11-24_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=676
- priorityscore=1501 adultscore=0 spamscore=0 clxscore=1015 bulkscore=0
- mlxscore=0 lowpriorityscore=0 impostorscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211250069
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] ARM: s3c: Fix a build error after the s3c24xx dma driver
+ was removed
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>, kernel@pengutronix.de,
+        linux-samsung-soc@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
+        linux-kernel@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        dmaengine@vger.kernel.org, Simtec Linux Team <linux@simtec.co.uk>,
+        linux-next@vger.kernel.org
+References: <20221021203329.4143397-14-arnd@kernel.org>
+ <20221118215401.505480-1-u.kleine-koenig@pengutronix.de>
+ <f0425349-d965-0a40-0672-27dfbe45eb44@linaro.org>
+ <b759a3e7-7a45-3dc9-14ba-8b01da798f10@linaro.org>
+ <20221125085117.23p7yv6wgo6b5l3v@pengutronix.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221125085117.23p7yv6wgo6b5l3v@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Janis Schoetterl-Glausch (2022-11-22 14:10:41)
-> On Tue, 2022-11-22 at 08:47 +0100, Thomas Huth wrote:
-> > On 17/11/2022 23.17, Janis Schoetterl-Glausch wrote:
-[...]
-> > >   Supported flags:
-> > >     * ``KVM_S390_MEMOP_F_CHECK_ONLY``
-> > >     * ``KVM_S390_MEMOP_F_SKEY_PROTECTION``
-> > > +  * ``KVM_S390_MEMOP_F_CMPXCHG``
-> > > +
-> > > +The semantics of the flags common with logical acesses are as for lo=
-gical
-> > > +accesses.
-> > > +
-> > > +For write accesses, the KVM_S390_MEMOP_F_CMPXCHG might be supported.
-> >=20
-> > I'd maybe merge this with the last sentence:
-> >=20
-> > For write accesses, the KVM_S390_MEMOP_F_CMPXCHG flag is supported if=20
-> > KVM_CAP_S390_MEM_OP_EXTENSION has bit 1 (i.e. bit with value 2) set.
->=20
-> Ok.
-> >=20
-> > ... and speaking of that, I wonder whether it's maybe a good idea to=20
-> > introduce some #defines for bit 1 / value 2, to avoid the confusion ?
->=20
-> Not sure, I don't feel it's too complicated. Where would you define it?
-> Next to the mem_op struct? KVM_S390_MEMOP_EXTENSION_CAP_CMPXCHG?
+On 25/11/2022 09:51, Uwe Kleine-König wrote:
+> Hello,
+> 
+> On Sun, Nov 20, 2022 at 12:22:31PM +0100, Krzysztof Kozlowski wrote:
+>> On 20/11/2022 11:31, Krzysztof Kozlowski wrote:
+>>> On 18/11/2022 22:54, Uwe Kleine-König wrote:
+>>>> The linux/platform_data/dma-s3c24xx.h header file was removed. It didn't
+>>>> declare or define any symbol needed in devs.c though, so the #include
+>>>> can just be dropped.
+>>>>
+>>>> Fixes: cccc46ae3623 ("dmaengine: remove s3c24xx driver")
+>>>> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+>>>> ---
+>>>
+>>> The file was not removed... or it should not have been yet. The s3c24xx
+>>> dma driver removal should be part of Arnd series taken via SoC ARM.
+> 
+> The patch enters next with the merge of
+> 
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
+> 
+> Ah, the patch that became cccc46ae3623 (i.e. patch #14) is part of a
+> bigger series. Its patch #1 removes s3c24xx.c (which you pointed out to be still
+> broken) and patch #2 includes the change I suggested here.
+> 
+>> I think that commit should be just dropped instead.
+> 
+> +1
+> 
+> BTW, cccc46ae3623 is included in next since next-20221107 and breaks
+> (at least) arm/s3c2410_defconfig. So I would consider reverting
+> cccc46ae3623 a fix. (Added linux-next to Cc:)
 
-I think the define would be a good idea. Location and name sound good to me.
+Yes. The build failure of next was reported already by kernel test robot.
 
-You could also replace the hard-coded 0x3 in kvm_vm_ioctl_check_extension()=
- when you have the define.
+Vinod, can we drop this patch?
+
+Best regards,
+Krzysztof
+
