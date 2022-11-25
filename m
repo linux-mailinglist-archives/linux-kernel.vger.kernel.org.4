@@ -2,105 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A236A6385D6
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 10:04:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3A776385D9
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 10:05:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbiKYJEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 04:04:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50822 "EHLO
+        id S229728AbiKYJFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 04:05:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiKYJEp (ORCPT
+        with ESMTP id S229659AbiKYJFm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 04:04:45 -0500
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8928C1CFD4;
-        Fri, 25 Nov 2022 01:04:43 -0800 (PST)
-Received: by mail-qv1-f47.google.com with SMTP id r15so1826283qvm.6;
-        Fri, 25 Nov 2022 01:04:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Na1uuPG0QUm3HxGryKPw8jShOXh4QNKTq09wipPjxvk=;
-        b=GE/LTAqjw+BEIgrXikOi4e+5pNAOVo5KtiEZnDdckn3hU6UQK88U8bdi3v9+KhQ10B
-         7xsXHW+6nR/+HlN6FWTc9vOs8Ek+mEYNlkMH+B1Z9XzvKYC7nW23DoEoGvpDK8nXY98B
-         9bK35Zmi/s+hYCGxGK91On6T3+Sc1aaOhwwoQl+yS9fIM5tzyiSu38AhU3JK1MpoWwjf
-         YaPY5qCSHvKBZikbU1fo75IoTUypDoNAgt9vIeaXL8Od/cZbYieGAAofUbRGixqFV/eP
-         Ymep+HZlRzL/OjodUsPbZrVqRX567oQe2j6RHzobpWEzAQBYFhU9UkVw9DMSrb6bf8Wd
-         Fv3w==
-X-Gm-Message-State: ANoB5pnGWG9HO5UaXhreaNK/X6ZgDgUsAzEDvWg+/uLxvoTpYl+Vuaog
-        Xigx6xLtBCLg9UotEALG9BXBfVj7K1AcRw==
-X-Google-Smtp-Source: AA0mqf55B6VJ7ZX0fWyNDsbym+GlUZrv6CYp979IHqihxSFIwluFzAAMjRPbsUgijuUlXeMRwkGAzQ==
-X-Received: by 2002:a05:6214:3b0e:b0:4bb:6b72:3c36 with SMTP id nm14-20020a0562143b0e00b004bb6b723c36mr15971524qvb.121.1669367082547;
-        Fri, 25 Nov 2022 01:04:42 -0800 (PST)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id z127-20020a379785000000b006eed75805a2sm2375579qkd.126.2022.11.25.01.04.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Nov 2022 01:04:41 -0800 (PST)
-Received: by mail-yb1-f177.google.com with SMTP id i131so4341989ybc.9;
-        Fri, 25 Nov 2022 01:04:39 -0800 (PST)
-X-Received: by 2002:a25:7204:0:b0:6f0:9ff5:1151 with SMTP id
- n4-20020a257204000000b006f09ff51151mr9302140ybc.543.1669367079638; Fri, 25
- Nov 2022 01:04:39 -0800 (PST)
+        Fri, 25 Nov 2022 04:05:42 -0500
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D492F665;
+        Fri, 25 Nov 2022 01:05:41 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id BFBE420007;
+        Fri, 25 Nov 2022 09:05:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1669367139;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DZduL8+SCQkgvIaMbER98FDrtIpxj65WDtWOy1Rrn1Y=;
+        b=QadMMoM1lIBqHn1LYpPkAPPMXzxA1bPc49jau4+lnr+OL5Gw8ssHMqlf7mqe8UpAcwZRqn
+        SMgY0gEl0JFG4UY5zD51oaTtBJ67vlNB8MlqtzxtN87q4mlTIHYemZv1lfT5JRPTtLzvpC
+        CwQIQEn1kE/s1ilV97vEcMKBXk+Xfsxfmb7bOrn1LQjVjGdqu5pCjonAlxCfrdzPShNBwy
+        +5+ID6o/iOhXiqtJFvJZoe6AF67oAOcKqaTT5EvGW/rn0AjJZXtJkC52Pxa8QLOGh3WCk7
+        8xgDGesK/yZfha/GGZGab1/NIe6iDN1W9C9ChkMiXEs3xF3uf8SyMJ8dFf5Mhg==
+Date:   Fri, 25 Nov 2022 10:05:04 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Boris Brezillon <boris.brezillon@collabora.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the nand tree with the mtd-fixes
+ tree
+Message-ID: <20221125100504.5424c3ad@xps-13>
+In-Reply-To: <20221125094634.665b079c@canb.auug.org.au>
+References: <20221125094634.665b079c@canb.auug.org.au>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20221124172207.153718-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20221124172207.153718-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 25 Nov 2022 10:04:28 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWbunjdFo5YfQ2t4DSDm-LX8WhvLkzAogGrOg7HY4_uPw@mail.gmail.com>
-Message-ID: <CAMuHMdWbunjdFo5YfQ2t4DSDm-LX8WhvLkzAogGrOg7HY4_uPw@mail.gmail.com>
-Subject: Re: [PATCH v4 0/7] AX45MP: Add support to non-coherent DMA
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+Hi Jean,
 
-On Thu, Nov 24, 2022 at 6:24 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> Due to the above approach custom SBI calls have been implemented. The
-> above implementation is in preparation for adding support for Renesas
-> RZ/Five SoC which uses the AX45MP core. As with the above approach the
-> kernel image might not be generic so that it can be used on other
+sfr@canb.auug.org.au wrote on Fri, 25 Nov 2022 09:46:34 +1100:
 
-might be generic?
+> Hi all,
+>=20
+> Today's linux-next merge of the nand tree got a conflict in:
+>=20
+>   drivers/mtd/nand/onenand/Kconfig
+>=20
+> between commit:
+>=20
+>   c717b9b7d6de ("mtd: onenand: omap2: add dependency on GPMC")
+>=20
+> from the mtd-fixes tree and commit:
+>=20
+>   b46ff0780f17 ("mtd: onenand: omap2: Drop obsolete dependency on COMPILE=
+_TEST")
 
-> platforms.
+As this commit is not super urgent and because I want to make the merge
+process as smooth as possible, I'll drop it from my branches. Please
+rebase and resend when -rc1 is out and I'll apply right away.
 
-Gr{oetje,eeting}s,
+Thanks Stephen for the report.
 
-                        Geert
+Cheers,
+Miqu=C3=A8l
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+>=20
+> from the nand tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
