@@ -2,282 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB3B638D56
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 16:14:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA67D638D5C
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 16:18:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbiKYPOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 10:14:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36920 "EHLO
+        id S229622AbiKYPR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 10:17:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbiKYPNm (ORCPT
+        with ESMTP id S229570AbiKYPR5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 10:13:42 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 85410D4C;
-        Fri, 25 Nov 2022 07:13:14 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3EBC12B;
-        Fri, 25 Nov 2022 07:13:20 -0800 (PST)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1A4F63F587;
-        Fri, 25 Nov 2022 07:13:10 -0800 (PST)
-Date:   Fri, 25 Nov 2022 15:13:08 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Pierre Gondois <pierre.gondois@arm.com>
-Cc:     linux-kernel@vger.kernel.org, Ionela.Voinescu@arm.com,
-        Rob.Herring@arm.com, Catalin Marinas <catalin.marinas@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Gavin Shan <gshan@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        SeongJae Park <sj@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v2 5/5] arch_topology: Build cacheinfo from primary CPU
-Message-ID: <20221125151308.2vr25mnkctfj6h7b@bogus>
-References: <20221121171217.3581004-1-pierre.gondois@arm.com>
- <20221121171217.3581004-6-pierre.gondois@arm.com>
+        Fri, 25 Nov 2022 10:17:57 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740EB1F606
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 07:17:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669389476; x=1700925476;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TA+1Ns2zQjOmdGxjxZll6kdn2tclvA1e9U9LASRu4J4=;
+  b=GW+U/ZXI/RxAsU1HQc+xac3Bzjwzdy3XOsxfDwjsxTJVhDiYZMvT4yMe
+   69HlzlZaWpO5Dt/XrFv6zYYEiPQRpuknDWM1tdIYP1ccccBiXqnMhxymQ
+   yiZrzqUb3bktIUla4QLCAzK8DauoRtd4qM7l66P2gS+iTWHgyTzOh0ANG
+   pk7/qLRRA8/FetuAErpj8H9+JwFlxMefRAyyxZ3C7quvralFz0xfo2Lex
+   lopK8ot81613YrJao2Z8jMy+EAzNjRcfUnPnLG2QurDM1GhnI7KfvcVYE
+   sXPa+G/yCDobpaqey+zxhVF5JP0b9GkA8EK59ihEY9rtRnZrGGFuzUBDi
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="313198006"
+X-IronPort-AV: E=Sophos;i="5.96,193,1665471600"; 
+   d="scan'208";a="313198006"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2022 07:17:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="817166937"
+X-IronPort-AV: E=Sophos;i="5.96,193,1665471600"; 
+   d="scan'208";a="817166937"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 25 Nov 2022 07:17:52 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oyaSc-00HHPP-32;
+        Fri, 25 Nov 2022 17:17:50 +0200
+Date:   Fri, 25 Nov 2022 17:17:50 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        'Joe Perches' <joe@perches.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH 0/1] Slightly relax the type checking done by min() and
+ max().
+Message-ID: <Y4Dcnha/JYoRl4HH@smile.fi.intel.com>
+References: <cfc6c0f0fd4c4724890be8a8397c2cbe@AcuMS.aculab.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221121171217.3581004-6-pierre.gondois@arm.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cfc6c0f0fd4c4724890be8a8397c2cbe@AcuMS.aculab.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 06:12:13PM +0100, Pierre Gondois wrote:
-> commit 3fcbf1c77d08 ("arch_topology: Fix cache attributes detection
-> in the CPU hotplug path")
-> adds a call to detect_cache_attributes() to populate the cacheinfo
-> before updating the siblings mask. detect_cache_attributes() allocates
-> memory and can take the PPTT mutex (on ACPI platforms). On PREEMPT_RT
-> kernels, on secondary CPUs, this triggers a:
->   'BUG: sleeping function called from invalid context' [1]
-> as the code is executed with preemption and interrupts disabled.
+On Fri, Nov 25, 2022 at 03:00:40PM +0000, David Laight wrote:
+> The min() and max() defines include a type check to avoid the unexpected
+>   behaviour when a negative value is compared against and unsigned value.
+> However a lot of code hits this check and uses min_t() to avoid the error.
+> Many of these are just plain wrong.
 > 
-> The primary CPU was previously storing the cache information using
-> the now removed (struct cpu_topology).llc_id:
-> commit 5b8dc787ce4a ("arch_topology: Drop LLC identifier stash from
-> the CPU topology")
+> Those casting to u8 or u16 are particularly suspect, eg:
+> drivers/usb/misc/usb251xb.c:528:
+> 		hub->max_current_sp = min_t(u8, property_u32 / 2000, 50);
 > 
-> allocate_cache_info() tries to build the cacheinfo from the primary
-> CPU prior secondary CPUs boot, if the DT/ACPI description
-> contains cache information.
-> If allocate_cache_info() fails, then fallback to the current state
-> for the cacheinfo allocation. [1] will be triggered in such case.
+> This patch does two changes:
+> - Replace typeof(x) with typeof((x) + 0) to promote char/short to int.
+> - Add an (int) cast to constants between 0 and MAX_INT so the compiler
+>   doesn't promote the 'other side' of the comparison to an unsinged type.
+>   If this is done the type test is arranged to always succeed.
 > 
-> When unplugging a CPU, the cacheinfo memory cannot be freed. If it
-> was, then the memory would be allocated early by the re-plugged
-> CPU and would trigger [1].
+> The following can also be done (with some lateral thought):
+> - Allow all comparisons where both types are signed. 
+> - Allow all comparisons where both types are unsigned. 
+> - Allow comparisons where the larger type is signed.
 > 
-> Note that populate_cache_leaves() might be called multiple times
-> due to populate_leaves being moved up. This is required since
-> detect_cache_attributes() might be called with per_cpu_cacheinfo(cpu)
-> being allocated but not populated.
+> In addition most of the min_t() calls are there to compare a signed type
+> (that holds a non-negative value) with an unsigned value.
+> The definition:
+> #define min_unsigned(x,y) min((x) + 0u + 0ull, (y) + 0u + 0ull)
+> will do an unsigned comparision without 'accidentally' masking off
+> any non-zero high bits.
 > 
-> [1]:
-> [    7.560791] BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
-> [    7.560794] in_atomic(): 1, irqs_disabled(): 128, non_block: 0, pid: 0, name: swapper/111
-> [    7.560796] preempt_count: 1, expected: 0
-> [    7.560797] RCU nest depth: 1, expected: 1
-> [    7.560799] 3 locks held by swapper/111/0:
-> [    7.560800]  #0: ffff403e406cae98 (&pcp->lock){+.+.}-{3:3}, at: get_page_from_freelist+0x218/0x12c8
-> [    7.560811]  #1: ffffc5f8ed09f8e8 (rcu_read_lock){....}-{1:3}, at: rt_spin_trylock+0x48/0xf0
-> [    7.560820]  #2: ffff403f400b4fd8 (&zone->lock){+.+.}-{3:3}, at: rmqueue_bulk+0x64/0xa80
-> [    7.560824] irq event stamp: 0
-> [    7.560825] hardirqs last  enabled at (0): [<0000000000000000>] 0x0
-> [    7.560827] hardirqs last disabled at (0): [<ffffc5f8e9f7d594>] copy_process+0x5dc/0x1ab8
-> [    7.560830] softirqs last  enabled at (0): [<ffffc5f8e9f7d594>] copy_process+0x5dc/0x1ab8
-> [    7.560833] softirqs last disabled at (0): [<0000000000000000>] 0x0
-> [    7.560834] Preemption disabled at:
-> [    7.560835] [<ffffc5f8e9fd3c28>] migrate_enable+0x30/0x130
-> [    7.560838] CPU: 111 PID: 0 Comm: swapper/111 Tainted: G        W          6.0.0-rc4-rt6-[...]
-> [    7.560841] Call trace:
-> [...]
-> [    7.560870]  __kmalloc+0xbc/0x1e8
-> [    7.560873]  detect_cache_attributes+0x2d4/0x5f0
-> [    7.560876]  update_siblings_masks+0x30/0x368
-> [    7.560880]  store_cpu_topology+0x78/0xb8
-> [    7.560883]  secondary_start_kernel+0xd0/0x198
-> [    7.560885]  __secondary_switched+0xb0/0xb4
-> 
-> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
-> ---
->  drivers/base/arch_topology.c | 10 ++++++-
->  drivers/base/cacheinfo.c     | 56 +++++++++++++++++++++++++++++-------
->  include/linux/cacheinfo.h    |  1 +
->  3 files changed, 55 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> index e7d6e6657ffa..54be88f658a0 100644
-> --- a/drivers/base/arch_topology.c
-> +++ b/drivers/base/arch_topology.c
-> @@ -825,7 +825,7 @@ __weak int __init parse_acpi_topology(void)
->  #if defined(CONFIG_ARM64) || defined(CONFIG_RISCV)
->  void __init init_cpu_topology(void)
->  {
-> -	int ret;
-> +	int cpu, ret;
->  
->  	reset_cpu_topology();
->  	ret = parse_acpi_topology();
-> @@ -840,6 +840,14 @@ void __init init_cpu_topology(void)
->  		reset_cpu_topology();
->  		return;
->  	}
-> +
-> +	for_each_possible_cpu(cpu) {
-> +		ret = allocate_cache_info(cpu);
-> +		if (ret) {
-> +			pr_err("Early cacheinfo failed, ret = %d\n", ret);
+> With those extra changes there can be a 'duck shoot' on min_t().
 
-Is it better to be more specific in the error message or do you think
-error code will suffice ? Something like
-
-"Early cacheinfo allocation failed, ret = %d\n"
-
-> +			break;
-> +		}
-> +	}
->  }
->  
->  void store_cpu_topology(unsigned int cpuid)
-> diff --git a/drivers/base/cacheinfo.c b/drivers/base/cacheinfo.c
-> index 6f6cd120c4f1..429a55e7c5e2 100644
-> --- a/drivers/base/cacheinfo.c
-> +++ b/drivers/base/cacheinfo.c
-> @@ -371,10 +371,6 @@ static void free_cache_attributes(unsigned int cpu)
->  		return;
->  
->  	cache_shared_cpu_map_remove(cpu);
-> -
-> -	kfree(per_cpu_cacheinfo(cpu));
-> -	per_cpu_cacheinfo(cpu) = NULL;
-> -	cache_leaves(cpu) = 0;
->  }
->  
->  int __weak init_cache_level(unsigned int cpu)
-> @@ -387,18 +383,56 @@ int __weak populate_cache_leaves(unsigned int cpu)
->  	return -ENOENT;
->  }
->  
-> +int allocate_cache_info(unsigned int cpu)
-> +{
-> +	struct cpu_cacheinfo *this_cpu_ci;
-> +	unsigned int levels, split_levels;
-> +	int ret;
-> +
-> +	if (acpi_disabled) {
-> +		ret = init_of_cache_level(cpu);
-> +		if (ret < 0)
-> +			return ret;
-> +	} else {
-> +		ret = acpi_get_cache_info(cpu, &levels, &split_levels);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		this_cpu_ci = get_cpu_cacheinfo(cpu);
-> +		this_cpu_ci->num_levels = levels;
-> +		/*
-> +		 * This assumes that:
-> +		 * - there cannot be any split caches (data/instruction)
-> +		 *   above a unified cache
-> +		 * - data/instruction caches come by pair
-> +		 */
-> +		this_cpu_ci->num_leaves = levels + split_levels;
-> +	}
-> +	if (!cache_leaves(cpu))
-> +		return -ENOENT;
-> +
-
-The above part is more fetching info than allocating. Does it make sense
-to rename along similar lines.
-
-> +	per_cpu_cacheinfo(cpu) = kcalloc(cache_leaves(cpu),
-> +					 sizeof(struct cacheinfo), GFP_ATOMIC);
-> +	if (per_cpu_cacheinfo(cpu) == NULL) {
-> +		cache_leaves(cpu) = 0;
-> +		return -ENOMEM;
-> +	}
-> +
-
-IIReadC, detect_cache_attributes also have above allocation, does it make
-sense to consolidate into one inline function or something ?
-
-> +	return ret;
-> +}
-> +
->  int detect_cache_attributes(unsigned int cpu)
->  {
->  	int ret;
->  
-> -	/* Since early detection of the cacheinfo is allowed via this
-> -	 * function and this also gets called as CPU hotplug callbacks via
-> -	 * cacheinfo_cpu_online, the initialisation can be skipped and only
-> -	 * CPU maps can be updated as the CPU online status would be update
-> -	 * if called via cacheinfo_cpu_online path.
-> +	/* Since early initialization/allocation of the cacheinfo is allowed
-> +	 * via allocate_cache_info() and this also gets called as CPU hotplug
-> +	 * callbacks via cacheinfo_cpu_online, the init/alloc can be skipped
-> +	 * as it will happen only once (the cacheinfo memory is never freed).
-> +	 * Just populate the cacheinfo.
->  	 */
->  	if (per_cpu_cacheinfo(cpu))
-> -		goto update_cpu_map;
-> +		goto populate_leaves;
->  
->  	if (init_cache_level(cpu) || !cache_leaves(cpu))
->  		return -ENOENT;
-> @@ -410,6 +444,7 @@ int detect_cache_attributes(unsigned int cpu)
->  		return -ENOMEM;
->  	}
->  
-> +populate_leaves:
->  	/*
->  	 * populate_cache_leaves() may completely setup the cache leaves and
->  	 * shared_cpu_map or it may leave it partially setup.
-> @@ -418,7 +453,6 @@ int detect_cache_attributes(unsigned int cpu)
->  	if (ret)
->  		goto free_ci;
->  
-> -update_cpu_map:
->  	/*
->  	 * For systems using DT for cache hierarchy, fw_token
->  	 * and shared_cpu_map will be set up here only if they are
-> diff --git a/include/linux/cacheinfo.h b/include/linux/cacheinfo.h
-> index f992d81d211f..7d390806b788 100644
-> --- a/include/linux/cacheinfo.h
-> +++ b/include/linux/cacheinfo.h
-> @@ -85,6 +85,7 @@ int populate_cache_leaves(unsigned int cpu);
->  int cache_setup_acpi(unsigned int cpu);
->  bool last_level_cache_is_valid(unsigned int cpu);
->  bool last_level_cache_is_shared(unsigned int cpu_x, unsigned int cpu_y);
-> +int allocate_cache_info(unsigned int cpu);
->  int detect_cache_attributes(unsigned int cpu);
->  #ifndef CONFIG_ACPI_PPTT
->  /*
-> -- 
-> 2.25.1
-> 
-
-With above nits fixed or discussed further to retain as is, you can add
-
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-
+You have an issue with your email setup, i.e. you send two independent messages
+(not a chain). It probably shows that either you don't use `git send-email` for
+sending patch, or you missed --thread option to it.
 
 -- 
-Regards,
-Sudeep
+With Best Regards,
+Andy Shevchenko
+
+
