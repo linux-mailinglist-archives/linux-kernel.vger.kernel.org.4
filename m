@@ -2,198 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F94639268
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 00:48:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA3BC63926F
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 00:51:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbiKYXsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 18:48:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36974 "EHLO
+        id S229898AbiKYXvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 18:51:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbiKYXsA (ORCPT
+        with ESMTP id S229514AbiKYXvS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 18:48:00 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB7215B842;
-        Fri, 25 Nov 2022 15:47:19 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 2D83A5C00FB;
-        Fri, 25 Nov 2022 18:47:19 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Fri, 25 Nov 2022 18:47:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1669420039; x=1669506439; bh=V6
-        MbhYfVD6c6BFLlGZgGaEzDFxsQdBBvIonrpxOU5Qg=; b=koo8/vrroIQVqYzhBI
-        rUrRwJV9sFPs6v4eSOvU7lLJ4GLK0O2cub1nIJz8BWubb9G6bhAIKWvI+lwKBSa7
-        DNBDiyi8t63u6QMFaWf1YDHxJvuXeEC++LkhmPlMwXzexaH1zILo7KTL5raTtefg
-        3rfH+xGjK/qdv1QyPA4amXQZeKvStOlO59VmMlHEX/a6UuEdbJz2oC1wwCbXpzXx
-        kb0xioVke0MyJGHA3kxIz3LjI4hF4FSkbQIVOZejUqxg67TqbW+2Vjd/YWDYHCgd
-        tkU4WB3ss86B421pfRrP7STIlf1oRuwqFNdLiHK5b2q5ygpS4Q1QMVCDYhZU/I21
-        UeRQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1669420039; x=1669506439; bh=V6MbhYfVD6c6B
-        FLlGZgGaEzDFxsQdBBvIonrpxOU5Qg=; b=idB09pC3M92di/zk5tX9bwUx2Q2qh
-        EsHoyCcbfr3JzpEAsny/ORy5vn8+JlhytVQvkfrUocOAOE1RFSqsoTx/JRi6zxWO
-        4bRQaPKBtky9MIMGVvtS7Nt/98eA/fsxAHQvOBUzkBui6eurZTRUjdvocYERrlPZ
-        Y4WvKTmRCRbPV4kqwjc8uxgYQTK9e3YuCiD+t3Y1Unxc5q1F29z8XMJP+5oqJJeR
-        /VBK4JWYsj/1riQUmJxrc7gMtHoV7AHzk/oyUjdloN6UZPZHN7HmDtBshScDLqDy
-        l0uuyRwpj4LWmFYNYvd5jYBWoYDgud53QanT/o6b+vsdfkrs+rtJ65RrQ==
-X-ME-Sender: <xms:B1SBY6C8KqXA0dE9hUvfpPDH5oyCI68qZZU7BFfF8NG-eYNgYaEX_g>
-    <xme:B1SBY0gsIKSc9dtSE4Zel9-ekjQnwtboWp6CG6rAEw7K8GxODvUjAVJyrkOPX2FBo
-    gCyxW0oRuBS-lqC5A>
-X-ME-Received: <xmr:B1SBY9niOwOisXgxkTBGDXdBFKcb6lGsfXar9Ss84RiCV3PHnpWYLime3Xut7j2a30p92qSCULLg8029NSnzHAf2xr6OUVHXnG4wvBwdtglFdC7JfS1lEeUt2oXE2yo2MSJ1nA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrieeigdduudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
-    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
-    frrghtthgvrhhnpedukeetueduhedtleetvefguddvvdejhfefudelgfduveeggeehgfdu
-    feeitdevteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:B1SBY4z4PcHDCQrP_3iT4XxzxrK_CZyAVr6OAmF_kW1NpCGj6GMxnw>
-    <xmx:B1SBY_RfBLpY3zoVhUB-qKrsdglu1LUE6JPN-wW6lbKjPSB4zltAbQ>
-    <xmx:B1SBYzav6K8W1tcOclM2kWBm7itcpd1eG1MC7OzfJ8vhH3rpOx1jWg>
-    <xmx:B1SBY0DgGAvA9S2pyZ0ti9TH0O_dk9qTqZmTV2w1phcOh0nrIv_pYw>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 25 Nov 2022 18:47:17 -0500 (EST)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-sunxi@lists.linux.dev, Palmer Dabbelt <palmer@dabbelt.com>,
-        Conor Dooley <conor@kernel.org>,
-        linux-riscv@lists.infradead.org
-Cc:     devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Andre Przywara <andre.przywara@arm.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Christian Hewitt <christianshewitt@gmail.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>
-Subject: [PATCH v2 12/12] riscv: defconfig: Enable the Allwinner D1 platform and drivers
-Date:   Fri, 25 Nov 2022 17:46:56 -0600
-Message-Id: <20221125234656.47306-13-samuel@sholland.org>
-X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20221125234656.47306-1-samuel@sholland.org>
-References: <20221125234656.47306-1-samuel@sholland.org>
+        Fri, 25 Nov 2022 18:51:18 -0500
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8895E18E;
+        Fri, 25 Nov 2022 15:51:17 -0800 (PST)
+Received: by mail-pj1-f43.google.com with SMTP id k2-20020a17090a4c8200b002187cce2f92so8907494pjh.2;
+        Fri, 25 Nov 2022 15:51:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UBCy9qp7TSwSwGwI/krp6oqH0EI9xTeC+ExI/AlQHzg=;
+        b=1OQZpXZ9Ed1f3U724rkw+MtCYUcdJtTOkQ3OJ37kYyDX/+ASIHd6vmK9sV2RyiKbDR
+         ffkPd2ZaEPqioDrIqq60oCchjlF1lDAjF6VQHiegOBVIjzBfg9O5LIsr17MGXVrhfHJ1
+         EpSV4AkvHA61ahLrikQ2SE8nCgoDrWzsdzSJlEvmLg0VS+Mfjt+DoY/n7vJxRMSDT0yY
+         M+5bSNwfcAKFZcSNTjEgcGXAitcGRLhVqwn8PT38U/J8WQuqXeGpHSbYU7jTEST9os7J
+         lhcWIDCR0gTByg9ebWcdcGzslqg1QCVb16SGCkSxfiJymBuUdmuTNnhxFpy5HCr5kqjH
+         8B4w==
+X-Gm-Message-State: ANoB5pmSedKMG6RkTCcAwZoIvPyhtzK5azH+FU+4AfjKzrZo/Eipmx+E
+        RQuM+oZM4QaEN5RqE01/84Q=
+X-Google-Smtp-Source: AA0mqf40CELg5Cd4cKADSnuQ7zDvszL+QjMGY2dYDbM8qR4FVWtlF2gM/wXRLECZg2wkT9gOazTizw==
+X-Received: by 2002:a17:90a:b88c:b0:218:e1c1:b4f3 with SMTP id o12-20020a17090ab88c00b00218e1c1b4f3mr15351878pjr.201.1669420276891;
+        Fri, 25 Nov 2022 15:51:16 -0800 (PST)
+Received: from [192.168.3.219] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id q6-20020a17090311c600b001865c298588sm3937409plh.258.2022.11.25.15.51.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Nov 2022 15:51:15 -0800 (PST)
+Message-ID: <d448b944-708a-32d4-37d7-0be16ee5f73c@acm.org>
+Date:   Fri, 25 Nov 2022 15:51:11 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        UPPERCASE_50_75 autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 1/5] driver core: make struct class.dev_uevent() take a
+ const *
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>, Luis Chamberlain <mcgrof@kernel.org>,
+        Russ Weight <russell.h.weight@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Johan Hovold <johan@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Keith Busch <kbusch@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Raed Salem <raeds@nvidia.com>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Avihai Horon <avihaih@nvidia.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Wang Yufen <wangyufen@huawei.com>, linux-block@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20221123122523.1332370-1-gregkh@linuxfoundation.org>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20221123122523.1332370-1-gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that several D1-based boards are supported, enable the platform in
-our defconfig. Build in the drivers which are necessary to boot, such as
-the pinctrl, MMC, RTC (which provides critical clocks), SPI (for flash),
-and watchdog (which may be left enabled by the bootloader). Other common
-onboard peripherals are enabled as modules.
+On 11/23/22 04:25, Greg Kroah-Hartman wrote:
+> diff --git a/include/linux/mISDNif.h b/include/linux/mISDNif.h
+> index 7dd1f01ec4f9..7aab4a769736 100644
+> --- a/include/linux/mISDNif.h
+> +++ b/include/linux/mISDNif.h
+> @@ -586,7 +586,7 @@ extern struct mISDNclock *mISDN_register_clock(char *, int, clockctl_func_t *,
+>   						void *);
+>   extern void	mISDN_unregister_clock(struct mISDNclock *);
+>   
+> -static inline struct mISDNdevice *dev_to_mISDN(struct device *dev)
+> +static inline struct mISDNdevice *dev_to_mISDN(const struct device *dev)
+>   {
+>   	if (dev)
+>   		return dev_get_drvdata(dev);
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
+Why does the dev_to_mISDN() function drop constness? I haven't found an 
+explanation for this in the cover letter.
 
-(no changes since v1)
+Thanks,
 
- arch/riscv/configs/defconfig | 23 ++++++++++++++++++++++-
- 1 file changed, 22 insertions(+), 1 deletion(-)
-
-diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
-index 05fd5fcf24f9..8dfe0550c0e6 100644
---- a/arch/riscv/configs/defconfig
-+++ b/arch/riscv/configs/defconfig
-@@ -25,6 +25,7 @@ CONFIG_BLK_DEV_INITRD=y
- CONFIG_EXPERT=y
- # CONFIG_SYSFS_SYSCALL is not set
- CONFIG_PROFILING=y
-+CONFIG_ARCH_SUNXI=y
- CONFIG_SOC_MICROCHIP_POLARFIRE=y
- CONFIG_SOC_SIFIVE=y
- CONFIG_SOC_STARFIVE=y
-@@ -118,22 +119,31 @@ CONFIG_VIRTIO_NET=y
- CONFIG_MACB=y
- CONFIG_E1000E=y
- CONFIG_R8169=y
-+CONFIG_STMMAC_ETH=m
- CONFIG_MICROSEMI_PHY=y
- CONFIG_INPUT_MOUSEDEV=y
-+CONFIG_KEYBOARD_SUN4I_LRADC=m
- CONFIG_SERIAL_8250=y
- CONFIG_SERIAL_8250_CONSOLE=y
-+CONFIG_SERIAL_8250_DW=y
- CONFIG_SERIAL_OF_PLATFORM=y
- CONFIG_VIRTIO_CONSOLE=y
- CONFIG_HW_RANDOM=y
- CONFIG_HW_RANDOM_VIRTIO=y
-+CONFIG_I2C_MV64XXX=m
- CONFIG_SPI=y
- CONFIG_SPI_SIFIVE=y
-+CONFIG_SPI_SUN6I=y
- # CONFIG_PTP_1588_CLOCK is not set
--CONFIG_GPIOLIB=y
- CONFIG_GPIO_SIFIVE=y
-+CONFIG_WATCHDOG=y
-+CONFIG_SUNXI_WATCHDOG=y
-+CONFIG_REGULATOR=y
-+CONFIG_REGULATOR_FIXED_VOLTAGE=y
- CONFIG_DRM=m
- CONFIG_DRM_RADEON=m
- CONFIG_DRM_NOUVEAU=m
-+CONFIG_DRM_SUN4I=m
- CONFIG_DRM_VIRTIO_GPU=m
- CONFIG_FB=y
- CONFIG_FRAMEBUFFER_CONSOLE=y
-@@ -146,19 +156,30 @@ CONFIG_USB_OHCI_HCD=y
- CONFIG_USB_OHCI_HCD_PLATFORM=y
- CONFIG_USB_STORAGE=y
- CONFIG_USB_UAS=y
-+CONFIG_USB_MUSB_HDRC=m
-+CONFIG_USB_MUSB_SUNXI=m
-+CONFIG_NOP_USB_XCEIV=m
- CONFIG_MMC=y
- CONFIG_MMC_SDHCI=y
- CONFIG_MMC_SDHCI_PLTFM=y
- CONFIG_MMC_SDHCI_CADENCE=y
- CONFIG_MMC_SPI=y
-+CONFIG_MMC_SUNXI=y
- CONFIG_RTC_CLASS=y
-+CONFIG_RTC_DRV_SUN6I=y
-+CONFIG_DMADEVICES=y
-+CONFIG_DMA_SUN6I=m
- CONFIG_VIRTIO_PCI=y
- CONFIG_VIRTIO_BALLOON=y
- CONFIG_VIRTIO_INPUT=y
- CONFIG_VIRTIO_MMIO=y
-+CONFIG_SUN8I_DE2_CCU=m
-+CONFIG_SUN50I_IOMMU=y
- CONFIG_RPMSG_CHAR=y
- CONFIG_RPMSG_CTRL=y
- CONFIG_RPMSG_VIRTIO=y
-+CONFIG_PHY_SUN4I_USB=m
-+CONFIG_NVMEM_SUNXI_SID=y
- CONFIG_EXT4_FS=y
- CONFIG_EXT4_FS_POSIX_ACL=y
- CONFIG_EXT4_FS_SECURITY=y
--- 
-2.37.4
+Bart.
 
