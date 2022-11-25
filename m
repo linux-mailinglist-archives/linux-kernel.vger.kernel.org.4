@@ -2,101 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 255FC638AA8
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 13:58:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DD71638AB2
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 13:59:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbiKYM6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 07:58:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56184 "EHLO
+        id S229753AbiKYM7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 07:59:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiKYM6q (ORCPT
+        with ESMTP id S229777AbiKYM7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 07:58:46 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CCC27CE9;
-        Fri, 25 Nov 2022 04:58:45 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 290FD1FD63;
-        Fri, 25 Nov 2022 12:58:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1669381124; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HOiD9ianBiK3WSdhkTFKawbGbHxzkZa1OpZlesKwxwg=;
-        b=CE7srKW4HlBYiMGla3w9Z4/Krm+Q2CWl3QbNYEZt0g5MFdcYmt5NQzomMQAM1LniG5S52H
-        uDX3MOBuMUXcGxBwGksUsB2Lwg3tCoKTbcqM5Dp/leITFkFU9ekryT1OpfmTOYfi6HmXjf
-        vh4qcYF7m90dz1TAJmpc8d3kKn3jyp8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1669381124;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HOiD9ianBiK3WSdhkTFKawbGbHxzkZa1OpZlesKwxwg=;
-        b=LkmXBh3KMsb1J3DVq5Z+aP5/+fZjqX7OvzYdq57CUb/Ob396AgLH8uANbtmR6gg0wKzLd6
-        lh+F3HpOvH1Wu8Aw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E47A613A08;
-        Fri, 25 Nov 2022 12:58:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 0NhDNgO8gGOGPQAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Fri, 25 Nov 2022 12:58:43 +0000
-Date:   Fri, 25 Nov 2022 13:58:41 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the nand tree with the mtd-fixes
- tree
-Message-ID: <20221125135841.134310ba@endymion.delvare>
-In-Reply-To: <20221125100504.5424c3ad@xps-13>
-References: <20221125094634.665b079c@canb.auug.org.au>
-        <20221125100504.5424c3ad@xps-13>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        Fri, 25 Nov 2022 07:59:12 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D599528E2F;
+        Fri, 25 Nov 2022 04:59:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669381142; x=1700917142;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=v4fej//7FpkGY53wVCQwPqHO2iJNyMNdkMs+y+xX9pI=;
+  b=j0RotfVV9pC3r9m9PGRVJ4i4RKhevmsXfYUTNUNbOx9Yp1znoeK1HYa0
+   M7vm0lqBlb/Yskyu4tHQI8yiQLEm+rkuCsQtIV8V9ODAz2S/VxW50cLus
+   WF5GqRLkAsoUGYrqMiU+mmYYkgm2GfFVf3D5EwL/rWf9QxD45SRk8qs9b
+   aqOMNug0hMUL0haVCi1ivEGurgD80H8tYD6gBgH627QxmDwZVd6DJecrx
+   QWpryQFtZcXQXp4s2pDSCkU7Eeguw2z7gJCjK/GWmKhoZW9LRqHdyoE9U
+   lg5irSsn+CkdsEqebn8Dr00+HMUzekAJF5kefUWPkfOs3IMktRj5RFchT
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="341381295"
+X-IronPort-AV: E=Sophos;i="5.96,193,1665471600"; 
+   d="scan'208";a="341381295"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2022 04:59:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="706061282"
+X-IronPort-AV: E=Sophos;i="5.96,193,1665471600"; 
+   d="scan'208";a="706061282"
+Received: from jiaxichen-precision-3650-tower.sh.intel.com ([10.239.159.75])
+  by fmsmga008.fm.intel.com with ESMTP; 25 Nov 2022 04:58:57 -0800
+From:   Jiaxi Chen <jiaxi.chen@linux.intel.com>
+To:     kvm@vger.kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        seanjc@google.com, pbonzini@redhat.com, ndesaulniers@google.com,
+        alexandre.belloni@bootlin.com, peterz@infradead.org,
+        jpoimboe@kernel.org, chang.seok.bae@intel.com,
+        pawan.kumar.gupta@linux.intel.com, babu.moger@amd.com,
+        jmattson@google.com, sandipan.das@amd.com, tony.luck@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, fenghua.yu@intel.com,
+        keescook@chromium.org, nathan@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 5/8] x86: KVM: Advertise AVX-IFMA CPUID to user space
+Date:   Fri, 25 Nov 2022 20:58:42 +0800
+Message-Id: <20221125125845.1182922-6-jiaxi.chen@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221125125845.1182922-1-jiaxi.chen@linux.intel.com>
+References: <20221125125845.1182922-1-jiaxi.chen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Nov 2022 10:05:04 +0100, Miquel Raynal wrote:
-> sfr@canb.auug.org.au wrote on Fri, 25 Nov 2022 09:46:34 +1100:
-> > Today's linux-next merge of the nand tree got a conflict in:
-> > 
-> >   drivers/mtd/nand/onenand/Kconfig
-> > 
-> > between commit:
-> > 
-> >   c717b9b7d6de ("mtd: onenand: omap2: add dependency on GPMC")
-> > 
-> > from the mtd-fixes tree and commit:
-> > 
-> >   b46ff0780f17 ("mtd: onenand: omap2: Drop obsolete dependency on COMPILE_TEST")  
-> 
-> As this commit is not super urgent and because I want to make the merge
-> process as smooth as possible, I'll drop it from my branches. Please
-> rebase and resend when -rc1 is out and I'll apply right away.
+AVX-IFMA is a new instruction in the latest Intel platform Sierra
+Forest. This instruction packed multiplies unsigned 52-bit integers and
+adds the low/high 52-bit products to Qword Accumulators.
 
-Noted, no problem.
+The bit definition:
+CPUID.(EAX=7,ECX=1):EAX[bit 23]
 
+AVX-IFMA is on an expected-dense CPUID leaf and some other bits on this
+leaf have kernel usages. Given that, define this feature bit like
+X86_FEATURE_<name> in kernel. Considering AVX-IFMA itself has no truly
+kernel usages and /proc/cpuinfo has too much unreadable flags, hide this
+one in /proc/cpuinfo.
+
+Advertise AVX-IFMA to KVM userspace. This is safe because there are no
+new VMX controls or additional host enabling required for guests to use
+this feature.
+
+Signed-off-by: Jiaxi Chen <jiaxi.chen@linux.intel.com>
+Acked-by: Borislav Petkov <bp@suse.de>
+---
+ arch/x86/include/asm/cpufeatures.h | 1 +
+ arch/x86/kvm/cpuid.c               | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+index 20059dc33d24..1419c4e04d45 100644
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -310,6 +310,7 @@
+ #define X86_FEATURE_AVX512_BF16		(12*32+ 5) /* AVX512 BFLOAT16 instructions */
+ #define X86_FEATURE_CMPCCXADD           (12*32+ 7) /* "" CMPccXADD instructions */
+ #define X86_FEATURE_AMX_FP16		(12*32+21) /* "" AMX fp16 Support */
++#define X86_FEATURE_AVX_IFMA            (12*32+23) /* "" Support for VPMADD52[H,L]UQ */
+ 
+ /* AMD-defined CPU features, CPUID level 0x80000008 (EBX), word 13 */
+ #define X86_FEATURE_CLZERO		(13*32+ 0) /* CLZERO instruction */
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index 0e04d1138bca..8612cddd9838 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -663,7 +663,8 @@ void kvm_set_cpu_caps(void)
+ 		kvm_cpu_cap_set(X86_FEATURE_SPEC_CTRL_SSBD);
+ 
+ 	kvm_cpu_cap_mask(CPUID_7_1_EAX,
+-		F(AVX_VNNI) | F(AVX512_BF16) | F(CMPCCXADD) | F(AMX_FP16)
++		F(AVX_VNNI) | F(AVX512_BF16) | F(CMPCCXADD) | F(AMX_FP16) |
++		F(AVX_IFMA)
+ 	);
+ 
+ 	kvm_cpu_cap_mask(CPUID_D_1_EAX,
 -- 
-Jean Delvare
-SUSE L3 Support
+2.27.0
+
