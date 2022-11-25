@@ -2,67 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87DF4638E3B
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 17:26:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19D6D638E3D
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 17:28:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbiKYQ0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 11:26:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
+        id S229687AbiKYQ2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 11:28:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiKYQ0g (ORCPT
+        with ESMTP id S229495AbiKYQ2V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 11:26:36 -0500
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FD4A4D5D1
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 08:26:35 -0800 (PST)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-3abc71aafcaso45978867b3.3
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 08:26:35 -0800 (PST)
+        Fri, 25 Nov 2022 11:28:21 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FED517427
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 08:28:20 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id cw8so1311745ejb.10
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 08:28:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bf7E7n4dmrdFRC5rZ1QW+EG5hHZAKscT7MoDcTeBD58=;
-        b=G7gtbdq8ip2ekxwjuI/Ub7lCR6vSRAanKnS7PLhX2TsMFeIfK0dk0lA71Ecz56gEby
-         eoWR5LG2GYMXiHODKmXHPIIjalopjSpHD7pDwEUskqdxTxLgThs3QVHUvf58mJL+Y3Ef
-         sAunH4fiMS5Ixo9ehkZ52PlDfyf4mQrsWqYe+C2YOy1jicGTNMFIYmYDHnDobLnRrqtc
-         3ab0RZgd/Fy6b077SaZrAdCSVwT/QG6GpEWXlL4g//RmcKVcxUvUrvDYzgQGuICfWzpB
-         LD7SIpofW2zcEeJTHOEtPLxdRE5MaJg+jtH+zrs/8FBq4XMEQeoWYGtf9StmQhi64N2X
-         yz3A==
+        d=chromium.org; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FPfIcZ7oMFAWMErNOiDjIKAKPnIKu22VqMpx37ofk00=;
+        b=aUwGVuMXyJgJCAsCUvWy3cRAnZdydVYshWa7vdWjNxFdJlX17LHfBZidw2jPsd6Ias
+         rDsTEWcavVDqxeeofCi6uvNO79qiGVFMmDKKrrMomr8desXQAn9S2PY5T+eVfdHMFi/h
+         8ty+kGBPgvn7HF22ZOAAZA0P+oYT/20dD8t9s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=bf7E7n4dmrdFRC5rZ1QW+EG5hHZAKscT7MoDcTeBD58=;
-        b=o1P/ygF6nKECLkFUA9pghl86FeAHxMOi1bHHqU1f5nqJqiFisEPoVKtZYyNVsh0lyx
-         8C7biL3oLZicb8HCJqgQoiSF8u1J44c7SrlgKjVJt6w9LAA4GiZKLlb+rUpy3jvrXgcg
-         cgSXKUYX8g/bgjlFCB0X52gbDMfQjxjZia4v+SqRMdpZ6RON+Rh8/3TeBhJyHoOnQp3s
-         ePrsaqhAMG30BJo8vld8CfZHn8mnGICn2a3RV6FE/L+hfyxGmApgGXoad6Fsk3shBjNQ
-         06Azkze+0b2m7grN1K2EofDur2hSPH2SUxsK5AegIVa50ziGV0RU9dgnYMkO8Gz0Nm8m
-         y/qw==
-X-Gm-Message-State: ANoB5pnbDlXo8LTFqy7CDgTrvcxCPlNhWtGdVHNI5MZxQ1UEbFsEw2wZ
-        fx6uxdRMvtmP4DhLaSqDcFJVaOf4Aa8nJfGGAJlqAg==
-X-Google-Smtp-Source: AA0mqf6dpYCUTp9rCGQ4y3qXOTEFkV/f/u8MPzAwc5LOoH3J6YCnEgQFsWvPKhbCHpODj7iXjQiYSWTbULk9LWhGl/Q=
-X-Received: by 2002:a81:dd8:0:b0:3b8:97ce:990a with SMTP id
- 207-20020a810dd8000000b003b897ce990amr5556946ywn.448.1669393594268; Fri, 25
- Nov 2022 08:26:34 -0800 (PST)
+        bh=FPfIcZ7oMFAWMErNOiDjIKAKPnIKu22VqMpx37ofk00=;
+        b=sOnUkjkfwmE0Te6n6aBEazVGAGBQ8sV/BRz0J1Nlz51kL/n8LIHO2xYZ+1fHyFmQzx
+         VQdhFmVwRmeeWp1wFOOSEsR4ZOZIH8GtWtrtBKap6SL8HMDJgkwTdIwEZk+9uewqYKwc
+         9hVvxEII6vHBfRSDBSyD9fJI6/mo3jEy/JGa1GdXIiZyBR8qSXtmnp1hEbUrLcvrBtET
+         jPsFx9Rlm0MqgkGg2nMB63ghgI+SVs1VNVTdv2DJPRXKjPzLzsg/vNnbX4dqCjoYleE8
+         sU33ZZLsNMqSNCb4T0Qlk3s+qEyjSmCDqyLxnDMZU1WHr92m65JQJUWb4CjmYG9/RSU3
+         CLmg==
+X-Gm-Message-State: ANoB5pkWI5VEJUkeQzxltFGwuaKzd7nibpK9AJVyDd/WxPci2wBk1/ul
+        ry83ziPFqwu7zb/nDXZCULw9XOzKdP6q2FCp
+X-Google-Smtp-Source: AA0mqf5CoPt+3iMGVdMS5sptppyW5DW0OMpWoLkAdjvxpFJYpZ18xIoomWaaxApwBWBj+x5ZfUfApg==
+X-Received: by 2002:a17:906:d8db:b0:7ba:8633:7f7b with SMTP id re27-20020a170906d8db00b007ba86337f7bmr9893641ejb.206.1669393699000;
+        Fri, 25 Nov 2022 08:28:19 -0800 (PST)
+Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
+        by smtp.gmail.com with ESMTPSA id ud10-20020a170907c60a00b007b29eb8a4dbsm1771589ejc.13.2022.11.25.08.28.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Nov 2022 08:28:18 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Fri, 25 Nov 2022 17:28:10 +0100
+Subject: [PATCH] iommu/mediatek: Fix crash on isr after kexec()
 MIME-Version: 1.0
-References: <20221125075804.064161337@linuxfoundation.org>
-In-Reply-To: <20221125075804.064161337@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 25 Nov 2022 21:56:23 +0530
-Message-ID: <CA+G9fYstqhTMcmVVu3ArZ7F=raf34SZ95Z8y_W+V+4TwcDgyDA@mail.gmail.com>
-Subject: Re: [PATCH 6.0 000/313] 6.0.10-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20221125-mtk-iommu-v1-0-bb5ecac97a28@chromium.org>
+To:     Joerg Roedel <joro@8bytes.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Yong Wu <yong.wu@mediatek.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        linux-mediatek@lists.infradead.org
+X-Mailer: b4 0.11.0-dev-696ae
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1626; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=yRsx62PHekdowYwa/Kc+JnAl1OMT11qcvF/UlUuv6e0=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjgO0e3Iz3uM3saXvlJTwcfd3xV9teD31lx/tBsCaA
+ +GKjJmCJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4DtHgAKCRDRN9E+zzrEiJyVD/
+ 4m5rgQ65+VT7WWI6q1UJaIcmFMXSC9WDSpsxRNyMBz6BZRl8DFMhNassgGM7Yjvs/dpX2vSLlc65qv
+ GiFTZaTAvqIk5J8IS7wIrf4/vfknf9EVix8AUcFguYeK8FlPNWbxWWVPtum55vKSQS1a86HOlOtmAt
+ 0JWGTzVCkSPmG9whMr37fwsQmcXd1U22IoxKYKxlTDsW43eplAc8+YCXlGUw/jIRf6VSD2jyCC6q1s
+ VPPdqFmFrVvYPnvPj9x2JYrSyJxgATgup+ik22/syCK/2Gfm/q6Q+F3i9D5SlOi9UceYAkazZgGTQ4
+ 9DU0HQ4BfNJxEdEHEeiAwMuFuA4ghfTigyEgD/U2gIt2mVnaI0+ja67va3TFrqfFjX4viTps6fQDRO
+ ysS39413twJwmd2jmq9jSUAMgv7dJJnpAAwajU5EO5Ll7Jiefj982V5jwuHIEv+2UfNBcNcNy4hHpC
+ rT4CPllsoZC40ASm16E4LEQ8k957AN9mCXoSOAaFpM9xoKhtwIOthkoXW5QRWPjB1iYsAYfiMo3GDb
+ vpyigsb2GbfNvCV7+oZmpcrnWBBqBG/Oiohf4LIsBsuI+3HWAZMIKAT2sYpW9BrpXoPvD7qKWefC9f
+ VT9oitp2Ge/qjpxG1RCS3QoszdeRwAsmwGWTzh2I0RFE5HJUvMUQaTOzdYLg==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,140 +86,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Nov 2022 at 13:28, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.0.10 release.
-> There are 313 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 27 Nov 2022 07:57:07 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.10-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+If the system is rebooted via isr(), the IRQ handler might be triggerd
+before the domain is initialized. Resulting on an invalid memory access
+error.
 
-Results from Linaro's test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Fix:
+[    0.500930] Unable to handle kernel read from unreadable memory at virtual address 0000000000000070
+[    0.501166] Call trace:
+[    0.501174]  report_iommu_fault+0x28/0xfc
+[    0.501180]  mtk_iommu_isr+0x10c/0x1c0
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+To: Yong Wu <yong.wu@mediatek.com>
+To: Joerg Roedel <joro@8bytes.org>
+To: Will Deacon <will@kernel.org>
+To: Robin Murphy <robin.murphy@arm.com>
+To: Matthias Brugger <matthias.bgg@gmail.com>
+Cc: iommu@lists.linux.dev
+Cc: linux-mediatek@lists.infradead.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+---
+ drivers/iommu/mtk_iommu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-## Build
-* kernel: 6.0.10-rc2
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-6.0.y
-* git commit: e0b681e38dd4981e5305f1775747e3eb645e10ae
-* git describe: v6.0.9-314-ge0b681e38dd4
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.0.y/build/v6.0.9-314-ge0b681e38dd4
+diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+index 2ab2ecfe01f8..17f6be5a5097 100644
+--- a/drivers/iommu/mtk_iommu.c
++++ b/drivers/iommu/mtk_iommu.c
+@@ -454,7 +454,7 @@ static irqreturn_t mtk_iommu_isr(int irq, void *dev_id)
+ 		fault_larb = data->plat_data->larbid_remap[fault_larb][sub_comm];
+ 	}
+ 
+-	if (report_iommu_fault(&dom->domain, bank->parent_dev, fault_iova,
++	if (dom && report_iommu_fault(&dom->domain, bank->parent_dev, fault_iova,
+ 			       write ? IOMMU_FAULT_WRITE : IOMMU_FAULT_READ)) {
+ 		dev_err_ratelimited(
+ 			bank->parent_dev,
 
-## Test Regressions (compared to v6.0.9)
+---
+base-commit: 4312098baf37ee17a8350725e6e0d0e8590252d4
+change-id: 20221125-mtk-iommu-13023f971298
 
-## Metric Regressions (compared to v6.0.9)
-
-## Test Fixes (compared to v6.0.9)
-
-## Metric Fixes (compared to v6.0.9)
-
-## Test result summary
-total: 149083, pass: 130099, fail: 3546, skip: 15063, xfail: 375
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 151 total, 146 passed, 5 failed
-* arm64: 49 total, 48 passed, 1 failed
-* i386: 39 total, 36 passed, 3 failed
-* mips: 30 total, 28 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 38 total, 32 passed, 6 failed
-* riscv: 16 total, 16 passed, 0 failed
-* s390: 16 total, 14 passed, 2 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 42 total, 41 passed, 1 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-breakpoints
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-kvm
-* kselftest-lib
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-openat2
-* kselftest-seccomp
-* kselftest-timens
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcn[
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Best regards,
+-- 
+Ricardo Ribalda <ribalda@chromium.org>
