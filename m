@@ -2,126 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F48638257
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 03:23:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B77863825B
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 03:24:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbiKYCXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 21:23:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34734 "EHLO
+        id S229673AbiKYCYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 21:24:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiKYCXT (ORCPT
+        with ESMTP id S229477AbiKYCYa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 21:23:19 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8221ADB8
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 18:23:18 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hsAt/6FrYuCngndhVq+5VCfylgadPtDYh4A7RHatgCjVH8AdHr8UjwBmqJbPjBcXfkJx8suCZ7R3sPX1AAApS/g+/jfVtF6bxklJ3R+RH6KSgABNj9v86vHcgdUgxHYHmxTY22T4EOFYROCllQ3IqCj0OmtlwYOds5l4E2erl/FH0ql+ePpbXiadJSzuNHQoTqoE7Am2ASc6FnUs474fEOeeEfFc7bv/z30iYkOunJeC8h5/NNwnxdMTm4YG8273pBJIg5+7pJoD53WDaZIDcnFarE2YMkjAVmFhzhlHaA+zAjehMKfOY8NA6fNYzmfLEeLSHeAjsB/5mcwRp5e4qg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WFDsSCk8BY5UV005y1a6c5Kdpr0RFnlI/AQFVJE+WxE=;
- b=j+UWprP+D7X6+CEwMlH+uGi+ICrmq5h/Qr6A8pswVxTNctuRTME0SRyVb0FQd9sOVPv8Xn219kKJ+FRLg7ty8QRCS6f/YRXXZtpC0mGEIxwaHPzwB90GKHWEXo3UTKQswn566xLNi8t6X4ezqJuj9WjJshCJroBv3EaCd0Oo8+P64f9rxWY/B3r4U7Jcxi5jI+Lgs3YDP/QLwvSHTMZOzrAXvNDt+CRFVead8ykxRumKoDDunU1MpLlIKRou2uMlEF4EKbNvrEFWjEju9k8oqtrqahV+Ns92v2xg84NvxNcwXGzlW9NRGv4I+tP8tCBRpM1tf3zutwkO25zGrTB29Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WFDsSCk8BY5UV005y1a6c5Kdpr0RFnlI/AQFVJE+WxE=;
- b=b6HRu2ed7yHI9orT9iD6ltG7ojuRod2R5TdBnqSp4n9z2oGl3iC1OKKyNtVt1H3WIyBIQpDzThgO4vJt+Lv3JANuUHHKuoGNR0KiSUqS5fe2roYjImkFIUGfqADKs4/JIRB4zFLYCesaSwErSWqIfmJ8k6ohUbmsHow/Vlj3qvY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB3370.namprd12.prod.outlook.com (2603:10b6:5:38::25) by
- PH0PR12MB8152.namprd12.prod.outlook.com (2603:10b6:510:292::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Fri, 25 Nov
- 2022 02:23:14 +0000
-Received: from DM6PR12MB3370.namprd12.prod.outlook.com
- ([fe80::2fd1:bdaf:af05:e178]) by DM6PR12MB3370.namprd12.prod.outlook.com
- ([fe80::2fd1:bdaf:af05:e178%3]) with mapi id 15.20.5857.018; Fri, 25 Nov 2022
- 02:23:14 +0000
-Message-ID: <0a747797-9b1c-ca60-569f-76eea19a08d3@amd.com>
-Date:   Thu, 24 Nov 2022 21:23:11 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] swsmu/amdgpu_smu: Fix the wrong if-condition
-Content-Language: en-CA
-To:     "Quan, Evan" <Evan.Quan@amd.com>,
-        Yu Songping <yusongping@huawei.com>,
-        "airlied@gmail.com" <airlied@gmail.com>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>
-Cc:     "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221124015237.172948-1-yusongping@huawei.com>
- <DM6PR12MB261939876DAFDBA3B25DEB17E40F9@DM6PR12MB2619.namprd12.prod.outlook.com>
-From:   Luben Tuikov <luben.tuikov@amd.com>
-In-Reply-To: <DM6PR12MB261939876DAFDBA3B25DEB17E40F9@DM6PR12MB2619.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR10CA0031.namprd10.prod.outlook.com
- (2603:10b6:208:120::44) To DM6PR12MB3370.namprd12.prod.outlook.com
- (2603:10b6:5:38::25)
+        Thu, 24 Nov 2022 21:24:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F541B1FB
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 18:23:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669343016;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=u9r9NHOb4ra+Mf5QnW792ruIJGFPU0f/l9NNTHPvhbU=;
+        b=ZJoZDa23tWWfLiT6o7gmZqeTEyICSKc/KoAvJ61rz/oqM5SMRdpp31+ft9rLMhWKz0fVCQ
+        rsD8QF1u/Bco+pnRSvcTA+CXyXgHZnzduX6t++4QrwsO/rTBUNNQcGI84h0OrDIDhLqabR
+        8tPSWoaXi926JppnSquc8gqx6OwJ52Q=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-597-4tZ2cEygMSyJFltOmf9FTg-1; Thu, 24 Nov 2022 21:23:29 -0500
+X-MC-Unique: 4tZ2cEygMSyJFltOmf9FTg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 17138803481;
+        Fri, 25 Nov 2022 02:23:29 +0000 (UTC)
+Received: from server.redhat.com (ovpn-12-152.pek2.redhat.com [10.72.12.152])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C482A1415114;
+        Fri, 25 Nov 2022 02:23:25 +0000 (UTC)
+From:   Cindy Lu <lulu@redhat.com>
+To:     lulu@redhat.com, jasowang@redhat.com, mst@redhat.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Subject: [PATCH v2] vhost_vdpa: fix the crash in unmap a large memory
+Date:   Fri, 25 Nov 2022 10:23:17 +0800
+Message-Id: <20221125022317.2157263-1-lulu@redhat.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3370:EE_|PH0PR12MB8152:EE_
-X-MS-Office365-Filtering-Correlation-Id: f5f62ea9-a468-4b63-19e6-08dace8c019a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dNe7ZOK+S6ELp9pAeoDjtF1Y/mJOaGX1C3P0vfXhrHst/diYpfW0MH9JIdRh0PpP1c01gSSa08ufcmQLmU0Eg1NJOkDZJ2REgDp6PhBPP93alUnFD5T/TOkHSiJOCe6aP+V3jOtrzs3VtuziopDBXl9T+BrOkUKsGBJSSDbhzrejSK6Xf83jTH3a0NK1T+70BTfnmPLXsSpXbq4rMpTOQKQZNmnM/hiVdWR8MwKOwrzrH6fTdzTKuPl6sf8bNMBTqVLynXPX1t3hiXFlxa1zsK6farZ32dRvSKrHjggeDbdAY+97OaSE13GCJVlgstlaw6zUhB4dq0lC5bMrtqnwTJ3JwBMv3GMm0QZAQR0ExjgJcvTOHn++vkZAird6k8V0Gj9OJ/qz+yKK8E3MTnz7qhfKFfz+K7IDmHo7X5dyLHxftVFkXUfSUuHuAvakwWrMHctWBRBdIibqOPJcSy8GEnc8wqNsBypbs56H5BNeosP8fijY1WivRgFO7TuH8iaV41flaSja24A9rkodvFc5oV/O8zdabIP3MyvXvFMFTgAEVpw6Ogu1mR0RrDifryOsX9LMgAv4ONCdLiKQKTCGVBcpBxs4rPyPwoKyMpH6E8Cna7CTQqJFVs/dCwCRIr2oPjYC7L9msPNRBcNwb5NZDrW1IXM62DL2i0thmsLhCp1cV0qbKZkTX/+o5iZH6nru6dH5CB64AE87liv5P8e9Vm/6eCnlb8a5YcWMEptXitQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(366004)(39860400002)(376002)(346002)(451199015)(478600001)(6486002)(6506007)(53546011)(186003)(4001150100001)(110136005)(26005)(6666004)(36756003)(2906002)(6512007)(38100700002)(31696002)(86362001)(83380400001)(2616005)(8936002)(41300700001)(44832011)(66946007)(66556008)(66476007)(8676002)(31686004)(4326008)(5660300002)(54906003)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NlBjaUpFVCtwTmQvL1ljQlVNU1cvVncvT2o5WElmZEM0VUdCR1MrZ3ZGYVcx?=
- =?utf-8?B?VlJqekZiZXlzek9XTnlQZCtGWjZJa2RpR2U1NndZeFREU2VjaXBLSlZ3Rkk4?=
- =?utf-8?B?czh0Z2JkMnBEQVRQeW41a1EyVDlYVUpzenRaN2tXc1RHbkV3NC8yWjJpbkd6?=
- =?utf-8?B?RHVucXByeFZaM2crQlFOVmlleGJHOUVYQWt2UStTSWttVHI2S2NQY2x0RnNL?=
- =?utf-8?B?dFh3UGRyc0dqS1BaV0lHam15MkFYMnd0Tk53Zmw5NWZjb29wZXlQeHltSkh5?=
- =?utf-8?B?bG9VeXNFNkM2MzRyZDQ2TEtkVzJxQm9tMzNZcnRyYUo4bW5oWXV6a05QbHln?=
- =?utf-8?B?UTA1UXVhQ1dDM3kvMmplU0oxcmZWOXlhZGpYSFJnZ0IyM3pWbndrSHE0YU1E?=
- =?utf-8?B?bWxVOStzdkVpUEx5Y25MZkdENWR0L3hFQ09ZZ3BZWDFNMHUreFcwcG55NHJI?=
- =?utf-8?B?RkN1cXQrQ01hZ0RlNlRmeGhpWHhnNjl4cGpuQ09SRlFKa25YSTI0RXYrU1d2?=
- =?utf-8?B?QUVLZWh1VHFmY1k0eFNKOC9JUk94RkN1M0l2YWVrTDdOMzNYRHpvV0JvWHZR?=
- =?utf-8?B?YnltbEVuZ25SdGYzNzlNUFppb0hGdHRURm85Mml1SENYaGUrdEhsZm1SdXVs?=
- =?utf-8?B?azZlVy92aXNTWE5peTlsc1RPRS9BYzdkdHJMZWtvZTY0NnZVUG1vcjRmK3RB?=
- =?utf-8?B?QTVGRHhEdWFCdUFJdkRUbDV0bXlPcTdNTXhmeXVTWFZZSGhjV2xPazRCZFF0?=
- =?utf-8?B?S3g1VVIrMjdKYVg2UHFwemlUUkI5dDFqQ0Z0bVlyZWRMaDhZb0lCbzdtRzFV?=
- =?utf-8?B?MTZkZHNCaTZkQVZpRHBQQnlSNFF2dXFmVnZYT2VKckFtbGdKVFZpVWJTSXUr?=
- =?utf-8?B?VVhtNEIwbk1BMnlGZThKNlJucUhaUmdOcmlUVlByUGlBNEdLY1VBRXp4VEZi?=
- =?utf-8?B?ckZHWk16M2JUVjRCZWpZM0Q5RkoxcGk0Mis2eHg2ZEdmS2NEUEdESFJjR2pF?=
- =?utf-8?B?Q0h3OGE0UEk2TTJDd1FvOTFST3VDdHRHVDR5UTJIdGhaTnNhOGdsOTZudmpM?=
- =?utf-8?B?K08yN294aC9pRFFvMEJCdHJJMTRhZVUwYXJzVHFGKzJhQ3FkMkxzRlRKd0li?=
- =?utf-8?B?Nk0zK3VWNTNJVGRKeUl0ZCtCTWlodC9YZEI4ZE9mZmMrUlZ1MU1VSUpIcFh2?=
- =?utf-8?B?bUhlSXpEc3I4TWRRWEpHa0JGUzlGR2pETFB1UVhqb2tQWVE1QnhKU2ZldGRx?=
- =?utf-8?B?anVDNkZ3UGw4RFd3aTJJQmJNbG9vczkyaWhrWTdMcHBVNXlpYnZ6RjF1S0xl?=
- =?utf-8?B?a2xiaTNkNklDaVlpc0Q3aCtqNGpVUEc0M1J1b0lXV1ZjaU94UTU1aXpkUjhV?=
- =?utf-8?B?NUNDNkVKVE5EZEFkRE1vWUgraEF5S1QvTE5XTG5WUXBOYXFMeXE0bzNCazlU?=
- =?utf-8?B?UjJtYWRMbldzN01qZUdkNEgwYVBRNGZGc2FyNHNneHV6aDFJQU9qTTBpVWZ4?=
- =?utf-8?B?bC9jVHllbzdESWFuZEZjMGNOUHV2bU1CTGdITlJlVDVTaHF2ZGwwZ1BJT096?=
- =?utf-8?B?aGI5STdJVk5RQjFYUi81ODdKbllHL29EUVJKaEhHOW50V0R4dW1GdEJKV1pG?=
- =?utf-8?B?RGcySHdZMy93N3hMaDhTRm9DWDNnMDV5N3lGU1hCbTAvcEhCQ3ROalVKME1z?=
- =?utf-8?B?RmdzbHBmUU42UXhqUEdCMVY1YitFajJleHc5a2JoR3FzQVZiTUJBY3lyc3Rn?=
- =?utf-8?B?aHkrUVZGWWQveE5BZ2dWVTR1VC94MlAwempoekMyeGdpWGlFREk4bDhtUkNj?=
- =?utf-8?B?RC8ySjU4QlpjWk0xbk13RytsS0d3MW0rUkZUK1R2UUk1TS9MdGgzcE5HaE56?=
- =?utf-8?B?ZDgrWmR3UHRsWXhNcGxSTXVaaHk1aDdXV1kvODZrSko5RTNZUEtuRW1KRzZJ?=
- =?utf-8?B?MWxpQWhTSjN3eG5QZFhCcmRKMmMyQXJ4bkZEcUllbUZNWlVHay9WTE5RQkhX?=
- =?utf-8?B?RnNxRjNpd1VOa29pYVQwc1pWSWI4MUc3T1crZER0NTV0Z05JR04vTDdpNndk?=
- =?utf-8?B?NWEvc3p1dlZXMjNyTFY1QjZPaTk2ODNaWFRSNFpxVWlIaG9ha2hkVWh0YXJw?=
- =?utf-8?Q?i8T/60xTIW5lbZTt1yNChBTrb?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f5f62ea9-a468-4b63-19e6-08dace8c019a
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3370.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2022 02:23:14.6465
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YjZyePlWopLAIpSbth4uzRU4Tjb9IPoR2iv3KN55Sym5L3d6UjZA+2P5VN1v9yi4
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB8152
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -129,51 +58,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied!
+While testing in vIOMMU, sometimes guest will unmap very large memory,
+which will cause the crash. To fix this,Move the iommu_unmap to
+vhost_vdpa_pa_unmap/vhost_vdpa_va_unmap and only unmap the memory
+that saved in iotlb.
 
-Thanks,
-Luben
+Call Trace:
+[  647.820144] ------------[ cut here ]------------
+[  647.820848] kernel BUG at drivers/iommu/intel/iommu.c:1174!
+[  647.821486] invalid opcode: 0000 [#1] PREEMPT SMP PTI
+[  647.822082] CPU: 10 PID: 1181 Comm: qemu-system-x86 Not tainted 6.0.0-rc1home_lulu_2452_lulu7_vhost+ #62
+[  647.823139] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.15.0-29-g6a62e0cb0dfe-prebuilt.qem4
+[  647.824365] RIP: 0010:domain_unmap+0x48/0x110
+[  647.825424] Code: 48 89 fb 8d 4c f6 1e 39 c1 0f 4f c8 83 e9 0c 83 f9 3f 7f 18 48 89 e8 48 d3 e8 48 85 c0 75 59
+[  647.828064] RSP: 0018:ffffae5340c0bbf0 EFLAGS: 00010202
+[  647.828973] RAX: 0000000000000001 RBX: ffff921793d10540 RCX: 000000000000001b
+[  647.830083] RDX: 00000000080000ff RSI: 0000000000000001 RDI: ffff921793d10540
+[  647.831214] RBP: 0000000007fc0100 R08: ffffae5340c0bcd0 R09: 0000000000000003
+[  647.832388] R10: 0000007fc0100000 R11: 0000000000100000 R12: 00000000080000ff
+[  647.833668] R13: ffffae5340c0bcd0 R14: ffff921793d10590 R15: 0000008000100000
+[  647.834782] FS:  00007f772ec90640(0000) GS:ffff921ce7a80000(0000) knlGS:0000000000000000
+[  647.836004] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  647.836990] CR2: 00007f02c27a3a20 CR3: 0000000101b0c006 CR4: 0000000000372ee0
+[  647.838107] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[  647.839283] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[  647.840666] Call Trace:
+[  647.841437]  <TASK>
+[  647.842107]  intel_iommu_unmap_pages+0x93/0x140
+[  647.843112]  __iommu_unmap+0x91/0x1b0
+[  647.844003]  iommu_unmap+0x6a/0x95
+[  647.844885]  vhost_vdpa_unmap+0x1de/0x1f0 [vhost_vdpa]
+[  647.845985]  vhost_vdpa_process_iotlb_msg+0xf0/0x90b [vhost_vdpa]
+[  647.847235]  ? _raw_spin_unlock+0x15/0x30
+[  647.848181]  ? _copy_from_iter+0x8c/0x580
+[  647.849137]  vhost_chr_write_iter+0xb3/0x430 [vhost]
+[  647.850126]  vfs_write+0x1e4/0x3a0
+[  647.850897]  ksys_write+0x53/0xd0
+[  647.851688]  do_syscall_64+0x3a/0x90
+[  647.852508]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[  647.853457] RIP: 0033:0x7f7734ef9f4f
+[  647.854408] Code: 89 54 24 18 48 89 74 24 10 89 7c 24 08 e8 29 76 f8 ff 48 8b 54 24 18 48 8b 74 24 10 41 89 c8
+[  647.857217] RSP: 002b:00007f772ec8f040 EFLAGS: 00000293 ORIG_RAX: 0000000000000001
+[  647.858486] RAX: ffffffffffffffda RBX: 00000000fef00000 RCX: 00007f7734ef9f4f
+[  647.859713] RDX: 0000000000000048 RSI: 00007f772ec8f090 RDI: 0000000000000010
+[  647.860942] RBP: 00007f772ec8f1a0 R08: 0000000000000000 R09: 0000000000000000
+[  647.862206] R10: 0000000000000001 R11: 0000000000000293 R12: 0000000000000010
+[  647.863446] R13: 0000000000000002 R14: 0000000000000000 R15: ffffffff01100000
+[  647.864692]  </TASK>
+[  647.865458] Modules linked in: rpcsec_gss_krb5 auth_rpcgss nfsv4 dns_resolver nfs lockd grace fscache netfs v]
+[  647.874688] ---[ end trace 0000000000000000 ]---
+[  647.876013] RIP: 0010:domain_unmap+0x48/0x110
+[  647.878306] Code: 48 89 fb 8d 4c f6 1e 39 c1 0f 4f c8 83 e9 0c 83 f9 3f 7f 18 48 89 e8 48 d3 e8 48 85 c0 75 59
+[  647.884581] RSP: 0018:ffffae5340c0bbf0 EFLAGS: 00010202
+[  647.886308] RAX: 0000000000000001 RBX: ffff921793d10540 RCX: 000000000000001b
+[  647.888775] RDX: 00000000080000ff RSI: 0000000000000001 RDI: ffff921793d10540
+[  647.890295] RBP: 0000000007fc0100 R08: ffffae5340c0bcd0 R09: 0000000000000003
+[  647.891660] R10: 0000007fc0100000 R11: 0000000000100000 R12: 00000000080000ff
+[  647.893019] R13: ffffae5340c0bcd0 R14: ffff921793d10590 R15: 0000008000100000
+[  647.894506] FS:  00007f772ec90640(0000) GS:ffff921ce7a80000(0000) knlGS:0000000000000000
+[  647.895963] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  647.897348] CR2: 00007f02c27a3a20 CR3: 0000000101b0c006 CR4: 0000000000372ee0
+[  647.898719] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 
-On 2022-11-24 05:10, Quan, Evan wrote:
-> [AMD Official Use Only - General]
-> 
-> Reviewed-by: Evan Quan <evan.quan@amd.com>
-> 
->> -----Original Message-----
->> From: amd-gfx <amd-gfx-bounces@lists.freedesktop.org> On Behalf Of Yu
->> Songping
->> Sent: Thursday, November 24, 2022 9:53 AM
->> To: airlied@gmail.com; daniel@ffwll.ch
->> Cc: dri-devel@lists.freedesktop.org; amd-gfx@lists.freedesktop.org; linux-
->> kernel@vger.kernel.org
->> Subject: [PATCH] swsmu/amdgpu_smu: Fix the wrong if-condition
->>
->> The logical operator '&&' will make
->> smu->ppt_funcs->set_gfx_power_up_by_imu segment fault when
->> ppt_funcs is
->> smu->NULL.
->>
->> Signed-off-by: Yu Songping <yusongping@huawei.com>
->> ---
->>  drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
->> b/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
->> index b880f4d7d67e..1cb728b0b7ee 100644
->> --- a/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
->> +++ b/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
->> @@ -161,7 +161,7 @@ int smu_get_dpm_freq_range(struct smu_context
->> *smu,
->>
->>  int smu_set_gfx_power_up_by_imu(struct smu_context *smu)  {
->> -     if (!smu->ppt_funcs && !smu->ppt_funcs-
->>> set_gfx_power_up_by_imu)
->> +     if (!smu->ppt_funcs || !smu->ppt_funcs-
->>> set_gfx_power_up_by_imu)
->>               return -EOPNOTSUPP;
->>
->>       return smu->ppt_funcs->set_gfx_power_up_by_imu(smu);
->> --
->> 2.17.1
+Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
+Signed-off-by: Cindy Lu <lulu@redhat.com>
+---
+ drivers/vhost/vdpa.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+index 166044642fd5..e5a07751bf45 100644
+--- a/drivers/vhost/vdpa.c
++++ b/drivers/vhost/vdpa.c
+@@ -692,6 +692,8 @@ static void vhost_vdpa_pa_unmap(struct vhost_vdpa *v,
+ 	struct vhost_iotlb_map *map;
+ 	struct page *page;
+ 	unsigned long pfn, pinned;
++	struct vdpa_device *vdpa = v->vdpa;
++	const struct vdpa_config_ops *ops = vdpa->config;
+ 
+ 	while ((map = vhost_iotlb_itree_first(iotlb, start, last)) != NULL) {
+ 		pinned = PFN_DOWN(map->size);
+@@ -703,6 +705,8 @@ static void vhost_vdpa_pa_unmap(struct vhost_vdpa *v,
+ 			unpin_user_page(page);
+ 		}
+ 		atomic64_sub(PFN_DOWN(map->size), &dev->mm->pinned_vm);
++		if ((ops->dma_map == NULL) && (ops->set_map == NULL))
++			iommu_unmap(v->domain, map->start, map->size);
+ 		vhost_iotlb_map_free(iotlb, map);
+ 	}
+ }
+@@ -713,11 +717,15 @@ static void vhost_vdpa_va_unmap(struct vhost_vdpa *v,
+ {
+ 	struct vhost_iotlb_map *map;
+ 	struct vdpa_map_file *map_file;
++	struct vdpa_device *vdpa = v->vdpa;
++	const struct vdpa_config_ops *ops = vdpa->config;
+ 
+ 	while ((map = vhost_iotlb_itree_first(iotlb, start, last)) != NULL) {
+ 		map_file = (struct vdpa_map_file *)map->opaque;
+ 		fput(map_file->file);
+ 		kfree(map_file);
++		if (ops->set_map == NULL)
++			iommu_unmap(v->domain, map->start, map->size);
+ 		vhost_iotlb_map_free(iotlb, map);
+ 	}
+ }
+@@ -805,8 +813,6 @@ static void vhost_vdpa_unmap(struct vhost_vdpa *v,
+ 	} else if (ops->set_map) {
+ 		if (!v->in_batch)
+ 			ops->set_map(vdpa, asid, iotlb);
+-	} else {
+-		iommu_unmap(v->domain, iova, size);
+ 	}
+ 
+ 	/* If we are in the middle of batch processing, delay the free
+-- 
+2.34.3
 
