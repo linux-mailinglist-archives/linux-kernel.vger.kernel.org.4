@@ -2,60 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2847D638E1E
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 17:15:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B763B638E20
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 17:15:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiKYQPF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 25 Nov 2022 11:15:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60702 "EHLO
+        id S229930AbiKYQPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 11:15:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiKYQPD (ORCPT
+        with ESMTP id S229564AbiKYQPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 11:15:03 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A41E24A58C
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 08:15:02 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-207-VFIJ4Hx7N3WIl9yXfbkxLg-1; Fri, 25 Nov 2022 16:14:59 +0000
-X-MC-Unique: VFIJ4Hx7N3WIl9yXfbkxLg-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 25 Nov
- 2022 16:14:58 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Fri, 25 Nov 2022 16:14:58 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>
-CC:     LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "'Joe Perches'" <joe@perches.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: RE: [PATCH 0/1] Slightly relax the type checking done by min() and
- max().
-Thread-Topic: [PATCH 0/1] Slightly relax the type checking done by min() and
- max().
-Thread-Index: AdkA3hAUrkOWi1xYRg2SAA6P778SAwAA2U8AAAAaTjAAATacgAAAJxcA
-Date:   Fri, 25 Nov 2022 16:14:58 +0000
-Message-ID: <0b38ced96519407e95962aef2771bbc6@AcuMS.aculab.com>
-References: <cfc6c0f0fd4c4724890be8a8397c2cbe@AcuMS.aculab.com>
- <Y4DdQIMiFGk7YYcJ@smile.fi.intel.com>
- <7e594ad64e444d448c747688b8f28249@AcuMS.aculab.com>
- <Y4DmFfj6G6+niZ+t@smile.fi.intel.com>
-In-Reply-To: <Y4DmFfj6G6+niZ+t@smile.fi.intel.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 25 Nov 2022 11:15:06 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F464A58C;
+        Fri, 25 Nov 2022 08:15:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1669392903; bh=qpnvahsb1gH6U2pwNTu5bAtWc/gJIzd4bOInlsusqys=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+        b=sCJ51OImfYC8k2G89c5/jjw6B1A/ABQQXGLTzZog5Qe6Hbjz4j+iQ5kTteeMyCiSD
+         VCrNDiajuOkF9KvMQALTIXAbhZRhktOLkIYZk4dpBzo4h1VvOFpFJVX1JAjEhTy8zg
+         plWh8BiyVYKjRWkQKAPiBVUthnqqHvP3Y7XpEpD3wAdgOgSI9VodPhqOp6NoWHO0lk
+         METzI0aHheCLsgurKxnNHfw74UxM0Ij1vDHFRZFgYu67v0dm8qU0+9Kn9MgRhWDV29
+         4QjjbCMPznY1UiWWobdcKKLJyISbJt97jy0NEpWUF5TSFo1+9Tkj2hvWs4mjvqE8wi
+         /mgb7b48pQmBA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.100.20] ([46.142.34.128]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MGhyS-1pCKc048wc-00DlOn; Fri, 25
+ Nov 2022 17:15:03 +0100
+Message-ID: <1202a038-2aff-9231-70c5-0674fc79b57d@gmx.de>
+Date:   Fri, 25 Nov 2022 17:15:02 +0100
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+From:   Ronald Warsow <rwarsow@gmx.de>
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Content-Language: de-DE
+Subject: Re: [PATCH 6.0 000/313] 6.0.10-rc2 review
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:buFftNzx751lcuZQtIicgegnH4dAcU7/c+7bt0vgUa96Vm8NH2S
+ sBwwTVJZ+4ccZIul47whOFK5CfVSgRyiN3mSk9TfHJDSHJuZZKQbTWLVKRVeLGhr/oMf9Vq
+ kbsLmmrKdjDtXXolqxzR2buodl+JI6bmCm6TDvywOlT5x6bzP3L5uvNsb3zL+dU31EzMrAO
+ oO+sUAq+xtS+QPe/uZ1xQ==
+UI-OutboundReport: notjunk:1;M01:P0:a/ogCoMootY=;n2ZQRMuBU7k6V/eXhaROQqJynoM
+ p3c8EwizTVxT9fxKqyriBsbuMxAXO13wFfGf7IEy73feB/yAS+j2+zSjLSIVxFFP1ibodEREJ
+ x5dtdittij6GmWyjTGsWDIuI8Jw9MG4pIT3EtjqG3qhQ7cAPGrAy/C8gXY45REFEB+WMNZaAM
+ 3o06qExExzIeJO2ZOHyA5GwXfoz4dXXO+xpcEZFu5LUNOUVWfhFHjDPd2pgpdNTgCHjXg83mh
+ PFr3DeVQXtSKjopjWduEHwkLQMHD1cyzNhBPhObkBxpE7CFvihUrVdFyU/aXhKo60sdVrBFXS
+ yPo7MBI5a63k26uJUs9ZTRftWw+StySMPfhtt3PIqJf3s9tstjBfAzuh/wOvVPgB62tZI6EuY
+ jnERDgzXRhBVQAd+71RbXNR8KudU5z4jYLoRizqv5jirZyaa+7E/5vPVc2vkwYubGVAUjxsSE
+ qnHc4Z1dnibQYXw1TzBUodqTTk/GwgYCtLYP7ekWpq/PE7tvDoe1MIw/0cJNBSC6YiqZ3S95w
+ QJ2D9P05PC9teYVJxR1/YIptCmu/0gTyoMTHEU3xXNK5EXItIq7L9lavpHu4eeroNXccJjdTB
+ H4Wk3M2yuyXRm2YMSxKz4sW6GNdWSJjxHUKiIZ39TMCnv+z88VPIvidWf5LYa69l/xGWDFegZ
+ fkJKSfE5D6l2T0Il8IPkCgPQtrBW54SZEOA/HCUOM+MfIumJLRvwMDxTtOiXhyKRvmszYMLzF
+ 5iE2Wg0ABR5IJxuk1di9vWVpg1QNze0XW2UcGcSxN2P3iMuilh8RBa02usQVSPRuUmvkwcX2F
+ Ao4BRPO3WcyQ/dVihBSM7jVxKm1L8z0lwZbJMh0EA5/n0rqjbpX/eUAAsOB2i8H6fA+2AVBoZ
+ ax4H0eGVTuQJ/PYTZJRrnn2r0pAtvVEUhBTUVdH98JvozweXV0wyn6/XmcLY23OwcHyBf9mT6
+ N0VFSSonukx8SPEjpAoeab4dB44=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,61 +68,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: 'Andy Shevchenko'
-> Sent: 25 November 2022 15:58
-> 
-> On Fri, Nov 25, 2022 at 03:27:07PM +0000, David Laight wrote:
-> > From: Andy Shevchenko
-> > > Sent: 25 November 2022 15:21
-> > > On Fri, Nov 25, 2022 at 03:00:40PM +0000, David Laight wrote:
-> > > > The min() and max() defines include a type check to avoid the unexpected
-> > > >   behaviour when a negative value is compared against and unsigned value.
-> > > > However a lot of code hits this check and uses min_t() to avoid the error.
-> > > > Many of these are just plain wrong.
-> > > >
-> > > > Those casting to u8 or u16 are particularly suspect, eg:
-> > > > drivers/usb/misc/usb251xb.c:528:
-> > > > 		hub->max_current_sp = min_t(u8, property_u32 / 2000, 50);
-> > >
-> > > I don't buy this. What's exactly wrong with this code?
-> >
-> > Consider what happens if propery_u32 is 512000.
-> > The returned value is 0 not 50.
-> 
-> I considered that and there are two things to consider on your side:
-> 1) it's coming from device property;
-> 2) device property is validated using YAML schema.
-> 
-> On top of that, the wrong property is on the user. We have a lot of stuff that
-> user may put wrongly, but it's user's choice.
-> 
-> Any better example, please?
+Hi Greg
 
-How about:
+6.0.10-rc2
 
-data_size = min_t(u16, buf_size, len);
+compiles [1], boots and runs here on x86_64
+(Intel i5-11400, Fedora 37)
 
-https://elixir.bootlin.com/linux/v6.1-rc6/source/kernel/printk/printk_ringbuffer.c#L1738
+[1]
+no rtc_wake_setup error seen here
 
+Thanks
 
-Now, maybe, you could claim that buf_size > 64k never happens.
-But the correct cast here is u32 to match buf_size.
-len (being u16) will be promoted to int before the compare.
-
-Just search the kernel for "min_t(u8," or "min_t(u16," while some might
-be ok, I really wouldn't want to verify each case.
-
-If you look hard enough there are also some:
-	u32_var = min_t(u32, u32_val, u64_val);
-where the intent is to limit values that might be invalid for u32.
-
-I did try compiling a kernel with min_t() defined to be min() (no casts)
-but there were too many false positives without allowing all
-unsigned v unsigned compares.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Tested-by: Ronald Warsow <rwarsow@gmx.de>
 
