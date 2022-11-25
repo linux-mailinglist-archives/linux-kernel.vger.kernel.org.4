@@ -2,93 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72AE7638C1D
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 15:27:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 122A1638C26
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 15:28:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbiKYO1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 09:27:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48866 "EHLO
+        id S229949AbiKYO2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 09:28:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbiKYO1S (ORCPT
+        with ESMTP id S229633AbiKYO2k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 09:27:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044272CCA3
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 06:27:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2FC2EB82AFC
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 14:27:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ECE7C433D7;
-        Fri, 25 Nov 2022 14:27:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669386424;
-        bh=I95mCqXAxBgNy1M7H5iHXj3ZCuWyvPCokrJXPIjXYHY=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=WPucsUQf1aPUC2XcwJVzhcxsYSxRfOOuDTtsWKXyZs3YG4cpIjZq8RgKjlFyjrQuU
-         wsLgqI1qFvvOiCSFaHUV3kUbPG9QbbUHi7He/Iaf24oylGSz1JFZgR3jv8bG2mnxl1
-         MY/uiOrxc5t8HD8N3zxkcanw36noSW5Y3zo1yKqdnvRcsZpdCyrOIcCYqQUkqciTBo
-         76ALgWZ3wMntujc9FxmUwWNvN4zJ9UszZZuaK0R2jOIRWmDWVkw5lJ6MRFqbCPwXBw
-         rJ8JvM196aD3DbMARMxyhLBNOsrps8YWEQNBxDZd3sOQze2Mk7i8PqBDDLcyN3qv+A
-         ZWOD/MG0X3RHQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, tiwai@suse.com,
-        alsa-devel@alsa-project.org, lgirdwood@gmail.com, perex@perex.cz,
-        kernel test robot <lkp@intel.com>
-In-Reply-To: <20221124140351.407506-1-srinivas.kandagatla@linaro.org>
-References: <20221124140351.407506-1-srinivas.kandagatla@linaro.org>
-Subject: Re: [PATCH] ASoC: qcom: cleanup and fix dependency of QCOM_COMMON
-Message-Id: <166938642224.506633.17958881347418036982.b4-ty@kernel.org>
-Date:   Fri, 25 Nov 2022 14:27:02 +0000
+        Fri, 25 Nov 2022 09:28:40 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098811FF8D
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 06:28:39 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id v1so6988182wrt.11
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 06:28:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lS8stYG6Frvb/BGcJu8YF7/dhbrkHyksUpy1OUW/W8o=;
+        b=iLf+bm0YWyEWyekYREpUElP51zBlNPaWDVomF+ugXXNHI3HoMojdsP6OWb0Kxvp9Ql
+         20w/dpa2zHvxucLayRJvwCeb2lun3jvwNqiyQMzC91Mq0xxEFkNg1ncxxZmJgGSrnoct
+         X8OIjqy3UwAkHd7od/eH9KDYIM8FSEmDZLizmfC3p8KeDgALXR22qkMFcQ6y4PeKFynJ
+         MiZp2L25QPylIW0RBjT5OXz6yiLQAUqnOriavIvmC4EolycVfTVv7TL3KRcsBDLqeK5n
+         NIqpykWn2GPyycoRO+hr9tsclBO75uNdAyxfUH1ug6I7WIECa8CtQYGGXtfgvf/jOEJ1
+         LIfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lS8stYG6Frvb/BGcJu8YF7/dhbrkHyksUpy1OUW/W8o=;
+        b=C3FwUvhzyd0HSAO0jECwwppCFzVMU88UqnA26tzsvq6UgM/vfQqHr3GmjsKADOjT/I
+         zaB1igNRauZpqLcsDK4hYF71SH/GqHX1nsLyqaS4bUbu2O0NPsSR70JaW4OH3f1St+gE
+         Ptgd3ulehxytfCuI42fGwolFGSOVwkPY0PTN38XMn3+isjRRhc7V+vae421LsjT1xhzN
+         YhA+C6rnhrY4AqtbWaSpW5zjRcaBJ61CissgdZRXpBtAQCVuTdA4HL8oOuntU6y8ibsr
+         xpDpN7YwZHGyEhpy8LV4eYKxg8/Mb5uudUznDj9OOkR/Jj1pvpbEG8jo4A0GoUbZtQ7m
+         ccOw==
+X-Gm-Message-State: ANoB5pl1YbwYJRYY5YRt0d+E71+9GvDX6vNP4ypTikLMN1K4x1vPzvwf
+        ai6IXPJx3rpUSRsOaYCVpTIPww==
+X-Google-Smtp-Source: AA0mqf7/pzzluGnCKQmm11BgI3tTNO02+C6KE6GeTiLRxeEFih/UD+ZhHhtfmgjjuNIHGli1CuGCOw==
+X-Received: by 2002:a5d:5187:0:b0:242:5ef:ce32 with SMTP id k7-20020a5d5187000000b0024205efce32mr2320626wrv.260.1669386517472;
+        Fri, 25 Nov 2022 06:28:37 -0800 (PST)
+Received: from [10.83.37.24] ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id e5-20020a05600c4e4500b003b492753826sm5249548wmq.43.2022.11.25.06.28.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Nov 2022 06:28:36 -0800 (PST)
+Message-ID: <2081d2ac-b2b5-9299-7239-dc4348ec0d0a@arista.com>
+Date:   Fri, 25 Nov 2022 14:28:30 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v6 1/5] jump_label: Prevent key->enabled int overflow
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+        Bob Gilligan <gilligan@arista.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jason Baron <jbaron@akamai.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        Steven Rostedt <rostedt@goodmis.org>, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>
+References: <20221123173859.473629-1-dima@arista.com>
+ <20221123173859.473629-2-dima@arista.com>
+ <Y4B17nBArWS1Iywo@hirez.programming.kicks-ass.net>
+From:   Dmitry Safonov <dima@arista.com>
+In-Reply-To: <Y4B17nBArWS1Iywo@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Nov 2022 14:03:51 +0000, Srinivas Kandagatla wrote:
-> SND_SOC_QCOM_COMMON depends on SOUNDWIRE for some symbols but this
-> is not explicitly specified using Kconfig depends. On the other hand
-> SND_SOC_QCOM_COMMON is also directly selected by the sound card
-> Kconfigs, this could result in various combinations and some symbols
-> ending up in modules and soundcard that uses those symbols as in-build
-> driver.
+On 11/25/22 07:59, Peter Zijlstra wrote:
+> On Wed, Nov 23, 2022 at 05:38:55PM +0000, Dmitry Safonov wrote:
+>> 1. With CONFIG_JUMP_LABEL=n static_key_slow_inc() doesn't have any
+>>    protection against key->enabled refcounter overflow.
+>> 2. With CONFIG_JUMP_LABEL=y static_key_slow_inc_cpuslocked()
+>>    still may turn the refcounter negative as (v + 1) may overflow.
+>>
+>> key->enabled is indeed a ref-counter as it's documented in multiple
+>> places: top comment in jump_label.h, Documentation/staging/static-keys.rst,
+>> etc.
+>>
+>> As -1 is reserved for static key that's in process of being enabled,
+>> functions would break with negative key->enabled refcount:
+>> - for CONFIG_JUMP_LABEL=n negative return of static_key_count()
+>>   breaks static_key_false(), static_key_true()
+>> - the ref counter may become 0 from negative side by too many
+>>   static_key_slow_inc() calls and lead to use-after-free issues.
+>>
+>> These flaws result in that some users have to introduce an additional
+>> mutex and prevent the reference counter from overflowing themselves,
+>> see bpf_enable_runtime_stats() checking the counter against INT_MAX / 2.
+>>
+>> Prevent the reference counter overflow by checking if (v + 1) > 0.
+>> Change functions API to return whether the increment was successful.
+>>
+>> Signed-off-by: Dmitry Safonov <dima@arista.com>
+>> Acked-by: Jakub Kicinski <kuba@kernel.org>
 > 
-> [...]
+> This looks good to me:
+> 
+> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-Applied to
+Thank you, Peter!
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+> What is the plan for merging this? I'm assuming it would want to go
+> through the network tree, but as already noted earlier it depends on a
+> patch I have in tip/locking/core.
+> 
+> Now I checked, tip/locking/core is *just* that one patch, so it might be
+> possible to merge that branch and this series into the network tree and
+> note that during the pull request to Linus.
 
-Thanks!
+I initially thought it has to go through tip trees because of the
+dependence, but as you say it's just one patch.
 
-[1/1] ASoC: qcom: cleanup and fix dependency of QCOM_COMMON
-      commit: 8d89cf6ff229ff31cd4f73f5b3928564b81fc41e
+I was also asked by Jakub on v4 to wait for Eric's Ack/Review, so once I
+get a go from him, I will send all 6 patches for inclusion into -net
+tree, if that will be in time before the merge window.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+Thanks again for the review and ack,
+          Dmitry
