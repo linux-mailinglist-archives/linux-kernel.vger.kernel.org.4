@@ -2,129 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC60A6381E8
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 01:25:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDF176381EA
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 01:29:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbiKYAZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 19:25:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40534 "EHLO
+        id S229788AbiKYA3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 19:29:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiKYAZu (ORCPT
+        with ESMTP id S229514AbiKYA3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 19:25:50 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24401827E1;
-        Thu, 24 Nov 2022 16:25:49 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NJFyH2lrNz4xN7;
-        Fri, 25 Nov 2022 11:25:43 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1669335944;
-        bh=vHhDHdhQ7cy7gKTzyyO1n/uhTQymw8N+AlJaDSAhm5E=;
-        h=Date:From:To:Cc:Subject:From;
-        b=gkLHTHL/y+UXYwxPnxRlm7TeDdYy80Klq8S+aq5Z4AouPdP4TC7qXWFaxHzZw8k/F
-         kpOWRTTYeKbkG1YX4WMZCeHTz0yaJXu7NGW/5unfzEFSRy6gyvT5ciZlFW0U3hRlKM
-         7d1zQWkI2ZXV9U2v6UqAPFFx/Yf+M04qB2ddPJs4AZ2/EGEa+CYxJMm0huXBqkuGJs
-         jKHalYGRxyF3PqwAGVMQ47pdHAjvUTz3dDXirPLdnXObjj/gyyT2RGmHy7aR0gptag
-         pmliEAJiqi/T/Cvhw78EIycQODGKm4WwdwU+LL83kzbRAqOcNO1mTmYPDv2bVaaUfF
-         /thV6r/5IX72w==
-Date:   Fri, 25 Nov 2022 11:25:42 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Yuan Can <yuancan@huawei.com>
-Subject: linux-next: manual merge of the char-misc tree with the broadcom
- tree
-Message-ID: <20221125112542.466ebc42@canb.auug.org.au>
+        Thu, 24 Nov 2022 19:29:13 -0500
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F61E73B9A
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 16:29:11 -0800 (PST)
+Received: by mail-ot1-x331.google.com with SMTP id 46-20020a9d0631000000b00666823da25fso1799796otn.0
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 16:29:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxtx.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rTkWTJr+jVo44z0ToVSWhOX33FwS2vLhzhC45GxZgmU=;
+        b=Qdjl+pr+iIz3S+2tn1Q0JU7ziR4GJ03sr352O+F4nFNUm1ZTG52sYXAn95iZZhHWA2
+         vfyvvqmSy/GXOB8bIDWNZaol5ovJUTOs+XSMPsjBBdwVwt5nfJGp+M/DyGLj3qCbT6nF
+         MIuRFfqjJ3qVcCymi6VGzNg03Rj4i/w1QMoF0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rTkWTJr+jVo44z0ToVSWhOX33FwS2vLhzhC45GxZgmU=;
+        b=3PuuoLA5pKZz3YKN2kP6YYLVmHpw775EJ+epVsxlfaa912O56lPPOdrNix/FIfD0zy
+         1oxFt0k3H/DylB/oAee2TexQxS8ZqFulWBCseB4i4sFTvPQWfCMcseFvXQnL4cmB6Iex
+         HRLvI56IusVOYYGq2mzJaazQw/BjrS714saNJOuFKcIWUTgZoNVVLqrdHLucLj1Uxv/G
+         VROAGizFi8AAx36CTLtJmYjUQ3291OJIzDOwhmFzRmx6opjvMcQ2kpLT94pzgKivFHub
+         7vJ5zW1nSfuu/U3ae+4tsmHMB6oskV8HJjljPPNm7JAfvCAKN4K0Uh7nXkfbEDWcH/XJ
+         9eBA==
+X-Gm-Message-State: ANoB5pkEhEfgp8OeCN+NKGh50il++90E/uQTRKL1OgCUWD33GixfHZ1f
+        zLqFQbVAh7hHY5+yP5i5ttpd4g==
+X-Google-Smtp-Source: AA0mqf5Up/gRWD0unDI43s9o/afyX5Cgl0YlLTTlVxTCX38dEV155pu9MJQMQWx1c5O2bS1YQcANXA==
+X-Received: by 2002:a05:6830:1604:b0:661:ef0:230a with SMTP id g4-20020a056830160400b006610ef0230amr9369057otr.235.1669336150530;
+        Thu, 24 Nov 2022 16:29:10 -0800 (PST)
+Received: from fedora64.linuxtx.org (99-47-93-78.lightspeed.rcsntx.sbcglobal.net. [99.47.93.78])
+        by smtp.gmail.com with ESMTPSA id d16-20020a9d4f10000000b0066c8bf7f196sm972120otl.51.2022.11.24.16.29.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Nov 2022 16:29:10 -0800 (PST)
+Sender: Justin Forbes <jmforbes@linuxtx.org>
+Date:   Thu, 24 Nov 2022 18:29:08 -0600
+From:   Justin Forbes <jforbes@fedoraproject.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.0 000/314] 6.0.10-rc1 review
+Message-ID: <Y4AMVB9zUGgPQbLk@fedora64.linuxtx.org>
+References: <20221123084625.457073469@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xr_1ppfyl/dfmvx4mdFtLbM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221123084625.457073469@linuxfoundation.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/xr_1ppfyl/dfmvx4mdFtLbM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Nov 23, 2022 at 09:47:25AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.10 release.
+> There are 314 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 25 Nov 2022 08:45:20 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.10-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Hi all,
+Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
+s390x, x86_64), and boot tested x86_64. No regressions noted.
 
-Today's linux-next merge of the char-misc tree got a conflict in:
-
-  drivers/firmware/raspberrypi.c
-
-between commit:
-
-  117bd98daca0 ("firmware: raspberrypi: Use dev_err_probe() to simplify cod=
-e")
-
-from the broadcom tree and commit:
-
-  7b51161696e8 ("firmware: raspberrypi: fix possible memory leak in rpi_fir=
-mware_probe()")
-
-from the char-misc tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/firmware/raspberrypi.c
-index ec07bf26e5eb,dba315f675bc..000000000000
---- a/drivers/firmware/raspberrypi.c
-+++ b/drivers/firmware/raspberrypi.c
-@@@ -288,9 -268,13 +288,11 @@@ static int rpi_firmware_probe(struct pl
-  	fw->cl.tx_block =3D true;
- =20
-  	fw->chan =3D mbox_request_channel(&fw->cl, 0);
-- 	if (IS_ERR(fw->chan))
-- 		return dev_err_probe(dev, PTR_ERR(fw->chan),
-- 				     "Failed to get mbox channel\n");
-+ 	if (IS_ERR(fw->chan)) {
-+ 		int ret =3D PTR_ERR(fw->chan);
- -		if (ret !=3D -EPROBE_DEFER)
- -			dev_err(dev, "Failed to get mbox channel: %d\n", ret);
-+ 		kfree(fw);
- -		return ret;
-++		return dev_err_probe(dev, ret, "Failed to get mbox channel\n");
-+ 	}
- =20
-  	init_completion(&fw->c);
-  	kref_init(&fw->consumers);
-
---Sig_/xr_1ppfyl/dfmvx4mdFtLbM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOAC4YACgkQAVBC80lX
-0GxjFQf/aLHUbFePwhLqPE3Mv3ruJuMUYVgdD4CF1kmbIaepxlt6vtFqRhG+yFC1
-lp2cMnnwBJO8j2bsF06u7Csstr3+Gr4Q1yq0MFBkXzv7j4KddroX+o1+eoWkJsHD
-V1EDOXYEjaRV2eJBSXs3JABUQjdzw89h4mf4qMBtj50YbUjSQ3IpKSUArcuVZbAJ
-6XLq0gfiAeb6q0zjiyYp9oIE9UI43+fXyiRIfxTkX+OCN7RmIW/gNbiCpev9zf3v
-uF+6ZspocPYNREjphgcFXAu2QMWPZnaJVjNyR3q6j5tL9w2FQZ9Qr7LUy+E1Y8Ji
-owCiJjgYTJ9JQfQ9znNVyjqwO7PyYA==
-=dpQS
------END PGP SIGNATURE-----
-
---Sig_/xr_1ppfyl/dfmvx4mdFtLbM--
+Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
