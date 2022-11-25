@@ -2,179 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D8A56383B3
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 06:59:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CF3F6383BE
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 07:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbiKYF7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 00:59:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40142 "EHLO
+        id S229527AbiKYGFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 01:05:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiKYF7H (ORCPT
+        with ESMTP id S229452AbiKYGFk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 00:59:07 -0500
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120050.outbound.protection.outlook.com [40.107.12.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EB6233B3;
-        Thu, 24 Nov 2022 21:59:05 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PggmluYsOTHug4N4zu3JpbFwL1Qw5BhWyrwxYFfioo7B/Xb9sCq4MaJp9roMfSM4QOUOB2y86c1STYrQ98kxHIAOIZUrt5WBdzyBjd10OIbUBFuTyyUPQQ34/GnuWVC9MVlCUvRIH8QzPUp4nj10SyQQkbpOpca6aJjIKxeKDooT2dJrcSNV0BsOFvGohOgra59gX8KCXy+vPLXgSrEypL0shdaePT6kdIOh/0Zz5dZdzdU285PxzhJsZa1OQAjjbXPWJm43eDTzQb++Pv87EIxRf7CueA0gYwiOwZm9akCZXmwZ3hMPMwpp022nHggH1y4/wN2spHkCeYz2bGISOg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=P2rXStqRo5Mjs+g9Xfo/35lCjR5LX8W82k/gmHWXfBM=;
- b=PswgdQ/YubXteTV62fHvw0JDsKYmgkN9yu0DO0hxpHScjPVIXYqIVFNJ6ESeHoBl4cZX/bkqDzVgOmB2pqLiRJ4gOry0M3NAbHYFEsElNsUvbx41C1vXcjHbhbxPdZXjSsBTOVjXavZ6evHuoTPesaAmfy4KLdsw1IC95P+epXYen01o/ghRO1YsXruR9VWUYJVcJVY+97eqG5haM82JKGrVEufTuOLtkLQuKzBFd+/Si600ldz67BlJGS2IcS0i6mS7s9iLvVYHs5k1WMClXSCrMTk5w9eswldyN2F0Qs7hEPXxMN+IijEoV9eiZV+DqvlTqSk/QVDuLO8Q6DPiMw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=P2rXStqRo5Mjs+g9Xfo/35lCjR5LX8W82k/gmHWXfBM=;
- b=3Ojyy5FxhqLR9T95uK8eoMSceK/KPPZsiBfdKX79gjyLddILA4j7uurqr3PzhcOyHNEzeoQVzOBbVc98PzQn6Gd7NflmZxRIqBZivN5lzTqBDHfWwyN2LhhjvIl2dgm+zt7d80EJR8mgQwBBsSL6srA35r8TuPxAg73u1z9jow9xE7djHtsG5nRmqDTWgqWsg9RWRBvfagT7013QqY8hsy5sHUQ0brd5HEALwnenBiScns1YlKTc4xc6//oSdRtRUnDmI1uu5Xt2V7WoI1z6HDBOFkEC74Q4y+d9PWojWrKx+erGH0HI9G/lAtvIrov2TzubuH8U6/bzEEUoX8WF2g==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PAZP264MB2397.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1e4::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.20; Fri, 25 Nov
- 2022 05:59:02 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::a85b:a9b6:cb36:fa6]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::a85b:a9b6:cb36:fa6%9]) with mapi id 15.20.5857.020; Fri, 25 Nov 2022
- 05:59:02 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>
-CC:     Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Hao Luo <haoluo@google.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jiri Olsa <jolsa@kernel.org>, KP Singh <kpsingh@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Stanislav Fomichev <sdf@google.com>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>
-Subject: Re: [PATCH] powerpc/bpf: Only update ldimm64 during extra pass when
- it is an address
-Thread-Topic: [PATCH] powerpc/bpf: Only update ldimm64 during extra pass when
- it is an address
-Thread-Index: AQHY/+BWf7gs5QKIpkuwfOKyhRUrWq5N2yQAgAAkjgCAABeygIAAY6WAgAClm4CAAAWjgA==
-Date:   Fri, 25 Nov 2022 05:59:02 +0000
-Message-ID: <4dd462c8-7f0f-58c8-0f3f-757442134c90@csgroup.eu>
-References: <3f6d302a2068d9e357efda2d92c8da99a0f2d0b2.1669278892.git.christophe.leroy@csgroup.eu>
- <1669284441.66eunvaboi.naveen@linux.ibm.com>
- <9f17237f-94da-f58f-4f4b-0068851b4123@csgroup.eu>
- <1669297066.kxu8xl391n.naveen@linux.ibm.com>
- <ba982820-0a22-1180-7b3c-b32acae6e9f7@csgroup.eu>
- <1669354227.c0iu04jq2o.naveen@linux.ibm.com>
-In-Reply-To: <1669354227.c0iu04jq2o.naveen@linux.ibm.com>
-Accept-Language: fr-FR, en-US
-Content-Language: fr-FR
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PAZP264MB2397:EE_
-x-ms-office365-filtering-correlation-id: 98e58c1c-5309-41b6-4595-08daceaa2736
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: yJRYJcw03mKy8BOEPZqGzDpfAquQLGez4m5aX90x7ve7Qjt3dKBnusz9Y+EqrOQHwoRIu1LP+b6NNu0fKGf4WncTKXjmgmE/4BA3eQkl5rvQTLZhdr16QkwPu2033Gmn8h8m9VWejoBfUM3gi0+x9CsnMmz6ZoQN7j1G1AKTnuYN8ormd73e2xVzlMqN1HXVsSbOHt7UqzWfzGr7VY4mot5i5bLQX+sutFC6zNicSvGBryxcYJAFC2XjbZoy+CMxZ8ercCOvklPi6vI2TnMoN6XStMIMYFINIqCbdiG1WgPWXSLFatOv9C72l9CrQz4Pnp4Olw3CTGxS0cQytx737AUTWQLOdtxkLbvIhwddNXC7iuvOD96VCi++H+m5cRXfreIZyJJjbNVZwGBtQkjfwI6DQir04An+/lDuhB18QbpoZTSmLouuxdRGeyr90DzyKFbZbkEKxuNd/RlpdMrsg+aW7o42QpqP6ahruN2Yi4VWxAUNGHp89ypE8ICc1QoktNLwNJh5GBVvd/BN3b/BqM5L6s4YJOrANEXTGMr+M4eUBO70SdPEN/3U35FdPk/x/7BJbAn/WwkGHQ1p6SsKybGRUEy614WKFdxomQj1jDO4H1/LxUGvWQg6QF20/SlEnkG1fJjF5P4SIa/D3bN6tVs6CwrXYmbKilX5/TwofOUgIksgDtjGSY/Hz0ee56hgzo27r4MQLCJiIO29JbRqAktbW6p+0KPYAsi8pzptPz4YOkoINfVoNgvnbqyzBiFl
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(376002)(136003)(396003)(346002)(39860400002)(451199015)(38100700002)(83380400001)(66574015)(31686004)(31696002)(86362001)(54906003)(110136005)(6506007)(71200400001)(6486002)(36756003)(38070700005)(26005)(122000001)(2616005)(186003)(6512007)(44832011)(5660300002)(7416002)(478600001)(15650500001)(91956017)(66556008)(8676002)(66476007)(64756008)(76116006)(66946007)(66446008)(41300700001)(4326008)(8936002)(316002)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cWh1SzJtZzBrQjRrektYOUE5RHdvb2Q3dXN4bUJITlQ5QlVSVHIvT0hMNCtV?=
- =?utf-8?B?aDNEWGFNSW1Eb2I0THRWdXdCN3BTL1dGVGFJKzBzeHpHWmhEdFdQU1laVzFt?=
- =?utf-8?B?blZ6dTVncFo2MW1TcmxML2dGR1o4WDgwc1RrSThzMHpWVUNBaDhxUG5DRy9w?=
- =?utf-8?B?U3F6Mm5GeitSb2JlZlN2MzdYU1A4YTFhVm1rU3NvK3g4RFlLWi9paExUeUxr?=
- =?utf-8?B?TTU2N0lraGNJaGw2SzE3NDRjM0pBKzZVTlZGRDcrYytYSlhwSnFxZk1oTkw4?=
- =?utf-8?B?SmRmSUNEM0tIc2R2MEtqbm1sOEtnUWN3Q29zQmtkZEpjL01SNXVQNEVyUFlp?=
- =?utf-8?B?cy9PV25ZdzJ0d0FXbVM5ZE9sekRXdFpmcFdHc1N1OERrV1N2a1phT0JDaHhK?=
- =?utf-8?B?U2FPMElsNDhaMkZkRkVmMVUvNHFHcWZFNXJlbi9GL0d0WTBvVEpkL3ZMNVNy?=
- =?utf-8?B?ZUhVTFI3WEhqMS9MOW9uTkM0TFUxcFEwVXBabzF1ci9qQUU3dURnaHJ3R1lv?=
- =?utf-8?B?NjNBQ1c4S0pZcjM3SVNKazVYbWZDbGhpaG0zNm1ubTB6T2plZis3U29KMlFJ?=
- =?utf-8?B?blNnakxZTEtYemFKWWxlSUZPVEx6MlhqN0c3Q0c3VjZxYXNtTU41MzdhR1Bt?=
- =?utf-8?B?Z1hXWFQ5UzJyeVFZZWhpRnl4d1BMS1ZhVWErVlpkRmhrTTFNbkFhUXN5bVI0?=
- =?utf-8?B?aTM0UVRlb1QxeThhaXMrc21PV05scEE1Z1RLaFhHTG1jR2s1VWVYTVIrL3dv?=
- =?utf-8?B?ZmNjRUdSdlBMRXRQTkVobHg2aTZmbjRZcm51cXhWVDZpTFp2bnhscXNmNlVw?=
- =?utf-8?B?WEE2ajlYSHJhdGFHRUp0R1V4b2E3MUlHeW5PKyt0R3FOM0dMR1FaaGN3UEUw?=
- =?utf-8?B?VXY0SHJ2M3Y4ZFFHTzhsbXY4SGw1N3hEK1l4d2xNb3BRaWM4Um1VOE1vdWU4?=
- =?utf-8?B?SzFQVFdxakIvTWgrWlVPc0VoMTFyNVpueFBORDBBdDBNcXlTWWZsQmIrUGZQ?=
- =?utf-8?B?UDR4STJueGpRQTRIcGt2UzA5eTRTUExaakR1dHM3YjBTSlNWUkxUeTRmbnkx?=
- =?utf-8?B?TjdDZ0loVnM0VUtFOXQyaG1yNXozaC9ocXdhbmNFTlo2NjZ3YlZ0RDRlUmln?=
- =?utf-8?B?eHZTdzB1cXZVWjNZaWtSNnFqSnE4M005U3IycXJWRmg2NThseFpzTVhScnhL?=
- =?utf-8?B?cGlGQmU3VUZZdE9icUw5TFVkZlF4N0Z1N3grL25RTm5uOGxuYTRaamxQSjNG?=
- =?utf-8?B?KzBNbGVUdWtPSTRTZUlnc2M1UjMwMGhJK29na0I4QzQxdXQvM29QdE1hUmJx?=
- =?utf-8?B?cFFLU2dnNGRBRzZndlh4ZlhZQ1BiQklPWXYxY3FLZzNNQ2N0VHpMTkExaUJ5?=
- =?utf-8?B?V3JWN1NJUnJBU3phTDF4ZEhaR2hBSDBMS2Q0akNMMXFKSVBZYWNZUEhsYjdB?=
- =?utf-8?B?cnQ4Qy81cWQxKzBvVjVhaW82RXJ6YkFTNHVDalIza1dSVHQzQTh5T1I3akFa?=
- =?utf-8?B?ZEc1WVlBOUN6a2xkTmNOb0pXUHBROVphTTZEblBIQlR0VWJIencrTDhaQWNl?=
- =?utf-8?B?ZFNRNllSdVZmS25wem53bVJtcmdtNkdLTk1ja0dHdjV3MjdOWlZhSzVvNk1G?=
- =?utf-8?B?RG9ndUFmUjBZWGkwa2Z3VFB1VEVFWmU3R0FJTDI3QllVdUhrYWdZSHBCTWdD?=
- =?utf-8?B?TUtHQ3dBbW9BYjFmVlpmdEVhck1sd1BlQ2IrZHNVQ0NUdSs5RElINmZXM1FB?=
- =?utf-8?B?b3JIV24yWlNGdXhxL21rL1A4dk9DdVowaUhmekFTRGZ3d1BNK24raFdBM2Fa?=
- =?utf-8?B?dFd3NGZjZWJBdjdKUm9yVmwrcWtnb0dPSjhkMDlNZythWWRxRUIrcWRtVEpR?=
- =?utf-8?B?ZFZ5anlZSm8xVWI0OS8xL0paQ0JtSkZhYS9QcTV4Y0Y0QlA2Rk5BU01hVGgz?=
- =?utf-8?B?SGpkY054Z013RkRYWUNoRTRnOE9Mc3k1RnZjVXBYcVRQZGM3QkdRU0RGQTZ6?=
- =?utf-8?B?WjY4ZnlmbmordlA2MGgyNmpPVGxwa1lDTng2amNLT054bXhPNXA4M1VIT0h3?=
- =?utf-8?B?cVZFK1VZZlZac3pqelRzNUFYdXVxL1p2Y3dsRnp3VlNXNkVTL0xjTTFpUk1K?=
- =?utf-8?Q?QNx20SgwnU0GOI/wk+CB7ZZTN?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <708F16E5F1595940A5ED15F41080868E@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Fri, 25 Nov 2022 01:05:40 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30EB1FCF4;
+        Thu, 24 Nov 2022 22:05:39 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AP50kUP032652;
+        Fri, 25 Nov 2022 06:05:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=95nu3QZwoiCm+Mik9Bjpaa1JAMoaDGnyaT/b8apUHYA=;
+ b=WLc2B0kpr12ZAA0Hk1Uj/oORduNjzHLOXO3z/pFZo+U+GytOyLLmLk2GcGAc0tWgUlFG
+ UFPD9bSK8mzXdleG2zqEV+FtfJ7gw2eXwQ9Zm8L5L+j4/g95FvtFHY02A+tVT2GauF/R
+ NKNNqzHMiJdrl1unKvNmS1ORdeMm4beevshlj2z3Ll700LUM4wQUV9OLMS8cXn9g52FJ
+ jR0pNitr2w3KHm4bkzLNBW62CoViZVNygqX9qZHqFM76Pncyenwz6R9iYMycJCmzBCVH
+ vxQvGCnPoOpqFnGT7HlE0fKMXYi5xZHVpDGYm4rWCoFvE5+JBjN4/4LnaLzkrPiWJNND IQ== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m21mbbc2q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Nov 2022 06:05:28 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AP65Ruf027697
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Nov 2022 06:05:27 GMT
+Received: from [10.216.38.33] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 24 Nov
+ 2022 22:05:19 -0800
+Message-ID: <6753d5a3-e46b-2cf1-c807-333093ff3fdf@quicinc.com>
+Date:   Thu, 24 Nov 2022 22:05:16 -0800
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 98e58c1c-5309-41b6-4595-08daceaa2736
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Nov 2022 05:59:02.3664
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JDR//BMwIn8gIHNKkkvfOMtNWGnAEDTgqvzlWRFeeieq8Ui1xQRQlHqZ8ROUsEo0KblC88pp4u8hH1jbLfaNPf/AbINU5yuxwo5wFklDy3E=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAZP264MB2397
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [Freedreno] [PATCH v2 03/12] drm/msm/dpu: Refactor sc7280_pp
+ location
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Robert Foss <robert.foss@linaro.org>, <robdclark@gmail.com>,
+        <dmitry.baryshkov@linaro.org>, <sean@poorly.run>,
+        <airlied@linux.ie>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>, <quic_kalyant@quicinc.com>,
+        <swboyd@chromium.org>, <angelogioacchino.delregno@somainline.org>,
+        <loic.poulain@linaro.org>, <quic_khsieh@quicinc.com>,
+        <quic_vpolimer@quicinc.com>, <vkoul@kernel.org>,
+        <dianders@chromium.org>, <linux-arm-msm@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Jonathan Marek <jonathan@marek.ca>,
+        <vinod.koul@linaro.org>, <quic_jesszhan@quicinc.com>,
+        <andersson@kernel.org>
+References: <20221115133105.980877-1-robert.foss@linaro.org>
+ <20221115133105.980877-4-robert.foss@linaro.org>
+ <d85a5d66-d54b-29cb-3ced-69c75f6f7802@somainline.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <d85a5d66-d54b-29cb-3ced-69c75f6f7802@somainline.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: dy2vjxEGi9Y89OT7Lgm1pPSd_OzBv1mD
+X-Proofpoint-GUID: dy2vjxEGi9Y89OT7Lgm1pPSd_OzBv1mD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-25_02,2022-11-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=999 lowpriorityscore=0 mlxscore=0 spamscore=0 malwarescore=0
+ impostorscore=0 priorityscore=1501 bulkscore=0 phishscore=0 clxscore=1015
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211250049
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDI1LzExLzIwMjIgw6AgMDY6MzgsIE5hdmVlbiBOLiBSYW8gYSDDqWNyaXTCoDoNCj4g
-Q2hyaXN0b3BoZSBMZXJveSB3cm90ZToNCj4+DQo+Pg0KPj4gTGUgMjQvMTEvMjAyMiDDoCAxNDo0
-OSwgTmF2ZWVuIE4uIFJhbyBhIMOpY3JpdMKgOg0KPj4+IENocmlzdG9waGUgTGVyb3kgd3JvdGU6
-DQo+Pj4+DQo+Pj4+DQo+Pj4+IExlIDI0LzExLzIwMjIgw6AgMTE6MTMsIE5hdmVlbiBOLiBSYW8g
-YSDDqWNyaXTCoDoNCj4+Pj4+IENocmlzdG9waGUgTGVyb3kgd3JvdGU6DQo+Pj4+DQo+Pj4+IElu
-IHdoYXQgZGlyZWN0aW9uIGNvdWxkIHRoYXQgY2hhbmdlIGluIHRoZSBmdXR1cmUgPw0KPj4+Pg0K
-Pj4+PiBGb3IgbWUgaWYgdGhleSBjaGFuZ2UgdGhhdCBpdCBiZWNvbWVzIGFuIEFQSSBjaGFuZ2Uu
-DQo+Pj4NCj4+PiBNb3JlIG9mIGFuIGV4dGVuc2lvbiwgd2hpY2ggaXMgZXhhY3RseSB3aGF0IHdl
-IGhhZCB3aGVuIA0KPj4+IEJQRl9QU0VVRE9fRlVOQyB3YXMgaW50cm9kdWNlZC4gVG9vayB1cyBu
-ZWFybHkgYSB5ZWFyIGJlZm9yZSB3ZSBub3RpY2VkLg0KPj4+DQo+Pj4gQmVjYXVzZSB3ZSBkbyBu
-b3QgZG8gYSBmdWxsIEpJVCBkdXJpbmcgdGhlIGV4dHJhIHBhc3MgdG9kYXkgbGlrZSANCj4+PiBv
-dGhlciBhcmNoaXRlY3R1cmVzLCB3ZSBhcmUgdGhlIGV4Y2VwdGlvbiAtIHRoZXJlIGlzIGFsd2F5
-cyB0aGUgcmlzayANCj4+PiBvZiBicGYgY29yZSBjaGFuZ2VzIGJyZWFraW5nIG91ciBKSVQuIFNv
-LCBJIHN0aWxsIHRoaW5rIGl0IGlzIGJldHRlciANCj4+PiBpZiB3ZSBkbyBhIGZ1bGwgSklUIGR1
-cmluZyBleHRyYSBwYXNzLg0KPj4+DQo+Pg0KPj4gSSBsaWtlIHRoZSBpZGVhIG9mIGEgZnVsbCBK
-SVQgZHVyaW5nIGV4dHJhIHBhc3NlcyBhbmQgd2lsbCBzdGFydCANCj4+IGxvb2tpbmcgYXQgaXQu
-DQo+Pg0KPj4gV2lsbCBpdCBhbHNvIGFsbG93IHVzIHRvIHJldmVydCB5b3VyIGNvbW1pdCBmYWIw
-NzYxMWZiMmUgDQo+PiAoInBvd2VycGMzMi9icGY6IEZpeCBjb2RlZ2VuIGZvciBicGYtdG8tYnBm
-IGNhbGxzIikgPw0KPiANCj4gTm90IGVudGlyZWx5LiBXZSBzdGlsbCBuZWVkIHRob3NlIGV4dHJh
-IG5vcHMgZHVyaW5nIHRoZSBpbml0aWFsIEpJVCBzbyANCj4gdGhhdCB3ZSBjYW4gZXN0aW1hdGUg
-dGhlIG1heGltdW0gcHJvZyBzaXplLiBEdXJpbmcgZXh0cmEgcGFzcywgd2UgY2FuIA0KPiBvbmx5
-IGVtaXQgdGhlIG5lY2Vzc2FyeSBpbnN0cnVjdGlvbnMgYW5kIHNraXAgZXh0cmEgbm9wcy4gV2Ug
-bWF5IG5lZWQgdG8gDQo+IGRvIHR3byBwYXNzZXMgZHVyaW5nIGV4dHJhX3Bhc3MgdG8gYWRqdXN0
-IHRoZSBicmFuY2ggdGFyZ2V0cyB0aG91Z2guDQo+IA0KDQpCZWZvcmUgeW91ciBjaGFuZ2UsIHRo
-ZSBjb2RlIHdhczoNCg0KCWlmIChpbWFnZSAmJiByZWwgPCAweDIwMDAwMDAgJiYgcmVsID49IC0w
-eDIwMDAwMDApIHsNCgkJUFBDX0JMKGZ1bmMpOw0KCX0gZWxzZSB7DQoJCS8qIExvYWQgZnVuY3Rp
-b24gYWRkcmVzcyBpbnRvIHIwICovDQoJCUVNSVQoUFBDX1JBV19MSVMoX1IwLCBJTU1fSChmdW5j
-KSkpOw0KCQlFTUlUKFBQQ19SQVdfT1JJKF9SMCwgX1IwLCBJTU1fTChmdW5jKSkpOw0KCQlFTUlU
-KFBQQ19SQVdfTVRDVFIoX1IwKSk7DQoJCUVNSVQoUFBDX1JBV19CQ1RSTCgpKTsNCgl9DQoNCkR1
-cmluZyB0aGUgaW5pdGlhbCBwYXNzLCBpbWFnZSBpcyBOVUxMIHNvIHRoZSBlbHNlIGJyYW5jaCBp
-cyB0YWtlbi4NCg0KQ2hyaXN0b3BoZQ0K
+
+
+On 11/15/2022 5:33 AM, Konrad Dybcio wrote:
+> 
+> 
+> On 15/11/2022 14:30, Robert Foss wrote:
+>> The sc7280_pp declaration is not located by the other _pp
+>> declarations, but rather hidden around the _merge_3d
+>> declarations. Let's fix this to avoid confusion.
+>>
+>> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>> ---
+> This is already merged.
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=1a5b5372e3b0a4cc65a0cbb724b1b0859f4ac63c 
+> 
+> 
+> Konrad
+
+Its part of linux-next but a PR hasnt been sent with it.
+
+That being said, since this particular change has been taken separately, 
+this series should now be rebased without this change and addressing 
+some of the other comments given by konrad.
+
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 14 +++++++-------
+>>   1 file changed, 7 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c 
+>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> index 4dac90ee5b8a..8f2d634f7b6b 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> @@ -1294,6 +1294,13 @@ static const struct dpu_pingpong_cfg 
+>> sm8150_pp[] = {
+>>               -1),
+>>   };
+>> +static const struct dpu_pingpong_cfg sc7280_pp[] = {
+>> +    PP_BLK("pingpong_0", PINGPONG_0, 0x59000, 0, sc7280_pp_sblk, -1, 
+>> -1),
+>> +    PP_BLK("pingpong_1", PINGPONG_1, 0x6a000, 0, sc7280_pp_sblk, -1, 
+>> -1),
+>> +    PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, 0, sc7280_pp_sblk, -1, 
+>> -1),
+>> +    PP_BLK("pingpong_3", PINGPONG_3, 0x6c000, 0, sc7280_pp_sblk, -1, 
+>> -1),
+>> +};
+>> +
+>>   static struct dpu_pingpong_cfg qcm2290_pp[] = {
+>>       PP_BLK("pingpong_0", PINGPONG_0, 0x70000, 0, sdm845_pp_sblk,
+>>           DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+>> @@ -1352,13 +1359,6 @@ static const struct dpu_merge_3d_cfg 
+>> sm8450_merge_3d[] = {
+>>       MERGE_3D_BLK("merge_3d_3", MERGE_3D_3, 0x65f00),
+>>   };
+>> -static const struct dpu_pingpong_cfg sc7280_pp[] = {
+>> -    PP_BLK("pingpong_0", PINGPONG_0, 0x59000, 0, sc7280_pp_sblk, -1, 
+>> -1),
+>> -    PP_BLK("pingpong_1", PINGPONG_1, 0x6a000, 0, sc7280_pp_sblk, -1, 
+>> -1),
+>> -    PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, 0, sc7280_pp_sblk, -1, 
+>> -1),
+>> -    PP_BLK("pingpong_3", PINGPONG_3, 0x6c000, 0, sc7280_pp_sblk, -1, 
+>> -1),
+>> -};
+>> -
+>>   /*************************************************************
+>>    * DSC sub blocks config
+>>    *************************************************************/
