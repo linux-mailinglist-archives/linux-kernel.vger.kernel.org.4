@@ -2,63 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71F67638DC0
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 16:51:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75EE3638DD9
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 16:53:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbiKYPv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 10:51:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38176 "EHLO
+        id S229818AbiKYPxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 10:53:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiKYPvS (ORCPT
+        with ESMTP id S229814AbiKYPx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 10:51:18 -0500
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3357247329;
-        Fri, 25 Nov 2022 07:51:13 -0800 (PST)
-Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id A50931BF203;
-        Fri, 25 Nov 2022 15:51:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1669391472;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GPaT39sAq6bB/8jycs8Qu4XNOLXdQXN9CIa8CNq+0DU=;
-        b=d/iWI35QnhWrUQmu3eK7MTp+CL19nh+Yxmv+C3PgagomoCjafmL46X4+idl8P6GeM7d7W/
-        IuyPuItiyYGPs6TsLADAGD0fSGx6to8UDVu3P9UK3lyMkSj/644Y+Y5bjxkZyDmYKd2Qga
-        DUF4/VbHFuiaCTiZ0UHRpzPT1DjliCWV4/upp90Fv1szfz/rUHVVRGz1w5qZJuqmV8DlmS
-        cNOkK0+d9366JLreDe2UDAfAZ62wxQCkvsA9I3ZhrdFmqD0kW5jtdEEkWlnU2CmcNCVjUK
-        Fkf7YKCimzEimQEb0AaOSeczhQyCpHoJCRmyNQeq1OscLIz4gU7xdWoeIXLmHA==
-Date:   Fri, 25 Nov 2022 16:51:09 +0100
-From:   Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To:     Vadym Kochan <vadym.kochan@plvision.eu>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Elad Nachman <enachman@marvell.com>,
-        Raz Adashi <raza@marvell.com>, Yuval Shaia <yshaia@marvell.com>
-Subject: Re: [PATCH v2 2/3] PCI: armada8k: Add AC5 SoC support
-Message-ID: <20221125165109.6059d3a5@windsurf>
-In-Reply-To: <VI1P190MB03173DB0A16402C8AB670D91950E9@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
-References: <20221124135829.2551873-1-vadym.kochan@plvision.eu>
-        <20221124135829.2551873-3-vadym.kochan@plvision.eu>
-        <20221124155817.5f372417@windsurf>
-        <VI1P190MB03173DB0A16402C8AB670D91950E9@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Fri, 25 Nov 2022 10:53:28 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B78C490B1;
+        Fri, 25 Nov 2022 07:53:16 -0800 (PST)
+Received: (Authenticated sender: i.maximets@ovn.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 3B44324000F;
+        Fri, 25 Nov 2022 15:51:13 +0000 (UTC)
+Message-ID: <bf975714-7edc-efdd-de84-56194aa6eb60@ovn.org>
+Date:   Fri, 25 Nov 2022 16:51:25 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Cc:     i.maximets@ovn.org, dev@openvswitch.org,
+        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        linux-kselftest@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Content-Language: en-US
+To:     Adrian Moreno <amorenoz@redhat.com>,
+        Aaron Conole <aconole@redhat.com>, netdev@vger.kernel.org
+References: <20221122140307.705112-1-aconole@redhat.com>
+ <20221122140307.705112-2-aconole@redhat.com>
+ <c04242ee-f125-6d95-e263-65470222d3cf@ovn.org>
+ <83a0b3e4-1327-c1c4-4eb4-9a25ff533d1d@redhat.com>
+From:   Ilya Maximets <i.maximets@ovn.org>
+Subject: Re: [ovs-dev] [RFC net-next 1/6] openvswitch: exclude kernel flow key
+ from upcalls
+In-Reply-To: <83a0b3e4-1327-c1c4-4eb4-9a25ff533d1d@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,27 +50,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
-
-On Fri, 25 Nov 2022 08:43:06 +0000
-Vadym Kochan <vadym.kochan@plvision.eu> wrote:
-
-> [quote]
-> this is not needed, as by the time Linux is loaded, link has already been established (by boot loaders)
+On 11/25/22 16:29, Adrian Moreno wrote:
 > 
-> So this code is not needed.
-> [/quote]
+> 
+> On 11/23/22 22:22, Ilya Maximets wrote:
+>> On 11/22/22 15:03, Aaron Conole wrote:
+>>> When processing upcall commands, two groups of data are available to
+>>> userspace for processing: the actual packet data and the kernel
+>>> sw flow key data.  The inclusion of the flow key allows the userspace
+>>> avoid running through the dissection again.
+>>>
+>>> However, the userspace can choose to ignore the flow key data, as is
+>>> the case in some ovs-vswitchd upcall processing.  For these messages,
+>>> having the flow key data merely adds additional data to the upcall
+>>> pipeline without any actual gain.  Userspace simply throws the data
+>>> away anyway.
+>>
+>> Hi, Aaron.  While it's true that OVS in userpsace is re-parsing the
+>> packet from scratch and using the newly parsed key for the OpenFlow
+>> translation, the kernel-porvided key is still used in a few important
+>> places.  Mainly for the compatibility checking.  The use is described
+>> here in more details:
+>>    https://docs.kernel.org/networking/openvswitch.html#flow-key-compatibility
+>>
+>> We need to compare the key generated in userspace with the key
+>> generated by the kernel to know if it's safe to install the new flow
+>> to the kernel, i.e. if the kernel and OVS userpsace are parsing the
+>> packet in the same way.
+>>
+> 
+> Hi Ilya,
+> 
+> Do we need to do that for every packet?
+> Could we send a bitmask of supported fields to userspace at feature
+> negotiation and let OVS slowpath flows that it knows the kernel won't
+> be able to handle properly?
 
-Not ideal to rely on the bootloader for this sort of initialization,
-and if we want to do this change, perhaps it should be done in another
-patch.
+It's not that simple, because supported fields in a packet depend
+on previous fields in that same packet.  For example, parsing TCP
+header is generally supported, but it won't be parsed for IPv6
+fragments (even the first one), number of vlan headers will affect
+the parsing as we do not parse deeper than 2 vlan headers, etc.
+So, I'm afraid we have to have a per-packet information, unless we
+can somehow probe all the possible valid combinations of packet
+headers.
 
-But again, the fact that "it works for Marvell because their vendor
-U-Boot does the right thing prior to loading Linux" is not really a
-very solid argument to drop kernel code :-/
+> 
+> 
+>> On the other hand, OVS today doesn't check the data, it only checks
+>> which fields are present.  So, if we can generate and pass the bitmap
+>> of fields present in the key or something similar without sending the
+>> full key, that might still save some CPU cycles and memory in the
+>> socket buffer while preserving the ability to check for forward and
+>> backward compatibility.  What do you think?
+>>
+>>
+>> The rest of the patch set seems useful even without patch #1 though.
+>>
+>> Nit: This patch #1 should probably be merged with the patch #6 and be
+>> at the end of a patch set, so the selftest and the main code are updated
+>> at the same time.
+>>
+>> Best regards, Ilya Maximets.
+>> _______________________________________________
+>> dev mailing list
+>> dev@openvswitch.org
+>> https://mail.openvswitch.org/mailman/listinfo/ovs-dev
+>>
+> 
+> Thanks
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
