@@ -2,113 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B37C56388CD
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 12:32:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 045936388CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 12:32:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbiKYLc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 06:32:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58960 "EHLO
+        id S229909AbiKYLcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 06:32:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbiKYLcW (ORCPT
+        with ESMTP id S229541AbiKYLcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 06:32:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC99E71
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 03:31:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669375882;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=o0whn50hBaBPJSQq4RKgv9QraGn/cvKe5x1wVFmyAmE=;
-        b=SlXFNtIfhLSLJJFZTLFel6Zm0fqtSe6GM0iAC3fTCDUxrewQ2pcz433oitshdAEO+5Lx6r
-        8NXll8EtvROApyPHY8fokz7SCUU1Uy612coS+fRzHmSLkBuvAwEE69hfjBXurpRhUdwN39
-        T39mGYmL6xEhXeEVbI0qlvcEOeh8Ahc=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-511-QPKfae2GMsKRlqMm3L8dQA-1; Fri, 25 Nov 2022 06:31:21 -0500
-X-MC-Unique: QPKfae2GMsKRlqMm3L8dQA-1
-Received: by mail-qk1-f197.google.com with SMTP id bk30-20020a05620a1a1e00b006fb2378c857so5066079qkb.18
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 03:31:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o0whn50hBaBPJSQq4RKgv9QraGn/cvKe5x1wVFmyAmE=;
-        b=zlwAUbsxH6KbFQGMUC1FXuHrQJhM4sHxHbqUGOhNW3NIiSqIvVx5y2Spab6ib9G3t+
-         4er0XtO5QQhmbnl8trg7MnmpUktaVJf+4SdytSQ4e64vxmsLz48Fu1Guvd9Ni7E6Ud50
-         7R34kqx0Emfj8bcJ8b7sNPXAwSHbvPnT3CeQb+IRYiyBWJWWbD2Of+4QqTuuAat62URa
-         185Zkh6ufDCFcssBuJjo+yoNcR6UVkguGAzTtTHRpg006KNn8nWfC0XixKoIBAevO3Cy
-         bSe94bDI7FCGMJTHLnPLj0gJL39qGybLOEVAHJFiKtUWdIXaeKRwWWLQft1vy6H2IJNy
-         a2Fg==
-X-Gm-Message-State: ANoB5pnNRgL34I68A0DIlVZWp/pQWxCUlVTRzKEvcVHuvbKBhNeyzk94
-        49O3EgBoph56DnGdfyCAADadfyly+zAxrUO0m4uBv+DRWoV6BnsvQDKRWxY1R8s/JUb5m/EDflo
-        lmqpOL/ZY35XKDTuskJkJmBY=
-X-Received: by 2002:ac8:734d:0:b0:3a5:2784:f462 with SMTP id q13-20020ac8734d000000b003a52784f462mr18738799qtp.590.1669375880842;
-        Fri, 25 Nov 2022 03:31:20 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5MrrxAhGW+JX7yXKj/nNSxGBgtw9E8v2y+gdjXK61hr+gPJZuL1eilM+sjR/92x2KZrbXqiw==
-X-Received: by 2002:ac8:734d:0:b0:3a5:2784:f462 with SMTP id q13-20020ac8734d000000b003a52784f462mr18738776qtp.590.1669375880599;
-        Fri, 25 Nov 2022 03:31:20 -0800 (PST)
-Received: from klayman.redhat.com (net-2-34-28-144.cust.vodafonedsl.it. [2.34.28.144])
-        by smtp.gmail.com with ESMTPSA id q1-20020a05620a0d8100b006fc2f74ad12sm2581080qkl.92.2022.11.25.03.31.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Nov 2022 03:31:20 -0800 (PST)
-From:   Marco Pagani <marpagan@redhat.com>
-To:     Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Manish Narani <manish.narani@xilinx.com>
-Cc:     Marco Pagani <marpagan@redhat.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH] iio: adc: xilinx-ams: fix devm_krealloc() return value check
-Date:   Fri, 25 Nov 2022 12:31:12 +0100
-Message-Id: <20221125113112.219290-1-marpagan@redhat.com>
-X-Mailer: git-send-email 2.38.1
+        Fri, 25 Nov 2022 06:32:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147761902F;
+        Fri, 25 Nov 2022 03:32:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AED4F623A5;
+        Fri, 25 Nov 2022 11:32:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7B1DC433D6;
+        Fri, 25 Nov 2022 11:31:59 +0000 (UTC)
+Date:   Fri, 25 Nov 2022 11:31:56 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, Will Deacon <will@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
+Subject: Re: [v2 PATCH 2/9] crypto: api - Add crypto_tfm_ctx_dma
+Message-ID: <Y4CnrGmT5o7zcLJr@arm.com>
+References: <Y4BGC2BPesy3qsEm@gondor.apana.org.au>
+ <E1oyQRz-000djH-3a@formenos.hmeau.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <E1oyQRz-000djH-3a@formenos.hmeau.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The clang-analyzer reported a warning: "Value stored to 'ret'
-is never read".
+Hi Herbert,
 
-Fix the return value check if devm_krealloc() fails to resize
-ams_channels.
+Thanks for putting this together. I'll try to go through the series but
+my crypto knowledge is fairly limited.
 
-Fixes: d5c70627a794 ("iio: adc: Add Xilinx AMS driver")
-Signed-off-by: Marco Pagani <marpagan@redhat.com>
----
- drivers/iio/adc/xilinx-ams.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, Nov 25, 2022 at 12:36:31PM +0800, Herbert Xu wrote:
+> diff --git a/include/crypto/algapi.h b/include/crypto/algapi.h
+> index f50c5d1725da..4c99eb66e654 100644
+> --- a/include/crypto/algapi.h
+> +++ b/include/crypto/algapi.h
+> @@ -7,6 +7,7 @@
+>  #ifndef _CRYPTO_ALGAPI_H
+>  #define _CRYPTO_ALGAPI_H
+>  
+> +#include <asm/cache.h>
+>  #include <linux/align.h>
+>  #include <linux/crypto.h>
+>  #include <linux/kconfig.h>
+> @@ -25,6 +26,14 @@
+>  #define MAX_CIPHER_BLOCKSIZE		16
+>  #define MAX_CIPHER_ALIGNMASK		15
+>  
+> +#ifdef ARCH_DMA_MINALIGN
+> +#define CRYPTO_DMA_ALIGN ARCH_DMA_MINALIGN
+> +#else
+> +#define CRYPTO_DMA_ALIGN CRYPTO_MINALIGN
+> +#endif
+> +
+> +#define CRYPTO_DMA_PADDING ((CRYPTO_DMA_ALIGN - 1) & ~(CRYPTO_MINALIGN - 1))
 
-diff --git a/drivers/iio/adc/xilinx-ams.c b/drivers/iio/adc/xilinx-ams.c
-index 5b4bdf3a26bb..a507d2e17079 100644
---- a/drivers/iio/adc/xilinx-ams.c
-+++ b/drivers/iio/adc/xilinx-ams.c
-@@ -1329,7 +1329,7 @@ static int ams_parse_firmware(struct iio_dev *indio_dev)
- 
- 	dev_channels = devm_krealloc(dev, ams_channels, dev_size, GFP_KERNEL);
- 	if (!dev_channels)
--		ret = -ENOMEM;
-+		return -ENOMEM;
- 
- 	indio_dev->channels = dev_channels;
- 	indio_dev->num_channels = num_channels;
+Is the CRYPTO_DMA_PADDING used anywhere? I couldn't find it in this
+series and I'd rather drop it, together with CRYPTO_DMA_ALIGN (see
+below).
+
+> +
+>  struct crypto_aead;
+>  struct crypto_instance;
+>  struct module;
+> @@ -189,10 +198,38 @@ static inline void crypto_xor_cpy(u8 *dst, const u8 *src1, const u8 *src2,
+>  	}
+>  }
+>  
+> +static inline void *crypto_tfm_ctx(struct crypto_tfm *tfm)
+> +{
+> +	return tfm->__crt_ctx;
+> +}
+> +
+> +static inline void *crypto_tfm_ctx_align(struct crypto_tfm *tfm,
+> +					 unsigned int align)
+> +{
+> +	if (align <= crypto_tfm_ctx_alignment())
+> +		align = 1;
+> +
+> +	return PTR_ALIGN(crypto_tfm_ctx(tfm), align);
+> +}
+> +
+>  static inline void *crypto_tfm_ctx_aligned(struct crypto_tfm *tfm)
+>  {
+> -	return PTR_ALIGN(crypto_tfm_ctx(tfm),
+> -			 crypto_tfm_alg_alignmask(tfm) + 1);
+> +	return crypto_tfm_ctx_align(tfm, crypto_tfm_alg_alignmask(tfm) + 1);
+>+}
+
+I had an attempt to make crypto_tfm_alg_alignmask() the larger of the
+cra_alignmask and ARCH_DMA_MINALIGN but for some reason the kernel
+started to panic, so I gave up.
+
+> +
+> +static inline unsigned int crypto_dma_align(void)
+> +{
+> +	return CRYPTO_DMA_ALIGN;
+> +}
+
+We have a generic dma_get_cache_alignment() function which currently is
+either 1 or ARCH_DMA_MINALIGN, if the latter is defined. My plan is to
+make eventually make this dynamic based on the actual cache line size
+(on most arm64 systems it would be 64 rather than 128). So could you use
+this instead of defining a CRYPTO_DMA_ALIGN? The only difference would
+be that dma_get_cache_alignment() returns 1 rather than
+ARCH_KMALLOC_MINALIGN if ARCH_DMA_MINALIGN is not defined, but I don't
+think that's an issue.
+
+> +
+> +static inline unsigned int crypto_dma_padding(void)
+> +{
+> +	return (crypto_dma_align() - 1) & ~(crypto_tfm_ctx_alignment() - 1);
+> +}
+> +
+> +static inline void *crypto_tfm_ctx_dma(struct crypto_tfm *tfm)
+> +{
+> +	return crypto_tfm_ctx_align(tfm, crypto_dma_align());
+>  }
+
+These would need to cope with crypto_dma_align() < ARCH_KMALLOC_MINALIGN.
+I think that's fine, the padding will be 0 if crypto_dma_align() is 1.
+
 -- 
-2.38.1
-
+Catalin
