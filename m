@@ -2,126 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52DBC63858C
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 09:52:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33B4F638592
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 09:52:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbiKYIvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 03:51:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34788 "EHLO
+        id S229535AbiKYIwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 03:52:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbiKYIvq (ORCPT
+        with ESMTP id S229541AbiKYIwb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 03:51:46 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9721E31ED8
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 00:51:42 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oyUQe-0008Qt-8q; Fri, 25 Nov 2022 09:51:24 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oyUQX-000Bz1-Gz; Fri, 25 Nov 2022 09:51:18 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oyUQX-000FZX-M5; Fri, 25 Nov 2022 09:51:17 +0100
-Date:   Fri, 25 Nov 2022 09:51:17 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>, kernel@pengutronix.de,
-        linux-samsung-soc@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
-        linux-kernel@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        dmaengine@vger.kernel.org, Simtec Linux Team <linux@simtec.co.uk>,
-        linux-next@vger.kernel.org
-Subject: Re: [PATCH] ARM: s3c: Fix a build error after the s3c24xx dma driver
- was removed
-Message-ID: <20221125085117.23p7yv6wgo6b5l3v@pengutronix.de>
-References: <20221021203329.4143397-14-arnd@kernel.org>
- <20221118215401.505480-1-u.kleine-koenig@pengutronix.de>
- <f0425349-d965-0a40-0672-27dfbe45eb44@linaro.org>
- <b759a3e7-7a45-3dc9-14ba-8b01da798f10@linaro.org>
+        Fri, 25 Nov 2022 03:52:31 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866BBCE9;
+        Fri, 25 Nov 2022 00:52:28 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AP8nmiJ006687;
+        Fri, 25 Nov 2022 08:52:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
+ mime-version : content-transfer-encoding : in-reply-to : references :
+ subject : to : cc : from : message-id : date; s=pp1;
+ bh=7RGeCEHG1G53Xom7o/juk/OP7d5IJEctJeBMolf8ohE=;
+ b=jtXj+Qa0Hw49rdLzDKaQKmWe6taT9UacpCAKpRHwij/B3D8wIrJKqMMcgVCIIAgf19k9
+ T77Jev2X23zV8KN2aUovjCQG3CjwXtrD5kig7Cb7j1UWRqZWg9iR0GowUNnDPAztnzB1
+ zDxmZz0Fodtw8uqtd+PS2ezUEnnWDnVY80ftIiZ1pZi6/vp+pkfs+7o3L7uNRBgL0Z1M
+ t+c7p70gKAsnciqPCRauo5MPozEo/wvaQUwLEyXGd1o61hqzxgJr70MSGAVZEvAdbq99
+ oDGNNX4RsspzR1OBTwNAxLLxUS03V+yXjyw1wXlszudVyXyTHbPUWN7vhv8pOBTP90sk lA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m2thrr1ny-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Nov 2022 08:52:25 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AP8oqN1009927;
+        Fri, 25 Nov 2022 08:52:24 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3m2thrr1nf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Nov 2022 08:52:24 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AP8pOZC017679;
+        Fri, 25 Nov 2022 08:52:22 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma03ams.nl.ibm.com with ESMTP id 3kxps91ar3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Nov 2022 08:52:22 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AP8qI8c63766992
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 25 Nov 2022 08:52:18 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CD47B42042;
+        Fri, 25 Nov 2022 08:52:18 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A76B04203F;
+        Fri, 25 Nov 2022 08:52:18 +0000 (GMT)
+Received: from t14-nrb (unknown [9.171.26.223])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 25 Nov 2022 08:52:18 +0000 (GMT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="esiizevgytu3ebii"
-Content-Disposition: inline
-In-Reply-To: <b759a3e7-7a45-3dc9-14ba-8b01da798f10@linaro.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <e735fa2cde6e9c92dda134634cb3d67b64b23fe9.camel@linux.ibm.com>
+References: <20221117221758.66326-1-scgl@linux.ibm.com> <20221117221758.66326-3-scgl@linux.ibm.com> <f96b50e2-24ac-4016-d3f1-ffc375516e7c@redhat.com> <e735fa2cde6e9c92dda134634cb3d67b64b23fe9.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 2/9] Documentation: KVM: s390: Describe KVM_S390_MEMOP_F_CMPXCHG
+To:     Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Thomas Huth <thuth@redhat.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>
+From:   Nico Boehr <nrb@linux.ibm.com>
+Message-ID: <166936633695.19077.13372353298394327779@t14-nrb.local>
+User-Agent: alot/0.8.1
+Date:   Fri, 25 Nov 2022 09:52:18 +0100
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: tHcF3P8PfsqF7PEYaJjzK5zOowVa2Wef
+X-Proofpoint-GUID: FNGyPJvbxGrMU8e6_jYyAt9gb_ciObwx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-25_02,2022-11-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=676
+ priorityscore=1501 adultscore=0 spamscore=0 clxscore=1015 bulkscore=0
+ mlxscore=0 lowpriorityscore=0 impostorscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211250069
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---esiizevgytu3ebii
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hello,
-
-On Sun, Nov 20, 2022 at 12:22:31PM +0100, Krzysztof Kozlowski wrote:
-> On 20/11/2022 11:31, Krzysztof Kozlowski wrote:
-> > On 18/11/2022 22:54, Uwe Kleine-K=F6nig wrote:
-> >> The linux/platform_data/dma-s3c24xx.h header file was removed. It didn=
-'t
-> >> declare or define any symbol needed in devs.c though, so the #include
-> >> can just be dropped.
-> >>
-> >> Fixes: cccc46ae3623 ("dmaengine: remove s3c24xx driver")
-> >> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> >> ---
+Quoting Janis Schoetterl-Glausch (2022-11-22 14:10:41)
+> On Tue, 2022-11-22 at 08:47 +0100, Thomas Huth wrote:
+> > On 17/11/2022 23.17, Janis Schoetterl-Glausch wrote:
+[...]
+> > >   Supported flags:
+> > >     * ``KVM_S390_MEMOP_F_CHECK_ONLY``
+> > >     * ``KVM_S390_MEMOP_F_SKEY_PROTECTION``
+> > > +  * ``KVM_S390_MEMOP_F_CMPXCHG``
+> > > +
+> > > +The semantics of the flags common with logical acesses are as for lo=
+gical
+> > > +accesses.
+> > > +
+> > > +For write accesses, the KVM_S390_MEMOP_F_CMPXCHG might be supported.
 > >=20
-> > The file was not removed... or it should not have been yet. The s3c24xx
-> > dma driver removal should be part of Arnd series taken via SoC ARM.
+> > I'd maybe merge this with the last sentence:
+> >=20
+> > For write accesses, the KVM_S390_MEMOP_F_CMPXCHG flag is supported if=20
+> > KVM_CAP_S390_MEM_OP_EXTENSION has bit 1 (i.e. bit with value 2) set.
+>=20
+> Ok.
+> >=20
+> > ... and speaking of that, I wonder whether it's maybe a good idea to=20
+> > introduce some #defines for bit 1 / value 2, to avoid the confusion ?
+>=20
+> Not sure, I don't feel it's too complicated. Where would you define it?
+> Next to the mem_op struct? KVM_S390_MEMOP_EXTENSION_CAP_CMPXCHG?
 
-The patch enters next with the merge of
+I think the define would be a good idea. Location and name sound good to me.
 
-	git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
-
-Ah, the patch that became cccc46ae3623 (i.e. patch #14) is part of a
-bigger series. Its patch #1 removes s3c24xx.c (which you pointed out to be =
-still
-broken) and patch #2 includes the change I suggested here.
-
-> I think that commit should be just dropped instead.
-
-+1
-
-BTW, cccc46ae3623 is included in next since next-20221107 and breaks
-(at least) arm/s3c2410_defconfig. So I would consider reverting
-cccc46ae3623 a fix. (Added linux-next to Cc:)
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---esiizevgytu3ebii
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOAggIACgkQwfwUeK3K
-7AlqoQf+KRbGDmlQGJTMMKxkt2L3KLegKVD+jLC7UDsLNb0hvIZfNNT+rHssdKoT
-ECq3d0DiK74j5sRtBthgpx3HXMMv5Pu8KgdCNFctiqrfKHugthsaVUNCoEx3Y6cN
-JUfGERyytyAduNPLUzUNS79ANWeVpZ2z9lIYwbDZpdcwLp8JY2RFSfvIqU25l8ug
-3S+e+/NXj37PgCkgvyp8DWbcEoRpNrHLmpaXivhayf3D//0MYa6kdGM0Xejdtw0T
-an5yLUFEdndcRBpp0t9yWh/M83/xTJZ9ndcp8RZMjEVdcBedKpPo/UyO4K+sWQFp
-hfWyBh44QeIwv64XfzGst+xJRoGOuw==
-=WdqC
------END PGP SIGNATURE-----
-
---esiizevgytu3ebii--
+You could also replace the hard-coded 0x3 in kvm_vm_ioctl_check_extension()=
+ when you have the define.
