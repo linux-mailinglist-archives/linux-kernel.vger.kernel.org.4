@@ -2,94 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19585638204
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 02:10:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 220EA638206
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 02:11:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbiKYBKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 20:10:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42434 "EHLO
+        id S229635AbiKYBLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 20:11:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiKYBKw (ORCPT
+        with ESMTP id S229481AbiKYBK5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 20:10:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08162A2;
-        Thu, 24 Nov 2022 17:10:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 24 Nov 2022 20:10:57 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D71042A2;
+        Thu, 24 Nov 2022 17:10:53 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C7C2621D6;
-        Fri, 25 Nov 2022 01:10:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9096C433D6;
-        Fri, 25 Nov 2022 01:10:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669338650;
-        bh=TdYed7TzESNC1tSwHb7ZJEnF2YBPikCulQMC9JlgMYg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kZheonZrXzlZicETGsgJZcqON+TbANG0DHsXrMr8u21ujd279w/E1Pp6pt2PIGz/q
-         PmSBeMh/LTE6jf5dPkRa41TAMIntOKCllkZH18SDkISWU9SJ0DwO149aDDmIu6LWj3
-         P27epfIJAFgY0mytXA5FZeTE61HuwBMOZBGCdKIIfa1HeQuy6U/ndExeeKi0v9Knmj
-         a7uDZE8wlV0mpFGfkW4T9y62Gb13hsKvJkXVzJGb8tEzrojGQTLo/44GjcWvFXRHfb
-         RnsbgVbvXCwevqI8Y09+92TQZTuqdakKYJWdr0sLIMWNfkiRpBKeHAQLyLwY/papBg
-         dvFUyJy15G9Iw==
-Date:   Fri, 25 Nov 2022 10:10:47 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     rostedt@goodmis.org, linux-trace-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tracing/user_events: Fix call print_fmt leak
-Message-Id: <20221125101047.6772413447785430ccbf8046@kernel.org>
-In-Reply-To: <20221123183248.554-1-beaub@linux.microsoft.com>
-References: <20221123183248.554-1-beaub@linux.microsoft.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NJGyM70Nxz4x1D;
+        Fri, 25 Nov 2022 12:10:51 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1669338652;
+        bh=BacT35E2JfZsyBJMyx+bXO6kk1xW5TFq1kyIRhiw+Jo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=a3NtHUhhFZItgRTQmnOt9HplNvPZlx2WpRN3em1VPpzuuc53RYZFhMIDObUsmyKaj
+         eRazzgXD5K5ZC1WcMdkcSyGJfH+8Lcj5oeD2jO1lAQhDrhfsdEUD0l8y10y2YzMjH7
+         kOx8dT7SkZysrtHzmSjY6SDnqFN8fRQXDEXiQqnAPCKJADpRsuj3oANiXs5nA+sbUo
+         8YHm9jic8jpdrgQFHPylzmbNIuBdtHgHwGhjKeYz20SBVW+8vNrydY0heAcc+MLXVp
+         YvA7H4wCAsHf2amrTdK2uXyTwxq2PwGVWRWZcgw/4Vzv5O9bakkIkLoiA9g8YRFCKi
+         Oh+mO2vSMlfrg==
+Date:   Fri, 25 Nov 2022 12:10:51 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Juergen Gross <jgross@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "kernelci.org bot" <bot@kernelci.org>
+Subject: linux-next: build failure after merge of the mm-hotfixes tree
+Message-ID: <20221125121051.311beecd@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/iDtB_YEVPjtg4sQ4=W.6Izs";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Nov 2022 10:32:48 -0800
-Beau Belgrave <beaub@linux.microsoft.com> wrote:
+--Sig_/iDtB_YEVPjtg4sQ4=W.6Izs
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-> If user_event_trace_register() fails within user_event_parse() the
-> call's print_fmt member is not freed. Add kfree call to fix this.
-> 
-> Fixes: aa3b2b4c6692 ("user_events: Add print_fmt generation support for basic types")
-> Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
+Hi all,
 
-This looks good to me.
+After merging the mm-hotfixes tree, today's linux-next build (arm
+allmodconfig) failed like this:
 
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+mm/vmscan.c:4090:9: error: implicit declaration of function =E2=80=98pmd_yo=
+ung=E2=80=99; did you mean =E2=80=98pte_young=E2=80=99? [-Werror=3Dimplicit=
+-function-declaration]
 
-Thank you!
+Caused by commit
 
-> ---
->  kernel/trace/trace_events_user.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-> index ae78c2d53c8a..b46844736015 100644
-> --- a/kernel/trace/trace_events_user.c
-> +++ b/kernel/trace/trace_events_user.c
-> @@ -1357,6 +1357,7 @@ static int user_event_parse(struct user_event_group *group, char *name,
->  put_user:
->  	user_event_destroy_fields(user);
->  	user_event_destroy_validators(user);
-> +	kfree(user->call.print_fmt);
->  	kfree(user);
->  	return ret;
->  }
-> -- 
-> 2.25.1
-> 
+  3f85e711d5af ("mm: introduce arch_has_hw_nonleaf_pmd_young()")
 
+This error was found by the kernel.ci bot and so is still int today's
+tree.
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/iDtB_YEVPjtg4sQ4=W.6Izs
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOAFhsACgkQAVBC80lX
+0GyNKgf/fyVh61nCQ5O8cKikPzo1ug0ZwY2v6Bkkbi0bVwCC6lIynxcSm0UZqhDx
+TXgq5sTqd2b1YwRquKMkvWkfvbliRqsFS9nQxMp9XaFYTv3fpZGiEAnPuJntJVin
+xu4aPFOyEw5dL4cHUX6yY5DtVKwN8XaeF1ZnOZTE4Sg+L0dBF5ddsgtw2yeW6/u7
+B+sHQYVziT8b2BMVMhJ6LA8/W0Sonv89xVLSO7q3Y3iZ6RoNfJ86YYKPy2trj7kv
+XgBMCbSQW3Hztk3/Q8Rmh1Uyza1YZApBxrjHler1rTBMHkteHltfReUkH3LrZqrZ
+UfqL4APNF9HL3DaFkOWmYLvN5pj+TQ==
+=WqRU
+-----END PGP SIGNATURE-----
+
+--Sig_/iDtB_YEVPjtg4sQ4=W.6Izs--
