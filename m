@@ -2,88 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 890366390DF
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 21:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA3486390EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 22:00:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbiKYUxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 15:53:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44062 "EHLO
+        id S229949AbiKYVAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 16:00:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiKYUxb (ORCPT
+        with ESMTP id S229495AbiKYVA2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 15:53:31 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9705D303E3;
-        Fri, 25 Nov 2022 12:53:30 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id ha10so12733136ejb.3;
-        Fri, 25 Nov 2022 12:53:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6sD/Opg2kMqx/4KzDzQ2UqRnrUwBi1wf4XCjq+pkybA=;
-        b=bm45a8aZ6R6jyfumNKlTQyyX9hJCa0YY6TrulwUgivh5dhWtAX1bCCMmZ08MHPJr5C
-         mPuiZLrNlD35kkTOdRQX3P6vmYKq6k88AiAyxUNTeiLX5kZfS2FIb8F4LVRwMRwLyoBR
-         sBJarFQgNJ2Rw5J5CTM0fKSLfGS+AMheq8vm7Gh+7GgYzxeLXtgK4Grq9hEMOJ1Puc+p
-         BhPbWAPaKANSNaWrUuHQ9wofHHU5krRiyj+W/YRKUPUtL115CxeSSL4kRBpZIiJV7n9M
-         fmP1eSAOAmUa2Tl6bgoTtzluUzFDlRbkjk3BeOHi8tPpqN9oxOyHgn7udlOJIrpMhNwW
-         Ngag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6sD/Opg2kMqx/4KzDzQ2UqRnrUwBi1wf4XCjq+pkybA=;
-        b=bh759STP+WSgrq54vDkTqE6+ZoPPYyjugetKYgJmtH59MD7kiVOgPpMOgM703qrG9s
-         3Innw+TZc7msS8bPH3gnkoqxl9ydEQjgvSZSLgmNWahqlj6LPPS9wEhMXq2wzK25ACF6
-         y3N/agkU7iHFbwv/Zhi0CS6+b+sVtKIR/mFTOwMPTovVyng7Ekb6nxMgPx9g3OPj+QU8
-         R8T5zNW29j9+mntoHsAZXx2kbFtEnVoIJljbYAehA5oe1NhTuAxUesdrWkjK9a3gWN2m
-         BCyGtGx8P/ZzgZz0suhwEecqDX+B199nciY4XJUCO27QobR4ohmUVuY0mBvriQnheXpO
-         92+w==
-X-Gm-Message-State: ANoB5plvxvDKT3EYQ7auhjTYM/7qjhgAOyhMV8rWbAatf1dHPucgxKfo
-        HYKmSuhDKH0L8BJlW4RNSVeBVkGuLuzwdVj3b70=
-X-Google-Smtp-Source: AA0mqf6ZqeXlwkzzwv31EFgGaPOJIe9a20QRlRigNwZ5FuDhorinVjP2uOsFChpXkysNFQeb3b9Pc4fGT34f1ILc/Ro=
-X-Received: by 2002:a17:906:8a57:b0:7ad:a030:4915 with SMTP id
- gx23-20020a1709068a5700b007ada0304915mr34077097ejc.267.1669409609046; Fri, 25
- Nov 2022 12:53:29 -0800 (PST)
+        Fri, 25 Nov 2022 16:00:28 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BDB8391C6;
+        Fri, 25 Nov 2022 13:00:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=s4UABV1ux66nah7EYyy5GKkUpPAottxYKhO0fUNPBjk=; b=WINL+1C5RFCsGAMmYeRmkGvFUH
+        CjKRYD87yhdW1z3mzkO/wvKYXVtXVi9s2FwZ3TMTHX1R3UhzXfNJyj+oHa95bXcWe7aQJeUsTvcrC
+        6SW/qHSRF2xMswuS+blR5PDDrMba6p/sKHR+K9DxLjdUtwACjcVgmk+kXEftKRQW6KuKZyBWC8WMT
+        aTnPTOpbuFPuBHCZbDBxaZWZJg8Ah+Kq/KVKlIgGaLbXz9VcJ5CUdT0u85zrRroq5Yor7t84S/0mL
+        Z45ew5LwhZtSyY8r5QTPzmcwfoHy5B1iMQcaFTEFyBpALMuPrYuP3iQJ+NfYmcQIk21hYlmGZ1p2U
+        DsObimCA==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1oyfo1-006kkn-2O;
+        Fri, 25 Nov 2022 21:00:17 +0000
+Date:   Fri, 25 Nov 2022 21:00:17 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fsdevel@vger.kernel.org,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] fs: clear a UBSAN shift-out-of-bounds warning
+Message-ID: <Y4Es4TIbVos5CTO9@ZenIV>
+References: <20221125091358.1963-1-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-References: <20221124172207.153718-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221124172207.153718-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <3689906.Lt9SDvczpP@diego> <CA+V-a8uQh=q8ksTe8ttHkJThcoYtggSU-AXUqPGYnam0CiqZWw@mail.gmail.com>
- <3b5e52c5-7a1c-8bdd-b076-0c5e13463274@sholland.org>
-In-Reply-To: <3b5e52c5-7a1c-8bdd-b076-0c5e13463274@sholland.org>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Fri, 25 Nov 2022 20:53:02 +0000
-Message-ID: <CA+V-a8tZgswanaN2gbmWzswO4pLLQ884aQa+KVNLwjDS9YqS=A@mail.gmail.com>
-Subject: Re: [PATCH v4 5/7] riscv: mm: dma-noncoherent: Pass direction and
- operation to ALT_CMO_OP()
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221125091358.1963-1-thunder.leizhen@huawei.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,43 +52,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Samuel,
+On Fri, Nov 25, 2022 at 05:13:56PM +0800, Zhen Lei wrote:
+> v2 --> v3:
+> Updated the commit message of patch 2/2 based on Alexander Viro's suggestion.
 
-Thank you for the review.
+Not exactly what I meant...  I've tentatively applied it, with the
+following commit message:
 
-On Fri, Nov 25, 2022 at 6:49 PM Samuel Holland <samuel@sholland.org> wrote:
->
-> On 11/24/22 13:18, Lad, Prabhakar wrote:
-> > Hi Heiko,
-> >
-> > Thank you for the review.
-> >
-> > On Thu, Nov 24, 2022 at 6:29 PM Heiko St=C3=BCbner <heiko@sntech.de> wr=
-ote:
-> >>
-> >> Am Donnerstag, 24. November 2022, 18:22:05 CET schrieb Prabhakar:
-> >>> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >>>
-> >>> Pass direction and operation to ALT_CMO_OP() macro.
-> >>>
-> >>> This is in preparation for adding errata for the Andes CPU core.
-> >>
-> >> can you provide more explanation why that is necessary please?
-> >> I guess you want to use different cache operations for some cases?
-> >>
-> > Yes basically to call different cache operations based on the dir and
-> > operations (and also this allows to export just one function to handle
-> > the errata). I'll update the commit message in the next version.
->
-> This makes things less efficient, because it requires more instructions
-> and registers inside the alternative section, and your function
-> duplicates the logic from arch_sync_dma_for_device(). The alternative is
-> already passed the operation (clean/flush/invalidate) as a token, so you
-> can construct the function name with token pasting.
->
-I did think about it but that didn't help for example in the
-arch_dma_prep_coherent() we are calling flush token, but on RZ/Five
-for arch_dma_prep_coherent() we have to do nothing.
+--------------------------------
+get rid of INT_LIMIT, use type_max() instead
 
-Cheers,
-Prabhakar
+INT_LIMIT() tries to do what type_max() does, except that type_max()
+doesn't rely upon undefined behaviour[*], might as well use type_max()
+instead.
+
+[*] if T is an N-bit signed integer type, the maximal value in T is
+pow(2, N - 1) - 1, all right, but naive expression for that value
+ends up with a couple of wraparounds and as usual for wraparounds
+in signed types, that's an undefined behaviour.  type_max() takes
+care to avoid those...
+
+Caught-by: UBSAN
+Suggested-by: Eric Biggers <ebiggers@kernel.org>
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+Reviewed-by: Eric Biggers <ebiggers@google.com>
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+--------------------------------
+
+Does anybody have objections against the commit message above?
