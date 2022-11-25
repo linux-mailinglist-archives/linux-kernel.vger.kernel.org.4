@@ -2,40 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC95639158
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 23:23:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D1F263915A
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 23:24:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbiKYWXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 17:23:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39446 "EHLO
+        id S229583AbiKYWYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 17:24:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiKYWXb (ORCPT
+        with ESMTP id S229454AbiKYWYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 17:23:31 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18024205E3;
-        Fri, 25 Nov 2022 14:23:31 -0800 (PST)
-From:   =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1669415009;
-        bh=NQ+04B6zJQxzHILCfAFkhF13N2/TELUbaH94zEW62cA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=oGL3K0ftiDi0H3tP1NKq0EhToZqpCPxDfWkxK+snQP0SbS2Z6YbgPIEKrH1XwAbgM
-         3GBM/xf75lgSbKmoFcGOI/CtOSqc+txkufagdaEHx5NKcEHmCQoD3Tpw7HssaPMDB+
-         TjmQYH5y76RsYzM+kZusZ/GrMisJiPBRbzEAAb/k=
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] watchdog: Report firmware_version in sysfs
-Date:   Fri, 25 Nov 2022 23:23:15 +0100
-Message-Id: <20221125222315.4925-1-linux@weissschuh.net>
-X-Mailer: git-send-email 2.38.1
+        Fri, 25 Nov 2022 17:24:10 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB032655B;
+        Fri, 25 Nov 2022 14:24:10 -0800 (PST)
+Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 169BD6602B6F;
+        Fri, 25 Nov 2022 22:24:06 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1669415048;
+        bh=n/JLhB9y1lHTrAqStH1aXYwPM6mB/oILrr8xuIpUxBM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hL1D4Rz9csbBTpf1Zc8BME8cRYbNoiwVf+91duBmWBmSu3hj0B/x0mxj9IayaaEIF
+         ZuRYN0f0bP4uheKt2VXEj61N1VnnDAzSmNKXfudty00OIalGaLuSTbLN/Hkgt23QOQ
+         Lkd0dCcu5gqhI3S7O5m+O4ePoMFPq2dV4ybUNFRuVJIOLHiQUJ4NXJOrrGySa78inN
+         ke/aQ/9ywGMunB4khwu9lr2l6PyFcvejc9M2a5d+4t7xePZKCqbNez4bkA/zopnbVZ
+         eLjJySiDFw+mxFZW2jVoiFaXV8VW7/YY3jktdQ8LKTnULKmrPAMYL5tSmFXvTxp6+c
+         KxtGmHbs3kcZQ==
+Date:   Fri, 25 Nov 2022 17:24:02 -0500
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     "Nancy.Lin" <nancy.lin@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, linux@roeck-us.net,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "jason-jh . lin" <jason-jh.lin@mediatek.com>,
+        Yongqiang Niu <yongqiang.niu@mediatek.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, llvm@lists.linux.dev,
+        singo.chang@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v28 6/7] drm/mediatek: add drm ovl_adaptor sub driver for
+ MT8195
+Message-ID: <20221125222402.u4qiolkqi2nsv7ae@notapiano>
+References: <20221107072413.16178-1-nancy.lin@mediatek.com>
+ <20221107072413.16178-7-nancy.lin@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1669414993; l=1549; i=linux@weissschuh.net; s=20211113; h=from:subject; bh=NQ+04B6zJQxzHILCfAFkhF13N2/TELUbaH94zEW62cA=; b=efEVyF6r8ALLabqaD+48qPvQ0ZPwyjpW7rBNapW//ealEWU/pw+w2BVj8w101tmZmFGGOyWW5dNW DN+TjMYLDnZirs1+g8+4WyrgEjNihcAFyYuGLJUfalO3bzzaFbSW
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519; pk=9LP6KM4vD/8CwHW7nouRBhWLyQLcK1MkP6aTZbzUlj4=
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221107072413.16178-7-nancy.lin@mediatek.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -45,51 +73,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This synchronizes the information reported by ioctl and sysfs.
-The mismatch is confusing because "wdctl" from util-linux uses the ioctl
-when used with root privileges and sysfs without.
+On Mon, Nov 07, 2022 at 03:24:12PM +0800, Nancy.Lin wrote:
+> Add drm ovl_adaptor sub driver. Bring up ovl_adaptor sub driver if
+> the component exists in the path.
+> 
+> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Reviewed-by: CK Hu <ck.hu@mediatek.com>
+> Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> Tested-by: NÌcolas F. R. A. Prado <nfraprado@collabora.com>
+> ---
+[..]
+> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+> index 30dcb65d8a5a..ce5617ad04cb 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+[..]
+> @@ -897,22 +906,18 @@ int mtk_drm_crtc_create(struct drm_device *drm_dev,
+>  		crtc_i++;
+>  
+>  	for (i = 0; i < path_len; i++) {
+> -		enum mtk_ddp_comp_id comp_id = path[i];
+> +		unsigned int comp_id = path[i];
+>  		struct device_node *node;
+> -		struct mtk_ddp_comp *comp;
+>  
+>  		node = priv->comp_node[comp_id];
+> -		comp = &priv->ddp_comp[comp_id];
+> -
+> -		if (!node) {
+> -			dev_info(dev,
+> -				 "Not creating crtc %d because component %d is disabled or missing\n",
+> -				 crtc_i, comp_id);
+> -			return 0;
+> -		}
+>  
+> -		if (!comp->dev) {
+> -			dev_err(dev, "Component %pOF not initialized\n", node);
+> +		/* Not all drm components have a DTS device node, such as ovl_adaptor,
+> +		 * which is the drm bring up sub driver
+> +		 */
+> +		if (!node && comp_id != DDP_COMPONENT_DRM_OVL_ADAPTOR) {
+> +			dev_err(dev,
+> +				"Not creating crtc %d because component %d is disabled, missing or not initialized\n",
+> +				crtc_i, comp_id);
+>  			return -ENODEV;
 
-Signed-off-by: Thomas Wei√üschuh <linux@weissschuh.net>
+Why do you change the behavior here? If !node, the return should be 0, because
+there are two separate data streams, for internal and external display, and they
+are optional. It should be possible to for example have the nodes for external
+display disabled in DT and still have the driver probe and have a working
+internal display. But with this change you're breaking that. Also, this message
+should stay as dev_info and not mention "not initialized", so basically it
+should stay the same as before the change.
 
----
-
-Userspace implementation:
-
-https://github.com/util-linux/util-linux/pull/1927
----
- drivers/watchdog/watchdog_dev.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
-index 55574ed42504..88c76e27873c 100644
---- a/drivers/watchdog/watchdog_dev.c
-+++ b/drivers/watchdog/watchdog_dev.c
-@@ -555,6 +555,15 @@ static ssize_t identity_show(struct device *dev, struct device_attribute *attr,
- }
- static DEVICE_ATTR_RO(identity);
- 
-+static ssize_t firmware_version_show(struct device *dev, struct device_attribute *attr,
-+				     char *buf)
-+{
-+	struct watchdog_device *wdd = dev_get_drvdata(dev);
-+
-+	return sysfs_emit(buf, "%d\n", wdd->info->firmware_version);
-+}
-+static DEVICE_ATTR_RO(firmware_version);
-+
- static ssize_t state_show(struct device *dev, struct device_attribute *attr,
- 				char *buf)
- {
-@@ -618,6 +627,7 @@ static umode_t wdt_is_visible(struct kobject *kobj, struct attribute *attr,
- static struct attribute *wdt_attrs[] = {
- 	&dev_attr_state.attr,
- 	&dev_attr_identity.attr,
-+	&dev_attr_firmware_version.attr,
- 	&dev_attr_timeout.attr,
- 	&dev_attr_min_timeout.attr,
- 	&dev_attr_max_timeout.attr,
-
-base-commit: 0b1dcc2cf55ae6523c6fbd0d741b3ac28c9f4536
--- 
-2.38.1
-
+Thanks,
+NÌcolas
