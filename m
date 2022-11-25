@@ -2,130 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 987466383C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 07:08:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E15446383E8
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 07:13:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbiKYGIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 01:08:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45846 "EHLO
+        id S229436AbiKYGNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 01:13:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbiKYGIH (ORCPT
+        with ESMTP id S229773AbiKYGNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 01:08:07 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E951FFB6
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 22:08:05 -0800 (PST)
+        Fri, 25 Nov 2022 01:13:15 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443102F388;
+        Thu, 24 Nov 2022 22:12:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669356485; x=1700892485;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=y/akn5msuvN9Nkygx05J5LbdcnZH8ElmQx+X7UMtEvY=;
-  b=ERZ+mHUrXZ4SqN5+zBT9S/82YlxaWKZyNOY1K/LALxj0tLgWr2bdwgTs
-   yaIhgUuVqByGMEHg6WskEwCrySPhyp6/rPhMqNIPjXkmChuxvEW9TC6C2
-   dyd7DWtmngXL2RvNAJR++Fc5UrEZNtC2HWW+fSasE1rnXWGs4U483DN41
-   E4oJykZNsWAOAjF2fPEe9NLy6QPcOec+Scz4nIjvR23SW02f99McVk8oe
-   No7ndmPPdGOU+x94rEqT8/wJqBlvLlVZg1aNV8iDYZ+vuv2RUl9oGv4+b
-   vj+iLb9BYo+WSVZZN8XH5Vw8oZAV4nHj6E2at6nvM2sUO0/i/7UpFehQu
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="316239474"
+  t=1669356733; x=1700892733;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6jYt7Cj8zjwcswBZNQ/vgJGpt/57KFSil74omp6mMf8=;
+  b=Vjq45Bli3Xrx1bDbLlvF/2oh3fLUEI8h6mREwgHy1HzmaKFy/El+il1T
+   j2P6QFPMZg0qB81+1oQtSjlO5EvtP4pPO96q+7QOL5+5Cmv7yvq+rqNzx
+   fV6wapURr38QX8m6DNbwcJ6VWU69Lx9uuHTyJNLVWdQfsXaUvhdnWLUqW
+   JaSsY522E82y++luRsfl6+R/CgBEoNw4oEqRjlFkXHwS5SfX17Lb6d9Ex
+   vXJI3IvAvQvHRiHz8m/FzNN4A0mKy5QDEmoQPM+Bh+gQ11vP/EuBnvnt7
+   PJW2xmrEjTpyB8Y0Usv27RAvA0st0WjfAZCXqfzjVk6CJkHwN3EmH9YVf
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="294801830"
 X-IronPort-AV: E=Sophos;i="5.96,192,1665471600"; 
-   d="scan'208";a="316239474"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2022 22:08:00 -0800
+   d="scan'208";a="294801830"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2022 22:10:52 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="817047562"
+X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="620236912"
 X-IronPort-AV: E=Sophos;i="5.96,192,1665471600"; 
-   d="scan'208";a="817047562"
-Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 24 Nov 2022 22:07:58 -0800
-Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oyRsU-0004kE-0r;
-        Fri, 25 Nov 2022 06:07:58 +0000
-Date:   Fri, 25 Nov 2022 14:07:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2022.11.22a] BUILD SUCCESS
- 92cc9d759e41acfeaacc577aba0128dc4b06dab6
-Message-ID: <63805ba3.UuLsQPMueiV6RhdU%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+   d="scan'208";a="620236912"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga006.jf.intel.com with ESMTP; 24 Nov 2022 22:10:49 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 1C0CA128; Fri, 25 Nov 2022 08:11:14 +0200 (EET)
+Date:   Fri, 25 Nov 2022 08:11:14 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        stable@vger.kernel.org, Dale Smith <dalepsmith@gmail.com>,
+        John Harris <jmharris@gmail.com>
+Subject: Re: [PATCH v1 1/1] pinctrl: intel: Save and restore pins in "direct
+ IRQ" mode
+Message-ID: <Y4BcguSaNlh7VbLQ@black.fi.intel.com>
+References: <20221124222926.72326-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221124222926.72326-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.11.22a
-branch HEAD: 92cc9d759e41acfeaacc577aba0128dc4b06dab6  docs/RCU/rcubarrier: Right-adjust line numbers in code snippets
+On Fri, Nov 25, 2022 at 12:29:26AM +0200, Andy Shevchenko wrote:
+> The firmware on some systems may configure GPIO pins to be
+> an interrupt source in so called "direct IRQ" mode. In such
+> cases the GPIO controller driver has no idea if those pins
+> are being used or not. At the same time, there is a known bug
+> in the firmwares that don't restore the pin settings correctly
+> after suspend, i.e. by an unknown reason the Rx value becomes
+> inverted.
+> 
+> Hence, let's save and restore the pins that are configured
+> as GPIOs in the input mode with GPIROUTIOXAPIC bit set.
+> 
+> Cc: stable@vger.kernel.org
+> Reported-and-tested-by: Dale Smith <dalepsmith@gmail.com>
+> Reported-and-tested-by: John Harris <jmharris@gmail.com>
+> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=214749
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-elapsed time: 2041m
+Thanks Andy!
 
-configs tested: 48
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-alpha                               defconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-s390                                defconfig
-s390                             allmodconfig
-m68k                             allmodconfig
-alpha                            allyesconfig
-arc                              allyesconfig
-m68k                             allyesconfig
-s390                             allyesconfig
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-ia64                             allmodconfig
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-arc                  randconfig-r043-20221124
-i386                          randconfig-a001
-x86_64                        randconfig-a006
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-i386                                defconfig
-i386                             allyesconfig
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-
-clang tested configs:
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-hexagon              randconfig-r041-20221124
-hexagon              randconfig-r045-20221124
-s390                 randconfig-r044-20221124
-riscv                randconfig-r042-20221124
-x86_64                        randconfig-a016
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
