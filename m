@@ -2,304 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF830638534
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 09:29:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28906638537
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 09:30:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbiKYI32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 03:29:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47418 "EHLO
+        id S229877AbiKYIaI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 25 Nov 2022 03:30:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiKYI3Z (ORCPT
+        with ESMTP id S229734AbiKYIaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 03:29:25 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A057F31208
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 00:29:23 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id h5so136879ljk.11
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 00:29:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lbfwrVz027Kn0FHAJfS+jf/DBbMwmEQoqxG1FAyNFnY=;
-        b=CZyayG2rb8XXbW8TRWf1De/qC1oDKa3sdzUGz7CFZJGCUJ3hke8Pcv0SeBip81FJ+x
-         JusaXlEkx99owAXC/ie/A2BEOiz9lo96sXqrH9PrILlr9fm7Q74h5txF9/7pdiaQJQaf
-         IwGvVohyPx+WhA5YDvNeNiUqDO5bg5Rr/TOYTB0INb39o0KHXAkCsX+BcJTiEyMe+OWz
-         ndkUFRZtWXJL/+favQy+K7bgw5rgQXLzi+OAa9afoF1GgZzDIeFsJsnNgPtTrGCr5yxx
-         +3b8l72SWqhmqBYEORw5J8iVlxU8K2JmLb1yHTHHBMMiFs3iRUvegzmFBZW5g5ESBZc5
-         PMtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lbfwrVz027Kn0FHAJfS+jf/DBbMwmEQoqxG1FAyNFnY=;
-        b=5+MHyYpZNBejuRwd/Zl07lIdpG+pE88ekmqD3NtEaBxUuFFYQ0GOxY2VLSqckDhHUO
-         nKgXjzPF1Gnm0kAd5O3CfRHGmH6JMu/0TAZZ02UcE6t3XkBmTb74dth3oGliruiFC2CT
-         Ypbp91GfgQQc8pk7G1tQgzNKqZP3sD6XFUft7+RpNTtpjwIuBdfsqZze+VunuWiKnx2T
-         XTRBYl73CRMjGYvI+A+HFbIBKEnm5jSCs2vnRlCUH6DAtL7sascuZAIih/MC+3STNV+h
-         3Ea25hWA1DMNgAkV3931XdssyJ7TZZD6qEQovG2x5L/uSrfDnns4O3OXrhpMOToA/Prl
-         lmew==
-X-Gm-Message-State: ANoB5plUdlRTEpf+fG+RF9Uo9Ri2YVjmelzD+wXweZm4b/sz/s8eyDDn
-        l9y4AlkFbHu9CshCGZ/UWyZsnA==
-X-Google-Smtp-Source: AA0mqf5FUk43GbJYwwcX9qThwDXMqvjhHMe9EIo5ni6bShbP7bgEsHNhrO3aT3+GkPVltba10RRQsQ==
-X-Received: by 2002:a05:651c:1797:b0:277:1caf:679e with SMTP id bn23-20020a05651c179700b002771caf679emr6321914ljb.115.1669364961806;
-        Fri, 25 Nov 2022 00:29:21 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id t24-20020a056512209800b004ae24559388sm433351lfr.111.2022.11.25.00.29.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Nov 2022 00:29:21 -0800 (PST)
-Message-ID: <bb12ea88-b416-7e32-93b9-730b6f009b98@linaro.org>
-Date:   Fri, 25 Nov 2022 09:29:20 +0100
+        Fri, 25 Nov 2022 03:30:06 -0500
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F30731210;
+        Fri, 25 Nov 2022 00:30:05 -0800 (PST)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 2AP8StpE6006039, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 2AP8StpE6006039
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Fri, 25 Nov 2022 16:28:55 +0800
+Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Fri, 25 Nov 2022 16:29:38 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Fri, 25 Nov 2022 16:29:38 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b]) by
+ RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b%5]) with mapi id
+ 15.01.2375.007; Fri, 25 Nov 2022 16:29:38 +0800
+From:   Ping-Ke Shih <pkshih@realtek.com>
+To:     Sascha Hauer <s.hauer@pengutronix.de>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
+CC:     Neo Jou <neojou@gmail.com>, Hans Ulli Kroll <linux@ulli-kroll.de>,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Martin Blumenstingl" <martin.blumenstingl@googlemail.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Alexander Hochbaum <alex@appudo.com>,
+        Da Xue <da@libre.computer>,
+        "Bernie Huang" <phhuang@realtek.com>,
+        Viktor Petrenko <g0000ga@gmail.com>
+Subject: RE: [PATCH v3 03/11] rtw88: Drop rf_lock
+Thread-Topic: [PATCH v3 03/11] rtw88: Drop rf_lock
+Thread-Index: AQHY/oIygBK3Wh67DEaTX45BCElsma5PUv2Q
+Date:   Fri, 25 Nov 2022 08:29:38 +0000
+Message-ID: <71f8444cb3bf4859843339614f61a6e8@realtek.com>
+References: <20221122145226.4065843-1-s.hauer@pengutronix.de>
+ <20221122145226.4065843-4-s.hauer@pengutronix.de>
+In-Reply-To: <20221122145226.4065843-4-s.hauer@pengutronix.de>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/11/25_=3F=3F_06:00:00?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v1 1/2] dt-bindings: leds: add binding for aw200xx
-Content-Language: en-US
-To:     Martin Kurbanov <mmkurbanov@sberdevices.ru>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        kernel@sberdevices.ru
-References: <20221124204807.1593241-1-mmkurbanov@sberdevices.ru>
- <20221124204807.1593241-2-mmkurbanov@sberdevices.ru>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221124204807.1593241-2-mmkurbanov@sberdevices.ru>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/11/2022 21:48, Martin Kurbanov wrote:
-> Add YAML devicetree binding for AWINIC AW20036/AW20052/AW20074
-> led driver.
+
+
+> -----Original Message-----
+> From: Sascha Hauer <s.hauer@pengutronix.de>
+> Sent: Tuesday, November 22, 2022 10:52 PM
+> To: linux-wireless@vger.kernel.org
+> Cc: Neo Jou <neojou@gmail.com>; Hans Ulli Kroll <linux@ulli-kroll.de>; Ping-Ke Shih <pkshih@realtek.com>;
+> Yan-Hsuan Chuang <tony0620emma@gmail.com>; Kalle Valo <kvalo@kernel.org>; netdev@vger.kernel.org;
+> linux-kernel@vger.kernel.org; Martin Blumenstingl <martin.blumenstingl@googlemail.com>;
+> kernel@pengutronix.de; Johannes Berg <johannes@sipsolutions.net>; Alexander Hochbaum <alex@appudo.com>;
+> Da Xue <da@libre.computer>; Bernie Huang <phhuang@realtek.com>; Viktor Petrenko <g0000ga@gmail.com>;
+> Sascha Hauer <s.hauer@pengutronix.de>
+> Subject: [PATCH v3 03/11] rtw88: Drop rf_lock
 > 
-> Signed-off-by: Martin Kurbanov <mmkurbanov@sberdevices.ru>
-> ---
->  .../bindings/leds/leds-aw200xx.yaml           | 110 ++++++++++++++++++
->  include/dt-bindings/leds/leds-aw200xx.h       |  48 ++++++++
->  2 files changed, 158 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/leds/leds-aw200xx.yaml
->  create mode 100644 include/dt-bindings/leds/leds-aw200xx.h
+> The rtwdev->rf_lock spinlock protects the rf register accesses in
+> rtw_read_rf() and rtw_write_rf(). Most callers of these functions hold
+> rtwdev->mutex already with the exception of the callsites in the debugfs
+> code. The debugfs code doesn't justify an extra lock, so acquire the mutex
+> there as well before calling rf register accessors and drop the now
+> unnecessary spinlock.
 > 
-> diff --git a/Documentation/devicetree/bindings/leds/leds-aw200xx.yaml b/Documentation/devicetree/bindings/leds/leds-aw200xx.yaml
-> new file mode 100644
-> index 000000000000..3bdadcbc2ee2
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/leds/leds-aw200xx.yaml
+> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
 
-Filename based on compatibles, so "awinic,aw200xx.yaml"
+Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
 
-> @@ -0,0 +1,110 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/leds/leds-aw200xx.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: AWINIC AW200XX LED Driver
-
-What does the "Driver" mean? Linux Driver? If yes, then drop it. Same in
-other places.
-
-> +
-> +maintainers:
-> +  - Martin Kurbanov <mmkurbanov@sberdevices.ru>
-> +
-> +description: |
-> +  This controller is present on AW20036/AW20054/AW20072.
-> +  It is a 3x12/6x9/6x12 matrix LED driver programmed via
-> +  an I2C interface, up to 36/54/72 LEDs or 12/18/24 RGBs,
-> +  3 pattern controllers for auto breathing or group dimming control.
-> +
-> +  For more product information please see the link below:
-> +  aw20036 - https://www.awinic.com/Public/Uploads/uploadfile/files/20200509/20200509151532_5eb65894d205a.pdf
-> +  aw20054 - https://www.awinic.com/Public/Uploads/uploadfile/files/20200509/20200509151602_5eb658b2b77cb.pdf
-> +  aw20072 - https://www.awinic.com/Public/Uploads/uploadfile/files/20200509/20200509151754_5eb659227a145.pdf
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - awinic,aw20036
-> +      - awinic,aw20054
-> +      - awinic,aw20072
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  display-size:
-
-Is it a standard property? Does not look like. Non-standard properties
-need vendor prefix and type ($ref).
-
-> +    maxItems: 1
-> +    description:
-> +      Leds matrix size, see dt-bindings/leds/leds-aw200xx.h
-
-But judging by your constants, you have the same number of columns, just
-rows differ, so probably you want to describe here number of rows.
-
-> +
-> +  imax:
-> +    maxItems: 1
-> +    description:
-> +      Maximum supply current, see dt-bindings/leds/leds-aw200xx.h
-
-No. Use existing properties from common.yaml. This looks like
-led-max-microamp and it is per LED, not per entire device.
-
-> +
-> +patternProperties:
-> +  "^led@[0-9a-f]$":
-> +    type: object
-> +    $ref: common.yaml#
-
-unevaluatedProperties: false
-
-> +
-> +    properties:
-> +      reg:
-> +        description:
-> +          LED number
-> +        maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +  - display-size
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/leds/common.h>
-> +    #include <dt-bindings/leds/leds-aw200xx.h>
-> +
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        led-controller@3a {
-> +            compatible = "awinic,aw20036";
-> +            reg = <0x3a>;
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +            interrupt-parent = <&gpio_intc>;
-> +            interrupts = <13 IRQ_TYPE_LEVEL_LOW>;
-> +
-> +            display-size = <AW20036_DSIZE_3X12>;
-> +            imax = <AW200XX_IMAX_60MA>;
-> +
-> +            led@0 {
-> +                reg = <0x0>;
-> +                color = <LED_COLOR_ID_RED>;
-> +            };
-> +
-> +            led@1 {
-> +                reg = <0x1>;
-> +                color = <LED_COLOR_ID_GREEN>;
-> +            };
-> +
-> +            led@2 {
-> +                reg = <0x2>;
-> +                color = <LED_COLOR_ID_BLUE>;
-> +            };
-> +        };
-> +    };
-> +
-> +...
-> diff --git a/include/dt-bindings/leds/leds-aw200xx.h b/include/dt-bindings/leds/leds-aw200xx.h
-> new file mode 100644
-> index 000000000000..6b2ba4c3c6b1
-> --- /dev/null
-> +++ b/include/dt-bindings/leds/leds-aw200xx.h
-> @@ -0,0 +1,48 @@
-> +/* SPDX-License-Identifier: GPL-2.0+ */
-
-Dual license, like bindings.
-
-> +/**
-> + * This header provides constants for aw200xx LED bindings.
-> + *
-> + * Copyright (c) 2022, SberDevices. All Rights Reserved.
-> + *
-> + * Author: Martin Kurbanov <mmkurbanov@sberdevices.ru>
-> + */
-> +#ifndef _DT_BINDINGS_LEDS_AW200XX_H
-> +#define _DT_BINDINGS_LEDS_AW200XX_H
-> +
-> +/* Global max current (IMAX) */
-> +#define AW200XX_IMAX_3_3MA  8
-> +#define AW200XX_IMAX_6_7MA  9
-
-No. Bindings are not for storing register constants. Feel free to store
-here IDs (ID start from 0 or 1 and is incremented by 1)... but how the
-IMAX even matches any need for "ID"?
-
-> +#define AW200XX_IMAX_10MA   0
-> +#define AW200XX_IMAX_13_3MA 11
-> +#define AW200XX_IMAX_20MA   1
-> +#define AW200XX_IMAX_26_7MA 13
-> +#define AW200XX_IMAX_30MA   2
-> +#define AW200XX_IMAX_40MA   3
-> +#define AW200XX_IMAX_53_3MA 15
-> +#define AW200XX_IMAX_60MA   4
-> +#define AW200XX_IMAX_80MA   5
-> +#define AW200XX_IMAX_120MA  6
-> +#define AW200XX_IMAX_160MA  7
-> +
-> +/* Display size for aw20036 */
-> +#define AW20036_DSIZE_1X12 0
-> +#define AW20036_DSIZE_2X12 1
-> +#define AW20036_DSIZE_3X12 2
-> +
-> +/* Display size for aw20054 */
-> +#define AW20054_DSIZE_1X9 0
-> +#define AW20054_DSIZE_2X9 1
-> +#define AW20054_DSIZE_3X9 2
-> +#define AW20054_DSIZE_4X9 3
-> +#define AW20054_DSIZE_5X9 4
-> +#define AW20054_DSIZE_6X9 5
-> +
-> +/* Display size for aw20072 */
-> +#define AW20072_DSIZE_1X12 0
-> +#define AW20072_DSIZE_2X12 1
-> +#define AW20072_DSIZE_3X12 2
-> +#define AW20072_DSIZE_4X12 3
-> +#define AW20072_DSIZE_5X12 4
-> +#define AW20072_DSIZE_6X12 5
-
-Drop all constants and instead use number of rows without specifying it
-in binding.
-
-So in total entire file can be dropped.
-
-> +
-> +#endif /* !_DT_BINDINGS_LEDS_AW200XX_H */
-
-Best regards,
-Krzysztof
+[...]
 
