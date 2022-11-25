@@ -2,166 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C20F6384C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 08:51:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F31846384CC
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 08:53:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbiKYHv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 02:51:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42046 "EHLO
+        id S229757AbiKYHw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 02:52:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbiKYHvx (ORCPT
+        with ESMTP id S229493AbiKYHw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 02:51:53 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5A32F395
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 23:51:51 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id x13-20020a17090a46cd00b00218f611b6e9so3450257pjg.1
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 23:51:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shopee.com; s=shopee.com;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=F+6fVVB9BmEJEqb7Ji1ITmJk4l6XMki34cizL1NoHWs=;
-        b=aeRBe+pU/jO8Gy99w737xR904Bnhj4f7us8VIYn/UcNkg7f2jsbMct+LXkjRtIQnXR
-         GZsrEFlwJuhFVxyPqBGmEIRpqO1FUKXM+fTwxEUSoYWST4Y/WaxRTmuzz2+1Gn+fppTZ
-         /JbZzmq3BnXoadA6T17FouZYezsATwTr6Xi7CQprNDZNyatcjS2yA7j2G/euX6k/iJFo
-         6tjj1W4cPapz8lnuiHq92v5HPGUBDqQLBnfjzSMHtAPCU+UGMnI/wzefa8on4hZDwhIM
-         FTAUduVWvQWY+fGycu13uGrVnHNZ6sUez7Ijg+hMOJ1pNf8Q61ISQpLn1tLexhw73YUq
-         LsnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=F+6fVVB9BmEJEqb7Ji1ITmJk4l6XMki34cizL1NoHWs=;
-        b=g2M6LSqBJ/jgyHE2ynF7ccewJEQP2qf+kznWl+G09QQTvcpxinvO8rPvj4naempoWL
-         9SimecldKBR/C50TVFNijUNrp8IU/yi2/3vW2NlL7N/2yM/2thhaE0/qMzrIl23zeCnn
-         kcH3xNlYtI+5hyGaQpJg/SPwMnJ3cdTXkYcXgXa0mqtGM5ramdbvoLVFd7CVo0XQzLTa
-         jGRONt8I6bhkiMPf3jiOw0mrbVATEFbMO0myzdUhd1sOT9Bz6ef8UNlcgejnI2un4hwz
-         jBRNP2+DpXwe78p0JTGVEWE0qjudGhC+uxR0nMhCMvmcsvmGuevuewku/m+N0YoDbiVV
-         gUKA==
-X-Gm-Message-State: ANoB5pmX3mbtSlprs+ppym7wvTIXJxyn1TvEZZKpdSOXMyQbKJo7b4Yc
-        N0BgXG8fBJr4dIdlNBzUf901ZA==
-X-Google-Smtp-Source: AA0mqf6DI53+N6EogVEf5foHezmMcOMrbLA4u8a6joMtZUrnXsRvJVRKypDwwA+f6XKp7C/B1Ni3Dg==
-X-Received: by 2002:a17:90a:5918:b0:213:ff:1cda with SMTP id k24-20020a17090a591800b0021300ff1cdamr38252467pji.86.1669362710755;
-        Thu, 24 Nov 2022 23:51:50 -0800 (PST)
-Received: from ubuntu-haifeng.default.svc.cluster.local ([101.127.248.173])
-        by smtp.gmail.com with ESMTPSA id 6-20020a621406000000b0057447bb0ddcsm2433271pfu.49.2022.11.24.23.51.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 23:51:50 -0800 (PST)
-From:   "haifeng.xu" <haifeng.xu@shopee.com>
-To:     longman@redhat.com
-Cc:     lizefan.x@bytedance.com, tj@kernel.org, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "haifeng.xu" <haifeng.xu@shopee.com>
-Subject: [PATCH] cgroup/cpuset: Clean up cpuset_task_status_allowed
-Date:   Fri, 25 Nov 2022 07:51:33 +0000
-Message-Id: <20221125075133.12718-1-haifeng.xu@shopee.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 25 Nov 2022 02:52:58 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8DC1F2CD;
+        Thu, 24 Nov 2022 23:52:56 -0800 (PST)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NJRsd0tQ9zmWC2;
+        Fri, 25 Nov 2022 15:52:21 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 25 Nov 2022 15:52:55 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 25 Nov 2022 15:52:54 +0800
+Subject: Re: [PATCH] pipe: fix potential use-after-free in pipe_read()
+To:     Al Viro <viro@zeniv.linux.org.uk>
+CC:     Matthew Wilcox <willy@infradead.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>
+References: <20221117115323.1718-1-thunder.leizhen@huawei.com>
+ <Y4Bh0fTf4vZ6/6Pc@ZenIV>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <3a38686c-040a-202c-2778-7670a2b3f087@huawei.com>
+Date:   Fri, 25 Nov 2022 15:52:53 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Y4Bh0fTf4vZ6/6Pc@ZenIV>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cpuset_task_status_allowed just shows mems_allowed status, so
-rename it to task_mems_allowed. Moreover, it's only used in
-proc_pid_status, so move it to fs/proc/array.c. There is no
-intentional function change.
 
-Signed-off-by: haifeng.xu <haifeng.xu@shopee.com>
----
- fs/proc/array.c        | 13 +++++++++++--
- include/linux/cpuset.h |  7 -------
- kernel/cgroup/cpuset.c |  9 ---------
- 3 files changed, 11 insertions(+), 18 deletions(-)
 
-diff --git a/fs/proc/array.c b/fs/proc/array.c
-index 49283b8103c7..e6cdef8387e6 100644
---- a/fs/proc/array.c
-+++ b/fs/proc/array.c
-@@ -80,7 +80,6 @@
- #include <linux/file.h>
- #include <linux/fdtable.h>
- #include <linux/times.h>
--#include <linux/cpuset.h>
- #include <linux/rcupdate.h>
- #include <linux/delayacct.h>
- #include <linux/seq_file.h>
-@@ -413,6 +412,16 @@ static void task_cpus_allowed(struct seq_file *m, struct task_struct *task)
- 		   cpumask_pr_args(&task->cpus_mask));
- }
- 
-+static void task_mems_allowed(struct seq_file *m, struct task_struct *task)
-+{
-+#ifdef CONFIG_CPUSETS
-+	seq_printf(m, "Mems_allowed:\t%*pb\n",
-+		   nodemask_pr_args(&task->mems_allowed));
-+	seq_printf(m, "Mems_allowed_list:\t%*pbl\n",
-+		   nodemask_pr_args(&task->mems_allowed));
-+#endif
-+}
-+
- static inline void task_core_dumping(struct seq_file *m, struct task_struct *task)
- {
- 	seq_put_decimal_ull(m, "CoreDumping:\t", !!task->signal->core_state);
-@@ -449,7 +458,7 @@ int proc_pid_status(struct seq_file *m, struct pid_namespace *ns,
- 	task_cap(m, task);
- 	task_seccomp(m, task);
- 	task_cpus_allowed(m, task);
--	cpuset_task_status_allowed(m, task);
-+	task_mems_allowed(m, task);
- 	task_context_switch_counts(m, task);
- 	return 0;
- }
-diff --git a/include/linux/cpuset.h b/include/linux/cpuset.h
-index d58e0476ee8e..30b91116dd2f 100644
---- a/include/linux/cpuset.h
-+++ b/include/linux/cpuset.h
-@@ -112,8 +112,6 @@ extern int cpuset_mems_allowed_intersects(const struct task_struct *tsk1,
- extern int cpuset_memory_pressure_enabled;
- extern void __cpuset_memory_pressure_bump(void);
- 
--extern void cpuset_task_status_allowed(struct seq_file *m,
--					struct task_struct *task);
- extern int proc_cpuset_show(struct seq_file *m, struct pid_namespace *ns,
- 			    struct pid *pid, struct task_struct *tsk);
- 
-@@ -246,11 +244,6 @@ static inline int cpuset_mems_allowed_intersects(const struct task_struct *tsk1,
- 
- static inline void cpuset_memory_pressure_bump(void) {}
- 
--static inline void cpuset_task_status_allowed(struct seq_file *m,
--						struct task_struct *task)
--{
--}
--
- static inline int cpuset_mem_spread_node(void)
- {
- 	return 0;
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 589827ccda8b..5798d4231662 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -4045,12 +4045,3 @@ int proc_cpuset_show(struct seq_file *m, struct pid_namespace *ns,
- 	return retval;
- }
- #endif /* CONFIG_PROC_PID_CPUSET */
--
--/* Display task mems_allowed in /proc/<pid>/status file. */
--void cpuset_task_status_allowed(struct seq_file *m, struct task_struct *task)
--{
--	seq_printf(m, "Mems_allowed:\t%*pb\n",
--		   nodemask_pr_args(&task->mems_allowed));
--	seq_printf(m, "Mems_allowed_list:\t%*pbl\n",
--		   nodemask_pr_args(&task->mems_allowed));
--}
+On 2022/11/25 14:33, Al Viro wrote:
+> On Thu, Nov 17, 2022 at 07:53:23PM +0800, Zhen Lei wrote:
+>> Accessing buf->flags after pipe_buf_release(pipe, buf) is unsafe, because
+>> the 'buf' memory maybe freed.
+> 
+> Huh?  What are you talking about?
+>                         struct pipe_buffer *buf = &pipe->bufs[tail & mask];
+> To free *buf you would need to free the entire damn array, which is
+> obviously not going to be possible here; if you are talking about reuse
+> of *buf - that's controlled by pipe->tail, and we do not assign it until
+> later.
+> 
+> Fetching any fields of *buf is safe; what can get freed is buf->page, not
+> buf itself.  So that buf->flags access is fine.
+
+Right. Thank you for explaining clearly. Sorry, I misunderstood in the
+course of learning.
+
+> 
+> .
+> 
+
 -- 
-2.25.1
-
+Regards,
+  Zhen Lei
