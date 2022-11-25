@@ -2,110 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F90638737
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 11:19:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3813763873C
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 11:19:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbiKYKTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 05:19:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45876 "EHLO
+        id S230089AbiKYKTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 05:19:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiKYKS7 (ORCPT
+        with ESMTP id S230009AbiKYKTk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 05:18:59 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B4D2126B;
-        Fri, 25 Nov 2022 02:18:58 -0800 (PST)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NJW672Lb5zRpQ9;
-        Fri, 25 Nov 2022 18:18:23 +0800 (CST)
-Received: from kwepemm600007.china.huawei.com (7.193.23.208) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 25 Nov 2022 18:18:56 +0800
-Received: from [10.174.185.210] (10.174.185.210) by
- kwepemm600007.china.huawei.com (7.193.23.208) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 25 Nov 2022 18:18:55 +0800
-Subject: Re: [PATCH v3 1/3] KVM: x86/pmu: Disable guest PEBS on hybird cpu due
- to heterogeneity
-To:     Like Xu <like.xu.linux@gmail.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-CC:     <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-        "wanghaibin.wang@huawei.com" <wanghaibin.wang@huawei.com>,
-        Zenghui Yu <yuzenghui@huawei.com>
-References: <20221109082802.27543-1-likexu@tencent.com>
- <20221109082802.27543-2-likexu@tencent.com>
-From:   Kunkun Jiang <jiangkunkun@huawei.com>
-Message-ID: <16bb2874-c8c8-fb4e-c793-28605f36712b@huawei.com>
-Date:   Fri, 25 Nov 2022 18:18:54 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Fri, 25 Nov 2022 05:19:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C71F218B4;
+        Fri, 25 Nov 2022 02:19:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD79F62349;
+        Fri, 25 Nov 2022 10:19:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09032C433D6;
+        Fri, 25 Nov 2022 10:19:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669371579;
+        bh=wi1wajl/uQaonaWjdH3x87mG1xWYis5sdgMpB1P6VBQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=E4cr9iHDICE9SsxDGL/9CiVT1UOVGyWQ4OQfzc+Y5O0XoADgHg6A6o5tSPOviuUe/
+         RtfoTfYzYOBLh9WP92bGkdT9oFeBV3ADNNPARQE3tRORxYrx8+on/dXoJBeyC6BaBg
+         OPuYLTHQ1ZLCpieJH8qgkI49PaeYVplOEGBy2MVuVDSWcXmiu+qy4Arkwn4lxHGwwX
+         7THM2IgwOy6+d95VPW5rnD1cQ8ZTE9g8xyuuLFKTX04zis9ZLF+5L/dC63PafAhgZe
+         4+/EDF205WIZuHosU4jl7HIvWPKWT1U+jEpVPdfuLH+x9W54L1mcUdMHnEHSDOlfIi
+         XQPR8It5XbCrA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oyVnd-0002Wq-KI; Fri, 25 Nov 2022 11:19:14 +0100
+Date:   Fri, 25 Nov 2022 11:19:13 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Luca Weiss <luca.weiss@fairphone.com>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 1/3] dt-bindings: phy: qcom,qmp-usb3-dp: Add
+ sm6350 compatible
+Message-ID: <Y4CWoT52Q8jnm/dF@hovoldconsulting.com>
+References: <20221125092749.46073-1-luca.weiss@fairphone.com>
+ <Y4CP9fwhDXsLu57Q@hovoldconsulting.com>
+ <COLABNHBQ1DG.1PB8SDY3FW1YY@otso>
 MIME-Version: 1.0
-In-Reply-To: <20221109082802.27543-2-likexu@tencent.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Originating-IP: [10.174.185.210]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600007.china.huawei.com (7.193.23.208)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <COLABNHBQ1DG.1PB8SDY3FW1YY@otso>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Like,
+On Fri, Nov 25, 2022 at 10:55:31AM +0100, Luca Weiss wrote:
+> Hi Johan,
+> 
+> On Fri Nov 25, 2022 at 10:50 AM CET, Johan Hovold wrote:
+> > On Fri, Nov 25, 2022 at 10:27:47AM +0100, Luca Weiss wrote:
+> > > Add the compatible describing the combo phy found on SM6350.
+> > > 
+> > > Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> > > ---
+> > > @Johan Hovold, I've sent this v2 as RFC because there are several things
+> > > where I have questions on how it should be done.
+> > > 
+> > > In this patch, you can see there's cfg_ahb (&xo_board) and power-domains
+> > > is not set. In msm-4.19 &gcc_usb30_prim_gdsc is only used in the
+> > > ssusb@a600000 node, or should I also add it to qmpphy?
+> >
+> > Yeah, you may need to add a platform specific section of the clocks,
+> > which appear to be different, even if I'm not sure they are currently
+> > described correctly (xo_board as cfg_ahb and "QLINK" as ref). How are
+> > they named in the vendor's dts?
+> 
+> This is the msm-4.19 dts:
+> https://android.googlesource.com/kernel/msm-extra/devicetree/+/refs/heads/android-msm-bramble-4.19-android11-qpr1/qcom/lagoon-usb.dtsi#354
 
-There is a question I would like to ask. As far as I know, Alder Lake uses
-a hybrid architecture and the kernel presents two types of PMUs.Can the
-events created on the VCPU still count normally if the VCPU thread gets
-migrate across different CPUs?
+		clocks = <&gcc GCC_USB3_PRIM_PHY_AUX_CLK>,
+			<&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>,
+			<&rpmhcc RPMH_QLINK_CLK>,
+			<&gcc GCC_USB3_PRIM_CLKREF_CLK>,
+			<&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>;
+		clock-names = "aux_clk", "pipe_clk", "ref_clk_src",
+				"ref_clk", "com_aux_clk";
 
-As far as I know, ARM64 big.LITTLE is not working properly, according to
-this set of patches.
-[PATCH v4 0/6] KVM: arm64: Improve PMU support on heterogeneous systems
-https://lore.kernel.org/all/20220127161759.53553-1-alexandru.elisei@arm.com/
+So it looks like you don't need update the binding for the clocks as the
+above matches sc8280xp:
 
-Thanks，
-Kunkun Jiang
+	aux
+	ref
+	com_aux
+	usb3_pipe
 
-On 2022/11/9 16:28, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
->
-> >From vPMU enabling perspective, KVM does not have proper support for
-> hybird x86 core. The reported perf_capabilities value (e.g. the format
-> of pebs record) depends on the type of cpu the kvm-intel module is init.
-> When a vcpu of one pebs format migrates to a vcpu of another pebs format,
-> the incorrect parsing of pebs records by guest can make profiling data
-> analysis extremely problematic.
->
-> The safe way to fix this is to disable this part of the support until the
-> guest recognizes that it is running on the hybird cpu, which is appropriate
-> at the moment given that x86 hybrid architectures are not heavily touted
-> in the data center market.
->
-> Signed-off-by: Like Xu <likexu@tencent.com>
-> ---
->   arch/x86/kvm/vmx/capabilities.h | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/x86/kvm/vmx/capabilities.h b/arch/x86/kvm/vmx/capabilities.h
-> index cd2ac9536c99..ea0498684048 100644
-> --- a/arch/x86/kvm/vmx/capabilities.h
-> +++ b/arch/x86/kvm/vmx/capabilities.h
-> @@ -392,7 +392,9 @@ static inline bool vmx_pt_mode_is_host_guest(void)
->   
->   static inline bool vmx_pebs_supported(void)
->   {
-> -	return boot_cpu_has(X86_FEATURE_PEBS) && kvm_pmu_cap.pebs_ept;
-> +	return boot_cpu_has(X86_FEATURE_PEBS) &&
-> +	       !boot_cpu_has(X86_FEATURE_HYBRID_CPU) &&
-> +	       kvm_pmu_cap.pebs_ept;
->   }
->   
->   static inline bool cpu_has_notify_vmexit(void)
+Parent clocks (ref_clk_src) should not be included in the binding, but
+rather be handled by the clock driver. For example, see:
+
+	https://lore.kernel.org/all/20221121085058.31213-4-johan+linaro@kernel.org/
+	https://lore.kernel.org/all/20221115152956.21677-1-quic_shazhuss@quicinc.com/
+
+> > >  .../bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml          | 5 +++--
+> > >  1 file changed, 3 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
+> > > index 6f31693d9868..3e39e3e0504d 100644
+> > > --- a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
+> > > +++ b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
+> > > @@ -17,16 +17,18 @@ properties:
+> > >    compatible:
+> > >      enum:
+> > >        - qcom,sc8280xp-qmp-usb43dp-phy
+> > > +      - qcom,sm6350-qmp-usb3-dp-phy
+> > >  
+> > >    reg:
+> > >      maxItems: 1
+> > >  
+> > >    clocks:
+> > > -    maxItems: 4
+> > > +    maxItems: 5
+> > >  
+> > >    clock-names:
+> > >      items:
+> > >        - const: aux
+> > > +      - const: cfg_ahb
+> > >        - const: ref
+> > >        - const: com_aux
+> > >        - const: usb3_pipe
+> >
+> > So this would need to be moved to an allOf: construct at the end with
+> > one section each for sc8280xp and sm6350.
+> 
+> Ack.
+
+So no need to change this it seems.
+
+Johan
