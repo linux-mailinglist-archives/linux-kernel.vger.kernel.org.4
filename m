@@ -2,246 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E58B638F88
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 19:11:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B1B1638F8D
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 19:16:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbiKYSLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 13:11:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59158 "EHLO
+        id S229769AbiKYSQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 13:16:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbiKYSLj (ORCPT
+        with ESMTP id S229548AbiKYSQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 13:11:39 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661B231DD8;
-        Fri, 25 Nov 2022 10:11:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669399898; x=1700935898;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=McC2W34dBid4dm371TTlzsuWAfcvm6zxbkwy2w4MfyY=;
-  b=WSmbR24MaAt0GCv8LcZGk8g4N8kaMGPZ7RAOUHE4vDtUQbB2D97bUiR6
-   /mKHdJeC0hFgWgl/M0ebwJDN5uDRdIC1ZEiPTV36IocqwaL0ArR1X88Xf
-   D8VvV2Yi2cGitullCzTXCSgAeO3RN3MQs8iPEkPW78lsj4jiObX18Gm8c
-   paaDS3pn+XMi6b8IQ0B6ke4hFPwavklE3IYcz9NA+YOnPkPGa1fsghWV7
-   wCfTI6W6Ilt3sDmX3RKQJAd8tk5XAHV1AzjEuIkL4E77eVqjIxdzULE2R
-   elhehk5a221v/V7Q8tc4in8eA0u7uiNKyMXDn1m5oJ3I7KR9kJeij7S/t
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="341426385"
-X-IronPort-AV: E=Sophos;i="5.96,194,1665471600"; 
-   d="scan'208";a="341426385"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2022 10:11:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="642762583"
-X-IronPort-AV: E=Sophos;i="5.96,194,1665471600"; 
-   d="scan'208";a="642762583"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 25 Nov 2022 10:11:35 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 0E198F7; Fri, 25 Nov 2022 20:12:01 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH v1 2/2] gpiolib: Introduce gpio_device_get() and gpio_device_put()
-Date:   Fri, 25 Nov 2022 20:11:58 +0200
-Message-Id: <20221125181158.67265-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221125181158.67265-1-andriy.shevchenko@linux.intel.com>
-References: <20221125181158.67265-1-andriy.shevchenko@linux.intel.com>
-MIME-Version: 1.0
+        Fri, 25 Nov 2022 13:16:43 -0500
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01olkn2011.outbound.protection.outlook.com [40.92.52.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4377C46661;
+        Fri, 25 Nov 2022 10:16:42 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=W2wTgOSQMhXwJGfh05ZxfL+I4feFxOPqoWXyu7E+/Kphd6GB4VbEcda6zTXLX1OnHZoJhFS/qcw5DHWoxdT34Oe+mcJs+5CWXaX6wcY+gA/RhGGqMYogg8r9aR2GKkGpxrl//Ik4mA9yzYY4oXsa/EFKCMXgfVZNqpWE0I0f+VJtiwrgYqt6xS3odtSD/pZOWdMEkPwSUebQiIe+hMa3cGWA0RiElw7pFQsau5Nrxh72w33Hn6rF61KmnJ3kWqChilQnk+aeeAsvLSJ9gha4ZtdMKyAIQsyY1MIuOsvswSkXzBIRkpTM7MjQeza6M5IThWbO4AovBc3HbXjt65e8AA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dkhulgFWMag46CUFZdywor7NYq29QizZEqjmAbphHh0=;
+ b=KgHzcDZXO3PX9Nzr/Cb1TPDTzWlFC5CEjJ3l5fUtqhDdYdTkYpnU+92Tp6xRpPspL9GWWtTAUE9v2DXsjWmjdqHob+QqABn0sqGXZzZC5eVjolc4KEkRmYv9d8mTgPqntY9JJ8g7mxdCYqk6koK5+IWRX9nhWT0kxB3IvcGS79U5pJw8Vua+NYpH/kSv701tbIgXtWJ+RwK/CKl6a4x6nxBOGVKwEYkMLOErkKfSnVlJDB+Ww2GkufRXfuR48Mqv68GUUjY4T5Brz9D+MV27f4yZiD5coKVJvdC/BBcwCMe09EQ3gkF+KqW37Sc050y4jGDcXTDN6woGRVavAYN/kg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dkhulgFWMag46CUFZdywor7NYq29QizZEqjmAbphHh0=;
+ b=XY1tFWBLiNc9RrEcV8CNy+OjJTlxOSxRWg28Pa+kL1oQhIyd8qedDRsg45wyQ5loY4CVQnT/Dd5ZA8R9ih78nE5uV7vP2Qv4OVztTBhJ0WioBssG0081aFF9cegIuxdxZLykcJHK9e1YFnS1xowhzDRo/JYUWw/CNNXGo0Iegavr038uIGl5sdvAkH5HLoXFmVVVn2VxytG3R0UL4hYiTECjP92droOMCY547oVUIprSSL+nUqd83QoD3kmds1ktyUZxh0f3f6ewGD19dPQwLGKkuftk/sTBOcBU/Wctkv/7KaWNyPQykFx4BZ92vFMudPQCVrqdTP+j4sDftADPEA==
+Received: from HK0PR01MB2801.apcprd01.prod.exchangelabs.com
+ (2603:1096:203:95::22) by SG2PR01MB4592.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:1b9::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.20; Fri, 25 Nov
+ 2022 18:16:39 +0000
+Received: from HK0PR01MB2801.apcprd01.prod.exchangelabs.com
+ ([fe80::483e:25f7:b655:9528]) by HK0PR01MB2801.apcprd01.prod.exchangelabs.com
+ ([fe80::483e:25f7:b655:9528%6]) with mapi id 15.20.5813.020; Fri, 25 Nov 2022
+ 18:16:39 +0000
+From:   Kushagra Verma <kushagra765@outlook.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH v2] fs: namei: fix two excess parameter description warnings
+Date:   Fri, 25 Nov 2022 23:46:03 +0530
+Message-ID: <HK0PR01MB2801A4C374BC28C8C98BA7EDF80E9@HK0PR01MB2801.apcprd01.prod.exchangelabs.com>
+X-Mailer: git-send-email 2.38.1
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-TMN:  [dGCkUfoRhom+QGa+ruXvgVKYsVCxbTednEwtO3KH0axzMCTrk1plPqoAaFoUkLPj]
+X-ClientProxiedBy: PN2PR01CA0024.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:25::29) To HK0PR01MB2801.apcprd01.prod.exchangelabs.com
+ (2603:1096:203:95::22)
+X-Microsoft-Original-Message-ID: <20221125181603.5867-1-kushagra765@outlook.com>
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: HK0PR01MB2801:EE_|SG2PR01MB4592:EE_
+X-MS-Office365-Filtering-Correlation-Id: a5902b06-f50d-40fa-4228-08dacf1131e5
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: auP6k2xFn6DodtXPi51zTW/o7+BR3Rz7hodJJQaD8skWZWjrjjLFMWZYjBpqese9a8EYxxqjPwCMiSOfOj316TztLlN5IrUHa97gRTGTiV7b7045TkMcCLHAqXITq1dAKeyV2Fbk9cZWRopS7EfFsgAHvYkKZ6t/ABG5FH73sqg9zWKjWMN4QyCJChORJGe9g2LBAZP+YniAtodqn5j+Ezy14MzMTOztmKBeEtpZ+3yEh79wTMRIN8sGRp6PQRlMartqIeMqaRfedvIBoLUhL9dDY+x8rdO0MdiwD9C5fRO7qhAIyF1subV8EuxWywIJB8GjNqfzvDfB8SUnLE/pCds2oSwKBzxgSwx+w4bfPqBzxKtIujUSM0TihF0dtkoU52YXwoTJqGdMeE+ih3MOykvUKu0oSM1KzHNxnJ3n0C4ZBM2gzng84t/qYlt9eqtecX2egNTHDIsJdKEqtYtCwzA7DupJd5TufxSPfXa/IhJk5b281yNq0EbhWy60q/l0oEMXjD1DqKNqBGtx9XnaSxyujQJhQL37zHS5tThOAS3qccY5P/7DkY8tKCWuaSMG65jGLAMiV/38hWqOxyivwAMtbu6x1BA43QUWXD4bP0g=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?81DZsak7yVWBWzHpRhMmWHj8PDknEcteKKCpQEORdfRj3q+SdDItjkNlk0IL?=
+ =?us-ascii?Q?oQ2fj9fCM05EPF+8J8bTrCMKMmeluwbaCwkLDW5RXRwZPac5lACOnE+5U4jf?=
+ =?us-ascii?Q?5EZaWRVsF1G6kyt4a+/YOfS3F9bRcH9/TPYDXwKlC1SJIJrmUYDyBXF7h0yN?=
+ =?us-ascii?Q?fRZby+kxtbcBRC9EfGpQMZPG+EXbKs8q7qVB21Xz0VQ8ank4x/SPrf4akm3u?=
+ =?us-ascii?Q?Rapl3oa314Yl3vQdfpmp8bZ/i7QcSoWLbvr7apmoGtg3ERFHuvZGXWi4yRRp?=
+ =?us-ascii?Q?RjDeahdBJ+d9vQtqxWBw8zNvdWi/Xu4Fo0iLWWwVFF8fXXGK6gXgCjIafm/P?=
+ =?us-ascii?Q?JhAKXUdMTAvB5XKiL945UXiw+z5Gl4AVC6dxPmDOOzit6cp6shbR8P2WG2rR?=
+ =?us-ascii?Q?P4oJFvD0Jag+tp7L1QNzSnxBkZSfV5juCvJtGJi7zHm2AQG75g9u9U0SJvnJ?=
+ =?us-ascii?Q?Ncf6COXBIdu5dyThaAsjpOftRrnd2WHbOQpYPrlsXYrjbiVXMFp2vsl0b6WK?=
+ =?us-ascii?Q?cuy3D6kIO1Bqg8PkPHJIKYpAKUqtwUHH0SJM5wjyk7E9yYK8ZxJQ6bb5G1cF?=
+ =?us-ascii?Q?EEiCzG3jvX2jmbkvajsMddfmIDr/51zVBo7Nl7nCWKjHg6ffkCeS+0U0Xh33?=
+ =?us-ascii?Q?sXXlZwIUhqfMNfajiri/DB6A7UkrcxBGniO1oSJxJV79ufQQUsp/K4+cOweO?=
+ =?us-ascii?Q?UJJJ7soXtTCfhkL359XqfOSJHsKb2zIJSFFPtXvdCEF8OiyoeQ46AoqLFRa/?=
+ =?us-ascii?Q?sHR/tNXxi+WACHCZOMFnQpaYEiXM/xNh8gBu/WwU62JwOuRAXuM10tqRShyK?=
+ =?us-ascii?Q?C8We3hKsjfIETSbuuYhtPJEHVMhpsKXxaLCSMUpIOLKvYH9lP6bl6j20BCsX?=
+ =?us-ascii?Q?uY8Kp+vM6+WAVffGZ7YfYk6jpAvxMdbS/a7A48S/DkVxNsMwGOv9tatMlBGp?=
+ =?us-ascii?Q?kVgNz2OZrsJtwAXbfrJ5SHyDmFF+pLYOXmklqoqaodf8tkms1ySxPbTN43cw?=
+ =?us-ascii?Q?mcK/ZsmO7MJIHwoqh1+CB6FGzoTcxLwe4/MdswAuJ2evDfonOcHFIQWk1wGD?=
+ =?us-ascii?Q?glNA5ekFHEuvYfG1S721xczOrt/XPZhLNBb8aWmFQyjo7Zu893eISa38g6kh?=
+ =?us-ascii?Q?fThJbFkYGm1pGFW+Vgu0HX4j6nxg6Oo3aTksAC9dgm3yEXQAfodiq1qXBhyp?=
+ =?us-ascii?Q?vuu0aA+RbGdo7+LIYOhZProz+Z/jXGGkzu4lmnIcSYp8KIWwH7D71ppLhd/k?=
+ =?us-ascii?Q?ziGNJ7PUo2QkjAmz2ov4V4iStIe2AXGwJwTrarZ79khaLcss1gNkYKVuh4S2?=
+ =?us-ascii?Q?29w2sAEh7Uy5xaqbFb96AHUTH69IlerRcy38zYsPYUqbNg=3D=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a5902b06-f50d-40fa-4228-08dacf1131e5
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR01MB2801.apcprd01.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2022 18:16:39.0785
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR01MB4592
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce gpio_device_get() and gpio_device_put() helpers
-and convert existing users.
+While building the kernel documentation, two excess parameter description
+warnings appear:
+	./fs/namei.c:3589: warning: Excess function parameter 'dentry'
+	description in 'vfs_tmpfile'
+	./fs/namei.c:3589: warning: Excess function parameter 'open_flag'
+	description in 'vfs_tmpfile'
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Fix these warnings by changing 'dentry' to 'parentpath' in the parameter
+description and 'open_flag' to 'file' and change 'file' parameter's
+description accordingly.
+
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Kushagra Verma <kushagra765@outlook.com>
 ---
- drivers/gpio/gpiolib-cdev.c | 21 +++++++++------------
- drivers/gpio/gpiolib.c      | 14 ++++++--------
- drivers/gpio/gpiolib.h      | 10 ++++++++++
- 3 files changed, 25 insertions(+), 20 deletions(-)
+v1 -> v2: Add Randy Dunlap's Tested-by tag
 
-diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
-index f9288e41e3a7..acfb779767ed 100644
---- a/drivers/gpio/gpiolib-cdev.c
-+++ b/drivers/gpio/gpiolib-cdev.c
-@@ -265,7 +265,7 @@ static void linehandle_free(struct linehandle_state *lh)
- 		if (lh->descs[i])
- 			gpiod_free(lh->descs[i]);
- 	kfree(lh->label);
--	put_device(&lh->gdev->dev);
-+	gpio_device_put(lh->gdev);
- 	kfree(lh);
- }
- 
-@@ -307,8 +307,7 @@ static int linehandle_create(struct gpio_device *gdev, void __user *ip)
- 	lh = kzalloc(sizeof(*lh), GFP_KERNEL);
- 	if (!lh)
- 		return -ENOMEM;
--	lh->gdev = gdev;
--	get_device(&gdev->dev);
-+	lh->gdev = gpio_device_get(gdev);
- 
- 	if (handlereq.consumer_label[0] != '\0') {
- 		/* label is only initialized if consumer_label is set */
-@@ -1480,7 +1479,7 @@ static void linereq_free(struct linereq *lr)
- 	}
- 	kfifo_free(&lr->events);
- 	kfree(lr->label);
--	put_device(&lr->gdev->dev);
-+	gpio_device_put(lr->gdev);
- 	kfree(lr);
- }
- 
-@@ -1550,8 +1549,7 @@ static int linereq_create(struct gpio_device *gdev, void __user *ip)
- 	if (!lr)
- 		return -ENOMEM;
- 
--	lr->gdev = gdev;
--	get_device(&gdev->dev);
-+	lr->gdev = gpio_device_get(gdev);
- 
- 	for (i = 0; i < ulr.num_lines; i++) {
- 		lr->lines[i].req = lr;
-@@ -1799,7 +1797,7 @@ static void lineevent_free(struct lineevent_state *le)
- 	if (le->desc)
- 		gpiod_free(le->desc);
- 	kfree(le->label);
--	put_device(&le->gdev->dev);
-+	gpio_device_put(le->gdev);
- 	kfree(le);
- }
- 
-@@ -1965,8 +1963,7 @@ static int lineevent_create(struct gpio_device *gdev, void __user *ip)
- 	le = kzalloc(sizeof(*le), GFP_KERNEL);
- 	if (!le)
- 		return -ENOMEM;
--	le->gdev = gdev;
--	get_device(&gdev->dev);
-+	le->gdev = gpio_device_get(gdev);
- 
- 	if (eventreq.consumer_label[0] != '\0') {
- 		/* label is only initialized if consumer_label is set */
-@@ -2514,7 +2511,7 @@ static int gpio_chrdev_open(struct inode *inode, struct file *file)
- 
- 	init_waitqueue_head(&cdev->wait);
- 	INIT_KFIFO(cdev->events);
--	cdev->gdev = gdev;
-+	cdev->gdev = gpio_device_get(gdev);
- 
- 	cdev->lineinfo_changed_nb.notifier_call = lineinfo_changed_notify;
- 	ret = blocking_notifier_chain_register(&gdev->notifier,
-@@ -2522,7 +2519,6 @@ static int gpio_chrdev_open(struct inode *inode, struct file *file)
- 	if (ret)
- 		goto out_free_bitmap;
- 
--	get_device(&gdev->dev);
- 	file->private_data = cdev;
- 
- 	ret = nonseekable_open(inode, file);
-@@ -2535,6 +2531,7 @@ static int gpio_chrdev_open(struct inode *inode, struct file *file)
- 	blocking_notifier_chain_unregister(&gdev->notifier,
- 					   &cdev->lineinfo_changed_nb);
- out_free_bitmap:
-+	gpio_device_put(gdev);
- 	bitmap_free(cdev->watched_lines);
- out_free_cdev:
- 	kfree(cdev);
-@@ -2555,7 +2552,7 @@ static int gpio_chrdev_release(struct inode *inode, struct file *file)
- 	bitmap_free(cdev->watched_lines);
- 	blocking_notifier_chain_unregister(&gdev->notifier,
- 					   &cdev->lineinfo_changed_nb);
--	put_device(&gdev->dev);
-+	gpio_device_put(gdev);
- 	kfree(cdev);
- 
- 	return 0;
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index 9b935288db9d..52a1b03987dc 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -874,7 +874,7 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
- 	gpiochip_free_valid_mask(gc);
- 	if (gdev->dev.release) {
- 		/* release() has been registered by gpiochip_setup_dev() */
--		put_device(&gdev->dev);
-+		gpio_device_put(gdev);
- 		goto err_print_message;
- 	}
- err_remove_from_list:
-@@ -961,7 +961,7 @@ void gpiochip_remove(struct gpio_chip *gc)
- 	 * gone.
- 	 */
- 	gcdev_unregister(gdev);
--	put_device(&gdev->dev);
-+	gpio_device_put(gdev);
- }
- EXPORT_SYMBOL_GPL(gpiochip_remove);
- 
-@@ -2052,17 +2052,15 @@ static int validate_desc(const struct gpio_desc *desc, const char *func)
- int gpiod_request(struct gpio_desc *desc, const char *label)
- {
- 	int ret = -EPROBE_DEFER;
--	struct gpio_device *gdev;
- 
- 	VALIDATE_DESC(desc);
--	gdev = desc->gdev;
- 
--	if (try_module_get(gdev->owner)) {
-+	if (try_module_get(desc->gdev->owner)) {
- 		ret = gpiod_request_commit(desc, label);
- 		if (ret)
--			module_put(gdev->owner);
-+			module_put(desc->gdev->owner);
- 		else
--			get_device(&gdev->dev);
-+			gpio_device_get(desc->gdev);
- 	}
- 
- 	if (ret)
-@@ -2123,7 +2121,7 @@ void gpiod_free(struct gpio_desc *desc)
- {
- 	if (desc && desc->gdev && gpiod_free_commit(desc)) {
- 		module_put(desc->gdev->owner);
--		put_device(&desc->gdev->dev);
-+		gpio_device_put(desc->gdev);
- 	} else {
- 		WARN_ON(extra_checks);
- 	}
-diff --git a/drivers/gpio/gpiolib.h b/drivers/gpio/gpiolib.h
-index 027674025561..13b2c02ec328 100644
---- a/drivers/gpio/gpiolib.h
-+++ b/drivers/gpio/gpiolib.h
-@@ -74,6 +74,16 @@ struct gpio_device {
- 
- #define to_gpio_device(_dev_)	container_of(_dev_, struct gpio_device, dev)
- 
-+static inline struct gpio_device *gpio_device_get(struct gpio_device *gdev)
-+{
-+	return to_gpio_device(get_device(&gdev->dev));
-+}
-+
-+static inline void gpio_device_put(struct gpio_device *gdev)
-+{
-+	put_device(&gdev->dev);
-+}
-+
- /* gpio suffixes used for ACPI and device tree lookup */
- static __maybe_unused const char * const gpio_suffixes[] = { "gpios", "gpio" };
- 
+ fs/namei.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/fs/namei.c b/fs/namei.c
+index 578c2110df02..8e77e194fed5 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -3571,9 +3571,9 @@ static int do_open(struct nameidata *nd,
+ /**
+  * vfs_tmpfile - create tmpfile
+  * @mnt_userns:	user namespace of the mount the inode was found from
+- * @dentry:	pointer to dentry of the base directory
++ * @parentpath:	pointer to dentry of the base directory
+  * @mode:	mode of the new tmpfile
+- * @open_flag:	flags
++ * @file:	file information
+  *
+  * Create a temporary file.
+  *
 -- 
-2.35.1
+2.38.1
 
