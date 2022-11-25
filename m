@@ -2,235 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82862638FFB
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 19:38:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27626639008
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 19:44:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbiKYSio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 13:38:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51220 "EHLO
+        id S229717AbiKYSoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 13:44:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiKYSim (ORCPT
+        with ESMTP id S229570AbiKYSoH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 13:38:42 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AEF612628
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 10:38:42 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id c140so6008570ybf.11
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 10:38:42 -0800 (PST)
+        Fri, 25 Nov 2022 13:44:07 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD3745ECC
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 10:44:05 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id p12so4704489plq.4
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 10:44:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=R113yfqtwbqC0ITDeGvhSNa3zHrb/nkgAVqOtFCA4Qc=;
-        b=sS359yY7pQIaB3NIMVHYcqDqWmEn/ZMyYfc7T6oA3VOjJmqn0ykiDIAFmwHIQSbsLQ
-         SwBMwRnZhBCbXGg6szCpfHmDgxIEcskbbt0mPR6iR10Lm8nOmVRFbaaGEpADctbzhWX7
-         fPe0fWjas4DFr8/jjVLoxV6jKNqu62BAu3ItCwKWCUpG4SZvIJExxAKMtYoF3/lTTibB
-         wtCyMudC0RoYxPe2jfPlNOdYXLMVwnasC9E0dZJpO6P7XJIkWmnvWU/WvCispvu5W9wV
-         J3BwUkORUs03UIenFoYtgGx+XVyBQFc0F2NrmWWLOlFOUKkSTmiql4z9rE5LNMxJQJmf
-         by+Q==
+        bh=YFUcQ3hLuxafQYtxQnWs87DdE99a3mWHbnJqXUnaU40=;
+        b=wJNS50eWgo70qBzwRJ/eacnPCkagYxdtrqNdFD4nfBt0ByVzB1jHs4I5dSd7W/hRlV
+         XLAEIcyFK1c0YL3L1oqAuONU+7aF5NIHAIWAFc/UoPvh8fGWv8DU+nDyugqquQphVyvy
+         mZABavgj6fEQ9KleIjLsKS88R8uRtrMJPlde1PWmnrp1JLlbdjF12SwrSyZN0pRoGlrv
+         /Os3aKcXhKKm91745O+g/S8vJk9t8X2eCEWZ6Rfxvjdgw3BhUKoKF0v8KOm8HFZZNMFU
+         1Cce1lG+UBgDXqirKs4LEddhvaXFYG+kvCfyImLrnlMPxeu1GvJASeqKrpq/mYrOI6iR
+         MUqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=R113yfqtwbqC0ITDeGvhSNa3zHrb/nkgAVqOtFCA4Qc=;
-        b=5NfKZhO5W8xtGb3Isut/R08Zfc0O/2R8p4WXEoQr7TDCqO5BiDPT3sdutJWEDHRnc1
-         BC6JtkzNdgJYnEwBC5zZH2wA9IxM1r8QEqRfu5QhriOjjbjDkDOXAqRwkXsgITVpwj2O
-         q74p5HWexQ3+BUMFgtg8XD3lK+0SqTcYNXkH0oSFgV2JfxKmENU6VvSl4C9sravkQ/78
-         bUQn0G9JYyq/UA2c+UcC62TVstj3CvTgscI95ej/r9X/w+Eun7nksvMl03nfNHt+Qfyw
-         h+/VkhkW1+mqvbpF6g+b1DOH9qEhzxjXI0ZPWiqie2k6uM6mIiU92OtIgICa1tQC5ZtU
-         F/kw==
-X-Gm-Message-State: ANoB5pmmoAJYkKDiUcw5CRH/hs3ExSIhJSqkNP2Ey8uId1UBavp4/pmi
-        ycIS+BAjGKoYxY+EaQplODM3uOdftuEleH2Ugfizgw==
-X-Google-Smtp-Source: AA0mqf5AXflwQEOLKlJmJazpNyHLivko8S4A9tyMg119AsSvYjt/IFoUuaE2j1mVksysNrm0lltNF3qJhF/EdhJtEFs=
-X-Received: by 2002:a25:7408:0:b0:6f2:49a7:38ef with SMTP id
- p8-20020a257408000000b006f249a738efmr6331877ybc.365.1669401521064; Fri, 25
- Nov 2022 10:38:41 -0800 (PST)
+        bh=YFUcQ3hLuxafQYtxQnWs87DdE99a3mWHbnJqXUnaU40=;
+        b=z4SqZ1c0LySSAKu+caqE9VA9Cjo3KH3vbIQBY5L5rH+1mxSMFfuLkMbjnEK4/m8V5y
+         /7Ekl0W2+soslOxHJ1DJ3BRujXWw3X0VqY/0CLYjLkXsyG9zjm5F8n1IInBFxVstzFsS
+         b5sMbqKlFCpuLMXbin340LWLVrqjwtUtFfZhuO4BevAnvR3S7rJH93hGnLboLl+rKysg
+         3go/HW/GgEcbemx3WsbimKz/eVzJLq9yF/yAqlKolNnh23CwXnNEnRy6j30YN2kPCrqz
+         vho77UFT+vKqj00yjkz8iNmIXUliwDtbNQxe459HbudcpCgy8o3wbSLIduG+hIK1NkuJ
+         ijHg==
+X-Gm-Message-State: ANoB5pmZJ05WZPMQliGCT2M3Fae4HXKqYukphUaXNL8+clSoiIMcmumh
+        ZUYJF2B8y+ZTs86OvROh3SwPgg==
+X-Google-Smtp-Source: AA0mqf7dGVW4MXOGlUxRKNCXMQzyzk240b9VEqd1QcNaooVXqjFTk78T7hsrfzGxsU2Jndumrs3gNA==
+X-Received: by 2002:a17:90a:c006:b0:219:158d:b19a with SMTP id p6-20020a17090ac00600b00219158db19amr2114270pjt.152.1669401844720;
+        Fri, 25 Nov 2022 10:44:04 -0800 (PST)
+Received: from hermes.local (204-195-120-218.wavecable.com. [204.195.120.218])
+        by smtp.gmail.com with ESMTPSA id x13-20020aa79a4d000000b0056ba7cda4b5sm3522287pfj.16.2022.11.25.10.44.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Nov 2022 10:44:04 -0800 (PST)
+Date:   Fri, 25 Nov 2022 10:44:01 -0800
+From:   Stephen Hemminger <stephen@networkplumber.org>
+To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        <netdev@vger.kernel.org>, "David S. Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        "Giuseppe Cavallaro" <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "Maxime Coquelin" <mcoquelin.stm32@gmail.com>,
+        Yang Yang <yang.yang29@zte.com>,
+        "Xu Panda" <xu.panda@zte.com.cn>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next] Revert "net: stmmac: use sysfs_streq() instead
+ of strncmp()"
+Message-ID: <20221125104401.0e18979f@hermes.local>
+In-Reply-To: <Y4Ct37sV+/y9rcly@boxer>
+References: <20221125105304.3012153-1-vladimir.oltean@nxp.com>
+        <Y4Ct37sV+/y9rcly@boxer>
 MIME-Version: 1.0
-References: <20221123193519.3948105-1-tjmercier@google.com>
- <260a86f0-057e-e235-ac38-abeb922d0dc1@amd.com> <Y38z6A5IF/BlXVPp@phenom.ffwll.local>
- <63972059-1c23-ceb9-841c-1cfee29a1c77@gmail.com>
-In-Reply-To: <63972059-1c23-ceb9-841c-1cfee29a1c77@gmail.com>
-From:   "T.J. Mercier" <tjmercier@google.com>
-Date:   Fri, 25 Nov 2022 10:38:30 -0800
-Message-ID: <CABdmKX2QvW_7qDeosxES4jLsTDPUWS-Qphj4FaJUsqDeVQbf9A@mail.gmail.com>
-Subject: Re: [Linaro-mm-sig] Re: [PATCH] dma-buf: A collection of typo and
- documentation fixes
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
-Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 1:43 AM Christian K=C3=B6nig
-<ckoenig.leichtzumerken@gmail.com> wrote:
->
-> Am 24.11.22 um 10:05 schrieb Daniel Vetter:
-> > On Thu, Nov 24, 2022 at 08:03:09AM +0100, Christian K=C3=B6nig wrote:
-> >> Am 23.11.22 um 20:35 schrieb T.J. Mercier:
-> >>> I've been collecting these typo fixes for a while and it feels like
-> >>> time to send them in.
-> >>>
-> >>> Signed-off-by: T.J. Mercier <tjmercier@google.com>
-> >> Acked-by: Christian K=C3=B6nig <christian.koenig@amd.com>
-> > Will you also push this? I think tj doesn't have commit rights yet, and=
- I
-> > somehow can't see the patch locally (I guess it's stuck in moderation).
->
-> I was just about to complain that this doesn't apply cleanly to
-> drm-misc-next.
->
-> Trivial problem, one of the typos was just removed by Dimitry a few
-> weeks ago.
->
-> I've fixed that up locally and pushed the result, but nevertheless
-> please make sure that DMA-buf patches are based on the drm branches.
->
-I'm sorry, this was on top of a random spot in Linus's 6.1-rc5.
-(84368d882b96 Merge tag 'soc-fixes-6.1-3') I'm not sure why I did
-that, but I suspect it was after a fresh git pull. I have too many
-repos.
+On Fri, 25 Nov 2022 12:58:23 +0100
+Maciej Fijalkowski <maciej.fijalkowski@intel.com> wrote:
 
-Thanks all for the reviews.
+> On Fri, Nov 25, 2022 at 12:53:04PM +0200, Vladimir Oltean wrote:
+> > This reverts commit f72cd76b05ea1ce9258484e8127932d0ea928f22.
+> > This patch is so broken, it hurts. Apparently no one reviewed it and it
+> > passed the build testing (because the code was compiled out), but it was
+> > obviously never compile-tested, since it produces the following build
+> > error, due to an incomplete conversion where an extra argument was left,
+> > although the function being called was left:
+> >=20
+> > stmmac_main.c: In function =E2=80=98stmmac_cmdline_opt=E2=80=99:
+> > stmmac_main.c:7586:28: error: too many arguments to function =E2=80=98s=
+ysfs_streq=E2=80=99
+> >  7586 |                 } else if (sysfs_streq(opt, "pause:", 6)) {
+> >       |                            ^~~~~~~~~~~
+> > In file included from ../include/linux/bitmap.h:11,
+> >                  from ../include/linux/cpumask.h:12,
+> >                  from ../include/linux/smp.h:13,
+> >                  from ../include/linux/lockdep.h:14,
+> >                  from ../include/linux/mutex.h:17,
+> >                  from ../include/linux/notifier.h:14,
+> >                  from ../include/linux/clk.h:14,
+> >                  from ../drivers/net/ethernet/stmicro/stmmac/stmmac_mai=
+n.c:17:
+> > ../include/linux/string.h:185:13: note: declared here
+> >   185 | extern bool sysfs_streq(const char *s1, const char *s2);
+> >       |             ^~~~~~~~~~~
+> >=20
+> > What's even worse is that the patch is flat out wrong. The stmmac_cmdli=
+ne_opt()
+> > function does not parse sysfs input, but cmdline input such as
+> > "stmmaceth=3Dtc:1,pause:1". The pattern of using strsep() followed by
+> > strncmp() for such strings is not unique to stmmac, it can also be found
+> > mainly in drivers under drivers/video/fbdev/.
+> >=20
+> > With strncmp("tc:", 3), the code matches on the "tc:1" token properly.
+> > With sysfs_streq("tc:"), it doesn't.
+> >=20
+> > Fixes: f72cd76b05ea ("net: stmmac: use sysfs_streq() instead of strncmp=
+()")
+> > Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com> =20
+>=20
+> Ah the infamous string handling in C...
+>=20
+> Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+>=20
+> Even when there would be no build error I agree that we should have kept
+> the code as it was.
+>=20
+> > ---
+> >  .../net/ethernet/stmicro/stmmac/stmmac_main.c  | 18 +++++++++---------
+> >  1 file changed, 9 insertions(+), 9 deletions(-)
+> >=20
+> > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/driver=
+s/net/ethernet/stmicro/stmmac/stmmac_main.c
+> > index 1a86e66e4560..3affb7d3a005 100644
+> > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> > @@ -7565,31 +7565,31 @@ static int __init stmmac_cmdline_opt(char *str)
+> >  	if (!str || !*str)
+> >  		return 1;
+> >  	while ((opt =3D strsep(&str, ",")) !=3D NULL) {
+> > -		if (sysfs_streq(opt, "debug:")) {
+> > +		if (!strncmp(opt, "debug:", 6)) {
+> >  			if (kstrtoint(opt + 6, 0, &debug))
+> >  				goto err;
+> > -		} else if (sysfs_streq(opt, "phyaddr:")) {
+> > +		} else if (!strncmp(opt, "phyaddr:", 8)) {
+> >  			if (kstrtoint(opt + 8, 0, &phyaddr))
+> >  				goto err;
+> > -		} else if (sysfs_streq(opt, "buf_sz:")) {
+> > +		} else if (!strncmp(opt, "buf_sz:", 7)) {
+> >  			if (kstrtoint(opt + 7, 0, &buf_sz))
+> >  				goto err;
+> > -		} else if (sysfs_streq(opt, "tc:")) {
+> > +		} else if (!strncmp(opt, "tc:", 3)) {
+> >  			if (kstrtoint(opt + 3, 0, &tc))
+> >  				goto err;
+> > -		} else if (sysfs_streq(opt, "watchdog:")) {
+> > +		} else if (!strncmp(opt, "watchdog:", 9)) {
+> >  			if (kstrtoint(opt + 9, 0, &watchdog))
+> >  				goto err;
+> > -		} else if (sysfs_streq(opt, "flow_ctrl:")) {
+> > +		} else if (!strncmp(opt, "flow_ctrl:", 10)) {
+> >  			if (kstrtoint(opt + 10, 0, &flow_ctrl))
+> >  				goto err;
+> > -		} else if (sysfs_streq(opt, "pause:", 6)) {
+> > +		} else if (!strncmp(opt, "pause:", 6)) {
+> >  			if (kstrtoint(opt + 6, 0, &pause))
+> >  				goto err;
+> > -		} else if (sysfs_streq(opt, "eee_timer:")) {
+> > +		} else if (!strncmp(opt, "eee_timer:", 10)) {
+> >  			if (kstrtoint(opt + 10, 0, &eee_timer))
+> >  				goto err;
+> > -		} else if (sysfs_streq(opt, "chain_mode:")) {
+> > +		} else if (!strncmp(opt, "chain_mode:", 11)) {
+> >  			if (kstrtoint(opt + 11, 0, &chain_mode))
+> >  				goto err;
+> >  		}
+> > --=20
+> > 2.34.1
+> >  =20
 
-> Thanks,
-> Christian.
->
-> > -Daniel
-> >
-> >>> ---
-> >>>    drivers/dma-buf/dma-buf.c | 14 +++++++-------
-> >>>    include/linux/dma-buf.h   |  6 +++---
-> >>>    2 files changed, 10 insertions(+), 10 deletions(-)
-> >>>
-> >>> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-> >>> index dd0f83ee505b..614ccd208af4 100644
-> >>> --- a/drivers/dma-buf/dma-buf.c
-> >>> +++ b/drivers/dma-buf/dma-buf.c
-> >>> @@ -1141,7 +1141,7 @@ EXPORT_SYMBOL_NS_GPL(dma_buf_unmap_attachment, =
-DMA_BUF);
-> >>>     *
-> >>>     * @dmabuf:      [in]    buffer which is moving
-> >>>     *
-> >>> - * Informs all attachmenst that they need to destroy and recreated a=
-ll their
-> >>> + * Informs all attachments that they need to destroy and recreate al=
-l their
-> >>>     * mappings.
-> >>>     */
-> >>>    void dma_buf_move_notify(struct dma_buf *dmabuf)
-> >>> @@ -1159,11 +1159,11 @@ EXPORT_SYMBOL_NS_GPL(dma_buf_move_notify, DMA=
-_BUF);
-> >>>    /**
-> >>>     * DOC: cpu access
-> >>>     *
-> >>> - * There are mutliple reasons for supporting CPU access to a dma buf=
-fer object:
-> >>> + * There are multiple reasons for supporting CPU access to a dma buf=
-fer object:
-> >>>     *
-> >>>     * - Fallback operations in the kernel, for example when a device =
-is connected
-> >>>     *   over USB and the kernel needs to shuffle the data around firs=
-t before
-> >>> - *   sending it away. Cache coherency is handled by braketing any tr=
-ansactions
-> >>> + *   sending it away. Cache coherency is handled by bracketing any t=
-ransactions
-> >>>     *   with calls to dma_buf_begin_cpu_access() and dma_buf_end_cpu_=
-access()
-> >>>     *   access.
-> >>>     *
-> >>> @@ -1190,7 +1190,7 @@ EXPORT_SYMBOL_NS_GPL(dma_buf_move_notify, DMA_B=
-UF);
-> >>>     *   replace ION buffers mmap support was needed.
-> >>>     *
-> >>>     *   There is no special interfaces, userspace simply calls mmap o=
-n the dma-buf
-> >>> - *   fd. But like for CPU access there's a need to braket the actual=
- access,
-> >>> + *   fd. But like for CPU access there's a need to bracket the actua=
-l access,
-> >>>     *   which is handled by the ioctl (DMA_BUF_IOCTL_SYNC). Note that
-> >>>     *   DMA_BUF_IOCTL_SYNC can fail with -EAGAIN or -EINTR, in which =
-case it must
-> >>>     *   be restarted.
-> >>> @@ -1264,10 +1264,10 @@ static int __dma_buf_begin_cpu_access(struct =
-dma_buf *dmabuf,
-> >>>     * preparations. Coherency is only guaranteed in the specified ran=
-ge for the
-> >>>     * specified access direction.
-> >>>     * @dmabuf:      [in]    buffer to prepare cpu access for.
-> >>> - * @direction:     [in]    length of range for cpu access.
-> >>> + * @direction:     [in]    direction of access.
-> >>>     *
-> >>>     * After the cpu access is complete the caller should call
-> >>> - * dma_buf_end_cpu_access(). Only when cpu access is braketed by bot=
-h calls is
-> >>> + * dma_buf_end_cpu_access(). Only when cpu access is bracketed by bo=
-th calls is
-> >>>     * it guaranteed to be coherent with other DMA access.
-> >>>     *
-> >>>     * This function will also wait for any DMA transactions tracked t=
-hrough
-> >>> @@ -1307,7 +1307,7 @@ EXPORT_SYMBOL_NS_GPL(dma_buf_begin_cpu_access, =
-DMA_BUF);
-> >>>     * actions. Coherency is only guaranteed in the specified range fo=
-r the
-> >>>     * specified access direction.
-> >>>     * @dmabuf:      [in]    buffer to complete cpu access for.
-> >>> - * @direction:     [in]    length of range for cpu access.
-> >>> + * @direction:     [in]    direction of access.
-> >>>     *
-> >>>     * This terminates CPU access started with dma_buf_begin_cpu_acces=
-s().
-> >>>     *
-> >>> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-> >>> index 71731796c8c3..1d61a4f6db35 100644
-> >>> --- a/include/linux/dma-buf.h
-> >>> +++ b/include/linux/dma-buf.h
-> >>> @@ -330,7 +330,7 @@ struct dma_buf {
-> >>>      * @lock:
-> >>>      *
-> >>>      * Used internally to serialize list manipulation, attach/detach =
-and
-> >>> -    * vmap/unmap. Note that in many cases this is superseeded by
-> >>> +    * vmap/unmap. Note that in many cases this is superseded by
-> >>>      * dma_resv_lock() on @resv.
-> >>>      */
-> >>>     struct mutex lock;
-> >>> @@ -365,7 +365,7 @@ struct dma_buf {
-> >>>      */
-> >>>     const char *name;
-> >>> -   /** @name_lock: Spinlock to protect name acces for read access. *=
-/
-> >>> +   /** @name_lock: Spinlock to protect name access for read access. =
-*/
-> >>>     spinlock_t name_lock;
-> >>>     /**
-> >>> @@ -402,7 +402,7 @@ struct dma_buf {
-> >>>      *   anything the userspace API considers write access.
-> >>>      *
-> >>>      * - Drivers may just always add a write fence, since that only
-> >>> -    *   causes unecessarily synchronization, but no correctness issu=
-es.
-> >>> +    *   causes unnecessary synchronization, but no correctness issue=
-s.
-> >>>      *
-> >>>      * - Some drivers only expose a synchronous userspace API with no
-> >>>      *   pipelining across drivers. These do not set any fences for t=
-heir
->
+Configuring via module options is bad idea.
+If you have to do it don't roll your own key/value parsing.
+If the driver just used regular module_param() for this it wouldn't have th=
+is crap.
