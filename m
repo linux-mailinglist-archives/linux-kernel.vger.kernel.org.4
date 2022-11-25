@@ -2,51 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71ED4638B5E
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 14:37:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D37638B67
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 14:40:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbiKYNhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 08:37:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37586 "EHLO
+        id S229757AbiKYNk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 08:40:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbiKYNhp (ORCPT
+        with ESMTP id S229453AbiKYNk1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 08:37:45 -0500
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE84FCE9
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 05:37:43 -0800 (PST)
-Received: by mail-io1-f71.google.com with SMTP id o15-20020a6bf80f000000b006de313e5cfeso2070449ioh.6
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 05:37:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MylCb3p+Ls6myJyGJs1nv54tAD4Nw5G5SgxoxqrICpQ=;
-        b=AyHxVtmw660vJbi4k8tuUWn9SRHIuY2ozHXjcvGPr6AQebDKXdE7DjZurBFg3Qglkd
-         cAiTVz93tbYWrlMJilJB7UEztEVk8d/rM3tV+RAREdXYdadLr7ao+t8tvSS+hKFAvFX1
-         WPPE36caw06H2CHWKUh7HAA7hfM+d3ZicLDa4iTW23j/Ob5fq9nVC1bCy4SBXL+0JNts
-         Q/whv9JwqxQ9lNOz2HR49p/6I4cG2O4EodSHgsUdOnQtWj8SrUoGi3lr8x3a9k37+R+c
-         8i3hZfEGroulopSXV9ICae3R+J0gBj7RmSM3pXrqh19x008QES/nWjzjgY9gGN/jYBSL
-         XBGw==
-X-Gm-Message-State: ANoB5pnM1jr+kfQB0hnB9TQ+PkuDS/nv1T7svLcGTcdw4qepSkqBBr4Y
-        3hHITUpMpumJUDNtuQGhSarrymis5s0T7Mrza8F6TKLBWU0y
-X-Google-Smtp-Source: AA0mqf5sxHXLzFtKueDQg2b5fadddVGPga7WERR+IPad9WPKkIILVUC6WdR5P06FlOc0vfVE+YDnO1HPRp3QWtQFH3dhVORgZcYg
+        Fri, 25 Nov 2022 08:40:27 -0500
+Received: from out162-62-57-210.mail.qq.com (out162-62-57-210.mail.qq.com [162.62.57.210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF4A1928F;
+        Fri, 25 Nov 2022 05:40:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1669383620;
+        bh=ood4vbBiDrQkuZYdST/YJDYyULNFGcAYpukDELQQS2k=;
+        h=From:To:Cc:Subject:Date;
+        b=ZbAzEeBjtmhddTM5vtFHUTDOJszIOqtReLofS+RB2vz1rX1om4FJI5OxCgIaMiI7Y
+         EgBnRVxkUwYjIr+2gpRlm7AQVXMWL5+oywHczaMMXQ0Y/viRKbwdpNNkFmvloFXxyA
+         Gmt13dnNaRtrlgbcly5rQSh/Cw3yv05C4bUOym/8=
+Received: from localhost.localdomain ([221.223.28.123])
+        by newxmesmtplogicsvrszc2-0.qq.com (NewEsmtp) with SMTP
+        id 9A522CC3; Fri, 25 Nov 2022 21:38:37 +0800
+X-QQ-mid: xmsmtpt1669383517tx1rwx6he
+Message-ID: <tencent_EEC5C049082D4BF0724AC5E9956BD41E5105@qq.com>
+X-QQ-XMAILINFO: Ma9u/w5Vb6c03qejOHkqbN0593+fKNt7q/uoQbPqGAiyM7o4iU8RL0Suw7nFq7
+         R6QRtiPIKEBgYMwgOMyToVGqibA9vzpkSNsEfVZ8kmLd0JQYwb3Nxoud5zc1Cmj+LwWz92LZNnxJ
+         nAiN/PEzvgcTQuNHdMDkM0rZhKvB/m5FjNu6oCh0vUjDgapCacbKgmK3XiqqiWBacnhi1pkf6QfP
+         SoiI96RBiJrhXsP6/aqZ80M0pZ96xeHfFJgcItzdnEW4A86BlCsyDW7YxRH7K47NiDrz+fCCe0+S
+         wrP0P/9q4TuT7QC5g5Zxfrhy34OhuptjO+1q1ijPju1RNkmlBxfi5ydB8tPjB8QkBoid0FXzWaAR
+         SGggQgHElTu9qMz7JaEM98VggNV0923IWopuW5arJyr85x8eepLZAwI7PrTuFA3Lot4gRH5iOs4p
+         yn1AYu5oYvXj0GcKHL9H12GMaU1k+Oe2+skz9tVdYj3T46eiYJLuYaD/2JRlwLJtSVN2WVQNNjgg
+         sGU2IOYwjhtKDNBkQ2eQOWSK4+saobgumLNs2zRJRIzkS5Ce4ICo6qbbgi6BAOLyWxG/Kc1NB8Oq
+         vz6Qy7HYeCs1J8I5+jK6Wxs0UP6dcQTggU2p8azUFBuLTyravU05fnhSR/90L9HRa7tcMGT9uCUH
+         8IWHzvKZKqyivxx93ku5Froosp3MQqFERu7FHvq7GuCPyCMHq2uCZxIcp5Sx+ZL9hGGXcQ5yqOMl
+         BJK7LzrUXfFUhhFXMFX3VyAGIYlobBU2z/npHzV9IQvpZ9AEu+NwJXLolic91RO23ah0PbUnqCAR
+         fRL6cHFdO9Sl47uRC5OJV4nC3TXc5lo7DdJ36OH8mipN/fKKa+iszlfbhdcOMTsX8IJd65R9pX8J
+         u4gVJ3b9Mny3yhOQH/qH5g19KNa4jtKLyzb/uvXGo4Vu6/jZzFO0LNzxejUjdPAOLBwOIoD7UASg
+         7L/zQyjbs=
+From:   Rong Tao <rtoax@foxmail.com>
+To:     jack@suse.com
+Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rong Tao <rongtao@cestc.cn>
+Subject: [PATCH] fs/ext2: Fix code indentation
+Date:   Fri, 25 Nov 2022 21:38:21 +0800
+X-OQ-MSGID: <20221125133821.643-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.28.0.windows.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:f52:b0:302:b44f:a09 with SMTP id
- y18-20020a056e020f5200b00302b44f0a09mr10193988ilj.227.1669383463212; Fri, 25
- Nov 2022 05:37:43 -0800 (PST)
-Date:   Fri, 25 Nov 2022 05:37:43 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000519d0205ee4ba094@google.com>
-Subject: [syzbot] WARNING in iov_iter_revert (3)
-From:   syzbot <syzbot+8c7a4ca1cc31b7ce7070@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com, willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
         SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,69 +61,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: Rong Tao <rongtao@cestc.cn>
 
-syzbot found the following issue on:
+ts=4 can cause misunderstanding in code reading. It is better to replace
+8 spaces with one tab.
 
-HEAD commit:    eb7081409f94 Linux 6.1-rc6
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=105ff881880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8cdf448d3b35234
-dashboard link: https://syzkaller.appspot.com/bug?extid=8c7a4ca1cc31b7ce7070
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/4a019f55c517/disk-eb708140.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/eb36e890aa8b/vmlinux-eb708140.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/feee2c23ec64/bzImage-eb708140.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8c7a4ca1cc31b7ce7070@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 7897 at lib/iov_iter.c:918 iov_iter_revert+0x394/0x850
-Modules linked in:
-CPU: 0 PID: 7897 Comm: syz-executor.2 Not tainted 6.1.0-rc6-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:iov_iter_revert+0x394/0x850 lib/iov_iter.c:918
-Code: 80 3c 01 00 48 8b 5c 24 20 74 08 48 89 df e8 e3 c9 a3 fd 4c 89 2b 48 83 c4 68 5b 41 5c 41 5d 41 5e 41 5f 5d c3 e8 5c b1 4f fd <0f> 0b eb e8 48 8d 6b 18 48 89 e8 48 c1 e8 03 42 80 3c 28 00 74 08
-RSP: 0018:ffffc90015fe7ac8 EFLAGS: 00010287
-RAX: ffffffff843ae714 RBX: ffffc90015fe7e40 RCX: 0000000000040000
-RDX: ffffc9000c1cc000 RSI: 000000000003ef70 RDI: 000000000003ef71
-RBP: fffffffffff80e18 R08: ffffffff843ae3bc R09: fffffbfff1d2f2de
-R10: fffffbfff1d2f2de R11: 1ffffffff1d2f2dd R12: fffffffffff80e18
-R13: ffffc90015fe7e40 R14: ffffc90015fe7e50 R15: 000000007fefef0c
-FS:  00007f212fd7e700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000c00c59ffb8 CR3: 000000007dc32000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- generic_file_read_iter+0x3d4/0x540 mm/filemap.c:2804
- do_iter_read+0x6e3/0xc10 fs/read_write.c:796
- vfs_readv fs/read_write.c:916 [inline]
- do_preadv+0x1f4/0x330 fs/read_write.c:1008
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f212f08b639
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f212fd7e168 EFLAGS: 00000246 ORIG_RAX: 0000000000000147
-RAX: ffffffffffffffda RBX: 00007f212f1ac1f0 RCX: 00007f212f08b639
-RDX: 0000000000000001 RSI: 0000000020000100 RDI: 0000000000000003
-RBP: 00007f212f0e6ae9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffdc886837f R14: 00007f212fd7e300 R15: 0000000000022000
- </TASK>
-
-
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ fs/ext2/super.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/fs/ext2/super.c b/fs/ext2/super.c
+index 03f2af98b1b4..69c88facfe90 100644
+--- a/fs/ext2/super.c
++++ b/fs/ext2/super.c
+@@ -1648,7 +1648,7 @@ static int __init init_ext2_fs(void)
+ 	err = init_inodecache();
+ 	if (err)
+ 		return err;
+-        err = register_filesystem(&ext2_fs_type);
++	err = register_filesystem(&ext2_fs_type);
+ 	if (err)
+ 		goto out;
+ 	return 0;
+-- 
+2.31.1
+
+
