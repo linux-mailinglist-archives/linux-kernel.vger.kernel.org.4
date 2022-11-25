@@ -2,144 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88841638E90
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 17:49:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5543C638E94
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 17:50:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbiKYQtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 11:49:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
+        id S230088AbiKYQuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 11:50:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbiKYQtc (ORCPT
+        with ESMTP id S229786AbiKYQtn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 11:49:32 -0500
-Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D62D5215D
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 08:48:14 -0800 (PST)
-Received: by mail-vk1-xa34.google.com with SMTP id 6so597746vkk.6
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 08:48:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=oTTfcoRrU0StocsPWITcDvFwfydUNrOq1yx22xUwc4Q=;
-        b=1/nali5o+yPtp4fa9mMqVuWhgtggT9rmWJAcyW7yCYDuCAsKGn83MiacJOkMqX9gnR
-         jn81xEr5sxQ+84Va4jRJCkqUTAnSK11UqTFOLTDyeVZkakwYLLxwB+EZuPPh1jfX2kSd
-         YzGSCtKx0Mu+5rb28AkZJ2SkvsceH+qfd1wDhUa2WNJAM4e/Tn8l1F06Ts7FGYwYzsEv
-         CdNeFDYRxZOINrTTENRhTuVE/oBq5iF5jfsJRToNoRmtvYV4Yt6CKlEB93vrMWs8DlkT
-         UyqfDE4Cq0fSjIpFn8I1yAOsVTrW8ZLjPgmHJ4u0RopAc/6qBmVmRn8Z4Rn0cXllY8IK
-         yP6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oTTfcoRrU0StocsPWITcDvFwfydUNrOq1yx22xUwc4Q=;
-        b=EUhJO8omohwBgpgUl6+iwhfwIx9DV1n1Zgogp6bXW8M1sASRDf9Fc/lOsgGgpE9uLN
-         JB9k9lx5raWTMsAu8wEo9u7Fsc5RDhpB7Pu1nMd1rrWhrNr1B+VBhkrzeJbXog0V6Kc7
-         7SzqqTNhlS/nebiZQGTDY5FeHRtbqBuOWykOvkMudPkfrBpeXwlad6SDx7Cnwi31zjQ2
-         Y8NdWfoCyyhbkHtdKpHdtK+fj1253WTsIjXn6vWiFYPwNC46z5jElMkaA7uO0nAExEVl
-         GqhJ1ixuv4mOO7WffgMmiY4a9kpbxVn+Ra0jXfD+1nbecauc/CBZxXVzS1hFD5bKI3gi
-         0M7g==
-X-Gm-Message-State: ANoB5pl3Kg2gFQIj+KqtMxZEv/i3j01JADObTA1SDDvHNYC9pKIbiG3A
-        /svl8Ltcj/1rtuTDtxO4e4NOnCbQLdtS9wUbmbvjrA==
-X-Google-Smtp-Source: AA0mqf7wHcHs+jZ+23bnrrfy2o/9bDG2JM2tDK5A631Aa7acT4B45duF7qHXru/VFEJ0uirx+8nZ6eYRaCexumSmXBI=
-X-Received: by 2002:ac5:c915:0:b0:3b8:7fbd:9554 with SMTP id
- t21-20020ac5c915000000b003b87fbd9554mr11745712vkl.27.1669394893661; Fri, 25
- Nov 2022 08:48:13 -0800 (PST)
+        Fri, 25 Nov 2022 11:49:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCDA537E1;
+        Fri, 25 Nov 2022 08:48:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D57062576;
+        Fri, 25 Nov 2022 16:48:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AC39C433D7;
+        Fri, 25 Nov 2022 16:48:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669394908;
+        bh=cTVoodLlRnSOP0+5MqapZl7ab4yuqBv9vryTvywIgb8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TIk0X2r88mAdgXcX0wma+4mqtdidj+l5UzaOvNkGERBV0KIWnVDqH+jwuM8y90ay6
+         +wJs1DvXpE+OkI1MphVGFu8rTwcrAaTlJoYGskbIxciIgNR703V15p/SKFxIc6OY/B
+         xuE3yUMhxW8R98348tFw54Ew1mUungbpsu0D5i//fs+zrq/VBjZHnbqH5mehTSOFnS
+         2cFgZyjf9mNayVFBtAkPVfFJVi9m9Y7YFaVW7HYv1pl7OxFLRfAvureAPWbGNcP2oz
+         QORjLnw2MZGiZGWS3fdOuvBn48NIE5Wm3rs1GOeMoopRAHOoWEgH9uKpZeL+OUFp9t
+         WOvbyMCeTZRmQ==
+Date:   Fri, 25 Nov 2022 16:48:23 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
+Cc:     linux-spi@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] spi: wpcm-fiu: Add driver for Nuvoton WPCM450
+ Flash Interface Unit (FIU)
+Message-ID: <Y4Dx13KQHqyBLak3@sirena.org.uk>
+References: <20221124191400.287918-1-j.neuschaefer@gmx.net>
+ <20221124191400.287918-3-j.neuschaefer@gmx.net>
+ <Y4C9druicCm0m3wi@sirena.org.uk>
+ <Y4DuW6Rai0urvrEI@probook>
 MIME-Version: 1.0
-References: <20221125153257.528826-1-brgl@bgdev.pl> <Y4DsTxPH1tv5eEwf@sol>
-In-Reply-To: <Y4DsTxPH1tv5eEwf@sol>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 25 Nov 2022 17:48:02 +0100
-Message-ID: <CAMRc=Me83-_oiGEmwy4BUrzLEMT6ZsoMwWYsb6iXwg19yHMHdQ@mail.gmail.com>
-Subject: Re: [PATCH] gpiolib: cdev: fix NULL-pointer dereferences
-To:     Kent Gibson <warthog618@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="EcQuk4Qg6NViYNQL"
+Content-Disposition: inline
+In-Reply-To: <Y4DuW6Rai0urvrEI@probook>
+X-Cookie: Time and tide wait for no man.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022 at 5:24 PM Kent Gibson <warthog618@gmail.com> wrote:
->
-> On Fri, Nov 25, 2022 at 04:32:57PM +0100, Bartosz Golaszewski wrote:
-> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> >
-> > There are several places where we can crash the kernel by requesting
-> > lines, unbinding the GPIO device, then calling any of the system calls
-> > relevant to the GPIO character device's annonymous file descriptors:
-> > ioctl(), read(), poll().
-> >
-> > While I observed it with the GPIO simulator, it will also happen for any
-> > of the GPIO devices that can be hot-unplugged - for instance any HID GPIO
-> > expander (e.g. CP2112).
-> >
-> > This affects both v1 and v2 uAPI.
-> >
-> > Fix this by simply checking if the GPIO chip pointer is not NULL.
-> >
->
-> Fixes: ??
->
-> And split for v1 and v2 as the Fixes for those will differ?
->
-> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> > ---
-> >  drivers/gpio/gpiolib-cdev.c | 15 +++++++++++++++
-> >  1 file changed, 15 insertions(+)
-> >
-> > diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
-> > index 0cb6b468f364..d5632742942a 100644
-> > --- a/drivers/gpio/gpiolib-cdev.c
-> > +++ b/drivers/gpio/gpiolib-cdev.c
-> > @@ -201,6 +201,9 @@ static long linehandle_ioctl(struct file *file, unsigned int cmd,
-> >       unsigned int i;
-> >       int ret;
-> >
-> > +     if (!lh->gdev->chip)
-> > +             return -ENODEV;
-> > +
->
-> Is there anything to prevent the chip being removed by another thread
-> between this check and subsequent usage?
->
 
-Eh... not really, no. The issue we have here seems to be the same as
-the one Laurent Pinchart described back in 2015[1] and revisited
-during his 2022 linux plumbers presentation[2], except he blamed it on
-devres, whereas I think the problem is much deeper and devres has
-nothing to do with it.
+--EcQuk4Qg6NViYNQL
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Ideally we'd need a global fortifying of the driver model against
-hot-unplug related device unbinding.
+On Fri, Nov 25, 2022 at 05:33:31PM +0100, Jonathan Neusch=E4fer wrote:
 
-After a quick glance at the relevant code, I think we'd need to add
-some flag to struct file for the vfs to check on any fs operation and
-return an error early if user-space tries to operate on an fd
-associated with a removed device. I'm not sure yet if that's feasible
-globally or even the right solution at all - just brainstorming here.
+> As to connecting non-memory chips: There is also a second, completely
+> different SPI controller in this SoC, which is used on some boards (in
+> factory configuration) to drive a little status LCD. I think it would be
+> easiest to use that one for custom hardware extensions.
 
-Then at the subsystem level, the GPIO device struct would need a lock
-that would be taken by every user-space operation AND the code
-unregistering the device so that we don't do what you described (i.e.
-if there's a thread doing a read(), then let's wait until it returns
-before we drop the device).
+That's never stopped hardware engineers.  Perhaps it's simpler for
+pinmuxing, layout or other reasons in a given design.
 
-This wouldn't fix the case in which the same situation happened in a
-kernel driver but crashing the kernel from within is a much lesser
-offense than allowing user-space to crash it.
+> > If the driver were implementing regular SPI operations and advertising
+> > a maximum transfer length this should just work without having to jump
+> > through hoops.  The core can split transfers up into sections that fit
+> > within the controller limits transparently.
 
-So this patch is just papering over for now I suppose.
+> As far as I'm aware, the controller is not capable of performing a pure
+> read transfer, because the command byte (a byte that is written, in
+> half-duplex) is always included at the start. I think this limitation
+> would break your idea.
 
-Bart
+> IOW, the hoops aren't nice, but I think they're necessary.
 
-[1] https://lkml.org/lkml/2015/7/14/741
-[2] https://www.youtube.com/watch?v=kW8LHWlJPTU
+Ah, I see.  That is very limiting.  I'm very surprised that the
+6 byte thing works at all TBH.
+
+--EcQuk4Qg6NViYNQL
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOA8dYACgkQJNaLcl1U
+h9BtJQf9GPbxMYPOrlz3SZgjNLNWe4/gqjuP6n4MLBYU0xX6EA0jljP6ns0O0O1e
+hctY+Xg08vYmz9Ty3Ogc6lv1dPXwGB+AxRktoxkZuhp0uiPU5RzTyI7Ln80+DIKA
++KUtP0XO/yjXDcMTS9phUaDmwwKaneKrbYw02G04iYWsJr5Kmp+tJiRYQEBlgdsa
+C0bRvfs/rGZHh6PtlamxACJGz8w25EfHbiD/zYpa5csHVQBkSr2qqpMUNKkABBqE
+9UNq+InmthqHdHUnjyLVYuy2NcID2EDyo2/rCvi9I6hQceyYchvZFimwp7MciMHy
+LkU87STOjXlPjsAaORZDQifKRiG22Q==
+=YB2z
+-----END PGP SIGNATURE-----
+
+--EcQuk4Qg6NViYNQL--
