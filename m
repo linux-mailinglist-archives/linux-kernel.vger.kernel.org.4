@@ -2,170 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4961639015
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 19:53:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 251F763901F
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 20:00:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbiKYSxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 13:53:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59176 "EHLO
+        id S229870AbiKYTAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 14:00:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiKYSxr (ORCPT
+        with ESMTP id S229450AbiKYTAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 13:53:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222F31E70E;
-        Fri, 25 Nov 2022 10:53:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C9E34B82BF7;
-        Fri, 25 Nov 2022 18:53:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87C12C433D6;
-        Fri, 25 Nov 2022 18:53:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669402423;
-        bh=m9DmreRsp3qm+OBs9c7PwmWAYIsMOGxzO+D37vTFY/Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kw2da1MqwcjZgn6L89tWiGvKo0b2JLIIcVq+9GzOCEexQ13Sdf47gxY2WeNtVrthX
-         yILwPnh3hDmpxHWGbjEsaZzHBVrcfgLwg8eTKjUk9EubUhu9gLPkyuUXcH33HssRXp
-         B2cfT24m7dsOLwLTY3xEbco9nmsbdVePxhx9HGIdnsnxneu1YGseIB9p4ek2srPqrN
-         QPF+HjBJt8rlgsL6ptE6Z6oELFQHX8oXhrKVMvl29ptIOCIO+2gChlaJOD3HZVz3lb
-         EjIlodgs5tO3lj2MMCIWQtC8kZwYWhI1eXDjq1zN1Nt6ByD9xqr+YEAZYmWfGMv2HN
-         GoNX3Hki6K5ug==
-Date:   Fri, 25 Nov 2022 18:53:37 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-fpga@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>,
-        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, Lee Jones <lee@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Marco Pagani <marpagan@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 07/11] regmap: indirect: Add indirect regmap support
-Message-ID: <Y4EPMbc+KCuDpuxJ@sirena.org.uk>
-References: <20221117120515.37807-1-ilpo.jarvinen@linux.intel.com>
- <20221117120515.37807-8-ilpo.jarvinen@linux.intel.com>
- <Y3Y4vWr/CGbaH0HQ@sirena.org.uk>
- <a089f1a0-c0f4-e1a2-d084-fd83e28e7e33@linux.intel.com>
- <Y3ZTSSLUqHil4dfl@sirena.org.uk>
- <a82565d-c282-7ace-e759-6514c29cca1c@linux.intel.com>
- <Y3eOzOmTeTKBoPrd@sirena.org.uk>
- <a97ce076-4ca6-5f1b-eba4-4068dcb64b3d@linux.intel.com>
+        Fri, 25 Nov 2022 14:00:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C3A6220FD
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 10:59:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669402741;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=RV0U9RdGRZiYinfHu3agKBivQwemACMiM9oHLAnMCi4=;
+        b=YGGLQ7vHJaug7c+Ng5OPL3dIaWYx4lEzNl2fMLYDIKkVSLqhAu4MdUHou3GwMhQW0eKmjO
+        lDAec9tWuOWM6QDjEq8kgzqQ+2SqTgasMJGkvxyn4yxdeW8NTywpf3GzrP6khBsK27bBl7
+        Is8jIDMU6CYdx60cpRLgT8vLbxpRM10=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-531-4Eh_jEeLMGyW2neeExgn-g-1; Fri, 25 Nov 2022 13:59:00 -0500
+X-MC-Unique: 4Eh_jEeLMGyW2neeExgn-g-1
+Received: by mail-qt1-f199.google.com with SMTP id ff5-20020a05622a4d8500b003a526107477so4778683qtb.9
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 10:59:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RV0U9RdGRZiYinfHu3agKBivQwemACMiM9oHLAnMCi4=;
+        b=Iha0Lq+XTa6zCY+znWPCv/0E0a88muHBAwljvoSuq9HTZz22Va2p4CnFWSv0lj7g0z
+         zTppX/Z3QB1isFW2WC95+aOKALwlfwIvUrasFbwETMshHQByfC2zPjUwXR5fIGxlMwG7
+         xy/xSoK6kA4LEKgcAsFgiOz+EBNIJ2OYzFn97drhMvPjuLgVW3zdp17WTEm7FZVyA7DX
+         /uZ3O/XiFEZpsncpdyCvSAPTRS3NEb50sUzjc+Kz5oDohUYvrrPOwP66u6qB5QfF10Qo
+         uBl27KEvc6g3tG1cGjPcpkHgyiIrprW0v6a08jUy9+zSEygO+FH6wFOzGoukLUmtkK+G
+         6Grg==
+X-Gm-Message-State: ANoB5pk1pVlcysNogtyuwoyGGhCrKy1rzaejkXm2KXbGp4QOz9Z4dl8f
+        1BxXaikUYZPQpjryHA5lsVEgmFRx9Bbtd5AyxqRgwR7Qy8mfWTXxjPLTQdiyVtjS++2dJqArKuT
+        4D/Z9MV/aA+EjRXRUlqgURYp5
+X-Received: by 2002:ac8:6899:0:b0:3a5:122:fbe4 with SMTP id m25-20020ac86899000000b003a50122fbe4mr37645210qtq.493.1669402739622;
+        Fri, 25 Nov 2022 10:58:59 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4KEAfKu/z8lqhOzgWKnhgNda71vMnpJjEyBHAW1nvQf+e3GI5Il1jaIu6a2nqtJB01FG5a8g==
+X-Received: by 2002:ac8:6899:0:b0:3a5:122:fbe4 with SMTP id m25-20020ac86899000000b003a50122fbe4mr37645194qtq.493.1669402739381;
+        Fri, 25 Nov 2022 10:58:59 -0800 (PST)
+Received: from x1n.redhat.com (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id bq38-20020a05620a46a600b006fc40dafaa2sm3212729qkb.8.2022.11.25.10.58.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Nov 2022 10:58:58 -0800 (PST)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     peterx@redhat.com, Andrew Morton <akpm@linux-foundation.org>,
+        Anatoly Pugachev <matorola@gmail.com>,
+        Raghavendra K T <raghavendra.kt@amd.com>,
+        Thorsten Leemhuis <regressions@leemhuis.info>, Hev <r@hev.cc>
+Subject: [PATCH] mm/thp: Re-apply mkdirty for small pages after split
+Date:   Fri, 25 Nov 2022 13:58:57 -0500
+Message-Id: <20221125185857.3110155-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3F/01jOFRbO3fGT2"
-Content-Disposition: inline
-In-Reply-To: <a97ce076-4ca6-5f1b-eba4-4068dcb64b3d@linux.intel.com>
-X-Cookie: Time and tide wait for no man.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+We used to have 624a2c94f5b7 fixing the regression reported here by Anatoly
+Pugachev on sparc64:
 
---3F/01jOFRbO3fGT2
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+https://lore.kernel.org/r/20221021160603.GA23307@u164.east.ru
 
-On Mon, Nov 21, 2022 at 03:37:40PM +0200, Ilpo J=E4rvinen wrote:
+Where we temporarily ignored the dirty bit for small pages.
 
-> Previously you were against saying it clearly that it's Intel FPGA=20
-> specific when Matthew proposed changing the name to not sound something=
-=20
-> too generic. If you're ok with that now, I'm happy to make such change.
+Then, Hev <r@hev.cc> also reported similar issue on loongarch:
 
-Saying it's for some Intel FPGA just makes it sound like it should only
-live within the driver for that FPGA.  The issue with there being only
-one user:
+(the original mail was private, but Anatoly copied the list here)
+https://lore.kernel.org/r/CADxRZqxqb7f_WhMh=jweZP+ynf_JwGd-0VwbYgp4P+T0-AXosw@mail.gmail.com
 
-> > Perhaps you have some name for this
-> > interface?  You're only adding one user here which isn't helping
-> > make the case that this is something generic.
+Hev pointed out that the issue is having HW write bit set within the
+pte_mkdirty() so the split pte can be written after split even if e.g. they
+were shared by more than one processes, causing data corrupt.
 
-is part of it, as is the fact that the naming is so very generic.  Even
-"Intel FPGA" seems to be heading to the generic side, this is presumably
-some specific thing rather than just something that everyone using a
-FPGA from Intel is going to need.  The issue with this being overly
-specific isn't just the name, it's the code as well.
+Hev also tried to explain why loongarch set HW write bit in mkdirty:
 
-> > I can't tell what you're trying to say here.  Are you saying that
-> > this is somehow baked into some FPGA design so that it's memory
-> > mapped with only a few registers showing to the rest of the
-> > system rather than just having a substantial memory mapped
-> > window like is typically used for FPGAs, but someohow this
-> > register window stuff is implemented in the soft IP so people are
-> > just throwng vaugely similar interfaces into a random host mapped
-> > register layout?
->=20
-> What I tried to say the users are not expected to be nicely confined into=
-=20
-> drivers/mfd/ (and a single driver in there).
+https://lore.kernel.org/r/CAHirt9itKO_K_HPboXh5AyJtt16Zf0cD73PtHvM=na39u_ztxA@mail.gmail.com
 
-So this interface is part of the physical IP surrounding the actual
-programmable bit of a FPGA or something?  That doesn't seem entirely
-right though given the fact that the registers are apparently one of the
-things that gets moved around a lot.  I still have no idea what this
-hardware actually looks like or what this code is trying to represent,
-especially given the very few things that you are trying to
-parameterise.  It's really not obvious there's even any point in trying
-to share this code at the abstraction level you've gone for.
+One way to fix it is as what Huacai proposed here for loongarch (then we
+can re-apply the dirty bit in thp split):
 
-Do you have any examples of even a second user that isn't this one MFD
-which you can share?
+https://lore.kernel.org/r/20221117042532.4064448-1-chenhuacai@loongson.cnn
 
-> You didn't answer at all my question about where to place the code?
-> I'm repeating it with the context below since you cut it off:
+We may need similar thing for sparc64, though.
 
-I keep telling you to either make this so that it's actually generic or
-just have register get/set operations in the regmap for the device using
-it.  As things stand with the code you've sent there's a bunch of things
-like the way it's doing direct MMIO (which means it only works on top of
-memory mapped devices) and the absolute requirement for an idle command
-and a wait for completion which clearly look like this is device specific.
+For now since we've found the root cause of the dirty bit issue the simpler
+solution (which won't lose the dirty bit for small) that will work for both
+is we wr-protect after pte_mkdirty(), so the HW write bit can be persistent
+after thp split.
 
-> Whether that is "generic" enough to reside in drivers/base/regmap can
-> of course be debated but lets say I put it into drivers/mfd/ along with=
-=20
-> the code currently using it. By doing that, we'll postpone this discussio=
-n=20
-> to the point when the first driver using it outside of drivers/mfd/ comes=
-=20
-> by. At that point, having the indirect code in drivers/mfd/ is shown to=
-=20
-> be a wrong choice.
+Add a comment for wrprotect, so we will not mess up the ordering later.
 
-> It's of course nothing that couldn't be fixed by patches moving the code=
-=20
-> around to some more preferred location. And that location likely turns ou=
-t=20
-> to be drivers/base/regmap, no? Or do you have a better place for it in=20
-> that case?
+With 624a2c94f5b7 this is not a fix anymore, but just brings back the dirty
+bit for thp split safely, so we re-apply the optimization but in safe way.
 
-If you think this should be shared via regmap then make it shareable.
-That needs more work than just repainting the name.
+Provide a T-B credit to Hev too (not the exact same patch but the same
+outcome) for loongarch.
 
---3F/01jOFRbO3fGT2
-Content-Type: application/pgp-signature; name="signature.asc"
+Cc: Anatoly Pugachev <matorola@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Raghavendra K T <raghavendra.kt@amd.com>
+Cc: Thorsten Leemhuis <regressions@leemhuis.info>
+Tested-by: Hev <r@hev.cc> # loongarch
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
 
------BEGIN PGP SIGNATURE-----
+PS: Anatoly, feel free to try this too on sparc64.  Applicable to either
+branch (Linus's, or akpm's) as long as latest.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOBDzAACgkQJNaLcl1U
-h9BIRQf/SIePGloROG+aH1fiQ/rM6HTduYZzQGL8uh9F7UopIHC/NMsPzlq7FR7P
-Js+8wSigBiuoW+xKYw+IsgqJDQCVR9rTdxzhRJ9LUXBn5vyamYyGKnBo58XpK5g0
-wHo7++T/755N6k7S6/at+PzNramNqRIG0jaknuO6KkiIvpXFFCinUMcjAuTEKkPk
-XcxhnvUAgwPKXroEBJ7XwsIhPzFbu/ltcnoHdKqzUseAeJRfcQT1zfXn/4FG59p0
-9/Eav+JKz8xD5bA/JiJ8rPPE2UGBJpEm/m/z6a6/Quyn3wvzZG1f6/XCB5FU0o3H
-h4grJUPgAJh363cWCdfHxuhebDA+/A==
-=tsLN
------END PGP SIGNATURE-----
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
+ mm/huge_memory.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
---3F/01jOFRbO3fGT2--
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index ae1e2d80bb6e..5f93ba064323 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -2192,16 +2192,18 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
+ 			entry = maybe_mkwrite(entry, vma);
+ 			if (anon_exclusive)
+ 				SetPageAnonExclusive(page + i);
+-			if (!write)
+-				entry = pte_wrprotect(entry);
+ 			if (!young)
+ 				entry = pte_mkold(entry);
++			/* NOTE: this may set soft-dirty too on some archs */
++			if (dirty)
++				entry = pte_mkdirty(entry);
+ 			/*
+-			 * NOTE: we don't do pte_mkdirty when dirty==true
+-			 * because it breaks sparc64 which can sigsegv
+-			 * random process.  Need to revisit when we figure
+-			 * out what is special with sparc64.
++			 * NOTE: this needs to happen after pte_mkdirty,
++			 * because some archs (sparc64, loongarch) could
++			 * set hw write bit when mkdirty.
+ 			 */
++			if (!write)
++				entry = pte_wrprotect(entry);
+ 			if (soft_dirty)
+ 				entry = pte_mksoft_dirty(entry);
+ 			if (uffd_wp)
+-- 
+2.37.3
+
