@@ -2,60 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9013D6386E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 10:58:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CD3C6386D7
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 10:55:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbiKYJ6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 04:58:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48768 "EHLO
+        id S229670AbiKYJzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 04:55:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbiKYJ5s (ORCPT
+        with ESMTP id S229901AbiKYJzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 04:57:48 -0500
+        Fri, 25 Nov 2022 04:55:19 -0500
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4222F110
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 01:56:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CC14A06A;
+        Fri, 25 Nov 2022 01:52:18 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B6CA61F390;
-        Fri, 25 Nov 2022 09:51:50 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 98A7E1FD6A;
+        Fri, 25 Nov 2022 09:52:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1669369910; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type;
-        bh=QZuI2VdCrr8kiO2QLDD2YAacX8MBPrBrma/xaPJCh6Q=;
-        b=fS3hqHAN3etoGRlj8E72ntGebL2MYiDsDsgHnwNrjO46sxDzLqInXf7Soln4OeI7d4Yh3Y
-        aKxytZ2t2Fp6btCWDG1KrBGmqgduOBZ4JEakg5LSf7X8F1kl8z7isG6F4A1mPjo1utSsFj
-        o/J3TcVwOsGU+s8hTYVStflH32DUUrA=
+        t=1669369934; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j5gHcv1jP7rHDv6WjXG8/kTErobBs4ljiKSMXxDZAhA=;
+        b=upDFs7ucUcwcvrOxapflk6090GnTUsxyfpe7ypzG7Rw/r8LOeyJIy1PZ0gp8pKWH0BNVkb
+        6VmJx3qc3oAVmklDD8qhKrZ7LV+PnBTgTB1MF90M+YPmzvsQ4hx3mAAwHBRa3efFLvRQb6
+        OgeTGI1KGRk1DeZKcJhHmEtuBm2V8g4=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1669369910;
+        s=susede2_ed25519; t=1669369934;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type;
-        bh=QZuI2VdCrr8kiO2QLDD2YAacX8MBPrBrma/xaPJCh6Q=;
-        b=f6eaFtG9dQ1x6cI6DXDVVju3cpBwuq9TRQ7g5vwE3441J5F6LfF8Yc6nRT5KL4D3+NuQwq
-        zTFFtk28DbgiXICw==
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j5gHcv1jP7rHDv6WjXG8/kTErobBs4ljiKSMXxDZAhA=;
+        b=tLDIqVAy/1R/0p89CwgBqnxXet1EO2WHqlAWHvau5gwhkeHic1UYCZ9rBA9AprOpFj97zg
+        Eu7XC8iadP/J2rCA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 955711361C;
-        Fri, 25 Nov 2022 09:51:50 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0F6A11361C;
+        Fri, 25 Nov 2022 09:52:14 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id lzCyIzaQgGNIVgAAMHmgww
-        (envelope-from <tiwai@suse.de>); Fri, 25 Nov 2022 09:51:50 +0000
-Date:   Fri, 25 Nov 2022 10:51:50 +0100
-Message-ID: <878rjz2wg9.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] sound fixes for 6.1-rc7
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
+        id gxRDAU6QgGOEVgAAMHmgww
+        (envelope-from <aherrmann@suse.de>); Fri, 25 Nov 2022 09:52:14 +0000
+Date:   Fri, 25 Nov 2022 10:52:12 +0100
+From:   Andreas Herrmann <aherrmann@suse.de>
+To:     Li Nan <linan122@huawei.com>
+Cc:     tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH -next 1/2] blk-iocost: fix divide by 0 error in
+ calc_lcoefs()
+Message-ID: <Y4CQTKAKmUi9pxHU@suselix>
+References: <20221124140635.695205-1-linan122@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221124140635.695205-1-linan122@huawei.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -65,63 +74,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On Thu, Nov 24, 2022 at 10:06:34PM +0800, Li Nan wrote:
+> echo max of u64 to cost.model can cause divide by 0 error.
+> 
+>   # echo 8:0 rbps=18446744073709551615 > /sys/fs/cgroup/io.cost.model
+> 
+>   divide error: 0000 [#1] PREEMPT SMP
+>   RIP: 0010:calc_lcoefs+0x4c/0xc0
+>   Call Trace:
+>    <TASK>
+>    ioc_refresh_params+0x2b3/0x4f0
+>    ioc_cost_model_write+0x3cb/0x4c0
+>    ? _copy_from_iter+0x6d/0x6c0
+>    ? kernfs_fop_write_iter+0xfc/0x270
+>    cgroup_file_write+0xa0/0x200
+>    kernfs_fop_write_iter+0x17d/0x270
+>    vfs_write+0x414/0x620
+>    ksys_write+0x73/0x160
+>    __x64_sys_write+0x1e/0x30
+>    do_syscall_64+0x35/0x80
+>    entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> calc_lcoefs() uses the input value of cost.model in DIV_ROUND_UP_ULL,
+> overflow would happen if bps plus IOC_PAGE_SIZE is greater than
+> ULLONG_MAX, it can cause divide by 0 error.I_LCOEF_MAX is introduced to
+> prevent it.
+> 
+> Signed-off-by: Li Nan <linan122@huawei.com>
+> ---
+>  block/blk-iocost.c | 5 +++++
+>  1 file changed, 5 insertions(+)
 
-please pull sound fixes for v6.1-rc7 from:
+Looks good.
+Reviewed-by: Andreas Herrmann <aherrmann@suse.de>
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.1-rc7
+> diff --git a/block/blk-iocost.c b/block/blk-iocost.c
+> index f01359906c83..a38a5324bf10 100644
+> --- a/block/blk-iocost.c
+> +++ b/block/blk-iocost.c
+> @@ -306,6 +306,9 @@ enum {
+>  	IOC_PAGE_SIZE		= 1 << IOC_PAGE_SHIFT,
+>  	IOC_SECT_TO_PAGE_SHIFT	= IOC_PAGE_SHIFT - SECTOR_SHIFT,
+>  
+> +	/* avoid overflow */
+> +	I_LCOEF_MAX		= ULLONG_MAX - IOC_PAGE_SIZE,
+> +
+>  	/* if apart further than 16M, consider randio for linear model */
+>  	LCOEF_RANDIO_PAGES	= 4096,
+>  };
+> @@ -3406,6 +3409,8 @@ static ssize_t ioc_cost_model_write(struct kernfs_open_file *of, char *input,
+>  			goto einval;
+>  		if (match_u64(&args[0], &v))
+>  			goto einval;
+> +		if (v > I_LCOEF_MAX)
+> +			goto einval;
+>  		u[tok] = v;
+>  		user = true;
+>  	}
+> -- 
+> 2.31.1
+> 
 
-The topmost commit is ecae4c8954a1faba6fcc4fe6ec1680b3c4e393d1
+-- 
+Regards,
+Andreas
 
-----------------------------------------------------------------
-
-sound fixes for 6.1-rc7
-
-A few more last-minute fixes for 6.1 that have been gathered in the
-last week; nothing looks too worrisome, mostly device-specific small
-fixes, including the ABI fix for ASoC SOF.
-
-----------------------------------------------------------------
-
-Chancel Liu (1):
-      ASoC: wm8962: Wait for updated value of WM8962_CLOCKING1 register
-
-Detlev Casanova (1):
-      ASoC: sgtl5000: Reset the CHIP_CLK_CTRL reg on remove
-
-Jiasheng Jiang (1):
-      ASoC: max98373: Add checks for devm_kcalloc
-
-Junxiao Chang (1):
-      ASoC: hdac_hda: fix hda pcm buffer overflow issue
-
-Kees Cook (1):
-      ALSA: seq: Fix function prototype mismatch in snd_seq_expand_var_event
-
-Olivier Moysan (1):
-      ASoC: stm32: i2s: remove irqf_oneshot flag
-
-Pierre-Louis Bossart (1):
-      ASoC: SOF: dai: move AMD_HS to end of list to restore backwards-compatibility
-
-Richard Fitzgerald (1):
-      ASoC: soc-pcm: Don't zero TDM masks in __soc_pcm_open()
-
-Shuming Fan (1):
-      ASoC: rt711-sdca: fix the latency time of clock stop prepare state machine transitions
-
-Srinivasa Rao Mandadapu (1):
-      ASoC: soc-pcm: Add NULL check in BE reparenting
-
----
- include/sound/sof/dai.h           |  2 +-
- sound/core/seq/seq_memory.c       | 11 +++++++----
- sound/soc/codecs/hdac_hda.h       |  4 ++--
- sound/soc/codecs/max98373-i2c.c   |  4 ++++
- sound/soc/codecs/rt711-sdca-sdw.c |  2 +-
- sound/soc/codecs/sgtl5000.c       |  1 +
- sound/soc/codecs/wm8962.c         |  8 ++++++++
- sound/soc/soc-pcm.c               |  7 ++-----
- sound/soc/stm/stm32_i2s.c         |  2 +-
- 9 files changed, 27 insertions(+), 14 deletions(-)
-
+SUSE Software Solutions Germany GmbH
+Frankenstrasse 146, 90461 Nürnberg, Germany
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)
