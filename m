@@ -2,98 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C3B3638B69
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 14:40:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DD24638B6C
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 14:41:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiKYNkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 08:40:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39522 "EHLO
+        id S229784AbiKYNlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 08:41:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiKYNke (ORCPT
+        with ESMTP id S229724AbiKYNlS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 08:40:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0158011168
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 05:40:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A7D04B82ABD
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 13:40:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56DFAC433C1;
-        Fri, 25 Nov 2022 13:40:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669383631;
-        bh=1Vi9cYPQdsFlwN2CupqS3SDHphAahEkfEFQ47zI6WhI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IDp9FDBQ2WGmmAcEkiW2GHNzyxAljeKVhmaOAfdahPkFsZNnZiasCvP1PntCi4W3e
-         GdEz0mFYBRPy29WZVxfhOBAawsChZgsLOoIHfTYwMmbtZgGsChvUcST6MfaW/s71Vo
-         KPJQ3//yg32O0vdIclPMxYCXM+ljCguSNfdSwUXYNjOmf+qT6NHGo5PyWc3UREuH0i
-         yrNz5x8nhfPJBgCw34SrK4K9MvyJBb1fzwr60V9x2oKu7nn4A13dTR9IDNT0yE8v2c
-         JKWdqpz1CGd8tfrzaFv9GQFw9/2u6iBVY2eFAHDM3ewlUT63r2qYYtKupXIZC0FjC9
-         WeArEEzwpq4eA==
-Date:   Fri, 25 Nov 2022 13:40:23 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     arnd@arndb.de, akpm@linux-foundation.org, nathan@kernel.org,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch,
-        ndesaulniers@google.com, trix@redhat.com, harry.wentland@amd.com,
-        sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com,
-        alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 2/2] Kconfig.debug: Provide a little extra FRAME_WARN
- leeway when KASAN is enabled
-Message-ID: <Y4DFx20YXDLcuVJm@google.com>
-References: <20221125120750.3537134-1-lee@kernel.org>
- <20221125120750.3537134-3-lee@kernel.org>
+        Fri, 25 Nov 2022 08:41:18 -0500
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830FF10B9
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 05:41:15 -0800 (PST)
+Received: (Authenticated sender: alex@ghiti.fr)
+        by mail.gandi.net (Postfix) with ESMTPSA id 2E15860016;
+        Fri, 25 Nov 2022 13:41:11 +0000 (UTC)
+Message-ID: <6fee29f8-8150-e6ec-e2ec-210610a7e27d@ghiti.fr>
+Date:   Fri, 25 Nov 2022 14:41:11 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221125120750.3537134-3-lee@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] riscv: increase boot command line size to 1K
+Content-Language: en-US
+To:     Andrea Righi <andrea.righi@canonical.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221125133713.314796-1-andrea.righi@canonical.com>
+From:   Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <20221125133713.314796-1-andrea.righi@canonical.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Nov 2022, Lee Jones wrote:
+Hi Andrea,
 
-> When enabled, KASAN enlarges function's stack-frames.  Pushing quite a
-> few over the current threshold.  This can mainly be seen on 32-bit
-> architectures where the present limit (when !GCC) is a lowly
-> 1024-Bytes.
-> 
-> Signed-off-by: Lee Jones <lee@kernel.org>
+On 11/25/22 14:37, Andrea Righi wrote:
+> Kernel parameters string is limited to 512 characters on riscv (using
+> the default from include/uapi/asm-generic/setup.h).
+>
+> In some testing environments (e.g., qemu with long kernel parameters
+> string) we may exceed this limit, triggering errors like the following:
+>
+> [    3.331893] Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000000
+> [    3.332625] CPU: 2 PID: 1 Comm: sh Not tainted 6.1.0-rc6-kc #1
+> [    3.333233] Hardware name: riscv-virtio,qemu (DT)
+> [    3.333550] Call Trace:
+> [    3.333736] [<ffffffff800062b6>] dump_backtrace+0x1c/0x24
+> [    3.334053] [<ffffffff806e8f54>] show_stack+0x2c/0x38
+> [    3.334260] [<ffffffff806f2d06>] dump_stack_lvl+0x5a/0x7c
+> [    3.334483] [<ffffffff806f2d3c>] dump_stack+0x14/0x1c
+> [    3.334687] [<ffffffff806e92fa>] panic+0x116/0x2d0
+> [    3.334878] [<ffffffff8001b0aa>] do_exit+0x80a/0x810
+> [    3.335079] [<ffffffff8001b1d0>] do_group_exit+0x24/0x70
+> [    3.335287] [<ffffffff8001b234>] __wake_up_parent+0x0/0x20
+> [    3.335502] [<ffffffff80003cee>] ret_from_syscall+0x0/0x2
+> [    3.335857] SMP: stopping secondary CPUs
+> [    3.337561] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000000 ]---
+>
+> It seems reasonable enough to increase the default command line size to
+> 1024, like arm, to prevent issues like the one reported above.
+>
+> Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
 > ---
->  lib/Kconfig.debug | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index c3c0b077ade33..82d475168db95 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -399,6 +399,7 @@ config FRAME_WARN
->  	default 2048 if GCC_PLUGIN_LATENT_ENTROPY
->  	default 2048 if PARISC
->  	default 1536 if (!64BIT && XTENSA)
-> +	default 1280 if KASAN && !64BIT
->  	default 1024 if !64BIT
->  	default 2048 if 64BIT
->  	help
+>   arch/riscv/include/asm/setup.h      | 7 +++++++
+>   arch/riscv/include/uapi/asm/setup.h | 7 +++++++
+>   2 files changed, 14 insertions(+)
+>   create mode 100644 arch/riscv/include/asm/setup.h
+>   create mode 100644 arch/riscv/include/uapi/asm/setup.h
+>
+> diff --git a/arch/riscv/include/asm/setup.h b/arch/riscv/include/asm/setup.h
+> new file mode 100644
+> index 000000000000..f4fe549aab40
+> --- /dev/null
+> +++ b/arch/riscv/include/asm/setup.h
+> @@ -0,0 +1,7 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +#ifndef __ASMRISCV_SETUP_H
+> +#define __ASMRISCV_SETUP_H
+> +
+> +#include <uapi/asm/setup.h>
+> +
+> +#endif /* __ASMRISCV_SETUP_H */
+> diff --git a/arch/riscv/include/uapi/asm/setup.h b/arch/riscv/include/uapi/asm/setup.h
+> new file mode 100644
+> index 000000000000..5738f93ae437
+> --- /dev/null
+> +++ b/arch/riscv/include/uapi/asm/setup.h
+> @@ -0,0 +1,7 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _UAPI__ASMRISCV_SETUP_H
+> +#define _UAPI__ASMRISCV_SETUP_H
+> +
+> +#define COMMAND_LINE_SIZE 1024
+> +
+> +#endif /* _UAPI__ASMRISCV_SETUP_H */
 
-Note this also fixes 61 warnings when
 
-  (GCC && !GCC_PLUGIN_LATENT_ENTROPY)
+Just for reference to previous discussions regarding this: 
+https://lore.kernel.org/lkml/CACT4Y+YYAfTafFk7DE0B=qQFgkPXS7492AhBdY_CP1WdB8CGfA@mail.gmail.com/T/
 
-... which as Arnd says should not be enabled by default.  We'll
-address that issue once this set has been applied.
+Thanks,
 
--- 
-Lee Jones [李琼斯]
+Alex
+
