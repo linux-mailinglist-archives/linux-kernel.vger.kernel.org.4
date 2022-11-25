@@ -2,72 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D92526389C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 13:29:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E2F6389CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 13:31:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbiKYM3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 07:29:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55400 "EHLO
+        id S229788AbiKYMbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 07:31:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbiKYM3h (ORCPT
+        with ESMTP id S229673AbiKYMbT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 07:29:37 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903CE4A5B0;
-        Fri, 25 Nov 2022 04:29:36 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id w23so3854634ply.12;
-        Fri, 25 Nov 2022 04:29:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7xh9LbtZzqm4dkobqZjAtGb2NHj8Qkn7BN/d8Dnlu+8=;
-        b=BogLWBOfmrcP4qPaqILrhcroXBtG0tR+l9DpJGue32XeB3EKciXk/QuakkdtV33589
-         91HOrREnWQDErMiWy20/isCohmyRDBbXjfMvV0XDy7vv3b5z9DWtjRSCL1f0JMsY+MHD
-         qWxSooxQPPCIp6L11tAlikcy+MfieG6QIymf15GDz/aSdxhfdtZZ8ewQYlwKMi1q7IaC
-         IUT0/0rnSChMlFy0h9TwOZRy45IdNGXemXCKvzRolR038Fq83C6OY2OiGLvsY4vkJvfl
-         3hWkVCkTJvYaDjra+MaF1/++zgS1RmRNbgmYVh2Hh7r4EROmGuKxL9Url+Jj1nGGbeQO
-         hhGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7xh9LbtZzqm4dkobqZjAtGb2NHj8Qkn7BN/d8Dnlu+8=;
-        b=j0k/zuorYMSGYeAofE9dKxuhu1IJD7IN4VLcYuMoHgJrvLCNi0sl0MMZF78m/sxXBY
-         E/ciep0AxYmyidmIqGy7blPsIymxicBn2CyiBkKwbYE6mwrucekqTTBq0C7leBsbkXSB
-         /we5PhuFokHk/lTONviSJllLjp1iA84C+PZGsYzW/71+0lSDrLNz3FODkYXpIkUXiDGa
-         /m1tUhLBA2l6rG3LICCwUaTw7Pp+SGTd6cG2rILnoWVsMexUEUltArNbcGCvX9FgHx6N
-         y3yQ9kxIFw7HmqN7ZBsLtgmq5HGbQ1GXF5Q9XCGidzOoKI2ude/sZWOED5SKvcTrDNvm
-         Jktw==
-X-Gm-Message-State: ANoB5pm5I7osrGg+iYC9dyF1VzPGqo8lTLt1tc1xHLhWCiSVR2omMRjR
-        L5ImG/Nnr6sLJsW2nWr7zGTLbNFoUenQ
-X-Google-Smtp-Source: AA0mqf6HCT7Hp6y2mnKkyvWCRquS9hGVIlKeWmYQlQkdhYseADgJDjmFIZJzGzpsEYZnO5kytOBBtA==
-X-Received: by 2002:a17:90b:3c42:b0:218:8186:ef9b with SMTP id pm2-20020a17090b3c4200b002188186ef9bmr37685657pjb.10.1669379375701;
-        Fri, 25 Nov 2022 04:29:35 -0800 (PST)
-Received: from localhost.localdomain ([144.214.0.6])
-        by smtp.gmail.com with ESMTPSA id x14-20020a170902a38e00b0018912c37c8fsm117009pla.129.2022.11.25.04.29.32
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 25 Nov 2022 04:29:35 -0800 (PST)
-From:   Hao Sun <sunhao.th@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, Hao Sun <sunhao.th@gmail.com>
-Subject: [PATCH bpf-next v3 3/3] selftests/bpf: Add tests for LDX/STX/ST sanitize
-Date:   Fri, 25 Nov 2022 20:29:12 +0800
-Message-Id: <20221125122912.54709-4-sunhao.th@gmail.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
-In-Reply-To: <20221125122912.54709-1-sunhao.th@gmail.com>
-References: <20221125122912.54709-1-sunhao.th@gmail.com>
+        Fri, 25 Nov 2022 07:31:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3722529D;
+        Fri, 25 Nov 2022 04:31:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6918C623C4;
+        Fri, 25 Nov 2022 12:31:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 693BDC433C1;
+        Fri, 25 Nov 2022 12:31:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669379477;
+        bh=OaKU45W8QrLKhHbu9Oxkvgt4uPosAwQSsVZwp8dqIt8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=XhY0vJlYEac/H484fM0aU3vBaJIItaF69xIuOAAln63lKPc/WelGEx0hz0VXOzYVp
+         8+ZPXfBNSdzsWF+CrOvh91Nno4keWAJa3eyXmBRPCOtfm3d1VBXiO4g+ioduQRLOyz
+         5eLu9FEaxZNG2kUgOwG5cGRi3DrfX5QZ0rsQvCTL2B7mwnOdTlYJhIA4MJJtp6WC21
+         q4ukhvy43tIkOoyvb6kC/54MbSkd1zt2OXIL+9PYVcd2SbHAmGkXb4KShmQyOW2v6P
+         D2RdFzjeSLmrLw2t/PCG36KBRYr/wuW8vKYGG5Dx56KjOKI72zaqH74kmTH4S2shaG
+         XgofdlZA2XujA==
+Message-ID: <23ecae8e-e4bf-60d9-1fa5-18894834d585@kernel.org>
+Date:   Fri, 25 Nov 2022 14:31:11 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v7 3/5] PCI: j721e: Add PCIe 4x lane selection support
+Content-Language: en-US
+To:     Matt Ranostay <mranostay@ti.com>, lpieralisi@kernel.org,
+        robh@kernel.org, kw@linux.com, bhelgaas@google.com,
+        krzysztof.kozlowski@linaro.org, vigneshr@ti.com,
+        tjoseph@cadence.com, sergio.paracuellos@gmail.com,
+        pthombar@cadence.com, linux-pci@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221124081221.1206167-1-mranostay@ti.com>
+ <20221124081221.1206167-4-mranostay@ti.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20221124081221.1206167-4-mranostay@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,343 +62,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add tests for LDX/STX/ST instrumentation in each possible case.
-Five cases for STX/ST, nice cases for LDX. All new/existing
-selftests can pass.
 
-A slab-out-of-bounds read report is also availble, which is
-achieved by exploiting CVE-2022-23222 and can be reproduced
-in Linux v5.10: https://pastebin.com/raw/Ee1Cw492
 
-Signed-off-by: Hao Sun <sunhao.th@gmail.com>
----
- .../selftests/bpf/verifier/sanitize_st_ldx.c  | 317 ++++++++++++++++++
- 1 file changed, 317 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/verifier/sanitize_st_ldx.c
+On 24/11/2022 10:12, Matt Ranostay wrote:
+> Add support for setting of two-bit field that allows selection of 4x lane
+> PCIe which was previously limited to only 2x lanes.
+> 
+> Signed-off-by: Matt Ranostay <mranostay@ti.com>
+> Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
+> ---
+>  drivers/pci/controller/cadence/pci-j721e.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/cadence/pci-j721e.c b/drivers/pci/controller/cadence/pci-j721e.c
+> index 8990f58d64d5..dab3db9be6d8 100644
+> --- a/drivers/pci/controller/cadence/pci-j721e.c
+> +++ b/drivers/pci/controller/cadence/pci-j721e.c
+> @@ -42,7 +42,6 @@ enum link_status {
+>  };
+>  
+>  #define J721E_MODE_RC			BIT(7)
+> -#define LANE_COUNT_MASK			BIT(8)
+>  #define LANE_COUNT(n)			((n) << 8)
+>  
+>  #define GENERATION_SEL_MASK		GENMASK(1, 0)
+> @@ -52,6 +51,7 @@ struct j721e_pcie {
+>  	struct clk		*refclk;
+>  	u32			mode;
+>  	u32			num_lanes;
+> +	u32			max_lanes;
+>  	void __iomem		*user_cfg_base;
+>  	void __iomem		*intd_cfg_base;
+>  	u32			linkdown_irq_regfield;
+> @@ -205,11 +205,15 @@ static int j721e_pcie_set_lane_count(struct j721e_pcie *pcie,
+>  {
+>  	struct device *dev = pcie->cdns_pcie->dev;
+>  	u32 lanes = pcie->num_lanes;
+> +	u32 mask = GENMASK(8, 8);
 
-diff --git a/tools/testing/selftests/bpf/verifier/sanitize_st_ldx.c b/tools/testing/selftests/bpf/verifier/sanitize_st_ldx.c
-new file mode 100644
-index 000000000000..dfd53f97eb95
---- /dev/null
-+++ b/tools/testing/selftests/bpf/verifier/sanitize_st_ldx.c
-@@ -0,0 +1,317 @@
-+#ifdef CONFIG_BPF_PROG_KASAN
-+
-+#define __BACKUP_REG(n) \
-+	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_##n, INSN_OFF_MASK)
-+#define BACKUP_SCRATCH_REGS                                                 \
-+	__BACKUP_REG(1), __BACKUP_REG(2), __BACKUP_REG(3), __BACKUP_REG(4), \
-+		__BACKUP_REG(5)
-+
-+#define __RESTORE_REG(n) \
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_##n, BPF_REG_10, INSN_OFF_MASK)
-+#define RESTORE_SCRATCH_REGS                                  \
-+	__RESTORE_REG(1), __RESTORE_REG(2), __RESTORE_REG(3), \
-+		__RESTORE_REG(4), __RESTORE_REG(5)
-+
-+{
-+	"sanitize stx: dst is R1, off is zero",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_1, 0, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, 0),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 1, 1),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BACKUP_SCRATCH_REGS,
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_0),
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	RESTORE_SCRATCH_REGS,
-+	BPF_MOV64_REG(BPF_REG_0, MAX_BPF_REG),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_1, 0, 1),
-+	},
-+},
-+{
-+	"sanitize stx: dst is R1",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_1, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 1, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BACKUP_SCRATCH_REGS,
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	RESTORE_SCRATCH_REGS,
-+	BPF_MOV64_REG(BPF_REG_0, MAX_BPF_REG),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_1, -8, 1),
-+	},
-+},
-+{
-+	"sanitize stx: dst is other regs, off is zero",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_2, 0, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_2, 0),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 1, 1),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BACKUP_SCRATCH_REGS,
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_0),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	RESTORE_SCRATCH_REGS,
-+	BPF_MOV64_REG(BPF_REG_0, MAX_BPF_REG),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_2, 0, 1),
-+	},
-+},
-+{
-+	"sanitize stx: dst is other regs",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_2, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_2, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 1, 1),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BACKUP_SCRATCH_REGS,
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_0),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	RESTORE_SCRATCH_REGS,
-+	BPF_MOV64_REG(BPF_REG_0, MAX_BPF_REG),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_2, -8, 1),
-+	},
-+},
-+{
-+	"sanitize stx: dst is R10",
-+	.insns = {
-+	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_10, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 1, 1),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.unexpected_insns = {
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	},
-+},
-+{
-+	"sanitize ldx: src is R1, dst is R0, off is zero",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_1, 0, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, 0),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 1, 1),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BACKUP_SCRATCH_REGS,
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	RESTORE_SCRATCH_REGS,
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, 0),
-+	},
-+},
-+{
-+	"sanitize ldx: src is R1, dst is R0",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_1, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 1, 1),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BACKUP_SCRATCH_REGS,
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	RESTORE_SCRATCH_REGS,
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8),
-+	},
-+},
-+{
-+	"sanitize ldx: src is R1, dst is others, off is zero",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_1, 0, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, 0),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 1, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BACKUP_SCRATCH_REGS,
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_0),
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	RESTORE_SCRATCH_REGS,
-+	BPF_MOV64_REG(BPF_REG_0, MAX_BPF_REG),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, 0),
-+	},
-+},
-+{
-+	"sanitize ldx: src is R1, dst is others",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_1, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 1, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BACKUP_SCRATCH_REGS,
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	RESTORE_SCRATCH_REGS,
-+	BPF_MOV64_REG(BPF_REG_0, MAX_BPF_REG),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, -8),
-+	},
-+},
-+{
-+	"sanitize ldx: src is others, dst is R0, off is zero",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_2, 0, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_2, 0),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 1, 1),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BACKUP_SCRATCH_REGS,
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	RESTORE_SCRATCH_REGS,
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_2, 0),
-+	},
-+},
-+{
-+	"sanitize ldx: src is others, dst is R0",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_2, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_2, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 1, 1),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BACKUP_SCRATCH_REGS,
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	RESTORE_SCRATCH_REGS,
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_2, -8),
-+	},
-+},
-+{
-+	"sanitize ldx: src is others, dst is others, off is zero",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_2, 0, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_2, 0),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 1, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BACKUP_SCRATCH_REGS,
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_0),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	RESTORE_SCRATCH_REGS,
-+	BPF_MOV64_REG(BPF_REG_0, MAX_BPF_REG),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_2, 0),
-+	},
-+},
-+{
-+	"sanitize ldx: src is others, dst is others",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_2, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_2, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 1, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BACKUP_SCRATCH_REGS,
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_0),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	RESTORE_SCRATCH_REGS,
-+	BPF_MOV64_REG(BPF_REG_0, MAX_BPF_REG),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_2, -8),
-+	},
-+},
-+{
-+	"sanitize LDX: SRC is R10",
-+	.insns = {
-+	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_10, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 1, 1),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.unexpected_insns = {
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	},
-+},
-+#endif /* CONFIG_BPF_PROG_KASAN */
--- 
-2.38.1
+u32 mask = BIT(8);
 
+>  	u32 val = 0;
+>  	int ret;
+>  
+> +	if (pcie->max_lanes == 4)
+> +		mask = GENMASK(9, 8);
+> +
+>  	val = LANE_COUNT(lanes - 1);
+> -	ret = regmap_update_bits(syscon, offset, LANE_COUNT_MASK, val);
+> +	ret = regmap_update_bits(syscon, offset, mask, val);
+>  	if (ret)
+>  		dev_err(dev, "failed to set link count\n");
+>  
+> @@ -439,6 +443,8 @@ static int j721e_pcie_probe(struct platform_device *pdev)
+>  	ret = of_property_read_u32(node, "num-lanes", &num_lanes);
+>  	if (ret || num_lanes > data->max_lanes)
+>  		num_lanes = 1;
+> +
+> +	pcie->max_lanes = data->max_lanes;
+>  	pcie->num_lanes = num_lanes;
+>  
+>  	if (dma_set_mask_and_coherent(dev, DMA_BIT_MASK(48)))
+
+Reviewed-by: Roger Quadros <rogerq@kernel.org>
+
+cheers,
+-roger
