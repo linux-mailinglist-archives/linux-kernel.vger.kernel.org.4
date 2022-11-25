@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F0F638492
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 08:41:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E74638494
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 08:41:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbiKYHlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 02:41:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59168 "EHLO
+        id S229748AbiKYHlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 02:41:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiKYHlN (ORCPT
+        with ESMTP id S229583AbiKYHlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 25 Nov 2022 02:41:13 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 946562C64D;
-        Thu, 24 Nov 2022 23:41:09 -0800 (PST)
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13FE827B15;
+        Thu, 24 Nov 2022 23:41:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669362069; x=1700898069;
+  t=1669362070; x=1700898070;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=rIgMfxuIvIdtlvycFy3GHeggDCrUAgOnBUIzzA4TRGc=;
-  b=EhGkymbf5Qh/sO3vSYGBe+NEmuJxWf7t9xkhWGcEoz33Dij+acuUhUJK
-   RCjYe6Vkrb4fBy/AWjYbyUDyqxaZc6CMAxxTxj4ufD+MoNYVCpoUHrkyy
-   HxBEDuQikGTIb4AeSMumE+qGYRZNFXBXFRQnvgeFuMxOGdX8DBOStxziR
-   ugTtRY/M9SzbhWPwcnaSoxdE52g96U28KBvDgnej8xMrLZxBtC9rU+fvt
-   JptthmZLcKbvg1AL8mqzg1/5Hn/1dWG5cns6W6UPY30nMXdexg/abLdqg
-   vDIQ8ojoGSgkHRojHdY6U2c+5Ru6pisu7axUhMpNSxDXFyA+okxNTPmSZ
+  bh=1mgQkjaB5P+ahHrLpwuDvbx66JxV4GIcznrBVFLcB3A=;
+  b=Lox3+knfgRSqTWj7yJZNXgaHhVHhb1YzQjKb13EAplWRO+UWKqS9rkDd
+   Izp7WBn7gSjwlaP0rxKoEdpWheoZsO8t8yIF6j4pW4pBgtqc/LJyaRn6/
+   y9wNvjgT8ijcOmAqPDw4buCIEyGXekLX75sDcnxKD5v5Qma30YzGXJ8r4
+   hbwEiRCn3jqWjKyasoBHCdcl3jOnECQtILTi5UBbU6DOp+Ynx4Njw76to
+   o0qR15GFnqL6Qk0S/zHqLJW41GPz7FyP56RDIX9BpVrlrEAfkRXyHPxVM
+   1K1LhCu14T5+vBa8FEEjLUZOBZRU/zQYl0hMDQ5iBYnjT0gG2c01sTxHm
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="297788133"
+X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="400721231"
 X-IronPort-AV: E=Sophos;i="5.96,192,1665471600"; 
-   d="scan'208";a="297788133"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2022 23:41:08 -0800
+   d="scan'208";a="400721231"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2022 23:41:08 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="784861804"
+X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="817066261"
 X-IronPort-AV: E=Sophos;i="5.96,192,1665471600"; 
-   d="scan'208";a="784861804"
+   d="scan'208";a="817066261"
 Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Nov 2022 23:41:02 -0800
+  by orsmga005.jf.intel.com with ESMTP; 24 Nov 2022 23:41:03 -0800
 Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oyTKY-0004qV-0y;
+        id 1oyTKY-0004qT-0r;
         Fri, 25 Nov 2022 07:41:02 +0000
-Date:   Fri, 25 Nov 2022 15:40:50 +0800
+Date:   Fri, 25 Nov 2022 15:40:52 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Hao Sun <sunhao.th@gmail.com>, bpf@vger.kernel.org
 Cc:     oe-kbuild-all@lists.linux.dev, ast@kernel.org,
@@ -52,17 +52,18 @@ Cc:     oe-kbuild-all@lists.linux.dev, ast@kernel.org,
         kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
         jolsa@kernel.org, davem@davemloft.net,
         linux-kernel@vger.kernel.org, Hao Sun <sunhao.th@gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/3] bpf: Sanitize STX/ST in jited BPF progs
+Subject: Re: [PATCH bpf-next v2 2/3] bpf: Sanitize LDX in jited BPF progs
  with KASAN
-Message-ID: <202211251510.fzpW7QEi-lkp@intel.com>
-References: <20221125063630.536657-2-sunhao.th@gmail.com>
+Message-ID: <202211251545.HHc1zsBb-lkp@intel.com>
+References: <20221125063630.536657-3-sunhao.th@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="dCK7bzv+eyockXKM"
+Content-Type: multipart/mixed; boundary="/O7/IVew1pKoNkKZ"
 Content-Disposition: inline
-In-Reply-To: <20221125063630.536657-2-sunhao.th@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,UPPERCASE_75_100 autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221125063630.536657-3-sunhao.th@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,UPPERCASE_75_100 autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -70,7 +71,7 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---dCK7bzv+eyockXKM
+--/O7/IVew1pKoNkKZ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
@@ -82,17 +83,17 @@ Thank you for the patch! Perhaps something to improve:
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Hao-Sun/bpf-Add-LDX-STX-ST-sanitize-in-jited-BPF-progs/20221125-143743
 base:   2b3e8f6f5b939ceeb2e097339bf78ebaaf11dfe9
-patch link:    https://lore.kernel.org/r/20221125063630.536657-2-sunhao.th%40gmail.com
-patch subject: [PATCH bpf-next v2 1/3] bpf: Sanitize STX/ST in jited BPF progs with KASAN
+patch link:    https://lore.kernel.org/r/20221125063630.536657-3-sunhao.th%40gmail.com
+patch subject: [PATCH bpf-next v2 2/3] bpf: Sanitize LDX in jited BPF progs with KASAN
 config: powerpc-allyesconfig
 compiler: powerpc-linux-gcc (GCC) 12.1.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b2fda8cc7c95aa1b69e2d247f3a18c7424ac15a9
+        # https://github.com/intel-lab-lkp/linux/commit/2a9cbd2def8de929b9d30e5cbe68ac69ddb8dcb5
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review Hao-Sun/bpf-Add-LDX-STX-ST-sanitize-in-jited-BPF-progs/20221125-143743
-        git checkout b2fda8cc7c95aa1b69e2d247f3a18c7424ac15a9
+        git checkout 2a9cbd2def8de929b9d30e5cbe68ac69ddb8dcb5
         # save the config file
         mkdir build_dir && cp config build_dir/.config
         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash kernel/
@@ -102,49 +103,71 @@ If you fix the issue, kindly add following tag where applicable
 
 All warnings (new ones prefixed by >>):
 
->> kernel/bpf/verifier.c:15335:21: warning: no previous prototype for 'bpf_asan_store8' [-Wmissing-prototypes]
+   kernel/bpf/verifier.c:15335:21: warning: no previous prototype for 'bpf_asan_store8' [-Wmissing-prototypes]
    15335 |         notrace u64 bpf_asan_store##n(u##n *addr) \
          |                     ^~~~~~~~~~~~~~
    kernel/bpf/verifier.c:15342:1: note: in expansion of macro 'BPF_ASAN_STORE'
    15342 | BPF_ASAN_STORE(8);
          | ^~~~~~~~~~~~~~
->> kernel/bpf/verifier.c:15335:21: warning: no previous prototype for 'bpf_asan_store16' [-Wmissing-prototypes]
+   kernel/bpf/verifier.c:15335:21: warning: no previous prototype for 'bpf_asan_store16' [-Wmissing-prototypes]
    15335 |         notrace u64 bpf_asan_store##n(u##n *addr) \
          |                     ^~~~~~~~~~~~~~
    kernel/bpf/verifier.c:15343:1: note: in expansion of macro 'BPF_ASAN_STORE'
    15343 | BPF_ASAN_STORE(16);
          | ^~~~~~~~~~~~~~
->> kernel/bpf/verifier.c:15335:21: warning: no previous prototype for 'bpf_asan_store32' [-Wmissing-prototypes]
+   kernel/bpf/verifier.c:15335:21: warning: no previous prototype for 'bpf_asan_store32' [-Wmissing-prototypes]
    15335 |         notrace u64 bpf_asan_store##n(u##n *addr) \
          |                     ^~~~~~~~~~~~~~
    kernel/bpf/verifier.c:15344:1: note: in expansion of macro 'BPF_ASAN_STORE'
    15344 | BPF_ASAN_STORE(32);
          | ^~~~~~~~~~~~~~
->> kernel/bpf/verifier.c:15335:21: warning: no previous prototype for 'bpf_asan_store64' [-Wmissing-prototypes]
+   kernel/bpf/verifier.c:15335:21: warning: no previous prototype for 'bpf_asan_store64' [-Wmissing-prototypes]
    15335 |         notrace u64 bpf_asan_store##n(u##n *addr) \
          |                     ^~~~~~~~~~~~~~
    kernel/bpf/verifier.c:15345:1: note: in expansion of macro 'BPF_ASAN_STORE'
    15345 | BPF_ASAN_STORE(64);
          | ^~~~~~~~~~~~~~
+>> kernel/bpf/verifier.c:15348:21: warning: no previous prototype for 'bpf_asan_load8' [-Wmissing-prototypes]
+   15348 |         notrace u64 bpf_asan_load##n(u##n *addr) \
+         |                     ^~~~~~~~~~~~~
+   kernel/bpf/verifier.c:15353:1: note: in expansion of macro 'BPF_ASAN_LOAD'
+   15353 | BPF_ASAN_LOAD(8);
+         | ^~~~~~~~~~~~~
+>> kernel/bpf/verifier.c:15348:21: warning: no previous prototype for 'bpf_asan_load16' [-Wmissing-prototypes]
+   15348 |         notrace u64 bpf_asan_load##n(u##n *addr) \
+         |                     ^~~~~~~~~~~~~
+   kernel/bpf/verifier.c:15354:1: note: in expansion of macro 'BPF_ASAN_LOAD'
+   15354 | BPF_ASAN_LOAD(16);
+         | ^~~~~~~~~~~~~
+>> kernel/bpf/verifier.c:15348:21: warning: no previous prototype for 'bpf_asan_load32' [-Wmissing-prototypes]
+   15348 |         notrace u64 bpf_asan_load##n(u##n *addr) \
+         |                     ^~~~~~~~~~~~~
+   kernel/bpf/verifier.c:15355:1: note: in expansion of macro 'BPF_ASAN_LOAD'
+   15355 | BPF_ASAN_LOAD(32);
+         | ^~~~~~~~~~~~~
+>> kernel/bpf/verifier.c:15348:21: warning: no previous prototype for 'bpf_asan_load64' [-Wmissing-prototypes]
+   15348 |         notrace u64 bpf_asan_load##n(u##n *addr) \
+         |                     ^~~~~~~~~~~~~
+   kernel/bpf/verifier.c:15356:1: note: in expansion of macro 'BPF_ASAN_LOAD'
+   15356 | BPF_ASAN_LOAD(64);
+         | ^~~~~~~~~~~~~
 
 
-vim +/bpf_asan_store8 +15335 kernel/bpf/verifier.c
+vim +/bpf_asan_load8 +15348 kernel/bpf/verifier.c
 
- 15333	
- 15334	#define BPF_ASAN_STORE(n)                         \
- 15335		notrace u64 bpf_asan_store##n(u##n *addr) \
- 15336		{                                         \
- 15337			u##n ret = *addr;                 \
- 15338			*addr = ret;                      \
- 15339			return ret;                       \
- 15340		}
- 15341	
+ 15346	
+ 15347	#define BPF_ASAN_LOAD(n)                         \
+ 15348		notrace u64 bpf_asan_load##n(u##n *addr) \
+ 15349		{                                        \
+ 15350			return *addr;                    \
+ 15351		}
+ 15352	
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---dCK7bzv+eyockXKM
+--/O7/IVew1pKoNkKZ
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
@@ -14598,4 +14621,4 @@ CONFIG_WARN_MISSING_DOCUMENTS=y
 CONFIG_WARN_ABI_ERRORS=y
 # end of Kernel hacking
 
---dCK7bzv+eyockXKM--
+--/O7/IVew1pKoNkKZ--
