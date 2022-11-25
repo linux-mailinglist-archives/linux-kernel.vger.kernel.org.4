@@ -2,58 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD3A0638634
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 10:28:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5C0F638636
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 10:28:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbiKYJ2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 04:28:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45260 "EHLO
+        id S229633AbiKYJ2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 04:28:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbiKYJ22 (ORCPT
+        with ESMTP id S229924AbiKYJ23 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 04:28:28 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB53A222BB;
+        Fri, 25 Nov 2022 04:28:29 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA12E13DDF;
+        Fri, 25 Nov 2022 01:28:24 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id w79so3673991pfc.2;
+        Fri, 25 Nov 2022 01:28:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gn2sizkMrneWFfSzYUQB5soJBl7mIdJiiFc0egNz5Zs=;
+        b=QsTVAa7JRtaXuFowmwy5i2eav7QNbidAg4ZI2AN96P8LbSM4r2EfZXICcTcTxDck4k
+         I/hJyMUfenMhrqYcQPe7meZL4ofu5fiQi2uKLEByWzGapBX2qmKAAns1gFdKtT50EhCo
+         Wh9jyVqg2pCPgLWMIJUbVLIHqrS9byxmd70vGoPmJMfqFRcgx9JbmCc4gqGEMSYnOx2s
+         HwynLvXlDqZMwQ28co+B7rA7cdAz034cs7o+bNsSUG1p9sBBYEslvTh/XgC/1KhDDj1m
+         Ly/ZaLGi68XMNvutGcYYPN1xJaIZgdCq67soSvO7yTr46HYdCaler8fmYqrEEl0cOdmb
+         6oQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gn2sizkMrneWFfSzYUQB5soJBl7mIdJiiFc0egNz5Zs=;
+        b=zPz84kR1TfHRJaQ50q18WJ5okueOsmofTVi96C6c1V0y2cwdI/++3f3CYuH5XwvKMt
+         a9sNojXDJ3yKlONWp2EsD45FbwniHUlLiWfjT1Hc8PGCO0At48kqlS+/gIQ2BEtc3giV
+         tccew0x93wkXPFjA93tDu45tqXDIsPlWDaol/hI6+LKkBMLeduCiqGiZpl/k+VSzTOQi
+         PSMm9ejhIdNfR+2PrRnlJVr+7Aj5+FOLyOY4jdUtiXCkl63HI/Fhxb5jZsaLRqd/1pNx
+         TBB3BNHUz8yGnlBT5xI3uiz8DG+Rldwk2vfsleVY6veN6mfg0DwAmnxGoyvL2Vf4EohH
+         22Lg==
+X-Gm-Message-State: ANoB5plr1qsrFuUnKC4cNCaFeSz2EvLNtkjZQpjhEMhKxk3Kr6Foep41
+        Wr48lpwZw9UdWCYELWko8cTC8kyyRLg=
+X-Google-Smtp-Source: AA0mqf50XZZ/soTHPNQbIvNJjXewcisXyQHI/CqiFiR3XoL8yz75ToMOhowDWc1u8gJaj5AMsJ+EbQ==
+X-Received: by 2002:a63:194f:0:b0:477:7db6:6d96 with SMTP id 15-20020a63194f000000b004777db66d96mr15349353pgz.458.1669368503761;
         Fri, 25 Nov 2022 01:28:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1669368504; x=1700904504;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Wzwmhe1tAJXVDVxgspmjOf4RzyKkfCj4R+nMlHGJos8=;
-  b=dcMxsgzS+J1wjQfB1wt4NC632r/WZPuOF4+DsiVMZIms1Mnz5hVezLuf
-   SgJUS96g0oWxgD9wUvutFR+jaoPo08g+lQ/+uqvpe93odydm23blLZ8Fq
-   ucHGe8xpH7HfLv1q0b027OrP2FByQQFYLg98fNK6Qurkawum3Yo9W1ls6
-   1+HMwi2qDr4P77aTAbaEJmlTjtbCQj/dGg0/obQJmAZah/ZDOH4VDnhQu
-   amuIRD74kzpCj0MX9rD6vtTpaupDq/GXol8ojBdJD3FQio3YUShYGI1md
-   9PsRwUHTIWAWjbrZfC3Q/9K3l8MXqXm87JKiLgVcAvVkefyJRTGx0O69B
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,193,1665471600"; 
-   d="scan'208";a="190492699"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Nov 2022 02:28:23 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Fri, 25 Nov 2022 02:28:22 -0700
-Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Fri, 25 Nov 2022 02:28:21 -0700
-From:   Eugen Hristev <eugen.hristev@microchip.com>
-To:     <claudiu.beznea@microchip.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        Eugen Hristev <eugen.hristev@microchip.com>
-Subject: [PATCH] ARM: configs: switch to new MICROCHIP_ISC driver
-Date:   Fri, 25 Nov 2022 11:28:12 +0200
-Message-ID: <20221125092812.446379-1-eugen.hristev@microchip.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Received: from localhost.localdomain (2001-b400-e2d2-0afd-e841-8cc0-6431-915a.emome-ip6.hinet.net. [2001:b400:e2d2:afd:e841:8cc0:6431:915a])
+        by smtp.gmail.com with ESMTPSA id f68-20020a623847000000b0056c702a370dsm2613526pfa.117.2022.11.25.01.28.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Nov 2022 01:28:22 -0800 (PST)
+From:   Owen Yang <ecs.taipeikernel@gmail.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Gavin Lee <gavin.lee@ecs.corp-partner.google.com>,
+        Bob Moragues <moragues@google.com>,
+        Matthias Kaehlcke <mka@google.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Abner Yen <abner.yen@ecs.corp-partner.google.com>,
+        Harvey <hunge@google.com>,
+        Owen Yang <ecs.taipeikernel@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v2 1/2] dt-bindings: arm: qcom: Add zombie
+Date:   Fri, 25 Nov 2022 17:28:13 +0800
+Message-Id: <20221125172726.v2.1.Idfcba5344b7995b44b7fa2e20f1aa4351defeca6@changeid>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,82 +77,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ATMEL_ISC and ATMEL_XISC have been deprecated and moved to staging.
-Use the new MICROCHIP_ISC/MICROCHIP_XISC symbols which are the
-replacement drivers.
+Add an entry in the device tree binding for sc7280-zombie.
 
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+Signed-off-by: Owen Yang <ecs.taipeikernel@gmail.com>
 ---
 
-Hi,
+(no changes since v1)
 
-This should go in 6.2, after the media subsystem new features will be merged.
-The tree here :
-https://git.linuxtv.org/media_stage.git/
-... contains the patches that are destined for 6.2 and perform the
-move of the ISC drivers to staging:
+ Documentation/devicetree/bindings/arm/qcom.yaml | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-https://git.linuxtv.org/media_stage.git/commit/?id=55927c98a2c88019e23353a87f44032107ca2854
-
-Hence this patch has to go in the same kernel version to allow the current
-defconfigs that use the ISC to switch to the new driver.
-(The old driver won't be selected anymore since it depends on
-MEDIA_DEPRECATED , so that symbol has to be selected first to select the
-old driver which is now in staging )
-
-Thanks
-
- arch/arm/configs/multi_v7_defconfig | 6 +++---
- arch/arm/configs/sama5_defconfig    | 2 +-
- arch/arm/configs/sama7_defconfig    | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index b61b2e3d116b..d1686bc40e5d 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -663,11 +663,11 @@ CONFIG_USB_VIDEO_CLASS=m
- CONFIG_V4L_PLATFORM_DRIVERS=y
- CONFIG_V4L_MEM2MEM_DRIVERS=y
- CONFIG_VIDEO_ASPEED=m
--CONFIG_VIDEO_ATMEL_ISC=m
--CONFIG_VIDEO_ATMEL_XISC=m
- CONFIG_VIDEO_ATMEL_ISI=m
--CONFIG_VIDEO_MICROCHIP_CSI2DC=m
- CONFIG_VIDEO_MMP_CAMERA=m
-+CONFIG_VIDEO_MICROCHIP_ISC=m
-+CONFIG_VIDEO_MICROCHIP_XISC=m
-+CONFIG_VIDEO_MICROCHIP_CSI2DC=m
- CONFIG_VIDEO_TEGRA_VDE=m
- CONFIG_VIDEO_RENESAS_CEU=m
- CONFIG_VIDEO_RCAR_VIN=m
-diff --git a/arch/arm/configs/sama5_defconfig b/arch/arm/configs/sama5_defconfig
-index 877bbe7b777e..f89fd4e0d10a 100644
---- a/arch/arm/configs/sama5_defconfig
-+++ b/arch/arm/configs/sama5_defconfig
-@@ -150,8 +150,8 @@ CONFIG_MEDIA_PLATFORM_SUPPORT=y
- CONFIG_MEDIA_USB_SUPPORT=y
- CONFIG_USB_VIDEO_CLASS=m
- CONFIG_V4L_PLATFORM_DRIVERS=y
--CONFIG_VIDEO_ATMEL_ISC=y
- CONFIG_VIDEO_ATMEL_ISI=y
-+CONFIG_VIDEO_MICROCHIP_ISC=y
- CONFIG_VIDEO_MT9V032=m
- CONFIG_VIDEO_OV2640=m
- CONFIG_VIDEO_OV5640=m
-diff --git a/arch/arm/configs/sama7_defconfig b/arch/arm/configs/sama7_defconfig
-index 8f28c9d443f0..cc42cea77f38 100644
---- a/arch/arm/configs/sama7_defconfig
-+++ b/arch/arm/configs/sama7_defconfig
-@@ -140,7 +140,7 @@ CONFIG_MEDIA_SUPPORT_FILTER=y
- CONFIG_MEDIA_CAMERA_SUPPORT=y
- CONFIG_MEDIA_PLATFORM_SUPPORT=y
- CONFIG_V4L_PLATFORM_DRIVERS=y
--CONFIG_VIDEO_ATMEL_XISC=y
-+CONFIG_VIDEO_MICROCHIP_XISC=y
- CONFIG_VIDEO_MICROCHIP_CSI2DC=y
- CONFIG_VIDEO_IMX219=m
- CONFIG_VIDEO_IMX274=m
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index 1b5ac6b02bc5..46ec61e3dec3 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -595,6 +595,16 @@ properties:
+           - const: google,villager-sku512
+           - const: qcom,sc7280
+ 
++      - description: Google Zombie (newest rev)
++        items:
++          - const: google,zombie
++          - const: qcom,sc7280
++
++      - description: Google Zombie with LTE (newest rev)
++        items:
++          - const: google,zombie-sku512
++          - const: qcom,sc7280
++
+       - items:
+           - enum:
+               - lenovo,flex-5g
 -- 
-2.25.1
+2.17.1
 
