@@ -2,155 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBC8A6385C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 09:59:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACA136385C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 10:00:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbiKYI7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 03:59:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45876 "EHLO
+        id S229917AbiKYJAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 04:00:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiKYI7p (ORCPT
+        with ESMTP id S229920AbiKYI75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 03:59:45 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BA032040
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 00:59:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=vZoNCJjY0Q3X4k84Vewd1QspSTLiUHiINRsOJnCDUeY=; b=G0TWOUnL2Bs1HNe8xv88rMjAHi
-        SS4KNfHDy7Wv5OaTWxtfd8Xr3lfyQdgugh3Wmo111XYvkC04P3QEkixYCdMj4O9aLzImlSjTjH7ns
-        EH5k1KDmAEU68mhpLKRsAw7nb34q9gDSvVVoPq0l2Hsmxg/Ye/GWGbIZfMwuxVhms0A4gAVFScu7/
-        //geUu1wRuegtMi15Bls0u+jVl9F2GwBfqCjhak/KH2hyVA0JTieikhNxcOciIUW98IjyZ5lTBdib
-        loNZ/9vNfpaLiBohBE4rMpBG7b5bK1c4yJec6W+N7J6/DOmrXWKlkCFoQUt5DEKG1ie5g4nRV3MPK
-        +wXgqOTw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oyUYP-004Tc0-FC; Fri, 25 Nov 2022 08:59:25 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 08931300422;
-        Fri, 25 Nov 2022 09:59:24 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id DA4AE2BB639CD; Fri, 25 Nov 2022 09:59:23 +0100 (CET)
-Date:   Fri, 25 Nov 2022 09:59:23 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Don <joshdon@google.com>
-Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        anna-maria@linutronix.de
-Subject: Re: [PATCH v3] sched: async unthrottling for cfs bandwidth
-Message-ID: <Y4CD615rYurnV6h7@hirez.programming.kicks-ass.net>
-References: <20221117005418.3499691-1-joshdon@google.com>
- <Y3d+1a9AEnWaxFwq@hirez.programming.kicks-ass.net>
- <CABk29NtSmXVCvkdpymeam7AYmXhZy2JLYLPFTdKpk5g6AN1-zg@mail.gmail.com>
- <094299a3-f039-04c1-d749-2bea0bc14246@linux.dev>
- <Y3tn5wz6TjsqfGTA@hirez.programming.kicks-ass.net>
- <CABk29Nuyp=Ba=qiJAospx-SR2ZQM9GrKW0pDUeJ3sfgNB4uLFg@mail.gmail.com>
- <Y3ymBOfRikUci/PD@hirez.programming.kicks-ass.net>
- <Y4CDZXZJpPB0J1BV@hirez.programming.kicks-ass.net>
+        Fri, 25 Nov 2022 03:59:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7B2326CC;
+        Fri, 25 Nov 2022 00:59:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 884D5622F8;
+        Fri, 25 Nov 2022 08:59:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5DF8C433D6;
+        Fri, 25 Nov 2022 08:59:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669366795;
+        bh=e6HuqocvKF2BxDIP+LM0eTorRMU5x/m6qeueXBoIy2o=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=MZLlKugAC6ovMQ6VpXpiH0+51k+TUegiP4iNiF1dxh6mqfMkCiNkF+9QKGLP7DrfV
+         zkPVQJbmZZ73wkWHtcjm2PltxG4gk/KN1zRvyCjxqgBFfVunKH23LEDHj3rOBYxIc3
+         zd9GbFmo9NaJ8mhDpbGaIkp2HyXMwun+13BEW7LatQzutT371SJbaQObTXQAK0i5At
+         ltsgAti7Ey91x0scqvwEw/YCNQ94NK+reLBkdPy3atdvLcfgHdd0mStZGsVgv55Edn
+         BqFR4/vKKScfoaGjnCwRk8zDanRtgRcKF00rg405puK0cBKagQ1MTjt161ZVHlYipH
+         DI4uDKm++rPoA==
+Message-ID: <5b26410e-a9d9-de8c-ea31-13dfec6c77b1@kernel.org>
+Date:   Fri, 25 Nov 2022 10:59:44 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4CDZXZJpPB0J1BV@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v9 3/6] remoteproc: pru: Add enum for PRU Core
+ Indentifiers.
+Content-Language: en-US
+To:     MD Danish Anwar <danishanwar@ti.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Suman Anna <s-anna@ti.com>, "Andrew F . Davis" <afd@ti.com>,
+        nm@ti.com, vigneshr@ti.com, srk@ti.com,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20221118111924.3277838-1-danishanwar@ti.com>
+ <20221118111924.3277838-4-danishanwar@ti.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20221118111924.3277838-4-danishanwar@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022 at 09:57:09AM +0100, Peter Zijlstra wrote:
-> On Tue, Nov 22, 2022 at 11:35:48AM +0100, Peter Zijlstra wrote:
-> > On Mon, Nov 21, 2022 at 11:37:14AM -0800, Josh Don wrote:
-> > > Yep, this tradeoff feels "best", but there are some edge cases where
-> > > this could potentially disrupt fairness. For example, if we have
-> > > non-trivial W, a lot of cpus to iterate through for dispatching remote
-> > > unthrottle, and quota is small. Doesn't help that the timer is pinned
-> > > so that this will continually hit the same cpu.
-> > 
-> > We could -- if we wanted to -- manually rotate the timer around the
-> > relevant CPUs. Doing that sanely would require a bit of hrtimer surgery
-> > though I'm afraid.
+Hi,
+
+On 18/11/2022 13:19, MD Danish Anwar wrote:
+> Introducing enum pruss_pru_id for PRU Core Identifiers.
+> PRUSS_PRU0 indicates PRU Core 0.
+> PRUSS_PRU1 indicates PRU Core 1.
+> PRUSS_NUM_PRUS indicates the total number of PRU Cores.
 > 
-> Here; something like so should enable us to cycle the bandwidth timer.
-> Just need to figure out a way to find another CPU or something.
+> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
+> ---
+>  drivers/remoteproc/pru_rproc.c | 6 +++---
+>  include/linux/pruss.h          | 9 +++++++++
+>  2 files changed, 12 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
+> index 4769ade9c316..7d4ed39b3772 100644
+> --- a/drivers/remoteproc/pru_rproc.c
+> +++ b/drivers/remoteproc/pru_rproc.c
+> @@ -564,7 +564,7 @@ static void *pru_d_da_to_va(struct pru_rproc *pru, u32 da, size_t len)
+>  	dram0 = pruss->mem_regions[PRUSS_MEM_DRAM0];
+>  	dram1 = pruss->mem_regions[PRUSS_MEM_DRAM1];
+>  	/* PRU1 has its local RAM addresses reversed */
+> -	if (pru->id == 1)
+> +	if (pru->id == PRUSS_PRU1)
+>  		swap(dram0, dram1);
+>  	shrd_ram = pruss->mem_regions[PRUSS_MEM_SHRD_RAM2];
+>  
+> @@ -873,14 +873,14 @@ static int pru_rproc_set_id(struct pru_rproc *pru)
+>  	case RTU0_IRAM_ADDR_MASK:
+>  		fallthrough;
+>  	case PRU0_IRAM_ADDR_MASK:
+> -		pru->id = 0;
+> +		pru->id = PRUSS_PRU0;
+>  		break;
+>  	case TX_PRU1_IRAM_ADDR_MASK:
+>  		fallthrough;
+>  	case RTU1_IRAM_ADDR_MASK:
+>  		fallthrough;
+>  	case PRU1_IRAM_ADDR_MASK:
+> -		pru->id = 1;
+> +		pru->id = PRUSS_PRU1;
+>  		break;
+>  	default:
+>  		ret = -EINVAL;
+> diff --git a/include/linux/pruss.h b/include/linux/pruss.h
+> index 4909226f14a9..fdc719b43db0 100644
+> --- a/include/linux/pruss.h
+> +++ b/include/linux/pruss.h
+> @@ -14,6 +14,15 @@
+>  
+>  #define PRU_RPROC_DRVNAME "pru-rproc"
+>  
+> +/*
+> + * enum pruss_pru_id - PRU core identifiers
+> + */
 
-Some more preparation...
+This does not follow kernel-doc style
+https://www.kernel.org/doc/html/v6.0/doc-guide/kernel-doc.html#structure-union-and-enumeration-documentation
 
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -5617,7 +5617,7 @@ static int do_sched_cfs_period_timer(str
- 	if (!throttled) {
- 		/* mark as potentially idle for the upcoming period */
- 		cfs_b->idle = 1;
--		return 0;
-+		return HRTIMER_RESTART;
- 	}
- 
- 	/* account preceding periods in which throttling occurred */
-@@ -5641,10 +5641,10 @@ static int do_sched_cfs_period_timer(str
- 	 */
- 	cfs_b->idle = 0;
- 
--	return 0;
-+	return HRTIMER_RESTART;
- 
- out_deactivate:
--	return 1;
-+	return HRTIMER_NORESTART;
- }
- 
- /* a cfs_rq won't donate quota below this amount */
-@@ -5836,9 +5836,9 @@ static enum hrtimer_restart sched_cfs_pe
- {
- 	struct cfs_bandwidth *cfs_b =
- 		container_of(timer, struct cfs_bandwidth, period_timer);
-+	int restart = HRTIMER_RESTART;
- 	unsigned long flags;
- 	int overrun;
--	int idle = 0;
- 	int count = 0;
- 
- 	raw_spin_lock_irqsave(&cfs_b->lock, flags);
-@@ -5847,7 +5847,7 @@ static enum hrtimer_restart sched_cfs_pe
- 		if (!overrun)
- 			break;
- 
--		idle = do_sched_cfs_period_timer(cfs_b, overrun, flags);
-+		restart = do_sched_cfs_period_timer(cfs_b, overrun, flags);
- 
- 		if (++count > 3) {
- 			u64 new, old = ktime_to_ns(cfs_b->period);
-@@ -5880,11 +5880,11 @@ static enum hrtimer_restart sched_cfs_pe
- 			count = 0;
- 		}
- 	}
--	if (idle)
-+	if (restart == HRTIMER_NORESTART)
- 		cfs_b->period_active = 0;
- 	raw_spin_unlock_irqrestore(&cfs_b->lock, flags);
- 
--	return idle ? HRTIMER_NORESTART : HRTIMER_RESTART;
-+	return restart;
- }
- 
- void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b)
+> +enum pruss_pru_id {
+> +	PRUSS_PRU0 = 0,
+> +	PRUSS_PRU1,
+> +	PRUSS_NUM_PRUS,
+> +};
+> +
+>  struct device_node;
+>  
+>  #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
+
+cheers,
+-roger
