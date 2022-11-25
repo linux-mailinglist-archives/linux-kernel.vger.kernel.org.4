@@ -2,67 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F99C638F79
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 19:03:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CD4F638F7C
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 19:04:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbiKYSC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 13:02:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54470 "EHLO
+        id S229890AbiKYSE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 13:04:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiKYSCy (ORCPT
+        with ESMTP id S229851AbiKYSE1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 13:02:54 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07AD1C92E;
-        Fri, 25 Nov 2022 10:02:53 -0800 (PST)
+        Fri, 25 Nov 2022 13:04:27 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171D32CDC5;
+        Fri, 25 Nov 2022 10:04:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669399373; x=1700935373;
+  t=1669399467; x=1700935467;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=pBzzW7E1Wwa1OMeKtZTVcirSZarNwEtwdhOAc/4sCWI=;
-  b=culgEQ9Hpk3+hXoVAC7GtN0yIcM6T71VpMuuLoZBrs7BMQbSZtJgNoP2
-   c/WGm1t+z06d06C8oG9upuSFyWFPvbBw152KccqO6m3pdgH593UKZTUOu
-   7NKs3bs/AVDuS2JFAhv2G+/xuXMJkCqjjkMxFIXBiCiS+ZHoLhhkO11sJ
-   SaRmsT2PH/ofJTU2yPF8p0jrBTCQ79QQ5lDFIvLt1UT+1BDT2KDizyv1z
-   t+wzIb9kxvaFJDY2R5C3eheXs4cvHGWPjwKkkDatGaowZ4ZeSR9Rh3RR4
-   hCWukn8bdIVkHtJLSabOh8fAdsutGI72BRjkXtcx1X/rszCrcQoSlbcKJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="314556360"
+  bh=cvo+wdxbGI7eQfNrQ+AeWW9IagbEwD8A5SKG0BtPBIQ=;
+  b=OqWNJLCJTXLk51LoCe7y9h5tt0APhBjUQR7lwHs2jaJjcLPocPKGLB/V
+   Km5kb/cjd0ZevrXiMlKrTLalEkXEqkeVm07aa40v9fzgoEpmI0+e4+P0E
+   x/11LA8I3Br7SeFZyqtCgx4/1BZDs356CNEiM/3b9PWF85X6q6nptcCLO
+   jfyLgeDvWD2qn9BfG5UD3AQL/1bS2KxA/ii7R1iM0Auczche0LYM6N1NN
+   vPg3cXzbhk7vQnt48PMfwmktNWP9YAiREAGi1Nnl74P8rNer0220P0+Gq
+   8nAEv7qhuF7eU9Y/+jMnDT3oMRE+hUzfUz32dXGYkVHZRG7/VOLyMkuZ6
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="316345438"
 X-IronPort-AV: E=Sophos;i="5.96,194,1665471600"; 
-   d="scan'208";a="314556360"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2022 10:02:53 -0800
+   d="scan'208";a="316345438"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2022 10:04:03 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="971634227"
+X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="675445123"
 X-IronPort-AV: E=Sophos;i="5.96,194,1665471600"; 
-   d="scan'208";a="971634227"
+   d="scan'208";a="675445123"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga005.fm.intel.com with ESMTP; 25 Nov 2022 10:02:51 -0800
+  by orsmga001.jf.intel.com with ESMTP; 25 Nov 2022 10:03:58 -0800
 Received: from andy by smile.fi.intel.com with local (Exim 4.96)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oyd2I-00HLQf-1n;
-        Fri, 25 Nov 2022 20:02:50 +0200
-Date:   Fri, 25 Nov 2022 20:02:50 +0200
+        id 1oyd3K-00HLRW-2S;
+        Fri, 25 Nov 2022 20:03:54 +0200
+Date:   Fri, 25 Nov 2022 20:03:54 +0200
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH] gpiolib: cdev: fix NULL-pointer dereferences
-Message-ID: <Y4EDSqiq6WSZANt8@smile.fi.intel.com>
-References: <20221125153257.528826-1-brgl@bgdev.pl>
- <Y4DsTxPH1tv5eEwf@sol>
- <CAMRc=Me83-_oiGEmwy4BUrzLEMT6ZsoMwWYsb6iXwg19yHMHdQ@mail.gmail.com>
- <Y4EBubusGqo4IroP@smile.fi.intel.com>
+To:     Tharunkumar.Pasumarthi@microchip.com
+Cc:     Kumaravel.Thiagarajan@microchip.com, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com,
+        macro@orcam.me.uk, jay.dolan@accesio.com, cang1@live.co.uk,
+        u.kleine-koenig@pengutronix.de, wander@redhat.com,
+        etremblay@distech-controls.com, jk@ozlabs.org,
+        biju.das.jz@bp.renesas.com, geert+renesas@glider.be,
+        phil.edworthy@renesas.com, lukas@wunner.de,
+        UNGLinuxDriver@microchip.com, colin.i.king@gmail.com
+Subject: Re: [PATCH v5 tty-next 1/4] 8250: microchip: pci1xxxx: Add driver
+ for quad-uart support.
+Message-ID: <Y4EDinQApvqheyZC@smile.fi.intel.com>
+References: <20221117050126.2966714-1-kumaravel.thiagarajan@microchip.com>
+ <20221117050126.2966714-2-kumaravel.thiagarajan@microchip.com>
+ <Y3Xv6XOwddNq6Gmr@smile.fi.intel.com>
+ <PH7PR11MB595813B2AB661CD50517DEB89B0E9@PH7PR11MB5958.namprd11.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y4EBubusGqo4IroP@smile.fi.intel.com>
+In-Reply-To: <PH7PR11MB595813B2AB661CD50517DEB89B0E9@PH7PR11MB5958.namprd11.prod.outlook.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,14 +76,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022 at 07:56:10PM +0200, Andy Shevchenko wrote:
-> On Fri, Nov 25, 2022 at 05:48:02PM +0100, Bartosz Golaszewski wrote:
+On Fri, Nov 25, 2022 at 03:45:01PM +0000, Tharunkumar.Pasumarthi@microchip.com wrote:
+> > From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Sent: Thursday, November 17, 2022 1:55 PM
 
 ...
 
-An off topic here, can we have this [1] being applied meanwhile?
+> > > +     case PCI_SUBDEVICE_ID_EFAR_PCI11414:
+> > > +             irq_idx = idx;
+> > > +             break;
+> > 
+> > Try to make this entire switch-case more compact. It's possible.
+> 
+> I am planning to use look-up table for this in-order to avoid computation
+> within switch case. Does this approach sound good?
 
-[1]: https://lore.kernel.org/linux-gpio/d1e86166-b2b0-a235-fe9e-be9ee4d93290@huawei.com/
+Maybe, it's you who decides, just show us the result and we will see.
 
 -- 
 With Best Regards,
