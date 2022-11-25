@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B7E5639112
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 22:28:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F500639113
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 22:28:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230084AbiKYV2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 16:28:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34868 "EHLO
+        id S230134AbiKYV2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 16:28:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbiKYV2j (ORCPT
+        with ESMTP id S230092AbiKYV2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 16:28:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE0E53EC5
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 13:28:37 -0800 (PST)
+        Fri, 25 Nov 2022 16:28:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB836537F1
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 13:28:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2EBD4B82C38
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 21:28:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33C1FC4347C;
-        Fri, 25 Nov 2022 21:28:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C0E860EF4
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 21:28:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D36EC433D6;
+        Fri, 25 Nov 2022 21:28:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669411714;
-        bh=UE91ckGCJzG7DYhHpRX4sNBnIkoKdtx0Ogz/pz5XkVk=;
+        s=k20201202; t=1669411721;
+        bh=QiMeHracAPcJNUmU/97XystmnPIWB7tNUE61xoEs2fE=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=CyR/geYX99NErL68x+WfVB+XVm3KFijEOOkn9ZPC+bOFRN6EIfovl9TXHoKAZETBV
-         bHzUPE6X13Q4BTBhJsYkkuE68Mhm7jtiKjCF1Q+CFR1Qj98iwDWMpYy23XB18SD0sX
-         tUlLCqbBXO6V8s8Cv9J7zzQreQExArHSUUHAMs9EGwhMzT3JFb+oSUyDG/gjVIzIOt
-         KffctQ4XTy+/vWngmaNNpS3SG3kh6z8LLuqmySYC9k7IC/EtXlF5TZx11IE7MhE+WU
-         0s4c6YtArAp7yyTbmWuTUiDFY7DlV8RInmzpzJRo0ZG4YpqAbSClSgf/wYoS/igrAA
-         ASh2B5tkr24lw==
+        b=Wavsfc/tfP9wiPgIeqbXnir/udsRF7leGt/6uh/2SFn1FYaV5GQYKK2+MH2fWKVwY
+         51v2xCP+HXKT8mhZkSOxV0NYjHYaIFHIvutvagaIl+PAw1kqMSIW/p57mgH7uLHSBg
+         cjt2A/JpUeACl+5pSwS3X1M5qG6QzzdmBdQUDYJtv1UzfWgDuxC2USHjtWYyhJQIc/
+         Fh7KSwB3Ud8EkpZ95Hx/k+NBx99DJJqY7oLeWIqUo+AXhxmOUMvy7LvvDL0Wyk1WF0
+         Cwa26/1CJr5C86+XQ8CFVkFYAtgYca6MPXZGqxSbCVEDtQfHGyz+MFI+uz9xyLPCPg
+         KfTS9YH2SuX8w==
 From:   Mark Brown <broonie@kernel.org>
-To:     Maarten Zanders <maarten.zanders@mind.be>
-Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-In-Reply-To: <20221028152626.109603-1-maarten.zanders@mind.be>
-References: <20221028152626.109603-1-maarten.zanders@mind.be>
-Subject: Re: [PATCH 0/3] ASoC: adau1372: fixes after debugging custom board
-Message-Id: <166941171393.2089698.14716103883721303046.b4-ty@kernel.org>
-Date:   Fri, 25 Nov 2022 21:28:33 +0000
+To:     Eddie James <eajames@linux.ibm.com>, linux-fsi@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, alistair@popple.id.au,
+        joel@jms.id.au, jk@ozlabs.org, rafael@kernel.org,
+        gregkh@linuxfoundation.org
+In-Reply-To: <20221102205148.1334459-1-eajames@linux.ibm.com>
+References: <20221102205148.1334459-1-eajames@linux.ibm.com>
+Subject: Re: (subset) [PATCH v2 0/5] fsi: Add regmap and refactor sbefifo
+Message-Id: <166941172004.2089843.9744380408394537777.b4-ty@kernel.org>
+Date:   Fri, 25 Nov 2022 21:28:40 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -53,29 +55,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Oct 2022 17:26:22 +0200, Maarten Zanders wrote:
-> Maarten Zanders (3):
->   ASoC: adau1372: fix mclk
->   ASoC: adau1372: add support for S24_LE mode
->   ASoC: adau1372: correct PGA enable & mute bit
+On Wed, 2 Nov 2022 15:51:43 -0500, Eddie James wrote:
+> The SBEFIFO hardware can now be attached over a new I2C endpoint interface
+> called the I2C Responder (I2CR). In order to use the existing SBEFIFO
+> driver, add a regmap driver for the FSI bus and an endpoint driver for the
+> I2CR. Then, refactor the SBEFIFO and OCC drivers to clean up and use the
+> new regmap driver or the I2CR interface.
 > 
->  sound/soc/codecs/adau1372.c | 31 +++++++++++++++++--------------
->  1 file changed, 17 insertions(+), 14 deletions(-)
+> Changes since v1:
+>  - Instead of a regmap driver for the I2CR, just have a private interface
+>    driver for FSI, since SBEFIFO is likely the only user.
 > 
 > [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
 
 Thanks!
 
-[1/3] ASoC: adau1372: fix mclk
-      commit: 27b6fa6145215c5f49d93e322a16144b928ecd3e
-[2/3] ASoC: adau1372: add support for S24_LE mode
-      commit: cd887a7ba74c8378ae8b52afa04adb0d49cdf13d
-[3/3] ASoC: adau1372: correct PGA enable & mute bit
-      commit: dffa0df699d7c20f447e6bd797666366c6bae4b3
+[1/5] regmap: Add FSI bus support
+      commit: bf0d29fb51ff5e6c13097dbfed7b99e0e35b4a15
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
