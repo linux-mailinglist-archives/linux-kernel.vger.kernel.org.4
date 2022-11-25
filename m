@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C7C563916E
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 23:30:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6F3639176
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 23:31:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbiKYWaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 17:30:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44602 "EHLO
+        id S230036AbiKYWbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 17:31:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiKYWai (ORCPT
+        with ESMTP id S230007AbiKYWak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 17:30:38 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D1E58025
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 14:30:29 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id ho10so13078930ejc.1
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 14:30:29 -0800 (PST)
+        Fri, 25 Nov 2022 17:30:40 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD44758BC0
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 14:30:32 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id bj12so12974334ejb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 14:30:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=tessares.net; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1Cb2y/UtN3+Ws3JUnmppragcoaJ4ENOeTCAI1eAVlFM=;
-        b=01N2xfDvgcjSbGMjylrmgTjJ9Bc13QikP569jRTFgVhoc0H6iuPm/1R0hjQQHj83rq
-         1ttFxwNLBg8Bw886+QyslUvLZmXpq0mfr63ty1INQU77HyPsQxMMU4w8W2FJOvpgLnkD
-         Ak4AWRy7qbeU99I3JOSRpJ1gJWy1uizWVoco8DYHdN5zS/lS4saQeNHutAu/F47VYlzs
-         +8uUIFuko+RZA0EWgTq9f9RFh+67jtKVpWLZtj+oHiOYTK+vknsSmYJnlLfXYDGxNuUV
-         nTr/o2kJZ3OS9xuwh0XlyZPoBE1d5ZfbjHgtVtyFqQbfpntAWIxTL6TbNQtrvzb22sGi
-         Oxaw==
+        bh=E1JR5Int83weGmlDAZ8KCrVS6bbZMLt4JJ3mk20BbRU=;
+        b=RWKW8xV74p4li70/5s11jS4IMkdN4+7dKoqNldNA7UJtb4Za3VO0dPs8G39JsRzUGu
+         +o2P9Km+PZyYTlHfnUUdTKa5bATCZFfcIjWnOSZdXnDQPc4TWFPESbOzozEsovGsAsO+
+         m2ZIFsnekdYcooRTDcsm7DgJG4Pbt9HdW3BL1y5SL6kVPS8ljHrqaC4btj82QFfIWqPE
+         N7BhXB7YCjZjQ8zLls9AH++MPQYD7OgxBJ3A1CNbBKyxsxB2vpY2dBX1UZbuaNNmPJlH
+         HJkNHkHzMn1nxu/GjCRkugB4ZzETsKPR5mCKklI+cwQV1cXPHowQ2LgX+uDsHqEqAEaS
+         lA/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1Cb2y/UtN3+Ws3JUnmppragcoaJ4ENOeTCAI1eAVlFM=;
-        b=X+EqklqHa+Ov8hEuWjXPaChEBNO7sLD4cYxqnTexfXRxwQbxAykuiL/s3iRY9XK5ZS
-         ajTWcsqZv6RFpbvtasW/c0a2N7mOm60uTLxldWjh/KmGJEjbhjrp7kdxZfhxL9zs0qMG
-         0KFHSaRAqMdNt2nQCOqyE57y48BgsI4Dv9uqWJWnCscQROJykm+FAZQljbGrKBn4sH+j
-         I8cHfn+mdD5wTwpM0WJ41EwxqrngAPKYpoeERGDPhY1BmLmUTHIUBJI5WE2082ZZDi8F
-         Os+UVcl99CETTSJr+Y1cBz+hrvNV37n9NtkvkOJkLnGHLnATweBZmvVJaGChN/0D+UW7
-         YEXQ==
-X-Gm-Message-State: ANoB5pnteuWndRnNIB34RVC1Mh4PeVeLG8g3agLItdzMBYMx7cXBuhV/
-        VYIviZKto5tL8tfqMYYcpe1goA==
-X-Google-Smtp-Source: AA0mqf6xxK8WYM+lNhjpWP9rJ2n8b/ziVH3Ex8BQy4Meg4InWA43gG5qkbTGVS5xV+gneGzekuux/g==
-X-Received: by 2002:a17:907:7796:b0:7b6:6086:75bc with SMTP id ky22-20020a170907779600b007b6608675bcmr23083760ejc.181.1669415428977;
-        Fri, 25 Nov 2022 14:30:28 -0800 (PST)
+        bh=E1JR5Int83weGmlDAZ8KCrVS6bbZMLt4JJ3mk20BbRU=;
+        b=dS/Ihr2nO+BQVTVYwp2PEQ+o0/DKfyRSVfh3qx1vhLRup0sKPkD4+B5gokBL+aWmDF
+         ui+qK5PIr9v5MIb97tUEBpzDTgy+xCkQCo1+U5qhaJociTq+fviU+/HV5oCSX6Ulerm7
+         rpKGzk9zj7gXTo+31z6X5T7+WKKyjwle8i0waG96tU01PbKJYSvrJ9SsZEJADMP7+AYq
+         RXUciqXboLxfGjQi1n8V5xJcHPr+IZjTVqiek2+L3c5t0Fd6AdbdazyWpQrOLTRIVgY9
+         6txYMCS15qPJcQownE1eqkYgEtnwXLIGFAYVIOTUa7b5cvBVr6tQVzDLuvkgCStW0RlF
+         d84A==
+X-Gm-Message-State: ANoB5pmcr96+3oGIIlcrCHBGCaQVX4UFf5oa27TZKTPGVEkezOxFIut4
+        SrLKZbsCYdIID4mfykH/032xKg==
+X-Google-Smtp-Source: AA0mqf6/KaVU8ozp1mPAfv+uvG0KA7+NnHu3Lv4jEQzLA+NDOIARu1lAoMykMsNVUIpXNklan6SN7w==
+X-Received: by 2002:a17:906:4dcb:b0:7bb:d6e5:6b1c with SMTP id f11-20020a1709064dcb00b007bbd6e56b1cmr7575596ejw.104.1669415431000;
+        Fri, 25 Nov 2022 14:30:31 -0800 (PST)
 Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id q1-20020a056402248100b0046267f8150csm2254612eda.19.2022.11.25.14.30.27
+        by smtp.gmail.com with ESMTPSA id q1-20020a056402248100b0046267f8150csm2254612eda.19.2022.11.25.14.30.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Nov 2022 14:30:28 -0800 (PST)
+        Fri, 25 Nov 2022 14:30:30 -0800 (PST)
 From:   Matthieu Baerts <matthieu.baerts@tessares.net>
 To:     Mat Martineau <mathew.j.martineau@linux.intel.com>,
         Matthieu Baerts <matthieu.baerts@tessares.net>,
@@ -57,92 +57,92 @@ To:     Mat Martineau <mathew.j.martineau@linux.intel.com>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>
-Cc:     Dmytro Shytyi <dmytro@shytyi.net>, netdev@vger.kernel.org,
-        mptcp@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 6/8] mptcp: add TCP_FASTOPEN sock option
-Date:   Fri, 25 Nov 2022 23:29:52 +0100
-Message-Id: <20221125222958.958636-7-matthieu.baerts@tessares.net>
+Cc:     netdev@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next 7/8] mptcp: add support for TCP_FASTOPEN_KEY sockopt
+Date:   Fri, 25 Nov 2022 23:29:53 +0100
+Message-Id: <20221125222958.958636-8-matthieu.baerts@tessares.net>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20221125222958.958636-1-matthieu.baerts@tessares.net>
 References: <20221125222958.958636-1-matthieu.baerts@tessares.net>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2069; i=matthieu.baerts@tessares.net;
- h=from:subject; bh=3lYgndFAWxyUdVThAOH1DTU2iT5OHzt+/flIs4qdSmA=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBjgUHPHz7z7nQQ/ZU7tkAMYEJqt9sIdN822xr0gpN1
- 21RZWhCJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCY4FBzwAKCRD2t4JPQmmgc0MmEA
- CPNfsIncIXq8fq2Gcg3wKHNfyVoZVZ6L/UTzsRsHUbaGrGp8amjthHO0ps6pAeK3a63cQmJZmI5i4z
- fPWVZvjt3sMd5Kuef01BgG7k/Ey4y0Rq0/2RewMYtsVmVDC8TxQFNt28Lbb2mVYlF5nHLOlgE6tXuR
- 4Opi8wfxggdLOO7+epC1gttpqqkX+td76vBL/ltaB3UO7PnJuwfIuwVUFn1IuHpj1H3Y21kCMQoTay
- LKBwRdScBYqBwLQk5B/9cyNwB5GvlaqXkR3dI7kMHuUy8l1md6ekv3m0829EQbp+vsPuLc7h9tj/bo
- MY8PkUimbNGfovbxjZrSXTpsI0xzIiCAD+p5t8Fyr3T3hCGDux/7qzuWrfoZWmKlg7O9Wf2hlFZK+y
- sv+veiRWLnNUHLwM6mQBFi48oqOl0msDj8o7RQAfNcN7jwmDAL8wYUR20wHzspcb+9E+mmqoVwp6QW
- h0ENTBEDuoXkDaAvPKrUHwvdLuYm5Mj/WmFw71SY5s3xFyR1tevNVQjHu/GwOx9xsZsSm2YSvlAZuI
- 1z3DVR+gd7hdQfAVDV1tepjtlUCd3YkkWwlx64oYRJmDcKI+WAxc16zQijOACIm98c15NTFXJ0dVlV
- njTk1sIkK3F/6pg6HJcIT2LcXE7BbFfYSa6i14O2SxPFe6i0ZlQeg2CWXeTw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1958; i=matthieu.baerts@tessares.net;
+ h=from:subject; bh=8soZSefjdC1P5SPfpTSfBA9V7b6DGdkwS8pfXBGPBIk=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBjgUHQCot9Zm8fgwY3GN6Emj0jLhXjYgKZQVRSfcZm
+ +EK5pgGJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCY4FB0AAKCRD2t4JPQmmgc81PEA
+ DdalZkgR4/ghd4mFPTlTnp7uG0BFTlS1tyM3PG7S6Fgr/APXIEq9KJ5ZiNbWgvK3KuAIJcI/TZmWLF
+ Jei7MndFIqbYYZ49hnG2G36CivbeR362ir2Mb9dpOq7UWq1oJ5b0LN5r8NZmwkdC+/JH13l7XZMHXj
+ RizEcuS7gMc6jtg8KtoDTE6QWaOh9RiYMWRkEcyT5TW0qwHF80x6BJLJmtUs85891b4Vi3N+vMtuij
+ hgpk1KfGLCczOwK7duRP5EjC7OtPTZk9HLqDjlKohLpMJM3ei2UlgcWqeF+MYstQ5BTGbBnEs9/HVM
+ OzrzmQvi6QRJsjNyoG+7njrN3zV6y165jtOtjoNlfbWyXGPEuZuzhV2JX2XBJWyvjGFeRWJeojule6
+ N7ZihmUMUwpX9RYZUy8HtutZceHwGeio8rDKtHsYjDGpJxlR+Zvx+6NazM5xHNxMzUbKmdXAJXDxRd
+ JSsynUxdJYJvofBsauB+qQgvQAUSBuBgLGvKcYzscJD0JjDxlxIcjW4KUBZczzhtGX/0Ib0kdeERiq
+ xjUDT4xm95kQGnNS1zH3JAarn8TXzbMrIB20A1i0qE0nRJy4DWqwi5IH54t+qxn7ZdX1udL8GmSF5i
+ /IARWmzBFTbJUkqj5LBKFiiD3iAfU5kxzeTuKnDs8o/G4DC2XxSJunl6C7cg==
 X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp; fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmytro Shytyi <dmytro@shytyi.net>
-
-The TCP_FASTOPEN socket option is one way for the application to tell
-the kernel TFO support has to be enabled for the listener socket.
+The goal of this socket option is to set different keys per listener,
+see commit 1fba70e5b6be ("tcp: socket option to set TCP fast open key")
+for more details about this socket option.
 
 The only thing to do here with MPTCP is to relay the request to the
 first subflow like it is already done for the other TCP_FASTOPEN* socket
 options.
 
 Acked-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Dmytro Shytyi <dmytro@shytyi.net>
 Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 ---
- net/mptcp/sockopt.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ net/mptcp/sockopt.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/net/mptcp/sockopt.c b/net/mptcp/sockopt.c
-index f62f6483ef77..c1bca711c35c 100644
+index c1bca711c35c..a47423ebb33a 100644
 --- a/net/mptcp/sockopt.c
 +++ b/net/mptcp/sockopt.c
-@@ -559,6 +559,7 @@ static bool mptcp_supported_sockopt(int level, int optname)
- 		case TCP_NOTSENT_LOWAT:
- 		case TCP_TX_DELAY:
+@@ -561,6 +561,7 @@ static bool mptcp_supported_sockopt(int level, int optname)
  		case TCP_INQ:
-+		case TCP_FASTOPEN:
+ 		case TCP_FASTOPEN:
  		case TCP_FASTOPEN_CONNECT:
++		case TCP_FASTOPEN_KEY:
  		case TCP_FASTOPEN_NO_COOKIE:
  			return true;
-@@ -569,7 +570,7 @@ static bool mptcp_supported_sockopt(int level, int optname)
+ 		}
+@@ -570,9 +571,6 @@ static bool mptcp_supported_sockopt(int level, int optname)
  		/* TCP_REPAIR, TCP_REPAIR_QUEUE, TCP_QUEUE_SEQ, TCP_REPAIR_OPTIONS,
  		 * TCP_REPAIR_WINDOW are not supported, better avoid this mess
  		 */
--		/* TCP_FASTOPEN_KEY, TCP_FASTOPEN are not supported because
-+		/* TCP_FASTOPEN_KEY is not supported because
- 		 * fastopen for the listener side is currently unsupported
- 		 */
+-		/* TCP_FASTOPEN_KEY is not supported because
+-		 * fastopen for the listener side is currently unsupported
+-		 */
  	}
-@@ -801,6 +802,7 @@ static int mptcp_setsockopt_sol_tcp(struct mptcp_sock *msk, int optname,
- 		/* See tcp.c: TCP_DEFER_ACCEPT does not fail */
- 		mptcp_setsockopt_first_sf_only(msk, SOL_TCP, optname, optval, optlen);
+ 	return false;
+ }
+@@ -804,6 +802,7 @@ static int mptcp_setsockopt_sol_tcp(struct mptcp_sock *msk, int optname,
  		return 0;
-+	case TCP_FASTOPEN:
+ 	case TCP_FASTOPEN:
  	case TCP_FASTOPEN_CONNECT:
++	case TCP_FASTOPEN_KEY:
  	case TCP_FASTOPEN_NO_COOKIE:
  		return mptcp_setsockopt_first_sf_only(msk, SOL_TCP, optname,
-@@ -1166,6 +1168,7 @@ static int mptcp_getsockopt_sol_tcp(struct mptcp_sock *msk, int optname,
- 	case TCP_INFO:
- 	case TCP_CC_INFO:
+ 						      optval, optlen);
+@@ -1170,6 +1169,7 @@ static int mptcp_getsockopt_sol_tcp(struct mptcp_sock *msk, int optname,
  	case TCP_DEFER_ACCEPT:
-+	case TCP_FASTOPEN:
+ 	case TCP_FASTOPEN:
  	case TCP_FASTOPEN_CONNECT:
++	case TCP_FASTOPEN_KEY:
  	case TCP_FASTOPEN_NO_COOKIE:
  		return mptcp_getsockopt_first_sf_only(msk, SOL_TCP, optname,
+ 						      optval, optlen);
 -- 
 2.37.2
 
