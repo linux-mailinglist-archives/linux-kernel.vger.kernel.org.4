@@ -2,737 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A13D7638D4E
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 16:13:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32C88638D0D
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 16:07:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbiKYPNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 10:13:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
+        id S229773AbiKYPHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 10:07:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbiKYPM6 (ORCPT
+        with ESMTP id S230271AbiKYPHc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 10:12:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE40E48749
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 07:11:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669389105;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0umtC4MfgS1x7nfa252nsVL6T4vQ9S+hnM0ed4G85tw=;
-        b=MwoWwURMTyaSbO89V9Q5FVBvlcTiSOqID1Fax/sUUWMVW4kV8FJFeXANTAMZiNWecf5EGM
-        dji6p0BE8CUKVxVgkJipDA/6r8SgQE4N9XktKxAwZNhVmnCecqfvB+OAIHn5lOsYomNJsC
-        1pTfREKz04B30kwBOlihjdt8Kvj0lhw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-613-vEws9ExEPB-jeAgKMmfu0w-1; Fri, 25 Nov 2022 10:11:42 -0500
-X-MC-Unique: vEws9ExEPB-jeAgKMmfu0w-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4D41E29AB3E0;
-        Fri, 25 Nov 2022 15:11:40 +0000 (UTC)
-Received: from ptitbras (unknown [10.39.193.103])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 150561121330;
-        Fri, 25 Nov 2022 15:11:33 +0000 (UTC)
-References: <20221119034633.1728632-1-ltykernel@gmail.com>
- <20221119034633.1728632-17-ltykernel@gmail.com>
-User-agent: mu4e 1.8.0; emacs 28.2
-From:   Christophe de Dinechin <dinechin@redhat.com>
-To:     Tianyu Lan <ltykernel@gmail.com>
-Cc:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
-        jgross@suse.com, tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, peterz@infradead.org,
-        ashish.kalra@amd.com, srutherford@google.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
-        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
-        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
-        michael.roth@amd.com, thomas.lendacky@amd.com,
-        venu.busireddy@oracle.com, sterritt@google.com,
-        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH V2 16/18] x86/sev: Initialize #HV doorbell and
- handle interrupt requests
-Date:   Fri, 25 Nov 2022 12:49:33 +0100
-In-reply-to: <20221119034633.1728632-17-ltykernel@gmail.com>
-Message-ID: <m2ilj3kr19.fsf@redhat.com>
+        Fri, 25 Nov 2022 10:07:32 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB18193E0;
+        Fri, 25 Nov 2022 07:07:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669388846; x=1700924846;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=HDaq+DmLj+TLoos0/GpLIXsStzsgz85wgrL+CB8X7NE=;
+  b=HN44FGFhc31gdaowzGsHkO0SepCB0gv2atWvl1ySMgYPjV0ig/imuOfs
+   s+Mpyd2VCbZrbVLJ3+fmceoLyEARkhJbZV37YZMge6ArHWmiqz/BsWC3t
+   pQ2C0c59DsVR/gRQGdh4P9i4LmS33bm1tysh4YDNbxs0w1GtRAECeh3dR
+   jryqfvviI72pYZ/+iilBUkhur/vyWf+hCkqvw2VOb2HBNrtZdFBz08iKd
+   FzIISmk8P5mv/zc+p1WXZ8w23poO6DuZQA4+WH5IS6D99SZrYycQmtYVr
+   TT7Q740R0O8oKrw99mWUFzCCA/5NeDyXkpJG/fxo5a3M8PMoiFtWdJ06K
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="294200209"
+X-IronPort-AV: E=Sophos;i="5.96,193,1665471600"; 
+   d="scan'208";a="294200209"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2022 07:07:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="748614798"
+X-IronPort-AV: E=Sophos;i="5.96,193,1665471600"; 
+   d="scan'208";a="748614798"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga002.fm.intel.com with ESMTP; 25 Nov 2022 07:05:28 -0800
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 25 Nov 2022 07:05:27 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Fri, 25 Nov 2022 07:05:27 -0800
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.47) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Fri, 25 Nov 2022 05:21:26 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=emqidH1LcKa1pn5NG3RgKxDIHVK5ORbOSSa2l2+fmMAnoeq/ezlUDS+vTRI2izGOCIRutjZYGQ3ZQjh12Cbbl25VFu1iO1aDZORBQKKAPAhjdLC5B036wQEcOyLEokygWI1az2awqbvddthtHi6exriO6P6PQRBocwG0hmtd/eswYvgcsCVjSERX1aDgEdhcOsF3/lzNvJxMmX3ojsTXaFQKdfD6Cv+XBr7KdKSzdkTFiyb97kxE34QhigSCz97ra1cDNEGKkVA9r6XXzUsxWeePdCPOec0/eRpRyVokMm9bLd9W5JH8RyDIHJafaXEGEGI77bK6oMg+2YB+97KkWA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=U2FcTYFP9QiIJ4zo4+NfS56EwauGcNeQIF4MK1i85Bc=;
+ b=ef6FW1HT/tKyRonxAIVGVcRiisXKu76pLiy4uT8qGvhTPUMG9DXLINQ8lmfieiHysxkX1uCezsDIOmHECjInROE480tX5X25d/5CEefIzukfI3C4XpbLZmeka7a4HQFryzYx5Rc1SVvTal7RkOZS5agcuYs8rfvgqtoC/u6DtCNdaQ9+4aSYWUkVaBuZEgNX2FOUruxeSRmcHOGm+tTdB/d4B296KLx9+vHoBq/7721QY9+cNdCHCmuW41GKtwxN1+n0zmcOYbVS1nOJyRa0VEH0oVTg94pdpdgPc7Ig7Hlipk4KuEsqowkzPCJjTExdSu7hQVhIHuK0BGUhpHRiNg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
+ PH0PR11MB4936.namprd11.prod.outlook.com (2603:10b6:510:42::20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5857.20; Fri, 25 Nov 2022 13:21:23 +0000
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::5f39:1ef:13a5:38b6]) by DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::5f39:1ef:13a5:38b6%6]) with mapi id 15.20.5834.009; Fri, 25 Nov 2022
+ 13:21:23 +0000
+Date:   Fri, 25 Nov 2022 14:21:17 +0100
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     Roger Quadros <rogerq@kernel.org>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>, <edumazet@google.com>,
+        <pabeni@redhat.com>, <vigneshr@ti.com>,
+        <linux-omap@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 net-next 5/6] net: ethernet: ti: am65-cpsw: retain
+ PORT_VLAN_REG after suspend/resume
+Message-ID: <Y4DBTbVxUpbJ5sEl@boxer>
+References: <20221123124835.18937-1-rogerq@kernel.org>
+ <20221123124835.18937-6-rogerq@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20221123124835.18937-6-rogerq@kernel.org>
+X-ClientProxiedBy: FR3P281CA0020.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1c::21) To DM4PR11MB6117.namprd11.prod.outlook.com
+ (2603:10b6:8:b3::19)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|PH0PR11MB4936:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5fd679a0-3c00-4dcb-9d77-08dacee7f2e4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NYNHi8raazPxXrwNShp8MscW5pQS9OoGOEMA32iNwl0nDQ03APgg+JbM7CtUPayczMhiYl1Bn9xytf7fn1t+nL4vmdwbl6tqsnzR07Pg5B3v2RRS3QLCvodUqBlSz2ox4HOUWKEcKKesYeRq6VTJPugXNWCihICHYwF3Y5JPkadedXqD/LzCI54O/KIJzLR+CYQYmcZven4+p5BNbTqbszJQuPWBF7UEkLMX7HIvTrqoaWwk7dUBaFmT1kkdZbIVn6lkEkiIh4bAWmTDZLTcZkgrWjgAVeEtZWJ35JX1A9guyZA+E0R/FZC/Sv6qXDMzFjocC3wySaDw2a8OcA1xEq2dYk6W3GDZcYgY08W3qW1PHdQhjEL4tAAnFu8Tw+7oNd/kXZzFDh255ZhfNeyOPUmKJUQxSVLgfqnLdyRwGAZVdm92UDuNk/fVi6I5Bf9f21qyKOKgtEryEpbRHEp37n+RwyPzXnfyEqiyg1nB/bY3l5gHBVAUoarYc9DEfeNJIRB9sbj+dzrBw2WS8UxhmxUl6/1w3b/qYw9VBHE2Y2mHIGV00/CFnS1z6xS4BWCh1dZmP3Z1aKtBywfkysV1f0TSROzPAk/MthYPMH1jOyFSjAJIHwQZpcvQ0k4+EcTb0lKd2FzRaqEcPaGoHPBU7w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(39860400002)(346002)(376002)(136003)(366004)(396003)(451199015)(66476007)(66556008)(66946007)(8676002)(15650500001)(86362001)(83380400001)(6916009)(316002)(2906002)(5660300002)(44832011)(4326008)(38100700002)(82960400001)(41300700001)(8936002)(186003)(6666004)(478600001)(6486002)(33716001)(6512007)(26005)(9686003)(6506007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ls2NeYrEhkMofNjwin56dMF8jsZ+pPb0lLNqt/Mc5w7Wg7Lr2cZsCrZlYVh2?=
+ =?us-ascii?Q?ytxm6K1w4mZeaDQZuEvg3oAeONsj6V2Yr1fcOABWlFKTU8cOSTiZb8ZEp0l7?=
+ =?us-ascii?Q?mHKAaogOkLKIeXkgZJfbAjLTxoEkILEi1nPC5AeSl1mExZdRloEQKa6B/cbb?=
+ =?us-ascii?Q?OFGhMFvGlNKcoPAwRgi7YSFnZMf2yS46kZ+Wk+v6OZ8ZRgTXOVObTiJwfGsW?=
+ =?us-ascii?Q?c+JxROciw5zSpeT669FPhqtDt2FWNA8JunyhqLYMYycpPVS7O70xoWe08Tuo?=
+ =?us-ascii?Q?1ua4kaBiv8fOGD/LFeRdLFZGZv4CtM18PmLsBsBLlIhmbCXFBz54l7FIXQ7P?=
+ =?us-ascii?Q?kZW/g6glZKCpmhHXHC8xGXHChpH//MykmZ7f/s+IcnDihNYQVY860l6vs2ha?=
+ =?us-ascii?Q?i6V6eTPp7ezZPOYxWPQASj4pL/hXJm4C1xTTqurFsysYSJLDpbjXBHBBXwYm?=
+ =?us-ascii?Q?OiI70cQhIv0S2Eh2beaeMbJImzj6zcidSB5T/rORfQa4lIpK1S75ZBQAAEZz?=
+ =?us-ascii?Q?mD2LqcGzIra1HFlc7Ncuk9G7eV39lwgEzy6dwgURUrp5d+jBMiltKMfi2lbA?=
+ =?us-ascii?Q?cv/Q0+584RD4F9mlQKddP9MWn3j5ZWq8GMvRMEeG4utoMVWPf9mOT6LIaMxK?=
+ =?us-ascii?Q?dw36N5iDsUBKfFoxfxyVv+PduyTvzinLzpk79mKBA0bm3kH7//7Yj11qMzUR?=
+ =?us-ascii?Q?0790BC8PNgQcCVi8Vn/RpC5Oxkb0n9B5Jv2f0DpzUBKS+67+qSSZRfXk3Mu4?=
+ =?us-ascii?Q?YfH91yyGUCqTkSEmFbbaPN6I8qcvSGlmwgXUucR/HcSeACKWURE2jo46EBX2?=
+ =?us-ascii?Q?7q5Q3yx5qS7++6Clv3b66hgI21AZSa6/5a4bAsgtpQlSpRfasqE9IGvY4wdQ?=
+ =?us-ascii?Q?qQfEp9vskYKwx4hWwNLM3Fui1NkqKvIHfoyf/hB1dPgbG7JpiKVGQtZg+US9?=
+ =?us-ascii?Q?4qZgSqwNDjgzhkrlWIQvjoC3T3Oie+nT3fc+tzlfnSuKeTg1uaMmWYAGLqHl?=
+ =?us-ascii?Q?IKuYQH6z/GzIQX+lxalILRzrBpRQg/OtEORVIgaeLCUTZSP6dfnSb1KOMw8u?=
+ =?us-ascii?Q?6Qrx/5TzT8/FfPd0wHm+Zf5OF2tOyyA19LEQ3yTqOwFKv40CmZWnXscChlt1?=
+ =?us-ascii?Q?w06Z5daIPOChgprihVDIBT+82PN54eXh3A01hApTrXMu7TEnU0p1s2wqWjQr?=
+ =?us-ascii?Q?pzjo0bm8e1SqZQJx0IgCPJ5N7jmiBFJJf7pPlTu+6uNfuYoZmmHXZKRDpi8n?=
+ =?us-ascii?Q?xpANUD7rDdbfsPr935TzF68x+GhresmmpiR8HZmkzbwFXWOhZYVaaH7w9WJs?=
+ =?us-ascii?Q?++DCRoSn//bGNFzc7hSBm2jgfAsqbHAZcmqxlxKMiMD1d3dyrt4aGqBqm1m5?=
+ =?us-ascii?Q?+jKhIiT+noklMZM8mHmu+Ap2DcFSQQdedyPVmPN8UkOpBWY6YbIBfHlLH5c5?=
+ =?us-ascii?Q?JqXSqEDGraoYJm8nFuU/xH6mKd3cvPqQyHGR3Js+2GEEWhlOZQvJjAdTTXA6?=
+ =?us-ascii?Q?Gc+AgXQ/sSboObJxJzKw/a79OnrQ27E0TbnVYV6D62KYk9+83UJIY71pdqea?=
+ =?us-ascii?Q?n9Dm66ADJKofHVQesJvHt/UwR+VZdNEbIrO6AraibEJELv/4uLzTVl9Rm7x9?=
+ =?us-ascii?Q?gw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5fd679a0-3c00-4dcb-9d77-08dacee7f2e4
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2022 13:21:23.5588
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: d1yf4DHJCnkJOOA6ddQmjTWsQKy8aDjUXY80/JINHOWgrHThCKrd1xLOmkw5Lb1hfYqxPM/WS1c5O8C/2T6nournkCvpjNe/r02s5giLIgg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4936
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 2022-11-18 at 22:46 -05, Tianyu Lan <ltykernel@gmail.com> wrote...
-> From: Tianyu Lan <tiala@microsoft.com>
->
-> Enable #HV exception to handle interrupt requests from hypervisor.
->
-> Co-developed-by: Lendacky Thomas <thomas.lendacky@amd.com>
-> Co-developed-by: Kalra Ashish <ashish.kalra@amd.com>
-> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
+On Wed, Nov 23, 2022 at 02:48:34PM +0200, Roger Quadros wrote:
+> During suspend resume the context of PORT_VLAN_REG is lost so
+> save it during suspend and restore it during resume for
+> host port and slave ports.
+> 
+> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+> Signed-off-by: David S. Miller <davem@davemloft.net>
 > ---
->  arch/x86/entry/entry_64.S          |  18 ++
->  arch/x86/include/asm/irqflags.h    |  19 ++
->  arch/x86/include/asm/mem_encrypt.h |   2 +
->  arch/x86/include/asm/msr-index.h   |   6 +
->  arch/x86/include/uapi/asm/svm.h    |   4 +
->  arch/x86/kernel/sev.c              | 354 ++++++++++++++++++++++++-----
->  arch/x86/kernel/traps.c            |  50 ++++
->  7 files changed, 400 insertions(+), 53 deletions(-)
->
-> diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-> index b2059df43c57..fe460cf44ab5 100644
-> --- a/arch/x86/entry/entry_64.S
-> +++ b/arch/x86/entry/entry_64.S
-> @@ -1058,6 +1058,15 @@ SYM_CODE_END(paranoid_entry)
->   * R15 - old SPEC_CTRL
->   */
->  SYM_CODE_START_LOCAL(paranoid_exit)
-> +#ifdef CONFIG_AMD_MEM_ENCRYPT
-> +	/*
-> +	 * If a #HV was delivered during execution and interrupts were
-> +	 * disabled, then check if it can be handled before the iret
-> +	 * (which may re-enable interrupts).
-> +	 */
-> +	mov     %rsp, %rdi
-> +	call    check_hv_pending
-> +#endif
->  	UNWIND_HINT_REGS
->
->  	/*
-> @@ -1183,6 +1192,15 @@ SYM_CODE_START_LOCAL(error_entry)
->  SYM_CODE_END(error_entry)
->
->  SYM_CODE_START_LOCAL(error_return)
-> +#ifdef CONFIG_AMD_MEM_ENCRYPT
-> +	/*
-> +	 * If a #HV was delivered during execution and interrupts were
-> +	 * disabled, then check if it can be handled before the iret
-> +	 * (which may re-enable interrupts).
-> +	 */
-> +	mov     %rsp, %rdi
-> +	call    check_hv_pending
-> +#endif
->  	UNWIND_HINT_REGS
->  	DEBUG_ENTRY_ASSERT_IRQS_OFF
->  	testb	$3, CS(%rsp)
-> diff --git a/arch/x86/include/asm/irqflags.h b/arch/x86/include/asm/irqflags.h
-> index 7793e52d6237..e0730d8bc0ac 100644
-> --- a/arch/x86/include/asm/irqflags.h
-> +++ b/arch/x86/include/asm/irqflags.h
-> @@ -14,6 +14,9 @@
->  /*
->   * Interrupt control:
->   */
-> +#ifdef CONFIG_AMD_MEM_ENCRYPT
-> +void check_hv_pending(struct pt_regs *regs);
-> +#endif
->
->  /* Declaration required for gcc < 4.9 to prevent -Werror=missing-prototypes */
->  extern inline unsigned long native_save_fl(void);
-> @@ -35,6 +38,19 @@ extern __always_inline unsigned long native_save_fl(void)
->  	return flags;
->  }
->
-> +extern inline void native_restore_fl(unsigned long flags)
-> +{
-> +	asm volatile("push %0 ; popf"
-> +		     : /* no output */
-> +		     : "g" (flags)
-> +		     : "memory", "cc");
-> +#ifdef CONFIG_AMD_MEM_ENCRYPT
-> +	if ((flags & X86_EFLAGS_IF)) {
-> +		check_hv_pending(NULL);
-> +	}
-> +#endif
-> +}
+>  drivers/net/ethernet/ti/am65-cpsw-nuss.c | 7 +++++++
+>  drivers/net/ethernet/ti/am65-cpsw-nuss.h | 4 ++++
+>  2 files changed, 11 insertions(+)
+> 
+> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> index 0b59088e3728..f5357afde527 100644
+> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
+> @@ -2875,7 +2875,9 @@ static int am65_cpsw_nuss_suspend(struct device *dev)
+>  	struct am65_cpsw_port *port;
+>  	struct net_device *ndev;
+>  	int i, ret;
+> +	struct am65_cpsw_host *host_p = am65_common_get_host(common);
+
+Nit: I see that retrieving host pointer depends on getting the common
+pointer first from dev_get_drvdata(dev) so pure RCT is not possible to
+maintain here but nonetheless I would move this line just below the common
+pointer:
+
+	struct am65_cpsw_common *common = dev_get_drvdata(dev);
+	struct am65_cpsw_host *host = am65_common_get_host(common);
+	struct am65_cpsw_port *port;
+	struct net_device *ndev;
+	int i, ret;
+
+Also I think plain 'host' for variable name is just fine, no need for _p
+suffix to indicate it is a pointer. in that case you should go with
+common_p etc.
+
+>  
+> +	host_p->vid_context = readl(host_p->port_base + AM65_CPSW_PORT_VLAN_REG_OFFSET);
+>  	for (i = 0; i < common->port_num; i++) {
+>  		port = &common->ports[i];
+>  		ndev = port->ndev;
+> @@ -2883,6 +2885,7 @@ static int am65_cpsw_nuss_suspend(struct device *dev)
+>  		if (!ndev)
+>  			continue;
+>  
+> +		port->vid_context = readl(port->port_base + AM65_CPSW_PORT_VLAN_REG_OFFSET);
+>  		netif_device_detach(ndev);
+>  		if (netif_running(ndev)) {
+>  			rtnl_lock();
+> @@ -2909,6 +2912,7 @@ static int am65_cpsw_nuss_resume(struct device *dev)
+>  	struct am65_cpsw_port *port;
+>  	struct net_device *ndev;
+>  	int i, ret;
+> +	struct am65_cpsw_host *host_p = am65_common_get_host(common);
+>  
+>  	ret = am65_cpsw_nuss_init_tx_chns(common);
+>  	if (ret)
+> @@ -2941,8 +2945,11 @@ static int am65_cpsw_nuss_resume(struct device *dev)
+>  		}
+>  
+>  		netif_device_attach(ndev);
+> +		writel(port->vid_context, port->port_base + AM65_CPSW_PORT_VLAN_REG_OFFSET);
+>  	}
+>  
+> +	writel(host_p->vid_context, host_p->port_base + AM65_CPSW_PORT_VLAN_REG_OFFSET);
 > +
->  static __always_inline void native_irq_disable(void)
->  {
->  	asm volatile("cli": : :"memory");
-> @@ -43,6 +59,9 @@ static __always_inline void native_irq_disable(void)
->  static __always_inline void native_irq_enable(void)
->  {
->  	asm volatile("sti": : :"memory");
-> +#ifdef CONFIG_AMD_MEM_ENCRYPT
-> +	check_hv_pending(NULL);
-> +#endif
+>  	return 0;
 >  }
->
->  static inline __cpuidle void native_safe_halt(void)
-> diff --git a/arch/x86/include/asm/mem_encrypt.h b/arch/x86/include/asm/mem_encrypt.h
-> index 72ca90552b6a..7264ca5f5b2d 100644
-> --- a/arch/x86/include/asm/mem_encrypt.h
-> +++ b/arch/x86/include/asm/mem_encrypt.h
-> @@ -50,6 +50,7 @@ void __init early_set_mem_enc_dec_hypercall(unsigned long vaddr, int npages,
->  void __init mem_encrypt_free_decrypted_mem(void);
->
->  void __init sev_es_init_vc_handling(void);
-> +void __init sev_snp_init_hv_handling(void);
->
->  #define __bss_decrypted __section(".bss..decrypted")
->
-> @@ -72,6 +73,7 @@ static inline void __init sme_encrypt_kernel(struct boot_params *bp) { }
->  static inline void __init sme_enable(struct boot_params *bp) { }
->
->  static inline void sev_es_init_vc_handling(void) { }
-> +static inline void sev_snp_init_hv_handling(void) { }
->
->  static inline int __init
->  early_set_memory_decrypted(unsigned long vaddr, unsigned long size) { return 0; }
-> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-> index 10ac52705892..6fe25a6e325f 100644
-> --- a/arch/x86/include/asm/msr-index.h
-> +++ b/arch/x86/include/asm/msr-index.h
-> @@ -562,10 +562,16 @@
->  #define MSR_AMD64_SEV_ENABLED_BIT	0
->  #define MSR_AMD64_SEV_ES_ENABLED_BIT	1
->  #define MSR_AMD64_SEV_SNP_ENABLED_BIT	2
-> +#define MSR_AMD64_SEV_REFLECTVC_ENABLED_BIT		4
-> +#define MSR_AMD64_SEV_RESTRICTED_INJECTION_ENABLED_BIT	5
-> +#define MSR_AMD64_SEV_ALTERNATE_INJECTION_ENABLED_BIT	6
->  #define MSR_AMD64_SEV_ENABLED		BIT_ULL(MSR_AMD64_SEV_ENABLED_BIT)
->  #define MSR_AMD64_SEV_ES_ENABLED	BIT_ULL(MSR_AMD64_SEV_ES_ENABLED_BIT)
->  #define MSR_AMD64_SEV_SNP_ENABLED	BIT_ULL(MSR_AMD64_SEV_SNP_ENABLED_BIT)
->
-> +#define MSR_AMD64_SEV_REFLECTVC_ENABLED			BIT_ULL(MSR_AMD64_SEV_REFLECTVC_ENABLED_BIT)
-> +#define MSR_AMD64_SEV_RESTRICTED_INJECTION_ENABLED	BIT_ULL(MSR_AMD64_SEV_RESTRICTED_INJECTION_ENABLED_BIT)
-> +#define MSR_AMD64_SEV_ALTERNATE_INJECTION_ENABLED	BIT_ULL(MSR_AMD64_SEV_ALTERNATE_INJECTION_ENABLED_BIT)
->  #define MSR_AMD64_VIRT_SPEC_CTRL	0xc001011f
->
->  /* AMD Collaborative Processor Performance Control MSRs */
-> diff --git a/arch/x86/include/uapi/asm/svm.h b/arch/x86/include/uapi/asm/svm.h
-> index f69c168391aa..85d6882262e7 100644
-> --- a/arch/x86/include/uapi/asm/svm.h
-> +++ b/arch/x86/include/uapi/asm/svm.h
-> @@ -115,6 +115,10 @@
->  #define SVM_VMGEXIT_AP_CREATE_ON_INIT		0
->  #define SVM_VMGEXIT_AP_CREATE			1
->  #define SVM_VMGEXIT_AP_DESTROY			2
-> +#define SVM_VMGEXIT_HV_DOORBELL_PAGE		0x80000014
-> +#define SVM_VMGEXIT_GET_PREFERRED_HV_DOORBELL_PAGE	0
-> +#define SVM_VMGEXIT_SET_HV_DOORBELL_PAGE		1
-> +#define SVM_VMGEXIT_QUERY_HV_DOORBELL_PAGE		2
->  #define SVM_VMGEXIT_HV_FEATURES			0x8000fffd
->  #define SVM_VMGEXIT_UNSUPPORTED_EVENT		0x8000ffff
->
-> diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-> index b54ee3ba37b0..23cd025f97dc 100644
-> --- a/arch/x86/kernel/sev.c
-> +++ b/arch/x86/kernel/sev.c
-> @@ -104,6 +104,12 @@ struct sev_es_runtime_data {
->  	 * is currently unsupported in SEV-ES guests.
->  	 */
->  	unsigned long dr7;
-> +	/*
-> +	 * SEV-SNP requires that the GHCB must be registered before using it.
-> +	 * The flag below will indicate whether the GHCB is registered, if its
-> +	 * not registered then sev_es_get_ghcb() will perform the registration.
-> +	 */
-> +	bool ghcb_registered;
+>  #endif /* CONFIG_PM_SLEEP */
+> diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.h b/drivers/net/ethernet/ti/am65-cpsw-nuss.h
+> index 2c9850fdfcb6..e95cc37a7286 100644
+> --- a/drivers/net/ethernet/ti/am65-cpsw-nuss.h
+> +++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.h
+> @@ -55,12 +55,16 @@ struct am65_cpsw_port {
+>  	bool				rx_ts_enabled;
+>  	struct am65_cpsw_qos		qos;
+>  	struct devlink_port		devlink_port;
+> +	/* Only for suspend resume context */
+> +	u32				vid_context;
 >  };
->
->  struct ghcb_state {
-> @@ -122,6 +128,183 @@ struct sev_config {
->
->  static struct sev_config sev_cfg __read_mostly;
->
-> +static noinstr struct ghcb *__sev_get_ghcb(struct ghcb_state *state);
-> +static noinstr void __sev_put_ghcb(struct ghcb_state *state);
-> +static int vmgexit_hv_doorbell_page(struct ghcb *ghcb, u64 op, u64 pa);
-> +static void sev_snp_setup_hv_doorbell_page(struct ghcb *ghcb);
-> +
-> +union hv_pending_events {
-> +	u16 events;
-> +	struct {
-> +		u8 vector;
-> +		u8 nmi : 1;
-> +		u8 mc : 1;
-> +		u8 reserved1 : 5;
-> +		u8 no_further_signal : 1;
-> +	};
-> +};
-> +
-> +struct sev_hv_doorbell_page {
-> +	union hv_pending_events pending_events;
-> +	u8 no_eoi_required;
-> +	u8 reserved2[61];
-> +	u8 padding[4032];
-> +};
-> +
-> +struct sev_snp_runtime_data {
-> +	struct sev_hv_doorbell_page hv_doorbell_page;
-> +};
-> +
-> +static DEFINE_PER_CPU(struct sev_snp_runtime_data*, snp_runtime_data);
-> +
-> +static inline u64 sev_es_rd_ghcb_msr(void)
-> +{
-> +	return __rdmsr(MSR_AMD64_SEV_ES_GHCB);
-> +}
-> +
-> +static __always_inline void sev_es_wr_ghcb_msr(u64 val)
-> +{
-> +	u32 low, high;
-> +
-> +	low  = (u32)(val);
-> +	high = (u32)(val >> 32);
-> +
-> +	native_wrmsr(MSR_AMD64_SEV_ES_GHCB, low, high);
-> +}
-> +
-> +struct sev_hv_doorbell_page *sev_snp_current_doorbell_page(void)
-> +{
-> +	return &this_cpu_read(snp_runtime_data)->hv_doorbell_page;
-> +}
-> +
-> +static u8 sev_hv_pending(void)
-> +{
-> +	return sev_snp_current_doorbell_page()->pending_events.events;
-> +}
-> +
-> +static void hv_doorbell_apic_eoi_write(u32 reg, u32 val)
-> +{
-> +	if (xchg(&sev_snp_current_doorbell_page()->no_eoi_required, 0) & 0x1)
-> +		return;
-> +
-> +	BUG_ON(reg != APIC_EOI);
-> +	apic->write(reg, val);
-> +}
-> +
-> +static void do_exc_hv(struct pt_regs *regs)
-> +{
-> +	union hv_pending_events pending_events;
-> +	u8 vector;
-> +
-> +	while (sev_hv_pending()) {
-> +		asm volatile("cli" : : : "memory");
-> +
-> +		pending_events.events = xchg(
-> +			&sev_snp_current_doorbell_page()->pending_events.events,
-> +			0);
-> +
-> +		if (pending_events.nmi)
-> +			exc_nmi(regs);
-> +
-> +#ifdef CONFIG_X86_MCE
-> +		if (pending_events.mc)
-> +			exc_machine_check(regs);
-> +#endif
-> +
-> +		if (!pending_events.vector)
-> +			return;
-> +
-> +		if (pending_events.vector < FIRST_EXTERNAL_VECTOR) {
-> +			/* Exception vectors */
-> +			WARN(1, "exception shouldn't happen\n");
-> +		} else if (pending_events.vector == FIRST_EXTERNAL_VECTOR) {
-> +			sysvec_irq_move_cleanup(regs);
-> +		} else if (pending_events.vector == IA32_SYSCALL_VECTOR) {
-> +			WARN(1, "syscall shouldn't happen\n");
-> +		} else if (pending_events.vector >= FIRST_SYSTEM_VECTOR) {
-> +			switch (pending_events.vector) {
-> +#if IS_ENABLED(CONFIG_HYPERV)
-> +			case HYPERV_STIMER0_VECTOR:
-> +				sysvec_hyperv_stimer0(regs);
-> +				break;
-> +			case HYPERVISOR_CALLBACK_VECTOR:
-> +				sysvec_hyperv_callback(regs);
-> +				break;
-> +#endif
-> +#ifdef CONFIG_SMP
-> +			case RESCHEDULE_VECTOR:
-> +				sysvec_reschedule_ipi(regs);
-> +				break;
-> +			case IRQ_MOVE_CLEANUP_VECTOR:
-> +				sysvec_irq_move_cleanup(regs);
-> +				break;
-> +			case REBOOT_VECTOR:
-> +				sysvec_reboot(regs);
-> +				break;
-> +			case CALL_FUNCTION_SINGLE_VECTOR:
-> +				sysvec_call_function_single(regs);
-> +				break;
-> +			case CALL_FUNCTION_VECTOR:
-> +				sysvec_call_function(regs);
-> +				break;
-> +#endif
-> +#ifdef CONFIG_X86_LOCAL_APIC
-> +			case ERROR_APIC_VECTOR:
-> +				sysvec_error_interrupt(regs);
-> +				break;
-> +			case SPURIOUS_APIC_VECTOR:
-> +				sysvec_spurious_apic_interrupt(regs);
-> +				break;
-> +			case LOCAL_TIMER_VECTOR:
-> +				sysvec_apic_timer_interrupt(regs);
-> +				break;
-> +			case X86_PLATFORM_IPI_VECTOR:
-> +				sysvec_x86_platform_ipi(regs);
-> +				break;
-> +#endif
-> +			case 0x0:
-> +				break;
-> +			default:
-> +				panic("Unexpected vector %d\n", vector);
-> +				unreachable();
-> +			}
-> +		} else {
-> +			common_interrupt(regs, pending_events.vector);
-> +		}
-> +
-> +		asm volatile("sti" : : : "memory");
-> +	}
-> +}
-> +
-> +void check_hv_pending(struct pt_regs *regs)
-
-This looks like two functions, one with regs == NULL and one with regs,
-different internal logic, different call sites. Would you consider splitting
-into two?
-
-> +{
-> +	struct pt_regs local_regs;
-> +
-> +	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
-> +		return;
-
-
-> +
-> +	if (regs) {
-> +		if ((regs->flags & X86_EFLAGS_IF) == 0)
-> +			return;
-> +
-> +		if (!sev_hv_pending())
-> +			return;
-> +
-> +		do_exc_hv(regs);
-> +	} else {
-> +		if (sev_hv_pending()) {
-> +			memset(&local_regs, 0, sizeof(struct pt_regs));
-> +			regs = &local_regs;
-> +			asm volatile("movl %%cs, %%eax;" : "=a" (regs->cs));
-> +			asm volatile("movl %%ss, %%eax;" : "=a" (regs->ss));
-> +			regs->orig_ax = 0xffffffff;
-> +			regs->flags = native_save_fl();
-> +			do_exc_hv(regs);
-> +		}
-> +	}
-> +}
-> +EXPORT_SYMBOL_GPL(check_hv_pending);
-> +
->  static __always_inline bool on_vc_stack(struct pt_regs *regs)
->  {
->  	unsigned long sp = regs->sp;
-> @@ -193,68 +376,35 @@ void noinstr __sev_es_ist_exit(void)
->  	this_cpu_write(cpu_tss_rw.x86_tss.ist[IST_INDEX_VC], *(unsigned long *)ist);
->  }
->
-> -/*
-> - * Nothing shall interrupt this code path while holding the per-CPU
-> - * GHCB. The backup GHCB is only for NMIs interrupting this path.
-> - *
-> - * Callers must disable local interrupts around it.
-> - */
-> -static noinstr struct ghcb *__sev_get_ghcb(struct ghcb_state *state)
-> +static bool sev_restricted_injection_enabled(void)
->  {
-> -	struct sev_es_runtime_data *data;
-> +	return sev_status & MSR_AMD64_SEV_RESTRICTED_INJECTION_ENABLED;
-> +}
-> +
-> +void __init sev_snp_init_hv_handling(void)
-> +{
-> +	struct sev_snp_runtime_data *snp_data;
-> +	struct ghcb_state state;
->  	struct ghcb *ghcb;
-> +	unsigned long flags;
-> +	int cpu;
-> +	int err;
->
->  	WARN_ON(!irqs_disabled());
-> +	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP) || !sev_restricted_injection_enabled())
-> +		return;
->
-> -	data = this_cpu_read(runtime_data);
-> -	ghcb = &data->ghcb_page;
-> -
-> -	if (unlikely(data->ghcb_active)) {
-> -		/* GHCB is already in use - save its contents */
-> -
-> -		if (unlikely(data->backup_ghcb_active)) {
-> -			/*
-> -			 * Backup-GHCB is also already in use. There is no way
-> -			 * to continue here so just kill the machine. To make
-> -			 * panic() work, mark GHCBs inactive so that messages
-> -			 * can be printed out.
-> -			 */
-> -			data->ghcb_active        = false;
-> -			data->backup_ghcb_active = false;
-> -
-> -			instrumentation_begin();
-> -			panic("Unable to handle #VC exception! GHCB and Backup GHCB are already in use");
-> -			instrumentation_end();
-> -		}
-> -
-> -		/* Mark backup_ghcb active before writing to it */
-> -		data->backup_ghcb_active = true;
-> -
-> -		state->ghcb = &data->backup_ghcb;
-> -
-> -		/* Backup GHCB content */
-> -		*state->ghcb = *ghcb;
-> -	} else {
-> -		state->ghcb = NULL;
-> -		data->ghcb_active = true;
-> -	}
-> +	local_irq_save(flags);
->
-> -	return ghcb;
-> -}
-> +	ghcb = __sev_get_ghcb(&state);
->
-> -static inline u64 sev_es_rd_ghcb_msr(void)
-> -{
-> -	return __rdmsr(MSR_AMD64_SEV_ES_GHCB);
-> -}
-> +	sev_snp_setup_hv_doorbell_page(ghcb);
->
-> -static __always_inline void sev_es_wr_ghcb_msr(u64 val)
-> -{
-> -	u32 low, high;
-> +	__sev_put_ghcb(&state);
->
-> -	low  = (u32)(val);
-> -	high = (u32)(val >> 32);
-> +	apic_set_eoi_write(hv_doorbell_apic_eoi_write);
->
-> -	native_wrmsr(MSR_AMD64_SEV_ES_GHCB, low, high);
-> +	local_irq_restore(flags);
->  }
->
->  static int vc_fetch_insn_kernel(struct es_em_ctxt *ctxt,
-> @@ -515,6 +665,79 @@ static enum es_result vc_slow_virt_to_phys(struct ghcb *ghcb, struct es_em_ctxt
->  /* Include code shared with pre-decompression boot stage */
->  #include "sev-shared.c"
->
-> +/*
-> + * Nothing shall interrupt this code path while holding the per-CPU
-> + * GHCB. The backup GHCB is only for NMIs interrupting this path.
-> + *
-> + * Callers must disable local interrupts around it.
-> + */
-> +static noinstr struct ghcb *__sev_get_ghcb(struct ghcb_state *state)
-> +{
-> +	struct sev_es_runtime_data *data;
-> +	struct ghcb *ghcb;
-> +
-> +	WARN_ON(!irqs_disabled());
-> +
-> +	data = this_cpu_read(runtime_data);
-> +	ghcb = &data->ghcb_page;
-> +
-> +	if (unlikely(data->ghcb_active)) {
-> +		/* GHCB is already in use - save its contents */
-> +
-> +		if (unlikely(data->backup_ghcb_active)) {
-> +			/*
-> +			 * Backup-GHCB is also already in use. There is no way
-> +			 * to continue here so just kill the machine. To make
-> +			 * panic() work, mark GHCBs inactive so that messages
-> +			 * can be printed out.
-> +			 */
-> +			data->ghcb_active        = false;
-> +			data->backup_ghcb_active = false;
-> +
-> +			instrumentation_begin();
-> +			panic("Unable to handle #VC exception! GHCB and Backup GHCB are already in use");
-> +			instrumentation_end();
-> +		}
-> +
-> +		/* Mark backup_ghcb active before writing to it */
-> +		data->backup_ghcb_active = true;
-> +
-> +		state->ghcb = &data->backup_ghcb;
-> +
-> +		/* Backup GHCB content */
-> +		*state->ghcb = *ghcb;
-> +	} else {
-> +		state->ghcb = NULL;
-> +		data->ghcb_active = true;
-> +	}
-> +
-> +	/* SEV-SNP guest requires that GHCB must be registered before using it. */
-> +	if (!data->ghcb_registered) {
-> +		if (cc_platform_has(CC_ATTR_GUEST_SEV_SNP)) {
-> +			snp_register_ghcb_early(__pa(ghcb));
-> +			sev_snp_setup_hv_doorbell_page(ghcb);
-> +		} else {
-> +			sev_es_wr_ghcb_msr(__pa(ghcb));
-> +		}
-> +		data->ghcb_registered = true;
-> +	}
-> +
-> +	return ghcb;
-> +}
-> +
-> +static void sev_snp_setup_hv_doorbell_page(struct ghcb *ghcb)
-> +{
-> +	u64 pa;
-> +	enum es_result ret;
-> +
-> +	pa = __pa(sev_snp_current_doorbell_page());
-> +	vc_ghcb_invalidate(ghcb);
-> +	ret = vmgexit_hv_doorbell_page(ghcb,
-> +			SVM_VMGEXIT_SET_HV_DOORBELL_PAGE, pa);
-> +	if (ret != ES_OK)
-> +		panic("SEV-SNP: failed to set up #HV doorbell page");
-> +}
-> +
->  static noinstr void __sev_put_ghcb(struct ghcb_state *state)
->  {
->  	struct sev_es_runtime_data *data;
-> @@ -1282,6 +1505,11 @@ void setup_ghcb(void)
->  		snp_register_ghcb_early(__pa(&boot_ghcb_page));
->  }
->
-> +int vmgexit_hv_doorbell_page(struct ghcb *ghcb, u64 op, u64 pa)
-> +{
-> +	return sev_es_ghcb_hv_call(ghcb, NULL, SVM_VMGEXIT_HV_DOORBELL_PAGE, op, pa);
-> +}
-> +
->  #ifdef CONFIG_HOTPLUG_CPU
->  static void sev_es_ap_hlt_loop(void)
->  {
-> @@ -1355,6 +1583,7 @@ static void __init alloc_runtime_data(int cpu)
->  static void __init init_ghcb(int cpu)
->  {
->  	struct sev_es_runtime_data *data;
-> +	struct sev_snp_runtime_data *snp_data;
->  	int err;
->
->  	data = per_cpu(runtime_data, cpu);
-> @@ -1366,8 +1595,22 @@ static void __init init_ghcb(int cpu)
->
->  	memset(&data->ghcb_page, 0, sizeof(data->ghcb_page));
->
-> +	snp_data = memblock_alloc(sizeof(*snp_data), PAGE_SIZE);
-> +	if (!snp_data)
-> +		panic("Can't allocate SEV-SNP runtime data");
-> +
-> +	err = early_set_memory_decrypted((unsigned long)&snp_data->hv_doorbell_page,
-> +					 sizeof(snp_data->hv_doorbell_page));
-> +	if (err)
-> +		panic("Can't map #HV doorbell pages unencrypted");
-> +
-> +	memset(&snp_data->hv_doorbell_page, 0, sizeof(snp_data->hv_doorbell_page));
-> +
-> +	per_cpu(snp_runtime_data, cpu) = snp_data;
-> +
->  	data->ghcb_active = false;
->  	data->backup_ghcb_active = false;
-> +	data->ghcb_registered = false;
->  }
->
->  void __init sev_es_init_vc_handling(void)
-> @@ -2006,7 +2249,12 @@ DEFINE_IDTENTRY_VC_USER(exc_vmm_communication)
->
->  static bool hv_raw_handle_exception(struct pt_regs *regs)
->  {
-> -	return false;
-> +	/* Clear the no_further_signal bit */
-> +	sev_snp_current_doorbell_page()->pending_events.events &= 0x7fff;
-> +
-> +	check_hv_pending(regs);
-> +
-> +	return true;
->  }
->
->  static __always_inline bool on_hv_fallback_stack(struct pt_regs *regs)
-> diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-> index 178015a820f0..af97e6610fbb 100644
-> --- a/arch/x86/kernel/traps.c
-> +++ b/arch/x86/kernel/traps.c
-> @@ -898,6 +898,53 @@ asmlinkage __visible noinstr struct pt_regs *vc_switch_off_ist(struct pt_regs *r
->
->  	return regs_ret;
->  }
-> +
-> +asmlinkage __visible noinstr struct pt_regs *hv_switch_off_ist(struct pt_regs *regs)
-> +{
-> +	unsigned long sp, *stack;
-> +	struct stack_info info;
-> +	struct pt_regs *regs_ret;
-> +
-> +	/*
-> +	 * A malicious hypervisor can inject 2 HVs in a row, which will corrupt
-> +	 * the trap frame on our IST stack.  We add a defensive check here to
-> +	 * catch such behavior.
-> +	 */
-> +	BUG_ON(regs->sp >= __this_cpu_ist_bottom_va(HV) && regs->sp < __this_cpu_ist_top_va(HV));
-> +
-> +	/*
-> +	 * In the SYSCALL entry path the RSP value comes from user-space - don't
-> +	 * trust it and switch to the current kernel stack
-> +	 */
-> +	if (ip_within_syscall_gap(regs)) {
-> +		sp = this_cpu_read(cpu_current_top_of_stack);
-> +		goto sync;
-> +	}
-> +
-> +	/*
-> +	 * From here on the RSP value is trusted. Now check whether entry
-> +	 * happened from a safe stack. Not safe are the entry or unknown stacks,
-> +	 * use the fall-back stack instead in this case.
-> +	 */
-> +	sp    = regs->sp;
-> +	stack = (unsigned long *)sp;
-> +
-> +	if (!get_stack_info_noinstr(stack, current, &info) || info.type == STACK_TYPE_ENTRY ||
-> +	    info.type > STACK_TYPE_EXCEPTION_LAST)
-> +		sp = __this_cpu_ist_top_va(HV2);
-> +sync:
-> +	/*
-> +	 * Found a safe stack - switch to it as if the entry didn't happen via
-> +	 * IST stack. The code below only copies pt_regs, the real switch happens
-> +	 * in assembly code.
-> +	 */
-> +	sp = ALIGN_DOWN(sp, 8) - sizeof(*regs_ret);
-> +
-> +	regs_ret = (struct pt_regs *)sp;
-> +	*regs_ret = *regs;
-> +
-> +	return regs_ret;
-> +}
->  #endif
->
->  asmlinkage __visible noinstr struct pt_regs *fixup_bad_iret(struct pt_regs *bad_regs)
-> @@ -1457,4 +1504,7 @@ void __init trap_init(void)
->  	/* Setup traps as cpu_init() might #GP */
->  	idt_setup_traps();
->  	cpu_init();
-> +
-> +	/* Init #HV doorbell pages when running as an SEV-SNP guest */
-> +	sev_snp_init_hv_handling();
->  }
-
-
---
-Cheers,
-Christophe de Dinechin (https://c3d.github.io)
-Theory of Incomplete Measurements (https://c3d.github.io/TIM)
-
+>  
+>  struct am65_cpsw_host {
+>  	struct am65_cpsw_common		*common;
+>  	void __iomem			*port_base;
+>  	void __iomem			*stat_base;
+> +	/* Only for suspend resume context */
+> +	u32				vid_context;
+>  };
+>  
+>  struct am65_cpsw_tx_chn {
+> -- 
+> 2.17.1
+> 
