@@ -2,58 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3611F6384B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 08:49:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF64F6384C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 08:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbiKYHt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 02:49:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40506 "EHLO
+        id S229608AbiKYHun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 02:50:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiKYHtZ (ORCPT
+        with ESMTP id S229498AbiKYHul (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 02:49:25 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92E12F00F
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 23:49:23 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oyTSa-0000mo-6P; Fri, 25 Nov 2022 08:49:20 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oyTSY-0006IA-Q3; Fri, 25 Nov 2022 08:49:18 +0100
-Date:   Fri, 25 Nov 2022 08:49:18 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Arun.Ramadoss@microchip.com
-Cc:     Woojung.Huh@microchip.com, andrew@lunn.ch, f.fainelli@gmail.com,
-        davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
-        edumazet@google.com, pabeni@redhat.com, kernel@pengutronix.de,
-        kuba@kernel.org, olteanv@gmail.com, vivien.didelot@gmail.com
-Subject: Re: [PATCH net-next v6 6/6] net: dsa: microchip: ksz8: move all DSA
- configurations to one location
-Message-ID: <20221125074918.GB22688@pengutronix.de>
-References: <20221124101458.3353902-1-o.rempel@pengutronix.de>
- <20221124101458.3353902-7-o.rempel@pengutronix.de>
- <e270aedb761cad689ee969285ac07578848e2ae5.camel@microchip.com>
- <20221125055240.GA22688@pengutronix.de>
- <439da76d5f0fb800f11cec66c06a444a7a4e591a.camel@microchip.com>
+        Fri, 25 Nov 2022 02:50:41 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2B01BEBB;
+        Thu, 24 Nov 2022 23:50:37 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 0D86E21AE4;
+        Fri, 25 Nov 2022 07:50:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1669362636; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nvdAlIgOG5yqCLw/uf3CjVt0knMtHQ2HViq7mDKGha0=;
+        b=UfA+KLDHvqCfxZkPL8VzkpPT/Fhn6znGTJkr9TAm8Df/6osHNjpPZL3bpjXCNW9Y6CO+bV
+        55yDsVYkDD1XCL4UB9UYWsXIiUbxJpK1nR1ijkPRl3MAS0DNrX3yo0Osn0cL7Uhod8zhw2
+        6Jmj/Fl9CPemw02qixisQW8yEpz74O8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1669362636;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nvdAlIgOG5yqCLw/uf3CjVt0knMtHQ2HViq7mDKGha0=;
+        b=hFbVrf2fTew+nsw0hgcUxNXADJWFG/z1U07cXA+HsRBXofEjbI5gIqoncmK8d81yaEwaT8
+        DibuSqZrI/DVt/AA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E840413A08;
+        Fri, 25 Nov 2022 07:50:35 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id kKr+N8tzgGMTFgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 25 Nov 2022 07:50:35 +0000
+Message-ID: <14bd73b0-5480-2b35-7b89-161075d9f444@suse.cz>
+Date:   Fri, 25 Nov 2022 08:50:35 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <439da76d5f0fb800f11cec66c06a444a7a4e591a.camel@microchip.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: linux-next: build failure after merge of the slab tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Marco Elver <elver@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>
+References: <20221125124934.462dc661@canb.auug.org.au>
+Content-Language: en-US
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20221125124934.462dc661@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,99 +76,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022 at 07:14:32AM +0000, Arun.Ramadoss@microchip.com wrote:
-> Hi Oleksij,
+On 11/25/22 02:49, Stephen Rothwell wrote:
+> Hi all,
 > 
-> On Fri, 2022-11-25 at 06:52 +0100, Oleksij Rempel wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you
-> > know the content is safe
-> > 
-> > Hi Arun,
-> > 
-> > On Thu, Nov 24, 2022 at 03:05:27PM +0000, Arun.Ramadoss@microchip.com
-> >  wrote:
-> > > Hi Oleksij,
-> > > On Thu, 2022-11-24 at 11:14 +0100, Oleksij Rempel wrote:
-> > > > EXTERNAL EMAIL: Do not click links or open attachments unless you
-> > > > know the content is safe
-> > > > 
-> > > > To make the code more comparable to KSZ9477 code, move DSA
-> > > > configurations to the same location.
-> > > > 
-> > > > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > > > ---
-> > > >  drivers/net/dsa/microchip/ksz8795.c | 20 ++++++++++----------
-> > > >  1 file changed, 10 insertions(+), 10 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/net/dsa/microchip/ksz8795.c
-> > > > b/drivers/net/dsa/microchip/ksz8795.c
-> > > > index 060e41b9b6ef..003b0ac2854c 100644
-> > > > --- a/drivers/net/dsa/microchip/ksz8795.c
-> > > > +++ b/drivers/net/dsa/microchip/ksz8795.c
-> > > > @@ -1359,6 +1359,16 @@ int ksz8_setup(struct dsa_switch *ds)
-> > > > 
-> > > >         ds->mtu_enforcement_ingress = true;
-> > > > 
-> > > > +       /* We rely on software untagging on the CPU port, so that
-> > > > we
-> > > > +        * can support both tagged and untagged VLANs
-> > > > +        */
-> > > > +       ds->untag_bridge_pvid = true;
-> > > > +
-> > > > +       /* VLAN filtering is partly controlled by the global VLAN
-> > > > +        * Enable flag
-> > > > +        */
-> > > > +       ds->vlan_filtering_is_global = true;
-> > > > +
-> > > >         ksz_cfg(dev, S_REPLACE_VID_CTRL, SW_FLOW_CTRL, true);
-> > > > 
-> > > >         /* Enable automatic fast aging when link changed
-> > > > detected. */
-> > > > @@ -1418,16 +1428,6 @@ int ksz8_switch_init(struct ksz_device
-> > > > *dev)
-> > > >         dev->phy_port_cnt = dev->info->port_cnt - 1;
-> > > >         dev->port_mask = (BIT(dev->phy_port_cnt) - 1) | dev-
-> > > > >info-
-> > > > > cpu_ports;
-> > > 
-> > > Since you moved dsa related items to ksz8_setup, remaining items in
-> > > ksz8_switch_init are
-> > > - dev->cpu_port - Used in ksz_setup but called after the individual
-> > > switch setup function. We can move it ksz8_setup.
-> > > - dev->phy_port_cnt - Used in ksz8_vlan_filtering and
-> > > ksz8_config_cpuport. We can move.
-> > > - dev->port_mask - used in ksz_switch_register. So we cannot move.
-> > > 
-> > > To make the ksz8_switch_init and ksz9477_switch_init function
-> > > similar,
-> > > we can move dev->cpu_port and dev->phy_port_cnt from
-> > > ksz8_switch_init
-> > > to ksz8_setup
-> > 
-> > It make no sense to move this variables. Every place where they are
-> > used, can be replaced with dsa functions like:
-> > dsa_switch_for_each_user_port() or dsa_cpu_ports()/dsa_is_cpu_port()
-> > Making this changes within this patch set make no sense to.
+> After merging the slab tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
 > 
-> Agreed. 
-> I thought of cleaning up
-> ksz8_switch_init/ksz9477_switch_init/lan937x_switch_init, since these
-> functions are not performing any useful activity other than
-> initializing these variables. Similarly all the exit function are
-> performing same reset function. I thought these init and exit function
-> in the ksz_dev_ops structure is reduntant.
+> mm/slub.c:965:13: error: 'freelist_corrupted' defined but not used [-Werror=unused-function]
+>   965 | static bool freelist_corrupted(struct kmem_cache *s, struct slab *slab,
+>       |             ^~~~~~~~~~~~~~~~~~
+> 
+> Caused by commit
+> 
+>   f6e94ad44e77 ("mm, slub: remove percpu slabs with CONFIG_SLUB_TINY")
+> 
+> I have used the slab tree from next-20221123 again.
 
-I'll try to add ore cleanups to my currently pending patch set.
-Currently I'm working on following ksz8 related tasks:
-- add MTU configuration support
-- add stats64 support
-- fix fdb_dump and add fdb_add/del support
-- fix PHY loopback support to make selftest work
+I tried the allmodconfig and:
 
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+WARNING: unmet direct dependencies detected for SLUB_DEBUG
+  Depends on [n]: SLUB [=y] && SYSFS [=y] && !SLUB_TINY [=y]
+  Selected by [y]:
+  - KASAN_GENERIC [=y] && <choice> && HAVE_ARCH_KASAN [=y] && CC_HAS_KASAN_GENERIC [=y] && CC_HAS_WORKING_NOSANITIZE_ADDRESS [=y] && SLUB [=y]
+
+Wasn't aware it's possible that it will leave a combination of configs
+that's not allowed and just warn about it. Oh well.
+
+I'll solve it by:
+--- a/lib/Kconfig.kasan
++++ b/lib/Kconfig.kasan
+@@ -37,7 +37,7 @@ menuconfig KASAN
+                     (HAVE_ARCH_KASAN_SW_TAGS && CC_HAS_KASAN_SW_TAGS)) && \
+                    CC_HAS_WORKING_NOSANITIZE_ADDRESS) || \
+                   HAVE_ARCH_KASAN_HW_TAGS
+-       depends on (SLUB && SYSFS) || (SLAB && !DEBUG_SLAB)
++       depends on (SLUB && SYSFS && !SLUB_TINY) || (SLAB && !DEBUG_SLAB)
+        select STACKDEPOT_ALWAYS_INIT
+        help
+          Enables KASAN (Kernel Address Sanitizer) - a dynamic memory safety
+
