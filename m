@@ -2,58 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 365D5638560
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 09:42:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DD9D638569
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 09:43:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbiKYImR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 03:42:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56142 "EHLO
+        id S229786AbiKYInc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 03:43:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiKYImP (ORCPT
+        with ESMTP id S229468AbiKYInQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 03:42:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C8623EAC;
-        Fri, 25 Nov 2022 00:42:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DF870B8297E;
-        Fri, 25 Nov 2022 08:42:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA784C433D6;
-        Fri, 25 Nov 2022 08:42:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669365728;
-        bh=wNK5p2ICZvmDUo5ht1Bd/UZayoyWfUcZHgC5WWokmFc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JjgMYWb2d03U7t8XE3LAWDfXT3leoe5w1RvlMgUox4xqkUB5pYaUf+dmSrPiJwuh6
-         ddNJWtrf2mI/zL+KrxLS9nrEKgkSejVshTEL6T8GPeS770FQ3Am01t0g7t2Aky7puP
-         R/zUT18zrtFZghuodvIcp/dvzPcHmmjIXmnuGMZ2ZhQbO/UuBYyMn7lqWwfNxy1Q4y
-         cGWC+W8cc2y9VuzcICxd2FNMNzDuNxwQifa7Y9J0o2zTkXAQHyi9Px3A3dkvfkuDev
-         kB6cM/hAOyMsojHp07cHF6LaIHHAfFQ4WkuBWGS4mcQDzVYplHZxFAllWxJP38VHqJ
-         3nE7yzVpV59Ag==
-Message-ID: <6dc36b74-6982-7fcf-a396-8977f1146c05@kernel.org>
-Date:   Fri, 25 Nov 2022 10:41:58 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 net-next 4/6] net: ethernet: ti: am65-cpsw: Add
- suspend/resume support
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     davem@davemloft.net, maciej.fijalkowski@intel.com, kuba@kernel.org,
-        edumazet@google.com, pabeni@redhat.com, vigneshr@ti.com,
-        linux-omap@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221123124835.18937-1-rogerq@kernel.org>
- <20221123124835.18937-5-rogerq@kernel.org> <Y35bahTL2cMgXM1F@lunn.ch>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <Y35bahTL2cMgXM1F@lunn.ch>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Fri, 25 Nov 2022 03:43:16 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216E620F6F
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 00:43:15 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id a5-20020a25af05000000b006e450a5e507so3361982ybh.22
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 00:43:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=dehjIhc0oB2x/7qa8tpHLfPv+8ip2PCtDc/VgLdDFS0=;
+        b=U3tR0OVoZ0hHgA1k6gQVY26XcT3oNgQIup/uX30yKzUfLfrSKpvRJsmcSBuhiAXpTS
+         rTzQMGzMJNRsRtthJ4BxyoK+TidlhhFCJmjhxBf/o1FEDj74nyLKCXv3UoCsEVkyMOeU
+         364amPEiG2TPV7cF3TGX+tLLAPX4almhYT7NCNw9CXxbjzI0V/mb8zoOMitrJVRJA7dj
+         so3SRxWDXfqlFI3Uw6FkxsZS8mgE7neClxz6IKN1K/gUkQhbn5yotHy8A0DKQmNZGmod
+         UisNijbujJ0UGmHkgWBKaLdxRuxz2CsxSAWjZikzhuh6GNn9njbaHLDcXdeN0Mt/hTxE
+         23bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dehjIhc0oB2x/7qa8tpHLfPv+8ip2PCtDc/VgLdDFS0=;
+        b=P2ujABfCYX3cPygKVsX21DfjB2wFmdqKL7mz1rLyynua2c9CuOQ2/rSw79Q75r+93l
+         dAs8DFoJCfkY9oNRVO+eGtHW1yeppxrvPxk/ptGCAMLe0Ly54cmZtIM2tECSKKYsD1cM
+         2FFL6dvnm5kJu0fwYYKdKufuH/pntLllaiVbhrggdwDGgzxR2Kj2qrCUGTXUasszr6R9
+         Uznf9yuREbWk7GfE6tRJCl0fXHSqDe2f+OFxsnViVW1MauW66YI/lda75t+6mYBB1fXQ
+         rSS6I2+htXBwPAx+31TG0d7AQ0bVnn+Tv1gwiGUCngAoB3Ino3KkwTa68+QvmRU+8Wtp
+         IT5g==
+X-Gm-Message-State: ANoB5pnswS/DCooB8uHzj6W/5mWDTPErVQ4CU+Gj/8uWcxlRykB9tt+W
+        anat4jx818TmbbAnHRbnVRX2O8J4i551bg==
+X-Google-Smtp-Source: AA0mqf6SIG2nM06vCqr04rh+5zvembhI1If1NZodMNsjqU25om3zZ8oQIazCspuzdvbnHIuLg9UcLSc+CucUsg==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a05:6902:114b:b0:6e1:ce17:6c40 with SMTP
+ id p11-20020a056902114b00b006e1ce176c40mr9ybu.5.1669365793417; Fri, 25 Nov
+ 2022 00:43:13 -0800 (PST)
+Date:   Fri, 25 Nov 2022 16:43:04 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
+Message-ID: <20221125084306.1063074-1-davidgow@google.com>
+Subject: [PATCH v4 1/3] kunit: Provide a static key to check if KUnit is
+ actively running tests
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendan.higgins@linux.dev>,
+        Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>, linux-doc@vger.kernel.org,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,49 +71,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/11/2022 19:42, Andrew Lunn wrote:
->> +static int am65_cpsw_nuss_ndev_add_tx_napi(struct am65_cpsw_common *common);
->> +
-> 
-> Please move the code around so you don't need this. Ideally as a patch
-> which only does the move. It is then trivial to review.
+KUnit does a few expensive things when enabled. This hasn't been a
+problem because KUnit was only enabled on test kernels, but with a few
+people enabling (but not _using_) KUnit on production systems, we need a
+runtime way of handling this.
 
-OK.
+Provide a 'kunit_running' static key (defaulting to false), which allows
+us to hide any KUnit code behind a static branch. This should reduce the
+performance impact (on other code) of having KUnit enabled to a single
+NOP when no tests are running.
 
-> 
->>  static void am65_cpsw_port_set_sl_mac(struct am65_cpsw_port *slave,
->>  				      const u8 *dev_addr)
->>  {
->> @@ -555,11 +558,24 @@ static int am65_cpsw_nuss_ndo_slave_open(struct net_device *ndev)
->>  	struct am65_cpsw_common *common = am65_ndev_to_common(ndev);
->>  	struct am65_cpsw_port *port = am65_ndev_to_port(ndev);
->>  	int ret, i;
->> +	u32 reg;
->>  
->>  	ret = pm_runtime_resume_and_get(common->dev);
->>  	if (ret < 0)
->>  		return ret;
->>  
->> +	/* Idle MAC port */
->> +	cpsw_sl_ctl_set(port->slave.mac_sl, CPSW_SL_CTL_CMD_IDLE);
->> +	cpsw_sl_wait_for_idle(port->slave.mac_sl, 100);
->> +	cpsw_sl_ctl_reset(port->slave.mac_sl);
->> +
->> +	/* soft reset MAC */
->> +	cpsw_sl_reg_write(port->slave.mac_sl, CPSW_SL_SOFT_RESET, 1);
->> +	mdelay(1);
->> +	reg = cpsw_sl_reg_read(port->slave.mac_sl, CPSW_SL_SOFT_RESET);
->> +	if (reg)
->> +		dev_info(common->dev, "mac reset not yet done\n");
-> 
-> Should that be dev_info()? dev_dbg()
+Note that, while it looks unintuitive, tests always run entirely within
+__kunit_test_suites_init(), so it's safe to decrement the static key at
+the end of this function, rather than in __kunit_test_suites_exit(),
+which is only there to clean up results in debugfs.
 
-Do you think we should error out here as this might indicate some
-hardware malfunction and it is unlikely to work?
-In that case dev_err() seems more appropriate?
+Signed-off-by: David Gow <davidgow@google.com>
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
+---
+This should be a no-op (other than a possible performance improvement)
+functionality-wise, and lays the groundwork for a more optimised static
+stub implementation.
 
-> 
->        Andrew
+The remaining patches in the series add a kunit_get_current_test()
+function which is a more friendly and performant wrapper around
+current->kunit_test, and use this in the slub test. They also improve
+the documentation a bit.
 
-cheers,
--roger
+If there are no objections, we'll take the whole series via the KUnit
+tree.
+
+Changes since v3:
+https://lore.kernel.org/linux-kselftest/20221119081252.3864249-1-davidgow@google.com/
+- Use DECLARE_STATIC_KEY_FALSE() -- thanks Daniel!
+
+No changes since v2:
+https://lore.kernel.org/all/20221025071907.1251820-1-davidgow@google.com/
+
+Changes since v1:
+https://lore.kernel.org/linux-kselftest/20221021072854.333010-1-davidgow@google.com/
+- No changes in this patch.
+- Patch 2/3 is reworked, patch 3/3 is new.
+
+---
+ include/kunit/test.h | 4 ++++
+ lib/kunit/test.c     | 6 ++++++
+ 2 files changed, 10 insertions(+)
+
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 4666a4d199ea..87ea90576b50 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -16,6 +16,7 @@
+ #include <linux/container_of.h>
+ #include <linux/err.h>
+ #include <linux/init.h>
++#include <linux/jump_label.h>
+ #include <linux/kconfig.h>
+ #include <linux/kref.h>
+ #include <linux/list.h>
+@@ -27,6 +28,9 @@
+ 
+ #include <asm/rwonce.h>
+ 
++/* Static key: true if any KUnit tests are currently running */
++DECLARE_STATIC_KEY_FALSE(kunit_running);
++
+ struct kunit;
+ 
+ /* Size of log associated with test. */
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index 1c9d8d962d67..87a5d795843b 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -20,6 +20,8 @@
+ #include "string-stream.h"
+ #include "try-catch-impl.h"
+ 
++DEFINE_STATIC_KEY_FALSE(kunit_running);
++
+ #if IS_BUILTIN(CONFIG_KUNIT)
+ /*
+  * Fail the current test and print an error message to the log.
+@@ -615,10 +617,14 @@ int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_
+ 		return 0;
+ 	}
+ 
++	static_branch_inc(&kunit_running);
++
+ 	for (i = 0; i < num_suites; i++) {
+ 		kunit_init_suite(suites[i]);
+ 		kunit_run_tests(suites[i]);
+ 	}
++
++	static_branch_dec(&kunit_running);
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(__kunit_test_suites_init);
+-- 
+2.38.1.584.g0f3c55d4c2-goog
+
