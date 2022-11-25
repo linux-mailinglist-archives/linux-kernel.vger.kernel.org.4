@@ -2,194 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97B8C6389DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 13:34:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 836656389EB
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 13:36:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbiKYMec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 07:34:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60138 "EHLO
+        id S229979AbiKYMgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 07:36:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiKYMe3 (ORCPT
+        with ESMTP id S229897AbiKYMgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 07:34:29 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC331ADBD;
-        Fri, 25 Nov 2022 04:34:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
-        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=sFT+GfO1F5bItAMLrXRbZRq8y+SnQhmcuiZ5NiJSBPY=; b=VsGqIls27azE9N+s+Aqru6zp99
-        ujG5wfDJ12MGYXvxxXu+ZzduwCOpIYx9nR3+IFlknbxGhHmCfwajNV3PYIzQ23KscGGP8DInq/FSI
-        a3fx2R7sABRIw8Gv2aZfrUqghnJNG0ZM75kPKUV9+QUvLtJ/V2bbaPy+ca5MrGQ572yqpW7wo8onN
-        s64x6O6GpLIlytN32cxTlVJI5EjIH50uoCqe2+ptTZul7qR1f+ghKqaJajQhGcQ5c4yoimuUJsLTt
-        ThBqia7YmGAoLOl8vKthhe8IoiP5f7CVD2pZhA7ChietEEcMt8TllkxkUpRhRv39knjV7WfNvPjRv
-        kCEzEa7g==;
-Received: from [2001:8b0:10b:5::bb3] (helo=u3832b3a9db3152.infradead.org)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oyXuW-009ZlC-D6; Fri, 25 Nov 2022 12:34:28 +0000
-Message-ID: <a3a13c21817d75f64dedaed8c658ddd7636ce50a.camel@infradead.org>
-Subject: Re: [PATCH v2 1/1] KVM: x86/xen: add support for 32-bit guests in
- SCHEDOP_poll
-From:   David Woodhouse <dwmw2@infradead.org>
-To:     "Kaya, Metin" <metikaya@amazon.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-Cc:     "Durrant, Paul" <pdurrant@amazon.co.uk>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Date:   Fri, 25 Nov 2022 12:34:21 +0000
-In-Reply-To: <7a19d6c2c86ffd09ecd86ea00375ef48302b7084.camel@infradead.org>
-References: <1647881191688.60603@amazon.com>
-         ,<1647882914508.15309@amazon.com> <1647883644964.29736@amazon.com>
-         <7a19d6c2c86ffd09ecd86ea00375ef48302b7084.camel@infradead.org>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-        boundary="=-s9HhKLkZpWABJ5cdIO4S"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Fri, 25 Nov 2022 07:36:43 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FF82D766
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 04:36:42 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id 5so3356709wmo.1
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 04:36:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=F8QEr1U+4DdwT5X6CEZxWsT4dF4Ejt6T8JypPrPO5rI=;
+        b=K1xi5tAQLXN9sLEIHr9BFO77DXOhF/h+p2Te8YWE54iOn1IeUtcnLo90aaRsxW20W5
+         rZVEcSEaRhabtLkuR0NeGOtMxgEZZotZzAzoHiA9UL2BZETO7Y4wWT8wDedQ9Z0YgHdu
+         n5PHhsvP51wHsF0Ysd5M7CCE7wpBlA9BgIN9e5xLPXWW8Iuy2NrnfFZX2KcB7lQhuMTb
+         ckk8NdpZ7uYvZGI3sP/hNvAuFcRVdVRIQfZ9rW3SLuDmGTygd6rAHWbfy5SEI9znwF+u
+         akM+qLLW7oSTGMNWAeNhmf+qlyHWx438NqeWmTvr8wVuaQEZDKpzVIvomFZQiG+yZrvi
+         RS6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=F8QEr1U+4DdwT5X6CEZxWsT4dF4Ejt6T8JypPrPO5rI=;
+        b=xqfzyxdkT/lnpfJ6coUcPqd9xX6E2CkNNcMoFenVXQUixHY7xhB7FOSDACuAEgnQ9d
+         HZfio7+pKu0lSvq28LetTRimuDY+eLDUihL3xyLl1A33fKwJsGBvdkhUOlw99IlD8X02
+         VetT4e3Fs+d6OsXbYM8KY56kulDa54/ZqUoPdAvO0BEgjdUJ4Area66CyS4yndAfHd1v
+         i6xCIgASEoZZ/ol0Hbsnr54861CjjtrY+ke3l2vOVCf1LAXUyCYLXaUR7jsrJoUB1d4F
+         xA5tNUiJw9jwP5rpUJF+9fIrvup7AKoCOfmfa3NgYrtfsauaiAwPZgJUuRaxHFFLlziA
+         Rmsg==
+X-Gm-Message-State: ANoB5pn8d99/cbrhJxsvqsonBC8Yr4y13AZwnYejQEzaXJMf62h7QNe/
+        pBJG75tdnKSLs/4TTa6TcPckSQ==
+X-Google-Smtp-Source: AA0mqf7i/gSH7GGQvOSqsgv9xi7K0jb2aAWSKxgFmGXT6Puc65tmss7R9tmharjDtcFbJgZW8DFsoA==
+X-Received: by 2002:a05:600c:1e85:b0:3cf:84be:aaf9 with SMTP id be5-20020a05600c1e8500b003cf84beaaf9mr14204871wmb.111.1669379800868;
+        Fri, 25 Nov 2022 04:36:40 -0800 (PST)
+Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id k15-20020a5d6d4f000000b002366dd0e030sm3574111wri.68.2022.11.25.04.36.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Nov 2022 04:36:40 -0800 (PST)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
+        dmitry.baryshkov@linaro.org, sean@poorly.run, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org, dianders@chromium.org,
+        david@ixit.cz, krzysztof.kozlowski+dt@linaro.org,
+        swboyd@chromium.org, konrad.dybcio@somainline.org,
+        agross@kernel.org, andersson@kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        bryan.odonoghue@linaro.org
+Subject: [PATCH v4 00/18] mdss-dsi-ctrl binding and dts fixes
+Date:   Fri, 25 Nov 2022 12:36:20 +0000
+Message-Id: <20221125123638.823261-1-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+V4:
+- Moves the update of the example from patch #5 to patch #4
 
---=-s9HhKLkZpWABJ5cdIO4S
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+V3:
+- Moves declaration of mdss-dsi-ctrl into compat string declaration
+  patch - Krzysztof, Dmitry
+- Renames qcm-2290 compat string to agreed compat "qcom,socname-dsi-ctrl"
+  Dmirty, Krzysztof
+- Adds empty line after if clause in yaml control flow section - Dmirty
+- Adds Rb/Ack - Krzysztof, Dmitry, Doug, David
+- vdd*
+  Looking into this some more, I don't believe vdd, vdda, vddio ought to be
+  required properties. Its up to the PCB manufacturer and the panel in-use
+  how that panel is powered. Powering the panel is not something that
+  even necessarily needs to be done from the dsi-ctrl driver.
+  Originally marking vdd* as required in the .txt was an error, its not a
+  SoC level dtsi requirement.
+- clock-names
+  Rather than replicate the clock-name in each if block I listed them with
+  a specific description from a similar reference in usb/qcom,dwc3.yaml.
+ 
+https://lore.kernel.org/linux-arm-msm/eb80681f-2e0b-605f-0444-ec65562f74b8@linaro.org/
 
-On Thu, 2022-11-24 at 00:33 +0000, David Woodhouse wrote:
-> Could do with a test case. It's fairly simple to flip the 'longmode'
-> config even when the guest is actually in 64-bit mode, so it should be
-> fairly easy to add this in the xen_shinfo_test.
+V2:
+https://www.spinics.net/lists/linux-arm-msm/msg116326.html
 
-Hm, not so. This doesn't depend on the 'longmode' flag; that's only for
-the structs in shared memory. For an actual hypercall, the compat
-behaviour depends more sensibly on the actual CPU mode in which the
-hypercall was made.
+- Moves the DSI PHY changes to a different later series.
+  There are enough dsi-controller-main changes to justify its own
+  standalone series.
 
-I'm not sure I see how to use 32-bit guest mode from the KVM self
-tests. Even KVM_HC_SEND_IPI doesn't seem to have a 32-bit test... or a
-positive test at all, in fact. All we seem to do is test that it
-returns -ENOSYS when *disabled*.
+- The original phy-name binding change given discussion with Rob and
+  Krzysztof became its own standalone series that has since been merged.
+  https://www.mail-archive.com/dri-devel@lists.freedesktop.org/msg403214.html
 
+- Retains the drop of power-domain from yaml as a required property.
+  I dug into the available dtsi. The apq8064 doesn't appear to have any
+  GDSC which can be attached as a power-domain, which means the
+  power-domain requirement is not universal across the various silicon
+  versions.
 
---=-s9HhKLkZpWABJ5cdIO4S
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
+- Adds Dmitry's RB to power-domain drop
 
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
-ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
-EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
-FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
-aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
-EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
-VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
-aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
-ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
-QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
-rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
-ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
-U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
-DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
-BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
-dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
-BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
-QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
-CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
-xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
-IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
-kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
-eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
-KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
-1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
-OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
-x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
-5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
-DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
-VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
-UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
-MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
-ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
-oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
-SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
-xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
-RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
-bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
-NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
-KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
-5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
-C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
-gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
-VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
-MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
-by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
-b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
-BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
-QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
-c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
-AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
-qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
-v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
-Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
-tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
-Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
-YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
-ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
-IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
-ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
-GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
-h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
-9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
-P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
-2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
-BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
-7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
-lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
-lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
-AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
-Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
-FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
-BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
-cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
-aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
-LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
-BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
-cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
-Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
-lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
-WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
-hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
-IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
-dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
-NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
-xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjIxMTI1MTIzNDIxWjAvBgkqhkiG9w0BCQQxIgQg7kyH1FUv
-+ZAKnhX4AaC0T3/StWLdKq8byMbcHpeJ3Y0wgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
-A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
-dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
-DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
-MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
-Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgBhVThBylh1aL9RZdS28qQynTWmTn/mGa9A
-K4D9LiUbCORH8U+iI+iRPNyfG3jOqCAT4ngkpG0V2B8vwbM7tnLQ++Z4fyEb1FtgJi6Aees76nix
-8du6srnegf8S35sgluG/DFEu8rTAD6obREw1ICfO+LLlqlXah9Z/6QW5RRRj0v4i+gdMprA/KhcR
-pUoKsUyDskvMW0PIZ5HXdQxe5Kr261M/P4crlnx9AuqZh+ZxRlrMsc2AtliGHJm/8uCHv4gpKCky
-n3+pxzG6JpBD+H4fh/0h6ZXdOmKIRPsk2rRtLPz/9Dq9lg3/uvH82YajxxWBNXZH07wZZB/a0cNt
-lJJ9NydQExzxvRv1lhVApwH0hQvUkG9kqyPmHlMQXkypcjV+G7VzACtADq32lpWKKspUHz9ZFaK5
-yaS5DpiHdE+mTvBQj/F8az6lDVnNVIsIBgl1bfTIP0n+pRzmoXAtookN/BwbVImGrloh4POUoDrd
-c4ROIGTuTGgh/kK3KlrG+Z6cC5iql1DEj1QUAOlirwCCHr2MVhGLSppdk0MHaP67J8kdMK2HX5Kp
-hH0cJtazUlZC4+IJlYiutcMg51QIK68TztfYLtH4/NHbIbF7ZFW87s/61mCE8sDyDJvH/LyXcuKq
-/VTc3jwVQjIhz7j2by45akNftiqxQiiwIUcnBDiclgAAAAAAAA==
+- For the clock declarations I've
+  * I noticed that the simple change I had worked for msm8939 but
+    subsquently broke other dtsi which drove a bigger change to document
+    the clocks on a per compatible basis.
+  * Added compat strings in yaml.
+  * Moved the allOf down later in the file to acomodate the if/then.
+  * Number of clocks validated on a per compatible basis
+  * The driver code which doesn't care about the number of clocks
+    can still operate on the mdss-dsi-ctrl compat but the dts checks will
+    validate against the compat string and yaml.
+
+- vdd descriptions
+  Took the previous text I missed from the .txt file - Krzysztof, Dmitry
+  Adds vdd, vdda and vddio to the required list. This exposes warnings in
+  existing dtsi but the previous .txt declared these regulators as
+  required. - Krzysztof
+ 
+V1:
+This series fixes up a number of dtbs checks which are being flagged adding
+in the msm8939 dtsi.
 
 
---=-s9HhKLkZpWABJ5cdIO4S--
+When converting from .txt to .yaml a number of the parameters for the older
+msm8916 silicon were not transmitted into the yaml.
+
+Adding in the msm8939 which is a near 1:1 copy of the msm8916 in terms of
+dtsi triggers a rake of dtbs checks as a result.
+
+https://www.mail-archive.com/dri-devel@lists.freedesktop.org/msg403211.html
+
+Bryan O'Donoghue (18):
+  dt-bindings: msm: dsi-controller-main: Fix operating-points-v2
+    constraint
+  dt-bindings: msm: dsi-controller-main: Fix power-domain constraint
+  dt-bindings: msm: dsi-controller-main: Rename qcom,dsi-ctrl-6g-qcm2290
+    to qcom,qcm2290-dsi-ctrl
+  dt-bindings: msm: dsi-controller-main: Add compatible strings for
+    every current SoC
+  dt-bindings: msm: dsi-controller-main: Document clocks on a per
+    compatible basis
+  dt-bindings: msm: dsi-controller-main: Fix description of core clock
+  dt-bindings: msm: dsi-controller-main: Fix clock declarations
+  dt-bindings: msm: dsi-controller-main: Add vdd* descriptions back in
+  ARM: dts: qcom: apq8064: add compat qcom,apq8064-dsi-ctrl
+  ARM: dts: qcom: msm8974: Add compat qcom,msm8974-dsi-ctrl
+  arm64: dts: qcom: msm8916: Add compat qcom,msm8916-dsi-ctrl
+  arm64: dts: qcom: msm8996: Add compat qcom,msm8996-dsi-ctrl
+  arm64: dts: qcom: sc7180: Add compat qcom,sc7180-dsi-ctrl
+  arm64: dts: qcom: sc7280: Add compat qcom,sc7280-dsi-ctrl
+  arm64: dts: qcom: sdm630: Add compat qcom,sdm630-dsi-ctrl
+  arm64: dts: qcom: sdm660: Add compat qcom,sdm660-dsi-ctrl
+  arm64: dts: qcom: sdm845: Add compat qcom,sdm845-dsi-ctrl
+  arm64: dts: qcom: sm8250: Add compat qcom,sm8250-dsi-ctrl
+
+ .../display/msm/dsi-controller-main.yaml      | 205 ++++++++++++++++--
+ arch/arm/boot/dts/qcom-apq8064.dtsi           |   3 +-
+ arch/arm/boot/dts/qcom-msm8974.dtsi           |   3 +-
+ arch/arm64/boot/dts/qcom/msm8916.dtsi         |   3 +-
+ arch/arm64/boot/dts/qcom/msm8996.dtsi         |   6 +-
+ arch/arm64/boot/dts/qcom/sc7180.dtsi          |   3 +-
+ arch/arm64/boot/dts/qcom/sc7280.dtsi          |   3 +-
+ arch/arm64/boot/dts/qcom/sdm630.dtsi          |   3 +-
+ arch/arm64/boot/dts/qcom/sdm660.dtsi          |   3 +-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |   6 +-
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          |   6 +-
+ 11 files changed, 208 insertions(+), 36 deletions(-)
+
+-- 
+2.38.1
 
