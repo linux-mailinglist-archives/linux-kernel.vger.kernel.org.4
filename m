@@ -2,50 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F19756384C5
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 08:51:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C20F6384C8
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 08:51:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbiKYHvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 02:51:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41250 "EHLO
+        id S229529AbiKYHv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 02:51:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiKYHvM (ORCPT
+        with ESMTP id S229690AbiKYHvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 02:51:12 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BEFA2E69D;
-        Thu, 24 Nov 2022 23:51:11 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NJRrF5z5gz5BNS0;
-        Fri, 25 Nov 2022 15:51:09 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2AP7p14o099419;
-        Fri, 25 Nov 2022 15:51:01 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp02[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Fri, 25 Nov 2022 15:51:03 +0800 (CST)
-Date:   Fri, 25 Nov 2022 15:51:03 +0800 (CST)
-X-Zmail-TransId: 2afa638073e70889e413
-X-Mailer: Zmail v1.0
-Message-ID: <202211251551030468773@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <wsa@kernel.org>
-Cc:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBpMmM6IFVzZSBkZXZpY2VfbWF0Y2hfb2Zfbm9kZSgp?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2AP7p14o099419
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 638073ED.000 by FangMail milter!
-X-FangMail-Envelope: 1669362669/4NJRrF5z5gz5BNS0/638073ED.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 638073ED.000/4NJRrF5z5gz5BNS0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        Fri, 25 Nov 2022 02:51:53 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5A32F395
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 23:51:51 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id x13-20020a17090a46cd00b00218f611b6e9so3450257pjg.1
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 23:51:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shopee.com; s=shopee.com;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=F+6fVVB9BmEJEqb7Ji1ITmJk4l6XMki34cizL1NoHWs=;
+        b=aeRBe+pU/jO8Gy99w737xR904Bnhj4f7us8VIYn/UcNkg7f2jsbMct+LXkjRtIQnXR
+         GZsrEFlwJuhFVxyPqBGmEIRpqO1FUKXM+fTwxEUSoYWST4Y/WaxRTmuzz2+1Gn+fppTZ
+         /JbZzmq3BnXoadA6T17FouZYezsATwTr6Xi7CQprNDZNyatcjS2yA7j2G/euX6k/iJFo
+         6tjj1W4cPapz8lnuiHq92v5HPGUBDqQLBnfjzSMHtAPCU+UGMnI/wzefa8on4hZDwhIM
+         FTAUduVWvQWY+fGycu13uGrVnHNZ6sUez7Ijg+hMOJ1pNf8Q61ISQpLn1tLexhw73YUq
+         LsnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=F+6fVVB9BmEJEqb7Ji1ITmJk4l6XMki34cizL1NoHWs=;
+        b=g2M6LSqBJ/jgyHE2ynF7ccewJEQP2qf+kznWl+G09QQTvcpxinvO8rPvj4naempoWL
+         9SimecldKBR/C50TVFNijUNrp8IU/yi2/3vW2NlL7N/2yM/2thhaE0/qMzrIl23zeCnn
+         kcH3xNlYtI+5hyGaQpJg/SPwMnJ3cdTXkYcXgXa0mqtGM5ramdbvoLVFd7CVo0XQzLTa
+         jGRONt8I6bhkiMPf3jiOw0mrbVATEFbMO0myzdUhd1sOT9Bz6ef8UNlcgejnI2un4hwz
+         jBRNP2+DpXwe78p0JTGVEWE0qjudGhC+uxR0nMhCMvmcsvmGuevuewku/m+N0YoDbiVV
+         gUKA==
+X-Gm-Message-State: ANoB5pmX3mbtSlprs+ppym7wvTIXJxyn1TvEZZKpdSOXMyQbKJo7b4Yc
+        N0BgXG8fBJr4dIdlNBzUf901ZA==
+X-Google-Smtp-Source: AA0mqf6DI53+N6EogVEf5foHezmMcOMrbLA4u8a6joMtZUrnXsRvJVRKypDwwA+f6XKp7C/B1Ni3Dg==
+X-Received: by 2002:a17:90a:5918:b0:213:ff:1cda with SMTP id k24-20020a17090a591800b0021300ff1cdamr38252467pji.86.1669362710755;
+        Thu, 24 Nov 2022 23:51:50 -0800 (PST)
+Received: from ubuntu-haifeng.default.svc.cluster.local ([101.127.248.173])
+        by smtp.gmail.com with ESMTPSA id 6-20020a621406000000b0057447bb0ddcsm2433271pfu.49.2022.11.24.23.51.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Nov 2022 23:51:50 -0800 (PST)
+From:   "haifeng.xu" <haifeng.xu@shopee.com>
+To:     longman@redhat.com
+Cc:     lizefan.x@bytedance.com, tj@kernel.org, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "haifeng.xu" <haifeng.xu@shopee.com>
+Subject: [PATCH] cgroup/cpuset: Clean up cpuset_task_status_allowed
+Date:   Fri, 25 Nov 2022 07:51:33 +0000
+Message-Id: <20221125075133.12718-1-haifeng.xu@shopee.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,32 +70,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+cpuset_task_status_allowed just shows mems_allowed status, so
+rename it to task_mems_allowed. Moreover, it's only used in
+proc_pid_status, so move it to fs/proc/array.c. There is no
+intentional function change.
 
-Replace the open-code with device_match_of_node().
-
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+Signed-off-by: haifeng.xu <haifeng.xu@shopee.com>
 ---
- drivers/i2c/i2c-core-of.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/proc/array.c        | 13 +++++++++++--
+ include/linux/cpuset.h |  7 -------
+ kernel/cgroup/cpuset.c |  9 ---------
+ 3 files changed, 11 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
-index 3ed74aa4b44b..307a0adf6bc1 100644
---- a/drivers/i2c/i2c-core-of.c
-+++ b/drivers/i2c/i2c-core-of.c
-@@ -115,11 +115,11 @@ void of_i2c_register_devices(struct i2c_adapter *adap)
-
- static int of_dev_or_parent_node_match(struct device *dev, const void *data)
+diff --git a/fs/proc/array.c b/fs/proc/array.c
+index 49283b8103c7..e6cdef8387e6 100644
+--- a/fs/proc/array.c
++++ b/fs/proc/array.c
+@@ -80,7 +80,6 @@
+ #include <linux/file.h>
+ #include <linux/fdtable.h>
+ #include <linux/times.h>
+-#include <linux/cpuset.h>
+ #include <linux/rcupdate.h>
+ #include <linux/delayacct.h>
+ #include <linux/seq_file.h>
+@@ -413,6 +412,16 @@ static void task_cpus_allowed(struct seq_file *m, struct task_struct *task)
+ 		   cpumask_pr_args(&task->cpus_mask));
+ }
+ 
++static void task_mems_allowed(struct seq_file *m, struct task_struct *task)
++{
++#ifdef CONFIG_CPUSETS
++	seq_printf(m, "Mems_allowed:\t%*pb\n",
++		   nodemask_pr_args(&task->mems_allowed));
++	seq_printf(m, "Mems_allowed_list:\t%*pbl\n",
++		   nodemask_pr_args(&task->mems_allowed));
++#endif
++}
++
+ static inline void task_core_dumping(struct seq_file *m, struct task_struct *task)
  {
--	if (dev->of_node == data)
-+	if (device_match_of_node(dev, data))
- 		return 1;
-
- 	if (dev->parent)
--		return dev->parent->of_node == data;
-+		return device_match_of_node(dev->parent, data);
-
+ 	seq_put_decimal_ull(m, "CoreDumping:\t", !!task->signal->core_state);
+@@ -449,7 +458,7 @@ int proc_pid_status(struct seq_file *m, struct pid_namespace *ns,
+ 	task_cap(m, task);
+ 	task_seccomp(m, task);
+ 	task_cpus_allowed(m, task);
+-	cpuset_task_status_allowed(m, task);
++	task_mems_allowed(m, task);
+ 	task_context_switch_counts(m, task);
  	return 0;
  }
+diff --git a/include/linux/cpuset.h b/include/linux/cpuset.h
+index d58e0476ee8e..30b91116dd2f 100644
+--- a/include/linux/cpuset.h
++++ b/include/linux/cpuset.h
+@@ -112,8 +112,6 @@ extern int cpuset_mems_allowed_intersects(const struct task_struct *tsk1,
+ extern int cpuset_memory_pressure_enabled;
+ extern void __cpuset_memory_pressure_bump(void);
+ 
+-extern void cpuset_task_status_allowed(struct seq_file *m,
+-					struct task_struct *task);
+ extern int proc_cpuset_show(struct seq_file *m, struct pid_namespace *ns,
+ 			    struct pid *pid, struct task_struct *tsk);
+ 
+@@ -246,11 +244,6 @@ static inline int cpuset_mems_allowed_intersects(const struct task_struct *tsk1,
+ 
+ static inline void cpuset_memory_pressure_bump(void) {}
+ 
+-static inline void cpuset_task_status_allowed(struct seq_file *m,
+-						struct task_struct *task)
+-{
+-}
+-
+ static inline int cpuset_mem_spread_node(void)
+ {
+ 	return 0;
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index 589827ccda8b..5798d4231662 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -4045,12 +4045,3 @@ int proc_cpuset_show(struct seq_file *m, struct pid_namespace *ns,
+ 	return retval;
+ }
+ #endif /* CONFIG_PROC_PID_CPUSET */
+-
+-/* Display task mems_allowed in /proc/<pid>/status file. */
+-void cpuset_task_status_allowed(struct seq_file *m, struct task_struct *task)
+-{
+-	seq_printf(m, "Mems_allowed:\t%*pb\n",
+-		   nodemask_pr_args(&task->mems_allowed));
+-	seq_printf(m, "Mems_allowed_list:\t%*pbl\n",
+-		   nodemask_pr_args(&task->mems_allowed));
+-}
 -- 
 2.25.1
+
