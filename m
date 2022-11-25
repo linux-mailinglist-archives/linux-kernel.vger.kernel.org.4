@@ -2,230 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C84D63822F
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 02:50:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0287638230
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 02:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbiKYBuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 20:50:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36410 "EHLO
+        id S229612AbiKYBxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 20:53:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiKYBuM (ORCPT
+        with ESMTP id S229452AbiKYBxd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 20:50:12 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8363A382;
-        Thu, 24 Nov 2022 17:50:11 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id ED57B4D5;
-        Fri, 25 Nov 2022 02:50:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1669341009;
-        bh=9m9VpgU4N/iB30ablYStr4T8l/N4LwY4oyZK9aJc3Zw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cRVxBE26zLS9aVU2qaGwdrrRSRnrHqpp+YGCMH4NuQUfvyQ7ozcm4wXZhe9jrKU/X
-         QBBlYzwYOCaC4sn1Z1CdUDOx7vjLh2o6faZf1VcaX+1ker7DVj6/C4Jd95OuhiH8oH
-         zKJOooTAUCZY3zi5XnhQ3kpOLq5XcEZghMlqVm9I=
-Date:   Fri, 25 Nov 2022 03:49:52 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Cc:     Umang Jain <umang.jain@ideasonboard.com>,
-        linux-media@vger.kernel.org, kernel-list@raspberrypi.com,
-        linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Naushir Patuck <naush@raspberrypi.com>,
-        David Plowman <david.plowman@raspberrypi.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.org>
-Subject: Re: [PATCH 03/14] media: videobuf2: Allow exporting of a struct
- dmabuf
-Message-ID: <Y4AfQLE7eh2gLZJl@pendragon.ideasonboard.com>
-References: <20221121214722.22563-1-umang.jain@ideasonboard.com>
- <20221121214722.22563-4-umang.jain@ideasonboard.com>
- <Y3wHKfeNB6Fv9Xpo@pendragon.ideasonboard.com>
- <CAPY8ntAtbnUqhJRd7+bWLRUz+K=1Hnd33XwSR930hPVfc7EPPg@mail.gmail.com>
+        Thu, 24 Nov 2022 20:53:33 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 063A72AE0A
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 17:53:31 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id c21so992765pfb.10
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 17:53:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KXQVt0h+pcpEUzQ0rG/bapcrBmAHayOWk2YjYsGPK0c=;
+        b=L6YegcttMNJWrf/sMnBsIZ2psJKiN3k0P5iY6QHS965IMIzXJFAu618/8qy70uvlnf
+         yY3Uir/UEnDb1nN6vLycAulTCcBIOm7kK51BjxnGkzcmUazWTr5deEKD8Bl9uzVrKsDI
+         wMaP1ogdR11PgdXJalJYWQZ6q543NMvVAuZCIFHtPXNETiF9FoRdDkGPLnWCi1PlGeyP
+         zyrd05JKGjDC02xH3+lSXh95NnmBZ0IY2bnxMiXLF8P/S4YsqlrpVRazsi3cw2XCe1fE
+         NMqQ5D+fswnqxXHxYvx8cPAQwbJjZMZIn6M9CzqiP3dw5SDGfFMVbi1f0IPROh18LVvc
+         o8bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KXQVt0h+pcpEUzQ0rG/bapcrBmAHayOWk2YjYsGPK0c=;
+        b=v284D57+TVDWF9X4UiaMdizkssY8Q1aUWsWwf32aqZaVl3H2+C+lyc0taNc1ewUhW5
+         rbjLORK2iZM3on2fIg3PiTWjK/KJywc/DHTSp+ZsThdtEIT0s/AB3jkkqlY5/swZlsZG
+         c2ufHFWN1A2GcpM0ZSO0FUhlqZLBRFRGhiH+zTylXNPLNEQ5kaSZQwVqgT+e1gMIICTp
+         aaO13lkmsK8OAUDcDtS4CS97fzA0/qR9TUwYRflnh3dbcMFryV/a2g6gBwZaAAv+65RS
+         uztJ2jHwe6XPs10166PWRef0mE2vnzrNhxMYRobgdPsTclCC7OrDLQy/aUnYoyf08YrH
+         cqOg==
+X-Gm-Message-State: ANoB5pmG81kavkpFAnbz5k2VSKiWBc54EFDYNhGq6IV94VtNWHyHLxZ0
+        ExD671LK2tcnZ7Vs2KHZEhs+EPwAJUgte9SxScA=
+X-Google-Smtp-Source: AA0mqf5d7INgWCp+sfzP40RVpZ97fEh3UJhx0EHTDJM9/wPMWwRtrnjOHWuEwxfIN8yVh23kVD1U99qz4yhnMKcUmPw=
+X-Received: by 2002:aa7:824f:0:b0:56e:8ed7:569f with SMTP id
+ e15-20020aa7824f000000b0056e8ed7569fmr8656515pfn.19.1669341211152; Thu, 24
+ Nov 2022 17:53:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAPY8ntAtbnUqhJRd7+bWLRUz+K=1Hnd33XwSR930hPVfc7EPPg@mail.gmail.com>
+References: <20221123142025.1504030-1-suagrfillet@gmail.com>
+ <20221123142025.1504030-2-suagrfillet@gmail.com> <CAJF2gTTwvApRaGhZJxOrdcjWUC9DN-WF_7EKcHXx5HZ9Jkd5EA@mail.gmail.com>
+ <CAAYs2=ghhMmmrM4Bktvw9iGiajS5PLd1=Z61j2ZfhbhGUi4ekg@mail.gmail.com> <CAJF2gTTWSr0qYTnRORSexEHMqUt-Lj6xZd0O-fUgC+f74FfCZA@mail.gmail.com>
+In-Reply-To: <CAJF2gTTWSr0qYTnRORSexEHMqUt-Lj6xZd0O-fUgC+f74FfCZA@mail.gmail.com>
+From:   Song Shuai <suagrfillet@gmail.com>
+Date:   Fri, 25 Nov 2022 01:53:19 +0000
+Message-ID: <CAAYs2=ifvfY3QW07LXL+B6KH6b3EELMcXuz6ja_rYNE=G4+=qQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] riscv/ftrace: add DYNAMIC_FTRACE_WITH_DIRECT_CALLS support
+To:     Guo Ren <guoren@kernel.org>
+Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, rostedt@goodmis.org, mhiramat@kernel.org,
+        mark.rutland@arm.com, peterz@infradead.org, jolsa@redhat.com,
+        bp@suse.de, jpoimboe@kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dave,
-
-On Tue, Nov 22, 2022 at 11:35:31AM +0000, Dave Stevenson wrote:
-> On Mon, 21 Nov 2022 at 23:18, Laurent Pinchart wrote:
-> > On Tue, Nov 22, 2022 at 03:17:11AM +0530, Umang Jain wrote:
-> > > From: Dave Stevenson <dave.stevenson@raspberrypi.org>
-> > >
-> > > videobuf2 only allowed exporting a dmabuf as a file descriptor,
-> > > but there are instances where having the struct dma_buf is
-> > > useful within the kernel.
-> > >
-> > > Split the current implementation into two, one step which
-> > > exports a struct dma_buf, and the second which converts that
-> > > into an fd.
-> > >
-> > > Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
-> > > Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
-> > > ---
-> > >  .../media/common/videobuf2/videobuf2-core.c   | 36 +++++++++++++------
-> > >  include/media/videobuf2-core.h                | 15 ++++++++
-> > >  2 files changed, 40 insertions(+), 11 deletions(-)
-> > >
-> > > diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
-> > > index ab9697f3b5f1..32b26737cac4 100644
-> > > --- a/drivers/media/common/videobuf2/videobuf2-core.c
-> > > +++ b/drivers/media/common/videobuf2/videobuf2-core.c
-> > > @@ -2184,49 +2184,49 @@ static int __find_plane_by_offset(struct vb2_queue *q, unsigned long off,
-> > >       return -EINVAL;
-> > >  }
-> > >
-> > > -int vb2_core_expbuf(struct vb2_queue *q, int *fd, unsigned int type,
-> > > -             unsigned int index, unsigned int plane, unsigned int flags)
-> > > +struct dma_buf *vb2_core_expbuf_dmabuf(struct vb2_queue *q, unsigned int type,
-> > > +                                    unsigned int index, unsigned int plane,
-> > > +                                    unsigned int flags)
+Guo Ren <guoren@kernel.org> =E4=BA=8E2022=E5=B9=B411=E6=9C=8824=E6=97=A5=E5=
+=91=A8=E5=9B=9B 15:31=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Thu, Nov 24, 2022 at 1:27 AM Song Shuai <suagrfillet@gmail.com> wrote:
 > >
-> > This function is used in the ISP driver, in bcm2835_isp_buf_prepare(),
-> > for MMAP buffers, and as far as I can tell, its only purpose is to
-> > create a dma_buf instance to then be imported in
-> > vchiq_mmal_submit_buffer() with a call to vc_sm_cma_import_dmabuf().
-> > That sounds like a very complicated set of operations, and quite
-> > inefficient :-(
-> 
-> Are you saying that dmabufs are not the preferred route for sharing
-> buffers between kernel subsystems? What are you suggesting instead?
-> 
-> If the VPU (firmware) has a handle to the buffer then we need to
-> manage the lifetime such that it is not freed until the VPU has
-> released it. That is handled for you with dmabufs, therefore why
-> reinvent the wheel?
-
-When we go through userspace, dmabuf is certainly the way to go. Here,
-we need to share buffer information between two drivers that are
-specific to the platform, so we could avoid going through so many layers
-by using a custom abstraction. However, that would require additional
-development, and probably reinventing the wheel to some extent, so it's
-probably not worth it.
-
-I'd like to explore if we could avoid creating a second dmabuf in
-vc_sm_cma_import_dmabuf_internal() to make all this a bit more
-lightweight. Let's discuss it in replies to patch 01/14.
-
-> > >  {
-> > >       struct vb2_buffer *vb = NULL;
-> > >       struct vb2_plane *vb_plane;
-> > > -     int ret;
-> > >       struct dma_buf *dbuf;
+> > Guo Ren <guoren@kernel.org> =E4=BA=8E2022=E5=B9=B411=E6=9C=8823=E6=97=
+=A5=E5=91=A8=E4=B8=89 23:02=E5=86=99=E9=81=93=EF=BC=9A
 > > >
-> > >       if (q->memory != VB2_MEMORY_MMAP) {
-> > >               dprintk(q, 1, "queue is not currently set up for mmap\n");
-> > > -             return -EINVAL;
-> > > +             return ERR_PTR(-EINVAL);
-> > >       }
+> > > Cool job, thx.
 > > >
-> > >       if (!q->mem_ops->get_dmabuf) {
-> > >               dprintk(q, 1, "queue does not support DMA buffer exporting\n");
-> > > -             return -EINVAL;
-> > > +             return ERR_PTR(-EINVAL);
-> > >       }
+> > > On Wed, Nov 23, 2022 at 10:20 PM Song Shuai <suagrfillet@gmail.com> w=
+rote:
+> > >>
+> > >> This patch adds DYNAMIC_FTRACE_WITH_DIRECT_CALLS support for RISC-V.
+> > >>
+> > >> select the DYNAMIC_FTRACE_WITH_DIRECT_CALLS to provide the
+> > >> register_ftrace_direct[_multi] interfaces allowing users to register
+> > >> the customed trampoline (direct_caller) as the mcount for one or
+> > >> more target functions. And modify_ftrace_direct[_multi] are also
+> > >> provided for modifying direct_caller.
+> > >>
+> > >> To make the direct_caller and the other ftrace hooks (eg. function/f=
+graph
+> > >> tracer, k[ret]probes) co-exist, a temporary register is nominated to
+> > >> store the address of direct_caller in ftrace_regs_caller. After the
+> > >> setting of the address direct_caller by direct_ops->func and the
+> > >> RESTORE_REGS in ftrace_regs_caller, direct_caller will be jumped to
+> > >> by the `jr` inst.
+> > >>
+> > >> Signed-off-by: Song Shuai <suagrfillet@gmail.com>
+> > >> ---
+> > >>  arch/riscv/Kconfig              | 1 +
+> > >>  arch/riscv/include/asm/ftrace.h | 6 ++++++
+> > >>  arch/riscv/kernel/mcount-dyn.S  | 4 ++++
+> > >>  3 files changed, 11 insertions(+)
+> > >>
+> > >> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > >> index 39ec8d628cf6..d083ec08d0b6 100644
+> > >> --- a/arch/riscv/Kconfig
+> > >> +++ b/arch/riscv/Kconfig
+> > >> @@ -278,6 +278,7 @@ config ARCH_RV64I
+> > >>         select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
+> > >>         select HAVE_DYNAMIC_FTRACE if !XIP_KERNEL && MMU && $(cc-opt=
+ion,-fpatchable-function-entry=3D8)
+> > >>         select HAVE_DYNAMIC_FTRACE_WITH_REGS if HAVE_DYNAMIC_FTRACE
+> > >> +       select HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+> > >>         select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
+> > >>         select HAVE_FUNCTION_GRAPH_TRACER
+> > >>         select HAVE_FUNCTION_TRACER if !XIP_KERNEL && !PREEMPTION
+> > >> diff --git a/arch/riscv/include/asm/ftrace.h b/arch/riscv/include/as=
+m/ftrace.h
+> > >> index 01bebb28eabe..be4d57566139 100644
+> > >> --- a/arch/riscv/include/asm/ftrace.h
+> > >> +++ b/arch/riscv/include/asm/ftrace.h
+> > >> @@ -114,6 +114,12 @@ struct ftrace_regs;
+> > >>  void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
+> > >>                        struct ftrace_ops *op, struct ftrace_regs *fr=
+egs);
+> > >>  #define ftrace_graph_func ftrace_graph_func
+> > >> +
+> > >> +static inline void arch_ftrace_set_direct_caller(struct pt_regs *re=
+gs, unsigned long addr)
+> > >> +{
+> > >> +               regs->t1 =3D addr;
 > > >
-> > >       if (flags & ~(O_CLOEXEC | O_ACCMODE)) {
-> > >               dprintk(q, 1, "queue does support only O_CLOEXEC and access mode flags\n");
-> > > -             return -EINVAL;
-> > > +             return ERR_PTR(-EINVAL);
-> > >       }
+> > > How about regs->t0 =3D addr; ?
+> > > And delete all mcount-dyn.S modification.
 > > >
-> > >       if (type != q->type) {
-> > >               dprintk(q, 1, "invalid buffer type\n");
-> > > -             return -EINVAL;
-> > > +             return ERR_PTR(-EINVAL);
-> > >       }
+> > The direct_caller has the same program layout as the ftrace_caller, whi=
+ch means
+> > the reg t0 will never be changed when direct_caller returns.
+> >
+> > If regs->t0 changes here and ftrace_regs_caller executes `jr t0`,
+> > direct_caller will enter the dead loop.
+> >
+> > Actually the reg t0 always saves the address of function entry with 8B
+> > offset, it should only
+> > changed by the IPMODIFY ops instead of the direct_ops.
+> How about:
+> static inline void arch_ftrace_set_direct_caller(struct pt_regs *regs,
+> unsigned long addr)
+> {
+>                regs->t1 =3D regs->t0;
+>                regs->t0 =3D addr;
+>
+> direct_caller:
+> add sp,sp,-?
+> sd t1,?(sp)
+direct_caller also serves as the first trampoline as ftrace_caller, like th=
+is:
+```
+func -- direct_caller
+        -- ftrace_[regs]_caller
+```
+So the t1 in this line has to be t0 to save the PC.
+> sd ra,?(sp)
+> call foo
+> ld t1,?(sp)
+And this line.
+> ld ra,?(sp)
+> add sp,sp,?
+> jr t1 // <- back to function entry
+>
+> And delete all mcount-dyn.S modification.
+>
+> > >>
+> > >> +}
+> > >> +
+> > >>  #endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
+> > >>
+> > >>  #endif /* __ASSEMBLY__ */
+> > >> diff --git a/arch/riscv/kernel/mcount-dyn.S b/arch/riscv/kernel/mcou=
+nt-dyn.S
+> > >> index 466c6ef217b1..b89c85a58569 100644
+> > >> --- a/arch/riscv/kernel/mcount-dyn.S
+> > >> +++ b/arch/riscv/kernel/mcount-dyn.S
+> > >> @@ -233,6 +233,7 @@ ENDPROC(ftrace_caller)
+> > >>  #else /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
+> > >>  ENTRY(ftrace_regs_caller)
+> > >>         SAVE_ABI_REGS 1
+> > >> +       REG_S   x0, PT_T1(sp)
+> > >>         PREPARE_ARGS
+> > >>
+> > >>  ftrace_regs_call:
+> > >> @@ -241,7 +242,10 @@ ftrace_regs_call:
+> > >>
+> > >>
+> > >>         RESTORE_ABI_REGS 1
+> > >> +       bnez    t1,.Ldirect
+> > >>         jr t0
+> > >> +.Ldirect:
+> > >> +       jr t1
+> > >>  ENDPROC(ftrace_regs_caller)
+> > >>
+> > >>  ENTRY(ftrace_caller)
+> > >> --
+> > >> 2.20.1
+> > >>
 > > >
-> > >       if (index >= q->num_buffers) {
-> > >               dprintk(q, 1, "buffer index out of range\n");
-> > > -             return -EINVAL;
-> > > +             return ERR_PTR(-EINVAL);
-> > >       }
 > > >
-> > >       vb = q->bufs[index];
-> > >
-> > >       if (plane >= vb->num_planes) {
-> > >               dprintk(q, 1, "buffer plane out of range\n");
-> > > -             return -EINVAL;
-> > > +             return ERR_PTR(-EINVAL);
-> > >       }
-> > >
-> > >       if (vb2_fileio_is_active(q)) {
-> > >               dprintk(q, 1, "expbuf: file io in progress\n");
-> > > -             return -EBUSY;
-> > > +             return ERR_PTR(-EBUSY);
-> > >       }
-> > >
-> > >       vb_plane = &vb->planes[plane];
-> > > @@ -2238,9 +2238,23 @@ int vb2_core_expbuf(struct vb2_queue *q, int *fd, unsigned int type,
-> > >       if (IS_ERR_OR_NULL(dbuf)) {
-> > >               dprintk(q, 1, "failed to export buffer %d, plane %d\n",
-> > >                       index, plane);
-> > > -             return -EINVAL;
-> > > +             return ERR_PTR(-EINVAL);
-> > >       }
-> > >
-> > > +     return dbuf;
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(vb2_core_expbuf_dmabuf);
-> > > +
-> > > +int vb2_core_expbuf(struct vb2_queue *q, int *fd, unsigned int type,
-> > > +                 unsigned int index, unsigned int plane, unsigned int flags)
-> > > +{
-> > > +     struct dma_buf *dbuf;
-> > > +     int ret;
-> > > +
-> > > +     dbuf = vb2_core_expbuf_dmabuf(q, type, index, plane, flags);
-> > > +     if (IS_ERR(dbuf))
-> > > +             return PTR_ERR(dbuf);
-> > > +
-> > >       ret = dma_buf_fd(dbuf, flags & ~O_ACCMODE);
-> > >       if (ret < 0) {
-> > >               dprintk(q, 3, "buffer %d, plane %d failed to export (%d)\n",
-> > > diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
-> > > index 3253bd2f6fee..33629ed2b64f 100644
-> > > --- a/include/media/videobuf2-core.h
-> > > +++ b/include/media/videobuf2-core.h
-> > > @@ -911,6 +911,21 @@ int vb2_core_streamon(struct vb2_queue *q, unsigned int type);
-> > >   */
-> > >  int vb2_core_streamoff(struct vb2_queue *q, unsigned int type);
-> > >
-> > > +/**
-> > > + * vb2_core_expbuf_dmabuf() - Export a buffer as a dma_buf structure
-> > > + * @q:         videobuf2 queue
-> > > + * @type:      buffer type
-> > > + * @index:     id number of the buffer
-> > > + * @plane:     index of the plane to be exported, 0 for single plane queues
-> > > + * @flags:     flags for newly created file, currently only O_CLOEXEC is
-> > > + *             supported, refer to manual of open syscall for more details
-> > > + *
-> > > + * Return: Returns the dmabuf pointer
-> > > + */
-> > > +struct dma_buf *vb2_core_expbuf_dmabuf(struct vb2_queue *q, unsigned int type,
-> > > +                                    unsigned int index, unsigned int plane,
-> > > +                                    unsigned int flags);
-> > > +
-> > >  /**
-> > >   * vb2_core_expbuf() - Export a buffer as a file descriptor.
-> > >   * @q:               pointer to &struct vb2_queue with videobuf2 queue.
-
--- 
-Regards,
-
-Laurent Pinchart
+> > > --
+> > > Best Regards
+> > >  Guo Ren
+>
+>
+>
+> --
+> Best Regards
+>  Guo Ren
+Thanks,
+Song
