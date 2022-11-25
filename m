@@ -2,117 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45B43639091
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 21:18:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D8C0639096
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 21:20:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbiKYUSq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 25 Nov 2022 15:18:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50140 "EHLO
+        id S229916AbiKYUUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 15:20:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiKYUSp (ORCPT
+        with ESMTP id S229554AbiKYUUM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 15:18:45 -0500
-Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9C9354B3C;
-        Fri, 25 Nov 2022 12:18:44 -0800 (PST)
-Received: from omf04.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay02.hostedemail.com (Postfix) with ESMTP id 16469120E10;
-        Fri, 25 Nov 2022 20:18:43 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf04.hostedemail.com (Postfix) with ESMTPA id E4F2C20024;
-        Fri, 25 Nov 2022 20:18:39 +0000 (UTC)
-Message-ID: <1fb146231e1810b4c9923f384afa166e07e7f253.camel@perches.com>
-Subject: Re: [PATCH v2 1/3] printk: introduce new macros pr_<level>_cont()
-From:   Joe Perches <joe@perches.com>
-To:     Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        linux-pm@vger.kernel.org, Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Whitcroft <apw@canonical.com>
-Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Fri, 25 Nov 2022 12:18:39 -0800
-In-Reply-To: <20221125190948.2062-2-linux@weissschuh.net>
-References: <20221125190948.2062-1-linux@weissschuh.net>
-         <20221125190948.2062-2-linux@weissschuh.net>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Fri, 25 Nov 2022 15:20:12 -0500
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25593554C0;
+        Fri, 25 Nov 2022 12:20:12 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 946A15C0065;
+        Fri, 25 Nov 2022 15:20:10 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Fri, 25 Nov 2022 15:20:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1669407610; x=1669494010; bh=SH21Yn2SJRMLTVtT3dx346JtA
+        Jb7CcIUzlp8Ja9h9EI=; b=BKah3F8Ovr6QQ1SkfSXVuvdvdhkeWDbcfgUH9Fn1i
+        k7hk+AzbiuXhP+v88R8+RlXewbQXt5Pat4qwTLaddY2SRQVlsPbcr4tVdjSQNuKw
+        FU7EFnweQNL3uqqPRO9QaCLYSFf+cjRKdL0gsDV8ij0K+ukeXSRnx2MLwlDIF5y9
+        9w+HtziE7LHCRBwCjtDl0xS6jRjo+druGmknOa1xY8A3w8lOA/63j76T4joJyIRd
+        KAQR78srjPqpXtrkPDHtm+9ScvwTSxfFoIk16Yl47zauuErWTDIQOW3RJ8jBwABd
+        spz9q51kjFS/wHyCIoy3BUn2SJGZfHrOZTqaFK5JxWLGA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1669407610; x=1669494010; bh=SH21Yn2SJRMLTVtT3dx346JtAJb7CcIUzlp
+        8Ja9h9EI=; b=FYaOC6iMmsjxKF9AbljnfYZzMXlJi6U4AOqZ+l0UIxM1esAWW1O
+        KdCUUdx0Rsa7j5lNzrNssycUqRC2k/7DwONdshSZgZRPrt4bGw2ukV8hx1lUgGaM
+        msiixEr1mCaQAXVjTx/x/rReKr62O7Yoev+5xwyWJXIRxq6bGMsNVlpYudAZglTy
+        AnPZw3R8CCOic9hi9pSbnkDvdBnsk3YUyE09X//LOJ0BtH2WnX1fKzgs8hao2lkY
+        1DPtsO3uujmmHHrSG0WBIUsqfNDa5lpEgN4N+HREc0S95PNfBwGgkEDLROYnpYRt
+        f/YJLgfVZmwUFGKleDYcdwiSV9d94gCEbOQ==
+X-ME-Sender: <xms:eiOBY5OWCMAQMqq2Uv1FsPXJTf59jgpfzn3y7DkqTF6tPIBData1MQ>
+    <xme:eiOBY79KagxL3BfN9VqRnmyFFvwm6A1SvDXLwLSqEJy8RrC1qcT0J6O8J6sz41Vr3
+    IC5c0n_ez0-mITePQ>
+X-ME-Received: <xmr:eiOBY4TF3Ukg8Sb-4pKzJxR0DDViARokjvH3lGARFhjMb9Z5Hw_rBPzC2SXLZjUiozntl26FGY8bbeH3NounZg7MYNWlYVdY2O2NBayjQqi8AmingIOWZd86-jCOn_WYSKixtA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrieehgddufeeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
+    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
+    grthhtvghrnhepkeevlefhjeeuleeltedvjedvfeefteegleehueejffehgffffeekhefh
+    hfekkeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:eiOBY1sddYWZMcnazNwtwGC0u3rmGRp2BPIwKHOrS4FVxugEPLqFKw>
+    <xmx:eiOBYxcGZUEMu7WVyaRkiab0IgRj6d7p_inedIOqhKCjsYkPLX3Www>
+    <xmx:eiOBYx3elquxkRuxAB2cPnjuMhl0rbF4gg3bANw0rZH9kdIUYQzs6A>
+    <xmx:eiOBY81sqmpkOHHch0KCyEqVLp9Yv7yR4qrdQbg1KKN0PyC3UVo_fg>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 25 Nov 2022 15:20:09 -0500 (EST)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        LABBE Corentin <clabbe.montjoie@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, netdev@vger.kernel.org
+Subject: [PATCH 0/3] dt-bindings: net: sunxi: Fix binding validation issues
+Date:   Fri, 25 Nov 2022 14:20:05 -0600
+Message-Id: <20221125202008.64595-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.37.4
 MIME-Version: 1.0
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: E4F2C20024
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Stat-Signature: e45qpp4yydk1s8hnejt63rpfar1zcp7c
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18Dumif6Rntq0hk+ClDBLKwDMFpMrrz2Qs=
-X-HE-Tag: 1669407519-309942
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-11-25 at 20:09 +0100, Thomas Weiﬂschuh wrote:
-> These macros emit continuation messages with explicit levels.
-> In case the continuation is logged separately from the original message
-> it will retain its level instead of falling back to KERN_DEFAULT.
-> 
-> This remedies the issue that logs filtered by level contain stray
-> continuation messages without context.
-> 
-> Suggested-by: Petr Mladek <pmladek@suse.com>
-> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
-> ---
->  include/linux/printk.h | 23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
-> 
-> diff --git a/include/linux/printk.h b/include/linux/printk.h
-> index 8c81806c2e99..8f564c38f121 100644
-> --- a/include/linux/printk.h
-> +++ b/include/linux/printk.h
-> @@ -537,6 +537,8 @@ struct pi_entry {
->   * This macro expands to a printk with KERN_CONT loglevel. It should only be
->   * used when continuing a log message with no newline ('\n') enclosed. Otherwise
->   * it defaults back to KERN_DEFAULT loglevel.
-> + *
-> + * Use the dedicated pr_<level>_cont() macros instead.
->   */
->  #define pr_cont(fmt, ...) \
->  	printk(KERN_CONT fmt, ##__VA_ARGS__)
-> @@ -701,6 +703,27 @@ do {									\
->  	no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
->  #endif
->  
-> +/*
-> + * Print a continuation message with level. In case the continuation is split
-> + * from the main message it preserves the level.
-> + */
-> +
-> +#define pr_emerg_cont(fmt, ...)					\
-> +	printk(KERN_EMERG KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
+These patches fix issues found when running `make dtbs_check` on sunxi
+boards. I am not 100% sure about the change in the first two patches,
+but I think I understand what is happening, and the change has the
+desired effect. It fixes errors of the form:
 
-Aren't this rather backwards?
-KERN_CONT KERN_<LEVEL> seems to make more sense to me.
+  arch/arm/boot/dts/sun6i-a31s-colorfly-e708-q1.dtb: ethernet@1c30000:
+  Unevaluated properties are not allowed ('mdio', 'reset-names',
+  'resets', 'snps,fixed-burst', 'snps,force_sf_dma_mode', 'snps,pbl'
+  were unexpected)
 
-> +#define pr_alert_cont(fmt, ...)					\
-> +	printk(KERN_ALERT KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
-> +#define pr_crit_cont(fmt, ...)					\
-> +	printk(KERN_CRIT KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
-> +#define pr_err_cont(fmt, ...)					\
-> +	printk(KERN_ERR KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
-> +#define pr_warn_cont(fmt, ...)					\
-> +	printk(KERN_WARN KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
-> +#define pr_notice_cont(fmt, ...)					\
-> +	printk(KERN_NOTICE KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
-> +#define pr_info_cont(fmt, ...)					\
-> +	printk(KERN_INFO KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
-> +/* no pr_debug_ratelimited, it doesn't make sense with CONFIG_DYNAMIC_DEBUG. */
-> +
->  extern const struct file_operations kmsg_fops;
->  
->  enum {
+where all of the listed properties are defined in snps,dwmac.yaml.
+
+The third patch fixes an unrelated omission in the sun8i-emac binding.
+
+
+Samuel Holland (3):
+  dt-bindings: net: sun7i-gmac: Fix snps,dwmac.yaml inheritance
+  dt-bindings: net: sun8i-emac: Fix snps,dwmac.yaml inheritance
+  dt-bindings: net: sun8i-emac: Add phy-supply property
+
+ .../devicetree/bindings/net/allwinner,sun7i-a20-gmac.yaml   | 5 ++---
+ .../devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml  | 6 +++++-
+ 2 files changed, 7 insertions(+), 4 deletions(-)
+
+-- 
+2.37.4
 
