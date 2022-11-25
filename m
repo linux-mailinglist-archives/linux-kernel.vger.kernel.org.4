@@ -2,112 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89472638847
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 12:08:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD4463884A
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 12:08:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbiKYLIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 06:08:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60584 "EHLO
+        id S229775AbiKYLIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 06:08:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbiKYLII (ORCPT
+        with ESMTP id S229515AbiKYLIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 06:08:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92534D5D5
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 03:07:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669374432;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sFEngP0X3fPVq5kw5eVn67kkqccTP4KFzznQM/5adG0=;
-        b=SDLlhCwOwSCkcupD4WEW2uhORsI/zjNFs8LjxH8lnfDoI+iYsZLGuhE1COWydWFwlXN5N6
-        ueCYoNFljJY1mwyKGjXfSdOOsYmn3EK7fDm9S3/zkTpO/gwljupa8YEhC/yf9I/mLs5aG3
-        WZ0QViiSFLaPDpvd7EVykKYQtXvWzAo=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-654-tVMIIkpHPJu4lsqtKUwLNA-1; Fri, 25 Nov 2022 06:07:10 -0500
-X-MC-Unique: tVMIIkpHPJu4lsqtKUwLNA-1
-Received: by mail-wm1-f72.google.com with SMTP id az40-20020a05600c602800b003cfa26c40easo3817543wmb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 03:07:10 -0800 (PST)
+        Fri, 25 Nov 2022 06:08:37 -0500
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA7A31FF80;
+        Fri, 25 Nov 2022 03:08:35 -0800 (PST)
+Received: by mail-wr1-f50.google.com with SMTP id x5so6248690wrt.7;
+        Fri, 25 Nov 2022 03:08:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sFEngP0X3fPVq5kw5eVn67kkqccTP4KFzznQM/5adG0=;
-        b=UvOFU0o0OvwyBAQON5H8NiDFLLKxz2ue3MApX1r8eAzmJN1SmPNmw1PdrIC5oj07j4
-         bzZaokdhHJt8SjnRwPy+j9TVloPBt2ZcRR5S0sufKQV+OQOQvHSE9iHb/4SbVNNiNYTh
-         Ss0l5WHA+zDnvdR/7AsCHi+HVHxw5fDhq6hkn/YrATbb3e+c8BuSBGwIaFs+S2wnuPQs
-         KLTggLWBzh3K6aD0r6QQ/joRxnP+Zb500Nrik9nl1Khh5u6ljrGmx4Iqy3SgFSBLvAhK
-         enTP8jhNaIiXRzAfi5tQ0qVnH+IRPpr1ChJE8WSGaq+bVdrtntHJ4oWQsWd0j63Dft4Q
-         E4Cw==
-X-Gm-Message-State: ANoB5pnWfP0JvfzzfjeL0XJP7QpF9ZDuuLxAJbnTsVGr8BAufrZZK6Yi
-        Cbyguixa4S+G6Pp74ho+2TCwGQQ6VH08zRmIObGjiL8B5msoICguUKgx4tsgOBww1NhJ9QTn9U/
-        gi28BTNEAXMs3faXwB9YRJcr8
-X-Received: by 2002:a05:600c:4e4c:b0:3cf:87c6:890b with SMTP id e12-20020a05600c4e4c00b003cf87c6890bmr27851418wmq.194.1669374429209;
-        Fri, 25 Nov 2022 03:07:09 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4ekFpSGBe1M+kDVda3TnzsIFkEcOgKcp7ocT5w3PpSZSU0krdQ+qq0patBmQZVNGkBmTCp8w==
-X-Received: by 2002:a05:600c:4e4c:b0:3cf:87c6:890b with SMTP id e12-20020a05600c4e4c00b003cf87c6890bmr27851391wmq.194.1669374428951;
-        Fri, 25 Nov 2022 03:07:08 -0800 (PST)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id co29-20020a0560000a1d00b00236e834f050sm3703836wrb.35.2022.11.25.03.07.07
+        bh=Ko+xoqLtNUZNHhBBiO7KwAurhDJoia3rMVPFpu1qvr0=;
+        b=muPcKgeNHMer7ZnVh1MUEPXZHfxurPffK48E3B+nv42zeR2j3mGauZ0dpPp23zJQ23
+         LNmXbkLx/abULQTjyK927d9uwfNrN+gJHOTNCvq6I24c918CVWQmtuwDz+QRYFF+RqcR
+         8WrTzc/nzF5wB/pTTiwQBPCliOCNDYQtAB+GdsBv0xEtZO0IbRQW7mehCOEIUsabnep/
+         kxT1NOdwOPJRN+w9CyEj/YfhoQi9Hn+WoI/clgl/iD5Y5n4cPIrAoPo+MfPLa2tjCcsi
+         YPstpKvrvl6o+mnwDh+avoiibMhel6+L4fLXSN6HVHxTj26u5cgCgE8l7Na36562JaCu
+         9ykA==
+X-Gm-Message-State: ANoB5pnrueJszELx+JSwrzNgKmj0wj6Y/gR5N7yarVOH3bF0xTYOFIjT
+        AxSbnuJrFfUTihADuQ15Cu9w8RZP/EY=
+X-Google-Smtp-Source: AA0mqf5Y38vwcONUoeAGJnBlHmzrjBtjGbaoOdsmjFJzC+kogqLTb1IaEpC5k5bBRlm00dgFAtvUpg==
+X-Received: by 2002:a05:6000:235:b0:241:ebff:2db1 with SMTP id l21-20020a056000023500b00241ebff2db1mr7665863wrz.312.1669374514122;
+        Fri, 25 Nov 2022 03:08:34 -0800 (PST)
+Received: from [192.168.1.49] (185-219-167-24-static.vivo.cz. [185.219.167.24])
+        by smtp.gmail.com with ESMTPSA id p13-20020a05600c358d00b003c6b9749505sm9620009wmq.30.2022.11.25.03.08.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Nov 2022 03:07:08 -0800 (PST)
-Message-ID: <90c712ff-c5bb-ab44-fb1e-fcf7b055e908@redhat.com>
-Date:   Fri, 25 Nov 2022 12:07:07 +0100
+        Fri, 25 Nov 2022 03:08:33 -0800 (PST)
+Message-ID: <611396d6-8e08-82cc-ca9c-73a575ea8025@kernel.org>
+Date:   Fri, 25 Nov 2022 12:08:32 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH 14/24] drm/vc4: txp: Reorder the variable assignments
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 4/6] serial: 8250: Add IIR FIFOs enabled field properly
 Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Maxime Ripard <mripard@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     David Gow <davidgow@google.com>, linaro-mm-sig@lists.linaro.org,
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-serial@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org,
-        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
-        linux-media@vger.kernel.org, kunit-dev@googlegroups.com,
-        dri-devel@lists.freedesktop.org,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        linux-kernel@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-References: <20221123-rpi-kunit-tests-v1-0-051a0bb60a16@cerno.tech>
- <20221123-rpi-kunit-tests-v1-14-051a0bb60a16@cerno.tech>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20221123-rpi-kunit-tests-v1-14-051a0bb60a16@cerno.tech>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        linux-kernel@vger.kernel.org
+References: <20221124125948.23432-1-ilpo.jarvinen@linux.intel.com>
+ <20221124125948.23432-5-ilpo.jarvinen@linux.intel.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20221124125948.23432-5-ilpo.jarvinen@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/23/22 16:25, Maxime Ripard wrote:
-> The current order of variable assignments is unneccessarily complex,
-> let's make it simpler.
+On 24. 11. 22, 13:59, Ilpo Järvinen wrote:
+> Don't use magic literals & comments but define a real field instead
+> for UART_IIR_FIFO_ENABLED and name also the values.
 > 
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 > ---
-Much easier to follow indeed.
+>   drivers/tty/serial/8250/8250_port.c | 17 +++++++----------
+>   include/uapi/linux/serial_reg.h     |  4 ++++
+>   2 files changed, 11 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+> index e79bf2afd9be..6d343b15bc58 100644
+> --- a/drivers/tty/serial/8250/8250_port.c
+> +++ b/drivers/tty/serial/8250/8250_port.c
+> @@ -1293,22 +1293,19 @@ static void autoconfig(struct uart_8250_port *up)
+>   
+>   	serial_out(up, UART_FCR, UART_FCR_ENABLE_FIFO);
+>   
+> -	/* Assign this as it is to truncate any bits above 7.  */
+> -	scratch = serial_in(up, UART_IIR);
+> -
+> -	switch (scratch >> 6) {
+> -	case 0:
+> +	switch (serial_in(up, UART_IIR) & UART_IIR_FIFO_ENABLED) {
+> +	case UART_IIR_FIFO_ENABLED_8250:
+>   		autoconfig_8250(up);
+>   		break;
+> -	case 1:
+> -		port->type = PORT_UNKNOWN;
+> -		break;
+> -	case 2:
+> +	case UART_IIR_FIFO_EAABLED_16550:
 
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+EAABLED :)?
+
+> --- a/include/uapi/linux/serial_reg.h
+> +++ b/include/uapi/linux/serial_reg.h
+> @@ -44,6 +44,10 @@
+>   #define UART_IIR_RX_TIMEOUT	0x0c /* OMAP RX Timeout interrupt */
+>   #define UART_IIR_XOFF		0x10 /* OMAP XOFF/Special Character */
+>   #define UART_IIR_CTS_RTS_DSR	0x20 /* OMAP CTS/RTS/DSR Change */
+> +#define UART_IIR_FIFO_ENABLED	0xc0 /* FIFOs enabled / port type identification */
+> +#define  UART_IIR_FIFO_ENABLED_8250	0x00	/* 8250: no FIFO */
+> +#define  UART_IIR_FIFO_EAABLED_16550	0x80	/* 16550: (broken/unusable) FIFO */
+> +#define  UART_IIR_FIFO_ENABLED_16550A	0xc0	/* 16550A: FIFO enabled */
+>   
+>   #define UART_FCR	2	/* Out: FIFO Control Register */
+>   #define UART_FCR_ENABLE_FIFO	0x01 /* Enable the FIFO */
 
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+js
+suse labs
 
