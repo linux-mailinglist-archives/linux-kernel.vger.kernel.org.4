@@ -2,117 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F94F638AB9
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 14:00:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58F61638AAD
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 13:59:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbiKYNAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 08:00:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56968 "EHLO
+        id S229913AbiKYM70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 07:59:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiKYM71 (ORCPT
+        with ESMTP id S229739AbiKYM7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 07:59:27 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8B84EC15;
-        Fri, 25 Nov 2022 04:59:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669381158; x=1700917158;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=uot9L1uQxBV1A/wpS9xDkw6yGvTv6P2vf7vUoxfOr6M=;
-  b=Ia0Bh5OuRFJclAPGDlthxk+k8QHmP/VxomhrJl2PhG2iSRFMGMbT+TIV
-   hy0spLzlJoH1suS7ifjTz5moT5AjSo5JFXO5LJhXCT4Qpus8j3RTWbr/S
-   80HQCxIfEd+MHY7J7NSISvRTN1Cn7PIVORi6djnQaMQWaHKZx+o8g3X22
-   AxUyV1hDEV91KV3lDskY911APW8lY34/rVtNQ5bYWuWN0E9NrmaIj1k05
-   hFt2dVpnC0qzRg4Cn+WLUWkr2A9zZQsIf3VZi2n0diHqmkI9Re8CZtoq8
-   xH+PgowqSrCgWCUJfqCZabl2vBcdowbzEGYlEFfH3y0amyEy3y4dwfPcs
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="376622372"
-X-IronPort-AV: E=Sophos;i="5.96,193,1665471600"; 
-   d="scan'208";a="376622372"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2022 04:59:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="706061350"
-X-IronPort-AV: E=Sophos;i="5.96,193,1665471600"; 
-   d="scan'208";a="706061350"
-Received: from jiaxichen-precision-3650-tower.sh.intel.com ([10.239.159.75])
-  by fmsmga008.fm.intel.com with ESMTP; 25 Nov 2022 04:59:13 -0800
-From:   Jiaxi Chen <jiaxi.chen@linux.intel.com>
-To:     kvm@vger.kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, ndesaulniers@google.com,
-        alexandre.belloni@bootlin.com, peterz@infradead.org,
-        jpoimboe@kernel.org, chang.seok.bae@intel.com,
-        pawan.kumar.gupta@linux.intel.com, babu.moger@amd.com,
-        jmattson@google.com, sandipan.das@amd.com, tony.luck@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, fenghua.yu@intel.com,
-        keescook@chromium.org, nathan@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 8/8] KVM: x86: Advertise PREFETCHIT0/1 CPUID to user space
-Date:   Fri, 25 Nov 2022 20:58:45 +0800
-Message-Id: <20221125125845.1182922-9-jiaxi.chen@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221125125845.1182922-1-jiaxi.chen@linux.intel.com>
-References: <20221125125845.1182922-1-jiaxi.chen@linux.intel.com>
+        Fri, 25 Nov 2022 07:59:04 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE864D5D3;
+        Fri, 25 Nov 2022 04:58:56 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id d3so5120837ljl.1;
+        Fri, 25 Nov 2022 04:58:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=erSKfCU3pTuk1I/bIJQZzdQ++3SxDETdH1OGJv5ABiE=;
+        b=Vb5QdU4KQHrbqp7FP34w6pU+RpSjlVX66KcFdyIBhQUrmDVPTkty9x4cab83kbak86
+         cvHFo+JITH2/HaEanAt8NtuVeCeUc7/eZHW0dYQKCsrRZ+ZsxKOqWzY/KjXEzkzrd9rz
+         LWwNI/+AFdCPo8qgmkysOz5kPWgDDE67w4cZ4tJVzrk6GerUO7aktgx7kyq/+CnO3ltw
+         TFN3goJafZZS9QpxovEeDpRWC8LTZ9oZmtZibtmB/Qa32HlOLs8m7OFRcwXgTuZe1YJm
+         SBJdOygrZ/4wpUsNlCS8641N9yIE247YF/Xz7VVW3/C+Jo+/xguHyj+JynLekR7mDKnU
+         R3PA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=erSKfCU3pTuk1I/bIJQZzdQ++3SxDETdH1OGJv5ABiE=;
+        b=5vZvUw9gHX9linQa6X5rABmMEXLNY6jDMh+PuBOiVN4HQwROnu27Fu4O8v0IA7ZUnn
+         u1CFfzOof/wvnZFeexqa2ydrRuOHxwzHwA/fkkmysCHkaiS7D1IfKdxcjwv/onNe9lr/
+         qCT8r5cESbYXDNrJEzZmKZkU9v97/xpYQ7FwRRts0jzRCKw6w76gAFp3muS61bqa6Rja
+         qMULKSWsUjQnC/4zHWkYYd4ky7XuUtFn/ngmDBUJBEwlNlg9FRSlTPZl0lx7FA7mRDmk
+         mm72cDHmQv9C3GoM2lW1rlpKUT0V9G8qRFHLCgndcV2B2pOj9mHm7Zy8mbAZ6dPSS2cZ
+         dHIg==
+X-Gm-Message-State: ANoB5pmQ1Cbt+ZT4bx7mZvgsBVMGhFiyo6lpsfgwSNbhKIj7sDCPCm/j
+        F99+pkUU1ujxWW4LhJ2Dyag=
+X-Google-Smtp-Source: AA0mqf5bkYEKfvpLG98j9zg9nXnagXGZ9s9FVbmlKYE/joHpTlEiCrjckFBR9/GQCzuYsXUFR/hmcA==
+X-Received: by 2002:a2e:8e23:0:b0:26c:4f23:d346 with SMTP id r3-20020a2e8e23000000b0026c4f23d346mr11072077ljk.304.1669381135114;
+        Fri, 25 Nov 2022 04:58:55 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id n3-20020ac242c3000000b004ab98cd5644sm512485lfl.182.2022.11.25.04.58.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Nov 2022 04:58:54 -0800 (PST)
+Date:   Fri, 25 Nov 2022 15:58:52 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh@kernel.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>, linux-pci@vger.kernel.org,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+Subject: Re: [PATCH v7 00/20] PCI: dwc: Add generic resources and Baikal-T1
+ support
+Message-ID: <20221125125852.bozaykbckfkek4i3@mobilestation>
+References: <20221113191301.5526-1-Sergey.Semin@baikalelectronics.ru>
+ <166921583106.17960.15949667825256145052.b4-ty@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <166921583106.17960.15949667825256145052.b4-ty@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Latest Intel platform Granite Rapids has introduced a new instruction -
-PREFETCHIT0/1, which moves code to memory (cache) closer to the
-processor depending on specific hints.
+On Wed, Nov 23, 2022 at 04:09:12PM +0100, Lorenzo Pieralisi wrote:
+> On Sun, 13 Nov 2022 22:12:41 +0300, Serge Semin wrote:
+> > This patchset is a third one in the series created in the framework of
+> > my Baikal-T1 PCIe/eDMA-related work:
+> > 
+> > [1: Done v5] PCI: dwc: Various fixes and cleanups
+> > Link: https://lore.kernel.org/linux-pci/20220624143428.8334-1-Sergey.Semin@baikalelectronics.ru/
+> > Merged: kernel 6.0-rc1
+> > [2: Done v4] PCI: dwc: Add hw version and dma-ranges support
+> > Link: https://lore.kernel.org/linux-pci/20220624143947.8991-1-Sergey.Semin@baikalelectronics.ru
+> > Merged: kernel 6.0-rc1
+> > [3: In-review v7] PCI: dwc: Add generic resources and Baikal-T1 support
+> > Link: ---you are looking at it---
+> > [4: Done v6] dmaengine: dw-edma: Add RP/EP local DMA support
+> > Link: https://lore.kernel.org/linux-pci/20221107210438.1515-1-Sergey.Semin@baikalelectronics.ru/
+> > 
+> > [...]
+> 
+> I think it is time we merged this series - we went through
+> several rounds of reviews and it should be ready for
+> mainline (in particular wrt using the generic infrastructure
+> it puts in place).
+> 
+> Applied to pci/dwc, thank you.
 
-The bit definition:
-CPUID.(EAX=7,ECX=1):EDX[bit 14]
+Thanks. We've finally done that!
 
-PREFETCHIT0/1 is on a KVM-only subleaf. Plus an x86_FEATURE definition
-for this feature bit to direct it to the KVM entry.
+Could you please merge the DW eDMA part in too?
+Link: https://lore.kernel.org/linux-pci/20221107210438.1515-1-Sergey.Semin@baikalelectronics.ru/
+Due to the dependencies we agreed to hold it on for until the last DW
+PCIe patchset is merged in. See discussion here:
+https://lore.kernel.org/dmaengine/20220616183900.ww7ora37kmve7av2@mobilestation/
+and here (Vinod ab-tag):
+https://lore.kernel.org/linux-pci/YuKFnjrxnyNa+98X@matsya/
+and here (the last thread mentioned the dependencies):
+https://lore.kernel.org/linux-pci/20220825112843.4pbh37x6wemsdmmp@mobilestation/
 
-Advertise PREFETCHIT0/1 to KVM userspace. This is safe because there are
-no new VMX controls or additional host enabling required for guests to
-use this feature.
+The eDMA series has got all the ab/rb/tb-tags from @Vinod and @Mani side.
+The only tiny exception is
+[PATCH v6 22/24] dmaengine: dw-edma: Bypass dma-ranges mapping for the local setup
+for which I had to drop the tags due to an update per the @Robin request
+in the framework of the dma-ranges/DMA-mask discussion:
+https://lore.kernel.org/linux-pci/20220927104831.bovlzl74osb4t5d3@mobilestation/
+https://lore.kernel.org/linux-pci/20221007224515.sseyabdfa2phcsdz@mobilestation/
 
-Signed-off-by: Jiaxi Chen <jiaxi.chen@linux.intel.com>
----
- arch/x86/kvm/cpuid.c         | 2 +-
- arch/x86/kvm/reverse_cpuid.h | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+I failed to reach @Robin since November 8, 2022. If you are able to
+effectively draw his attention so he looked at the updated patch, that
+would be great. Other than that I see no barrier to merge the DW eDMA
+series in too.
 
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index c4ea8f593b72..f60e9fa1b777 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -668,7 +668,7 @@ void kvm_set_cpu_caps(void)
- 	);
- 
- 	kvm_cpu_cap_init_kvm_defined(CPUID_7_1_EDX,
--		F(AVX_VNNI_INT8) | F(AVX_NE_CONVERT)
-+		F(AVX_VNNI_INT8) | F(AVX_NE_CONVERT) | F(PREFETCHITI)
- 	);
- 
- 	kvm_cpu_cap_mask(CPUID_D_1_EAX,
-diff --git a/arch/x86/kvm/reverse_cpuid.h b/arch/x86/kvm/reverse_cpuid.h
-index 43eff7207e01..203fdad07bae 100644
---- a/arch/x86/kvm/reverse_cpuid.h
-+++ b/arch/x86/kvm/reverse_cpuid.h
-@@ -40,6 +40,7 @@ enum kvm_only_cpuid_leafs {
- /* Intel-defined sub-features, CPUID level 0x00000007:1 (EDX) */
- #define X86_FEATURE_AVX_VNNI_INT8       KVM_X86_FEATURE(CPUID_7_1_EDX, 4)
- #define X86_FEATURE_AVX_NE_CONVERT      KVM_X86_FEATURE(CPUID_7_1_EDX, 5)
-+#define X86_FEATURE_PREFETCHITI         KVM_X86_FEATURE(CPUID_7_1_EDX, 14)
- 
- struct cpuid_reg {
- 	u32 function;
--- 
-2.27.0
+-Serge(y)
 
+> 
+> [01/20] dt-bindings: imx6q-pcie: Fix clock names for imx6sx and imx8mq
+>         https://git.kernel.org/lpieralisi/pci/c/b8a83e600bdd
+> [02/20] dt-bindings: visconti-pcie: Fix interrupts array max constraints
+>         https://git.kernel.org/lpieralisi/pci/c/4cf4b9b70ab2
+> [03/20] dt-bindings: PCI: dwc: Detach common RP/EP DT bindings
+>         https://git.kernel.org/lpieralisi/pci/c/057646a5db2f
+> [04/20] dt-bindings: PCI: dwc: Remove bus node from the examples
+>         https://git.kernel.org/lpieralisi/pci/c/b9fe9985aee2
+> [05/20] dt-bindings: PCI: dwc: Add phys/phy-names common properties
+>         https://git.kernel.org/lpieralisi/pci/c/875596361910
+> [06/20] dt-bindings: PCI: dwc: Add max-link-speed common property
+>         https://git.kernel.org/lpieralisi/pci/c/eaa9d8865287
+> [07/20] dt-bindings: PCI: dwc: Apply generic schema for generic device only
+>         https://git.kernel.org/lpieralisi/pci/c/f133396e2d00
+> [08/20] dt-bindings: PCI: dwc: Add max-functions EP property
+>         https://git.kernel.org/lpieralisi/pci/c/12f7936c7a0e
+> [09/20] dt-bindings: PCI: dwc: Add interrupts/interrupt-names common properties
+>         https://git.kernel.org/lpieralisi/pci/c/35486813c41b
+> [10/20] dt-bindings: PCI: dwc: Add reg/reg-names common properties
+>         https://git.kernel.org/lpieralisi/pci/c/4cc13eedb892
+> [11/20] dt-bindings: PCI: dwc: Add clocks/resets common properties
+>         https://git.kernel.org/lpieralisi/pci/c/bd9504af9169
+> [12/20] dt-bindings: PCI: dwc: Add dma-coherent property
+>         https://git.kernel.org/lpieralisi/pci/c/4a8972542a6d
+> [13/20] dt-bindings: PCI: dwc: Apply common schema to Rockchip DW PCIe nodes
+>         https://git.kernel.org/lpieralisi/pci/c/98b59129cb9f
+> [14/20] dt-bindings: PCI: dwc: Add Baikal-T1 PCIe Root Port bindings
+>         https://git.kernel.org/lpieralisi/pci/c/ce27c4e61f2d
+> [15/20] PCI: dwc: Introduce dma-ranges property support for RC-host
+>         https://git.kernel.org/lpieralisi/pci/c/8522e17d4cab
+> [16/20] PCI: dwc: Introduce generic controller capabilities interface
+>         https://git.kernel.org/lpieralisi/pci/c/7f9e982dc4fc
+> [17/20] PCI: dwc: Introduce generic resources getter
+>         https://git.kernel.org/lpieralisi/pci/c/ef8c58877fe7
+> [18/20] PCI: dwc: Combine iATU detection procedures
+>         https://git.kernel.org/lpieralisi/pci/c/9f67ecdd9579
+> [19/20] PCI: dwc: Introduce generic platform clocks and resets
+>         https://git.kernel.org/lpieralisi/pci/c/ef69f852a978
+> [20/20] PCI: dwc: Add Baikal-T1 PCIe controller support
+>         https://git.kernel.org/lpieralisi/pci/c/ba6ed462dcf4
+> 
+> Thanks,
+> Lorenzo
