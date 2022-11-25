@@ -2,70 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5D33638C5D
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 15:38:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F155638C5F
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 15:38:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbiKYOi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 09:38:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60064 "EHLO
+        id S230063AbiKYOib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 09:38:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbiKYOiZ (ORCPT
+        with ESMTP id S230046AbiKYOi0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 09:38:25 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07B41D310
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 06:38:24 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso7941902pjt.0
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 06:38:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=y7OdG/1AA7A8QO7ro/ae7lGZ6Xn5O4xI1Yx+62qUlgI=;
-        b=M/JUFv4TwAnM5AARdXkediVBXdwVJP0TZ4+dJWIlpplhA98UWj5UbbdEw6ynLsjdZ/
-         NATKK04icg9VRpWi9irytspzY9ps04YjskE+wsdAK0VDfX4/e/4N0LLKtTklsZRwTmTT
-         yx5NeUWukFm3jzVnia9Lt8y8u7eH9U/A87tdyWO5G+8JhfKR7fONtH/+PiyIO1QrYCg2
-         t/TbdbycUMR1Gpi0x3A8XwnrrnXKxiC4Q17r/ikf3+CSQfsV96yJoUTmkkiHNXwA+uDP
-         wFYBtS5MhlCT45cmUmzy5JsPXL7yrPS6BFdCQGE4WepFrUcwllDUB+0Suoj/aoz+n4sI
-         qdyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=y7OdG/1AA7A8QO7ro/ae7lGZ6Xn5O4xI1Yx+62qUlgI=;
-        b=Ript60OD2h8eSfeWm6HCut7wBmnge7esarJtMpyKYQLXo8V445qxmwoytsWeeJevR+
-         8EO/COQQxD3CuHxIKR21o3lo6FjYqjTSGecswu5HGnmUjnI+hj2g52w8WeLiokUwi+FD
-         +qGGPo8AJASJkzMqkqxzK2y4XpwYMKIXe4E/k6mRshe9wwthYduSytWKFuBoiF6ZeAcL
-         UkgSJ20EHtPBv4rbmfMGOtnY9ZoI3ND+1fs3Ux2hzlNZiuJeNuzWdoC+Nd4JsVaYF7Kt
-         giAdcTnPz+Eo5l0RalEz7T+q8l36hl05IvrXGFMD7B3/GhFWmN2q+gnbm05K189cMhyV
-         vKdg==
-X-Gm-Message-State: ANoB5pmgpeQcDb3SUkGFdRUeFQMJoY160DYYzWyq11P4cUBElOqKkCu5
-        TcKXA7ldH5UgcYimTetTj84XTNdPo3RK8x/vPKkO+Q==
-X-Google-Smtp-Source: AA0mqf5svRfmeY2K5liUXPqUGrovG9g0sMIM0rFvMMjpbLa8YX7W0LsZEF2fl4jRS44moGYBeSxAtt4kDZ9DK0PHzBM=
-X-Received: by 2002:a17:90a:4615:b0:218:8f4:bad5 with SMTP id
- w21-20020a17090a461500b0021808f4bad5mr47415639pjg.55.1669387104386; Fri, 25
- Nov 2022 06:38:24 -0800 (PST)
+        Fri, 25 Nov 2022 09:38:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9481C108
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 06:38:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1481CB82B0C
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 14:38:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB8A7C433D6;
+        Fri, 25 Nov 2022 14:38:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669387102;
+        bh=iuTi+FfhIxjv1xdL+qu3A8EUi5IhPdwJ2hWZj4UxQlA=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=UInR8Tp9VfIP1TsXq7DZrl14Tk2LkRVLxwnnVahrgi9yU9WjnGX3IKd+b9BZKtgYf
+         jTSvV870xpbnmB5GU/k9tESu66Dnelmz+qAwLaOYNwRSlVvIUCGulMu48Y9gWi8OUU
+         vF9d1YdC31PF+V30mYxPvWtG64HrClFz46/je9KKI2y2IUsCBvwIKi4Pl1rjWpbxRM
+         ToJ+RiQKTdGLu1u+JOXSIE3vBO1hnto5s6Rc3g9UCnFh0/y732yVwqul9HQPSLcqND
+         vVEBPPDz1yfTTe0YEKQCcmHFf+xyvUfkA3UzvwGRZk+uUrZhWvoIzpSw8bf7zxAovY
+         fsKDn6iRv/vjg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>, tiwai@suse.com
+Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com
+In-Reply-To: <20221124134556.3343784-1-rf@opensource.cirrus.com>
+References: <20221124134556.3343784-1-rf@opensource.cirrus.com>
+Subject: Re: [PATCH 0/2] firmware: cs_dsp: Switch to using namespaced exports
+Message-Id: <166938710147.543323.1489768823749219688.b4-ty@kernel.org>
+Date:   Fri, 25 Nov 2022 14:38:21 +0000
 MIME-Version: 1.0
-References: <20221125112201.240178-1-krzysztof.kozlowski@linaro.org> <20221125112201.240178-4-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221125112201.240178-4-krzysztof.kozlowski@linaro.org>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Fri, 25 Nov 2022 08:38:11 -0600
-Message-ID: <CAPLW+4nSLP4ZpnzYrOfMu0uOQ0OYnWsnZ=sUppxts6O_3-yYZg@mail.gmail.com>
-Subject: Re: [PATCH 4/4] dt-bindings: soc: samsung: exynos-sysreg: add clocks
- for Exynos850
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        Sriranjani P <sriranjani.p@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fc921
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,67 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Nov 2022 at 05:22, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> Exynos850 has dedicated clock for accessing SYSREGs.  Allow it, even
-> though Linux currently does not enable them and relies on bootloader.
->
+On Thu, 24 Nov 2022 13:45:54 +0000, Richard Fitzgerald wrote:
+> Use EXPORT_SYMBOL_NS_GPL() instead of EXPORT_SYMBOL_GPL() and patch the
+> three drivers that use cs_dsp to add the MODULE_IMPORT_NS().
+> 
+> To make the namespace more specific the KConfig symbol for cs_dsp is
+> changed from CS_DSP to FW_CS_DSP.
+> 
+> Richard Fitzgerald (2):
+>   firmware: cs_dsp: Rename KConfig symbol CS_DSP -> FW_CS_DSP
+>   firmware: cs_dsp: Make the exports namespaced
+> 
+> [...]
 
-Not sure if this description is correct. Of course, there is no driver
-for "samsung,exynos850-sysreg" compatible at the moment, so the next
-compatible from the list ("syscon") is used for Exynos850. And
-"syscon" driver (drivers/mfd/syscon.c) actually does control the
-clocks. I remember adding "clocks" property to Exynos850 dts to fix
-actual problem. Also, the "clocks" property is not described in
-Documentation/devicetree/bindings/mfd/syscon.yaml, didn't really check
-if it's ok or it's just missing.
+Applied to
 
-Other than that comment:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+Thanks!
 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->
-> ---
->
-> Cc: Sriranjani P <sriranjani.p@samsung.com>
-> Cc: Chanho Park <chanho61.park@samsung.com>
-> Cc: Sam Protsenko <semen.protsenko@linaro.org>
-> ---
->  .../soc/samsung/samsung,exynos-sysreg.yaml        | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml b/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
-> index 42357466005e..27cea934a286 100644
-> --- a/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
-> +++ b/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
-> @@ -36,10 +36,25 @@ properties:
->    reg:
->      maxItems: 1
->
-> +  clocks:
-> +    maxItems: 1
-> +
->  required:
->    - compatible
->    - reg
->
-> +allOf:
-> +  - if:
-> +      not:
-> +        properties:
-> +          compatible:
-> +            contains:
-> +              enum:
-> +                - samsung,exynos850-sysreg
-> +    then:
-> +      properties:
-> +        clocks: false
-> +
->  additionalProperties: false
->
->  examples:
-> --
-> 2.34.1
->
+[1/2] firmware: cs_dsp: Rename KConfig symbol CS_DSP -> FW_CS_DSP
+      commit: d7cfdf17cb9d072b41547e7cc882ecd900aa6589
+[2/2] firmware: cs_dsp: Make the exports namespaced
+      commit: e57d904ac4be6de7ecc9083f51a9a38f72482f82
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
