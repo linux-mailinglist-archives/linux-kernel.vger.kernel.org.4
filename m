@@ -2,268 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D1D163861A
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 10:26:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7BF1638626
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 10:26:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbiKYJZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 04:25:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41024 "EHLO
+        id S229558AbiKYJ04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 04:26:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbiKYJZt (ORCPT
+        with ESMTP id S229734AbiKYJ0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 04:25:49 -0500
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2046.outbound.protection.outlook.com [40.107.96.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3C631F82;
-        Fri, 25 Nov 2022 01:25:46 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fwoNcf5vXxdmkjJ4mDMeL/N98ONHoWsb4Dh5pwfBWXfP70sHcRsWbHeBYhbjT/7Ks9JWCcqyI1Q1B/19me+0Oggh6zS+nzHEo59gK+UTdIRBuebAPZVEmNxJQpFnayKdv0wABGBwZ31RQFNAScoRouw44KHJZkheI4AX8JYJ5BYvidknrwYmX+xQF5vWJ10viGqSmHNka+VN3ms2kR3tpqqRG9Dxu2IBBYDYlFXXhMKAt0h9OEanc61N/XzFsDNIg519bz6ZRuUQcfDtWhGzc0i0OXxrd81msnUQsmBZ8CaDZzmsBtgKVykLe4rbDeIcWHU2QPOvpqS+rAsiK9ZilQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ptKLpD/UD56c+zH9PQ/UGytaJcgaunA9AY4taxrDKdc=;
- b=VLcvBeleLajkYD53JtzOf1hi2KO4ZGetmNXJBu5Zwly/4ZCTSF+pt6+nuc+cuXiKHqGnjiCH2uKqsSjrC/DL6/ZMHNQ8RNDByXWuxSP6SXKA8FLMWauPqZ/5K+JpsiR9kCB0y4XNVtlqy5o7Ungs56269yXDa6lC6mxK8cnD7hlkDf/uT1RJB9Ifs88k50jd4hVHJLQyB1xXjZvIcBsngCzaTdsj5/XiAhqjp+7ELL9VyvswAlBOEn3eHVHNBujwD5aIh+RC2iGDo1HTu5RUxW5g4AQpSJ+MSFNWUDOmib69uTPpIYNUmeVy956GQDY682xtAopLQtz/p02IXLmdbQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ptKLpD/UD56c+zH9PQ/UGytaJcgaunA9AY4taxrDKdc=;
- b=TFHLKIfdfcsSjywGtlv+mFTNFA9Z1bSMq4P/5OMydUuXzwLgG6xgeZ1hsh+da7wcS2XKy+OUZHwUEFdZwMD7lNbjC+6g2rQDuo63WPfWijkt+D7QopJfZjf9yTTCyDd5ZHQLF9C8MEmeIfztV3aIIpJRxHi4G1vOiMalm/71YbM=
-Received: from DM6PR02CA0067.namprd02.prod.outlook.com (2603:10b6:5:177::44)
- by BY5PR12MB4856.namprd12.prod.outlook.com (2603:10b6:a03:1d5::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.20; Fri, 25 Nov
- 2022 09:25:43 +0000
-Received: from DM6NAM11FT023.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:177:cafe::5f) by DM6PR02CA0067.outlook.office365.com
- (2603:10b6:5:177::44) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.20 via Frontend
- Transport; Fri, 25 Nov 2022 09:25:43 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT023.mail.protection.outlook.com (10.13.173.96) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5857.20 via Frontend Transport; Fri, 25 Nov 2022 09:25:43 +0000
-Received: from [10.254.241.50] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 25 Nov
- 2022 03:25:35 -0600
-Message-ID: <add472c4-a555-e8a8-94f4-bcf707f32af1@amd.com>
-Date:   Fri, 25 Nov 2022 10:25:22 +0100
+        Fri, 25 Nov 2022 04:26:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9842AC55
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 01:25:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669368330;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PdoQUUexZ7ga7BmgL2KbubMH7KSrCAhYA4sosdJ8U/Q=;
+        b=Y9BvoI/RORKVkZpXw6zROBIajuNoWVtIashLuZmi7K3w8bIr/6MW+b0eLO1oPhkhUOyNIe
+        mhdkYHS6lcQvo7ZBesJJCaL8bq65TIGhCLTD2wqeQdcdlqkSunGXmWGiPZUxQlpw82tGW1
+        fpQygSvz7r9hyFWNj5wCXEn5CM4n/O8=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-604-bez98_xgNs6Gfye3lkbraQ-1; Fri, 25 Nov 2022 04:25:29 -0500
+X-MC-Unique: bez98_xgNs6Gfye3lkbraQ-1
+Received: by mail-wr1-f70.google.com with SMTP id h2-20020adfa4c2000000b00241cf936619so715018wrb.9
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 01:25:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PdoQUUexZ7ga7BmgL2KbubMH7KSrCAhYA4sosdJ8U/Q=;
+        b=1L4Mgo306IGvvl4Ur6fjr77LJJ8ln3sqbWK6t3/NnYKTIlYOMLWg7ABVc7V/y4ZqYl
+         rTW5e1dBXGvje3KqAmmJWL2igRtF2lrfPOiL2nGccCsEuGiqwvVKzuRYxuWOjNRTOKcF
+         vBsIeL4vgJgiPTqZe63PMoBiVhmCTsq5SY/ZabPLAfXIyjiErmVsYPgMK4NQ30lmIN2f
+         KDZ/1/h92jS360LvUAPq3JTJlu5D5nSIz0dygaY73OImfJXEPW7W695HqSpkFK+q/MKe
+         jdNbAhGvyVX5sYlTy9kqvFCoYz6IJWVX4oSCvW/fjOr+kDY/5/01ibKsAR/WNfwhyKG5
+         mW8w==
+X-Gm-Message-State: ANoB5pncwLtcs4db5G7k4IR66JmUR3JGjTrkogHSISkNqz5VnQW12eXW
+        VjrvbaBcYgLRwVVD9oLGDk6bP5t4ArkEMfjCHcV5xIeCqivM3ps/skKmnKV6k10VemNao7sOh5J
+        smog74A94sVqYSim+hIIOPgvm
+X-Received: by 2002:a05:600c:3501:b0:3c7:4f0:77b3 with SMTP id h1-20020a05600c350100b003c704f077b3mr13270556wmq.93.1669368328284;
+        Fri, 25 Nov 2022 01:25:28 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4vxRVWps62Nub/Y/bXYoNoPFQkcrqfFgC4Xw+JywmVH37euSYEJ8/pRQ9JWKoQwlq2n7w9Uw==
+X-Received: by 2002:a05:600c:3501:b0:3c7:4f0:77b3 with SMTP id h1-20020a05600c350100b003c704f077b3mr13270533wmq.93.1669368328022;
+        Fri, 25 Nov 2022 01:25:28 -0800 (PST)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id b17-20020a5d4b91000000b0024207478de3sm664177wrt.93.2022.11.25.01.25.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Nov 2022 01:25:26 -0800 (PST)
+Message-ID: <56cbef35-da0e-d278-fef5-83b0944ed416@redhat.com>
+Date:   Fri, 25 Nov 2022 10:25:24 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v11 5/6] firmware: xilinx: Add RPU configuration APIs
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 04/24] drm/tests: helpers: Switch to a platform_device
 Content-Language: en-US
-To:     Tanmay Shah <tanmay.shah@amd.com>, <andersson@kernel.org>,
-        <mathieu.poirier@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <bill.mills@linaro.org>, <linux-remoteproc@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Ben Levinsky <ben.levinsky@amd.com>
-References: <20221114233940.2096237-1-tanmay.shah@amd.com>
- <20221114233940.2096237-6-tanmay.shah@amd.com>
-From:   Michal Simek <michal.simek@amd.com>
-In-Reply-To: <20221114233940.2096237-6-tanmay.shah@amd.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Maxime Ripard <mripard@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     David Gow <davidgow@google.com>, linaro-mm-sig@lists.linaro.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
+        linux-media@vger.kernel.org, kunit-dev@googlegroups.com,
+        dri-devel@lists.freedesktop.org,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        linux-kernel@vger.kernel.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>
+References: <20221123-rpi-kunit-tests-v1-0-051a0bb60a16@cerno.tech>
+ <20221123-rpi-kunit-tests-v1-4-051a0bb60a16@cerno.tech>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20221123-rpi-kunit-tests-v1-4-051a0bb60a16@cerno.tech>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT023:EE_|BY5PR12MB4856:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5b851400-1017-4b01-43e8-08dacec706d0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2/s9sbICfS0BsToy01+yCzRk149W3Uvr3VDimLYC9XF/gfeQcevwtkvIyQ/hFQgpv1bHkjzffkGGL8OPBZS17PveVdULg+0mta48+D9vn2qDUef9hY/DoSKOZcUBSlQuagXqt4a8uxx6is5H/NzaV5KzpTry4aKsLwCYIUlR42yU8YU6eBh6YfgtMj2G6CBspS5u9L3cYHgFHeKrzLIFm60dwDO4NN6LTPepKixPaYMbVFmwMXGWPCT4/7sd4T0VdJq4FCXJ/qR2QegyaHRdaYjeQqOWFRsIGURZQ6vbZosyWYBZM6bYLzk7D9T+r7DSCUIda45GgZCnN/J3mL3UlEzhOoB1AbKVAM+p8PBdPhZZC3k9V5Lg8oQ2BxN+IkIqspRSmClTUeNknQdFOD4+WcZjr8txqtpz9xehScOx1iu7Ssq17vRXXR2Svk+t2/brqRGGbq5987nZh4vJbtb2YbxBDbp7/OrW1vHll9lHyOqaBbSnVmybFMlyLXOJRoxB8ppRaOP9KUeNFK7bdlgygZlZ29zVvsvwTdCkRBYcM8h/KiOTiUvRDQO4W6S00AkLvhLvZGGnk8P/vD9AsAmzdafmRtbSMFye3Vg5qNbmPL8XehANSs24MZ58fbXBycF56/QDYjaWA7v9x3yQqpEcajo2beiDgmMpUkSBDVubMD6YS3DbVzIW9KYZB5Ptkp/6XerrcHtoOaxTL9RWTfRIM5L1X83Cb0AQA7IJ/lRmBNeu+DSeqav+fmxKtqOxsNIKEAy8cf0oZhGwaa+LRcIALw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(346002)(396003)(376002)(451199015)(40470700004)(36840700001)(46966006)(8936002)(2616005)(26005)(44832011)(5660300002)(356005)(16526019)(186003)(336012)(426003)(47076005)(36756003)(81166007)(40480700001)(31696002)(86362001)(110136005)(16576012)(54906003)(316002)(82310400005)(6666004)(41300700001)(53546011)(40460700003)(8676002)(4326008)(70586007)(70206006)(478600001)(31686004)(36860700001)(83380400001)(2906002)(82740400003)(43740500002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2022 09:25:43.2910
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5b851400-1017-4b01-43e8-08dacec706d0
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT023.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4856
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 11/15/22 00:39, Tanmay Shah wrote:
-> From: Ben Levinsky <ben.levinsky@amd.com>
+On 11/23/22 16:25, Maxime Ripard wrote:
+> The device managed resources are ran if the device has bus, which is not
+> the case of a root_device.
 > 
-> This patch adds APIs to access to configure RPU and its
-> processor-specific memory.
+> Let's use a platform_device instead.
 > 
-> That is query the run-time mode of RPU as either split or lockstep as well
-> as API to set this mode. In addition add APIs to access configuration of
-> the RPUs' tightly coupled memory (TCM).
-> 
-> Signed-off-by: Ben Levinsky <ben.levinsky@amd.com>
-> Signed-off-by: Tanmay Shah <tanmay.shah@amd.com>
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 > ---
+>  drivers/gpu/drm/tests/drm_kunit_helpers.c | 19 +++++++++++++++++--
+>  1 file changed, 17 insertions(+), 2 deletions(-)
 > 
-> Changes in v11:
->    - Rebase on latest rproc-next branch and resolve merge conflicts
-> 
-> Changes in v10:
->    - None
-> 
-> Changes in v9:
->    - None
-> 
-> Changes in v8:
->    - None
-> 
-> Changes in v7:
->    - None
-> 
-> Changes in v6:
->    - None
-> 
-> Changes in v5:
->    - None
-> 
-> Changes in v4:
->    - None
-> 
-> Changes in v3:
->    - Add missing function argument documentation
-> 
->   drivers/firmware/xilinx/zynqmp.c     | 62 ++++++++++++++++++++++++++++
->   include/linux/firmware/xlnx-zynqmp.h | 18 ++++++++
->   2 files changed, 80 insertions(+)
-> 
-> diff --git a/drivers/firmware/xilinx/zynqmp.c b/drivers/firmware/xilinx/zynqmp.c
-> index 1865e43ed7e7..e4981e7f3500 100644
-> --- a/drivers/firmware/xilinx/zynqmp.c
-> +++ b/drivers/firmware/xilinx/zynqmp.c
-> @@ -1159,6 +1159,68 @@ int zynqmp_pm_release_node(const u32 node)
->   }
->   EXPORT_SYMBOL_GPL(zynqmp_pm_release_node);
->   
-> +/**
-> + * zynqmp_pm_get_rpu_mode() - Get RPU mode
-> + * @node_id:	Node ID of the device
-> + * @rpu_mode:	return by reference value
-> + *		either split or lockstep
-> + *
-> + * Return:	return 0 on success or error+reason.
-> + *		if success, then  rpu_mode will be set
-> + *		to current rpu mode.
-> + */
-> +int zynqmp_pm_get_rpu_mode(u32 node_id, enum rpu_oper_mode *rpu_mode)
-> +{
-> +	u32 ret_payload[PAYLOAD_ARG_CNT];
+> diff --git a/drivers/gpu/drm/tests/drm_kunit_helpers.c b/drivers/gpu/drm/tests/drm_kunit_helpers.c
+> index 2f974f45c5b4..651aa93a98a8 100644
+> --- a/drivers/gpu/drm/tests/drm_kunit_helpers.c
+> +++ b/drivers/gpu/drm/tests/drm_kunit_helpers.c
+> @@ -6,6 +6,7 @@
+>  #include <kunit/resource.h>
+>  
+>  #include <linux/device.h>
+> +#include <linux/platform_device.h>
+>  
+>  #include "drm_kunit_helpers.h"
+>  
+> @@ -20,12 +21,26 @@ static const struct drm_mode_config_funcs drm_mode_config_funcs = {
+>  
+>  struct device *drm_kunit_helper_alloc_device(struct kunit *test)
+>  {
+> -	return root_device_register(FAKE_DEVICE_NAME);
+> +	struct platform_device *pdev;
 > +	int ret;
 > +
-> +	ret = zynqmp_pm_invoke_fn(PM_IOCTL, node_id,
-> +				  IOCTL_GET_RPU_OPER_MODE, 0, 0, ret_payload);
-> +
-> +	/* only set rpu_mode if no error */
-> +	if (ret == XST_PM_SUCCESS)
-> +		*rpu_mode = ret_payload[0];
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(zynqmp_pm_get_rpu_mode);
-> +
-> +/**
-> + * zynqmp_pm_set_rpu_mode() - Set RPU mode
-> + * @node_id:	Node ID of the device
-> + * @rpu_mode:	Argument 1 to requested IOCTL call. either split or lockstep
-> + *
-> + *		This function is used to set RPU mode to split or
-> + *		lockstep
-> + *
-> + * Return:	Returns status, either success or error+reason
-> + */
-> +int zynqmp_pm_set_rpu_mode(u32 node_id, enum rpu_oper_mode rpu_mode)
-> +{
-> +	return zynqmp_pm_invoke_fn(PM_IOCTL, node_id,
-> +				   IOCTL_SET_RPU_OPER_MODE, (u32)rpu_mode,
-> +				   0, NULL);
-> +}
-> +EXPORT_SYMBOL_GPL(zynqmp_pm_set_rpu_mode);
-> +
-> +/**
-> + * zynqmp_pm_set_tcm_config - configure TCM
-> + * @node_id:	Firmware specific TCM subsystem ID
-> + * @tcm_mode:	Argument 1 to requested IOCTL call
-> + *              either PM_RPU_TCM_COMB or PM_RPU_TCM_SPLIT
-> + *
-> + * This function is used to set RPU mode to split or combined
-> + *
-> + * Return: status: 0 for success, else failure
-> + */
-> +int zynqmp_pm_set_tcm_config(u32 node_id, enum rpu_tcm_comb tcm_mode)
-> +{
-> +	return zynqmp_pm_invoke_fn(PM_IOCTL, node_id,
-> +				   IOCTL_TCM_COMB_CONFIG, (u32)tcm_mode, 0,
-> +				   NULL);
-> +}
-> +EXPORT_SYMBOL_GPL(zynqmp_pm_set_tcm_config);
-> +
->   /**
->    * zynqmp_pm_force_pwrdwn - PM call to request for another PU or subsystem to
->    *             be powered down forcefully
-> diff --git a/include/linux/firmware/xlnx-zynqmp.h b/include/linux/firmware/xlnx-zynqmp.h
-> index ad3f2bd0c470..cf92e739fa3b 100644
-> --- a/include/linux/firmware/xlnx-zynqmp.h
-> +++ b/include/linux/firmware/xlnx-zynqmp.h
-> @@ -530,6 +530,9 @@ int zynqmp_pm_request_wake(const u32 node,
->   			   const bool set_addr,
->   			   const u64 address,
->   			   const enum zynqmp_pm_request_ack ack);
-> +int zynqmp_pm_get_rpu_mode(u32 node_id, enum rpu_oper_mode *rpu_mode);
-> +int zynqmp_pm_set_rpu_mode(u32 node_id, u32 arg1);
-> +int zynqmp_pm_set_tcm_config(u32 node_id, u32 arg1);
->   int zynqmp_pm_set_sd_config(u32 node, enum pm_sd_config_type config, u32 value);
->   int zynqmp_pm_set_gem_config(u32 node, enum pm_gem_config_type config,
->   			     u32 value);
-> @@ -818,6 +821,21 @@ static inline int zynqmp_pm_request_wake(const u32 node,
->   	return -ENODEV;
->   }
->   
-> +static inline int zynqmp_pm_get_rpu_mode(u32 node_id, enum rpu_oper_mode *rpu_mode)
-> +{
-> +	return -ENODEV;
-> +}
-> +
-> +static inline int zynqmp_pm_set_rpu_mode(u32 node_id, u32 arg1)
-> +{
-> +	return -ENODEV;
-> +}
-> +
-> +static inline int zynqmp_pm_set_tcm_config(u32 node_id, u32 arg1)
-> +{
-> +	return -ENODEV;
-> +}
-> +
->   static inline int zynqmp_pm_set_sd_config(u32 node,
->   					  enum pm_sd_config_type config,
->   					  u32 value)
+> +	ret = platform_driver_register(&fake_platform_driver);
 
-Acked-by: Michal Simek <michal.simek@amd.com>
+Maybe the platform_driver_register() is something that should be done
+in the drm_client_modeset_test_init() callback ?
 
-Thanks,
-Michal
+I would also as a part of this series rename the kunit_suite from
+"drm_test_pick_cmdline_test_suite" to "drm_test_modeset_test_suite"
+or something like that. Since you are already setting the .init and
+.exit callbacks to allocate and release the devices. So it is more
+than just a test suite for cmdline params testing.
+
+> +	KUNIT_ASSERT_EQ(test, ret, 0);
+> +
+> +	pdev = platform_device_alloc(FAKE_DEVICE_NAME, PLATFORM_DEVID_NONE);
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
+> +
+> +	ret = platform_device_add(pdev);
+> +	KUNIT_ASSERT_EQ(test, ret, 0);
+> +
+> +	return &pdev->dev;
+>  }
+>
+
+Probably won't do it as a part of this series to avoid making it cross
+subsystem, but I think there's room to further consolidation since this
+helper seems to be quite generic and something that would be useful for
+other subsystems. So it would make sense for kunit to have helpers to
+manage platform drivers and devices.
+
+In fact, I see that drivers/base/test/test_async_driver_probe.c already
+has similar helpers that could be exposed to the rest of the kernel.
+
+The patch looks good to me though and any of these changes could be done
+as a follow-up:
+
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
+
