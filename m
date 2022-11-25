@@ -2,486 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDCD563867A
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 10:45:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8300063867C
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 10:45:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbiKYJpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 04:45:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59746 "EHLO
+        id S229879AbiKYJpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 04:45:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbiKYJoi (ORCPT
+        with ESMTP id S229903AbiKYJox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 04:44:38 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B81E17895;
-        Fri, 25 Nov 2022 01:44:37 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id 130so3678182pfu.8;
-        Fri, 25 Nov 2022 01:44:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=m61btkicQIKjugLrSUNVEFGsw4I5jEkIx0LfVeGXzVE=;
-        b=eWq2TgAiL2XxRDEsQl9Fm6OUz4FyzCV90Zh3H7D4MYoY83idFm3EAcDaVOgDoAr1mH
-         b90J1W+DdlGEWv+e6DKyEvpfE9x+/vzbwSzFEl8q/u//MluD1vBAmqjwp300oeSHJ6Cj
-         9p8ar+NFvrzHlvPi/snxits8ZSLDeAldVDD4QHM7trS47U5ncFyYX64JeFRfnjAbvp7t
-         YQ62/i0+qTnzih7bcv6G1AlVJ/jI+iHQDK+RRlqBmMkQWzKiOHdodEE74twqeQ5flJ8x
-         Fz6FkD+j3BMCoNBuwjiqvCGYwCy81mdL03lf+EzNWzN59CzKMlhQfPFhAuwDhHhgXRbh
-         A8DA==
+        Fri, 25 Nov 2022 04:44:53 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFCCC3AC2F
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 01:44:46 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id i8-20020a056e0212c800b00302578e6d78so2610361ilm.0
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 01:44:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=m61btkicQIKjugLrSUNVEFGsw4I5jEkIx0LfVeGXzVE=;
-        b=PPybYqvPFHyBSBYRu0uLq/kFHVPCR2I58hRsGbtvm/n0hoaAHBmoITSrQADSiW0N6+
-         lcWJN+2Ej5IFYcTTbiWuqoEzY5B13ItYjW1QsmhhgP/KWpXdpCRrpvj5cqbz0C7UYik7
-         rqzAu13ymd8EkoAYYJzS2rP/r7TV+9yaGDjOhFaH3x32LU1hyZGKVE/wFrNm8mkkgrIx
-         XR4VZs8ZcfKRlo5hEx7sorlNPNWHVymK8KJRo0fIndciP1Xqch1gFA0u5hAW6DUBK40j
-         0zv00+hjey8k4LxbNSMIe0INGCWEJAkHMhMHW/1yebV1VBsQQRNzqis3dLicB+sb6BoV
-         y0VQ==
-X-Gm-Message-State: ANoB5pkdcuPNaqSoa/3K4GLMDGCdxgydVF3Z29J5HXWcGH/I1wchH+M6
-        UeoPyjfnjs4FT1CqRPTYRz4fONAj0is=
-X-Google-Smtp-Source: AA0mqf53omhxqeeBHygjbra8MlIMnGohYd50GraFlJzAPbepjyIYS6NzO1FdjKem/ff9FrtOyjzuvw==
-X-Received: by 2002:a62:2941:0:b0:573:6a8d:dd15 with SMTP id p62-20020a622941000000b005736a8ddd15mr28384867pfp.2.1669369476580;
-        Fri, 25 Nov 2022 01:44:36 -0800 (PST)
-Received: from localhost.localdomain (2001-b400-e2d2-0afd-e841-8cc0-6431-915a.emome-ip6.hinet.net. [2001:b400:e2d2:afd:e841:8cc0:6431:915a])
-        by smtp.gmail.com with ESMTPSA id z14-20020a170903018e00b00186a2dd3ffdsm2963923plg.15.2022.11.25.01.44.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Nov 2022 01:44:36 -0800 (PST)
-From:   Owen Yang <ecs.taipeikernel@gmail.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Abner Yen <abner.yen@ecs.corp-partner.google.com>,
-        Gavin Lee <gavin.lee@ecs.corp-partner.google.com>,
-        Harvey <hunge@google.com>, Matthias Kaehlcke <mka@google.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Bob Moragues <moragues@google.com>,
-        Owen Yang <ecs.taipeikernel@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH v5 2/2] arm64: dts: qcom: sc7280: Add DT for sc7280-herobrine-zombie
-Date:   Fri, 25 Nov 2022 17:44:25 +0800
-Message-Id: <20221125174415.v5.2.I5fa17e079100361ef6809efa0bba2bf32f829e15@changeid>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221125174415.v5.1.Idfcba5344b7995b44b7fa2e20f1aa4351defeca6@changeid>
-References: <20221125174415.v5.1.Idfcba5344b7995b44b7fa2e20f1aa4351defeca6@changeid>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Kn5J0PDBpydiWw4C/8UfIOnIQ57GtBd5BpTMRXaXG98=;
+        b=UmjWbtjKoT3OQEYDdoimLvCos/H8IITbwTLv4cpf0p4/ZwBNOA8g3/FXrwxR9YSvCA
+         Z4t/3rD+Z3AXyeGNOp0xKBB3sWg1ybJwCVxtuP9Anv1PXAFSePvhyQbyUq1PaGy2cSPp
+         QgUOI0XwQNbBZWT9qU7P0Sn5zSTR+20XH6g+DQeKoi4Vs4KhF07kpg+DWtaTvTdMAnPA
+         asXIbguXn+f1oHK2f+2tA4mbfDaj6pXBAdDGtKyldDobpSGAlYJFRcfvb8Fo6xIHqDWX
+         EJW4wcwvnOlF7x2ysJZGdZkK044SQKmx9VXMBFSWM8GYSkkUxbgzRLi7F73KeptgqqwH
+         yQCQ==
+X-Gm-Message-State: ANoB5pmEijei9zYWH3gyKOTGBl4n7Id0cbvsnsD9Zr/c/T2GfPZ5bqkL
+        2R7IwczKfyk7Ld5J6PlJr7xwR52CmAtGcfRAULxQaQI8Upsx
+X-Google-Smtp-Source: AA0mqf5c9tfej0Zb0v9T4Pibq6Op5mFJ4lFlaUWbe3XbLoU/+EiaM8f4ZcxugGEi6AHflH0ycfZ2y0mLRTCSX5AgWVNvL1WgdCvq
+MIME-Version: 1.0
+X-Received: by 2002:a05:6e02:f52:b0:302:b44f:a09 with SMTP id
+ y18-20020a056e020f5200b00302b44f0a09mr9744698ilj.227.1669369486205; Fri, 25
+ Nov 2022 01:44:46 -0800 (PST)
+Date:   Fri, 25 Nov 2022 01:44:46 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000396ded05ee485f93@google.com>
+Subject: [syzbot] BUG: corrupted list in remove_nodes
+From:   syzbot <syzbot+9cb68ebbbe46dc73843e@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        rafael@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add DT for sc7280-herobrine-zombie
+Hello,
 
-Signed-off-by: Owen Yang <ecs.taipeikernel@gmail.com>
+syzbot found the following issue on:
+
+HEAD commit:    9500fc6e9e60 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=10bf96b5880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b25c9f218686dd5e
+dashboard link: https://syzkaller.appspot.com/bug?extid=9cb68ebbbe46dc73843e
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/1363e60652f7/disk-9500fc6e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/fcc4da811bb6/vmlinux-9500fc6e.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/0b554298f1fa/Image-9500fc6e.gz.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9cb68ebbbe46dc73843e@syzkaller.appspotmail.com
+
+list_del corruption. next->prev should be ffff0000c9d7ea00, but was 0000000000000000. (next=ffff0000cc0a8d00)
+------------[ cut here ]------------
+kernel BUG at lib/list_debug.c:64!
+Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 1 PID: 8731 Comm: syz-executor.4 Not tainted 6.1.0-rc5-syzkaller-32269-g9500fc6e9e60 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __list_del_entry_valid+0xcc/0xd0 lib/list_debug.c:62
+lr : __list_del_entry_valid+0xcc/0xd0 lib/list_debug.c:62
+sp : ffff8000153a3990
+x29: ffff8000153a3990 x28: ffff0000cc0a8d00 x27: ffff800009a8825c
+x26: ffff800009a88240 x25: ffff0000cc0a8d00 x24: ffff0000c6bb5ec0
+x23: ffff0000c9d7ea00 x22: 0000000000000000 x21: ffff0000fa4e1730
+x20: ffff8000153a3a08 x19: 0000000000000000 x18: 00000000000000c0
+x17: 20747562202c3030 x16: ffff80000dc18158 x15: ffff000102341a40
+x14: 0000000000000000 x13: 00000000ffffffff x12: ffff000102341a40
+x11: ff808000081c6510 x10: 0000000000000000 x9 : 31ba0981391d2e00
+x8 : 31ba0981391d2e00 x7 : ffff80000c0b2b74 x6 : 0000000000000000
+x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : ffff0001fefddcc8 x1 : 0000000100000001 x0 : 000000000000006d
+Call trace:
+ __list_del_entry_valid+0xcc/0xd0 lib/list_debug.c:62
+ __list_del_entry include/linux/list.h:134 [inline]
+ list_move_tail include/linux/list.h:229 [inline]
+ remove_nodes+0xbc/0x2d0 drivers/base/devres.c:455
+ devres_release_all+0x80/0x194 drivers/base/devres.c:529
+ device_release+0x28/0xe0 drivers/base/core.c:2321
+ kobject_cleanup+0xe8/0x280 lib/kobject.c:673
+ kobject_release lib/kobject.c:704 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ kobject_put+0x94/0xf8 lib/kobject.c:721
+ put_device+0x28/0x40 drivers/base/core.c:3624
+ hci_free_dev+0x24/0x34 net/bluetooth/hci_core.c:2560
+ vhci_release+0x4c/0x80 drivers/bluetooth/hci_vhci.c:569
+ __fput+0x198/0x3e4 fs/file_table.c:320
+ ____fput+0x20/0x30 fs/file_table.c:348
+ task_work_run+0x100/0x148 kernel/task_work.c:179
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0x2dc/0xcac kernel/exit.c:820
+ do_group_exit+0x98/0xcc kernel/exit.c:950
+ get_signal+0xabc/0xb2c kernel/signal.c:2858
+ do_signal+0x128/0x438 arch/arm64/kernel/signal.c:1071
+ do_notify_resume+0xc0/0x1f0 arch/arm64/kernel/signal.c:1124
+ prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
+ exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
+ asm_exit_to_user_mode+0x70/0x84 arch/arm64/kernel/entry-common.c:149
+ ret_from_fork+0x1c/0x20 arch/arm64/kernel/entry.S:866
+Code: d4210000 f001b780 912e0800 94aa876b (d4210000) 
+---[ end trace 0000000000000000 ]---
+
+
 ---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Changes in v5:
-- Overwrite pm8350c_pwm_backlight setting in sc7280-herobrine-zombie.dtsi for chrome zombie. v5.
-- Dropping the redundant 'DT binding for' as requested by Krzysztof. v4.
-- Adding an empty line here before "/dts-v1/;" in "sc7280-herobrine-zombie-lte.dts", "sc7280-herobrine-zombie.dts" as requested by Matthias. v4.
-- Deleteing "/dts-v1/;" in "sc7280-herobrine-zombie.dtsi" as requested by Matthias. v4.
-- Droping changing file path in description. v3. as requested by Matthias. v3.
-- Changing Patch order, binding patch first and dt file second, as requested by Douglas. v2.
-- Adding "arm64: dts: qcom: sc7280:" in dt patch ${SUBJECT}, as requested by Douglas. v2.
-- Adding "dt-bindings: arm: qcom:" in bind patch ${SUBJECT}, as requested by Douglas. v2.
-- Adding '#include "sc7280-herobrine-wifi-sku.dtsi"' in sc7280-herobrine-zombie.dts, as requested by Douglas. v2.
-- Adding "(newest rev)" for zombie entry description in qcom.yaml, as requested by Douglas. v2.
-- Adding "post-power-on-delay-ms = <100>;" for trackpad in "sc7280-herobrine-zombie.dtsi". v2
-- Changing "vcc-supply" to "vdd-supply" for trackpad in "sc7280-herobrine-zombie.dtsi", as requested by Douglas. v2.
-
- arch/arm64/boot/dts/qcom/Makefile             |   2 +
- .../dts/qcom/sc7280-herobrine-zombie-lte.dts  |  16 +
- .../boot/dts/qcom/sc7280-herobrine-zombie.dts |  16 +
- .../dts/qcom/sc7280-herobrine-zombie.dtsi     | 313 ++++++++++++++++++
- 4 files changed, 347 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie-lte.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtsi
-
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index d7669a7cee9f..84237ebd76f4 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -109,6 +109,8 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-herobrine-r1.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-villager-r0.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-villager-r1.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-villager-r1-lte.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-zombie.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-zombie-lte.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp2.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-crd-r3.dtb
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie-lte.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie-lte.dts
-new file mode 100644
-index 000000000000..c9fe64529555
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie-lte.dts
-@@ -0,0 +1,16 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Google Zombie board device tree source
-+ *
-+ * Copyright 2022 Google LLC.
-+ */
-+
-+/dts-v1/;
-+
-+#include "sc7280-herobrine-zombie.dtsi"
-+#include "sc7280-herobrine-lte-sku.dtsi"
-+
-+/ {
-+	model = "Google Zombie with LTE";
-+	compatible = "google,zombie-sku512", "qcom,sc7280";
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dts
-new file mode 100644
-index 000000000000..0246c12b2f40
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dts
-@@ -0,0 +1,16 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Google Zombie board device tree source
-+ *
-+ * Copyright 2022 Google LLC.
-+ */
-+
-+/dts-v1/;
-+
-+#include "sc7280-herobrine-zombie.dtsi"
-+#include "sc7280-herobrine-wifi-sku.dtsi"
-+
-+/ {
-+	model = "Google Zombie";
-+	compatible = "google,zombie", "qcom,sc7280";
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtsi
-new file mode 100644
-index 000000000000..d10362ecdafb
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtsi
-@@ -0,0 +1,313 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Google Zombie board device tree source
-+ *
-+ * Copyright 2022 Google LLC.
-+ */
-+
-+#include "sc7280-herobrine.dtsi"
-+#include "sc7280-herobrine-audio-rt5682.dtsi"
-+
-+/*
-+ * ADDITIONS TO FIXED REGULATORS DEFINED IN PARENT DEVICE TREE FILES
-+ *
-+ * Sort order matches the order in the parent files (parents before children).
-+ */
-+
-+&pp3300_codec {
-+	status = "okay";
-+};
-+
-+/* ADDITIONS TO NODES DEFINED IN PARENT DEVICE TREE FILES */
-+
-+ap_tp_i2c: &i2c0 {
-+	clock-frequency = <400000>;
-+	status = "okay";
-+
-+	trackpad: trackpad@15 {
-+		compatible = "hid-over-i2c";
-+		reg = <0x15>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&tp_int_odl>;
-+
-+		interrupt-parent = <&tlmm>;
-+		interrupts = <7 IRQ_TYPE_EDGE_FALLING>;
-+
-+		hid-descr-addr = <0x01>;
-+		vdd-supply = <&pp3300_z1>;
-+		post-power-on-delay-ms = <100>;
-+
-+		wakeup-source;
-+	};
-+};
-+
-+&ap_sar_sensor_i2c {
-+	status = "okay";
-+};
-+
-+&ap_sar_sensor0 {
-+	status = "okay";
-+};
-+
-+&ap_sar_sensor1 {
-+	status = "okay";
-+};
-+
-+&mdss_edp {
-+	status = "okay";
-+};
-+
-+&mdss_edp_phy {
-+	status = "okay";
-+};
-+
-+/* For nvme */
-+&pcie1 {
-+	status = "okay";
-+};
-+
-+/* For nvme */
-+&pcie1_phy {
-+	status = "okay";
-+};
-+
-+&pwmleds {
-+	status = "okay";
-+};
-+
-+/* For eMMC */
-+&sdhc_1 {
-+	status = "okay";
-+};
-+
-+/* PINCTRL - ADDITIONS TO NODES IN PARENT DEVICE TREE FILES */
-+
-+&ts_rst_conn {
-+	bias-disable;
-+};
-+
-+/* PINCTRL - BOARD-SPECIFIC */
-+
-+/*
-+ * Methodology for gpio-line-names:
-+ * - If a pin goes to herobrine board and is named it gets that name.
-+ * - If a pin goes to herobrine board and is not named, it gets no name.
-+ * - If a pin is totally internal to Qcard then it gets Qcard name.
-+ * - If a pin is not hooked up on Qcard, it gets no name.
-+ */
-+
-+&pm8350c_gpios {
-+	gpio-line-names = "FLASH_STROBE_1",		/* 1 */
-+			  "AP_SUSPEND",
-+			  "PM8008_1_RST_N",
-+			  "",
-+			  "",
-+			  "",
-+			  "PMIC_EDP_BL_EN",
-+			  "PMIC_EDP_BL_PWM",
-+			  "";
-+};
-+
-+&pm8350c_pwm_backlight{
-+	pwms = <&pm8350c_pwm 3 200000>;
-+};
-+
-+&tlmm {
-+	gpio-line-names = "AP_TP_I2C_SDA",		/* 0 */
-+			  "AP_TP_I2C_SCL",
-+			  "SSD_RST_L",
-+			  "PE_WAKE_ODL",
-+			  "AP_SAR_SDA",
-+			  "AP_SAR_SCL",
-+			  "PRB_SC_GPIO_6",
-+			  "TP_INT_ODL",
-+			  "HP_I2C_SDA",
-+			  "HP_I2C_SCL",
-+
-+			  "GNSS_L1_EN",			/* 10 */
-+			  "GNSS_L5_EN",
-+			  "SPI_AP_MOSI",
-+			  "SPI_AP_MISO",
-+			  "SPI_AP_CLK",
-+			  "SPI_AP_CS0_L",
-+			  /*
-+			   * AP_FLASH_WP is crossystem ABI. Schematics
-+			   * call it BIOS_FLASH_WP_OD.
-+			   */
-+			  "AP_FLASH_WP",
-+			  "",
-+			  "AP_EC_INT_L",
-+			  "",
-+
-+			  "UF_CAM_RST_L",		/* 20 */
-+			  "WF_CAM_RST_L",
-+			  "UART_AP_TX_DBG_RX",
-+			  "UART_DBG_TX_AP_RX",
-+			  "",
-+			  "PM8008_IRQ_1",
-+			  "HOST2WLAN_SOL",
-+			  "WLAN2HOST_SOL",
-+			  "MOS_BT_UART_CTS",
-+			  "MOS_BT_UART_RFR",
-+
-+			  "MOS_BT_UART_TX",		/* 30 */
-+			  "MOS_BT_UART_RX",
-+			  "PRB_SC_GPIO_32",
-+			  "HUB_RST_L",
-+			  "",
-+			  "",
-+			  "AP_SPI_FP_MISO",
-+			  "AP_SPI_FP_MOSI",
-+			  "AP_SPI_FP_CLK",
-+			  "AP_SPI_FP_CS_L",
-+
-+			  "AP_EC_SPI_MISO",		/* 40 */
-+			  "AP_EC_SPI_MOSI",
-+			  "AP_EC_SPI_CLK",
-+			  "AP_EC_SPI_CS_L",
-+			  "LCM_RST_L",
-+			  "EARLY_EUD_N",
-+			  "",
-+			  "DP_HOT_PLUG_DET",
-+			  "IO_BRD_MLB_ID0",
-+			  "IO_BRD_MLB_ID1",
-+
-+			  "IO_BRD_MLB_ID2",		/* 50 */
-+			  "SSD_EN",
-+			  "TS_I2C_SDA_CONN",
-+			  "TS_I2C_CLK_CONN",
-+			  "TS_RST_CONN",
-+			  "TS_INT_CONN",
-+			  "AP_I2C_TPM_SDA",
-+			  "AP_I2C_TPM_SCL",
-+			  "PRB_SC_GPIO_58",
-+			  "PRB_SC_GPIO_59",
-+
-+			  "EDP_HOT_PLUG_DET_N",		/* 60 */
-+			  "FP_TO_AP_IRQ_L",
-+			  "",
-+			  "AMP_EN",
-+			  "CAM0_MCLK_GPIO_64",
-+			  "CAM1_MCLK_GPIO_65",
-+			  "WF_CAM_MCLK",
-+			  "PRB_SC_GPIO_67",
-+			  "FPMCU_BOOT0",
-+			  "UF_CAM_SDA",
-+
-+			  "UF_CAM_SCL",			/* 70 */
-+			  "",
-+			  "",
-+			  "WF_CAM_SDA",
-+			  "WF_CAM_SCL",
-+			  "",
-+			  "",
-+			  "EN_FP_RAILS",
-+			  "FP_RST_L",
-+			  "PCIE1_CLKREQ_ODL",
-+
-+			  "EN_PP3300_DX_EDP",		/* 80 */
-+			  "US_EURO_HS_SEL",
-+			  "FORCED_USB_BOOT",
-+			  "WCD_RESET_N",
-+			  "MOS_WLAN_EN",
-+			  "MOS_BT_EN",
-+			  "MOS_SW_CTRL",
-+			  "MOS_PCIE0_RST",
-+			  "MOS_PCIE0_CLKREQ_N",
-+			  "MOS_PCIE0_WAKE_N",
-+
-+			  "MOS_LAA_AS_EN",		/* 90 */
-+			  "SD_CD_ODL",
-+			  "",
-+			  "",
-+			  "MOS_BT_WLAN_SLIMBUS_CLK",
-+			  "MOS_BT_WLAN_SLIMBUS_DAT0",
-+			  "HP_MCLK",
-+			  "HP_BCLK",
-+			  "HP_DOUT",
-+			  "HP_DIN",
-+
-+			  "HP_LRCLK",			/* 100 */
-+			  "HP_IRQ",
-+			  "",
-+			  "",
-+			  "GSC_AP_INT_ODL",
-+			  "EN_PP3300_CODEC",
-+			  "AMP_BCLK",
-+			  "AMP_DIN",
-+			  "AMP_LRCLK",
-+			  "UIM1_DATA_GPIO_109",
-+
-+			  "UIM1_CLK_GPIO_110",		/* 110 */
-+			  "UIM1_RESET_GPIO_111",
-+			  "PRB_SC_GPIO_112",
-+			  "UIM0_DATA",
-+			  "UIM0_CLK",
-+			  "UIM0_RST",
-+			  "UIM0_PRESENT_ODL",
-+			  "SDM_RFFE0_CLK",
-+			  "SDM_RFFE0_DATA",
-+			  "WF_CAM_EN",
-+
-+			  "FASTBOOT_SEL_0",		/* 120 */
-+			  "SC_GPIO_121",
-+			  "FASTBOOT_SEL_1",
-+			  "SC_GPIO_123",
-+			  "FASTBOOT_SEL_2",
-+			  "SM_RFFE4_CLK_GRFC_8",
-+			  "SM_RFFE4_DATA_GRFC_9",
-+			  "WLAN_COEX_UART1_RX",
-+			  "WLAN_COEX_UART1_TX",
-+			  "PRB_SC_GPIO_129",
-+
-+			  "LCM_ID0",			/* 130 */
-+			  "LCM_ID1",
-+			  "",
-+			  "SDR_QLINK_REQ",
-+			  "SDR_QLINK_EN",
-+			  "QLINK0_WMSS_RESET_N",
-+			  "SMR526_QLINK1_REQ",
-+			  "SMR526_QLINK1_EN",
-+			  "SMR526_QLINK1_WMSS_RESET_N",
-+			  "PRB_SC_GPIO_139",
-+
-+			  "SAR1_IRQ_ODL",		/* 140 */
-+			  "SAR0_IRQ_ODL",
-+			  "PRB_SC_GPIO_142",
-+			  "",
-+			  "WCD_SWR_TX_CLK",
-+			  "WCD_SWR_TX_DATA0",
-+			  "WCD_SWR_TX_DATA1",
-+			  "WCD_SWR_RX_CLK",
-+			  "WCD_SWR_RX_DATA0",
-+			  "WCD_SWR_RX_DATA1",
-+
-+			  "DMIC01_CLK",			/* 150 */
-+			  "DMIC01_DATA",
-+			  "DMIC23_CLK",
-+			  "DMIC23_DATA",
-+			  "",
-+			  "",
-+			  "EC_IN_RW_ODL",
-+			  "HUB_EN",
-+			  "WCD_SWR_TX_DATA2",
-+			  "",
-+
-+			  "",				/* 160 */
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+
-+			  "",				/* 170 */
-+			  "MOS_BLE_UART_TX",
-+			  "MOS_BLE_UART_RX",
-+			  "",
-+			  "",
-+			  "";
-+};
--- 
-2.17.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
