@@ -2,65 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE607638406
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 07:34:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34DCD638412
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 07:37:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbiKYGeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 01:34:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38404 "EHLO
+        id S229695AbiKYGhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 01:37:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiKYGeD (ORCPT
+        with ESMTP id S229472AbiKYGhl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 01:34:03 -0500
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD5F28728;
-        Thu, 24 Nov 2022 22:34:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=pIHGszfecZz9CSc52vNNlxGUv062DoFdWN6o4fVm8hg=; b=DA0htORxwAaODWdcRqz68PyWA4
-        iLLlTu3pAovQnRbO3EcAyGWXlWnnWB8ml0OxEL+bNjtc7URnjW6uYIjpWFyxnY1lHxX3qs3lN36KI
-        5gIT1fKN4jS1lSgTm5ZxxIwkJXmutWhlmPH1upsZrtifndkP2t0+Z/bb8nKfkmVD6B0ZPtRDCOlW8
-        73YyoAPAtzhARYS+UHqEVER8BFS8gYmdH52nFabs74UCQgvCooP/6wzXNs4UtFfadxylDbe4+vGxP
-        vlhIIvWIUsembOOSeWs2DGGNGmrkiTL2UhtXk5tnV3wQPoPe55UXaU4MWXn1m3P3NbrS8S0JiTdpQ
-        4biOYbTQ==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1oySHZ-006blK-2p;
-        Fri, 25 Nov 2022 06:33:53 +0000
-Date:   Fri, 25 Nov 2022 06:33:53 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Howells <dhowells@redhat.com>
-Subject: Re: [PATCH] pipe: fix potential use-after-free in pipe_read()
-Message-ID: <Y4Bh0fTf4vZ6/6Pc@ZenIV>
-References: <20221117115323.1718-1-thunder.leizhen@huawei.com>
+        Fri, 25 Nov 2022 01:37:41 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98C19FF1
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 22:37:39 -0800 (PST)
+Received: from kwepemi500009.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NJQ6q5fFczqSdm;
+        Fri, 25 Nov 2022 14:33:39 +0800 (CST)
+Received: from huawei.com (10.67.175.85) by kwepemi500009.china.huawei.com
+ (7.221.188.199) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 25 Nov
+ 2022 14:37:36 +0800
+From:   Xia Fukun <xiafukun@huawei.com>
+To:     <jani.nikula@linux.intel.com>, <airlied@gmail.com>,
+        <daniel@ffwll.ch>, <ville.syrjala@linux.intel.com>,
+        <lucas.demarchi@intel.com>, <joonas.lahtinen@linux.intel.com>
+CC:     <rodrigo.vivi@intel.com>, <tvrtko.ursulin@linux.intel.com>,
+        <intel-gfx@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <xiafukun@huawei.com>
+Subject: [PATCH] drm/i915/bios: fix a memory leak in generate_lfp_data_ptrs
+Date:   Fri, 25 Nov 2022 14:34:28 +0800
+Message-ID: <20221125063428.69486-1-xiafukun@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221117115323.1718-1-thunder.leizhen@huawei.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.85]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500009.china.huawei.com (7.221.188.199)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 07:53:23PM +0800, Zhen Lei wrote:
-> Accessing buf->flags after pipe_buf_release(pipe, buf) is unsafe, because
-> the 'buf' memory maybe freed.
+When (size != 0 || ptrs->lvds_ entries != 3), the program tries to
+free() the ptrs. However, the ptrs is not created by calling kzmalloc(),
+but is obtained by pointer offset operation.
+This may lead to memory leaks or undefined behavior.
 
-Huh?  What are you talking about?
-                        struct pipe_buffer *buf = &pipe->bufs[tail & mask];
-To free *buf you would need to free the entire damn array, which is
-obviously not going to be possible here; if you are talking about reuse
-of *buf - that's controlled by pipe->tail, and we do not assign it until
-later.
+Fix this by replacing the arguments of kfree() with ptrs_block.
 
-Fetching any fields of *buf is safe; what can get freed is buf->page, not
-buf itself.  So that buf->flags access is fine.
+Fixes: a87d0a847607 ("drm/i915/bios: Generate LFP data table pointers if the VBT lacks them")
+Signed-off-by: Xia Fukun <xiafukun@huawei.com>
+---
+ drivers/gpu/drm/i915/display/intel_bios.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/i915/display/intel_bios.c b/drivers/gpu/drm/i915/display/intel_bios.c
+index 28bdb936cd1f..edbdb949b6ce 100644
+--- a/drivers/gpu/drm/i915/display/intel_bios.c
++++ b/drivers/gpu/drm/i915/display/intel_bios.c
+@@ -414,7 +414,7 @@ static void *generate_lfp_data_ptrs(struct drm_i915_private *i915,
+ 		ptrs->lvds_entries++;
+ 
+ 	if (size != 0 || ptrs->lvds_entries != 3) {
+-		kfree(ptrs);
++		kfree(ptrs_block);
+ 		return NULL;
+ 	}
+ 
+-- 
+2.17.1
+
