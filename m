@@ -2,157 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73002638CC9
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 15:55:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DC49638CCE
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 15:57:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbiKYOzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 09:55:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52092 "EHLO
+        id S229821AbiKYO51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 09:57:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbiKYOzs (ORCPT
+        with ESMTP id S229735AbiKYO5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 09:55:48 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE192DA92
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 06:55:47 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id r12so7296039lfp.1
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 06:55:47 -0800 (PST)
+        Fri, 25 Nov 2022 09:57:25 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22FC73D939
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 06:57:24 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id 130so4152099pgc.5
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 06:57:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VxBpBwNM8lbqAqevdDFL53IYXQgfoQq8ag1aBuLSLxI=;
-        b=TRCfVHMriA0CRg1R8NCh5cJ6Kcsxo2SdWk5x5g3g/XWOEKJlPLicUtfS1J7Bcd5YZG
-         DFH3R6AZR/m7hdiWOUnqSi+HiPeqJl+HV9udEUISUqryFHQXskWEeTyAYkeZPuiPbfqy
-         W6buRZUHOcoDm/7MwEk0wM6XtFWgubux5r7uvwAcfGV13iusfhgk3Qfuw29DjVbsrrZt
-         lYfjYm5CAf5G0MwhdY7KnXsgPsl93/LtXed9lzQdxQ7hkcrzOjuX4k6kNHn16JAY7USP
-         oo/wHqPLutA/guNs3AMKX3tGSrjmMu7x+bqz7hf/fLlVWDBqoJfza6J/XOKIgzpVaAke
-         arjg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jdhD7TyJAV9Yjv88DjHcR22sCnTCoFYgtGFsGgYfXW0=;
+        b=Uqm0qn5phqXeWhCqw/F05B4fb0YwjNUdPVyTz7nqy4Q+gyHwPLQ6HvMR1FgS8jsCQU
+         q1IK7QHUqNoSej2t1wae6i6GrPqtmNhKTjRNOXv6dBWEzRWn3zQdAUmrUhsthaHH4ikA
+         cKR2je4BA6e11up3gJriA/c3gADhUN24D8E0lcOKMwEyz+uwt53A6gsbAQTo8nUyFU29
+         Nzm2onZOM9+PF/v7Fqfbx9qr3HMphnAgYbvo2Oh7YGfVdmy0npoS0XPfeShCqUtIbkWN
+         3x124UDWLQJk1XjK6AP0SfKR3Jb8jr/J7dC5VtiH9wtkfA9KDI0Bz/IE257BuNOsWrFa
+         g8Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VxBpBwNM8lbqAqevdDFL53IYXQgfoQq8ag1aBuLSLxI=;
-        b=3jwdpe7KtUjM4AyrMXTM/H+korhx0kEfj/kj/vNg4w4Gbrbhwg0WOcYUTc0JcOTHxj
-         cjd3W/OJyczhmi4RtR3onSSLFkgChCIUMwV8DmdTUpIiXz1bnb2KhIPqwN2799ZaT/D8
-         avJa1bTxqdnbQOjTfPv0OnTjQrhEPBVKpJ2NVKmfC7kvI+EulldEL+EEunVU+2RJNlps
-         1zHKJQsZp7r6a4GcUBZHERZD03o+aMtwtGKpQe2iZolUu3xcTgCHD87Ok/RjwjppDPJC
-         +fVx0Wybf19s+Q1Qv4qMIFy/Vs9olH/zveCox5/SJGRPSJVzm30XBYTVO5015iiWH1T/
-         LfbQ==
-X-Gm-Message-State: ANoB5plXunM9hS7LT5Zv3serPtO9zvk7sgFbBUCrn7Yw3loWtpRrNFSV
-        QXSyZC9NcVyxxOlmaVQfu/SxJA==
-X-Google-Smtp-Source: AA0mqf7Gm+58Go9sKrIMFxXvl8KJRz9zByM5cvhEqK0ccTyKySFxTT2TXz/HJuSiyQq1awCnhbwoyg==
-X-Received: by 2002:a05:6512:324f:b0:4b4:f3c5:f195 with SMTP id c15-20020a056512324f00b004b4f3c5f195mr3290518lfr.516.1669388146359;
-        Fri, 25 Nov 2022 06:55:46 -0800 (PST)
-Received: from [192.168.1.101] (95.49.32.48.neoplus.adsl.tpnet.pl. [95.49.32.48])
-        by smtp.gmail.com with ESMTPSA id k2-20020a2ea282000000b0026c2baa72d4sm378848lja.27.2022.11.25.06.55.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Nov 2022 06:55:45 -0800 (PST)
-Message-ID: <e44abbe6-080f-e0d5-5311-04e3a1e9f66e@linaro.org>
-Date:   Fri, 25 Nov 2022 15:55:44 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jdhD7TyJAV9Yjv88DjHcR22sCnTCoFYgtGFsGgYfXW0=;
+        b=FTaeG6nV1qeMmJujJfNhk6gEwl42TuofSHOzPjgnEATP4mnKTR4ccEJTqVAO+fB4kd
+         v61+rz5xBq7/nXokA5GOyozxMg2ceyP2zUi4/ZH9vPggG3nKJgNoGgjP5nKmAK7IDFtU
+         cFX2bO3NFtXj8CfcfAsOiyzm4k6NAtVaOITC/M/7tOxCSAqsUHr9a2phAW10WLa5S1ve
+         DaOleO4B9ZjN1zkM5xP+YnT5W8zYrZn77NOdJWP9BcjAE6MbNUp6hHMpg1ku/R0jdaof
+         MzdYxi8gED70WM7xVdCCaO/f//TDTzpQtkz87lWn3LP4bl6n5/D3GgQw8ddyYF0uQ5KS
+         pQ8w==
+X-Gm-Message-State: ANoB5pnHmMuLZzErtyW+zVv3SGDQ3wmC2VyxBOFsjrPJqvIRqJkWWALZ
+        rWZu10WXWYTpOASkeLF6QYevyn+ZWbSSpVfp9OiIyQ==
+X-Google-Smtp-Source: AA0mqf5I5b28SQXiYfcgPnjF5puxBhYUKVhvjzG8dNtV0uM9fPMxZbbenGJQY8bIxdgwY3OxzBMUM0f64wcqVgqOMVc=
+X-Received: by 2002:a63:e008:0:b0:46f:5979:8889 with SMTP id
+ e8-20020a63e008000000b0046f59798889mr16712060pgh.119.1669388243590; Fri, 25
+ Nov 2022 06:57:23 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 2/2] ARM: dts: qcom: align LED node names with dtschema
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+References: <20221125112201.240178-1-krzysztof.kozlowski@linaro.org>
+ <20221125112201.240178-3-krzysztof.kozlowski@linaro.org> <CAPLW+4kwFCLaiowajdCnA09eT4emOB-3d-6cbA=ZYyRLwYuCxw@mail.gmail.com>
+ <dfd956d5-d62d-52ac-c485-afc71c441df5@linaro.org>
+In-Reply-To: <dfd956d5-d62d-52ac-c485-afc71c441df5@linaro.org>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Fri, 25 Nov 2022 08:57:12 -0600
+Message-ID: <CAPLW+4mWq5Q4Ht1Upx2Xw3fMfNvvSK6fEPbLFru1NLpKHLbKOg@mail.gmail.com>
+Subject: Re: [PATCH 3/4] dt-bindings: soc: samsung: exynos-sysreg: add
+ dedicated SYSREG compatibles to Exynos5433
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221125144209.477328-1-krzysztof.kozlowski@linaro.org>
- <20221125144209.477328-2-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221125144209.477328-2-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        Sriranjani P <sriranjani.p@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 25 Nov 2022 at 08:47, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 25/11/2022 15:22, Sam Protsenko wrote:
+> > On Fri, 25 Nov 2022 at 05:22, Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> Exynos5433 has several different SYSREGs, so use dedicated compatibles
+> >> for them.
+> >>
+> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >>
+> >> ---
+> >>
+> >> Cc: Sriranjani P <sriranjani.p@samsung.com>
+> >> Cc: Chanho Park <chanho61.park@samsung.com>
+> >> Cc: Sam Protsenko <semen.protsenko@linaro.org>
+> >> ---
+> >
+> > Hi Krzysztof,
+> >
+> > Just curious: what is the rationale for adding those more specific
+> > sysregs? AFAIR, e.g. in Exynos850, different SysReg instances have
+> > pretty much the same register layout.
+> >
+>
+> On Exynos5433 all these blocks have different registers. Are you saying
+> that Exynos850 has four (or more) sysregs which are exactly the same?
+> Same registers? Why would they duplicate it?
+>
 
+Ah, no, you are right. Just checked it, they are different. Just first
+couple of registers are similar between blocks, that's why I memorized
+it wrong.
 
-On 25.11.2022 15:42, Krzysztof Kozlowski wrote:
-> The node names should be generic and DT schema expects certain pattern:
-> 
->   qcom-ipq4018-ap120c-ac.dtb: leds: 'wlan2g', 'wlan5g' do not match any of the regexes: '(^led-[0-9a-f]$|led)', 'pinctrl-[0-9]+'
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+So as I understand, adding those new compatibles follows "describe HW,
+not a driver" rule? Because AFAIU, right now it'll fallback to
+"syscon" compatible anyway.
 
-Konrad
->  arch/arm/boot/dts/qcom-ipq4018-ap120c-ac-bit.dts | 6 +++---
->  arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dts     | 6 +++---
->  2 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac-bit.dts b/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac-bit.dts
-> index cf7da1ab177c..1b27edce9d4f 100644
-> --- a/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac-bit.dts
-> +++ b/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac-bit.dts
-> @@ -9,7 +9,7 @@ / {
->  	leds {
->  		compatible = "gpio-leds";
->  
-> -		power {
-> +		led-power {
->  			label = "ap120c-ac:green:power";
->  			function = LED_FUNCTION_POWER;
->  			color = <LED_COLOR_ID_GREEN>;
-> @@ -17,14 +17,14 @@ power {
->  			default-state = "on";
->  		};
->  
-> -		wlan {
-> +		led-wlan {
->  			label = "ap120c-ac:green:wlan";
->  			function = LED_FUNCTION_WLAN;
->  			color = <LED_COLOR_ID_GREEN>;
->  			gpios = <&tlmm 3 GPIO_ACTIVE_HIGH>;
->  		};
->  
-> -		support {
-> +		led-support {
->  			label = "ap120c-ac:green:support";
->  			color = <LED_COLOR_ID_GREEN>;
->  			gpios = <&tlmm 2 GPIO_ACTIVE_HIGH>;
-> diff --git a/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dts b/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dts
-> index c4f89b712fd9..a707057c887d 100644
-> --- a/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dts
-> +++ b/arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dts
-> @@ -7,7 +7,7 @@ / {
->  	leds {
->  		compatible = "gpio-leds";
->  
-> -		status: status {
-> +		status: led-status {
->  			label = "ap120c-ac:blue:status";
->  			function = LED_FUNCTION_STATUS;
->  			color = <LED_COLOR_ID_BLUE>;
-> @@ -15,7 +15,7 @@ status: status {
->  			default-state = "keep";
->  		};
->  
-> -		wlan2g {
-> +		led-wlan2g {
->  			label = "ap120c-ac:green:wlan2g";
->  			function = LED_FUNCTION_WLAN;
->  			color = <LED_COLOR_ID_GREEN>;
-> @@ -23,7 +23,7 @@ wlan2g {
->  			linux,default-trigger = "phy0tpt";
->  		};
->  
-> -		wlan5g {
-> +		led-wlan5g {
->  			label = "ap120c-ac:red:wlan5g";
->  			function = LED_FUNCTION_WLAN;
->  			color = <LED_COLOR_ID_RED>;
+> Best regards,
+> Krzysztof
+>
