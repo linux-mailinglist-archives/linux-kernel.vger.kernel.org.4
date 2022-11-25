@@ -2,114 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD67C6388F6
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 12:42:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20C466388F2
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 12:42:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbiKYLm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 06:42:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39372 "EHLO
+        id S229877AbiKYLmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 06:42:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbiKYLm0 (ORCPT
+        with ESMTP id S229491AbiKYLmU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 06:42:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4689A1BE8E
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 03:41:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669376490;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FOhIdeO2viHCtBqTf2iYEwnXDI6Ezk/3Vbjgspkc6Ig=;
-        b=KBJ/+nUngYjIimzyazzf5IVEMZCVzCdGJ7vdH5xJ7P3qPXAMy3aXNHdzlpJPrGmX38QgY2
-        uBPtmCjCvi7LRXHyVHThZTB4vLhNgNLqJ/Pbbz7lh+Z3lobrO3IJ5OpLqW8Fo39bCFxVoc
-        E3tpuG1OxqlwfhlyR3flGIIknkODh9Q=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-164-e-dOen_SO8eWVX3CFGB8tw-1; Fri, 25 Nov 2022 06:41:26 -0500
-X-MC-Unique: e-dOen_SO8eWVX3CFGB8tw-1
-Received: by mail-wm1-f72.google.com with SMTP id h4-20020a1c2104000000b003d01b66fe65so4087284wmh.2
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 03:41:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FOhIdeO2viHCtBqTf2iYEwnXDI6Ezk/3Vbjgspkc6Ig=;
-        b=GpoyQek9++OPTp8H8pEj9w63vxJoqlZulGB1nW2W6WdB4P6cYFad0i0QGfif1OpocP
-         s0FLBrkuWfJMWufahfvPJJ0mCc9ywgGisF4aMs3ocqiGRj1GsSIIAE/64K9juaE/vgvi
-         LbtMcHW7+F9ztD7jrXJBwaxIlRJT5wfUge1zwc88WgyO6Jbu8WDVje9ej+GhkVCZN0Bp
-         jDENzyf6h6H//n1KUrfuP3lPHd3rh3pY3Zs5VscVXbRDYmot54Qd9KEQPV94/l/9OVtX
-         vAaYnXwbIE49T3GZXCYWudJ0CUXZS9HFUIRMExAIv2eyez1lcgRs0zE7rzZD0OUyXXBq
-         B1cw==
-X-Gm-Message-State: ANoB5pm8Hqu/cQUMKhJOOxRts8b9v2xbpErQfNXk5gO5wbmh/+jqyySV
-        +VMShEazY/3W7Wtu0o4eFaZlnINZNhhE6BB0DLX6thfuV6gOfOi0q9yIddBlXk2ml+Js+vWVbkQ
-        i5+iEpX/nr2NHHqT8V+cUC/9Y
-X-Received: by 2002:adf:e34d:0:b0:241:ee4a:2301 with SMTP id n13-20020adfe34d000000b00241ee4a2301mr7222669wrj.429.1669376485538;
-        Fri, 25 Nov 2022 03:41:25 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7XK7j/pUPAtmTo6t54sJnnyf1J8fqURJI79qjd/c5yPhwa217razm52j8W7b414NZu8YvG6w==
-X-Received: by 2002:adf:e34d:0:b0:241:ee4a:2301 with SMTP id n13-20020adfe34d000000b00241ee4a2301mr7222654wrj.429.1669376485339;
-        Fri, 25 Nov 2022 03:41:25 -0800 (PST)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id he6-20020a05600c540600b003cf4ec90938sm4846070wmb.21.2022.11.25.03.41.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Nov 2022 03:41:24 -0800 (PST)
-Message-ID: <a39d6b1f-a496-d293-8f27-c17d30d6c0b5@redhat.com>
-Date:   Fri, 25 Nov 2022 12:41:23 +0100
+        Fri, 25 Nov 2022 06:42:20 -0500
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34BBB1E3F6;
+        Fri, 25 Nov 2022 03:42:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1669376539;
+  x=1700912539;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=JhyzSfrrReVX0sQCzaa5uP5Ld+NNauN2KVzxad0wMJA=;
+  b=aaxAm7XTJ3oP5MIs8no/Lz5/MiNXLM4WVCG+f9VE7jnk/2T0EWYOBmzD
+   SMnOePRCp+n+DQpYNeZYu1qZO747H2RkVWALh39sn/wi1jMfJwVRkQhwy
+   EFSlVrRpfFOZUA+SBLwRFVyr8B1l7YZdwujYDIWzyWTypXpc+c+K5C+OY
+   WyCiUQlcuzbpH1N/G4fYsetXX4F8a62qSSQckUDPIPkycc//Yr/2GDtFL
+   kVbuhl3EM08s1QOalPdXG2ouZmS+pJl+KpWYerAd4azPPrWqOpE0Q8Zq6
+   /+WmHuEFJlXZ6/Dinbpt7RL0X9fW7BcMbeesVIRkaeqrq3owkU41h2dSc
+   Q==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+CC:     <kernel@axis.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] perf annotate: Work with vmlinux outside symfs
+Date:   Fri, 25 Nov 2022 12:42:09 +0100
+Message-ID: <20221125114210.2353820-1-vincent.whitchurch@axis.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH 21/24] drm/vc4: hvs: Provide a function to initialize the
- HVS structure
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Maxime Ripard <mripard@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     David Gow <davidgow@google.com>, linaro-mm-sig@lists.linaro.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org,
-        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
-        linux-media@vger.kernel.org, kunit-dev@googlegroups.com,
-        dri-devel@lists.freedesktop.org,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        linux-kernel@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-References: <20221123-rpi-kunit-tests-v1-0-051a0bb60a16@cerno.tech>
- <20221123-rpi-kunit-tests-v1-21-051a0bb60a16@cerno.tech>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20221123-rpi-kunit-tests-v1-21-051a0bb60a16@cerno.tech>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/23/22 16:26, Maxime Ripard wrote:
-> We'll need to initialize the HVS structure without a backing device to
-> create a mock we'll use for testing.
-> 
-> Split the structure initialization part into a separate function.
-> 
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> ---
+It is currently possible to use --symfs along with a vmlinux which lies
+outside of the symfs by passing an absolute path to --vmlinux, thanks to
+the check in dso__load_vmlinux() which handles this explicitly.
 
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+However, the annotate code lacks this check and thus perf annotate does
+not work ("Internal error: Invalid -1 error code") for kernel functions
+with this combination.  Add the missing handling.
 
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+---
+ tools/perf/util/annotate.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
+index db475e44f42f..52bdec764545 100644
+--- a/tools/perf/util/annotate.c
++++ b/tools/perf/util/annotate.c
+@@ -1695,7 +1695,11 @@ static int dso__disassemble_filename(struct dso *dso, char *filename, size_t fil
+ 		 * cache, or is just a kallsyms file, well, lets hope that this
+ 		 * DSO is the same as when 'perf record' ran.
+ 		 */
+-		__symbol__join_symfs(filename, filename_size, dso->long_name);
++		if (dso->kernel && dso->long_name[0] == '/')
++			snprintf(filename, filename_size,
++				 "%s", dso->long_name);
++		else
++			__symbol__join_symfs(filename, filename_size, dso->long_name);
+ 
+ 		mutex_lock(&dso->lock);
+ 		if (access(filename, R_OK) && errno == ENOENT && dso->nsinfo) {
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+2.34.1
 
