@@ -2,195 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27626639008
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 19:44:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B9FF63900A
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 19:45:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbiKYSoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 13:44:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53906 "EHLO
+        id S229900AbiKYSpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 13:45:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiKYSoH (ORCPT
+        with ESMTP id S229570AbiKYSpe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 13:44:07 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD3745ECC
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 10:44:05 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id p12so4704489plq.4
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 10:44:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YFUcQ3hLuxafQYtxQnWs87DdE99a3mWHbnJqXUnaU40=;
-        b=wJNS50eWgo70qBzwRJ/eacnPCkagYxdtrqNdFD4nfBt0ByVzB1jHs4I5dSd7W/hRlV
-         XLAEIcyFK1c0YL3L1oqAuONU+7aF5NIHAIWAFc/UoPvh8fGWv8DU+nDyugqquQphVyvy
-         mZABavgj6fEQ9KleIjLsKS88R8uRtrMJPlde1PWmnrp1JLlbdjF12SwrSyZN0pRoGlrv
-         /Os3aKcXhKKm91745O+g/S8vJk9t8X2eCEWZ6Rfxvjdgw3BhUKoKF0v8KOm8HFZZNMFU
-         1Cce1lG+UBgDXqirKs4LEddhvaXFYG+kvCfyImLrnlMPxeu1GvJASeqKrpq/mYrOI6iR
-         MUqQ==
+        Fri, 25 Nov 2022 13:45:34 -0500
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2432545ECC;
+        Fri, 25 Nov 2022 10:45:33 -0800 (PST)
+Received: by mail-qt1-f181.google.com with SMTP id h24so2988062qta.9;
+        Fri, 25 Nov 2022 10:45:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YFUcQ3hLuxafQYtxQnWs87DdE99a3mWHbnJqXUnaU40=;
-        b=z4SqZ1c0LySSAKu+caqE9VA9Cjo3KH3vbIQBY5L5rH+1mxSMFfuLkMbjnEK4/m8V5y
-         /7Ekl0W2+soslOxHJ1DJ3BRujXWw3X0VqY/0CLYjLkXsyG9zjm5F8n1IInBFxVstzFsS
-         b5sMbqKlFCpuLMXbin340LWLVrqjwtUtFfZhuO4BevAnvR3S7rJH93hGnLboLl+rKysg
-         3go/HW/GgEcbemx3WsbimKz/eVzJLq9yF/yAqlKolNnh23CwXnNEnRy6j30YN2kPCrqz
-         vho77UFT+vKqj00yjkz8iNmIXUliwDtbNQxe459HbudcpCgy8o3wbSLIduG+hIK1NkuJ
-         ijHg==
-X-Gm-Message-State: ANoB5pmZJ05WZPMQliGCT2M3Fae4HXKqYukphUaXNL8+clSoiIMcmumh
-        ZUYJF2B8y+ZTs86OvROh3SwPgg==
-X-Google-Smtp-Source: AA0mqf7dGVW4MXOGlUxRKNCXMQzyzk240b9VEqd1QcNaooVXqjFTk78T7hsrfzGxsU2Jndumrs3gNA==
-X-Received: by 2002:a17:90a:c006:b0:219:158d:b19a with SMTP id p6-20020a17090ac00600b00219158db19amr2114270pjt.152.1669401844720;
-        Fri, 25 Nov 2022 10:44:04 -0800 (PST)
-Received: from hermes.local (204-195-120-218.wavecable.com. [204.195.120.218])
-        by smtp.gmail.com with ESMTPSA id x13-20020aa79a4d000000b0056ba7cda4b5sm3522287pfj.16.2022.11.25.10.44.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Nov 2022 10:44:04 -0800 (PST)
-Date:   Fri, 25 Nov 2022 10:44:01 -0800
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        <netdev@vger.kernel.org>, "David S. Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        "Giuseppe Cavallaro" <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "Maxime Coquelin" <mcoquelin.stm32@gmail.com>,
-        Yang Yang <yang.yang29@zte.com>,
-        "Xu Panda" <xu.panda@zte.com.cn>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next] Revert "net: stmmac: use sysfs_streq() instead
- of strncmp()"
-Message-ID: <20221125104401.0e18979f@hermes.local>
-In-Reply-To: <Y4Ct37sV+/y9rcly@boxer>
-References: <20221125105304.3012153-1-vladimir.oltean@nxp.com>
-        <Y4Ct37sV+/y9rcly@boxer>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yVnYr+yRHxw7HWghSQNQQghN0tldZQ4+ZOhhs+c595w=;
+        b=LAhVU1SJdEqS6lSb4k6n+oxLjqzB3WBNEisiZqT5830TPbUo1+/ZwjKCYXFBwsR0f+
+         f/7LCMECGqz8SRPxn5x1DQBJmyp/TTdXHQWWkVizSoMhiV1rtZLLEnv8xNz86nZbuc0T
+         AkRPR9KoiamqaG8DXFw6qZs7FM0El+1s9xWmTCnuKH8gN8NU4KW9A2MEUUAXoPdlu/Rr
+         Pvjy6DymFav/bODjmQULtg9pe6B5mBtWjEiorL74JOX4tE1rmZa9aCLakWXqYmbMpEPA
+         BkqTDrPW4IdpBcklf17+/QrdngGHn1SisDBY18tNo/AuGgDMLurAzor92auBf/aA9vLc
+         0o4w==
+X-Gm-Message-State: ANoB5pkVv9Od87Xap/9Hr58pUis5W6PANGzifCBocugpM8/eyNFL4lKq
+        VZa09XUcjo3TAw5+YiTbt1yxAVCtLgorNgNYzZU=
+X-Google-Smtp-Source: AA0mqf7pZVddib+OvYk4FWSEsX10juR9fJpwuUq+tcQQmF+OpBMeEd9dyFDoObmDSDj2qk3A+42WM9Rt+mHZMc0ltjg=
+X-Received: by 2002:ac8:1482:0:b0:3a5:1e6f:7e05 with SMTP id
+ l2-20020ac81482000000b003a51e6f7e05mr19373259qtj.357.1669401932242; Fri, 25
+ Nov 2022 10:45:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20221112094048.3614365-1-yangyingliang@huawei.com>
+ <CAJZ5v0g6bct5pTruxHjjJPQpwDNR8WgqhLWaZWo8NKeRH3n6iw@mail.gmail.com>
+ <Y35zwffl7bUdjs93@kroah.com> <b4fe247b-0980-40ea-bc69-0430e3b18320@huawei.com>
+In-Reply-To: <b4fe247b-0980-40ea-bc69-0430e3b18320@huawei.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 25 Nov 2022 19:45:21 +0100
+Message-ID: <CAJZ5v0j+M79zD4Tsskkpsq8gyFQ8enjoZh-f54qOu1Rs_5tojA@mail.gmail.com>
+Subject: Re: [PATCH] powercap: fix possible name leak while device_register() fails
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Nov 2022 12:58:23 +0100
-Maciej Fijalkowski <maciej.fijalkowski@intel.com> wrote:
+On Thu, Nov 24, 2022 at 3:16 AM Yang Yingliang <yangyingliang@huawei.com> wrote:
+>
+>
+> On 2022/11/24 3:25, Greg Kroah-Hartman wrote:
+> > On Wed, Nov 23, 2022 at 08:00:14PM +0100, Rafael J. Wysocki wrote:
+> >> On Sat, Nov 12, 2022 at 10:42 AM Yang Yingliang
+> >> <yangyingliang@huawei.com> wrote:
+> >>> If device_register() returns error, the name allocated by
+> Sorry,
+> I didn't describe clearly here, it's not only after device_register()
+> failure, but also in the error path before register, the name is not
+> freed, see description below.
 
-> On Fri, Nov 25, 2022 at 12:53:04PM +0200, Vladimir Oltean wrote:
-> > This reverts commit f72cd76b05ea1ce9258484e8127932d0ea928f22.
-> > This patch is so broken, it hurts. Apparently no one reviewed it and it
-> > passed the build testing (because the code was compiled out), but it was
-> > obviously never compile-tested, since it produces the following build
-> > error, due to an incomplete conversion where an extra argument was left,
-> > although the function being called was left:
-> >=20
-> > stmmac_main.c: In function =E2=80=98stmmac_cmdline_opt=E2=80=99:
-> > stmmac_main.c:7586:28: error: too many arguments to function =E2=80=98s=
-ysfs_streq=E2=80=99
-> >  7586 |                 } else if (sysfs_streq(opt, "pause:", 6)) {
-> >       |                            ^~~~~~~~~~~
-> > In file included from ../include/linux/bitmap.h:11,
-> >                  from ../include/linux/cpumask.h:12,
-> >                  from ../include/linux/smp.h:13,
-> >                  from ../include/linux/lockdep.h:14,
-> >                  from ../include/linux/mutex.h:17,
-> >                  from ../include/linux/notifier.h:14,
-> >                  from ../include/linux/clk.h:14,
-> >                  from ../drivers/net/ethernet/stmicro/stmmac/stmmac_mai=
-n.c:17:
-> > ../include/linux/string.h:185:13: note: declared here
-> >   185 | extern bool sysfs_streq(const char *s1, const char *s2);
-> >       |             ^~~~~~~~~~~
-> >=20
-> > What's even worse is that the patch is flat out wrong. The stmmac_cmdli=
-ne_opt()
-> > function does not parse sysfs input, but cmdline input such as
-> > "stmmaceth=3Dtc:1,pause:1". The pattern of using strsep() followed by
-> > strncmp() for such strings is not unique to stmmac, it can also be found
-> > mainly in drivers under drivers/video/fbdev/.
-> >=20
-> > With strncmp("tc:", 3), the code matches on the "tc:1" token properly.
-> > With sysfs_streq("tc:"), it doesn't.
-> >=20
-> > Fixes: f72cd76b05ea ("net: stmmac: use sysfs_streq() instead of strncmp=
-()")
-> > Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com> =20
->=20
-> Ah the infamous string handling in C...
->=20
-> Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
->=20
-> Even when there would be no build error I agree that we should have kept
-> the code as it was.
->=20
-> > ---
-> >  .../net/ethernet/stmicro/stmmac/stmmac_main.c  | 18 +++++++++---------
-> >  1 file changed, 9 insertions(+), 9 deletions(-)
-> >=20
-> > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/driver=
-s/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > index 1a86e66e4560..3affb7d3a005 100644
-> > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > @@ -7565,31 +7565,31 @@ static int __init stmmac_cmdline_opt(char *str)
-> >  	if (!str || !*str)
-> >  		return 1;
-> >  	while ((opt =3D strsep(&str, ",")) !=3D NULL) {
-> > -		if (sysfs_streq(opt, "debug:")) {
-> > +		if (!strncmp(opt, "debug:", 6)) {
-> >  			if (kstrtoint(opt + 6, 0, &debug))
-> >  				goto err;
-> > -		} else if (sysfs_streq(opt, "phyaddr:")) {
-> > +		} else if (!strncmp(opt, "phyaddr:", 8)) {
-> >  			if (kstrtoint(opt + 8, 0, &phyaddr))
-> >  				goto err;
-> > -		} else if (sysfs_streq(opt, "buf_sz:")) {
-> > +		} else if (!strncmp(opt, "buf_sz:", 7)) {
-> >  			if (kstrtoint(opt + 7, 0, &buf_sz))
-> >  				goto err;
-> > -		} else if (sysfs_streq(opt, "tc:")) {
-> > +		} else if (!strncmp(opt, "tc:", 3)) {
-> >  			if (kstrtoint(opt + 3, 0, &tc))
-> >  				goto err;
-> > -		} else if (sysfs_streq(opt, "watchdog:")) {
-> > +		} else if (!strncmp(opt, "watchdog:", 9)) {
-> >  			if (kstrtoint(opt + 9, 0, &watchdog))
-> >  				goto err;
-> > -		} else if (sysfs_streq(opt, "flow_ctrl:")) {
-> > +		} else if (!strncmp(opt, "flow_ctrl:", 10)) {
-> >  			if (kstrtoint(opt + 10, 0, &flow_ctrl))
-> >  				goto err;
-> > -		} else if (sysfs_streq(opt, "pause:", 6)) {
-> > +		} else if (!strncmp(opt, "pause:", 6)) {
-> >  			if (kstrtoint(opt + 6, 0, &pause))
-> >  				goto err;
-> > -		} else if (sysfs_streq(opt, "eee_timer:")) {
-> > +		} else if (!strncmp(opt, "eee_timer:", 10)) {
-> >  			if (kstrtoint(opt + 10, 0, &eee_timer))
-> >  				goto err;
-> > -		} else if (sysfs_streq(opt, "chain_mode:")) {
-> > +		} else if (!strncmp(opt, "chain_mode:", 11)) {
-> >  			if (kstrtoint(opt + 11, 0, &chain_mode))
-> >  				goto err;
-> >  		}
-> > --=20
-> > 2.34.1
-> >  =20
+So you would need to update the changelog at least.  But see below.
 
-Configuring via module options is bad idea.
-If you have to do it don't roll your own key/value parsing.
-If the driver just used regular module_param() for this it wouldn't have th=
-is crap.
+> >>> dev_set_name() need be freed. In technical, we should call
+> >>> put_device() to give up the reference and free the name in
+> >>> driver core, but in some cases the device is not intizalized,
+> >>> put_device() can not be called, so don't complicate the code,
+> >>> just call kfree_const() to free name in the error path.
+> >>>
+> >>> Fixes: 75d2364ea0ca ("PowerCap: Add class driver")
+> >>> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> >>> ---
+> >>>   drivers/powercap/powercap_sys.c | 2 ++
+> >>>   1 file changed, 2 insertions(+)
+> >>>
+> >>> diff --git a/drivers/powercap/powercap_sys.c b/drivers/powercap/powercap_sys.c
+> >>> index f0654a932b37..11e742dc83b9 100644
+> >>> --- a/drivers/powercap/powercap_sys.c
+> >>> +++ b/drivers/powercap/powercap_sys.c
+> >>> @@ -572,6 +572,7 @@ struct powercap_zone *powercap_register_zone(
+> >>>   err_name_alloc:
+> >>>          idr_remove(power_zone->parent_idr, power_zone->id);
+> >>>   err_idr_alloc:
+> >>> +       kfree_const(dev_name(&power_zone->dev));
+> >>>          if (power_zone->allocated)
+> >>>                  kfree(power_zone);
+> >>>          mutex_unlock(&control_type->lock);
+> >>> @@ -622,6 +623,7 @@ struct powercap_control_type *powercap_register_control_type(
+> >>>          dev_set_name(&control_type->dev, "%s", name);
+> >>>          result = device_register(&control_type->dev);
+> >>>          if (result) {
+> >>> +               kfree_const(dev_name(&control_type->dev));
+> >> Why is it necessary to free a device name explicitly after a failing
+> >> device_register()?
+> powercap_register_zone()
+> {
+>      ...
+>      dev_set_name() // allocate name
+>      ...
+>      if (!power_zone->constraints)
+>          goto err_const_alloc; //the name is leaked in this path
+>      ...
+>      if (!power_zone->zone_dev_attrs)
+>          goto err_attr_alloc; //the name is leaked in this path
+>      ...
+>      if (result)
+>          goto err_dev_ret; //the name is leaked in this path
+>
+>      result = device_register(&power_zone->dev);
+>      if (result)
+>          goto err_dev_ret;//put_device() is not called, the name is
+> leaked in this path
+>      ...
+> err_dev_ret:
+>      kfree(power_zone->zone_dev_attrs);
+> err_attr_alloc:
+>      kfree(power_zone->constraints);
+> err_const_alloc:
+>      kfree(power_zone->name);
+> err_name_alloc:
+>      idr_remove(power_zone->parent_idr, power_zone->id);
+> err_idr_alloc:
+>      if (power_zone->allocated)
+>          kfree(power_zone);
+> }
+
+So can't the dev_set_name() be reordered closer to device_register(),
+so it is not necessary to worry about freeing the name?
+
+> >>
+> >> If it is really necessary, then there is a problem in
+> >> device_register() itself AFAICS, because it uses dev_set_name() at
+> >> least in the dev->init_name present case.
+> When the dev_set_name() called in device_register(), if register fails, the
+> name is freed in its error path. But in this case, dev_set_name() is called
+> outside the register, it needs call put_device() to free the name.
+
+In any case, device_register() needs to take care of it anyway,
+because it uses dev_set_name() itself in the dev->init_name case,
+doesn't it?
