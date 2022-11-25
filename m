@@ -2,89 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0371639088
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 21:13:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36A5963908C
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 21:17:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbiKYUNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 15:13:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47148 "EHLO
+        id S229838AbiKYURQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 25 Nov 2022 15:17:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiKYUNa (ORCPT
+        with ESMTP id S229495AbiKYURO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 15:13:30 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DD028727
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 12:13:28 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so8564537pjs.4
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 12:13:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MDP8+zBmfQHRcFiPOpCE4wMRSn6LEmNlkUH03ts3yr0=;
-        b=hKyprivKiYzzTQ8oF/ulUkkdzfgIzRiVbIUuR89KKXYuG438MnyI88QGVMT8EcO1w2
-         iGJr19FWFI0DRxsAW6fw4vpIkQ7sS6PXTXfZZq1dsZ8SqhlpjEIwCyTLHbfJZfJU0NHz
-         A9pB4zYyQs3p5roKeN30feXEdRIwLbAtzEP6kNo1VcvYiCuoMkLyjctiWg1x9mPf17ho
-         NYYRhaNm3fbQhLyiS+uTdSgESVpJmHagdOe0785ktd7t+ECJL/d1GE5bM1FqQXaguMLF
-         YfRMpG8KvHZK7Rc/YcR7Ez16XYTPz6V4euDjSEZwjRgOx4SEiOvCCBU6zLUzj3B8bMPA
-         0uZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MDP8+zBmfQHRcFiPOpCE4wMRSn6LEmNlkUH03ts3yr0=;
-        b=SDbNc6uxGGBVW+BLyrTrf9AhJzjIcuWkT0k/j31lADXY+a1R7ztuOL+2Mx/us/5Ems
-         4Zrb7WyYt8m8+f5n3ECc4JrQXQi0K55IJcHc/HioVlIV1RUgmRs3khbFOOKs50ttN5S0
-         URipCdP8wMriUb8etb+/udxL0lRj1ULb2OgWm30AXZ70T7moUhfLibyLXoL4s9rvXMs9
-         L/xCOskozmzmZSpOpDdyG7VRY24+e2+u7q1mWdq6FRW4OEuBEWFFg+zECkCQFr5s4ELs
-         25v2hEoMRZ4ISF507g1CDdaB6I4gaCTv4lEaxnSrJqjB88rOndRQFXF/hwdijAJblq3p
-         Cm4g==
-X-Gm-Message-State: ANoB5pli+V9N+w1zDVA5GcvsJKec8i7Ndz4XEoYbG/WqWykT5MZ258Y3
-        QVQPdBOeRfyD2VSMbgGqfUJlJy5TB16qnQ==
-X-Google-Smtp-Source: AA0mqf7aQtDeqUgEbaJZZey8FgHViRH5FRjF5BMRy/riw4u/ktLZOVEt+cQ+jwW38CL7F8wBpxdP0g==
-X-Received: by 2002:a17:903:2601:b0:189:315f:d6fc with SMTP id jd1-20020a170903260100b00189315fd6fcmr19751432plb.35.1669407208245;
-        Fri, 25 Nov 2022 12:13:28 -0800 (PST)
-Received: from debug.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id b16-20020a170903229000b00186a68ec086sm3813166plh.193.2022.11.25.12.13.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Nov 2022 12:13:27 -0800 (PST)
-Date:   Fri, 25 Nov 2022 12:13:26 -0800
-From:   Deepak Gupta <debug@rivosinc.com>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     palmer@dabbelt.com, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Jisheng Zhang <jszhang@kernel.org>
-Subject: Re: [PATCH v2] riscv: VMAP_STACK overflow detection thread-safe
-Message-ID: <20221125201326.GA2037421@debug.ba.rivosinc.com>
-References: <20221124094845.1907443-1-debug@rivosinc.com>
- <CAJF2gTSU5sskjJTm6yL_X9aHdtVQ0MLzEY7FRRLT1mKH9qkWXw@mail.gmail.com>
+        Fri, 25 Nov 2022 15:17:14 -0500
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C8454B1C;
+        Fri, 25 Nov 2022 12:17:12 -0800 (PST)
+Received: from omf19.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay08.hostedemail.com (Postfix) with ESMTP id A9A43140D5C;
+        Fri, 25 Nov 2022 20:17:10 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf19.hostedemail.com (Postfix) with ESMTPA id B5D5220026;
+        Fri, 25 Nov 2022 20:16:38 +0000 (UTC)
+Message-ID: <39f687f7c71b162eb8caefbec939fa2ad74fcdfc.camel@perches.com>
+Subject: Re: [PATCH v2 2/3] checkpatch: handle new pr_<level>_cont macros
+From:   Joe Perches <joe@perches.com>
+To:     Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        linux-pm@vger.kernel.org, Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Whitcroft <apw@canonical.com>
+Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Fri, 25 Nov 2022 12:17:05 -0800
+In-Reply-To: <20221125190948.2062-3-linux@weissschuh.net>
+References: <20221125190948.2062-1-linux@weissschuh.net>
+         <20221125190948.2062-3-linux@weissschuh.net>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAJF2gTSU5sskjJTm6yL_X9aHdtVQ0MLzEY7FRRLT1mKH9qkWXw@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Stat-Signature: jfghn9hynfghytwr1ikjsr8zhdjio9c7
+X-Rspamd-Server: rspamout03
+X-Rspamd-Queue-Id: B5D5220026
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        KHOP_HELO_FCRDNS,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
         autolearn_force=no version=3.4.6
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+Iblfm+D6CDYgMLfGST2SFn8mRmzUFMYw=
+X-HE-Tag: 1669407398-853785
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 05:53:45PM +0800, Guo Ren wrote:
->On Thu, Nov 24, 2022 at 5:48 PM Deepak Gupta <debug@rivosinc.com> wrote:
->>
->> index df9444397908..a7da051159cf 100644
->> --- a/arch/riscv/kernel/asm-offsets.c
->> +++ b/arch/riscv/kernel/asm-offsets.c
->> @@ -38,6 +38,7 @@ void asm_offsets(void)
->>         OFFSET(TASK_TI_KERNEL_SP, task_struct, thread_info.kernel_sp);
->>         OFFSET(TASK_TI_USER_SP, task_struct, thread_info.user_sp);
->>
->> +       OFFSET(TASK_TI_CPU_NUM, task_struct, thread_info.cpu);
->Why not TASK_TI_CPU ?
-No specific reason.
->
->>         OFFSET(TASK_THREAD_F0,  task_struct, thread.fstate.f[0]);
->>         OFFSET(TASK_THREAD_F1,  task_struct, thread.fstate.f[1]);
->>         OFFSET(TASK_THREAD_F2,  task_struct, thread.fstate.f[2]);
+On Fri, 2022-11-25 at 20:09 +0100, Thomas Weißschuh wrote:
+> These new macros from include/linux/printk.h replace the usage of plain
+> pr_cont().
+[]
+> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> index 1e5e66ae5a52..fb1747639c9c 100755
+> --- a/scripts/checkpatch.pl
+> +++ b/scripts/checkpatch.pl
+> @@ -590,7 +590,7 @@ our $zero_initializer = qr{(?:(?:0[xX])?0+$Int_type?|NULL|false)\b};
+>  
+>  our $logFunctions = qr{(?x:
+>  	printk(?:_ratelimited|_once|_deferred_once|_deferred|)|
+> -	(?:[a-z0-9]+_){1,2}(?:printk|emerg|alert|crit|err|warning|warn|notice|info|debug|dbg|vdbg|devel|cont|WARN)(?:_ratelimited|_once|)|
+> +	(?:[a-z0-9]+_){1,2}(?:printk|emerg|alert|crit|err|warning|warn|notice|info|debug|dbg|vdbg|devel|cont|WARN)(?:_ratelimited|_once|_cont|)|
+
+OK
+
+>  	TP_printk|
+>  	WARN(?:_RATELIMIT|_ONCE|)|
+>  	panic|
+> @@ -6374,11 +6374,17 @@ sub process {
+>  		}
+>  
+>  # check for logging continuations
+> -		if ($line =~ /\bprintk\s*\(\s*KERN_CONT\b|\bpr_cont\s*\(/) {
+> +		if ($line =~ /\bprintk\s*\(\s*KERN_CONT\b|\bpr_([a-z]+_)?cont\s*\(/) {
+>  			WARN("LOGGING_CONTINUATION",
+>  			     "Avoid logging continuation uses where feasible\n" . $herecurr);
+>  		}
+
+OK
+
+> +# check for logging continuations without explicit level
+> +		if ($line =~ /\bpr_cont\s*\(/) {
+> +			WARN("LOGGING_CONTINUATION_WITHOUT_LEVEL",
+> +			     "Avoid logging continuation without level\n" . $herecurr);
+> +		}
+> +
+
+Not so sure about this one.
+
+I think relatively few situations are going to require interleaving avoidance.
+
+>  # check for unnecessary use of %h[xudi] and %hh[xudi] in logging functions
+>  		if (defined $stat &&
+>  		    $line =~ /\b$logFunctions\s*\(/ &&
+
