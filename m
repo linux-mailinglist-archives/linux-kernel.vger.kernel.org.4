@@ -2,110 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05DDA63912A
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 22:40:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E0B5639130
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 22:42:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbiKYVkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 16:40:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43210 "EHLO
+        id S230118AbiKYVmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 16:42:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiKYVkj (ORCPT
+        with ESMTP id S229722AbiKYVmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 16:40:39 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3243856D73;
-        Fri, 25 Nov 2022 13:40:38 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id s5so7890912edc.12;
-        Fri, 25 Nov 2022 13:40:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XNaBZL9MZcNCqmZkqv11ka/Dn7mF7OI5C41Pu9xMYMc=;
-        b=Y1HHq96UL1l3km0QQ//mHoLkIj8zeIaokUq55LGm5aYacRK/f+Gh/vkQQVXEWA164Y
-         DJ6bY+pkFMb2kA+NW+moKK/PQ+Izz4Fjo4p+nneW8bUZyiCW12XjqRha1wROKmfUJRfS
-         aBjwfFg+7yzn/cNVL9HLBFjX1mL6horPpP19hv9sNCHSqpflr90pLnyh8HfDi8C2/lA8
-         0MDrAckm3UdXsTWh8gulTHtPQAi1n485yq10KVPoiXeDxPHREy+QlFZnLZsKFqrXDcuf
-         7WUlBbbyTudbw3cU6D2LhxptlQ9jRZIRQBbL57C7Kz8xf6/hBtgASPuXWbxumTMVWOM3
-         U2bA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XNaBZL9MZcNCqmZkqv11ka/Dn7mF7OI5C41Pu9xMYMc=;
-        b=iy+TT4GXHDUKvAkCcy/sbsiEDDIgP7Bft3LzPdVSXrX9efYWmsOakCjnuBei2sMk4L
-         BvtJbHJYFvyzHQsdYsAldi9GBqNEWpw+YIRAGsYUsau/K4wPUh1mxGFonf4pzjAXkW3A
-         exGXhLm7cx9O+xexznjFq/kVwc85BeZBi/wstVfpzEZ/6lemALJUATh97YXTxC3yUZv+
-         3+bTkuDx7Y+zJPfvYaPUi/q8oF1BckKt1ZAkCAesJSm6qFuR0U2n/LfkV6h5BBv/jVuo
-         uIjpK1zKDyNu5ag/0Pj0FqHLWRpsG4niVmsmCKPzLDlEMD2Yl1Ry9PjHY92kJWTKiS0e
-         GOaw==
-X-Gm-Message-State: ANoB5pm9R2m0s2/5zXtx03m4LEM078T2Gqw5Zbw7dZ0ahZ8IC/Xib0UW
-        fJpZ3stLW1jOBXpgBL+yDdM=
-X-Google-Smtp-Source: AA0mqf5SJQvKlEEsURWR5hTwCO8Go6GPXa3mG5GlT1yf3i6DYN/S13e9NX0LMtaMSLLytHsaJAWejQ==
-X-Received: by 2002:a05:6402:1118:b0:467:a8cb:10c9 with SMTP id u24-20020a056402111800b00467a8cb10c9mr22525201edv.123.1669412436635;
-        Fri, 25 Nov 2022 13:40:36 -0800 (PST)
-Received: from skbuf ([188.26.57.184])
-        by smtp.gmail.com with ESMTPSA id u17-20020a1709061db100b0078128c89439sm1986388ejh.6.2022.11.25.13.40.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Nov 2022 13:40:36 -0800 (PST)
-Date:   Fri, 25 Nov 2022 23:40:33 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Arun.Ramadoss@microchip.com
-Cc:     andrew@lunn.ch, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, vivien.didelot@gmail.com,
-        linux@armlinux.org.uk, Tristram.Ha@microchip.com,
-        f.fainelli@gmail.com, kuba@kernel.org, edumazet@google.com,
-        pabeni@redhat.com, richardcochran@gmail.com,
-        netdev@vger.kernel.org, Woojung.Huh@microchip.com,
-        davem@davemloft.net
-Subject: Re: [RFC Patch net-next v2 3/8] net: dsa: microchip: Initial
- hardware time stamping support
-Message-ID: <20221125214033.mb67ozczo7th6vi3@skbuf>
-References: <20221121154150.9573-1-arun.ramadoss@microchip.com>
- <20221121154150.9573-4-arun.ramadoss@microchip.com>
- <20221121231314.kabhej6ae6bl3qtj@skbuf>
- <298f4117872301da3e4fe4fed221f51e9faab5d0.camel@microchip.com>
- <20221124102221.2xldwevfmjbekx43@skbuf>
- <0d7df00d4c3a5228571fd408ea7ca3d71885bf6f.camel@microchip.com>
- <20221124141456.ruxxiu7bfmsihz35@skbuf>
- <4b2408602ce29c421250102c5165564d7dafda77.camel@microchip.com>
+        Fri, 25 Nov 2022 16:42:19 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CD2D656ECE;
+        Fri, 25 Nov 2022 13:42:18 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0B1F22B;
+        Fri, 25 Nov 2022 13:42:25 -0800 (PST)
+Received: from slackpad.lan (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1DF6D3F587;
+        Fri, 25 Nov 2022 13:42:17 -0800 (PST)
+Date:   Fri, 25 Nov 2022 21:40:50 +0000
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 1/2] ARM: dts: sunxi: Fix GPIO LED node names
+Message-ID: <20221125214050.711997f1@slackpad.lan>
+In-Reply-To: <20221125195401.61642-1-samuel@sholland.org>
+References: <20221125195401.61642-1-samuel@sholland.org>
+Organization: Arm Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4b2408602ce29c421250102c5165564d7dafda77.camel@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022 at 07:06:07AM +0000, Arun.Ramadoss@microchip.com wrote:
-> KSZ switches need a additional 4 bytes in tail tag if the PTP is
-> enabled in hardware. If the PTP is enabled and if we didn't add 4
-> additional bytes in the tail tag then packets are corrupted.
-> 
-> Tristram explained this in the patch conversation
-> 
-> https://lore.kernel.org/netdev/20201118203013.5077-1-ceggers@arri.de/T/#mb3eba4918bda351a405168e7a2140d29262f4c63
-> 
-> I did the follwing experiment today, 
-> * Removed the ptp time stamp check in tag_ksz.c. In the ksz_xmit
-> function, 4 additional bytes are added only if KSZ_SKB_CB->ts_en bit is
-> set.
-> * Setup the board, ping two boards. Ping is successful.
-> * Run the ptpl in the background
-> * Now if I run the ping, ping is not successful. And also in the ptp4l
-> log message it shows as bad message received.
-> 
-> We need a mechanism to inform tag_ksz.c to add 4 additional bytes in
-> tail_tag for all the packets if the ptp is enabled in the hardware.
+On Fri, 25 Nov 2022 13:54:00 -0600
+Samuel Holland <samuel@sholland.org> wrote:
 
-Ok. The code + comments need to be sufficiently self-explanatory that
-this question does not get asked again. It will not be trivial to do a
-proper job documenting the hardware oddities as a justification for the
-software workarounds, but it should be possible.
+Hi Samuel,
+
+> These board devicetrees fail to validate because the gpio-leds schema
+> requires its child nodes to have "led" in the node name.
+> 
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+
+That looks alright, though the comment in the binding says that we
+should just have led-0, led-1 instead, so just (hex) numbers. The
+"status" name is also in the label, so we wouldn't lose information.
+
+Actually, also "label" is deprecated, in favour of "color" and
+"function", shall this be fixed on the way? Or is there anything that
+breaks (older kernels) when removing the label property? 
+
+Cheers,
+Andre
+
+> ---
+> 
+>  arch/arm/boot/dts/sun5i-gr8-chip-pro.dts | 2 +-
+>  arch/arm/boot/dts/sun5i-r8-chip.dts      | 2 +-
+>  arch/arm/boot/dts/sun6i-a31s-sina31s.dts | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/sun5i-gr8-chip-pro.dts b/arch/arm/boot/dts/sun5i-gr8-chip-pro.dts
+> index a32cde3e32eb..3222f1490716 100644
+> --- a/arch/arm/boot/dts/sun5i-gr8-chip-pro.dts
+> +++ b/arch/arm/boot/dts/sun5i-gr8-chip-pro.dts
+> @@ -70,7 +70,7 @@ chosen {
+>  	leds {
+>  		compatible = "gpio-leds";
+>  
+> -		status {
+> +		led-status {
+>  			label = "chip-pro:white:status";
+>  			gpios = <&axp_gpio 2 GPIO_ACTIVE_HIGH>;
+>  			default-state = "on";
+> diff --git a/arch/arm/boot/dts/sun5i-r8-chip.dts b/arch/arm/boot/dts/sun5i-r8-chip.dts
+> index 4bf4943d4eb7..303191c926c2 100644
+> --- a/arch/arm/boot/dts/sun5i-r8-chip.dts
+> +++ b/arch/arm/boot/dts/sun5i-r8-chip.dts
+> @@ -70,7 +70,7 @@ chosen {
+>  	leds {
+>  		compatible = "gpio-leds";
+>  
+> -		status {
+> +		led-status {
+>  			label = "chip:white:status";
+>  			gpios = <&axp_gpio 2 GPIO_ACTIVE_HIGH>;
+>  			default-state = "on";
+> diff --git a/arch/arm/boot/dts/sun6i-a31s-sina31s.dts b/arch/arm/boot/dts/sun6i-a31s-sina31s.dts
+> index 0af48e143b66..b84822453381 100644
+> --- a/arch/arm/boot/dts/sun6i-a31s-sina31s.dts
+> +++ b/arch/arm/boot/dts/sun6i-a31s-sina31s.dts
+> @@ -67,7 +67,7 @@ hdmi_con_in: endpoint {
+>  	leds {
+>  		compatible = "gpio-leds";
+>  
+> -		status {
+> +		led-status {
+>  			label = "sina31s:status:usr";
+>  			gpios = <&pio 7 13 GPIO_ACTIVE_HIGH>; /* PH13 */
+>  		};
+
