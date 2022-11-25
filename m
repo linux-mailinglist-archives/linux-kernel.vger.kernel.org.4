@@ -2,303 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB3F638221
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 02:43:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F35C638219
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 02:27:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbiKYBnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 20:43:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60054 "EHLO
+        id S229538AbiKYB14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 20:27:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiKYBn3 (ORCPT
+        with ESMTP id S229436AbiKYB1y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 20:43:29 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2063.outbound.protection.outlook.com [40.107.237.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4777FAC8
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 17:43:27 -0800 (PST)
+        Thu, 24 Nov 2022 20:27:54 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3941E3DA;
+        Thu, 24 Nov 2022 17:27:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669339673; x=1700875673;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   in-reply-to:mime-version;
+  bh=lRHRIdbLAV65UGTFsD+yVeNa06mJuHi9Mr+CbvdYOsk=;
+  b=TwMVACs3PcYyl7zMUXU+FRPjVh5E40l8BH4a8GZrh1qnNHgtpLvtXvGY
+   nyeLPhx4bL0l7ldTLdmW645Tr2/E2o8X4+xjopGJhAanhx1by5w9GPxap
+   rq089DZnugGDPIXuZqc76e6ehDuvKNlGAwE8CqQi4MSuwTWeJIhbjtMX3
+   a8qXtoY/L1aZYAvV3bosSw3/CutizlgMyG4pDxJjv8K4oJ2WJcZpkk15a
+   cgag81eEBsW2cGeOOfIvrUp4JWLsiP/92c3ebXzBSxHfwZninJXBDMQ3o
+   m+haWki6Gr//LGWxRRWzwPPBo4JWrChELsXyZxZXYahwesntv5+jjOp9Y
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="297747583"
+X-IronPort-AV: E=Sophos;i="5.96,191,1665471600"; 
+   d="scan'208";a="297747583"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2022 17:27:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="620183006"
+X-IronPort-AV: E=Sophos;i="5.96,191,1665471600"; 
+   d="scan'208";a="620183006"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga006.jf.intel.com with ESMTP; 24 Nov 2022 17:27:52 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 24 Nov 2022 17:27:52 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Thu, 24 Nov 2022 17:27:52 -0800
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.174)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Thu, 24 Nov 2022 17:27:52 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eVAtFmsh4/5kEPwefcEtE3fq0+mgyIM23kGQQDgtpAWMLoA5tGc2FihycmDfuOGT8lOopJMJeET4D7WTRXxM0wj+l8G7pgE4Z/ETjFrbShvCdIUumMBa6CfvPNOG6GkPpuAS8/GDX3SkNRv7p0fLn/H1IGNYsjAUEhEzsVLH+vgL0ncb/V8ntWoZ9X/3ijTPxBQfsNlVCHw9zr9QO2YRD+Y5DfPlgJ8QiGxIAV/E5GzbomSd8kk9iHYRABX0NAu1duaE9X+6HoOanrmNzlsDhecXOTEYIS9stLtvg6rayOCsQPLkiZkzgKo/clwRLa0KsxNEbUHfUX3M69Rar62gXw==
+ b=WOAZnft47TGES9xzLrbNvd5TUtdYSk80DZwswwz6k+OHEJDF1JIW+6PvDimNc2G1FI9aBGgj+m5cMRao9NQQu7DPyPkvHhfF896I1BeJFn0ogba/ldyeKxBODfXy9hFFIcdQRY6AlXdlRl5+JdlBtOPOksB7Xbbyl20mtxOykifhG1/+eYjuKikqHyz+ELEJkisugY6C1JtWNDxYsdWQ3tk8Ud5lQKnxSC5vHkcOq/V9tvUB+BFGAdpDLhU/m6MrseL0oERE3tiWKMeEa0WRWEF+6xDIHQFPqJWtv/nQPtd/OiiFFinEnsOmap0W15cqsKsxShaF5oMhEapcttlSxw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0gSVOJdhJnIzmYo3eVOPyCzsc/StYGwLhwS6kqTPoQk=;
- b=HNx9uAanL1ySfHkZasAGr2acZv3LD8JK4wfdBaQ0jz+3QW2EOqBdis2Xy9Q36jEjYKJR9RswkFgGQyGpiDJ3ZfiJcVVYH0W2v3GgGhl6qdHtsVwYmuS78hzIqvmyO/v1CgRjkOlA0v+oP9EUK2sITPL9aSNh1XBZmuQvCU7t4W88QuEljhFsvTKtepyQgjIoQ+z304KiKCibbCmpboBrvLbDr4TurpyzboG25EvAwX4jt2We0S8AskGoEYxxTduNMNHu1G72IczBqMjpkDRudFBHIHqMNz45+0CRy7OdU+CQRCWUfFjWNS0rjdrdD9AMPsBgOwKke6Ha/8ENPE07cQ==
+ bh=21fdooOrA1uPHciLaQxwJlLfCTmhSa6yFcQgS7qCHZ0=;
+ b=CjqsZCabNmpbEX+s7meSbjExob9I1FUB9qvRZz6Wxtwo+mXuLv0nE0ZeREkGjdiW7cFrmuoumk/hEjtynb45iqBfuRawWp/1fG4woe8AZI0pOR4MrPRCaqVu5rGirRM5Tfcm06201O3wYWJtuD+0d/uMaurs7/RW5bp+ukr5Nu4X2t08DAvjf7njaN+tcsJAmtdBLyOeDEqH8NcakRVsWDcfvsGPVN0VCgeYBqcUh2OU3I+TX8De3FbUKRx7Pbr/blyc+9/129gq1CsM1u+KhZSkUnBSQ3YAToMzxj5uk6tcazd93cmg1LfmfwEVouwe6dHGddyZK0kC6k0untr8/Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0gSVOJdhJnIzmYo3eVOPyCzsc/StYGwLhwS6kqTPoQk=;
- b=nsAgLBbtdC+72Sd2dKkVlxa72VCldWUz25lM6QtZ4VMtyT+KjgEv0CW3LTDCMfDP8L0in9htnOGBKoM2zf5f5ridyqHXjd/xRApViqVMRuQNAOfdmfyiJagonfJlfBq2okhSCP3Uc4znZLjdPZHty9teLQPlUFjJNg3l6uuhfdA9GzaIKdku2sb/oZY1qe64t6Hu/8m8hOLEIDIwr6OdxDKmNbOgeaGoDIniQW37bCjDFSfvkpj+vJSRiY5b55twvKUqUXIdx0MRfacBZxMZrSiMnICTvHacpzxgf65NIURAJz8qCww/BbX+4/2YQ4IMB2LfJtDwr7qx3c3KTEft/A==
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
- by PH8PR12MB7135.namprd12.prod.outlook.com (2603:10b6:510:22c::11) with
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS7PR11MB5966.namprd11.prod.outlook.com (2603:10b6:8:71::6) by
+ PH7PR11MB6907.namprd11.prod.outlook.com (2603:10b6:510:203::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19; Fri, 25 Nov
- 2022 01:43:25 +0000
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::ecfb:a3ad:3efa:9df8]) by BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::ecfb:a3ad:3efa:9df8%3]) with mapi id 15.20.5834.015; Fri, 25 Nov 2022
- 01:43:25 +0000
-References: <20221123005752.161003-1-gshan@redhat.com>
- <e8a64b11-98f9-b571-dce9-a60df98e3e5@google.com>
- <c61612f7-b861-39cf-3e73-dbe4d134eec0@redhat.com>
- <871qptrvsw.fsf@nvidia.com> <Y37mC1+LQscJaOk4@casper.infradead.org>
- <51ffd399-7fa3-b2f2-b6e5-61a8b609e350@redhat.com>
-User-agent: mu4e 1.8.10; emacs 28.2
-From:   Alistair Popple <apopple@nvidia.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Hugh Dickins <hughd@google.com>, Gavin Shan <gshan@redhat.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, william.kucharski@oracle.com,
-        ziy@nvidia.com, kirill.shutemov@linux.intel.com,
-        zhenyzha@redhat.com, shan.gavin@gmail.com, riel@surriel.com
-Subject: Re: [PATCH] mm: migrate: Fix THP's mapcount on isolation
-Date:   Fri, 25 Nov 2022 11:58:46 +1100
-In-reply-to: <51ffd399-7fa3-b2f2-b6e5-61a8b609e350@redhat.com>
-Message-ID: <87o7svreq0.fsf@nvidia.com>
-Content-Type: text/plain
-X-ClientProxiedBy: SYCPR01CA0012.ausprd01.prod.outlook.com
- (2603:10c6:10:31::24) To BYAPR12MB3176.namprd12.prod.outlook.com
- (2603:10b6:a03:134::26)
+ 2022 01:27:44 +0000
+Received: from DS7PR11MB5966.namprd11.prod.outlook.com
+ ([fe80::af0:fb9e:4ef9:24e5]) by DS7PR11MB5966.namprd11.prod.outlook.com
+ ([fe80::af0:fb9e:4ef9:24e5%9]) with mapi id 15.20.5834.015; Fri, 25 Nov 2022
+ 01:27:44 +0000
+Date:   Fri, 25 Nov 2022 09:04:44 +0800
+From:   Yan Zhao <yan.y.zhao@intel.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "sean.j.christopherson@intel.com" <sean.j.christopherson@intel.com>,
+        "dmatlack@google.com" <dmatlack@google.com>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>
+Subject: Re: [PATCH v10 035/108] KVM: x86/mmu: Track shadow MMIO value on a
+ per-VM basis
+Message-ID: <Y4AUrLJtk7pK082i@yzhao56-desk.sh.intel.com>
+Reply-To: Yan Zhao <yan.y.zhao@intel.com>
+References: <cover.1667110240.git.isaku.yamahata@intel.com>
+ <f1c9996fa4f4bc71b3feee8407d247aeabb8968e.1667110240.git.isaku.yamahata@intel.com>
+ <Y3wvhWyIKNzczFov@yzhao56-desk.sh.intel.com>
+ <887a77acc9bf96f7c7bea519ab7ebdd27fb67985.camel@intel.com>
+ <Y4AIYGGEU3BdrQgV@yzhao56-desk.sh.intel.com>
+ <8e14a7732a2d873846d07c4ec467fb7c48b2307f.camel@intel.com>
+ <Y4AOMo00B0vlQfIU@yzhao56-desk.sh.intel.com>
+ <1ad20facd81dd346e00ff686ae4a0550123de851.camel@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <1ad20facd81dd346e00ff686ae4a0550123de851.camel@intel.com>
+X-ClientProxiedBy: SI2PR01CA0048.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:193::17) To DS7PR11MB5966.namprd11.prod.outlook.com
+ (2603:10b6:8:71::6)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3176:EE_|PH8PR12MB7135:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4252c60f-db4c-49d2-b471-08dace867175
+X-MS-TrafficTypeDiagnostic: DS7PR11MB5966:EE_|PH7PR11MB6907:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3419cc3a-23e5-401a-24b4-08dace84408e
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BeRJTCYZwTlzRqTzlmgn6KjJBzjqlv08U+0PBzzOf6n/JY9cVJkgYWAJoua0rhhELvdpAVh6HM7pdM1Nvp/Er2g4KDpFacXM6HNhLpkqCwj4jbnxfLdHhiMSmQXRDtUfx3VsPIzrhVZ/vv+EcsK+5dj6cIhH0lMGIxrzgwm5dQsdtJpXDRpjGd5sGKDdaQd1nns85ue6hIURP2TdUupFVL+0nRa8C+ZxKvzuDz7KLqZdP8bEiGzmXfUtoMHJ0tG9Hm9e4obe8zoVK1fUUAi8/kCIa4yO+VRGYS4tPD3/M2n34wH7/mqoK2DNa9p5TwnftkyaW/i94qghWLn6kT4x1F+p0ureSMY6Gp8q39XXiH5gk2jkYO324P+AUyDYO47xXhSWYdoYhwrT6VwNXDoYos8fWKbF/Jy0uy7CNrJ4nbDYPUZKXg0qh1cXdqIcNzetL2KKY9M5N4yduCVamBlnt908OUebvGJjU25TXIdC0RieKNOyOpvlA8PxlXDewH/nDBMuIaliQ4tchr7E8ZSuy2fGSuSnD8yDYRXyv9ZUFgJSYKDXHGy7cElA6px3B5VHq867NZC7eLI9n42yEJuLKLi3iYpg+ZkYUNcf5WwkMMnJ9xT/WvB2ynAG3ySpzMcXQ+ZgVTHr+nh5gs5EbK3g8Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(39860400002)(376002)(366004)(136003)(451199015)(2906002)(83380400001)(36756003)(8936002)(26005)(41300700001)(7416002)(6916009)(54906003)(316002)(86362001)(186003)(2616005)(6666004)(6506007)(5660300002)(53546011)(6512007)(478600001)(38100700002)(66899015)(8676002)(66556008)(6486002)(66476007)(4326008)(66946007);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Q+vmSt5nQKyejOM78qJkNu9HTTLiKnXjKZzPkzwa96I2w+m4Ep4dsWPfJaMqig6ShERm8T+Mh081meOo/ayFcCxToe6bt+P6/iMbwDftBq6Xc+s38pZqMkv2zWOZA1Nf/6Jq17NAQjawl+NI1D3wRs6Q7kxlK9g7PY8MEn2AjshB1BLo3zu74VYKfQtaDsD/Rpau6PYSkisn+xh2kfp8V/0MXADmAKNSt7l00bpzyGjTbXbfTzmEyeqcD0OVPTURHW6UwxjMP1q5whoe/nlGCTWfckLS/8KGMzPHDAFnf69arGoMmOGCO16Pa+oI3tUL52PIM1lW+cdUlIlOuDxBBuJwMjfcew8TxK6+DbVd9m8Qo0h2t4TUAj23k3R14TXqpCmdIV5B5sNOV9Z7gT7xfvxOggGMoC+WNGO557wpcPWstC+gFo0U0qfaQpnwCl+oHaobvCtI5Lr3g77U8bNn6mD+EEOKzl4Mif4XGWjrzYtWF25hFolecJX7xfrO+Kv9e7O9vnoe3Sf5XfFN97Kqq1boo7z+PrvXq/SWcEsYpB9zB+ySJd92N3ipzd5Z1t5GBPNLkVlRgKeHlYFpGbZDqbDbn6fijXSGWDuJjCBN+26xF0WcHc+XWgHup16z+STy0DVB+f5A6reFRuhViGgaJg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR11MB5966.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(376002)(346002)(39860400002)(136003)(366004)(451199015)(8676002)(66946007)(6636002)(66556008)(4326008)(66476007)(6486002)(38100700002)(82960400001)(26005)(478600001)(6506007)(83380400001)(86362001)(6512007)(2906002)(3450700001)(41300700001)(54906003)(5660300002)(316002)(4001150100001)(8936002)(6862004)(186003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xFlMdknn0yzwVbWkgT9di+Jy5XA8cw/oYJtIl5qN9FGHiJfL9/TOaIU8wUm8?=
- =?us-ascii?Q?o3enmn0rksp0O7Ko92q+zJshe2GDJp3iq2rt28exJ3CCn1bmCM2X6oBz1qDv?=
- =?us-ascii?Q?WmZQ2YInR+NZn3bBFmsY/MYExkzZ2vYuKhN+YbVVRo2HeSbVFQp3yQZ8afaF?=
- =?us-ascii?Q?u01z9RF5+OCkpoyI2xkW/nUGAz051Norsu+0qkGOLiMt63Hyx0hdlVyMu6QG?=
- =?us-ascii?Q?9ahIJtzEVO3JhqwKyn/Cbf5TrjEc8aIt762A7LSJmjOQkm02he8hSmMz3nmv?=
- =?us-ascii?Q?RdjJJcqu3gPwnV3kiCWo3qoY4kCSdfngpOzO6RPCB6OZxG9AhbeaUOYRADBi?=
- =?us-ascii?Q?8Nu3IO4Fkon8T6kwAGVTYdyOOeGbrNKQeI/BPjSwt9OJNZjFOV85881J2k3h?=
- =?us-ascii?Q?J24wNzUUUHC8jzDcPcEQjgZSYmUPfiG8LYgARM1Z7mJehDru2hOM8oHAA+Ux?=
- =?us-ascii?Q?49DTUjiTciT4zGHFKHZ1Qwam6yWdcHgFnWUYKDH2Sw7xxCMPkEj6ZInHdmNd?=
- =?us-ascii?Q?TJfKw/H5dhbS9XaxhhuGIrzEdeb0IlHwe/jRWs71S4HsuJoAnnHFHZ51nYdM?=
- =?us-ascii?Q?8VDo5xvYE7o7M17mjUwIBWtVJUNctEpsVIlqiLjJPOr3RVn0lkupe8Hdh7bp?=
- =?us-ascii?Q?/ZJWneQoGu9iDgVWbG6/4kHaSEj4IHg7+tqVPlfhDs0HQN+VorT9iPW/k/kV?=
- =?us-ascii?Q?OF4O8KbxGk0Q9W6K8dbxs79lp/abwJ6JcB5qtM4t0RxWIYQyeyPhpfSa5h23?=
- =?us-ascii?Q?1x0mT8z0pSLmP7rZBZ/0xe4e4rnxumS+mKIO+gtW2ciLWQ+hojsYR0ZzFZfz?=
- =?us-ascii?Q?AoSseZYEJHPn+khl/njT9wjhNGhbLHr0LFbkNvlT5+F8mlO+/qJWmlRjM8Da?=
- =?us-ascii?Q?0bWZT7fonzrwwlCjB2kp/8QccDu4SHs4cFfs7AqDJpumzIGJRQVVR8mM0IRp?=
- =?us-ascii?Q?6jYVcs9QOgX7h+7j2gauhS7ZJA/V8FRParNPM1qwNwUtplPIkPdksyPKPFZq?=
- =?us-ascii?Q?u6vPl2kapcKADMtS8lSvxzFzdX5qPfs98lq4wmA07++GH9VmXx2ZQIfkzRcL?=
- =?us-ascii?Q?C4pbvJ5oZGh9DHjqvQ2C3lfedhqNk8hOHc2UIgkMPXTROdrHw9xKlIIMY0Kg?=
- =?us-ascii?Q?DVzND58lRwYmkJFPhhvPbrBHxuldjwYCJqRm79yH7CtHip15b55P2g35e25I?=
- =?us-ascii?Q?gE5ATfm4Qvyr/UA7U4PkmvEE/sz6YgeGvACOhi5o2t7WRLCqxXZf+13aEJsV?=
- =?us-ascii?Q?n39QFSifqOOArg4eimbnGeWguPzSGzO0AZISZMANXiP2igK7WspNI0GVmXZ1?=
- =?us-ascii?Q?bJa6hVH/Y/jpY1huIyHquhsMd6+tHOjJ0B+ckj7gCYh/utoF+n/fGwnVrOzH?=
- =?us-ascii?Q?Rq6CppyaOjL2sBLD9FiIlP+y2Pkmqrc18VQFhCHyT12wPkuZngRi4MBZBhdQ?=
- =?us-ascii?Q?KNXwvnZLZL8Xj3IaRyMuF9ANJJP4WmgGbPwC+LjIRcTGCZp4ML4UGWYw2Nlj?=
- =?us-ascii?Q?64ubVyl042BZJSCBOdvQH5pUNG1NLXBaehs6wfWTP7CAkGHEb4MZN0ha5E93?=
- =?us-ascii?Q?B98elqbtP2L2DxGJxwPenh4UC5gTjytD6+F0gWFp?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4252c60f-db4c-49d2-b471-08dace867175
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?oTWC0LOO2PQcYkqFY06QLAvfhyy5qAqmUS25nCqgsSXJHqXGJV5Y67aLuFW7?=
+ =?us-ascii?Q?97YvPTT2/7Dq5Nm9jd3mVflQOLsV3MFvXlmr4NaauoaKFKfzJLrajanPlO9h?=
+ =?us-ascii?Q?u7w/rb1at4E/Akn6wTSXYVwQt9HykxB0JLVkUC/PO72YGf5pcsdHTyAsID88?=
+ =?us-ascii?Q?drkc2/kfrciq7mbWnMluwDPJRPjlaQCJwBB8kt1Hb9LS0XiQHUIpXdtdvvoh?=
+ =?us-ascii?Q?vjWcmvFQazCNQPjA6PyaM+pwdKLG9a2hk5kvioKt6kv7Ef9yfXLtr/5PmVhL?=
+ =?us-ascii?Q?rSnwKAamaTgrLEGhxaKpxYBvhLVoe8JBwb14emuFwPPRYVZRbFyPPxRp1Odd?=
+ =?us-ascii?Q?b2Cr+zgDwxolZS7Y47WhowwOjGYWUu67VWWdSPYfuo5FmTdjgxrVIDzsTIBP?=
+ =?us-ascii?Q?HPsIRdkafxlp4wo29225Pu1tVD6JW/uDeejC+Rlccmx6jFIJ1ASDmSJXh1AR?=
+ =?us-ascii?Q?fXabjsjSrjIfmDD418hsB3VxVVjVk3DUpxuq5QOsSZ+jDtABkE/C6yoor6f/?=
+ =?us-ascii?Q?9jgOlVqTJkRE7kF+qo+5ZsD01Vtcc1RHM/Y1pha0IEc5RYDJvJrysGg4CPNZ?=
+ =?us-ascii?Q?Jcu4PA3K0QG1QzcuvAmJaSV69K/a+Sc47LxSsEMKllnFoJ9Ll+F3Counhdtd?=
+ =?us-ascii?Q?IZYZwfRrO8WCj+OnFWBgnp77s0VpaTTCs5vIUQmdEzwF48W37GLKAFEpLRDa?=
+ =?us-ascii?Q?NjEJblJzooO6Mt+AqnvQ/agqPnYsGSea+Tk2wYZAotAZXXgjGKlkzNZofc0h?=
+ =?us-ascii?Q?FNBwYhTqtINQg85LKYbA6sNkvukobH7fPj1LCjnhCEgbv/iW8uv7fyZkP5wS?=
+ =?us-ascii?Q?Yee1arMeZ68rOm5bt8P7Yxhxb/OxayWqyIU0jf8e0vwA34QiQ3sDWxXg9FZ6?=
+ =?us-ascii?Q?SYUWB6RCOTlxR2do60mUPwsrdd1PAYG5osu4auroj9eRRno7My0MZLB4iYYp?=
+ =?us-ascii?Q?+EK3xtaunq9Crsx5mF9/29gnxs8giK6+xHWJU4OmGToprojWIZBJHHFPsUuf?=
+ =?us-ascii?Q?BM8GytEo1L+5wJYlbCIpPt6G931DKrlX60MMECkKUUlm1oEXZ7Yo9BV7rJKb?=
+ =?us-ascii?Q?t/7LLvaD0pWc61kSzaAzmqwkwjGsKODoFB5MoxPTLhVcomfbIWKj565GWCH0?=
+ =?us-ascii?Q?iTqDtbuGB1t1D65UfXXewheH8DlGsM5LySfz7ZjI38KCK2IpIiCMmvFP8Tay?=
+ =?us-ascii?Q?P9i+FtMeCLm53qFFC50Ejk2TuyUas7peROV2VQiuyOFEY6JhFf9oESThIMQr?=
+ =?us-ascii?Q?TlnKe28WejdKIohB+JdriAXj5zXMUzwYJzhmoHvG5nmeDUYMN2xLugyFioUh?=
+ =?us-ascii?Q?jlIXWwz7r1FBQwlrN+PFNYQ/X2yLFghAHaxIaUt8t8Zhq+HxPP9ZA4looKnd?=
+ =?us-ascii?Q?/28t+I5wc5JyYz1/NaXxnqCA0qw9K5rur9QYQenCHRqOc26FbQ1km8yDuDru?=
+ =?us-ascii?Q?TbA0kXTxQNq5gkxPX6fzT+IJi+9mRZq7VYIJIb9qfeKt7mWOMijZfDnjieyp?=
+ =?us-ascii?Q?RFu4yUuTmANZr7GgtcsqNsn1c06EJCgY5r7a/fvptPsWv2yMJJ4zmqPJUreG?=
+ =?us-ascii?Q?gVBHXC535CiWKhxx+AcIG/lR/ZB3g1WPgoNDhiAe?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3419cc3a-23e5-401a-24b4-08dace84408e
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR11MB5966.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2022 01:43:25.2387
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2022 01:27:44.1658
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AxpUMveNCiespr+w3eNIvRag5eJaaEuTXRkZqGnk6alYz5Ol4GWG34gISWnk+B5sSBBEBa46n/GS/VTzI73dFg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7135
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: PRgTQq3jy3s8W6iMyUm8F+3puorHMWFV1DfkLnxBijIASaroRsccnQtyXw8y1tkvU7mZcw46/KMdlMIMLrtbYA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6907
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Nov 25, 2022 at 09:07:09AM +0800, Huang, Kai wrote:
+> On Fri, 2022-11-25 at 08:37 +0800, Yan Zhao wrote:
+> > On Fri, Nov 25, 2022 at 08:45:01AM +0800, Huang, Kai wrote:
+> > > On Fri, 2022-11-25 at 08:12 +0800, Yan Zhao wrote:
+> > > > On Fri, Nov 25, 2022 at 08:13:48AM +0800, Huang, Kai wrote:
+> > > > > On Tue, 2022-11-22 at 10:10 +0800, Yan Zhao wrote:
+> > > > > > Also make enable_mmio_caching to be a per-VM value?
+> > > > > > As if the shadow_mmio_value is 0, mmio_caching needs to be disabled.
+> > > > > 
+> > > > > If I recall correctly, Sean said we can disable TDX guests if mmio_caching is
+> > > > > disabled (we also will need to change to allow enable_mmio_caching to still be
+> > > > > true when mmio_value is 0).
+> > > > > 
+> > > > > SEV_ES has similar logic:
+> > > > > 
+> > > > > void __init sev_hardware_setup(void)
+> > > > > {
+> > > > > 
+> > > > > 	...
+> > > > > 
+> > > > >         /*
+> > > > >          * SEV-ES requires MMIO caching as KVM doesn't have access to the guest
+> > > > >          * instruction stream, i.e. can't emulate in response to a #NPF and
+> > > > >          * instead relies on #NPF(RSVD) being reflected into the guest as #VC
+> > > > >          * (the guest can then do a #VMGEXIT to request MMIO emulation).
+> > > > >          */
+> > > > >         if (!enable_mmio_caching)
+> > > > >                 goto out;
+> > > > > 
+> > > > 
+> > > > Would enabling mmio caching in per-VM basis be better?
+> > > > 
+> > > 
+> > > We need Paolo/Sean to decide.
+> > > 
+> > > The thing is TDX guests always require mmio_caching being enabled.  For VMX
+> > > guests, normally we will always enable mmio_caching too.  So I think per-VM
+> > > basis mmio_caching is not that useful.
+> > With per-VM basis enabling, I think we can get rid of the kvm_gfn_shared_mask(kvm)
+> > in below code and also in handle_abnormal_pfn()
+> > 
+> > static inline bool is_mmio_spte(struct kvm *kvm, u64 spte)
+> > {
+> >         return (spte & shadow_mmio_mask) == kvm->arch.shadow_mmio_value &&
+> >                likely(enable_mmio_caching || kvm_gfn_shared_mask(kvm));
+> > }
+> > 
+> 
+> It needs to go anyway regardless per-VM mmio_caching or not, as explained we
+> need to change to allow enable_mmio_caching to be true even mmio_value is 0.
 
-David Hildenbrand <david@redhat.com> writes:
+Or it's better to check enable_mmio_caching is true in
+kvm_mmu_set_mmio_spte_value() as below. 
 
-> On 24.11.22 04:33, Matthew Wilcox wrote:
->> On Thu, Nov 24, 2022 at 12:06:56PM +1100, Alistair Popple wrote:
->>>
->>> David Hildenbrand <david@redhat.com> writes:
->>>
->>>> On 23.11.22 06:14, Hugh Dickins wrote:
->>>>> On Wed, 23 Nov 2022, Gavin Shan wrote:
->>>>>
->>>>>> The issue is reported when removing memory through virtio_mem device.
->>>>>> The transparent huge page, experienced copy-on-write fault, is wrongly
->>>>>> regarded as pinned. The transparent huge page is escaped from being
->>>>>> isolated in isolate_migratepages_block(). The transparent huge page
->>>>>> can't be migrated and the corresponding memory block can't be put
->>>>>> into offline state.
->>>>>>
->>>>>> Fix it by replacing page_mapcount() with total_mapcount(). With this,
->>>>>> the transparent huge page can be isolated and migrated, and the memory
->>>>>> block can be put into offline state.
->>>>>>
->>>>>> Fixes: 3917c80280c9 ("thp: change CoW semantics for anon-THP")
->>>>>> Cc: stable@vger.kernel.org   # v5.8+
->>>>>> Reported-by: Zhenyu Zhang <zhenyzha@redhat.com>
->>>>>> Suggested-by: David Hildenbrand <david@redhat.com>
->>>>>> Signed-off-by: Gavin Shan <gshan@redhat.com>
->>>>> Interesting, good catch, looked right to me: except for the Fixes
->>>>> line
->>>>> and mention of v5.8.  That CoW change may have added a case which easily
->>>>> demonstrates the problem, but it would have been the wrong test on a THP
->>>>> for long before then - but only in v5.7 were compound pages allowed
->>>>> through at all to reach that test, so I think it should be
->>>>> Fixes: 1da2f328fa64 ("mm,thp,compaction,cma: allow THP migration for
->>>>> CMA allocations")
->>>>> Cc: stable@vger.kernel.org   # v5.7+
->>>>> Oh, no, stop: this is not so easy, even in the latest tree.
->>>>> Because at the time of that "admittedly racy check", we have no hold
->>>>> at all on the page in question: and if it's PageLRU or PageCompound
->>>>> at one instant, it may be different the next instant.  Which leaves it
->>>>> vulnerable to whatever BUG_ON()s there may be in the total_mapcount()
->>>>> path - needs research.  *Perhaps* there are no more BUG_ON()s in the
->>>>> total_mapcount() path than in the existing page_mapcount() path.
->>>>> I suspect that for this to be safe (before your patch and more so
->>>>> after),
->>>>> it will be necessary to shift the "admittedly racy check" down after the
->>>>> get_page_unless_zero() (and check the sequence of operations when a
->>>>> compound page is initialized).
->>>>
->>>> Grabbing a reference first sounds like the right approach to me.
->>>
->>> I think you're right. Without a page reference I don't think it is even
->>> safe to look at struct page, at least not without synchronisation
->>> against memory hot unplug which could remove the struct page. From a
->>> quick glance I didn't see anything here that obviously did that though.
->> Memory hotplug is the offending party here.  It has to make sure
->> that
->> everything else is definitely quiescent before removing the struct pages.
->> Otherwise you can't even try_get a refcount.
-
-Sure, I might be missing something but how can memory hotplug possibly
-synchronise against some process (eg. try_to_compact_pages) doing
-try_get(pfn_to_page(random_pfn)) without that process either informing
-memory hotplug that it needs pages to remain valid long enough to get a
-reference or detecting that memory hotplug is in the process of
-offlining pages?
-
-> At least alloc_contig_range() and memory offlining are mutually
-> exclusive due to MIGRATE_ISOLTAE. I recall that ordinary memory
-> compaction similarly deals with isolated pageblocks (or some other
-> mechanism I forgot) to not race with memory offlining. Wouldn't worry
-> about that for now.
-
-Sorry, agree - to be clear this discussion isn't relevant for this patch
-but reviewing it got me thinking about how this works. I still don't see
-how alloc_contig_range() is totally safe against memory offlining
-though. From what I can see we have the following call path to set
-MIGRATE_ISOLATE:
-
-alloc_contig_range(pfn) -> start_isolate_page_range(pfn) ->
-isolate_single_pageblock(pfn) -> page_zone(pfn_to_page(pfn))
-
-There's nothing in that call stack that prevent offlining of the page,
-hence the struct page may be freed by this point. Am I missing something
-else here?
-
-try_to_compact_pages() has a similar issue which is what I noticed
-reviewing this patch:
-
-try_to_compact_pages() -> compact_zone_order() -> compact_zone() ->
-isolate_migratepages() -> isolate_migratepages_block() ->
-PageHuge(pfn_to_page(pfn))
-
-Again I couldn't see anything in that path that would hold the page
-stable long enough to safely perform the pfn_to_page() and get a
-reference. And after a bit of fiddling I was able to trigger the below
-oops running the compaction_test selftest whilst offlining memory so I
-don't think it is safe:
-
-Entering kdb (current=0xffff8882452fb6c0, pid 5646) on processor 1 Oops: (null)
-due to oops @ 0xffffffff81af6486
-CPU: 1 PID: 5646 Comm: compaction_test Not tainted 6.0.0-01424-gf3ec7e734795 #110
-Hardware name: Gigabyte Technology Co., Ltd. B150M-D3H/B150M-D3H-CF, BIOS F24 04/11/2018
-RIP: 0010:PageHuge+0xa6/0x180
-Code: 00 0f 85 d0 00 00 00 48 8b 43 08 a8 01 0f 85 97 00 00 00 66 90 48 b8 00 00 00 00 00 fc ff df 48 8d 7b 50 48 89 fa 48 c1 ea 03 <0f> b6 04 02 84 c0 74 02 7e 7f 31 c0 80 7b 50 02 0f 94 c0 5b 41 5c
-RSP: 0000:ffffc9001252efa8 EFLAGS: 00010207
-RAX: dffffc0000000000 RBX: fffffffffffffffe RCX: ffffffff81af63f9
-RDX: 0000000000000009 RSI: 0000000000000008 RDI: 000000000000004e
-RBP: ffffc9001252efb8 R08: 0000000000000000 R09: ffffea000f690007
-R10: fffff94001ed2000 R11: 0000000000000001 R12: ffffea000f690008
-R13: 0000000000000ab3 R14: ffffea000f690000 R15: 00000000003da400
-FS:  00007f83e08b7740(0000) GS:ffff88823bc00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fb6e1cbb3e0 CR3: 0000000344044003 CR4: 00000000003706e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- isolate_migratepages_block+0x43c/0x3dc0
- ? reclaim_throttle+0x7a0/0x7a0
- ? __reset_isolation_suitable+0x350/0x350
- compact_zone+0xb73/0x31f0
- ? compaction_suitable+0x1e0/0x1e0
- compact_zone_order+0x127/0x240
- ? compact_zone+0x31f0/0x31f0
- ? __this_cpu_preempt_check+0x13/0x20
- ? cpuusage_write+0x380/0x380
- ? __kasan_check_read+0x11/0x20
- try_to_compact_pages+0x23b/0x770
- ? psi_task_change+0x201/0x300
- __alloc_pages_direct_compact+0x15d/0x650
- ? get_page_from_freelist+0x3fa0/0x3fa0
- ? psi_task_change+0x201/0x300
- ? _raw_spin_unlock+0x19/0x40
- __alloc_pages_slowpath.constprop.0+0x9e1/0x2260
- ? warn_alloc+0x1a0/0x1a0
- ? __zone_watermark_ok+0x430/0x430
- ? prepare_alloc_pages+0x40b/0x620
- __alloc_pages+0x42f/0x540
- ? __alloc_pages_slowpath.constprop.0+0x2260/0x2260
- alloc_buddy_huge_page.isra.0+0x7c/0x130
- alloc_fresh_huge_page+0x1f1/0x4e0
- alloc_pool_huge_page+0xab/0x2d0
- __nr_hugepages_store_common+0x37a/0xed0
- ? return_unused_surplus_pages+0x330/0x330
- ? __kasan_check_write+0x14/0x20
- ? _raw_spin_lock_irqsave+0x99/0x100
- ? proc_doulongvec_minmax+0x54/0x80
- hugetlb_sysctl_handler_common+0x247/0x320
- ? nr_hugepages_store+0xf0/0xf0
- ? alloc_huge_page+0xbf0/0xbf0
- hugetlb_sysctl_handler+0x20/0x30
- proc_sys_call_handler+0x451/0x650
- ? unregister_sysctl_table+0x1c0/0x1c0
- ? apparmor_file_permission+0x124/0x280
- ? security_file_permission+0x72/0x90
- proc_sys_write+0x13/0x20
- vfs_write+0x7ca/0xd80
- ? kernel_write+0x4d0/0x4d0
- ? do_sys_openat2+0x114/0x450
- ? __kasan_check_write+0x14/0x20
- ? down_write+0xb4/0x130
- ksys_write+0x116/0x220
- ? __kasan_check_write+0x14/0x20
- ? __ia32_sys_read+0xb0/0xb0
- ? debug_smp_processor_id+0x17/0x20
- ? fpregs_assert_state_consistent+0x52/0xc0
- __x64_sys_write+0x73/0xb0
- ? syscall_exit_to_user_mode+0x26/0x50
- do_syscall_64+0x38/0x90
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f83e09b2190
-Code: 40 00 48 8b 15 71 9c 0d 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b7 0f 1f 00 80 3d 51 24 0e 00 00 74 17 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 58 c3 0f 1f 80 00 00 00 00 48 83 ec 28 48 89
-RSP: 002b:00007ffe4c08e478 EFLAGS: 00000202 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 00007ffe4c08e648 RCX: 00007f83e09b2190
-RDX: 0000000000000006 RSI: 000055d7575611f8 RDI: 0000000000000003
-RBP: 00007ffe4c08e4c0 R08: 00007f83e0a8cc60 R09: 0000000000000000
-R10: 00007f83e08d40b8 R11: 0000000000000202 R12: 0000000000000000
-R13: 00007ffe4c08e658 R14: 000055d757562df0 R15: 00007f83e0adc020
- </TASK>
-
+void kvm_mmu_set_mmio_spte_value(struct kvm *kvm, u64 mmio_value)
+{
+        WARN_ON(!enable_mmio_caching);
+        kvm->arch.shadow_mmio_value = mmio_value;
+}
