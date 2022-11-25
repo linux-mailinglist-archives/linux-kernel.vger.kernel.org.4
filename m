@@ -2,109 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AABB6384DF
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 09:00:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCB476384E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 09:00:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbiKYIAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 03:00:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51418 "EHLO
+        id S229808AbiKYIAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 03:00:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiKYIAG (ORCPT
+        with ESMTP id S229814AbiKYIAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 03:00:06 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9028A303D5;
-        Fri, 25 Nov 2022 00:00:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=8TV2H+mw2roghON9dZi8tjqa2D9zCsxjBsOv5fUqu44=; b=eiEI5OIfZpN2baAb5xqupaNWdT
-        JusrNhWE3n/ggnWuzCJ0ElAOkkeZys1s0HHQe8iya1t/nqFkX4Ggn9NKO7MNAAM24Ci2iVd7kr9VK
-        zqlsaAr+HyUUG4z+h+HLLIGa2FgQAUj4iqzSOQ/op2e3jHvABBy5AkcPUuOrF4fqCpxt8wU0qKV/f
-        DQYw+9pyIv1yPSc+RO0O/VsImNwJG8GQ/ZQFdqpYLgu02+26haD97bFJ1Vij2izaVZoFF3Dmpsobp
-        R8ON4Jf/rimYfwsPEpOKVH7m1y/mUxx1wiX8Z+ESCvx56NRqdfHE8+RHMMZgHOW6GUy6enZ8XI2UH
-        Yt+Ynigw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oyTcl-009Phg-38; Fri, 25 Nov 2022 07:59:51 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B703B300282;
-        Fri, 25 Nov 2022 08:59:42 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 95BC62D52AC8A; Fri, 25 Nov 2022 08:59:42 +0100 (CET)
-Date:   Fri, 25 Nov 2022 08:59:42 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Dmitry Safonov <dima@arista.com>
-Cc:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Bob Gilligan <gilligan@arista.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        Steven Rostedt <rostedt@goodmis.org>, netdev@vger.kernel.org
-Subject: Re: [PATCH v6 1/5] jump_label: Prevent key->enabled int overflow
-Message-ID: <Y4B17nBArWS1Iywo@hirez.programming.kicks-ass.net>
-References: <20221123173859.473629-1-dima@arista.com>
- <20221123173859.473629-2-dima@arista.com>
+        Fri, 25 Nov 2022 03:00:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290762FFF9;
+        Fri, 25 Nov 2022 00:00:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BDD6BB82974;
+        Fri, 25 Nov 2022 08:00:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6D4FEC433D6;
+        Fri, 25 Nov 2022 08:00:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669363217;
+        bh=0HvTLDVz0F+F3ENKXrYiYaMjdbfw6Al5nW8NPscnaRc=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=P40z/GZM7AGjL6AHDIRqg1VTrTsFpOH6QI9zt6eWUBuUHpO1Wcp7kAzalsqMgafZ5
+         heJ30oEvNVBnLFKDuma2P98VDA/4vO/I1SS0es5mzi0q+z972FXmkJ5/JDbLMqTmx8
+         RRfZWUvIwQ6Z66Bhenp8kgBiOU7goKlC18WPN9CqqtKfQyKgHrEqfOjVfpa995X/Hm
+         rssyYUYgZNh/2EaKQZCOHauchVk+8stLkH3Qx+sWhg2m0bbABvv/ZWvPp0CKmalYZl
+         TS60kOybSCNHFgyh6JEGsH5Mcn/grpixf9p1zVAYrERKZkIup3UZpCQK5a5ueUbuOu
+         KwBH8Hr8lT+Cw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 54675E270C7;
+        Fri, 25 Nov 2022 08:00:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221123173859.473629-2-dima@arista.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] can: mcba_usb: Fix termination command argument
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166936321734.29613.11890827238652314469.git-patchwork-notify@kernel.org>
+Date:   Fri, 25 Nov 2022 08:00:17 +0000
+References: <20221124152504.125994-1-yashi@spacecubics.com>
+In-Reply-To: <20221124152504.125994-1-yashi@spacecubics.com>
+To:     Yasushi SHOJI <yasushi.shoji@gmail.com>
+Cc:     yashi@spacecubics.com, wg@grandegger.com, mkl@pengutronix.de,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, remigiusz.kollataj@mobica.com,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 05:38:55PM +0000, Dmitry Safonov wrote:
-> 1. With CONFIG_JUMP_LABEL=n static_key_slow_inc() doesn't have any
->    protection against key->enabled refcounter overflow.
-> 2. With CONFIG_JUMP_LABEL=y static_key_slow_inc_cpuslocked()
->    still may turn the refcounter negative as (v + 1) may overflow.
-> 
-> key->enabled is indeed a ref-counter as it's documented in multiple
-> places: top comment in jump_label.h, Documentation/staging/static-keys.rst,
-> etc.
-> 
-> As -1 is reserved for static key that's in process of being enabled,
-> functions would break with negative key->enabled refcount:
-> - for CONFIG_JUMP_LABEL=n negative return of static_key_count()
->   breaks static_key_false(), static_key_true()
-> - the ref counter may become 0 from negative side by too many
->   static_key_slow_inc() calls and lead to use-after-free issues.
-> 
-> These flaws result in that some users have to introduce an additional
-> mutex and prevent the reference counter from overflowing themselves,
-> see bpf_enable_runtime_stats() checking the counter against INT_MAX / 2.
-> 
-> Prevent the reference counter overflow by checking if (v + 1) > 0.
-> Change functions API to return whether the increment was successful.
-> 
-> Signed-off-by: Dmitry Safonov <dima@arista.com>
-> Acked-by: Jakub Kicinski <kuba@kernel.org>
+Hello:
 
-This looks good to me:
+This patch was applied to netdev/net.git (master)
+by Marc Kleine-Budde <mkl@pengutronix.de>:
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+On Fri, 25 Nov 2022 00:25:03 +0900 you wrote:
+> Microchip USB Analyzer can activate the internal termination resistors
+> by setting the "termination" option ON, or OFF to to deactivate them.
+> As I've observed, both with my oscilloscope and captured USB packets
+> below, you must send "0" to turn it ON, and "1" to turn it OFF.
+> 
+> >From the schematics in the user's guide, I can confirm that you must
+> drive the CAN_RES signal LOW "0" to activate the resistors.
+> 
+> [...]
 
-What is the plan for merging this? I'm assuming it would want to go
-through the network tree, but as already noted earlier it depends on a
-patch I have in tip/locking/core.
+Here is the summary with links:
+  - [v2] can: mcba_usb: Fix termination command argument
+    https://git.kernel.org/netdev/net/c/1a8e3bd25f1e
 
-Now I checked, tip/locking/core is *just* that one patch, so it might be
-possible to merge that branch and this series into the network tree and
-note that during the pull request to Linus.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
