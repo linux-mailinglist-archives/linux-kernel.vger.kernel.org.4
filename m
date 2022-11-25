@@ -2,312 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD91D6384A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 08:46:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE38A6384A1
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 08:45:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbiKYHqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 02:46:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35968 "EHLO
+        id S229568AbiKYHpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 02:45:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiKYHqB (ORCPT
+        with ESMTP id S229436AbiKYHpP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 02:46:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A470D2ED4E
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 23:45:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669362304;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1aJL8yY2AvWtZ/kybolPnYAS/Vk3EAt7eDYyCnF3Z9c=;
-        b=crOjfeChTxp5nHmL/TcRt6Jet2Kdf1u+ujg9v4DcwrhUPzSM3J+ukn0fGbuJLBwkEdK2Fn
-        maKZL392apAN7zzGxhS+fE9n9h2Skp9jbLAfy2R7fd7Sm4no64OoQED6oGDboCUfHO9gB5
-        jH0rMCn652cz8izMQ5y7joUN2aA5+Oc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-518-OQo6rHxFM5W_JOoxCdjI4A-1; Fri, 25 Nov 2022 02:45:01 -0500
-X-MC-Unique: OQo6rHxFM5W_JOoxCdjI4A-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 25 Nov 2022 02:45:15 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 876612C128;
+        Thu, 24 Nov 2022 23:45:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ED3E03C0CD48;
-        Fri, 25 Nov 2022 07:45:00 +0000 (UTC)
-Received: from localhost (ovpn-12-208.pek2.redhat.com [10.72.12.208])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C8C58492B1F;
-        Fri, 25 Nov 2022 07:44:59 +0000 (UTC)
-Date:   Fri, 25 Nov 2022 15:44:55 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        Philipp Rudo <prudo@redhat.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Ross Zwisler <zwisler@kernel.org>, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kexec: Enable runtime allocation of crash_image
-Message-ID: <Y4Byd94oeoGCuTGq@MiWiFi-R3L-srv>
-References: <20221124-kexec-noalloc-v1-0-d78361e99aec@chromium.org>
- <Y4AvTEZiNXfFU1Wv@MiWiFi-R3L-srv>
- <CANiDSCsgFYvShoTo9xAPe0wqSJgTnB7ZgzXmNqD+L2cKdsVoRg@mail.gmail.com>
- <Y4BrjfLSukrSbGn4@MiWiFi-R3L-srv>
- <CANiDSCueVsRMBjjmCDc+r5YjM0UzThLyFm10kp1cKZw4Pnv6kg@mail.gmail.com>
+        by sin.source.kernel.org (Postfix) with ESMTPS id E9AA6CE2C30;
+        Fri, 25 Nov 2022 07:45:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F707C433D6;
+        Fri, 25 Nov 2022 07:45:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1669362311;
+        bh=4DOmv+Bk48r/mh7tn2tBd58GhSVVN4trqBllxSUBgDM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hEte8LclML+6pWLHhdvmOoqPoRTwDsa62inGylLc+nsJULsMi7Z6R079Lek16L5AD
+         4vJh8onaoB3kdZuo6veMoNV8uGLa2GNQ5B+9FNylrT9uhbdx56Sb9w6lG/auzwZRXe
+         n89kxKWKsjOJDafyGFE218JL/wwvKieA5mr8bKDI=
+Date:   Fri, 25 Nov 2022 08:45:07 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
+        rwarsow@gmx.de
+Subject: Re: [PATCH 6.0 000/314] 6.0.10-rc1 review
+Message-ID: <Y4Byg4lq6jOWcY8D@kroah.com>
+References: <20221123084625.457073469@linuxfoundation.org>
+ <Y39SmCRcY7EUhkhA@debian>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANiDSCueVsRMBjjmCDc+r5YjM0UzThLyFm10kp1cKZw4Pnv6kg@mail.gmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y39SmCRcY7EUhkhA@debian>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/25/22 at 08:26am, Ricardo Ribalda wrote:
-> Hi Baoquan
+On Thu, Nov 24, 2022 at 11:16:40AM +0000, Sudip Mukherjee wrote:
+> Hi Greg,
 > 
-> On Fri, 25 Nov 2022 at 08:15, Baoquan He <bhe@redhat.com> wrote:
-> >
-> > On 11/25/22 at 06:52am, Ricardo Ribalda wrote:
-> > > Hi Baoquan
-> > >
-> > > Thanks for your review!
-> > >
-> > > On Fri, 25 Nov 2022 at 03:58, Baoquan He <bhe@redhat.com> wrote:
-> > > >
-> > > > On 11/24/22 at 11:23pm, Ricardo Ribalda wrote:
-> > > > > Usually crash_image is defined statically via the crashkernel parameter
-> > > > > or DT.
-> > > > >
-> > > > > But if the crash kernel is not used, or is smaller than then
-> > > > > area pre-allocated that memory is wasted.
-> > > > >
-> > > > > Also, if the crash kernel was not defined at bootime, there is no way to
-> > > > > use the crash kernel.
-> > > > >
-> > > > > Enable runtime allocation of the crash_image if the crash_image is not
-> > > > > defined statically. Following the same memory allocation/validation path
-> > > > > that for the reboot kexec kernel.
-> > > >
-> > > > We don't check if the crashkernel memory region is valid in kernel, but
-> > > > we do have done the check in kexec-tools utility. Since both kexec_load and
-> > > > kexec_file_load need go through path of kexec-tools loading, we haven't
-> > > > got problem with lack of the checking in kernel.
-> > >
-> > > Not sure if I follow you.
-> > >
-> > > We currently check if the crash kernel is in the right place at
-> > > sanity_check_segment_list()
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/kexec_core.c#n239
-> >
-> > Please check below code in kexec-tools utility, currently we have to use
-> > kexec -p to enter into kexec_load or kexec_file_load system call. Before
-> > entering system call, we have below code:
+> On Wed, Nov 23, 2022 at 09:47:25AM +0100, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 6.0.10 release.
+> > There are 314 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> > 
+> > Responses should be made by Fri, 25 Nov 2022 08:45:20 +0000.
+> > Anything received after that time might be too late.
 > 
-> So your concern is that the current kexec-tools does not let you pass
-> a crashkernel unless there is memory reserved for it?
+> Build test (gcc version 12.2.1 20221016):
+> mips: 52 configs -> 1 failure
+> arm: 100 configs -> 2 failures
+> arm64: 3 configs -> no failure
+> x86_64: 4 configs -> no failure
+> alpha allmodconfig -> no failure
+> csky allmodconfig -> no failure
+> powerpc allmodconfig -> 1 failure
+> riscv allmodconfig -> no failure
+> s390 allmodconfig -> no failure
+> xtensa allmodconfig -> no failure
+> 
+> Note:
+> 1. As reported by others arm mips and powerpc allmodconfig fails with:
+> drivers/rtc/rtc-cmos.c:1299:13: error: 'rtc_wake_setup' defined but not used [-Werror=unused-function]
+>  1299 | static void rtc_wake_setup(struct device *dev)
+>       |             ^~~~~~~~~~~~~~
+> 
 
-No, my concern is why we have to do the check in kernel if we have done
-that in kexec-tools utility. You didn't say your kexec-lite need this
-until now. I think it's fine to add the check in kernel if you prefer to
-do the check in kernel, but not in kexec-lite. 
-
-The motivation or reason you want to make the change is very important.
+Should now be fixed, thanks.
 
 
 > 
-> Once the changes land in the kernel I can make a patch for that. I am
-> currently using this to test the code:
+> 2. arm imxrt_defconfig fails with:
 > 
-> https://chromium-review.googlesource.com/c/chromiumos/platform2/+/3953579/4/kexec-lite/kexec-lite.c
+> In file included from ./include/linux/bpf-cgroup.h:5,
+>                  from security/device_cgroup.c:8:
+> ./include/linux/bpf.h:2310:20: error: static declaration of 'bpf_prog_inc_misses_counter' follows non-static declaration
+>  2310 | static inline void bpf_prog_inc_misses_counter(struct bpf_prog *prog)
+>       |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> ./include/linux/bpf.h:1970:14: note: previous declaration of 'bpf_prog_inc_misses_counter' with type 'void(struct bpf_prog *)'
+>  1970 | void notrace bpf_prog_inc_misses_counter(struct bpf_prog *prog);
+>       |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~
 > 
-> >
-> > https://kernel.googlesource.com/pub/scm/utils/kernel/kexec/kexec-tools.git/+/refs/heads/master/kexec/kexec.c
-> >
-> > int main(int argc, char *argv[])
-> > {
-> > ......
-> >                 if (do_load &&
-> >             ((kexec_flags & KEXEC_ON_CRASH) ||
-> >              (kexec_file_flags & KEXEC_FILE_ON_CRASH)) &&
-> >             !is_crashkernel_mem_reserved()) {
-> >                 die("Memory for crashkernel is not reserved\n"
-> >                     "Please reserve memory by passing"
-> >                     "\"crashkernel=Y@X\" parameter to kernel\n"
-> >                     "Then try to loading kdump kernel\n");
-> >         }
-> >
-> > ......
-> > }
-> >
-> > >
-> > >
-> > > >
-> > > > However, even though we want to do the check, doing like below is much
-> > > > easier and more reasonable.
-> > > >
-> > > > diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-> > > > index 45637511e0de..4d1339bd2ccf 100644
-> > > > --- a/kernel/kexec_file.c
-> > > > +++ b/kernel/kexec_file.c
-> > > > @@ -344,6 +344,8 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
-> > > >
-> > > >         dest_image = &kexec_image;
-> > > >         if (flags & KEXEC_FILE_ON_CRASH) {
-> > > > +               if (!crash_memory_valid())
-> > > > +                       return -EINVAL;
-> > > >                 dest_image = &kexec_crash_image;
-> > > >                 if (kexec_crash_image)
-> > > >                         arch_kexec_unprotect_crashkres();
-> > > >
-> > > > So, I am wondering if there is an issue encountered if we don't do the
-> > > > check in kernel.
-> > > >
-> > > > Thanks
-> > > > Baoquan
-> > > >
-> > > > >
-> > > > > ---
-> > > > >
-> > > > > To: Eric Biederman <ebiederm@xmission.com>
-> > > > > Cc: kexec@lists.infradead.org
-> > > > > Cc: linux-kernel@vger.kernel.org
-> > > > > Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
-> > > > > Cc: linux-kernel@vger.kernel.org
-> > > > > Cc: Ross Zwisler <zwisler@kernel.org>
-> > > > > Cc: Philipp Rudo <prudo@redhat.com>
-> > > > > Cc: Baoquan He <bhe@redhat.com>
-> > > > > ---
-> > > > >  include/linux/kexec.h | 1 +
-> > > > >  kernel/kexec.c        | 9 +++++----
-> > > > >  kernel/kexec_core.c   | 5 +++++
-> > > > >  kernel/kexec_file.c   | 7 ++++---
-> > > > >  4 files changed, 15 insertions(+), 7 deletions(-)
-> > > > >
-> > > > > diff --git a/include/linux/kexec.h b/include/linux/kexec.h
-> > > > > index 41a686996aaa..98ca9a32bc8e 100644
-> > > > > --- a/include/linux/kexec.h
-> > > > > +++ b/include/linux/kexec.h
-> > > > > @@ -427,6 +427,7 @@ extern int kexec_load_disabled;
-> > > > >  extern bool kexec_in_progress;
-> > > > >
-> > > > >  int crash_shrink_memory(unsigned long new_size);
-> > > > > +bool __crash_memory_valid(void);
-> > > > >  ssize_t crash_get_memory_size(void);
-> > > > >
-> > > > >  #ifndef arch_kexec_protect_crashkres
-> > > > > diff --git a/kernel/kexec.c b/kernel/kexec.c
-> > > > > index cb8e6e6f983c..b5c17db25e88 100644
-> > > > > --- a/kernel/kexec.c
-> > > > > +++ b/kernel/kexec.c
-> > > > > @@ -28,7 +28,7 @@ static int kimage_alloc_init(struct kimage **rimage, unsigned long entry,
-> > > > >       struct kimage *image;
-> > > > >       bool kexec_on_panic = flags & KEXEC_ON_CRASH;
-> > > > >
-> > > > > -     if (kexec_on_panic) {
-> > > > > +     if (kexec_on_panic && __crash_memory_valid()) {
-> > > > >               /* Verify we have a valid entry point */
-> > > > >               if ((entry < phys_to_boot_phys(crashk_res.start)) ||
-> > > > >                   (entry > phys_to_boot_phys(crashk_res.end)))
-> > > > > @@ -44,7 +44,7 @@ static int kimage_alloc_init(struct kimage **rimage, unsigned long entry,
-> > > > >       image->nr_segments = nr_segments;
-> > > > >       memcpy(image->segment, segments, nr_segments * sizeof(*segments));
-> > > > >
-> > > > > -     if (kexec_on_panic) {
-> > > > > +     if (kexec_on_panic && __crash_memory_valid()) {
-> > > > >               /* Enable special crash kernel control page alloc policy. */
-> > > > >               image->control_page = crashk_res.start;
-> > > > >               image->type = KEXEC_TYPE_CRASH;
-> > > > > @@ -101,7 +101,7 @@ static int do_kexec_load(unsigned long entry, unsigned long nr_segments,
-> > > > >
-> > > > >       if (flags & KEXEC_ON_CRASH) {
-> > > > >               dest_image = &kexec_crash_image;
-> > > > > -             if (kexec_crash_image)
-> > > > > +             if (kexec_crash_image && __crash_memory_valid())
-> > > > >                       arch_kexec_unprotect_crashkres();
-> > > > >       } else {
-> > > > >               dest_image = &kexec_image;
-> > > > > @@ -157,7 +157,8 @@ static int do_kexec_load(unsigned long entry, unsigned long nr_segments,
-> > > > >       image = xchg(dest_image, image);
-> > > > >
-> > > > >  out:
-> > > > > -     if ((flags & KEXEC_ON_CRASH) && kexec_crash_image)
-> > > > > +     if ((flags & KEXEC_ON_CRASH) && kexec_crash_image &&
-> > > > > +         __crash_memory_valid())
-> > > > >               arch_kexec_protect_crashkres();
-> > > > >
-> > > > >       kimage_free(image);
-> > > > > diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-> > > > > index ca2743f9c634..77083c9760fb 100644
-> > > > > --- a/kernel/kexec_core.c
-> > > > > +++ b/kernel/kexec_core.c
-> > > > > @@ -1004,6 +1004,11 @@ void crash_kexec(struct pt_regs *regs)
-> > > > >       }
-> > > > >  }
-> > > > >
-> > > > > +bool __crash_memory_valid(void)
-> > > > > +{
-> > > > > +     return crashk_res.end != crashk_res.start;
-> > > > > +}
-> > > > > +
-> > > > >  ssize_t crash_get_memory_size(void)
-> > > > >  {
-> > > > >       ssize_t size = 0;
-> > > > > diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-> > > > > index 45637511e0de..0671f4f370ff 100644
-> > > > > --- a/kernel/kexec_file.c
-> > > > > +++ b/kernel/kexec_file.c
-> > > > > @@ -280,7 +280,7 @@ kimage_file_alloc_init(struct kimage **rimage, int kernel_fd,
-> > > > >
-> > > > >       image->file_mode = 1;
-> > > > >
-> > > > > -     if (kexec_on_panic) {
-> > > > > +     if (kexec_on_panic && __crash_memory_valid()) {
-> > > > >               /* Enable special crash kernel control page alloc policy. */
-> > > > >               image->control_page = crashk_res.start;
-> > > > >               image->type = KEXEC_TYPE_CRASH;
-> > > > > @@ -345,7 +345,7 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
-> > > > >       dest_image = &kexec_image;
-> > > > >       if (flags & KEXEC_FILE_ON_CRASH) {
-> > > > >               dest_image = &kexec_crash_image;
-> > > > > -             if (kexec_crash_image)
-> > > > > +             if (kexec_crash_image && __crash_memory_valid())
-> > > > >                       arch_kexec_unprotect_crashkres();
-> > > > >       }
-> > > > >
-> > > > > @@ -408,7 +408,8 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
-> > > > >  exchange:
-> > > > >       image = xchg(dest_image, image);
-> > > > >  out:
-> > > > > -     if ((flags & KEXEC_FILE_ON_CRASH) && kexec_crash_image)
-> > > > > +     if ((flags & KEXEC_FILE_ON_CRASH) && kexec_crash_image &&
-> > > > > +         __crash_memory_valid())
-> > > > >               arch_kexec_protect_crashkres();
-> > > > >
-> > > > >       kexec_unlock();
-> > > > >
-> > > > > ---
-> > > > > base-commit: 4312098baf37ee17a8350725e6e0d0e8590252d4
-> > > > > change-id: 20221124-kexec-noalloc-3cab3cbe000f
-> > > > >
-> > > > > Best regards,
-> > > > > --
-> > > > > Ricardo Ribalda <ribalda@chromium.org>
-> > > > >
-> > > >
-> > >
-> > >
-> > > --
-> > > Ricardo Ribalda
-> > >
-> >
-> 
-> 
-> -- 
-> Ricardo Ribalda
-> 
+> Caused by a1ba348f5325 ("bpf: Prevent bpf program recursion for raw tracepoint probes").
 
+Oh, nice catch!  I messed up the backport of this commit, and put the
+prototype in the wrong place in the .h file.  Let me push out a -rc2
+with this moved a bit to see if that solves the problem.
+
+Interesting that your build tests were the only one that caught this.
+
+thanks,
+
+greg k-h
