@@ -2,462 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 302F1638410
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 07:37:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BAAB638419
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 07:39:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbiKYGhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 01:37:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39782 "EHLO
+        id S229645AbiKYGjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 01:39:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbiKYGg6 (ORCPT
+        with ESMTP id S229480AbiKYGjE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 01:36:58 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8362D2A94D;
-        Thu, 24 Nov 2022 22:36:54 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id q1so3167316pgl.11;
-        Thu, 24 Nov 2022 22:36:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BgKC00kdEHyZ2BMxISGOkS8d2W0npo/wh8nj7cf1w34=;
-        b=a12nDl9D1CbPueV4YzaLMBHFl44tEKfpy19bep699O5HacSnAmWdbesFzgbz5gCiIq
-         KlreKoUI/BMhrGlKscdidLDnfAh75owtsIWG5OeZCiJzJWJMiwQJBZBt9Ef1uxjvGWSm
-         xhkmfJJZ9cH0XF1xbY9PPO89MtY+Uaj8NwaUAhbYU5g5BcAy1oySr1Syj7lGefy8jnmj
-         5wzbkYpDO16NyKbydsuw84VaQKCfl+DnTJTI6arNvhPVc6ZVHB86ecqAtD6EBdud61iw
-         i8Unw39nlRcvhwrUfSZiW2zomgs7DF+C//JqdKhTDbYslAnLrq/4Iy61qXpKUU8tgAKh
-         nDZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BgKC00kdEHyZ2BMxISGOkS8d2W0npo/wh8nj7cf1w34=;
-        b=uAprJR9/x2no7FYQL6iYPtNQKLVJxZtdUPPeMg+kBWGXUHTl/95PW599hcILbqvRuH
-         fiVYG/FEe23U4nT8H8Fa7WTuVjg6bD6tFXgC3kLefUuDhz5O4XtTXAXxQ0TOG5xsRN80
-         bw5ViY170Me9nXIQS20OhsERjig89PXmwmXUwFm889r5JYo6TQBsLMzZyg9dW2q8uh+x
-         QoMMPSTn2sLA8g7PxShp4DUGapI/j3jMPTMhMfl+1ZXMs5/CBoxf0kHY4othbk8GaNnb
-         UYlqan8jilZCk1oqh/XV3rTtvSesGnTfUpWhoOW2sKWwPWTcTZyEs109UpD/COit3EZx
-         0IFA==
-X-Gm-Message-State: ANoB5plm8iZYRhfNc3JtO17P/ljyEgxQrKJeuLRGJQ3HZZOd5ibUf+eG
-        GtBi/wrvMC6m5o0KWk9UrFRDUJ9sOjtp
-X-Google-Smtp-Source: AA0mqf4Yh+x4Z1hZHW72wP736tEQrYj9qiy4J5F3yh1U8pb8AzF8GFYOliRHfrX+0Sv02pjuiZR9UA==
-X-Received: by 2002:a63:711e:0:b0:477:5654:c37e with SMTP id m30-20020a63711e000000b004775654c37emr23222471pgc.206.1669358213619;
-        Thu, 24 Nov 2022 22:36:53 -0800 (PST)
-Received: from pc.localdomain ([166.111.83.15])
-        by smtp.gmail.com with ESMTPSA id nm18-20020a17090b19d200b001fd6066284dsm2214891pjb.6.2022.11.24.22.36.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 22:36:52 -0800 (PST)
-From:   Hao Sun <sunhao.th@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, Hao Sun <sunhao.th@gmail.com>
-Subject: [PATCH bpf-next v2 3/3] selftests/bpf: Add tests for LDX/STX/ST sanitize
-Date:   Fri, 25 Nov 2022 14:36:30 +0800
-Message-Id: <20221125063630.536657-4-sunhao.th@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221125063630.536657-1-sunhao.th@gmail.com>
-References: <20221125063630.536657-1-sunhao.th@gmail.com>
+        Fri, 25 Nov 2022 01:39:04 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA0C1D640;
+        Thu, 24 Nov 2022 22:39:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669358343; x=1700894343;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=g8/tNfSQpEaSqLn7jd8I6VHreqJZWcaZZlqFJ8fP5g0=;
+  b=K4vMxonR6qMVAQDYanByaL9U3LmIqh3kvnrXje5SPI1VMeGbOsgs1dAy
+   I9gb8WMqu0RxwIi1KJocXfh23kON896lCJab4q/LvNRUrQnzOZAfycde7
+   2yte6nPz+Sg7eJFar2PSjv0Xi4mrcDgYzt9YkGQL9Fycr/vU5TXzz9Om3
+   IsjItXVqTzpOG7Rj2w7bQfA/v9Kg6U1kDynHcfYKAFWZ3CjObGRXRA5ds
+   blP43jVjdpjMik3GcIAiFaPx957M4vHYQpiRAQftlZZ+If2cNCXZEg5U8
+   XU57SOvMX2vBfz7+FQk3QRABm34sDOjq73rxaGoN6HmbJxYOidtCetP9s
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="315578605"
+X-IronPort-AV: E=Sophos;i="5.96,192,1665471600"; 
+   d="scan'208";a="315578605"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2022 22:39:03 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10541"; a="784846015"
+X-IronPort-AV: E=Sophos;i="5.96,192,1665471600"; 
+   d="scan'208";a="784846015"
+Received: from zhichen2-mobl.ccr.corp.intel.com ([10.254.210.142])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2022 22:39:01 -0800
+Message-ID: <5ed329f894bc81f5375303a69c07dee16630503e.camel@intel.com>
+Subject: Re: [RFC PATCH 2/3] cpuidle: ladder: Tune promotion/demotion
+ threshold
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     rjw@rjwysocki.net, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Fri, 25 Nov 2022 14:38:59 +0800
+In-Reply-To: <CAJZ5v0gPOUQDb8c_pVYjzBvU3e3U9JoLhJy5vRBF4h2=zvaHHw@mail.gmail.com>
+References: <20221105174225.28673-1-rui.zhang@intel.com>
+         <20221105174225.28673-2-rui.zhang@intel.com>
+         <CAJZ5v0gPOUQDb8c_pVYjzBvU3e3U9JoLhJy5vRBF4h2=zvaHHw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add tests for LDX/STX/ST instrumentation in each possible case.
-Four cases for STX/ST, include dst_reg equals to R0, R1, R10,
-other regs, respectively, ten cases for LDX. All new/existing
-selftests can pass.
+Hi, Rafael,
 
-A slab-out-of-bounds read report is also availble, which is
-achieved by exploiting CVE-2022-23222 and can be reproduced
-in Linux v5.10: https://pastebin.com/raw/Ee1Cw492.
+thanks for reviewing the patch series.
 
-Signed-off-by: Hao Sun <sunhao.th@gmail.com>
----
- .../selftests/bpf/verifier/sanitize_st_ldx.c  | 362 ++++++++++++++++++
- 1 file changed, 362 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/verifier/sanitize_st_ldx.c
+On Wed, 2022-11-23 at 18:50 +0100, Rafael J. Wysocki wrote:
+> On Sat, Nov 5, 2022 at 6:40 PM Zhang Rui <rui.zhang@intel.com> wrote:
+> > After fixing the bogus comparison between u64 and s64, the ladder
+> > governor stops making promotion decisions errornously.
+> > 
+> > However, after this, it is found that the ladder governor demotes
+> > much
+> > easier than promotes.
+> 
+> "After fixing an error related to using signed and unsigned integers
+> in the ladder governor in a previous patch, that governor turns out
+> to
+> demote much easier than promote"
+> 
+> > Below is captured using turbostat after a 30 seconds runtime idle,
+> > 
+> > Without previous patch,
+> > Busy%   IRQ     POLL    C1      C1E     C3      C6      C7s     C8 
+> >      C9      C10     CPU%c1  CPU%c3  CPU%c6  CPU%c7  PkgWatt
+> > 0.30    2373    0       0       0       4       9       25      122
+> >      326     2857    0.36    0.04    0.57    98.73   1.48
+> 
+> Why is the above relevant?
 
-diff --git a/tools/testing/selftests/bpf/verifier/sanitize_st_ldx.c b/tools/testing/selftests/bpf/verifier/sanitize_st_ldx.c
-new file mode 100644
-index 000000000000..1db0d1794f29
---- /dev/null
-+++ b/tools/testing/selftests/bpf/verifier/sanitize_st_ldx.c
-@@ -0,0 +1,362 @@
-+#ifdef CONFIG_BPF_PROG_KASAN
-+
-+#define __BACKUP_REG(n) \
-+	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_##n, INSN_OFF_MASK)
-+#define BACKUP_SCRATCH_REGS                                                 \
-+	__BACKUP_REG(1), __BACKUP_REG(2), __BACKUP_REG(3), __BACKUP_REG(4), \
-+		__BACKUP_REG(5)
-+
-+#define __RESTORE_REG(n) \
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_##n, BPF_REG_10, INSN_OFF_MASK)
-+#define RESTORE_SCRATCH_REGS                                  \
-+	__RESTORE_REG(1), __RESTORE_REG(2), __RESTORE_REG(3), \
-+		__RESTORE_REG(4), __RESTORE_REG(5)
-+
-+{
-+	"sanitize stx: dst is R1",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_1, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 1, 1),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BACKUP_SCRATCH_REGS,
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	RESTORE_SCRATCH_REGS,
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+	BPF_MOV64_REG(BPF_REG_0, MAX_BPF_REG),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_1, -8, 1),
-+	},
-+},
-+{
-+	"sanitize stx: dst is R0",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_0, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_0, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 1, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_1),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BACKUP_SCRATCH_REGS,
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	RESTORE_SCRATCH_REGS,
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
-+	BPF_MOV64_REG(BPF_REG_1, MAX_BPF_REG),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_0, -8, 1),
-+	},
-+},
-+{
-+	"sanitize stx: dst is R10",
-+	.insns = {
-+	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_10, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 1, 1),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.unexpected_insns = {
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	},
-+},
-+{
-+	"sanitize stx: dst is other regs",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_2, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_2, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 1, 1),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_1),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BACKUP_SCRATCH_REGS,
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	RESTORE_SCRATCH_REGS,
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_2),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_1),
-+	BPF_MOV64_REG(BPF_REG_1, MAX_BPF_REG),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_2, -8, 1),
-+	},
-+},
-+{
-+	"sanitize ldx: src is R1, dst is R0",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_1, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 1, 1),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BACKUP_SCRATCH_REGS,
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	RESTORE_SCRATCH_REGS,
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8),
-+	},
-+},
-+{
-+	"sanitize ldx: src is R1, dst is R1",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_1, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 1, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BACKUP_SCRATCH_REGS,
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	RESTORE_SCRATCH_REGS,
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+	BPF_MOV64_REG(BPF_REG_0, MAX_BPF_REG),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, -8),
-+	},
-+},
-+{
-+	"sanitize ldx: src is R1, dst is other regs",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_1, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_2, 1, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BACKUP_SCRATCH_REGS,
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	RESTORE_SCRATCH_REGS,
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+	BPF_MOV64_REG(BPF_REG_0, MAX_BPF_REG),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, -8),
-+	},
-+},
-+{
-+	"sanitize ldx: src is R0, dst is R1",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_0, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_0, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 1, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BACKUP_SCRATCH_REGS,
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	RESTORE_SCRATCH_REGS,
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_0, -8),
-+	},
-+},
-+{
-+	"sanitize ldx: src is R0, dst is R0",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_0, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_0, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 1, 1),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_1),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BACKUP_SCRATCH_REGS,
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	RESTORE_SCRATCH_REGS,
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
-+	BPF_MOV64_REG(BPF_REG_1, MAX_BPF_REG),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_0, -8),
-+	},
-+},
-+{
-+	"sanitize ldx: src is R0, dst is other regs",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_0, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_0, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_2, 1, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_1),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BACKUP_SCRATCH_REGS,
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	RESTORE_SCRATCH_REGS,
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
-+	BPF_MOV64_REG(BPF_REG_1, MAX_BPF_REG),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_0, -8),
-+	},
-+},
-+{
-+	"sanitize ldx: src is other regs, dst is R0",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_2, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_2, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 1, 1),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_1),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BACKUP_SCRATCH_REGS,
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	RESTORE_SCRATCH_REGS,
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+	BPF_MOV64_REG(BPF_REG_1, MAX_BPF_REG),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_2, -8),
-+	},
-+},
-+{
-+	"sanitize ldx: src is other regs, dst is R1",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_2, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_2, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 1, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BACKUP_SCRATCH_REGS,
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	RESTORE_SCRATCH_REGS,
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+	BPF_MOV64_REG(BPF_REG_0, MAX_BPF_REG),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_2, -8),
-+	},
-+},
-+{
-+	"sanitize ldx: src is other regs, dst is self",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_2, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_2, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_2, 1, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_2),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_1),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BACKUP_SCRATCH_REGS,
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	RESTORE_SCRATCH_REGS,
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_2),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_1),
-+	BPF_MOV64_REG(BPF_REG_1, MAX_BPF_REG),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_2, -8),
-+	},
-+},
-+{
-+	"sanitize ldx: src is other regs, dst is other regs",
-+	.insns = {
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_2, -8, 1),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_3, BPF_REG_2, -8),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_3, 1, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 2),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_3),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.retval = 1,
-+	.expected_insns = {
-+	BPF_MOV64_REG(MAX_BPF_REG, BPF_REG_1),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_2),
-+	BPF_MOV64_REG(BPF_REG_3, BPF_REG_0),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
-+	BACKUP_SCRATCH_REGS,
-+	BPF_EMIT_CALL(INSN_IMM_MASK),
-+	RESTORE_SCRATCH_REGS,
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_3),
-+	BPF_MOV64_REG(BPF_REG_1, MAX_BPF_REG),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_3, BPF_REG_2, -8),
-+	},
-+},
-+#endif /* CONFIG_BPF_PROG_KASAN */
--- 
-2.38.1
+Just for comparison purpose.
+For a pure idle scenario (Busy% < 0.5), with ladder governor, we used
+to have 99% CPU%c7, but now, with patch 1/3,
+
+CPU%c1  CPU%c3  CPU%c6  CPU%c7
+34.18   16.21   17.69   31.51
+This does not look like the correct behavior for any cpuidle governor.
+
+> 
+> > With previous patch,
+> > Busy%   IRQ     POLL    C1      C1E     C3      C6      C7s     C8 
+> >      C9      C10     CPU%c1  CPU%c3  CPU%c6  CPU%c7  PkgWatt
+> > 0.42    3071    0       771     838     447     327     336     382
+> >      299     344     34.18   16.21   17.69   31.51   2.00
+> > 
+> > And this is caused by the imbalanced
+> > PROMOTION_COUNT/DEMOTION_COUNT.
+> 
+> I would explain why/how the imbalanced PROMOTION_COUNT/DEMOTION_COUNT
+> imbalance causes this.
+
+sure, how about something below.
+
+The PROMOTION_COUNT/DEMOTION_COUNT are used as the threshold between
+the ladder governor detects it "should promote/demote", and the ladder
+governor does a real promotion/demotion.
+
+Currently, PROMOTION_COUNT is set to 4 and DEMOTION_COUNT is set to 1.
+This means that the ladder governor does real demotion immediately when
+it "should demote", but it does real promotion only if it "should
+promote" 4 times in a row, without a single "should demote" occur in
+between.
+
+As a result, this lower the chance to do real promotion and the ladder
+governor is more likely to choose a shallower state. 
+
+> 
+> I guess more residency in the deeper idle state is expected?  Or
+> desired??
+> 
+> > With this patch,
+> > Busy%   IRQ     POLL    C1      C1E     C3      C6      C7s     C8 
+> >      C9      C10     CPU%c1  CPU%c3  CPU%c6  CPU%c7  PkgWatt
+> > 0.39    2436    0       1       72      177     51      194     243
+> >      799     1883    0.50    0.32    0.35    98.45   1.53
+> > 
+> > Note that this is an experimental patch to illustrate the problem,
+> > and it is checked with idle scenario only for now.
+> > I will try to evaluate with more scenarios, and if someone can help
+> > evaluate with more scenarios at the same time and provide data for
+> > the
+> > benefit with different PROMOTION_COUNT/DEMOTION_COUNT values, that
+> > would be great.
+> 
+> So yes, this requires more work.
+> 
+> Overall, I think that you are concerned that the previous change
+> might
+> be regarded as a regression and are trying to compensate for it with
+> a
+> PROMOTION_COUNT/DEMOTION_COUNT change.
+
+Exactly.
+
+> I'm not sure I can agree with that approach, because the shallower
+> idle states might be preferred by the original ladder design
+> intentionally, for performance reasons.
+> 
+hmmm, even if there is only 30% c7/c8/c9/c10 residency in a pure idle
+scenario?
+
+And further more, since the imbalanced PROMOTION_COUNT/DEMOTION_COUNT
+and the unsigned/signed integers problem are both there since the first
+day the ladder governor was introduced, commit 4f86d3a8e297 ("cpuidle:
+consolidate 2.6.22 cpuidle branch into one patch"),
+
+my guess is that
+
+the unsigned/signed integers problem introduces a lot of pseudo
+promotions, and the PROMOTION_COUNT/DEMOTION_COUNT is introduced to
+workaround this so that the ladder governor doesn't get stuck at deep
+idle state.
+
+I don't have a solid proof for this. But at least for the pure idle
+scenario, I don't think 30% deep idle residency is the right behavior,
+and it needs to be tuned anyway.
+
+thanks,
+rui
+
+> > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> > ---
+> >  drivers/cpuidle/governors/ladder.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/cpuidle/governors/ladder.c
+> > b/drivers/cpuidle/governors/ladder.c
+> > index fb61118aef37..4b47aa0a4da9 100644
+> > --- a/drivers/cpuidle/governors/ladder.c
+> > +++ b/drivers/cpuidle/governors/ladder.c
+> > @@ -20,8 +20,8 @@
+> >  #include <asm/io.h>
+> >  #include <linux/uaccess.h>
+> > 
+> > -#define PROMOTION_COUNT 4
+> > -#define DEMOTION_COUNT 1
+> > +#define PROMOTION_COUNT 2
+> > +#define DEMOTION_COUNT 4
+> > 
+> >  struct ladder_device_state {
+> >         struct {
+> > --
+
 
