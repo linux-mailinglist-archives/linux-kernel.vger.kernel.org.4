@@ -2,56 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC80638280
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 03:41:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D5D4638287
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 03:44:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbiKYClD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 21:41:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47458 "EHLO
+        id S229702AbiKYCot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 21:44:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiKYCkz (ORCPT
+        with ESMTP id S229582AbiKYCoq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 21:40:55 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00252B180;
-        Thu, 24 Nov 2022 18:40:53 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id A878924DBCB;
-        Fri, 25 Nov 2022 10:40:52 +0800 (CST)
-Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 25 Nov
- 2022 10:40:52 +0800
-Received: from [192.168.125.96] (183.27.97.81) by EXMBX068.cuchost.com
- (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 25 Nov
- 2022 10:40:51 +0800
-Message-ID: <dfd4d062-f5f3-826d-b314-73302fc6c86c@starfivetech.com>
-Date:   Fri, 25 Nov 2022 10:40:51 +0800
+        Thu, 24 Nov 2022 21:44:46 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1EEE2B1A9;
+        Thu, 24 Nov 2022 18:44:45 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AP2CS8r029121;
+        Fri, 25 Nov 2022 02:44:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=z6JUryT4jk/yyFthRu8NYLvWjq32BhBoElWTlmNoT6s=;
+ b=goLLCv4Yk/0ea8hDii/RHxFEZRCQjoSdWyPUtAcsKp3Bjz1MNh33/lcM6p45mCDohi4S
+ e6lAjhKMhBBPhqi6ZeprtoTdIlm2fNPCDVAJD3uxhxCWTavyjYPF6p9t4/rZzgxrNv0X
+ nmX3eLoLW9Cvrk4unUPe8csJ3ZTqt3z1AhmAm3jjRV1ypo/VoUp4PnSvOkKQuxCZqsvV
+ iuvca7df2Am3qaz4Mg1eTAv0p0h54iLi4t7iqpRA41Z80umQuORvvfwCpV+2sHwWF+zF
+ XzoiWjQ95r44srYtOoFIybYQaGlC3Z+9RDA3BcMk9JZZWk2RytYhRnj4Vtv8Bpav8lFB Bg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m29349h28-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Nov 2022 02:44:37 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AP2iaRj025216
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Nov 2022 02:44:36 GMT
+Received: from [10.239.154.244] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 24 Nov
+ 2022 18:44:34 -0800
+Message-ID: <062fb756-e84a-68ba-1347-7a6e66d5ac0d@quicinc.com>
+Date:   Fri, 25 Nov 2022 10:44:32 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v1 3/4] soc: starfive: Add StarFive JH71XX pmu driver
+ Thunderbird/102.3.0
+Subject: Re: [PATCH] usb: gadget: f_fs: use io_data->status consistently
+To:     John Keeping <john@metanate.com>, <linux-usb@vger.kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Dan Carpenter <error27@gmail.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20221124170430.3998755-1-john@metanate.com>
 Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-CC:     <linux-riscv@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>
-References: <20221118133216.17037-1-walker.chen@starfivetech.com>
- <20221118133216.17037-4-walker.chen@starfivetech.com> <Y3fe0LbZlOX1Dcw5@spud>
-From:   Walker Chen <walker.chen@starfivetech.com>
-In-Reply-To: <Y3fe0LbZlOX1Dcw5@spud>
-Content-Type: text/plain; charset="UTF-8"
+From:   Linyu Yuan <quic_linyyuan@quicinc.com>
+In-Reply-To: <20221124170430.3998755-1-john@metanate.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.97.81]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX068.cuchost.com
- (172.16.6.68)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: a-6S_1FLDM1z4UxTuepDEb35gLSjLXK2
+X-Proofpoint-GUID: a-6S_1FLDM1z4UxTuepDEb35gLSjLXK2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-24_14,2022-11-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ lowpriorityscore=0 suspectscore=0 spamscore=0 impostorscore=0
+ priorityscore=1501 bulkscore=0 mlxlogscore=858 adultscore=0 clxscore=1011
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211250018
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,65 +81,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/19 3:36, Conor Dooley wrote:
-> Hey Walker,
-> 
-> On Fri, Nov 18, 2022 at 09:32:15PM +0800, Walker Chen wrote:
->> Add generic power domain driver for the StarFive JH71XX SoC.
->> 
->> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
->> ---
->>  MAINTAINERS                       |   8 +
-> 
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index a70c1d0f303e..112f1e698723 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -19623,6 +19623,14 @@ F:	Documentation/devicetree/bindings/reset/starfive,jh7100-reset.yaml
->>  F:	drivers/reset/starfive/
->>  F:	include/dt-bindings/reset/starfive*
->>  
->> +STARFIVE JH71XX PMU CONTROLLER DRIVER
->> +M:	Walker Chen <walker.chen@starfivetech.com>
->> +S:	Maintained
-> 
-> Should this be supported? (ditto the other series that you guys have
-> sent out in the last few days)
 
-Ok, will be changed to Supported.
+Reviewed-by: Linyu Yuan <quic_linyyuan@quicinc.com>
 
-> 
->> +F:	Documentation/devicetree/bindings/power/starfive*
->> +F:	drivers/soc/starfive/jh71xx_pmu.c
->> +F:	include/soc/starfive/pm_domains.h
->> +F:	include/dt-bindings/power/jh7110-power.h
-> 
-> I noticed that you have not CCed Arnd on these patches, which makes me
-> wonder how do you intend getting these patches applied?
-> Until now, Palmer has mostly merged RISC-V drivers/soc patches, but in
-> the last few days I've taken over for drivers/soc/{sifive,microchip}.
-> 
-> Are you going to send PRs for this stuff to Arnd, or would you like me
-> to apply patches for drivers/soc/startech? I happy to do that for you if
-> you like.
-> 
-> If you're going to send pull requests, I am not sure if Arnd requires
-> GPG signed tags for them. Arnd?
-> 
-> Otherwise, if you want me to take them, please add something like the
-> following, in addition to the entry your series already adds for the
-> specific driver:
-> STARFIVE SOC DRIVERS
-> M:	Conor Dooley <conor@kernel.org>
-> S:	Maintained
-> T:	git https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/
-> F:	drivers/soc/starfive/
-> F:	include/soc/starfive/
 
-Thank you for taking the time to review and comment. I hope you apply these patches 
-for drivers/soc/starfive. If you do that, I am very grateful to you!
-The above description will be added to MAINTAINERS in the next version of patch.
-
-Best Regards,
-Walker Chen
-
+On 11/25/2022 1:04 AM, John Keeping wrote:
+> Commit fb1f16d74e26 ("usb: gadget: f_fs: change ep->status safe in
+> ffs_epfile_io()") added a new ffs_io_data::status field to fix lifetime
+> issues in synchronous requests.
+>
+> While there are no similar lifetime issues for asynchronous requests
+> (the separate ep member in ffs_io_data avoids them) using the status
+> field means the USB request can be freed earlier and that there is more
+> consistency between the synchronous and asynchronous I/O paths.
+>
+> Cc: Linyu Yuan <quic_linyyuan@quicinc.com>
+> Signed-off-by: John Keeping <john@metanate.com>
+> ---
+>   drivers/usb/gadget/function/f_fs.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+> index 73dc10a77cde..1221f0d1b1a9 100644
+> --- a/drivers/usb/gadget/function/f_fs.c
+> +++ b/drivers/usb/gadget/function/f_fs.c
+> @@ -825,8 +825,7 @@ static void ffs_user_copy_worker(struct work_struct *work)
+>   {
+>   	struct ffs_io_data *io_data = container_of(work, struct ffs_io_data,
+>   						   work);
+> -	int ret = io_data->req->status ? io_data->req->status :
+> -					 io_data->req->actual;
+> +	int ret = io_data->status;
+>   	bool kiocb_has_eventfd = io_data->kiocb->ki_flags & IOCB_EVENTFD;
+>   
+>   	if (io_data->read && ret > 0) {
+> @@ -840,8 +839,6 @@ static void ffs_user_copy_worker(struct work_struct *work)
+>   	if (io_data->ffs->ffs_eventfd && !kiocb_has_eventfd)
+>   		eventfd_signal(io_data->ffs->ffs_eventfd, 1);
+>   
+> -	usb_ep_free_request(io_data->ep, io_data->req);
+> -
+>   	if (io_data->read)
+>   		kfree(io_data->to_free);
+>   	ffs_free_buffer(io_data);
+> @@ -856,6 +853,9 @@ static void ffs_epfile_async_io_complete(struct usb_ep *_ep,
+>   
+>   	ENTER();
+>   
+> +	io_data->status = req->status ? req->status : req->actual;
+> +	usb_ep_free_request(_ep, req);
+> +
+>   	INIT_WORK(&io_data->work, ffs_user_copy_worker);
+>   	queue_work(ffs->io_completion_wq, &io_data->work);
+>   }
