@@ -2,79 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9346638443
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 08:10:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA393638453
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 08:15:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiKYHKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 02:10:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36280 "EHLO
+        id S229632AbiKYHO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 02:14:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiKYHKS (ORCPT
+        with ESMTP id S229606AbiKYHOq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 02:10:18 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19C719296;
-        Thu, 24 Nov 2022 23:10:16 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NJQx05gyyz8QrkZ;
-        Fri, 25 Nov 2022 15:10:12 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2AP7A2qc050542;
-        Fri, 25 Nov 2022 15:10:02 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp02[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Fri, 25 Nov 2022 15:10:04 +0800 (CST)
-Date:   Fri, 25 Nov 2022 15:10:04 +0800 (CST)
-X-Zmail-TransId: 2afa63806a4cffffffffa5549e35
-X-Mailer: Zmail v1.0
-Message-ID: <202211251510047017670@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <cw00.choi@samsung.com>
-Cc:     <myungjoo.ham@samsung.com>, <kyungmin.park@samsung.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBQTSAvIGRldmZyZXE6IGV2ZW50OiBVc2UgZGV2aWNlX21hdGNoX29mX25vZGUoKQ==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2AP7A2qc050542
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 63806A54.001 by FangMail milter!
-X-FangMail-Envelope: 1669360212/4NJQx05gyyz8QrkZ/63806A54.001/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63806A54.001/4NJQx05gyyz8QrkZ
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 25 Nov 2022 02:14:46 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05352B620
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 23:14:44 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id b12so5453758wrn.2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 23:14:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7Pw7Ud8uaEoBuIuRRBEZJLZJrxngQ8HCMPnpIFft49s=;
+        b=FRaPlQvSWHXKw3p1xNOjlopLcDJxmm+nY/UeLG5lB/EWJEvORPVzFIw0AqVWU7so9M
+         J4zZtLIcroxqtLVtUSpmMNcdjB4cMmrpE3pigGKv6WFZghzydBL+y0MGVEjaYSZtfka2
+         5I5J63lhcfQoib0WQmYoGcCcRhBbMKHdjrzvUo/8+gLGrZQUzYLPusB5vtoLmvjSz5ax
+         q2atctidMEkDA74MXhKwENXcdXC5jmJHe4IbKpzNn2dW1rOaik/yO2+aYx4peglkdBsa
+         pGbwamKZu9GLPcMq3yDq9dFFXXwYqnCQHbLsOfGL/T/pGlw+9zeMvRv4bAPxuTF6LCys
+         eiow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7Pw7Ud8uaEoBuIuRRBEZJLZJrxngQ8HCMPnpIFft49s=;
+        b=fJVhlrfkJHntk9Y2ZH27uZmFuvTyKospSzaRRKrs9LCnfxRNkx4eRkRXAjIwhp/yIV
+         ZXFB3L95gHr+Q3qRHi4CKq281/uOL1WH+nfPjVTjljBr1HIq3rssCFqPeSm5xqF9P7pA
+         2zAHX9ushT+ykIkCd8aCE0Nr+qfBI/2E+YmwPNt9izDl/2eX/XDTRwO04IT4o5XNzuoJ
+         CR+tnJJyKLs//tmL5cYQ192NYDXfBcKm0xVfrS7054/9x7dYIxbGztTazb0IE7qyMYuQ
+         AuZRw9dw0UNwwWu1pWzS267rDXhVGC5qRZG4/+o/DNK/8iOfqOGELT7CW4prRjXjcFjw
+         WElQ==
+X-Gm-Message-State: ANoB5plOHeNcDd13dQUb/EgNfXEb3+fzanyBy1EK5noleUYiSWrlxjTu
+        ruxW0X1SD4wRVhV5wCjjWTU7Rg==
+X-Google-Smtp-Source: AA0mqf7FW4N96w4Tjg1QXNKmRp04ht4U+dNuA5z6DIMW609sYIhxq7ZZpALTkF1cW+yOtM29ZI7VtQ==
+X-Received: by 2002:adf:df09:0:b0:236:885e:ef4b with SMTP id y9-20020adfdf09000000b00236885eef4bmr22205827wrl.13.1669360483089;
+        Thu, 24 Nov 2022 23:14:43 -0800 (PST)
+Received: from localhost.localdomain ([5.133.47.210])
+        by smtp.gmail.com with ESMTPSA id c2-20020a05600c0a4200b003cfd4cf0761sm9108444wmq.1.2022.11.24.23.14.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Nov 2022 23:14:42 -0800 (PST)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH v2 00/10] misc: fastrpc: patches for 6.2
+Date:   Fri, 25 Nov 2022 07:13:55 +0000
+Message-Id: <20221125071405.148786-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+Hi Greg,
 
-Replace the open-code with device_match_of_node().
+Here are some fastrpc patches which add new feature to handle Audio
+Protection Domain. Along with it there is one locking update on dma-buf
+and an update to bindings.
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/devfreq/devfreq-event.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Could you please queue them up for 6.2.
 
-diff --git a/drivers/devfreq/devfreq-event.c b/drivers/devfreq/devfreq-event.c
-index 6765c03334bc..f041edccd107 100644
---- a/drivers/devfreq/devfreq-event.c
-+++ b/drivers/devfreq/devfreq-event.c
-@@ -233,7 +233,7 @@ struct devfreq_event_dev *devfreq_event_get_edev_by_phandle(struct device *dev,
+Thanks,
+Srini
 
- 	mutex_lock(&devfreq_event_list_lock);
- 	list_for_each_entry(edev, &devfreq_event_list, node) {
--		if (edev->dev.parent && edev->dev.parent->of_node == node)
-+		if (edev->dev.parent && device_match_of_node(edev->dev.parent, node))
- 			goto out;
- 	}
+
+changes since v1:
+	dropped a dmabuf lock patch.
+
+Abel Vesa (10):
+  dt-bindings: misc: qcom,fastrpc: increase allowed iommus entries
+  misc: fastrpc: Rename audio protection domain to root
+  misc: fastrpc: Add reserved mem support
+  misc: fastrpc: Add fastrpc_remote_heap_alloc
+  misc: fastrpc: Use fastrpc_map_put in fastrpc_map_create on fail
+  misc: fastrpc: Rework fastrpc_req_munmap
+  misc: fastrpc: Add support for audiopd
+  misc: fastrpc: Safekeep mmaps on interrupted invoke
+  misc: fastrpc: Add mmap request assigning for static PD pool
+  misc: fastrpc: Add dma_mask to fastrpc_channel_ctx
+
+ .../bindings/misc/qcom,fastrpc.yaml           |   2 +-
+ drivers/misc/fastrpc.c                        | 260 +++++++++++++++---
+ include/uapi/misc/fastrpc.h                   |   7 +
+ 3 files changed, 236 insertions(+), 33 deletions(-)
 
 -- 
 2.25.1
+
