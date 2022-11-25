@@ -2,180 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04F966388BE
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 12:29:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E3D6388C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 12:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbiKYL3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 06:29:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57810 "EHLO
+        id S229778AbiKYLah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 06:30:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiKYL3N (ORCPT
+        with ESMTP id S229541AbiKYLaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 06:29:13 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298A4BC01
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 03:29:12 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id m22so9638154eji.10
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 03:29:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura.hr; s=sartura;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fjVN2/rarqDocQfRidrwGPz+qRzx6OCOZytsLPLYMiI=;
-        b=TCteURvHQM5/U/BicR2ooC7pNBm94/ZNg1On4HQzhX1qR+4STId8/XzuNEF9aWrzXc
-         7XkkxA+clrH55MWjx645uvUgrvZnmVoOJJYPQGkKBksl4Ct5qzh87nuqSyGjhWQBizcw
-         LYIbQDm8Y65s6zdydt9EA+bLLfAtNcflaPd9yJSF39A1emvBm30GAYPGgcb4aQFGU97A
-         JM7sryoKzCFnuVDddXsqEeRYEwtu2nHm9MIxFiSwtzyu3/cigC6k2Xmu1TIrhlXsgzuv
-         XDBfw5VminEL6THAxgk6NBoduMboAmC53SoECNHgP9TZjFL7/Zbl9ZTSwwwQvAxkKRTy
-         FOqw==
+        Fri, 25 Nov 2022 06:30:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCBB175AC
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 03:29:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669375776;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=s7B+glXPiHunh65c3ikcxd5Un328udBU6gxH6BbvNec=;
+        b=Jm6VZNRUHvH1Hj/BvNFJCUh780V+BESN1f52M2RDzOeYvy5pMMKsIIvdIHMy8uvAWDsUtv
+        w4vba3f+GvFSI4LFk0ZywW3GkssRHbAHCsOvp1fEfsuKc/uScdxQXjG+D07ibmnE+HH2uD
+        0Vh0GXsBzOODWn1aNAiCZ9q0p2wiLBY=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-482-v6BxeaeXO2-mtveGq_Daug-1; Fri, 25 Nov 2022 06:29:33 -0500
+X-MC-Unique: v6BxeaeXO2-mtveGq_Daug-1
+Received: by mail-wm1-f70.google.com with SMTP id m17-20020a05600c3b1100b003cf9cc47da5so2296106wms.9
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 03:29:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fjVN2/rarqDocQfRidrwGPz+qRzx6OCOZytsLPLYMiI=;
-        b=WYdeHYcvq/G6ej+/gsgUjbjzA3yqLjRWFg1x/ejIR0YdMKtL9SrhhgSqAt1tFIrClp
-         9rPp0qjE+UHqh1mNVnKT5XiOf8B8iio1aAZU4SWkDntWBxJrQ/+3Fr68Q/dZjHQmOZlr
-         IGN3Pc81xEiv+CdH+3RqolSwsUGca6Erp5b8fc2D+3eaICexgtPNWo/FEgDqnnvQf7la
-         jyaltsbOB32xDbvOVUoYfR56d042cLiV2SwyS+FR/oLOEH+Orhkh2mGr9434vD7MEePA
-         chSvD6ZhBLG7ACC77HleyOjscnDK9M2/gJsFf/ihAhN8X5qj+dVuxXz81s9H5Vb+ixLp
-         kSHw==
-X-Gm-Message-State: ANoB5pnoNhZZhtckMDCGnR93vm1WFiHPD2DPw5SknNG0g5eBuHiW/DJ4
-        fwbxCQs1ieosx6rig6IdGEMJcg==
-X-Google-Smtp-Source: AA0mqf4RcSOX8BzWZvef3/rhkSC3lI78SUp/kX4xqPnhbCEp/4hNeep6gDAalJKqBRoSBRxq21lYdQ==
-X-Received: by 2002:a17:906:190d:b0:7bd:1f71:ee0e with SMTP id a13-20020a170906190d00b007bd1f71ee0emr581811eje.714.1669375750653;
-        Fri, 25 Nov 2022 03:29:10 -0800 (PST)
-Received: from fedora.. (dh207-98-224.xnet.hr. [88.207.98.224])
-        by smtp.googlemail.com with ESMTPSA id f19-20020a17090631d300b007a1d4944d45sm1451996ejf.142.2022.11.25.03.29.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Nov 2022 03:29:09 -0800 (PST)
-From:   Robert Marko <robert.marko@sartura.hr>
-To:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Robert Marko <robert.marko@sartura.hr>, luka.perkov@sartura.hr
-Subject: [PATCH] dt-bindings: watchdog: Convert GPIO binding to json-schema
-Date:   Fri, 25 Nov 2022 12:29:04 +0100
-Message-Id: <20221125112904.48652-1-robert.marko@sartura.hr>
-X-Mailer: git-send-email 2.38.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=s7B+glXPiHunh65c3ikcxd5Un328udBU6gxH6BbvNec=;
+        b=3Snb+lFthG4KZp5BDNjj5Z5vlr0TCQvzZTf6gg46X9gqgAFyH4m02+uH8JFkwnrs6v
+         mMCBqHXfwqctheSemfoZ+llWIUy/nWRI6nlN+elqX/4akzhJfUS7Q6oUrRpjzBBJuedt
+         GZknkNQ89TJZjoVo1KLqSTDbg5Tyrc65yPRBIE9gh3R3m0WAG7JLysyU4W2hAeoWUTre
+         jt5twSSbqzy9DA8wO3G1Gsai246sfmyhyH1GbY2J+KJe4K3o4X95r5XBeZXV/+PLiO0g
+         nAZexeMz78lA9Md6cW3e9mWiK0yeah5MTvUIjXR0RRjwNBBSnM+Xagu9VVw9VIvl5I3d
+         +5aQ==
+X-Gm-Message-State: ANoB5pmwjtxv5OIQ+oyomTbAUS/n686BxIoAWwVE9zwMvgF0s5ZTWsIB
+        g0IKO46ByX2LrQy60tfftMtJ/dbOFL7F1+4Y8xChrwypQAb02WgOeXzNNfLmdelU+XKHpKjtMR9
+        HGdqVCyTPmXZE1rURmbAc0Lkg
+X-Received: by 2002:a1c:4c0c:0:b0:3cf:9881:e9d9 with SMTP id z12-20020a1c4c0c000000b003cf9881e9d9mr27524185wmf.6.1669375772042;
+        Fri, 25 Nov 2022 03:29:32 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4tA122+galS8pDRgP2Y6iWuz67WbLgxFBL4oNYp0k+u30rTmKQtH54GX28s3piYeICYXfz4g==
+X-Received: by 2002:a1c:4c0c:0:b0:3cf:9881:e9d9 with SMTP id z12-20020a1c4c0c000000b003cf9881e9d9mr27524167wmf.6.1669375771857;
+        Fri, 25 Nov 2022 03:29:31 -0800 (PST)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id r14-20020a5d4e4e000000b002366ded5864sm3471722wrt.116.2022.11.25.03.29.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Nov 2022 03:29:30 -0800 (PST)
+Message-ID: <05e6a16f-ee7f-1b9a-0ab8-5b042d60c86d@redhat.com>
+Date:   Fri, 25 Nov 2022 12:29:29 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 18/24] drm/vc4: crtc: Introduce a lower-level crtc init
+ helper
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Maxime Ripard <mripard@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     David Gow <davidgow@google.com>, linaro-mm-sig@lists.linaro.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
+        linux-media@vger.kernel.org, kunit-dev@googlegroups.com,
+        dri-devel@lists.freedesktop.org,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        linux-kernel@vger.kernel.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>
+References: <20221123-rpi-kunit-tests-v1-0-051a0bb60a16@cerno.tech>
+ <20221123-rpi-kunit-tests-v1-18-051a0bb60a16@cerno.tech>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20221123-rpi-kunit-tests-v1-18-051a0bb60a16@cerno.tech>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the DT binding for GPIO WDT to JSON schema.
+On 11/23/22 16:26, Maxime Ripard wrote:
+> The current vc4_crtc_init() helper assumes that we will be using
+> hardware planes and calls vc4_plane_init().
+> 
+> While it's a reasonable assumption, we'll want to mock the plane and
+> thus provide our own. Let's create a helper that will take the plane as
+> an argument.
+> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> ---
 
-Cc: luka.perkov@sartura.hr
-Signed-off-by: Robert Marko <robert.marko@sartura.hr>
----
- .../devicetree/bindings/watchdog/gpio-wdt.txt | 28 ----------
- .../bindings/watchdog/gpio-wdt.yaml           | 55 +++++++++++++++++++
- 2 files changed, 55 insertions(+), 28 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/watchdog/gpio-wdt.txt
- create mode 100644 Documentation/devicetree/bindings/watchdog/gpio-wdt.yaml
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 
-diff --git a/Documentation/devicetree/bindings/watchdog/gpio-wdt.txt b/Documentation/devicetree/bindings/watchdog/gpio-wdt.txt
-deleted file mode 100644
-index 198794963786..000000000000
---- a/Documentation/devicetree/bindings/watchdog/gpio-wdt.txt
-+++ /dev/null
-@@ -1,28 +0,0 @@
--* GPIO-controlled Watchdog
--
--Required Properties:
--- compatible: Should contain "linux,wdt-gpio".
--- gpios: From common gpio binding; gpio connection to WDT reset pin.
--- hw_algo: The algorithm used by the driver. Should be one of the
--  following values:
--  - toggle: Either a high-to-low or a low-to-high transition clears
--    the WDT counter. The watchdog timer is disabled when GPIO is
--    left floating or connected to a three-state buffer.
--  - level: Low or high level starts counting WDT timeout,
--    the opposite level disables the WDT. Active level is determined
--    by the GPIO flags.
--- hw_margin_ms: Maximum time to reset watchdog circuit (milliseconds).
--
--Optional Properties:
--- always-running: If the watchdog timer cannot be disabled, add this flag to
--  have the driver keep toggling the signal without a client. It will only cease
--  to toggle the signal when the device is open and the timeout elapsed.
--
--Example:
--	watchdog: watchdog {
--		/* ADM706 */
--		compatible = "linux,wdt-gpio";
--		gpios = <&gpio3 9 GPIO_ACTIVE_LOW>;
--		hw_algo = "toggle";
--		hw_margin_ms = <1600>;
--	};
-diff --git a/Documentation/devicetree/bindings/watchdog/gpio-wdt.yaml b/Documentation/devicetree/bindings/watchdog/gpio-wdt.yaml
-new file mode 100644
-index 000000000000..155dc7965e9b
---- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/gpio-wdt.yaml
-@@ -0,0 +1,55 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/gpio-wdt.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: GPIO controlled watchdog
-+
-+maintainers:
-+  - Robert Marko <robert.marko@sartura.hr>
-+
-+properties:
-+  compatible:
-+    const: linux,wdt-gpio
-+
-+  gpios:
-+    maxItems: 1
-+    description: GPIO connected to the WDT reset pin
-+
-+  hw_algo:
-+    $ref: /schemas/types.yaml#/definitions/string
-+    description: Algorithm used by the driver
-+    oneOf:
-+      - description:
-+          Either a high-to-low or a low-to-high transition clears the WDT counter.
-+          The watchdog timer is disabled when GPIO is left floating or connected
-+          to a three-state buffer.
-+        const: toggle
-+      - description:
-+          Low or high level starts counting WDT timeout, the opposite level
-+          disables the WDT.
-+          Active level is determined by the GPIO flags.
-+        const: level
-+
-+  hw_margin_ms:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: Maximum time to reset watchdog circuit (in milliseconds)
-+    minimum: 2
-+    maximum: 65535
-+
-+  always-running:
-+    type: boolean
-+    description:
-+      If the watchdog timer cannot be disabled, add this flag to have the driver
-+      keep toggling the signal without a client.
-+      It will only cease to toggle the signal when the device is open and the
-+      timeout elapsed.
-+
-+required:
-+  - compatible
-+  - gpios
-+  - hw_algo
-+  - hw_margin_ms
-+
-+unevaluatedProperties: false
 -- 
-2.38.1
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
 
