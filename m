@@ -2,111 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D57E63898F
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 13:19:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6D55638992
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 13:19:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbiKYMTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 07:19:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43208 "EHLO
+        id S229783AbiKYMTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 07:19:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbiKYMTJ (ORCPT
+        with ESMTP id S229894AbiKYMTP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 07:19:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7EE1928F
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 04:19:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 88AA7622C1
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 12:19:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59DE8C433B5;
-        Fri, 25 Nov 2022 12:19:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669378748;
-        bh=mZOp0vsvzRrNngwKyz7HgmROJmugzd6BQQN4kzDGk24=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G5wlKNylGWwR6ccZnV/INSMAmpV0EY9BkrXiiJe/AQR0G5sNqfMBGGACQyjqJUA91
-         WQQJpKRH91kDEgfcIP8P1MnpMeDgzSLbZ1m3fc/5nqmVx0NrTQw0WCIm2PQPLCG26Z
-         bsYrl4UMvlHkFGB41Lqgs2Z/Dy9okY7qAotKMH1vvBDGSx2LTUaF3I0ieN7VTwWHx2
-         i1Nw+hxV+2g6R0dw44LxzAs+X8zw2uppIAi+zggmEC4W8zMX8dt1Qc7ZcrQtiuCYSw
-         zqJ6lKysbpar/wNHQoF2+hoBADLgTFJe/JEu5P+dHV8n+OwVcGTsc48biZoyqRl6tM
-         P8Cq6ZRKhRidA==
-Date:   Fri, 25 Nov 2022 12:18:58 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
-Cc:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
-        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
-        kuninori.morimoto.gx@renesas.com,
-        angelogioacchino.delregno@collabora.com, nfraprado@collabora.com,
-        chunxu.li@mediatek.com, ajye_huang@compal.corp-partner.google.com,
-        allen-kh.cheng@mediatek.com, dri-devel@lists.freedesktop.org,
-        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v2 1/3] ASoC: hdmi-codec: Add event handler for hdmi TX
-Message-ID: <Y4Cysgk5Gic5ae9B@sirena.org.uk>
-References: <20221125094413.4940-1-jiaxin.yu@mediatek.com>
- <20221125094413.4940-2-jiaxin.yu@mediatek.com>
+        Fri, 25 Nov 2022 07:19:15 -0500
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A19421B8;
+        Fri, 25 Nov 2022 04:19:13 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R451e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VVfPnmv_1669378749;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VVfPnmv_1669378749)
+          by smtp.aliyun-inc.com;
+          Fri, 25 Nov 2022 20:19:11 +0800
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Subject: [PATCH] selftests/tls: Fix tls selftests dependency to correct algorithm
+Date:   Fri, 25 Nov 2022 20:19:05 +0800
+Message-Id: <20221125121905.88292-1-tianjia.zhang@linux.alibaba.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kNT+QONpsQiODP63"
-Content-Disposition: inline
-In-Reply-To: <20221125094413.4940-2-jiaxin.yu@mediatek.com>
-X-Cookie: Time and tide wait for no man.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit d2825fa9365d ("crypto: sm3,sm4 - move into crypto directory") moves
+the SM3 and SM4 stand-alone library and the algorithm implementation for
+the Crypto API into the same directory, and the corresponding relationship
+of Kconfig is modified, CONFIG_CRYPTO_SM3/4 corresponds to the stand-alone
+library of SM3/4, and CONFIG_CRYPTO_SM3/4_GENERIC corresponds to the
+algorithm implementation for the Crypto API. Therefore, it is necessary
+for this module to depend on the correct algorithm.
 
---kNT+QONpsQiODP63
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Fixes: d2825fa9365d ("crypto: sm3,sm4 - move into crypto directory")
+Cc: Jason A. Donenfeld <Jason@zx2c4.com>
+Cc: stable@vger.kernel.org # v5.19+
+Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+---
+ tools/testing/selftests/net/config | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Fri, Nov 25, 2022 at 05:44:11PM +0800, Jiaxin Yu wrote:
+diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+index ead7963b9bf0..bd89198cd817 100644
+--- a/tools/testing/selftests/net/config
++++ b/tools/testing/selftests/net/config
+@@ -43,5 +43,5 @@ CONFIG_NET_ACT_TUNNEL_KEY=m
+ CONFIG_NET_ACT_MIRRED=m
+ CONFIG_BAREUDP=m
+ CONFIG_IPV6_IOAM6_LWTUNNEL=y
+-CONFIG_CRYPTO_SM4=y
++CONFIG_CRYPTO_SM4_GENERIC=y
+ CONFIG_AMT=m
+-- 
+2.24.3 (Apple Git-128)
 
-> +	/*
-> +	 * PCM trigger callback.
-> +	 * Mandatory
-> +	 */
-> +	int (*trigger)(struct device *dev, int cmd);
-> +
-
-Making this mandatory would break all existing users, though...
-
-> +	switch (event) {
-> +	case SND_SOC_DAPM_PRE_PMU:
-> +		if (hcp->hcd.ops->trigger)
-> +			hcp->hcd.ops->trigger(component->dev->parent, SNDRV_PCM_TRIGGER_START);
-
-...it's not actually mandatory so it's just the comment that's wrong.
-I'm a little unclear why this is being implemented as a DAPM operation
-rather than having the driver forward the PCM trigger op if it's needed?
-Or alternatively if a DAPM callback is needed why not provide one
-directly rather than hooking into the trigger function - that's going to
-be called out of sequence with the rest of DAPM and be potentially
-confusing given the very different environments that trigger and DAPM
-operations run in.  A quick glance at the it6505 driver suggests it'd be
-happier with a DAPM callback.
-
---kNT+QONpsQiODP63
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOAsrEACgkQJNaLcl1U
-h9CCdgf+JzEvQcOa+cudwzO1Ok98aky4qGZCuKQnnWtkrCayv8eiu7wd7w5G9dpU
-VciYfLQ8bgQ3UOImbANerH2+FJhMtldcF8Vn5FJCG1eXpJGMRbWrjguA15/n88uT
-bQ2wEInMii6ecKtSyULg3ie9tuLseZfS3jJHOwJeYFANRmaef0UUAQyPkHnnVsj8
-luaShk6424tDgSWY1es5RVtOOzPH/JpBXK1DKuCEBI7DFYuAJtmqgXXIZvfwNPHe
-sCV/N6DVZNU152PRSiyAX3Y8/x3NzYiSs6BXexv10OlCq44sCPYZ+HdbgY7qQL4y
-w7JwiNOcmvN0sbAhK0jjSKmJ3/spKw==
-=ReC2
------END PGP SIGNATURE-----
-
---kNT+QONpsQiODP63--
