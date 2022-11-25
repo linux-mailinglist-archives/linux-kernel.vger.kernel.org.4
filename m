@@ -2,52 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F024638214
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 02:22:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 071B563821C
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 02:40:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229495AbiKYBW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 20:22:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48122 "EHLO
+        id S229558AbiKYBjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 20:39:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiKYBWY (ORCPT
+        with ESMTP id S229644AbiKYBjp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 20:22:24 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1B615A23;
-        Thu, 24 Nov 2022 17:22:23 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NJHCY6zVtz4x1D;
-        Fri, 25 Nov 2022 12:22:17 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1669339339;
-        bh=saHo3P0BwjjRoCeS8vHqkJcotvhah21HE79XVudW4A8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=YdXoKpEBEbGG3yYiqxgt0dBcIkIROSq2g2FG/mWZW/2O+I13Cg72in6k7vlGGFiGR
-         3sbM2LEoEQSFh/lVIWuAZHNpyVsVlUdkhC66+kEzNKDmjjWT9e3G3xe+v8cSt1ljsx
-         Z83Z8sNYVMnQxcIKWWrksc/zf8xSxBp+lTgN7w1t5DSbQhhhodgtn5SMio7Jp+G3KK
-         Pn+XwRzz/FmGhHoZNhjpoArfHv02Px2wstdxnk9ncBYpAJ7a4Uzko4gFqbU9OcSY81
-         slHSrZgRK82hK/lTqujDACDxY3ehGqhipoFWP3+Aq3iDPDZiB9ltif0rPqLwRfJ0gJ
-         /PoMmSaKa7Tfg==
-Date:   Fri, 25 Nov 2022 12:22:16 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Borislav Petkov <bp@suse.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the efi tree with the tip tree
-Message-ID: <20221125122216.07eae5c6@canb.auug.org.au>
+        Thu, 24 Nov 2022 20:39:45 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F99F2A72D
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 17:38:56 -0800 (PST)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NJHZ501bpzmW83;
+        Fri, 25 Nov 2022 09:38:21 +0800 (CST)
+Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 25 Nov 2022 09:38:43 +0800
+Received: from [10.174.178.247] (10.174.178.247) by
+ dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 25 Nov 2022 09:38:43 +0800
+Subject: =?UTF-8?B?UmU6IFJl77yaUmU6IFtQQVRDSCAzLzNdIGFybV9zY3BpOiBtb2RpZnkg?=
+ =?UTF-8?Q?to_support_acpi?=
+To:     =?UTF-8?B?546L5rSq6L6J?= <honghui.wang@ucas.com.cn>,
+        Sudeep Holla <sudeep.holla@arm.com>
+CC:     Mark Rutland <mark.rutland@arm.com>,
+        Cristian Maruss <cristian.marussi@arm.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <tencent_3D435BAB4430B7F532CF2ADD@qq.com>
+From:   Hanjun Guo <guohanjun@huawei.com>
+Message-ID: <9732f012-f2f5-d770-c9b7-6005fa0c578f@huawei.com>
+Date:   Fri, 25 Nov 2022 09:38:42 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/TefiX9Y0xVmb/u4GSqfcIzX";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+In-Reply-To: <tencent_3D435BAB4430B7F532CF2ADD@qq.com>
+Content-Type: text/plain; charset="gb18030"; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.247]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500002.china.huawei.com (7.185.36.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,83 +59,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/TefiX9Y0xVmb/u4GSqfcIzX
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Honghui,
 
-Hi all,
+On 2022/11/24 22:17, Íõºé»Ô wrote:
+> Thanks!
+> 
+> The uefi firmware was built include ACPI/AML, but current kernel code is not able to extract the info, the ACPI/AML driver of kernel is not enough for majority of  devices , but fdt driver is. I think there's a lot of work to support more acpi driver.
 
-Today's linux-next merge of the efi tree got a conflict in:
+I think the firmware did the wrong thing about SCPI support,
+please take a look at ACPI 6.5, chapter 14 Platform Communications
+Channel (PCC).
 
-  arch/x86/boot/compressed/efi_thunk_64.S
-
-between commit:
-
-  cb8bda8ad443 ("x86/boot/compressed: Rename efi_thunk_64.S to efi-mixed.S")
-
-from the tip tree and commit:
-
-  a61962d8e7d3 ("efi: libstub: Permit mixed mode return types other than ef=
-i_status_t")
-
-from the efi tree.
-
-I fixed it up (I remofved the file and applied the following patch) and
-can carry the fix as necessary. This is now fixed as far as linux-next
-is concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 25 Nov 2022 12:15:58 +1100
-Subject: [PATCH] fix up for "efi: libstub: Permit mixed mode return types o=
-ther than efi_status_t"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- arch/x86/boot/compressed/efi_mixed.S | 6 ------
- 1 file changed, 6 deletions(-)
-
-diff --git a/arch/x86/boot/compressed/efi_mixed.S b/arch/x86/boot/compresse=
-d/efi_mixed.S
-index 8b02e507d3bb..4ca70bf93dc0 100644
---- a/arch/x86/boot/compressed/efi_mixed.S
-+++ b/arch/x86/boot/compressed/efi_mixed.S
-@@ -132,12 +132,6 @@ SYM_FUNC_START(__efi64_thunk)
- 	movl	%ebx, %fs
- 	movl	%ebx, %gs
-=20
--	/*
--	 * Convert 32-bit status code into 64-bit.
--	 */
--	roll	$1, %eax
--	rorq	$1, %rax
--
- 	pop	%rbx
- 	pop	%rbp
- 	RET
---=20
-2.35.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/TefiX9Y0xVmb/u4GSqfcIzX
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOAGMkACgkQAVBC80lX
-0GyuTgf+KRC2uYSZ8t9WyLMyCwCsMKqgTGvRRXy+TYQr3EHfUMfcvtZIVHzy6yft
-uRiffDEZ6u/GvEsPy+ah2gh2KgTeN1OMS4lZs9sqiF3YdDEELcI+iVWAKox0P5Vn
-O6cgIiafxnAdEkRM8G/zJGL5cJTRCZ9IoU5xmmNfE8ru+OEf4432skQpWw+p+J5T
-ecOv/Yle8+I+NFHHSJFUsPrWu1E295PFDt3n82Fhk3Br6reXJXvn5aU/CE3u109F
-VaA/DX3xr5+jvolbhb5EAHjgNxnFC3B5ZgCozkXluEidQmWwA6xBKGgNQOdE3J4z
-J2CU4jH61vbDA7LYGL+pOLay7XZ+oQ==
-=/BQW
------END PGP SIGNATURE-----
-
---Sig_/TefiX9Y0xVmb/u4GSqfcIzX--
+Thanks
+Hanjun
