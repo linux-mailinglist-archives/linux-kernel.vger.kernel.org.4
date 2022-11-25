@@ -2,109 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB64638B42
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 14:34:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14205638B57
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 14:36:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbiKYNeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 08:34:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33834 "EHLO
+        id S229728AbiKYNgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 08:36:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbiKYNe3 (ORCPT
+        with ESMTP id S229568AbiKYNgl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 08:34:29 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5401D27CE1
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 05:34:28 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id o5-20020a17090a678500b00218cd5a21c9so4162976pjj.4
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 05:34:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FPjVEmqI7FcTxDQjOjFdkmZXOdhj/g4dR9UU5XqZtdo=;
-        b=O3dV9w1EznnqADFI8HcfaP1tcl7bzoQWW4zf5eraPg2rOgS9vRJaZuljjONKu0gF9h
-         tcs0R6/MKfPkBaPsSzY6ZqrBf5ISGy0WXmzRxuzWXDlj0OIKtU20MIypxCNhFiHe7Nj5
-         AEt9L+DwkGeTu/MWXGDfID17tvy6pJnZw8C+4Dwa+ApcaRGi6rof+HINiZ39GponcGqy
-         AG2PS+epA/XcG8T29bGeOxPLFxqEerOJijlV9/zHsS5R0c7QlThgZzgZ9nKGPhFdTl6u
-         CaUk3ZksCZR996RcyL8UXmNTV+ABrcGZZ8f+dD4x2U8mD2sQw2+daLjueh4jc76s648H
-         2o2g==
+        Fri, 25 Nov 2022 08:36:41 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F82327171
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 05:36:40 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id q197-20020a6b8ece000000b006de79f67604so2070371iod.13
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 05:36:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FPjVEmqI7FcTxDQjOjFdkmZXOdhj/g4dR9UU5XqZtdo=;
-        b=TgM2Gw5H0jBmyyGIlpa4InrxSgNT2OYgN6+TSQjeDivkt35qmHbSSX9aqkaDWOjbtW
-         6/R4hz4JM+pj2vxKKc26FUD9x9XNy6nrplJCyhj7luKi6RzF8b43AgG2mEVZEG9O/5Eq
-         /E/FOuc7fgrRKNpY08XStRJgvM1c0FgAedR1ymc2nI7D+OUedHMrPFbrkdLaUL4hz1hG
-         IoFlrsaFw8TxrcxGW0j9AJN40uPdgv58M19WzFWUfu/hX15mKLkJmUxin5zQr6FtfnzB
-         yg4vn/oXZtjlhLOZGBUKfK2IlfzxITt3fBD9N/GO4o/sDnWxY9v6XZtBwR6q33037iRd
-         JTKA==
-X-Gm-Message-State: ANoB5plDJQgh++3miS8NR9FJ3OYk5jX+GYlFcfqXlYByVdWoFo34+r+s
-        4OuqCVfIWWEZ6yKfavKhMlCvUA==
-X-Google-Smtp-Source: AA0mqf6eo32xt+wquQDb1/qpXiRb26CIfPGb9VQMeM20qi/Yqwf5T/k6XRavx/rLl/caSk/fa+58Og==
-X-Received: by 2002:a17:902:ce8e:b0:174:b537:266d with SMTP id f14-20020a170902ce8e00b00174b537266dmr18444274plg.144.1669383267666;
-        Fri, 25 Nov 2022 05:34:27 -0800 (PST)
-Received: from [127.0.0.1] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
-        by smtp.gmail.com with ESMTPSA id k145-20020a628497000000b0056246403534sm3071291pfd.88.2022.11.25.05.34.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Nov 2022 05:34:26 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ye Bin <yebin@huaweicloud.com>
-Cc:     Ye Bin <yebin10@huawei.com>, ming.lei@redhat.com
-In-Reply-To: <20221117022940.873959-1-yebin@huaweicloud.com>
-References: <20221117022940.873959-1-yebin@huaweicloud.com>
-Subject: Re: [PATCH] blk-mq: fix possible memleak when register 'hctx' failed
-Message-Id: <166938326642.10648.1942082324154053183.b4-ty@kernel.dk>
-Date:   Fri, 25 Nov 2022 06:34:26 -0700
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Rg7zvfJJUkX6xAT/F8BXtC/IVqqsd55S66taMC514rE=;
+        b=rVnQp+1fTck1aBDZ7W1odOTD+4d716PPK06Md5eIxgh5ANdOJ2EHcWhVUDN7bypgDN
+         7vAw3enFje4LBuAbxGf+fQafae9jp4hweHD1VURRZP/HM43+PihhsSaVvkr2S0jMjiJl
+         IaH/1dLLQtDckCs2MxMJyQ2xwSaq+Cz2MN4w/Y7ntRutYiY5qTZ7wrIPcLCp6hp2cWsC
+         K1kSMXY/F4rZVVsEvDxM/JDAUS12h3rWArJ/hgnQpeCCcs5nDgTfcPhcmHDY9IHfPXVX
+         asPYPsx/4FMak+lFJfVoBFf0UhGQ76uWOgSNL43GNdcY33jmZrWD+d3HTt/lY1KiBiLj
+         wO2Q==
+X-Gm-Message-State: ANoB5pnU4wMlkolLlfUxRfogm7+QJAOnSsMV9Rr8Vb5dM22Y8CIhIlgS
+        CeJAIv5DKu/fy7/VmDb6Luw1Z87s6L/rauDjZIjm7pnJBZaI
+X-Google-Smtp-Source: AA0mqf6LtL7u7NfaAYY63kFvybp1q1L4JFqnw2SzK8R18S9lIl7PApzpNu8xgR5CkX5JIhZrE5O8OK8hLu72QPrOyCc2My963rb4
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-28747
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:b70a:0:b0:302:e38e:7620 with SMTP id
+ k10-20020a92b70a000000b00302e38e7620mr5102987ili.63.1669383399763; Fri, 25
+ Nov 2022 05:36:39 -0800 (PST)
+Date:   Fri, 25 Nov 2022 05:36:39 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000089773e05ee4b9cb4@google.com>
+Subject: [syzbot] kernel BUG in btrfs_drop_extents
+From:   syzbot <syzbot+0b1fb6b0108c27419f9f@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Nov 2022 10:29:40 +0800, Ye Bin wrote:
-> From: Ye Bin <yebin10@huawei.com>
-> 
-> There's issue as follows when do fault injection test:
-> unreferenced object 0xffff888132a9f400 (size 512):
->   comm "insmod", pid 308021, jiffies 4324277909 (age 509.733s)
->   hex dump (first 32 bytes):
->     00 00 00 00 00 00 00 00 08 f4 a9 32 81 88 ff ff  ...........2....
->     08 f4 a9 32 81 88 ff ff 00 00 00 00 00 00 00 00  ...2............
->   backtrace:
->     [<00000000e8952bb4>] kmalloc_node_trace+0x22/0xa0
->     [<00000000f9980e0f>] blk_mq_alloc_and_init_hctx+0x3f1/0x7e0
->     [<000000002e719efa>] blk_mq_realloc_hw_ctxs+0x1e6/0x230
->     [<000000004f1fda40>] blk_mq_init_allocated_queue+0x27e/0x910
->     [<00000000287123ec>] __blk_mq_alloc_disk+0x67/0xf0
->     [<00000000a2a34657>] 0xffffffffa2ad310f
->     [<00000000b173f718>] 0xffffffffa2af824a
->     [<0000000095a1dabb>] do_one_initcall+0x87/0x2a0
->     [<00000000f32fdf93>] do_init_module+0xdf/0x320
->     [<00000000cbe8541e>] load_module+0x3006/0x3390
->     [<0000000069ed1bdb>] __do_sys_finit_module+0x113/0x1b0
->     [<00000000a1a29ae8>] do_syscall_64+0x35/0x80
->     [<000000009cd878b0>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> 
-> [...]
+Hello,
 
-Applied, thanks!
+syzbot found the following issue on:
 
-[1/1] blk-mq: fix possible memleak when register 'hctx' failed
-      commit: 4b7a21c57b14fbcd0e1729150189e5933f5088e9
+HEAD commit:    c3eb11fbb826 Merge tag 'pci-v6.1-fixes-3' of git://git.ker..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=15f07a05880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8d01b6e3197974dd
+dashboard link: https://syzkaller.appspot.com/bug?extid=0b1fb6b0108c27419f9f
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=171a3f2d880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17338b55880000
 
-Best regards,
--- 
-Jens Axboe
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/d81ac029767f/disk-c3eb11fb.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/b68346b5b73c/vmlinux-c3eb11fb.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/410a61724587/bzImage-c3eb11fb.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/272c7f0998ac/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0b1fb6b0108c27419f9f@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+kernel BUG at fs/btrfs/file.c:786!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 3625 Comm: syz-executor242 Not tainted 6.1.0-rc6-syzkaller-00015-gc3eb11fbb826 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:btrfs_drop_extents+0x3527/0x3550 fs/btrfs/file.c:786
+Code: 00 48 8b 7c 24 48 e8 e8 9c 52 fe e9 85 fb ff ff e8 2e 84 fe fd 0f 0b e8 27 84 fe fd 0f 0b e8 20 84 fe fd 0f 0b e8 19 84 fe fd <0f> 0b e8 12 84 fe fd 0f 0b e8 0b 84 fe fd 0f 0b e8 04 84 fe fd 0f
+RSP: 0018:ffffc90003afe000 EFLAGS: 00010293
+RAX: ffffffff838c1457 RBX: 00000000fffffff4 RCX: ffff888077a657c0
+RDX: 0000000000000000 RSI: 00000000fffffff4 RDI: 0000000000000000
+RBP: ffffc90003afe390 R08: ffffffff838bfeb7 R09: ffffffff8381b3b2
+R10: 0000000000000002 R11: ffff888077a657c0 R12: dffffc0000000000
+R13: ffff888077829360 R14: 0000000000000000 R15: dffffc0000000000
+FS:  0000555556f703c0(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f199b878250 CR3: 0000000021698000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ cow_file_range_inline+0x41b/0x920 fs/btrfs/inode.c:434
+ cow_file_range+0x391/0xfa0 fs/btrfs/inode.c:1219
+ fallback_to_cow+0x47a/0x530 fs/btrfs/inode.c:1754
+ run_delalloc_nocow+0x1249/0x14a0 fs/btrfs/inode.c:2161
+ btrfs_run_delalloc_range+0x380/0x11a0 fs/btrfs/inode.c:2221
+ writepage_delalloc+0x25e/0x540 fs/btrfs/extent_io.c:1968
+ __extent_writepage+0x5d6/0x14d0 fs/btrfs/extent_io.c:2272
+ extent_write_cache_pages+0x9e7/0x12d0 fs/btrfs/extent_io.c:3186
+ extent_writepages+0x228/0x550 fs/btrfs/extent_io.c:3308
+ do_writepages+0x3c3/0x680 mm/page-writeback.c:2469
+ filemap_fdatawrite_wbc+0x11e/0x170 mm/filemap.c:388
+ __filemap_fdatawrite_range mm/filemap.c:421 [inline]
+ filemap_fdatawrite_range+0x175/0x200 mm/filemap.c:439
+ btrfs_fdatawrite_range fs/btrfs/file.c:4155 [inline]
+ start_ordered_ops fs/btrfs/file.c:2041 [inline]
+ btrfs_sync_file+0x39e/0x1140 fs/btrfs/file.c:2117
+ generic_write_sync include/linux/fs.h:2883 [inline]
+ btrfs_do_write_iter+0xcf2/0x1260 fs/btrfs/file.c:1990
+ do_iter_write+0x6c2/0xc20 fs/read_write.c:861
+ iter_file_splice_write+0x7fc/0xfc0 fs/splice.c:686
+ do_splice_from fs/splice.c:764 [inline]
+ direct_splice_actor+0xe6/0x1c0 fs/splice.c:931
+ splice_direct_to_actor+0x4e4/0xc00 fs/splice.c:886
+ do_splice_direct+0x279/0x3d0 fs/splice.c:974
+ do_sendfile+0x5fb/0xf80 fs/read_write.c:1255
+ __do_sys_sendfile64 fs/read_write.c:1323 [inline]
+ __se_sys_sendfile64+0x14f/0x1b0 fs/read_write.c:1309
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fd4bb0747e9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 81 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd1c3b5eb8 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
+RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007fd4bb0747e9
+RDX: 0000000000000000 RSI: 0000000000000006 RDI: 0000000000000005
+RBP: 00007ffd1c3b5f00 R08: 0000000000000002 R09: aaaaaaaaaaaa0102
+R10: 0001000000201005 R11: 0000000000000246 R12: 0000000000000007
+R13: 00007fd4bb0ee7bc R14: 0000000000000003 R15: 0000000000000001
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:btrfs_drop_extents+0x3527/0x3550 fs/btrfs/file.c:786
+Code: 00 48 8b 7c 24 48 e8 e8 9c 52 fe e9 85 fb ff ff e8 2e 84 fe fd 0f 0b e8 27 84 fe fd 0f 0b e8 20 84 fe fd 0f 0b e8 19 84 fe fd <0f> 0b e8 12 84 fe fd 0f 0b e8 0b 84 fe fd 0f 0b e8 04 84 fe fd 0f
+RSP: 0018:ffffc90003afe000 EFLAGS: 00010293
+RAX: ffffffff838c1457 RBX: 00000000fffffff4 RCX: ffff888077a657c0
+RDX: 0000000000000000 RSI: 00000000fffffff4 RDI: 0000000000000000
+RBP: ffffc90003afe390 R08: ffffffff838bfeb7 R09: ffffffff8381b3b2
+R10: 0000000000000002 R11: ffff888077a657c0 R12: dffffc0000000000
+R13: ffff888077829360 R14: 0000000000000000 R15: dffffc0000000000
+FS:  0000555556f703c0(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055f4cf139900 CR3: 0000000021698000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
