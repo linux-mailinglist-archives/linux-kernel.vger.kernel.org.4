@@ -2,75 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 324796390D4
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 21:48:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 014FF6390DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 21:50:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbiKYUsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 15:48:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
+        id S229847AbiKYUuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 15:50:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbiKYUsh (ORCPT
+        with ESMTP id S229610AbiKYUuh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 15:48:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1B727147;
-        Fri, 25 Nov 2022 12:48:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AA0360E9C;
-        Fri, 25 Nov 2022 20:48:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 79C78C433D6;
-        Fri, 25 Nov 2022 20:48:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669409314;
-        bh=TATGHwB7xBd9ArAnJsTaMk1P+5Zzj5vCxD/NRTaBBL4=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=XrcQf7nWMEAJ1N88RUjCqAJxBXPPrA2+P8wpUXoaibfxxeT+D87xI5QWcrB4n6g0o
-         VwDyUL3vEnjtADBQ9FB9V9gdfuB6z3yTvgVqRC02I1qoYoo1mVVJpFaEDZqt//hXjN
-         kCM3w6++k/fndbocPozJanGEdVxPqTLffhHwcGvOAIthqNKRXfEu3tl4WlHcAsCnWW
-         jLon8YXRb/neZbIV1MitlA9RfHGYl9Sl524I6Ej1xpavCEpcvwY6yArPRgDRCYFsiI
-         kRIVzav9UoVlS1Kqka2Kr0PKpNY8u/X3lvQlZqytSKz9Fk6UIfMb55sFVz6Gcp9Psu
-         +5XNCSRZrubAQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 64B20E270C7;
-        Fri, 25 Nov 2022 20:48:34 +0000 (UTC)
-Subject: Re: [GIT PULL] s390 updates for 6.1-rc7
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Y4DqhTPzzIz+GiyO@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-References: <Y4DqhTPzzIz+GiyO@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-X-PR-Tracked-List-Id: <linux-s390.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Y4DqhTPzzIz+GiyO@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-6.1-6
-X-PR-Tracked-Commit-Id: adba1a9b81d5020a9bf8332fee9ff0171fe7623d
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e3ebac80b6e9efe47b0ac3bf4b2d800b0b1958ff
-Message-Id: <166940931440.23524.16829188065171648049.pr-tracker-bot@kernel.org>
-Date:   Fri, 25 Nov 2022 20:48:34 +0000
-To:     Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 25 Nov 2022 15:50:37 -0500
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2083.outbound.protection.outlook.com [40.107.101.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439132ED5E
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 12:50:36 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Sz11yNfESJsM0dqsfqOgaigxjrrWlYyyhYoDvUzm4meUHbjzitCEYxXsHqtmljUBGKsWIhotYdWEBu6bjFGQImmF0+akD+peghofl0SVG2uRYjVhtPCRwetCveN8nUt6GqMoiFsX8GPSi1LI84xrI/9kwy6OZxtVi4NoNcrkKjz95nAwvq3cle9p7eLxxg581aUWc2M9B2+16eHRueiE1K7yUo0cIMxr9j4q2GOtybVC/paMT61ObQ4wMsNfHtuxIQ6ZrR4vTpFo29A5tQ0bcXx0/TSTOuazafi2vTY34WWk/fm3IRsZk2CaEi9kJOg/IUAH0G3QhHjmWUO52egXMA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/0cFnfo5yY4w9ku9swtap4o8e+iJji+2dML7/E3t5iw=;
+ b=bHIZKweHge5GFMlw7VvwXBUbDpQ9uB5uPKQh1rjSmn6YvoCyaMDsgL53xTciWGY6+x0u25XgRxiCy/jH306Q2mbj1AMj6wBqpq+9Ko/ZlQMASDbBEodv0O5R8yvXmhzBSm+F7Jcyj7IAQzKwDOdIuejTq4+iy5qGpxiejQAjzt3Gs7ytIl5UFGoy/drF8+eNKkRpYu/ulpeVolVqEAS3orOu+DVJ+s15QI7S04sYdhQmOB/CXeykk5YreyuHacnOmKqWbIxYTFWXJZirHHqD9IrBOaYhlCOygdJnqZ8u9bBEw70ThmB0CfIYRUca5hahSK0kNbrGXMfbajpJBZXX6w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/0cFnfo5yY4w9ku9swtap4o8e+iJji+2dML7/E3t5iw=;
+ b=js5YjPYc38frnUDV9rbK3IvykQ3aKIKDiE7W3T6GC8552eVjeMvmnHjpTDBtYfVA+U2ESNAOjLx6rog1cjWDGlQ2E6qU6cWJ3/LqbB7BuQIdvvpx3YUVZNnnOUwkThDARsAfFM8jpK6yX927lNugCwBFEt+zU2D6DqVw4PTer4Y=
+Received: from DM6PR11CA0016.namprd11.prod.outlook.com (2603:10b6:5:190::29)
+ by PH0PR12MB7905.namprd12.prod.outlook.com (2603:10b6:510:28b::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19; Fri, 25 Nov
+ 2022 20:50:33 +0000
+Received: from DM6NAM11FT020.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:190:cafe::c7) by DM6PR11CA0016.outlook.office365.com
+ (2603:10b6:5:190::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.20 via Frontend
+ Transport; Fri, 25 Nov 2022 20:50:32 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT020.mail.protection.outlook.com (10.13.172.224) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5857.18 via Frontend Transport; Fri, 25 Nov 2022 20:50:32 +0000
+Received: from hamza-pc.localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 25 Nov
+ 2022 14:50:31 -0600
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+To:     <amd-gfx@lists.freedesktop.org>
+CC:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Pavle Kotarac <Pavle.Kotarac@amd.com>,
+        David Zhang <dingchen.zhang@amd.com>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Mikita Lipski <mikita.lipski@amd.com>,
+        Po Ting Chen <robin.chen@amd.com>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] drm/amd/display: fix PSR-SU/DSC interoperability support
+Date:   Fri, 25 Nov 2022 15:50:43 -0500
+Message-ID: <20221125205043.373331-1-hamza.mahfooz@amd.com>
+X-Mailer: git-send-email 2.38.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT020:EE_|PH0PR12MB7905:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7b65d604-60f3-4425-174c-08dacf26b20a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sv3NUxJUjDw7KK0hEqxdArv2lIA4xnmPjLlTOBsVfVMXsGHwZ58SpKEsFUcjzoJIQGM5PvS4DYEOMBlM3iO1UxEeGLDcWbhhQPhJVawE8Q7gLE2lTaU6YLD/7rENoLnkFofaGfiIEuW/vO9H4wn43JbFDkvj9DN3D7On+LHwhyvdSmOKkvDiA0Z9x6K08KsjWRN0RiH7yGgD/18F82xctft3jv3e1KAZl/k3XubpjP36CM7AcNId3ng00gTyUBMM02HhXLsuwAhkQYrML+uj0ltcJHgyGiEYMRWMMShtj4mjqo1UP3flfq7+Jz2NeVp4hMSW6byiybKsfWk/86gmLZ652lhelAJ//ejoqOALY8l6D01duoxRMYFhbo1EzaXsGE0/F6u6J9+4lV6sremQFFZiuE5NP33LnDo04lVsLZRvgJjPNzO2KuTbCh573pvxNYvbRooxIZUQS5INRqmzphrRuxYFoABe49dI13C8ph8cKaJMtdvTGG3H4G6mm9sUJOnWWChcFwen2hcZWslJJbJv7chZDOBwDXfKCyI0xfyyJ/Wlaj1BYBCXJkcm1/QINfvOfPYUX6qvRhQtTyEmYjyeZuTTE+bg7zbKZSMO/a2Hrl2SB5+w+rBbf73bJpXaP3YchovZ98O3dUT1Ui9NSIyS6RkMpbLrsXQZ+j8HpnzT8U8PWLgdy43TOWHzcAsIGvtda7sQPGzzYZBdGyeP4mT3dCHqhhRhhlU5uwQarQYoSxdkYacx5uRXvE7sB6mmoLGlakPuLrrksjiniTtZPQ==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(346002)(376002)(136003)(451199015)(40470700004)(36840700001)(46966006)(86362001)(70586007)(40460700003)(70206006)(41300700001)(356005)(36860700001)(82740400003)(54906003)(8676002)(4326008)(82310400005)(81166007)(8936002)(316002)(6916009)(5660300002)(426003)(47076005)(83380400001)(44832011)(2906002)(40480700001)(478600001)(6666004)(1076003)(186003)(16526019)(2616005)(336012)(26005)(36756003)(16060500005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2022 20:50:32.8434
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7b65d604-60f3-4425-174c-08dacf26b20a
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT020.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7905
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 25 Nov 2022 17:17:09 +0100:
+Currently, there are issues with enabling PSR-SU + DSC. This stems from
+the fact that DSC imposes a slice height on transmitted video data and
+we are not conforming to that slice height in PSR-SU regions. So, pass
+slice_height into su_y_granularity to feed the DSC slice height into
+PSR-SU code.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-6.1-6
+Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+---
+ .../drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e3ebac80b6e9efe47b0ac3bf4b2d800b0b1958ff
-
-Thank you!
-
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c
+index 26291db0a3cf..55acadf0b63f 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c
+@@ -53,6 +53,41 @@ static bool link_supports_psrsu(struct dc_link *link)
+ 	return true;
+ }
+ 
++static bool psr_su_set_y_granularity(struct dc *dc, struct dc_link *link,
++				     struct dc_stream_state *stream,
++				     struct psr_config *config)
++{
++	u16 pic_height;
++	u8 slice_height;
++
++	if (!dc->caps.edp_dsc_support ||
++	    link->panel_config.dsc.disable_dsc_edp ||
++	    !link->dpcd_caps.dsc_caps.dsc_basic_caps.fields.dsc_support.DSC_SUPPORT ||
++	    !stream->timing.dsc_cfg.num_slices_v)
++		return true;
++
++	pic_height = stream->timing.v_addressable +
++		stream->timing.v_border_top + stream->timing.v_border_bottom;
++	slice_height = pic_height / stream->timing.dsc_cfg.num_slices_v;
++
++	if (slice_height) {
++		if (config->su_y_granularity &&
++		    (slice_height % config->su_y_granularity)) {
++			WARN(1,
++			     "%s: dsc: %d, slice_height: %d, num_slices_v: %d\n",
++			     __func__,
++			     stream->sink->dsc_caps.dsc_dec_caps.is_dsc_supported,
++			     slice_height,
++			     stream->timing.dsc_cfg.num_slices_v);
++			return false;
++		}
++
++		config->su_y_granularity = slice_height;
++	}
++
++	return true;
++}
++
+ /*
+  * amdgpu_dm_set_psr_caps() - set link psr capabilities
+  * @link: link
+@@ -122,6 +157,9 @@ bool amdgpu_dm_link_setup_psr(struct dc_stream_state *stream)
+ 		psr_config.allow_multi_disp_optimizations =
+ 			(amdgpu_dc_feature_mask & DC_PSR_ALLOW_MULTI_DISP_OPT);
+ 
++		if (!psr_su_set_y_granularity(dc, link, stream, &psr_config))
++			return false;
++
+ 		ret = dc_link_setup_psr(link, stream, &psr_config, &psr_context);
+ 
+ 	}
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.38.1
+
