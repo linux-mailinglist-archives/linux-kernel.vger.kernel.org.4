@@ -2,89 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C466388F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 12:42:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 198F26388F9
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 12:42:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbiKYLmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 06:42:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39524 "EHLO
+        id S230104AbiKYLmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 06:42:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiKYLmU (ORCPT
+        with ESMTP id S230193AbiKYLmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 06:42:20 -0500
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34BBB1E3F6;
-        Fri, 25 Nov 2022 03:42:19 -0800 (PST)
+        Fri, 25 Nov 2022 06:42:37 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719A42AC5
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 03:42:34 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id be13so6494348lfb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 03:42:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1669376539;
-  x=1700912539;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=JhyzSfrrReVX0sQCzaa5uP5Ld+NNauN2KVzxad0wMJA=;
-  b=aaxAm7XTJ3oP5MIs8no/Lz5/MiNXLM4WVCG+f9VE7jnk/2T0EWYOBmzD
-   SMnOePRCp+n+DQpYNeZYu1qZO747H2RkVWALh39sn/wi1jMfJwVRkQhwy
-   EFSlVrRpfFOZUA+SBLwRFVyr8B1l7YZdwujYDIWzyWTypXpc+c+K5C+OY
-   WyCiUQlcuzbpH1N/G4fYsetXX4F8a62qSSQckUDPIPkycc//Yr/2GDtFL
-   kVbuhl3EM08s1QOalPdXG2ouZmS+pJl+KpWYerAd4azPPrWqOpE0Q8Zq6
-   /+WmHuEFJlXZ6/Dinbpt7RL0X9fW7BcMbeesVIRkaeqrq3owkU41h2dSc
-   Q==;
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-CC:     <kernel@axis.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] perf annotate: Work with vmlinux outside symfs
-Date:   Fri, 25 Nov 2022 12:42:09 +0100
-Message-ID: <20221125114210.2353820-1-vincent.whitchurch@axis.com>
-X-Mailer: git-send-email 2.34.1
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HuPscf/chfZUucxqeK0O8KtSwVLAMHyTryFfC0BnouI=;
+        b=cRBJ1zIlVB87Nh4EHVcPOxoezUvVbm14AjUgY4f08Iy8TfC87vMcKJDo6glZPhWH7Z
+         GwT8aTsLmweIygCJ/gUv3Vykf6eM7OeiH3i8V8Zy5GD+xPul5w495P7qrsOrnyDaOxLl
+         11Yooh4D6KhfExQlcIjJp9pTmDEK/TrsXc1fkt2A+jNggyrcvkalMMV+LsSc+eKTBBl8
+         aO/wg7tP+nsnZtL5r2c+Dib0cy3zswaht6L8po9wdwGFjhxB6EsSMDCMhj1aL8jVoU+r
+         8Z+oahw4aQc+fkVoYQ8MpgIkXCKKc68nGnW00/rrfWqCGMvqKERweUhcQpK3NBZgJ2Uf
+         I9uQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HuPscf/chfZUucxqeK0O8KtSwVLAMHyTryFfC0BnouI=;
+        b=S6wwK1Wd9b87Bqe0ukocYGXrowKJLxESa/6dsz7ejS4yXf7/OZa8fe5adxyYYPdNok
+         QRwJ5RKwpILBwLBakLwbCtNW0lWDuKJJfbOiR0cFW4lo249h0thsLpcvZzgxReb7qbx6
+         07O7IedI9QopEHpMzi6M2tkEsWD9rZPwcW6dV1O6EfbSLxsibeuB2MurSJEo3ExuAHXw
+         C92BpoJmUUq0/XPJ8pxE0f+pXWTy6PfdPKuOmVQZ3esWck+lpMr3s3x+UDVhp5/CyG9S
+         gxFgbpksJGuaAIbd6eAFxu8BR7co8g7mFbYI5OLa+CVkoc6MvwhB5gIpVHLG70W5KFxw
+         KASg==
+X-Gm-Message-State: ANoB5pkB87dKOWfHP+mKIlKILxd7g3Pg3p9ymvVlxkGONMhgIoRl7Yht
+        VbBZx2oRBjffUZyhABpjgjv7yA==
+X-Google-Smtp-Source: AA0mqf69KgZUaBuDg3MrXss7tf94wwuwhowHtIdO7QNFzCE8H2TyG926JtAx4Z6Md29+4m7ZV17tMw==
+X-Received: by 2002:a19:760b:0:b0:4b1:ebdb:be43 with SMTP id c11-20020a19760b000000b004b1ebdbbe43mr7257355lff.176.1669376552426;
+        Fri, 25 Nov 2022 03:42:32 -0800 (PST)
+Received: from [192.168.1.101] (95.49.32.48.neoplus.adsl.tpnet.pl. [95.49.32.48])
+        by smtp.gmail.com with ESMTPSA id o7-20020a05651205c700b004a2550db9ddsm494684lfo.245.2022.11.25.03.42.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Nov 2022 03:42:31 -0800 (PST)
+Message-ID: <d03bd4d4-e4ef-681b-b4a5-02822e1eee75@linaro.org>
+Date:   Fri, 25 Nov 2022 12:42:29 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2] brcmfmac: Add support for BCM43596 PCIe Wi-Fi
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Kalle Valo <kvalo@kernel.org>,
+        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <ALSI@bang-olufsen.dk>,
+        Hector Martin <marcan@marcan.st>,
+        "~postmarketos/upstreaming@lists.sr.ht" 
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        "martin.botka@somainline.org" <martin.botka@somainline.org>,
+        "angelogioacchino.delregno@somainline.org" 
+        <angelogioacchino.delregno@somainline.org>,
+        "marijn.suijten@somainline.org" <marijn.suijten@somainline.org>,
+        "jamipkettunen@somainline.org" <jamipkettunen@somainline.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Marek Vasut <marex@denx.de>,
+        "Zhao, Jiaqing" <jiaqing.zhao@intel.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Soon Tak Lee <soontak.lee@cypress.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "brcm80211-dev-list.pdl@broadcom.com" 
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        "SHA-cyfmac-dev-list@infineon.com" <SHA-cyfmac-dev-list@infineon.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220921001630.56765-1-konrad.dybcio@somainline.org>
+ <83b90478-3974-28e6-cf13-35fc4f62e0db@marcan.st>
+ <13b8c67c-399c-d1a6-4929-61aea27aa57d@somainline.org>
+ <0e65a8b2-0827-af1e-602c-76d9450e3d11@marcan.st>
+ <7fd077c5-83f8-02e2-03c1-900a47f05dc1@somainline.org>
+ <CACRpkda3uryD6TOEaTi3pPX5No40LBWoyHR4VcEuKw4iYT0dqA@mail.gmail.com>
+ <20220922133056.eo26da4npkg6bpf2@bang-olufsen.dk> <87sfke32pc.fsf@kernel.org>
+ <4592f87a-bb61-1c28-13f0-d041a6e7d3bf@linaro.org>
+ <CACRpkdax-3VVDd29iH51mfumakqM7jyEc8Pbb=AQwAgp2WsqFQ@mail.gmail.com>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <CACRpkdax-3VVDd29iH51mfumakqM7jyEc8Pbb=AQwAgp2WsqFQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is currently possible to use --symfs along with a vmlinux which lies
-outside of the symfs by passing an absolute path to --vmlinux, thanks to
-the check in dso__load_vmlinux() which handles this explicitly.
 
-However, the annotate code lacks this check and thus perf annotate does
-not work ("Internal error: Invalid -1 error code") for kernel functions
-with this combination.  Add the missing handling.
 
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
----
- tools/perf/util/annotate.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+On 21.11.2022 14:56, Linus Walleij wrote:
+> On Fri, Nov 18, 2022 at 5:47 PM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+> 
+>> I can think of a couple of hacky ways to force use of 43596 fw, but I
+>> don't think any would be really upstreamable..
+> 
+> If it is only known to affect the Sony Xperias mentioned then
+> a thing such as:
+> 
+> if (of_machine_is_compatible("sony,xyz") ||
+>     of_machine_is_compatible("sony,zzz")... ) {
+>    // Enforce FW version
+> }
+> 
+> would be completely acceptable in my book. It hammers the
+> problem from the top instead of trying to figure out itsy witsy
+> details about firmware revisions.
+> 
+> Yours,
+> Linus Walleij
+Actually, I think I came up with a better approach by pulling a page
+out of Asahi folks' book - please take a look and tell me what you
+think about this:
 
-diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
-index db475e44f42f..52bdec764545 100644
---- a/tools/perf/util/annotate.c
-+++ b/tools/perf/util/annotate.c
-@@ -1695,7 +1695,11 @@ static int dso__disassemble_filename(struct dso *dso, char *filename, size_t fil
- 		 * cache, or is just a kallsyms file, well, lets hope that this
- 		 * DSO is the same as when 'perf record' ran.
- 		 */
--		__symbol__join_symfs(filename, filename_size, dso->long_name);
-+		if (dso->kernel && dso->long_name[0] == '/')
-+			snprintf(filename, filename_size,
-+				 "%s", dso->long_name);
-+		else
-+			__symbol__join_symfs(filename, filename_size, dso->long_name);
- 
- 		mutex_lock(&dso->lock);
- 		if (access(filename, R_OK) && errno == ENOENT && dso->nsinfo) {
--- 
-2.34.1
+[1] https://github.com/SoMainline/linux/commit/4b6fccc995cd79109b0dae4e4ab2e48db97695e7
+[2] https://github.com/SoMainline/linux/commit/e3ea1dc739634f734104f37fdbed046873921af7
 
+
+Konrad
