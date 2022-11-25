@@ -2,141 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 122A1638C26
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 15:28:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4075C638C2F
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 15:31:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbiKYO2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 09:28:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51470 "EHLO
+        id S229619AbiKYObT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 09:31:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbiKYO2k (ORCPT
+        with ESMTP id S229477AbiKYObR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 09:28:40 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098811FF8D
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 06:28:39 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id v1so6988182wrt.11
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 06:28:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lS8stYG6Frvb/BGcJu8YF7/dhbrkHyksUpy1OUW/W8o=;
-        b=iLf+bm0YWyEWyekYREpUElP51zBlNPaWDVomF+ugXXNHI3HoMojdsP6OWb0Kxvp9Ql
-         20w/dpa2zHvxucLayRJvwCeb2lun3jvwNqiyQMzC91Mq0xxEFkNg1ncxxZmJgGSrnoct
-         X8OIjqy3UwAkHd7od/eH9KDYIM8FSEmDZLizmfC3p8KeDgALXR22qkMFcQ6y4PeKFynJ
-         MiZp2L25QPylIW0RBjT5OXz6yiLQAUqnOriavIvmC4EolycVfTVv7TL3KRcsBDLqeK5n
-         NIqpykWn2GPyycoRO+hr9tsclBO75uNdAyxfUH1ug6I7WIECa8CtQYGGXtfgvf/jOEJ1
-         LIfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lS8stYG6Frvb/BGcJu8YF7/dhbrkHyksUpy1OUW/W8o=;
-        b=C3FwUvhzyd0HSAO0jECwwppCFzVMU88UqnA26tzsvq6UgM/vfQqHr3GmjsKADOjT/I
-         zaB1igNRauZpqLcsDK4hYF71SH/GqHX1nsLyqaS4bUbu2O0NPsSR70JaW4OH3f1St+gE
-         Ptgd3ulehxytfCuI42fGwolFGSOVwkPY0PTN38XMn3+isjRRhc7V+vae421LsjT1xhzN
-         YhA+C6rnhrY4AqtbWaSpW5zjRcaBJ61CissgdZRXpBtAQCVuTdA4HL8oOuntU6y8ibsr
-         xpDpN7YwZHGyEhpy8LV4eYKxg8/Mb5uudUznDj9OOkR/Jj1pvpbEG8jo4A0GoUbZtQ7m
-         ccOw==
-X-Gm-Message-State: ANoB5pl1YbwYJRYY5YRt0d+E71+9GvDX6vNP4ypTikLMN1K4x1vPzvwf
-        ai6IXPJx3rpUSRsOaYCVpTIPww==
-X-Google-Smtp-Source: AA0mqf7/pzzluGnCKQmm11BgI3tTNO02+C6KE6GeTiLRxeEFih/UD+ZhHhtfmgjjuNIHGli1CuGCOw==
-X-Received: by 2002:a5d:5187:0:b0:242:5ef:ce32 with SMTP id k7-20020a5d5187000000b0024205efce32mr2320626wrv.260.1669386517472;
-        Fri, 25 Nov 2022 06:28:37 -0800 (PST)
-Received: from [10.83.37.24] ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id e5-20020a05600c4e4500b003b492753826sm5249548wmq.43.2022.11.25.06.28.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Nov 2022 06:28:36 -0800 (PST)
-Message-ID: <2081d2ac-b2b5-9299-7239-dc4348ec0d0a@arista.com>
-Date:   Fri, 25 Nov 2022 14:28:30 +0000
+        Fri, 25 Nov 2022 09:31:17 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5094209B9;
+        Fri, 25 Nov 2022 06:31:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669386673; x=1700922673;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qDLD3fBqolvWdZw4+QW3UAeP3btXJS1HckNw0b9pvBk=;
+  b=HJ7QA8LQSnXBKcnYnyMNFxfNZmTw756C4e1nxqpDh/Hz/jSqyC/QpLlR
+   n7Re1vjundeTZ8gRIe8OcXaMK5FdSy4mC6/rsKW0yQ6iNqV5vmqKYDTUM
+   oQ72zO0ihjRPefm75gQGaOOnms+9I6dsGOODeByKkCcItAYm1oztv7qKG
+   aX/JzoOxuOuMeCS+sfIvO1ASyPJlDVXiyHnrBYyUgpa3geY9m3HfeUFZC
+   2YsoPExpuSFKgBIHygo85ULoT7xyxKVlUI11tHPuXzBU5xCX2Z/jQztbc
+   H9giXyF2Ag/WGQzGJCZWbhqSyQESJZ6CPshKq0+hCZ/frAZl7t/Vp7tck
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="315649430"
+X-IronPort-AV: E=Sophos;i="5.96,193,1665471600"; 
+   d="scan'208";a="315649430"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2022 06:31:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="817156468"
+X-IronPort-AV: E=Sophos;i="5.96,193,1665471600"; 
+   d="scan'208";a="817156468"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 25 Nov 2022 06:31:10 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oyZjQ-00HGM5-0j;
+        Fri, 25 Nov 2022 16:31:08 +0200
+Date:   Fri, 25 Nov 2022 16:31:07 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Wang Yufen <wangyufen@huawei.com>
+Cc:     bvanassche@acm.org, jgg@ziepe.ca, leon@kernel.org,
+        dennis.dalessandro@cornelisnetworks.com,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bart.vanassche@wdc.com, easwar.hariharan@intel.com
+Subject: Re: [PATCH 1/2] RDMA/hfi1: Fix error return code in
+ parse_platform_config()
+Message-ID: <Y4DRqzSGtsqTpAhU@smile.fi.intel.com>
+References: <1669377831-41386-1-git-send-email-wangyufen@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v6 1/5] jump_label: Prevent key->enabled int overflow
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        Bob Gilligan <gilligan@arista.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        Steven Rostedt <rostedt@goodmis.org>, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>
-References: <20221123173859.473629-1-dima@arista.com>
- <20221123173859.473629-2-dima@arista.com>
- <Y4B17nBArWS1Iywo@hirez.programming.kicks-ass.net>
-From:   Dmitry Safonov <dima@arista.com>
-In-Reply-To: <Y4B17nBArWS1Iywo@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1669377831-41386-1-git-send-email-wangyufen@huawei.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/25/22 07:59, Peter Zijlstra wrote:
-> On Wed, Nov 23, 2022 at 05:38:55PM +0000, Dmitry Safonov wrote:
->> 1. With CONFIG_JUMP_LABEL=n static_key_slow_inc() doesn't have any
->>    protection against key->enabled refcounter overflow.
->> 2. With CONFIG_JUMP_LABEL=y static_key_slow_inc_cpuslocked()
->>    still may turn the refcounter negative as (v + 1) may overflow.
->>
->> key->enabled is indeed a ref-counter as it's documented in multiple
->> places: top comment in jump_label.h, Documentation/staging/static-keys.rst,
->> etc.
->>
->> As -1 is reserved for static key that's in process of being enabled,
->> functions would break with negative key->enabled refcount:
->> - for CONFIG_JUMP_LABEL=n negative return of static_key_count()
->>   breaks static_key_false(), static_key_true()
->> - the ref counter may become 0 from negative side by too many
->>   static_key_slow_inc() calls and lead to use-after-free issues.
->>
->> These flaws result in that some users have to introduce an additional
->> mutex and prevent the reference counter from overflowing themselves,
->> see bpf_enable_runtime_stats() checking the counter against INT_MAX / 2.
->>
->> Prevent the reference counter overflow by checking if (v + 1) > 0.
->> Change functions API to return whether the increment was successful.
->>
->> Signed-off-by: Dmitry Safonov <dima@arista.com>
->> Acked-by: Jakub Kicinski <kuba@kernel.org>
-> 
-> This looks good to me:
-> 
-> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+On Fri, Nov 25, 2022 at 08:03:50PM +0800, Wang Yufen wrote:
+> In the previous while loop, "ret" may be assigned zero. Therefore,
+> "ret" needs to be assigned -EINVAL at the beginning of each loop.
 
-Thank you, Peter!
+...
 
-> What is the plan for merging this? I'm assuming it would want to go
-> through the network tree, but as already noted earlier it depends on a
-> patch I have in tip/locking/core.
-> 
-> Now I checked, tip/locking/core is *just* that one patch, so it might be
-> possible to merge that branch and this series into the network tree and
-> note that during the pull request to Linus.
+>  	while (ptr < (u32 *)(dd->platform_config.data + file_length)) {
+> +		ret = -EINVAL;
+>  		header1 = *ptr;
+>  		header2 = *(ptr + 1);
+>  		if (header1 != ~header2) {
 
-I initially thought it has to go through tip trees because of the
-dependence, but as you say it's just one patch.
+You may do it differently and simplify even existing code, i.e.
 
-I was also asked by Jakub on v4 to wait for Eric's Ack/Review, so once I
-get a go from him, I will send all 6 patches for inclusion into -net
-tree, if that will be in time before the merge window.
+// The following two lines to add
+bali_with_einval:
+	ret = -EINVAL;
+bail:
+	memset(pcfgcache, 0, sizeof(struct platform_config_cache));
+	return ret;
 
-Thanks again for the review and ack,
-          Dmitry
+Then you convert all goto bail; to goto bail_with_einval; where it's
+appropriate. And dropping some duplicative ret = -EINVAL; lines above.
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
