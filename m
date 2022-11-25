@@ -2,50 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E46076382B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 04:30:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 610966382BD
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 04:35:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbiKYDaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 22:30:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52976 "EHLO
+        id S229635AbiKYDf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 22:35:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiKYDaR (ORCPT
+        with ESMTP id S229453AbiKYDf0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 22:30:17 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1211DA76;
-        Thu, 24 Nov 2022 19:30:15 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NJL393T3cz4x1V;
-        Fri, 25 Nov 2022 14:30:13 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1669347014;
-        bh=6SWwZc2uQtmpeEVjQzq7dy69TnAznszEflKHW/ZfoLY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=SnCFcg/C4VSrKZZ+rUfjyyLZ44/oQbDrg/sJp1Q5r3pSsZIN+0vTqPNGugZHmoiwZ
-         jShzCWsdh2qx5xOb61DO+rwX2ddHafsHh4E3uWDemT73c3GOB43aDIdoqxDFpP86PV
-         KshHXPQdYCtnh+PQwWQ2vldLjOF86GReJkbTorfi7+kf9OECLD9aqP0iFSsrdiL+wU
-         ANr8T6jLZlOct4Sncyq8ql0VXb+SmJzERPqjuvpJ9S6ikITpASHyZQAFVxVefWwOge
-         GJJSX2Yw+0SveJv8oHb2iYm5hpby6t2ckc6K2vZuUMXDG89Bqr/k4gpbBRVmLISeVb
-         VtIwtOrtQMK1g==
-Date:   Fri, 25 Nov 2022 14:30:12 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Sathvika Vasireddy <sv@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the powerpc-objtool tree
-Message-ID: <20221125143012.6426c2b9@canb.auug.org.au>
+        Thu, 24 Nov 2022 22:35:26 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B753C2982C;
+        Thu, 24 Nov 2022 19:35:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=f8/x32fER3aRdejEpsCx+wOLDBv/ItD+V8F3NbSrtbc=; b=r01ynWszvCOW0gRReJc0mPmaeT
+        4udkpjpGBia+sXIkLIOXBsuaTlBVVkhuppKmpDdjkBhDkp9t+rxXxKEZfC7Fah0vLuWEsX16J14kQ
+        iTDi+/xmZDYDDpRiJO3Ln80mvbANCN9dZ1YHac6GOcrRJjA/aE2lJaIL/tDDVCfEUylL4CZlZXZZX
+        nbCeFUeaVpnHpD9IQVhtUafE52qEQizDsH/bqXEg2ls1U9f8Vd+QBwZpM706f8WpTgGDI09nTdvx6
+        baGfSswMUU47TynqNM8QZmdIAaIBUdKFdNBuvYwagQEw9nbEwfjDKkq/hBZ4WObbqHj0I0Imkq+By
+        1qK4U+Ig==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1oyPTi-006a41-0t;
+        Fri, 25 Nov 2022 03:34:14 +0000
+Date:   Fri, 25 Nov 2022 03:34:14 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Jeff Layton <jlayton@kernel.org>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>,
+        David Howells <dhowells@redhat.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Xiubo Li <xiubli@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Tom Talpey <tom@talpey.com>,
+        Christine Caulfield <ccaulfie@redhat.com>,
+        David Teigland <teigland@redhat.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Bob Peterson <rpeterso@redhat.com>,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Mark Fasheh <mark@fasheh.com>,
+        Joel Becker <jlbec@evilplan.org>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        Mike Marshall <hubcap@omnibond.com>,
+        Martin Brandenburg <martin@omnibond.com>,
+        "Darrick J. Wong" <djwong@kernel.org>, hch@lst.de,
+        linux-kernel@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
+        linux-afs@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org, cluster-devel@redhat.com,
+        linux-nfs@vger.kernel.org, ocfs2-devel@oss.oracle.com,
+        devel@lists.orangefs.org, linux-xfs@vger.kernel.org
+Subject: Re: [PATCH] filelock: move file locking definitions to separate
+ header file
+Message-ID: <Y4A3tmISFIR7ERfE@ZenIV>
+References: <20221120210004.381842-1-jlayton@kernel.org>
+ <Y3xHQwM3UiD/SK0K@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/qIAd5CAuMjQ7zm8y6Hspz0Y";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3xHQwM3UiD/SK0K@casper.infradead.org>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,40 +85,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/qIAd5CAuMjQ7zm8y6Hspz0Y
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Nov 22, 2022 at 03:51:31AM +0000, Matthew Wilcox wrote:
+> On Sun, Nov 20, 2022 at 03:59:57PM -0500, Jeff Layton wrote:
+> > Move the file locking definitions to a new header file, and add the
+> > appropriate #include directives to the source files that need them. By
+> > doing this we trim down fs.h a bit and limit the amount of rebuilding
+> > that has to be done when we make changes to the file locking APIs.
+> 
+> I'm in favour of this in general, but I think there's a few implicit
+> includes.  Can you create a test.c that only #include
+> <linnux/filelock.h> and see if there's anything missing?
+> 
+> > +	wait_queue_head_t fl_wait;
+> > +	struct file *fl_file;
+> 
+> These two seem undefined at this point.
+> 
+> > +	struct fasync_struct *	fl_fasync; /* for lease break notifications */
+> 
+> Likewise.
 
-Hi all,
+#include <linux/wait.h>
 
-After merging the powerpc-objtool tree, today's linux-next build (powerpc
-pseries_le_defconfig) produced these warnings:
+struct file;
+struct fasync_struct;
 
-arch/powerpc/kernel/head_64.o: warning: objtool: end_first_256B(): can't fi=
-nd starting instruction
-arch/powerpc/kernel/optprobes_head.o: warning: objtool: optprobe_template_e=
-nd(): can't find starting instruction
 
-I have no idea what started this (they may have been there yesterday).
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/qIAd5CAuMjQ7zm8y6Hspz0Y
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOANsQACgkQAVBC80lX
-0Gx9qggAl/flwI3IFQ4qQYlHsYOAVZdsiag897RGpD2qHFNlnRyfaoBHVwSh4XFj
-LPSFRiK4kjbMj4iJgD57WCDqklvx5R6BrixXRHFXaMecbJzBDWepEVZLhR7Cth2C
-ZeDWXrZC38j8Yx/nHMjQqPXxZCV5ua4sUYGMcX9V6D8cRA5Qaf8nDbV4hzZEYKsA
-pqByt5NeRX6sOGRSSJwd/ddIKbASklks1sYxYk7ijeGgB+up94tTarDwnHbWo5mO
-UiYfx6uPfiijrT8B3Nd/9XtxL4+Eoru1cfj9+eZJxqb83NcpiTDfVlQk1YL4W+09
-iutP/nnvH3/N4yk9i95pDrikytSbEA==
-=6Rr6
------END PGP SIGNATURE-----
-
---Sig_/qIAd5CAuMjQ7zm8y6Hspz0Y--
