@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 961C46386AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 10:49:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F20276386B8
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 10:50:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbiKYJtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 04:49:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60390 "EHLO
+        id S230129AbiKYJtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 04:49:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiKYJsO (ORCPT
+        with ESMTP id S229912AbiKYJsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 04:48:14 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935672D764
+        Fri, 25 Nov 2022 04:48:15 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3213E0BF
         for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 01:46:34 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id h20-20020a056e021d9400b00300581edaa5so2594517ila.12
+Received: by mail-il1-f200.google.com with SMTP id j20-20020a056e02219400b00300a22a7fe0so2619976ila.3
         for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 01:46:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=O4DGcGV2JrRZXaUOixoskVdfBL3gOdPW1qweVO1zLOI=;
-        b=Iz0j0t4AjgLV77vy7aWT42VNA/m29YUlZYwAPgjTp5aGpW0XtAzD0Qo9oMoFYfxnzP
-         rVYFB6CpQ41O51bQNeABkfLiTKwwgoACyLYNaaPRBLyUdgcVjXAXvWKhAFRM7mDnhkfE
-         zRcMTiG/c93mpf/3sqeIKMz5XQtcDuiNsIaNK/X+FXa1ssBF+QQCZ5Pp4TZuSqutsDmz
-         jka6755n3gBehIWd6Q+dWb39hwzONRW8EPFXVPS/s4TWtYvwroc6umjskivUAQwEK2I7
-         g5WKJrX3JDLmn0v7anHl00BMtB64B3G42uBgEd1g0Jonp24fLhBNEUETPhHyIoKWu8dP
-         nQLA==
-X-Gm-Message-State: ANoB5pkvdlvVbOCK40aFvRplmYAVk1AY3jcCJh0GJY3CaMYrse3FUAlc
-        Dct2hvMdXlazhx9RF8C4hgdurYmhvM3/HWWTf1SxFbCcMvyD
-X-Google-Smtp-Source: AA0mqf7808ABF7EIhF6nXmCUmPVEc5WHZs0bQ9RSwxD1mSx4dwq+7GUluNRc+oQA/XXuwAnN7okq06jL2PQIaHmOgXpbGR9/xLb9
+        bh=oozvbbcqsuDZpplpfBZRUDeUw0G5+ggpfxV0UEudkZ0=;
+        b=W0TtUW490+7PM02Fn/2Cena7Q+aCSvfL8GWWI3UGsh9UHV4UWq4H0MskbUI37towgm
+         Qeew+wphFFE2QAB8r/q48jvkzbt/uakfXlOcgo1gqKhmWzGIO4Hr1HGG4Snn2Q4Wdvsr
+         plCqiyqPTgZ6wqejQ5q/df/mVuoxMnHkGkWVUEzSWWWJMv8wtGUJcHi+Sn+Tv3c9P0z6
+         qJY7Bfx6t4Wc/8iJQjipEv5pmVeWUYMwR6WO/h+eSvrHVesKjmspzQlTmX0C/CcHFaYv
+         O0JAQtbqQgjfgHeML3129D0utPec7sdSD+a/f+xDQEYJ84IU3EADebpqweOhHTIahUKv
+         GFdw==
+X-Gm-Message-State: ANoB5pmav96E8H4TOgKNk4p8WErXhnMFMx2FrU8g5Odes1IZa1dDQqWf
+        UUQ6Y2iXhufIK5YzA2urnRW1eFlgTztwyrOCTr5y+wpjwRbF
+X-Google-Smtp-Source: AA0mqf760M2FH+IKvxtpfffiXOSmIkKYUlrU0oQJiRnU82CwPkt981LOBti1h6yQtBMVfenn0kEGdKgkYxJehdOHtxiBVL2+ILS1
 MIME-Version: 1.0
-X-Received: by 2002:a02:c48a:0:b0:375:9796:17c1 with SMTP id
- t10-20020a02c48a000000b00375979617c1mr15850021jam.18.1669369593982; Fri, 25
- Nov 2022 01:46:33 -0800 (PST)
-Date:   Fri, 25 Nov 2022 01:46:33 -0800
+X-Received: by 2002:a6b:7511:0:b0:6d6:8005:8527 with SMTP id
+ l17-20020a6b7511000000b006d680058527mr9716524ioh.166.1669369594234; Fri, 25
+ Nov 2022 01:46:34 -0800 (PST)
+Date:   Fri, 25 Nov 2022 01:46:34 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a5f23f05ee4865cf@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in set_de_name_and_namelen
-From:   syzbot <syzbot+3969ffae9388a369bab8@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
+Message-ID: <000000000000a9ccd705ee4865be@google.com>
+Subject: [syzbot] kernel BUG in clear_state_bit
+From:   syzbot <syzbot+78dbea1c214b5413bdd3@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
         syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
@@ -59,104 +60,95 @@ syzbot found the following issue on:
 
 HEAD commit:    c3eb11fbb826 Merge tag 'pci-v6.1-fixes-3' of git://git.ker..
 git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=15a7e1c9880000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1280f3ed880000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=8d01b6e3197974dd
-dashboard link: https://syzkaller.appspot.com/bug?extid=3969ffae9388a369bab8
+dashboard link: https://syzkaller.appspot.com/bug?extid=78dbea1c214b5413bdd3
 compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1615d7e5880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15f20981880000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=149d9403880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14a0d8e3880000
 
 Downloadable assets:
 disk image: https://storage.googleapis.com/syzbot-assets/d81ac029767f/disk-c3eb11fb.raw.xz
 vmlinux: https://storage.googleapis.com/syzbot-assets/b68346b5b73c/vmlinux-c3eb11fb.xz
 kernel image: https://storage.googleapis.com/syzbot-assets/410a61724587/bzImage-c3eb11fb.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/0b4c696f5585/mount_0.gz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/f47b682262bc/mount_0.gz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+3969ffae9388a369bab8@syzkaller.appspotmail.com
+Reported-by: syzbot+78dbea1c214b5413bdd3@syzkaller.appspotmail.com
 
-REISERFS (device loop0): Using r5 hash to sort names
-REISERFS (device loop0): Created .reiserfs_priv - reserved for xattr storage.
-==================================================================
-BUG: KASAN: use-after-free in strlen+0x56/0x60 lib/string.c:495
-Read of size 1 at addr ffff8880700f09cc by task syz-executor399/3632
-
-CPU: 0 PID: 3632 Comm: syz-executor399 Not tainted 6.1.0-rc6-syzkaller-00015-gc3eb11fbb826 #0
+BTRFS: device fsid d552757d-9c39-40e3-95f0-16d819589928 devid 1 transid 8 /dev/loop0 scanned by syz-executor247 (3626)
+BTRFS info (device loop0): using sha256 (sha256-avx2) checksum algorithm
+BTRFS info (device loop0): using free space tree
+BTRFS info (device loop0): enabling ssd optimizations
+------------[ cut here ]------------
+kernel BUG at fs/btrfs/extent-io-tree.c:517!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 3626 Comm: syz-executor247 Not tainted 6.1.0-rc6-syzkaller-00015-gc3eb11fbb826 #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:clear_state_bit+0x325/0x330 fs/btrfs/extent-io-tree.c:517
+Code: 2f fe e9 9c fd ff ff 44 89 e9 80 e1 07 80 c1 03 38 c1 0f 8c c7 fe ff ff 4c 89 ef e8 a5 0f 2f fe e9 ba fe ff ff e8 bb f7 da fd <0f> 0b 66 0f 1f 84 00 00 00 00 00 55 48 89 e5 41 57 41 56 41 55 41
+RSP: 0018:ffffc90003cae8d0 EFLAGS: 00010293
+RAX: ffffffff83afa0b5 RBX: 00000000fffffff4 RCX: ffff888022add7c0
+RDX: 0000000000000000 RSI: 00000000fffffff4 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffff83af9ee2 R09: 00000000ffffffff
+R10: fffffbfff1a42e97 R11: 1ffffffff1a42e96 R12: ffff88807f27c540
+R13: ffffc90003caead8 R14: 0000000000001000 R15: dffffc0000000000
+FS:  0000555555ca1300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020010000 CR3: 0000000023ed5000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- print_address_description+0x74/0x340 mm/kasan/report.c:284
- print_report+0x107/0x1f0 mm/kasan/report.c:395
- kasan_report+0xcd/0x100 mm/kasan/report.c:495
- strlen+0x56/0x60 lib/string.c:495
- _Z16__fortify_strlenPKcU17pass_object_size1 include/linux/fortify-string.h:196 [inline]
- set_de_name_and_namelen+0x378/0x5c0 fs/reiserfs/namei.c:82
- search_by_entry_key+0x6ca/0xd20 fs/reiserfs/namei.c:172
- reiserfs_readdir_inode+0x235/0x1410 fs/reiserfs/dir.c:98
- iterate_dir+0x257/0x5f0
- __do_sys_getdents64 fs/readdir.c:369 [inline]
- __se_sys_getdents64+0x1db/0x4c0 fs/readdir.c:354
+ __clear_extent_bit+0x669/0xc60 fs/btrfs/extent-io-tree.c:674
+ clear_record_extent_bits+0x4e/0x80 fs/btrfs/extent-io-tree.c:1614
+ __btrfs_qgroup_release_data+0x4b9/0x850 fs/btrfs/qgroup.c:3870
+ btrfs_add_ordered_extent+0xdf/0xbe0 fs/btrfs/ordered-data.c:188
+ cow_file_range+0x73a/0xfa0 fs/btrfs/inode.c:1299
+ btrfs_run_delalloc_range+0xed4/0x11a0 fs/btrfs/inode.c:2229
+ writepage_delalloc+0x25e/0x540 fs/btrfs/extent_io.c:1968
+ __extent_writepage+0x5d6/0x14d0 fs/btrfs/extent_io.c:2272
+ extent_write_cache_pages+0x9e7/0x12d0 fs/btrfs/extent_io.c:3186
+ extent_writepages+0x228/0x550 fs/btrfs/extent_io.c:3308
+ do_writepages+0x3c3/0x680 mm/page-writeback.c:2469
+ filemap_fdatawrite_wbc+0x11e/0x170 mm/filemap.c:388
+ __filemap_fdatawrite_range mm/filemap.c:421 [inline]
+ filemap_fdatawrite_range+0x175/0x200 mm/filemap.c:439
+ btrfs_fdatawrite_range+0x4b/0x110 fs/btrfs/file.c:4155
+ btrfs_wait_ordered_range+0x65/0x270 fs/btrfs/ordered-data.c:774
+ btrfs_punch_hole fs/btrfs/file.c:2913 [inline]
+ btrfs_fallocate+0x421/0x2020 fs/btrfs/file.c:3367
+ vfs_fallocate+0x515/0x670 fs/open.c:323
+ do_vfs_ioctl+0x2187/0x29a0 fs/ioctl.c:849
+ __do_sys_ioctl fs/ioctl.c:868 [inline]
+ __se_sys_ioctl+0x83/0x170 fs/ioctl.c:856
  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
  do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fb4f3debec9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffed0b87788 EFLAGS: 00000246 ORIG_RAX: 00000000000000d9
-RAX: ffffffffffffffda RBX: 00007fb4f3e5bed0 RCX: 00007fb4f3debec9
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000004
-RBP: 00007ffed0b87798 R08: 0000000000000001 R09: 0000000000000001
-R10: 00000000000010e3 R11: 0000000000000246 R12: 00007ffed0b877c0
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+RIP: 0033:0x7f2e2246aac9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 91 18 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd222883d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f2e2246aac9
+RDX: 0000000020000100 RSI: 0000000040305829 RDI: 0000000000000005
+RBP: 0000000000000006 R08: 0000000000000001 R09: 00007ffd00000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffd22288460
+R13: 00007f2e224ed780 R14: 0000000000000003 R15: 00007ffd2228842a
  </TASK>
-
-The buggy address belongs to the physical page:
-page:ffffea0001c03c00 refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x700f0
-flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000000 ffffea0001c03c48 ffffea0001c03bc8 0000000000000000
-raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as freed
-page last allocated via order 0, migratetype Movable, gfp_mask 0x8(__GFP_MOVABLE), pid 1, tgid 1 (swapper/0), ts 10266546633, free_ts 11631552401
- split_map_pages+0x25b/0x540 mm/compaction.c:97
- isolate_freepages_range+0x4ac/0x510 mm/compaction.c:735
- alloc_contig_range+0x6a9/0x980 mm/page_alloc.c:9371
- __alloc_contig_pages mm/page_alloc.c:9394 [inline]
- alloc_contig_pages+0x3c8/0x4e0 mm/page_alloc.c:9471
- debug_vm_pgtable_alloc_huge_page+0xcd/0x11e mm/debug_vm_pgtable.c:1098
- init_args+0xa3a/0xdba mm/debug_vm_pgtable.c:1221
- debug_vm_pgtable+0x9a/0x4a6 mm/debug_vm_pgtable.c:1259
- do_one_initcall+0x1c9/0x400 init/main.c:1303
- do_initcall_level+0x168/0x218 init/main.c:1376
- do_initcalls+0x4b/0x8c init/main.c:1392
- kernel_init_freeable+0x428/0x5d5 init/main.c:1631
- kernel_init+0x19/0x2b0 init/main.c:1519
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1459 [inline]
- free_pcp_prepare+0x80c/0x8f0 mm/page_alloc.c:1509
- free_unref_page_prepare mm/page_alloc.c:3387 [inline]
- free_unref_page+0x7d/0x5f0 mm/page_alloc.c:3483
- free_contig_range+0xa3/0x160 mm/page_alloc.c:9493
- destroy_args+0xfe/0x935 mm/debug_vm_pgtable.c:1031
- debug_vm_pgtable+0x44d/0x4a6 mm/debug_vm_pgtable.c:1354
- do_one_initcall+0x1c9/0x400 init/main.c:1303
- do_initcall_level+0x168/0x218 init/main.c:1376
- do_initcalls+0x4b/0x8c init/main.c:1392
- kernel_init_freeable+0x428/0x5d5 init/main.c:1631
- kernel_init+0x19/0x2b0 init/main.c:1519
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-
-Memory state around the buggy address:
- ffff8880700f0880: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff8880700f0900: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->ffff8880700f0980: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-                                              ^
- ffff8880700f0a00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff8880700f0a80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-==================================================================
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:clear_state_bit+0x325/0x330 fs/btrfs/extent-io-tree.c:517
+Code: 2f fe e9 9c fd ff ff 44 89 e9 80 e1 07 80 c1 03 38 c1 0f 8c c7 fe ff ff 4c 89 ef e8 a5 0f 2f fe e9 ba fe ff ff e8 bb f7 da fd <0f> 0b 66 0f 1f 84 00 00 00 00 00 55 48 89 e5 41 57 41 56 41 55 41
+RSP: 0018:ffffc90003cae8d0 EFLAGS: 00010293
+RAX: ffffffff83afa0b5 RBX: 00000000fffffff4 RCX: ffff888022add7c0
+RDX: 0000000000000000 RSI: 00000000fffffff4 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffff83af9ee2 R09: 00000000ffffffff
+R10: fffffbfff1a42e97 R11: 1ffffffff1a42e96 R12: ffff88807f27c540
+R13: ffffc90003caead8 R14: 0000000000001000 R15: dffffc0000000000
+FS:  0000555555ca1300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020010000 CR3: 0000000023ed5000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
 
 ---
