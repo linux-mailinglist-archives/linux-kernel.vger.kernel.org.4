@@ -2,201 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4EE6390CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 21:45:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5FA26390CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 21:47:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbiKYUpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 15:45:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38568 "EHLO
+        id S229891AbiKYUrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 15:47:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiKYUpg (ORCPT
+        with ESMTP id S229582AbiKYUrt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 15:45:36 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3789355CB2;
-        Fri, 25 Nov 2022 12:45:35 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669409132;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Nx7J1ZYr7PRDjr0HjbjLwEuOmEiqovGUiWQQwnfrbYQ=;
-        b=AdCx8VPE/lzRBFp7vbqM3AWVW89sObDyt43L3+MHIoDr1ZzaVYwNcdPk1SFmEv+x41P4rg
-        jmmVPNEhH0Dt6Ar4z6lI4svK79bAj6/nzBllkMSCGFBgGz+NNHxjR9kz1BgSvDqfDhHkHR
-        MdA7+TniTH4Llx5g5AYETV37fiBxXc0Vbn59hmZ3ryGKfeHR8B/zRYu1zsWl4cUYrhKcgO
-        bngTt11EPv4BYrkv4hOhJsRQC/tIjIVL8XIPhC12VfRbcqVzQN4knhwAm+HOknvZd3JclX
-        vO+Ic1zJts7unrwo2HsRzwS9cVglJ4Jy8zdFxXCORI9f72omzt0DZijsgKzZLQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669409132;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Nx7J1ZYr7PRDjr0HjbjLwEuOmEiqovGUiWQQwnfrbYQ=;
-        b=HFsIpAcT6mMdpz79iidHhND9Aa/Q6QqVc7oqC6hX0dK3g5hv7aHto9ob0Xt4sKULt+jUCy
-        SN3mGKCZx+oHUaAQ==
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-crypto@vger.kernel.org, linux-api@vger.kernel.org,
-        x86@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        Carlos O'Donell <carlos@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <brauner@kernel.org>
-Subject: Re: [PATCH v7 1/3] random: add vgetrandom_alloc() syscall
-In-Reply-To: <20221124165536.1631325-2-Jason@zx2c4.com>
-References: <20221124165536.1631325-1-Jason@zx2c4.com>
- <20221124165536.1631325-2-Jason@zx2c4.com>
-Date:   Fri, 25 Nov 2022 21:45:31 +0100
-Message-ID: <87bkouyd90.ffs@tglx>
+        Fri, 25 Nov 2022 15:47:49 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2114193F6;
+        Fri, 25 Nov 2022 12:47:48 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 2AB812189A;
+        Fri, 25 Nov 2022 20:47:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1669409267; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=YBBYrboQ9C7soWP/CxVP/nBs2GyZ7rvVNHV0wFFseXA=;
+        b=HcgQ6mk6dBhiY9v3u95XDqE1lIy3azcmPiZPxwtU+nTm2HIc2sUS+JRD6z1pGhUFnodKUH
+        sf71RqcfIzq2CNtFNtM98+GAVCgi6ZhrGi8w4fdqieEcrNLHeqVaDaJE5V0dWt9HIOPhe8
+        X6gxQWahuKoMNXN/tvzsieR0JAA91+0=
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 2161D2C141;
+        Fri, 25 Nov 2022 20:47:47 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 70BD4DA822; Fri, 25 Nov 2022 21:47:16 +0100 (CET)
+From:   David Sterba <dsterba@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Btrfs updates for 6.1-rc7
+Date:   Fri, 25 Nov 2022 21:47:15 +0100
+Message-Id: <cover.1669400851.git.dsterba@suse.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24 2022 at 17:55, Jason A. Donenfeld wrote:
-> ---
->  MAINTAINERS                             |  1 +
->  arch/x86/Kconfig                        |  1 +
->  arch/x86/entry/syscalls/syscall_64.tbl  |  1 +
->  arch/x86/include/asm/unistd.h           |  1 +
->  drivers/char/random.c                   | 59 +++++++++++++++++++++++++
->  include/uapi/asm-generic/unistd.h       |  7 ++-
->  kernel/sys_ni.c                         |  3 ++
->  lib/vdso/getrandom.h                    | 23 ++++++++++
->  scripts/checksyscalls.sh                |  4 ++
->  tools/include/uapi/asm-generic/unistd.h |  7 ++-
->  10 files changed, 105 insertions(+), 2 deletions(-)
->  create mode 100644 lib/vdso/getrandom.h
+Hi,
 
-I think I asked for this before:
+a few more fixes from past two weeks. Please pull, thanks.
 
-Please split these things properly up. Provide the syscall and then wire
-it up.
+- fix a regression in nowait + buffered write
 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 67745ceab0db..331e21ba961a 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -59,6 +59,7 @@ config X86
->  	#
->  	select ACPI_LEGACY_TABLES_LOOKUP	if ACPI
->  	select ACPI_SYSTEM_POWER_STATES_SUPPORT	if ACPI
-> +	select ADVISE_SYSCALLS			if X86_64
+- in zoned mode fix endianness when comparing super block generation
 
-Why is this x86_64 specific?
+- locking and lockdep fixes:
+  - fix potential sleeping under spinlock when setting qgroup limit
+  - lockdep warning fixes when btrfs_path is freed after copy_to_user
+  - do not modify log tree while holding a leaf from fs tree locked
 
-> --- a/arch/x86/include/asm/unistd.h
-> +++ b/arch/x86/include/asm/unistd.h
-> @@ -27,6 +27,7 @@
->  #  define __ARCH_WANT_COMPAT_SYS_PWRITEV64
->  #  define __ARCH_WANT_COMPAT_SYS_PREADV64V2
->  #  define __ARCH_WANT_COMPAT_SYS_PWRITEV64V2
-> +#  define __ARCH_WANT_VGETRANDOM_ALLOC
+- fix freeing of sysfs files of static features on error
 
-So instead of this define, why can't you do:
+- use kv.alloc for zone map allocation as a fallback to avoid warnings
+  due to high order allocation
 
-config VGETRADOM_ALLOC
-       bool
-       select ADVISE_SYSCALLS
+- send, avoid unaligned encoded writes when attempting to clone range
 
-and then have
+----------------------------------------------------------------
+The following changes since commit c62f6bec53e63b11112e1ebce6bbaa39ce6f6706:
 
-config GENERIC_VDSO_RANDOM_WHATEVER
-       bool
-       select VGETRANDOM_ALLOC
+  btrfs: zoned: fix locking imbalance on scrub (2022-11-07 14:35:25 +0100)
 
-This gives a clear Kconfig dependency instead of the random
-ADVISE_SYSCALLS select.
+are available in the Git repository at:
 
->--- a/drivers/char/random.c
-> +++ b/drivers/char/random.c
+  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-6.1-rc6-tag
 
-> +#include "../../lib/vdso/getrandom.h"
+for you to fetch changes up to ffdbb44f2f23f963b8f5672e35c3a26088177a62:
 
-Seriously?
+  btrfs: sysfs: normalize the error handling branch in btrfs_init_sysfs() (2022-11-23 16:52:22 +0100)
 
-include/vdso/ exists for a reason.
+----------------------------------------------------------------
+Anand Jain (3):
+      btrfs: free btrfs_path before copying inodes to userspace
+      btrfs: free btrfs_path before copying fspath to userspace
+      btrfs: free btrfs_path before copying subvol info to userspace
 
-> +#ifdef __ARCH_WANT_VGETRANDOM_ALLOC
-> +/*
-> + * The vgetrandom() function in userspace requires an opaque state, which this
-> + * function provides to userspace, by mapping a certain number of special pages
-> + * into the calling process. It takes a hint as to the number of opaque states
-> + * desired, and returns the number of opaque states actually allocated, the
-> + * size of each one in bytes, and the address of the first state.
+ChenXiaoSong (1):
+      btrfs: qgroup: fix sleep from invalid context bug in btrfs_qgroup_inherit()
 
-As this is a syscall which can be invoked outside of the VDSO, can you
-please provide proper kernel-doc which explains the arguments, the
-functionality and the return value?
+Christoph Hellwig (2):
+      btrfs: zoned: fix missing endianness conversion in sb_write_pointer
+      btrfs: use kvcalloc in btrfs_get_dev_zone_info
 
-> + */
-> +SYSCALL_DEFINE3(vgetrandom_alloc, unsigned int __user *, num,
-> +		unsigned int __user *, size_per_each, unsigned int, flags)
-> +{
-> +	size_t alloc_size, num_states;
-> +	unsigned long pages_addr;
-> +	unsigned int num_hint;
-> +	int ret;
-> +
-> +	if (flags)
-> +		return -EINVAL;
-> +
-> +	if (get_user(num_hint, num))
-> +		return -EFAULT;
-> +
-> +	num_states = clamp_t(size_t, num_hint, 1, (SIZE_MAX & PAGE_MASK) / sizeof(struct vgetrandom_state));
-> +	alloc_size = PAGE_ALIGN(num_states * sizeof(struct vgetrandom_state));
-> +
-> +	if (put_user(alloc_size / sizeof(struct vgetrandom_state), num) ||
-> +	    put_user(sizeof(struct vgetrandom_state), size_per_each))
-> +		return -EFAULT;
+Filipe Manana (3):
+      btrfs: fix assertion failure and blocking during nowait buffered write
+      btrfs: send: avoid unaligned encoded writes when attempting to clone range
+      btrfs: do not modify log tree while holding a leaf from fs tree locked
 
-That's a total of four sizeof(struct vgetrandom_state) usage sites.
+Josef Bacik (1):
+      btrfs: free btrfs_path before copying root refs to userspace
 
-       size_t state_size = sizeof(struct vgetrandom_state);
+Zhen Lei (1):
+      btrfs: sysfs: normalize the error handling branch in btrfs_init_sysfs()
 
-perhaps?
-
-> diff --git a/lib/vdso/getrandom.h b/lib/vdso/getrandom.h
-> new file mode 100644
-> index 000000000000..c7f727db2aaa
-> --- /dev/null
-> +++ b/lib/vdso/getrandom.h
-
-Wrong place. See above.
-
-> @@ -0,0 +1,23 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-> + */
-> +
-> +#ifndef _VDSO_LIB_GETRANDOM_H
-> +#define _VDSO_LIB_GETRANDOM_H
-> +
-> +#include <crypto/chacha.h>
-> +
-> +struct vgetrandom_state {
-> +	union {
-> +		struct {
-> +			u8 batch[CHACHA_BLOCK_SIZE * 3 / 2];
-> +			u32 key[CHACHA_KEY_SIZE / sizeof(u32)];
-> +		};
-> +		u8 batch_key[CHACHA_BLOCK_SIZE * 2];
-> +	};
-> +	unsigned long generation;
-> +	u8 pos;
-> +};
-
-Thanks,
-
-        tglx
+ fs/btrfs/ctree.c    | 36 ++++++++++++++++++++++++++------
+ fs/btrfs/ioctl.c    | 23 ++++++++++++---------
+ fs/btrfs/qgroup.c   |  9 +-------
+ fs/btrfs/send.c     | 24 +++++++++++++++++++++-
+ fs/btrfs/sysfs.c    |  7 +++++--
+ fs/btrfs/tree-log.c | 59 +++++++++++++++++++++++++++++++++++++++++++++++++----
+ fs/btrfs/zoned.c    |  9 ++++----
+ 7 files changed, 132 insertions(+), 35 deletions(-)
