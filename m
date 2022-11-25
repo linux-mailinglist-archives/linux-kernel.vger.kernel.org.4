@@ -2,147 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21886638DBD
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 16:51:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 845D7638DBC
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 16:51:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbiKYPvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 10:51:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37824 "EHLO
+        id S229664AbiKYPvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 10:51:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiKYPvA (ORCPT
+        with ESMTP id S229675AbiKYPu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 10:51:00 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524454A056
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 07:50:59 -0800 (PST)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2APDajpE016694;
-        Fri, 25 Nov 2022 09:50:25 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=PODMain02222019;
- bh=wp5bEiofcFAuumJ4kmy+pC74tinHVBJltbLqOj0XD6E=;
- b=fW/z/+MvNFjoFpk5N9FQUKpDEPiSSJ1KlY1AZn5x/9Tsn/emq+gwkYPhwwk4v4wNhh96
- RnehhYb5xvysd/BA2Fol4/CY2u3gUJDGbcrH92S7gccHrVOdQwo8DfjoKUOw/v8rC9+4
- yiI0srnvLObfIVjo1FT71zYGW9BsY88a0n6R+N/BpLMmptu3ZUSkgZygZdYNhC/E9/L2
- BaJU7OO5FE+bnI71FZ0/qoI80AgA8IQNBv3zTUvTrp8dQoY6pSPP0sMkaW4pOiaezrCJ
- uIOtLLXPqs7amneCMZzZdYT99YO+qhGMYpbO6KQTVopByhzM8sql2OVH8GoENBrv9SIh 5A== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3kxwe6yfyd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Nov 2022 09:50:25 -0600
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Fri, 25 Nov
- 2022 09:50:23 -0600
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
- Transport; Fri, 25 Nov 2022 09:50:23 -0600
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 5C2D62BA;
-        Fri, 25 Nov 2022 15:50:23 +0000 (UTC)
-Date:   Fri, 25 Nov 2022 15:50:23 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Guillermo Rodriguez Garcia <guille.rodriguez@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>,
-        Tan =?utf-8?B?TmF5xLFy?= <tannayir@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@codeaurora.org>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        David Rhodes <david.rhodes@cirrus.com>,
-        James Schulman <james.schulman@cirrus.com>,
-        <patches@opensource.cirrus.com>, <alsa-devel@alsa-project.org>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: SOC_DOUBLE_R_SX_TLV controls broken in cs24l51 driver
-Message-ID: <20221125155023.GF105268@ediswmail.ad.cirrus.com>
-References: <CABDcavYdsk-O4x3oPX4i4+T5wsoZV26_kpEq6JvpD8A_cAGHxg@mail.gmail.com>
- <20221124111336.GE105268@ediswmail.ad.cirrus.com>
- <CABDcavbRryENG58LO7+gbJeKbBBPP1uG1Xc00yXUBNzspWpWoA@mail.gmail.com>
+        Fri, 25 Nov 2022 10:50:59 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FAE231FB8;
+        Fri, 25 Nov 2022 07:50:56 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id x17so7363784wrn.6;
+        Fri, 25 Nov 2022 07:50:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gGtFpd9/hEihcxfaAZXLh+MO2ImBUdS5RPJo51eOJ5A=;
+        b=Wd6tMpn1N5SIEtXHFwc1eScSBrFdtSlj2xAcP/GVikTRm1O6CSkkb4tWt9U3NoCIa4
+         ijWwVQUGwSEiaT41EnbxqcvBjeBbqgZx07Wf0Z2MhTvq72fA/IaeRK77bTB6tSZsvxD9
+         2xKnPOSOK3ua+7nYV3bUIOpZMkWLbqTwnDxvULKNAMT6BN4lAxIrxyeWtc7sX9aJTl5y
+         tOqchmZnX90FCKtSOS4kryZ6ll56ip6D7P+r/50tYc/nXW4J+/pDeMDNF3fr/rX9S7Yu
+         E7YisrgoDNkwMnZEswLQlMssNyAocughTN01RX8UKLKrGTfi3Ldvr6GSGE2hkDDJ8+32
+         nWJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gGtFpd9/hEihcxfaAZXLh+MO2ImBUdS5RPJo51eOJ5A=;
+        b=0te77cvKCGbeoPQeWjt4H8E5aJWpZrFAWQhlIBrdc6e3X1JWGd7+URKqE92XKuuLIb
+         em0P9esUtmCcCsI1BOmtSDstYSpqWArgyOtGXaS4NALp5csbqx0dBpuAThqta4UM+jm0
+         wYCQtbDd7JsChomf2QeuB6eU+Z2Bn6UTToG29/zgKAMj4rJ1KbHZnJu/JVBj864JX/0h
+         Iqz6UCAeCWHnmBGiIHnlJ/fbmVWnGbEzunO8L480667IIMNwdj4Eg2jThqo/Ufr7a4F1
+         ujEA8Z5QBv9Qw827zZjuBV9Hpl6JvXddNUWXlKNV80KkR0EClHXg9gpMVorVKSF4T+IY
+         1oiA==
+X-Gm-Message-State: ANoB5plaKCyqIBA66qBYiVWVFoDrUXHTk1B2B+IZbUdcZYQJiQHfO83q
+        wKGjN91o0mHdZ7dMZ6lMu+Qo7lPyfeo=
+X-Google-Smtp-Source: AA0mqf51cWgSgehn/7HYrUUOy965hQUYasigP3oEcbV2hg7FAxvEw+pQQdBzhgOj70jyVM+s/0Hx8A==
+X-Received: by 2002:a5d:4308:0:b0:241:e80e:225a with SMTP id h8-20020a5d4308000000b00241e80e225amr9726284wrq.560.1669391454971;
+        Fri, 25 Nov 2022 07:50:54 -0800 (PST)
+Received: from [192.168.0.14] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net. [86.13.91.161])
+        by smtp.gmail.com with ESMTPSA id j13-20020adfff8d000000b00241bd177f89sm4050389wrr.14.2022.11.25.07.50.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Nov 2022 07:50:54 -0800 (PST)
+Message-ID: <5beff345-84c2-d456-1b7f-05309afa397b@gmail.com>
+Date:   Fri, 25 Nov 2022 15:50:53 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABDcavbRryENG58LO7+gbJeKbBBPP1uG1Xc00yXUBNzspWpWoA@mail.gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-ORIG-GUID: oEp1YLz9lHd_bE8JVFLILUcI_6rcWsLf
-X-Proofpoint-GUID: oEp1YLz9lHd_bE8JVFLILUcI_6rcWsLf
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3] device property: fix of node refcount leak in
+ fwnode_graph_get_next_endpoint()
+Content-Language: en-US
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     andriy.shevchenko@linux.intel.com, heikki.krogerus@linux.intel.com,
+        sakari.ailus@linux.intel.com, gregkh@linuxfoundation.org,
+        rafael@kernel.org
+References: <20221123022542.2999510-1-yangyingliang@huawei.com>
+From:   Daniel Scally <djrscally@gmail.com>
+In-Reply-To: <20221123022542.2999510-1-yangyingliang@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 02:54:15PM +0100, Guillermo Rodriguez Garcia wrote:
-> El jue, 24 nov 2022 a las 12:13, Charles Keepax
-> (<ckeepax@opensource.cirrus.com>) escribió:
-> >
-> > On Thu, Nov 24, 2022 at 10:57:34AM +0100, Guillermo Rodriguez Garcia wrote:
-> > > Hi all,
-> > >
-> > > I am using a dev board with a Cirrus Logic cs24l51 codec.
-> > >
-> > > This used to work fine prior to kernel version 5.x, however after 5.x
-> > > it is not possible to set certain values for ALSA controls from
-> > > userspace.
-> > >
-> > > I believe this is related to the input validation that is mentioned in
-> > > this thread: https://lore.kernel.org/all/Yph8C3bRxcr6ogW7@sirena.org.uk/T/,
-> > > and possibly in this commit: 4f1e50d6a9cf9c1b8c859d449b5031cacfa8404e
-> > > ("ASoC: ops: Reject out of bounds values in snd_soc_put_volsw_sx()")
-> > >
-> > > For the cs24l51, all the controls that fail are using the
-> > > SOC_DOUBLE_R_SX_TLV macro.
-> > >
-> > > I have traced this to the checks in snd_soc_put_volsw_sx, specifically
-> > > the (val > max - min) check:
-> > >
-> >
-> > Can you try these two patches:
-> >
-> > https://lore.kernel.org/all/165236477046.1016627.15470197691244479154.b4-ty@kernel.org/
-> 
-> Thanks.
-> In my tests, these patches seem to fix the problem for some values,
-> but not for all of them:
-> 
-> $ amixer cset name='Analog Playback Volume' '208','208'
-> numid=3,iface=MIXER,name='Analog Playback Volume'
->   ; type=INTEGER,access=rw---R--,values=2,min=0,max=228,step=0
->   : values=208,208
->   | dBscale-min=-102.00dB,step=0.50dB,mute=0
-> 
-> $ amixer cset name='Analog Playback Volume' '180','180'
-> amixer: Control default element write error: Invalid argument
-> 
-> Looking at the code I'd say that patch 1/2 is correct however I have
-> doubts about patch 2/2:
-> 
->         val_mask = mask << rshift;
->         val2 = (ucontrol->value.integer.value[1] + min) & mask;
-> +
-> +       if (mc->platform_max && val2 > mc->platform_max)
-> +           return -EINVAL;
-> +       if (val2 > max)
-> +           return -EINVAL;
-> +
->         val2 = val2 << rshift;
-> 
->         err = snd_soc_component_update_bits(component, reg2, val_mask,
-> 
-> The checks for max and platform_max are done on val2, but val2 is
-> already the result of adding the minimum value ('min') and applying
-> the mask.
-> Shouldn't the checks be done on ucontrol->value.integer.value[1] instead?
-> 
+Hi all - sorry that took so long
 
-Yeah they definitely should, I have resent the two patches
-including that fixup, lets see what Mark says. You are CCed
-on them so be great if you could give them a test too.
+On 23/11/2022 02:25, Yang Yingliang wrote:
+> The 'parent' returned by fwnode_graph_get_port_parent()
+> with refcount incremented when 'prev' is not NULL, it
+> needs be put when finish using it.
+>
+> Because the parent is const, introduce a new variable to
+> store the returned fwnode, then put it before returning
+> from fwnode_graph_get_next_endpoint().
+>
+> Fixes: b5b41ab6b0c1 ("device property: Check fwnode->secondary in fwnode_graph_get_next_endpoint()")
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
 
-Thanks,
-Charles
+
+This looks fine to me (thanks for fixing it), and it works fine on my
+Surface:
+
+
+Reviewed-and-tested-by: Daniel Scally <djrscally@gmail.com>
+
+> v2 -> v3:
+>   Add a out label.
+>
+> v1 -> v2:
+>   Introduce a new variable to store the returned fwnode.
+> ---
+>  drivers/base/property.c | 18 ++++++++++++------
+>  1 file changed, 12 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/base/property.c b/drivers/base/property.c
+> index 2a5a37fcd998..7f338cb4fb7b 100644
+> --- a/drivers/base/property.c
+> +++ b/drivers/base/property.c
+> @@ -989,26 +989,32 @@ struct fwnode_handle *
+>  fwnode_graph_get_next_endpoint(const struct fwnode_handle *fwnode,
+>  			       struct fwnode_handle *prev)
+>  {
+> +	struct fwnode_handle *ep, *port_parent = NULL;
+>  	const struct fwnode_handle *parent;
+> -	struct fwnode_handle *ep;
+>  
+>  	/*
+>  	 * If this function is in a loop and the previous iteration returned
+>  	 * an endpoint from fwnode->secondary, then we need to use the secondary
+>  	 * as parent rather than @fwnode.
+>  	 */
+> -	if (prev)
+> -		parent = fwnode_graph_get_port_parent(prev);
+> -	else
+> +	if (prev) {
+> +		port_parent = fwnode_graph_get_port_parent(prev);
+> +		parent = port_parent;
+> +	} else {
+>  		parent = fwnode;
+> +	}
+>  	if (IS_ERR_OR_NULL(parent))
+>  		return NULL;
+>  
+>  	ep = fwnode_call_ptr_op(parent, graph_get_next_endpoint, prev);
+>  	if (ep)
+> -		return ep;
+> +		goto out_put_port_parent;
+> +
+> +	ep = fwnode_graph_get_next_endpoint(parent->secondary, NULL);
+>  
+> -	return fwnode_graph_get_next_endpoint(parent->secondary, NULL);
+> +out_put_port_parent:
+> +	fwnode_handle_put(port_parent);
+> +	return ep;
+>  }
+>  EXPORT_SYMBOL_GPL(fwnode_graph_get_next_endpoint);
+>  
