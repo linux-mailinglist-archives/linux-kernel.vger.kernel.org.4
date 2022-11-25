@@ -2,136 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACA136385C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 10:00:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DAC06385CA
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 10:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbiKYJAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 04:00:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46286 "EHLO
+        id S229769AbiKYJBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 04:01:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbiKYI75 (ORCPT
+        with ESMTP id S229739AbiKYJBm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 03:59:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7B2326CC;
-        Fri, 25 Nov 2022 00:59:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 25 Nov 2022 04:01:42 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADA531FAC
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 01:01:40 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 6098721AAD;
+        Fri, 25 Nov 2022 09:01:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1669366899; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8KBBxMgrMdqbWWjnCjbmhEDCO2E0mxKk+X1L9Pdof78=;
+        b=dDZkK6MFpqk1iBum5NBrbZ8A+c/Y8y0RFsUbfTWAdOe7B6e5/JBlEwck7nch1LSNtVKYAb
+        pOhfamKHZIbCRL6ZReq88DII4qRDFFfKCLwmb1bf9qohbvWiCDJfLTBJTSn5ltMFVd0tfw
+        Pzqh/KaIguLNwVaoYgHWEB6E2T2Oql4=
+Received: from suse.cz (unknown [10.100.201.202])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 884D5622F8;
-        Fri, 25 Nov 2022 08:59:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5DF8C433D6;
-        Fri, 25 Nov 2022 08:59:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669366795;
-        bh=e6HuqocvKF2BxDIP+LM0eTorRMU5x/m6qeueXBoIy2o=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MZLlKugAC6ovMQ6VpXpiH0+51k+TUegiP4iNiF1dxh6mqfMkCiNkF+9QKGLP7DrfV
-         zkPVQJbmZZ73wkWHtcjm2PltxG4gk/KN1zRvyCjxqgBFfVunKH23LEDHj3rOBYxIc3
-         zd9GbFmo9NaJ8mhDpbGaIkp2HyXMwun+13BEW7LatQzutT371SJbaQObTXQAK0i5At
-         ltsgAti7Ey91x0scqvwEw/YCNQ94NK+reLBkdPy3atdvLcfgHdd0mStZGsVgv55Edn
-         BqFR4/vKKScfoaGjnCwRk8zDanRtgRcKF00rg405puK0cBKagQ1MTjt161ZVHlYipH
-         DI4uDKm++rPoA==
-Message-ID: <5b26410e-a9d9-de8c-ea31-13dfec6c77b1@kernel.org>
-Date:   Fri, 25 Nov 2022 10:59:44 +0200
+        by relay2.suse.de (Postfix) with ESMTPS id 2C4302C141;
+        Fri, 25 Nov 2022 09:01:39 +0000 (UTC)
+Date:   Fri, 25 Nov 2022 10:01:35 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH printk v2 6/7] printk: Use an output buffer descriptor
+ struct for emit
+Message-ID: <Y4CEb7a57PpFpDni@alley>
+References: <20221123231400.614679-1-john.ogness@linutronix.de>
+ <20221123231400.614679-7-john.ogness@linutronix.de>
+ <Y3+xK7hHmUIlzq9w@alley>
+ <87o7swkqar.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v9 3/6] remoteproc: pru: Add enum for PRU Core
- Indentifiers.
-Content-Language: en-US
-To:     MD Danish Anwar <danishanwar@ti.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Suman Anna <s-anna@ti.com>, "Andrew F . Davis" <afd@ti.com>,
-        nm@ti.com, vigneshr@ti.com, srk@ti.com,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20221118111924.3277838-1-danishanwar@ti.com>
- <20221118111924.3277838-4-danishanwar@ti.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20221118111924.3277838-4-danishanwar@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87o7swkqar.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 18/11/2022 13:19, MD Danish Anwar wrote:
-> Introducing enum pruss_pru_id for PRU Core Identifiers.
-> PRUSS_PRU0 indicates PRU Core 0.
-> PRUSS_PRU1 indicates PRU Core 1.
-> PRUSS_NUM_PRUS indicates the total number of PRU Cores.
+On Thu 2022-11-24 22:21:08, John Ogness wrote:
+> On 2022-11-24, Petr Mladek <pmladek@suse.com> wrote:
+> > I wish, this change was done in two patches. 1st introducing and
+> > using struct console_message. 2nd moving the code into separate
+> > console_get_next_message().
 > 
-> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
-> ---
->  drivers/remoteproc/pru_rproc.c | 6 +++---
->  include/linux/pruss.h          | 9 +++++++++
->  2 files changed, 12 insertions(+), 3 deletions(-)
+> OK.
 > 
-> diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
-> index 4769ade9c316..7d4ed39b3772 100644
-> --- a/drivers/remoteproc/pru_rproc.c
-> +++ b/drivers/remoteproc/pru_rproc.c
-> @@ -564,7 +564,7 @@ static void *pru_d_da_to_va(struct pru_rproc *pru, u32 da, size_t len)
->  	dram0 = pruss->mem_regions[PRUSS_MEM_DRAM0];
->  	dram1 = pruss->mem_regions[PRUSS_MEM_DRAM1];
->  	/* PRU1 has its local RAM addresses reversed */
-> -	if (pru->id == 1)
-> +	if (pru->id == PRUSS_PRU1)
->  		swap(dram0, dram1);
->  	shrd_ram = pruss->mem_regions[PRUSS_MEM_SHRD_RAM2];
->  
-> @@ -873,14 +873,14 @@ static int pru_rproc_set_id(struct pru_rproc *pru)
->  	case RTU0_IRAM_ADDR_MASK:
->  		fallthrough;
->  	case PRU0_IRAM_ADDR_MASK:
-> -		pru->id = 0;
-> +		pru->id = PRUSS_PRU0;
->  		break;
->  	case TX_PRU1_IRAM_ADDR_MASK:
->  		fallthrough;
->  	case RTU1_IRAM_ADDR_MASK:
->  		fallthrough;
->  	case PRU1_IRAM_ADDR_MASK:
-> -		pru->id = 1;
-> +		pru->id = PRUSS_PRU1;
->  		break;
->  	default:
->  		ret = -EINVAL;
-> diff --git a/include/linux/pruss.h b/include/linux/pruss.h
-> index 4909226f14a9..fdc719b43db0 100644
-> --- a/include/linux/pruss.h
-> +++ b/include/linux/pruss.h
-> @@ -14,6 +14,15 @@
->  
->  #define PRU_RPROC_DRVNAME "pru-rproc"
->  
-> +/*
-> + * enum pruss_pru_id - PRU core identifiers
-> + */
+> >> +	if (cmsg->is_extmsg) {
+> >> +		write_text = &cbufs->ext_text[0];
+> >> +		write_text_size = sizeof(cbufs->ext_text);
+> >> +		len = info_print_ext_header(write_text, write_text_size, r.info);
+> >> +		len += msg_print_ext_body(write_text + len, write_text_size - len,
+> >> +					  &r.text_buf[0], r.info->text_len, &r.info->dev_info);
+> >> +	} else {
+> >> +		write_text = &cbufs->text[0];
+> >> +		len = record_print_text(&r, console_msg_format & MSG_FORMAT_SYSLOG, printk_time);
+> >> +	}
+> >> +
+> >> +	cmsg->outbuf = write_text;
+> >> +	cmsg->outbuf_len = len;
+> >
+> > Please, remove "write_text" variable and use cmsg->outbuf directly.
+> > It would safe one mental transition of buffer names:
+> >
+> >    cbufs->text -> write_text -> cmsg->outbuf
+> >
+> > vs.
+> >
+> >    cbufs->text -> cmsg->outbuf
+> 
+> I originally had the non-extended case without @write_text. I felt like
+> it was harder to follow what actually got set. Really the main objective
+> of the function is to set @outbuf and @outbuf_len. I felt like moving
+> that outside of the if/else block made it clearer what is going on. But
+> I can go back to having each if/else branch set those fields in their
+> own way.
 
-This does not follow kernel-doc style
-https://www.kernel.org/doc/html/v6.0/doc-guide/kernel-doc.html#structure-union-and-enumeration-documentation
+I am not sure if we are talking about the same thing. My idea was to do:
 
-> +enum pruss_pru_id {
-> +	PRUSS_PRU0 = 0,
-> +	PRUSS_PRU1,
-> +	PRUSS_NUM_PRUS,
-> +};
-> +
->  struct device_node;
->  
->  #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
+	if (cmsg->is_extmsg) {
+		cmsg->outbuf = &cbufs->ext_text[0];
+		outbuf_size = sizeof(cbufs->ext_text);
+		len = info_print_ext_header(cmsg->outbuf, outbuf_size, r.info);
+		len += msg_print_ext_body(cmsg->outbuf + len, outbuf_size - len,
+				  &r.text_buf[0], r.info->text_len, &r.info->dev_info);
+	} else {
+		cmsg->outbuf = &cbufs->text[0];
+		/* &r points to &cbufs->text[0], changes are done inline */
+		len = record_print_text(&r, console_msg_format & MSG_FORMAT_SYSLOG, printk_time);
+	}
 
-cheers,
--roger
+> > PS: Please, wait a bit with updating the patches. I have got yet
+> >     another idea when seeing the code around dropped messages.
+> >     But I have to sleep over it.
+> 
+> Don't worry. I always wait until you finish the full review before
+> touching anything. ;-)
+> 
+> >     My concern is that the message about dropped messages need not
+> >     fit into the smaller "cbufs->text" buffer. It might be better
+> >     to put it into the bigger one.
+> 
+> This series _does_ put the dropped messages in the bigger one.
+
+Ah, I have overlooked this. It might actually be a motivation to avoid
+all these shuffles and really use:
+
+	struct console_buffers {
+		char	outbuf[CONSOLE_EXT_LOG_MAX];
+		char	readbuf[CONSOLE_LOG_MAX];
+	};
+> >
+> >      Normal consoles would use only @outbuf. Only the extended console
+> >      would need the @readbuf to read the messages before they are
+> >      formatted.
+> 
+> The "problem" with this idea is that record_print_text() creates the
+> normal output in-place within the readbuf. So for normal messages with
+> no dropped messages, we still end up writing out the readbuf.
+
+We handle this this in console_get_next_message() by reading the
+messages into the right buffer:
+
+	boot is_extcon = console_srcu_read_flags(con) & CON_EXTENDED;
+
+	/*
+	 * Normal consoles might read the message into the outbuf directly.
+	 * Console headers are added inplace.
+	 */
+	if (is_extcon)
+		prb_rec_init_rd(&r, &info, &cbufs->readbuf[0], sizeof(cbufs->readbuf));
+	else
+		prb_rec_init_rd(&r, &info, &cbufs->outbuf[0], sizeof(cbufs->outbuf));
+
+	if (!prb_read_valid(prb, con->seq, &r))
+		return false;
+
+	...
+
+
+	if (is_extcon) {
+		len = info_print_ext_header(cbufs->outbuf, sizeof(cbufs->outbuf, r.info);
+		len += msg_print_ext_body(cbufs->outbuf + len, sizeof(cbufs->outbuf) - len,
+				  &r.text_buf[0], r.info->text_len, &r.info->dev_info);
+	} else {
+		len = record_print_text(&r, console_msg_format & MSG_FORMAT_SYSLOG, printk_time);
+	}
+
+
+
+> >      I guess that struct console_message won't be needed then at all.
+> 
+> Since we sometimes output the in-place readbuf and sometimes a newly
+> written buffer, it is nice that console_message can abstract that out.
+> 
+> Also, right now @is_extmsg is the only input variable. For thread/atomic
+> consoles, the input variables @seq and @dropped will be added.
+> console_message will then have its own copy of all the information
+> needed to let itself get filled and console_get_next_message() will no
+> longer require the console as an argument.
+> 
+> This is important for the thread/atomic consoles because it removes all
+> locking constraints from console_get_next_message(). For _this_ series,
+> console_get_next_message() still requires holding the console_lock
+> because it is accessing con->seq and con->dropped.
+> 
+> I could have added @seq and @dropped to console_message for this series,
+> but for the legacy consoles it looks like a lot of unnecessary
+> copying. Only with the thread/atomic consoles does the benefit become
+> obvious.
+
+I could imagine adding these metadata into the struct console_buffers.
+Or we could call it struct console_messages from the beginning.
+
+We could even completely move con->seq, con->dropped into this new
+structure. It would safe even more copies.
+
+IMHO, the less structures and the less copying the better.
+Especially when the values have different name in each structure
+that makes it even more complicated.
+
+Best Regards,
+Petr
