@@ -2,136 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 140B363879D
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 11:36:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 519B46387A1
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 11:36:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbiKYKgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 05:36:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33398 "EHLO
+        id S229948AbiKYKg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 05:36:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiKYKf6 (ORCPT
+        with ESMTP id S229436AbiKYKg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 05:35:58 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E61303CB;
-        Fri, 25 Nov 2022 02:35:58 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AP8tcrq013196;
-        Fri, 25 Nov 2022 10:35:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=9/JwlFdZxR/Av60fuDgGOCsKJSidvpa774Rv0zzgIVk=;
- b=T3F94jKoEZsd6FVOLYLB34v1S0x/Ffnbi2EV4oaqKViueP+ktjwGEmORCmwGO1ZcUUSv
- 2QutnVixNC+s/T/U0VL1uvKBhH4nJgp1pJ1m1J2NxDw7UNrhGCEGIo6e+V+lTTdK12of
- Wkid9Pg07sa3kYfgy+5ssNvLXxjBG2wWoZ0c9n3k2WrZXe5hu5Vp3UKV/KnPu8g9VNck
- 71vC/eyo49JCQdse73DOgMPAHzZSYB2h/MiN305mxU18GWTzdQ94HkWJzkct4C7EKFHx
- sHo0Kn/noFJMrnocDXE6lymdsB2AB25RiNiTmMhifeVQVcy5rR4GRhHrVArAhnxU3Usx gw== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m1gxeqa93-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Nov 2022 10:35:50 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2APAZnew001693
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Nov 2022 10:35:49 GMT
-Received: from hu-namajain-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Fri, 25 Nov 2022 02:35:46 -0800
-From:   Naman Jain <quic_namajain@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-CC:     Naman Jain <quic_namajain@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_pkondeti@quicinc.com>, <quic_mojha@quicinc.com>,
-        <quic_shashim@quicinc.com>
-Subject: [PATCH] soc: qcom: socinfo: Add support for new fields in revision 16
-Date:   Fri, 25 Nov 2022 16:05:33 +0530
-Message-ID: <20221125103533.2960-1-quic_namajain@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 25 Nov 2022 05:36:27 -0500
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0454931ED8
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 02:36:26 -0800 (PST)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-381662c78a9so37563407b3.7
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 02:36:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=icn0jb6niHgKih8G3jVCl4LiZcAERsEm2d0y54xh6HI=;
+        b=nat6Lwpn6LmNvFUEZ/t0HCZTHQI5rRuHDNhbrHJTTFEykKUopyFFscx/CyCkNWKb03
+         34rkkcTGHYZP0XBXo8JJvOjzWtfdp7aKCVLpG9TMGpmt87/IJ6XRSu15IQZtq8bAQ7v5
+         3MS9HphUw2/yD47OE4BOpqG2H3mttJudUXGvZQ889ULa2mG+aqp/5HTmT5l94B3bcptj
+         0C0yzSslh2nlsL9m6hWOFHCPTvtIQ466H/FLse6mLpHZVjiO/b9KMuCX91jv7STi7tHt
+         Ln4BcCWRZVRVRmGR3U3vJyADlucxsinZ43RTlya4x208o79rY+pzkNGP67P3+ddDF8I1
+         wpXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=icn0jb6niHgKih8G3jVCl4LiZcAERsEm2d0y54xh6HI=;
+        b=kFOLUv6n7dg3ioHtvIejhTmj0302uk3TiHUCrNl1/iru1Tvlxs1Ox5VIqmOAY3PR5A
+         VxZJShNKXiSiVn8bWMu+34MjhAg4W4nOolrFs2uPx3eose0tPbN+IFOALmkFMFwL/wZd
+         x0u/F0EnhUcOVm8sFT/fEY0u7TiePnBWytuUk186p97oK3VqhVscpGRcI+UtxqP6TvaT
+         WUKd1PAY21C39KUBAR9p+YCGlCppxRHIzv4d/KcWctJ2KJG1wSpneYbDeWSR+63LGuKy
+         h+Ah+gOrNBZREluK4J26FidMkGm+MCI0iEzrpEp8xMGsQfc/1noNPkJynpwFYfRT7kPS
+         esSQ==
+X-Gm-Message-State: ANoB5plNS0DHcA/raF8jV/tpRdOJDRry4XNzZYTEF+Gkq7uNct/Y9FGq
+        MEkycBVqVkWnR+J7y00oO6Y/tsO4d37pNnajLLNZjw==
+X-Google-Smtp-Source: AA0mqf41E9+NYZ+j5x2IoDghFGfb7rusKNAbGsHkqPhgh6d9kjiyd+ht4jZR3a5RD8KgZ3hbAIyCF745PXR2SQwvn1o=
+X-Received: by 2002:a81:1189:0:b0:3b3:7c97:a033 with SMTP id
+ 131-20020a811189000000b003b37c97a033mr8390257ywr.44.1669372585221; Fri, 25
+ Nov 2022 02:36:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: yXJKhxTPkfvEkdGKFSBKVbFznjSK3hLK
-X-Proofpoint-ORIG-GUID: yXJKhxTPkfvEkdGKFSBKVbFznjSK3hLK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-25_02,2022-11-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 adultscore=0 mlxlogscore=999 malwarescore=0
- lowpriorityscore=0 spamscore=0 impostorscore=0 phishscore=0 bulkscore=0
- mlxscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211250083
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221122202245.449198-1-nfrayer@baylibre.com> <20221122202245.449198-2-nfrayer@baylibre.com>
+ <db869c2f-d34f-1ce5-22f9-634a8454ee79@ti.com>
+In-Reply-To: <db869c2f-d34f-1ce5-22f9-634a8454ee79@ti.com>
+From:   Nicolas Frayer <nfrayer@baylibre.com>
+Date:   Fri, 25 Nov 2022 11:36:14 +0100
+Message-ID: <CANyCTtSYQKtgXZ0c5VaLoMUPaPwq3ZyMcONkJfig75eA0q7E5Q@mail.gmail.com>
+Subject: Re: [PATCH 1/3] arm64: arch_k3: Removed ti mailbox and sci select
+To:     Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     nm@ti.com, kristo@kernel.org, ssantosh@kernel.org,
+        linux-arm-kernel@lists.infradead.org, jassisinghbrar@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        linux-kernel@vger.kernel.org, khilman@baylibre.com,
+        glaroque@baylibre.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for new fields coming with socinfo structure under v16 to get
-SKU information, product code and name and type of different parts present
-in the SoC. Also, add debugfs nodes to read feature and product codes to
-allow user to get SKU and other SoC details. Support for SoC parts name
-and type parsing will be added separately. Details of fields added:
-* feature_code: mapped to qcom internal and external SKU IDs
-* pcode: product code
-* npartnamemap_offset: parts name map array offset from socinfo base ptr
-* nnum_partname_mapping: number of part mappings
+Le jeu. 24 nov. 2022 =C3=A0 15:29, Vignesh Raghavendra <vigneshr@ti.com> a =
+=C3=A9crit :
+>
+>
+>
+> On 23/11/22 1:52 am, Nicolas Frayer wrote:
+> > In order to build ti mailbox and ti sci as modules,
+> > remove their automatic selection by ARCH_K3
+> >
+>
+> $Subject: s/Removed/Remove,
+> s/ti/TI
+> s/sci/SCI
+>
+> > Signed-off-by: Nicolas Frayer <nfrayer@baylibre.com>
+> > ---
+> >  arch/arm64/Kconfig.platforms | 2 --
+> >  1 file changed, 2 deletions(-)
+> >
+> > diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platform=
+s
+> > index 912529ac58b3..5f16eb498dbf 100644
+> > --- a/arch/arm64/Kconfig.platforms
+> > +++ b/arch/arm64/Kconfig.platforms
+> > @@ -126,8 +126,6 @@ config ARCH_K3
+> >       select PM_GENERIC_DOMAINS if PM
+> >       select MAILBOX
+> >       select SOC_TI
+> > -     select TI_MESSAGE_MANAGER
+> > -     select TI_SCI_PROTOCOL
+> >       select TI_SCI_INTR_IRQCHIP
+> >       select TI_SCI_INTA_IRQCHIP
+> >       help
+>
+>
+> Why not use "imply" instead of "select". This should allow TI_SCI*
+> drivers to be built as modules if required. Would make 2/3 and 3/3
+> redundant.
+>
+> Also, note that 1/3, 2/3 and 3/3 have to go through 3 different trees,
+> so not a great idea to post as a single series.
+>
+> Regards
+> Vignesh
 
-Signed-off-by: Naman Jain <quic_namajain@quicinc.com>
----
- drivers/soc/qcom/socinfo.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
-
-diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
-index 545934aead43..0464e79a3c91 100644
---- a/drivers/soc/qcom/socinfo.c
-+++ b/drivers/soc/qcom/socinfo.c
-@@ -169,6 +169,11 @@ struct socinfo {
- 	__le32 ndefective_parts_array_offset;
- 	/* Version 15 */
- 	__le32 nmodem_supported;
-+	/* Version 16 */
-+	__le32  feature_code;
-+	__le32  pcode;
-+	__le32  npartnamemap_offset;
-+	__le32  nnum_partname_mapping;
- };
- 
- #ifdef CONFIG_DEBUG_FS
-@@ -189,6 +194,8 @@ struct socinfo_params {
- 	u32 num_defective_parts;
- 	u32 ndefective_parts_array_offset;
- 	u32 nmodem_supported;
-+	u32 feature_code;
-+	u32 pcode;
- };
- 
- struct smem_image_version {
-@@ -503,6 +510,15 @@ static void socinfo_debugfs_init(struct qcom_socinfo *qcom_socinfo,
- 			   &qcom_socinfo->info.fmt);
- 
- 	switch (qcom_socinfo->info.fmt) {
-+	case SOCINFO_VERSION(0, 16):
-+		qcom_socinfo->info.feature_code = __le32_to_cpu(info->feature_code);
-+		qcom_socinfo->info.pcode = __le32_to_cpu(info->pcode);
-+
-+		debugfs_create_u32("feature_code", 0444, qcom_socinfo->dbg_root,
-+				   &qcom_socinfo->info.feature_code);
-+		debugfs_create_u32("pcode", 0444, qcom_socinfo->dbg_root,
-+				   &qcom_socinfo->info.pcode);
-+		fallthrough;
- 	case SOCINFO_VERSION(0, 15):
- 		qcom_socinfo->info.nmodem_supported = __le32_to_cpu(info->nmodem_supported);
- 
--- 
-2.17.1
-
+Thanks Vignesh, I'll send a v2 using imply and drop 2/3 and 3/3
