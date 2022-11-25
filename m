@@ -2,73 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B257C639074
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 21:00:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53A7A639077
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 21:01:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbiKYUAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 15:00:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38282 "EHLO
+        id S229806AbiKYUBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 15:01:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiKYUAf (ORCPT
+        with ESMTP id S229610AbiKYUB2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 15:00:35 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56B32E6A7
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 12:00:33 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id b62so4763978pgc.0
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 12:00:33 -0800 (PST)
+        Fri, 25 Nov 2022 15:01:28 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBADB2EF02
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 12:01:27 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id e141so6243185ybh.3
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 12:01:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5OTzkH3CdtgMvkxSL/SyGfXxDbvuq+njYGlJM/u4onY=;
-        b=WjZPrJ3lgchjf9mb8TbsCGA1p6hY2q8P2C9C9cUZpHEoh+x/eklawszc1NLq4d5cB/
-         UgxQnrSu7U74Yb5HsnjZbdiJVNSgZFGsR0nXbys3Ejh+r+7dkAN6/l/QsEPTaTq+mKbV
-         dwTTdUuMf4OXHcYtNFSAfvJ1Ddq/cv4JmeXAzwLah2n+m48iGfvjeKq50hDNo21UMqxA
-         DaQ7c6vQHGnbuT+4uT8BlT97zWU9p0TPxjLgUS5QFXTY+fn59uO1Yarsu4l596GILP+i
-         cO2At/Y3mZnuQjBLJdNbye2OiF3TLbISYV21lF+13FAFVES2zMx+KElzq88K0TKDRGxG
-         QFJQ==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XsAz5OBEzFSCrUnH0XURNQPAnZshG1GxLmebcCoOCro=;
+        b=M1fxuOx1LYLPTrX7jOgiFNsY6mUl3ZHy75KtzD2wHrMcSLVac2HWlQZ/pnZVBd8r5i
+         64QIaD+J3JdhCwsgP8FKln0/tKEgXUlKf8dUtNZAsLlAC7a0iylDO82oYv62/RsFqQBx
+         zqs2fRI5qzheKBClurQPHvoraeO2w60ryX9BY5gce4XWRUhQ/XE9CBrZ68h19wRXZxWJ
+         Z/3vdq588NLmDIcoKH72Eqgk9AidinRyGdLiP5ErQACJpawMNxc+PYN3nAHnn9rX0b4P
+         3tah9AxCSkvyNZi+siePM1rrbv8Oa4gpzATi/AHaNLUd6O7NY1PTF7bUOocZzuK87eTr
+         fkdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5OTzkH3CdtgMvkxSL/SyGfXxDbvuq+njYGlJM/u4onY=;
-        b=BJcABZqH90fCcHvp62MaivqY96DFn1jVygbmX6D+u7BBCQPwmJXTlk0VIZ9uSIwd2e
-         Aa2ccP6gAqaGM7P3gOUKeGxRBv6q4VPjOuq7+gBDCsYSk9/zeYwvPieOD4AY1Q2bhegH
-         ofao/UlGpB8RDuKZkw8OeMUgr3Yb6DiydUp6XINf4JfDF8yVHrOP9krvbE+sNBTdsC1S
-         eNZmUWbi7v3bcNAhS4b+FbQVPpHsD/QkYgoLCC5tkLLJVFI93RQKgZ4FR+r6bkE/5OY6
-         okG9jnr9l2X2f9cdXXAnC68d6CHarvOAjiw6pC75Jr9Mu8Uw7e07jcI/qUfAf118bqVt
-         6sow==
-X-Gm-Message-State: ANoB5pkQV2M1Eg3OhDkyrB7Xnapp72SgGFJci2PbjljUYM+cnBIjSd7c
-        JVXy7r/5JtgFGAIIX8Ft/b7lbg==
-X-Google-Smtp-Source: AA0mqf5U35aZ0d9BkDlXhYRv/DVhcOtmFKDIgoKi+wypTLliGt/ZKwosItB72t/SFh3oPNMKZjL7AQ==
-X-Received: by 2002:a63:134e:0:b0:46e:f011:9563 with SMTP id 14-20020a63134e000000b0046ef0119563mr36694720pgt.451.1669406433184;
-        Fri, 25 Nov 2022 12:00:33 -0800 (PST)
-Received: from DougS18 (s173-180-45-4.bc.hsia.telus.net. [173.180.45.4])
-        by smtp.gmail.com with ESMTPSA id x14-20020a170902a38e00b0018912c37c8fsm640064pla.129.2022.11.25.12.00.31
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 25 Nov 2022 12:00:32 -0800 (PST)
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Rafael J. Wysocki'" <rafael@kernel.org>,
-        "'Kajetan Puchalski'" <kajetan.puchalski@arm.com>
-Cc:     <daniel.lezcano@linaro.org>, <lukasz.luba@arm.com>,
-        <Dietmar.Eggemann@arm.com>, <yu.chen.surf@gmail.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Doug Smythies" <dsmythies@telus.net>
-References: <20221031121314.1381472-1-kajetan.puchalski@arm.com> <20221031121314.1381472-3-kajetan.puchalski@arm.com> <CAJZ5v0hHvf-033Oa-nW7UEZq=9cTFzn6e_znccPXBUeNa=YY+Q@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hHvf-033Oa-nW7UEZq=9cTFzn6e_znccPXBUeNa=YY+Q@mail.gmail.com>
-Subject: RE: [RFC PATCH v3 2/2] cpuidle: teo: Introduce util-awareness
-Date:   Fri, 25 Nov 2022 12:00:32 -0800
-Message-ID: <002401d90108$93a831e0$baf895a0$@telus.net>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XsAz5OBEzFSCrUnH0XURNQPAnZshG1GxLmebcCoOCro=;
+        b=YkVew9b+ql3yMuP0YwwkTx0GzI0RifCPuJXNljmbwwm1EebUL+8em7xx3GfrTd+lsx
+         13ofXlKeG7wF6KBcBFBHZvi85yPQbr9EM702JnDxwrs44A5bJ03QkJtBrkhndljhoSui
+         wRaQzp5fTIAMBtsdTzP2CLuuyzqIl9yHERT6MANSA4R2epOaTsNKVNK3qjoxsqghYfTS
+         WubWK/LL1s8hsDjVgzsWFSOq+YxiCnKiyEUwQbqYwgCQDSBCy2dYRJKRENS8Ckswz9Rn
+         UpAjL0tqE76JPPMATDPgOAm6+G8tneSGvOyOaRswtAfT++9RdCnH0YpXdKYAdSqL6fuz
+         CmgQ==
+X-Gm-Message-State: ANoB5pk/SH2VE/S9frNHLpN3M0aFB2htR5LumBxV+wcHLCK/4pFlASU4
+        +0EZRucyFrut0dqSCklesX2WxsbX47nPmENpXnizKA==
+X-Google-Smtp-Source: AA0mqf7gKI/WoDu6LpJd7wKwjj72gk7p/63usADkgJGSXUlrxGzQ+7EPO6kFAvRuwsaxR6ehDmpUK7sviW1uFtmqxJs=
+X-Received: by 2002:a25:d9d8:0:b0:6e4:c5c4:a62b with SMTP id
+ q207-20020a25d9d8000000b006e4c5c4a62bmr19152567ybg.560.1669406486793; Fri, 25
+ Nov 2022 12:01:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-ca
-Thread-Index: AQJ3niu74TkyFjUbsRqSa0N7+FgHagJieOsRAbWVYo2s8hAF8A==
+References: <20221125075750.019489581@linuxfoundation.org>
+In-Reply-To: <20221125075750.019489581@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 26 Nov 2022 01:31:14 +0530
+Message-ID: <CA+G9fYvHBGz_hHcxqizx4CKLuRkeQp9ytAuCjsBp+BGf1xQ0Og@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/180] 5.15.80-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -78,40 +70,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022.11.25 10:27 Rafael wrote:
-> On Mon, Oct 31, 2022 at 1:14 PM Kajetan wrote:
-
-... [delete some] ...
-
->> +}
->> +
->> /**
->>   * teo_update - Update CPU metrics after wakeup.
->>   * @drv: cpuidle driver containing state data.
->> @@ -303,7 +359,9 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
->>         int i;
->>
->>         if (dev->last_state_idx >= 0) {
->> -               teo_update(drv, dev);
->> +               /* don't update metrics if the cpu was utilized during the last sleep */
+On Fri, 25 Nov 2022 at 13:29, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> Why?
+> This is the start of the stable review cycle for the 5.15.80 release.
+> There are 180 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> The metrics are related to idle duration and cpu_data->utilized
-> indicates whether or not latency should be reduced.  These are
-> different things.
+> Responses should be made by Sun, 27 Nov 2022 07:57:16 +0000.
+> Anything received after that time might be too late.
 >
-> Moreover, this is just one data point and there may not be any direct
-> connection between it and the decision made in this particular cycle.
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.80-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Hi Rafael,
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Yes, agreed. And version 4 of this patch set deleted this stuff.
-See also my similar feedback, with accompanying test data
-that verified the issue in [1].
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-[1] https://lore.kernel.org/linux-pm/CAAYoRsUgm6KyJCDowGKFVuMwJepnVN8NFEenjd3O-FN7+BETSw@mail.gmail.com/
+## Build
+* kernel: 5.15.80-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: d0344da1eca6840c665685e68ae82c09b301fc02
+* git describe: v5.15.79-181-gd0344da1eca6
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.79-181-gd0344da1eca6
 
-... Doug
+## Test Regressions (compared to v5.15.79)
 
+## Metric Regressions (compared to v5.15.79)
 
+## Test Fixes (compared to v5.15.79)
+
+## Metric Fixes (compared to v5.15.79)
+
+## Test result summary
+total: 145876, pass: 126345, fail: 3093, skip: 16007, xfail: 431
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 151 total, 148 passed, 3 failed
+* arm64: 49 total, 47 passed, 2 failed
+* i386: 39 total, 35 passed, 4 failed
+* mips: 31 total, 29 passed, 2 failed
+* parisc: 8 total, 7 passed, 1 failed
+* powerpc: 34 total, 32 passed, 2 failed
+* riscv: 14 total, 14 passed, 0 failed
+* s390: 16 total, 14 passed, 2 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 42 total, 40 passed, 2 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-kvm
+* kselftest-lib
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-openat2
+* kselftest-seccomp
+* kselftest-timens
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-lock[
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
