@@ -2,96 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F500639113
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 22:28:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A57363911B
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 22:32:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbiKYV2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 16:28:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34886 "EHLO
+        id S229810AbiKYVcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 16:32:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbiKYV2n (ORCPT
+        with ESMTP id S229672AbiKYVcl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 16:28:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB836537F1
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 13:28:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C0E860EF4
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 21:28:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D36EC433D6;
-        Fri, 25 Nov 2022 21:28:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669411721;
-        bh=QiMeHracAPcJNUmU/97XystmnPIWB7tNUE61xoEs2fE=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Wavsfc/tfP9wiPgIeqbXnir/udsRF7leGt/6uh/2SFn1FYaV5GQYKK2+MH2fWKVwY
-         51v2xCP+HXKT8mhZkSOxV0NYjHYaIFHIvutvagaIl+PAw1kqMSIW/p57mgH7uLHSBg
-         cjt2A/JpUeACl+5pSwS3X1M5qG6QzzdmBdQUDYJtv1UzfWgDuxC2USHjtWYyhJQIc/
-         Fh7KSwB3Ud8EkpZ95Hx/k+NBx99DJJqY7oLeWIqUo+AXhxmOUMvy7LvvDL0Wyk1WF0
-         Cwa26/1CJr5C86+XQ8CFVkFYAtgYca6MPXZGqxSbCVEDtQfHGyz+MFI+uz9xyLPCPg
-         KfTS9YH2SuX8w==
-From:   Mark Brown <broonie@kernel.org>
-To:     Eddie James <eajames@linux.ibm.com>, linux-fsi@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, alistair@popple.id.au,
-        joel@jms.id.au, jk@ozlabs.org, rafael@kernel.org,
-        gregkh@linuxfoundation.org
-In-Reply-To: <20221102205148.1334459-1-eajames@linux.ibm.com>
-References: <20221102205148.1334459-1-eajames@linux.ibm.com>
-Subject: Re: (subset) [PATCH v2 0/5] fsi: Add regmap and refactor sbefifo
-Message-Id: <166941172004.2089843.9744380408394537777.b4-ty@kernel.org>
-Date:   Fri, 25 Nov 2022 21:28:40 +0000
+        Fri, 25 Nov 2022 16:32:41 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4328E186E8;
+        Fri, 25 Nov 2022 13:32:38 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id b8so7894425edf.11;
+        Fri, 25 Nov 2022 13:32:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VONFYT4AURNaTYs5rJwmKOLQ/6WDExSPVR7SnweH9a4=;
+        b=C9WQHR/1b4JUCiAnW2MDxbKR7WmToTeLJDTuRcHkadgtmXgEWMWUuvgfCbh/t21MkK
+         IKgsWdQpK7uZSjA2kubI3GkXymFc3skjdL14plk15AwrjHMenLgmZzPrafWptQTM6PFx
+         1EFBHwHgfjhl2m4WJVF7tqhYA065RHCBsYa7v1jL/5QNeFunCeiZfjcG8r6426SLPmA8
+         2dX02CBiyLOf44bWk86pKoZNpHLzwDKuKJ3XnRmmVHEUDQXTDAXTj9Yg8bSmRgbnBPYg
+         5hlPXiwtSNRBttCitr2dkFxpDIHOYaD4RW0zu9xyoHr1hJAHoFTJZ6k1CB+EgaGqSNzU
+         xTtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VONFYT4AURNaTYs5rJwmKOLQ/6WDExSPVR7SnweH9a4=;
+        b=RzbVYcT0ghXbt1E4t3dJNVwkbBGCFsHeq08acdLMXEtPLVBQAve38swvKEK/C+Osue
+         GveJF31aAZC38CcbbtrlGqDn9UcW9o1uUbj6O0hiYph0ZTXJ0Geg/1pCeYd5uzSSV/K3
+         bHPKY2aMR5YIGcAFFhHQb1k+EdhqEXFASY71UXBXdBz0IGnASPuxb7Ft8oW0AGY7fklA
+         gZKKg3tWEXTb2z6pOmfcAJ2YUl/v60I55b024NXD0LZE+qrvmGECHQuFGadlf4YJRjn1
+         VE9CyKjR+W82TZ2gRCRj6g9sHN6KEtlOTv8Y7DRhMEZtVh3jAtntA1ij0xy68ZX+Nalz
+         7HwA==
+X-Gm-Message-State: ANoB5pkY0GSUVJTPlhUNgQQ2zhhGik8CkVK+iCaEaevF57+b0u+57ClA
+        7FreIDucPfnQIUK2gFRvO5M=
+X-Google-Smtp-Source: AA0mqf6m6mWQQ74JBI+aQyE5MBqgwRA5k+DZUCfyOXodcv12VVI1/EpNsz6p9NMySXwonAyzKsnr4A==
+X-Received: by 2002:a05:6402:4284:b0:461:8156:e0ca with SMTP id g4-20020a056402428400b004618156e0camr4025383edc.271.1669411956618;
+        Fri, 25 Nov 2022 13:32:36 -0800 (PST)
+Received: from skbuf ([188.26.57.184])
+        by smtp.gmail.com with ESMTPSA id 9-20020a170906210900b007add1c4dadbsm1977455ejt.153.2022.11.25.13.32.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Nov 2022 13:32:33 -0800 (PST)
+Date:   Fri, 25 Nov 2022 23:32:30 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Arun.Ramadoss@microchip.com
+Subject: Re: [PATCH net-next v6 5/6] net: dsa: microchip: enable MTU
+ normalization for KSZ8795 and KSZ9477 compatible switches
+Message-ID: <20221125213230.da42rnyolrxpybng@skbuf>
+References: <20221124101458.3353902-1-o.rempel@pengutronix.de>
+ <20221124101458.3353902-6-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221124101458.3353902-6-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Nov 2022 15:51:43 -0500, Eddie James wrote:
-> The SBEFIFO hardware can now be attached over a new I2C endpoint interface
-> called the I2C Responder (I2CR). In order to use the existing SBEFIFO
-> driver, add a regmap driver for the FSI bus and an endpoint driver for the
-> I2CR. Then, refactor the SBEFIFO and OCC drivers to clean up and use the
-> new regmap driver or the I2CR interface.
+On Thu, Nov 24, 2022 at 11:14:57AM +0100, Oleksij Rempel wrote:
+> KSZ8795 and KSZ9477 compatible series of switches use global max frame
+> size configuration register. So, enable MTU normalization for this reason.
 > 
-> Changes since v1:
->  - Instead of a regmap driver for the I2CR, just have a private interface
->    driver for FSI, since SBEFIFO is likely the only user.
-> 
-> [...]
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
 
-Applied to
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
-
-Thanks!
-
-[1/5] regmap: Add FSI bus support
-      commit: bf0d29fb51ff5e6c13097dbfed7b99e0e35b4a15
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
