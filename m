@@ -2,151 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3813763873C
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 11:19:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17737638739
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 11:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbiKYKTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 05:19:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46448 "EHLO
+        id S230022AbiKYKTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 05:19:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbiKYKTk (ORCPT
+        with ESMTP id S229572AbiKYKTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 05:19:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C71F218B4;
-        Fri, 25 Nov 2022 02:19:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD79F62349;
-        Fri, 25 Nov 2022 10:19:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09032C433D6;
-        Fri, 25 Nov 2022 10:19:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669371579;
-        bh=wi1wajl/uQaonaWjdH3x87mG1xWYis5sdgMpB1P6VBQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E4cr9iHDICE9SsxDGL/9CiVT1UOVGyWQ4OQfzc+Y5O0XoADgHg6A6o5tSPOviuUe/
-         RtfoTfYzYOBLh9WP92bGkdT9oFeBV3ADNNPARQE3tRORxYrx8+on/dXoJBeyC6BaBg
-         OPuYLTHQ1ZLCpieJH8qgkI49PaeYVplOEGBy2MVuVDSWcXmiu+qy4Arkwn4lxHGwwX
-         7THM2IgwOy6+d95VPW5rnD1cQ8ZTE9g8xyuuLFKTX04zis9ZLF+5L/dC63PafAhgZe
-         4+/EDF205WIZuHosU4jl7HIvWPKWT1U+jEpVPdfuLH+x9W54L1mcUdMHnEHSDOlfIi
-         XQPR8It5XbCrA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oyVnd-0002Wq-KI; Fri, 25 Nov 2022 11:19:14 +0100
-Date:   Fri, 25 Nov 2022 11:19:13 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Luca Weiss <luca.weiss@fairphone.com>
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 1/3] dt-bindings: phy: qcom,qmp-usb3-dp: Add
- sm6350 compatible
-Message-ID: <Y4CWoT52Q8jnm/dF@hovoldconsulting.com>
-References: <20221125092749.46073-1-luca.weiss@fairphone.com>
- <Y4CP9fwhDXsLu57Q@hovoldconsulting.com>
- <COLABNHBQ1DG.1PB8SDY3FW1YY@otso>
+        Fri, 25 Nov 2022 05:19:30 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662D821887
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 02:19:29 -0800 (PST)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1oyVnn-0004RC-Ta; Fri, 25 Nov 2022 11:19:24 +0100
+Message-ID: <9ea3b053cf20d0f3564ccd6152b258ddf0cc8d1e.camel@pengutronix.de>
+Subject: Re: [PATCH v1] PCI: imx6: Set MSI enable bit of RC in resume
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Hongxing Zhu <hongxing.zhu@nxp.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>
+Cc:     "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>
+Date:   Fri, 25 Nov 2022 11:19:22 +0100
+In-Reply-To: <AS8PR04MB8676A61A8C554EB0F0162C998C0E9@AS8PR04MB8676.eurprd04.prod.outlook.com>
+References: <1667289595-12440-1-git-send-email-hongxing.zhu@nxp.com>
+         <AS8PR04MB8676A61A8C554EB0F0162C998C0E9@AS8PR04MB8676.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <COLABNHBQ1DG.1PB8SDY3FW1YY@otso>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022 at 10:55:31AM +0100, Luca Weiss wrote:
-> Hi Johan,
+Am Freitag, dem 25.11.2022 um 02:07 +0000 schrieb Hongxing Zhu:
+> Friendly ping.
+> Anymore comments are very appreciated.
 > 
-> On Fri Nov 25, 2022 at 10:50 AM CET, Johan Hovold wrote:
-> > On Fri, Nov 25, 2022 at 10:27:47AM +0100, Luca Weiss wrote:
-> > > Add the compatible describing the combo phy found on SM6350.
-> > > 
-> > > Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> > > ---
-> > > @Johan Hovold, I've sent this v2 as RFC because there are several things
-> > > where I have questions on how it should be done.
-> > > 
-> > > In this patch, you can see there's cfg_ahb (&xo_board) and power-domains
-> > > is not set. In msm-4.19 &gcc_usb30_prim_gdsc is only used in the
-> > > ssusb@a600000 node, or should I also add it to qmpphy?
-> >
-> > Yeah, you may need to add a platform specific section of the clocks,
-> > which appear to be different, even if I'm not sure they are currently
-> > described correctly (xo_board as cfg_ahb and "QLINK" as ref). How are
-> > they named in the vendor's dts?
+> BTW, I had verified on i.MX7D/i.MX6QP platforms that MSI wouldn’t be functional
+>  after resume without this patch.
+
+Instead of playing whack-a-mole and restoring individual config setting
+after resume, shouldn't we just do a pci_save_state() on suspend and
+then restore the complete config by calling pci_restore_state() on
+resume?
+
+Regards,
+Lucas
+
 > 
-> This is the msm-4.19 dts:
-> https://android.googlesource.com/kernel/msm-extra/devicetree/+/refs/heads/android-msm-bramble-4.19-android11-qpr1/qcom/lagoon-usb.dtsi#354
-
-		clocks = <&gcc GCC_USB3_PRIM_PHY_AUX_CLK>,
-			<&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>,
-			<&rpmhcc RPMH_QLINK_CLK>,
-			<&gcc GCC_USB3_PRIM_CLKREF_CLK>,
-			<&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>;
-		clock-names = "aux_clk", "pipe_clk", "ref_clk_src",
-				"ref_clk", "com_aux_clk";
-
-So it looks like you don't need update the binding for the clocks as the
-above matches sc8280xp:
-
-	aux
-	ref
-	com_aux
-	usb3_pipe
-
-Parent clocks (ref_clk_src) should not be included in the binding, but
-rather be handled by the clock driver. For example, see:
-
-	https://lore.kernel.org/all/20221121085058.31213-4-johan+linaro@kernel.org/
-	https://lore.kernel.org/all/20221115152956.21677-1-quic_shazhuss@quicinc.com/
-
-> > >  .../bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml          | 5 +++--
-> > >  1 file changed, 3 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
-> > > index 6f31693d9868..3e39e3e0504d 100644
-> > > --- a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
-> > > +++ b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
-> > > @@ -17,16 +17,18 @@ properties:
-> > >    compatible:
-> > >      enum:
-> > >        - qcom,sc8280xp-qmp-usb43dp-phy
-> > > +      - qcom,sm6350-qmp-usb3-dp-phy
-> > >  
-> > >    reg:
-> > >      maxItems: 1
-> > >  
-> > >    clocks:
-> > > -    maxItems: 4
-> > > +    maxItems: 5
-> > >  
-> > >    clock-names:
-> > >      items:
-> > >        - const: aux
-> > > +      - const: cfg_ahb
-> > >        - const: ref
-> > >        - const: com_aux
-> > >        - const: usb3_pipe
-> >
-> > So this would need to be moved to an allOf: construct at the end with
-> > one section each for sc8280xp and sm6350.
+> Best Regards
+> Richard Zhu
 > 
-> Ack.
+> > -----Original Message-----
+> > From: Richard Zhu <hongxing.zhu@nxp.com>
+> > Sent: 2022年11月1日 16:00
+> > To: l.stach@pengutronix.de; bhelgaas@google.com;
+> > lorenzo.pieralisi@arm.com
+> > Cc: Hongxing Zhu <hongxing.zhu@nxp.com>; linux-pci@vger.kernel.org;
+> > linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
+> > kernel@pengutronix.de; dl-linux-imx <linux-imx@nxp.com>
+> > Subject: [PATCH v1] PCI: imx6: Set MSI enable bit of RC in resume
+> > 
+> > The MSI Enable bit controls delivery of MSI interrupts from components below
+> > the Root Port. This bit might lost during the suspend, should be re-configured
+> > during resume.
+> > 
+> > Encapsulate the MSI enable set into a standalone function, and invoke it in
+> > both probe and resume.
+> > 
+> > Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+> > ---
+> >  drivers/pci/controller/dwc/pci-imx6.c | 24 +++++++++++++++++-------
+> >  1 file changed, 17 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/drivers/pci/controller/dwc/pci-imx6.c
+> > b/drivers/pci/controller/dwc/pci-imx6.c
+> > index 2616585ca5f8..dba15546075f 100644
+> > --- a/drivers/pci/controller/dwc/pci-imx6.c
+> > +++ b/drivers/pci/controller/dwc/pci-imx6.c
+> > @@ -1041,6 +1041,21 @@ static void imx6_pcie_pm_turnoff(struct
+> > imx6_pcie *imx6_pcie)
+> >  	usleep_range(1000, 10000);
+> >  }
+> > 
+> > +static void pci_imx_set_msi_en(struct dw_pcie *pci) {
+> > +	u8 offset;
+> > +	u16 val;
+> > +
+> > +	if (pci_msi_enabled()) {
+> > +		offset = dw_pcie_find_capability(pci, PCI_CAP_ID_MSI);
+> > +		dw_pcie_dbi_ro_wr_en(pci);
+> > +		val = dw_pcie_readw_dbi(pci, offset + PCI_MSI_FLAGS);
+> > +		val |= PCI_MSI_FLAGS_ENABLE;
+> > +		dw_pcie_writew_dbi(pci, offset + PCI_MSI_FLAGS, val);
+> > +		dw_pcie_dbi_ro_wr_dis(pci);
+> > +	}
+> > +}
+> > +
+> >  static int imx6_pcie_suspend_noirq(struct device *dev)  {
+> >  	struct imx6_pcie *imx6_pcie = dev_get_drvdata(dev); @@ -1073,6
+> > +1088,7 @@ static int imx6_pcie_resume_noirq(struct device *dev)
+> >  	if (imx6_pcie->link_is_up)
+> >  		imx6_pcie_start_link(imx6_pcie->pci);
+> > 
+> > +	pci_imx_set_msi_en(imx6_pcie->pci);
+> >  	return 0;
+> >  }
+> > 
+> > @@ -1090,7 +1106,6 @@ static int imx6_pcie_probe(struct platform_device
+> > *pdev)
+> >  	struct resource *dbi_base;
+> >  	struct device_node *node = dev->of_node;
+> >  	int ret;
+> > -	u16 val;
+> > 
+> >  	imx6_pcie = devm_kzalloc(dev, sizeof(*imx6_pcie), GFP_KERNEL);
+> >  	if (!imx6_pcie)
+> > @@ -1282,12 +1297,7 @@ static int imx6_pcie_probe(struct platform_device
+> > *pdev)
+> >  	if (ret < 0)
+> >  		return ret;
+> > 
+> > -	if (pci_msi_enabled()) {
+> > -		u8 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_MSI);
+> > -		val = dw_pcie_readw_dbi(pci, offset + PCI_MSI_FLAGS);
+> > -		val |= PCI_MSI_FLAGS_ENABLE;
+> > -		dw_pcie_writew_dbi(pci, offset + PCI_MSI_FLAGS, val);
+> > -	}
+> > +	pci_imx_set_msi_en(pci);
+> > 
+> >  	return 0;
+> >  }
+> > --
+> > 2.25.1
+> 
 
-So no need to change this it seems.
 
-Johan
