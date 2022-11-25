@@ -2,108 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4163A638955
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 13:00:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A53638901
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 12:43:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbiKYMAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 07:00:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57794 "EHLO
+        id S230086AbiKYLnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 06:43:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiKYMAJ (ORCPT
+        with ESMTP id S229554AbiKYLnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 07:00:09 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1062C65E;
-        Fri, 25 Nov 2022 04:00:08 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 5F9F05C010F;
-        Fri, 25 Nov 2022 07:00:05 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Fri, 25 Nov 2022 07:00:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1669377605; x=1669464005; bh=ORhbw5an4G
-        KOiycsFaYqr6B7NvcZliSQjROA9jUxxDQ=; b=SX3HhB2VU0akjfNzf1Zjg3a/E/
-        WMXIeswGBRQdbDbwf7BDfohblR9XpFpj6zaI9zO31143qWlt4oq8tio5c/tA8DYr
-        /dsxgEO+BGRv4k+uYBAybNhuYoBjtVqC+AvVQhTdBHi1vGu0dkPs8S+/VEHjYBTc
-        NCk5sObJZOh5PywusTWdp9W8XLSNipo02ImL7YyIJPcFB5rAqStowiZ56+Hh8Fcg
-        k30lRJq42LxThw98Lnb2RrbeWjPIpZJId2zG+9cYJ1BZzBFrahPUTkBWIVj2s/x5
-        3eNW6Qq8gXTMYglbUtHo3/ha1mOh4O2kdM0pN3F9GTnB+xPT/ZYfyEYiufnw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1669377605; x=1669464005; bh=ORhbw5an4GKOiycsFaYqr6B7NvcZ
-        liSQjROA9jUxxDQ=; b=ZoKlCL5YPv32N0RUcpxX3a7QvEHwfmqOW61w0eFQcxI8
-        euGHCkRQpIyTmDq/RSB5o+/Nm4HYRPslxu05jMYBuERy6kf97/BH0QEHCoWh4c5+
-        4v8OT+laiPrqzXRAskS12VGUsnYlZkhz4LMGGVbt/RoVQz+KhrR+06qiy0D9DHHN
-        XL5kMRKJ9J2gT3CzgPN0fmaZ6kgCF8q+Vy3IKosLtd/ORh1dwpT+ut8ry7LhK5OP
-        5G3MfCZ3spqMdMrOaiw0P21kSZa1OTFC0NbpWCnF07DvsLcM28RnpbC9q/dGdwp2
-        hYIC0XYdpydBe/b+o69nGHcwoKcR5bfQvhulJRC6/A==
-X-ME-Sender: <xms:Ra6AY9HtGXENshMown2z-nLMpSjYeMpr9U9BWEDQKRh1n9bv8ElXNA>
-    <xme:Ra6AYyUkVjaBnLfZbfmbU1Of_q9zTD_4bT9etK8FVpBYxrHO_0_qRLPamrtfQ1x2J
-    slANLQ16Rp99zqAmwA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrieehgdefhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:Ra6AY_L5ouZKpCDJx89DpbzqttGSqUlX19fpuOYdKhQSFEfN1sfKGA>
-    <xmx:Ra6AYzFE7yvr-5avfIo59jRUYy6G_yQl6HlLmQzQQoVSWJA23JUd2A>
-    <xmx:Ra6AYzXTk0O97UnKHdY6fIXqHQiIZkIJ-TF4EeLUsHmch16zVJAxkA>
-    <xmx:Ra6AY6EBVauUH7dPJEDvicc4Tmo-_8-PBKrqPuYB5YRj-9v1mckffQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id EEE29B60086; Fri, 25 Nov 2022 07:00:04 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <cfd1324c-ca40-4af5-a469-2e9ba897dfcc@app.fastmail.com>
-In-Reply-To: <20221125115003.30308-1-yuehaibing@huawei.com>
-References: <20221125115003.30308-1-yuehaibing@huawei.com>
-Date:   Fri, 25 Nov 2022 12:59:44 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     YueHaibing <yuehaibing@huawei.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>, f.fainelli@broadcom.com,
-        "Naresh Kamboju" <naresh.kamboju@linaro.org>
-Cc:     Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] net: broadcom: Add PTP_1588_CLOCK_OPTIONAL dependency for BCMGENET
- under ARCH_BCM2835
+        Fri, 25 Nov 2022 06:43:45 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12ADBE1D;
+        Fri, 25 Nov 2022 03:43:44 -0800 (PST)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NJXzx4p5Hz15Mv1;
+        Fri, 25 Nov 2022 19:43:09 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.70) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 25 Nov 2022 19:43:42 +0800
+From:   Wang Yufen <wangyufen@huawei.com>
+To:     <bvanassche@acm.org>, <jgg@ziepe.ca>, <leon@kernel.org>,
+        <dennis.dalessandro@cornelisnetworks.com>
+CC:     <linux-rdma@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <andriy.shevchenko@linux.intel.com>, <bart.vanassche@wdc.com>,
+        <easwar.hariharan@intel.com>, Wang Yufen <wangyufen@huawei.com>
+Subject: [PATCH 1/2] RDMA/hfi1: Fix error return code in parse_platform_config()
+Date:   Fri, 25 Nov 2022 20:03:50 +0800
+Message-ID: <1669377831-41386-1-git-send-email-wangyufen@huawei.com>
+X-Mailer: git-send-email 1.8.3.1
+MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.175.112.70]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022, at 12:50, YueHaibing wrote:
-> commit 8d820bc9d12b ("net: broadcom: Fix BCMGENET Kconfig") fixes the build
-> that contain 99addbe31f55 ("net: broadcom: Select BROADCOM_PHY for BCMGENET")
-> and enable BCMGENET=y but PTP_1588_CLOCK_OPTIONAL=m, which otherwise
-> leads to a link failure. However this may trigger a runtime failure.
->
-> Fix the original issue by propagating the PTP_1588_CLOCK_OPTIONAL dependency
-> of BROADCOM_PHY down to BCMGENET.
->
-> Fixes: 8d820bc9d12b ("net: broadcom: Fix BCMGENET Kconfig")
-> Fixes: 99addbe31f55 ("net: broadcom: Select BROADCOM_PHY for BCMGENET")
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+In the previous while loop, "ret" may be assigned zero. Therefore,
+"ret" needs to be assigned -EINVAL at the beginning of each loop.
 
-Thanks for fixing this,
+Fixes: 97167e813415 ("staging/rdma/hfi1: Tune for unknown channel if configuration file is absent")
+Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+---
+ drivers/infiniband/hw/hfi1/firmware.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+diff --git a/drivers/infiniband/hw/hfi1/firmware.c b/drivers/infiniband/hw/hfi1/firmware.c
+index 1d77514..c179dfe 100644
+--- a/drivers/infiniband/hw/hfi1/firmware.c
++++ b/drivers/infiniband/hw/hfi1/firmware.c
+@@ -1788,6 +1788,7 @@ int parse_platform_config(struct hfi1_devdata *dd)
+ 	 * being used.
+ 	 */
+ 	while (ptr < (u32 *)(dd->platform_config.data + file_length)) {
++		ret = -EINVAL;
+ 		header1 = *ptr;
+ 		header2 = *(ptr + 1);
+ 		if (header1 != ~header2) {
+-- 
+1.8.3.1
+
