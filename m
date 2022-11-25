@@ -2,117 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD403638916
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 12:53:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1DAE638920
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 12:53:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbiKYLxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 06:53:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50540 "EHLO
+        id S229967AbiKYLxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 06:53:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiKYLxN (ORCPT
+        with ESMTP id S229580AbiKYLxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 06:53:13 -0500
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 366CA1A800
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 03:53:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1669377192;
-  x=1700913192;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=crz04ig20tpvAmEbWeHvM10lzZnFghyvDj4EsoOeDhI=;
-  b=EEnoPylpzVWOO7cWrNVme95lRN1AOoxdjgMvd0vdT/MWHcN+kVbPvXKH
-   x+ZHqdo83elwR7IqZwZZAzsVYF0IJe5VBxLrlnqpH+yzRa8BHmc1NDiBg
-   5vjaL8pjOtJnzaTs/rDgEd0THUgLdcWcOeXFtYDuxxzz3ymySpviq9r7+
-   e8Gs72Yt8zdeQ3JjMiXTM2Xm4mHSj4ncy70dJzjpZyl2Hdj9ETv5aIyJw
-   WJ2sSKfGJH9CZJphOFH6LTwd5/QSImxINrH6wWeqtydC0awvnMdOMves0
-   +G04YFmHBPHZKN7DeeNjUDzQTX1mhZlIvjOAiwslg7xCEAsPQgYXoU2zw
-   A==;
-Date:   Fri, 25 Nov 2022 12:53:10 +0100
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Leo Yan <leo.yan@linaro.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-CC:     Hans-Peter Nilsson <hp@axis.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kim Phillips <kim.phillips@arm.com>
-Subject: Re: [PATCH] perf arm64: Fix mksyscalltbl, don't lose syscalls due to
- sort -nu
-Message-ID: <Y4Cspv98j8TqwCqZ@axis.com>
-References: <20201228023941.E0DE2203B5@pchp3.se.axis.com>
- <20201229030933.GC28115@leoy-ThinkPad-X240s>
+        Fri, 25 Nov 2022 06:53:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B24E2C11D;
+        Fri, 25 Nov 2022 03:53:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2283162371;
+        Fri, 25 Nov 2022 11:53:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E041C433C1;
+        Fri, 25 Nov 2022 11:53:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669377232;
+        bh=GJUGKKMFeuENkwBge1jb0Mdf5GIp2DPpvfvOPbbp7iw=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=GQQihBilK2RZaxGRLnomolcNP5U3RCj+AOVFaIQsIDVaiQoZm2uipr73zZ549jroy
+         wLQ9pcyDXfakozCgBda/OPBv7kYn4YQoBLL9FqugcpPizWGWRtHYTJ2APimsaRS6Xc
+         fRYxvTaU9vacBQddeSATsVI9/kjShokM/FYD5EbQKy34vV2gfuAEoqkFvsum6osOQN
+         qOgEXpBHE3y3b/rvmd0G1ufuTTprLvvQZ0XNt+F34q28LElHnC/8WtE2/OsBenxKo0
+         XX/sKoPfjyj6Ocg4HzTmgfuTdC6TZ2mdKtd6CZQ2URmrAp6XAxoTqyWGCHSVjmcyVn
+         FLvT/MLY5v4TA==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Alvin =?utf-8?Q?=C5=A0iprag?= =?utf-8?Q?a?= 
+        <ALSI@bang-olufsen.dk>, Hector Martin <marcan@marcan.st>,
+        "~postmarketos\/upstreaming\@lists.sr.ht" 
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        "martin.botka\@somainline.org" <martin.botka@somainline.org>,
+        "angelogioacchino.delregno\@somainline.org" 
+        <angelogioacchino.delregno@somainline.org>,
+        "marijn.suijten\@somainline.org" <marijn.suijten@somainline.org>,
+        "jamipkettunen\@somainline.org" <jamipkettunen@somainline.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Marek Vasut <marex@denx.de>,
+        "Zhao\, Jiaqing" <jiaqing.zhao@intel.com>,
+        "Russell King \(Oracle\)" <rmk+kernel@armlinux.org.uk>,
+        Soon Tak Lee <soontak.lee@cypress.com>,
+        "linux-wireless\@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "brcm80211-dev-list.pdl\@broadcom.com" 
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        "SHA-cyfmac-dev-list\@infineon.com" 
+        <SHA-cyfmac-dev-list@infineon.com>,
+        "netdev\@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] brcmfmac: Add support for BCM43596 PCIe Wi-Fi
+References: <20220921001630.56765-1-konrad.dybcio@somainline.org>
+        <83b90478-3974-28e6-cf13-35fc4f62e0db@marcan.st>
+        <13b8c67c-399c-d1a6-4929-61aea27aa57d@somainline.org>
+        <0e65a8b2-0827-af1e-602c-76d9450e3d11@marcan.st>
+        <7fd077c5-83f8-02e2-03c1-900a47f05dc1@somainline.org>
+        <CACRpkda3uryD6TOEaTi3pPX5No40LBWoyHR4VcEuKw4iYT0dqA@mail.gmail.com>
+        <20220922133056.eo26da4npkg6bpf2@bang-olufsen.dk>
+        <87sfke32pc.fsf@kernel.org>
+        <4592f87a-bb61-1c28-13f0-d041a6e7d3bf@linaro.org>
+        <CACRpkdax-3VVDd29iH51mfumakqM7jyEc8Pbb=AQwAgp2WsqFQ@mail.gmail.com>
+        <d03bd4d4-e4ef-681b-b4a5-02822e1eee75@linaro.org>
+Date:   Fri, 25 Nov 2022 13:53:43 +0200
+In-Reply-To: <d03bd4d4-e4ef-681b-b4a5-02822e1eee75@linaro.org> (Konrad
+        Dybcio's message of "Fri, 25 Nov 2022 12:42:29 +0100")
+Message-ID: <87fse76yig.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20201229030933.GC28115@leoy-ThinkPad-X240s>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 29, 2020 at 11:09:33AM +0800, Leo Yan wrote:
-> On Mon, Dec 28, 2020 at 03:39:41AM +0100, Hans-Peter Nilsson wrote:
-> > When using "sort -nu", arm64 syscalls were lost.  That is, the
-> > io_setup syscall (number 0) and all but one (typically
-> > ftruncate; 64) of the syscalls that are defined symbolically
-> > (like "#define __NR_ftruncate __NR3264_ftruncate") at the point
-> > where "sort" is applied.
-> > 
-> > This creation-of-syscalls.c-scheme is, judging from comments,
-> > copy-pasted from powerpc, and worked there because at the time,
-> > its tools/arch/powerpc/include/uapi/asm/unistd.h had *literals*,
-> > like "#define __NR_ftruncate 93".
-> > 
-> > With sort being numeric and the non-numeric key effectively
-> > evaluating to 0, the sort option "-u" means these "duplicates"
-> > are removed.  There's no need to remove syscall lines with
-> > duplicate numbers for arm64 because there are none, so let's fix
-> > that by just losing the "-u".  Having the table numerically
-> > sorted on syscall-number for the rest of the syscalls looks
-> > nice, so keep the "-n".
-> > 
-> > Signed-off-by: Hans-Peter Nilsson <hp@axis.com>
-> 
-> Very good catching!  I tested this patch with the commands:
-> 
-> $ cd $LINUX_KERN
-> $ tools/perf/arch/arm64/entry/syscalls/mksyscalltbl \
->         $ARM64_TOOLCHAIN_PATH/aarch64-linux-gnu-gcc \
->         gcc tools tools/include/uapi/asm-generic/unistd.h
-> 
-> It gives out complete syscall tables:
-> 
-> $ diff /tmp/mksyscall_before.txt /tmp/mksyscall_after.txt
-> 1a2,4
-> > 	[223] = "fadvise64",
-> > 	[25] = "fcntl",
-> > 	[44] = "fstatfs",
-> 2a6,11
-> > 	[0] = "io_setup",
-> > 	[62] = "lseek",
-> > 	[222] = "mmap",
-> > 	[71] = "sendfile",
-> > 	[43] = "statfs",
-> > 	[45] = "truncate",
-> 
-> Rather than dropping option "-u" for sort command, I googled and read
-> the manual of "sort", but cannot find other better method.  So this
-> patch looks good for me:
-> 
-> Reviewed-by: Leo Yan <leo.yan@linaro.org>
-> Tested-by: Leo Yan <leo.yan@linaro.org>
+Konrad Dybcio <konrad.dybcio@linaro.org> writes:
 
-It looks like this patch was never applied?  AFAICS it is still needed
-on current HEAD and it still applies cleanly.
+> On 21.11.2022 14:56, Linus Walleij wrote:
+>> On Fri, Nov 18, 2022 at 5:47 PM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>> 
+>>> I can think of a couple of hacky ways to force use of 43596 fw, but I
+>>> don't think any would be really upstreamable..
+>> 
+>> If it is only known to affect the Sony Xperias mentioned then
+>> a thing such as:
+>> 
+>> if (of_machine_is_compatible("sony,xyz") ||
+>>     of_machine_is_compatible("sony,zzz")... ) {
+>>    // Enforce FW version
+>> }
+>> 
+>> would be completely acceptable in my book. It hammers the
+>> problem from the top instead of trying to figure out itsy witsy
+>> details about firmware revisions.
+>> 
+>> Yours,
+>> Linus Walleij
+>
+> Actually, I think I came up with a better approach by pulling a page
+> out of Asahi folks' book - please take a look and tell me what you
+> think about this:
+>
+> [1]
+> https://github.com/SoMainline/linux/commit/4b6fccc995cd79109b0dae4e4ab2e48db97695e7
+> [2]
+> https://github.com/SoMainline/linux/commit/e3ea1dc739634f734104f37fdbed046873921af7
+
+Instead of a directory path ("brcm/brcmfmac43596-pcie") why not provide
+just the chipset name ("brcmfmac43596-pcie")? IMHO it's unnecessary to
+have directory names in Device Tree.
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
