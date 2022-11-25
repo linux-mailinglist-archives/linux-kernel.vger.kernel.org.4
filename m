@@ -2,142 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1572638792
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 11:33:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A97ED638799
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 11:34:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbiKYKdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 05:33:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
+        id S229850AbiKYKei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 05:34:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiKYKdM (ORCPT
+        with ESMTP id S229795AbiKYKee (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 05:33:12 -0500
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9C882B605;
-        Fri, 25 Nov 2022 02:33:10 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 08DFF5C00F5;
-        Fri, 25 Nov 2022 05:33:10 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Fri, 25 Nov 2022 05:33:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1669372390; x=1669458790; bh=JROol/irmv
-        N5MEhKuBHYiHbWYmYWc16fBXOgVLqfN3w=; b=nc6+evhM3PIDQl6BIqrif/Xc90
-        fnSj7VcZ+bdORPHuauNy1fBgw/kKBaDBy2vc39GQNCgHzf2LuWLVwUTZy04QZKlS
-        j8lzQVSTLtKHYmGS23rlmJ57G97jCKDfr9zjbVgAscon8MgkqyF7lgo4OTtwHR9/
-        Q3mBYW5S9NpoDlPcqoDvQyK5t4IEOGMjR6ABWAxYj7r/ML0UhmYbXIaPa8rWy9Sd
-        /tMIYfwHfZkg+uBurm11rFWrCNrhfMjq09kVNyKYfTz4pOCgI+iMrc6DiBid9z/M
-        HtJPe9AoWNDCs8PolW70SXGNXsAmnB9g/Uu6MY9bsYhHMnOSkAfKH85BcMmA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1669372390; x=1669458790; bh=JROol/irmvN5MEhKuBHYiHbWYmYW
-        c16fBXOgVLqfN3w=; b=U1hY0Cudj6B4TKUpU+tp2asHfGqBdJUcRkwh/m9AvweJ
-        1skw5vkkHJiupRKLu7OC+A4BhA9V0mURms+o/zGEw2Vz0nWcsB89Jrfz8/ioPOP6
-        ccrGqXDEC8Ef7q1ny1WS3dEG84csgp/39vf49Y4gYeVOUwbJIKuFcM/3cZVo1SNp
-        g3xnD2Uz4k/s7jLtpyIDOTO7cqeSvN89nbcy5+nxN8gT3J1VMGmTJLrCKbbZjcvl
-        Z69J6+e7+Baf7WAiP+dvzqACH33mbbajKakUiyb5kX3zsmcPNwxXARdEtTCiX2vT
-        gyZ/FWJ2mRnqnPimFL4yxRy29jqMc9XN7D4q9lZfsw==
-X-ME-Sender: <xms:5ZmAY1XYErWsidxtNqOjpk8K83kB3OzuZaMXKKsLk1HoMHlsgyDwiQ>
-    <xme:5ZmAY1mWtHOqqWcOTApwtuQhVW8n966vkpmLNoWwDlb8Bx2oXf2sZ-jInp7OD4x27
-    o3AIW4bSRLsKsjFw5o>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrieehgddujecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:5ZmAYxZSZEJ7_3pgDwmuQWYyWlQi9_s_WlDWUFix7KPc_f3zjgW7Qw>
-    <xmx:5ZmAY4UjomsQ9nQ2i3xVelvGVhqVmKyMtYoO5CmqcLixG1BgpjszUw>
-    <xmx:5ZmAY_lh0tCnqCaf7YONCkllryXgss1689XvIrjI2E03wRz4fYDssw>
-    <xmx:5pmAYxuh2MkrW6VoxPrz_SAR1bJiVKtaxdZxdI4prcsY34JTauL2fg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 5B292B60086; Fri, 25 Nov 2022 05:33:09 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <78fc17ac-bdce-4835-953d-d50d0a467146@app.fastmail.com>
-In-Reply-To: <23b0fa9c-d041-8c56-ec4b-04991fa340d4@huawei.com>
-References: <20221123084557.945845710@linuxfoundation.org>
- <CA+G9fYvKfbJHcMZtybf_0Ru3+6fKPg9HwWTOhdCLrOBXMaeG1A@mail.gmail.com>
- <CA+G9fYvgaNKbr_EhWsh9hjnzCeVXGJoXX4to72ytdvZi8W0svA@mail.gmail.com>
- <Y4BuUU5yMI6PqCbb@kroah.com>
- <CA+G9fYsXomPXcecPDzDydO3=i2qHDM2RTtGxr0p2YOS6=YcWng@mail.gmail.com>
- <a1652617-9da5-4a29-9711-9d3b3cf66597@app.fastmail.com>
- <23b0fa9c-d041-8c56-ec4b-04991fa340d4@huawei.com>
-Date:   Fri, 25 Nov 2022 11:32:49 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     YueHaibing <yuehaibing@huawei.com>,
-        "Naresh Kamboju" <naresh.kamboju@linaro.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        "Linus Torvalds" <torvalds@linux-foundation.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Guenter Roeck" <linux@roeck-us.net>, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org,
-        "Pavel Machek" <pavel@denx.de>,
-        "Jon Hunter" <jonathanh@nvidia.com>,
-        "Florian Fainelli" <f.fainelli@gmail.com>,
-        "Sudip Mukherjee" <sudipm.mukherjee@gmail.com>,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Netdev <netdev@vger.kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        =?UTF-8?Q?Daniel_D=C3=ADaz?= <daniel.diaz@linaro.org>
-Subject: Re: [PATCH 5.10 000/149] 5.10.156-rc1 review
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 25 Nov 2022 05:34:34 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36D7421BA;
+        Fri, 25 Nov 2022 02:34:32 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id x102so5873921ede.0;
+        Fri, 25 Nov 2022 02:34:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZEpkuQXuvOiX23moyFDnFxgEP2HnqxVQhoNAx7KzG+8=;
+        b=g1drplUkwDolDWizuLqHCWwBVIFGtE+j/n5Lv8jrj37Q8V/JRxyrr1uYt74+0IYE94
+         tR9HaIOul/fQMbrNbfwHfiXpA7au8Eij7h2sLqEkXI9qrKnCCTuApCnwFgDmw50zkCRS
+         hjnG5nMXWkEqYVxce8AsTogPE20iIRc/PPa+zBx8bwZbZo7m2QbL/blE81mphmiLnMr5
+         OxTZIneoDveMDLoaiz8fxoK/S41clLqxsOxJ+ztYpT1GVGriwc9MXjW+Q/ls9ZJl1xtq
+         M8PDUfwJ8DLHVyQiBY4J8OC+sM/ffE2bYWJO5HYsVLcenkKxOsjHzu2KfzIMxrKd4AjO
+         jy0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZEpkuQXuvOiX23moyFDnFxgEP2HnqxVQhoNAx7KzG+8=;
+        b=4ElweRLE693ghiacl2y+/47wdBDq8n6k4dnQM48lAGwtA+nVDg1YopgqqIRmDStlbQ
+         mtbYNgo9sZUl9U37DcmKa99RaEc+6oFhHLBUOW/F5K3FnTj8zmbYWPUhCLfSVU/a82Yl
+         TflWn2isQvqoOpCv6d3HxumpkNLmQEZNy/f+rpsR4ZrG4hckUEk/p9CS6Q7lwjsCQ0XI
+         8poXLj706DXDDw2H6KdSLcTwHo8njCiWQbuiAfGN/ElsrzcqWjuQkdIAOjhhi5R4XgSS
+         PadtD55brPhsfI7jTtX4fYQrtAyjljFsIGvpwLx/0rjkwxyLi3YCan54PO8BsySmfGja
+         uUqw==
+X-Gm-Message-State: ANoB5pkpTj3ZcATGtVG+dMz7mJZ3oB91shChy+09vRGc5a/irkoVKNKZ
+        68g2oIdGQ8JIXSawQ8K0UYdemiptRjzE+IWBois=
+X-Google-Smtp-Source: AA0mqf5HrlCFHGWi4MUGdrjcLpjKY5UhP4x39kSPBoAH0e6ijoZRD3oKw6heUDDA+5j983c7sUpuxvy2UVbKyB+BAAE=
+X-Received: by 2002:aa7:d156:0:b0:468:51b0:295 with SMTP id
+ r22-20020aa7d156000000b0046851b00295mr34445349edo.319.1669372471204; Fri, 25
+ Nov 2022 02:34:31 -0800 (PST)
+MIME-Version: 1.0
+References: <20221124172207.153718-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221124172207.153718-7-prabhakar.mahadev-lad.rj@bp.renesas.com> <70d1bfde-f57f-1741-08d3-23e362793595@linaro.org>
+In-Reply-To: <70d1bfde-f57f-1741-08d3-23e362793595@linaro.org>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Fri, 25 Nov 2022 10:34:04 +0000
+Message-ID: <CA+V-a8s2awLp=YvbhA1Ohe500Oh1easLUcG9V4_FWov7Pf2i6g@mail.gmail.com>
+Subject: Re: [PATCH v4 6/7] dt-bindings: cache: r9a07g043f-l2-cache: Add DT
+ binding documentation for L2 cache controller
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022, at 11:25, YueHaibing wrote:
-> On 2022/11/25 18:02, Arnd Bergmann wrote:
->> On Fri, Nov 25, 2022, at 09:05, Naresh Kamboju wrote:
->>> On Fri, 25 Nov 2022 at 12:57, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
->>>> On Thu, Nov 24, 2022 at 09:17:36PM +0530, Naresh Kamboju wrote:
->>>>>
->>>>> Daniel bisected this reported problem and found the first bad commit,
->>>>>
->>>>> YueHaibing <yuehaibing@huawei.com>
->>>>>     net: broadcom: Fix BCMGENET Kconfig
->>>>
->>>> But that is in 5.10.155, 5.15.79, 6.0.9, and 6.1-rc5.  It is not new to
->>>> this -rc release.
->>>
->>> It started from 5.10.155 and this is only seen on 5.10 and other
->>> branches 5.15, 6.0 and mainline are looking good.
->> 
->> I think the original patch is wrong and should be fixed upstream.
->> The backported patch in question is a one-line Kconfig change doing
+Hi Krzysztof,
+
+Thank you for the review.
+
+On Fri, Nov 25, 2022 at 8:16 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> It seems lts 5.10 do not contain commit e5f31552674e ("ethernet: fix 
-> PTP_1588_CLOCK dependencies"),
-> there is not PTP_1588_CLOCK_OPTIONAL option.
+> On 24/11/2022 18:22, Prabhakar wrote:
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >
+> > Add DT binding documentation for L2 cache controller found on RZ/Five SoC.
+> >
+> > The Renesas RZ/Five microprocessor includes a RISC-V CPU Core (AX45MP
+> > Single) from Andes. The AX45MP core has an L2 cache controller, this patch
+> > describes the L2 cache block.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> > RFC v3 -> v4
+> > * Dropped l2 cache configuration parameters
+> > * s/larger/large
+> > * Added minItems/maxItems for andestech,pma-regions
+> > ---
+> >  .../cache/andestech,ax45mp-cache.yaml         | 93 +++++++++++++++++++
+> >  .../cache/andestech,ax45mp-cache.h            | 38 ++++++++
+> >  2 files changed, 131 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/cache/andestech,ax45mp-cache.yaml
+> >  create mode 100644 include/dt-bindings/cache/andestech,ax45mp-cache.h
+> >
+> > diff --git a/Documentation/devicetree/bindings/cache/andestech,ax45mp-cache.yaml b/Documentation/devicetree/bindings/cache/andestech,ax45mp-cache.yaml
+> > new file mode 100644
+> > index 000000000000..bf255b177d0a
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/cache/andestech,ax45mp-cache.yaml
+> > @@ -0,0 +1,93 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +# Copyright (C) 2022 Renesas Electronics Corp.
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/cache/andestech,ax45mp-cache.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Andestech AX45MP L2 Cache Controller
+> > +
+> > +maintainers:
+> > +  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > +
+> > +description:
+> > +  A level-2 cache (L2C) is used to improve the system performance by providing
+> > +  a large amount of cache line entries and reasonable access delays. The L2C
+> > +  is shared between cores, and a non-inclusive non-exclusive policy is used.
+> > +
+> > +select:
+> > +  properties:
+> > +    compatible:
+> > +      contains:
+> > +        enum:
+> > +          - andestech,ax45mp-cache
+> > +
+> > +  required:
+> > +    - compatible
+> > +
+> > +properties:
+> > +  compatible:
+> > +    items:
+> > +      - const: andestech,ax45mp-cache
+> > +      - const: cache
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  cache-line-size:
+> > +    const: 64
+> > +
+> > +  cache-level:
+> > +    const: 2
+> > +
+> > +  cache-sets:
+> > +    const: 1024
+> > +
+> > +  cache-size:
+> > +    enum: [131072, 262144, 524288, 1048576, 2097152]
+> > +
+> > +  cache-unified: true
+> > +
+> > +  next-level-cache: true
+> > +
+> > +  andestech,pma-regions:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> > +    minItems: 1
+> > +    maxItems: 16
+> > +    items:
+> > +      minItems: 3
+> > +      maxItems: 3
+>
+> Instead:
+> items:
+>   items:
+>     - description: Explain
+>     - description: what is
+>     - description: here
+>
+Ok, I will do that in the next version.
 
-Ok, so there is a second problem then.
+- description: Memory region offset to be set up in the PMA
+- description: Size of the PMA region
+- description: Flags indicating how the region should be set up in the
+PMA. (ETYP[1:0] | MTYP[5:2]) use the macros
+defined in include/dt-bindings/cache/andestech,ax45mp-cache.h.
 
-Greg, please just revert fbb4e8e6dc7b ("net: broadcom: Fix BCMGENET Kconfig")
-in stable/linux-5.10.y: it depends on e5f31552674e ("ethernet: fix
-PTP_1588_CLOCK dependencies"), which we probably don't want backported
-from 5.15 to 5.10.
+> > +    description: Optional array of memory regions to be set in the PMA.
+> > +
+> > +additionalProperties: false
+> > +
+> > +required:
+> > +  - compatible
+> > +  - cache-line-size
+> > +  - cache-level
+> > +  - cache-sets
+> > +  - cache-size
+> > +  - cache-unified
+> > +  - interrupts
+> > +  - reg
+>
+> Keep the same order as properties appear in the "properties:"
+>
+Agreed, will do.
 
-YueHaibing, do you agree with my suggestion for improving the
-upstream 8d820bc9d12b ("net: broadcom: Fix BCMGENET Kconfig")
-commit? Can you send a follow-up fix, or should I?
 
-      Arnd
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/irq.h>
+> > +    #include <dt-bindings/cache/andestech,ax45mp-cache.h>
+> > +
+> > +    cache-controller@2010000 {
+> > +        reg = <0x13400000 0x100000>;
+> > +        compatible = "andestech,ax45mp-cache", "cache";
+> > +        interrupts = <508 IRQ_TYPE_LEVEL_HIGH>;
+> > +        cache-line-size = <64>;
+> > +        cache-level = <2>;
+> > +        cache-sets = <1024>;
+> > +        cache-size = <262144>;
+> > +        cache-unified;
+> > +        andestech,pma-regions = <0x58000000 0x08000000
+> > +                                 (AX45MP_PMACFG_ETYP_NAPOT | AX45MP_PMACFG_MTYP_MEM_NON_CACHE_BUF)>;
+> > +    };
+> > diff --git a/include/dt-bindings/cache/andestech,ax45mp-cache.h b/include/dt-bindings/cache/andestech,ax45mp-cache.h
+> > new file mode 100644
+> > index 000000000000..aa1cad24075d
+> > --- /dev/null
+> > +++ b/include/dt-bindings/cache/andestech,ax45mp-cache.h
+> > @@ -0,0 +1,38 @@
+> > +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+> > +/*
+> > + * This header provides constants for Andes AX45MP PMA configuration
+> > + *
+> > + * Copyright (C) 2022 Renesas Electronics Corp.
+> > + */
+> > +
+> > +#ifndef __DT_BINDINGS_ANDESTECH_AX45MP_CACHE_H
+> > +#define __DT_BINDINGS_ANDESTECH_AX45MP_CACHE_H
+> > +
+> > +/* OFF: PMA entry is disabled */
+> > +#define AX45MP_PMACFG_ETYP_DISABLED                  0
+> > +/* Naturally aligned power of 2 region */
+> > +#define AX45MP_PMACFG_ETYP_NAPOT                     3
+> > +
+> > +/* Device, Non-bufferable */
+> > +#define AX45MP_PMACFG_MTYP_DEV_NON_BUF                       (0 << 2)
+> > +/* Device, bufferable */
+> > +#define AX45MP_PMACFG_MTYP_DEV_BUF                   (1 << 2)
+> > +/* Memory, Non-cacheable, Non-bufferable */
+> > +#define AX45MP_PMACFG_MTYP_MEM_NON_CACHE_NON_BUF     (2 << 2)
+> > +/* Memory, Non-cacheable, Bufferable */
+> > +#define AX45MP_PMACFG_MTYP_MEM_NON_CACHE_BUF         (3 << 2)
+>
+> What are all these? They don't look like flags, because 3 = 1 | 2...
+> they don't look like constants, because we do not use shifts in
+> constants. Are these some register values? I also do not see the header
+> being used in the code, so why having a bindings header if it is not
+> used (DTS is not usage...)?
+>
+These are register bit values for the MTYP[5:2] field. The DTS example
+in the binding doc (above) uses these macros. I haven't included the
+DTS/I patches with this patchset yet do think I should?
+
+Cheers,
+Prabhakar
