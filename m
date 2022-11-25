@@ -2,178 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 113DC638267
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 03:32:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 358CA63826E
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 03:33:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiKYCcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 21:32:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38964 "EHLO
+        id S229702AbiKYCd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 21:33:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiKYCcD (ORCPT
+        with ESMTP id S229476AbiKYCdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 21:32:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4879325294
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 18:31:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669343469;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=TPhqQvzp7+vTWf7DLXTpXvjBtnzoyoWNsTDksErqOjk=;
-        b=OLat1SqUcZbBnbpFMB41+dKZzfteyFhNGK+cUaslrtriksojBVYyisa0UuOALefGIUjHli
-        u83LZX0oWUmBxIlYTlU9oIe1QJ9EVrcQf/iJdSxFdva4fSst098M3zGPUeg9/D8e4IZb8V
-        YDXg4yti+Wpx+kXmKnW/wEJJNF1QFaU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-53-ZjLd_kyjM9absemzuZ3fNA-1; Thu, 24 Nov 2022 21:31:04 -0500
-X-MC-Unique: ZjLd_kyjM9absemzuZ3fNA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 804BC85A588;
-        Fri, 25 Nov 2022 02:31:03 +0000 (UTC)
-Received: from server.redhat.com (ovpn-12-152.pek2.redhat.com [10.72.12.152])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B53731415114;
-        Fri, 25 Nov 2022 02:30:48 +0000 (UTC)
-From:   Cindy Lu <lulu@redhat.com>
-To:     lulu@redhat.com, jasowang@redhat.com, mst@redhat.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Subject: [PATCH v3] vhost_vdpa: fix the crash in unmap a large memory
-Date:   Fri, 25 Nov 2022 10:30:45 +0800
-Message-Id: <20221125023045.2158413-1-lulu@redhat.com>
+        Thu, 24 Nov 2022 21:33:55 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91BF201A6
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 18:33:53 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id io19so2796399plb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 18:33:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=C3ynaYc2KmE6H+RiMyNuG83Uvj+d7vH3kcd1RvLrvVE=;
+        b=LZiLMbqEfNJ/UzarkS4hWdRi0UqvtipwE5umrihLJEfEpmnFKvTVAYgUxJA+hvUeS6
+         6u6yKHwyJ6YyWMx3g7qlA16mQZBfsdXpg7X3rVGNF0VznaxVAqPSlpuS6kb418uU4RkX
+         lRljPR5TngzJSNcKG0A1th0a84WzhacZLpeoVgnavSOzIeQqi2Rg44ph548q37Dtmq8V
+         ytASQ/GqA7qrvQvBJbpttjVd+usCCZ0Ge/b6wUqQyfPAW2KBWLR/fHCrzlGQBjsDW9ur
+         iLZN0mIn7+10nkXCnVpoHAsoV5/kePSQio7vdM0bZNemBqC6Rk+IrvonaJITj7Px2rQP
+         +Ytg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=C3ynaYc2KmE6H+RiMyNuG83Uvj+d7vH3kcd1RvLrvVE=;
+        b=jliSFKbTniq8rvVMBcHrlYD6xuXyoXPXfmzZIzBLgjnFvWtp9hOZkDFhSZEw+ijLnS
+         ropRD0v4S0qnuZCqGyuoMaAQuHPsTFSVGLvcQ/mgGrVPsuT3DhDb8pHS7cP7ovXNXeJj
+         JS4nFgNTrCI7g20Ai+Q5FkRu8inlyJT6Mx0gajW6li9fmi24zFMTXDiEidgD/AG3g99+
+         rKOrxvXqr13mcGbjAMZm7Jh3SCQ6/kgo91qxBantZBygkyuVWITAeGeeRbh0O2YEJEQV
+         bOerTElVFOzliGdhn0EeZR3pJp8isLAf/bHMDApZSOvdVrgcnvqUmHuU72OXrKGgcBa3
+         Lx2Q==
+X-Gm-Message-State: ANoB5pmi96bVNYHl4vxpUyFxS279IREeaq6HMsO2Nugh/DjmMyniVJsP
+        sIMagjRlTV5U49Apl2hkWkM=
+X-Google-Smtp-Source: AA0mqf4X1W4dSDu2L4XQm+rbEdzMxOkbnq92dTwKQ1DynkEBADnVfjtyPvqp5RrjMFgAyyrI5Ec2HA==
+X-Received: by 2002:a17:902:eb86:b0:188:c395:1748 with SMTP id q6-20020a170902eb8600b00188c3951748mr18390066plg.155.1669343633332;
+        Thu, 24 Nov 2022 18:33:53 -0800 (PST)
+Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
+        by smtp.gmail.com with ESMTPSA id m127-20020a625885000000b0056bc5ad4862sm1893822pfb.28.2022.11.24.18.33.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Nov 2022 18:33:52 -0800 (PST)
+Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     x86@kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, Yury Norov <yury.norov@gmail.com>,
+        llvm@lists.linux.dev, Peter Zijlstra <peterz@infradead.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v2 0/2] x86/asm/bitops: optimize fls functions for constant expressions
+Date:   Fri, 25 Nov 2022 11:33:28 +0900
+Message-Id: <20221125023330.195581-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.37.4
+In-Reply-To: <20221106095106.849154-1-mailhol.vincent@wanadoo.fr>
+References: <20221106095106.849154-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While testing in vIOMMU, sometimes guest will unmap very large memory,
-which will cause the crash. To fix this,Move the iommu_unmap to
-vhost_vdpa_pa_unmap/vhost_vdpa_va_unmap and only unmap the memory
-that saved in iotlb.
+The compilers provide some builtin expression equivalent to the fls(),
+__fls() and fls64() functions of the kernel.
 
-Call Trace:
-[  647.820144] ------------[ cut here ]------------
-[  647.820848] kernel BUG at drivers/iommu/intel/iommu.c:1174!
-[  647.821486] invalid opcode: 0000 [#1] PREEMPT SMP PTI
-[  647.822082] CPU: 10 PID: 1181 Comm: qemu-system-x86 Not tainted 6.0.0-rc1home_lulu_2452_lulu7_vhost+ #62
-[  647.823139] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.15.0-29-g6a62e0cb0dfe-prebuilt.qem4
-[  647.824365] RIP: 0010:domain_unmap+0x48/0x110
-[  647.825424] Code: 48 89 fb 8d 4c f6 1e 39 c1 0f 4f c8 83 e9 0c 83 f9 3f 7f 18 48 89 e8 48 d3 e8 48 85 c0 75 59
-[  647.828064] RSP: 0018:ffffae5340c0bbf0 EFLAGS: 00010202
-[  647.828973] RAX: 0000000000000001 RBX: ffff921793d10540 RCX: 000000000000001b
-[  647.830083] RDX: 00000000080000ff RSI: 0000000000000001 RDI: ffff921793d10540
-[  647.831214] RBP: 0000000007fc0100 R08: ffffae5340c0bcd0 R09: 0000000000000003
-[  647.832388] R10: 0000007fc0100000 R11: 0000000000100000 R12: 00000000080000ff
-[  647.833668] R13: ffffae5340c0bcd0 R14: ffff921793d10590 R15: 0000008000100000
-[  647.834782] FS:  00007f772ec90640(0000) GS:ffff921ce7a80000(0000) knlGS:0000000000000000
-[  647.836004] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  647.836990] CR2: 00007f02c27a3a20 CR3: 0000000101b0c006 CR4: 0000000000372ee0
-[  647.838107] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[  647.839283] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[  647.840666] Call Trace:
-[  647.841437]  <TASK>
-[  647.842107]  intel_iommu_unmap_pages+0x93/0x140
-[  647.843112]  __iommu_unmap+0x91/0x1b0
-[  647.844003]  iommu_unmap+0x6a/0x95
-[  647.844885]  vhost_vdpa_unmap+0x1de/0x1f0 [vhost_vdpa]
-[  647.845985]  vhost_vdpa_process_iotlb_msg+0xf0/0x90b [vhost_vdpa]
-[  647.847235]  ? _raw_spin_unlock+0x15/0x30
-[  647.848181]  ? _copy_from_iter+0x8c/0x580
-[  647.849137]  vhost_chr_write_iter+0xb3/0x430 [vhost]
-[  647.850126]  vfs_write+0x1e4/0x3a0
-[  647.850897]  ksys_write+0x53/0xd0
-[  647.851688]  do_syscall_64+0x3a/0x90
-[  647.852508]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[  647.853457] RIP: 0033:0x7f7734ef9f4f
-[  647.854408] Code: 89 54 24 18 48 89 74 24 10 89 7c 24 08 e8 29 76 f8 ff 48 8b 54 24 18 48 8b 74 24 10 41 89 c8
-[  647.857217] RSP: 002b:00007f772ec8f040 EFLAGS: 00000293 ORIG_RAX: 0000000000000001
-[  647.858486] RAX: ffffffffffffffda RBX: 00000000fef00000 RCX: 00007f7734ef9f4f
-[  647.859713] RDX: 0000000000000048 RSI: 00007f772ec8f090 RDI: 0000000000000010
-[  647.860942] RBP: 00007f772ec8f1a0 R08: 0000000000000000 R09: 0000000000000000
-[  647.862206] R10: 0000000000000001 R11: 0000000000000293 R12: 0000000000000010
-[  647.863446] R13: 0000000000000002 R14: 0000000000000000 R15: ffffffff01100000
-[  647.864692]  </TASK>
-[  647.865458] Modules linked in: rpcsec_gss_krb5 auth_rpcgss nfsv4 dns_resolver nfs lockd grace fscache netfs v]
-[  647.874688] ---[ end trace 0000000000000000 ]---
-[  647.876013] RIP: 0010:domain_unmap+0x48/0x110
-[  647.878306] Code: 48 89 fb 8d 4c f6 1e 39 c1 0f 4f c8 83 e9 0c 83 f9 3f 7f 18 48 89 e8 48 d3 e8 48 85 c0 75 59
-[  647.884581] RSP: 0018:ffffae5340c0bbf0 EFLAGS: 00010202
-[  647.886308] RAX: 0000000000000001 RBX: ffff921793d10540 RCX: 000000000000001b
-[  647.888775] RDX: 00000000080000ff RSI: 0000000000000001 RDI: ffff921793d10540
-[  647.890295] RBP: 0000000007fc0100 R08: ffffae5340c0bcd0 R09: 0000000000000003
-[  647.891660] R10: 0000007fc0100000 R11: 0000000000100000 R12: 00000000080000ff
-[  647.893019] R13: ffffae5340c0bcd0 R14: ffff921793d10590 R15: 0000008000100000
-[  647.894506] FS:  00007f772ec90640(0000) GS:ffff921ce7a80000(0000) knlGS:0000000000000000
-[  647.895963] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  647.897348] CR2: 00007f02c27a3a20 CR3: 0000000101b0c006 CR4: 0000000000372ee0
-[  647.898719] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+The kernel's x86 implementation relies on assembly code. This assembly
+code can not be folded when used with constant expressions.
 
-Cc: stable@vger.kernel.org
-Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
-Signed-off-by: Cindy Lu <lulu@redhat.com>
----
- drivers/vhost/vdpa.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+This series replaces the kernel assembly by a builtin equivalent when
+appropriate. It is a follow-up on this previous series:
 
-diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-index 166044642fd5..e5a07751bf45 100644
---- a/drivers/vhost/vdpa.c
-+++ b/drivers/vhost/vdpa.c
-@@ -692,6 +692,8 @@ static void vhost_vdpa_pa_unmap(struct vhost_vdpa *v,
- 	struct vhost_iotlb_map *map;
- 	struct page *page;
- 	unsigned long pfn, pinned;
-+	struct vdpa_device *vdpa = v->vdpa;
-+	const struct vdpa_config_ops *ops = vdpa->config;
- 
- 	while ((map = vhost_iotlb_itree_first(iotlb, start, last)) != NULL) {
- 		pinned = PFN_DOWN(map->size);
-@@ -703,6 +705,8 @@ static void vhost_vdpa_pa_unmap(struct vhost_vdpa *v,
- 			unpin_user_page(page);
- 		}
- 		atomic64_sub(PFN_DOWN(map->size), &dev->mm->pinned_vm);
-+		if ((ops->dma_map == NULL) && (ops->set_map == NULL))
-+			iommu_unmap(v->domain, map->start, map->size);
- 		vhost_iotlb_map_free(iotlb, map);
- 	}
- }
-@@ -713,11 +717,15 @@ static void vhost_vdpa_va_unmap(struct vhost_vdpa *v,
- {
- 	struct vhost_iotlb_map *map;
- 	struct vdpa_map_file *map_file;
-+	struct vdpa_device *vdpa = v->vdpa;
-+	const struct vdpa_config_ops *ops = vdpa->config;
- 
- 	while ((map = vhost_iotlb_itree_first(iotlb, start, last)) != NULL) {
- 		map_file = (struct vdpa_map_file *)map->opaque;
- 		fput(map_file->file);
- 		kfree(map_file);
-+		if (ops->set_map == NULL)
-+			iommu_unmap(v->domain, map->start, map->size);
- 		vhost_iotlb_map_free(iotlb, map);
- 	}
- }
-@@ -805,8 +813,6 @@ static void vhost_vdpa_unmap(struct vhost_vdpa *v,
- 	} else if (ops->set_map) {
- 		if (!v->in_batch)
- 			ops->set_map(vdpa, asid, iotlb);
--	} else {
--		iommu_unmap(v->domain, iova, size);
- 	}
- 
- 	/* If we are in the middle of batch processing, delay the free
+  https://lore.kernel.org/all/20220907090935.919-1-mailhol.vincent@wanadoo.fr/
+
+in which I promised to also modify the fls() functions.
+
+* Changelog *
+
+v1 -> v2:
+
+  * [patch 1/2] add Reviewed-by: Nick Desaulniers tag.
+
+  * [patch 2/2] replace:
+       BUILD_BUG_ON(sizeof(unsigned long long) != sizeof(x));
+    by:
+       BUILD_BUG_ON(!__same_type(x, unsigned long long));
+    and slightly modify the commit description.
+
+Vincent Mailhol (2):
+  x86/asm/bitops: Replace __fls() by its generic builtin implementation
+  x86/asm/bitops: Use __builtin_clz*() to evaluate constant expressions
+
+ arch/x86/include/asm/bitops.h | 70 ++++++++++++++++++++---------------
+ 1 file changed, 40 insertions(+), 30 deletions(-)
+
 -- 
-2.34.3
+2.37.4
 
