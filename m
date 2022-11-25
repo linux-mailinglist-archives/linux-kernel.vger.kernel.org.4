@@ -2,93 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3357638F6A
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 18:56:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BB27638F6F
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 18:57:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiKYR4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 12:56:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50390 "EHLO
+        id S229773AbiKYR52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 12:57:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiKYR4O (ORCPT
+        with ESMTP id S229724AbiKYR50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 12:56:14 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CDD0240A5;
-        Fri, 25 Nov 2022 09:56:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669398974; x=1700934974;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dGozxIeI3Hdihd+DZCG3wMJNJscHR7IQT+pzisHO0dw=;
-  b=PEHplHBWj5K4xgAKzId5N2yIhtdX/eWA7YUZGjuB8oCTOVaJnTeMHiHK
-   z5zVXqmh4itKCT0A/yxyMLvPre8z1ffqdgAnX1gg9mxqIHpopCclhiSVh
-   J7fF60z3fWkRmyWHJZcB8YRoyHq2UsSqs+aSEfTjlFDr6UowvrqqsAKlL
-   731hxfCVb8+ezrD5/Nd+mV7WHVv+2onAHhvM62kNHHv4HdobxOP3Y4V68
-   Y8Su0/X3GRKqhM4N2xR+j3bQc0RJHFjy1Epi3XKa7RUSzRImAxyjF0O4A
-   zvoi5/g5jq8DBNHSctL2pMf9mX5/fvQWLHbbuiREQELg2A+P87ZMyGbvk
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="297876025"
-X-IronPort-AV: E=Sophos;i="5.96,194,1665471600"; 
-   d="scan'208";a="297876025"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2022 09:56:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="817198720"
-X-IronPort-AV: E=Sophos;i="5.96,194,1665471600"; 
-   d="scan'208";a="817198720"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 25 Nov 2022 09:56:11 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oycvq-00HLBW-0p;
-        Fri, 25 Nov 2022 19:56:10 +0200
-Date:   Fri, 25 Nov 2022 19:56:09 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH] gpiolib: cdev: fix NULL-pointer dereferences
-Message-ID: <Y4EBubusGqo4IroP@smile.fi.intel.com>
-References: <20221125153257.528826-1-brgl@bgdev.pl>
- <Y4DsTxPH1tv5eEwf@sol>
- <CAMRc=Me83-_oiGEmwy4BUrzLEMT6ZsoMwWYsb6iXwg19yHMHdQ@mail.gmail.com>
+        Fri, 25 Nov 2022 12:57:26 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4BC23BF1;
+        Fri, 25 Nov 2022 09:57:25 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id cw8so1776584ejb.10;
+        Fri, 25 Nov 2022 09:57:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:to:references
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vbRnJZLZimHWsGzRHTMEcRloTQuJ50SlssIRdpmahOs=;
+        b=WLSyqVO/wsM9eNLKGkI5R/6DTuNUeLXYT6SaaQZ4v4pPyKuGdbNe+rdqVzDLMziHYP
+         SscsKUjrxJ4kCM0KTqeCbTGyC4d9gaUODE8Zo35ggje4LifKSo2it+1qg157950YxLBD
+         S2rcVIk05h9JS1uljIZ+1QHf4S8SODen0qykk3B30AjJayPNd5dYYkbESOu9XdrACpk+
+         +onN/3M6fFHgoU074a9mxMr+ouyGFVjvpiqnY6wRIHk0GMX1+VVQr2J78R3tmyOwOQJI
+         baS+zPxOce7/8rGgDDaEGEro50GOYY8ZMqAFc+BnlmeB6eYEPomA3APvZEgnjlY/435h
+         aRzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:to:references
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vbRnJZLZimHWsGzRHTMEcRloTQuJ50SlssIRdpmahOs=;
+        b=nn6UefuKmUXDHYk88D3ZS65KNyEg5vlbBMfQc1hpZ7d51lZ5BdEUrK97qy5sV6qJXj
+         AocPFjrwaxhfTKh/NoBl5az5sNqdb6UgmdzQpyxt0CBQT2Sf2DpF0OoRhq0lFNdfhB2r
+         ogt9PqNAlZlXBAcIOwmEFpePzxeOjY7mlpjZIeAWzBeYKUOHH+MpJ4e0J+jKa3HFhatl
+         ODa0vdJUf+HquqWX7LPbbPTLA3VDRTZpWVigKraxX/vT8wv+6Io4KAXAGuTKNgA0Ualh
+         JCIPDVH+7TmwTAva8UQZDbkmY/ZoaQ2fRFX3iymeW9X26ZiUohYyfYEZOCRGNDxqkYv/
+         n2Tw==
+X-Gm-Message-State: ANoB5pnFNtyAG18J0TtUgkAXrtT/YUwfxQU0rFCfZz/OX07vCS2S9Gfp
+        JuRAFKUbCQ84KcXruBBdNec=
+X-Google-Smtp-Source: AA0mqf4hyqLTkqhO3vKi5JfsbhKQpcKYiIiI8Yu0KuqqvXAGFw/uV1xzLJV/0HIg3YYneVzw+NdmoQ==
+X-Received: by 2002:a17:906:1844:b0:77a:4bfe:d6df with SMTP id w4-20020a170906184400b0077a4bfed6dfmr33873692eje.396.1669399044408;
+        Fri, 25 Nov 2022 09:57:24 -0800 (PST)
+Received: from [192.168.178.2] (dslb-092-072-004-196.092.072.pools.vodafone-ip.de. [92.72.4.196])
+        by smtp.gmail.com with ESMTPSA id f24-20020a170906495800b007bb32e2d6f5sm1791287ejt.207.2022.11.25.09.57.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Nov 2022 09:57:23 -0800 (PST)
+Message-ID: <81722eba-3910-2117-8b07-bb030ab754dd@gmail.com>
+Date:   Fri, 25 Nov 2022 18:57:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMRc=Me83-_oiGEmwy4BUrzLEMT6ZsoMwWYsb6iXwg19yHMHdQ@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: [PATCH 3/4] dt-bindings: display: panel: mipi-dbi-spi: Add missing
+ property
+Content-Language: en-US
+References: <43ccb0fb-119b-1afe-758b-e413729dd704@gmail.com>
+To:     =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+From:   =?UTF-8?Q?Otto_Pfl=c3=bcger?= <affenull2345@gmail.com>
+In-Reply-To: <43ccb0fb-119b-1afe-758b-e413729dd704@gmail.com>
+X-Forwarded-Message-Id: <43ccb0fb-119b-1afe-758b-e413729dd704@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022 at 05:48:02PM +0100, Bartosz Golaszewski wrote:
-> On Fri, Nov 25, 2022 at 5:24 PM Kent Gibson <warthog618@gmail.com> wrote:
-
-...
-
-> Then at the subsystem level, the GPIO device struct would need a lock
-> that would be taken by every user-space operation AND the code
-> unregistering the device so that we don't do what you described (i.e.
-> if there's a thread doing a read(), then let's wait until it returns
-> before we drop the device).
-
-It's called a reference counting, basically you need to get device and then
-put when it makes sense.
-
-> This wouldn't fix the case in which the same situation happened in a
-> kernel driver but crashing the kernel from within is a much lesser
-> offense than allowing user-space to crash it.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+The power-supply property is currently only mentioned in the 
+description, but not listed in the properties section as it should be. 
+Add it there. Signed-off-by: Otto Pflüger --- 
+.../devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml | 3 +++ 1 
+file changed, 3 insertions(+) diff --git 
+a/Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml 
+b/Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml 
+index c2df8d28aaf5..d55bf12ecead 100644 --- 
+a/Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml+++ 
+b/Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml 
+@@ -80,6 +80,9 @@ properties: Controller data/command selection (D/CX) 
+in 4-line SPI mode. If not set, the controller is in 3-line SPI mode. + 
+power-supply: + description: Power supply for the display module (Vdd). 
++ required: - compatible - reg -- 2.30.2
