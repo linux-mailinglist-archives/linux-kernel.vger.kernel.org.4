@@ -2,81 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76E64638F52
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 18:49:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B14638F55
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 18:52:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbiKYRtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 12:49:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45186 "EHLO
+        id S229685AbiKYRwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 12:52:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiKYRtW (ORCPT
+        with ESMTP id S229507AbiKYRwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 12:49:22 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE7A24F26
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 09:49:22 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id k21-20020a5e8915000000b006de391b332fso2320358ioj.4
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 09:49:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T9uBU8s5VCIdHByMxtUe+OwrIeZYs1TZi9TU9WQnEtM=;
-        b=mxmsN94q6+xujRheOVD468EYHz/TWlv/LiqPmSXHPHUegJZwQo+SIYysQSjQDKP2XH
-         rF1VtfPtd/dCdPAffbjOXKyf8XpboWkZ4/dB482D1vM2vbem1HSS6pOsdYeZld4Z0j+U
-         ri/JLklPKcmEgyLvJXuEMc0p6b6oy+9CJ0VNVAbKgz9KnIr8WENLhvJ1HSYGh17pU/Lp
-         T/qzITgqSVfBtDPiVSyncR2AtSgsro9u2uJTIspyO0mx2zp6nk1kfUaWmIlZBviyUyFy
-         yMvunbR95BWTTW/x1tTvvwX80EDbG6yAky/LZ2q3tH865kUbi0wvV67iwChJuFSLXfLE
-         EAQw==
-X-Gm-Message-State: ANoB5pmivYC/xZDYqWLXKOKhomH0cikX/aVEqwgsdo7QAmoWqpZd2dPd
-        BNF4ngY9/hI9nqQOxQ6LRR3GAG/KBf0ELd4GH3ENCTDWNs/7
-X-Google-Smtp-Source: AA0mqf5879qp50T0kHMWEYv22lu2q7SWnZD7I/9CRQlfvrei278pacvgl2mxtV/M2hSYf76qTZpZHfEh4L/Sbgr2P9/WkQ2+cwh3
+        Fri, 25 Nov 2022 12:52:33 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A75CA46B
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 09:52:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-Id:
+        Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=GIcWfR29KxBSmoIZOlpYH+gYQbsCenYVDvVyeGYpOa4=; b=Os8oO+tErbmLzBCYSvntbuX9PH
+        C88GYeet3nbuGPlPvFdLRr4wP9NmyLQJbFbHaLK/GnBl19SD7RJ7DWmQki0rdw+QDkIwM4F2Dq/c0
+        RMrkdgtaOEBxT+nzDVo1N91k7U2YvhR9ovwB/JiDk0UCq4UTHFCd2p7mD0zRSeQyZPMPSroQaYii+
+        hc2KLZYAKaIUalK4Xgxn+VNK2DTCIPtdH7XWfFPYx9n6OkfNSRTNOId0J0sTZL+2CokkGwvWJWTfw
+        aE9bQJt6Z1zjLOaiHy90buK6e47xjpv/3D7oxfWq2mI+NwDFcVfeU8twLgTB5uU3LN1C4HTaAVqZv
+        x3T6r+xg==;
+Received: from 200-148-10-170.dsl.telesp.net.br ([200.148.10.170] helo=steammachine.lan)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1oycsD-008yzi-6T; Fri, 25 Nov 2022 18:52:25 +0100
+From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
+To:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     kernel-dev@igalia.com, alexander.deucher@amd.com,
+        contactshashanksharma@gmail.com, amaranath.somalapuram@amd.com,
+        christian.koenig@amd.com, pierre-eric.pelloux-prayer@amd.com,
+        Simon Ser <contact@emersion.fr>,
+        Rob Clark <robdclark@gmail.com>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Stone <daniel@fooishbar.org>,
+        =?UTF-8?q?=27Marek=20Ol=C5=A1=C3=A1k=27?= <maraeo@gmail.com>,
+        Dave Airlie <airlied@gmail.com>,
+        "Pierre-Loup A . Griffais" <pgriffais@valvesoftware.com>,
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
+Subject: [PATCH v3 0/2] drm: Add GPU reset sysfs
+Date:   Fri, 25 Nov 2022 14:52:01 -0300
+Message-Id: <20221125175203.52481-1-andrealmeid@igalia.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-X-Received: by 2002:a02:7122:0:b0:375:d16a:c9e9 with SMTP id
- n34-20020a027122000000b00375d16ac9e9mr18131069jac.75.1669398561510; Fri, 25
- Nov 2022 09:49:21 -0800 (PST)
-Date:   Fri, 25 Nov 2022 09:49:21 -0800
-In-Reply-To: <000000000000a9ccd705ee4865be@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003f5a8205ee4f2429@google.com>
-Subject: Re: [syzbot] kernel BUG in clear_state_bit
-From:   syzbot <syzbot+78dbea1c214b5413bdd3@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, jdelvare@suse.com,
-        jiapeng.chong@linux.alibaba.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@roeck-us.net,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+This patchset adds a udev event for DRM device's resets.
 
-commit 4444a06981af66a49cf0cd08fec9759e8dd0a0fc
-Author: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Date:   Thu Sep 1 02:23:32 2022 +0000
+Userspace apps can trigger GPU resets by misuse of graphical APIs or driver
+bugs. Either way, the GPU reset might lead the system to a broken state[1], that
+might be recovered if user has access to a tty or a remote shell. Arguably, this
+recovery could happen automatically by the system itself, thus this is the goal
+of this patchset.
 
-    hwmon: (emc2305) Remove unused including <linux/version.h>
+For debugging and report purposes, device coredump support was already added
+for amdgpu[2], but it's not suitable for programmatic usage like this one given
+the uAPI not being stable and the need for parsing.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=161ba58d880000
-start commit:   c3eb11fbb826 Merge tag 'pci-v6.1-fixes-3' of git://git.ker..
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=151ba58d880000
-console output: https://syzkaller.appspot.com/x/log.txt?x=111ba58d880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8d01b6e3197974dd
-dashboard link: https://syzkaller.appspot.com/bug?extid=78dbea1c214b5413bdd3
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=149d9403880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14a0d8e3880000
+GL/VK is out of scope for this use, giving that we are dealing with device
+resets regardless of API.
 
-Reported-by: syzbot+78dbea1c214b5413bdd3@syzkaller.appspotmail.com
-Fixes: 4444a06981af ("hwmon: (emc2305) Remove unused including <linux/version.h>")
+A basic userspace daemon is provided at [3] showing how the interface is used
+to recovery from resets.
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+[1] A search for "reset" in DRM/AMD issue tracker shows reports of resets
+making the system unusable:
+https://gitlab.freedesktop.org/drm/amd/-/issues/?search=reset
+
+[2] https://lore.kernel.org/amd-gfx/20220602081538.1652842-2-Amaranath.Somalapuram@amd.com/
+
+[3] https://gitlab.freedesktop.org/andrealmeid/gpu-resetd
+
+v2: https://lore.kernel.org/dri-devel/20220308180403.75566-1-contactshashanksharma@gmail.com/
+
+André Almeida (1):
+  drm/amdgpu: Add work function for GPU reset event
+
+Shashank Sharma (1):
+  drm: Add GPU reset sysfs event
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu.h        |  4 +++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 30 ++++++++++++++++++++++
+ drivers/gpu/drm/drm_sysfs.c                | 26 +++++++++++++++++++
+ include/drm/drm_sysfs.h                    | 13 ++++++++++
+ 4 files changed, 73 insertions(+)
+
+-- 
+2.38.1
+
