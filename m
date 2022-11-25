@@ -2,90 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44980638BAF
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 14:57:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 535C2638BB4
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 14:58:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbiKYN5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 08:57:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52040 "EHLO
+        id S229849AbiKYN6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 08:58:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiKYN45 (ORCPT
+        with ESMTP id S229810AbiKYN6V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 08:56:57 -0500
+        Fri, 25 Nov 2022 08:58:21 -0500
 Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34AD71A3AF
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 05:56:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652B317591
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 05:58:20 -0800 (PST)
 Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id EA15F5C0042;
-        Fri, 25 Nov 2022 08:56:53 -0500 (EST)
+        by mailout.nyi.internal (Postfix) with ESMTP id 0B0A65C00EE;
+        Fri, 25 Nov 2022 08:58:16 -0500 (EST)
 Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Fri, 25 Nov 2022 08:56:53 -0500
+  by compute3.internal (MEProxy); Fri, 25 Nov 2022 08:58:16 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
         :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1669384613; x=1669471013; bh=AJ9PsFy5CS
-        z721+gAGzXyodp3uslzfHlE5deNBj+7XM=; b=o5q0VB0XWsH9AG+wLN47Ylrsj1
-        YwBedZULmI9/U/WIbZLvylclvsnSnZpQJ4UgqXBjOJajSaFpgPGgWqyMmYWziTij
-        v7McsddverO3OK4JiPycLCB6zUYVRSOEj4QVkr/afyZGV1WUGw4ycjt9uLwp8xaf
-        9JY0OfNXJxgi8PEYojWxWLGCpUN4M/xLhyOYLxQvdHX+sXbTGDhJraSrZ0Z/NWT9
-        oSGahZkH5bhm5g438XfKztyIwJnzIjiFE4KYgs1J4Vct1OMOL8iJ2udheAH3NjLI
-        UDWXrqYDRHoTBh6LGnucrUIkXFFW6elXdxjLYP+V0LHGbMNqoI81hVyFAAHg==
+        :subject:to:to; s=fm3; t=1669384696; x=1669471096; bh=HZFW0Q6ily
+        rDold9b9ca9gHjKB3WJYu7yBNi/OLlm4s=; b=KGJZiKitRl3OE1rk8bBGc/1ZQ3
+        Ma4nnuK/qC4S+Z7c21rN3BBkmmsOTu1iSi306GclQlD1aLoZAI7bxy/Zyf2WWL/c
+        T9YvWuOmeJrBE27O8hLQcZnBIRtt9zF029V8GJQjvRIz05T4SrutfObIB2+ecPmU
+        aBmXNBORU+7plARbIQUQSQ5mPoXPc7wapieq5aUFQwuQ3c9l+7X8Di1Tkd2WkPey
+        JXi606GY2/woLA7wakeS7nNMMWQZj5pAhDMaidzPb4bOqwDKNFBbYuTD93yeC7H7
+        nYJlejZXEmApA5wxfE4OEZtGDMbpTAe+VgMh0H2DdXH/wJsvYNw8sBVsSGiw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
         :feedback-id:from:from:in-reply-to:in-reply-to:message-id
         :mime-version:references:reply-to:sender:subject:subject:to:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1669384613; x=1669471013; bh=AJ9PsFy5CSz721+gAGzXyodp3usl
-        zfHlE5deNBj+7XM=; b=cT5iBxNtCxKQLK3E704dI0GwO7f816dGYwUtSIpu/a17
-        zQJJ6KzmVvXrcR/9KegxJYo/fXLAEA7Eaxp69wp4fnyIj9kCBFQv7Xqpwnxb7kn8
-        ic2eDXcd0jeu+RtKpaH9AEJf+NgQZFwg6nut9wCIkTc33wAquNzJv6GzKVSpm2KS
-        IWBUOdZ2D3J7xEXN2fnJKnGJlOSNX1sE1csSOo3eLFId2rji1jt1H9hINYCLqOrV
-        FcmIeopzyB4pq4pVu9fVRa27UT5yclIhAol8tLr0MJh1p47ZN5YooD1s9sLf67kD
-        UDCLGF6BJXRWflt0qhm/2mbZePRXK/zIKREjd/TeJA==
-X-ME-Sender: <xms:pMmAY96BTwqIFJjqGfCNm5KGTJofa6ZdFpZe8nU73oqd5Nrqype9JA>
-    <xme:pMmAY67bJVdykE36mfOPfdqdzcVL-43PxOudaUeoGY4HN-vI-WQx_0sNhO1BR8fmG
-    yRfG23I5ybUozkIO4A>
+        fm1; t=1669384696; x=1669471096; bh=HZFW0Q6ilyrDold9b9ca9gHjKB3W
+        JYu7yBNi/OLlm4s=; b=WCy1IAOAaD2q1pazTB73ladozixKckhwGuvVzqadnlJP
+        8J01lU3w9VknC9kPGp3I7gOJrs8GiLfpRxTIkKd6S5jJAjCWwHIQhYJNTTJSZTEz
+        i3nXo0D2H947sSrNaGRGnq5Kp8vW1eQ1zBUysveDTiTrDXCVrwt/ul8GqKybWKtD
+        7V/BtIkBcO16XL/6LR4PoTIzudeUJeTt85YvzVW28dvqxomIk2wSGU5DV1WHXU3H
+        ZWgvNxf3+yDutaJgJ/WYFSUUhTJYy/wuxE/IPkXCtHQMWBNM1T3RQXY8C1aaSYps
+        39J8LX+2CdwIwUPL7WGG4cv2wSM6DmRkvi8McvKdtg==
+X-ME-Sender: <xms:98mAYwTQQTPGZUCY5Ecf99OxN3NiVm8yFLqj-xE3583Zb1FwbQfQdQ>
+    <xme:98mAY9xFj3fZePOmQeLVotqhpGpJT82FlInXycwbBhS05dxL7D2bG8b9TqWBgvUHn
+    mZ3bCgl9dGb2ra3WG4>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrieehgdehlecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
     fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
     ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeufeeh
-    udenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:pMmAY0c1RX5dPxzxlFexGL0mtChlYM0nRWeksdXKdJ5m90N9QtSReQ>
-    <xmx:pMmAY2LlrOUlVAZzzabe3rQbuL7VysUvCyaQyWsKuHkkggQ69TcNIg>
-    <xmx:pMmAYxJ7T8_tN41JgdR9CTKrVFvrgV2B9S89G2H7YOEhjt5aE2cLOw>
-    <xmx:pcmAY4Y9HaDEI4VCbMF-7ocFtKklwf8oZkLghIjakyvLZQf9EHAdYw>
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:98mAY92-9MacwOWeuopHJrwvwn8LiAnzE5Y0q9lTofBIjOxjSE_S2Q>
+    <xmx:98mAY0A-T3hqUI6pt_PcBXnOum7WDdCLnvk4tFP0rF6WahVCDRCXwQ>
+    <xmx:98mAY5jF7orPhyh-LUci3Lcj-EVZkKEk81Hfz_gu9sIAR7uraz74FA>
+    <xmx:-MmAYyZ2dEuifH96GuYTNE97AmSuYSQT7jhv1i24XaZPX_o4hKDJ7A>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id BE346B60089; Fri, 25 Nov 2022 08:56:52 -0500 (EST)
+        id 90CCFB60086; Fri, 25 Nov 2022 08:58:15 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
 Mime-Version: 1.0
-Message-Id: <98978f82-eb78-4fa7-901e-76c3070362e3@app.fastmail.com>
-In-Reply-To: <Y4C66dg+9wwiXdVs@leoy-yangtze.lan>
-References: <20201228023941.E0DE2203B5@pchp3.se.axis.com>
- <20201229030933.GC28115@leoy-ThinkPad-X240s> <Y4Cspv98j8TqwCqZ@axis.com>
- <Y4C66dg+9wwiXdVs@leoy-yangtze.lan>
-Date:   Fri, 25 Nov 2022 14:56:31 +0100
+Message-Id: <347df991-4755-4f11-b530-4d0e3994a9db@app.fastmail.com>
+In-Reply-To: <Y4DFx20YXDLcuVJm@google.com>
+References: <20221125120750.3537134-1-lee@kernel.org>
+ <20221125120750.3537134-3-lee@kernel.org> <Y4DFx20YXDLcuVJm@google.com>
+Date:   Fri, 25 Nov 2022 14:57:55 +0100
 From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Leo Yan" <leo.yan@linaro.org>,
-        "Vincent Whitchurch" <vincent.whitchurch@axis.com>
-Cc:     "Arnaldo Carvalho de Melo" <acme@kernel.org>,
-        "Hans-Peter Nilsson" <hp@axis.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "John Garry" <john.garry@huawei.com>,
-        "Will Deacon" <will@kernel.org>,
-        "Mathieu Poirier" <mathieu.poirier@linaro.org>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Ingo Molnar" <mingo@redhat.com>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
-        "Jiri Olsa" <jolsa@redhat.com>,
-        "Namhyung Kim" <namhyung@kernel.org>,
-        "Kim Phillips" <kim.phillips@arm.com>
-Subject: Re: [PATCH] perf arm64: Fix mksyscalltbl, don't lose syscalls due to sort -nu
+To:     "Lee Jones" <lee@kernel.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Nathan Chancellor" <nathan@kernel.org>,
+        "Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>,
+        mripard@kernel.org, "Thomas Zimmermann" <tzimmermann@suse.de>,
+        "Dave Airlie" <airlied@gmail.com>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        "Tom Rix" <trix@redhat.com>,
+        "Harry Wentland" <harry.wentland@amd.com>,
+        "Leo Li" <sunpeng.li@amd.com>,
+        "Rodrigo Siqueira" <Rodrigo.Siqueira@amd.com>,
+        "Alex Deucher" <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Xinhui.Pan@amd.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 2/2] Kconfig.debug: Provide a little extra FRAME_WARN leeway
+ when KASAN is enabled
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
@@ -97,33 +100,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022, at 13:54, Leo Yan wrote:
-> On Fri, Nov 25, 2022 at 12:53:10PM +0100, Vincent Whitchurch wrote:
-
->> It looks like this patch was never applied?  AFAICS it is still needed
->> on current HEAD and it still applies cleanly.
+On Fri, Nov 25, 2022, at 14:40, Lee Jones wrote:
+> On Fri, 25 Nov 2022, Lee Jones wrote:
 >
-> Thanks a lot for bringing up this.
+>> When enabled, KASAN enlarges function's stack-frames.  Pushing quite a
+>> few over the current threshold.  This can mainly be seen on 32-bit
+>> architectures where the present limit (when !GCC) is a lowly
+>> 1024-Bytes.
+>> 
+>> Signed-off-by: Lee Jones <lee@kernel.org>
+>> ---
+>>  lib/Kconfig.debug | 1 +
+>>  1 file changed, 1 insertion(+)
+>> 
+>> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+>> index c3c0b077ade33..82d475168db95 100644
+>> --- a/lib/Kconfig.debug
+>> +++ b/lib/Kconfig.debug
+>> @@ -399,6 +399,7 @@ config FRAME_WARN
+>>  	default 2048 if GCC_PLUGIN_LATENT_ENTROPY
+>>  	default 2048 if PARISC
+>>  	default 1536 if (!64BIT && XTENSA)
+>> +	default 1280 if KASAN && !64BIT
+>>  	default 1024 if !64BIT
+>>  	default 2048 if 64BIT
+>>  	help
 >
-> Before there have a discussion [1] for refactoring Arm64 system call
-> table but it didn't really happen.
+> Note this also fixes 61 warnings when
+>
+>   (GCC && !GCC_PLUGIN_LATENT_ENTROPY)
+>
+> ... which as Arnd says should not be enabled by default.  We'll
+> address that issue once this set has been applied.
 
-I actually worked on this last week and did a new series to convert
-the old asm-generic/unistd.h header into the syscall.tbl format,
-and change arm64 to use that.
+Thanks a lot for checking this!
 
-You can find my work in the 'syscall-tbl' branch of my asm-generic
-tree [1]. This has only seen light build testing so far, and is
-probably still buggy, but most of the work is there. The missing
-bits are the Makefiles for the other seven architectures using
-asm-generic/unistd.h, and checking the output to ensure the
-contents are still the same.
-
-> I think it's the right thing to merge
-> this patch, @Arnaldo, could you pick up this patch?
-
-That sounds fine to me.
-
-    Arnd
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git/
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
