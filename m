@@ -2,131 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3EE638987
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 13:17:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1443F638989
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 13:18:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbiKYMRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 07:17:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39198 "EHLO
+        id S229848AbiKYMSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 07:18:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiKYMRD (ORCPT
+        with ESMTP id S229553AbiKYMSK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 07:17:03 -0500
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3853E4A07F;
-        Fri, 25 Nov 2022 04:16:58 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VVfPn5c_1669378599;
-Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VVfPn5c_1669378599)
-          by smtp.aliyun-inc.com;
-          Fri, 25 Nov 2022 20:16:40 +0800
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-To:     Eric Biggers <ebiggers@kernel.org>,
-        "Theodore Y. Ts o" <tytso@mit.edu>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        linux-fscrypt@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
-Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Subject: [PATCH v3 2/2] fscrypt: Add SM4 XTS/CTS symmetric algorithm support
-Date:   Fri, 25 Nov 2022 20:16:30 +0800
-Message-Id: <20221125121630.87793-3-tianjia.zhang@linux.alibaba.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
-In-Reply-To: <20221125121630.87793-1-tianjia.zhang@linux.alibaba.com>
-References: <20221125121630.87793-1-tianjia.zhang@linux.alibaba.com>
+        Fri, 25 Nov 2022 07:18:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9660217419;
+        Fri, 25 Nov 2022 04:18:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3262A623BC;
+        Fri, 25 Nov 2022 12:18:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AB08C43470;
+        Fri, 25 Nov 2022 12:18:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669378688;
+        bh=2QQ3gkT8M4ne/f/6SMJfPCcoYNo2dNjFDj4PF9DSWIc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=HurY4q/yF+peulV7cvOO7tegNpqJMAftwxJ/HfA90kCJRh5gKLHbacaMXDqq4TBBF
+         UnZJqEzFBWuFNipA/KgLMK7QPG1SIOaKjAU1NW5bQ/rB87Hwbz0LDOXjl81jbkaOR7
+         xq4peTK2aiu/PiYMyds1P5XvlAZNzJhc4K7/xPDpdmU2e82pfQCBhYel2eSN0JfJLC
+         3Ue3BuPUJWq11QwyzHluDrzKqvVgYUFHJn3jgZLozJOQKSxWtkW37sh3rZj1zbYdrt
+         sjSkueGKaQ5qeJYk1l7CC+09XMVJM2576vH2pHzGbL+NI+ySnJSEtHauEdXTG+HVr1
+         6PMqs4Dr3V1Og==
+Received: by mail-lj1-f175.google.com with SMTP id a15so4975647ljb.7;
+        Fri, 25 Nov 2022 04:18:08 -0800 (PST)
+X-Gm-Message-State: ANoB5pmy8xs7+GWuk5H/kPP14SMilP3GYuE7XwzbbZcLoV3/SrkM5Xor
+        5toyO4KeoObPC3j3VsC80aFtqJy5jGhrP0HLuAM=
+X-Google-Smtp-Source: AA0mqf6CxETx94Nasnco4cIEVleHJVePOuucHyZEljEzF94SI+7etB5m2ezhOcBypmHyucIqtfdrsFWGOcllieCaWAo=
+X-Received: by 2002:a2e:95d2:0:b0:277:96a:5c32 with SMTP id
+ y18-20020a2e95d2000000b00277096a5c32mr11115105ljh.415.1669378686498; Fri, 25
+ Nov 2022 04:18:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <Y4BGC2BPesy3qsEm@gondor.apana.org.au>
+In-Reply-To: <Y4BGC2BPesy3qsEm@gondor.apana.org.au>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 25 Nov 2022 13:17:55 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXFAN2xDt+tKzOJt8zbhXA64U4qi28rzmrSSRoQDbsRHmA@mail.gmail.com>
+Message-ID: <CAMj1kXFAN2xDt+tKzOJt8zbhXA64U4qi28rzmrSSRoQDbsRHmA@mail.gmail.com>
+Subject: Re: [v2 PATCH 0/9] crypto: Add helpers for allocating with DMA alignment
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SM4 is a symmetric algorithm widely used in China, and is even mandatory
-in many scenarios. We need to provide these users with the ability to
-encrypt files or disks using SM4-XTS, and many other algorithms that use
-SM2/3/4 algorithms or their combined algorithm scenarios, these features
-are demanded by many users, this patch enables to use SM4-XTS mode to
-encrypt file content, and use SM4-CBC-CTS to encrypt filename.
+On Fri, 25 Nov 2022 at 05:35, Herbert Xu <herbert@gondor.apana.org.au> wrote:
+>
+> This patch series adds helpers to allow drivers to explicitly
+> request ARCH_DMA_MINALIGN when allocating memory through the
+> Crypto API.
+>
+> Note that I've only converted one file in one driver as this
+> is only meant to show how it's done and find out what else we
+> may need.
+>
+> Other drivers will be added later.
+>
 
-Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
----
- Documentation/filesystems/fscrypt.rst |  1 +
- fs/crypto/keysetup.c                  | 15 +++++++++++++++
- fs/crypto/policy.c                    |  4 ++++
- include/uapi/linux/fscrypt.h          |  2 ++
- 4 files changed, 22 insertions(+)
+Hi Herbert,
 
-diff --git a/Documentation/filesystems/fscrypt.rst b/Documentation/filesystems/fscrypt.rst
-index 5ba5817c17c2..af27e7b2c74f 100644
---- a/Documentation/filesystems/fscrypt.rst
-+++ b/Documentation/filesystems/fscrypt.rst
-@@ -336,6 +336,7 @@ Currently, the following pairs of encryption modes are supported:
- 
- - AES-256-XTS for contents and AES-256-CTS-CBC for filenames
- - AES-128-CBC for contents and AES-128-CTS-CBC for filenames
-+- SM4-XTS for contents and SM4-CTS-CBC for filenames
- - Adiantum for both contents and filenames
- - AES-256-XTS for contents and AES-256-HCTR2 for filenames (v2 policies only)
- 
-diff --git a/fs/crypto/keysetup.c b/fs/crypto/keysetup.c
-index f7407071a952..24e55c95abc3 100644
---- a/fs/crypto/keysetup.c
-+++ b/fs/crypto/keysetup.c
-@@ -44,6 +44,21 @@ struct fscrypt_mode fscrypt_modes[] = {
- 		.security_strength = 16,
- 		.ivsize = 16,
- 	},
-+	[FSCRYPT_MODE_SM4_XTS] = {
-+		.friendly_name = "SM4-XTS",
-+		.cipher_str = "xts(sm4)",
-+		.keysize = 32,
-+		.security_strength = 16,
-+		.ivsize = 16,
-+		.blk_crypto_mode = BLK_ENCRYPTION_MODE_SM4_XTS,
-+	},
-+	[FSCRYPT_MODE_SM4_CTS] = {
-+		.friendly_name = "SM4-CTS",
-+		.cipher_str = "cts(cbc(sm4))",
-+		.keysize = 16,
-+		.security_strength = 16,
-+		.ivsize = 16,
-+	},
- 	[FSCRYPT_MODE_ADIANTUM] = {
- 		.friendly_name = "Adiantum",
- 		.cipher_str = "adiantum(xchacha12,aes)",
-diff --git a/fs/crypto/policy.c b/fs/crypto/policy.c
-index 46757c3052ef..8e69bc0c35cd 100644
---- a/fs/crypto/policy.c
-+++ b/fs/crypto/policy.c
-@@ -71,6 +71,10 @@ static bool fscrypt_valid_enc_modes_v1(u32 contents_mode, u32 filenames_mode)
- 	    filenames_mode == FSCRYPT_MODE_AES_128_CTS)
- 		return true;
- 
-+	if (contents_mode == FSCRYPT_MODE_SM4_XTS &&
-+	    filenames_mode == FSCRYPT_MODE_SM4_CTS)
-+		return true;
-+
- 	if (contents_mode == FSCRYPT_MODE_ADIANTUM &&
- 	    filenames_mode == FSCRYPT_MODE_ADIANTUM)
- 		return true;
-diff --git a/include/uapi/linux/fscrypt.h b/include/uapi/linux/fscrypt.h
-index a756b29afcc2..47dbd1994bfe 100644
---- a/include/uapi/linux/fscrypt.h
-+++ b/include/uapi/linux/fscrypt.h
-@@ -26,6 +26,8 @@
- #define FSCRYPT_MODE_AES_256_CTS		4
- #define FSCRYPT_MODE_AES_128_CBC		5
- #define FSCRYPT_MODE_AES_128_CTS		6
-+#define FSCRYPT_MODE_SM4_XTS			7
-+#define FSCRYPT_MODE_SM4_CTS			8
- #define FSCRYPT_MODE_ADIANTUM			9
- #define FSCRYPT_MODE_AES_256_HCTR2		10
- /* If adding a mode number > 10, update FSCRYPT_MODE_MAX in fscrypt_private.h */
--- 
-2.24.3 (Apple Git-128)
+This approach seems conceptually similar to what I proposed a while ago:
+https://lore.kernel.org/all/20220406142715.2270256-1-ardb@kernel.org/
 
+If we agree that creating a distinction between ordinary allocations
+and ones that are rounded up to DMA alignment is ok, I wonder if we
+could minimize the churn by simply choosing between one or the other
+by taking the CRYPTO_ALG_ASYNC flag into account. On x86 and other
+arches that don't care about the distinction, none of this has any
+effect anyway. And on arm64, only hardware implementations use the
+CRYPTO_ALG_ASYNC flag, which makes its presence a reasonable heuristic
+to decide whether an algo implementation is backed by hardware that
+relies on DMA (the penalty for getting it wrong would be to use DMA
+ailgnment unnecessarily, which we already do today anyway)
+
+We'd still need changes in the generic crypto layer to distinguish the
+two cases, but we wouldn't need any changes to the drivers, which
+seems like a huge benefit to me
