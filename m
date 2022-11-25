@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F392638BFA
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 15:21:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4ECF638BF9
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 15:20:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbiKYOUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 09:20:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42584 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbiKYOUs (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229750AbiKYOUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 25 Nov 2022 09:20:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42578 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229498AbiKYOUq (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 25 Nov 2022 09:20:46 -0500
 Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6328023157
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 06:20:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B0723155
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 06:20:45 -0800 (PST)
 Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2APCp6w7007040;
-        Fri, 25 Nov 2022 08:20:31 -0600
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2APCp6w6007040;
+        Fri, 25 Nov 2022 08:20:30 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=PODMain02222019;
- bh=mDzk+uY23FTNoUUYh8QvKniEEsfAMyybDRWMvyjLv68=;
- b=VoixvH6UYkJWptdkGMR6/AM5bk/uA0XnzVaWxNtJ6St+da8PP5ya0WxWEZGtauc32vN7
- tNj2GQKHjIC0zTnu2bpSuIHZycp1aAXcoL2O2hlwH5NUbTK3Ss0wvG8Iy1OKchiWIn+S
- 0k/ewBvo4y3UjOXKQe3FFUJtJorK/65opcs9+Ot3rdzFbG7cQZ7zzmWdnM/ru2Gfoue5
- WrejCfKvOpj2y9XBWXd2xlrexhDJZftdNCun/YKjE0c2Smu+sfFMUXFtU7TD/DgZpV72
- d89Smo9EHLdM2qT+jk2Dv0BQ1o81n7iKjp9JLd77x6CKieFiVX+3n9PpuKX4K3/brGZw jg== 
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=PODMain02222019;
+ bh=6ZdYEsC3Rusgx6qcuK949ZOovE2XqeUbSDG2Tg6BizI=;
+ b=OPgylOLyxVEug+hOYtYw8PcTm0JmbWLOC3gNB7iXUpLvSu5aJG8OffAxeCdTsF1WNpv2
+ PzFtGv4+REbcwUzeSy8PGeDFgwSPhtCLEZ0MOuCVbr93LZxEV+ywOh4eZqNjoIkZ9TjB
+ CoZWARNx0DgroGWM6f3tY52hknmwueuzPoSIgQShKRuTsjjsn1/kqTYItXroE0YuIL1I
+ n74FJFDY6QdKJr1XaMNFWPgkfTe4aTJHUMnO5ufsbQyqsyKbyjzGR4xCRoxKp5nVFieO
+ kWNSt2WLSxREonL8D0vFeJXU6LiyDPBRoEw2ZSAAayA+iJTg8Fa75PPXn+HCxnR8+IIB SQ== 
 Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3kxvet7ccn-2
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3kxvet7ccn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Nov 2022 08:20:31 -0600
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+        Fri, 25 Nov 2022 08:20:30 -0600
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Fri, 25 Nov
  2022 08:20:29 -0600
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.20 via Frontend Transport; Fri, 25 Nov 2022 08:20:29 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
+ Transport; Fri, 25 Nov 2022 08:20:29 -0600
 Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 005522BA;
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 0F3C6B0E;
         Fri, 25 Nov 2022 14:20:29 +0000 (UTC)
 From:   Charles Keepax <ckeepax@opensource.cirrus.com>
 To:     <vkoul@kernel.org>
@@ -47,15 +47,17 @@ CC:     <yung-chuan.liao@linux.intel.com>,
         <pierre-louis.bossart@linux.intel.com>, <sanyog.r.kale@intel.com>,
         <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
         <patches@opensource.cirrus.com>
-Subject: [PATCH v4 0/4] Minor SoundWire clean ups
-Date:   Fri, 25 Nov 2022 14:20:24 +0000
-Message-ID: <20221125142028.1118618-1-ckeepax@opensource.cirrus.com>
+Subject: [PATCH v4 1/4] soundwire: bus: export sdw_nwrite_no_pm and sdw_nread_no_pm functions
+Date:   Fri, 25 Nov 2022 14:20:25 +0000
+Message-ID: <20221125142028.1118618-2-ckeepax@opensource.cirrus.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221125142028.1118618-1-ckeepax@opensource.cirrus.com>
+References: <20221125142028.1118618-1-ckeepax@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 2JtisvnBNqiy_et9YRgZfhIVEesJvxzi
-X-Proofpoint-GUID: 2JtisvnBNqiy_et9YRgZfhIVEesJvxzi
+X-Proofpoint-ORIG-GUID: soKBxbUKxvrBKVP9mPo-Oi0hf_urzVzL
+X-Proofpoint-GUID: soKBxbUKxvrBKVP9mPo-Oi0hf_urzVzL
 X-Proofpoint-Spam-Reason: safe
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
@@ -66,37 +68,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just some minor tidy ups and preparation for starting to upstream some
-Cirrus SoundWire devices. The first three patches are pretty trivial,
-the last patch which moves the remaining core over to using the no_pm
-functions could probably use some careful review.
+From: Simon Trimmer <simont@opensource.cirrus.com>
 
-Changes since v3:
- - Return an error and add a WARN_ONCE if the build stubs are used.
+The commit 167790abb90f ("soundwire: export sdw_write/read_no_pm
+functions") exposed the single byte no_pm versions of the IO functions
+that can be used without touching PM, export the multi byte no_pm
+versions for the same reason.
 
-Changes since v2:
- - Fix up a memory leak of a buffer on the error path
- - Added some reviewed by's
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Signed-off-by: Simon Trimmer <simont@opensource.cirrus.com>
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+---
 
-Thanks,
-Charles
+No change since v3.
 
-*** BLURB HERE ***
+ drivers/soundwire/bus.c       | 8 ++++----
+ include/linux/soundwire/sdw.h | 2 ++
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-Charles Keepax (3):
-  soundwire: Provide build stubs for common functions
-  soundwire: debugfs: Switch to sdw_read_no_pm
-  soundwire: stream: Move remaining register accesses over to no_pm
-
-Simon Trimmer (1):
-  soundwire: bus: export sdw_nwrite_no_pm and sdw_nread_no_pm functions
-
- drivers/soundwire/bus.c       |  10 ++--
- drivers/soundwire/debugfs.c   |  13 ++++-
- drivers/soundwire/stream.c    |  30 +++++-----
- include/linux/soundwire/sdw.h | 107 ++++++++++++++++++++++++++++++----
- 4 files changed, 129 insertions(+), 31 deletions(-)
-
+diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
+index 76515c33e639e..ef4878258afad 100644
+--- a/drivers/soundwire/bus.c
++++ b/drivers/soundwire/bus.c
+@@ -414,8 +414,7 @@ int sdw_fill_msg(struct sdw_msg *msg, struct sdw_slave *slave,
+  * all clients need to use the pm versions
+  */
+ 
+-static int
+-sdw_nread_no_pm(struct sdw_slave *slave, u32 addr, size_t count, u8 *val)
++int sdw_nread_no_pm(struct sdw_slave *slave, u32 addr, size_t count, u8 *val)
+ {
+ 	struct sdw_msg msg;
+ 	int ret;
+@@ -430,9 +429,9 @@ sdw_nread_no_pm(struct sdw_slave *slave, u32 addr, size_t count, u8 *val)
+ 		ret = 0;
+ 	return ret;
+ }
++EXPORT_SYMBOL(sdw_nread_no_pm);
+ 
+-static int
+-sdw_nwrite_no_pm(struct sdw_slave *slave, u32 addr, size_t count, const u8 *val)
++int sdw_nwrite_no_pm(struct sdw_slave *slave, u32 addr, size_t count, const u8 *val)
+ {
+ 	struct sdw_msg msg;
+ 	int ret;
+@@ -447,6 +446,7 @@ sdw_nwrite_no_pm(struct sdw_slave *slave, u32 addr, size_t count, const u8 *val)
+ 		ret = 0;
+ 	return ret;
+ }
++EXPORT_SYMBOL(sdw_nwrite_no_pm);
+ 
+ int sdw_write_no_pm(struct sdw_slave *slave, u32 addr, u8 value)
+ {
+diff --git a/include/linux/soundwire/sdw.h b/include/linux/soundwire/sdw.h
+index 9e4537f409c29..902ed46f76c80 100644
+--- a/include/linux/soundwire/sdw.h
++++ b/include/linux/soundwire/sdw.h
+@@ -1047,7 +1047,9 @@ int sdw_write(struct sdw_slave *slave, u32 addr, u8 value);
+ int sdw_write_no_pm(struct sdw_slave *slave, u32 addr, u8 value);
+ int sdw_read_no_pm(struct sdw_slave *slave, u32 addr);
+ int sdw_nread(struct sdw_slave *slave, u32 addr, size_t count, u8 *val);
++int sdw_nread_no_pm(struct sdw_slave *slave, u32 addr, size_t count, u8 *val);
+ int sdw_nwrite(struct sdw_slave *slave, u32 addr, size_t count, const u8 *val);
++int sdw_nwrite_no_pm(struct sdw_slave *slave, u32 addr, size_t count, const u8 *val);
+ int sdw_update(struct sdw_slave *slave, u32 addr, u8 mask, u8 val);
+ int sdw_update_no_pm(struct sdw_slave *slave, u32 addr, u8 mask, u8 val);
+ 
 -- 
 2.30.2
 
