@@ -2,62 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB9763841C
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 07:41:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA9CB638420
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 07:44:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbiKYGlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 01:41:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44640 "EHLO
+        id S229677AbiKYGn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 01:43:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbiKYGli (ORCPT
+        with ESMTP id S229575AbiKYGn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 01:41:38 -0500
-Received: from fd01.gateway.ufhost.com (unknown [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DBD2A730;
-        Thu, 24 Nov 2022 22:41:00 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 9286D24E35C;
-        Fri, 25 Nov 2022 14:40:39 +0800 (CST)
-Received: from EXMBX072.cuchost.com (172.16.6.82) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 25 Nov
- 2022 14:40:39 +0800
-Received: from [192.168.125.106] (183.27.97.81) by EXMBX072.cuchost.com
- (172.16.6.82) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 25 Nov
- 2022 14:40:38 +0800
-Message-ID: <72b3d10e-5a8e-ed42-6808-f53773913422@starfivetech.com>
-Date:   Fri, 25 Nov 2022 14:41:12 +0800
+        Fri, 25 Nov 2022 01:43:57 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888532A73D;
+        Thu, 24 Nov 2022 22:43:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=iYW/JhAzy/NAHRzRn6OtcNKWyJmGU2/7NHJP6EadOQU=; b=IcfdP1PWIKeGhwP833cmZzviRW
+        qu2ypsdSMoJrBuD6aw+etBv17UIzjGkE99o2W1bap/UOFePESA2JPkQ6HToAfMqus8ZvFhoi71k14
+        U9GJ7+Wk72/WgrF1x5RJgAo9YzGJnKoSnNUAu+tk+AqmMafvzrjN8pMBmQj6E3/Q2pNdDu3WLXLac
+        6QL4v+2y6v8HkK4Sb3nwFpW+3fdp2lh+dXVW5zPs6WuJQ0HrSixB5J+T8QazZ41YuQ/Y8KJiWWdM1
+        9SVoIARbFDi1mhwOuakuTYBlDpZB7QEtsFFhF1KBmCw2E9VAF4ivb7j5j5+NNNl81sKWcsFmzRd5a
+        UN0G5KBg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1oySRB-006btE-0g;
+        Fri, 25 Nov 2022 06:43:49 +0000
+Date:   Fri, 25 Nov 2022 06:43:49 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fsdevel@vger.kernel.org,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] fs: clear a UBSAN shift-out-of-bounds warning
+Message-ID: <Y4BkJd3Jy6MY3cdu@ZenIV>
+References: <20221121024418.1800-1-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v2 09/14] dt-bindings: clock: Add StarFive JH7110 system
- clock and reset generator
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20221118010627.70576-1-hal.feng@starfivetech.com>
- <20221118010627.70576-10-hal.feng@starfivetech.com>
- <1d62f95f-0edc-afd4-abb4-37fadc0b6a47@linaro.org>
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <1d62f95f-0edc-afd4-abb4-37fadc0b6a47@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.97.81]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX072.cuchost.com
- (172.16.6.82)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,RDNS_NONE,SPF_HELO_PASS,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221121024418.1800-1-thunder.leizhen@huawei.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,34 +52,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Nov 2022 09:47:08 +0100, Krzysztof Kozlowski wrote:
-> On 18/11/2022 02:06, Hal Feng wrote:
-> > From: Emil Renner Berthing <kernel@esmil.dk>
-> > 
-> > Add bindings for the system clock and reset generator (SYSCRG) on the
-> > JH7110 RISC-V SoC by StarFive Ltd.
-> > 
-> > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> > Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
-> 
-> Binding headers are coming with the file bringing bindings for the
-> device, so you need to squash patches.
+On Mon, Nov 21, 2022 at 10:44:16AM +0800, Zhen Lei wrote:
+> v1 -- > v2:
+> 1. Replace INT_LIMIT(loff_t) with OFFSET_MAX in btrfs.
+> 2. Replace INT_LIMIT() with type_max().
 
-As we discussed in patch 7, could I merge patch 7, 8, 9, 10 and add the
-following files in one commit?
+Looks fine, except that I'd rather go for commit message
+along the lines of "INT_LIMIT tries to do what type_max does,
+except that type_max doesn't rely upon undefined behaviour;
+might as well use type_max() instead"
 
-include/dt-bindings/clock/starfive,jh7110-crg.h
-include/dt-bindings/reset/starfive,jh7110-crg.h
-Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml
-Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml
-
-Best regards,
-Hal
-
-> 
-> > ---
-> >  .../clock/starfive,jh7110-syscrg.yaml         | 80 +++++++++++++++++++
-> >  MAINTAINERS                                   |  2 +-
-> >  2 files changed, 81 insertions(+), 1 deletion(-)
-> >  create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml
-
+If you want to credit UBSAN - sure, no problem, just don't
+clutter the commit message with that.  As it is, it reads
+as "make $TOOL STFU"...
