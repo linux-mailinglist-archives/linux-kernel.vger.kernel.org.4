@@ -2,135 +2,331 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73EBD638871
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 12:15:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F00F863887D
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 12:18:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230377AbiKYLPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 06:15:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42950 "EHLO
+        id S229848AbiKYLSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 06:18:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbiKYLPx (ORCPT
+        with ESMTP id S229452AbiKYLSN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 06:15:53 -0500
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399E7286C1
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 03:15:53 -0800 (PST)
-Received: by mail-pf1-x443.google.com with SMTP id l7so1404344pfl.7
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 03:15:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YUyfOwVtIYzBrMOM6aE47q/ey8wjAn3R1rFZ/EdItnU=;
-        b=QOK5WYKDlMApI8vZbjbog5nGHUS9CaccZHsRuH/oldjqKAopXEScKa+OqiDcnwbQ6C
-         XyAT8/Ax1HEfyO4yofTrO34QBC/El3caW1hwLwiSHfdjl2WLvstFrb9l90GyGkqz8gdv
-         hVSwfWHy14PG57ZRypp95smXkgDPzx8mrNghADKumt3Z4n4AXWv+8OUpDyef3P56gLLH
-         j9F3hO04n7MsSvzHA/+fzlQIRGVyJ+O6cRGm7KmuVZCA3v6wOkWPr4Z4v6H3MlJadndg
-         7Pc1mNZzfLrF/y0K0/Jntt5vQGPKn7hL8VLF9ce132GyoXCjXx2ZOBno9TnlwJGsilvT
-         umsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YUyfOwVtIYzBrMOM6aE47q/ey8wjAn3R1rFZ/EdItnU=;
-        b=UwVcno6GcfIg/zIxfiKuQft6wXTqIIvkB4nXwG17aN0j7NXzEi2oPQgckWwltxOzn5
-         t7HkyQ6iGc5zQxF0L8cdqd2dS+ed+8qcH0YmQNDewoMN+RhhIiEP6rt1dr3jappTOwSt
-         uSG7/8u4vUhbW+4QI2Mn1m1f9Aek75fFyOUXk6KhmqMTfiuBCCyC5vAY8D6m1woqOQXY
-         0qD+U9ETcWJDJYpwhaooCjlf8BuqrhhV7Eb8D7tjt4d5nR3WpCWbUPXBnC3J2DKQbyeN
-         OrRhV691ljhqj3inWlDI7QvLR93waHC4oBWw74VLRWQZH8+TxSeoyV4wd+GibAwjS7V9
-         xCoQ==
-X-Gm-Message-State: ANoB5pmF0Nd9qy0ImT8ilXf6NcuHnjjXORA8pM7ztLFhjefgEe64AO55
-        HgZwQ45W3EI7O+ctStH+7gAkMjhHtueBo7dUYsA=
-X-Google-Smtp-Source: AA0mqf6tiwddKJBsWNPjLWIoSMkbHP7yy2k04lb3kF+zjGZhcMYOsJCESvLTs7H4qYqZ6x7yNDhkVD4UuG6x4mEcMD8=
-X-Received: by 2002:a63:e442:0:b0:477:bfab:5a81 with SMTP id
- i2-20020a63e442000000b00477bfab5a81mr9213287pgk.64.1669374952308; Fri, 25 Nov
- 2022 03:15:52 -0800 (PST)
+        Fri, 25 Nov 2022 06:18:13 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC565233A9;
+        Fri, 25 Nov 2022 03:18:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1669375091; x=1700911091;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=exPqwwcPvWlmDULPLtKdVviUlO9FBM4xFir3ZuZSLAQ=;
+  b=ZTSyUdmhVjkgmqKrvIhtqvr0KildAnt7x8C3GJE6qJutJnMUtxxXN4gw
+   F2jhpmB6P+p+bjPyhtjvMrM94hvHZclHJR7plrFnedS455LHDglaPW9tH
+   wLJxo3Jq6W6SUCTGX0N1kealjUyYd3Mz+CT9gVtso9iycgLTrJPEcObvr
+   81VlKpUAFAfls9GZtQI3ENIp+dSXIhmsUSciCxLMskt5AeIQVSyTyuAf8
+   kc4f1loLtSA5QcWrGoiF8y2Zzcgo+ah8URU9dN37evbNgviVUgS64aFlG
+   cw4TOJ0jDzPFpU/eZTGMRfYVBEjxT6y6Bg9NDEu1nIYvq0RZcyfcnT6/c
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,193,1665471600"; 
+   d="scan'208";a="188642591"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Nov 2022 04:18:10 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 25 Nov 2022 04:18:02 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Fri, 25 Nov 2022 04:18:00 -0700
+Date:   Fri, 25 Nov 2022 11:17:42 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Walker Chen <walker.chen@starfivetech.com>
+CC:     Conor Dooley <conor@kernel.org>, <linux-riscv@lists.infradead.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 3/4] soc: starfive: Add StarFive JH71XX pmu driver
+Message-ID: <Y4CkVnmdEhCsyckH@wendy>
+References: <20221118133216.17037-1-walker.chen@starfivetech.com>
+ <20221118133216.17037-4-walker.chen@starfivetech.com>
+ <Y3giSQ0YccyY2tVk@spud>
+ <95b05ac3-31a9-50dc-8eeb-eb3a9f883a6b@starfivetech.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6a06:1b8f:b0:587:289e:8c0d with HTTP; Fri, 25 Nov 2022
- 03:15:51 -0800 (PST)
-Reply-To: philipsjohnsongoodp@gmail.com
-From:   philips <robertandersongood5@gmail.com>
-Date:   Fri, 25 Nov 2022 11:15:51 +0000
-Message-ID: <CAD7QbCCoD852N87eTMwW00_wwEtfT0CERuJGD48+iTfzVg=9JQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNDISC_FREEM,UPPERCASE_50_75 autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <95b05ac3-31a9-50dc-8eeb-eb3a9f883a6b@starfivetech.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-0J/QntCS0JXQoNCV0J3QndCr0Jkg0Jgg0J3QntCi0JDQoNCY0KPQoQ0KINCb0J7QndCU0J7QnS3Q
-ktC10LvQuNC60L7QsdGA0LjRgtCw0L3QuNGPDQoNCtCS0LDRiNC10LzRgyDQstC90LjQvNCw0L3Q
-uNGOOiDQtNC+0YDQvtCz0L7QuSDQtNGA0YPQsw0KDQrQn9C+0LbQsNC70YPQudGB0YLQsCwg0L3Q
-tSDQvtCx0LjQttCw0LnRgtC10YHRjCwg0LXRgdC70Lgg0Y3RgtC+INGB0L7QvtCx0YnQtdC90LjQ
-tSDQv9GA0LjQtNC10YIg0Log0LLQsNC8LCDQv9C+0YHQutC+0LvRjNC60YMNCtGPINC00L7Qu9C2
-0LXQvSDQsdGL0Lsg0L/QvtC70YPRh9C40YLRjCDQstCw0YjQtSDRgdC+0LPQu9Cw0YHQuNC1INC4
-INC+0LTQvtCx0YDQtdC90LjQtSwg0L/RgNC10LbQtNC1INGH0LXQvCDQvtGC0L/RgNCw0LLQuNGC
-0YwNCtGN0YLQviDQv9GA0LXQtNC70L7QttC10L3QuNC1INC/0L4g0Y3Qu9C10LrRgtGA0L7QvdC9
-0L7QuSDQv9C+0YfRgtC1LiDQryDQtNC10LnRgdGC0LLQvtCy0LDQuyDRgtCw0LosINC60LDQuiDR
-jyDRgdC00LXQu9Cw0LssDQrQuNC3LdC30LAg0LLQsNC20L3QvtGB0YLQuCDQuCDRgdGA0L7Rh9C9
-0L7RgdGC0Lgg0Y3RgtC+0LPQviDQtNC10LvQsC4g0KEg0LrQsNC60L7QuSDQsdGLINGB0YLQvtGA
-0L7QvdGLINCy0Ysg0L3QuA0K0YHQvNC+0YLRgNC10LvQuCDQvdCwINGN0YLQviwg0L/Rg9GB0YLR
-jCDQstCw0Lwg0LHRg9C00LXRgiDQv9GA0LjRj9GC0L3QviDQsdGL0YHRgtGA0L4g0L7RgtCy0LXR
-gtC40YLRjCDQu9C40LHQvg0K0L7RgtGA0LjRhtCw0YLQtdC70YzQvdC+LCDQu9C40LHQviDQv9C+
-0LvQvtC20LjRgtC10LvRjNC90L4uDQoNCtCc0LXQvdGPINC30L7QstGD0YIg0KTQuNC70LjQv9GB
-INCU0LbQvtC90YHQvtC9LiDQryDQvtGC0L/RgNCw0LLQuNC7INCy0LDQvCDRjdC70LXQutGC0YDQ
-vtC90L3QvtC1INC/0LjRgdGM0LzQviDRgNCw0L3QtdC1INCx0LXQtw0K0L7RgtCy0LXRgtCwLCDQ
-siDQvNC+0LXQvCDQv9C10YDQstC+0Lwg0Y3Qu9C10LrRgtGA0L7QvdC90L7QvCDQv9C40YHRjNC8
-0LUg0Y8g0YPQv9C+0LzRj9C90YPQuyDQviDQvNC+0LXQvCDQutC70LjQtdC90YLQtSwNCtC60L7R
-gtC+0YDRi9C5INGD0LzQtdGAIDE1INGB0LXQvdGC0Y/QsdGA0Y8gMjAxNSDQs9C+0LTQsC4g0K8g
-0YHQtNC10LvQsNC7INC90LXRgdC60L7Qu9GM0LrQviDQt9Cw0L/RgNC+0YHQvtCyLCDRh9GC0L7Q
-sdGLDQrQvdCw0LnRgtC4INC60L7Qs9C+LdC70LjQsdC+INC40Lcg0LTQsNC70YzQvdC40YUg0YDQ
-vtC00YHRgtCy0LXQvdC90LjQutC+0LIg0LzQvtC10LPQviDQutC70LjQtdC90YLQsCwg0L3QviDR
-jdGC0L4NCtC+0LrQsNC30LDQu9C+0YHRjCDQsdC10LfRg9GB0L/QtdGI0L3Ri9C8LCDRjyDRgtGA
-0LXQsdGD0Y4g0LLQsNGI0LXQs9C+INGB0L7Qs9C70LDRgdC40Y8g0L/RgNC10LTRgdGC0LDQstC4
-0YLRjCDQstCw0YEg0LrQsNC6DQrQsdC70LjQt9C60L7Qs9C+INGA0L7QtNGB0YLQstC10L3QvdC4
-0LrQsCDQkdCb0JjQltCd0JXQk9CeINCg0J7QlNCh0KLQktCV0J3QndCY0JrQkCDQnNCe0JXQk9Ce
-INCf0J7QodCb0JXQlNCd0JXQk9CeINCa0JvQmNCV0J3QotCQLA0K0J/QntCi0J7QnNCjINCn0KLQ
-niDQoyDQktCQ0KEg0J7QlNCY0J3QkNCa0J7QktCr0JUg0JjQnNCV0J3QkCDRgSDQv9C+0LrQvtC5
-0L3Ri9C8LCDRg9C90LDRgdC70LXQtNC+0LLQsNGC0Ywg0LTQtdC/0L7Qt9C40YLQvdGL0LkNCtGE
-0L7QvdC0INC90LAg0YHRg9C80LzRgyAyIDcwMCAwMDAsMDAg0YTRg9C90YLQvtCyINGB0YLQtdGA
-0LvQuNC90LPQvtCyICjRgtC+0LvRjNC60L4g0LTQstCwINC80LjQu9C70LjQvtC90LANCtGB0LXQ
-vNGM0YHQvtGCINGC0YvRgdGP0Ycg0LHRgNC40YLQsNC90YHQutC40YUg0YTRg9C90YLQvtCyINGB
-0YLQtdGA0LvQuNC90LPQvtCyLCDQsiBGU1QtQkFOSyBMb25kb24sDQrQvtGB0YLQsNCy0LvQtdC9
-0L3Ri9C5INC60LvQuNC10L3RgtC+0Lwg0LTQviDRgtC+0LPQviwg0LrQsNC6INC+0L0g0LHRg9C0
-0LXRgiDQutC+0L3RhNC40YHQutC+0LLQsNC9LA0KDQrQkdCw0L3QuiDQstGL0LTQsNC7INC80L3Q
-tSDRg9Cy0LXQtNC+0LzQu9C10L3QuNC1LCDRh9GC0L7QsdGLINGPINC/0YDQtdC00L7RgdGC0LDQ
-stC40Lsg0LXQs9C+INGA0L7QtNGB0YLQstC10L3QvdC40LrQvtCyINCyDQrQutCw0YfQtdGB0YLQ
-stC1INGB0LLQvtC10LPQviDQsNC00LLQvtC60LDRgtCwLCDQuNC90LDRh9C1INC+0L3QuCDQv9GA
-0L7RgtC+0LvQutC90YPRgiDRhNC+0L3QtCDQsiDQs9C+0YHRg9C00LDRgNGB0YLQstC10L3QvdGD
-0Y4NCtC60LDQt9C90YMg0LrQsNC6INC90LXQstC+0YHRgtGA0LXQsdC+0LLQsNC90L3Ri9C5INCy
-0LXQutGB0LXQu9GMLiDQryDQvdCw0LTQtdGP0LvRgdGPLCDRh9GC0L4g0LLRiyDQvdC1INGA0LDQ
-t9C+0LHQu9Cw0YfQuNGC0LUNCtC4INC90LUg0L/RgNC10LTQsNC00LjRgtC1INGN0YLQviDQtNC+
-0LLQtdGA0LjQtSDQuCDRg9Cy0LXRgNC10L3QvdC+0YHRgtGMLCDQutC+0YLQvtGA0YvQtSDRjyDQ
-v9GL0YLQsNGO0YHRjCDRg9GB0YLQsNC90L7QstC40YLRjA0K0YEg0LLQsNC80Lgg0LTQu9GPINC9
-0LDRiNC10Lkg0LLQt9Cw0LjQvNC90L7QuSDQstGL0LPQvtC00YssINGPINC90LUg0YXQvtGH0YMs
-INGH0YLQvtCx0Ysg0YEg0L3QsNC80Lgg0LHRi9C70LAg0YLRgNC10YLRjNGPDQrRgdGC0L7RgNC+
-0L3QsCwg0Y3RgtC+INC00L7Qu9C20L3QviDQsdGL0YLRjCDRgdC10LrRgNC10YLQvtC8INC80LXQ
-ttC00YMg0LzQvdC+0Lkg0Lgg0LLQsNC80LguINCvINC30LDQstC10YDRj9GOINC4DQrQs9Cw0YDQ
-sNC90YLQuNGA0YPRjiwg0YfRgtC+INGN0YLQviDQsdGD0LTQtdGCINCy0YvQv9C+0LvQvdC10L3Q
-viDQsiDRgdC+0L7RgtCy0LXRgtGB0YLQstC40Lgg0YEg0LfQsNC60L7QvdC90YvQvA0K0YHQvtCz
-0LvQsNGI0LXQvdC40LXQvCwg0LrQvtGC0L7RgNC+0LUg0LfQsNGJ0LjRgtC40YIg0LLQsNGBINC+
-0YIg0LvRjtCx0L7Qs9C+INC90LDRgNGD0YjQtdC90LjRjyDQt9Cw0LrQvtC90LAuINCS0YHQtSwg
-0YfRgtC+DQrRjyDRgtGA0LXQsdGD0Y4g0L7RgiDQstCw0YEsIC0g0Y3RgtC+INCy0LDRiNC1INGH
-0LXRgdGC0L3QvtC1INGB0L7RgtGA0YPQtNC90LjRh9C10YHRgtCy0L4sINGH0YLQvtCx0Ysg0LzR
-iyDQvNC+0LPQu9C4DQrQv9GA0L7QstC10YHRgtC4INGN0YLRgyDRgtGA0LDQvdC30LDQutGG0LjR
-ji4NCg0K0JTQu9GPINC/0L7Qu9GD0YfQtdC90LjRjyDQsdC+0LvQtdC1INC/0L7QtNGA0L7QsdC9
-0L7QuSDQuNC90YTQvtGA0LzQsNGG0LjQuCwg0L/QvtC20LDQu9GD0LnRgdGC0LAsINGB0LLRj9C2
-0LjRgtC10YHRjCDRgdC+DQrQvNC90L7QuSwg0L7QttC40LTQsNGPINCy0LDRiNC10LPQviDRgdGA
-0L7Rh9C90L7Qs9C+INC+0YLQstC10YLQsC4NCg0K0JfQsNGA0LDQvdC10LUg0YHQv9Cw0YHQuNCx
-0L4g0Lgg0YXRgNCw0L3QuCDQstCw0YEg0JHQvtCzLA0KDQrQnNC40YHRgtC10YAg0KTQuNC70LjQ
-v9GBINCU0LbQvtC90YHQvtC9LCDRjdGB0LrQstCw0LnRgC4NCtCj0YHQsNC00YzQsdCwIDIsINCd
-0YzRji3QrtC90LjQvtC9LdGB0YLRgNC40YIsIExEMSAyUEYNCtCb0J7QndCU0J7QnS3QktC10LvQ
-uNC60L7QsdGA0LjRgtCw0L3QuNGPDQpQT1ZFUkVOTllZIEkgTk9UQVJJVVMNCiBMT05ET04tVmVs
-aWtvYnJpdGFuaXlhDQo=
+On Fri, Nov 25, 2022 at 06:04:59PM +0800, Walker Chen wrote:
+> On 2022/11/19 8:24, Conor Dooley wrote:
+> > On Fri, Nov 18, 2022 at 09:32:15PM +0800, Walker Chen wrote:
+
+> >> +void starfive_pmu_hw_event_turn_off(u32 mask)
+> >> +{
+> >> +	pmu_writel(mask, HW_EVENT_TURN_OFF_MASK);
+> >> +}
+> >> +EXPORT_SYMBOL(starfive_pmu_hw_event_turn_off);
+> > 
+> > Where are the users for these exports? Also, should they be exported as
+> > GPL?
+> > 
+> > Either way, what is the point of the extra layer of abstraction here
+> > around the writel()?
+> 
+> The two export functions are only prepared for GPU module. But accordint to
+>  the latest information, it seems that there is no open source plan for GPU. 
+> So the two functions will be drop in next version of patch.
+
+That's a shame!
+
+> >> +static int starfive_pmu_get_state(struct starfive_power_dev *pmd, bool *is_on)
+> >> +{
+> >> +	struct starfive_pmu *pmu = pmd->power;
+> >> +
+> >> +	if (!pmd->mask) {
+> >> +		*is_on = false;
+> >> +		return -EINVAL;
+> >> +	}
+> >> +
+> >> +	*is_on = __raw_readl(pmu->base + CURR_POWER_MODE) & pmd->mask;
+> > 
+> > Is there a specific reason that you are using the __raw variants here
+> > (and elsewhere) in the driver?
+> 
+> Will use unified function '__raw_readl' and '__raw_writel'
+
+No no, I want to know *why* you are using the __raw accessors here. My
+understanding was that __raw variants are unbarriered & unordered with
+respect to other io accesses.
+
+I do notice that the bcm driver you mentioned uses the __raw variants,
+but only __raw variants - whereas you use readl() which is ordered and
+barriered & __raw_readl().
+
+Is there a reason why you would not use readl() or readl_relaxed()?
+
+> >> +
+> >> +	return 0;
+> >> +}
+> >> +
+> >> +static int starfive_pmu_set_state(struct starfive_power_dev *pmd, bool on)
+> >> +{
+> >> +	struct starfive_pmu *pmu = pmd->power;
+> >> +	unsigned long flags;
+> >> +	uint32_t val;
+> >> +	uint32_t mode;
+> >> +	uint32_t encourage_lo;
+> >> +	uint32_t encourage_hi;
+> >> +	bool is_on;
+> >> +	int ret;
+> >> +
+> >> +	if (!pmd->mask)
+> >> +		return -EINVAL;
+> >> +
+> >> +	if (is_on == on) {
+> >> +		dev_info(pmu->pdev, "pm domain [%s] is already %sable status.\n",
+> >> +				pmd->genpd.name, on ? "en" : "dis");
+> > 
+> > Am I missing something here: you've just declared is_on, so it must be
+> > false & therefore this check is all a little pointless? The check just
+> > becomes if (false == on) which I don't think is what you're going for
+> > here? Or did I miss something obvious?
+> 
+> Sorry, indeed I missed several lines of code. It should be witten like this:
+> 	ret = jh71xx_pmu_get_state(pmd, &is_on);
+>         if (ret) {
+>                 dev_dbg(pmu->pdev, "unable to get current state for %s\n",
+>                         pmd->genpd.name);
+>                 return ret;
+>         }
+
+Heh, this looks more sane :)
+
+> 
+>         if (is_on == on) {
+>                 dev_dbg(pmu->pdev, "pm domain [%s] is already %sable status.\n",
+>                         pmd->genpd.name, on ? "en" : "dis");
+>                 return 0;
+>         }
+> 
+> > 
+> >> +		return 0;
+> >> +	}
+> >> +
+> >> +	spin_lock_irqsave(&pmu->lock, flags);
+> >> +
+> >> +	if (on) {
+> >> +		mode = SW_TURN_ON_POWER_MODE;
+> >> +		encourage_lo = SW_MODE_ENCOURAGE_EN_LO;
+> >> +		encourage_hi = SW_MODE_ENCOURAGE_EN_HI;
+> >> +	} else {
+> >> +		mode = SW_TURN_OFF_POWER_MODE;
+> >> +		encourage_lo = SW_MODE_ENCOURAGE_DIS_LO;
+> >> +		encourage_hi = SW_MODE_ENCOURAGE_DIS_HI;
+> >> +	}
+> >> +
+> >> +	__raw_writel(pmd->mask, pmu->base + mode);
+> >> +
+> >> +	/* write SW_ENCOURAGE to make the configuration take effect */
+> >> +	__raw_writel(SW_MODE_ENCOURAGE_ON, pmu->base + SW_ENCOURAGE);
+> > 
+> > Is register "sticky"? IOW, could you set it in probe and leave this mode
+> > always on? Or does it need to be set every time you want to use this
+> > feature?
+> 
+> These power domain registers need to be set by other module according to the
+> specific situation. 
+> For example some power domains should be turned off via System PM mechanism
+> when system goes to sleep, 
+> and then they are turned on when system resume.
+
+I was just wondering if SW_MODE_ENCOURAGE_ON would retain it's value
+during operation or if it had to be written every time. It's fine if
+that's not the case.
+
+> >> +	__raw_writel(encourage_lo, pmu->base + SW_ENCOURAGE);
+> >> +	__raw_writel(encourage_hi, pmu->base + SW_ENCOURAGE);
+> >> +
+> >> +	spin_unlock_irqrestore(&pmu->lock, flags);
+> >> +
+> >> +	if (on) {
+> >> +		ret = readl_poll_timeout_atomic(pmu->base + CURR_POWER_MODE, val,
+> >> +						val & pmd->mask, DELAY_US,
+> >> +						TIMEOUT_US);
+> >> +		if (ret) {
+> >> +			dev_err(pmu->pdev, "%s: failed to power on\n", pmd->genpd.name);
+> >> +			return -ETIMEDOUT;
+> >> +		}
+> >> +	} else {
+> >> +		ret = readl_poll_timeout_atomic(pmu->base + CURR_POWER_MODE, val,
+> >> +						!(val & pmd->mask), DELAY_US,
+> >> +						TIMEOUT_US);
+> > 
+> > Could you not just decide the 3rd arg outside of the readl_poll..() and
+> > save on duplicating the wait logic here?
+> 
+> Seems that the readl_poll..() can only be called in two cases 
+> because the CURR_POWER_MODE register is read to val and then operation with mask every time.
+> 
+
+I'm sorry, I completely forgot that read*_poll..() actually not actually
+a function. Please ignore this comment!
+
+> >> +static int starfive_pmu_probe(struct platform_device *pdev)
+> >> +{
+> >> +	struct device *dev = &pdev->dev;
+> >> +	struct device_node *np = dev->of_node;
+> >> +	const struct starfive_pmu_data *entry, *table;
+> >> +	struct starfive_pmu *pmu;
+> >> +	unsigned int i;
+> >> +	uint8_t max_bit = 0;
+> >> +	int ret;
+> >> +
+> >> +	pmu = devm_kzalloc(dev, sizeof(*pmu), GFP_KERNEL);
+> >> +	if (!pmu)
+> >> +		return -ENOMEM;
+> >> +
+> >> +	pmu_base = pmu->base = devm_platform_ioremap_resource(pdev, 0);
+> >> +	if (IS_ERR(pmu->base))
+> >> +		return PTR_ERR(pmu->base);
+> >> +
+> >> +	/* initialize pmu interrupt  */
+> >> +	pmu->irq = platform_get_irq(pdev, 0);
+> >> +	if (pmu->irq < 0)
+> >> +		return pmu->irq;
+> >> +
+> >> +	ret = devm_request_irq(dev, pmu->irq, starfive_pmu_interrupt,
+> >> +			       0, pdev->name, pmu);
+> >> +	if (ret)
+> >> +		dev_err(dev, "request irq failed.\n");
+> >> +
+> >> +	table = of_device_get_match_data(dev);
+> >> +	if (!table)
+> >> +		return -EINVAL;
+> >> +
+> >> +	pmu->pdev = dev;
+> >> +	pmu->genpd_data.num_domains = 0;
+> >> +	i = 0;
+> >> +	for (entry = table; entry->name; entry++) {
+> >> +		max_bit = max(max_bit, entry->bit);
+> >> +		i++;
+> >> +	}
+> > 
+> > This looks like something that could be replaced by the functions in
+> > linux/list.h, no? Same below.
+> 
+> Nowadays other platforms on linux mainline mostly write in this way or write like this: 
+> 	for (i = 0; i < num; i++) {
+> 		...
+> 		pm_genpd_init(&pmd[i]->genpd, NULL, !is_on);
+> 	}
+
+That's not what this specific bit of code is doing though, right? You're
+walking jh7110_power_domains to find the highest bit. I was looking at what
+some other drivers do, and took a look at drivers/soc/qcom/rpmhpd.c
+where they know the size of this struct at compile time & so can do
+store the number of power domains in the match data. If you did that,
+you could use a loop like the one other platforms use.
+
+> >> +	if (!pmu->genpd)
+> >> +		return -ENOMEM;
+> >> +
+> >> +	pmu->genpd_data.domains = pmu->genpd;
+> >> +
+> >> +	i = 0;
+> >> +	for (entry = table; entry->name; entry++) {
+
+And it's the same here. By now, you should know how many power domains
+you have, no?
+
+Anyways, as I said before I don't know much about this power domain
+stuff, it's just that these two loops seem odd.
+
+> >> +		struct starfive_power_dev *pmd = &pmu->dev[i];
+> >> +		bool is_on;
+> >> +
+> >> +		pmd->power = pmu;
+> >> +		pmd->mask = BIT(entry->bit);
+> >> +		pmd->genpd.name = entry->name;
+> >> +		pmd->genpd.flags = entry->flags;
+> >> +
+> >> +		ret = starfive_pmu_get_state(pmd, &is_on);
+> >> +		if (ret)
+> >> +			dev_warn(dev, "unable to get current state for %s\n",
+> >> +				 pmd->genpd.name);
+
+> >> +static const struct starfive_pmu_data jh7110_power_domains[] = {
+> > 
+> > Is this driver jh7110 only or actually jh71XX? Have you just started out
+> > by implementing one SoC both intend to support both?
+> 
+> JH7110 is our first SoC, probably the next generation of SoC jh7120 still
+> use this controller driver.
+> Maybe now the naming for JH71XX is not very suitable.
+
+Right. My question was more about if this supported the JH7100 too, but
+I saw from your answer to Emil that it won't. I don't have a preference
+as to whether you call it jh71xx or jh7110, I'll leave that up to
+yourselves and Emil. This particular struct should still be called
+`jh7110_power_domains` though since it is particular to this SoC, no
+matter what you end up calling the file etc.
+
+> > I don't know /jack/ about power domain stuff, so I can barely review
+> > this at all sadly.
+
+> Thank you for taking the time to review the code, you helped me a lot.
+> Thank you so much.
+
+No worries, looking forward to getting my board :)
+
