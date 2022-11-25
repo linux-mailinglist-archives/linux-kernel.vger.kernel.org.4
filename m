@@ -2,184 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58F61638AAD
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 13:59:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D71E0638AB8
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 14:00:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbiKYM70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 07:59:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56776 "EHLO
+        id S229937AbiKYM75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 07:59:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiKYM7E (ORCPT
+        with ESMTP id S229989AbiKYM7Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 07:59:04 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE864D5D3;
-        Fri, 25 Nov 2022 04:58:56 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id d3so5120837ljl.1;
-        Fri, 25 Nov 2022 04:58:56 -0800 (PST)
+        Fri, 25 Nov 2022 07:59:25 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C112421BF
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 04:59:12 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id 83-20020a1c0256000000b003d03017c6efso5458895wmc.4
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 04:59:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=erSKfCU3pTuk1I/bIJQZzdQ++3SxDETdH1OGJv5ABiE=;
-        b=Vb5QdU4KQHrbqp7FP34w6pU+RpSjlVX66KcFdyIBhQUrmDVPTkty9x4cab83kbak86
-         cvHFo+JITH2/HaEanAt8NtuVeCeUc7/eZHW0dYQKCsrRZ+ZsxKOqWzY/KjXEzkzrd9rz
-         LWwNI/+AFdCPo8qgmkysOz5kPWgDDE67w4cZ4tJVzrk6GerUO7aktgx7kyq/+CnO3ltw
-         TFN3goJafZZS9QpxovEeDpRWC8LTZ9oZmtZibtmB/Qa32HlOLs8m7OFRcwXgTuZe1YJm
-         SBJdOygrZ/4wpUsNlCS8641N9yIE247YF/Xz7VVW3/C+Jo+/xguHyj+JynLekR7mDKnU
-         R3PA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=xAwDeLMDI7jjJICxpuML25RfdqA6Cct7LkWV25vDTYU=;
+        b=Y5a6fIYD6fefsUga9jeZ6gQhDhnIy/oo5V973q+1AyvwYEVWseFjU6EI5w+ZM0ir/K
+         WVD2xm0KZUHZBxq61q8bNIGvbQFNwL6fbhC91x55xttVQhG05+xteRY+qhC0yTf4QIMM
+         KIwVNs5VKlWJLSVTZ/izvgt712WWZFWfKKOn1KG6btlcnGw+moEOzaUe6FjudVwWKGmN
+         Bx4HZ8z+l7CNMipP50eWZrLe980kGBgfk5/7siS84hYe5CLKrXx5dn7S5ku33POGIGDA
+         MwoOVKiPninQTH1DikIhfvY6xYAYLQ34lVPuzkEuPoqZF0WSQASCzu4Jn2hqkK4d3zfY
+         wKrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=erSKfCU3pTuk1I/bIJQZzdQ++3SxDETdH1OGJv5ABiE=;
-        b=5vZvUw9gHX9linQa6X5rABmMEXLNY6jDMh+PuBOiVN4HQwROnu27Fu4O8v0IA7ZUnn
-         u1CFfzOof/wvnZFeexqa2ydrRuOHxwzHwA/fkkmysCHkaiS7D1IfKdxcjwv/onNe9lr/
-         qCT8r5cESbYXDNrJEzZmKZkU9v97/xpYQ7FwRRts0jzRCKw6w76gAFp3muS61bqa6Rja
-         qMULKSWsUjQnC/4zHWkYYd4ky7XuUtFn/ngmDBUJBEwlNlg9FRSlTPZl0lx7FA7mRDmk
-         mm72cDHmQv9C3GoM2lW1rlpKUT0V9G8qRFHLCgndcV2B2pOj9mHm7Zy8mbAZ6dPSS2cZ
-         dHIg==
-X-Gm-Message-State: ANoB5pmQ1Cbt+ZT4bx7mZvgsBVMGhFiyo6lpsfgwSNbhKIj7sDCPCm/j
-        F99+pkUU1ujxWW4LhJ2Dyag=
-X-Google-Smtp-Source: AA0mqf5bkYEKfvpLG98j9zg9nXnagXGZ9s9FVbmlKYE/joHpTlEiCrjckFBR9/GQCzuYsXUFR/hmcA==
-X-Received: by 2002:a2e:8e23:0:b0:26c:4f23:d346 with SMTP id r3-20020a2e8e23000000b0026c4f23d346mr11072077ljk.304.1669381135114;
-        Fri, 25 Nov 2022 04:58:55 -0800 (PST)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id n3-20020ac242c3000000b004ab98cd5644sm512485lfl.182.2022.11.25.04.58.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Nov 2022 04:58:54 -0800 (PST)
-Date:   Fri, 25 Nov 2022 15:58:52 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh@kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>, linux-pci@vger.kernel.org,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
-Subject: Re: [PATCH v7 00/20] PCI: dwc: Add generic resources and Baikal-T1
- support
-Message-ID: <20221125125852.bozaykbckfkek4i3@mobilestation>
-References: <20221113191301.5526-1-Sergey.Semin@baikalelectronics.ru>
- <166921583106.17960.15949667825256145052.b4-ty@kernel.org>
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xAwDeLMDI7jjJICxpuML25RfdqA6Cct7LkWV25vDTYU=;
+        b=LxspSrg/FNTzfr9Wqhr0WTHrdC6Ui5IwMm2nX98ybMQwVuAJu7VL3LHJte197wZBIp
+         3MLc+tcmJh0reLfzL9SiV4JFNQr+IXFUCfdyQHrlwMaQizRDWaYTeNS/xJ8odXXxil3n
+         7QZqPGPv3nNQVYCnd6JSDIU/5OuCoyjmfyUPo/rL9pq2eiAxryIUvqEf8DzVI4ERvgK+
+         R/CL9sgU5jvsGebryxuSX5YLHsytDYbII5NwEtZWSd9L9oXCQkagg3Cu88eGcQk/h+tO
+         c4gpgAjmanVhXyh5eQk6nrCxOgY5zFBhuGHmp1RS4/0LZyMdnW4HQErcK1TPz+W6PUpP
+         pcAg==
+X-Gm-Message-State: ANoB5pmSODBkGJsGi5+Qr6RTYYGWuacOaLOQUmtxyo7CSh+ZmfSPIZpM
+        duAWUrEnVSDzYx2rVDWQg0YQKQ==
+X-Google-Smtp-Source: AA0mqf7mEGKLa42qccOR51NJrHfVji46zsVRrQCeKgATOV8TvhZ+PAqLLRnZL3faN6fZ6R9yxZK58A==
+X-Received: by 2002:a05:600c:3b09:b0:3cf:987a:2bf with SMTP id m9-20020a05600c3b0900b003cf987a02bfmr15034111wms.157.1669381150938;
+        Fri, 25 Nov 2022 04:59:10 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:84a5:7e09:b15:f1fe? ([2a01:e0a:982:cbb0:84a5:7e09:b15:f1fe])
+        by smtp.gmail.com with ESMTPSA id fn9-20020a05600c688900b003cf6a55d8e8sm5100190wmb.7.2022.11.25.04.59.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Nov 2022 04:59:10 -0800 (PST)
+Message-ID: <038bebc1-2999-69d0-9c3d-e25acf61e31d@linaro.org>
+Date:   Fri, 25 Nov 2022 13:59:09 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <166921583106.17960.15949667825256145052.b4-ty@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 3/6] soc: amlogic: meson-pwrc: Add NNA power domain for
+ A311D
+Content-Language: en-US
+To:     Tomeu Vizoso <tomeu.vizoso@collabora.com>
+Cc:     Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "moderated list:ARM/Amlogic Meson SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Amlogic Meson SoC support" 
+        <linux-amlogic@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20221125111921.37261-1-tomeu.vizoso@collabora.com>
+ <20221125111921.37261-4-tomeu.vizoso@collabora.com>
+Organization: Linaro Developer Services
+In-Reply-To: <20221125111921.37261-4-tomeu.vizoso@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 04:09:12PM +0100, Lorenzo Pieralisi wrote:
-> On Sun, 13 Nov 2022 22:12:41 +0300, Serge Semin wrote:
-> > This patchset is a third one in the series created in the framework of
-> > my Baikal-T1 PCIe/eDMA-related work:
-> > 
-> > [1: Done v5] PCI: dwc: Various fixes and cleanups
-> > Link: https://lore.kernel.org/linux-pci/20220624143428.8334-1-Sergey.Semin@baikalelectronics.ru/
-> > Merged: kernel 6.0-rc1
-> > [2: Done v4] PCI: dwc: Add hw version and dma-ranges support
-> > Link: https://lore.kernel.org/linux-pci/20220624143947.8991-1-Sergey.Semin@baikalelectronics.ru
-> > Merged: kernel 6.0-rc1
-> > [3: In-review v7] PCI: dwc: Add generic resources and Baikal-T1 support
-> > Link: ---you are looking at it---
-> > [4: Done v6] dmaengine: dw-edma: Add RP/EP local DMA support
-> > Link: https://lore.kernel.org/linux-pci/20221107210438.1515-1-Sergey.Semin@baikalelectronics.ru/
-> > 
-> > [...]
+On 25/11/2022 12:19, Tomeu Vizoso wrote:
+> Based on power initialization sequence in downstream driver.
 > 
-> I think it is time we merged this series - we went through
-> several rounds of reviews and it should be ready for
-> mainline (in particular wrt using the generic infrastructure
-> it puts in place).
+> Signed-off-by: Tomeu Vizoso <tomeu.vizoso@collabora.com>
+> ---
+>   drivers/soc/amlogic/meson-ee-pwrc.c | 17 +++++++++++++++++
+>   1 file changed, 17 insertions(+)
 > 
-> Applied to pci/dwc, thank you.
+> diff --git a/drivers/soc/amlogic/meson-ee-pwrc.c b/drivers/soc/amlogic/meson-ee-pwrc.c
+> index dd5f2a13ceb5..925cfaf50d11 100644
+> --- a/drivers/soc/amlogic/meson-ee-pwrc.c
+> +++ b/drivers/soc/amlogic/meson-ee-pwrc.c
+> @@ -46,6 +46,9 @@
+>   #define HHI_NANOQ_MEM_PD_REG1		(0x47 << 2)
+>   #define HHI_VPU_MEM_PD_REG2		(0x4d << 2)
+>   
+> +#define G12A_HHI_NANOQ_MEM_PD_REG0	(0x43 << 2)
+> +#define G12A_HHI_NANOQ_MEM_PD_REG1	(0x44 << 2)
+> +
+>   struct meson_ee_pwrc;
+>   struct meson_ee_pwrc_domain;
+>   
+> @@ -106,6 +109,13 @@ static struct meson_ee_pwrc_top_domain sm1_pwrc_usb = SM1_EE_PD(17);
+>   static struct meson_ee_pwrc_top_domain sm1_pwrc_pci = SM1_EE_PD(18);
+>   static struct meson_ee_pwrc_top_domain sm1_pwrc_ge2d = SM1_EE_PD(19);
+>   
+> +static struct meson_ee_pwrc_top_domain g12a_pwrc_nna = {	\
+> +		.sleep_reg = GX_AO_RTI_GEN_PWR_SLEEP0, 		\
+> +		.sleep_mask = BIT(16) | BIT(17),		\
+> +		.iso_reg = GX_AO_RTI_GEN_PWR_ISO0, 		\
+> +		.iso_mask = BIT(16) | BIT(17), 			\
+> +	};
+> +
+>   /* Memory PD Domains */
+>   
+>   #define VPU_MEMPD(__reg)					\
+> @@ -217,6 +227,11 @@ static struct meson_ee_pwrc_mem_domain sm1_pwrc_mem_audio[] = {
+>   	{ HHI_AUDIO_MEM_PD_REG0, GENMASK(27, 26) },
+>   };
+>   
+> +static struct meson_ee_pwrc_mem_domain g12a_pwrc_mem_nna[] = {
+> +	{ G12A_HHI_NANOQ_MEM_PD_REG0, 0xffffffff },
+> +	{ G12A_HHI_NANOQ_MEM_PD_REG1, 0xffffffff },
 
-Thanks. We've finally done that!
+Weird it's not 0xff like on SM1, I looked at the A311D Datasheet and
+HHI_NANOQ_MEM_PD_REG0 is 31:0 so 0xffffffff is correct, but
+HHI_NANOQ_MEM_PD_REG1 is 23:0 so 0xFFFFFF is the correct value.
 
-Could you please merge the DW eDMA part in too?
-Link: https://lore.kernel.org/linux-pci/20221107210438.1515-1-Sergey.Semin@baikalelectronics.ru/
-Due to the dependencies we agreed to hold it on for until the last DW
-PCIe patchset is merged in. See discussion here:
-https://lore.kernel.org/dmaengine/20220616183900.ww7ora37kmve7av2@mobilestation/
-and here (Vinod ab-tag):
-https://lore.kernel.org/linux-pci/YuKFnjrxnyNa+98X@matsya/
-and here (the last thread mentioned the dependencies):
-https://lore.kernel.org/linux-pci/20220825112843.4pbh37x6wemsdmmp@mobilestation/
+Bur please replace with GENMASK(31, 0) and GENMASK(23, 0) to align with the
+rest of the code.
 
-The eDMA series has got all the ab/rb/tb-tags from @Vinod and @Mani side.
-The only tiny exception is
-[PATCH v6 22/24] dmaengine: dw-edma: Bypass dma-ranges mapping for the local setup
-for which I had to drop the tags due to an update per the @Robin request
-in the framework of the dma-ranges/DMA-mask discussion:
-https://lore.kernel.org/linux-pci/20220927104831.bovlzl74osb4t5d3@mobilestation/
-https://lore.kernel.org/linux-pci/20221007224515.sseyabdfa2phcsdz@mobilestation/
+> +};
+> +
+>   #define VPU_PD(__name, __top_pd, __mem, __is_pwr_off, __resets, __clks)	\
+>   	{								\
+>   		.name = __name,						\
+> @@ -253,6 +268,8 @@ static struct meson_ee_pwrc_domain_desc g12a_pwrc_domains[] = {
+>   	[PWRC_G12A_VPU_ID]  = VPU_PD("VPU", &gx_pwrc_vpu, g12a_pwrc_mem_vpu,
+>   				     pwrc_ee_is_powered_off, 11, 2),
+>   	[PWRC_G12A_ETH_ID] = MEM_PD("ETH", meson_pwrc_mem_eth),
+> +	[PWRC_G12A_NNA_ID] = TOP_PD("NNA", &g12a_pwrc_nna, g12a_pwrc_mem_nna,
+> +				    pwrc_ee_is_powered_off),
+>   };
+>   
+>   static struct meson_ee_pwrc_domain_desc gxbb_pwrc_domains[] = {
 
-I failed to reach @Robin since November 8, 2022. If you are able to
-effectively draw his attention so he looked at the updated patch, that
-would be great. Other than that I see no barrier to merge the DW eDMA
-series in too.
+With this fixed:
 
--Serge(y)
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
 
-> 
-> [01/20] dt-bindings: imx6q-pcie: Fix clock names for imx6sx and imx8mq
->         https://git.kernel.org/lpieralisi/pci/c/b8a83e600bdd
-> [02/20] dt-bindings: visconti-pcie: Fix interrupts array max constraints
->         https://git.kernel.org/lpieralisi/pci/c/4cf4b9b70ab2
-> [03/20] dt-bindings: PCI: dwc: Detach common RP/EP DT bindings
->         https://git.kernel.org/lpieralisi/pci/c/057646a5db2f
-> [04/20] dt-bindings: PCI: dwc: Remove bus node from the examples
->         https://git.kernel.org/lpieralisi/pci/c/b9fe9985aee2
-> [05/20] dt-bindings: PCI: dwc: Add phys/phy-names common properties
->         https://git.kernel.org/lpieralisi/pci/c/875596361910
-> [06/20] dt-bindings: PCI: dwc: Add max-link-speed common property
->         https://git.kernel.org/lpieralisi/pci/c/eaa9d8865287
-> [07/20] dt-bindings: PCI: dwc: Apply generic schema for generic device only
->         https://git.kernel.org/lpieralisi/pci/c/f133396e2d00
-> [08/20] dt-bindings: PCI: dwc: Add max-functions EP property
->         https://git.kernel.org/lpieralisi/pci/c/12f7936c7a0e
-> [09/20] dt-bindings: PCI: dwc: Add interrupts/interrupt-names common properties
->         https://git.kernel.org/lpieralisi/pci/c/35486813c41b
-> [10/20] dt-bindings: PCI: dwc: Add reg/reg-names common properties
->         https://git.kernel.org/lpieralisi/pci/c/4cc13eedb892
-> [11/20] dt-bindings: PCI: dwc: Add clocks/resets common properties
->         https://git.kernel.org/lpieralisi/pci/c/bd9504af9169
-> [12/20] dt-bindings: PCI: dwc: Add dma-coherent property
->         https://git.kernel.org/lpieralisi/pci/c/4a8972542a6d
-> [13/20] dt-bindings: PCI: dwc: Apply common schema to Rockchip DW PCIe nodes
->         https://git.kernel.org/lpieralisi/pci/c/98b59129cb9f
-> [14/20] dt-bindings: PCI: dwc: Add Baikal-T1 PCIe Root Port bindings
->         https://git.kernel.org/lpieralisi/pci/c/ce27c4e61f2d
-> [15/20] PCI: dwc: Introduce dma-ranges property support for RC-host
->         https://git.kernel.org/lpieralisi/pci/c/8522e17d4cab
-> [16/20] PCI: dwc: Introduce generic controller capabilities interface
->         https://git.kernel.org/lpieralisi/pci/c/7f9e982dc4fc
-> [17/20] PCI: dwc: Introduce generic resources getter
->         https://git.kernel.org/lpieralisi/pci/c/ef8c58877fe7
-> [18/20] PCI: dwc: Combine iATU detection procedures
->         https://git.kernel.org/lpieralisi/pci/c/9f67ecdd9579
-> [19/20] PCI: dwc: Introduce generic platform clocks and resets
->         https://git.kernel.org/lpieralisi/pci/c/ef69f852a978
-> [20/20] PCI: dwc: Add Baikal-T1 PCIe controller support
->         https://git.kernel.org/lpieralisi/pci/c/ba6ed462dcf4
-> 
-> Thanks,
-> Lorenzo
+
+Thanks,
+Neil
+
