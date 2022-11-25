@@ -2,192 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47CE0638B59
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 14:37:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78BBD638B5B
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 14:37:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiKYNhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 08:37:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36032 "EHLO
+        id S229796AbiKYNhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 08:37:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiKYNhL (ORCPT
+        with ESMTP id S229784AbiKYNhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 08:37:11 -0500
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDE4275E0;
-        Fri, 25 Nov 2022 05:37:07 -0800 (PST)
-Received: by mail-qv1-f42.google.com with SMTP id h10so2665244qvq.7;
-        Fri, 25 Nov 2022 05:37:07 -0800 (PST)
+        Fri, 25 Nov 2022 08:37:20 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE1127171
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 05:37:17 -0800 (PST)
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 607943F202
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 13:37:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1669383435;
+        bh=8DnTlIACDbzEtLRf6uyG90k2lVADApi5Q0dzsALoGgs=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=gybrPLUqAFnpSc7NoZM0A616yXIXzfLYLPUSk79gfOb8kTPlXiJoc2QUyn3Hx9oCn
+         ewDrTwgKkWn3Djf+r2kojXpef6fP7xMZhosMbekVPS4aHwH8x3QsWEefLod+0IfbL6
+         LjuVTqvn3ys64wMuYIaDmrrzm7IK91Xuz4oUW2iUBoXQIRbmLAno+/sQu+jQSUqBWw
+         b9BEqxY0zJrLnPDfGGJC+b52/1KwdhL5OXog14EdFzd/1N27oQavwXNysdUie3jWsa
+         vcEZf6mPIsQd3Wmsg9/cI6fwnaVWXdqIs8df35yGo8BgAKUWgn9k5zP9IZmuhvZqKs
+         rmGp423BPDX5g==
+Received: by mail-ej1-f71.google.com with SMTP id hr21-20020a1709073f9500b007b29ccd1228so2286881ejc.16
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 05:37:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=H/q4ORqj+1WvrsL5OQMUArcB5WYASWCSO5oYKs9uTXQ=;
-        b=57MI5A6zq3KL6LrFFfWBn+ZZLbh9Z0JF1LK1llzqDNtnwFTGPgwqqIhUSvVV7enwPo
-         6DjIh78mmWACFrqZb/0M1XIhxzDUWkki0VcsSFtrRkRnxNogAXeTvqO9M6zDtO4UgTBL
-         S4d0gc00M6pWgmWznvUxWYpcV3lt179cgAMeAkqQNz1rODh+YWJeBeUiASXyQIGxu0xc
-         vXkGUgmhygWSJwWn3LAU/rdo/IISdJyN6U7Rw8AIs/SlA8MrTZCepElJH4ssZnxCl6zr
-         K8lBcbvjHKpSmqB/0DGs4sNg+gE1mMvZ/vwQyxEs1pgsIzI41bugHW74Nk/vzPtGy2Mn
-         JE+g==
-X-Gm-Message-State: ANoB5pmmvG0UlJknjzgLG8lBdN9UEA1BNqj8ihlX6aXo5gy1Lvxmmfc7
-        iNypP3uJobbwysAWdMPrxSShxakMXZBrGy/g3AI=
-X-Google-Smtp-Source: AA0mqf4qDQlLIeoh8DcVGtZQFSffGK8i6e+msSpzdQdejg0WFVl6Pp0fk/2ioPjHZ+7aC2QnfKGDre7Wk+BSiy+qdn8=
-X-Received: by 2002:a0c:c589:0:b0:4b1:a9ac:21de with SMTP id
- a9-20020a0cc589000000b004b1a9ac21demr17018211qvj.119.1669383426997; Fri, 25
- Nov 2022 05:37:06 -0800 (PST)
+        bh=8DnTlIACDbzEtLRf6uyG90k2lVADApi5Q0dzsALoGgs=;
+        b=P+h/ej6H1zUFjXxLYg3W8mvw0QAgZt1TT1VdgmcC/dvTVLH8bhKOiP1xymdcF+UXqy
+         t+ds7AE9ibuhj2BCWXA2/anyYLG/5FYQ4RH8UWr8v8SX4/uox46FIZuHDv4lEaaUhW9T
+         97xHHLTKHd1LlAdYT5GVyPu8se8hRCz+0QQvOIPHGHVUq39SNj2ccqahYvJHnxhwQzxH
+         YNOV41iNgVj7AhJ9/svW2mn+m3R+bBclsMN+uN2l6FmQ+Qe1UclTVqx8anHd8npXWWrd
+         y1yKpuBZyYOT1JOGK47v+mTccU/j0MaolR8rlP1gMT+YXQGPt/bCuPcHUT4x759jvbNp
+         powA==
+X-Gm-Message-State: ANoB5pnY4pYVtYrKywtZzWfwkeJvbfhu1qLGP0QKVAXWjSEH3rgnp9st
+        0lv7stTNbxwkGF+1d4TQx9KNeo8TJ6KP+X+lTWwJeea7dzQkQdw+tsRiMddq6N9mSBOx+lqVRWR
+        GvhRP/w0Yptj7HMaCjJzowCgWbbUfP2WBBLHCeEma6Q==
+X-Received: by 2002:a17:906:68a:b0:78d:3188:9116 with SMTP id u10-20020a170906068a00b0078d31889116mr32469850ejb.176.1669383435065;
+        Fri, 25 Nov 2022 05:37:15 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4wOtfkriCx9cw+Ix96Y2Ld90o3KlP7uuL0BqKMXT3ekDjiRZ+U2dVi0QMpXeaZVgJGkYfb0g==
+X-Received: by 2002:a17:906:68a:b0:78d:3188:9116 with SMTP id u10-20020a170906068a00b0078d31889116mr32469823ejb.176.1669383434765;
+        Fri, 25 Nov 2022 05:37:14 -0800 (PST)
+Received: from righiandr-XPS-13-7390.homenet.telecomitalia.it ([95.236.177.174])
+        by smtp.gmail.com with ESMTPSA id va5-20020a170907d00500b0078d0981516esm1585372ejc.38.2022.11.25.05.37.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Nov 2022 05:37:14 -0800 (PST)
+From:   Andrea Righi <andrea.righi@canonical.com>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] riscv: increase boot command line size to 1K
+Date:   Fri, 25 Nov 2022 14:37:13 +0100
+Message-Id: <20221125133713.314796-1-andrea.righi@canonical.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20221105174225.28673-1-rui.zhang@intel.com> <20221105174225.28673-2-rui.zhang@intel.com>
- <CAJZ5v0gPOUQDb8c_pVYjzBvU3e3U9JoLhJy5vRBF4h2=zvaHHw@mail.gmail.com> <5ed329f894bc81f5375303a69c07dee16630503e.camel@intel.com>
-In-Reply-To: <5ed329f894bc81f5375303a69c07dee16630503e.camel@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 25 Nov 2022 14:36:53 +0100
-Message-ID: <CAJZ5v0gWwqtqezkBapqK4RbefOT2q7R7pWiTb8E4AbptFu7tAg@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/3] cpuidle: ladder: Tune promotion/demotion threshold
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, rjw@rjwysocki.net,
-        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022 at 7:39 AM Zhang Rui <rui.zhang@intel.com> wrote:
->
-> Hi, Rafael,
->
-> thanks for reviewing the patch series.
->
-> On Wed, 2022-11-23 at 18:50 +0100, Rafael J. Wysocki wrote:
-> > On Sat, Nov 5, 2022 at 6:40 PM Zhang Rui <rui.zhang@intel.com> wrote:
-> > > After fixing the bogus comparison between u64 and s64, the ladder
-> > > governor stops making promotion decisions errornously.
-> > >
-> > > However, after this, it is found that the ladder governor demotes
-> > > much
-> > > easier than promotes.
-> >
-> > "After fixing an error related to using signed and unsigned integers
-> > in the ladder governor in a previous patch, that governor turns out
-> > to
-> > demote much easier than promote"
-> >
-> > > Below is captured using turbostat after a 30 seconds runtime idle,
-> > >
-> > > Without previous patch,
-> > > Busy%   IRQ     POLL    C1      C1E     C3      C6      C7s     C8
-> > >      C9      C10     CPU%c1  CPU%c3  CPU%c6  CPU%c7  PkgWatt
-> > > 0.30    2373    0       0       0       4       9       25      122
-> > >      326     2857    0.36    0.04    0.57    98.73   1.48
-> >
-> > Why is the above relevant?
->
-> Just for comparison purpose.
-> For a pure idle scenario (Busy% < 0.5), with ladder governor, we used
-> to have 99% CPU%c7, but now, with patch 1/3,
->
-> CPU%c1  CPU%c3  CPU%c6  CPU%c7
-> 34.18   16.21   17.69   31.51
-> This does not look like the correct behavior for any cpuidle governor.
+Kernel parameters string is limited to 512 characters on riscv (using
+the default from include/uapi/asm-generic/setup.h).
 
-It all depends on what the design goal was and I don't really know
-that in this particular case.
+In some testing environments (e.g., qemu with long kernel parameters
+string) we may exceed this limit, triggering errors like the following:
 
-It looks like the plan was to make it promote less often than demote
-or the counts would have been chosen differently.
+[    3.331893] Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000000
+[    3.332625] CPU: 2 PID: 1 Comm: sh Not tainted 6.1.0-rc6-kc #1
+[    3.333233] Hardware name: riscv-virtio,qemu (DT)
+[    3.333550] Call Trace:
+[    3.333736] [<ffffffff800062b6>] dump_backtrace+0x1c/0x24
+[    3.334053] [<ffffffff806e8f54>] show_stack+0x2c/0x38
+[    3.334260] [<ffffffff806f2d06>] dump_stack_lvl+0x5a/0x7c
+[    3.334483] [<ffffffff806f2d3c>] dump_stack+0x14/0x1c
+[    3.334687] [<ffffffff806e92fa>] panic+0x116/0x2d0
+[    3.334878] [<ffffffff8001b0aa>] do_exit+0x80a/0x810
+[    3.335079] [<ffffffff8001b1d0>] do_group_exit+0x24/0x70
+[    3.335287] [<ffffffff8001b234>] __wake_up_parent+0x0/0x20
+[    3.335502] [<ffffffff80003cee>] ret_from_syscall+0x0/0x2
+[    3.335857] SMP: stopping secondary CPUs
+[    3.337561] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000000 ]---
 
-> >
-> > > With previous patch,
-> > > Busy%   IRQ     POLL    C1      C1E     C3      C6      C7s     C8
-> > >      C9      C10     CPU%c1  CPU%c3  CPU%c6  CPU%c7  PkgWatt
-> > > 0.42    3071    0       771     838     447     327     336     382
-> > >      299     344     34.18   16.21   17.69   31.51   2.00
-> > >
-> > > And this is caused by the imbalanced
-> > > PROMOTION_COUNT/DEMOTION_COUNT.
-> >
-> > I would explain why/how the imbalanced PROMOTION_COUNT/DEMOTION_COUNT
-> > imbalance causes this.
->
-> sure, how about something below.
->
-> The PROMOTION_COUNT/DEMOTION_COUNT are used as the threshold between
-> the ladder governor detects it "should promote/demote", and the ladder
-> governor does a real promotion/demotion.
->
-> Currently, PROMOTION_COUNT is set to 4 and DEMOTION_COUNT is set to 1.
-> This means that the ladder governor does real demotion immediately when
-> it "should demote", but it does real promotion only if it "should
-> promote" 4 times in a row, without a single "should demote" occur in
-> between.
->
-> As a result, this lower the chance to do real promotion and the ladder
-> governor is more likely to choose a shallower state.
+It seems reasonable enough to increase the default command line size to
+1024, like arm, to prevent issues like the one reported above.
 
-Sounds good and now the question is what's the behavior expected by
-users.  Do we have any data?
+Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+---
+ arch/riscv/include/asm/setup.h      | 7 +++++++
+ arch/riscv/include/uapi/asm/setup.h | 7 +++++++
+ 2 files changed, 14 insertions(+)
+ create mode 100644 arch/riscv/include/asm/setup.h
+ create mode 100644 arch/riscv/include/uapi/asm/setup.h
 
-> >
-> > I guess more residency in the deeper idle state is expected?  Or
-> > desired??
-> >
-> > > With this patch,
-> > > Busy%   IRQ     POLL    C1      C1E     C3      C6      C7s     C8
-> > >      C9      C10     CPU%c1  CPU%c3  CPU%c6  CPU%c7  PkgWatt
-> > > 0.39    2436    0       1       72      177     51      194     243
-> > >      799     1883    0.50    0.32    0.35    98.45   1.53
-> > >
-> > > Note that this is an experimental patch to illustrate the problem,
-> > > and it is checked with idle scenario only for now.
-> > > I will try to evaluate with more scenarios, and if someone can help
-> > > evaluate with more scenarios at the same time and provide data for
-> > > the
-> > > benefit with different PROMOTION_COUNT/DEMOTION_COUNT values, that
-> > > would be great.
-> >
-> > So yes, this requires more work.
-> >
-> > Overall, I think that you are concerned that the previous change
-> > might
-> > be regarded as a regression and are trying to compensate for it with
-> > a
-> > PROMOTION_COUNT/DEMOTION_COUNT change.
->
-> Exactly.
->
-> > I'm not sure I can agree with that approach, because the shallower
-> > idle states might be preferred by the original ladder design
-> > intentionally, for performance reasons.
-> >
-> hmmm, even if there is only 30% c7/c8/c9/c10 residency in a pure idle
-> scenario?
+diff --git a/arch/riscv/include/asm/setup.h b/arch/riscv/include/asm/setup.h
+new file mode 100644
+index 000000000000..f4fe549aab40
+--- /dev/null
++++ b/arch/riscv/include/asm/setup.h
+@@ -0,0 +1,7 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef __ASMRISCV_SETUP_H
++#define __ASMRISCV_SETUP_H
++
++#include <uapi/asm/setup.h>
++
++#endif /* __ASMRISCV_SETUP_H */
+diff --git a/arch/riscv/include/uapi/asm/setup.h b/arch/riscv/include/uapi/asm/setup.h
+new file mode 100644
+index 000000000000..5738f93ae437
+--- /dev/null
++++ b/arch/riscv/include/uapi/asm/setup.h
+@@ -0,0 +1,7 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _UAPI__ASMRISCV_SETUP_H
++#define _UAPI__ASMRISCV_SETUP_H
++
++#define COMMAND_LINE_SIZE 1024
++
++#endif /* _UAPI__ASMRISCV_SETUP_H */
+-- 
+2.37.2
 
-Yes, even in that case.  All boils down to the question regarding user
-expectations.
-
-> And further more, since the imbalanced PROMOTION_COUNT/DEMOTION_COUNT
-> and the unsigned/signed integers problem are both there since the first
-> day the ladder governor was introduced, commit 4f86d3a8e297 ("cpuidle:
-> consolidate 2.6.22 cpuidle branch into one patch"),
->
-> my guess is that
->
-> the unsigned/signed integers problem introduces a lot of pseudo
-> promotions, and the PROMOTION_COUNT/DEMOTION_COUNT is introduced to
-> workaround this so that the ladder governor doesn't get stuck at deep
-> idle state.
-
-That may be a good guess, so I would add it to the changelog of the patch.
-
-> I don't have a solid proof for this. But at least for the pure idle
-> scenario, I don't think 30% deep idle residency is the right behavior,
-> and it needs to be tuned anyway.
-
-Well, have you checked what happens if the counts are set to the same
-value, e.g. 2?
