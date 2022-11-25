@@ -2,301 +2,629 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35BB76382B3
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 04:28:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50BDC6382B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 04:27:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiKYD16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 22:27:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49914 "EHLO
+        id S229628AbiKYD1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 22:27:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbiKYD1y (ORCPT
+        with ESMTP id S229468AbiKYD1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 22:27:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3302C233AE
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 19:27:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669346824;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JwS+i6RHG4xio2GVK1XiM/i9nFbjB+wVt/xavPQmn3c=;
-        b=OzSloXY0dPSrpbOnXEPgh0zSdhRpKLAGAKQe95DDY/XctkTcf9wo9O89mKqu68WwZ42ZHS
-        5+HtFKdvRb3oy22v5Isb2wIGNFp0nDNZyXcONI47gtpxvR9zbJJ1o1iYfcaJLJ/fdsbL4v
-        Tn9Pn8kd5P8g4hNisFlKOMCDp5p6zq8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-76-BDApgZi3M5KZkQ13ZWGYHQ-1; Thu, 24 Nov 2022 22:27:00 -0500
-X-MC-Unique: BDApgZi3M5KZkQ13ZWGYHQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 521AC3804507;
-        Fri, 25 Nov 2022 03:26:59 +0000 (UTC)
-Received: from localhost (ovpn-12-208.pek2.redhat.com [10.72.12.208])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C5DF540C6DC7;
-        Fri, 25 Nov 2022 03:26:57 +0000 (UTC)
-Date:   Fri, 25 Nov 2022 11:26:53 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Eric DeVolder <eric.devolder@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
-        boris.ostrovsky@oracle.com
-Subject: Re: [PATCH v14 3/7] crash: add generic infrastructure for crash
- hotplug support
-Message-ID: <Y4A1/cSekXUTFriC@MiWiFi-R3L-srv>
-References: <20221116214643.6384-1-eric.devolder@oracle.com>
- <20221116214643.6384-4-eric.devolder@oracle.com>
+        Thu, 24 Nov 2022 22:27:02 -0500
+Received: from 189.cn (ptr.189.cn [183.61.185.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CC952339C;
+        Thu, 24 Nov 2022 19:26:59 -0800 (PST)
+HMM_SOURCE_IP: 10.64.8.43:49060.617529776
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-123.150.8.42 (unknown [10.64.8.43])
+        by 189.cn (HERMES) with SMTP id EA9DA1002FD;
+        Fri, 25 Nov 2022 11:26:57 +0800 (CST)
+Received: from  ([123.150.8.42])
+        by gateway-153622-dep-6cffbd87dd-f7vjc with ESMTP id 2cba03f4a0944842842423a44b25942c for mhiramat@kernel.org;
+        Fri, 25 Nov 2022 11:26:57 CST
+X-Transaction-ID: 2cba03f4a0944842842423a44b25942c
+X-Real-From: chensong_2000@189.cn
+X-Receive-IP: 123.150.8.42
+X-MEDUSA-Status: 0
+Sender: chensong_2000@189.cn
+Message-ID: <12297a7f-7501-9b65-a279-80a2e0061fd8@189.cn>
+Date:   Fri, 25 Nov 2022 11:26:56 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221116214643.6384-4-eric.devolder@oracle.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 2/2] kernel/trace: Provide default impelentations
+ defined in trace_probe_tmpl.h
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     rostedt@goodmis.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org
+References: <1669190524-2894-1-git-send-email-chensong_2000@189.cn>
+ <20221125092932.ac68e715819a5aeb8afe4685@kernel.org>
+Content-Language: en-US
+From:   Song Chen <chensong_2000@189.cn>
+In-Reply-To: <20221125092932.ac68e715819a5aeb8afe4685@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/16/22 at 04:46pm, Eric DeVolder wrote:
-......
-> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
-> index ebf46c3b8f8b..b4dbc21f9081 100644
-> --- a/include/linux/kexec.h
-> +++ b/include/linux/kexec.h
-> @@ -32,6 +32,7 @@ extern note_buf_t __percpu *crash_notes;
->  #include <linux/compat.h>
->  #include <linux/ioport.h>
->  #include <linux/module.h>
-> +#include <linux/highmem.h>
->  #include <asm/kexec.h>
->  
->  /* Verify architecture specific macros are defined */
-> @@ -374,6 +375,13 @@ struct kimage {
->  	struct purgatory_info purgatory_info;
->  #endif
->  
-> +#ifdef CONFIG_CRASH_HOTPLUG
+Hi,
 
-This kernel config CRASH_HOTPLUG is added in patch 7, but we have used
-it in the previous patch, not sure if this is acceptable.
-
-> +	bool hotplug_event;
-> +	unsigned int offlinecpu;
-> +	bool elfcorehdr_index_valid;
-> +	int elfcorehdr_index;
-> +#endif
-> +
->  #ifdef CONFIG_IMA_KEXEC
->  	/* Virtual address of IMA measurement buffer for kexec syscall */
->  	void *ima_buffer;
-> @@ -503,6 +511,34 @@ static inline int arch_kexec_post_alloc_pages(void *vaddr, unsigned int pages, g
->  static inline void arch_kexec_pre_free_pages(void *vaddr, unsigned int pages) { }
->  #endif
->  
-> +#ifndef arch_map_crash_pages
-> +/*
-> + * NOTE: The addresses and sizes passed to this routine have
-> + * already been fully aligned on page boundaries. There is no
-> + * need for massaging the address or size.
-> + */
-> +static inline void *arch_map_crash_pages(unsigned long paddr,
-> +					unsigned long size)
-> +{
-> +	if (size > 0)
-> +		return kmap_local_page(pfn_to_page(paddr >> PAGE_SHIFT));
-> +	else
-> +		return NULL;
-> +}
-> +#endif
-> +
-> +#ifndef arch_unmap_crash_pages
-> +static inline void arch_unmap_crash_pages(void *ptr)
-> +{
-> +	if (ptr)
-> +		kunmap_local(ptr);
-> +}
-> +#endif
-> +
-> +#ifndef arch_crash_handle_hotplug_event
-> +static inline void arch_crash_handle_hotplug_event(struct kimage *image) { }
-> +#endif
-> +
->  #else /* !CONFIG_KEXEC_CORE */
->  struct pt_regs;
->  struct task_struct;
-> diff --git a/kernel/crash_core.c b/kernel/crash_core.c
-> index 8c648fd5897a..4e7221226976 100644
-> --- a/kernel/crash_core.c
-> +++ b/kernel/crash_core.c
-> @@ -11,6 +11,8 @@
->  #include <linux/vmalloc.h>
->  #include <linux/sizes.h>
->  #include <linux/kexec.h>
-> +#include <linux/memory.h>
-> +#include <linux/cpuhotplug.h>
->  
->  #include <asm/page.h>
->  #include <asm/sections.h>
-> @@ -18,6 +20,7 @@
->  #include <crypto/sha1.h>
->  
->  #include "kallsyms_internal.h"
-> +#include "kexec_internal.h"
->  
->  /* vmcoreinfo stuff */
->  unsigned char *vmcoreinfo_data;
-> @@ -612,3 +615,139 @@ static int __init crash_save_vmcoreinfo_init(void)
->  }
->  
->  subsys_initcall(crash_save_vmcoreinfo_init);
-> +
-> +#ifdef CONFIG_CRASH_HOTPLUG
-> +#undef pr_fmt
-> +#define pr_fmt(fmt) "crash hp: " fmt
-> +/*
-> + * To accurately reflect hot un/plug changes, the elfcorehdr (which
-> + * is passed to the crash kernel via the elfcorehdr= parameter)
-> + * must be updated with the new list of CPUs and memories.
-> + *
-> + * In order to make changes to elfcorehdr, two conditions are needed:
-> + * First, the segment containing the elfcorehdr must be large enough
-> + * to permit a growing number of resources; the elfcorehdr memory size
-> + * is based on NR_CPUS_DEFAULT and CRASH_MAX_MEMORY_RANGES.
-> + * Second, purgatory must explicitly exclude the elfcorehdr from the
-> + * list of segments it checks (since the elfcorehdr changes and thus
-> + * would require an update to purgatory itself to update the digest).
-> + */
-> +static void handle_hotplug_event(unsigned int hp_action, unsigned int cpu)
-> +{
-> +	/* Obtain lock while changing crash information */
-> +	if (kexec_trylock()) {
-> +
-> +		/* Check kdump is loaded */
-> +		if (kexec_crash_image) {
-> +			struct kimage *image = kexec_crash_image;
-> +
-> +			if (hp_action == KEXEC_CRASH_HP_ADD_CPU ||
-> +				hp_action == KEXEC_CRASH_HP_REMOVE_CPU)
-> +				pr_debug("hp_action %u, cpu %u\n", hp_action, cpu);
-> +			else
-> +				pr_debug("hp_action %u\n", hp_action);
-> +
-> +			/*
-> +			 * When the struct kimage is allocated, it is wiped to zero, so
-> +			 * the elfcorehdr_index_valid defaults to false. Find the
-> +			 * segment containing the elfcorehdr, if not already found.
-> +			 * This works for both the kexec_load and kexec_file_load paths.
-> +			 */
-> +			if (!image->elfcorehdr_index_valid) {
-> +				unsigned long mem, memsz;
-> +				unsigned char *ptr;
-> +				unsigned int n;
-> +
-> +				for (n = 0; n < image->nr_segments; n++) {
-> +					mem = image->segment[n].mem;
-> +					memsz = image->segment[n].memsz;
-> +					ptr = arch_map_crash_pages(mem, memsz);
-> +					if (ptr) {
-> +						/* The segment containing elfcorehdr */
-> +						if (memcmp(ptr, ELFMAG, SELFMAG) == 0) {
-> +							image->elfcorehdr_index = (int)n;
-> +							image->elfcorehdr_index_valid = true;
-> +						}
-> +					}
-> +					arch_unmap_crash_pages((void *)ptr);
-> +				}
-> +			}
-> +
-> +			if (!image->elfcorehdr_index_valid) {
-> +				pr_err("unable to locate elfcorehdr segment");
-> +				goto out;
-> +			}
-> +
-> +			/* Needed in order for the segments to be updated */
-> +			arch_kexec_unprotect_crashkres();
-> +
-> +			/* Flag to differentiate between normal load and hotplug */
-> +			image->hotplug_event = true;
-> +
-> +			/* Now invoke arch-specific update handler */
-> +			arch_crash_handle_hotplug_event(image);
-> +
-> +			/* No longer handling a hotplug event */
-> +			image->hotplug_event = false;
-> +
-> +			/* Change back to read-only */
-> +			arch_kexec_protect_crashkres();
-> +		}
-> +
-> +out:
-> +		/* Release lock now that update complete */
-> +		kexec_unlock();
-> +	}
-> +}
-> +
-> +static int crash_memhp_notifier(struct notifier_block *nb, unsigned long val, void *v)
-> +{
-> +	switch (val) {
-> +	case MEM_ONLINE:
-> +		handle_hotplug_event(KEXEC_CRASH_HP_ADD_MEMORY,
-> +			KEXEC_CRASH_HP_INVALID_CPU);
-> +		break;
-> +
-> +	case MEM_OFFLINE:
-> +		handle_hotplug_event(KEXEC_CRASH_HP_REMOVE_MEMORY,
-> +			KEXEC_CRASH_HP_INVALID_CPU);
-> +		break;
-> +	}
-> +	return NOTIFY_OK;
-> +}
-> +
-> +static struct notifier_block crash_memhp_nb = {
-> +	.notifier_call = crash_memhp_notifier,
-> +	.priority = 0
-> +};
-> +
-> +static int crash_cpuhp_online(unsigned int cpu)
-> +{
-> +	handle_hotplug_event(KEXEC_CRASH_HP_ADD_CPU, cpu);
-> +	return 0;
-> +}
-> +
-> +static int crash_cpuhp_offline(unsigned int cpu)
-> +{
-> +	handle_hotplug_event(KEXEC_CRASH_HP_REMOVE_CPU, cpu);
-> +	return 0;
-> +}
-> +
-> +static int __init crash_hotplug_init(void)
-> +{
-> +	int result = 0;
-> +
-> +	if (IS_ENABLED(CONFIG_MEMORY_HOTPLUG))
-> +		register_memory_notifier(&crash_memhp_nb);
-> +
-> +	if (IS_ENABLED(CONFIG_HOTPLUG_CPU))
-> +		result = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
-> +						   "crash/cpuhp",
-> +						   crash_cpuhp_online,
-> +						   crash_cpuhp_offline);
-> +
-> +	return result;
-> +}
-> +
-> +subsys_initcall(crash_hotplug_init);
-> +#endif
-> -- 
-> 2.31.1
+在 2022/11/25 08:29, Masami Hiramatsu (Google) 写道:
+> Hi Song,
+> 
+> On Wed, 23 Nov 2022 16:02:04 +0800
+> Song Chen <chensong_2000@189.cn> wrote:
+> 
+>> There are 7 function definitions in trace_probe_tmpl.h, they are:
+>>
+>> 1, process_fetch_insn
+>> 2, fetch_store_strlen
+>> 3, fetch_store_string
+>> 4, fetch_store_strlen_user
+>> 5, fetch_store_string_user
+>> 6, probe_mem_read
+>> 7, probe_mem_read_user
+>>
+>> Every C file which includes trace_probe_tmpl.h has to implement them,
+>> otherwise it gets warnings and errors. However, some of them are identical,
+>> like kprobe and eprobe, as a result, there is a lot redundant code in those
+>> 2 files.
+> 
+> Thank you for update! this direction looks good to me.
+>
+>>
+>> This patch would like to provide default behaviors for those functions
+>> which kprobe and eprobe can share by just including trace_probe_kernel.h
+>> with trace_probe_tmpl.h together.
+>>
+>> It removes redundant code, increases readability, and more importantly,
+>> makes it easier to introduce a new feature based on trace probe
+>> (it's possible).
+> 
+> OK, I have some comments, see below;
 > 
 
+I looked into below comments, in summary, only mark nokprobe_inline for 
+get_event_field. is it correct?
+
+/Song
+
+>>
+>> Signed-off-by: Song Chen <chensong_2000@189.cn>
+>> ---
+>>   kernel/trace/trace_eprobe.c       | 144 ------------------------------
+>>   kernel/trace/trace_events_synth.c |   7 +-
+>>   kernel/trace/trace_kprobe.c       | 102 ---------------------
+>>   kernel/trace/trace_probe_kernel.h | 140 +++++++++++++++++++++++++++--
+>>   4 files changed, 138 insertions(+), 255 deletions(-)
+>>
+>> diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
+>> index bdb26eee7a0c..60ced4a7a25d 100644
+>> --- a/kernel/trace/trace_eprobe.c
+>> +++ b/kernel/trace/trace_eprobe.c
+>> @@ -319,64 +319,6 @@ print_eprobe_event(struct trace_iterator *iter, int flags,
+>>   	return trace_handle_return(s);
+>>   }
+>>   
+>> -static unsigned long get_event_field(struct fetch_insn *code, void *rec)
+>> -{
+>> -	struct ftrace_event_field *field = code->data;
+>> -	unsigned long val;
+>> -	void *addr;
+>> -
+>> -	addr = rec + field->offset;
+>> -
+>> -	if (is_string_field(field)) {
+>> -		switch (field->filter_type) {
+>> -		case FILTER_DYN_STRING:
+>> -			val = (unsigned long)(rec + (*(unsigned int *)addr & 0xffff));
+>> -			break;
+>> -		case FILTER_RDYN_STRING:
+>> -			val = (unsigned long)(addr + (*(unsigned int *)addr & 0xffff));
+>> -			break;
+>> -		case FILTER_STATIC_STRING:
+>> -			val = (unsigned long)addr;
+>> -			break;
+>> -		case FILTER_PTR_STRING:
+>> -			val = (unsigned long)(*(char *)addr);
+>> -			break;
+>> -		default:
+>> -			WARN_ON_ONCE(1);
+>> -			return 0;
+>> -		}
+>> -		return val;
+>> -	}
+>> -
+>> -	switch (field->size) {
+>> -	case 1:
+>> -		if (field->is_signed)
+>> -			val = *(char *)addr;
+>> -		else
+>> -			val = *(unsigned char *)addr;
+>> -		break;
+>> -	case 2:
+>> -		if (field->is_signed)
+>> -			val = *(short *)addr;
+>> -		else
+>> -			val = *(unsigned short *)addr;
+>> -		break;
+>> -	case 4:
+>> -		if (field->is_signed)
+>> -			val = *(int *)addr;
+>> -		else
+>> -			val = *(unsigned int *)addr;
+>> -		break;
+>> -	default:
+>> -		if (field->is_signed)
+>> -			val = *(long *)addr;
+>> -		else
+>> -			val = *(unsigned long *)addr;
+>> -		break;
+>> -	}
+>> -	return val;
+>> -}
+>> -
+>>   static int get_eprobe_size(struct trace_probe *tp, void *rec)
+>>   {
+>>   	struct fetch_insn *code;
+>> @@ -419,92 +361,6 @@ static int get_eprobe_size(struct trace_probe *tp, void *rec)
+>>   	return ret;
+>>   }
+>>   
+>> -/* Kprobe specific fetch functions */
+>> -
+>> -/* Note that we don't verify it, since the code does not come from user space */
+>> -static int
+>> -process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
+>> -		   void *base)
+>> -{
+>> -	unsigned long val;
+>> -
+>> - retry:
+>> -	switch (code->op) {
+>> -	case FETCH_OP_TP_ARG:
+>> -		val = get_event_field(code, rec);
+>> -		break;
+>> -	case FETCH_OP_IMM:
+>> -		val = code->immediate;
+>> -		break;
+>> -	case FETCH_OP_COMM:
+>> -		val = (unsigned long)current->comm;
+>> -		break;
+>> -	case FETCH_OP_DATA:
+>> -		val = (unsigned long)code->data;
+>> -		break;
+>> -	case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
+>> -		code++;
+>> -		goto retry;
+>> -	default:
+>> -		return -EILSEQ;
+>> -	}
+>> -	code++;
+>> -	return process_fetch_insn_bottom(code, val, dest, base);
+>> -}
+>> -NOKPROBE_SYMBOL(process_fetch_insn)
+>> -
+>> -/* Return the length of string -- including null terminal byte */
+>> -static nokprobe_inline int
+>> -fetch_store_strlen_user(unsigned long addr)
+>> -{
+>> -	return kern_fetch_store_strlen_user(addr);
+>> -}
+>> -
+>> -/* Return the length of string -- including null terminal byte */
+>> -static nokprobe_inline int
+>> -fetch_store_strlen(unsigned long addr)
+>> -{
+>> -	return kern_fetch_store_strlen(addr);
+>> -}
+>> -
+>> -/*
+>> - * Fetch a null-terminated string from user. Caller MUST set *(u32 *)buf
+>> - * with max length and relative data location.
+>> - */
+>> -static nokprobe_inline int
+>> -fetch_store_string_user(unsigned long addr, void *dest, void *base)
+>> -{
+>> -	return kern_fetch_store_string_user(addr, dest, base);
+>> -}
+>> -
+>> -/*
+>> - * Fetch a null-terminated string. Caller MUST set *(u32 *)buf with max
+>> - * length and relative data location.
+>> - */
+>> -static nokprobe_inline int
+>> -fetch_store_string(unsigned long addr, void *dest, void *base)
+>> -{
+>> -	return kern_fetch_store_string(addr, dest, base);
+>> -}
+>> -
+>> -static nokprobe_inline int
+>> -probe_mem_read_user(void *dest, void *src, size_t size)
+>> -{
+>> -	const void __user *uaddr =  (__force const void __user *)src;
+>> -
+>> -	return copy_from_user_nofault(dest, uaddr, size);
+>> -}
+>> -
+>> -static nokprobe_inline int
+>> -probe_mem_read(void *dest, void *src, size_t size)
+>> -{
+>> -#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+>> -	if ((unsigned long)src < TASK_SIZE)
+>> -		return probe_mem_read_user(dest, src, size);
+>> -#endif
+>> -	return copy_from_kernel_nofault(dest, src, size);
+>> -}
+>> -
+>>   /* eprobe handler */
+>>   static inline void
+>>   __eprobe_trace_func(struct eprobe_data *edata, void *rec)
+>> diff --git a/kernel/trace/trace_events_synth.c b/kernel/trace/trace_events_synth.c
+>> index e310052dc83c..7460f18ba973 100644
+>> --- a/kernel/trace/trace_events_synth.c
+>> +++ b/kernel/trace/trace_events_synth.c
+>> @@ -18,6 +18,7 @@
+>>   #include <linux/trace_events.h>
+>>   #include <trace/events/mmflags.h>
+>>   #include "trace_probe.h"
+>> +#include "trace_probe_tmpl.h"
+>>   #include "trace_probe_kernel.h"
+>>   
+>>   #include "trace_synth.h"
+>> @@ -420,12 +421,12 @@ static unsigned int trace_string(struct synth_trace_event *entry,
+>>   		data_offset += event->n_u64 * sizeof(u64);
+>>   		data_offset += data_size;
+>>   
+>> -		len = kern_fetch_store_strlen((unsigned long)str_val);
+>> +		len = fetch_store_strlen((unsigned long)str_val);
+>>   
+>>   		data_offset |= len << 16;
+>>   		*(u32 *)&entry->fields[*n_u64] = data_offset;
+>>   
+>> -		ret = kern_fetch_store_string((unsigned long)str_val, &entry->fields[*n_u64], entry);
+>> +		ret = fetch_store_string((unsigned long)str_val, &entry->fields[*n_u64], entry);
+>>   
+>>   		(*n_u64)++;
+>>   	} else {
+>> @@ -473,7 +474,7 @@ static notrace void trace_event_raw_event_synth(void *__data,
+>>   		val_idx = var_ref_idx[field_pos];
+>>   		str_val = (char *)(long)var_ref_vals[val_idx];
+>>   
+>> -		len = kern_fetch_store_strlen((unsigned long)str_val);
+>> +		len = fetch_store_strlen((unsigned long)str_val);
+>>   
+>>   		fields_size += len;
+>>   	}
+>> diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+>> index a4ffa864dbb7..c2e0b741ae82 100644
+>> --- a/kernel/trace/trace_kprobe.c
+>> +++ b/kernel/trace/trace_kprobe.c
+>> @@ -1218,108 +1218,6 @@ static const struct file_operations kprobe_profile_ops = {
+>>   	.release        = seq_release,
+>>   };
+>>   
+>> -/* Kprobe specific fetch functions */
+>> -
+>> -/* Return the length of string -- including null terminal byte */
+>> -static nokprobe_inline int
+>> -fetch_store_strlen_user(unsigned long addr)
+>> -{
+>> -	return kern_fetch_store_strlen_user(addr);
+>> -}
+>> -
+>> -/* Return the length of string -- including null terminal byte */
+>> -static nokprobe_inline int
+>> -fetch_store_strlen(unsigned long addr)
+>> -{
+>> -	return kern_fetch_store_strlen(addr);
+>> -}
+>> -
+>> -/*
+>> - * Fetch a null-terminated string from user. Caller MUST set *(u32 *)buf
+>> - * with max length and relative data location.
+>> - */
+>> -static nokprobe_inline int
+>> -fetch_store_string_user(unsigned long addr, void *dest, void *base)
+>> -{
+>> -	return kern_fetch_store_string_user(addr, dest, base);
+>> -}
+>> -
+>> -/*
+>> - * Fetch a null-terminated string. Caller MUST set *(u32 *)buf with max
+>> - * length and relative data location.
+>> - */
+>> -static nokprobe_inline int
+>> -fetch_store_string(unsigned long addr, void *dest, void *base)
+>> -{
+>> -	return kern_fetch_store_string(addr, dest, base);
+>> -}
+>> -
+>> -static nokprobe_inline int
+>> -probe_mem_read_user(void *dest, void *src, size_t size)
+>> -{
+>> -	const void __user *uaddr =  (__force const void __user *)src;
+>> -
+>> -	return copy_from_user_nofault(dest, uaddr, size);
+>> -}
+>> -
+>> -static nokprobe_inline int
+>> -probe_mem_read(void *dest, void *src, size_t size)
+>> -{
+>> -#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+>> -	if ((unsigned long)src < TASK_SIZE)
+>> -		return probe_mem_read_user(dest, src, size);
+>> -#endif
+>> -	return copy_from_kernel_nofault(dest, src, size);
+>> -}
+>> -
+>> -/* Note that we don't verify it, since the code does not come from user space */
+>> -static int
+>> -process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
+>> -		   void *base)
+>> -{
+>> -	struct pt_regs *regs = rec;
+>> -	unsigned long val;
+>> -
+>> -retry:
+>> -	/* 1st stage: get value from context */
+>> -	switch (code->op) {
+>> -	case FETCH_OP_REG:
+>> -		val = regs_get_register(regs, code->param);
+>> -		break;
+>> -	case FETCH_OP_STACK:
+>> -		val = regs_get_kernel_stack_nth(regs, code->param);
+>> -		break;
+>> -	case FETCH_OP_STACKP:
+>> -		val = kernel_stack_pointer(regs);
+>> -		break;
+>> -	case FETCH_OP_RETVAL:
+>> -		val = regs_return_value(regs);
+>> -		break;
+>> -	case FETCH_OP_IMM:
+>> -		val = code->immediate;
+>> -		break;
+>> -	case FETCH_OP_COMM:
+>> -		val = (unsigned long)current->comm;
+>> -		break;
+>> -	case FETCH_OP_DATA:
+>> -		val = (unsigned long)code->data;
+>> -		break;
+>> -#ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
+>> -	case FETCH_OP_ARG:
+>> -		val = regs_get_kernel_argument(regs, code->param);
+>> -		break;
+>> -#endif
+>> -	case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
+>> -		code++;
+>> -		goto retry;
+>> -	default:
+>> -		return -EILSEQ;
+>> -	}
+>> -	code++;
+>> -
+>> -	return process_fetch_insn_bottom(code, val, dest, base);
+>> -}
+>> -NOKPROBE_SYMBOL(process_fetch_insn)
+>>   
+>>   /* Kprobe handler */
+>>   static nokprobe_inline void
+>> diff --git a/kernel/trace/trace_probe_kernel.h b/kernel/trace/trace_probe_kernel.h
+>> index 77dbd9ff9782..cee6078b1043 100644
+>> --- a/kernel/trace/trace_probe_kernel.h
+>> +++ b/kernel/trace/trace_probe_kernel.h
+> 
+> OK, so for now, this header file is only for the kernel access events.
+> 
+>> @@ -12,7 +12,7 @@
+>>    */
+>>   /* Return the length of string -- including null terminal byte */
+>>   static nokprobe_inline int
+>> -kern_fetch_store_strlen_user(unsigned long addr)
+>> +fetch_store_strlen_user(unsigned long addr)
+>>   {
+>>   	const void __user *uaddr =  (__force const void __user *)addr;
+>>   	int ret;
+>> @@ -29,14 +29,14 @@ kern_fetch_store_strlen_user(unsigned long addr)
+>>   
+>>   /* Return the length of string -- including null terminal byte */
+>>   static nokprobe_inline int
+>> -kern_fetch_store_strlen(unsigned long addr)
+>> +fetch_store_strlen(unsigned long addr)
+>>   {
+>>   	int ret, len = 0;
+>>   	u8 c;
+>>   
+>>   #ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+>>   	if (addr < TASK_SIZE)
+>> -		return kern_fetch_store_strlen_user(addr);
+>> +		return fetch_store_strlen_user(addr);
+>>   #endif
+>>   
+>>   	do {
+>> @@ -63,7 +63,7 @@ static nokprobe_inline void set_data_loc(int ret, void *dest, void *__dest, void
+>>    * with max length and relative data location.
+>>    */
+>>   static nokprobe_inline int
+>> -kern_fetch_store_string_user(unsigned long addr, void *dest, void *base)
+>> +fetch_store_string_user(unsigned long addr, void *dest, void *base)
+>>   {
+>>   	const void __user *uaddr =  (__force const void __user *)addr;
+>>   	int maxlen = get_loc_len(*(u32 *)dest);
+>> @@ -86,7 +86,7 @@ kern_fetch_store_string_user(unsigned long addr, void *dest, void *base)
+>>    * length and relative data location.
+>>    */
+>>   static nokprobe_inline int
+>> -kern_fetch_store_string(unsigned long addr, void *dest, void *base)
+>> +fetch_store_string(unsigned long addr, void *dest, void *base)
+>>   {
+>>   	int maxlen = get_loc_len(*(u32 *)dest);
+>>   	void *__dest;
+>> @@ -94,7 +94,7 @@ kern_fetch_store_string(unsigned long addr, void *dest, void *base)
+>>   
+>>   #ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+>>   	if ((unsigned long)addr < TASK_SIZE)
+>> -		return kern_fetch_store_string_user(addr, dest, base);
+>> +		return fetch_store_string_user(addr, dest, base);
+>>   #endif
+>>   
+>>   	if (unlikely(!maxlen))
+>> @@ -112,4 +112,132 @@ kern_fetch_store_string(unsigned long addr, void *dest, void *base)
+>>   	return ret;
+>>   }
+>>   
+>> +static nokprobe_inline int
+>> +probe_mem_read_user(void *dest, void *src, size_t size)
+>> +{
+>> +	const void __user *uaddr =  (__force const void __user *)src;
+>> +
+>> +	return copy_from_user_nofault(dest, uaddr, size);
+>> +}
+>> +
+>> +static nokprobe_inline int
+>> +probe_mem_read(void *dest, void *src, size_t size)
+>> +{
+>> +#ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+>> +	if ((unsigned long)src < TASK_SIZE)
+>> +		return probe_mem_read_user(dest, src, size);
+>> +#endif
+>> +	return copy_from_kernel_nofault(dest, src, size);
+>> +}
+>> +
+>> +static unsigned long get_event_field(struct fetch_insn *code, void *rec)
+> 
+> Please make all functions as "nokprobe_inline" in trace_probe_kernel.h
+> because those can be used from kprobe context.
+> 
+> 
+>> +{
+>> +	struct ftrace_event_field *field = code->data;
+>> +	unsigned long val;
+>> +	void *addr;
+>> +
+>> +	addr = rec + field->offset;
+>> +
+>> +	if (is_string_field(field)) {
+>> +		switch (field->filter_type) {
+>> +		case FILTER_DYN_STRING:
+>> +			val = (unsigned long)(rec + (*(unsigned int *)addr & 0xffff));
+>> +			break;
+>> +		case FILTER_RDYN_STRING:
+>> +			val = (unsigned long)(addr + (*(unsigned int *)addr & 0xffff));
+>> +			break;
+>> +		case FILTER_STATIC_STRING:
+>> +			val = (unsigned long)addr;
+>> +			break;
+>> +		case FILTER_PTR_STRING:
+>> +			val = (unsigned long)(*(char *)addr);
+>> +			break;
+>> +		default:
+>> +			WARN_ON_ONCE(1);
+>> +			return 0;
+>> +		}
+>> +		return val;
+>> +	}
+>> +
+>> +	switch (field->size) {
+>> +	case 1:
+>> +		if (field->is_signed)
+>> +			val = *(char *)addr;
+>> +		else
+>> +			val = *(unsigned char *)addr;
+>> +		break;
+>> +	case 2:
+>> +		if (field->is_signed)
+>> +			val = *(short *)addr;
+>> +		else
+>> +			val = *(unsigned short *)addr;
+>> +		break;
+>> +	case 4:
+>> +		if (field->is_signed)
+>> +			val = *(int *)addr;
+>> +		else
+>> +			val = *(unsigned int *)addr;
+>> +		break;
+>> +	default:
+>> +		if (field->is_signed)
+>> +			val = *(long *)addr;
+>> +		else
+>> +			val = *(unsigned long *)addr;
+>> +		break;
+>> +	}
+>> +	return val;
+>> +}
+>> +
+>> +/* Note that we don't verify it, since the code does not come from user space */
+>> +static int
+> 
+> Ditto.
+> 
+>> +process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
+>> +		   void *base)
+>> +{
+>> +	struct pt_regs *regs = rec;
+>> +	unsigned long val;
+>> +
+>> +retry:
+>> +	/* 1st stage: get value from context */
+>> +	switch (code->op) {
+>> +	case FETCH_OP_REG:
+>> +		val = regs_get_register(regs, code->param);
+>> +		break;
+>> +	case FETCH_OP_STACK:
+>> +		val = regs_get_kernel_stack_nth(regs, code->param);
+>> +		break;
+>> +	case FETCH_OP_STACKP:
+>> +		val = kernel_stack_pointer(regs);
+>> +		break;
+>> +	case FETCH_OP_RETVAL:
+>> +		val = regs_return_value(regs);
+>> +		break;
+>> +	case FETCH_OP_IMM:
+>> +		val = code->immediate;
+>> +		break;
+>> +	case FETCH_OP_COMM:
+>> +		val = (unsigned long)current->comm;
+>> +		break;
+>> +	case FETCH_OP_DATA:
+>> +		val = (unsigned long)code->data;
+>> +		break;
+>> +#ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
+>> +	case FETCH_OP_ARG:
+>> +		val = regs_get_kernel_argument(regs, code->param);
+>> +		break;
+>> +#endif
+>> +	case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
+>> +		code++;
+>> +		goto retry;
+>> +	case FETCH_OP_TP_ARG:
+>> +		val = get_event_field(code, rec);
+>> +		break;
+>> +	default:
+>> +		return -EILSEQ;
+>> +	}
+>> +	code++;
+>> +
+>> +	return process_fetch_insn_bottom(code, val, dest, base);
+>> +}
+>> +NOKPROBE_SYMBOL(process_fetch_insn)
+> 
+> And this is not needed for the nokprobe_inline functions.
+> 
+> Thank you!
+> 
+>> +
+>>   #endif /* __TRACE_PROBE_KERNEL_H_ */
+>> -- 
+>> 2.25.1
+>>
+> 
+> 
