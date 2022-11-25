@@ -2,46 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57D7D638F49
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 18:45:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3DC6638F4D
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 18:48:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbiKYRpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 12:45:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41604 "EHLO
+        id S230006AbiKYRsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 12:48:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbiKYRpL (ORCPT
+        with ESMTP id S229685AbiKYRsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 12:45:11 -0500
-Received: from smtp.smtpout.orange.fr (smtp-30.smtpout.orange.fr [80.12.242.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3140E537D3
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 09:45:09 -0800 (PST)
-Received: from pop-os.home ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id ycl6oRgotNKuIycl6oW0Qo; Fri, 25 Nov 2022 18:45:07 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 25 Nov 2022 18:45:07 +0100
-X-ME-IP: 86.243.100.34
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vamsi Singamsetty <vamssi@codeaurora.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Abhinav Asati <asatiabhi@codeaurora.org>,
-        Mayank Chopra <mak.chopra@codeaurora.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH] misc: fastrpc: Fix an error handling path in fastrpc_rpmsg_probe()
-Date:   Fri, 25 Nov 2022 18:45:02 +0100
-Message-Id: <b909d2f3273b794ea0f1f78d14bc24affb08ea5f.1669398274.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Fri, 25 Nov 2022 12:48:07 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7721CB20
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 09:48:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669398486; x=1700934486;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lFnwMy7tH/1jjCK7gvvHwna2ISaJXAsxVKp7FJgg9HE=;
+  b=c0R2r2sebmCM/xA+Dx4hREGczhaQSSn3WFhDxow6ilGHsjuo/MpoByny
+   ep7OMRMu9H3azh8pTOjSc8+e7a79SXx4/Cy5KeF/rfAU7EszGcmVQJgC3
+   hPahVcHXmUcFKyvRwCFeCBK3PHjt5CpzoSc3ZfrTX3NeP9TUTbiZUVggm
+   HzzaU+j+GjtP8PJWx2f1c7eMnMtnx3BN32VgZpmYeGAwU7DRA8AAeXa3/
+   IcFSXpo9xgUBoXN2IHJ8dfxMCBFkd0pwI3c6qVHkqCj7AZGh+dHEiHnKf
+   wFB7mmwjWmIiN1lNQWXUyzJKEJgozYztYCXQRnsz3Bz0Jb2ABgH6i6WSz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="315677130"
+X-IronPort-AV: E=Sophos;i="5.96,194,1665471600"; 
+   d="scan'208";a="315677130"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2022 09:48:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="971631144"
+X-IronPort-AV: E=Sophos;i="5.96,194,1665471600"; 
+   d="scan'208";a="971631144"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga005.fm.intel.com with ESMTP; 25 Nov 2022 09:48:03 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oycnx-00HKzG-1l;
+        Fri, 25 Nov 2022 19:48:01 +0200
+Date:   Fri, 25 Nov 2022 19:48:01 +0200
+From:   'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        'Joe Perches' <joe@perches.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH 0/1] Slightly relax the type checking done by min() and
+ max().
+Message-ID: <Y4D/0dqOODs4ZHQM@smile.fi.intel.com>
+References: <cfc6c0f0fd4c4724890be8a8397c2cbe@AcuMS.aculab.com>
+ <Y4DdQIMiFGk7YYcJ@smile.fi.intel.com>
+ <7e594ad64e444d448c747688b8f28249@AcuMS.aculab.com>
+ <Y4DmFfj6G6+niZ+t@smile.fi.intel.com>
+ <0b38ced96519407e95962aef2771bbc6@AcuMS.aculab.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0b38ced96519407e95962aef2771bbc6@AcuMS.aculab.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,44 +74,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If of_platform_populate() fails, some resources need to be freed as already
-done in the other error handling paths.
+On Fri, Nov 25, 2022 at 04:14:58PM +0000, David Laight wrote:
+> From: 'Andy Shevchenko'
+> > Sent: 25 November 2022 15:58
+> > On Fri, Nov 25, 2022 at 03:27:07PM +0000, David Laight wrote:
 
-Fixes: 278d56f970ae ("misc: fastrpc: Reference count channel context")
-Fixes: 3abe3ab3cdab ("misc: fastrpc: add secure domain support")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-First Fixes is when branching to the error handling path should have been
-introduced.
-Second Fixes is when misc_register() have been added.
----
- drivers/misc/fastrpc.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+...
 
-diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-index 0f467a71b069..22163728bd85 100644
---- a/drivers/misc/fastrpc.c
-+++ b/drivers/misc/fastrpc.c
-@@ -2127,7 +2127,18 @@ static int fastrpc_rpmsg_probe(struct rpmsg_device *rpdev)
- 	data->domain_id = domain_id;
- 	data->rpdev = rpdev;
- 
--	return of_platform_populate(rdev->of_node, NULL, NULL, rdev);
-+	err = of_platform_populate(rdev->of_node, NULL, NULL, rdev);
-+	if (err)
-+		goto populate_error;
-+
-+	return 0;
-+
-+populate_error:
-+	if (data->fdevice)
-+		misc_deregister(&data->fdevice->miscdev);
-+	if (data->secure_fdevice)
-+		misc_deregister(&data->secure_fdevice->miscdev);
-+
- fdev_error:
- 	kfree(data);
- 	return err;
+> > Any better example, please?
+> 
+> How about:
+
+Better, indeed.
+
+> data_size = min_t(u16, buf_size, len);
+> 
+> https://elixir.bootlin.com/linux/v6.1-rc6/source/kernel/printk/printk_ringbuffer.c#L1738
+> 
+> Now, maybe, you could claim that buf_size > 64k never happens.
+> But the correct cast here is u32 to match buf_size.
+> len (being u16) will be promoted to int before the compare.
+> 
+> Just search the kernel for "min_t(u8," or "min_t(u16," while some might
+> be ok, I really wouldn't want to verify each case.
+> 
+> If you look hard enough there are also some:
+> 	u32_var = min_t(u32, u32_val, u64_val);
+> where the intent is to limit values that might be invalid for u32.
+
+Wouldn't be better to actually issue a warning if the desired type is shorter
+than one of the min_t() arguments?
+
+Then you go through all cases and fix them accordingly.
+
+Blindly relaxing the rules is not an option in my opinion.
+
 -- 
-2.34.1
+With Best Regards,
+Andy Shevchenko
+
 
