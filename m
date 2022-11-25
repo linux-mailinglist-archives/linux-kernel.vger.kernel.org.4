@@ -2,115 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3DC6638F4D
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 18:48:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E64638F52
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 18:49:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbiKYRsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 12:48:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44548 "EHLO
+        id S229758AbiKYRtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 12:49:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiKYRsH (ORCPT
+        with ESMTP id S229685AbiKYRtW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 12:48:07 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7721CB20
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 09:48:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669398486; x=1700934486;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lFnwMy7tH/1jjCK7gvvHwna2ISaJXAsxVKp7FJgg9HE=;
-  b=c0R2r2sebmCM/xA+Dx4hREGczhaQSSn3WFhDxow6ilGHsjuo/MpoByny
-   ep7OMRMu9H3azh8pTOjSc8+e7a79SXx4/Cy5KeF/rfAU7EszGcmVQJgC3
-   hPahVcHXmUcFKyvRwCFeCBK3PHjt5CpzoSc3ZfrTX3NeP9TUTbiZUVggm
-   HzzaU+j+GjtP8PJWx2f1c7eMnMtnx3BN32VgZpmYeGAwU7DRA8AAeXa3/
-   IcFSXpo9xgUBoXN2IHJ8dfxMCBFkd0pwI3c6qVHkqCj7AZGh+dHEiHnKf
-   wFB7mmwjWmIiN1lNQWXUyzJKEJgozYztYCXQRnsz3Bz0Jb2ABgH6i6WSz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="315677130"
-X-IronPort-AV: E=Sophos;i="5.96,194,1665471600"; 
-   d="scan'208";a="315677130"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2022 09:48:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="971631144"
-X-IronPort-AV: E=Sophos;i="5.96,194,1665471600"; 
-   d="scan'208";a="971631144"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga005.fm.intel.com with ESMTP; 25 Nov 2022 09:48:03 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oycnx-00HKzG-1l;
-        Fri, 25 Nov 2022 19:48:01 +0200
-Date:   Fri, 25 Nov 2022 19:48:01 +0200
-From:   'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        'Joe Perches' <joe@perches.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH 0/1] Slightly relax the type checking done by min() and
- max().
-Message-ID: <Y4D/0dqOODs4ZHQM@smile.fi.intel.com>
-References: <cfc6c0f0fd4c4724890be8a8397c2cbe@AcuMS.aculab.com>
- <Y4DdQIMiFGk7YYcJ@smile.fi.intel.com>
- <7e594ad64e444d448c747688b8f28249@AcuMS.aculab.com>
- <Y4DmFfj6G6+niZ+t@smile.fi.intel.com>
- <0b38ced96519407e95962aef2771bbc6@AcuMS.aculab.com>
+        Fri, 25 Nov 2022 12:49:22 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE7A24F26
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 09:49:22 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id k21-20020a5e8915000000b006de391b332fso2320358ioj.4
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 09:49:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=T9uBU8s5VCIdHByMxtUe+OwrIeZYs1TZi9TU9WQnEtM=;
+        b=mxmsN94q6+xujRheOVD468EYHz/TWlv/LiqPmSXHPHUegJZwQo+SIYysQSjQDKP2XH
+         rF1VtfPtd/dCdPAffbjOXKyf8XpboWkZ4/dB482D1vM2vbem1HSS6pOsdYeZld4Z0j+U
+         ri/JLklPKcmEgyLvJXuEMc0p6b6oy+9CJ0VNVAbKgz9KnIr8WENLhvJ1HSYGh17pU/Lp
+         T/qzITgqSVfBtDPiVSyncR2AtSgsro9u2uJTIspyO0mx2zp6nk1kfUaWmIlZBviyUyFy
+         yMvunbR95BWTTW/x1tTvvwX80EDbG6yAky/LZ2q3tH865kUbi0wvV67iwChJuFSLXfLE
+         EAQw==
+X-Gm-Message-State: ANoB5pmivYC/xZDYqWLXKOKhomH0cikX/aVEqwgsdo7QAmoWqpZd2dPd
+        BNF4ngY9/hI9nqQOxQ6LRR3GAG/KBf0ELd4GH3ENCTDWNs/7
+X-Google-Smtp-Source: AA0mqf5879qp50T0kHMWEYv22lu2q7SWnZD7I/9CRQlfvrei278pacvgl2mxtV/M2hSYf76qTZpZHfEh4L/Sbgr2P9/WkQ2+cwh3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0b38ced96519407e95962aef2771bbc6@AcuMS.aculab.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:7122:0:b0:375:d16a:c9e9 with SMTP id
+ n34-20020a027122000000b00375d16ac9e9mr18131069jac.75.1669398561510; Fri, 25
+ Nov 2022 09:49:21 -0800 (PST)
+Date:   Fri, 25 Nov 2022 09:49:21 -0800
+In-Reply-To: <000000000000a9ccd705ee4865be@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003f5a8205ee4f2429@google.com>
+Subject: Re: [syzbot] kernel BUG in clear_state_bit
+From:   syzbot <syzbot+78dbea1c214b5413bdd3@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, jdelvare@suse.com,
+        jiapeng.chong@linux.alibaba.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux@roeck-us.net,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022 at 04:14:58PM +0000, David Laight wrote:
-> From: 'Andy Shevchenko'
-> > Sent: 25 November 2022 15:58
-> > On Fri, Nov 25, 2022 at 03:27:07PM +0000, David Laight wrote:
+syzbot has bisected this issue to:
 
-...
+commit 4444a06981af66a49cf0cd08fec9759e8dd0a0fc
+Author: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Date:   Thu Sep 1 02:23:32 2022 +0000
 
-> > Any better example, please?
-> 
-> How about:
+    hwmon: (emc2305) Remove unused including <linux/version.h>
 
-Better, indeed.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=161ba58d880000
+start commit:   c3eb11fbb826 Merge tag 'pci-v6.1-fixes-3' of git://git.ker..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=151ba58d880000
+console output: https://syzkaller.appspot.com/x/log.txt?x=111ba58d880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8d01b6e3197974dd
+dashboard link: https://syzkaller.appspot.com/bug?extid=78dbea1c214b5413bdd3
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=149d9403880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14a0d8e3880000
 
-> data_size = min_t(u16, buf_size, len);
-> 
-> https://elixir.bootlin.com/linux/v6.1-rc6/source/kernel/printk/printk_ringbuffer.c#L1738
-> 
-> Now, maybe, you could claim that buf_size > 64k never happens.
-> But the correct cast here is u32 to match buf_size.
-> len (being u16) will be promoted to int before the compare.
-> 
-> Just search the kernel for "min_t(u8," or "min_t(u16," while some might
-> be ok, I really wouldn't want to verify each case.
-> 
-> If you look hard enough there are also some:
-> 	u32_var = min_t(u32, u32_val, u64_val);
-> where the intent is to limit values that might be invalid for u32.
+Reported-by: syzbot+78dbea1c214b5413bdd3@syzkaller.appspotmail.com
+Fixes: 4444a06981af ("hwmon: (emc2305) Remove unused including <linux/version.h>")
 
-Wouldn't be better to actually issue a warning if the desired type is shorter
-than one of the min_t() arguments?
-
-Then you go through all cases and fix them accordingly.
-
-Blindly relaxing the rules is not an option in my opinion.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
