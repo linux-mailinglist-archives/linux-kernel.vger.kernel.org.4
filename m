@@ -2,128 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8899F638516
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 09:18:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39510638518
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 09:19:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbiKYISq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 03:18:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
+        id S229845AbiKYIS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 03:18:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiKYISo (ORCPT
+        with ESMTP id S229874AbiKYISy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 03:18:44 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF1E20345
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 00:18:43 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id z4so5633620wrr.3
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 00:18:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:reply-to:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=qDmdqp6SW6HdFWgspk0DWIhPAU8t3Np9ZdtMMl7oOME=;
-        b=CCHdYELQT1M8w4EtFrJ2Y7fmtaPgnfa+7fnzY6yF6NSfwsfqUC9hhrJeb4T1FthHx2
-         2/0T9VRuj7VXQTIvdJBg+2ccKz5yGMVHx8GhXfVL2HOav+QIsXQqWj21E7hY+jj88/Ng
-         KxxPkjnETI7qmhspWN5cMT8LjeN7YgayYM5DmSjXbLQvOCWJ/y+1bwZ9JRNOAwQymafn
-         8q4cDH0G54vCv8jvCoxYSDVU9r7cMMWIjztu2J4uw4MprSXynW1B4nCRMXULy78a8tUm
-         H0HP2SBOIUmWm5o/iemOrpAev5DeOheYhzfW1Iu9UV1iOYEE/ZBbrpVOZM5CP8+eE0sR
-         tyGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:reply-to:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qDmdqp6SW6HdFWgspk0DWIhPAU8t3Np9ZdtMMl7oOME=;
-        b=gBTVrRUEC9a7DO7rUxIFjnuWrYq3wloz09yNnJWzKHoMqinChTVvYyfyPR1bai++C2
-         OmvXn6YpoPVjnhmCELq0L8/htZ1xZvAPtfZgUXcZB3Ilp6ZZ4I1ivnkqyaT+h0Yt/kVF
-         3/k/+jUr01EJXgwFcuT7+6gI9DGhzrcVk6kpprdVhcCT6jpdprd/THUxfSph48UVWPVw
-         s9AWVTiR6XeQ+FovrVDO2yYVjFxWVcKpmTmCIdNXVqdxx7yTfemrABfbPZzLpl6T+O3V
-         5HT9jTOHtBQLxRtA53lSVeeQpssdjyYnKyeUhfR9R5UOaPjmXFSiBEABfqYiQ5BQ72W8
-         MD1g==
-X-Gm-Message-State: ANoB5pkJ1nPmbtzlp3hPleVS2KoUk4Uew+sIIjdwWixrf324fvhAgp7r
-        ITDFqWxv5WRGH8syJul8tZ2cJw==
-X-Google-Smtp-Source: AA0mqf5XuJU+9BN9OybWW9e8Vo2SZBCkORxZk42hiu7opuMRYNfY4D/Qh2JkoX4RRScVpiBDsEVCdQ==
-X-Received: by 2002:adf:e5c6:0:b0:236:7921:e10e with SMTP id a6-20020adfe5c6000000b002367921e10emr22040365wrn.61.1669364321538;
-        Fri, 25 Nov 2022 00:18:41 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:84a5:7e09:b15:f1fe? ([2a01:e0a:982:cbb0:84a5:7e09:b15:f1fe])
-        by smtp.gmail.com with ESMTPSA id m24-20020a05600c3b1800b003cf47556f21sm9683549wms.2.2022.11.25.00.18.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Nov 2022 00:18:41 -0800 (PST)
-Message-ID: <e4ea8291-f733-775e-e2d1-79c5f887fa5b@linaro.org>
-Date:   Fri, 25 Nov 2022 09:18:40 +0100
+        Fri, 25 Nov 2022 03:18:54 -0500
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBAD303E5;
+        Fri, 25 Nov 2022 00:18:52 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VVeXNnB_1669364328;
+Received: from 30.97.48.45(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VVeXNnB_1669364328)
+          by smtp.aliyun-inc.com;
+          Fri, 25 Nov 2022 16:18:49 +0800
+Message-ID: <e22e325e-bf49-c1de-4356-962ece1287fe@linux.alibaba.com>
+Date:   Fri, 25 Nov 2022 16:18:51 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH] arm64: dts: qcom: msm8996-tone: Fix USB taking 6 minutes
- to wake up
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] hwspinlock: Use device_match_of_node()
+To:     ye.xingchen@zte.com.cn, andersson@kernel.org
+Cc:     ohad@wizery.com, linux-remoteproc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20221124220147.102611-1-konrad.dybcio@linaro.org>
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20221124220147.102611-1-konrad.dybcio@linaro.org>
+References: <202211251544369078587@zte.com.cn>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <202211251544369078587@zte.com.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/11/2022 23:01, Konrad Dybcio wrote:
-> The hardware turns out to be pretty sluggish at assuming it can only
-> do USB2 with just a USB2 phy assigned to it - before it needed about
-> 6 minutes to acknowledge that.
+
+
+On 11/25/2022 3:44 PM, ye.xingchen@zte.com.cn wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
 > 
-> Limit it to USB-HS explicitly to make USB come up about 720x faster.
+> Replace the open-code with device_match_of_node().
 > 
-> Fixes: 9da65e441d4d ("arm64: dts: qcom: Add support for SONY Xperia X Performance / XZ / XZs (msm8996, Tone platform)")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+
+LGTM.
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+
 > ---
-> No words.
+>   drivers/hwspinlock/hwspinlock_core.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->   arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi | 5 +----
->   1 file changed, 1 insertion(+), 4 deletions(-)
+> diff --git a/drivers/hwspinlock/hwspinlock_core.c b/drivers/hwspinlock/hwspinlock_core.c
+> index fd5f5c5a5244..22b8f2a70b3b 100644
+> --- a/drivers/hwspinlock/hwspinlock_core.c
+> +++ b/drivers/hwspinlock/hwspinlock_core.c
+> @@ -367,7 +367,7 @@ int of_hwspin_lock_get_id(struct device_node *np, int index)
+>   			continue;
+>   		}
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi b/arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi
-> index 12a7b6d91dbe..0ab9687f3406 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi
-> @@ -991,10 +991,6 @@ touch_int_sleep: touch-int-sleep-state {
->   	};
->   };
->   
-> -/*
-> - * For reasons that are currently unknown (but probably related to fusb301), USB takes about
-> - * 6 minutes to wake up (nothing interesting in kernel logs), but then it works as it should.
-> - */
->   &usb3 {
->   	status = "okay";
->   	qcom,select-utmi-as-pipe-clk;
-> @@ -1003,6 +999,7 @@ &usb3 {
->   &usb3_dwc3 {
->   	extcon = <&usb3_id>;
->   	dr_mode = "peripheral";
-> +	maximum-speed = "high-speed";
->   	phys = <&hsusb_phy1>;
->   	phy-names = "usb2-phy";
->   	snps,hird-threshold = /bits/ 8 <0>;
-
-
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+> -		if (hwlock->bank->dev->of_node == args.np) {
+> +		if (device_match_of_node(hwlock->bank->dev, args.np)) {
+>   			ret = 0;
+>   			break;
+>   		}
