@@ -2,130 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E50B638715
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 11:10:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46242638719
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 11:10:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiKYKKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 05:10:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36350 "EHLO
+        id S229868AbiKYKKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 05:10:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiKYKKJ (ORCPT
+        with ESMTP id S229536AbiKYKKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 05:10:09 -0500
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594C51FFAD
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 02:10:09 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id C968D5C011C;
-        Fri, 25 Nov 2022 05:10:08 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Fri, 25 Nov 2022 05:10:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1669371008; x=1669457408; bh=sHNDwussAO
-        DPs0bMRD5Q0+uhuwgj3HV2Euo1WwhXFms=; b=WvsTSkpj57FeW2bCYcSxBN7GZB
-        RPS6+d8Z0kwTQY+YsMFHTPYXUhPpmBpzM6Ijib4RH+CthsoBH7d7qhVMs1xPpKOl
-        2msAxkxW77eYdm2K+gLQ0VsnVBk9bGZ2/vXTok/XmP5Z2RTc49gyR91hY2Dutp89
-        pmMyj8xAAHD9Ei7QsNpCxzgtGSitxX37UY50av3jRTQZqAf97Nqus9dH7vJloAA4
-        mA5yBq3AZwT2LO9UzIbwtgZEHk/aqVk2qpMCm+Eph1c10hKDzhaA2VF2JsaihDhn
-        gxRStJZabserBvI47e8uqsnYBhjRfSbEtv5fdFn8H5ywNOjxUiWDXlLN09eg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1669371008; x=1669457408; bh=sHNDwussAODPs0bMRD5Q0+uhuwgj
-        3HV2Euo1WwhXFms=; b=fJ0rcyJaeCm/CRMm12MXRsYMFCzv8arZ6TCxIh6NDMHI
-        sjkPltkiy/h8jKPZ1JHPlMFQGY4T0jDmahKzTjKV2bsRsoJwt0tJfHM44j7uBde+
-        ngcbjypLIGe6x3NS7MQBrgkvFDOM9hIfoDOpRxbht78CWJqpp0Hdr3lehW/PRbjB
-        7NEYapsfiSDLaubOarcX6k+XFLJu6zwmRZ9DP2jsgtc0TTxHdZYG+2tz61qdFOvy
-        OCV/5ev7CA0mR/KQRqtZeQCZ15bJJdGOXxAUMCOMSY9y8TVzSEscgaFRKtD45xLp
-        SEr+bSwi2fmXxZUJEU2s/wBNLwl0sW+/oue2/+yYNA==
-X-ME-Sender: <xms:gJSAY6qPRPh2Cq0b0CQ4lAsfnMviHcWLAs58MPV8e0TF2CUpuvom4w>
-    <xme:gJSAY4oD8nKYgXIRUH0L7piwat9Elpsj2GRtCZ2am-87NsahTxTBWGyq-hstdhC_5
-    KoVtwi__B9LGLIsYF4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrieehgdduvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:gJSAY_PV0UbOXz3I4CW9JTI6t5UnpXlfGz0UH1yHmC1kHeUHVdG9PA>
-    <xmx:gJSAY57Wd-iPEEnDS3buE8trakr2m4IKvgvhNMf_PHZTwmdgnbzP_Q>
-    <xmx:gJSAY54ZxL8mrHTzz1YoGTjQeBrGOBoNxFWlONFZAxBWL1F6W9Pdng>
-    <xmx:gJSAY2xCO-nom1RUTGjMIMPJYnJnrp_FGykf51NJev0fCcENkTfvWQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 6CDCEB60086; Fri, 25 Nov 2022 05:10:08 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <fdce9233-b547-43c9-aea9-3038a1a84a1d@app.fastmail.com>
-In-Reply-To: <20221125092517.3074989-2-lee@kernel.org>
-References: <20221125092517.3074989-1-lee@kernel.org>
- <20221125092517.3074989-2-lee@kernel.org>
-Date:   Fri, 25 Nov 2022 11:09:48 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Lee Jones" <lee@kernel.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Nathan Chancellor" <nathan@kernel.org>,
-        "Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>,
-        mripard@kernel.org, "Thomas Zimmermann" <tzimmermann@suse.de>,
-        "Dave Airlie" <airlied@gmail.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        "Nick Desaulniers" <ndesaulniers@google.com>,
-        "Tom Rix" <trix@redhat.com>,
-        "Harry Wentland" <harry.wentland@amd.com>,
-        "Leo Li" <sunpeng.li@amd.com>,
-        "Rodrigo Siqueira" <Rodrigo.Siqueira@amd.com>,
-        "Alex Deucher" <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Xinhui.Pan@amd.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 1/3] drm/amd/display/dc/calcs/dce_calcs: Break-out a stack-heavy
- chunk of code
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 25 Nov 2022 05:10:48 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684AE1FFAD;
+        Fri, 25 Nov 2022 02:10:47 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id b8so5708232edf.11;
+        Fri, 25 Nov 2022 02:10:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=IUCM0LE2Qdll2KQhXqeTAiIGjjD6iG7iWRvqL9i1T/s=;
+        b=Ns29kwRrHv7Ip/kcPlqzvmLf+DOhGJwpNWyUvTpOBGtbV5cZHzGhPvN0INYbebjz5O
+         oX3sgyukJbtrz+blPsF3Cw/Tl87sIlhFOhnzvoXY0RtmuNnSXASazX4+3BDwUX1R9c/l
+         Mc+73ig0zJjLkH5Ukr347y8q9SivewP+aGZDKM0A5JsYQtTOASMpS4EJq7yfPUC1SldM
+         QSM6/zAlId8XGwAghhcBcz82f8SvpvEUN1/luNYYeA4jHR25lwDy1Jfkcn6x9tPRvZxN
+         T/ppXxFKqwZTFvrqz1bhW1F88p5cW7jpwWyU4J/fc8FRFEY/xgI1NursXSuRyXMsh9/8
+         Aj9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IUCM0LE2Qdll2KQhXqeTAiIGjjD6iG7iWRvqL9i1T/s=;
+        b=dd+PDPWD/vy3ChzYPNRNlpeg0gJ8+xhadlU6ti/UdDSoqXS7QO9xsFg3GXqwGeylau
+         AiSJ8+b/nTL+vp8/Ruv1+UCP2pcsbJmlOgJX6WnwOyMoV/NwheFQVzgRrcH6sE+1lbZd
+         IIqt15V054Ov+E6coslbnybll8R52tyvFjuLQqBCdod3dQNJDLsOskIDphT+M6xSI9sQ
+         t7TzV+DknVmzji+WcOu5y40w0+tW5gmUcZDkyDgScFtIUFYgip86mJRnvahcNGgK36pa
+         G0SXwdFW6+0JJCmk9J/FeySpAJcQ5XLwSzpaVi2Zc9eZv/+pn0NUc3dWp3nnDTAXE8a6
+         ytHw==
+X-Gm-Message-State: ANoB5pmMNO8PAS7Qq3SSN4Wi+Je0kSrSdfbivs9FpV+U94o2ZPxOXKgp
+        rYgdOUGYXIWRTmCzD424RodO/b60iFqhCfzCtH8=
+X-Google-Smtp-Source: AA0mqf74kk78BGZ9XqzWiJe0v91Q/kxGQ61MMser1Tuvs6dPAkMcXojiHnTRgz2VPD2O0Krfp5XnCHbHh8QBUvCIXNw=
+X-Received: by 2002:a05:6402:f:b0:468:56c3:7c8 with SMTP id
+ d15-20020a056402000f00b0046856c307c8mr34662608edu.109.1669371045850; Fri, 25
+ Nov 2022 02:10:45 -0800 (PST)
+MIME-Version: 1.0
+References: <20221124172207.153718-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221124172207.153718-5-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAJF2gTT7XEXmLWpP6nnSNRms9kj2NQR2dOA5N+V2UmnsurJogQ@mail.gmail.com>
+In-Reply-To: <CAJF2gTT7XEXmLWpP6nnSNRms9kj2NQR2dOA5N+V2UmnsurJogQ@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Fri, 25 Nov 2022 10:10:19 +0000
+Message-ID: <CA+V-a8uA=U72Mq7Rqu09BoWRG0jNHXUK=C5VFq=jb0iHLjom5w@mail.gmail.com>
+Subject: Re: [PATCH DO NOT REVIEW v4 4/7] riscv: errata: andes: Fix auipc-jalr
+ addresses in patched alternatives
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022, at 10:25, Lee Jones wrote:
-> bw_calcs() presently blows the stack-frame limit by calling functions
-> inside a argument list which return quite a bit of data to be passed
-> onto sub-functions.  Simply breaking out this hunk reduces the
-> stack-frame use by 500 Bytes, preventing the following compiler
-> warning:
->
->     drivers/gpu/drm/amd/amdgpu/../display/dc/dml/calcs/dce_calcs.c:3285:6:
->       warning: stack frame size (1384) exceeds limit (1024)
->         in 'bw_calcs' [-Wframe-larger-than]
->     bool bw_calcs(struct dc_context *ctx,
->          ^
->     1 warning generated.
->
-> This resolves the issue and takes us one step closer towards a
-> successful allmodconfig WERROR build.
->
-> Signed-off-by: Lee Jones <lee@kernel.org>
+Hi Guo,
 
-Is this still needed with the patch to turn off the display engine
-on most architectures? On which architecture and with which compiler
-do you still observe the problem?
+On Fri, Nov 25, 2022 at 1:09 AM Guo Ren <guoren@kernel.org> wrote:
+>
+> On Fri, Nov 25, 2022 at 1:22 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> >
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >
+> > This patch is added just for building purpose, as patch [0] will export
+> > this in its next version.
+> >
+> > https://patchwork.kernel.org/project/linux-riscv/patch/20221110164924.529386-6-heiko@sntech.de/
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> > Note, as Heiko will be exporting riscv_alternative_fix_auipc_jalr() function
+> > so that it can be used other erratas Ive just included for compilation.
+> > ---
+> >  arch/riscv/errata/andes/errata.c | 71 ++++++++++++++++++++++++++++++++
+> >  1 file changed, 71 insertions(+)
+> >
+> > diff --git a/arch/riscv/errata/andes/errata.c b/arch/riscv/errata/andes/errata.c
+> > index ec3e052ca8c7..4061ad4983bc 100644
+> > --- a/arch/riscv/errata/andes/errata.c
+> > +++ b/arch/riscv/errata/andes/errata.c
+> > @@ -13,9 +13,80 @@
+> >  #include <asm/alternative.h>
+> >  #include <asm/cacheflush.h>
+> >  #include <asm/errata_list.h>
+> > +#include <asm/parse_asm.h>
+> >  #include <asm/patch.h>
+> > +#include <asm/sbi.h>
+> >  #include <asm/vendorid_list.h>
+> >
+> > +/* Copy of Heiko's code from patch [0]
+> > + * [0] https://patchwork.kernel.org/project/linux-riscv/patch/20221110164924.529386-6-heiko@sntech.de/
+> Move it to commit-msg. No link in the code.
+>
+This patch is *not* to be merged and is just included for compilation
+purposes only.
 
-Note that this probably doesn't actually solve the potential stack
-overflow by itself, since the function that is now split out
-is still called with the parent stack active. Splitting out multiple
-smaller bits however would solve it since then the stack frames
-could overlap.
-
-    Arnd
+Cheers,
+Prabhakar
