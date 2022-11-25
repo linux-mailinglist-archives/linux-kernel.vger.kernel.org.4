@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2F8C638F5D
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 18:52:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3357638F6A
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 18:56:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbiKYRwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 12:52:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46764 "EHLO
+        id S229685AbiKYR4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 12:56:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbiKYRwk (ORCPT
+        with ESMTP id S229491AbiKYR4O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 12:52:40 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D6BC1B9C6
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 09:52:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:
-        In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=TjyhoR6wt5B1E4yoomBzwFjtmTKYq8UrV6BN0DXxMac=; b=PDGhzefohyKbNssK+vE/PxQIHg
-        BtGaRCTTjPQRYWs/KaW3JO/cQ7oIENCFQ7FacdHUzOluADsLEeUOU/d//dZuNtKmtT5iBt0yw4Vo7
-        7v+xi3oNXBYSeWIpK0MTXohhvusRSHReacLdxmKzLH4L/o5j5VJNONPf6Zxsv+DjE0Hh9w/sI3SIO
-        3L9uqS8pexFzWn2N5oRg3xu1FsJFLaYCApbbbDVKcZNishF6Tb6eV1LeeZ7nSUcBFLN2HLoFv08ll
-        RNokDTcP2k6htXKfRm7ydSHgUcxtfvctt8CTGzRlbiszZLAVYS9MPvEFlodCBU0IaRA9F9H2hQnUm
-        iohSEERw==;
-Received: from 200-148-10-170.dsl.telesp.net.br ([200.148.10.170] helo=steammachine.lan)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1oycsN-008yzi-Ob; Fri, 25 Nov 2022 18:52:36 +0100
-From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
-To:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Cc:     kernel-dev@igalia.com, alexander.deucher@amd.com,
-        contactshashanksharma@gmail.com, amaranath.somalapuram@amd.com,
-        christian.koenig@amd.com, pierre-eric.pelloux-prayer@amd.com,
-        Simon Ser <contact@emersion.fr>,
-        Rob Clark <robdclark@gmail.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Stone <daniel@fooishbar.org>,
-        =?UTF-8?q?=27Marek=20Ol=C5=A1=C3=A1k=27?= <maraeo@gmail.com>,
-        Dave Airlie <airlied@gmail.com>,
-        "Pierre-Loup A . Griffais" <pgriffais@valvesoftware.com>,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
-        Shashank Sharma <shashank.sharma@amd.com>
-Subject: [PATCH v3 2/2] drm/amdgpu: Add work function for GPU reset event
-Date:   Fri, 25 Nov 2022 14:52:03 -0300
-Message-Id: <20221125175203.52481-3-andrealmeid@igalia.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221125175203.52481-1-andrealmeid@igalia.com>
-References: <20221125175203.52481-1-andrealmeid@igalia.com>
+        Fri, 25 Nov 2022 12:56:14 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CDD0240A5;
+        Fri, 25 Nov 2022 09:56:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669398974; x=1700934974;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dGozxIeI3Hdihd+DZCG3wMJNJscHR7IQT+pzisHO0dw=;
+  b=PEHplHBWj5K4xgAKzId5N2yIhtdX/eWA7YUZGjuB8oCTOVaJnTeMHiHK
+   z5zVXqmh4itKCT0A/yxyMLvPre8z1ffqdgAnX1gg9mxqIHpopCclhiSVh
+   J7fF60z3fWkRmyWHJZcB8YRoyHq2UsSqs+aSEfTjlFDr6UowvrqqsAKlL
+   731hxfCVb8+ezrD5/Nd+mV7WHVv+2onAHhvM62kNHHv4HdobxOP3Y4V68
+   Y8Su0/X3GRKqhM4N2xR+j3bQc0RJHFjy1Epi3XKa7RUSzRImAxyjF0O4A
+   zvoi5/g5jq8DBNHSctL2pMf9mX5/fvQWLHbbuiREQELg2A+P87ZMyGbvk
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="297876025"
+X-IronPort-AV: E=Sophos;i="5.96,194,1665471600"; 
+   d="scan'208";a="297876025"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2022 09:56:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="817198720"
+X-IronPort-AV: E=Sophos;i="5.96,194,1665471600"; 
+   d="scan'208";a="817198720"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 25 Nov 2022 09:56:11 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oycvq-00HLBW-0p;
+        Fri, 25 Nov 2022 19:56:10 +0200
+Date:   Fri, 25 Nov 2022 19:56:09 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH] gpiolib: cdev: fix NULL-pointer dereferences
+Message-ID: <Y4EBubusGqo4IroP@smile.fi.intel.com>
+References: <20221125153257.528826-1-brgl@bgdev.pl>
+ <Y4DsTxPH1tv5eEwf@sol>
+ <CAMRc=Me83-_oiGEmwy4BUrzLEMT6ZsoMwWYsb6iXwg19yHMHdQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMRc=Me83-_oiGEmwy4BUrzLEMT6ZsoMwWYsb6iXwg19yHMHdQ@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,117 +69,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a work function to send a GPU reset uevent and scheduled it during
-a GPU reset.
+On Fri, Nov 25, 2022 at 05:48:02PM +0100, Bartosz Golaszewski wrote:
+> On Fri, Nov 25, 2022 at 5:24 PM Kent Gibson <warthog618@gmail.com> wrote:
 
-Co-developed-by: Shashank Sharma <shashank.sharma@amd.com>
-Signed-off-by: Shashank Sharma <shashank.sharma@amd.com>
-Signed-off-by: André Almeida <andrealmeid@igalia.com>
----
-V3:
-   - Merge two last commits
+...
 
-V2: Addressed review comments from Christian
-   - Changed the name of the work to gpu_reset_event_work
-   - Added a structure to accommodate some additional information
-     (like a PID and some flags)
-   - Do not add new structure in amdgpu.h
----
- drivers/gpu/drm/amd/amdgpu/amdgpu.h        |  4 +++
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 30 ++++++++++++++++++++++
- 2 files changed, 34 insertions(+)
+> Then at the subsystem level, the GPIO device struct would need a lock
+> that would be taken by every user-space operation AND the code
+> unregistering the device so that we don't do what you described (i.e.
+> if there's a thread doing a read(), then let's wait until it returns
+> before we drop the device).
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu.h b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-index 6b74df446694..88cb5b739c5d 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-@@ -60,6 +60,8 @@
- #include <drm/amdgpu_drm.h>
- #include <drm/drm_gem.h>
- #include <drm/drm_ioctl.h>
-+#include <drm/gpu_scheduler.h>
-+#include <drm/drm_sysfs.h>
- 
- #include <kgd_kfd_interface.h>
- #include "dm_pp_interface.h"
-@@ -1003,6 +1005,7 @@ struct amdgpu_device {
- 
- 	int asic_reset_res;
- 	struct work_struct		xgmi_reset_work;
-+	struct work_struct		gpu_reset_event_work;
- 	struct list_head		reset_list;
- 
- 	long				gfx_timeout;
-@@ -1036,6 +1039,7 @@ struct amdgpu_device {
- 	pci_channel_state_t		pci_channel_state;
- 
- 	struct amdgpu_reset_control     *reset_cntl;
-+	struct drm_reset_event_info	reset_event_info;
- 	uint32_t                        ip_versions[MAX_HWIP][HWIP_MAX_INSTANCE];
- 
- 	bool				ram_is_direct_mapped;
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-index b2b1c66bfe39..d04541fdb606 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-@@ -77,6 +77,7 @@
- #include <linux/pm_runtime.h>
- 
- #include <drm/drm_drv.h>
-+#include <drm/drm_sysfs.h>
- 
- MODULE_FIRMWARE("amdgpu/vega10_gpu_info.bin");
- MODULE_FIRMWARE("amdgpu/vega12_gpu_info.bin");
-@@ -3365,6 +3366,19 @@ bool amdgpu_device_has_dc_support(struct amdgpu_device *adev)
- 	return amdgpu_device_asic_has_dc_support(adev->asic_type);
- }
- 
-+static void amdgpu_device_reset_event_func(struct work_struct *__work)
-+{
-+	struct amdgpu_device *adev = container_of(__work, struct amdgpu_device,
-+						   gpu_reset_event_work);
-+	/*
-+	 * A GPU reset has happened, inform the userspace and pass the reset
-+	 * related information
-+	 */
-+	drm_sysfs_reset_event(&adev->ddev, &adev->reset_event_info);
-+
-+	put_pid(adev->reset_event_info.pid);
-+}
-+
- static void amdgpu_device_xgmi_reset_func(struct work_struct *__work)
- {
- 	struct amdgpu_device *adev =
-@@ -3616,6 +3630,7 @@ int amdgpu_device_init(struct amdgpu_device *adev,
- 			  amdgpu_device_delay_enable_gfx_off);
- 
- 	INIT_WORK(&adev->xgmi_reset_work, amdgpu_device_xgmi_reset_func);
-+	INIT_WORK(&adev->gpu_reset_event_work, amdgpu_device_reset_event_func);
- 
- 	adev->gfx.gfx_off_req_count = 1;
- 	adev->gfx.gfx_off_residency = 0;
-@@ -4920,6 +4935,21 @@ int amdgpu_do_asic_reset(struct list_head *device_list_handle,
- 					goto out;
- 
- 				vram_lost = amdgpu_device_check_vram_lost(tmp_adev);
-+
-+				if (reset_context->job && reset_context->job->vm) {
-+					tmp_adev->reset_event_info.pid =
-+						find_get_pid(reset_context->job->vm->task_info.pid);
-+				} else {
-+					tmp_adev->reset_event_info.pid = NULL;
-+				}
-+
-+				if (vram_lost)
-+					tmp_adev->reset_event_info.flags |=
-+						DRM_RESET_EVENT_VRAM_LOST;
-+
-+				/* Send GPU reset event */
-+				schedule_work(&tmp_adev->gpu_reset_event_work);
-+
- #ifdef CONFIG_DEV_COREDUMP
- 				tmp_adev->reset_vram_lost = vram_lost;
- 				memset(&tmp_adev->reset_task_info, 0,
+It's called a reference counting, basically you need to get device and then
+put when it makes sense.
+
+> This wouldn't fix the case in which the same situation happened in a
+> kernel driver but crashing the kernel from within is a much lesser
+> offense than allowing user-space to crash it.
+
 -- 
-2.38.1
+With Best Regards,
+Andy Shevchenko
+
 
