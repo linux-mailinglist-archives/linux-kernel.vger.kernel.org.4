@@ -2,197 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBEEB6388B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 12:24:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16FF8638882
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 12:19:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbiKYLYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 06:24:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53656 "EHLO
+        id S229629AbiKYLTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 06:19:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiKYLY3 (ORCPT
+        with ESMTP id S229564AbiKYLTj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 06:24:29 -0500
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1A31BEA9;
-        Fri, 25 Nov 2022 03:24:27 -0800 (PST)
-Received: by mail-qt1-f176.google.com with SMTP id cg5so2335280qtb.12;
-        Fri, 25 Nov 2022 03:24:27 -0800 (PST)
+        Fri, 25 Nov 2022 06:19:39 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA5523EBE;
+        Fri, 25 Nov 2022 03:19:38 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id n7so6254552wrr.13;
+        Fri, 25 Nov 2022 03:19:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=vJ/Ad4hSKfagSWXJgtJNFFKqplgksfsr8uetGe6EuYA=;
+        b=dHZmajYnzz4u1jEo2HZja6kVm1mWJREW0f3tbiQn1KmezmC7S0VAc6VWFkNXA0eZaB
+         EHAjzMMhncEiD+gratUs0iJRq+ZhBY42zlYNrV5JoLQBB8uwcLZ0+WwGDWnaGwb7ri1M
+         K6GyCqwCqr5XqpnGJSimkapXZVnWD5QyBb2f/qj4qHGWuyO5Y4unUXkQo7REY0Ab4yUY
+         nxWMqqzpHIsz6tjDAc5sBBUlhB4NUi5XSwz8w829yZycYO3+0kutXTTuEeEdxGEp3BvT
+         y3u4079+nY36PXhoFse7cqNF4oRZ164FJtNjnISILNNq24uLevUhZMAluMl6TXhjp1EB
+         5RBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6Zo8eiAW4zN+rDEorAgGhPKfwHubATfFtXeTA+vPKZw=;
-        b=Jfo5/yLvXWXEpU5RoKTZ1ivfTPiaZqBuMjPCSp9rbV4uMq2Ttl8m1mIZddp6I8KQdU
-         ZPe5BblFnT/BjrB7gbQQKqDVcmZMlbKG57GMuX9FiR0WPX7Z5naetoDoUtPSLL+/nAYK
-         G6t/jxGHnOx1j94aiJdFPq37id97phUqnkREoKYPCAhTHw3scFgTaVQqgQagidlW8TTn
-         2axKAy0cd7xI4SmPnLRCBUczih/1w/Fx7oTda1hPLoN95b6AZc0xckKDkdXXsMZlj+vk
-         VqiCHqvG6+9ekdOe8LYdM9tq2yy+pgSKrq9SADs1tcEuctVccyfbULRXg0Anel6Ey3w2
-         XbMA==
-X-Gm-Message-State: ANoB5pmzoJNqUR9lQa2+vqOSEE6XG9TCGdcqdxJpwWSev8pKhSZjScYG
-        zDeavqrol0mOmqSclxe8Z17ktRN0p17onA==
-X-Google-Smtp-Source: AA0mqf4o4uz3twaftR8+CnMdAWQWKFF68zARNoUs3AzIf4vqCNMMEz9YxS3tsGN4yBqLH1rIudDyfA==
-X-Received: by 2002:ac8:528f:0:b0:38a:9db4:8006 with SMTP id s15-20020ac8528f000000b0038a9db48006mr16442615qtn.166.1669375466668;
-        Fri, 25 Nov 2022 03:24:26 -0800 (PST)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id k8-20020ac84748000000b003a569a0afcasm2035904qtp.66.2022.11.25.03.24.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Nov 2022 03:24:26 -0800 (PST)
-Received: by mail-yb1-f173.google.com with SMTP id z192so4780948yba.0;
-        Fri, 25 Nov 2022 03:24:26 -0800 (PST)
-X-Received: by 2002:a25:2343:0:b0:6f3:c535:4e9c with SMTP id
- j64-20020a252343000000b006f3c5354e9cmr86466ybj.380.1669375077609; Fri, 25 Nov
- 2022 03:17:57 -0800 (PST)
-MIME-Version: 1.0
-References: <20221124172207.153718-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221124172207.153718-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <70d1bfde-f57f-1741-08d3-23e362793595@linaro.org> <CA+V-a8s2awLp=YvbhA1Ohe500Oh1easLUcG9V4_FWov7Pf2i6g@mail.gmail.com>
-In-Reply-To: <CA+V-a8s2awLp=YvbhA1Ohe500Oh1easLUcG9V4_FWov7Pf2i6g@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 25 Nov 2022 12:17:45 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXktJWskc8m-hL75gfkkkZnqsiuraAG+wPjWcs2JZpGKA@mail.gmail.com>
-Message-ID: <CAMuHMdXktJWskc8m-hL75gfkkkZnqsiuraAG+wPjWcs2JZpGKA@mail.gmail.com>
-Subject: Re: [PATCH v4 6/7] dt-bindings: cache: r9a07g043f-l2-cache: Add DT
- binding documentation for L2 cache controller
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Rob Herring <robh+dt@kernel.org>,
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vJ/Ad4hSKfagSWXJgtJNFFKqplgksfsr8uetGe6EuYA=;
+        b=hxi0YjXhjZ8oghJnvuEKJxvrjVrclnTrNELEM7FCPEBPfAKHe2P4TszwgoX2jumvY6
+         22anC6MYSUVnG3f0C1pSWUOpAjIgytx9fRk4XnHN4WLddE1cD2r0NrVpYj5Az3ZiLjTL
+         JSO5If8I/PA+60yqxybWPhOIIsozZFuQ1hML9G7QdpApUa8Fdm1l2jmMfQFkIqQMHdii
+         8gitwnDxkj5zNSjJyKHiKfL5/HNXguvsNHgWy0YE6E2M5BvM0dtixdb+PxpzMoMzGoy6
+         Tg4sOFptqzZjhpHqkWgN3bMh3duDr4fUw/z6nRXgp5VufqYpD6p5IrqLD1vPoMqVHpbM
+         v7Dg==
+X-Gm-Message-State: ANoB5pk4QexYHrfh3FiJxD0Puv/kMc9n3JLqYhsTtW4c6iEGqSjh5Gn7
+        fFsVXA9zxILCCpyr8POZ+Iw=
+X-Google-Smtp-Source: AA0mqf7qcwBF0kX1Tp8rgnVWvydougD+PQOYjSSxRa5bPdGbWmiAjgx6M/qac3U1VJJkyI9gVdzcdg==
+X-Received: by 2002:a5d:6b45:0:b0:236:7a1c:c41a with SMTP id x5-20020a5d6b45000000b002367a1cc41amr11849573wrw.680.1669375177118;
+        Fri, 25 Nov 2022 03:19:37 -0800 (PST)
+Received: from cizrna.home (cst-prg-44-69.cust.vodafone.cz. [46.135.44.69])
+        by smtp.gmail.com with ESMTPSA id v11-20020a5d4b0b000000b002368f6b56desm4207406wrq.18.2022.11.25.03.19.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Nov 2022 03:19:36 -0800 (PST)
+Sender: Tomeu Vizoso <tomeu.vizoso@gmail.com>
+From:   Tomeu Vizoso <tomeu.vizoso@collabora.com>
+Cc:     Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS),
+        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS FOR VIVANTE GPU
+        IP),
+        etnaviv@lists.freedesktop.org (moderated list:DRM DRIVERS FOR VIVANTE
+        GPU IP), Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        linux-amlogic@lists.infradead.org (open list:ARM/Amlogic Meson SoC
+        support),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Amlogic Meson
+        SoC support), linux-kernel@vger.kernel.org (open list),
+        Lucas Stach <l.stach@pengutronix.de>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux+etnaviv@armlinux.org.uk>
+Subject: [PATCH 0/6] Support for the NPU in Vim3
+Date:   Fri, 25 Nov 2022 12:19:13 +0100
+Message-Id: <20221125111921.37261-1-tomeu.vizoso@collabora.com>
+X-Mailer: git-send-email 2.38.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-, Hi Prabhakar,
+Hi,
 
-On Fri, Nov 25, 2022 at 11:34 AM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
-> On Fri, Nov 25, 2022 at 8:16 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
-> > On 24/11/2022 18:22, Prabhakar wrote:
-> > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > >
-> > > Add DT binding documentation for L2 cache controller found on RZ/Five SoC.
-> > >
-> > > The Renesas RZ/Five microprocessor includes a RISC-V CPU Core (AX45MP
-> > > Single) from Andes. The AX45MP core has an L2 cache controller, this patch
-> > > describes the L2 cache block.
-> > >
-> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > ---
-> > > RFC v3 -> v4
-> > > * Dropped l2 cache configuration parameters
-> > > * s/larger/large
-> > > * Added minItems/maxItems for andestech,pma-regions
+This series adds support for the Verisilicon VIPNano-QI NPU in the A311D
+as in the VIM3 board.
 
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/cache/andestech,ax45mp-cache.yaml
+The IP is very closeley based on previous Vivante GPUs, so the etnaviv
+driver works basically unchanged.
 
-> > > +examples:
-> > > +  - |
-> > > +    #include <dt-bindings/interrupt-controller/irq.h>
-> > > +    #include <dt-bindings/cache/andestech,ax45mp-cache.h>
-> > > +
-> > > +    cache-controller@2010000 {
-> > > +        reg = <0x13400000 0x100000>;
-> > > +        compatible = "andestech,ax45mp-cache", "cache";
-> > > +        interrupts = <508 IRQ_TYPE_LEVEL_HIGH>;
-> > > +        cache-line-size = <64>;
-> > > +        cache-level = <2>;
-> > > +        cache-sets = <1024>;
-> > > +        cache-size = <262144>;
-> > > +        cache-unified;
-> > > +        andestech,pma-regions = <0x58000000 0x08000000
-> > > +                                 (AX45MP_PMACFG_ETYP_NAPOT | AX45MP_PMACFG_MTYP_MEM_NON_CACHE_BUF)>;
-> > > +    };
-> > > diff --git a/include/dt-bindings/cache/andestech,ax45mp-cache.h b/include/dt-bindings/cache/andestech,ax45mp-cache.h
-> > > new file mode 100644
-> > > index 000000000000..aa1cad24075d
-> > > --- /dev/null
-> > > +++ b/include/dt-bindings/cache/andestech,ax45mp-cache.h
-> > > @@ -0,0 +1,38 @@
-> > > +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-> > > +/*
-> > > + * This header provides constants for Andes AX45MP PMA configuration
-> > > + *
-> > > + * Copyright (C) 2022 Renesas Electronics Corp.
-> > > + */
-> > > +
-> > > +#ifndef __DT_BINDINGS_ANDESTECH_AX45MP_CACHE_H
-> > > +#define __DT_BINDINGS_ANDESTECH_AX45MP_CACHE_H
-> > > +
-> > > +/* OFF: PMA entry is disabled */
-> > > +#define AX45MP_PMACFG_ETYP_DISABLED                  0
-> > > +/* Naturally aligned power of 2 region */
-> > > +#define AX45MP_PMACFG_ETYP_NAPOT                     3
-> > > +
-> > > +/* Device, Non-bufferable */
-> > > +#define AX45MP_PMACFG_MTYP_DEV_NON_BUF                       (0 << 2)
-> > > +/* Device, bufferable */
-> > > +#define AX45MP_PMACFG_MTYP_DEV_BUF                   (1 << 2)
-> > > +/* Memory, Non-cacheable, Non-bufferable */
-> > > +#define AX45MP_PMACFG_MTYP_MEM_NON_CACHE_NON_BUF     (2 << 2)
-> > > +/* Memory, Non-cacheable, Bufferable */
-> > > +#define AX45MP_PMACFG_MTYP_MEM_NON_CACHE_BUF         (3 << 2)
-> >
-> > What are all these? They don't look like flags, because 3 = 1 | 2...
-> > they don't look like constants, because we do not use shifts in
-> > constants. Are these some register values? I also do not see the header
-> > being used in the code, so why having a bindings header if it is not
-> > used (DTS is not usage...)?
-> >
-> These are register bit values for the MTYP[5:2] field. The DTS example
-> in the binding doc (above) uses these macros. I haven't included the
-> DTS/I patches with this patchset yet do think I should?
+Regards,
 
-I think the main objection from Rob is that these look too much like
-raw register values to be written unchanged to registers, which is
-frowned upon in DT.
+Tomeu
 
-Now, can we make this more generic?
+Tomeu Vizoso (6):
+  dt-bindings: reset: meson-g12a: Add missing NNA reset
+  dt-bindings: power: Add NNA power domain
+  soc: amlogic: meson-pwrc: Add NNA power domain for A311D
+  arm64: dts: meson-g12-common: Add reference to NNA reset to pwrc
+  arm64: dts: Add DT node for the VIPNano-QI on the A311D
+  drm/etnaviv: add HWDB entry for VIPNano-QI.7120.0055
 
-  1. Do you need AX45MP_PMACFG_ETYP_DISABLED, i.e. will it ever be
-     specified in DTS, or is this a pure software thing?
-  2. Obviously you can let the driver decide if AX45MP_PMACFG_ETYP_NAPOT
-     can be set, based on address/size?
-  3. If the two above are removed, the shifts can be handled in the
-     driver instead,
-  4. Are there existing (more generic) definitions that can be used
-     instead?
+ .../boot/dts/amlogic/meson-g12-common.dtsi    | 15 +++++++--
+ .../amlogic/meson-g12b-a311d-khadas-vim3.dts  |  4 +++
+ drivers/gpu/drm/etnaviv/etnaviv_hwdb.c        | 31 +++++++++++++++++++
+ drivers/soc/amlogic/meson-ee-pwrc.c           | 17 ++++++++++
+ include/dt-bindings/power/meson-g12a-power.h  |  1 +
+ .../reset/amlogic,meson-g12a-reset.h          |  4 ++-
+ 6 files changed, 69 insertions(+), 3 deletions(-)
 
-BTW, what's the difference between non-bufferable and non-cacheable?
+-- 
+2.38.1
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
