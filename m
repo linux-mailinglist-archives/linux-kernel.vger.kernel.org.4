@@ -2,101 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75EA563896A
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 13:09:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 126A963896E
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 13:11:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiKYMJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 07:09:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35256 "EHLO
+        id S229553AbiKYMLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 07:11:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiKYMJg (ORCPT
+        with ESMTP id S229436AbiKYMK7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 07:09:36 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E7241992
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 04:09:35 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id t10so4984883ljj.0
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 04:09:35 -0800 (PST)
+        Fri, 25 Nov 2022 07:10:59 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1916419B5
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 04:10:57 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id g7so6595554lfv.5
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 04:10:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=91MuML7JJZ6zElri/OMGlnT1cEg4AMa72Ix0GPKAExM=;
-        b=U5GYc7M+mqwu4a0qJaIu5fcH5AVdQZWrGvylRLpOqnVMHSDAwsvNidrw4dwPlIZxtB
-         wfAm21Z0UT7nn4/1TE1Wlppr5SiwpuB3Vle8yd59+s2u1TCLnLuJESs0axD7KHoDysai
-         VtB1ER3BK2wZ9Dbbm0autykC+vaWAGg3rIPhme+amqGCQMrfJYw50cLxv9rFaanh1e37
-         67Hl3xH/gRLsVavKB3q9jOeO/dPTRuwjrIpjIcEqXsnDTrS6rXonqhhOtt+CYFUPO6Ve
-         IuOBlHCB5wPUz0J4IcKQfqKo/kRKu1SJIrtTt+hZyeycWTT8JMoMXfRRiyjAEzv1ZiWT
-         VsDA==
+        bh=FwheS7W3PJSUlRY8b47wc0KETioQqU6W+QumFAOe5GA=;
+        b=Ie4PK9vVTrfbphdAEVAsnpNCCVym61AlASjuuKkW3Airp2tY5blaHGxlNXSh9vrMs4
+         SL3Ei4Kd7oEwHXIBW7eCV6ojFK4QoAq1BryS07BKqcjxb8Rq9tvW5Xo3r9QyMDF9tEJR
+         H4XgGtewIWdY4AXNJ7Kxunfv3U1xWSZxnwbSlNKWVwbHPS6vAj4YV6tfrXJ2ndfkjRQg
+         CFEcUY61ni9v3BwNcBOUPYklByQ7CpkD2jx09+MrD9GsW+je4D0MLJM7nM6vTgvX+/Lt
+         TGs8sDsi+W2zKCRJgn0RmC9HZInzq0gjEKBSkhdr/kwNId44yIkVn4Eos3WFaOjino6B
+         C3EA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=91MuML7JJZ6zElri/OMGlnT1cEg4AMa72Ix0GPKAExM=;
-        b=yuf3qHQZ1uUtdVIwKq/VVWlr2LrKrL0oaPG7E6dOCO5Qn5TO96pd9PUhfE27meUr+r
-         8Q2zcMb8TTJfRqezVax4oGWkyldHSOuyGdvhTZ7zSPbXd6ETxs+PwmTd9bMEs6F4Uhsr
-         UyElUBp0SRkZPkS8dt7uS8q4YN+T8sBdNFhTcvkESoeSjT8PyL4dhvnc7JfKIqc2wcOV
-         Waj0ih6CxnLnJQbs2gUvBqrZE7BktcEkSYiD8XNfN1RqsNUmDX0XcdT4xQKxkusL3cm6
-         7/u2q+Dqvb0hJ1lbmeL1NZzab8hKhuK7BuSni9pOOcrmICihpGU0XMFQn67Vv7C6J1h6
-         T5xg==
-X-Gm-Message-State: ANoB5pnY0SMYvCvBm8cshPrnEjIDec5rpDzAaSMNEyz01+3YGzSeBNJD
-        bWSJ7QXrd3sxvm4TglHIX6utVg==
-X-Google-Smtp-Source: AA0mqf5NkUarevJ+YN8nlxT2bV36CGFbcTQk1X7c2TXngQ0pB/y9CyD2JRpUYr4LlVCPoMAidmpLkA==
-X-Received: by 2002:a05:651c:88e:b0:277:139d:78d2 with SMTP id d14-20020a05651c088e00b00277139d78d2mr11106234ljq.22.1669378173406;
-        Fri, 25 Nov 2022 04:09:33 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id v9-20020a2ea609000000b0027966a022c9sm345559ljp.5.2022.11.25.04.09.32
+        bh=FwheS7W3PJSUlRY8b47wc0KETioQqU6W+QumFAOe5GA=;
+        b=kpWEkjbfX6pxbmU/t0qMa+9aVLeHMWPdSmhX5iW6gL7I8WJ4Bk4zqvcOwOu6vZdbRS
+         mUQzSirpHyOCwWyiFKxYA11oQecxU0Jtd++I26sQRRCwudXA+6L/KYq1Tm4+NAXI6M07
+         PENexOGDnsAAfpI3s0iQ2pT2ln8fNy5/Z1aYfGnnZquvZgJPydgYN/pI18iDNzpTSXLJ
+         zc05SfoiofS/G0XqQS1aHpwx60gvEULyYBS1dDO0fJgfUMoqLxjPgTT8XbNzkpdK63gL
+         lNeGiIxiwCbXBUDUtYxGZYuTamsL2tDUqUKydPG+YYkKL7Gbvf/Y7v+quKmjYWUiJj92
+         rQyA==
+X-Gm-Message-State: ANoB5plNku+Lr1oJN/L2nYS+Pe9Dal3PT9yfBF4t0lOMOulxsuTjFPWl
+        yJmDp0S1il2gsE4soXVpxvYMxA==
+X-Google-Smtp-Source: AA0mqf68tOvuTcSzyAPy6oW4Sx+ZczsMO12qtp1bc9Pp+m0Ch6uGXznDzBePxRQy+8SCkSWGbeTijg==
+X-Received: by 2002:a05:6512:1184:b0:4af:a588:e8bd with SMTP id g4-20020a056512118400b004afa588e8bdmr12064931lfr.173.1669378256311;
+        Fri, 25 Nov 2022 04:10:56 -0800 (PST)
+Received: from [192.168.1.101] (95.49.32.48.neoplus.adsl.tpnet.pl. [95.49.32.48])
+        by smtp.gmail.com with ESMTPSA id b23-20020ac247f7000000b004aa95889063sm509219lfp.43.2022.11.25.04.10.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Nov 2022 04:09:32 -0800 (PST)
-Message-ID: <6947c59a-25c5-2331-2769-5ec138c5bb8c@linaro.org>
-Date:   Fri, 25 Nov 2022 13:09:32 +0100
+        Fri, 25 Nov 2022 04:10:55 -0800 (PST)
+Message-ID: <fc2812b1-db96-caa6-2ecb-c5bb2c33246a@linaro.org>
+Date:   Fri, 25 Nov 2022 13:10:53 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH] leds: MAINTAINERS: include dt-bindings headers
+Subject: Re: [PATCH v2] brcmfmac: Add support for BCM43596 PCIe Wi-Fi
 Content-Language: en-US
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Olliver Schinagl <oliver@schinagl.nl>
-References: <20220830083625.281462-1-krzysztof.kozlowski@linaro.org>
- <93f128ce-5229-5163-841a-66d3cd54130a@linaro.org>
- <Y4CgmOqhF12UtG+Q@duo.ucw.cz>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y4CgmOqhF12UtG+Q@duo.ucw.cz>
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <ALSI@bang-olufsen.dk>,
+        Hector Martin <marcan@marcan.st>,
+        "~postmarketos/upstreaming@lists.sr.ht" 
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        "martin.botka@somainline.org" <martin.botka@somainline.org>,
+        "angelogioacchino.delregno@somainline.org" 
+        <angelogioacchino.delregno@somainline.org>,
+        "marijn.suijten@somainline.org" <marijn.suijten@somainline.org>,
+        "jamipkettunen@somainline.org" <jamipkettunen@somainline.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Marek Vasut <marex@denx.de>,
+        "Zhao, Jiaqing" <jiaqing.zhao@intel.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Soon Tak Lee <soontak.lee@cypress.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "brcm80211-dev-list.pdl@broadcom.com" 
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        "SHA-cyfmac-dev-list@infineon.com" <SHA-cyfmac-dev-list@infineon.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220921001630.56765-1-konrad.dybcio@somainline.org>
+ <83b90478-3974-28e6-cf13-35fc4f62e0db@marcan.st>
+ <13b8c67c-399c-d1a6-4929-61aea27aa57d@somainline.org>
+ <0e65a8b2-0827-af1e-602c-76d9450e3d11@marcan.st>
+ <7fd077c5-83f8-02e2-03c1-900a47f05dc1@somainline.org>
+ <CACRpkda3uryD6TOEaTi3pPX5No40LBWoyHR4VcEuKw4iYT0dqA@mail.gmail.com>
+ <20220922133056.eo26da4npkg6bpf2@bang-olufsen.dk> <87sfke32pc.fsf@kernel.org>
+ <4592f87a-bb61-1c28-13f0-d041a6e7d3bf@linaro.org>
+ <CACRpkdax-3VVDd29iH51mfumakqM7jyEc8Pbb=AQwAgp2WsqFQ@mail.gmail.com>
+ <d03bd4d4-e4ef-681b-b4a5-02822e1eee75@linaro.org> <87fse76yig.fsf@kernel.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <87fse76yig.fsf@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/11/2022 12:01, Pavel Machek wrote:
-> On Fri 2022-11-25 11:52:59, Krzysztof Kozlowski wrote:
->> On 30/08/2022 10:36, Krzysztof Kozlowski wrote:
->>> Include the Devicetree binding headers in LED SUBSYSTEM entry.
->>>
->>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> ---
->>>  MAINTAINERS | 1 +
->>>  1 file changed, 1 insertion(+)
->>>
->>
->> Anyone is going to pick it up?
+
+
+On 25.11.2022 12:53, Kalle Valo wrote:
+> Konrad Dybcio <konrad.dybcio@linaro.org> writes:
 > 
-> That's for me, I guess.
+>> On 21.11.2022 14:56, Linus Walleij wrote:
+>>> On Fri, Nov 18, 2022 at 5:47 PM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>>>
+>>>> I can think of a couple of hacky ways to force use of 43596 fw, but I
+>>>> don't think any would be really upstreamable..
+>>>
+>>> If it is only known to affect the Sony Xperias mentioned then
+>>> a thing such as:
+>>>
+>>> if (of_machine_is_compatible("sony,xyz") ||
+>>>     of_machine_is_compatible("sony,zzz")... ) {
+>>>    // Enforce FW version
+>>> }
+>>>
+>>> would be completely acceptable in my book. It hammers the
+>>> problem from the top instead of trying to figure out itsy witsy
+>>> details about firmware revisions.
+>>>
+>>> Yours,
+>>> Linus Walleij
+>>
+>> Actually, I think I came up with a better approach by pulling a page
+>> out of Asahi folks' book - please take a look and tell me what you
+>> think about this:
+>>
+>> [1]
+>> https://github.com/SoMainline/linux/commit/4b6fccc995cd79109b0dae4e4ab2e48db97695e7
+>> [2]
+>> https://github.com/SoMainline/linux/commit/e3ea1dc739634f734104f37fdbed046873921af7
+> 
+> Instead of a directory path ("brcm/brcmfmac43596-pcie") why not provide
+> just the chipset name ("brcmfmac43596-pcie")? IMHO it's unnecessary to
+> have directory names in Device Tree.
+I think it's common practice to include a full $FIRMWARE_DIR-relative
+path when specifying firmware in DT, though here I left out the board
+name bit as that's assigned dynamically anyway. That said, if you don't
+like it, I can change it.
 
-Yes, please.
-
-Best regards,
-Krzysztof
-
+Konrad
+> 
