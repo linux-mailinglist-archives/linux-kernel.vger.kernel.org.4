@@ -2,73 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E02E063848C
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 08:39:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60BA0638484
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 08:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbiKYHjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 02:39:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58322 "EHLO
+        id S229628AbiKYHiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 02:38:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiKYHji (ORCPT
+        with ESMTP id S229436AbiKYHiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 02:39:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950112793B
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 23:38:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669361918;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=E7efTvFjZ8o6sgciRzqUgjkiiwfrW4QhnCNd5PneRps=;
-        b=UuCEPFpJujItJ5UOF3RlkQFYixvhQxUMW3YWZd18sYFfkWhR8D+Q3Eou94VC12krgQwu4B
-        BZjOGfuGECiP82x3v3EApJZKUJF56qhTiUB7myGHpOetQgnhnGpo1I5Qri1DhrHPFClmHj
-        QNwVxvQ0lbyzpmhtaK/zzNgJlz0pdd8=
-Received: from mail-ua1-f69.google.com (mail-ua1-f69.google.com
- [209.85.222.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-657-JszWFwfTNnSRSrux9KhLow-1; Fri, 25 Nov 2022 02:38:37 -0500
-X-MC-Unique: JszWFwfTNnSRSrux9KhLow-1
-Received: by mail-ua1-f69.google.com with SMTP id a11-20020ab0494b000000b0041123ae77cdso1492361uad.1
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 23:38:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=E7efTvFjZ8o6sgciRzqUgjkiiwfrW4QhnCNd5PneRps=;
-        b=kzD51LUDGACEu2wk9JEt3yjip/hwKJZfSoQ18gRYbfs4WXdpw6fLlj57d5h5yHO2hV
-         m3l/H1BRMLaJcQ4GZurDzc177lUhv8b9Tqs2Z48RSGBUekupnOgxGEBaf5Frv7/p6kv/
-         C9XWzUVdOfW58rnzp0IR7RtvenlCYVkSzZkg72gNS5foy0pPPpFN1KI7+VuX8QmhvTBP
-         FnMEL6YYIZ9JwPP+ATdvIQdudvhP9z+MCqpW4W0mBtRgXK1C0MIvad5o2bLjSmFDAQiK
-         idxwMHm7rRbg1BknhJinnCNs4wTuRQjLzPcbeFRBiYdmcbcwlkW4Eu5DAofL7U+6YiVW
-         CKJQ==
-X-Gm-Message-State: ANoB5pnlwEPkrZaccW1CW05EA36gqTud6YLvRehrW4mWyT7xL8PbFv+j
-        ja7zNyp8Uy/l7G+Gj5LMMZGkHv1vkq9Ykr+7hjGsxFssWrW6UJjgjLupUW/i/b2LAmPdDDiWi7c
-        vM0CGs6rX5Hl2vy6Nhd/COOCmG4d49jX12YkA3pkW
-X-Received: by 2002:a67:c001:0:b0:3aa:4802:ac3d with SMTP id v1-20020a67c001000000b003aa4802ac3dmr11035068vsi.49.1669361916724;
-        Thu, 24 Nov 2022 23:38:36 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5POy6CnOmupW9Vb+blL3PmrP2ocAAMOqRoExTdWZJ1Ky+9j6NnYC0YSmPZJ18MSyA0YG7bx1YamDdlXZScsnc=
-X-Received: by 2002:a67:c001:0:b0:3aa:4802:ac3d with SMTP id
- v1-20020a67c001000000b003aa4802ac3dmr11035058vsi.49.1669361916398; Thu, 24
- Nov 2022 23:38:36 -0800 (PST)
+        Fri, 25 Nov 2022 02:38:13 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1D9275E5;
+        Thu, 24 Nov 2022 23:38:11 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oyTHl-0003Az-TW; Fri, 25 Nov 2022 08:38:09 +0100
+Message-ID: <687f308d-b221-9c2d-24c1-6a4417d27843@leemhuis.info>
+Date:   Fri, 25 Nov 2022 08:38:09 +0100
 MIME-Version: 1.0
-References: <20221125023045.2158413-1-lulu@redhat.com> <CACGkMEuPMYVamb9saZWX8E38Xu_Q5vS7BKweyUeOaS==uiVZqw@mail.gmail.com>
-In-Reply-To: <CACGkMEuPMYVamb9saZWX8E38Xu_Q5vS7BKweyUeOaS==uiVZqw@mail.gmail.com>
-From:   Cindy Lu <lulu@redhat.com>
-Date:   Fri, 25 Nov 2022 15:37:59 +0800
-Message-ID: <CACLfguU6VZ7PPf7coj7Fe5ZPdqitekHkL9rfc3o4nWG2uFmonw@mail.gmail.com>
-Subject: Re: [PATCH v3] vhost_vdpa: fix the crash in unmap a large memory
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     mst@redhat.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: =?UTF-8?Q?Re=3a_=5bregression=2c_bisected=5d_Bug=c2=a0216738_-_Addi?=
+ =?UTF-8?Q?ng_O=5fAPPEND_to_O=5fRDWR_with_fcntl=28fd=2c_F=5fSETFL=29_does_no?=
+ =?UTF-8?Q?t_work_on_overlayfs?=
+Content-Language: en-US, de-DE
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
+        Pierre Labastie <pierre.labastie@neuf.fr>,
+        linux-unionfs@vger.kernel.org
+References: <2505800d-8625-dab0-576a-3a0221954ba3@leemhuis.info>
+ <Y3+jz5CVA9S+h2+b@ZenIV>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <Y3+jz5CVA9S+h2+b@ZenIV>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1669361891;6b96b55d;
+X-HE-SMSGID: 1oyTHl-0003Az-TW
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,182 +51,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-/ and
+On 24.11.22 18:03, Al Viro wrote:
+> On Thu, Nov 24, 2022 at 04:47:56PM +0100, Thorsten Leemhuis wrote:
+> [...]
 
+Al: thx for fixing this!
 
-On Fri, 25 Nov 2022 at 15:17, Jason Wang <jasowang@redhat.com> wrote:
+> I could pick it in vfs.git #fixes, or Miklos could put it through his tree.
+> Miklos, which way would you prefer that to go?
 >
-> On Fri, Nov 25, 2022 at 10:31 AM Cindy Lu <lulu@redhat.com> wrote:
-> >
-> > While testing in vIOMMU, sometimes guest will unmap very large memory,
-> > which will cause the crash. To fix this,Move the iommu_unmap to
-> > vhost_vdpa_pa_unmap/vhost_vdpa_va_unmap and only unmap the memory
-> > that saved in iotlb.
-> >
-> > Call Trace:
-> > [  647.820144] ------------[ cut here ]------------
-> > [  647.820848] kernel BUG at drivers/iommu/intel/iommu.c:1174!
-> > [  647.821486] invalid opcode: 0000 [#1] PREEMPT SMP PTI
-> > [  647.822082] CPU: 10 PID: 1181 Comm: qemu-system-x86 Not tainted 6.0.=
-0-rc1home_lulu_2452_lulu7_vhost+ #62
-> > [  647.823139] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS=
- rel-1.15.0-29-g6a62e0cb0dfe-prebuilt.qem4
-> > [  647.824365] RIP: 0010:domain_unmap+0x48/0x110
-> > [  647.825424] Code: 48 89 fb 8d 4c f6 1e 39 c1 0f 4f c8 83 e9 0c 83 f9=
- 3f 7f 18 48 89 e8 48 d3 e8 48 85 c0 75 59
-> > [  647.828064] RSP: 0018:ffffae5340c0bbf0 EFLAGS: 00010202
-> > [  647.828973] RAX: 0000000000000001 RBX: ffff921793d10540 RCX: 0000000=
-00000001b
-> > [  647.830083] RDX: 00000000080000ff RSI: 0000000000000001 RDI: ffff921=
-793d10540
-> > [  647.831214] RBP: 0000000007fc0100 R08: ffffae5340c0bcd0 R09: 0000000=
-000000003
-> > [  647.832388] R10: 0000007fc0100000 R11: 0000000000100000 R12: 0000000=
-0080000ff
-> > [  647.833668] R13: ffffae5340c0bcd0 R14: ffff921793d10590 R15: 0000008=
-000100000
-> > [  647.834782] FS:  00007f772ec90640(0000) GS:ffff921ce7a80000(0000) kn=
-lGS:0000000000000000
-> > [  647.836004] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [  647.836990] CR2: 00007f02c27a3a20 CR3: 0000000101b0c006 CR4: 0000000=
-000372ee0
-> > [  647.838107] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000=
-000000000
-> > [  647.839283] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000=
-000000400
-> > [  647.840666] Call Trace:
-> > [  647.841437]  <TASK>
-> > [  647.842107]  intel_iommu_unmap_pages+0x93/0x140
-> > [  647.843112]  __iommu_unmap+0x91/0x1b0
-> > [  647.844003]  iommu_unmap+0x6a/0x95
-> > [  647.844885]  vhost_vdpa_unmap+0x1de/0x1f0 [vhost_vdpa]
-> > [  647.845985]  vhost_vdpa_process_iotlb_msg+0xf0/0x90b [vhost_vdpa]
-> > [  647.847235]  ? _raw_spin_unlock+0x15/0x30
-> > [  647.848181]  ? _copy_from_iter+0x8c/0x580
-> > [  647.849137]  vhost_chr_write_iter+0xb3/0x430 [vhost]
-> > [  647.850126]  vfs_write+0x1e4/0x3a0
-> > [  647.850897]  ksys_write+0x53/0xd0
-> > [  647.851688]  do_syscall_64+0x3a/0x90
-> > [  647.852508]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > [  647.853457] RIP: 0033:0x7f7734ef9f4f
-> > [  647.854408] Code: 89 54 24 18 48 89 74 24 10 89 7c 24 08 e8 29 76 f8=
- ff 48 8b 54 24 18 48 8b 74 24 10 41 89 c8
-> > [  647.857217] RSP: 002b:00007f772ec8f040 EFLAGS: 00000293 ORIG_RAX: 00=
-00000000000001
-> > [  647.858486] RAX: ffffffffffffffda RBX: 00000000fef00000 RCX: 00007f7=
-734ef9f4f
-> > [  647.859713] RDX: 0000000000000048 RSI: 00007f772ec8f090 RDI: 0000000=
-000000010
-> > [  647.860942] RBP: 00007f772ec8f1a0 R08: 0000000000000000 R09: 0000000=
-000000000
-> > [  647.862206] R10: 0000000000000001 R11: 0000000000000293 R12: 0000000=
-000000010
-> > [  647.863446] R13: 0000000000000002 R14: 0000000000000000 R15: fffffff=
-f01100000
-> > [  647.864692]  </TASK>
-> > [  647.865458] Modules linked in: rpcsec_gss_krb5 auth_rpcgss nfsv4 dns=
-_resolver nfs lockd grace fscache netfs v]
-> > [  647.874688] ---[ end trace 0000000000000000 ]---
-> > [  647.876013] RIP: 0010:domain_unmap+0x48/0x110
-> > [  647.878306] Code: 48 89 fb 8d 4c f6 1e 39 c1 0f 4f c8 83 e9 0c 83 f9=
- 3f 7f 18 48 89 e8 48 d3 e8 48 85 c0 75 59
-> > [  647.884581] RSP: 0018:ffffae5340c0bbf0 EFLAGS: 00010202
-> > [  647.886308] RAX: 0000000000000001 RBX: ffff921793d10540 RCX: 0000000=
-00000001b
-> > [  647.888775] RDX: 00000000080000ff RSI: 0000000000000001 RDI: ffff921=
-793d10540
-> > [  647.890295] RBP: 0000000007fc0100 R08: ffffae5340c0bcd0 R09: 0000000=
-000000003
-> > [  647.891660] R10: 0000007fc0100000 R11: 0000000000100000 R12: 0000000=
-0080000ff
-> > [  647.893019] R13: ffffae5340c0bcd0 R14: ffff921793d10590 R15: 0000008=
-000100000
-> > [  647.894506] FS:  00007f772ec90640(0000) GS:ffff921ce7a80000(0000) kn=
-lGS:0000000000000000
-> > [  647.895963] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [  647.897348] CR2: 00007f02c27a3a20 CR3: 0000000101b0c006 CR4: 0000000=
-000372ee0
-> > [  647.898719] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000=
-000000000
-> >
-> > Cc: stable@vger.kernel.org
-> > Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
-> > Signed-off-by: Cindy Lu <lulu@redhat.com>
-> > ---
-> >  drivers/vhost/vdpa.c | 10 ++++++++--
-> >  1 file changed, 8 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> > index 166044642fd5..e5a07751bf45 100644
-> > --- a/drivers/vhost/vdpa.c
-> > +++ b/drivers/vhost/vdpa.c
-> > @@ -692,6 +692,8 @@ static void vhost_vdpa_pa_unmap(struct vhost_vdpa *=
-v,
-> >         struct vhost_iotlb_map *map;
-> >         struct page *page;
-> >         unsigned long pfn, pinned;
-> > +       struct vdpa_device *vdpa =3D v->vdpa;
-> > +       const struct vdpa_config_ops *ops =3D vdpa->config;
-> >
-> >         while ((map =3D vhost_iotlb_itree_first(iotlb, start, last)) !=
-=3D NULL) {
-> >                 pinned =3D PFN_DOWN(map->size);
-> > @@ -703,6 +705,8 @@ static void vhost_vdpa_pa_unmap(struct vhost_vdpa *=
-v,
-> >                         unpin_user_page(page);
-> >                 }
-> >                 atomic64_sub(PFN_DOWN(map->size), &dev->mm->pinned_vm);
-> > +               if ((ops->dma_map =3D=3D NULL) && (ops->set_map =3D=3D =
-NULL))
-> > +                       iommu_unmap(v->domain, map->start, map->size);
->
-> I think we'd better move the ops->dma_unmap() here as well as iommu_unmap=
-()?
->
-> >                 vhost_iotlb_map_free(iotlb, map);
-> >         }
-> >  }
-> > @@ -713,11 +717,15 @@ static void vhost_vdpa_va_unmap(struct vhost_vdpa=
- *v,
-> >  {
-> >         struct vhost_iotlb_map *map;
-> >         struct vdpa_map_file *map_file;
-> > +       struct vdpa_device *vdpa =3D v->vdpa;
-> > +       const struct vdpa_config_ops *ops =3D vdpa->config;
-> >
-> >         while ((map =3D vhost_iotlb_itree_first(iotlb, start, last)) !=
-=3D NULL) {
-> >                 map_file =3D (struct vdpa_map_file *)map->opaque;
-> >                 fput(map_file->file);
-> >                 kfree(map_file);
-> > +               if (ops->set_map =3D=3D NULL)
-> > +                       iommu_unmap(v->domain, map->start, map->size);
->
-> Need to check where we have dma_unmap() and call that if it exists?
->
-> Thanks
->
-Hi Jason=EF=BC=8C
-I think  these functions are called in vhost_vdpa_unmap,
-Do you want to separate the function in vhost_vdpa_unmap
-and move it to vhost_vdpa_va_unmap and vhost_vdpa_pa_unmap? I
-thanks
-cindy
+> [PATCH] update ->f_iocb_flags when ovl_change_flags() modifies ->f_flags
+> 
+> ovl_change_flags() is an open-coded variant of fs/fcntl.c:setfl() and it got
+> missed by 164f4064ca81e "keep iocb_flags() result cached in struct file";
+> the same change applies there.
+> 
+> Reported-by: Pierre Labastie <pierre.labastie@neuf.fr>
 
-> >                 vhost_iotlb_map_free(iotlb, map);
-> >         }
-> >  }
-> > @@ -805,8 +813,6 @@ static void vhost_vdpa_unmap(struct vhost_vdpa *v,
-> >         } else if (ops->set_map) {
-> >                 if (!v->in_batch)
-> >                         ops->set_map(vdpa, asid, iotlb);
-> > -       } else {
-> > -               iommu_unmap(v->domain, iova, size);
-> >         }
-> >
-> >         /* If we are in the middle of batch processing, delay the free
-> > --
-> > 2.34.3
-> >
->
+Miklos, if you pick this up, could you for the sake of future code
+archeologists please add this here:
 
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216738
+
+tia! To explain: Linus[1] and others considered proper link tags in
+cases like this important, as they allow anyone to look into the
+backstory weeks or years from now. That why they should be placed here,
+as outlined by the documentation[2]. I care personally, because these
+tags make my regression tracking efforts a whole lot easier, as they
+allow my tracking bot 'regzbot' to automatically connect reports with
+patches posted or committed to fix tracked regressions.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
+
+[1] for details, see:
+https://lore.kernel.org/all/CAHk-=wjMmSZzMJ3Xnskdg4+GGz=5p5p+GSYyFBTh0f-DgvdBWg@mail.gmail.com/
+https://lore.kernel.org/all/CAHk-=wgs38ZrfPvy=nOwVkVzjpM3VFU1zobP37Fwd_h9iAD5JQ@mail.gmail.com/
+https://lore.kernel.org/all/CAHk-=wjxzafG-=J8oT30s7upn4RhBs6TX-uVFZ5rME+L5_DoJA@mail.gmail.com/
+
+[2] see Documentation/process/submitting-patches.rst
+(http://docs.kernel.org/process/submitting-patches.html) and
+Documentation/process/5.Posting.rst
+(https://docs.kernel.org/process/5.Posting.html)
