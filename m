@@ -2,197 +2,354 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA4BF638BA7
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 14:55:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40A9F638BAE
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 14:57:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbiKYNz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 08:55:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51166 "EHLO
+        id S229895AbiKYN4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 08:56:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229896AbiKYNzW (ORCPT
+        with ESMTP id S229569AbiKYN4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 08:55:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3690221258;
-        Fri, 25 Nov 2022 05:55:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA49C6245B;
-        Fri, 25 Nov 2022 13:55:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D975C433D6;
-        Fri, 25 Nov 2022 13:55:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669384514;
-        bh=02dI1lNmveQrMuT/Cc1xXAnRLUb8g7J9hwX6UzoKBFc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KouTAujdIoK+X5R0bHouk8vqaIt+Uy9J1A6+KgwwpYJ3AYYmoFXZnLIqJqWhthu+0
-         LB6nXrlZWPPq0lvRrz/IeIXqy2x0/ZH4aJoWJph3oOzxAYrOWqMc9PrfMy7/QEI4rG
-         vSmOivxxi1G0DES8NNcOg/EYByyXiGT63lxyjmQ/BzupqnEP4dZmBQQWllDfjQYH0k
-         BuTH/ydfgjl5T8rQdvCGwniEUmbZN5IdlZhpPH85qIO+5oqoNXXzKVXWmlZmHBZAzA
-         AMJCvZ2gcpSUjnSFQ5RJ9166NT8dAHz0F9kiTSft1aZDe3g0D8c+LZynmvxEoNOEyS
-         KqZCdzKoO/DBw==
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     "Paul E . McKenney" <paulmck@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>, rcu@vger.kernel.org
-Subject: [PATCH 3/3] rcu-tasks: Fix synchronize_rcu_tasks() VS zap_pid_ns_processes()
-Date:   Fri, 25 Nov 2022 14:55:00 +0100
-Message-Id: <20221125135500.1653800-4-frederic@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221125135500.1653800-1-frederic@kernel.org>
-References: <20221125135500.1653800-1-frederic@kernel.org>
+        Fri, 25 Nov 2022 08:56:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0D81A217
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 05:55:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669384538;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=v0Rm2rACyFv6E1mOm4SIOMpNqdoU64JxaywiSbHtE6M=;
+        b=cte4WSMYG9B23fCfRYD+u3G+hEFw3JYU5BdV5gVH891OBJrf/9Zx1J3cjp9FTWLujfyGmx
+        KexDhW3vvKSiwuHMSMVUMyhtWtGIn1eqH0saFMsAxtcbhN5yxtMtLaBDY1nQHQUD5PstDL
+        2QYRknOZkiA+/Vm8v1wLaSdwRPD01BM=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-655-aJ-ARrGtOZi_6IR3VskPDg-1; Fri, 25 Nov 2022 08:55:37 -0500
+X-MC-Unique: aJ-ARrGtOZi_6IR3VskPDg-1
+Received: by mail-qk1-f198.google.com with SMTP id br8-20020a05620a460800b006fbf8866293so5402311qkb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 05:55:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=v0Rm2rACyFv6E1mOm4SIOMpNqdoU64JxaywiSbHtE6M=;
+        b=gdlxnXegLPrcSbzymS7MkawrcjcTGv5ALKcmh9zWselTFCG1fYWzZZrPrklr1G1jQ6
+         vDsyt9AJQmYyyjHU6c9ETGlWOY7e7Esnt3NsAa0nPMRNpqKmj/BmLKOI9tZQZCdDg2xe
+         P0B8BcYv0itspKj4+66RHBwuuNk3+hpvCwGS2InEW3QwYQDzrUAK893kTe1WZ+Tx4aW5
+         IwxjyzzBxuN8ZgPPHBOts7g6VRwewwsP2pFyzxBMdyvEwhH6k0zBugl7v5g6+XYh7HaB
+         WKGDpgCvdsFuwwbQNJ1ZYF7Khw+8mpbRdOPc4sQT7mcepUmR2dTz3fQ9A60DJ9TVIf7Q
+         Y5Lw==
+X-Gm-Message-State: ANoB5pmFDwfUsJ29uEOTtmZ9quNkcTzhPz2pmVTeaLISKcOeoRVdvxM0
+        bSIzhb4NnuE/sLNS3A8ynQTt3Mn6lIQ3GA//ap9tKtEKw/a81JiXTtroraSd0nzHVqJuMjEnnq4
+        rq50kx9q23urj2o63eDRZP+/c
+X-Received: by 2002:a37:8a45:0:b0:6f9:fd7a:f300 with SMTP id m66-20020a378a45000000b006f9fd7af300mr17897035qkd.257.1669384537002;
+        Fri, 25 Nov 2022 05:55:37 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf59/yTRceIpvgcasRJR+5OX2+3EsmYQZLlOI7Ardpwc2mtQkPSOS8x5uMgPdo+oysJTAtin6g==
+X-Received: by 2002:a37:8a45:0:b0:6f9:fd7a:f300 with SMTP id m66-20020a378a45000000b006f9fd7af300mr17897009qkd.257.1669384536609;
+        Fri, 25 Nov 2022 05:55:36 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id l126-20020a378984000000b006cfc7f9eea0sm2739828qkd.122.2022.11.25.05.55.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Nov 2022 05:55:35 -0800 (PST)
+Date:   Fri, 25 Nov 2022 08:55:34 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Rik van Riel <riel@surriel.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        James Houghton <jthoughton@google.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+Subject: Re: [PATCH RFC v2 00/12] mm/hugetlb: Make huge_pte_offset()
+ thread-safe for pmd unshare
+Message-ID: <Y4DJVqIP4A1rS/Wk@x1n>
+References: <20221118011025.2178986-1-peterx@redhat.com>
+ <70376d57-7924-8ac9-9e93-1831248115a0@redhat.com>
+ <Y343kIQ9l2d8wViz@x1n>
+ <21278883-46a6-5a6a-fcf5-9a6ee6f632a9@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <21278883-46a6-5a6a-fcf5-9a6ee6f632a9@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RCU Tasks and PID-namespace unshare can interact in do_exit() in a
-complicated circular dependency:
+On Fri, Nov 25, 2022 at 10:43:43AM +0100, David Hildenbrand wrote:
+> On 23.11.22 16:09, Peter Xu wrote:
+> > Hi, David,
+> > 
+> > Thanks for taking a look.
+> > 
+> > On Wed, Nov 23, 2022 at 10:40:40AM +0100, David Hildenbrand wrote:
+> > > On 18.11.22 02:10, Peter Xu wrote:
+> > > > Based on latest mm-unstable (96aa38b69507).
+> > > > 
+> > > > This can be seen as a follow-up series to Mike's recent hugetlb vma lock
+> > > > series for pmd unsharing, so this series also depends on that one.
+> > > > Hopefully this series can make it a more complete resolution for pmd
+> > > > unsharing.
+> > > > 
+> > > > PS: so far no one strongly ACKed this, let me keep the RFC tag.  But I
+> > > > think I'm already more confident than many of the RFCs I posted.
+> > > > 
+> > > > PS2: there're a lot of changes comparing to rfcv1, so I'm just not adding
+> > > > the changelog.  The whole idea is still the same, though.
+> > > > 
+> > > > Problem
+> > > > =======
+> > > > 
+> > > > huge_pte_offset() is a major helper used by hugetlb code paths to walk a
+> > > > hugetlb pgtable.  It's used mostly everywhere since that's needed even
+> > > > before taking the pgtable lock.
+> > > > 
+> > > > huge_pte_offset() is always called with mmap lock held with either read or
+> > > > write.
+> > > > 
+> > > > For normal memory types that's far enough, since any pgtable removal
+> > > > requires mmap write lock (e.g. munmap or mm destructions).  However hugetlb
+> > > > has the pmd unshare feature, it means not only the pgtable page can be gone
+> > > > from under us when we're doing a walking, but also the pgtable page we're
+> > > > walking (even after unshared, in this case it can only be the huge PUD page
+> > > > which contains 512 huge pmd entries, with the vma VM_SHARED mapped).  It's
+> > > > possible because even though freeing the pgtable page requires mmap write
+> > > > lock, it doesn't help us when we're walking on another mm's pgtable, so
+> > > > it's still on risk even if we're with the current->mm's mmap lock.
+> > > > 
+> > > > The recent work from Mike on vma lock can resolve most of this already.
+> > > > It's achieved by forbidden pmd unsharing during the lock being taken, so no
+> > > > further risk of the pgtable page being freed.  It means if we can take the
+> > > > vma lock around all huge_pte_offset() callers it'll be safe.
+> > 
+> > [1]
+> > 
+> > > > 
+> > > > There're already a bunch of them that we did as per the latest mm-unstable,
+> > > > but also quite a few others that we didn't for various reasons.  E.g. it
+> > > > may not be applicable for not-allow-to-sleep contexts like FOLL_NOWAIT.
+> > > > Or, huge_pmd_share() is actually a tricky user of huge_pte_offset(),
+> > 
+> > [2]
+> > 
+> > > > because even if we took the vma lock, we're walking on another mm's vma!
+> > > > Taking vma lock for all the vmas are probably not gonna work.
+> > > > 
+> > > > I have totally no report showing that I can trigger such a race, but from
+> > > > code wise I never see anything that stops the race from happening.  This
+> > > > series is trying to resolve that problem.
+> > > 
+> > > Let me try understand the basic problem first:
+> > > 
+> > > hugetlb walks page tables semi-lockless: while we hold the mmap lock, we
+> > > don't grab the page table locks. That's very hugetlb specific handling and I
+> > > assume hugetlb uses different mechanisms to sync against MADV_DONTNEED,
+> > > concurrent page fault s... but that's no news. hugetlb is weird in many ways
+> > > :)
+> > > 
+> > > So, IIUC, you want a mechanism to synchronize against PMD unsharing. Can't
+> > > we use some very basic locking for that?
+> > 
+> 
+> Sorry for the delay, finally found time to look into this again. :)
+> 
+> > Yes we can in most cases.  Please refer to above paragraph [1] where I
+> > referred Mike's recent work on vma lock.  That's the basic locking we need
+> > so far to protect pmd unsharing.  I'll attach the link too in the next
+> > post, which is here:
+> > 
+> > https://lore.kernel.org/r/20220914221810.95771-1-mike.kravetz@oracle.com
+> > 
+> > > 
+> > > Using RCU / disabling local irqs seems a bit excessive because we *are*
+> > > holding the mmap lock and only care about concurrent unsharing
+> > 
+> > The series wanted to address where the vma lock is not easy to take.  It
+> > originates from when I was reading Mike's other patch, I forgot why I did
+> > that but I just noticed there's some code path that we may not want to take
+> > a sleepable lock, e.g. in follow page code.
+> 
+> As I stated, whenever we already take the (expensive) mmap lock, the least
+> thing we should have to worry about is taking another sleepable lock IMHO.
+> Please correct me if I'm wrong.
 
-1) TASK A calls unshare(CLONE_NEWPID), this creates a new PID namespace
-   that every subsequent child of TASK A will belong to. But TASK A
-   doesn't itself belong to that new PID namespace.
+Yes that's not a major concern.  But I still think the follow page path
+should sleep as less as possible.  For example, non-hugetlb doesn't sleep
+now.  If with RCU lock we may do it lockless, then why not?
 
-2) TASK A forks() and creates TASK B. TASK A stays attached to its PID
-   namespace (let's say PID_NS1) and TASK B is the first task belonging
-   to the new PID namespace created by unshare()  (let's call it PID_NS2).
+The same thing to patch 3 of this patchset - I would think it beneficial to
+have even without a new lock type introduced, because it still makes the
+follow page path cleaner, and have the hugetlb and non-hugetlb match.
 
-3) Since TASK B is the first task attached to PID_NS2, it becomes the
-   PID_NS2 child reaper.
+> 
+> > 
+> > The other one is huge_pmd_share() where we may have the mmap lock for
+> > current mm but we're fundamentally walking another mm.  It'll be tricky to
+> > take a sleepable lock in such condition too.
+> 
+> We're already grabbing the i_mmap_lock_read(mapping), and the VMAs are
+> should be stable in that interval tree IIUC. So I wonder if taking VMA locks
+> would really be problematic here. Anything obvious I am missing?
 
-4) TASK A forks() again and creates TASK C which get attached to PID_NS2.
-   Note how TASK C has TASK A as a parent (belonging to PID_NS1) but has
-   TASK B (belonging to PID_NS2) as a pid_namespace child_reaper.
+No, I think you're right, and I found that myself just yesterday when I was
+writting a reproducer.  huge_pmd_share() is safe here, so at least that
+patch in this patchset can be dropped.
 
-5) TASK B exits and since it is the child reaper for PID_NS2, it has to
-   kill all other tasks attached to PID_NS2, and wait for all of them to
-   die before getting reaped itself (zap_pid_ns_process()).
+> 
+> > 
+> > I mentioned these cases in the other paragraph above [2].  Let me try to
+> > expand that in my next post too.
+> 
+> That would be great. I yet have to dedicate more time to understand all that
+> complexity.
+> 
+> > 
+> > It's debatable whether all the rest places can only work with either RCU or
+> > irq disabled, but the idea is at least it should speed up those paths when
+> > we still can.  Here, irqoff might be a bit heavy, but RCU lock should be
+> > always superior to vma lock when possible, the payoff is we may still see
+> > stale pgtable data (since unsharing can still happen in parallel), while
+> > that can be completely avoided when we take the vma lock.
+> 
+> IRQ disabled is frowned upon by RT folks, that's why I'd like to understand
+> if this is really required. Also, adding RCU to an already complex mechanism
+> doesn't necessarily make it easier :)
 
-6) TASK A calls synchronize_rcu_tasks() which leads to
-   synchronize_srcu(&tasks_rcu_exit_srcu).
+I've posted it before, let me copy that over:
 
-7) TASK B is waiting for TASK C to get reaped. But TASK B is under a
-   tasks_rcu_exit_srcu SRCU critical section (exit_notify() is between
-   exit_tasks_rcu_start() and exit_tasks_rcu_finish()), blocking TASK A.
+arch/arm64/Kconfig:     select MMU_GATHER_RCU_TABLE_FREE     
+arch/x86/Kconfig:       select MMU_GATHER_RCU_TABLE_FREE        if PARAVIRT
 
-8) TASK C exits and since TASK A is its parent, it waits for it to reap
-   TASK C, but it can't because TASK A waits for TASK B that waits for
-   TASK C.
+arch/arm64/Kconfig:     select ARCH_WANT_HUGE_PMD_SHARE if ARM64_4K_PAGES || (ARM64_16K_PAGES && !ARM64_VA_BITS_36)
+arch/riscv/Kconfig:     select ARCH_WANT_HUGE_PMD_SHARE if 64BIT
+arch/x86/Kconfig:       select ARCH_WANT_HUGE_PMD_SHARE
 
-Pid_namespace semantics can hardly be changed at this point. But the
-coverage of tasks_rcu_exit_srcu can be reduced instead.
+The irqoff thing is definitely unfortunate, but that's only happening with
+riscv or x86 when !PARAVIRT.  I would suppose PARAVIRT a common
+config.. then it's majorly for riscv only.  If someday riscv can support
+rcu table free we can remove it and enforce rcu table free for pmd sharing
+if wanted.
 
-The current task is assumed not to be concurrently reapable at this
-stage of exit_notify() and therefore tasks_rcu_exit_srcu can be
-temporarily relaxed without breaking its constraints, providing a way
-out of the deadlock scenario.
+Said that, the "new lock" part is definitely not the core of the patchset
+(even if it might read like that..).  The core part is to first identify
+the issue on overlooked usage of huge_pte_offset() and how to make it
+always safe.
 
-Fixes: 3f95aa81d265 ("rcu: Make TASKS_RCU handle tasks that are almost done exiting")
-Reported-by: Pengfei Xu <pengfei.xu@intel.com>
-Suggested-by: Boqun Feng <boqun.feng@gmail.com>
-Suggested-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-Suggested-by: Paul E. McKenney <paulmck@kernel.org>
-Cc: Oleg Nesterov <oleg@redhat.com>
-Cc: Lai Jiangshan <jiangshanlai@gmail.com>
-Cc: Eric W . Biederman <ebiederm@xmission.com>
-Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
----
- include/linux/rcupdate.h |  2 ++
- kernel/pid_namespace.c   | 17 +++++++++++++++++
- kernel/rcu/tasks.h       | 14 ++++++++++++--
- 3 files changed, 31 insertions(+), 2 deletions(-)
+Let me also update a few more things when at it.
 
-diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-index 89b3036746d2..a19d91d5461c 100644
---- a/include/linux/rcupdate.h
-+++ b/include/linux/rcupdate.h
-@@ -238,6 +238,7 @@ void synchronize_rcu_tasks_rude(void);
- 
- #define rcu_note_voluntary_context_switch(t) rcu_tasks_qs(t, false)
- void exit_tasks_rcu_start(void);
-+void exit_tasks_rcu_stop(void);
- void exit_tasks_rcu_finish(void);
- #else /* #ifdef CONFIG_TASKS_RCU_GENERIC */
- #define rcu_tasks_classic_qs(t, preempt) do { } while (0)
-@@ -246,6 +247,7 @@ void exit_tasks_rcu_finish(void);
- #define call_rcu_tasks call_rcu
- #define synchronize_rcu_tasks synchronize_rcu
- static inline void exit_tasks_rcu_start(void) { }
-+static inline void exit_tasks_rcu_stop(void) { }
- static inline void exit_tasks_rcu_finish(void) { }
- #endif /* #else #ifdef CONFIG_TASKS_RCU_GENERIC */
- 
-diff --git a/kernel/pid_namespace.c b/kernel/pid_namespace.c
-index f4f8cb0435b4..fc21c5d5fd5d 100644
---- a/kernel/pid_namespace.c
-+++ b/kernel/pid_namespace.c
-@@ -244,7 +244,24 @@ void zap_pid_ns_processes(struct pid_namespace *pid_ns)
- 		set_current_state(TASK_INTERRUPTIBLE);
- 		if (pid_ns->pid_allocated == init_pids)
- 			break;
-+		/*
-+		 * Release tasks_rcu_exit_srcu to avoid following deadlock:
-+		 *
-+		 * 1) TASK A unshare(CLONE_NEWPID)
-+		 * 2) TASK A fork() twice -> TASK B (child reaper for new ns)
-+		 *    and TASK C
-+		 * 3) TASK B exits, kills TASK C, waits for TASK A to reap it
-+		 * 4) TASK A calls synchronize_rcu_tasks()
-+		 *                   -> synchronize_srcu(tasks_rcu_exit_srcu)
-+		 * 5) *DEADLOCK*
-+		 *
-+		 * It is considered safe to release tasks_rcu_exit_srcu here
-+		 * because we assume the current task can not be concurrently
-+		 * reaped at this point.
-+		 */
-+		exit_tasks_rcu_stop();
- 		schedule();
-+		exit_tasks_rcu_start();
- 	}
- 	__set_current_state(TASK_RUNNING);
- 
-diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-index 9a8114114b48..f9dfc2ece287 100644
---- a/kernel/rcu/tasks.h
-+++ b/kernel/rcu/tasks.h
-@@ -1016,12 +1016,22 @@ void exit_tasks_rcu_start(void) __acquires(&tasks_rcu_exit_srcu)
-  * task is exiting and may be removed from the tasklist. See
-  * corresponding synchronize_srcu() for further details.
-  */
--void exit_tasks_rcu_finish(void) __releases(&tasks_rcu_exit_srcu)
-+void exit_tasks_rcu_stop(void) __releases(&tasks_rcu_exit_srcu)
- {
- 	struct task_struct *t = current;
- 
- 	__srcu_read_unlock(&tasks_rcu_exit_srcu, t->rcu_tasks_idx);
--	exit_tasks_rcu_finish_trace(t);
-+}
-+
-+/*
-+ * Contribute to protect against tasklist scan blind spot while the
-+ * task is exiting and may be removed from the tasklist. See
-+ * corresponding synchronize_srcu() for further details.
-+ */
-+void exit_tasks_rcu_finish(void)
-+{
-+	exit_tasks_rcu_stop();
-+	exit_tasks_rcu_finish_trace(current);
- }
- 
- #else /* #ifdef CONFIG_TASKS_RCU */
+Since it'll be very hard to reproduce the race discussed in this series, I
+didn't try to write a reproducer until yesterday. I'll need some kernel
+delays to trigger that, only if so I can trigger some use-after-free.  So I
+think problem confirmed.  The rest is how to resolve it, and whether the
+vma lock is good enough.
+
+One other thing to mention is I overlooked one important thing on the huge
+pgtable lock, which is actually not protected by RCU (as it's part of
+pmd_free()).  IOW if a hugetlb walker that wants to do huge_pte_lock()
+after huge_pte_offset() it won't be guarded by RCU, hence the new lock
+won't easily work for them.  That's another thing very unfortunate.  I'm
+not sure whether it's okay to move that part into the page free rcu
+callback, but definitely needs more thoughts as pmd_free() is an arch API.
+
+Debatably irqoff might work if the arch needs IPI for tlb flush so irqoff
+may protect both the pgtable page but also the huge_pte_lock(), but I don't
+think it's wise either to enlarge the irqoff to generic archs, and also I
+think "whether tlb flush requires IPI" is arch-specific, that makes this
+over complicated too and not necessary.
+
+So firstly, I think I need to rework the patchset so more places will need
+to take the vma lock (where pgtable lock needed).  I tend to keep the RCU
+lock because it's lighter at least to !riscv, if so it'll look like this
+for the rule to use huge_pte_offset():
+
+/*
+ * huge_pte_offset(): Walk the hugetlb pgtable until the last level PTE.
+ * Returns the pte_t* if found, or NULL if the address is not mapped.
+ *
+ * IMPORTANT: we should normally not directly call this function, instead
+ * this is only a common interface to implement arch-specific walker.
+ * Please consider using the hugetlb_walk() helper to make sure of the
+ * correct locking is satisfied.
+ *
+ * Since this function will walk all the pgtable pages (including not only
+ * high-level pgtable page, but also PUD entry that can be unshared
+ * concurrently for VM_SHARED), the caller of this function should be
+ * responsible of its thread safety.  One can follow this rule:
+ *
+ *  (1) For private mappings: pmd unsharing is not possible, so it'll
+ *      always be safe if we're with the mmap sem for either read or write.
+ *      This is normally always the case, IOW we don't need to do anything
+ *      special.
+ *
+ *  (2) For shared mappings: pmd unsharing is possible (so the PUD-ranged
+ *      pgtable page can go away from under us!  It can be done by a pmd
+ *      unshare with a follow up munmap() on the other process), then we
+ *      need either:
+ *
+ *     (2.1) hugetlb vma lock read or write held, to make sure pmd unshare
+ *           won't happen upon the range (it also makes sure the pte_t we
+ *           read is the right and stable one), or,
+ *
+ *     (2.2) hugetlb mapping i_mmap_rwsem lock held read or write, to make
+ *           sure even if unshare happened the racy unmap() will wait until
+ *           i_mmap_rwsem is released, or,
+ *
+ *     (2.3) pgtable walker lock, to make sure even pmd unsharing happened,
+ *           the old shared PUD page won't get freed from under us.  In
+ *           this case, the pteval can be obsolete, but at least it's still
+ *           always safe to access the page (e.g., de-referencing pte_t*
+ *           would not cause use-after-free).  Note, it's not safe to
+ *           access pgtable lock with this lock.  If huge_pte_lock()
+ *           needed, look for (2.1) or (2.2).
+ *
+ * Option (2.3) is the lightest, but it means pmd unshare can still happen
+ * so the pte got from pgtable walk can be stalled; also only page data is
+ * safe to access not others (e.g. pgtable lock).  Option (2.1) is the
+ * safest, which guarantees pte stability until the vma lock released,
+ * however heavier than (2.3).
+ */
+
+Where hugetlb_walk() will be a new wrapper I'll introduce just to make sure
+lock protections:
+
+static inline pte_t *
+hugetlb_walk(struct vm_area_struct *vma, unsigned long addr, unsigned long sz)
+{
+#ifdef CONFIG_LOCKDEP
+	/* lockdep_is_held() only defined with CONFIG_LOCKDEP */
+	if (vma->vm_flags & VM_MAYSHARE) {
+		struct hugetlb_vma_lock *vma_lock = vma->vm_private_data;
+
+		/*
+		 * Here, taking any of the three locks will guarantee
+		 * safety of hugetlb pgtable walk.
+		 *
+		 * For more information on the locking rules of using
+		 * huge_pte_offset(), please see the comment above
+		 * huge_pte_offset() in the header file.
+		 */
+		WARN_ON_ONCE(!hugetlb_walker_locked() &&
+			     !lockdep_is_held(&vma_lock->rw_sema) &&
+			     !lockdep_is_held(
+				 &vma->vm_file->f_mapping->i_mmap_rwsem));
+	}
+#endif
+
+	return huge_pte_offset(vma->vm_mm, addr, sz);
+}
+
 -- 
-2.25.1
+Peter Xu
 
