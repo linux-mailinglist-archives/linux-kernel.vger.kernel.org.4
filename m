@@ -2,66 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA9CB638420
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 07:44:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93601638421
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 07:54:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbiKYGn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 01:43:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47286 "EHLO
+        id S229631AbiKYGyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 01:54:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiKYGn5 (ORCPT
+        with ESMTP id S229541AbiKYGyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 01:43:57 -0500
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888532A73D;
-        Thu, 24 Nov 2022 22:43:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=iYW/JhAzy/NAHRzRn6OtcNKWyJmGU2/7NHJP6EadOQU=; b=IcfdP1PWIKeGhwP833cmZzviRW
-        qu2ypsdSMoJrBuD6aw+etBv17UIzjGkE99o2W1bap/UOFePESA2JPkQ6HToAfMqus8ZvFhoi71k14
-        U9GJ7+Wk72/WgrF1x5RJgAo9YzGJnKoSnNUAu+tk+AqmMafvzrjN8pMBmQj6E3/Q2pNdDu3WLXLac
-        6QL4v+2y6v8HkK4Sb3nwFpW+3fdp2lh+dXVW5zPs6WuJQ0HrSixB5J+T8QazZ41YuQ/Y8KJiWWdM1
-        9SVoIARbFDi1mhwOuakuTYBlDpZB7QEtsFFhF1KBmCw2E9VAF4ivb7j5j5+NNNl81sKWcsFmzRd5a
-        UN0G5KBg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1oySRB-006btE-0g;
-        Fri, 25 Nov 2022 06:43:49 +0000
-Date:   Fri, 25 Nov 2022 06:43:49 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fsdevel@vger.kernel.org,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] fs: clear a UBSAN shift-out-of-bounds warning
-Message-ID: <Y4BkJd3Jy6MY3cdu@ZenIV>
-References: <20221121024418.1800-1-thunder.leizhen@huawei.com>
+        Fri, 25 Nov 2022 01:54:53 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2CD72B609
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 22:54:51 -0800 (PST)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NJQZd1Nw0zRnvL;
+        Fri, 25 Nov 2022 14:54:17 +0800 (CST)
+Received: from dggpemm500014.china.huawei.com (7.185.36.153) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 25 Nov 2022 14:54:49 +0800
+Received: from localhost.localdomain (10.175.112.125) by
+ dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 25 Nov 2022 14:54:49 +0800
+From:   Wupeng Ma <mawupeng1@huawei.com>
+To:     <naoya.horiguchi@nec.com>
+CC:     <linmiaohe@huawei.com>, <akpm@linux-foundation.org>,
+        <pizhenwei@bytedance.com>, <linux-mm@kvack.org>,
+        <mawupeng1@huawei.com>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next 1/1] mm/memory-failure.c: Cleanup in unpoison_memory
+Date:   Fri, 25 Nov 2022 14:54:44 +0800
+Message-ID: <20221125065444.3462681-1-mawupeng1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221121024418.1800-1-thunder.leizhen@huawei.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500014.china.huawei.com (7.185.36.153)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 10:44:16AM +0800, Zhen Lei wrote:
-> v1 -- > v2:
-> 1. Replace INT_LIMIT(loff_t) with OFFSET_MAX in btrfs.
-> 2. Replace INT_LIMIT() with type_max().
+From: Ma Wupeng <mawupeng1@huawei.com>
 
-Looks fine, except that I'd rather go for commit message
-along the lines of "INT_LIMIT tries to do what type_max does,
-except that type_max doesn't rely upon undefined behaviour;
-might as well use type_max() instead"
+If freeit it true, the value of ret must be zero, there is no need to
+check the value of freeit after label unlock_mutex.
 
-If you want to credit UBSAN - sure, no problem, just don't
-clutter the commit message with that.  As it is, it reads
-as "make $TOOL STFU"...
+We can drop variable freeit to do this cleanup.
+
+Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
+---
+ mm/memory-failure.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index 2e62940c7bae..c77a9e37e27e 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -2338,7 +2338,6 @@ int unpoison_memory(unsigned long pfn)
+ 	struct page *page;
+ 	struct page *p;
+ 	int ret = -EBUSY;
+-	int freeit = 0;
+ 	unsigned long count = 1;
+ 	bool huge = false;
+ 	static DEFINE_RATELIMIT_STATE(unpoison_rs, DEFAULT_RATELIMIT_INTERVAL,
+@@ -2413,10 +2412,9 @@ int unpoison_memory(unsigned long pfn)
+ 				goto unlock_mutex;
+ 			}
+ 		}
+-		freeit = !!TestClearPageHWPoison(p);
+ 
+ 		put_page(page);
+-		if (freeit) {
++		if (TestClearPageHWPoison(p)) {
+ 			put_page(page);
+ 			ret = 0;
+ 		}
+@@ -2424,7 +2422,7 @@ int unpoison_memory(unsigned long pfn)
+ 
+ unlock_mutex:
+ 	mutex_unlock(&mf_mutex);
+-	if (!ret || freeit) {
++	if (!ret) {
+ 		if (!huge)
+ 			num_poisoned_pages_sub(pfn, 1);
+ 		unpoison_pr_info("Unpoison: Software-unpoisoned page %#lx\n",
+-- 
+2.25.1
+
