@@ -2,159 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0305A6389BE
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 13:27:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE8576389C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 13:29:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbiKYM1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 07:27:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54006 "EHLO
+        id S229628AbiKYM3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 07:29:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiKYM1x (ORCPT
+        with ESMTP id S229498AbiKYM32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 07:27:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20801DDFB;
-        Fri, 25 Nov 2022 04:27:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A4C2CB82A92;
-        Fri, 25 Nov 2022 12:27:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B504C433D6;
-        Fri, 25 Nov 2022 12:27:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669379269;
-        bh=PVmnxrUgHUfQVAVze+UCc6oLNX2A8iRf2P5L11tfoN8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ZtGpgHJfPzraVTm7xpYBum+KkpJ5ZEY5ZfvYqxbeKXjclEHVuEjPPKJ+b7ZlM7adC
-         5IiEbHqztwFnRAjYQmHerigmds9daLNuTpkNf//6+M1a+XszUjkOTZtykeIgsepRH+
-         RIoJoMZsq+lEzehJ0Pc2CAkt+5YLlUL9U544tSyKr1Z8Y+dqo5S01/UrxOqAlBrS1T
-         AoK13jv/9IYY3xqTduLI5SrqyAHxEbYyQdJCZ1hhWY/oa4kxJjDV1jObVor2s0YU5w
-         dpy+dfZK1ZPvZU5WajvzwV0OpzTdNmpm/Pk1iH9lKSolD6G2qGesbpO15upwrh3+Dg
-         i/oVc+nK/O0Kw==
-Message-ID: <cd9051ca-9f79-31fc-870d-04dce5139ca9@kernel.org>
-Date:   Fri, 25 Nov 2022 14:27:43 +0200
+        Fri, 25 Nov 2022 07:29:28 -0500
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7B81DF0A;
+        Fri, 25 Nov 2022 04:29:26 -0800 (PST)
+Received: by mail-pj1-x1043.google.com with SMTP id mv18so3619247pjb.0;
+        Fri, 25 Nov 2022 04:29:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Id119FNrcIYOcK2wl9q4CLC2KosZ+id1TTQdMTAyNJM=;
+        b=dA1fT78TyhtuWqwVk4Njfg5LAPAB9CG0GzGWhCPANkpxOKlwDVibchMRr3hgd20aMX
+         xhY0+RKq2N9vazLgA2yWcI//p9xF+8uhAfCFk/ImKRNK3EImyTwp7FasytqQpeQ6CFsi
+         LvZ5jumU8jkI/tu6BnIa0F/D7g6ZOX8iuw85EAs3rP7mi8tgulMKvrZZdPUJShtaSYvn
+         ZWieMtSAmUVVRIuY9XPBr2vAWF1vgQZPKLTwrqX3xkzrrO/K1mvyN7Omqv7HgXfQQFHf
+         7CYfhGF+ku1oZpe86Fk5u/2fsahgiwmHv7Za6zu7e/1h4S69arwauiAoAqfGPpS8XhlI
+         7lJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Id119FNrcIYOcK2wl9q4CLC2KosZ+id1TTQdMTAyNJM=;
+        b=czEHIOO9WW01X8Nog76t3l7PPAwcqPnWHKxl94PuZrkttaqrqTF6FEBp9hIvJ7urFs
+         0twHnzx+r4ewIYNaXst9fHxFAJ/Gb+TBhEz8IkyhmeAZAHPUq9v4lT0gP6DRfTIO6s2M
+         Av74C2RwBSHHIIsDkouq8lMk8vGVEK8gLM6xX68JPCqZNT2cu+V1+anf8Hmsm36MKWL9
+         JYDeiHW9hwuFU/dJT6wmTyxgDuwfyrJP89oZ9DT4jFlWDg07WFg0ZotfOA+rDero3jaI
+         LIiOP4SNTfdJ8UIKjwNMhiFZB+3gj9UFxAbX9whqn0BB3htbBL3Rjdhn2Xq8zJJfb62G
+         DZcQ==
+X-Gm-Message-State: ANoB5plD/Z6C73f5ebjcWXRkCXOl6EI7Cs0OpPL7EY5Rz7ytiU6Qa6P5
+        LTrMMmW8bW+pLhZfa84unV5L4HBcIOka
+X-Google-Smtp-Source: AA0mqf6C8fWDPypulL05gRBD+1ipTxMCjvLmII4/xdwJ02CxLGOQDAlG0Nj1fB9Fth1i85FD7RKgLg==
+X-Received: by 2002:a17:902:8548:b0:188:6300:57ad with SMTP id d8-20020a170902854800b00188630057admr24619816plo.7.1669379365424;
+        Fri, 25 Nov 2022 04:29:25 -0800 (PST)
+Received: from localhost.localdomain ([144.214.0.6])
+        by smtp.gmail.com with ESMTPSA id x14-20020a170902a38e00b0018912c37c8fsm117009pla.129.2022.11.25.04.29.22
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Fri, 25 Nov 2022 04:29:24 -0800 (PST)
+From:   Hao Sun <sunhao.th@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, Hao Sun <sunhao.th@gmail.com>
+Subject: [PATCH bpf-next v3 0/3] bpf: Add LDX/STX/ST sanitize in jited BPF progs
+Date:   Fri, 25 Nov 2022 20:29:09 +0800
+Message-Id: <20221125122912.54709-1-sunhao.th@gmail.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v7 2/5] PCI: j721e: Add per platform maximum lane settings
-Content-Language: en-US
-To:     Matt Ranostay <mranostay@ti.com>, lpieralisi@kernel.org,
-        robh@kernel.org, kw@linux.com, bhelgaas@google.com,
-        krzysztof.kozlowski@linaro.org, vigneshr@ti.com,
-        tjoseph@cadence.com, sergio.paracuellos@gmail.com,
-        pthombar@cadence.com, linux-pci@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221124081221.1206167-1-mranostay@ti.com>
- <20221124081221.1206167-3-mranostay@ti.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20221124081221.1206167-3-mranostay@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLACK,
+        URIBL_DBL_ABUSE_REDIR autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matt,
+The verifier sometimes makes mistakes[1][2] that may be exploited to
+achieve arbitrary read/write. Currently, syzbot is continuously testing
+bpf, and can find memory issues in bpf syscalls, but it can hardly find
+mischecking/bugs in the verifier. We need runtime checks like KASAN in
+BPF programs for this. This patch series implements address sanitize
+in jited BPF progs for testing purpose, so that tools like syzbot can
+find interesting bugs in the verifier automatically by, if possible,
+generating and executing BPF programs that bypass the verifier but have
+memory issues, then triggering this sanitizing.
 
-On 24/11/2022 10:12, Matt Ranostay wrote:
-> Various platforms have different maximum amount of lanes that can be
-> selected. Add max_lanes to struct j721e_pcie to allow for detection of this
-> which is needed to calculate the needed bitmask size for the possible lane
-> count.
-> 
-> Signed-off-by: Matt Ranostay <mranostay@ti.com>
-> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
-> ---
->  drivers/pci/controller/cadence/pci-j721e.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/cadence/pci-j721e.c b/drivers/pci/controller/cadence/pci-j721e.c
-> index cc83a8925ce0..8990f58d64d5 100644
-> --- a/drivers/pci/controller/cadence/pci-j721e.c
-> +++ b/drivers/pci/controller/cadence/pci-j721e.c
-> @@ -47,8 +47,6 @@ enum link_status {
->  
->  #define GENERATION_SEL_MASK		GENMASK(1, 0)
->  
-> -#define MAX_LANES			2
-> -
->  struct j721e_pcie {
->  	struct cdns_pcie	*cdns_pcie;
->  	struct clk		*refclk;
-> @@ -71,6 +69,7 @@ struct j721e_pcie_data {
->  	unsigned int		quirk_disable_flr:1;
->  	u32			linkdown_irq_regfield;
->  	unsigned int		byte_access_allowed:1;
-> +	unsigned int		max_lanes;
->  };
->  
->  static inline u32 j721e_pcie_user_readl(struct j721e_pcie *pcie, u32 offset)
-> @@ -290,11 +289,13 @@ static const struct j721e_pcie_data j721e_pcie_rc_data = {
->  	.quirk_retrain_flag = true,
->  	.byte_access_allowed = false,
->  	.linkdown_irq_regfield = LINK_DOWN,
-> +	.max_lanes = 2,
->  };
->  
->  static const struct j721e_pcie_data j721e_pcie_ep_data = {
->  	.mode = PCI_MODE_EP,
->  	.linkdown_irq_regfield = LINK_DOWN,
-> +	.max_lanes = 2,
->  };
->  
->  static const struct j721e_pcie_data j7200_pcie_rc_data = {
-> @@ -302,23 +303,27 @@ static const struct j721e_pcie_data j7200_pcie_rc_data = {
->  	.quirk_detect_quiet_flag = true,
->  	.linkdown_irq_regfield = J7200_LINK_DOWN,
->  	.byte_access_allowed = true,
-> +	.max_lanes = 2,
->  };
->  
->  static const struct j721e_pcie_data j7200_pcie_ep_data = {
->  	.mode = PCI_MODE_EP,
->  	.quirk_detect_quiet_flag = true,
->  	.quirk_disable_flr = true,
-> +	.max_lanes = 2,
->  };
->  
->  static const struct j721e_pcie_data am64_pcie_rc_data = {
->  	.mode = PCI_MODE_RC,
->  	.linkdown_irq_regfield = J7200_LINK_DOWN,
->  	.byte_access_allowed = true,
-> +	.max_lanes = 1,
->  };
->  
->  static const struct j721e_pcie_data am64_pcie_ep_data = {
->  	.mode = PCI_MODE_EP,
->  	.linkdown_irq_regfield = J7200_LINK_DOWN,
-> +	.max_lanes = 1,
->  };
->  
->  static const struct of_device_id of_j721e_pcie_match[] = {
-> @@ -432,7 +437,7 @@ static int j721e_pcie_probe(struct platform_device *pdev)
->  	pcie->user_cfg_base = base;
->  
->  	ret = of_property_read_u32(node, "num-lanes", &num_lanes);
-> -	if (ret || num_lanes > MAX_LANES)
-> +	if (ret || num_lanes > data->max_lanes)
->  		num_lanes = 1;
+The idea is to dispatch read/write addr of a BPF program to the kernel
+functions that are instrumented by KASAN, to achieve indirect checking.
+Indirect checking is adopted because this is much simple, instrument
+direct checking like compilers makes the jit much more complex. The
+main step is: back up all the scratch regs to extend BPF prog stack,
+store addr to R1, and then insert the checking function before load
+or store insns, during bpf_misc_fixup(). The stack size of BPF progs
+is extended by 64 bytes in this mode, to backup R1~R5 to make sure
+the checking funcs won't corrupt regs states. An extra Kconfig option
+is used to enable this, so normal use case won't be impacted at all.
 
-num_lanes = data->max_lanes; ?
+Also, not all ldx/stx/st are instrumented. Insns rewrote by other fixup
+or conversion passes that use BPF_REG_AX are skipped, because that
+conflicts with us; insns whose access addr is specified by R10 are also
+skipped because they are trivial to verify.
 
-Should we also print an error message saying that invalid num-lanes
-was supplied in device tree?
-Is it better to error out of probe?
+Patch1 sanitizes st/stx insns, and Patch2 sanitizes ldx insns, Patch3 adds
+selftests for instrumentation in each possible case, and all new/existing
+selftests for the verifier can pass. Also, a BPF prog that also exploits
+CVE-2022-23222 to achieve OOB read is provided[3], this can be perfertly
+captured with this patch series.
 
->  	pcie->num_lanes = num_lanes;
->  
+[1] http://bit.do/CVE-2021-3490
+[2] http://bit.do/CVE-2022-23222
+[3] OOB-read: https://pastebin.com/raw/Ee1Cw492
 
-cheers,
--roger
+v1 -> v2:
+        remove changes to JIT completely, backup regs to extended stack.
+v2 -> v3:
+	fix missing-prototypes warning report by kernel test bot.
+	simplify regs backing up and rewrite corresponding selftests.
+
+Hao Sun (3):
+  bpf: Sanitize STX/ST in jited BPF progs with KASAN
+  bpf: Sanitize LDX in jited BPF progs with KASAN
+  selftests/bpf: Add tests for LDX/STX/ST sanitize
+
+ kernel/bpf/Kconfig                            |  13 +
+ kernel/bpf/verifier.c                         | 173 ++++++++++
+ .../selftests/bpf/verifier/sanitize_st_ldx.c  | 317 ++++++++++++++++++
+ 3 files changed, 503 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/verifier/sanitize_st_ldx.c
+
+
+base-commit: 2b3e8f6f5b939ceeb2e097339bf78ebaaf11dfe9
+-- 
+2.38.1
+
