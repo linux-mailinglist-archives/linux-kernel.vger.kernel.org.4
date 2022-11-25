@@ -2,112 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E90FC638589
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 09:51:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96E21638586
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 09:51:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbiKYIvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 03:51:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34354 "EHLO
+        id S229802AbiKYIv1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 25 Nov 2022 03:51:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbiKYIvb (ORCPT
+        with ESMTP id S229510AbiKYIv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 03:51:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5066275DB
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 00:50:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669366235;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZCa5X8lXlExaGphI0WGFeQw46HpXtfvTpixratHZyiE=;
-        b=B3Lh+NtPg/yvsm5mOnBrZzbuAWTquVHGKL5wg1PJiufqANb6kdhDa3iYRZsycsoqXK4+Ik
-        KkIM4uiGN3A4er9AiBRxiPlYtLr9PUMx/pEr3obNfGapjRFUAtMy+RlNBkYs7ld24FzeiX
-        HyNvdApubs6CW4gmG6Ivfm494iQOSus=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-113-g2FjUN9JPhekY7p4RMWW5A-1; Fri, 25 Nov 2022 03:50:34 -0500
-X-MC-Unique: g2FjUN9JPhekY7p4RMWW5A-1
-Received: by mail-wm1-f70.google.com with SMTP id x10-20020a05600c420a00b003cfa33f2e7cso2129516wmh.2
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 00:50:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZCa5X8lXlExaGphI0WGFeQw46HpXtfvTpixratHZyiE=;
-        b=fztEEFsu837OP5KDdmWQD9N9GKMGDYm2EVRRtXd3WabvTfgq3oIfArhe+VRAgom4vE
-         7xAEVIKVpo7/gBJHUG4ecYTs/PIZ57OMCFf8uYGOJK+b2zyImnEYc1NbsVSFHADK0n9a
-         bhuAMWDihqxX8ex32+sHDPcDsQVDQTx6uwsKajqaxwHrTuTXC9OAWCyOuy8jF+U8RCo2
-         ivm2P1uFeAwzYmxJMiDbm+vwjjOUFGeQiQ9OJYZ3vDvqcfyZC1t7OkxHGisdSG9X95Q2
-         7HMLnTH502gG85ODTyejCgjslm7eQDzPSQ85ZLuI8395uEDF/85iAww2VU09YdHbU2M5
-         xG8A==
-X-Gm-Message-State: ANoB5pnx8qP57CMB9q+Y0pvSFiAcX1/KznjqxXn7a23iaGlsTi/jVHJG
-        FDjDLoLyzgk7hbUFQ9Lz2pUnkVsYY+Sw1WSuObF8hUnBUvnn76qk8rlTaY5v6pgrryQq1msJayp
-        GJ5lY4GkX+lE0kchXWgo8Uew9
-X-Received: by 2002:a5d:5305:0:b0:242:25e:e731 with SMTP id e5-20020a5d5305000000b00242025ee731mr2642371wrv.48.1669366233209;
-        Fri, 25 Nov 2022 00:50:33 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6mov6a1ABQsKCpweMfuKZj8FtStMvwn4E4x4v/bkoJJVxviE1bsUHgijhFDEI16xW3gYv3qw==
-X-Received: by 2002:a5d:5305:0:b0:242:25e:e731 with SMTP id e5-20020a5d5305000000b00242025ee731mr2642344wrv.48.1669366232940;
-        Fri, 25 Nov 2022 00:50:32 -0800 (PST)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id p11-20020a05600c468b00b003cfd10a33afsm8890236wmo.11.2022.11.25.00.50.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Nov 2022 00:50:32 -0800 (PST)
-Message-ID: <2517016e-1b31-b821-df0c-8c0498f11719@redhat.com>
-Date:   Fri, 25 Nov 2022 09:50:31 +0100
+        Fri, 25 Nov 2022 03:51:26 -0500
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4232427903;
+        Fri, 25 Nov 2022 00:51:25 -0800 (PST)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 2AP8o2LN1013351, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 2AP8o2LN1013351
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Fri, 25 Nov 2022 16:50:02 +0800
+Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.9; Fri, 25 Nov 2022 16:50:45 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Fri, 25 Nov 2022 16:50:45 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b]) by
+ RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b%5]) with mapi id
+ 15.01.2375.007; Fri, 25 Nov 2022 16:50:45 +0800
+From:   Ping-Ke Shih <pkshih@realtek.com>
+To:     Sascha Hauer <s.hauer@pengutronix.de>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
+CC:     Neo Jou <neojou@gmail.com>, Hans Ulli Kroll <linux@ulli-kroll.de>,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Martin Blumenstingl" <martin.blumenstingl@googlemail.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Alexander Hochbaum <alex@appudo.com>,
+        Da Xue <da@libre.computer>,
+        "Bernie Huang" <phhuang@realtek.com>,
+        Viktor Petrenko <g0000ga@gmail.com>
+Subject: RE: [PATCH v3 06/11] rtw88: iterate over vif/sta list non-atomically
+Thread-Topic: [PATCH v3 06/11] rtw88: iterate over vif/sta list non-atomically
+Thread-Index: AQHY/oIuKuRZgKSqcE2cjQtXkytLTa5PVioQ
+Date:   Fri, 25 Nov 2022 08:50:45 +0000
+Message-ID: <b915078edbc1427384719c0b77b37fda@realtek.com>
+References: <20221122145226.4065843-1-s.hauer@pengutronix.de>
+ <20221122145226.4065843-7-s.hauer@pengutronix.de>
+In-Reply-To: <20221122145226.4065843-7-s.hauer@pengutronix.de>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXMBS01.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/11/25_=3F=3F_06:00:00?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH 01/24] drm/tests: helpers: Rename the device init helper
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Maxime Ripard <mripard@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     David Gow <davidgow@google.com>, linaro-mm-sig@lists.linaro.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org,
-        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
-        linux-media@vger.kernel.org, kunit-dev@googlegroups.com,
-        dri-devel@lists.freedesktop.org,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        linux-kernel@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-References: <20221123-rpi-kunit-tests-v1-0-051a0bb60a16@cerno.tech>
- <20221123-rpi-kunit-tests-v1-1-051a0bb60a16@cerno.tech>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20221123-rpi-kunit-tests-v1-1-051a0bb60a16@cerno.tech>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/23/22 16:25, Maxime Ripard wrote:
-> The name doesn't really fit the conventions for the other helpers in
-> DRM/KMS, so let's rename it to make it obvious that we allocate a new
-> DRM device.
+
+
+> -----Original Message-----
+> From: Sascha Hauer <s.hauer@pengutronix.de>
+> Sent: Tuesday, November 22, 2022 10:52 PM
+> To: linux-wireless@vger.kernel.org
+> Cc: Neo Jou <neojou@gmail.com>; Hans Ulli Kroll <linux@ulli-kroll.de>; Ping-Ke Shih <pkshih@realtek.com>;
+> Yan-Hsuan Chuang <tony0620emma@gmail.com>; Kalle Valo <kvalo@kernel.org>; netdev@vger.kernel.org;
+> linux-kernel@vger.kernel.org; Martin Blumenstingl <martin.blumenstingl@googlemail.com>;
+> kernel@pengutronix.de; Johannes Berg <johannes@sipsolutions.net>; Alexander Hochbaum <alex@appudo.com>;
+> Da Xue <da@libre.computer>; Bernie Huang <phhuang@realtek.com>; Viktor Petrenko <g0000ga@gmail.com>;
+> Sascha Hauer <s.hauer@pengutronix.de>
+> Subject: [PATCH v3 06/11] rtw88: iterate over vif/sta list non-atomically
 > 
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> ---
+> The driver uses ieee80211_iterate_active_interfaces_atomic()
+> and ieee80211_iterate_stations_atomic() in several places and does
+> register accesses in the iterators. This doesn't cope with upcoming
+> USB support as registers can only be accessed non-atomically.
+> 
+> Split these into a two stage process: First use the atomic iterator
+> functions to collect all active interfaces or stations on a list, then
+> iterate over the list non-atomically and call the iterator on each
+> entry.
+> 
+> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+> Suggested-by: Pkshih <pkshih@realtek.com>
 
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+Please correct my full name. The old setting of my mailer is improper.
 
--- 
-Best regards,
+Suggested-by: Ping-Ke Shih <pkshih@realtek.com>
+Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
 
-Javier Martinez Canillas
-Core Platforms
-Red Hat
 
