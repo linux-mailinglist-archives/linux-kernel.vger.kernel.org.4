@@ -2,139 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 198F26388F9
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 12:42:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33F9C638905
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 12:45:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbiKYLmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 06:42:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40452 "EHLO
+        id S229914AbiKYLpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 06:45:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbiKYLmh (ORCPT
+        with ESMTP id S229772AbiKYLo7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 06:42:37 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719A42AC5
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 03:42:34 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id be13so6494348lfb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 03:42:34 -0800 (PST)
+        Fri, 25 Nov 2022 06:44:59 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A4DF19001
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 03:44:58 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id v8so6056686edi.3
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 03:44:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HuPscf/chfZUucxqeK0O8KtSwVLAMHyTryFfC0BnouI=;
-        b=cRBJ1zIlVB87Nh4EHVcPOxoezUvVbm14AjUgY4f08Iy8TfC87vMcKJDo6glZPhWH7Z
-         GwT8aTsLmweIygCJ/gUv3Vykf6eM7OeiH3i8V8Zy5GD+xPul5w495P7qrsOrnyDaOxLl
-         11Yooh4D6KhfExQlcIjJp9pTmDEK/TrsXc1fkt2A+jNggyrcvkalMMV+LsSc+eKTBBl8
-         aO/wg7tP+nsnZtL5r2c+Dib0cy3zswaht6L8po9wdwGFjhxB6EsSMDCMhj1aL8jVoU+r
-         8Z+oahw4aQc+fkVoYQ8MpgIkXCKKc68nGnW00/rrfWqCGMvqKERweUhcQpK3NBZgJ2Uf
-         I9uQ==
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ganGoGk0dGLWUVZJZmO5N8MpSnIzwLlxlJWd5xpG83Q=;
+        b=RclqeXPCsvXV295FMJA2FxIFmH1hIIdtE83WJi1sS2G+TBtQqDyYZu42qNcLM3L6v1
+         60gjZ9vN9VAt/7rkJkryeuBmRONyL1OJLG4o3NnUlcXE++uqtjTZ+dkgwPVyxTE/YO2K
+         RiqNzcS3hLhu/tJeZB7zHbhLzznr/3DQxfMLz4LThA1Bp3HTUe9NpL7v0yrgjfL/qiIe
+         Kt1dqqWBm4rvfIVaUPVyjsWq4Ui/4Vmzh863hv163sDvJH3wjCtHaB99VL0dj/PHkLDl
+         O9Quf7aao/efSpjhi/xnajZL6cbZQdkZI5EqlIUHkORpad55O/fpRIZGQojRIEoDvYwj
+         5xbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HuPscf/chfZUucxqeK0O8KtSwVLAMHyTryFfC0BnouI=;
-        b=S6wwK1Wd9b87Bqe0ukocYGXrowKJLxESa/6dsz7ejS4yXf7/OZa8fe5adxyYYPdNok
-         QRwJ5RKwpILBwLBakLwbCtNW0lWDuKJJfbOiR0cFW4lo249h0thsLpcvZzgxReb7qbx6
-         07O7IedI9QopEHpMzi6M2tkEsWD9rZPwcW6dV1O6EfbSLxsibeuB2MurSJEo3ExuAHXw
-         C92BpoJmUUq0/XPJ8pxE0f+pXWTy6PfdPKuOmVQZ3esWck+lpMr3s3x+UDVhp5/CyG9S
-         gxFgbpksJGuaAIbd6eAFxu8BR7co8g7mFbYI5OLa+CVkoc6MvwhB5gIpVHLG70W5KFxw
-         KASg==
-X-Gm-Message-State: ANoB5pkB87dKOWfHP+mKIlKILxd7g3Pg3p9ymvVlxkGONMhgIoRl7Yht
-        VbBZx2oRBjffUZyhABpjgjv7yA==
-X-Google-Smtp-Source: AA0mqf69KgZUaBuDg3MrXss7tf94wwuwhowHtIdO7QNFzCE8H2TyG926JtAx4Z6Md29+4m7ZV17tMw==
-X-Received: by 2002:a19:760b:0:b0:4b1:ebdb:be43 with SMTP id c11-20020a19760b000000b004b1ebdbbe43mr7257355lff.176.1669376552426;
-        Fri, 25 Nov 2022 03:42:32 -0800 (PST)
-Received: from [192.168.1.101] (95.49.32.48.neoplus.adsl.tpnet.pl. [95.49.32.48])
-        by smtp.gmail.com with ESMTPSA id o7-20020a05651205c700b004a2550db9ddsm494684lfo.245.2022.11.25.03.42.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Nov 2022 03:42:31 -0800 (PST)
-Message-ID: <d03bd4d4-e4ef-681b-b4a5-02822e1eee75@linaro.org>
-Date:   Fri, 25 Nov 2022 12:42:29 +0100
+        bh=ganGoGk0dGLWUVZJZmO5N8MpSnIzwLlxlJWd5xpG83Q=;
+        b=am9LrX8Wk/wsyWpOatShq8zMK0Ts/1WKMauL9wtaRwzTgwlwR/fMgTtfO/DliwVw7u
+         rxWuXL/ln1KyOaKBB14OZRzOayuqRU+/6bomQUJ4PT8Ee6otLT4zoIf0YmXLq4EiMDfh
+         qGaY7qODXZhu8JWAUKpGIv0Y78r26wwkyXP2K7KCS1YSyZlvt0uy4yUYJvAU2oGfWq9z
+         3BDAgZffGbqKLfEwt9KmXCdzSadc+5qgLh750sLYUUaLKbz42jQNFmkFPIjW0OeQv9dC
+         jzDq2tNIVhxgHTWLEaZQsosA0HbDe2pINnKTz5ijz7tT8DcfMKaPpW1LqWCvXiLXQRmQ
+         xY4A==
+X-Gm-Message-State: ANoB5pktjVH2pxoNhdWZ0NcR0JN5H2/o9tN4ifcS02tREQc59/hqmWP2
+        3JM9+Lj2WEfh7PZZbj1b/tHo3A==
+X-Google-Smtp-Source: AA0mqf7SeBJN7wr1Q4tACLDGo74k4BsLhAglgzt2jja6Yg+ow1nUgTWXD1+XxUrNqU9Yf/KfD80AVw==
+X-Received: by 2002:a05:6402:2318:b0:469:10b2:df98 with SMTP id l24-20020a056402231800b0046910b2df98mr30800385eda.115.1669376696729;
+        Fri, 25 Nov 2022 03:44:56 -0800 (PST)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id kz1-20020a17090777c100b0078de26f66b9sm1467428ejc.114.2022.11.25.03.44.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Nov 2022 03:44:56 -0800 (PST)
+Date:   Fri, 25 Nov 2022 12:44:54 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v4 1/7] riscv: asm: alternative-macros: Introduce
+ ALTERNATIVE_3() macro
+Message-ID: <20221125114454.yfh2mtctbi3nkud7@kamzik>
+References: <20221124172207.153718-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221124172207.153718-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <Y3/LgZkR1hkblJ8D@spud>
+ <4801607.MHq7AAxBmi@diego>
+ <Y3/OlKI1jyi0eoCJ@spud>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2] brcmfmac: Add support for BCM43596 PCIe Wi-Fi
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Kalle Valo <kvalo@kernel.org>,
-        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <ALSI@bang-olufsen.dk>,
-        Hector Martin <marcan@marcan.st>,
-        "~postmarketos/upstreaming@lists.sr.ht" 
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        "martin.botka@somainline.org" <martin.botka@somainline.org>,
-        "angelogioacchino.delregno@somainline.org" 
-        <angelogioacchino.delregno@somainline.org>,
-        "marijn.suijten@somainline.org" <marijn.suijten@somainline.org>,
-        "jamipkettunen@somainline.org" <jamipkettunen@somainline.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Marek Vasut <marex@denx.de>,
-        "Zhao, Jiaqing" <jiaqing.zhao@intel.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Soon Tak Lee <soontak.lee@cypress.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "brcm80211-dev-list.pdl@broadcom.com" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        "SHA-cyfmac-dev-list@infineon.com" <SHA-cyfmac-dev-list@infineon.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220921001630.56765-1-konrad.dybcio@somainline.org>
- <83b90478-3974-28e6-cf13-35fc4f62e0db@marcan.st>
- <13b8c67c-399c-d1a6-4929-61aea27aa57d@somainline.org>
- <0e65a8b2-0827-af1e-602c-76d9450e3d11@marcan.st>
- <7fd077c5-83f8-02e2-03c1-900a47f05dc1@somainline.org>
- <CACRpkda3uryD6TOEaTi3pPX5No40LBWoyHR4VcEuKw4iYT0dqA@mail.gmail.com>
- <20220922133056.eo26da4npkg6bpf2@bang-olufsen.dk> <87sfke32pc.fsf@kernel.org>
- <4592f87a-bb61-1c28-13f0-d041a6e7d3bf@linaro.org>
- <CACRpkdax-3VVDd29iH51mfumakqM7jyEc8Pbb=AQwAgp2WsqFQ@mail.gmail.com>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <CACRpkdax-3VVDd29iH51mfumakqM7jyEc8Pbb=AQwAgp2WsqFQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y3/OlKI1jyi0eoCJ@spud>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 21.11.2022 14:56, Linus Walleij wrote:
-> On Fri, Nov 18, 2022 at 5:47 PM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+On Thu, Nov 24, 2022 at 08:05:40PM +0000, Conor Dooley wrote:
+> On Thu, Nov 24, 2022 at 08:58:41PM +0100, Heiko Stübner wrote:
+> > Am Donnerstag, 24. November 2022, 20:52:33 CET schrieb Conor Dooley:
+> > > On Thu, Nov 24, 2022 at 05:22:01PM +0000, Prabhakar wrote:
+> > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > 
+> > > > Introduce ALTERNATIVE_3() macro.
+> > > 
+> > > Bit perfunctory I think! There's a lovely comment down below that would
+> > > make for a better commit message if you were to yoink it.
+> > > Content looks about what I'd expect to see though.
+> > 
+> > Also both the comment on the original ALTERNATIVE_2 and the new ALTERNATIVE_3
+> > should probably be merged into a single comment explaining this once for all
+> > ALTERNATIVE_x variants.
+> > 
+> > Especially with the dma stuff, I'm pretty sure we'll get at least an ALTERNATIVE_4
+> > if not even more ;-) . So we defnitly don't want to repeat this multiple times.
 > 
->> I can think of a couple of hacky ways to force use of 43596 fw, but I
->> don't think any would be really upstreamable..
-> 
-> If it is only known to affect the Sony Xperias mentioned then
-> a thing such as:
-> 
-> if (of_machine_is_compatible("sony,xyz") ||
->     of_machine_is_compatible("sony,zzz")... ) {
->    // Enforce FW version
-> }
-> 
-> would be completely acceptable in my book. It hammers the
-> problem from the top instead of trying to figure out itsy witsy
-> details about firmware revisions.
-> 
-> Yours,
-> Linus Walleij
-Actually, I think I came up with a better approach by pulling a page
-out of Asahi folks' book - please take a look and tell me what you
-think about this:
+> Oh I can promise you that there'll be a #4 ;)
 
-[1] https://github.com/SoMainline/linux/commit/4b6fccc995cd79109b0dae4e4ab2e48db97695e7
-[2] https://github.com/SoMainline/linux/commit/e3ea1dc739634f734104f37fdbed046873921af7
+I took a stab[*] at cleaning up alternative-macros.h a bit in order to
+prepare for _3, _4, ..., _42. The idea was to try and find a way to
+reduce as much duplication as possible, both in the current code and
+in the new macros.
 
+[*] https://lore.kernel.org/all/20221125113959.35328-1-ajones@ventanamicro.com/
 
-Konrad
+Thanks,
+drew
