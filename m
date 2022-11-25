@@ -2,170 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FF2A638DC5
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 16:51:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBC6A638DCE
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 16:53:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbiKYPvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 10:51:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38636 "EHLO
+        id S229618AbiKYPw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 10:52:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiKYPvt (ORCPT
+        with ESMTP id S229622AbiKYPwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 10:51:49 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE58423BE7;
-        Fri, 25 Nov 2022 07:51:48 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id v81so4802884oie.5;
-        Fri, 25 Nov 2022 07:51:48 -0800 (PST)
+        Fri, 25 Nov 2022 10:52:53 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1926627159
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 07:52:52 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id j16so7467970lfe.12
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 07:52:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=I+rzUabA+R+ClowpTx1fNfQ7ebnqEjXoJ9kJUWmt2bo=;
-        b=bXvUiGNOzo6BZF7opuk08LbNx2t0x6W7jmjaevKXEXvU29ybCw1Du+XLTuneflt1zp
-         XPpL5P+oM0I18N/Sqo8KHduZTCa3NI9DcqsXWF+8LxEzdKMrqCXWGiuXvgvouqyofiNT
-         oAK4z8hj4HCiFtWFKSe1mmUQjCfKy1qOlRP/evNFS2iGYRzCyVf1bkFGUIAVRb2LNqmx
-         oiWWH2CNFJqsW95v4GyLjR5ITsI+Wriz0ahpR7YuDoFZaPuD50Y78AM2hhrlrU3MPhYV
-         /ddxVjbhf0m8SNAns2EbXb7OZjPwDi/TB1rfmGJG4LIudyuqo98w0y3lD82MB0sehavu
-         wssg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1S80mqqzZPV4x0fjfvSYuvzqcnujfLUcEw9LE2vdO30=;
+        b=rxTk+ofk5/kp/tBgvUncx34Wmy8PgkdH58ZnTcqVFqL6NiwtquGNdY9uMuSjTxWRU4
+         3ABUuer/n0skicY6HzPI/ItzipsC74K25KnLi71x6JCoC4olV7sXe815Frn+7irN2KBI
+         OggqKwajRyS7oiMjBW9sF+eQoLtbULqADkFczb69mTXl573T/acIro0SXY4bVxOVTFv+
+         IdDONAr3bVmK5L5A1DrmgAYz4xWZSK0YAuPR/ISkMJUCESleloB4Ra4PvliqpfJsRJJH
+         uqmhmgT/CxRAQT+y3ZBuqEXVDIaYHb9ATpEaCKoJyYFF+Er8bDb1d2j/scrgK6YtTPqM
+         nA9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=I+rzUabA+R+ClowpTx1fNfQ7ebnqEjXoJ9kJUWmt2bo=;
-        b=E3hXoZTgi1t97G08E94vY7iH/6Sm+9BbuqIc2DYx3TjGS5n87t9Csp6sLXD+OfxDX2
-         ACqHPNRXtrxty0sKbDXfvc2WxQczOl4aVsAxsxnrNvcrCNgA0qsYoR2mdp7ZO3KDjwQw
-         xLZ/9+6va2UDWRxlH/ELmiUM38FNV2JSvgS4hohvCiJcKz31+9Wjr0+C/tyI/TShqLLt
-         0Ace6w1/2zJZA+adKyPHFgCe2OlLVB5fPHEbVrp9o3vJ55+o0kQVEH7IQ5KlCgdmZN6R
-         ypqYOr/7DlFJor0dblXboq/Q3kNGkANlgYMEC3ejfaR/O2LbBtnN5VCCESeRBkxONEGW
-         kMsg==
-X-Gm-Message-State: ANoB5plHtJiQPL0Mwq4EQIsrpOpz0EuaqL6KVWmYKfNrBaRskiqPT2Rq
-        N9U0QPMI3XJ+l7uiy13F6XCjrtgZZnY=
-X-Google-Smtp-Source: AA0mqf5XPInWTtZURlWgM4gu8NVtw/5U1lbYyU4E61Zxnx4AWkfLGGNWsA+fMxksB+hTaYrkHx4lKQ==
-X-Received: by 2002:aca:60d7:0:b0:359:e2f5:88a6 with SMTP id u206-20020aca60d7000000b00359e2f588a6mr10914884oib.181.1669391508034;
-        Fri, 25 Nov 2022 07:51:48 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m4-20020a9d6ac4000000b00661a33883b8sm1757420otq.71.2022.11.25.07.51.47
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1S80mqqzZPV4x0fjfvSYuvzqcnujfLUcEw9LE2vdO30=;
+        b=T4vqhJ3iP9CVsW/9JSb5vuy9mKHptRrV0hzDivi7ipNZzzxIhBY08XAqxk9J70duNM
+         6b+CzZyq99dPZigCdtl16e0OK7rpXPEYnSEyCb9XactK+bIlH+fZOVzHeu5H1BZbtpW3
+         b02Ys9YRbn3wfu4S4QRef+2T8VVgxPBwIv+4fBCXAL5EDQybLf9hTSvQacXeRzjte7a2
+         rqBnlrA3eXOjH28v8fmtRcPF28ooxydQjhM4SCk7U2gy/TsQIweSs39gI1KB6xFy+e44
+         pjXnAtjGjmBQLHb1jhk9V7mxQGKtrxewEYdyVzSWYk9z7uXcuovTqHFc2FkW98NMvon2
+         vPMA==
+X-Gm-Message-State: ANoB5pkPst+WT9gYXHVhtAIz37cqHR9XQOYJfmkJCrSCeg3MdLRlnouc
+        1e6dw+csPtWcKuHMHlTyP6k+EA==
+X-Google-Smtp-Source: AA0mqf6X/KnbJCFxPa7UnT2OxSIX0wk6JLemR+lPA+e4v/zQ+I1V5mQKQC1w//ayTYER8W7yYAXiIQ==
+X-Received: by 2002:a19:5e58:0:b0:4a7:5a63:71e1 with SMTP id z24-20020a195e58000000b004a75a6371e1mr6959397lfi.399.1669391570441;
+        Fri, 25 Nov 2022 07:52:50 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id t14-20020a05651c204e00b002778a76a3c3sm391488ljo.112.2022.11.25.07.52.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Nov 2022 07:51:47 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 25 Nov 2022 07:51:46 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Fri, 25 Nov 2022 07:52:50 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6] hwmon: (pmbus/core): Implement regulator get_status
-Message-ID: <20221125155146.GA1169995@roeck-us.net>
-References: <20221124193642.4081054-1-Naresh.Solanki@9elements.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH v4 0/3] arm64: dts: qcom: sm8450-hdk: add sound support
+Date:   Fri, 25 Nov 2022 16:52:44 +0100
+Message-Id: <20221125155247.501203-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221124193642.4081054-1-Naresh.Solanki@9elements.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 08:36:42PM +0100, Naresh Solanki wrote:
-> From: Patrick Rudolph <patrick.rudolph@9elements.com>
-> 
-> Add get_status for pmbus_regulator_ops.
-> ---
+Hi,
 
-Adding "---" into the commit description causes everything afterwards
-to get lost when applying the patch, including the signatures.
-I fixed it up and applied it, but please don't do that in the future.
+Changes since v3
+================
+1. Re-order reg and sound-dai-cells.
 
-Guenter
+Changes since v2
+================
+1. Patch 2: Use lower-case hex.
+2. Patch 3: Use ACTIVE_LOW for qcom,wcd9380-codec reset-gpios.
+   https://lore.kernel.org/all/20221116053817.2929810-11-dmitry.torokhov@gmail.com
+3. Add Rb tags.
 
-> Changes:
-> - use lock throughout the function
-> - Avoid line continuation upto 100 column
-> - Optimize use of & and | operator
-> - Check for VOUT, IOUT, TEMPERATURE bit in status word before checking
->   respective status register for fault.
-> - Report regulator current status.
-> - Utilize get_error_flag to check for regulator errors.
-> - Check for return value of function get_error_flag
-> - Use function pmbus_regulator_get_error_flags directly
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> ---
->  drivers/hwmon/pmbus/pmbus_core.c | 44 ++++++++++++++++++++++++++++++++
->  1 file changed, 44 insertions(+)
-> 
-> 
-> base-commit: 2c71b3246ec3246522e8cb7c8191dc7a5d62cc70
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-> index 20ca26e19db7..95e95783972a 100644
-> --- a/drivers/hwmon/pmbus/pmbus_core.c
-> +++ b/drivers/hwmon/pmbus/pmbus_core.c
-> @@ -2855,6 +2855,49 @@ static int pmbus_regulator_get_error_flags(struct regulator_dev *rdev, unsigned
->  	return 0;
->  }
->  
-> +static int pmbus_regulator_get_status(struct regulator_dev *rdev)
-> +{
-> +	struct device *dev = rdev_get_dev(rdev);
-> +	struct i2c_client *client = to_i2c_client(dev->parent);
-> +	struct pmbus_data *data = i2c_get_clientdata(client);
-> +	u8 page = rdev_get_id(rdev);
-> +	int status, ret;
-> +
-> +	mutex_lock(&data->update_lock);
-> +	status = pmbus_get_status(client, page, PMBUS_STATUS_WORD);
-> +	if (status < 0) {
-> +		ret = status;
-> +		goto unlock;
-> +	}
-> +
-> +	if (status & PB_STATUS_OFF) {
-> +		ret = REGULATOR_STATUS_OFF;
-> +		goto unlock;
-> +	}
-> +
-> +	/* If regulator is ON & reports power good then return ON */
-> +	if (!(status & PB_STATUS_POWER_GOOD_N)) {
-> +		ret = REGULATOR_STATUS_ON;
-> +		goto unlock;
-> +	}
-> +
-> +	ret = pmbus_regulator_get_error_flags(rdev, &status);
-> +	if (ret)
-> +		goto unlock;
-> +
-> +	if (status & (REGULATOR_ERROR_UNDER_VOLTAGE | REGULATOR_ERROR_OVER_CURRENT |
-> +	   REGULATOR_ERROR_REGULATION_OUT | REGULATOR_ERROR_FAIL | REGULATOR_ERROR_OVER_TEMP)) {
-> +		ret = REGULATOR_STATUS_ERROR;
-> +		goto unlock;
-> +	}
-> +
-> +	ret = REGULATOR_STATUS_UNDEFINED;
-> +
-> +unlock:
-> +	mutex_unlock(&data->update_lock);
-> +	return ret;
-> +}
-> +
->  static int pmbus_regulator_get_low_margin(struct i2c_client *client, int page)
->  {
->  	struct pmbus_data *data = i2c_get_clientdata(client);
-> @@ -2995,6 +3038,7 @@ const struct regulator_ops pmbus_regulator_ops = {
->  	.disable = pmbus_regulator_disable,
->  	.is_enabled = pmbus_regulator_is_enabled,
->  	.get_error_flags = pmbus_regulator_get_error_flags,
-> +	.get_status = pmbus_regulator_get_status,
->  	.get_voltage = pmbus_regulator_get_voltage,
->  	.set_voltage = pmbus_regulator_set_voltage,
->  	.list_voltage = pmbus_regulator_list_voltage,
+Changes since v1
+================
+1. Patch 2:
+   - Whitespace cleanups.
+   - Correct include - do not use deprecated one.
+2. Patch 3:
+   - Sort.
+   - Add Rb tag.
+   - Correct include - do not use deprecated one and drop q6asm.h (not used).
+
+Description
+===========
+Initial work (still partially in progress) adding audio to HDK8450 board.
+
+Working/tested:
+ - speakers
+ - one channel of headset
+
+The DTS patches do not have particular dependencies, however they:
+1. Use updated ASoC bindings:
+   https://lore.kernel.org/linux-arm-msm/20221111113547.100442-1-krzysztof.kozlowski@linaro.org/T/#t
+
+2. For full operation need changes in Soundwire and Qualcomm ASoC drivers, not
+   yet upstreamed:
+   https://github.com/krzk/linux/commits/wip/sm8450
+   Booting remoteproc without these changes will report errors, but these are
+   expected at this stage.
+
+Best regards,
+Krzysztof
+
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+
+Srinivas Kandagatla (3):
+  arm64: dts: qcom: sm8450: add GPR node
+  arm64: dts: qcom: sm8450: add Soundwire and LPASS
+  arm64: dts: qcom: sm8450-hdk: add sound support
+
+ arch/arm64/boot/dts/qcom/sm8450-hdk.dts | 160 ++++++++++++
+ arch/arm64/boot/dts/qcom/sm8450.dtsi    | 334 ++++++++++++++++++++++++
+ 2 files changed, 494 insertions(+)
+
+-- 
+2.34.1
+
