@@ -2,152 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B9FF63900A
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 19:45:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5698C639010
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 19:49:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbiKYSpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 13:45:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
+        id S229904AbiKYStR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 13:49:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiKYSpe (ORCPT
+        with ESMTP id S229570AbiKYStQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 13:45:34 -0500
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2432545ECC;
-        Fri, 25 Nov 2022 10:45:33 -0800 (PST)
-Received: by mail-qt1-f181.google.com with SMTP id h24so2988062qta.9;
-        Fri, 25 Nov 2022 10:45:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yVnYr+yRHxw7HWghSQNQQghN0tldZQ4+ZOhhs+c595w=;
-        b=LAhVU1SJdEqS6lSb4k6n+oxLjqzB3WBNEisiZqT5830TPbUo1+/ZwjKCYXFBwsR0f+
-         f/7LCMECGqz8SRPxn5x1DQBJmyp/TTdXHQWWkVizSoMhiV1rtZLLEnv8xNz86nZbuc0T
-         AkRPR9KoiamqaG8DXFw6qZs7FM0El+1s9xWmTCnuKH8gN8NU4KW9A2MEUUAXoPdlu/Rr
-         Pvjy6DymFav/bODjmQULtg9pe6B5mBtWjEiorL74JOX4tE1rmZa9aCLakWXqYmbMpEPA
-         BkqTDrPW4IdpBcklf17+/QrdngGHn1SisDBY18tNo/AuGgDMLurAzor92auBf/aA9vLc
-         0o4w==
-X-Gm-Message-State: ANoB5pkVv9Od87Xap/9Hr58pUis5W6PANGzifCBocugpM8/eyNFL4lKq
-        VZa09XUcjo3TAw5+YiTbt1yxAVCtLgorNgNYzZU=
-X-Google-Smtp-Source: AA0mqf7pZVddib+OvYk4FWSEsX10juR9fJpwuUq+tcQQmF+OpBMeEd9dyFDoObmDSDj2qk3A+42WM9Rt+mHZMc0ltjg=
-X-Received: by 2002:ac8:1482:0:b0:3a5:1e6f:7e05 with SMTP id
- l2-20020ac81482000000b003a51e6f7e05mr19373259qtj.357.1669401932242; Fri, 25
- Nov 2022 10:45:32 -0800 (PST)
+        Fri, 25 Nov 2022 13:49:16 -0500
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9411EC5B;
+        Fri, 25 Nov 2022 10:49:13 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 7EDDF5C00AC;
+        Fri, 25 Nov 2022 13:49:10 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Fri, 25 Nov 2022 13:49:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1669402150; x=
+        1669488550; bh=lGBLZWw4I2IVEe7ioPYHs0ee4vEFUgD9+nW1n+RmPgk=; b=G
+        w+QGLTLVvemFW/nXuipobMMHYB//cFx3yZejaTLWzL2a36xdVO85aPXyky4FMg//
+        sDuV2BVseU7w6m7dK0CYtkMjtu5OlsRMoM+Eyc0P9j97a/3nuZAXHvsCpooefpXp
+        BiPCbuCX5oJh+yQMejb77bbsFAGFr0O39G0ihKCK6jP4gLLjxC0D2ahU/Ixz5Zae
+        EyGUzILyFOavr7Xx9eL2XUk+jrK21AM1dwGaea9paWoFcFlUhCE7Bgp/ZirmzR8o
+        Hu8mT7z+WxLDya9ShoQdUrFjX49EZ5jGTaITu6oQ0oAB+7BMAc/DPn2mm307IOuj
+        iiorbpmTWdDRBXQgOcWfQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1669402150; x=
+        1669488550; bh=lGBLZWw4I2IVEe7ioPYHs0ee4vEFUgD9+nW1n+RmPgk=; b=s
+        iP+d+1Cr9xX7hOx+9Nc+jE4O6lyv8hSRtb0gW2577XvBoyRR3eqjhq/oHZ7gkdL+
+        2+MpPZaV6x3LIQKZC0dumsU+N+6XzzJDQ+Ik90TlLWQf7XXKb+LrR0vuV6djCqz6
+        cCnR8UI/3OgJYpL+N4bE/lOc+FsWHYUgrbtG5vwooKrJzqzHAdGCiZJua644ebWn
+        I4RwD0pTUmypO0J+T+n6+V+iiIy2n89NThL8VkEbdxIWAQB6WOSAqMnJpy81mUgp
+        94qbnaJEYhv2b21GAB6XZ3IqJHDzmr8RxrUMIapCbAV+yW4iyNS+A+Ue9Z0jyxHH
+        mY2z9wPABwamp7g+z7yoQ==
+X-ME-Sender: <xms:JQ6BY4iv4RHmiA62fny5yI9YDI9TCsMDw_rYpsq613baazuFDo3TSA>
+    <xme:JQ6BYxAJImrvGcnnvCBuSdUYANgJ7ZQCjHg69Qnt_4wz3VfKTy3o-cWUOPsnZEkbr
+    9og8GdHmNJFU2qFRw>
+X-ME-Received: <xmr:JQ6BYwGUwvadsg3zElasU1qN12IWedU9XyMga9Z79VVbWbCPLqXYrraBRdUPHSpB9OOFoN7zfEEl4VeX7ONvY8pQMdVTXIrmc1Gois8tTb83Ud4w1H_vv1xHog>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrieehgdduudekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfvfevfhfhufgjtgfgsehtkeertddtfeejnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpeegieekueefvddvueetiedviefftdfgtdefjefgteeffeegfffg
+    vdffheejvdeuieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:JQ6BY5RWoXXEr60Vwh2k712uxx4d3ja3R-gyIL-v2nbXaeH-gD-5mg>
+    <xmx:JQ6BY1yZLm5nZ93cdF7ABIVVJGLxVu7VxkVq8Z46B1VhUiuHeQQbfg>
+    <xmx:JQ6BY36QVnGO8gGm8cPyaMLEcwOm0GuJPpzvwwOnmsXD7e-Ro3jmJA>
+    <xmx:Jg6BY7rMqmoHaIqQt1SqANX6uylPyxd0Lj-MBa1nq1PVbP6ia9dWLA>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 25 Nov 2022 13:49:07 -0500 (EST)
+Message-ID: <3b5e52c5-7a1c-8bdd-b076-0c5e13463274@sholland.org>
+Date:   Fri, 25 Nov 2022 12:49:06 -0600
 MIME-Version: 1.0
-References: <20221112094048.3614365-1-yangyingliang@huawei.com>
- <CAJZ5v0g6bct5pTruxHjjJPQpwDNR8WgqhLWaZWo8NKeRH3n6iw@mail.gmail.com>
- <Y35zwffl7bUdjs93@kroah.com> <b4fe247b-0980-40ea-bc69-0430e3b18320@huawei.com>
-In-Reply-To: <b4fe247b-0980-40ea-bc69-0430e3b18320@huawei.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 25 Nov 2022 19:45:21 +0100
-Message-ID: <CAJZ5v0j+M79zD4Tsskkpsq8gyFQ8enjoZh-f54qOu1Rs_5tojA@mail.gmail.com>
-Subject: Re: [PATCH] powercap: fix possible name leak while device_register() fails
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Content-Language: en-US
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20221124172207.153718-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221124172207.153718-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <3689906.Lt9SDvczpP@diego>
+ <CA+V-a8uQh=q8ksTe8ttHkJThcoYtggSU-AXUqPGYnam0CiqZWw@mail.gmail.com>
+From:   Samuel Holland <samuel@sholland.org>
+Subject: Re: [PATCH v4 5/7] riscv: mm: dma-noncoherent: Pass direction and
+ operation to ALT_CMO_OP()
+In-Reply-To: <CA+V-a8uQh=q8ksTe8ttHkJThcoYtggSU-AXUqPGYnam0CiqZWw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 3:16 AM Yang Yingliang <yangyingliang@huawei.com> wrote:
->
->
-> On 2022/11/24 3:25, Greg Kroah-Hartman wrote:
-> > On Wed, Nov 23, 2022 at 08:00:14PM +0100, Rafael J. Wysocki wrote:
-> >> On Sat, Nov 12, 2022 at 10:42 AM Yang Yingliang
-> >> <yangyingliang@huawei.com> wrote:
-> >>> If device_register() returns error, the name allocated by
-> Sorry,
-> I didn't describe clearly here, it's not only after device_register()
-> failure, but also in the error path before register, the name is not
-> freed, see description below.
+On 11/24/22 13:18, Lad, Prabhakar wrote:
+> Hi Heiko,
+> 
+> Thank you for the review.
+> 
+> On Thu, Nov 24, 2022 at 6:29 PM Heiko Stübner <heiko@sntech.de> wrote:
+>>
+>> Am Donnerstag, 24. November 2022, 18:22:05 CET schrieb Prabhakar:
+>>> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>>>
+>>> Pass direction and operation to ALT_CMO_OP() macro.
+>>>
+>>> This is in preparation for adding errata for the Andes CPU core.
+>>
+>> can you provide more explanation why that is necessary please?
+>> I guess you want to use different cache operations for some cases?
+>>
+> Yes basically to call different cache operations based on the dir and
+> operations (and also this allows to export just one function to handle
+> the errata). I'll update the commit message in the next version.
 
-So you would need to update the changelog at least.  But see below.
+This makes things less efficient, because it requires more instructions
+and registers inside the alternative section, and your function
+duplicates the logic from arch_sync_dma_for_device(). The alternative is
+already passed the operation (clean/flush/invalidate) as a token, so you
+can construct the function name with token pasting.
 
-> >>> dev_set_name() need be freed. In technical, we should call
-> >>> put_device() to give up the reference and free the name in
-> >>> driver core, but in some cases the device is not intizalized,
-> >>> put_device() can not be called, so don't complicate the code,
-> >>> just call kfree_const() to free name in the error path.
-> >>>
-> >>> Fixes: 75d2364ea0ca ("PowerCap: Add class driver")
-> >>> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> >>> ---
-> >>>   drivers/powercap/powercap_sys.c | 2 ++
-> >>>   1 file changed, 2 insertions(+)
-> >>>
-> >>> diff --git a/drivers/powercap/powercap_sys.c b/drivers/powercap/powercap_sys.c
-> >>> index f0654a932b37..11e742dc83b9 100644
-> >>> --- a/drivers/powercap/powercap_sys.c
-> >>> +++ b/drivers/powercap/powercap_sys.c
-> >>> @@ -572,6 +572,7 @@ struct powercap_zone *powercap_register_zone(
-> >>>   err_name_alloc:
-> >>>          idr_remove(power_zone->parent_idr, power_zone->id);
-> >>>   err_idr_alloc:
-> >>> +       kfree_const(dev_name(&power_zone->dev));
-> >>>          if (power_zone->allocated)
-> >>>                  kfree(power_zone);
-> >>>          mutex_unlock(&control_type->lock);
-> >>> @@ -622,6 +623,7 @@ struct powercap_control_type *powercap_register_control_type(
-> >>>          dev_set_name(&control_type->dev, "%s", name);
-> >>>          result = device_register(&control_type->dev);
-> >>>          if (result) {
-> >>> +               kfree_const(dev_name(&control_type->dev));
-> >> Why is it necessary to free a device name explicitly after a failing
-> >> device_register()?
-> powercap_register_zone()
-> {
->      ...
->      dev_set_name() // allocate name
->      ...
->      if (!power_zone->constraints)
->          goto err_const_alloc; //the name is leaked in this path
->      ...
->      if (!power_zone->zone_dev_attrs)
->          goto err_attr_alloc; //the name is leaked in this path
->      ...
->      if (result)
->          goto err_dev_ret; //the name is leaked in this path
->
->      result = device_register(&power_zone->dev);
->      if (result)
->          goto err_dev_ret;//put_device() is not called, the name is
-> leaked in this path
->      ...
-> err_dev_ret:
->      kfree(power_zone->zone_dev_attrs);
-> err_attr_alloc:
->      kfree(power_zone->constraints);
-> err_const_alloc:
->      kfree(power_zone->name);
-> err_name_alloc:
->      idr_remove(power_zone->parent_idr, power_zone->id);
-> err_idr_alloc:
->      if (power_zone->allocated)
->          kfree(power_zone);
-> }
+Regards,
+Samuel
 
-So can't the dev_set_name() be reordered closer to device_register(),
-so it is not necessary to worry about freeing the name?
-
-> >>
-> >> If it is really necessary, then there is a problem in
-> >> device_register() itself AFAICS, because it uses dev_set_name() at
-> >> least in the dev->init_name present case.
-> When the dev_set_name() called in device_register(), if register fails, the
-> name is freed in its error path. But in this case, dev_set_name() is called
-> outside the register, it needs call put_device() to free the name.
-
-In any case, device_register() needs to take care of it anyway,
-because it uses dev_set_name() itself in the dev->init_name case,
-doesn't it?
