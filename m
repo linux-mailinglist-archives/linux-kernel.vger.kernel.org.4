@@ -2,84 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF5E4638664
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 10:40:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E32A0638666
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 10:41:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbiKYJka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 04:40:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54700 "EHLO
+        id S229633AbiKYJlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 04:41:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiKYJkU (ORCPT
+        with ESMTP id S229737AbiKYJlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 04:40:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8889230F49;
-        Fri, 25 Nov 2022 01:40:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 39B80B82A16;
-        Fri, 25 Nov 2022 09:40:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D7E35C433C1;
-        Fri, 25 Nov 2022 09:40:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669369216;
-        bh=NbyfoG3Fi4CJ3iXyWGQeSWLYsbPnDW+RHnyZytSKhs0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Frr+kDw+cgtPdkeig/GGd0KTRKGG9AXlS5VARVMRwwVGJ0QDei6NvSjgUrxS4hGzZ
-         kqdUaY/JINRYqT6cfXPNv4feHV/53ZL1Cj/SQAFGC+tIBkdpr206LBoDO4teGmAhbf
-         s/pgs3HwxRHBT6JYNKPgndVbjtk6KOz7A19U/2lea3YBAaRJIBi+XOB5GK57Lj+d6e
-         qgE1FayE7ebVswyX2nNj1FLzN9UZrMmQ+0Z1cCeQuUliWCYWxl6vIHDUbYr6YDW1Id
-         nc6J/idT/Iz6VqPpgdfu8f6fzC7F50eQTGjQAePJXCVIOwWSjD3Nzcdqs62r3mX0pO
-         jBqix9vU0N7zw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B9C45E29F3C;
-        Fri, 25 Nov 2022 09:40:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 25 Nov 2022 04:41:12 -0500
+Received: from out199-17.us.a.mail.aliyun.com (out199-17.us.a.mail.aliyun.com [47.90.199.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E7C3AC2E
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 01:41:10 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R731e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=joseph.qi@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VVewUrY_1669369264;
+Received: from 30.221.133.6(mailfrom:joseph.qi@linux.alibaba.com fp:SMTPD_---0VVewUrY_1669369264)
+          by smtp.aliyun-inc.com;
+          Fri, 25 Nov 2022 17:41:05 +0800
+Message-ID: <711323de-5a9f-db09-6105-319ff1ff52c1@linux.alibaba.com>
+Date:   Fri, 25 Nov 2022 17:41:04 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: fec: don't reset irq coalesce settings to defaults on
- "ip link up"
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166936921675.2800.4020168798324451407.git-patchwork-notify@kernel.org>
-Date:   Fri, 25 Nov 2022 09:40:16 +0000
-References: <20221123133853.1822415-1-linux@rasmusvillemoes.dk>
-In-Reply-To: <20221123133853.1822415-1-linux@rasmusvillemoes.dk>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     qiangqing.zhang@nxp.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Subject: Re: [PATCH] ocfs2: fix infinite loop for orphan entry list
+Content-Language: en-US
+To:     lihongweizz <lihongweizz@inspur.com>, mark@fasheh.com,
+        jlbec@evilplan.org
+Cc:     ocfs2-devel@oss.oracle.com, linux-kernel@vger.kernel.org
+References: <20221125034118.427-1-lihongweizz@inspur.com>
+From:   Joseph Qi <joseph.qi@linux.alibaba.com>
+In-Reply-To: <20221125034118.427-1-lihongweizz@inspur.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
 
-On Wed, 23 Nov 2022 14:38:52 +0100 you wrote:
-> Currently, when a FEC device is brought up, the irq coalesce settings
-> are reset to their default values (1000us, 200 frames). That's
-> unexpected, and breaks for example use of an appropriate .link file to
-> make systemd-udev apply the desired
-> settings (https://www.freedesktop.org/software/systemd/man/systemd.link.html),
-> or any other method that would do a one-time setup during early boot.
+On 11/25/22 11:41 AM, lihongweizz wrote:
+> Orphan file may be in the recover list already when the ip_next_orphan
+> is NULL (for example, orphan file is second tail elementof recover
+> list). In this scenario, the file could be added to the list twice
+> and infinite loop happened. So we need another pointer value here(EFAULT)
+>  instead of NULL for the list tail element.
 > 
-> [...]
 
-Here is the summary with links:
-  - net: fec: don't reset irq coalesce settings to defaults on "ip link up"
-    https://git.kernel.org/netdev/net/c/df727d4547de
+Don't understand how it happens. Is this a real issue you encountered?
+When queue orphans, it will bypass those already in recover list.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Thanks,
+Joseph
 
-
+> Signed-off-by: lihongweizz <lihongweizz@inspur.com>
+> ---
+>  fs/ocfs2/journal.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/ocfs2/journal.c b/fs/ocfs2/journal.c
+> index 126671e..4620013 100644
+> --- a/fs/ocfs2/journal.c
+> +++ b/fs/ocfs2/journal.c
+> @@ -2207,7 +2207,7 @@ static int ocfs2_recover_orphans(struct ocfs2_super *osb,
+>  				 enum ocfs2_orphan_reco_type orphan_reco_type)
+>  {
+>  	int ret = 0;
+> -	struct inode *inode = NULL;
+> +	struct inode *inode = ERR_PTR(-EFAULT);
+>  	struct inode *iter;
+>  	struct ocfs2_inode_info *oi;
+>  	struct buffer_head *di_bh = NULL;
+> @@ -2224,7 +2224,7 @@ static int ocfs2_recover_orphans(struct ocfs2_super *osb,
+>  	if (ret)
+>  		mlog_errno(ret);
+>  
+> -	while (inode) {
+> +	while (!IS_ERR(inode)) {
+>  		oi = OCFS2_I(inode);
+>  		trace_ocfs2_recover_orphans_iput(
+>  					(unsigned long long)oi->ip_blkno);
