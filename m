@@ -2,188 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69E066384F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 09:05:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA81F6384F5
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 09:06:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiKYIFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 03:05:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56802 "EHLO
+        id S229789AbiKYIGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 03:06:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiKYIFW (ORCPT
+        with ESMTP id S229599AbiKYIGG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 03:05:22 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC834218A5
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 00:05:20 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id j196so4223999ybj.2
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 00:05:20 -0800 (PST)
+        Fri, 25 Nov 2022 03:06:06 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B459A21E0B
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 00:06:05 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id b9so4297036ljr.5
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 00:06:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pnfIVSOrUJ3z+ilEDdymU1GO/STI0zxzNjpepGL0pvY=;
-        b=G9i0Y5NM3kY1yH6UILP1oYSOnKsIaZHoPRSN+B+o+PeOJWJv9HW74WfuUmfYFlaWX2
-         xb4e2tijSPZAn9AVQM3oEXa3TxO1DmGbTZa/Wu/Fq7MNy0R4vnfMKe1cve+r39I20f2R
-         BHmD1RbmEmcjRjWfAesitbIMwc+688tJMaHSaD37b8/dVQjQ3CPednoutLFpO60KiGGW
-         R/G7dPdqtKzyEkweEmE5c0J2Wepl43/Rfm2OdCAlLFBsd87DlPXeEN+MCSt2ugSKqcBR
-         aFUhn7WXyVcR8DOZ4Jo4fQie+TMU/nrBwNGafmFCdxu2tz/FmhUsAtw3lGmyjPL2s6E1
-         Hj6A==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=D49i9+CqzhVncl5C6H/ptIMUdWGDiCQ2jV+wEFz40RA=;
+        b=n/PGbygZuJrtVuapZT8bdM1579wHkSd3l9IVakzRsfx7SFDPCr6+z1phHUMbC7MmGe
+         l/nsjSlGVD2z4Ql58NgWsJHRrVUzG7RoeQrjMaqM9UONFICqoyR0Tw+00DDFFZvIO7vg
+         U28rpMxn0j2YvgpkiiuJk42Vm4yD+JEts2R5QBOzdtuVU/Vp4lKR5MUzEZNqADHAuxOD
+         zS0pIKtB9DCjUE87vlRxcwXBWCI1crkRmWZ1MYhAUFyqP+rPp4m+y4/YLGju2vOSYkJU
+         UbhqOzmk8husMENiGNoJibHkxoCo8tl3yVs6dAgP54EOQNJgMF3o6IU2j6VLBVx2QXTu
+         aNlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pnfIVSOrUJ3z+ilEDdymU1GO/STI0zxzNjpepGL0pvY=;
-        b=GiiinVEXj9SPcWyyP1fw1QaQMcKUg0zd766kqOQXG9NxVtBNWOxewvjpA1H3SeUFWw
-         BQskZAp4DIladxtlIpr6JwdP5/O9uFnnmTYEMauLdgiRYjI4mOGtrb8nMlqD5T77Bsav
-         vXrcRA54jgTJI7CxrNvg7qVxN/fWyOAqX8gA1c4A+62oLItjrjO6GIBDIaAy2hcaoT7V
-         vnSmBMm7Y3Iza2pSjmyCD9CJqhunXm6m6dp3oRGE0oH6svxtGifoXswYWuAWhBu9/bNq
-         m6yBty2ivAgih/eqnhNljfKvCuvkLTBP91xTA67kuHYsq7Kn/Wozq+qUql+pndM2Q5Ab
-         yzoQ==
-X-Gm-Message-State: ANoB5pmnrZmmd9I1nJ07iEZ/tQ4fONk7pnJloNDD79dV5MzsG0Qae0I9
-        FJCjxLhxxqkthIX+EJIT3z9XBSvTKncex8kBkwWU6w==
-X-Google-Smtp-Source: AA0mqf7OgJkiz3KAGFtHjIaNXzXenKiC0lfUTs2VaZpT60Y42LyT6mHG+ZY7pBZ6ToQai8QeKtDh5776ncDGQd5pifM=
-X-Received: by 2002:a25:9d8f:0:b0:6d0:155f:aa9e with SMTP id
- v15-20020a259d8f000000b006d0155faa9emr15327691ybp.448.1669363519825; Fri, 25
- Nov 2022 00:05:19 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=D49i9+CqzhVncl5C6H/ptIMUdWGDiCQ2jV+wEFz40RA=;
+        b=mCqMi1RNEMJTBmZFExvqQONBUCKzTH1oEYlOoTR8tAfc4H1Xle2Fye305/2JyF+p9D
+         S2i3ApzZVEyHKIy4ydk1cTUB8xgy4Bhu/mjguoM7c77CGxU3ixlH7bovP98I5psM3u/l
+         P4i5/uTvDP/QeWjz8NVxq9yn2pCYa60AP3RBtJYp7lv4i0Se7DS6jfUjn/qzr70lPvEO
+         2B/JupU+PdDAhLbwrPnNAJDMRqWp+QC8hw1WstH+B1KImacJpbzFMXHWEpW9saxJk83+
+         tGg2SHplY1kY1mktgSGtmkvdFc9eM7i6kemBpfNYNrrEEUiraZNVsb8vFYDc22s5Ky1G
+         SPsw==
+X-Gm-Message-State: ANoB5pm30+u+4f+31gDDfpjKycRdW5HuFB1sAdIRYlfkhA9LT0oDOsSe
+        goKLLsYywGop/Bxjb49YiNfEjA==
+X-Google-Smtp-Source: AA0mqf6VxT1aEXu7weoSccK7/ISZvPA73NLRVTO6wuY9yZQZBdzrp0PjPI71T4AeNAn5MJj15hwsPw==
+X-Received: by 2002:a2e:aa94:0:b0:277:871:5712 with SMTP id bj20-20020a2eaa94000000b0027708715712mr11000813ljb.129.1669363563955;
+        Fri, 25 Nov 2022 00:06:03 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id b24-20020a196458000000b004949a8df775sm433304lfj.33.2022.11.25.00.06.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Nov 2022 00:06:03 -0800 (PST)
+Message-ID: <8ad024c8-1284-0f72-91a3-2a8d9b5692fe@linaro.org>
+Date:   Fri, 25 Nov 2022 09:06:01 +0100
 MIME-Version: 1.0
-References: <20221123084557.945845710@linuxfoundation.org> <CA+G9fYvKfbJHcMZtybf_0Ru3+6fKPg9HwWTOhdCLrOBXMaeG1A@mail.gmail.com>
- <CA+G9fYvgaNKbr_EhWsh9hjnzCeVXGJoXX4to72ytdvZi8W0svA@mail.gmail.com> <Y4BuUU5yMI6PqCbb@kroah.com>
-In-Reply-To: <Y4BuUU5yMI6PqCbb@kroah.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 25 Nov 2022 13:35:08 +0530
-Message-ID: <CA+G9fYsXomPXcecPDzDydO3=i2qHDM2RTtGxr0p2YOS6=YcWng@mail.gmail.com>
-Subject: Re: [PATCH 5.10 000/149] 5.10.156-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        YueHaibing <yuehaibing@huawei.com>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        Netdev <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: display/msm: add support for SM6115
+Content-Language: en-US
+To:     Adam Skladowski <a39.skl@gmail.com>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kalyan Thota <quic_kalyant@quicinc.com>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Vinod Polimera <quic_vpolimer@quicinc.com>,
+        Jason Wang <wangborong@cdjrlc.com>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221124001708.25720-1-a39.skl@gmail.com>
+ <20221124001708.25720-2-a39.skl@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221124001708.25720-2-a39.skl@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Nov 2022 at 12:57, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Thu, Nov 24, 2022 at 09:17:36PM +0530, Naresh Kamboju wrote:
-> > On Wed, 23 Nov 2022 at 19:30, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> > >
-> > > On Wed, 23 Nov 2022 at 14:50, Greg Kroah-Hartman
-> > > <gregkh@linuxfoundation.org> wrote:
-> > > >
-> > > > This is the start of the stable review cycle for the 5.10.156 release.
-> > > > There are 149 patches in this series, all will be posted as a response
-> > > > to this one.  If anyone has any issues with these being applied, please
-> > > > let me know.
-> > > >
-> > > > Responses should be made by Fri, 25 Nov 2022 08:45:20 +0000.
-> > > > Anything received after that time might be too late.
-> > > >
-> > > > The whole patch series can be found in one patch at:
-> > > >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.156-rc1.gz
-> > > > or in the git tree and branch at:
-> > > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> > > > and the diffstat can be found below.
-> > > >
-> > > > thanks,
-> > > >
-> > > > greg k-h
-> > >
-> > >
-> > > With stable rc 5.10.156-rc1 Raspberry Pi 4 Model B failed to boot due to
-> > > following warnings / errors [1]. The NFS mount failed and failed to boot.
-> > >
-> > > I have to bisect this problem.
-> >
-> > Daniel bisected this reported problem and found the first bad commit,
-> >
-> > YueHaibing <yuehaibing@huawei.com>
-> >     net: broadcom: Fix BCMGENET Kconfig
->
-> But that is in 5.10.155, 5.15.79, 6.0.9, and 6.1-rc5.  It is not new to
-> this -rc release.
+On 24/11/2022 01:16, Adam Skladowski wrote:
+> Add DPU and MDSS schemas to describe MDSS and DPU blocks on the Qualcomm
+> SM6115 platform.
+> Configuration for DSI/PHY is shared with QCM2290 so compatibles are reused.
+> Lack of dsi phy supply in example is intended
+> due to fact on qcm2290, sm6115 and sm6125
+> this phy is supplied via power domain, not regulator.
+> 
+> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
+> ---
 
-It started from 5.10.155 and this is only seen on 5.10 and other
-branches 5.15, 6.0 and mainline are looking good.
 
->
-> What config options are being set because of this that cause the
-> problem?
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-LKFT is built with arm64 defconfig + distro configs as described below.
+Best regards,
+Krzysztof
 
->   Should it just be reverted for 5.10.y, and not the other
-> branches?  Or for everywhere including Linus's tree?
-
-Reverting for 5.10 works for Rpi-4 to boot.
-
-Due to the problematic commit
-      # CONFIG_BROADCOM_PHY is not set
-and Raspberry Pi 4 boot failed only on 5.10.155 and later.
-
---
-
-diff -Narub good-config bad-config
---- good-config 2022-11-09 14:19:58.000000000 +0530
-+++ bad-config 2022-11-16 15:50:36.000000000 +0530
-@@ -1,6 +1,6 @@
- #
- # Automatically generated file; DO NOT EDIT.
--# Linux/arm64 5.10.154-rc2 Kernel Configuration
-+# Linux/arm64 5.10.155 Kernel Configuration
- #
- CONFIG_CC_VERSION_TEXT="aarch64-linux-gnu-gcc (Debian 11.3.0-6) 11.3.0"
- CONFIG_CC_IS_GCC=y
-@@ -2611,7 +2611,7 @@
- # CONFIG_ADIN_PHY is not set
- CONFIG_AQUANTIA_PHY=y
- # CONFIG_AX88796B_PHY is not set
--CONFIG_BROADCOM_PHY=y
-+# CONFIG_BROADCOM_PHY is not set
- # CONFIG_BCM54140_PHY is not set
- CONFIG_BCM7XXX_PHY=y
- # CONFIG_BCM84881_PHY is not set
-
----
-
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-#
-# See https://docs.tuxmake.org/ for complete documentation.
-# Original tuxmake command with fragments listed below.
-# tuxmake --runtime podman --target-arch arm64 --toolchain gcc-11
---kconfig defconfig --kconfig-add
-https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/lkft.config
---kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/lkft-crypto.config
---kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/distro-overrides.config
---kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/systemd.config
---kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/virtio.config
---kconfig-add CONFIG_ARM64_MODULE_PLTS=y --kconfig-add
-CONFIG_SYN_COOKIES=y --kconfig-add CONFIG_SCHEDSTATS=y
-CROSS_COMPILE_COMPAT=arm-linux-gnueabihf-
-
-Bad config link,
-https://builds.tuxbuild.com/2HcnnvEDD3gSr1zmS5DHzqPG2cJ/config
-
->
-> thanks,
->
-> greg k-h
-
-- Naresh
