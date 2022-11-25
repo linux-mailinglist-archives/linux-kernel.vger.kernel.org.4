@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4132638C84
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 15:42:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E310638C86
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 15:42:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbiKYOmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 09:42:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35312 "EHLO
+        id S230241AbiKYOmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 09:42:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbiKYOl5 (ORCPT
+        with ESMTP id S230239AbiKYOl7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 09:41:57 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 024114046D
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 06:41:36 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id j4so7254369lfk.0
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 06:41:36 -0800 (PST)
+        Fri, 25 Nov 2022 09:41:59 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960073F06E
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 06:41:38 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id d6so7192086lfs.10
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 06:41:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HIqedhY263uumnwVyOOhrtbKH4I7pBieIt5aXa4in8I=;
-        b=rtCle6yXSQ1vc79vQfcEo7qSwkQJAaqu97WYmhx1iX+Tnj/GINRpXx5t5BjZ5SjT8A
-         6OxZEd1mCf917izBaE7s4dM5w3/IMbtMK7rf8btUHiQf1lxlV5z652yDV5o8MphaD7L0
-         1aD2Av7fkpUOHJV4BsAhA9NjCSfaXBumgJabTLlZKaX9TFJ6m+AZs6c4vbUyvW3pw2Xw
-         9PC3xptehntMbVBlMmJRxeAPfnXgpmnZTNySYxnoPszFbAoMgeLsJH+tvOCqxlA6trIn
-         wHOn2m//QtGboF6TDiD3DRwbmoJP3DdmRXgrwTtoWCjuhj6/VIorb9vhi+GnJV9GmI6y
-         YjFQ==
+        bh=njud4xqq274bpbwus33xYwY3Vs5r+wFEXFrEEoEu/J8=;
+        b=I+rMTxd0holP4+mHqW9f3Ic0bSJrXy+E2J4Wn2B+enbKIFu4Rl1r7s4ZvdFz478h9N
+         jQ8zTMqN4LjrAd0LY9z2j6ZXU2yJaWl6+pK39PTNCFfWkUQtnA3cY2GkvdANYOhJr08o
+         QSDZZH0fOXBI1BcI+rFqhm8rtgzO6XqVqHeCe/ag5x8XZSUe0ZU1lYb5erq1V+HJkWpV
+         0KIOf2xtZ2OPzbu6gc1QlUURMWF0ovYNDxKSiOyJyuYf2qvEagXmMMG7XOB6PP+FM6VW
+         2khNsp/xAop8kFseJMmf6sKoBDQFsAieQWcx1qVgnfW4UJ8V2+Yb26VS3/AVgY6UPnn8
+         bYaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=HIqedhY263uumnwVyOOhrtbKH4I7pBieIt5aXa4in8I=;
-        b=458E6Lsmp0+Tzt7xX6BBnMZ0RWnGs1SpNEG/dvZa4O0qS+VWa0NHOCYJJUJ7duiE9E
-         Rf9+hXL+aLJW/se72d9zOxjRAMY769q6zDTdPqc6v2TqwJT7SBz+cy3CUU9mFmquGYhY
-         SHnNHqONumoO1o2bk3N4BxYe9W9VpSChaIgplpdGwEakDo8+MDXrpIkmivDtbCrhDwI5
-         hhMTXQdIW/KQP8XXoLs8f8m6+XePenpAxs9lcLrOXFRenptWy00YNqozODTZ0Sga+H5s
-         JDMIDtPTmlHbgOo/ROvgaqQ+ttL+ys0RcNcnNuBt+uT1d1O5/hcZr3HynB4sVIhtLNLg
-         iWOQ==
-X-Gm-Message-State: ANoB5pm4GzoSM7w6NnSueGjvH5EiInSWaKPN33X4NGHQ47z/U21LdZm6
-        qCKIu1qV5x0Yr251pG79B33Rlg==
-X-Google-Smtp-Source: AA0mqf72cxvboIAASK/RuclKKNxPm778/B5Antl3QBSn/POsWaypdmwLLblOtiUoMO96NMWHFNtmyQ==
-X-Received: by 2002:ac2:4a6d:0:b0:4b1:5efe:895f with SMTP id q13-20020ac24a6d000000b004b15efe895fmr12343962lfp.337.1669387296527;
-        Fri, 25 Nov 2022 06:41:36 -0800 (PST)
+        bh=njud4xqq274bpbwus33xYwY3Vs5r+wFEXFrEEoEu/J8=;
+        b=fpTa5YKaBwqiOJ1S3Zpg2KWttrmMXD86CUOvqRtOADU3zQePU1ihefNnMeSq9hCuvW
+         ni6cw9zCctwdAVuOF3PvvCwCRHqIXttZaFSU91cElSzY9pgN6lTXNGhzabL1eP1gcKkZ
+         lQGFq2j3vrfkHDsDt3/GQDqbYWpMrFsvwTTBvMyaixNeCCktwzdf7dCdGjezDjxBEnJX
+         y0RiDfxhk/pfGTvfGRcOWsMQHTPejHLvpsYyc9ckBTn598tb9WMZh26Y2LwQnkaeMVie
+         H/yN6O2akaphOJvdDzrxdNehl0/mxpIbjoxP6fv64vpKZMrNmOFN3YkQu3TMR1fWAZsK
+         j9pQ==
+X-Gm-Message-State: ANoB5pkY5psWe+Gi8pWMEXmhckO4e8l15VWD1fBiaEOl9zSbMLONSehe
+        aDKiMZIjoVd7rlnFbh9BZ0dY5Q==
+X-Google-Smtp-Source: AA0mqf457dG/Zneu4HP5vPQymw7lWN6txp4hBVttYKTzJajEVM+FVhOg6D5e3JejzY1TnqfidKPvNQ==
+X-Received: by 2002:a05:6512:3b88:b0:4a3:9533:f4c9 with SMTP id g8-20020a0565123b8800b004a39533f4c9mr7381181lfv.615.1669387298167;
+        Fri, 25 Nov 2022 06:41:38 -0800 (PST)
 Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id t9-20020a056512030900b00494618889c0sm551512lfp.42.2022.11.25.06.41.35
+        by smtp.gmail.com with ESMTPSA id a22-20020a056512201600b00492dbf809e8sm541757lfb.118.2022.11.25.06.41.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Nov 2022 06:41:36 -0800 (PST)
+        Fri, 25 Nov 2022 06:41:37 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+        Michal Simek <michal.simek@xilinx.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] arm64: dts: rockchip: rk3328: drop unused LED mode property
-Date:   Fri, 25 Nov 2022 15:41:34 +0100
-Message-Id: <20221125144135.477144-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] arm64: dts: xilinx: align LED node names with dtschema
+Date:   Fri, 25 Nov 2022 15:41:36 +0100
+Message-Id: <20221125144136.477171-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -71,35 +71,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GPIO LEDs do not have a 'mode' property:
+The node names should be generic and DT schema expects certain pattern:
 
-  rockchip/rk3328-roc-pc.dtb: leds: led-0: Unevaluated properties are not allowed ('mode' was unexpected)
+  xilinx/zynqmp-zcu100-revC.dtb: leds: 'vbus-det' does not match any of the regexes: '(^led-[0-9a-f]$|led)', 'pinctrl-[0-9]+'
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/rockchip/rk3328-roc-cc.dts | 2 --
- 1 file changed, 2 deletions(-)
+ arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3328-roc-cc.dts b/arch/arm64/boot/dts/rockchip/rk3328-roc-cc.dts
-index aa22a0c22265..5d5d9574088c 100644
---- a/arch/arm64/boot/dts/rockchip/rk3328-roc-cc.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3328-roc-cc.dts
-@@ -96,7 +96,6 @@ power_led: led-0 {
- 			linux,default-trigger = "heartbeat";
- 			gpios = <&rk805 1 GPIO_ACTIVE_LOW>;
- 			default-state = "on";
--			mode = <0x23>;
+diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts
+index d61a297a2090..6948fd40554b 100644
+--- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts
++++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts
+@@ -86,7 +86,7 @@ led-ds5 {
+ 			linux,default-trigger = "bluetooth-power";
  		};
  
- 		user_led: led-1 {
-@@ -104,7 +103,6 @@ user_led: led-1 {
- 			linux,default-trigger = "mmc1";
- 			gpios = <&rk805 0 GPIO_ACTIVE_LOW>;
- 			default-state = "off";
--			mode = <0x05>;
- 		};
- 	};
- };
+-		vbus-det { /* U5 USB5744 VBUS detection via MIO25 */
++		led-vbus-det { /* U5 USB5744 VBUS detection via MIO25 */
+ 			label = "vbus_det";
+ 			gpios = <&gpio 25 GPIO_ACTIVE_HIGH>;
+ 			default-state = "on";
 -- 
 2.34.1
 
