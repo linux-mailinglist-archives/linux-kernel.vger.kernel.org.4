@@ -2,104 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5613C638ED2
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 18:08:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0869638ED6
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 18:09:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiKYRIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 12:08:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46838 "EHLO
+        id S229630AbiKYRJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 12:09:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiKYRIM (ORCPT
+        with ESMTP id S229518AbiKYRJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 12:08:12 -0500
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0852165A8;
-        Fri, 25 Nov 2022 09:08:09 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 1E46B5FD0C;
-        Fri, 25 Nov 2022 20:08:08 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1669396088;
-        bh=KXyYR4VF9sCYOsS3NPi6MuVELIEouxGMJZ8BpfDIAZo=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=cyQDFrMQ8vzelcVlsjJps0cLRUAWlLytI/uP3q6P9R+5SdbJCbaQvZ9W5CFsZinZG
-         oXPE+FxBfkfA98sqOGxND2adWai2xXOoqJxype2JDn4RvKQ0WGTSJa1cf+OVxwXPET
-         M7YLm1wFzcDzkew3sNVRvf+RyL+RAbqVYmWFM0MSMhEvqEOMrde3dVBKl4Tf27CLQo
-         fAXA2NWFMrHZ+0U1q5MHQAtZHnXADT3RRDanIbKJyB8kssS7BzHVmKps4/A8tK+Lrp
-         lHgpvnTbrkVVYuoDx1KVWlDcinJwCV5u/awtMa2LCkStr7Egyuas+d0Azb3kQchsPn
-         ddqI560AwAOHQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Fri, 25 Nov 2022 20:08:06 +0300 (MSK)
-From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-To:     Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "kys@microsoft.com" <kys@microsoft.com>,
-        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "Dexuan Cui" <decui@microsoft.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>,
-        Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
-        "Krasnov Arseniy" <oxffffaa@gmail.com>,
-        Bobby Eshleman <bobby.eshleman@gmail.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: [RFC PATCH v2 3/6] vsock/vmci: always return ENOMEM in case of error
-Thread-Topic: [RFC PATCH v2 3/6] vsock/vmci: always return ENOMEM in case of
- error
-Thread-Index: AQHZAPB8vpTNk9Cz/UiwVhA3FAXi7Q==
-Date:   Fri, 25 Nov 2022 17:08:06 +0000
-Message-ID: <675b1f93-dc07-0a70-0622-c3fc6236c8bb@sberdevices.ru>
-In-Reply-To: <9d96f6c6-1d4f-8197-b3bc-8957124c8933@sberdevices.ru>
-Accept-Language: en-US, ru-RU
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <EE8E26C4524E094488B07003CE426ABC@sberdevices.ru>
-Content-Transfer-Encoding: base64
+        Fri, 25 Nov 2022 12:09:48 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238641D335
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 09:09:47 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id g13-20020a056602072d00b006c60d59110fso2306254iox.12
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 09:09:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q+gVepjvy5i5gmcpNK9MMQgLScOA+o4Qp5rBSKy/Ei8=;
+        b=JJGUD/p+5eHH2d/X3k8OH+68IWWvGjAfLh5Kv84VlnQdlZiSf29OOsTTe6AnAmAwmN
+         Y33QD4jhxBCXDvMihxVk0Omswrq83YJg+aHPb5ol0OKLBN++g8A39euiWGDX3ouoYPl+
+         s6ROehBqPYNRJFRLSLYcZ482cdc5WahXopRMexpnQCmenuI0xQhSFJ5UUIJNTWhnMMRE
+         4QMZbhZ2HWqpUIP+E8fSfrvn5hu7MX1ZVVnCYfOVZrSyyEoNU/vSG4fdx5cNLqp5sfiR
+         VLapMYIBNOHHaR3VIzX1QuIqqlJ4LSKiroVioF5zMpGWCDvwFKRz6ejijf5DpuFzfaS/
+         jxdg==
+X-Gm-Message-State: ANoB5pkyr2oKDZhJ4qq395C1Z2LvMKd+FoZonWq7yyV9vV+wAe+5yhxd
+        uGVbAC8QYPrtCKJbvsv5WsT912XRzSDJdKXv88YBdqe3QZfa
+X-Google-Smtp-Source: AA0mqf5gtWhSDlEfr7MDlFe+1/3XGbS501s0+ORv6vupK7k0UwVKcXKxB0rvUfmp6AstWPdoZlgd68RgvFIY+TSIbY5vV8nEU1Dy
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/11/25 14:59:00 #20610704
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:2408:b0:389:5377:d86f with SMTP id
+ z8-20020a056638240800b003895377d86fmr3200049jat.142.1669396186442; Fri, 25
+ Nov 2022 09:09:46 -0800 (PST)
+Date:   Fri, 25 Nov 2022 09:09:46 -0800
+In-Reply-To: <0000000000003f315b05ee1ed3f4@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000aeaf5a05ee4e96d7@google.com>
+Subject: Re: [syzbot] kernel BUG in close_ctree
+From:   syzbot <syzbot+2665d678fffcc4608e18@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogQm9iYnkgRXNobGVtYW4gPGJvYmJ5LmVzaGxlbWFuQGJ5dGVkYW5jZS5jb20+DQoNClRo
-aXMgc2F2ZXMgb3JpZ2luYWwgYmVoYXZpb3VyIGZyb20gYWZfdnNvY2suYyAtIHN3aXRjaCBhbnkg
-ZXJyb3INCmNvZGUgcmV0dXJuZWQgZnJvbSB0cmFuc3BvcnQgbGF5ZXIgdG8gRU5PTUVNLg0KDQpT
-aWduZWQtb2ZmLWJ5OiBCb2JieSBFc2hsZW1hbiA8Ym9iYnkuZXNobGVtYW5AYnl0ZWRhbmNlLmNv
-bT4NClNpZ25lZC1vZmYtYnk6IEFyc2VuaXkgS3Jhc25vdiA8QVZLcmFzbm92QHNiZXJkZXZpY2Vz
-LnJ1Pg0KLS0tDQogbmV0L3Ztd192c29jay92bWNpX3RyYW5zcG9ydC5jIHwgOSArKysrKysrKy0N
-CiAxIGZpbGUgY2hhbmdlZCwgOCBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQoNCmRpZmYg
-LS1naXQgYS9uZXQvdm13X3Zzb2NrL3ZtY2lfdHJhbnNwb3J0LmMgYi9uZXQvdm13X3Zzb2NrL3Zt
-Y2lfdHJhbnNwb3J0LmMNCmluZGV4IDg0MmM5NDI4NmQzMS4uMjg5YTM2YTIwM2EyIDEwMDY0NA0K
-LS0tIGEvbmV0L3Ztd192c29jay92bWNpX3RyYW5zcG9ydC5jDQorKysgYi9uZXQvdm13X3Zzb2Nr
-L3ZtY2lfdHJhbnNwb3J0LmMNCkBAIC0xODM4LDcgKzE4MzgsMTQgQEAgc3RhdGljIHNzaXplX3Qg
-dm1jaV90cmFuc3BvcnRfc3RyZWFtX2VucXVldWUoDQogCXN0cnVjdCBtc2doZHIgKm1zZywNCiAJ
-c2l6ZV90IGxlbikNCiB7DQotCXJldHVybiB2bWNpX3FwYWlyX2VucXVldih2bWNpX3RyYW5zKHZz
-ayktPnFwYWlyLCBtc2csIGxlbiwgMCk7DQorCWludCBlcnI7DQorDQorCWVyciA9IHZtY2lfcXBh
-aXJfZW5xdWV2KHZtY2lfdHJhbnModnNrKS0+cXBhaXIsIG1zZywgbGVuLCAwKTsNCisNCisJaWYg
-KGVyciA8IDApDQorCQllcnIgPSAtRU5PTUVNOw0KKw0KKwlyZXR1cm4gZXJyOw0KIH0NCiANCiBz
-dGF0aWMgczY0IHZtY2lfdHJhbnNwb3J0X3N0cmVhbV9oYXNfZGF0YShzdHJ1Y3QgdnNvY2tfc29j
-ayAqdnNrKQ0KLS0gDQoyLjI1LjENCg==
+syzbot has found a reproducer for the following issue on:
+
+HEAD commit:    c3eb11fbb826 Merge tag 'pci-v6.1-fixes-3' of git://git.ker..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=115013c5880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8d01b6e3197974dd
+dashboard link: https://syzkaller.appspot.com/bug?extid=2665d678fffcc4608e18
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1360d8e3880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=175f0d53880000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/d81ac029767f/disk-c3eb11fb.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/b68346b5b73c/vmlinux-c3eb11fb.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/410a61724587/bzImage-c3eb11fb.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/f5bd1887114f/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2665d678fffcc4608e18@syzkaller.appspotmail.com
+
+assertion failed: list_empty(&fs_info->delayed_iputs), in fs/btrfs/disk-io.c:4664
+------------[ cut here ]------------
+kernel BUG at fs/btrfs/ctree.h:3713!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 3632 Comm: syz-executor235 Not tainted 6.1.0-rc6-syzkaller-00015-gc3eb11fbb826 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:assertfail+0x1a/0x1c fs/btrfs/ctree.h:3713
+Code: 48 c7 c2 80 aa 38 8b 31 c0 e8 ef e3 ff ff 0f 0b 89 f1 48 89 fe 48 c7 c7 60 d9 38 8b 48 c7 c2 50 0a 39 8b 31 c0 e8 d3 e3 ff ff <0f> 0b 55 48 89 e5 41 57 41 56 41 55 41 54 53 48 83 e4 e0 48 81 ec
+RSP: 0018:ffffc90003d7fa58 EFLAGS: 00010246
+RAX: 0000000000000051 RBX: ffff88807c960d58 RCX: 83509907ab950400
+RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
+RBP: ffffc90003d7fbe8 R08: ffffffff816e568d R09: fffff520007aff05
+R10: fffff520007aff05 R11: 1ffff920007aff04 R12: 0000000000000000
+R13: ffff88807c960000 R14: dffffc0000000000 R15: dffffc0000000000
+FS:  00005555573a6300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffcab996e28 CR3: 0000000078318000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ close_ctree+0x818/0xbde fs/btrfs/disk-io.c:4664
+ generic_shutdown_super+0x130/0x310 fs/super.c:492
+ kill_anon_super+0x36/0x60 fs/super.c:1086
+ btrfs_kill_super+0x3d/0x50 fs/btrfs/super.c:2441
+ deactivate_locked_super+0xa7/0xf0 fs/super.c:332
+ cleanup_mnt+0x494/0x520 fs/namespace.c:1186
+ task_work_run+0x243/0x300 kernel/task_work.c:179
+ ptrace_notify+0x29a/0x340 kernel/signal.c:2354
+ ptrace_report_syscall include/linux/ptrace.h:420 [inline]
+ ptrace_report_syscall_exit include/linux/ptrace.h:482 [inline]
+ syscall_exit_work+0x8c/0xe0 kernel/entry/common.c:251
+ syscall_exit_to_user_mode_prepare+0x63/0xc0 kernel/entry/common.c:278
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
+ syscall_exit_to_user_mode+0xa/0x60 kernel/entry/common.c:296
+ do_syscall_64+0x49/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fd3e400af67
+Code: ff d0 48 89 c7 b8 3c 00 00 00 0f 05 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffcab997568 EFLAGS: 00000202 ORIG_RAX: 00000000000000a6
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007fd3e400af67
+RDX: 00007ffcab99762a RSI: 000000000000000a RDI: 00007ffcab997620
+RBP: 00007ffcab997620 R08: 00000000ffffffff R09: 00007ffcab997400
+R10: 00005555573a7653 R11: 0000000000000202 R12: 00007ffcab9986e0
+R13: 00005555573a75f0 R14: 00007ffcab997590 R15: 00007ffcab998700
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:assertfail+0x1a/0x1c fs/btrfs/ctree.h:3713
+Code: 48 c7 c2 80 aa 38 8b 31 c0 e8 ef e3 ff ff 0f 0b 89 f1 48 89 fe 48 c7 c7 60 d9 38 8b 48 c7 c2 50 0a 39 8b 31 c0 e8 d3 e3 ff ff <0f> 0b 55 48 89 e5 41 57 41 56 41 55 41 54 53 48 83 e4 e0 48 81 ec
+RSP: 0018:ffffc90003d7fa58 EFLAGS: 00010246
+RAX: 0000000000000051 RBX: ffff88807c960d58 RCX: 83509907ab950400
+RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
+RBP: ffffc90003d7fbe8 R08: ffffffff816e568d R09: fffff520007aff05
+R10: fffff520007aff05 R11: 1ffff920007aff04 R12: 0000000000000000
+R13: ffff88807c960000 R14: dffffc0000000000 R15: dffffc0000000000
+FS:  00005555573a6300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fd3e405ad48 CR3: 0000000078318000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
