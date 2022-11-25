@@ -2,60 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F37416387B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 11:42:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E65296387BF
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 11:43:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbiKYKmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 05:42:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37690 "EHLO
+        id S230228AbiKYKnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 05:43:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiKYKmB (ORCPT
+        with ESMTP id S229758AbiKYKni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 05:42:01 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E820043AF4
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 02:41:59 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id q7so4694478ljp.9
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 02:41:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=FsdyF22Jd1SmNdZVco6Z+UYx7zskrJpALmeloXVwY24=;
-        b=NV+dXmBbaB4hNo9Yc5iLiBeuwwF6pwZqbU5DI1obYKp7AFo1JUQZhZvw6EGsYXlRLk
-         nisk3lKSUpoHTLo3hZ6WNo5UvI+PH4bVTaR6BXqoV8CVxKTkkZ+hIYWg7+scKqsDBXrc
-         9HPew8UtNQi3kdT3DboDJDfhNkToZmtKY+KsCIsP6iK394P2Z9CUPHKX0eF5i2d/dtau
-         XDfGc/iuAEg9vRUvgOFEhijjQqXgAuWTko1yX0KzJis0QOZVbgFK67X5z7kM8zLj+2Ze
-         HwZskjCVDpsVeUicaMVCBVNG6bneZ38BGAPlMUSmfzbSEaBIYlXP7UM7K+lQ49j4zxMW
-         G7dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FsdyF22Jd1SmNdZVco6Z+UYx7zskrJpALmeloXVwY24=;
-        b=EtvxNzSKn5vg3Eaq4CFBNPm2kCZytZlZUQ3SRawEt9zIqnOmvekx0QaNbOxDxpbBRt
-         WZ2/Uxf1gErV+mypxDBtHrRiZbVxDqjpnmCJAAJWNjUicON3W4xxJYuRu1mrByN3DhjD
-         scCz2jN3m9qgiAPhv9724uu/oXELKrUY8N3UY5Q0/j/o8As1xAvM7DFRDGgPTyYrG6Nt
-         rzAKbeJkBTVQvahnmK1SghZ2IsigXt4W3cp+XR1Y+uU/npevTFr8kiR+x1cU9KHJx5xE
-         U/skVaR9qS8lq6w+Eof8aNSSncwfk2MQdXM4GcEHOGKONYUI0lrBTVRtBVKNx+V6ioyb
-         +bgg==
-X-Gm-Message-State: ANoB5pkicrtRUHtzCVgDzmrGFCDci2lS/YHAzvJYlOhOkm6O+4MJq534
-        unfSjIac2moC6dZeQ4JKOMxv+j0aTUkrJFGVQrM=
-X-Google-Smtp-Source: AA0mqf4YvBrEKGFHWA6OAJ8H9MO+PD9RXFe8yPcjNSp3hYZPG5u92Koq1cs+EzjZpM862eItB/EKseJGQOCjO+hxo5M=
-X-Received: by 2002:a2e:a4c9:0:b0:279:4bb9:bb51 with SMTP id
- p9-20020a2ea4c9000000b002794bb9bb51mr6996322ljm.28.1669372917958; Fri, 25 Nov
- 2022 02:41:57 -0800 (PST)
+        Fri, 25 Nov 2022 05:43:38 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F44F1F9E9;
+        Fri, 25 Nov 2022 02:43:36 -0800 (PST)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NJWfY1fYNz15MsX;
+        Fri, 25 Nov 2022 18:43:01 +0800 (CST)
+Received: from [10.174.179.215] (10.174.179.215) by
+ canpemm500007.china.huawei.com (7.192.104.62) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 25 Nov 2022 18:43:33 +0800
+Subject: Re: [PATCH 5.10 000/149] 5.10.156-rc1 review
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <stable@vger.kernel.org>, <patches@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>, <shuah@kernel.org>,
+        <patches@kernelci.org>, <lkft-triage@lists.linaro.org>,
+        Pavel Machek <pavel@denx.de>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        <srw@sladewatkins.net>, <rwarsow@gmx.de>,
+        Netdev <netdev@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
+References: <20221123084557.945845710@linuxfoundation.org>
+ <CA+G9fYvKfbJHcMZtybf_0Ru3+6fKPg9HwWTOhdCLrOBXMaeG1A@mail.gmail.com>
+ <CA+G9fYvgaNKbr_EhWsh9hjnzCeVXGJoXX4to72ytdvZi8W0svA@mail.gmail.com>
+ <Y4BuUU5yMI6PqCbb@kroah.com>
+ <CA+G9fYsXomPXcecPDzDydO3=i2qHDM2RTtGxr0p2YOS6=YcWng@mail.gmail.com>
+ <a1652617-9da5-4a29-9711-9d3b3cf66597@app.fastmail.com>
+ <23b0fa9c-d041-8c56-ec4b-04991fa340d4@huawei.com>
+ <78fc17ac-bdce-4835-953d-d50d0a467146@app.fastmail.com>
+From:   YueHaibing <yuehaibing@huawei.com>
+Message-ID: <a6b5e0f5-815c-6fd0-9195-80cfd0819912@huawei.com>
+Date:   Fri, 25 Nov 2022 18:43:32 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-From:   Yun Levi <ppbuk5246@gmail.com>
-Date:   Fri, 25 Nov 2022 19:41:46 +0900
-Message-ID: <CAM7-yPTWs8J6sGjcyDrRsXu5APDHm5Kr19G500y=72=FwYCq3g@mail.gmail.com>
-Subject: [Question] About UNWIND_HINT_ENTRY on entry_SYSCALL_64.
-To:     jpoimboe@kernel.org, peterz@infradead.org
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <78fc17ac-bdce-4835-953d-d50d0a467146@app.fastmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,30 +74,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello.
+On 2022/11/25 18:32, Arnd Bergmann wrote:
+> On Fri, Nov 25, 2022, at 11:25, YueHaibing wrote:
+>> On 2022/11/25 18:02, Arnd Bergmann wrote:
+>>> On Fri, Nov 25, 2022, at 09:05, Naresh Kamboju wrote:
+>>>> On Fri, 25 Nov 2022 at 12:57, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+>>>>> On Thu, Nov 24, 2022 at 09:17:36PM +0530, Naresh Kamboju wrote:
+>>>>>>
+>>>>>> Daniel bisected this reported problem and found the first bad commit,
+>>>>>>
+>>>>>> YueHaibing <yuehaibing@huawei.com>
+>>>>>>     net: broadcom: Fix BCMGENET Kconfig
+>>>>>
+>>>>> But that is in 5.10.155, 5.15.79, 6.0.9, and 6.1-rc5.  It is not new to
+>>>>> this -rc release.
+>>>>
+>>>> It started from 5.10.155 and this is only seen on 5.10 and other
+>>>> branches 5.15, 6.0 and mainline are looking good.
+>>>
+>>> I think the original patch is wrong and should be fixed upstream.
+>>> The backported patch in question is a one-line Kconfig change doing
+>>
+>> It seems lts 5.10 do not contain commit e5f31552674e ("ethernet: fix 
+>> PTP_1588_CLOCK dependencies"),
+>> there is not PTP_1588_CLOCK_OPTIONAL option.
+> 
+> Ok, so there is a second problem then.
+> 
+> Greg, please just revert fbb4e8e6dc7b ("net: broadcom: Fix BCMGENET Kconfig")
+> in stable/linux-5.10.y: it depends on e5f31552674e ("ethernet: fix
+> PTP_1588_CLOCK dependencies"), which we probably don't want backported
+> from 5.15 to 5.10.
+> 
+> YueHaibing, do you agree with my suggestion for improving the
+> upstream 8d820bc9d12b ("net: broadcom: Fix BCMGENET Kconfig")
+> commit? Can you send a follow-up fix, or should I?
 
-While I try to see the information related to ORC in vmlinux,
-I'm trying to find out ORC information related to entry_SYSCALL_64's address.
+Ok, I will take care this.
 
-For this, I've tried to take the following step:
-    1. booting the kernel with the "nokaslr" option.
-    2. Getting ORC information by "objdump orc dump vmlinux"
-    3. cat /proc/kallsyms and check the address of "entry_SYSCALL_64"
-          - In my kernel, It's address .text + a00000
-    4. Find out related ORC entry gotten in step 2.
-
-But, I couldn't find the reason why entry_SYSCALL_64's orc info isn't
-encoded with end =1.
-Instead, It was encoded as INVALID ORC entry like:
-
-  .text+a00000: sp:(und) bp:(und) type:call end:0
-
-IIUC, Some of the code is started with UNWIND_HINT_ENTRY or UNWIND_HINT_EMPTY,
-it should be encoded with end = 1. But it doesn't.
-
-Am I wrong?
-
-
--- 
-Sincerely,
-Levi
+> 
+>       Arnd
+> .
+> 
