@@ -2,47 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48D726383F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 07:20:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A8A6383F4
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 07:21:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbiKYGUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 01:20:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57634 "EHLO
+        id S229558AbiKYGVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 01:21:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiKYGUB (ORCPT
+        with ESMTP id S229436AbiKYGVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 01:20:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34E4240B1;
-        Thu, 24 Nov 2022 22:20:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7C2D5B8296C;
-        Fri, 25 Nov 2022 06:19:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFBD7C433C1;
-        Fri, 25 Nov 2022 06:19:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1669357198;
-        bh=lwUIOPkS2nkRiCcVVbf1phCqilu19fGrO7QVgbS+Ag4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=T54rKLt0/2gVIlmTERS2EZn18vBFPN2fa5qi0m4X7O/o+lCsI24sg9t1ZWF3tGWrr
-         Au/C4JZ8Wad2ceRONb3TYvuNtbABuhXnJLLOWs6XVrifeekALWKAWXoOyuZzKXykca
-         bDWsbkxH2esaH0nZ930TaaIsWed3SAHbUkuZzkKk=
-Date:   Thu, 24 Nov 2022 22:19:57 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     mm-commits@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hotfixes for 6.1-rc7
-Message-Id: <20221124221957.e1237518cd877725e5e7f698@linux-foundation.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Fri, 25 Nov 2022 01:21:49 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61BCA240B1;
+        Thu, 24 Nov 2022 22:21:48 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AP5KSJY007979;
+        Fri, 25 Nov 2022 06:21:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=7X2cAV8D+5tN4VerwY+Cmy51FaJdiqC/SHu8MMSG/CE=;
+ b=RlzGebGH2snuiXO4Jy5qlbLiAqvwAhY9D8qmoTigq1w3IRCWEfgkc9+ek6ShQHTCmK30
+ xHNwjbDAu7pEPLezH1xTN+qegeqmTnFOzROAfkcf9E3H9QNxxMf1SkTmHTcAQWdwGlvr
+ ic515ooUrsPixia1I29NiOXDmNiPFvxPoaZYe3uofIcAlpeEnenw37EShWUnVWmhaNCh
+ rHy7wtmBr1/GLx/5mkDFKnIOoz1zp/r99aITAscXIzkheQyCDbFTrQ4xGw/qD3A29FRT
+ 7gq3cvz+VLmb2m7O66iCRsEqwlaLz1iwU+CRvAyh3PoOz/Zh2Tb9DsC6U+TEEcP7Rp2n rw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m2buv9gfm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Nov 2022 06:21:34 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AP6LW9b013426
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Nov 2022 06:21:32 GMT
+Received: from [10.216.38.33] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 24 Nov
+ 2022 22:21:26 -0800
+Message-ID: <cb4347b0-b885-1a00-6ab1-03566191e1ec@quicinc.com>
+Date:   Thu, 24 Nov 2022 22:21:22 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] drm/msm/dpu: Print interrupt index in addition to the
+ mask
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        <phone-devel@vger.kernel.org>
+CC:     <~postmarketos/upstreaming@lists.sr.ht>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        "Sean Paul" <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Vinod Polimera <quic_vpolimer@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20221121222456.437815-1-marijn.suijten@somainline.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20221121222456.437815-1-marijn.suijten@somainline.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: pp-FMCIr_c_5Iu05Tb_m__SLWc8ZnweR
+X-Proofpoint-ORIG-GUID: pp-FMCIr_c_5Iu05Tb_m__SLWc8ZnweR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-25_02,2022-11-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ clxscore=1011 mlxscore=0 phishscore=0 adultscore=0 spamscore=0
+ mlxlogscore=999 suspectscore=0 lowpriorityscore=0 impostorscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211250051
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -50,120 +95,65 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Linus, please merge this batch of MM and non-MM hotfixes.
 
-Thanks.
-
-
-The following changes since commit 436fa4a699bcd1c368bea9199e22b0a1b9cf9e0f:
-
-  docs: kmsan: fix formatting of "Example report" (2022-11-08 15:57:25 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-hotfixes-stable-2022-11-24
-
-for you to fetch changes up to de3db3f883a82c4800f4af0ae2cc3b96a408ee9b:
-
-  test_kprobes: fix implicit declaration error of test_kprobes (2022-11-22 18:50:45 -0800)
-
-----------------------------------------------------------------
-24 hotfixes.  8 marked cc:stable and 16 for post-6.0 issues.
-
-There have been a lot of hotfixes this cycle, and this is quite a large
-batch given how far we are into the -rc cycle.  Presumably a reflection of
-the unusually large amount of MM material which went into 6.1-rc1.
-
-----------------------------------------------------------------
-Alex Hung (2):
-      mailmap: update Alex Hung's email address
-      MAINTAINERS: update Alex Hung's email address
-
-Alistair Popple (2):
-      mm/memory: return vm_fault_t result from migrate_to_ram() callback
-      mm/migrate_device: return number of migrating pages in args->cpages
-
-Aneesh Kumar K.V (1):
-      mm/cgroup/reclaim: fix dirty pages throttling on cgroup v1
-
-Charan Teja Kalla (1):
-      mm/page_exit: fix kernel doc warning in page_ext_put()
-
-Chen Wandun (1):
-      swapfile: fix soft lockup in scan_swap_map_slots
-
-Chen Zhongjin (1):
-      nilfs2: fix nilfs_sufile_mark_dirty() not set segment usage as dirty
-
-Gautam Menghani (1):
-      mm/khugepaged: refactor mm_khugepaged_scan_file tracepoint to remove filename from function call
-
-Ian Cowan (1):
-      mm: mmap: fix documentation for vma_mas_szero
-
-Johannes Weiner (1):
-      mm: vmscan: fix extreme overreclaim and swap floods
-
-Li Hua (1):
-      test_kprobes: fix implicit declaration error of test_kprobes
-
-Li Liguang (1):
-      mm: correctly charge compressed memory to its memcg
-
-Marco Elver (1):
-      kfence: fix stack trace pruning
-
-Mike Kravetz (2):
-      ipc/shm: call underlying open/close vm_ops
-      hugetlb: fix __prep_compound_gigantic_page page flag setting
-
-Mukesh Ojha (1):
-      gcov: clang: fix the buffer overflow issue
-
-Qi Zheng (1):
-      mm: fix unexpected changes to {failslab|fail_page_alloc}.attr
-
-Sam James (1):
-      kbuild: fix -Wimplicit-function-declaration in license_is_gpl_compatible
-
-Satya Priya (1):
-      mailmap: update email address for Satya Priya
-
-SeongJae Park (1):
-      mm/damon/sysfs-schemes: skip stats update if the scheme directory is removed
-
-Yang Shi (1):
-      mm: khugepaged: allow page allocation fallback to eligible nodes
-
-Yosry Ahmed (1):
-      proc/meminfo: fix spacing in SecPageTables
-
-Yu Zhao (1):
-      mm: multi-gen LRU: retry folios written back while isolated
-
- .mailmap                           |  2 ++
- MAINTAINERS                        |  2 +-
- fs/nilfs2/sufile.c                 |  8 +++++
- fs/proc/meminfo.c                  |  2 +-
- include/linux/fault-inject.h       |  7 ++--
- include/linux/license.h            |  2 ++
- include/trace/events/huge_memory.h |  8 ++---
- ipc/shm.c                          | 34 +++++++++++++-----
- kernel/gcov/clang.c                |  2 ++
- lib/Kconfig.debug                  |  1 +
- lib/fault-inject.c                 | 13 ++++---
- mm/damon/sysfs.c                   |  4 +++
- mm/failslab.c                      | 12 +++++--
- mm/hugetlb.c                       |  4 ++-
- mm/kfence/report.c                 | 13 ++++---
- mm/khugepaged.c                    | 35 ++++++++----------
- mm/memcontrol.c                    |  2 +-
- mm/memory.c                        |  2 +-
- mm/migrate_device.c                |  8 +++--
- mm/mmap.c                          |  2 +-
- mm/page_alloc.c                    |  7 ++--
- mm/page_ext.c                      |  2 +-
- mm/swapfile.c                      |  8 ++---
- mm/vmscan.c                        | 72 ++++++++++++++++++++++++++++----------
- 24 files changed, 173 insertions(+), 79 deletions(-)
-
+On 11/21/2022 2:24 PM, Marijn Suijten wrote:
+> The mask only describes the `irq_idx % 32` part, making it generally
+> impossible to deduce what interrupt is being enabled/disabled.  Since
+> `debug/core_irq` in debugfs (and other prints) also include the full
+> `DPU_IRQ_IDX()` value, print the same full value here for easier
+> correlation instead of only adding the `irq_idx / 32` part.
+> 
+> Furthermore, make the dbgstr messages more consistent.
+> 
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c | 12 ++++++------
+>   1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
+> index cf1b6d84c18a..64589a9c2c51 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
+> @@ -252,9 +252,9 @@ static int dpu_hw_intr_enable_irq_locked(struct dpu_hw_intr *intr, int irq_idx)
+>   
+>   	cache_irq_mask = intr->cache_irq_mask[reg_idx];
+>   	if (cache_irq_mask & DPU_IRQ_MASK(irq_idx)) {
+> -		dbgstr = "DPU IRQ already set:";
+> +		dbgstr = "already ";
+>   	} else {
+> -		dbgstr = "DPU IRQ enabled:";
+> +		dbgstr = "";
+>   
+>   		cache_irq_mask |= DPU_IRQ_MASK(irq_idx);
+>   		/* Cleaning any pending interrupt */
+> @@ -268,7 +268,7 @@ static int dpu_hw_intr_enable_irq_locked(struct dpu_hw_intr *intr, int irq_idx)
+>   		intr->cache_irq_mask[reg_idx] = cache_irq_mask;
+>   	}
+>   
+> -	pr_debug("%s MASK:0x%.8lx, CACHE-MASK:0x%.8x\n", dbgstr,
+> +	pr_debug("DPU IRQ %d %senabled: MASK:0x%.8lx, CACHE-MASK:0x%.8x\n", irq_idx, dbgstr,
+>   			DPU_IRQ_MASK(irq_idx), cache_irq_mask);
+>   
+>   	return 0;
+> @@ -301,9 +301,9 @@ static int dpu_hw_intr_disable_irq_locked(struct dpu_hw_intr *intr, int irq_idx)
+>   
+>   	cache_irq_mask = intr->cache_irq_mask[reg_idx];
+>   	if ((cache_irq_mask & DPU_IRQ_MASK(irq_idx)) == 0) {
+> -		dbgstr = "DPU IRQ is already cleared:";
+> +		dbgstr = "already ";
+>   	} else {
+> -		dbgstr = "DPU IRQ mask disable:";
+> +		dbgstr = "";
+>   
+>   		cache_irq_mask &= ~DPU_IRQ_MASK(irq_idx);
+>   		/* Disable interrupts based on the new mask */
+> @@ -317,7 +317,7 @@ static int dpu_hw_intr_disable_irq_locked(struct dpu_hw_intr *intr, int irq_idx)
+>   		intr->cache_irq_mask[reg_idx] = cache_irq_mask;
+>   	}
+>   
+> -	pr_debug("%s MASK:0x%.8lx, CACHE-MASK:0x%.8x\n", dbgstr,
+> +	pr_debug("DPU IRQ %d %sdisabled: MASK:0x%.8lx, CACHE-MASK:0x%.8x\n", irq_idx, dbgstr,
+>   			DPU_IRQ_MASK(irq_idx), cache_irq_mask);
+>   
+>   	return 0;
