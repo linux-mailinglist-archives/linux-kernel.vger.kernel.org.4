@@ -2,113 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC90D63886A
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 12:14:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 713E9638866
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 12:14:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230245AbiKYLOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 06:14:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41166 "EHLO
+        id S230385AbiKYLOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 06:14:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiKYLOq (ORCPT
+        with ESMTP id S230057AbiKYLOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 06:14:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39D51D0CD
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 03:13:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669374822;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qFx/VXqLp/Ia7vJAw9Cj+XP8sI/+0/nuoQb7QGji8jU=;
-        b=U9auQhXVqixk0MWUNhoeZ7iS4TkChVz6eBYjq8X46dBP29nbsMeRVtVJ7s/0V+V7kJxR6Y
-        glEb4G2YaI8GoU0GK2LCf3tna+cvQqzWwW61SZpdQbSl2vGTHc267AmZuM2ZFH8gq1IL+Y
-        lt9Y4SRPrMqIUT2Mb96QbdD4xhrJyvU=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-556-aRc9uGDHMQmlGA-YSKEQHw-1; Fri, 25 Nov 2022 06:13:40 -0500
-X-MC-Unique: aRc9uGDHMQmlGA-YSKEQHw-1
-Received: by mail-wm1-f71.google.com with SMTP id j2-20020a05600c1c0200b003cf7397fc9bso2288624wms.5
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 03:13:40 -0800 (PST)
+        Fri, 25 Nov 2022 06:14:18 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A04324958
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 03:14:15 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id d128so4696399ybf.10
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 03:14:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=tR6n285CjGjiEweDZ5Rpr+M2GTjNH/qXmtQMPjMs0+c=;
+        b=c99ikx49ox7ps1gMjRcvBxZCxMF1Q2X426RlWzGPErFaS2/JGYC+WE0VtkEkdWIyD6
+         z88xRAh6GX2/MFFFdrU6Ihb8gAAup+C6XRg27ULRjJBDkodEII/XjVG/RiC9D9qPFQsn
+         TYJN4FgikG1xUO5VRg3yAYazReVLHxnbkkhpUqOFkWSOVPRTjPEMf9rbE+EmvJFajtrD
+         FAgnyYlCCjUByqaUwxA9O4HO08lt22EX/hsxJi60T/LmHq4ZbdD59G5mIj8x94D7k+/o
+         x0pHSOalKNBHHlMC59N42eRhe9cW2TA57ujHkaQIRcVvJgxofT7gqkd+d9LUWnCIdjbN
+         kTdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qFx/VXqLp/Ia7vJAw9Cj+XP8sI/+0/nuoQb7QGji8jU=;
-        b=KFLHVmjPA72smK94QSAxyeJoxGMMnm/wSomkcVyGeE1LNHw1Q7SfikW5m4QfhvJ1Hb
-         t6u5t3gGmy4SaoC6ZY2qYTQDQpcFou5BWiBGOaozbVtEA40b5gDJn7DWCOt5cOcQSc2p
-         5fqqCu0mInHw+dJ9Ue/6gZyjGuvuxI3uDRhc8ZL7Jkc63sw6RnVRNv1Z+eOeJvLg/xov
-         flLPh3eWaipg3KgYgTnD8I9bKbDvV5u1Y4TL3gZMr9tRXC0quBxWr/kT6X3OappSncoT
-         kiN+GtVAhQXCQ0rXRKlgqyZA9b9ygqOygO+7cRJcvkAjgNGav2inbD6wcywfSJJyRgaL
-         SJ5A==
-X-Gm-Message-State: ANoB5plpZO09yB3zA/4YG4+mkfJEyS6v2yk5k8S0Eua8R/5GYMzBH+Hp
-        YaoztE0y5H24jMssz9LbuPp6mD7bkgeTksB+5n3NvFxptrXDL56eS86whOF9w9MvnEHnKK03ujx
-        qWNk6YYAc+v2VCEH0j576V+uG
-X-Received: by 2002:a05:600c:4113:b0:3cf:a3e0:73e4 with SMTP id j19-20020a05600c411300b003cfa3e073e4mr14008543wmi.21.1669374819683;
-        Fri, 25 Nov 2022 03:13:39 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4QbRaGQmx0lzXwDi9UpdtUdoe4KD8bKMgqn+J5cd47t76yI/i28tjLFg1hYaguZbzcAUiqhw==
-X-Received: by 2002:a05:600c:4113:b0:3cf:a3e0:73e4 with SMTP id j19-20020a05600c411300b003cfa3e073e4mr14008533wmi.21.1669374819497;
-        Fri, 25 Nov 2022 03:13:39 -0800 (PST)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id e3-20020a5d65c3000000b002383edcde09sm3440822wrw.59.2022.11.25.03.13.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Nov 2022 03:13:39 -0800 (PST)
-Message-ID: <2405809e-8183-e353-1259-94e16ebe8204@redhat.com>
-Date:   Fri, 25 Nov 2022 12:13:38 +0100
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tR6n285CjGjiEweDZ5Rpr+M2GTjNH/qXmtQMPjMs0+c=;
+        b=PD4fJmtlAHvO13fmhHMBY4cIrSNaYM7UydaTC+/iTBM7nnUXqvJVJpOeVyX5eZSRFw
+         axWzu/3BgZN3hoVo+ZKu6JZ1zBrWPGq9M3QdhDcQKqPg2Dtx56qD4/Vea0Gd0uZdIoh6
+         mzyH1cOx8NlJSKRXaYlJgxMsu7RmvmfvPXMoCvEy4S54DTz3o43yHX7HBx+8KtujfUKr
+         KmKMntxkYi1ai9CDiyP/O40P5SQSVB0JB+O1Hom6pRaoGopTET2s1xQaH4pDH2tnghoT
+         tkA5CYMZIgUroX1/5tvZniG+k+DM6YDbpyRjUHZYaQPA3wKjRXCeEybVJIaeniFqCyRz
+         ov3g==
+X-Gm-Message-State: ANoB5pm+h7KIVNRXogdXOCUKRqjeBLV4hcOVoMU0gDFqaIwS20KtCl50
+        D4pfDLPCIrTIP+OrTVRJZr4X6TKWKusndc84P0PtZg==
+X-Google-Smtp-Source: AA0mqf4SbZz4MHCM6eYS/GQWVWxtFtQtXAM37B3lS2YcupS0l9TAFw0bzAoymEKP6IXA6txZtMTI5FJU7IPL9YrcSUw=
+X-Received: by 2002:a5b:f0f:0:b0:6d2:5835:301f with SMTP id
+ x15-20020a5b0f0f000000b006d25835301fmr25099494ybr.336.1669374853963; Fri, 25
+ Nov 2022 03:14:13 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH 17/24] drm/vc4: crtc: Pass the device and data in
- vc4_crtc_init
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Maxime Ripard <mripard@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     David Gow <davidgow@google.com>, linaro-mm-sig@lists.linaro.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org,
-        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
-        linux-media@vger.kernel.org, kunit-dev@googlegroups.com,
-        dri-devel@lists.freedesktop.org,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        linux-kernel@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-References: <20221123-rpi-kunit-tests-v1-0-051a0bb60a16@cerno.tech>
- <20221123-rpi-kunit-tests-v1-17-051a0bb60a16@cerno.tech>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20221123-rpi-kunit-tests-v1-17-051a0bb60a16@cerno.tech>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 25 Nov 2022 16:44:02 +0530
+Message-ID: <CA+G9fYt9W2h31bSquJ7Jj7jsP=4OEhF9WMB=NwdR2WcavvPusA@mail.gmail.com>
+Subject: perf: list of failures from LKFT CI
+To:     linux-perf-users@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/23/22 16:25, Maxime Ripard wrote:
-> Both users of vc4_crtc_init need the same extra initialization to set
-> the pointer to the platform_device and the CRTC data. Since it's
-> mandatory, let's make them both arguments of vc4_crtc_init().
-> 
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> ---
+Perf stat JSON output linter test and few more failed on next-20221125.
 
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
--- 
-Best regards,
+Regressions found on qemu_arm64:
+    perf/perf-stat-JSON-output-linter
+    perf/perf-stat-CSV-output-linter
+    perf/perf-all-PMU-test
+    https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221125/testrun/13178580/suite/perf/tests/
 
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+Regressions found on qemu_x86_64:
+    perf/perf-stat-JSON-output-linter
+    perf/Watchpoint-subtest-2
+    perf/perf-all-metricgroups-test
+    https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221125/testrun/13178612/suite/perf/tests/
 
+Regressions found on x86:
+    perf/perf-all-metricgroups-test
+    perf/perf-stat-JSON-output-linter
+    https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221125/testrun/13181129/suite/perf/tests/
+
+Details of perf test failures.
+Good case: Expected output,
+Linux next-20221124
+
+ 92: perf stat JSON output linter                                    :
+--- start ---
+test child forked, pid 3067
+Checking json output: no args [Success]
+Checking json output: system wide [Success]
+Checking json output: interval [Success]
+Checking json output: event [Success]
+Checking json output: per thread [Success]
+Checking json output: per node [Success]
+Checking json output: system wide Checking json output: system wide no
+aggregation [Success]
+Checking json output: per core [Success]
+Checking json output: per die [Success]
+Checking json output: per socket [Success]
+test child finished with 0
+---- end ----
+perf stat JSON output linter: Ok
+
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221124/testrun/13170208/suite/perf/test/perf-stat-JSON-output-linter/log
+
+Bad case: failed output.
+ 92: perf stat JSON output linter                                    :
+--- start ---
+test child forked, pid 2268
+Checking json output: no args [   65.101948] audit: type=1701
+audit(1669350899.408:21): auid=4294967295 uid=0 gid=0 ses=4294967295
+pid=2277 comm=\"perf\" exe=\"/usr/bin/perf\" sig=6 res=1
+Test failed for input:
+{\"counter-value\" : \"0.531160\", \"unit\" : \"msec\", \"event\" :
+\"task-clock\", \"event-runtime\" : 531160, \"pcnt-running\" : 100.00,
+\"metric-value\" : 0.425336, \"metric-unit\" : \"CPUs utilized\"}
+
+{\"counter-value\" : \"0.000000\", \"unit\" : \"\", \"event\" :
+\"context-switches\", \"event-runtime\" : 531160, \"pcnt-running\" :
+100.00, \"metric-value\" : 0.000000, \"metric-unit\" : \"/sec\"}
+
+{\"counter-value\" : \"0.000000\", \"unit\" : \"\", \"event\" :
+\"cpu-migrations\", \"event-runtime\" : 531160, \"pcnt-running\" :
+100.00, \"metric-value\" : 0.000000, \"metric-unit\" : \"/sec\"}
+
+{\"counter-value\" : \"43.000000\", \"unit\" : \"\", \"event\" :
+\"page-faults\", \"event-runtime\" : 531160, \"pcnt-running\" :
+100.00, \"metric-value\" : 80.954891, \"metric-unit\" : \"K/sec\"}
+
+{\"counter-value\" : \"1264746.000000\", \"unit\" : \"\", \"event\" :
+\"cycles\", \"event-runtime\" : 531160, \"pcnt-running\" : 100.00,
+\"metric-value\" : 2.381102, \"metric-unit\" : \"GHz\"}
+
+{\"counter-value\" : \"1711188.000000\", \"unit\" : \"\", \"event\" :
+\"instructions\", \"event-runtime\" : 531160, \"pcnt-running\" :
+100.00, \"metric-value\" : 1.352989, \"metric-unit\" : \"insn per
+cycle\"}
+
+{\"counter-value\" : \"<not supported>\", \"unit\" : \"\", \"event\" :
+\"branches\", \"event-runtime\" : 0, \"pcnt-running\" : 100.00, Fatal
+error: glibc detected an invalid stdio handle
+
+Traceback (most recent call last):
+  File \"/usr/libexec/perf-core/tests/shell/lib/perf_json_output_lint.py\",
+line 93, in <module>
+    check_json_output(expected_items)
+  File \"/usr/libexec/perf-core/tests/shell/lib/perf_json_output_lint.py\",
+line 54, in check_json_output
+    raise RuntimeError(f'wrong number of fields. counted {count}
+expected {expected_items}'
+RuntimeError: wrong number of fields. counted 5 expected 6 in
+'{\"counter-value\" : \"<not supported>\", \"unit\" : \"\", \"event\"
+: \"branches\", \"event-runtime\" : 0, \"pcnt-running\" : 100.00,
+Fatal error: glibc detected an invalid stdio handle
+'
+test child finished with -1
+---- end ----
+perf stat JSON output linter: FAILED!
+
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221125/testrun/13178580/suite/perf/test/perf-stat-JSON-output-linter/log
+
+Test results comparison history:
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221125/testrun/13178580/suite/perf/test/perf-stat-JSON-output-linter/history/
+
+--
+Linaro LKFT
+https://lkft.linaro.org
