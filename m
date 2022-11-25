@@ -2,283 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDFE76387B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 11:42:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 704506388AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 12:23:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbiKYKmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 05:42:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39038 "EHLO
+        id S230210AbiKYLXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 06:23:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiKYKmw (ORCPT
+        with ESMTP id S229807AbiKYLWu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 05:42:52 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74EF91AF03
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 02:42:48 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NJWfB5jWqz4f3nTX
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 18:42:42 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP4 (Coremail) with SMTP id gCh0CgB3m9ginIBjiyyDBA--.17322S4;
-        Fri, 25 Nov 2022 18:42:44 +0800 (CST)
-From:   Hou Tao <houtao@huaweicloud.com>
-To:     linux-erofs@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, Gao Xiang <xiang@kernel.org>,
-        Chao Yu <chao@kernel.org>, Yue Hu <huyue2@coolpad.com>,
-        Jeffle Xu <jefflexu@linux.alibaba.com>,
-        Jia Zhu <zhujia.zj@bytedance.com>, houtao1@huawei.com
-Subject: [PATCH v2] erofs: check the uniqueness of fsid in shared domain in advance
-Date:   Fri, 25 Nov 2022 19:08:22 +0800
-Message-Id: <20221125110822.3812942-1-houtao@huaweicloud.com>
-X-Mailer: git-send-email 2.29.2
+        Fri, 25 Nov 2022 06:22:50 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B4E140D9
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 03:22:48 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id n7so6266008wrr.13
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 03:22:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:to:from:user-agent
+         :references:from:to:cc:subject:date:message-id:reply-to;
+        bh=pn54IrAg9BvGdpbmlmTu4g2JeVdd9hbFtNrFP2BoA2s=;
+        b=CxcXVjwjK4O53Xsx4YzgKeQEGBU2MaHahr/zOMhAdXq/sVnoZdb23QDoGDzacEdWZ6
+         Rlwbs2pHtNvE2W1+dPnxWGWL59DGt9iH4oZfc0sztwVn2bWaWVWwpbhBOvhnlQWpEcDW
+         wBpQ4rj5BtaEqJ8B8Hc2MS94pFz6y8zsNBfwg1gGawhTj2B7gTb12UBAqjJW7Ux3Wn7N
+         hJskj2x+HOGvCgjRHN7pFl3gbdx8vQi4J6ilaqAmNkx3tj8DTdJZ+55G40uRnTt8M/6O
+         i5ZMbjBjoZldLlzQZfmHVKIbBnyhFPQnPyROsi3B7TgVR/xprXdMqdFhrTNXGg6Jub2+
+         Q1zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:to:from:user-agent
+         :references:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pn54IrAg9BvGdpbmlmTu4g2JeVdd9hbFtNrFP2BoA2s=;
+        b=wBCaoeiO+YQKqTQ0fXVySDpzzn671cQPwqnz1IVgmC8aJGy0fcWPeid5yA7rcP2Em4
+         aQy7ZAaCtYrGvwy2IP2CVBIP/u4QWU+qfjSUshe4SQs7ptc6+iyWlOrywfbXs52PPBSf
+         6auKwNG+LsDylhfoJjo4ps7lW301T0XkW0TNVswHIC0otZiubmzTWNqu1cCxwS1JUxRm
+         UTSuoqal+mN1DI7C5TGn0s6RZRb0EeKb4/TN0bEeiXaOaXICExnagfzcTqYOwVLSbU0l
+         hZytiFkBA6edrKXTkQDfTYb8J79Zt467rO52vIZ718fJg/PHz2/teXNoij8JdSr0CJrx
+         U0mw==
+X-Gm-Message-State: ANoB5pnKDe9RHMmd2OOzCctA6ktKbmO4o1YZYxfX8XEt4F9aiFOW8DDY
+        C7VfbW/WOKq9mrgfDucUlLPWqw==
+X-Google-Smtp-Source: AA0mqf5J1upCR0wwX6epG9BvfBXsPDWbg7ZhxcnvLJ7dj4mY2ZQicjacNyBf2f6pOKtwDPhaumPn2A==
+X-Received: by 2002:a05:6000:1088:b0:22e:4a4e:b890 with SMTP id y8-20020a056000108800b0022e4a4eb890mr14732078wrw.554.1669375366508;
+        Fri, 25 Nov 2022 03:22:46 -0800 (PST)
+Received: from localhost (253.35.17.109.rev.sfr.net. [109.17.35.253])
+        by smtp.gmail.com with ESMTPSA id m6-20020adfc586000000b002366fb99cdasm3538269wrg.50.2022.11.25.03.22.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Nov 2022 03:22:45 -0800 (PST)
+References: <20221110150035.2824580-1-adeep@lexina.in>
+ <1jk03y37vs.fsf@starbuckisacylon.baylibre.com>
+ <c31cc8a3-8adc-3e93-f6fe-73cd7482429d@lexina.in>
+User-agent: mu4e 1.8.10; emacs 28.2
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Vyacheslav <adeep@lexina.in>, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH 0/4] arm64: amlogic: mmc: meson-gx: Add core, tx, rx
+Date:   Fri, 25 Nov 2022 11:28:17 +0100
+In-reply-to: <c31cc8a3-8adc-3e93-f6fe-73cd7482429d@lexina.in>
+Message-ID: <1j7czj2s8r.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgB3m9ginIBjiyyDBA--.17322S4
-X-Coremail-Antispam: 1UD129KBjvJXoW3AF1Dury8ur4xWF48JFyxZrb_yoW3Cr4kpa
-        yfCw1SqrWkXry5ua1fXF4DXFyfK3s7ta1DGw18J3sYyw48Jr18GryvyFyYyF47G34DArW2
-        qF12v3WUuw48Ar7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUgKb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Y
-        z7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zV
-        AF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4l
-        IxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s
-        0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
-        daVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hou Tao <houtao1@huawei.com>
 
-When shared domain is enabled, doing mount twice with the same fsid and
-domain_id will trigger sysfs warning as shown below:
+On Thu 24 Nov 2022 at 09:22, Vyacheslav <adeep@lexina.in> wrote:
 
- sysfs: cannot create duplicate filename '/fs/erofs/d0,meta.bin'
- CPU: 15 PID: 1051 Comm: mount Not tainted 6.1.0-rc6+ #1
- Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
- Call Trace:
-  <TASK>
-  dump_stack_lvl+0x38/0x49
-  dump_stack+0x10/0x12
-  sysfs_warn_dup.cold+0x17/0x27
-  sysfs_create_dir_ns+0xb8/0xd0
-  kobject_add_internal+0xb1/0x240
-  kobject_init_and_add+0x71/0xa0
-  erofs_register_sysfs+0x89/0x110
-  erofs_fc_fill_super+0x98c/0xaf0
-  vfs_get_super+0x7d/0x100
-  get_tree_nodev+0x16/0x20
-  erofs_fc_get_tree+0x20/0x30
-  vfs_get_tree+0x24/0xb0
-  path_mount+0x2fa/0xa90
-  do_mount+0x7c/0xa0
-  __x64_sys_mount+0x8b/0xe0
-  do_syscall_64+0x30/0x60
-  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> Hi!
+> Thanks for reply. Sorry for delay.
+>
+>
+> 13.11.2022 23:06, Jerome Brunet wrote:
+>> On Thu 10 Nov 2022 at 18:00, Vyacheslav Bocharov <adeep@lexina.in> wrote:
+>> 
+>>> The mmc driver use the same phase values (core - 180, tx/rx - 0) for all
+>>> meson64 platforms. However, some platforms (and even some boards) require
+>>> different values
+>> Where does it stops ? Trying to solve the instabilities of this
+>> IP/driver by tweaking the phase has proven to be dead-end.
+>
+> As a result, there is now a stalemate and various real-world operating
+> system projects use patches to change clock phases.
+>
 
-The reason is erofs_fscache_register_cookie() doesn't guarantee the primary
-data blob (aka fsid) is unique in the shared domain and
-erofs_register_sysfs() invoked by the second mount will fail due to the
-duplicated fsid in the shared domain and report warning.
+The current setting has seen its fair share of "real world"
+testing too, before being applied. 
 
-It would be better to check the uniqueness of fsid before doing
-erofs_register_sysfs(), so adding a new flags parameter for
-erofs_fscache_register_cookie() and doing the uniqueness check if
-EROFS_REG_COOKIE_NEED_NOEXIST is enabled.
+It does need more work, sure. It does not make what is proposed here
+appropriate.
 
-After the patch, the error in dmesg for the duplicated mount would be:
+>
+>> Soon, you'll end up tweaking these settings depending on the on
+>> particular version of the device because it ships with a different eMMC
+>> manufacturer. Then comes multi sourcing, sdio modules, sdcards ...
+>> 
+>>> (axg for example use 270 degree for core clock).
+>> Where ? Upstream linux does not
+>
+> Armbian/Home Assistant OS use core phase 270 for axg/g12/sm1 boards
+> (patches by Neil). On JetHub devices phase 270 is need with eMMC more than
+> 16Gb size.
 
- erofs: ...: erofs_domain_register_cookie: XX already exists in domain YY
+Size has nothing to do with this. Few boards electing to do something
+else does justify making this a DT config. It just shows the controller
+still need work.
 
-Reviewed-by: Jia Zhu <zhujia.zj@bytedance.com>
-Signed-off-by: Hou Tao <houtao1@huawei.com>
----
-v2:
- * Do tab-alignment for EROFS_REG_COOKIE_NEED_xxx (Suggested by Jia Zhu)
- * Add Reviewed-by tag
+>
+>> u-boot does something of the sort for sm1 and I'm not entirely sure this
+>> appropriate either.
+>
+> U-boot in Armbian/HAOS use same phase 270 or/and force low speed mode for
+> eMMC (limit clock freq).
+>
+>> IMO, this setting has more to do with the mode the mmc device is
+>> operating at - not the platform or board.
+>> We had some discussions with the HW designers at AML and they recommended
+>> to keep a phase shift of 180 between the Core and Tx. They also
+>> recommended to leave Rx alone (actually, starting from the v3, the Rx
+>> field has no effect. It is not even wired to actual HW)
+>
+> I do not have access to AML engineers :)
+> I can only test settings on several different boards. And it seems that the
+> phase settings depend not only on the board layout, but also on the eMMC
+> chip used.
 
-v1: https://lore.kernel.org/linux-erofs/20221125074057.2229083-1-houtao@huaweicloud.com/
- fs/erofs/fscache.c  | 47 +++++++++++++++++++++++++++++++++------------
- fs/erofs/internal.h | 10 ++++++++--
- fs/erofs/super.c    |  2 +-
- 3 files changed, 44 insertions(+), 15 deletions(-)
+What are you going to do when a manufacturer does multi-sourcing then
+? Make one DT per PCB/eMMC chip combination ? It is wrong and does not scale.
 
-diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
-index af5ed6b9c54d..6a792a513d6b 100644
---- a/fs/erofs/fscache.c
-+++ b/fs/erofs/fscache.c
-@@ -494,7 +494,8 @@ static int erofs_fscache_register_domain(struct super_block *sb)
- 
- static
- struct erofs_fscache *erofs_fscache_acquire_cookie(struct super_block *sb,
--						    char *name, bool need_inode)
-+						   char *name,
-+						   unsigned int flags)
- {
- 	struct fscache_volume *volume = EROFS_SB(sb)->volume;
- 	struct erofs_fscache *ctx;
-@@ -516,7 +517,7 @@ struct erofs_fscache *erofs_fscache_acquire_cookie(struct super_block *sb,
- 	fscache_use_cookie(cookie, false);
- 	ctx->cookie = cookie;
- 
--	if (need_inode) {
-+	if (flags & EROFS_REG_COOKIE_NEED_INODE) {
- 		struct inode *const inode = new_inode(sb);
- 
- 		if (!inode) {
-@@ -554,14 +555,15 @@ static void erofs_fscache_relinquish_cookie(struct erofs_fscache *ctx)
- 
- static
- struct erofs_fscache *erofs_fscache_domain_init_cookie(struct super_block *sb,
--		char *name, bool need_inode)
-+						       char *name,
-+						       unsigned int flags)
- {
- 	int err;
- 	struct inode *inode;
- 	struct erofs_fscache *ctx;
- 	struct erofs_domain *domain = EROFS_SB(sb)->domain;
- 
--	ctx = erofs_fscache_acquire_cookie(sb, name, need_inode);
-+	ctx = erofs_fscache_acquire_cookie(sb, name, flags);
- 	if (IS_ERR(ctx))
- 		return ctx;
- 
-@@ -589,7 +591,8 @@ struct erofs_fscache *erofs_fscache_domain_init_cookie(struct super_block *sb,
- 
- static
- struct erofs_fscache *erofs_domain_register_cookie(struct super_block *sb,
--						   char *name, bool need_inode)
-+						   char *name,
-+						   unsigned int flags)
- {
- 	struct inode *inode;
- 	struct erofs_fscache *ctx;
-@@ -602,23 +605,30 @@ struct erofs_fscache *erofs_domain_register_cookie(struct super_block *sb,
- 		ctx = inode->i_private;
- 		if (!ctx || ctx->domain != domain || strcmp(ctx->name, name))
- 			continue;
--		igrab(inode);
-+		if (!(flags & EROFS_REG_COOKIE_NEED_NOEXIST)) {
-+			igrab(inode);
-+		} else {
-+			erofs_err(sb, "%s already exists in domain %s", name,
-+				  domain->domain_id);
-+			ctx = ERR_PTR(-EEXIST);
-+		}
- 		spin_unlock(&psb->s_inode_list_lock);
- 		mutex_unlock(&erofs_domain_cookies_lock);
- 		return ctx;
- 	}
- 	spin_unlock(&psb->s_inode_list_lock);
--	ctx = erofs_fscache_domain_init_cookie(sb, name, need_inode);
-+	ctx = erofs_fscache_domain_init_cookie(sb, name, flags);
- 	mutex_unlock(&erofs_domain_cookies_lock);
- 	return ctx;
- }
- 
- struct erofs_fscache *erofs_fscache_register_cookie(struct super_block *sb,
--						    char *name, bool need_inode)
-+						    char *name,
-+						    unsigned int flags)
- {
- 	if (EROFS_SB(sb)->domain_id)
--		return erofs_domain_register_cookie(sb, name, need_inode);
--	return erofs_fscache_acquire_cookie(sb, name, need_inode);
-+		return erofs_domain_register_cookie(sb, name, flags);
-+	return erofs_fscache_acquire_cookie(sb, name, flags);
- }
- 
- void erofs_fscache_unregister_cookie(struct erofs_fscache *ctx)
-@@ -647,6 +657,7 @@ int erofs_fscache_register_fs(struct super_block *sb)
- 	int ret;
- 	struct erofs_sb_info *sbi = EROFS_SB(sb);
- 	struct erofs_fscache *fscache;
-+	unsigned int flags;
- 
- 	if (sbi->domain_id)
- 		ret = erofs_fscache_register_domain(sb);
-@@ -655,8 +666,20 @@ int erofs_fscache_register_fs(struct super_block *sb)
- 	if (ret)
- 		return ret;
- 
--	/* acquired domain/volume will be relinquished in kill_sb() on error */
--	fscache = erofs_fscache_register_cookie(sb, sbi->fsid, true);
-+	/*
-+	 * When shared domain is enabled, using NEED_NOEXIST to guarantee
-+	 * the primary data blob (aka fsid) is unique in the shared domain.
-+	 *
-+	 * For non-shared-domain case, fscache_acquire_volume() invoked by
-+	 * erofs_fscache_register_volume() has already guaranteed
-+	 * the uniqueness of primary data blob.
-+	 *
-+	 * Acquired domain/volume will be relinquished in kill_sb() on error.
-+	 */
-+	flags = EROFS_REG_COOKIE_NEED_INODE;
-+	if (sbi->domain_id)
-+		flags |= EROFS_REG_COOKIE_NEED_NOEXIST;
-+	fscache = erofs_fscache_register_cookie(sb, sbi->fsid, flags);
- 	if (IS_ERR(fscache))
- 		return PTR_ERR(fscache);
- 
-diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-index 05dc68627722..e51f27b6bde1 100644
---- a/fs/erofs/internal.h
-+++ b/fs/erofs/internal.h
-@@ -604,13 +604,18 @@ static inline int z_erofs_load_lzma_config(struct super_block *sb,
- }
- #endif	/* !CONFIG_EROFS_FS_ZIP */
- 
-+/* flags for erofs_fscache_register_cookie() */
-+#define EROFS_REG_COOKIE_NEED_INODE	1
-+#define EROFS_REG_COOKIE_NEED_NOEXIST	2
-+
- /* fscache.c */
- #ifdef CONFIG_EROFS_FS_ONDEMAND
- int erofs_fscache_register_fs(struct super_block *sb);
- void erofs_fscache_unregister_fs(struct super_block *sb);
- 
- struct erofs_fscache *erofs_fscache_register_cookie(struct super_block *sb,
--						     char *name, bool need_inode);
-+						    char *name,
-+						    unsigned int flags);
- void erofs_fscache_unregister_cookie(struct erofs_fscache *fscache);
- 
- extern const struct address_space_operations erofs_fscache_access_aops;
-@@ -623,7 +628,8 @@ static inline void erofs_fscache_unregister_fs(struct super_block *sb) {}
- 
- static inline
- struct erofs_fscache *erofs_fscache_register_cookie(struct super_block *sb,
--						     char *name, bool need_inode)
-+						     char *name,
-+						     unsigned int flags)
- {
- 	return ERR_PTR(-EOPNOTSUPP);
- }
-diff --git a/fs/erofs/super.c b/fs/erofs/super.c
-index 1c7dcca702b3..481788c24a68 100644
---- a/fs/erofs/super.c
-+++ b/fs/erofs/super.c
-@@ -245,7 +245,7 @@ static int erofs_init_device(struct erofs_buf *buf, struct super_block *sb,
- 	}
- 
- 	if (erofs_is_fscache_mode(sb)) {
--		fscache = erofs_fscache_register_cookie(sb, dif->path, false);
-+		fscache = erofs_fscache_register_cookie(sb, dif->path, 0);
- 		if (IS_ERR(fscache))
- 			return PTR_ERR(fscache);
- 		dif->fscache = fscache;
--- 
-2.29.2
+> What to do about this (if not to use the magic of the driver
+> from AML) other than providing the ability to change the value in
+> devicetree for each board I can't think of yet.
+>
+>> Funnily, that is not what the vendor driver does. It also does A LOT of
+>> extremely complex and 'debatable' things, which mostly mask how much the
+>> driver is unstable.
+>
+> As far as I understand they just go through all possible values until the
+> first successful attempt to initialize the device.
+> What do you think of the idea to implement such a variant for the meson-gx
+> driver?
+
+What the amlogic driver does are overly complex computation to get a tuning
+value, which is then contiously cycled (in the IRQ handler!!) while silently
+retrying failed transaction behind MMC core's back
+
+That's far from being desirable.
+
+>
+>> With the upstream drivers, modes up to SDR50 and HS200 have been stable
+>> lately. SDR104 and DDR modes (DDR52 or HS400) remains problematic.
+>
+> I have troubles with HS200, for example:
+> Card Type [CARD_TYPE: 0x57]
+>  HS200 Single Data Rate eMMC @200MHz 1.8VI/O
+>  HS Dual Data Rate eMMC @52MHz 1.8V or 3VI/O
+>  HS eMMC @52MHz - at rated device voltage(s)
+>  HS eMMC @26MHz - at rated device voltage(s)
+>
+
+That does not says with which mode or at which stage the problem occurs
+
+>> Changing the settings further would require more discussion with AML.
+>> Blindly poking these value until you get something stablish for 1
+>> particular use case is a recipe for disaster.
+>
+> I assumed the idea that the dts are edited by the maintainers or the board
+> developers and will be able to choose the values themselves.
+>
+
+And eventually, we'll end-up telling people to adjust the phases
+depending of the sdcard they insert ... This does not work for me.
+
+I understand the will to get this working at full speed. I've spent A
+LOT more time than would have wanted in this driver, trying to do
+exactly that. There is quite an history about that on this list
+detailing why changes have been made.
+
+It was stable(ish) for while. Now we are getting more reports of
+problems. This (again) shows this need more work. It also shows there
+are still things we don't know about this controller and this where it
+gets tricky because there is high risk of causing regressions with each
+change.
+
+Let's leave Rx (which has no effect) and Tx out for now.
+
+My guess is the core phase might need to be adapted depending on
+* Mode: It seems the DDR modes are done by making the controller run
+  faster then diving the output clock by 2. This divider might
+  mess up the phase shift needed.
+* Speed: Maybe there is delay contraint between the input clock and the
+  core and we need at adapting the phase shift depending on the rate ?
+
+I think what could be tried - with a LOOONG RFT giving a chance people
+to report regressions - is:
+* Defaulting the Core phase to 270: Despite AML HW engineer
+  recommendation, this is what the vendor code does. Maybe this will help
+  with board that seems to require 270 to start.
+  I know if stays for all modes, it will cause problems
+1) Set 180 when switching to DDR modes
+2) Wether switching to 180 for high speed SDR modes (UHS, HS200) is
+   required, or not, is a bit unclear. If the problem is the internal
+   divider, it should not be required. If the problem is the delay,
+   maybe it is.
+
+>
+>> 
+>>> This patch
+>>> transfers the values from the code to the variables in the device-tree files.
+>>> If not set in dts, use old default values.
+>> I think going that way is opening a big can of worms.
+>> I don't think this should be applied
+>> 
+>>>
+>>> Vyacheslav Bocharov (4):
+>>>    arm64: amlogic: mmc: meson-gx: Add core, tx, rx eMMC/SD/SDIO phase
+>>>      clock settings from devicetree data
+>>>    arm64: amlogic: mmc: meson-gx: Add dts binding include for core, tx,
+>>>      rx eMMC/SD/SDIO phase clock settings from devicetree data
+>>>    arm64: amlogic: dts: meson: update meson-axg device-tree for new core,
+>>>      tx, rx phase clock settings.
+>>>    arm64: dts: docs: Update mmc meson-gx documentation for new config
+>>>      option amlogic,mmc-phase
+>>>
+>>>   .../bindings/mmc/amlogic,meson-gx.txt         |  7 ++++
+>>>   arch/arm64/boot/dts/amlogic/meson-axg.dtsi    |  3 ++
+>>>   drivers/mmc/host/meson-gx-mmc.c               | 18 +++++++---
+>>>   include/dt-bindings/mmc/meson-gx-mmc.h        | 35 +++++++++++++++++++
+>>>   4 files changed, 58 insertions(+), 5 deletions(-)
+>>>   create mode 100644 include/dt-bindings/mmc/meson-gx-mmc.h
+>> _______________________________________________
+>> linux-amlogic mailing list
+>> linux-amlogic@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/linux-amlogic
 
