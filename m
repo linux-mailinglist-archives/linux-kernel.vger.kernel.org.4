@@ -2,194 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F25386385B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 09:57:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 295796385BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 09:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbiKYI5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 03:57:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42692 "EHLO
+        id S229818AbiKYI63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 03:58:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiKYI5f (ORCPT
+        with ESMTP id S229688AbiKYI62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 03:57:35 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1146B853
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 00:57:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ZixrIwFvCi94UuY2L1fI9WSFXdjYr0pMmnLYf2WxCL0=; b=RwNVJTgjY7d0XuR6NrMdmnoIJc
-        Juz7wjJbCyEJKrsByboyuYTWBsbpBBqfT4v+Z1mbXa6cq4oMod2jH/kZSoZrBQKK8bGPMFa+QXuLG
-        tTzTY2XJDXUb69Zmx5i4wDtnx0LC4FaUC5m6EZkpaHY2aL2K7arfzfOCWPTXCQA+CbfoTDi73U1uQ
-        2xcDWtYzg5n4msfFdLBpR2CkoH5Kfptj9JcK68RLJsBs9Qg/kFZaO87V3GWDPYuLw/uq/EnV+40/3
-        2870wqNPEnSgKsISXSXrXfgzIvtJlGmCyUnhdTq4mMGOOUfaEGoh+2l80/kyfRcEWCLePCTA/ygml
-        dJOccVgA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oyUWN-009Rzu-0C; Fri, 25 Nov 2022 08:57:19 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 653A630034E;
-        Fri, 25 Nov 2022 09:57:09 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 284602B6CB401; Fri, 25 Nov 2022 09:57:09 +0100 (CET)
-Date:   Fri, 25 Nov 2022 09:57:09 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Don <joshdon@google.com>
-Cc:     Chengming Zhou <zhouchengming@bytedance.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        anna-maria@linutronix.de
-Subject: Re: [PATCH v3] sched: async unthrottling for cfs bandwidth
-Message-ID: <Y4CDZXZJpPB0J1BV@hirez.programming.kicks-ass.net>
-References: <20221117005418.3499691-1-joshdon@google.com>
- <Y3d+1a9AEnWaxFwq@hirez.programming.kicks-ass.net>
- <CABk29NtSmXVCvkdpymeam7AYmXhZy2JLYLPFTdKpk5g6AN1-zg@mail.gmail.com>
- <094299a3-f039-04c1-d749-2bea0bc14246@linux.dev>
- <Y3tn5wz6TjsqfGTA@hirez.programming.kicks-ass.net>
- <CABk29Nuyp=Ba=qiJAospx-SR2ZQM9GrKW0pDUeJ3sfgNB4uLFg@mail.gmail.com>
- <Y3ymBOfRikUci/PD@hirez.programming.kicks-ass.net>
+        Fri, 25 Nov 2022 03:58:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A27E10D9
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 00:57:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669366648;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5Zasw8bTF5Rv7J9KCKu2Jsu6Fuo3MdgsNAsJkLxlZjY=;
+        b=SVwjODFC4b5kG2cVRr3+XYoJLOx0q2+Ml5LJUgvFs5qN8+02gczVbcWGSs3wtT6LSzSky8
+        73gT9CKLOHDHHd8zR0JYebm7rjqDIL53x8jWyTM7gKcj4hofk9xywU1E4iGAE7uA9w8cHL
+        Lh10H8X146KvxrTYWOKIICwCDMOGsow=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-348-5G-fZUWsND2FdhJvA_9kGw-1; Fri, 25 Nov 2022 03:57:26 -0500
+X-MC-Unique: 5G-fZUWsND2FdhJvA_9kGw-1
+Received: by mail-wr1-f69.google.com with SMTP id s1-20020adfa281000000b00241f7467851so705514wra.17
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 00:57:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5Zasw8bTF5Rv7J9KCKu2Jsu6Fuo3MdgsNAsJkLxlZjY=;
+        b=ZuJHTtRObctWuQARsagPyBRMpAZW1SUNOzCuZK3Xqj/6sqwDUS0FyJYdyouhGXEAfI
+         fnE2v0ryKEYQnOdC00CNxOFDgf0uLB2H+UyMBMXBv/0ZjdtL8xCjKiKOjkoinQYWWN0f
+         BWJf9a/PduowGPWCUSUVt6etxGSrTwjy0Dlk8AtEV9gQ6lJwOHdi3abi4AngTBSRp74b
+         vfzSCwIGgkd6a6zW2txoFxcFp9ODr8eKp8qEl5H/X/xlfVaKYqWbdvciyCvxvWWqDSnu
+         Wp97ZX9iujvDMYNphvPxdQj08YA3KeQ7kgY+p+hKVO4+aAUkpZ9AzjN6J43hyx/v4mpl
+         Y6HA==
+X-Gm-Message-State: ANoB5pmE6IyFqXPA8d5R1X0ElwuaTQ6a63wENQTem6hkeAsVVpwHvv7C
+        SaWDWMwjf2utk/opmla2cMO4+Q6bhweML3FcAElqfPVrhuSJI3mVmZo4WDchBYGc7rWjXJ0RcHv
+        zDF4EkxTTzDcZ4c+jpjqeX5Zk
+X-Received: by 2002:adf:de8f:0:b0:241:df57:80a7 with SMTP id w15-20020adfde8f000000b00241df5780a7mr11243005wrl.191.1669366645226;
+        Fri, 25 Nov 2022 00:57:25 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6I9dIfw7rl+C6lpH9D4FzplrH7lHVT+4+0sx5/OzVH2zqrsMW/YbaUpZl0bbTphLuFhCwwqA==
+X-Received: by 2002:adf:de8f:0:b0:241:df57:80a7 with SMTP id w15-20020adfde8f000000b00241df5780a7mr11242992wrl.191.1669366645018;
+        Fri, 25 Nov 2022 00:57:25 -0800 (PST)
+Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id i19-20020a1c5413000000b003cfc02ab8basm8929498wmb.33.2022.11.25.00.57.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Nov 2022 00:57:24 -0800 (PST)
+Message-ID: <cb95b9c7-a975-1990-caed-a7ce80860809@redhat.com>
+Date:   Fri, 25 Nov 2022 09:57:23 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3ymBOfRikUci/PD@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 02/24] drm/tests: helpers: Remove the name parameter
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Maxime Ripard <mripard@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     David Gow <davidgow@google.com>, linaro-mm-sig@lists.linaro.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
+        linux-media@vger.kernel.org, kunit-dev@googlegroups.com,
+        dri-devel@lists.freedesktop.org,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        linux-kernel@vger.kernel.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>
+References: <20221123-rpi-kunit-tests-v1-0-051a0bb60a16@cerno.tech>
+ <20221123-rpi-kunit-tests-v1-2-051a0bb60a16@cerno.tech>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20221123-rpi-kunit-tests-v1-2-051a0bb60a16@cerno.tech>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 11:35:48AM +0100, Peter Zijlstra wrote:
-> On Mon, Nov 21, 2022 at 11:37:14AM -0800, Josh Don wrote:
-> > Yep, this tradeoff feels "best", but there are some edge cases where
-> > this could potentially disrupt fairness. For example, if we have
-> > non-trivial W, a lot of cpus to iterate through for dispatching remote
-> > unthrottle, and quota is small. Doesn't help that the timer is pinned
-> > so that this will continually hit the same cpu.
+On 11/23/22 16:25, Maxime Ripard wrote:
+> The device name isn't really useful, we can just define it instead of
+> exposing it in the API.
 > 
-> We could -- if we wanted to -- manually rotate the timer around the
-> relevant CPUs. Doing that sanely would require a bit of hrtimer surgery
-> though I'm afraid.
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> ---
+>  drivers/gpu/drm/tests/drm_client_modeset_test.c | 2 +-
+>  drivers/gpu/drm/tests/drm_kunit_helpers.c       | 6 ++++--
+>  drivers/gpu/drm/tests/drm_kunit_helpers.h       | 3 +--
+>  3 files changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/tests/drm_client_modeset_test.c b/drivers/gpu/drm/tests/drm_client_modeset_test.c
+> index e469d1634e2d..6920c3ffdfdf 100644
+> --- a/drivers/gpu/drm/tests/drm_client_modeset_test.c
+> +++ b/drivers/gpu/drm/tests/drm_client_modeset_test.c
+> @@ -41,7 +41,7 @@ static int drm_client_modeset_test_init(struct kunit *test)
+>  
+>  	test->priv = priv;
+>  
+> -	priv->drm = drm_kunit_helper_alloc_drm_device(test, DRIVER_MODESET, "drm-client-modeset-test");
+> +	priv->drm = drm_kunit_helper_alloc_drm_device(test, DRIVER_MODESET);
+>  	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->drm);
+>  
+>  	ret = drmm_connector_init(priv->drm, &priv->connector,
+> diff --git a/drivers/gpu/drm/tests/drm_kunit_helpers.c b/drivers/gpu/drm/tests/drm_kunit_helpers.c
+> index a4ad030ed101..7f69f56f5892 100644
+> --- a/drivers/gpu/drm/tests/drm_kunit_helpers.c
+> +++ b/drivers/gpu/drm/tests/drm_kunit_helpers.c
+> @@ -9,6 +9,8 @@
+>  
+>  #include "drm_kunit_helpers.h"
+>  
+> +#define FAKE_DEVICE_NAME	"drm-kunit-fake-device"
+> +
 
-Here; something like so should enable us to cycle the bandwidth timer.
-Just need to figure out a way to find another CPU or something.
+I think that KUNIT_DEVICE_NAME and "drm-kunit-mock-device" are more descriptive
+names here. But I'm also OK with the patch as is.
 
----
-diff --git a/include/linux/hrtimer.h b/include/linux/hrtimer.h
-index 0ee140176f10..f8bd200d678a 100644
---- a/include/linux/hrtimer.h
-+++ b/include/linux/hrtimer.h
-@@ -63,8 +63,10 @@ enum hrtimer_mode {
-  * Return values for the callback function
-  */
- enum hrtimer_restart {
--	HRTIMER_NORESTART,	/* Timer is not restarted */
--	HRTIMER_RESTART,	/* Timer must be restarted */
-+	HRTIMER_RESTART = -1,		/* Timer must be restarted */
-+	HRTIMER_NORESTART = 0,		/* Timer is not restarted */
-+	HRTIMER_RESTART_MIGRATE = 1,
-+	HRTIMER_RESTART_MIGRATE_MAX = HRTIMER_RESTART_MIGRATE + NR_CPUS,
- };
- 
- /*
-diff --git a/kernel/time/hrtimer.c b/kernel/time/hrtimer.c
-index 3ae661ab6260..e75033f78a19 100644
---- a/kernel/time/hrtimer.c
-+++ b/kernel/time/hrtimer.c
-@@ -1621,6 +1621,16 @@ bool hrtimer_active(const struct hrtimer *timer)
- }
- EXPORT_SYMBOL_GPL(hrtimer_active);
- 
-+static void raw_spin_lock_double(raw_spinlock_t *a, raw_spinlock_t *b)
-+{
-+	if (b < a)
-+		swap(a, b);
-+
-+	raw_spin_lock(a);
-+	if (b != a)
-+		raw_spin_lock_nested(b, SINGLE_DEPTH_NESTING);
-+}
-+
- /*
-  * The write_seqcount_barrier()s in __run_hrtimer() split the thing into 3
-  * distinct sections:
-@@ -1644,6 +1654,8 @@ static void __run_hrtimer(struct hrtimer_cpu_base *cpu_base,
- 			  struct hrtimer *timer, ktime_t *now,
- 			  unsigned long flags) __must_hold(&cpu_base->lock)
- {
-+	struct hrtimer_cpu_base *new_cpu_base = cpu_base;
-+	struct hrtimer_clock_base *new_base = base;
- 	enum hrtimer_restart (*fn)(struct hrtimer *);
- 	bool expires_in_hardirq;
- 	int restart;
-@@ -1686,7 +1698,17 @@ static void __run_hrtimer(struct hrtimer_cpu_base *cpu_base,
- 
- 	lockdep_hrtimer_exit(expires_in_hardirq);
- 	trace_hrtimer_expire_exit(timer);
--	raw_spin_lock_irq(&cpu_base->lock);
-+
-+	local_irq_disable();
-+
-+	if (restart >= HRTIMER_RESTART_MIGRATE) {
-+		int cpu = restart - HRTIMER_RESTART_MIGRATE;
-+		int b = base - cpu_base->clock_base;
-+
-+		new_cpu_base = &per_cpu(hrtimer_bases, cpu);
-+		new_base = new_cpu_base->clock_base[b];
-+	}
-+	raw_spin_lock_double(&cpu_base->lock, &new_cpu_base->lock);
- 
- 	/*
- 	 * Note: We clear the running state after enqueue_hrtimer and
-@@ -1698,8 +1720,16 @@ static void __run_hrtimer(struct hrtimer_cpu_base *cpu_base,
- 	 * for us already.
- 	 */
- 	if (restart != HRTIMER_NORESTART &&
--	    !(timer->state & HRTIMER_STATE_ENQUEUED))
--		enqueue_hrtimer(timer, base, HRTIMER_MODE_ABS);
-+	    !(timer->state & HRTIMER_STATE_ENQUEUED)) {
-+
-+		if (new_cpu_base != cpu_base) {
-+			timer->base = new_base;
-+			enqueue_hrtimer(timer, new_base, HRTIMER_MODE_ABS);
-+			raw_spin_unlock(&new_cpu_base->lock);
-+		} else {
-+			enqueue_hrtimer(timer, base, HRTIMER_MODE_ABS);
-+		}
-+	}
- 
- 	/*
- 	 * Separate the ->running assignment from the ->state assignment.
-@@ -2231,12 +2261,8 @@ int hrtimers_dead_cpu(unsigned int scpu)
- 	local_irq_disable();
- 	old_base = &per_cpu(hrtimer_bases, scpu);
- 	new_base = this_cpu_ptr(&hrtimer_bases);
--	/*
--	 * The caller is globally serialized and nobody else
--	 * takes two locks at once, deadlock is not possible.
--	 */
--	raw_spin_lock(&new_base->lock);
--	raw_spin_lock_nested(&old_base->lock, SINGLE_DEPTH_NESTING);
-+
-+	raw_spin_lock_double(&old_base->lock, &new_base->lock);
- 
- 	for (i = 0; i < HRTIMER_MAX_CLOCK_BASES; i++) {
- 		migrate_hrtimer_list(&old_base->clock_base[i],
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
+
