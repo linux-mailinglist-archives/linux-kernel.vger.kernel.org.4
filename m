@@ -2,153 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 845D7638DBC
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 16:51:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71F67638DC0
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 16:51:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbiKYPvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 10:51:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37782 "EHLO
+        id S229755AbiKYPv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 10:51:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbiKYPu7 (ORCPT
+        with ESMTP id S229680AbiKYPvS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 10:50:59 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FAE231FB8;
-        Fri, 25 Nov 2022 07:50:56 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id x17so7363784wrn.6;
-        Fri, 25 Nov 2022 07:50:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gGtFpd9/hEihcxfaAZXLh+MO2ImBUdS5RPJo51eOJ5A=;
-        b=Wd6tMpn1N5SIEtXHFwc1eScSBrFdtSlj2xAcP/GVikTRm1O6CSkkb4tWt9U3NoCIa4
-         ijWwVQUGwSEiaT41EnbxqcvBjeBbqgZx07Wf0Z2MhTvq72fA/IaeRK77bTB6tSZsvxD9
-         2xKnPOSOK3ua+7nYV3bUIOpZMkWLbqTwnDxvULKNAMT6BN4lAxIrxyeWtc7sX9aJTl5y
-         tOqchmZnX90FCKtSOS4kryZ6ll56ip6D7P+r/50tYc/nXW4J+/pDeMDNF3fr/rX9S7Yu
-         E7YisrgoDNkwMnZEswLQlMssNyAocughTN01RX8UKLKrGTfi3Ldvr6GSGE2hkDDJ8+32
-         nWJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gGtFpd9/hEihcxfaAZXLh+MO2ImBUdS5RPJo51eOJ5A=;
-        b=0te77cvKCGbeoPQeWjt4H8E5aJWpZrFAWQhlIBrdc6e3X1JWGd7+URKqE92XKuuLIb
-         em0P9esUtmCcCsI1BOmtSDstYSpqWArgyOtGXaS4NALp5csbqx0dBpuAThqta4UM+jm0
-         wYCQtbDd7JsChomf2QeuB6eU+Z2Bn6UTToG29/zgKAMj4rJ1KbHZnJu/JVBj864JX/0h
-         Iqz6UCAeCWHnmBGiIHnlJ/fbmVWnGbEzunO8L480667IIMNwdj4Eg2jThqo/Ufr7a4F1
-         ujEA8Z5QBv9Qw827zZjuBV9Hpl6JvXddNUWXlKNV80KkR0EClHXg9gpMVorVKSF4T+IY
-         1oiA==
-X-Gm-Message-State: ANoB5plaKCyqIBA66qBYiVWVFoDrUXHTk1B2B+IZbUdcZYQJiQHfO83q
-        wKGjN91o0mHdZ7dMZ6lMu+Qo7lPyfeo=
-X-Google-Smtp-Source: AA0mqf51cWgSgehn/7HYrUUOy965hQUYasigP3oEcbV2hg7FAxvEw+pQQdBzhgOj70jyVM+s/0Hx8A==
-X-Received: by 2002:a5d:4308:0:b0:241:e80e:225a with SMTP id h8-20020a5d4308000000b00241e80e225amr9726284wrq.560.1669391454971;
-        Fri, 25 Nov 2022 07:50:54 -0800 (PST)
-Received: from [192.168.0.14] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net. [86.13.91.161])
-        by smtp.gmail.com with ESMTPSA id j13-20020adfff8d000000b00241bd177f89sm4050389wrr.14.2022.11.25.07.50.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Nov 2022 07:50:54 -0800 (PST)
-Message-ID: <5beff345-84c2-d456-1b7f-05309afa397b@gmail.com>
-Date:   Fri, 25 Nov 2022 15:50:53 +0000
+        Fri, 25 Nov 2022 10:51:18 -0500
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3357247329;
+        Fri, 25 Nov 2022 07:51:13 -0800 (PST)
+Received: (Authenticated sender: thomas.petazzoni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id A50931BF203;
+        Fri, 25 Nov 2022 15:51:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1669391472;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GPaT39sAq6bB/8jycs8Qu4XNOLXdQXN9CIa8CNq+0DU=;
+        b=d/iWI35QnhWrUQmu3eK7MTp+CL19nh+Yxmv+C3PgagomoCjafmL46X4+idl8P6GeM7d7W/
+        IuyPuItiyYGPs6TsLADAGD0fSGx6to8UDVu3P9UK3lyMkSj/644Y+Y5bjxkZyDmYKd2Qga
+        DUF4/VbHFuiaCTiZ0UHRpzPT1DjliCWV4/upp90Fv1szfz/rUHVVRGz1w5qZJuqmV8DlmS
+        cNOkK0+d9366JLreDe2UDAfAZ62wxQCkvsA9I3ZhrdFmqD0kW5jtdEEkWlnU2CmcNCVjUK
+        Fkf7YKCimzEimQEb0AaOSeczhQyCpHoJCRmyNQeq1OscLIz4gU7xdWoeIXLmHA==
+Date:   Fri, 25 Nov 2022 16:51:09 +0100
+From:   Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To:     Vadym Kochan <vadym.kochan@plvision.eu>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Elad Nachman <enachman@marvell.com>,
+        Raz Adashi <raza@marvell.com>, Yuval Shaia <yshaia@marvell.com>
+Subject: Re: [PATCH v2 2/3] PCI: armada8k: Add AC5 SoC support
+Message-ID: <20221125165109.6059d3a5@windsurf>
+In-Reply-To: <VI1P190MB03173DB0A16402C8AB670D91950E9@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
+References: <20221124135829.2551873-1-vadym.kochan@plvision.eu>
+        <20221124135829.2551873-3-vadym.kochan@plvision.eu>
+        <20221124155817.5f372417@windsurf>
+        <VI1P190MB03173DB0A16402C8AB670D91950E9@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3] device property: fix of node refcount leak in
- fwnode_graph_get_next_endpoint()
-Content-Language: en-US
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     andriy.shevchenko@linux.intel.com, heikki.krogerus@linux.intel.com,
-        sakari.ailus@linux.intel.com, gregkh@linuxfoundation.org,
-        rafael@kernel.org
-References: <20221123022542.2999510-1-yangyingliang@huawei.com>
-From:   Daniel Scally <djrscally@gmail.com>
-In-Reply-To: <20221123022542.2999510-1-yangyingliang@huawei.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all - sorry that took so long
+Hello!
 
-On 23/11/2022 02:25, Yang Yingliang wrote:
-> The 'parent' returned by fwnode_graph_get_port_parent()
-> with refcount incremented when 'prev' is not NULL, it
-> needs be put when finish using it.
->
-> Because the parent is const, introduce a new variable to
-> store the returned fwnode, then put it before returning
-> from fwnode_graph_get_next_endpoint().
->
-> Fixes: b5b41ab6b0c1 ("device property: Check fwnode->secondary in fwnode_graph_get_next_endpoint()")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
+On Fri, 25 Nov 2022 08:43:06 +0000
+Vadym Kochan <vadym.kochan@plvision.eu> wrote:
 
+> [quote]
+> this is not needed, as by the time Linux is loaded, link has already been established (by boot loaders)
+> 
+> So this code is not needed.
+> [/quote]
 
-This looks fine to me (thanks for fixing it), and it works fine on my
-Surface:
+Not ideal to rely on the bootloader for this sort of initialization,
+and if we want to do this change, perhaps it should be done in another
+patch.
 
+But again, the fact that "it works for Marvell because their vendor
+U-Boot does the right thing prior to loading Linux" is not really a
+very solid argument to drop kernel code :-/
 
-Reviewed-and-tested-by: Daniel Scally <djrscally@gmail.com>
-
-> v2 -> v3:
->   Add a out label.
->
-> v1 -> v2:
->   Introduce a new variable to store the returned fwnode.
-> ---
->  drivers/base/property.c | 18 ++++++++++++------
->  1 file changed, 12 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/base/property.c b/drivers/base/property.c
-> index 2a5a37fcd998..7f338cb4fb7b 100644
-> --- a/drivers/base/property.c
-> +++ b/drivers/base/property.c
-> @@ -989,26 +989,32 @@ struct fwnode_handle *
->  fwnode_graph_get_next_endpoint(const struct fwnode_handle *fwnode,
->  			       struct fwnode_handle *prev)
->  {
-> +	struct fwnode_handle *ep, *port_parent = NULL;
->  	const struct fwnode_handle *parent;
-> -	struct fwnode_handle *ep;
->  
->  	/*
->  	 * If this function is in a loop and the previous iteration returned
->  	 * an endpoint from fwnode->secondary, then we need to use the secondary
->  	 * as parent rather than @fwnode.
->  	 */
-> -	if (prev)
-> -		parent = fwnode_graph_get_port_parent(prev);
-> -	else
-> +	if (prev) {
-> +		port_parent = fwnode_graph_get_port_parent(prev);
-> +		parent = port_parent;
-> +	} else {
->  		parent = fwnode;
-> +	}
->  	if (IS_ERR_OR_NULL(parent))
->  		return NULL;
->  
->  	ep = fwnode_call_ptr_op(parent, graph_get_next_endpoint, prev);
->  	if (ep)
-> -		return ep;
-> +		goto out_put_port_parent;
-> +
-> +	ep = fwnode_graph_get_next_endpoint(parent->secondary, NULL);
->  
-> -	return fwnode_graph_get_next_endpoint(parent->secondary, NULL);
-> +out_put_port_parent:
-> +	fwnode_handle_put(port_parent);
-> +	return ep;
->  }
->  EXPORT_SYMBOL_GPL(fwnode_graph_get_next_endpoint);
->  
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
