@@ -2,131 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D1F263915A
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 23:24:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE83639160
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 23:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbiKYWYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 17:24:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39808 "EHLO
+        id S229788AbiKYWaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 17:30:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiKYWYK (ORCPT
+        with ESMTP id S229454AbiKYWaW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 17:24:10 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB032655B;
-        Fri, 25 Nov 2022 14:24:10 -0800 (PST)
-Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 169BD6602B6F;
-        Fri, 25 Nov 2022 22:24:06 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1669415048;
-        bh=n/JLhB9y1lHTrAqStH1aXYwPM6mB/oILrr8xuIpUxBM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hL1D4Rz9csbBTpf1Zc8BME8cRYbNoiwVf+91duBmWBmSu3hj0B/x0mxj9IayaaEIF
-         ZuRYN0f0bP4uheKt2VXEj61N1VnnDAzSmNKXfudty00OIalGaLuSTbLN/Hkgt23QOQ
-         Lkd0dCcu5gqhI3S7O5m+O4ePoMFPq2dV4ybUNFRuVJIOLHiQUJ4NXJOrrGySa78inN
-         ke/aQ/9ywGMunB4khwu9lr2l6PyFcvejc9M2a5d+4t7xePZKCqbNez4bkA/zopnbVZ
-         eLjJySiDFw+mxFZW2jVoiFaXV8VW7/YY3jktdQ8LKTnULKmrPAMYL5tSmFXvTxp6+c
-         KxtGmHbs3kcZQ==
-Date:   Fri, 25 Nov 2022 17:24:02 -0500
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     "Nancy.Lin" <nancy.lin@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, linux@roeck-us.net,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "jason-jh . lin" <jason-jh.lin@mediatek.com>,
-        Yongqiang Niu <yongqiang.niu@mediatek.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, llvm@lists.linux.dev,
-        singo.chang@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v28 6/7] drm/mediatek: add drm ovl_adaptor sub driver for
- MT8195
-Message-ID: <20221125222402.u4qiolkqi2nsv7ae@notapiano>
-References: <20221107072413.16178-1-nancy.lin@mediatek.com>
- <20221107072413.16178-7-nancy.lin@mediatek.com>
+        Fri, 25 Nov 2022 17:30:22 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F062E9E0
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 14:30:20 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id v8so8062538edi.3
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 14:30:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/lfe7NcgAftfCbfY2/+Z4pAkfVrRZUU2cO+H0igoqlA=;
+        b=7FzjGwCiJNJVId0pUks3IuSTjdAMDw/5uXCGz//3wbe+aLq/LZkraFTPq+18Iqy8f+
+         CAVozAtbugIdxu88+z6SZt3bmZRfgpoeY2+CfsQsBW3uw1dbpoPZTSya72tcg61Zp4Yz
+         MEPWXVkwFTLGVCxst/lDCPkehzZk5zczUMp7euaQlpBLGQDL0hDDDINkWnD6arSwHjDx
+         KZe7Q3wXtmnB9mRA+gi5eoFCbv7gFJ7/xXP4mT3AP4LuiVTP7obGpqCSjYh9gGg31rRx
+         bTOl5+gcVNvCOUQp/opbKTBlY2OFU51UNYpeOSUbTDLjfcpmey7BW0Vljjbs9AfGHspU
+         SARQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/lfe7NcgAftfCbfY2/+Z4pAkfVrRZUU2cO+H0igoqlA=;
+        b=nBEbxhCghyLuu0DValfe+o4YsbnazvLTHLwez7Ag9lsQauXYbkADBkZ0k22MWVW7Uj
+         uUXfFZda7fQREjiXNNQVP4J0/EHgjTOjH/inJ0Eswdvq2OiXJi6M9ptHoEYav0ZkdR/+
+         L2rxzD1qY22+ws/HiMqipe35sLP8AbVu0ZqgWq13x0nQ/OxzivuS3285L4vYd7ESZG+x
+         QAJ82OpZEjWvyyFbUVrqeX9XAkD7mjO9LzOxqES7FOHsmGz+6lzQefo+yIGUUjuLXs/2
+         yEd6QRjV4QnHWEVtv5Xe3XVepFQpaJ4ok6X/FnHCtF7aMAWdS7v7R/E3u3oT3uiVRMYc
+         fmHg==
+X-Gm-Message-State: ANoB5ploHDnLNv0mTIuoJ56kHugw8wMWFxLvry+YtP5X2iwm/9DFgmQk
+        ODNXyW8qM1xgKgrXJlDqoRPv8g==
+X-Google-Smtp-Source: AA0mqf45lZIo5bLh7SlwVwao3zqUEgyAn3xE8WBlMhIlo1JGSbjME9QxdeWPkodlemi4FjWWeyrtJA==
+X-Received: by 2002:a05:6402:5c7:b0:469:6e8f:74c1 with SMTP id n7-20020a05640205c700b004696e8f74c1mr19895454edx.334.1669415419190;
+        Fri, 25 Nov 2022 14:30:19 -0800 (PST)
+Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
+        by smtp.gmail.com with ESMTPSA id q1-20020a056402248100b0046267f8150csm2254612eda.19.2022.11.25.14.30.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Nov 2022 14:30:18 -0800 (PST)
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc:     Benjamin Hesmans <benjamin.hesmans@tessares.net>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        mptcp@lists.linux.dev, netdev@vger.kernel.org
+Subject: [PATCH net-next 0/8] mptcp: MSG_FASTOPEN and TFO listener side support
+Date:   Fri, 25 Nov 2022 23:29:46 +0100
+Message-Id: <20221125222958.958636-1-matthieu.baerts@tessares.net>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2144; i=matthieu.baerts@tessares.net;
+ h=from:subject; bh=/zzbai6dUt499JGTzQ7EvmldP8hH2rMm7tWR7FtcNHY=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBjgUHP3odjVCF44gMniUSK742ym4dsZtaly1a5iwCc
+ FH/sZh6JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCY4FBzwAKCRD2t4JPQmmgc4AgD/
+ 9DDOGjkr+5Wmxj4SWdYT43p//sr3oSXjQ2BycD/2oU/9vaHX0oS66ZS1zlrHRX5eTvWTvrx52OsQUn
+ dPITVA4VCiU8KuNrys1OOjMJ1Lhmc5GrhEXujArJiqlMzCinR/g4YvTClJnCdHtx43gsrC7n7Ipp6Q
+ yuocyEcoNVPLVIvpDqDbkIGjC0iYuMbBE/X4HF1r8/EnMNHC3TWbtoYGjqDpRKvs8hOAHeXdvZMmxe
+ Graz1JQuoSCj3rsZBy726G8sGveOYkwcKstbTayfW5X/B8hIG4h0sF6N5pRwDR1L+WnpytQ/IRPBLJ
+ gC7c06L5RN+DkzrQ2o+WF2LPBVDm9ZlbbGIQz04c/EwDR8bXfNMG5RBVwTuCds4RDuXf7n/KrMQIMR
+ vF/0Zm4qJO9rs6PzJ6d3PcW/hP8AmmPrmuSyVmltFVmWSvcV+nT4JryyqgK3MbXRy1OmE+7oZtzkwg
+ WZaAYLQUI0wqZ9FB2ewIdGcvULVhwjo+N9lOx0vny3H+7dJxoid3QgpGZnzLjYKsXP5Ktj/cKCqepr
+ wO0rMej6wXKqtMLaER8mVT5Rjm8wzaJNiaVH2D8Sq7nF8BGjb+BlSFD+mZy7vvf3T0lJSupd5lz1S9
+ bkuc/p9WoY5PocljH1c4FM5mPGPwaAI3SAGFPAt7FicEtbh284ft0Gs/R+HA==
+X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp; fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221107072413.16178-7-nancy.lin@mediatek.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 03:24:12PM +0800, Nancy.Lin wrote:
-> Add drm ovl_adaptor sub driver. Bring up ovl_adaptor sub driver if
-> the component exists in the path.
-> 
-> Signed-off-by: Nancy.Lin <nancy.lin@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Reviewed-by: CK Hu <ck.hu@mediatek.com>
-> Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Tested-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> ---
-[..]
-> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-> index 30dcb65d8a5a..ce5617ad04cb 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-[..]
-> @@ -897,22 +906,18 @@ int mtk_drm_crtc_create(struct drm_device *drm_dev,
->  		crtc_i++;
->  
->  	for (i = 0; i < path_len; i++) {
-> -		enum mtk_ddp_comp_id comp_id = path[i];
-> +		unsigned int comp_id = path[i];
->  		struct device_node *node;
-> -		struct mtk_ddp_comp *comp;
->  
->  		node = priv->comp_node[comp_id];
-> -		comp = &priv->ddp_comp[comp_id];
-> -
-> -		if (!node) {
-> -			dev_info(dev,
-> -				 "Not creating crtc %d because component %d is disabled or missing\n",
-> -				 crtc_i, comp_id);
-> -			return 0;
-> -		}
->  
-> -		if (!comp->dev) {
-> -			dev_err(dev, "Component %pOF not initialized\n", node);
-> +		/* Not all drm components have a DTS device node, such as ovl_adaptor,
-> +		 * which is the drm bring up sub driver
-> +		 */
-> +		if (!node && comp_id != DDP_COMPONENT_DRM_OVL_ADAPTOR) {
-> +			dev_err(dev,
-> +				"Not creating crtc %d because component %d is disabled, missing or not initialized\n",
-> +				crtc_i, comp_id);
->  			return -ENODEV;
+Before this series, only the initiator of a connection was able to combine both
+TCP FastOpen and MPTCP when using TCP_FASTOPEN_CONNECT socket option.
 
-Why do you change the behavior here? If !node, the return should be 0, because
-there are two separate data streams, for internal and external display, and they
-are optional. It should be possible to for example have the nodes for external
-display disabled in DT and still have the driver probe and have a working
-internal display. But with this change you're breaking that. Also, this message
-should stay as dev_info and not mention "not initialized", so basically it
-should stay the same as before the change.
+These new patches here add (in theory) the full support of TFO with MPTCP, which
+means:
 
-Thanks,
-Nícolas
+ - MSG_FASTOPEN sendmsg flag support (patch 1/8)
+ - TFO support for the listener side (patches 2-5/8)
+ - TCP_FASTOPEN socket option (patch 6/8)
+ - TCP_FASTOPEN_KEY socket option (patch 7/8)
+
+To support TFO for the server side, a few preparation patches are needed
+(patches 2 to 5/8). Some of them were inspired by a previous work from Benjamin
+Hesmans.
+
+Note that TFO support with MPTCP has been validated with selftests (patch 8/8)
+but also with Packetdrill tests running with a modified but still very WIP
+version supporting MPTCP. Both the modified tool and the tests are available
+online:
+
+  https://github.com/multipath-tcp/packetdrill/
+
+
+Dmytro Shytyi (5):
+  mptcp: add MSG_FASTOPEN sendmsg flag support
+  mptcp: implement delayed seq generation for passive fastopen
+  mptcp: add subflow_v(4,6)_send_synack()
+  mptcp: add TCP_FASTOPEN sock option
+  selftests: mptcp: mptfo Initiator/Listener
+
+Matthieu Baerts (1):
+  mptcp: add support for TCP_FASTOPEN_KEY sockopt
+
+Paolo Abeni (2):
+  mptcp: track accurately the incoming MPC suboption type
+  mptcp: consolidate initial ack seq generation
+
+ net/mptcp/Makefile                            |   2 +-
+ net/mptcp/fastopen.c                          |  73 ++++++++
+ net/mptcp/options.c                           |  25 ++-
+ net/mptcp/protocol.c                          |  39 +---
+ net/mptcp/protocol.h                          |  28 ++-
+ net/mptcp/sockopt.c                           |   9 +-
+ net/mptcp/subflow.c                           | 105 ++++++++---
+ .../selftests/net/mptcp/mptcp_connect.c       | 171 +++++++++++++-----
+ .../selftests/net/mptcp/mptcp_connect.sh      |  21 +++
+ 9 files changed, 358 insertions(+), 115 deletions(-)
+ create mode 100644 net/mptcp/fastopen.c
+
+
+Cc: Benjamin Hesmans <benjamin.hesmans@tessares.net>
+base-commit: a6e3d86ece0b42a571a11055ace5c3148cb7ce76
+-- 
+2.37.2
+
