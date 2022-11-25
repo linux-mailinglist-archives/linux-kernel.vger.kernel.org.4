@@ -2,211 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4741638270
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 03:34:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B8BE63826C
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 03:33:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiKYCeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Nov 2022 21:34:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42722 "EHLO
+        id S229644AbiKYCda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Nov 2022 21:33:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbiKYCeA (ORCPT
+        with ESMTP id S229452AbiKYCd3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Nov 2022 21:34:00 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ECCF23173
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 18:33:59 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id f9so2827670pgf.7
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Nov 2022 18:33:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3yAoT1kLjr2RjOiYLwcVMKA0GhtRYKf2X90lTYA9Hn4=;
-        b=T/qdGX3ipHc7MMkeq8ke6n/7Kx1Mu93QbEcxMleGD7kJGuP0VXCtHwETV4Z+K9pSOk
-         KbAU/aTvuEZfcAhyhtq5/G7Xe6Egm+NBcRRXpHcaPOcCvERwy0p0TdVMT3b86T4M4qTY
-         UbU2XcbRqpGpE+2omjBcyT7B8iONaRy365xNp++rW8bNWpr9Yb/t7PL6iDOlNyQ0cWz0
-         /mlyCSXYUhKEV37gn3VKtVq8oQDKdAxT7zZeVN2nPoSm1g6ICWSowekz0heRzPrOh1n5
-         HH6biCVATxCQHWVQ5VACH20U3Rn6S32lHun0tnsB//x/zdIP0ciqXAG+/Qd3p9OPd52o
-         kMhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=3yAoT1kLjr2RjOiYLwcVMKA0GhtRYKf2X90lTYA9Hn4=;
-        b=x0vucnPWeREPeenpsG5mxhFzLB6FXQh0d8WR2jEComplQCXkv/swS6qEAo0DZubVAB
-         RqPkTD+5EsEgY8USpKL1ymeUF0syBDNexPsBFxzFKvpgzhp3SwaR03lzqOxg1l1vmT0F
-         eIyXPSxZPB3OQdw56y1mGaB3YvUN6jCNCm+iOqXkOIvDeQlCgvaYDFloGc3LoDE/SstM
-         BhhepHG2o03IQdM1sJGOYVXqprwuyBXY7fYQDtMZXKAHEaeQ6ZoN7v9BrSjkAnZFNLvt
-         plxp4N3S4WZ7jRFAAXJBCkvRhiuMsCUnaTeExBLXdiUMysqf1FnP6izvI5SF/HPBjfV2
-         Pe6A==
-X-Gm-Message-State: ANoB5pl1GjOUB7wN1nprdNwqxeMs2BNrpYhJ30E+GqahRL9SC0Of6InE
-        9XyD9GgOXGGVFNDZuFjP5Yg=
-X-Google-Smtp-Source: AA0mqf5iZlH730FIMbWjNM/VqjZdwc+5RwTIk+VuF/xjGNEX4C2l2JbUHDmFaFALAqPmj12m336MKQ==
-X-Received: by 2002:a05:6a00:d59:b0:56e:5bcd:d025 with SMTP id n25-20020a056a000d5900b0056e5bcdd025mr16409954pfv.65.1669343638652;
-        Thu, 24 Nov 2022 18:33:58 -0800 (PST)
-Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id m127-20020a625885000000b0056bc5ad4862sm1893822pfb.28.2022.11.24.18.33.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Nov 2022 18:33:58 -0800 (PST)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     x86@kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, Yury Norov <yury.norov@gmail.com>,
-        llvm@lists.linux.dev, Peter Zijlstra <peterz@infradead.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Borislav Petkov <bp@suse.de>
-Subject: [PATCH v2 2/2] x86/asm/bitops: Use __builtin_clz*() to evaluate constant expressions
-Date:   Fri, 25 Nov 2022 11:33:30 +0900
-Message-Id: <20221125023330.195581-3-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20221125023330.195581-1-mailhol.vincent@wanadoo.fr>
-References: <20221106095106.849154-1-mailhol.vincent@wanadoo.fr>
- <20221125023330.195581-1-mailhol.vincent@wanadoo.fr>
+        Thu, 24 Nov 2022 21:33:29 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B271F62C;
+        Thu, 24 Nov 2022 18:33:25 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id DBA1324E1A4;
+        Fri, 25 Nov 2022 10:33:16 +0800 (CST)
+Received: from EXMBX072.cuchost.com (172.16.6.82) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 25 Nov
+ 2022 10:33:17 +0800
+Received: from [192.168.125.106] (183.27.97.81) by EXMBX072.cuchost.com
+ (172.16.6.82) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 25 Nov
+ 2022 10:33:15 +0800
+Message-ID: <d367c8c3-50ce-585f-9caa-573f42b76064@starfivetech.com>
+Date:   Fri, 25 Nov 2022 10:33:47 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+From:   Hal Feng <hal.feng@starfivetech.com>
+Subject: Re: [PATCH v2 11/14] clk: starfive: Add StarFive JH7110 system clock
+ driver
+To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
+CC:     "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20221118010627.70576-1-hal.feng@starfivetech.com>
+ <20221118010627.70576-12-hal.feng@starfivetech.com>
+ <CAJM55Z9fshBmW0x4B4+9s=tffqcPrAd7MbdbvmS0kCBdJunHPg@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CAJM55Z9fshBmW0x4B4+9s=tffqcPrAd7MbdbvmS0kCBdJunHPg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [183.27.97.81]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX072.cuchost.com
+ (172.16.6.82)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GCC and clang offers the __builtin_clz(x) and __builtin_clzll(x)
-functions which return the number of leading zero bits in
-x. c.f. [1]. By a simple subtraction, we can derive below equivalences:
+On Sat, 19 Nov 2022 01:03:54 +0800, Emil Renner Berthing wrote:
+> On Fri, 18 Nov 2022 at 02:06, Hal Feng <hal.feng@starfivetech.com> wrote:
+>> diff --git a/drivers/clk/starfive/clk-starfive-jh7110-sys.c b/drivers/clk/starfive/clk-starfive-jh7110-sys.c
+>> new file mode 100644
+>> index 000000000000..3c1afd691210
+>> --- /dev/null
+>> +++ b/drivers/clk/starfive/clk-starfive-jh7110-sys.c
+>> @@ -0,0 +1,650 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * StarFive JH7110 System Clock Driver
+>> + *
+>> + * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
+>> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
+>> + */
+>> +
+>> +#include <linux/clk.h>
+>> +#include <linux/clk-provider.h>
+>> +#include <linux/init.h>
+>> +#include <linux/io.h>
+>> +#include <linux/platform_device.h>
+>> +
+>> +#include <dt-bindings/clock/starfive-jh7110.h>
+>> +
+>> +#include "clk-starfive-jh71x0.h"
+>> +
+>> +/* external clocks */
+>> +#define JH7110_SYSCLK_OSC                      (JH7110_SYSCLK_END + 0)
+>> +#define JH7110_SYSCLK_GMAC1_RMII_REFIN         (JH7110_SYSCLK_END + 1)
+>> +#define JH7110_SYSCLK_GMAC1_RGMII_RXIN         (JH7110_SYSCLK_END + 2)
+>> +#define JH7110_SYSCLK_I2STX_BCLK_EXT           (JH7110_SYSCLK_END + 3)
+>> +#define JH7110_SYSCLK_I2STX_LRCK_EXT           (JH7110_SYSCLK_END + 4)
+>> +#define JH7110_SYSCLK_I2SRX_BCLK_EXT           (JH7110_SYSCLK_END + 5)
+>> +#define JH7110_SYSCLK_I2SRX_LRCK_EXT           (JH7110_SYSCLK_END + 6)
+>> +#define JH7110_SYSCLK_TDM_EXT                  (JH7110_SYSCLK_END + 7)
+>> +#define JH7110_SYSCLK_MCLK_EXT                 (JH7110_SYSCLK_END + 8)
+>> +
+>> +static const struct jh71x0_clk_data jh7110_sysclk_data[] __initconst = {
+>> +       /* root */
+>> +       JH71X0__MUX(JH7110_SYSCLK_CPU_ROOT, "cpu_root", 2,
+>> +                   JH7110_SYSCLK_OSC,
+>> +                   JH7110_SYSCLK_PLL0_OUT),
+>> +       JH71X0__DIV(JH7110_SYSCLK_CPU_CORE, "cpu_core", 7,
+>> +                   JH7110_SYSCLK_CPU_ROOT),
+>> +       JH71X0__DIV(JH7110_SYSCLK_CPU_BUS, "cpu_bus", 2,
+>> +                   JH7110_SYSCLK_CPU_CORE),
+>> +       JH71X0__MUX(JH7110_SYSCLK_GPU_ROOT, "gpu_root", 2,
+>> +                   JH7110_SYSCLK_PLL2_OUT,
+>> +                   JH7110_SYSCLK_PLL1_OUT),
+>> +       JH71X0_MDIV(JH7110_SYSCLK_PERH_ROOT, "perh_root", 2, 2,
+>> +                   JH7110_SYSCLK_PLL0_OUT,
+>> +                   JH7110_SYSCLK_PLL2_OUT),
+>> +       JH71X0__MUX(JH7110_SYSCLK_BUS_ROOT, "bus_root", 2,
+>> +                   JH7110_SYSCLK_OSC,
+>> +                   JH7110_SYSCLK_PLL2_OUT),
+>> +       JH71X0__DIV(JH7110_SYSCLK_NOCSTG_BUS, "nocstg_bus", 3,
+>> +                   JH7110_SYSCLK_BUS_ROOT),
+>> +       JH71X0__DIV(JH7110_SYSCLK_AXI_CFG0, "axi_cfg0", 3,
+>> +                   JH7110_SYSCLK_BUS_ROOT),
+>> +       JH71X0__DIV(JH7110_SYSCLK_STG_AXIAHB, "stg_axiahb", 2,
+>> +                   JH7110_SYSCLK_AXI_CFG0),
+>> +       JH71X0_GATE(JH7110_SYSCLK_AHB0, "ahb0", CLK_IS_CRITICAL,
+>> +                   JH7110_SYSCLK_STG_AXIAHB),
+>> +       JH71X0_GATE(JH7110_SYSCLK_AHB1, "ahb1", CLK_IS_CRITICAL,
+>> +                   JH7110_SYSCLK_STG_AXIAHB),
+>> +       JH71X0__DIV(JH7110_SYSCLK_APB_BUS_FUNC, "apb_bus_func", 8,
+>> +                   JH7110_SYSCLK_STG_AXIAHB),
+>> +       JH71X0_GATE(JH7110_SYSCLK_APB0, "apb0", CLK_IS_CRITICAL,
+>> +                   JH7110_SYSCLK_APB_BUS),
+>> +       JH71X0__DIV(JH7110_SYSCLK_PLL0_DIV2, "pll0_div2", 2,
+>> +                   JH7110_SYSCLK_PLL0_OUT),
+>> +       JH71X0__DIV(JH7110_SYSCLK_PLL1_DIV2, "pll1_div2", 2,
+>> +                   JH7110_SYSCLK_PLL1_OUT),
+>> +       JH71X0__DIV(JH7110_SYSCLK_PLL2_DIV2, "pll2_div2", 2,
+>> +                   JH7110_SYSCLK_PLL2_OUT),
+>> +       JH71X0__DIV(JH7110_SYSCLK_AUDIO_ROOT, "audio_root", 8,
+>> +                   JH7110_SYSCLK_PLL2_OUT),
+>> +       JH71X0__DIV(JH7110_SYSCLK_MCLK_INNER, "mclk_inner", 64,
+>> +                   JH7110_SYSCLK_AUDIO_ROOT),
+>> +       JH71X0__MUX(JH7110_SYSCLK_MCLK, "mclk", 2,
+>> +                   JH7110_SYSCLK_MCLK_INNER,
+>> +                   JH7110_SYSCLK_MCLK_EXT),
+>> +       JH71X0_GATE(JH7110_SYSCLK_MCLK_OUT, "mclk_out", 0,
+>> +                   JH7110_SYSCLK_MCLK_INNER),
+>> +       JH71X0_MDIV(JH7110_SYSCLK_ISP_2X, "isp_2x", 8, 2,
+>> +                   JH7110_SYSCLK_PLL2_OUT,
+>> +                   JH7110_SYSCLK_PLL1_OUT),
+>> +       JH71X0__DIV(JH7110_SYSCLK_ISP_AXI, "isp_axi", 4,
+>> +                   JH7110_SYSCLK_ISP_2X),
+>> +       JH71X0_GDIV(JH7110_SYSCLK_GCLK0, "gclk0", 0, 62,
+>> +                   JH7110_SYSCLK_PLL0_DIV2),
+>> +       JH71X0_GDIV(JH7110_SYSCLK_GCLK1, "gclk1", 0, 62,
+>> +                   JH7110_SYSCLK_PLL1_DIV2),
+>> +       JH71X0_GDIV(JH7110_SYSCLK_GCLK2, "gclk2", 0, 62,
+>> +                   JH7110_SYSCLK_PLL2_DIV2),
+>> +       /* cores */
+>> +       JH71X0_GATE(JH7110_SYSCLK_CORE, "core_clk", CLK_IGNORE_UNUSED,
+>> +                   JH7110_SYSCLK_CPU_CORE),
+>> +       JH71X0_GATE(JH7110_SYSCLK_CORE1, "core_clk1", CLK_IGNORE_UNUSED,
+>> +                   JH7110_SYSCLK_CPU_CORE),
+>> +       JH71X0_GATE(JH7110_SYSCLK_CORE2, "core_clk2", CLK_IGNORE_UNUSED,
+>> +                   JH7110_SYSCLK_CPU_CORE),
+>> +       JH71X0_GATE(JH7110_SYSCLK_CORE3, "core_clk3", CLK_IGNORE_UNUSED,
+>> +                   JH7110_SYSCLK_CPU_CORE),
+>> +       JH71X0_GATE(JH7110_SYSCLK_CORE4, "core_clk4", CLK_IGNORE_UNUSED,
+>> +                   JH7110_SYSCLK_CPU_CORE),
+>> +       JH71X0_GATE(JH7110_SYSCLK_DEBUG, "debug_clk", CLK_IGNORE_UNUSED,
+>> +                   JH7110_SYSCLK_CPU_BUS),
+>> +       JH71X0__DIV(JH7110_SYSCLK_RTC_TOGGLE, "rtc_toggle", 6,
+>> +                   JH7110_SYSCLK_OSC),
+>> +       JH71X0_GATE(JH7110_SYSCLK_TRACE0, "trace_clk0", CLK_IGNORE_UNUSED,
+>> +                   JH7110_SYSCLK_CPU_CORE),
+>> +       JH71X0_GATE(JH7110_SYSCLK_TRACE1, "trace_clk1", CLK_IGNORE_UNUSED,
+>> +                   JH7110_SYSCLK_CPU_CORE),
+>> +       JH71X0_GATE(JH7110_SYSCLK_TRACE2, "trace_clk2", CLK_IGNORE_UNUSED,
+>> +                   JH7110_SYSCLK_CPU_CORE),
+>> +       JH71X0_GATE(JH7110_SYSCLK_TRACE3, "trace_clk3", CLK_IGNORE_UNUSED,
+>> +                   JH7110_SYSCLK_CPU_CORE),
+>> +       JH71X0_GATE(JH7110_SYSCLK_TRACE4, "trace_clk4", CLK_IGNORE_UNUSED,
+>> +                   JH7110_SYSCLK_CPU_CORE),
+>> +       JH71X0_GATE(JH7110_SYSCLK_TRACE_COM, "trace_com", CLK_IGNORE_UNUSED,
+>> +                   JH7110_SYSCLK_CPU_BUS),
+> 
+> Why should these clocks not be turned off if they're not critical like
+> the clocks above?
+> 
+> My guess would be that the clocks for core 1-4 are critical, but maybe
+> not the trace and debug clocks.
 
-* For fls:
-  Aside of the x = 0 special case, fls(x) is equivalent to
-  BITS_PER_TYPE(x) - __builtin_clz(x).
+I synchronized these flags before with StarFive JH7110 SDK which is not
+released yet. But you're right, the core clocks should be enabled and the
+debug/trace clocks could be disabled during system booting. After some
+discussion, we think it's more appropriate to remove the flags of
+trace/debug clocks and set the flags of core clocks as CLK_IS_CRITICAL.
 
-* For fls64: Aside of the x = 0 special case, fls64(x) is equivalent
-  to BITS_PER_TYPE(x) - __builtin_clzll(x).
-  __builtin_clzll() takes an unsigned long long as argument instead of
-  a u64 which is fine because those two types are equivalent. Regardless,
-  add a BUILD_BUG_ON() safety net is added to formally assert that u64
-  and unsigned long long are the same.
+> 
+[...]
+>> +};
+>> +
+>> +static const struct {
+>> +       const char *name;
+>> +       const char *parent;
+>> +       unsigned int mul;
+>> +       unsigned int div;
+>> +} jh7110_fixed_factor_clocks[JH7110_SYSCLK_END - JH7110_SYSCLK_PLL0_OUT] __initconst = {
+>> +       [JH7110_SYSCLK_PLL0_OUT - JH7110_SYSCLK_PLL0_OUT] = {
+>> +               "pll0_out", "osc", 625, 12 /* 24MHz -> 1250.0MHz */
+>> +       },
+>> +       [JH7110_SYSCLK_PLL1_OUT - JH7110_SYSCLK_PLL0_OUT] = {
+>> +               "pll1_out", "osc", 533, 12 /* 24MHz -> 1066.0MHz */
+>> +       },
+>> +       [JH7110_SYSCLK_PLL2_OUT - JH7110_SYSCLK_PLL0_OUT] = {
+>> +               "pll2_out", "osc", 99, 2 /* 24MHz -> 1188.0MHz */
+>> +       },
+>> +       [JH7110_SYSCLK_PCLK2_MUX_FUNC - JH7110_SYSCLK_PLL0_OUT] = {
+>> +               "pclk2_mux_func", "apb_bus_func", 1, 1
+>> +       },
+>> +       [JH7110_SYSCLK_PCLK2_MUX - JH7110_SYSCLK_PLL0_OUT] = {
+>> +               "pclk2_mux", "pclk2_mux_func", 1, 1
+>> +       },
+>> +       [JH7110_SYSCLK_APB_BUS - JH7110_SYSCLK_PLL0_OUT] = {
+>> +               "apb_bus", "pclk2_mux", 1, 1
+>> +       },
+>> +       [JH7110_SYSCLK_AXI_CFG1 - JH7110_SYSCLK_PLL0_OUT] = {
+>> +               "axi_cfg1", "isp_axi", 1, 1
+>> +       },
+>> +       [JH7110_SYSCLK_APB12 - JH7110_SYSCLK_PLL0_OUT] = {
+>> +               "apb12", "apb_bus", 1, 1
+>> +       },
+>> +       [JH7110_SYSCLK_VOUT_ROOT - JH7110_SYSCLK_PLL0_OUT] = {
+>> +               "vout_root", "pll2_out", 1, 1
+>> +       },
+>> +       [JH7110_SYSCLK_VENC_ROOT - JH7110_SYSCLK_PLL0_OUT] = {
+>> +               "venc_root", "pll2_out", 1, 1
+>> +       },
+>> +       [JH7110_SYSCLK_VDEC_ROOT - JH7110_SYSCLK_PLL0_OUT] = {
+>> +               "vdec_root", "pll0_out", 1, 1
+>> +       },
+>> +       [JH7110_SYSCLK_GMACUSB_ROOT - JH7110_SYSCLK_PLL0_OUT] = {
+>> +               "gmacusb_root", "pll0_out", 1, 1
+>> +       },
+>> +};
+> 
+> Having these extra 1-1 clocks that can't be controlled anyway seems unnecessary.
+> Consider sync'ing with my latest jh7110 branch at
+> https://github.com/esmil/linux/tree/jh7110
 
-When used on constant expressions, the compiler is only able to fold
-the builtin version (c.f. [2]). However, for non constant expressions,
-the kernel inline assembly results in better code for both GCC and
-clang.
+Thanks. I'll have a look.
 
-Use __builtin_constant_p() to select between the kernel's
-fls()/fls64() and __builtin_clz()/__builtin_clzll() depending on
-whether the argument is constant or not.
+>> diff --git a/drivers/clk/starfive/clk-starfive-jh71x0.h b/drivers/clk/starfive/clk-starfive-jh71x0.h
+>> index baf4b5cb4b8a..7a52e46eb6db 100644
+>> --- a/drivers/clk/starfive/clk-starfive-jh71x0.h
+>> +++ b/drivers/clk/starfive/clk-starfive-jh71x0.h
+>> @@ -105,10 +105,18 @@ struct jh71x0_clk_priv {
+>>         spinlock_t rmw_lock;
+>>         struct device *dev;
+>>         void __iomem *base;
+>> -       struct clk_hw *pll[3];
+>> +       struct clk_hw *pll[12];
+>>         struct jh71x0_clk reg[];
+>>  };
+>>
+>>  const struct clk_ops *starfive_jh71x0_clk_ops(u32 max);
+>>
+>> +#if IS_ENABLED(CONFIG_CLK_STARFIVE_JH7110_SYS)
+> 
+> The function below is used both in the syscrg driver and the aoncrg
+> driver, so why guard it like this?
 
-While renaming fls64() to variable_fls64(), change the argument type
-from __64 to u64 because we are not in an uapi header.
+Because the aoncrg driver depends on the syscrg driver, which is set
+in Kconfig.
 
-[1] Built-in Functions Provided by GCC:
-https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
+Best regards,
+Hal
 
-[2] commit 146034fed6ee ("x86/asm/bitops: Use __builtin_ffs() to evaluate constant expressions")
-
-CC: Borislav Petkov <bp@suse.de>
-CC: Nick Desaulniers <ndesaulniers@google.com>
-CC: Yury Norov <yury.norov@gmail.com>
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- arch/x86/include/asm/bitops.h | 56 ++++++++++++++++++++++++-----------
- 1 file changed, 39 insertions(+), 17 deletions(-)
-
-diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
-index a31453d7686d..d10e774af343 100644
---- a/arch/x86/include/asm/bitops.h
-+++ b/arch/x86/include/asm/bitops.h
-@@ -333,18 +333,15 @@ static __always_inline int variable_ffs(int x)
-  */
- #define ffs(x) (__builtin_constant_p(x) ? __builtin_ffs(x) : variable_ffs(x))
- 
--/**
-- * fls - find last set bit in word
-- * @x: the word to search
-- *
-- * This is defined in a similar way as the libc and compiler builtin
-- * ffs, but returns the position of the most significant set bit.
-- *
-- * fls(value) returns 0 if value is 0 or the position of the last
-- * set bit if value is nonzero. The last (most significant) bit is
-- * at position 32.
-- */
--static __always_inline int fls(unsigned int x)
-+static __always_inline int constant_fls(unsigned int x)
-+{
-+	if (!x)
-+		return 0;
-+
-+	return BITS_PER_TYPE(x) - __builtin_clz(x);
-+}
-+
-+static __always_inline int variable_fls(unsigned int x)
- {
- 	int r;
- 
-@@ -375,18 +372,29 @@ static __always_inline int fls(unsigned int x)
- }
- 
- /**
-- * fls64 - find last set bit in a 64-bit word
-+ * fls - find last set bit in word
-  * @x: the word to search
-  *
-  * This is defined in a similar way as the libc and compiler builtin
-- * ffsll, but returns the position of the most significant set bit.
-+ * ffs, but returns the position of the most significant set bit.
-  *
-- * fls64(value) returns 0 if value is 0 or the position of the last
-+ * fls(value) returns 0 if value is 0 or the position of the last
-  * set bit if value is nonzero. The last (most significant) bit is
-- * at position 64.
-+ * at position 32.
-  */
-+#define fls(x) (__builtin_constant_p(x) ? constant_fls(x) : variable_fls(x))
-+
- #ifdef CONFIG_X86_64
--static __always_inline int fls64(__u64 x)
-+static __always_inline int constant_fls64(u64 x)
-+{
-+	if (!x)
-+		return 0;
-+
-+	BUILD_BUG_ON(!__same_type(x, unsigned long long));
-+	return BITS_PER_TYPE(x) - __builtin_clzll(x);
-+}
-+
-+static __always_inline int variable_fls64(u64 x)
- {
- 	int bitpos = -1;
- 	/*
-@@ -399,6 +407,20 @@ static __always_inline int fls64(__u64 x)
- 	    : "rm" (x));
- 	return bitpos + 1;
- }
-+
-+/**
-+ * fls64 - find last set bit in a 64-bit word
-+ * @x: the word to search
-+ *
-+ * This is defined in a similar way as the libc and compiler builtin
-+ * ffsll, but returns the position of the most significant set bit.
-+ *
-+ * fls64(value) returns 0 if value is 0 or the position of the last
-+ * set bit if value is nonzero. The last (most significant) bit is
-+ * at position 64.
-+ */
-+#define fls64(x) \
-+	(__builtin_constant_p(x) ? constant_fls64(x) : variable_fls64(x))
- #else
- #include <asm-generic/bitops/fls64.h>
- #endif
--- 
-2.37.4
-
+> 
+>> +int jh7110_reset_controller_register(struct jh71x0_clk_priv *priv,
+>> +                                    const char *adev_name,
+>> +                                    u32 adev_id);
+>> +
+>> +#endif
+>> +
+>>  #endif
