@@ -2,49 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA3486390EC
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 22:00:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 537896390F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 22:03:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbiKYVAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 16:00:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46004 "EHLO
+        id S229975AbiKYVDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 16:03:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiKYVA2 (ORCPT
+        with ESMTP id S229495AbiKYVDV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 16:00:28 -0500
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BDB8391C6;
-        Fri, 25 Nov 2022 13:00:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=s4UABV1ux66nah7EYyy5GKkUpPAottxYKhO0fUNPBjk=; b=WINL+1C5RFCsGAMmYeRmkGvFUH
-        CjKRYD87yhdW1z3mzkO/wvKYXVtXVi9s2FwZ3TMTHX1R3UhzXfNJyj+oHa95bXcWe7aQJeUsTvcrC
-        6SW/qHSRF2xMswuS+blR5PDDrMba6p/sKHR+K9DxLjdUtwACjcVgmk+kXEftKRQW6KuKZyBWC8WMT
-        aTnPTOpbuFPuBHCZbDBxaZWZJg8Ah+Kq/KVKlIgGaLbXz9VcJ5CUdT0u85zrRroq5Yor7t84S/0mL
-        Z45ew5LwhZtSyY8r5QTPzmcwfoHy5B1iMQcaFTEFyBpALMuPrYuP3iQJ+NfYmcQIk21hYlmGZ1p2U
-        DsObimCA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1oyfo1-006kkn-2O;
-        Fri, 25 Nov 2022 21:00:17 +0000
-Date:   Fri, 25 Nov 2022 21:00:17 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fsdevel@vger.kernel.org,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/2] fs: clear a UBSAN shift-out-of-bounds warning
-Message-ID: <Y4Es4TIbVos5CTO9@ZenIV>
-References: <20221125091358.1963-1-thunder.leizhen@huawei.com>
+        Fri, 25 Nov 2022 16:03:21 -0500
+Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF9E442C5
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 13:03:18 -0800 (PST)
+Received: by mail-ua1-x932.google.com with SMTP id e24so1917345uam.10
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 13:03:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OVEFqwCX0va+VfJ7c+eGlux97SoQeyh4xYOkEeZpCiI=;
+        b=5kpozuC8hYlXhFyeFbWRwWNpcWQ04RgM5YwI8JPfPklrr+LrcPKGJq6P5tqWAr2OGB
+         j9Z4/lUd3QB0P76YCwSM6krQPxjiDz96rOa9tN0lUEgEL8Fn2ekZcK0pM7iwvgNaWhlY
+         Td+Q6iOGsoykmpBC/aF4spDDi82QSnQ0Yd+H3K0VPWP0eyj9yKQQrsqMwiiThQh5OpDR
+         7w9z6M8/t9TkxmiwQ6oCJ3RZLIfTX8Z4Ttz+9oQo8nNSLNLFmAp6nSwl0ETbEppyNofL
+         y+5anKUiY2u0eePOQo2Cy2jtuGdRzKnq1MaBG6izLxAVt35uNUUrF0qumnAL2JbHcqfe
+         UG7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OVEFqwCX0va+VfJ7c+eGlux97SoQeyh4xYOkEeZpCiI=;
+        b=CW3+nEvSrTkgKsAmyhxGiNxu2SYs7vVwVeshrZZ5dqqpTfu6veqlrFKCZ3kM3WzZaW
+         oCnBeWg0js0BQUQ1kwCGjpWhrpJAOI0WlYUhdSP+GpFeDue2GwjL3Mjp7KPGB/HkMuMl
+         3A9XdhGoj0OkNlZ5HtOEm+2o33Rbubz7nHUSyeBQjFNIVRtCulE8QhS2GI1LQnTp5JXw
+         Oo5yhbyrcfGbpuylvpOyfepIZMbW/YKIBYnK5wjAxWp3jLDqA2qPvWMj26fSl4TVTskP
+         E+25qjWztfDwY2zorQT1zS297WQ94KXSeq7oDLDn5JoaD2VfjRkf6RLSj2eALwn85TIx
+         CXhw==
+X-Gm-Message-State: ANoB5pmrnMuN+7uwX+7OlrakCIhGmAuQ5gN1C9Dfhy6NFZSWu76YhODs
+        LJ6hQrUYSnTFyeSIhARQ6s17iTIxMBB1IUSL7SysDQ==
+X-Google-Smtp-Source: AA0mqf67ml0/y5Y6L0uB229FME78wZM/z+mBuVEXKMVNFI9Rv0NZ/gTWjiZKnZ5pNjCI7CxDjsDgzvDXrqcFxcDotaY=
+X-Received: by 2002:ab0:6015:0:b0:418:c2fa:f8a6 with SMTP id
+ j21-20020ab06015000000b00418c2faf8a6mr15600391ual.119.1669410197837; Fri, 25
+ Nov 2022 13:03:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221125091358.1963-1-thunder.leizhen@huawei.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20221125153257.528826-1-brgl@bgdev.pl> <Y4DsTxPH1tv5eEwf@sol>
+ <CAMRc=Me83-_oiGEmwy4BUrzLEMT6ZsoMwWYsb6iXwg19yHMHdQ@mail.gmail.com> <Y4EBubusGqo4IroP@smile.fi.intel.com>
+In-Reply-To: <Y4EBubusGqo4IroP@smile.fi.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Fri, 25 Nov 2022 22:03:06 +0100
+Message-ID: <CAMRc=MdHtJC4Tmn3KgcnefmHTrpXy=ROAAXJLN9uv=ouJ-hQSw@mail.gmail.com>
+Subject: Re: [PATCH] gpiolib: cdev: fix NULL-pointer dereferences
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,31 +69,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022 at 05:13:56PM +0800, Zhen Lei wrote:
-> v2 --> v3:
-> Updated the commit message of patch 2/2 based on Alexander Viro's suggestion.
+On Fri, Nov 25, 2022 at 6:56 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Fri, Nov 25, 2022 at 05:48:02PM +0100, Bartosz Golaszewski wrote:
+> > On Fri, Nov 25, 2022 at 5:24 PM Kent Gibson <warthog618@gmail.com> wrote:
+>
+> ...
+>
+> > Then at the subsystem level, the GPIO device struct would need a lock
+> > that would be taken by every user-space operation AND the code
+> > unregistering the device so that we don't do what you described (i.e.
+> > if there's a thread doing a read(), then let's wait until it returns
+> > before we drop the device).
+>
+> It's called a reference counting, basically you need to get device and then
+> put when it makes sense.
+>
 
-Not exactly what I meant...  I've tentatively applied it, with the
-following commit message:
+Andy: I am aware of struct device reference counting but this isn't
+it. You can count references all you want, but when I disconnect my
+CP2112, the USB bus calls gpiochip_remove(), struct gpio_chip * inside
+struct gpio_device is set to NULL and while the underlying struct
+device itself is still alive, the GPIO chip is no longer usable.
 
---------------------------------
-get rid of INT_LIMIT, use type_max() instead
+Reference counting won't help because the device is no longer there,
+so this behavior is correct but there's an issue with user-space still
+being able to hold certain resources and we need to make sure that
+when it tries to use them, we return an error instead of crashing.
 
-INT_LIMIT() tries to do what type_max() does, except that type_max()
-doesn't rely upon undefined behaviour[*], might as well use type_max()
-instead.
+I think that a good solution is to make sure, we cannot set gdev->gc
+to NULL as long as there are user-space operations in progress. After
+all, it's better to try to send a USB request to an unplugged device
+than to dereference a NULL pointer. To that end, we could have a
+user-space lock that would also be taken by gpiochip_remove().
 
-[*] if T is an N-bit signed integer type, the maximal value in T is
-pow(2, N - 1) - 1, all right, but naive expression for that value
-ends up with a couple of wraparounds and as usual for wraparounds
-in signed types, that's an undefined behaviour.  type_max() takes
-care to avoid those...
+But this is still a per-subsystem solution. Most other subsystems
+suffer from the same issue.
 
-Caught-by: UBSAN
-Suggested-by: Eric Biggers <ebiggers@kernel.org>
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-Reviewed-by: Eric Biggers <ebiggers@google.com>
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
---------------------------------
-
-Does anybody have objections against the commit message above?
+Bartosz
