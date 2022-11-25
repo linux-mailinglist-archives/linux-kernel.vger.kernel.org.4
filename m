@@ -2,81 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E8636386C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 10:51:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C11E6386C4
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Nov 2022 10:52:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbiKYJvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 04:51:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40974 "EHLO
+        id S230053AbiKYJvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 04:51:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbiKYJvP (ORCPT
+        with ESMTP id S229852AbiKYJvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 04:51:15 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA7546677
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 01:48:44 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so7225782pjc.3
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 01:48:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fh9lKt/Ex1PEWTAeH6nLeKPXEkO8R8rkyg+dYswqgEE=;
-        b=vDysZeeLfQomwf6B75nRI+HaGjwrhHZIUs5fdZIrRPKP/VbWvL7yQ0ALrxn4dZl7j9
-         n+kpaP41Wst0rPmTeoFnCi1nUcqjnbvqBwdn69zyBwUV/DX4wxKIvJ/vlrfJ8V/DUNmg
-         Je7abb6o1fqWw+0Owl7vUd5QNv/AEvpp0VaHOT+SOBNUcA8KkJzgDrlQyWWRtEjH6YMb
-         id+oeuDWgcYSLAEolbcBqs864ZePbxbPDZZmCwSYUqNYf8Dqrw1ah3nxPAIp87+ybaEc
-         OMNm7FyX6fB7gDrl5TTgsNRtySjRrC+DRrN1m5r/w9nqR06/zETDgWY+DnOLP/hj/z9L
-         dRJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fh9lKt/Ex1PEWTAeH6nLeKPXEkO8R8rkyg+dYswqgEE=;
-        b=bHO9fYeLpu6iESejqwzWBzTs6dvNk7Ljmfh2PoGsT6ir2wUw5q2r2vWZ6ATjOXJR3d
-         2nNWdRGvVMi0ktx8VbcPAEWpypE73ZBTSaOGw8WtnMDKam2orJOhp/BEEu8I5zHzyngX
-         9wqfv9jN7C5S0ihlBGPiAt92ONotQULRxuwnhBerHUdA0r4EZY1vEDGZU4bMYwpDn8n1
-         VKgTmT9jarxWROwQEDVC8axSkki38qeQb8vEWWfuuX/JU6JDkVCraqFTaeAZ9NMYjYsr
-         XyU4qT7vsRfSI8T7bgPevyXHO4Yu5xyv7keUk99JHJhan3J3LfhACuX8GmMF1LllFtaN
-         P+kQ==
-X-Gm-Message-State: ANoB5pk9Xt6l4XXDeJ3jxikNxpSAYwI7SOS2QXHt/t6RKOYdIpawzbgD
-        99adEXewGHHbd9FgCR6f1mFDBg==
-X-Google-Smtp-Source: AA0mqf7lZaeE4yg7AW0Zyy+PHMsdV0xTaeowycIugKV0CyHIEnPfVIYVEXLDovr2cbvx7/bzEry1XA==
-X-Received: by 2002:a17:903:40c4:b0:188:4f86:e4ea with SMTP id t4-20020a17090340c400b001884f86e4eamr18503460pld.59.1669369723802;
-        Fri, 25 Nov 2022 01:48:43 -0800 (PST)
-Received: from ?IPV6:2400:4050:c360:8200:8ae8:3c4:c0da:7419? ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
-        by smtp.gmail.com with ESMTPSA id r17-20020a63ce51000000b0045751ef6423sm2273887pgi.87.2022.11.25.01.48.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Nov 2022 01:48:43 -0800 (PST)
-Message-ID: <4a2d4e3e-5b15-2c58-dc49-92908ab80ad0@daynix.com>
-Date:   Fri, 25 Nov 2022 18:48:38 +0900
+        Fri, 25 Nov 2022 04:51:22 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699F03FB8B;
+        Fri, 25 Nov 2022 01:49:14 -0800 (PST)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NJVMt6mZfzbngb;
+        Fri, 25 Nov 2022 17:45:14 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 25 Nov 2022 17:49:12 +0800
+Received: from [10.174.178.174] (10.174.178.174) by
+ dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 25 Nov 2022 17:49:11 +0800
+Subject: Re: [PATCH v3] device property: fix of node refcount leak in
+ fwnode_graph_get_next_endpoint()
+To:     Daniel Scally <djrscally@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <heikki.krogerus@linux.intel.com>, <sakari.ailus@linux.intel.com>,
+        <gregkh@linuxfoundation.org>, <rafael@kernel.org>,
+        <yangyingliang@huawei.com>
+References: <20221123022542.2999510-1-yangyingliang@huawei.com>
+ <Y34gz4UXN7il3b49@smile.fi.intel.com>
+ <d2c7979e-3891-283e-d20b-97b75a27730e@gmail.com>
+From:   Yang Yingliang <yangyingliang@huawei.com>
+Message-ID: <5061895a-bbd3-6a9f-c938-f101123ac308@huawei.com>
+Date:   Fri, 25 Nov 2022 17:49:11 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v3] igb: Allocate MSI-X vector when testing
-To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Yan Vugenfirer <yan@daynix.com>,
-        Yuri Benditovich <yuri.benditovich@daynix.com>
-References: <20221123010926.7924-1-akihiko.odaki@daynix.com>
- <Y34/LDxCnYd6VGJ2@boxer>
+In-Reply-To: <d2c7979e-3891-283e-d20b-97b75a27730e@gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-From:   Akihiko Odaki <akihiko.odaki@daynix.com>
-In-Reply-To: <Y34/LDxCnYd6VGJ2@boxer>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.178.174]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,75 +61,89 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+On 2022/11/25 17:32, Daniel Scally wrote:
+> Hello
+>
+> On 23/11/2022 13:31, Andy Shevchenko wrote:
+>> On Wed, Nov 23, 2022 at 10:25:42AM +0800, Yang Yingliang wrote:
+>>> The 'parent' returned by fwnode_graph_get_port_parent()
+>>> with refcount incremented when 'prev' is not NULL, it
+>>> needs be put when finish using it.
+>>>
+>>> Because the parent is const, introduce a new variable to
+>>> store the returned fwnode, then put it before returning
+>>> from fwnode_graph_get_next_endpoint().
+>> To me this looks good enough. Not sure if Dan has a chance (time) to look at
+>> this, though. And maybe even test...
+>>
+>> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>
+> Apologies; didn't notice this earlier. I will look at and test this today
 
-On 2022/11/24 0:41, Maciej Fijalkowski wrote:
-> On Wed, Nov 23, 2022 at 10:09:26AM +0900, Akihiko Odaki wrote:
->> Without this change, the interrupt test fail with MSI-X environment:
->>
->> $ sudo ethtool -t enp0s2 offline
->> [   43.921783] igb 0000:00:02.0: offline testing starting
->> [   44.855824] igb 0000:00:02.0 enp0s2: igb: enp0s2 NIC Link is Down
->> [   44.961249] igb 0000:00:02.0 enp0s2: igb: enp0s2 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX/TX
->> [   51.272202] igb 0000:00:02.0: testing shared interrupt
->> [   56.996975] igb 0000:00:02.0 enp0s2: igb: enp0s2 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX/TX
->> The test result is FAIL
->> The test extra info:
->> Register test  (offline)	 0
->> Eeprom test    (offline)	 0
->> Interrupt test (offline)	 4
->> Loopback test  (offline)	 0
->> Link test   (on/offline)	 0
->>
->> Here, "4" means an expected interrupt was not delivered.
->>
->> To fix this, route IRQs correctly to the first MSI-X vector by setting
->> IVAR_MISC. Also, set bit 0 of EIMS so that the vector will not be
->> masked. The interrupt test now runs properly with this change:
-> 
-> Much better!
-> 
->>
->> $ sudo ethtool -t enp0s2 offline
->> [   42.762985] igb 0000:00:02.0: offline testing starting
->> [   50.141967] igb 0000:00:02.0: testing shared interrupt
->> [   56.163957] igb 0000:00:02.0 enp0s2: igb: enp0s2 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX/TX
->> The test result is PASS
->> The test extra info:
->> Register test  (offline)	 0
->> Eeprom test    (offline)	 0
->> Interrupt test (offline)	 0
->> Loopback test  (offline)	 0
->> Link test   (on/offline)	 0
->>
->> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
-> 
-> Same comment as on other patch - justify why there is no fixes tag and
-> specify the tree in subject.
+Thanks,
 
-I couldn't identify what commit introduced the problem. Please see:
-https://lore.kernel.org/netdev/f2457229-865a-57a0-94a1-c5c63b2f30a5@daynix.com/
-
-Regards,
-Akihiko Odaki
-
-> 
->> ---
->>   drivers/net/ethernet/intel/igb/igb_ethtool.c | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/net/ethernet/intel/igb/igb_ethtool.c b/drivers/net/ethernet/intel/igb/igb_ethtool.c
->> index e5f3e7680dc6..ff911af16a4b 100644
->> --- a/drivers/net/ethernet/intel/igb/igb_ethtool.c
->> +++ b/drivers/net/ethernet/intel/igb/igb_ethtool.c
->> @@ -1413,6 +1413,8 @@ static int igb_intr_test(struct igb_adapter *adapter, u64 *data)
->>   			*data = 1;
->>   			return -1;
->>   		}
->> +		wr32(E1000_IVAR_MISC, E1000_IVAR_VALID << 8);
->> +		wr32(E1000_EIMS, BIT(0));
->>   	} else if (adapter->flags & IGB_FLAG_HAS_MSI) {
->>   		shared_int = false;
->>   		if (request_irq(irq,
->> -- 
->> 2.38.1
->>
+I tested it, without this patch, I got this message:
+OF: ERROR: memory leak, expected refcount 1 instead of 4, 
+of_node_get()/of_node_put() unbalanced - destroy cset entry: attach 
+overlay node /i2c/pmic@34/tcpc/connector
+after this patch,  the message is gone.
+>
+>>> Fixes: b5b41ab6b0c1 ("device property: Check fwnode->secondary in fwnode_graph_get_next_endpoint()")
+>>> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+>>> ---
+>>> v2 -> v3:
+>>>    Add a out label.
+>>>
+>>> v1 -> v2:
+>>>    Introduce a new variable to store the returned fwnode.
+>>> ---
+>>>   drivers/base/property.c | 18 ++++++++++++------
+>>>   1 file changed, 12 insertions(+), 6 deletions(-)
+>>>
+>>> diff --git a/drivers/base/property.c b/drivers/base/property.c
+>>> index 2a5a37fcd998..7f338cb4fb7b 100644
+>>> --- a/drivers/base/property.c
+>>> +++ b/drivers/base/property.c
+>>> @@ -989,26 +989,32 @@ struct fwnode_handle *
+>>>   fwnode_graph_get_next_endpoint(const struct fwnode_handle *fwnode,
+>>>   			       struct fwnode_handle *prev)
+>>>   {
+>>> +	struct fwnode_handle *ep, *port_parent = NULL;
+>>>   	const struct fwnode_handle *parent;
+>>> -	struct fwnode_handle *ep;
+>>>   
+>>>   	/*
+>>>   	 * If this function is in a loop and the previous iteration returned
+>>>   	 * an endpoint from fwnode->secondary, then we need to use the secondary
+>>>   	 * as parent rather than @fwnode.
+>>>   	 */
+>>> -	if (prev)
+>>> -		parent = fwnode_graph_get_port_parent(prev);
+>>> -	else
+>>> +	if (prev) {
+>>> +		port_parent = fwnode_graph_get_port_parent(prev);
+>>> +		parent = port_parent;
+>>> +	} else {
+>>>   		parent = fwnode;
+>>> +	}
+>>>   	if (IS_ERR_OR_NULL(parent))
+>>>   		return NULL;
+>>>   
+>>>   	ep = fwnode_call_ptr_op(parent, graph_get_next_endpoint, prev);
+>>>   	if (ep)
+>>> -		return ep;
+>>> +		goto out_put_port_parent;
+>>> +
+>>> +	ep = fwnode_graph_get_next_endpoint(parent->secondary, NULL);
+>>>   
+>>> -	return fwnode_graph_get_next_endpoint(parent->secondary, NULL);
+>>> +out_put_port_parent:
+>>> +	fwnode_handle_put(port_parent);
+>>> +	return ep;
+>>>   }
+>>>   EXPORT_SYMBOL_GPL(fwnode_graph_get_next_endpoint);
+>>>   
+>>> -- 
+>>> 2.25.1
+>>>
+> .
