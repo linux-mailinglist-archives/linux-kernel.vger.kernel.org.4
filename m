@@ -2,82 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 154D163955D
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 11:33:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C02EA63955F
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 11:35:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbiKZKdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 05:33:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54752 "EHLO
+        id S229554AbiKZKfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 05:35:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiKZKdS (ORCPT
+        with ESMTP id S229454AbiKZKfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 05:33:18 -0500
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF802655F;
-        Sat, 26 Nov 2022 02:33:16 -0800 (PST)
-Received: from sopl295.home (unknown [IPv6:2a01:cb19:8d70:d500:b9f9:2ddd:cb4c:4b34])
-        (Authenticated sender: robert.jarzmik@free.fr)
-        by smtp4-g21.free.fr (Postfix) with ESMTPSA id A135419F58D;
-        Sat, 26 Nov 2022 11:33:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
-        s=smtp-20201208; t=1669458795;
-        bh=trAIjXQgfCOT8mzOtZdvR3zVgqjE7H8j/IocuQbKRJk=;
-        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
-        b=Bnu/qzCNRGjdyWnC0iBqjA+c8e8NRppn+0rODqBXa2M2Gr8Y7agMcXlgWyjTkc+ex
-         gteir53YVC5gzVR8YC17uG8PWG1FpHGCiJq8+s2or81HuHV9wgKA/IxQ5NrSFVMxo+
-         hVgCSo6Dq6UL78B1Zh7zjJLx3OPjM/2CtwpTaUu4K3UNN+AhtBNBzjLeYEO1JZUmZH
-         D2ew+zCMsJLNAFm9DzW/MKOCi+fw4029mLo/a9mWhVVKZIDnH+9Oi9rc5UvMo0LTAT
-         SzgeQbF0m+ke44EnqcPBrGayckNYxNOQPGz3dkPqfJpv92LyDW0hJzGY4/O7unURW7
-         Y6vf4PX4prX0Q==
-References: <20221124100112.4172513-1-j.neuschaefer@gmx.net>
-User-agent: mu4e 1.8.11; emacs 28.1
-From:   Robert Jarzmik <robert.jarzmik@free.fr>
-To:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: dts: pxa2xx: Don't mention &pwri2c where it
- doesn't exist
-Date:   Sat, 26 Nov 2022 11:32:07 +0100
-In-reply-to: <20221124100112.4172513-1-j.neuschaefer@gmx.net>
-Message-ID: <m2a64ef1jz.fsf@sopl295.home>
+        Sat, 26 Nov 2022 05:35:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF1B26ADF;
+        Sat, 26 Nov 2022 02:35:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 44C9AB81197;
+        Sat, 26 Nov 2022 10:34:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4C56C433C1;
+        Sat, 26 Nov 2022 10:34:56 +0000 (UTC)
+Message-ID: <e4609919-d9be-33c4-1488-352443523b14@xs4all.nl>
+Date:   Sat, 26 Nov 2022 11:34:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 4/4] media: i2c: s5c73m3: switch to using gpiod API
+Content-Language: en-US
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+References: <20221115221145.2550572-1-dmitry.torokhov@gmail.com>
+ <20221115221145.2550572-4-dmitry.torokhov@gmail.com>
+ <CACRpkdbARhDuqSiOZM6GZynHsQWau8JhsEa2zcpsPZSLuD07Kg@mail.gmail.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <CACRpkdbARhDuqSiOZM6GZynHsQWau8JhsEa2zcpsPZSLuD07Kg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus,
 
-Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net> writes:
+On 17/11/2022 10:06, Linus Walleij wrote:
+> On Tue, Nov 15, 2022 at 11:11 PM Dmitry Torokhov
+> <dmitry.torokhov@gmail.com> wrote:
+> 
+>> This patch switches the driver away from legacy gpio/of_gpio API to
+>> gpiod API, and removes use of of_get_named_gpio_flags() which I want to
+>> make private to gpiolib.
+>>
+>> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> 
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-> The pwri2c node does not exist in all PXA2xx SoCs (specifically=20
-> not
-> in PXA25x), and thus isn't defined in pxa2xx.dtsi. It is,=20
-> however,
-> currently mentioned in /aliases, causing an error when building=20
-> a
-> devicetree that doesn't define it.
->
-> Move the mention of &pwri2c in /aliases to the files that define=20
-> it
-> (pxa27x.dtsi and pxa3xx.dtsi), to avoid the error mentioned=20
-> above.
->
-> Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-Acked-by: Robert Jarzmik <robert.jarzmik@free.fr>
+There are now two patches that do this switch to using the gpiod API:
+this one, and one from you:
 
-Cheers.
+https://patchwork.linuxtv.org/project/linux-media/patch/20221108100604.1500909-1-linus.walleij@linaro.org/
 
---
-Robert
+Any preference?
+
+Regards,
+
+	Hans
