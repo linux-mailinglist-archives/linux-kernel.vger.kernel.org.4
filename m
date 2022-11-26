@@ -2,110 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D39CB639667
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 15:25:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BEEA63966A
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 15:28:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbiKZOY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 09:24:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36532 "EHLO
+        id S229580AbiKZO2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 09:28:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiKZOY5 (ORCPT
+        with ESMTP id S229469AbiKZO2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 09:24:57 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1164118E1F
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 06:24:55 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id d3so8183738ljl.1
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 06:24:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6vLna4taitqPmXLIIkapuDDCcusBIaRbdtMepRsT1Lk=;
-        b=bI/p49EaYjuVNxAB0YHtI/ULp6a34ypk7UGk8rPTjXj/5EGsGX9EIKYdE7ktAR7y/5
-         HyDXWltCIJFyUhUilDAEmCLBbazUzVMG+7a0FbLVh21BRg0xE64M+3WJUlngnejDx0Td
-         dTw6sqoCTcC4Bu4EV7ix1Sq2ffm9B5Mht+EWCubU1CD/NQ1G7UMMErff8PCKZ0jTAsGN
-         jp4FTrDEblJ0SE0GlRxk37Jj+puqMl+N/yxMlxj6O/oryZsq5no3XMJ4RltHJwCHV+iX
-         5tx/HfJYdaB/O8X9WPPPtI9e/bhe746amcH0JupCys9/jrWctaPYQNGCs/vu0UCVfuJ6
-         d1vQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6vLna4taitqPmXLIIkapuDDCcusBIaRbdtMepRsT1Lk=;
-        b=AbY7vUtCcaFqwkFeGcl3qGsNpLMpC62gJo+zM3HyRwNHD2VSOKwRAtjVPsrF8vRef4
-         b+MVIfm2GJGpDQV7Hrtfw6IJ29vuRBMwBO4Hf1aMfiBE8Dr4fw2ixcRE/SlX52bdzJhT
-         CQ5JyNhjuZHgm3cncqZnVBgv1zmWS8wKvkzdriFSvz0pO4F+Zf9GeIiHx4l9ImLjuRxs
-         PZWnYBklfje/Kb8DOCtSTWH5x8FH3xAskA5VUKxFezi/NDbQxLiVkPmuEImBj6/i4wVJ
-         CmjUU4w3LRkRraklIy4xh1OSxNPm8+xZC2VyHQkAdUjjMez+3RQqhCSSNPHrgok7wvye
-         Gu9g==
-X-Gm-Message-State: ANoB5pmkqHRSoIKwl3OFJhYxJLNw+dQI6eqv+vu0iyadwDvsIwWXhChu
-        +qxUHARXw7Ei+2kafcdXHnAq4A==
-X-Google-Smtp-Source: AA0mqf6bMS826cl9TH4JOInpUf9DZmNCB4YgAJ67hHhc1az7C1ec/rGdofviQdcKs36HpKCtZBLcgA==
-X-Received: by 2002:a2e:9194:0:b0:279:7ffa:15aa with SMTP id f20-20020a2e9194000000b002797ffa15aamr4788408ljg.307.1669472693437;
-        Sat, 26 Nov 2022 06:24:53 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id f13-20020a0565123b0d00b004b0b131453csm956821lfv.49.2022.11.26.06.24.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Nov 2022 06:24:53 -0800 (PST)
-Message-ID: <54f500cb-d7d0-8af1-eb58-99fbe71791a5@linaro.org>
-Date:   Sat, 26 Nov 2022 15:24:52 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] arm64: dts: amlogic: align LED node names with dtschema
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     neil.armstrong@linaro.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221125144141.477253-1-krzysztof.kozlowski@linaro.org>
- <3719828c-0ac5-34c9-a04b-251cbeb5f6ef@linaro.org>
- <a135f93a-235a-27b8-f649-69d62f6ebd30@linaro.org>
-In-Reply-To: <a135f93a-235a-27b8-f649-69d62f6ebd30@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Sat, 26 Nov 2022 09:28:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A8F1A827
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 06:28:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3AB3FB80159
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 14:28:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 028C6C433C1;
+        Sat, 26 Nov 2022 14:28:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669472910;
+        bh=5ajgFZi4SmoYha16KEs1dhL0q/O9X7fn18AlzYpYO/8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AgeGjwEi63Doabk4rXHAtNmEhbtwfb6ve/0TwP2Ce+oIXxBhP+yIBGKX+pfvfaT/q
+         uzldSOLudko3FQnnzo5poPVu7avDhcoRTE+ORIyrjLaaOijYQHPN2Uwk/onJD8zmb7
+         YT094YAEGVUMiZgwUcKeUYtywYqVV3NbheOdKm1BVIKk39AR5VSEDjsxkSMl/tpQhD
+         pIUHhmfAPsgdD8LtIB79pykoU+9BYyPNEjY9+GaQfjnOpUVpQ1PnnxbLJ14N7Rquy4
+         rRNnPsdaaWOwAOO+ZyfCyb4Le3+Rsj5nm9SRGAu+GJjl0mXOghaZrAkP6ttbkbyefn
+         lHoOvm8zKAf0Q==
+Received: from 82-132-228-24.dab.02.net ([82.132.228.24] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oywAN-008j2K-Hd;
+        Sat, 26 Nov 2022 14:28:27 +0000
+Date:   Sat, 26 Nov 2022 14:28:14 +0000
+Message-ID: <87sfi5u6wx.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 3/7] genirq: Add mechanism to multiplex a single HW IPI
+In-Reply-To: <CAK9=C2UeMVnMBKOgO_nseUZnmvG+CUu7xaRXtt6j3Esr+ap04g@mail.gmail.com>
+References: <20221114093904.1669461-1-apatel@ventanamicro.com>
+        <20221114093904.1669461-4-apatel@ventanamicro.com>
+        <87y1rxubty.wl-maz@kernel.org>
+        <CAK9=C2UeMVnMBKOgO_nseUZnmvG+CUu7xaRXtt6j3Esr+ap04g@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 82.132.228.24
+X-SA-Exim-Rcpt-To: apatel@ventanamicro.com, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, daniel.lezcano@linaro.org, atishp@atishpatra.org, Alistair.Francis@wdc.com, anup@brainfault.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/11/2022 15:16, Krzysztof Kozlowski wrote:
-> On 25/11/2022 18:16, Neil Armstrong wrote:
->> On 25/11/2022 15:41, Krzysztof Kozlowski wrote:
->>> The node names should be generic and DT schema expects certain pattern:
->>>
->>>    amlogic/meson-sm1-bananapi-m5.dtb: leds: 'blue' does not match any of the regexes: '(^led-[0-9a-f]$|led)', 'pinctrl-[0-9]+'
->>>
->>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> ---
->>>   arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts | 4 ++--
->>>   1 file changed, 2 insertions(+), 2 deletions(-)
->>>
->>
->>
->> <snip>
->>
->>
->> Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+On Sat, 26 Nov 2022 13:31:46 +0000,
+Anup Patel <apatel@ventanamicro.com> wrote:
 > 
-> Aren't you maintainer of the platform? This means I should take care of
-> this patch?
+> On Sat, Nov 26, 2022 at 6:12 PM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > On Mon, 14 Nov 2022 09:39:00 +0000,
+> > Anup Patel <apatel@ventanamicro.com> wrote:
+> > >
+> > > +struct ipi_mux_control {
+> > > +     void                            *data;
+> > > +     unsigned int                    nr;
+> >
+> > Honestly, I think we can get rid of this. The number of IPIs Linux
+> > uses is pretty small, and assuming a huge value (like 32) would be
+> > enough. It would save looking up this value on each IPI handling.
+> 
+> I had kept in-case some driver wanted to create fewer (< 32)
+> muxed IPIs.
 
-Ah, this will be picked up by Kevin or Jerome? So this tag means only
-Reviewer's statement of oversight, right?
+I'm fine with being able to specifying the max, but I'm not sure there
+is a need to keep track of it any further. Certainly, the overhead of
+loading this value on each IPI could be removed. On most architecture,
+for_each_set_bit() and co and better optimised with a fixed number of
+bits.
 
-Best regards,
-Krzysztof
+> > > +static const struct irq_chip ipi_mux_chip = {
+> > > +     .name           = "IPI Mux",
+> > > +     .irq_mask       = ipi_mux_mask,
+> > > +     .irq_unmask     = ipi_mux_unmask,
+> > > +     .ipi_send_mask  = ipi_mux_send_mask,
+> > > +};
+> >
+> > I really think this could either be supplied by the irqchip, or
+> > somehow patched to avoid the pointless imux->ops->ipi_mux_send
+> > indirection. Pointer chasing hurts.
+> 
+> Once we remove ipi_mux_pre/post_handle() callbacks, the
+> "ops" will be pointless and we will be able to remove one level
+> of indirection here.
+> 
+> We certainly need a mux irqchip to implement the
+> mask/unmask semantics for muxed IPIs.
 
+I'm not disputing that last point.
+
+> > > +/**
+> > > + * ipi_mux_create - Create virtual IPIs multiplexed on top of a single
+> > > + * parent IPI.
+> > > + * @parent_virq:     virq of the parent per-CPU IRQ
+> > > + * @nr_ipi:          number of virtual IPIs to create. This should
+> > > + *                   be <= BITS_PER_TYPE(int)
+> > > + * @ops:             multiplexing operations for the parent IPI
+> > > + * @data:            opaque data used by the multiplexing operations
+> >
+> > What is the use for data? If anything, that data should be passed via
+> > the mux interrupt. But the whole point of this is to make the mux
+> > invisible. So this whole 'data' business is a mystery to me.
+> 
+> This is added only to pass back driver data in ipi_mux_send().
+
+Again, what is the purpose of such data? If you need per-interrupt
+data, this should be provided by the requester of the interrupt.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
