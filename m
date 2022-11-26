@@ -2,104 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B3C6394AA
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 09:29:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B97B26394A9
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 09:28:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbiKZI3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 03:29:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43408 "EHLO
+        id S229564AbiKZI2t convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 26 Nov 2022 03:28:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiKZI3N (ORCPT
+        with ESMTP id S229498AbiKZI2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 03:29:13 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A2C2A251
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 00:29:12 -0800 (PST)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NK4d016XLz15MtS
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 16:28:36 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 26 Nov 2022 16:29:10 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 26 Nov
- 2022 16:29:10 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <tglx@linutronix.de>, <kraig@google.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] genirq/irqdesc: fix WARNING in irq_sysfs_del()
-Date:   Sat, 26 Nov 2022 16:27:16 +0800
-Message-ID: <20221126082716.438271-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 26 Nov 2022 03:28:47 -0500
+Received: from kozue.soulik.info (kozue.soulik.info [IPv6:2001:19f0:7000:8404:5054:ff:fe75:428f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA98FEE39;
+        Sat, 26 Nov 2022 00:28:46 -0800 (PST)
+Received: from [192.168.10.76] (unknown [112.65.61.224])
+        by kozue.soulik.info (Postfix) with ESMTPSA id 3ABC1100C90;
+        Sat, 26 Nov 2022 17:28:32 +0900 (JST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+From:   ayaka <ayaka@soulik.info>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH] media: v4l2-mem2mem: allow device run without buf
+Date:   Sat, 26 Nov 2022 16:28:33 +0800
+Message-Id: <80315D27-6558-44F8-B4F0-8F464602D709@soulik.info>
+References: <edd368ea3cc9bb31700600a7f1fe7c837501458c.camel@collabora.com>
+Cc:     Hsia-Jun Li <randy.li@synaptics.com>, linux-media@vger.kernel.org,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        sebastian.fricke@collabora.com,
+        kieran.bingham+renesas@ideasonboard.com,
+        laurent.pinchart@ideasonboard.com, ming.qian@nxp.com,
+        wenst@chromium.org, linux-kernel@vger.kernel.org
+In-Reply-To: <edd368ea3cc9bb31700600a7f1fe7c837501458c.camel@collabora.com>
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
+X-Mailer: iPad Mail (18D61)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I got the lots of WARNING report when doing fault injection test:
 
-kernfs: can not remove 'chip_name', no directory
-WARNING: CPU: 0 PID: 253 at fs/kernfs/dir.c:1616 kernfs_remove_by_name_ns+0xce/0xe0
-RIP: 0010:kernfs_remove_by_name_ns+0xce/0xe0
-Call Trace:
- <TASK>
- remove_files.isra.1+0x3f/0xb0
- sysfs_remove_group+0x68/0xe0
- sysfs_remove_groups+0x41/0x70
- __kobject_del+0x45/0xc0
- kobject_del+0x29/0x40
- free_desc+0x42/0x70
- irq_free_descs+0x5e/0x90
 
-kernfs: can not remove 'hwirq', no directory
-WARNING: CPU: 0 PID: 253 at fs/kernfs/dir.c:1616 kernfs_remove_by_name_ns+0xce/0xe0
-RIP: 0010:kernfs_remove_by_name_ns+0xce/0xe0
-Call Trace:
- <TASK>
- remove_files.isra.1+0x3f/0xb0
- sysfs_remove_group+0x68/0xe0
- sysfs_remove_groups+0x41/0x70
- __kobject_del+0x45/0xc0
- kobject_del+0x29/0x40
- free_desc+0x42/0x70
- irq_free_descs+0x5e/0x90
+> On Nov 25, 2022, at 9:43 PM, Nicolas Dufresne <nicolas.dufresne@collabora.com> wrote:
+> 
+> ﻿CAUTION: Email originated externally, do not click links or open attachments unless you recognize the sender and know the content is safe.
+> 
+> 
+>> Le mercredi 23 novembre 2022 à 17:24 +0800, Hsia-Jun Li a écrit :
+>> From: Randy Li <ayaka@soulik.info>
+>> 
+>> For the decoder supports Dynamic Resolution Change,
+>> we don't need to allocate any CAPTURE or graphics buffer
+>> for them at inital CAPTURE setup step.
+>> 
+>> We need to make the device run or we can't get those
+>> metadata.
+> 
+> Nack: This is not how it works. I know the m2m framework make it difficult, but
+> it is expected that the driver have a special state for OUTPUT streamon (before
+> capture streamon). Please have a look at other drivers.
+> 
+I have some good reasons here that make dynamic resolution should happen in the device_run().
+1. If the CAPTURE is STREAMON, when the resolution changed event should be triggered? Of course it would be in device_run(), there is no reason to make an special case here.
 
-If irq_sysfs_add() fails in alloc_descs(), the directory of interrupt
-informations is not added to sysfs, it causes the WARNINGs when removing
-the information files. Fix this by adding check kobj.state_in_sysfs in
-irq_sysfs_del().
+The following reasons may be better applied for encrypted(DRM) video, when no normal video stream parser could be invoked.
+We don’t know whether the user input contains valid sequence header, would the sequence header applied to the current frame? Beside the metadata we need may not at the beginning of the buffer.
+2. If it would cost lots of device time on parsing it, it even may even need to read more than one OUTPUT buffers, we would be better to fix this into the normal schedule procedure. Or it would block the other running contexts(instances)
+3. We need extra methods to wait the other context done their work which breaks the original job queue.
 
-Fixes: ecb3f394c5db ("genirq: Expose interrupt information through sysfs")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- kernel/irq/irqdesc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+buffered flag is a perfect way to fix these problems, I didn’t see any m2m driver uses them.
 
-diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
-index a91f9001103c..e391f4195b87 100644
---- a/kernel/irq/irqdesc.c
-+++ b/kernel/irq/irqdesc.c
-@@ -303,7 +303,7 @@ static void irq_sysfs_del(struct irq_desc *desc)
- 	 * kobject_del() complains about a object with no parent, so make
- 	 * it conditional.
- 	 */
--	if (irq_kobj_base)
-+	if (irq_kobj_base && desc->kobj.state_in_sysfs)
- 		kobject_del(&desc->kobj);
- }
- 
--- 
-2.25.1
+> Nicolas
+>> 
+>> Signed-off-by: Randy Li <ayaka@soulik.info>
+>> ---
+>> drivers/media/v4l2-core/v4l2-mem2mem.c | 5 +++--
+>> 1 file changed, 3 insertions(+), 2 deletions(-)
+>> 
+>> diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
+>> index be7fde1ed3ea..cd56d60fad9d 100644
+>> --- a/drivers/media/v4l2-core/v4l2-mem2mem.c
+>> +++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
+>> @@ -301,8 +301,9 @@ static void __v4l2_m2m_try_queue(struct v4l2_m2m_dev *m2m_dev,
+>> 
+>>      dprintk("Trying to schedule a job for m2m_ctx: %p\n", m2m_ctx);
+>> 
+>> -     if (!m2m_ctx->out_q_ctx.q.streaming
+>> -         || !m2m_ctx->cap_q_ctx.q.streaming) {
+>> +     if (!(m2m_ctx->out_q_ctx.q.streaming || m2m_ctx->out_q_ctx.buffered)
+>> +         || !(m2m_ctx->cap_q_ctx.q.streaming
+>> +              || m2m_ctx->cap_q_ctx.buffered)) {
+>>              dprintk("Streaming needs to be on for both queues\n");
+>>              return;
+>>      }
+> 
 
