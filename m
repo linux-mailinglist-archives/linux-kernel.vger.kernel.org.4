@@ -2,205 +2,407 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 104956393E8
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 05:45:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCA76639388
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 04:03:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbiKZEpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 23:45:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47384 "EHLO
+        id S230103AbiKZDDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 22:03:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbiKZEom (ORCPT
+        with ESMTP id S229788AbiKZDDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 23:44:42 -0500
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273A12CE2E
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 20:44:41 -0800 (PST)
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20221126044439epoutp02bdd5ed99d22a6e566e6be8d035d0e77f~rCOgT5mV41149911499epoutp02Y
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 04:44:39 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20221126044439epoutp02bdd5ed99d22a6e566e6be8d035d0e77f~rCOgT5mV41149911499epoutp02Y
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1669437879;
-        bh=klC3Ze6CsU7jU+5ImFRcxx8BOAW8fkPo2fpyuousOCo=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=EL5faRLCdUxKbIEShBoiPmpI/6bA+W4vFZVS+Gw+MqDHOKr1fZtOGl8Sc/prHfa3t
-         kSkUjnRjiccM9o2MQ1tGfC5cfX1jHiwg7V16fJnnketTtGhpTggkmfKilA+A/eemaZ
-         +VYh66tNHfHolvUmlaFD7ZoQyd19S3KOSrGArZnU=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-        20221126044439epcas5p2b4b6de423d46f804d6bc0bee66539392~rCOfqM-yL0533105331epcas5p2B;
-        Sat, 26 Nov 2022 04:44:39 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.178]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4NJzfY2MMHz4x9Pv; Sat, 26 Nov
-        2022 04:44:37 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        23.7E.56352.5B991836; Sat, 26 Nov 2022 13:44:37 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20221125143359epcas5p2e3ab4843f882f3b0103fcf92ec0aac88~q2nw9gcCZ1260512605epcas5p29;
-        Fri, 25 Nov 2022 14:33:59 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20221125143359epsmtrp2d801fa3c87ffeefbb5488f0444537a9c~q2nw7ZhGA2471724717epsmtrp2S;
-        Fri, 25 Nov 2022 14:33:59 +0000 (GMT)
-X-AuditID: b6c32a4b-383ff7000001dc20-b8-638199b5b883
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        49.2E.14392.652D0836; Fri, 25 Nov 2022 23:33:58 +0900 (KST)
-Received: from FDSFTE302 (unknown [107.122.81.78]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20221125143353epsmtip2ce6f90109229a5d41dd13180028f3fbc~q2nrpSkXW0641206412epsmtip2p;
-        Fri, 25 Nov 2022 14:33:52 +0000 (GMT)
-From:   "Sriranjani P" <sriranjani.p@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
-        "'Lee Jones'" <lee@kernel.org>,
-        "'Rob Herring'" <robh+dt@kernel.org>,
-        "'Krzysztof Kozlowski'" <krzysztof.kozlowski+dt@linaro.org>,
-        "'Alim Akhtar'" <alim.akhtar@samsung.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>
-Cc:     "'Chanho Park'" <chanho61.park@samsung.com>,
-        "'Sam Protsenko'" <semen.protsenko@linaro.org>
-In-Reply-To: <20221125112201.240178-4-krzysztof.kozlowski@linaro.org>
-Subject: RE: [PATCH 4/4] dt-bindings: soc: samsung: exynos-sysreg: add
- clocks for Exynos850
-Date:   Fri, 25 Nov 2022 20:03:49 +0530
-Message-ID: <016f01d900da$f44148d0$dcc3da70$@samsung.com>
+        Fri, 25 Nov 2022 22:03:30 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D7B31FB9;
+        Fri, 25 Nov 2022 19:03:29 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id D62D45C00A9;
+        Fri, 25 Nov 2022 22:03:26 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Fri, 25 Nov 2022 22:03:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1669431806; x=
+        1669518206; bh=jKSOJ0vxyid9Dgy0Kfkl4AhIBUfl/N9hmjFMfQRINPo=; b=q
+        PXMZ5hIYAuBnSwmjB/NX4Ck3RKa87H0XJJI0FlfpxGUATmDHRgV+uwp+1Nz1D4xV
+        KTH2F+QzQtmRbLx64+TdkDKwnQ/Xa6td2ZnuZA8HgMvEngtlWjKl7XnzQsCdmQUE
+        l1qUl+7eDeXJOv+SmRpnT4I3Jc2Q1LibTXJiQxlZrFRolxpeWt+TZmu+NMqhP0d7
+        ivy46xit2C1BEd7QWEh6h9dF9hx8OHxh2ycbigbyb5HXWNurom9MLFhUltApr1rX
+        wG8kG8auuxfEGjAtxAbqb+8X9qpa+DZE41N6Dznzz4jyoQwU4D/Pb/ALUL7wyXJg
+        LiCCDR3IqZbdf11Z3gIyQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1669431806; x=
+        1669518206; bh=jKSOJ0vxyid9Dgy0Kfkl4AhIBUfl/N9hmjFMfQRINPo=; b=G
+        EYWpkgnE3argSfdOn7P1twpFwNNt6V/cIff6vE81EhrJXLDz15sgCVeQ2x7cmliD
+        iXTKDMrE67qlBLwHo0qjzSvulJ/bFaedWz3dz3X5o+gsgADK4biwz/kjOXeNFYaT
+        3VUcebzQ1ntUEUM9WiOlE80IWXxAKOQ8P6fYpOviXv4fsjqmo/9co0o/u2u4UZni
+        fgytkNcZ0H18SE2oBaXUzw5bXFrRvHtAf6mo/qt/c4rxOp6ERc3eF5ffFG+g0Wd0
+        5DpYLfmk65owB7WR7EOzDLRoZzFKC9W4dT3miydKiDhU+afZpVkUU1Aq31ASXKgC
+        IMmLJRRmb0+OIz9JSMRzg==
+X-ME-Sender: <xms:_oGBYxAkH7QyD_I9LVdRD2w3HxJ_udV6-SU22zWva9p1rcLJauGZlQ>
+    <xme:_oGBY_jWXhKqW_VLq_Yt_NzMY0oeZMDEaNcft8srZTmvQNJ5CPAsJmeAbXnyJZGny
+    M3pmtdRSR9m-vjKAg>
+X-ME-Received: <xmr:_oGBY8mvhDuFTCcrLIxJrvJh1psns2OFQqG97Y3rlfB7KsgMwEVQ0T9T0h0nL2r7AFGcMhNhr8CXVSs6UlWkdCf4usOXoHFssrN0DjZW2rESvP7d3P7KHUKpzg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrieeigdehudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfvvehfhffujggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepjefgfffhudejfedtuedugeeutdetgfeiteffffehjeeugfeuvdeh
+    jeetfedtffdtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:_oGBY7zanC2IIgmAyyeAq91Vvaub9h-Y78-NIRErClsMlxe4m6k-0A>
+    <xmx:_oGBY2TO4UGb7o7Fy8wb1hGhtl--P7vx0ywiIurXKtpi0tajhXCtxQ>
+    <xmx:_oGBY-ZUqWnT05Ae0mHjWfaVi_RAuVMO6sEHLqWsq_GKAcpYBoay8Q>
+    <xmx:_oGBY9IgT230p5stRfoc8MFB29F4iC9krik7wqeb8HdxRafWtDHVhA>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 25 Nov 2022 22:03:25 -0500 (EST)
+Message-ID: <3ee22b0e-2010-1cf6-bca8-3c803d73d7f9@sholland.org>
+Date:   Fri, 25 Nov 2022 21:03:24 -0600
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Content-Language: en-US
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Maxime Ripard <mripard@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+References: <20221125040112.18160-1-samuel@sholland.org>
+ <20221125040112.18160-3-samuel@sholland.org>
+ <20221126002243.37b1034d@slackpad.lan>
+From:   Samuel Holland <samuel@sholland.org>
+Subject: Re: [PATCH v4 2/4] regulator: sun20i: Add Allwinner D1 LDOs driver
+In-Reply-To: <20221126002243.37b1034d@slackpad.lan>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQIt87tfTwup8v8WQwS48SHvnyDBrAJHFqkaAo0HZj6tfy1NYA==
-Content-Language: en-in
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrNJsWRmVeSWpSXmKPExsWy7bCmhu7WmY3JBrOW8Fg8mLeNzeLyfm2L
-        +UfOsVr0vXjIbLH39VZ2ix1tC1ksNj2+xmpxedccNosZ5/cxWbTuPcJu8bxvH5MDt8emVZ1s
-        Hneu7WHz2Lyk3qNvyypGj8+b5AJYo7JtMlITU1KLFFLzkvNTMvPSbZW8g+Od403NDAx1DS0t
-        zJUU8hJzU22VXHwCdN0yc4AOU1IoS8wpBQoFJBYXK+nb2RTll5akKmTkF5fYKqUWpOQUmBTo
-        FSfmFpfmpevlpZZYGRoYGJkCFSZkZ/y4JVXwX6Di9Luj7A2MZ3m7GDk5JARMJCa/+cfaxcjF
-        ISSwm1Hi+On7bBDOJ0aJZ19uM0E43xgl5vz/zAzTsmBXD1TVXkaJqU/3QlU9Z5TYd3sdE0gV
-        m4C+xOsV88GqRAT+M0n8/dXGApJgFkiUOH3mBFgRp4CrRMf6NUA2B4ewQKxE100vEJNFQFVi
-        5jddkApeAUuJn2vfsEHYghInZz6BmiIvsf3tHKiDFCR+Pl3GCmKLCDhJdC2ZywxRIy5x9GcP
-        M8gJEgJrOSQO3H/CCjJfQsBFor3NDaJXWOLV8S3sELaUxOd3e9kg7HSJzUc2s0LYORIdTc1Q
-        u+wlDlyZwwIyhllAU2L9Ln2IsKzE1FMQnzML8En0/n7CBBHnldgxD8ZWk1j8qBPKlpFY++gT
-        6wRGpVlIPpuF5LNZSD6YhbBtASPLKkbJ1ILi3PTUYtMC47zUcnh0J+fnbmIEp1ot7x2Mjx58
-        0DvEyMTBeIhRgoNZSYQ34XhDshBvSmJlVWpRfnxRaU5q8SFGU2BoT2SWEk3OByb7vJJ4QxNL
-        AxMzMzMTS2MzQyVx3sUztJKFBNITS1KzU1MLUotg+pg4OKUamHj5+ou1G3TiNwS3Jf0V+lW3
-        5EbTfAd1zhRfDeES0eb1n8RXXV64L/KBqnD14wOMjtxam9NtLXczJeSd5mxambZgpXHyx32Z
-        td/vmei+SPRJWs3GuHPj5s7z5xp3yocu5WtlNu0RO19kza007WNP2f2/xj+CeJqDV39516d6
-        /MeiC15ZbMxW1U83PBP6POHn/2P6+7JWHovc1CVabfJpz6NDIpM/Bx44zKV4ynNxqRfXykPm
-        V5YmXxcNOHisfYm4pY37htNOZ3jilgQEME1WCS658Sz2x9xzf1lazwsfXvj/YWW5u+o0se9n
-        z8f3HNk5Qaziiv6P8g1JjVEJf3Y07Oi36BVbv1ei5rCfjfO0LCWW4oxEQy3mouJEAEpMazg+
-        BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprKIsWRmVeSWpSXmKPExsWy7bCSvG7YpYZkg3XrLCwezNvGZnF5v7bF
-        /CPnWC36Xjxkttj7eiu7xY62hSwWmx5fY7W4vGsOm8WM8/uYLFr3HmG3eN63j8mB22PTqk42
-        jzvX9rB5bF5S79G3ZRWjx+dNcgGsUVw2Kak5mWWpRfp2CVwZP25JFfwXqDj97ih7A+NZ3i5G
-        Tg4JAROJBbt62LoYuTiEBHYzSlxe9p0NIiEjcfLBEmYIW1hi5b/n7BBFTxklXu+7xQqSYBPQ
-        l3i9Yj5Yt4hAK7PEo6e3WEASzAKJEo9OvofqOM8o8X3RPLAOTgFXiY71a5hAbGGBaImzOz8C
-        2RwcLAKqEjO/6YKEeQUsJX6ufcMGYQtKnJz5BGqmnsT69XMYIWx5ie1v50BdpyDx8+kysPEi
-        Ak4SXUvmMkPUiEsc/dnDPIFReBaSUbOQjJqFZNQsJC0LGFlWMUqmFhTnpucWGxYY5qWW6xUn
-        5haX5qXrJefnbmIEx5yW5g7G7as+6B1iZOJgPMQowcGsJMKbcLwhWYg3JbGyKrUoP76oNCe1
-        +BCjNAeLkjjvha6T8UIC6YklqdmpqQWpRTBZJg5OqQYmH4vzqpPf82pe+DFvI+veKSUeCxSY
-        pddmTtuYd3sq6/ObE7/E6D7RZXgvn5gy81zCAfE58mYVqySNA90CJiasttv/7rDTZr2il+Xf
-        nTXXNS9+EDGRRWH+nVeXNrvduzM37hUP6+4PtyKDf6+Vi/ndclkw7JrZFqmvJQvnldc9nb1Q
-        NO7h28xL5f+F/j0Xmvau1U58Z4dM82+7/bes1MKPux+Jt5Kc+nqhaum5F0IuqnwrLn5nmrAk
-        rp35TlTHLNH6VFuZe5MtZK5F3zmtcD3EbmfLepmeP1Fzpss5+W44rq/Wu1O9PeXfqot/2R8u
-        vq0fON0uz+Mfk3KMsTIf8+GJxTOWai7/FFo/ZePPkNm6a5VYijMSDbWYi4oTAdhGvgooAwAA
-X-CMS-MailID: 20221125143359epcas5p2e3ab4843f882f3b0103fcf92ec0aac88
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221125112239epcas5p2a7c3cbe93480ea421f391730e78d8145
-References: <20221125112201.240178-1-krzysztof.kozlowski@linaro.org>
-        <CGME20221125112239epcas5p2a7c3cbe93480ea421f391730e78d8145@epcas5p2.samsung.com>
-        <20221125112201.240178-4-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Andre,
 
+On 11/25/22 18:22, Andre Przywara wrote:
+> On Thu, 24 Nov 2022 22:01:10 -0600
+> Samuel Holland <samuel@sholland.org> wrote:
+> 
+> Hi Samuel,
+> 
+>> D1 contains two pairs of LDOs, "analog" LDOs and "system" LDOs. They are
+>> similar and can share a driver, but only the system LDOs have a DT
+>> binding defined so far.
+>>
+>> The system LDOs have a single linear range. The voltage step is not an
+>> integer, so a custom .list_voltage is needed to get the rounding right.
+>>
+>> Signed-off-by: Samuel Holland <samuel@sholland.org>
+>> ---
+>>
+>> Changes in v4:
+>>  - Drop the analog LDOs until the codec binding is ready
+>>
+>> Changes in v3:
+>>  - Adjust control flow in sun20i_regulator_get_regmap() for clarity
+>>
+>> Changes in v2:
+>>  - Use decimal numbers for .n_voltages instead of field widths
+>>  - Get the regmap from the parent device instead of a property/phandle
+>>
+>>  drivers/regulator/Kconfig            |   8 ++
+>>  drivers/regulator/Makefile           |   1 +
+>>  drivers/regulator/sun20i-regulator.c | 150 +++++++++++++++++++++++++++
+>>  3 files changed, 159 insertions(+)
+>>  create mode 100644 drivers/regulator/sun20i-regulator.c
+>>
+>> diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
+>> index 070e4403c6c2..8480532114c1 100644
+>> --- a/drivers/regulator/Kconfig
+>> +++ b/drivers/regulator/Kconfig
+>> @@ -1280,6 +1280,14 @@ config REGULATOR_STW481X_VMMC
+>>  	  This driver supports the internal VMMC regulator in the STw481x
+>>  	  PMIC chips.
+>>  
+>> +config REGULATOR_SUN20I
+>> +	tristate "Allwinner D1 internal LDOs"
+>> +	depends on ARCH_SUNXI || COMPILE_TEST
+>> +	select MFD_SYSCON
+>> +	default ARCH_SUNXI
+>> +	help
+>> +	  This driver supports the internal LDOs in the Allwinner D1 SoC.
+>> +
+>>  config REGULATOR_SY7636A
+>>  	tristate "Silergy SY7636A voltage regulator"
+>>  	depends on MFD_SY7636A
+>> diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
+>> index 5962307e1130..8e9b5a21123d 100644
+>> --- a/drivers/regulator/Makefile
+>> +++ b/drivers/regulator/Makefile
+>> @@ -150,6 +150,7 @@ obj-$(CONFIG_REGULATOR_STM32_VREFBUF) += stm32-vrefbuf.o
+>>  obj-$(CONFIG_REGULATOR_STM32_PWR) += stm32-pwr.o
+>>  obj-$(CONFIG_REGULATOR_STPMIC1) += stpmic1_regulator.o
+>>  obj-$(CONFIG_REGULATOR_STW481X_VMMC) += stw481x-vmmc.o
+>> +obj-$(CONFIG_REGULATOR_SUN20I) += sun20i-regulator.o
+>>  obj-$(CONFIG_REGULATOR_SY7636A) += sy7636a-regulator.o
+>>  obj-$(CONFIG_REGULATOR_SY8106A) += sy8106a-regulator.o
+>>  obj-$(CONFIG_REGULATOR_SY8824X) += sy8824x.o
+>> diff --git a/drivers/regulator/sun20i-regulator.c b/drivers/regulator/sun20i-regulator.c
+>> new file mode 100644
+>> index 000000000000..031bcc3dee50
+>> --- /dev/null
+>> +++ b/drivers/regulator/sun20i-regulator.c
+>> @@ -0,0 +1,150 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +//
+>> +// Copyright (c) 2021-2022 Samuel Holland <samuel@sholland.org>
+>> +//
+>> +
+>> +#include <linux/mfd/syscon.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of_device.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/regmap.h>
+>> +#include <linux/regulator/driver.h>
+>> +
+>> +#define SUN20I_SYS_LDO_CTRL_REG		0x150
+>> +
+>> +struct sun20i_regulator_data {
+>> +	const struct regulator_desc	*descs;
+>> +	unsigned int			ndescs;
+>> +};
+>> +
+>> +/* regulator_list_voltage_linear() modified for the non-integral uV_step. */
+>> +static int sun20i_d1_system_ldo_list_voltage(struct regulator_dev *rdev,
+>> +					     unsigned int selector)
+>> +{
+>> +	const struct regulator_desc *desc = rdev->desc;
+>> +	unsigned int uV;
+>> +
+>> +	if (selector >= desc->n_voltages)
+>> +		return -EINVAL;
+>> +
+>> +	uV = desc->min_uV + (desc->uV_step * selector);
+>> +
+>> +	/* Produce correctly-rounded absolute voltages. */
+>> +	return uV + ((selector + 1 + (desc->min_uV % 4)) / 3);
+>> +}
+>> +
+>> +static const struct regulator_ops sun20i_d1_system_ldo_ops = {
+>> +	.list_voltage		= sun20i_d1_system_ldo_list_voltage,
+>> +	.map_voltage		= regulator_map_voltage_ascend,
+>> +	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
+>> +	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
+>> +};
+>> +
+>> +static const struct regulator_desc sun20i_d1_system_ldo_descs[] = {
+>> +	{
+>> +		.name		= "ldoa",
+>> +		.supply_name	= "ldo-in",
+>> +		.of_match	= "ldoa",
+>> +		.ops		= &sun20i_d1_system_ldo_ops,
+>> +		.type		= REGULATOR_VOLTAGE,
+>> +		.owner		= THIS_MODULE,
+>> +		.n_voltages	= 32,
+>> +		.min_uV		= 1600000,
+>> +		.uV_step	= 13333, /* repeating */
+> 
+> So while I see that those values are probably the closest we can with a
+> simple linear algorithm, they first two values seem to be slightly off
+> from those values in the manual:
+> sel diff algor  manual
+>  0:   7 (1.600 - 1.593)
+>  1:   6 (1.613 - 1.607)
+> Oddly enough the rest of the values are spot on.
+> I don't know if this really matters, or if the LDOs are actually
+> accurate enough to that level of precision, or if it's a manual bug, or
+> if we really care at all, but it might warrant some comment, I guess?
+> I just got triggered by the min value not being the first value in the
+> list.
 
-> -----Original Message-----
-> From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@linaro.org]
-> Sent: 25 November 2022 16:52
-> To: Lee Jones <lee@kernel.org>; Rob Herring <robh+dt@kernel.org>;
-Krzysztof
-> Kozlowski <krzysztof.kozlowski+dt@linaro.org>; Alim Akhtar
-> <alim.akhtar@samsung.com>; devicetree@vger.kernel.org; linux-
-> kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
-linux-samsung-
-> soc@vger.kernel.org
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>; Sriranjani P
-> <sriranjani.p@samsung.com>; Chanho Park <chanho61.park@samsung.com>;
-> Sam Protsenko <semen.protsenko@linaro.org>
-> Subject: [PATCH 4/4] dt-bindings: soc: samsung: exynos-sysreg: add clocks
-for
-> Exynos850
-> 
-> Exynos850 has dedicated clock for accessing SYSREGs.  Allow it, even
-though
-> Linux currently does not enable them and relies on bootloader.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Cc: Sriranjani P <sriranjani.p@samsung.com>
-> Cc: Chanho Park <chanho61.park@samsung.com>
-> Cc: Sam Protsenko <semen.protsenko@linaro.org>
-> ---
+Whoops, I did the math based on the default 1.8 V and after some spot
+checks assumed the range was linear. I should have noticed this.
 
-Reviewed-by: Sriranjani P <sriranjani.p@samsung.com>
+Conveniently, LDOB is unused on most boards, so I can measure the range
+directly. The INA219 I'm using gives me a 4 mV LSB in its most precise
+mode, which I'm averaging to get 2 mV precision.
 
->  .../soc/samsung/samsung,exynos-sysreg.yaml        | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git
-> a/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-
-> sysreg.yaml
-> b/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-
-> sysreg.yaml
-> index 42357466005e..27cea934a286 100644
-> --- a/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-
-> sysreg.yaml
-> +++ b/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-
-> sysre
-> +++ g.yaml
-> @@ -36,10 +36,25 @@ properties:
->    reg:
->      maxItems: 1
-> 
-> +  clocks:
-> +    maxItems: 1
-> +
->  required:
->    - compatible
->    - reg
-> 
-> +allOf:
-> +  - if:
-> +      not:
-> +        properties:
-> +          compatible:
-> +            contains:
-> +              enum:
-> +                - samsung,exynos850-sysreg
-> +    then:
-> +      properties:
-> +        clocks: false
-> +
->  additionalProperties: false
-> 
->  examples:
-> --
-> 2.34.1
+reg     measure manual  diff
+============================
+0x00:   1.160   1.167   -7
+0x08:   1.266   1.273   -7
+0x09:   1.280   1.287   -7
+0x0a:   1.292   1.300   -8
+0x0b:   1.306   1.313   -7
+0x0c:   1.320   1.327   -7
+0x0d:   1.332   1.340   -8
+0x0e:   1.346   1.353   -7
+0x0f:   1.360   1.367   -7
+0x10:   1.372   1.380   -8
+0x18:   1.480   1.487   -7
+0x1c:   1.532   1.540   -8
+0x1d:   1.546   1.553   -7
+0x1e:   1.560   1.567   -7
+0x1f:   1.572   1.580   -8
+0x20:   1.586   1.593   -7 <<
+0x21:   1.600   1.607   -7 <<
+0x22:   1.620   1.627   -7 <<
+0x23:   1.632   1.640   -8 <<
+0x24:   1.646   1.653   -7
+0x25:   1.660   1.667   -7
+0x26:   1.672   1.680   -8
+0x27:   1.686   1.693   -7
+0x28:   1.700   1.707   -7
+0x30:   1.806   1.813   -7
+0x38:   1.912   1.920   -8
+0x3e:   1.992   2.000   -8
+0x3f:   2.006   2.013   -7
 
+So it looks like the LDOs are accurate, and the manual is quite correct.
+
+I'm willing to blame the constant offset on my crude test setup.
+
+>> +		.vsel_reg	= SUN20I_SYS_LDO_CTRL_REG,
+>> +		.vsel_mask	= GENMASK(7, 0),
+>> +	},
+>> +	{
+>> +		.name		= "ldob",
+>> +		.supply_name	= "ldo-in",
+>> +		.of_match	= "ldob",
+>> +		.ops		= &sun20i_d1_system_ldo_ops,
+>> +		.type		= REGULATOR_VOLTAGE,
+>> +		.owner		= THIS_MODULE,
+>> +		.n_voltages	= 64,
+>> +		.min_uV		= 1166666,
+>> +		.uV_step	= 13333, /* repeating */
+> 
+> For LDOB it seems to be worse, as the second half is constantly off by
+> what looks like 6.666mV:
+> sel diff algor  manual
+> ...
+> 32:   0 (1.593 - 1.593)
+> 33:   0 (1.607 - 1.607)
+> 34:  -7 (1.620 - 1.627)
+> 35:  -7 (1.633 - 1.64)
+> 36:  -6 (1.647 - 1.653)
+> ...
+> 63:  -6 (2.007 - 2.013)
+> The first half is correct, though. Closer inspection reveals that
+> everything with bit 5 set is exactly the same as LDOA. Maybe we can use
+> that to our advantage?
+
+Since I already have a custom .list_voltage implementation, I think the
+simplest solution is:
+
+	if (uV >= 1620000)
+		uV += 7000;
+
+or similar to get the rounding right.
+
+Regards,
+Samuel
+
+> Cheers,
+> Andre
+> 
+>> +		.vsel_reg	= SUN20I_SYS_LDO_CTRL_REG,
+>> +		.vsel_mask	= GENMASK(15, 8),
+>> +	},
+>> +};
+>> +
+>> +static const struct sun20i_regulator_data sun20i_d1_system_ldos = {
+>> +	.descs	= sun20i_d1_system_ldo_descs,
+>> +	.ndescs	= ARRAY_SIZE(sun20i_d1_system_ldo_descs),
+>> +};
+>> +
+>> +static struct regmap *sun20i_regulator_get_regmap(struct device *dev)
+>> +{
+>> +	struct regmap *regmap;
+>> +
+>> +	/*
+>> +	 * First try the syscon interface. The system control device is not
+>> +	 * compatible with "syscon", so fall back to getting the regmap from
+>> +	 * its platform device. This is ugly, but required for devicetree
+>> +	 * backward compatibility.
+>> +	 */
+>> +	regmap = syscon_node_to_regmap(dev->parent->of_node);
+>> +	if (!IS_ERR(regmap))
+>> +		return regmap;
+>> +
+>> +	regmap = dev_get_regmap(dev->parent, NULL);
+>> +	if (regmap)
+>> +		return regmap;
+>> +
+>> +	return ERR_PTR(-EPROBE_DEFER);
+>> +}
+>> +
+>> +static int sun20i_regulator_probe(struct platform_device *pdev)
+>> +{
+>> +	const struct sun20i_regulator_data *data;
+>> +	struct device *dev = &pdev->dev;
+>> +	struct regulator_config config;
+>> +	struct regmap *regmap;
+>> +
+>> +	data = of_device_get_match_data(dev);
+>> +	if (!data)
+>> +		return -EINVAL;
+>> +
+>> +	regmap = sun20i_regulator_get_regmap(dev);
+>> +	if (IS_ERR(regmap))
+>> +		return dev_err_probe(dev, PTR_ERR(regmap), "Failed to get regmap\n");
+>> +
+>> +	config = (struct regulator_config) {
+>> +		.dev	= dev,
+>> +		.regmap	= regmap,
+>> +	};
+>> +
+>> +	for (unsigned int i = 0; i < data->ndescs; ++i) {
+>> +		const struct regulator_desc *desc = &data->descs[i];
+>> +		struct regulator_dev *rdev;
+>> +
+>> +		rdev = devm_regulator_register(dev, desc, &config);
+>> +		if (IS_ERR(rdev))
+>> +			return PTR_ERR(rdev);
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static const struct of_device_id sun20i_regulator_of_match[] = {
+>> +	{
+>> +		.compatible = "allwinner,sun20i-d1-system-ldos",
+>> +		.data = &sun20i_d1_system_ldos,
+>> +	},
+>> +	{ },
+>> +};
+>> +MODULE_DEVICE_TABLE(of, sun20i_regulator_of_match);
+>> +
+>> +static struct platform_driver sun20i_regulator_driver = {
+>> +	.probe	= sun20i_regulator_probe,
+>> +	.driver	= {
+>> +		.name		= "sun20i-regulator",
+>> +		.of_match_table	= sun20i_regulator_of_match,
+>> +	},
+>> +};
+>> +module_platform_driver(sun20i_regulator_driver);
+>> +
+>> +MODULE_AUTHOR("Samuel Holland <samuel@sholland.org>");
+>> +MODULE_DESCRIPTION("Allwinner D1 internal LDO driver");
+>> +MODULE_LICENSE("GPL");
+> 
 
