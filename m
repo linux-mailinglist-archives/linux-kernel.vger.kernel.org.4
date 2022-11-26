@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01338639661
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 15:18:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F107963965E
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 15:17:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbiKZOSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 09:18:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60044 "EHLO
+        id S229585AbiKZORy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 09:17:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiKZORv (ORCPT
+        with ESMTP id S229536AbiKZORv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 26 Nov 2022 09:17:51 -0500
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F2B18E3B;
-        Sat, 26 Nov 2022 06:17:51 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BC020340;
+        Sat, 26 Nov 2022 06:17:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669472271; x=1701008271;
+  t=1669472269; x=1701008269;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=tzQvOKWf3TMH/Dd1rfQ3NBBo0TXSVQc4zhcPWFce9AM=;
-  b=n0R/em1l38MVw5om6c33CY5DdL3jzuP5MyoXvcM0onYB+NKGbZDneGPI
-   LTR7GQST1iow0kvbmrGkR6q+/MD1V6ZtXqvMsFfUkbwhSWA4klMxmLC6r
-   S5BTqD3CY8YivGVAadEJjnM7KZvRNt2jDlPeU7d5Si/dTn6FZBPy8ZK2C
-   z/8Keq8qZSe1M2CMi70sG1kFs03tHgawcQvgtwUb4qAdMz0QCOdYFPEJF
-   byBes19Q5sZzqjFNpXkKZdxyLOPiCI1ckss2q29GZz9U+Tt8vWYB36NpV
-   iiosdMv7FyR9ZlbFGv1gdCGxhyISlfBo1hq7EZN81wotF0KtCSZfTWtCq
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10543"; a="315755387"
+  bh=9dgWdr0fMMMvj7yoBb+AISsyHcjZYsN6cesstQv37Zk=;
+  b=P4zKFPbzKKze27TfI+fLaFB1YKyXsdjKEB2jELB/apvU2PCSBsRtRfjV
+   Nzz6OWKYgB0twMtD2GlHMB+sCkWHSz95dyZO2255wjcpXuJyUxEkBx5mD
+   sSjPvfCHkbY1B4WjhoBqdxACHJHJVs81Vn9cc607rw8swWzrHua1+ZBLH
+   7c8Wn5njEDifILL9sAnlyxOf3jLoFl2S5pvVvz1N32bCoS2HL1M0l6Dcv
+   ja4xIicvOLTou6g335J64bNIHbuw8E96Ba3h/mEPLx807DsAytVrR+lV+
+   tCsoKqBl4T2OlbgvATsSq/c9sHSnqYmi2OBfbcylGHnjSXPj99RlkbQQ2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10543"; a="315755384"
 X-IronPort-AV: E=Sophos;i="5.96,196,1665471600"; 
-   d="scan'208";a="315755387"
+   d="scan'208";a="315755384"
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
   by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2022 06:17:47 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10543"; a="971800596"
+X-IronPort-AV: E=McAfee;i="6500,9779,10543"; a="971800594"
 X-IronPort-AV: E=Sophos;i="5.96,196,1665471600"; 
-   d="scan'208";a="971800596"
+   d="scan'208";a="971800594"
 Received: from black.fi.intel.com ([10.237.72.28])
   by fmsmga005.fm.intel.com with ESMTP; 26 Nov 2022 06:17:44 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 29EC03B3; Sat, 26 Nov 2022 16:18:11 +0200 (EET)
+        id 33573184; Sat, 26 Nov 2022 16:18:11 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -50,9 +50,9 @@ Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 4/5] rtc: isl12022: Join string literals back
-Date:   Sat, 26 Nov 2022 16:18:05 +0200
-Message-Id: <20221126141806.62205-4-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 5/5] rtc: isl12022: sort header inclusion alphabetically
+Date:   Sat, 26 Nov 2022 16:18:06 +0200
+Message-Id: <20221126141806.62205-5-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221126141806.62205-1-andriy.shevchenko@linux.intel.com>
 References: <20221126141806.62205-1-andriy.shevchenko@linux.intel.com>
@@ -68,40 +68,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For easy grepping on debug purposes join string literals back in
-the messages.
-
-While at it, drop __func__ parameter from unique enough dev_dbg()
-message as Dynamic Debug can retrieve this at run time.
+Sort header inclusion alphabetically for better maintenance.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/rtc/rtc-isl12022.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ drivers/rtc/rtc-isl12022.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/rtc/rtc-isl12022.c b/drivers/rtc/rtc-isl12022.c
-index 77b4763f2a70..ee38c5067ea8 100644
+index ee38c5067ea8..e68a79b5e00e 100644
 --- a/drivers/rtc/rtc-isl12022.c
 +++ b/drivers/rtc/rtc-isl12022.c
-@@ -143,16 +143,12 @@ static int isl12022_rtc_read_time(struct device *dev, struct rtc_time *tm)
+@@ -8,14 +8,14 @@
+  * by Alessandro Zummo <a.zummo@towertech.it>.
+  */
  
- 	if (buf[ISL12022_REG_SR] & (ISL12022_SR_LBAT85 | ISL12022_SR_LBAT75)) {
- 		dev_warn(dev,
--			 "voltage dropped below %u%%, "
--			 "date and time is not reliable.\n",
-+			 "voltage dropped below %u%%, date and time is not reliable.\n",
- 			 buf[ISL12022_REG_SR] & ISL12022_SR_LBAT85 ? 85 : 75);
- 	}
+-#include <linux/i2c.h>
+ #include <linux/bcd.h>
+-#include <linux/rtc.h>
+-#include <linux/slab.h>
+-#include <linux/module.h>
+ #include <linux/err.h>
+-#include <linux/regmap.h>
+ #include <linux/hwmon.h>
++#include <linux/i2c.h>
++#include <linux/module.h>
++#include <linux/regmap.h>
++#include <linux/rtc.h>
++#include <linux/slab.h>
  
- 	dev_dbg(dev,
--		"%s: raw data is sec=%02x, min=%02x, hr=%02x, "
--		"mday=%02x, mon=%02x, year=%02x, wday=%02x, "
--		"sr=%02x, int=%02x",
--		__func__,
-+		"raw data is sec=%02x, min=%02x, hr=%02x, mday=%02x, mon=%02x, year=%02x, wday=%02x, sr=%02x, int=%02x",
- 		buf[ISL12022_REG_SC],
- 		buf[ISL12022_REG_MN],
- 		buf[ISL12022_REG_HR],
+ #include <asm/byteorder.h>
+ 
 -- 
 2.35.1
 
