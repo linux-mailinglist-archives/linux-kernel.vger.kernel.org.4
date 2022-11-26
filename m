@@ -2,134 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F8E8639691
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 15:41:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9523639694
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 15:42:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbiKZOlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 09:41:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45760 "EHLO
+        id S229652AbiKZOmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 09:42:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiKZOlm (ORCPT
+        with ESMTP id S229621AbiKZOmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 09:41:42 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1B413D67
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 06:41:41 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id e15so405576ljl.7
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 06:41:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LcpZ2v4R4rV4js+pgJmRUOcThZTfcN01I5uv2UUj3Pk=;
-        b=gIr8xGUAH2211xt8AE/1c3ib2vUjORyW7/lrZMgJ1sgEezi/tcWKaWG/HWDhCe10t9
-         n+NWIn6IETO3EDXz1TQ94L4F8AmqZmmK+KtG1IQVLgVbr3p+7DYoLVKmO1XRjuXhRDKO
-         VCXTRat6DbzSu5GzBxLNkVwR6HhFya5e7L7Bjfiq4rO5D/3dyhzd/SJzA1cq0lc4ejfC
-         Vh/6pO5x/MZco7gEzDxjVt8qL1xfsqOQ+tR3WpZ+tJ7BmJ+RcXFn7MdX/qcrMrru3odz
-         6YOR6Flgmyd7MjOPuxx6a0oPPS0QUz+VHYhUUSRQNHNJkBtEujhDDthwxnCPXJzX+ajz
-         ud9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LcpZ2v4R4rV4js+pgJmRUOcThZTfcN01I5uv2UUj3Pk=;
-        b=GrR+pGm3CbTmrGKzFI1pCs6KMJgzk1hYnUDynIRvmikGwPO4uIgRFxAZkWALWGvC6p
-         SJtkAl4WOG+TEMiPXi3zFiqNkmEYQrOz4Autee1RVJj71jGpe6BZeYBNVFO3jtqcN9Gg
-         5bBCp4+hpd5gJFrLgWKUAt4SEcMCOdGN4oinpumek1b94N3QjJXTzSyxA79RvdQnDZyq
-         5pmaw7kF627cySk03qBaYaXd5NjQKiUYdagfnXx4QtLWbfSEHXSrwhco9zf+ppu46MvD
-         oopPQq69Lfv3h89sBn2wOu12OF9T/3XlEQ3rCw034PYLuSNgqYpPOcJuP/nY+BER+/Nc
-         V6+w==
-X-Gm-Message-State: ANoB5pkP7Sl817C3mUd1iORnntv1nKkWUU27G8bh9yrNpBxu4m35s8zW
-        /Tv4LeEc++qkoZdjyWiDIWz2Kg==
-X-Google-Smtp-Source: AA0mqf73mQkLWU9ZPxx/9Q10S5YyT13jjhDYgerD8FIcIYglklF652qu6cW2/15lvocuVKeSbGpPMg==
-X-Received: by 2002:a05:651c:906:b0:279:1349:b2e2 with SMTP id e6-20020a05651c090600b002791349b2e2mr13490093ljq.382.1669473700019;
-        Sat, 26 Nov 2022 06:41:40 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id f30-20020a19381e000000b004b177293a8dsm946364lfa.210.2022.11.26.06.41.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Nov 2022 06:41:39 -0800 (PST)
-Message-ID: <4f562df6-99ce-34fd-defb-217f2cdb5ba6@linaro.org>
-Date:   Sat, 26 Nov 2022 15:41:38 +0100
+        Sat, 26 Nov 2022 09:42:39 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09938BD0;
+        Sat, 26 Nov 2022 06:42:34 -0800 (PST)
+Received: from [192.168.1.139] ([37.4.248.27]) by mrelayeu.kundenserver.de
+ (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MiJhQ-1oUqQd2vmY-00fQ6v; Sat, 26 Nov 2022 15:42:13 +0100
+Message-ID: <fc2fb888-7742-123c-69c9-cdb156ff2d9f@i2se.com>
+Date:   Sat, 26 Nov 2022 15:42:12 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v3 07/18] dt-bindings: msm: dsi-controller-main: Fix clock
- declarations
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 00/14] staging: vc04_services: bcm2835-isp support
+To:     Umang Jain <umang.jain@ideasonboard.com>,
+        linux-media@vger.kernel.org, kernel-list@raspberrypi.com,
+        linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-staging@lists.linux.dev,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>
+Cc:     Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Naushir Patuck <naush@raspberrypi.com>,
+        David Plowman <david.plowman@raspberrypi.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+References: <20221121214722.22563-1-umang.jain@ideasonboard.com>
 Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
-        dmitry.baryshkov@linaro.org, sean@poorly.run, airlied@gmail.com,
-        daniel@ffwll.ch, robh+dt@kernel.org, dianders@chromium.org,
-        david@ixit.cz, krzysztof.kozlowski+dt@linaro.org,
-        swboyd@chromium.org, konrad.dybcio@somainline.org,
-        agross@kernel.org, andersson@kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20221124004801.361232-1-bryan.odonoghue@linaro.org>
- <20221124004801.361232-8-bryan.odonoghue@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221124004801.361232-8-bryan.odonoghue@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <20221121214722.22563-1-umang.jain@ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:8slHj8WkDJRsqxXk3QgZmn+S+i3YLVteMlITc3PvYqzk28jedC4
+ rj+rgBgwyecIyhEY4Efl+Zfh71iJxNfpynuMMa2KESZQD17AFit04t2abBWBCsfPtUHGl0e
+ 6uH8OtSC1EzFomt97H52CLwfecfNMdCB0RMWx0yX/1/EYq22l5kuU98K6nekJY6pw5PsViJ
+ UJpNLSKyHBWqQ09sF1UlA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:iN8eChRQexM=:3hd2ZDNNSqzS7KHNr8NdqF
+ LQ/eFh9Fti6fu91n8lVXq0EOySvmQcpWmhNU/LC7XxpOoqCkWNsXuM/wZ75+puxH8ekhsaVG2
+ oRCt4Ir84rExF11FFCnSHBkoHpTazm7tmUnaZalBcJIC2zOJfZHUdy4SLgu0Q00fa4ZIrIPhS
+ qQa9sGtYfbkuBqTVAcT+xXjdJteXbYtAyfkjNy3NoBHQZfBgHCguKmhNmeFqwwdtcb1S16Y5k
+ qZc3pu6zoWKHwWoOQkdcKa2WQ7xjatRyWmrxZsjE0DpQoyTeRlO9PZNjIrTUs9vYQWjEN+DFG
+ Hzh2JK+SMckmUUGb1E5s/qJQPBdV21ZwgyY8zqehK71NZ8czVB/uNZXwoa+pqivKvCOVW87tz
+ etzKXvISd0JF5TdSA960dS5ydQf7YQMZGoaMlr2pH0BRRiYVzVwJZQFjFqtLKVWVUIC6LYeXo
+ tRHdCvbU9+UhB6v0dGphWRCcM1dwuVNuMrRtyH1s8jMudszKh+9KKu6GtL+njuOtPnCdlmXwG
+ LNOjeKF+ynPBWpy8rCa8bTwKKHUGNKO8ZR5/faASSaeGqzz8j+Ha53RDoDomXdladzw/Cd8Kg
+ jTrMAm1/KaUtCWd36d7/3ys2sgywHIc0Cm7UL32NhtwtokEETFpHAbGiKWCRW/7Dj/gd4jWOA
+ R26SPQEU/SsLsqDPPdAFE4x70CE+BtnvnMyRr9G62OTjNe+m4g3ggLE/NNZGK6PlSB3qCDD2r
+ 29y5mlmFZK+5RHFemcVNxZvewO5N3Zr92kfXCuM2rYAY3htcZFJOXpOCZEdjHcdqPAUGmMf3y
+ pDcqGpJUlrlx2sQyo0is3Xaj/lufg==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/11/2022 01:47, Bryan O'Donoghue wrote:
-> When converting from .txt to .yaml dt-binding descriptions we appear to
-> have missed some of the previous detail on the number and names of
-> permissible clocks.
-> 
-> Fix this by listing the clock descriptions against the clock names at a
-> high level.
-> 
-> Fixes: 4dbe55c97741 ("dt-bindings: msm: dsi: add yaml schemas for DSI bindings")
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
->  .../display/msm/dsi-controller-main.yaml      | 20 ++++++++++++-------
->  1 file changed, 13 insertions(+), 7 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
-> index 0c09b9230b7f5..0fbb0c04f4b06 100644
-> --- a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
-> +++ b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
-> @@ -36,13 +36,19 @@ properties:
->      maxItems: 1
->  
->    clocks:
-> -    items:
-> -      - description: Display byte clock
-> -      - description: Display byte interface clock
-> -      - description: Display pixel clock
-> -      - description: Display core clock
-> -      - description: Display AHB clock
-> -      - description: Display AXI clock
-> +    description: |
-> +      Several clocks are used, depending on the variant. Typical ones are::
-> +       - bus:: Display AHB clock.
-> +       - byte:: Display byte clock.
-> +       - byte_intf:: Display byte interface clock.
-> +       - core:: Display core clock.
-> +       - core_mss:: Core MultiMedia SubSystem clock.
-> +       - iface:: Display AXI clock.
-> +       - mdp_core:: MDP Core clock.
-> +       - mnoc:: MNOC clock
-> +       - pixel:: Display pixel clock.
-> +    minItems: 6
-> +    maxItems: 9
+Hi Umang,
 
-I don't understand why this is separate from your previous patch. At
-patch #5 this part become wrong, so it cannot be separate, obviously.
-IOW, Your patch #5 is buggy without this piece.
+Am 21.11.22 um 22:47 schrieb Umang Jain:
+> This series aims to upport bcm2835-isp from the RPi kernel [1] and is a
+> independent subset of earlier series [2] posted to upport CSI-2/CCP2
+> receiver IP core("Unicam) + the ISP driver found in BCM283x and compatible
+> SoCs (namely BCM2711). Unicam is still under active development to work
+> with multistream support to get into mainline. Hence only the ISP driver
+> will remain the primary area of this series.
 
-Best regards,
-Krzysztof
+thanks for working on this. But honestly i would prefer that vchiq comes 
+out of staging before adding more features. As Greg said some time ago 
+staging is not a place to "dump code and run away". These new files are 
+in the same bad shape as the rest of vc04 before the clean-up here in 
+staging started.
+
+I agree that VCSM is on the TODO list for vchiq, but this driver is not 
+necessary for making bcm2835-audio & bcm2835-camera leave staging. It 
+just binds more resources on a new feature.
+
+Unfortuntately i hadn't much time to work on vchiq by myself.
+
+Just my two cents
+Stefan
 
