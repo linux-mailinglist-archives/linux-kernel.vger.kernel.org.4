@@ -2,55 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE0D2639851
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 22:53:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99C54639855
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 22:54:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbiKZVxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 16:53:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49070 "EHLO
+        id S229554AbiKZVyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 16:54:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiKZVxs (ORCPT
+        with ESMTP id S229453AbiKZVyK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 16:53:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F892C2;
-        Sat, 26 Nov 2022 13:53:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 587C360B7E;
-        Sat, 26 Nov 2022 21:53:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A697C433D6;
-        Sat, 26 Nov 2022 21:53:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669499625;
-        bh=OWkY+Q2AWHHXFpSYHf6WVJ2BPlgIehXKQ01/N2rvGaU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W1v53UmAPr8Bf3PvMGy4A8+6b9BD+005Qgy3zdIdZmS55GXSn8lUT/WqsuR+yVoWh
-         NPfZCiKmmh+Pmr2zOMAaYsfdhNCeAT5W0ydBKcMrIyutVjIQwteCc5KRevYDfDH9gO
-         a9cIi9crJmND0aAgqH4BjwKlSE9SqeVOAqU3HYixofEsYxQ/2bHaxDvNh2SpJY6vRJ
-         0Vy4RRawgdZJK5CT8SKTXEuavb/DBwM0ahJOhLw6eDy+6sZnz7xzadI9GhrTXYp/cX
-         yn5TR+Trin/61/PPNWy7BgYWir4NukjFrkTErghEBZCKIKM1O50neo73BZxAQLKMV1
-         mjkdslwV+3n8A==
-Date:   Sat, 26 Nov 2022 16:53:42 -0500
-From:   William Breathitt Gray <wbg@kernel.org>
-To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Cc:     william.gray@linaro.org, jic23@kernel.org,
-        alexandre.torgue@foss.st.com, olivier.moysan@foss.st.com,
-        linux-iio@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] counter: stm32-lptimer-cnt: fix the check on arr and cmp
- registers update
-Message-ID: <Y4KK5tck2aCdKWXF@ishi>
-References: <20221123133609.465614-1-fabrice.gasnier@foss.st.com>
+        Sat, 26 Nov 2022 16:54:10 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D53717883
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 13:54:09 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id l67so9007823ybl.1
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 13:54:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zqe81NVe4wdrr2qX6L4lKfxkGOclAd0cUZt1hvJHh6k=;
+        b=KSesdFAk+hx2US2lXbKFOn0Csy1YQU/Q4fmPt3IHZVJjZQh6iVjthC8P0w9jg8Weim
+         Nzxu6WUEVv2q/uHzt0SwvOZViEwISSJW+DSBA8jsnM4qt/56XSpR5l23VkH+cxImmgLU
+         39e0RqgGVD3EG49hxlE4QkbCmSixA4q17vObjYhW39wAZgn6vclsseAnpff6Pg7uDK8Z
+         zs0yxHw7TkG92GRjJOd3S01JujZqsZtTyEBznfSjOiD6J49b6phBn/HEZVDeZCZQtecx
+         3MnevQ2ZREIW455Qx4UcJiRG4N4Rx/g/BWdFCRC11O2VNT+l2Md1ZGhxNQJnebIEuc4T
+         M5tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Zqe81NVe4wdrr2qX6L4lKfxkGOclAd0cUZt1hvJHh6k=;
+        b=dckAf1CBHZSy+HRAKqurMstw3lDxCM+1WOISxvfIHTfV59GX5e4vCZBx+GDFA50qPW
+         XgEGLUrSDcvnKDqbyxTODxV6UOBWwqT4D5BudNIH0Ccu5zPRpORUuiEzRDLKlvpwSd6D
+         bULwtdVzwh/8QzA297w3Vhs0k1ChI5Y1AqXgx3HUx7Wyi12MvVX6kOhf2sLOezQygjzn
+         dt+PaISG4FH/OTvXF1r9wel+zXIdU4/2CZ6blggYxrJ+rqVTNXQRZ96tmL1fRlPq6QhK
+         U6OuQMB9DIs57X7mqdSAVHc4Pwyyf7UoD07PaQEaQACXtWBxgpDVYB7gRl3KU+gYMA72
+         RXqg==
+X-Gm-Message-State: ANoB5pmTLIyAuIz44IDstwG5TXqOFV2n2I/Li6ey/YI7ktAzSMbqOAc/
+        cOczworTIooDP59GntR6PsB91PaAhl/RSghw70DLCNcoKtbzyg==
+X-Google-Smtp-Source: AA0mqf78FRQ1441202IFUwXz8NzZChqqyuytSPBEfAvEooJvd057yNmqCvNaVpwYu33ZVh/g47KT0G8ilKiWDJ9YkDE=
+X-Received: by 2002:a25:c7c8:0:b0:6bd:1ca1:afd6 with SMTP id
+ w191-20020a25c7c8000000b006bd1ca1afd6mr40579650ybe.43.1669499648876; Sat, 26
+ Nov 2022 13:54:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="u770lf6WZ1x5I9rX"
-Content-Disposition: inline
-In-Reply-To: <20221123133609.465614-1-fabrice.gasnier@foss.st.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20221123152001.694546-1-abel.vesa@linaro.org> <20221123152001.694546-3-abel.vesa@linaro.org>
+ <CACRpkdZtkHCkfUAcezSJvmei=HOezK6oyx+4C5kBrEtU+vAB-g@mail.gmail.com>
+ <fecb2dd6-9be2-78dc-4598-cc338fbdc2a2@linaro.org> <CACRpkdZJaz9BEorQa7dTNkgTkwZjJNB-MWrpKFxHRgdsf3xJww@mail.gmail.com>
+ <8602cacd-f552-e843-5c17-681b099069a3@linaro.org>
+In-Reply-To: <8602cacd-f552-e843-5c17-681b099069a3@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 26 Nov 2022 22:53:57 +0100
+Message-ID: <CACRpkdbqjNJH_QvWyEPceUUxRQ2tOpErNOWA0rg5GNwq7PfUFQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] dt-bindings: pinctrl: qcom,tlmm-common: document
+ i2c pull property
+To:     neil.armstrong@linaro.org
+Cc:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,60 +76,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Nov 25, 2022 at 1:40 PM <neil.armstrong@linaro.org> wrote:
 
---u770lf6WZ1x5I9rX
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> As I understood, it enables an "I2C resistor" on the pin, removing the need
+> of an external pull-up resistor on the line.
+>
+> I assume the classical pull-up bias is not strong enough to replace an actual
+> resistor on the PCB.
 
-On Wed, Nov 23, 2022 at 02:36:09PM +0100, Fabrice Gasnier wrote:
-> The ARR (auto reload register) and CMP (compare) registers are
-> successively written. The status bits to check the update of these
-> registers are polled together with regmap_read_poll_timeout().
-> The condition to end the loop may become true, even if one of the register
-> isn't correctly updated.
-> So ensure both status bits are set before clearing them.
->=20
-> Fixes: d8958824cf07 ("iio: counter: Add support for STM32 LPTimer")
-> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+In that case I think this should be an argument to bias-pull-up like:
 
-Applied to the counter-current branch of counter.git.
+bias-pull-up = <360000>;
 
-William Breathitt Gray
+Nominally the pull up is in ohms:
 
-> ---
->  drivers/counter/stm32-lptimer-cnt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/counter/stm32-lptimer-cnt.c b/drivers/counter/stm32-=
-lptimer-cnt.c
-> index d6b80b6dfc28..8439755559b2 100644
-> --- a/drivers/counter/stm32-lptimer-cnt.c
-> +++ b/drivers/counter/stm32-lptimer-cnt.c
-> @@ -69,7 +69,7 @@ static int stm32_lptim_set_enable_state(struct stm32_lp=
-tim_cnt *priv,
-> =20
->  	/* ensure CMP & ARR registers are properly written */
->  	ret =3D regmap_read_poll_timeout(priv->regmap, STM32_LPTIM_ISR, val,
-> -				       (val & STM32_LPTIM_CMPOK_ARROK),
-> +				       (val & STM32_LPTIM_CMPOK_ARROK) =3D=3D STM32_LPTIM_CMPOK_ARRO=
-K,
->  				       100, 1000);
->  	if (ret)
->  		return ret;
-> --=20
-> 2.25.1
->=20
+  bias-pull-up:
+    oneOf:
+      - type: boolean
+      - $ref: /schemas/types.yaml#/definitions/uint32
+    description: pull up the pin. Takes as optional argument on hardware
+      supporting it the pull strength in Ohm.
 
---u770lf6WZ1x5I9rX
-Content-Type: application/pgp-signature; name="signature.asc"
+Then the driver can choose to shunt in this extra I2C resistance
+from the resistance passed as argument. So no special property
+is needed, provided you can get an idea about the resistance
+provided here.
 
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCY4KK5gAKCRC1SFbKvhIj
-K+deAQC6ZXzAa3xdZuWBglzIaSy1YgvjYJNRFUV1M62hbScaawD8CRdlC/3xIFg2
-fNtfcSsKjpct2CfSS9TwcuYUKf32ewI=
-=xvBl
------END PGP SIGNATURE-----
-
---u770lf6WZ1x5I9rX--
+Yours,
+Linus Walleij
