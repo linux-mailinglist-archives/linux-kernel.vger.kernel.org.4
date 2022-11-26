@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13A916397FA
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 20:04:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD6136397FE
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 20:04:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiKZTEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 14:04:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50766 "EHLO
+        id S229514AbiKZTEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 14:04:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiKZTEB (ORCPT
+        with ESMTP id S229541AbiKZTEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 14:04:01 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F84F15825
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 11:03:59 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id be13so11550393lfb.4
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 11:03:59 -0800 (PST)
+        Sat, 26 Nov 2022 14:04:21 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA8B1571A
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 11:04:21 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id l8so8657254ljh.13
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 11:04:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=xJpb+WkZomiEzVr3FB9WEc1c2EffiMVPclC8fGlh3s8=;
-        b=dJgBE61y1TEmCKX4hb3KjCC5icYw0Rjg5nXCZ8mYvHKGctBqvJN8rZATLAR1yQEnjC
-         Sj2cN7RDvYRRE/War1xcr8lYTXHbs3Psnuq/vWD5tE4I8eI6dgfpi8E0lfomzrmWU6sZ
-         2dE6Nbr5P2Tc92US/3araYp2EOh42i9T2C4t+AD2IS58hrmctQN+Cfg35OhC89KV6nuq
-         sOEHmvct96WKxyM7JvA4rYNGLNZZwaWB0SScG44WRu2nS+kE7KPhUZz+TLijpLGD0T6I
-         5OOPFMmGhZDcXOQo4q5FmqQ0YpZUpflmtaLvpkhGR0b1q81ZCj1EcLNMD5binun0hcxX
-         XomA==
+        bh=TyzwzT+WwrFM+CjpxBOrQdYctaWDznQ/WphWUZdPKsE=;
+        b=n3nGOfkJIEMRNu8dMrJylxK8dzsUovN1mC5QFI3zH5t+97fR/wumj6LMMVM6+4tkBe
+         jOYlQ2hlJl1VLwtPTv2z/q7E8VW73XihCAsLWlEV4xiLcCS8pCJefjd8hAdUjwE8TLC/
+         vAR6LBXalz/tV4Rs7X9J5Hql7rBYy+1Ii3ZLes5v8dEyGjcGwjBZwGQQdzeo3CvQno/Z
+         9eyYfEVKFZGrk4HfsLkCxMx4gqq+0e9++MUWFFk+ldbahSEfDr377gar1g7a+h43BkoB
+         KMsicWCZWwuZp3h15mwp0G9EbXTitYnqV11GImesDkm90fWU7kSSFi+IoGgDv6AxGco/
+         HgCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xJpb+WkZomiEzVr3FB9WEc1c2EffiMVPclC8fGlh3s8=;
-        b=xX2dHmZbITV4QVUc73sNE8ylFWEhet30fMQNB+4M68NXOC+ZgPU7O0LDAFGk/ZoSnu
-         VLw+gwOJG0EnICMS0ezxXBxrVeNd+hZ00SRszUU4dryZ2++r6JZWO5/xycUEQg/c48o9
-         5w3bgfW4jhNtbWB0ngbOiRNp4r+O0nDQRTQ7K9YE9rHeufkPpsdg3UqGUWQ0f7kcbHWP
-         39DOaF6WhB6tnPNA8tKfuLFotsid8gbGAevcMDsA67XwUYE9chruim+4zSXzsCgxsbQ+
-         NuNRiSVrXN+Uq9ghlvO6wUPqzsrW5vCygfrMMNOKiS6QyK3hYBC4izz3jWLjz0cAKpRL
-         tYYA==
-X-Gm-Message-State: ANoB5plJGG/a0MOC1Yft8oVLUZ2Z7gFBJsGRBSc1XWdpHwN6JgXSTPca
-        uwOHdllRTFvGRIkl5NiQE0zPmw==
-X-Google-Smtp-Source: AA0mqf513EmQbR4frhOdq/bbbyDNS7W6KiUDqApBp0la6BHiUOGHcbkMtbdFVBN2q5QtFbEZzZ00vQ==
-X-Received: by 2002:ac2:4d44:0:b0:4b1:2aab:7cc0 with SMTP id 4-20020ac24d44000000b004b12aab7cc0mr9740288lfp.553.1669489437839;
-        Sat, 26 Nov 2022 11:03:57 -0800 (PST)
+        bh=TyzwzT+WwrFM+CjpxBOrQdYctaWDznQ/WphWUZdPKsE=;
+        b=lA7ppW6UiYSyk8lFR7E80CgfYuoe44m0StxLtzXSMuiohenJA2fGthc7K/iI1Kj+LN
+         oMzJ1uKBv9LHsrqsw1HdLnaXs6VuMPyMoOPYVGTm6AyrW7MLUPvWF0YZzpbWz9c/XJDF
+         DJUn/4D7n3A4hc8bt4OqAKdIxo60rOQEOxVS0BrTnfv1Fs78wWfe3Qxo+pdXOpycs5yd
+         nC9CMl5npSs4yP8ujDU7kWzqaWVSBrKn6p6N19DVvimgPXSYb90UGA1xIqWnl1DnyvK+
+         U2CzsXZwRTHjx4wfMDc90UEl3YFX8YzY7ZD4QS2AgBdJ0Mx/lw/M0yOVDKSy37MYu42o
+         NUpQ==
+X-Gm-Message-State: ANoB5pm5yq5zrwtk8J2BHgSTLMNWfRFVQzLiz3OJLykRk7GWKdr/t4YU
+        zUILgCI2SLgg2qFPuozO3M9xdg==
+X-Google-Smtp-Source: AA0mqf5hYsw/4JWIgSJ6mGIhPRCDka2xGpUjs6SqX0VHzgleUdx0I+5zjhfK7HRUzLuORnTrW//xiw==
+X-Received: by 2002:a2e:a37c:0:b0:26e:93:980d with SMTP id i28-20020a2ea37c000000b0026e0093980dmr15258413ljn.488.1669489459446;
+        Sat, 26 Nov 2022 11:04:19 -0800 (PST)
 Received: from [192.168.1.8] ([185.24.52.156])
-        by smtp.gmail.com with ESMTPSA id b29-20020a0565120b9d00b004946e72711bsm998920lfv.76.2022.11.26.11.03.56
+        by smtp.gmail.com with ESMTPSA id 4-20020ac25f44000000b00492b494c4e8sm1002101lfz.298.2022.11.26.11.04.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Nov 2022 11:03:57 -0800 (PST)
-Message-ID: <4a2a36ee-85d3-bf6d-ec19-87a89831f67e@linaro.org>
-Date:   Sat, 26 Nov 2022 21:03:56 +0200
+        Sat, 26 Nov 2022 11:04:19 -0800 (PST)
+Message-ID: <65824eed-d988-2de6-5fd1-380aec116d13@linaro.org>
+Date:   Sat, 26 Nov 2022 21:04:18 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH v4 16/18] arm64: dts: qcom: sdm660: Add compat
- qcom,sdm660-dsi-ctrl
+Subject: Re: [PATCH v4 17/18] arm64: dts: qcom: sdm845: Add compat
+ qcom,sdm845-dsi-ctrl
 Content-Language: en-GB
 To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
         linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
@@ -69,9 +69,9 @@ Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com, sean@poorly.run,
         andersson@kernel.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
 References: <20221125123638.823261-1-bryan.odonoghue@linaro.org>
- <20221125123638.823261-17-bryan.odonoghue@linaro.org>
+ <20221125123638.823261-18-bryan.odonoghue@linaro.org>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221125123638.823261-17-bryan.odonoghue@linaro.org>
+In-Reply-To: <20221125123638.823261-18-bryan.odonoghue@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,35 +84,17 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 25/11/2022 14:36, Bryan O'Donoghue wrote:
-> Add silicon specific compatible qcom,sdm660-dsi-ctrl to the
+> Add silicon specific compatible qcom,sdm845-dsi-ctrl to the
 > mdss-dsi-ctrl block. This allows us to differentiate the specific bindings
-> for sdm660 against the yaml documentation.
+> for sdm845 against the yaml documentation.
 > 
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
 > Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 > ---
->   arch/arm64/boot/dts/qcom/sdm660.dtsi | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm660.dtsi b/arch/arm64/boot/dts/qcom/sdm660.dtsi
-> index 10bf1c45cf6ec..f8ec728e67f3d 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm660.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm660.dtsi
-> @@ -154,7 +154,8 @@ mdp5_intf2_out: endpoint {
->   
->   &mdss {
->   	dsi1: dsi@c996000 {
-> -		compatible = "qcom,mdss-dsi-ctrl";
-> +		compatible = "qcom,sdm660-dsi-ctrl",
-> +			     "qcom,mdss-dsi-ctrl";
+>   arch/arm64/boot/dts/qcom/sdm845.dtsi | 6 ++++--
+>   1 file changed, 4 insertions(+), 2 deletions(-)
 
-So, we'd end up with two identical DSI hosts, but one has compatible 
-'qcom,sdm660-dsi-ctrl' and another one 'qcom,sdm630-dsi-ctrl'.
-
-I think, use sdm660 for both of them (for both sdm630 and sdm660)
-
->   		reg = <0x0c996000 0x400>;
->   		reg-names = "dsi_ctrl";
->   
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
 -- 
 With best wishes
