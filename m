@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D2EC6392B7
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 01:25:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3FBD6392B9
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 01:26:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbiKZAZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 19:25:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39940 "EHLO
+        id S230210AbiKZA0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 19:26:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbiKZAZl (ORCPT
+        with ESMTP id S230177AbiKZA0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 19:25:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197D759FFA;
-        Fri, 25 Nov 2022 16:25:40 -0800 (PST)
+        Fri, 25 Nov 2022 19:26:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A776532F3;
+        Fri, 25 Nov 2022 16:26:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C45E5B82C15;
-        Sat, 26 Nov 2022 00:25:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85FE1C4314A;
-        Sat, 26 Nov 2022 00:25:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 071F16119F;
+        Sat, 26 Nov 2022 00:26:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F8BEC4314C;
+        Sat, 26 Nov 2022 00:26:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669422337;
-        bh=v1EAEdq/9XMPq4VdR6VbfxT4QOV2UU4TS9MCVch7vtg=;
+        s=k20201202; t=1669422370;
+        bh=4NqNq+oQLioxqw2Ds8WybcMSRlhpEEQrSTl1t1QeXSk=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Lfbfzuj2/Myn5D5nFNHvzorwfWA+auD8gXXE/558BrcgffXs2ZFVxJGedPJ96UUFT
-         JgZ3F6d6BU7nhp+h3MXml9ovKBRGqIrj7NH/tQ5PSRbQl/9CSXuhdltCG/Ux01doU2
-         KnIR0pfVoGvizULCu8yD3q64vikWPZZwt/DpN18KJBGbqFhUx/EV/3tUJvvq0v5y1U
-         2gEJU/CYreqSEiS9JZ4GhPU9IIC23IUl7txY7OODc15h7I/3xT5u0wGVW+R1Css9L4
-         bpzfQXbCmZ1CcCz6jBn/dW9DudlT6JjXwNtrlNA1QexTUOZTJlrGYWcRjAxlWGEwxW
-         QnzuxGlOaK5bg==
-Received: by mail-ej1-f53.google.com with SMTP id ud5so13454092ejc.4;
-        Fri, 25 Nov 2022 16:25:37 -0800 (PST)
-X-Gm-Message-State: ANoB5pnQ38nqC6caIgQYX7RbwKHzJAOSjSrKVMUtVo3i70ha80XI4StP
-        KAqcFqOFAhekeoHiuGRaOdXPpwLgeMltuHMeqC0=
-X-Google-Smtp-Source: AA0mqf5JKbQbdr4hooc6+KcGn5VrwQ+vQvRTuLKNt6Huqb0VVWdHuGzaN/EzMhexeWJy8Z8l10XpUPmceHZK5YzoKbg=
-X-Received: by 2002:a17:906:19d7:b0:7b2:b782:e1df with SMTP id
- h23-20020a17090619d700b007b2b782e1dfmr30032927ejd.308.1669422335764; Fri, 25
- Nov 2022 16:25:35 -0800 (PST)
+        b=RkTAHaQ0TXV+8wMjPvUbxLH+CcZbUr5hFWwrCNhR4WaWbAyvJ4a4VOnVEHqT2y7tD
+         oz2DxQ4FdkmQQKJLWWplVYy6vmRPWcYELNmsX1SSUXwKPKoGepfOIhGY/rDp/+79gc
+         qZiiZNDGCLw5eYG2I1IjnUVrDXZv5b0VJiGdwTjwgzb8JLEGCfWueL0/mqo66nPnXx
+         uyZtH3VGdx6UDuFACVozegU/uOgoBtgsduzI+sv3s1RMu4CbeRs8b+a5lFDn8BBFnJ
+         +/0HWps+Joo3D5NAs9IZp+Kx5ADMK3iNzsIqjr3cp6VzeCVqF5NS6yPpHkcjafv48h
+         an4Bw2IYmOj0g==
+Received: by mail-ej1-f50.google.com with SMTP id ud5so13455749ejc.4;
+        Fri, 25 Nov 2022 16:26:10 -0800 (PST)
+X-Gm-Message-State: ANoB5pnMxdYIpdtI8yYEmiiq++fhnT99YRfANez3LM3x+Hy+sUKFDGgl
+        lK97uUHanpxRtHRs3oG8eQSWuZZd07JHiGDngiI=
+X-Google-Smtp-Source: AA0mqf5rj7jcgUfLhNXIG0TqAfUM9IYKmv+CjWTNjQ5iY22Fpirb1CubwF4ZNx/HRTFAr6hpmzQPOwWdJnE+T+QPcL4=
+X-Received: by 2002:a17:907:cf84:b0:78d:4795:ff1f with SMTP id
+ ux4-20020a170907cf8400b0078d4795ff1fmr35452882ejc.331.1669422368689; Fri, 25
+ Nov 2022 16:26:08 -0800 (PST)
 MIME-Version: 1.0
-References: <20221125234656.47306-1-samuel@sholland.org> <20221125234656.47306-10-samuel@sholland.org>
-In-Reply-To: <20221125234656.47306-10-samuel@sholland.org>
+References: <20221125234656.47306-1-samuel@sholland.org> <20221125234656.47306-9-samuel@sholland.org>
+In-Reply-To: <20221125234656.47306-9-samuel@sholland.org>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 26 Nov 2022 08:25:24 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRZg6uPXKQMdx6f1cj-SojwTkJ1X7X7y-HeGP2yy9taxA@mail.gmail.com>
-Message-ID: <CAJF2gTRZg6uPXKQMdx6f1cj-SojwTkJ1X7X7y-HeGP2yy9taxA@mail.gmail.com>
-Subject: Re: [PATCH v2 09/12] riscv: dts: allwinner: Add Dongshan Nezha STU devicetree
+Date:   Sat, 26 Nov 2022 08:25:56 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTbGiMQa__pudngh0R_BjPDO2ymvwaRFbbSpzJNgfiBRA@mail.gmail.com>
+Message-ID: <CAJF2gTTbGiMQa__pudngh0R_BjPDO2ymvwaRFbbSpzJNgfiBRA@mail.gmail.com>
+Subject: Re: [PATCH v2 08/12] riscv: dts: allwinner: Add MangoPi MQ Pro devicetree
 To:     Samuel Holland <samuel@sholland.org>
 Cc:     Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
@@ -83,40 +83,42 @@ Reviewed-by: Guo Ren <guoren@kernel.org>
 
 On Sat, Nov 26, 2022 at 7:47 AM Samuel Holland <samuel@sholland.org> wrote:
 >
-> The 100ask Dongshan Nezha STU is a system-on-module that can be used
-> standalone or with a carrier board. The SoM provides gigabit Ethernet,
-> HDMI, a USB peripheral port, and WiFi/Bluetooth via an RTL8723DS chip.
+> The MangoPi MQ Pro is a tiny SBC with a layout compatible to the
+> Raspberry Pi Zero. It includes the Allwinner D1 SoC, 512M or 1G of DDR3,
+> and an RTL8723DS-based WiFi/Bluetooth module.
 >
-> The "DIY" carrier board exposes almost every pin from the D1 SoC to 0.1"
-> headers, but contains no digital circuitry, so it does not have its own
-> devicetree.
+> The board also exposes GPIO Port E via a connector on the end of the
+> board, which can support either a camera or an RMII Ethernet PHY. The
+> additional regulators supply that connector.
 >
 > Signed-off-by: Samuel Holland <samuel@sholland.org>
 > ---
 >
-> (no changes since v1)
+> Changes in v2:
+>  - Added LED (GPIO shared between onboard LED and backlight regulator)
 >
 >  arch/riscv/boot/dts/allwinner/Makefile        |   1 +
->  .../sun20i-d1-dongshan-nezha-stu.dts          | 118 ++++++++++++++++++
->  2 files changed, 119 insertions(+)
->  create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-dongshan-nezha-stu.dts
+>  .../allwinner/sun20i-d1-mangopi-mq-pro.dts    | 143 ++++++++++++++++++
+>  2 files changed, 144 insertions(+)
+>  create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-mangopi-mq-pro.dts
 >
 > diff --git a/arch/riscv/boot/dts/allwinner/Makefile b/arch/riscv/boot/dts/allwinner/Makefile
-> index 2ed586fafaea..87f70b1af6b4 100644
+> index f1c70b9dc9bf..2ed586fafaea 100644
 > --- a/arch/riscv/boot/dts/allwinner/Makefile
 > +++ b/arch/riscv/boot/dts/allwinner/Makefile
-> @@ -1,4 +1,5 @@
->  # SPDX-License-Identifier: GPL-2.0
-> +dtb-$(CONFIG_ARCH_SUNXI) += sun20i-d1-dongshan-nezha-stu.dtb
->  dtb-$(CONFIG_ARCH_SUNXI) += sun20i-d1-lichee-rv-86-panel-480p.dtb
+> @@ -3,5 +3,6 @@ dtb-$(CONFIG_ARCH_SUNXI) += sun20i-d1-lichee-rv-86-panel-480p.dtb
 >  dtb-$(CONFIG_ARCH_SUNXI) += sun20i-d1-lichee-rv-86-panel-720p.dtb
 >  dtb-$(CONFIG_ARCH_SUNXI) += sun20i-d1-lichee-rv-dock.dtb
-> diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1-dongshan-nezha-stu.dts b/arch/riscv/boot/dts/allwinner/sun20i-d1-dongshan-nezha-stu.dts
+>  dtb-$(CONFIG_ARCH_SUNXI) += sun20i-d1-lichee-rv.dtb
+> +dtb-$(CONFIG_ARCH_SUNXI) += sun20i-d1-mangopi-mq-pro.dtb
+>  dtb-$(CONFIG_ARCH_SUNXI) += sun20i-d1-nezha.dtb
+>  dtb-$(CONFIG_ARCH_SUNXI) += sun20i-d1s-mangopi-mq.dtb
+> diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1-mangopi-mq-pro.dts b/arch/riscv/boot/dts/allwinner/sun20i-d1-mangopi-mq-pro.dts
 > new file mode 100644
-> index 000000000000..c549a1c5fbf0
+> index 000000000000..6d5897dc22e2
 > --- /dev/null
-> +++ b/arch/riscv/boot/dts/allwinner/sun20i-d1-dongshan-nezha-stu.dts
-> @@ -0,0 +1,118 @@
+> +++ b/arch/riscv/boot/dts/allwinner/sun20i-d1-mangopi-mq-pro.dts
+> @@ -0,0 +1,143 @@
 > +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
 > +// Copyright (C) 2022 Samuel Holland <samuel@sholland.org>
 > +
@@ -129,11 +131,11 @@ On Sat, Nov 26, 2022 at 7:47 AM Samuel Holland <samuel@sholland.org> wrote:
 > +#include "sun20i-common-regulators.dtsi"
 > +
 > +/ {
-> +       model = "Dongshan Nezha STU";
-> +       compatible = "100ask,dongshan-nezha-stu", "allwinner,sun20i-d1";
+> +       model = "MangoPi MQ Pro";
+> +       compatible = "widora,mangopi-mq-pro", "allwinner,sun20i-d1";
 > +
 > +       aliases {
-> +               ethernet0 = &emac;
+> +               ethernet0 = &rtl8723ds;
 > +               mmc0 = &mmc0;
 > +               serial0 = &uart0;
 > +       };
@@ -146,32 +148,39 @@ On Sat, Nov 26, 2022 at 7:47 AM Samuel Holland <samuel@sholland.org> wrote:
 > +               compatible = "gpio-leds";
 > +
 > +               led-0 {
-> +                       color = <LED_COLOR_ID_GREEN>;
-> +                       function = LED_FUNCTION_STATUS;
-> +                       gpios = <&pio 2 1 GPIO_ACTIVE_HIGH>; /* PC1 */
+> +                       color = <LED_COLOR_ID_BLUE>;
+> +                       function = LED_FUNCTION_BACKLIGHT;
+> +                       gpios = <&pio 3 18 GPIO_ACTIVE_HIGH>; /* PD18 */
 > +               };
 > +       };
 > +
-> +       reg_usbvbus: usbvbus {
+> +       reg_avdd2v8: avdd2v8 {
 > +               compatible = "regulator-fixed";
-> +               regulator-name = "usbvbus";
-> +               regulator-min-microvolt = <5000000>;
-> +               regulator-max-microvolt = <5000000>;
-> +               gpio = <&pio 3 19 GPIO_ACTIVE_HIGH>; /* PD19 */
-> +               enable-active-high;
-> +               vin-supply = <&reg_vcc>;
+> +               regulator-name = "avdd2v8";
+> +               regulator-min-microvolt = <2800000>;
+> +               regulator-max-microvolt = <2800000>;
+> +               vin-supply = <&reg_vcc_3v3>;
 > +       };
 > +
-> +       /*
-> +        * This regulator is PWM-controlled, but the PWM controller is not
-> +        * yet supported, so fix the regulator to its default voltage.
-> +        */
+> +       reg_dvdd: dvdd {
+> +               compatible = "regulator-fixed";
+> +               regulator-name = "dvdd";
+> +               regulator-min-microvolt = <1200000>;
+> +               regulator-max-microvolt = <1200000>;
+> +               vin-supply = <&reg_vcc_3v3>;
+> +       };
+> +
 > +       reg_vdd_cpu: vdd-cpu {
 > +               compatible = "regulator-fixed";
 > +               regulator-name = "vdd-cpu";
 > +               regulator-min-microvolt = <1100000>;
 > +               regulator-max-microvolt = <1100000>;
 > +               vin-supply = <&reg_vcc>;
+> +       };
+> +
+> +       wifi_pwrseq: wifi-pwrseq {
+> +               compatible = "mmc-pwrseq-simple";
+> +               reset-gpios = <&pio 6 17 GPIO_ACTIVE_LOW>; /* PG17 */
 > +       };
 > +};
 > +
@@ -183,29 +192,13 @@ On Sat, Nov 26, 2022 at 7:47 AM Samuel Holland <samuel@sholland.org> wrote:
 > +       clock-frequency = <24000000>;
 > +};
 > +
-> +&ehci0 {
+> +&ehci1 {
 > +       status = "okay";
-> +};
-> +
-> +&emac {
-> +       pinctrl-0 = <&rgmii_pe_pins>;
-> +       pinctrl-names = "default";
-> +       phy-handle = <&ext_rgmii_phy>;
-> +       phy-mode = "rgmii-id";
-> +       phy-supply = <&reg_vcc_3v3>;
-> +       status = "okay";
-> +};
-> +
-> +&mdio {
-> +       ext_rgmii_phy: ethernet-phy@1 {
-> +               compatible = "ethernet-phy-ieee802.3-c22";
-> +               reg = <1>;
-> +       };
 > +};
 > +
 > +&mmc0 {
-> +       broken-cd;
 > +       bus-width = <4>;
+> +       cd-gpios = <&pio 5 6 GPIO_ACTIVE_HIGH>; /* PF6 */
 > +       disable-wp;
 > +       vmmc-supply = <&reg_vcc_3v3>;
 > +       vqmmc-supply = <&reg_vcc_3v3>;
@@ -214,8 +207,30 @@ On Sat, Nov 26, 2022 at 7:47 AM Samuel Holland <samuel@sholland.org> wrote:
 > +       status = "okay";
 > +};
 > +
-> +&ohci0 {
+> +&mmc1 {
+> +       bus-width = <4>;
+> +       mmc-pwrseq = <&wifi_pwrseq>;
+> +       non-removable;
+> +       vmmc-supply = <&reg_vcc_3v3>;
+> +       vqmmc-supply = <&reg_vcc_3v3>;
+> +       pinctrl-0 = <&mmc1_pins>;
+> +       pinctrl-names = "default";
 > +       status = "okay";
+> +
+> +       rtl8723ds: wifi@1 {
+> +               reg = <1>;
+> +               interrupt-parent = <&pio>;
+> +               interrupts = <6 10 IRQ_TYPE_LEVEL_LOW>; /* PG10 */
+> +               interrupt-names = "host-wake";
+> +       };
+> +};
+> +
+> +&ohci1 {
+> +       status = "okay";
+> +};
+> +
+> +&pio {
+> +       vcc-pe-supply = <&reg_avdd2v8>;
 > +};
 > +
 > +&uart0 {
@@ -224,15 +239,27 @@ On Sat, Nov 26, 2022 at 7:47 AM Samuel Holland <samuel@sholland.org> wrote:
 > +       status = "okay";
 > +};
 > +
+> +&uart1 {
+> +       uart-has-rtscts;
+> +       pinctrl-0 = <&uart1_pg6_pins>, <&uart1_pg8_rts_cts_pins>;
+> +       pinctrl-names = "default";
+> +       status = "okay";
+> +
+> +       bluetooth {
+> +               compatible = "realtek,rtl8723ds-bt";
+> +               device-wake-gpios = <&pio 6 18 GPIO_ACTIVE_HIGH>; /* PG18 */
+> +               enable-gpios = <&pio 6 15 GPIO_ACTIVE_HIGH>; /* PG15 */
+> +               host-wake-gpios = <&pio 6 14 GPIO_ACTIVE_HIGH>; /* PG14 */
+> +       };
+> +};
+> +
 > +&usb_otg {
-> +       dr_mode = "otg";
+> +       dr_mode = "peripheral";
 > +       status = "okay";
 > +};
 > +
 > +&usbphy {
-> +       usb0_id_det-gpios = <&pio 3 21 GPIO_ACTIVE_HIGH>; /* PD21 */
-> +       usb0_vbus_det-gpios = <&pio 3 20 GPIO_ACTIVE_HIGH>; /* PD20 */
-> +       usb0_vbus-supply = <&reg_usbvbus>;
+> +       usb1_vbus-supply = <&reg_vcc>;
 > +       status = "okay";
 > +};
 > --
