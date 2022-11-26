@@ -2,81 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7919639638
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 14:38:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5353363963A
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 14:40:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbiKZNis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 08:38:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41526 "EHLO
+        id S229641AbiKZNkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 08:40:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiKZNiq (ORCPT
+        with ESMTP id S229446AbiKZNkn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 08:38:46 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0731B9F9
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 05:38:45 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id b3so10773815lfv.2
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 05:38:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JODCHnpvnBiR3n3fpZD67kgmrBczvvXLFyLOXUIrzLw=;
-        b=R3kgfVWpjBBFfaYMxVPvDJJvCc8bXrmR/5iyKRzySX5/rt2UGFXYJQ1CbZ7V/QTNtj
-         QVRr/i02Iy+GkqfMTBjzC05z09gJXZA4ibdqDPZ5fQBrOvhcMk6UIJ+YctxesjOSpoIB
-         kQCG4DKHPIOrN/KdA00jHuACtf8jgXrLX6XKPD1bVQuk9GvGStFHlTntU7YcjaeoUqKw
-         vFSAYNI9x+PPd4aNr68aaPW6AqVDvEPkaa0C5N1eKr9tc3ir4teP7RuOEpJoYjyRazN/
-         oM8NxRY1aVpC7Ncrd9xs2MrwgP4B0hjE6kqmVRAiikfIR4vdOFyrDNYHINYe4NOvoT5+
-         wd0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JODCHnpvnBiR3n3fpZD67kgmrBczvvXLFyLOXUIrzLw=;
-        b=BtabdVkOM2wKhmJV0FKZgxeLk29KAlcSppyvQjELacSkaO/wPRwCrlglRc6rNJp1Xu
-         BhvkLx4WYwGemVWBs1xFjV2/bf9g4bVWTPO12I4W3DE/LS9KTvbUaG1G00wZzJ5S0xq4
-         oSEYSICxKfUW1T5yMLrdhRhWlRUWYuo/iOTPOtbQZD/LR0Dgh6yIdNUQ97oE8rp1i4NC
-         3dFxmPwu6vdCw9LeHDzdoQ4pUxh7FI/f4gDsDL6x541rUmStZCXvQIrXXzh0HCB5h/SX
-         jgHlIy21dc62hjZJua/Ye+WfjmrweJu3SgEFld2fLoRlNMhMhN90XUHvLYWWdW4SpX5r
-         7Hyg==
-X-Gm-Message-State: ANoB5plLnFmuG1N/fd/kHudA4liHoMMaEPEk5TSVrsqdM0GUQdiK+OV1
-        CKJ7/DhHgLiEL+FweoUAZ7mJog==
-X-Google-Smtp-Source: AA0mqf6MtjdoVhvR7zpbOEi+YVSwYyAWyZtyojehbq8a4FMrZd2GJ1stmBS+SNY6qcKKgpKEhAISJw==
-X-Received: by 2002:a19:5f11:0:b0:4a2:240a:443a with SMTP id t17-20020a195f11000000b004a2240a443amr13705255lfb.529.1669469923936;
-        Sat, 26 Nov 2022 05:38:43 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id k20-20020a0565123d9400b0049487818dd9sm931511lfv.60.2022.11.26.05.38.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Nov 2022 05:38:43 -0800 (PST)
-Message-ID: <ffa1e063-7e29-0bcb-035c-ff96f8eb037d@linaro.org>
-Date:   Sat, 26 Nov 2022 14:37:37 +0100
+        Sat, 26 Nov 2022 08:40:43 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905261DA7F;
+        Sat, 26 Nov 2022 05:40:42 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1A2C221B3D;
+        Sat, 26 Nov 2022 13:40:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669470041; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BoGl6Fm7p2wFv2CwtdQxNHqKs/HFx08iy/uRCX9zFjU=;
+        b=SIyt6qAciTDNvEAg09j748/wQATsUA/Uj85V8pa3X798Hb7CVGZYXJmBzTBPlvGd1ERn21
+        Jo1hoFCv0CEpbCLESRyBHQoyg9TLmLcEulzdYD3+pYn7dnV6xrJuZX7prlLm9yC+OW3PqA
+        ERg9P2ARB71DVcyHnT72oVHdAT8SBNM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669470041;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BoGl6Fm7p2wFv2CwtdQxNHqKs/HFx08iy/uRCX9zFjU=;
+        b=iXiYIYfZymLvkVxSItVy4pxnnMwc0LmU+cd++qbaXJUzKvdIyCBDd9FFUIVkuFjM7kLC4C
+        zk1AZU+49bs0XgDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D7D411326E;
+        Sat, 26 Nov 2022 13:40:40 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 4jGuM1gXgmO+EgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Sat, 26 Nov 2022 13:40:40 +0000
+Message-ID: <46e8cf0d-ab47-59b1-6c87-53d2d63a5bf6@suse.de>
+Date:   Sat, 26 Nov 2022 14:40:40 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH 3/3] dt-bindings: net: sun8i-emac: Add phy-supply property
+Subject: Re: [PATCH] fbdev: make offb driver tristate
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>,
+        linuxppc-dev@lists.ozlabs.org, Daniel Vetter <daniel@ffwll.ch>,
+        Helge Deller <deller@gmx.de>, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <20221126000401.25302-1-rdunlap@infradead.org>
 Content-Language: en-US
-To:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     LABBE Corentin <clabbe.montjoie@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, netdev@vger.kernel.org
-References: <20221125202008.64595-1-samuel@sholland.org>
- <20221125202008.64595-4-samuel@sholland.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221125202008.64595-4-samuel@sholland.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20221126000401.25302-1-rdunlap@infradead.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------Ki0pK44NuJYH6e0YyzbOqHJf"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,22 +76,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/11/2022 21:20, Samuel Holland wrote:
-> This property has always been supported by the Linux driver; see
-> commit 9f93ac8d4085 ("net-next: stmmac: Add dwmac-sun8i"). In fact, the
-> original driver submission includes the phy-supply code but no mention
-> of it in the binding, so the omission appears to be accidental. In
-> addition, the property is documented in the binding for the previous
-> hardware generation, allwinner,sun7i-a20-gmac.
-> 
-> Document phy-supply in the binding to fix devicetree validation for the
-> 25+ boards that already use this property.
-> 
-> Fixes: 0441bde003be ("dt-bindings: net-next: Add DT bindings documentation for Allwinner dwmac-sun8i")
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------Ki0pK44NuJYH6e0YyzbOqHJf
+Content-Type: multipart/mixed; boundary="------------vJuoS16oKQcn9uhxcFoFCUdr";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>, Masahiro Yamada <masahiroy@kernel.org>,
+ =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>,
+ linuxppc-dev@lists.ozlabs.org, Daniel Vetter <daniel@ffwll.ch>,
+ Helge Deller <deller@gmx.de>, linux-fbdev@vger.kernel.org,
+ dri-devel@lists.freedesktop.org
+Message-ID: <46e8cf0d-ab47-59b1-6c87-53d2d63a5bf6@suse.de>
+Subject: Re: [PATCH] fbdev: make offb driver tristate
+References: <20221126000401.25302-1-rdunlap@infradead.org>
+In-Reply-To: <20221126000401.25302-1-rdunlap@infradead.org>
 
-This looks ok.
+--------------vJuoS16oKQcn9uhxcFoFCUdr
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Best regards,
-Krzysztof
+DQoNCkFtIDI2LjExLjIyIHVtIDAxOjA0IHNjaHJpZWIgUmFuZHkgRHVubGFwOg0KPiBNYWtl
+IHRoZSBvZmZiIChPcGVuIEZpcm13YXJlIGZyYW1lIGJ1ZmZlcikgZHJpdmVyIHRyaXN0YXRl
+LA0KPiBpLmUuLCBzbyB0aGF0IGl0IGNhbiBiZSBidWlsdCBhcyBhIGxvYWRhYmxlIG1vZHVs
+ZS4NCj4gDQo+IEhvd2V2ZXIsIGl0IHN0aWxsIGRlcGVuZHMgb24gdGhlIHNldHRpbmcgb2Yg
+RFJNX09GRFJNDQo+IHNvIHRoYXQgYm90aCBvZiB0aGVzZSBkcml2ZXJzIGNhbm5vdCBiZSBi
+dWlsdGluIGF0IHRoZSBzYW1lIHRpbWUNCj4gbm9yIGNhbiBvbmUgYmUgYnVpbHRpbiBhbmQg
+dGhlIG90aGVyIG9uZSBhIGxvYWRhYmxlIG1vZHVsZS4NCj4gDQo+IEJ1aWxkLXRlc3RlZCBz
+dWNjZXNzZnVsbHkgd2l0aCBhbGwgY29tYmluYXRpb24gb2YgRFJNX09GRFJNIGFuZCBGQl9P
+Ri4NCj4gDQo+IFRoaXMgZml4ZXMgYSBidWlsZCBpc3N1ZSB0aGF0IE1pY2hhbCByZXBvcnRl
+ZCB3aGVuIEZCX09GPXkgYW5kDQo+IERSTV9PRkRSTT1tOg0KPiANCj4gcG93ZXJwYzY0LWxp
+bnV4LWxkOiBkcml2ZXJzL3ZpZGVvL2ZiZGV2L29mZmIubzooLmRhdGEucmVsLnJvKzB4NTgp
+OiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvIGBjZmJfZmlsbHJlY3QnDQo+IHBvd2VycGM2NC1s
+aW51eC1sZDogZHJpdmVycy92aWRlby9mYmRldi9vZmZiLm86KC5kYXRhLnJlbC5ybysweDYw
+KTogdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgY2ZiX2NvcHlhcmVhJw0KPiBwb3dlcnBjNjQt
+bGludXgtbGQ6IGRyaXZlcnMvdmlkZW8vZmJkZXYvb2ZmYi5vOiguZGF0YS5yZWwucm8rMHg2
+OCk6IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8gYGNmYl9pbWFnZWJsaXQnDQo+IA0KPiBTaWdu
+ZWQtb2ZmLWJ5OiBSYW5keSBEdW5sYXAgPHJkdW5sYXBAaW5mcmFkZWFkLm9yZz4NCj4gU3Vn
+Z2VzdGVkLWJ5OiBBcm5kIEJlcmdtYW5uIDxhcm5kQGFybmRiLmRlPg0KPiBDYzogTWFzYWhp
+cm8gWWFtYWRhIDxtYXNhaGlyb3lAa2VybmVsLm9yZz4NCj4gQ2M6IFRob21hcyBaaW1tZXJt
+YW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KPiBDYzogTWljaGFsIFN1Y2jDoW5layA8bXN1
+Y2hhbmVrQHN1c2UuZGU+DQo+IENjOiBsaW51eHBwYy1kZXZAbGlzdHMub3psYWJzLm9yZw0K
+PiBDYzogRGFuaWVsIFZldHRlciA8ZGFuaWVsQGZmd2xsLmNoPg0KPiBDYzogSGVsZ2UgRGVs
+bGVyIDxkZWxsZXJAZ214LmRlPg0KPiBDYzogbGludXgtZmJkZXZAdmdlci5rZXJuZWwub3Jn
+DQo+IENjOiBkcmktZGV2ZWxAbGlzdHMuZnJlZWRlc2t0b3Aub3JnDQoNCkFja2VkLWJ5OiBU
+aG9tYXMgWmltbWVybWFubiA8dHppbW1lcm1hbm5Ac3VzZS5kZT4NCg0KPiANCj4gLS0tDQo+
+ICAgZHJpdmVycy92aWRlby9mYmRldi9LY29uZmlnIHwgICAgNCArKy0tDQo+ICAgMSBmaWxl
+IGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYg
+LS0gYS9kcml2ZXJzL3ZpZGVvL2ZiZGV2L0tjb25maWcgYi9kcml2ZXJzL3ZpZGVvL2ZiZGV2
+L0tjb25maWcNCj4gLS0tIGEvZHJpdmVycy92aWRlby9mYmRldi9LY29uZmlnDQo+ICsrKyBi
+L2RyaXZlcnMvdmlkZW8vZmJkZXYvS2NvbmZpZw0KPiBAQCAtNDU2LDggKzQ1Niw4IEBAIGNv
+bmZpZyBGQl9BVEFSSQ0KPiAgIAkgIGNoaXBzZXQgZm91bmQgaW4gQXRhcmlzLg0KPiAgIA0K
+PiAgIGNvbmZpZyBGQl9PRg0KPiAtCWJvb2wgIk9wZW4gRmlybXdhcmUgZnJhbWUgYnVmZmVy
+IGRldmljZSBzdXBwb3J0Ig0KPiAtCWRlcGVuZHMgb24gKEZCID0geSkgJiYgUFBDICYmICgh
+UFBDX1BTRVJJRVMgfHwgUENJKQ0KPiArCXRyaXN0YXRlICJPcGVuIEZpcm13YXJlIGZyYW1l
+IGJ1ZmZlciBkZXZpY2Ugc3VwcG9ydCINCj4gKwlkZXBlbmRzIG9uIEZCICYmIFBQQyAmJiAo
+IVBQQ19QU0VSSUVTIHx8IFBDSSkNCj4gICAJZGVwZW5kcyBvbiAhRFJNX09GRFJNDQo+ICAg
+CXNlbGVjdCBBUEVSVFVSRV9IRUxQRVJTDQo+ICAgCXNlbGVjdCBGQl9DRkJfRklMTFJFQ1QN
+Cg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0K
+U1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5
+MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdl
+c2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
+--------------vJuoS16oKQcn9uhxcFoFCUdr--
+
+--------------Ki0pK44NuJYH6e0YyzbOqHJf
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmOCF1gFAwAAAAAACgkQlh/E3EQov+CJ
+vw/+ONumJQjV+7LoEpcMdQywoYRDLqpBwO/cB5TlRWktE2eLaRwMG88S2rOde8UcNu++iKAndzYZ
+q6v9TbZGx2dFV6dWPxefOd6UxgZVuPVffPlzGs71iaaDmr33yoQXvA+XYMs62JX2RSLmxx9lW5lU
+BsloOKY15g7sh64e7UfL3V2nlC+I6nScpa8lmC+tOkX0pzEEpDlMmBa7QsNhfvf0oZ0VJFzvDoIL
+lMgxjVpBv5YAmhOaMf2pQXgjfHbJnEL18o4iRvWLWKaU0B12J46KxTqTafok/TmASdRugRH5NIP1
+wa5V7f1twwtJdczhLCfPzq1Iiv86JgD0CyN3af/LIBwN/FwZkI3LftRvWJtgU7ikD5FymPmhhc+a
+YcxjmVhwUcUnh4vhA0CuhA3zA77XJFbBdtrBP2gchSvA4tZ/vJqtZm1DOSVdzGt1xqwvdzamwUse
+mDome8RBkhqbbFmQZAjvJiAOxHkdtFaOy8NS0hYH7bgRCc34eccBz+t3vjtB9k/bcx3c9DASN5Rd
+uWcXN6yuRce4HuwVHTidZKWmclxRZiZYfwJmLGLEpf8ReJvTetBtuMmoJ7i0OG26K4Kh4Kmag8t3
+UjqXVYGVY4stIdA3/sq3H9u9h6hp6jSDJiWlq4Or5iNGuiL4wd/WZyAyODk2+HxXpx5SwIhll1Xi
+J9c=
+=nzHm
+-----END PGP SIGNATURE-----
+
+--------------Ki0pK44NuJYH6e0YyzbOqHJf--
