@@ -2,136 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 298736398FF
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 00:49:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE188639900
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 00:50:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229569AbiKZXtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 18:49:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32924 "EHLO
+        id S229597AbiKZXuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 18:50:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiKZXtR (ORCPT
+        with ESMTP id S229459AbiKZXuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 18:49:17 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A1813E07
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 15:49:12 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id D501D5C00A5;
-        Sat, 26 Nov 2022 18:49:11 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Sat, 26 Nov 2022 18:49:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1669506551; x=
-        1669592951; bh=DIPXyu8HQb1ZeFRaVm//QFcNLLl7SMnvb14+RRPUPkc=; b=R
-        iQY/SIv5HjpaoqzBhGUqZTel7ZSmfVLzHObK8TWSgG8S9O37n60ZJdjBEY2tNpqe
-        3JQiF4Zh4ztELmsG0Za9AgQjHtLA2RVVO5XuxeDQOCMfTLEJlSI7PTfauv7Sd6IX
-        mxvX3ExWhe4dEV5xemUwd+jYxczFoOo4M8NI414QWpbFOvMOsEdjrH0o7gREgBDy
-        XlmiIOAbd4rKasEh2qDtQ/ezof12Ul3sbiViG+BmBW61DY0C64y0YuM+kNHKKgqF
-        LzR1LwPKouhNPrhlBpbezOarHV5/GxWZzvaIbfSReS2niW+ScP9wBreMMB4MPnp5
-        VVgTMdx9l2+DJ9UO6Wc0A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1669506551; x=
-        1669592951; bh=DIPXyu8HQb1ZeFRaVm//QFcNLLl7SMnvb14+RRPUPkc=; b=U
-        C8GgaWMjisgvQdcz3hLMSiJ20Ew4vch670rNrLHvb9AFf0Hv9sZEOL7UDQoB/teG
-        sh8Ur2Z0VJLn83s+VcTmiyen6PJ9jO8cQOhJaNVQwMtI0eaB+qqMPfPFtIPM6hUS
-        BA19nc6E6K5paeJdjeFOFJDV083ekZBeNe5nz2xjKq9ZhCnV28r+0gWorEozm5FQ
-        979QJ7RG5ZYVMlqhDNH30EqmRjNHqRsuDjmiw5Kbf/W1MZsoB6sx7FG1wvWSi4be
-        6h5mKvazqzVhFx0sURnQZ3NHn+uLjZnrZmxKuaVKVLQiwxOM5nZ+9+H4g8byVkVu
-        4JbC5feOTbrqg6+Gm7zLA==
-X-ME-Sender: <xms:96WCY4iUeF_qQCWuMx1cT57Rd41M07iYQOlNy07RSO25VAf6ibGDAA>
-    <xme:96WCYxCKHyH9mwItEdndrtCgtLI1MNf5GvDfPWjl-NZ6I5kuk3Xsb3ey1YgyHf3Nv
-    yvlJQ3Vlu6JAfj8Fg>
-X-ME-Received: <xmr:96WCYwGBmI5qIafbT0yeVnwkTZWAr-yKzWQVxgyK_39MQE368PqeTP7JrCYY-zwBXUd6jeucGjtZywpm45jT-sANBjrLf0Ic_QgJwxGNIUFaV31cO3BNmhxSPw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrieekgddugecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfvvehfhffujggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepjefgfffhudejfedtuedugeeutdetgfeiteffffehjeeugfeuvdeh
-    jeetfedtffdtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:96WCY5Q_pcqRKMNb4NMPG198kIsx0z4zToCvn-_XEFP6rL7Gwn2kIQ>
-    <xmx:96WCY1zOLvDR-BFdiU6RNZLnOGXltIZQ7D4cJV38f4NREIhJbM6ArA>
-    <xmx:96WCY34hC9cwjFCKgYTeOSwoT1Ifg5psGo34BVMkYxmo_6GycUSO-A>
-    <xmx:96WCYw_LSryUVugF09crF1Dgf1MUhCqoKb2XQ0dfZuwN_jdX4phGRw>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 26 Nov 2022 18:49:10 -0500 (EST)
-Message-ID: <cf953917-efe4-8254-f468-3baf7e596483@sholland.org>
-Date:   Sat, 26 Nov 2022 17:49:10 -0600
+        Sat, 26 Nov 2022 18:50:18 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68BD013E0D
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 15:50:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669506617; x=1701042617;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=IF/O4yy28CbthxSzZjiQdq+ft6SJ4rqV3EqY8uH3ZSw=;
+  b=mviX9ZME8+Jn+7Kgv9GkV8333qat1LCLcdNp1ASKbFyt2v82MWw0rNOr
+   wRSYrfZ1WoZIk0fg1tIm+hikdGO875NycLbVwAUd8vtnCD93+RqbfMg8x
+   A2GlzrORwevoyEXpvuDaqUcYxnWKezGqQIAFB15XgmU5bVq2NF9SuoqHc
+   rNAU97A0iJKNsnP8gxePdTb6IJu0Mjt4X+WzbehRXyFpVKLWEm6kVLQsN
+   5JJwqmSrAo5vxPKMWEcK11QKdQjR887zzXhh/EKapbDAegZfwZd4BkVle
+   v8qh2sFLMXLtItHSmgvSBHB9FyCnkGZF87iR473id/p5KSZOn4Ki1Ae+K
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10543"; a="316456054"
+X-IronPort-AV: E=Sophos;i="5.96,197,1665471600"; 
+   d="scan'208";a="316456054"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2022 15:50:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10543"; a="785235508"
+X-IronPort-AV: E=Sophos;i="5.96,197,1665471600"; 
+   d="scan'208";a="785235508"
+Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 26 Nov 2022 15:50:15 -0800
+Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oz4w3-0006eb-0l;
+        Sat, 26 Nov 2022 23:50:15 +0000
+Date:   Sun, 27 Nov 2022 07:49:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/boot] BUILD SUCCESS
+ f1e525009493cbd569e7c8dd7d58157855f8658d
+Message-ID: <6382a5fd.O1rlnIskUEGCxC48%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>, Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org
-References: <1666841949-5244-1-git-send-email-yangtiezhu@loongson.cn>
- <87v8n1ubbj.wl-maz@kernel.org>
-From:   Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH v2] irqchip: LoongArch: Select
- GENERIC_IRQ_EFFECTIVE_AFF_MASK if SMP
-In-Reply-To: <87v8n1ubbj.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/26/22 06:53, Marc Zyngier wrote:
-> On Thu, 27 Oct 2022 04:39:09 +0100,
-> Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
->>
->> An IRQ's effective affinity can only be different from its configured
->> affinity if there are multiple CPUs. Make it clear that this option is
->> only meaningful when SMP is enabled.
->>
->> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->> ---
->>
->> v2: rebased on 6.1-rc2
->>
->>  drivers/irqchip/Kconfig | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
->> index 7ef9f5e..8461915 100644
->> --- a/drivers/irqchip/Kconfig
->> +++ b/drivers/irqchip/Kconfig
->> @@ -575,7 +575,7 @@ config IRQ_LOONGARCH_CPU
->>  	bool
->>  	select GENERIC_IRQ_CHIP
->>  	select IRQ_DOMAIN
->> -	select GENERIC_IRQ_EFFECTIVE_AFF_MASK
->> +	select GENERIC_IRQ_EFFECTIVE_AFF_MASK if SMP
->>  	select LOONGSON_LIOINTC
->>  	select LOONGSON_EIOINTC
->>  	select LOONGSON_PCH_PIC
-> 
-> We already have this:
-> 
-> # Supports effective affinity mask
-> config GENERIC_IRQ_EFFECTIVE_AFF_MASK
->        depends on SMP
->        bool
-> 
-> Do we really need to express this for every interrupt controller?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/boot
+branch HEAD: f1e525009493cbd569e7c8dd7d58157855f8658d  x86/boot: Skip realmode init code when running as Xen PV guest
 
-Unfortunately yes, because "select" does not respect dependencies. So
-the "depends on SMP" line does not enforce anything; it only serves to
-provide a warning at configure time that the build will break.
+elapsed time: 2189m
 
-Regards,
-Samuel
+configs tested: 58
+configs skipped: 2
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arc                  randconfig-r043-20221124
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+x86_64                           rhel-8.3-kvm
+ia64                             allmodconfig
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+s390                                defconfig
+s390                             allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+mips                             allyesconfig
+sh                               allmodconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+m68k                             allyesconfig
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+x86_64                        randconfig-a002
+x86_64                              defconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+i386                          randconfig-a001
+i386                          randconfig-a003
+x86_64                               rhel-8.3
+i386                          randconfig-a005
+x86_64                           allyesconfig
+i386                                defconfig
+i386                             allyesconfig
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+arm                                 defconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+
+clang tested configs:
+riscv                randconfig-r042-20221124
+hexagon              randconfig-r041-20221124
+hexagon              randconfig-r045-20221124
+s390                 randconfig-r044-20221124
+x86_64                        randconfig-a014
+x86_64                        randconfig-a012
+x86_64                        randconfig-a016
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
