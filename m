@@ -2,104 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4C016393F3
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 06:07:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A386393F4
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 06:08:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbiKZFHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 00:07:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
+        id S230104AbiKZFIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 00:08:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiKZFHq (ORCPT
+        with ESMTP id S229523AbiKZFIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 00:07:46 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF21DFB9
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 21:07:43 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id 3-20020a17090a098300b00219041dcbe9so4593170pjo.3
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 21:07:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=heitbaum.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XIOp2nu9uvK0guG9IHkctrJxTkczWL48KQcVVRMB+sI=;
-        b=KbHbebB1AOC6FNyUoIrqEKRRU8gN4H1n3aW0W4XOxqYjk01uU6tC/ivQA1/TsaQ/vC
-         vxd66ZN8e0RHI4d2NQB79eYHp0/mqsTBmND3xMnsyxixf4RMewsfnGRqFZn6fBWjCoUM
-         vHSI3OSrHZbt7x+fJ4p6aHpujG/7mjR07c1G8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XIOp2nu9uvK0guG9IHkctrJxTkczWL48KQcVVRMB+sI=;
-        b=zKA1/zBm1/2tcsXCy1ecZXXmt976nmkwIdw/cI4DdT/UYOgsXn4cBg8sN86pDwhq+H
-         Z9dAUzb6bbapFSPAY+cjeHil5R7Xz+C3axfm9mrD0awnSC6y/LaoLZzupP7nzBexptiJ
-         91lvdbgfP5YrGOdWepfT+S40ZfdL4B1aJba+Rzh5K8I6uMsGASjyrW8eABtI7wILRh88
-         ys9BsebXDL0b68FFj1liCxDZG/so1+OcucVSmVk60IWk8sfGyy7eyx7NYC/RIhNyxI97
-         P6AVC0ROhPjB1n8kcTr754T8/xB9JR2EdLy1CWpGKi3ty88j7T1zXtRaz6fKfL+yqpv7
-         QtYg==
-X-Gm-Message-State: ANoB5pls+k5z0kdEc5sqgBKzDbWfR0pD06DEwRtXEghes3/tQe56apPd
-        buCn8tLDhFMT/6wIFYgkMsOGRQ==
-X-Google-Smtp-Source: AA0mqf7SgF9lw7W0QqWM9WGGCr1ko400p0Hj8rA6IDF/EO+wK3u6KaOCsCX7175wYeZ+1CYXYmSpzQ==
-X-Received: by 2002:a17:90a:5298:b0:217:e054:9ac8 with SMTP id w24-20020a17090a529800b00217e0549ac8mr50572914pjh.246.1669439262808;
-        Fri, 25 Nov 2022 21:07:42 -0800 (PST)
-Received: from a6c5907d6328 ([220.253.112.46])
-        by smtp.gmail.com with ESMTPSA id im16-20020a170902bb1000b00183c6784704sm3094862plb.291.2022.11.25.21.07.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Nov 2022 21:07:41 -0800 (PST)
-Date:   Sat, 26 Nov 2022 05:07:32 +0000
-From:   Rudi Heitbaum <rudi@heitbaum.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.0 000/313] 6.0.10-rc2 review
-Message-ID: <20221126050732.GA2942465@a6c5907d6328>
-References: <20221125075804.064161337@linuxfoundation.org>
+        Sat, 26 Nov 2022 00:08:13 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F491A806
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 21:08:12 -0800 (PST)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AQ4uq8i011137;
+        Sat, 26 Nov 2022 05:07:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2022-7-12; bh=hEdmssi73mdZJZby6VH83OA2wc6mC+NgmIbVOzmV8+8=;
+ b=YRv/MbqsKUL00lc46HNMmHbRZN5nRNTAQSZErCmQ2JKouYF8lTgHw57IJg+gbcbUbFqd
+ j/TK0X5TvVm+D17WWxIbHD5sXRrb0EQDkYT7HLk+f4wMyOHpW0UMMKIdc+AGmnF94kXY
+ pCo1Pr5LKwMXHqCEwUM9EthDW3yd7Sh7MsHRsSjOzX0BKlDzISo74jDFDZc4mTCMHiVu
+ znFxsXqHM9Q5kTfP4XJqoiVdVTZuyKDNB8v2tUI5u2agBmzDcSSQLsld1MHGaIemOh1K
+ g3xsbZodojcNStcjzFzSsRZLSw67l4LmbjP2+Cwy4O0qqFAahDmoBZ7vboDmM0cvvmc9 nw== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3m3c7dg07b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 26 Nov 2022 05:07:56 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2AQ4jExv023572;
+        Sat, 26 Nov 2022 05:07:54 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3m3c1q8p74-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 26 Nov 2022 05:07:54 +0000
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AQ52vF1011626;
+        Sat, 26 Nov 2022 05:07:54 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3m3c1q8p61-1;
+        Sat, 26 Nov 2022 05:07:54 +0000
+From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     harshit.m.mogalapalli@oracle.com, error27@gmail.com,
+        harshit.m.mogalapalli@gmail.com, Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Paul Durrant <paul.durrant@citrix.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] xen/privcmd: Fix a possible warning in privcmd_ioctl_mmap_resource()
+Date:   Fri, 25 Nov 2022 21:07:45 -0800
+Message-Id: <20221126050745.778967-1-harshit.m.mogalapalli@oracle.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221125075804.064161337@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-26_04,2022-11-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 suspectscore=0
+ bulkscore=0 adultscore=0 mlxlogscore=999 malwarescore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211260040
+X-Proofpoint-GUID: kO7OwKz7A5zcOQYmakxJLrTnzyx51z-5
+X-Proofpoint-ORIG-GUID: kO7OwKz7A5zcOQYmakxJLrTnzyx51z-5
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022 at 08:58:38AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.10 release.
-> There are 313 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 27 Nov 2022 07:57:07 +0000.
-> Anything received after that time might be too late.
+As 'kdata.num' is user-controlled data, if user tries to allocate
+memory larger than(>=) MAX_ORDER, then kcalloc() will fail, it
+creates a stack trace and messes up dmesg with a warning.
 
-Hi Greg,
+Call trace:
+-> privcmd_ioctl
+--> privcmd_ioctl_mmap_resource
 
-6.0.10-rc2 tested.
+Add __GFP_NOWARN in order to avoid too large allocation warning.
+This is detected by static analysis using smatch.
 
-Run tested on:
-- Intel Alder Lake x86_64 (nuc12 i7-1260P)
-- SolidRun Cubox-i Dual/Quad - NXP iMX6 (Cubox-i4Pro)
+Fixes: 3ad0876554ca ("xen/privcmd: add IOCTL_PRIVCMD_MMAP_RESOURCE")
+Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+---
+ drivers/xen/privcmd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-In addition - build tested for:
-- Allwinner A64
-- Allwinner H3
-- Allwinner H5
-- Allwinner H6
-- NXP iMX8
-- Qualcomm Dragonboard
-- Rockchip RK3288
-- Rockchip RK3328
-- Rockchip RK3399pro
-- Samsung Exynos
+diff --git a/drivers/xen/privcmd.c b/drivers/xen/privcmd.c
+index fae50a24630b..1edf45ee9890 100644
+--- a/drivers/xen/privcmd.c
++++ b/drivers/xen/privcmd.c
+@@ -760,7 +760,7 @@ static long privcmd_ioctl_mmap_resource(struct file *file,
+ 		goto out;
+ 	}
+ 
+-	pfns = kcalloc(kdata.num, sizeof(*pfns), GFP_KERNEL);
++	pfns = kcalloc(kdata.num, sizeof(*pfns), GFP_KERNEL | __GFP_NOWARN);
+ 	if (!pfns) {
+ 		rc = -ENOMEM;
+ 		goto out;
+-- 
+2.38.1
 
-Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
---
-Rudi
