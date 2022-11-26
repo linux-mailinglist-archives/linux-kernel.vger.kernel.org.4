@@ -2,101 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA82E639312
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 02:23:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB4B1639317
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 02:26:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbiKZBXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 20:23:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
+        id S230045AbiKZB0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 20:26:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbiKZBXY (ORCPT
+        with ESMTP id S229722AbiKZB0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 20:23:24 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7866943849;
-        Fri, 25 Nov 2022 17:23:23 -0800 (PST)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NJv9g5tXGzRpXR;
-        Sat, 26 Nov 2022 09:22:47 +0800 (CST)
-Received: from [10.174.179.191] (10.174.179.191) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 26 Nov 2022 09:23:21 +0800
-Message-ID: <01fc11f9-b798-f690-32d9-7f4d577a8e82@huawei.com>
-Date:   Sat, 26 Nov 2022 09:23:20 +0800
+        Fri, 25 Nov 2022 20:26:12 -0500
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EAFC343878;
+        Fri, 25 Nov 2022 17:26:10 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-05 (Coremail) with SMTP id zQCowABXd8wna4FjF24+Ag--.33231S2;
+        Sat, 26 Nov 2022 09:25:59 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     error27@gmail.com, maximlevitsky@gmail.com, oakad@yahoo.com,
+        ulf.hansson@linaro.org, christophe.jaillet@wanadoo.fr,
+        axboe@kernel.dk, hare@suse.de
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v2] memstick/ms_block: Add check for alloc_ordered_workqueue
+Date:   Sat, 26 Nov 2022 09:25:58 +0800
+Message-Id: <20221126012558.34374-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 2/2] RDMA/srp: Fix error return code in
- srp_parse_options()
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     <bvanassche@acm.org>, <jgg@ziepe.ca>, <leon@kernel.org>,
-        <dennis.dalessandro@cornelisnetworks.com>,
-        <linux-rdma@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bart.vanassche@wdc.com>, <easwar.hariharan@intel.com>
-References: <1669377831-41386-1-git-send-email-wangyufen@huawei.com>
- <1669377831-41386-2-git-send-email-wangyufen@huawei.com>
- <Y4DTMQVenpsEiKHz@smile.fi.intel.com>
-From:   wangyufen <wangyufen@huawei.com>
-In-Reply-To: <Y4DTMQVenpsEiKHz@smile.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.191]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: zQCowABXd8wna4FjF24+Ag--.33231S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7AFy5WF4UCF1xAFyxJF1kZrb_yoW8Xw4fpa
+        15CF9rWw4rGa1DGrn8tr15WFW3C3W8G3yfG3sagwnIvwn5ArsxXFyxtas0qFs8uFZ3JF4D
+        AFsxt3yDWFyDJw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
+        0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+        8cxan2IY04v7MxkIecxEwVAFwVWkMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+        vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAI
+        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa
+        73UjIFyTuYvjfUOMKZDUUUU
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+As the alloc_ordered_workqueue may return NULL pointer,
+it should be better to add check for the return
+value.
+Moreover, the msb->io_queue should be freed if error occurs later.
 
+Fixes: 0ab30494bc4f ("memstick: add support for legacy memorysticks")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+Changelog:
 
-在 2022/11/25 22:37, Andy Shevchenko 写道:
-> On Fri, Nov 25, 2022 at 08:03:51PM +0800, Wang Yufen wrote:
->> In the previous while loop, "ret" may be assigned zero. Therefore,
->> "ret" needs to be assigned -EINVAL at the beginning of each loop.
-> 
-> ...
-> 
->>   	while ((p = strsep(&sep_opt, ",\n")) != NULL) {
->> +		ret = -EINVAL;
->>   		if (!*p)
->>   			continue;
-> 
-> Better option is to investigate each case separately and gather all of them
-> into a single fix.
-> 
-> For example, this
-> 
-> 	case SRP_OPT_MAX_IT_IU_SIZE:
-> 		if (match_int(args, &token) || token < 0) {
-> 			pr_warn("bad maximum initiator to target IU size '%s'\n", p);
-> 			goto out;
-> 		}
-> 		target->max_it_iu_size = token;
-> 		break;
-> 
-> can be rewritten as
-> 
-> 	case SRP_OPT_MAX_IT_IU_SIZE:
-> 		ret = match_int(args, &token);
-> 		if (ret)
-> 			goto out;
-> 		if (token < 0) {
-> 			pr_warn("bad maximum initiator to target IU size '%s'\n", p);
-> 			ret = -EINVAL;
-> 			goto out;
-> 		}
-> 		target->max_it_iu_size = token;
-> 		break;
-> 
-> and so on...
->
-I got it. Will change in v2.
-Thanks!
+v1 -> v2:
+
+1. Assign error number to rc if alloc_ordered_workqueue fails.
+2. Free msb->io_queue if error occurs later.
+---
+ drivers/memstick/core/ms_block.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/memstick/core/ms_block.c b/drivers/memstick/core/ms_block.c
+index ba8414519515..04115cd92433 100644
+--- a/drivers/memstick/core/ms_block.c
++++ b/drivers/memstick/core/ms_block.c
+@@ -2116,6 +2116,11 @@ static int msb_init_disk(struct memstick_dev *card)
+ 	dbg("Set total disk size to %lu sectors", capacity);
+ 
+ 	msb->io_queue = alloc_ordered_workqueue("ms_block", WQ_MEM_RECLAIM);
++	if (!msb->io_queue) {
++		rc = -ENOMEM;
++		goto out_cleanup_disk;
++	}
++
+ 	INIT_WORK(&msb->io_work, msb_io_work);
+ 	sg_init_table(msb->prealloc_sg, MS_BLOCK_MAX_SEGS+1);
+ 
+@@ -2125,10 +2130,12 @@ static int msb_init_disk(struct memstick_dev *card)
+ 	msb_start(card);
+ 	rc = device_add_disk(&card->dev, msb->disk, NULL);
+ 	if (rc)
+-		goto out_cleanup_disk;
++		goto out_destroy_workqueue;
+ 	dbg("Disk added");
+ 	return 0;
+ 
++out_destroy_workqueue:
++	destroy_workqueue(msb->io_queue);
+ out_cleanup_disk:
+ 	put_disk(msb->disk);
+ out_free_tag_set:
+-- 
+2.25.1
 
