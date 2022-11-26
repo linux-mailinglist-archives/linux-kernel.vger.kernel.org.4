@@ -2,77 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FB6B639285
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 01:13:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B570639288
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 01:13:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbiKZAN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 19:13:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55846 "EHLO
+        id S230107AbiKZANi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 19:13:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiKZAN2 (ORCPT
+        with ESMTP id S229993AbiKZANh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 19:13:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827752BB0D
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 16:13:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EADC61143
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 00:13:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6C5AC433C1;
-        Sat, 26 Nov 2022 00:13:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1669421606;
-        bh=F2Iz4FmHG/F1E/NZVczN3uc6knKQCTCJz/o482AKOHI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Xc82kQZsd+dQC/numsQShfrRl+O0J8DnCYj1NMIktTDjsGED0IanHoKaOvb7l6l9W
-         oyafUj9mcWJNEimTbhve+jbIwR6TknhuIP/fj2WgmMJHG9oI1T07xeHAmMfC/UNu6A
-         Uq12fxjx9eR+6SxN34H8xSMxLbYx+XtpzKU+ElTI=
-Date:   Fri, 25 Nov 2022 16:13:25 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Lee Jones <lee@kernel.org>
-Cc:     arnd@arndb.de, nathan@kernel.org,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch,
-        ndesaulniers@google.com, trix@redhat.com, harry.wentland@amd.com,
-        sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com,
-        alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 0/2] Fix a bunch of allmodconfig errors
-Message-Id: <20221125161325.bed715211b887d0a298813de@linux-foundation.org>
-In-Reply-To: <20221125120750.3537134-1-lee@kernel.org>
-References: <20221125120750.3537134-1-lee@kernel.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Fri, 25 Nov 2022 19:13:37 -0500
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5A22FC35;
+        Fri, 25 Nov 2022 16:13:36 -0800 (PST)
+Received: by mail-pf1-f171.google.com with SMTP id a9so1925685pfr.0;
+        Fri, 25 Nov 2022 16:13:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ru1TywxZNaC39NNAePmlRI5Ov25vqXZAwJ5dyy9w1u8=;
+        b=giWJg+aKoAuS8/m6p8PaqTAFjtuubho67laSUP1Yjk8O/diaATT0IsZvmyumyGCJna
+         TCuZ8E9oD8JbVTcsZqdR5HRpvqjyL5Gz859WTCh60Lw5vAyyu+PQCsWaTefBWbgkCsSG
+         fwsOoB78NT3voSI7xTcVQZL/61ohBm657FLgmgtQu+meP+sXKkRyp899ALABNrIaK0m6
+         Ca60N9rvI/BmLqe8ICWmLnTPnlejnzu4+ZmCxnYQ8d2adCth4GJcM1G7D5OqaEvw8vLq
+         7k/26Al0+a7o8R1G4ktJpCtNedap2SLnz0YndReMb9fLAXNoXTNPKRtOKm1WjE+K1eq+
+         TDgA==
+X-Gm-Message-State: ANoB5pmLIJaptDKf5k3UkV0d8v/7CtmglX8nAzB8AOs9a44qYlpkmJZ8
+        WuayHaREZEfA46bnBWssFBeUxVKhFAI=
+X-Google-Smtp-Source: AA0mqf60kRzKNKZY5tUXsPjMG4NwiZtljH37aPFWHxrlYGPPiarjdiJBIDmEe7Z4r7GpbtVteTqikg==
+X-Received: by 2002:a63:5422:0:b0:46e:be03:d9b2 with SMTP id i34-20020a635422000000b0046ebe03d9b2mr17779659pgb.406.1669421616206;
+        Fri, 25 Nov 2022 16:13:36 -0800 (PST)
+Received: from [192.168.3.219] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id x22-20020a170902821600b0017f48a9e2d6sm3906284pln.292.2022.11.25.16.13.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Nov 2022 16:13:35 -0800 (PST)
+Message-ID: <c260691a-e047-0d23-fbb2-b903466eef7d@acm.org>
+Date:   Fri, 25 Nov 2022 16:13:34 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [External] : Re: [PATCH 2/2] scsi: core: Use SCSI_SCAN_INITIAL in
+ do_scsi_scan_host()
+Content-Language: en-US
+To:     John Garry <john.g.garry@oracle.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        martin.petersen@oracle.com, jejb@linux.ibm.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221121121725.1910795-1-john.g.garry@oracle.com>
+ <20221121121725.1910795-3-john.g.garry@oracle.com>
+ <83c29cc2-9bf4-265f-4f8a-ab83d8b6271b@opensource.wdc.com>
+ <347d0e04-65d1-b735-75eb-e8358c91c08a@oracle.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <347d0e04-65d1-b735-75eb-e8358c91c08a@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Nov 2022 12:07:48 +0000 Lee Jones <lee@kernel.org> wrote:
+On 11/21/22 05:48, John Garry wrote:
+> cheers. As mentioned, I can combine these patches if people prefer.
 
-> Since b339ec9c229aa ("kbuild: Only default to -Werror if COMPILE_TEST") WERROR 
-> now defaults to COMPILE_TEST meaning that it's enabled for allmodconfig        
-> builds.  This leads to some interesting failures, each resolved in this set.   
+I'm in favor of combining both patches.
 
-I'm not sure who this patchset is aimed at, so I'll take my usual
-approach of grabbing it and seeing who complains.
+Whether or not these patches get combined, feel free to add:
 
-> With this set applied, I am able to obtain a successful allmodconfig Arm build.
-
-b339ec9c229aa is a year old and I've been doing arm allmodconfig for
-ever.  What am I missing here?
-
-A broken arm allmodconfig is pretty irritating - I'm thinking that a
-fix should be backported into -stable kernels.  But I'm clearly missing
-something here.
-
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
