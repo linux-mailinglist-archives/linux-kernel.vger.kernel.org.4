@@ -2,89 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5037663955A
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 11:30:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 154D163955D
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 11:33:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbiKZKac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 05:30:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50272 "EHLO
+        id S229459AbiKZKdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 05:33:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiKZKaK (ORCPT
+        with ESMTP id S229500AbiKZKdS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 05:30:10 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51EDA2871E;
-        Sat, 26 Nov 2022 02:30:09 -0800 (PST)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NK7FN3KnGzJnp2;
-        Sat, 26 Nov 2022 18:26:48 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 26 Nov 2022 18:30:07 +0800
-Received: from localhost.localdomain (10.67.165.2) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 26 Nov 2022 18:30:07 +0800
-From:   Haoyue Xu <xuhaoyue1@hisilicon.com>
-To:     <jgg@nvidia.com>, <leon@kernel.org>
-CC:     <linux-rdma@vger.kernel.org>, <linuxarm@huawei.com>,
-        <linux-kernel@vger.kernel.org>, <xuhaoyue1@hisilicon.com>
-Subject: [PATCH for-next 6/6] RDMA/hns: Fix XRC caps on HIP08
-Date:   Sat, 26 Nov 2022 18:29:11 +0800
-Message-ID: <20221126102911.2921820-7-xuhaoyue1@hisilicon.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20221126102911.2921820-1-xuhaoyue1@hisilicon.com>
-References: <20221126102911.2921820-1-xuhaoyue1@hisilicon.com>
+        Sat, 26 Nov 2022 05:33:18 -0500
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF802655F;
+        Sat, 26 Nov 2022 02:33:16 -0800 (PST)
+Received: from sopl295.home (unknown [IPv6:2a01:cb19:8d70:d500:b9f9:2ddd:cb4c:4b34])
+        (Authenticated sender: robert.jarzmik@free.fr)
+        by smtp4-g21.free.fr (Postfix) with ESMTPSA id A135419F58D;
+        Sat, 26 Nov 2022 11:33:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+        s=smtp-20201208; t=1669458795;
+        bh=trAIjXQgfCOT8mzOtZdvR3zVgqjE7H8j/IocuQbKRJk=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=Bnu/qzCNRGjdyWnC0iBqjA+c8e8NRppn+0rODqBXa2M2Gr8Y7agMcXlgWyjTkc+ex
+         gteir53YVC5gzVR8YC17uG8PWG1FpHGCiJq8+s2or81HuHV9wgKA/IxQ5NrSFVMxo+
+         hVgCSo6Dq6UL78B1Zh7zjJLx3OPjM/2CtwpTaUu4K3UNN+AhtBNBzjLeYEO1JZUmZH
+         D2ew+zCMsJLNAFm9DzW/MKOCi+fw4029mLo/a9mWhVVKZIDnH+9Oi9rc5UvMo0LTAT
+         SzgeQbF0m+ke44EnqcPBrGayckNYxNOQPGz3dkPqfJpv92LyDW0hJzGY4/O7unURW7
+         Y6vf4PX4prX0Q==
+References: <20221124100112.4172513-1-j.neuschaefer@gmx.net>
+User-agent: mu4e 1.8.11; emacs 28.1
+From:   Robert Jarzmik <robert.jarzmik@free.fr>
+To:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: dts: pxa2xx: Don't mention &pwri2c where it
+ doesn't exist
+Date:   Sat, 26 Nov 2022 11:32:07 +0100
+In-reply-to: <20221124100112.4172513-1-j.neuschaefer@gmx.net>
+Message-ID: <m2a64ef1jz.fsf@sopl295.home>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.165.2]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chengchang Tang <tangchengchang@huawei.com>
 
-XRC caps has been set by default. But in fact, XRC is not supported
-in HIP08.
+Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net> writes:
 
-Fixes: 32548870d438 ("RDMA/hns: Add support for XRC on HIP09")
-Signed-off-by: Chengchang Tang <tangchengchang@huawei.com>
-Signed-off-by: Haoyue Xu <xuhaoyue1@hisilicon.com>
----
- drivers/infiniband/hw/hns/hns_roce_hw_v2.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+> The pwri2c node does not exist in all PXA2xx SoCs (specifically=20
+> not
+> in PXA25x), and thus isn't defined in pxa2xx.dtsi. It is,=20
+> however,
+> currently mentioned in /aliases, causing an error when building=20
+> a
+> devicetree that doesn't define it.
+>
+> Move the mention of &pwri2c in /aliases to the files that define=20
+> it
+> (pxa27x.dtsi and pxa3xx.dtsi), to avoid the error mentioned=20
+> above.
+>
+> Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+Acked-by: Robert Jarzmik <robert.jarzmik@free.fr>
 
-diff --git a/drivers/infiniband/hw/hns/hns_roce_hw_v2.c b/drivers/infiniband/hw/hns/hns_roce_hw_v2.c
-index f32100c6f1d9..2716852f5e92 100644
---- a/drivers/infiniband/hw/hns/hns_roce_hw_v2.c
-+++ b/drivers/infiniband/hw/hns/hns_roce_hw_v2.c
-@@ -2051,13 +2051,14 @@ static void set_default_caps(struct hns_roce_dev *hr_dev)
- 
- 	caps->flags |= HNS_ROCE_CAP_FLAG_ATOMIC | HNS_ROCE_CAP_FLAG_MW |
- 		       HNS_ROCE_CAP_FLAG_SRQ | HNS_ROCE_CAP_FLAG_FRMR |
--		       HNS_ROCE_CAP_FLAG_QP_FLOW_CTRL | HNS_ROCE_CAP_FLAG_XRC;
-+		       HNS_ROCE_CAP_FLAG_QP_FLOW_CTRL;
- 
- 	caps->gid_table_len[0] = HNS_ROCE_V2_GID_INDEX_NUM;
- 
- 	if (hr_dev->pci_dev->revision >= PCI_REVISION_ID_HIP09) {
- 		caps->flags |= HNS_ROCE_CAP_FLAG_STASH |
--			       HNS_ROCE_CAP_FLAG_DIRECT_WQE;
-+			       HNS_ROCE_CAP_FLAG_DIRECT_WQE |
-+			       HNS_ROCE_CAP_FLAG_XRC;
- 		caps->max_sq_inline = HNS_ROCE_V3_MAX_SQ_INLINE;
- 	} else {
- 		caps->max_sq_inline = HNS_ROCE_V2_MAX_SQ_INLINE;
--- 
-2.30.0
+Cheers.
 
+--
+Robert
