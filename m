@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F51C639303
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 02:10:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9162639306
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 02:14:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbiKZBKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 20:10:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41052 "EHLO
+        id S230047AbiKZBOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 20:14:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiKZBK3 (ORCPT
+        with ESMTP id S229791AbiKZBOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 20:10:29 -0500
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9302CCAA;
-        Fri, 25 Nov 2022 17:10:28 -0800 (PST)
-Received: by mail-pj1-f46.google.com with SMTP id md8so799829pjb.4;
-        Fri, 25 Nov 2022 17:10:28 -0800 (PST)
+        Fri, 25 Nov 2022 20:14:06 -0500
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438092CDF0;
+        Fri, 25 Nov 2022 17:14:06 -0800 (PST)
+Received: by mail-pf1-f174.google.com with SMTP id q12so1360303pfn.10;
+        Fri, 25 Nov 2022 17:14:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PEeX4qyWg0IrAHe/fvm5AXFA+iKbUTvD986+eHJxTfA=;
-        b=RN9JDfdIuJBguFyi1A9tBs0JXROnRymTPjbW6QtK3uzaFxPzPZfE8BMYO3uGAsES8B
-         mPvNlJ2QzVWT+Kgdggc7R51pDDBQcMQEUxRAFOVFrLeV9BHR0f9K2lT7g/pfQOI9QlMv
-         Rm+D4EWQ+8OuEnY18ainQ/pPuKkYRakhb7mP+mPC5lvfbGQT4kaIUZ8DF44YC9i+uWHl
-         3687p93OqQCNSmDy+PBeePbSE7dWu6UBIfQvZM6fjUSZuQD8dCC4o2xmF3dRDl345Jq1
-         5y5wKJkIs1ASTtlrxNQTj4lA/B/NTmeQfRuJ7w5wfvvYOaztx2VTOmefRZQ4y7IpDoWx
-         lCdw==
-X-Gm-Message-State: ANoB5pnt+uvEXLejnZ17yTLiLIC67QK8XcQOfbgIPNvnr80XKXrRSQRU
-        Jw5vPiw4IR5lc0k9bE5RzSQ=
-X-Google-Smtp-Source: AA0mqf4YYaQW75PaoYy4IXPZM8MWzzeDuc9H22FTeGdh1VZ7ErM5RanSi3THxi/FOrCJwzcN0IMwjA==
-X-Received: by 2002:a17:902:7b84:b0:189:6623:4c47 with SMTP id w4-20020a1709027b8400b0018966234c47mr6292602pll.170.1669425028073;
-        Fri, 25 Nov 2022 17:10:28 -0800 (PST)
+        bh=D7ErcfLJhFJdRfBJj830X4NhZcNP4qOk8E34HtsCRQI=;
+        b=hCYTDOsx2C46Z25Br+h1Zo+eDIXnHWDDXjoNg6yD1SLWtyAnIiVCI65jZX+3/S9rNJ
+         MsyFc1GkiPuOSFzu3CenmK+QIetaqLspNI0AmVDjPg5J48aM0F+gRD7IU3bpTXSsKPkc
+         zqNCMKwLtItaRkjLn79Jhd49/vTP5S4Jp1uBJo5GSluY8k8Q1QydcbaHD4w37zdPWrqA
+         S78QbLVm1ui7LgIPHKskJMhlmiHkZsEq2PVTwSslD7uDJWnGZ92XZylx7K3S8zDhtCVt
+         EKPcMbkTdTkkQaNl/a4O8ShGIZB9JwPsMl/H936rkXSX8yDj+NoFf6ej5pAgdpCoMbKW
+         Up5A==
+X-Gm-Message-State: ANoB5pk64BeVrm/OHotJ8AXeScnzuGNnGuTKWJGLUmaWw6tqKkvmsPjW
+        b4xhM6YelaHILuUkGEJgBEc=
+X-Google-Smtp-Source: AA0mqf4YXw7lVfe7T9ZGMmfzN3axd0i4UT4h+X2tme/cHj6ib8f6X28gLp/Lb0TyfZwG0hZfc/R/CQ==
+X-Received: by 2002:a63:f041:0:b0:477:f449:36ba with SMTP id s1-20020a63f041000000b00477f44936bamr2047545pgj.125.1669425245308;
+        Fri, 25 Nov 2022 17:14:05 -0800 (PST)
 Received: from [192.168.3.219] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id k4-20020a63d844000000b00476e84c3530sm3101627pgj.60.2022.11.25.17.10.25
+        by smtp.gmail.com with ESMTPSA id z14-20020a170903018e00b00186a2dd3ffdsm4088504plg.15.2022.11.25.17.14.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Nov 2022 17:10:27 -0800 (PST)
-Message-ID: <105b9113-8322-aa68-7d21-45f5ba288d34@acm.org>
-Date:   Fri, 25 Nov 2022 17:10:25 -0800
+        Fri, 25 Nov 2022 17:14:04 -0800 (PST)
+Message-ID: <e760d891-36d9-8253-326d-ad5c3645714f@acm.org>
+Date:   Fri, 25 Nov 2022 17:14:02 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH v5 06/16] ufs: core: mcq: Configure resource regions
+Subject: Re: [PATCH v5 07/16] ufs: core: mcq: Calculate queue depth
 Content-Language: en-US
 To:     Asutosh Das <quic_asutoshd@quicinc.com>, quic_cang@quicinc.com,
         martin.petersen@oracle.com, linux-scsi@vger.kernel.org
@@ -53,11 +53,17 @@ Cc:     quic_nguyenb@quicinc.com, quic_xiaosenh@quicinc.com,
         beanhuo@micron.com, linux-arm-msm@vger.kernel.org,
         Alim Akhtar <alim.akhtar@samsung.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Jinyoung Choi <j-young.choi@samsung.com>,
+        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
         open list <linux-kernel@vger.kernel.org>
 References: <cover.1669176158.git.quic_asutoshd@quicinc.com>
- <05400727c8a82b7ef85a576c1fa2d9bd81458e9a.1669176158.git.quic_asutoshd@quicinc.com>
+ <ae139f730dcec6462f9218856bf974eda4a29e1d.1669176158.git.quic_asutoshd@quicinc.com>
 From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <05400727c8a82b7ef85a576c1fa2d9bd81458e9a.1669176158.git.quic_asutoshd@quicinc.com>
+In-Reply-To: <ae139f730dcec6462f9218856bf974eda4a29e1d.1669176158.git.quic_asutoshd@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -71,31 +77,29 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 11/22/22 20:10, Asutosh Das wrote:
-> +/* Resources */
-> +static const struct ufshcd_res_info ufs_res_info[RES_MAX] = {
-> +	{.name = "ufs_mem",},
-> +	{.name = "mcq",},
-> +	/* Submission Queue DAO */
-> +	{.name = "mcq_sqd",},
-> +	/* Submission Queue Interrupt Status */
-> +	{.name = "mcq_sqis",},
-> +	/* Completion Queue DAO */
-> +	{.name = "mcq_cqd",},
-> +	/* Completion Queue Interrupt Status */
-> +	{.name = "mcq_cqis",},
-> +	/* MCQ vendor specific */
-> +	{.name = "mcq_vs",},
-> +};
+> +int ufshcd_mcq_decide_queue_depth(struct ufs_hba *hba)
+> +{
+> +	int mac;
+> +
+> +	/* Mandatory to implement get_hba_mac() */
+> +	mac = ufshcd_mcq_vops_get_hba_mac(hba);
+> +	if (mac < 0) {
+> +		dev_err(hba->dev, "Failed to get mac, err=%d\n", mac);
+> +		return mac;
+> +	}
+> +
+> +	WARN_ON(!hba->dev_info.bqueuedepth);
+> +	/*
+> +	 * max. value of bqueuedepth = 256, mac is host dependent.
+> +	 * It is mandatory for UFS device to define bQueueDepth if
+> +	 * shared queuing architecture is enabled.
+> +	 */
+> +	return min_t(int, mac, hba->dev_info.bqueuedepth);
+> +}
 
-Which names to associate with nodes in the device tree for UFS MCQ 
-resources has not been standardized. Additionally, the UFS driver is 
-also used on platforms that do not support the device tree (e.g. Intel 
-x86 platforms). So I don't think that the platform_get_resource_byname() 
-calls should occur in the UFS driver core. How about moving the code 
-that queries device tree nodes into the Qualcomm driver until a second 
-user of this code is added? If a second user of this code appears this 
-code could e.g. become a kernel module shared by both UFS host 
-controller drivers.
+Isn't WARN_ON_ONCE() recommended over WARN_ON()?
+
+Otherwise this patch looks good to me.
 
 Thanks,
 
