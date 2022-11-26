@@ -2,144 +2,410 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7898B6395FA
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 13:39:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DAF66395FB
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 13:42:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbiKZMjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 07:39:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38326 "EHLO
+        id S229535AbiKZMmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 07:42:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiKZMju (ORCPT
+        with ESMTP id S229450AbiKZMmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 07:39:50 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A179A1FFA4;
-        Sat, 26 Nov 2022 04:39:46 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id w15-20020a17090a380f00b0021873113cb4so6374142pjb.0;
-        Sat, 26 Nov 2022 04:39:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UX7oPzfxEqRosS76R8Lsuk6SvDMI2y8a/cpo44O3R5E=;
-        b=Bz+ABP3BufV81lhyJcAUQ8yJxjPJhZMcr0SlpzdcZXPjMzWJ8svfOK13S/zfigvnlo
-         QSMYHd0y20Xc4BIx+gr4Q2W+cOQOoj6AVO3zlN/2u/pGAj/goIcXwDcZ96JOwam5FkZ3
-         jRfMf+1MF7OuhM6c9fE6regcDp3QJAsTDey/8gTOAnMjb35UbPPJ5SFY1HbSpo7Rv/6t
-         jyn82qajrXSQbZ1M4T8k1arzkREHVd3gBVGE7s6aze/9mhFSynbOtB6xt0wkAUafe9Fj
-         LKU4FWKDgRbQxtosDboyTFiXctQR1Q8PraUxHbmaiZTnGMMiBjd9I2029Uu+MRu8Giix
-         EKxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UX7oPzfxEqRosS76R8Lsuk6SvDMI2y8a/cpo44O3R5E=;
-        b=JlcGquq3H4B3597QJ3lE21oX2mtx2Tia/31I83sUoSNEbWKGW2VbqZ88FZzuMH7/WP
-         Y4AJ54WovIjI7emqLzZdT2XZqbjdV4OfUJturfJOjnWkal4W4lHr1h6+Q7XL+3KQdI/C
-         sMU8/n5zVWbmEWjI/X98XL1MtVlssYt/xQT5SvkfezJOVMZsrTAOShEddDibOIC2Y+yB
-         nBuVSq09IlJ+BWwk4gGY05KY01Y6kaQeQoy2tuJMiR4+6Wm7GBicdh7H/tnBg0/c9GEf
-         py+0y808TjWjZJvBVIJXY5om/DFldjJW/2EcbLSPFFEEe9me0Pz9HGR2yVxb+BY80GxK
-         mEjw==
-X-Gm-Message-State: ANoB5plflwSTcwmF7i16D5WTd0kJHTwcI0oFt1n0rjq7KEDStYH/q8Dn
-        Uv7qpkz/B73x2yAOz1tyuSk=
-X-Google-Smtp-Source: AA0mqf4Q+vG9ybXU6Pv4izAesd3spnim0enjBHyRrf9t79Nwx8UbxYwdypglztLVgyh+mgsXuX/STQ==
-X-Received: by 2002:a17:90a:5298:b0:217:e054:9ac8 with SMTP id w24-20020a17090a529800b00217e0549ac8mr51932482pjh.246.1669466386116;
-        Sat, 26 Nov 2022 04:39:46 -0800 (PST)
-Received: from debian.me (subs09a-223-255-225-68.three.co.id. [223.255.225.68])
-        by smtp.gmail.com with ESMTPSA id q4-20020a170902dac400b00188f6cbd950sm5252997plx.226.2022.11.26.04.39.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Nov 2022 04:39:45 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id DB998104374; Sat, 26 Nov 2022 19:39:41 +0700 (WIB)
-Date:   Sat, 26 Nov 2022 19:39:41 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V3 3/3] Documentation/osnoise: Add osnoise/options
- documentation
-Message-ID: <Y4IJDY2802+x17Ig@debian.me>
-References: <cover.1669409262.git.bristot@kernel.org>
- <0a8ecf364af29b0c1d5007f4d71265127c114a1f.1669409262.git.bristot@kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Fh1KnNgyu1c5IbAd"
-Content-Disposition: inline
-In-Reply-To: <0a8ecf364af29b0c1d5007f4d71265127c114a1f.1669409262.git.bristot@kernel.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Sat, 26 Nov 2022 07:42:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6B01FFA7
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 04:42:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12C0560112
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 12:42:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A7BCC433D6;
+        Sat, 26 Nov 2022 12:42:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669466532;
+        bh=uyA91/WIMD2IjmQ+tmb3QENbzIKL+8L+4z9NnN7901Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Wso69y6Dya+nThWWmnx310ZCW3yYPfe6QXVZDXPj0msdFYnLc2pRg17bVdLXwKQ3+
+         ug44pKhpJzP9uze3BoTH3s+imq7ZhUSCHyl8kySzfsW7gGNO8TdANP8X/CLcA1FW3h
+         Nl8Smw6+egnKVau+cJaC2UE6hgxKFxxYUe2nOkAD5Hd7UKBGbqH4bNcGKaSTDX1Y7j
+         gVEGOONyMl+bZEgWJIi2usDXM+bRSfuEKJ/ttX4cdp4If1zFOPye57XSFis2TdlCN7
+         vvLdT2Y2UWaEizX2SE/0ZDJSErfNTxqizFhiXQMJfCKGJjOgryG2Lz2KW6+9xZWDGx
+         1PVymLxHi4SfA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oyuVV-008iIE-Qc;
+        Sat, 26 Nov 2022 12:42:09 +0000
+Date:   Sat, 26 Nov 2022 12:42:01 +0000
+Message-ID: <87y1rxubty.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 3/7] genirq: Add mechanism to multiplex a single HW IPI
+In-Reply-To: <20221114093904.1669461-4-apatel@ventanamicro.com>
+References: <20221114093904.1669461-1-apatel@ventanamicro.com>
+        <20221114093904.1669461-4-apatel@ventanamicro.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: apatel@ventanamicro.com, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, daniel.lezcano@linaro.org, atishp@atishpatra.org, Alistair.Francis@wdc.com, anup@brainfault.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 14 Nov 2022 09:39:00 +0000,
+Anup Patel <apatel@ventanamicro.com> wrote:
+> 
+> All RISC-V platforms have a single HW IPI provided by the INTC local
+> interrupt controller. The HW method to trigger INTC IPI can be through
+> external irqchip (e.g. RISC-V AIA), through platform specific device
+> (e.g. SiFive CLINT timer), or through firmware (e.g. SBI IPI call).
+> 
+> To support multiple IPIs on RISC-V, we add a generic IPI multiplexing
+> mechanism which help us create multiple virtual IPIs using a single
+> HW IPI. This generic IPI multiplexing is inspired from the Apple AIC
+> irqchip driver and it is shared by various RISC-V irqchip drivers.
+> 
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> ---
+>  include/linux/irq.h  |  18 +++
+>  kernel/irq/Kconfig   |   5 +
+>  kernel/irq/Makefile  |   1 +
+>  kernel/irq/ipi-mux.c | 268 +++++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 292 insertions(+)
+>  create mode 100644 kernel/irq/ipi-mux.c
+> 
+> diff --git a/include/linux/irq.h b/include/linux/irq.h
+> index c3eb89606c2b..5ab702cb0a5b 100644
+> --- a/include/linux/irq.h
+> +++ b/include/linux/irq.h
+> @@ -1266,6 +1266,24 @@ int __ipi_send_mask(struct irq_desc *desc, const struct cpumask *dest);
+>  int ipi_send_single(unsigned int virq, unsigned int cpu);
+>  int ipi_send_mask(unsigned int virq, const struct cpumask *dest);
+>  
+> +/**
+> + * struct ipi_mux_ops - IPI multiplex operations
+> + *
+> + * @ipi_mux_pre_handle:	Optional function called before handling parent IPI
+> + * @ipi_mux_post_handle:Optional function called after handling parent IPI
+> + * @ipi_mux_send:	Trigger parent IPI on target CPUs
+> + */
+> +struct ipi_mux_ops {
+> +	void (*ipi_mux_pre_handle)(unsigned int parent_virq, void *data);
+> +	void (*ipi_mux_post_handle)(unsigned int parent_virq, void *data);
 
---Fh1KnNgyu1c5IbAd
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I still haven't seen any decent explanation for this other than "we
+need it". What is it that cannot be achieved via the irq_ack() and
+irq_eoi() callbacks?
 
-On Fri, Nov 25, 2022 at 10:20:24PM +0100, Daniel Bristot de Oliveira wrote:
-> +Tracer Options
-> +--------------
+> +	void (*ipi_mux_send)(unsigned int parent_virq, void *data,
+> +			     const struct cpumask *mask);
+
+In what context would the 'parent_virq' be useful? You are *sending*
+an IPI, not receiving it, and I expect the mechanism by which you send
+such an IPI to be independent of the Linux view of the irq.
+
+Also, please swap data and mask in the function signature.
+
+> +};
 > +
-> +The osnoise/options file exposes a set of on/off configuration options f=
-or
-> +the osnoise tracer. These options are:
+> +void ipi_mux_process(void);
+> +int ipi_mux_create(unsigned int parent_virq, unsigned int nr_ipi,
+> +		   const struct ipi_mux_ops *ops, void *data);
 > +
-> + - DEFAULTS: reset the options to the default value.
-> + - OSNOISE_WORKLOAD: do not dispatch osnoise workload (see dedicated
-> +   section below).
-> + - PANIC_ON_STOP: call panic() if the tracer stops. This option serves to
-> +    capture a vmcore.
-
-Excessive indentation makes PANIC_ON_STOP item above become definition list
-instead. I have to make a small fixup:
-
----- >8 ----
-
-diff --git a/Documentation/trace/osnoise-tracer.rst b/Documentation/trace/o=
-snoise-tracer.rst
-index 0641781b00f5e8..f2008e3172231d 100644
---- a/Documentation/trace/osnoise-tracer.rst
-+++ b/Documentation/trace/osnoise-tracer.rst
-@@ -125,7 +125,7 @@ the osnoise tracer. These options are:
-  - OSNOISE_WORKLOAD: do not dispatch osnoise workload (see dedicated
-    section below).
-  - PANIC_ON_STOP: call panic() if the tracer stops. This option serves to
--    capture a vmcore.
-+   capture a vmcore.
-  - OSNOISE_PREEMPT_DISABLE: disable preemption while running the osnoise
-    workload, allowing only IRQ and hardware-related noise.
-  - OSNOISE_IRQ_DISABLE: disable IRQs while running the osnoise workload,
-
-> + - OSNOISE_PREEMPT_DISABLE: disable preemption while running the osnoise
-> +   workload, allowing only IRQ and hardware-related noise.
-> + - OSNOISE_IRQ_DISABLE: disable IRQs while running the osnoise workload,
-> +   allowing only NMIs and hardware-related noise, like hwlat tracer.
+>  #ifdef CONFIG_GENERIC_IRQ_MULTI_HANDLER
+>  /*
+>   * Registers a generic IRQ handling function as the top-level IRQ handler in
+> diff --git a/kernel/irq/Kconfig b/kernel/irq/Kconfig
+> index db3d174c53d4..df17dbc54b02 100644
+> --- a/kernel/irq/Kconfig
+> +++ b/kernel/irq/Kconfig
+> @@ -86,6 +86,11 @@ config GENERIC_IRQ_IPI
+>  	depends on SMP
+>  	select IRQ_DOMAIN_HIERARCHY
+>  
+> +# Generic IRQ IPI Mux support
+> +config GENERIC_IRQ_IPI_MUX
+> +	bool
+> +	depends on SMP
 > +
+>  # Generic MSI interrupt support
+>  config GENERIC_MSI_IRQ
+>  	bool
+> diff --git a/kernel/irq/Makefile b/kernel/irq/Makefile
+> index b4f53717d143..f19d3080bf11 100644
+> --- a/kernel/irq/Makefile
+> +++ b/kernel/irq/Makefile
+> @@ -15,6 +15,7 @@ obj-$(CONFIG_GENERIC_IRQ_MIGRATION) += cpuhotplug.o
+>  obj-$(CONFIG_PM_SLEEP) += pm.o
+>  obj-$(CONFIG_GENERIC_MSI_IRQ) += msi.o
+>  obj-$(CONFIG_GENERIC_IRQ_IPI) += ipi.o
+> +obj-$(CONFIG_GENERIC_IRQ_IPI_MUX) += ipi-mux.o
+>  obj-$(CONFIG_SMP) += affinity.o
+>  obj-$(CONFIG_GENERIC_IRQ_DEBUGFS) += debugfs.o
+>  obj-$(CONFIG_GENERIC_IRQ_MATRIX_ALLOCATOR) += matrix.o
+> diff --git a/kernel/irq/ipi-mux.c b/kernel/irq/ipi-mux.c
+> new file mode 100644
+> index 000000000000..259e00366dd7
+> --- /dev/null
+> +++ b/kernel/irq/ipi-mux.c
+> @@ -0,0 +1,268 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Multiplex several virtual IPIs over a single HW IPI.
+> + *
+> + * Copyright The Asahi Linux Contributors
+> + * Copyright (c) 2022 Ventana Micro Systems Inc.
+> + */
+> +
+> +#define pr_fmt(fmt) "ipi-mux: " fmt
+> +#include <linux/cpu.h>
+> +#include <linux/init.h>
+> +#include <linux/irq.h>
+> +#include <linux/irqchip.h>
+> +#include <linux/irqchip/chained_irq.h>
+> +#include <linux/irqdomain.h>
+> +#include <linux/jump_label.h>
+> +#include <linux/percpu.h>
+> +#include <linux/smp.h>
+> +
+> +struct ipi_mux_cpu {
+> +	atomic_t			enable;
+> +	atomic_t			bits;
+> +	struct cpumask			send_mask;
+> +};
+> +
+> +struct ipi_mux_control {
+> +	void				*data;
+> +	unsigned int			nr;
 
-Otherwise LGTM.=20
+Honestly, I think we can get rid of this. The number of IPIs Linux
+uses is pretty small, and assuming a huge value (like 32) would be
+enough. It would save looking up this value on each IPI handling.
 
---=20
-An old man doll... just what I always wanted! - Clara
+> +	unsigned int			parent_virq;
+> +	struct irq_domain		*domain;
+> +	const struct ipi_mux_ops	*ops;
+> +	struct ipi_mux_cpu __percpu	*cpu;
+> +};
+> +
+> +static struct ipi_mux_control *imux;
+> +static DEFINE_STATIC_KEY_FALSE(imux_pre_handle);
+> +static DEFINE_STATIC_KEY_FALSE(imux_post_handle);
+> +
+> +static void ipi_mux_mask(struct irq_data *d)
+> +{
+> +	struct ipi_mux_cpu *icpu = this_cpu_ptr(imux->cpu);
+> +
+> +	atomic_andnot(BIT(irqd_to_hwirq(d)), &icpu->enable);
+> +}
+> +
+> +static void ipi_mux_unmask(struct irq_data *d)
+> +{
+> +	u32 ibit = BIT(irqd_to_hwirq(d));
+> +	struct ipi_mux_cpu *icpu = this_cpu_ptr(imux->cpu);
+> +
+> +	atomic_or(ibit, &icpu->enable);
+> +
+> +	/*
+> +	 * The atomic_or() above must complete before the atomic_read()
+> +	 * below to avoid racing ipi_mux_send_mask().
+> +	 */
+> +	smp_mb__after_atomic();
+> +
+> +	/* If a pending IPI was unmasked, raise a parent IPI immediately. */
+> +	if (atomic_read(&icpu->bits) & ibit)
+> +		imux->ops->ipi_mux_send(imux->parent_virq, imux->data,
+> +					cpumask_of(smp_processor_id()));
+> +}
+> +
+> +static void ipi_mux_send_mask(struct irq_data *d, const struct cpumask *mask)
+> +{
+> +	u32 ibit = BIT(irqd_to_hwirq(d));
+> +	struct ipi_mux_cpu *icpu = this_cpu_ptr(imux->cpu);
+> +	struct cpumask *send_mask = &icpu->send_mask;
+> +	unsigned long flags;
+> +	int cpu;
+> +
+> +	/*
+> +	 * We use send_mask as a per-CPU variable so disable local
+> +	 * interrupts to avoid being preempted.
+> +	 */
+> +	local_irq_save(flags);
+> +
+> +	cpumask_clear(send_mask);
+> +
+> +	for_each_cpu(cpu, mask) {
+> +		icpu = per_cpu_ptr(imux->cpu, cpu);
+> +		atomic_or(ibit, &icpu->bits);
+> +
+> +		/*
+> +		 * The atomic_or() above must complete before
+> +		 * the atomic_read() below to avoid racing with
+> +		 * ipi_mux_unmask().
+> +		 */
+> +		smp_mb__after_atomic();
+> +
+> +		if (atomic_read(&icpu->enable) & ibit)
+> +			cpumask_set_cpu(cpu, send_mask);
+> +	}
+> +
+> +	/* Trigger the parent IPI */
+> +	imux->ops->ipi_mux_send(imux->parent_virq, imux->data, send_mask);
+> +
+> +	local_irq_restore(flags);
+> +}
+> +
+> +static const struct irq_chip ipi_mux_chip = {
+> +	.name		= "IPI Mux",
+> +	.irq_mask	= ipi_mux_mask,
+> +	.irq_unmask	= ipi_mux_unmask,
+> +	.ipi_send_mask	= ipi_mux_send_mask,
+> +};
 
---Fh1KnNgyu1c5IbAd
-Content-Type: application/pgp-signature; name="signature.asc"
+I really think this could either be supplied by the irqchip, or
+somehow patched to avoid the pointless imux->ops->ipi_mux_send
+indirection. Pointer chasing hurts.
 
------BEGIN PGP SIGNATURE-----
+> +
+> +static int ipi_mux_domain_alloc(struct irq_domain *d, unsigned int virq,
+> +				unsigned int nr_irqs, void *arg)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < nr_irqs; i++) {
+> +		irq_set_percpu_devid(virq + i);
+> +		irq_domain_set_info(d, virq + i, i,
+> +				    &ipi_mux_chip, d->host_data,
+> +				    handle_percpu_devid_irq, NULL, NULL);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct irq_domain_ops ipi_mux_domain_ops = {
+> +	.alloc		= ipi_mux_domain_alloc,
+> +	.free		= irq_domain_free_irqs_top,
+> +};
+> +
+> +/**
+> + * ipi_mux_process - Process multiplexed virtual IPIs
+> + */
+> +void ipi_mux_process(void)
+> +{
+> +	struct ipi_mux_cpu *icpu = this_cpu_ptr(imux->cpu);
+> +	irq_hw_number_t hwirq;
+> +	unsigned long ipis;
+> +	int en;
 
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY4IJCQAKCRD2uYlJVVFO
-o0FTAP9skzEDf1UmukIcXkQk/1UVOZeKWUXCHkfVQQ64c/HiogD5AfxVq4Uow1dv
-8CWRcboYwygyHbNvjATE/GYDj7woMgQ=
-=5WqF
------END PGP SIGNATURE-----
+Please use an unsigned type here (see the rationale in atomic_t.txt).
 
---Fh1KnNgyu1c5IbAd--
+> +
+> +	if (static_branch_unlikely(&imux_pre_handle))
+> +		imux->ops->ipi_mux_pre_handle(imux->parent_virq, imux->data);
+> +
+> +	/*
+> +	 * Reading enable mask does not need to be ordered as long as
+> +	 * this function called from interrupt handler because only
+> +	 * the CPU itself can change it's own enable mask.
+> +	 */
+> +	en = atomic_read(&icpu->enable);
+> +
+> +	/*
+> +	 * Clear the IPIs we are about to handle. This pairs with the
+> +	 * atomic_fetch_or_release() in ipi_mux_send_mask().
+> +	 */
+> +	ipis = atomic_fetch_andnot(en, &icpu->bits) & en;
+> +
+> +	for_each_set_bit(hwirq, &ipis, imux->nr)
+> +		generic_handle_domain_irq(imux->domain, hwirq);
+> +
+> +	if (static_branch_unlikely(&imux_post_handle))
+> +		imux->ops->ipi_mux_post_handle(imux->parent_virq, imux->data);
+
+Do you see what I meant about the {pre,post}_handle callback, and how
+they are *exactly* like irq_{ack,eoi}?
+
+> +}
+> +
+> +static void ipi_mux_handler(struct irq_desc *desc)
+> +{
+> +	struct irq_chip *chip = irq_desc_get_chip(desc);
+> +
+> +	chained_irq_enter(chip, desc);
+> +	ipi_mux_process();
+> +	chained_irq_exit(chip, desc);
+> +}
+> +
+> +/**
+> + * ipi_mux_create - Create virtual IPIs multiplexed on top of a single
+> + * parent IPI.
+> + * @parent_virq:	virq of the parent per-CPU IRQ
+> + * @nr_ipi:		number of virtual IPIs to create. This should
+> + *			be <= BITS_PER_TYPE(int)
+> + * @ops:		multiplexing operations for the parent IPI
+> + * @data:		opaque data used by the multiplexing operations
+
+What is the use for data? If anything, that data should be passed via
+the mux interrupt. But the whole point of this is to make the mux
+invisible. So this whole 'data' business is a mystery to me.
+
+> + *
+> + * If the parent IPI > 0 then ipi_mux_process() will be automatically
+> + * called via chained handler.
+> + *
+> + * If the parent IPI <= 0 then it is responsibility of irqchip drivers
+> + * to explicitly call ipi_mux_process() for processing muxed IPIs.
+
+0 is a much more idiomatic value for "no parent IRQ". < 0 normally
+represents an error.
+
+> + *
+> + * Returns first virq of the newly created virtual IPIs upon success
+> + * or <=0 upon failure
+> + */
+> +int ipi_mux_create(unsigned int parent_virq, unsigned int nr_ipi,
+
+Tell me how I can express a negative parent_virq here?
+
+> +		   const struct ipi_mux_ops *ops, void *data)
+> +{
+> +	struct fwnode_handle *fwnode;
+> +	struct irq_domain *domain;
+> +	int rc;
+> +
+> +	if (imux)
+> +		return -EEXIST;
+> +
+> +	if (BITS_PER_TYPE(int) < nr_ipi || !ops || !ops->ipi_mux_send)
+> +		return -EINVAL;
+> +
+> +	if (parent_virq &&
+> +	    !irqd_is_per_cpu(irq_desc_get_irq_data(irq_to_desc(parent_virq))))
+> +		return -EINVAL;
+
+See how buggy this is if I follow your definition of "no parent IRQ"?
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
