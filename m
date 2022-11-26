@@ -2,113 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC09639608
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 14:08:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BB3663960B
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 14:08:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbiKZNIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 08:08:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50236 "EHLO
+        id S229502AbiKZNIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 08:08:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiKZNIA (ORCPT
+        with ESMTP id S229481AbiKZNIs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 08:08:00 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9B51BEBD
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 05:07:59 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id a29so10680538lfj.9
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 05:07:59 -0800 (PST)
+        Sat, 26 Nov 2022 08:08:48 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A861CFDA
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 05:08:47 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id bn5so8029883ljb.2
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 05:08:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=PumZpgWWCLIt7GuPFKuRL0B5pDS2/W2Oy2A7hBHkkG0=;
-        b=ivWfLCpCTigcI4CW6DnkfkcGmtbFXQdDSOHEfEY9ANghziwgE0vyCf30XMc7LxVqlz
-         DX7EI/eII8uVUIvrXN2yuGievg1KPUSHmjOGWzL2qD/IKKHGVxs8opyuPT92FbSMXwRj
-         jOrAcdEvQ71f1E/32SX90VQxcW5KO0fUolyAUsdDtp2xc0DioE/T+XPjrQPi/B+TMEqm
-         1O9+b09wZia+PgDBG7lcoKTbGx+kvtYFkiLf9gLRa3ene6mTjLWcTwxt5bU+3/uK6u0u
-         rFnCKE0Pak7H1a1GozXdKLZ1Df2k9H+A9asulM/3Ly8+RpfbC+F3SMR99SHDP711CTPk
-         QmNg==
+        bh=kBp9JJJ8y9iJjxZRAAxiuLXJ4T2FaosTbSPRiHvomTk=;
+        b=bST3FkgoBljZ5d3OnIxGZe694KSTcTtbU7/LamQOhEBhuRF5W2cZybdVk7PBbPhf/z
+         V/WUfp695FFhu2WImtkfdYtIcPHpVs0TJM44SSFvtsfclcHIJ9E5VUsuUbnK2ofTsSVE
+         O/qvyOru7KZQo3SFpW8EZllT9HfPeKdDLQlfnl7gSrsoHbfw3mXlfTWnURQ/vMW3ddi5
+         PHqvUweV7ZEzGe1kW8DddH1qITGrPRp0/dGOsF6Z6pU8e+NGS1FCuNvohtVxjJbALS2r
+         HHxc9Gm/fs6bcUEvWWfAr2elbZNzYuNsa39Ul8RdXsiY3/ES91l/Hp4SjnJGWLDAqgUz
+         rHJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PumZpgWWCLIt7GuPFKuRL0B5pDS2/W2Oy2A7hBHkkG0=;
-        b=SBW9Zj2AHhXbHqO9WLd9eQj5miiRMRMAETXBaYcZ2Ak2iC+wF8cdlyv5HLltiEKpiR
-         WH2Svj+7mDz0Mpr+PPk9P4VeFmix1xpwxvalrLkyp8Jxqte5DLbJfHz7v9TU5Le7P5uH
-         7PGCy79lZKPtXn5yjLY9AkvmZxsNRj9K83AdfK9YKUJT+DuxQR7F1Zx0a/IurrbrpGBz
-         5BTKmwxDohsA5PolxqDTNU5vZN1xmt+BsclPI3sR7i6en1dxy5COaOGdXirsjWNqs0ui
-         HhIo2Z7FOVzbUSfcErxafSkeAP4AZH1aXdNuoxedJUUcEC1MBgDm02eV8R9SAu3myk9b
-         x/Tw==
-X-Gm-Message-State: ANoB5pkHrOI3DbNEUxTyiVAcpQk0d+jH2rBIsQnaSyT0m+Qa0CES6JC+
-        RtEcyrnRkaC9cHicLqJ1ozbw6A==
-X-Google-Smtp-Source: AA0mqf4KKLZQIWEHr4q51nApvU3vh2NWWMLJctdKVErLPvKx4kWD7uVIvt/497Orjd1ZPEKrw9AjAQ==
-X-Received: by 2002:a05:6512:48b:b0:4b4:9196:af54 with SMTP id v11-20020a056512048b00b004b49196af54mr8332834lfq.686.1669468076446;
-        Sat, 26 Nov 2022 05:07:56 -0800 (PST)
+        bh=kBp9JJJ8y9iJjxZRAAxiuLXJ4T2FaosTbSPRiHvomTk=;
+        b=uHAUd7VuPLnnFdqL+5fD2Ed6nWtrNRuNalYZXTldkZsMa5zSB4OXk3F2tyJ/SzUiNo
+         glQleiDjW1mcHd7HoQ50xXYgCPqn1GE5jnFCl8l0tHT0TllkYFCVDOlaoWKQ+JHGWBuB
+         BCCXRU1LZbHZ+QHVc0zUoSbEeYU72zqmGSdt4NishcpoIvfo6EBcQLgCnw051zG4Maxo
+         SoAGVTJQIjq+1vcVKVGca5pLU9qiqedSW70g6feKu+8PiMhacCpKNgIs4mwC2UaPNKyh
+         eW7nOP17G/zOVbgDdUR7KpVxWYx9yS4iyO9ut1uN0aWjJYKqh37h1ujIcCceINd8Jw99
+         7imQ==
+X-Gm-Message-State: ANoB5plecfnjkGzaYFLW7gd/BTo6uQUh/BMXHRlvVouV34dxiPBWZFwg
+        gOEOSogYhjkXBsA39HhpvoKKcA==
+X-Google-Smtp-Source: AA0mqf7wRdpO5GEpd9igTtQ2FsMD4Iu4RPsZKe+3QvKfPtldGePuaubW6od0RFNNbWpvHhgAS/id+Q==
+X-Received: by 2002:a2e:6a17:0:b0:277:fae:902e with SMTP id f23-20020a2e6a17000000b002770fae902emr9927508ljc.267.1669468125710;
+        Sat, 26 Nov 2022 05:08:45 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id o5-20020a198c05000000b00498fc3d4d15sm911376lfd.190.2022.11.26.05.07.55
+        by smtp.gmail.com with ESMTPSA id b11-20020ac2410b000000b004b40c2fccfdsm933446lfi.59.2022.11.26.05.08.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Nov 2022 05:07:55 -0800 (PST)
-Message-ID: <fc6f32e1-9aa6-8106-24e4-ff020e641c48@linaro.org>
-Date:   Sat, 26 Nov 2022 14:07:54 +0100
+        Sat, 26 Nov 2022 05:08:45 -0800 (PST)
+Message-ID: <8cc27053-0635-b34f-cef8-8ac307060f1d@linaro.org>
+Date:   Sat, 26 Nov 2022 14:08:44 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH 2/4] dt-bindings: soc: samsung: exynos-sysreg: split from
- syscon
-To:     Sriranjani P <sriranjani.p@samsung.com>,
+Subject: Re: [PATCH 3/4] dt-bindings: soc: samsung: exynos-sysreg: add
+ dedicated SYSREG compatibles to Exynos5433
+Content-Language: en-US
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
         'Lee Jones' <lee@kernel.org>,
         'Rob Herring' <robh+dt@kernel.org>,
         'Krzysztof Kozlowski' <krzysztof.kozlowski+dt@linaro.org>,
-        'Alim Akhtar' <alim.akhtar@samsung.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org
-Cc:     'Chanho Park' <chanho61.park@samsung.com>,
+Cc:     'Sriranjani P' <sriranjani.p@samsung.com>,
+        'Chanho Park' <chanho61.park@samsung.com>,
         'Sam Protsenko' <semen.protsenko@linaro.org>
 References: <20221125112201.240178-1-krzysztof.kozlowski@linaro.org>
- <CGME20221125112238epcas5p25b27eec809d72032216f2f8c375ea45b@epcas5p2.samsung.com>
- <20221125112201.240178-2-krzysztof.kozlowski@linaro.org>
- <016d01d900da$c46a6d80$4d3f4880$@samsung.com>
-Content-Language: en-US
+ <CGME20221125112241epcas5p1d9558a8de5bfa807ed6dc5c55635c900@epcas5p1.samsung.com>
+ <20221125112201.240178-3-krzysztof.kozlowski@linaro.org>
+ <01a901d900f0$3b025560$b1070020$@samsung.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <016d01d900da$c46a6d80$4d3f4880$@samsung.com>
+In-Reply-To: <01a901d900f0$3b025560$b1070020$@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/11/2022 15:32, Sriranjani P wrote:
+On 25/11/2022 18:06, Alim Akhtar wrote:
 > 
 > 
 >> -----Original Message-----
 >> From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@linaro.org]
->> Sent: 25 November 2022 16:52
+>> Sent: Friday, November 25, 2022 4:52 PM
 >> To: Lee Jones <lee@kernel.org>; Rob Herring <robh+dt@kernel.org>;
-> Krzysztof
->> Kozlowski <krzysztof.kozlowski+dt@linaro.org>; Alim Akhtar
+>> Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>; Alim Akhtar
 >> <alim.akhtar@samsung.com>; devicetree@vger.kernel.org; linux-
->> kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
-> linux-samsung-
->> soc@vger.kernel.org
+>> kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
+>> samsung-soc@vger.kernel.org
 >> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>; Sriranjani P
 >> <sriranjani.p@samsung.com>; Chanho Park <chanho61.park@samsung.com>;
 >> Sam Protsenko <semen.protsenko@linaro.org>
->> Subject: [PATCH 2/4] dt-bindings: soc: samsung: exynos-sysreg: split from
->> syscon
+>> Subject: [PATCH 3/4] dt-bindings: soc: samsung: exynos-sysreg: add
+> dedicated
+>> SYSREG compatibles to Exynos5433
 >>
->> Split Samsung Exynos SoC SYSREG bindings to own file to narrow the
-> bindings
->> and do not allow other parts of syscon.yaml.  This allows further
-> customization
->> of Samsung SoC bindings.
+>> Exynos5433 has several different SYSREGs, so use dedicated compatibles for
+>> them.
 >>
 >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 >>
@@ -118,13 +115,43 @@ On 25/11/2022 15:32, Sriranjani P wrote:
 >> Cc: Chanho Park <chanho61.park@samsung.com>
 >> Cc: Sam Protsenko <semen.protsenko@linaro.org>
 >> ---
-> 
-> We agree for add separate YAML for  Samsung Exynos and hence I think we can 
-> go ahead and add  separate yaml for Tesla FSD.
-> Reviewed-by: Sriranjani P <sriranjani.p@samsung.com>
+>> .../bindings/soc/samsung/samsung,exynos-sysreg.yaml | 13 ++++++++++++-
+>> 1 file changed, 12 insertions(+), 1 deletion(-)
+>>
+>> diff --git
+>> a/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-
+>> sysreg.yaml
+>> b/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-
+>> sysreg.yaml
+>> index 68064a5e339c..42357466005e 100644
+>> --- a/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-
+>> sysreg.yaml
+>> +++ b/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-
+>> sysre
+>> +++ g.yaml
+>> @@ -17,10 +17,21 @@ properties:
+>>               - samsung,exynos3-sysreg
+>>               - samsung,exynos4-sysreg
+>>               - samsung,exynos5-sysreg
+>> -              - samsung,exynos5433-sysreg
+>>               - samsung,exynos850-sysreg
+>>               - samsung,exynosautov9-sysreg
+>>           - const: syscon
+>> +      - items:
+>> +          - enum:
+>> +              - samsung,exynos5433-cam0-sysreg
+>> +              - samsung,exynos5433-cam1-sysreg
+>> +              - samsung,exynos5433-disp-sysreg
+>> +              - samsung,exynos5433-fsys-sysreg
+>> +          - const: samsung,exynos5433-sysreg
+>> +          - const: syscon
+>> +      - items:
+>> +          - const: samsung,exynos5433-sysreg
+>> +          - const: syscon
+>> +        deprecated: true
+> Any reason to add "deprecated: true" here for above compatible?
 
-Tesla FSD should go to the same file. No need for another binding for
-same design...
+Because it should be used alone as unspecific.
 
 Best regards,
 Krzysztof
