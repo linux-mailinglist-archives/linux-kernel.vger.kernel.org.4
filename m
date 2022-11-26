@@ -2,102 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 723EA6394F3
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 10:45:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65E6963950C
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 10:49:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbiKZJpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 04:45:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52278 "EHLO
+        id S229676AbiKZJtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 04:49:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiKZJpE (ORCPT
+        with ESMTP id S229599AbiKZJs6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 04:45:04 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2BB1BEAC
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 01:45:03 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id o30so5071487wms.2
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 01:45:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fNBK4QqpY340G3XV9v4iOSyaQo0TRWeIslb8zESvqLE=;
-        b=EsXgxdwDGtli4wpNVj7WBXbE9x4pV9ASGAdalZffmwJv3ubhkgi5w3kywjoSBubvrF
-         FSLpb6nr5AHwpqexI+G6JUD2lYvnyi8JJxwJ+fJbMeZGWI/FOJHI3yvxfXgL4Xetw+ss
-         uEdzTVhX2dywawhL8ncFrc5dZ2j2cn0o/UA9rnRYOUpG0VJlCeXjjkz3kXi9JXTbbEmN
-         sJDP0yhfNe2EKW5FWwhmx0WOUK/YqgvqKtNiwUXMBR/UnX1iRzsmqQiCf9GlSk9LzZXO
-         /Nu+KuPRbW0Z1isrScZ90BvHfUJx4pKtsxC4BjDrKaWrbP7KbnQDZYBPoYWMfdMh+H9Z
-         R1FQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fNBK4QqpY340G3XV9v4iOSyaQo0TRWeIslb8zESvqLE=;
-        b=lE0LpnehtJAalZWoQ4WXnJnnR0zSSPLbH8r1KuQ0SaZE2/fpcG1FDcWI8W66dowG0q
-         j9dbFBihkI81pFvgs0MC3BIt4hILRodmvo/Khf1+z6NdyHVMlrMf4lUYKHtgpnx5QK/S
-         rpJNhhV8FLmzvyBEJvau3svLcPUsExmz/AsDOvayycXC3HgaTTsMuuaOHp7gd8Dl4tuU
-         L6uJ2kZHz3kxLqb8Arh1QwWTHnZHXGtLgKI70fBJsj4zmOndKzDJSACYde7pxqIA+GWK
-         tJTToJusG9sIb3RGO6BN3De3g7+Ko2dl3A4tDSqd5/vbszetOp8/Pj9AcGvQkZyTFa0m
-         SKmA==
-X-Gm-Message-State: ANoB5pmw7dKfX8OPzDyVqa3ehbmN2pTZRdwXDX2KEp8VqrqC2eLoGOrA
-        Xub24i476Bp7GgnVOPOnYTw=
-X-Google-Smtp-Source: AA0mqf6d8cfU4hNSGLB0APXRKgv6Kojpb29bspmLAqKJe36EnnZdCMYe0G6qOdGyD3oOdoh6vs3Gtg==
-X-Received: by 2002:a05:600c:3c96:b0:3cf:a457:2d89 with SMTP id bg22-20020a05600c3c9600b003cfa4572d89mr33816286wmb.20.1669455901774;
-        Sat, 26 Nov 2022 01:45:01 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id h9-20020adffd49000000b002383fc96509sm5654788wrs.47.2022.11.26.01.44.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Nov 2022 01:45:01 -0800 (PST)
-Date:   Sat, 26 Nov 2022 12:44:55 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Ekaterina Esina <eesina@astralinux.ru>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Won Kang <wkang77@gmail.com>, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: Re: [PATCH] gdm7240: Add check for NULL for callback in r
-Message-ID: <Y4HgF21MXyb9YH+h@kadam>
-References: <20221123132345.7071-1-eesina@astralinux.ru>
+        Sat, 26 Nov 2022 04:48:58 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A9929359;
+        Sat, 26 Nov 2022 01:48:52 -0800 (PST)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NK6Nw0cDlzRpYp;
+        Sat, 26 Nov 2022 17:48:16 +0800 (CST)
+Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 26 Nov 2022 17:48:31 +0800
+Received: from ubuntu1804.huawei.com (10.67.174.61) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 26 Nov 2022 17:48:30 +0800
+From:   Yang Jihong <yangjihong1@huawei.com>
+To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <haoluo@google.com>, <jolsa@kernel.org>,
+        <illusionist.neo@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <mykolal@fb.com>, <shuah@kernel.org>,
+        <benjamin.tissoires@redhat.com>, <memxor@gmail.com>,
+        <colin.i.king@gmail.com>, <asavkov@redhat.com>, <delyank@fb.com>,
+        <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+CC:     <yangjihong1@huawei.com>
+Subject: [PATCH bpf-next v3 0/4] bpf: Support kernel function call in 32-bit ARM
+Date:   Sat, 26 Nov 2022 17:45:26 +0800
+Message-ID: <20221126094530.226629-1-yangjihong1@huawei.com>
+X-Mailer: git-send-email 2.30.GIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221123132345.7071-1-eesina@astralinux.ru>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.61]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 04:23:45PM +0300, Ekaterina Esina wrote:
-> Before dereferencing r->callback check it for NULL.
-> 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> Fixes: 61e121047645 ("staging: gdm7240: adding LTE USB driver")
-> Signed-off-by: Ekaterina Esina <eesina@astralinux.ru>
-> ---
->  drivers/staging/gdm724x/gdm_usb.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/staging/gdm724x/gdm_usb.c b/drivers/staging/gdm724x/gdm_usb.c
-> index 54bdb64f52e8..7cf89f4c95c4 100644
-> --- a/drivers/staging/gdm724x/gdm_usb.c
-> +++ b/drivers/staging/gdm724x/gdm_usb.c
-> @@ -409,10 +409,12 @@ static void do_rx(struct work_struct *work)
->  		switch (cmd_evt) {
->  		case LTE_GET_INFORMATION_RESULT:
->  			if (set_mac_address(hci->data, r->cb_data) == 0) {
-> -				r->callback(r->cb_data,
-> +				if (r->callback) {
+1. Patch1 is dependent patch to fix zext extension error in 32-bit ARM.
+2. Patch2 supports bpf fkunc in 32-bit ARM for EABI.
+3. Patch3 is used to add test cases to cover some parameter scenarios
+   states by AAPCS.
+4. Patch4 fix a comment error.
 
-What makes you think r->callback can be NULL?
+The following is the test_progs result in the 32-bit ARM environment:
 
-So far as I can see that's not possible.  It is checked before it's
-added to the list in gdm_usb_rcv_complete().
+  # uname -m
+  armv7l
+  # echo 1 > /proc/sys/net/core/bpf_jit_enable
+  # ./test_progs -t kfunc_call
+  #1/1     kfunc_call/kfunc_syscall_test_fail:OK
+  #1/2     kfunc_call/kfunc_syscall_test_null_fail:OK
+  #1/3     kfunc_call/kfunc_call_test_get_mem_fail_rdonly:OK
+  #1/4     kfunc_call/kfunc_call_test_get_mem_fail_use_after_free:OK
+  #1/5     kfunc_call/kfunc_call_test_get_mem_fail_oob:OK
+  #1/6     kfunc_call/kfunc_call_test_get_mem_fail_not_const:OK
+  #1/7     kfunc_call/kfunc_call_test_mem_acquire_fail:OK
+  #1/8     kfunc_call/kfunc_call_test1:OK
+  #1/9     kfunc_call/kfunc_call_test2:OK
+  #1/10    kfunc_call/kfunc_call_test4:OK
+  #1/11    kfunc_call/kfunc_call_test5:OK
+  #1/12    kfunc_call/kfunc_call_test6:OK
+  #1/13    kfunc_call/kfunc_call_test_ref_btf_id:OK
+  #1/14    kfunc_call/kfunc_call_test_get_mem:OK
+  #1/15    kfunc_call/kfunc_syscall_test:OK
+  #1/16    kfunc_call/kfunc_syscall_test_null:OK
+  #1/19    kfunc_call/destructive:OK
 
-regards,
-dan carpenter
+---
+Changes since v2:
+  - Remove patches to adjust sk size check for CO_RE in 32-bit arch.
+  - Add check of kfunc's return value in insn_def_regno.
+  - Adjust is_reg64 for insn_def_regno.
+  - The check of CONFIG_AEABI is moved from emit_kfunc_call to
+    bpf_jit_supports_kfunc_call.
+  - Fix a comment error in fixup_kfunc_call.
+
+Yang Jihong (4):
+  bpf: Adapt 32-bit return value kfunc for 32-bit ARM when zext
+    extension
+  bpf: Add kernel function call support in 32-bit ARM for EABI
+  bpf:selftests: Add kfunc_call test for mixing 32-bit and 64-bit
+    parameters
+  bpf: Fix comment error in fixup_kfunc_call function
+
+ arch/arm/net/bpf_jit_32.c                     | 137 ++++++++++++++++++
+ kernel/bpf/verifier.c                         |  46 +++++-
+ net/bpf/test_run.c                            |  18 +++
+ .../selftests/bpf/prog_tests/kfunc_call.c     |   3 +
+ .../selftests/bpf/progs/kfunc_call_test.c     |  52 +++++++
+ 5 files changed, 252 insertions(+), 4 deletions(-)
+
+-- 
+2.30.GIT
 
