@@ -2,93 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 784EC63967E
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 15:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96E9C639681
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 15:32:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229436AbiKZObA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 09:31:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39838 "EHLO
+        id S229629AbiKZOc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 09:32:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiKZOa5 (ORCPT
+        with ESMTP id S229454AbiKZOc1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 09:30:57 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820DD1CB36
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 06:30:56 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id s8so10882325lfc.8
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 06:30:56 -0800 (PST)
+        Sat, 26 Nov 2022 09:32:27 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD111B9EB
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 06:32:26 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id z4so8180943ljq.6
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 06:32:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=LOp9VeEnzv5VAO/OaCmDsm8rDMNVnUqD5Q2WOV4X6To=;
-        b=J9veXx5lGUVMqWV12L613oXsILLAQ+wdd9j0hxVGO49OzpZdRB5bzLw/nxtcS8z87e
-         re99fj8r/ZKReZvZX5iAxs7yR6/s8zsnZU5pPJE+nWXLwcQJcd+fBQYLtqmUayn/5j5T
-         ZkSop/96qSZ/eiG/l9O4wG0d+BO2v85G6zRYu86MJVpFf6d72MBrgfsho9hKX2H3RfdJ
-         NklZGbzahZi8znKT+oqgqHJhUcsT72isQGFmNnB34J/BSSK91TrYePmcU5fztIfia8oV
-         GUsnly+WeWsZjpNgN7rNNmnWzSzdW+x9ty4IueNPFj6GN0t8rBbHWZmuyENj9bI6uOwG
-         /b5w==
+        bh=K4zuqMsuiqnvrDQp6f6xq5f0XqYJXIynO5h28fxOnsU=;
+        b=gjZlOl29mWeOtWX9ThnwZStX+q18qMsbFd52esHJOQuXy1WSDEzTyQksdLwEz97HhG
+         mEFLn9XXshTNvIMvF05LpWfGxa5MDXVOM/FM8U/sAPzj3mhh3SjRM8FLjFEPQ0Z8WU7F
+         o2ssJ2Qb1nIUzbfFjXZHXRvnWyFykaNhmmD8XH/4OmUpjy/cE4k1vJO7nOgtCBkfESzD
+         AGO4ZqoqrEdjm1EDtjqTFmTsSN7dFvm0lj4G1CbcfdPnOQMyoyk60sfCdXL5FhRjTVWo
+         Px/T4Jas7DS2wntOp/xLqTrxycWknQkrHJnN6Uwl/FSyn0NXuwOPobU2wK/ZR6frp1UC
+         v6CA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LOp9VeEnzv5VAO/OaCmDsm8rDMNVnUqD5Q2WOV4X6To=;
-        b=08WauGLjh63eqBz5I+49PlvVGfnrA4Rivz+3ARMM6Z7GoB7e0xZsR3j2+VlU4bBzYE
-         AzwxuIJ6fEmH03Y8vfi2UxGj1plQtecgFaH4ecjlr31D3tIu1i1ne5F7aKYFRjXGi6bY
-         Egqd6pDnRjn2YjZKzDd2dVfcCCbt+FaGvC23HVtCq4CmR/3FRyOxuzZzNONvbJa14zfB
-         eAxOBTNPe0o+XxzbLMbvDWEmm+AdcUCfJUoq/zd0/WqHDHTrp4mix08qNOOy9catd2aK
-         hNVfSBZVLokOYhn0e8/GqKM/6Uzf4BdtwLpPpJ1vMFZN0FDZC7e5cW8jcGPN6oNyvXxH
-         Qi3Q==
-X-Gm-Message-State: ANoB5pl344KUTiMMtk8GNp4MYTwBRiXcZhM3fC232hVbpqeYqC+TDgbI
-        S0wSP7OKBCwnDg2J2gnmfUbktA==
-X-Google-Smtp-Source: AA0mqf75yMUiNVRsRqbq4zu5xWBS2wPOH+4izo3ghaVHNNA3rV1zExal1ikJKmniGK3OZXYq/r03dQ==
-X-Received: by 2002:a19:5049:0:b0:4b4:661a:1ce1 with SMTP id z9-20020a195049000000b004b4661a1ce1mr13137363lfj.136.1669473054898;
-        Sat, 26 Nov 2022 06:30:54 -0800 (PST)
+        bh=K4zuqMsuiqnvrDQp6f6xq5f0XqYJXIynO5h28fxOnsU=;
+        b=7/nVVNFk6q5g7SG2GD/AVl1vZEKGKF+hEMZU7HauO/m3m8/ZInbifv+czV6w/A/NyS
+         zuAZ/JxRF++hI+iaornwa5Drn8phn2Bbs6MpdohOGCcbLUhMH/VuWpHb4v9gfo+xxsY8
+         jbsyiLCcouHyUqUT1bmgQxNo49sXPuXpjT8ja62XXrBnV8zDKKAxIF+El6lp17iPQ78b
+         mSpbzFxjWpBj0/wfVThoOQ3r/ZNjnvqBeLSsoAQjK4GEmBq9uS0Owc10UVCFy8iWJOfw
+         C8nbaVx8aayxpc3Pp7uzia3B4KQ5RiZSJvSuDsQCiMLfaGLByrer2grd3aoJgJORPANb
+         jKhw==
+X-Gm-Message-State: ANoB5pmJuC7sUCeO+14A+k99jyndxaL262CnfnuYTRnRVSLznNd3XKoq
+        ORyzZNrkrTWqf2u/wg00ujUmBmcSQrjiqzK3
+X-Google-Smtp-Source: AA0mqf4/4oZ0kQLRKfzZKB+9gta/ZRTDrQn+blmHHw+wrQgHzNnKaa+UH9SINf3JuV/LmjV0Q2uHAA==
+X-Received: by 2002:a05:651c:b93:b0:279:69e6:bb1e with SMTP id bg19-20020a05651c0b9300b0027969e6bb1emr7269177ljb.335.1669473145151;
+        Sat, 26 Nov 2022 06:32:25 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id p5-20020ac24ec5000000b00494603953b6sm935295lfr.6.2022.11.26.06.30.53
+        by smtp.gmail.com with ESMTPSA id o1-20020a2ebd81000000b0026dced9840dsm637552ljq.61.2022.11.26.06.32.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Nov 2022 06:30:54 -0800 (PST)
-Message-ID: <30744357-33cb-96c1-bbe9-f544cde04980@linaro.org>
-Date:   Sat, 26 Nov 2022 15:30:53 +0100
+        Sat, 26 Nov 2022 06:32:24 -0800 (PST)
+Message-ID: <b3e80e53-16df-f6b5-bf1e-6f13ae93973e@linaro.org>
+Date:   Sat, 26 Nov 2022 15:32:23 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH v7 4/5] dt-bindings: PCI: ti,j721e-pci-*: add j784s4-pci-*
- compatible strings
+Subject: Re: [PATCH V2 1/6] dt-bindings: dmaengine: xilinx_dma:Add
+ xlnx,axistream-connected property
 Content-Language: en-US
-To:     Matt Ranostay <mranostay@ti.com>, rogerq@kernel.org,
-        lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, vigneshr@ti.com, tjoseph@cadence.com,
-        sergio.paracuellos@gmail.com, pthombar@cadence.com,
-        linux-pci@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221124081221.1206167-1-mranostay@ti.com>
- <20221124081221.1206167-5-mranostay@ti.com>
+To:     Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>,
+        vkoul@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lars@metafoo.de,
+        adrianml@alumnos.upm.es
+Cc:     dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        michal.simek@amd.com, radhey.shyam.pandey@amd.com,
+        anirudha.sarangi@amd.com, harini.katakam@amd.com, git@amd.com
+References: <20221124102745.2620370-1-sarath.babu.naidu.gaddam@amd.com>
+ <20221124102745.2620370-2-sarath.babu.naidu.gaddam@amd.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221124081221.1206167-5-mranostay@ti.com>
+In-Reply-To: <20221124102745.2620370-2-sarath.babu.naidu.gaddam@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/11/2022 09:12, Matt Ranostay wrote:
-> Add definition for j784s4-pci-ep + j784s4-pci-host devices along with
-> schema checks for num-lanes.
+On 24/11/2022 11:27, Sarath Babu Naidu Gaddam wrote:
+> From: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
 > 
-> Signed-off-by: Matt Ranostay <mranostay@ti.com>
+> Add an optional AXI DMA property 'xlnx,axistream-connected'. This
+> can be specified to indicate that DMA is connected to a streaming IP
+> in the hardware design and dma driver needs to do some additional
+> handling i.e pass metadata and perform streaming IP specific
+> configuration.
+> 
+> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+> Signed-off-by: Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
+> ---
+> Changes in V2:
+> 1) Moved xlnx,axistream-connected optional property to under AXI DMA.
+> 2) Removed Acked-by: Rob Herring.
+> ---
 
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+You already add two properties here. Convert to DT schema and then add.
 
 Best regards,
 Krzysztof
