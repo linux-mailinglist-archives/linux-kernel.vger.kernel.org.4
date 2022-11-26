@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D70B7639623
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 14:34:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1304F639624
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 14:34:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbiKZNee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 08:34:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34988 "EHLO
+        id S229506AbiKZNeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 08:34:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiKZNec (ORCPT
+        with ESMTP id S229436AbiKZNec (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 26 Nov 2022 08:34:32 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B751902C
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C83819033
         for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 05:34:31 -0800 (PST)
-Date:   Sat, 26 Nov 2022 13:34:26 -0000
+Date:   Sat, 26 Nov 2022 13:34:28 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669469668;
+        s=2020; t=1669469669;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=SmCYCGm0BvBvyxk+DEsBy+/4EqgLZrxk2j9sfi/hvfE=;
-        b=UzfQBnYhZugsSNFGv4d2pyxJo+4c36wdtIv3Ow97wSopEu9aJVS1j5eQwEW8Vj34QAR+Kv
-        PvylmQb3QXfTaoIExLYGbEEBhUWKcDgTR6++k8YvS0gEPyuDRPxQOesWtgRuYTp0N+IM9P
-        sP7M9ZSd/mVW19gIojr9w3xMCBvhWnp5VUImGwZhZN+tNQwZigw/yPXMGJ42v+bvEEA9IL
-        DHehWiWncOvtCQyIgPbDeVgkpDULxqDMiRqPSvwKhbe+f8jthbPxgAE+3p1KveSXhEK/bl
-        ls/KKOnAa3fSBSIfstmhWU7p9EtkXQ3B4dzFFrtLqyqniTAdX72la3EXea1a7Q==
+        bh=Yw2+g2S+dV4R09fdSwSfX8T30y+JATdBOLxt9/8tVGs=;
+        b=265U3cbXZjiBTKRmS2rIuO1kV7SKF7iiUz7L9xZZGXugj2VLY/GOG03RQNHYKxmZhbdAUD
+        5+wqb5TGO6SWpw3HJvJNe0N2QAOhkK0gydITmuh4pGDGZN/JyaxTvnhcAq2NEf6v9X0ing
+        ZSRaEd19U76/piNBldZcAJwZIkqFVwQ7d3Et2kGULILpQzxaQlHNAwNL5q4crVqBjMfUed
+        p3hMVPs+BCbsVdbHwh4kbbgzq2/3Bi6QtP0/0Xm0xneUwHXxPFeoYlQj+9l2Z8Cj7IBL8x
+        mvJySBSCXzXkjuOVuALeJ9YHi81/7ydkpTltRdzB5WxrUi3VIpJOTT1Vk9G3nA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669469668;
+        s=2020e; t=1669469669;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=SmCYCGm0BvBvyxk+DEsBy+/4EqgLZrxk2j9sfi/hvfE=;
-        b=q02x4p5k9tq5hDeBGsIAa+xR+9wDaNrIe74KomOqUIP/tM9fLir/FYdqMy70FMWI796ANT
-        UDXNz0ilNNmMaLBA==
-From:   "irqchip-bot for Liu Peibao" <tip-bot2@linutronix.de>
+        bh=Yw2+g2S+dV4R09fdSwSfX8T30y+JATdBOLxt9/8tVGs=;
+        b=IHEjtgsuuuNYxZpQkG1ibGyxm8LPAfzq25xzzbRc6e7r35lauWpGZjyvY1kqdDnAnnrz7/
+        d5AX4UnEWpXIENCw==
+From:   "irqchip-bot for Aidan MacDonald" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip/loongson-liointc: Fix improper
- error handling in liointc_init()
-Cc:     Liu Peibao <liupeibao@loongson.cn>, Marc Zyngier <maz@kernel.org>,
-        tglx@linutronix.de
-In-Reply-To: <20221104110712.23300-1-liupeibao@loongson.cn>
-References: <20221104110712.23300-1-liupeibao@loongson.cn>
+Subject: [irqchip: irq/irqchip-next] irqchip/sl28cpld: Replace irqchip
+ mask_invert with unmask_base
+Cc:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        Michael Walle <michael@walle.cc>,
+        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
+In-Reply-To: <20221112152701.41990-1-aidanmacdonald.0x0@gmail.com>
+References: <20221112152701.41990-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-Message-ID: <166946966692.4906.8560659273979544805.tip-bot2@tip-bot2>
+Message-ID: <166946966809.4906.9388873806018936021.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,45 +67,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     4a60a3cdcf1875c965095eb9e22c3d12bbc5a53d
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/4a60a3cdcf1875c965095eb9e22c3d12bbc5a53d
-Author:        Liu Peibao <liupeibao@loongson.cn>
-AuthorDate:    Fri, 04 Nov 2022 19:07:12 +08:00
+Commit-ID:     d502c558fd2b190c9125e8da54bef3f302fa9b15
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/d502c558fd2b190c9125e8da54bef3f302fa9b15
+Author:        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+AuthorDate:    Sat, 12 Nov 2022 15:27:01 
 Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Sat, 26 Nov 2022 13:29:57 
+CommitterDate: Sat, 26 Nov 2022 13:29:52 
 
-irqchip/loongson-liointc: Fix improper error handling in liointc_init()
+irqchip/sl28cpld: Replace irqchip mask_invert with unmask_base
 
-For cores less than 4, eg, loongson2k1000 with 2 cores, the
-of_property_match_string() may return with an error value,
-which causes that liointc could not work. At least isr0 is
-what should be checked like previous commit b2c4c3969fd7
-("irqchip/loongson-liointc: irqchip add 2.0 version") did.
+Remove use of the deprecated mask_invert flag. Inverted mask
+registers (where a '1' bit enables an IRQ) can be described more
+directly as an unmask register.
 
-Fixes: 0858ed035a85 ("irqchip/loongson-liointc: Add ACPI init support")
-Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
+Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Reviewed-by: Michael Walle <michael@walle.cc>
 Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20221104110712.23300-1-liupeibao@loongson.cn
+Link: https://lore.kernel.org/r/20221112152701.41990-1-aidanmacdonald.0x0@gmail.com
 ---
- drivers/irqchip/irq-loongson-liointc.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/irqchip/irq-sl28cpld.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
-index 0da8716..c4584e2 100644
---- a/drivers/irqchip/irq-loongson-liointc.c
-+++ b/drivers/irqchip/irq-loongson-liointc.c
-@@ -207,10 +207,13 @@ static int liointc_init(phys_addr_t addr, unsigned long size, int revision,
- 					"reg-names", core_reg_names[i]);
+diff --git a/drivers/irqchip/irq-sl28cpld.c b/drivers/irqchip/irq-sl28cpld.c
+index fbb3544..f217224 100644
+--- a/drivers/irqchip/irq-sl28cpld.c
++++ b/drivers/irqchip/irq-sl28cpld.c
+@@ -65,8 +65,7 @@ static int sl28cpld_intc_probe(struct platform_device *pdev)
+ 	irqchip->chip.num_irqs = ARRAY_SIZE(sl28cpld_irqs);
+ 	irqchip->chip.num_regs = 1;
+ 	irqchip->chip.status_base = base + INTC_IP;
+-	irqchip->chip.mask_base = base + INTC_IE;
+-	irqchip->chip.mask_invert = true;
++	irqchip->chip.unmask_base = base + INTC_IE;
+ 	irqchip->chip.ack_base = base + INTC_IP;
  
- 			if (index < 0)
--				goto out_iounmap;
-+				continue;
- 
- 			priv->core_isr[i] = of_iomap(node, index);
- 		}
-+
-+		if (!priv->core_isr[0])
-+			goto out_iounmap;
- 	}
- 
- 	/* Setup IRQ domain */
+ 	return devm_regmap_add_irq_chip_fwnode(dev, dev_fwnode(dev),
