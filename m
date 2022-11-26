@@ -2,128 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D03EB6397AB
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 19:46:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 667FC6397B2
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 19:54:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbiKZSqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 13:46:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40938 "EHLO
+        id S229568AbiKZSyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 13:54:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiKZSqN (ORCPT
+        with ESMTP id S229551AbiKZSyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 13:46:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78AAB1C906
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 10:46:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2A5FEB80958
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 18:46:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 521ACC433D6;
-        Sat, 26 Nov 2022 18:46:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669488369;
-        bh=uWdFFAXg78nudNnPJUDiXEmEVy6V5aBDdLZwo3yon44=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L6dR+XFLq9Qto5l1h0WDJat2H97M7zodpyqFs4JjoT8cwVtyWSkP7RH7FruhnaYWl
-         MfmF/x46qUZxhUMBdK7p3v8QZi2SqjfQ9FFqiCnvz3nSJP7Xzl0ztMy3ok/rc7T1B7
-         E7aDsFzzIrJTXYRWjhazFczbAWBSV51qS1Ct2hQxdMZ9AFiFpNTOX9YnHD8TjNzgPb
-         Tm2Smbj+mseRAkPCSzZv2/4zY1mFk6lZQRaw+sHCYCflcAQdHEqJvSZJIV+of1yzRy
-         eKLOioMDdMnu02v2h/T9Hpnrib5FyUVvi+d+S132qheihkutra5XN7v2NjSp8sGTEt
-         JlOeutqwQReMQ==
-Date:   Sat, 26 Nov 2022 18:46:05 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Andrea Righi <andrea.righi@canonical.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] riscv: increase boot command line size to 1K
-Message-ID: <Y4Je7chN+fQM3NpP@spud>
-References: <20221125133713.314796-1-andrea.righi@canonical.com>
+        Sat, 26 Nov 2022 13:54:16 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1BA15FCD
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 10:54:14 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id f13so11505080lfa.6
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 10:54:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=17Uu5jB5JSV5jcVLyNQKvZQt0F2pRwxcX8qU0oKH7qw=;
+        b=hd/b35FcuDguYSlqryOQKYBHU9QtBMOiMyUdY5h4wx7KHyOf/l9+c/A9bDpNTpzl6i
+         CeJtMBtmLLmS02vjN7cGtyelAF1womE/Ri0uolJ23roXhI4yop7dCkv4IaYPR0M2eKRq
+         ELj83xM+6tCWZa6tqQHl2HchVMdCETh/zJV+grmE+lP8ZFZNe2xL+Hm+XO1zKflqkx84
+         8dObKZontXoNls2yxo6gvW3jtTF0yUp3c85BmDNj/qgQ5Snv/+LNw4p9S3P9Rwump3Fp
+         Ud3wbFLqTqj8Q5JpDKylWVU38ycyTvsa1ySRV0PW02NUVDfmXjw7Zbr7OueoALA/cKfA
+         9KeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=17Uu5jB5JSV5jcVLyNQKvZQt0F2pRwxcX8qU0oKH7qw=;
+        b=Hh1VXflFaKxS27wfpE3OqWgcHUKwgL1GAOueaFKZ/BzkzEaCYNSy9gsNyFV9pfD04N
+         vPx7N7ib0YOKX0LoyVf17SgKyNEClRHGzpsaL6z56LtorDhd6d45fquhUVM5HLEsSEpq
+         J/9SvwJCi0wdXtYrWH8HxqNcCkenpy0JtQrNfICRlFIcjuqBDS/B9v1qmwu6WGV/9J0x
+         emjJkSacnOYeI4cIcRZnV+7w07SZSJ+kWqNW4fSo9f8xRRa6eZ8cN3AbKRfz6j8kqeMs
+         zY1uojHzRD5N5K+YzIddvYHhT4inhRGJQeoI5ue0wp5thM2bCenKFmesRzmwyqqHD84y
+         yB+A==
+X-Gm-Message-State: ANoB5pnVlt9pGiuh1ejQm5gzP+2sSHA89XrB+kgWJrLpkqEvzIw5vlFM
+        jdx3HmwGmMMciJUTbjwA/qAlNQ==
+X-Google-Smtp-Source: AA0mqf6Y7o7r7uQYiZDsghBFDuKtnMf9/K9SkY9AU9Mbkm5Kf98HI24HvIBkrxEmTFbQEGx9TreZMg==
+X-Received: by 2002:a05:6512:63:b0:4b4:f7a2:e4f2 with SMTP id i3-20020a056512006300b004b4f7a2e4f2mr5034714lfo.272.1669488853033;
+        Sat, 26 Nov 2022 10:54:13 -0800 (PST)
+Received: from [192.168.1.8] ([185.24.52.156])
+        by smtp.gmail.com with ESMTPSA id s2-20020a056512314200b004a2c447598fsm993270lfi.159.2022.11.26.10.54.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 26 Nov 2022 10:54:12 -0800 (PST)
+Message-ID: <dc5df66c-2e2b-14f1-ce88-705d831f37d9@linaro.org>
+Date:   Sat, 26 Nov 2022 20:54:11 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221125133713.314796-1-andrea.righi@canonical.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v4 03/18] dt-bindings: msm: dsi-controller-main: Rename
+ qcom,dsi-ctrl-6g-qcm2290 to qcom,qcm2290-dsi-ctrl
+Content-Language: en-GB
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com, sean@poorly.run,
+        airlied@gmail.com, daniel@ffwll.ch, robh+dt@kernel.org,
+        dianders@chromium.org, david@ixit.cz,
+        krzysztof.kozlowski+dt@linaro.org, swboyd@chromium.org,
+        konrad.dybcio@somainline.org, agross@kernel.org,
+        andersson@kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20221125123638.823261-1-bryan.odonoghue@linaro.org>
+ <20221125123638.823261-4-bryan.odonoghue@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20221125123638.823261-4-bryan.odonoghue@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Andrea,
-
-On Fri, Nov 25, 2022 at 02:37:13PM +0100, Andrea Righi wrote:
-> Kernel parameters string is limited to 512 characters on riscv (using
-> the default from include/uapi/asm-generic/setup.h).
+On 25/11/2022 14:36, Bryan O'Donoghue wrote:
+> We will add in a number of compat strings to dsi-controller-main.yaml in
+> the format "qcom,socname-dsi-ctrl" convert the currently unused
+> qcom,dsi-ctrl-6g-qcm2290 to qcom,qcm2290-dsi-ctrl.
 > 
-> In some testing environments (e.g., qemu with long kernel parameters
-> string) we may exceed this limit, triggering errors like the following:
-> 
-> [    3.331893] Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000000
-> [    3.332625] CPU: 2 PID: 1 Comm: sh Not tainted 6.1.0-rc6-kc #1
-> [    3.333233] Hardware name: riscv-virtio,qemu (DT)
-> [    3.333550] Call Trace:
-> [    3.333736] [<ffffffff800062b6>] dump_backtrace+0x1c/0x24
-> [    3.334053] [<ffffffff806e8f54>] show_stack+0x2c/0x38
-> [    3.334260] [<ffffffff806f2d06>] dump_stack_lvl+0x5a/0x7c
-> [    3.334483] [<ffffffff806f2d3c>] dump_stack+0x14/0x1c
-> [    3.334687] [<ffffffff806e92fa>] panic+0x116/0x2d0
-> [    3.334878] [<ffffffff8001b0aa>] do_exit+0x80a/0x810
-> [    3.335079] [<ffffffff8001b1d0>] do_group_exit+0x24/0x70
-> [    3.335287] [<ffffffff8001b234>] __wake_up_parent+0x0/0x20
-> [    3.335502] [<ffffffff80003cee>] ret_from_syscall+0x0/0x2
-> [    3.335857] SMP: stopping secondary CPUs
-> [    3.337561] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000000 ]---
-> 
-> It seems reasonable enough to increase the default command line size to
-> 1024, like arm, to prevent issues like the one reported above.
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
-error: arch/riscv/include/uapi/asm/setup.h: missing "WITH Linux-syscall-note" for SPDX-License-Identifier
+I'd say, as you are going to introduce new bindings using two compat 
+strings, just leave this binding as is, marking it as deprecated.
 
-Unfortunately this does not build :/
-
-Thanks,
-Conor.
-
-> Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
 > ---
->  arch/riscv/include/asm/setup.h      | 7 +++++++
->  arch/riscv/include/uapi/asm/setup.h | 7 +++++++
->  2 files changed, 14 insertions(+)
->  create mode 100644 arch/riscv/include/asm/setup.h
->  create mode 100644 arch/riscv/include/uapi/asm/setup.h
+>   .../devicetree/bindings/display/msm/dsi-controller-main.yaml    | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/arch/riscv/include/asm/setup.h b/arch/riscv/include/asm/setup.h
-> new file mode 100644
-> index 000000000000..f4fe549aab40
-> --- /dev/null
-> +++ b/arch/riscv/include/asm/setup.h
-> @@ -0,0 +1,7 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +#ifndef __ASMRISCV_SETUP_H
-> +#define __ASMRISCV_SETUP_H
-> +
-> +#include <uapi/asm/setup.h>
-> +
-> +#endif /* __ASMRISCV_SETUP_H */
-> diff --git a/arch/riscv/include/uapi/asm/setup.h b/arch/riscv/include/uapi/asm/setup.h
-> new file mode 100644
-> index 000000000000..5738f93ae437
-> --- /dev/null
-> +++ b/arch/riscv/include/uapi/asm/setup.h
-> @@ -0,0 +1,7 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _UAPI__ASMRISCV_SETUP_H
-> +#define _UAPI__ASMRISCV_SETUP_H
-> +
-> +#define COMMAND_LINE_SIZE 1024
-> +
-> +#endif /* _UAPI__ASMRISCV_SETUP_H */
-> -- 
-> 2.37.2
-> 
+> diff --git a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+> index cf782c5f5bdb0..67d08dc338925 100644
+> --- a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+> +++ b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+> @@ -16,7 +16,7 @@ properties:
+>     compatible:
+>       enum:
+>         - qcom,mdss-dsi-ctrl
+> -      - qcom,dsi-ctrl-6g-qcm2290
+> +      - qcom,qcm2290-dsi-ctrl
+>   
+>     reg:
+>       maxItems: 1
+
+-- 
+With best wishes
+Dmitry
+
