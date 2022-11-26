@@ -2,76 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 312AE6393E9
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 05:49:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B37226393EE
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 06:00:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbiKZEtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 23:49:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
+        id S229549AbiKZFAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 00:00:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiKZEtP (ORCPT
+        with ESMTP id S229464AbiKZFAC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 23:49:15 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E59F24F11
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 20:49:14 -0800 (PST)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NJzgG2mk2zqSdm;
-        Sat, 26 Nov 2022 12:45:14 +0800 (CST)
-Received: from cgs.huawei.com (10.244.148.83) by
- kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 26 Nov 2022 12:49:12 +0800
-From:   Gaosheng Cui <cuigaosheng1@huawei.com>
-To:     <krzysztof.kozlowski@linaro.org>, <mripard@kernel.org>,
-        <alexandre.belloni@bootlin.com>, <nicolas.ferre@microchip.com>,
-        <cuigaosheng1@huawei.com>
-CC:     <linux-kernel@vger.kernel.org>
-Subject: [PATCH] memory: mvebu-devbus: Fix missing clk_disable_unprepare in mvebu_devbus_probe()
-Date:   Sat, 26 Nov 2022 12:49:11 +0800
-Message-ID: <20221126044911.7226-1-cuigaosheng1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 26 Nov 2022 00:00:02 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D461121E23
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 21:00:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669438801; x=1700974801;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ajxnLbQQiZCmuMNaAqGsvziwUERDBoERbf5MloAdBeQ=;
+  b=WWHCXBLgP9dVncl7F6M0FYpGJGJLazkUEfeOziUNwyBY96aZUYX4SAC0
+   XDQdJ2CRXPXZYSjfyDbja7bH49c0A56og6JANeDVilB7SSeYKOqX1tjIC
+   2lGDsbaRMm9MtXdw8pltKONE5EtpbpU+lZOHuuJGua7bwvaTs9dN14yTP
+   4IrafVXwppyD4cA4f/rZUu3u2P9/4EOVhS8yy5r6a+kzbhW9CyXNqKawX
+   t7Q9+EmTClwii/CnfUg5XFe2m46G5TUsPfrscJW5LQR2J98c170IwDai7
+   f6uy+6pzl0nQvjKdE2In3HpgewzLcFeJ+sr9kNzoFUOx3yT6xScXU/4IR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="314602465"
+X-IronPort-AV: E=Sophos;i="5.96,194,1665471600"; 
+   d="scan'208";a="314602465"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2022 21:00:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="785096770"
+X-IronPort-AV: E=Sophos;i="5.96,194,1665471600"; 
+   d="scan'208";a="785096770"
+Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 25 Nov 2022 21:00:00 -0800
+Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oynIG-0005uD-01;
+        Sat, 26 Nov 2022 05:00:00 +0000
+Date:   Sat, 26 Nov 2022 12:59:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:perf/core] BUILD SUCCESS
+ 17b8d847b92d815d1638f0de154654081d66b281
+Message-ID: <63819d15.AQzzgBpHzGYBKrvp%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.244.148.83]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The clk_disable_unprepare() should be called in the error handling
-of devbus_get_timing_params() and of_platform_populate(), fix it by
-replacing devm_clk_get and clk_prepare_enable by devm_clk_get_enabled.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf/core
+branch HEAD: 17b8d847b92d815d1638f0de154654081d66b281  perf/x86/intel/uncore: Fix reference count leak in __uncore_imc_init_box()
 
-Fixes: e81b6abebc87 ("memory: add a driver for atmel ram controllers")
-Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
----
- drivers/memory/mvebu-devbus.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+elapsed time: 2457m
 
-diff --git a/drivers/memory/mvebu-devbus.c b/drivers/memory/mvebu-devbus.c
-index 8450638e8670..efc6c08db2b7 100644
---- a/drivers/memory/mvebu-devbus.c
-+++ b/drivers/memory/mvebu-devbus.c
-@@ -280,10 +280,9 @@ static int mvebu_devbus_probe(struct platform_device *pdev)
- 	if (IS_ERR(devbus->base))
- 		return PTR_ERR(devbus->base);
- 
--	clk = devm_clk_get(&pdev->dev, NULL);
-+	clk = devm_clk_get_enabled(&pdev->dev, NULL);
- 	if (IS_ERR(clk))
- 		return PTR_ERR(clk);
--	clk_prepare_enable(clk);
- 
- 	/*
- 	 * Obtain clock period in picoseconds,
+configs tested: 58
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+sh                               allmodconfig
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+arc                  randconfig-r043-20221124
+s390                                defconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+s390                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+m68k                             allyesconfig
+ia64                             allmodconfig
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+x86_64                        randconfig-a002
+x86_64                        randconfig-a004
+x86_64                        randconfig-a006
+x86_64                               rhel-8.3
+x86_64                              defconfig
+powerpc                          allmodconfig
+x86_64                           allyesconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+i386                                defconfig
+i386                             allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+
+clang tested configs:
+riscv                randconfig-r042-20221124
+hexagon              randconfig-r041-20221124
+hexagon              randconfig-r045-20221124
+s390                 randconfig-r044-20221124
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
