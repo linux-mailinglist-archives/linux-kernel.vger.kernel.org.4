@@ -2,91 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406F663984A
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 22:45:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DABCB63984E
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 22:49:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbiKZVps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 16:45:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45122 "EHLO
+        id S229536AbiKZVtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 16:49:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiKZVpq (ORCPT
+        with ESMTP id S229453AbiKZVtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 16:45:46 -0500
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E8113E8F
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 13:45:45 -0800 (PST)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-3c21d6e2f3aso11258037b3.10
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 13:45:45 -0800 (PST)
+        Sat, 26 Nov 2022 16:49:40 -0500
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4F1167CA
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 13:49:39 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id 7so8958585ybp.13
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 13:49:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pRxq+j1N3NePxiJ2JT2MTJet9Uql84OySQTRJfr9N3I=;
-        b=vqK+8wvDlVZobG46JZZmctmyGzHXZF93PNREcIr7XM953PhGW6Pq5q6apgGRbjzUI8
-         CzaRBcn0sdl+eJzgNeXrm+36UHmK0k4tgJ4ki4PWAsVYJ/AVJXuxokoF9TBU5Y3kWqA3
-         09FUtIStJCxfbU1zQgC6yOelHFtrD+0k7REJWLcCMnb93N7FeN3odr5ud4EybrvkfoRF
-         P2mtjCMYwCXifoc75QGHoKsXy9RoeybAj8A2Va5e3j/Mo+ZeupJU+EPd9XbjZkYj0Wf7
-         5IR5FIzDPW1LSzIBCMslfDCMK1uCrfB8K6ktO8Lv3L2LzdeMXrk4MyN/7QbTlyTddCBd
-         8Suw==
+        bh=64rZY6gHcuVaviWfitw7c133Lk1q1wMsjFa4kaG/g+s=;
+        b=iP4J6FZzKaMir0+W4S4i3tVRMi0ESzplhJxBU4jXzpD7AquMBJvX0CZteC6hbdh6sz
+         Vod09BoB8GrSAWPTQejsBtuqJyKPlM5oTXx9AUoDkVnvz1E2EAX+gzLKARuIL7/MUZ9i
+         fO5cdhe78lSAWKQoVLB/DJO0i4g/+/nQEurrSurmpJwDOr54xXq/r5bdTfvuRg+QIMK2
+         QTVrh0aV4V00t8m/771s3L5t++xDhj92VgphhnUKOvXCUOsv/Z286yd8hovLVSSjQO5/
+         SO0pFAezWkZfB9FB04eKlTnj6vX50JHeqDvXo1HcCQa2/suaaOuMxi0ObrkHV6mzOpfq
+         KnNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pRxq+j1N3NePxiJ2JT2MTJet9Uql84OySQTRJfr9N3I=;
-        b=pVCwAZWUz3VBSmoKQhqH1fSsVd9oIDGFixaGREcz3QuvoHLTs4gVSYujCLHLfTSt7H
-         GIib5oDd5CDJgz/aI/8oTZMQ0OQ6gKwvtomB8qSON1zXYGNzjNHupaB66KdSlij3pQtb
-         KNO1nVfLd7bauzmx86nJC0pAx8KHsy51kGBYhXPHcer80JTQzIP0W+HSkQhvs4wo+bcU
-         Fs3r99fxIx0JZHxe0TTUCqIe1RunJ2B31l5G6PDbRNQui9TtqrAhXIbORuxu8CewjfdA
-         3/f8/vQGm915cBOCYJQTKrWwvjK0fdYU7RDJBrkFQv9Rmwxg5YlMgcCeLsl7B6wfMIrI
-         vJrQ==
-X-Gm-Message-State: ANoB5pnRe/laU6Dr0kXR+zTmR9T/YdPigsBCNseoFXOTpCWu3cy1lI0E
-        8Y6cJMS5GM4lMoTZBMPufJHndStHOMCKqO19hTso+w==
-X-Google-Smtp-Source: AA0mqf43EmhH/k7KEVgca9O5pYenGVMwt1/G9lr9Kr07O2rgGeziMSyprL3K1L17O8T6R019ZTuW5TwbvWWK86rYXQ4=
-X-Received: by 2002:a81:65c1:0:b0:376:f7e2:4b12 with SMTP id
- z184-20020a8165c1000000b00376f7e24b12mr25287377ywb.0.1669499144991; Sat, 26
- Nov 2022 13:45:44 -0800 (PST)
+        bh=64rZY6gHcuVaviWfitw7c133Lk1q1wMsjFa4kaG/g+s=;
+        b=gRxJZw08nV4kYht/ejpA3Qa7cWYAfpwBVdf3KHp3xTkzdBZoCAt3j3My1a/FffGgst
+         iQ8ZLVsc+DwEaeOfuVWoZOPZllx3HJgFNCuvcXWMIftK9VT8raTVvGt4rAJTmnfycXy6
+         gYYjfpTVJX4ci0CrhE8/eil+Nv3nA+SYnGLSb5VoQZHjYSYFIdjNGV28fbRCk/Jrn5OF
+         KRVMF0r3EmcwXt1LDMwxWz+uuTKPCh4tmuPgwSjZWSDMumQtjdpFwscu+yfJgXkb25z/
+         Z1DGax2XZWm8ERn2x4N/kS4FoEky22PCHYN94CUrMj8pY+tdHFGHoNqyaYNmmo5pzDab
+         Dw8A==
+X-Gm-Message-State: ANoB5pnzyChE4HMkOEtcS2Fu8yIDcARSz71ugJH+kbxpqTBu2xX7h3e6
+        dG+jNBVxf+dOJPNakVKPYxt5+3LnFrTnrS2lk+fQYA==
+X-Google-Smtp-Source: AA0mqf6gdk3XLLJowDZX5ZGc5gTQstM3esNfZxiYvyNeRAMLuMKV5iSVY7uMMAKw8ERGI5Q/odz8aNizpviciL/7GnU=
+X-Received: by 2002:a25:c485:0:b0:6be:8e8d:639f with SMTP id
+ u127-20020a25c485000000b006be8e8d639fmr40035380ybf.506.1669499378786; Sat, 26
+ Nov 2022 13:49:38 -0800 (PST)
 MIME-Version: 1.0
-References: <20220921001630.56765-1-konrad.dybcio@somainline.org>
- <83b90478-3974-28e6-cf13-35fc4f62e0db@marcan.st> <13b8c67c-399c-d1a6-4929-61aea27aa57d@somainline.org>
- <0e65a8b2-0827-af1e-602c-76d9450e3d11@marcan.st> <7fd077c5-83f8-02e2-03c1-900a47f05dc1@somainline.org>
- <CACRpkda3uryD6TOEaTi3pPX5No40LBWoyHR4VcEuKw4iYT0dqA@mail.gmail.com>
- <20220922133056.eo26da4npkg6bpf2@bang-olufsen.dk> <87sfke32pc.fsf@kernel.org>
- <4592f87a-bb61-1c28-13f0-d041a6e7d3bf@linaro.org> <CACRpkdax-3VVDd29iH51mfumakqM7jyEc8Pbb=AQwAgp2WsqFQ@mail.gmail.com>
- <d03bd4d4-e4ef-681b-b4a5-02822e1eee75@linaro.org> <87fse76yig.fsf@kernel.org>
- <fc2812b1-db96-caa6-2ecb-c5bb2c33246a@linaro.org> <87bkov6x1q.fsf@kernel.org>
-In-Reply-To: <87bkov6x1q.fsf@kernel.org>
+References: <20221115221145.2550572-1-dmitry.torokhov@gmail.com>
+ <20221115221145.2550572-4-dmitry.torokhov@gmail.com> <CACRpkdbARhDuqSiOZM6GZynHsQWau8JhsEa2zcpsPZSLuD07Kg@mail.gmail.com>
+ <e4609919-d9be-33c4-1488-352443523b14@xs4all.nl>
+In-Reply-To: <e4609919-d9be-33c4-1488-352443523b14@xs4all.nl>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sat, 26 Nov 2022 22:45:33 +0100
-Message-ID: <CACRpkdbpJ8fw0UsuHXGX43JRyPy6j8P41_5gesXOmitHvyoRwQ@mail.gmail.com>
-Subject: Re: [PATCH v2] brcmfmac: Add support for BCM43596 PCIe Wi-Fi
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        =?UTF-8?Q?Alvin_=C5=A0ipraga?= <ALSI@bang-olufsen.dk>,
-        Hector Martin <marcan@marcan.st>,
-        "~postmarketos/upstreaming@lists.sr.ht" 
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        "martin.botka@somainline.org" <martin.botka@somainline.org>,
-        "angelogioacchino.delregno@somainline.org" 
-        <angelogioacchino.delregno@somainline.org>,
-        "marijn.suijten@somainline.org" <marijn.suijten@somainline.org>,
-        "jamipkettunen@somainline.org" <jamipkettunen@somainline.org>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Marek Vasut <marex@denx.de>,
-        "Zhao, Jiaqing" <jiaqing.zhao@intel.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Soon Tak Lee <soontak.lee@cypress.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "brcm80211-dev-list.pdl@broadcom.com" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        "SHA-cyfmac-dev-list@infineon.com" <SHA-cyfmac-dev-list@infineon.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Sat, 26 Nov 2022 22:49:27 +0100
+Message-ID: <CACRpkdaczw75FX17m96s6zS1ng+rp8QXwW2=n8HZ5OKYH6xpsA@mail.gmail.com>
+Subject: Re: [PATCH 4/4] media: i2c: s5c73m3: switch to using gpiod API
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -97,70 +71,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 25, 2022 at 1:25 PM Kalle Valo <kvalo@kernel.org> wrote:
-> Konrad Dybcio <konrad.dybcio@linaro.org> writes:
->
-> > On 25.11.2022 12:53, Kalle Valo wrote:
-> >> Konrad Dybcio <konrad.dybcio@linaro.org> writes:
-> >>
-> >>> On 21.11.2022 14:56, Linus Walleij wrote:
-> >>>> On Fri, Nov 18, 2022 at 5:47 PM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
-> >>>>
-> >>>>> I can think of a couple of hacky ways to force use of 43596 fw, but I
-> >>>>> don't think any would be really upstreamable..
-> >>>>
-> >>>> If it is only known to affect the Sony Xperias mentioned then
-> >>>> a thing such as:
-> >>>>
-> >>>> if (of_machine_is_compatible("sony,xyz") ||
-> >>>>     of_machine_is_compatible("sony,zzz")... ) {
-> >>>>    // Enforce FW version
-> >>>> }
-> >>>>
-> >>>> would be completely acceptable in my book. It hammers the
-> >>>> problem from the top instead of trying to figure out itsy witsy
-> >>>> details about firmware revisions.
-> >>>>
-> >>>> Yours,
-> >>>> Linus Walleij
-> >>>
-> >>> Actually, I think I came up with a better approach by pulling a page
-> >>> out of Asahi folks' book - please take a look and tell me what you
-> >>> think about this:
-> >>>
-> >>> [1]
-> >>> https://github.com/SoMainline/linux/commit/4b6fccc995cd79109b0dae4e4ab2e48db97695e7
-> >>> [2]
-> >>> https://github.com/SoMainline/linux/commit/e3ea1dc739634f734104f37fdbed046873921af7
-
-Something in this direction works too.
-
-The upside is that it tells all operating systems how to deal
-with the firmware for this hardware.
-
-> >> Instead of a directory path ("brcm/brcmfmac43596-pcie") why not provide
-> >> just the chipset name ("brcmfmac43596-pcie")? IMHO it's unnecessary to
-> >> have directory names in Device Tree.
+On Sat, Nov 26, 2022 at 11:34 AM Hans Verkuil <hverkuil@xs4all.nl> wrote:
+> On 17/11/2022 10:06, Linus Walleij wrote:
+> > On Tue, Nov 15, 2022 at 11:11 PM Dmitry Torokhov
+> > <dmitry.torokhov@gmail.com> wrote:
 > >
-> > I think it's common practice to include a full $FIRMWARE_DIR-relative
-> > path when specifying firmware in DT, though here I left out the board
-> > name bit as that's assigned dynamically anyway. That said, if you don't
-> > like it, I can change it.
+> >> This patch switches the driver away from legacy gpio/of_gpio API to
+> >> gpiod API, and removes use of of_get_named_gpio_flags() which I want to
+> >> make private to gpiolib.
+> >>
+> >> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> >
+> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 >
-> It's just that I have understood that Device Tree is supposed to
-> describe hardware and to me a firmware directory "brcm/" is a software
-> property, not a hardware property. But this is really for the Device
-> Tree maintainers to decide, they know this best :)
+> There are now two patches that do this switch to using the gpiod API:
+> this one, and one from you:
 
-I would personally just minimize the amount of information
-put into the device tree to be exactly what is needed to find
-the right firmware.
+Ooops we stepped on each others' toes again. Dmitry & I really like
+to fix these drivers :D sorry about that.
 
-brcm,firmware-compatible = "43596";
+> https://patchwork.linuxtv.org/project/linux-media/patch/20221108100604.1500909-1-linus.walleij@linaro.org/
+>
+> Any preference?
 
-since the code already knows how to conjure the rest of the string.
-
-But check with Rob/Krzysztof.
+Not really, take the one you like best, they look functionally equivalent to me,
+just slightly different stylistic choices.
 
 Yours,
 Linus Walleij
