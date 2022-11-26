@@ -2,118 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE1763981D
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 20:14:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 504FA63981F
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 20:16:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbiKZTOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 14:14:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55842 "EHLO
+        id S229564AbiKZTQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 14:16:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbiKZTNy (ORCPT
+        with ESMTP id S229462AbiKZTQj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 14:13:54 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F001C92C
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 11:13:42 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id 136so6514491pga.1
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 11:13:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WPJu+jZjV0HF0T3O/nCnlgZiVdaWzUPqt5uvtlZaGzY=;
-        b=dGPoELH6LYY/NsUqxEUPysiRcKM5+5tvV2nxV8r7QxSK5xrXtnkQzxIGbI9apCaMY2
-         MpQ6pZoounyJeXG0FbPgepU72AUH29pZfio+7PM1letpGsxN2vhtjyK8/i74fcKOMR2I
-         922bznRDlU+11wHr4T4H3TNPZbmc31eL+Vu7CfYsvf0E3Hw5kntFGrWBzS1bv9odmIqr
-         6pejvL1GkvJOARDLAvJKqGsg6rqyuIqdDpXiCcfka8DF3/teIf+FzpmdLpiQaHMKA447
-         IHylVwJwx6y7eUsHMW4ZfXyV8NCvU+YAuRJAceSpmr9AiSHLv0BfyaXUpDt9VHo+WsEf
-         YLNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WPJu+jZjV0HF0T3O/nCnlgZiVdaWzUPqt5uvtlZaGzY=;
-        b=y8K7x/KHU0rZPCHRJE/CX7wwu/7vnkqjtVl+0P2UUEoFGuJX5c3fke62ybNOTQc7Z+
-         eFw2wE9L5GiRLCrQyZEzOga+jIXLKz1xhxixkozP2nUtkyh6Q9jvG/tVT5c082bVlkXw
-         rB7S5M1ReIe5bc8fmQxRh/Y5zICdfElXxcwtgnqe+c/jLOiUzmkNVqzwGYTPzPmsP0tZ
-         ei88NS7HqJYTM+j6rvQYKttes8H0PR+t9Gdwnj9TDl61TzvBssFPgqCgZW38H95uD79J
-         mfEcn2oTE4RfHk3r5bUWWGNU6KCM3XsIPXIQBhaD0wNBLS4RllAoUXDxTp+wBZ7+Vz/5
-         1bDA==
-X-Gm-Message-State: ANoB5pnK8vFePcp9aI7tmvdJaapIw17M+YYxA/E0/9LWSFC/L8/HSvE6
-        ZVGfz9105bBLCCD2oyo+uThx8ji1XZk1zltVQCU=
-X-Google-Smtp-Source: AA0mqf7nfGi+HzFfofWXjZoc0oQtcKaZp0Gx2vHhUFS0/wlAGVRIzDXGXm+kG/SBkAdaS32NWnXtOtznaATukPjlPFg=
-X-Received: by 2002:a63:f00e:0:b0:477:5e25:6d4c with SMTP id
- k14-20020a63f00e000000b004775e256d4cmr22089354pgh.159.1669490022359; Sat, 26
- Nov 2022 11:13:42 -0800 (PST)
+        Sat, 26 Nov 2022 14:16:39 -0500
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17FC140ED;
+        Sat, 26 Nov 2022 11:16:38 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 207185C0080;
+        Sat, 26 Nov 2022 14:16:38 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Sat, 26 Nov 2022 14:16:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1669490198; x=1669576598; bh=M7EPshB7W7XmXZsnaKJ1Jh7xA
+        ayYTnVyi38A+Cdf158=; b=fiipHUSG5HUsY0rj9sFAIRYo91pZ/V2qyYK2a2mpZ
+        5ejmy8kAXmGVksqWLdTaVW9BtZTeWn8zVCig/ditGo7qlLEQ/otdyXGV3ySNGgRA
+        GSE3IX42/LMlHimDnrHXMciqhd/ZGVHrP/DR8hW5vpo1wFC6Zmce/gBdjbM1zu+j
+        y2dBrPASdAlquLXqXuPiWBGWj/g6dGpm9a/DIybRkClBVlQ5K0FDri52lR0AvjcS
+        K8BVopYn/+nBAQkC2o5+nJJIQDZcuVLJoL352tXKEtEMQ//Vlx2a21A+lvEKW6Jw
+        irgjYyy9/0rkPHPvHM8SAez6Vv2FbDhXAvjPXXe/ixncA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1669490198; x=1669576598; bh=M7EPshB7W7XmXZsnaKJ1Jh7xAayYTnVyi38
+        A+Cdf158=; b=cBLL/19fpvDhvBNLNAEZ4w+zUMsiseZENBA8wPfLjvvp0g5eK3w
+        VPNz0VqiwnA+NO4I7Q51XDEM+h8Tb/Cxshso/9JvxEDh7IsPj5vbqgXr6tEoRSmB
+        PRTY4Vi6YBcS1/obv0/dnhFRpjBv2XO6sJadbIdsIhmEHWqmttN+Zenz7dmMSCo6
+        ZEk/207s1cgoLzNBx5tqR898FMf/Ln4lqJ6ucNxrgo/emUJIsN7Jw72zoMWNj74s
+        7y4NF9EhIEe2ClzFS8DTvOr1QuescgmnA9ae5W06+Gx6Bj+aTEH5RWUxLUIHqaB4
+        5q5zNqOLVrTuJC59gb8dADdKRAQvfTHNJxw==
+X-ME-Sender: <xms:FWaCY6CBGe6KXjhlqeewLQIx_vB18FCYYAPcjT5m0Z1mTjgVgDprwQ>
+    <xme:FWaCY0gNyNKhj6Fiy1XJVV5RcL9MyLaovz3bRW80wbODHJBOS-jnAoFQsNMCeuARK
+    PYhkoAhFW2ssZUr7g>
+X-ME-Received: <xmr:FWaCY9mv3CCKZDBtd2maxAV3g-JAr8mcB0plToVHHXFyxEt_Vu65eidXCZu2gXlIqpixuHH5Sc0JDNCfcaTCkAebKDzhpqJ45tCdW1TbJ_mj9-mTmiY7Pu2VrmiDqWllvbB6uA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrieejgdduvdehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
+    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
+    grthhtvghrnhepkeevlefhjeeuleeltedvjedvfeefteegleehueejffehgffffeekhefh
+    hfekkeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:FWaCY4xB49LAJM29IXKBIpDuvKt1QYSp_BZlhpztZz7ZosxPWivNew>
+    <xmx:FWaCY_R0-gh013bc0SxG-bvs3tRwEmT2BvmO1rAPxlopAo1K4n5u-Q>
+    <xmx:FWaCYzagjcFvVu5Xi7DNLTNOeYMZ7OxPlJXVqr2tvk-3natwzkRnpQ>
+    <xmx:FmaCY4R57ws_sMay55q3zvyDq1SZoKvggCk07VsTy1TjOsac4VLExg>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 26 Nov 2022 14:16:37 -0500 (EST)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Fabien Poussin <fabien.poussin@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: [PATCH] pinctrl: sunxi: d1: Add CAN bus pinmuxes
+Date:   Sat, 26 Nov 2022 13:16:36 -0600
+Message-Id: <20221126191636.6673-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.37.4
 MIME-Version: 1.0
-References: <c124467c401e9d44dd35a36fdae1c48e4e505e9e.1666901317.git.andreyknvl@google.com>
- <Y13oij+hiJgQ9BXj@elver.google.com>
-In-Reply-To: <Y13oij+hiJgQ9BXj@elver.google.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Sat, 26 Nov 2022 20:13:31 +0100
-Message-ID: <CA+fCnZficLHbDpqjn-wiQhg9dTTO8HjLSwAOLGuPgd8O511F4A@mail.gmail.com>
-Subject: Re: [PATCH] kasan: allow sampling page_alloc allocations for HW_TAGS
-To:     Marco Elver <elver@google.com>
-Cc:     andrey.konovalov@linux.dev,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Florian Mayer <fmayer@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 30, 2022 at 3:59 AM Marco Elver <elver@google.com> wrote:
->
-> > +- ``kasan.page_alloc.sample=<sampling frequency>`` makes KASAN tag only
->
-> Frequency is number of samples per frame (unit time, or if used
-> non-temporally like here, population size).
->
-> [1] https://en.wikipedia.org/wiki/Systematic_sampling
->
-> You're using it as an interval, so I'd just replace uses of frequency
-> with "interval" appropriately here and elsewhere.
+From: Fabien Poussin <fabien.poussin@gmail.com>
 
-Done in v2.
+The D1 pin controller contains muxes for two CAN buses. While the CAN
+bus controllers are only documented for the T113 SoC, the pin controller
+is the same across all SoC variants.
 
-> > +static inline bool kasan_sample_page_alloc(void)
-> > +{
-> > +     unsigned long *count = this_cpu_ptr(&kasan_page_alloc_count);
->
-> this_cpu_inc_return()
->
-> without it, you need to ensure preemption is disabled around here.
->
-> > +
-> > +     return (*count)++ % kasan_page_alloc_sample == 0;
->
-> Doing '%' is a potentially costly operation if called in a fast-path.
->
-> We can generate better code with (rename 'count' -> 'skip'):
->
->         long skip_next = this_cpu_dec_return(kasan_page_alloc_skip);
->
->         if (skip_next < 0) {
->                 this_cpu_write(kasan_page_alloc_skip, kasan_page_alloc_sample - 1);
->                 return true;
->         }
->
->         return false;
+Signed-off-by: Fabien Poussin <fabien.poussin@gmail.com>
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
 
-Done in v2.
+ drivers/pinctrl/sunxi/pinctrl-sun20i-d1.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thank you, Marco!
+diff --git a/drivers/pinctrl/sunxi/pinctrl-sun20i-d1.c b/drivers/pinctrl/sunxi/pinctrl-sun20i-d1.c
+index 40858b881298..9cc94be1046d 100644
+--- a/drivers/pinctrl/sunxi/pinctrl-sun20i-d1.c
++++ b/drivers/pinctrl/sunxi/pinctrl-sun20i-d1.c
+@@ -47,6 +47,7 @@ static const struct sunxi_desc_pin d1_pins[] = {
+ 		SUNXI_FUNCTION(0x5, "i2s2_din"),	/* DIN2 */
+ 		SUNXI_FUNCTION(0x6, "lcd0"),		/* D18 */
+ 		SUNXI_FUNCTION(0x7, "uart4"),		/* TX */
++		SUNXI_FUNCTION(0x8, "can0"),		/* TX */
+ 		SUNXI_FUNCTION_IRQ_BANK(0xe, 0, 2)),
+ 	SUNXI_PIN(SUNXI_PINCTRL_PIN(B, 3),
+ 		SUNXI_FUNCTION(0x0, "gpio_in"),
+@@ -57,6 +58,7 @@ static const struct sunxi_desc_pin d1_pins[] = {
+ 		SUNXI_FUNCTION(0x5, "i2s2_din"),	/* DIN0 */
+ 		SUNXI_FUNCTION(0x6, "lcd0"),		/* D19 */
+ 		SUNXI_FUNCTION(0x7, "uart4"),		/* RX */
++		SUNXI_FUNCTION(0x8, "can0"),		/* RX */
+ 		SUNXI_FUNCTION_IRQ_BANK(0xe, 0, 3)),
+ 	SUNXI_PIN(SUNXI_PINCTRL_PIN(B, 4),
+ 		SUNXI_FUNCTION(0x0, "gpio_in"),
+@@ -67,6 +69,7 @@ static const struct sunxi_desc_pin d1_pins[] = {
+ 		SUNXI_FUNCTION(0x5, "i2s2_din"),	/* DIN1 */
+ 		SUNXI_FUNCTION(0x6, "lcd0"),		/* D20 */
+ 		SUNXI_FUNCTION(0x7, "uart5"),		/* TX */
++		SUNXI_FUNCTION(0x8, "can1"),		/* TX */
+ 		SUNXI_FUNCTION_IRQ_BANK(0xe, 0, 4)),
+ 	SUNXI_PIN(SUNXI_PINCTRL_PIN(B, 5),
+ 		SUNXI_FUNCTION(0x0, "gpio_in"),
+@@ -77,6 +80,7 @@ static const struct sunxi_desc_pin d1_pins[] = {
+ 		SUNXI_FUNCTION(0x5, "pwm0"),
+ 		SUNXI_FUNCTION(0x6, "lcd0"),		/* D21 */
+ 		SUNXI_FUNCTION(0x7, "uart5"),		/* RX */
++		SUNXI_FUNCTION(0x8, "can1"),		/* RX */
+ 		SUNXI_FUNCTION_IRQ_BANK(0xe, 0, 5)),
+ 	SUNXI_PIN(SUNXI_PINCTRL_PIN(B, 6),
+ 		SUNXI_FUNCTION(0x0, "gpio_in"),
+-- 
+2.37.4
+
