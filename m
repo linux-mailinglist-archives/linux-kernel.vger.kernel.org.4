@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 830F2639886
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 23:56:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10BEF639889
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 23:56:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbiKZW4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 17:56:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40786 "EHLO
+        id S229696AbiKZW4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 17:56:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiKZW4k (ORCPT
+        with ESMTP id S229670AbiKZW4m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 17:56:40 -0500
+        Sat, 26 Nov 2022 17:56:42 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EAE140D7;
-        Sat, 26 Nov 2022 14:56:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FDF14033;
+        Sat, 26 Nov 2022 14:56:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95E45B80A36;
-        Sat, 26 Nov 2022 22:56:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22713C43470;
-        Sat, 26 Nov 2022 22:56:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C1C7BB80990;
+        Sat, 26 Nov 2022 22:56:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB3BCC43146;
+        Sat, 26 Nov 2022 22:56:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669503397;
-        bh=AtKhQp8FtKxLMmPcpUUV2Sk+OJL/9nVhE5GmwRmFJ/E=;
+        s=k20201202; t=1669503398;
+        bh=wCew/KSYiW5FMRpAcbkMMNoa0Tg0Yys9AnOHzoZ6il8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tpc49ynONcF6JHmKmUmDdKQimA5CgkjPa8g75uKF3gIHTiUVOidbUq2NaO6AeRXx0
-         faxfC5+C9SN6n5m+MPij0NW62dlLfBpi7HxSJroADn90szqn4nHcQu8UBpLs3+rAJB
-         9LJ1mI9J308cAk3h7csqYE6R7ZI55mERJRQa3DhK0xPqskmehF0MX4MSnYugRxuQTO
-         VkjIj//94z3zPL6+wpocM42sbe1HZIFzsSU/pqLWjQHG0T2tI+uHvCged6RCISfpQ4
-         ZnUipha/lMiCSMezbryYnutETrFVNA7hX6AMJmPVpT1DvnxMRes6lZCPLwE1tDiNUD
-         g5dUyW76vsYbw==
+        b=iU09oV6qH+haiGzgiXuF0/S4LQyMadKXIFcYKmTSKU7kOMjP5o7K2kFLjGtY4w8Pa
+         FAMmfl9dlKJdVGA8U4FUbnZwE41c3RVhqICFpRrRkcaf8RlP9CZ+7AGaAeACbrRcYJ
+         4lb8cKx9Klcs267OGILTJR1W8dsyzNumUzs8Xpc7F2/YEMh5SQq5lSW6rBEA9kWFIx
+         AU7DLCb0Le6BX7XwVIj8Uf6MEedqDTXtDib5+AqyA02UK1agU6k81fMQpQ1umOQKQt
+         Kr9684qmU8D4BV6+HNeeEsHsdMfCgFJtjUL/YQ5D+V5aD6r9qaOyZPT17IHaBVRdNE
+         q2vjtoPnsvasg==
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH v3 3/5] kbuild: add read-file macro
-Date:   Sun, 27 Nov 2022 07:56:22 +0900
-Message-Id: <20221126225624.751661-3-masahiroy@kernel.org>
+        Nicolas Schier <nicolas@fjasle.eu>
+Subject: [PATCH v3 4/5] kconfig: refactor Makefile to reduce process forks
+Date:   Sun, 27 Nov 2022 07:56:23 +0900
+Message-Id: <20221126225624.751661-4-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221126225624.751661-1-masahiroy@kernel.org>
 References: <20221126225624.751661-1-masahiroy@kernel.org>
@@ -56,14 +54,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since GNU Make 4.2, $(file ...) supports the read operater '<', which
-is useful to read a file without forking any process. No warning is
-shown even if the input file is missing.
-
-For older Make versions, it falls back to the cat command.
-
-The added ifeq will break when GNU Make 4.10 or 10.0 is released.
-It will take a long time if the current release pace continues.
+Refactor Makefile and use read-file macro. For Make >= 4.2, it can read
+out a file by using the built-in function.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
@@ -71,84 +63,290 @@ Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
 
 (no changes since v1)
 
- Makefile                  |  2 +-
- scripts/Kbuild.include    | 15 +++++++++++++++
- scripts/Makefile.modfinal |  2 +-
- scripts/Makefile.modinst  |  2 +-
- 4 files changed, 18 insertions(+), 3 deletions(-)
+ scripts/kconfig/.gitignore   |  4 +++-
+ scripts/kconfig/Makefile     | 43 +++++++++++++++++++-----------------
+ scripts/kconfig/gconf-cfg.sh |  7 ++++--
+ scripts/kconfig/mconf-cfg.sh | 25 ++++++++++++---------
+ scripts/kconfig/nconf-cfg.sh | 23 ++++++++++---------
+ scripts/kconfig/qconf-cfg.sh | 10 ++++++---
+ scripts/remove-stale-files   |  2 ++
+ 7 files changed, 67 insertions(+), 47 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index eb80332f7b51..60ce9dcafc72 100644
---- a/Makefile
-+++ b/Makefile
-@@ -369,7 +369,7 @@ else # !mixed-build
- include $(srctree)/scripts/Kbuild.include
+diff --git a/scripts/kconfig/.gitignore b/scripts/kconfig/.gitignore
+index 500e7424b3ef..c8a3f9cd52f0 100644
+--- a/scripts/kconfig/.gitignore
++++ b/scripts/kconfig/.gitignore
+@@ -1,5 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ /conf
+ /[gmnq]conf
+-/[gmnq]conf-cfg
++/[gmnq]conf-cflags
++/[gmnq]conf-libs
++/qconf-bin
+ /qconf-moc.cc
+diff --git a/scripts/kconfig/Makefile b/scripts/kconfig/Makefile
+index b8ef0fb4bbef..da7da9775a4b 100644
+--- a/scripts/kconfig/Makefile
++++ b/scripts/kconfig/Makefile
+@@ -159,11 +159,12 @@ conf-objs	:= conf.o $(common-objs)
+ hostprogs	+= nconf
+ nconf-objs	:= nconf.o nconf.gui.o $(common-objs)
  
- # Read KERNELRELEASE from include/config/kernel.release (if it exists)
--KERNELRELEASE = $(shell cat include/config/kernel.release 2> /dev/null)
-+KERNELRELEASE = $(call read-file, include/config/kernel.release)
- KERNELVERSION = $(VERSION)$(if $(PATCHLEVEL),.$(PATCHLEVEL)$(if $(SUBLEVEL),.$(SUBLEVEL)))$(EXTRAVERSION)
- export VERSION PATCHLEVEL SUBLEVEL KERNELRELEASE KERNELVERSION
+-HOSTLDLIBS_nconf	= $(shell . $(obj)/nconf-cfg && echo $$libs)
+-HOSTCFLAGS_nconf.o	= $(shell . $(obj)/nconf-cfg && echo $$cflags)
+-HOSTCFLAGS_nconf.gui.o	= $(shell . $(obj)/nconf-cfg && echo $$cflags)
++HOSTLDLIBS_nconf       = $(call read-file, $(obj)/nconf-libs)
++HOSTCFLAGS_nconf.o     = $(call read-file, $(obj)/nconf-cflags)
++HOSTCFLAGS_nconf.gui.o = $(call read-file, $(obj)/nconf-cflags)
  
-diff --git a/scripts/Kbuild.include b/scripts/Kbuild.include
-index 4b8cf464b53b..55c2243f91c8 100644
---- a/scripts/Kbuild.include
-+++ b/scripts/Kbuild.include
-@@ -10,6 +10,10 @@ empty   :=
- space   := $(empty) $(empty)
- space_escape := _-_SPACE_-_
- pound := \#
-+define newline
+-$(obj)/nconf.o $(obj)/nconf.gui.o: $(obj)/nconf-cfg
++$(obj)/nconf: | $(obj)/nconf-libs
++$(obj)/nconf.o $(obj)/nconf.gui.o: | $(obj)/nconf-cflags
+ 
+ # mconf: Used for the menuconfig target based on lxdialog
+ hostprogs	+= mconf
+@@ -171,27 +172,28 @@ lxdialog	:= $(addprefix lxdialog/, \
+ 		     checklist.o inputbox.o menubox.o textbox.o util.o yesno.o)
+ mconf-objs	:= mconf.o $(lxdialog) $(common-objs)
+ 
+-HOSTLDLIBS_mconf = $(shell . $(obj)/mconf-cfg && echo $$libs)
++HOSTLDLIBS_mconf = $(call read-file, $(obj)/mconf-libs)
+ $(foreach f, mconf.o $(lxdialog), \
+-  $(eval HOSTCFLAGS_$f = $$(shell . $(obj)/mconf-cfg && echo $$$$cflags)))
++  $(eval HOSTCFLAGS_$f = $$(call read-file, $(obj)/mconf-cflags)))
+ 
+-$(addprefix $(obj)/, mconf.o $(lxdialog)): $(obj)/mconf-cfg
++$(obj)/mconf: | $(obj)/mconf-libs
++$(addprefix $(obj)/, mconf.o $(lxdialog)): | $(obj)/mconf-cflags
+ 
+ # qconf: Used for the xconfig target based on Qt
+ hostprogs	+= qconf
+ qconf-cxxobjs	:= qconf.o qconf-moc.o
+ qconf-objs	:= images.o $(common-objs)
+ 
+-HOSTLDLIBS_qconf	= $(shell . $(obj)/qconf-cfg && echo $$libs)
+-HOSTCXXFLAGS_qconf.o	= $(shell . $(obj)/qconf-cfg && echo $$cflags)
+-HOSTCXXFLAGS_qconf-moc.o = $(shell . $(obj)/qconf-cfg && echo $$cflags)
+-
+-$(obj)/qconf.o: $(obj)/qconf-cfg
++HOSTLDLIBS_qconf         = $(call read-file, $(obj)/qconf-libs)
++HOSTCXXFLAGS_qconf.o     = -std=c++11 -fPIC $(call read-file, $(obj)/qconf-cflags)
++HOSTCXXFLAGS_qconf-moc.o = -std=c++11 -fPIC $(call read-file, $(obj)/qconf-cflags)
++$(obj)/qconf: | $(obj)/qconf-libs
++$(obj)/qconf.o $(obj)/qconf-moc.o: | $(obj)/qconf-cflags
+ 
+ quiet_cmd_moc = MOC     $@
+-      cmd_moc = $(shell . $(obj)/qconf-cfg && echo $$moc) $< -o $@
++      cmd_moc = $(call read-file, $(obj)/qconf-bin)/moc $< -o $@
+ 
+-$(obj)/qconf-moc.cc: $(src)/qconf.h $(obj)/qconf-cfg FORCE
++$(obj)/qconf-moc.cc: $(src)/qconf.h FORCE | $(obj)/qconf-bin
+ 	$(call if_changed,moc)
+ 
+ targets += qconf-moc.cc
+@@ -200,15 +202,16 @@ targets += qconf-moc.cc
+ hostprogs	+= gconf
+ gconf-objs	:= gconf.o images.o $(common-objs)
+ 
+-HOSTLDLIBS_gconf    = $(shell . $(obj)/gconf-cfg && echo $$libs)
+-HOSTCFLAGS_gconf.o  = $(shell . $(obj)/gconf-cfg && echo $$cflags)
++HOSTLDLIBS_gconf   = $(call read-file, $(obj)/gconf-libs)
++HOSTCFLAGS_gconf.o = $(call read-file, $(obj)/gconf-cflags)
+ 
+-$(obj)/gconf.o: $(obj)/gconf-cfg
++$(obj)/gconf: | $(obj)/gconf-libs
++$(obj)/gconf.o: | $(obj)/gconf-cflags
+ 
+ # check if necessary packages are available, and configure build flags
+-filechk_conf_cfg = $(CONFIG_SHELL) $<
++cmd_conf_cfg = $< $(addprefix $(obj)/$*conf-, cflags libs bin)
+ 
+-$(obj)/%conf-cfg: $(src)/%conf-cfg.sh FORCE
+-	$(call filechk,conf_cfg)
++$(obj)/%conf-cflags $(obj)/%conf-libs $(obj)/%conf-bin: $(src)/%conf-cfg.sh
++	$(call cmd,conf_cfg)
+ 
+ clean-files += *conf-cfg
+diff --git a/scripts/kconfig/gconf-cfg.sh b/scripts/kconfig/gconf-cfg.sh
+index cbd90c28c05f..040d8f338820 100755
+--- a/scripts/kconfig/gconf-cfg.sh
++++ b/scripts/kconfig/gconf-cfg.sh
+@@ -1,6 +1,9 @@
+ #!/bin/sh
+ # SPDX-License-Identifier: GPL-2.0
+ 
++cflags=$1
++libs=$2
 +
+ PKG="gtk+-2.0 gmodule-2.0 libglade-2.0"
+ 
+ if [ -z "$(command -v ${HOSTPKG_CONFIG})" ]; then
+@@ -26,5 +29,5 @@ if ! ${HOSTPKG_CONFIG} --atleast-version=2.0.0 gtk+-2.0; then
+ 	exit 1
+ fi
+ 
+-echo cflags=\"$(${HOSTPKG_CONFIG} --cflags $PKG)\"
+-echo libs=\"$(${HOSTPKG_CONFIG} --libs $PKG)\"
++${HOSTPKG_CONFIG} --cflags ${PKG} > ${cflags}
++${HOSTPKG_CONFIG} --libs ${PKG} > ${libs}
+diff --git a/scripts/kconfig/mconf-cfg.sh b/scripts/kconfig/mconf-cfg.sh
+index 025b565e0b7c..1e61f50a5905 100755
+--- a/scripts/kconfig/mconf-cfg.sh
++++ b/scripts/kconfig/mconf-cfg.sh
+@@ -1,19 +1,22 @@
+ #!/bin/sh
+ # SPDX-License-Identifier: GPL-2.0
+ 
++cflags=$1
++libs=$2
 +
-+endef
+ PKG="ncursesw"
+ PKG2="ncurses"
  
- ###
- # Comparison macros.
-@@ -55,6 +59,17 @@ stringify = $(squote)$(quote)$1$(quote)$(squote)
- kbuild-dir = $(if $(filter /%,$(src)),$(src),$(srctree)/$(src))
- kbuild-file = $(or $(wildcard $(kbuild-dir)/Kbuild),$(kbuild-dir)/Makefile)
+ if [ -n "$(command -v ${HOSTPKG_CONFIG})" ]; then
+ 	if ${HOSTPKG_CONFIG} --exists $PKG; then
+-		echo cflags=\"$(${HOSTPKG_CONFIG} --cflags $PKG)\"
+-		echo libs=\"$(${HOSTPKG_CONFIG} --libs $PKG)\"
++		${HOSTPKG_CONFIG} --cflags ${PKG} > ${cflags}
++		${HOSTPKG_CONFIG} --libs ${PKG} > ${libs}
+ 		exit 0
+ 	fi
  
-+###
-+# Read a file, replacing newlines with spaces
-+#
-+# This ifeq will break when GNU Make 4.10 is released.
-+# Remove this conditional until then.
-+ifeq ($(call test-ge, $(MAKE_VERSION), 4.2),y)
-+read-file = $(subst $(newline),$(space),$(file < $1))
-+else
-+read-file = $(shell cat $1 2>/dev/null)
-+endif
+-	if ${HOSTPKG_CONFIG} --exists $PKG2; then
+-		echo cflags=\"$(${HOSTPKG_CONFIG} --cflags $PKG2)\"
+-		echo libs=\"$(${HOSTPKG_CONFIG} --libs $PKG2)\"
++	if ${HOSTPKG_CONFIG} --exists ${PKG2}; then
++		${HOSTPKG_CONFIG} --cflags ${PKG2} > ${cflags}
++		${HOSTPKG_CONFIG} --libs ${PKG2} > ${libs}
+ 		exit 0
+ 	fi
+ fi
+@@ -22,22 +25,22 @@ fi
+ # (Even if it is installed, some distributions such as openSUSE cannot
+ # find ncurses by pkg-config.)
+ if [ -f /usr/include/ncursesw/ncurses.h ]; then
+-	echo cflags=\"-D_GNU_SOURCE -I/usr/include/ncursesw\"
+-	echo libs=\"-lncursesw\"
++	echo -D_GNU_SOURCE -I/usr/include/ncursesw > ${cflags}
++	echo -lncursesw > ${libs}
+ 	exit 0
+ fi
+ 
+ if [ -f /usr/include/ncurses/ncurses.h ]; then
+-	echo cflags=\"-D_GNU_SOURCE -I/usr/include/ncurses\"
+-	echo libs=\"-lncurses\"
++	echo -D_GNU_SOURCE -I/usr/include/ncurses > ${cflags}
++	echo -lncurses > ${libs}
+ 	exit 0
+ fi
+ 
+ # As a final fallback before giving up, check if $HOSTCC knows of a default
+ # ncurses installation (e.g. from a vendor-specific sysroot).
+ if echo '#include <ncurses.h>' | ${HOSTCC} -E - >/dev/null 2>&1; then
+-	echo cflags=\"-D_GNU_SOURCE\"
+-	echo libs=\"-lncurses\"
++	echo -D_GNU_SOURCE > ${cflags}
++	echo -lncurses > ${libs}
+ 	exit 0
+ fi
+ 
+diff --git a/scripts/kconfig/nconf-cfg.sh b/scripts/kconfig/nconf-cfg.sh
+index 3a10bac2adb3..f871a2160e36 100755
+--- a/scripts/kconfig/nconf-cfg.sh
++++ b/scripts/kconfig/nconf-cfg.sh
+@@ -1,19 +1,22 @@
+ #!/bin/sh
+ # SPDX-License-Identifier: GPL-2.0
+ 
++cflags=$1
++libs=$2
 +
- ###
- # Easy method for doing a status message
-        kecho := :
-diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-index 25bedd83644b..7252f6cf7837 100644
---- a/scripts/Makefile.modfinal
-+++ b/scripts/Makefile.modfinal
-@@ -13,7 +13,7 @@ include $(srctree)/scripts/Kbuild.include
- include $(srctree)/scripts/Makefile.lib
+ PKG="ncursesw menuw panelw"
+ PKG2="ncurses menu panel"
  
- # find all modules listed in modules.order
--modules := $(sort $(shell cat $(MODORDER)))
-+modules := $(sort $(call read-file, $(MODORDER)))
+ if [ -n "$(command -v ${HOSTPKG_CONFIG})" ]; then
+ 	if ${HOSTPKG_CONFIG} --exists $PKG; then
+-		echo cflags=\"$(${HOSTPKG_CONFIG} --cflags $PKG)\"
+-		echo libs=\"$(${HOSTPKG_CONFIG} --libs $PKG)\"
++		${HOSTPKG_CONFIG} --cflags ${PKG} > ${cflags}
++		${HOSTPKG_CONFIG} --libs ${PKG} > ${libs}
+ 		exit 0
+ 	fi
  
- __modfinal: $(modules)
- 	@:
-diff --git a/scripts/Makefile.modinst b/scripts/Makefile.modinst
-index a4c987c23750..509d424dbbd2 100644
---- a/scripts/Makefile.modinst
-+++ b/scripts/Makefile.modinst
-@@ -9,7 +9,7 @@ __modinst:
- include include/config/auto.conf
- include $(srctree)/scripts/Kbuild.include
+ 	if ${HOSTPKG_CONFIG} --exists $PKG2; then
+-		echo cflags=\"$(${HOSTPKG_CONFIG} --cflags $PKG2)\"
+-		echo libs=\"$(${HOSTPKG_CONFIG} --libs $PKG2)\"
++		${HOSTPKG_CONFIG} --cflags ${PKG2} > ${cflags}
++		${HOSTPKG_CONFIG} --libs ${PKG2} > ${libs}
+ 		exit 0
+ 	fi
+ fi
+@@ -22,20 +25,20 @@ fi
+ # (Even if it is installed, some distributions such as openSUSE cannot
+ # find ncurses by pkg-config.)
+ if [ -f /usr/include/ncursesw/ncurses.h ]; then
+-	echo cflags=\"-D_GNU_SOURCE -I/usr/include/ncursesw\"
+-	echo libs=\"-lncursesw -lmenuw -lpanelw\"
++	echo -D_GNU_SOURCE -I/usr/include/ncursesw > ${cflags}
++	echo -lncursesw -lmenuw -lpanelw > ${libs}
+ 	exit 0
+ fi
  
--modules := $(sort $(shell cat $(MODORDER)))
-+modules := $(sort $(call read-file, $(MODORDER)))
+ if [ -f /usr/include/ncurses/ncurses.h ]; then
+-	echo cflags=\"-D_GNU_SOURCE -I/usr/include/ncurses\"
+-	echo libs=\"-lncurses -lmenu -lpanel\"
++	echo -D_GNU_SOURCE -I/usr/include/ncurses > ${cflags}
++	echo -lncurses -lmenu -lpanel > ${libs}
+ 	exit 0
+ fi
  
- ifeq ($(KBUILD_EXTMOD),)
- dst := $(MODLIB)/kernel
+ if [ -f /usr/include/ncurses.h ]; then
+-	echo cflags=\"-D_GNU_SOURCE\"
+-	echo libs=\"-lncurses -lmenu -lpanel\"
++	echo -D_GNU_SOURCE > ${cflags}
++	echo -lncurses -lmenu -lpanel > ${libs}
+ 	exit 0
+ fi
+ 
+diff --git a/scripts/kconfig/qconf-cfg.sh b/scripts/kconfig/qconf-cfg.sh
+index ad652cb53947..117f36e568fc 100755
+--- a/scripts/kconfig/qconf-cfg.sh
++++ b/scripts/kconfig/qconf-cfg.sh
+@@ -1,6 +1,10 @@
+ #!/bin/sh
+ # SPDX-License-Identifier: GPL-2.0
+ 
++cflags=$1
++libs=$2
++bin=$3
++
+ PKG="Qt5Core Qt5Gui Qt5Widgets"
+ 
+ if [ -z "$(command -v ${HOSTPKG_CONFIG})" ]; then
+@@ -11,9 +15,9 @@ if [ -z "$(command -v ${HOSTPKG_CONFIG})" ]; then
+ fi
+ 
+ if ${HOSTPKG_CONFIG} --exists $PKG; then
+-	echo cflags=\"-std=c++11 -fPIC $(${HOSTPKG_CONFIG} --cflags $PKG)\"
+-	echo libs=\"$(${HOSTPKG_CONFIG} --libs $PKG)\"
+-	echo moc=\"$(${HOSTPKG_CONFIG} --variable=host_bins Qt5Core)/moc\"
++	${HOSTPKG_CONFIG} --cflags ${PKG} > ${cflags}
++	${HOSTPKG_CONFIG} --libs ${PKG} > ${libs}
++	${HOSTPKG_CONFIG} --variable=host_bins Qt5Core > ${bin}
+ 	exit 0
+ fi
+ 
+diff --git a/scripts/remove-stale-files b/scripts/remove-stale-files
+index ccadfa3afb2b..64b14aa5aebf 100755
+--- a/scripts/remove-stale-files
++++ b/scripts/remove-stale-files
+@@ -47,3 +47,5 @@ rm -f arch/riscv/purgatory/kexec-purgatory.c
+ rm -f scripts/extract-cert
+ 
+ rm -f arch/x86/purgatory/kexec-purgatory.c
++
++rm -f scripts/kconfig/[gmnq]conf-cfg
 -- 
 2.34.1
 
