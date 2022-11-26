@@ -2,110 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D94B63935E
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 03:29:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6297639374
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 03:40:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbiKZC3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 21:29:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58184 "EHLO
+        id S230089AbiKZCkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 21:40:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiKZC3V (ORCPT
+        with ESMTP id S230045AbiKZCj6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 21:29:21 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922F81AD9A;
-        Fri, 25 Nov 2022 18:29:20 -0800 (PST)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NJwZb4smDzJnQc;
-        Sat, 26 Nov 2022 10:25:59 +0800 (CST)
-Received: from kwepemm600020.china.huawei.com (7.193.23.147) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 26 Nov 2022 10:29:18 +0800
-Received: from [127.0.0.1] (10.174.178.94) by kwepemm600020.china.huawei.com
- (7.193.23.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 26 Nov
- 2022 10:29:17 +0800
-Message-ID: <13064a0a-fc98-33ee-e30b-6a9284d4ae7b@huawei.com>
-Date:   Sat, 26 Nov 2022 10:29:15 +0800
+        Fri, 25 Nov 2022 21:39:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9235BD6B
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 18:39:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 23645B82C1E
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 02:39:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85A88C433C1;
+        Sat, 26 Nov 2022 02:39:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669430394;
+        bh=hNp6kkavaA4fFEtDxD/RPPtCE6oh1dDhusRYeGSmsy0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=U6bj76mOt6z+WXCP4Na0X3vxR+JMS8DKAIInJnpun6dOoNU9YOVT1G+qRXDCjArvB
+         XS4v0flEKV1+xaGhlhqNRLOjvFQ3fGVQFdDDTgKBaQJi8R3tcfqa6AEpKQf8rzKPm5
+         yDdCtNjm28vj8egsYNA5ygpUkoRqBmJLoHPlz0EIOPtoLYLhYQyU6Yfshi0l1QrkiM
+         PtycVjBVxPrCre5JhTGm4bgzmZLSsChVFmqAu5Fd1Y1u4jxsiAK/ryguCfSJOKiyFn
+         IBZ+wRiUwIpT9Jz6cC3IWlBQmfD8dVyZjoAIOhesR5PRuULNfeCj6dBI/7aYZlsD1e
+         NKcQyyYtj555w==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
+Subject: [PATCH] MAINTAINERS: Add f2fs bug tracker link
+Date:   Sat, 26 Nov 2022 10:38:07 +0800
+Message-Id: <20221126023807.3490189-1-chao@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 4.19 000/114] 4.19.267-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <stable@vger.kernel.org>
-CC:     <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
-        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <rwarsow@gmx.de>
-References: <20221123084551.864610302@linuxfoundation.org>
-Content-Language: en-US
-From:   zhouzhixiu <zhouzhixiu@huawei.com>
-In-Reply-To: <20221123084551.864610302@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.94]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600020.china.huawei.com (7.193.23.147)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+As f2fs component in bugzilla.kernel.org was created and used since
+2018-7.
 
-On 2022/11/23 16:49, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.267 release.
-> There are 114 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 25 Nov 2022 08:45:20 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.267-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
->
-> -------------
-Tested on arm64 and x86 for 4.19.267-rc1,
+Signed-off-by: Chao Yu <chao@kernel.org>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Kernel 
-repo:https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-Branch: linux-4.19.y
-Version: 4.19.267-rc1
-Commit: f65c47c3f3362b712468c9b15657d9311e998240
-Compiler: gcc version 7.3.0 (GCC)
-
-arm64:
---------------------------------------------------------------------
-Testcase Result Summary:
-total: 8947
-passed: 8947
-failed: 0
-timeout: 0
---------------------------------------------------------------------
-
-x86:
---------------------------------------------------------------------
-Testcase Result Summary:
-total: 8947
-passed: 8947
-failed: 0
-timeout: 0
---------------------------------------------------------------------
-Tested-by: Hulk Robot <hulkrobot@huawei.com>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index cf0f18502372..01fdbb592ea7 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7828,6 +7828,7 @@ M:	Chao Yu <chao@kernel.org>
+ L:	linux-f2fs-devel@lists.sourceforge.net
+ S:	Maintained
+ W:	https://f2fs.wiki.kernel.org/
++B:	https://bugzilla.kernel.org/enter_bug.cgi?product=File%20System&component=f2fs
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git
+ F:	Documentation/ABI/testing/sysfs-fs-f2fs
+ F:	Documentation/filesystems/f2fs.rst
+-- 
+2.25.1
 
