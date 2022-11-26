@@ -2,160 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49B4B639828
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 20:31:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9EF63982A
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 20:39:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbiKZTbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 14:31:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35696 "EHLO
+        id S229582AbiKZTjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 14:39:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiKZTbm (ORCPT
+        with ESMTP id S229464AbiKZTjT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 14:31:42 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B59D18366
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 11:31:40 -0800 (PST)
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 6644C3F03D
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 19:31:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1669491098;
-        bh=2zpd7a1SGgeohkv0SUw3EJvuZe2S1i4FaVDUMzJj/io=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=mf3B5inULZoXmZFW5YNyYXAtufyvHwvR8+BZy9rjd7e9m7mgqN3LAT7ltVP1x9kz4
-         B5OD3xG/MO2SmMgL4SIw73x/qNEzLiEDLWgizUbv+pn1Kwo0JDj7ID0r8+x5XJRL7E
-         O59opDiuBI128/N4ngH1vdHzxDXDb0E7IoQw4JsiMaSNnMt1BLQ00JvZeN+ry0PDLU
-         ui0V1lDwKAS55pFHz/LHJscb56e1y8WxUOeZYL1tzRIs5P6jH0cXCAz1kxj/IXa5qo
-         uof2sRWMmmh//IsmJPAdecWZQZLW2M2cf8gYl0cxqnhL01r5TnZlkZq1kfJE1CA5yr
-         h9w+GH4cdwPBw==
-Received: by mail-ed1-f70.google.com with SMTP id h8-20020a056402280800b0046af59e0986so1019255ede.22
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 11:31:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2zpd7a1SGgeohkv0SUw3EJvuZe2S1i4FaVDUMzJj/io=;
-        b=mwm8flCK/9rjwUfKzXcbW6HqWwWb17PRh6Z77fqAjuiWyV8qqzdtTYQRt/j0omr6xK
-         yWhbIpXUD6bob4NaaL4yiwqH0dBLugSmbnE0SGtEKuwjArLsaQLagnfKFCKRyuLRWsWB
-         kmRbbM0yDQX5XWXLwxs1M57YzWPlKjZnxxcpyNR0/QMzTm/J/0mtDqD/4QSF6GI2fPMg
-         kBIrp5i2VtGaKvdkxXE+tCouFOv3JfbaALhLingnPJiXSVcletiGwLSf878UVoHlGBRA
-         pLkwolr8f7MSm+w78fLvjVa+ponWAtQgc7a3xNTur264JRi6u6LyZ/BtZoBsIuY+SGdH
-         yL1A==
-X-Gm-Message-State: ANoB5pkH8KgOk0ZZGFRuGmxmHaA+spyFK+lqoGI2WedkRjNGVQ2LhwTD
-        h6ysWE2Y5A8OAG4N2mwQpABC7r5RyxlCwRW5crCVzDFVfLWARKTYaajmEztkCzF1F/IlbGABtUr
-        2/Rhqp+rrF1y4BO4UbYsxVonQxj9MVm/eT4MCpD38KA==
-X-Received: by 2002:a17:906:3914:b0:7b2:7e90:53e4 with SMTP id f20-20020a170906391400b007b27e9053e4mr19225621eje.645.1669491098054;
-        Sat, 26 Nov 2022 11:31:38 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6+ar2joRyP4lT0A8Cnz1ZF3qCGAADOB6leDxvYPArumSpvtwvdGHBuZ/LUNr/tP2A+qq4DVg==
-X-Received: by 2002:a17:906:3914:b0:7b2:7e90:53e4 with SMTP id f20-20020a170906391400b007b27e9053e4mr19225604eje.645.1669491097766;
-        Sat, 26 Nov 2022 11:31:37 -0800 (PST)
-Received: from localhost ([95.236.177.174])
-        by smtp.gmail.com with ESMTPSA id n3-20020a056402514300b0045d59e49acbsm3333844edd.7.2022.11.26.11.31.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Nov 2022 11:31:37 -0800 (PST)
-Date:   Sat, 26 Nov 2022 20:31:36 +0100
-From:   Andrea Righi <andrea.righi@canonical.com>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] riscv: increase boot command line size to 1K
-Message-ID: <Y4JpmEoKOBIbaVLi@righiandr-XPS-13-7390>
-References: <20221125133713.314796-1-andrea.righi@canonical.com>
- <Y4Je7chN+fQM3NpP@spud>
- <Y4Jmk74enBTwkNcR@righiandr-XPS-13-7390>
- <Y4JoDSXOLepJX8mI@spud>
+        Sat, 26 Nov 2022 14:39:19 -0500
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70CFB1A824;
+        Sat, 26 Nov 2022 11:39:16 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id D81D75C00B7;
+        Sat, 26 Nov 2022 14:39:15 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Sat, 26 Nov 2022 14:39:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1669491555; x=
+        1669577955; bh=0Xacy2MFR0NStzqlX4jQQv2QXRX4Mm2Xkg6hMAxNiYI=; b=F
+        aIpojefdjZ3ipXpZo6YTdFlE8vmSfNU+qvhPx11yUpypsLhSfRRHV9vQCzBDYfWw
+        a6UnSfXp3de5XiI+TifetoH0sVuJbY+vkNskFe51z5Rhz63JQRJUSS1HmhA+cK+8
+        sHGLeDzA0KKBYT3k2F4NuHKYucSCEli+qHzoUn4B8UIrGkKZ8PboCZVskRO3pVWf
+        0exUdSVdLU7t8uBMUYNqIQNDc02M675KYOXb8PHryTmI23eHTQf30iZrE8Peddzc
+        qJ4d1uJuhz3MbNLq9Wx1VtUEnICMzkuhU72GfgdpLqn7xLpz+G5bCk6Hf+FYodUT
+        e11jKA5oSqv+2rAo5fsJw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1669491555; x=
+        1669577955; bh=0Xacy2MFR0NStzqlX4jQQv2QXRX4Mm2Xkg6hMAxNiYI=; b=x
+        HYqKe2eD1pbU8yOC7ItQNuXwKAOuFgiqpeEcO5uvpercZ44w5cEuNY79Z5H9yci4
+        OZnVhT+NJIBMdiPR92QT0vWoeg3CKplMpIy4KdLQf+QxW7Hv62WuavO9mmjULAh4
+        FWQKxeL4+oa6WBVqrLTjgVerEWqyLxa8xzWJaFnL/R9X3cDcp85G5iNSbQ1UuTgg
+        nnYReXr0YYjG9H7WJ935TLaFrWH1QAqkSErl9Pk3AJkbsJ5y0CsupHk6P6beffE4
+        RSyFT91gEvfL0XiJLTCJwLI+09B/txo3K5u9Yh0EELhlR4DCkTZ773bRzZwiqgnV
+        DDSYPxwpmpFgmTWa58NCA==
+X-ME-Sender: <xms:Y2uCY-OFQy8GWAooGDbwA8xXQE2OSmoxikSRT2dKKNPwO9FDUawSVw>
+    <xme:Y2uCY88PRFlItwSp2iqBk0bK-DS0_F0chGnScfSkXJ_yp0-URtHIBc5K6E5VRLbId
+    4J86XXzpgMUDV1JSA>
+X-ME-Received: <xmr:Y2uCY1QNYzQcUe3wnuxTZbit26VXpDjbIicDfw83wAkLWWrjwXUqXqbi08jm5fN7poEAo5_3pmzSaQKvizZGjOp_6floU-8rz5n8sA2bDPz1B8MOR3TGkWAjqw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrieejgddufedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpeekjeelleefiedthfdtgfekgeehudefudeugeffvdfhudekleel
+    fedtteejhedutdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:Y2uCY-uQebIl79PaIlW3vUggSs2u5lZKJl7tm91i_vzNChaK-yQRTA>
+    <xmx:Y2uCY2ea3dReSJp7QD3zyjL5MKd1V39EzbEexNjETaQzlc5qLeA3UQ>
+    <xmx:Y2uCYy3k7eRYiPvUgIeeXFkGlmEa8WAoiiH3Z093JpXf5GGKvsO6Ow>
+    <xmx:Y2uCY27CkCtxy0FZDlOW_l4nJvPbUd9qC8fjc1Zo1TjLDSb2-WiYtw>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 26 Nov 2022 14:39:14 -0500 (EST)
+Message-ID: <f9039589-410e-faa9-fc7a-b1e71039dae5@sholland.org>
+Date:   Sat, 26 Nov 2022 13:39:14 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4JoDSXOLepJX8mI@spud>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH 1/3] dt-bindings: timer: sifive,clint: add comaptibles for
+ T-Head's C9xx
+Content-Language: en-US
+To:     Icenowy Zheng <uwu@icenowy.me>, Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jisheng Zhang <jszhang@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+References: <20221121041757.418645-1-uwu@icenowy.me>
+ <20221121041757.418645-2-uwu@icenowy.me>
+From:   Samuel Holland <samuel@sholland.org>
+In-Reply-To: <20221121041757.418645-2-uwu@icenowy.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 26, 2022 at 07:25:01PM +0000, Conor Dooley wrote:
-> On Sat, Nov 26, 2022 at 08:18:43PM +0100, Andrea Righi wrote:
-> > On Sat, Nov 26, 2022 at 06:46:05PM +0000, Conor Dooley wrote:
-> > > Hey Andrea,
-> > > 
-> > > On Fri, Nov 25, 2022 at 02:37:13PM +0100, Andrea Righi wrote:
-> > > > Kernel parameters string is limited to 512 characters on riscv (using
-> > > > the default from include/uapi/asm-generic/setup.h).
-> > > > 
-> > > > In some testing environments (e.g., qemu with long kernel parameters
-> > > > string) we may exceed this limit, triggering errors like the following:
-> > > > 
-> > > > [    3.331893] Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000000
-> > > > [    3.332625] CPU: 2 PID: 1 Comm: sh Not tainted 6.1.0-rc6-kc #1
-> > > > [    3.333233] Hardware name: riscv-virtio,qemu (DT)
-> > > > [    3.333550] Call Trace:
-> > > > [    3.333736] [<ffffffff800062b6>] dump_backtrace+0x1c/0x24
-> > > > [    3.334053] [<ffffffff806e8f54>] show_stack+0x2c/0x38
-> > > > [    3.334260] [<ffffffff806f2d06>] dump_stack_lvl+0x5a/0x7c
-> > > > [    3.334483] [<ffffffff806f2d3c>] dump_stack+0x14/0x1c
-> > > > [    3.334687] [<ffffffff806e92fa>] panic+0x116/0x2d0
-> > > > [    3.334878] [<ffffffff8001b0aa>] do_exit+0x80a/0x810
-> > > > [    3.335079] [<ffffffff8001b1d0>] do_group_exit+0x24/0x70
-> > > > [    3.335287] [<ffffffff8001b234>] __wake_up_parent+0x0/0x20
-> > > > [    3.335502] [<ffffffff80003cee>] ret_from_syscall+0x0/0x2
-> > > > [    3.335857] SMP: stopping secondary CPUs
-> > > > [    3.337561] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000000 ]---
-> > > > 
-> > > > It seems reasonable enough to increase the default command line size to
-> > > > 1024, like arm, to prevent issues like the one reported above.
-> > > 
-> > > error: arch/riscv/include/uapi/asm/setup.h: missing "WITH Linux-syscall-note" for SPDX-License-Identifier
-> > > 
-> > > Unfortunately this does not build :/
-> > > 
-> > > Thanks,
-> > > Conor.
-> > 
-> > Oh I see, because it's uapi it needs "WITH Linux-syscall-note",
-> > wondering why I can't reproduce this failure...
+On 11/20/22 22:17, Icenowy Zheng wrote:
+> T-Head C906/C910 CLINT is not compliant to SiFive ones (and even not
+> compliant to the newcoming ACLINT spec) because of lack of mtime
+> register.
 > 
-> tuxmake --wrapper ccache --target-arch riscv --directory . \
-> 	--environment=KBUILD_BUILD_TIMESTAMP=@1621270510 \
-> 	--environment=KBUILD_BUILD_USER=tuxmake --environment=KBUILD_BUILD_HOST=tuxmake \
-> 	-o $tmpdir --toolchain llvm -z none -k rv32_defconfig
+> Add a compatible string formatted like the C9xx-specific PLIC
+> compatible, and do not allow a SiFive one as fallback because they're
+> not really compliant.
 > 
-> (copy paste from a script)
-> That's what caught it initially & I think should be reproduce able. My
-> own standard build script also runs all of the HDRINST stuff if they've
-> changed since the last time a given toolchain was used so it reproduces
-> locally for me too.
+> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+> ---
+>  Documentation/devicetree/bindings/timer/sifive,clint.yaml | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 
-Ah! I'm pretty sure it's HDRINST, I'm just doing make, cross-compiling
-the kernel, and running it directly from the build directory with a
-custom script (that is basically a wrapper to qemu), so I don't need to
-actually install anything. That's why I didn't catch the error.
+Reviewed-by: Samuel Holland <samuel@sholland.org>
 
-Thanks for sharing that, I'll make sure to test also a proper install
-next time. :)
-
--Andrea
-
-> 
-> > Anyway, as pointed out by Alexandre, there was already a previous
-> > discussion about this topic:
-> > https://lore.kernel.org/lkml/CACT4Y+YYAfTafFk7DE0B=qQFgkPXS7492AhBdY_CP1WdB8CGfA@mail.gmail.com/T/
-> > 
-> > Hopefully this change will be addressed there (and the patch land in
-> > -next at least), otherwise I'll post a v2.
-> 
-> Yup, I noticed that thread - in fact I was going to link it yesterday
-> before I saw Alex already had ;)
-> 
-> Thanks,
-> Conor.
