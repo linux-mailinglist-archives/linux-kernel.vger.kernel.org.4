@@ -2,73 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB6E063932E
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 02:46:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B40639332
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 02:49:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbiKZBqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 20:46:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60460 "EHLO
+        id S230156AbiKZBtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 20:49:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbiKZBqo (ORCPT
+        with ESMTP id S229733AbiKZBta (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 20:46:44 -0500
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3CD450AC;
-        Fri, 25 Nov 2022 17:46:43 -0800 (PST)
-Received: by mail-ot1-x32b.google.com with SMTP id a13-20020a9d6e8d000000b00668d65fc44fso3648140otr.9;
-        Fri, 25 Nov 2022 17:46:43 -0800 (PST)
+        Fri, 25 Nov 2022 20:49:30 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 992412CE23;
+        Fri, 25 Nov 2022 17:49:29 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id a7-20020a056830008700b0066c82848060so3663336oto.4;
+        Fri, 25 Nov 2022 17:49:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=zSVu8IzWQnukYfrlr5/HsImCuo05xjm0CcfHLq4urLI=;
-        b=RZC2Lxjfq7QI2Nc/9un0NKkTteBkrHjVjqKdAqOInw7u9Gsi7ro4i9TNGDxKyzNGMV
-         ojewZguGFeqvzygkN0UCUKMRraJRWpd9fAoxV+HXoflyp9vm3oJKA0uN+VRRvCjIZiAh
-         jpcGiTBLzmEDNs7+tZiPsDdDPiPZlqX1mHm5XhAkGfzacdy3NpvRcOLBs8I243x1FCMl
-         TCunXaWytSvSFSxcQXDGv0djUBaHwPv1u58xLrGPON18haElE1epFLyTbs+o+A5WsPh1
-         h1o07+OaJwQ24MxrkVCsH6CsRA4Gtceplk7/o0HCdGwp8bFTEG+P+WTqthsC30m+lMou
-         29Dg==
+        bh=qrFJYNhe1eUR+cg2PLq9sf7qlUh16S1Iij0FFbWrKHU=;
+        b=Lu3daCAyy7EYi1IT7G3mGSnZlaiHzyFbgq9EUKYiYrcGgyWj9xuA0PZ/WwTL4Xu6VS
+         lqRv8mirC/+QyX1ZwWtL0of/HMFbhhrmxfEmaOIQq/RfhDL7fpfbqrm81+KFO0YZd80J
+         M2UY7BHsy6Lo0Fix8BkKhKA9UEWUXRa1fO3XlU5MuS3vYzy5xMgDOF0x/mAEG7SmwGwi
+         eh/z4R5CcSKH8LWrrvWzgRsQxmNuOrq3HBn0qHCS9RU0LYDC2+EOTrY/bKNVP1SDuXzE
+         Ux0mnsjQqjFqs5fghwkp3jJHBNlFOOOVsUQkXtttxiH6w9A5PvomyR0asbRYwAWGi8YF
+         Nahg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zSVu8IzWQnukYfrlr5/HsImCuo05xjm0CcfHLq4urLI=;
-        b=Wvn9ccLmHA+ceiH9s/7JbajxZMhewsQKYaDmfrXEyRs2qFVlczaYb4gJXv44Ura3+R
-         jHLWMrN1uit1yxamHvnwNcNinIfogs5s2yq6E0DR2KpxrshJIskjJK+bYcksuN1IwFtL
-         A/fvPOoWj3htlKHqoz9vfCMSb5a8cxCn87+mwn4rbX66mdLGLw8tPksGR2R3FLU+L+tY
-         kEeGBq1UuorSHKUWy7fOIKAMesDZjMJowYkkbHJZCKbeWr09vFOmjEZ/xz8oyPkB61qz
-         JTDGD2VzzqvKp/faCrQhbWlPUBC5MMx7tD4lQ053pt9DBOvWqn5pFCGUHxIuZ7wBoc1J
-         bUWw==
-X-Gm-Message-State: ANoB5pnzLupHI7/yViWKpfwrGj2kHJnVZtnRB7LPxoappLtJZ6TnF29Q
-        z6DV2p/iQ1r4zYZMiI2HgXsiRTCRHyU=
-X-Google-Smtp-Source: AA0mqf6m1IZqpqNKxu6eqLQBMxG/ut11WVzoaY1UoHXO1V99N2U4iXVaS7dxXZM2z7Xze6y7pdW0eg==
-X-Received: by 2002:a05:6830:1e96:b0:66b:48e3:655a with SMTP id n22-20020a0568301e9600b0066b48e3655amr10595917otr.20.1669427202585;
-        Fri, 25 Nov 2022 17:46:42 -0800 (PST)
+        bh=qrFJYNhe1eUR+cg2PLq9sf7qlUh16S1Iij0FFbWrKHU=;
+        b=rKy3KecVDdHY45eTgojgjF67q4w4xyP3qjO2TZAUCqEpEZPvSK/gUMbMcQtmIA6l87
+         UIXtu7gbSmFLOeUCuVGjcpHcQ9SM8QWsYXYtISHhkKLAN7dEAtblEmFPLgA/OJ1BPKts
+         cT+RgWdblMX12DLCJO4dL2rKqbsfwJoFg04hwHpgPFhQm/JSjxXpOh2+FaXBkDsPhr1E
+         ltRCaoUSnja4w81J9qqqZZeJAT83XGVcYrsbLAgSe1eIk03w/t0qeagk0dHBMD0xvcZM
+         +DCF6/P1WZNW0Hgvw70I5hKFy7fMamLE6wbvh/0gm37GUdS36pHFEYEDtFrnU3nqWew7
+         6XvA==
+X-Gm-Message-State: ANoB5pnvrraf88M0aWDEYD2d7G36CrSrf8NZnZSqLKuNCCPgD9644sgO
+        dsXdvJa1eEnlc6veB3gUuRJSOmeZLjA=
+X-Google-Smtp-Source: AA0mqf7qzJnZCGRtUmx9b6Z8RAFQpFJaFhFSkj9lwX9+LwE5akFCrWjKU+XmA9GZ84oAAKagjA7R+g==
+X-Received: by 2002:a9d:5e9a:0:b0:661:dd09:fcc4 with SMTP id f26-20020a9d5e9a000000b00661dd09fcc4mr20733624otl.60.1669427368822;
+        Fri, 25 Nov 2022 17:49:28 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g31-20020a056830309f00b0066cf6a14d1asm2344284ots.23.2022.11.25.17.46.41
+        by smtp.gmail.com with ESMTPSA id q1-20020a9d4b01000000b0066cc88749f8sm2251432otf.68.2022.11.25.17.49.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Nov 2022 17:46:41 -0800 (PST)
+        Fri, 25 Nov 2022 17:49:28 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <7c38ad68-49cb-0f8a-18a4-fa78f0429bdd@roeck-us.net>
-Date:   Fri, 25 Nov 2022 17:46:40 -0800
+Message-ID: <d9728160-001c-9e29-b195-0cbc82b45184@roeck-us.net>
+Date:   Fri, 25 Nov 2022 17:49:27 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [PATCH] watchdog: Report firmware_version in sysfs
+Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add support for Quadro flow
+ sensor pulses
 Content-Language: en-US
-To:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221125222315.4925-1-linux@weissschuh.net>
- <da94449e-d250-1b44-0e72-f951b73b1946@roeck-us.net>
- <ddd1ea7b-0be7-4c16-a5ac-56516f955ef9@t-8ch.de>
+To:     Aleksa Savic <savicaleksa83@gmail.com>, linux-hwmon@vger.kernel.org
+Cc:     leonard.anderweit@gmail.com, Jack Doan <me@jackdoan.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221125215515.31380-1-savicaleksa83@gmail.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <ddd1ea7b-0be7-4c16-a5ac-56516f955ef9@t-8ch.de>
+In-Reply-To: <20221125215515.31380-1-savicaleksa83@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -80,76 +81,165 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/25/22 17:00, Thomas Weißschuh wrote:
-> On 2022-11-25 16:37-0800, Guenter Roeck wrote:
->> On 11/25/22 14:23, Thomas Weißschuh wrote:
->>> This synchronizes the information reported by ioctl and sysfs.
->>> The mismatch is confusing because "wdctl" from util-linux uses the ioctl
->>> when used with root privileges and sysfs without.
->>>
->>> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
->>>
->>> ---
->>>
->>> Userspace implementation:
->>>
->>> https://github.com/util-linux/util-linux/pull/1927
->>> ---
->>>    drivers/watchdog/watchdog_dev.c | 10 ++++++++++
->>>    1 file changed, 10 insertions(+)
->>>
->>> diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
->>> index 55574ed42504..88c76e27873c 100644
->>> --- a/drivers/watchdog/watchdog_dev.c
->>> +++ b/drivers/watchdog/watchdog_dev.c
->>> @@ -555,6 +555,15 @@ static ssize_t identity_show(struct device *dev, struct device_attribute *attr,
->>>    }
->>>    static DEVICE_ATTR_RO(identity);
->>> +static ssize_t firmware_version_show(struct device *dev, struct device_attribute *attr,
->>> +				     char *buf)
->>> +{
->>> +	struct watchdog_device *wdd = dev_get_drvdata(dev);
->>> +
->>> +	return sysfs_emit(buf, "%d\n", wdd->info->firmware_version);
->>> +}
->>> +static DEVICE_ATTR_RO(firmware_version);
->>> +
->>>    static ssize_t state_show(struct device *dev, struct device_attribute *attr,
->>>    				char *buf)
->>>    {
->>> @@ -618,6 +627,7 @@ static umode_t wdt_is_visible(struct kobject *kobj, struct attribute *attr,
->>>    static struct attribute *wdt_attrs[] = {
->>>    	&dev_attr_state.attr,
->>>    	&dev_attr_identity.attr,
->>> +	&dev_attr_firmware_version.attr,
->>>    	&dev_attr_timeout.attr,
->>>    	&dev_attr_min_timeout.attr,
->>>    	&dev_attr_max_timeout.attr,
->>>
->>> base-commit: 0b1dcc2cf55ae6523c6fbd0d741b3ac28c9f4536
->>
->> I think this conflicts with drivers/watchdog/ziirave_wdt.c which generates its own
->> firmnware_version attribute.
+On 11/25/22 13:55, Aleksa Savic wrote:
+> Add support for reading and writing flow sensor pulses value on
+> the Aquacomputer Quadro. Implemented by Leonard Anderweit [1].
 > 
-> Indeed, thanks for the catch.
+> [1] https://github.com/aleksamagicka/aquacomputer_d5next-hwmon/pull/45
 > 
-> We probably can't change the attribute from ziirave_wdt, which is a bit
-> unfortunate as "firmware_version" would nicely match the name from
-> "struct watchdog_info".
+> Originally-from: Leonard Anderweit <leonard.anderweit@gmail.com>
+> Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
+> ---
+>   Documentation/hwmon/aquacomputer_d5next.rst |  3 +-
+>   drivers/hwmon/aquacomputer_d5next.c         | 68 ++++++++++++++++-----
+>   2 files changed, 55 insertions(+), 16 deletions(-)
 > 
-> How about "fw_version"?
-> 
+> diff --git a/Documentation/hwmon/aquacomputer_d5next.rst b/Documentation/hwmon/aquacomputer_d5next.rst
+> index 15226346434d..637bdbc8fcad 100644
+> --- a/Documentation/hwmon/aquacomputer_d5next.rst
+> +++ b/Documentation/hwmon/aquacomputer_d5next.rst
+> @@ -39,7 +39,7 @@ current.
+>   
+>   The Quadro exposes four physical and sixteen virtual temperature sensors, a flow
+>   sensor and four PWM controllable fans, along with their speed (in RPM), power,
+> -voltage and current.
+> +voltage and current. Flow sensor pulses are also available.
+>   
+>   The Farbwerk and Farbwerk 360 expose four temperature sensors. Additionally,
+>   sixteen virtual temperature sensors of the Farbwerk 360 are exposed.
+> @@ -64,6 +64,7 @@ Sysfs entries
+>   temp[1-20]_input Physical/virtual temperature sensors (in millidegrees Celsius)
+>   temp[1-4]_offset Temperature sensor correction offset (in millidegrees Celsius)
+>   fan[1-8]_input   Pump/fan speed (in RPM) / Flow speed (in dL/h)
+> +fan5_pulses      Quadro flow sensor pulses
+>   power[1-8]_input Pump/fan power (in micro Watts)
+>   in[0-7]_input    Pump/fan voltage (in milli Volts)
+>   curr[1-8]_input  Pump/fan current (in milli Amperes)
+> diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
+> index 49d3f9876fe8..77a3ac33d4ac 100644
+> --- a/drivers/hwmon/aquacomputer_d5next.c
+> +++ b/drivers/hwmon/aquacomputer_d5next.c
+> @@ -136,6 +136,7 @@ static u8 quadro_sensor_fan_offsets[] = { 0x70, 0x7D, 0x8A, 0x97 };
+>   
+>   /* Control report offsets for the Quadro */
+>   #define QUADRO_TEMP_CTRL_OFFSET		0xA
+> +#define QUADRO_FLOW_PULSES_CTRL_OFFSET	0x6
+>   static u16 quadro_ctrl_fan_offsets[] = { 0x37, 0x8c, 0xe1, 0x136 }; /* Fan speed offsets (0-100%) */
+>   
+>   /* Specs of High Flow Next flow sensor */
+> @@ -303,6 +304,7 @@ struct aqc_data {
+>   	u16 temp_ctrl_offset;
+>   	u16 power_cycle_count_offset;
+>   	u8 flow_sensor_offset;
+> +	u8 flow_pulses_ctrl_offset;
+>   
+>   	/* General info, same across all devices */
+>   	u32 serial_number[2];
+> @@ -461,20 +463,32 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
+>   		}
+>   		break;
+>   	case hwmon_fan:
+> -		switch (priv->kind) {
+> -		case highflownext:
+> -			/* Special case to support flow sensor, water quality and conductivity */
+> -			if (channel < 3)
+> -				return 0444;
+> -			break;
+> -		case quadro:
+> -			/* Special case to support flow sensor */
+> -			if (channel < priv->num_fans + 1)
+> -				return 0444;
+> +		switch (attr) {
+> +		case hwmon_fan_input:
+> +		case hwmon_fan_label:
+> +			switch (priv->kind) {
+> +			case highflownext:
+> +				/* Special case to support flow sensor, water quality
+> +				 * and conductivity
+> +				 */
+> +				if (channel < 3)
+> +					return 0444;
+> +				break;
+> +			case quadro:
+> +				/* Special case to support flow sensor */
+> +				if (channel < priv->num_fans + 1)
+> +					return 0444;
+> +				break;
+> +			default:
+> +				if (channel < priv->num_fans)
+> +					return 0444;
+> +				break;
+> +			}
+>   			break;
+> -		default:
+> -			if (channel < priv->num_fans)
+> -				return 0444;
+> +		case hwmon_fan_pulses:
+> +			/* Special case for Quadro flow sensor */
+> +			if (priv->kind == quadro && channel == priv->num_fans)
+> +				return 0644;
+>   			break;
 
-I don't have a better idea. Go for it.
+I think "default:" is now missing here.
 
 Guenter
 
-> That would match the naming of sysfs attributes from a bunch of other
-> subsystems.
-> 
-> And obviously an addition to Documentation/ABI/testing/sysfs-class-watchdog is
-> also missing from the patch.
-> I'll add it in v2.
-> 
-> Thomas
+>   		}
+>   		break;
+> @@ -552,7 +566,18 @@ static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+>   		}
+>   		break;
+>   	case hwmon_fan:
+> -		*val = priv->speed_input[channel];
+> +		switch (attr) {
+> +		case hwmon_fan_input:
+> +			*val = priv->speed_input[channel];
+> +			break;
+> +		case hwmon_fan_pulses:
+> +			ret = aqc_get_ctrl_val(priv, priv->flow_pulses_ctrl_offset, val);
+> +			if (ret < 0)
+> +				return ret;
+> +			break;
+> +		default:
+> +			break;
+> +		}
+>   		break;
+>   	case hwmon_power:
+>   		*val = priv->power_input[channel];
+> @@ -632,6 +657,18 @@ static int aqc_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+>   			return -EOPNOTSUPP;
+>   		}
+>   		break;
+> +	case hwmon_fan:
+> +		switch (attr) {
+> +		case hwmon_fan_pulses:
+> +			val = clamp_val(val, 10, 1000);
+> +			ret = aqc_set_ctrl_val(priv, priv->flow_pulses_ctrl_offset, val);
+> +			if (ret < 0)
+> +				return ret;
+> +			break;
+> +		default:
+> +			break;
+> +		}
+> +		break;
+>   	case hwmon_pwm:
+>   		switch (attr) {
+>   		case hwmon_pwm_input:
+> @@ -691,7 +728,7 @@ static const struct hwmon_channel_info *aqc_info[] = {
+>   			   HWMON_F_INPUT | HWMON_F_LABEL,
+>   			   HWMON_F_INPUT | HWMON_F_LABEL,
+>   			   HWMON_F_INPUT | HWMON_F_LABEL,
+> -			   HWMON_F_INPUT | HWMON_F_LABEL,
+> +			   HWMON_F_INPUT | HWMON_F_LABEL | HWMON_F_PULSES,
+>   			   HWMON_F_INPUT | HWMON_F_LABEL,
+>   			   HWMON_F_INPUT | HWMON_F_LABEL,
+>   			   HWMON_F_INPUT | HWMON_F_LABEL),
+> @@ -1000,6 +1037,7 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>   		priv->buffer_size = QUADRO_CTRL_REPORT_SIZE;
+>   
+>   		priv->flow_sensor_offset = QUADRO_FLOW_SENSOR_OFFSET;
+> +		priv->flow_pulses_ctrl_offset = QUADRO_FLOW_PULSES_CTRL_OFFSET;
+>   		priv->power_cycle_count_offset = QUADRO_POWER_CYCLES;
+>   
+>   		priv->temp_label = label_temp_sensors;
 
