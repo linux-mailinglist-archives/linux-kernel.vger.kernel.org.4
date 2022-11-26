@@ -2,104 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D702639650
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 15:16:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C35D9639658
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 15:17:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbiKZOQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 09:16:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58444 "EHLO
+        id S229552AbiKZORw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 09:17:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiKZOQw (ORCPT
+        with ESMTP id S229464AbiKZORt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 09:16:52 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A45B1D312
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 06:16:51 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id z24so8141793ljn.4
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 06:16:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OIMZD3XxyhT7mbxN3+O9EeY+atM1x1y6l6xsxzVqKFo=;
-        b=EaWjhKBu2mujx7WpVfhmDydUuW6097k7tvxgB0dRAxOdIx9bgLU8TrRCshsOeT+QK1
-         XzPvkNlUTDHmw4gVb8cv1ECC8SoDuKnMw1eewAV6BPfcDf75JWjqaPks0JEQvn+HRCzf
-         S0WtiSbG7ZUzZ53Nkxx2I8jfouvXyF89NqZQopIXIMNqqAX66cJJ6hA1vQC3zZ5zZMZM
-         8Xm8u/OChrurt+aZglid7hOhSQVQiNUC6HFKCCpQX/GXQkFL1jnuCoH/6YWHSFoRvxx/
-         MWwE6RnM7oKH7E6gxwqcKb1THTmDmJlApDNJ+BZcM5bTQM4CCrGPafqDQWSoy63K3zpT
-         9Irw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OIMZD3XxyhT7mbxN3+O9EeY+atM1x1y6l6xsxzVqKFo=;
-        b=0Lrhq6WsaYLFelZa7fd7NZhJyr805Tu+wgwWm5ktBecTcHMgs10CkzyxKQmg8N1F7t
-         V4oJgqj0qz/i9yRMv/f+XXhT7qaZn29Mxc6gSEUmy0ATtBqy7b9njasycvYcwH2VXmdq
-         taKaRrp40VlGdM4tXL0fKEvqKEIrip3XjFwQ/OfEQX1W0PVwUrDOQe5sTyHJ9vQdT9eG
-         XDiXAUGUirBo6QFITRInPaUoUgoOWG1Two8HGT8P7MK+D4/U7y2yOwyV2djGzNqKIQUU
-         caRttp4S95HuoTRFNGAsa8rxcYDV0oMXRr5xSnkU/OXMlB2CKkqFh5+O8KrfahSzxzz7
-         P5gQ==
-X-Gm-Message-State: ANoB5pmxF/zGwebNlg1h4fbzU6oW9XEKMeitFrD7a/QylJeim+n9Qqnc
-        rudo0qDs0/DwE49x8fCEwUTgBw==
-X-Google-Smtp-Source: AA0mqf7U2YqAOIaKV8TxXn235bn6cK6igkK9AUjLBApqru9timelSNmL19AoXsWnLnrcyURNL9pwCg==
-X-Received: by 2002:a2e:be28:0:b0:278:f1a5:a361 with SMTP id z40-20020a2ebe28000000b00278f1a5a361mr8073946ljq.124.1669472209423;
-        Sat, 26 Nov 2022 06:16:49 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id 2-20020ac24822000000b004a22599c4ddsm930015lft.268.2022.11.26.06.16.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Nov 2022 06:16:48 -0800 (PST)
-Message-ID: <a135f93a-235a-27b8-f649-69d62f6ebd30@linaro.org>
-Date:   Sat, 26 Nov 2022 15:16:47 +0100
+        Sat, 26 Nov 2022 09:17:49 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF17D12601;
+        Sat, 26 Nov 2022 06:17:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669472267; x=1701008267;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=MQc84tABIklxiwjd/JnPm2AoEMxnQw6t0O2sj0eZ5D4=;
+  b=VqUTw/hJzygvYM2uqZxoRAkXgP9ajRa/2tM1WyOBIjw8dyKIoUnVqPEm
+   GxbtRruMnjXjgDU6ulBkeDOTl1drUPKwYgwXRkeGemcV9g8BeQrdSFue9
+   NjNVxYeqAY56xwPheDqa7g/ZldrUn/V6J8W4ykqUk+C+ncrQij3RITJ19
+   5J612ePgqew1HSjbJugLLr4N6lUeGLJ6+waKxSVy+AmUG21GE70Mo106+
+   oEYuTDVjxYE5ma8wJ8EM55YLe/IjYLH8X2y/Yk4cpsW620rXAGvDZMmKe
+   m/COFIB0O+jkWZT2hXP77kDlmzJ/k29Uu9Lr01rA98e+l4P+IEMr55GZt
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10543"; a="315755383"
+X-IronPort-AV: E=Sophos;i="5.96,196,1665471600"; 
+   d="scan'208";a="315755383"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2022 06:17:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10543"; a="971800593"
+X-IronPort-AV: E=Sophos;i="5.96,196,1665471600"; 
+   d="scan'208";a="971800593"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 26 Nov 2022 06:17:44 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 007F710E; Sat, 26 Nov 2022 16:18:10 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/5] rtc: isl12022: Get rid of unneeded private struct isl12022
+Date:   Sat, 26 Nov 2022 16:18:02 +0200
+Message-Id: <20221126141806.62205-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] arm64: dts: amlogic: align LED node names with dtschema
-Content-Language: en-US
-To:     neil.armstrong@linaro.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221125144141.477253-1-krzysztof.kozlowski@linaro.org>
- <3719828c-0ac5-34c9-a04b-251cbeb5f6ef@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <3719828c-0ac5-34c9-a04b-251cbeb5f6ef@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/11/2022 18:16, Neil Armstrong wrote:
-> On 25/11/2022 15:41, Krzysztof Kozlowski wrote:
->> The node names should be generic and DT schema expects certain pattern:
->>
->>    amlogic/meson-sm1-bananapi-m5.dtb: leds: 'blue' does not match any of the regexes: '(^led-[0-9a-f]$|led)', 'pinctrl-[0-9]+'
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>   arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
-> 
-> 
-> <snip>
-> 
-> 
-> Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+First of all, the struct rtc_device pointer is kept in the managed
+resources, no need to keep it outside (no users in the driver).
 
-Aren't you maintainer of the platform? This means I should take care of
-this patch?
+Second, replace private struct isl12022 with a regmap.
 
-Best regards,
-Krzysztof
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/rtc/rtc-isl12022.c | 56 ++++++++++++++------------------------
+ 1 file changed, 21 insertions(+), 35 deletions(-)
+
+diff --git a/drivers/rtc/rtc-isl12022.c b/drivers/rtc/rtc-isl12022.c
+index a3b0de3393f5..44058fa27277 100644
+--- a/drivers/rtc/rtc-isl12022.c
++++ b/drivers/rtc/rtc-isl12022.c
+@@ -46,11 +46,6 @@
+ 
+ static struct i2c_driver isl12022_driver;
+ 
+-struct isl12022 {
+-	struct rtc_device *rtc;
+-	struct regmap *regmap;
+-};
+-
+ static umode_t isl12022_hwmon_is_visible(const void *data,
+ 					 enum hwmon_sensor_types type,
+ 					 u32 attr, int channel)
+@@ -67,8 +62,7 @@ static umode_t isl12022_hwmon_is_visible(const void *data,
+  */
+ static int isl12022_hwmon_read_temp(struct device *dev, long *mC)
+ {
+-	struct isl12022 *isl12022 = dev_get_drvdata(dev);
+-	struct regmap *regmap = isl12022->regmap;
++	struct regmap *regmap = dev_get_drvdata(dev);
+ 	u8 temp_buf[2];
+ 	int temp, ret;
+ 
+@@ -115,23 +109,21 @@ static const struct hwmon_chip_info isl12022_hwmon_chip_info = {
+ 
+ static void isl12022_hwmon_register(struct device *dev)
+ {
+-	struct isl12022 *isl12022;
++	struct regmap *regmap = dev_get_drvdata(dev);
+ 	struct device *hwmon;
+ 	int ret;
+ 
+ 	if (!IS_REACHABLE(CONFIG_HWMON))
+ 		return;
+ 
+-	isl12022 = dev_get_drvdata(dev);
+-
+-	ret = regmap_update_bits(isl12022->regmap, ISL12022_REG_BETA,
++	ret = regmap_update_bits(regmap, ISL12022_REG_BETA,
+ 				 ISL12022_BETA_TSE, ISL12022_BETA_TSE);
+ 	if (ret) {
+ 		dev_warn(dev, "unable to enable temperature sensor\n");
+ 		return;
+ 	}
+ 
+-	hwmon = devm_hwmon_device_register_with_info(dev, "isl12022", isl12022,
++	hwmon = devm_hwmon_device_register_with_info(dev, "isl12022", regmap,
+ 						     &isl12022_hwmon_chip_info,
+ 						     NULL);
+ 	if (IS_ERR(hwmon))
+@@ -144,8 +136,7 @@ static void isl12022_hwmon_register(struct device *dev)
+  */
+ static int isl12022_rtc_read_time(struct device *dev, struct rtc_time *tm)
+ {
+-	struct isl12022 *isl12022 = dev_get_drvdata(dev);
+-	struct regmap *regmap = isl12022->regmap;
++	struct regmap *regmap = dev_get_drvdata(dev);
+ 	uint8_t buf[ISL12022_REG_INT + 1];
+ 	int ret;
+ 
+@@ -190,8 +181,7 @@ static int isl12022_rtc_read_time(struct device *dev, struct rtc_time *tm)
+ 
+ static int isl12022_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ {
+-	struct isl12022 *isl12022 = dev_get_drvdata(dev);
+-	struct regmap *regmap = isl12022->regmap;
++	struct regmap *regmap = dev_get_drvdata(dev);
+ 	int ret;
+ 	uint8_t buf[ISL12022_REG_DW + 1];
+ 
+@@ -218,8 +208,7 @@ static int isl12022_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ 
+ 	buf[ISL12022_REG_DW] = tm->tm_wday & 0x07;
+ 
+-	return regmap_bulk_write(isl12022->regmap, ISL12022_REG_SC,
+-				 buf, sizeof(buf));
++	return regmap_bulk_write(regmap, ISL12022_REG_SC, buf, sizeof(buf));
+ }
+ 
+ static const struct rtc_class_ops isl12022_rtc_ops = {
+@@ -235,34 +224,31 @@ static const struct regmap_config regmap_config = {
+ 
+ static int isl12022_probe(struct i2c_client *client)
+ {
+-	struct isl12022 *isl12022;
++	struct rtc_device *rtc;
++	struct regmap *regmap;
+ 
+ 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
+ 		return -ENODEV;
+ 
+-	isl12022 = devm_kzalloc(&client->dev, sizeof(struct isl12022),
+-				GFP_KERNEL);
+-	if (!isl12022)
+-		return -ENOMEM;
+-	dev_set_drvdata(&client->dev, isl12022);
+-
+-	isl12022->regmap = devm_regmap_init_i2c(client, &regmap_config);
+-	if (IS_ERR(isl12022->regmap)) {
++	regmap = devm_regmap_init_i2c(client, &regmap_config);
++	if (IS_ERR(regmap)) {
+ 		dev_err(&client->dev, "regmap allocation failed\n");
+-		return PTR_ERR(isl12022->regmap);
++		return PTR_ERR(regmap);
+ 	}
+ 
++	dev_set_drvdata(&client->dev, regmap);
++
+ 	isl12022_hwmon_register(&client->dev);
+ 
+-	isl12022->rtc = devm_rtc_allocate_device(&client->dev);
+-	if (IS_ERR(isl12022->rtc))
+-		return PTR_ERR(isl12022->rtc);
++	rtc = devm_rtc_allocate_device(&client->dev);
++	if (IS_ERR(rtc))
++		return PTR_ERR(rtc);
+ 
+-	isl12022->rtc->ops = &isl12022_rtc_ops;
+-	isl12022->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+-	isl12022->rtc->range_max = RTC_TIMESTAMP_END_2099;
++	rtc->ops = &isl12022_rtc_ops;
++	rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
++	rtc->range_max = RTC_TIMESTAMP_END_2099;
+ 
+-	return devm_rtc_register_device(isl12022->rtc);
++	return devm_rtc_register_device(rtc);
+ }
+ 
+ #ifdef CONFIG_OF
+-- 
+2.35.1
 
