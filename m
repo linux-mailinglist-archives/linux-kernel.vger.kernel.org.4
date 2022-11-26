@@ -2,82 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD8963961A
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 14:26:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C5D963961B
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 14:27:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbiKZN0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 08:26:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57776 "EHLO
+        id S229619AbiKZN1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 08:27:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiKZN0a (ORCPT
+        with ESMTP id S229629AbiKZN1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 08:26:30 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01243E0EB
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 05:26:29 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id e15so259215ljl.7
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 05:26:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=o4HSsW8BSppm65SzOgKkp1ueBN0+yQmM4nOdtdewie4=;
-        b=fQ948lgQWtUyPvTbVqFz9q/GMnUuxAq/xfBCHkJL16BWRoGwSi7N3Ll1/vKlrlTWf1
-         LN96gsqTnvCQpGN5YjYG10xuR+YaL9zM4L9WUOz8Xvv/hqroWL6TL3HT309cLxm2/KBG
-         eCLfmz7owAKXhMPNkUHj3S0eRZidLboTGGrQwNMJE7IkX0/mvqgGT/rW5cwGPyNDqE7l
-         ghJ5zdtCgdSttJXsAZjStUGWjArFUF3kjd7WbsSD6HxDO++Jp1lZM81h3ML1cpov6FmI
-         82K6z1t3VYJgrwpxQfkNtIMovDVq3xdq/yyUPZ01D40tY1sWMoYYT774LPidZ0QcrhD/
-         rlFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o4HSsW8BSppm65SzOgKkp1ueBN0+yQmM4nOdtdewie4=;
-        b=4aGBRyQV/3GE8f1lIA5gkCh5DXuWB3GySLYtR8VP6Ul2sDydecTgRRHAG+uMehUuYz
-         XiXVzdHkvnrxX1QvP2uWw6kibE2Skua3uqOpwYljPk7Kg/t3Y/IdVmwmWMBwLRhMHSJp
-         lCCSCrwrvJmck6qcVDyQvbJ9STHowj90xBAxmX+Xm4lahRYslU0xYliIZpHCS+AlxnH0
-         W2hHOE8XgLm2v1Ok5qJYz0EPZV0SH44xPRcHFmeQo1LeW1porLdCJH82xYdfadnvff4K
-         CbZaQL2tWddrq3VCYA5406L+eU+54lm/6MHhTB9RvIDXqINy5KX2+el11ccm4D5XhiX+
-         VhkA==
-X-Gm-Message-State: ANoB5plShIqYKcwBQXlVsFhKjJ4A7XxqsELOajNEsmudTAvciMggI/vh
-        ObJm+gZ0c9cgZMbvrN2WnHQgVQ==
-X-Google-Smtp-Source: AA0mqf4diqUCufc5o5ynb6ePA7iRhvGzndvX4FgyVTV8biyv9XJ3eZhD7JtIGLRQ2Y+XGxyaz98WZg==
-X-Received: by 2002:a05:651c:11c1:b0:279:7b1c:9add with SMTP id z1-20020a05651c11c100b002797b1c9addmr5996583ljo.151.1669469187372;
-        Sat, 26 Nov 2022 05:26:27 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id y30-20020a0565123f1e00b004a2386b8cf9sm931748lfa.206.2022.11.26.05.26.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Nov 2022 05:26:26 -0800 (PST)
-Message-ID: <5b05317d-28cc-bfc8-f415-e6acf453dc7c@linaro.org>
-Date:   Sat, 26 Nov 2022 14:26:25 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 2/3] dt-bindings: net: sun8i-emac: Fix snps,dwmac.yaml
- inheritance
-Content-Language: en-US
-To:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     LABBE Corentin <clabbe.montjoie@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, netdev@vger.kernel.org
-References: <20221125202008.64595-1-samuel@sholland.org>
- <20221125202008.64595-3-samuel@sholland.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221125202008.64595-3-samuel@sholland.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Sat, 26 Nov 2022 08:27:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0C31FCE9
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 05:27:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CD172B811A3
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 13:26:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88DC6C433D6;
+        Sat, 26 Nov 2022 13:26:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669469217;
+        bh=m2PBpo50KihUD8jxV2Wr/IBI8v2zWIml3fzPmh/Ty/s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=k6qpCWikIWE09o4UxF0WtmZVxM+aD548Fs2uvwzykaAeebmlMlXSltgNAh/XPbPF1
+         TKfnbKOVeLusshqiD18gBTJiCib7feXYmAnWOoQkKRw3LxRSb92lkwD4jRBAndK4IQ
+         awLoqRGySG3KqYMKDI6vvVb7g7MJdseaXQsYm0rQ8uzINBWXEmOnM3iknQCxPMPTly
+         AhiizHWHjcKyQzju7DwTOuC0p2bblz95dhsT8rpPaWFm++xAlBwVMsHsyFimeMSGCY
+         7jYf1+Dd7Ftz0l2lMwmuvgvTETg6CmRMuswHj8F5ynsEYlFDvQvaRWD4J7Xy3f5i1K
+         Go1U7fqFU7+Wg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oyvCp-008iWi-75;
+        Sat, 26 Nov 2022 13:26:55 +0000
+Date:   Sat, 26 Nov 2022 13:26:47 +0000
+Message-ID: <87tu2lu9rc.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] irqchip: Allow test compilation of Broadcom drivers
+In-Reply-To: <20221024222749.2341479-1-f.fainelli@gmail.com>
+References: <20221024222749.2341479-1-f.fainelli@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: f.fainelli@gmail.com, linux-kernel@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com, tglx@linutronix.de
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,52 +66,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/11/2022 21:20, Samuel Holland wrote:
-> The sun8i-emac binding extends snps,dwmac.yaml, and should accept all
-> properties defined there, including "mdio", "resets", and "reset-names".
-> However, validation currently fails for these properties because the
-
-validation does not fail:
-make dt_binding_check -> no problems
-
-Maybe you meant that DTS do not pass dtbs_check?
-
-
-> local binding sets "unevaluatedProperties: false", and snps,dwmac.yaml
-> is only included inside an allOf block. Fix this by referencing
-> snps,dwmac.yaml at the top level.
-
-There is nothing being fixed here...
-
+On Mon, 24 Oct 2022 23:27:39 +0100,
+Florian Fainelli <f.fainelli@gmail.com> wrote:
 > 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> Allow test compilation of the Broadcom irqchip drivers by adding a
+> COMPILE_TEST dependency.
+> 
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 > ---
+>  drivers/irqchip/Kconfig | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
->  .../devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml     | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml b/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml
-> index 1432fda3b603..34a47922296d 100644
-> --- a/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml
-> +++ b/Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml
-> @@ -10,6 +10,8 @@ maintainers:
->    - Chen-Yu Tsai <wens@csie.org>
->    - Maxime Ripard <mripard@kernel.org>
+> diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+> index 7ef9f5e696d3..e4b2ec9b2450 100644
+> --- a/drivers/irqchip/Kconfig
+> +++ b/drivers/irqchip/Kconfig
+> @@ -116,7 +116,7 @@ config BCM6345_L1_IRQ
 >  
-> +$ref: "snps,dwmac.yaml#"
-> +
->  properties:
->    compatible:
->      oneOf:
-> @@ -60,7 +62,6 @@ required:
->    - syscon
->  
->  allOf:
-> -  - $ref: "snps,dwmac.yaml#"
->    - if:
->        properties:
->          compatible:
+>  config BCM7038_L1_IRQ
+>  	tristate "Broadcom STB 7038-style L1/L2 interrupt controller driver"
+> -	depends on ARCH_BRCMSTB || BMIPS_GENERIC
+> +	depends on ARCH_BRCMSTB || BMIPS_GENERIC || COMPILE_TEST
 
-Best regards,
-Krzysztof
+Do we actually need all this churn now that OF is user-selectable (see
+0166dc11be91)?
 
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
