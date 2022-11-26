@@ -2,96 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16048639792
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 19:10:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6B26397A1
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 19:23:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbiKZSJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 13:09:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56668 "EHLO
+        id S229533AbiKZSXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 13:23:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiKZSJB (ORCPT
+        with ESMTP id S229495AbiKZSXH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 13:09:01 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9061004B
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 10:08:58 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id o5so1955466wrm.1
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 10:08:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=14HxlRV+SCHhU12Rhd+agDyzR52gxT5y8aPZsUnVBcQ=;
-        b=JSUOpnXVUL/GtjGB+U5r8O3XJS4oO27vbjQDsLdJ/FGIJwOWh64sgz7OetrwgWMst1
-         KrwUMvbwqF2PHIhNvMwFnwMJwvCh5oCq9NeTbMC0koYwiyCcUMUfFWMoNBgWQWIi2JbK
-         KclHHIy1Bl2rI4igM/+Z0pkMB2rCxdjNgOr/NllrCeUSiSA+YGceRa5Z76k6Buc4lU5u
-         y5iNQcvrw2ImTH9iCOLtAwOCuuuWrS2+AYNeNdF3amFmXCsGGX0GM01XcoyI6loLInRP
-         uVsBJMKKeKn2nDwhkRwsy/Ba4ft5IAxbKs8jRxMXRKnmlbHVpo0zW8c/PPvtVotGuUlC
-         U8Tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=14HxlRV+SCHhU12Rhd+agDyzR52gxT5y8aPZsUnVBcQ=;
-        b=a9jy+VSfA4+LwSR4qATTzQtT2SN8SxlP3V2XWe0JmecgyuWnWgMVOoTDqUcNGNJks7
-         1O2A1Fji8E896Oip4x018/tBFLSmLGV2U+SweC7j63On0vuoucR8HMTp7sa6l0VySQgt
-         W83lJ79N3INcc9TNlvF6BCl+EnDp3PPtmGUO1Rykvw97zwBq8wPZYzS6E+WUY5jz2LFk
-         VAEJ9Say6MG9X4rsLIuiDMdXcVMxPrzrYsmDyCz/TtxYEZCign9r3pAy128ivFJFfTt7
-         EVkmyTTM659h3zbp8OI7kGiNGzj4UNgIAUXYvTnbOTI86zrZjZbFzceg7NtEm/5DtQpQ
-         h68Q==
-X-Gm-Message-State: ANoB5pmDq+zP6KWnnrfSBlgt4GEL2QdY4wIGfMoE5jXppMlP+9vYgphx
-        wshIrqJjgzFEIZIxIi+ENmQCSQ==
-X-Google-Smtp-Source: AA0mqf46lNLHAVNwE5GbJ272Q83inWMEqFqLSYa4pDcNM0EpPB/YRth9LRxuNf6zHFVz4J8/8Pl5fQ==
-X-Received: by 2002:a05:6000:886:b0:241:b933:34a1 with SMTP id ca6-20020a056000088600b00241b93334a1mr17565403wrb.550.1669486137356;
-        Sat, 26 Nov 2022 10:08:57 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id l11-20020a5d668b000000b00241bc4880fesm6383609wru.111.2022.11.26.10.08.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Nov 2022 10:08:56 -0800 (PST)
-Message-ID: <26f9ff51-b6ee-5d2b-fc8b-93f7778d99a4@linaro.org>
-Date:   Sat, 26 Nov 2022 18:08:55 +0000
+        Sat, 26 Nov 2022 13:23:07 -0500
+X-Greylist: delayed 466 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 26 Nov 2022 10:23:05 PST
+Received: from out-197.mta0.migadu.com (out-197.mta0.migadu.com [IPv6:2001:41d0:1004:224b::c5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D9D1A05D
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 10:23:05 -0800 (PST)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1669486515;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=JDvTtFdWl1YXSMfasI4Saz9+J3V+bsk5xm78bG3AgR8=;
+        b=DCYD0KPcyxtjNJVYy6HnI9aIp9UN1NOZmB15RRNNisl/+JIlP8nH+T8va/C39F3R2CskX+
+        JSvgWTHhm22MPGPI2B9fKoSlBT5WPofQE1mTwt+0rHXb5mJDPbFng957Bwzc/+u30VmA5O
+        fTlC0571r0ej+/Nz6ILpPn6w+ZqN1T4=
+From:   andrey.konovalov@linux.dev
+To:     Marco Elver <elver@google.com>, David Gow <davidgow@google.com>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: [PATCH mm] kasan: fail non-kasan KUnit tests on KASAN reports
+Date:   Sat, 26 Nov 2022 19:15:11 +0100
+Message-Id: <655fd7e303b852809d3a8167d28091429f969c73.1669486407.git.andreyknvl@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 03/18] dt-bindings: msm: dsi-controller-main: Rename
- qcom,dsi-ctrl-6g-qcm2290 to qcom,qcm2290-dsi-ctrl
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
-        dmitry.baryshkov@linaro.org, sean@poorly.run, airlied@gmail.com,
-        daniel@ffwll.ch, robh+dt@kernel.org, dianders@chromium.org,
-        david@ixit.cz, krzysztof.kozlowski+dt@linaro.org,
-        swboyd@chromium.org, konrad.dybcio@somainline.org,
-        agross@kernel.org, andersson@kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20221124004801.361232-1-bryan.odonoghue@linaro.org>
- <20221124004801.361232-4-bryan.odonoghue@linaro.org>
- <4fd1500d-e3ca-45fd-1cc8-81783697b809@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <4fd1500d-e3ca-45fd-1cc8-81783697b809@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/11/2022 14:36, Krzysztof Kozlowski wrote:
-> That's a bit surprising. Did we discuss it? It breaks the ABI, so I
-> doubt (driver/bindings were already upstreamed).
-> 
-> Best regards,
-> Krzysztof
+From: Andrey Konovalov <andreyknvl@google.com>
 
-We did discuss it but, apparently didn't grep it.
+After the recent changes done to KUnit-enabled KASAN tests, non-KASAN KUnit
+tests stopped being failed when KASAN report is detected.
 
-I'll drop this
+Recover that property by failing the currently running non-KASAN KUnit test
+when KASAN detects and prints a report for a bad memory access.
+
+Note that if the bad accesses happened in a kernel thread that doesn't
+have a reference to the currently running KUnit-test available via
+current->kunit_test, the test won't be failed. This is a limitation of
+KUnit, which doesn't yet provide a thread-agnostic way to find the
+reference to the currenly running test.
+
+Fixes: 49d9977ac909 ("kasan: check CONFIG_KASAN_KUNIT_TEST instead of CONFIG_KUNIT")
+Fixes: 7f29493ba529 ("kasan: switch kunit tests to console tracepoints")
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+---
+ mm/kasan/kasan.h      |  6 ++++++
+ mm/kasan/kasan_test.c | 11 +++++++++++
+ mm/kasan/report.c     | 22 ++++++++++++++++++++++
+ 3 files changed, 39 insertions(+)
+
+diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
+index a84491bc4867..08a83a7ef77f 100644
+--- a/mm/kasan/kasan.h
++++ b/mm/kasan/kasan.h
+@@ -548,6 +548,12 @@ void kasan_restore_multi_shot(bool enabled);
+ 
+ #endif
+ 
++#if IS_ENABLED(CONFIG_KASAN_KUNIT_TEST)
++bool kasan_kunit_test_suite_executing(void);
++#else
++static bool kasan_kunit_test_suite_executing(void) { return false; }
++#endif
++
+ /*
+  * Exported functions for interfaces called from assembly or from generated
+  * code. Declared here to avoid warnings about missing declarations.
+diff --git a/mm/kasan/kasan_test.c b/mm/kasan/kasan_test.c
+index e27591ef2777..c9a615e892ed 100644
+--- a/mm/kasan/kasan_test.c
++++ b/mm/kasan/kasan_test.c
+@@ -32,6 +32,9 @@
+ 
+ #define OOB_TAG_OFF (IS_ENABLED(CONFIG_KASAN_GENERIC) ? 0 : KASAN_GRANULE_SIZE)
+ 
++/* Whether the KASAN KUnit test suite is currently being executed. */
++static bool executing;
++
+ static bool multishot;
+ 
+ /* Fields set based on lines observed in the console. */
+@@ -47,6 +50,11 @@ static struct {
+ void *kasan_ptr_result;
+ int kasan_int_result;
+ 
++bool kasan_kunit_test_suite_executing(void)
++{
++	return READ_ONCE(executing);
++}
++
+ /* Probe for console output: obtains test_status lines of interest. */
+ static void probe_console(void *ignore, const char *buf, size_t len)
+ {
+@@ -76,6 +84,8 @@ static int kasan_suite_init(struct kunit_suite *suite)
+ 		return -1;
+ 	}
+ 
++	WRITE_ONCE(executing, true);
++
+ 	/*
+ 	 * Temporarily enable multi-shot mode. Otherwise, KASAN would only
+ 	 * report the first detected bug and panic the kernel if panic_on_warn
+@@ -94,6 +104,7 @@ static int kasan_suite_init(struct kunit_suite *suite)
+ 
+ static void kasan_suite_exit(struct kunit_suite *suite)
+ {
++	WRITE_ONCE(executing, false);
+ 	kasan_restore_multi_shot(multishot);
+ 	for_each_kernel_tracepoint(unregister_tracepoints, NULL);
+ 	tracepoint_synchronize_unregister();
+diff --git a/mm/kasan/report.c b/mm/kasan/report.c
+index 31355851a5ec..e718c997ecae 100644
+--- a/mm/kasan/report.c
++++ b/mm/kasan/report.c
+@@ -9,6 +9,7 @@
+  *        Andrey Konovalov <andreyknvl@gmail.com>
+  */
+ 
++#include <kunit/test.h>
+ #include <linux/bitops.h>
+ #include <linux/ftrace.h>
+ #include <linux/init.h>
+@@ -112,10 +113,31 @@ EXPORT_SYMBOL_GPL(kasan_restore_multi_shot);
+ 
+ #endif
+ 
++#if IS_ENABLED(CONFIG_KUNIT)
++
++static void fail_nonkasan_kunit_test(void)
++{
++	struct kunit *test;
++
++	if (!kasan_kunit_test_suite_executing())
++		return;
++
++	test = current->kunit_test;
++	if (test)
++		kunit_set_failure(test);
++}
++
++#else /* CONFIG_KUNIT */
++
++static void fail_nonkasan_kunit_test(void) { }
++
++#endif /* CONFIG_KUNIT */
++
+ static DEFINE_SPINLOCK(report_lock);
+ 
+ static void start_report(unsigned long *flags, bool sync)
+ {
++	fail_nonkasan_kunit_test();
+ 	/* Respect the /proc/sys/kernel/traceoff_on_warning interface. */
+ 	disable_trace_on_warning();
+ 	/* Do not allow LOCKDEP mangling KASAN reports. */
+-- 
+2.25.1
+
