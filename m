@@ -2,76 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 138356396A1
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 15:46:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9B3B6396A5
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 15:48:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbiKZOqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 09:46:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48798 "EHLO
+        id S229475AbiKZOsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 09:48:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiKZOqc (ORCPT
+        with ESMTP id S229622AbiKZOsl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 09:46:32 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E68213EAA
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 06:46:31 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id l8so8168893ljh.13
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 06:46:31 -0800 (PST)
+        Sat, 26 Nov 2022 09:48:41 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F341B78C
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 06:48:36 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id p8so10908457lfu.11
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 06:48:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=6cZq8OT8F2u1G+4KG5gAMpwVp5A0HMoWu/Eqh8dw+/I=;
-        b=O/f4KfYlk4WCT/fyRp+lpMRV2476Va8uYDvN74Dii3D2KJinIBhs0Gw9QTEW898DI+
-         OBNZr3b9HiW8hk/34tqUR0bdke9WGmA8/cnQ6HL+XoOkT/N6VKwA+GX17LCzNjZzTsUS
-         cp7zcm1rguf4JKlilXLNBPA8UYruJpz2BdenOFaTqps8YIQQ6f/TR2tSiUJSiQSwEWq0
-         7mTTMtYIuraGbbGGWDXOWz3j1Uz/8hRHW8jfRvCBABRDT9MmaHH/umQENZciqdJP2uF+
-         EVpH0/z1W2RdNudceST+0Lok3UaGNMgZkxNzuzS+Y8vDesoXbUjBRNOKN4eKX6dbrHrD
-         r54g==
+        bh=NCkEcXssRQbmgG+L+8GoHzRRDs8zdXaeqWwBNyHJxUs=;
+        b=SuypPEb1ok0pZ47WzmQfbMraruPLcGJ+eF2/bqoCL8998ndLQCEOWHg8W+zb31ZOxo
+         chldLp4jpNjwvi5D2OhgfAksJZIAu5uBt5Wg5LDYWEGwhj/W3K5eT48Mp7N+swJJnLE/
+         jtfeiGTuhIriPBNI5BsN6cQCAYV8zdi+2/OXJ+RjuZqwObjpwRilb2h5ncnwPzXqn2oH
+         QEeVL8j0SHJ+uSSl9BF+9JkCRQpfsEVpJ/uI1Dwjzr+uk45W3bt+bBtwXGTEyNDKov6G
+         3FkC4cBtvq9FCH7Ni7+OVz1kSz9D0ekCr7cawlBwKES/N0wh2+YE8ovFhWmaOJJOFNQQ
+         AmCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6cZq8OT8F2u1G+4KG5gAMpwVp5A0HMoWu/Eqh8dw+/I=;
-        b=o+C/HGl51SuYtWPHbuJp9utTm4Ba03wvvD2cEvyohE4NcvdBgFuyVG2PeSjsG5Nxmy
-         /g6YsbidNtq40j132FS0mIMEY4tLhdGJMR7aX7nb/ubfnLlAbR3PSQ1v/uxg9qvvtMOd
-         eaCLnYk3/woaDdgx5zXdOQPYFBbzsSx77f3qmtXDvd7jdQT0xRFHmKjCalTyVuvPMOhJ
-         F81zRFf4e5f3VM5gWfKPva3pP0qGVenzay9XrsMFqx0la/1DHnKcHqez67WRexfBx9eG
-         6LN20OXJrsAS3gWPuIJ5bD5dIbTA5JlSZwuQMJ3avaKB1XSnBPl75kv9cQMtHT3gV8u/
-         +E0Q==
-X-Gm-Message-State: ANoB5pmzvSaIKmP1UMp7fUr+CEtc1E+rZ4imGmj/SFJAXgH+2RchHmfq
-        4EkpTs2VrNpY9jEsp9RtduOHAg==
-X-Google-Smtp-Source: AA0mqf7l3fakUd44VH4Y1atC95rlxJUi7tt32oesGR4CbTxFRdKiko9XXZCSiCq5OA1bGwKmQYKjyA==
-X-Received: by 2002:a2e:3a1a:0:b0:278:f073:d3c0 with SMTP id h26-20020a2e3a1a000000b00278f073d3c0mr15168000lja.357.1669473989436;
-        Sat, 26 Nov 2022 06:46:29 -0800 (PST)
+        bh=NCkEcXssRQbmgG+L+8GoHzRRDs8zdXaeqWwBNyHJxUs=;
+        b=TJy7xG2wRk/qLkIQ44XipLYwd4KCtusvFw5k6ScmBYuhcGgHj/XiH4MphxAq72qNvP
+         rDbTOaz+NlozEf8Fh4YXK/EVRZGgNnyRax8PFZFrf8AYLCA3nl4fmGEBI1XfeZOaTQnv
+         AVpsStrSt9yd1BYG1uVKjO0SrNbNyq8gamXOWnTsJiN8mys26D40PjLd1ifK934vzjxu
+         83565SvFyvUPl4Pwkogrpi22oRszOylIOs/0tZDKU4yV3L0D8bFjBSyhP+ZBpmxBe8gv
+         27Cr3fp+TjYPiwrZZkyplrWpOcVypK/IDxEYFO1gmdouII0DTQlMwRPV4Y7E5AGvynSk
+         f+Xw==
+X-Gm-Message-State: ANoB5pmhliD6lCjQCFb6ijCOvBhUG00Avxr67CFg2OseV8LUTPKL2kh0
+        GKr8KavZvrLjUKvkqWdo8G4ohw==
+X-Google-Smtp-Source: AA0mqf53IjUhz0NUpmCvDHwNUZVIhvLBfrBuGuqctcLItqr8LzS5CanyELMQHPrj/HKH131QMnFrZA==
+X-Received: by 2002:a19:c506:0:b0:4b1:c15c:126c with SMTP id w6-20020a19c506000000b004b1c15c126cmr9044037lfe.8.1669474115345;
+        Sat, 26 Nov 2022 06:48:35 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id b12-20020a05651c032c00b0027741daec09sm643691ljp.107.2022.11.26.06.46.28
+        by smtp.gmail.com with ESMTPSA id bj35-20020a2eaaa3000000b0026bf43a4d72sm212966ljb.115.2022.11.26.06.48.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Nov 2022 06:46:29 -0800 (PST)
-Message-ID: <b3a9f5e2-56ca-b112-e0f5-563404dcb05e@linaro.org>
-Date:   Sat, 26 Nov 2022 15:46:27 +0100
+        Sat, 26 Nov 2022 06:48:34 -0800 (PST)
+Message-ID: <99c3e666-ec26-07a0-be40-0177dd449d84@linaro.org>
+Date:   Sat, 26 Nov 2022 15:48:33 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH v3 08/18] dt-bindings: msm: dsi-controller-main: Add vdd*
- descriptions back in
+Subject: Re: [PATCH 2/3] dt-bindings: net: sun8i-emac: Fix snps,dwmac.yaml
+ inheritance
 Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
-        dmitry.baryshkov@linaro.org, sean@poorly.run, airlied@gmail.com,
-        daniel@ffwll.ch, robh+dt@kernel.org, dianders@chromium.org,
-        david@ixit.cz, krzysztof.kozlowski+dt@linaro.org,
-        swboyd@chromium.org, konrad.dybcio@somainline.org,
-        agross@kernel.org, andersson@kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20221124004801.361232-1-bryan.odonoghue@linaro.org>
- <20221124004801.361232-9-bryan.odonoghue@linaro.org>
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        LABBE Corentin <clabbe.montjoie@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, netdev@vger.kernel.org
+References: <20221125202008.64595-1-samuel@sholland.org>
+ <20221125202008.64595-3-samuel@sholland.org>
+ <5b05317d-28cc-bfc8-f415-e6acf453dc7c@linaro.org>
+ <20221126142735.47dcca6d@slackpad.lan>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221124004801.361232-9-bryan.odonoghue@linaro.org>
+In-Reply-To: <20221126142735.47dcca6d@slackpad.lan>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,56 +89,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/11/2022 01:47, Bryan O'Donoghue wrote:
-> When converting from .txt to .yaml we didn't include descriptions for the
-> existing regulator supplies.
+On 26/11/2022 15:28, Andre Przywara wrote:
+> On Sat, 26 Nov 2022 14:26:25 +0100
+> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 > 
-> - vdd
-> - vdda
-> - vddio
+> Hi,
 > 
-> Add those descriptions into the yaml now as they were prior to the
-> conversion. In the .txt description we marked these regulators as required,
-> however, that requirement appears to have been in error.
+>> On 25/11/2022 21:20, Samuel Holland wrote:
+>>> The sun8i-emac binding extends snps,dwmac.yaml, and should accept all
+>>> properties defined there, including "mdio", "resets", and "reset-names".
+>>> However, validation currently fails for these properties because the  
+>>
+>> validation does not fail:
+>> make dt_binding_check -> no problems
+>>
+>> Maybe you meant that DTS do not pass dtbs_check?
 > 
-> Taking the example of sc7180-trogdor-wormdingler.dtsi. The avdd and avee
-> come from GPIO controlled external regulators, not the SoC and in this case
-> there's no need for vddio to power an I/O bus. Similarly the regulators for
-> the LCD are controlled by the panel driver not by the dsi-ctrl driver.
+> Yes, that's what he meant: If a board actually doesn't have Ethernet
+> configured, dt-validate complains. I saw this before, but didn't find
+> any solution.
+> An example is: $ dt-validate ... sun50i-a64-pinephone-1.2.dtb
+> arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone-1.2.dtb:
+>   ethernet@1c30000: Unevaluated properties are not allowed ('resets', 'reset-names', 'mdio' were unexpected)
+>   From schema: Documentation/devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml
 > 
-> It would be possible to connect a different type of panel to the DSI bus
-> here in which case we may or may not want to make use of vdd, vdda or
-> vddio.
-> 
-> This is also the case for older chipsets like apq8064, msm8916 etc the vdd*
-> regulators in the dsi-ctrl block are helpers not dependencies.
-> 
-> Add the description of vdd, vdda and vddio back in for the existing
-> upstream dts where vdd, vdda or vddio are already declared but, don't
-> declare those regulators required - they are not SoC requirements.
-> 
-> Fixes: 4dbe55c97741 ("dt-bindings: msm: dsi: add yaml schemas for DSI bindings")
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
->  .../bindings/display/msm/dsi-controller-main.yaml    | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
-> index 0fbb0c04f4b06..bcbcbdca1a78a 100644
-> --- a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
-> +++ b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
-> @@ -133,6 +133,18 @@ properties:
->        - port@0
->        - port@1
->  
-> +  vdd-supply:
-> +    description:
-> +      vdd regulator device node
+> Why exactly is beyond me, but this patch removes this message.
 
-I see my comment was not really implemented. I asked:
-1. vdd->VDD
-2. Drop "device node". It's not a device node. It's a VDD regulator.
-
+I don't think this should be fixed like this. That's the problem of
+dtschema (not ignoring fully disabled nodes) and such patch only moves
+from one correct syntax to another correct syntax, which fixes dtschema
+problem, but changes nothing here.
 
 Best regards,
 Krzysztof
