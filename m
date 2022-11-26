@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB1C639349
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 03:12:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D89A1639318
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 02:27:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbiKZCME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 21:12:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46988 "EHLO
+        id S230120AbiKZB1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 20:27:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbiKZCMC (ORCPT
+        with ESMTP id S229722AbiKZB1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 21:12:02 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630025984F;
-        Fri, 25 Nov 2022 18:12:01 -0800 (PST)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NJwFn4lBwzRpWM;
-        Sat, 26 Nov 2022 10:11:25 +0800 (CST)
-Received: from kwepemm600014.china.huawei.com (7.193.23.54) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+        Fri, 25 Nov 2022 20:27:14 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD66543878
+        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 17:27:13 -0800 (PST)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NJvG51fGyzmW9k;
+        Sat, 26 Nov 2022 09:26:37 +0800 (CST)
+Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 26 Nov 2022 10:11:59 +0800
-Received: from ubuntu1804.huawei.com (10.67.175.28) by
- kwepemm600014.china.huawei.com (7.193.23.54) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 26 Nov 2022 10:11:58 +0800
-From:   Yi Yang <yiyang13@huawei.com>
-To:     <ldewangan@nvidia.com>, <gregkh@linuxfoundation.org>,
-        <jirislaby@kernel.org>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <kyarlagadda@nvidia.com>,
-        <yiyang13@huawei.com>
-CC:     <linux-serial@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH, v2] serial: tegra: Add missing clk_disable_unprepare() in tegra_uart_hw_init()
-Date:   Sat, 26 Nov 2022 10:08:52 +0800
-Message-ID: <20221126020852.113378-1-yiyang13@huawei.com>
-X-Mailer: git-send-email 2.17.1
+ 15.1.2375.31; Sat, 26 Nov 2022 09:27:12 +0800
+Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
+ (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 26 Nov
+ 2022 09:27:11 +0800
+From:   Liu Shixin <liushixin2@huawei.com>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        Liu Shixin <liushixin2@huawei.com>
+Subject: [PATCH] ALSA: asihpi: fix missing pci_disable_device()
+Date:   Sat, 26 Nov 2022 10:14:29 +0800
+Message-ID: <20221126021429.3029562-1-liushixin2@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.28]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600014.china.huawei.com (7.193.23.54)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.32]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -51,56 +49,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the missing clk_disable_unprepare() before return from
-tegra_uart_hw_init() in the error handling path.
-When request_irq() fails in tegra_uart_startup(), 'tup->uart_clk'
-has been enabled, fix it by adding clk_disable_unprepare().
+pci_disable_device() need be called while module exiting, switch to use
+pcim_enable(), pci_disable_device() will be called in pcim_release().
 
-Fixes: cc9ca4d95846 ("serial: tegra: Only print FIFO error message when an error occurs")
-Fixes: d781ec21bae6 ("serial: tegra: report clk rate errors")
-Signed-off-by: Yi Yang <yiyang13@huawei.com>
+Fixes: 3285ea10e9b0 ("ALSA: asihpi - Interrelated HPI tidy up.")
+Signed-off-by: Liu Shixin <liushixin2@huawei.com>
 ---
-v2:
-- it is also missing in tegra_uart_startup() if an error occurs
-after a successful tegra_uart_hw_init() call, fix it.
- drivers/tty/serial/serial-tegra.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ sound/pci/asihpi/hpioctl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/serial-tegra.c b/drivers/tty/serial/serial-tegra.c
-index e5b9773db5e3..1cf08b33456c 100644
---- a/drivers/tty/serial/serial-tegra.c
-+++ b/drivers/tty/serial/serial-tegra.c
-@@ -1046,6 +1046,7 @@ static int tegra_uart_hw_init(struct tegra_uart_port *tup)
- 	if (tup->cdata->fifo_mode_enable_status) {
- 		ret = tegra_uart_wait_fifo_mode_enabled(tup);
- 		if (ret < 0) {
-+			clk_disable_unprepare(tup->uart_clk);
- 			dev_err(tup->uport.dev,
- 				"Failed to enable FIFO mode: %d\n", ret);
- 			return ret;
-@@ -1067,6 +1068,7 @@ static int tegra_uart_hw_init(struct tegra_uart_port *tup)
- 	 */
- 	ret = tegra_set_baudrate(tup, TEGRA_UART_DEFAULT_BAUD);
- 	if (ret < 0) {
-+		clk_disable_unprepare(tup->uart_clk);
- 		dev_err(tup->uport.dev, "Failed to set baud rate\n");
- 		return ret;
- 	}
-@@ -1226,10 +1228,13 @@ static int tegra_uart_startup(struct uart_port *u)
- 				dev_name(u->dev), tup);
- 	if (ret < 0) {
- 		dev_err(u->dev, "Failed to register ISR for IRQ %d\n", u->irq);
--		goto fail_hw_init;
-+		goto fail_request_irq;
- 	}
- 	return 0;
+diff --git a/sound/pci/asihpi/hpioctl.c b/sound/pci/asihpi/hpioctl.c
+index bb31b7fe867d..477a5b4b50bc 100644
+--- a/sound/pci/asihpi/hpioctl.c
++++ b/sound/pci/asihpi/hpioctl.c
+@@ -361,7 +361,7 @@ int asihpi_adapter_probe(struct pci_dev *pci_dev,
+ 		pci_dev->device, pci_dev->subsystem_vendor,
+ 		pci_dev->subsystem_device, pci_dev->devfn);
  
-+fail_request_irq:
-+	/* tup->uart_clk is already enabled in tegra_uart_hw_init */
-+	clk_disable_unprepare(tup->uart_clk);
- fail_hw_init:
- 	if (!tup->use_rx_pio)
- 		tegra_uart_dma_channel_free(tup, true);
+-	if (pci_enable_device(pci_dev) < 0) {
++	if (pcim_enable_device(pci_dev) < 0) {
+ 		dev_err(&pci_dev->dev,
+ 			"pci_enable_device failed, disabling device\n");
+ 		return -EIO;
 -- 
-2.17.1
+2.25.1
 
