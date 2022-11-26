@@ -2,118 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A2BF639807
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 20:12:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0D0639817
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 20:13:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiKZTMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 14:12:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53684 "EHLO
+        id S229694AbiKZTNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 14:13:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiKZTMS (ORCPT
+        with ESMTP id S229436AbiKZTN0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 14:12:18 -0500
-X-Greylist: delayed 3419 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 26 Nov 2022 11:12:17 PST
-Received: from out-122.mta0.migadu.com (out-122.mta0.migadu.com [91.218.175.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6A617890
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 11:12:17 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1669489935;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Mld0Zf5BHHuTHmAamXf8kUapqnIfndf6LF73jgEUyOU=;
-        b=JRT26BDvFyqYcCreQlbv+eRunjXarfdLgSQrSIN61868nvVAbKFfzCAPXP1pu6+7vfuQdd
-        WyQDQUFYp/RCMRU6uZHcxzmr1bgQox4v5SK5bCluwdnbKPLCHupa2a077vEk/OaK8sx4/z
-        /EOB1zmujUK1lo/QM2FLlP61uFm+QVU=
-From:   andrey.konovalov@linux.dev
-To:     Marco Elver <elver@google.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Florian Mayer <fmayer@google.com>,
-        Jann Horn <jannh@google.com>,
-        Mark Brand <markbrand@google.com>, netdev@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH v2 2/2] net, kasan: sample tagging of skb allocations with HW_TAGS
-Date:   Sat, 26 Nov 2022 20:12:13 +0100
-Message-Id: <7bf26d03fab8d99cdeea165990e9f2cf054b77d6.1669489329.git.andreyknvl@google.com>
-In-Reply-To: <4c341c5609ed09ad6d52f937eeec28d142ff1f46.1669489329.git.andreyknvl@google.com>
-References: <4c341c5609ed09ad6d52f937eeec28d142ff1f46.1669489329.git.andreyknvl@google.com>
+        Sat, 26 Nov 2022 14:13:26 -0500
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B3865EF;
+        Sat, 26 Nov 2022 11:13:24 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id C4CFE5C0086;
+        Sat, 26 Nov 2022 14:13:21 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Sat, 26 Nov 2022 14:13:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1669490001; x=1669576401; bh=/Swga9/f3c
+        a8n+exMSarTlOwmNA57DG0SPyW0U3UXv0=; b=x+KIdqiZjXSa79G21mU1hnRUT+
+        YrrG2lbZ4GHT9ELvWGldRUw//oGWMKDE4NLJrLYiUucTVvo5/+IfCgMIwKW9j652
+        4cRlAJk0ANbamiDqMoNQsUWiNEWFguO8oVpqFriFjpBxphg4+tdH4yCsQv8UeBdr
+        m9+F7o2pwPM7i1mFgo3WYqJuzcSTBmD1o0yQ2gOEJRT7LdcPLVIPfwqYLkJMipmG
+        BXU8RB9sx1VQIdnDfmPKZrC4X+HtSSe7Ycdk+kqimMZM5f99TNkXrenfLSXZX/gh
+        jKUoP8Y0Cx5IvmQj/9opewFF7mtP8jp+rbf41tx7a3vzyAo/BRj3EcONFPUA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1669490001; x=1669576401; bh=/Swga9/f3ca8n
+        +exMSarTlOwmNA57DG0SPyW0U3UXv0=; b=BreZv9tq4FtRXs5oxq0RCabkeWdFf
+        Hqd6ISPB8GiX4UQMy3OJs1pWjgSTtX2FT8v6ZdRdXrAiK/icwhxF9xHE8lZI3O1s
+        mhfpmtlfslUOIachTSgG+Ab/JsOMrRM/SgVp3+GDm55jGeqqxvugN2zstl9s31FO
+        i9Se3vsA0EkxGadY8k/+2yfwDgko3ez+42Yv/jASKB15fgHwxZOpRkZj39Ccuxwl
+        joHIHlgFI9Vt7HJmgPiVgOzwkFLMYUwsTsezvfx7HNkFkta3wVGz5Y6NvNWv2PvE
+        vAP3AO7sdeyn8m5zSRUQv1BwtJpyJZECiYoFAbT5VRpiQmE4vfZ0qMG/Q==
+X-ME-Sender: <xms:UWWCYzWv5F9Lj0L4ksV5YKF3J65xYGIwLvRsedvuU9MaSyeWAZMa3g>
+    <xme:UWWCY7lTmgxy4LtLSc5JmhbzxX44zInrohjpf7yxqLL9vgCb7i-egzr1mBpM38HmE
+    9EPZfGmigsnyKEWUA>
+X-ME-Received: <xmr:UWWCY_Yz2piKahY94zqFOPAQ9eR571VQPTyta84xFkF_oXatfBhSKrIV4APze2bokVhmXZPng81hHnbGW5YR-nl-ypcVWA07baTskPdVW9souy5tkcuksrnIRWTj0oXJ2tN1lw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrieejgdduvdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofggtgfgsehtkeertdertdejnecuhfhrohhmpefurghmuhgv
+    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
+    frrghtthgvrhhnpeeuvefhveekieffveeileehtdduleffveehgfdugfdtkeehteffffel
+    hfeftedvvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:UWWCY-WPQp-i_EvNzWEpTtgRyJrmhdTmrm1MKXFoOfITd0ub5sRTMw>
+    <xmx:UWWCY9nG_hWRZCLiaXtAWWZdZPg2JhgwEk2gpf7Qi-McluVJ3almXA>
+    <xmx:UWWCY7c8FEOkh_RgTTFcgNLDJLEp3K1ja-A5OCuDU3fe9cNMzV_R6w>
+    <xmx:UWWCYzfrHpJ4TCmLU_hm3NnBi5O5oO5ZX6X01G2umAzCLbOFlaBhOA>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 26 Nov 2022 14:13:20 -0500 (EST)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: [PATCH 0/5] clk: sunxi-ng: Allwinner R528/T113 clock support
+Date:   Sat, 26 Nov 2022 13:13:14 -0600
+Message-Id: <20221126191319.6404-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.37.4
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrey Konovalov <andreyknvl@google.com>
+R528 and T113 are SoCs based on the same design as D1/D1s, but with ARM
+CPUs instead of RISC-V. They use the same CCU implementation, meaning
+the CCU has gates/resets for all peripherals present on any SoC in this
+family. I verified the CAN bus bits are also present on D1/D1s.
 
-As skb page_alloc allocations tend to be big, tagging and checking all
-such allocations with Hardware Tag-Based KASAN introduces a significant
-slowdown in testing scenarios that extensively use the network. This is
-undesirable, as Hardware Tag-Based KASAN is intended to be used in
-production and thus its performance impact is crucial.
+Patches 1-2 clean up the Kconfig in preparation for patch 3, which
+allows building the driver. Patches 4-5 add the missing driver bits.
 
-Use __GFP_KASAN_SAMPLE flag for skb page_alloc allocations to make KASAN
-use sampling and tag only some of these allocations.
 
-When running a local loopback test on a testing MTE-enabled device in sync
-mode, enabling Hardware Tag-Based KASAN intoduces a 50% slowdown. Applying
-this patch and setting kasan.page_alloc.sampling to a value higher than 1
-allows to lower the slowdown. The performance improvement saturates around
-the sampling interval value of 10, which lowers the slowdown to 20%. The
-slowdown in real scenarios will likely be better.
+András Szemző (1):
+  clk: sunxi-ng: d1: Mark cpux clock as critical
 
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
----
- net/core/skbuff.c | 4 ++--
- net/core/sock.c   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Fabien Poussin (1):
+  clk: sunxi-ng: d1: Add CAN bus gates and resets
 
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 88fa40571d0c..fdea87deee13 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -6135,8 +6135,8 @@ struct sk_buff *alloc_skb_with_frags(unsigned long header_len,
- 		while (order) {
- 			if (npages >= 1 << order) {
- 				page = alloc_pages((gfp_mask & ~__GFP_DIRECT_RECLAIM) |
--						   __GFP_COMP |
--						   __GFP_NOWARN,
-+						   __GFP_COMP | __GFP_NOWARN |
-+						   __GFP_KASAN_SAMPLE,
- 						   order);
- 				if (page)
- 					goto fill_page;
-diff --git a/net/core/sock.c b/net/core/sock.c
-index a3ba0358c77c..f7d20070ad88 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -2842,7 +2842,7 @@ bool skb_page_frag_refill(unsigned int sz, struct page_frag *pfrag, gfp_t gfp)
- 		/* Avoid direct reclaim but allow kswapd to wake */
- 		pfrag->page = alloc_pages((gfp & ~__GFP_DIRECT_RECLAIM) |
- 					  __GFP_COMP | __GFP_NOWARN |
--					  __GFP_NORETRY,
-+					  __GFP_NORETRY | __GFP_KASAN_SAMPLE,
- 					  SKB_FRAG_PAGE_ORDER);
- 		if (likely(pfrag->page)) {
- 			pfrag->size = PAGE_SIZE << SKB_FRAG_PAGE_ORDER;
+Samuel Holland (3):
+  clk: sunxi-ng: Remove duplicate ARCH_SUNXI dependencies
+  clk: sunxi-ng: Move SoC driver conditions to dependencies
+  clk: sunxi-ng: d1: Allow building for R528/T113
+
+ drivers/clk/sunxi-ng/Kconfig              | 71 ++++++++++++-----------
+ drivers/clk/sunxi-ng/ccu-sun20i-d1.c      | 13 ++++-
+ drivers/clk/sunxi-ng/ccu-sun20i-d1.h      |  2 +-
+ include/dt-bindings/clock/sun20i-d1-ccu.h |  2 +
+ include/dt-bindings/reset/sun20i-d1-ccu.h |  2 +
+ 5 files changed, 53 insertions(+), 37 deletions(-)
+
 -- 
-2.25.1
+2.37.4
 
