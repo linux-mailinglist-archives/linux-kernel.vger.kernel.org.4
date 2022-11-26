@@ -2,101 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 044C5639795
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 19:16:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 181F5639799
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 19:17:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229480AbiKZSQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 13:16:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58770 "EHLO
+        id S229506AbiKZSRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 13:17:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiKZSQa (ORCPT
+        with ESMTP id S229459AbiKZSRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 13:16:30 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200F215FEE
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 10:16:29 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id x66so6806988pfx.3
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 10:16:29 -0800 (PST)
+        Sat, 26 Nov 2022 13:17:38 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D3CA1A6
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 10:17:36 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id x17so10974111wrn.6
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 10:17:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JGpKt/08MfScwB6fADFvl3111rWPJnPqOlgX6pbF40Q=;
-        b=o8y5SyU0VgwzDDto4f1d87fe5Ma97bZLuDXEaIfj4X7z35KEHrKeZtCowPmplEjt/S
-         VvkeyUkaW7I0m34pJKJ70N+CyuYoqzgazNha+5kLAzIEnhc1NZIAxBqF73901cDr7f2f
-         Xa0n/Cwzp2LAAMhK1JCbpc9+QDq6EwZ1BbuqbW9bw0WncNzqKj9CeFk028w+YUNg9ZA8
-         ihtxHuFZ4ccuKElAoxEMOU3bOBpgTkZybAwqrMVzBctP8VYjLMI3RK+jRlasmJZ08qxD
-         C0naUbiZdN7xz1eNJaDLQsqUSUQMSftjhAIQ5EOSzqQpBktNlR9PV7/42kQwUt0SJbgt
-         wAKg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2jWGZXUq/8NH1N5iaORK98xsLKjvX4aUS6R7xoBAWfQ=;
+        b=Yk5MtSvDrz2lDTvFv5gsRvSq/RqCktYOZF1CEjtsNASsLLFKNubrwQg2NYJnWnRITd
+         GL0KicO22ToPwOJU8pJ++LwRKSPJeznbWJW8bwGAMDvuO+r+z70M6BUMRw9X5D25JuY7
+         KlZKDKQaIWjcCt02MxOnTIRGb1asuP6swytqACX0niBGMj/nOQ1SMc5rlr4JAfi64P+C
+         zOPYariaXTC0f9gIvkl5oiATTQb8z4Txovjn6iivjX4CABwD5a3FBrjwrdgiLI0DiRR8
+         ss7NBDaDqzGFcsjXjEfZXYQiKx5MJSjV31Hg3txAe3xnWeYFfoOIEng0+K1uRrFBMH11
+         YsAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JGpKt/08MfScwB6fADFvl3111rWPJnPqOlgX6pbF40Q=;
-        b=W2EDkCoHm7JoFFaEyi+4MuLTwFEV8ZZt7OMbKszDGRjnm3uG2030Wfr3gSnUmyil9O
-         eew86p5db0vQlodl2kg/vBtVcuqly1eYOquKlzKwySW8agVZxdnajQrUiCwFGmL6OkRJ
-         j56nNbcSOUT07J5Xzk52XzAQ/Hj6wAe2qg+mWA8qGHs5i+VWCZpK05sIuAPidVmn92Hl
-         fgDjEpHC8jPCeisYVcDUpLL3Twh6ZxRaEK59xAvocEBij2B0O/kj9ILnfdiXu48aBkhj
-         bHGxVrtY53E6QmVkN5VvC5scU1ZCr0QjBSaAQu4HjVtV/+viVbmidO9Sj5wBTl9/47Do
-         AJNg==
-X-Gm-Message-State: ANoB5pln6jdhGgmYZrg+MPP5/T0o+3JSvoy3tLvZ6MX2cMgfQz/qssIm
-        aa1gSjFbW3SEsjow0mL4pOh+TjbBzufFEL/0lfw=
-X-Google-Smtp-Source: AA0mqf51KcRqZtGXIoWsZgkico2/FQwgiHzOCmxsRfJvot8tEPra8WaOtbgOeiN/65HKyfAVVAiZf+6BPg/nq7ya/MY=
-X-Received: by 2002:a62:2702:0:b0:572:8766:598b with SMTP id
- n2-20020a622702000000b005728766598bmr24121255pfn.21.1669486588616; Sat, 26
- Nov 2022 10:16:28 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2jWGZXUq/8NH1N5iaORK98xsLKjvX4aUS6R7xoBAWfQ=;
+        b=RXkLsEygcEYYY9WcPkpSPLkBlLmGXtR3PVZ8ggwwPKMqPYvNlwZ3hjD1g69BoAuOU1
+         vblzZfNt998+WV8ov6Kkzh7ghLU6U6TSwxy39l7WinCFxT5zIWSppbUKeAe2QxfO/qsj
+         w8D2xZvYS37I/YzwIovmDS3zss5pXEq2ZljXxFT9xzSf0vt8bJlcYgODrkb/paQ2pVLs
+         JR33nvqXzQnBP189h7msqBBh4cySVXejYKBCz70EWfDuzXV5aP3+ZJHi5ZkwZe8E+BwR
+         5vwE9P9QYdqrZvWGAprG91nboDqS6hKvUXulYKSUBTeZHtqq9+dJkO2WfmWcnCgKh0YP
+         AHaQ==
+X-Gm-Message-State: ANoB5pngiJGgulIf1/00hVj1Q1H4uV4KUrUdS2eaaV5MKRL4tQ/w7zch
+        7MQueLM63SNWqlDfV49wsFC5RA==
+X-Google-Smtp-Source: AA0mqf7/vDq4XHW5zFgdG2Q9cyHchw3hTW3makpdYNiTuYZBdx1CLJjIc+CScDaZNEb+YfbJlhIJBQ==
+X-Received: by 2002:adf:f2d0:0:b0:242:7c:eb9c with SMTP id d16-20020adff2d0000000b00242007ceb9cmr8035275wrp.178.1669486655181;
+        Sat, 26 Nov 2022 10:17:35 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id t6-20020adfeb86000000b00241e5b917d0sm7604113wrn.36.2022.11.26.10.17.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 26 Nov 2022 10:17:34 -0800 (PST)
+Message-ID: <bf70adbc-f52d-6355-6b7d-b19561fed731@linaro.org>
+Date:   Sat, 26 Nov 2022 18:17:33 +0000
 MIME-Version: 1.0
-References: <655fd7e303b852809d3a8167d28091429f969c73.1669486407.git.andreyknvl@google.com>
-In-Reply-To: <655fd7e303b852809d3a8167d28091429f969c73.1669486407.git.andreyknvl@google.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Sat, 26 Nov 2022 19:16:17 +0100
-Message-ID: <CA+fCnZceUx+Vqj7nUPiLrexnmU11KkGGtJ3-9KfXm336e+cv3w@mail.gmail.com>
-Subject: Re: [PATCH mm] kasan: fail non-kasan KUnit tests on KASAN reports
-To:     David Gow <davidgow@google.com>
-Cc:     Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>,
-        andrey.konovalov@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 05/18] dt-bindings: msm: dsi-controller-main: Document
+ clocks on a per compatible basis
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+Cc:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
+        dmitry.baryshkov@linaro.org, sean@poorly.run, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org, dianders@chromium.org,
+        david@ixit.cz, krzysztof.kozlowski+dt@linaro.org,
+        swboyd@chromium.org, konrad.dybcio@somainline.org,
+        agross@kernel.org, andersson@kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20221124004801.361232-1-bryan.odonoghue@linaro.org>
+ <20221124004801.361232-6-bryan.odonoghue@linaro.org>
+ <fb3f9ad7-7b6f-fe22-8787-5bfa1d7caf05@linaro.org>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <fb3f9ad7-7b6f-fe22-8787-5bfa1d7caf05@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 26, 2022 at 7:15 PM <andrey.konovalov@linux.dev> wrote:
->
-> From: Andrey Konovalov <andreyknvl@google.com>
->
-> After the recent changes done to KUnit-enabled KASAN tests, non-KASAN KUnit
-> tests stopped being failed when KASAN report is detected.
->
-> Recover that property by failing the currently running non-KASAN KUnit test
-> when KASAN detects and prints a report for a bad memory access.
->
-> Note that if the bad accesses happened in a kernel thread that doesn't
-> have a reference to the currently running KUnit-test available via
-> current->kunit_test, the test won't be failed. This is a limitation of
-> KUnit, which doesn't yet provide a thread-agnostic way to find the
-> reference to the currenly running test.
->
-> Fixes: 49d9977ac909 ("kasan: check CONFIG_KASAN_KUNIT_TEST instead of CONFIG_KUNIT")
-> Fixes: 7f29493ba529 ("kasan: switch kunit tests to console tracepoints")
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+On 26/11/2022 14:44, Krzysztof Kozlowski wrote:
+> On 24/11/2022 01:47, Bryan O'Donoghue wrote:
+>> Each compatible has a different set of clocks which are associated with it.
+>> Add in the list of clocks for each compatible.
+>>
+>> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+>> ---
+>>   .../display/msm/dsi-controller-main.yaml      | 154 ++++++++++++++++--
+>>   1 file changed, 143 insertions(+), 11 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+>> index c4da7179999d2..88aac7d33555c 100644
+>> --- a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+>> +++ b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+>> @@ -9,9 +9,6 @@ title: Qualcomm Display DSI controller
+>>   maintainers:
+>>     - Krishna Manikandan <quic_mkrishn@quicinc.com>
+>>   
+>> -allOf:
+>> -  - $ref: "../dsi-controller.yaml#"
+>> -
+>>   properties:
+>>     compatible:
+>>       items:
+>> @@ -48,13 +45,8 @@ properties:
+>>         - description: Display AXI clock
+>>   
+>>     clock-names:
+>> -    items:
+>> -      - const: byte
+>> -      - const: byte_intf
+>> -      - const: pixel
+>> -      - const: core
+>> -      - const: iface
+>> -      - const: bus
+>> +    minItems: 6
+>> +    maxItems: 9
+>>   
+>>     phys:
+>>       maxItems: 1
+>> @@ -147,6 +139,146 @@ required:
+>>     - assigned-clock-parents
+>>     - ports
+>>   
+>> +allOf:
+>> +  - $ref: "../dsi-controller.yaml#"
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            enum:
+>> +              - qcom,apq8064-dsi-ctrl
+>> +    then:
+>> +      properties:
+>> +        clocks:
+>> +          maxItems: 7
+>> +        clock-names:
+>> +          items:
+>> +            - const: iface
+>> +            - const: bus
+>> +            - const: core_mmss
+>> +            - const: src
+>> +            - const: byte
+>> +            - const: pixel
+>> +            - const: core
+>> +
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            enum:
+>> +              - qcom,msm8916-dsi-ctrl
+>> +    then:
+>> +      properties:
+>> +        clocks:
+>> +          maxItems: 6
+>> +        clock-names:
+>> +          items:
+>> +            - const: mdp_core
+>> +            - const: iface
+>> +            - const: bus
+>> +            - const: byte
+>> +            - const: pixel
+>> +            - const: core
+>> +
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            enum:
+>> +              - qcom,msm8974-dsi-ctrl
+>> +    then:
+>> +      properties:
+>> +        clocks:
+>> +          maxItems: 3
+>> +        clock-names:
+>> +          items:
+>> +            - const: iface
+>> +            - const: bus
+>> +            - const: vsync
+> 
+> minItems are 6, so does it actually work?
 
-Hi David,
+Hmm.
 
-Could you please check whether this patch resolves the issue with
-non-KASAN KUnit tests for you?
+I ran this using a recent version of dt-schema from github
 
-Thank you!
+DT_DOC_CHECKER=~/Development/qualcomm/dt-schema/tools/dt-doc-validate
+DT_EXTRACT_EX=~/Development/qualcomm/dt-schema/tools/dt-extract-example
+DT_MK_SCHEMA=~/Development/qualcomm/dt-schema/tools/dt-mk-schema
+DT_CHECKER=~/Development/qualcomm/dt-schema/tools/dt-validate
+
+make DT_CHECKER_FLAGS=-m dt_binding_check O=$BUILDDIR 
+DT_DOC_CHECKER=$DT_DOC_CHECKER DT_EXTRACT_EX=$DT_EXTRACT_EX 
+DT_MK_SCHEMA=$DT_MK_SCHEMA DT_CHECKER=$DT_CHECKER 
+DT_SCHEMA_FILES=display/msm/dsi-controller-main.yaml -j `nproc`
+
+Neither of these throw an warning in my compile log
+
+arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts:&dsi0
+arch/arm/boot/dts/qcom-msm8974pro-samsung-klte.dts:&dsi0
+
+thanks for spotting
+
+>> -           compatible = "qcom,mdss-dsi-ctrl";
+>> +           compatible = "qcom,sc7180-dsi-ctrl", "qcom,mdss-dsi-ctrl";
+> 
+
+already dropped in v4
+
