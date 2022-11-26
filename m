@@ -2,132 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB5EC6396E3
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 16:44:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1009D6396F1
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 16:54:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbiKZPoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 10:44:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45430 "EHLO
+        id S229495AbiKZPya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 10:54:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiKZPoI (ORCPT
+        with ESMTP id S229436AbiKZPy3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 10:44:08 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E0EF7A;
-        Sat, 26 Nov 2022 07:44:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669477447; x=1701013447;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=TYZva1qhZaDDzx7ssD6565IlpCg24ayIFbcaC7tY8Tc=;
-  b=afaV5wieNPUjxu0caJC6JdakAXQOqaG+mJP11E9sBOfdvxW/FCdDmoSq
-   uszGkpjb5nf3De548PRwyr8tA0gjYkdzZijT5eCkTI9MaUL7wuDEK5FNd
-   DHxxEedinEuG50v1wryTy8tuS2GfxLpPE0gycyCpJAkwIvhrwC+gn8YZP
-   vqGEDAZKZz5uKM+4zWczaOB+RJUrHWVl1v9DiPG/G1MsaoSG/5NPhScuG
-   JcNKVf2MOUenZM/iTJdfierEPIRgcSWgA7CVeokYeMdRvPe3t3BpDN/xD
-   57LDEQ+dPBOukc9S9pF7aZDWoHCdzdL+VmK/32YN6VaBwDrOJGpoZ9vaZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10543"; a="376747252"
-X-IronPort-AV: E=Sophos;i="5.96,196,1665471600"; 
-   d="scan'208";a="376747252"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2022 07:44:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10543"; a="620587303"
-X-IronPort-AV: E=Sophos;i="5.96,196,1665471600"; 
-   d="scan'208";a="620587303"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006.jf.intel.com with ESMTP; 26 Nov 2022 07:43:54 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1oyxLL-000Bco-1n;
-        Sat, 26 Nov 2022 17:43:51 +0200
-Date:   Sat, 26 Nov 2022 17:43:51 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>,
-        alsa-devel@alsa-project.org, linux-staging@lists.linux.dev,
-        linux-pwm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-leds@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        linux-serial@vger.kernel.org, linux-input@vger.kernel.org,
-        Grant Likely <grant.likely@linaro.org>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, chrome-platform@lists.linux.dev,
-        linux-actions@lists.infradead.org, linux-gpio@vger.kernel.org,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        gregkh@linuxfoundation.org, linux-rpi-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Purism Kernel Team <kernel@puri.sm>,
-        patches@opensource.cirrus.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>, linux-crypto@vger.kernel.org,
-        kernel@pengutronix.de, netdev@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
-Message-ID: <Y4I0N3KpU/LSJYpd@smile.fi.intel.com>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221122185818.3740200d@jic23-huawei>
- <20221122201654.5rdaisqho33buibj@pengutronix.de>
+        Sat, 26 Nov 2022 10:54:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1141C5;
+        Sat, 26 Nov 2022 07:54:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA2A760B87;
+        Sat, 26 Nov 2022 15:54:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 788A3C433D6;
+        Sat, 26 Nov 2022 15:54:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669478067;
+        bh=C1r5GHLV5/tMA5KWxFKhaWvykn3QHCxI+yprvdC29B8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VViYIVmGrgXDKYSKgkGlPzEPxgRGcNB60aDCZewHPRSt8al1S9rYz39S/VPC4jHIR
+         pgfJqzerAsjiawOEJbI/4lyCgU3mnii8Z+ULRFx0NPf2i4T90L5eJcJoqojRRygEZ6
+         W11BstYyboUZJa1TciP0w1PigzA5EYXAvUIKnEZqeQnxGTgMsn3I8x4cxWrCAetB8f
+         Pe3VYg74xt6pKrGj9wdRBJFmhGJqqRQGY6N0tYQf2/cmg8OH4OsjJRbsBJBjAzpBfH
+         zSFTw+IjHkhC/h7gOTfXCeilv4myzhZaGHgTKNPkxL+klzh/DqAWEe6L4b5GU5LE9V
+         HrfRHK1KHHTtg==
+Date:   Sat, 26 Nov 2022 15:54:19 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-sunxi@lists.linux.dev, Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Andre Przywara <andre.przywara@arm.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        Christian Hewitt <christianshewitt@gmail.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v2 03/12] dt-bindings: riscv: Add Allwinner D1/D1s board
+ compatibles
+Message-ID: <Y4I2qxTCr7GvkuVz@spud>
+References: <20221125234656.47306-1-samuel@sholland.org>
+ <20221125234656.47306-4-samuel@sholland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221122201654.5rdaisqho33buibj@pengutronix.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221125234656.47306-4-samuel@sholland.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 09:16:54PM +0100, Uwe Kleine-König wrote:
-> On Tue, Nov 22, 2022 at 06:58:18PM +0000, Jonathan Cameron wrote:
-
-> > Queued all of the below:
-> > with one tweaked as per your suggestion and the highlighted one dropped on basis
-> > I was already carrying the equivalent - as you pointed out.
-> > 
-> > I was already carrying the required dependency.
-> > 
-> > Includes the IIO ones in staging.
-> > 
-
-> > p.s. I perhaps foolishly did this in a highly manual way so as to
-> > also pick up Andy's RB.  So might have dropped one...
+On Fri, Nov 25, 2022 at 05:46:47PM -0600, Samuel Holland wrote:
+> Several SoMs and boards are available that feature the Allwinner D1 or
+> D1s SoC. Document their compatible strings.
 > 
-> You could have done:
+> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
 > 
-> 	H=$(git rev-parse @)
-> 	b4 am -P 49-190 20221118224540.619276-1-uwe@kleine-koenig.org
-> 	git am ...
-> 	git filter-branch -f --msg-filter "grep -v 'Signed-off-by: Jonathan'; echo 'Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>'; echo 'Signed-off-by: Jonathan Cameron <jic23@kernel.org>'" $H..
+> Changes in v2:
+>  - Add MangoPi MQ (non-Pro) board
 > 
-> (untested, but you get the idea).
+>  .../devicetree/bindings/riscv/sunxi.yaml      | 69 +++++++++++++++++++
+>  1 file changed, 69 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/riscv/sunxi.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/riscv/sunxi.yaml b/Documentation/devicetree/bindings/riscv/sunxi.yaml
+> new file mode 100644
+> index 000000000000..9edb5e5992b1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/riscv/sunxi.yaml
+> @@ -0,0 +1,69 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/riscv/sunxi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Allwinner RISC-V SoC-based boards
+> +
+> +maintainers:
+> +  - Chen-Yu Tsai <wens@csie.org>
+> +  - Jernej Skrabec <jernej.skrabec@gmail.com>
+> +  - Samuel Holland <samuel@sholland.org>
+> +
+> +description:
+> +  Allwinner RISC-V SoC-based boards
+> +
+> +properties:
+> +  $nodename:
+> +    const: '/'
+> +  compatible:
+> +    oneOf:
+> +      - description: Dongshan Nezha STU SoM
+> +        items:
+> +          - const: 100ask,dongshan-nezha-stu
 
-That's, for example (just last from the history as is), how I usually do it
-(tested):
+I googled the 100ask crowd & see yet another d1 based board:
+https://www.cnx-software.com/2022/11/02/dongshanpi-d1s-allwinner-d1s-risc-v-development-board-teach-programming/
+It's cool to see the variety :)
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
- git filter-branch --msg-filter 'sed -e "/Signed-off-by: Andy Shevchenko/ a Tested-by: Daniel Scally <dan.scally@ideasonboard.com>"' -f HEAD~4..HEAD
-
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> +          - const: allwinner,sun20i-d1
+> +
+> +      - description: D1 Nezha board
+> +        items:
+> +          - const: allwinner,d1-nezha
+> +          - const: allwinner,sun20i-d1
+> +
+> +      - description: ClockworkPi R-01 SoM and v3.14 board
+> +        items:
+> +          - const: clockwork,r-01-clockworkpi-v3.14
+> +          - const: allwinner,sun20i-d1
+> +
+> +      - description: ClockworkPi R-01 SoM, v3.14 board, and DevTerm expansion
+> +        items:
+> +          - const: clockwork,r-01-devterm-v3.14
+> +          - const: clockwork,r-01-clockworkpi-v3.14
+> +          - const: allwinner,sun20i-d1
+> +
+> +      - description: Lichee RV SoM
+> +        items:
+> +          - const: sipeed,lichee-rv
+> +          - const: allwinner,sun20i-d1
+> +
+> +      - description: Carrier boards for the Lichee RV SoM
+> +        items:
+> +          - enum:
+> +              - sipeed,lichee-rv-86-panel-480p
+> +              - sipeed,lichee-rv-86-panel-720p
+> +              - sipeed,lichee-rv-dock
+> +          - const: sipeed,lichee-rv
+> +          - const: allwinner,sun20i-d1
+> +
+> +      - description: MangoPi MQ board
+> +        items:
+> +          - const: widora,mangopi-mq
+> +          - const: allwinner,sun20i-d1s
+> +
+> +      - description: MangoPi MQ Pro board
+> +        items:
+> +          - const: widora,mangopi-mq-pro
+> +          - const: allwinner,sun20i-d1
+> +
+> +additionalProperties: true
+> +
+> +...
+> -- 
+> 2.37.4
+> 
