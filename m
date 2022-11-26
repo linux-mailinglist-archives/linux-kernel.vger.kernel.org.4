@@ -2,109 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 316B3639867
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 23:19:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93411639871
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 23:26:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbiKZWTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 17:19:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58168 "EHLO
+        id S229627AbiKZWZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 17:25:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiKZWTB (ORCPT
+        with ESMTP id S229453AbiKZWZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 17:19:01 -0500
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC2718E1B
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 14:19:00 -0800 (PST)
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 2AQMIlnY014115
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 07:18:48 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 2AQMIlnY014115
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1669501128;
-        bh=eCoWv21FlmpHLwc97EGzHeLTUW/a+GA8t8Cm/ZadSPA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=H1NXzImV6t9rh6H+zukX1U9G5gNCaZqJwJpSQrTN/iJQJGvTgGAaKp/Wkfkpp9Ncs
-         uHVQmUvw8db/MGbc7ZojBF94+nFJDgviM9vfGJfcYZbOOU9eXwj2MmHBi+Od8yfJHz
-         zcKMQ0y9Xhyn0bVuZjhYZYWFt6IVP3CNQJ11NI3+5NkZhBUXT9+C7HFJNneMcY0f2+
-         4EciOMdBJzjnotVxXvRaSEWAbX6xs6Xyx+OWEIsnf3KFlpFqmq3xMMXlyXZWTSvKSV
-         8aifW98sNvQwZeDuTfNvA09Wo4w0sf5ux5GsM4Kv3Uk/wTAebZbylg1/bbE/miLEaO
-         wyuDCy6Ec3S6Q==
-X-Nifty-SrcIP: [209.85.167.177]
-Received: by mail-oi1-f177.google.com with SMTP id r76so7905256oie.13
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 14:18:48 -0800 (PST)
-X-Gm-Message-State: ANoB5pmuylHV+CUSlvwu6/qH0qQVNPwkn3xXFlhfPcQHtZzQDVN7SgW2
-        I7w9UDJvX1rep1PtlptozXKDKkJVE4ouCZEFhJs=
-X-Google-Smtp-Source: AA0mqf5n1/RIeUfwDyZLminfvFm1O0saHRY4Zh7CYxiBKtXxUzb8vn1K4cCYK1laaA3SYsvpI3YO38U22j/k9BMNlRU=
-X-Received: by 2002:a05:6808:3009:b0:354:94a6:a721 with SMTP id
- ay9-20020a056808300900b0035494a6a721mr12844494oib.194.1669501127494; Sat, 26
- Nov 2022 14:18:47 -0800 (PST)
+        Sat, 26 Nov 2022 17:25:36 -0500
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E3DE0C3;
+        Sat, 26 Nov 2022 14:25:34 -0800 (PST)
+Received: by mail-io1-f47.google.com with SMTP id i85so5247319ioa.5;
+        Sat, 26 Nov 2022 14:25:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ZlyB3iEQfZN2ouKWA070xdoCwtuTYqQ3/sG9m3p7/80=;
+        b=VAk7lsvtZ+DsBg+hvaW7dC+ZrMlGaPgCVqWKIYfm1mIJmE8viGV0SXeLkGIkupBb05
+         /TI0JCw6FV/LQn97dn/xrCUQPoQI0lq1a73YcnaqdTnnIGnLRci2P8HP+1t9GnN6y5CV
+         30IdQerHrLKrFJPQvYVHmzXr6eVDoAKIdQGWqzdQsK/Qk9CPlpoobMpo+AV3S95RU/Uc
+         zl4Q3dub0EpxkMU1RuGojsbrJhKVoIrThFPO8zq/H5eZFPk+X7wxUIHanTMcUZ5PQjXP
+         s5QPnABDDjkHB/XI0PXl1KCTKm7I6fgunm0iBYLkytlDaHYd+a40tZHlGlh1sT6KRcqQ
+         qtBg==
+X-Gm-Message-State: ANoB5pmyX99vc/+jno1i8hKjU1Gvi3ynP5unEaUgZierUwKwugdjkNYS
+        e5n9EWeZfE9a0XMMH4+18U1KOhYMlQ==
+X-Google-Smtp-Source: AA0mqf6yWHEStBRsGoTfckgJSkpmKT6XWvb9nkZy76Ew7cHLnrwvgiNck/FaNKmTl5/fQQkixWY/ew==
+X-Received: by 2002:a5d:8941:0:b0:6a1:2c0c:6084 with SMTP id b1-20020a5d8941000000b006a12c0c6084mr10279947iot.128.1669501533882;
+        Sat, 26 Nov 2022 14:25:33 -0800 (PST)
+Received: from robh_at_kernel.org ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id z15-20020a05663822af00b00389d2ff28a5sm712108jas.47.2022.11.26.14.25.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Nov 2022 14:25:33 -0800 (PST)
+Received: (nullmailer pid 35346 invoked by uid 1000);
+        Sat, 26 Nov 2022 22:25:36 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-References: <20221126051002.123199-1-linux@weissschuh.net> <20221126051002.123199-3-linux@weissschuh.net>
-In-Reply-To: <20221126051002.123199-3-linux@weissschuh.net>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 27 Nov 2022 07:18:11 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAREVSp_5d1SaFOLyBHJJrJ6zE_qxSYWAFFnfoz3d0w3-Q@mail.gmail.com>
-Message-ID: <CAK7LNAREVSp_5d1SaFOLyBHJJrJ6zE_qxSYWAFFnfoz3d0w3-Q@mail.gmail.com>
-Subject: Re: [PATCH 3/3] init/version.c: remove #include <generated/utsversion.h>
-To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Jonathan =?utf-8?q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Cc:     linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+In-Reply-To: <20221124191400.287918-2-j.neuschaefer@gmx.net>
+References: <20221124191400.287918-1-j.neuschaefer@gmx.net>
+ <20221124191400.287918-2-j.neuschaefer@gmx.net>
+Message-Id: <166950112932.8087.6546134123286782729.robh@kernel.org>
+Subject: Re: [PATCH v2 1/3] dt-bindings: spi: Add Nuvoton WPCM450 Flash
+ Interface Unit (FIU)
+Date:   Sat, 26 Nov 2022 16:25:36 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 26, 2022 at 2:10 PM Thomas Wei=C3=9Fschuh <linux@weissschuh.net=
-> wrote:
->
-> Commit 2df8220cc511 ("kbuild: build init/built-in.a just once") moved
-> the usage of the define UTS_VERSION to the file version-timestamp.c.
 
-With s/UTS_VERSION/UTS_RELEASE/,
-
-
-Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
-
->
-> version-timestamp.c in turn is included from version.c but already
-> includes utsversion.h itself properly.
->
-> The unneeded include of utsversion.h from version.c can be dropped.
->
-> Fixes: 2df8220cc511 ("kbuild: build init/built-in.a just once")
-> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+On Thu, 24 Nov 2022 20:13:58 +0100, Jonathan Neuschäfer wrote:
+> The Flash Interface Unit (FIU) is the SPI flash controller in the
+> Nuvoton WPCM450 BMC SoC. It supports four chip selects, and direct
+> (memory-mapped) access to 16 MiB per chip. Larger flash chips can be
+> accessed by software-defined SPI transfers.
+> 
+> The FIU in newer NPCM7xx SoCs is not compatible with the WPCM450 FIU.
+> 
+> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
 > ---
->  init/version.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/init/version.c b/init/version.c
-> index 01d4ab05f0ba..f117921811b4 100644
-> --- a/init/version.c
-> +++ b/init/version.c
-> @@ -15,7 +15,6 @@
->  #include <linux/printk.h>
->  #include <linux/uts.h>
->  #include <linux/utsname.h>
-> -#include <generated/utsrelease.h>
->  #include <linux/proc_ns.h>
->
->  static int __init early_hostname(char *arg)
-> --
-> 2.38.1
->
+> 
+> v2:
+> - A few cleanups suggested by Krzysztof Kozlowski
+> - Simplify binding by making second reg item mandatory
+> 
+> v1:
+> - https://lore.kernel.org/lkml/20221105185911.1547847-4-j.neuschaefer@gmx.net/
+> ---
+>  .../bindings/spi/nuvoton,wpcm450-fiu.yaml     | 66 +++++++++++++++++++
+>  1 file changed, 66 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/nuvoton,wpcm450-fiu.yaml
+> 
 
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
---=20
-Best Regards
-Masahiro Yamada
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/spi/nuvoton,wpcm450-fiu.example.dts:18:18: fatal error: dt-bindings/clock/nuvoton,wpcm450-clk.h: No such file or directory
+   18 |         #include <dt-bindings/clock/nuvoton,wpcm450-clk.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:406: Documentation/devicetree/bindings/spi/nuvoton,wpcm450-fiu.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1492: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221124191400.287918-2-j.neuschaefer@gmx.net
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command.
+
