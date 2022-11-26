@@ -2,112 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37DC86394B4
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 09:56:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 518AB6394EA
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 10:23:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbiKZIz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 03:55:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54478 "EHLO
+        id S229485AbiKZJXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 04:23:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiKZIz5 (ORCPT
+        with ESMTP id S229459AbiKZJXo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 03:55:57 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FCB1F62C;
-        Sat, 26 Nov 2022 00:55:57 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id r18so5662041pgr.12;
-        Sat, 26 Nov 2022 00:55:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mjCyoWb61wdL81qcmSTAoCdIWg/CnPBXU24aGBaxwOM=;
-        b=GKxrnlQLxkL9Zl+l/xPdpODXepbcFe04+9KhbZqPCrUdhirdjzECqRG7Bho21ovFaz
-         I3YdMsdsZ0fbxpGtE1dKZEo6AjHoQ7zitma0vg5XFFnDExCg46EmBf0bRbi3EL8NMZ0V
-         xXCMos5IWLsaEHb0C4fGPnJBSE1smSkBJSFZwclaL6iMbo4nxn+i1Q56kXkPAJ27iH0I
-         YJ0uzsFlP+jOpDIbuiYNAhozku4OuzTGBZXerfPyPFesLfuaQecUDwGpyyZ/cuIKPyMd
-         sfxV78V5uXlyjsd7gBEwWgODn6zHnUHDZemDrk+QU3FdTE4u6jlE6f2YELumG+BvZJET
-         yhaw==
+        Sat, 26 Nov 2022 04:23:44 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09EC2275C8
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 01:23:44 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id j20-20020a056e02219400b00300a22a7fe0so4450770ila.3
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 01:23:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mjCyoWb61wdL81qcmSTAoCdIWg/CnPBXU24aGBaxwOM=;
-        b=i6/KBuaEop75RO0eTEIacEnowsUqU35bUVsxuUriuaoVsqMDC1GQHODYYvEKVx7QAq
-         SQYYyZhUG/4DhVaA0USJwFXESI/+5pjlVGxygj2GWQEJf7HRptcRYQjrJqMU2ZCcfvB6
-         R4RyWTRwibDmD2Nnn7qlHgS+Ot7US3lJiKp6NqXwIOdoN9C+eqTagTXQ8B21CFp6UiRL
-         HbIr6eEtP+gjDWypt68JkR6qE7/8zXwHm5wWXRyYBjdduWP8cTW+Dts2rmaor1BlDCK3
-         ZIJbJa2udUuAELu8bUofoeU9ZXOnA4r4JYVLi8kJhdZiDGWYdKSWHwn8E69eXCzkfnXD
-         pXhQ==
-X-Gm-Message-State: ANoB5pmuIOEsQIN6s9n+F4z9PEHSsD7taB38f7tIdlQoog556Z4+eRLK
-        cyGczVOn6vrxkLr1DQsUisg=
-X-Google-Smtp-Source: AA0mqf46aOZen8tAGbErQ9j6rmqHuNqXcVcwUnho3E5t1ejjZqVcNErb8tzEMFzSlpfLszqPUVgv3A==
-X-Received: by 2002:a05:6a00:1d21:b0:574:a486:cb with SMTP id a33-20020a056a001d2100b00574a48600cbmr9339894pfx.11.1669452956727;
-        Sat, 26 Nov 2022 00:55:56 -0800 (PST)
-Received: from debian.me (subs02-180-214-232-11.three.co.id. [180.214.232.11])
-        by smtp.gmail.com with ESMTPSA id l7-20020a170902f68700b0017f756563bcsm4892392plg.47.2022.11.26.00.55.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Nov 2022 00:55:56 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 7B41210436D; Sat, 26 Nov 2022 15:55:52 +0700 (WIB)
-Date:   Sat, 26 Nov 2022 15:55:51 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.0 000/313] 6.0.10-rc2 review
-Message-ID: <Y4HUl6gMvkDJxgA+@debian.me>
-References: <20221125075804.064161337@linuxfoundation.org>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=loPan65hC9LffYNEIOROZKXrTfmHiDsnKPAsVgMfppQ=;
+        b=sdE0m8v8FXt/76amiCzdzC0Tb0Sbh4aQ+ba7NheILWvACYneJZLYLAFxYKOtMMT5D1
+         P+lZNUMpaPHGdOWVvaZu5K1tuMe9VWKPmV5dK+Y0R6BKxcr27xvFMq8xpfIAWZt0afHu
+         akp1Nx6GMD02XEvh/nFDfZ87NgOS9E0C6r4/hiGxvDwx8AaVl9e/X/UmU3GkShmiS8XP
+         sp660z1juw8nZ/iceS898U1B2ZAJ68ZbgHg2SmBN/FJjwjn1F90YCCA85DAhn/r0nFRj
+         YDv1e9byfUu9wb0DeqSF9Pwa3B6hh8B16mE7tuw7F/szDEcXXXS0fMBt0gO6QH9O55MJ
+         woNg==
+X-Gm-Message-State: ANoB5pnO0+E9h6+J/Pn3zxJL3s5qCRtR21gRpx5e6FVMafnKP+eOgb/N
+        vMBdUWIvkpBOMnoBqvgKDe0hTYZHKca0MZUJ63Mp3eHdxmVd
+X-Google-Smtp-Source: AA0mqf5VoOWoeIXq6A6dHmdGVAjNlJCaqmbXRrbyE2T84QShFK7/cqFTt3LfyPd9LLOuOSEsZxqpkdWeRddxvjhoH1JLDfhbF1jP
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="1CcNYwqhgGfkxMEO"
-Content-Disposition: inline
-In-Reply-To: <20221125075804.064161337@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:cbab:0:b0:375:280e:59c8 with SMTP id
+ v11-20020a02cbab000000b00375280e59c8mr12808268jap.91.1669454623384; Sat, 26
+ Nov 2022 01:23:43 -0800 (PST)
+Date:   Sat, 26 Nov 2022 01:23:43 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cbade405ee5c318c@google.com>
+Subject: [syzbot] BUG: unable to handle kernel paging request in __detach_mounts
+From:   syzbot <syzbot+7bddaf6b35765f4a1bd3@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
---1CcNYwqhgGfkxMEO
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+syzbot found the following issue on:
 
-On Fri, Nov 25, 2022 at 08:58:38AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.10 release.
-> There are 313 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+HEAD commit:    6d464646530f Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=13016e75880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=23eec5c79c22aaf8
+dashboard link: https://syzkaller.appspot.com/bug?extid=7bddaf6b35765f4a1bd3
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=123594e3880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=164dd7e5880000
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.2.0).
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/f22d29413625/disk-6d464646.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/389f0a5f1a4a/vmlinux-6d464646.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/48ddb02d82da/Image-6d464646.gz.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/ff775172773d/mount_0.gz
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+7bddaf6b35765f4a1bd3@syzkaller.appspotmail.com
 
---=20
-An old man doll... just what I always wanted! - Clara
+Unable to handle kernel paging request at virtual address 000fbcb9763f43bd
+Mem abort info:
+  ESR = 0x0000000096000004
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x04: level 0 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000004
+  CM = 0, WnR = 0
+[000fbcb9763f43bd] address between user and kernel address ranges
+Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 0 PID: 3084 Comm: syz-executor274 Not tainted 6.1.0-rc6-syzkaller-32662-g6d464646530f #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : lookup_mountpoint fs/namespace.c:768 [inline]
+pc : __detach_mounts+0xcc/0x3c4 fs/namespace.c:1741
+lr : lookup_mountpoint fs/namespace.c:767 [inline]
+lr : __detach_mounts+0xe4/0x3c4 fs/namespace.c:1741
+sp : ffff80000ffbbcc0
+x29: ffff80000ffbbcc0 x28: ffff0000c63e8000 x27: 0000000000000000
+x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000001
+x23: ffff80000c0f4540 x22: ffff0000c0555618 x21: 4a0fbcb9763f43ad
+x20: ffff8000085d7f60 x19: ffff80000d300700 x18: 00000000000000c0
+x17: ffff80000dda8198 x16: ffff80000dbe6158 x15: ffff0000c63e8000
+x14: ffff80000dda8198 x13: ffff80000dbe6158 x12: ffff0000c63e8000
+x11: ff80800008607f5c x10: 0000000000000000 x9 : ffff800008607f5c
+x8 : ffff0000c63e8000 x7 : ffff8000085d7f60 x6 : 0000000000000000
+x5 : 0000000000000020 x4 : ffff80000ffbbaa0 x3 : 0000000000000000
+x2 : ffff8000081a6214 x1 : ffff80000cbaab30 x0 : 0000000000000000
+Call trace:
+ lookup_mountpoint fs/namespace.c:767 [inline]
+ __detach_mounts+0xcc/0x3c4 fs/namespace.c:1741
+ detach_mounts fs/mount.h:116 [inline]
+ vfs_rmdir+0x25c/0x264 fs/namei.c:4127
+ do_rmdir+0x164/0x2a4 fs/namei.c:4181
+ __do_sys_unlinkat fs/namei.c:4361 [inline]
+ __se_sys_unlinkat fs/namei.c:4355 [inline]
+ __arm64_sys_unlinkat+0x90/0xa8 fs/namei.c:4355
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+Code: 0b080128 8a0b0108 f8687955 b4000115 (f9400aa8) 
+---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	0b080128 	add	w8, w9, w8
+   4:	8a0b0108 	and	x8, x8, x11
+   8:	f8687955 	ldr	x21, [x10, x8, lsl #3]
+   c:	b4000115 	cbz	x21, 0x2c
+* 10:	f9400aa8 	ldr	x8, [x21, #16] <-- trapping instruction
 
---1CcNYwqhgGfkxMEO
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY4HUiwAKCRD2uYlJVVFO
-o6ybAP9NqLaB6L+lF2RF9TI+GtnoTjgX2+5JnN/BjIgquv4TbgD/UsPqydFI5nTo
-KP2Rnp0N4UkMCI2XWBSRcazJebcmnwk=
-=xTG3
------END PGP SIGNATURE-----
-
---1CcNYwqhgGfkxMEO--
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
