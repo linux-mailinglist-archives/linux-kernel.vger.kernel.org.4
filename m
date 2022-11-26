@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C5216398E4
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 00:11:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E18B06398E6
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 00:12:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbiKZXLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 18:11:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48514 "EHLO
+        id S229533AbiKZXMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 18:12:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiKZXLs (ORCPT
+        with ESMTP id S229521AbiKZXMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 18:11:48 -0500
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F39117A83;
-        Sat, 26 Nov 2022 15:11:47 -0800 (PST)
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 2AQNBOWW021164;
-        Sun, 27 Nov 2022 08:11:25 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 2AQNBOWW021164
+        Sat, 26 Nov 2022 18:12:05 -0500
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB5517A94;
+        Sat, 26 Nov 2022 15:12:03 -0800 (PST)
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 2AQNBjAj024382;
+        Sun, 27 Nov 2022 08:11:46 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 2AQNBjAj024382
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1669504285;
-        bh=ZXrddbrSlzc42mKp5xuTGaCpfLZncZ4RzMDXBMJwWvs=;
+        s=dec2015msa; t=1669504306;
+        bh=J1aAnXscrvWFK80n1DQJD2O6z7NQ6gh1y6G3uDAZyIk=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QTxigVNs64hacV6yM6sUdv6HbCLDlME6f5lUEwAwWTNS1VQPyYy4BSNrxCP9p0N5m
-         kYDDDmh1DLCg3wyrg8UdafdMVjEUmLFhZrDV2o62Z/i4tx1h0ZZBaY6Ac/TY1okyGu
-         woJ4+Hv8v/PShZbOJdF6shNq1rlOKljCxk6p9q/Cul14IEpY1VG1S+e93coVOttvMl
-         OG2JmT1KOiVIiSGF7k9Iy31HtqqQnSYgJqjaMosa8JICdsuTcVb9G2gXE2ruunR2gk
-         qWtdIxGN4XqpYEhV/r8sBRPT5XTRvIGj8m0eJ1K86e06cWEH5xCRVSZnot4q8AtOi5
-         PDoxi6ow43qKQ==
-X-Nifty-SrcIP: [209.85.160.49]
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-1432a5f6468so9061737fac.12;
-        Sat, 26 Nov 2022 15:11:25 -0800 (PST)
-X-Gm-Message-State: ANoB5pntuNN5rV7yapwY4B0774nXrDdbfy1tPfCodDYSQQO6NO7SaiVP
-        gG9uPa9UcxYUGCQcMEASoAN/nuY/CWCB6C0+FT0=
-X-Google-Smtp-Source: AA0mqf7jOkCHJxOYdfbDjcYjv1QUtwzXCXXJBSNM3ouGB1lZLBuc56KAP2BkZdHl8a2jZ93t3Vb78oZBvjrAaxx1RSU=
-X-Received: by 2002:a05:6870:ea8e:b0:13b:a31f:45fd with SMTP id
- s14-20020a056870ea8e00b0013ba31f45fdmr27866584oap.194.1669504283965; Sat, 26
- Nov 2022 15:11:23 -0800 (PST)
+        b=eciRdrErQqvG+mOZQ5No8Zebq30kqIzILQsWSJ44uh5rl+OzyS9my2tSMzhVZY2Xt
+         SnNqYdmNtYfgEH1QCmt6xRJ4DQDukeg/PzCqoapW0vXL6wzjoE6eLhItiPpuw6Seyg
+         CSfUdCrZOEnyWkpj7BflGhy/xSq8ZrywYDagSHYE0i/20WaNt3g4VgJEmFCwOtGxPC
+         8SNXRtIF9cZcrDfAK05eP/O0B958vuzMQebgufc0cyjvXGLYsDmQv2482dQFRspjUa
+         B58zIMNOn3zv/Fy7wFHPVjIsWLfgjVboufxov38D/nt4uyq8TUgrB/zXNcQkNUQmKk
+         EGBvKNz9YjSCg==
+X-Nifty-SrcIP: [209.85.160.44]
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-14286d5ebc3so9103430fac.3;
+        Sat, 26 Nov 2022 15:11:46 -0800 (PST)
+X-Gm-Message-State: ANoB5plE1K1jTrDjHS9lR8puucjUZy6cEtN9438lvMHxawNZ0NYu05HI
+        H2BI0oyvK93lYVyGORLRBEgbUKum6gbyye0pcLo=
+X-Google-Smtp-Source: AA0mqf6Bgxuv5S0JItTGlteY7DsOjjGjEFt8EwOQxaE+G9SXjFUUCKxQWVrWluwTZ+5fWNU6oBgVPOwvN8q4VGb4YAQ=
+X-Received: by 2002:a05:6870:3b06:b0:13b:5d72:d2c6 with SMTP id
+ gh6-20020a0568703b0600b0013b5d72d2c6mr13777762oab.287.1669504305063; Sat, 26
+ Nov 2022 15:11:45 -0800 (PST)
 MIME-Version: 1.0
-References: <5b59fdb7db34f5292b1d138939c6b70b2b2039dd.1666703850.git.jtoppins@redhat.com>
-In-Reply-To: <5b59fdb7db34f5292b1d138939c6b70b2b2039dd.1666703850.git.jtoppins@redhat.com>
+References: <20221125101249.24931-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20221125101249.24931-1-andriy.shevchenko@linux.intel.com>
 From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 27 Nov 2022 08:10:47 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATPZkMCabD5aGNamp-gH3aZvFPr2_Yq=N=rM_ht2i3p6g@mail.gmail.com>
-Message-ID: <CAK7LNATPZkMCabD5aGNamp-gH3aZvFPr2_Yq=N=rM_ht2i3p6g@mail.gmail.com>
-Subject: Re: [PATCH next] kbuild: add ability to make source rpm buildable
- using koji
-To:     Jonathan Toppins <jtoppins@redhat.com>
-Cc:     linux-kbuild@vger.kernel.org, dzickus@redhat.com, kheib@redhat.com,
-        jtornosm@redhat.com, ihuguet@redhat.com,
-        Ivan Vecera <ivecera@redhat.com>,
-        Michal Marek <michal.lkml@markovi.net>,
+Date:   Sun, 27 Nov 2022 08:11:09 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAThgfr2p5G9eNViw48ha1+505xNAOeadiVp1_gqq9CABg@mail.gmail.com>
+Message-ID: <CAK7LNAThgfr2p5G9eNViw48ha1+505xNAOeadiVp1_gqq9CABg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] modpost: Mark uuid_le type to be suitable only for MEI
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org
+        Nicolas Schier <nicolas@fjasle.eu>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
@@ -64,82 +61,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 10:17 PM Jonathan Toppins <jtoppins@redhat.com> wrote:
+On Fri, Nov 25, 2022 at 7:12 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> From: Ivan Vecera <ivecera@redhat.com>
+> The uuid_le type is used only in MEI ABI, do not advertise it for others.
+> While at it, comment out that UUID types are not to be used in a new code.
 >
-> Changes:
-> - added new target 'srcrpm-pkg' to generate source rpm
-> - added required build tools to spec file
-> - removed locally compiled host tools to force their re-compile
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
 >
-> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
-> Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
-
 
 Applied to linux-kbuild.
 Thanks.
 
-> ---
->  scripts/Makefile.package | 10 ++++++++++
->  scripts/package/mkspec   |  7 +++++++
->  2 files changed, 17 insertions(+)
+
+
+> If you confused by acrn user of the uuid_le type, the patch to fix that
+> is pending for v6.2 as well 1dbb4f0235a4 ("virt: acrn: Mark the uuid
+> field as unused"). Nevertheless this patch doesn't break the things and
+> hence can go independently to the respective tree.
 >
-> diff --git a/scripts/Makefile.package b/scripts/Makefile.package
-> index 8bbcced67c22..e0830a870394 100644
-> --- a/scripts/Makefile.package
-> +++ b/scripts/Makefile.package
-> @@ -62,6 +62,16 @@ rpm-pkg:
->         +rpmbuild $(RPMOPTS) --target $(UTS_MACHINE)-linux -ta $(KERNELPATH).tar.gz \
->         --define='_smp_mflags %{nil}'
+>  scripts/mod/file2alias.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
 >
-> +# srcrpm-pkg
-> +# ---------------------------------------------------------------------------
-> +PHONY += srcrpm-pkg
-> +srcrpm-pkg:
-> +       $(MAKE) clean
-> +       $(CONFIG_SHELL) $(MKSPEC) >$(objtree)/kernel.spec
-> +       $(call cmd,src_tar,$(KERNELPATH),kernel.spec)
-> +       +rpmbuild $(RPMOPTS) --target $(UTS_MACHINE) -ts $(KERNELPATH).tar.gz \
-> +       --define='_smp_mflags %{nil}' --define='_srcrpmdir $(srctree)'
+> diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
+> index 7df23905fdf1..91c2e7ba5e52 100644
+> --- a/scripts/mod/file2alias.c
+> +++ b/scripts/mod/file2alias.c
+> @@ -34,19 +34,23 @@ typedef Elf64_Addr  kernel_ulong_t;
+>  typedef uint32_t       __u32;
+>  typedef uint16_t       __u16;
+>  typedef unsigned char  __u8;
 > +
->  # binrpm-pkg
->  # ---------------------------------------------------------------------------
->  PHONY += binrpm-pkg
-> diff --git a/scripts/package/mkspec b/scripts/package/mkspec
-> index 70392fd2fd29..dda00a948a01 100755
-> --- a/scripts/package/mkspec
-> +++ b/scripts/package/mkspec
-> @@ -33,6 +33,8 @@ EXCLUDES="$RCS_TAR_IGNORE --exclude=*vmlinux* --exclude=*.mod \
->  --exclude=*.o --exclude=*.ko --exclude=*.cmd --exclude=Documentation \
->  --exclude=.config.old --exclude=.missing-syscalls.d --exclude=*.s"
+> +/* UUID types for backward compatibility, don't use in new code */
+>  typedef struct {
+>         __u8 b[16];
+>  } guid_t;
 >
-> +test -n "$LOCALVERSION" && MAKE="$MAKE LOCALVERSION=$LOCALVERSION"
+> -/* backwards compatibility, don't use in new code */
+> -typedef struct {
+> -       __u8 b[16];
+> -} uuid_le;
+>  typedef struct {
+>         __u8 b[16];
+>  } uuid_t;
 > +
->  # We can label the here-doc lines for conditional output to the spec file
->  #
->  # Labels:
-> @@ -49,6 +51,9 @@ sed -e '/^DEL/d' -e 's/^\t*//' <<EOF
->         URL: https://www.kernel.org
->  $S     Source: kernel-$__KERNELRELEASE.tar.gz
->         Provides: $PROVIDES
-> +$S     BuildRequires: bc binutils bison dwarves elfutils-libelf-devel flex
-> +$S     BuildRequires: gcc make openssl openssl-devel perl python3 rsync
+>  #define        UUID_STRING_LEN         36
+>
+> +/* MEI UUID type, don't use anywhere else */
+> +typedef struct {
+> +       __u8 b[16];
+> +} uuid_le;
 > +
->         # $UTS_MACHINE as a fallback of _arch in case
->         # /usr/lib/rpm/platform/*/macros was not included.
->         %define _arch %{?_arch:$UTS_MACHINE}
-> @@ -80,6 +85,8 @@ $S$M  against the $__KERNELRELEASE kernel package.
->  $S$M
->  $S     %prep
->  $S     %setup -q
-> +$S     rm -f scripts/basic/fixdep scripts/kconfig/conf
-> +$S     rm -f tools/objtool/{fixdep,objtool}
->  $S
->  $S     %build
->  $S     $MAKE %{?_smp_mflags} KBUILD_BUILD_VERSION=%{release}
+>  /* Big exception to the "don't include kernel headers into userspace, which
+>   * even potentially has different endianness and word sizes, since
+>   * we handle those differences explicitly below */
 > --
-> 2.31.1
+> 2.35.1
 >
 
 
