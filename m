@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA946639865
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 23:18:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 316B3639867
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 23:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiKZWSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 17:18:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57820 "EHLO
+        id S229610AbiKZWTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 17:19:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiKZWST (ORCPT
+        with ESMTP id S229453AbiKZWTB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 17:18:19 -0500
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D0917E28
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 14:18:17 -0800 (PST)
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 2AQMHlpm015109
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 07:17:48 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 2AQMHlpm015109
+        Sat, 26 Nov 2022 17:19:01 -0500
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC2718E1B
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 14:19:00 -0800 (PST)
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 2AQMIlnY014115
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 07:18:48 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 2AQMIlnY014115
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1669501068;
-        bh=uMYjlILPqJ8SrLVYqEu74wUNH0+GPpNjC8d5G2tGxQY=;
+        s=dec2015msa; t=1669501128;
+        bh=eCoWv21FlmpHLwc97EGzHeLTUW/a+GA8t8Cm/ZadSPA=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=IDbDsci9+nVR6gmDtSDJ27gLlrD3FoCIDzRzjzVasT2OMAbycfkQIri8cOe3Pwjto
-         iaQUiV6xz/cGk16/IMGJDCRZF7GHQdUReg8IjN9vpgLu5kUMMDsXUTHD/DdldJ7p4D
-         c+DBjOoop1l42hsbDTwP33vav+0Z7BFtzrLTi5j4w6Zr/bKH5HesccasItRo0wBYCr
-         4EofMiJoOZVbhnhYQrAIAAcBi0MS4mZMD3ialo547Z5idYxrJ0db9fbt5jMcqwDPEe
-         Vymmw2dihAIS0nwZCMtzBV2df5IVzmpJBndTJphCSASqjoaWKAW+n3xwt3NvcnGe64
-         EiXMxQCbrZxQw==
-X-Nifty-SrcIP: [209.85.167.178]
-Received: by mail-oi1-f178.google.com with SMTP id m204so7922325oib.6
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 14:17:47 -0800 (PST)
-X-Gm-Message-State: ANoB5pkUK2S78j7gzmzyGmmN8a4TIaqPl0k4RoI2uhxSqhNZm4/fE4+t
-        INrKNImZaCVhQ1F3OVb50v1r1GzXojwaxq7RybM=
-X-Google-Smtp-Source: AA0mqf7DrCgQxqlmM/2+u7mcCqohRJuQjWmra2YCG3G/NdsvlzOWmND2/oMnaB4DLAstZR1kdTqNdgKSkiGc+gfTJGg=
-X-Received: by 2002:aca:1c06:0:b0:354:28ae:23b3 with SMTP id
- c6-20020aca1c06000000b0035428ae23b3mr13083821oic.287.1669501066859; Sat, 26
- Nov 2022 14:17:46 -0800 (PST)
+        b=H1NXzImV6t9rh6H+zukX1U9G5gNCaZqJwJpSQrTN/iJQJGvTgGAaKp/Wkfkpp9Ncs
+         uHVQmUvw8db/MGbc7ZojBF94+nFJDgviM9vfGJfcYZbOOU9eXwj2MmHBi+Od8yfJHz
+         zcKMQ0y9Xhyn0bVuZjhYZYWFt6IVP3CNQJ11NI3+5NkZhBUXT9+C7HFJNneMcY0f2+
+         4EciOMdBJzjnotVxXvRaSEWAbX6xs6Xyx+OWEIsnf3KFlpFqmq3xMMXlyXZWTSvKSV
+         8aifW98sNvQwZeDuTfNvA09Wo4w0sf5ux5GsM4Kv3Uk/wTAebZbylg1/bbE/miLEaO
+         wyuDCy6Ec3S6Q==
+X-Nifty-SrcIP: [209.85.167.177]
+Received: by mail-oi1-f177.google.com with SMTP id r76so7905256oie.13
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 14:18:48 -0800 (PST)
+X-Gm-Message-State: ANoB5pmuylHV+CUSlvwu6/qH0qQVNPwkn3xXFlhfPcQHtZzQDVN7SgW2
+        I7w9UDJvX1rep1PtlptozXKDKkJVE4ouCZEFhJs=
+X-Google-Smtp-Source: AA0mqf5n1/RIeUfwDyZLminfvFm1O0saHRY4Zh7CYxiBKtXxUzb8vn1K4cCYK1laaA3SYsvpI3YO38U22j/k9BMNlRU=
+X-Received: by 2002:a05:6808:3009:b0:354:94a6:a721 with SMTP id
+ ay9-20020a056808300900b0035494a6a721mr12844494oib.194.1669501127494; Sat, 26
+ Nov 2022 14:18:47 -0800 (PST)
 MIME-Version: 1.0
-References: <20221126051002.123199-1-linux@weissschuh.net> <20221126051002.123199-2-linux@weissschuh.net>
-In-Reply-To: <20221126051002.123199-2-linux@weissschuh.net>
+References: <20221126051002.123199-1-linux@weissschuh.net> <20221126051002.123199-3-linux@weissschuh.net>
+In-Reply-To: <20221126051002.123199-3-linux@weissschuh.net>
 From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 27 Nov 2022 07:17:10 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATPW2QE8ZnE56hC_ayWeG9s8nBkArae9a1d9Sqw=Xy_gg@mail.gmail.com>
-Message-ID: <CAK7LNATPW2QE8ZnE56hC_ayWeG9s8nBkArae9a1d9Sqw=Xy_gg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] powerpc/book3e: remove #include <generated/utsrelease.h>
+Date:   Sun, 27 Nov 2022 07:18:11 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAREVSp_5d1SaFOLyBHJJrJ6zE_qxSYWAFFnfoz3d0w3-Q@mail.gmail.com>
+Message-ID: <CAK7LNAREVSp_5d1SaFOLyBHJJrJ6zE_qxSYWAFFnfoz3d0w3-Q@mail.gmail.com>
+Subject: Re: [PATCH 3/3] init/version.c: remove #include <generated/utsversion.h>
 To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         Russ Weight <russell.h.weight@intel.com>,
@@ -68,46 +68,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Sat, Nov 26, 2022 at 2:10 PM Thomas Wei=C3=9Fschuh <linux@weissschuh.net=
 > wrote:
 >
-> Commit 7ad4bd887d27 ("powerpc/book3e: get rid of #include <generated/comp=
-ile.h>")
-> removed the usage of the define UTS_VERSION but forgot to drop the
-> include.
->
-> Fixes: 7ad4bd887d27 ("powerpc/book3e: get rid of #include <generated/comp=
-ile.h>")
-> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
-> ---
+> Commit 2df8220cc511 ("kbuild: build init/built-in.a just once") moved
+> the usage of the define UTS_VERSION to the file version-timestamp.c.
 
+With s/UTS_VERSION/UTS_RELEASE/,
 
-Assuming you will fix the commit description,
 
 Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
 
-
-
-
->  arch/powerpc/mm/nohash/kaslr_booke.c | 1 -
+>
+> version-timestamp.c in turn is included from version.c but already
+> includes utsversion.h itself properly.
+>
+> The unneeded include of utsversion.h from version.c can be dropped.
+>
+> Fixes: 2df8220cc511 ("kbuild: build init/built-in.a just once")
+> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+> ---
+>  init/version.c | 1 -
 >  1 file changed, 1 deletion(-)
 >
-> diff --git a/arch/powerpc/mm/nohash/kaslr_booke.c b/arch/powerpc/mm/nohas=
-h/kaslr_booke.c
-> index 0d04f9d5da8d..2fb3edafe9ab 100644
-> --- a/arch/powerpc/mm/nohash/kaslr_booke.c
-> +++ b/arch/powerpc/mm/nohash/kaslr_booke.c
-> @@ -19,7 +19,6 @@
->  #include <asm/cacheflush.h>
->  #include <asm/kdump.h>
->  #include <mm/mmu_decl.h>
+> diff --git a/init/version.c b/init/version.c
+> index 01d4ab05f0ba..f117921811b4 100644
+> --- a/init/version.c
+> +++ b/init/version.c
+> @@ -15,7 +15,6 @@
+>  #include <linux/printk.h>
+>  #include <linux/uts.h>
+>  #include <linux/utsname.h>
 > -#include <generated/utsrelease.h>
+>  #include <linux/proc_ns.h>
 >
->  struct regions {
->         unsigned long pa_start;
+>  static int __init early_hostname(char *arg)
 > --
 > 2.38.1
 >
 
 
---
+--=20
 Best Regards
-
 Masahiro Yamada
