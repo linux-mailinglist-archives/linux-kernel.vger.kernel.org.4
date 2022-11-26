@@ -2,75 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 087166395AA
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 12:14:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B31D6395B2
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 12:18:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbiKZLOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 06:14:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50540 "EHLO
+        id S229480AbiKZLSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 06:18:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiKZLNf (ORCPT
+        with ESMTP id S229582AbiKZLRp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 06:13:35 -0500
-Received: from smtp.smtpout.orange.fr (smtp-29.smtpout.orange.fr [80.12.242.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2EAE1AD98
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 03:13:32 -0800 (PST)
-Received: from pop-os.home ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id yt7gosMV5gfI9yt7hoiV8F; Sat, 26 Nov 2022 12:13:30 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 26 Nov 2022 12:13:30 +0100
-X-ME-IP: 86.243.100.34
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Hannes Reinecke <hare@suse.de>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH] scsi: libfc: Include the correct header
-Date:   Sat, 26 Nov 2022 12:13:27 +0100
-Message-Id: <960f34418358f0c35e645aa2cf7e0ec7fe6b60b9.1669461197.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sat, 26 Nov 2022 06:17:45 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298B3B4BB
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 03:17:42 -0800 (PST)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NK8MN6Qy7zmW99;
+        Sat, 26 Nov 2022 19:17:04 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 26 Nov 2022 19:17:40 +0800
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 26 Nov 2022 19:17:39 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tejun Heo <tj@kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>
+Subject: [PATCH v2] kernfs: remove an unused if statement in kernfs_path_from_node_locked()
+Date:   Sat, 26 Nov 2022 19:16:34 +0800
+Message-ID: <20221126111634.1994-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.37.3.windows.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This file does not use rcu, so there is no point in including
-<linux/rculist.h>.
+It makes no sense to call kernfs_path_from_node_locked() with NULL buf,
+and no one is doing that right now.
 
-The dependency has been removed in commit fa519f701d27 ("scsi: libfc: fixup
-'sleeping function called from invalid context'")
-It turned a list_for_each_entry_rcu() into a list_for_each_entry().
-
-So just #include <linux/list.h> now.
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Suggested-by: Tejun Heo <tj@kernel.org>
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 ---
- drivers/scsi/libfc/fc_disc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/kernfs/dir.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/drivers/scsi/libfc/fc_disc.c b/drivers/scsi/libfc/fc_disc.c
-index 0f32ded246d0..384f48ff64d7 100644
---- a/drivers/scsi/libfc/fc_disc.c
-+++ b/drivers/scsi/libfc/fc_disc.c
-@@ -24,7 +24,7 @@
- #include <linux/slab.h>
- #include <linux/err.h>
- #include <linux/export.h>
--#include <linux/rculist.h>
-+#include <linux/list.h>
+diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
+index f33b3baad07cb36..8a11bf189970274 100644
+--- a/fs/kernfs/dir.c
++++ b/fs/kernfs/dir.c
+@@ -149,9 +149,6 @@ static int kernfs_path_from_node_locked(struct kernfs_node *kn_to,
+ 	if (kn_from == kn_to)
+ 		return strlcpy(buf, "/", buflen);
  
- #include <asm/unaligned.h>
- 
+-	if (!buf)
+-		return -EINVAL;
+-
+ 	common = kernfs_common_ancestor(kn_from, kn_to);
+ 	if (WARN_ON(!common))
+ 		return -EINVAL;
 -- 
-2.34.1
+2.25.1
 
