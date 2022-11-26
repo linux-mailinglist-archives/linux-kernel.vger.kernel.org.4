@@ -2,111 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69CFF6393BE
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 04:29:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5975863939E
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 04:15:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbiKZD3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 22:29:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37082 "EHLO
+        id S230168AbiKZDPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 22:15:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbiKZD2u (ORCPT
+        with ESMTP id S229708AbiKZDPB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 22:28:50 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5DCA1B1C0
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 19:28:48 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id q1so5303738pgl.11
-        for <linux-kernel@vger.kernel.org>; Fri, 25 Nov 2022 19:28:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=j5Q0CkdkqL9ImdAVIDGKbxO6HhGOHH4+dcxvWGaloTI=;
-        b=vQcrIjz+iAM4/+6KK9dOteBewZBvvuRjY78MAP7M2DIEwDl8oHKd3zWvIBxPymedBf
-         w5Rl+FKB5mm8EamXRDV2s8ZYZC+OjgCQw1bcgYORXysDXExH5CA7rLzA/KYSrSm1Ki66
-         4ckYtkPBNi9EFEaqe2ZXhZpQ5igywGjXmEqbiEfDl9f9b92Tj8X8uNIC99qorP1ATkTH
-         o3j9q5Nl6x0hT7VrvpvS/cc8j6q1tTP3NQWvdftuplhsVIwaKyBSymofiBuEpuqtp3KT
-         c4HcAoi1GGw845MdrJMfDChzoMSR0m3RJMQC5vrR4sE/NwzJNDaGvNfDHE+iM6vBibim
-         EprQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j5Q0CkdkqL9ImdAVIDGKbxO6HhGOHH4+dcxvWGaloTI=;
-        b=Rl26ailPul+HC6JMkrNWmlr7jLaiypZCgZ4xtTg+3d6Rq6a7eUmxR/L1xXX4PlMi78
-         QVa9R3d3a4jPE2MwojBDi+p/M8+ZJgTv69aLmLJvKdlPKYB6KevtzLek1iXiDCw5AjTD
-         2lP8/4kqEfF7aUercRgTILU2CHPKgwH5KidqCsBcAiK1XpOiaqurgKRaWjvhhKb6wlsj
-         8wnWLvHW9locEvv9FJ9mQYNtZudRMeb7t90jiVXJHJR8Jvls9oAQwbiXyEqZyV1isqsm
-         ei/sfpzYb5tvwe3gYcAk3dPmVF+mhbfn7uX5KXObpFbUU7MWgw3LrauFksHMLXvyZ5Ji
-         Rfpg==
-X-Gm-Message-State: ANoB5plFq148kCNdEw4G5DPM51gF/mwl5o/gFkmaGXTvznkgiQJZckiU
-        +ekUtR9sGRzOW7SKLPKd+bXT8F6+eW1GAMhJkJVRqQ==
-X-Google-Smtp-Source: AA0mqf6YrmynoSeLWrq1OCN23+0Rw6OG8maifO+H3HCjpykKHdKuyYwAhZaS6xlcO7VtSexNJ9pGce/dN9tHv7AhpWA=
-X-Received: by 2002:a05:6a00:c5:b0:56b:a4f6:e030 with SMTP id
- e5-20020a056a0000c500b0056ba4f6e030mr23264033pfj.85.1669433328402; Fri, 25
- Nov 2022 19:28:48 -0800 (PST)
+        Fri, 25 Nov 2022 22:15:01 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E3755ABE;
+        Fri, 25 Nov 2022 19:15:00 -0800 (PST)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NJxfM0C6lzHw7Q;
+        Sat, 26 Nov 2022 11:14:19 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.70) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 26 Nov 2022 11:14:57 +0800
+From:   Wang Yufen <wangyufen@huawei.com>
+To:     <bvanassche@acm.org>, <jgg@ziepe.ca>, <leon@kernel.org>,
+        <dennis.dalessandro@cornelisnetworks.com>
+CC:     <linux-rdma@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <andriy.shevchenko@linux.intel.com>, <bart.vanassche@wdc.com>,
+        <easwar.hariharan@intel.com>, Wang Yufen <wangyufen@huawei.com>
+Subject: [PATCH v2 1/2] RDMA/hfi1: Fix error return code in parse_platform_config()
+Date:   Sat, 26 Nov 2022 11:35:03 +0800
+Message-ID: <1669433704-2254-1-git-send-email-wangyufen@huawei.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-References: <20221125070959.49027-1-zhangjiachen.jaycee@bytedance.com> <20221125165242.a33918e30cc9dc70750ed95f@linux-foundation.org>
-In-Reply-To: <20221125165242.a33918e30cc9dc70750ed95f@linux-foundation.org>
-From:   Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
-Date:   Sat, 26 Nov 2022 11:28:37 +0800
-Message-ID: <CAFQAk7ja-d-QvccAYHWAUR=P3Jf9Sh33wn=MSTfao-BE9q9Qjw@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH] filemap: Fix some misleading comments
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, xieyongji@bytedance.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.70]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 26, 2022 at 8:52 AM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Fri, 25 Nov 2022 15:09:59 +0800 Jiachen Zhang <zhangjiachen.jaycee@bytedance.com> wrote:
->
-> > The users of filemap_write_and_wait_range() and file_write_and_wait_range()
-> > interfaces should set the lend parameter to LLONG_MAX, rather than -1, to
-> > indicate they want to writeback to the very end-of-file, as several kernel
-> > code paths are checking the 'wbc->range_end == LLONG_MAX' conditions.
->
-> Unclear.  LLONG_MAX differs from -1 on 64-bit and differs differently
-> on 32-bit.
->
+In the previous while loop, "ret" may be assigned zero, so the error
+return code may be incorrectly set to 0 instead of -EINVAL.
+Add bail_with_einval goto label and covert all "goto bail;" to "goto
+bail_with_einval:" where it's appropriate. Add dropping some duplicative
+"ret = -EINVAL;" lines, as Andy suggessted.
 
-I think whether using -1 or LLONG_MAX causes no difference if there is
-no other code comparing  'wbc->range_end == LLONG_MAX'.  There is no
-case in the kernel code using -1 for now, but maybe we'd better fix
-the misleading comments to prevent future misuse.
+Fixes: 97167e813415 ("staging/rdma/hfi1: Tune for unknown channel if configuration file is absent")
+Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+---
+ drivers/infiniband/hw/hfi1/firmware.c | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
 
-> > --- a/mm/filemap.c
-> > +++ b/mm/filemap.c
-> > @@ -661,7 +661,8 @@ EXPORT_SYMBOL_GPL(filemap_range_has_writeback);
-> >   * Write out and wait upon file offsets lstart->lend, inclusive.
-> >   *
-> >   * Note that @lend is inclusive (describes the last byte to be written) so
-> > - * that this function can be used to write to the very end-of-file (end = -1).
-> > + * that this function can be used to write to the very end-of-file (@lend =
-> > + * LLONG_MAX).
-> >   *
->
-> The write(2) manpage says "According to POSIX.1, if count is greater
-> than SSIZE_MAX, the result is implementation-defined; see NOTES for the
-> upper limit on Linux." And filemap_fdatawrite_wbc() enforces LONG_MAX,
-> which differs from LLONG_MAX on 32-bit.
->
-> I suspect more research is needed here.
+diff --git a/drivers/infiniband/hw/hfi1/firmware.c b/drivers/infiniband/hw/hfi1/firmware.c
+index 1d77514..44d8628 100644
+--- a/drivers/infiniband/hw/hfi1/firmware.c
++++ b/drivers/infiniband/hw/hfi1/firmware.c
+@@ -1730,7 +1730,7 @@ int parse_platform_config(struct hfi1_devdata *dd)
+ 	u32 *ptr = NULL;
+ 	u32 header1 = 0, header2 = 0, magic_num = 0, crc = 0, file_length = 0;
+ 	u32 record_idx = 0, table_type = 0, table_length_dwords = 0;
+-	int ret = -EINVAL; /* assume failure */
++	int ret;
+ 
+ 	/*
+ 	 * For integrated devices that did not fall back to the default file,
+@@ -1743,7 +1743,7 @@ int parse_platform_config(struct hfi1_devdata *dd)
+ 
+ 	if (!dd->platform_config.data) {
+ 		dd_dev_err(dd, "%s: Missing config file\n", __func__);
+-		goto bail;
++		goto bail_with_einval;
+ 	}
+ 	ptr = (u32 *)dd->platform_config.data;
+ 
+@@ -1751,7 +1751,7 @@ int parse_platform_config(struct hfi1_devdata *dd)
+ 	ptr++;
+ 	if (magic_num != PLATFORM_CONFIG_MAGIC_NUM) {
+ 		dd_dev_err(dd, "%s: Bad config file\n", __func__);
+-		goto bail;
++		goto bail_with_einval;
+ 	}
+ 
+ 	/* Field is file size in DWORDs */
+@@ -1774,7 +1774,7 @@ int parse_platform_config(struct hfi1_devdata *dd)
+ 	if (file_length > dd->platform_config.size) {
+ 		dd_dev_info(dd, "%s:File claims to be larger than read size\n",
+ 			    __func__);
+-		goto bail;
++		goto bail_with_einval;
+ 	} else if (file_length < dd->platform_config.size) {
+ 		dd_dev_info(dd,
+ 			    "%s:File claims to be smaller than read size, continuing\n",
+@@ -1794,7 +1794,7 @@ int parse_platform_config(struct hfi1_devdata *dd)
+ 			dd_dev_err(dd, "%s: Failed validation at offset %ld\n",
+ 				   __func__, (ptr - (u32 *)
+ 					      dd->platform_config.data));
+-			goto bail;
++			goto bail_with_einval;
+ 		}
+ 
+ 		record_idx = *ptr &
+@@ -1837,7 +1837,7 @@ int parse_platform_config(struct hfi1_devdata *dd)
+ 					   __func__, table_type,
+ 					   (ptr - (u32 *)
+ 					    dd->platform_config.data));
+-				goto bail; /* We don't trust this file now */
++				goto bail_with_einval; /* We don't trust this file now */
+ 			}
+ 			pcfgcache->config_tables[table_type].table = ptr;
+ 		} else {
+@@ -1856,7 +1856,7 @@ int parse_platform_config(struct hfi1_devdata *dd)
+ 					   __func__, table_type,
+ 					   (ptr -
+ 					    (u32 *)dd->platform_config.data));
+-				goto bail; /* We don't trust this file now */
++				goto bail_with_einval; /* We don't trust this file now */
+ 			}
+ 			pcfgcache->config_tables[table_type].table_metadata =
+ 									ptr;
+@@ -1873,8 +1873,7 @@ int parse_platform_config(struct hfi1_devdata *dd)
+ 			dd_dev_err(dd, "%s: Failed CRC check at offset %ld\n",
+ 				   __func__, (ptr -
+ 				   (u32 *)dd->platform_config.data));
+-			ret = -EINVAL;
+-			goto bail;
++			goto bail_with_einval;
+ 		}
+ 		/* Jump the CRC DWORD */
+ 		ptr++;
+@@ -1882,6 +1881,9 @@ int parse_platform_config(struct hfi1_devdata *dd)
+ 
+ 	pcfgcache->cache_valid = 1;
+ 	return 0;
++
++bail_with_einval:
++	ret = -EINVAL;
+ bail:
+ 	memset(pcfgcache, 0, sizeof(struct platform_config_cache));
+ 	return ret;
+-- 
+1.8.3.1
 
-The reason 'wbc.nr_to_write' might be set to LONG_MAX for
-filemap_fdatawrite_wbc() might be because 'nr_to_write' is defined as
-the 'long' type. Maybe it should be fine as 'lend' and 'range_end' are
-defined as type 'off_t'.
-
-Thanks,
-Jiachen
