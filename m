@@ -2,40 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D00056395F7
+	by mail.lfdr.de (Postfix) with ESMTP id 83CF66395F6
 	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 13:29:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiKZM3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 07:29:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34082 "EHLO
+        id S229610AbiKZM3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 07:29:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiKZM3P (ORCPT
+        with ESMTP id S229548AbiKZM3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 26 Nov 2022 07:29:15 -0500
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097BD1CB1F
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CD51CB20
         for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 04:29:13 -0800 (PST)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NK9xv51YBzmW0N;
-        Sat, 26 Nov 2022 20:28:35 +0800 (CST)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NK9xw0rXHzmW0m;
+        Sat, 26 Nov 2022 20:28:36 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.31; Sat, 26 Nov 2022 20:29:11 +0800
 Received: from thunder-town.china.huawei.com (10.174.178.55) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 26 Nov 2022 20:29:10 +0800
+ 15.1.2375.31; Sat, 26 Nov 2022 20:29:11 +0800
 From:   Zhen Lei <thunder.leizhen@huawei.com>
 To:     Russell King <linux@armlinux.org.uk>,
         Ard Biesheuvel <ardb@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>
 CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH v4 0/2] ARM: Make the dumped instructions are consistent with the disassembled ones
-Date:   Sat, 26 Nov 2022 20:21:35 +0800
-Message-ID: <20221126122137.2025-1-thunder.leizhen@huawei.com>
+Subject: [PATCH v4 1/2] ARM: Refactor dump_instr()
+Date:   Sat, 26 Nov 2022 20:21:36 +0800
+Message-ID: <20221126122137.2025-2-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.37.3.windows.1
+In-Reply-To: <20221126122137.2025-1-thunder.leizhen@huawei.com>
+References: <20221126122137.2025-1-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -51,29 +53,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v3 --> v4:
-1. The sparse warnings that are not involved in the modification are
-   not eliminated.
-2. Eliminate the sparse warnings involved in the modification when
-   refactor dump_instr(), no longer use a separate patch.
+1. Rename local variable 'val16' to 'tmp'. So that the processing
+   statements of thumb and arm can be aligned.
+2. Fix two sparse check warnings: (add __user for type conversion)
+   warning: incorrect type in initializer (different address spaces)
+      expected unsigned short [noderef] __user *register __p
+      got unsigned short [usertype] *
+3. Prepare for the next patch to avoid repeated judgment.
+   Before:
+   if (!user_mode(regs)) {
+           if (thumb)
+           else
+   } else {
+           if (thumb)
+           else
+   }
 
-v2 --> v3:
-1. Don't use '__force to' cleanup the sparse warnings
-2. Refactor dump_instr()
-3. Relace cpu_to_le{32|16}() with __mem_to_opcode_{arm|thumb16}()
+   After:
+   if (thumb) {
+           if (user_mode(regs))
+           else
+   } else {
+           if (user_mode(regs))
+           else
+   }
 
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+---
+ arch/arm/kernel/traps.c | 23 ++++++++++++-----------
+ 1 file changed, 12 insertions(+), 11 deletions(-)
 
-v1 --> v2:
-1. Cleanup sparse warnings.
-
-Zhen Lei (2):
-  ARM: Refactor dump_instr()
-  ARM: Make the dumped instructions are consistent with the disassembled
-    ones
-
- arch/arm/kernel/traps.c | 25 ++++++++++++++-----------
- 1 file changed, 14 insertions(+), 11 deletions(-)
-
+diff --git a/arch/arm/kernel/traps.c b/arch/arm/kernel/traps.c
+index 20b2db6dcd1ced7..a92e0763739584e 100644
+--- a/arch/arm/kernel/traps.c
++++ b/arch/arm/kernel/traps.c
+@@ -178,19 +178,20 @@ static void dump_instr(const char *lvl, struct pt_regs *regs)
+ 	for (i = -4; i < 1 + !!thumb; i++) {
+ 		unsigned int val, bad;
+ 
+-		if (!user_mode(regs)) {
+-			if (thumb) {
+-				u16 val16;
+-				bad = get_kernel_nofault(val16, &((u16 *)addr)[i]);
+-				val = val16;
+-			} else {
+-				bad = get_kernel_nofault(val, &((u32 *)addr)[i]);
+-			}
++		if (thumb) {
++			u16 tmp;
++
++			if (user_mode(regs))
++				bad = get_user(tmp, &((u16 __user *)addr)[i]);
++			else
++				bad = get_kernel_nofault(tmp, &((u16 *)addr)[i]);
++
++			val = tmp;
+ 		} else {
+-			if (thumb)
+-				bad = get_user(val, &((u16 *)addr)[i]);
++			if (user_mode(regs))
++				bad = get_user(val, &((u32 __user *)addr)[i]);
+ 			else
+-				bad = get_user(val, &((u32 *)addr)[i]);
++				bad = get_kernel_nofault(val, &((u32 *)addr)[i]);
+ 		}
+ 
+ 		if (!bad)
 -- 
 2.25.1
 
