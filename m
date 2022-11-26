@@ -2,59 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BBF86395FD
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 13:47:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 011A26395FF
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 13:53:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbiKZMrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 07:47:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39994 "EHLO
+        id S229610AbiKZMxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 07:53:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiKZMrN (ORCPT
+        with ESMTP id S229450AbiKZMxQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 07:47:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C8A1E709;
-        Sat, 26 Nov 2022 04:47:12 -0800 (PST)
+        Sat, 26 Nov 2022 07:53:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451FE1A239
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 04:53:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EFBF9B80938;
-        Sat, 26 Nov 2022 12:47:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 808FDC433C1;
-        Sat, 26 Nov 2022 12:47:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA7C76069A
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 12:53:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22832C433C1;
+        Sat, 26 Nov 2022 12:53:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669466829;
-        bh=aUnwiZ0T+qkgKvPuYy5lFJKnKKsQUpGXGZBorwl31mw=;
+        s=k20201202; t=1669467195;
+        bh=0tj611paSClr2KhG41wBuDzLa0tN0B/v8K0CuhNujKo=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=b8ybiJlldDbKV7g6AiBhdysECUXbKFoXN+gntG2T9HyJOgAwS4Xexm7tUDGaZp6Jl
-         Y0dFgcnhYiKBmCeYgjH84kL7laxTaMwDFB2a+iXxrtf39pS7G+/OwGyB6kJfta0gBz
-         VqC90sfnekDzoqrvncY0Fl8Gpl/a/PkTV7Y2wQdwuE+K/p2uCtJBuvGSoGVlk2N63u
-         Q+rW5gFXaeVSPfRXZtasSB3i7eIshx92gWpbUosaFj6q2hg9xlGGVNfx+GHsSZsu/d
-         PV8oA5DP73mv2pTtGC2JSmtGDbjGEbuag0pti9Q3c7GKuRvSRmOZdvkPBGAVQw7aoV
-         M2hk9wWLWo4Ng==
+        b=AX5dqXjgQjTm/Cq3mUq9RGHw44m+sX/k5dh4cZGzc5IcF3srchzOQTW5W0MWY2pCw
+         Ys54M/KyQHFKg8xpcjZDd00sAXYig75AtXsvlJlhEasuloImWB8kjZOv6tzAfnu4rN
+         1H7HKR22Wm835xctrazxVtCMmcqRd6PaOn26cK1JrrnWyaGeOkslMwzMxXURiAYwdl
+         UGdaW7PVqv31vCiBSJ6/u8HtJ/wAEJTssIxELL+6+gPVtuvAftLzQ3EaMXdcH1QRg/
+         0YVCR/OkvPkUDmcmPKWywbixqxutm1Kg3au/SaE06+LpCs6vTpEiak9K5dNpsdI6mp
+         xZZsE6eMSylSg==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.95)
         (envelope-from <maz@kernel.org>)
-        id 1oyuaJ-008iJ9-K7;
-        Sat, 26 Nov 2022 12:47:07 +0000
-Date:   Sat, 26 Nov 2022 12:46:59 +0000
-Message-ID: <87wn7hublo.wl-maz@kernel.org>
+        id 1oyugC-008iLS-QW;
+        Sat, 26 Nov 2022 12:53:12 +0000
+Date:   Sat, 26 Nov 2022 12:53:04 +0000
+Message-ID: <87v8n1ubbj.wl-maz@kernel.org>
 From:   Marc Zyngier <maz@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH 03/30] irqchip: Use kstrtobool() instead of strtobool()
-In-Reply-To: <755c4083122071bb27aa8ed5d98156a07bb63a39.1667336095.git.christophe.jaillet@wanadoo.fr>
-References: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
-        <755c4083122071bb27aa8ed5d98156a07bb63a39.1667336095.git.christophe.jaillet@wanadoo.fr>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] irqchip: LoongArch: Select GENERIC_IRQ_EFFECTIVE_AFF_MASK if SMP
+In-Reply-To: <1666841949-5244-1-git-send-email-yangtiezhu@loongson.cn>
+References: <1666841949-5244-1-git-send-email-yangtiezhu@loongson.cn>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
  (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
 X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: christophe.jaillet@wanadoo.fr, tglx@linutronix.de, linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+X-SA-Exim-Rcpt-To: yangtiezhu@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -66,35 +64,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 01 Nov 2022 21:13:51 +0000,
-Christophe JAILLET <christophe.jaillet@wanadoo.fr> wrote:
+On Thu, 27 Oct 2022 04:39:09 +0100,
+Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
 > 
-> strtobool() is the same as kstrtobool().
-> However, the latter is more used within the kernel.
+> An IRQ's effective affinity can only be different from its configured
+> affinity if there are multiple CPUs. Make it clear that this option is
+> only meaningful when SMP is enabled.
 > 
-> In order to remove strtobool() and slightly simplify kstrtox.h, switch to
-> the other function name.
-> 
-> While at it, include the corresponding header file (<linux/kstrtox.h>)
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 > ---
-> This patch is part of a serie that axes all usages of strtobool().
-> Each patch can be applied independently from the other ones.
 > 
-> The last patch of the serie removes the definition of strtobool().
+> v2: rebased on 6.1-rc2
 > 
-> You may not be in copy of the cover letter. So, if needed, it is available
-> at [1].
+>  drivers/irqchip/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> 
-> This patch has NOT been compile tested.
+> diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+> index 7ef9f5e..8461915 100644
+> --- a/drivers/irqchip/Kconfig
+> +++ b/drivers/irqchip/Kconfig
+> @@ -575,7 +575,7 @@ config IRQ_LOONGARCH_CPU
+>  	bool
+>  	select GENERIC_IRQ_CHIP
+>  	select IRQ_DOMAIN
+> -	select GENERIC_IRQ_EFFECTIVE_AFF_MASK
+> +	select GENERIC_IRQ_EFFECTIVE_AFF_MASK if SMP
+>  	select LOONGSON_LIOINTC
+>  	select LOONGSON_EIOINTC
+>  	select LOONGSON_PCH_PIC
 
-Thanks for having the honesty to state that this hasn't been even
-compile tested. However, and for fairly obvious reason, I will not
-take such patches.
+We already have this:
 
-Thanks,
+# Supports effective affinity mask
+config GENERIC_IRQ_EFFECTIVE_AFF_MASK
+       depends on SMP
+       bool
+
+Do we really need to express this for every interrupt controller?
 
 	M.
 
