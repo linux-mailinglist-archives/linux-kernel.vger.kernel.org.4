@@ -2,56 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F0BC639634
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 14:35:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D5F639635
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 14:35:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbiKZNft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 08:35:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35902 "EHLO
+        id S229693AbiKZNfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 08:35:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiKZNfS (ORCPT
+        with ESMTP id S229688AbiKZNfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 08:35:18 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7B01D674
+        Sat, 26 Nov 2022 08:35:20 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001882181E
         for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 05:34:49 -0800 (PST)
-Date:   Sat, 26 Nov 2022 13:34:46 -0000
+Date:   Sat, 26 Nov 2022 13:34:47 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669469687;
+        s=2020; t=1669469688;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KvHJ7jlKpYZk3pzLo0+rM+uRdAXs08XEQZ3v20Ebbag=;
-        b=ma+9AkEyvhIiLx1ilHiZe2CKGGnw6XQGnGkMWFM4bBvI2e1IwqqV1KjS5yXBnmEQuxXYVh
-        5pvnnMOdtXboxf8l/T3x4tBZ162w8wpmnB1D61ldG3q5drMNlRt+T6rDZa2eunv6QxCWBV
-        tR9b/SpQF1RDL8frtLLWaGbVqkYuy6gNHlebuGCoUITO7Ht/4X7K82zKH//wCbJSXtamW0
-        gn67vZyKzKfOeYpQ5CwUWQX5wJP28s/JwqI2PXIOqpbj5hHfmpbD1n5MgRdDtHtewLAdjI
-        a+E9a+1SmTzMIC/Pi37p8uY1HJKrt27rOblc/WuuqfLg3MNc7zn0tkZuzP2RCg==
+        bh=yKxbvGFi6opj3Xg8bXiFsfp4VHNmZocIRZNkr9A0bO4=;
+        b=EQlsAelWBp7fd3i12vQnqGg1ZmHkS01f004xEGmE/tGW8ysY2lSud7eaSDLtBoONO8OXZl
+        nPk+Ek3OxYI+gmowXrud+SRApbODuHssGJQgZi+MdAoE5tu+P4XnS5n+KTsfFVEt3nNFJT
+        Bbt20ALHiH/8qKofqv0FVaPHecXX3n1/uJ1QMIEdP0tQb6Mkf3NLP9nkAiAi2CZSRifLYK
+        aumdZoPNjfS0x2/5qaFoCCJN2lDokAG8i41xHrQMNVnFNirTwYHGUTt9fxP5yq829djjWP
+        o5PioD9vA30poeJKJvpjR/WsmdAusLDtJ0uHtRmsczS6Zf2GfZqjHP8yn2sAwg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669469687;
+        s=2020e; t=1669469688;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KvHJ7jlKpYZk3pzLo0+rM+uRdAXs08XEQZ3v20Ebbag=;
-        b=F+yaEDSUdx8cjJ6wh7F0POXd8fRb66R1xeAkVBtyo+tpOBEe0MxtN5Yc9GDzijFSUxphAf
-        YJQICsb0XMPb4WAA==
+        bh=yKxbvGFi6opj3Xg8bXiFsfp4VHNmZocIRZNkr9A0bO4=;
+        b=/6kTGYFXKJqAHCCmPHuW4uUZckQ4iVlN+oMM3jAenE24RZVf/ZRn8CKcLeqnwFWf4T4cbj
+        XRJ2Ph/Ep6tTqGAA==
 From:   "irqchip-bot for Liu Peibao" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] dt-bindings: interrupt-controller: add
- yaml for LoongArch CPU interrupt controller
-Cc:     Liu Peibao <liupeibao@loongson.cn>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20221114113824.1880-3-liupeibao@loongson.cn>
-References: <20221114113824.1880-3-liupeibao@loongson.cn>
+Subject: [irqchip: irq/irqchip-next] irqchip: loongarch-cpu: add DT support
+Cc:     Liu Peibao <liupeibao@loongson.cn>, Marc Zyngier <maz@kernel.org>,
+        tglx@linutronix.de
+In-Reply-To: <20221114113824.1880-2-liupeibao@loongson.cn>
+References: <20221114113824.1880-2-liupeibao@loongson.cn>
 MIME-Version: 1.0
-Message-ID: <166946968615.4906.13490870742447683383.tip-bot2@tip-bot2>
+Message-ID: <166946968726.4906.11156861205994702462.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,65 +65,52 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     6b2748ada244c7597e9b677a0bdda4e8781a8d8f
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/6b2748ada244c7597e9b677a0bdda4e8781a8d8f
+Commit-ID:     855d4ca4bdb366aab3d43408b74e02ab629d1d55
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/855d4ca4bdb366aab3d43408b74e02ab629d1d55
 Author:        Liu Peibao <liupeibao@loongson.cn>
-AuthorDate:    Mon, 14 Nov 2022 19:38:24 +08:00
+AuthorDate:    Mon, 14 Nov 2022 19:38:23 +08:00
 Committer:     Marc Zyngier <maz@kernel.org>
 CommitterDate: Sat, 26 Nov 2022 11:54:11 
 
-dt-bindings: interrupt-controller: add yaml for LoongArch CPU interrupt controller
+irqchip: loongarch-cpu: add DT support
 
-Current LoongArch compatible CPUs support 14 CPU IRQs. We can describe how
-the 14 IRQs are wired to the platform's internal interrupt controller by
-devicetree.
+LoongArch is coming to support booting with FDT, so DT
+support of this driver is desired.
 
 Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20221114113824.1880-3-liupeibao@loongson.cn
+Link: https://lore.kernel.org/r/20221114113824.1880-2-liupeibao@loongson.cn
 ---
- Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml | 34 ++++++++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
+ drivers/irqchip/irq-loongarch-cpu.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
-new file mode 100644
-index 0000000..2a1cf88
---- /dev/null
-+++ b/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
-@@ -0,0 +1,34 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/interrupt-controller/loongarch,cpu-interrupt-controller.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/irqchip/irq-loongarch-cpu.c b/drivers/irqchip/irq-loongarch-cpu.c
+index 741612b..a28b7c5 100644
+--- a/drivers/irqchip/irq-loongarch-cpu.c
++++ b/drivers/irqchip/irq-loongarch-cpu.c
+@@ -92,6 +92,25 @@ static const struct irq_domain_ops loongarch_cpu_intc_irq_domain_ops = {
+ 	.xlate = irq_domain_xlate_onecell,
+ };
+ 
++#ifdef CONFIG_OF
++int __init loongarch_cpu_irq_of_init(struct device_node *of_node,
++				struct device_node *parent)
++{
++	cpuintc_handle = of_node_to_fwnode(of_node);
 +
-+title: LoongArch CPU Interrupt Controller
++	irq_domain = irq_domain_create_linear(cpuintc_handle, EXCCODE_INT_NUM,
++				&loongarch_cpu_intc_irq_domain_ops, NULL);
++	if (!irq_domain)
++		panic("Failed to add irqdomain for loongarch CPU");
 +
-+maintainers:
-+  - Liu Peibao <liupeibao@loongson.cn>
++	set_handle_irq(&handle_cpu_irq);
 +
-+properties:
-+  compatible:
-+    const: loongarch,cpu-interrupt-controller
++	return 0;
++}
++IRQCHIP_DECLARE(cpu_intc, "loongson,cpu-interrupt-controller",
++					loongarch_cpu_irq_of_init);
++#endif
 +
-+  '#interrupt-cells':
-+    const: 1
-+
-+  interrupt-controller: true
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - '#interrupt-cells'
-+  - interrupt-controller
-+
-+examples:
-+  - |
-+    interrupt-controller {
-+      compatible = "loongarch,cpu-interrupt-controller";
-+      #interrupt-cells = <1>;
-+      interrupt-controller;
-+    };
+ static int __init
+ liointc_parse_madt(union acpi_subtable_headers *header,
+ 		       const unsigned long end)
