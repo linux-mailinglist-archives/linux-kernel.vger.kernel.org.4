@@ -2,269 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F725639763
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 18:09:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F4F8639760
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 18:09:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiKZRJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 12:09:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33608 "EHLO
+        id S229737AbiKZRJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 12:09:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiKZRJm (ORCPT
+        with ESMTP id S229469AbiKZRJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 12:09:42 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CA419288;
-        Sat, 26 Nov 2022 09:09:41 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id k2-20020a17090a4c8200b002187cce2f92so10247286pjh.2;
-        Sat, 26 Nov 2022 09:09:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sLFIKfte67bdoQLm56Ip88k11Q1iXzAXCyP4EbfifyQ=;
-        b=Qqdy2+7IeuUQYby+p2g2YD8tGvWMxicv1Ioj0/ANeJyIqaeZBM+ryEn69gs8EgLQj8
-         OsKqfgMCujGLXOW7Brr6oT7X7RpQGkIeh7cBicSP0KCHGbD0EgyyjKfkdhKoPJLoltl/
-         OIcCd/599NWw12BSkXYU+SA/biJa98039xA0tllKPPxlMcjABR337XIFwWeGAslnt1Ia
-         s6byov1peg3lZfXd4v/t13hTYmMrLlAh82i4VRpvravpxGRxkZyAOCOOVTQ2RNLCj82i
-         5hqhd2OsBGXyLvFSRvdy6EMyY4zhHj9VQxumVWy5oQN7yjHQbLDwD7gAPBGQ+LvAXtUP
-         fBHA==
+        Sat, 26 Nov 2022 12:09:32 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8A119021
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 09:09:31 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id y12-20020a056e021bec00b00302a7d5bc83so5002343ilv.16
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 09:09:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sLFIKfte67bdoQLm56Ip88k11Q1iXzAXCyP4EbfifyQ=;
-        b=j33OxB+sU6vdNx9iFIkmRwU9WuppxKVJxAEu+MPOrxK3w96hsQSBvxprqIOodVIzlE
-         IYgU+0Y3rW45Hv5eoPEib7IePteWy7t/eTigRIOyHRTS4+0WU8zy5uPMGJ6oxaz147SY
-         iR6vKXOCxfPYSjLXu67JShMWfMIkRmF3wrWpWY8Me2yBPB5ND+8eUnYvkRmyq8WT4Cfm
-         s75q3HShg68YVVNAI/OGf5xUrsFjODbDXMY2WI2UGfuLMtW6VB+zUX33zZeC0FqUjOzj
-         9gJFXYTQFrvOVIZMw76XBM8o9VL5MjItr2u25i2czKky/jRsij9S/HC1bD7ubd8ABgZ2
-         SoqA==
-X-Gm-Message-State: ANoB5plvY74UCrYh+k50wDj3Y7qLqqDG4sNbtrOekRn8o5tVTSmWEVpQ
-        ZdPT15lFZH1HxDGDLF2X9Chilb6VjQA77Yi0agM=
-X-Google-Smtp-Source: AA0mqf4TJsENZt3RxiaDOoBbJDmgDFN8Sjw0MX6oPq4zVEGXXt4w7TuhSBtUO9e4gAyy4y002l9CxuLwLJjv7m3cSuY=
-X-Received: by 2002:a17:903:300c:b0:186:9ef5:4d59 with SMTP id
- o12-20020a170903300c00b001869ef54d59mr36934713pla.89.1669482580757; Sat, 26
- Nov 2022 09:09:40 -0800 (PST)
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dK39n2LHUM6dTNpUPIXAiJVmWXxSWQm6JqTRK4z2qZE=;
+        b=gh4hLIeanCc3A5pg2ugSfeIxl2cbzxIDXqTrIdVmgvZUG1DKm4r84L+dIAyhk3EekI
+         nFCk4FGo1bLNlDahmmVb/HT6kzzJZPYDVayonNzwIfBjAAcAqMTnuoeGxVujkHeDUdP/
+         VZ9zbvux+b3i94wNza/kDQLieAIYPUhehzLZX95vrxwqvpKUjRh5MgWdZgYR1IvAubGk
+         oOk6h820qAh73+K1zkhLFnseoQMvXV2PyKyuMmbFzHvtLgDdlpikFZnsUriw43ifS5CY
+         pO+9B8IXIbYDa9NTgr/TDqjL3oYqkvmJrCefA234nGg6102x+naAnGeRvWkfppBgmhHM
+         uEQQ==
+X-Gm-Message-State: ANoB5pm9x8DABW3TLGx01vDDfQpE0PWu9rkwdZA0er2Cqx3Xmu9K03CS
+        bfXAlE8xzoW93H3xAxB/KnzP99OXMvAF9bChv4ThWOGE3yS1
+X-Google-Smtp-Source: AA0mqf77h2cF/n4XILxIVVJgReGwedw+0fs1zOPsxdArt26KD+kmV/nKUdCprfZZLzIQV73E+kUwWr2uXto4pD4rov36jHvqC8PY
 MIME-Version: 1.0
-References: <20221117233838.give.484-kees@kernel.org> <20221117234328.594699-4-keescook@chromium.org>
-In-Reply-To: <20221117234328.594699-4-keescook@chromium.org>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Sat, 26 Nov 2022 18:09:29 +0100
-Message-ID: <CA+fCnZdMNs8Ut=_vwZNu-ksAW1T9+dxR3AcLpGb_3rYJjzOffg@mail.gmail.com>
-Subject: Re: [PATCH v3 4/6] panic: Consolidate open-coded panic_on_warn checks
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Jann Horn <jannh@google.com>, Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Gow <davidgow@google.com>,
-        tangmeng <tangmeng@uniontech.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Seth Jenkins <sethjenkins@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Eric Biggers <ebiggers@google.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org
+X-Received: by 2002:a92:ca8d:0:b0:302:de10:7ae1 with SMTP id
+ t13-20020a92ca8d000000b00302de107ae1mr8923641ilo.15.1669482570940; Sat, 26
+ Nov 2022 09:09:30 -0800 (PST)
+Date:   Sat, 26 Nov 2022 09:09:30 -0800
+In-Reply-To: <000000000000f841fb05eb364ce6@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000999ad405ee62b30b@google.com>
+Subject: Re: [syzbot] UBSAN: array-index-out-of-bounds in txCommit
+From:   syzbot <syzbot+0558d19c373e44da3c18@syzkaller.appspotmail.com>
+To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 12:43 AM Kees Cook <keescook@chromium.org> wrote:
->
-> Several run-time checkers (KASAN, UBSAN, KFENCE, KCSAN, sched) roll
-> their own warnings, and each check "panic_on_warn". Consolidate this
-> into a single function so that future instrumentation can be added in
-> a single location.
->
-> Cc: Marco Elver <elver@google.com>
-> Cc: Dmitry Vyukov <dvyukov@google.com>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Juri Lelli <juri.lelli@redhat.com>
-> Cc: Vincent Guittot <vincent.guittot@linaro.org>
-> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Ben Segall <bsegall@google.com>
-> Cc: Mel Gorman <mgorman@suse.de>
-> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-> Cc: Valentin Schneider <vschneid@redhat.com>
-> Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-> Cc: Alexander Potapenko <glider@google.com>
-> Cc: Andrey Konovalov <andreyknvl@gmail.com>
-> Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: David Gow <davidgow@google.com>
-> Cc: tangmeng <tangmeng@uniontech.com>
-> Cc: Jann Horn <jannh@google.com>
-> Cc: Shuah Khan <skhan@linuxfoundation.org>
-> Cc: Petr Mladek <pmladek@suse.com>
-> Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Cc: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-> Cc: Tiezhu Yang <yangtiezhu@loongson.cn>
-> Cc: kasan-dev@googlegroups.com
-> Cc: linux-mm@kvack.org
-> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  include/linux/panic.h | 1 +
->  kernel/kcsan/report.c | 3 +--
->  kernel/panic.c        | 9 +++++++--
->  kernel/sched/core.c   | 3 +--
->  lib/ubsan.c           | 3 +--
->  mm/kasan/report.c     | 4 ++--
->  mm/kfence/report.c    | 3 +--
->  7 files changed, 14 insertions(+), 12 deletions(-)
->
-> diff --git a/include/linux/panic.h b/include/linux/panic.h
-> index c7759b3f2045..979b776e3bcb 100644
-> --- a/include/linux/panic.h
-> +++ b/include/linux/panic.h
-> @@ -11,6 +11,7 @@ extern long (*panic_blink)(int state);
->  __printf(1, 2)
->  void panic(const char *fmt, ...) __noreturn __cold;
->  void nmi_panic(struct pt_regs *regs, const char *msg);
-> +void check_panic_on_warn(const char *origin);
->  extern void oops_enter(void);
->  extern void oops_exit(void);
->  extern bool oops_may_print(void);
-> diff --git a/kernel/kcsan/report.c b/kernel/kcsan/report.c
-> index 67794404042a..e95ce7d7a76e 100644
-> --- a/kernel/kcsan/report.c
-> +++ b/kernel/kcsan/report.c
-> @@ -492,8 +492,7 @@ static void print_report(enum kcsan_value_change value_change,
->         dump_stack_print_info(KERN_DEFAULT);
->         pr_err("==================================================================\n");
->
-> -       if (panic_on_warn)
-> -               panic("panic_on_warn set ...\n");
-> +       check_panic_on_warn("KCSAN");
->  }
->
->  static void release_report(unsigned long *flags, struct other_info *other_info)
-> diff --git a/kernel/panic.c b/kernel/panic.c
-> index d843d036651e..cfa354322d5f 100644
-> --- a/kernel/panic.c
-> +++ b/kernel/panic.c
-> @@ -201,6 +201,12 @@ static void panic_print_sys_info(bool console_flush)
->                 ftrace_dump(DUMP_ALL);
->  }
->
-> +void check_panic_on_warn(const char *origin)
-> +{
-> +       if (panic_on_warn)
-> +               panic("%s: panic_on_warn set ...\n", origin);
-> +}
-> +
->  /**
->   *     panic - halt the system
->   *     @fmt: The text string to print
-> @@ -619,8 +625,7 @@ void __warn(const char *file, int line, void *caller, unsigned taint,
->         if (regs)
->                 show_regs(regs);
->
-> -       if (panic_on_warn)
-> -               panic("panic_on_warn set ...\n");
-> +       check_panic_on_warn("kernel");
->
->         if (!regs)
->                 dump_stack();
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 5800b0623ff3..285ef8821b4f 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -5729,8 +5729,7 @@ static noinline void __schedule_bug(struct task_struct *prev)
->                 pr_err("Preemption disabled at:");
->                 print_ip_sym(KERN_ERR, preempt_disable_ip);
->         }
-> -       if (panic_on_warn)
-> -               panic("scheduling while atomic\n");
-> +       check_panic_on_warn("scheduling while atomic");
->
->         dump_stack();
->         add_taint(TAINT_WARN, LOCKDEP_STILL_OK);
-> diff --git a/lib/ubsan.c b/lib/ubsan.c
-> index 36bd75e33426..60c7099857a0 100644
-> --- a/lib/ubsan.c
-> +++ b/lib/ubsan.c
-> @@ -154,8 +154,7 @@ static void ubsan_epilogue(void)
->
->         current->in_ubsan--;
->
-> -       if (panic_on_warn)
-> -               panic("panic_on_warn set ...\n");
-> +       check_panic_on_warn("UBSAN");
->  }
->
->  void __ubsan_handle_divrem_overflow(void *_data, void *lhs, void *rhs)
-> diff --git a/mm/kasan/report.c b/mm/kasan/report.c
-> index df3602062bfd..cc98dfdd3ed2 100644
-> --- a/mm/kasan/report.c
-> +++ b/mm/kasan/report.c
-> @@ -164,8 +164,8 @@ static void end_report(unsigned long *flags, void *addr)
->                                        (unsigned long)addr);
->         pr_err("==================================================================\n");
->         spin_unlock_irqrestore(&report_lock, *flags);
-> -       if (panic_on_warn && !test_bit(KASAN_BIT_MULTI_SHOT, &kasan_flags))
-> -               panic("panic_on_warn set ...\n");
-> +       if (!test_bit(KASAN_BIT_MULTI_SHOT, &kasan_flags))
-> +               check_panic_on_warn("KASAN");
->         if (kasan_arg_fault == KASAN_ARG_FAULT_PANIC)
->                 panic("kasan.fault=panic set ...\n");
->         add_taint(TAINT_BAD_PAGE, LOCKDEP_NOW_UNRELIABLE);
-> diff --git a/mm/kfence/report.c b/mm/kfence/report.c
-> index 7e496856c2eb..110c27ca597d 100644
-> --- a/mm/kfence/report.c
-> +++ b/mm/kfence/report.c
-> @@ -268,8 +268,7 @@ void kfence_report_error(unsigned long address, bool is_write, struct pt_regs *r
->
->         lockdep_on();
->
-> -       if (panic_on_warn)
-> -               panic("panic_on_warn set ...\n");
-> +       check_panic_on_warn("KFENCE");
->
->         /* We encountered a memory safety error, taint the kernel! */
->         add_taint(TAINT_BAD_PAGE, LOCKDEP_STILL_OK);
-> --
-> 2.34.1
->
+syzbot has found a reproducer for the following issue on:
 
-Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+HEAD commit:    644e9524388a Merge tag 'for-v6.1-rc' of git://git.kernel.o..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=16788381880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8d01b6e3197974dd
+dashboard link: https://syzkaller.appspot.com/bug?extid=0558d19c373e44da3c18
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13591573880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10c2c7ab880000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/0968428e17b4/disk-644e9524.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/fd4c3bfd0777/vmlinux-644e9524.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/ee4571f27f1c/bzImage-644e9524.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/0fdce98f569c/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0558d19c373e44da3c18@syzkaller.appspotmail.com
+
+================================================================================
+UBSAN: array-index-out-of-bounds in fs/jfs/jfs_txnmgr.c:1738:5
+index 18 is out of range for type 'xad_t [18]'
+CPU: 1 PID: 3636 Comm: syz-executor352 Not tainted 6.1.0-rc6-syzkaller-00308-g644e9524388a #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+ ubsan_epilogue lib/ubsan.c:151 [inline]
+ __ubsan_handle_out_of_bounds+0xdb/0x130 lib/ubsan.c:283
+ xtLog fs/jfs/jfs_txnmgr.c:1738 [inline]
+ txLog fs/jfs/jfs_txnmgr.c:1391 [inline]
+ txCommit+0x3fb5/0x6d40 fs/jfs/jfs_txnmgr.c:1259
+ jfs_commit_inode+0x342/0x5a0 fs/jfs/inode.c:108
+ extAlloc+0xc93/0xff0 fs/jfs/jfs_extent.c:172
+ jfs_get_block+0x342/0xce0 fs/jfs/inode.c:248
+ __block_write_begin_int+0x54c/0x1a80 fs/buffer.c:1991
+ __block_write_begin fs/buffer.c:2041 [inline]
+ block_write_begin+0x93/0x1e0 fs/buffer.c:2102
+ jfs_write_begin+0x2d/0x60 fs/jfs/inode.c:304
+ generic_perform_write+0x2e4/0x5e0 mm/filemap.c:3753
+ __generic_file_write_iter+0x176/0x400 mm/filemap.c:3881
+ generic_file_write_iter+0xab/0x310 mm/filemap.c:3913
+ do_iter_write+0x6c2/0xc20 fs/read_write.c:861
+ iter_file_splice_write+0x7fc/0xfc0 fs/splice.c:686
+ do_splice_from fs/splice.c:764 [inline]
+ direct_splice_actor+0xe6/0x1c0 fs/splice.c:931
+ splice_direct_to_actor+0x4e4/0xc00 fs/splice.c:886
+ do_splice_direct+0x279/0x3d0 fs/splice.c:974
+ do_sendfile+0x5fb/0xf80 fs/read_write.c:1255
+ __do_sys_sendfile64 fs/read_write.c:1323 [inline]
+ __se_sys_sendfile64+0x14f/0x1b0 fs/read_write.c:1309
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f12751c65e9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 71 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f12751512f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
+RAX: ffffffffffffffda RBX: 00007f12752517f0 RCX: 00007f12751c65e9
+RDX: 0000000000000000 RSI: 0000000000000007 RDI: 0000000000000006
+RBP: 00007f127521e0e4 R08: 0000000000000000 R09: 0000000000000000
+R10: 000080001d00c0d0 R11: 0000000000000246 R12: 65732f636f72702f
+R13: 0030656c69662f2e R14: 0031656c69662f2e R15: 00007f12752517f8
+ </TASK>
+================================================================================
+
