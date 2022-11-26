@@ -2,115 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8D5F639635
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 14:35:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7919639638
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 14:38:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbiKZNfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 08:35:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35404 "EHLO
+        id S229580AbiKZNis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 08:38:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbiKZNfU (ORCPT
+        with ESMTP id S229446AbiKZNiq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 08:35:20 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001882181E
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 05:34:49 -0800 (PST)
-Date:   Sat, 26 Nov 2022 13:34:47 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1669469688;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yKxbvGFi6opj3Xg8bXiFsfp4VHNmZocIRZNkr9A0bO4=;
-        b=EQlsAelWBp7fd3i12vQnqGg1ZmHkS01f004xEGmE/tGW8ysY2lSud7eaSDLtBoONO8OXZl
-        nPk+Ek3OxYI+gmowXrud+SRApbODuHssGJQgZi+MdAoE5tu+P4XnS5n+KTsfFVEt3nNFJT
-        Bbt20ALHiH/8qKofqv0FVaPHecXX3n1/uJ1QMIEdP0tQb6Mkf3NLP9nkAiAi2CZSRifLYK
-        aumdZoPNjfS0x2/5qaFoCCJN2lDokAG8i41xHrQMNVnFNirTwYHGUTt9fxP5yq829djjWP
-        o5PioD9vA30poeJKJvpjR/WsmdAusLDtJ0uHtRmsczS6Zf2GfZqjHP8yn2sAwg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1669469688;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yKxbvGFi6opj3Xg8bXiFsfp4VHNmZocIRZNkr9A0bO4=;
-        b=/6kTGYFXKJqAHCCmPHuW4uUZckQ4iVlN+oMM3jAenE24RZVf/ZRn8CKcLeqnwFWf4T4cbj
-        XRJ2Ph/Ep6tTqGAA==
-From:   "irqchip-bot for Liu Peibao" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip: loongarch-cpu: add DT support
-Cc:     Liu Peibao <liupeibao@loongson.cn>, Marc Zyngier <maz@kernel.org>,
-        tglx@linutronix.de
-In-Reply-To: <20221114113824.1880-2-liupeibao@loongson.cn>
-References: <20221114113824.1880-2-liupeibao@loongson.cn>
+        Sat, 26 Nov 2022 08:38:46 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0731B9F9
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 05:38:45 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id b3so10773815lfv.2
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 05:38:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JODCHnpvnBiR3n3fpZD67kgmrBczvvXLFyLOXUIrzLw=;
+        b=R3kgfVWpjBBFfaYMxVPvDJJvCc8bXrmR/5iyKRzySX5/rt2UGFXYJQ1CbZ7V/QTNtj
+         QVRr/i02Iy+GkqfMTBjzC05z09gJXZA4ibdqDPZ5fQBrOvhcMk6UIJ+YctxesjOSpoIB
+         kQCG4DKHPIOrN/KdA00jHuACtf8jgXrLX6XKPD1bVQuk9GvGStFHlTntU7YcjaeoUqKw
+         vFSAYNI9x+PPd4aNr68aaPW6AqVDvEPkaa0C5N1eKr9tc3ir4teP7RuOEpJoYjyRazN/
+         oM8NxRY1aVpC7Ncrd9xs2MrwgP4B0hjE6kqmVRAiikfIR4vdOFyrDNYHINYe4NOvoT5+
+         wd0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JODCHnpvnBiR3n3fpZD67kgmrBczvvXLFyLOXUIrzLw=;
+        b=BtabdVkOM2wKhmJV0FKZgxeLk29KAlcSppyvQjELacSkaO/wPRwCrlglRc6rNJp1Xu
+         BhvkLx4WYwGemVWBs1xFjV2/bf9g4bVWTPO12I4W3DE/LS9KTvbUaG1G00wZzJ5S0xq4
+         oSEYSICxKfUW1T5yMLrdhRhWlRUWYuo/iOTPOtbQZD/LR0Dgh6yIdNUQ97oE8rp1i4NC
+         3dFxmPwu6vdCw9LeHDzdoQ4pUxh7FI/f4gDsDL6x541rUmStZCXvQIrXXzh0HCB5h/SX
+         jgHlIy21dc62hjZJua/Ye+WfjmrweJu3SgEFld2fLoRlNMhMhN90XUHvLYWWdW4SpX5r
+         7Hyg==
+X-Gm-Message-State: ANoB5plLnFmuG1N/fd/kHudA4liHoMMaEPEk5TSVrsqdM0GUQdiK+OV1
+        CKJ7/DhHgLiEL+FweoUAZ7mJog==
+X-Google-Smtp-Source: AA0mqf6MtjdoVhvR7zpbOEi+YVSwYyAWyZtyojehbq8a4FMrZd2GJ1stmBS+SNY6qcKKgpKEhAISJw==
+X-Received: by 2002:a19:5f11:0:b0:4a2:240a:443a with SMTP id t17-20020a195f11000000b004a2240a443amr13705255lfb.529.1669469923936;
+        Sat, 26 Nov 2022 05:38:43 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id k20-20020a0565123d9400b0049487818dd9sm931511lfv.60.2022.11.26.05.38.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 26 Nov 2022 05:38:43 -0800 (PST)
+Message-ID: <ffa1e063-7e29-0bcb-035c-ff96f8eb037d@linaro.org>
+Date:   Sat, 26 Nov 2022 14:37:37 +0100
 MIME-Version: 1.0
-Message-ID: <166946968726.4906.11156861205994702462.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 3/3] dt-bindings: net: sun8i-emac: Add phy-supply property
+Content-Language: en-US
+To:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     LABBE Corentin <clabbe.montjoie@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, netdev@vger.kernel.org
+References: <20221125202008.64595-1-samuel@sholland.org>
+ <20221125202008.64595-4-samuel@sholland.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221125202008.64595-4-samuel@sholland.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-next branch of irqchip:
+On 25/11/2022 21:20, Samuel Holland wrote:
+> This property has always been supported by the Linux driver; see
+> commit 9f93ac8d4085 ("net-next: stmmac: Add dwmac-sun8i"). In fact, the
+> original driver submission includes the phy-supply code but no mention
+> of it in the binding, so the omission appears to be accidental. In
+> addition, the property is documented in the binding for the previous
+> hardware generation, allwinner,sun7i-a20-gmac.
+> 
+> Document phy-supply in the binding to fix devicetree validation for the
+> 25+ boards that already use this property.
+> 
+> Fixes: 0441bde003be ("dt-bindings: net-next: Add DT bindings documentation for Allwinner dwmac-sun8i")
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
 
-Commit-ID:     855d4ca4bdb366aab3d43408b74e02ab629d1d55
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/855d4ca4bdb366aab3d43408b74e02ab629d1d55
-Author:        Liu Peibao <liupeibao@loongson.cn>
-AuthorDate:    Mon, 14 Nov 2022 19:38:23 +08:00
-Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Sat, 26 Nov 2022 11:54:11 
+This looks ok.
 
-irqchip: loongarch-cpu: add DT support
+Best regards,
+Krzysztof
 
-LoongArch is coming to support booting with FDT, so DT
-support of this driver is desired.
-
-Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20221114113824.1880-2-liupeibao@loongson.cn
----
- drivers/irqchip/irq-loongarch-cpu.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
-
-diff --git a/drivers/irqchip/irq-loongarch-cpu.c b/drivers/irqchip/irq-loongarch-cpu.c
-index 741612b..a28b7c5 100644
---- a/drivers/irqchip/irq-loongarch-cpu.c
-+++ b/drivers/irqchip/irq-loongarch-cpu.c
-@@ -92,6 +92,25 @@ static const struct irq_domain_ops loongarch_cpu_intc_irq_domain_ops = {
- 	.xlate = irq_domain_xlate_onecell,
- };
- 
-+#ifdef CONFIG_OF
-+int __init loongarch_cpu_irq_of_init(struct device_node *of_node,
-+				struct device_node *parent)
-+{
-+	cpuintc_handle = of_node_to_fwnode(of_node);
-+
-+	irq_domain = irq_domain_create_linear(cpuintc_handle, EXCCODE_INT_NUM,
-+				&loongarch_cpu_intc_irq_domain_ops, NULL);
-+	if (!irq_domain)
-+		panic("Failed to add irqdomain for loongarch CPU");
-+
-+	set_handle_irq(&handle_cpu_irq);
-+
-+	return 0;
-+}
-+IRQCHIP_DECLARE(cpu_intc, "loongson,cpu-interrupt-controller",
-+					loongarch_cpu_irq_of_init);
-+#endif
-+
- static int __init
- liointc_parse_madt(union acpi_subtable_headers *header,
- 		       const unsigned long end)
