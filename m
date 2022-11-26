@@ -2,115 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D249F6392FE
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 02:05:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F51C639303
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 02:10:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbiKZBFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 20:05:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38082 "EHLO
+        id S229722AbiKZBKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 20:10:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiKZBFi (ORCPT
+        with ESMTP id S229570AbiKZBK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 20:05:38 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C7C209AC;
-        Fri, 25 Nov 2022 17:05:33 -0800 (PST)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NJtmL2JZmzHwCt;
-        Sat, 26 Nov 2022 09:04:18 +0800 (CST)
-Received: from [10.174.179.200] (10.174.179.200) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 26 Nov 2022 09:04:56 +0800
-Subject: Re: [PATCH net 1/2] octeontx2-pf: Fix possible memory leak in
- otx2_probe()
-To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        <sunil.kovvuri@gmail.com>, <sgoutham@marvell.com>
-CC:     <gakula@marvell.com>, <sbhatta@marvell.com>, <hkelam@marvell.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <naveenm@marvell.com>, <rsaladi2@marvell.com>,
-        <linux-kernel@vger.kernel.org>
-References: <cover.1669253985.git.william.xuanziyang@huawei.com>
- <e024450cf08f469fb1e0153b78a04a54829dfddb.1669253985.git.william.xuanziyang@huawei.com>
- <Y4DHHUUbGl5wWGQ+@boxer>
-From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
-Message-ID: <f4bb4aa5-08cc-4a4d-76cf-46bda5c6de59@huawei.com>
-Date:   Sat, 26 Nov 2022 09:04:56 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Fri, 25 Nov 2022 20:10:29 -0500
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9302CCAA;
+        Fri, 25 Nov 2022 17:10:28 -0800 (PST)
+Received: by mail-pj1-f46.google.com with SMTP id md8so799829pjb.4;
+        Fri, 25 Nov 2022 17:10:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PEeX4qyWg0IrAHe/fvm5AXFA+iKbUTvD986+eHJxTfA=;
+        b=RN9JDfdIuJBguFyi1A9tBs0JXROnRymTPjbW6QtK3uzaFxPzPZfE8BMYO3uGAsES8B
+         mPvNlJ2QzVWT+Kgdggc7R51pDDBQcMQEUxRAFOVFrLeV9BHR0f9K2lT7g/pfQOI9QlMv
+         Rm+D4EWQ+8OuEnY18ainQ/pPuKkYRakhb7mP+mPC5lvfbGQT4kaIUZ8DF44YC9i+uWHl
+         3687p93OqQCNSmDy+PBeePbSE7dWu6UBIfQvZM6fjUSZuQD8dCC4o2xmF3dRDl345Jq1
+         5y5wKJkIs1ASTtlrxNQTj4lA/B/NTmeQfRuJ7w5wfvvYOaztx2VTOmefRZQ4y7IpDoWx
+         lCdw==
+X-Gm-Message-State: ANoB5pnt+uvEXLejnZ17yTLiLIC67QK8XcQOfbgIPNvnr80XKXrRSQRU
+        Jw5vPiw4IR5lc0k9bE5RzSQ=
+X-Google-Smtp-Source: AA0mqf4YYaQW75PaoYy4IXPZM8MWzzeDuc9H22FTeGdh1VZ7ErM5RanSi3THxi/FOrCJwzcN0IMwjA==
+X-Received: by 2002:a17:902:7b84:b0:189:6623:4c47 with SMTP id w4-20020a1709027b8400b0018966234c47mr6292602pll.170.1669425028073;
+        Fri, 25 Nov 2022 17:10:28 -0800 (PST)
+Received: from [192.168.3.219] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id k4-20020a63d844000000b00476e84c3530sm3101627pgj.60.2022.11.25.17.10.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Nov 2022 17:10:27 -0800 (PST)
+Message-ID: <105b9113-8322-aa68-7d21-45f5ba288d34@acm.org>
+Date:   Fri, 25 Nov 2022 17:10:25 -0800
 MIME-Version: 1.0
-In-Reply-To: <Y4DHHUUbGl5wWGQ+@boxer>
-Content-Type: text/plain; charset="gbk"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v5 06/16] ufs: core: mcq: Configure resource regions
 Content-Language: en-US
+To:     Asutosh Das <quic_asutoshd@quicinc.com>, quic_cang@quicinc.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org
+Cc:     quic_nguyenb@quicinc.com, quic_xiaosenh@quicinc.com,
+        stanley.chu@mediatek.com, eddie.huang@mediatek.com,
+        daejun7.park@samsung.com, avri.altman@wdc.com, mani@kernel.org,
+        beanhuo@micron.com, linux-arm-msm@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <cover.1669176158.git.quic_asutoshd@quicinc.com>
+ <05400727c8a82b7ef85a576c1fa2d9bd81458e9a.1669176158.git.quic_asutoshd@quicinc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <05400727c8a82b7ef85a576c1fa2d9bd81458e9a.1669176158.git.quic_asutoshd@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.200]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Thu, Nov 24, 2022 at 09:56:43AM +0800, Ziyang Xuan wrote:
->> In otx2_probe(), there are several possible memory leak bugs
->> in exception paths as follows:
->> 1. Do not release pf->otx2_wq when excute otx2_init_tc() failed.
->> 2. Do not shutdown tc when excute otx2_register_dl() failed.
->> 3. Do not unregister devlink when initialize SR-IOV failed.
->>
->> Fixes: 1d4d9e42c240 ("octeontx2-pf: Add tc flower hardware offload on ingress traffic")
->> Fixes: 2da489432747 ("octeontx2-pf: devlink params support to set mcam entry count")
->> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
->> ---
->>  drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c | 5 ++++-
->>  1 file changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
->> index 303930499a4c..8d7f2c3b0cfd 100644
->> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
->> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
->> @@ -2900,7 +2900,7 @@ static int otx2_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->>  
->>  	err = otx2_register_dl(pf);
->>  	if (err)
->> -		goto err_mcam_flow_del;
->> +		goto err_register_dl;
->>  
->>  	/* Initialize SR-IOV resources */
->>  	err = otx2_sriov_vfcfg_init(pf);
->> @@ -2919,8 +2919,11 @@ static int otx2_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->>  	return 0;
-> 
-> If otx2_dcbnl_set_ops() fails at the end then shouldn't we also call
-> otx2_sriov_vfcfg_cleanup() ?
+On 11/22/22 20:10, Asutosh Das wrote:
+> +/* Resources */
+> +static const struct ufshcd_res_info ufs_res_info[RES_MAX] = {
+> +	{.name = "ufs_mem",},
+> +	{.name = "mcq",},
+> +	/* Submission Queue DAO */
+> +	{.name = "mcq_sqd",},
+> +	/* Submission Queue Interrupt Status */
+> +	{.name = "mcq_sqis",},
+> +	/* Completion Queue DAO */
+> +	{.name = "mcq_cqd",},
+> +	/* Completion Queue Interrupt Status */
+> +	{.name = "mcq_cqis",},
+> +	/* MCQ vendor specific */
+> +	{.name = "mcq_vs",},
+> +};
 
-I think it does not need. This is the probe process. PF and VF are all not ready to work,
-so pf->vf_configs[i].link_event_work does not scheduled. And pf->vf_configs memory resource will
-be freed by devm subsystem if probe failed. There are not memory leak and other problems.
+Which names to associate with nodes in the device tree for UFS MCQ 
+resources has not been standardized. Additionally, the UFS driver is 
+also used on platforms that do not support the device tree (e.g. Intel 
+x86 platforms). So I don't think that the platform_get_resource_byname() 
+calls should occur in the UFS driver core. How about moving the code 
+that queries device tree nodes into the Qualcomm driver until a second 
+user of this code is added? If a second user of this code appears this 
+code could e.g. become a kernel module shared by both UFS host 
+controller drivers.
 
-@Sunil Goutham, Please help to confirm.
+Thanks,
 
-Thanks.
-
-> 
->>  
->>  err_pf_sriov_init:
->> +	otx2_unregister_dl(pf);
->> +err_register_dl:
->>  	otx2_shutdown_tc(pf);
->>  err_mcam_flow_del:
->> +	destroy_workqueue(pf->otx2_wq);
->>  	otx2_mcam_flow_del(pf);
->>  err_unreg_netdev:
->>  	unregister_netdev(netdev);
->> -- 
->> 2.25.1
->>
-> .
-> 
+Bart.
