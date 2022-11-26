@@ -2,203 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98BF16394AF
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 09:42:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B66F6394B2
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 09:55:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbiKZIkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 03:40:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47218 "EHLO
+        id S229531AbiKZIzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 03:55:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiKZIkQ (ORCPT
+        with ESMTP id S229495AbiKZIy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 03:40:16 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2061.outbound.protection.outlook.com [40.107.223.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9921B9FC
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 00:40:14 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YAO+6Syo26N8/07/MGEjBGWeiGW6zwp2R6LDInaQqZoE9b+RqvMKk4mN3VFPoUZPuxDB+VaRXdufLrdoIOmnn1h1t/Xiq9MzfU7onX786hWFpog3vQ3ho1LrQGzlen5HjgLAhtO+ebey7k/zNDAeGJiLt+tgF1/4rwDYPPjINmpINof80IginVGIHiF+dIPbYZcDY5yQQRT4xMoKXrFf48PvxBCui4BvIiGDke/G8ICX/by5ksdM7O8LbL8vVqwEB1jeNemzd9zkqVD8cCfAddnjAlns0zDk06Z70oPIYAa487bW7kqeQR3x3liFY09QNDfz38lD1JX11wfDAEirtQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3BNm7p4c1V7oH2YmNCWcgCtqaLXGmbOhnFyLarXxtLE=;
- b=T1nBc282FiKRTUZQzuENHF60tJ8czVv/JLPOEmUlScUR2vXczpVzwpoKcUnzWoH4oJNOz8WeqIQeScPP7DWzrjZ9ncRDgIPeAOBbPwH507WgVdWYGsRJEC9w+w/35F4rjezO4Oc5anrsHYXAYdmBq59ufKcY6+lOigr/s2lt+s8lTzcv73TTEvta2mPEW8v9IWiuGCMR2StXTx/hDh31oPxqvber4en1Rk5fVB3zItWtX03fwbBkK1f1MxmN8cJPQMx1r/CtfioWFyLJX9z9w8RZZlDvA18NS46+qivRp5XNDC6+NwrzYpsLXhEdxflJXZ5Jp0dTCY6AQzMMsoaGMA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3BNm7p4c1V7oH2YmNCWcgCtqaLXGmbOhnFyLarXxtLE=;
- b=x+qYmkJS6qs3iHNqBE4rBduVSfrbpJuc9uzvM0mxHpZlMJXXWFmJFoUhlNRhkUUAXki6l0+DTWwQLZSa9FeYVF8UBspvDhAEK/WSXH2WdQQPjawz7gWGREnkr9fC7wZdVeYixnGcanbVxL8t/H2Oz1qY9jR4dPwDlmEYEkr2vl0=
-Received: from MW4PR03CA0029.namprd03.prod.outlook.com (2603:10b6:303:8f::34)
- by BN9PR12MB5082.namprd12.prod.outlook.com (2603:10b6:408:133::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.21; Sat, 26 Nov
- 2022 08:40:12 +0000
-Received: from CO1NAM11FT107.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:8f:cafe::52) by MW4PR03CA0029.outlook.office365.com
- (2603:10b6:303:8f::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.21 via Frontend
- Transport; Sat, 26 Nov 2022 08:40:11 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT107.mail.protection.outlook.com (10.13.175.97) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5857.20 via Frontend Transport; Sat, 26 Nov 2022 08:40:11 +0000
-Received: from pp-server-two.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Sat, 26 Nov
- 2022 02:40:06 -0600
-From:   xinhui pan <xinhui.pan@amd.com>
-To:     <amd-gfx@lists.freedesktop.org>
-CC:     <daniel@ffwll.ch>, <dri-devel@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>, <matthew.auld@intel.com>,
-        <christian.koenig@amd.com>, xinhui pan <xinhui.pan@amd.com>
-Subject: [PATCH] drm: Optimise for continuous memory allocation
-Date:   Sat, 26 Nov 2022 16:39:54 +0800
-Message-ID: <20221126083954.112164-1-xinhui.pan@amd.com>
-X-Mailer: git-send-email 2.34.1
+        Sat, 26 Nov 2022 03:54:57 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910A71F636;
+        Sat, 26 Nov 2022 00:54:51 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NK5C90lfMz4f3kJq;
+        Sat, 26 Nov 2022 16:54:45 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgD3GthW1IFjS9C3BA--.57384S3;
+        Sat, 26 Nov 2022 16:54:48 +0800 (CST)
+Subject: Re: [PATCH RFC] scsi: core: remove unsed 'restarts' from scsi_device
+To:     Yu Kuai <yukuai1@huaweicloud.com>, ming.lei@redhat.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20221118113052.1324140-1-yukuai1@huaweicloud.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <cefdae2e-67e3-b4b4-f569-31db960e991f@huaweicloud.com>
+Date:   Sat, 26 Nov 2022 16:54:46 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <20221118113052.1324140-1-yukuai1@huaweicloud.com>
+Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT107:EE_|BN9PR12MB5082:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2e26c741-159a-4c21-c4ae-08dacf89d4d8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LRA44zu1aXw13sr+IcItp1RVmLwaT5AbtnuDgeQAh+SmNydX4diow9rmwWamhp8kgyJQKET3Fwlj/IdVn8Lc/fmswZyxQj1nm2gyS1HplOYATl1lK82sglYqLYzK0qxefUldTS8p5AqnxflzElgvLbBUcGDfGFe/wywwJGGeoo9Em9t0/uplzB5CRiFWQsYYuCx+m8HyUznMqdURhTF4NHFhg+hIiQ/nK0zpB2X7/Od3XJSrzYYLEwICKZdkoV/KG9Dg5CDPZYMIvHUzyPnL46Ijx9D29Ln7qjYWc/SWrt6oiCN9FWLTm3RWlhcwHrp6Aa8+6Fz1c8xV5fypMVkBLitz/t7cAtv995QqVXK5aoasAUmsUhE+m108JfC4DZw1mmlRrgmfQx5JT38rjdzW/b3NB6MGRZLvnjhtFRPgWUITN2HChFDOoGxwNJEOBAx475A9zt6KdJksT/ISZ37QRmT8SMWoilR/PtKVXvjqz4DklK0tNV4tpBnruYEfZUNS3dl31kCfB42TM2gz+gwxO31Q36+WteioBsRPiU1JPZsO18E3u8atDgfeZIWuAi6Q1z+SxNBsr0/oSzfDmC/j4f/OLR16FJQ/rElh+adUukuE2jBMPCuAxLL2TIcvFNpXZxa5BAzuwg0BqNH2v/wzUAHVJt6Ku2tBK7Xu4Md5x3tRXMS38pLMfKkFIbIi/TJlfE9ErD9qtyNb8yFXUA1OziSjEmNrtOqegxydXc+ihvI=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(396003)(39860400002)(451199015)(36840700001)(40470700004)(46966006)(47076005)(426003)(83380400001)(336012)(66899015)(54906003)(6666004)(7696005)(40460700003)(36756003)(81166007)(356005)(86362001)(40480700001)(82310400005)(82740400003)(36860700001)(2616005)(16526019)(186003)(1076003)(5660300002)(26005)(478600001)(6916009)(8936002)(8676002)(2906002)(70586007)(70206006)(4326008)(41300700001)(316002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Nov 2022 08:40:11.3072
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2e26c741-159a-4c21-c4ae-08dacf89d4d8
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT107.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5082
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: gCh0CgD3GthW1IFjS9C3BA--.57384S3
+X-Coremail-Antispam: 1UD129KBjvdXoW7GrWkZF1UKr45Xw1xAr18Zrb_yoWDZwb_Gr
+        WkKryDWa1UGrn2qFyUKr1qvFW8Kwn0gry5XF18XFnrXry8tayrCFWDKryYyFsxZa1kC3s7
+        Ar15Xa45GrsrZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb4kFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vI
+        Y487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
+        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y
+        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
+        WUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8
+        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UU
+        UUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently drm-buddy does not have full knowledge of continuous memory.
+Hi,
 
-Lets consider scenario below.
-order 1:    L		    R
-order 0: LL	LR	RL	RR
-for order 1 allocation, it can offer L or R or LR+RL.
+ÔÚ 2022/11/18 19:30, Yu Kuai Ð´µÀ:
+> From: Yu Kuai <yukuai3@huawei.com>
+> 
+> During code review, I found that 'restarts' is not useful anymore after
+> the following commits:
+> 
+> 1) commit ab3cee3762e5 ("blk-mq: In blk_mq_dispatch_rq_list() "no budget"
+> is a reason to kick")
+> 2) commit d3b38596875d ("blk-mq: run queue no matter whether the request
+> is the last request")
+> 3) commit 673235f91531 ("scsi: core: Fix race between handling STS_RESOURCE
+> and completion")
+> 
+> Now that if get budget ever failed, block layer will make sure to
+> trigger new run queue for the hctx. Hence there is no need to run queue
+> from scsi layer in this case.
+> 
 
-For now, we only implement L or R case for continuous memory allocation.
-So this patch aims to implement the LR+RL case.
+Does anyone has suggestions about this patch?
 
-Signed-off-by: xinhui pan <xinhui.pan@amd.com>
----
- drivers/gpu/drm/drm_buddy.c | 56 ++++++++++++++++++++++++++++++++-----
- 1 file changed, 49 insertions(+), 7 deletions(-)
+More info why I tried to remove this:
 
-diff --git a/drivers/gpu/drm/drm_buddy.c b/drivers/gpu/drm/drm_buddy.c
-index 11bb59399471..550af558342e 100644
---- a/drivers/gpu/drm/drm_buddy.c
-+++ b/drivers/gpu/drm/drm_buddy.c
-@@ -386,6 +386,37 @@ alloc_range_bias(struct drm_buddy *mm,
- 	return ERR_PTR(err);
- }
- 
-+static struct drm_buddy_block *
-+find_continuous_blocks(struct drm_buddy *mm,
-+		       int order,
-+		       struct drm_buddy_block **rn)
-+{
-+	struct list_head *head = &mm->free_list[order];
-+	struct drm_buddy_block *node, *parent, *free_node;
-+
-+	list_for_each_entry(free_node, head, link) {
-+		node = free_node;
-+		parent = node->parent;
-+		while (parent && parent->right == node) {
-+			node = parent;
-+			parent = node->parent;
-+		}
-+		if (!parent)
-+			continue;
-+
-+		node = parent->right;
-+		while (drm_buddy_block_is_split(node))
-+			node = node->left;
-+
-+		if (drm_buddy_block_is_free(node) &&
-+		    drm_buddy_block_order(node) == order) {
-+			*rn = node;
-+			return free_node;
-+		}
-+	}
-+	return NULL;
-+}
-+
- static struct drm_buddy_block *
- get_maxblock(struct list_head *head)
- {
-@@ -637,7 +668,7 @@ int drm_buddy_alloc_blocks(struct drm_buddy *mm,
- 			   struct list_head *blocks,
- 			   unsigned long flags)
- {
--	struct drm_buddy_block *block = NULL;
-+	struct drm_buddy_block *block = NULL, *rblock = NULL;
- 	unsigned int min_order, order;
- 	unsigned long pages;
- 	LIST_HEAD(allocated);
-@@ -689,17 +720,28 @@ int drm_buddy_alloc_blocks(struct drm_buddy *mm,
- 				break;
- 
- 			if (order-- == min_order) {
-+				if (!(flags & DRM_BUDDY_RANGE_ALLOCATION) &&
-+				    min_order != 0 && pages == BIT(order + 1)) {
-+					block = find_continuous_blocks(mm,
-+								       order,
-+								       &rblock);
-+					if (block)
-+						break;
-+				}
- 				err = -ENOSPC;
- 				goto err_free;
- 			}
- 		} while (1);
- 
--		mark_allocated(block);
--		mm->avail -= drm_buddy_block_size(mm, block);
--		kmemleak_update_trace(block);
--		list_add_tail(&block->link, &allocated);
--
--		pages -= BIT(order);
-+		do {
-+			mark_allocated(block);
-+			mm->avail -= drm_buddy_block_size(mm, block);
-+			kmemleak_update_trace(block);
-+			list_add_tail(&block->link, &allocated);
-+			pages -= BIT(order);
-+			block = rblock;
-+			rblock = NULL;
-+		} while (block);
- 
- 		if (!pages)
- 			break;
--- 
-2.34.1
+while testing megaraid with 4 nvme with none elevator, the default
+queue_depth is 128, while I test it with fio 128 jobs and 1 iodepth,
+bw is about 4Gib/s, however, if I test with 128 jobs and 2 iodepth,
+bw is decreased to about 0.8Gib/s, and with this patch applied,
+bw can stay 4Gib/s in the later case.
+
+Thanks,
+Kuai
 
