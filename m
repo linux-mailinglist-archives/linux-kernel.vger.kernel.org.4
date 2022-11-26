@@ -2,209 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB4DE639695
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 15:43:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E887D639698
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 15:43:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbiKZOnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 09:43:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47108 "EHLO
+        id S229670AbiKZOnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 09:43:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiKZOnC (ORCPT
+        with ESMTP id S229669AbiKZOnJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 09:43:02 -0500
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C1CE007
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 06:42:59 -0800 (PST)
-Received: by mail-qv1-xf31.google.com with SMTP id a17so2752861qvt.9
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 06:42:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nQhwElD6HyjdOaWbP69t5Eif9DF7qh6agcOZWVGnnXQ=;
-        b=RG0e9GACvhxDMvcR8NUKJ/kSE1TeXzvh4lS6Oyq/5iAvCRyfXRIoFBL/4V/8oOt/Tv
-         V3R6VA/kmWNpTuGmd03twm4ppolFss3E+wRezPh/gQsjlrVLBT21snQiSwrrY8KjfR3T
-         sbh0sKtMCPyCCx98gFtahTT9mV8TqX6ZyuOys=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nQhwElD6HyjdOaWbP69t5Eif9DF7qh6agcOZWVGnnXQ=;
-        b=sPG3jy8TGZjYDrQQJS/NA9IDm8NHDKBlPYqVZ4Stsp9vD2cl6HUvO0FGZP2wErUMYR
-         6aapsUdRrly1M175aIEZYF6AGYc0cmuCH3Keq9CjID496sN/3jYO+z2igh9pYueYE4SE
-         92rnBd1oZLsWXCgX4+uVfFx387sDmncsPgdusENZBYe/RCWk+NAM64rcWJLP/3IdfDXO
-         s7Ka3w3daJHHyV9IJ0KzFkUpxQGfC2epapUduCKU6FO3idiWVsncI79eR7lHbNNN8pnk
-         3REzusQBmjkv6BmHTxScFaFuV4qaYhLdBuCNFckqxyhV0Qu1Zk6MqFydwTrBmVydMvO8
-         DrlA==
-X-Gm-Message-State: ANoB5pnMEVFrCo8coWLfRYhJ178HeQmRgw6++4pzruobpyawrXX00lCs
-        KE5Cc2+IgGqtxNuMNTrK6QL3SowGH/qEeQ==
-X-Google-Smtp-Source: AA0mqf7N9VYhNM+QHnaJ2zf6+fKMQEnAkxPWuvThoSZGJ183go/Nuh3NiCbyIm5PaAJU6IbaAsKRgA==
-X-Received: by 2002:a05:6214:3984:b0:4bb:e31f:a56e with SMTP id ny4-20020a056214398400b004bbe31fa56emr24205391qvb.76.1669473778664;
-        Sat, 26 Nov 2022 06:42:58 -0800 (PST)
-Received: from smtpclient.apple (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
-        by smtp.gmail.com with ESMTPSA id j10-20020ac84c8a000000b003a5fb681ae7sm3795432qtv.3.2022.11.26.06.42.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Nov 2022 06:42:58 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Joel Fernandes <joel@joelfernandes.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH] rcu-tasks: Make rude RCU-Tasks work well with CPU hotplug
-Date:   Sat, 26 Nov 2022 09:42:57 -0500
-Message-Id: <CE3515A9-2226-4001-BEDA-9DD6CB2ACF09@joelfernandes.org>
-References: <PH0PR11MB58804E24C3C14371F4397D68DA119@PH0PR11MB5880.namprd11.prod.outlook.com>
-Cc:     Neeraj Upadhyay <quic_neeraju@quicinc.com>, paulmck@kernel.org,
-        frederic@kernel.org, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <PH0PR11MB58804E24C3C14371F4397D68DA119@PH0PR11MB5880.namprd11.prod.outlook.com>
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-X-Mailer: iPhone Mail (19G82)
+        Sat, 26 Nov 2022 09:43:09 -0500
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2067.outbound.protection.outlook.com [40.107.241.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B7813CCF;
+        Sat, 26 Nov 2022 06:43:08 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FX0lsvnxXD5varBy+vnx4hmwfEc53Hd3JM1AZCx90N5W6SOQLajwOI4u/hcJs85Q6PYa9Y9DhCTpjFqcztbOwuyU7wnIuRHCQjm7kChz3Yz8Wi7YbhRJI1Jhm094RX92fS8Sr1Nw35MbPmiDl/Bn6kWh0EKxbLBzAhMbxdcifljdi4zLMxS8xHMxd9SJSCpWARcoRRzvZWCfXsxHvWTKfLtFpTXv2gTE30b+y6MEssbbduf+01W3ugs/re9xN/NuYxnZ0RC+jIxqJlNY2dNPTB8ix3uWeRtk1ZoqwguAvMABWMfnhvyzyAnE+FgJyUSlKeteOtGbzDwEZgljYratlg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=y+bqL0GdXCPkYXr9IoH7Zt3D/PyKa/KqO2ZdfsZ14ME=;
+ b=BsP1uu557s9URRqr8/Yl5eVWLFt8dJE50l1QsvD8cpF0jbHOnRe5kV8Sf+FykiuioAfurVmgjbcqJX4yT72Zq1PfT0xsx8xMVxpCABJL6/3a/pnJoBy1LSYYPEpXYFS/AVLr71bJ/S4G24a8DDKeXUY3CBT57P5AJ7RYYGH1ZQWH2VcaDstjhGewJ8Y59yKGGaYFEyGcz2uqO5F7H1ObzdG77TakMMkBA6GHL54ZtFuNbgZnEBWhVCCLMHeanxBNlCKYhFloI8s81yaMNa25GVUNKYygKIvxylKMnN0nF562J5a7IzfXQD66SH85SniIkHS90dRUdUpXoNkp1LFzTA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=y+bqL0GdXCPkYXr9IoH7Zt3D/PyKa/KqO2ZdfsZ14ME=;
+ b=fqHymeWxx5m8clix+xavV0WuwpMIyquCt5fsdBtozu/cm1p+NHY4tlw2W0qf76jKNZ/Iprihp9bL76PsHFpCzf2JUVBPAhNLY2bmXysl7rLbv+iSRqTB7gS7J1kfTGrpZ2MvuAQn7mN7CKxJoqV0Po/2+8iimdiXpkMH3slT36Ew49Ayuc15xKBsBXS05qnCM4cnZa1hk/GlY8bpK5Oj8u5QHyKQfXWHle3WHQnpYno/gWzGDe1HmrFZrkfrcG8vPvF3TBTA2ycg+l6cIJuWh7ZPrNNszRT03E+13gy2yqtJ7M8PG0j/B9LJwX4sQGVtcJGM/y3bLCAR3GpCroJGYg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
+ (2603:10a6:208:1a::16) by AM0PR04MB7154.eurprd04.prod.outlook.com
+ (2603:10a6:208:19f::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19; Sat, 26 Nov
+ 2022 14:43:05 +0000
+Received: from AM0PR0402MB3395.eurprd04.prod.outlook.com
+ ([fe80::14eb:6506:8510:875f]) by AM0PR0402MB3395.eurprd04.prod.outlook.com
+ ([fe80::14eb:6506:8510:875f%7]) with mapi id 15.20.5857.020; Sat, 26 Nov 2022
+ 14:43:05 +0000
+Message-ID: <a26ed87f-9e4c-7c1f-515b-edaaff9140fd@suse.com>
+Date:   Sat, 26 Nov 2022 15:43:02 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] module: Don't wait for GOING modules
+Content-Language: en-US
+To:     mcgrof@kernel.org, Petr Mladek <pmladek@suse.com>
+Cc:     prarit@redhat.com, david@redhat.com, mwilck@suse.com,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20221123131226.24359-1-petr.pavlu@suse.com>
+ <Y348QNmO2AHh3eNr@alley>
+From:   Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <Y348QNmO2AHh3eNr@alley>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR2P281CA0007.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a::17) To AM0PR0402MB3395.eurprd04.prod.outlook.com
+ (2603:10a6:208:1a::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR0402MB3395:EE_|AM0PR04MB7154:EE_
+X-MS-Office365-Filtering-Correlation-Id: c6b883ed-84ae-4aa6-51e0-08dacfbc86a4
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fRk6qxC+5Aw/K5n4VKLJnoGVoSxEKHXv0f+i3JWCOOmZX2lS/6xux5tDLjrBnBT1WrjHfR4ihyE4AFl96RzMAUNfshDVSRwSy0EoitvGMN/+RO8czSenPczoPuvHaq+VK/qXZFko5Dk8KRnsGv5jWA2re3uXkSHqxuJrsD1gUV5jd4JodI/zA/llZoQRwVnSYr5ttm+i3tn8GGEKeXttfHnrXhK1VnE5n6ZKVN0WMUS0GJs7wzx4vK+uL2luiPgLlHKyCV2fFnBEWEigyaD1mfZ7XQWHbEwSnVErztz5IWCPK6QMIQ3Tws5JkcCV0V1mXMaA26Z/6eb/YjO7HpN9fo7XXjktFn9dptUtQR/YP3kXeUiQ/WAffSOn1QtWVN4oR9QPkq/dt9W55iusUOJuiXfJgLG3CnjqW17nivY6jacAUW2TrKU6RuEsZRhpcmbOurf5F13NO2AcTdzu2O6HmcsqYd2TeDRQdor6/nbWoMAtIMLcAFgaUMKUd7hwoWPUD+IBAbaxqKwrBRCkMK+freBkMpQTeEoNwOUPtviqcdqF2j70TyM0e8ucB4vZXhovqxE0u1OVBTm8SzPzM9NfgmGL6s+xpxvJOVhuwmNaBtbdxGDfSrSvqyE86pC2LPoFpMEnWYODckxiyY+qfa6ng9H9e/hTRJBrBBPk2g6BadI3pig4ro3VipTiEMq9tLQe1YhDx2wP9o/jPTLgXaRbmNkpoNmwlLXJJXpIFEMWke6BaoIfANY53FsC6xm86fJA
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR0402MB3395.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(39850400004)(366004)(396003)(346002)(376002)(451199015)(31686004)(36756003)(38100700002)(4001150100001)(2906002)(41300700001)(44832011)(83380400001)(31696002)(86362001)(66946007)(66476007)(6636002)(37006003)(316002)(6486002)(966005)(8676002)(66556008)(2616005)(478600001)(8936002)(6862004)(5660300002)(55236004)(186003)(53546011)(6666004)(26005)(6512007)(4326008)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZzNuYjhIUHdmV0Y4eDUwaUhLL25rOFJVMnk3SktNZmpHbzFCbHB3ZW9JVWpC?=
+ =?utf-8?B?aUZ5MFp2TGxHWWVzdHdXdHpsUFA4cFk2MHNoU213L0pDK1ltTm9ZdmF3UU5E?=
+ =?utf-8?B?dGxZVmo3akFKc1NlZjJTVUhVL0lXSEJ5T1BkT2xodUNZbDNyZEhHZmpOY2Vj?=
+ =?utf-8?B?VVlNbjFkTzhlZEcxU241bjhMZlNMcnJPaTlNWkxXeDN0aE1Hd3dpVHFSMWtq?=
+ =?utf-8?B?TnU5MDBkYTJDeWpISXFQdmZZTVlxcWJzaWtucHREWlRZS1ZYL0YxRlp2dnJS?=
+ =?utf-8?B?UFJ4NTNvZllKSWRRMUt3Y2F1REJUSXA4UTdIN200c05oZHZ5cjV6cVVjbVJr?=
+ =?utf-8?B?OHhOMXFwcGc4OEppYXY0T1ZMWEtmTXdYSllvRHFySnNEaU1xMnVhdi9sa1V0?=
+ =?utf-8?B?c3N4L2d6c0R5anN1WnpDM1JCUmtmU1lpNjVwYVBDZmlWak1hOVlCVDVzVFQ5?=
+ =?utf-8?B?TlVNaHRzYjZ2bVJmMWVjRWhRNlhQeXF3K1JiRTl5aG56Qy9xSU0wMjlGOVJ5?=
+ =?utf-8?B?dkVnTk9vdDkrN0dUWitTcU1BMVBXYWdBVlFlZ1ovUVpRSzJqQ29ITldsRk51?=
+ =?utf-8?B?NS9MYlcwbTlTMDh3bVpnQVRZdkwwYzl2WDVxbEpVRGl1K3BBTkNxbFBBL0RK?=
+ =?utf-8?B?KysxZTUxUzcrVlArbyt5NDBqc3FGZVExS016dzVGbkxZTUpuT1Ntd3pXbGtR?=
+ =?utf-8?B?cnpOdTVMaDIraHlUZ0ZwMW1JK3REbmppMnFMa09FUXRKaFhaOUt0S2NLWE9v?=
+ =?utf-8?B?MkNUaGs2eCtUNFZiOXUxVnN3Q2JRM2ZrU1VpYmgrc2R5VkFDUzlBanQyYTRh?=
+ =?utf-8?B?cmUvQm5vaGR3L1ljVmR3ZnE3cVpvZzU3VTBsb1V6ZUxCR2U2SUJsOTBHYThn?=
+ =?utf-8?B?bHU3R3piQTc0RGE1N1FVcEFMOHN5emxoRXhpOExIRU4wdFh3NGlGM3ZIR205?=
+ =?utf-8?B?bHQ2R05zK1RaTUwyYVZESUJLWEFWVThiVi9TQkpTQW1qZkRJVVJNTi9wMTA3?=
+ =?utf-8?B?UDI1RzU5ZDdrcjdEQ0s5dGJEMjhaQzN0akNVMTNxWFBybUQ3enNsKzY2UGVM?=
+ =?utf-8?B?MGQyMjZITWVpbno1SHZ0RzNkc2EyRXM2VW5uRUhlcEJMZjFUVGFGUnF4dzhX?=
+ =?utf-8?B?ODV4QzhhajBKQUpNYmUweWcxbjc5V2VKN05XMnAvUHFrWnhqeGVYWEgrY0V4?=
+ =?utf-8?B?TUZva2RqTUo0dmFSTnFNS0FKS2pHRlRuNk9Ld3ZmR05oREJmYzNvTXRNKytE?=
+ =?utf-8?B?OElUdzNGUU9waGVtSnRVNlFpZUxPVWRoTEliZmRZZFZoVlJjSjJpV0pKdlEw?=
+ =?utf-8?B?Q2VSVUdvOW1KWWdPbXhoYlhmcHNUMVVyWFRQTk03citTR1g2QWZzMFF4cmMz?=
+ =?utf-8?B?WHl0dmM0TU53cEJZbUtGQkg0WE9NaXA2aFZUNzlKZ1JqVDVyZndRRm5KV1Va?=
+ =?utf-8?B?KzBqQWZXOWJiaFFXaDkxSEUrMGM2OGpTUFZFTFFIMlloR0FJei9UTnkrRTRZ?=
+ =?utf-8?B?bGdYdi83MWsvYVh5UTRWdHJEa1RtM3RLMzczRkVzRktnZmFqdGxFSjRpeUhO?=
+ =?utf-8?B?R091ZFhyVjNpS2JJWUErNVd5bnJRTGF2bnpqSVhNN25EOWM4SFozWDcwZVZs?=
+ =?utf-8?B?WXBRS0pGRUJzTTJNMVloamZTSmpvNHppQWd0ZnFqTHhwRi9uMnBqR1l5V2Na?=
+ =?utf-8?B?VEw5SjgwNVRicVY1eDJ4SWIzWThXanpxeXc1bncxZUo1SExMYkRGN05XZTRx?=
+ =?utf-8?B?d09IWkZxL3ZXSU9WNm9yQlk2ZUprcVNwaUNxNU1Td1dtQi81VVFBQndZQ0xB?=
+ =?utf-8?B?Q0kweFp5dVBlSjdkNnBwWXd2aS9FQUx2ZFUwTDUxTm9TcnhkL1JQdy9IZ0l2?=
+ =?utf-8?B?T01VSTBwUlBGQVBIYmhray9pV01zR25rRWI1Z2xsMVA0VmxjenZQbHVJT09P?=
+ =?utf-8?B?OTloMDNlN0JYUVBMTVpDQzYvVnRaYTBCYThDZ2FlRW5jMkdwRDRwQkY3Tmw4?=
+ =?utf-8?B?VURULzNKSWdNd1lReGNEOUlsVWFKYXdaZThibkROMXRGZTNPMVRqRk95Zzd5?=
+ =?utf-8?B?Y2ZJaHhmMWl5Zmc0M00yY3pXVU9PUElMRGlSRzhFcm02RVZ5Qi9OUkVvbHVT?=
+ =?utf-8?Q?dnO6umH8NiAchNWzD5Ikj46tV?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c6b883ed-84ae-4aa6-51e0-08dacfbc86a4
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR0402MB3395.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Nov 2022 14:43:04.8719
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nUO3R1lMR4/TIh8qAvqqW9lwbXg8eAqZlWgXpSbbJLHvsDVXieZ+P2FEBBWWH7oGVqh0Q88auOF/QVg9S6G0Gw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB7154
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> On Nov 26, 2022, at 12:52 AM, Zhang, Qiang1 <qiang1.zhang@intel.com> wrote=
-:
->=20
-> =EF=BB=BF
->>=20
->> Hi Zqiang,
->>=20
->> On 11/25/2022 9:24 PM, Zqiang wrote:
->> Currently, for the case of num_online_cpus() <=3D 1, return directly,
->> indicates the end of current grace period and then release old data.
->> it's not accurate, for SMP system, when num_online_cpus() is equal
->> one, maybe another cpu that in offline process(after invoke
->> __cpu_disable()) is still in the rude RCU-Tasks critical section
->> holding the old data, this lead to memory corruption.
->>=20
->>=20
->>=20
->> Was this race seen in your testing? For the outgoing CPU, once that
->> CPU marks itself offline (and decrements __num_online_cpus), do we
->> have tracing active on that CPU, and synchronize_rcu_tasks_rude()
->> not waiting for it could potentially lead to memory corruption?
->=20
-> Hi Neeraj
->=20
-> Indeed, I didn't see race in the actual production environment,
-> Maybe my commit information description is not accurate enough,
-> like the scene I described with joel.
->=20
-> If in cpuhp_invoke_callback, some callback is in rude rcu-tasks read ctric=
-al section,
-> and still holding old data, but in this time, synchronize_rcu_tasks_rude()=
- not waiting,
-> and release old data.
->=20
-> Suppose the system has two cpus
->=20
->    CPU0                                                                   =
-  CPU1
->                         cpu_stopper_thread
->                                                                           =
-       take_cpu_down
->                            __cpu_disable
->                            dec __num_online_cpus=20
-> rcu_tasks_rude_wait_gp                                      cpuhp_invoke_c=
-allback =20
->    num_online_cpus() =3D=3D 1
->        return;
->=20
-> when __num_online_cpus =3D=3D 1, the CPU1 not completely offline.
-
-Agreed with yours and Neeraj assessment.
-
->>=20
->> As per my understanding, given that outgoing/incoming CPU=20
->> decrements/increments the __num_online_cpus value, and num_online_cpus()
->> is a plain read, problem could happen when the incoming CPU updates the
->> __num_online_cpus  value, however, rcu_tasks_rude_wait_gp()'s=20
->> num_online_cpus() call didn't observe the increment. So,=20
->> cpus_read_lock/unlock() seems to be required to handle this case.
->=20
-> Yes, the same problem will be encountered when going online, due to
-> access  __num_online_cpus  that is not protected by cpus_read_lock/unlock(=
-)=20
-> in rcu_tasks_rude_wait_gp().
->=20
-> Do I need to change the commit information to send v2?
-
-I think so. If you could add the CPU sequence diagram you mentioned, that wo=
-uld be great.
-
-Also I suggest add more details of which specific parts of the hotplug proce=
-ss (the ones in stop machine only) are susceptible to the issue. That is, on=
-ly those hotplug callbacks that are in  stop machine which may have trampoli=
-nes prematurely freed from another cpu, right?
-
-Thanks!
-
-  - Joel
-
-
-
->=20
-> Thanks
-> Zqiang
->=20
->>=20
->>=20
->> Thanks
->> Neeraj
->>=20
->> Therefore, this commit add cpus_read_lock/unlock() before executing
->> num_online_cpus().
->>=20
->> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+On 11/23/22 16:29, Petr Mladek wrote:
+> On Wed 2022-11-23 14:12:26, Petr Pavlu wrote:
+>> During a system boot, it can happen that the kernel receives a burst of
+>> requests to insert the same module but loading it eventually fails
+>> during its init call. For instance, udev can make a request to insert
+>> a frequency module for each individual CPU when another frequency module
+>> is already loaded which causes the init function of the new module to
+>> return an error.
+>>
+>> Since commit 6e6de3dee51a ("kernel/module.c: Only return -EEXIST for
+>> modules that have finished loading"), the kernel waits for modules in
+>> MODULE_STATE_GOING state to finish unloading before making another
+>> attempt to load the same module.
+>>
+>> This creates unnecessary work in the described scenario and delays the
+>> boot. In the worst case, it can prevent udev from loading drivers for
+>> other devices and might cause timeouts of services waiting on them and
+>> subsequently a failed boot.
+>>
+>> This patch attempts a different solution for the problem 6e6de3dee51a
+>> was trying to solve. Rather than waiting for the unloading to complete,
+>> it returns a different error code (-EBUSY) for modules in the GOING
+>> state. This should avoid the error situation that was described in
+>> 6e6de3dee51a (user space attempting to load a dependent module because
+>> the -EEXIST error code would suggest to user space that the first module
+>> had been loaded successfully), while avoiding the delay situation too.
+>>
+>> Fixes: 6e6de3dee51a ("kernel/module.c: Only return -EEXIST for modules that have finished loading")
+>> Co-developed-by: Martin Wilck <mwilck@suse.com>
+>> Signed-off-by: Martin Wilck <mwilck@suse.com>
+>> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+>> Cc: stable@vger.kernel.org
 >> ---
->>  kernel/rcu/tasks.h | 20 ++++++++++++++++++--
->>  1 file changed, 18 insertions(+), 2 deletions(-)
->>=20
->> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
->> index 4a991311be9b..08e72c6462d8 100644
->> --- a/kernel/rcu/tasks.h
->> +++ b/kernel/rcu/tasks.h
->> @@ -1033,14 +1033,30 @@ static void rcu_tasks_be_rude(struct work_struct *=
-work)
->>  {
->>  }
->>=20
->> +static DEFINE_PER_CPU(struct work_struct, rude_work);
->> +
->>  // Wait for one rude RCU-tasks grace period.
->>  static void rcu_tasks_rude_wait_gp(struct rcu_tasks *rtp)
->>  {
->> +    int cpu;
->> +    struct work_struct *work;
->> +
->> +    cpus_read_lock();
->>      if (num_online_cpus() <=3D 1)
->> -        return;    // Fastpath for only one CPU.
->> +        goto end;// Fastpath for only one CPU.
->>=20
->>      rtp->n_ipis +=3D cpumask_weight(cpu_online_mask) > -    schedule_on_=
-each_cpu(rcu_tasks_be_rude);
->> +    for_each_online_cpu(cpu) {
->> +        work =3D per_cpu_ptr(&rude_work, cpu);
->> +        INIT_WORK(work, rcu_tasks_be_rude);
->> +        schedule_work_on(cpu, work);
->> +    }
->> +
->> +    for_each_online_cpu(cpu)
->> +        flush_work(per_cpu_ptr(&rude_work, cpu));
->> +
->> +end:
->> +    cpus_read_unlock();
->>  }
->>=20
->>  void call_rcu_tasks_rude(struct rcu_head *rhp, rcu_callback_t func);
+>>
+>> Notes:
+>>     Sending this alternative patch per the discussion in
+>>     https://lore.kernel.org/linux-modules/20220919123233.8538-1-petr.pavlu@suse.com/.
+>>     The initial version comes internally from Martin, hence the co-developed tag.
+>>
+>>  kernel/module/main.c | 8 +++++---
+>>  1 file changed, 5 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/kernel/module/main.c b/kernel/module/main.c
+>> index d02d39c7174e..b7e08d1edc27 100644
+>> --- a/kernel/module/main.c
+>> +++ b/kernel/module/main.c
+>> @@ -2386,7 +2386,8 @@ static bool finished_loading(const char *name)
+>>  	sched_annotate_sleep();
+>>  	mutex_lock(&module_mutex);
+>>  	mod = find_module_all(name, strlen(name), true);
+>> -	ret = !mod || mod->state == MODULE_STATE_LIVE;
+>> +	ret = !mod || mod->state == MODULE_STATE_LIVE
+>> +		|| mod->state == MODULE_STATE_GOING;
+>>  	mutex_unlock(&module_mutex);
+>>  
+>>  	return ret;
+>> @@ -2566,7 +2567,8 @@ static int add_unformed_module(struct module *mod)
+>>  	mutex_lock(&module_mutex);
+>>  	old = find_module_all(mod->name, strlen(mod->name), true);
+>>  	if (old != NULL) {
+>> -		if (old->state != MODULE_STATE_LIVE) {
+>> +		if (old->state == MODULE_STATE_COMING
+>> +		    || old->state == MODULE_STATE_UNFORMED) {
+>>  			/* Wait in case it fails to load. */
+>>  			mutex_unlock(&module_mutex);
+>>  			err = wait_event_interruptible(module_wq,
+>> @@ -2575,7 +2577,7 @@ static int add_unformed_module(struct module *mod)
+>>  				goto out_unlocked;
+>>  			goto again;
+>>  		}
+>> -		err = -EEXIST;
+>> +		err = old->state != MODULE_STATE_LIVE ? -EBUSY : -EEXIST;
+> 
+> Hmm, this is not much reliable. It helps only when we manage to read
+> the old module state before it is gone.
+> 
+> A better solution would be to always return when there was a parallel
+> load. The older patch from Petr Pavlu was more precise because it
+> stored result of the exact parallel load. The below code is easier
+> and might be good enough.
+> 
+> static int add_unformed_module(struct module *mod)
+> {
+> 	int err;
+> 	struct module *old;
+> 
+> 	mod->state = MODULE_STATE_UNFORMED;
+> 
+> 	mutex_lock(&module_mutex);
+> 	old = find_module_all(mod->name, strlen(mod->name), true);
+> 	if (old != NULL) {
+> 		if (old->state == MODULE_STATE_COMING
+> 		    || old->state == MODULE_STATE_UNFORMED) {
+> 			/* Wait for the result of the parallel load. */
+> 			mutex_unlock(&module_mutex);
+> 			err = wait_event_interruptible(module_wq,
+> 					       finished_loading(mod->name));
+> 			if (err)
+> 				goto out_unlocked;
+> 		}
+> 
+> 		/* The module might have gone in the meantime. */
+> 		mutex_lock(&module_mutex);
+> 		old = find_module_all(mod->name, strlen(mod->name), true);
+> 
+> 		/*
+> 		 * We are here only when the same module was being loaded.
+> 		 * Do not try to load it again right now. It prevents
+> 		 * long delays caused by serialized module load failures.
+> 		 * It might happen when more devices of the same type trigger
+> 		 * load of a particular module.
+> 		 */
+> 		if (old && old->state == MODULE_STATE_LIVE)
+> 			err = -EXIST;
+> 		else
+> 			err = -EBUSY;
+> 		goto out;
+> 	}
+> 	mod_update_bounds(mod);
+> 	list_add_rcu(&mod->list, &modules);
+> 	mod_tree_insert(mod);
+> 	err = 0;
+> 
+> out:
+> 	mutex_unlock(&module_mutex);
+> out_unlocked:
+> 	return err;
+> }
+
+I think this makes sense. The suggested code only needs to have the second
+mutex_lock()+find_module_all() pair moved into the preceding if block to work
+correctly. I will wait a bit if there is more feedback and post an updated
+patch.
+
+Thanks,
+Petr
