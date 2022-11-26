@@ -2,88 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E2F96396C7
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 16:32:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 085236396C8
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 16:32:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbiKZPcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 10:32:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39730 "EHLO
+        id S229644AbiKZPcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 10:32:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiKZPcA (ORCPT
+        with ESMTP id S229446AbiKZPcK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 10:32:00 -0500
-Received: from smtp.smtpout.orange.fr (smtp-29.smtpout.orange.fr [80.12.242.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9EC1A83D
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 07:31:59 -0800 (PST)
-Received: from [192.168.1.18] ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id yx9loZaHtNKuIyx9loXs3F; Sat, 26 Nov 2022 16:31:57 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 26 Nov 2022 16:31:57 +0100
-X-ME-IP: 86.243.100.34
-Message-ID: <7bf2977b-b3a9-0543-0a41-dd4ad03e1594@wanadoo.fr>
-Date:   Sat, 26 Nov 2022 16:31:53 +0100
+        Sat, 26 Nov 2022 10:32:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95FBB1CFD2
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 07:32:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 140A760B85
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 15:32:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9ECAC433C1;
+        Sat, 26 Nov 2022 15:32:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669476728;
+        bh=2h++QTrAorI59jH3iOzNiOX8uGhWbeZh9J4UkZ1FyzY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XTiCoNiFxstsiQ35EmguH3iWYVBEe3apPBSsTx3XhGaH6OEnPLE73OcRJDA1TFzzf
+         3G5xP1gC1z9cmAtNIgerhIblRAmPkHDOEfr4XGBzsz9+8BJWW71+71cyduG14ubOxd
+         iCjl6S0MQL2qWIUHflM/amzUvTLsZ/cGBhxbcpX+vX/OprEHM+0sAaQzfeQ84oHdDS
+         tDsZRQvY7SkerNjM6DL9/uAsielxGaDuroSK6k4R262+5K97gDO3EmRQs8R7w7ecn6
+         v/bNBy13uGUtaRaStBGxFq5x3XvB9HBVG2BBSggNAfOrVMhWRPinZjUx0rrQ3To5Je
+         3E/eQnnf9MgOA==
+Date:   Sat, 26 Nov 2022 15:32:04 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH] riscv: Fix NR_CPUS range conditions
+Message-ID: <Y4IxdOPWhLLg5rwd@spud>
+References: <20221126061557.3541-1-samuel@sholland.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 1/2] staging: vme_user: add list_del in the error handling
- of tsi148_dma_list_add
-Content-Language: fr, en-US
-To:     Dongliang Mu <dzm91@hust.edu.cn>,
-        Martyn Welch <martyn@welchs.me.uk>,
-        Manohar Vanga <manohar.vanga@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mingyi Kang <jerrykang026@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-References: <20221126125642.16358-1-dzm91@hust.edu.cn>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20221126125642.16358-1-dzm91@hust.edu.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221126061557.3541-1-samuel@sholland.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 26/11/2022 à 13:56, Dongliang Mu a écrit :
-> Smatch reports the following issue:
-> drivers/staging/vme_user/vme_tsi148.c:1757 tsi148_dma_list_add()
-> warn: '&entry->list' not removed from list
+On Sat, Nov 26, 2022 at 12:15:56AM -0600, Samuel Holland wrote:
+> The conditions reference the symbol SBI_V01, which does not exist. The
+> correct symbol is RISCV_SBI_V01.
+
+Huh, good spot.
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
 > 
-
-Hi,
-
-Not tested with smatch, but I think that moving the list_add_tail() call 
-just a few lines below, when all lights are green, would also fix the issue.
-
-Just my 2c,
-
-CJ
-
-
-> Fix this by adding list_del in the error handling code.
-> 
-> Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+> Fixes: e623715f3d67 ("RISC-V: Increase range and default value of NR_CPUS")
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
 > ---
->   drivers/staging/vme_user/vme_tsi148.c | 1 +
->   1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/staging/vme_user/vme_tsi148.c b/drivers/staging/vme_user/vme_tsi148.c
-> index 020e0b3bce64..0171f46d1848 100644
-> --- a/drivers/staging/vme_user/vme_tsi148.c
-> +++ b/drivers/staging/vme_user/vme_tsi148.c
-> @@ -1751,6 +1751,7 @@ static int tsi148_dma_list_add(struct vme_dma_list *list,
->   	return 0;
->   
->   err_dma:
-> +	list_del(&entry->list);
->   err_dest:
->   err_source:
->   err_align:
-
+>  arch/riscv/Kconfig | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index fec54872ab45..acbfe34c6a00 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -319,9 +319,9 @@ config SMP
+>  config NR_CPUS
+>  	int "Maximum number of CPUs (2-512)"
+>  	depends on SMP
+> -	range 2 512 if !SBI_V01
+> -	range 2 32 if SBI_V01 && 32BIT
+> -	range 2 64 if SBI_V01 && 64BIT
+> +	range 2 512 if !RISCV_SBI_V01
+> +	range 2 32 if RISCV_SBI_V01 && 32BIT
+> +	range 2 64 if RISCV_SBI_V01 && 64BIT
+>  	default "32" if 32BIT
+>  	default "64" if 64BIT
+>  
+> -- 
+> 2.37.4
+> 
