@@ -2,76 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4078639367
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 03:30:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FDDF6392FC
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 02:04:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230144AbiKZCaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 25 Nov 2022 21:30:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58470 "EHLO
+        id S230084AbiKZBEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 25 Nov 2022 20:04:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiKZCaD (ORCPT
+        with ESMTP id S229570AbiKZBEq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 25 Nov 2022 21:30:03 -0500
-X-Greylist: delayed 1043 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 25 Nov 2022 18:30:01 PST
-Received: from mail.rrk.ir (mail.rrk.ir [46.209.19.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE393136D;
-        Fri, 25 Nov 2022 18:30:01 -0800 (PST)
-Received: from localhost (mail.rrk.ir [127.0.0.1])
-        by mail.rrk.ir (Postfix) with ESMTP id EA9C439713E;
-        Sat, 26 Nov 2022 05:42:33 +0330 (+0330)
-X-Virus-Scanned: Debian amavisd-new at mail.rrk.ir
-Received: from mail.rrk.ir ([127.0.0.1])
-        by localhost (mail.rrk.ir [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id IzeIoOj2fku4; Sat, 26 Nov 2022 05:42:24 +0330 (+0330)
-Content-Type: text/plain; charset="iso-8859-1"
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=rrk.ir; s=rrk;
-        t=1669401265; bh=Tek/QbFshVvW3DxuEJIWlwCvxszEYuMod+HhVGwXvdw=;
-        h=Subject:To:From:Date:Reply-To:From;
-        b=XsaGpSI2+BPsPsnjXM4yFUsvvZtG2D3G4mu7WrXewlWGtdJtiw/lhxot1OPNVFGVf
-         KfOjnF6/wtoPXS4GV7gMJGL7wUBB61LKZzEz3ekcgyUmTkcWAb6+q2MbfNaI8W7y8D
-         FAhONqYUnRm167ahaXs6fewXFePk7acVbtylF5Z4=
+        Fri, 25 Nov 2022 20:04:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2174E201B1;
+        Fri, 25 Nov 2022 17:04:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B512A61141;
+        Sat, 26 Nov 2022 01:04:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7CDAC433D6;
+        Sat, 26 Nov 2022 01:04:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669424685;
+        bh=TY8IZL8P0GF/A6JPjvDXNXoBU6fP3tYdWjqdkHU4+KQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=jdxb7OJTykXTbWY4qVib6VwP1PG4cWONNqmy33EzBOjEuIfgG8Y1Xbi3m6k900lZA
+         TZAD3q8Rzqso3GSvglqjAG17syvH0axtZKPkigdq3ryjzO3UsgHiQ5FyQAn1Bhug5v
+         QuTSWKCN9PBO9dXf94FL/eatVgXdcF8oTOgnwqTortbWGDkrmESwK6HHlzu5skRiMh
+         oVeBP5apE5az3yl6zwmH2RMF6KZGnhCbYgu9aemYBurjgarsLtwzEaey62p/dYtc9d
+         KWJSJqQrjT4g3Ai6jEUo+oX4PPHOsscfDip+TCNekVsdz3iBoTFYAMrE7tgTGNvWRf
+         dRznfnYxAw/6A==
+Received: by mercury (Postfix, from userid 1000)
+        id 4014910613B8; Sat, 26 Nov 2022 02:04:41 +0100 (CET)
+Date:   Sat, 26 Nov 2022 02:04:41 +0100
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [GIT PULL] power-supply fixes for 6.1
+Message-ID: <20221126010441.kkp6iavyvlcporpy@mercury.elektranox.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Re: Liaison Officer Needed In Your State...  
-To:     Recipients <firewall@rrk.ir>
-From:   "Ms. Kelvin Lin " <firewall@rrk.ir>
-Date:   Fri, 25 Nov 2022 10:34:12 -0800
-Reply-To: mail@gukaimail.com
-Message-Id: <20221126021233.EA9C439713E@mail.rrk.ir>
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_99,BAYES_999,
-        DATE_IN_PAST_06_12,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
-        *      [score: 1.0000]
-        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 1.0000]
-        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
-        *  1.5 DATE_IN_PAST_06_12 Date: is 6 to 12 hours before Received: date
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-X-Spam-Level: *****
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vts4brejo3q2mbte"
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
+--vts4brejo3q2mbte
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-A reputable pharmaceutical company from Vietnam is in need of a reliable in=
-dividual or corporate entity in your state to act as their Liaison; this wi=
-ll not affect your current job or business operations in anyway.  If intere=
-sted, reply for more information.
+Hi Linus,
 
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
-Sincerely,
-Ms. Kelvin Lin
-CC
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+
+are available in the Git repository at:
+
+  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.1-rc
+
+for you to fetch changes up to 767e684367e4759d9855b184045b7a9d6b19acd2:
+
+  power: supply: ab8500: Defer thermal zone probe (2022-11-01 01:00:32 +0100)
+
+----------------------------------------------------------------
+Power Supply Fixes for 6.1 cycle
+
+Fixes for the 6.1 cycle:
+ * rk817: Two error handling fixes
+ * ip5xxx: fix inter overflow in current calculation
+ * ab8500: fix thermal zone probing
+
+----------------------------------------------------------------
+Chris Morgan (1):
+      power: supply: rk817: Change rk817_chg_cur_to_reg to int
+
+Dan Carpenter (1):
+      power: supply: rk817: check correct variable
+
+Linus Walleij (1):
+      power: supply: ab8500: Defer thermal zone probe
+
+Ondrej Jirman (1):
+      power: supply: ip5xxx: Fix integer overflow in current_now calculation
+
+ drivers/power/supply/ab8500_btemp.c  |  9 ++++++++-
+ drivers/power/supply/ip5xxx_power.c  |  2 +-
+ drivers/power/supply/rk817_charger.c | 14 ++++++--------
+ 3 files changed, 15 insertions(+), 10 deletions(-)
+
+--vts4brejo3q2mbte
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmOBZigACgkQ2O7X88g7
++ppaDxAAgdH2kiKR3z0PT1/TrudVIhW0k7fHaLfq48WaVMTP5iKzOmoa55Wxf24s
+fRiGV2NU/qJ4pzavY8hi1W+5SRCE0JshHXH6zFoorryEsDUWi9lplTZHDUavOjUD
+U9IJPoyQ4hwmfgnB1GYJYfw3MlBFkypetSsrgbGUxVWQeWsrNh7kTtmoLX9abcHB
+bVnOHWLOeQSsqBlgxdhc8P1J6juOhwPWCVQCBiX7s+80uGs3+o/ZGpmzuBUr9W2n
+W0H+sVAlHAfz44EPi1KGhPpht4rahJv1XHrCPDNe1TB4hF0GlPXStY8+Yh8RicEF
+5jlMwItQdL+eS9JSoRWnlHGsRUHprvgH40xPWPwuWPfqb7r6ghHAkW97g+2HMBe/
+Ghp3BGyI9RV4nx6rDbyHf5/KcSFUeYTbRqrPyk0VcDUDc1PqwttRS9FPhd8EzGZW
+mAF2LuB4AG7OB1KaI2prLELkAU7dZJPtBQ7Ei1Zqp+UcgjTfK7Yu10LAe8prQkYA
+q7eK/V9pVNhEjh/Gf3/2aoQ5tgxIvuOdOzLWgw3V48BAi4u9eA9cp033R5mwbCu7
+34EiN4hxwAUo7FBemW1RGlCEIOU1h1CKBEOrlBLjwTTsKrcm+0OrfwrL0R4ahJcZ
+tlqy29pd1ZbrAWx64j7kv8TxFGYJW2uW67yr71JiJ9mG/pEf3iE=
+=9E2u
+-----END PGP SIGNATURE-----
+
+--vts4brejo3q2mbte--
