@@ -2,129 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B076396AF
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 15:52:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0876B6396B1
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 15:54:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiKZOwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 09:52:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
+        id S229670AbiKZOyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 09:54:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiKZOwn (ORCPT
+        with ESMTP id S229518AbiKZOym (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 09:52:43 -0500
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B5E6476;
-        Sat, 26 Nov 2022 06:52:39 -0800 (PST)
-Received: from hillosipuli.retiisi.eu (dkxjnptf9d2bpn7gcmbty-3.rev.dnainternet.fi [IPv6:2001:14ba:44ce:b640:9d1d:82c5:eca2:5060])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id D1B8D1B00118;
-        Sat, 26 Nov 2022 16:52:36 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1669474357;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Eam9jeoBQiN3SrHfi7a8ZxUvYPGxuG4vei6/xRQJZTk=;
-        b=Egy/Snw4aLdAGA/cCwbZNNip7ODsR8iCctJ50MCaareaH3dPf1aSBXEF3bzAfc1BAXmVNF
-        G1i0mtTfW7pLiiJO+hIUffnLWQy0h3mu6kUuxnno8iAodg/Wn/8H8Y1OzL900eAdMbFPHe
-        FIrKDacfUZLEMGCSFuP8qkqkIE+EwlrTbHy4Fvq72UvLpvxDIwrNoCmT0pDIzmfS5ufQo7
-        A/wbiQhz5Hh1oqq1Z7DKaIzaRQ0+9FE2Gy6BGjB0k5SVdCtpnlrV0yXxrTOfnti3nQaIrZ
-        K1qG12NM1AFbRSRCMe5wZdhN7ickITOir4ncO6Xhrr0Ga5YBju89Alow78C1jA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1669474357;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Eam9jeoBQiN3SrHfi7a8ZxUvYPGxuG4vei6/xRQJZTk=;
-        b=Z7C92FfMLbI+WqUKeGrkVpDL9CWvjI5PdRFmE8I1rsCyd82FT8ARGbZycHOG4kYFHCEihp
-        vG1DlBHa9yHbvhIXTif5CL7vmjjoGFrsm2s1HzoZKBN4z3H6kAf6OGAmulTgQ/lspcOXp0
-        /vZJV7OYPMsyKkHuRYv1CMTk4WnJSibnJV2TXKgskd1+T8U4PV5x6XRrtf03ULsDBu/oLz
-        5wYjCUaDHs55MzjsgHxMUJrIAyQOjvRUnZk+H5txoV87QpCyfx2AxGbZgvDqgXE/LXaMuR
-        +d3GwjG6k9Mui3lS994/ioIn4OYdVfKfVE/Vb2hYmyqAJ/7ugH7OxTzV5dH94w==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1669474357; a=rsa-sha256;
-        cv=none;
-        b=rT58Ant0zIwQO/3RsO+vdoxkzSlWHolhtspR2FEqRFgpam7G3jZvYqawuy1o8TlMFepMrs
-        b06XFwe+Nb/OYTZHQPNuziUTJAdXvgq3GGdFmQCMBxslS+4COhEq+pX90y9ZwQCE742rGq
-        N5KDRjfHoDFJemRlkwgGhCxnlBEygWg7EF0z7okRAJMzdu6TPFvZ5/jYXvmYCP/tib2bIC
-        C1ED5dEIyMBnMYrrcxClktu1/FBWOg1pdB3cxOafvIWiNRhWSi62KmQx48EY7gNKQINIIE
-        RIAS7d7UoMlVeC5RWPmXEoudrKWFaP/r7ecXx22BWFZagBNV1uwCSAAw03Jlmg==
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 81A78634C92;
-        Sat, 26 Nov 2022 16:52:36 +0200 (EET)
-Date:   Sat, 26 Nov 2022 16:52:36 +0200
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     shravan kumar <shravanmicrochip@gmail.com>
-Cc:     shravan kumar <shravan.chippa@microchip.com>,
-        paul.j.murphy@intel.com, daniele.alessandrelli@intel.com,
-        mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/6] dt-bindings: imx334: modify link frequency in
- examples
-Message-ID: <Y4IoNGaPNzQ+fa7A@valkosipuli.retiisi.eu>
-References: <20221125050807.1857479-1-shravan.chippa@microchip.com>
- <20221125050807.1857479-2-shravan.chippa@microchip.com>
- <Y4DlZWqlVf6zYZTo@valkosipuli.retiisi.eu>
- <CAOPdzVa7Fb3Nwfs8ZzTLGJkJ6KMbqAs3KB6p-fu2jKVO0qNv4w@mail.gmail.com>
+        Sat, 26 Nov 2022 09:54:42 -0500
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120085.outbound.protection.outlook.com [40.107.12.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E794E1E3D1;
+        Sat, 26 Nov 2022 06:54:40 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=L8mtgJAGv9X8ONnILmBwrkfofB0/TgacicJAtKLJWT7uJ1tTvJve0G5KVLcGisA8M9KdkPnmFZMrpOpoKA/hg2jppuQiAOdzOEEhxhM4iRLQ5Rf7eJzdqlkwwE1An75Hqo0gAXgJcf/s9hUyRxCfM93zx51wCsV45xZMbPlwUwEIaC34ei+/yWZhZuynDgajs0+z8joErche46WywhrWes64GRctgGroq5uIje7fmi5FtdTe6wmRiyt0XosuHmKP/qN7cvtDjGe0EKPfB1/a7OUIbDQY02Hzx3tHkXRDqZnMippJstYx9vxBk4v3dhf4OtANvlcXuhYxLtnPSzdHCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TYaBUI6zTgVdhIghh+C6Tej6Hq2GzlBCk2y3S+0NE3c=;
+ b=dMiGWEUZE2pnMpjgmi/CeX8Vjd4Ze7ETpvmKBvH5X3r3Q9IAgoldbrWZfmIjkcHDr+qMHIwvpY2wT6DIonD9CmTOGtbK0vsnJJti2LfNQmip8JzvFWvhFttqrDEkYtaxBUN/2l9PNGnV7Td8SEpW7AywivS72qFJg1SHnY3NUsdqVPVWfWEZuE24MtQPIohQD1TWrQrgpuZ7eHtrk9Rlh7XcK0n+kUl7b0VrWRlYYytEZt5ghtyNeYTDpdkdr3ZWaonv2ocE1VnlDYOtzqzq1urCU/bq6kCCJBq5xvAAMi9NUHicx043bjcZd044JIhoCSK5xXlAaOyWpMHOiT/6YQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TYaBUI6zTgVdhIghh+C6Tej6Hq2GzlBCk2y3S+0NE3c=;
+ b=AInajGbz5w5G2sbEYtAf4uWWZGegkw1hgVc3zlbJEOdcC4qX/W7Q2JzqKTuaTLVegCnDIA3wArQkwaclaRB0f7otLKmVIrMahAP8lRlkz85xe0A5+oyHh2BZkTn+ORjMphZbIUvW+dDYxXSEgOnDYLodd4yeQmvQRdx4IVB4Mc1aA/G+cIDPXJHvO/c7MAhWNev3yi+aEeAAYJkXohWrJnsvlHrsKEaGA70LQrfndWWTk+6/VTZ7+2noLf8xtKw+Gym0fs8x8kDJdd+bS69Eq4OJIVfARAW3TCWh4o8Sht5Yq6eWhGCmZlqXJN3QJxYhCDl0P/ZqTgfMKFaSXzTIdg==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR0P264MB3221.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1d4::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.21; Sat, 26 Nov
+ 2022 14:54:37 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::a85b:a9b6:cb36:fa6]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::a85b:a9b6:cb36:fa6%8]) with mapi id 15.20.5857.021; Sat, 26 Nov 2022
+ 14:54:37 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     =?utf-8?B?VGhvbWFzIFdlacOfc2NodWg=?= <linux@weissschuh.net>
+CC:     Luis Chamberlain <mcgrof@kernel.org>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH 2/3] powerpc/book3e: remove #include
+ <generated/utsrelease.h>
+Thread-Topic: [PATCH 2/3] powerpc/book3e: remove #include
+ <generated/utsrelease.h>
+Thread-Index: AQHZAVWpki/i7bY6nkCRQ+Pno6q/Xq5Q0P+AgABtGYCAAA0+gA==
+Date:   Sat, 26 Nov 2022 14:54:37 +0000
+Message-ID: <d48f728c-18ac-727c-6e0f-8b30e955449e@csgroup.eu>
+References: <20221126051002.123199-1-linux@weissschuh.net>
+ <20221126051002.123199-2-linux@weissschuh.net>
+ <03859890-bf90-4ad0-1926-4b8cb8dbfa57@csgroup.eu>
+ <8f8b12fd-2e25-49e4-a1fa-247f08f56454@t-8ch.de>
+In-Reply-To: <8f8b12fd-2e25-49e4-a1fa-247f08f56454@t-8ch.de>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR0P264MB3221:EE_
+x-ms-office365-filtering-correlation-id: 21e14cf1-fb04-4383-8a7d-08dacfbe23b1
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Dez4DsTtIF4HJaup1/+h4T2tttVryPA7l8l3VdU8avq4eMitH5/adpqFqKx1mhMf5qTHuYpU1qipWds+8PCgOMusfTgNwICX6I/zOeIrwK+b3oNgwPcQf3/0E7EPxT1Ivk/GCsMVtVpqzQ5LhNqx5L0FKAUYF5bmku3MAm0HKg0p421AWP9tdsYenynPuKwwFiVRVLRzWWS5jGwN/CXcrOtp+UyBj1OtA7vCNlYIcgVhce2GmpJSEFxtpJikjtKvFkLgIanUvOVK3GzUf8C3haHz/Zl+FWGC/J8MJ7LKbpAPNJfc8g0C+67b3rlTtJgcuHF6b2NcSsTMVPtXqmevdR2UX/6XXtFQzefnmM478+4tuLG7H5Y4ly49UmsX08Dtf3MpQTJrRNz+q3UT4STMgZFK7rmzKkQmubeaIjtYiby6+nhuZnXqLHXb7icd9ZOGVchIJw2TiZrDyWfNufeMdMON1q0RZokblO6Osm2vNjTxh++njKyXnibl1FQWhqF3Mly1L5hoF5MsBLZ2Gi0pNCj41qcDUuAU63FP4Zc+6MC1o3TKYutsnS4yGMJpkUFccrRfCYzbHf+7ZIELOwAmS2sLUFLi7bpsYYu5N+fW6Tni4qRk9qUXdG7rf8PxqfOX36fPgPo770ap2wZifomM1Zt/oopIr2hMODm4GK1g9/CJHAbD+HaEn2lmJfC8qph0CCcW+Jsl5mWSzkoE7wbsvGHL92KSFW+LeccRczYUgbQL46HjMngbJa+Q1N0NdEgJxiJ9pyKgPLFJf0ij7r8PYw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39830400003)(366004)(376002)(396003)(346002)(451199015)(5660300002)(7416002)(66946007)(71200400001)(6486002)(66556008)(66476007)(316002)(4326008)(91956017)(76116006)(6916009)(54906003)(64756008)(66446008)(36756003)(41300700001)(8676002)(83380400001)(38100700002)(38070700005)(122000001)(478600001)(31696002)(86362001)(2616005)(186003)(26005)(6506007)(8936002)(6512007)(31686004)(4001150100001)(2906002)(44832011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bWF4SnpUcXRyY0djTUJpck54QVBUdkRXTVMvUm80NC96UnRteGJkSkJsWDFn?=
+ =?utf-8?B?QXhQTW5ZTTc4VldwaDRNaHJDSy9lOXl3dFJUOTRNU21EbVVhQmswZkNtUEpm?=
+ =?utf-8?B?UGZwcnFrS0xPV09naENvNFMrbGNpaEcyZHlEUkNKcVJsNnZ0Z2Rxa01SVUJE?=
+ =?utf-8?B?SllNOGtTR2hrRDZOMEYvS2lDZUJ4a09ZNWJHeG5HblRSeWxaR2tUd3pmU1Fw?=
+ =?utf-8?B?Wm1hYWhwZDMxaUxIS0hTRmg2SkUyUllzWnlhRkVycll4S1c0MHRwcm9zcTBE?=
+ =?utf-8?B?Zmp3UTZrYW9ERkZEMDJlWGpJdUw4U1lZcDBoMzZSTmoxZTl5cmFjUmtkUFAw?=
+ =?utf-8?B?RXlXK2hjMGpYY0ZSYnhSRHVqZVlzK2xkVm54WmlSd05JTVM4YVV2dXZacFRL?=
+ =?utf-8?B?eURQa1ExNjhadG5KeVF4Rm1vcERxL3NISFc5TDZvNXFOWFptN2o0L0JOVlV2?=
+ =?utf-8?B?Y2xFRFE1NloycENhbytuS3Njcm5XRWx4QWxmd05XZHo3d1dqaTNJM1IrLzN4?=
+ =?utf-8?B?eDNDdW05NzdoSHdyVHhPdTdZakNTWnJUR2x2R1lrUTYzejg1VCtYM2ZHcWlY?=
+ =?utf-8?B?MEVvbVcveUl4dlRDSkg5Q1NJUHZrSzNWWENYdzFUd2RJdE1vVUhMZWtSMlNT?=
+ =?utf-8?B?Nng5M0JqOCsyNzB5UGhyZ1BGdGUrOXZGY05vSmxMVk02VHYzMG1VQUpJTDNr?=
+ =?utf-8?B?eUh6Q2h3ejdJUllvNHB6S2wrTHdVeHJHSXBtcmtxK0c0czBJMGt5NFNjcGVV?=
+ =?utf-8?B?TmdOQkRCZDVDYVVrdlRBTStWbkJ0UkNtNnFON2VEYVZqdUk0RGsrd0w4WUdu?=
+ =?utf-8?B?UmJNK0RtSzVJbUtTaW1TVFBSQk1VTGFBSE5STEh5OTNSVHJQZVFOdWU1dXYv?=
+ =?utf-8?B?eGxQb2Q3RkVsUkN2aHVRamExcWJ6MGdhaDczb3ZDUjRrYXVnZ3VjeGVMMGFQ?=
+ =?utf-8?B?Y0toc3p6WlljSkR4blhKamFEcVdrd0tLbHRhV0RyemRMa09maHhKS0Z0MURD?=
+ =?utf-8?B?VWNtUVUweUpMeVhwZTZ4cXlyYzhoTjhXek5kSExZc2MvNHJhZVVhaXFTT1oy?=
+ =?utf-8?B?dnRlTWV1azA0Snc5WXVsdWhJck5nT3ZpSGVxaDFmSU1veEZuMkh0c3NuZkY0?=
+ =?utf-8?B?eURBL2pHMjQ5aC9KY2lOaGdkOVhQM0diRFRESXZITTlPU2cvSUNJNlB6cnJs?=
+ =?utf-8?B?VmVFZFVlQ1BjRzlFb1poNUIwYld4MkVtRFVpV1M0akkwWTRvZzRPRm0vWldI?=
+ =?utf-8?B?REFnUzNVZkJQTGNpaEpwMW85NmNENEtvN2ZaWmlMalY0c3RlQTdqU2dxVXIv?=
+ =?utf-8?B?Q2pLYjM4M0xsWkRkOFlMQXhnRFZCaHVuNmhRbWJMQkVyazBSY1JYVnlMa3dV?=
+ =?utf-8?B?bGl3MHRWbWRPNDF1Z0oyMmQxTUplVTlMNS9vcFdkQ2RydnFaYWY2Tk5BOHRL?=
+ =?utf-8?B?YzFZK1RtYWNJbGdodlV5Ymd6VVpoL2R0MlRiVENYbFVxL3NaSFlqRktpU0RN?=
+ =?utf-8?B?VENiSXMyNVMrd00yK1lyV1ZaclhhS1Uxa0VTK0RjenkyUnk4c0RNZ2Z2Q1R0?=
+ =?utf-8?B?RVVqRnlpV0FaQ3c0OHJQbDRtcCtFRlQrN3lnUXB1NXhocjR3VG41c2pXWTlH?=
+ =?utf-8?B?bmtwQUZNUnBQZjhENkM0aVAzeGVIVHRtVGUyK3BFeEl2dS9tWjY0SVJzWTFs?=
+ =?utf-8?B?MmlZRENVOHkrK3ppRW5RQ04zSFk1TEFYcUNEeE9xcGRxNXFveStRR3pUYWVo?=
+ =?utf-8?B?V1ZKakpobFNtVHhWTjZOTjBMeVJ0TWV0NHVmSzE5OCtJQm04YW1RWHNkdkls?=
+ =?utf-8?B?UW9BYXB5TjZBbzg3aEljOFRvUWR4aVlmLzlneUx4bEMwaG9mejlNcnAwRXl5?=
+ =?utf-8?B?cEUrWmpPaTlKRC9vVXVzazZaeEtsQ0NZVEdhRmJTOFd0d1JvaERtT283UElW?=
+ =?utf-8?B?bDdObGNyQmNYaXRuTU5IZHNuM01KV1F5Z3ZrWGorcGk2djlyT0FHTkt5ditP?=
+ =?utf-8?B?dWVVelFQSGJhUzFWRU9ZRzBsNFNnaWxDVUU1UzJhTnFNOFp3Tm85am5FNG1U?=
+ =?utf-8?B?MDUxSUdVUlk1N1loK2NWVVYvZ1E3cmo3b2lhcG5TdG1lb3BVWS9zelNYOXU2?=
+ =?utf-8?B?UDB4am9WQ1hJL1RaSEd4S2tWb1Q5cHlrTUtYcUNjNVR2VEVISnRzTVVmRUV2?=
+ =?utf-8?B?U0E9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <DC1FBEC1A89556469A8BD363C0966064@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOPdzVa7Fb3Nwfs8ZzTLGJkJ6KMbqAs3KB6p-fu2jKVO0qNv4w@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 21e14cf1-fb04-4383-8a7d-08dacfbe23b1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Nov 2022 14:54:37.5452
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: JiI2K4OL37dRPn0MEEiTyXbzrM/LX7n5YvwCVy1nH2gB3XJHI8WMC4TQe6GZzG9mI5JYBbqK+ni7cmoaJTG/CKJrNJP9OMS1UxpS6Rr1qDo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB3221
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 26, 2022 at 04:21:57PM +0530, shravan kumar wrote:
-> On Fri, Nov 25, 2022 at 9:27 PM Sakari Ailus <sakari.ailus@iki.fi> wrote:
-> >
-> > Hi Shravan,
-> >
-> > On Fri, Nov 25, 2022 at 10:38:02AM +0530, shravan kumar wrote:
-> > > From: Shravan Chippa <shravan.chippa@microchip.com>
-> > >
-> > > -imx334 sensor is configured to 1782Mbps/lane for 3840x2160@60.
-> > > -But in device tree bindings exapmple we are passing 891Mbps/lane
-> > > so modified to 1782Mbps
-> > >
-> > > Signed-off-by: Shravan Chippa <shravan.chippa@microchip.com>
-> > > ---
-> > >  Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml b/Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml
-> > > index f5055b9db693..ea3c93f97d65 100644
-> > > --- a/Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml
-> > > +++ b/Documentation/devicetree/bindings/media/i2c/sony,imx334.yaml
-> > > @@ -82,7 +82,7 @@ examples:
-> > >                  imx334: endpoint {
-> > >                      remote-endpoint = <&cam>;
-> > >                      data-lanes = <1 2 3 4>;
-> > > -                    link-frequencies = /bits/ 64 <891000000>;
-> > > +                    link-frequencies = /bits/ 64 <1782000000>;
-> >
-> > My understanding is that the original frequency is correct --- 594 MHz
-> > pixel clock, 12 bpp, four lanes (and DDR).
-> 
-> As per my understanding, other than these three parameters there is
-> one more link frequency (communication frequency from imx334 sensor to
-> MIPI CSI2 controller).
-> thanks,
-
-Feel free to add additional frequencies later on. But this patch appears to
-be just wrong.
-
--- 
-Sakari Ailus
+DQoNCkxlIDI2LzExLzIwMjIgw6AgMTU6MDcsIFRob21hcyBXZWnDn3NjaHVoIGEgw6ljcml0wqA6
+DQo+IE9uIDIwMjItMTEtMjYgMDc6MzYrMDAwMCwgQ2hyaXN0b3BoZSBMZXJveSB3cm90ZToNCj4+
+IExlIDI2LzExLzIwMjIgw6AgMDY6MTAsIFRob21hcyBXZWnDn3NjaHVoIGEgw6ljcml0wqA6DQo+
+Pj4gQ29tbWl0IDdhZDRiZDg4N2QyNyAoInBvd2VycGMvYm9vazNlOiBnZXQgcmlkIG9mICNpbmNs
+dWRlIDxnZW5lcmF0ZWQvY29tcGlsZS5oPiIpDQo+Pj4gcmVtb3ZlZCB0aGUgdXNhZ2Ugb2YgdGhl
+IGRlZmluZSBVVFNfVkVSU0lPTiBidXQgZm9yZ290IHRvIGRyb3AgdGhlDQo+Pj4gaW5jbHVkZS4N
+Cj4+DQo+PiBXaGF0IGFib3V0Og0KPj4gYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy81Mnh4L2VmaWth
+LmMNCj4+IGFyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvYW1pZ2FvbmUvc2V0dXAuYw0KPj4gYXJjaC9w
+b3dlcnBjL3BsYXRmb3Jtcy9jaHJwL3NldHVwLmMNCj4+IGFyY2gvcG93ZXJwYy9wbGF0Zm9ybXMv
+cG93ZXJtYWMvYm9vdHhfaW5pdC5jDQo+Pg0KPj4gSSBiZWxpZXZlIHlvdSBjYW4gZG8gYSBsb3Qg
+bW9yZSB0aGFuIHdoYXQgeW91IGRpZCBpbiB5b3VyIHNlcmllcy4NCj4gDQo+IFRoZSBjb21taXQg
+bWVzc2FnZXMgYXJlIHdyb25nLg0KPiBUaGV5IHNob3VsZCBoYXZlIHNhaWQgVVRTX1JFTEVBU0Ug
+aW5zdGVhZCBvZiBVVFNfVkVSU0lPTi4NCg0KQWgsIG9rLiBTbyB5b3VyIHNlcmllcyBpcyBjb21w
+bGV0ZSB0aGVuOg0KDQokIGdpdCBncmVwIC1MIFVUU19SRUxFQVNFIGBnaXQgZ3JlcCAtbCAiI2lu
+Y2x1ZGUgPGdlbmVyYXRlZC91dHNyZWxlYXNlLmg+ImANCkRvY3VtZW50YXRpb24vdGFyZ2V0L3Rj
+bV9tb2RfYnVpbGRlci5weQ0KYXJjaC9wb3dlcnBjL21tL25vaGFzaC9rYXNscl9ib29rZS5jDQpk
+cml2ZXJzL2Jhc2UvZmlybXdhcmVfbG9hZGVyL2Zpcm13YXJlLmgNCmluaXQvdmVyc2lvbi5jDQoN
+ClJldmlld2VkLWJ5OiBDaHJpc3RvcGhlIExlcm95IDxjaHJpc3RvcGhlLmxlcm95QGNzZ3JvdXAu
+ZXU+DQoNCj4gDQo+IENvdWxkIHRoZSBtYWludGFpbmVycyBmaXggdGhpcyB1cCB3aGVuIGFwcGx5
+aW5nPw0KPiBJIGFsc28gY2hhbmdlZCBpdCBsb2NhbGx5IHNvIGl0IHdpbGwgYmUgZml4ZWQgZm9y
+IHYyLg0KPiANCj4+IExpc3Qgb2YgZmlsZXMgdXNpbmcgVVRTX1ZFUlNJT04gOg0KPj4NCj4+ICQg
+Z2l0IGdyZXAgLWwgVVRTX1ZFUlNJT04NCj4+IFsuLl0NCj4gDQo+IFRob21hcw0K
