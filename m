@@ -2,138 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A89E6394AB
-	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 09:29:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98BF16394AF
+	for <lists+linux-kernel@lfdr.de>; Sat, 26 Nov 2022 09:42:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbiKZI3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 03:29:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43442 "EHLO
+        id S229514AbiKZIkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 03:40:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiKZI3S (ORCPT
+        with ESMTP id S229464AbiKZIkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 03:29:18 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A554D2A251
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 00:29:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669451357; x=1700987357;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=SqbRVrCioVa3UeMqVxXShz51YhwAK+wO0nYLWVzAdNQ=;
-  b=P5goWCXRMSTWXjAuQDnWHS2QR9WI7wtRnLhWrjaEoRb7ZKiyWo5Kog50
-   XffqqtZJuWJYijmtePIp5Nj0vz2q9oMP6rwBMbFJ9dZMP6Rk8PElrywyq
-   ekRfzaAXJ5vN7fGv+1LIsxntX4W7s551NmbJKJ3UwiP779n2hELt0Kr0W
-   8ztj9AmQatCpr8NcwCOFhCUHjZZA8iDYBhHq4iuZpYjeWWjKWiceuilgM
-   J6krtKfzjfxXSPwZWQXZg7z732Mh9+c18PSCEv42iAf41H6ec7Su1/YB6
-   7qlWTuXL5rrU+eA6IvoXDNt7GLvh/VlWEZlziKofYAxVc+oncG5JqiVyt
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="376726174"
-X-IronPort-AV: E=Sophos;i="5.96,194,1665471600"; 
-   d="scan'208";a="376726174"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2022 00:29:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10542"; a="817322273"
-X-IronPort-AV: E=Sophos;i="5.96,194,1665471600"; 
-   d="scan'208";a="817322273"
-Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 26 Nov 2022 00:29:16 -0800
-Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oyqYl-00065l-12;
-        Sat, 26 Nov 2022 08:29:15 +0000
-Date:   Sat, 26 Nov 2022 16:28:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:timers/core] BUILD SUCCESS
- e0d3da982c96aeddc1bbf1cf9469dbb9ebdca657
-Message-ID: <6381ce47.WpWT00poLTgEaLRr%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 26 Nov 2022 03:40:16 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2061.outbound.protection.outlook.com [40.107.223.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9921B9FC
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 00:40:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YAO+6Syo26N8/07/MGEjBGWeiGW6zwp2R6LDInaQqZoE9b+RqvMKk4mN3VFPoUZPuxDB+VaRXdufLrdoIOmnn1h1t/Xiq9MzfU7onX786hWFpog3vQ3ho1LrQGzlen5HjgLAhtO+ebey7k/zNDAeGJiLt+tgF1/4rwDYPPjINmpINof80IginVGIHiF+dIPbYZcDY5yQQRT4xMoKXrFf48PvxBCui4BvIiGDke/G8ICX/by5ksdM7O8LbL8vVqwEB1jeNemzd9zkqVD8cCfAddnjAlns0zDk06Z70oPIYAa487bW7kqeQR3x3liFY09QNDfz38lD1JX11wfDAEirtQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3BNm7p4c1V7oH2YmNCWcgCtqaLXGmbOhnFyLarXxtLE=;
+ b=T1nBc282FiKRTUZQzuENHF60tJ8czVv/JLPOEmUlScUR2vXczpVzwpoKcUnzWoH4oJNOz8WeqIQeScPP7DWzrjZ9ncRDgIPeAOBbPwH507WgVdWYGsRJEC9w+w/35F4rjezO4Oc5anrsHYXAYdmBq59ufKcY6+lOigr/s2lt+s8lTzcv73TTEvta2mPEW8v9IWiuGCMR2StXTx/hDh31oPxqvber4en1Rk5fVB3zItWtX03fwbBkK1f1MxmN8cJPQMx1r/CtfioWFyLJX9z9w8RZZlDvA18NS46+qivRp5XNDC6+NwrzYpsLXhEdxflJXZ5Jp0dTCY6AQzMMsoaGMA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3BNm7p4c1V7oH2YmNCWcgCtqaLXGmbOhnFyLarXxtLE=;
+ b=x+qYmkJS6qs3iHNqBE4rBduVSfrbpJuc9uzvM0mxHpZlMJXXWFmJFoUhlNRhkUUAXki6l0+DTWwQLZSa9FeYVF8UBspvDhAEK/WSXH2WdQQPjawz7gWGREnkr9fC7wZdVeYixnGcanbVxL8t/H2Oz1qY9jR4dPwDlmEYEkr2vl0=
+Received: from MW4PR03CA0029.namprd03.prod.outlook.com (2603:10b6:303:8f::34)
+ by BN9PR12MB5082.namprd12.prod.outlook.com (2603:10b6:408:133::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.21; Sat, 26 Nov
+ 2022 08:40:12 +0000
+Received: from CO1NAM11FT107.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8f:cafe::52) by MW4PR03CA0029.outlook.office365.com
+ (2603:10b6:303:8f::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.21 via Frontend
+ Transport; Sat, 26 Nov 2022 08:40:11 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT107.mail.protection.outlook.com (10.13.175.97) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5857.20 via Frontend Transport; Sat, 26 Nov 2022 08:40:11 +0000
+Received: from pp-server-two.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Sat, 26 Nov
+ 2022 02:40:06 -0600
+From:   xinhui pan <xinhui.pan@amd.com>
+To:     <amd-gfx@lists.freedesktop.org>
+CC:     <daniel@ffwll.ch>, <dri-devel@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>, <matthew.auld@intel.com>,
+        <christian.koenig@amd.com>, xinhui pan <xinhui.pan@amd.com>
+Subject: [PATCH] drm: Optimise for continuous memory allocation
+Date:   Sat, 26 Nov 2022 16:39:54 +0800
+Message-ID: <20221126083954.112164-1-xinhui.pan@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT107:EE_|BN9PR12MB5082:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2e26c741-159a-4c21-c4ae-08dacf89d4d8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: LRA44zu1aXw13sr+IcItp1RVmLwaT5AbtnuDgeQAh+SmNydX4diow9rmwWamhp8kgyJQKET3Fwlj/IdVn8Lc/fmswZyxQj1nm2gyS1HplOYATl1lK82sglYqLYzK0qxefUldTS8p5AqnxflzElgvLbBUcGDfGFe/wywwJGGeoo9Em9t0/uplzB5CRiFWQsYYuCx+m8HyUznMqdURhTF4NHFhg+hIiQ/nK0zpB2X7/Od3XJSrzYYLEwICKZdkoV/KG9Dg5CDPZYMIvHUzyPnL46Ijx9D29Ln7qjYWc/SWrt6oiCN9FWLTm3RWlhcwHrp6Aa8+6Fz1c8xV5fypMVkBLitz/t7cAtv995QqVXK5aoasAUmsUhE+m108JfC4DZw1mmlRrgmfQx5JT38rjdzW/b3NB6MGRZLvnjhtFRPgWUITN2HChFDOoGxwNJEOBAx475A9zt6KdJksT/ISZ37QRmT8SMWoilR/PtKVXvjqz4DklK0tNV4tpBnruYEfZUNS3dl31kCfB42TM2gz+gwxO31Q36+WteioBsRPiU1JPZsO18E3u8atDgfeZIWuAi6Q1z+SxNBsr0/oSzfDmC/j4f/OLR16FJQ/rElh+adUukuE2jBMPCuAxLL2TIcvFNpXZxa5BAzuwg0BqNH2v/wzUAHVJt6Ku2tBK7Xu4Md5x3tRXMS38pLMfKkFIbIi/TJlfE9ErD9qtyNb8yFXUA1OziSjEmNrtOqegxydXc+ihvI=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(396003)(39860400002)(451199015)(36840700001)(40470700004)(46966006)(47076005)(426003)(83380400001)(336012)(66899015)(54906003)(6666004)(7696005)(40460700003)(36756003)(81166007)(356005)(86362001)(40480700001)(82310400005)(82740400003)(36860700001)(2616005)(16526019)(186003)(1076003)(5660300002)(26005)(478600001)(6916009)(8936002)(8676002)(2906002)(70586007)(70206006)(4326008)(41300700001)(316002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Nov 2022 08:40:11.3072
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2e26c741-159a-4c21-c4ae-08dacf89d4d8
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT107.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5082
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/core
-branch HEAD: e0d3da982c96aeddc1bbf1cf9469dbb9ebdca657  Bluetooth: hci_qca: Fix the teardown problem for real
+Currently drm-buddy does not have full knowledge of continuous memory.
 
-elapsed time: 2532m
+Lets consider scenario below.
+order 1:    L		    R
+order 0: LL	LR	RL	RR
+for order 1 allocation, it can offer L or R or LR+RL.
 
-configs tested: 56
-configs skipped: 2
+For now, we only implement L or R case for continuous memory allocation.
+So this patch aims to implement the LR+RL case.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Signed-off-by: xinhui pan <xinhui.pan@amd.com>
+---
+ drivers/gpu/drm/drm_buddy.c | 56 ++++++++++++++++++++++++++++++++-----
+ 1 file changed, 49 insertions(+), 7 deletions(-)
 
-gcc tested configs:
-arc                                 defconfig
-s390                             allmodconfig
-alpha                               defconfig
-s390                                defconfig
-s390                             allyesconfig
-mips                             allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-arc                  randconfig-r043-20221124
-ia64                             allmodconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-m68k                             allyesconfig
-x86_64                           rhel-8.3-syz
-x86_64                           rhel-8.3-kvm
-x86_64                         rhel-8.3-kunit
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a006
-x86_64                        randconfig-a015
-i386                                defconfig
-i386                             allyesconfig
-arm                                 defconfig
-
-clang tested configs:
-riscv                randconfig-r042-20221124
-hexagon              randconfig-r041-20221124
-hexagon              randconfig-r045-20221124
-s390                 randconfig-r044-20221124
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a012
-x86_64                        randconfig-a005
-x86_64                        randconfig-a016
-x86_64                        randconfig-a014
-
+diff --git a/drivers/gpu/drm/drm_buddy.c b/drivers/gpu/drm/drm_buddy.c
+index 11bb59399471..550af558342e 100644
+--- a/drivers/gpu/drm/drm_buddy.c
++++ b/drivers/gpu/drm/drm_buddy.c
+@@ -386,6 +386,37 @@ alloc_range_bias(struct drm_buddy *mm,
+ 	return ERR_PTR(err);
+ }
+ 
++static struct drm_buddy_block *
++find_continuous_blocks(struct drm_buddy *mm,
++		       int order,
++		       struct drm_buddy_block **rn)
++{
++	struct list_head *head = &mm->free_list[order];
++	struct drm_buddy_block *node, *parent, *free_node;
++
++	list_for_each_entry(free_node, head, link) {
++		node = free_node;
++		parent = node->parent;
++		while (parent && parent->right == node) {
++			node = parent;
++			parent = node->parent;
++		}
++		if (!parent)
++			continue;
++
++		node = parent->right;
++		while (drm_buddy_block_is_split(node))
++			node = node->left;
++
++		if (drm_buddy_block_is_free(node) &&
++		    drm_buddy_block_order(node) == order) {
++			*rn = node;
++			return free_node;
++		}
++	}
++	return NULL;
++}
++
+ static struct drm_buddy_block *
+ get_maxblock(struct list_head *head)
+ {
+@@ -637,7 +668,7 @@ int drm_buddy_alloc_blocks(struct drm_buddy *mm,
+ 			   struct list_head *blocks,
+ 			   unsigned long flags)
+ {
+-	struct drm_buddy_block *block = NULL;
++	struct drm_buddy_block *block = NULL, *rblock = NULL;
+ 	unsigned int min_order, order;
+ 	unsigned long pages;
+ 	LIST_HEAD(allocated);
+@@ -689,17 +720,28 @@ int drm_buddy_alloc_blocks(struct drm_buddy *mm,
+ 				break;
+ 
+ 			if (order-- == min_order) {
++				if (!(flags & DRM_BUDDY_RANGE_ALLOCATION) &&
++				    min_order != 0 && pages == BIT(order + 1)) {
++					block = find_continuous_blocks(mm,
++								       order,
++								       &rblock);
++					if (block)
++						break;
++				}
+ 				err = -ENOSPC;
+ 				goto err_free;
+ 			}
+ 		} while (1);
+ 
+-		mark_allocated(block);
+-		mm->avail -= drm_buddy_block_size(mm, block);
+-		kmemleak_update_trace(block);
+-		list_add_tail(&block->link, &allocated);
+-
+-		pages -= BIT(order);
++		do {
++			mark_allocated(block);
++			mm->avail -= drm_buddy_block_size(mm, block);
++			kmemleak_update_trace(block);
++			list_add_tail(&block->link, &allocated);
++			pages -= BIT(order);
++			block = rblock;
++			rblock = NULL;
++		} while (block);
+ 
+ 		if (!pages)
+ 			break;
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.34.1
+
