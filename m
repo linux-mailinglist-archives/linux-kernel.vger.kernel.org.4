@@ -2,37 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F0DB639C04
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 18:32:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E58F639C07
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 18:33:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbiK0RcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 12:32:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52294 "EHLO
+        id S229615AbiK0RdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 12:33:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiK0RcX (ORCPT
+        with ESMTP id S229450AbiK0Rc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 12:32:23 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EECC64E4
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 09:32:22 -0800 (PST)
-Received: from [2a02:8108:963f:de38:5054:ff:feb3:8f48] (helo=regzbot.fritz.box); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        id 1ozLVs-0004JB-Ht; Sun, 27 Nov 2022 18:32:20 +0100
-From:   "Regzbot (on behalf of Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: Linux regressions report  for mainline [2022-11-27]
-Date:   Sun, 27 Nov 2022 17:32:19 +0000
-Message-Id: <166956961686.104691.2021186998003391429@leemhuis.info>
-X-Mailer: git-send-email 2.38.1
-Content-Type: text/plain; charset="utf-8"
+        Sun, 27 Nov 2022 12:32:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DCBA6453;
+        Sun, 27 Nov 2022 09:32:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2599FB80AE6;
+        Sun, 27 Nov 2022 17:32:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45CEEC433C1;
+        Sun, 27 Nov 2022 17:32:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669570373;
+        bh=8w7VTx/8jnLMeTpaw70+gwklXuYHAobZHbYwgVJCREs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ahn1SrHeINF3qv1+cDrCi+yH7iT990ujHVAUbRgVKTjNJqznGydQht/i/S5k0bf+c
+         7uTvDH3zxxfBNHrNEaXJBbCYqhF5KEvHAkgVQRrY1jnC58sc2OLbFTGBsf0bn6f5EX
+         yirayZxcq1mzFnFU0n2pzzhxIDXlf/ozqsfo2VI6TKYM7Mx3y7Dxstu98RHH5npQXZ
+         8Ica5TIopPkkafuy8v7juZwYkLM5QkwgaJu6dnG+zaDQrW3DFAKIw7gA61nB8xkOSm
+         CcLvZvVqtDfTzPMKOHVnCECYzbiqxFez8vNFVEGxJfHhjviEhS2Jwdpog/97kmd+Y+
+         bKwfkwr0HEIHg==
+Date:   Sun, 27 Nov 2022 17:32:48 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v2 7/9] riscv: dts: bouffalolab: add Sipeed M1s SoM and
+ Dock devicetree
+Message-ID: <Y4OfQLfAmYOucKdq@spud>
+References: <20221127132448.4034-1-jszhang@kernel.org>
+ <20221127132448.4034-8-jszhang@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1669570342;b68d1c26;
-X-HE-SMSGID: 1ozLVs-0004JB-Ht
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221127132448.4034-8-jszhang@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -40,107 +63,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus! Below is a slightly edited report from regzbot listing all
-regression from this cycle that the bot and I are currently aware of.
+On Sun, Nov 27, 2022 at 09:24:46PM +0800, Jisheng Zhang wrote:
+> Sipeed manufactures a M1s system-on-module and dock board, add basic
+> support for them.
+> 
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 
-One net regression is brand new and a fix already was posted. The
-arm64/qcom one reently was discussed. The arm64/drm one looks stalled
-and is waiting for feedback from the reporter afaics; I already send
-an inquiry, but that didn't help.
+Other than the plic compatibe in 5/9 needing a fix one way or another,
+the dts looks fine so
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-HTH, Ciao, Thorsten
----
-Hi, this is regzbot, the Linux kernel regression tracking bot.
+Thanks,
+Conor.
 
-Currently I'm aware of 3 regressions in linux-mainline. Find the
-current status below and the latest on the web:
-
-https://linux-regtracking.leemhuis.info/regzbot/mainline/
-
-Bye bye, hope to see you soon for the next report.
-   Regzbot (on behalf of Thorsten Leemhuis)
-
-
-======================================================
-current cycle (v6.0.. aka v6.1-rc), culprit identified
-======================================================
-
-
-[ *NEW* ] net: RTM_DELROUTE not sent anymore when deleting (last) nexthop of routes
------------------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/CAOiHx==ddZr6mvvbzgoAwwhJW76qGNVOcNsTG-6m79Ch+=aA5Q@mail.gmail.com/
-https://lore.kernel.org/netdev/CAOiHx==ddZr6mvvbzgoAwwhJW76qGNVOcNsTG-6m79Ch%2B=aA5Q@mail.gmail.com/
-
-By Jonas Gorski; 3 days ago; 13 activities, latest 2 days ago.
-Introduced in 61b91eb33a69 (v6.1-rc1)
-
-Recent activities from: Jonas Gorski (5), Ido Schimmel (4), David
-  Ahern (2), Thorsten Leemhuis (1), Nikolay Aleksandrov (1)
-
-One patch associated with this regression:
-* Re: RTM_DELROUTE not sent anymore when deleting (last) nexthop of routes in 6.1
-  https://lore.kernel.org/netdev/Y3%2BV9gu4NUQ7P0mL@shredder/
-  3 days ago, by Ido Schimmel
-
-Noteworthy links:
-* [PATCH net] ipv4: Fix route deletion when nexthop info is not specified
-  https://lore.kernel.org/netdev/20221124210932.2470010-1-idosch@nvidia.com/
-  2 days ago, by Ido Schimmel; thread monitored.
-
-
-arm64: crash on the Qualcomm SM8250
------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/CAMi1Hd1VBCFhf7+EXWHQWcGy4k=tcyLa7RGiFdprtRnegSG0Mw@mail.gmail.com/
-https://lore.kernel.org/lkml/CAMi1Hd1VBCFhf7%2BEXWHQWcGy4k=tcyLa7RGiFdprtRnegSG0Mw@mail.gmail.com/
-
-By Amit Pundir; 18 days ago; 17 activities, latest 3 days ago.
-Introduced in c44094eee32f (v6.1-rc1)
-
-Recent activities from: Catalin Marinas (1), Sibi Sankar (1), Manivannan
-  Sadhasivam (1)
-
-Noteworthy links:
-* [PATCH] Revert "arm64: dma: Drop cache invalidation from arch_dma_prep_coherent()"
-  https://lore.kernel.org/lkml/20221114110329.68413-1-manivannan.sadhasivam@linaro.org/
-  13 days ago, by Manivannan Sadhasivam; thread monitored.
-
-
-drm: msm: DSI controller being switched off before the panel unprepare hook is called
--------------------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/1892d0af-8aa4-dc03-887a-e44bb623b836@linaro.org/
-https://lore.kernel.org/dri-devel/1892d0af-8aa4-dc03-887a-e44bb623b836@linaro.org/
-
-By Caleb Connolly; 16 days ago; 2 activities, latest 14 days ago.
-Introduced in 007ac0262b0d (v6.1-rc1)
-
-
-=============
-End of report
-=============
-
-All regressions marked '[ *NEW* ]' were added since the previous report,
-which can be found here:
-https://lore.kernel.org/r/166896848178.941482.1410650446316360950@leemhuis.info
-
-Thanks for your attention, have a nice day!
-
-  Regzbot, your hard working Linux kernel regression tracking robot
-
-
-P.S.: Wanna know more about regzbot or how to use it to track regressions
-for your subsystem? Then check out the getting started guide or the
-reference documentation:
-
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
-
-The short version: if you see a regression report you want to see
-tracked, just send a reply to the report where you Cc
-regressions@lists.linux.dev with a line like this:
-
-#regzbot introduced: v5.13..v5.14-rc1
-
-If you want to fix a tracked regression, just do what is expected
-anyway: add a 'Link:' tag with the url to the report, e.g.:
-
-Link: https://lore.kernel.org/all/30th.anniversary.repost@klaava.Helsinki.FI/
+> ---
+>  arch/riscv/boot/dts/Makefile                  |  1 +
+>  arch/riscv/boot/dts/bouffalolab/Makefile      |  2 ++
+>  .../dts/bouffalolab/bl808-sipeed-m1s-dock.dts | 25 +++++++++++++++++++
+>  .../dts/bouffalolab/bl808-sipeed-m1s.dtsi     | 21 ++++++++++++++++
+>  4 files changed, 49 insertions(+)
+>  create mode 100644 arch/riscv/boot/dts/bouffalolab/Makefile
+>  create mode 100644 arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s-dock.dts
+>  create mode 100644 arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s.dtsi
+> 
+> diff --git a/arch/riscv/boot/dts/Makefile b/arch/riscv/boot/dts/Makefile
+> index ff174996cdfd..b525467152b2 100644
+> --- a/arch/riscv/boot/dts/Makefile
+> +++ b/arch/riscv/boot/dts/Makefile
+> @@ -1,4 +1,5 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> +subdir-y += bouffalolab
+>  subdir-y += sifive
+>  subdir-y += starfive
+>  subdir-$(CONFIG_SOC_CANAAN_K210_DTB_BUILTIN) += canaan
+> diff --git a/arch/riscv/boot/dts/bouffalolab/Makefile b/arch/riscv/boot/dts/bouffalolab/Makefile
+> new file mode 100644
+> index 000000000000..5419964e892d
+> --- /dev/null
+> +++ b/arch/riscv/boot/dts/bouffalolab/Makefile
+> @@ -0,0 +1,2 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +dtb-$(CONFIG_SOC_BOUFFALOLAB) += bl808-sipeed-m1s-dock.dtb
+> diff --git a/arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s-dock.dts b/arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s-dock.dts
+> new file mode 100644
+> index 000000000000..c6b4894a7b88
+> --- /dev/null
+> +++ b/arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s-dock.dts
+> @@ -0,0 +1,25 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
+> +/*
+> + * Copyright (C) 2022 Jisheng Zhang <jszhang@kernel.org>
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "bl808-sipeed-m1s.dtsi"
+> +
+> +/ {
+> +	model = "Sipeed M1s Dock";
+> +	compatible = "sipeed,m1s-dock", "sipeed,m1s", "bouffalolab,bl808";
+> +
+> +	aliases {
+> +		serial0 = &uart0;
+> +	};
+> +
+> +	chosen {
+> +		stdout-path = "serial0:2000000n8";
+> +	};
+> +};
+> +
+> +&uart0 {
+> +	status = "okay";
+> +};
+> diff --git a/arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s.dtsi b/arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s.dtsi
+> new file mode 100644
+> index 000000000000..5026de768534
+> --- /dev/null
+> +++ b/arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s.dtsi
+> @@ -0,0 +1,21 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
+> +/*
+> + * Copyright (C) 2022 Jisheng Zhang <jszhang@kernel.org>
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "bl808.dtsi"
+> +
+> +/ {
+> +	compatible = "sipeed,m1s", "bouffalolab,bl808";
+> +
+> +	memory@50000000 {
+> +		device_type = "memory";
+> +		reg = <0x50000000 0x04000000>;
+> +	};
+> +};
+> +
+> +&xtal {
+> +	clock-frequency = <40000000>;
+> +};
+> -- 
+> 2.38.1
+> 
+> 
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
