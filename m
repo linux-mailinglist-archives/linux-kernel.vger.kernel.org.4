@@ -2,102 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C81639D94
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 23:26:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 684C3639D95
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 23:26:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbiK0W0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 17:26:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49880 "EHLO
+        id S229683AbiK0W0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 17:26:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiK0W0U (ORCPT
+        with ESMTP id S229652AbiK0W0d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 17:26:20 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247CF642E
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 14:26:19 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-88-1iRpMDN2PEKQmUM_Nnzjqg-1; Sun, 27 Nov 2022 22:26:15 +0000
-X-MC-Unique: 1iRpMDN2PEKQmUM_Nnzjqg-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sun, 27 Nov
- 2022 22:26:13 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Sun, 27 Nov 2022 22:26:13 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Linus Torvalds' <torvalds@linux-foundation.org>
-CC:     LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Joe Perches" <joe@perches.com>
-Subject: RE: [PATCH 1/1] minmax.h: Slightly relax the type checking done by
- min() and max().
-Thread-Topic: [PATCH 1/1] minmax.h: Slightly relax the type checking done by
- min() and max().
-Thread-Index: AdkA3jB+9p3HVKOjROWboToCz6X2bgBwb9KAAAEizAAAAZNzAAAAy3Lw
-Date:   Sun, 27 Nov 2022 22:26:13 +0000
-Message-ID: <b96a46eb24c2482bb6081418bd2ace02@AcuMS.aculab.com>
-References: <58cac72242e54380971cfa842f824470@AcuMS.aculab.com>
- <CAHk-=wgZCBedi_xrysY2EAsN8tQjb3K4-qYtF-FaEE+GFuuE4Q@mail.gmail.com>
- <433b8b44fe6e43b2b576c311bb55cc8a@AcuMS.aculab.com>
- <CAHk-=wjgqs7Uev9=X8qP0mR0C+KoRze6d+1SoMib5x6o3yZSQg@mail.gmail.com>
-In-Reply-To: <CAHk-=wjgqs7Uev9=X8qP0mR0C+KoRze6d+1SoMib5x6o3yZSQg@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Sun, 27 Nov 2022 17:26:33 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60E83764F
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 14:26:31 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id z15-20020a5e860f000000b006c09237cc06so4625797ioj.21
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 14:26:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=D4BAMvOh+lRBFmBVJIyi+KYicBvfJ9pF6A4C+kPxHtM=;
+        b=Hbe2zz8Ebrm8EAmgQ3XH/ZIcDJGOS6y/Dp8ss1tdW9tHEvEpniBd05zTGWvyD+8wS9
+         EGc/Hj6WwscRMYx9rm2Z+bDqNFZpmG93q5gtfY7OAMva9dl9mCVgNnhZF25GeJYl2HCy
+         +QORbaVB88OI+XfyqrZUuWqJxBzvxBZYAltfxnhtfIzqh1IR7rQxYpQxsJcIETSCaMp+
+         Um6nqcsajhGVU3XEijhISO/oe6y4HFSPZmvGVtzWT0zKGJh2d165uxYGr2jPMB4ImMKx
+         Zb3f3FhQqJ4O6lJHh7Vsvs/ulSMgDwriwjGP9rZozw8GakQpMBlRCybM7ia33BdR4iow
+         HwIA==
+X-Gm-Message-State: ANoB5plNBJ43xMiUXEt9vUv9gAHx8JX7GzfuL0ilZ44081km/OFFyYnO
+        5McRsNx+s2uvjDv+YqMexyFTWx1vtyJP5YQ31LHzTCOdh05H
+X-Google-Smtp-Source: AA0mqf641B3UAoXUEN9NYmdriC/PxzTyI2l/4icimkHqjNiJ8PbhMaWOljCeZm6je7h/1KsCkkbeVm4XU2gv00RC4cQO55nAZW71
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:c505:0:b0:372:e2a5:3a54 with SMTP id
+ s5-20020a02c505000000b00372e2a53a54mr14999197jam.106.1669587990751; Sun, 27
+ Nov 2022 14:26:30 -0800 (PST)
+Date:   Sun, 27 Nov 2022 14:26:30 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001c590f05ee7b3ff4@google.com>
+Subject: [syzbot] WARNING in nci_add_new_protocol
+From:   syzbot <syzbot+210e196cef4711b65139@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com,
+        krzysztof.kozlowski@linaro.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMjcgTm92ZW1iZXIgMjAyMiAyMTo1NA0KPiAN
-Cj4gT24gU3VuLCBOb3YgMjcsIDIwMjIgYXQgMTo0MiBQTSBEYXZpZCBMYWlnaHQgPERhdmlkLkxh
-aWdodEBhY3VsYWIuY29tPiB3cm90ZToNCj4gPg0KPiA+IFdoeSBzaG91bGQgaXQgYmUgYSBwcm9i
-bGVtPw0KPiA+IG1pbigtNCwgc2l6ZW9mKFgpKSBiZWNvbWVzIG1pbigtNCwgKGludClzaXplb2Yo
-WCkpIGFuZCB0aHVzIC00Lg0KPiA+IFdpdGhvdXQgdGhlIGNhc3QgdGhlIC00IGlzIGNvbnZlcnRl
-ZCB0byBhIHZlcnkgbGFyZ2UgdW5zaWduZWQNCj4gPiB2YWx1ZSBzbyB0aGUgcmVzdWx0IGlzIHNp
-emVvZihYKSAtIG5vdCBhdCBhbGwgZXhwZWN0ZWQuDQo+IA0KPiBUaGF0IGlzIEVYQUNUTFkgdGhl
-IHByb2JsZW0uDQo+IA0KPiBZb3UgZXZlbiBlbnVtZXJhdGUgaXQsIGFuZCB3b3JrIHRocm91Z2gg
-ZXhhY3RseSB3aGF0IGhhcHBlbnMsIGFuZCB0aGVuDQo+IHlvdSBTVElMTCBzYXkgInRoaXMgaXMg
-bm90IGEgcHJvYmxlbSIuDQo+IA0KPiBJdCBkYW1uIHdlbGwgaXMgYSBIVUdFIHByb2JsZW0uIFdo
-ZW4gcGVvcGxlIHNheSAiSSBuZWVkIG15IG9mZnNldCB0bw0KPiBiZSBzbWFsbGVyIHRoYW4gdGhl
-IHNpemUgb2YgdGhlIG9iamVjdCIsIHRoZW4gYSB2YWx1ZSBsaWtlIC00IElTIE5PVA0KPiBBQ0NF
-UFRBQkxFLiBJdCBzaG91bGQgY2F1c2UgYSBodWdlIHR5cGUgd2FybmluZyBhYm91dCBob3cgdGhl
-IHRlc3Qgd2FzDQo+IGJyb2tlbi4NCj4gDQo+IERhdmlkLCB0aGlzIGlzIGxpdGVyYWxseSAqRVhB
-Q1RMWSogd2h5IHdlIGhhdmUgdGhvc2Ugc3RyaWN0IHR5cGUgaXNzdWVzLg0KPiANCj4gVGhlIGZh
-Y3QgdGhhdCB5b3UgZG9uJ3QgZXZlbiBzZWVtIHRvIHJlYWxpemUgd2h5IHRoaXMgd291bGQgYmUg
-YQ0KPiBwcm9ibGVtIG1ha2VzIG1lIE5BSyB0aGlzIHBhdGNoIHNvIGhhcmQgdGhhdCBpdCBpc24n
-dCBldmVuIGZ1bm55Lg0KPiANCj4gQW5kcmV3LCBwbGVhc2UgcmVtb3ZlIHRoaXMgZnJvbSB5b3Vy
-IHF1ZXVlLiBJdCdzIG5vdCBldmVuIHJlbW90ZWx5DQo+IGFjY2VwdGFibGUuIEkgd2FzIGhvcGlu
-ZyBJIHdhcyBtaXNyZWFkaW5nIHRoZSBwYXRjaCwgYnV0IGl0IHR1cm5zIG91dA0KPiB0aGF0IHRo
-aXMgInJlbGF4IHRoZSBydWxlcyB3YXkgdG9vIG11Y2giIHdhcyBhcHBhcmVudGx5IGludGVudGlv
-bmFsLg0KDQpJIGd1ZXNzIHlvdSdyZSB0aGUgYm9zcyA6LSkNCg0KQnV0IHdoYXQgYWN0dWFsbHkg
-aGFwcGVucyBpcyB0aGUgY29tcGlsZXIgYmxlYXRzIGFib3V0IG1pbigpDQpzbyByYXRoZXIgdGhl
-biBjaGFuZ2UgYSBjb25zdGFudCB0byBiZSB1bnNpZ25lZCAoZXRjKSB0aGUgY29kZQ0KaXMgcmV3
-cml0dGVuIHdpdGggbWluX3QoKSBhbmQgYm90aCBzaWRlcyBhcmUgY2FzdCB0byAodXN1YWxseSkN
-CmFuIHVuc2lnbmVkIHR5cGUuDQpUaGVyZSBhcmUgYSBub24temVybyBudW1iZXIgb2YgY2FzZXMg
-d2hlcmUgdGhlIGNhc3QgbWFza3MgaGlnaA0KYml0cyBvZmYgdGhlIGxhcmdlIHZhbHVlLg0KDQpH
-aXZlbiB0aGUgbnVtYmVyIG9mIG1pbl90KHU4LHgseSkgYW5kIG1pbl90KHUxNix4LHkpIGl0IGlz
-DQpwcmV0dHkgY2xlYXIgYSBsb3Qgb2YgcGVvcGxlIGRvbid0IGFjdHVhbGx5IGtub3cgdGhlIEMg
-YXJpdGhtZXRpYw0KcHJvbW90aW9uIHJ1bGVzLg0KDQpGb3JjaW5nIGFuIHVuc2lnbmVkIGNvbXBh
-cmlzb24gY2FuIGJlIGRvbmUgYnkgYWRkaW5nIGhhdmluZzoNCiNkZWZpbmUgbWluX3Vuc2lnbmVk
-KHgsIHkpIG1pbigoeCkgKyAwdSArIDB1bGwsICh5KSArIDB1ICsgMHVsbCkNCnRoYXQgd2lsbCBu
-ZXZlciBtYXNrIG9mZiBiaXRzIGFuZCBnZW5lcmF0ZXMgc2FuZSBjb2RlLg0KQWxtb3N0IGFsbCB0
-aGUgbWluX3QoKSBjb3VsZCBiZSByZXBsYWNlZCBieSB0aGF0IGRlZmluaXRpb24uDQoNCglEYXZp
-ZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQg
-RmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4
-NiAoV2FsZXMpDQo=
+Hello,
 
+syzbot found the following issue on:
+
+HEAD commit:    4312098baf37 Merge tag 'spi-fix-v6.1-rc6' of git://git.ker..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=12e25bb5880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b1129081024ee340
+dashboard link: https://syzkaller.appspot.com/bug?extid=210e196cef4711b65139
+compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+210e196cef4711b65139@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 7843 at net/nfc/nci/ntf.c:260 nci_add_new_protocol+0x268/0x30c net/nfc/nci/ntf.c:260
+memcpy: detected field-spanning write (size 129) of single field "target->sensf_res" at net/nfc/nci/ntf.c:260 (size 18)
+Modules linked in:
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 0 PID: 7843 Comm: kworker/u4:3 Not tainted 6.1.0-rc6-syzkaller #0
+Hardware name: ARM-Versatile Express
+Workqueue: nfc2_nci_rx_wq nci_rx_work
+Backtrace: 
+[<81751624>] (dump_backtrace) from [<81751718>] (show_stack+0x18/0x1c arch/arm/kernel/traps.c:253)
+ r7:81cf8970 r6:822228ec r5:60000193 r4:81d06d58
+[<81751700>] (show_stack) from [<8176d3e0>] (__dump_stack lib/dump_stack.c:88 [inline])
+[<81751700>] (show_stack) from [<8176d3e0>] (dump_stack_lvl+0x48/0x54 lib/dump_stack.c:106)
+[<8176d398>] (dump_stack_lvl) from [<8176d404>] (dump_stack+0x18/0x1c lib/dump_stack.c:113)
+ r5:00000000 r4:82445d14
+[<8176d3ec>] (dump_stack) from [<817522c0>] (panic+0x11c/0x360 kernel/panic.c:274)
+[<817521a4>] (panic) from [<80241604>] (__warn+0x98/0x1a4 kernel/panic.c:621)
+ r3:00000001 r2:00000000 r1:00000000 r0:81cf8970
+ r7:816e192c
+[<8024156c>] (__warn) from [<817525a0>] (warn_slowpath_fmt+0x9c/0xd4 kernel/panic.c:651)
+ r8:00000009 r7:816e192c r6:00000104 r5:81ec7084 r4:81d20104
+[<81752508>] (warn_slowpath_fmt) from [<816e192c>] (nci_add_new_protocol+0x268/0x30c net/nfc/nci/ntf.c:260)
+ r8:84f0b129 r7:dfb25e4c r6:00000002 r5:00000081 r4:84f0b0fc
+[<816e16c4>] (nci_add_new_protocol) from [<816e2738>] (nci_add_new_target net/nfc/nci/ntf.c:306 [inline])
+[<816e16c4>] (nci_add_new_protocol) from [<816e2738>] (nci_rf_discover_ntf_packet net/nfc/nci/ntf.c:378 [inline])
+[<816e16c4>] (nci_add_new_protocol) from [<816e2738>] (nci_ntf_packet+0xaf8/0xe18 net/nfc/nci/ntf.c:792)
+ r8:00000001 r7:00000000 r6:84f0b000 r5:85202c00 r4:00000103
+[<816e1c40>] (nci_ntf_packet) from [<816df268>] (nci_rx_work+0x70/0xe8 net/nfc/nci/core.c:1513)
+ r10:84851205 r9:81a4b84c r8:81ec67b8 r7:84f0b0a4 r6:84f0b070 r5:84f0b000
+ r4:85202c00
+[<816df1f8>] (nci_rx_work) from [<802611c0>] (process_one_work+0x20c/0x5ac kernel/workqueue.c:2289)
+ r9:828e5c00 r8:00000100 r7:84851200 r6:8280e800 r5:85867500 r4:84f0b070
+[<80260fb4>] (process_one_work) from [<802615cc>] (worker_thread+0x6c/0x4e0 kernel/workqueue.c:2436)
+ r10:8280e800 r9:00000088 r8:82204d40 r7:8280e81c r6:85867518 r5:8280e800
+ r4:85867500
+[<80261560>] (worker_thread) from [<80269b24>] (kthread+0xec/0x11c kernel/kthread.c:376)
+ r10:00000000 r9:ed855e8c r8:852e8700 r7:85867500 r6:80261560 r5:828e5c00
+ r4:84991a40
+[<80269a38>] (kthread) from [<80200100>] (ret_from_fork+0x14/0x34 arch/arm/kernel/entry-common.S:148)
+Exception stack(0xdfb25fb0 to 0xdfb25ff8)
+5fa0:                                     00000000 00000000 00000000 00000000
+5fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+5fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+ r9:00000000 r8:00000000 r7:00000000 r6:00000000 r5:80269a38 r4:84991a40
+Rebooting in 86400 seconds..
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
