@@ -2,352 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8CD56399DE
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 11:18:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5FAD6399EC
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 11:37:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbiK0KSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 05:18:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49446 "EHLO
+        id S229601AbiK0KhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 05:37:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiK0KSb (ORCPT
+        with ESMTP id S229575AbiK0KhC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 05:18:31 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4516DF1F
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 02:18:29 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id w15-20020a17090a380f00b0021873113cb4so7793487pjb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 02:18:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8dFxQI+/RVircnstLupR+wzSTGReSsywaPKKiQaphTk=;
-        b=hnybZPSoxrGMsNvTQa88HwLi4nRKBQnfQ95rng4eaARtP2YBPX47HbJDA4LSJ3f+NC
-         LmvTllgulvbhEt4p6Rf7Sn4pPx4Jw5QWcVWRfcJSrWDlVysM3RdnPcoKAlG0/x440d6L
-         AL4XJ3EttE7l4m4RWpFjc68qW5DUJe4JaWA0FWi2y/rR8D36uxYU780dvcpd9Dtbu7Z/
-         dW1A14u+OFQMMLxnEcN30jcagoiVuD8Ff2PzLgtrnA8Pp59P7UwSl507r2oPsmRCA+ws
-         GRosVJynkzYce/tQizK6anj6vJLZoBKal/gCU9c80CanVS8y2buAD1R3bu5v72N4J+28
-         1b3A==
+        Sun, 27 Nov 2022 05:37:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A817E0EE
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 02:35:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669545314;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=a/FKhEJUKr4Au5jEDV0nA39boCfv1uOAmeL78/XZzlw=;
+        b=O27xJtPpaXX+WGWtRHYJetfQf0LitOuWyYASTvh9BOIc76OBbAvqAJoksVcyj8ihyyybuL
+        K0BzXUXxU998BrnvTHmhdCmjqJ56s5MlltXbtXEOh8pcP8m9+etTCwEOVSMLMxVzLD+KhE
+        02JICc1N+vm9jg/GhumwHtE2HYBwStg=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-156-RjwoPbkuNK2bKW0MgdIo7g-1; Sun, 27 Nov 2022 05:35:13 -0500
+X-MC-Unique: RjwoPbkuNK2bKW0MgdIo7g-1
+Received: by mail-wm1-f69.google.com with SMTP id j2-20020a05600c1c0200b003cf7397fc9bso4824723wms.5
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 02:35:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8dFxQI+/RVircnstLupR+wzSTGReSsywaPKKiQaphTk=;
-        b=EoHrjwS1mB60YRnL01OPcD8QIbr5SULnifByB5UpIbQ218M0NzzrogtFSle0K75g7l
-         LGljopYy+OUPC1vUot+L0n+fEdN/wcprnWKcJ4ZjI0ZdcM97nmb2ZtJlQ2RupjB0CUGp
-         j6u4HThe0Ih0u+AxMPs44ErcZKdD+o2HEo3Q25mV1LzILrYHMyrc3udKPDPRQFTrO0o+
-         XkhTp6C6Bdl6WZyHS9MnVW+3eVG8aAKY8gnoJjnG5EJIWHPnruK+BXLFPdyqU+VDKlDZ
-         5c8ljTTP8FDYyBTMXBrDSyURMoqZq0E9uM1hCfk0i2JVwwyJuNm5fj0GGkTPjsGTHgai
-         V7Cg==
-X-Gm-Message-State: ANoB5plCP35eMY52Q85r5ior3icu49YMzoraKWl1AR+gV2T7Fjjer0JO
-        WOdv0vSTRFGG6H82DRAvHRk=
-X-Google-Smtp-Source: AA0mqf7hyQ/awHJ7ShPcK8/eUKE6NXbFHmLQ6tLT2iWM5FwJAvi7eqXiTFmx7TYF1k5B0B9yeUmhqA==
-X-Received: by 2002:a17:90b:888:b0:219:1a88:727b with SMTP id bj8-20020a17090b088800b002191a88727bmr6989938pjb.47.1669544308392;
-        Sun, 27 Nov 2022 02:18:28 -0800 (PST)
-Received: from hyeyoo ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id f16-20020aa79690000000b00553d573222fsm5922088pfk.199.2022.11.27.02.18.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Nov 2022 02:18:27 -0800 (PST)
-Date:   Sun, 27 Nov 2022 19:18:21 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>, patches@lists.linux.dev,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 08/12] mm, slub: refactor free debug processing
-Message-ID: <Y4M5bWgjSWKZEXnO@hyeyoo>
-References: <20221121171202.22080-1-vbabka@suse.cz>
- <20221121171202.22080-9-vbabka@suse.cz>
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :content-language:references:cc:to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a/FKhEJUKr4Au5jEDV0nA39boCfv1uOAmeL78/XZzlw=;
+        b=PfiAFScXO5Ayl0Xe/a0E4YLh01l/NhgL1hdBS5120bJYZRFrvJzeLZa7E0jFU/zLBd
+         949sSdfhVk0WP9/X2VJp91587bGRDmtdIzECrhBatcNdIGAB78UYUEeEgqDRWUhC/2Cu
+         S2D3UPOjB4IU0Dx4h2tcoTAgrVmjQaqgTawlLA6GJ475d10JjQTUUFvHkDs/LJDtJ120
+         dmceABbfvqXnNMfx9YN7dtdFz3RDgqduGQwo8L95K+xLjMZJVzPuSgiomoe+0aqigUXc
+         aDWY5n1hFu2MJUm9XO6AGjya/VISr9c0fyHO1kWZAieheGnAC/OZNjl4Hw6b6/V/E4yI
+         dutA==
+X-Gm-Message-State: ANoB5pn08OThuo0FtGl+vc7Ammi2wXHDqXEsraTP/eofhNiIlVsCxIDl
+        5NCEio8rbxMiwnLTPFxhBltSsORq2Gs/sRaW5DnI9mUK9nbYnKfbKuhttvs2Z+H4R5iZG6MSo6w
+        YQWF1ydAT0ViUH0uLrfMIspjPtpewUeSNIsz0BH9i/lnZ3rWlmgrlYXHv/2NbxMe14EAL4LUK
+X-Received: by 2002:a05:600c:4e88:b0:3b5:477:1e80 with SMTP id f8-20020a05600c4e8800b003b504771e80mr34594866wmq.200.1669545312034;
+        Sun, 27 Nov 2022 02:35:12 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf44zTk6J1KBaqs1seffTqR2+v9TqwwPSmjBWI2JrtJKUPaYELfhGu32bDJHUXiVwBKDfUuj3g==
+X-Received: by 2002:a05:600c:4e88:b0:3b5:477:1e80 with SMTP id f8-20020a05600c4e8800b003b504771e80mr34594816wmq.200.1669545311706;
+        Sun, 27 Nov 2022 02:35:11 -0800 (PST)
+Received: from ?IPV6:2003:cb:c724:dc00:5ea8:da59:8609:7da? (p200300cbc724dc005ea8da59860907da.dip0.t-ipconnect.de. [2003:cb:c724:dc00:5ea8:da59:8609:7da])
+        by smtp.gmail.com with ESMTPSA id u10-20020a05600c19ca00b003c5571c27a1sm14797024wmq.32.2022.11.27.02.35.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 27 Nov 2022 02:35:11 -0800 (PST)
+Message-ID: <81fb0fa3-2e06-b765-56ac-a7d981194e59@redhat.com>
+Date:   Sun, 27 Nov 2022 11:35:09 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221121171202.22080-9-vbabka@suse.cz>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+To:     linux-kernel@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <20221116102659.70287-1-david@redhat.com>
+ <20221116102659.70287-17-david@redhat.com>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH mm-unstable v1 16/20] mm/frame-vector: remove FOLL_FORCE
+ usage
+In-Reply-To: <20221116102659.70287-17-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 06:11:58PM +0100, Vlastimil Babka wrote:
-> Since commit c7323a5ad078 ("mm/slub: restrict sysfs validation to debug
-> caches and make it safe"), caches with debugging enabled use the
-> free_debug_processing() function to do both freeing checks and actual
-> freeing to partial list under list_lock, bypassing the fast paths.
+On 16.11.22 11:26, David Hildenbrand wrote:
+> FOLL_FORCE is really only for ptrace access. According to commit
+> 707947247e95 ("media: videobuf2-vmalloc: get_userptr: buffers are always
+> writable"), get_vaddr_frames() currently pins all pages writable as a
+> workaround for issues with read-only buffers.
 > 
-> We will want to use the same path for CONFIG_SLUB_TINY, but without the
-> debugging checks, so refactor the code so that free_debug_processing()
-> does only the checks, while the freeing is handled by a new function
-> free_to_partial_list().
+> FOLL_FORCE, however, seems to be a legacy leftover as it predates
+> commit 707947247e95 ("media: videobuf2-vmalloc: get_userptr: buffers are
+> always writable"). Let's just remove it.
 > 
-> For consistency, change return parameter alloc_debug_processing() from
-> int to bool and correct the !SLUB_DEBUG variant to return true and not
-> false. This didn't matter until now, but will in the following changes.
+> Once the read-only buffer issue has been resolved, FOLL_WRITE could
+> again be set depending on the DMA direction.
 > 
-> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+> Cc: Hans Verkuil <hverkuil@xs4all.nl>
+> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+> Cc: Tomasz Figa <tfiga@chromium.org>
+> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 > ---
->  mm/slub.c | 154 +++++++++++++++++++++++++++++-------------------------
->  1 file changed, 83 insertions(+), 71 deletions(-)
+>   drivers/media/common/videobuf2/frame_vector.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/mm/slub.c b/mm/slub.c
-> index bf726dd00f7d..fd56d7cca9c2 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -1368,7 +1368,7 @@ static inline int alloc_consistency_checks(struct kmem_cache *s,
->  	return 1;
->  }
->  
-> -static noinline int alloc_debug_processing(struct kmem_cache *s,
-> +static noinline bool alloc_debug_processing(struct kmem_cache *s,
->  			struct slab *slab, void *object, int orig_size)
->  {
->  	if (s->flags & SLAB_CONSISTENCY_CHECKS) {
-> @@ -1380,7 +1380,7 @@ static noinline int alloc_debug_processing(struct kmem_cache *s,
->  	trace(s, slab, object, 1);
->  	set_orig_size(s, object, orig_size);
->  	init_object(s, object, SLUB_RED_ACTIVE);
-> -	return 1;
-> +	return true;
->  
->  bad:
->  	if (folio_test_slab(slab_folio(slab))) {
-> @@ -1393,7 +1393,7 @@ static noinline int alloc_debug_processing(struct kmem_cache *s,
->  		slab->inuse = slab->objects;
->  		slab->freelist = NULL;
->  	}
-> -	return 0;
-> +	return false;
->  }
->  
->  static inline int free_consistency_checks(struct kmem_cache *s,
-> @@ -1646,17 +1646,17 @@ static inline void setup_object_debug(struct kmem_cache *s, void *object) {}
->  static inline
->  void setup_slab_debug(struct kmem_cache *s, struct slab *slab, void *addr) {}
->  
-> -static inline int alloc_debug_processing(struct kmem_cache *s,
-> -	struct slab *slab, void *object, int orig_size) { return 0; }
-> +static inline bool alloc_debug_processing(struct kmem_cache *s,
-> +	struct slab *slab, void *object, int orig_size) { return true; }
->  
-> -static inline void free_debug_processing(
-> -	struct kmem_cache *s, struct slab *slab,
-> -	void *head, void *tail, int bulk_cnt,
-> -	unsigned long addr) {}
-> +static inline bool free_debug_processing(struct kmem_cache *s,
-> +	struct slab *slab, void *head, void *tail, int *bulk_cnt,
-> +	unsigned long addr, depot_stack_handle_t handle) { return true; }
->  
->  static inline void slab_pad_check(struct kmem_cache *s, struct slab *slab) {}
->  static inline int check_object(struct kmem_cache *s, struct slab *slab,
->  			void *object, u8 val) { return 1; }
-> +static inline depot_stack_handle_t set_track_prepare(void) { return 0; }
->  static inline void set_track(struct kmem_cache *s, void *object,
->  			     enum track_item alloc, unsigned long addr) {}
->  static inline void add_full(struct kmem_cache *s, struct kmem_cache_node *n,
-> @@ -2833,38 +2833,28 @@ static inline unsigned long node_nr_objs(struct kmem_cache_node *n)
->  }
->  
->  /* Supports checking bulk free of a constructed freelist */
-> -static noinline void free_debug_processing(
-> -	struct kmem_cache *s, struct slab *slab,
-> -	void *head, void *tail, int bulk_cnt,
-> -	unsigned long addr)
-> +static inline bool free_debug_processing(struct kmem_cache *s,
-> +	struct slab *slab, void *head, void *tail, int *bulk_cnt,
-> +	unsigned long addr, depot_stack_handle_t handle)
->  {
-> -	struct kmem_cache_node *n = get_node(s, slab_nid(slab));
-> -	struct slab *slab_free = NULL;
-> +	bool checks_ok = false;
->  	void *object = head;
->  	int cnt = 0;
-> -	unsigned long flags;
-> -	bool checks_ok = false;
-> -	depot_stack_handle_t handle = 0;
-> -
-> -	if (s->flags & SLAB_STORE_USER)
-> -		handle = set_track_prepare();
-> -
-> -	spin_lock_irqsave(&n->list_lock, flags);
->  
->  	if (s->flags & SLAB_CONSISTENCY_CHECKS) {
->  		if (!check_slab(s, slab))
->  			goto out;
->  	}
->  
-> -	if (slab->inuse < bulk_cnt) {
-> +	if (slab->inuse < *bulk_cnt) {
->  		slab_err(s, slab, "Slab has %d allocated objects but %d are to be freed\n",
-> -			 slab->inuse, bulk_cnt);
-> +			 slab->inuse, *bulk_cnt);
->  		goto out;
->  	}
->  
->  next_object:
->  
-> -	if (++cnt > bulk_cnt)
-> +	if (++cnt > *bulk_cnt)
->  		goto out_cnt;
->  
->  	if (s->flags & SLAB_CONSISTENCY_CHECKS) {
-> @@ -2886,57 +2876,18 @@ static noinline void free_debug_processing(
->  	checks_ok = true;
->  
->  out_cnt:
-> -	if (cnt != bulk_cnt)
-> +	if (cnt != *bulk_cnt) {
->  		slab_err(s, slab, "Bulk free expected %d objects but found %d\n",
-> -			 bulk_cnt, cnt);
-> -
-> -out:
-> -	if (checks_ok) {
-> -		void *prior = slab->freelist;
-> -
-> -		/* Perform the actual freeing while we still hold the locks */
-> -		slab->inuse -= cnt;
-> -		set_freepointer(s, tail, prior);
-> -		slab->freelist = head;
-> -
-> -		/*
-> -		 * If the slab is empty, and node's partial list is full,
-> -		 * it should be discarded anyway no matter it's on full or
-> -		 * partial list.
-> -		 */
-> -		if (slab->inuse == 0 && n->nr_partial >= s->min_partial)
-> -			slab_free = slab;
-> -
-> -		if (!prior) {
-> -			/* was on full list */
-> -			remove_full(s, n, slab);
-> -			if (!slab_free) {
-> -				add_partial(n, slab, DEACTIVATE_TO_TAIL);
-> -				stat(s, FREE_ADD_PARTIAL);
-> -			}
-> -		} else if (slab_free) {
-> -			remove_partial(n, slab);
-> -			stat(s, FREE_REMOVE_PARTIAL);
-> -		}
-> +			 *bulk_cnt, cnt);
-> +		*bulk_cnt = cnt;
->  	}
->  
-> -	if (slab_free) {
-> -		/*
-> -		 * Update the counters while still holding n->list_lock to
-> -		 * prevent spurious validation warnings
-> -		 */
-> -		dec_slabs_node(s, slab_nid(slab_free), slab_free->objects);
-> -	}
-> -
-> -	spin_unlock_irqrestore(&n->list_lock, flags);
-> +out:
->  
->  	if (!checks_ok)
->  		slab_fix(s, "Object at 0x%p not freed", object);
->  
-> -	if (slab_free) {
-> -		stat(s, FREE_SLAB);
-> -		free_slab(s, slab_free);
-> -	}
-> +	return checks_ok;
->  }
->  #endif /* CONFIG_SLUB_DEBUG */
->  
-> @@ -3453,6 +3404,67 @@ void *kmem_cache_alloc_node(struct kmem_cache *s, gfp_t gfpflags, int node)
->  }
->  EXPORT_SYMBOL(kmem_cache_alloc_node);
->  
-> +static noinline void free_to_partial_list(
-> +	struct kmem_cache *s, struct slab *slab,
-> +	void *head, void *tail, int bulk_cnt,
-> +	unsigned long addr)
-> +{
-> +	struct kmem_cache_node *n = get_node(s, slab_nid(slab));
-> +	struct slab *slab_free = NULL;
-> +	int cnt = bulk_cnt;
-> +	unsigned long flags;
-> +	depot_stack_handle_t handle = 0;
-> +
-> +	if (s->flags & SLAB_STORE_USER)
-> +		handle = set_track_prepare();
-> +
-> +	spin_lock_irqsave(&n->list_lock, flags);
-> +
-> +	if (free_debug_processing(s, slab, head, tail, &cnt, addr, handle)) {
-> +		void *prior = slab->freelist;
-> +
-> +		/* Perform the actual freeing while we still hold the locks */
-> +		slab->inuse -= cnt;
-> +		set_freepointer(s, tail, prior);
-> +		slab->freelist = head;
-> +
-> +		/*
-> +		 * If the slab is empty, and node's partial list is full,
-> +		 * it should be discarded anyway no matter it's on full or
-> +		 * partial list.
-> +		 */
-> +		if (slab->inuse == 0 && n->nr_partial >= s->min_partial)
-> +			slab_free = slab;
-> +
-> +		if (!prior) {
-> +			/* was on full list */
-> +			remove_full(s, n, slab);
-> +			if (!slab_free) {
-> +				add_partial(n, slab, DEACTIVATE_TO_TAIL);
-> +				stat(s, FREE_ADD_PARTIAL);
-> +			}
-> +		} else if (slab_free) {
-> +			remove_partial(n, slab);
-> +			stat(s, FREE_REMOVE_PARTIAL);
-> +		}
-> +	}
-> +
-> +	if (slab_free) {
-> +		/*
-> +		 * Update the counters while still holding n->list_lock to
-> +		 * prevent spurious validation warnings
-> +		 */
-> +		dec_slabs_node(s, slab_nid(slab_free), slab_free->objects);
-> +	}
-> +
-> +	spin_unlock_irqrestore(&n->list_lock, flags);
-> +
-> +	if (slab_free) {
-> +		stat(s, FREE_SLAB);
-> +		free_slab(s, slab_free);
-> +	}
-> +}
-> +
->  /*
->   * Slow path handling. This may still be called frequently since objects
->   * have a longer lifetime than the cpu slabs in most processing loads.
-> @@ -3479,7 +3491,7 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
->  		return;
->  
->  	if (kmem_cache_debug(s)) {
-> -		free_debug_processing(s, slab, head, tail, cnt, addr);
-> +		free_to_partial_list(s, slab, head, tail, cnt, addr);
->  		return;
->  	}
->  
-> -- 
-> 2.38.1
->
+> diff --git a/drivers/media/common/videobuf2/frame_vector.c b/drivers/media/common/videobuf2/frame_vector.c
+> index 542dde9d2609..062e98148c53 100644
+> --- a/drivers/media/common/videobuf2/frame_vector.c
+> +++ b/drivers/media/common/videobuf2/frame_vector.c
+> @@ -50,7 +50,7 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
+>   	start = untagged_addr(start);
+>   
+>   	ret = pin_user_pages_fast(start, nr_frames,
+> -				  FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
+> +				  FOLL_WRITE | FOLL_LONGTERM,
+>   				  (struct page **)(vec->ptrs));
+>   	if (ret > 0) {
+>   		vec->got_ref = true;
 
-Looks good to me.
 
-Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Hi Andrew,
+
+see the discussion at [1] regarding a conflict and how to proceed with
+upstreaming. The conflict would be easy to resolve, however, also
+the patch description doesn't make sense anymore with [1].
+
+
+On top of mm-unstable, reverting this patch and applying [1] gives me
+an updated patch:
+
+
+ From 1e66c25f1467c1f1e5f275312f2c6df29308d4df Mon Sep 17 00:00:00 2001
+From: David Hildenbrand <david@redhat.com>
+Date: Wed, 16 Nov 2022 11:26:55 +0100
+Subject: [PATCH] mm/frame-vector: remove FOLL_FORCE usage
+
+GUP now supports reliable R/O long-term pinning in COW mappings, such
+that we break COW early. MAP_SHARED VMAs only use the shared zeropage so
+far in one corner case (DAXFS file with holes), which can be ignored
+because GUP does not support long-term pinning in fsdax (see
+check_vma_flags()).
+
+Consequently, FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM is no longer required
+for reliable R/O long-term pinning: FOLL_LONGTERM is sufficient. So stop
+using FOLL_FORCE, which is really only for ptrace access.
+
+Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: Hans Verkuil <hverkuil@xs4all.nl>
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: Tomasz Figa <tfiga@chromium.org>
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: David Hildenbrand <david@redhat.com>
+---
+  drivers/media/common/videobuf2/frame_vector.c | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/common/videobuf2/frame_vector.c b/drivers/media/common/videobuf2/frame_vector.c
+index aad72640f055..8606fdacf5b8 100644
+--- a/drivers/media/common/videobuf2/frame_vector.c
++++ b/drivers/media/common/videobuf2/frame_vector.c
+@@ -41,7 +41,7 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames, bool write,
+  	int ret_pin_user_pages_fast = 0;
+  	int ret = 0;
+  	int err;
+-	unsigned int gup_flags = FOLL_FORCE | FOLL_LONGTERM;
++	unsigned int gup_flags = FOLL_LONGTERM;
+  
+  	if (nr_frames == 0)
+  		return 0;
+-- 
+2.38.1
+
+
+
+Please let me know how you want to proceed. Ideally, you'd pick up
+[1] and apply this updated patch. Also, please tell me if I should
+send this updated patch in a separate mail (e.g., as reply to this mail).
+
+
+[1] https://lkml.kernel.org/r/71bdd3cf-b044-3f12-df58-7c16d5749587@xs4all.nl
 
 -- 
 Thanks,
-Hyeonggon
+
+David / dhildenb
+
