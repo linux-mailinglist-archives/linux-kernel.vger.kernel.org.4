@@ -2,294 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E036263993E
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 04:29:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4382639944
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 04:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbiK0D3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 22:29:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36170 "EHLO
+        id S229589AbiK0Dme convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 26 Nov 2022 22:42:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiK0D3H (ORCPT
+        with ESMTP id S229480AbiK0Dmc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 22:29:07 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF2711A2D
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 19:29:05 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id g12so11880678wrs.10
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 19:29:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vOHgtUos/OWv/67WuwdQ5Bn7s3r1/TwlVmZZj7phXpA=;
-        b=K0IkhdoRtjO+ZyQmpDeVLjMrk6DneVCkRzWUZOXjyMYBiEBD3hSLz+138q0MA42+G6
-         O36BS5zglgsovhWmCU07YukJ3CE4FWlWY80ExtTZM5Mlr6Q208bVH588li696xwkohOO
-         rQPIIVZ8EVik2d1gqv9hFjEQmyXErvezfhI4kDLHMlZBS+F91Sil77LxNPjyDkfKWWxr
-         uk9uRRni4deunp3AgxQFA83J7BlzJPIjNnUaTyLur88oQCyMYQbNaxeobqlq/SSsXqce
-         IxEdG7XRlyM3hUwNSseEmdYdgv+zGW/p44XRrHg07bnfEEWzXZzlP00eON7nO+3I62/1
-         1XFA==
+        Sat, 26 Nov 2022 22:42:32 -0500
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2400DF1;
+        Sat, 26 Nov 2022 19:42:29 -0800 (PST)
+Received: by mail-pf1-f170.google.com with SMTP id w79so7462371pfc.2;
+        Sat, 26 Nov 2022 19:42:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vOHgtUos/OWv/67WuwdQ5Bn7s3r1/TwlVmZZj7phXpA=;
-        b=yduyOQh3OTWclmsq/mjiU/w9k4V1QPl4Iw6d0X5/iRdqD2xk3xclsc1bR8Kd5c1vhC
-         plO/+PdiYAmt4hqlx8u/n2vv2wKf8JE/gkYdAlQpANSDXcbvKak1sMHjh9USAK869L+p
-         bdlA1ZTO+VZyw7hKpBCpQ9CEuGOv0lGGn19KuaWLnCpvbtwoTp7/7mVmE/2ySgWz0eaH
-         lTmmzufGi4MiPLhx1bvgtwvMQeIi4zD4U4KqbcCjMJ1M7Vc6sjNkdsN38aFO7XRfy7R2
-         WOgHR7qXpQbfde4GKY1uXgTNfQNpOts+LxAHVpZsxHwIRLWC1/xzTeOzR1igiWhOtK4Q
-         EsAQ==
-X-Gm-Message-State: ANoB5plf7javi8mhPZreM7CNN9QWf+fbFzKE6JVy+gEvkPWCtjpHVAlS
-        brNOBjty9e3cebbrcU+Fk672GdEehNvz+G/L5FsIiQ==
-X-Google-Smtp-Source: AA0mqf41FYo8wWzOeH0XSJrQ2TDdoV9GGN6kokYBxxeR7O4i1nMTxmkne3lKQN1LnBOhOLyTxYvHVFftnig2FdpOz7E=
-X-Received: by 2002:adf:e2c9:0:b0:241:db86:176d with SMTP id
- d9-20020adfe2c9000000b00241db86176dmr17882344wrj.40.1669519744242; Sat, 26
- Nov 2022 19:29:04 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FucA3Sodw38qvlVLRVvNtzxLWzWTb944v88XDY3XbJY=;
+        b=KQsKXfxiaLtAsHNz+uuP5iUFaDUT4D85gZb2vVlOmRwlmwUO2hx54z3sVD7Z9ddyvV
+         Ueh/N3pU1ZtoriWKPkQU/eC+KZPnaPXYqL9k5S8y73jIGRhHe/Gdg8LVKizndL63Wr52
+         0IE54iuoo0/QDeVN3BVGDmw+A42y1ihGDOL+5joKsWXpNpTa1Krk9PQIoxFL1iSMwXuh
+         j1JoZds0Ukqe6c35Jvp++rnNmtZObgnN3O7OQpFXx/bdeLTsLHJ3kO2SrmJE8I/9EYZY
+         A7tUHkGbft+12D5rrI6lJDCTN1yu1qvbjWuxTjoZC/OfH8rdO6KC9zAODQQUk+TJ2TWC
+         XA9g==
+X-Gm-Message-State: ANoB5pklAwcItLyvz9tCj0XGGwVWe4kZmFC94EepQMv4K/oSJLARYV+F
+        GoLqxPbfazv9gXjV2hMxotyxbPI7N/7YmRNLZqM=
+X-Google-Smtp-Source: AA0mqf4pd0LS9qQTVN4KChy6A06YwOUnjFr7T249St3XDx3faAgp823CKEfuq8gJFBEKhemKCjH0hmTK280KuYTb4i0=
+X-Received: by 2002:a62:1a8b:0:b0:572:7c58:540 with SMTP id
+ a133-20020a621a8b000000b005727c580540mr27182789pfa.69.1669520549055; Sat, 26
+ Nov 2022 19:42:29 -0800 (PST)
 MIME-Version: 1.0
-References: <20221125032018.962-1-ravi.bangoria@amd.com>
-In-Reply-To: <20221125032018.962-1-ravi.bangoria@amd.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Sat, 26 Nov 2022 19:28:52 -0800
-Message-ID: <CAP-5=fVtFLuFzYY8x72ib1=G8n-aFYjqRmttxsu7t-oFGnCWEw@mail.gmail.com>
-Subject: Re: [PATCH] perf test: Add event group test
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     acme@kernel.org, jolsa@redhat.com, namhyung@kernel.org,
-        peterz@infradead.org, mark.rutland@arm.com,
-        kan.liang@linux.intel.com, adrian.hunter@intel.com,
-        alexander.shishkin@linux.intel.com, carsten.haitzler@arm.com,
-        leo.yan@linaro.org, maddy@linux.ibm.com, kjain@linux.ibm.com,
-        atrajeev@linux.vnet.ibm.com, tmricht@linux.ibm.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandipan.das@amd.com, ananth.narayan@amd.com,
-        santosh.shukla@amd.com
+References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
+ <20221126162211.93322-1-mailhol.vincent@wanadoo.fr> <20221126162211.93322-4-mailhol.vincent@wanadoo.fr>
+ <Y4JJ8Dyz7urLz/IM@lunn.ch>
+In-Reply-To: <Y4JJ8Dyz7urLz/IM@lunn.ch>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Sun, 27 Nov 2022 12:42:17 +0900
+Message-ID: <CAMZ6Rq+K+6gbaZ35SOJcR9qQaTJ7KR0jW=XoDKFkobjhj8CHhw@mail.gmail.com>
+Subject: Re: [PATCH v4 3/6] can: etas_es58x: export product information
+ through devlink_ops::info_get()
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Saeed Mahameed <saeed@kernel.org>,
+        Jiri Pirko <jiri@nvidia.com>,
+        Lukas Magel <lukas.magel@posteo.net>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 7:21 PM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
+Hi Andrew,
+
+Thank you for the review and the interesting comments on the parsing.
+
+On. 27 Nov. 2022 at 02:37, Andrew Lunn <andrew@lunn.ch> wrote:
+> > +struct es58x_sw_version {
+> > +     u8 major;
+> > +     u8 minor;
+> > +     u8 revision;
+> > +};
 >
-> Multiple events in a group can belong to one or more pmus, however
-> there are some limitations to it. Basically, perf doesn't allow
-> creating a group of events from different hw pmus. Write a simple
-> test to create various combinations of hw, sw and uncore pmu events
-> and verify group creation succeeds or fails as expected.
-
-Awesome, thanks! Some comments below.
-
-> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
-> ---
-> Note: Uncore pmu event detail for Intel, Arm, PowerPC and s390 needs
-> to be verified/fixed. These are marked as XXX in the patch.
+> > +static int es58x_devlink_info_get(struct devlink *devlink,
+> > +                               struct devlink_info_req *req,
+> > +                               struct netlink_ext_ack *extack)
+> > +{
+> > +     struct es58x_device *es58x_dev = devlink_priv(devlink);
+> > +     struct es58x_sw_version *fw_ver = &es58x_dev->firmware_version;
+> > +     struct es58x_sw_version *bl_ver = &es58x_dev->bootloader_version;
+> > +     struct es58x_hw_revision *hw_rev = &es58x_dev->hardware_revision;
+> > +     char buf[max(sizeof("xx.xx.xx"), sizeof("axxx/xxx"))];
+> > +     int ret = 0;
+> > +
+> > +     if (es58x_sw_version_is_set(fw_ver)) {
+> > +             snprintf(buf, sizeof(buf), "%02u.%02u.%02u",
+> > +                      fw_ver->major, fw_ver->minor, fw_ver->revision);
 >
->  tools/perf/tests/Build          |   1 +
->  tools/perf/tests/builtin-test.c |   1 +
->  tools/perf/tests/event_groups.c | 126 ++++++++++++++++++++++++++++++++
->  tools/perf/tests/tests.h        |   1 +
->  4 files changed, 129 insertions(+)
->  create mode 100644 tools/perf/tests/event_groups.c
->
-> diff --git a/tools/perf/tests/Build b/tools/perf/tests/Build
-> index 2064a640facb..9a59d451ca44 100644
-> --- a/tools/perf/tests/Build
-> +++ b/tools/perf/tests/Build
-> @@ -67,6 +67,7 @@ perf-y += expand-cgroup.o
->  perf-y += perf-time-to-tsc.o
->  perf-y += dlfilter-test.o
->  perf-y += sigtrap.o
-> +perf-y += event_groups.o
->
->  $(OUTPUT)tests/llvm-src-base.c: tests/bpf-script-example.c tests/Build
->         $(call rule_mkdir)
-> diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
-> index 7122eae1d98d..48cd0c809cb1 100644
-> --- a/tools/perf/tests/builtin-test.c
-> +++ b/tools/perf/tests/builtin-test.c
-> @@ -110,6 +110,7 @@ static struct test_suite *generic_tests[] = {
->         &suite__perf_time_to_tsc,
->         &suite__dlfilter,
->         &suite__sigtrap,
-> +       &suite__event_groups,
->         NULL,
->  };
->
-> diff --git a/tools/perf/tests/event_groups.c b/tools/perf/tests/event_groups.c
-> new file mode 100644
-> index 000000000000..92486b68cadb
-> --- /dev/null
-> +++ b/tools/perf/tests/event_groups.c
-> @@ -0,0 +1,126 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <string.h>
-> +#include <unistd.h>
-> +#include <stdio.h>
-> +#include "linux/perf_event.h"
-> +#include "tests.h"
-> +#include "debug.h"
-> +#include "pmu.h"
-> +#include "header.h"
-> +#include "../perf-sys.h"
-> +
-> +static int event_open(int type, unsigned long config, int g_fd)
-> +{
-> +       struct perf_event_attr attr;
-> +
-> +       memset(&attr, 0, sizeof(struct perf_event_attr));
-> +       attr.type = type;
-> +       attr.size = sizeof(struct perf_event_attr);
-> +       attr.config = config;
+> I see you have been very careful here, but i wonder if you might still
+> get some compiler/static code analyser warnings here. As far as i
+> remember %02u does not limit it to two characters.
 
-Could you add a comment for the line below?
+I checked, none of gcc and clang would trigger a warning even for a
+'make W=12'. More generally speaking, I made sure that my driver is
+free of any W=12.
+(except from the annoying spam from GENMASK_INPUT_CHECK for which my
+attempts to silence it were rejected:
+https://lore.kernel.org/all/20220426161658.437466-1-mailhol.vincent@wanadoo.fr/
+).
 
-> +       attr.disabled = g_fd == -1 ? 1 : 0;
-> +
-> +       return sys_perf_event_open(&attr, -1, 0, g_fd, 0);
-> +}
-> +
-> +/* hw: cycles, sw: context-switch, uncore: [arch dependent] */
+> If the number is
+> bigger than 99, it will take three characters. And your types are u8,
+> so the compiler could consider these to be 3 characters each. So you
+> end up truncating. Which you look to of done correctly, but i wonder
+> if some over zealous checker will report it?
 
-static?
+That zealous check is named -Wformat-truncation in gcc (I did not find
+it in clang). Even W=3 doesn't report it so I consider this to be
+fine.
 
-> +int type[] = {0, 1, -1};
-> +unsigned long config[] = {0, 3, -1};
-> +
-> +static int setup_uncore_event(void)
-> +{
-> +       char pmu_name[25] = {0};
-> +       struct perf_pmu *pmu;
-> +
+> Maybe consider "xxx.xxx.xxx"?
 
-I think the below finding of an uncore PMU is clunky. On my tigerlake
-Intel laptop, for example, I don't have an uncore_imc_0 but do have
-uncore_imc_free_running_0. I think the real fix here is that we should
-start a new "pmus.h" and "pmus.c", moving the pmus static variable
-from pmu.c to pmus.c. In pmus.h we should have an every PMU iterator,
-like we do with perf_pmu__for_each_hybrid_pmu. I'd like to go further
-with a pmus.h, as the computation of the perf_pmu struct should be
-done a lot more lazily than it is now. But for now you can just
-iterate the pmus looking for one saying beginning with "uncore_" as a
-name.
+If I do that, I also need to consider the maximum length of the
+hardware revision would be "a/xxxxx/xxxxx" because the numbers are
+u16. The declaration would become:
 
-> +#if defined(__x86_64__) || defined(__i386__)
-> +{
-> +       char buf[128] = {0};
-> +
-> +       if (get_cpuid(buf, sizeof(buf)))
-> +               return -1;
-> +       if (strstr(buf, "Intel")) {
-> +               strcpy(pmu_name, "uncore_imc_0"); /* XXX */
-> +               config[2] = 0xff04;
-> +       } else {
-> +               strcpy(pmu_name, "amd_l3");
-> +               config[2] = 0xff04; /* l3_cache_accesses */
-> +       }
-> +}
-> +#elif defined(__arm__) || defined(__aarch64__)
-> +       strcpy(pmu_name, "l2c_220"); /* XXX */
-> +       config[2] = 0x0;
-> +#elif defined(__powerpc__)
-> +       strcpy(pmu_name, "hv_24x7"); /* XXX */
-> +       config[2] = 0x0;
-> +#elif defined(__s390x__)
-> +       strcpy(pmu_name, "pai_crypto"); /* XXX */
-> +       config[2] = 0x0;
-> +#else
-> +       pr_debug("No uncore pmu event found\n");
-> +       return -1;
-> +#endif
-> +
-> +       pmu = perf_pmu__find(pmu_name);
-> +       if (!pmu) {
-> +               pr_debug("Can not find uncore pmu\n");
-> +               return -1;
-> +       }
-> +       type[2] = pmu->type;
-> +       return 0;
-> +}
-> +
-> +static int run_test(int i, int j, int k)
-> +{
-> +       int erroneous = ((((1 << i) | (1 << j) | (1 << k)) & 5) == 5);
-> +       int fd1, fd2, fd3;
-> +
-> +       fd1 = event_open(type[i], config[i], -1);
+        char buf[max(sizeof("xxx.xxx.xxx"), sizeof("axxxxx/xxxxx"))];
 
-nit: a name like "event_group_leader_fd" would be more intention
-revealing than fd1.
+Because no such warning exists in the kernel, I do not think the above
+line to be a good trade off. I would like to keep things as they are,
+it is easier to read. That said, I will add an extra check in
+es58x_parse_sw_version() and es58x_parse_hw_revision() to assert that
+the number are not bigger than 99 for the software version (and not
+bigger than 999 for the hardware revision). That way the code will
+guarantee that the truncation can never occur.
 
-Thanks!
-Ian
+> Nice paranoid code by the way. I'm not the best at spotting potential
+> buffer overflows, but this code looks good. The only question i had
+> left was how well sscanf() deals with UTF-8.
 
-> +       if (fd1 == -1)
-> +               return -1;
-> +
-> +       fd2 = event_open(type[j], config[j], fd1);
-> +       if (fd2 == -1) {
-> +               close(fd1);
-> +               return erroneous ? 0 : -1;
-> +       }
-> +
-> +       fd3 = event_open(type[k], config[k], fd1);
-> +       if (fd3 == -1) {
-> +               close(fd1);
-> +               close(fd2);
-> +               return erroneous ? 0 : -1;
-> +       }
-> +
-> +       close(fd1);
-> +       close(fd2);
-> +       close(fd3);
-> +       return erroneous ? -1 : 0;
-> +}
-> +
-> +static int test__event_groups(struct test_suite *text __maybe_unused, int subtest __maybe_unused)
-> +{
-> +       int i, j, k;
-> +       int ret;
-> +       int r;
-> +
-> +       ret = setup_uncore_event();
-> +       if (ret || type[2] == -1)
-> +               return TEST_SKIP;
-> +
-> +       ret = TEST_OK;
-> +       for (i = 0; i < 3; i++) {
-> +               for (j = 0; j < 3; j++) {
-> +                       for (k = 0; k < 3; k++) {
-> +                               r = run_test(i, j, k);
-> +                               if (r)
-> +                                       ret = TEST_FAIL;
-> +
-> +                               pr_debug("0x%x 0x%lx, 0x%x 0x%lx, 0x%x 0x%lx: %s\n",
-> +                                        type[i], config[i], type[j], config[j],
-> +                                        type[k], config[k], r ? "Fail" : "Pass");
-> +                       }
-> +               }
-> +       }
-> +       return ret;
-> +}
-> +
-> +DEFINE_SUITE("Event groups", event_groups);
-> diff --git a/tools/perf/tests/tests.h b/tools/perf/tests/tests.h
-> index 5bbb8f6a48fc..08570b5505d7 100644
-> --- a/tools/perf/tests/tests.h
-> +++ b/tools/perf/tests/tests.h
-> @@ -147,6 +147,7 @@ DECLARE_SUITE(expand_cgroup_events);
->  DECLARE_SUITE(perf_time_to_tsc);
->  DECLARE_SUITE(dlfilter);
->  DECLARE_SUITE(sigtrap);
-> +DECLARE_SUITE(event_groups);
->
->  /*
->   * PowerPC and S390 do not support creation of instruction breakpoints using the
-> --
-> 2.38.1
->
+It does not consider UTF-8. The %u is a _parse_integer_limit() in disguise.
+  https://elixir.bootlin.com/linux/v6.1-rc6/source/lib/vsprintf.c#L3637
+  https://elixir.bootlin.com/linux/v6.1-rc6/source/lib/vsprintf.c#L70
+
+_parse_integer_limit() just check for ASCII digits so the first UTF-8
+character would make the function return.
+  https://elixir.bootlin.com/linux/v6.1-rc6/source/lib/kstrtox.c#L65
+
+For example, this:
+  "ＦＷ:03.00.06"
+would fail parsing because sscanf() will not be able to match the
+first byte of the UTF-8 'Ｆ' with 'F'.
+
+Another example:
+  "FW:０３.００.０６"
+would also fail parsing because _parse_integer_limit() will not
+recognize the first byte of UTF-8 '０' as a valid ASCII digit and
+return early.
+
+To finish, a very edge case:
+  "FW:03.00.0６"
+would incorrectly succeed. It will parse "FW:03.00.0" successfully and
+will return when encountering the UTF-8 '６'. But I am not willing to
+cover that edge case. If the device goes into this level of
+perversion, I do not care any more as long as it does not result in
+undefined behaviour.
+
+
+Yours sincerely,
+Vincent Mailhol
