@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 011EE639B19
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 14:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C88E639B1C
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 14:35:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiK0Nfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 08:35:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54160 "EHLO
+        id S229614AbiK0Nfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 08:35:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiK0NfZ (ORCPT
+        with ESMTP id S229720AbiK0Nfc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 08:35:25 -0500
+        Sun, 27 Nov 2022 08:35:32 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319E811141;
-        Sun, 27 Nov 2022 05:35:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5741311153;
+        Sun, 27 Nov 2022 05:35:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D92FAB80AFE;
-        Sun, 27 Nov 2022 13:35:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CE40C4347C;
-        Sun, 27 Nov 2022 13:34:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 115AAB80AF9;
+        Sun, 27 Nov 2022 13:35:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C76EC4314A;
+        Sun, 27 Nov 2022 13:35:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669556101;
-        bh=MNbW+YutU+sVrmmOrPINpNykL05x+gdBC0t0g2Icviw=;
+        s=k20201202; t=1669556104;
+        bh=g4LJwNon3ikj0mDiKpgNdJBJC8dWgZ0tmK3s2vZCTD8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iu8kEZVOT1yqzn1YbRDJIxQVy17rJLRAgVSIvst11f18PAQi9ez4knFI/tgn8qRXi
-         GO4k1HGJ1ggQgj6fCJ6/wIpyYeGwq/buxrdfsQYi9msT+p9DC6vjIvjg42Vec6hLrM
-         0eB8lREFkL8/w+gtGgX8MOS6P+eqwHCgEiJgQtlVNme2xgy80CH4p/hpsESV6swg4O
-         6tbocxXBzhHMneZ3e+VxKUC6WwlA2tr5/GtBDfcTZ7egpQfpO4tYTIgsrmNoYf+ZA6
-         qY9UKJ7wRHqWmPbpA4YUhW1G42Yh2/tNrxF8MR0s0xbPffAxRD7JctbLkJ0a5KLCYE
-         6VqpFlM53Wrgw==
+        b=jpO2M682vQ59NWqkX6C/C8bebtVTVE9tMN7m3DVqfwTJEMUHe76Q450KRtW9+EEDP
+         kp+JkF6gVBYtcBV/2OGtkNDp8Qd6fCNAdzzWbNPMreWCx7VebuoKTX2ytVyOh/M3JZ
+         w7brGzjj12WY1QBlV0HgY6GY129KZMbRbxmDT90I8SMB93tsVMarDW8J38Uoj2w19G
+         6OqlrcgPf8gzKQsNMrh3wZdTSfoYDPU1JxX6JmtnS1A54XxzPKPYKPG9UGm8K+TomB
+         29umEFMPipo6Tk89TitsHdQ6L8uQKxcx2makqRG93Ug4Y2vig1z5wjwYWFPv0fdMp5
+         axkzfNI+P6CGQ==
 From:   Jisheng Zhang <jszhang@kernel.org>
 To:     Rob Herring <robh+dt@kernel.org>, Conor Dooley <conor@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -43,9 +43,9 @@ To:     Rob Herring <robh+dt@kernel.org>, Conor Dooley <conor@kernel.org>,
         =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH v2 7/9] riscv: dts: bouffalolab: add Sipeed M1s SoM and Dock devicetree
-Date:   Sun, 27 Nov 2022 21:24:46 +0800
-Message-Id: <20221127132448.4034-8-jszhang@kernel.org>
+Subject: [PATCH v2 8/9] MAINTAINERS: riscv: add entry for Bouffalolab SoC
+Date:   Sun, 27 Nov 2022 21:24:47 +0800
+Message-Id: <20221127132448.4034-9-jszhang@kernel.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20221127132448.4034-1-jszhang@kernel.org>
 References: <20221127132448.4034-1-jszhang@kernel.org>
@@ -60,96 +60,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sipeed manufactures a M1s system-on-module and dock board, add basic
-support for them.
+Add Jisheng Zhang as Bouffalolab SoC maintainer.
 
 Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 ---
- arch/riscv/boot/dts/Makefile                  |  1 +
- arch/riscv/boot/dts/bouffalolab/Makefile      |  2 ++
- .../dts/bouffalolab/bl808-sipeed-m1s-dock.dts | 25 +++++++++++++++++++
- .../dts/bouffalolab/bl808-sipeed-m1s.dtsi     | 21 ++++++++++++++++
- 4 files changed, 49 insertions(+)
- create mode 100644 arch/riscv/boot/dts/bouffalolab/Makefile
- create mode 100644 arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s-dock.dts
- create mode 100644 arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s.dtsi
+ MAINTAINERS | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/arch/riscv/boot/dts/Makefile b/arch/riscv/boot/dts/Makefile
-index ff174996cdfd..b525467152b2 100644
---- a/arch/riscv/boot/dts/Makefile
-+++ b/arch/riscv/boot/dts/Makefile
-@@ -1,4 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
-+subdir-y += bouffalolab
- subdir-y += sifive
- subdir-y += starfive
- subdir-$(CONFIG_SOC_CANAAN_K210_DTB_BUILTIN) += canaan
-diff --git a/arch/riscv/boot/dts/bouffalolab/Makefile b/arch/riscv/boot/dts/bouffalolab/Makefile
-new file mode 100644
-index 000000000000..5419964e892d
---- /dev/null
-+++ b/arch/riscv/boot/dts/bouffalolab/Makefile
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0
-+dtb-$(CONFIG_SOC_BOUFFALOLAB) += bl808-sipeed-m1s-dock.dtb
-diff --git a/arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s-dock.dts b/arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s-dock.dts
-new file mode 100644
-index 000000000000..c6b4894a7b88
---- /dev/null
-+++ b/arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s-dock.dts
-@@ -0,0 +1,25 @@
-+// SPDX-License-Identifier: (GPL-2.0+ or MIT)
-+/*
-+ * Copyright (C) 2022 Jisheng Zhang <jszhang@kernel.org>
-+ */
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 00ff4a2949b8..a6b04249853c 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17729,6 +17729,15 @@ F:	arch/riscv/
+ N:	riscv
+ K:	riscv
+ 
++RISC-V BOUFFALOLAB SOC SUPPORT
++M:	Jisheng Zhang <jszhang@kernel.org>
++L:	linux-riscv@lists.infradead.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/riscv/bouffalolab.yaml
++F:	Documentation/devicetree/bindings/serial/bouffalolab,uart.yaml
++F:	arch/riscv/boot/dts/bouffalolab/
++F:	drivers/tty/serial/bflb_uart.c
 +
-+/dts-v1/;
-+
-+#include "bl808-sipeed-m1s.dtsi"
-+
-+/ {
-+	model = "Sipeed M1s Dock";
-+	compatible = "sipeed,m1s-dock", "sipeed,m1s", "bouffalolab,bl808";
-+
-+	aliases {
-+		serial0 = &uart0;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:2000000n8";
-+	};
-+};
-+
-+&uart0 {
-+	status = "okay";
-+};
-diff --git a/arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s.dtsi b/arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s.dtsi
-new file mode 100644
-index 000000000000..5026de768534
---- /dev/null
-+++ b/arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s.dtsi
-@@ -0,0 +1,21 @@
-+// SPDX-License-Identifier: (GPL-2.0+ or MIT)
-+/*
-+ * Copyright (C) 2022 Jisheng Zhang <jszhang@kernel.org>
-+ */
-+
-+/dts-v1/;
-+
-+#include "bl808.dtsi"
-+
-+/ {
-+	compatible = "sipeed,m1s", "bouffalolab,bl808";
-+
-+	memory@50000000 {
-+		device_type = "memory";
-+		reg = <0x50000000 0x04000000>;
-+	};
-+};
-+
-+&xtal {
-+	clock-frequency = <40000000>;
-+};
+ RISC-V MICROCHIP FPGA SUPPORT
+ M:	Conor Dooley <conor.dooley@microchip.com>
+ M:	Daire McNamara <daire.mcnamara@microchip.com>
 -- 
 2.38.1
 
