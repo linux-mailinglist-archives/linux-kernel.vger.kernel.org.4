@@ -2,128 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF5A8639931
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 03:44:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DA8D639935
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 03:48:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbiK0Coj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 21:44:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54486 "EHLO
+        id S229510AbiK0Cpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 21:45:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiK0Coi (ORCPT
+        with ESMTP id S229453AbiK0Cpr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 21:44:38 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E01E15723
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 18:44:36 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id h21-20020a05660224d500b006debd7dedccso3619928ioe.9
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 18:44:36 -0800 (PST)
+        Sat, 26 Nov 2022 21:45:47 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC8215723
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 18:45:46 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id 6so7000925pgm.6
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 18:45:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ppae8YkGxihHdolp7H9Ytm/fuY6Yp4IGxdByEhiVIp0=;
+        b=O2xOwuAqWd42vmpaztCU+N0Zt7qwCJ+HxM+oeF/R/Gj78hawuSuBKUWUiUq7nriKCE
+         LXgj9dd2Y8h6yoGZ98JNK9rt2CFthOzB9ISvDyTsm996HEY84YepKQ1lmA3YKTGbqdfS
+         mZYY3HcYNv+rwoedu1KmAvTk9QCvqoATnvSwbk8KhsqeTscHgGX9mujcI5woUWdPOMEs
+         4CCoP/7Ov1iBFRXxGUv6s2OlEGFERatM1Gdb5Oa+k2sM4c0A6+b6jO3vxTs8rcRfRCW8
+         M22qGsW3PQAJ6X6AY74nYB2fn3GraeQtDLGqaZkcLvU8YBFhVjvAnC3tcNli0r+YBO5N
+         bzcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x2Wlsv+VYPj+/PHBrA6LKzK7bHl/NuBOJ73q0NuYt5o=;
-        b=kROP84MYdTVgvGqXcqdjAz+b4iCdnLHEzOi0qXSlNotAOOpMt57o29w92H/QX7at7Y
-         t5XERKkbYNjY78gwUagaDgizp9i02NmqgFtDS5xFZzzvH9YnNJZtBpJKKLbfMRghi8SS
-         Jb/sE2Bv5A7F+voQ3HG4aID62ylv1tAtX2FmoN/jtsFEQfQHtvz5uxoIJpJ1dGZWUiD2
-         4W1dXLfn1H5G7MhmBmLszb1KrCn1sP1EEbVzYX6HdGAzNIDOSPXX38bb9K98fJ90X6pu
-         PdRWlM42krMXsq50Z8dS+2OwCTSBNiU4037NZ0ivvWqjOxo0TdL04LZzDZqOA96ayhad
-         YMQQ==
-X-Gm-Message-State: ANoB5pnS8WnLsKzGyXW1PHwym7W8BUqFTtP3GJUReLhLMGbeqqCGREOx
-        ecsUpLSKlVjHqEwL1HcYa+thADgXRzsKC6g4w5ICp7ASgme9
-X-Google-Smtp-Source: AA0mqf7oUs5VcmwZ0YznYucRYXBF/yuRbwaaGBAgAjEUipIm4AXlucnMoIVJwz76dFfj9ixSF83vqilbZXLGBMjPAqNaidzN7T/3
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ppae8YkGxihHdolp7H9Ytm/fuY6Yp4IGxdByEhiVIp0=;
+        b=N3X2LlEIlmWyViRrJ7HyFu6i36FAlKd1xt4HhNSOSlMVOmtl7C+KQISGr4i34I+rDZ
+         FvWhnFxujzGsUjMy6an+dsjd1FeipHvzrn/kTuaUzV+VcePsH4eFA/INPLGCsJ7JG5HA
+         KsQ6iBbEbVTM5hQbz3yZjx1MMJ1nwXy63U2iIC+Z1daQOYEFmovcPyMtZsN+s1j1Gnb0
+         ZuGDtbjVG42r2QHeuLg3GRBJRgCzLxY+cI9I5mfQ6Zxj/m6KdmPLWEa13DOthDFfnxa9
+         CVvtkvBQISZ1OO1+3/Mcp86y1BBFyUSK/XHskrbx/teKFevVdM9bJF83pxvy2+zsNl1z
+         pMPg==
+X-Gm-Message-State: ANoB5pluyW5qMgxFCLOF9LNST/A3cK0oJUeUJXToGZAQoumlLpP4jFcq
+        trzQZIQYLPVH8X62Rp1JEpzul4nILwBWarv3vYhYOHg5/lcJnQ==
+X-Google-Smtp-Source: AA0mqf6YciwvlYw43Lh0nHr5XuZ1gXzzHQykeXjeIoYNZhlpSYxSR4xj6cT/+28H978gFdAz/Dp8UCqc83Ro3cy9dEM=
+X-Received: by 2002:a65:45ce:0:b0:44b:2928:f868 with SMTP id
+ m14-20020a6545ce000000b0044b2928f868mr31009871pgr.384.1669517145674; Sat, 26
+ Nov 2022 18:45:45 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a92:cc8f:0:b0:300:c067:e72c with SMTP id
- x15-20020a92cc8f000000b00300c067e72cmr10610322ilo.319.1669517075971; Sat, 26
- Nov 2022 18:44:35 -0800 (PST)
-Date:   Sat, 26 Nov 2022 18:44:35 -0800
-In-Reply-To: <000000000000cf908705eaa8c5a7@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000042884105ee6abce9@google.com>
-Subject: Re: [syzbot] WARNING in __kernel_write_iter
-From:   syzbot <syzbot+12e098239d20385264d3@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+References: <20221121035140.118651-1-zhouzhouyi@gmail.com> <87y1rxwsse.ffs@tglx>
+In-Reply-To: <87y1rxwsse.ffs@tglx>
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date:   Sun, 27 Nov 2022 10:45:34 +0800
+Message-ID: <CAABZP2xNTbrx9iV+KH3VZx1c9Yi97+izNA=XSJQBuOJ4WENFZg@mail.gmail.com>
+Subject: Re: [PATCH linux-next][RFC]torture: avoid offline tick_do_timer_cpu
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     fweisbec@gmail.com, mingo@kernel.org, dave@stgolabs.net,
+        paulmck@kernel.org, josh@joshtriplett.org, mpe@ellerman.id.au,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Thank Thomas for your guidance
 
-HEAD commit:    6d464646530f Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=11f871bb880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=23eec5c79c22aaf8
-dashboard link: https://syzkaller.appspot.com/bug?extid=12e098239d20385264d3
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=114ef275880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13a92353880000
+On Sun, Nov 27, 2022 at 1:05 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> On Mon, Nov 21 2022 at 11:51, Zhouyi Zhou wrote:
+> > During CPU-hotplug torture (CONFIG_NO_HZ_FULL=y), if we try to
+> > offline tick_do_timer_cpu, the operation will fail because in
+> > function tick_nohz_cpu_down:
+> > ```
+> > if (tick_nohz_full_running && tick_do_timer_cpu == cpu)
+> >       return -EBUSY;
+> > ```
+> > Above bug was first discovered in torture tests performed in PPC VM
+>
+> How is this a bug?
+Yes, this is a false positive instead.
+>
+> > of Open Source Lab of Oregon State University, and reproducable in RISC-V
+> > and X86-64 (with additional kernel commandline cpu0_hotplug).
+> >
+> > In this patch, we avoid offline tick_do_timer_cpu by distribute
+> > the offlining cpu among remaining cpus.
+>
+> Please read Documentation/process. Search for 'this patch'...
+Documentation/process/submitting-patches.rst says:
+"Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
+instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy
+to do frotz", as if you are giving orders to the codebase to change
+its behaviour."
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/f22d29413625/disk-6d464646.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/389f0a5f1a4a/vmlinux-6d464646.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/48ddb02d82da/Image-6d464646.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/609bce089bbe/mount_0.gz
+So, I should construct my patch as:
+We avoid ... by ...
+>
+> >
+> > Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > ---
+> >  include/linux/tick.h        |  1 +
+> >  kernel/time/tick-common.c   |  1 +
+> >  kernel/time/tick-internal.h |  1 -
+> >  kernel/torture.c            | 10 ++++++++++
+> >  4 files changed, 12 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/include/linux/tick.h b/include/linux/tick.h
+> > index bfd571f18cfd..23cc0b205853 100644
+> > --- a/include/linux/tick.h
+> > +++ b/include/linux/tick.h
+> > @@ -14,6 +14,7 @@
+> >  #include <linux/rcupdate.h>
+> >
+> >  #ifdef CONFIG_GENERIC_CLOCKEVENTS
+> > +extern int tick_do_timer_cpu __read_mostly;
+> >  extern void __init tick_init(void);
+> >  /* Should be core only, but ARM BL switcher requires it */
+> >  extern void tick_suspend_local(void);
+> > diff --git a/kernel/time/tick-common.c b/kernel/time/tick-common.c
+> > index 46789356f856..87b9b9afa320 100644
+> > --- a/kernel/time/tick-common.c
+> > +++ b/kernel/time/tick-common.c
+> > @@ -48,6 +48,7 @@ ktime_t tick_next_period;
+> >   *    procedure also covers cpu hotplug.
+> >   */
+> >  int tick_do_timer_cpu __read_mostly = TICK_DO_TIMER_BOOT;
+> > +EXPORT_SYMBOL_GPL(tick_do_timer_cpu);
+>
+> No. We are not exporting this just to make a bogus test case happy.
+>
+> Fix the torture code to handle -EBUSY correctly.
+I am going to do a study on this, for now, I do a grep in the kernel tree:
+find . -name "*.c"|xargs grep cpuhp_setup_state|wc -l
+The result of the grep command shows that there are 268
+cpuhp_setup_state* cases.
+which may make our task more complicated.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+12e098239d20385264d3@syzkaller.appspotmail.com
+After my study, should we also take Frederic's proposal as a possible option?
+(construct a function for this)
+https://lore.kernel.org/lkml/20221123223658.GC1395324@lothringen/
 
-BTRFS info (device loop0): using free space tree
-BTRFS info (device loop0): enabling ssd optimizations
-BTRFS info (device loop0): checking UUID tree
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 3072 at fs/read_write.c:504 __kernel_write_iter+0x250/0x284 fs/read_write.c:504
-Modules linked in:
-CPU: 0 PID: 3072 Comm: syz-executor372 Not tainted 6.1.0-rc6-syzkaller-32662-g6d464646530f #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __kernel_write_iter+0x250/0x284 fs/read_write.c:504
-lr : __kernel_write_iter+0x250/0x284 fs/read_write.c:504
-sp : ffff800012d9ba90
-x29: ffff800012d9bad0 x28: ffff0000c9367000 x27: 0000000000000000
-x26: 0000000000000000 x25: 0000000000000011 x24: ffff0000ca81f580
-x23: 0000000000000000 x22: ffff0000c993f808 x21: ffff0000c0292c00
-x20: ffff800012d9bb20 x19: 00000000000a801d x18: 00000000000000c0
-x17: ffff80000dda8198 x16: ffff80000dbe6158 x15: ffff0000c7d38000
-x14: 0000000000000000 x13: 00000007ffffffff x12: ffff0000c7d38000
-x11: ff808000085ba5e8 x10: 0000000000000000 x9 : ffff8000085ba5e8
-x8 : ffff0000c7d38000 x7 : 6b636f6c5f746e65 x6 : ffff80000801154c
-x5 : ffff80000e0caee8 x4 : 0000000000000011 x3 : 0000000000000001
-x2 : ffff0000c993f808 x1 : 0000000000000000 x0 : 0000000000000000
-Call trace:
- __kernel_write_iter+0x250/0x284 fs/read_write.c:504
- __kernel_write fs/read_write.c:537 [inline]
- kernel_write+0x10c/0x1d0 fs/read_write.c:558
- write_buf fs/btrfs/send.c:591 [inline]
- send_header fs/btrfs/send.c:709 [inline]
- send_subvol+0x94/0x17ec fs/btrfs/send.c:7653
- btrfs_ioctl_send+0xd74/0xed0 fs/btrfs/send.c:8019
- _btrfs_ioctl_send+0x188/0x218 fs/btrfs/ioctl.c:5233
- btrfs_ioctl+0x5c0/0xa64
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __arm64_sys_ioctl+0xd0/0x140 fs/ioctl.c:856
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-irq event stamp: 82496
-hardirqs last  enabled at (82495): [<ffff80000844b028>] mod_lruvec_page_state include/linux/vmstat.h:563 [inline]
-hardirqs last  enabled at (82495): [<ffff80000844b028>] __kmalloc_large_node+0x108/0x188 mm/slab_common.c:1099
-hardirqs last disabled at (82496): [<ffff80000c0808b4>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
-softirqs last  enabled at (81982): [<ffff80000801c38c>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
-softirqs last disabled at (81980): [<ffff80000801c358>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
----[ end trace 0000000000000000 ]---
-
+I learned a lot during this process
+Many thanks
+Zhouyi
+>
+> Thanks,
+>
+>         tglx
