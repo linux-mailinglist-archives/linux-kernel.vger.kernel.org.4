@@ -2,95 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0956639985
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 08:29:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80E99639982
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 08:25:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbiK0H3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 02:29:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36566 "EHLO
+        id S229515AbiK0HXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 02:23:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiK0H3M (ORCPT
+        with ESMTP id S229491AbiK0HXc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 02:29:12 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1EA13D28
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 23:29:12 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id v3-20020a17090ac90300b00218441ac0f6so10344723pjt.0
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 23:29:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igorinstitute-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:date:from:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A+15f3T3+S3cU3nRipNryZJ4svWYzk/FzguyIiKQo5Y=;
-        b=R+W/2Kk0/vwErqgTCVnwyJdA+49fCvdEw5R4Q3NlZCWvbQpbNIZWfbGScngPYJ6Eub
-         Qkku9e2Vc6FV7h1ctudVvvNrEYrC6amRep79WGs311zLkdsynZP0QPGHEf4ND0mmzpFj
-         C25yztKS7BnZWheWndZBqvYVDNmuC5NalsYophyEaY3KTnIbBKIwtWKRLFqtHFpP0Xk8
-         yjBlszs/AQ60Wiv86BNIFnwm02bc0/U9U1IIww4LXexFiJw5HVb2ZsZyx5nghOWcO0DA
-         Vq1T5ZZ5Hey9UlsTVw+K70nak6h95uM1Z2pxqLcp4J/zU4oBwhFj8ykn6kIUTUOQPdxJ
-         bADA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:date:from:message-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=A+15f3T3+S3cU3nRipNryZJ4svWYzk/FzguyIiKQo5Y=;
-        b=x4obaADdqMBlVCHLulcsdVCiSEdBJkgkMsJKjpPoY57P1UatEZU47roCHjOcxZ6979
-         aN1W9Kj3JzrY/5hFdLxrdnFxk2ZGEsk1hb+UG2W0qmUcI06MYXK5HNCeuWTIkqMXRgGg
-         e8cZOtCflH8gZ6S/W1Qr5rJMVWJqva8/3KCSRXMXYpH82Q0wmI5NcNHD/mU2DVa29/OU
-         60JY103VJcBc2DummvSyZoK7Men8daD21/CrN+usyudbKzjadfG2HcaW5Qx6gRXy8bec
-         IBfCkWU99lON9Hi5EVRjaGTEi3SwYsyFvMtYueraCxAvAaE+N9jaYJmzaA6X59gEpgdF
-         vUTA==
-X-Gm-Message-State: ANoB5pl9JOEGXC+wM2dYQRvT0uIiuXN0AkQalbtYvnxqbAfpSOYNhjg/
-        DUapU1HcfW1PEWLXelssRoAohKQfVnqLBw==
-X-Google-Smtp-Source: AA0mqf6InhROC4XL8bT1IanMdMMMCSjQhLQ2R8kuioKvNmGLuRhHLl78r8THfEvxaQYvDKhb1R4iyg==
-X-Received: by 2002:a17:902:a718:b0:189:7722:99d7 with SMTP id w24-20020a170902a71800b00189772299d7mr5479382plq.96.1669534151792;
-        Sat, 26 Nov 2022 23:29:11 -0800 (PST)
-Received: from localhost ([121.99.145.49])
-        by smtp.gmail.com with ESMTPSA id b23-20020aa79517000000b00574d7111c99sm2794396pfp.195.2022.11.26.23.29.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Nov 2022 23:29:11 -0800 (PST)
-Message-ID: <638311c7.a70a0220.4e021.3abe@mx.google.com>
-From:   Daniel Beer <daniel.beer@igorinstitute.com>
-Date:   Thu, 27 Oct 2022 21:38:38 +1300
-Subject: [PATCH 2/2] ASoC: tas5805m: add missing page switch.
-To:     alsa-devel@alsa-project.org
-Cc:     linux-kernel@vger.kernel.org,
-        Daniel Beer <daniel.beer@igorinstitute.com>,
-        Andy Liu <andy-liu@ti.com>, Mark Brown <broonie@kernel.org>,
-        Derek Simkowiak <derek.simkowiak@igorinstitute.com>
-X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        Sun, 27 Nov 2022 02:23:32 -0500
+Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5278013D11
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 23:23:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1669533801; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=iEFzdWNViSURgz8Y4NovvijJYpK+p23njdwUvyPq2DkyayBrlzuwDNFzJDA2/UzX5xaqQ0iEJXfCGfwJFV/HPe4frb8xfR00LyA4gEh0uPNFaVUGXbKm5Th/A+9/ZHY5LN6szDC8ln0RT4/87Acjkord9bzZVQe266U194I0PL4=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1669533801; h=Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=T1cysyrGoq304rLsu0xWkq0J6KZT872CrMJW3x4MX4k=; 
+        b=atAX36osMkq2VAzYe16vHnA3jYKY45UDUy+0lYYbwqfsYCzAb177ebkyGRPQoMSis43Nz/X+3VYneGc7/WNs83Gx8v5IHQozFnpexCxbrPucgP7OpxzNDCl743XVtdvLhHVfnDsH3Nkn7gAqw2nhC59Kq6AjLrIJC1d4am+n9IM=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=icenowy.me;
+        spf=pass  smtp.mailfrom=uwu@icenowy.me;
+        dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1669533801;
+        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
+        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
+        bh=T1cysyrGoq304rLsu0xWkq0J6KZT872CrMJW3x4MX4k=;
+        b=C9rhh60xiqKoCg5vtTfDF/bCdiiy5eu/Bawo1l3x4LMvgIG6VSDRBnOZaizbA1Wz
+        38TEY30qkoRP06/E6vW7e9zQl+Fb5vc/0T5nDe/jy/IihFD0B1g/AiEsBQVgDQG+4Ji
+        sj3fpjBvRkNcv1VDLYTFzOQR/R40RVIQnPidlZuo=
+Received: from edelgard.fodlan.icenowy.me (112.94.100.108 [112.94.100.108]) by mx.zohomail.com
+        with SMTPS id 1669533799204919.048958253238; Sat, 26 Nov 2022 23:23:19 -0800 (PST)
+From:   Icenowy Zheng <uwu@icenowy.me>
+To:     Lee Jones <lee@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-sunxi@lists.linux.dev, Icenowy Zheng <uwu@icenowy.me>
+Subject: [PATCH] mfd: axp20x: adapt to newly refactored unmask_base in regmap-irq
+Date:   Sun, 27 Nov 2022 15:23:07 +0800
+Message-Id: <20221127072307.2092327-1-uwu@icenowy.me>
+X-Mailer: git-send-email 2.37.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In tas5805m_refresh, we switch pages to update the DSP volume control,
-but we need to switch back to page 0 before trying to alter the
-soft-mute control. This latter page-switch was missing.
+The mask_base and unmask_base fields in a regmap-irq description is
+recently refactored to be orthogonal and mask_inverted property is
+deprecated. The new semantics of unmask_base just fits AXP PMICs.
 
-Fixes: ec45268467f4 ("ASoC: add support for TAS5805M digital amplifier")
-Signed-off-by: Daniel Beer <daniel.beer@igorinstitute.com>
+Specify enabling registers as unmask_base and drop mask_inverted
+property to adapt to the new interface.
+
+Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
 ---
- sound/soc/codecs/tas5805m.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/mfd/axp20x.c | 21 +++++++--------------
+ 1 file changed, 7 insertions(+), 14 deletions(-)
 
-diff --git a/sound/soc/codecs/tas5805m.c b/sound/soc/codecs/tas5805m.c
-index d720c67b9675..5cf7726904c2 100644
---- a/sound/soc/codecs/tas5805m.c
-+++ b/sound/soc/codecs/tas5805m.c
-@@ -203,6 +203,9 @@ static void tas5805m_refresh(struct tas5805m_priv *tas5805m)
- 	set_dsp_scale(rm, 0x24, tas5805m->vol[0]);
- 	set_dsp_scale(rm, 0x28, tas5805m->vol[1]);
- 
-+	regmap_write(rm, REG_PAGE, 0x00);
-+	regmap_write(rm, REG_BOOK, 0x00);
-+
- 	/* Set/clear digital soft-mute */
- 	regmap_write(rm, REG_DEVICE_CTRL_2,
- 		(tas5805m->is_muted ? DCTRL2_MUTE : 0) |
+diff --git a/drivers/mfd/axp20x.c b/drivers/mfd/axp20x.c
+index 88a212a8168c..6e6b5dbab098 100644
+--- a/drivers/mfd/axp20x.c
++++ b/drivers/mfd/axp20x.c
+@@ -506,8 +506,7 @@ static const struct regmap_irq_chip axp152_regmap_irq_chip = {
+ 	.name			= "axp152_irq_chip",
+ 	.status_base		= AXP152_IRQ1_STATE,
+ 	.ack_base		= AXP152_IRQ1_STATE,
+-	.mask_base		= AXP152_IRQ1_EN,
+-	.mask_invert		= true,
++	.unmask_base		= AXP152_IRQ1_EN,
+ 	.init_ack_masked	= true,
+ 	.irqs			= axp152_regmap_irqs,
+ 	.num_irqs		= ARRAY_SIZE(axp152_regmap_irqs),
+@@ -518,8 +517,7 @@ static const struct regmap_irq_chip axp20x_regmap_irq_chip = {
+ 	.name			= "axp20x_irq_chip",
+ 	.status_base		= AXP20X_IRQ1_STATE,
+ 	.ack_base		= AXP20X_IRQ1_STATE,
+-	.mask_base		= AXP20X_IRQ1_EN,
+-	.mask_invert		= true,
++	.unmask_base		= AXP20X_IRQ1_EN,
+ 	.init_ack_masked	= true,
+ 	.irqs			= axp20x_regmap_irqs,
+ 	.num_irqs		= ARRAY_SIZE(axp20x_regmap_irqs),
+@@ -531,8 +529,7 @@ static const struct regmap_irq_chip axp22x_regmap_irq_chip = {
+ 	.name			= "axp22x_irq_chip",
+ 	.status_base		= AXP20X_IRQ1_STATE,
+ 	.ack_base		= AXP20X_IRQ1_STATE,
+-	.mask_base		= AXP20X_IRQ1_EN,
+-	.mask_invert		= true,
++	.unmask_base		= AXP20X_IRQ1_EN,
+ 	.init_ack_masked	= true,
+ 	.irqs			= axp22x_regmap_irqs,
+ 	.num_irqs		= ARRAY_SIZE(axp22x_regmap_irqs),
+@@ -543,8 +540,7 @@ static const struct regmap_irq_chip axp288_regmap_irq_chip = {
+ 	.name			= "axp288_irq_chip",
+ 	.status_base		= AXP20X_IRQ1_STATE,
+ 	.ack_base		= AXP20X_IRQ1_STATE,
+-	.mask_base		= AXP20X_IRQ1_EN,
+-	.mask_invert		= true,
++	.unmask_base		= AXP20X_IRQ1_EN,
+ 	.init_ack_masked	= true,
+ 	.irqs			= axp288_regmap_irqs,
+ 	.num_irqs		= ARRAY_SIZE(axp288_regmap_irqs),
+@@ -556,8 +552,7 @@ static const struct regmap_irq_chip axp803_regmap_irq_chip = {
+ 	.name			= "axp803",
+ 	.status_base		= AXP20X_IRQ1_STATE,
+ 	.ack_base		= AXP20X_IRQ1_STATE,
+-	.mask_base		= AXP20X_IRQ1_EN,
+-	.mask_invert		= true,
++	.unmask_base		= AXP20X_IRQ1_EN,
+ 	.init_ack_masked	= true,
+ 	.irqs			= axp803_regmap_irqs,
+ 	.num_irqs		= ARRAY_SIZE(axp803_regmap_irqs),
+@@ -568,8 +563,7 @@ static const struct regmap_irq_chip axp806_regmap_irq_chip = {
+ 	.name			= "axp806",
+ 	.status_base		= AXP20X_IRQ1_STATE,
+ 	.ack_base		= AXP20X_IRQ1_STATE,
+-	.mask_base		= AXP20X_IRQ1_EN,
+-	.mask_invert		= true,
++	.unmask_base		= AXP20X_IRQ1_EN,
+ 	.init_ack_masked	= true,
+ 	.irqs			= axp806_regmap_irqs,
+ 	.num_irqs		= ARRAY_SIZE(axp806_regmap_irqs),
+@@ -580,8 +574,7 @@ static const struct regmap_irq_chip axp809_regmap_irq_chip = {
+ 	.name			= "axp809",
+ 	.status_base		= AXP20X_IRQ1_STATE,
+ 	.ack_base		= AXP20X_IRQ1_STATE,
+-	.mask_base		= AXP20X_IRQ1_EN,
+-	.mask_invert		= true,
++	.unmask_base		= AXP20X_IRQ1_EN,
+ 	.init_ack_masked	= true,
+ 	.irqs			= axp809_regmap_irqs,
+ 	.num_irqs		= ARRAY_SIZE(axp809_regmap_irqs),
 -- 
-2.38.1
+2.37.1
 
