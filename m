@@ -2,54 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E083639D2C
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 22:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E40B639D33
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 22:15:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiK0VMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 16:12:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58164 "EHLO
+        id S229662AbiK0VP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 16:15:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiK0VMq (ORCPT
+        with ESMTP id S229619AbiK0VPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 16:12:46 -0500
-X-Greylist: delayed 244 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 27 Nov 2022 13:12:45 PST
-Received: from cavan.codon.org.uk (cavan.codon.org.uk [176.126.240.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE59BC86;
-        Sun, 27 Nov 2022 13:12:45 -0800 (PST)
-Received: by cavan.codon.org.uk (Postfix, from userid 1000)
-        id 3317D424A3; Sun, 27 Nov 2022 21:12:44 +0000 (GMT)
-Date:   Sun, 27 Nov 2022 21:12:44 +0000
-From:   Matthew Garrett <mjg59@srcf.ucam.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-efi@vger.kernel.org, linux-crypto@vger.kernel.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        ardb@kernel.org
-Subject: Re: [PATCH v3 2/5] efi: stub: use random seed from EFI variable
-Message-ID: <20221127211244.GB32253@srcf.ucam.org>
-References: <20221122020404.3476063-1-Jason@zx2c4.com>
- <20221122020404.3476063-3-Jason@zx2c4.com>
+        Sun, 27 Nov 2022 16:15:23 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D4FC761
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 13:15:22 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id c1so14605810lfi.7
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 13:15:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xMfZ7ojzEusZSXOR1+4lvLHDxR9DG6QpHq+z2MT/mFo=;
+        b=xjEG5ymX6soPm4/RckNuDvvkf2RtsoVsi0vqpsP0yCJRBDIFRaaksS2wAx/gfPr8Uc
+         ndJuBLLmLHbk5gSWzZZ6sfvK32WD7j+VI3gMZrdapz6rLNkK+6bYYdd69BsGlAay0Ujk
+         x5gZu0g98SfMRWr9Wgc3ZTk0r5+iLz87/gi7AyUDLVAd1T5ZZuFkwecykVJARdxTYs9D
+         YPZYEQNfYaqOHQawnAH8NZIBixcAbHkSzWnz/jKHE/JIvd8OCadeWGv5eCLOwEnqn8vi
+         N5nnNy05XHb0zRFkThjhlSbGwl8KQz6bUmTWaEv8AIi3QhY/+Odu6hZ2r752i/di3jEj
+         fIqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xMfZ7ojzEusZSXOR1+4lvLHDxR9DG6QpHq+z2MT/mFo=;
+        b=jj4sRecTlq/PJ9ddNWzGwLZM1VixQTG164z2JmPd2ZdT0iU6FZZ7bEdyfJrCfaLUzg
+         T9WP2JOC8JLMtqiscXu18DOSqhKJLmo78aFgOEK8AQhuObvbe0lHYgUljoiI2Hh7EAXe
+         IwbT3q4sKlQNhdaq4DK52zsYMGZR9++E+ywZAhYwEjrscN5RR8ns81MBQ3QHQ/9Sue0L
+         +LLLvjwRMtXdSRzSF0i+e/Pq9a946qe6t5l2V7PVmi5gdCCfB59k7kqkEr9ka7tcaql7
+         G8HtL6ZVXspBNaww7j82JITrhEhiixsTMCvPHImSXT98xRICX2iU11yPxaZCp/BS7oDN
+         y9TA==
+X-Gm-Message-State: ANoB5pnil7ceF95fzV2tFUXuH9Xg4ttSJ8KX+LQhd+G98sBJu0Wpxj9f
+        q4Mg+CFHkQtK0lbD811S+c5kXagAXicw+hQx
+X-Google-Smtp-Source: AA0mqf4x1iSF+BS5FUF+PRtHJp/BUnje4H5BmmpwQhj0HY0pf7BnAAnNlJfsqzE/ove2zGOv/18oRw==
+X-Received: by 2002:a19:f010:0:b0:4a2:2e81:9be5 with SMTP id p16-20020a19f010000000b004a22e819be5mr16932099lfc.486.1669583720587;
+        Sun, 27 Nov 2022 13:15:20 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id c13-20020a2e9d8d000000b0026dd4be2290sm1044112ljj.90.2022.11.27.13.15.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 27 Nov 2022 13:15:20 -0800 (PST)
+Message-ID: <9ec77e6e-55c0-4331-ad62-9ab001273652@linaro.org>
+Date:   Sun, 27 Nov 2022 22:15:18 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221122020404.3476063-3-Jason@zx2c4.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH net-next v2 1/7] Revert "dt-bindings: marvell,prestera:
+ Add description for device-tree bindings"
+Content-Language: en-US
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        devicetree@vger.kernel.org, Robert Marko <robert.marko@sartura.hr>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Michael Walle <michael@walle.cc>,
+        Marcin Wojtas <mw@semihalf.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Vadym Kochan <vadym.kochan@plvision.eu>,
+        Taras Chornyi <tchornyi@marvell.com>,
+        Rob Herring <robh@kernel.org>
+References: <20221124111556.264647-1-miquel.raynal@bootlin.com>
+ <20221124111556.264647-2-miquel.raynal@bootlin.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221124111556.264647-2-miquel.raynal@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 03:04:01AM +0100, Jason A. Donenfeld wrote:
+On 24/11/2022 12:15, Miquel Raynal wrote:
+> This reverts commit 40acc05271abc2852c32622edbebd75698736b9b.
+> 
+> marvell,prestera.txt is an old file describing the old Alleycat3
+> standalone switches. The commit mentioned above actually hacked these
+> bindings to add support for a device tree property for a more modern
+> version of the IP connected over PCI, using only the generic compatible
+> in order to retrieve the device node from the prestera driver to read
+> one static property.
+> 
+> The problematic property discussed here is "base-mac-provider". The
+> original intent was to point to a nvmem device which could produce the
+> relevant nvmem-cell. This property has never been acked by DT
+> maintainers and fails all the layering that has been brought with the nvmem
 
-> +		 * We delete the seed here, and /hope/ that this causes EFI to
-> +		 * also zero out its representation on disk. This is somewhat
+It's funnier - it was never sent to DT maintainers nor to the
+devicetree@ list. :(
 
-Several implementations I've worked with simply append a deletion marker 
-or append a new variable value until the variable store fills up 
-entirely, at which point a garbage collection event is either run or 
-scheduled for the next reboot. The spec doesn't define how this is 
-handled so unfortunately I don't think there's any way to get a pony 
-here.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
