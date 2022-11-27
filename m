@@ -2,187 +2,352 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71CBB6399DB
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 10:55:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8CD56399DE
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 11:18:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbiK0JzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 04:55:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45768 "EHLO
+        id S229498AbiK0KSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 05:18:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiK0JzX (ORCPT
+        with ESMTP id S229495AbiK0KSb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 04:55:23 -0500
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0BF412760;
-        Sun, 27 Nov 2022 01:55:21 -0800 (PST)
-Received: by mail-qt1-f173.google.com with SMTP id l2so4964056qtq.11;
-        Sun, 27 Nov 2022 01:55:21 -0800 (PST)
+        Sun, 27 Nov 2022 05:18:31 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4516DF1F
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 02:18:29 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id w15-20020a17090a380f00b0021873113cb4so7793487pjb.0
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 02:18:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8dFxQI+/RVircnstLupR+wzSTGReSsywaPKKiQaphTk=;
+        b=hnybZPSoxrGMsNvTQa88HwLi4nRKBQnfQ95rng4eaARtP2YBPX47HbJDA4LSJ3f+NC
+         LmvTllgulvbhEt4p6Rf7Sn4pPx4Jw5QWcVWRfcJSrWDlVysM3RdnPcoKAlG0/x440d6L
+         AL4XJ3EttE7l4m4RWpFjc68qW5DUJe4JaWA0FWi2y/rR8D36uxYU780dvcpd9Dtbu7Z/
+         dW1A14u+OFQMMLxnEcN30jcagoiVuD8Ff2PzLgtrnA8Pp59P7UwSl507r2oPsmRCA+ws
+         GRosVJynkzYce/tQizK6anj6vJLZoBKal/gCU9c80CanVS8y2buAD1R3bu5v72N4J+28
+         1b3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=a/lRJw3Gs/dFweLCVLuIgos8ablOI2qBTJVe/3vTcrU=;
-        b=BTkSMIlD5lD3ZbnfiMATJDoG5jJXcSOvRxTeYzffskdwIygLy1uA+XE9NmLYjwMK49
-         9XKKfTBsEOjUCQSPhdYG9sIFia2NPP30n/GQ8qaNZgyoqIqwIkMTbXnQSiZ3sYtc+9fu
-         KZ0B3xkZ7eLpL84S0R2ldLif75qiBTglVO7GuOpyrHQwlqKh6fArTh4PP0OEkUW6eCoR
-         XTsOYo/RqF3/BHMTXm7VMPODRqKX/ceA7CcsBotlCl1l7iqW0bT3gJvZoxARq+bfBKOF
-         Hg753X1iBU7/FfZJSZ6kzhFTBbSywLRPBhiqI1xHwMmNpik9yn+YdzRgOTdaWCLEFBXP
-         Rp3g==
-X-Gm-Message-State: ANoB5pn9Fr73KUTVQAH8UYeB9QMlb9jZe0YZR3QI4/oEplbmDBMwSyo9
-        9xdo35oTZ0xEwKgjhB8nRzUT5vXLZyzB1A==
-X-Google-Smtp-Source: AA0mqf4T/nhr8ZGy2ehWS/7wryA+JgB2ugtouWdo7t2seYn/U4ECDoGawjw6OgCqsYO35+Vm4VCvqA==
-X-Received: by 2002:a05:622a:514e:b0:3a5:2988:c67c with SMTP id ew14-20020a05622a514e00b003a52988c67cmr31107413qtb.487.1669542920790;
-        Sun, 27 Nov 2022 01:55:20 -0800 (PST)
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
-        by smtp.gmail.com with ESMTPSA id z1-20020ac84541000000b003a530a32f67sm5044802qtn.65.2022.11.27.01.55.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Nov 2022 01:55:20 -0800 (PST)
-Received: by mail-yb1-f170.google.com with SMTP id y83so9941836yby.12;
-        Sun, 27 Nov 2022 01:55:19 -0800 (PST)
-X-Received: by 2002:a5b:24b:0:b0:6ca:3b11:8d76 with SMTP id
- g11-20020a5b024b000000b006ca3b118d76mr25273660ybp.202.1669542919298; Sun, 27
- Nov 2022 01:55:19 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8dFxQI+/RVircnstLupR+wzSTGReSsywaPKKiQaphTk=;
+        b=EoHrjwS1mB60YRnL01OPcD8QIbr5SULnifByB5UpIbQ218M0NzzrogtFSle0K75g7l
+         LGljopYy+OUPC1vUot+L0n+fEdN/wcprnWKcJ4ZjI0ZdcM97nmb2ZtJlQ2RupjB0CUGp
+         j6u4HThe0Ih0u+AxMPs44ErcZKdD+o2HEo3Q25mV1LzILrYHMyrc3udKPDPRQFTrO0o+
+         XkhTp6C6Bdl6WZyHS9MnVW+3eVG8aAKY8gnoJjnG5EJIWHPnruK+BXLFPdyqU+VDKlDZ
+         5c8ljTTP8FDYyBTMXBrDSyURMoqZq0E9uM1hCfk0i2JVwwyJuNm5fj0GGkTPjsGTHgai
+         V7Cg==
+X-Gm-Message-State: ANoB5plCP35eMY52Q85r5ior3icu49YMzoraKWl1AR+gV2T7Fjjer0JO
+        WOdv0vSTRFGG6H82DRAvHRk=
+X-Google-Smtp-Source: AA0mqf7hyQ/awHJ7ShPcK8/eUKE6NXbFHmLQ6tLT2iWM5FwJAvi7eqXiTFmx7TYF1k5B0B9yeUmhqA==
+X-Received: by 2002:a17:90b:888:b0:219:1a88:727b with SMTP id bj8-20020a17090b088800b002191a88727bmr6989938pjb.47.1669544308392;
+        Sun, 27 Nov 2022 02:18:28 -0800 (PST)
+Received: from hyeyoo ([114.29.91.56])
+        by smtp.gmail.com with ESMTPSA id f16-20020aa79690000000b00553d573222fsm5922088pfk.199.2022.11.27.02.18.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Nov 2022 02:18:27 -0800 (PST)
+Date:   Sun, 27 Nov 2022 19:18:21 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, patches@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/12] mm, slub: refactor free debug processing
+Message-ID: <Y4M5bWgjSWKZEXnO@hyeyoo>
+References: <20221121171202.22080-1-vbabka@suse.cz>
+ <20221121171202.22080-9-vbabka@suse.cz>
 MIME-Version: 1.0
-References: <20221124172207.153718-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221124172207.153718-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <bf8e33fd-a752-d5d5-859e-14302d069f2d@sholland.org> <CA+V-a8sz4i_wenTyA5tVTVB8dQWLmuXCf3CGYOPC+C07GJ8WTw@mail.gmail.com>
-In-Reply-To: <CA+V-a8sz4i_wenTyA5tVTVB8dQWLmuXCf3CGYOPC+C07GJ8WTw@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sun, 27 Nov 2022 10:55:07 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWQO_usrJwmVYDx6o-CpzmotVZLt176eKbqLzY-GXiDng@mail.gmail.com>
-Message-ID: <CAMuHMdWQO_usrJwmVYDx6o-CpzmotVZLt176eKbqLzY-GXiDng@mail.gmail.com>
-Subject: Re: [PATCH v4 7/7] soc: renesas: Add L2 cache management for RZ/Five SoC
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221121171202.22080-9-vbabka@suse.cz>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
-
-On Sat, Nov 26, 2022 at 10:10 PM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
-> On Fri, Nov 25, 2022 at 7:43 PM Samuel Holland <samuel@sholland.org> wrote:
-> > On 11/24/22 11:22, Prabhakar wrote:
-> > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > >
-> > > On the AX45MP core, cache coherency is a specification option so it may
-> > > not be supported. In this case DMA will fail. As a workaround, firstly we
-> > > allocate a global dma coherent pool from which DMA allocations are taken
-> > > and marked as non-cacheable + bufferable using the PMA region as specified
-> > > in the device tree. Synchronization callbacks are implemented to
-> > > synchronize when doing DMA transactions.
-> > >
-> > > The Andes AX45MP core has a Programmable Physical Memory Attributes (PMA)
-> > > block that allows dynamic adjustment of memory attributes in the runtime.
-> > > It contains a configurable amount of PMA entries implemented as CSR
-> > > registers to control the attributes of memory locations in interest.
-> > >
-> > > Below are the memory attributes supported:
-> > > * Device, Non-bufferable
-> > > * Device, bufferable
-> > > * Memory, Non-cacheable, Non-bufferable
-> > > * Memory, Non-cacheable, Bufferable
-> > > * Memory, Write-back, No-allocate
-> > > * Memory, Write-back, Read-allocate
-> > > * Memory, Write-back, Write-allocate
-> > > * Memory, Write-back, Read and Write-allocate
-> > >
-> > > This patch adds support to configure the memory attributes of the memory
-> > > regions as passed from the l2 cache node and exposes the cache management
-> > > ops.
-> >
-> > Forgive my ignorance, but why do you need both a DMA pool and explicit
-> > cache maintenance? Wouldn't the purpose of marking a memory region as
-> > permanently non-cacheable be to avoid cache maintenance? And likewise,
-> > if you are doing cache maintenance anyway, why does it matter if/how the
-> > memory is cacheable?
-> >
-> "Memory, Non-cacheable, Bufferable" raises an AXI signal for
-> transactions hence needing SW implementation for cache maintenance.
+On Mon, Nov 21, 2022 at 06:11:58PM +0100, Vlastimil Babka wrote:
+> Since commit c7323a5ad078 ("mm/slub: restrict sysfs validation to debug
+> caches and make it safe"), caches with debugging enabled use the
+> free_debug_processing() function to do both freeing checks and actual
+> freeing to partial list under list_lock, bypassing the fast paths.
+> 
+> We will want to use the same path for CONFIG_SLUB_TINY, but without the
+> debugging checks, so refactor the code so that free_debug_processing()
+> does only the checks, while the freeing is handled by a new function
+> free_to_partial_list().
+> 
+> For consistency, change return parameter alloc_debug_processing() from
+> int to bool and correct the !SLUB_DEBUG variant to return true and not
+> false. This didn't matter until now, but will in the following changes.
+> 
+> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+> ---
+>  mm/slub.c | 154 +++++++++++++++++++++++++++++-------------------------
+>  1 file changed, 83 insertions(+), 71 deletions(-)
+> 
+> diff --git a/mm/slub.c b/mm/slub.c
+> index bf726dd00f7d..fd56d7cca9c2 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -1368,7 +1368,7 @@ static inline int alloc_consistency_checks(struct kmem_cache *s,
+>  	return 1;
+>  }
+>  
+> -static noinline int alloc_debug_processing(struct kmem_cache *s,
+> +static noinline bool alloc_debug_processing(struct kmem_cache *s,
+>  			struct slab *slab, void *object, int orig_size)
+>  {
+>  	if (s->flags & SLAB_CONSISTENCY_CHECKS) {
+> @@ -1380,7 +1380,7 @@ static noinline int alloc_debug_processing(struct kmem_cache *s,
+>  	trace(s, slab, object, 1);
+>  	set_orig_size(s, object, orig_size);
+>  	init_object(s, object, SLUB_RED_ACTIVE);
+> -	return 1;
+> +	return true;
+>  
+>  bad:
+>  	if (folio_test_slab(slab_folio(slab))) {
+> @@ -1393,7 +1393,7 @@ static noinline int alloc_debug_processing(struct kmem_cache *s,
+>  		slab->inuse = slab->objects;
+>  		slab->freelist = NULL;
+>  	}
+> -	return 0;
+> +	return false;
+>  }
+>  
+>  static inline int free_consistency_checks(struct kmem_cache *s,
+> @@ -1646,17 +1646,17 @@ static inline void setup_object_debug(struct kmem_cache *s, void *object) {}
+>  static inline
+>  void setup_slab_debug(struct kmem_cache *s, struct slab *slab, void *addr) {}
+>  
+> -static inline int alloc_debug_processing(struct kmem_cache *s,
+> -	struct slab *slab, void *object, int orig_size) { return 0; }
+> +static inline bool alloc_debug_processing(struct kmem_cache *s,
+> +	struct slab *slab, void *object, int orig_size) { return true; }
+>  
+> -static inline void free_debug_processing(
+> -	struct kmem_cache *s, struct slab *slab,
+> -	void *head, void *tail, int bulk_cnt,
+> -	unsigned long addr) {}
+> +static inline bool free_debug_processing(struct kmem_cache *s,
+> +	struct slab *slab, void *head, void *tail, int *bulk_cnt,
+> +	unsigned long addr, depot_stack_handle_t handle) { return true; }
+>  
+>  static inline void slab_pad_check(struct kmem_cache *s, struct slab *slab) {}
+>  static inline int check_object(struct kmem_cache *s, struct slab *slab,
+>  			void *object, u8 val) { return 1; }
+> +static inline depot_stack_handle_t set_track_prepare(void) { return 0; }
+>  static inline void set_track(struct kmem_cache *s, void *object,
+>  			     enum track_item alloc, unsigned long addr) {}
+>  static inline void add_full(struct kmem_cache *s, struct kmem_cache_node *n,
+> @@ -2833,38 +2833,28 @@ static inline unsigned long node_nr_objs(struct kmem_cache_node *n)
+>  }
+>  
+>  /* Supports checking bulk free of a constructed freelist */
+> -static noinline void free_debug_processing(
+> -	struct kmem_cache *s, struct slab *slab,
+> -	void *head, void *tail, int bulk_cnt,
+> -	unsigned long addr)
+> +static inline bool free_debug_processing(struct kmem_cache *s,
+> +	struct slab *slab, void *head, void *tail, int *bulk_cnt,
+> +	unsigned long addr, depot_stack_handle_t handle)
+>  {
+> -	struct kmem_cache_node *n = get_node(s, slab_nid(slab));
+> -	struct slab *slab_free = NULL;
+> +	bool checks_ok = false;
+>  	void *object = head;
+>  	int cnt = 0;
+> -	unsigned long flags;
+> -	bool checks_ok = false;
+> -	depot_stack_handle_t handle = 0;
+> -
+> -	if (s->flags & SLAB_STORE_USER)
+> -		handle = set_track_prepare();
+> -
+> -	spin_lock_irqsave(&n->list_lock, flags);
+>  
+>  	if (s->flags & SLAB_CONSISTENCY_CHECKS) {
+>  		if (!check_slab(s, slab))
+>  			goto out;
+>  	}
+>  
+> -	if (slab->inuse < bulk_cnt) {
+> +	if (slab->inuse < *bulk_cnt) {
+>  		slab_err(s, slab, "Slab has %d allocated objects but %d are to be freed\n",
+> -			 slab->inuse, bulk_cnt);
+> +			 slab->inuse, *bulk_cnt);
+>  		goto out;
+>  	}
+>  
+>  next_object:
+>  
+> -	if (++cnt > bulk_cnt)
+> +	if (++cnt > *bulk_cnt)
+>  		goto out_cnt;
+>  
+>  	if (s->flags & SLAB_CONSISTENCY_CHECKS) {
+> @@ -2886,57 +2876,18 @@ static noinline void free_debug_processing(
+>  	checks_ok = true;
+>  
+>  out_cnt:
+> -	if (cnt != bulk_cnt)
+> +	if (cnt != *bulk_cnt) {
+>  		slab_err(s, slab, "Bulk free expected %d objects but found %d\n",
+> -			 bulk_cnt, cnt);
+> -
+> -out:
+> -	if (checks_ok) {
+> -		void *prior = slab->freelist;
+> -
+> -		/* Perform the actual freeing while we still hold the locks */
+> -		slab->inuse -= cnt;
+> -		set_freepointer(s, tail, prior);
+> -		slab->freelist = head;
+> -
+> -		/*
+> -		 * If the slab is empty, and node's partial list is full,
+> -		 * it should be discarded anyway no matter it's on full or
+> -		 * partial list.
+> -		 */
+> -		if (slab->inuse == 0 && n->nr_partial >= s->min_partial)
+> -			slab_free = slab;
+> -
+> -		if (!prior) {
+> -			/* was on full list */
+> -			remove_full(s, n, slab);
+> -			if (!slab_free) {
+> -				add_partial(n, slab, DEACTIVATE_TO_TAIL);
+> -				stat(s, FREE_ADD_PARTIAL);
+> -			}
+> -		} else if (slab_free) {
+> -			remove_partial(n, slab);
+> -			stat(s, FREE_REMOVE_PARTIAL);
+> -		}
+> +			 *bulk_cnt, cnt);
+> +		*bulk_cnt = cnt;
+>  	}
+>  
+> -	if (slab_free) {
+> -		/*
+> -		 * Update the counters while still holding n->list_lock to
+> -		 * prevent spurious validation warnings
+> -		 */
+> -		dec_slabs_node(s, slab_nid(slab_free), slab_free->objects);
+> -	}
+> -
+> -	spin_unlock_irqrestore(&n->list_lock, flags);
+> +out:
+>  
+>  	if (!checks_ok)
+>  		slab_fix(s, "Object at 0x%p not freed", object);
+>  
+> -	if (slab_free) {
+> -		stat(s, FREE_SLAB);
+> -		free_slab(s, slab_free);
+> -	}
+> +	return checks_ok;
+>  }
+>  #endif /* CONFIG_SLUB_DEBUG */
+>  
+> @@ -3453,6 +3404,67 @@ void *kmem_cache_alloc_node(struct kmem_cache *s, gfp_t gfpflags, int node)
+>  }
+>  EXPORT_SYMBOL(kmem_cache_alloc_node);
+>  
+> +static noinline void free_to_partial_list(
+> +	struct kmem_cache *s, struct slab *slab,
+> +	void *head, void *tail, int bulk_cnt,
+> +	unsigned long addr)
+> +{
+> +	struct kmem_cache_node *n = get_node(s, slab_nid(slab));
+> +	struct slab *slab_free = NULL;
+> +	int cnt = bulk_cnt;
+> +	unsigned long flags;
+> +	depot_stack_handle_t handle = 0;
+> +
+> +	if (s->flags & SLAB_STORE_USER)
+> +		handle = set_track_prepare();
+> +
+> +	spin_lock_irqsave(&n->list_lock, flags);
+> +
+> +	if (free_debug_processing(s, slab, head, tail, &cnt, addr, handle)) {
+> +		void *prior = slab->freelist;
+> +
+> +		/* Perform the actual freeing while we still hold the locks */
+> +		slab->inuse -= cnt;
+> +		set_freepointer(s, tail, prior);
+> +		slab->freelist = head;
+> +
+> +		/*
+> +		 * If the slab is empty, and node's partial list is full,
+> +		 * it should be discarded anyway no matter it's on full or
+> +		 * partial list.
+> +		 */
+> +		if (slab->inuse == 0 && n->nr_partial >= s->min_partial)
+> +			slab_free = slab;
+> +
+> +		if (!prior) {
+> +			/* was on full list */
+> +			remove_full(s, n, slab);
+> +			if (!slab_free) {
+> +				add_partial(n, slab, DEACTIVATE_TO_TAIL);
+> +				stat(s, FREE_ADD_PARTIAL);
+> +			}
+> +		} else if (slab_free) {
+> +			remove_partial(n, slab);
+> +			stat(s, FREE_REMOVE_PARTIAL);
+> +		}
+> +	}
+> +
+> +	if (slab_free) {
+> +		/*
+> +		 * Update the counters while still holding n->list_lock to
+> +		 * prevent spurious validation warnings
+> +		 */
+> +		dec_slabs_node(s, slab_nid(slab_free), slab_free->objects);
+> +	}
+> +
+> +	spin_unlock_irqrestore(&n->list_lock, flags);
+> +
+> +	if (slab_free) {
+> +		stat(s, FREE_SLAB);
+> +		free_slab(s, slab_free);
+> +	}
+> +}
+> +
+>  /*
+>   * Slow path handling. This may still be called frequently since objects
+>   * have a longer lifetime than the cpu slabs in most processing loads.
+> @@ -3479,7 +3491,7 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+>  		return;
+>  
+>  	if (kmem_cache_debug(s)) {
+> -		free_debug_processing(s, slab, head, tail, cnt, addr);
+> +		free_to_partial_list(s, slab, head, tail, cnt, addr);
+>  		return;
+>  	}
+>  
+> -- 
+> 2.38.1
 >
-> > > More info about PMA (section 10.3):
-> > > Link: http://www.andestech.com/wp-content/uploads/AX45MP-1C-Rev.-5.0.0-Datasheet.pdf
-> > >
-> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-> > > +static int ax45mp_configure_pma_regions(struct device_node *np)
-> > > +{
-> > > +     const char *propname = "andestech,pma-regions";
-> > > +     u32 start, size, flags;
-> > > +     unsigned int entry_id;
-> > > +     unsigned int i;
-> > > +     int count;
-> > > +     int ret;
-> > > +
-> > > +     count = of_property_count_elems_of_size(np, propname, sizeof(u32) * 3);
-> > > +     if (count < 0)
-> > > +             return count;
-> > > +
-> > > +     if (count > AX45MP_MAX_PMA_REGIONS)
-> > > +             return -EINVAL;
-> > > +
-> > > +     for (i = 0, entry_id = 0 ; entry_id < count ; i += 3, entry_id++) {
-> > > +             of_property_read_u32_index(np, propname, i, &start);
-> > > +             of_property_read_u32_index(np, propname, i + 1, &size);
-> > > +             of_property_read_u32_index(np, propname, i + 2, &flags);
-> > > +             ret = ax45mp_sbi_set_pma(start, size, flags, entry_id);
-> > > +             if (!ret)
-> > > +                     pr_err("Failed to setup PMA region 0x%x - 0x%x flags: 0x%x",
-> > > +                            start, start + size, flags);
-> > > +     }
-> > > +
-> > > +     return 0;
-> > > +}
-> >
-> > If firmware support is required to set up these PMA regions, why is
-> > Linux doing this at all? The firmware has access to the devicetree as
-> > well. It can set this up before entering S-mode, and then you don't need
-> > to expose this capability via an SBI extension. In fact, firmware could
-> > generate the reserved-memory node based on these regions at runtime (or
-> > vice versa).
-> >
-> That's a good point. I'll do some research on this and get back.
->
-> Btw are there any existing examples where the firmware adds DT nodes?
+Looks good to me.
 
-/memory, reserved-memory, optee on ARM, RPC status on R-Car Gen3/4, ...
+Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+Thanks,
+Hyeonggon
