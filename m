@@ -2,222 +2,314 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A72B639BA9
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 17:15:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF358639BAB
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 17:15:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbiK0QPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 11:15:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60122 "EHLO
+        id S229585AbiK0QPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 11:15:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiK0QPB (ORCPT
+        with ESMTP id S229475AbiK0QPh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 11:15:01 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2060.outbound.protection.outlook.com [40.107.220.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA016BCB0;
-        Sun, 27 Nov 2022 08:14:59 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=clBBlXf2ZOaYy8h7KbU9LxiVVs7FM4qr+HQATsZpqxJkLpD5MvAmLFgPZjW39qxWIyrOFpD3TuWCZLS9YW9nl9nOGsAKuvB9yevE2be7/IRjVefDtAf16cC17W0+y1vvU+DqOculTCIAam73z8kx13qwk2X+gBWGTWxOyKXDlzh2/pB1FNsBqRp71FnvYdZ5BeaBfZF638fgaBnxze7eMcv/SROCTm9j/RrWhMH9uXx7AAsUL7PWLsPBRu0WHuSwPe9wfn2g6VnF7Cl0wtSZAme6nG+LW9qFmyHn15Tb+08kzxIfCBsUQkeeu+kKToBJDma6VED0/80u+f6sX9ms8A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7QRq8ntWlbOqX3muc0dWBCfXupfLJuGYB09ZO/gVZ9A=;
- b=dJq+7Kt9QTWIwM2293y01IVf5VTgLWJHUGTKLSwUWzKQsrGGC5Uota3HbEOAaA4oEtP8DhpwPkIto9zIoWcfq9H5TA5BRxaaVjnWNMr+1Larxx5nVDxsKtvZ8JtYjS3b6+ZRAvnNn85kaK0DN/NFpY8mYbOwM767s1WHtN98bQ9lX1BYcRnCDha28j5jnd/YQSReGfT8lUqkb8Xs1wlNMlT7leb9Frd5gmhgE13EgzMGPU3pZ9J7fL80wxTdeRfS0LmB9Dve7C86LYowMUgPkZzn/EK2P42lOM2IyCnAwMHnco67s6moA5DRNJE5Aw9xnymXWit4RgRLYkwBKC9eBA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7QRq8ntWlbOqX3muc0dWBCfXupfLJuGYB09ZO/gVZ9A=;
- b=idF88Thum+2o/JvPLKPbtffI9BIAmoQ7o1zY0nD+IsBbzoMtE7iVOKOOK9Wqy33+qjWXLVea+Z4fjGJPVCyFLWolULyHwnDLJLe1BtMC8f2iWIiBZcakqCJkHzExMNofSG0OpPivYRMqZysqHmL8RLRcFN8qufIsqbWXr4nxNAORCVeIYNJjkaXGtrJ80u0fXAUOgjULQMyNZCjRWTCmzWmDsWHmTzTIGXiGNkd6WS4PctV/axAVJddZxW7ASiPnvzaFG2z68DHAdBi1bJVjMutjpUKzGc5/+8uNK8It+zf4/GtbGuZDFIunzEvjqlE4cc8f0vCAzKsb3fzdmUUffw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
- by BY5PR12MB4887.namprd12.prod.outlook.com (2603:10b6:a03:1c6::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.22; Sun, 27 Nov
- 2022 16:14:58 +0000
-Received: from CY5PR12MB6179.namprd12.prod.outlook.com
- ([fe80::a600:9252:615:d31a]) by CY5PR12MB6179.namprd12.prod.outlook.com
- ([fe80::a600:9252:615:d31a%3]) with mapi id 15.20.5834.015; Sun, 27 Nov 2022
- 16:14:57 +0000
-Date:   Sun, 27 Nov 2022 18:14:50 +0200
-From:   Ido Schimmel <idosch@nvidia.com>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     Jiri Pirko <jiri@nvidia.com>, netdev@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Arnaud Ebalard <arno@natisbad.org>,
-        Srujana Challa <schalla@marvell.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Michael Chan <michael.chan@broadcom.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Dimitris Michailidis <dmichail@fungible.com>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Linu Cherian <lcherian@marvell.com>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Jerin Jacob <jerinj@marvell.com>,
-        hariprasad <hkelam@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        Taras Chornyi <tchornyi@marvell.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Petr Machata <petrm@nvidia.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Shannon Nelson <snelson@pensando.io>, drivers@pensando.io,
-        Ariel Elior <aelior@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Vadim Fedorenko <vadfed@fb.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Vadim Pasternak <vadimp@mellanox.com>,
-        Shalom Toledo <shalomt@mellanox.com>,
-        linux-crypto@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linux-rdma@vger.kernel.org, oss-drivers@corigine.com,
-        Jiri Pirko <jiri@mellanox.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Hao Chen <chenhao288@hisilicon.com>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Shijith Thotton <sthotton@marvell.com>,
-        Ido Schimmel <idosch@mellanox.com>
-Subject: Re: [PATCH net-next v3 1/5] mlxsw: minimal: fix
- mlxsw_m_module_get_drvinfo() to correctly report driver name
-Message-ID: <Y4OM+q5yqCE4/aGs@shredder>
-References: <20221122154934.13937-1-mailhol.vincent@wanadoo.fr>
- <20221127130919.638324-1-mailhol.vincent@wanadoo.fr>
- <20221127130919.638324-2-mailhol.vincent@wanadoo.fr>
+        Sun, 27 Nov 2022 11:15:37 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9CB63B8;
+        Sun, 27 Nov 2022 08:15:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=n5m9TdhS9W2Ahe7LJqsvvjnZ4x8/D63jAOgfmSmnpco=; b=ZuI2nfG7NIqdVnL7/igP9qj3cP
+        mdbItmAXyhGNnkeRsv4T2I7ww71lYLriXqEV5rRi0jg57AcSrH0619DGK/M1Lxmeo8iGT43A2NAH/
+        8l9Jpo3KuU8OnkarUC7xrBKnervzGxNk1Q1jw3jMNlDZYWU4UlwWCEHwni7p3MgD2ip4+fN0Ax+Tz
+        eWupSk/s8c/y25V3wfPoyMIsDOV8UhEvmh87CBk/dkUozYIUhsxTXObPyMxxAU9hSCA+kfOQOxCSP
+        wFpTApd16QsBEEDL+jRtciXLnltprGHB0N2fj4L4ExNjdV8yIRAS3g97e4UomcOdVLU154398jB9X
+        8Wtu2+uw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1ozKJU-0079wc-2A;
+        Sun, 27 Nov 2022 16:15:28 +0000
+Date:   Sun, 27 Nov 2022 16:15:28 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Evgeniy Dushistov <dushistov@mail.ru>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: Re: [RESEND PATCH v4] fs/ufs: Replace kmap() with kmap_local_page()
+Message-ID: <Y4ONIFJatIGsVNpf@ZenIV>
+References: <20221016163855.8173-1-fmdefrancesco@gmail.com>
+ <Y4E++JERgUMoqfjG@ZenIV>
+ <Y4FG0O7VWTTng5yh@ZenIV>
+ <2188828.irdbgypaU6@suse>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221127130919.638324-2-mailhol.vincent@wanadoo.fr>
-X-ClientProxiedBy: LO4P123CA0399.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:189::8) To CY5PR12MB6179.namprd12.prod.outlook.com
- (2603:10b6:930:24::22)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR12MB6179:EE_|BY5PR12MB4887:EE_
-X-MS-Office365-Filtering-Correlation-Id: d1cf44b4-4c4b-4d59-4b97-08dad0928629
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OAW2LAgHzmTTLxHUJ34Z63U0Ruxalo7GD7KQ6Lcc+6dZikP3KWMoDMU8B98OB5e+/3qkbRWFGM+fUQTsbnlFKDgdZchfWdGFDPIxpTgA9pgjvXP+WAqV1n7k1qCfPpM/AEUIH90XFphgIY2Cm9fEh3HvPTDE7Ack2elbHWQ/Af0C0LPdIXoDeePpgE1R833OkATdcq/Y2QT7HMAt4JexuayOfszPzC/ipASgiH6cu+77QxO1LxTM7mgPhyKdfEqG1okLI/3OhNsvrqg+wEh+ynC0IlS2Srj2chgt4kFdKHKduQ1XPJAi5lAQMYn0+h1bZDMfdG9eC4hH5Y6XRfc9OTxlCjZDykZyGfSacCvtYHjmbEsXMPo+zBfimUZ1HCF3cERiTeNN8YZHf0u8ZlCVCpREJlVpFcWCVz4rYfcQNxyXZ9KLmmkRPIEgX6O382pZ1fpDp18/qauhp783MQ5xnPBgmn4TuTpTdMJrWeFEBxRHjgqxTox12RiDqjXiZwWjTEAVBKES57VOzNYKPB2wTmtFdKNEBXQnxtNvDlQEigafCM0zID/UUJQxvi8Esv3In9MuBLDdpRAjGcdF6mnU+TqYwAyi1K/bEb0Lv/Zw5YFdfjOpIhHnLmxDLAxIva2HlpitS7FxYvp3kuqdWRLt4/NEHak4IYhvi5g56WDa3okEUgU0+o7ymWBecja0lVLJA55w24ehLsxkNO9CBX5jrF0Bfd+zTrQor4KALpPPY0MWc6HTy7pyGw9gFdTD9ZYr
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(136003)(396003)(346002)(376002)(39850400004)(366004)(451199015)(6506007)(41300700001)(6666004)(107886003)(38100700002)(5660300002)(8936002)(186003)(7406005)(33716001)(7416002)(26005)(6512007)(9686003)(54906003)(6486002)(966005)(316002)(86362001)(6916009)(478600001)(66476007)(4326008)(66556008)(8676002)(66946007)(83380400001)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Gk1TiVgGIyTPh0Or+nBkvBDkW2eJRSuIfK0BnRgEptz0vMU+ZE3GtpcRTvhF?=
- =?us-ascii?Q?oNBxHODpUHW53ysP/XOMvF8pJu87jPV6SW7VLdIkB9s7B9iBvR9NZ+O8EQFs?=
- =?us-ascii?Q?u509BM0NbIuC7KFq5fawMNG4QomF0S1vCMHUwJO1oR+qlTv2lij41vULCYoF?=
- =?us-ascii?Q?9G3ZGZ3ejvt9ZfgMDgoeS0lfhsEnJBRObX+/qe7D7hFKnl8GvEb3um8sxsAI?=
- =?us-ascii?Q?FBOOgP8untzNBi03Gplznpvbc6whEpOSliudJaqn2195ol1EexB62khZOcoX?=
- =?us-ascii?Q?KzV6NXTNpcYhy2+OID5BhAAYksUxaoc5FdZDTxvEgLOlfELVhQTI8euFzGi2?=
- =?us-ascii?Q?R3/EIkO8s+N0JLZK1pHEVIt8n/MEzTtBe1RQjJGD70Y/kMlYGaSlZgDBqXz8?=
- =?us-ascii?Q?M6szP34GU3Tgm0td7VZ4G4kdSfdMmnqrZlAtjf7uQhG2tDPHGQHhKoqnQQ1e?=
- =?us-ascii?Q?cTueStHMjYW8b+m+NHIdEN4H2B1DtyjgErOWTzdmxoET1DUbSe6zE340ZJmt?=
- =?us-ascii?Q?L3Ul303AiNN48ACSNDaFvUsuYP0eXdr7b4y96LEo/QxBxdbOicb3zAVsa9WJ?=
- =?us-ascii?Q?J3euw6e327PXK0qg4KZYlPB69FSld9KSGxnyoUitceD4ZDCUx/pDJ2EHJYhp?=
- =?us-ascii?Q?uAjr7/qZBM3C65Ov/6/gdlpOnKieB4zYnnTKqx4d6FLvrE5H2NRmhvcv1EtC?=
- =?us-ascii?Q?3MZMjftLc7u3QmKTNcnrG6EuYVLCMcXHvQznDTNMALcJrQyhDNo3Uhg94k9F?=
- =?us-ascii?Q?P2EDvWuay5JEQSUtZJYe8VLfcNv3IjB6qQ0wkVpPpAcLvP+2ppoJjzkpJW9r?=
- =?us-ascii?Q?1krDh/Cjcqx5x6ni0gljS82AwjPEvAJqh9zlSasUVTog4tj+30a96OjVX9A4?=
- =?us-ascii?Q?1+VOZ3iHBXUczGcMXAtDVKWb+txF0QrvP4/TQdE5BFLspU3uMe5jZRbznVun?=
- =?us-ascii?Q?qOjCRTP5Gv3pOWO/ilRpTI+Ph+fA+0DTMv6Rx5CXf8O5ZhUi4Q/YCACjI5+e?=
- =?us-ascii?Q?Rezw/1CuYiPsWvoKw6N4Q036ZLLprGOY3mb4S5HxI9yp3E2yDtpKMh2aILbi?=
- =?us-ascii?Q?TqvpnwXXnp5vHFWlweSQNCGtmk3il2urI6n7Wj9ZFhoGFj6v7GFH79h0xnfJ?=
- =?us-ascii?Q?Vqo4dPz4yJYdqrSEeHD1vW3e1AVn/1FszuZYuzrxELVo7BIzyrum+lpjO8Kq?=
- =?us-ascii?Q?qXi3nhxl62BWrYIELKY0jnQRAd4XShEDN6t46ad7fkpLBCG7ZSekXyLGM5wi?=
- =?us-ascii?Q?bqytTbAIrxuPFvtsZujPkTKUs7TStNfnozmSH5u5r1HSTD01+TVoyK5xMdbx?=
- =?us-ascii?Q?DchjMvImoJYpGW+63AHpHbfSfLbqcnU/Lam9qKXEKZgY/5ITzBAaG4yYU1YK?=
- =?us-ascii?Q?zty1qrnR+hfpahwAfUFE9GtsBnlO3xkAg8hwKz93WYHMuJy2ZMNmoTbJPkVV?=
- =?us-ascii?Q?+piITgHQpe2yAhB5wOZj0g+59x7kZBXJk6lVJlKXz3J/PU8cZBg2DfozfqZc?=
- =?us-ascii?Q?6SEeck+S/BePz+q2odpxftxT8KUeZTvkctN7r1xUuK8+7tgkDdlHsziMpBD1?=
- =?us-ascii?Q?Fbo8PXsFaGp00mVBCbPrlvj+o0lD2I96vohZMP/0?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d1cf44b4-4c4b-4d59-4b97-08dad0928629
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2022 16:14:57.6146
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aZkPKq7blycgB3wI9zPk2fzNJhlJb4OamcpPd2liP4pBmICq66NKXrYhlIRwEmfNcZV+Jz8lW0peIvGK5iiIag==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4887
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <2188828.irdbgypaU6@suse>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 27, 2022 at 10:09:15PM +0900, Vincent Mailhol wrote:
-> Currently, mlxsw_m_module_get_drvinfo() reports the device_kind. The
-> device_kind is not necessarily the same as the device_name. For
-> example, the mlxsw_i2c implementation sets up the device_kind as
-> ic2_client::name in [1] which indicates the type of the device
-> (e.g. chip name), not the actual driver name.
-> 
-> Fix it so that it correctly reports the driver name.
-> 
-> [1] mlxsw_i2c_probe() from drivers/net/ethernet/mellanox/mlxsw/i2c.c
-> Link: https://elixir.bootlin.com/linux/v6.1-rc1/source/drivers/net/ethernet/mellanox/mlxsw/i2c.c#L714
+On Sat, Nov 26, 2022 at 03:12:16PM +0100, Fabio M. De Francesco wrote:
 
-Before the series:
+> Al, thanks for taking the time to answer in such detail although I can believe 
+> that, to spot the mistakes in my patch and then write your email, it probably 
+> took you 10 minutes or so :-)
 
-# ethtool -i eth2 | grep driver
-driver: mlxsw_minimal
+FWIW, it's generally useful to ask yourself if patch can be made less noisy -
+are there any regular parts that could be carved out of it, how much is due to
+calling conventions changes and can those be done differently, etc.
 
-After the series:
+If it can be decomposed into simpler parts, it becomes easier to review (and
+that includes debugging - when bisect points to a commit and you need to find
+what's wrong with it, splitting that change into several steps is often
+a useful approach; if nothing else, you get a chance to bisect that and
+narrow the area to look into, but often enough you'll spot the bug while
+carving the change up).
 
-# ethtool -i eth2 | grep driver
-driver: mlxsw_minimal
+Below is what I'd actually done when reviewing that thing (and it took more
+than 10 minutes):
 
-See:
-https://elixir.bootlin.com/linux/v6.1-rc1/source/drivers/net/ethernet/mellanox/mlxsw/minimal.c#L721
+What happens in this patch?
+	1) switch from kmap/kunmap to kmap_local_page/kunmap_local; that's
+in ufs_get_page() and ufs_put_page().  OK, so ufs_put_page() needs to be
+supplied with the virtual address in addition to page.  And callers of
+ufs_get_page() need the virtual address to access, not just the page.
 
-The current code is consistent with the PCI driver:
-https://elixir.bootlin.com/linux/v6.1-rc1/source/drivers/net/ethernet/mellanox/mlxsw/spectrum_ethtool.c#L17
+	2) pages fed to ufs_put_page() ultimately come from earlier
+ufs_get_page(), so presumably virtual address could be propagated along
+the same path.  OK...
 
-Which also correctly reports the driver name.
+	3) change in ufs_inode_by_name() seems to fit the above -
+ufs_find_entry() used to return page, now it returns page and address;
+that address is fed to ufs_put_page().
+	So what has ufs_find_entry() become?  2 "in" arguments (directory
+inode and entry name), 2 "out" arguments (page and virtual address of the
+first byte in that page) and return value - pointer to directory entry.
+So basically we are passing directory and name and get a triple -
+	* pointer to directory entry
+	* page reference that need to be held so we could access that
+directory entry
+	* pointer to the first byte of the page that contains directory
+entry...
+	Looks redundant - the 3rd component is simply the 1st one rounded
+down to page size...
 
-So I prefer to keep the code as-is.
+	And it seems that at least some of the affected functions are
+in the same situation - they are already working in terms of <pointer to
+directory entry, pointer to page> pairs, and with those adding the
+virtual address is redundant.  Let's see...
 
-Thanks
+	4) functions with changed calling conventions are
+		ufs_put_page()
+		ufs_set_link()
+		ufs_check_page()
+		ufs_get_page()
+		ufs_dotdot()
+		ufs_find_entry()
+		ufs_delete_entry()
+	Out of those, ufs_put_page() and ufs_get_page() are consumer and
+producer of the virtual address, and ufs_check_page() needs the address
+as well, but other four all seem to be in the same boat -
+pair <pointer to directory entry, page> becomes a triple
+<pointer to directory entry, page, pointer to the first byte of page>
+and that's redundant.
+	ufs_set_link() and ufs_delete_entry() have that triple passed
+to them; ufs_find_entry() and ufs_dotdot() return such triple to the
+caller.
+	Looks like we could replace e.g.
+	de = ufs_dotdot(inode, &page, &addr);
+	if (de) {
+		...
+		ufs_put_page(page, addr);
+	}
+with
+	de = ufs_dotdot(inode, &page);
+	if (de) {
+		addr = <round de down>
+		...
+		ufs_put_page(page, addr);
+	}
+	That would return the call to what it used to be; whether it's a win
+or not, depends upon the things we use addr for.  Let's check...
 
-> 
-> Fixes: 9bbd7efbc055 ("mlxsw: i2c: Extend initialization with querying firmware info")
-> CC: Shalom Toledo <shalomt@mellanox.com>
-> CC: Ido Schimmel <idosch@mellanox.com>
-> CC: Vadim Pasternak <vadimp@mellanox.com>
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> ---
->  drivers/net/ethernet/mellanox/mlxsw/minimal.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/mellanox/mlxsw/minimal.c b/drivers/net/ethernet/mellanox/mlxsw/minimal.c
-> index 6b56eadd736e..9b37ddbe0cba 100644
-> --- a/drivers/net/ethernet/mellanox/mlxsw/minimal.c
-> +++ b/drivers/net/ethernet/mellanox/mlxsw/minimal.c
-> @@ -92,7 +92,7 @@ static void mlxsw_m_module_get_drvinfo(struct net_device *dev,
->  	struct mlxsw_m_port *mlxsw_m_port = netdev_priv(dev);
->  	struct mlxsw_m *mlxsw_m = mlxsw_m_port->mlxsw_m;
->  
-> -	strscpy(drvinfo->driver, mlxsw_m->bus_info->device_kind,
-> +	strscpy(drvinfo->driver, dev_driver_string(dev->dev.parent),
->  		sizeof(drvinfo->driver));
->  	snprintf(drvinfo->fw_version, sizeof(drvinfo->fw_version),
->  		 "%d.%d.%d",
-> -- 
-> 2.37.4
-> 
+	5) ufs_set_link(inode, de, page, addr, ...) always gets de, page and
+addr coming from the same ufs_find_entry() or ufs_dotdot() call.  I.e.
+in all cases addr is rounded-down de; could as well find that value inside
+ufs_set_link(), returning the callers to original state.
+
+	6) ufs_delete_entry(dir, de, page, addr) - same story; de, page and
+addr come from the same call of ufs_find_entry(), so we can reconstruct
+addr by de inside ufs_delete_entry(); no need to pass it down, returning
+those callers to original state.
+
+	7) ufs_find_entry() - 4 callers, address is passed to ufs_put_page(),
+ufs_delete_entry(), ufs_set_link().  The last two don't really need that
+argument, so we are left with "need to round down for passing to ufs_put_page()".
+
+	8) ufs_dotdot() - address is passed to ufs_put_page() or ufs_set_link().
+The latter doesn't need that argument, so we are again left with "need to round
+down for passing to ufs_put_page()".
+
+	9) So ufs_put_page() gets rounded-down pointer to directory entry here...
+Might be worth a helper that would take a page + address and do ufs_put_page()
+for page and rounded down address...  But do we even need that to be separate
+from ufs_put_page()?  After all, the addresses we are currently passing to
+ufs_put_page() are page-aligned, so rounding any of them down to page size
+is a no-op.  Might as well change ufs_put_page() from "takes page reference
+and virtual address of beginning of the page" to "takes page reference and
+virtual address anywhere within the page"; if nothing else, it would reduce
+the clutter in fs/ufs/namei.c parts and it might be useful in fs/ufs/dir.c
+part as well.  OK, the intermediate plan:
+	* ufs_put_page() rounds the address down to page size
+	* ufs_set_link() and ufs_delete_entry() do not get page_addr passed
+to them; reconstruct it as rounded-down directory entry pointer.  Calling
+conventions are back to original.
+	* ufs_find_entry() and ufs_dotdot() do not bother returning page_addr.
+Calling conventions are back to original.
+	* callers of ufs_put_page() in fs/ufs/namei.c give it directory entry
+instead of page_addr.  Same for ufs_inode_by_name(), that got us started in
+that direction.
+
+	10) ufs_set_link() uses page_addr for two things - finding location
+in file (page_offset() + difference between de and page_addr) and feeding it
+to ufs_put_page().  The latter can be given de, as we do in other places;
+the former would become "difference between de and de rounded down to page
+size"... wait a sec - that's just the address modulo page size, aka.
+offset_in_page(de).  OK, we don't even need to reconstruct page_addr in
+there.  Win...
+
+	11) for ufs_get_page() we want the virtual address returned.  Looking
+through the callers, though, shows that calling conventions are clumsy -
+we have page = ufs_get_page(dir, n, &page_addr) followed by casting
+page_addr to various pointer types, assigning it to various pointer
+variables or, in one case, even ufs_get_page(dir, n, (void **)&char_pointer_var)
+Ouch...  We have 2 "in" arguments (directory and page number) and
+2 values to return to caller - page reference and pointer to beginning of
+the page.  The type of the first component is always the same (struct page *),
+but the second... depending upon the caller, it may be void *, char *
+or struct ufs_dir_entry *.  Passing it out via "out" argument is painful -
+return value is much more suitable for that; there we can return void *
+and have the assignment in callers convert it as needed.  Page reference,
+OTOH, is well-suited for passing out via "out" argument - same type in
+all cases.
+	So it looks like we want addr = ufs_get_page(dir, n, &page);
+as calling conventions.  Callers need to check IS_ERR(addr) instead of
+IS_ERR(page), but that's about it.  *AND* they might be able to cut
+down on assignments - just store the return value directly in variable
+they would copy it into.
+
+	12) ufs_dotdot() needs not bother with returning page_address.
+With new calling conventions for ufs_get_page() it doesn't need
+'page' or 'page_addr' at all - we want the value of
+	ufs_get_page(dir, 0, p)
+but we only want it converted to struct ufs_dir_entry *.  And we already
+have a variable of just that type declared right there, so we can do
+simply
+	struct ufs_dir_entry *de = ufs_get_page(dir, 0, p);
+The rest becomes
+	if (!IS_ERR(de)) {
+		de = ufs_next_entry(dir->i_sb, de);
+	} else {
+		de = NULL;
+	}
+	return de;
+or, better yet, 
+	if (!IS_ERR(de))
+		return ufs_next_entry(dir->i_sb, de);
+	else
+		return NULL;
+Makes sense - ".." is the second entry in directory, so we ask for the
+first page, treat its beginning as entry pointer and return the next
+entry...  And yes, it looks like ufs_get_page() callers are happier
+with such calling conventions.
+
+	13) ufs_find_entry() - getting rid of res_page_addr argument
+is obvious, so's adjusting the calling conventions for ufs_get_page().
+Surprisingly subtle question is whether we can get rid of 'page_addr'
+there; now that we don't store it in *res_page_addr the only thing
+we use it for is ufs_put_page().  With ufs_get_page() calling
+conventions change we'd get
+	page_addr = ufs_get_page(dir, n, &page);
+	if (!IS_ERR(page_addr)) {
+		kaddr = page_addr;
+		de = (struct ufs_dir_entry *) kaddr;
+		kaddr += ufs_last_byte(dir, n) - reclen;
+		while ((char *) de <= kaddr) {
+		       if (ufs_match(sb, namelen, name, de))
+				goto found;
+			de = ufs_next_entry(sb, de);
+		}
+		ufs_put_page(page, page_addr);
+	}
+We have a couple of other pointers around - kaddr and de.  kaddr is
+set to page_addr + something, then de iterates through the entries
+starting at page_addr until it gets past kaddr, looking for the match.
+So we get to the end of loop if we have *not* found a match within
+this page, and de is not guaranteed to point within the same page when
+we leave the loop.  Not suitable for passing to ufs_put_page(), then.
+kaddr, OTOH, would better be pointing into the same page - we use
+de <= kaddr as permission to dereference de, and we'd better not run
+out of page.  A look at ufs_last_byte() shows that its return value
+is always no greater than PAGE_SIZE, so kaddr is guaranteed to point
+within the same page.  Good.  So we can turn that into
+	kaddr = ufs_get_page(dir, n, &page);
+	if (!IS_ERR(kaddr)) {
+		de = (struct ufs_dir_entry *) kaddr;
+		kaddr += ufs_last_byte(dir, n) - reclen;
+		....
+		ufs_put_page(page, kaddr);
+	}
+and page_addr bites the dust.	
+
+	14) ufs_add_link() - similar adjustment to new calling conventions
+for ufs_get_page().  Uses of page_addr: fed to ufs_put_page() (same as
+in ufs_find_entry() kaddr is guaranteed to point into the same page and
+thus can be used instead) and calculation of position in directory, same
+as we'd seen in ufs_set_link().  The latter becomes page_offset(page) +
+offset_in_page(de), killing page_addr off.  BTW, we get
+		kaddr = ufs_get_page(dir, n, &page);
+		err = PTR_ERR(kaddr);
+		if (IS_ERR(kaddr))
+			goto out;
+with out: being just 'return err;', which suggests
+		kaddr = ufs_get_page(dir, n, &page);
+		if (IS_ERR(kaddr))
+			return ERR_PTR(kaddr);
+instead (and that was the only goto out; so the label can be removed).
+The value stored in err in case !IS_ERR(kaddr) is (thankfully) never
+used - would've been a bug otherwise.  So this is an equivalent transformation.
+
+	15) ufs_readdir() - trivial modifications to deal with ufs_get_page()
+calling conventions change; an ugly cast goes away.
+
+	16) ufs_delete_entry() - kaddr argument is dropped, we make it a local
+variable initialized with rounded down dir.  Incidentally, 'dir - kaddr' can
+be replaced with offset_in_page(dir) in there and similar for (char *)pde - kaddr.
+
+	17) ufs_empty_dir() - we adjust to ufs_get_page() calling conventions
+change, page_addr can be dropped same as in ufs_find_entry().  Need to lift
+kaddr out of loop to deal with not_empty: part (hadn't noticed when writing
+original reply, but compiler would've caught that)
+
+	18) fs/ufs/namei.c parts do shrink down to pretty much just 'pass
+the right directory entry to ufs_put_page()' (and most of ufs.h changes
+disapper).  ufs_get_page() calling conventions change is actually the bulk
+of what remains of this patch after that massage.  Other than that we have
+several 'use offset_in_page()' local changes and extra argument of
+ufs_put_page().  Hmm...  offset_in_page() actually counts as a valid (and
+trivially safe) optimization, independent of anything kmap-related.
+Worth carving out as the first step in series.  Come to think of that,
+ufs_get_page() calling conventions change *also* can be done without
+the kmap_local_page() switchover; we would do kmap() and return page_address(page).
+Callers would be happier with such calling conventions, and carving that
+part out would reduce the patch to just the 'switch ufs_get_page() to
+kmap_local_page(), switch ufs_put_page() to kunmap_local() and supply it
+with a pointer into the page in question'.  Which is much smaller and
+easier to review.
