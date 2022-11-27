@@ -2,100 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4A9F639C5F
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 19:31:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A194639C61
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 19:34:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbiK0Sbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 13:31:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38818 "EHLO
+        id S229551AbiK0Seq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 13:34:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiK0Sbx (ORCPT
+        with ESMTP id S229487AbiK0Seo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 13:31:53 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4485BDF69;
-        Sun, 27 Nov 2022 10:31:51 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        Sun, 27 Nov 2022 13:34:44 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9694E69
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 10:34:43 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 23CD811ED;
-        Sun, 27 Nov 2022 19:31:49 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1669573909;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TfHh5EwkvsEuQH9VGCwExhDOA5E7QBcDJe9jFMWQ0RI=;
-        b=J4doKE8Mfp8wNgXOownzniBUUunsnoQdZqOxo6ua76abg9pzeDkCXJlQ0bFR3ZqEI531QD
-        vd+ICxZIkReyHuqsMANxXlmvvblA1wJOt9fYWodZMlC28hHktNAttAtXG314GeSNkB8DzP
-        v+H2HLi/bnlYHWoT0DROF3oItzqOXJa7u8XSeGgNmhq1OfNd8OzNSWz4YdiZ3lUTpo2GF1
-        TTCa57QRlzKao21eE5jBEMf4YzdD6MI76lTbxczl/iugAar+RqfWLMpJ5sJ4OpNyFXRxu5
-        ZvSVIl3P3TlG0Lv3zU55H4a7L8qVAEGYHx+8BfW4ciqkNNSjvv4IasMRgqVGCg==
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8BA7D21B70;
+        Sun, 27 Nov 2022 18:34:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669574082; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=EM3IWTZffE0t8mqrk8ap1Lagq6Nmt4pMyd/upq1uheM=;
+        b=0gY7yVDAExkCGPb1nMKKT/K1SKWvNXSv91vB0s55scByPOWOPg2O6tvnSX0OfGhnvnEUrg
+        mTw4sDVQW3qe40/g2DKKn9Emf80Z3bN4FXx9xTNqrTWHVy1tU+JK9eqDRW5aEU4M0QBImX
+        bHa16gvaXsAxrYuKUA0flUWSeYy7mIo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669574082;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=EM3IWTZffE0t8mqrk8ap1Lagq6Nmt4pMyd/upq1uheM=;
+        b=U/QJVF5a18X+Jhlfq4j3hXQpjyGAWtq+w8VxfxqEGuIODC9AjrsWzsugXVGPJPyZ0byr6L
+        RE31NKVP/iMf4sCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 50AEF134CE;
+        Sun, 27 Nov 2022 18:34:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id WXIFEsKtg2P8HAAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Sun, 27 Nov 2022 18:34:42 +0000
+Date:   Sun, 27 Nov 2022 19:34:41 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Subject: [PATCH] ASoC: rsnd: Drop obsolete dependency on COMPILE_TEST
+Message-ID: <20221127193441.0b54484d@endymion.delvare>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Date:   Sun, 27 Nov 2022 19:31:48 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linus.walleij@linaro.org, brgl@bgdev.pl,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        broonie@kernel.org
-Subject: Re: [PATCH v3 3/9] gpio: 104-dio-48e: Migrate to the regmap-irq API
-In-Reply-To: <Y3ykg1Vc96Px6ovg@fedora>
-References: <cover.1669100542.git.william.gray@linaro.org>
- <80fc819bcafe9697b6e02c0750d3cf0ea4ec9e1b.1669100542.git.william.gray@linaro.org>
- <Y3414YhVjqKakddV@smile.fi.intel.com> <Y3ykg1Vc96Px6ovg@fedora>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <3a23df35a35cdba19eeb10c75b5bca97@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
+is possible to test-build any driver which depends on OF on any
+architecture by explicitly selecting OF. Therefore depending on
+COMPILE_TEST as an alternative is no longer needed.
 
-[sorry this mail was just delivered now, although it seems
-to be sent last Tuesday.]
+It is actually better to always build such drivers with OF enabled,
+so that the test builds are closer to how each driver will actually be
+built on its intended target. Building them without OF may not test
+much as the compiler will optimize out potentially large parts of the
+code. In the worst case, this could even pop false positive warnings.
+Dropping COMPILE_TEST here improves the quality of our testing and
+avoids wasting time on non-existent issues.
 
-Am 2022-11-22 11:29, schrieb William Breathitt Gray:
-> On Wed, Nov 23, 2022 at 05:01:53PM +0200, Andy Shevchenko wrote:
->> On Tue, Nov 22, 2022 at 02:11:00AM -0500, William Breathitt Gray 
->> wrote:
->> > +	/* Initialize device interrupt state */
->> > +	err = regmap_read(map, DIO48E_DISABLE_INTERRUPT, &val);
->> > +	if (err)
->> > +		return err;
->> 
->> Use ->init_hw() callback for this.
-> 
-> In a subsequent patch 7/9 we remove direct gpio_chip registration in
-> favor of the i8255 library registration via gpio_regmap. It doesn't 
-> look
-> like gpio_regmap_register() sets the init_hw() callback.
-> 
-> Michael, do you see any issues if I introduce init_hw() to
-> gpio_regmap_config? Or do you think this IRQ initialization belongs
-> somewhere else?
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Cc: Liam Girdwood <lgirdwood@gmail.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Jaroslav Kysela <perex@perex.cz>
+Cc: Takashi Iwai <tiwai@suse.com>
+---
+ sound/soc/sh/Kconfig |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Something like the following?
-   gpiochip->init_hw = config.irq_init_hw;
+--- linux-6.0.orig/sound/soc/sh/Kconfig
++++ linux-6.0/sound/soc/sh/Kconfig
+@@ -39,7 +39,7 @@ config SND_SOC_SH4_SIU
+ config SND_SOC_RCAR
+ 	tristate "R-Car series SRU/SCU/SSIU/SSI support"
+ 	depends on COMMON_CLK
+-	depends on OF || COMPILE_TEST
++	depends on OF
+ 	select SND_SIMPLE_CARD_UTILS
+ 	select REGMAP_MMIO
+ 	help
 
-gpiochip doesn't seem to be the correct place, gpiochip_add_irqchip()
-is a noop for gpio-regmap, right? So using gpiochip_irqchip_init_hw()
-seems wrong.
 
-Maybe make gpio-regmap call it on its own? But really we just connect
-the regmap-irq to the gpiochip irqdomain. What is the purpose of the
-.init_hw callback? I've looked at other drivers which use regmap-irq
-and they all seem to just initialize the hardware in their _probe().
-
--michael
+-- 
+Jean Delvare
+SUSE L3 Support
