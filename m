@@ -2,115 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 578DD639C64
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 19:35:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 049BC639C68
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 19:38:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbiK0Sfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 13:35:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40116 "EHLO
+        id S229631AbiK0Si2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 13:38:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiK0Sfx (ORCPT
+        with ESMTP id S229500AbiK0SiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 13:35:53 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BC1E69
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 10:35:52 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Sun, 27 Nov 2022 13:38:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88465A188;
+        Sun, 27 Nov 2022 10:38:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 0B4D421AF5;
-        Sun, 27 Nov 2022 18:35:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1669574151; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=GzRGmhIco9PatSLCVTBuFUSdQWbXCS9KgIxMPxfqP6c=;
-        b=WuDtHBl1RK6ArRGJn+10YZHQwtvyP1BuKQrOhASlOHnhqdnDasw2kz+t5CV3qY2VVR7oos
-        Qvwzlci8MXM7D62SxXxjQl7G0a1C8x6LuGiAzGrVvoOsRdiNeGIA0yVZHQ5gGfBeVqRK8t
-        ogkxVP/kOvz4CJYrlH9LxmXbESMCmPo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1669574151;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=GzRGmhIco9PatSLCVTBuFUSdQWbXCS9KgIxMPxfqP6c=;
-        b=t6qwboRmpPh/XqJGVRiRLjb3BfVx2ws/LkGz2UIuOqwA0If+36QFQ2gIzOayWEmxClW0l0
-        M5nx+dybgkg5btDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A95DC134CE;
-        Sun, 27 Nov 2022 18:35:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id n7OuJwaug2N9HQAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Sun, 27 Nov 2022 18:35:50 +0000
-Date:   Sun, 27 Nov 2022 19:35:49 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH] ASoC: SOF: Drop obsolete dependency on COMPILE_TEST
-Message-ID: <20221127193549.211bf8f7@endymion.delvare>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18C6660E8B;
+        Sun, 27 Nov 2022 18:38:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DFA7C433D6;
+        Sun, 27 Nov 2022 18:38:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669574302;
+        bh=CYMIjb5gAdEwblJqPgCeMG3YnIc+UiEUP69wjHO+80o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bov49eJquLLRRRmcovLLKyCn5XGNT4v6cAjKYpQeQMZN6QS1FOZ1GCvIQ4K79Qc7u
+         rNph3AH9GRBVKGwSGBgmE3ypDFS4+QeCbhVnPS/gUaNXsEq9JJSVJQEznZFZGFvLwR
+         r2xvCv6vlXRWkySZ9ooh2kQyfyKmLYpvhb2o+UKJ3QE7xHJTfUvVkcqADvfLIuzDwL
+         Ql5tAoI6h07U8YEjYN3luBlaUILwEbX71G+vqYFopLnu6mIHpOWResh1kuPIeOFul4
+         MUU37iC+ujd8UPRbojG4gYzl1e2aBp1AzXgkVQ5ALtOfMgsflHzN6GYNycH7iC3ez7
+         YMNtJD1azIKEQ==
+Date:   Sun, 27 Nov 2022 10:38:22 -0800
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Cc:     linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        nvdimm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        david@fromorbit.com, dan.j.williams@intel.com
+Subject: Re: [PATCH 0/2] fsdax,xfs: fix warning messages
+Message-ID: <Y4OuntOVjId9FLzL@magnolia>
+References: <1669301694-16-1-git-send-email-ruansy.fnst@fujitsu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1669301694-16-1-git-send-email-ruansy.fnst@fujitsu.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
-is possible to test-build any driver which depends on OF on any
-architecture by explicitly selecting OF. Therefore depending on
-COMPILE_TEST as an alternative is no longer needed.
+On Thu, Nov 24, 2022 at 02:54:52PM +0000, Shiyang Ruan wrote:
+> Many testcases failed in dax+reflink mode with warning message in dmesg.
+> This also effects dax+noreflink mode if we run the test after a
+> dax+reflink test.  So, the most urgent thing is solving the warning
+> messages.
+> 
+> Patch 1 fixes some mistakes and adds handling of CoW cases not
+> previously considered (srcmap is HOLE or UNWRITTEN).
+> Patch 2 adds the implementation of unshare for fsdax.
+> 
+> With these fixes, most warning messages in dax_associate_entry() are
+> gone.  But honestly, generic/388 will randomly failed with the warning.
+> The case shutdown the xfs when fsstress is running, and do it for many
+> times.  I think the reason is that dax pages in use are not able to be
+> invalidated in time when fs is shutdown.  The next time dax page to be
+> associated, it still remains the mapping value set last time.  I'll keep
+> on solving it.
+> 
+> The warning message in dax_writeback_one() can also be fixed because of
+> the dax unshare.
 
-It is actually better to always build such drivers with OF enabled,
-so that the test builds are closer to how each driver will actually be
-built on its intended target. Building them without OF may not test
-much as the compiler will optimize out potentially large parts of the
-code. In the worst case, this could even pop false positive warnings.
-Dropping COMPILE_TEST here improves the quality of our testing and
-avoids wasting time on non-existent issues.
+This cuts down the amount of test failures quite a bit, but I think
+you're still missing a piece or two -- namely the part that refuses to
+enable S_DAX mode on a reflinked file when the inode is being loaded
+from disk.  However, thank you for fixing dax.c, because that was the
+part I couldn't figure out at all. :)
 
-Signed-off-by: Jean Delvare <jdelvare@suse.de>
-Cc: Liam Girdwood <lgirdwood@gmail.com>
-Cc: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
-Cc: Bard Liao <yung-chuan.liao@linux.intel.com>
-Cc: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Cc: Kai Vehmanen <kai.vehmanen@linux.intel.com>
-Cc: Daniel Baluta <daniel.baluta@nxp.com>
-Cc: Mark Brown <broonie@kernel.org>
----
- sound/soc/sof/Kconfig |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--D
 
---- linux-6.0.orig/sound/soc/sof/Kconfig
-+++ linux-6.0/sound/soc/sof/Kconfig
-@@ -39,7 +39,7 @@ config SND_SOC_SOF_ACPI_DEV
- 
- config SND_SOC_SOF_OF
- 	tristate "SOF OF enumeration support"
--	depends on OF || COMPILE_TEST
-+	depends on OF
- 	help
- 	  This adds support for Device Tree enumeration. This option is
- 	  required to enable i.MX8 or Mediatek devices.
-
-
--- 
-Jean Delvare
-SUSE L3 Support
+> 
+> Shiyang Ruan (2):
+>   fsdax,xfs: fix warning messages at dax_[dis]associate_entry()
+>   fsdax,xfs: port unshare to fsdax
+> 
+>  fs/dax.c             | 166 ++++++++++++++++++++++++++++++-------------
+>  fs/xfs/xfs_iomap.c   |   6 +-
+>  fs/xfs/xfs_reflink.c |   8 ++-
+>  include/linux/dax.h  |   2 +
+>  4 files changed, 129 insertions(+), 53 deletions(-)
+> 
+> -- 
+> 2.38.1
+> 
