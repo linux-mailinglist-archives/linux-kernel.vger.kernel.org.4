@@ -2,126 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57E99639A08
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 12:14:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F21C7639A15
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 12:21:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbiK0LOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 06:14:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34948 "EHLO
+        id S229506AbiK0LV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 06:21:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiK0LOF (ORCPT
+        with ESMTP id S229491AbiK0LVw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 06:14:05 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC06D50
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 03:14:04 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 897B821B79;
-        Sun, 27 Nov 2022 11:14:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1669547642; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=/hJQt8aogWSZjN5sT9Dyem+5KAdpXY3iOrxHIUUZNfE=;
-        b=Et+JiPRJ2UR+9m3ph8Y19TAknEOfw7K3neSm+wyyPM9O7QzSby54Q5ZCa1vyCbQOoxObe6
-        PDBAObY209T2vgCc8Cj8hyLcwHN6gEGFPyxvBRWc9nRdkoRjRAPTm6ScHnDUeKBPgzqJMR
-        2JcVDUnFXrzCXNXC/SgNq/8Kfcqg4JI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1669547642;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=/hJQt8aogWSZjN5sT9Dyem+5KAdpXY3iOrxHIUUZNfE=;
-        b=MafNahvWWlZfGYWsL19jYplmuMsPFsYXltI2zOP31JNomSUT9l3d/fOkA17AFVoMOe9oiJ
-        IMEAhfwYmaeFKPCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7437413428;
-        Sun, 27 Nov 2022 11:14:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id I2HaG3pGg2PvdwAAMHmgww
-        (envelope-from <bp@suse.de>); Sun, 27 Nov 2022 11:14:02 +0000
-Date:   Sun, 27 Nov 2022 12:13:58 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] x86/urgent for 6.1-rc7
-Message-ID: <Y4NGdmo0OcxvZ5H+@zn.tnic>
+        Sun, 27 Nov 2022 06:21:52 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302211261F
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 03:21:51 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-267-9oGNHm0mPuqOpULexa31pA-1; Sun, 27 Nov 2022 11:21:47 +0000
+X-MC-Unique: 9oGNHm0mPuqOpULexa31pA-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sun, 27 Nov
+ 2022 11:21:45 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.044; Sun, 27 Nov 2022 11:21:45 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Petr Pavlu' <petr.pavlu@suse.com>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        Petr Mladek <pmladek@suse.com>
+CC:     "prarit@redhat.com" <prarit@redhat.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "mwilck@suse.com" <mwilck@suse.com>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH] module: Don't wait for GOING modules
+Thread-Topic: [PATCH] module: Don't wait for GOING modules
+Thread-Index: AQHZAaVxB8H1UydPLE6UJhyT5xD8cq5SoAfQ
+Date:   Sun, 27 Nov 2022 11:21:45 +0000
+Message-ID: <8224e68169eb49ec9866c253be84b09b@AcuMS.aculab.com>
+References: <20221123131226.24359-1-petr.pavlu@suse.com>
+ <Y348QNmO2AHh3eNr@alley> <a26ed87f-9e4c-7c1f-515b-edaaff9140fd@suse.com>
+In-Reply-To: <a26ed87f-9e4c-7c1f-515b-edaaff9140fd@suse.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+RnJvbTogUGV0ciBQYXZsdQ0KPiBTZW50OiAyNiBOb3ZlbWJlciAyMDIyIDE0OjQzDQo+IA0KPiBP
+biAxMS8yMy8yMiAxNjoyOSwgUGV0ciBNbGFkZWsgd3JvdGU6DQo+ID4gT24gV2VkIDIwMjItMTEt
+MjMgMTQ6MTI6MjYsIFBldHIgUGF2bHUgd3JvdGU6DQo+ID4+IER1cmluZyBhIHN5c3RlbSBib290
+LCBpdCBjYW4gaGFwcGVuIHRoYXQgdGhlIGtlcm5lbCByZWNlaXZlcyBhIGJ1cnN0IG9mDQo+ID4+
+IHJlcXVlc3RzIHRvIGluc2VydCB0aGUgc2FtZSBtb2R1bGUgYnV0IGxvYWRpbmcgaXQgZXZlbnR1
+YWxseSBmYWlscw0KPiA+PiBkdXJpbmcgaXRzIGluaXQgY2FsbC4gRm9yIGluc3RhbmNlLCB1ZGV2
+IGNhbiBtYWtlIGEgcmVxdWVzdCB0byBpbnNlcnQNCj4gPj4gYSBmcmVxdWVuY3kgbW9kdWxlIGZv
+ciBlYWNoIGluZGl2aWR1YWwgQ1BVIHdoZW4gYW5vdGhlciBmcmVxdWVuY3kgbW9kdWxlDQo+ID4+
+IGlzIGFscmVhZHkgbG9hZGVkIHdoaWNoIGNhdXNlcyB0aGUgaW5pdCBmdW5jdGlvbiBvZiB0aGUg
+bmV3IG1vZHVsZSB0bw0KPiA+PiByZXR1cm4gYW4gZXJyb3IuDQo+ID4+DQo+ID4+IFNpbmNlIGNv
+bW1pdCA2ZTZkZTNkZWU1MWEgKCJrZXJuZWwvbW9kdWxlLmM6IE9ubHkgcmV0dXJuIC1FRVhJU1Qg
+Zm9yDQo+ID4+IG1vZHVsZXMgdGhhdCBoYXZlIGZpbmlzaGVkIGxvYWRpbmciKSwgdGhlIGtlcm5l
+bCB3YWl0cyBmb3IgbW9kdWxlcyBpbg0KPiA+PiBNT0RVTEVfU1RBVEVfR09JTkcgc3RhdGUgdG8g
+ZmluaXNoIHVubG9hZGluZyBiZWZvcmUgbWFraW5nIGFub3RoZXINCj4gPj4gYXR0ZW1wdCB0byBs
+b2FkIHRoZSBzYW1lIG1vZHVsZS4NCj4gPj4NCj4gPj4gVGhpcyBjcmVhdGVzIHVubmVjZXNzYXJ5
+IHdvcmsgaW4gdGhlIGRlc2NyaWJlZCBzY2VuYXJpbyBhbmQgZGVsYXlzIHRoZQ0KPiA+PiBib290
+LiBJbiB0aGUgd29yc3QgY2FzZSwgaXQgY2FuIHByZXZlbnQgdWRldiBmcm9tIGxvYWRpbmcgZHJp
+dmVycyBmb3INCj4gPj4gb3RoZXIgZGV2aWNlcyBhbmQgbWlnaHQgY2F1c2UgdGltZW91dHMgb2Yg
+c2VydmljZXMgd2FpdGluZyBvbiB0aGVtIGFuZA0KPiA+PiBzdWJzZXF1ZW50bHkgYSBmYWlsZWQg
+Ym9vdC4NCj4gPj4NCj4gPj4gVGhpcyBwYXRjaCBhdHRlbXB0cyBhIGRpZmZlcmVudCBzb2x1dGlv
+biBmb3IgdGhlIHByb2JsZW0gNmU2ZGUzZGVlNTFhDQo+ID4+IHdhcyB0cnlpbmcgdG8gc29sdmUu
+IFJhdGhlciB0aGFuIHdhaXRpbmcgZm9yIHRoZSB1bmxvYWRpbmcgdG8gY29tcGxldGUsDQo+ID4+
+IGl0IHJldHVybnMgYSBkaWZmZXJlbnQgZXJyb3IgY29kZSAoLUVCVVNZKSBmb3IgbW9kdWxlcyBp
+biB0aGUgR09JTkcNCj4gPj4gc3RhdGUuIFRoaXMgc2hvdWxkIGF2b2lkIHRoZSBlcnJvciBzaXR1
+YXRpb24gdGhhdCB3YXMgZGVzY3JpYmVkIGluDQo+ID4+IDZlNmRlM2RlZTUxYSAodXNlciBzcGFj
+ZSBhdHRlbXB0aW5nIHRvIGxvYWQgYSBkZXBlbmRlbnQgbW9kdWxlIGJlY2F1c2UNCj4gPj4gdGhl
+IC1FRVhJU1QgZXJyb3IgY29kZSB3b3VsZCBzdWdnZXN0IHRvIHVzZXIgc3BhY2UgdGhhdCB0aGUg
+Zmlyc3QgbW9kdWxlDQo+ID4+IGhhZCBiZWVuIGxvYWRlZCBzdWNjZXNzZnVsbHkpLCB3aGlsZSBh
+dm9pZGluZyB0aGUgZGVsYXkgc2l0dWF0aW9uIHRvby4NCj4gPj4NCj4gPj4gRml4ZXM6IDZlNmRl
+M2RlZTUxYSAoImtlcm5lbC9tb2R1bGUuYzogT25seSByZXR1cm4gLUVFWElTVCBmb3IgbW9kdWxl
+cyB0aGF0IGhhdmUgZmluaXNoZWQgbG9hZGluZyIpDQo+ID4+IENvLWRldmVsb3BlZC1ieTogTWFy
+dGluIFdpbGNrIDxtd2lsY2tAc3VzZS5jb20+DQo+ID4+IFNpZ25lZC1vZmYtYnk6IE1hcnRpbiBX
+aWxjayA8bXdpbGNrQHN1c2UuY29tPg0KPiA+PiBTaWduZWQtb2ZmLWJ5OiBQZXRyIFBhdmx1IDxw
+ZXRyLnBhdmx1QHN1c2UuY29tPg0KPiA+PiBDYzogc3RhYmxlQHZnZXIua2VybmVsLm9yZw0KPiA+
+PiAtLS0NCj4gPj4NCj4gPj4gTm90ZXM6DQo+ID4+ICAgICBTZW5kaW5nIHRoaXMgYWx0ZXJuYXRp
+dmUgcGF0Y2ggcGVyIHRoZSBkaXNjdXNzaW9uIGluDQo+ID4+ICAgICBodHRwczovL2xvcmUua2Vy
+bmVsLm9yZy9saW51eC1tb2R1bGVzLzIwMjIwOTE5MTIzMjMzLjg1MzgtMS1wZXRyLnBhdmx1QHN1
+c2UuY29tLy4NCj4gPj4gICAgIFRoZSBpbml0aWFsIHZlcnNpb24gY29tZXMgaW50ZXJuYWxseSBm
+cm9tIE1hcnRpbiwgaGVuY2UgdGhlIGNvLWRldmVsb3BlZCB0YWcuDQo+ID4+DQo+ID4+ICBrZXJu
+ZWwvbW9kdWxlL21haW4uYyB8IDggKysrKystLS0NCj4gPj4gIDEgZmlsZSBjaGFuZ2VkLCA1IGlu
+c2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pDQo+ID4+DQo+ID4+IGRpZmYgLS1naXQgYS9rZXJu
+ZWwvbW9kdWxlL21haW4uYyBiL2tlcm5lbC9tb2R1bGUvbWFpbi5jDQo+ID4+IGluZGV4IGQwMmQz
+OWM3MTc0ZS4uYjdlMDhkMWVkYzI3IDEwMDY0NA0KPiA+PiAtLS0gYS9rZXJuZWwvbW9kdWxlL21h
+aW4uYw0KPiA+PiArKysgYi9rZXJuZWwvbW9kdWxlL21haW4uYw0KPiA+PiBAQCAtMjM4Niw3ICsy
+Mzg2LDggQEAgc3RhdGljIGJvb2wgZmluaXNoZWRfbG9hZGluZyhjb25zdCBjaGFyICpuYW1lKQ0K
+PiA+PiAgCXNjaGVkX2Fubm90YXRlX3NsZWVwKCk7DQo+ID4+ICAJbXV0ZXhfbG9jaygmbW9kdWxl
+X211dGV4KTsNCj4gPj4gIAltb2QgPSBmaW5kX21vZHVsZV9hbGwobmFtZSwgc3RybGVuKG5hbWUp
+LCB0cnVlKTsNCj4gPj4gLQlyZXQgPSAhbW9kIHx8IG1vZC0+c3RhdGUgPT0gTU9EVUxFX1NUQVRF
+X0xJVkU7DQo+ID4+ICsJcmV0ID0gIW1vZCB8fCBtb2QtPnN0YXRlID09IE1PRFVMRV9TVEFURV9M
+SVZFDQo+ID4+ICsJCXx8IG1vZC0+c3RhdGUgPT0gTU9EVUxFX1NUQVRFX0dPSU5HOw0KPiA+PiAg
+CW11dGV4X3VubG9jaygmbW9kdWxlX211dGV4KTsNCj4gPj4NCj4gPj4gIAlyZXR1cm4gcmV0Ow0K
+PiA+PiBAQCAtMjU2Niw3ICsyNTY3LDggQEAgc3RhdGljIGludCBhZGRfdW5mb3JtZWRfbW9kdWxl
+KHN0cnVjdCBtb2R1bGUgKm1vZCkNCj4gPj4gIAltdXRleF9sb2NrKCZtb2R1bGVfbXV0ZXgpOw0K
+PiA+PiAgCW9sZCA9IGZpbmRfbW9kdWxlX2FsbChtb2QtPm5hbWUsIHN0cmxlbihtb2QtPm5hbWUp
+LCB0cnVlKTsNCj4gPj4gIAlpZiAob2xkICE9IE5VTEwpIHsNCj4gPj4gLQkJaWYgKG9sZC0+c3Rh
+dGUgIT0gTU9EVUxFX1NUQVRFX0xJVkUpIHsNCj4gPj4gKwkJaWYgKG9sZC0+c3RhdGUgPT0gTU9E
+VUxFX1NUQVRFX0NPTUlORw0KPiA+PiArCQkgICAgfHwgb2xkLT5zdGF0ZSA9PSBNT0RVTEVfU1RB
+VEVfVU5GT1JNRUQpIHsNCj4gPj4gIAkJCS8qIFdhaXQgaW4gY2FzZSBpdCBmYWlscyB0byBsb2Fk
+LiAqLw0KPiA+PiAgCQkJbXV0ZXhfdW5sb2NrKCZtb2R1bGVfbXV0ZXgpOw0KPiA+PiAgCQkJZXJy
+ID0gd2FpdF9ldmVudF9pbnRlcnJ1cHRpYmxlKG1vZHVsZV93cSwNCj4gPj4gQEAgLTI1NzUsNyAr
+MjU3Nyw3IEBAIHN0YXRpYyBpbnQgYWRkX3VuZm9ybWVkX21vZHVsZShzdHJ1Y3QgbW9kdWxlICpt
+b2QpDQo+ID4+ICAJCQkJZ290byBvdXRfdW5sb2NrZWQ7DQo+ID4+ICAJCQlnb3RvIGFnYWluOw0K
+PiA+PiAgCQl9DQo+ID4+IC0JCWVyciA9IC1FRVhJU1Q7DQo+ID4+ICsJCWVyciA9IG9sZC0+c3Rh
+dGUgIT0gTU9EVUxFX1NUQVRFX0xJVkUgPyAtRUJVU1kgOiAtRUVYSVNUOw0KPiA+DQo+ID4gSG1t
+LCB0aGlzIGlzIG5vdCBtdWNoIHJlbGlhYmxlLiBJdCBoZWxwcyBvbmx5IHdoZW4gd2UgbWFuYWdl
+IHRvIHJlYWQNCj4gPiB0aGUgb2xkIG1vZHVsZSBzdGF0ZSBiZWZvcmUgaXQgaXMgZ29uZS4NCj4g
+Pg0KPiA+IEEgYmV0dGVyIHNvbHV0aW9uIHdvdWxkIGJlIHRvIGFsd2F5cyByZXR1cm4gd2hlbiB0
+aGVyZSB3YXMgYSBwYXJhbGxlbA0KPiA+IGxvYWQuIFRoZSBvbGRlciBwYXRjaCBmcm9tIFBldHIg
+UGF2bHUgd2FzIG1vcmUgcHJlY2lzZSBiZWNhdXNlIGl0DQo+ID4gc3RvcmVkIHJlc3VsdCBvZiB0
+aGUgZXhhY3QgcGFyYWxsZWwgbG9hZC4gVGhlIGJlbG93IGNvZGUgaXMgZWFzaWVyDQo+ID4gYW5k
+IG1pZ2h0IGJlIGdvb2QgZW5vdWdoLg0KPiA+DQo+ID4gc3RhdGljIGludCBhZGRfdW5mb3JtZWRf
+bW9kdWxlKHN0cnVjdCBtb2R1bGUgKm1vZCkNCj4gPiB7DQo+ID4gCWludCBlcnI7DQo+ID4gCXN0
+cnVjdCBtb2R1bGUgKm9sZDsNCj4gPg0KPiA+IAltb2QtPnN0YXRlID0gTU9EVUxFX1NUQVRFX1VO
+Rk9STUVEOw0KPiA+DQo+ID4gCW11dGV4X2xvY2soJm1vZHVsZV9tdXRleCk7DQo+ID4gCW9sZCA9
+IGZpbmRfbW9kdWxlX2FsbChtb2QtPm5hbWUsIHN0cmxlbihtb2QtPm5hbWUpLCB0cnVlKTsNCj4g
+PiAJaWYgKG9sZCAhPSBOVUxMKSB7DQo+ID4gCQlpZiAob2xkLT5zdGF0ZSA9PSBNT0RVTEVfU1RB
+VEVfQ09NSU5HDQo+ID4gCQkgICAgfHwgb2xkLT5zdGF0ZSA9PSBNT0RVTEVfU1RBVEVfVU5GT1JN
+RUQpIHsNCj4gPiAJCQkvKiBXYWl0IGZvciB0aGUgcmVzdWx0IG9mIHRoZSBwYXJhbGxlbCBsb2Fk
+LiAqLw0KPiA+IAkJCW11dGV4X3VubG9jaygmbW9kdWxlX211dGV4KTsNCj4gPiAJCQllcnIgPSB3
+YWl0X2V2ZW50X2ludGVycnVwdGlibGUobW9kdWxlX3dxLA0KPiA+IAkJCQkJICAgICAgIGZpbmlz
+aGVkX2xvYWRpbmcobW9kLT5uYW1lKSk7DQo+ID4gCQkJaWYgKGVycikNCj4gPiAJCQkJZ290byBv
+dXRfdW5sb2NrZWQ7DQo+ID4gCQl9DQo+ID4NCj4gPiAJCS8qIFRoZSBtb2R1bGUgbWlnaHQgaGF2
+ZSBnb25lIGluIHRoZSBtZWFudGltZS4gKi8NCj4gPiAJCW11dGV4X2xvY2soJm1vZHVsZV9tdXRl
+eCk7DQo+ID4gCQlvbGQgPSBmaW5kX21vZHVsZV9hbGwobW9kLT5uYW1lLCBzdHJsZW4obW9kLT5u
+YW1lKSwgdHJ1ZSk7DQo+ID4NCj4gPiAJCS8qDQo+ID4gCQkgKiBXZSBhcmUgaGVyZSBvbmx5IHdo
+ZW4gdGhlIHNhbWUgbW9kdWxlIHdhcyBiZWluZyBsb2FkZWQuDQo+ID4gCQkgKiBEbyBub3QgdHJ5
+IHRvIGxvYWQgaXQgYWdhaW4gcmlnaHQgbm93LiBJdCBwcmV2ZW50cw0KPiA+IAkJICogbG9uZyBk
+ZWxheXMgY2F1c2VkIGJ5IHNlcmlhbGl6ZWQgbW9kdWxlIGxvYWQgZmFpbHVyZXMuDQo+ID4gCQkg
+KiBJdCBtaWdodCBoYXBwZW4gd2hlbiBtb3JlIGRldmljZXMgb2YgdGhlIHNhbWUgdHlwZSB0cmln
+Z2VyDQo+ID4gCQkgKiBsb2FkIG9mIGEgcGFydGljdWxhciBtb2R1bGUuDQo+ID4gCQkgKi8NCj4g
+PiAJCWlmIChvbGQgJiYgb2xkLT5zdGF0ZSA9PSBNT0RVTEVfU1RBVEVfTElWRSkNCj4gPiAJCQll
+cnIgPSAtRVhJU1Q7DQo+ID4gCQllbHNlDQo+ID4gCQkJZXJyID0gLUVCVVNZOw0KPiA+IAkJZ290
+byBvdXQ7DQo+ID4gCX0NCj4gPiAJbW9kX3VwZGF0ZV9ib3VuZHMobW9kKTsNCj4gPiAJbGlzdF9h
+ZGRfcmN1KCZtb2QtPmxpc3QsICZtb2R1bGVzKTsNCj4gPiAJbW9kX3RyZWVfaW5zZXJ0KG1vZCk7
+DQo+ID4gCWVyciA9IDA7DQo+ID4NCj4gPiBvdXQ6DQo+ID4gCW11dGV4X3VubG9jaygmbW9kdWxl
+X211dGV4KTsNCj4gPiBvdXRfdW5sb2NrZWQ6DQo+ID4gCXJldHVybiBlcnI7DQo+ID4gfQ0KPiAN
+Cj4gSSB0aGluayB0aGlzIG1ha2VzIHNlbnNlLiBUaGUgc3VnZ2VzdGVkIGNvZGUgb25seSBuZWVk
+cyB0byBoYXZlIHRoZSBzZWNvbmQNCj4gbXV0ZXhfbG9jaygpK2ZpbmRfbW9kdWxlX2FsbCgpIHBh
+aXIgbW92ZWQgaW50byB0aGUgcHJlY2VkaW5nIGlmIGJsb2NrIHRvIHdvcmsNCj4gY29ycmVjdGx5
+LiBJIHdpbGwgd2FpdCBhIGJpdCBpZiB0aGVyZSBpcyBtb3JlIGZlZWRiYWNrIGFuZCBwb3N0IGFu
+IHVwZGF0ZWQNCj4gcGF0Y2guDQoNCldoaWxlIHBlb3BsZSBoYXZlIGFsbCB0aGlzIGNvZGUgY2Fj
+aGVkIGluIHRoZWlyIGJyYWlucw0KdGhlcmUgaXMgcmVsYXRlZCBwcm9ibGVtIEkgY2FuIGVhc2ls
+eSBoaXQuDQoNCklmIHR3byBwcm9jZXNzZXMgY3JlYXRlIHNjdHAgc29ja2V0cyBhdCB0aGUgc2Ft
+ZSB0aW1lIGFuZCBzY3RwDQptb2R1bGUgaGFzIHRvIGJlIGxvYWRlZCB0aGVuIHRoZSBzZWNvbmQg
+cHJvY2VzcyBjYW4gZW50ZXIgdGhlDQptb2R1bGUgY29kZSBiZWZvcmUgaXMgaXQgZnVsbHkgaW5p
+dGlhbGlzZWQuDQpUaGlzIG1pZ2h0IGJlIGJlY2F1c2UgdGhlIHRyeV9tb2R1bGVfZ2V0KCkgc3Vj
+Y2VlZHMgYmVmb3JlIHRoZQ0KbW9kdWxlIGluaXRpYWxpc2F0aW9uIGZ1bmN0aW9uIHJldHVybnMu
+DQoNCkkndmUgYXZvaWRlZCB0aGUgaXNzdWUgYnkgZW5zdXJpbmcgdGhlIHNvY2tldCBjcmVhdGVz
+IGFyZSBzZXJpYWxpc2VkLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2Vz
+aWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVL
+DQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
-please pull a couple of urgent x86 fixes which accumulated recently, for
-6.1.
-
-Thx.
-
----
-
-The following changes since commit eb7081409f94a9a8608593d0fb63a1aa3d6f95d8:
-
-  Linux 6.1-rc6 (2022-11-20 16:02:16 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v6.1_rc7
-
-for you to fetch changes up to 4dbd6a3e90e03130973688fd79e19425f720d999:
-
-  x86/ioremap: Fix page aligned size calculation in __ioremap_caller() (2022-11-22 12:21:16 +0100)
-
-----------------------------------------------------------------
-- ioremap: mask out the bits which are not part of the physical address
-*after* the size computation is done to prevent and hypothetical ioremap
-failures
-
-- Change the MSR save/restore functionality during suspend to rely on
-flags denoting that the related MSRs are actually supported vs reading
-them and assuming they are (an Atom one allows reading but not writing,
-thus breaking this scheme at resume time.)
-
-- prevent IV reuse in the AES-GCM communication scheme between SNP
-guests and the AMD secure processor
-
-----------------------------------------------------------------
-Michael Kelley (1):
-      x86/ioremap: Fix page aligned size calculation in __ioremap_caller()
-
-Pawan Gupta (2):
-      x86/tsx: Add a feature bit for TSX control MSR support
-      x86/pm: Add enumeration check before spec MSRs save/restore setup
-
-Peter Gonda (1):
-      virt/sev-guest: Prevent IV reuse in the SNP guest driver
-
- arch/x86/include/asm/cpufeatures.h      |  3 ++
- arch/x86/kernel/cpu/tsx.c               | 38 +++++++--------
- arch/x86/mm/ioremap.c                   |  8 +++-
- arch/x86/power/cpu.c                    | 23 +++++----
- drivers/virt/coco/sev-guest/sev-guest.c | 84 +++++++++++++++++++++++++++------
- 5 files changed, 112 insertions(+), 44 deletions(-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
-(HRB 36809, AG Nürnberg)
