@@ -2,133 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E7B5639B92
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 16:43:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 671F1639B97
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 16:54:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbiK0PnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 10:43:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55260 "EHLO
+        id S229619AbiK0PyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 10:54:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiK0PnV (ORCPT
+        with ESMTP id S229521AbiK0PyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 10:43:21 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC70D2DE
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 07:43:19 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id f3so7869835pgc.2
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 07:43:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QoqD+yoK4iUhwEviRcvAZ4p8z1xcTui7U2heAF5a4zQ=;
-        b=pW8oiV8k3BxvlYxvnp4Q2jio964NAuVqZNES+q7gkoqqg/8FcDZUrfghpnrhWQiLo0
-         qaGB96VmwMXaq9m8zR9gacxtVxmFPRNF+/RaRPP6CQwK9ZD8YxOgzB6Z/iTkgSaq08au
-         kv5R7Q9I72MfrCb+GXpOQkEGOvszZR2tWfKuBbgUKk12LE8Als8QTG7M2I0sZwgb2o2x
-         jaPRcMKjtyq9dtMvmCUifsOOgIns4i7lTbDllqLaQPOqaSZV2TOSHsuGLc90anGfqSaL
-         27wX8zF1m4geYBLpjHtsmHBaXqe0StL+KoIabRwu2eEh8DsfBJ2EuA8PI4fCjwJ8JrzV
-         uGQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QoqD+yoK4iUhwEviRcvAZ4p8z1xcTui7U2heAF5a4zQ=;
-        b=OnFL7qlaxriz0TWztFypWoqgw8IZ0TYOToNdCQY28ilvR8jiVHE+yoAI+IBINwTlL+
-         n3ecgEbg+U0JzRLNTY5zSRshr1ks+Bhv1JPq50bCskeraU1gmIE1TAdRivaTbL6KjyTN
-         iMa/Q7Tj/WujsROP3BcLyD/sqmS6ObRy2PUNeM4k8l8a5ltXsyHTkJbawv9dkyPxPxx/
-         IRCxJmgwkBtIQI1U44pyC218aplDh/CNA3cTghhipZp+AXmXYx0GNdgGXzU5dYGDzH3W
-         VOuJNZg+u4Do11q1oZ89MlDdGSXHerjDPsrB0cb9qEM2vw6b4fVpkp6iC7RKmky0OR5D
-         wIBg==
-X-Gm-Message-State: ANoB5pmsEQyqG7/fkXky0Mu52qC/EXtQd+qRSQ4i/pf4fTfBZ4jcNWn3
-        yyD553CruczbRiZqYYPX6yFsQXGKl3LX4mTOx57MNQ==
-X-Google-Smtp-Source: AA0mqf6gFiXOwgh2CpDtU8yGb8UYkH6A8+wiyF5d0XjCWNcAnB42vY5fd/NpoZvaRmCfEOHRZScmoX1Aw0Jtrj8y5eg=
-X-Received: by 2002:aa7:854d:0:b0:56d:6e51:60ee with SMTP id
- y13-20020aa7854d000000b0056d6e5160eemr27439275pfn.25.1669563799458; Sun, 27
- Nov 2022 07:43:19 -0800 (PST)
+        Sun, 27 Nov 2022 10:54:20 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF760DEC0;
+        Sun, 27 Nov 2022 07:54:18 -0800 (PST)
+From:   =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1669564456;
+        bh=hFVNL9asli5tIDyA3WxJjlkOG1f2F7NESUl0mhNd6YQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OOzbe3dlF1Uxr9eSIlFbZU84yF0v4K1jNDuIEgVUoAqvQpbIUfpRLeBBpvzfde4Uo
+         CxMNU8qyRePDw3E7icl5wkBNTOJUezOV77+ie5w2NzfMMAxb0B9pT8L3/JGu9XdGI9
+         kJMC++xE2v4RxckNRdI59ScIVKrnVg1SjMkPwlbQ=
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH] watchdog: core: don't reset KEEPALIVEPING through sysfs
+Date:   Sun, 27 Nov 2022 16:45:59 +0100
+Message-Id: <20221127154559.80899-1-linux@weissschuh.net>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221127123259.20339-1-krzysztof.kozlowski@linaro.org> <20221127123259.20339-4-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221127123259.20339-4-krzysztof.kozlowski@linaro.org>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Sun, 27 Nov 2022 09:43:07 -0600
-Message-ID: <CAPLW+4=B=xx3gUsv7gj_AhDG44zyurFzaHvws8eCV+efcEdV_Q@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] dt-bindings: soc: samsung: exynos-sysreg: add
- clocks for Exynos850
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        Sriranjani P <sriranjani.p@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1669563958; l=4246; i=linux@weissschuh.net; s=20211113; h=from:subject; bh=hFVNL9asli5tIDyA3WxJjlkOG1f2F7NESUl0mhNd6YQ=; b=aMGG2Q+p8KJE7dtKXkBnNnJl5JcuNK/70jYbUBzbB3ynzcO04qDChCmSESJDF7QwKQVUdSP8wLtJ Zy1JDGSLBn/HciFPOrL/WFhNvBbBCDFS4oBtbI088sEQd0YBeon5
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519; pk=9LP6KM4vD/8CwHW7nouRBhWLyQLcK1MkP6aTZbzUlj4=
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 27 Nov 2022 at 06:33, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> Exynos850 has dedicated clock for accessing SYSREGs.  Allow it, even
-> though Linux currently does not enable them and relies on bootloader.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->
-> ---
->
-> Changes since v1:
-> 1. Make clocks required on Exynos850.
-> 2. Due to above change, do not add Rb tags.
->
-> Cc: Sriranjani P <sriranjani.p@samsung.com>
-> Cc: Chanho Park <chanho61.park@samsung.com>
-> Cc: Sam Protsenko <semen.protsenko@linaro.org>
-> ---
+Reading the watchdog status via ioctl(WDIOC_GETSTATUS) or sysfs will
+reset the status bit KEEPALIVEPING.
 
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+This is done so an application can validate that the watchdog was pinged
+since the last read of the status.
 
->  .../soc/samsung/samsung,exynos-sysreg.yaml      | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml b/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
-> index 42357466005e..9f3fc6406d9d 100644
-> --- a/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
-> +++ b/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
-> @@ -36,10 +36,27 @@ properties:
->    reg:
->      maxItems: 1
->
-> +  clocks:
-> +    maxItems: 1
-> +
->  required:
->    - compatible
->    - reg
->
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - samsung,exynos850-sysreg
-> +    then:
-> +      required:
-> +        - clocks
-> +    else:
-> +      properties:
-> +        clocks: false
-> +
->  additionalProperties: false
->
->  examples:
-> --
-> 2.34.1
->
+For the ioctl-based interface this is fine as only one application can
+manage a watchdog interface at a time, so it can properly handle this
+implicit state modification.
+
+The sysfs "status" file however is world-readable. This means that the
+watchdog state can be modified by any other unprivileged process on the
+system.
+
+As the sysfs interface can also not be used to set this bit, let's
+remove the capability to clear it.
+
+Fixes: 90b826f17a4e ("watchdog: Implement status function in watchdog core")
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+
+---
+
+I was not able to find an application (besides wdctl) that uses this
+bit. But if applications are to use it, it should probably be reliable.
+
+Other possible solutions I can think of:
+* Only reset the bit when the file opened privileged
+* Only reset the bit when the file opened writable
+
+Instead of using a status bit to check if the watchdog was pinged it
+would probably be more robust to use a sequence counter or timestamp.
+Especially as it seems more operations are being exposed over sysfs over
+time.
+
+I'm not sure it's worth it though.
+---
+ Documentation/ABI/testing/sysfs-class-watchdog |  3 ++-
+ drivers/watchdog/watchdog_dev.c                | 13 +++++++++----
+ 2 files changed, 11 insertions(+), 5 deletions(-)
+
+diff --git a/Documentation/ABI/testing/sysfs-class-watchdog b/Documentation/ABI/testing/sysfs-class-watchdog
+index 585caecda3a5..182a8a9e530e 100644
+--- a/Documentation/ABI/testing/sysfs-class-watchdog
++++ b/Documentation/ABI/testing/sysfs-class-watchdog
+@@ -38,7 +38,8 @@ Contact:	Wim Van Sebroeck <wim@iguana.be>
+ Description:
+ 		It is a read only file. It contains watchdog device's
+ 		internal status bits. It is equivalent to WDIOC_GETSTATUS
+-		of ioctl interface.
++		of ioctl interface, except that the status bit
++		WDIOF_KEEPALIVEPING is not reset.
+ 
+ What:		/sys/class/watchdog/watchdogn/timeleft
+ Date:		August 2015
+diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
+index 55574ed42504..7e3e964c4d6f 100644
+--- a/drivers/watchdog/watchdog_dev.c
++++ b/drivers/watchdog/watchdog_dev.c
+@@ -320,13 +320,15 @@ static int watchdog_stop(struct watchdog_device *wdd)
+ /*
+  * watchdog_get_status - wrapper to get the watchdog status
+  * @wdd: The watchdog device to get the status from
++ * @reset_keepaliveping: Reset the status bit _WDOG_KEEPALIVE
+  *
+  * Get the watchdog's status flags.
+  * The caller must hold wd_data->lock.
+  *
+  * Return: watchdog's status flags.
+  */
+-static unsigned int watchdog_get_status(struct watchdog_device *wdd)
++static unsigned int watchdog_get_status(struct watchdog_device *wdd,
++					bool reset_keepaliveping)
+ {
+ 	struct watchdog_core_data *wd_data = wdd->wd_data;
+ 	unsigned int status;
+@@ -345,9 +347,12 @@ static unsigned int watchdog_get_status(struct watchdog_device *wdd)
+ 	if (test_bit(_WDOG_ALLOW_RELEASE, &wd_data->status))
+ 		status |= WDIOF_MAGICCLOSE;
+ 
+-	if (test_and_clear_bit(_WDOG_KEEPALIVE, &wd_data->status))
++	if (test_bit(_WDOG_KEEPALIVE, &wd_data->status))
+ 		status |= WDIOF_KEEPALIVEPING;
+ 
++	if (reset_keepaliveping)
++		clear_bit(_WDOG_KEEPALIVE, &wd_data->status);
++
+ 	if (IS_ENABLED(CONFIG_WATCHDOG_HRTIMER_PRETIMEOUT))
+ 		status |= WDIOF_PRETIMEOUT;
+ 
+@@ -476,7 +481,7 @@ static ssize_t status_show(struct device *dev, struct device_attribute *attr,
+ 	unsigned int status;
+ 
+ 	mutex_lock(&wd_data->lock);
+-	status = watchdog_get_status(wdd);
++	status = watchdog_get_status(wdd, false);
+ 	mutex_unlock(&wd_data->lock);
+ 
+ 	return sysfs_emit(buf, "0x%x\n", status);
+@@ -753,7 +758,7 @@ static long watchdog_ioctl(struct file *file, unsigned int cmd,
+ 			sizeof(struct watchdog_info)) ? -EFAULT : 0;
+ 		break;
+ 	case WDIOC_GETSTATUS:
+-		val = watchdog_get_status(wdd);
++		val = watchdog_get_status(wdd, true);
+ 		err = put_user(val, p);
+ 		break;
+ 	case WDIOC_GETBOOTSTATUS:
+
+base-commit: faf68e3523c21d07c5f7fdabd0daf6301ff8db3f
+-- 
+2.38.1
+
