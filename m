@@ -2,120 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D3D8639D19
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 22:06:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E57C0639D1A
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 22:06:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbiK0VGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 16:06:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54272 "EHLO
+        id S229602AbiK0VGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 16:06:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiK0VF5 (ORCPT
+        with ESMTP id S229607AbiK0VGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 16:05:57 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC202B4B7
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 13:05:56 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id g12so14617740lfh.3
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 13:05:56 -0800 (PST)
+        Sun, 27 Nov 2022 16:06:15 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A904BF61
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 13:06:13 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id v8so13079948edi.3
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 13:06:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5Nt+rYmibpu5dTdXk3Hdc1ryP5rBQWqr1sW/Ulf9bq0=;
-        b=srCg+kNV7zBo4yvmtMoNhDSdq84K7EnTBQDQcycsqvubhznP6G0Kw+Ntl4XJTKoH/4
-         lQ2WQnJmzU+IRQEc67VGOdSgP6b+VZei4Pr0KYyD6Rk/C4iswsf2pkEE+9QKEOtqPvxX
-         TN2NkMjzHhs3SQHLZnGJ1RO7Tep1LhS1/Go0Ohx7P3FbYmEsk/GODhlQTBYb4KYklBSB
-         X3xRCzruwUCAzwVC07b/zQhhPsoxBDqoBl3JMpCXlGFYJyF6v/q+f2kV3PIiXLVfmFC6
-         v9qU57h2kCIkJPqUM8C+jFxMQ18JWLoA6VqCC5bOadzjdKqt5Z95HmKB7Cf95lq+rGD9
-         /FBA==
+        d=chromium.org; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KpEq2XM1YcTPQcw+4JJSyNeoXgL2xBwAGVLtnrNWxhU=;
+        b=i3T3lCm9VZPExCvJlK5TujyGU4OIfNjPc8i3cng1iMlplAGywfCDL3o132gbIkZM1S
+         zWV5H/jzE3BIFQ7Znss8FYsyFlRWLSDv/0zd2lwV2VGhkmKAhDr2PluaTX2mE1WGfi3R
+         L+bnHqTFYru/HN75HYc/Xfcd0hSFFvGWBai/A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5Nt+rYmibpu5dTdXk3Hdc1ryP5rBQWqr1sW/Ulf9bq0=;
-        b=UAAbq6JgdAnP54UtxPINpBYXLRtNIw9V2aHFARoxqjD9ogvA+hX/M5qXQsP0V/+Nv1
-         WnzO68qWQZpIgPixh2nWE3Sy74se9FxJdahkdSN++eGkAmmg6Bd4yA9f4PO56A3bpEjI
-         jWajeXBf0w7/3M+LKVrf/P/FwtnAJZAWah5hN/fMpQ3dRvwM/QVBB2Rk83Q1SXKkaaM/
-         sRQREA0KNguYyenevuPdBNzXGhbigbnSpim3X22WXBoDuUoD0wfK6BPLIy2P2COErlEg
-         b8WgJExTkkQKL/SVvGRpVNRYQbp7i+9p4gA5J7SHPkccw1KNbYuB65tM80EUfPSk/Bfs
-         C5nQ==
-X-Gm-Message-State: ANoB5plAY1KQmgYSurNbaJxh9PRjwBJu6nqe0mJeIujdDwy2w9Zb8GrY
-        +7hI5U4V4L5U3vM/hiKHTV3Yr80kk7ic17fl
-X-Google-Smtp-Source: AA0mqf7071rUuF/DfDP8jw/HF2yThwmGczn0XX4obQ6G6ilBWM5aMqFGIdR8YtNoYiWvfw07N5e+mg==
-X-Received: by 2002:ac2:54b3:0:b0:4a2:4589:fa1e with SMTP id w19-20020ac254b3000000b004a24589fa1emr9855269lfk.444.1669583155100;
-        Sun, 27 Nov 2022 13:05:55 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id q21-20020a056512211500b00492dc29be7bsm1416100lfr.227.2022.11.27.13.05.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Nov 2022 13:05:54 -0800 (PST)
-Message-ID: <1f5795ac-0391-ca61-9c44-9f648d44e5b3@linaro.org>
-Date:   Sun, 27 Nov 2022 22:05:53 +0100
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KpEq2XM1YcTPQcw+4JJSyNeoXgL2xBwAGVLtnrNWxhU=;
+        b=pVN1k+nQtPyCMJwVR/xBBfX8o0wKCNH84viahOMLun/UgUzW5CvYhZetu235wJigKa
+         i136wxmKjVyA4+t9yf/KrWL8Rc4AqsFxreWNhSjWlZS/3ax+E2Eg8hFhBwWk418UWj+u
+         1Ct+GcrcNY4ljNc+KOxA/u4Ym3qxp6OaVgv7v7zcPgofwPt2umUso5uPSPtJLbkycyo5
+         POsGYtKBLfYMaYgl46ra6pHxXSAso0+aWFUPjVoMXpX+yODI7bl6iNxlJTNSa5CgJ4hE
+         lYLIV6WRVQQeJETJJ5D+CUlzo1L6OQhoUkyqh3OzKxlerVu8qRz1yaeadLjIl3UcuPtg
+         7DkA==
+X-Gm-Message-State: ANoB5pkapyaLmIeLjrUoyODCpKygcywtPMaGYPHisatZCd/vtRVoDHJI
+        BOMMn9cW0PDIg0sZeDuqyEzMhXFqE8NnAA==
+X-Google-Smtp-Source: AA0mqf7AK0u4SFho7bYNOX0OHN0NXJHVzesCrSaAduE2uZjphYIWcoxLSGn/r68Za0WEhEMKpaZKig==
+X-Received: by 2002:a05:6402:4027:b0:468:fc39:e89 with SMTP id d39-20020a056402402700b00468fc390e89mr28057871eda.170.1669583171485;
+        Sun, 27 Nov 2022 13:06:11 -0800 (PST)
+Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
+        by smtp.gmail.com with ESMTPSA id md6-20020a170906ae8600b007af0f0d2249sm4177891ejb.52.2022.11.27.13.06.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Nov 2022 13:06:11 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Sun, 27 Nov 2022 22:06:02 +0100
+Subject: [PATCH v2] regulator: da9211: Use irq handler when ready
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 1/2] dt-bindings: arm: qcom: Document oneplus,bacon device
-Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221127181835.806410-1-luca@z3ntu.xyz>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221127181835.806410-1-luca@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Message-Id: <20221124-da9211-v2-0-1779e3c5d491@chromium.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Ricardo Ribalda <ribalda@chromium.org>,
+        linux-kernel@vger.kernel.org
+X-Mailer: b4 0.11.0-dev-696ae
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2515; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=64X4q4g/buDNWHqsk0ePMcVX3nLxG/h6WzT9QC73iVI=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjg9E89h5L1WLokbAJhqGvCAzAw4pa/x+MDYyvgkjb
+ WemUw8aJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4PRPAAKCRDRN9E+zzrEiCX7D/
+ 9MgWfQijyj0r6rQqXgYfRFRX+fg9DLj68wzrxKaqd1WrvuM2Lx3V3VTlI2B0RSDvXY8bfGxmcAw+LO
+ qIk/kXF0HqJdWOAn1EwyT1iT0QOjQZVlgiUGrNYbejHY2XQyxLej0QWfQ0eR+xkwd2t6fMuF3E7yqQ
+ npGkK3mmtDMgoRbKQvF3LUb8Cv/QgNjog5zvYbnjEogo2U5Zdfcd6nR2LWSO3ZXc0ed1UpMClkWS81
+ tgt3y1aojof5QGMS5FP/IW/yFEYpNu4uSqtgvMf0CgqNb+qOv7xxjceK9Yl/yvPUk6HRQPDlANtQPg
+ aLt1OKOIu9JNFJXgq7LCMc+ZTKxqN6SnzoAqSVYhmi2OnQKBCpstsnAdY6N4nj8K4olR1vve23L4DO
+ W1XhH+HWFAxC8bmT1GmKk4T9gqDXOA+V3lhIFbfzdA/YhnBbRYDCX4DzVfmADBUOLyYHLeQ2bZ/KIO
+ DXeBgnQdWMBn0VAD97/jU9hVapduykiDy+Z/alqwP+MxR6uqYaJ2jvIRAYHoA7W9lQINp3BWtEhD9H
+ CIiF+x5TR6HA3j18k9aaruFBR7NYWT9bL8eU9XIoHxrfo8nYcO7uEvOTmNC/ztlpramk+Cpw7mZgCT
+ zOiYdOMRrVeewSR4+lSETn/pM3mOOzobClJ34+25i1Yc8CM2z1ktR70F7mjQ==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/11/2022 19:18, Luca Weiss wrote:
-> Document the OnePlus One ("bacon") which is a smartphone based on the
-> Snapdragon 801 SoC.
-> 
-> Also allow msm8974 devices to use qcom,msm-id and qcom,board-id.
-> 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> ---
->  Documentation/devicetree/bindings/arm/qcom.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-> index 463509f0f23a..3d2cc8ae34d8 100644
-> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
-> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-> @@ -167,6 +167,7 @@ properties:
->            - enum:
->                - fairphone,fp2
->                - lge,hammerhead
-> +              - oneplus,bacon
->                - samsung,klte
->                - sony,xperia-amami
->                - sony,xperia-castor
-> @@ -896,6 +897,7 @@ allOf:
->                - qcom,apq8026
->                - qcom,apq8094
->                - qcom,apq8096
-> +              - qcom,msm8974
+If the system does not come from reset (like when it is kexec()), the
+regulator might have an IRQ waiting for us.
 
-Someone will have to rebase:
-https://lore.kernel.org/linux-devicetree/20221104172122.252761-4-angelogioacchino.delregno@collabora.com/
+If we enable the IRQ handler before its structures are ready, we crash.
 
-Patch is good:
+This patch fixes:
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+[    1.141839] Unable to handle kernel read from unreadable memory at virtual address 0000000000000078
+[    1.316096] Call trace:
+[    1.316101]  blocking_notifier_call_chain+0x20/0xa8
+[    1.322757] cpu cpu0: dummy supplies not allowed for exclusive requests
+[    1.327823]  regulator_notifier_call_chain+0x1c/0x2c
+[    1.327825]  da9211_irq_handler+0x68/0xf8
+[    1.327829]  irq_thread+0x11c/0x234
+[    1.327833]  kthread+0x13c/0x154
+
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+regulator: da9211: Fix crash when irqs are pre-enabled
+
+If the system does not come from reset (like when it is kexec()), the
+regulator might have an IRQ waiting for us.
+
+If we enable the IRQ handler before its structures are ready, we crash.
+
+To: Support Opensource <support.opensource@diasemi.com>
+To: Liam Girdwood <lgirdwood@gmail.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: linux-kernel@vger.kernel.org
+---
+Changes in v2:
+- Move chip_irq assignment before regulator_init (Thanks Adam)
+- Reduce commit message (Thanks Mark)
+- Link to v1: https://lore.kernel.org/r/20221124-da9211-v1-0-a54549aa6d3b@chromium.org
+---
+ drivers/regulator/da9211-regulator.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/regulator/da9211-regulator.c b/drivers/regulator/da9211-regulator.c
+index e01b32d1fa17..00828f5baa97 100644
+--- a/drivers/regulator/da9211-regulator.c
++++ b/drivers/regulator/da9211-regulator.c
+@@ -498,6 +498,12 @@ static int da9211_i2c_probe(struct i2c_client *i2c)
+ 
+ 	chip->chip_irq = i2c->irq;
+ 
++	ret = da9211_regulator_init(chip);
++	if (ret < 0) {
++		dev_err(chip->dev, "Failed to initialize regulator: %d\n", ret);
++		return ret;
++	}
++
+ 	if (chip->chip_irq != 0) {
+ 		ret = devm_request_threaded_irq(chip->dev, chip->chip_irq, NULL,
+ 					da9211_irq_handler,
+@@ -512,11 +518,6 @@ static int da9211_i2c_probe(struct i2c_client *i2c)
+ 		dev_warn(chip->dev, "No IRQ configured\n");
+ 	}
+ 
+-	ret = da9211_regulator_init(chip);
+-
+-	if (ret < 0)
+-		dev_err(chip->dev, "Failed to initialize regulator: %d\n", ret);
+-
+ 	return ret;
+ }
+ 
+
+---
+base-commit: 4312098baf37ee17a8350725e6e0d0e8590252d4
+change-id: 20221124-da9211-4b8904b4feb5
 
 Best regards,
-Krzysztof
-
+-- 
+Ricardo Ribalda <ribalda@chromium.org>
