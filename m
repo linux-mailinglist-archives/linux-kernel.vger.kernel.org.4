@@ -2,164 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4382639944
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 04:42:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDAF2639949
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 05:29:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbiK0Dme convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 26 Nov 2022 22:42:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39650 "EHLO
+        id S229597AbiK0E3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 23:29:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiK0Dmc (ORCPT
+        with ESMTP id S229459AbiK0E3v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 22:42:32 -0500
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2400DF1;
-        Sat, 26 Nov 2022 19:42:29 -0800 (PST)
-Received: by mail-pf1-f170.google.com with SMTP id w79so7462371pfc.2;
-        Sat, 26 Nov 2022 19:42:29 -0800 (PST)
+        Sat, 26 Nov 2022 23:29:51 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D85F11164
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 20:29:50 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id b4so7485939pfb.9
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 20:29:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=telus.net; s=google;
+        h=thread-index:content-language:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DqgH8cmHhfTz1Vd5tEGfh30cXpik/rHUE/AA8MWiYIA=;
+        b=QxtOkawsOV8yH3gBwfP3XH7r0/9hh0Xf1MbOjZJPJnwUmxABxSgiKfKds5tVnPf6IP
+         FnkzcXfn+/S/Wc8+/OgFtAxWeAleZrGOHS7pLIUwFagdWBi5DyrFHqCitTpZsd9Rzw6h
+         omDcExhBorMv9Iq+rFOuku0HQIvLs5EC1a+ifE1Tdu2QiPfUwuehXO76BBE58utnksp0
+         3lEMPMcNAH/xIdxeJAqD48uWnep3P41pK4IshNV2sBH0Yyi9xb4z52jSgehGbp1UVLix
+         n5VFOcbK4uiR7EhAP2cOoc/vXYAMQjc+GFPAnSpK7g+A8obPe5FrugzfCpY+1QjHzg12
+         AFUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FucA3Sodw38qvlVLRVvNtzxLWzWTb944v88XDY3XbJY=;
-        b=KQsKXfxiaLtAsHNz+uuP5iUFaDUT4D85gZb2vVlOmRwlmwUO2hx54z3sVD7Z9ddyvV
-         Ueh/N3pU1ZtoriWKPkQU/eC+KZPnaPXYqL9k5S8y73jIGRhHe/Gdg8LVKizndL63Wr52
-         0IE54iuoo0/QDeVN3BVGDmw+A42y1ihGDOL+5joKsWXpNpTa1Krk9PQIoxFL1iSMwXuh
-         j1JoZds0Ukqe6c35Jvp++rnNmtZObgnN3O7OQpFXx/bdeLTsLHJ3kO2SrmJE8I/9EYZY
-         A7tUHkGbft+12D5rrI6lJDCTN1yu1qvbjWuxTjoZC/OfH8rdO6KC9zAODQQUk+TJ2TWC
-         XA9g==
-X-Gm-Message-State: ANoB5pklAwcItLyvz9tCj0XGGwVWe4kZmFC94EepQMv4K/oSJLARYV+F
-        GoLqxPbfazv9gXjV2hMxotyxbPI7N/7YmRNLZqM=
-X-Google-Smtp-Source: AA0mqf4pd0LS9qQTVN4KChy6A06YwOUnjFr7T249St3XDx3faAgp823CKEfuq8gJFBEKhemKCjH0hmTK280KuYTb4i0=
-X-Received: by 2002:a62:1a8b:0:b0:572:7c58:540 with SMTP id
- a133-20020a621a8b000000b005727c580540mr27182789pfa.69.1669520549055; Sat, 26
- Nov 2022 19:42:29 -0800 (PST)
+        h=thread-index:content-language:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DqgH8cmHhfTz1Vd5tEGfh30cXpik/rHUE/AA8MWiYIA=;
+        b=wkzsE0hYFizMvI/4vLaI4d/TB8C9JhRwnDiZODBNQICs6cnTu1o0dq5Yx+iFjNMcfY
+         jf2ItnbRynVsxlnT1B+N22Ap01WMVYPUIzlAev6m96WUAlU2FOKFXvdPHSkXHAL5BiRs
+         Sbp3g2YmX1lCVUHWc51tWRA1j6pK+kIZUWv7e1MOxZ4gABO8KXxpJufW7Wj4o9cNx2hI
+         ToQqoA334qCDUTx0xZF649v9ImCdSADA8u7fmZPLgwLU79oNHwUo4D+8OjiWmk13d1jv
+         oYTUURydSuoXs9cGWI95o6vlmVjpOjduHfbYi/Hu299+IEE2gFm/zJXsmfwWDQQQy+5J
+         qWwA==
+X-Gm-Message-State: ANoB5plHkgjNUyzurlb13tup3ocoDvmJxEZZda/5EONZMtF9lboaZMlg
+        7hl4V9Ou+kLZ9B+CatT36HHFMA==
+X-Google-Smtp-Source: AA0mqf5w6Q8t2dnnUcA5QNcjpQJxJ8kEWg+TkaCm7G6FUDiBRGvQjIDHviO3GjIqFnz+XbYO7B3lUA==
+X-Received: by 2002:a05:6a00:1741:b0:563:9203:cc53 with SMTP id j1-20020a056a00174100b005639203cc53mr36158170pfc.20.1669523389987;
+        Sat, 26 Nov 2022 20:29:49 -0800 (PST)
+Received: from DougS18 (s173-180-45-4.bc.hsia.telus.net. [173.180.45.4])
+        by smtp.gmail.com with ESMTPSA id h14-20020a056a00000e00b00574ebfdc721sm1904359pfk.16.2022.11.26.20.29.48
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 26 Nov 2022 20:29:49 -0800 (PST)
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Rafael J. Wysocki'" <rafael@kernel.org>,
+        "'Kajetan Puchalski'" <kajetan.puchalski@arm.com>
+Cc:     <daniel.lezcano@linaro.org>, <lukasz.luba@arm.com>,
+        <Dietmar.Eggemann@arm.com>, <yu.chen.surf@gmail.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Doug Smythies" <dsmythies@telus.net>
+References: <20221031121314.1381472-1-kajetan.puchalski@arm.com> <20221031121314.1381472-3-kajetan.puchalski@arm.com> <CAJZ5v0hHvf-033Oa-nW7UEZq=9cTFzn6e_znccPXBUeNa=YY+Q@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hHvf-033Oa-nW7UEZq=9cTFzn6e_znccPXBUeNa=YY+Q@mail.gmail.com>
+Subject: RE: [RFC PATCH v3 2/2] cpuidle: teo: Introduce util-awareness
+Date:   Sat, 26 Nov 2022 20:29:51 -0800
+Message-ID: <004d01d90218$e4631670$ad294350$@telus.net>
 MIME-Version: 1.0
-References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
- <20221126162211.93322-1-mailhol.vincent@wanadoo.fr> <20221126162211.93322-4-mailhol.vincent@wanadoo.fr>
- <Y4JJ8Dyz7urLz/IM@lunn.ch>
-In-Reply-To: <Y4JJ8Dyz7urLz/IM@lunn.ch>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sun, 27 Nov 2022 12:42:17 +0900
-Message-ID: <CAMZ6Rq+K+6gbaZ35SOJcR9qQaTJ7KR0jW=XoDKFkobjhj8CHhw@mail.gmail.com>
-Subject: Re: [PATCH v4 3/6] can: etas_es58x: export product information
- through devlink_ops::info_get()
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        Saeed Mahameed <saeed@kernel.org>,
-        Jiri Pirko <jiri@nvidia.com>,
-        Lukas Magel <lukas.magel@posteo.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+        charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: en-ca
+Thread-Index: AQJ3niu74TkyFjUbsRqSa0N7+FgHagJieOsRAbWVYo2s8+GpAA==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew,
+On 2022.11.25 10:27 Rafael wrote:
+> On Mon, Oct 31, 2022 at 1:14 PM Kajetan wrote:
 
-Thank you for the review and the interesting comments on the parsing.
+... [delete some] ...
 
-On. 27 Nov. 2022 at 02:37, Andrew Lunn <andrew@lunn.ch> wrote:
-> > +struct es58x_sw_version {
-> > +     u8 major;
-> > +     u8 minor;
-> > +     u8 revision;
-> > +};
+>>         /*
+>>          * Find the deepest idle state whose target residency does not exceed
+>>          * the current sleep length and the deepest idle state not deeper than
+>> @@ -454,6 +527,11 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
+>>         if (idx > constraint_idx)
+>>                 idx = constraint_idx;
+>>
+>> +       /* if the CPU is being utilized and C1 is the selected candidate */
+>> +       /* choose a shallower non-polling state to improve latency */
 >
-> > +static int es58x_devlink_info_get(struct devlink *devlink,
-> > +                               struct devlink_info_req *req,
-> > +                               struct netlink_ext_ack *extack)
-> > +{
-> > +     struct es58x_device *es58x_dev = devlink_priv(devlink);
-> > +     struct es58x_sw_version *fw_ver = &es58x_dev->firmware_version;
-> > +     struct es58x_sw_version *bl_ver = &es58x_dev->bootloader_version;
-> > +     struct es58x_hw_revision *hw_rev = &es58x_dev->hardware_revision;
-> > +     char buf[max(sizeof("xx.xx.xx"), sizeof("axxx/xxx"))];
-> > +     int ret = 0;
-> > +
-> > +     if (es58x_sw_version_is_set(fw_ver)) {
-> > +             snprintf(buf, sizeof(buf), "%02u.%02u.%02u",
-> > +                      fw_ver->major, fw_ver->minor, fw_ver->revision);
+> Again, the kernel coding style for multi-line comments is different
+> from the above.
 >
-> I see you have been very careful here, but i wonder if you might still
-> get some compiler/static code analyser warnings here. As far as i
-> remember %02u does not limit it to two characters.
+>> +       if (cpu_data->utilized && idx == 1)
+>
+> I've changed my mind with respect to adding the idx == 1 check to
+> this.  If the goal is to reduce latency for the "loaded" CPUs, this
+> applies to deeper idle states too.
 
-I checked, none of gcc and clang would trigger a warning even for a
-'make W=12'. More generally speaking, I made sure that my driver is
-free of any W=12.
-(except from the annoying spam from GENMASK_INPUT_CHECK for which my
-attempts to silence it were rejected:
-https://lore.kernel.org/all/20220426161658.437466-1-mailhol.vincent@wanadoo.fr/
-).
+After taking idle state 0 (POLL) out of it, the energy cost for reducing
+the selected idle state by 1 was still high in some cases, at least on my
+Intel processor. That was mainly for idle state 2 being bumped to idle
+state 1. I don't recall significant differences bumping idle state 3 to idle
+state 2, but I don't know about other Intel processors.
 
-> If the number is
-> bigger than 99, it will take three characters. And your types are u8,
-> so the compiler could consider these to be 3 characters each. So you
-> end up truncating. Which you look to of done correctly, but i wonder
-> if some over zealous checker will report it?
+So, there is a trade-off here where we might want to accept this higher
+energy consumption for no gain in some workflows verses the higher
+energy for gain in other workflows, or not.
 
-That zealous check is named -Wformat-truncation in gcc (I did not find
-it in clang). Even W=3 doesn't report it so I consider this to be
-fine.
+Example 1: Higher energy, for no benefit:
+Workflow: a medium load at 211 work/sleep frequency.
+This data is for one thread, but I looked at up to 6 threads.
+No performance metric, the work just has to finish before
+the next cycle begins.
+CPU frequency scaling driver: intel_pstate
+CPU frequency scaling governor: powersave
+No HWP.
+Kernel 6.1-rc3
 
-> Maybe consider "xxx.xxx.xxx"?
+teo: ~14.8 watts
+util-v4 without the "idx == 1" above: 16.1 watts (+8.8%)
+More info:
+http://smythies.com/~doug/linux/idle/teo-util/consume/dwell-v4/
 
-If I do that, I also need to consider the maximum length of the
-hardware revision would be "a/xxxxx/xxxxx" because the numbers are
-u16. The declaration would become:
+Example 2: Lower energy, but no loss in performance:
+Workflow: 500 threads, light load per thread,
+approximately 10 hertz work/sleep frequency per thread.
+CPU frequency scaling driver: intel_cpufreq
+CPU frequency scaling governor: schedutil
+No HWP.
+Kernel 6.1-rc3
 
-        char buf[max(sizeof("xxx.xxx.xxx"), sizeof("axxxxx/xxxxx"))];
+teo: ~70 watts
+util-v4 without the "idx == 1" above: ~59 watts (-16%)
+Execution times were the same
+More info:
+http://smythies.com/~doug/linux/idle/teo-util/waiter/
 
-Because no such warning exists in the kernel, I do not think the above
-line to be a good trade off. I would like to keep things as they are,
-it is easier to read. That said, I will add an extra check in
-es58x_parse_sw_version() and es58x_parse_hw_revision() to assert that
-the number are not bigger than 99 for the software version (and not
-bigger than 999 for the hardware revision). That way the code will
-guarantee that the truncation can never occur.
+Note: legend util-v4-1 is util-v4 without the "idx == 1".
+I have also added util-v4-1 to some of the previous results.
 
-> Nice paranoid code by the way. I'm not the best at spotting potential
-> buffer overflows, but this code looks good. The only question i had
-> left was how well sscanf() deals with UTF-8.
+For reference, my testing processor:
 
-It does not consider UTF-8. The %u is a _parse_integer_limit() in disguise.
-  https://elixir.bootlin.com/linux/v6.1-rc6/source/lib/vsprintf.c#L3637
-  https://elixir.bootlin.com/linux/v6.1-rc6/source/lib/vsprintf.c#L70
+Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
 
-_parse_integer_limit() just check for ASCII digits so the first UTF-8
-character would make the function return.
-  https://elixir.bootlin.com/linux/v6.1-rc6/source/lib/kstrtox.c#L65
+$ grep . /sys/devices/system/cpu/cpu0/cpuidle/state*/name
+/sys/devices/system/cpu/cpu0/cpuidle/state0/name:POLL
+/sys/devices/system/cpu/cpu0/cpuidle/state1/name:C1_ACPI
+/sys/devices/system/cpu/cpu0/cpuidle/state2/name:C2_ACPI
+/sys/devices/system/cpu/cpu0/cpuidle/state3/name:C3_ACPI
 
-For example, this:
-  "ＦＷ:03.00.06"
-would fail parsing because sscanf() will not be able to match the
-first byte of the UTF-8 'Ｆ' with 'F'.
+$ grep . /sys/devices/system/cpu/cpu0/cpuidle/state*/desc
+/sys/devices/system/cpu/cpu0/cpuidle/state0/desc:CPUIDLE CORE POLL IDLE
+/sys/devices/system/cpu/cpu0/cpuidle/state1/desc:ACPI FFH MWAIT 0x0
+/sys/devices/system/cpu/cpu0/cpuidle/state2/desc:ACPI FFH MWAIT 0x30
+/sys/devices/system/cpu/cpu0/cpuidle/state3/desc:ACPI FFH MWAIT 0x60
 
-Another example:
-  "FW:０３.００.０６"
-would also fail parsing because _parse_integer_limit() will not
-recognize the first byte of UTF-8 '０' as a valid ASCII digit and
-return early.
+... Doug
 
-To finish, a very edge case:
-  "FW:03.00.0６"
-would incorrectly succeed. It will parse "FW:03.00.0" successfully and
-will return when encountering the UTF-8 '６'. But I am not willing to
-cover that edge case. If the device goes into this level of
-perversion, I do not care any more as long as it does not result in
-undefined behaviour.
-
-
-Yours sincerely,
-Vincent Mailhol
