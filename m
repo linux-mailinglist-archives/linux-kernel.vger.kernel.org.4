@@ -2,78 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09803639A79
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 13:27:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE6B9639A7F
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 13:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbiK0M1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 07:27:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60368 "EHLO
+        id S229625AbiK0MdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 07:33:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiK0M1J (ORCPT
+        with ESMTP id S229563AbiK0MdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 07:27:09 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E44D2CA
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 04:27:08 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id r8so10154487ljn.8
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 04:27:08 -0800 (PST)
+        Sun, 27 Nov 2022 07:33:04 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BEDCE0B
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 04:33:03 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id bp15so13427192lfb.13
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 04:33:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oRsBmhJgOiktxZ9hAbABKbiBkzI54IdKyOuZ84YupsA=;
-        b=Gx6by0dHsgykNX4biM/yxpswE5R1N8WCzTw7JTn6BX+c0Kosgy18nR+TgPS2otyv3g
-         Ea30viVWdk60NslLbHsxNylIvgdmQ5yh4SUOO/X6H56Ka/MfyH4F14EWih2GrhD+fFCa
-         06NflOoD/nrOoCQ8l1jqbRN6NXe5VYgqxeDYCEeE2pzVzvcXwzRiKdAIdmRAcIDJlwK+
-         d9q0zjM563BYtGGV+RMOHNynspJLsq6Vdx3j/Y9WK8FdzF6eWUKFNAcotdA67c0/y7ym
-         xdLqutwLK9RqZUNiafEx41Mo+lDIfdPffU0Qf5B8uiwdYCMbV9rjuMROgpBvuB1cbLXN
-         xOEA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cPN+BmEQYUICy1UGQadZzNzqjOx78Sh8uSqQROeddZE=;
+        b=R2Bv2zPBNAl3ZUxMwVQ94JqwxnJpJG5mXOKSYD3VHvLrUz2pmoO7egVrIX2SfqctqC
+         6l6g8zPjichLkNqzdYCMoJRUHCqnXy0PoWi74E5GCi6FX3W7QV0qMOVyW2DRpSpCXYqN
+         DCrOt/IVhX6tYwdu9wqij+3COEEPWoP3Q12rFyI6YHzwUR0oMD2DpU+ii8QnSGXQmjmo
+         lM3RJodFsgGFfR7Ge079wQ5nSFBkHa0L+KDJjk8CBV00WGVk96N6nvcUwOXLRjcUySHL
+         /ki5yRrNugHMXrnV6H36Gyfw2qCokuvQ0Y2u0zH/ZGNaAWdwEHG/Mwwj9bph2TsmSQAb
+         0KvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oRsBmhJgOiktxZ9hAbABKbiBkzI54IdKyOuZ84YupsA=;
-        b=klGRRMX8Yiqxv2E5yrrGztZDC+OAPjxDFGUYqsPm746EEN2OI1LXDicfaS3pecWgKo
-         QwInKvGwr4KoJBk+9XZLvwbPvVDlso7mCw+fCESC0+olpbG84R4ZgecmT6RIB9rOVdwi
-         YF9Wmid8CqaM8jrBs4q8rd5UmhL8cpNBBijS8SMwuKsNmF8U32HtvHi/h+i6eqOLpN9m
-         /8WuHqhCPHH2BzGeCeM+rfp7u1qTT6bHLnSJ5JJFtRP3NtQzZWQsA5ZWHUTTgpeKal8I
-         MrgH0H4BMM+Aj6lo/27s25TFjzeKfRKvgqeOVXTIbnbe6yu2HZMmRbHsBMbhQSxgOHUR
-         vJ8A==
-X-Gm-Message-State: ANoB5pkad6zSjDs8XA7xfI2jd4UHfIgzt0cGOYRDTSVmdy3pCcNuIQMU
-        /Pbzc4CQ4Gci3nYCIVMjeah3Aw==
-X-Google-Smtp-Source: AA0mqf6d2iU7YNZjKcPm/9Y5uvPlIk030M+5XL1i0uu2X/FspJli+OJsUqrzuAMzquzmBo+UOCkO8w==
-X-Received: by 2002:a2e:9457:0:b0:26e:6730:2da2 with SMTP id o23-20020a2e9457000000b0026e67302da2mr9384606ljh.245.1669552026517;
-        Sun, 27 Nov 2022 04:27:06 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id e5-20020ac25ca5000000b004a05837103csm1260558lfq.196.2022.11.27.04.27.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Nov 2022 04:27:05 -0800 (PST)
-Message-ID: <234a38f2-68a2-2d85-b4ec-dab3e4e64025@linaro.org>
-Date:   Sun, 27 Nov 2022 13:27:04 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 1/2] dt-bindings: power: rpmpd: Add SM4250 support
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     bhupesh.linux@gmail.com, agross@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20221127112204.1486337-1-bhupesh.sharma@linaro.org>
- <20221127112204.1486337-2-bhupesh.sharma@linaro.org>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cPN+BmEQYUICy1UGQadZzNzqjOx78Sh8uSqQROeddZE=;
+        b=BD3RO5mkKYEKFzqTMXcrrhhNH0xJGNIebjtOK/GuG5J+KGIUEiiNtnjYzLuEq5gpct
+         TJf1hGW85Tp+VV3T8dwGx9b28yYCE/jj8SyIKyb/4hTTVuTEEEJyDAUullCgkhvMPdC8
+         pAO6oyhxeU0DangpDClP8dZPK33ir4uMJk5yq3SyyxICFlHEGJeotEivmVq107XF+QDa
+         QJtT3BHAyMvasraeWyugfSAGyiaS6TUgf8Q8O1D0Hv6ckQFLkfDYTJqcbin8mf3GQPcV
+         WjqiVH9nJEcqpbf3sg/NV/jwsCfvxodcoYCIALMzRN6FdKCNRLfu8XjP7RP39F6cFGXJ
+         tRUg==
+X-Gm-Message-State: ANoB5pnSzGcx/cK9NsMIqnOwUoDyZqMF89w2pQsZR6D4UXmWsWkHg0E9
+        KbAHMV/49Wt59ey0W1psYcLSkw==
+X-Google-Smtp-Source: AA0mqf4ZGewxA+MAxTSYQyTdPfXIgmWFQs7H/WvB19mYSjPeHIYBsOkM7+Ouac+VhOeyig59zSJdfQ==
+X-Received: by 2002:a05:6512:c06:b0:4b4:a843:38b3 with SMTP id z6-20020a0565120c0600b004b4a84338b3mr12120722lfu.417.1669552382298;
+        Sun, 27 Nov 2022 04:33:02 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id bf36-20020a05651225a400b0049fff3f645esm1270435lfb.70.2022.11.27.04.33.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Nov 2022 04:33:01 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221127112204.1486337-2-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+To:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Sriranjani P <sriranjani.p@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>
+Subject: [PATCH v2 1/4] arm64: dts: exynos: add dedicated SYSREG compatibles to Exynos5433
+Date:   Sun, 27 Nov 2022 13:32:56 +0100
+Message-Id: <20221127123259.20339-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,20 +76,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/11/2022 12:22, Bhupesh Sharma wrote:
-> Add compatible and constants for the power domains exposed by the
-> SM4250 RPM.
-> 
-> Cc: Bjorn Andersson <andersson@kernel.org>
-> Cc: Rajendra Nayak <rnayak@codeaurora.org>
-> Cc: Konrad Dybcio <konrad.dybcio@somainline.org> 
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org> 
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Exynos5433 has several different SYSREGs, so use dedicated compatibles
+for them.
 
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+Reviewed-by: Sriranjani P <sriranjani.p@samsung.com>
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
 
-Best regards,
-Krzysztof
+Changes since v1:
+1. Add Rb tags.
+
+Cc: Sriranjani P <sriranjani.p@samsung.com>
+Cc: Chanho Park <chanho61.park@samsung.com>
+Cc: Sam Protsenko <semen.protsenko@linaro.org>
+---
+ arch/arm64/boot/dts/exynos/exynos5433.dtsi | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/exynos/exynos5433.dtsi b/arch/arm64/boot/dts/exynos/exynos5433.dtsi
+index bd6a354b9cb5..6976e45aa769 100644
+--- a/arch/arm64/boot/dts/exynos/exynos5433.dtsi
++++ b/arch/arm64/boot/dts/exynos/exynos5433.dtsi
+@@ -1118,22 +1118,26 @@ hdmiphy: hdmiphy@13af0000 {
+ 		};
+ 
+ 		syscon_disp: syscon@13b80000 {
+-			compatible = "samsung,exynos5433-sysreg", "syscon";
++			compatible = "samsung,exynos5433-disp-sysreg",
++				     "samsung,exynos5433-sysreg", "syscon";
+ 			reg = <0x13b80000 0x1010>;
+ 		};
+ 
+ 		syscon_cam0: syscon@120f0000 {
+-			compatible = "samsung,exynos5433-sysreg", "syscon";
++			compatible = "samsung,exynos5433-cam0-sysreg",
++				     "samsung,exynos5433-sysreg", "syscon";
+ 			reg = <0x120f0000 0x1020>;
+ 		};
+ 
+ 		syscon_cam1: syscon@145f0000 {
+-			compatible = "samsung,exynos5433-sysreg", "syscon";
++			compatible = "samsung,exynos5433-cam1-sysreg",
++				     "samsung,exynos5433-sysreg", "syscon";
+ 			reg = <0x145f0000 0x1038>;
+ 		};
+ 
+ 		syscon_fsys: syscon@156f0000 {
+-			compatible = "samsung,exynos5433-sysreg", "syscon";
++			compatible = "samsung,exynos5433-fsys-sysreg",
++				     "samsung,exynos5433-sysreg", "syscon";
+ 			reg = <0x156f0000 0x1044>;
+ 		};
+ 
+-- 
+2.34.1
 
