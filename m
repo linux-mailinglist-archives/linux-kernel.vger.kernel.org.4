@@ -2,58 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5690C639D5F
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 22:42:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E13F1639D61
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 22:44:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiK0VmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 16:42:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38518 "EHLO
+        id S229693AbiK0VoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 16:44:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiK0VmN (ORCPT
+        with ESMTP id S229521AbiK0VoB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 16:42:13 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F76CE03
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 13:42:12 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-114-m5WpA0fOM4eLpNBtIAxzKg-1; Sun, 27 Nov 2022 21:42:09 +0000
-X-MC-Unique: m5WpA0fOM4eLpNBtIAxzKg-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sun, 27 Nov
- 2022 21:42:07 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Sun, 27 Nov 2022 21:42:06 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Linus Torvalds' <torvalds@linux-foundation.org>
-CC:     LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Joe Perches" <joe@perches.com>
-Subject: RE: [PATCH 1/1] minmax.h: Slightly relax the type checking done by
- min() and max().
-Thread-Topic: [PATCH 1/1] minmax.h: Slightly relax the type checking done by
- min() and max().
-Thread-Index: AdkA3jB+9p3HVKOjROWboToCz6X2bgBwb9KAAAEizAA=
-Date:   Sun, 27 Nov 2022 21:42:06 +0000
-Message-ID: <433b8b44fe6e43b2b576c311bb55cc8a@AcuMS.aculab.com>
-References: <58cac72242e54380971cfa842f824470@AcuMS.aculab.com>
- <CAHk-=wgZCBedi_xrysY2EAsN8tQjb3K4-qYtF-FaEE+GFuuE4Q@mail.gmail.com>
-In-Reply-To: <CAHk-=wgZCBedi_xrysY2EAsN8tQjb3K4-qYtF-FaEE+GFuuE4Q@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Sun, 27 Nov 2022 16:44:01 -0500
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D22765B7
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 13:43:59 -0800 (PST)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-3876f88d320so88671267b3.6
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 13:43:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q3YJ8VN4qd/z1cevuuYf6BzrtIafu4RWyw6odYhJ3RM=;
+        b=xl2aTicD/qKFHfHq+LzfroPQbYHSrzIEfeD2Ob6oEuWgU8WzZDTYs4L/9thbGXh5nm
+         Xs6+ApXjhZJriEXHtYdizyyIiJd71ebrvCROaIpXiePzWb7fIUWM8kPUaxjgTTiEdM22
+         ncHVYNuOfFdE+ZrwOZWXR5gMWSoUNNYvXkZYhaxMjLGPrFLXYy8Dw4AoGi1IgTSev8eZ
+         Bps1SUwAPz8bpOYMI0Ej8OYYRGQtRWqVnOfHBOlW9YpemZMlT8AEE4r3D+cTczzKp87i
+         39tAofYvg3XMb1auK6XP3i8sXQFXMN3BVyw+wQZ7+OcaQOPVD/L7CaBuVOyDGJNfrePE
+         B1Jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q3YJ8VN4qd/z1cevuuYf6BzrtIafu4RWyw6odYhJ3RM=;
+        b=NKSylGLjBl75CF0Q/JGklCt1e1g38D73BKpFUZ+xp1+xURVSwtkHpM7i+fYaRNKUUM
+         DnVrj/TJI0FGqhY/gb4Ve0iNX1KmEZipuuKbQ3MaeGcS67iLptcvLIxtd1StMjxMJyxI
+         eE2uDF9WTiMysDurplWcQEXdvYbQPceV1Q9QrAmqAejokkOQllm53quNJmjg0GLKfZ9b
+         H9HwbE2abaw6pxo83ZXDlo7YHNWNwI/nemUi9+Ju9EQppF0DYAt+7JCAAc+n4gIkPAsx
+         f2O1dhxy1k6m/AiWfJGXuFNRWEEiXBa1Q8iScQb3bLCXCeV+LSGjqr6Vd+3PxMCBinYm
+         SpWA==
+X-Gm-Message-State: ANoB5pmEAxuKZgmIMpcOMg6cXVXRGManTx+18snBi4kCXAigomOLa8aV
+        ArwvS6ylRzzyY0CEk7vRwt3hZvMVF+J2Gosy1uxrYg==
+X-Google-Smtp-Source: AA0mqf66I8xq7rZ0bAaQt2cLk1BVbeeZsnMiNjpUCai1K5JbdH+J7KsZFasgMiyl2LhZUBDdGTtqrDTIudgq871HxEk=
+X-Received: by 2002:a81:520d:0:b0:3c0:c065:7608 with SMTP id
+ g13-20020a81520d000000b003c0c0657608mr7161381ywb.378.1669585438656; Sun, 27
+ Nov 2022 13:43:58 -0800 (PST)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+References: <20221127181835.806410-1-luca@z3ntu.xyz> <CAA8EJpoe09FZcfVXuknmFWO5qg-iYDOBVN3=qr=DeJjvHw56Mw@mail.gmail.com>
+ <f0a15b01-81b6-5c73-6c35-ce3a8c71b4ad@linaro.org>
+In-Reply-To: <f0a15b01-81b6-5c73-6c35-ce3a8c71b4ad@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Sun, 27 Nov 2022 23:43:47 +0200
+Message-ID: <CAA8EJppEXpv-wVAAXhZ6NiPzDGzP+evnKrT=an5esOx610D+dw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: arm: qcom: Document oneplus,bacon device
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,59 +73,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMjcgTm92ZW1iZXIgMjAyMiAyMDozNw0KPiAN
-Cj4gT24gRnJpLCBOb3YgMjUsIDIwMjIgYXQgNzowMCBBTSBEYXZpZCBMYWlnaHQgPERhdmlkLkxh
-aWdodEBhY3VsYWIuY29tPiB3cm90ZToNCj4gPg0KPiA+IC0gU2tpcCB0aGUgdHlwZSB0ZXN0IGlm
-IGVpdGhlciBhcmd1bWVudCBpcyBhIHBvc2l0aXZlICdpbnQnIGNvbnN0YW50Lg0KPiA+ICAgSW5z
-dGVhZCBjYXN0IHRoZSBjb25zdGFudCB0byAnaW50JywgdGhlIGNvbXBpbGVyIG1heSBwcm9tb3Rl
-IGl0DQo+ID4gICBiYWNrIHRvICd1bnNpZ25lZCBpbnQnIHdoZW4gZG9pbmcgdGhlIHRlc3QuDQo+
-IA0KPiBOby4gVGhpcyBsb29rcyB2ZXJ5IHdyb25nIHRvIG1lLg0KPiANCj4gTWF5YmUgSSdtIG1p
-cy1yZWFkaW5nIHNvbWV0aGluZywgYnV0IGl0IGxvb2tzIGxpa2UgdGhpcyBtYWtlcyBhDQo+ICJz
-aXplb2YoKSIgZXNzZW50aWFsbHkgYmUgY29tcGF0aWJsZSB3aXRoIGFuICJpbnQiIHZhcmlhYmxl
-Lg0KPiANCj4gVGhhdCBpcyBob3JyZW5kb3VzbHkgd3JvbmcuIEl0IHNob3VsZCB3YXJuLg0KPiAN
-Cj4gSWYgeW91IGFyZSBkb2luZyBhICJtaW4oaSxzaXplb2YoWCkpIiwgYW5kICJpIiBpcyBhIHNp
-Z25lZCBpbnRlZ2VyLA0KPiB0aGVuIHNvbWV0aGluZyBpcyB3cm9uZy4gV2hhdCBkb2VzIHRoYXQg
-Y29kZSBleHBlY3Q/IEl0IHNob3VsZG4ndA0KPiBzaWxlbnRseSBzYXkgInRoaXMgaXMgb2siLCBi
-ZWNhdXNlIGl0IG1vc3QgZGVmaW5pdGVseSBpc24ndC4NCg0KV2h5IHNob3VsZCBpdCBiZSBhIHBy
-b2JsZW0/DQptaW4oLTQsIHNpemVvZihYKSkgYmVjb21lcyBtaW4oLTQsIChpbnQpc2l6ZW9mKFgp
-KSBhbmQgdGh1cyAtNC4NCldpdGhvdXQgdGhlIGNhc3QgdGhlIC00IGlzIGNvbnZlcnRlZCB0byBh
-IHZlcnkgbGFyZ2UgdW5zaWduZWQNCnZhbHVlIHNvIHRoZSByZXN1bHQgaXMgc2l6ZW9mKFgpIC0g
-bm90IGF0IGFsbCBleHBlY3RlZC4NCg0KQnV0IGl0IGlzIG11Y2ggbW9yZSBsaWtlbHkgdGhhdCB0
-aGVyZSBpcyBhbiBlYXJsaWVyIHRlc3QgZm9yDQpuZWdhdGl2ZSB2YWx1ZXMsIHNvIHRoZSBkb21h
-aW4gb2YgJ2knIGlzIG5vbi1uZWdhdGl2ZS4NClRoZW4gdGhlIHR5cGUtY2hlY2sganVzdCBmb3Jj
-ZXMgdGhlIGNvZGVyIHRvIHVzZSBtaW5fdCgpDQphbmQgcGljayBzb21lIHR5cGUgdG8gJ3NodXQg
-dGhlIGNvbXBpbGVyIHVwJy4NCg0KU28gSSdtIGp1c3QgdHJlYXRpbmcgYm90aCBtaW4oaSwgMTYp
-IGFuZCBtaW4oaSwgMTZ1KSBhcyBzaWduZWQNCm9wZXJhdGlvbnMuDQoNCj4gU28gbWF5YmUgSSdt
-ICBtaXMtcmVhZGluZyB0aGlzIGFsbCBhbmQgaXQgZG9lc24ndCBhY3R1YWxseSBkbyB3aGF0IEkN
-Cj4gdGhpbmsgaXQgZG9lcywgYnV0IHRoaXMgc2VlbXMgdG8gcmVsYXggdGhpbmdzICptdWNoKiB0
-b28gbXVjaC4NCg0KSSBkaWQgbWFuYWdlIHRvIGYqY2sgdXAgdGhlIHBhdGNoIGluIHNvbWUgc3Vi
-dGxlIHdheXMuDQpNb3N0bHkgZHVlIHRvIHRoZSBub24taW50dWl0aXZlIG5hdHVyZSBvZiB0aGUg
-J3ZvaWQgKicgdHJpY2suDQoNCj4gVGhlcmUncyBhIHJlYXNvbiB3ZSByZXF1aXJlIHR5cGVzIHRv
-IGJlIGNvbXBhdGlibGUsIGFuZCB5b3UganVzdA0KPiByZW1vdmVkIHNvbWUgb2YgdGhlIGltcG9y
-dGFudCBzaWduZWRuZXNzIGNoZWNrcy4NCg0KSSdkIGFzc3VtZWQgdGhlIG1haW4gcmVhc29uIHdh
-cyB0byBhdm9pZCBuZWdhdGl2ZSBpbnRlZ2VycyBiZWluZw0KY29udmVydGVkIHRvIHZlcnkgbGFy
-Z2UgdW5zaWduZWQgdmFsdWVzLg0KVGhhdCBpcyBkZWZpbml0ZWx5IGEgZ29vZCBpZGVhLg0KDQpB
-cyB3ZWxsIGFzIHRoZSBjb21wYXJpc29ucyBvZiBpbnQgdiBzbWFsbC11bnNpZ25lZCBjb25zdGFu
-dHMNCnRoZXJlIGFyZSBzb21lIG90aGVycyB3aGljaCBhcmUgY3VycmVudGx5IHJlamVjdGVkLg0K
-DQpDb25zaWRlciBtaW4odThfdmFyLCAxNnUpIG5vIHJlYXNvbiB0byByZWplY3QgdGhhdCBvbmUu
-DQpCdXQgdGhlIHR5cGVzIGRvbid0IG1hdGNoLCBhbmQgdGhlIHU4X3ZhciBpcyBmaXJzdCBjb252
-ZXJ0ZWQNCnRvIHNpZ25lZCBpbnQgYW5kIHRoZW4gdG8gdW5zaWduZWQgaW50IGJlZm9yZSB0aGUg
-Y29tcGFyaXNvbi4NCg0KSSBhbHNvIGZvdW5kIG1hbnkgZXhhbXBsZXMgb2YgY29kZSB0cnlpbmcg
-dG8gYm91bmQgdTggdmFyaWFibGVzIHVzaW5nDQondThfdmFyID0gbWluX3QodTgsIFt1OF92YXJ8
-Y29uc3RhbnRfYmVsb3dfMjU2XSwgdW5zaWduZWRfZXhwcmVzc2lvbiknLg0KTWF5YmUgdGhlIGNv
-bnN0YW50IHNob3VsZCBiZSB1bnNpZ25lZCwgYnV0IHRoZSAndTgnIGNhc3QgaXMganVzdA0KcGxh
-aW4gd3JvbmcuDQpBbGwgdGhlIGZhbHNlLXBvc2l0aXZlcyBpbiB0aGUgdHlwZSBjaGVjayBpbiBt
-aW4oKSBqdXN0IG1ha2UgdGhlc2UNCm1vcmUgbGlrZWx5Lg0KDQpJJ20gbG9va2luZyBhdCBhbHNv
-IGFsbG93aW5nOg0KCSdhbnkgdW5zaWduZWQgdHlwZScgdiAnYW55IHVuc2lnbmVkIHR5cGUnDQoJ
-J2FueSBzaWduZWQgdHlwZScgdiAnYW55IHNpZ25lZCB0eXBlJw0KTmVpdGhlciBvZiB3aGljaCBl
-dmVyIGRvZXMgYW55dGhpbmcgb3RoZXIgdGhhbiB3aGF0IGlzIGV4cGVjdGVkLg0KQW5kIGFsc286
-DQoJJ2FueSBzaWduZWQgdHlwZScgdiAnYW55IHNtYWxsZXIgdW5zaWduZWQgdHlwZScNCndoaWNo
-IGlzIGFsc28gb2sgYmVjYXVzZSB0aGUgY29tcGlsZXIgY29udmVydHMgdGhlIHVuc2lnbmVkDQp0
-eXBlIHRvIHRoZSBsYXJnZXIgc2lnbmVkIG9uZSBhbmQgZG9lcyBhbiB1bnNpZ25lZCBjb21wYXJl
-Lg0KKEhlcmUgdGhlICdzaWduZWQgdHlwZScgY2FuIGJlIGFzc3VtZWQgdG8gYmUgYXQgbGVhc3Qg
-J2ludCcNCmR1ZSB0byB0aGUgaW50ZWdlciBwcm9tb3Rpb25zIGJlZm9yZSBhbnkgYXJpdGhtZXRp
-Yy4pDQoNCkkgbmVlZCB0byBmaW5kIGEgY29tcGlsZS10aW1lIGNoZWNrIGZvciBhIHNpZ25lZCB0
-eXBlIHRoYXQNCmRvZXNuJ3QgYmFyZiBvbiBhIHBvaW50ZXIhDQoNCglEYXZpZA0KDQotDQpSZWdp
-c3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9u
-IEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+On Sun, 27 Nov 2022 at 23:30, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 27/11/2022 22:25, Dmitry Baryshkov wrote:
+> > On Sun, 27 Nov 2022 at 20:19, Luca Weiss <luca@z3ntu.xyz> wrote:
+> >>
+> >> Document the OnePlus One ("bacon") which is a smartphone based on the
+> >> Snapdragon 801 SoC.
+> >>
+> >> Also allow msm8974 devices to use qcom,msm-id and qcom,board-id.
+> >
+> > The patch itself is good. However it raised a broader question for me.
+> > Up to now all msm8974pro devices use qcom,msm8974 as a top-level
+> > compatibility string. Should it be changed to use pro-specific one
+> > (e.g. qcom,msm8974pro)?
+>
+> Yes, makes sense.
 
+Would you make the patch?
+
+-- 
+With best wishes
+Dmitry
