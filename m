@@ -2,78 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DDB7639A16
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 12:22:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF592639A17
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 12:24:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbiK0LWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 06:22:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37734 "EHLO
+        id S229607AbiK0LYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 06:24:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiK0LWt (ORCPT
+        with ESMTP id S229491AbiK0LYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 06:22:49 -0500
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86452DF13
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 03:22:48 -0800 (PST)
-Received: by mail-vs1-xe36.google.com with SMTP id k17so215858vsr.10
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 03:22:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fKI9vFEPXIzHzVFr+QxTcG5Lyf/zrgASR8cbrQonBSw=;
-        b=Kgc0NcKlEc89svpcxUZzXQftexvYKuZHbrr9p4ogOFL8+JzY5cXS4z8nnArXS14IAo
-         BSwMjSaLVklUMej5Yg7t3nTp4/Z4bqON+IguK1NTMCMvaNu5+HbkA8h/fy0g2ElTHkGg
-         WW6OnisI9mdN6JH18aOz6nVJAtcInAjcAXm6z4didplxDEdey8+FYQ/5UPyXAUD66p7F
-         RG8lQx2MP1HtQVlo7A7GRgNNAhBH7mnRDgKPPiUW6ecpNHhHzn817qKSM7BYXycgkqP3
-         FWSwIMnLpVihLAQ4qTjiz9okEw+I0KXGo5tHrbyhQItyvnNND0LoGHju2N75nHjjjOfi
-         Smeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fKI9vFEPXIzHzVFr+QxTcG5Lyf/zrgASR8cbrQonBSw=;
-        b=6f647cKNZzPBU63a7Bhw/61jRp+PgFLJF2cvHbqtYmyrMrHynJaHxZfU3Cth2yeZ3o
-         9xHkOgAiPdKiGCAOdhw/kfvlD4lW6hrVdgHHs8rnRfJA1Xoa+Ma1Symas1Zq076qfX9W
-         W5MjZxxM6ksySA7ukOquXfS9JpyHHi00PUCf93oAudx+FIyNh6whYGbbMeqo467/1sAt
-         X++ps0t6u39EoFl49EDxjYPYjLaMOhuK3hvfq3Bp5di5lur69Fp/OLgeCLdigxU1i7ry
-         7skBuhVRXTdJrZo1Rk1apR47brCFKu5IvLbcIbjvkaaErrJioqmdsMrDKJIJJ3v5oTiG
-         fqQQ==
-X-Gm-Message-State: ANoB5plVXFeY1L0Pf3saHj8/LJczcSFij/ASZ/g+h1SIIUspZlCdDLHj
-        tEa+mUM58Pj7/b2hR+KhoBlz1p6zdlP3KP2JdiU=
-X-Google-Smtp-Source: AA0mqf4ET5gcD0ClzSd02IfAjNl5pkP36nlPhT8nYN1U5oZ09Gh5OO0TdFwRllW5SiJfdH92eKBG08hg0T9H2Qa6TgM=
-X-Received: by 2002:a05:6102:159f:b0:3b0:51c3:fab9 with SMTP id
- g31-20020a056102159f00b003b051c3fab9mr14128692vsv.63.1669548167531; Sun, 27
- Nov 2022 03:22:47 -0800 (PST)
+        Sun, 27 Nov 2022 06:24:13 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F29E080
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 03:24:12 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3E60B1F8B0;
+        Sun, 27 Nov 2022 11:24:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669548251; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=7uv1ccI+AAi044FZA47KB2MoMX8TyaRhVOAmJKgr8zM=;
+        b=nIc1AZ8kXy6oz5299ka/D/VJlSog8BsRKNdUd36qL5wt0HfKY1ip/ulZj0cAuI+/ab0O6I
+        J+jjp/iXKaMLO+yRKsaGDugh+3HvuKjomp8N0BwGzeG2a0DExRbnokL0OxoG7usFj8Q0OS
+        ducTtbpYgbtnRihc3iU7ETDB/FElcuo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669548251;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=7uv1ccI+AAi044FZA47KB2MoMX8TyaRhVOAmJKgr8zM=;
+        b=JpFN4c8IWtvcpAZJDM2KROUC0Z91ya49oJdXFo1nYht7Mh6Ek172ShuZZIC7uqA3c/BwVm
+        71/Gz6tBck9Uu+CA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 32CC813428;
+        Sun, 27 Nov 2022 11:24:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id tqxeDNtIg2OoewAAMHmgww
+        (envelope-from <bp@suse.de>); Sun, 27 Nov 2022 11:24:11 +0000
+Date:   Sun, 27 Nov 2022 12:24:07 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] objtool/urgent for 6.1-rc7
+Message-ID: <Y4NI1xw9d7E8O1Lf@zn.tnic>
 MIME-Version: 1.0
-Sender: mr.handase002@gmail.com
-Received: by 2002:ab0:3259:0:b0:3d1:7be7:2eb6 with HTTP; Sun, 27 Nov 2022
- 03:22:47 -0800 (PST)
-From:   "Miss.Cynthia" <cynthiahazem11@gmail.com>
-Date:   Sun, 27 Nov 2022 11:22:47 +0000
-X-Google-Sender-Auth: M6jFiSOEOEytDd48oeCW_jCGYvA
-Message-ID: <CAPq4bZZ66fTR1DzRgiVDD8cV4+EhwdOnnuLh6+gk7Z50SEzmeg@mail.gmail.com>
-Subject: =?UTF-8?B?R3LDvMOfZS4=?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_HK_NAME_FM_MR_MRS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gr=C3=BC=C3=9Fe.
+Hi Linus,
 
-Mein Name ist Cynthia und ich bin ein M=C3=A4dchen aus Tunesien. Ich habe
-Ihre E-Mail-Adresse im Internet gefunden und beschlossen, Sie wegen
-etwas sehr Wichtigem zu kontaktieren, wenn Sie mir nur antworten,
-wof=C3=BCr ich bete.
+pls pull a single objtool fix for 6.1.
 
-Aufrichtig,
-Cynthia
+Thx.
+
+---
+
+The following changes since commit 094226ad94f471a9f19e8f8e7140a09c2625abaa:
+
+  Linux 6.1-rc5 (2022-11-13 13:12:55 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/objtool_urgent_for_v6.1_rc7
+
+for you to fetch changes up to 2d77de1581bb5b470486edaf17a7d70151131afd:
+
+  scripts/faddr2line: Fix regression in name resolution on ppc64le (2022-11-16 10:42:10 +0100)
+
+----------------------------------------------------------------
+- Handle different output of readelf on different distros running
+ppc64le which confuses faddr2line's function offsets conversion
+
+----------------------------------------------------------------
+Srikar Dronamraju (1):
+      scripts/faddr2line: Fix regression in name resolution on ppc64le
+
+ scripts/faddr2line | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Martje Boudien Moerman
+(HRB 36809, AG Nürnberg)
