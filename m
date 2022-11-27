@@ -2,75 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E94C3639C63
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 19:34:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 578DD639C64
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 19:35:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbiK0Se5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 13:34:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39790 "EHLO
+        id S229615AbiK0Sfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 13:35:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiK0Sex (ORCPT
+        with ESMTP id S229500AbiK0Sfx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 13:34:53 -0500
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9EFDF84;
-        Sun, 27 Nov 2022 10:34:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=HbkyPqtk4FWZA0Swpp/Ynilr1ADcBAXSKQQTZhA6dSQ=; b=owDdRAPN1wbgK+RWx93FJY56aQ
-        wvhGI7c7HPKJVRAynYXrANlNLmbookQEmyRq0c0Tsw9ARqG2MGf8zgc3TJPqgNQJF8V8jN637vHm2
-        A6PkjsSt4bGrC2I3T6tEJw4pnPRQUlNb32h4o7otjXe1ndVZN9qP8GHWZLQVntqXWoKW4Ct0RWY/7
-        /FK6d+gPLhS1lTnL13468xJmhTlPJ0xdVYOMKEkEBZMpyT8walcnBBvNwVg+hjKOdLmNRokxI/4FK
-        GSlpT9tmDyrxgDqHl6l6tgcFf+DagNmc66l1oVJ6Df9uH46z00EObakmTcGsnV4oNrjWcXYW7Dvo6
-        yVnO5IVg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1ozMUM-007BiS-21;
-        Sun, 27 Nov 2022 18:34:50 +0000
-Date:   Sun, 27 Nov 2022 18:34:50 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: [git pull] more fixes
-Message-ID: <Y4Otysg7VQdEj1Jp@ZenIV>
+        Sun, 27 Nov 2022 13:35:53 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BC1E69
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 10:35:52 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 0B4D421AF5;
+        Sun, 27 Nov 2022 18:35:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669574151; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=GzRGmhIco9PatSLCVTBuFUSdQWbXCS9KgIxMPxfqP6c=;
+        b=WuDtHBl1RK6ArRGJn+10YZHQwtvyP1BuKQrOhASlOHnhqdnDasw2kz+t5CV3qY2VVR7oos
+        Qvwzlci8MXM7D62SxXxjQl7G0a1C8x6LuGiAzGrVvoOsRdiNeGIA0yVZHQ5gGfBeVqRK8t
+        ogkxVP/kOvz4CJYrlH9LxmXbESMCmPo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669574151;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=GzRGmhIco9PatSLCVTBuFUSdQWbXCS9KgIxMPxfqP6c=;
+        b=t6qwboRmpPh/XqJGVRiRLjb3BfVx2ws/LkGz2UIuOqwA0If+36QFQ2gIzOayWEmxClW0l0
+        M5nx+dybgkg5btDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A95DC134CE;
+        Sun, 27 Nov 2022 18:35:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id n7OuJwaug2N9HQAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Sun, 27 Nov 2022 18:35:50 +0000
+Date:   Sun, 27 Nov 2022 19:35:49 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH] ASoC: SOF: Drop obsolete dependency on COMPILE_TEST
+Message-ID: <20221127193549.211bf8f7@endymion.delvare>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 406c706c7b7f1730aa787e914817b8d16b1e99f6:
+Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
+is possible to test-build any driver which depends on OF on any
+architecture by explicitly selecting OF. Therefore depending on
+COMPILE_TEST as an alternative is no longer needed.
 
-  vfs: vfs_tmpfile: ensure O_EXCL flag is enforced (2022-11-19 02:22:11 -0500)
+It is actually better to always build such drivers with OF enabled,
+so that the test builds are closer to how each driver will actually be
+built on its intended target. Building them without OF may not test
+much as the compiler will optimize out potentially large parts of the
+code. In the worst case, this could even pop false positive warnings.
+Dropping COMPILE_TEST here improves the quality of our testing and
+avoids wasting time on non-existent issues.
 
-are available in the Git repository at:
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Cc: Liam Girdwood <lgirdwood@gmail.com>
+Cc: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+Cc: Bard Liao <yung-chuan.liao@linux.intel.com>
+Cc: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+Cc: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+Cc: Daniel Baluta <daniel.baluta@nxp.com>
+Cc: Mark Brown <broonie@kernel.org>
+---
+ sound/soc/sof/Kconfig |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git tags/pull-fixes
+--- linux-6.0.orig/sound/soc/sof/Kconfig
++++ linux-6.0/sound/soc/sof/Kconfig
+@@ -39,7 +39,7 @@ config SND_SOC_SOF_ACPI_DEV
+ 
+ config SND_SOC_SOF_OF
+ 	tristate "SOF OF enumeration support"
+-	depends on OF || COMPILE_TEST
++	depends on OF
+ 	help
+ 	  This adds support for Device Tree enumeration. This option is
+ 	  required to enable i.MX8 or Mediatek devices.
 
-for you to fetch changes up to 10bc8e4af65946b727728d7479c028742321b60a:
 
-  vfs: fix copy_file_range() averts filesystem freeze protection (2022-11-25 00:52:28 -0500)
-
-----------------------------------------------------------------
-Amir's copy_file_range() fix
-
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-
-----------------------------------------------------------------
-Amir Goldstein (1):
-      vfs: fix copy_file_range() averts filesystem freeze protection
-
- fs/ksmbd/vfs.c     |  6 +++---
- fs/nfsd/vfs.c      |  4 ++--
- fs/read_write.c    | 19 +++++++++++++++----
- include/linux/fs.h |  8 ++++++++
- 4 files changed, 28 insertions(+), 9 deletions(-)
+-- 
+Jean Delvare
+SUSE L3 Support
