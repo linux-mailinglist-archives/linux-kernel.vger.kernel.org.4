@@ -2,140 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D71F0639C00
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 18:29:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C1DE639C1B
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 18:46:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbiK0R3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 12:29:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51470 "EHLO
+        id S229534AbiK0Rql convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 27 Nov 2022 12:46:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiK0R3n (ORCPT
+        with ESMTP id S229469AbiK0Rqk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 12:29:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A1A64E4;
-        Sun, 27 Nov 2022 09:29:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB1E660DEC;
-        Sun, 27 Nov 2022 17:29:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC0ADC433D6;
-        Sun, 27 Nov 2022 17:29:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669570182;
-        bh=1lnyMvrmbejuHK3k8rTbRFgf4LT4gk93GyeS33pk2Os=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nKAVZNkv1s2lQmBocf9e3J1zNamW+5vHQDr9kmxigTWdvjuMqa+9Niv1e69RHv6A5
-         bxf6HZfiA1fqvUFugo7hOmGtlHpqKbKLHJds5Jve8RQ3TUMzY7NF77220y6xkeNzwi
-         x+1jejPh5o2YkjXrZ2LYmcjD8fp0aOWRenUjovdCwujqLN3VDSU7Kx4gDxrgd5BWTe
-         vZ36wXKmALTJF0xY0P3f+q4iMrweqq62Rfg+o4XIsRqOW71XArAOooIW2CCIxD+7zg
-         MT9C/T9m7Sr7EPPeX6ItQWPvleMTQ2g8dpDBsrZqRC11syThnD9ErS9wu7BqcxmFoz
-         1kias5efhGb4Q==
-Date:   Sun, 27 Nov 2022 17:42:19 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: iio: adc: ti,adc081c: Document the binding
-Message-ID: <20221127174219.34d0406c@jic23-huawei>
-In-Reply-To: <e4be94a3-cdfc-cdf8-5d69-0eef480033f9@linaro.org>
-References: <20221125220903.8632-1-samuel@sholland.org>
-        <e4be94a3-cdfc-cdf8-5d69-0eef480033f9@linaro.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sun, 27 Nov 2022 12:46:40 -0500
+Received: from mail3.swissbit.com (mail3.swissbit.com [176.95.1.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBCF2AFD;
+        Sun, 27 Nov 2022 09:46:39 -0800 (PST)
+Received: from mail3.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id 7DEC8462DF8;
+        Sun, 27 Nov 2022 18:46:37 +0100 (CET)
+Received: from mail3.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id 65A12462CB0;
+        Sun, 27 Nov 2022 18:46:37 +0100 (CET)
+X-TM-AS-ERS: 10.149.2.42-127.5.254.253
+X-TM-AS-SMTP: 1.0 ZXguc3dpc3NiaXQuY29t Y2xvZWhsZUBoeXBlcnN0b25lLmNvbQ==
+X-DDEI-TLS-USAGE: Used
+Received: from ex.swissbit.com (unknown [10.149.2.42])
+        by mail3.swissbit.com (Postfix) with ESMTPS;
+        Sun, 27 Nov 2022 18:46:37 +0100 (CET)
+Received: from sbdeex04.sbitdom.lan (10.149.2.42) by sbdeex04.sbitdom.lan
+ (10.149.2.42) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Sun, 27 Nov
+ 2022 18:46:34 +0100
+Received: from sbdeex04.sbitdom.lan ([fe80::2047:4968:b5a0:1818]) by
+ sbdeex04.sbitdom.lan ([fe80::2047:4968:b5a0:1818%9]) with mapi id
+ 15.02.1118.009; Sun, 27 Nov 2022 18:46:31 +0100
+From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
+To:     Avri Altman <Avri.Altman@wdc.com>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "adrian.hunter@intel.com" <adrian.hunter@intel.com>
+Subject: [PATCHv2] mmc: block: remove non-data R1B ioctl workaround
+Thread-Topic: [PATCHv2] mmc: block: remove non-data R1B ioctl workaround
+Thread-Index: AdkCh3a7sIwrh5hoQz+Zy+s4Y1pY7g==
+Date:   Sun, 27 Nov 2022 17:46:31 +0000
+Message-ID: <57d4aceb25254e448bd3e575bd99b0c2@hyperstone.com>
+Accept-Language: en-US, de-DE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.153.3.27]
+Content-Type: text/plain;
+        charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TMASE-Version: DDEI-5.1-9.0.1002-27290.001
+X-TMASE-Result: 10-3.063300-10.000000
+X-TMASE-MatchedRID: ge9e+QLSeayzwwnlAhUjjJAk4Vz6rKorI64EUz6lBagHMdltgqikB9AY
+        WUo4HSIkhw5E/ZidsH8ep5R/z/M+R+ztpCSqSkXKSHCU59h5KrFN8rmPQRlvK8Oo7r/xHr1AI5W
+        zPQsv3Ab0YXQzpNvE/PIJkbMX4M4J4FG4Cyz4VuYReM8i8p3vgEyQ5fRSh265Br7dUnIrjPa1jg
+        3WdTw5hP+vfH78Rkg8fyYDewMOrQD1mZy4fIajlN0H8LFZNFG7bkV4e2xSge6XEvaNMPu9HE2mS
+        xF9S6Y3qlCCc6FqnAnn0KIoDyQXF+ulxyHOcPoH
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-TMASE-INERTIA: 0-0;;;;
+X-TMASE-XGENCLOUD: 0f04465c-3f33-471b-8334-5574cfacee4b-0-0-200-0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 27 Nov 2022 13:51:19 +0100
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+The workaround of pretending R1B non-data transfers are
+data transfers in order for the busy timeout to be respected
+by the host controller driver is removed. It wasn't useful
+in a long time.
 
-> On 25/11/2022 23:09, Samuel Holland wrote:
-> > Linux has a driver for these ADCs at drivers/iio/adc/ti-adc081c.c, but
-> > the compatible strings were undocumented. Add a binding for them. The
-> > hardware has an alert interrupt output, but existing ti,adc081c users
-> > do not provide the 'interrupts' property, so leave it as optional.
-> > 
-> > Signed-off-by: Samuel Holland <samuel@sholland.org>
-> > ---
-> > 
-> >  .../bindings/iio/adc/ti,adc081c.yaml          | 55 +++++++++++++++++++
-> >  1 file changed, 55 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/iio/adc/ti,adc081c.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/iio/adc/ti,adc081c.yaml b/Documentation/devicetree/bindings/iio/adc/ti,adc081c.yaml
-> > new file mode 100644
-> > index 000000000000..caaad777580c
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/iio/adc/ti,adc081c.yaml
-> > @@ -0,0 +1,55 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/iio/adc/ti,adc081c.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: TI Single-channel I2C ADCs
-> > +
-> > +maintainers:
-> > +  - Jonathan Cameron <jic23@kernel.org>
-> > +  - Lars-Peter Clausen <lars@metafoo.de>
-> > +
-> > +description: |
-> > +  Single-channel ADC supporting 8, 10, or 12-bit samples and high/low alerts.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - ti,adc081c
-> > +      - ti,adc101c
-> > +      - ti,adc121c
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  vref-supply:
-> > +    description:
-> > +      Regulator for the combined power supply and voltage reference
-> > +
-> > +  "#io-channel-cells":
-> > +    const: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg  
-> 
-> Why not requiring io-channel-cells? If it is an IIO ADC provider, you
-> need the cells, right?
+Initially the workaround ensured that R1B commands did not
+time out by setting the data timeout to be the command timeout
+in commit cb87ea28ed9e ("mmc: core: Add mmc CMD+ACMD passthrough ioctl").
+This was moved inside of an if clause with idata->buf_bytes being set
+in commit 4d6144de8ba2 ("mmc: core: check for zero length ioctl data").
+Since the workaround is now inside of the idata->buf_bytes clause
+and intended to fix R1B non-data transfers that do not have buf_bytes
+set we can also remove the workaround altogether.
+Since there are no data transfer invoking R1B commands this was dead
+code.
 
-Only if anyone is using it as a provider.  If it's purely being used via
-IIO then there are no consumers registered.
+Fixes: cb87ea28ed9e ("mmc: core: Add mmc CMD+ACMD passthrough ioctl")
+Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+---
+-v2: clarified commit message, no code change
+ drivers/mmc/core/block.c | 13 -------------
+ 1 file changed, 13 deletions(-)
 
-So historically I've left it up to those defining the binding to decide if
-they think #io-channel-cells should be required or optional.
+diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+index db6d8a099910..20da7ed43e6d 100644
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@ -514,19 +514,6 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
+ 		if (idata->ic.data_timeout_ns)
+ 			data.timeout_ns = idata->ic.data_timeout_ns;
+ 
+-		if ((cmd.flags & MMC_RSP_R1B) == MMC_RSP_R1B) {
+-			/*
+-			 * Pretend this is a data transfer and rely on the
+-			 * host driver to compute timeout.  When all host
+-			 * drivers support cmd.cmd_timeout for R1B, this
+-			 * can be changed to:
+-			 *
+-			 *     mrq.data = NULL;
+-			 *     cmd.cmd_timeout = idata->ic.cmd_timeout_ms;
+-			 */
+-			data.timeout_ns = idata->ic.cmd_timeout_ms * 1000000;
+-		}
+-
+ 		mrq.data = &data;
+ 	}
+ 
+-- 
+2.37.3
 
-It gets a bit non obvious with some of the more complex special ADCs on whether
-they will ever be consumed.  This one is generic, so quite likely it will be.
-
-Jonathan
-
-> 
-> Best regards,
-> Krzysztof
-> 
+Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
+Managing Director: Dr. Jan Peter Berns.
+Commercial register of local courts: Freiburg HRB381782
 
