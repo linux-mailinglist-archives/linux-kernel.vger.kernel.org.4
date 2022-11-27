@@ -2,95 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA0BC63996A
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 06:38:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3007963996D
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 06:43:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbiK0FiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 00:38:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39414 "EHLO
+        id S229514AbiK0Fn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 00:43:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiK0FiX (ORCPT
+        with ESMTP id S229487AbiK0FnY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 00:38:23 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2049.outbound.protection.outlook.com [40.107.94.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D270B1F1
-        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 21:38:21 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Lq8JJCsA05dqxgFYiuOHlBCvw3n3aZrRr5Ovhvuy/10Ns3Uj+pvr32kkNVes4t8amHc6wyeeICWOjnm3YNZL180HW4vDDT0skxck/qgOkfORxa1Wlr031aZWdUCEul7V+SKgodU1Yt2CX0l7gTT23GxQCpm6Oup7jkeH2wJVLtkF0KIfKaQEEzQZSW84h8a4GohFW6MevM6S1I2hiy1BMqUJCqBaoC9ePj0D4FIPPq2lpR7YN4GcCy80seRXC0RhrKP1WDlVWIvEjIUUJm8Azg7TO62FPakGeqVTOJGW1GzSj106F73XamMHv76ajzMRTEoNkPWm+3VKDvBhSk7/Xg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0GSeSTiGQLs/Y0wPZt+1ELfr/RSZdRhpAlcrV3Ebu84=;
- b=Qjx9oRhX4odGpl1wLF46KQki90vde3KBhKOWgV6BkM558BSXqPJwu+01rtLYWIp12cbrnp2ai91Y7hThEA6SKYDDzN0JPGg5t2VzfLdR+bwHPUPjZPr6uaTinvSy42W0aZzIXugqeEP1cLFbqUovmUXEMYCymI2S547kdN6TWfj1Hoof8IjGNFhPXWyfDr3g5XewbrntWrSOOYtuZ9RR1NIyvAWY23J+nEbodxo4cwuxQGQc4BpjM7N5WmKwvaLPZ0fuPdpQR0P7uLHedTTlyo55yX300ij6erTZK4+NwUzFIZ508wesxrD+TlA5QsJ6idkMeXIamuSG0BGxqWFIcg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0GSeSTiGQLs/Y0wPZt+1ELfr/RSZdRhpAlcrV3Ebu84=;
- b=jqs0N8FdIivRj98As6v/IxnoIav9Cn5Th0kHOAvKFSIKaBN5Bbsx1H/2X1sb68fTafsfwi7BcF9teQbutyTny6L0jTDpatzm9NJAcc/ZjmvLlkWOvjYRjuYiVsvYal93DmXLzzBawZPOPyVBgn2OAjofcY/RDtG+bbt9aSKuwdQ=
-Received: from DS7PR03CA0029.namprd03.prod.outlook.com (2603:10b6:5:3b8::34)
- by CH2PR12MB4150.namprd12.prod.outlook.com (2603:10b6:610:a6::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.22; Sun, 27 Nov
- 2022 05:38:19 +0000
-Received: from CY4PEPF0000B8EC.namprd05.prod.outlook.com
- (2603:10b6:5:3b8:cafe::d1) by DS7PR03CA0029.outlook.office365.com
- (2603:10b6:5:3b8::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.22 via Frontend
- Transport; Sun, 27 Nov 2022 05:38:18 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000B8EC.mail.protection.outlook.com (10.167.241.8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5813.11 via Frontend Transport; Sun, 27 Nov 2022 05:38:18 +0000
-Received: from pp-server-two.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Sat, 26 Nov
- 2022 23:38:16 -0600
-From:   xinhui pan <xinhui.pan@amd.com>
-To:     <amd-gfx@lists.freedesktop.org>
-CC:     <aniel@ffwll.ch>, <matthew.auld@intel.com>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <christian.koenig@amd.com>, xinhui pan <xinhui.pan@amd.com>
-Subject: [PATCH v2] drm: Optimise for continuous memory allocation
-Date:   Sun, 27 Nov 2022 13:37:46 +0800
-Message-ID: <20221127053746.102392-1-xinhui.pan@amd.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 27 Nov 2022 00:43:24 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F59B1182D
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 21:43:22 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id z18so11383789edb.9
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 21:43:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QZBNnP8FHtYG+tvjYSybxiFeBtiJ83MhkpqU8o7jStU=;
+        b=g9f5MoHeohB9VLPYcx+PnsoTTKUXQ7jtHayP+8thG4XYo/Ood14KvawMdYrmMi6Sdn
+         XgwQufokf1+IuWUzPTTJRAwwa1x0RIKRqiMbLTDRbbIt6+vZI/b0ztXXMXUwt++dwN2U
+         Nvji3Io4N0jLUXyF2P6mlAzl1aV1D0TKjIkbMGz2fsPlOBpthC/cvC7O6WsdI+uQbYri
+         +suBgomU0xKgdQQ8888KF6Kqf7SoOW9muXzNbD90V0BGikayezGBM/pTHikfY47t1fYR
+         nkotypW/TZCJXVHsXsb4b8k1ZAFbYddCDOQrjaufc9MgNwUqsQHL71poBwzaIUzrjlYp
+         bcfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QZBNnP8FHtYG+tvjYSybxiFeBtiJ83MhkpqU8o7jStU=;
+        b=5DM+IDP29Eo30Cly7UAhwPfxpVInGmUEvI5DcMbO/UgqZPRr0Gf508rdHJDfde1OvK
+         NPUQXdyGcRrO7V3R72iH2iksSHDuhjAhPYWmQRPKqDdcZQLe5HlHdvSwW4hzA60vCesW
+         HIcQtGdhH7AttxpM4W8NuZgnOcMFlZFf+ss/qEhySILzveB8y/AKCuZjYIxUsGXPcIDL
+         c84elatgwuHH6KzZ+HjPRrX6XrFuOnoHd/47S3UMWolTBkdNrGfR4fp/I+L+IP+0kUxW
+         Nse6R4TpUpKYYr21/9kCZ4a1RT9BTndGV0ZCU+rehmRCJ4uavC18fs+a3VF2m2FpeWiq
+         xR1w==
+X-Gm-Message-State: ANoB5pnptHNmo9I31nCMVMNj6Inau4sy1jKVPgwoXfijqEA0LjrbOuis
+        rgvf+MYiBHpnHvriZANnzTLYJTeTfRkELu+tmyUibkxU
+X-Google-Smtp-Source: AA0mqf45PplknXFTYiFz3FlUBn9EzNowRqh6cT67X7zcC5KmhMpgz2cnEbr6lI/yym0HEOHGfZbUqXHRD62N6RxjctE=
+X-Received: by 2002:a05:6402:5388:b0:46a:f4b0:2d23 with SMTP id
+ ew8-20020a056402538800b0046af4b02d23mr4184088edb.78.1669527800893; Sat, 26
+ Nov 2022 21:43:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000B8EC:EE_|CH2PR12MB4150:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5371c724-b883-4751-c2ea-08dad03996c8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0RuAq4tEWIXMtdPHKr+CLFHmPcrUkoYWgnOod0eN12QqwmGraTFiSHjMO1al3psLfKM0YdE0qmR7lMn07bZVQjlzqcmUw9+6HtVMUJvFz1IEqzMqN6+yOFyoAKeWzqDpWYTTOiBRUD/V6QmvG/t1yus3doG5L5NSgCSiGjZAoAaFwP8mWFbmM/5iI/3GCF8SgPqq7QrrRsm6mDZTfUeTivrl87L//cP5N4dzEPZ/d/+wkjevqDKAULYd0ixPtKDzC5CCYLcAgTEhjY8wnC9YJGL1lhADK6o4jX4mmcSbNKREtRzlkbwoIkcb16gDk02lulShrKRhueh5rwE9wWwNT5geV7zOrh7WVcALDFMTffyBH5rpw2RnPCnVcCjSyEgArPUzLlZhkXMuGiNPkqEaMTcapsJTp/uWm3Ud+P1eq03XXMJBoPAnUHpUJBefFw/V+KyU6D3nMwOoTWxjI/xREeW1SXbopG+YO+zPB6oiI8CAiytjJauWtK9rtMYklwE76QS2C1giIWASkqbvThxBsP69NHIf5Pb0eNAYoZRA+fn5eoBsFN7IZj1lqAVf/WcQZqZRdlkDxlPBhnZX5fXXi102a3u0qx1vgF2lNiGevJ5x4X6E2OfKXX6ahIp9BC3JIvKQbtgTAJeLJxOrQ8kVzUtCtqKwrCQd8NHMcBfQQu/QDqmZZLY/HYfN1/PUQt/gHEttLEM67uikW3GfAiIMByPLa22OHMxEAJmYkKBiw6k=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(396003)(376002)(346002)(451199015)(36840700001)(40470700004)(46966006)(36756003)(82740400003)(81166007)(356005)(83380400001)(6666004)(40480700001)(2906002)(316002)(26005)(8676002)(4326008)(86362001)(70206006)(70586007)(41300700001)(5660300002)(7696005)(8936002)(47076005)(426003)(54906003)(6916009)(2616005)(336012)(82310400005)(1076003)(40460700003)(186003)(16526019)(66899015)(36860700001)(478600001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2022 05:38:18.6705
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5371c724-b883-4751-c2ea-08dad03996c8
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000B8EC.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4150
+References: <20221020142514.1725514-1-chenhuacai@loongson.cn>
+In-Reply-To: <20221020142514.1725514-1-chenhuacai@loongson.cn>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Sun, 27 Nov 2022 13:43:06 +0800
+Message-ID: <CAAhV-H6uu5+WUaM0HVn40D=bpH4LmMNdUBJMSGuCMUchhsRa9g@mail.gmail.com>
+Subject: Re: [PATCH V2] irqchip/loongarch: Adjust acpi_cascade_irqdomain_init()
+ and sub-routines
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,120 +70,208 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently drm-buddy does not have full knowledge of continuous memory.
+Hi, Marc,
 
-Lets consider scenario below.
-order 1:    L		    R
-order 0: LL	LR	RL	RR
-for order 1 allocation, it can offer L or R or LR+RL.
+Just a gentle ping, I found that "irqchip/loongson-htvec: Add ACPI
+init support" has been merged, so I think this patch can also be
+merged to keep acpi_cascade_irqdomain_init()'s consistency. Thanks.
 
-For now, we only implement L or R case for continuous memory allocation.
-So this patch aims to implement the LR+RL case.
 
-Signed-off-by: xinhui pan <xinhui.pan@amd.com>
----
-change from v1:
-implement top-down continuous allocation
----
- drivers/gpu/drm/drm_buddy.c | 66 +++++++++++++++++++++++++++++++++----
- 1 file changed, 59 insertions(+), 7 deletions(-)
+Huacai
 
-diff --git a/drivers/gpu/drm/drm_buddy.c b/drivers/gpu/drm/drm_buddy.c
-index 11bb59399471..eea14505070e 100644
---- a/drivers/gpu/drm/drm_buddy.c
-+++ b/drivers/gpu/drm/drm_buddy.c
-@@ -386,6 +386,46 @@ alloc_range_bias(struct drm_buddy *mm,
- 	return ERR_PTR(err);
- }
- 
-+static struct drm_buddy_block *
-+find_continuous_blocks(struct drm_buddy *mm,
-+		       int order,
-+		       unsigned long flags,
-+		       struct drm_buddy_block **rn)
-+{
-+	struct list_head *head = &mm->free_list[order];
-+	struct drm_buddy_block *node, *parent, *free_node, *max_node = NULL;
-+
-+	list_for_each_entry(free_node, head, link) {
-+		if (max_node) {
-+			if (!(flags & DRM_BUDDY_TOPDOWN_ALLOCATION))
-+				break;
-+
-+			if (drm_buddy_block_offset(free_node) <
-+			    drm_buddy_block_offset(max_node))
-+				continue;
-+		}
-+
-+		parent = free_node;
-+		do {
-+			node = parent;
-+			parent = parent->parent;
-+		} while (parent && parent->right == node);
-+		if (!parent)
-+			continue;
-+
-+		node = parent->right;
-+		while (drm_buddy_block_is_split(node))
-+			node = node->left;
-+
-+		if (drm_buddy_block_is_free(node) &&
-+		    drm_buddy_block_order(node) == order) {
-+			*rn = node;
-+			max_node = free_node;
-+		}
-+	}
-+	return max_node;
-+}
-+
- static struct drm_buddy_block *
- get_maxblock(struct list_head *head)
- {
-@@ -637,7 +677,7 @@ int drm_buddy_alloc_blocks(struct drm_buddy *mm,
- 			   struct list_head *blocks,
- 			   unsigned long flags)
- {
--	struct drm_buddy_block *block = NULL;
-+	struct drm_buddy_block *block = NULL, *rblock = NULL;
- 	unsigned int min_order, order;
- 	unsigned long pages;
- 	LIST_HEAD(allocated);
-@@ -689,17 +729,29 @@ int drm_buddy_alloc_blocks(struct drm_buddy *mm,
- 				break;
- 
- 			if (order-- == min_order) {
-+				if (!(flags & DRM_BUDDY_RANGE_ALLOCATION) &&
-+				    min_order != 0 && pages == BIT(order + 1)) {
-+					block = find_continuous_blocks(mm,
-+								       order,
-+								       flags,
-+								       &rblock);
-+					if (block)
-+						break;
-+				}
- 				err = -ENOSPC;
- 				goto err_free;
- 			}
- 		} while (1);
- 
--		mark_allocated(block);
--		mm->avail -= drm_buddy_block_size(mm, block);
--		kmemleak_update_trace(block);
--		list_add_tail(&block->link, &allocated);
--
--		pages -= BIT(order);
-+		do {
-+			mark_allocated(block);
-+			mm->avail -= drm_buddy_block_size(mm, block);
-+			kmemleak_update_trace(block);
-+			list_add_tail(&block->link, &allocated);
-+			pages -= BIT(order);
-+			block = rblock;
-+			rblock = NULL;
-+		} while (block);
- 
- 		if (!pages)
- 			break;
--- 
-2.34.1
-
+On Thu, Oct 20, 2022 at 10:27 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
+>
+> 1, Adjust the return of acpi_cascade_irqdomain_init() and check its
+>    return value.
+> 2, Combine unnecessary short lines to one long line.
+>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+> V2: Adjust the return of acpi_cascade_irqdomain_init() and check its
+>     return value.
+>
+>  drivers/irqchip/irq-loongarch-cpu.c    | 30 +++++++++++++++-----------
+>  drivers/irqchip/irq-loongson-eiointc.c | 30 +++++++++++++++-----------
+>  drivers/irqchip/irq-loongson-pch-pic.c | 15 +++++++------
+>  3 files changed, 44 insertions(+), 31 deletions(-)
+>
+> diff --git a/drivers/irqchip/irq-loongarch-cpu.c b/drivers/irqchip/irq-loongarch-cpu.c
+> index 741612ba6a52..fdec3e9cfacf 100644
+> --- a/drivers/irqchip/irq-loongarch-cpu.c
+> +++ b/drivers/irqchip/irq-loongarch-cpu.c
+> @@ -92,18 +92,16 @@ static const struct irq_domain_ops loongarch_cpu_intc_irq_domain_ops = {
+>         .xlate = irq_domain_xlate_onecell,
+>  };
+>
+> -static int __init
+> -liointc_parse_madt(union acpi_subtable_headers *header,
+> -                      const unsigned long end)
+> +static int __init liointc_parse_madt(union acpi_subtable_headers *header,
+> +                                       const unsigned long end)
+>  {
+>         struct acpi_madt_lio_pic *liointc_entry = (struct acpi_madt_lio_pic *)header;
+>
+>         return liointc_acpi_init(irq_domain, liointc_entry);
+>  }
+>
+> -static int __init
+> -eiointc_parse_madt(union acpi_subtable_headers *header,
+> -                      const unsigned long end)
+> +static int __init eiointc_parse_madt(union acpi_subtable_headers *header,
+> +                                       const unsigned long end)
+>  {
+>         struct acpi_madt_eio_pic *eiointc_entry = (struct acpi_madt_eio_pic *)header;
+>
+> @@ -112,16 +110,24 @@ eiointc_parse_madt(union acpi_subtable_headers *header,
+>
+>  static int __init acpi_cascade_irqdomain_init(void)
+>  {
+> -       acpi_table_parse_madt(ACPI_MADT_TYPE_LIO_PIC,
+> -                             liointc_parse_madt, 0);
+> -       acpi_table_parse_madt(ACPI_MADT_TYPE_EIO_PIC,
+> -                             eiointc_parse_madt, 0);
+> +       int r;
+> +
+> +       r = acpi_table_parse_madt(ACPI_MADT_TYPE_LIO_PIC, liointc_parse_madt, 0);
+> +       if (r < 0)
+> +               return r;
+> +
+> +       r = acpi_table_parse_madt(ACPI_MADT_TYPE_EIO_PIC, eiointc_parse_madt, 0);
+> +       if (r < 0)
+> +               return r;
+> +
+>         return 0;
+>  }
+>
+>  static int __init cpuintc_acpi_init(union acpi_subtable_headers *header,
+>                                    const unsigned long end)
+>  {
+> +       int ret;
+> +
+>         if (irq_domain)
+>                 return 0;
+>
+> @@ -139,9 +145,9 @@ static int __init cpuintc_acpi_init(union acpi_subtable_headers *header,
+>         set_handle_irq(&handle_cpu_irq);
+>         acpi_set_irq_model(ACPI_IRQ_MODEL_LPIC, lpic_get_gsi_domain_id);
+>         acpi_set_gsi_to_irq_fallback(lpic_gsi_to_irq);
+> -       acpi_cascade_irqdomain_init();
+> +       ret = acpi_cascade_irqdomain_init();
+>
+> -       return 0;
+> +       return ret;
+>  }
+>
+>  IRQCHIP_ACPI_DECLARE(cpuintc_v1, ACPI_MADT_TYPE_CORE_PIC,
+> diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
+> index 16e9af8d8b1e..62867209736c 100644
+> --- a/drivers/irqchip/irq-loongson-eiointc.c
+> +++ b/drivers/irqchip/irq-loongson-eiointc.c
+> @@ -301,9 +301,8 @@ static struct irq_domain *acpi_get_vec_parent(int node, struct acpi_vector_group
+>         return NULL;
+>  }
+>
+> -static int __init
+> -pch_pic_parse_madt(union acpi_subtable_headers *header,
+> -                      const unsigned long end)
+> +static int __init pch_pic_parse_madt(union acpi_subtable_headers *header,
+> +                                       const unsigned long end)
+>  {
+>         struct acpi_madt_bio_pic *pchpic_entry = (struct acpi_madt_bio_pic *)header;
+>         unsigned int node = (pchpic_entry->address >> 44) & 0xf;
+> @@ -315,9 +314,8 @@ pch_pic_parse_madt(union acpi_subtable_headers *header,
+>         return -EINVAL;
+>  }
+>
+> -static int __init
+> -pch_msi_parse_madt(union acpi_subtable_headers *header,
+> -                      const unsigned long end)
+> +static int __init pch_msi_parse_madt(union acpi_subtable_headers *header,
+> +                                       const unsigned long end)
+>  {
+>         struct acpi_madt_msi_pic *pchmsi_entry = (struct acpi_madt_msi_pic *)header;
+>         struct irq_domain *parent = acpi_get_vec_parent(eiointc_priv[nr_pics - 1]->node, msi_group);
+> @@ -330,17 +328,23 @@ pch_msi_parse_madt(union acpi_subtable_headers *header,
+>
+>  static int __init acpi_cascade_irqdomain_init(void)
+>  {
+> -       acpi_table_parse_madt(ACPI_MADT_TYPE_BIO_PIC,
+> -                             pch_pic_parse_madt, 0);
+> -       acpi_table_parse_madt(ACPI_MADT_TYPE_MSI_PIC,
+> -                             pch_msi_parse_madt, 1);
+> +       int r;
+> +
+> +       r = acpi_table_parse_madt(ACPI_MADT_TYPE_BIO_PIC, pch_pic_parse_madt, 0);
+> +       if (r < 0)
+> +               return r;
+> +
+> +       r = acpi_table_parse_madt(ACPI_MADT_TYPE_MSI_PIC, pch_msi_parse_madt, 1);
+> +       if (r < 0)
+> +               return r;
+> +
+>         return 0;
+>  }
+>
+>  int __init eiointc_acpi_init(struct irq_domain *parent,
+>                                      struct acpi_madt_eio_pic *acpi_eiointc)
+>  {
+> -       int i, parent_irq;
+> +       int i, ret, parent_irq;
+>         unsigned long node_map;
+>         struct eiointc_priv *priv;
+>
+> @@ -386,9 +390,9 @@ int __init eiointc_acpi_init(struct irq_domain *parent,
+>
+>         acpi_set_vec_parent(acpi_eiointc->node, priv->eiointc_domain, pch_group);
+>         acpi_set_vec_parent(acpi_eiointc->node, priv->eiointc_domain, msi_group);
+> -       acpi_cascade_irqdomain_init();
+> +       ret = acpi_cascade_irqdomain_init();
+>
+> -       return 0;
+> +       return ret;
+>
+>  out_free_handle:
+>         irq_domain_free_fwnode(priv->domain_handle);
+> diff --git a/drivers/irqchip/irq-loongson-pch-pic.c b/drivers/irqchip/irq-loongson-pch-pic.c
+> index c01b9c257005..7477bbcf89fb 100644
+> --- a/drivers/irqchip/irq-loongson-pch-pic.c
+> +++ b/drivers/irqchip/irq-loongson-pch-pic.c
+> @@ -325,9 +325,8 @@ int find_pch_pic(u32 gsi)
+>         return -1;
+>  }
+>
+> -static int __init
+> -pch_lpc_parse_madt(union acpi_subtable_headers *header,
+> -                      const unsigned long end)
+> +static int __init pch_lpc_parse_madt(union acpi_subtable_headers *header,
+> +                                       const unsigned long end)
+>  {
+>         struct acpi_madt_lpc_pic *pchlpc_entry = (struct acpi_madt_lpc_pic *)header;
+>
+> @@ -336,8 +335,12 @@ pch_lpc_parse_madt(union acpi_subtable_headers *header,
+>
+>  static int __init acpi_cascade_irqdomain_init(void)
+>  {
+> -       acpi_table_parse_madt(ACPI_MADT_TYPE_LPC_PIC,
+> -                             pch_lpc_parse_madt, 0);
+> +       int r;
+> +
+> +       r = acpi_table_parse_madt(ACPI_MADT_TYPE_LPC_PIC, pch_lpc_parse_madt, 0);
+> +       if (r < 0)
+> +               return r;
+> +
+>         return 0;
+>  }
+>
+> @@ -364,7 +367,7 @@ int __init pch_pic_acpi_init(struct irq_domain *parent,
+>         }
+>
+>         if (acpi_pchpic->id == 0)
+> -               acpi_cascade_irqdomain_init();
+> +               ret = acpi_cascade_irqdomain_init();
+>
+>         return ret;
+>  }
+> --
+> 2.31.1
+>
