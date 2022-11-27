@@ -2,153 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D6963991D
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 02:10:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF5A8639931
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 03:44:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbiK0BKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 26 Nov 2022 20:10:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56970 "EHLO
+        id S229498AbiK0Coj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 26 Nov 2022 21:44:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiK0BKL (ORCPT
+        with ESMTP id S229453AbiK0Coi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 26 Nov 2022 20:10:11 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C42313DD7;
-        Sat, 26 Nov 2022 17:10:10 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id b3so12274789lfv.2;
-        Sat, 26 Nov 2022 17:10:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7tb2mXbdsR6eQa3wvtplNTYB5kFT59Ed36tfjNJz7Go=;
-        b=peqDeBsB+scWRJ971h6/MynvTpfitF/7/U01yUR9FKOx7ivOJSkSt7aDrGH0wYNCz4
-         YniIVyOWfT0+K1WVwq0v6yFnOknNLVUt2FRgVgjHB90OkbvczjufZfnXbbFv0IRk2Gpw
-         0naEecLHad0xQyMdij71NsDxDrTdfYxpV0d435UQJcVAayhiH/LBfSF/0bGdOBo0Eqt9
-         32YYMnteQh13PF9ioOkhLK9X2Zw9PLOHxka/HtF7etEL307aJ3qVK+rUilq48K84H4Mo
-         KHA8N7MV8ahLKhEmQZf3RiXaRzUsew6b5of2wn2uvMvg+2FcDElWyHGrtMgDUah3kppb
-         /qkQ==
+        Sat, 26 Nov 2022 21:44:38 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E01E15723
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 18:44:36 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id h21-20020a05660224d500b006debd7dedccso3619928ioe.9
+        for <linux-kernel@vger.kernel.org>; Sat, 26 Nov 2022 18:44:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7tb2mXbdsR6eQa3wvtplNTYB5kFT59Ed36tfjNJz7Go=;
-        b=nTaEvM1YB/Aac0uMP7xwUiHwoPe37xh2tATBIlkwmJ94gPKxbMZFuaPRzzqumysLow
-         FJgeuPFtkLCBw4yhhn/UMaZAtGkZpOhQ7N96x7LNKUuhyl7r8W5JTyG70Q1lkm0dI9c5
-         KUoowEzn0/6HWL0RnWSpSgrd5LxTVlh83gq2xISIC+i9gBQktVhl05jrvkr+pSkfHWOM
-         xWd5JO7xzxkIwNoBD8q9cNi8SFpNcNdM/S7zx3fWyA+OYDbUQmKG1PlktpbboED13MGv
-         DfV9RftAc7cCcGyoeowgNwptNkbdeMyIn+1pKzc/eYCguylvNttcS5Mz4j1s3aISZSdh
-         2nwg==
-X-Gm-Message-State: ANoB5pkwDVQH/ay/JviPX9h2LCUgYuwaAV9VTbHaRKfiY6G7ZOSp1VoZ
-        DkM70A1FgdmZcbV6bO2oKP0=
-X-Google-Smtp-Source: AA0mqf4Wx8+3aBzxVXvpROh9wAShu+Gtv4ckpYWVntL/AiibLP0wWFLl+jsVY9FrpfkqTRMzQ8nDcg==
-X-Received: by 2002:a05:6512:3084:b0:4aa:83e6:53e4 with SMTP id z4-20020a056512308400b004aa83e653e4mr14801390lfd.13.1669511408444;
-        Sat, 26 Nov 2022 17:10:08 -0800 (PST)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id o18-20020a056512053200b00497b198987bsm1106423lfc.26.2022.11.26.17.10.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Nov 2022 17:10:07 -0800 (PST)
-Date:   Sun, 27 Nov 2022 04:10:05 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Rob Herring <robh+dt@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        caihuoqing <caihuoqing@baidu.com>, Vinod Koul <vkoul@kernel.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 17/20] PCI: dwc: Introduce generic resources getter
-Message-ID: <20221127011005.cjzcd6slb6ezy7ix@mobilestation>
-References: <20221113191301.5526-18-Sergey.Semin@baikalelectronics.ru>
- <20221123194436.GA277209@bhelgaas>
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=x2Wlsv+VYPj+/PHBrA6LKzK7bHl/NuBOJ73q0NuYt5o=;
+        b=kROP84MYdTVgvGqXcqdjAz+b4iCdnLHEzOi0qXSlNotAOOpMt57o29w92H/QX7at7Y
+         t5XERKkbYNjY78gwUagaDgizp9i02NmqgFtDS5xFZzzvH9YnNJZtBpJKKLbfMRghi8SS
+         Jb/sE2Bv5A7F+voQ3HG4aID62ylv1tAtX2FmoN/jtsFEQfQHtvz5uxoIJpJ1dGZWUiD2
+         4W1dXLfn1H5G7MhmBmLszb1KrCn1sP1EEbVzYX6HdGAzNIDOSPXX38bb9K98fJ90X6pu
+         PdRWlM42krMXsq50Z8dS+2OwCTSBNiU4037NZ0ivvWqjOxo0TdL04LZzDZqOA96ayhad
+         YMQQ==
+X-Gm-Message-State: ANoB5pnS8WnLsKzGyXW1PHwym7W8BUqFTtP3GJUReLhLMGbeqqCGREOx
+        ecsUpLSKlVjHqEwL1HcYa+thADgXRzsKC6g4w5ICp7ASgme9
+X-Google-Smtp-Source: AA0mqf7oUs5VcmwZ0YznYucRYXBF/yuRbwaaGBAgAjEUipIm4AXlucnMoIVJwz76dFfj9ixSF83vqilbZXLGBMjPAqNaidzN7T/3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221123194436.GA277209@bhelgaas>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:cc8f:0:b0:300:c067:e72c with SMTP id
+ x15-20020a92cc8f000000b00300c067e72cmr10610322ilo.319.1669517075971; Sat, 26
+ Nov 2022 18:44:35 -0800 (PST)
+Date:   Sat, 26 Nov 2022 18:44:35 -0800
+In-Reply-To: <000000000000cf908705eaa8c5a7@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000042884105ee6abce9@google.com>
+Subject: Re: [syzbot] WARNING in __kernel_write_iter
+From:   syzbot <syzbot+12e098239d20385264d3@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
+syzbot has found a reproducer for the following issue on:
 
-On Wed, Nov 23, 2022 at 01:44:36PM -0600, Bjorn Helgaas wrote:
-> Hi Serge,
-> 
-> On Sun, Nov 13, 2022 at 10:12:58PM +0300, Serge Semin wrote:
-> > Currently the DW PCIe Root Port and Endpoint CSR spaces are retrieved in
-> > the separate parts of the DW PCIe core driver. It doesn't really make
-> > sense since the both controller types have identical set of the core CSR
-> > regions: DBI, DBI CS2 and iATU/eDMA. Thus we can simplify the DW PCIe Host
-> > and EP initialization methods by moving the platform-specific registers
-> > space getting and mapping into a common method. It gets to be even more
-> > justified seeing the CSRs base address pointers are preserved in the
-> > common DW PCIe descriptor. Note all the OF-based common DW PCIe settings
-> > initialization will be moved to the new method too in order to have a
-> > single function for all the generic platform properties handling in single
-> > place.
-> > 
-> > A nice side-effect of this change is that the pcie-designware-host.c and
-> > pcie-designware-ep.c drivers are cleaned up from all the direct dw_pcie
-> > storage modification, which makes the DW PCIe core, Root Port and Endpoint
-> > modules more coherent.
-> 
+HEAD commit:    6d464646530f Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=11f871bb880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=23eec5c79c22aaf8
+dashboard link: https://syzkaller.appspot.com/bug?extid=12e098239d20385264d3
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=114ef275880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13a92353880000
 
-> Thanks for these new generic interfaces in the DWC core!  And thanks
-> for the changes in this patch to take advantage of them in the
-> pcie-designware drivers.
-> 
-> Do you plan similar changes to other drivers to take advantage of
-> these DWC-generic data and interfaces?  If you add generic things to
-> the DWC core but only take advantage of them in your driver, I don't
-> think they are really usefully generic.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/f22d29413625/disk-6d464646.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/389f0a5f1a4a/vmlinux-6d464646.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/48ddb02d82da/Image-6d464646.gz.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/609bce089bbe/mount_0.gz
 
-Could you be more specific what generic things you are referring to? I
-am asking because the only part of the changes which is used in my
-low-level driver only is introduced in another patch of this series.
-It's
-< [PATCH v7 19/20] PCI: dwc: Introduce generic platform clocks and resets
-The new clock/reset request interface has been implemented the way it
-is due to reasons I in details described to Rob here:
-Link: https://lore.kernel.org/linux-pci/20220520160246.guczq52v2ycfgc6c@mobilestation
-To cut it short it can't be used by the most of the already available
-low-level drivers since they already have their own versions of the
-names for the clock and reset resources (or don't have any name
-defined at all). The only driver for which the interface could be
-utilized is Toshiba Visconti PCIe host controller driver. The device
-DT-bindings defines the clock names matching the generic names
-introduced in the patches of this series. If you find it appropriate
-enough I can provide a patch for that driver.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+12e098239d20385264d3@syzkaller.appspotmail.com
 
-Note the main goal of the patch
-[PATCH v7 19/20] PCI: dwc: Introduce generic platform clocks and resets
-was to create some interface to stop the developers of the new drivers
-from creating the platform-specific DT-bindings to the same clock and
-reset resources. Since the already defined DT-bindings can't be
-changed anyway I don't think it would worth risking to catch
-regressions on an attempt to provide a more complicated interface
-utilized in the old drivers too.
+BTRFS info (device loop0): using free space tree
+BTRFS info (device loop0): enabling ssd optimizations
+BTRFS info (device loop0): checking UUID tree
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 3072 at fs/read_write.c:504 __kernel_write_iter+0x250/0x284 fs/read_write.c:504
+Modules linked in:
+CPU: 0 PID: 3072 Comm: syz-executor372 Not tainted 6.1.0-rc6-syzkaller-32662-g6d464646530f #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __kernel_write_iter+0x250/0x284 fs/read_write.c:504
+lr : __kernel_write_iter+0x250/0x284 fs/read_write.c:504
+sp : ffff800012d9ba90
+x29: ffff800012d9bad0 x28: ffff0000c9367000 x27: 0000000000000000
+x26: 0000000000000000 x25: 0000000000000011 x24: ffff0000ca81f580
+x23: 0000000000000000 x22: ffff0000c993f808 x21: ffff0000c0292c00
+x20: ffff800012d9bb20 x19: 00000000000a801d x18: 00000000000000c0
+x17: ffff80000dda8198 x16: ffff80000dbe6158 x15: ffff0000c7d38000
+x14: 0000000000000000 x13: 00000007ffffffff x12: ffff0000c7d38000
+x11: ff808000085ba5e8 x10: 0000000000000000 x9 : ffff8000085ba5e8
+x8 : ffff0000c7d38000 x7 : 6b636f6c5f746e65 x6 : ffff80000801154c
+x5 : ffff80000e0caee8 x4 : 0000000000000011 x3 : 0000000000000001
+x2 : ffff0000c993f808 x1 : 0000000000000000 x0 : 0000000000000000
+Call trace:
+ __kernel_write_iter+0x250/0x284 fs/read_write.c:504
+ __kernel_write fs/read_write.c:537 [inline]
+ kernel_write+0x10c/0x1d0 fs/read_write.c:558
+ write_buf fs/btrfs/send.c:591 [inline]
+ send_header fs/btrfs/send.c:709 [inline]
+ send_subvol+0x94/0x17ec fs/btrfs/send.c:7653
+ btrfs_ioctl_send+0xd74/0xed0 fs/btrfs/send.c:8019
+ _btrfs_ioctl_send+0x188/0x218 fs/btrfs/ioctl.c:5233
+ btrfs_ioctl+0x5c0/0xa64
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __arm64_sys_ioctl+0xd0/0x140 fs/ioctl.c:856
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+irq event stamp: 82496
+hardirqs last  enabled at (82495): [<ffff80000844b028>] mod_lruvec_page_state include/linux/vmstat.h:563 [inline]
+hardirqs last  enabled at (82495): [<ffff80000844b028>] __kmalloc_large_node+0x108/0x188 mm/slab_common.c:1099
+hardirqs last disabled at (82496): [<ffff80000c0808b4>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
+softirqs last  enabled at (81982): [<ffff80000801c38c>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
+softirqs last disabled at (81980): [<ffff80000801c358>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
+---[ end trace 0000000000000000 ]---
 
--Serge(y)
-
-> 
-> Bjorn
