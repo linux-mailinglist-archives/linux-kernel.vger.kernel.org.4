@@ -2,80 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BFBD639D54
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 22:34:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5690C639D5F
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 22:42:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiK0Ver (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 16:34:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37318 "EHLO
+        id S229720AbiK0VmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 16:42:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiK0Veq (ORCPT
+        with ESMTP id S229601AbiK0VmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 16:34:46 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B512BF4B
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 13:34:45 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id r8so11128912ljn.8
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 13:34:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yCU9BCLUUaECqX+PIeXUH6Htfb80scvZnidybbOysXQ=;
-        b=uHNBMIP/zYAVzMPTB1lRizMM4XQ0yrES90O2uOSez+0j/g0Nbhq2FReybTyYILjefd
-         FOBEqCo1dxf3oKzMScCCvCe/MrI1/ZYqUMHldv7PKXsiXmpFZnXqx/LpD3SCE71iVnjS
-         0uQy7Fe+RpoFIhuZGaEiTilW8KQDtqbnWDizB8YxgyACssOjx/j+yZs/gdPkJLfWGQUI
-         H6t38/dfyZFqQUMW1Z0EBr9r/p4Is3XuI+89uWUWZhAYhEGWn9fcnChXqRyvhAchgAUv
-         XeQyvggKrAluy6vO//0dD8SJSHftdloxNKsuD4oOWRUrTC0BEc8pR7Cj9ClYXSswFg61
-         LjuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yCU9BCLUUaECqX+PIeXUH6Htfb80scvZnidybbOysXQ=;
-        b=vfRblG0rLyaJhKS+raUspqVnJQ8CIPV8WVNI8U7/cZQ4vEfd7VLOELuRTHg4JWlBLe
-         zCAuVInB419ER6eWpZ9K7WfzG8Nuq0FSCp/C8Y3S9LVsPh8hELNOi3fBEq+sbVkxVRTL
-         65oRvgWpZvJl0DeC2mn87rjrPPpFOxH+9wIhoqpXRMaPK5plg9zsS5fIaca9zp7uLzXE
-         wMiJK5/4dm04E31AxRPDVHBcZFEfXW3WAf4RlBA9/mEkW5LNe3V/3GLZCFEqgyhz+4mi
-         KTbVLb7A3tmpK31nNBQ7B7J1N0MVZ/kl1BHb6W91zQ72Aoyx7xRbST7F0lXQrUV4MUMf
-         /MGg==
-X-Gm-Message-State: ANoB5pmqw5egmKu7IXN3vvFKHBNgpUrFCjvhvaeavGiZ9NlVYZNKr8Ig
-        NriqTlDJg8dDCcwvTtv0XWdIog==
-X-Google-Smtp-Source: AA0mqf7aev59tmIt/2yL9DLH7XUeWxuyVD2nSDqFjvIEXdBc0sQ2S0AEaYnOn1Ur8GpRvzmap7OtVQ==
-X-Received: by 2002:a2e:bf09:0:b0:279:6c82:3e9a with SMTP id c9-20020a2ebf09000000b002796c823e9amr8477502ljr.97.1669584883536;
-        Sun, 27 Nov 2022 13:34:43 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id d26-20020a19385a000000b00498f3ebffb2sm1419537lfj.25.2022.11.27.13.34.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Nov 2022 13:34:43 -0800 (PST)
-Message-ID: <a75b604c-a671-d2c5-7160-74dcb8a4fa2e@linaro.org>
-Date:   Sun, 27 Nov 2022 22:34:42 +0100
+        Sun, 27 Nov 2022 16:42:13 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F76CE03
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 13:42:12 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-114-m5WpA0fOM4eLpNBtIAxzKg-1; Sun, 27 Nov 2022 21:42:09 +0000
+X-MC-Unique: m5WpA0fOM4eLpNBtIAxzKg-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sun, 27 Nov
+ 2022 21:42:07 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.044; Sun, 27 Nov 2022 21:42:06 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Linus Torvalds' <torvalds@linux-foundation.org>
+CC:     LKML <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Joe Perches" <joe@perches.com>
+Subject: RE: [PATCH 1/1] minmax.h: Slightly relax the type checking done by
+ min() and max().
+Thread-Topic: [PATCH 1/1] minmax.h: Slightly relax the type checking done by
+ min() and max().
+Thread-Index: AdkA3jB+9p3HVKOjROWboToCz6X2bgBwb9KAAAEizAA=
+Date:   Sun, 27 Nov 2022 21:42:06 +0000
+Message-ID: <433b8b44fe6e43b2b576c311bb55cc8a@AcuMS.aculab.com>
+References: <58cac72242e54380971cfa842f824470@AcuMS.aculab.com>
+ <CAHk-=wgZCBedi_xrysY2EAsN8tQjb3K4-qYtF-FaEE+GFuuE4Q@mail.gmail.com>
+In-Reply-To: <CAHk-=wgZCBedi_xrysY2EAsN8tQjb3K4-qYtF-FaEE+GFuuE4Q@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 0/6] memory: renesas-rpc-if: Rebind fixes and misc
- cleanups
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-spi@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-References: <cover.1669213027.git.geert+renesas@glider.be>
- <b500e42c-f782-79c6-70ce-650e4ea32c54@linaro.org>
-In-Reply-To: <b500e42c-f782-79c6-70ce-650e4ea32c54@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,28 +61,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/11/2022 22:31, Krzysztof Kozlowski wrote:
-> On 23/11/2022 15:41, Geert Uytterhoeven wrote:
->> 	Hi all,
->>
->> The Renesas RPC-IF provides either HyperFlash or SPI host access.
->> To handle this, three drivers are used:
->>   1. The RPC-IF core diver,
->>   2. An HyperFlash child driver,
->>   3. An SPI child driver.
->>
-> 
-> Thank you for the patch.
-> It is too late in the cycle for me to pick it up. I will take it after
-> the merge window.
-
-Optionally, if you want to push it via Renesas SoC tree and there are no
-conflicts with existing two patches, then these look good:
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Otherwise, I'll pick them up after the merge window.
-
-Best regards,
-Krzysztof
+RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMjcgTm92ZW1iZXIgMjAyMiAyMDozNw0KPiAN
+Cj4gT24gRnJpLCBOb3YgMjUsIDIwMjIgYXQgNzowMCBBTSBEYXZpZCBMYWlnaHQgPERhdmlkLkxh
+aWdodEBhY3VsYWIuY29tPiB3cm90ZToNCj4gPg0KPiA+IC0gU2tpcCB0aGUgdHlwZSB0ZXN0IGlm
+IGVpdGhlciBhcmd1bWVudCBpcyBhIHBvc2l0aXZlICdpbnQnIGNvbnN0YW50Lg0KPiA+ICAgSW5z
+dGVhZCBjYXN0IHRoZSBjb25zdGFudCB0byAnaW50JywgdGhlIGNvbXBpbGVyIG1heSBwcm9tb3Rl
+IGl0DQo+ID4gICBiYWNrIHRvICd1bnNpZ25lZCBpbnQnIHdoZW4gZG9pbmcgdGhlIHRlc3QuDQo+
+IA0KPiBOby4gVGhpcyBsb29rcyB2ZXJ5IHdyb25nIHRvIG1lLg0KPiANCj4gTWF5YmUgSSdtIG1p
+cy1yZWFkaW5nIHNvbWV0aGluZywgYnV0IGl0IGxvb2tzIGxpa2UgdGhpcyBtYWtlcyBhDQo+ICJz
+aXplb2YoKSIgZXNzZW50aWFsbHkgYmUgY29tcGF0aWJsZSB3aXRoIGFuICJpbnQiIHZhcmlhYmxl
+Lg0KPiANCj4gVGhhdCBpcyBob3JyZW5kb3VzbHkgd3JvbmcuIEl0IHNob3VsZCB3YXJuLg0KPiAN
+Cj4gSWYgeW91IGFyZSBkb2luZyBhICJtaW4oaSxzaXplb2YoWCkpIiwgYW5kICJpIiBpcyBhIHNp
+Z25lZCBpbnRlZ2VyLA0KPiB0aGVuIHNvbWV0aGluZyBpcyB3cm9uZy4gV2hhdCBkb2VzIHRoYXQg
+Y29kZSBleHBlY3Q/IEl0IHNob3VsZG4ndA0KPiBzaWxlbnRseSBzYXkgInRoaXMgaXMgb2siLCBi
+ZWNhdXNlIGl0IG1vc3QgZGVmaW5pdGVseSBpc24ndC4NCg0KV2h5IHNob3VsZCBpdCBiZSBhIHBy
+b2JsZW0/DQptaW4oLTQsIHNpemVvZihYKSkgYmVjb21lcyBtaW4oLTQsIChpbnQpc2l6ZW9mKFgp
+KSBhbmQgdGh1cyAtNC4NCldpdGhvdXQgdGhlIGNhc3QgdGhlIC00IGlzIGNvbnZlcnRlZCB0byBh
+IHZlcnkgbGFyZ2UgdW5zaWduZWQNCnZhbHVlIHNvIHRoZSByZXN1bHQgaXMgc2l6ZW9mKFgpIC0g
+bm90IGF0IGFsbCBleHBlY3RlZC4NCg0KQnV0IGl0IGlzIG11Y2ggbW9yZSBsaWtlbHkgdGhhdCB0
+aGVyZSBpcyBhbiBlYXJsaWVyIHRlc3QgZm9yDQpuZWdhdGl2ZSB2YWx1ZXMsIHNvIHRoZSBkb21h
+aW4gb2YgJ2knIGlzIG5vbi1uZWdhdGl2ZS4NClRoZW4gdGhlIHR5cGUtY2hlY2sganVzdCBmb3Jj
+ZXMgdGhlIGNvZGVyIHRvIHVzZSBtaW5fdCgpDQphbmQgcGljayBzb21lIHR5cGUgdG8gJ3NodXQg
+dGhlIGNvbXBpbGVyIHVwJy4NCg0KU28gSSdtIGp1c3QgdHJlYXRpbmcgYm90aCBtaW4oaSwgMTYp
+IGFuZCBtaW4oaSwgMTZ1KSBhcyBzaWduZWQNCm9wZXJhdGlvbnMuDQoNCj4gU28gbWF5YmUgSSdt
+ICBtaXMtcmVhZGluZyB0aGlzIGFsbCBhbmQgaXQgZG9lc24ndCBhY3R1YWxseSBkbyB3aGF0IEkN
+Cj4gdGhpbmsgaXQgZG9lcywgYnV0IHRoaXMgc2VlbXMgdG8gcmVsYXggdGhpbmdzICptdWNoKiB0
+b28gbXVjaC4NCg0KSSBkaWQgbWFuYWdlIHRvIGYqY2sgdXAgdGhlIHBhdGNoIGluIHNvbWUgc3Vi
+dGxlIHdheXMuDQpNb3N0bHkgZHVlIHRvIHRoZSBub24taW50dWl0aXZlIG5hdHVyZSBvZiB0aGUg
+J3ZvaWQgKicgdHJpY2suDQoNCj4gVGhlcmUncyBhIHJlYXNvbiB3ZSByZXF1aXJlIHR5cGVzIHRv
+IGJlIGNvbXBhdGlibGUsIGFuZCB5b3UganVzdA0KPiByZW1vdmVkIHNvbWUgb2YgdGhlIGltcG9y
+dGFudCBzaWduZWRuZXNzIGNoZWNrcy4NCg0KSSdkIGFzc3VtZWQgdGhlIG1haW4gcmVhc29uIHdh
+cyB0byBhdm9pZCBuZWdhdGl2ZSBpbnRlZ2VycyBiZWluZw0KY29udmVydGVkIHRvIHZlcnkgbGFy
+Z2UgdW5zaWduZWQgdmFsdWVzLg0KVGhhdCBpcyBkZWZpbml0ZWx5IGEgZ29vZCBpZGVhLg0KDQpB
+cyB3ZWxsIGFzIHRoZSBjb21wYXJpc29ucyBvZiBpbnQgdiBzbWFsbC11bnNpZ25lZCBjb25zdGFu
+dHMNCnRoZXJlIGFyZSBzb21lIG90aGVycyB3aGljaCBhcmUgY3VycmVudGx5IHJlamVjdGVkLg0K
+DQpDb25zaWRlciBtaW4odThfdmFyLCAxNnUpIG5vIHJlYXNvbiB0byByZWplY3QgdGhhdCBvbmUu
+DQpCdXQgdGhlIHR5cGVzIGRvbid0IG1hdGNoLCBhbmQgdGhlIHU4X3ZhciBpcyBmaXJzdCBjb252
+ZXJ0ZWQNCnRvIHNpZ25lZCBpbnQgYW5kIHRoZW4gdG8gdW5zaWduZWQgaW50IGJlZm9yZSB0aGUg
+Y29tcGFyaXNvbi4NCg0KSSBhbHNvIGZvdW5kIG1hbnkgZXhhbXBsZXMgb2YgY29kZSB0cnlpbmcg
+dG8gYm91bmQgdTggdmFyaWFibGVzIHVzaW5nDQondThfdmFyID0gbWluX3QodTgsIFt1OF92YXJ8
+Y29uc3RhbnRfYmVsb3dfMjU2XSwgdW5zaWduZWRfZXhwcmVzc2lvbiknLg0KTWF5YmUgdGhlIGNv
+bnN0YW50IHNob3VsZCBiZSB1bnNpZ25lZCwgYnV0IHRoZSAndTgnIGNhc3QgaXMganVzdA0KcGxh
+aW4gd3JvbmcuDQpBbGwgdGhlIGZhbHNlLXBvc2l0aXZlcyBpbiB0aGUgdHlwZSBjaGVjayBpbiBt
+aW4oKSBqdXN0IG1ha2UgdGhlc2UNCm1vcmUgbGlrZWx5Lg0KDQpJJ20gbG9va2luZyBhdCBhbHNv
+IGFsbG93aW5nOg0KCSdhbnkgdW5zaWduZWQgdHlwZScgdiAnYW55IHVuc2lnbmVkIHR5cGUnDQoJ
+J2FueSBzaWduZWQgdHlwZScgdiAnYW55IHNpZ25lZCB0eXBlJw0KTmVpdGhlciBvZiB3aGljaCBl
+dmVyIGRvZXMgYW55dGhpbmcgb3RoZXIgdGhhbiB3aGF0IGlzIGV4cGVjdGVkLg0KQW5kIGFsc286
+DQoJJ2FueSBzaWduZWQgdHlwZScgdiAnYW55IHNtYWxsZXIgdW5zaWduZWQgdHlwZScNCndoaWNo
+IGlzIGFsc28gb2sgYmVjYXVzZSB0aGUgY29tcGlsZXIgY29udmVydHMgdGhlIHVuc2lnbmVkDQp0
+eXBlIHRvIHRoZSBsYXJnZXIgc2lnbmVkIG9uZSBhbmQgZG9lcyBhbiB1bnNpZ25lZCBjb21wYXJl
+Lg0KKEhlcmUgdGhlICdzaWduZWQgdHlwZScgY2FuIGJlIGFzc3VtZWQgdG8gYmUgYXQgbGVhc3Qg
+J2ludCcNCmR1ZSB0byB0aGUgaW50ZWdlciBwcm9tb3Rpb25zIGJlZm9yZSBhbnkgYXJpdGhtZXRp
+Yy4pDQoNCkkgbmVlZCB0byBmaW5kIGEgY29tcGlsZS10aW1lIGNoZWNrIGZvciBhIHNpZ25lZCB0
+eXBlIHRoYXQNCmRvZXNuJ3QgYmFyZiBvbiBhIHBvaW50ZXIhDQoNCglEYXZpZA0KDQotDQpSZWdp
+c3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9u
+IEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
