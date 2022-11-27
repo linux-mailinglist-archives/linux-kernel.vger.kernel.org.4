@@ -2,104 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0179A639C22
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 18:53:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89281639C27
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 19:01:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbiK0RxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 12:53:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58296 "EHLO
+        id S229583AbiK0SBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 13:01:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiK0RxT (ORCPT
+        with ESMTP id S229450AbiK0SA6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 12:53:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B77CD2
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 09:53:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5999F60E0B
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 17:53:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B73F0C433C1;
-        Sun, 27 Nov 2022 17:53:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669571597;
-        bh=cR4oVWEUk67TAnV7gA291l8sois74FLMYSBwf6j79kg=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=rTPtL2mt8FWmVx2GP8FAoATCIpkEzeWETxEmypyD2s5cVOjNNGDxffAIzVp+JJSPB
-         kXga7F2X5leOvfu67vLAf22y9LWndAsNNtso1+hYnONzBoYwsbPea9x6HAYJhOqrbZ
-         kQPhGkpCqyLtZcsQE1OMPX7i65c2RVrOHqdjDKQMjUD+TA21q8VcuykyyfPCHavjpE
-         qwxiLu+LltpusRu+su7+zAmRVho0hshDG+lP3LSwlnMoBt6/dG/IUwEZBVsO8BZtOQ
-         9QBOozQ1iuvtJmf9oHp2ax8RE4QTE2Asb9XM3T3frPojd4+jTSxUSOv9AO8DfTuBGf
-         tpIV1md3I+68A==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 555555C09B0; Sun, 27 Nov 2022 09:53:17 -0800 (PST)
-Date:   Sun, 27 Nov 2022 09:53:17 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Zhouyi Zhou <zhouzhouyi@gmail.com>, fweisbec@gmail.com,
-        mingo@kernel.org, dave@stgolabs.net, josh@joshtriplett.org,
-        mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH linux-next][RFC]torture: avoid offline tick_do_timer_cpu
-Message-ID: <20221127175317.GF4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221121035140.118651-1-zhouzhouyi@gmail.com>
- <87y1rxwsse.ffs@tglx>
- <CAABZP2xNTbrx9iV+KH3VZx1c9Yi97+izNA=XSJQBuOJ4WENFZg@mail.gmail.com>
- <87v8n0woxv.ffs@tglx>
+        Sun, 27 Nov 2022 13:00:58 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577DA2641;
+        Sun, 27 Nov 2022 10:00:56 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id 136so8053066pga.1;
+        Sun, 27 Nov 2022 10:00:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:content-description
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=erOSLBSJOQriWz/l6knkBLN238RYB9gG07xwp8IgsdQ=;
+        b=OvcKHZx1bOPL4vhRYfpP5DpL891tNTyCxcE6407jvN5ZdBPi6NR0Vmys+7wJGnoZ8S
+         hAXrZPPIKrozox+tvXh2/c3sY7eV+WcnN6b0v6QodxPy3erT2Lk48djJqStaHkdGdvOb
+         2s7s4stoz6hp5my0ooBVRKdZFMGj3O9mI9IqKT/z+9atfUun3xTAdiV3ZZAwqUCWsQ5H
+         I2jxiZDWNxIyXMuAeXDXzgwMDCpEru5Z9Wtn14vbQBXgOjybmQxJZna5Aa6S44FTbpS5
+         IC9BCY35d9+aoLk5ryeESEt24oAeOa/km4F9sALTmvh5hppacY+kVG4n3/1a7tStj9Bl
+         OpgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:content-description
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=erOSLBSJOQriWz/l6knkBLN238RYB9gG07xwp8IgsdQ=;
+        b=Djqybbt0mo8YuM/01PcbDKPzarLnrq2mRiqDsLrBgqi8jxEdZONXQrBij7jcfFcM2Z
+         TzXnFoV6c34q9hz/nzoqOjomFJqzOL39aXCAOUQT7MEBPNYc0o+BllcbEDk0ofup0fxO
+         k7nfDn3lFBmkfFhzl81MfLGxLVCNS2eRcpOmHCeaJ/PDkNs2tbei8+mVY5/+llKh/wEW
+         Hfs7gtdm5gbs3hfWVlsEbVsEQzNA6a5gjQSIr2hCJey8nFEbSWC7/muxRCFvz8ITqsMR
+         uaXTbv3adrQGtb4GuVu4yvTXuKjB2Y8/wHS+eqWwbKgNAyfOiHltbdZzOHuzlXV7Uv1T
+         9vZg==
+X-Gm-Message-State: ANoB5pkqGB3wdCYBOEFzN8bL/HXtSqK8CarPlYnbwSPe7sxgeScrNxp0
+        PMc4I9MGxEZp88Ye6dF7Bfo=
+X-Google-Smtp-Source: AA0mqf6VD8hOT83036nEo9FhNPZMJYSEBoHzW6/PU2nivJh8sLHdQdHY/Sg0PJ+9xNcqbN3/0GYMSw==
+X-Received: by 2002:a63:5a48:0:b0:45f:88b2:1766 with SMTP id k8-20020a635a48000000b0045f88b21766mr23914138pgm.357.1669572055769;
+        Sun, 27 Nov 2022 10:00:55 -0800 (PST)
+Received: from Mahakal ([2401:4900:1cc4:c66e:6c75:d2b8:130e:c9e5])
+        by smtp.gmail.com with ESMTPSA id c2-20020a62f842000000b0056b3c863950sm6416443pfm.8.2022.11.27.10.00.52
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 27 Nov 2022 10:00:55 -0800 (PST)
+Date:   Sun, 27 Nov 2022 23:30:49 +0530
+From:   "<Vishal Badole>" <badolevishal1116@gmail.com>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     mturquette@baylibre.com, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, chinmoyghosh2001@gmail.com,
+        vimal.kumar32@gmail.com, Mintu Patel <mintupatel89@gmail.com>
+Subject: Re: [PATCH v3] Common clock: To list active consumers of clocks
+Message-ID: <20221127180048.GA8763@Mahakal>
+References: <20220624010550.582BBC341C7@smtp.kernel.org>
+ <1659463787-25976-1-git-send-email-badolevishal1116@gmail.com>
+ <20220822235014.86203C433D6@smtp.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
+Content-Description: Re: [PATCH v5] Common clock: To list active consumers of clocks
 Content-Disposition: inline
-In-Reply-To: <87v8n0woxv.ffs@tglx>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220822235014.86203C433D6@smtp.kernel.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_MISSP_FREEMAIL,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 27, 2022 at 01:40:28PM +0100, Thomas Gleixner wrote:
+Hi Stephen,
+As per your suggestions, we have updated and sent another gerrit with
+message Id <1669569799-8526-1-git-send-email-badolevishal1116@gmail.com>
+In this new patch we are listing the clock consumers name along with
+consumer id in clk_summary.
 
-[ . . . ]
+example:
+cat /sys/kernel/debug/clk/clk_summary
+                      enable  prepare  protect
+                             		                             duty  hardware                                Connection
+clock               count    count    count  rate   accuracy phase  cycle    enable       consumer                         Id
+------------------------------------------------------------------------------------------------------------------------------
+clk_mcasp0_fixed       0        0        0   24576000     0     0   50000     Y            deviceless                   of_clk_get_from_provider   
+			                                                                   deviceless                   no_connection_id   
+  clk_mcasp0           0        0        0   24576000     0     0   50000     N              simple-audio-card,cpu        deviceless
+											     no_connection_id   	  no_connection_id
 
-> >> No. We are not exporting this just to make a bogus test case happy.
-> >>
-> >> Fix the torture code to handle -EBUSY correctly.
-> > I am going to do a study on this, for now, I do a grep in the kernel tree:
-> > find . -name "*.c"|xargs grep cpuhp_setup_state|wc -l
-> > The result of the grep command shows that there are 268
-> > cpuhp_setup_state* cases.
-> > which may make our task more complicated.
-> 
-> Why? The whole point of this torture thing is to stress the
-> infrastructure.
+Please review the latest patch.
 
-Indeed.
+New patch details:
 
-> There are quite some reasons why a CPU-hotplug or a hot-unplug operation
-> can fail, which is not a fatal problem, really.
-> 
-> So if a CPU hotplug operation fails, then why can't the torture test
-> just move on and validate that the system still behaves correctly?
-> 
-> That gives us more coverage than just testing the good case and giving
-> up when something unexpected happens.
+Message ID: <1669569799-8526-1-git-send-email-badolevishal1116@gmail.com>
+Subject:	[PATCH v5] Common clock: To list active consumers of clocks
 
-Agreed, with access to a function like the tick_nohz_full_timekeeper()
-suggested earlier in this email thread, then yes, it would make sense to
-try to offline the CPU anyway, then forgive the failure in cases where
-the CPU matches that indicated by tick_nohz_full_timekeeper().
+Regards,
+Vishal
 
-> I even argue that the torture test should inject random failures into
-> the hotplug state machine to achieve extended code coverage.
 
-I could imagine torture_onoff() telling various CPU-hotplug notifiers
-to refuse the transition using some TBD interface.  That would better
-test the CPU-hotplug common code's ability to deal with failures.
-
-Or did you have something else/additional in mind?
-
-							Thanx, Paul
