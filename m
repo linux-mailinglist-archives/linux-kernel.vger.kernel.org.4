@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F62E639B12
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 14:35:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A88639B15
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 14:35:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbiK0NfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 08:35:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54780 "EHLO
+        id S229554AbiK0Nfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 08:35:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiK0NfN (ORCPT
+        with ESMTP id S229790AbiK0NfQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 08:35:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEFB110B5B;
-        Sun, 27 Nov 2022 05:34:56 -0800 (PST)
+        Sun, 27 Nov 2022 08:35:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EAC910FD0;
+        Sun, 27 Nov 2022 05:35:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 73CB660DD4;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 00E22B80AF9;
+        Sun, 27 Nov 2022 13:35:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C3AAC433D7;
         Sun, 27 Nov 2022 13:34:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D3B1C433D6;
-        Sun, 27 Nov 2022 13:34:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669556095;
-        bh=vsfhkLiCJ/68w3F/Z2fdmD7dgsK7LenaTlTpgKiTus0=;
+        s=k20201202; t=1669556098;
+        bh=KdlxQOc6nYzqZnDtcA2yP2/SDiF4cqIL6oaqqCIa6EU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WlFi7+4qvrBNTSUWn/wtTQuEOiQ8s4JGT8QOEF04LktK9zhANGrRXgt4UtKDmOrIP
-         hEQXHqEzDw4t3GoWplQ5g9usmGltjS8L9QicxYm5JbTPp8vwshdpVLd/BQmzp070/T
-         WSwgblpm5xMW+SNyEXi4LI1ZEGzUqyYZUp4iXAxaKAb2p2de951qDERF8H91qkTVIW
-         w7NTlFZxB1YxcMlySXBcmVnAYISDz3EdeVuYW7eZxOUN+Zvcp+iIUQZ12eh4pp6J0g
-         YzTXJy7W/hU8uK6/gG1GI0OiKAiGjsRCm0Oug4d6NTm3rt+DFQkNWy4n0AkVXBkojJ
-         hglbN1EQcqnig==
+        b=Cljbwijob+PHPYTH2utatqZN3tz5GV5LegXlFAdq3KXxkGYpwGuIYvYKjipLwENYT
+         bNY2XOdW1k6Rmz2wRxD2yGMozi1X/YcgtdT/G5dluEbdUKp8ehuEvot7u9BRUJLn3Y
+         u55WZeUt/8H1Gu7cre0DUbEGfYvyHyyoTmXMVjSoUfyCLaF4NM3aezr7VTSKxagHlO
+         WrrXT2beikz2uUPgDoBhmcFWLktXOrYLV9z/f2H5obOYin+lOEDJvk3b/CAMDq1lG6
+         TKOpAtv1n77Mfc8x/Q/IWmE3f4DCRZUP0vSidXFpbzqp+nhu35HwgI0LFz5Cw1uzqu
+         2Wdsyj01CuIkA==
 From:   Jisheng Zhang <jszhang@kernel.org>
 To:     Rob Herring <robh+dt@kernel.org>, Conor Dooley <conor@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -43,9 +43,9 @@ To:     Rob Herring <robh+dt@kernel.org>, Conor Dooley <conor@kernel.org>,
         =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH v2 5/9] dt-bindings: riscv: Add bouffalolab bl808 board compatibles
-Date:   Sun, 27 Nov 2022 21:24:44 +0800
-Message-Id: <20221127132448.4034-6-jszhang@kernel.org>
+Subject: [PATCH v2 6/9] riscv: dts: bouffalolab: add the bl808 SoC base device tree
+Date:   Sun, 27 Nov 2022 21:24:45 +0800
+Message-Id: <20221127132448.4034-7-jszhang@kernel.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20221127132448.4034-1-jszhang@kernel.org>
 References: <20221127132448.4034-1-jszhang@kernel.org>
@@ -60,55 +60,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Several SoMs and boards are available that feature the Bouffalolab
-bl808 SoC. Document the compatible strings.
+Add a baisc dtsi for the bouffalolab bl808 SoC.
 
 Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 ---
- .../bindings/riscv/bouffalolab.yaml           | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/riscv/bouffalolab.yaml
+ arch/riscv/boot/dts/bouffalolab/bl808.dtsi | 74 ++++++++++++++++++++++
+ 1 file changed, 74 insertions(+)
+ create mode 100644 arch/riscv/boot/dts/bouffalolab/bl808.dtsi
 
-diff --git a/Documentation/devicetree/bindings/riscv/bouffalolab.yaml b/Documentation/devicetree/bindings/riscv/bouffalolab.yaml
+diff --git a/arch/riscv/boot/dts/bouffalolab/bl808.dtsi b/arch/riscv/boot/dts/bouffalolab/bl808.dtsi
 new file mode 100644
-index 000000000000..91ca9dbdc798
+index 000000000000..f4b170ccc32e
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/riscv/bouffalolab.yaml
-@@ -0,0 +1,34 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/riscv/bouffalolab.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/arch/riscv/boot/dts/bouffalolab/bl808.dtsi
+@@ -0,0 +1,74 @@
++// SPDX-License-Identifier: (GPL-2.0+ or MIT)
++/*
++ * Copyright (C) 2022 Jisheng Zhang <jszhang@kernel.org>
++ */
 +
-+title: Bouffalo Lab Technology SoC-based boards
++#include <dt-bindings/interrupt-controller/irq.h>
 +
-+maintainers:
-+  - Jisheng Zhang <jszhang@kernel.org>
++/ {
++	compatible = "bouffalolab,bl808";
++	#address-cells = <1>;
++	#size-cells = <1>;
 +
-+description:
-+  Bouffalo Lab Technology SoC-based boards
++	cpus {
++		timebase-frequency = <1000000>;
++		#address-cells = <1>;
++		#size-cells = <0>;
 +
-+properties:
-+  $nodename:
-+    const: '/'
-+  compatible:
-+    oneOf:
-+      - description: Sipeed M1s SoM:
-+        items:
-+          - const: sipeed,m1s
-+          - const: bouffalolab,bl808
++		cpu0: cpu@0 {
++			compatible = "thead,c906", "riscv";
++			device_type = "cpu";
++			reg = <0>;
++			d-cache-block-size = <64>;
++			d-cache-sets = <256>;
++			d-cache-size = <32768>;
++			i-cache-block-size = <64>;
++			i-cache-sets = <128>;
++			i-cache-size = <32768>;
++			mmu-type = "riscv,sv39";
++			riscv,isa = "rv64imafdc";
 +
-+      - description: Carrier boards for the Sipeed M1s SoM:
-+        items:
-+          - enum:
-+              - sipeed,m1s-dock
-+          - const: sipeed,m1s
-+          - const: bouffalolab,bl808
++			cpu0_intc: interrupt-controller {
++				compatible = "riscv,cpu-intc";
++				interrupt-controller;
++				#address-cells = <0>;
++				#interrupt-cells = <1>;
++			};
++		};
++	};
 +
-+additionalProperties: true
++	xtal: xtal-clk {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		/* This value must be overridden by the board */
++		clock-frequency = <0>;
++	};
 +
-+...
++	soc {
++		compatible = "simple-bus";
++		ranges;
++		interrupt-parent = <&plic>;
++		dma-noncoherent;
++		#address-cells = <1>;
++		#size-cells = <1>;
++
++		uart0: serial@30002000 {
++			compatible = "bouffalolab,bl808-uart";
++			reg = <0x30002000 0x1000>;
++			interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&xtal>;
++			status = "disabled";
++		};
++
++		plic: interrupt-controller@e0000000 {
++			compatible = "thead,c900-plic";
++			reg = <0xe0000000 0x4000000>;
++			interrupts-extended = <&cpu0_intc 0xffffffff>,
++					      <&cpu0_intc 9>;
++			interrupt-controller;
++			#address-cells = <0>;
++			#interrupt-cells = <2>;
++			riscv,ndev = <64>;
++		};
++	};
++};
 -- 
 2.38.1
 
