@@ -2,79 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83E22639C7C
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 20:05:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5330E639C91
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 20:19:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbiK0TFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 14:05:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45738 "EHLO
+        id S229648AbiK0TS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 14:18:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiK0TFh (ORCPT
+        with ESMTP id S229506AbiK0TSs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 14:05:37 -0500
-X-Greylist: delayed 309 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 27 Nov 2022 11:05:34 PST
-Received: from srv01.abscue.de (abscue.de [89.58.28.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 973DBE087;
-        Sun, 27 Nov 2022 11:05:34 -0800 (PST)
-Received: from srv01.abscue.de (localhost [127.0.0.1])
-        by spamfilter.srv.local (Postfix) with ESMTP id 9173E1C0049;
-        Sun, 27 Nov 2022 20:00:21 +0100 (CET)
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Received: from srv01.abscue.de (abscue.de [89.58.28.240])
-        by srv01.abscue.de (Postfix) with ESMTPSA id 7B5731C0048;
-        Sun, 27 Nov 2022 20:00:21 +0100 (CET)
-From:   =?UTF-8?q?Otto=20Pfl=C3=BCger?= <otto.pflueger@abscue.de>
-To:     =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        Sun, 27 Nov 2022 14:18:48 -0500
+Received: from fritzc.com (mail.fritzc.com [IPv6:2a00:17d8:100::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E53F3A4;
+        Sun, 27 Nov 2022 11:18:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fritzc.com;
+        s=dkim; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:
+        To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=C+mZx1Eg6bo4mfX+DFliuwOi9n3vRN8QYXoOJN3XKzg=; b=jWzEMUkiw2c8kHimMLq5YPfDMl
+        8zx4jM3k6D+Xz0eHpryqHe8swrxyjuF7KWjH7U2bmjfjsIsHm47K8DRbjiHmZrb9Kok/yNnrJlDxJ
+        H6NhXquUI/+PJ+mOlS82Qp+x7QxxDMs9Aru7mrg+GyOSz1Qn/esHMtGdAF32cSRo5O9o=;
+Received: from 127.0.0.1
+        by fritzc.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim latest)
+        (envelope-from <christoph.fritz@hexdev.de>)
+        id 1ozMvf-000XD6-0c; Sun, 27 Nov 2022 20:03:03 +0100
+From:   Christoph Fritz <christoph.fritz@hexdev.de>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Pavel Pisa <pisa@cmp.felk.cvut.cz>,
+        Richard Weinberger <richard@nod.at>,
+        Andreas Lauser <andreas.lauser@mbition.io>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Otto=20Pfl=C3=BCger?= <otto.pflueger@abscue.de>
-Subject: [PATCH 0/4] drm/tiny: panel-mipi-dbi: Support separate I/O voltage supply
-Date:   Sun, 27 Nov 2022 19:59:44 +0100
-Message-Id: <20221127185948.1361083-1-otto.pflueger@abscue.de>
+Subject: [RFC][PATCH 0/2] LIN support for Linux
+Date:   Sun, 27 Nov 2022 20:02:42 +0100
+Message-Id: <20221127190244.888414-1-christoph.fritz@hexdev.de>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Spam_score: -1.0
+X-Spam_bar: -
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
+        version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As stated in Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-spi.yml,
-the MIPI DBI specification defines two power supplies, one for powering
-the panel and one for the I/O voltage. The panel-mipi-dbi driver
-currently only supports specifying a single "power-supply" in the
-device tree.
+The intention of this series is to kick off a discussion about how to
+support LIN (ISO 17987) [0] in Linux.
 
-Add support for a second power supply defined in a new "io-supply"
-device tree property to make the driver properly configure the voltage
-regulators on platforms where separate supplies are used.
+This series consist of two patches which are two individual proposals
+for adding LIN abstraction into the kernel.
 
-(Resent from a new email address with proper formatting)
+One approach is to add LIN ontop of CANFD:
+  [RFC] can: introduce LIN abstraction
 
-Otto Pflüger (4):
-  drm/mipi-dbi: Support separate I/O regulator
-  drm/tiny: panel-mipi-dbi: Read I/O supply from DT
-  dt-bindings: display: panel: mipi-dbi-spi: Add missing power-supply
-  dt-bindings: display: panel: mipi-dbi-spi: Add io-supply
+The other approach is adding a new type of CAN-socket:
+  [RFC] can: Add LIN proto skeleton
 
- .../bindings/display/panel/panel-mipi-dbi-spi.yaml | 11 ++++++++++-
- drivers/gpu/drm/drm_mipi_dbi.c                     | 14 ++++++++++++++
- drivers/gpu/drm/tiny/panel-mipi-dbi.c              |  5 +++++
- include/drm/drm_mipi_dbi.h                         |  7 ++++++-
- 4 files changed, 35 insertions(+), 2 deletions(-)
+These patches are abstracting LIN so that actual device drivers can
+make use of it.
+
+For reference, the LIN-ontop-of-CANFD variant already has a device
+driver using it (not part of this series). It is a specially built USB
+LIN-BUS adapter hardware called hexLIN [1].  Its purpose is mainly to
+test, adapt and discuss different LIN APIs for mainline Linux kernel.
+But it can already be used productively as a Linux LIN node in
+controller (master) and responder (slave) mode. By sysfs, hexLIN
+supports different checksum calculations and setting up a
+responder-table.
+
+For more info about hexLIN, see link below [1].
+
+We are looking for partners with Linux based LIN projects for funding. 
+
+[0]: https://en.wikipedia.org/wiki/Local_Interconnect_Network
+[1]: https://hexdev.de/hexlin/
+
+Christoph Fritz (1):
+  [RFC] can: Introduce LIN bus as CANFD abstraction
+
+Richard Weinberger (1):
+  [RFC] can: Add LIN proto skeleton
+
+ drivers/net/can/Kconfig          |  10 ++
+ drivers/net/can/Makefile         |   1 +
+ drivers/net/can/lin.c            | 181 +++++++++++++++++++++++++++
+ include/net/lin.h                |  30 +++++
+ include/uapi/linux/can.h         |   8 +-
+ include/uapi/linux/can/lin.h     |  15 +++
+ include/uapi/linux/can/netlink.h |   1 +
+ net/can/Kconfig                  |   5 +
+ net/can/Makefile                 |   3 +
+ net/can/lin.c                    | 207 +++++++++++++++++++++++++++++++
+ 10 files changed, 460 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/net/can/lin.c
+ create mode 100644 include/net/lin.h
+ create mode 100644 include/uapi/linux/can/lin.h
+ create mode 100644 net/can/lin.c
 
 -- 
 2.30.2
+
