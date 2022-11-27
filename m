@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37B0D639AE9
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 14:12:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42C12639AEE
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 14:13:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiK0NMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 08:12:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46440 "EHLO
+        id S229595AbiK0NNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 08:13:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbiK0NMC (ORCPT
+        with ESMTP id S229523AbiK0NNR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 08:12:02 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DFEDFC8
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 05:11:52 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id n1so5550713ljg.3
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 05:11:52 -0800 (PST)
+        Sun, 27 Nov 2022 08:13:17 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D89B50
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 05:13:16 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id c1so13551800lfi.7
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 05:13:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=lsGPEbguNLyXyXtQzAB2wJ4fId8JLFhyfl8o2yashtI=;
-        b=Li8wQ2MQpsuNmifYz+kZPILDr2YWOgtE++hH3wSz9Z+uybeOrU6yyv7gDgyYRvZAao
-         K/WQQAGYKTxeFyp2lJ6yr4rGmA62AyzdTDQm4qkyyfLXDGDhXUZkuiX1Y5upwCOru6Qp
-         e/7iO2LdF0Yj03tAP9XKjVFAXFUeBkBP3MZZldlKmCRIha4elFm2h1HNfzjZFodGmwrH
-         O3ValvaUQYKgnFAfzlfh59v2zqUkzcWEqXo5b2BkbyPRrhfXKtsHbgMNk17fZ96rkNd+
-         E4UUeYlbXU/owMrUuyd9fQ4Ly34fFLgYlskbnO5pey4cLlYW7Uyy5ugOkbR8jX7VNbpc
-         ReHw==
+        bh=ymMQqhpUEMJO+b52K8VIsBNlBPxjfHjs+nxko8CCAkA=;
+        b=JSJGXxblDGy1qS3qoTAjnackIDa+wZQBCsH0kr+qVnprwKK4TvbG4yjfrTjRMcLql1
+         1/e+fiJF3Z/UVAeIUWKRj6FaNjBu9wi9TrKIRBtQxz/IZqBeGexTtdjndE7H5zu6iqO9
+         7lXjgqaJXGArz2D0S4kx3cW8vYTaGZ0lDqJv7aNL9FkECn4XUPIicchnBYJX4sM0vE15
+         ATZw2hWO7+IGJTSvZaatmyjY/pFguaRyguEdPBt/uSX106j6vbVhNh6EE12222/w6SBM
+         24tGqUVwQIkAJDrip3cPHR6Y5HcWJxtWyj4tRTOnxuY9YpevZ2nvnY8vuljqbbwEH9Di
+         Z7ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lsGPEbguNLyXyXtQzAB2wJ4fId8JLFhyfl8o2yashtI=;
-        b=Pxp17Oh7+Ul4r04rObCADNN3gvzhNB7uDOkwqIn2tbZ47XKp5dNgwDL7M3/mpaP3+Q
-         hGn64bXI91x8QRUS89LAC7UHQcAjNwWWdmggCH1idkCcmMosHOO+vqSdu925qpive1tk
-         l4ttiIHpLTwonIke7CE52piuZtADk9R6m4rNXq3Vf2aypGVrrFnBcqXQWtvcxeE88QFB
-         yE7bRdTM55zkt4hI3Ps11EHzMc0x21T3UZ4sS91XDbUOzwzj64fcD8qNm6FJr+759Fak
-         VS3smJnlZHteYkRkx7D+2phICyRV8PkMP8JbpFs8EQCRq+xgPoBpVrTuKUtxAba7ZrK5
-         SVHw==
-X-Gm-Message-State: ANoB5pmN19hy9AYaKfHFeuxpJLN7ebZcwoGnOMkoDdWzDJ8kDL62NrNc
-        cwRCFxBwcnFvgTW453P/FBI1dw==
-X-Google-Smtp-Source: AA0mqf7D55Zimr5WD3Ta5W+Zbl1zFVFSuDEI4UZ2hLZvj32iV1yJ3DkH5cOJNK3LtUi7drUUjwEUdA==
-X-Received: by 2002:a05:651c:198a:b0:277:6c67:1a7f with SMTP id bx10-20020a05651c198a00b002776c671a7fmr15712660ljb.133.1669554710421;
-        Sun, 27 Nov 2022 05:11:50 -0800 (PST)
+        bh=ymMQqhpUEMJO+b52K8VIsBNlBPxjfHjs+nxko8CCAkA=;
+        b=McUu6524S91Laz3/4KA1naeITW3UM4Avubtox+eO5Z+rfIqwPdRW34C2Tc+hi/i7Ym
+         ZEIeAaRq+7RoDkuelvfKhjes8lWl9ZalEizPV5h24e8DIUW1TrjGVlH7FRjUNYD0Nm/W
+         ZMqLCjUzbqTluTrt5kcBjCIK28uUrSKfHgSbhfOeGWgMCsP8HySQJF3aFbNWTZy1qjhu
+         Q61i3SjG7kbmasnXXoMeJHZ5LoSxNqbFwc+fnFeEfZCCqt3N/rFW1WgLJNWmPLD9FySf
+         bFl41Lxwr/wAx7tY9gaJ95uM7IJZHpVHAv1zZPEJC0X6N/brR/aVMlQAO7r0CxDpKOD9
+         Ze9w==
+X-Gm-Message-State: ANoB5pl6pW70vRmEka1BD6gAI28LsAirgkE5lMMIukf7hw6nnW0IseZM
+        eo2FsVEDi9eNNVKKGpGZcQjZvg==
+X-Google-Smtp-Source: AA0mqf7qTvx4Q0DD8LmdqDNmzQypbQWAj1Cy/SzOTvxmHHY8KN/okl4/hczpu04jclcNSh1fjuMl9g==
+X-Received: by 2002:ac2:58d7:0:b0:4b4:fbce:606b with SMTP id u23-20020ac258d7000000b004b4fbce606bmr4336087lfo.27.1669554794552;
+        Sun, 27 Nov 2022 05:13:14 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id bp29-20020a056512159d00b0048aee825e2esm1298537lfb.282.2022.11.27.05.11.48
+        by smtp.gmail.com with ESMTPSA id 6-20020ac25f46000000b004ac393ecc32sm1297941lfz.304.2022.11.27.05.13.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Nov 2022 05:11:49 -0800 (PST)
-Message-ID: <c94d15bf-c5ed-b400-abdf-8cca4102b078@linaro.org>
-Date:   Sun, 27 Nov 2022 14:11:48 +0100
+        Sun, 27 Nov 2022 05:13:13 -0800 (PST)
+Message-ID: <f893330f-8fcd-044b-5bc9-f2c80813bb40@linaro.org>
+Date:   Sun, 27 Nov 2022 14:13:12 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH v6 05/10] dt-bindings: soc: mediatek: convert pwrap
- documentation
+Subject: Re: [PATCH v6 06/10] dt-bindings: mfd: mediatek: Add bindings for
+ MT6357 PMIC
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Alexandre Mergnat <amergnat@baylibre.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Sean Wang <sean.wang@mediatek.com>,
@@ -84,117 +83,37 @@ Cc:     Mattijs Korpershoek <mkorpershoek@baylibre.com>,
         linux-input@vger.kernel.org, devicetree@vger.kernel.org,
         linux-leds@vger.kernel.org
 References: <20221005-mt6357-support-v6-0-4f589756befa@baylibre.com>
- <20221005-mt6357-support-v6-5-4f589756befa@baylibre.com>
- <a9a47e08-1a08-abe5-1dbe-1537d3414af6@linaro.org>
-In-Reply-To: <a9a47e08-1a08-abe5-1dbe-1537d3414af6@linaro.org>
+ <20221005-mt6357-support-v6-6-4f589756befa@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221005-mt6357-support-v6-6-4f589756befa@baylibre.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/11/2022 14:04, Krzysztof Kozlowski wrote:
-> On 25/11/2022 16:10, Alexandre Mergnat wrote:
->> - Convert soc/mediatek/pwrap.txt to soc/mediatek/mediatek,pwrap.yaml
->> - Add syscon compatible const for mt8186 and mt8195 to match the DTS needs.
->>
->> +  resets:
->> +    minItems: 1
->> +    items:
->> +      - description: PMIC wrapper reset
->> +      - description: IP pairing reset
->> +
->> +  reset-names:
->> +    minItems: 1
->> +    items:
->> +      - const: pwrap
->> +      - const: pwrap-bridge
->> +
->> +  pmic:
->> +    type: object
+On 25/11/2022 16:10, Alexandre Mergnat wrote:
+> Currently, almost all MT63XX PMIC are documented mfd/mt6397.txt.
+> Unfortunately, the PMICs haven't always similar HW sub-features.
+> To have a better human readable schema, I chose to make one PMIC schema
+> to match the exact HW capabilities instead of convert mt6397.txt to
+> mediatek,mt63xx.yaml and put a bunch of properties behind
+> "if contain ... then ..."
 > 
-> What's here? Other schema? If not then maybe compatible? What about
-> description?
+> - add interrupt property
+> - change property refs to match with new yaml documentation
+> 
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> ---
 
-I guess this was comment from Rob, so it's fine.
 
-> 
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - reg-names
->> +  - interrupts
->> +  - clocks
->> +  - clock-names
->> +
->> +dependentRequired:
->> +  resets: [reset-names]
-> 
-> Drop.
-> 
->> +
->> +allOf:
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            const: mediatek,mt8365-pwrap
->> +    then:
->> +      properties:
->> +        clocks:
->> +          minItems: 4
->> +
->> +        clock-names:
->> +          minItems: 4
-> 
-> else:
-> ???
-
-Actually this looks less complete than your previous patch.
-
-else:
-  clocks:
-    maxItems: 2
-same for clock-names
-
-> 
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/interrupt-controller/irq.h>
->> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
->> +    #include <dt-bindings/reset/mt8135-resets.h>
->> +
->> +    soc {
->> +        #address-cells = <2>;
->> +        #size-cells = <2>;
->> +        pwrap@1000d000 {
->> +            compatible = "mediatek,mt8135-pwrap";
->> +            reg = <0 0x1000f000 0 0x1000>,
-> 
-> This does not match your unit address. No warnings when compile testing?
-> 
->> +                  <0 0x11017000 0 0x1000>;
->> +            reg-names = "pwrap", "pwrap-bridge";
->> +            interrupts = <GIC_SPI 128 IRQ_TYPE_LEVEL_HIGH>;
->> +            clocks = <&clk26m>, <&clk26m>;
->> +            clock-names = "spi", "wrap";
->> +            resets = <&infracfg MT8135_INFRA_PMIC_WRAP_RST>,
->> +                     <&pericfg MT8135_PERI_PWRAP_BRIDGE_SW_RST>;
->> +            reset-names = "pwrap", "pwrap-bridge";
-> 
-> Missing pmic. Make your example complete.
-
-Probably pmic should be skipped, I understand it is described in MFD
-binding.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
