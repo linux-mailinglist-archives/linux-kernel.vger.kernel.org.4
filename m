@@ -2,79 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 640406399A0
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 09:10:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA1EA6399A4
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 09:16:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbiK0IKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 03:10:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46322 "EHLO
+        id S229536AbiK0IQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 03:16:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiK0IKk (ORCPT
+        with ESMTP id S229487AbiK0IQb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 03:10:40 -0500
-Received: from mailgw.felk.cvut.cz (mailgw.felk.cvut.cz [147.32.82.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB45E0D6;
-        Sun, 27 Nov 2022 00:10:38 -0800 (PST)
-Received: from mailgw.felk.cvut.cz (localhost.localdomain [127.0.0.1])
-        by mailgw.felk.cvut.cz (Proxmox) with ESMTP id 0021330B294A;
-        Sun, 27 Nov 2022 09:10:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        cmp.felk.cvut.cz; h=cc:cc:content-transfer-encoding:content-type
-        :content-type:date:from:from:in-reply-to:message-id:mime-version
-        :references:reply-to:subject:subject:to:to; s=felkmail; bh=GGyL/
-        C4H6vtTsrrNEWsfehnYpF8amxqPutxzbZGcttQ=; b=aNK6bSUHyYC0fKV//4P50
-        8iC488EVv3oOeIeB/P0hp6Q5BUVjiJsG2KoBRdqMesQHs0CH/3MTt2pT2HjEOAmq
-        FrW3KqCVYpMOY38rNMMXcnllpqD1OdyhlRxcvYW4eSa50vmVrXZHz33TVBwQeCd5
-        ff5Q/n3aAsArvNHEVVZFGm++feNVcvm5Ih3tdwSoBP09q6pgecUccr670dHPl+vk
-        9ArL1E1kQD0cS3MMciFila9785HvItTcyhfVP3YWXmZ8RHiTlqOMO7rx9Jm3mzS6
-        s4ztCn1+7MsS5KrwuTmR4ZNjl8ppRNRnEtswbd8XV/eDq4Z2rb0ueOBytj5UpuPD
-        Q==
-Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
-        by mailgw.felk.cvut.cz (Proxmox) with ESMTPS id 72DED30AE001;
-        Sun, 27 Nov 2022 09:10:05 +0100 (CET)
-Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
-        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 2AR8A5lQ000718;
-        Sun, 27 Nov 2022 09:10:05 +0100
-Received: (from pisa@localhost)
-        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 2AR8A5nY000717;
-        Sun, 27 Nov 2022 09:10:05 +0100
-X-Authentication-Warning: haar.felk.cvut.cz: pisa set sender to pisa@cmp.felk.cvut.cz using -f
-From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
-To:     "Marc Kleine-Budde" <mkl@pengutronix.de>
-Subject: Re: [PATCH] can: ctucanfd: Drop obsolete dependency on COMPILE_TEST
-Date:   Sun, 27 Nov 2022 09:09:57 +0100
-User-Agent: KMail/1.9.10
-Cc:     Jean Delvare <jdelvare@suse.de>, linux-can@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        =?utf-8?q?Mat=C4=9Bj_Vasilevski?= <matej.vasilevski@gmail.com>
-References: <20221124141604.4265225f@endymion.delvare> <202211241556.38957.pisa@cmp.felk.cvut.cz> <20221125155758.ji5djevvycduuykt@pengutronix.de>
-In-Reply-To: <20221125155758.ji5djevvycduuykt@pengutronix.de>
-X-KMail-QuotePrefix: > 
+        Sun, 27 Nov 2022 03:16:31 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417A2F598;
+        Sun, 27 Nov 2022 00:16:30 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id w23so7485702ply.12;
+        Sun, 27 Nov 2022 00:16:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jtFXWEJ1f4pp6qiyXKj5arMcKw9TkHekZMlzR/UCnY4=;
+        b=A85/oNogWnVHeGFDcwnBsCBzVg6EgoXg2fl7K2Y4LWxkT5hu0+sQAS9UC6D2YFRGj/
+         B8NK1gr/KBZeTPQNSoKFdeCRAiru+jO71sox5JO7qXStGpCaesPOHHDgqlFrfUNOZSFE
+         jcWWXJm4LHm8lxGdWyWDLFzFmmrbaercTYyaThYaYhJ/XZ4R/IMASvEKymKu3RcKhHRl
+         uV8+ApBTEmWL3wypN7BpatPMiJ7MoE4QC/faAXPleW0bwkdTfDzeWDlAQgf2XglOw1PM
+         h5/kqnhknOYQ6qYtVbfsKvzkqNNI3v9tkIg+bndLjOysIXsLnl0YiSs6GkQoctSZrcPc
+         u/rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=jtFXWEJ1f4pp6qiyXKj5arMcKw9TkHekZMlzR/UCnY4=;
+        b=Xv4FnG/8MKnxlT+8tfWjMrZvNXlu+443rMMdjbbjZ6MeG4SiBXyIOpw4VlxoYoY1Ch
+         crf+5eBA6lPW/OVCuNmCrH1niFPrPa6iq8BuyhDrp5y9+OPt680VGuvRMV8N3PyUbhLO
+         dR//nBV9gHxVEK19/EETPhVmOiS0gJD7sKrElsSLmnXB/1f49JdtA/wulgw08f1+uKZ8
+         fAHMDt3AmDDJx1nm7xCWcN1MotjY6eYzSDYRR7acjlvt0hDBSC1zl8BU/6YM1ZZWReVL
+         YtOdpaCRUx03N5yMYtrQ1K5Ui+wN60FtIEE2kyUCvAf4pSeSZNkjvNUD7b6t8pFugKMe
+         bZtw==
+X-Gm-Message-State: ANoB5pkV+TQWlFeCdHhnIMe3RjKHoeQikssXUXjQl3n1inY/PzZyN+iE
+        +IXaUK0akzd4l0pDA3r/Bwc=
+X-Google-Smtp-Source: AA0mqf7E33SagQ9eCqtOUMPlG3tjkVYgrg25yhdp/y54PDogJWizI4UPgacnqj4NzSjZynYVWcB90Q==
+X-Received: by 2002:a17:90a:9313:b0:213:2168:1c78 with SMTP id p19-20020a17090a931300b0021321681c78mr49467293pjo.72.1669536989682;
+        Sun, 27 Nov 2022 00:16:29 -0800 (PST)
+Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
+        by smtp.gmail.com with ESMTPSA id a3-20020aa794a3000000b00572c12a1e91sm5799915pfl.48.2022.11.27.00.16.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Nov 2022 00:16:29 -0800 (PST)
+Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Jiri Pirko <jiri@nvidia.com>, netdev@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Arnaud Ebalard <arno@natisbad.org>,
+        Srujana Challa <schalla@marvell.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Michael Chan <michael.chan@broadcom.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Dimitris Michailidis <dmichail@fungible.com>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Linu Cherian <lcherian@marvell.com>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Jerin Jacob <jerinj@marvell.com>,
+        hariprasad <hkelam@marvell.com>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        Taras Chornyi <tchornyi@marvell.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Shannon Nelson <snelson@pensando.io>, drivers@pensando.io,
+        Ariel Elior <aelior@marvell.com>,
+        Manish Chopra <manishc@marvell.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Vadim Fedorenko <vadfed@fb.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Vadim Pasternak <vadimp@mellanox.com>,
+        Shalom Toledo <shalomt@mellanox.com>,
+        linux-crypto@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linux-rdma@vger.kernel.org, oss-drivers@corigine.com,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH net-next v2 0/5] net: devlink: return the driver name in devlink_nl_info_fill
+Date:   Sun, 27 Nov 2022 17:15:59 +0900
+Message-Id: <20221127081604.5242-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.37.4
+In-Reply-To: <20221122154934.13937-1-mailhol.vincent@wanadoo.fr>
+References: <20221122154934.13937-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: Text/Plain;
-  charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-Message-Id: <202211270909.57804.pisa@cmp.felk.cvut.cz>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Friday 25 of November 2022 16:57:58 Marc Kleine-Budde wrote:
-> On 24.11.2022 15:56:38, Pavel Pisa wrote:
-> > Thanks for the care. I cannot judge change on my personal opinion.
-> > But if that is general direction even for other drivers
-> > then I confirm the change.
->
-> Should I convert this into a formal Acked-by: :)
+The driver name is available in device_driver::name. Right now,
+drivers still have to report this piece of information themselves in
+their devlink_ops::info_get callback function.
 
-I you prefer formal one and agree with the change then yes.
+The goal of this series is to have the devlink core to report this
+information instead of the drivers.
 
-Acked-by: Pavel Pisa <pisa@cmp.felk.cvut.cz>
+The first two patches clean up the mlxsw driver for both the ethtool
+and the devlink (both are supposed to return the same information so
+the ethtool got included as well). This is split in two patches
+because of the different Fixes tag.
+
+The third patch fulfills the actual goal of this series: modify
+devlink core to report the driver name and clean-up all drivers. Both
+as to be done in an atomic change to avoid attribute duplication.
+
+The fourth patch removes the devlink_info_driver_name_put() function
+to prevent future drivers from reporting the driver name themselves.
+
+Finally, the fifth and last patch allows the core to call
+devlink_nl_info_fill() even if the devlink_ops::info_get() callback is
+NULL. This allows to do further more clean up in the drivers.
+---
+* Changelog *
+
+RFC v1 -> v2
+
+  * drop the RFC tag
+
+  * big rework following the discussion on RFC:
+    https://lore.kernel.org/netdev/20221122154934.13937-1-mailhol.vincent@wanadoo.fr/
+    Went from one patch to a series of five patches:
+
+  * drop the idea to report the USB serial number following Greg's
+    comment:
+    https://lore.kernel.org/linux-usb/Y3+VfNdt%2FK7UtRcw@kroah.com/
+
+Vincent Mailhol (5):
+  mlxsw: minimal: fix mlxsw_m_module_get_drvinfo() to correctly report
+    driver name
+  mlxsw: core: fix mlxsw_devlink_info_get() to correctly report driver
+    name
+  net: devlink: let the core report the driver name instead of the
+    drivers
+  net: devlink: remove devlink_info_driver_name_put()
+  net: devlink: make the devlink_ops::info_get() callback optional
+
+ .../marvell/octeontx2/otx2_cpt_devlink.c      |  4 ---
+ drivers/net/dsa/hirschmann/hellcreek.c        |  5 ---
+ drivers/net/dsa/mv88e6xxx/devlink.c           |  5 ---
+ drivers/net/dsa/sja1105/sja1105_devlink.c     | 12 ++-----
+ .../net/ethernet/broadcom/bnxt/bnxt_devlink.c |  4 ---
+ .../freescale/dpaa2/dpaa2-eth-devlink.c       | 11 +-----
+ .../ethernet/fungible/funeth/funeth_devlink.c |  7 ----
+ .../hisilicon/hns3/hns3pf/hclge_devlink.c     |  5 ---
+ .../hisilicon/hns3/hns3vf/hclgevf_devlink.c   |  5 ---
+ drivers/net/ethernet/intel/ice/ice_devlink.c  |  6 ----
+ .../marvell/octeontx2/af/rvu_devlink.c        |  7 ----
+ .../marvell/octeontx2/nic/otx2_devlink.c      | 15 --------
+ .../marvell/prestera/prestera_devlink.c       |  5 ---
+ .../net/ethernet/mellanox/mlx5/core/devlink.c |  4 ---
+ drivers/net/ethernet/mellanox/mlxsw/core.c    |  3 +-
+ drivers/net/ethernet/mellanox/mlxsw/minimal.c |  2 +-
+ .../net/ethernet/netronome/nfp/nfp_devlink.c  |  4 ---
+ .../ethernet/pensando/ionic/ionic_devlink.c   |  4 ---
+ drivers/net/ethernet/qlogic/qed/qed_devlink.c |  4 ---
+ drivers/net/netdevsim/dev.c                   |  3 --
+ drivers/ptp/ptp_ocp.c                         |  4 ---
+ include/net/devlink.h                         |  2 --
+ net/core/devlink.c                            | 35 ++++++++++++-------
+ 23 files changed, 29 insertions(+), 127 deletions(-)
+
+-- 
+2.37.4
 
