@@ -2,61 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD704639983
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 08:25:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E923463998A
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 08:32:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbiK0HZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 02:25:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35246 "EHLO
+        id S229563AbiK0HcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 02:32:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiK0HZZ (ORCPT
+        with ESMTP id S229506AbiK0HcN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 02:25:25 -0500
+        Sun, 27 Nov 2022 02:32:13 -0500
 Received: from sender4-op-o18.zoho.com (sender4-op-o18.zoho.com [136.143.188.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0745813D13;
-        Sat, 26 Nov 2022 23:25:25 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1669533911; cv=none; 
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A19C13D28;
+        Sat, 26 Nov 2022 23:32:13 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1669534318; cv=none; 
         d=zohomail.com; s=zohoarc; 
-        b=ggkzAtIy/l7f7YyyN6D1bmSEmSuAKIP4IsOJAVoA7ofakj2KB1Rpwuver6SPS7+mlQKlysKAdlfyBruF5KfMDQHpomomIMF84JG903es5X009QcNK0HKg7+aUvNklVxCmkBRnBIQq/xfyGwmpNOmfh9y8JSCCHmIchVMtLtGJck=
+        b=AzJcgUosMCw8t54UOBDm/wmUHvVceZrl0dPnsFrwU5nOHbZsKfVS2zcf4mPQJZV2P9e+UybA4UyvMvxtnZOsCsB2f1Sqro44jxST5d2sEbq3daabRFCgWTqERsf/5g2P5tVmothEM3rUF4dtH8Xnq7JFWx+QwWWK5SruFMLA3z8=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1669533911; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=0tSszAfeU3Hw+SM3zet0uKTU2t0DxmRUwULjrITFJWs=; 
-        b=ccgAGlirkStYdnvC6zgpmD21QG1w3R568sbHzY4hqYJNVCl/1ZyAvJF1EUSZBEfKFIfCUt4+BYFqQ4V5m7uLhU43B+e/jfTSo/xU5r1MJIRohH5XhdbvJA7kHRvFuzOzemq3BlDxv85iU49T22vIrVk+eORzB4V/vv1r5ivuwT4=
+        t=1669534318; h=Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=10CBDSSMY+O5kxCW3DRK9JuPL0vp25NduovcNFvUa4c=; 
+        b=igfj7JiLBO80BMoVMSFCD1sxlAKhc4gpxo7vFY8LVv1Dyb4qkE2fNM1oxQ9rmO3mFu1Zl4Bgk6NiDga6K1HWkvzDsfR49aWt3Wa3HH0eGJLYUhZG2P1lzWXswxb83ZoPcURQPO9f+94EtS6pFpDWc3dGZGjIXEdIrm/4utjivo0=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
         dkim=pass  header.i=icenowy.me;
         spf=pass  smtp.mailfrom=uwu@icenowy.me;
         dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1669533911;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1669534318;
         s=zmail; d=icenowy.me; i=uwu@icenowy.me;
-        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
-        bh=0tSszAfeU3Hw+SM3zet0uKTU2t0DxmRUwULjrITFJWs=;
-        b=KXV25JHEwreVFY60L/OefRyezdQqH7oK2TLu79SepeUo7fiBgsgnWeWJg/raHOFx
-        TdqT0pkzUHGsxHWLdwr8ed752oDRTp12wHQq2wcWydlfndM53EZ+BicCA3ECTYIx7qw
-        Ll37ZhEvPQL2uEroCGgA/sgmZY7tDebTBqk0ckiY=
+        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
+        bh=10CBDSSMY+O5kxCW3DRK9JuPL0vp25NduovcNFvUa4c=;
+        b=SwWfg9NayXpIsvXtxJ1XU1ELPGY2PSbPRCAFF834Mmk/zvF7R5sd7GWAYPYMm0iW
+        q3xyoKiqgfdcrKtMFc/bIqle6e9EaBJPPgd8vTKtTvSALAw4786ycdNpPij3nVDhu6K
+        AUwH3jUvCy+mCpJ7OrbdaJVTAoQg6Lxjw2eV5GZI=
 Received: from edelgard.fodlan.icenowy.me (112.94.100.108 [112.94.100.108]) by mx.zohomail.com
-        with SMTPS id 1669533910659843.6717300057095; Sat, 26 Nov 2022 23:25:10 -0800 (PST)
-Message-ID: <3276634843dcd7288ea5329d7803466bf8992d66.camel@icenowy.me>
-Subject: Re: [PATCH 1/3] dt-bindings: timer: sifive,clint: add comaptibles
- for T-Head's C9xx
+        with SMTPS id 1669534316404229.14536648713965; Sat, 26 Nov 2022 23:31:56 -0800 (PST)
 From:   Icenowy Zheng <uwu@icenowy.me>
-To:     Marc Zyngier <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Date:   Sun, 27 Nov 2022 15:25:04 +0800
-In-Reply-To: <20221121041757.418645-2-uwu@icenowy.me>
-References: <20221121041757.418645-1-uwu@icenowy.me>
-         <20221121041757.418645-2-uwu@icenowy.me>
-Organization: Anthon Open-Source Community
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Andre Przywara <andre.przywara@arm.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, Icenowy Zheng <uwu@icenowy.me>
+Subject: [PATCH 0/6] Rongpin RP-H6B support (and support for GL850G)
+Date:   Sun, 27 Nov 2022 15:31:34 +0800
+Message-Id: <20221127073140.2093897-1-uwu@icenowy.me>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-ZohoMailClient: External
 X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -68,67 +64,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=E5=9C=A8 2022-11-21=E6=98=9F=E6=9C=9F=E4=B8=80=E7=9A=84 12:17 +0800=EF=BC=
-=8CIcenowy Zheng=E5=86=99=E9=81=93=EF=BC=9A
-> T-Head C906/C910 CLINT is not compliant to SiFive ones (and even not
-> compliant to the newcoming ACLINT spec) because of lack of mtime
-> register.
->=20
-> Add a compatible string formatted like the C9xx-specific PLIC
-> compatible, and do not allow a SiFive one as fallback because they're
-> not really compliant.
->=20
-> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+This patchset adds support for Rongpin RP-H6B, and as a dependency,
+power sequence support for its onboard USB hub, GL850G.
 
-Could this patch get applied individually?
+The first 3 patches are for GL850G, adding a binding for it and adding
+its support to onboard_usb_hub driver.
 
-I want to drop the practice of the latter two patches and send new
-RFCs, and this patch is a dependency of some OpenSBI patch.
+The last 3 patches are for RP-H6B, also 2 for adding a binding and 1 for
+the real DT.
 
-> ---
-> =C2=A0Documentation/devicetree/bindings/timer/sifive,clint.yaml | 8
-> ++++++++
-> =C2=A01 file changed, 8 insertions(+)
->=20
-> diff --git
-> a/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-> b/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-> index bbad24165837..aada6957216c 100644
-> --- a/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-> +++ b/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-> @@ -20,6 +20,10 @@ description:
-> =C2=A0=C2=A0 property of "/cpus" DT node. The "timebase-frequency" DT pro=
-perty
-> is
-> =C2=A0=C2=A0 described in Documentation/devicetree/bindings/riscv/cpus.ya=
-ml
-> =C2=A0
-> +=C2=A0 T-Head C906/C910 CPU cores include an implementation of CLINT too=
-,
-> however
-> +=C2=A0 their implementation lacks a memory-mapped MTIME register, thus
-> not
-> +=C2=A0 compatible with SiFive ones.
-> +
-> =C2=A0properties:
-> =C2=A0=C2=A0 compatible:
-> =C2=A0=C2=A0=C2=A0=C2=A0 oneOf:
-> @@ -29,6 +33,10 @@ properties:
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 - starfive,jh7100-clint
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 - canaan,k210-clint
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: sif=
-ive,clint0
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - items:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - enum:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 - allwinner,sun20i-d1-clint
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: thead,c9=
-00-clint
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - items:
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: sif=
-ive,clint0
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: ris=
-cv,clint0
+Icenowy Zheng (6):
+  dt-bindings: vendor-prefixes: add Genesys Logic
+  dt-bindings: usb: Add binding for Genesys Logic GL850G hub controller
+  usb: misc: onboard_usb_hub: add Genesys Logic GL850G hub support
+  vendor-prefixes: Add Shenzhen Rongpin Electronics Co., Ltd
+  dt-bindings: arm: sunxi: add Rongpin RP-H6B board
+  arm64: dts: allwinner: h6: add Rongpin RP-H6C SoM and RP-H6B board
+
+ .../devicetree/bindings/arm/sunxi.yaml        |   6 +
+ .../bindings/usb/genesys,gl850g.yaml          |  48 ++++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   4 +
+ arch/arm64/boot/dts/allwinner/Makefile        |   1 +
+ .../boot/dts/allwinner/sun50i-h6-rp-h6b.dts   | 239 ++++++++++++++++++
+ .../boot/dts/allwinner/sun50i-h6-rp-h6c.dtsi  | 180 +++++++++++++
+ drivers/usb/misc/onboard_usb_hub.c            |   2 +
+ drivers/usb/misc/onboard_usb_hub.h            |   5 +
+ 8 files changed, 485 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h6-rp-h6b.dts
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h6-rp-h6c.dtsi
+
+-- 
+2.37.1
 
