@@ -2,146 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82196639CBF
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 21:23:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69868639CC2
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 21:27:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbiK0UXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 15:23:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38044 "EHLO
+        id S229581AbiK0U1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 15:27:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiK0UXH (ORCPT
+        with ESMTP id S229469AbiK0U1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 15:23:07 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBE9D120
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 12:23:06 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id e27so21284207ejc.12
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 12:23:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wfKh2Mf4Ino4G2YyHVeE+Z2MaLhC61+o3vx+CNzKjDQ=;
-        b=nNMnxcyEBZ591wHcQIif8hhyoGN8Ob34xVLn1BE7WR/+2cbc1LZpS/SHbTz2X1vkxp
-         5TXTWVZYYMy6Mn/yhpIJBIbnBvjJyg7H8OinLO/t8kq5LAJ18JpsZ4VhDE0EzuG3fI+G
-         A46ml9lDujs9yT5n8V2K5anZa0hdC+SUNeSGo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wfKh2Mf4Ino4G2YyHVeE+Z2MaLhC61+o3vx+CNzKjDQ=;
-        b=Vn0ht6HTVaY7AEs/1SiasX/m7KH2qjiTXf06rPyLBGW+mEASkI2x9cz2nmMPsKY8t7
-         4DPdvxf0Q9Ru9Gqsdd0RxetrqmU6g8JAn7qNBylsGgyDse45gp2zpZOiDqmulLnl5xWt
-         F/TlQEKCG0wNdKOMi6kavyONOOerlrLU+/CVizHhxyCNdxM71HImnIN/7wvwcpTdNJP4
-         Xda6o/usQaaHOwyLpdXeTJ8LtdrUZgGTRuL+EM1JaYBOgRFSsg1bgdI/1W82JHVl8dlS
-         qbv38m4+Cm2X1o5ve5I0eJgsRqJFmO0M4cZfCwdwxicOnMIF/9PvlXpM1nVZpI+A4YhY
-         JANg==
-X-Gm-Message-State: ANoB5pkCjZH352FhLJRGFzmsbxAdIaPMQO3nU1/sIYmODV8BtEUQJeG6
-        0BRTHP2tnbcPo45jXF9c4uvCER6FrhmOCQ==
-X-Google-Smtp-Source: AA0mqf5EgKvaGkUib8pzpuxBc1l9tI/0ro+ReGhiwOZ4uP5I8N+3wk7FIxnWqr3Zya96j80tQ00foQ==
-X-Received: by 2002:a17:906:c24d:b0:7ac:2e16:a8d2 with SMTP id bl13-20020a170906c24d00b007ac2e16a8d2mr30381713ejb.584.1669580585321;
-        Sun, 27 Nov 2022 12:23:05 -0800 (PST)
-Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id j9-20020a1709066dc900b007ba46867e6asm4165278ejt.16.2022.11.27.12.23.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Nov 2022 12:23:05 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Sun, 27 Nov 2022 21:22:58 +0100
-Subject: [PATCH] soc: mediatek: mtk-svs: Enable the IRQ later
+        Sun, 27 Nov 2022 15:27:53 -0500
+Received: from na01-obe.outbound.protection.outlook.com (mail-westus2azon11020024.outbound.protection.outlook.com [52.101.46.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D599F6418;
+        Sun, 27 Nov 2022 12:27:51 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ndHWIen9/vNmeYLdyAHrtd1NE1d+kAFnnafpz9F3vMxAqV6uRO8u9r+chvt2mZQkeRAahS1tdyNLpGLCqr90MEO76uYgWcKqYVL1IHhzFCC62A5mOsd1+cOQ9Y2amDqV5/QxNQugWA5QLctf+yE4sSVOdYpAJVqS5Dp0oNNiwn4caegooNM6J2ghdzrhJBA0anAWk7IYm/q2dYjMbDRxVsg8g8ge8VZ4XmhceECsQ8DczZUK3/dBZ7kj/sDz8mSeNdZxFRzlgSvitJCPoqpy3R48vdXlUNaIuFnj0sXXM9HCIZ1L/8SCVbcTH83da/X6Wd44PEXRyAdXmse9yVq92w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xMckL/gpO7SQonfXwhXtY/zcJsZ9n4TTk5hnFtNx+ww=;
+ b=kVYlk0g4hdXITyAtBr1iOsryywfPHxvrCQW8enrbO2AYjNCy7XimjGABQztbg+ii2eB0nzkcoP1Fm9L32Kb3qY4K4ZbH5jJQELfh3YbQOM4dT+IquItKCtb+P3LSTS4NvcZN7jYv+IIX/RyxMM0jGkD6GLdkvZ4P/G9hq/VD7+Ttmi8tSAd08rZvVuB4cGWaXHZrE6tbIIrGiZL5VWmNWFqtOgISKccBfbGPfY8rw8ayWcCUHZgV6nxrN/TjLELGmAAuGQyhIV1mDgYfJ+ncch7kVmqWx/bQtsNybrM4iSqWrengzPgVg37qPJBMTz7Wks/NH6kBM0SzsiW+8oBKqA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xMckL/gpO7SQonfXwhXtY/zcJsZ9n4TTk5hnFtNx+ww=;
+ b=DwVdUFGT7dqstMcmLGZL7QBUUiSb6M0SrDg5qxwZ2rXTiX0VlK8htO9DLpdT+ZTTdGbuShKiZnqw+/w6ZCo7IimFUd/ifBsEaSRwQlzhmmLLU+wHpUNk9I5mV8CXiU+2Q3L8fSdEt+a01YuKsogq37/eYqkEtUJxqAdox6fKxkE=
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
+ by CH2PR21MB1413.namprd21.prod.outlook.com (2603:10b6:610:8c::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.8; Sun, 27 Nov
+ 2022 20:27:49 +0000
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::ac9b:6fe1:dca5:b817]) by SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::ac9b:6fe1:dca5:b817%6]) with mapi id 15.20.5880.008; Sun, 27 Nov 2022
+ 20:27:49 +0000
+From:   Dexuan Cui <decui@microsoft.com>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+CC:     "ak@linux.intel.com" <ak@linux.intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Subject: RE: [PATCH 3/6] x86/tdx: Support vmalloc() for
+ tdx_enc_status_changed()
+Thread-Topic: [PATCH 3/6] x86/tdx: Support vmalloc() for
+ tdx_enc_status_changed()
+Thread-Index: AQHY/5Z0Z424jDhUsEe8P9jmzKLFI65Ns+2AgAV8WbA=
+Date:   Sun, 27 Nov 2022 20:27:48 +0000
+Message-ID: <SA1PR21MB1335A5E7E0B7592FA96814DEBF109@SA1PR21MB1335.namprd21.prod.outlook.com>
+References: <20221121195151.21812-1-decui@microsoft.com>
+ <20221121195151.21812-4-decui@microsoft.com>
+ <20221122002421.qg4h47cjoc2birvb@box.shutemov.name>
+ <SA1PR21MB133536EA0C26DFE0168E2F98BF0C9@SA1PR21MB1335.namprd21.prod.outlook.com>
+ <20221124075125.56cpbkmjyr26dzsn@box.shutemov.name>
+In-Reply-To: <20221124075125.56cpbkmjyr26dzsn@box.shutemov.name>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=89e565df-ecbd-49e0-8cd7-eac7f94dc372;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-11-27T19:37:46Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|CH2PR21MB1413:EE_
+x-ms-office365-filtering-correlation-id: 2bd26e36-c756-48ce-769d-08dad0b5d9a3
+x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 5EG9pSh445o4vyjCWI1dw9S/VODPpDOI1L6h0/g7LHSSfP2vXuYxlSVNTNMKHFbIJXmVq5oKH8BvQWu3xv9wnJi+RxlkVd2rkt4o57dG5SAtGvq5lbNn8XacRyb4Kovxn3R1jZWV0s52T6jNSw41F0k7DFlqxfEv0FaLh9rxR4hhJ+G7TzpULXWzYlYFngcarayxaLSHFvg9BFp6+eyV90AVDZ5+3Z0Fzrwajzz4i44aDONy4yYH5RJXkUMtNIuQ/dPachY2eid54RXY/KIunuiTyoJfiPCkCzUTdIxqXnPDrI5j19I45vjriIzpXguDXesthBsm3x/2O9ahne1UqW51rqC4tqZAYWlxoqJGCwZTfyzm72DQ6QP9D5hrhVHHaqWc7Hr4KUTFUE49Qa+sSchgLQEoL43NYXFruu4aOxUhyxK+W0cW2pKQWfGsQbmtB92F9ED9Fh7wkz70rnYn3vqGe/+hX0JCUnjQDrC3gcNp4gZabtHu8Z4yMtn5DkHloJna0kUJkq5jF5U3mAHviHz87biqD57zqUpUTAYwuxEgH9XzMZ3v7z7ZbW+yS2VrRWPTl06wJaNrNtx7L3q70MWDo2dh25tiPbm1yQdeui9ryIIqtFxh3kFQH4isU+lMigHzmNF5D82cEeTYFPV9gL4NN3HmkV8OMzHrfH/rfeFxt6G6af9VvkIBwZHMpSRHaiFCIYYbT/aOcP3/xIUPLmzmyEDqv40lDK5ANdAQo63kM9khqTnZeIzrzG5k7rgy
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(376002)(396003)(366004)(39860400002)(451199015)(316002)(478600001)(76116006)(66946007)(2906002)(33656002)(54906003)(6916009)(71200400001)(8990500004)(10290500003)(83380400001)(122000001)(82950400001)(82960400001)(107886003)(38100700002)(55016003)(26005)(7696005)(6506007)(86362001)(9686003)(186003)(38070700005)(5660300002)(7416002)(52536014)(8936002)(41300700001)(8676002)(66446008)(66556008)(66476007)(64756008)(4326008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?cHn1/maFVHGDDz/tjekHjBGUJkgAJMjDg/u2rw65SM7AimmmtJjkzdXxQGsO?=
+ =?us-ascii?Q?NlQdRDFVVZNdJNJcq32ueFESVNCBCkyArs4yjI3InV5yvDdbWMBPBoYNk0R6?=
+ =?us-ascii?Q?wfrZ67hwif+n6xWIMnxn2rzwGnD0ECoBoWECh0OueO4rr9iSoOaW81AatPhE?=
+ =?us-ascii?Q?IeNoHhYMGWEnDg08QBqglD8AbVvWBfCHICNl14a4JZZRhRPTYIeGiYnxZ1pU?=
+ =?us-ascii?Q?rRHln8X7rOb9ZpDOptqOYNJFegdHavZEAdkYhPpWnVbhPsc8GNWWGEiJQ8y4?=
+ =?us-ascii?Q?cujrNJW2ufEHp+pTkMtYL9rgTsJEtgTLZPjUnzwH2cjtKHA3udicP62NMtGW?=
+ =?us-ascii?Q?4x4TmQX8Pp+3AENFYfPUzZjvV26oPso4U+dtS00vtY2bm8KI+5WIJpcbd1w6?=
+ =?us-ascii?Q?NVjOEHvsWrsJU1oWxUkwh9Xm4SY39G34NGHI5z2+hN+0g6XyTLzWg/XV0sfk?=
+ =?us-ascii?Q?7PeeNBK0INx383a3GyvyBo9/AKah1vJoUw8d0pzQnsbzOp1lIvYr7fhff5Rp?=
+ =?us-ascii?Q?hm1kiKi6um5FkzZEV2uw2oKs5B4KeH/krF4niBh0kfMFLdsQ7VSw4N0dDSIq?=
+ =?us-ascii?Q?YpwH02AJimmt07GNVlIUGcLNqRdKW4MVI17ZEfx5pvIORw62YYWmr9Plput6?=
+ =?us-ascii?Q?Og4XSb9ydFPklyStYo2sxM2f46MbYesOSVglpZxXgdJiS+LDXNYfbe1gFLII?=
+ =?us-ascii?Q?IjsMAYTRCGoUGzRC2/X8DlOIGYjUo1o0v7PgO6qtF2g5Eotkto79KdeJTiQ9?=
+ =?us-ascii?Q?Kk8uN3yDw5lsQztuer7OjCI0/eR2bWi9s3LWXhBzS/XvcbEIIX2RVPk+jIKj?=
+ =?us-ascii?Q?qOzlFdSNihOYeNmVHI+E2wfztjcLfSIMX/bRJwbJdSSSJEGWw7g34judw2+5?=
+ =?us-ascii?Q?Ry9QWCzXDSeA2ppOIDg2WNLx7n5SHR4ywav8aCZnLNQ/RBeIyH6kl6TPgt/3?=
+ =?us-ascii?Q?qtnH+4h0Hax8ConC2ezjk1OHDy3o8ze47MvVxVHNqIhodzpaxYntl+IuJmuc?=
+ =?us-ascii?Q?NvyWoim0UoAYh8MRT8nyUypH42fc5ii3/UFKZ/MJ6j+Wdan6nxKJN6W87AbQ?=
+ =?us-ascii?Q?P5xOI6JQx8KBiDHFPKDLcFlG2rYs2wIAP56blhoeIrecnEgPsFDHKNZYQWzJ?=
+ =?us-ascii?Q?OTfYD7DDdgfmbdylUFFJR+3fmRgZEoWS32IeqZH7S0g/NFv+ME7IMUNFKnL2?=
+ =?us-ascii?Q?RZNubuGeGDgYrMNZVwZoiWkeC27QrWxngHvhHntgFkj9SkbYrGNgnCPHi/jh?=
+ =?us-ascii?Q?i43bGQ/hAn7m/uFpfLyGP7NxyhAywdFrCr9NEZjrm4aYi5V65/Pvv3rDJORi?=
+ =?us-ascii?Q?aXkBdVHJ0g/lxDu5zTOI/ROip+w8iYHlZZ6GGSQLHCxepFKDz1n00zPXbbpE?=
+ =?us-ascii?Q?/VWKHfngNfy3tD4y/xhcCnE3HIBvGQs9wIebHPrQLVmCXHJarzR72HlbCdXh?=
+ =?us-ascii?Q?P7FC/0En9KRy1IbpkI+j7bFn+o6NdPi/85v/A0wNVxbkkvW1LwB/xPrbxK9v?=
+ =?us-ascii?Q?4M9TyJUDz50tyIpCv9RHxHopNZ3Ww+sRoQEu9ykG7bBqC14MuUhejwlULZqC?=
+ =?us-ascii?Q?vKtWrCKFG8qzVosf2q0VNXSNFNV7bAuk+SDgbVh1?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221127-mtk-svs-v1-0-7a5819595838@chromium.org>
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1917; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=7DOft4Iv0/mgcfhfj8YN+wfHXirhGcx/iCjJqeykALw=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjg8cmyxwr2EJslRfWjI+SaTXHPsCiomTbm17eqkny
- rPpbu+GJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4PHJgAKCRDRN9E+zzrEiBIQD/
- 0V8fIaN+zDO0ZjtYZlWHksrz5RjFtlpLQYHbOAEUGOaPDDE1kEUWYYYsvzJJsHSVRMiIA4I7bdgHGo
- YtXSmR9fn5XuqC73IuPa3gm1uWGmF02sQYO0ZrPRPb7YHDG+leTTTLzYUUXnKQQIGglcZanv2uGs0y
- 1px7ILJpPxc7RRcNv+7XIYN3Nmp3lGJBXitLAOKhMcBfvR+ptmwet9xpmttA5gVN5xsY408PbcBuBZ
- 6V44phnpyzrtRf6S0iL5X53CMXKmduK26sRW5qclTy4y0K1WoiwrzJU5oO93YHbQ654CtYGQg19Kis
- EEbv1hyY6b6ACJxBiwop0cMnz8dgXLWk6TPS5qCpURuEyybiTCmCd+n4L4V1UoLxQvdR366P/19l4V
- KjcrthaDGNSypfS3lJcNF9toyBXt0ActqvSoP8GX6GAXHRTx26lQRByM1HYVRZKwOthfCOB5y7DiGX
- 7B9idyq68BaTdbr9ofGnD9SbBl/5uGsWEK/iTlVr7gp8jbzXwpcNSZ3RU4O5aK7JX0YR3H4sZd79DU
- D7qukNlw7gecCGG/1ht3GkLp63FMKvpkRv99cFI3xV2JmWMukNAsAQVarbq+VY6Efz56lN9LAq9xo3
- 2gvyegi305LoO+zHWrHrKNbBIyk9V6IHsDnWldhIA74056o7FwM+uY403n/Q==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2bd26e36-c756-48ce-769d-08dad0b5d9a3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Nov 2022 20:27:48.4844
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: GqCA8Iw8MqSkzhAE49v/+Txwz9wdl6tX3bw6MmGKmScfL/Y8TZ7o27K8BfQTTR1O9ktbAOmqqCm6bSSqS2NAEQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR21MB1413
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the system does not come from reset (like when is booted via
-kexec()), the peripheral might triger an IRQ before the data structures
-are initialised.
+> From: Kirill A. Shutemov <kirill@shutemov.name>
+> Sent: Wednesday, November 23, 2022 11:51 PM
+> > [...]
+> > > Will you also adjust direct mapping to have shared bit set?
+> > >
+> > > If not, we will have problems with load_unaligned_zeropad() when it w=
+ill
+> > > access shared pages via non-shared mapping.
 
-Fixes:
+It looks like this is also an issue to AMD SNP?
 
-[    0.227710] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000f08
-[    0.227913] Call trace:
-[    0.227918]  svs_isr+0x8c/0x538
+> > > If direct mapping is adjusted, we will get direct mapping fragmentati=
+on.
+> > [...]
+>=20
+> __get_free_pages() and kmalloc() returns pointer to the page in the direc=
+t
+> mapping. set_memory_decrypted() adjust direct mapping to have the shared
+> bit set. Everything is fine.
 
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
-To: Matthias Brugger <matthias.bgg@gmail.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-mediatek@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
----
- drivers/soc/mediatek/mtk-svs.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+You're correct. Now I understand the issue.
+=20
+> > BTW, I'll drop tdx_enc_status_changed_for_vmalloc() and try to enhance =
+the
+> > existing tdx_enc_status() to support both direct mapping and vmalloc().
 
-diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
-index 0469c9dfeb04..0451603a8cb0 100644
---- a/drivers/soc/mediatek/mtk-svs.c
-+++ b/drivers/soc/mediatek/mtk-svs.c
-@@ -2385,14 +2385,6 @@ static int svs_probe(struct platform_device *pdev)
- 		goto svs_probe_free_resource;
- 	}
- 
--	ret = devm_request_threaded_irq(svsp->dev, svsp_irq, NULL, svs_isr,
--					IRQF_ONESHOT, svsp->name, svsp);
--	if (ret) {
--		dev_err(svsp->dev, "register irq(%d) failed: %d\n",
--			svsp_irq, ret);
--		goto svs_probe_free_resource;
--	}
--
- 	svsp->main_clk = devm_clk_get(svsp->dev, "main");
- 	if (IS_ERR(svsp->main_clk)) {
- 		dev_err(svsp->dev, "failed to get clock: %ld\n",
-@@ -2426,6 +2418,14 @@ static int svs_probe(struct platform_device *pdev)
- 		goto svs_probe_iounmap;
- 	}
- 
-+	ret = devm_request_threaded_irq(svsp->dev, svsp_irq, NULL, svs_isr,
-+					IRQF_ONESHOT, svsp->name, svsp);
-+	if (ret) {
-+		dev_err(svsp->dev, "register irq(%d) failed: %d\n",
-+			svsp_irq, ret);
-+		goto svs_probe_iounmap;
-+	}
-+
- 	return 0;
- 
- svs_probe_iounmap:
+Looks like I should not drop tdx_enc_status_changed_for_vmalloc() and have =
+to
+detect if the addr is a vmalloc address, and if yes we'll have to adjust th=
+e direct
+mapping?
 
----
-base-commit: 4312098baf37ee17a8350725e6e0d0e8590252d4
-change-id: 20221127-mtk-svs-add137fbf187
+> > > Maybe tap into swiotlb buffer using DMA API?
+> >
+> > I doubt the Hyper-V vNIC driver here can call dma_alloc_coherent() to
+> > get a 16MB buffer from swiotlb buffers. I'm looking at dma_alloc_cohere=
+nt()
+> ->
+> > dma_alloc_attrs() -> dma_direct_alloc(), which typically calls
+> > __dma_direct_alloc_pages() to allocate congituous memory pages (which
+> > can't exceed the 4MB limit. Note there is no virtual IOMMU in a guest o=
+n
+> Hyper-V).
+> >
+> > It looks like we can't force dma_direct_alloc() to call
+> dma_direct_alloc_no_mapping(),
+> > because even if we set the DMA_ATTR_NO_KERNEL_MAPPING flag,
+> > force_dma_unencrypted() is still always true for a TDX guest.
+>=20
+> The point is not in reaching dma_direct_alloc_no_mapping(). The idea is
+> allocate from existing swiotlb that already has shared bit set in direct
+> mapping.
+>=20
+> vmap area that maps pages allocated from swiotlb also should work fine.
 
-Best regards,
--- 
-Ricardo Ribalda <ribalda@chromium.org>
+My understanding is that swiotlb is mainly for buffer bouncing, and the
+only non-static function in kernel/dma/swiotlb.c for allocating memory=20
+is swiotlb_alloc(), which is defined only if CONFIG_DMA_RESTRICTED_POOL=3Dy=
+,
+which is =3Dn on x86-64 due to CONFIG_OF=3Dn.
+
+If we don't adjust the direct mapping, IMO we'll have to do:
+1) force the kernel to not use load_unaligned_zeropad() for a coco VM?
+Or
+2) make swiotlb_alloc()/free() available to x86-64 and export them for driv=
+ers?
+Or
+3) implement and use a custom memory pool that's pre-allocated using
+__get_free_pages() and set_memory_decrypted(), and use the pool in drivers?=
+??
+
+BTW, ideas 1) and 3) are from Michael Kelley who discussed the issue with m=
+e.
+Michael can share more details and thoughts.
+
+I'm inclined to detect a vmalloc address and adjust the direct mapping:
+
+1) Typically IMO drivers don't use a lot of shared buffers from vmalloc(), =
+so
+direct mapping fragmentation is not a severe issue.
+
+2) When a driver does use shared buffers from vmalloc(), typically it only
+allocates the buffers once, when the device is being initialized. For a Lin=
+ux
+coco VM on Hyper-V, only the hv_netvsc driver uses shared buffers from
+vmalloc(). While we do need to support vNIC hot add/remove, in practice
+AFAIK vNIC hot add/remove happens very infrequently.
+
+Thoughts?
