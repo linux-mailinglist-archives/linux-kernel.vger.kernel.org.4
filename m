@@ -2,144 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CB776399C3
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 09:50:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E83856399C6
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 09:54:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbiK0Iut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 03:50:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58496 "EHLO
+        id S229550AbiK0IyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 03:54:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiK0Iup (ORCPT
+        with ESMTP id S229546AbiK0IyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 03:50:45 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A1C512D1F
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 00:50:39 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id s1-20020a056e021a0100b003026adad6a9so6274671ild.18
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 00:50:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hT5DgejXLG1VEeatPWPF6TXh+aFuSyUr4LfGy5xM6GE=;
-        b=lqV33SoKt6NuafsDiTpW+aedfZM2X6r5L9e5znm0BqdmesNNBngP2yyp4+pJK4BHxO
-         PD2hE9D58m5XtXIdBtfZ14H2s/IYL1UqDq52x4hOeX1jF/kLSMmUxNCU1ioycHv5tRx/
-         uN1BqF6lnJL3aleHKMFdyrSbndOtBG3y8v4E6n2MTZ9NtK9co/OCxKwOZvUpJOP3X/Iw
-         ST4sRz5NYznCZCNJ+ZY0m5ACtunZfaYxQD3s5gBG5Lm28+m2Q9Vx4s0VwrQ5QiU4bTej
-         58VJCIFVVUZQx9wwDjS0yow3oDDDzLMPEEOwVAtbWK7s1UBrCJycb2O+0Qq2f2rsJfYc
-         a9vg==
-X-Gm-Message-State: ANoB5pmTkpUto7aXLFudzUPOrzjfn6fF8W9AA/x7eTqXFm06IlgKiWXW
-        NxF339xYttbFrAUxCo8VRm0+P/EYbPpALVkyOqSxjw1kdhsm
-X-Google-Smtp-Source: AA0mqf7/b6Z1dIxDI3j6l50TbC8lTfUuvb93V6Gdz+EBsCavgLLPplQv7WmqGe8QShVt27Gc1QfPROGRUHkQXk+4wz3lUQoTnSbt
+        Sun, 27 Nov 2022 03:54:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1322E3AD
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 00:53:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669539200;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Br4Rln7XCqJbOUw1KscJEXa06iK1vrBwPHJNVfCnrC8=;
+        b=Ir2/7oN3Mz/diTlH5LXUdYk8chfyTDetRw/hfFjKWJjV6YD5j8QMf0QgGuSB4FLO3Ls24K
+        aBIzTKgAIejvsJdxB7QW6EaV2fNk3NbYd1x3Q19OsKI6KL0eFCk/oBYJz4OenMI6o8E7DM
+        blMUxkmoSyZUyQD2AI+DFyB7IovbcT8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-149-zDqUkPI3MrGTDPCqFSKIvQ-1; Sun, 27 Nov 2022 03:53:17 -0500
+X-MC-Unique: zDqUkPI3MrGTDPCqFSKIvQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A9F1D8339B4;
+        Sun, 27 Nov 2022 08:53:16 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8D455492B05;
+        Sun, 27 Nov 2022 08:53:16 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [GIT PULL] KVM fixes for Linux 6.1-rc7
+Date:   Sun, 27 Nov 2022 03:53:16 -0500
+Message-Id: <20221127085316.452610-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:4395:b0:36d:9ec0:14e3 with SMTP id
- bo21-20020a056638439500b0036d9ec014e3mr14837140jab.44.1669539038180; Sun, 27
- Nov 2022 00:50:38 -0800 (PST)
-Date:   Sun, 27 Nov 2022 00:50:38 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004f406b05ee6fd9f9@google.com>
-Subject: [syzbot] kernel BUG in btrfs_global_root_delete
-From:   syzbot <syzbot+c53508efe63e66c13e68@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Linus,
 
-syzbot found the following issue on:
+The following changes since commit 6d3085e4d89ad7e6c7f1c6cf929d903393565861:
 
-HEAD commit:    6d464646530f Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=133c91bb880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=23eec5c79c22aaf8
-dashboard link: https://syzkaller.appspot.com/bug?extid=c53508efe63e66c13e68
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1534adbb880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11820973880000
+  KVM: x86/mmu: Block all page faults during kvm_zap_gfn_range() (2022-11-11 07:19:46 -0500)
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/f22d29413625/disk-6d464646.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/389f0a5f1a4a/vmlinux-6d464646.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/48ddb02d82da/Image-6d464646.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/57b749caa804/mount_0.gz
+are available in the Git repository at:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c53508efe63e66c13e68@syzkaller.appspotmail.com
+  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
 
-BTRFS error (device loop0): parent transid verify failed on logical 5255168 mirror 1 wanted 5 found 7
-BTRFS warning (device loop0): couldn't read tree root
-assertion failed: !tmp, in fs/btrfs/disk-io.c:1098
-------------[ cut here ]------------
-kernel BUG at fs/btrfs/ctree.h:3713!
-Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 0 PID: 3072 Comm: syz-executor365 Not tainted 6.1.0-rc6-syzkaller-32662-g6d464646530f #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : assertfail+0x28/0x2c fs/btrfs/ctree.h:3712
-lr : assertfail+0x28/0x2c fs/btrfs/ctree.h:3712
-sp : ffff800012df3800
-x29: ffff800012df3800 x28: 0000000000000000 x27: 000000000000000b
-x26: 0000000000000000 x25: ffff0000c734e000 x24: ffff0000c734e000
-x23: 0000000000000000 x22: ffff0000c99141f7 x21: ffff0000c9b9c0a0
-x20: ffff0000c9914000 x19: ffff0000c9b9c060 x18: 0000000000000201
-x17: 000000000000b67e x16: ffff80000dbe6158 x15: ffff0000c6904ec0
-x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000c6904ec0
-x11: ff808000081c4d40 x10: 0000000000000000 x9 : 3743abf7676a7c00
-x8 : 3743abf7676a7c00 x7 : ffff80000c08e4f4 x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000100000000 x0 : 0000000000000032
-Call trace:
- assertfail+0x28/0x2c fs/btrfs/ctree.h:3712
- btrfs_global_root_delete+0x0/0x54 fs/btrfs/disk-io.c:1098
- load_global_roots_objectid+0x20c/0x460 fs/btrfs/disk-io.c:2460
- load_global_roots fs/btrfs/disk-io.c:2494 [inline]
- btrfs_read_roots+0x60/0x530 fs/btrfs/disk-io.c:2521
- init_tree_roots+0x288/0x3d0 fs/btrfs/disk-io.c:2940
- open_ctree+0x688/0xdc8 fs/btrfs/disk-io.c:3634
- btrfs_fill_super+0xc0/0x174 fs/btrfs/super.c:1461
- btrfs_mount_root+0x4a4/0x558 fs/btrfs/super.c:1829
- legacy_get_tree+0x30/0x74 fs/fs_context.c:610
- vfs_get_tree+0x40/0x140 fs/super.c:1531
- fc_mount fs/namespace.c:1043 [inline]
- vfs_kern_mount+0xe0/0x140 fs/namespace.c:1073
- btrfs_mount+0x20c/0x5e8 fs/btrfs/super.c:1889
- legacy_get_tree+0x30/0x74 fs/fs_context.c:610
- vfs_get_tree+0x40/0x140 fs/super.c:1531
- do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
- path_mount+0x358/0x890 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-Code: d00060a2 910f0c00 91096c42 97fffbda (d4210000) 
----[ end trace 0000000000000000 ]---
+for you to fetch changes up to fe08e36be9ecbf6b38714a77c97b1d25b7a6e4b0:
 
+  Merge branch 'kvm-dwmw2-fixes' into HEAD (2022-11-23 18:59:45 -0500)
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+----------------------------------------------------------------
+x86:
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+* Fixes for Xen emulation.  While nobody should be enabling it in
+  the kernel (the only public users of the feature are the selftests),
+  the bug effectively allows userspace to read arbitrary memory.
+
+* Correctness fixes for nested hypervisors that do not intercept INIT
+  or SHUTDOWN on AMD; the subsequent CPU reset can cause a use-after-free
+  when it disables virtualization extensions.  While downgrading the panic
+  to a WARN is quite easy, the full fix is a bit more laborious; there
+  are also tests.  This is the bulk of the pull request.
+
+* Fix race condition due to incorrect mmu_lock use around
+  make_mmu_pages_available().
+
+Generic:
+
+* Obey changes to the kvm.halt_poll_ns module parameter in VMs
+  not using KVM_CAP_HALT_POLL, restoring behavior from before
+  the introduction of the capability
+
+----------------------------------------------------------------
+David Matlack (3):
+      KVM: Cap vcpu->halt_poll_ns before halting rather than after
+      KVM: Avoid re-reading kvm->max_halt_poll_ns during halt-polling
+      KVM: Obey kvm.halt_poll_ns in VMs not using KVM_CAP_HALT_POLL
+
+David Woodhouse (3):
+      KVM: x86/xen: Validate port number in SCHEDOP_poll
+      KVM: x86/xen: Only do in-kernel acceleration of hypercalls for guest CPL0
+      KVM: Update gfn_to_pfn_cache khva when it moves within the same page
+
+Kazuki Takiguchi (1):
+      KVM: x86/mmu: Fix race condition in direct_page_fault
+
+Maxim Levitsky (9):
+      KVM: x86: nSVM: leave nested mode on vCPU free
+      KVM: x86: nSVM: harden svm_free_nested against freeing vmcb02 while still in use
+      KVM: x86: add kvm_leave_nested
+      KVM: x86: forcibly leave nested mode on vCPU reset
+      KVM: selftests: move idt_entry to header
+      kvm: selftests: add svm nested shutdown test
+      KVM: x86: allow L1 to not intercept triple fault
+      KVM: selftests: add svm part to triple_fault_test
+      KVM: x86: remove exit_int_info warning in svm_handle_exit
+
+Paolo Bonzini (2):
+      Merge branch 'kvm-svm-harden' into HEAD
+      Merge branch 'kvm-dwmw2-fixes' into HEAD
+
+ arch/x86/kvm/mmu/mmu.c                             | 13 ++--
+ arch/x86/kvm/svm/nested.c                          | 12 +++-
+ arch/x86/kvm/svm/svm.c                             | 16 +----
+ arch/x86/kvm/vmx/nested.c                          |  4 +-
+ arch/x86/kvm/x86.c                                 | 29 +++++++--
+ arch/x86/kvm/xen.c                                 | 32 +++++++---
+ include/linux/kvm_host.h                           |  1 +
+ tools/testing/selftests/kvm/.gitignore             |  1 +
+ tools/testing/selftests/kvm/Makefile               |  1 +
+ .../selftests/kvm/include/x86_64/processor.h       | 13 ++++
+ tools/testing/selftests/kvm/lib/x86_64/processor.c | 13 ----
+ .../kvm/x86_64/svm_nested_shutdown_test.c          | 67 ++++++++++++++++++++
+ .../selftests/kvm/x86_64/triple_fault_event_test.c | 73 +++++++++++++++++-----
+ virt/kvm/kvm_main.c                                | 52 ++++++++++++---
+ virt/kvm/pfncache.c                                |  7 ++-
+ 15 files changed, 251 insertions(+), 83 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/svm_nested_shutdown_test.c
+
