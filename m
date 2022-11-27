@@ -2,151 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D6F5639C5D
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 19:31:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4A9F639C5F
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 19:31:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbiK0SbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 13:31:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38504 "EHLO
+        id S229628AbiK0Sbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 13:31:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiK0SbH (ORCPT
+        with ESMTP id S229487AbiK0Sbx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 13:31:07 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA0CDF64
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 10:30:54 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id a22-20020a17090a6d9600b0021896eb5554so11945387pjk.1
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 10:30:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jDF7fJniIMYLvPziDoJ8MkC8F8ub7ejPyCVqiyAzxbk=;
-        b=AisgvCleW+MkXJB8X9DCovNuu4hxzk9hIOBWg1ZYt5+sNDOfIoZyWmifRAm4aN0H7I
-         c8P9W9MQMq8C2OYcpbAuj1U+rAYWcPFXKZwUdfnY10rg9IKx7CxATGyoElfk6S1S8VPO
-         1PdJvLOOkunkyhOsSyUGCZoRXLYGlD5jrvKEQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jDF7fJniIMYLvPziDoJ8MkC8F8ub7ejPyCVqiyAzxbk=;
-        b=7+juQ3ylOqbM0NOWmCmFybC2dzynFN1BHP4EKWGw9UbvPBFWkWfbrdCBk84OVGtUZ7
-         4+IoZborRU5S6PDnlE4tYeZUaby7X2PH38F2cb5PoeQ/seD6usiKp7Vw7Y3JJWE1M+jf
-         tWDnhtce8LDdPvqhPKNkTUziOBJABFr4n1FmIpKUGkZ5Hr5fGIw6Esb8VwG/Dkub1Rak
-         n397tZEyUVmTrSjqQiKzawq0M22XXnrwMTCrbJJ8MLI5pEJ/P6uyp0WtPGmw+5x/PwLH
-         XaSeqja43Xl6R7uWxPtSswlwNqNOK4iFRf3C69FwbxMnmD2y3ucsl/VJVxVor7+eiw03
-         3YJg==
-X-Gm-Message-State: ANoB5plgJbcRsB9jRel/8U14qJJXp1J5W4quAMsN1aONyzh8JMqPWRyo
-        i3+/e52ZpQY63FvlSt6UR/d9cA==
-X-Google-Smtp-Source: AA0mqf7vMt+NN5E0Qb1RrNycekHOmPvCA4lKOn3JC1pm9sJj9xn15AgZOivCj9HY2oPU8DHoxQGftA==
-X-Received: by 2002:a17:903:491:b0:17f:73d6:4375 with SMTP id jj17-20020a170903049100b0017f73d64375mr28634744plb.24.1669573854418;
-        Sun, 27 Nov 2022 10:30:54 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d17-20020a170902729100b00186727e5f5csm7056105pll.248.2022.11.27.10.30.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Nov 2022 10:30:53 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Ben Skeggs <bskeggs@redhat.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        coverity-bot <keescook+coverity-bot@chromium.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Airlie <airlied@redhat.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] drm/nouveau/disp: Fix nvif_outp_acquire_dp() argument size
-Date:   Sun, 27 Nov 2022 10:30:41 -0800
-Message-Id: <20221127183036.never.139-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Sun, 27 Nov 2022 13:31:53 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4485BDF69;
+        Sun, 27 Nov 2022 10:31:51 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 23CD811ED;
+        Sun, 27 Nov 2022 19:31:49 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1669573909;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TfHh5EwkvsEuQH9VGCwExhDOA5E7QBcDJe9jFMWQ0RI=;
+        b=J4doKE8Mfp8wNgXOownzniBUUunsnoQdZqOxo6ua76abg9pzeDkCXJlQ0bFR3ZqEI531QD
+        vd+ICxZIkReyHuqsMANxXlmvvblA1wJOt9fYWodZMlC28hHktNAttAtXG314GeSNkB8DzP
+        v+H2HLi/bnlYHWoT0DROF3oItzqOXJa7u8XSeGgNmhq1OfNd8OzNSWz4YdiZ3lUTpo2GF1
+        TTCa57QRlzKao21eE5jBEMf4YzdD6MI76lTbxczl/iugAar+RqfWLMpJ5sJ4OpNyFXRxu5
+        ZvSVIl3P3TlG0Lv3zU55H4a7L8qVAEGYHx+8BfW4ciqkNNSjvv4IasMRgqVGCg==
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3658; h=from:subject:message-id; bh=sZK5dE9btSjBkKxfA4jZ7gqAN7jjH8fOoys33f5siLw=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjg6zRKOASHsDsI5HMr1hz1aZcJj50RsL9W8Nz5Ec5 WMshrKaJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY4Os0QAKCRCJcvTf3G3AJttfD/ sHXTAYQIIIzN3AhaUwjNIR6S7WQm41hdKZf7A6wWb27QHSC2ACLJlTNHmYZatZCamyBAee3hh2oqHx 7XFsahk/Ol4P6EbW01mVxCwKskddYuvUXLa8qUyhJC4bLcMzsTIEPc6YVwIgJjpxAX3pbY7gB5ESeS HT3MZCWZNWKTjuNID8ZXQxdYJ1/VRyviwStdrdIbYQqCchaHprlY7sOWqmBU8cYw6uFsagh0nbRBwl zs/Kjc5GftyjHyoLs4WaKuN9LaHvkj2XjasKuzfBbPFNW9yRzhi+C8dR/R+h+jKeWqkhEBdB6bcw2M cImYaS/PQSCVvpVKOas65BWndH40jdBfm6KKi/SuHjBxZlGYzlrfIE6V3i7R3i3Q4XGUsmI4JmlrpS Rkk8CzQimshj29kc2okst/XZw45BhnSgTCuR9iZJ+FWaFyE4qKCeI7E7WHRWjbGwbKXtOjbJODrxfE 9gqZy9H8op3PjIjubv/HqBFwQIbsnSfPerlyrbWphGlXeLiJVoiD/sano2XoEkHDHyQ1ZX8ROyfn+i kGj3eG1NhGSQ52RfWTOA/wNxDOyKVDLcycCYmNkc+z6fmfSSel+YAF/gQnjYWkVjJV5ih+ecrvnbln mFU2tAYNru46y5SD4WffSIFjQL4i0Ytk+cuQryA4M52g/e58iWl8g/IRG+LA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Date:   Sun, 27 Nov 2022 19:31:48 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linus.walleij@linaro.org, brgl@bgdev.pl,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        broonie@kernel.org
+Subject: Re: [PATCH v3 3/9] gpio: 104-dio-48e: Migrate to the regmap-irq API
+In-Reply-To: <Y3ykg1Vc96Px6ovg@fedora>
+References: <cover.1669100542.git.william.gray@linaro.org>
+ <80fc819bcafe9697b6e02c0750d3cf0ea4ec9e1b.1669100542.git.william.gray@linaro.org>
+ <Y3414YhVjqKakddV@smile.fi.intel.com> <Y3ykg1Vc96Px6ovg@fedora>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <3a23df35a35cdba19eeb10c75b5bca97@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both Coverity and GCC with -Wstringop-overflow noticed that
-nvif_outp_acquire_dp() accidentally defined its second argument with 1
-additional element:
+Hi,
 
-drivers/gpu/drm/nouveau/dispnv50/disp.c: In function 'nv50_pior_atomic_enable':
-drivers/gpu/drm/nouveau/dispnv50/disp.c:1813:17: error: 'nvif_outp_acquire_dp' accessing 16 bytes in a region of size 15 [-Werror=stringop-overflow=]
- 1813 |                 nvif_outp_acquire_dp(&nv_encoder->outp, nv_encoder->dp.dpcd, 0, 0, false, false);
-      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/nouveau/dispnv50/disp.c:1813:17: note: referencing argument 2 of type 'u8[16]' {aka 'unsigned char[16]'}
-drivers/gpu/drm/nouveau/include/nvif/outp.h:24:5: note: in a call to function 'nvif_outp_acquire_dp'
-   24 | int nvif_outp_acquire_dp(struct nvif_outp *, u8 dpcd[16],
-      |     ^~~~~~~~~~~~~~~~~~~~
+[sorry this mail was just delivered now, although it seems
+to be sent last Tuesday.]
 
-Avoid these warnings by defining the argument size using the matching
-define (DP_RECEIVER_CAP_SIZE, 15) instead of having it be a literal
-(and incorrect) value (16).
+Am 2022-11-22 11:29, schrieb William Breathitt Gray:
+> On Wed, Nov 23, 2022 at 05:01:53PM +0200, Andy Shevchenko wrote:
+>> On Tue, Nov 22, 2022 at 02:11:00AM -0500, William Breathitt Gray 
+>> wrote:
+>> > +	/* Initialize device interrupt state */
+>> > +	err = regmap_read(map, DIO48E_DISABLE_INTERRUPT, &val);
+>> > +	if (err)
+>> > +		return err;
+>> 
+>> Use ->init_hw() callback for this.
+> 
+> In a subsequent patch 7/9 we remove direct gpio_chip registration in
+> favor of the i8255 library registration via gpio_regmap. It doesn't 
+> look
+> like gpio_regmap_register() sets the init_hw() callback.
+> 
+> Michael, do you see any issues if I introduce init_hw() to
+> gpio_regmap_config? Or do you think this IRQ initialization belongs
+> somewhere else?
 
-Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1527269 ("Memory - corruptions")
-Addresses-Coverity-ID: 1527268 ("Memory - corruptions")
-Link: https://lore.kernel.org/lkml/202211100848.FFBA2432@keescook/
-Link: https://lore.kernel.org/lkml/202211100848.F4C2819BB@keescook/
-Fixes: 813443721331 ("drm/nouveau/disp: move DP link config into acquire")
-Cc: Ben Skeggs <bskeggs@redhat.com>
-Cc: Karol Herbst <kherbst@redhat.com>
-Cc: Lyude Paul <lyude@redhat.com>
-Cc: David Airlie <airlied@gmail.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Dave Airlie <airlied@redhat.com>
-Cc: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc: dri-devel@lists.freedesktop.org
-Cc: nouveau@lists.freedesktop.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/gpu/drm/nouveau/include/nvif/outp.h | 3 ++-
- drivers/gpu/drm/nouveau/nvif/outp.c         | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+Something like the following?
+   gpiochip->init_hw = config.irq_init_hw;
 
-diff --git a/drivers/gpu/drm/nouveau/include/nvif/outp.h b/drivers/gpu/drm/nouveau/include/nvif/outp.h
-index 45daadec3c0c..fa76a7b5e4b3 100644
---- a/drivers/gpu/drm/nouveau/include/nvif/outp.h
-+++ b/drivers/gpu/drm/nouveau/include/nvif/outp.h
-@@ -3,6 +3,7 @@
- #define __NVIF_OUTP_H__
- #include <nvif/object.h>
- #include <nvif/if0012.h>
-+#include <drm/display/drm_dp.h>
- struct nvif_disp;
- 
- struct nvif_outp {
-@@ -21,7 +22,7 @@ int nvif_outp_acquire_rgb_crt(struct nvif_outp *);
- int nvif_outp_acquire_tmds(struct nvif_outp *, int head,
- 			   bool hdmi, u8 max_ac_packet, u8 rekey, u8 scdc, bool hda);
- int nvif_outp_acquire_lvds(struct nvif_outp *, bool dual, bool bpc8);
--int nvif_outp_acquire_dp(struct nvif_outp *, u8 dpcd[16],
-+int nvif_outp_acquire_dp(struct nvif_outp *outp, u8 dpcd[DP_RECEIVER_CAP_SIZE],
- 			 int link_nr, int link_bw, bool hda, bool mst);
- void nvif_outp_release(struct nvif_outp *);
- int nvif_outp_infoframe(struct nvif_outp *, u8 type, struct nvif_outp_infoframe_v0 *, u32 size);
-diff --git a/drivers/gpu/drm/nouveau/nvif/outp.c b/drivers/gpu/drm/nouveau/nvif/outp.c
-index 7da39f1eae9f..c24bc5eae3ec 100644
---- a/drivers/gpu/drm/nouveau/nvif/outp.c
-+++ b/drivers/gpu/drm/nouveau/nvif/outp.c
-@@ -127,7 +127,7 @@ nvif_outp_acquire(struct nvif_outp *outp, u8 proto, struct nvif_outp_acquire_v0
- }
- 
- int
--nvif_outp_acquire_dp(struct nvif_outp *outp, u8 dpcd[16],
-+nvif_outp_acquire_dp(struct nvif_outp *outp, u8 dpcd[DP_RECEIVER_CAP_SIZE],
- 		     int link_nr, int link_bw, bool hda, bool mst)
- {
- 	struct nvif_outp_acquire_v0 args;
--- 
-2.34.1
+gpiochip doesn't seem to be the correct place, gpiochip_add_irqchip()
+is a noop for gpio-regmap, right? So using gpiochip_irqchip_init_hw()
+seems wrong.
 
+Maybe make gpio-regmap call it on its own? But really we just connect
+the regmap-irq to the gpiochip irqdomain. What is the purpose of the
+.init_hw callback? I've looked at other drivers which use regmap-irq
+and they all seem to just initialize the hardware in their _probe().
+
+-michael
