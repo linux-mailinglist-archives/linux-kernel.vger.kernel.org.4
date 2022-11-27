@@ -2,96 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C433639B37
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 15:04:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BA1B639B34
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 15:02:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiK0OER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 09:04:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33972 "EHLO
+        id S229554AbiK0OCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 09:02:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiK0OEP (ORCPT
+        with ESMTP id S229436AbiK0OCV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 09:04:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2F81004E;
-        Sun, 27 Nov 2022 06:04:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66572B80ADD;
-        Sun, 27 Nov 2022 14:04:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97E44C433C1;
-        Sun, 27 Nov 2022 14:04:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669557852;
-        bh=4bNVTJbFt80mnttNYrDImWd2gZShvy6+XtKhN9ZvMj4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=vRmswTbkv1OQ45SGk7Bw7JE4FBQh0T2lGw4KzDLaxC450U4bGg0FTQ6ZFRxLnXOhD
-         OUpzhJkODJpmbfH7t+2ac/dUgNrXiTzRUITlPsfrCspBsWM0e5c7khVDXWaVrQv+VE
-         b7y0f27oNidgRB8zjLWFiBBb5OHceIOgB4SREFq8=
-Date:   Sun, 27 Nov 2022 15:01:58 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB driver fixes for 6.1-rc7
-Message-ID: <Y4Nt1l1L+kuOTEfO@kroah.com>
+        Sun, 27 Nov 2022 09:02:21 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E4E64C2
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 06:02:21 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id vv4so20085085ejc.2
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 06:02:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Lf0lCR+u8PMB9vsCy2CzoVh2AzQlmbXa7mTITxhx7k0=;
+        b=WoXB25Ziw2M8fDduSMN24s0eC3kQjea/ss7ETaO/jesndmxTMn11FEkdFSc00S86ZQ
+         YXU74qAw82LQsBzBCr/yP6/nKswIwm4rcilATt0gaRY4/h8l0eb/UdDHzPvHFAeyGIxn
+         +KH3FHZFvru2k/vSfxQfuveudzh6g/NRQfK/qH1YXO1pNuazrs7uAZZVtY6ETEMOnL3g
+         mOWanZT66OzUXW/OJ1cTTvk54KUl3jacTPHD1U4Kicoq1mKdmRnoyRXTRAqc5AMrpHEw
+         6oFUcLtnhq76+sSP/DE/MzpHr40CAJswSlS7xXq8wOD1sKMDqz9kRLF754OKKp1uPg22
+         NAuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lf0lCR+u8PMB9vsCy2CzoVh2AzQlmbXa7mTITxhx7k0=;
+        b=Cuwt1osOhQ3wvBW82lEOvRDPtSiVrzxv8gtIJoEHy/mvPfrZEr7ZcZBApNOmn3K4oD
+         Gn03IrjL7+tTTiWyLr7elsHB2b/axRgpnd3JFRp83PBuQ2qinXB8rSMa9ZxZzSf8QdDm
+         x3fW8urbihiO8xEkLAEdhonC6NPiWg7eFogn81DxaQDYJ+vrjMC6RvwjznBD0H4AFijj
+         3dz74zB2DVEmQoHEE5Iaz3Ow9GIl1GN8orEz+YHuhXfLQcPKQ20zlPyS1Rcr9Qr9JnQ4
+         eg8bp+S7nIUy2fvCLdKQ5EXlvE1EHfu46m9LzLW2ax0KLk8uhSMBqbAuxu2Obkn2c/zx
+         nozg==
+X-Gm-Message-State: ANoB5pmZsDpKS1z79lqP7gEKzCFvdSy8Y1AuYH7dKiUWPlYOVcwMoRDd
+        BavkvDiKJoExOM/GnEtZUnHd7creEtbZ+pHODYY=
+X-Google-Smtp-Source: AA0mqf7Kbv8wOzqs7zxKrH2p7CMGeG7YXX+/o06CrRVbAvqb5gAZ3IRv8nY5d3pTMNnX+iN0YyUU4wsGHvuyu49jnoc=
+X-Received: by 2002:a17:906:3145:b0:7b5:665a:fca5 with SMTP id
+ e5-20020a170906314500b007b5665afca5mr24939634eje.10.1669557738201; Sun, 27
+ Nov 2022 06:02:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6f02:40a3:b0:27:8ca1:d68a with HTTP; Sun, 27 Nov 2022
+ 06:02:17 -0800 (PST)
+Reply-To: n1a1t@yahoo.com
+From:   Lucinda <rita.lerouti@gmail.com>
+Date:   Sun, 27 Nov 2022 15:02:17 +0100
+Message-ID: <CA+9Q32dMk0HkZ7cRYhS__5=NmphR-g0N0JkRU3TvS7S6TbDKPA@mail.gmail.com>
+Subject: Hello Dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit eb7081409f94a9a8608593d0fb63a1aa3d6f95d8:
-
-  Linux 6.1-rc6 (2022-11-20 16:02:16 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.1-rc7
-
-for you to fetch changes up to 7a21b27aafa3edead79ed97e6f22236be6b9f447:
-
-  usb: cdnsp: fix issue with ZLP - added TD_SIZE = 1 (2022-11-22 16:52:05 +0100)
-
-----------------------------------------------------------------
-USB fixes for 6.1-rc7
-
-Here are some small USB fixes for 6.1-rc7 that resolve some reported
-problems:
-	- cdnsp driver fixes for reported problems
-	- dwc3 fixes for some small reported problems
-	- uvc gadget driver fix for reported regression due to changes
-	  in 6.1-rc1.
-
-All of these have been in linux-next with no reported problems.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Marek Szyprowski (1):
-      usb: dwc3: exynos: Fix remove() function
-
-Michael Grzeschik (1):
-      usb: gadget: uvc: also use try_format in set_format
-
-Pawel Laszczak (2):
-      usb: cdnsp: Fix issue with Clear Feature Halt Endpoint
-      usb: cdnsp: fix issue with ZLP - added TD_SIZE = 1
-
-Thinh Nguyen (2):
-      usb: dwc3: gadget: Disable GUSB2PHYCFG.SUSPHY for End Transfer
-      usb: dwc3: gadget: Clear ep descriptor last
-
- drivers/usb/cdns3/cdnsp-gadget.c       | 12 ++----
- drivers/usb/cdns3/cdnsp-ring.c         | 17 +++++---
- drivers/usb/dwc3/dwc3-exynos.c         | 11 +-----
- drivers/usb/dwc3/gadget.c              | 15 +++----
- drivers/usb/gadget/function/uvc_v4l2.c | 72 ++++++++++------------------------
- 5 files changed, 46 insertions(+), 81 deletions(-)
+Good Day
+with all due respect I ask for your permission to have a talk with you
+of something very important and urgent.
