@@ -2,50 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53105639BF7
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 18:21:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06393639BFA
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 18:23:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbiK0RVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 12:21:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48720 "EHLO
+        id S229550AbiK0RX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 12:23:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiK0RVs (ORCPT
+        with ESMTP id S229475AbiK0RXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 12:21:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7D4E0C6;
-        Sun, 27 Nov 2022 09:21:46 -0800 (PST)
+        Sun, 27 Nov 2022 12:23:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B33C63BD;
+        Sun, 27 Nov 2022 09:23:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 10736B80B28;
-        Sun, 27 Nov 2022 17:21:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75584C433C1;
-        Sun, 27 Nov 2022 17:21:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD9F960DED;
+        Sun, 27 Nov 2022 17:23:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A2C8C433D6;
+        Sun, 27 Nov 2022 17:23:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669569703;
-        bh=yyGZAKSi7dlG99PxQGUXdvxP+H5Bjf8b1R4WTI/6NOs=;
+        s=k20201202; t=1669569803;
+        bh=QIMLfSDoL2lbgD+2NPt656LV7PYTHEk9OFRVgEJkQ6I=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tEepddheUjXivjZNeWJHRb7ZU63FD0Sdt9N7X3LCVG4dCOaqe4adAyfLoBfOCELR1
-         uDvRdMXUkWdvRBA57oremvR15fQ4LrPOVFgcD8PKq2fuxWqplR0+/4UftgNlFxfsFB
-         5apnLltHV3MRSLXrvKTSjG6J/byjbp/kJEc6yIFmPGMJBDfQPgm2j2QgAjmUTx6cMw
-         awsGnWtSjDsq5tnCr71bE6dS3nG9BNmz/JVjIdC5L6jkzEcgeFZVn1ctcwkJhRBHnr
-         d/D5h3vxLfaSytz17ds+ifWxZbJQ+eLG85nUE7bd6emRU5T05yPzDwaMDtNeqI5Ke1
-         9emmdURTqI9og==
-Date:   Sun, 27 Nov 2022 19:21:39 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Hanjun Guo <guohanjun@huawei.com>
-Cc:     Peter Huewe <peterhuewe@gmx.de>, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] tpm: tpm_tis: Add the missed acpi_put_table() to
- fix memory leak
-Message-ID: <Y4Oco99TYl6CN8Yk@kernel.org>
-References: <1668684222-38457-1-git-send-email-guohanjun@huawei.com>
- <1668684222-38457-4-git-send-email-guohanjun@huawei.com>
+        b=h6WvF6BELW59nr2a2BhTjwjrpyngeFskVIePIM+nQYgIZm8teu3eAQPa3goYTeRv9
+         NWeEvdYKq/y1OV6eFVH9E5hGk0hLLwaPPGiTtPEbOVr8/XDXi7C2tjrrTvwdVBBK/Z
+         igZv7PlC3qLhJAMV0xPH8YBsvBKx0OwPxRk8zwd8G1PE5LWM83kj0ZRV9RuPoowJAq
+         YGeD6GoiojCyU4NiKz8bIvdssGXe8lZal6j2m2JUWXkwNKYPFurBUL3fJvabLX9wPW
+         TTKXr3Yat9dp3KQh3Xvya8HxbJj/7lRduvDG2MVQH+1Kayj8KHfis7PcV04ekgubG7
+         fPP5D+3V3bDjw==
+Date:   Sun, 27 Nov 2022 17:23:18 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v2 4/9] dt-bindings: vendor-prefixes: add bouffalolab
+Message-ID: <Y4OdBr3/uTPVbxMk@spud>
+References: <20221127132448.4034-1-jszhang@kernel.org>
+ <20221127132448.4034-5-jszhang@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1668684222-38457-4-git-send-email-guohanjun@huawei.com>
+In-Reply-To: <20221127132448.4034-5-jszhang@kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,57 +62,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 07:23:42PM +0800, Hanjun Guo wrote:
-> In check_acpi_tpm2(), we get the TPM2 table just to make
-> sure the table is there, not used after the init, so the
-> acpi_put_table() should be added to release the ACPI memory.
+On Sun, Nov 27, 2022 at 09:24:43PM +0800, Jisheng Zhang wrote:
+> In the following commits, we will support bl808 SoC which is from
+> Bouffalo Lab Technology (Nanjing) Co., Ltd.
 > 
-> Fixes: 4cb586a188d4 ("tpm_tis: Consolidate the platform and acpi probe flow")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Hanjun Guo <guohanjun@huawei.com>
+> Add bouffalolab vendor prefix binding.
+> 
+
+Perhaps add
+Link: https://en.bouffalolab.com/
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 > ---
->  drivers/char/tpm/tpm_tis.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
-> index bcff642..ed5dabd 100644
-> --- a/drivers/char/tpm/tpm_tis.c
-> +++ b/drivers/char/tpm/tpm_tis.c
-> @@ -125,6 +125,7 @@ static int check_acpi_tpm2(struct device *dev)
->  	const struct acpi_device_id *aid = acpi_match_device(tpm_acpi_tbl, dev);
->  	struct acpi_table_tpm2 *tbl;
->  	acpi_status st;
-> +	int ret = 0;
->  
->  	if (!aid || aid->driver_data != DEVICE_IS_TPM2)
->  		return 0;
-> @@ -132,8 +133,7 @@ static int check_acpi_tpm2(struct device *dev)
->  	/* If the ACPI TPM2 signature is matched then a global ACPI_SIG_TPM2
->  	 * table is mandatory
->  	 */
-> -	st =
-> -	    acpi_get_table(ACPI_SIG_TPM2, 1, (struct acpi_table_header **)&tbl);
-> +	st = acpi_get_table(ACPI_SIG_TPM2, 1, (struct acpi_table_header **)&tbl);
->  	if (ACPI_FAILURE(st) || tbl->header.length < sizeof(*tbl)) {
->  		dev_err(dev, FW_BUG "failed to get TPM2 ACPI table\n");
->  		return -EINVAL;
-> @@ -141,9 +141,10 @@ static int check_acpi_tpm2(struct device *dev)
->  
->  	/* The tpm2_crb driver handles this device */
->  	if (tbl->start_method != ACPI_TPM2_MEMORY_MAPPED)
-> -		return -ENODEV;
-> +		ret = -ENODEV;
->  
-> -	return 0;
-> +	acpi_put_table((struct acpi_table_header *)tbl);
-> +	return ret;
->  }
->  #else
->  static int check_acpi_tpm2(struct device *dev)
+> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> index 6e323a380294..81618f1dc01b 100644
+> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> @@ -194,6 +194,8 @@ patternProperties:
+>      description: BOE Technology Group Co., Ltd.
+>    "^bosch,.*":
+>      description: Bosch Sensortec GmbH
+> +  "^bouffalolab,.*":
+> +    description: Bouffalo Lab Technology (Nanjing) Co., Ltd.
+>    "^boundary,.*":
+>      description: Boundary Devices Inc.
+>    "^broadmobi,.*":
 > -- 
-> 1.7.12.4
+> 2.38.1
 > 
-
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-
-BR, Jarkko
