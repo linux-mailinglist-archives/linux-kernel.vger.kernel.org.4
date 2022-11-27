@@ -2,132 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3135639BE2
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 18:09:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE268639BE8
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 18:14:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbiK0RJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 12:09:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44196 "EHLO
+        id S229615AbiK0ROr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 12:14:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiK0RJX (ORCPT
+        with ESMTP id S229607AbiK0ROp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 12:09:23 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E04DFC8;
-        Sun, 27 Nov 2022 09:09:21 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id b12so13493390wrn.2;
-        Sun, 27 Nov 2022 09:09:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZuxgIdp0xqTuRzzoLY4mlfDBUIEbIXvI9sh1okauOJY=;
-        b=pWIVrtE+bZyK95xZII6HnM1QCqdBwq+IIG8jf0RMxy9mIlPtKE2E26sGU86z8OWZTK
-         A27ibDJKYn3VrYLJ12uLLTyujcIaOmWRxhe/AmW60EQmPi9dDEhpT97dblIR70xmp4pn
-         L5D7+iIl2VI+BS/a1BmOAXiWPzkxlKfuvvBrI9wN9hO3NzatGcLeFAmL4z8xuNBsKhpz
-         V08pHbFLUPS7fRY/oCGRf8jlvaVusCUcGWebidmdyui3zfgBK5GoJR3V5wLtr5N+vJzY
-         8i3U0bhY6NyoZuvq8Q0RnHE611BpbcspaXR6TiZAM3NrpV6Fd2nxuEKjrMo5lsMbhdTT
-         s6Tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZuxgIdp0xqTuRzzoLY4mlfDBUIEbIXvI9sh1okauOJY=;
-        b=XSRkoZqWJrIsxGgFDlic1wCt+10lS3e2Y5Dj6SSFm8SpZqVI/lryrJoBV9KkX0iIC0
-         V5ybW7MEGbdfOX1pfuRosUXKAm0eWmDaZy3z2KyrT9RYkDzYRE6BXtAKoswFw8AGDO4n
-         +atbzWyv1WuAD3nAXlUoPLbYuDU53Mxa4V2Tn6MJ/GAKjMcoLNlZkNhicwHQTxBsmvsW
-         j5Z/+WC1o6DnI9EboXhXb1DgY91nm1NT5W/hXyHORnvUahUm2nk/zW2H1OXdbDe/iJNs
-         ed5f1tc82ToRlmTYiwWFtQSzJ/5xW+AXXsuPD0CFny6UX+8DFqk+OqQD5n9lCYTPqeex
-         l+Pg==
-X-Gm-Message-State: ANoB5pmAAmRJtnwwCXIKBxoa9sdEyVmGDtxUixI0sq/CdzRSh8PW7nmf
-        y0ISesUXKdxh8qOrXvKQfa9gQnra3JTDl6WKNJg=
-X-Google-Smtp-Source: AA0mqf7+EiB7WO98d0txKip1y+2BqXjm3rTbhRGEd5/7rOcytRv8lxYyKcy8CxKK2672BJ5eyZLDIA==
-X-Received: by 2002:a5d:4d8b:0:b0:241:bf7b:db5b with SMTP id b11-20020a5d4d8b000000b00241bf7bdb5bmr26740939wru.267.1669568960696;
-        Sun, 27 Nov 2022 09:09:20 -0800 (PST)
-Received: from david-ryuzu.fritz.box (ipbcc3aba7.dynamic.kabel-deutschland.de. [188.195.171.167])
-        by smtp.googlemail.com with ESMTPSA id h17-20020a05600c315100b003cf483ee8e0sm17759967wmo.24.2022.11.27.09.09.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Nov 2022 09:09:20 -0800 (PST)
-From:   David Wronek <davidwronek@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        David Wronek <davidwronek@gmail.com>
-Subject: [PATCH 3/3] arm64: dts: qcom: sm8250-lenovo-j716f: Enable ADSP/CDSP/SLPI
-Date:   Sun, 27 Nov 2022 18:08:58 +0100
-Message-Id: <20221127170858.440040-4-davidwronek@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221127170858.440040-1-davidwronek@gmail.com>
-References: <20221127170858.440040-1-davidwronek@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 27 Nov 2022 12:14:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C25DFC8;
+        Sun, 27 Nov 2022 09:14:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CF0260DE9;
+        Sun, 27 Nov 2022 17:14:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A978EC433C1;
+        Sun, 27 Nov 2022 17:14:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669569283;
+        bh=eNWntHnxbLAV4gOOf2ZSjoUMjvCuwoALQIiJkyR8ZXY=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Inn9+rgvd3iHwQH0MJDxY1GEoU8L6KQnFWrVlnMKGQpu9vNhv9Qo1bOa+NWqoWQCC
+         QZxq854DT84Qv5avALn8OoWDBG1m1XfzcK6s92lEWEgOd1Ko68YI1PFEGVuQ/QzEbo
+         h46hRCPfvaMgNVDxCH06t33DTc/GMKV0qEEVoS1qy14kMRLLU89Lxt1v9xD5slHzXf
+         +1z7pwEDhcfFIkPkjxoWBVNJXYSMLTnJ5TbSBJMHAzYduuIad5de3ynw05Ah9CL2Ip
+         j6JmjAdazcExx0u5Lpq5IrNl5203LCrtHsv7frov9KbVlQ/XXBmOmIzV6X2PexK1XN
+         WQUXn0zJyw5Pg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 96D4AE21EFD;
+        Sun, 27 Nov 2022 17:14:43 +0000 (UTC)
+Subject: Re: [GIT PULL] SMB3 client fixes
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAH2r5ms=XKgJ0sWmYaCG+MY3RHv4vDdGO3VAZAQ=XQLzBW1dzA@mail.gmail.com>
+References: <CAH2r5ms=XKgJ0sWmYaCG+MY3RHv4vDdGO3VAZAQ=XQLzBW1dzA@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-cifs.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAH2r5ms=XKgJ0sWmYaCG+MY3RHv4vDdGO3VAZAQ=XQLzBW1dzA@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.samba.org/sfrench/cifs-2.6.git tags/6.1-rc6-smb3-fixes
+X-PR-Tracked-Commit-Id: 502487847743018c93d75b401eac2ea4c4973123
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 30a853c1bdede177adedd2de537ea16158125181
+Message-Id: <166956928361.3809.9583123688485858979.pr-tracker-bot@kernel.org>
+Date:   Sun, 27 Nov 2022 17:14:43 +0000
+To:     Steve French <smfrench@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enabled the ADSP, CDSP and SLPI remoteprocs with a simple "okay".
-Firmware needs to be provided by the Linux distribution, as it's signed
-and needs to come from stock Android.
+The pull request you sent on Sat, 26 Nov 2022 22:44:50 -0600:
 
-Signed-off-by: David Wronek <davidwronek@gmail.com>
----
- arch/arm64/boot/dts/qcom/sm8250-lenovo-j716f.dts | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+> git://git.samba.org/sfrench/cifs-2.6.git tags/6.1-rc6-smb3-fixes
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250-lenovo-j716f.dts b/arch/arm64/boot/dts/qcom/sm8250-lenovo-j716f.dts
-index c493721ef664..33edeb6f3ef4 100644
---- a/arch/arm64/boot/dts/qcom/sm8250-lenovo-j716f.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8250-lenovo-j716f.dts
-@@ -76,6 +76,11 @@ vreg_s6c_0p88: smpc6-regulator {
- 	};
- };
- 
-+&adsp {
-+	status = "okay";
-+	firmware-name = "qcom/sm8250/j716f/adsp.mbn";
-+};
-+
- &apps_rsc {
- 	pm8150-rpmh-regulators {
- 		compatible = "qcom,pm8150-rpmh-regulators";
-@@ -434,6 +439,11 @@ vreg_l7f_1p8: ldo7 {
- 	};
- };
- 
-+&cdsp {
-+	status = "okay";
-+	firmware-name = "qcom/sm8250/j716f/cdsp.mbn";
-+};
-+
- &gpi_dma0 {
- 	status = "okay";
- };
-@@ -515,6 +525,11 @@ &qupv3_id_2 {
- 	status = "okay";
- };
- 
-+&slpi {
-+	status = "okay";
-+	firmware-name = "qcom/sm8250/j716f/slpi.mbn";
-+};
-+
- &tlmm {
- 	gpio-reserved-ranges = <40 4>;
- };
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/30a853c1bdede177adedd2de537ea16158125181
+
+Thank you!
+
 -- 
-2.38.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
