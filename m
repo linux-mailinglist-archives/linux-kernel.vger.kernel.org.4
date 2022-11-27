@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A283B639E4C
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 00:56:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02437639E4D
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 00:57:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbiK0X4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 18:56:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44336 "EHLO
+        id S229616AbiK0X51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 18:57:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiK0X4H (ORCPT
+        with ESMTP id S229509AbiK0X5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 18:56:07 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E701BC93;
-        Sun, 27 Nov 2022 15:56:06 -0800 (PST)
+        Sun, 27 Nov 2022 18:57:25 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E94BC93
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 15:57:24 -0800 (PST)
 Received: (Authenticated sender: gregory.clement@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7E8DF40006;
-        Sun, 27 Nov 2022 23:56:03 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id BD916240004;
+        Sun, 27 Nov 2022 23:57:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1669593365;
+        t=1669593443;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2cLQyRvTObsQSLR0d1Gq8L390yP6Zpvaz75Y8uF4u+U=;
-        b=DdrpY7xoS3ciCKeMPN4cBm0Cz5UUQmtRY+1gdK9iJ8QL8a3UJbD8Pq3JGDUbbCFAHZSQJb
-        k3hnhlhCYZtUOn2YlixtLUs0v8cW0YLWXcGNgCee3CImITPWwNeUlZBQKFzJWg6ils46C+
-        RvnOEvhZNQnEaGDGbm2z82Lw2MxBlC9Nekm1kokqdIZfIZddiaderKcWID1ez1ja3bKVSm
-        nTuf/turaFPxCP/hVq1O7FOrW09zU87Qsgg7muy1q2yFd9/z71cXzraw+xECV6SbB0NPkR
-        Ukuuh/DslHXEHHnG3C20PuNfWq2dCKYRRH16XFEhQaXKi/AsGp1OjDvROBIfbw==
+        bh=l37uiqnZyo16oWSX5uCWvxnVzS1dNzc8ScxGMBi1+/0=;
+        b=B3/AbFM16eHclLkaiGbLAh1RP5qx+OOjZa1llo3o+ElviDZJ6mUaUKatJByQR7iGhKZLNq
+        KW/fByZUyi0Pq+pKYeRZahKwSUatCbb3V45yQ2pAKXtTlumiau0ypVaj3+4sAypTqr5G1d
+        P0UahJn4kNOUWyQ5k6K2eg9+LuNWMZrBrNL8lNc4ZBU8NS9gpShMO2xn8p1Fjn3qRIyaBK
+        9AYQrzxqAEfzVhJtNaEeH00vy1rFutZiTI+6P/XHC/FZ0qbuA2ur2kHqsbyt9wI3GUHPDA
+        mrQFDUhPs8nt5SRONtT64aWYaX76U2HxXGfAp8HaBKOIE8VttWY0SnSVeYbqOw==
 From:   Gregory CLEMENT <gregory.clement@bootlin.com>
 To:     Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>,
         Andrew Lunn <andrew@lunn.ch>,
         Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
         Rob Herring <robh+dt@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Marek =?utf-8?Q?Beh=C3=BAn?= <kabel@kernel.org>
-Subject: Re: [PATCH 0/6] ARM: dts: pci-mvebu: Fix assigned-addresses for
- every PCIe Root Port
-In-Reply-To: <20220817223053.31141-1-pali@kernel.org>
-References: <20220817223053.31141-1-pali@kernel.org>
-Date:   Mon, 28 Nov 2022 00:56:03 +0100
-Message-ID: <878rjw9cks.fsf@BL-laptop>
+Cc:     Marek =?utf-8?Q?Beh=C3=BAn?= <kabel@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: dts: turris-omnia: Add ethernet aliases
+In-Reply-To: <20220727130926.1874-1-pali@kernel.org>
+References: <20220727130926.1874-1-pali@kernel.org>
+Date:   Mon, 28 Nov 2022 00:57:22 +0100
+Message-ID: <875yf09cil.fsf@BL-laptop>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
@@ -59,54 +57,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Pali Roh=C3=A1r <pali@kernel.org> writes:
 
-> Per IEEE Std 1275-1994 bindings documentation (to which kernel DT
-> bindings refers), DT property assigned-addresses contains BDF address
-> of resource. Currently more PCIe Root Port nodes have BDF address in
-> assigned-addresses which points to different PCIe Root Port nodes. This
-> obviously does not make sense as the address resource specified in
-> assigned-addresses of every PCIe Root Port describes address range of
-> internal registers which are specific for corresponding Marvell PCIe
-> Root Port. Fix this issue and align all BDF addresses in
-> assigned-addresses DT property to specify correct BDF address of the
-> current PCIe Root Port.
+> This allows bootloader to correctly pass MAC addresses used by bootloader
+> to individual interfaces into kernel device tree.
 >
-> Note that current version of pci-mvebu.c controller driver, which
-> registers Marvell PCIe Root Ports, ignores BDF value in DT property
-> assigned-addresses. It expects that Root Port's assigned-addresses
-> contains address range of that root port. That is why driver currently
-> works without any issue and nobody spotted it. But if driver or
-> something else would do device tree validation then this issue should be
-> spotted and throws error. Also device tree files may be used by other
-> projects where drivers may require correct values.
->
-> This patch series aligns BDF address of every Marvell PCIe Root Port in
-> node name, config space in reg property and mem in assigned-address
-> property of internal registers resource.
->
-> Pali Roh=C3=A1r (6):
->   ARM: dts: dove: Fix assigned-addresses for every PCIe Root Port
->   ARM: dts: armada-370: Fix assigned-addresses for every PCIe Root Port
->   ARM: dts: armada-xp: Fix assigned-addresses for every PCIe Root Port
->   ARM: dts: armada-375: Fix assigned-addresses for every PCIe Root Port
->   ARM: dts: armada-38x: Fix assigned-addresses for every PCIe Root Port
->   ARM: dts: armada-39x: Fix assigned-addresses for every PCIe Root Port
+> Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
 
-Series applied on mvebu/dt
+Applied on mvebu/dt
 
 Thanks,
 
 Gregory
+> ---
+>  arch/arm/boot/dts/armada-385-turris-omnia.dts | 6 ++++++
+>  1 file changed, 6 insertions(+)
 >
->  arch/arm/boot/dts/armada-370.dtsi        |  2 +-
->  arch/arm/boot/dts/armada-375.dtsi        |  2 +-
->  arch/arm/boot/dts/armada-380.dtsi        |  4 ++--
->  arch/arm/boot/dts/armada-385.dtsi        |  6 +++---
->  arch/arm/boot/dts/armada-39x.dtsi        |  6 +++---
->  arch/arm/boot/dts/armada-xp-mv78230.dtsi |  8 ++++----
->  arch/arm/boot/dts/armada-xp-mv78260.dtsi | 16 ++++++++--------
->  arch/arm/boot/dts/dove.dtsi              |  2 +-
->  8 files changed, 23 insertions(+), 23 deletions(-)
->
+> diff --git a/arch/arm/boot/dts/armada-385-turris-omnia.dts b/arch/arm/boo=
+t/dts/armada-385-turris-omnia.dts
+> index f4eb6898aa6b..d2afa466e29a 100644
+> --- a/arch/arm/boot/dts/armada-385-turris-omnia.dts
+> +++ b/arch/arm/boot/dts/armada-385-turris-omnia.dts
+> @@ -23,6 +23,12 @@
+>  		stdout-path =3D &uart0;
+>  	};
+>=20=20
+> +	aliases {
+> +		ethernet0 =3D &eth0;
+> +		ethernet1 =3D &eth1;
+> +		ethernet2 =3D &eth2;
+> +	};
+> +
+>  	memory {
+>  		device_type =3D "memory";
+>  		reg =3D <0x00000000 0x40000000>; /* 1024 MB */
 > --=20
 > 2.20.1
 >
