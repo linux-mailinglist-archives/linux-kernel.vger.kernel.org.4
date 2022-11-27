@@ -2,117 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0EAD639D39
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 22:19:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10CAD639D3B
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 22:21:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbiK0VT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 16:19:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59998 "EHLO
+        id S229685AbiK0VVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 16:21:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiK0VT1 (ORCPT
+        with ESMTP id S229514AbiK0VVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 16:19:27 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE7AC74B
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 13:19:24 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id e15so3320026ljl.7
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 13:19:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BVBgzY9fU1meRitwXiLvwOD49gdhxqJl429JsRhYymU=;
-        b=a/jjz4wItuIdT6k5VAZduTzFm0xbhGSzhMsNNqdSUcmH6Outl5im8p9ewKhbpsrZg0
-         55k9Y9LPpZpDjDaNehWchb8gMJjJrW1whi8fteyqoSbtdA2TerLxbLGbxTv0HsTPurja
-         7A76C26Mjp2vKWaCbd5gZesK0tlOau67PiW5mmz7aoRL/WCPbjqvubDobmp7yMqzK6ly
-         pRDe2erXgXRo6eliEaiWB2lxvwQ6FBIyWZUfaBKobUVd3xPmiA7CifqCkS2IjMsGVSQA
-         1SRKLI1Ab7vphBn4oqnoCFc14T8QM3el4XPBESI7Je9JBtrK9rh5BkVjEWVTexwqLJ0n
-         yTlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BVBgzY9fU1meRitwXiLvwOD49gdhxqJl429JsRhYymU=;
-        b=GGPfh7hzV9ELS9MYOfeEBt9pkop5PHHspTS2IWYEJV1SszEMqUEIQYQ16PYuUweRaH
-         2gFM9Kldyd7I4KF7dE6qndIPKOBAr9wPREdxvbvAPl9E9I51GQSeMOynN4V1HDBC8+3k
-         WxffMPEZeea3x52sbOFks0HZ4g8lO1cZTW2cL213PBX/0VBDYP+pPgCIziH1KTMC6eEG
-         Csk7FSSijBSqsNFTN79j1pGGQqfJRlZlJoELj7bProbNQJQx1IxDpC6xRZxCEkOVLCCp
-         J0NVfGGxuei70CNRX894nb+4Wk8KKQYKpAt5490SA8KKGZ5gNdlDOHf/WMH7Wl7O4AMH
-         iXPA==
-X-Gm-Message-State: ANoB5pk86FrQku6uyefxBpNP4Y8cBJZvAVPBIINJ2x0vnQUPevOzT639
-        KC0cGfGf8mOnSg8CF0TC4u0ENC4MxjML8p4u
-X-Google-Smtp-Source: AA0mqf6TvYFJg6yLdGfKu+TkPqfL+Gy8GK+gmAHr8JecKy952l+k7/NH80FfVgn7smfjHPEQbCZc5g==
-X-Received: by 2002:a05:651c:ba5:b0:279:9a7c:ed14 with SMTP id bg37-20020a05651c0ba500b002799a7ced14mr2181755ljb.351.1669583963258;
-        Sun, 27 Nov 2022 13:19:23 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id p21-20020a2eba15000000b002777a07f48esm1070720lja.12.2022.11.27.13.19.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Nov 2022 13:19:22 -0800 (PST)
-Message-ID: <64620c65-15b7-314c-4990-5f2f42295acd@linaro.org>
-Date:   Sun, 27 Nov 2022 22:19:21 +0100
+        Sun, 27 Nov 2022 16:21:18 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F94C767;
+        Sun, 27 Nov 2022 13:21:15 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NL1jy6Lb0z4x1H;
+        Mon, 28 Nov 2022 08:21:10 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1669584071;
+        bh=E7O8hKlAa8UVSirv1JlGS8ojDlZNmXtagLbs83whE3Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ithL5iEiPNtACKqWb/sMmpHO+x4hRCZg9bqeIsoGZlB1o1AGMWzQ5oa2SRooU9CFq
+         t7wLrzYEan3z3iIDPBmeBWB4hY+Tll2p6B6XGb9/RJxUaQ07dvSkmi6gsfZtJ2yk4p
+         Sl3s6qkrirEm5TLxKWRtIcgveX/mQrUdgLS/4l8SwHElFA7zDgP+uIuJn7B7OrZucm
+         ZPlTtVE0wwDMNTd6e76VhdQ7jHsuJ55GyE49+1K7ry7qdRAEXVcF/FrYjKHEb0FKyN
+         qS04VCnWs+6OF7vBAiXI/+HNquA6uDqL+pFw1cgOpD1e2YsdEiSl3C0vMHofyyAyp5
+         ZurZw31hJPXNg==
+Date:   Mon, 28 Nov 2022 08:20:46 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the
+ v4l-dvb-next tree
+Message-ID: <20221128082046.26d95e24@canb.auug.org.au>
+In-Reply-To: <20221116073848.46178032@canb.auug.org.au>
+References: <20221116073848.46178032@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH net-next v2 2/7] dt-bindings: net: marvell,dfx-server:
- Convert to yaml
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org, Robert Marko <robert.marko@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Michael Walle <michael@walle.cc>,
-        Marcin Wojtas <mw@semihalf.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Vadym Kochan <vadym.kochan@plvision.eu>
-References: <20221124111556.264647-1-miquel.raynal@bootlin.com>
- <20221124111556.264647-3-miquel.raynal@bootlin.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221124111556.264647-3-miquel.raynal@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/.767puWyK/d1N4jzBET_Kbi";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/11/2022 12:15, Miquel Raynal wrote:
-> Even though this description is not used anywhere upstream (no matching
-> driver), while on this file I decided I would try a conversion to yaml
-> in order to clarify the prestera family description.
-> 
+--Sig_/.767puWyK/d1N4jzBET_Kbi
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-(...)
+Hi all,
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - ranges
-> +
-> +# The DFX server may expose clocks described as subnodes
-> +additionalProperties:
-> +  type: object
-> +
-> +examples:
-> +  - |
-> +
+On Wed, 16 Nov 2022 07:38:48 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Commits
+>=20
+>   0f6e8d8c94a8 ("venus: pm_helpers: Fix error check in vcodec_domains_get=
+()")
+>   ee357294a85b ("MAINTAINERS: Add Vikash as VENUS video driver co-maintai=
+ner")
+>=20
+> are missing a Signed-off-by from their committer.
 
-If there is going to be resent, drop blank line.
+These are now in the v4l-dvb tree still without their SOB lines :-(
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+--=20
+Cheers,
+Stephen Rothwell
 
-Best regards,
-Krzysztof
+--Sig_/.767puWyK/d1N4jzBET_Kbi
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOD1K4ACgkQAVBC80lX
+0GxysAf7Bguh801Ui3d+8w0BPyR0it1Rgr0FHpjZ6CMRA76Vx9lRxnlnJKermmxP
+B80cKgdnNp5x7F706GrO5VeGcxLeYqpQg5RhNFng+FttKP/tHjlfThVDG/azt1iY
+TIy98pVcglBYET9Iu91ITtKdDLNh7au4wXxA49tGjmHXDIRcdmxysVjy5yAeUPyc
+Sy6N1+/hJFA2v9NQaaopugc9g74hlMWTZO4IkZMtK7Hcd9/5/qCXMmmO8bzccmqw
+TRqpI/3f+B2blHLXGNaWtJxhjAkfV7+uVdwLLvs3e4pXPHQcGV2KPqyRJiaCqS+L
+tMqR27m80QGqg17nOoDrEfBIQgLBYQ==
+=xqhq
+-----END PGP SIGNATURE-----
+
+--Sig_/.767puWyK/d1N4jzBET_Kbi--
