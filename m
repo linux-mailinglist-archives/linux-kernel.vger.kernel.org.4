@@ -2,127 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C1DE639C1B
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 18:46:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0179A639C22
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 18:53:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbiK0Rql convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 27 Nov 2022 12:46:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
+        id S229568AbiK0RxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 12:53:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiK0Rqk (ORCPT
+        with ESMTP id S229450AbiK0RxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 12:46:40 -0500
-Received: from mail3.swissbit.com (mail3.swissbit.com [176.95.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBCF2AFD;
-        Sun, 27 Nov 2022 09:46:39 -0800 (PST)
-Received: from mail3.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 7DEC8462DF8;
-        Sun, 27 Nov 2022 18:46:37 +0100 (CET)
-Received: from mail3.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 65A12462CB0;
-        Sun, 27 Nov 2022 18:46:37 +0100 (CET)
-X-TM-AS-ERS: 10.149.2.42-127.5.254.253
-X-TM-AS-SMTP: 1.0 ZXguc3dpc3NiaXQuY29t Y2xvZWhsZUBoeXBlcnN0b25lLmNvbQ==
-X-DDEI-TLS-USAGE: Used
-Received: from ex.swissbit.com (unknown [10.149.2.42])
-        by mail3.swissbit.com (Postfix) with ESMTPS;
-        Sun, 27 Nov 2022 18:46:37 +0100 (CET)
-Received: from sbdeex04.sbitdom.lan (10.149.2.42) by sbdeex04.sbitdom.lan
- (10.149.2.42) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Sun, 27 Nov
- 2022 18:46:34 +0100
-Received: from sbdeex04.sbitdom.lan ([fe80::2047:4968:b5a0:1818]) by
- sbdeex04.sbitdom.lan ([fe80::2047:4968:b5a0:1818%9]) with mapi id
- 15.02.1118.009; Sun, 27 Nov 2022 18:46:31 +0100
-From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
-To:     Avri Altman <Avri.Altman@wdc.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "adrian.hunter@intel.com" <adrian.hunter@intel.com>
-Subject: [PATCHv2] mmc: block: remove non-data R1B ioctl workaround
-Thread-Topic: [PATCHv2] mmc: block: remove non-data R1B ioctl workaround
-Thread-Index: AdkCh3a7sIwrh5hoQz+Zy+s4Y1pY7g==
-Date:   Sun, 27 Nov 2022 17:46:31 +0000
-Message-ID: <57d4aceb25254e448bd3e575bd99b0c2@hyperstone.com>
-Accept-Language: en-US, de-DE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.153.3.27]
-Content-Type: text/plain;
-        charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        Sun, 27 Nov 2022 12:53:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B77CD2
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 09:53:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5999F60E0B
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 17:53:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B73F0C433C1;
+        Sun, 27 Nov 2022 17:53:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669571597;
+        bh=cR4oVWEUk67TAnV7gA291l8sois74FLMYSBwf6j79kg=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=rTPtL2mt8FWmVx2GP8FAoATCIpkEzeWETxEmypyD2s5cVOjNNGDxffAIzVp+JJSPB
+         kXga7F2X5leOvfu67vLAf22y9LWndAsNNtso1+hYnONzBoYwsbPea9x6HAYJhOqrbZ
+         kQPhGkpCqyLtZcsQE1OMPX7i65c2RVrOHqdjDKQMjUD+TA21q8VcuykyyfPCHavjpE
+         qwxiLu+LltpusRu+su7+zAmRVho0hshDG+lP3LSwlnMoBt6/dG/IUwEZBVsO8BZtOQ
+         9QBOozQ1iuvtJmf9oHp2ax8RE4QTE2Asb9XM3T3frPojd4+jTSxUSOv9AO8DfTuBGf
+         tpIV1md3I+68A==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 555555C09B0; Sun, 27 Nov 2022 09:53:17 -0800 (PST)
+Date:   Sun, 27 Nov 2022 09:53:17 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Zhouyi Zhou <zhouzhouyi@gmail.com>, fweisbec@gmail.com,
+        mingo@kernel.org, dave@stgolabs.net, josh@joshtriplett.org,
+        mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH linux-next][RFC]torture: avoid offline tick_do_timer_cpu
+Message-ID: <20221127175317.GF4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221121035140.118651-1-zhouzhouyi@gmail.com>
+ <87y1rxwsse.ffs@tglx>
+ <CAABZP2xNTbrx9iV+KH3VZx1c9Yi97+izNA=XSJQBuOJ4WENFZg@mail.gmail.com>
+ <87v8n0woxv.ffs@tglx>
 MIME-Version: 1.0
-X-TMASE-Version: DDEI-5.1-9.0.1002-27290.001
-X-TMASE-Result: 10-3.063300-10.000000
-X-TMASE-MatchedRID: ge9e+QLSeayzwwnlAhUjjJAk4Vz6rKorI64EUz6lBagHMdltgqikB9AY
-        WUo4HSIkhw5E/ZidsH8ep5R/z/M+R+ztpCSqSkXKSHCU59h5KrFN8rmPQRlvK8Oo7r/xHr1AI5W
-        zPQsv3Ab0YXQzpNvE/PIJkbMX4M4J4FG4Cyz4VuYReM8i8p3vgEyQ5fRSh265Br7dUnIrjPa1jg
-        3WdTw5hP+vfH78Rkg8fyYDewMOrQD1mZy4fIajlN0H8LFZNFG7bkV4e2xSge6XEvaNMPu9HE2mS
-        xF9S6Y3qlCCc6FqnAnn0KIoDyQXF+ulxyHOcPoH
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-TMASE-INERTIA: 0-0;;;;
-X-TMASE-XGENCLOUD: 0f04465c-3f33-471b-8334-5574cfacee4b-0-0-200-0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87v8n0woxv.ffs@tglx>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The workaround of pretending R1B non-data transfers are
-data transfers in order for the busy timeout to be respected
-by the host controller driver is removed. It wasn't useful
-in a long time.
+On Sun, Nov 27, 2022 at 01:40:28PM +0100, Thomas Gleixner wrote:
 
-Initially the workaround ensured that R1B commands did not
-time out by setting the data timeout to be the command timeout
-in commit cb87ea28ed9e ("mmc: core: Add mmc CMD+ACMD passthrough ioctl").
-This was moved inside of an if clause with idata->buf_bytes being set
-in commit 4d6144de8ba2 ("mmc: core: check for zero length ioctl data").
-Since the workaround is now inside of the idata->buf_bytes clause
-and intended to fix R1B non-data transfers that do not have buf_bytes
-set we can also remove the workaround altogether.
-Since there are no data transfer invoking R1B commands this was dead
-code.
+[ . . . ]
 
-Fixes: cb87ea28ed9e ("mmc: core: Add mmc CMD+ACMD passthrough ioctl")
-Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
----
--v2: clarified commit message, no code change
- drivers/mmc/core/block.c | 13 -------------
- 1 file changed, 13 deletions(-)
+> >> No. We are not exporting this just to make a bogus test case happy.
+> >>
+> >> Fix the torture code to handle -EBUSY correctly.
+> > I am going to do a study on this, for now, I do a grep in the kernel tree:
+> > find . -name "*.c"|xargs grep cpuhp_setup_state|wc -l
+> > The result of the grep command shows that there are 268
+> > cpuhp_setup_state* cases.
+> > which may make our task more complicated.
+> 
+> Why? The whole point of this torture thing is to stress the
+> infrastructure.
 
-diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-index db6d8a099910..20da7ed43e6d 100644
---- a/drivers/mmc/core/block.c
-+++ b/drivers/mmc/core/block.c
-@@ -514,19 +514,6 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
- 		if (idata->ic.data_timeout_ns)
- 			data.timeout_ns = idata->ic.data_timeout_ns;
- 
--		if ((cmd.flags & MMC_RSP_R1B) == MMC_RSP_R1B) {
--			/*
--			 * Pretend this is a data transfer and rely on the
--			 * host driver to compute timeout.  When all host
--			 * drivers support cmd.cmd_timeout for R1B, this
--			 * can be changed to:
--			 *
--			 *     mrq.data = NULL;
--			 *     cmd.cmd_timeout = idata->ic.cmd_timeout_ms;
--			 */
--			data.timeout_ns = idata->ic.cmd_timeout_ms * 1000000;
--		}
--
- 		mrq.data = &data;
- 	}
- 
--- 
-2.37.3
+Indeed.
 
-Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
-Managing Director: Dr. Jan Peter Berns.
-Commercial register of local courts: Freiburg HRB381782
+> There are quite some reasons why a CPU-hotplug or a hot-unplug operation
+> can fail, which is not a fatal problem, really.
+> 
+> So if a CPU hotplug operation fails, then why can't the torture test
+> just move on and validate that the system still behaves correctly?
+> 
+> That gives us more coverage than just testing the good case and giving
+> up when something unexpected happens.
 
+Agreed, with access to a function like the tick_nohz_full_timekeeper()
+suggested earlier in this email thread, then yes, it would make sense to
+try to offline the CPU anyway, then forgive the failure in cases where
+the CPU matches that indicated by tick_nohz_full_timekeeper().
+
+> I even argue that the torture test should inject random failures into
+> the hotplug state machine to achieve extended code coverage.
+
+I could imagine torture_onoff() telling various CPU-hotplug notifiers
+to refuse the transition using some TBD interface.  That would better
+test the CPU-hotplug common code's ability to deal with failures.
+
+Or did you have something else/additional in mind?
+
+							Thanx, Paul
