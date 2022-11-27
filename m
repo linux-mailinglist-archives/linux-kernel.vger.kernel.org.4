@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E40B639D33
-	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 22:15:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0EAD639D39
+	for <lists+linux-kernel@lfdr.de>; Sun, 27 Nov 2022 22:19:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbiK0VP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 16:15:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58844 "EHLO
+        id S229662AbiK0VT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 16:19:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiK0VPX (ORCPT
+        with ESMTP id S229514AbiK0VT1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 16:15:23 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D4FC761
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 13:15:22 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id c1so14605810lfi.7
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 13:15:22 -0800 (PST)
+        Sun, 27 Nov 2022 16:19:27 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE7AC74B
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 13:19:24 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id e15so3320026ljl.7
+        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 13:19:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=xMfZ7ojzEusZSXOR1+4lvLHDxR9DG6QpHq+z2MT/mFo=;
-        b=xjEG5ymX6soPm4/RckNuDvvkf2RtsoVsi0vqpsP0yCJRBDIFRaaksS2wAx/gfPr8Uc
-         ndJuBLLmLHbk5gSWzZZ6sfvK32WD7j+VI3gMZrdapz6rLNkK+6bYYdd69BsGlAay0Ujk
-         x5gZu0g98SfMRWr9Wgc3ZTk0r5+iLz87/gi7AyUDLVAd1T5ZZuFkwecykVJARdxTYs9D
-         YPZYEQNfYaqOHQawnAH8NZIBixcAbHkSzWnz/jKHE/JIvd8OCadeWGv5eCLOwEnqn8vi
-         N5nnNy05XHb0zRFkThjhlSbGwl8KQz6bUmTWaEv8AIi3QhY/+Odu6hZ2r752i/di3jEj
-         fIqA==
+        bh=BVBgzY9fU1meRitwXiLvwOD49gdhxqJl429JsRhYymU=;
+        b=a/jjz4wItuIdT6k5VAZduTzFm0xbhGSzhMsNNqdSUcmH6Outl5im8p9ewKhbpsrZg0
+         55k9Y9LPpZpDjDaNehWchb8gMJjJrW1whi8fteyqoSbtdA2TerLxbLGbxTv0HsTPurja
+         7A76C26Mjp2vKWaCbd5gZesK0tlOau67PiW5mmz7aoRL/WCPbjqvubDobmp7yMqzK6ly
+         pRDe2erXgXRo6eliEaiWB2lxvwQ6FBIyWZUfaBKobUVd3xPmiA7CifqCkS2IjMsGVSQA
+         1SRKLI1Ab7vphBn4oqnoCFc14T8QM3el4XPBESI7Je9JBtrK9rh5BkVjEWVTexwqLJ0n
+         yTlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xMfZ7ojzEusZSXOR1+4lvLHDxR9DG6QpHq+z2MT/mFo=;
-        b=jj4sRecTlq/PJ9ddNWzGwLZM1VixQTG164z2JmPd2ZdT0iU6FZZ7bEdyfJrCfaLUzg
-         T9WP2JOC8JLMtqiscXu18DOSqhKJLmo78aFgOEK8AQhuObvbe0lHYgUljoiI2Hh7EAXe
-         IwbT3q4sKlQNhdaq4DK52zsYMGZR9++E+ywZAhYwEjrscN5RR8ns81MBQ3QHQ/9Sue0L
-         +LLLvjwRMtXdSRzSF0i+e/Pq9a946qe6t5l2V7PVmi5gdCCfB59k7kqkEr9ka7tcaql7
-         G8HtL6ZVXspBNaww7j82JITrhEhiixsTMCvPHImSXT98xRICX2iU11yPxaZCp/BS7oDN
-         y9TA==
-X-Gm-Message-State: ANoB5pnil7ceF95fzV2tFUXuH9Xg4ttSJ8KX+LQhd+G98sBJu0Wpxj9f
-        q4Mg+CFHkQtK0lbD811S+c5kXagAXicw+hQx
-X-Google-Smtp-Source: AA0mqf4x1iSF+BS5FUF+PRtHJp/BUnje4H5BmmpwQhj0HY0pf7BnAAnNlJfsqzE/ove2zGOv/18oRw==
-X-Received: by 2002:a19:f010:0:b0:4a2:2e81:9be5 with SMTP id p16-20020a19f010000000b004a22e819be5mr16932099lfc.486.1669583720587;
-        Sun, 27 Nov 2022 13:15:20 -0800 (PST)
+        bh=BVBgzY9fU1meRitwXiLvwOD49gdhxqJl429JsRhYymU=;
+        b=GGPfh7hzV9ELS9MYOfeEBt9pkop5PHHspTS2IWYEJV1SszEMqUEIQYQ16PYuUweRaH
+         2gFM9Kldyd7I4KF7dE6qndIPKOBAr9wPREdxvbvAPl9E9I51GQSeMOynN4V1HDBC8+3k
+         WxffMPEZeea3x52sbOFks0HZ4g8lO1cZTW2cL213PBX/0VBDYP+pPgCIziH1KTMC6eEG
+         Csk7FSSijBSqsNFTN79j1pGGQqfJRlZlJoELj7bProbNQJQx1IxDpC6xRZxCEkOVLCCp
+         J0NVfGGxuei70CNRX894nb+4Wk8KKQYKpAt5490SA8KKGZ5gNdlDOHf/WMH7Wl7O4AMH
+         iXPA==
+X-Gm-Message-State: ANoB5pk86FrQku6uyefxBpNP4Y8cBJZvAVPBIINJ2x0vnQUPevOzT639
+        KC0cGfGf8mOnSg8CF0TC4u0ENC4MxjML8p4u
+X-Google-Smtp-Source: AA0mqf6TvYFJg6yLdGfKu+TkPqfL+Gy8GK+gmAHr8JecKy952l+k7/NH80FfVgn7smfjHPEQbCZc5g==
+X-Received: by 2002:a05:651c:ba5:b0:279:9a7c:ed14 with SMTP id bg37-20020a05651c0ba500b002799a7ced14mr2181755ljb.351.1669583963258;
+        Sun, 27 Nov 2022 13:19:23 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id c13-20020a2e9d8d000000b0026dd4be2290sm1044112ljj.90.2022.11.27.13.15.19
+        by smtp.gmail.com with ESMTPSA id p21-20020a2eba15000000b002777a07f48esm1070720lja.12.2022.11.27.13.19.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Nov 2022 13:15:20 -0800 (PST)
-Message-ID: <9ec77e6e-55c0-4331-ad62-9ab001273652@linaro.org>
-Date:   Sun, 27 Nov 2022 22:15:18 +0100
+        Sun, 27 Nov 2022 13:19:22 -0800 (PST)
+Message-ID: <64620c65-15b7-314c-4990-5f2f42295acd@linaro.org>
+Date:   Sun, 27 Nov 2022 22:19:21 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH net-next v2 1/7] Revert "dt-bindings: marvell,prestera:
- Add description for device-tree bindings"
+Subject: Re: [PATCH net-next v2 2/7] dt-bindings: net: marvell,dfx-server:
+ Convert to yaml
 Content-Language: en-US
 To:     Miquel Raynal <miquel.raynal@bootlin.com>,
         "David S. Miller" <davem@davemloft.net>,
@@ -71,13 +71,11 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Michael Walle <michael@walle.cc>,
         Marcin Wojtas <mw@semihalf.com>, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        Vadym Kochan <vadym.kochan@plvision.eu>,
-        Taras Chornyi <tchornyi@marvell.com>,
-        Rob Herring <robh@kernel.org>
+        Vadym Kochan <vadym.kochan@plvision.eu>
 References: <20221124111556.264647-1-miquel.raynal@bootlin.com>
- <20221124111556.264647-2-miquel.raynal@bootlin.com>
+ <20221124111556.264647-3-miquel.raynal@bootlin.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221124111556.264647-2-miquel.raynal@bootlin.com>
+In-Reply-To: <20221124111556.264647-3-miquel.raynal@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -90,24 +88,30 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 24/11/2022 12:15, Miquel Raynal wrote:
-> This reverts commit 40acc05271abc2852c32622edbebd75698736b9b.
+> Even though this description is not used anywhere upstream (no matching
+> driver), while on this file I decided I would try a conversion to yaml
+> in order to clarify the prestera family description.
 > 
-> marvell,prestera.txt is an old file describing the old Alleycat3
-> standalone switches. The commit mentioned above actually hacked these
-> bindings to add support for a device tree property for a more modern
-> version of the IP connected over PCI, using only the generic compatible
-> in order to retrieve the device node from the prestera driver to read
-> one static property.
-> 
-> The problematic property discussed here is "base-mac-provider". The
-> original intent was to point to a nvmem device which could produce the
-> relevant nvmem-cell. This property has never been acked by DT
-> maintainers and fails all the layering that has been brought with the nvmem
 
-It's funnier - it was never sent to DT maintainers nor to the
-devicetree@ list. :(
+(...)
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - ranges
+> +
+> +# The DFX server may expose clocks described as subnodes
+> +additionalProperties:
+> +  type: object
+> +
+> +examples:
+> +  - |
+> +
+
+If there is going to be resent, drop blank line.
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
