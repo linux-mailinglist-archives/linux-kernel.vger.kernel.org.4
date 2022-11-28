@@ -2,65 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF6263A0DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 06:48:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24F4A63A0E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 06:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbiK1Fsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 00:48:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49278 "EHLO
+        id S229568AbiK1FtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 00:49:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiK1Fsp (ORCPT
+        with ESMTP id S229704AbiK1Fs4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 00:48:45 -0500
-Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02on2057.outbound.protection.outlook.com [40.107.249.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D441AE6D;
-        Sun, 27 Nov 2022 21:48:44 -0800 (PST)
+        Mon, 28 Nov 2022 00:48:56 -0500
+Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02on2068.outbound.protection.outlook.com [40.107.249.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4797813E1C;
+        Sun, 27 Nov 2022 21:48:51 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dy7xOc7iCc6IJdVONQtN//nXa0UpzLfEs/sDYwq7iodwbbd21tehnPaIWBXqB6233J6ZVUrFWKrikfC5IzHA0hO46NhCktMbANgfnfBHsFJ3jObEVuh+CtFbWq1IkpStpfKNFnoSql4ioj3CulNaMQgsVNPunvzbf8b+kdd5HT6tvH6vzocdxnvsyHcWCZxJHebof8Ql3gzh4gbBDDWgFbwINqMH4N7GHaj8WdawX3Cz7+MhRJuzaSkqwTN0KkVtEHQwfG4wQBx5djuMTDj/8F4YKazlkW5XLJEhNYDfOVnxFDRpkxIG/Ql+J3SXW9JcNwrdhSTSwwXwczdMSAWaoA==
+ b=Ra0DNn47z44Dda5HaApPtOnPTKwtDSxk7LWpAPPBMJ/MeLa7kIPA/Tsgm+y4MCO9nrjlzV3gPB73BSFTiKKKUPbMG3tFzEx9KkXt1t7K4UEAD3+u/j32STW9WoqxaH5Sxh0ZaP43eP8p+/h6gQzfCRDyMohsOAkXQE6WrHudpl8hmgJzc75pQTucn5fvHSFr4wz2oqRUVX5VQi9lT2+vfdFiPMqpERMrpMF3CeLqrIhInhTtKbbKMZwX7jI96ESIvHi6c0Jnr/W1FJWAhWOnYm9SUruJvcOMYqEvQul7+9IxVClplUizpbX0yOAkHOvCFwKLENftzyOs6YyK/oR6Ig==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mcqryaXh2osR+0q4xR/lUluYb77/5Wvx8TRRFuAMHSo=;
- b=M1QeDF8252Bn/OSYsIctEo0n1TCcXbXjLEyAGZo/qL2dCbuPxP+0K12nl5YgQxYdziDaRaPO5nGo11I+N+nPDSTgWS4rkfEfV986hK5oYjKuNNF8ziyUHxxq/jVTpZiUSiIDyKMKqr9Dsf7t7q3DjlmZIEGyGwmKMelCd6yL9jZrvXomOlw5Ys93fxMxIWtDKvjUnVL0OWlnTQHxu/ewaw2LjUsNddsnP0y2xRZVhN+6c36G+Mcq8fe+BEpBnr8xJkCw7po34wFTCT8KSrWwWHMhCXjjxFBvYMqouJ/WQHFngGiLk5WHbjEWGtRb39vdjlW2eyFgquxqAQVEQGyogA==
+ bh=NKootHdzoY9t+MnBDuNh8njB/oNRECpNI7qyTn6GUSg=;
+ b=nvBFGqXrJ4rdiEoDyvUn57ET4otJDF0AUieDi8E5oqWYioSPz5JC+1yRCk4zTo+dNkP6lLMFOp/+agyyzhngefQhhCdJ7+4LhhXBmOrYJeOZqHw+0A6qq4PlFOioWDvStzW0GNHBpWEm1F9b4g8IEEJX5PmZIvN7noHkJlfou9iEbS2UEDNBQxhwo7/pDxwP7r83jdtEHGlqqYJb4NkGwsZZrdlrUowvsuL/y+kDyOBNETJggo3zjsGe5SHpBMeE3NgqP8fR/jClJ+bxQw14P5NRW33GQwszPpaSLwviM8h1WwGmB3OltfWVpfr3/xCxu5zy++IVkuvRGgwE7M0mfg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
  dkim=pass header.d=suse.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mcqryaXh2osR+0q4xR/lUluYb77/5Wvx8TRRFuAMHSo=;
- b=L73Jf9tx0wDWZfKwYwO0uxO+fZdvDFZsjgKMfg8KRBLmts2UKehNGvZjC6vYsCPcHhG74WMcQs9tZgxJzp2dX1ASiblCo30NzeEuQ205+bAe43p1kaCIgp/bb32GwQnpA6aHteW9sm6kioLGXYngAizupH7mTBgPkyjvVLq0sqP83Ffw+CzRe7MmzmScCZmQ1G5Xcxrj5G6unRErchwg4Dyx7Mc6g6nghwOox/KR57v7Ii1j41LBHFX88kSSgaz3+0Ukzv/+6rjZ86NaxjE0woKITxXpUnAsJst0Dzw1cdxRYPQqgOXYdQnKpl4uFvSKlV+ZANXcZFlpqE/bXC6/PA==
+ bh=NKootHdzoY9t+MnBDuNh8njB/oNRECpNI7qyTn6GUSg=;
+ b=zMj6Yig0U7tP7b9nkCB9U56K2gKZuonL4X73UEJFzjI2bu8xoUQIbFZeTlmyStCF8MXDP9TPgedz/1/bguzRdUz4kaLV8aqnRELlg8CehHH9lgmQplKTecQMamaUspsoxc8d66A1ER35g6sSG+60Jhpm4D2olcfDI6qUQkff1GWP60zNNTjaoMkUBFM/HSpq0/yoWATw+EOXSB98//dI6XtPb5MLipWNypUv4h7+zVfKLQkJ0UtL1lUYmQiR1Uy6mICZOb8ifAnGEsDfpOWuGaIHP213qgYaF+tMw7Wpq14LbcHrX/5LfcfW+3Qgn2P19227Ny7x5JX/b1gL2ehedA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=suse.com;
 Received: from VI1PR0402MB3439.eurprd04.prod.outlook.com (2603:10a6:803:4::13)
  by AS8PR04MB7829.eurprd04.prod.outlook.com (2603:10a6:20b:2a7::24) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.21; Mon, 28 Nov
- 2022 05:48:42 +0000
+ 2022 05:48:49 +0000
 Received: from VI1PR0402MB3439.eurprd04.prod.outlook.com
  ([fe80::28d6:1b8:94d9:89f5]) by VI1PR0402MB3439.eurprd04.prod.outlook.com
  ([fe80::28d6:1b8:94d9:89f5%7]) with mapi id 15.20.5857.023; Mon, 28 Nov 2022
- 05:48:42 +0000
+ 05:48:49 +0000
 From:   Chester Lin <clin@suse.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Cc:     Chester Lin <clin@suse.com>, s32@nxp.com,
         linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
         Larisa Grigore <larisa.grigore@nxp.com>,
         Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>,
         Andrei Stefanescu <andrei.stefanescu@nxp.com>,
-        Radu Pirea <radu-nicolae.pirea@nxp.com>,
         =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
         Matthias Brugger <mbrugger@suse.com>
-Subject: [PATCH v2 0/2] Add pinctrl support for S32 SoC family
-Date:   Mon, 28 Nov 2022 13:48:18 +0800
-Message-Id: <20221128054820.1771-1-clin@suse.com>
+Subject: [PATCH v2 1/2] dt-bindings: pinctrl: add schema for NXP S32 SoCs
+Date:   Mon, 28 Nov 2022 13:48:19 +0800
+Message-Id: <20221128054820.1771-2-clin@suse.com>
 X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20221128054820.1771-1-clin@suse.com>
+References: <20221128054820.1771-1-clin@suse.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: TYCP286CA0137.JPNP286.PROD.OUTLOOK.COM
@@ -69,51 +66,51 @@ X-ClientProxiedBy: TYCP286CA0137.JPNP286.PROD.OUTLOOK.COM
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: VI1PR0402MB3439:EE_|AS8PR04MB7829:EE_
-X-MS-Office365-Filtering-Correlation-Id: 747d59b6-0280-4bc6-5809-08dad1043478
+X-MS-Office365-Filtering-Correlation-Id: 84060feb-66f5-49fa-355f-08dad10438db
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: N2kXiEKNfaT3UjEi+fzFulWOTQ3JMYdADet8qXhnDlf+0tWru9qQb5aDTpQx7C+JAjIyI5eCk17Kr+q2U1uOK4zpnNpJ9StAvoJ9Ax/VUOGDfr0zIQs+VXesqMD6Or0xmX4/bq2gctyvbYsHvFDYR27sYq/ASItggShssNAPkvXKLAQjNxSAXOya/Mwwa2CNYtfrlxaUd+thZGx8eqYZq7+ZYWEV1mpbCtqtG6atq8Fta6MOpS5nljUZfSBwbzetFPaag2diU4U0FLHK4kEc0QzcIIkiabo7b09riCG/j9CEjkw0jxj2VjMFvC2WyeCnBJXaSFl0dfHRnfBUP4SqaUCGWw1NA+DBHAjNl6vfZeM++u5i3GeBwJ+PLL25Cp3ma8f2AEckH92vztDCZSXDVWfshgevoMkgFgWnjkNMoh5m3mmxKUDksTS/iQvnjd0sQDdw//GJvfKYCjykUVgpsQL3QOjH5X9PZtFQbDWtnfDGAcR9gRzyjVq/G1SP+cYqdHLly5ROkJRDY08O6cAawEPTTK6ARsH6tHsYIJY2OOhVKffKXvoA1sRgSs86EjfaJ56bjhlcGvveEhVAge19hpps+sOrE9MW6a9ldFy4l10KMppgnCpAjjeb3rGTuBvGoz34NGUOAoEFRrqjAITrqOCcVOgmCZ7xgYzSCxc9p7g=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0402MB3439.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(396003)(366004)(376002)(136003)(346002)(451199015)(86362001)(36756003)(186003)(316002)(1076003)(54906003)(41300700001)(83380400001)(66556008)(66476007)(66946007)(8676002)(110136005)(107886003)(2616005)(5660300002)(6666004)(6512007)(6506007)(4326008)(478600001)(966005)(6486002)(7416002)(8936002)(38100700002)(2906002)(66899015);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: kvaHHMo6kJbFpw52VMLEKBzAJ3r4ugyVaXeLFE5njCKDCgdXOY5IRPCuKLQ4y3KA8Cl7yw03W+AhZ/rb1FqnkVCVxIpdV8sJ6tWb1FjnBk6gcwOPc7aiJOPsRe3Bo6+1DPYsI+2+8KOKFAIogW0m94Rg70cnHJQhdBiKS22s6Uoy9X/kSCvbCT3VjUiHsy0gb7IZtWonredlOTZbgU/EVLxramJueUVUTahQpoJcoZfNfntOZOwI1lJ2w8itxN9WXVQ98+FNTInKMycD12MrJUX0fAZ1dMdlMjwuPdEb4y6vG5V9wq60xwVz5yjkBFFZzdmV5jDmijArhszqZDDbFWBJ0upIH4Gn1GAXbextOdUxKYlutPkyFyu0Tudm1VhXGJJDveQx/vy7PC5xpZ7ZcKBEWpyt4nhk6MMD/tBee8gbr2sUONnwYkgvydo+mnxqyce2LRFD3NX20Yjw+SjlA3sL4ByqFWloMiVfLK0QBVeYQWHeUAeh5QfxALVVlfBo2yN6MdgSi1BH1FlwStBB97PASQiTJHsrWj/jmrfkZTZjgdiCz5PX/escbL3NFMs7ukaJzYaGArydlo8lFd+l/TXu3Gpi8NIE5ngm3gf53Iat297rN7Kr0lCVvgcJLOyLNijS8JNyDUxj+LfkYOGMeF7Gfj92JnT2UpegfSq8ZAc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0402MB3439.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(6029001)(39860400002)(396003)(366004)(376002)(136003)(346002)(451199015)(86362001)(36756003)(186003)(316002)(1076003)(54906003)(41300700001)(66556008)(66476007)(66946007)(8676002)(110136005)(107886003)(2616005)(5660300002)(6666004)(6512007)(6506007)(4326008)(478600001)(966005)(6486002)(7416002)(8936002)(38100700002)(2906002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lwnvMG4n0MTVEzQ9XRDldvEn7Ek+z56nZ1oaZ0hqHF3b1ifkYMMUpCyWoZhx?=
- =?us-ascii?Q?KJnYOcIJxqS9m/tTQBOXq+JDKMl4xdlxFXgICGXnaUzzk0UAa04MaUWepO8z?=
- =?us-ascii?Q?6NZ8KtdEIX3z2MF8/66N4ogBmwz8ORlGmWJQJIabmViCfo/5JAtQgetJNMbq?=
- =?us-ascii?Q?o15zavpp4Ms8XoQ1O+zbV8rsQsjWg+fLiQzXIUD/+SKfr3+vacT8CYF1ptjw?=
- =?us-ascii?Q?5IA0qeY3c+SBIU6KgPmlt+i9XZYpT9NcnnBV35bfixEGfCaCh4V8jp1ORFdA?=
- =?us-ascii?Q?i8WYSIF4V4DcMiUMp399n9X/G/h/PLq5pEe4SzG9HAUUPluj9oOQbfxvC1EH?=
- =?us-ascii?Q?zegEKF0MKl9zzfGLYjm+/0iMS+m6QNgseFt2QZKNgmXfx9Nn8INg4tbt4Yq5?=
- =?us-ascii?Q?BwMSGHsB3M4OUj8Xm8OFyz4S4jp1P6hZ9dPBDdUlWVKX/NO2Gi+WMzaan/4l?=
- =?us-ascii?Q?lrwnjwkTkwJeuQEl89Tg3UCJb3gQpQKrlbcsqzzTqgT5PHuP883TM/Nce9oO?=
- =?us-ascii?Q?6bkNoj7piF/C69PacbybXTyQe0g/D0BnwWE1f632LgtUSKFHW4X/oKYqMlD0?=
- =?us-ascii?Q?covjutYmDIEVRkk5bQGP1Q+90ZgfSX+v1HgkZuko7qgkeqrMTpCivFqjH/Ea?=
- =?us-ascii?Q?HWk+wJrDOZzkqKJhoD+NaDqXAj6Iq3qR6JCwQwfcU+zlN+rB5y08rNozu6o6?=
- =?us-ascii?Q?a1QN5LVmDfp6AT+eJZn/zO5IxIyr1dtnKg5kp6D0gLTa6N5it5vu6ptVyOSA?=
- =?us-ascii?Q?OC7GWUlzXfnS0WZK9f6h6y2y81l0JcAzpWH9l3+Af9pFISjnaovYcoo3Evyr?=
- =?us-ascii?Q?+Gf5duXtFQqzS4m845T8zgDUTC+UbmdHJDKUcLF8WBlGRoxW5SUydPmdduUt?=
- =?us-ascii?Q?FfaRGbM/cILjRNlp8cdlBotyf95nkEd/GDNER3dBPnHhx2ruoG9IkpWDiZqC?=
- =?us-ascii?Q?7CMCG/WZ0NImKHVV5hvwd2yJYsnZOeLuCLT4b2bieDlHZdUizlHTPfceKdMO?=
- =?us-ascii?Q?fwWDGt6Na7cxGvJqzMeLDBMCOlMUvgAvya9Taw7gj4jBvf7+T74DJuS7t3z3?=
- =?us-ascii?Q?31L/Zps+HrzmtnYIHdg4+JFSBf7xdl8Y9Wv+dyaxDzIbNHZnyBmK+LpWZ4U1?=
- =?us-ascii?Q?vyeEgGCZreAWO3Nbr1ejEcphgSYg8TuDicIibjvsYHIutUxQtAExkALKzI5x?=
- =?us-ascii?Q?4MXR04zpM5G05gm0O7N2H4Xu1zfOecuBkck+pKFLAkjCfleNqxbFcml64BiQ?=
- =?us-ascii?Q?85kPyx1nn/T7c876tjgqEvCacKKBS7FQ2u3KOflHw5YDFif9CHnFTriJ4xER?=
- =?us-ascii?Q?QpY/2b5+D5uHRK2xbHN+px0031VL+oYhpTFCueM5L8t/k2l0eEcNf6SqQqaD?=
- =?us-ascii?Q?SFBfKzyojRKLTFYjm0ky9iHQzpj6uOC5DpTimnG0jhz6y/Cqbr4tIaGAOy50?=
- =?us-ascii?Q?i8vyr+oNgubmaGr8aB/7d/8yhMsidHh6cVRXSC3Lw2Mua6EjdrIkV5Q6RJd1?=
- =?us-ascii?Q?VgBVf98hquz7xYp8HC5pGeh1lLKg7LsMzKg1p+bxQH9vnEAqRW3AlFtO1q4a?=
- =?us-ascii?Q?7Pf6n9dQJl4eWJYNJtiVSw0IlZRhdIjcmlyd9BjCoI2kMSV3VqE763gMApse?=
- =?us-ascii?Q?iM4U9uumN1h6TyhmyaWexyOdajzJe2Y93zEMu0cJt7jh?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dc1SozxD8dNeu/sQUa78O8BQ/zBpXmVdsyqG8ASsMji/M2RqtWQLTr9q8srD?=
+ =?us-ascii?Q?UiSycd5kipwRVITQiXOAQ23oJr+8nWbMRC0LBQG8z34KtFG36Z0XfvlSmlkQ?=
+ =?us-ascii?Q?BxjV9DHujACQOE6PKER6Oyzk8PPaGU1tAo3TozkGgsSshvu0+BFpmvaRt0oZ?=
+ =?us-ascii?Q?A8cmZmnCFQgH7noG+CNOhd0AnG0Bb8VBc2LrI3X9sXPs32bflNBlwmISvPha?=
+ =?us-ascii?Q?e8+jvJr2cCbkwHJpX2J/DMe1cxiuk40qIuW4oYQA37M8OO4bpG8QR83Ye3gp?=
+ =?us-ascii?Q?ODEzxaOvZ5Cng7unrprSV/AE8UmELqK55cS07UXKRtDrOV5250GiuGQUxb/X?=
+ =?us-ascii?Q?VabttIJiXzQD8+kH1MBjS+UC49avMh7MFg1UySsbIdvvyElOSinuTKoOFZV/?=
+ =?us-ascii?Q?EIO34/yDcFy8fxVMqCdBjlWxDelUaWVBJNkpq34wLjqEUXSxkNp7xClZbnF9?=
+ =?us-ascii?Q?u6FYS9BBGHi7amqfwQ7px2vsObD8wHC/51/CBcRlaPNB8q+S0QAYdn4eqe+U?=
+ =?us-ascii?Q?cRKngn1EYlxE8h2ZWm6zrSo7EW8HGM/V709NU3ZsHeROBfcgsV0W3lA/DK2g?=
+ =?us-ascii?Q?kTqSkuvbsJcxk41ikefdv/hbv0nwvcdA98fw5gzr/hDIu4JbBJaIQUgmEG+9?=
+ =?us-ascii?Q?PNi0Pjo/In2FoEBRZonXn/qThgS74coDyV5ngdf/UuQ9xx3vFGRTpkIOjKK3?=
+ =?us-ascii?Q?3uV1VSauYP89aKk1pt45ZDkFL6ONIouMxI8MHanfOS3Gy5MlKB2ojA4GhS1t?=
+ =?us-ascii?Q?FV73Qjzr2iSy8p3zjQI1j2jVPiTXns838KBayJHvpHrbBqqSnIafziwtgagC?=
+ =?us-ascii?Q?T4PnZQmcv2zOr20XrqZjeplIGGjliKEVqGevo4liUkJLecpaFQNvYcNaIVQY?=
+ =?us-ascii?Q?+ePxjRsfu7rfEnZTZsbJHFhosHz+8xwedsrfYrCIKzzE2+9whTSpyxKWZpYV?=
+ =?us-ascii?Q?H5mE45d0AqfW6zGo54Bxf/MnAwvdCiws8VNgPUpFJ4b2G1Zp9dSSVafaL9IW?=
+ =?us-ascii?Q?nrptIT0MAMfrXfEu6+T0bHorJvbPtfwDZoZad0bTppNNtZ2rJskwFDOUzSsx?=
+ =?us-ascii?Q?tMJmgUGE7pkueRH6uM+XcoaD/f6vFlrNEX2aQRSwSlLuPO+Fjg7VUzHtRud0?=
+ =?us-ascii?Q?LamMrKi7z4TIOgrsnjU5MO0m491T5WAcNA7HQXBVGZgTBlKUugaV8/VePZsa?=
+ =?us-ascii?Q?eyhyTP8xQNGicwxtvNO1pcIGGgEsjI2m5nIwkwWtrhmK2+tAIRS9WlSF2Zvw?=
+ =?us-ascii?Q?aA0ZcZMfh9LuGsZWD16EEUfbRNS6rzahdT/g88X/vFK64qlJ9J8QE6VTgCMX?=
+ =?us-ascii?Q?MUFiGZhOPtEGHEY1VI76gWm1ABrm/PQLWg9dxO4UPGoalf5t+hMdt+0cXqgO?=
+ =?us-ascii?Q?rK0errwkEZ+eVSALBAlwa/z5qGFcxwnVJ6RJF+SuKWOr8zygK8qWA4I3Frad?=
+ =?us-ascii?Q?FKmwV1an5VCb4Ex29lt31HbZEFGo6D6BNLBQpTqeZJTQy9qIeVPxa+0kioWQ?=
+ =?us-ascii?Q?a4UiE5JsHhfton6t1+sk5MPgVaW3kWlZ4jY9PWtkpHSrEEz2mRWpJfPidHwR?=
+ =?us-ascii?Q?vWKQo+rxGdwpO6LFlpGPsneQTg9iRQFO7eeP93BhTNDJ1CVLEwxt/mcZieDP?=
+ =?us-ascii?Q?VshX4A4GsABiIDEB6k+abebaUDWjt5VSqmo+Ezmh1Olm?=
 X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 747d59b6-0280-4bc6-5809-08dad1043478
+X-MS-Exchange-CrossTenant-Network-Message-Id: 84060feb-66f5-49fa-355f-08dad10438db
 X-MS-Exchange-CrossTenant-AuthSource: VI1PR0402MB3439.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2022 05:48:41.9066
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2022 05:48:49.3904
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OCWQazlOq5lxJryuF7TYztqjNZElA7WpjjbiTqXc3l/vj4iTtarYZFKywoB5/4xI
+X-MS-Exchange-CrossTenant-UserPrincipalName: /i/ckeyvXOtBJ5cEUdhsead4h0xqmT8iNJWOvXigOUphV7O4vCpQdGm7Sf3bv7w6
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7829
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -125,53 +122,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Add DT schema for the pinctrl driver of NXP S32 SoC family.
 
-Here I want to introduce a new patch series, which aims to support IOMUX
-functions provided by SIUL2 [System Integration Unit Lite2] on S32 SoCs,
-such as S32G2. This series is originally from NXP's implementation on
-CodeAurora[1] and it will be required by upstream kernel for supporting
-a variety of devices on S32 SoCs which need to config PINMUXs, such as
-PHYs and MAC controllers.
-
-Currently, the whole architecture relies on FDTs offered by ATF[3] on
-CodeAurora to keep the flexibility of handling multiple S32 platforms since
-now S32 clks can be triggered via the ARM SCMI clock protocol and clk IDs/
-settings can vary according to different board designs. To ensure that the
-driver can work properly, the dt-binding schemas in this patchset are still
-required as references.
-
-Thanks,
-Chester
+Signed-off-by: Larisa Grigore <larisa.grigore@nxp.com>
+Signed-off-by: Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>
+Signed-off-by: Andrei Stefanescu <andrei.stefanescu@nxp.com>
+Signed-off-by: Chester Lin <clin@suse.com>
+---
 
 Changes in v2:
-- Move the "nxp,pins" ID range information from DT to the driver.
-- dt-bindings:
-  - Fix schema issues.
-  - Add descriptions for reg entries.
-  - Revise the example.
+- Remove the "nxp,pins" property since it has been moved into the driver.
+- Add descriptions for reg entries.
 - Refine the compatible name from "nxp,s32g-..." to "nxp,s32g2-...".
+- Fix schema issues and revise the example.
 - Fix the copyright format suggested by NXP.
 
-[1] https://source.codeaurora.org/external/autobsps32/linux/tree/drivers/pinctrl/freescale?h=bsp34.0-5.10.120-rt
-[2] https://source.codeaurora.org/external/autobsps32/arm-trusted-firmware/tag/?h=bsp34.0-2.5
-
-Chester Lin (2):
-  dt-bindings: pinctrl: add schema for NXP S32 SoCs
-  pinctrl: add NXP S32 SoC family support
-
- .../pinctrl/nxp,s32cc-siul2-pinctrl.yaml      |  125 ++
- drivers/pinctrl/freescale/Kconfig             |   16 +
- drivers/pinctrl/freescale/Makefile            |    2 +
- drivers/pinctrl/freescale/pinctrl-s32.h       |   77 ++
- drivers/pinctrl/freescale/pinctrl-s32cc.c     | 1003 +++++++++++++++++
- drivers/pinctrl/freescale/pinctrl-s32g.c      |  773 +++++++++++++
- 6 files changed, 1996 insertions(+)
+ .../pinctrl/nxp,s32cc-siul2-pinctrl.yaml      | 125 ++++++++++++++++++
+ 1 file changed, 125 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/pinctrl/nxp,s32cc-siul2-pinctrl.yaml
- create mode 100644 drivers/pinctrl/freescale/pinctrl-s32.h
- create mode 100644 drivers/pinctrl/freescale/pinctrl-s32cc.c
- create mode 100644 drivers/pinctrl/freescale/pinctrl-s32g.c
 
+diff --git a/Documentation/devicetree/bindings/pinctrl/nxp,s32cc-siul2-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/nxp,s32cc-siul2-pinctrl.yaml
+new file mode 100644
+index 000000000000..2fc25a9362af
+--- /dev/null
++++ b/Documentation/devicetree/bindings/pinctrl/nxp,s32cc-siul2-pinctrl.yaml
+@@ -0,0 +1,125 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright 2022 NXP
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/pinctrl/nxp,s32cc-siul2-pinctrl.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NXP S32 Common Chassis SIUL2 iomux controller
++
++maintainers:
++  - Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>
++  - Chester Lin <clin@suse.com>
++
++description: |
++  Core driver for the pin controller found on S32 Common Chassis SoC.
++
++properties:
++  compatible:
++    enum:
++      - nxp,s32g2-siul2-pinctrl
++
++  reg:
++    description:
++      A list of MSCR/IMCR register regions to be reserved.
++      - MSCR (Multiplexed Signal Configuration Register)
++        An MSCR register can configure the associated pin as either a GPIO pin
++        or a function output pin depends on the selected signal source.
++      - IMCR (Input Multiplexed Signal Configuration Register)
++        An IMCR register can configure the associated pin as function input
++        pin depends on the selected signal source.
++    minItems: 5
++    items:
++      - description: MSCR registers group 0 managed by the SIUL2 controller 0
++      - description: MSCR registers group 1 managed by the SIUL2 controller 1
++      - description: MSCR registers group 2 managed by the SIUL2 controller 1
++      - description: IMCR registers group 0 managed by the SIUL2 controller 0
++      - description: IMCR registers group 1 managed by the SIUL2 controller 1
++      - description: IMCR registers group 2 managed by the SIUL2 controller 1
++
++required:
++  - compatible
++  - reg
++
++patternProperties:
++  '-pins$':
++    type: object
++    additionalProperties: false
++
++    patternProperties:
++      '-grp[0-9]$':
++        type: object
++        allOf:
++          - $ref: pinmux-node.yaml#
++          - $ref: pincfg-node.yaml#
++        unevaluatedProperties: false
++        description:
++          Pinctrl node's client devices specify pin muxes using subnodes,
++          which in turn use the standard properties.
++
++additionalProperties: false
++
++examples:
++  - |
++
++    /* Pins functions (SSS field) */
++    #define FUNC0  0
++    #define FUNC1  1
++    #define FUNC2  2
++    #define FUNC3  3
++    #define FUNC4  4
++    #define FUNC5  5
++    #define FUNC6  6
++    #define FUNC7  7
++
++    #define S32CC_PINMUX(PIN, FUNC) (((PIN) << 4) | (FUNC))
++
++    #define S32CC_SLEW_208MHZ  0
++    #define S32CC_SLEW_166MHZ  4
++    #define S32CC_SLEW_150MHZ  5
++    #define S32CC_SLEW_133MHZ  6
++    #define S32CC_SLEW_83MHZ   7
++
++    pinctrl@4009c240 {
++        compatible = "nxp,s32g2-siul2-pinctrl";
++
++        /*
++         * There are two SIUL2 controllers in S32G2:
++         *
++         *   siul2_0 @ 0x4009c000
++         *   siul2_1 @ 0x44010000
++         *
++         * Every SIUL2 controller has multiple register types, and here
++         * only MSCR and IMCR registers need to be revealed for kernel
++         * to configure pinmux. Please note that some indexes are reserved,
++         * such as MSCR102-MSCR111 in the following reg property.
++         */
++
++              /* MSCR0-MSCR101 registers on siul2_0 */
++        reg = <0x4009c240 0x198>,
++              /* MSCR112-MSCR122 registers on siul2_1 */
++              <0x44010400 0x2c>,
++              /* MSCR144-MSCR190 registers on siul2_1 */
++              <0x44010480 0xbc>,
++              /* IMCR0-IMCR83 registers on siul2_0 */
++              <0x4009ca40 0x150>,
++              /* IMCR119-IMCR397 registers on siul2_1 */
++              <0x44010c1c 0x45c>,
++              /* IMCR430-IMCR495 registers on siul2_1 */
++              <0x440110f8 0x108>;
++
++        llce-can0-pins {
++            llce-can0-grp0 {
++                pinmux = <S32CC_PINMUX(43, FUNC0)>;
++                input-enable;
++                slew-rate = <S32CC_SLEW_208MHZ>;
++            };
++
++            llce-can0-grp1 {
++                pinmux = <S32CC_PINMUX(44, FUNC2)>;
++                output-enable;
++                slew-rate = <S32CC_SLEW_208MHZ>;
++            };
++        };
++    };
++...
 -- 
 2.37.3
 
