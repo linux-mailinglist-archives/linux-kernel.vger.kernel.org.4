@@ -2,122 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 141C263AB57
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B08C263AB5E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:43:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232050AbiK1Omc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 09:42:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34888 "EHLO
+        id S232320AbiK1OnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 09:43:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232570AbiK1OmE (ORCPT
+        with ESMTP id S232626AbiK1Omw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 09:42:04 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 285691AD9F;
-        Mon, 28 Nov 2022 06:42:03 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 28 Nov 2022 09:42:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E134D2E3;
+        Mon, 28 Nov 2022 06:42:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 97B151F8C8;
-        Mon, 28 Nov 2022 14:42:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1669646522; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BAsmdstj5OlnEk28QuiyRdM0jNSu4a4GNlosnGWLu3Y=;
-        b=JCWjH6jtRRXiDErJNqO58muuMjUd5J7fORqKBcHoDND1f8Jr8FXOmRx9X6okSOLPJXxX6o
-        qOpiDQq4YSwYal8TAZZjlZBzyg5pxAiJZU+ETATJjsS2uQG79YufJ1pAEzMRKyBi5quYoG
-        PvgfWsQAJs1VhP1axOOIZDFFkVE1YRs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1669646522;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BAsmdstj5OlnEk28QuiyRdM0jNSu4a4GNlosnGWLu3Y=;
-        b=PFpoYGW7ubVeY5LplGgltzuIbyjTcfF0VbkKcWbx4pgfULVGpC0aEZxlHajT1LsYOA5cj1
-        40iWFlo7BCxPzZCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3F9F31326E;
-        Mon, 28 Nov 2022 14:42:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 2NgbDrrIhGPzLgAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Mon, 28 Nov 2022 14:42:02 +0000
-Date:   Mon, 28 Nov 2022 15:41:58 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <uwe@kleine-koenig.org>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 487/606] misc: eeprom/eeprom: Convert to i2c's
- .probe_new()
-Message-ID: <20221128154158.7a486ae9@endymion.delvare>
-In-Reply-To: <20221118224540.619276-488-uwe@kleine-koenig.org>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
-        <20221118224540.619276-488-uwe@kleine-koenig.org>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 19626611D3;
+        Mon, 28 Nov 2022 14:42:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C937BC433C1;
+        Mon, 28 Nov 2022 14:42:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669646558;
+        bh=Vaqy0ljqy+6FwKwyXsEKERVsCLsDS1+87nejAbRnZ4w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eDNyihVbCj3VD1RtEKcdsPLgOX3bVqN1n+Bn0vD6U/fobkRuhCiK3G7MnbzXR+kmU
+         Wu1aK+UaUIGFbxVvszLCeTDdAcpZGTo7wMd+lMiPwelfoDYXchP7qmSsKurp+5tvTl
+         n8ER6shLBpk/CkP3UFzxb6Y0oCb5CpKo+SZXy9uZ26iWTgCHObZmjhiY60SjmS7Thv
+         4m+Lzyd+Z0kILEZlRo177qxBPyuBpNj3B8CwqtKg3nZ/QjEKGSY7QFPSpowUXJSQ+1
+         jgdwb6ARFkVb7vbCVSy1s5CQUHa49OUyLDVvxVIHa+YSf0/vTBDYiBM0CqFeQF8sZk
+         2cWNiR0IGZe2Q==
+Date:   Mon, 28 Nov 2022 20:12:22 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Asutosh Das <quic_asutoshd@quicinc.com>
+Cc:     quic_cang@quicinc.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, quic_nguyenb@quicinc.com,
+        quic_xiaosenh@quicinc.com, stanley.chu@mediatek.com,
+        eddie.huang@mediatek.com, daejun7.park@samsung.com,
+        bvanassche@acm.org, avri.altman@wdc.com, beanhuo@micron.com,
+        linux-arm-msm@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Jinyoung Choi <j-young.choi@samsung.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 04/16] ufs: core: Defer adding host to scsi if mcq is
+ supported
+Message-ID: <20221128144222.GD62721@thinkpad>
+References: <cover.1669176158.git.quic_asutoshd@quicinc.com>
+ <b75e35e1c23b428a6c55396c0fcda5ea22b4e33e.1669176158.git.quic_asutoshd@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b75e35e1c23b428a6c55396c0fcda5ea22b4e33e.1669176158.git.quic_asutoshd@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Nov 2022 23:43:41 +0100, Uwe Kleine-K=C3=B6nig wrote:
-> From: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
->=20
-> The probe function doesn't make use of the i2c_device_id * parameter so it
-> can be trivially converted.
->=20
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+On Tue, Nov 22, 2022 at 08:10:17PM -0800, Asutosh Das wrote:
+> If MCQ support is present, enabling it after MCQ support
+> has been configured would require reallocating tags and memory.
+> It would also free up the already allocated memory in
+> Single Doorbell Mode. So defer invoking scsi_add_host() until
+> MCQ is configured.
+
+Why cannot we do it for non MCQ case as well?
+
+Thanks,
+Mani
+
+> 
+> Co-developed-by: Can Guo <quic_cang@quicinc.com>
+> Signed-off-by: Can Guo <quic_cang@quicinc.com>
+> Signed-off-by: Asutosh Das <quic_asutoshd@quicinc.com>
 > ---
->  drivers/misc/eeprom/eeprom.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/misc/eeprom/eeprom.c b/drivers/misc/eeprom/eeprom.c
-> index 8a841a75d893..32611100d5cd 100644
-> --- a/drivers/misc/eeprom/eeprom.c
-> +++ b/drivers/misc/eeprom/eeprom.c
-> @@ -141,8 +141,7 @@ static int eeprom_detect(struct i2c_client *client, s=
-truct i2c_board_info *info)
->  	return 0;
->  }
-> =20
-> -static int eeprom_probe(struct i2c_client *client,
-> -			const struct i2c_device_id *id)
-> +static int eeprom_probe(struct i2c_client *client)
->  {
->  	struct i2c_adapter *adapter =3D client->adapter;
->  	struct eeprom_data *data;
-> @@ -197,7 +196,7 @@ static struct i2c_driver eeprom_driver =3D {
->  	.driver =3D {
->  		.name	=3D "eeprom",
->  	},
-> -	.probe		=3D eeprom_probe,
-> +	.probe_new	=3D eeprom_probe,
->  	.remove		=3D eeprom_remove,
->  	.id_table	=3D eeprom_id,
-> =20
+>  drivers/ufs/core/ufshcd.c | 19 +++++++++++++++----
+>  1 file changed, 15 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+> index 08be8ad..42c49ce 100644
+> --- a/drivers/ufs/core/ufshcd.c
+> +++ b/drivers/ufs/core/ufshcd.c
+> @@ -8208,6 +8208,7 @@ static int ufshcd_probe_hba(struct ufs_hba *hba, bool init_dev_params)
+>  	int ret;
+>  	unsigned long flags;
+>  	ktime_t start = ktime_get();
+> +	struct Scsi_Host *host = hba->host;
+>  
+>  	hba->ufshcd_state = UFSHCD_STATE_RESET;
+>  
+> @@ -8242,6 +8243,14 @@ static int ufshcd_probe_hba(struct ufs_hba *hba, bool init_dev_params)
+>  		ret = ufshcd_device_params_init(hba);
+>  		if (ret)
+>  			goto out;
+> +
+> +		if (is_mcq_supported(hba)) {
+> +			ret = scsi_add_host(host, hba->dev);
+> +			if (ret) {
+> +				dev_err(hba->dev, "scsi_add_host failed\n");
+> +				goto out;
+> +			}
+> +		}
+>  	}
+>  
+>  	ufshcd_tune_unipro_params(hba);
+> @@ -9838,10 +9847,12 @@ int ufshcd_init(struct ufs_hba *hba, void __iomem *mmio_base, unsigned int irq)
+>  		hba->is_irq_enabled = true;
+>  	}
+>  
+> -	err = scsi_add_host(host, hba->dev);
+> -	if (err) {
+> -		dev_err(hba->dev, "scsi_add_host failed\n");
+> -		goto out_disable;
+> +	if (!is_mcq_supported(hba)) {
+> +		err = scsi_add_host(host, hba->dev);
+> +		if (err) {
+> +			dev_err(hba->dev, "scsi_add_host failed\n");
+> +			goto out_disable;
+> +		}
+>  	}
+>  
+>  	hba->tmf_tag_set = (struct blk_mq_tag_set) {
+> -- 
+> 2.7.4
+> 
 
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
-
---=20
-Jean Delvare
-SUSE L3 Support
+-- 
+மணிவண்ணன் சதாசிவம்
