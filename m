@@ -2,119 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48F0763B27D
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 20:48:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF86B63B282
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 20:49:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231787AbiK1TsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 14:48:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41274 "EHLO
+        id S230226AbiK1TtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 14:49:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233866AbiK1TsN (ORCPT
+        with ESMTP id S233839AbiK1TtM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 14:48:13 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54CB15FFE;
-        Mon, 28 Nov 2022 11:48:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669664890; x=1701200890;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=n5VWOENDCBf3VgP2aur8apgqIJZll5eA5gIBPGE6z40=;
-  b=b/FVgSPsPLNsXQ0J+SULD8Hl1N/3yN6B/qRO2NSpLDz8VkEhPcDR/nBU
-   pvt0gl1pPqL+nTzPrZukXAzLywCgykiirFHqUtL/SA8LuVLB1SVdpRbaF
-   5h9fTfkg38C/PIw5ByTVSKQfpT+yMNbxxUMdzC2xr4fJ7qUWToc9aj4vK
-   Huy+bw1TPW+5bevqJhXiQ8PHs0dH8Fi9+kw0cO5GqZs8Vn6IGCM44Rc7P
-   5beicNFh7S49IOe6CTUdLTRRUWmzGB9w/SCnDvwnWooxGw6iAp9xg7295
-   Eqam9KWfi7XaLH6sEqv/pkoZh/qNE2yYvy6lB03RXRAHWRrXgpD2WkFPK
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="379194790"
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="379194790"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 11:48:09 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="621178600"
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="621178600"
-Received: from nroy-mobl1.amr.corp.intel.com (HELO [10.212.209.4]) ([10.212.209.4])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 11:48:08 -0800
-Message-ID: <f6d27366-e083-b362-b44c-eaf4d3365b53@intel.com>
-Date:   Mon, 28 Nov 2022 11:48:07 -0800
+        Mon, 28 Nov 2022 14:49:12 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC8C27CC0;
+        Mon, 28 Nov 2022 11:49:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=VAmDay8Qe2++NlnJo/s9zmage8EXAfl6yM10J36267M=; b=KlyRebYWJtdIAFWsb7JuDb5P47
+        eGzD6qfJm+YoSe1Mind9vYfg8c0LAmobj0xdjme1b2dwc4aOVPUoR//F6U3oCLLNlgdN0gy3cCNqK
+        j7DvEjZXnB78iiEHB21IKJMsSN8dbUOSjK/6p4D6N5c4hkhH8ajPdskiiHSr4wsmT+sKBBg8D0Okc
+        f6+/KPwdvZNad7M0lxhyUbfVTFgrGHBR3eLBiI6PyJb2jdyK/rcpFDbom4RMC9ksCaFrfPBHZksUK
+        R00qzvfLiPuSsbx/36a8/LWdceALEWrIStiv2aRmmpMVB9Qsv/Z3XI/O082SchT+1kx1l1XnimewP
+        YIuUzNrQ==;
+Received: from [177.34.169.227] (helo=[192.168.0.8])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1ozk7a-00AbVH-Fp; Mon, 28 Nov 2022 20:48:54 +0100
+Message-ID: <eb318e69-3fc5-c041-cc17-e0549d6cf128@igalia.com>
+Date:   Mon, 28 Nov 2022 16:48:45 -0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 5/6] x86/hyperv: Support hypercalls for TDX guests
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 05/17] drm/tests: helpers: Create the device in another
+ function
 Content-Language: en-US
-To:     Dexuan Cui <decui@microsoft.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221121195151.21812-1-decui@microsoft.com>
- <20221121195151.21812-6-decui@microsoft.com>
- <BYAPR21MB16886270B7899F35E8A826A4D70C9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <SA1PR21MB133528B2B3637D61368FF5FFBF139@SA1PR21MB1335.namprd21.prod.outlook.com>
- <b692c4da-4365-196d-9d12-33e2679c01de@intel.com>
- <SA1PR21MB1335BA9D27891F6B1BA3A988BF139@SA1PR21MB1335.namprd21.prod.outlook.com>
- <54871aec-823b-1ff5-8362-688d10e97263@intel.com>
- <SA1PR21MB13357B3CC486514D2DF50A4DBF139@SA1PR21MB1335.namprd21.prod.outlook.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <SA1PR21MB13357B3CC486514D2DF50A4DBF139@SA1PR21MB1335.namprd21.prod.outlook.com>
+To:     Maxime Ripard <maxime@cerno.tech>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     David Gow <davidgow@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-media@vger.kernel.org
+References: <20221123-rpi-kunit-tests-v2-0-efe5ed518b63@cerno.tech>
+ <20221123-rpi-kunit-tests-v2-5-efe5ed518b63@cerno.tech>
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>
+In-Reply-To: <20221123-rpi-kunit-tests-v2-5-efe5ed518b63@cerno.tech>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/28/22 11:37, Dexuan Cui wrote:
->> From: Dave Hansen <dave.hansen@intel.com>
-...
->> How do we know, for instance, that no hypercall using this interface
->> will *ever* take the 0x0 physical address as an argument?
+On 11/28/22 11:53, Maxime Ripard wrote:
+> We'll need in some tests to control when the device needs to be added
+> and removed, so let's split the device creation from the DRM device
+> creation function.
 > 
-> A 0x0 physical address as an argument still works: the 0 is passed
-> to the hypervisor using GHCI. I believe Hyper-V interprets the 0 as
-> an error (if the param is needed), and returns an "invalid parameter"
-> error code to the guest.
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 
-I don't see any data in the public documentation to support the claim
-that 0x0 is a special argument for either the input or output GPA
-parameters.
+Just a small nit below,
 
-This is despite some actual discussion on things like their alignment
-requirements[1] and interactions with overlay pages.
+Reviewed-by: Maíra Canal <mcanal@igalia.com>
 
-So, either you are mistaken about that behavior, or it looks like the
-documentation needs updating.
+>  
+> diff --git a/drivers/gpu/drm/tests/drm_probe_helper_test.c b/drivers/gpu/drm/tests/drm_probe_helper_test.c
+> index be61a92b79d2..438b1d42b843 100644
+> --- a/drivers/gpu/drm/tests/drm_probe_helper_test.c
+> +++ b/drivers/gpu/drm/tests/drm_probe_helper_test.c
+> @@ -17,6 +17,7 @@
+>  
+>  struct drm_probe_helper_test_priv {
+>  	struct drm_device *drm;
+> +	struct device *dev;
+>  	struct drm_connector connector;
+>  };
+>  
+> @@ -39,7 +40,10 @@ static int drm_probe_helper_test_init(struct kunit *test)
+>  	KUNIT_ASSERT_NOT_NULL(test, priv);
+>  	test->priv = priv;
+>  
+> -	priv->drm = drm_kunit_helper_alloc_drm_device(test,
+> +	priv->dev = drm_kunit_helper_alloc_device(test);
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->dev);
+> +
+> +	priv->drm = drm_kunit_helper_alloc_drm_device(test, priv->dev,
+>  						      DRIVER_MODESET | DRIVER_ATOMIC);
+>  	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->drm);
+>  
+> @@ -55,6 +59,13 @@ static int drm_probe_helper_test_init(struct kunit *test)
+>  	return 0;
+>  }
+>  
+> +static void drm_probe_helper_test_exit(struct kunit *test)
+> +{
+> +	struct drm_probe_helper_test_priv *priv = test->priv;;
 
-1.
-https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/hypercall-interface
+There are two semicolons by the end of this statement.
 
+Best Regards,
+- Maíra Canal
 
+> +
+> +	drm_kunit_helper_free_device(test, priv->dev);
+> +}
+> +
+>  typedef struct drm_display_mode *(*expected_mode_func_t)(struct drm_device *);
+>  
+>  struct drm_connector_helper_tv_get_modes_test {
+> @@ -195,6 +206,7 @@ static struct kunit_case drm_test_connector_helper_tv_get_modes_tests[] = {
+>  static struct kunit_suite drm_test_connector_helper_tv_get_modes_suite = {
+>  	.name = "drm_connector_helper_tv_get_modes",
+>  	.init = drm_probe_helper_test_init,
+> +	.exit = drm_probe_helper_test_exit,
+>  	.test_cases = drm_test_connector_helper_tv_get_modes_tests,
+>  };
+>  
+> diff --git a/include/drm/drm_kunit_helpers.h b/include/drm/drm_kunit_helpers.h
+> index 6c12b1426ba0..b4277fe92c38 100644
+> --- a/include/drm/drm_kunit_helpers.h
+> +++ b/include/drm/drm_kunit_helpers.h
+> @@ -6,8 +6,11 @@
+>  struct drm_device;
+>  struct kunit;
+>  
+> +struct device *drm_kunit_helper_alloc_device(struct kunit *test);
+> +void drm_kunit_helper_free_device(struct kunit *test, struct device *dev);
+> +
+>  struct drm_device *
+> -drm_kunit_helper_alloc_drm_device(struct kunit *test,
+> +drm_kunit_helper_alloc_drm_device(struct kunit *test, struct device *dev,
+>  				  u32 features);
+>  
+>  #endif // DRM_KUNIT_HELPERS_H_
+> 
