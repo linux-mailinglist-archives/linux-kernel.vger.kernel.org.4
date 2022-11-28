@@ -2,156 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6390E63ACFB
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 16:50:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54A0563AD02
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 16:51:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232136AbiK1Pun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 10:50:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57922 "EHLO
+        id S232367AbiK1Pv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 10:51:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231894AbiK1Puk (ORCPT
+        with ESMTP id S232344AbiK1PvX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 10:50:40 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 4AB1C634E
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 07:50:39 -0800 (PST)
-Received: (qmail 327280 invoked by uid 1000); 28 Nov 2022 10:50:38 -0500
-Date:   Mon, 28 Nov 2022 10:50:38 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Andrew Lunn <andrew@lunn.ch>, linux-can@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        Saeed Mahameed <saeed@kernel.org>,
-        Jiri Pirko <jiri@nvidia.com>,
-        Lukas Magel <lukas.magel@posteo.net>
-Subject: Re: [PATCH v4 2/6] can: etas_es58x: add devlink support
-Message-ID: <Y4TYzgOczlegG7OK@rowland.harvard.edu>
-References: <20221104073659.414147-1-mailhol.vincent@wanadoo.fr>
- <20221126162211.93322-1-mailhol.vincent@wanadoo.fr>
- <20221126162211.93322-3-mailhol.vincent@wanadoo.fr>
- <Y4JEGYMtIWX9clxo@lunn.ch>
- <CAMZ6RqK6AQVsRufw5Jr5aKpPQcy+05jq3TjrKqbaqk7NVgK+_Q@mail.gmail.com>
- <Y4OD70GD4KnoRk0k@rowland.harvard.edu>
- <CAMZ6Rq+Gi+rcLqSj2-kug7c1G_nNuj6peh5nH1DNoo8B3aSxzw@mail.gmail.com>
- <CAMZ6RqKS0sUFZWQfmRU6q2ivWEUFD06uiQekDr=u94L3uij3yQ@mail.gmail.com>
+        Mon, 28 Nov 2022 10:51:23 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9185D2E1
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 07:51:22 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id n20so26991731ejh.0
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 07:51:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gxG+EkRus6rhlH9PRO/Fl75BWcHi0qNFQ20NSLLna24=;
+        b=nx7GCKRFLL47qNWuL85bW7jEZbEvLQrpLeKgX+4ToR8wPAZ+YwMFp4qjwGK7a3OZ16
+         U4TdjV2p2mISH7yXy2ozLk23QmMbfOxzNIQ1glT+3GbKj9RIZgfBYW9AfbJb5lDgg3Nu
+         oDJLFWa5zndoh5Py/ZXUqmVByH/gMEBjdAvLo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gxG+EkRus6rhlH9PRO/Fl75BWcHi0qNFQ20NSLLna24=;
+        b=B1V5X05ZcSSywXDrTpwbcEhaIAEhOxlFBEWAC65D254+soKSMh0SXaLbKmHpQpS7hA
+         UhJa3I+rEcY7Pc9g5tx6IL/oFkCBmuO3Oxv5Qyet+nB+Tr3JLqVQxuLH1p7iQ6zo844n
+         vptnL6C/+x29eOn8jmKXSw35np4CGV4rgYoNaUQ/pOoorLSlJMKOtV7YiHfmyxyKUmYz
+         Qf877nfA1Mn/xX6OED5xqm9O4xiu9+/bA8dF6hh2p05c7Hd7VDGLNJOjwLVBcz2rp8at
+         h8rXmqBAh37dxG9KrJCplpefqRiIaBIMv7RymGAFHciuzInwti4F4/+30BrTM3zIUAqO
+         0RqQ==
+X-Gm-Message-State: ANoB5pl8+QpUgnmePoGHS7NSRxtN49MpWcP0zCey9JJ9sgFTyDgk8uXt
+        HKEBae1q8GrQQPGSeSjaEZhl7I3uXcVGBw==
+X-Google-Smtp-Source: AA0mqf6gWah6gVZgJ6NTjMzAlw2RDeboKfrLMgQFg9U3/EhGyWlsp1GrqrCzyqvU/vkeZYfV8TsMQw==
+X-Received: by 2002:a17:906:b0cd:b0:78d:8c6b:397b with SMTP id bk13-20020a170906b0cd00b0078d8c6b397bmr30162191ejb.364.1669650680550;
+        Mon, 28 Nov 2022 07:51:20 -0800 (PST)
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com. [209.85.128.42])
+        by smtp.gmail.com with ESMTPSA id 10-20020a170906310a00b007b8a8fc6674sm5136272ejx.12.2022.11.28.07.51.18
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Nov 2022 07:51:18 -0800 (PST)
+Received: by mail-wm1-f42.google.com with SMTP id v7so8814954wmn.0
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 07:51:18 -0800 (PST)
+X-Received: by 2002:a1c:cc04:0:b0:3cf:7716:8954 with SMTP id
+ h4-20020a1ccc04000000b003cf77168954mr38239298wmb.57.1669650677812; Mon, 28
+ Nov 2022 07:51:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMZ6RqKS0sUFZWQfmRU6q2ivWEUFD06uiQekDr=u94L3uij3yQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20221124115712.v4.1.Idfcba5344b7995b44b7fa2e20f1aa4351defeca6@changeid>
+ <CAPao8GK93KMrtaXw7mNWOCE60zk=uCENLfBXhNRVxJXEnnaGFg@mail.gmail.com> <f58866c8-0164-2e59-4ff3-f9a4f9334e49@linaro.org>
+In-Reply-To: <f58866c8-0164-2e59-4ff3-f9a4f9334e49@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 28 Nov 2022 07:51:06 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=UtiBYg_S-n7ZGFEChQcaMiima19qfYPibyW9DbQEsivA@mail.gmail.com>
+Message-ID: <CAD=FV=UtiBYg_S-n7ZGFEChQcaMiima19qfYPibyW9DbQEsivA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] dt-bindings: arm: qcom: Add zombie
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     =?UTF-8?B?5qWK5a6X57+w?= <ecs.taipeikernel@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bob Moragues <moragues@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>, Harvey <hunge@google.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, Gavin.Lee@ecs.com.tw,
+        Darren.Chen@ecs.com.tw, Abner.Yen@ecs.com.tw, Vicy.Lee@ecs.com.tw,
+        Jason.Huang@ecs.com.tw
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 02:32:23PM +0900, Vincent MAILHOL wrote:
-> On Mon. 28 Nov. 2022 at 10:34, Vincent MAILHOL
-> <mailhol.vincent@wanadoo.fr> wrote:
-> > On Mon. 28 Nov. 2022 at 00:41, Alan Stern <stern@rowland.harvard.edu> wrote:
-> > > On Sun, Nov 27, 2022 at 02:10:32PM +0900, Vincent MAILHOL wrote:
-> > > > > Should devlink_free() be after usb_set_inftdata()?
-> > > >
-> > > > A look at
-> > > >   $ git grep -W "usb_set_intfdata(.*NULL)"
-> > > >
-> > > > shows that the two patterns (freeing before or after
-> > > > usb_set_intfdata()) coexist.
-> > > >
-> > > > You are raising an important question here. usb_set_intfdata() does
-> > > > not have documentation that freeing before it is risky. And the
-> > > > documentation of usb_driver::disconnect says that:
-> > > >   "@disconnect: Called when the interface is no longer accessible,
-> > > >    usually because its device has been (or is being) disconnected
-> > > >    or the driver module is being unloaded."
-> > > >   Ref: https://elixir.bootlin.com/linux/v6.1-rc6/source/include/linux/usb.h#L1130
-> > > >
-> > > > So the interface no longer being accessible makes me assume that the
-> > > > order does not matter. If it indeed matters, then this is a foot gun
-> > > > and there is some clean-up work waiting for us on many drivers.
-> > > >
-> > > > @Greg, any thoughts on whether or not the order of usb_set_intfdata()
-> > > > and resource freeing matters or not?
-> > >
-> > > In fact, drivers don't have to call usb_set_intfdata(NULL) at all; the
-> > > USB core does it for them after the ->disconnect() callback returns.
-> >
-> > Interesting. This fact is widely unknown, cf:
-> >   $ git grep "usb_set_intfdata(.*NULL)" | wc -l
-> >   215
-> >
-> > I will do some clean-up later on, at least for the CAN USB drivers.
-> >
-> > > But if a driver does make the call, it should be careful to ensure that
-> > > the call happens _after_ the driver is finished using the interface-data
-> > > pointer.  For example, after all outstanding URBs have completed, if the
-> > > completion handlers will need to call usb_get_intfdata().
-> >
-> > ACK. I understand that it should be called *after* the completion of
-> > any ongoing task.
-> >
-> > My question was more on:
-> >
-> >         devlink_free(priv_to_devlink(es58x_dev));
-> >         usb_set_intfdata(intf, NULL);
-> >
-> > VS.
-> >
-> >         usb_set_intfdata(intf, NULL);
-> >         devlink_free(priv_to_devlink(es58x_dev));
-> >
-> > From your comments, I understand that both are fine.
-> 
-> Do we agree that the usb-skeleton is doing it wrong?
->   https://elixir.bootlin.com/linux/latest/source/drivers/usb/usb-skeleton.c#L567
-> usb_set_intfdata(interface, NULL) is called before deregistering the
-> interface and terminating the outstanding URBs!
+Hi,
 
-Going through the usb-skeleton.c source code, you will find that 
-usb_get_intfdata() is called from only a few routines:
+On Thu, Nov 24, 2022 at 1:29 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> > 2.
+> > I notice Kryzysztof say he didn't in cc mail loop at beggin, and below is
+> > my updated mail list:
+> > ---
+> > Series-to: LKML <linux-kernel@vger.kernel.org>
+> > Series-cc: Douglas Anderson <dianders@chromium.org>
+> > Series-cc: Bob Moragues <moragues@chromium.org>
+> > Series-cc: Harvey <hunge@google.com>
+> > Series-cc: Stephen Boyd <swboyd@chromium.org>
+> > Series-cc: Matthias Kaehlcke <mka@chromium.org>
+> > Series-cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > ---
+> > Is there anyone I missed?
+>
+> These are not correct addresses and not complete list of them. Don't
+> invent the entries, don't add there some weird addresses.
+>
+> Use get_maintainers.pl. That's it. Nothing more, nothing less.
 
-	skel_open()
-	skel_disconnect()
-	skel_suspend()
-	skel_pre_reset()
-	skel_post_reset()
+Just to give context here, I think Owen is using `patman` [0] to send
+patches. Yes, it's part of the u-boot tree but it's designed for
+sending Linux patches too.
 
-Of those, all but the first are called only by the USB core and they are 
-mutually exclusive with disconnect processing (except for 
-skel_disconnect() itself, of course).  So they don't matter.
+By default, that means that get_maintainer is automatically called on
+all patches and those entries are CCed. The extra "Series-cc" just
+lets you add extra people. It's fine to add extra people to patches if
+you think that those people are interested in getting it.
 
-The first, skel_open(), can be called as a result of actions by the 
-user, so the driver needs to ensure that this can't happen after it 
-clears the interface-data pointer.  The user can open the device file at 
-any time before the minor number is given back, so it is not proper to 
-call usb_set_intfdata(interface, NULL) before usb_deregister_dev() -- 
-but the driver does exactly this!
-
-(Well, it's not quite that bad.  skel_open() does check whether the 
-interface-data pointer value it gets from usb_get_intfdata() is NULL.  
-But it's still a race.)
-
-So yes, the current code is wrong.  And in fact, it will still be wrong 
-even after the usb_set_intfdata(interface, NULL) line is removed, 
-because there is no synchronization between skel_open() and 
-skel_disconnect().  It is possible for skel_disconnect() to run to 
-completion and the USB core to clear the interface-data pointer all 
-while skel_open() is running.  The driver needs a static private mutex 
-to synchronize opens with unregistrations.  (This is a general 
-phenomenon, true of all drivers that have a user interface such as a 
-device file.)
-
-The driver _does_ have a per-instance mutex, dev->io_mutex, to 
-synchronize I/O with disconnects.  But that's separate from 
-synchronizing opens with unregistrations, because at open time the 
-driver doesn't yet know the address of the private data structure or 
-even if the structure is still allocated.  So obviously it can't use a 
-mutex that is embedded within the private data structure for this 
-purpose.
-
-Alan Stern
+[0] https://source.denx.de/u-boot/u-boot/-/blob/master/tools/patman/patman.rst
