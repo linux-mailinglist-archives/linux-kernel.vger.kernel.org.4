@@ -2,52 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B941363B0DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 19:14:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 683B263B0DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 19:15:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232918AbiK1SOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 13:14:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50162 "EHLO
+        id S234070AbiK1SP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 13:15:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231856AbiK1SOZ (ORCPT
+        with ESMTP id S232244AbiK1SPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 13:14:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44562C675
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:56:42 -0800 (PST)
+        Mon, 28 Nov 2022 13:15:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61AE8766A;
+        Mon, 28 Nov 2022 09:57:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FF4F61337
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 17:56:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 949BDC433C1;
-        Mon, 28 Nov 2022 17:56:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D1AB061337;
+        Mon, 28 Nov 2022 17:57:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AB5CC433C1;
+        Mon, 28 Nov 2022 17:57:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669658201;
-        bh=UHB0IwCURSW0ZfKKegBbpDFFLahEIyT+jw1tKJBPgQA=;
+        s=k20201202; t=1669658263;
+        bh=HOm5tlWIniy5T1amAXM6Y8prJ7Kjyr4oEW5FOmYDoic=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BPJykboQTxYwAajFdfUb+fgsXJFMjWlrNgN+11r0CASINzJOiVBby068faMLEGGLX
-         FvomxjyEbz9Q4UipVVDl/Wn7jUhGb0cwxt3hIAL1B358BDhoecRhwfls4FPOwJAu+u
-         H8gd3Yx7GJJ3R/Z/AOGDoJNhlmTh1r1xEYFYF4aTtpy8w3kZEiMy42DiVDhOYsxH2t
-         ZXCKxHmvYHZqdOB41oOkG5G7siJr98TbzOnn/xTZvAMAgwzTHQAeDALK4fU+0Vdcni
-         GrBsaUhZQD5fSV0SSwMhpdyFc9drr9Av2OriSICynRl9sk0f1BUuN02PKwk+gR/Olo
-         y8JWltUebR8wQ==
-Date:   Mon, 28 Nov 2022 17:56:37 +0000
+        b=lkZTBD09uxBmtzSZiuor8HjGnbbP1RV/lyx2WAeOihIR7vO4VrljoBY1MtGSNUK3E
+         98JP5V9jtxBTF8PDeS1XarMMo5dPw+/rlowPp8unwkO1PMiK6Ru1I65LBMcTSN9y1F
+         9GH0y3P0Dz2GPAMi0QFsGEEODDYzzO5cvYMhjnOMpDT/P6DG306vNIg/sGCjE87b9Y
+         pGcerHb/jNWALLUDd5Ibi7KJl7j/OtUgs77xojC1MVkaBYnhiZinT7MRSVPqm7rBZv
+         UE3nRqjJFcSb7VCYe7VKxKUBmw8jRLpE5LW2EE96f73kUoLNevfSJHiATVXCL4/B96
+         OCl7V7suyc6hg==
+Date:   Mon, 28 Nov 2022 17:57:38 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Subject: Re: [PATCH] ASoC: rsnd: Drop obsolete dependency on COMPILE_TEST
-Message-ID: <Y4T2VbsknZOgb1rP@sirena.org.uk>
-References: <20221127193441.0b54484d@endymion.delvare>
- <Y4Sqn0xOP4R/fl9P@sirena.org.uk>
- <20221128145612.74ff3d25@endymion.delvare>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-spi@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: spi: Add Nuvoton WPCM450 Flash
+ Interface Unit (FIU)
+Message-ID: <Y4T2kowzjQMqxckF@sirena.org.uk>
+References: <20221124191400.287918-1-j.neuschaefer@gmx.net>
+ <20221124191400.287918-2-j.neuschaefer@gmx.net>
+ <166950112932.8087.6546134123286782729.robh@kernel.org>
+ <Y4SV+5/3Y0dw5QeU@wendy>
+ <Y4S+oWz8fNsQj5Gj@probook>
+ <Y4TBIah6vJAG3kj2@wendy>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="UhrjA2DqVOp+T3Oa"
+        protocol="application/pgp-signature"; boundary="8hu38K+e8vZwubEp"
 Content-Disposition: inline
-In-Reply-To: <20221128145612.74ff3d25@endymion.delvare>
+In-Reply-To: <Y4TBIah6vJAG3kj2@wendy>
 X-Cookie: In the next world, you're on your own.
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -59,58 +65,31 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---UhrjA2DqVOp+T3Oa
+--8hu38K+e8vZwubEp
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 28, 2022 at 02:56:12PM +0100, Jean Delvare wrote:
-> On Mon, 28 Nov 2022 12:33:35 +0000, Mark Brown wrote:
-> > On Sun, Nov 27, 2022 at 07:34:41PM +0100, Jean Delvare wrote:
+On Mon, Nov 28, 2022 at 02:09:37PM +0000, Conor Dooley wrote:
 
-> > > It is actually better to always build such drivers with OF enabled,
-> > > so that the test builds are closer to how each driver will actually be
-> > > built on its intended target. Building them without OF may not test
-> > > much as the compiler will optimize out potentially large parts of the
-> > > code. In the worst case, this could even pop false positive warnings.
-> > > Dropping COMPILE_TEST here improves the quality of our testing and
-> > > avoids wasting time on non-existent issues. =20
+> Without being a Responsible Adult^TM for either SPI or DT, my preference
+> would be for simplifying the binding so that if your clk stuff doesn't
+> land for 6.2 the binding checks still work.
 
-> > As ever building without OF does not preclude building with OF.
+Yes, please simplify the example.
 
-> I'm sorry, I'm not sure I understand what point you are trying to make
-> here.
-
-You're overselling what the change does here in a way that's getting a
-bit silly.  It's just cutting down the amount of stuff the randconfig
-people do, that's all.  It's not particularly bad to compile without the
-DT support, I suppose you could argue that it's preserving our ability
-to work with other firmware interfaces although that's a bit of a push
-(but then a lot of the stuff generated by randconfig is in a similar
-ballpark of course).  The whole point with COMPILE_TEST is that it's
-enabling unrealistic things that probably aren't practically useful.
-
-> That's true, but it's a matter of quantity versus quality. Would you
-> rather test build the code twice in its crippled form, which may
-> trigger false-positive warnings or hide actual warnings, or just once
-> in its proper form, where all warnings and build failures are real? I
-> definitely believe the latter is a better use of our resources.
-
-I'm not saying don't do the change, I'm saying don't oversell it.
-
---UhrjA2DqVOp+T3Oa
+--8hu38K+e8vZwubEp
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOE9lQACgkQJNaLcl1U
-h9BggQf/a4D/DUNNFiONMXCiabuB3MAsolK1pNndM6oSMlyfrlWHjdrT/31nDehL
-yqTw6X1FSWpWEKAUwZLciIvtnvoLNFmT8+C6xDAcNVz5dbcqf16LC+HWWRccAlSp
-cF7iQr1SGRos3Mp81jMcM2584jzDKoVjH9oSqlZ21O0h7G9r+7gZrKh1DMI9T7Eg
-zgtV5aHG8UGnYrR9lznVekvIZaY/5YyLaYwDpK/4VXIWDWMO1ySBQetwojaqZf5m
-gQ8Xzg9LGq06DwBNcMoCnEeFV4EXyTeflp6NnbzfZCNoAXJKPRr+Fcg7n9gilAOl
-4U2cZcjSdsS7zMb8sJQfVFzMMXc+bQ==
-=fCam
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOE9pEACgkQJNaLcl1U
+h9Bs1wf+OUxEzRc8Sldcia8LNWHm678IKCqgxrejUeJvY8R7o/7LTsHa5JVhnTt3
+Ovq4CmMPJ+0bEF5DIDBxGFWNfEA5C1E9eNJOm9HWTpSYfxZTpBRcP+YC0p1bS9pS
+IQhoCxI4K+iYfERMqy6QDCiBCXr9y0+7QHQvwJGvjHNwOXrfEeGdP8GACFTYzCno
+3fMMk+tuTUHeRiLKCjdDSbEZwYzMwapBi5mXKS7Ocj+S8SIZFe4zQWY2ViO21GtA
+SYedntOzggayxP4PyoIdxyoju5UqteP59QHtE28ygxkzZZt9G1dKhbjhzQ8QAviL
+5rv8aCuy9lWvUL45v2NzDVf5/IzSwQ==
+=bB+P
 -----END PGP SIGNATURE-----
 
---UhrjA2DqVOp+T3Oa--
+--8hu38K+e8vZwubEp--
