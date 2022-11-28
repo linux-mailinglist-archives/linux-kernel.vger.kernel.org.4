@@ -2,148 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 153EC639F00
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 02:36:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29843639F03
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 02:41:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiK1Bgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 27 Nov 2022 20:36:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48384 "EHLO
+        id S229700AbiK1Blb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 27 Nov 2022 20:41:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiK1Bgl (ORCPT
+        with ESMTP id S229548AbiK1Bla (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 27 Nov 2022 20:36:41 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8692FB865
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 17:36:35 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id f2-20020a5ec602000000b006dc67829888so4837339iok.3
-        for <linux-kernel@vger.kernel.org>; Sun, 27 Nov 2022 17:36:35 -0800 (PST)
+        Sun, 27 Nov 2022 20:41:30 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26418A47D;
+        Sun, 27 Nov 2022 17:41:28 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id o12so269001pjo.4;
+        Sun, 27 Nov 2022 17:41:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PaR7LgzX2MZo4rJ3PVl0tctTYz/3NOJLXLMUsXTLGD4=;
+        b=Pau7HecAGXX1ueUtl74grj3/J1c/RLQ+W+jYaJZ6EHWllnaY6Acziy3bxu2m7xIi5K
+         Rkk3Rz+1hGBw7/USdwCwkql3pclhcToikSCyM6dTy0QjkuWrpnWb+rFgU6FqacRNVTUV
+         gzPkf/I9GExvlnTC45hKFhbo6hB8XUuMzjISntm8SJugYpoKhscn52KE7jrkiWmUJQKj
+         azIYKNuzPRTt8GqPTujEZx2RHcm+AqIMK3V65xUQJHupQVtl4EMZiPfEdoQep+/++am7
+         P0f9CEmq12oSyM7EQTrxYq3xSSZv9bQOKNZRZu/3nSvgLMZHd9rvtNC/3Cwh2VZiLZ18
+         TUag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WHbFXNbfQJo0etgll7PK/wANb1syjZtzK5qI4dznE7w=;
-        b=LEOkiwkv5mspTxtExFOPX5K9pVMFNsSbknPbGmKvxfbeKSPpW1Vl75wI32TgIyoobZ
-         o5HEVizHZOFb4trKD20fyc/d+fRS4kmQYO1VnQZxDs1z/jsyJkV9ce4NotL2hjj+woHr
-         f0Y2cu4m6c8YesVeMEL2FJz9d8PwBXc/0IZN7rRohLogBHzgZHTcwjsSeFrC9AG8jrKo
-         TFMIwLxWrQTkkLkQ8nm2tj0izlX2OYYF5r3gi6qJaSVzL4+jN/bx8SRwO7vj2mejjOh6
-         LtoqXi79SxmY75rZ6A3gOmMiGpg/BLt7uBtS3pGb+jqwsfYhPp+vrk6qwJnHFxoEJpbx
-         xKDA==
-X-Gm-Message-State: ANoB5pmWaD2r9Y1kutsllCm+eCRcOFvu+f0+yiPwfYuQcSL6/cDlxTtr
-        7zTvWvX+7aVup+KORzGP6oqy83s/SbgK5m2BjvAvDEiXB3wb
-X-Google-Smtp-Source: AA0mqf68WiRHMAkun+P/xHmfORlQS01dTBout9CInD2zsm2OywEdK4y54zBCrpTEVSTT+UMXeuGkL04CKfgswxTVg/GaGCTgcu4J
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PaR7LgzX2MZo4rJ3PVl0tctTYz/3NOJLXLMUsXTLGD4=;
+        b=EDCqFqDE9llGElWSZxLwiT5VsaoJMerXXfgpgDTsLos/l5NXKroFUMV5o+mT3UD4QH
+         X6zcc7Ph5ijQ4sBXLipauZh7tZq50jp2306gFUUPRixveYowULlU8vNFJdN8E5z4AuqL
+         TtANbW68tM22fmQnymGLssOoJ4P9anN4jana28crDOIfUb4uAmLeksGDuTWiq1orMmOO
+         7uMWoTGoPXiisRyxZgcZ36Ku6ZgMZuZQ7hXchRfWB2YeFRUiqG7xluh1yYkqljGaVgjB
+         ySbxGUG3FlVqqSJPNSTQY7YS3BlV7GQLx44e5yrB1YBv3DfqcHp/QrqVtr9Hj5igOkVI
+         Ynjw==
+X-Gm-Message-State: ANoB5pnDI5D47f9TqLEz+6MLHHOLJCamhnayZUxo5iTNr3URcr4oENm/
+        Q9Yzp8VUYKddAopiq3kp+feJrSMnQtn572X1vQ==
+X-Google-Smtp-Source: AA0mqf4mFfYLCW1AxKxylFwSF4KzvebqyOsDWWDoMZ4XTTDIviAfprItj4RgHXP21gT8XWFIQfFAL8qn74iWKtUJJrs=
+X-Received: by 2002:a17:902:bd42:b0:188:ca57:8945 with SMTP id
+ b2-20020a170902bd4200b00188ca578945mr29912075plx.116.1669599687417; Sun, 27
+ Nov 2022 17:41:27 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a02:6d13:0:b0:374:ff83:34b8 with SMTP id
- m19-20020a026d13000000b00374ff8334b8mr14099890jac.60.1669599394907; Sun, 27
- Nov 2022 17:36:34 -0800 (PST)
-Date:   Sun, 27 Nov 2022 17:36:34 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d9caec05ee7de65e@google.com>
-Subject: [syzbot] BUG: unable to handle kernel NULL pointer dereference in get_super
-From:   syzbot <syzbot+cf2fe6054f356fc11d49@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+References: <20221125122912.54709-1-sunhao.th@gmail.com> <20221128003800.h2bmqcv5dfqmfbcf@MacBook-Pro-5.local>
+In-Reply-To: <20221128003800.h2bmqcv5dfqmfbcf@MacBook-Pro-5.local>
+From:   Hao Sun <sunhao.th@gmail.com>
+Date:   Mon, 28 Nov 2022 09:41:16 +0800
+Message-ID: <CACkBjsY_Jy9seMfcMMPbYN-YMubcUzABpMm7VFe8wU+X6LKAUQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 0/3] bpf: Add LDX/STX/ST sanitize in jited BPF progs
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLACK,
+        URIBL_DBL_ABUSE_REDIR autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Alexei Starovoitov <alexei.starovoitov@gmail.com> =E4=BA=8E2022=E5=B9=B411=
+=E6=9C=8828=E6=97=A5=E5=91=A8=E4=B8=80 08:38=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Fri, Nov 25, 2022 at 08:29:09PM +0800, Hao Sun wrote:
+> > The verifier sometimes makes mistakes[1][2] that may be exploited to
+> > achieve arbitrary read/write. Currently, syzbot is continuously testing
+> > bpf, and can find memory issues in bpf syscalls, but it can hardly find
+> > mischecking/bugs in the verifier. We need runtime checks like KASAN in
+> > BPF programs for this. This patch series implements address sanitize
+> > in jited BPF progs for testing purpose, so that tools like syzbot can
+> > find interesting bugs in the verifier automatically by, if possible,
+> > generating and executing BPF programs that bypass the verifier but have
+> > memory issues, then triggering this sanitizing.
+>
+> The above paragraph makes it sound that it's currently impossible to
+> use kasan with BPF. Which is confusing and incorrect statement.
+> kasan adds all the necessary instrumentation to BPF interpreter already
+> and syzbot can perform bug discovery.
+> syzbot runner should just disable JIT and run all progs via interpreter.
+> Adding all this logic to run JITed progs in kasan kernel is
+> just unnecessary complexity.
 
-syzbot found the following issue on:
+Sorry for the confusion, I mean JITed BPF prog can't use KASAN currently,
+maybe it should be called BPF_JITED_PROG_KASAN.
 
-HEAD commit:    6d464646530f Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=12cff0ad880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=23eec5c79c22aaf8
-dashboard link: https://syzkaller.appspot.com/bug?extid=cf2fe6054f356fc11d49
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=135b9a87880000
+It's actually useful because JIT is used in most real cases for testing/fuz=
+zing,
+syzbot uses WITH_JIT_ALWAYS_ON[1][2]. For those tools, they may need
+to run hundred times for each generated BPF prog to find interesting bugs i=
+n
+the verifier, JIT makes it much faster. Also, bugs in JIT can be
+missed if they're
+disabled.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/f22d29413625/disk-6d464646.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/389f0a5f1a4a/vmlinux-6d464646.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/48ddb02d82da/Image-6d464646.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/d865c8fd3706/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+cf2fe6054f356fc11d49@syzkaller.appspotmail.com
-
-Unable to handle kernel NULL pointer dereference at virtual address 0000000000000180
-Mem abort info:
-  ESR = 0x0000000096000005
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x05: level 1 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000005
-  CM = 0, WnR = 0
-user pgtable: 4k pages, 48-bit VAs, pgdp=000000010bce7000
-[0000000000000180] pgd=0800000111ba7003, p4d=0800000111ba7003, pud=0000000000000000
-Internal error: Oops: 0000000096000005 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 1 PID: 3102 Comm: syz-executor.4 Not tainted 6.1.0-rc6-syzkaller-32662-g6d464646530f #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : hlist_unhashed include/linux/list.h:854 [inline]
-pc : get_super+0x4c/0x144 fs/super.c:790
-lr : get_super+0x7c/0x144 fs/super.c:789
-sp : ffff800010fb3b40
-x29: ffff800010fb3b40 x28: ffff0000c5400000 x27: 0000000000000000
-x26: 00000000000000c0 x25: ffff0000c58c9500 x24: ffff800009ab2ee0
-x23: ffff80000d4e4400 x22: 0000000000000001 x21: ffff80000d4e43c0
-x20: 0000000000000000 x19: ffff0000c58c9500 x18: 000000000000035c
-x17: ffff80000c0cd83c x16: ffff80000dbe6158 x15: ffff0000c5400000
-x14: 0000000000000008 x13: 00000000ffffffff x12: ffff0000c5400000
-x11: ff808000085c1d08 x10: 0000000000000000 x9 : ffff8000085c1d08
-x8 : ffff0000c5400000 x7 : ffff8000085c1cbc x6 : 0000000000000000
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000001 x1 : 0000000000000000 x0 : 0000000000000000
-Call trace:
- get_super+0x4c/0x144
- __invalidate_device+0x28/0xb8 block/bdev.c:1003
- disk_force_media_change+0xf0/0x198 block/disk-events.c:310
- __loop_clr_fd+0x164/0x2a0 drivers/block/loop.c:1174
- lo_release+0xb4/0xc8 drivers/block/loop.c:1745
- blkdev_put_whole block/bdev.c:695 [inline]
- blkdev_put+0x200/0x284 block/bdev.c:953
- kill_block_super+0x58/0x78 fs/super.c:1431
- deactivate_locked_super+0x70/0xe8 fs/super.c:332
- deactivate_super+0xd0/0xd4 fs/super.c:363
- cleanup_mnt+0x184/0x1c0 fs/namespace.c:1186
- __cleanup_mnt+0x20/0x30 fs/namespace.c:1193
- task_work_run+0x100/0x148 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- do_notify_resume+0x174/0x1f0 arch/arm64/kernel/signal.c:1127
- prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
- exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
- el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:638
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-Code: eb17029f 54000620 f0027915 910f02b5 (f940c288) 
----[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess):
-   0:	eb17029f 	cmp	x20, x23
-   4:	54000620 	b.eq	0xc8  // b.none
-   8:	f0027915 	adrp	x21, 0x4f23000
-   c:	910f02b5 	add	x21, x21, #0x3c0
-* 10:	f940c288 	ldr	x8, [x20, #384] <-- trapping instruction
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+[1] http://bit.do/syzbot-bpf-config
+[2] http://bit.do/syzbot-bpf-next-config
