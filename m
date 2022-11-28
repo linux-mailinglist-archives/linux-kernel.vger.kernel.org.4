@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5439463A92A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:14:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6B3C63A933
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:14:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231811AbiK1NOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 08:14:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40086 "EHLO
+        id S231844AbiK1NOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 08:14:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231577AbiK1NNi (ORCPT
+        with ESMTP id S231665AbiK1NNj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 08:13:38 -0500
+        Mon, 28 Nov 2022 08:13:39 -0500
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812071D678;
-        Mon, 28 Nov 2022 05:13:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697E21DA63;
+        Mon, 28 Nov 2022 05:13:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669641217; x=1701177217;
+  t=1669641218; x=1701177218;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=GsviGa0DcVIC2LcEIZUUyDmrwHqAyGZci2nKyeSjNto=;
-  b=Mpkr6eFStFskEuiJLekkFdqLeBG5DoXW4DtoVyy0Wywdo0aoFwILAJ4I
-   bk/HdXFqz0Llb7RMabI7fawAxTeOmeYJPr2BjYSKwKXTE5jj/nLXdUm4J
-   /pMf7EY18eE5kB4XjjUVWu4cqbFSkGuQgf6/spZDo1HtJkCw24MpxsABa
-   jmPrWoQgas7ObviX9c7Y9RhK4tSLHGVukeyIbFX0otcEj9cIGGRIjebPn
-   nL7RadxxVaqJMuU84hYaU+86Bt6ENYV9BoCCQyChvKBswqWomcHx2e4k9
-   vzOvq5Q4PrEEvmPjhOqd7RX7Zi3rHd1td8fNlYS2R55oGBsxICA9UE/fK
+  bh=QuRfJtcjeJpezXilnQW60/bNiOmEuQ40ZOh0UG1TU4A=;
+  b=TIsGMRdxitwIt/fUtN7V2nT9X9lBWZouyurJtfOyx5dZUdoKk5707IcM
+   ntl1vDzJKPn8i6poAh9txSBxi0C2G5iI/h8rjS1y2oP7ctsQRaht66/n1
+   uqOaFjze8szn7zOvzPmIBeRoYwUMJyMTM6tBQFzhmfq37GvBQnHWedF5z
+   aWOCLe9AJHDitFtq/Ate8xOn2siFldEWRvIAvBMpk2ArqyAJ9YcUcE5fC
+   3J/9+YbwR0Vmm8raxkSNZRwe033ILMwJ7yuw26li5ap4Cwc026U+exMq8
+   KZKXB3hHUiWzqhBx8eApRgGKCtjM55iU4taaFJM2vb4sxXokII/iClpyt
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="401117125"
+X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="401117137"
 X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="401117125"
+   d="scan'208";a="401117137"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
   by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 05:13:33 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="749381349"
+X-IronPort-AV: E=McAfee;i="6500,9779,10544"; a="749381354"
 X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="749381349"
+   d="scan'208";a="749381354"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
   by fmsmga002.fm.intel.com with ESMTP; 28 Nov 2022 05:13:33 -0800
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
@@ -58,9 +58,9 @@ Cc:     Ricardo Neri <ricardo.neri@intel.com>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
         "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: [PATCH v2 08/22] sched/fair: Use IPC class to pick the busiest group
-Date:   Mon, 28 Nov 2022 05:20:46 -0800
-Message-Id: <20221128132100.30253-9-ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v2 09/22] sched/fair: Use IPC class score to select a busiest runqueue
+Date:   Mon, 28 Nov 2022 05:20:47 -0800
+Message-Id: <20221128132100.30253-10-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20221128132100.30253-1-ricardo.neri-calderon@linux.intel.com>
 References: <20221128132100.30253-1-ricardo.neri-calderon@linux.intel.com>
@@ -73,13 +73,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As it iterates, update_sd_pick_busiest() keeps on selecting as busiest
-sched groups of identical priority. Since both groups have the same
-priority, either group is a good choice. The IPCC score of the tasks
-placed a sched group can break this tie.
-
-Pick as busiest the sched group that yields a higher IPCC score after
-load balancing.
+For two runqueues of equal priority and equal number of running of tasks,
+select the one whose current task would have the highest IPC class score
+if placed on the destination CPU.
 
 Cc: Ben Segall <bsegall@google.com>
 Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
@@ -98,116 +94,105 @@ Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
 Changes since v1:
- * Added a comment to clarify why sched_asym_prefer() needs a tie breaker
-   only in update_sd_pick_busiest(). (PeterZ)
- * Renamed functions for accuracy:
-   sched_asym_class_prefer() >> sched_asym_ipcc_prefer()
-   sched_asym_class_pick() >> sched_asym_ipcc_pick()
- * Reworded commit message for clarity.
+ * Fixed a bug when selecting a busiest runqueue: when comparing two
+   runqueues with equal nr_running, we must compute the IPCC score delta
+   of both.
+ * Renamed local variables to improve the layout of the code block.
+   (PeterZ)
+ * Used the new interface names.
 ---
- kernel/sched/fair.c | 75 +++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
+ kernel/sched/fair.c | 54 ++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 53 insertions(+), 1 deletion(-)
 
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index e333f9623b3a..e8b181c31842 100644
+index e8b181c31842..113470bbd7a5 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -9176,6 +9176,63 @@ static void update_sg_lb_stats_scores(struct sg_lb_ipcc_stats *sgcs,
- 	sgs->ipcc_score_before = before;
+@@ -9233,6 +9233,24 @@ static bool sched_asym_ipcc_pick(struct sched_group *a,
+ 	return sched_asym_ipcc_prefer(a_stats, b_stats);
  }
  
 +/**
-+ * sched_asym_ipcc_prefer - Select a sched group based on its IPCC score
-+ * @a:	Load balancing statistics of @sg_a
-+ * @b:	Load balancing statistics of @sg_b
++ * ipcc_score_delta - Get the IPCC score delta on a different CPU
++ * @p:		A task
++ * @alt_cpu:	A prospective CPU to place @p
 + *
-+ * Returns: true if preferring @a has a higher IPCC score than @b after
-+ * balancing load. Returns false otherwise.
++ * Returns: The IPCC score delta that @p would get if placed on @alt_cpu
 + */
-+static bool sched_asym_ipcc_prefer(struct sg_lb_stats *a,
-+				   struct sg_lb_stats *b)
++static int ipcc_score_delta(struct task_struct *p, int alt_cpu)
 +{
++	unsigned long ipcc = p->ipcc;
++
 +	if (!sched_ipcc_enabled())
-+		return false;
++		return INT_MIN;
 +
-+	/* @a increases overall throughput after load balance. */
-+	if (a->ipcc_score_after > b->ipcc_score_after)
-+		return true;
-+
-+	/*
-+	 * If @a and @b yield the same overall throughput, pick @a if
-+	 * its current throughput is lower than that of @b.
-+	 */
-+	if (a->ipcc_score_after == b->ipcc_score_after)
-+		return a->ipcc_score_before < b->ipcc_score_before;
-+
-+	return false;
-+}
-+
-+/**
-+ * sched_asym_ipcc_pick - Select a sched group based on its IPCC score
-+ * @a:		A scheduling group
-+ * @b:		A second scheduling group
-+ * @a_stats:	Load balancing statistics of @a
-+ * @b_stats:	Load balancing statistics of @b
-+ *
-+ * Returns: true if @a has the same priority and @a has tasks with IPCC classes
-+ * that yield higher overall throughput after load balance.
-+ * Returns false otherwise.
-+ */
-+static bool sched_asym_ipcc_pick(struct sched_group *a,
-+				 struct sched_group *b,
-+				 struct sg_lb_stats *a_stats,
-+				 struct sg_lb_stats *b_stats)
-+{
-+	/*
-+	 * Only use the class-specific preference selection if both sched
-+	 * groups have the same priority. We are not looking at a specific
-+	 * CPU. We do not care about the idle state of the groups'
-+	 * preferred CPU.
-+	 */
-+	if (arch_asym_cpu_priority(a->asym_prefer_cpu, false) !=
-+	    arch_asym_cpu_priority(b->asym_prefer_cpu, false))
-+		return false;
-+
-+	return sched_asym_ipcc_prefer(a_stats, b_stats);
++	return arch_get_ipcc_score(ipcc, alt_cpu) -
++	       arch_get_ipcc_score(ipcc, task_cpu(p));
 +}
 +
  #else /* CONFIG_IPC_CLASSES */
  static void update_sg_lb_ipcc_stats(struct sg_lb_ipcc_stats *sgcs,
  				    struct rq *rq)
-@@ -9193,6 +9250,14 @@ static void update_sg_lb_stats_scores(struct sg_lb_ipcc_stats *sgcs,
- {
+@@ -9258,6 +9276,11 @@ static bool sched_asym_ipcc_pick(struct sched_group *a,
+ 	return false;
  }
  
-+static bool sched_asym_ipcc_pick(struct sched_group *a,
-+				 struct sched_group *b,
-+				 struct sg_lb_stats *a_stats,
-+				 struct sg_lb_stats *b_stats)
++static int ipcc_score_delta(struct task_struct *p, int alt_cpu)
 +{
-+	return false;
++	return INT_MIN;
 +}
 +
  #endif /* CONFIG_IPC_CLASSES */
  
  /**
-@@ -9452,6 +9517,16 @@ static bool update_sd_pick_busiest(struct lb_env *env,
- 				      sds->busiest->asym_prefer_cpu,
- 				      false))
- 			return false;
-+
-+		/*
-+		 * Unlike other callers of sched_asym_prefer(), here both @sg
-+		 * and @sds::busiest have tasks running. When they have equal
-+		 * priority, their IPC class scores can be used to select a
-+		 * better busiest.
-+		 */
-+		if (sched_asym_ipcc_pick(sds->busiest, sg, &sds->busiest_stat, sgs))
-+			return false;
-+
- 		break;
+@@ -10419,8 +10442,8 @@ static struct rq *find_busiest_queue(struct lb_env *env,
+ {
+ 	struct rq *busiest = NULL, *rq;
+ 	unsigned long busiest_util = 0, busiest_load = 0, busiest_capacity = 1;
++	int i, busiest_ipcc_delta = INT_MIN;
+ 	unsigned int busiest_nr = 0;
+-	int i;
  
- 	case group_misfit_task:
+ 	for_each_cpu_and(i, sched_group_span(group), env->cpus) {
+ 		unsigned long capacity, load, util;
+@@ -10526,8 +10549,37 @@ static struct rq *find_busiest_queue(struct lb_env *env,
+ 
+ 		case migrate_task:
+ 			if (busiest_nr < nr_running) {
++				struct task_struct *curr;
++
+ 				busiest_nr = nr_running;
+ 				busiest = rq;
++
++				/*
++				 * Remember the IPC score delta of busiest::curr.
++				 * We may need it to break a tie with other queues
++				 * with equal nr_running.
++				 */
++				curr = rcu_dereference(busiest->curr);
++				busiest_ipcc_delta = ipcc_score_delta(curr,
++								      env->dst_cpu);
++			/*
++			 * If rq and busiest have the same number of running
++			 * tasks, pick rq if doing so would give rq::curr a
++			 * bigger IPC boost on dst_cpu.
++			 */
++			} else if (sched_ipcc_enabled() &&
++				   busiest_nr == nr_running) {
++				struct task_struct *curr;
++				int delta;
++
++				curr = rcu_dereference(rq->curr);
++				delta = ipcc_score_delta(curr, env->dst_cpu);
++
++				if (busiest_ipcc_delta < delta) {
++					busiest_ipcc_delta = delta;
++					busiest_nr = nr_running;
++					busiest = rq;
++				}
+ 			}
+ 			break;
+ 
 -- 
 2.25.1
 
