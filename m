@@ -2,135 +2,588 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D21963A12A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 07:25:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FDAB63A132
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 07:26:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbiK1GZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 01:25:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35246 "EHLO
+        id S229815AbiK1G0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 01:26:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbiK1GZv (ORCPT
+        with ESMTP id S229799AbiK1G0Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 01:25:51 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF97013F69;
-        Sun, 27 Nov 2022 22:25:50 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id vp12so21980754ejc.8;
-        Sun, 27 Nov 2022 22:25:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pvyc/Y0je10m+7tKkRhVqd7F/6Fh4vGa48vpfH3+st0=;
-        b=SAZCqecAkk0r0Y7XYYioVUReAKI7cldklslyoKC2u3/eT+YgwS/UZ+yF+5XWNeGBBG
-         GK149C5V2arMKregXiTnTXUTFidEipqHeRYifxpO8SbJkBn/i7Z5J/Gwcel8pfPNYvRa
-         iRbeMlyT27y6hnPmOboeewmAT08sqKhZIHEAU/oTka6/vGeVSkUuPjjnx8aJc1snEDTh
-         tQt8NkbPIHl21DRLISyLuhz9qqP6FGG/SopDIljpzC4DNzRmJZbBMW2T07s99MRFjITm
-         sA3Z9lOXgNO4NDY+HyYcOr02OEyXTjHNlFC8vQMcik/2UFL8JoSJZU+YLPEw2qWLWc93
-         z2Og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pvyc/Y0je10m+7tKkRhVqd7F/6Fh4vGa48vpfH3+st0=;
-        b=IgXEzIUjDt7dvy9AdYltXNCMhHQr6sHw9X4IBcYJQVh/UYIHaxua2KFOLluqYXsizP
-         6E3DQkWBPoNAv1F9TxG1gm9/eWNx2lBNJRdz10ZrXL8rNfi1FEc7FTYhi6aaFKDGDbhy
-         V7hnhI9/bVFfBcifGzNGZ3IXMBZhVQXHafKK/FeWSdBwt5M67cUT0x7iSVayY/8pvCu7
-         Qcte6CJS+lfS71oTfMEBIol5s8TfT6qaVnumViht8xLFXWgxTRRl17B5lus6N1tFWLA0
-         FSsIrnVzGKv2cDiCba/yrNZtTD7Es19TsrELmHyo2Um/gEDfaAHmVoDCDtxIeGsgPGo4
-         LbkQ==
-X-Gm-Message-State: ANoB5plK4mobtl3WQ8qobXySiorMAOoCa1pudhza6ibWBjilJGGH4HbB
-        y+i+sArojYSzNk1sb5RD8rvzLcTFis5mV92gq94=
-X-Google-Smtp-Source: AA0mqf6zot371VpUgBCAP8yNRVW1ahi1kcEA//7QaEtGvMJx3biCW7dxrRUBQ+M/DR3wb4e6UgTQSje1IdyE0y9/Tq8=
-X-Received: by 2002:a17:906:cc8f:b0:78b:8ce7:fe3c with SMTP id
- oq15-20020a170906cc8f00b0078b8ce7fe3cmr41762439ejb.557.1669616748770; Sun, 27
- Nov 2022 22:25:48 -0800 (PST)
-MIME-Version: 1.0
-References: <20220714084136.570176-1-chenhuacai@loongson.cn> <20220714084136.570176-3-chenhuacai@loongson.cn>
-In-Reply-To: <20220714084136.570176-3-chenhuacai@loongson.cn>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Mon, 28 Nov 2022 14:25:35 +0800
-Message-ID: <CAAhV-H7uF85UHfbS+-sMcXbB=q3UO0Z8rO=poNQbEtaipi4PHQ@mail.gmail.com>
-Subject: Re: [PATCH V2 3/3] SH: cpuinfo: Fix a warning for CONFIG_CPUMASK_OFFSTACK
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Mon, 28 Nov 2022 01:26:16 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E67F3EE2D;
+        Sun, 27 Nov 2022 22:26:12 -0800 (PST)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8BxnuuDVIRjoJcBAA--.4001S3;
+        Mon, 28 Nov 2022 14:26:11 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axf+B7VIRjpAcdAA--.8407S2;
+        Mon, 28 Nov 2022 14:26:08 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        WANG Xuerui <kernel@xen0n.name>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org, linux-sh@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        Arnaud Patard <apatard@mandriva.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>
+Subject: [PATCH v7 1/2] gpio: loongson: add gpio driver support
+Date:   Mon, 28 Nov 2022 14:26:01 +0800
+Message-Id: <20221128062602.11473-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Axf+B7VIRjpAcdAA--.8407S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvAXoWfGw1kWrWrWr1UZr1DtF15XFb_yoW8XFyrCo
+        W7WFZ8WrW8Wr17JayFq3WSqF47ZFn0qF10ywnakan8Ca15tr98Jry3C3y3XFy0yF1FgFyx
+        ZFyfur4fGFsrtF4Dn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
+        J3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnRJU
+        UUBY1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFV
+        AK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2
+        z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr
+        1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkE
+        cVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F4
+        0Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC
+        6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2
+        Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI
+        1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_Jr
+        Wlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j
+        6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr
+        0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUv
+        cSsGvfC2KfnxnUUI43ZEXa7IU8orW5UUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ping?
+The Loongson platforms GPIO controller contains 60 GPIO pins in total,
+4 of which are dedicated GPIO pins, and the remaining 56 are reused
+with other functions. Each GPIO can set input/output and has the
+interrupt capability.
 
-On Thu, Jul 14, 2022 at 4:42 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
->
-> When CONFIG_CPUMASK_OFFSTACK and CONFIG_DEBUG_PER_CPU_MAPS is selected,
-> cpu_max_bits_warn() generates a runtime warning similar as below while
-> we show /proc/cpuinfo. Fix this by using nr_cpu_ids (the runtime limit)
-> instead of NR_CPUS to iterate CPUs.
->
-> [    3.052463] ------------[ cut here ]------------
-> [    3.059679] WARNING: CPU: 3 PID: 1 at include/linux/cpumask.h:108 show_cpuinfo+0x5e8/0x5f0
-> [    3.070072] Modules linked in: efivarfs autofs4
-> [    3.076257] CPU: 0 PID: 1 Comm: systemd Not tainted 5.19-rc5+ #1052
-> [    3.099465] Stack : 9000000100157b08 9000000000f18530 9000000000cf846c 9000000100154000
-> [    3.109127]         9000000100157a50 0000000000000000 9000000100157a58 9000000000ef7430
-> [    3.118774]         90000001001578e8 0000000000000040 0000000000000020 ffffffffffffffff
-> [    3.128412]         0000000000aaaaaa 1ab25f00eec96a37 900000010021de80 900000000101c890
-> [    3.138056]         0000000000000000 0000000000000000 0000000000000000 0000000000aaaaaa
-> [    3.147711]         ffff8000339dc220 0000000000000001 0000000006ab4000 0000000000000000
-> [    3.157364]         900000000101c998 0000000000000004 9000000000ef7430 0000000000000000
-> [    3.167012]         0000000000000009 000000000000006c 0000000000000000 0000000000000000
-> [    3.176641]         9000000000d3de08 9000000001639390 90000000002086d8 00007ffff0080286
-> [    3.186260]         00000000000000b0 0000000000000004 0000000000000000 0000000000071c1c
-> [    3.195868]         ...
-> [    3.199917] Call Trace:
-> [    3.203941] [<90000000002086d8>] show_stack+0x38/0x14c
-> [    3.210666] [<9000000000cf846c>] dump_stack_lvl+0x60/0x88
-> [    3.217625] [<900000000023d268>] __warn+0xd0/0x100
-> [    3.223958] [<9000000000cf3c90>] warn_slowpath_fmt+0x7c/0xcc
-> [    3.231150] [<9000000000210220>] show_cpuinfo+0x5e8/0x5f0
-> [    3.238080] [<90000000004f578c>] seq_read_iter+0x354/0x4b4
-> [    3.245098] [<90000000004c2e90>] new_sync_read+0x17c/0x1c4
-> [    3.252114] [<90000000004c5174>] vfs_read+0x138/0x1d0
-> [    3.258694] [<90000000004c55f8>] ksys_read+0x70/0x100
-> [    3.265265] [<9000000000cfde9c>] do_syscall+0x7c/0x94
-> [    3.271820] [<9000000000202fe4>] handle_syscall+0xc4/0x160
-> [    3.281824] ---[ end trace 8b484262b4b8c24c ]---
->
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->  arch/sh/kernel/cpu/proc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/sh/kernel/cpu/proc.c b/arch/sh/kernel/cpu/proc.c
-> index a306bcd6b341..5f6d0e827bae 100644
-> --- a/arch/sh/kernel/cpu/proc.c
-> +++ b/arch/sh/kernel/cpu/proc.c
-> @@ -132,7 +132,7 @@ static int show_cpuinfo(struct seq_file *m, void *v)
->
->  static void *c_start(struct seq_file *m, loff_t *pos)
->  {
-> -       return *pos < NR_CPUS ? cpu_data + *pos : NULL;
-> +       return *pos < nr_cpu_ids ? cpu_data + *pos : NULL;
->  }
->  static void *c_next(struct seq_file *m, void *v, loff_t *pos)
->  {
-> --
-> 2.31.1
->
+This driver added support for Loongson GPIO controller and support to
+use DTS or ACPI to descibe GPIO device resources.
+
+Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
+Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
+Signed-off-by: Juxin Gao <gaojuxin@loongson.cn>
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+---
+Change in v7:
+		1. Add the gpio irqchip support.
+		2. Replace __set_direction with loongson_commit_direction.
+		3. Replace __set_level with loongson_commit_level. 
+		4. Remove the parser of gsi_idx_map. 
+		5. Add the support_irq flag.
+		6. Replace string platform_data with chip_data.
+		7. Remove the loongson_gpio_request.
+Change in v6:
+		1. Remove the bit mode keep byte mode in all function except 
+		   loongson_gpio_init.
+		2. Use bgpio_init replace bit mode. 
+		3. Implement the function loongson_gpio_get_direction for byte mode.
+		4. Set ngpios after call bgpio_init. 
+		5. Use gpio-loongson-64bit.c as driver filename.
+		6. Ignore that loongson legacy drvier and remove the patch about 
+		   "gpio: loongson2ef: move driver to original location". 
+Change in v5:
+		1. Move legacy gpio driver to proper location.
+		2. Remove the "gpio_base".
+		3. Add of_device_id and acpi_device_id data field for platform
+		   data. 
+		4. Remove the ACPI_PTR().
+		5. Remove the gpio label judgement logic and use mode instead.  
+		6. Drop platform_loongson_gpio_get_props.
+		7. Using devres for all resource. 
+		8. Remove the loongson_gpio_remove.
+		9. Remove the unmatched print information.
+		10. Remove the loongson_gpio_exit.
+Change in v4:
+		1. Fixup name spelling about Signed-off-by. 
+		2. Drop "series" here and everywhere else.
+		3. Fixup the copyright in driver.
+		4. Drop the "else" in loongson_gpio_request.
+		5. Use trinocular operation replace the related logic.
+		6. Remove lable judgement in context about "lgpio->chip.to_irq = 
+		   loongson_gpio_to_irq"
+		7. Use dev_err replace pr_err in probe.
+		8. Make legacy platform_data should be left out of this patch.
+		9. Remove the mips config in gpio Kconfig.
+Change in v3:
+		1. Move the gpio platform data struct from arch/ into include/linux/
+		   platform_data/.
+		2. Replace platform_gpio_data with loongson_gpio_platform_data in .c.
+		3. Add maintainer in MAINTAINERS file for include/linux/platform_data/
+		   gpio-loongson.h and gpio-loongson.c
+Change in v2:
+		1. Fixup of_loongson_gpio_get_props and remove the parse logic about
+	           "loongson,conf_offset", "loongson,out_offset", "loongson,in_offset",
+		   "loongson,gpio_base", "loongson,support_irq" then kernel driver will
+		   initial them that depend compatible except "loongson,gpio_base".
+
+ MAINTAINERS                        |   6 +
+ drivers/gpio/Kconfig               |  12 +
+ drivers/gpio/Makefile              |   1 +
+ drivers/gpio/gpio-loongson-64bit.c | 380 +++++++++++++++++++++++++++++
+ 4 files changed, 399 insertions(+)
+ create mode 100644 drivers/gpio/gpio-loongson-64bit.c
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 5114db9c8f32..2854da69cabb 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12051,6 +12051,12 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/hwinfo/loongson,ls2k-chipid.yaml
+ F:	drivers/soc/loongson/loongson2_guts.c
+ 
++LOONGSON GPIO DRIVER
++M:	Yinbo Zhu <zhuyinbo@loongson.cn>
++L:	linux-gpio@vger.kernel.org
++S:	Maintained
++F:	drivers/gpio/gpio-loongson-64bit.c
++
+ LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+ M:	Sathya Prakash <sathya.prakash@broadcom.com>
+ M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+index a01af1180616..d3e2380dbacf 100644
+--- a/drivers/gpio/Kconfig
++++ b/drivers/gpio/Kconfig
+@@ -381,6 +381,18 @@ config GPIO_LOONGSON
+ 	help
+ 	  Driver for GPIO functionality on Loongson-2F/3A/3B processors.
+ 
++config GPIO_LOONGSON_64BIT
++	tristate "Loongson 64 bit GPIO support"
++	depends on LOONGARCH || COMPILE_TEST
++	select GPIO_GENERIC
++	select GPIOLIB_IRQCHIP
++	help
++	  Say yes here to support the GPIO functionality of a number of
++	  Loongson series of chips. The Loongson GPIO controller supports
++	  up to 60 GPIOS in total, 4 of which are dedicated GPIO pins, and
++	  the remaining 56 are reused with other functions, with edge or
++	  level triggered interrupts.
++
+ config GPIO_LPC18XX
+ 	tristate "NXP LPC18XX/43XX GPIO support"
+ 	default y if ARCH_LPC18XX
+diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
+index 29e3beb6548c..fc832484cc77 100644
+--- a/drivers/gpio/Makefile
++++ b/drivers/gpio/Makefile
+@@ -78,6 +78,7 @@ obj-$(CONFIG_GPIO_KEMPLD)		+= gpio-kempld.o
+ obj-$(CONFIG_GPIO_LOGICVC)		+= gpio-logicvc.o
+ obj-$(CONFIG_GPIO_LOONGSON1)		+= gpio-loongson1.o
+ obj-$(CONFIG_GPIO_LOONGSON)		+= gpio-loongson.o
++obj-$(CONFIG_GPIO_LOONGSON_64BIT)	+= gpio-loongson-64bit.o
+ obj-$(CONFIG_GPIO_LP3943)		+= gpio-lp3943.o
+ obj-$(CONFIG_GPIO_LP873X)		+= gpio-lp873x.o
+ obj-$(CONFIG_GPIO_LP87565)		+= gpio-lp87565.o
+diff --git a/drivers/gpio/gpio-loongson-64bit.c b/drivers/gpio/gpio-loongson-64bit.c
+new file mode 100644
+index 000000000000..3b11fa37d837
+--- /dev/null
++++ b/drivers/gpio/gpio-loongson-64bit.c
+@@ -0,0 +1,380 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Loongson GPIO Support
++ *
++ * Copyright (C) 2022 Loongson Technology Corporation Limited
++ */
++
++#include <linux/acpi.h>
++#include <linux/kernel.h>
++#include <linux/init.h>
++#include <linux/module.h>
++#include <linux/spinlock.h>
++#include <linux/err.h>
++#include <linux/gpio/driver.h>
++#include <linux/platform_device.h>
++#include <linux/bitops.h>
++#include <linux/of_irq.h>
++#include <asm/types.h>
++
++#define LOONGSON_GPIO_IN(x)		(x->reg_base +\
++					x->p_data->in_offset)
++#define LOONGSON_GPIO_OUT(x)		(x->reg_base +\
++					x->p_data->out_offset)
++#define LOONGSON_GPIO_OEN(x)		(x->reg_base +\
++					x->p_data->conf_offset)
++#define LOONGSON_GPIO_IN_BYTE(x, gpio)	(x->reg_base +\
++					x->p_data->in_offset + gpio)
++#define LOONGSON_GPIO_OUT_BYTE(x, gpio)	(x->reg_base +\
++					x->p_data->out_offset + gpio)
++#define LOONGSON_GPIO_OEN_BYTE(x, gpio)	(x->reg_base +\
++					x->p_data->conf_offset + gpio)
++
++enum loongson_gpio_mode {
++	BIT_CTRL_MODE,
++	BYTE_CTRL_MODE,
++};
++
++struct loongson_gpio_chip_data {
++	const char		*label;
++	enum loongson_gpio_mode	mode;
++	int			conf_offset;
++	int			out_offset;
++	int			in_offset;
++	bool			support_irq;
++};
++
++struct loongson_gpio_chip {
++	struct gpio_chip	chip;
++	struct fwnode_handle	*fwnode;
++	spinlock_t		lock;
++	void __iomem		*reg_base;
++	const struct loongson_gpio_chip_data *p_data;
++};
++
++static inline void loongson_commit_direction(
++				struct loongson_gpio_chip *lgpio,
++				unsigned int pin, int input)
++{
++	u8  bval;
++
++	bval = input ? 1 : 0;
++	writeb(bval, LOONGSON_GPIO_OEN_BYTE(lgpio, pin));
++}
++
++static void loongson_commit_level(struct loongson_gpio_chip *lgpio,
++				unsigned int pin, int high)
++{
++	u8 bval;
++
++	bval = high ? 1 : 0;
++	writeb(bval, LOONGSON_GPIO_OUT_BYTE(lgpio, pin));
++}
++
++static int loongson_gpio_direction_input(
++				struct gpio_chip *chip, unsigned int pin)
++{
++	unsigned long flags;
++	struct loongson_gpio_chip *lgpio =
++		container_of(chip, struct loongson_gpio_chip, chip);
++
++	spin_lock_irqsave(&lgpio->lock, flags);
++	loongson_commit_direction(lgpio, pin, 1);
++	spin_unlock_irqrestore(&lgpio->lock, flags);
++
++	return 0;
++}
++
++static int loongson_gpio_direction_output(
++				struct gpio_chip *chip, unsigned int pin,
++				int value)
++{
++	struct loongson_gpio_chip *lgpio =
++		container_of(chip, struct loongson_gpio_chip, chip);
++	unsigned long flags;
++
++	spin_lock_irqsave(&lgpio->lock, flags);
++	loongson_commit_level(lgpio, pin, value);
++	loongson_commit_direction(lgpio, pin, 0);
++	spin_unlock_irqrestore(&lgpio->lock, flags);
++
++	return 0;
++}
++
++static int loongson_gpio_get(struct gpio_chip *chip, unsigned int pin)
++{
++	u8  bval;
++	int val;
++
++	struct loongson_gpio_chip *lgpio =
++		container_of(chip, struct loongson_gpio_chip, chip);
++
++	bval = readb(LOONGSON_GPIO_IN_BYTE(lgpio, pin));
++	val = bval & 1;
++
++	return val;
++}
++
++static int loongson_gpio_get_direction(
++				struct gpio_chip *chip, unsigned int pin)
++{
++	u8  bval;
++	int val;
++
++	struct loongson_gpio_chip *lgpio =
++		container_of(chip, struct loongson_gpio_chip, chip);
++
++	bval = readb(LOONGSON_GPIO_OEN_BYTE(lgpio, pin));
++	val = bval & 1;
++
++	return val;
++}
++
++static void loongson_gpio_set(struct gpio_chip *chip, unsigned int pin,
++			int value)
++{
++	unsigned long flags;
++	struct loongson_gpio_chip *lgpio =
++		container_of(chip, struct loongson_gpio_chip, chip);
++
++	spin_lock_irqsave(&lgpio->lock, flags);
++	loongson_commit_level(lgpio, pin, value);
++	spin_unlock_irqrestore(&lgpio->lock, flags);
++}
++
++static int loongson_gpio_to_irq(
++			struct gpio_chip *chip, unsigned int offset)
++{
++	struct platform_device *pdev =
++		container_of(chip->parent, struct platform_device, dev);
++
++	if (offset >= chip->ngpio)
++		return -EINVAL;
++
++	return platform_get_irq(pdev, offset);
++}
++
++static void loongson_gpio_irq_ack(struct irq_data *d)
++{
++	irq_chip_ack_parent(d);
++}
++
++static void loongson_gpio_mask_irq(struct irq_data *d)
++{
++	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
++
++	irq_chip_mask_parent(d);
++	gpiochip_disable_irq(gc, d->hwirq);
++}
++
++static void loongson_gpio_irq_unmask(struct irq_data *d)
++{
++	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
++
++	gpiochip_enable_irq(gc, d->hwirq);
++	irq_chip_unmask_parent(d);
++}
++
++static int loongson_gpio_irq_set_type(struct irq_data *d, unsigned int type)
++{
++	switch (type) {
++	case IRQ_TYPE_EDGE_RISING:
++		irq_set_handler_locked(d, handle_edge_irq);
++		break;
++	case IRQ_TYPE_EDGE_FALLING:
++		irq_set_handler_locked(d, handle_edge_irq);
++		break;
++	case IRQ_TYPE_LEVEL_HIGH:
++		irq_set_handler_locked(d, handle_level_irq);
++		break;
++	case IRQ_TYPE_LEVEL_LOW:
++		irq_set_handler_locked(d, handle_level_irq);
++		break;
++	case IRQ_TYPE_EDGE_BOTH:
++		irq_set_handler_locked(d, handle_edge_irq);
++		break;
++	case IRQ_TYPE_NONE:
++	default:
++		return -EINVAL;
++	}
++
++	return irq_chip_set_type_parent(d, type);
++}
++
++static const struct irq_chip loongson_gpio_irqchip = {
++	.name = "loongson-gpio-irqchip",
++	.irq_ack = loongson_gpio_irq_ack,
++	.irq_mask = loongson_gpio_mask_irq,
++	.irq_unmask = loongson_gpio_irq_unmask,
++	.irq_set_type = loongson_gpio_irq_set_type,
++	.flags = IRQCHIP_IMMUTABLE,
++	GPIOCHIP_IRQ_RESOURCE_HELPERS,
++};
++
++static int loongson_gpio_child_to_parent_hwirq(struct gpio_chip *gc,
++					     unsigned int child,
++					     unsigned int child_type,
++					     unsigned int *parent,
++					     unsigned int *parent_type)
++{
++	*parent_type = child_type;
++
++	/* GPIO lines 0..3 have dedicated IRQs */
++	if (child >= 0 && child <= 3) {
++		*parent = child + 60;
++		return 0;
++	}
++
++	if (child >= 4 && child <= 31) {
++		*parent = 58;
++		return 0;
++	}
++
++	if (child >= 32 && child <= 63) {
++		*parent = 59;
++		return 0;
++	}
++
++	return -EINVAL;
++}
++
++static int loongson_gpio_init(
++			struct device *dev, struct loongson_gpio_chip *lgpio,
++			struct device_node *np, void __iomem *reg_base)
++{
++	int ret;
++	u32 ngpios;
++	struct irq_domain __maybe_unused *parent;
++	struct gpio_irq_chip __maybe_unused *girq;
++	struct device_node __maybe_unused *irq_parent;
++
++	lgpio->reg_base = reg_base;
++
++	if (lgpio->p_data->mode == BIT_CTRL_MODE) {
++		ret = bgpio_init(&lgpio->chip, dev, 8,
++				LOONGSON_GPIO_IN(lgpio),
++				LOONGSON_GPIO_OUT(lgpio), 0,
++				LOONGSON_GPIO_OEN(lgpio), NULL, 0);
++		if (ret) {
++			dev_err(dev, "unable to init generic GPIO\n");
++			return ret;
++		}
++	} else {
++		lgpio->chip.direction_input = loongson_gpio_direction_input;
++		lgpio->chip.get = loongson_gpio_get;
++		lgpio->chip.get_direction = loongson_gpio_get_direction;
++		lgpio->chip.direction_output = loongson_gpio_direction_output;
++		lgpio->chip.set = loongson_gpio_set;
++		lgpio->chip.can_sleep = 0;
++		lgpio->chip.of_node = np;
++		lgpio->chip.parent = dev;
++		spin_lock_init(&lgpio->lock);
++	}
++
++	device_property_read_u32(dev, "ngpios", &ngpios);
++
++	lgpio->chip.ngpio = ngpios;
++	lgpio->chip.label = lgpio->p_data->label;
++
++	if (lgpio->p_data->support_irq == true) {
++		lgpio->chip.to_irq = loongson_gpio_to_irq;
++		irq_parent = of_irq_find_parent(np);
++		if (irq_parent)
++			parent = irq_find_host(irq_parent);
++
++		lgpio->fwnode = of_node_to_fwnode(np);
++
++		girq = &lgpio->chip.irq;
++		gpio_irq_chip_set_chip(girq, &loongson_gpio_irqchip);
++		girq->fwnode = lgpio->fwnode;
++		girq->parent_domain = parent;
++		girq->child_to_parent_hwirq = loongson_gpio_child_to_parent_hwirq;
++		girq->handler = handle_bad_irq;
++		girq->default_type = IRQ_TYPE_NONE;
++	}
++
++	devm_gpiochip_add_data(dev, &lgpio->chip, lgpio);
++
++	return 0;
++}
++
++static int loongson_gpio_probe(struct platform_device *pdev)
++{
++	void __iomem *reg_base;
++	struct loongson_gpio_chip *lgpio;
++	struct device_node *np = pdev->dev.of_node;
++	struct device *dev = &pdev->dev;
++
++	lgpio = devm_kzalloc(dev, sizeof(*lgpio), GFP_KERNEL);
++	if (!lgpio)
++		return -ENOMEM;
++
++	lgpio->p_data = device_get_match_data(&pdev->dev);
++
++	reg_base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(reg_base))
++		return PTR_ERR(reg_base);
++
++	loongson_gpio_init(dev, lgpio, np, reg_base);
++
++	return 0;
++}
++
++static const struct loongson_gpio_chip_data loongson_gpio_pdata0 = {
++	.label = "ls2k_gpio",
++	.mode = BIT_CTRL_MODE,
++	.conf_offset = 0x0,
++	.in_offset = 0x10,
++	.out_offset = 0x20,
++	.support_irq = true,
++};
++
++static const struct loongson_gpio_chip_data loongson_gpio_pdata1 = {
++	.label = "ls7a_gpio",
++	.mode = BYTE_CTRL_MODE,
++	.conf_offset = 0x800,
++	.in_offset = 0x900,
++	.out_offset = 0xa00,
++	.support_irq = false,
++};
++
++static const struct of_device_id loongson_gpio_of_match[] = {
++	{
++		.compatible = "loongson,ls2k-gpio",
++		.data = &loongson_gpio_pdata0,
++	},
++	{
++		.compatible = "loongson,ls7a-gpio",
++		.data = &loongson_gpio_pdata1,
++	},
++	{}
++};
++MODULE_DEVICE_TABLE(of, loongson_gpio_of_match);
++
++static const struct acpi_device_id loongson_gpio_acpi_match[] = {
++	{
++		.id = "LOON0002",
++		.driver_data = (kernel_ulong_t)&loongson_gpio_pdata1,
++	},
++	{}
++};
++MODULE_DEVICE_TABLE(acpi, loongson_gpio_acpi_match);
++
++static struct platform_driver loongson_gpio_driver = {
++	.driver = {
++		.name = "loongson-gpio",
++		.owner = THIS_MODULE,
++		.of_match_table = loongson_gpio_of_match,
++		.acpi_match_table = loongson_gpio_acpi_match,
++	},
++	.probe = loongson_gpio_probe,
++};
++
++static int __init loongson_gpio_setup(void)
++{
++	return platform_driver_register(&loongson_gpio_driver);
++}
++postcore_initcall(loongson_gpio_setup);
++
++MODULE_DESCRIPTION("Loongson gpio driver");
++MODULE_LICENSE("GPL");
+-- 
+2.31.1
+
