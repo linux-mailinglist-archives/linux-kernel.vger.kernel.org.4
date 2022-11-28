@@ -2,141 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A10AB63AA0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:51:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E441963AA0E
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:51:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232124AbiK1NvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 08:51:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47394 "EHLO
+        id S232145AbiK1NvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 08:51:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232131AbiK1NvO (ORCPT
+        with ESMTP id S231445AbiK1NvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 08:51:14 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900851EC50
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 05:51:12 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id c65-20020a1c3544000000b003cfffd00fc0so11700825wma.1
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 05:51:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=A4qIw9CSlOm6ggm9ciNJN1TeZJOcMp5IoO7x7apMWbY=;
-        b=PUheZR1NpZnwy4KRhNf7nnLwIkGHB+FvPg3d4NllsEb6kJdBq7yONBrs3hMeyWlnn1
-         zq7ZDz79pngmWJGbOOpg7tjdv722XGMIA04Jsft2i512lr13vEq85Gy8pUH0PKhRieln
-         XQS+nVeEIzJPmfy5m7XTKjGQ6VRITUaWFNyBu5tcAumfrmGV5H5nWfrykIKNxDbwpvTB
-         8hgO296977TfbN+W61Ok9Fi/tYwiQfR/1wUcsq3pyTu5Pn6o+ohkdoHtkmUZPSdSZ+qq
-         Sv+9WnU8J0Vs/sWd7h/Pqtpe60IPEmIyYYHgzk8Y67wIP/PY01VQyNFEVT2hCPxE01im
-         /Qug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A4qIw9CSlOm6ggm9ciNJN1TeZJOcMp5IoO7x7apMWbY=;
-        b=xVoR5JI4FZPOlfmj/jtGH+7n8oIvDNixZ4e/qgX82W8yr4v3HR13FGwNI9WzXBMsn9
-         rw0EwnS/2+c/Vyg9POKVrHSiQ6idZBHvkhFimePsWv7MVQLgOnQfL/Uq9GF2T1qfRuTa
-         i+1qsbsz3FN5KdgAIJaw6RCc05qq3F8Xigiky6N0dA7lHHbfIuptve7R2D6xEbqmPegj
-         ShfMAMGrvDX0cEBdDQud526WB/PTvQoT5QXqRUoeU77hxpzybzWnYsZYdsNlGPwe/Dvr
-         wc0qBVBpBJLdVeIVes2HqaosJEvYPCF96kRvRbnosZKtYG500QZ3LuPjAyHu1GrjzHLh
-         SxFw==
-X-Gm-Message-State: ANoB5pnAdBQCpihS6o1bFiEfQcWVHXhFU82DRcWhh9uQdnJq6DX22edJ
-        /NmKSrlfHeWL99FivKOw23hJgw==
-X-Google-Smtp-Source: AA0mqf6nkBPng31LSUbczvahgKFmzQ1kx1CywnM+9hcT4gIL7Y/Lh2Y4uDKbcBxCZeQ9OdymBWy/Ug==
-X-Received: by 2002:a1c:f606:0:b0:3b4:bf6d:f9ba with SMTP id w6-20020a1cf606000000b003b4bf6df9bamr37179147wmc.133.1669643471076;
-        Mon, 28 Nov 2022 05:51:11 -0800 (PST)
-Received: from localhost ([2a01:cb19:85e6:1900:2bf7:7388:731d:c4e1])
-        by smtp.gmail.com with ESMTPSA id g6-20020a5d5406000000b00241d2df4960sm10884840wrv.17.2022.11.28.05.51.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 05:51:10 -0800 (PST)
-From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
-To:     "Lin, Meng-Bo" <linmengbo0689@protonmail.com>,
-        linux-input@vger.kernel.org
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Corey Minyard <cminyard@mvista.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Zheng Yongjun <zhengyongjun3@huawei.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Nikita Travkin <nikita@trvn.ru>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH] Input: stmfts - retry commands after timeout
-In-Reply-To: <20221117142753.2477-1-linmengbo0689@protonmail.com>
-References: <20221117142753.2477-1-linmengbo0689@protonmail.com>
-Date:   Mon, 28 Nov 2022 14:51:09 +0100
-Message-ID: <87wn7frxv6.fsf@baylibre.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 28 Nov 2022 08:51:17 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F16EC1EC50
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 05:51:16 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9DB4721B8A;
+        Mon, 28 Nov 2022 13:51:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669643475; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bOLaMPxOUG7+4vSlzBdUMwRrj0JlFA0stWHUkYrEcl0=;
+        b=tb4dXBk9E7uOnfLm/jK09MAtSuGeVbvX6bCRzTOUyE+Me+WcmVUbJrEUt6ZzUzTNsyxs8N
+        5aFhdfa/4Mrmbt1ih0yhNPrA7a9K9WNqZhwm2ozWl/xNtoF1rjiPstMJS505SiHkNGs6ne
+        4LeQy9fB6JEU9HNFyfd5KOuQZyK40sE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669643475;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bOLaMPxOUG7+4vSlzBdUMwRrj0JlFA0stWHUkYrEcl0=;
+        b=9n45SyRa82AFe61XqCIG9WmD1Zciit8L0w9BUBrIdwvZ0drp0HlLjsFxRo88uQdEdZ4IMZ
+        pNEDcwZyT9/8iGDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7CCFE1326E;
+        Mon, 28 Nov 2022 13:51:15 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id A/2xHdO8hGP/EgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 28 Nov 2022 13:51:15 +0000
+Date:   Mon, 28 Nov 2022 14:51:15 +0100
+Message-ID: <87lenvyyp8.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     John Keeping <john@metanate.com>
+Cc:     alsa-devel@alsa-project.org, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: usb-audio: Add quirk for Tascam Model 12
+In-Reply-To: <20221128122353.763696-1-john@metanate.com>
+References: <20221128122353.763696-1-john@metanate.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 14:28, "Lin, Meng-Bo" <linmengbo0689@protonmail.com> wrote:
+On Mon, 28 Nov 2022 13:23:52 +0100,
+John Keeping wrote:
+> 
+> Tascam's Model 12 is a mixer which can also operate as a USB audio
+> interface.  The audio interface uses explicit feedback but it seems that
+> it does not correctly handle missing isochronous frames.
+> 
+> When injecting an xrun (or doing anything else that pauses the playback
+> stream) the feedback rate climbs (for example, at 44,100Hz nominal, I
+> see a stable rate around 44,099 but xrun injection sees this peak at
+> around 44,135 in most cases) and glitches are heard in the audio stream
+> for several seconds - this is significantly worse than the single glitch
+> expected for an underrun.
+> 
+> While the stream does normally recover and the feedback rate returns to
+> a stable value, I have seen some occurrences where this does not happen
+> and the rate continues to increase while no audio is heard from the
+> output.  I have not found a solid reproduction for this.
+> 
+> This misbehaviour can be avoided by totally resetting the stream state
+> by switching the interface to alt 0 and back before restarting the
+> playback stream.
+> 
+> Add a new quirk flag which forces the endpoint and interface to be
+> reconfigured whenever the stream is stopped, and use this for the Tascam
+> Model 12.
+> 
+> Signed-off-by: John Keeping <john@metanate.com>
 
-> Add #define STMFTS_RETRY_COUNT 3 to retry stmfts_command() 3 times.
-> Without it, STMFTS_SYSTEM_RESET or STMFTS_SLEEP_OUT may return -110 to
-> failed attempt due to no event received for completion.
->
-> Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
+Thanks for the patch, it's an interesting case.
+About the code change:
 
-Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+> --- a/sound/usb/endpoint.c
+> +++ b/sound/usb/endpoint.c
+> @@ -1673,6 +1673,13 @@ void snd_usb_endpoint_stop(struct snd_usb_endpoint *ep, bool keep_pending)
+>  		stop_urbs(ep, false, keep_pending);
+>  		if (ep->clock_ref)
+>  			atomic_dec(&ep->clock_ref->locked);
+> +
+> +		if (ep->chip->quirk_flags & QUIRK_FLAG_FORCE_IFACE_RESET &&
+> +		    usb_pipeout(ep->pipe)) {
+> +			ep->need_setup = true;
+> +			if (ep->iface_ref)
+> +				ep->iface_ref->need_setup = true;
+> +		}
 
-> ---
->  drivers/input/touchscreen/stmfts.c | 20 +++++++++++---------
->  1 file changed, 11 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/input/touchscreen/stmfts.c b/drivers/input/touchscreen/stmfts.c
-> index d5bd170808fb..22de34966373 100644
-> --- a/drivers/input/touchscreen/stmfts.c
-> +++ b/drivers/input/touchscreen/stmfts.c
-> @@ -68,6 +68,7 @@
->  #define STMFTS_DATA_MAX_SIZE	(STMFTS_EVENT_SIZE * STMFTS_STACK_DEPTH)
->  #define STMFTS_MAX_FINGERS	10
->  #define STMFTS_DEV_NAME		"stmfts"
-> +#define STMFTS_RETRY_COUNT	3
->  
->  enum stmfts_regulators {
->  	STMFTS_REGULATOR_VDD,
-> @@ -317,19 +318,20 @@ static irqreturn_t stmfts_irq_handler(int irq, void *dev)
->  
->  static int stmfts_command(struct stmfts_data *sdata, const u8 cmd)
->  {
-> -	int err;
-> +	int err, retry;
->  
->  	reinit_completion(&sdata->cmd_done);
->  
-> -	err = i2c_smbus_write_byte(sdata->client, cmd);
-> -	if (err)
-> -		return err;
-> -
-> -	if (!wait_for_completion_timeout(&sdata->cmd_done,
-> -					 msecs_to_jiffies(1000)))
-> -		return -ETIMEDOUT;
-> +	for (retry = 0; retry < STMFTS_RETRY_COUNT; retry++) {
-> +		err = i2c_smbus_write_byte(sdata->client, cmd);
-> +		if (err)
-> +			return err;
->  
-> -	return 0;
-> +		if (wait_for_completion_timeout(&sdata->cmd_done,
-> +						msecs_to_jiffies(1000)))
-> +			return 0;
-> +	}
-> +	return -ETIMEDOUT;
->  }
->  
->  static int stmfts_input_open(struct input_dev *dev)
-> -- 
-> 2.30.2
+Is this the forced reset always safe?  Imagine that you have
+individual playback and capture streams, and what if only one of them
+gets stopped and restarted while another keeps running?
+
+
+thanks,
+
+Takashi
