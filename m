@@ -2,138 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00F2063A3E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:00:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B8263A41F
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:06:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiK1JAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 04:00:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34048 "EHLO
+        id S230236AbiK1JGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 04:06:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiK1JAR (ORCPT
+        with ESMTP id S230258AbiK1JGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 04:00:17 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC7C817AAF
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:00:16 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id s8so16288893lfc.8
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:00:16 -0800 (PST)
+        Mon, 28 Nov 2022 04:06:15 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627C61838B
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:06:12 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id q71so9359601pgq.8
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:06:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uxQ4Op4wJkfy+E4USfATcQwka4uMnYgoKUlk7fhdGSE=;
-        b=vYdb5XXPSaGwuCoLSVoXRdQxnPaAziy9sgNBD8ranp2ceRSNgedYCPqR4S0vLEMnU5
-         P7HmMByv0VoBFVxh3uq65mFCK6MQA3c0f560kARTzEWaiHCOOyVKCJTkHV4l3S0g0eq6
-         vyrw/O9/ZX1QkVXD18yE6C+NWMpaloiZ48EArn/TOG2veHbj9d1Vcemour9Z1xigBKa3
-         RpQk3CTgz6qadxdn6IuvgcjwozjTQ3KcPOCBhwr3enogTDQR0PzTks2bn9+1k7OhHpBq
-         tbyLx/EFDgvPrd35WmKItzN43WvkclKutLtUhhSEvey4QSfvY342K6flzqPRcf5xJC5F
-         updg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=z+Rewj5p/ZFGKxaPkUSZu5AiKFXUjbdI5QMEOTU0onA=;
+        b=N1GqHq6LcBeYT2l7XL/E6WrtMRb3SC9TfF0Ms+o9jvLzFuUqGl9Vm8bAou8v2kAWsi
+         poKhl+7fXJFqqqWVJbPZdfSyo1DHC2n0YX1uvnCcs41pVleSqF9bFUuwRjg+iMcF2dZP
+         GtZIUs9iE3sUpienUE20MiT6D8PgcUjnHJe9x+0kxXkPI10ugjCHonoNiNup1GwPZAmL
+         Og7VTNP7yhM6ueK9OzJ6Lo/zKsvmfuL4be0w9cqBnuUsBj/JAzOpTJptu0HvQDjulGbD
+         i0AebW/Aj1gLuAFrI35sA04jfCmRGBEWZGegZDlTbvEmG6VUu/9aLBfQIOEXz37gJNxU
+         Rzfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uxQ4Op4wJkfy+E4USfATcQwka4uMnYgoKUlk7fhdGSE=;
-        b=E4KSGrkUw5f4YLNigaNBxU+Jo924uYy120YiIE16KDsQ/WcAi03QqVWgwCLohmVby+
-         eQsfboq4IAvzSvEypGPiLAdKheKUYsjbBkRxrd32agKf/T2HN8Bm/azdyJI0FSP9aFew
-         iBO8i1N7j5ZjDgxfhVCQIW6e0F4VdSU9HL4KSvzkP5tLXY0mDwpHBQm+tf9mbycac0FG
-         VyptiMDA4+YOi+Ny+QeDcZ7N2ZLwBRQOze49FYiBcbenXrv3ABr0SE0pP7BeMQE2gDSz
-         egvYmVOFPR2Iy3rzLPUaK4gbbc9Ye2qsV6DMcwT0AsQVB1SMvv1Bm84d0SoVx8q+8mjs
-         FjYQ==
-X-Gm-Message-State: ANoB5pmwEQPGN4INm7tJu+UF5QDwXN4b8OOLzxx7KtVDk4PBWBQWPSOV
-        TcjrrnuVjlCtMkpZCPqfYfKZ9rcE2YArkDrr
-X-Google-Smtp-Source: AA0mqf4yCrmsZoHkLNUdgjrfnhNmrW+jAyoF8Yth5MPBnrKTzOxQXVV9S2/fv4YTu9XRNKVY+0RP+Q==
-X-Received: by 2002:ac2:52aa:0:b0:4b1:fc9:429f with SMTP id r10-20020ac252aa000000b004b10fc9429fmr17759584lfm.84.1669626015128;
-        Mon, 28 Nov 2022 01:00:15 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id v28-20020a05651203bc00b0048a757d1303sm1655307lfp.217.2022.11.28.01.00.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 01:00:14 -0800 (PST)
-Message-ID: <8b8e4b23-a3bc-7e3d-199a-e8f591d05d71@linaro.org>
-Date:   Mon, 28 Nov 2022 10:00:13 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=z+Rewj5p/ZFGKxaPkUSZu5AiKFXUjbdI5QMEOTU0onA=;
+        b=6zLTyOekxVF91SI8edEaUfd+dMaK6jD2y4TgJ6mLi/gpsJZppRDcKZrUC7Bp6+ar+S
+         +K0OFWJIQr6GZObS7Y85uD65KasBrxHcGV7LkWqOERBhLsWXqmhYseZTg4sCq0i9BVRi
+         pSHxoC/QB3uWx+yvWyuCguJ8bkWF0u5WbJelcBLRHn6ZIpRwTFyQohtpUZ2+ls9mE2Hq
+         f7HNZhzkgaVqvxkmmMwrdw9sd/XS1YKwBjOxtM+C9+JfRrZBcbNLOUG1FxXpZIKXbHIu
+         4keVUAY9rZUM8qsUcdNPQVHE0T5TpVXMTkYkFdunE5qhQ5drp+7kaXrACm3Hb2+wPgIX
+         pluQ==
+X-Gm-Message-State: ANoB5pkJmemUPwxwWYmST4f33CccZIzA+mOkJHJJh/cRmmVAYPeZdeF+
+        /JVcIB8L3+YRiRwjkKCBgss=
+X-Google-Smtp-Source: AA0mqf62LtEI9k6+6wMNDHKrBLNRhc6uHK7Lm6kOO+RYwr5f9qZ4w4JI2m2o2VZeO6mtsy7bcya9Qw==
+X-Received: by 2002:a05:6a00:1d0c:b0:573:7b50:acb8 with SMTP id a12-20020a056a001d0c00b005737b50acb8mr34307462pfx.59.1669626371832;
+        Mon, 28 Nov 2022 01:06:11 -0800 (PST)
+Received: from mi-HP-ProDesk-680-G4-MT.mioffice.cn ([43.224.245.252])
+        by smtp.gmail.com with ESMTPSA id s17-20020a170902ea1100b001811a197797sm8269268plg.194.2022.11.28.01.06.09
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 28 Nov 2022 01:06:11 -0800 (PST)
+From:   qixiaoyu1 <qxy65535@gmail.com>
+X-Google-Original-From: qixiaoyu1 <qixiaoyu1@xiaomi.com>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        qixiaoyu1 <qixiaoyu1@xiaomi.com>,
+        xiongping1 <xiongping1@xiaomi.com>
+Subject: [PATCH 0/5] Support enhanced hot/cold data separation for f2fs
+Date:   Mon, 28 Nov 2022 16:58:54 +0800
+Message-Id: <20221128085859.5295-1-qixiaoyu1@xiaomi.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 5/9] dt-bindings: spi: mtk-snfi: add mt7986 IC snfi
- bindings
-Content-Language: en-US
-To:     Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Chuanhong Guo <gch981213@gmail.com>
-Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, benliang.zhao@mediatek.com,
-        bin.zhang@mediatek.com
-References: <20221128020613.14821-1-xiangsheng.hou@mediatek.com>
- <20221128020613.14821-6-xiangsheng.hou@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221128020613.14821-6-xiangsheng.hou@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/11/2022 03:06, Xiangsheng Hou wrote:
-> 1. add mt7986 IC bindings
+This patch series introduce a runtime hot/cold data separation
+method for f2fs, in order to improve the accuracy for data
+temperature classification, reduce the garbage collection overhead
+after long-term data updates.
 
-Subject: drop second, redundant "bindings".
+Enhanced hot/cold data separation can record data block update
+frequency as "age" of the extent per inode, and take use of the age
+info to indicate better temperature type for data block allocation:
+ - It record total data blocks allocated since mount;
+ - When file extent has been updated, it calculate the count of data
+blocks allocated since last update as the age of the extent;
+ - Before the data block allocated, it search for the age info and
+choose the suitable segment for allocation.
 
-> 2. add optional nfi_hclk property which needed for mt7986
-> 
-> Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
-> ---
->  .../devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml      | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
-> index 6e6e02c91780..ee20075cd0e7 100644
-> --- a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
-> @@ -26,6 +26,7 @@ properties:
->      enum:
->        - mediatek,mt7622-snand
->        - mediatek,mt7629-snand
-> +      - mediatek,mt7986-snand
->  
->    reg:
->      items:
-> @@ -36,14 +37,19 @@ properties:
->        - description: NFI interrupt
->  
->    clocks:
-> +    minItems: 2
->      items:
->        - description: clock used for the controller
->        - description: clock used for the SPI bus
-> +      - description: clock used for the AHB bus dma bus, this depends on
-> +                     hardware design, so this is optional.
+Patch 1 records total data blocks allocated since mount.
 
-Optional for which variants? For all of them?
+Patch 2 implements cache to manager block update frequency per inode.
 
->  
->    clock-names:
-> +    minItems: 2
->      items:
->        - const: nfi_clk
->        - const: pad_clk
-> +      - const: nfi_hclk
+Patch 3 adds age_extent_cache mount option to enable this feature only
+when age_extent_cache mount option is on.
 
+Patch 4 updates block age info during out of place update.
 
+Patch 5 implements data block seperation with block update frequency.
 
-Best regards,
-Krzysztof
+Test and result:
+ - Prepare: create about 30000 files
+  * 3% for cold files (with cold file extension like .apk, from 3M to 10M)
+  * 50% for warm files (with random file extension like .FcDxq, from 1K
+to 4M)
+  * 47% for hot files (with hot file extension like .db, from 1K to 256K)
+ - create(5%)/random update(90%)/delete(5%) the files
+  * total write amount is about 70G
+  * fsync will be called for .db files, and buffered write will be used
+for other files
+
+The storage of test device is large enough(128G) so that it will not
+switch to SSR mode during the test.
+
+Benefit: dirty segment count increment reduce about 14%
+ - before: Dirty +21110
+ - after:  Dirty +18286
+
+qixiaoyu1 (2):
+  f2fs: update block age info during out of place update
+  f2fs: implement data block seperation with block update frequency
+
+xiongping1 (3):
+  f2fs: record total data blocks allocated since mount
+  f2fs: implement cache to manager block update frequency per inode
+  f2fs: add age_extent_cache mount option
+
+ Documentation/ABI/testing/sysfs-fs-f2fs |  14 +
+ Documentation/filesystems/f2fs.rst      |   4 +
+ fs/f2fs/Kconfig                         |   7 +
+ fs/f2fs/Makefile                        |   1 +
+ fs/f2fs/block_age.c                     | 733 ++++++++++++++++++++++++
+ fs/f2fs/debug.c                         |  20 +
+ fs/f2fs/f2fs.h                          |  83 +++
+ fs/f2fs/file.c                          |  10 +
+ fs/f2fs/inode.c                         |   8 +
+ fs/f2fs/namei.c                         |   4 +
+ fs/f2fs/node.c                          |   7 +-
+ fs/f2fs/node.h                          |   3 +
+ fs/f2fs/segment.c                       |  23 +
+ fs/f2fs/shrinker.c                      |   3 +
+ fs/f2fs/super.c                         |  51 ++
+ fs/f2fs/sysfs.c                         |  28 +
+ include/trace/events/f2fs.h             | 239 ++++++++
+ 17 files changed, 1237 insertions(+), 1 deletion(-)
+ create mode 100644 fs/f2fs/block_age.c
+
+-- 
+2.36.1
 
