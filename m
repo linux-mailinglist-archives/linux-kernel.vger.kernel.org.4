@@ -2,67 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6365E63AA76
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:06:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20F2863AA70
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:06:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232402AbiK1OGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 09:06:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33580 "EHLO
+        id S232324AbiK1OGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 09:06:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232304AbiK1OGU (ORCPT
+        with ESMTP id S231359AbiK1OGR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 09:06:20 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15E12127C;
-        Mon, 28 Nov 2022 06:06:17 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2ASE6B2q109903;
-        Mon, 28 Nov 2022 08:06:11 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1669644371;
-        bh=flzB7Wa6hAMqJiGA/2RH5eCO5QhcD1qsRfBay0L5uTc=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=sgMOVTnJHWvOyE9ZMBJX+tx/TohEOpBUJNp3+CQBK5YnqFI9L7yRh/VtMWTZaNovl
-         YAy9TszD8Rd3Hu8n05BQDO49QwIOQJOLYviEJQLtAJ41jgBSvXQ10xdgRQbjlxVYTC
-         CvLaVGZX3TLHnCMfH/mm2pX6pnC8TpfpVCJSOpSo=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2ASE6Bkb099220
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 28 Nov 2022 08:06:11 -0600
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 28
- Nov 2022 08:06:11 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 28 Nov 2022 08:06:11 -0600
-Received: from jti.ent.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2ASE5NQf125815;
-        Mon, 28 Nov 2022 08:06:05 -0600
-From:   Georgi Vlaev <g-vlaev@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Vibhore Vardhan <vibhore@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Georgi Vlaev <g-vlaev@ti.com>
-Subject: [PATCH v5 6/6] firmware: ti_sci: Introduce prepare system suspend call
-Date:   Mon, 28 Nov 2022 16:05:22 +0200
-Message-ID: <20221128140522.49474-7-g-vlaev@ti.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221128140522.49474-1-g-vlaev@ti.com>
-References: <20221128140522.49474-1-g-vlaev@ti.com>
+        Mon, 28 Nov 2022 09:06:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476E820F61;
+        Mon, 28 Nov 2022 06:06:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F168EB80DDF;
+        Mon, 28 Nov 2022 14:06:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFEEAC433C1;
+        Mon, 28 Nov 2022 14:06:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669644365;
+        bh=PvFU14Tw+GunusKbVMruIGE8w1KDKd8yILQPKFFCjsk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=k7CZOHPWVqpuMVy0DiM+Qx7MRYjZ5zqcv7d3OUPVBd2DbjOweUDW47zyJhf6x6o5a
+         tXytMHCFMWgFGsM/mMOm3ovtcdPK/kNziDAjJ8jb+SXg5iIMqIRxlg0OLBV+J8Ebeb
+         7J7jzXiqVVTnQ9CfuuMFR9wnIWSSX48WcLUxH+NEdTEUQTg6n6FP6OizB8t5zi7LIT
+         hSosMchmeoBnSPwLuFgKCsmbn2k1e/KKrikiMzQfKu2QP9IlgWKj9JAipXc/lmJ24G
+         htl8Xc4mPxFm70D5V4+HsNOPaA7rjFlZeNjQFhXu1DGP6lq/UGap2bdVkT8sybUMT4
+         XCEjaNkYl9mlw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ozeln-0097Mn-Hr;
+        Mon, 28 Nov 2022 14:06:03 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     linux-arm-kernel@lists.infradead.org,
+        Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Subject: Re: [PATCH] KVM: arm64: Replace PMU version number '0' with ID_AA64DFR0_EL1_PMUVer_NI
+Date:   Mon, 28 Nov 2022 14:06:00 +0000
+Message-Id: <166964435234.1494517.16237640748625443897.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221128135629.118346-1-anshuman.khandual@arm.com>
+References: <20221128135629.118346-1-anshuman.khandual@arm.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: linux-arm-kernel@lists.infradead.org, anshuman.khandual@arm.com, linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com, will@kernel.org, acme@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,77 +68,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Gerlach <d-gerlach@ti.com>
+On Mon, 28 Nov 2022 19:26:29 +0530, Anshuman Khandual wrote:
+> kvm_host_pmu_init() returns when detected PMU is either not implemented, or
+> implementation defined. kvm_pmu_probe_armpmu() also has a similar situation
+> Extracted ID_AA64DFR0_EL1_PMUVer value, when PMU is not implemented is '0',
+> which can be replaced with ID_AA64DFR0_EL1_PMUVer_NI defined as '0b0000'.
 
-Introduce a ti_sci_prepare_system_suspend call to be used in the driver
-suspend handler to allow the system to identify the low power mode being
-entered and if necessary, send TISCI_MSG_PREPARE_SLEEP with information
-about the mode is being entered and the address for allocated memory for
-storing the context during Deep Sleep.
+Applied to next, thanks!
 
-We're using "pm_suspend_target_state" to map the kernel's target suspend
-state to SysFW low power mode. Make sure this is available only when
-CONFIG_SUSPEND is enabled.
+[1/1] KVM: arm64: Replace PMU version number '0' with ID_AA64DFR0_EL1_PMUVer_NI
+      commit: 86815735aa571d493cf5768cad5fa8e6fd9c7ba8
 
-Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
-Signed-off-by: Vibhore Vardhan <vibhore@ti.com>
-Signed-off-by: Georgi Vlaev <g-vlaev@ti.com>
-Tested-by: Roger Quadros <rogerq@kernel.org>
----
- drivers/firmware/ti_sci.c | 37 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+Cheers,
 
-diff --git a/drivers/firmware/ti_sci.c b/drivers/firmware/ti_sci.c
-index 09bca1a15d74..681f2ebb3fe4 100644
---- a/drivers/firmware/ti_sci.c
-+++ b/drivers/firmware/ti_sci.c
-@@ -3568,9 +3568,46 @@ static void ti_sci_set_is_suspending(struct ti_sci_info *info, bool is_suspendin
- 	info->is_suspending = is_suspending;
- }
- 
-+static int ti_sci_prepare_system_suspend(struct ti_sci_info *info)
-+{
-+#if IS_ENABLED(CONFIG_SUSPEND)
-+	u8 mode;
-+
-+	/* Map and validate the target Linux suspend state to TISCI LPM. */
-+	switch (pm_suspend_target_state) {
-+	case PM_SUSPEND_MEM:
-+		/* S2MEM is not supported by the firmware. */
-+		if (!(info->fw_caps & MSG_FLAG_CAPS_LPM_DEEP_SLEEP))
-+			return 0;
-+		/* S2MEM can't continue if the LPM firmware is not loaded. */
-+		if (!info->lpm_firmware_loaded)
-+			return -EINVAL;
-+		mode = TISCI_MSG_VALUE_SLEEP_MODE_DEEP_SLEEP;
-+		break;
-+	default:
-+		/*
-+		 * Do not fail if we don't have action to take for a
-+		 * specific suspend mode.
-+		 */
-+		return 0;
-+	}
-+
-+	return ti_sci_cmd_prepare_sleep(&info->handle, mode,
-+					(u32)(info->ctx_mem_addr & 0xffffffff),
-+					(u32)((u64)info->ctx_mem_addr >> 32), 0);
-+#else
-+	return 0;
-+#endif
-+}
-+
- static int ti_sci_suspend(struct device *dev)
- {
- 	struct ti_sci_info *info = dev_get_drvdata(dev);
-+	int ret;
-+
-+	ret = ti_sci_prepare_system_suspend(info);
-+	if (ret)
-+		return ret;
- 	/*
- 	 * We must switch operation to polled mode now as drivers and the genpd
- 	 * layer may make late TI SCI calls to change clock and device states
+	M.
 -- 
-2.30.2
+Without deviation from the norm, progress is not possible.
+
 
