@@ -2,161 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6126C63AED9
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:25:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14E8F63AEDD
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 18:26:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232974AbiK1RZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 12:25:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41422 "EHLO
+        id S232977AbiK1R0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 12:26:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232984AbiK1RZR (ORCPT
+        with ESMTP id S232978AbiK1RZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 12:25:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D61B20349;
-        Mon, 28 Nov 2022 09:25:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6D92B80E90;
-        Mon, 28 Nov 2022 17:25:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 002F2C433D6;
-        Mon, 28 Nov 2022 17:25:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1669656311;
-        bh=wZlmYJl8LMxMeefdCbrE5viQuX+AZVgF+lHUSAzV8mA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jklUVBk1mHdNx5UwNOVAyoL9FcfwZD4B7KDGLSBvRl5IAv16CCb++ynZ+TPs/2xnW
-         Y09yfkYWX7Zusj8ufWXnQv3O5+iO2GnPgg5dqoMaQRFD7eFKipOag5+WZBxv2B/3hS
-         npOJ5H5324elD5m0VsViiZtApWHVqoGlQ7+jDW9I=
-Date:   Mon, 28 Nov 2022 18:25:09 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Johan Hovold <johan@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Keith Busch <kbusch@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Sebastian Reichel <sre@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Raed Salem <raeds@nvidia.com>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Avihai Horon <avihaih@nvidia.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Wang Yufen <wangyufen@huawei.com>, linux-block@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 1/5] driver core: make struct class.dev_uevent() take a
- const *
-Message-ID: <Y4Tu9UUGGiEdFcVw@kroah.com>
-References: <20221123122523.1332370-1-gregkh@linuxfoundation.org>
- <d448b944-708a-32d4-37d7-0be16ee5f73c@acm.org>
- <Y4NqAJW5V0tAP8ax@kroah.com>
- <5b14cdea-1bbe-1900-0004-a218ba97bbcb@acm.org>
+        Mon, 28 Nov 2022 12:25:44 -0500
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F30B27909;
+        Mon, 28 Nov 2022 09:25:43 -0800 (PST)
+Received: from g550jk.arnhem.chello.nl (unknown [62.108.10.64])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id E8ADED066B;
+        Mon, 28 Nov 2022 17:25:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1669656342; bh=IfmTaICdqswW4Lb7vIl8B1Dt74KuohxAAb8mcVQuCSE=;
+        h=From:To:Cc:Subject:Date;
+        b=K8LZqgjxPqJGhf1QPpriSd8PJ9rUdkJTFKWf0quuVXuRgBZjTZZ2BXk4pLOck6NL5
+         7V7LrutKMX4e0qBMUj/M73DnJF2QCDhyAzRlzgmpvO4f8jGrzjXFxgH71pQYeGiGKd
+         FZ3nim1z0tSceBF+8uANHobhthnLgSNFJ9S0kiQc=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca@z3ntu.xyz>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] dt-bindings: arm: qcom: Document oneplus,bacon device
+Date:   Mon, 28 Nov 2022 18:25:29 +0100
+Message-Id: <20221128172531.828660-1-luca@z3ntu.xyz>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5b14cdea-1bbe-1900-0004-a218ba97bbcb@acm.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 27, 2022 at 06:38:39PM -0800, Bart Van Assche wrote:
-> On 11/27/22 05:45, Greg Kroah-Hartman wrote:
-> > On Fri, Nov 25, 2022 at 03:51:11PM -0800, Bart Van Assche wrote:
-> > > On 11/23/22 04:25, Greg Kroah-Hartman wrote:
-> > > > diff --git a/include/linux/mISDNif.h b/include/linux/mISDNif.h
-> > > > index 7dd1f01ec4f9..7aab4a769736 100644
-> > > > --- a/include/linux/mISDNif.h
-> > > > +++ b/include/linux/mISDNif.h
-> > > > @@ -586,7 +586,7 @@ extern struct mISDNclock *mISDN_register_clock(char *, int, clockctl_func_t *,
-> > > >    						void *);
-> > > >    extern void	mISDN_unregister_clock(struct mISDNclock *);
-> > > > -static inline struct mISDNdevice *dev_to_mISDN(struct device *dev)
-> > > > +static inline struct mISDNdevice *dev_to_mISDN(const struct device *dev)
-> > > >    {
-> > > >    	if (dev)
-> > > >    		return dev_get_drvdata(dev);
-> > > 
-> > > Why does the dev_to_mISDN() function drop constness? I haven't found an
-> > > explanation for this in the cover letter.
-> > 
-> > I agree, this is going to be fixed up, see the thread starting here:
-> > 	https://lore.kernel.org/r/Y34+V2bCDdqujBDk@kroah.com
-> > 
-> > I'll work on making a const / non const version for these so that we
-> > don't loose the marking.
-> > 
-> > Oh wait, no, this function is fine, it's not modifying the device
-> > structure at all, and only returning the pointer in the private data
-> > stored in the device.  There is no loss of const-ness here.
-> 
-> Hi Greg,
-> 
-> This is what I found in include/linux/mISDNif.h:
-> 
-> struct mISDNdevice {
-> 	struct mISDNchannel	D;
-> 	u_int			id;
-> 	u_int			Dprotocols;
-> 	u_int			Bprotocols;
-> 	u_int			nrbchan;
-> 	u_char			channelmap[MISDN_CHMAP_SIZE];
-> 	struct list_head	bchannels;
-> 	struct mISDNchannel	*teimgr;
-> 	struct device		dev;
-> };
-> 
-> As one can see 'dev' is a member of struct mISDNdevice. I still think that
-> dev_to_mISDN() drops constness. Did I perhaps overlook something?
+Document the OnePlus One ("bacon") which is a smartphone based on the
+Snapdragon 801 SoC.
 
-I think you are missing that dev_to_mISDN() is doing something different
-than most dev_to_FOO() functions do (i.e. there is no container_of()
-call here at all):
+Also allow msm8974(pro) devices to use qcom,msm-id and qcom,board-id.
 
-static inline struct mISDNdevice *dev_to_mISDN(struct device *dev)
-{
-	if (dev)
-		return dev_get_drvdata(dev);
-	else
-		return NULL;
-}
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+---
+Changes in v2:
+* Rebase on https://lore.kernel.org/linux-arm-msm/21a20298-0e95-2185-38ea-0920336f4276@linaro.org/T/
+  Include qcom,msm8974pro in compatible
 
-See, no pointer mess or anything else here, all that happens is the
-driver data pointer in struct device is returned.
+Note, that this'll still conflict with msm8956/msm8976 patches to this
+file. But conflict should be trivial to solve, depending on what gets
+applied first.
 
-If this was a "normal" dev_to_FOO() function, then yes, the const-ness
-of the pointer would be called into question as the thread I linked to
-discusses.
+ Documentation/devicetree/bindings/arm/qcom.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-thanks,
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index a53a24b3edbb..8ad92bd1ab6c 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -173,6 +173,7 @@ properties:
+       - items:
+           - enum:
+               - fairphone,fp2
++              - oneplus,bacon
+               - samsung,klte
+               - sony,xperia-castor
+           - const: qcom,msm8974pro
+@@ -901,6 +902,7 @@ allOf:
+               - qcom,apq8026
+               - qcom,apq8094
+               - qcom,apq8096
++              - qcom,msm8974
+               - qcom,msm8992
+               - qcom,msm8994
+               - qcom,msm8996
+-- 
+2.38.1
 
-greg k-h
