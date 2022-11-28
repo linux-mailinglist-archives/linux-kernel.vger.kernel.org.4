@@ -2,101 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0061263A402
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:03:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33B5E63A413
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:05:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbiK1JDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 04:03:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35540 "EHLO
+        id S230200AbiK1JFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 04:05:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbiK1JD3 (ORCPT
+        with ESMTP id S230004AbiK1JFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 04:03:29 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F2D5587
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:03:28 -0800 (PST)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1oza2v-0003CB-QM; Mon, 28 Nov 2022 10:03:25 +0100
-Message-ID: <49cee522-261f-da9e-6869-60e68da3e0f2@pengutronix.de>
-Date:   Mon, 28 Nov 2022 10:03:21 +0100
+        Mon, 28 Nov 2022 04:05:02 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD171789F
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:05:01 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id g7so16311944lfv.5
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:05:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=A55aTUx9um1awxaJwrSFbAQ2B0+UBrA3NMiv8IfADq0=;
+        b=S72uyT2NmmapvIzFBlVuuVu0Rj7I4DWGK7uN5lPNwFlu0h/1xHqfc0w1ekc4I5t3Uc
+         EN1EyLvMqacGCEyoAVBLE2K5WwWW7b3QhzeHSt96fjPRHdsIcBipIoipMdiiwv2KLMKF
+         4jRN/hMdKFY1tCOyS2B1azQZzCvJ4VqiGQ1gKE4FLqK3KOY/tB4uwWsoppviePTHGj0I
+         xVFArXGbIddcVz/WKsB70I0stTDLANjS0MD/cELNNmuhiNaxpmNVJ0t77XYWD8eX6Ptt
+         DPn9UqhkeYxwgnaF/NCocPrBYXR5aGK3rgOKaYtBrYcmlo9DtCVRy2H/GR/W6qgBGkuG
+         2Pew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A55aTUx9um1awxaJwrSFbAQ2B0+UBrA3NMiv8IfADq0=;
+        b=56q+nvhv2rEdNwQ4YGmKsvP8H+ovSZc2joo7pZtg3XNbGnDjHqvBaOUSzjcqjugmkF
+         4oTq80J+w/IQySaugPCexdSbaY7dNezPotqgjqyJQHNcYMw3zCI7R9pI1YpDNL1web59
+         Ih7cQCs7E37e79e9X6KAVlCwDO381PGcWSMlT0+xEssSCYlyuUA50c4uFGdM39rppc1K
+         /LODPvCgpgBBikyvVP6EJlVCgydGCZzbs+OwEwzeptFXbIVnDH1pKx5b6aAJulng86HO
+         mVu8HswJg0D/Z7ajXinpSoNgz0Rq05ey2zi7RejIeBAyXZccZtryFJGXv/tXJfZzSdYN
+         skBg==
+X-Gm-Message-State: ANoB5plE5/raCOIbVS50cwI/XUQ2fY4FO+88MzxOkHTA1WAJUV7lk5Cb
+        38jTxCq6/Z+MeT1kjvQ1239lpjifCdMh46/5
+X-Google-Smtp-Source: AA0mqf690hCzqZNxg+ZuHnfgQ+jA8Im/PCMuhGme2XTYv6jky84sgnUWOjjTeaDuaJus+Yq5DlEr3A==
+X-Received: by 2002:a05:6512:2987:b0:4b1:61a6:fc45 with SMTP id du7-20020a056512298700b004b161a6fc45mr11308428lfb.224.1669626299613;
+        Mon, 28 Nov 2022 01:04:59 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id r30-20020ac25c1e000000b004ac088fdfd2sm1645536lfp.85.2022.11.28.01.04.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Nov 2022 01:04:59 -0800 (PST)
+Message-ID: <9985d44e-977e-d7ea-0932-4879a3ccd14d@linaro.org>
+Date:   Mon, 28 Nov 2022 10:04:57 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH linux-next] drm/imx: Use device_match_of_node()
+Subject: Re: [PATCH 7/9] dt-bindings: spi: mtk-snfi: add two timing delay
+ property
 Content-Language: en-US
-To:     ye.xingchen@zte.com.cn, p.zabel@pengutronix.de
-Cc:     daniel@ffwll.ch, festevam@gmail.com, s.hauer@pengutronix.de,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-imx@nxp.com, kernel@pengutronix.de, airlied@gmail.com,
-        shawnguo@kernel.org, linux-arm-kernel@lists.infradead.org
-References: <202211171511333735699@zte.com.cn>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <202211171511333735699@zte.com.cn>
+To:     Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Chuanhong Guo <gch981213@gmail.com>
+Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, benliang.zhao@mediatek.com,
+        bin.zhang@mediatek.com
+References: <20221128020613.14821-1-xiangsheng.hou@mediatek.com>
+ <20221128020613.14821-8-xiangsheng.hou@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221128020613.14821-8-xiangsheng.hou@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 28/11/2022 03:06, Xiangsheng Hou wrote:
+> add rx-sample-delay and rx-latch-latency property.
 
-On 17.11.22 08:11, ye.xingchen@zte.com.cn wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
-> 
-> Replace the open-code with device_match_of_node().
+Start sentences with capital letter.
 
-device_match_of_node() exists so a pointer to the function can be passed
-to class/driver_find_device. I see no reason to call it directly.
-
-I don't think you should pursue any patches, where you do this
-transformation even if they pass a compile test unlike the patch here.
-
-Thanks,
-Ahmad
+Here and in commit subject: property->properties
 
 > 
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+> Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
 > ---
->  drivers/gpu/drm/imx/imx-drm-core.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  .../bindings/spi/mediatek,spi-mtk-snfi.yaml      | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
 > 
-> diff --git a/drivers/gpu/drm/imx/imx-drm-core.c b/drivers/gpu/drm/imx/imx-drm-core.c
-> index e060fa6cbcb9..2e4f5af894b0 100644
-> --- a/drivers/gpu/drm/imx/imx-drm-core.c
-> +++ b/drivers/gpu/drm/imx/imx-drm-core.c
-> @@ -182,7 +182,7 @@ static int compare_of(struct device *dev, void *data)
->  	if (strcmp(dev->driver->name, "imx-ipuv3-crtc") == 0) {
->  		struct ipu_client_platformdata *pdata = dev->platform_data;
-> 
-> -		return pdata->of_node == np;
-> +		return device_match_of_node(pdata, np);
->  	}
-> 
->  	/* Special case for LDB, one device for two channels */
-> @@ -191,7 +191,7 @@ static int compare_of(struct device *dev, void *data)
->  		of_node_put(np);
->  	}
-> 
-> -	return dev->of_node == np;
-> +	return device_match_of_node(dev, np);
->  }
-> 
->  static int imx_drm_bind(struct device *dev)
+> diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
+> index ee20075cd0e7..367862688e92 100644
+> --- a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
+> @@ -55,6 +55,22 @@ properties:
+>      description: device-tree node of the accompanying ECC engine.
+>      $ref: /schemas/types.yaml#/definitions/phandle
+>  
+> +  rx-sample-delay:
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+No, use existing property, don't invent your own stuff - missing unit
+suffix. See spi-peripheral-props.yaml.
+
+> +    description: Rx delay to sample data with this value, the valid
+> +                 values are from 0 to 47. The delay is smaller than
+> +                 the rx-latch-latency.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+
+Drop $ref.
+
+> +    minItems: 0
+> +    maxItems: 47
+> +    default: 0
+> +
+> +  rx-latch-latency:
+
+Same problems. Did you check spi-peripheral-props.yaml or other SPI
+controller schemas for such property?
+
+> +    description: Rx delay to sample data with this value, the value
+> +                 unit is clock cycle.
+
+I think the unit should be rather time (e.g. us).
+
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [0, 1, 2, 3]
+> +    default: 0
+> +
+>  required:
+>    - compatible
+>    - reg
+
+Best regards,
+Krzysztof
 
