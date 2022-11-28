@@ -2,603 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 653E063B0D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 19:12:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDDAF63B0D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 19:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232613AbiK1SMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 13:12:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50162 "EHLO
+        id S232340AbiK1SNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 13:13:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231303AbiK1SML (ORCPT
+        with ESMTP id S232157AbiK1SNU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 13:12:11 -0500
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596BF2EF03
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:54:58 -0800 (PST)
-Received: by mail-vs1-xe32.google.com with SMTP id k185so3793923vsc.2
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 09:54:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Aq8d9X3al44YhCEZPMU7Ch9/VogXUjW+E9057QF4Vko=;
-        b=vwbR6YfFOcTQBtBDkhUL3ZCvEj6TBbWPQAmpJPpIotYSTgh6oCWnjCV4oOoes6lKFz
-         eSN01hW2tZn2FMzkCO7f+sNb7DHnImAYDqDu/VIhoErydGLnz9T1cK4XVaFDFdydXjs9
-         CiRyR6v842mWcTzGI9eBVLL8oDBb4CxOWaghtXDwTD7swZ16vdFzlLzSla3rbrnph+DE
-         toBP4cWhHpfJcFkAjAFtATAbqR8Onnu+LDjDNvVNXXw+CCvVhe9WmNPiJ0cGU+vU+pTS
-         MPqPruwCib59bLaODngd8RU54dlRrUKA5KVfCEsNr74YxsJwebdOohree4c6fujafOyT
-         IzAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Aq8d9X3al44YhCEZPMU7Ch9/VogXUjW+E9057QF4Vko=;
-        b=ItE4Us859JEcMxb052LvP33wAoCvXIxOGHsJJ/K23QQt+kQGw87OfehirhWbFC1l+V
-         pvfCp9rp4GMZcX8IOZM8veRIexKwPVlzfqFLGPmdzQzNIfbfgtp1InS5Gi4vazvKaVrg
-         13Cr+IWXLwCFbOZ4zwwgWJ9zjv4vBf0+ySQge5eTY3Ngs+W5zJ3XFIR4BKfMh0hjOEmX
-         bN0bxQBVafk0SWTK7OTVVTUNRkysztuW/IcEwOVs3EQgfV31X5opGrZMr2gSgSE+LVHZ
-         4gJDUpkkG2vnR28mof4guPO618MwsZcSAVXV+LSgdRtqoARgkAblIya0v1i1hVN9HNDZ
-         rDaA==
-X-Gm-Message-State: ANoB5pkWFar43X/bzMZPwzB9KzFmuSJWVumB/CRqMDHSYi4Jaoy4ayCC
-        cr1Ei4eA5Mmsknizuv3PhAw/IoCyglVAXWGWdygSkQ==
-X-Google-Smtp-Source: AA0mqf6Cqb52bkgpIv0Z2USFQD+LPtPR7wC/FPIMZEJ8LqpaO769L+cumG9mVFMGGrjnolgTdAfZ7R/Z6uq2RtEDg9E=
-X-Received: by 2002:a67:f645:0:b0:3a7:769c:6dee with SMTP id
- u5-20020a67f645000000b003a7769c6deemr20316445vso.13.1669658089611; Mon, 28
- Nov 2022 09:54:49 -0800 (PST)
+        Mon, 28 Nov 2022 13:13:20 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2123.outbound.protection.outlook.com [40.107.223.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 191B661776;
+        Mon, 28 Nov 2022 09:55:33 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kyijFl4DCJlx1X9yJ1a9lqUCV87VQtxADMA1Opi2PrjbnGEWeXFzSWfuQpigGWbzMAypwcnhiWhQMM+847Y8E4K7Jiis4gUv/QW42Ht77Zb9bRqYP50jEDnwa9VtaHEuVvbcc7cmapP7LGVQCNV5DvYfrnbJyGyYCVc3ewzYQlxYXaKGWGaLC1U/u3FqUHKV7scadpwCwjm62aQHlQuPub2dRp9ot4LNYbxw7K5g1w2B55F2uv7otxV+tkBOepXFrhWUUBpyS3U2mTGlAOBI4p+5fTYFyHA4YXu4VDNgRLds/HOjRF3sPHT3SHZoi61c/4PvlidXhRvk0dQARy0Mzw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pZt157AVu0UU8Xii48dq5NXW5NR2Rrm7ClkH8MI0fkw=;
+ b=Zei0ggoI0GBLG/KWm/xCzQ4cZnB40qAn83VfwM3itHy09sfIa+3zwcIWEM9W51yNZJusgaDGiatO8PepOOnWZkl/vHRGsPu4nAwIkBMmmaqwjc4Ha732sSBG9M54nCHCouV8EELI/8/dUalYwCTRgSHEDebzIUeR9G84SNMnuzYyk5TEn90ZWpaFH1tdSpM3yOvhPVFryFAKZcl1iFTwBRKV7HZiA7vFnkIxKoOgei78Zgd9XsJ+ntfpzb9xtTai7lK0oWJJ9eZjM7rbp/JMwII99UfpxXWRLekSpY3NjkiFKfrfIoE6Y28SLhh4AsfYA3iSCMIaiMa7vbm1Zkc/Qw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pZt157AVu0UU8Xii48dq5NXW5NR2Rrm7ClkH8MI0fkw=;
+ b=XJgFFw+BfXUTOWAPmpKiebwr7awXGXizGyF+WSQsBMTOuQHn0AMsafg6BLHALa9Zj71mou3Oy7VoO+Y2OqmrPqKOClm8cJvUTnkcgd2mXX0YPObZLQicEo55YlV9N67m+B8dmw7cSXIkQMgTaOAYGh8dND9+4Gl6IuLv04nl9us=
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
+ by IA1PR21MB3401.namprd21.prod.outlook.com (2603:10b6:208:3e2::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.8; Mon, 28 Nov
+ 2022 17:55:11 +0000
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::1e50:78ec:6954:d6dd]) by BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::1e50:78ec:6954:d6dd%6]) with mapi id 15.20.5880.008; Mon, 28 Nov 2022
+ 17:55:11 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+Subject: RE: [Patch v3 07/14] x86/hyperv: Change vTOM handling to use standard
+ coco mechanisms
+Thread-Topic: [Patch v3 07/14] x86/hyperv: Change vTOM handling to use
+ standard coco mechanisms
+Thread-Index: AQHY+es2O4adbWIH8UyWtCwRyUnUyq5JgOOAgAHDpcCAAEhFgIAAJ7oQgAjDHRCAACLagIAAALfwgAANigCAAAHQEA==
+Date:   Mon, 28 Nov 2022 17:55:11 +0000
+Message-ID: <BYAPR21MB1688BCC5DF4636DBF4DEA525D7139@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <1668624097-14884-1-git-send-email-mikelley@microsoft.com>
+ <1668624097-14884-8-git-send-email-mikelley@microsoft.com>
+ <Y3uTK3rBV6eXSJnC@zn.tnic>
+ <BYAPR21MB16886AF404739449CA467B1AD70D9@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y31Kqacbp9R5A1PF@zn.tnic>
+ <BYAPR21MB16886FF8B35F51964A515CD5D70C9@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <BYAPR21MB1688AF2F106CDC14E4F97DB4D7139@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y4Ti4UTBRGmbi0hD@zn.tnic>
+ <BYAPR21MB1688466C7766148C6B3B4684D7139@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y4Tu1tx6E1CfnrJi@zn.tnic>
+In-Reply-To: <Y4Tu1tx6E1CfnrJi@zn.tnic>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=9b9758f3-9d09-4647-8da9-ef2639e3b5bd;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-11-28T17:31:07Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|IA1PR21MB3401:EE_
+x-ms-office365-filtering-correlation-id: 77eca875-7ea3-4d5e-a8c5-08dad169b1c9
+x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: gVPmxIKOJS/TQRaopT8JnlLUqTM+szRqRjOUhJI2Sbp8/dKs5LbEycKTVR3hGGuxAA8QLAN2XdiY0lPIxZtpxjLdScrrqMznsSOLjZOWdaM3MVhUn5b8FMM6gDfi18TeTqw2FtueSPQbzWo4ks7ik9Ct/I/uc/3vOoqXXKLjdgrRRKbCxyEcdI2McUvQpPoM/qErs9c2hjMNDWlO47b3SY4K8PaAG1rqm23CI4+blRJ9b74KKHGzN86QF2wKoeVnkGM5mXUJ21pJ9e2Fcws3+qzVlF/kjGkYhMrezAjAaNWGgZtfOcFyRc7xmsiGdjgFzquapc4sm05lvcXPLvA80v8X+uJ6saHDsj1DyS/AduHYuPnHfwWa2r2OaN39f9WDR5qhU/nWTqAbw5IjRFwlIS1n/8M9p4nVv5JcYLQmxdruYQacZ8TNUrk5T2HlVjZbF++EgmgM294CkGextZTi4W8ulgKRVRQ2v5iAAL9yQWA/GPCyCIBHzNrXNNWmKpxkNLz6pPWPB3HRIQ5Q3etHQlwrmyPSSEYlrPfmmvhVsp5AQyzGZ1cAlJErf8YF+FVEnc9kot8vFHxEeHOi2d1+YTHpf3lAt5RI/Vw6e2qwyJbwkfE3qNQ1klAjuE01vHdSjurzrB04f0fu25J+U2+HHlbyHspcn+o2NzfUSCeI8o/Ozbe1DfIon+dF7/FEuIB+Gi4XMyIUnv89thtEVyHxnvByqZ9xjRcahQjm6+KJmTrThN/0L+keTB8tc26EHqHevQmJk6Sw0pNxKS+gJEHYX/awA8d6/ahOP67hEDiKfdtXrBr/DfZKD7jtnG7hQv3Z
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(396003)(366004)(346002)(39860400002)(451199015)(5660300002)(7406005)(7416002)(41300700001)(52536014)(8936002)(66899015)(4326008)(66476007)(64756008)(66446008)(66556008)(8676002)(966005)(54906003)(6916009)(8990500004)(71200400001)(10290500003)(76116006)(316002)(478600001)(66946007)(2906002)(86362001)(7696005)(9686003)(6506007)(26005)(33656002)(38070700005)(186003)(83380400001)(38100700002)(82960400001)(82950400001)(122000001)(55016003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?N/MShVtR8njTthfFNMCdqawvkp80ynmJWNYthUn7H3Ni6t84oPTKRAcPU3Ev?=
+ =?us-ascii?Q?2WCoRS+rxZWcO3oJsiFm394zOmWRyKKQkB8wwfOhF9g3/Nu/lG5bMngIbrbo?=
+ =?us-ascii?Q?dcTIElFhp9ffmQ5NBNfwYHykDQEbzCCXf0G5p0nNOgurgEEer5g11wiE5vja?=
+ =?us-ascii?Q?N+zOHHEc8r9VHgwTS+oWbv7W4tWNrUx/pUmrZIkWNpIc1Fw2NULCa11mNN5+?=
+ =?us-ascii?Q?zq7aimufZyudtj2y/ekhK+D6R/hnuBlZ5CPOD0xwVTO3SRlKmivuD8cE8JdJ?=
+ =?us-ascii?Q?OGqLtoV7hKcI4/0q16ZyT5lDm8RMJC5JvYS5mSfwX2wXeb491vYHuzIu/tPn?=
+ =?us-ascii?Q?5bzNKMhVESspjT+aU5sP873nbVNMrC73ORZ57iKmiJh0b6rDPPo+IhN+42FW?=
+ =?us-ascii?Q?emrLVvGCaWk8jaNJg4Zltbz9CV/tSbZa+6m54EkzbXKU6C0lfhpCYx1jtXGD?=
+ =?us-ascii?Q?XT8rQiXiITGFuPdEscj1mepwy5sf958BhAVRqu/ryXfmD5OU+eaHTUHUtLRd?=
+ =?us-ascii?Q?f4RxH+FJ3bW2I84vq+YqovBJ+WwoOLCMsMMkV08S2/0g9qlNxalRhbonI9FL?=
+ =?us-ascii?Q?AyJoagYc0oSLaynNVAD2qb/rjwW4JxqOkPlBXE7Hi8O4Bnl06vzod8azNHYE?=
+ =?us-ascii?Q?XzQZdv9pk7JPzrR0D2lJ4zfhxjUGTaDRihhqiz2H6mix3+3i6AWIfpbe9/jX?=
+ =?us-ascii?Q?zzq0XpdxtIQl0er8nVBoi7D3gy3SJccJ8t0E6qDWYRXXCff81OFp33yE8vDi?=
+ =?us-ascii?Q?Tw5QUKtrU+Ox6MIk4TGSAQA6ZLzqTn4ZTP4mqgbdbJY62SGHBlMZ1GJWcl44?=
+ =?us-ascii?Q?XbMa6T2e85viT8AD/BVhyjc3YvWoyU9to0xo2jz5+xZUuHBpVFIVl/JN5eIp?=
+ =?us-ascii?Q?jTLIZ0t2vzkUp9RjUAgOLHjWdQPGiGY8ZwAdjcSgwn9Drxuaj4WLbTrmT3ua?=
+ =?us-ascii?Q?Dij3XQTttreGsF+Y+ov54dKKwIqK2pmqmBbPhOhB8l9wEnyVDg/FYAGVQPSn?=
+ =?us-ascii?Q?5Lkt8dHWFRIaRrEmA08jCqqwjhyJ1UrSC5s+e8AbxTqdOos6AENLrWmzvH/L?=
+ =?us-ascii?Q?1a12iAr7kMdfF3/OUal0YRGY4P39qFF/Y+cZjhX1xHXiTcXkv2/26AJ7v1s8?=
+ =?us-ascii?Q?O/1/NOto1XxkqojMrevctd4MOw9uSWRoxo8DvT0znA9S6zUI4teTIJ9iJnM+?=
+ =?us-ascii?Q?nJ1q7h/E8b7KslN6YP8rDHP662Sz1EHthCGcWO0pqWJE/9NXFkSIFHqKtFIZ?=
+ =?us-ascii?Q?VYEGh1syxb2o7nEvUlEyj2Bhw08GW4F+PMEnVmbgyJAIW9WdGihzz/j9kPOj?=
+ =?us-ascii?Q?mWtSbsr9fbZ5y/4lViidaQqrHCcCFsShVzbFaxY4KfGqvs1GCYuS835S3vrM?=
+ =?us-ascii?Q?skbYJee5Qte3pouLmE3YguO2h4U/Aoql+n0VbEqvffijo1tC3zPE6EOHURri?=
+ =?us-ascii?Q?4xANcjb5UOIKSSoPiWW1jaD/a2OJ/uFB0OoOLihuKYUxuNUDNHyDVWp7yZCK?=
+ =?us-ascii?Q?1C57dOPg7wplRoDUXjWdDcbrvftOrNKz8XU8FOPLuCjwePxDvnX3soAfuMYu?=
+ =?us-ascii?Q?Fc71qZzw7AsAPIrraYkwFC2xabZ8nBrbgoLkIagKvPlL/D2WI/IN6DSOPg52?=
+ =?us-ascii?Q?KQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20221128064300.12021-1-zhuyinbo@loongson.cn>
-In-Reply-To: <20221128064300.12021-1-zhuyinbo@loongson.cn>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 28 Nov 2022 18:54:38 +0100
-Message-ID: <CAMRc=McpskmSTS9dn0HWEiZtOdRzV0YTabDmi6aEV98Oc-6X7w@mail.gmail.com>
-Subject: Re: [PATCH v8 1/2] gpio: loongson: add gpio driver support
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Juxin Gao <gaojuxin@loongson.cn>,
-        Bibo Mao <maobibo@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        Arnaud Patard <apatard@mandriva.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Hongchen Zhang <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 77eca875-7ea3-4d5e-a8c5-08dad169b1c9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Nov 2022 17:55:11.0744
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: hYxU3hQD6A86w9ouE1FqdeZe6tQHqmB5x5D+IpEcQOcE9e/C6IyVz9Wv2CzgGodLxOZN8H0+YAEmzXMwjQ2/RDmFSgBSE+ngCdyrhn5Lvpg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR21MB3401
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 7:43 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
->
-> The Loongson platforms GPIO controller contains 60 GPIO pins in total,
-> 4 of which are dedicated GPIO pins, and the remaining 56 are reused
-> with other functions. Each GPIO can set input/output and has the
-> interrupt capability.
->
-> This driver added support for Loongson GPIO controller and support to
-> use DTS or ACPI to descibe GPIO device resources.
->
-> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
-> Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
-> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
-> Signed-off-by: Juxin Gao <gaojuxin@loongson.cn>
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> ---
-> Change in v8:
->                 1. Return the loongson_gpio_init function directly in probe.
-> Change in v7:
->                 1. Add the gpio irqchip support.
->                 2. Replace __set_direction with loongson_commit_direction.
->                 3. Replace __set_level with loongson_commit_level.
->                 4. Remove the parser of gsi_idx_map.
->                 5. Add the support_irq flag.
->                 6. Replace string platform_data with chip_data.
->                 7. Remove the loongson_gpio_request.
-> Change in v6:
->                 1. Remove the bit mode keep byte mode in all function except
->                    loongson_gpio_init.
->                 2. Use bgpio_init replace bit mode.
->                 3. Implement the function loongson_gpio_get_direction for byte mode.
->                 4. Set ngpios after call bgpio_init.
->                 5. Use gpio-loongson-64bit.c as driver filename.
->                 6. Ignore that loongson legacy drvier and remove the patch about
->                    "gpio: loongson2ef: move driver to original location".
-> Change in v5:
->                 1. Move legacy gpio driver to proper location.
->                 2. Remove the "gpio_base".
->                 3. Add of_device_id and acpi_device_id data field for platform
->                    data.
->                 4. Remove the ACPI_PTR().
->                 5. Remove the gpio label judgement logic and use mode instead.
->                 6. Drop platform_loongson_gpio_get_props.
->                 7. Using devres for all resource.
->                 8. Remove the loongson_gpio_remove.
->                 9. Remove the unmatched print information.
->                 10. Remove the loongson_gpio_exit.
-> Change in v4:
->                 1. Fixup name spelling about Signed-off-by.
->                 2. Drop "series" here and everywhere else.
->                 3. Fixup the copyright in driver.
->                 4. Drop the "else" in loongson_gpio_request.
->                 5. Use trinocular operation replace the related logic.
->                 6. Remove lable judgement in context about "lgpio->chip.to_irq =
->                    loongson_gpio_to_irq"
->                 7. Use dev_err replace pr_err in probe.
->                 8. Make legacy platform_data should be left out of this patch.
->                 9. Remove the mips config in gpio Kconfig.
-> Change in v3:
->                 1. Move the gpio platform data struct from arch/ into include/linux/
->                    platform_data/.
->                 2. Replace platform_gpio_data with loongson_gpio_platform_data in .c.
->                 3. Add maintainer in MAINTAINERS file for include/linux/platform_data/
->                    gpio-loongson.h and gpio-loongson.c
-> Change in v2:
->                 1. Fixup of_loongson_gpio_get_props and remove the parse logic about
->                    "loongson,conf_offset", "loongson,out_offset", "loongson,in_offset",
->                    "loongson,gpio_base", "loongson,support_irq" then kernel driver will
->                    initial them that depend compatible except "loongson,gpio_base".
->
->  MAINTAINERS                        |   6 +
->  drivers/gpio/Kconfig               |  12 +
->  drivers/gpio/Makefile              |   1 +
->  drivers/gpio/gpio-loongson-64bit.c | 378 +++++++++++++++++++++++++++++
->  4 files changed, 397 insertions(+)
->  create mode 100644 drivers/gpio/gpio-loongson-64bit.c
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 5114db9c8f32..2854da69cabb 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -12051,6 +12051,12 @@ S:     Maintained
->  F:     Documentation/devicetree/bindings/hwinfo/loongson,ls2k-chipid.yaml
->  F:     drivers/soc/loongson/loongson2_guts.c
->
-> +LOONGSON GPIO DRIVER
-> +M:     Yinbo Zhu <zhuyinbo@loongson.cn>
-> +L:     linux-gpio@vger.kernel.org
-> +S:     Maintained
-> +F:     drivers/gpio/gpio-loongson-64bit.c
-> +
->  LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
->  M:     Sathya Prakash <sathya.prakash@broadcom.com>
->  M:     Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-> index a01af1180616..d3e2380dbacf 100644
-> --- a/drivers/gpio/Kconfig
-> +++ b/drivers/gpio/Kconfig
-> @@ -381,6 +381,18 @@ config GPIO_LOONGSON
->         help
->           Driver for GPIO functionality on Loongson-2F/3A/3B processors.
->
-> +config GPIO_LOONGSON_64BIT
-> +       tristate "Loongson 64 bit GPIO support"
-> +       depends on LOONGARCH || COMPILE_TEST
-> +       select GPIO_GENERIC
-> +       select GPIOLIB_IRQCHIP
-> +       help
-> +         Say yes here to support the GPIO functionality of a number of
-> +         Loongson series of chips. The Loongson GPIO controller supports
-> +         up to 60 GPIOS in total, 4 of which are dedicated GPIO pins, and
-> +         the remaining 56 are reused with other functions, with edge or
-> +         level triggered interrupts.
-> +
->  config GPIO_LPC18XX
->         tristate "NXP LPC18XX/43XX GPIO support"
->         default y if ARCH_LPC18XX
-> diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
-> index 29e3beb6548c..fc832484cc77 100644
-> --- a/drivers/gpio/Makefile
-> +++ b/drivers/gpio/Makefile
-> @@ -78,6 +78,7 @@ obj-$(CONFIG_GPIO_KEMPLD)             += gpio-kempld.o
->  obj-$(CONFIG_GPIO_LOGICVC)             += gpio-logicvc.o
->  obj-$(CONFIG_GPIO_LOONGSON1)           += gpio-loongson1.o
->  obj-$(CONFIG_GPIO_LOONGSON)            += gpio-loongson.o
-> +obj-$(CONFIG_GPIO_LOONGSON_64BIT)      += gpio-loongson-64bit.o
->  obj-$(CONFIG_GPIO_LP3943)              += gpio-lp3943.o
->  obj-$(CONFIG_GPIO_LP873X)              += gpio-lp873x.o
->  obj-$(CONFIG_GPIO_LP87565)             += gpio-lp87565.o
-> diff --git a/drivers/gpio/gpio-loongson-64bit.c b/drivers/gpio/gpio-loongson-64bit.c
-> new file mode 100644
-> index 000000000000..19a0149480f8
-> --- /dev/null
-> +++ b/drivers/gpio/gpio-loongson-64bit.c
-> @@ -0,0 +1,378 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Loongson GPIO Support
-> + *
-> + * Copyright (C) 2022 Loongson Technology Corporation Limited
-> + */
-> +
-> +#include <linux/acpi.h>
-> +#include <linux/kernel.h>
-> +#include <linux/init.h>
-> +#include <linux/module.h>
-> +#include <linux/spinlock.h>
-> +#include <linux/err.h>
-> +#include <linux/gpio/driver.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/bitops.h>
-> +#include <linux/of_irq.h>
-> +#include <asm/types.h>
-> +
-> +#define LOONGSON_GPIO_IN(x)            (x->reg_base +\
-> +                                       x->p_data->in_offset)
-> +#define LOONGSON_GPIO_OUT(x)           (x->reg_base +\
-> +                                       x->p_data->out_offset)
-> +#define LOONGSON_GPIO_OEN(x)           (x->reg_base +\
-> +                                       x->p_data->conf_offset)
-> +#define LOONGSON_GPIO_IN_BYTE(x, gpio) (x->reg_base +\
-> +                                       x->p_data->in_offset + gpio)
-> +#define LOONGSON_GPIO_OUT_BYTE(x, gpio)        (x->reg_base +\
-> +                                       x->p_data->out_offset + gpio)
-> +#define LOONGSON_GPIO_OEN_BYTE(x, gpio)        (x->reg_base +\
-> +                                       x->p_data->conf_offset + gpio)
-> +
-> +enum loongson_gpio_mode {
-> +       BIT_CTRL_MODE,
-> +       BYTE_CTRL_MODE,
-> +};
-> +
-> +struct loongson_gpio_chip_data {
-> +       const char              *label;
-> +       enum loongson_gpio_mode mode;
-> +       int                     conf_offset;
-> +       int                     out_offset;
-> +       int                     in_offset;
-> +       bool                    support_irq;
-> +};
-> +
-> +struct loongson_gpio_chip {
-> +       struct gpio_chip        chip;
-> +       struct fwnode_handle    *fwnode;
-> +       spinlock_t              lock;
-> +       void __iomem            *reg_base;
-> +       const struct loongson_gpio_chip_data *p_data;
-> +};
-> +
-> +static inline void loongson_commit_direction(
-> +                               struct loongson_gpio_chip *lgpio,
-> +                               unsigned int pin, int input)
-> +{
-> +       u8  bval;
-> +
-> +       bval = input ? 1 : 0;
-> +       writeb(bval, LOONGSON_GPIO_OEN_BYTE(lgpio, pin));
-> +}
-> +
-> +static void loongson_commit_level(struct loongson_gpio_chip *lgpio,
-> +                               unsigned int pin, int high)
-> +{
-> +       u8 bval;
-> +
-> +       bval = high ? 1 : 0;
-> +       writeb(bval, LOONGSON_GPIO_OUT_BYTE(lgpio, pin));
-> +}
-> +
-> +static int loongson_gpio_direction_input(
-> +                               struct gpio_chip *chip, unsigned int pin)
-> +{
-> +       unsigned long flags;
-> +       struct loongson_gpio_chip *lgpio =
-> +               container_of(chip, struct loongson_gpio_chip, chip);
-> +
-> +       spin_lock_irqsave(&lgpio->lock, flags);
-> +       loongson_commit_direction(lgpio, pin, 1);
-> +       spin_unlock_irqrestore(&lgpio->lock, flags);
-> +
-> +       return 0;
-> +}
-> +
-> +static int loongson_gpio_direction_output(
-> +                               struct gpio_chip *chip, unsigned int pin,
-> +                               int value)
-> +{
-> +       struct loongson_gpio_chip *lgpio =
-> +               container_of(chip, struct loongson_gpio_chip, chip);
-> +       unsigned long flags;
-> +
-> +       spin_lock_irqsave(&lgpio->lock, flags);
-> +       loongson_commit_level(lgpio, pin, value);
-> +       loongson_commit_direction(lgpio, pin, 0);
-> +       spin_unlock_irqrestore(&lgpio->lock, flags);
-> +
-> +       return 0;
-> +}
-> +
-> +static int loongson_gpio_get(struct gpio_chip *chip, unsigned int pin)
-> +{
-> +       u8  bval;
-> +       int val;
-> +
-> +       struct loongson_gpio_chip *lgpio =
-> +               container_of(chip, struct loongson_gpio_chip, chip);
-> +
-> +       bval = readb(LOONGSON_GPIO_IN_BYTE(lgpio, pin));
-> +       val = bval & 1;
-> +
-> +       return val;
-> +}
-> +
-> +static int loongson_gpio_get_direction(
-> +                               struct gpio_chip *chip, unsigned int pin)
-> +{
-> +       u8  bval;
-> +       int val;
-> +
-> +       struct loongson_gpio_chip *lgpio =
-> +               container_of(chip, struct loongson_gpio_chip, chip);
-> +
-> +       bval = readb(LOONGSON_GPIO_OEN_BYTE(lgpio, pin));
-> +       val = bval & 1;
-> +
-> +       return val;
-> +}
-> +
-> +static void loongson_gpio_set(struct gpio_chip *chip, unsigned int pin,
-> +                       int value)
-> +{
-> +       unsigned long flags;
-> +       struct loongson_gpio_chip *lgpio =
-> +               container_of(chip, struct loongson_gpio_chip, chip);
-> +
-> +       spin_lock_irqsave(&lgpio->lock, flags);
-> +       loongson_commit_level(lgpio, pin, value);
-> +       spin_unlock_irqrestore(&lgpio->lock, flags);
-> +}
-> +
-> +static int loongson_gpio_to_irq(
-> +                       struct gpio_chip *chip, unsigned int offset)
-> +{
-> +       struct platform_device *pdev =
-> +               container_of(chip->parent, struct platform_device, dev);
-> +
-> +       if (offset >= chip->ngpio)
-> +               return -EINVAL;
-> +
-> +       return platform_get_irq(pdev, offset);
-> +}
-> +
-> +static void loongson_gpio_irq_ack(struct irq_data *d)
-> +{
-> +       irq_chip_ack_parent(d);
-> +}
-> +
-> +static void loongson_gpio_mask_irq(struct irq_data *d)
-> +{
-> +       struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
-> +
-> +       irq_chip_mask_parent(d);
-> +       gpiochip_disable_irq(gc, d->hwirq);
-> +}
-> +
-> +static void loongson_gpio_irq_unmask(struct irq_data *d)
-> +{
-> +       struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
-> +
-> +       gpiochip_enable_irq(gc, d->hwirq);
-> +       irq_chip_unmask_parent(d);
-> +}
-> +
-> +static int loongson_gpio_irq_set_type(struct irq_data *d, unsigned int type)
-> +{
-> +       switch (type) {
-> +       case IRQ_TYPE_EDGE_RISING:
-> +               irq_set_handler_locked(d, handle_edge_irq);
-> +               break;
-> +       case IRQ_TYPE_EDGE_FALLING:
-> +               irq_set_handler_locked(d, handle_edge_irq);
-> +               break;
-> +       case IRQ_TYPE_LEVEL_HIGH:
-> +               irq_set_handler_locked(d, handle_level_irq);
-> +               break;
-> +       case IRQ_TYPE_LEVEL_LOW:
-> +               irq_set_handler_locked(d, handle_level_irq);
-> +               break;
-> +       case IRQ_TYPE_EDGE_BOTH:
-> +               irq_set_handler_locked(d, handle_edge_irq);
-> +               break;
-> +       case IRQ_TYPE_NONE:
-> +       default:
-> +               return -EINVAL;
-> +       }
-> +
-> +       return irq_chip_set_type_parent(d, type);
-> +}
-> +
-> +static const struct irq_chip loongson_gpio_irqchip = {
-> +       .name = "loongson-gpio-irqchip",
-> +       .irq_ack = loongson_gpio_irq_ack,
-> +       .irq_mask = loongson_gpio_mask_irq,
-> +       .irq_unmask = loongson_gpio_irq_unmask,
-> +       .irq_set_type = loongson_gpio_irq_set_type,
-> +       .flags = IRQCHIP_IMMUTABLE,
-> +       GPIOCHIP_IRQ_RESOURCE_HELPERS,
-> +};
-> +
-> +static int loongson_gpio_child_to_parent_hwirq(struct gpio_chip *gc,
-> +                                            unsigned int child,
-> +                                            unsigned int child_type,
-> +                                            unsigned int *parent,
-> +                                            unsigned int *parent_type)
-> +{
-> +       *parent_type = child_type;
-> +
-> +       /* GPIO lines 0..3 have dedicated IRQs */
-> +       if (child >= 0 && child <= 3) {
-> +               *parent = child + 60;
-> +               return 0;
-> +       }
-> +
-> +       if (child >= 4 && child <= 31) {
-> +               *parent = 58;
-> +               return 0;
-> +       }
-> +
-> +       if (child >= 32 && child <= 63) {
-> +               *parent = 59;
-> +               return 0;
-> +       }
-> +
-> +       return -EINVAL;
-> +}
-> +
-> +static int loongson_gpio_init(
-> +                       struct device *dev, struct loongson_gpio_chip *lgpio,
-> +                       struct device_node *np, void __iomem *reg_base)
-> +{
-> +       int ret;
-> +       u32 ngpios;
-> +       struct irq_domain __maybe_unused *parent;
-> +       struct gpio_irq_chip __maybe_unused *girq;
-> +       struct device_node __maybe_unused *irq_parent;
-> +
-> +       lgpio->reg_base = reg_base;
-> +
-> +       if (lgpio->p_data->mode == BIT_CTRL_MODE) {
-> +               ret = bgpio_init(&lgpio->chip, dev, 8,
-> +                               LOONGSON_GPIO_IN(lgpio),
-> +                               LOONGSON_GPIO_OUT(lgpio), 0,
-> +                               LOONGSON_GPIO_OEN(lgpio), NULL, 0);
-> +               if (ret) {
-> +                       dev_err(dev, "unable to init generic GPIO\n");
-> +                       return ret;
-> +               }
-> +       } else {
-> +               lgpio->chip.direction_input = loongson_gpio_direction_input;
-> +               lgpio->chip.get = loongson_gpio_get;
-> +               lgpio->chip.get_direction = loongson_gpio_get_direction;
-> +               lgpio->chip.direction_output = loongson_gpio_direction_output;
-> +               lgpio->chip.set = loongson_gpio_set;
-> +               lgpio->chip.can_sleep = 0;
-> +               lgpio->chip.of_node = np;
-> +               lgpio->chip.parent = dev;
-> +               spin_lock_init(&lgpio->lock);
-> +       }
-> +
-> +       device_property_read_u32(dev, "ngpios", &ngpios);
-> +
-> +       lgpio->chip.ngpio = ngpios;
-> +       lgpio->chip.label = lgpio->p_data->label;
-> +
-> +       if (lgpio->p_data->support_irq == true) {
-> +               lgpio->chip.to_irq = loongson_gpio_to_irq;
-> +               irq_parent = of_irq_find_parent(np);
-> +               if (irq_parent)
-> +                       parent = irq_find_host(irq_parent);
-> +
-> +               lgpio->fwnode = of_node_to_fwnode(np);
-> +
-> +               girq = &lgpio->chip.irq;
-> +               gpio_irq_chip_set_chip(girq, &loongson_gpio_irqchip);
-> +               girq->fwnode = lgpio->fwnode;
-> +               girq->parent_domain = parent;
-> +               girq->child_to_parent_hwirq = loongson_gpio_child_to_parent_hwirq;
-> +               girq->handler = handle_bad_irq;
-> +               girq->default_type = IRQ_TYPE_NONE;
-> +       }
-> +
-> +       devm_gpiochip_add_data(dev, &lgpio->chip, lgpio);
-> +
-> +       return 0;
-> +}
-> +
-> +static int loongson_gpio_probe(struct platform_device *pdev)
-> +{
-> +       void __iomem *reg_base;
-> +       struct loongson_gpio_chip *lgpio;
-> +       struct device_node *np = pdev->dev.of_node;
-> +       struct device *dev = &pdev->dev;
-> +
-> +       lgpio = devm_kzalloc(dev, sizeof(*lgpio), GFP_KERNEL);
-> +       if (!lgpio)
-> +               return -ENOMEM;
-> +
-> +       lgpio->p_data = device_get_match_data(&pdev->dev);
-> +
-> +       reg_base = devm_platform_ioremap_resource(pdev, 0);
-> +       if (IS_ERR(reg_base))
-> +               return PTR_ERR(reg_base);
-> +
-> +       return loongson_gpio_init(dev, lgpio, np, reg_base);
-> +}
-> +
-> +static const struct loongson_gpio_chip_data loongson_gpio_pdata0 = {
+From: Borislav Petkov <bp@alien8.de> Sent: Monday, November 28, 2022 9:25 A=
+M
+>=20
+> On Mon, Nov 28, 2022 at 04:59:27PM +0000, Michael Kelley (LINUX) wrote:
+> > 2) The Linux guest must set the vTOM flag in a PTE to access a page
+> > as unencrypted.
+>=20
+> What exactly do you call the "vTOM flag in the PTE"?
+>=20
+> I see this here:
+>=20
+> "When bit 1 (vTOM) of SEV_FEATURES is set in the VMSA of an SNP-active
+> VM, the VIRTUAL_TOM field is used to determine the C-bit for data
+> accesses instead of the guest page table contents. All data accesses
+> below VIRTUAL_TOM are accessed with an effective C-bit of 1 and all
+> addresses at or above VIRTUAL_TOM are accessed with an effective C-bit
+> of 0."
+>=20
+> Now you say
+>=20
+> "vTOM is the dividing line where the uppermost bit of the physical
+> address space is set; e.g., with 47 bits of guest physical address
+> space, vTOM is 0x40000000000 (bit 46 is set)."
+>=20
+> So on your guests, is VIRTUAL_TOM =3D=3D 0x400000000000?
+>=20
+> Btw, that 0x4000.. does not have bit 46 set but bit 42. Bit 46 set is
+>=20
+> 	0x400000000000
+>=20
+> which means one more '0' at the end.
 
-This pdata0 and pdata1 naming has no meaning here. Please choose
-something else like loongson_gpio_ls2k_data.
+Yeah, looks like I dropped a '0' in my comment text.  Will fix.
 
-Bartosz
+>=20
+> So before we discuss this further, let's agree on the basics first.
+>=20
+> > What Windows guests do isn't really relevant.  Again, the code in this =
+patch
+> > series all runs directly in the Linux guest, not the paravisor.  And th=
+e Linux
+> > guest isn't unmodified.  We've added changes to understand vTOM and
+> > the need to communicate with the hypervisor about page changes
+> > between private and shared.  But there are other changes for a fully
+> > enlightened guest that we don't have to make when using AMD vTOM,
+> > because the paravisor transparently (to the guest -- Linux or Windows)
+> > handles those issues.
+>=20
+> So this is some other type of guest you wanna run.
+>=20
+> Where is the documentation of that thing?
+>=20
+> I'd like to know what exactly it is going to use in the kernel.
 
-> +       .label = "ls2k_gpio",
-> +       .mode = BIT_CTRL_MODE,
-> +       .conf_offset = 0x0,
-> +       .in_offset = 0x10,
-> +       .out_offset = 0x20,
-> +       .support_irq = true,
-> +};
-> +
-> +static const struct loongson_gpio_chip_data loongson_gpio_pdata1 = {
-> +       .label = "ls7a_gpio",
-> +       .mode = BYTE_CTRL_MODE,
-> +       .conf_offset = 0x800,
-> +       .in_offset = 0x900,
-> +       .out_offset = 0xa00,
-> +       .support_irq = false,
-> +};
-> +
-> +static const struct of_device_id loongson_gpio_of_match[] = {
-> +       {
-> +               .compatible = "loongson,ls2k-gpio",
-> +               .data = &loongson_gpio_pdata0,
-> +       },
-> +       {
-> +               .compatible = "loongson,ls7a-gpio",
-> +               .data = &loongson_gpio_pdata1,
-> +       },
-> +       {}
-> +};
-> +MODULE_DEVICE_TABLE(of, loongson_gpio_of_match);
-> +
-> +static const struct acpi_device_id loongson_gpio_acpi_match[] = {
-> +       {
-> +               .id = "LOON0002",
-> +               .driver_data = (kernel_ulong_t)&loongson_gpio_pdata1,
-> +       },
-> +       {}
-> +};
-> +MODULE_DEVICE_TABLE(acpi, loongson_gpio_acpi_match);
-> +
-> +static struct platform_driver loongson_gpio_driver = {
-> +       .driver = {
-> +               .name = "loongson-gpio",
-> +               .owner = THIS_MODULE,
-> +               .of_match_table = loongson_gpio_of_match,
-> +               .acpi_match_table = loongson_gpio_acpi_match,
-> +       },
-> +       .probe = loongson_gpio_probe,
-> +};
-> +
-> +static int __init loongson_gpio_setup(void)
-> +{
-> +       return platform_driver_register(&loongson_gpio_driver);
-> +}
-> +postcore_initcall(loongson_gpio_setup);
-> +
-> +MODULE_DESCRIPTION("Loongson gpio driver");
-> +MODULE_LICENSE("GPL");
-> --
-> 2.31.1
->
+Standard Linux is the guest.  It's fully functional for running general
+Purpose workloads that want "confidential computing" where guest
+memory is encrypted and the data in the guest is not visible to the
+host hypervisor.  It's a standard Linux kernel.  I'm not sure what you
+mean by "some other type of guest".
+
+>=20
+> > Again, no.  What I have proposed as CC_VENDOR_AMD_VTOM is
+>=20
+> There's no vendor AMD_VTOM!
+>=20
+> We did the vendor thing to denote Intel or AMD wrt to confidential
+> computing.
+
+But vendor AMD effectively offers two different encryption schemes that
+could be seen by the guest VM.  The hypervisor chooses which scheme a
+particular guest will see.  Hyper-V has chosen to present the vTOM scheme
+to guest VMs, including normal Linux and Windows guests, that have been
+modestly updated to understand vTOM.
+
+>=20
+> Now you're coming up with something special. It can't be HYPERV because
+> Hyper-V does other types of confidential solutions too, apparently.
+
+In the future, Hyper-V may also choose to present original AMD C-bit scheme
+in some guest VMs, depending on the use case.  And it will present the Inte=
+l
+TDX scheme when running on that hardware.
+
+>=20
+> Now before this goes any further I'd like for "something special" to be
+> defined properly and not just be a one-off Hyper-V thing.
+>=20
+> > specific to AMD's virtual-Top-of-Memory architecture.  The TDX
+> > architecture doesn't really have a way to use a paravisor.
+> >
+> > To summarize, the code in this patch series is about a 3rd encryption
+> > scheme that is used by the guest.
+>=20
+> Yes, can that third thing be used by other hypervisors or is this
+> Hyper-V special?
+
+This third thing is part of the AMD SEV-SNP architecture and could be used
+by any hypervisor.
+
+>=20
+> > It is completely parallel to the AMD C-bit encryption scheme and
+> > the Intel TDX encryption scheme. With the AMD vTOM scheme, there is
+> > a paravisor that transparently emulates some things for the guest
+> > so there are fewer code changes needed in the guest, but this patch
+> > series is not about that paravisor code.
+>=20
+> Would other hypervisors want to support such a scheme?
+>=20
+> Is this architecture documented somewhere? If so, where?
+
+The AMD vTOM scheme is documented in the AMD SEV-SNP
+architecture specs.
+
+>=20
+> What would it mean for the kernel to support it.
+
+The Linux kernel running as a guest already supports it, at least when
+running on Hyper-V.   The code went into the 5.15 kernel [1][2] about
+a year ago.  But that code is more Hyper-V specific than is desirable.=20
+This patch set makes the AMD vTOM support more parallel to the Intel
+TDX and AMD C-bit support.
+
+To my knowledge, KVM does not support the AMD vTOM scheme.
+Someone from AMD may have a better sense whether adding that
+support is likely in the future.
+
+[1] https://lore.kernel.org/all/20211025122116.264793-1-ltykernel@gmail.com=
+/
+[2] https://lore.kernel.org/all/20211213071407.314309-1-ltykernel@gmail.com=
+/
+
+Michael
