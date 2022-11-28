@@ -2,124 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A85E63A59D
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 11:03:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0186963A5A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 11:04:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230157AbiK1KDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 05:03:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44888 "EHLO
+        id S230101AbiK1KEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 05:04:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbiK1KDq (ORCPT
+        with ESMTP id S230169AbiK1KEC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 05:03:46 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71245FE5
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 02:03:39 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id x5-20020a6bda05000000b006db3112c1deso5497204iob.0
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 02:03:39 -0800 (PST)
+        Mon, 28 Nov 2022 05:04:02 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2DA1A207
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 02:04:01 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id d3so4666526plr.10
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 02:04:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura.hr; s=sartura;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/IW5LWVVRI9kkHa5NwPWDaXFbPj7S5Bv6GzAU5EdZjU=;
+        b=keSuQkLR1LuBponYgjAFjTjF8JyLLs5E6fzwQSoIquhMstq7nV3WLFgBsIYhttXACY
+         mq5u/vf9XjXqdqtlgCh/GzwcGx7qAiHiXsx43HWcvjX9uqXWnNzkW6FTnrqt57rodg3O
+         tYKLBh4iEU20FPK8678rDVGN7Ae/S/qyy94si2NFcXGDa1E+nC9CtkeIk/TzeY2N0rpN
+         vS7Cr9QuQK+aIiGwyscOGxzvqPRJ1os9DaRs7U9HvT05e3X7nrjevpLhBTFqTTBz5t3Q
+         XwLXzTN6vZciOFA416Qj2y4vgCjRcshY8sY2E5qqnzQQrKP4rIqjKbwa9pqoSYzTUWnl
+         4drg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=t3Z7tD0qeX6aZfKu8J+Pu+V9SU8w3xwQLICQ/IZYsLw=;
-        b=IwJUOYUElmEmZ5NTFayW0kjlld8O84riL6Aehf7QpFs9WcMTLSh9KyA6i2cs9QGBNl
-         tqK9QIxoRX36hClZLHeEPDKhThuIMSQZo2Yf6d4sYCFpCcBUUXmT20jiFgbMFCbm4jO4
-         okwuFLocP7IW1quqSQI9b1l3n61scP392z1iaoOsKHq/hrBT0EFXT7D3iUX92XdHxkj8
-         uj+3mbVvvx3o/lL8Q+pi6jCCNDcI7/ndBmqqU//nN9K7pakBPs+spsZ9TxjRF1SLYweI
-         Qhb+4r5lRAMVfB6N61X40errZdOWY6iXiHmGuqLn6SS92wy/1ri84PhJkIICMyZPvIFQ
-         iDiQ==
-X-Gm-Message-State: ANoB5pkrsSHL2RrFDx8Pa7X7dT3vq33nkbfn2CiMv7Ec5+I53MlOHD5v
-        ZC/nu2/l+9uC0XWTmAs4o4dZeiFK/qrc+2MEQ9cP60Hd6H7k
-X-Google-Smtp-Source: AA0mqf6JuCYtFHLLS4RFlakMkxww1ZYJggnUkqrmDuT1eY/PB6+Gytg4KPQa6MO1p/QWC0kDA+quCQWo4F29eGZlWsSdj4LWFmwy
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/IW5LWVVRI9kkHa5NwPWDaXFbPj7S5Bv6GzAU5EdZjU=;
+        b=rt3xflpoQHii7ZZA45Ng+7JeB27fOi0WBeEOT7NmvqRl5kkQk6VXUhN05+rykyJNDe
+         6pivpVQaUNM0r8+BLNrNxZTGPhXDIdnK49WWlGkKGrKgBciomB00D3LOqEQAnk4IpeKu
+         XKChYiruRYPYW+Yph5DIzeStLGR3s+eh0TH4Y5UYVBm4yOUnANp/Rl6831EM3fOJZRP5
+         oBp0Ai8qZXyltRJxCBOQR34cvOptJ/0evGGzq8zAhGdmxY0TkTV5kdb21uULSTR+rqV5
+         uTSUjMXpmoz4vi0Noj2rernlHIfI0lvMIApRnJGDh9AGgK4Mx8NNg/u+ej9c1ZATgcMY
+         zqDw==
+X-Gm-Message-State: ANoB5pmLiRms9sL8OyeGFIS9353e3QOGP1ljbNhsbgswN2siq77WBmXR
+        fy4/gOgNR75+pxfAiGAImTX6CjAsl/XV9pb0MvJSu5dnSLylKQ==
+X-Google-Smtp-Source: AA0mqf4Gp+pVhmwbvUZVt7ZQTkdaSastAOQgb0R9mo3rJRs7Clc2ULqM0v3qxeECp9HvfCvmWVzXF67UrXHYTI6k9xc=
+X-Received: by 2002:a17:902:8601:b0:189:7372:144c with SMTP id
+ f1-20020a170902860100b001897372144cmr11515722plo.106.1669629840651; Mon, 28
+ Nov 2022 02:04:00 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a5d:80ce:0:b0:6de:c30c:4d49 with SMTP id
- h14-20020a5d80ce000000b006dec30c4d49mr14681560ior.83.1669629819147; Mon, 28
- Nov 2022 02:03:39 -0800 (PST)
-Date:   Mon, 28 Nov 2022 02:03:39 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000046def705ee84fc7a@google.com>
-Subject: [syzbot] WARNING in hfsplus_ext_write_extent
-From:   syzbot <syzbot+41264293e62d9074e4a8@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, willy@infradead.org
+References: <20221125112904.48652-1-robert.marko@sartura.hr> <166950120854.13025.2614107746698757914.robh@kernel.org>
+In-Reply-To: <166950120854.13025.2614107746698757914.robh@kernel.org>
+From:   Robert Marko <robert.marko@sartura.hr>
+Date:   Mon, 28 Nov 2022 11:03:49 +0100
+Message-ID: <CA+HBbNEVbu4DEuazeR4MUGoBDvB==iHFQo=+yXDgs8R7E0C-Kg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: watchdog: Convert GPIO binding to json-schema
+To:     Rob Herring <robh@kernel.org>
+Cc:     luka.perkov@sartura.hr, linux-kernel@vger.kernel.org,
+        linux@roeck-us.net, devicetree@vger.kernel.org,
+        wim@linux-watchdog.org, robh+dt@kernel.org,
+        linux-watchdog@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    faf68e3523c2 Merge tag 'kbuild-fixes-v6.1-4' of git://git...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16eb5555880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8d01b6e3197974dd
-dashboard link: https://syzkaller.appspot.com/bug?extid=41264293e62d9074e4a8
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/3bfa6577f378/disk-faf68e35.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/7bf0af58cde3/vmlinux-faf68e35.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/3e15d7d640b0/bzImage-faf68e35.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+41264293e62d9074e4a8@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-DEBUG_LOCKS_WARN_ON(lock->magic != lock)
-WARNING: CPU: 0 PID: 56 at kernel/locking/mutex.c:582 __mutex_lock_common+0x1bb0/0x26e0 kernel/locking/mutex.c:582
-Modules linked in:
-CPU: 0 PID: 56 Comm: kworker/u4:4 Not tainted 6.1.0-rc6-syzkaller-00315-gfaf68e3523c2 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Workqueue: writeback wb_workfn
- (flush-7:3)
-
-RIP: 0010:__mutex_lock_common+0x1bb0/0x26e0 kernel/locking/mutex.c:582
-Code: 84 c0 0f 85 bd 08 00 00 83 3d 63 80 db 03 00 0f 85 6f e5 ff ff 48 c7 c7 a0 98 ed 8a 48 c7 c6 20 99 ed 8a 31 c0 e8 20 91 b7 f6 <0f> 0b e9 53 e5 ff ff e8 84 e5 65 f6 e9 5a fa ff ff 0f 0b e9 53 ef
-RSP: 0018:ffffc900015771e0 EFLAGS: 00010246
-
-RAX: 3dec4f730bdc4f00 RBX: ffff88806fda0190 RCX: ffff8880196b8000
-RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-RBP: ffffc90001577360 R08: ffffffff816e55cd R09: ffffed1017304f1c
-R10: ffffed1017304f1c R11: 1ffff11017304f1b R12: dffffc0000000000
-R13: 1ffff920002aee50 R14: 0000000000000000 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f2ddf1a1000 CR3: 000000004730f000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
- hfsplus_ext_write_extent+0x87/0x1e0 fs/hfsplus/extents.c:149
- hfsplus_write_inode+0x1e/0x5c0 fs/hfsplus/super.c:154
- write_inode fs/fs-writeback.c:1440 [inline]
- __writeback_single_inode+0x4d6/0x670 fs/fs-writeback.c:1652
- writeback_sb_inodes+0xb3b/0x18f0 fs/fs-writeback.c:1878
- wb_writeback+0x41f/0x7b0 fs/fs-writeback.c:2052
- wb_do_writeback fs/fs-writeback.c:2195 [inline]
- wb_workfn+0x3cb/0xef0 fs/fs-writeback.c:2235
- process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
- worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
- kthread+0x266/0x300 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
+On Sat, Nov 26, 2022 at 11:25 PM Rob Herring <robh@kernel.org> wrote:
+>
+>
+> On Fri, 25 Nov 2022 12:29:04 +0100, Robert Marko wrote:
+> > Convert the DT binding for GPIO WDT to JSON schema.
+> >
+> > Cc: luka.perkov@sartura.hr
+> > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> > ---
+> >  .../devicetree/bindings/watchdog/gpio-wdt.txt | 28 ----------
+> >  .../bindings/watchdog/gpio-wdt.yaml           | 55 +++++++++++++++++++
+> >  2 files changed, 55 insertions(+), 28 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/watchdog/gpio-wdt.txt
+> >  create mode 100644 Documentation/devicetree/bindings/watchdog/gpio-wdt.yaml
+> >
+>
+> Running 'make dtbs_check' with the schema in this patch gives the
+> following warnings. Consider if they are expected or the schema is
+> incorrect. These may not be new warnings.
+>
+> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+> This will change in the future.
+>
+> Full log is available here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221125112904.48652-1-robert.marko@sartura.hr
+>
+>
+> watchdog-gpio: Unevaluated properties are not allowed ('always-enabled' was unexpected)
+>         arch/arm64/boot/dts/freescale/imx8mm-data-modul-edm-sbc.dtb
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+This is expected as always-enabled was not documented in TXT bindings
+nor the driver actually parses it,
+it is looking for always-running only.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Regards,
+Robert
+-- 
+Robert Marko
+Staff Embedded Linux Engineer
+Sartura Ltd.
+Lendavska ulica 16a
+10000 Zagreb, Croatia
+Email: robert.marko@sartura.hr
+Web: www.sartura.hr
