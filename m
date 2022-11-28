@@ -2,91 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52E2763A749
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 12:41:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDCBE63A74A
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 12:42:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230341AbiK1Llc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 06:41:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51450 "EHLO
+        id S230441AbiK1Lm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 06:42:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiK1Ll2 (ORCPT
+        with ESMTP id S230392AbiK1LmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 06:41:28 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EAF664C7
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 03:41:27 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Mon, 28 Nov 2022 06:42:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90EF15A11
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 03:42:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 5D70941E2F;
-        Mon, 28 Nov 2022 11:41:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1669635685; bh=YzTkgZL151xpivSuy+2SYaQn1Sj6M2+eEQlGgH8Ue3c=;
-        h=Date:From:Subject:To:Cc;
-        b=IBsiMw7xYzzdNgwCYXMTK9NZqcEP62rYRbDUmCsf7G2LGAMA6ddmSyIWhwCEImyJy
-         hPu/5djnVSEsBkj5cqx598fdyMfcKDbxc5Skp9DfIxqP4kF5/ml0Wz8Z48FWRFEfix
-         YvGJCcM9W59NfD1NTBKTtRgpYTZUZJlMrImQcF2EdnjiJRiCnwhBn1VJNW2yuUTiFC
-         WUUSUYPd1sS7VbV/MqraaK2xPWEAnUpv+RInZSyVNrlSCD/fXMMZoVoXq2g17tYeti
-         xZqaO4+1YbSPBWZ1oNbqlqVYqiSI3/KAVMZbxb8rXDyKuj4ep/6Y/wJCS5mENK14nS
-         RG8G3fjJCK1Mw==
-Message-ID: <57f84134-8645-35f6-2427-ee683800c413@marcan.st>
-Date:   Mon, 28 Nov 2022 20:41:22 +0900
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5671061127
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 11:42:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59AA5C433C1;
+        Mon, 28 Nov 2022 11:42:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1669635743;
+        bh=0jYGKi9Rw7l0Ynb7pJ7Lgdo+KwQcaw53TAev7Zp6YL0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fQkbP3HNnWvrdNHtJk4a+uXZn0YobL6h1DB7nIe0l+xPdBfHempYlGEfpp6u+ZLtb
+         GgNxqL6u86nFzoAJtXjdGrLFrLH+xPvkRlllC56ATbxjyTCAyX+VFvGYKX0jj6z/hY
+         4BnbuH3YcINrxqrOUK8zXSDoWPIyvjAWfvnvvc2Q=
+Date:   Mon, 28 Nov 2022 12:42:17 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     tglx@linutronix.de, kraig@google.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] genirq/irqdesc: fix WARNING in irq_sysfs_del()
+Message-ID: <Y4Semf3t/hgPsr3v@kroah.com>
+References: <20221126082716.438271-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-From:   Hector Martin <marcan@marcan.st>
-Subject: [GIT PULL] Apple SoC RTKit/SART updates for 6.2
-To:     SoC Team <soc@kernel.org>
-Content-Language: en-US
-Cc:     Asahi Linux <asahi@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221126082716.438271-1-yangyingliang@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi SoC folks,
+On Sat, Nov 26, 2022 at 04:27:16PM +0800, Yang Yingliang wrote:
+> I got the lots of WARNING report when doing fault injection test:
+> 
+> kernfs: can not remove 'chip_name', no directory
+> WARNING: CPU: 0 PID: 253 at fs/kernfs/dir.c:1616 kernfs_remove_by_name_ns+0xce/0xe0
+> RIP: 0010:kernfs_remove_by_name_ns+0xce/0xe0
+> Call Trace:
+>  <TASK>
+>  remove_files.isra.1+0x3f/0xb0
+>  sysfs_remove_group+0x68/0xe0
+>  sysfs_remove_groups+0x41/0x70
+>  __kobject_del+0x45/0xc0
+>  kobject_del+0x29/0x40
+>  free_desc+0x42/0x70
+>  irq_free_descs+0x5e/0x90
+> 
+> kernfs: can not remove 'hwirq', no directory
+> WARNING: CPU: 0 PID: 253 at fs/kernfs/dir.c:1616 kernfs_remove_by_name_ns+0xce/0xe0
+> RIP: 0010:kernfs_remove_by_name_ns+0xce/0xe0
+> Call Trace:
+>  <TASK>
+>  remove_files.isra.1+0x3f/0xb0
+>  sysfs_remove_group+0x68/0xe0
+>  sysfs_remove_groups+0x41/0x70
+>  __kobject_del+0x45/0xc0
+>  kobject_del+0x29/0x40
+>  free_desc+0x42/0x70
+>  irq_free_descs+0x5e/0x90
+> 
+> If irq_sysfs_add() fails in alloc_descs(), the directory of interrupt
+> informations is not added to sysfs, it causes the WARNINGs when removing
+> the information files. Fix this by adding check kobj.state_in_sysfs in
+> irq_sysfs_del().
+> 
+> Fixes: ecb3f394c5db ("genirq: Expose interrupt information through sysfs")
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+>  kernel/irq/irqdesc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
+> index a91f9001103c..e391f4195b87 100644
+> --- a/kernel/irq/irqdesc.c
+> +++ b/kernel/irq/irqdesc.c
+> @@ -303,7 +303,7 @@ static void irq_sysfs_del(struct irq_desc *desc)
+>  	 * kobject_del() complains about a object with no parent, so make
+>  	 * it conditional.
+>  	 */
+> -	if (irq_kobj_base)
+> +	if (irq_kobj_base && desc->kobj.state_in_sysfs)
 
-Please merge these RTKit/SART changes for 6.2.
+No, this is not ok, you are poking around in the core of sysfs in a
+field that should be private and not be able to be seen by anyone else.
+Fix this properly and do not try to remove a kobject that you know was
+not registered properly.
 
-This batch just contains two correctness fixes for issues reported by
-the kernel test robot.
+thanks,
 
--Hector
-
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
-
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
-
-are available in the Git repository at:
-
-  https://github.com/AsahiLinux/linux.git tags/asahi-soc-rtkit-sart-6.2
-
-for you to fetch changes up to 5acf07ff25f0c1c44105e6b8ebf88c55a0a04d2f:
-
-  soc: apple: rtkit: Stop casting function pointer signatures
-(2022-11-28 20:34:09 +0900)
-
-----------------------------------------------------------------
-Apple SoC RTKit/SART updates for 6.2.
-
-Just two minor correctness nits reported by the kernel test robot.
-
-----------------------------------------------------------------
-Sven Peter (2):
-      soc: apple: sart: Stop casting function pointer signatures
-      soc: apple: rtkit: Stop casting function pointer signatures
-
- drivers/soc/apple/rtkit.c | 7 ++++---
- drivers/soc/apple/sart.c  | 7 ++++++-
- 2 files changed, 10 insertions(+), 4 deletions(-)
-
+greg k-h
