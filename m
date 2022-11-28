@@ -2,116 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C986363A318
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 09:31:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77DC963A321
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 09:32:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbiK1IbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 03:31:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43112 "EHLO
+        id S230146AbiK1Icx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 03:32:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbiK1IbD (ORCPT
+        with ESMTP id S230075AbiK1Icv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 03:31:03 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E531175BB
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 00:30:59 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id r8so12261814ljn.8
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 00:30:59 -0800 (PST)
+        Mon, 28 Nov 2022 03:32:51 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62A15F71;
+        Mon, 28 Nov 2022 00:32:50 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id jn7so9442366plb.13;
+        Mon, 28 Nov 2022 00:32:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=v/ms0T42AkTk/cRIo1vElQWeWjhxMFGnKH3PD3tFd1E=;
-        b=O2M1PTCZR8mt3SUeRtG/QwPNxjnOQgrcUY6YdERup7cd75uBh+Ws0VRZxw4StQAWkY
-         99qI8nNJxzuN815YqbnaiOLcETih2O3NRW/T+WZsae3+bkpki1aRB5CjhtJnBBCa3iuA
-         LgRhoXVIyWRf1wUnTmjMEdunU7zURcsqL2Ku4otT+mJqahqq50o7w/9JlK/J7Q12h3kD
-         ftuYK0EogtFWZYXMxPRXbxSmZ3nbJP7tnqPYqWPb3SYUL/Kpy8Smax1ATIDVfgdru+oh
-         Q/4YdB1kaRzzlDct90W/I85516LVc4iq/QvCHJJfOYQXkjE4mZ7IF6s4b2L5yoAIttRk
-         FF5w==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yY7Oi7Q+vFyDBFAWCb+IcfZ6FtGwdbwGt/6v7B5GYzU=;
+        b=hcWoRfS2gOudUnbXgGWIzl+xV+YgDfqm6PZSSRcmuzYy3aI2BehE0rvpF+sUJtYJ4x
+         YuZ+5KUigkzHwWui9UzgYMBprEk2/1CQtCtURqIsJMVVKvnGnGXvq4dQakmI4upqJXGW
+         mLjaRkOsSTMm5p0DveLQ2PgKDgXUoF01rgywFtQAoX/5o6qq0bYSUwcaPa8KETQeFKeZ
+         eZH34oApT/dU4MRum/LC+I1KWiv6yB+2HyoEt5SRqfRMqrpc5bXfYadeeUuZ5TF0BMZa
+         p0yxexAbKksA+J5bsgZmYy1GOi/Hm8E0t4Ptvsn3tejn+Q3HZVC+Cmpp+TpVh9RiRLkf
+         om8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v/ms0T42AkTk/cRIo1vElQWeWjhxMFGnKH3PD3tFd1E=;
-        b=eIvWBcmm2BjOldBzp3eOik+Z9KY1vqygy+GN+I5Xizx1il8GaKn/ft7/7OVH5qZVzS
-         Q6BC8G0FZK9vcOKoNOfoOEbqGH4BKfX2gTS0Dq29914o0uMd2EiWBLNM6l/AcZynO05x
-         KHPdWwoc7E9bnRkxgvjoraTwn1IQmpmXPwQ5c/KOv9lbalbcpia6DCKm6mwWYE1IJTBe
-         e6Qly5s7r/BTtbChb6JTgvd2kLtmabvE0nFhQcEMStsc6xXkSSYG91KqybC/nB+F0LQf
-         YQUjowPerji9ZeXXyMDxVIbYAkOJakwUyd59AYShww6B6uK6+hdbzj4D8FEZmwJ0sOV9
-         DWdA==
-X-Gm-Message-State: ANoB5pnukh4NtXakRt4tMYNgjv3xCvd192HC07hgzxzaDgWwVMouxoAt
-        XL63dLusraQc3izQrn40Av+2+g==
-X-Google-Smtp-Source: AA0mqf4WQ9BxGq6ZLYloTIYn8qMg3Dvz6GHoFpf2EVL4IylUTMzOzfulKTdziNdCWcyL1QCPXRfvyg==
-X-Received: by 2002:a2e:a884:0:b0:277:37a8:ba87 with SMTP id m4-20020a2ea884000000b0027737a8ba87mr10275610ljq.14.1669624257906;
-        Mon, 28 Nov 2022 00:30:57 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id o4-20020ac25b84000000b004b4b9beb0eesm1633968lfn.50.2022.11.28.00.30.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 00:30:57 -0800 (PST)
-Message-ID: <61f1a1e5-bd2c-4a22-66f7-1935154b35ad@linaro.org>
-Date:   Mon, 28 Nov 2022 09:30:56 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yY7Oi7Q+vFyDBFAWCb+IcfZ6FtGwdbwGt/6v7B5GYzU=;
+        b=vi4tSN8GkBKVI3y8zTrXJXfoKAvoqy+GSXq/owqEgSJBJ4Ba2VGJjgn7bHeCgdy49i
+         zyutMrUzxDGOfggNcW/1N/j9Ay5+SlPIgM7XC1GpTF8WL2ipmX4vEKyLcifRp4Uuli4z
+         eVfhFsJjzNUeV5UBdUqZidWEG/AiRNSZVhyAfeu7CsnDFjTduawBNjxR3KjhHY2cwoCN
+         FujodOE/T3o4O13skDUgITwuavsvnN3I0MMve0+hutJz7e7YzHq2UiBbUAnBPiF7WWbn
+         kQ6LprpxLfTr2n5SvguDwnABri1I8S5bwOyhQR7+jUaxJWHL36qsSHrktbqTEno8mdFX
+         lgSw==
+X-Gm-Message-State: ANoB5plkri6VFpFdSf+QVoZBIA2/8mZMn/GFO8ZJfjnzBYuonaefdtCJ
+        ElTnl/W2tJVVN8F/43Biop8J8pspAR3p
+X-Google-Smtp-Source: AA0mqf5eFCjmFHq1U5v/UF4eA09aSYVlkhiiH3WexuWhItHiwFlIKD6zBohFnRhWYuxWCiW5Ls3fYg==
+X-Received: by 2002:a17:902:c7d1:b0:189:1a24:2865 with SMTP id r17-20020a170902c7d100b001891a242865mr32847709pla.18.1669624370332;
+        Mon, 28 Nov 2022 00:32:50 -0800 (PST)
+Received: from piliu.users.ipa.redhat.com ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id d22-20020a17090ad99600b002036006d65bsm7052905pjv.39.2022.11.28.00.32.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 00:32:49 -0800 (PST)
+Date:   Mon, 28 Nov 2022 16:32:43 +0800
+From:   Pingfan Liu <kernelfans@gmail.com>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     Zqiang <qiang1.zhang@intel.com>, paulmck@kernel.org,
+        joel@joelfernandes.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] srcu: Add detection of boot CPU srcu_data
+ structure's->srcu_cblist
+Message-ID: <Y4RyK4D25IFwWK3P@piliu.users.ipa.redhat.com>
+References: <20221117112050.3942407-1-qiang1.zhang@intel.com>
+ <20221117142025.GE839309@lothringen>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH V5 1/2] dt-bindings: firmware: qcom-scm: Add optional
- interrupt
-To:     Sibi Sankar <quic_sibis@quicinc.com>, andersson@kernel.org
-Cc:     agross@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        konrad.dybcio@somainline.org, robimarko@gmail.com,
-        quic_gurus@quicinc.com, quic_rjendra@quicinc.com
-References: <20221123204615.25358-1-quic_sibis@quicinc.com>
- <20221123204615.25358-2-quic_sibis@quicinc.com>
- <3cda9005-d7a5-56f0-d1d2-fd6c1cb36fc3@linaro.org>
- <7b6ffbb4-80fb-610a-c839-e3bf1668d4ed@quicinc.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <7b6ffbb4-80fb-610a-c839-e3bf1668d4ed@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221117142025.GE839309@lothringen>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/11/2022 06:57, Sibi Sankar wrote:
-
->>
->> Which devices have interrupts?
->>
->> We talked about it here:
->> https://lore.kernel.org/all/2464d90f-64e9-5e3c-404b-10394c3bc302@quicinc.com/
->> and here:
->> https://lore.kernel.org/all/c20edd0d-7613-5683-60e7-54317cac6e0b@linaro.org/
->>
->> But I still don't get which devices support it and which do not.
+On Thu, Nov 17, 2022 at 03:20:25PM +0100, Frederic Weisbecker wrote:
+> On Thu, Nov 17, 2022 at 07:20:50PM +0800, Zqiang wrote:
+> > Before SRCU_SIZE_WAIT_CALL srcu_size_state is reached, the srcu
+> > callback only insert to boot-CPU srcu_data structure's->srcu_cblist
+> > and other CPU srcu_data structure's->srcu_cblist is always empty. so
+> > before SRCU_SIZE_WAIT_CALL is reached, need to correctly check boot-CPU
+> > pend cbs in srcu_might_be_idle().
+> > 
+> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> > ---
+> >  kernel/rcu/srcutree.c | 7 +++++--
+> >  1 file changed, 5 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+> > index 6af031200580..6d9af9901765 100644
+> > --- a/kernel/rcu/srcutree.c
+> > +++ b/kernel/rcu/srcutree.c
+> > @@ -1098,8 +1098,11 @@ static bool srcu_might_be_idle(struct srcu_struct *ssp)
+> >  	unsigned long tlast;
+> >  
+> >  	check_init_srcu_struct(ssp);
+> > -	/* If the local srcu_data structure has callbacks, not idle.  */
+> > -	sdp = raw_cpu_ptr(ssp->sda);
+> > +	/* If the boot CPU or local srcu_data structure has callbacks, not idle.  */
+> > +	if (smp_load_acquire(&ssp->srcu_size_state) < SRCU_SIZE_WAIT_CALL)
+> > +		sdp = per_cpu_ptr(ssp->sda, get_boot_cpu_id());
+> > +	else
+> > +		sdp = raw_cpu_ptr(ssp->sda);
 > 
-> lol, I thought we reached a consensus earlier because of the "ok" and
-> R-b. Like I explained earlier the bootloader would be adding interrupt
-> on the fly, wouldn't such cases cause binding check failure if we list
-> all the devices supporting it? 
+> While at it if someone is interested in documenting/commenting on the meaning of
+> all these SRCU_SIZE_* things, it would be much appreciated!
+> 
 
-What type of failure? I don't get. Is this interrupt valid for SM8250?
-SDM845? MSM8996? and so on? Now you make it valid.
+Due to a conflict understanding to the code, once hesitate to jump in.
+But anyway, just bold to move ahead.
 
-> Also some of the SM8450 devices in the
-> wild would be running firmware not having the feature but I guess
-> eventually most of the them will end up supporting the feature in the
-> end.
+I have send a series "[PATCH 0/3] srcu: shrink the num of
+srcu_size_state", which opens the discussion. (Have Cced you and Zqiang)
 
-That's not what I meant. Your patch describes the case for one variant
-but you are affecting all of them.
+Please have a look.
 
+Thanks,
 
+	Pingfan
 
-Best regards,
-Krzysztof
-
+> Thanks.
+> 
+> >  	spin_lock_irqsave_rcu_node(sdp, flags);
+> >  	if (rcu_segcblist_pend_cbs(&sdp->srcu_cblist)) {
+> >  		spin_unlock_irqrestore_rcu_node(sdp, flags);
+> > -- 
+> > 2.25.1
+> > 
