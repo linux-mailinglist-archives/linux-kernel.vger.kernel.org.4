@@ -2,69 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA6C763AE2A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 17:57:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A2FC63AE2C
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 17:57:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231506AbiK1Q5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 11:57:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
+        id S231690AbiK1Q5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 11:57:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230419AbiK1Q5V (ORCPT
+        with ESMTP id S231558AbiK1Q53 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 11:57:21 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246CA1D323;
-        Mon, 28 Nov 2022 08:57:20 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id j5-20020a05600c410500b003cfa9c0ea76so8843924wmi.3;
-        Mon, 28 Nov 2022 08:57:20 -0800 (PST)
+        Mon, 28 Nov 2022 11:57:29 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE2A20198
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 08:57:29 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id 6so10449678pgm.6
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 08:57:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vew6IID4ljm4heiw9CiVMz5FKmMEPqWRzVvaDisBb5I=;
-        b=UjXq7Ztj+MduzKhQZ8vmeyZv7ih71rSO6vxUrYmW9MkDT1sCOn7RJoDrSa52WVfeBA
-         Kbk0NvqLnOyZhtDjdaVoErpK/1+MHHr5bMduMJr4Gf+FDKrGcMOIMBlR2EHyRN7sVXTP
-         SCBsb+XKi7hlFJ4denlaw7F9pFZDTPLDDkglOAXq82a8GgEn9g/cxSNNRX0HrxX9nkRk
-         LINuZhf8esJdtbYRN8CgSb9lte/EW7cUCP+IJpr0XIDUydpVLBn8suhIoY65PR+uLzYf
-         It4FjjtG/K3n28SlgHqWmXMM1N51Wy1bhfUpFIaTpEep3J87BiQZiXmOBI5mr/deIYBg
-         oO9w==
+        d=ivan-computer.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=N6OhLlFi8ozmHLPRySaIAeogD5ZelvXE92J+b5DNQxc=;
+        b=vgVTjesr+9HZ/5Oz1M7G+xtgXK3Rat5iRcxIfjMIxG7/5h9r4OsUM3/T8+TmRONIMP
+         fizpEZcOikI0v9ixw+cfsc/Ll+C09CeGhVu3PAyNFS+TaYW323zV/w6iSVSKzArJ8F+6
+         XJzOFzseiUEhs06iqPlLpcw3fE5VGJXQ8g/Y0PGyqyqHlyZGjtlzo0IbvXHCTe6lHXX7
+         i6MFOJm49nkyli+RQLpm+x/rcoAE/L8L/rYIkv2QKeAyo01qlsY2N98QoQqCnntGor1P
+         nEboZ5sTJG8oyDfNk3BCC56H8eX3YVtfwIOGOGJjwfKpgwz3vd3aad7nA7JWLXjE5EQK
+         07TA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vew6IID4ljm4heiw9CiVMz5FKmMEPqWRzVvaDisBb5I=;
-        b=s6isi1dpNbgY1gnsXwBM7iHZXuSGTGDp2pWCKl15tqm/wpMsbc9WX2w2tEY+EFc2TJ
-         QWT8JZmmhpKO1058Fa7yNKCz7DIgks3TQNajHOtbKQzHYuW2cufpYZt5GS6UsHrbbH9K
-         2w49MvPQRzhLT+d495YNI2HJlBSF7gipABAUhkLzoSrG6bc3JBJZNR0KV2kpZWOa709H
-         O7fYvhPXlXTb0Ibw/gqrS8uI0CYhYM0CVD3a57aNOEJEVyMgO5BwLChrHyAeV3fRDfwS
-         eRH1rwzbxsu4GxmjtR8weelQ+nZ+DIDkxMWtO61JRfStkMQQOJhMMLG2eQFrzgCQpSJe
-         vxUw==
-X-Gm-Message-State: ANoB5plOYMiXgQ1mjsA9bARKG/yClWQVeBlmNbTLJbMMVcvadVZzv6aV
-        KONzk47rFljgL5lQ3tJqcOg=
-X-Google-Smtp-Source: AA0mqf7z4UvRKndhNUHlnIZ1E1nA42RVLroivn5aMK1KdDrN6XfQphXgJTmiiU4C5EY3fjuJYLMP4w==
-X-Received: by 2002:a05:600c:1d92:b0:3cf:78fc:eda2 with SMTP id p18-20020a05600c1d9200b003cf78fceda2mr24981454wms.47.1669654638691;
-        Mon, 28 Nov 2022 08:57:18 -0800 (PST)
-Received: from localhost.localdomain ([94.73.35.229])
-        by smtp.gmail.com with ESMTPSA id p20-20020a05600c205400b003b476cabf1csm15316847wmg.26.2022.11.28.08.57.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 08:57:18 -0800 (PST)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     jikos@kernel.org
-Cc:     benjamin.tissoires@redhat.com, rydberg@bitmath.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
-        Akito <the@akito.ooo>
-Subject: [PATCH] HID: multitouch: fix Asus ExpertBook P2 P2451FA trackpoint
-Date:   Mon, 28 Nov 2022 17:57:05 +0100
-Message-Id: <20221128165705.7008-1-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        bh=N6OhLlFi8ozmHLPRySaIAeogD5ZelvXE92J+b5DNQxc=;
+        b=H37h7J/xIbW1GIe76eFPlfQciKsZ5KZvl8noY1XFCN7mfCK/bLTLQspSK1xS6v8j3x
+         mijbpEIgQgKDD0oCNL7r5IiOXik+Nrf4M2741vdv5fZMWWEGqT8BfA6vvnKB7T03NDbR
+         i6C+I0UIOdqdFoLaoDYo2kwLOZZUeVvQRbT3CGNGR2RxPFQyzZu8ko+Ne9VeOgFmyX9R
+         RW+hykmeC3U+5lNDl3r+lPP0c0dzFX1A/G/0ciP3Ls1/vt+1mZ8A7cCS2G/alj4sGMdB
+         7NDPcVHHly9IDz9YcqGURZ7JFSmJxVtTKjdd5oV6G3toqy8Pwcb1eV1u9jWjcDVZT0Jf
+         aQvw==
+X-Gm-Message-State: ANoB5pnZYHSIBVdTqyzIvd5PmOTLs1UJq2JGaTL0rTHZF7jXL1mHyouh
+        OANmmFTk10nydG8zQukhhIJ/6kDVBvt3EI6mEfrb2w==
+X-Google-Smtp-Source: AA0mqf7V2DvX+F9hrF3w6CNxnkNp4Uo8+XLmUBQKNzav0AzysdMDnA0Vcj+QDwW6MvuhPFq8f0k7DTTtn42iQuZgzZ4=
+X-Received: by 2002:a63:554a:0:b0:44c:bfe:9b1c with SMTP id
+ f10-20020a63554a000000b0044c0bfe9b1cmr34796043pgm.103.1669654648480; Mon, 28
+ Nov 2022 08:57:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <CAGjnhw_2oSWfMjNPZMneJXxdvT+qoqhKV8787NYuHnOauhSVyw@mail.gmail.com>
+ <Y4SGv3W+TtAiizwi@salvia>
+In-Reply-To: <Y4SGv3W+TtAiizwi@salvia>
+From:   Ivan Babrou <ivan@ivan.computer>
+Date:   Mon, 28 Nov 2022 08:57:17 -0800
+Message-ID: <CAGjnhw_tUOAnsYDT-pmpT4Ev5O_SkgCNiS4Tg-KCZi+wTgimCg@mail.gmail.com>
+Subject: Re: Unused variable 'mark' in v6.1-rc7
+To:     Pablo Neira Ayuso <pablo@netfilter.org>
+Cc:     Daniel Xu <dxu@dxuuu.xyz>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,42 +67,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The HID descriptor of this device contains two mouse collections, one
-for mouse emulation and the other for the trackpoint.
+On Mon, Nov 28, 2022 at 2:00 AM Pablo Neira Ayuso <pablo@netfilter.org> wrote:
+>
+> Hi,
+>
+> On Sun, Nov 27, 2022 at 05:30:47PM -0800, Ivan Babrou wrote:
+> > There's 52d1aa8b8249 in v6.1-rc7:
+> >
+> > * netfilter: conntrack: Fix data-races around ct mark
+> >
+> > It triggers an error:
+> >
+> > #19 355.8 /build/linux-source/net/netfilter/nf_conntrack_netlink.c: In
+> > function '__ctnetlink_glue_build':
+> > #19 355.8 /build/linux-source/net/netfilter/nf_conntrack_netlink.c:2674:13:
+> > error: unused variable 'mark' [-Werror=unused-variable]
+> > #19 355.8  2674 |         u32 mark;
+> > #19 355.8       |             ^~~~
+> > #19 355.8 cc1: all warnings being treated as errors
+> >
+> > If CONFIG_NF_CONNTRACK_MARK is not enabled, as mark is declared
+> > unconditionally, but used under ifdef:
+> >
+> >  #ifdef CONFIG_NF_CONNTRACK_MARK
+> > -       if ((events & (1 << IPCT_MARK) || ct->mark)
+> > -           && ctnetlink_dump_mark(skb, ct) < 0)
+> > +       mark = READ_ONCE(ct->mark);
+> > +       if ((events & (1 << IPCT_MARK) || mark) &&
+> > +           ctnetlink_dump_mark(skb, mark) < 0)
+> >                 goto nla_put_failure;
+> >  #endif
+> >
+> > To have NF_CONNTRACK_MARK one needs NETFILTER_ADVANCED:
+> >
+> > config NF_CONNTRACK_MARK
+> >         bool  'Connection mark tracking support'
+> >         depends on NETFILTER_ADVANCED
+> >
+> > It's supposed to be enabled by default:
+> >
+> > config NETFILTER_ADVANCED
+> >         bool "Advanced netfilter configuration"
+> >         depends on NETFILTER
+> >         default y
+> >
+> > But it's not in defconfig (it's missing from arm64 completely):
+> >
+> > $ rg NETFILTER_ADVANCED arch/x86/configs/x86_64_defconfig
+> > 93:# CONFIG_NETFILTER_ADVANCED is not set
+> >
+> > I think the solution is to enclose mark definition into ifdef as well
+> > and I'm happy to send a patch if you agree and would like me to.
+>
+> Thanks for reporting and offering a patch:
+>
+> Could you give a try to this one? I'll be glad to get a Tested-by:
+> tag if this is correct to you.
+>
+> https://patchwork.ozlabs.org/project/netfilter-devel/patch/20221128095853.10589-1-pablo@netfilter.org/
+>
+> Thanks.
 
-Both collections get merged and, because the first one defines X and Y,
-the movemenent events reported by the trackpoint collection are
-ignored.
-
-Set the MT_CLS_WIN_8_FORCE_MULTI_INPUT class for this device to be able
-to receive its reports.
-
-This fix is similar to/based on commit 40d5bb87377a ("HID: multitouch:
-enable multi-input as a quirk for some devices").
-
-Link: https://gitlab.freedesktop.org/libinput/libinput/-/issues/825
-Reported-by: Akito <the@akito.ooo>
-Tested-by: Akito <the@akito.ooo>
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
----
- drivers/hid/hid-multitouch.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
-index 91a4d3fc30e0..372cbdd223e0 100644
---- a/drivers/hid/hid-multitouch.c
-+++ b/drivers/hid/hid-multitouch.c
-@@ -1967,6 +1967,10 @@ static const struct hid_device_id mt_devices[] = {
- 		HID_DEVICE(BUS_I2C, HID_GROUP_MULTITOUCH_WIN_8,
- 			USB_VENDOR_ID_ELAN, 0x313a) },
- 
-+	{ .driver_data = MT_CLS_WIN_8_FORCE_MULTI_INPUT,
-+		HID_DEVICE(BUS_I2C, HID_GROUP_MULTITOUCH_WIN_8,
-+			USB_VENDOR_ID_ELAN, 0x3148) },
-+
- 	/* Elitegroup panel */
- 	{ .driver_data = MT_CLS_SERIAL,
- 		MT_USB_DEVICE(USB_VENDOR_ID_ELITEGROUP,
--- 
-2.38.1
-
+LGTM, it builds. Tested-by: Ivan Babrou <ivan@ivan.computer>
