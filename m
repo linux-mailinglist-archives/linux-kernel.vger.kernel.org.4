@@ -2,134 +2,426 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB17063A822
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 13:23:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAFD863A830
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 13:24:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbiK1MW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 07:22:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32918 "EHLO
+        id S231300AbiK1MX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 07:23:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230520AbiK1MWb (ORCPT
+        with ESMTP id S230321AbiK1MX2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 07:22:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904A5DFE8;
-        Mon, 28 Nov 2022 04:20:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3A5CFB80D84;
-        Mon, 28 Nov 2022 12:20:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42ECBC433C1;
-        Mon, 28 Nov 2022 12:20:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669638034;
-        bh=hwHxJwIUXRDcNgQfpP18T9DGPQgJ8ElV6U1yC2ecy1E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YRSu7lJaA0D7yuu98WzjVmoyeD+bzYRaqqkKWoM5K7ty7v/Bgs6+sTZYQjPKpFF3/
-         mOECZOqRWaioKrgZe5qOpyiDZ0AyjCYukBgDmEuh3W5cnX0fBK0vcB4nIOpDEbUssH
-         R6JooCa0PvTyW6fWLlCdtlXw1Ar45JoRIKmcbVOW6h7Y0s34dRalpQWbVBDdZo1SCr
-         8jHjQ2rVwlvGOYQtld90wCKjnau3Bm+rhewLjyGN1sdJHzCj0mjhg+dqFfzlyOumEQ
-         AsqsknUj9+imZeI+LXEr1wDUtwJdYUZlQlDe6lDCWv1F27PVBiWmpvNAR5CLT0z2+I
-         mTmLwiDzSAuKA==
-Date:   Mon, 28 Nov 2022 17:50:18 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Asutosh Das <quic_asutoshd@quicinc.com>
-Cc:     quic_cang@quicinc.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, quic_nguyenb@quicinc.com,
-        quic_xiaosenh@quicinc.com, stanley.chu@mediatek.com,
-        eddie.huang@mediatek.com, daejun7.park@samsung.com,
-        bvanassche@acm.org, avri.altman@wdc.com, beanhuo@micron.com,
-        linux-arm-msm@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Jinyoung Choi <j-young.choi@samsung.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 01/16] ufs: core: Optimize duplicate code to read
- extended feature
-Message-ID: <20221128122018.GA62721@thinkpad>
-References: <cover.1669176158.git.quic_asutoshd@quicinc.com>
- <b95fdf1a9b7d716049e286f84b94513dc30527ed.1669176158.git.quic_asutoshd@quicinc.com>
+        Mon, 28 Nov 2022 07:23:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99423FC6
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 04:20:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669638028;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6tXWdQlSCvs5GEG3n43IhCcq2+q+UWI++/8uktdd5Ew=;
+        b=adf63+gD641fdLlfp/nJSybAiNGrDd4f0+5NRgKSlgyQ4Fyn54qycHdpSm3qizqATBT4LQ
+        T9xEI/JyKSV8CldYMK/pFuzA6UB70Ge+QlVuanO6Gf8HhFuNgAV3QIfJiD4On5seT1uFZA
+        be9YayYqXffuptkrQFyuYKV6tWf76X0=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-339-3pyVnAlAOUuhzpaaih4Lpw-1; Mon, 28 Nov 2022 07:20:27 -0500
+X-MC-Unique: 3pyVnAlAOUuhzpaaih4Lpw-1
+Received: by mail-wm1-f72.google.com with SMTP id z15-20020a1c4c0f000000b003cf6f80007cso3639537wmf.3
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 04:20:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6tXWdQlSCvs5GEG3n43IhCcq2+q+UWI++/8uktdd5Ew=;
+        b=15HD7/ETKWtNV6MkiPmIMK1KDrHm0PgTGCK25KE3tXiBqLpnOMnwkypxhjAwdAQssY
+         Rndp6JiRwlvqroucXVJm0/zoWqqoz+UlqtePVBQZqS8iL31XA/qusR6UZNYViLjrM7V5
+         os8QKE0/D0zGNyvj/Un49Se+894Uyw12+joPv56PmQDcMxN+PmG5zbAyCuDIueBwa/F+
+         fic58a86XC6WHrEMG7RdAQhkjfF1t/f0bQ2Xr9LjTDtYd8BUfanbdH2TCMqekMcnh32v
+         AhgfFLHdpVbDoWwBISoZppj9zerZdm1iM9wuUHepIwDxYfLGP9hSxHggdAKW1W6uT9IJ
+         /G0g==
+X-Gm-Message-State: ANoB5pkJn4qt47+lKnQAzIqXKD2lVU/OkkV0VrTSXYR6UQNIudnxxPlf
+        CpJyzLMaR8PEK5YpJN4gLUfcdlIYFwboGvFfmRl5Qcgmwa89VL8TlwxBU2GZ/MNSaOiljsaPDk2
+        6hSTMc5NghJU001XgK7YFELbQ
+X-Received: by 2002:a1c:f006:0:b0:3cf:ecd8:330d with SMTP id a6-20020a1cf006000000b003cfecd8330dmr27105856wmb.130.1669638025029;
+        Mon, 28 Nov 2022 04:20:25 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4OJMaInAcTX0ETyey6xuzrfYOIltQnbUiSJkqwrL8S772x5RbEGjrMN/iJduiFyT3xvO2zMg==
+X-Received: by 2002:a1c:f006:0:b0:3cf:ecd8:330d with SMTP id a6-20020a1cf006000000b003cfecd8330dmr27105836wmb.130.1669638024714;
+        Mon, 28 Nov 2022 04:20:24 -0800 (PST)
+Received: from redhat.com ([2.52.149.178])
+        by smtp.gmail.com with ESMTPSA id f2-20020a1c6a02000000b003b4868eb71bsm18244111wmc.25.2022.11.28.04.20.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 04:20:24 -0800 (PST)
+Date:   Mon, 28 Nov 2022 07:20:20 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     "Longpeng (Mike, Cloud Infrastructure Service Product Dept.)" 
+        <longpeng2@huawei.com>
+Cc:     Jason Wang <jasowang@redhat.com>, stefanha@redhat.com,
+        sgarzare@redhat.com, eperezma@redhat.com, cohuck@redhat.com,
+        arei.gonglei@huawei.com, yechuan@huawei.com,
+        huangzhichao@huawei.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] vdpasim: support doorbell mapping
+Message-ID: <20221128071917-mutt-send-email-mst@kernel.org>
+References: <20221128025558.2152-1-longpeng2@huawei.com>
+ <CACGkMEsWoM1LKkPWPgDALssjkk4UXxfhYm3_aCFktNnpXtWVjQ@mail.gmail.com>
+ <53edc14a-74bb-f9c7-06bd-7ea1047fe613@huawei.com>
+ <20221128051555-mutt-send-email-mst@kernel.org>
+ <28c1ae52-38ff-42ce-4331-11f7aa040296@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <b95fdf1a9b7d716049e286f84b94513dc30527ed.1669176158.git.quic_asutoshd@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <28c1ae52-38ff-42ce-4331-11f7aa040296@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 08:10:14PM -0800, Asutosh Das wrote:
-> The code to parse the extended feature is duplicated twice
-> in the ufs core. Replace the duplicated code with a
-> function.
+On Mon, Nov 28, 2022 at 07:59:33PM +0800, Longpeng (Mike, Cloud Infrastructure Service Product Dept.) wrote:
 > 
-> Signed-off-by: Asutosh Das <quic_asutoshd@quicinc.com>
-
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
-
-Thanks,
-Mani
-
-> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-> ---
->  drivers/ufs/core/ufshcd.c | 21 +++++++++++++--------
->  1 file changed, 13 insertions(+), 8 deletions(-)
 > 
-> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-> index 768cb49..c9d7b78 100644
-> --- a/drivers/ufs/core/ufshcd.c
-> +++ b/drivers/ufs/core/ufshcd.c
-> @@ -215,6 +215,17 @@ ufs_get_desired_pm_lvl_for_dev_link_state(enum ufs_dev_pwr_mode dev_state,
->  	return UFS_PM_LVL_0;
->  }
->  
-> +static unsigned int ufs_get_ext_ufs_feature(struct ufs_hba *hba,
-> +					    const u8 *desc_buf)
-> +{
-> +	if (hba->desc_size[QUERY_DESC_IDN_DEVICE] <
-> +	    DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP + 4)
-> +		return 0;
-> +
-> +	return get_unaligned_be32(desc_buf +
-> +				  DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP);
-> +}
-> +
->  static const struct ufs_dev_quirk ufs_fixups[] = {
->  	/* UFS cards deviations table */
->  	{ .wmanufacturerid = UFS_VENDOR_MICRON,
-> @@ -7584,13 +7595,7 @@ static void ufshcd_wb_probe(struct ufs_hba *hba, const u8 *desc_buf)
->  	     (hba->dev_quirks & UFS_DEVICE_QUIRK_SUPPORT_EXTENDED_FEATURES)))
->  		goto wb_disabled;
->  
-> -	if (hba->desc_size[QUERY_DESC_IDN_DEVICE] <
-> -	    DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP + 4)
-> -		goto wb_disabled;
-> -
-> -	ext_ufs_feature = get_unaligned_be32(desc_buf +
-> -					DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP);
-> -
-> +	ext_ufs_feature = ufs_get_ext_ufs_feature(hba, desc_buf);
->  	if (!(ext_ufs_feature & UFS_DEV_WRITE_BOOSTER_SUP))
->  		goto wb_disabled;
->  
-> @@ -7644,7 +7649,7 @@ static void ufshcd_temp_notif_probe(struct ufs_hba *hba, const u8 *desc_buf)
->  	if (!(hba->caps & UFSHCD_CAP_TEMP_NOTIF) || dev_info->wspecversion < 0x300)
->  		return;
->  
-> -	ext_ufs_feature = get_unaligned_be32(desc_buf + DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP);
-> +	ext_ufs_feature = ufs_get_ext_ufs_feature(hba, desc_buf);
->  
->  	if (ext_ufs_feature & UFS_DEV_LOW_TEMP_NOTIF)
->  		mask |= MASK_EE_TOO_LOW_TEMP;
-> -- 
-> 2.7.4
-> 
+> 在 2022/11/28 18:19, Michael S. Tsirkin 写道:
+> > On Mon, Nov 28, 2022 at 04:19:30PM +0800, Longpeng (Mike, Cloud Infrastructure Service Product Dept.) wrote:
+> > > 
+> > > 
+> > > 在 2022/11/28 12:05, Jason Wang 写道:
+> > > > On Mon, Nov 28, 2022 at 10:56 AM Longpeng(Mike) <longpeng2@huawei.com> wrote:
+> > > > > 
+> > > > > From: Longpeng <longpeng2@huawei.com>
+> > > > > 
+> > > > > Support doorbell mapping for vdpasim devices, then we can test the notify
+> > > > > passthrough feature even if there's no real hardware on hand.
+> > > > 
+> > > > You can use vp_vdpa in L1 plus page_ver_vq in L0 to test it in L2.
+> > > > That is how I test it.
+> > > > 
+> > > Yes, using nested virtualization can work, but it's hard to deploy in my
+> > > working environment for some reasons, so I decided to emulate this
+> > > capability in vdpasim, it's much easier.
+> > > 
+> > > > > 
+> > > > > Allocates a dummy page which used to emulate the notify page of the device.
+> > > > > All values written to this page would be ignored,  a periodic work will
+> > > > > check whether there're requests that need to process.
+> > > > 
+> > > > This seems tricky, it means the device is working even if there's no
+> > > 
+> > > Right. It just try to make the vdpasim device work properly, but the vdpasim
+> > > device is only used for testing, so maybe the tricky emulation is
+> > > acceptable?
+> > 
+> > Maybe. You can try enabling VIRTIO_F_NOTIFICATION_DATA and then
+> > looking at the data written to figure out whether
+> > you need to poll the vq.
+> > 
+> We can try after the kernel supports the VIRTIO_F_NOTIFICATION_DATA feature,
+> while there is still a long way to go.
 
--- 
-மணிவண்ணன் சதாசிவம்
+That would be up to you to implement ;) It's probably 10-20 lines of
+code all in all.
+
+> > 
+> > > > kick. If we really want to do, we should try to use page fault handler
+> > > > (probably by extending the config ops), but I'm not sure it's worth to
+> > > > bother (or if we can find a use case for no simulator devices).
+> > > > 
+> > > This need to modify the framework, it seems unworthy.
+> > > 
+> > > > > 
+> > > > > This cap is disabled as default, users can enable it as follow:
+> > > > >     modprobe vdpa_sim notify_passthrough=true
+> > > > > 
+> > > > > Signed-off-by: Longpeng <longpeng2@huawei.com>
+> > > > > ---
+> > > > >    drivers/vdpa/vdpa_sim/vdpa_sim.c     | 71 ++++++++++++++++++++++++++--
+> > > > >    drivers/vdpa/vdpa_sim/vdpa_sim.h     |  5 +-
+> > > > >    drivers/vdpa/vdpa_sim/vdpa_sim_blk.c |  5 +-
+> > > > >    drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  4 +-
+> > > > >    4 files changed, 76 insertions(+), 9 deletions(-)
+> > > > > 
+> > > > > diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> > > > > index 7438a89ce939..5c215b56b78b 100644
+> > > > > --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> > > > > +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> > > > > @@ -14,6 +14,7 @@
+> > > > >    #include <linux/slab.h>
+> > > > >    #include <linux/sched.h>
+> > > > >    #include <linux/dma-map-ops.h>
+> > > > > +#include <asm/set_memory.h>
+> > > > >    #include <linux/vringh.h>
+> > > > >    #include <linux/vdpa.h>
+> > > > >    #include <linux/vhost_iotlb.h>
+> > > > > @@ -36,9 +37,15 @@ module_param(max_iotlb_entries, int, 0444);
+> > > > >    MODULE_PARM_DESC(max_iotlb_entries,
+> > > > >                    "Maximum number of iotlb entries for each address space. 0 means unlimited. (default: 2048)");
+> > > > > 
+> > > > > +static bool notify_passthrough;
+> > > > > +module_param(notify_passthrough, bool, 0444);
+> > > > > +MODULE_PARM_DESC(notify_passthrough,
+> > > > > +                "Enable vq notify(doorbell) area mapping. (default: false)");
+> > > > > +
+> > > > >    #define VDPASIM_QUEUE_ALIGN PAGE_SIZE
+> > > > >    #define VDPASIM_QUEUE_MAX 256
+> > > > >    #define VDPASIM_VENDOR_ID 0
+> > > > > +#define VDPASIM_VRING_POLL_PERIOD 100 /* ms */
+> > > > > 
+> > > > >    static struct vdpasim *vdpa_to_sim(struct vdpa_device *vdpa)
+> > > > >    {
+> > > > > @@ -276,7 +283,7 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
+> > > > >           }
+> > > > > 
+> > > > >           vdpasim->dev_attr = *dev_attr;
+> > > > > -       INIT_WORK(&vdpasim->work, dev_attr->work_fn);
+> > > > > +       INIT_DELAYED_WORK(&vdpasim->vring_work, dev_attr->work_fn);
+> > > > >           spin_lock_init(&vdpasim->lock);
+> > > > >           spin_lock_init(&vdpasim->iommu_lock);
+> > > > > 
+> > > > > @@ -287,6 +294,15 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
+> > > > >           set_dma_ops(dev, &vdpasim_dma_ops);
+> > > > >           vdpasim->vdpa.mdev = dev_attr->mgmt_dev;
+> > > > > 
+> > > > > +       if (notify_passthrough) {
+> > > > > +               vdpasim->notify = __get_free_page(GFP_KERNEL | __GFP_ZERO);
+> > > > > +               if (!vdpasim->notify)
+> > > > > +                       goto err_iommu;
+> > > > > +#ifdef CONFIG_X86
+> > > > > +               set_memory_uc(vdpasim->notify, 1);
+> > > > > +#endif
+> > > > 
+> > > > What's the reason for using uc memory?
+> > > > 
+> > > The vma->vm_page_prot of notify mapping is pgprot_noncached (see
+> > > vhost_vdpa_fault) but the vdpasim->notify is WB, so we should set its
+> > > memtype to UC here and set it back to WB when releasing the device.
+> > 
+> > You never look at this memory though. Why does it matter whether
+> > it's UC or WB?
+> > 
+> 
+> The warning in trace_pfn_remap() would be triggered.
+> 
+> For example:
+> 
+> x86/PAT: CPU 16/KVM:17819 map pfn RAM range req uncached-minus for [mem
+> 0x5151f3000-0x5151f3fff], got write-back
+> 
+> 
+> > > > > +       }
+> > > > > +
+> > > > >           vdpasim->config = kzalloc(dev_attr->config_size, GFP_KERNEL);
+> > > > >           if (!vdpasim->config)
+> > > > >                   goto err_iommu;
+> > > > > @@ -357,8 +373,11 @@ static void vdpasim_kick_vq(struct vdpa_device *vdpa, u16 idx)
+> > > > >           struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+> > > > >           struct vdpasim_virtqueue *vq = &vdpasim->vqs[idx];
+> > > > > 
+> > > > > +       if (notify_passthrough)
+> > > > > +               return;
+> > > > 
+> > > > So we should keep the two paths to be used at the same time. Userspace
+> > > > can choose to not map doorbells?
+> > > > 
+> > > It can work even if the userspace does not to map doorbells (e.g start
+> > > without page-per-vq=on), because the device will periodic check its vqs.
+> > > 
+> > > > Thanks
+> > > > 
+> > > > > +
+> > > > >           if (vq->ready)
+> > > > > -               schedule_work(&vdpasim->work);
+> > > > > +               schedule_work(&vdpasim->vring_work.work);
+> > > > >    }
+> > > > > 
+> > > > >    static void vdpasim_set_vq_cb(struct vdpa_device *vdpa, u16 idx,
+> > > > > @@ -495,6 +514,18 @@ static u8 vdpasim_get_status(struct vdpa_device *vdpa)
+> > > > >           return status;
+> > > > >    }
+> > > > > 
+> > > > > +static void vdpasim_set_vring_work(struct vdpasim *vdpasim, bool start)
+> > > > > +{
+> > > > > +       if (!notify_passthrough)
+> > > > > +               return;
+> > > > > +
+> > > > > +       if (start)
+> > > > > +               schedule_delayed_work(&vdpasim->vring_work,
+> > > > > +                               msecs_to_jiffies(VDPASIM_VRING_POLL_PERIOD));
+> > > > > +       else
+> > > > > +               cancel_delayed_work_sync(&vdpasim->vring_work);
+> > > > > +}
+> > > > > +
+> > > > >    static void vdpasim_set_status(struct vdpa_device *vdpa, u8 status)
+> > > > >    {
+> > > > >           struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+> > > > > @@ -502,12 +533,16 @@ static void vdpasim_set_status(struct vdpa_device *vdpa, u8 status)
+> > > > >           spin_lock(&vdpasim->lock);
+> > > > >           vdpasim->status = status;
+> > > > >           spin_unlock(&vdpasim->lock);
+> > > > > +
+> > > > > +       vdpasim_set_vring_work(vdpasim, status & VIRTIO_CONFIG_S_DRIVER_OK);
+> > > > >    }
+> > > > > 
+> > > > >    static int vdpasim_reset(struct vdpa_device *vdpa, bool clear)
+> > > > >    {
+> > > > >           struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+> > > > > 
+> > > > > +       vdpasim_set_vring_work(vdpasim, false);
+> > > > > +
+> > > > >           spin_lock(&vdpasim->lock);
+> > > > >           vdpasim->status = 0;
+> > > > >           vdpasim_do_reset(vdpasim);
+> > > > > @@ -672,12 +707,24 @@ static int vdpasim_dma_unmap(struct vdpa_device *vdpa, unsigned int asid,
+> > > > >           return 0;
+> > > > >    }
+> > > > > 
+> > > > > +static struct vdpa_notification_area
+> > > > > +vdpasim_get_vq_notification(struct vdpa_device *vdpa, u16 qid)
+> > > > > +{
+> > > > > +       struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+> > > > > +       struct vdpa_notification_area notify;
+> > > > > +
+> > > > > +       notify.addr = virt_to_phys((void *)vdpasim->notify);
+> > > > > +       notify.size = PAGE_SIZE;
+> > > > > +
+> > > > > +       return notify;
+> > > > > +}
+> > > > > +
+> > > > >    static void vdpasim_free(struct vdpa_device *vdpa)
+> > > > >    {
+> > > > >           struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+> > > > >           int i;
+> > > > > 
+> > > > > -       cancel_work_sync(&vdpasim->work);
+> > > > > +       cancel_delayed_work_sync(&vdpasim->vring_work);
+> > > > > 
+> > > > >           for (i = 0; i < vdpasim->dev_attr.nvqs; i++) {
+> > > > >                   vringh_kiov_cleanup(&vdpasim->vqs[i].out_iov);
+> > > > > @@ -693,7 +740,23 @@ static void vdpasim_free(struct vdpa_device *vdpa)
+> > > > >           vhost_iotlb_free(vdpasim->iommu);
+> > > > >           kfree(vdpasim->vqs);
+> > > > >           kfree(vdpasim->config);
+> > > > > +       if (vdpasim->notify) {
+> > > > > +#ifdef CONFIG_X86
+> > > > > +               set_memory_wb(vdpasim->notify, 1);
+> > > > > +#endif
+> > > > > +               free_page(vdpasim->notify);
+> > > > > +       }
+> > > > > +}
+> > > > > +
+> > > > > +void vdpasim_schedule_work(struct vdpasim *vdpasim, bool sched_now)
+> > > > > +{
+> > > > > +       if (sched_now)
+> > > > > +               schedule_work(&vdpasim->vring_work.work);
+> > > > > +       else if (notify_passthrough)
+> > > > > +               schedule_delayed_work(&vdpasim->vring_work,
+> > > > > +                                     msecs_to_jiffies(VDPASIM_VRING_POLL_PERIOD));
+> > > > >    }
+> > > > > +EXPORT_SYMBOL_GPL(vdpasim_schedule_work);
+> > > > > 
+> > > > >    static const struct vdpa_config_ops vdpasim_config_ops = {
+> > > > >           .set_vq_address         = vdpasim_set_vq_address,
+> > > > > @@ -704,6 +767,7 @@ static const struct vdpa_config_ops vdpasim_config_ops = {
+> > > > >           .get_vq_ready           = vdpasim_get_vq_ready,
+> > > > >           .set_vq_state           = vdpasim_set_vq_state,
+> > > > >           .get_vq_state           = vdpasim_get_vq_state,
+> > > > > +       .get_vq_notification    = vdpasim_get_vq_notification,
+> > > > >           .get_vq_align           = vdpasim_get_vq_align,
+> > > > >           .get_vq_group           = vdpasim_get_vq_group,
+> > > > >           .get_device_features    = vdpasim_get_device_features,
+> > > > > @@ -737,6 +801,7 @@ static const struct vdpa_config_ops vdpasim_batch_config_ops = {
+> > > > >           .get_vq_ready           = vdpasim_get_vq_ready,
+> > > > >           .set_vq_state           = vdpasim_set_vq_state,
+> > > > >           .get_vq_state           = vdpasim_get_vq_state,
+> > > > > +       .get_vq_notification    = vdpasim_get_vq_notification,
+> > > > >           .get_vq_align           = vdpasim_get_vq_align,
+> > > > >           .get_vq_group           = vdpasim_get_vq_group,
+> > > > >           .get_device_features    = vdpasim_get_device_features,
+> > > > > diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+> > > > > index 0e78737dcc16..da0866834918 100644
+> > > > > --- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
+> > > > > +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+> > > > > @@ -53,7 +53,7 @@ struct vdpasim_dev_attr {
+> > > > >    struct vdpasim {
+> > > > >           struct vdpa_device vdpa;
+> > > > >           struct vdpasim_virtqueue *vqs;
+> > > > > -       struct work_struct work;
+> > > > > +       struct delayed_work vring_work;
+> > > > >           struct vdpasim_dev_attr dev_attr;
+> > > > >           /* spinlock to synchronize virtqueue state */
+> > > > >           spinlock_t lock;
+> > > > > @@ -69,10 +69,13 @@ struct vdpasim {
+> > > > >           bool running;
+> > > > >           /* spinlock to synchronize iommu table */
+> > > > >           spinlock_t iommu_lock;
+> > > > > +       /* dummy notify page */
+> > > > > +       unsigned long notify;
+> > > > >    };
+> > > > > 
+> > > > >    struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *attr,
+> > > > >                                  const struct vdpa_dev_set_config *config);
+> > > > > +void vdpasim_schedule_work(struct vdpasim *vdpasim, bool sched_now);
+> > > > > 
+> > > > >    /* TODO: cross-endian support */
+> > > > >    static inline bool vdpasim_is_little_endian(struct vdpasim *vdpasim)
+> > > > > diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+> > > > > index c6db1a1baf76..8a640ea82284 100644
+> > > > > --- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+> > > > > +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
+> > > > > @@ -288,7 +288,7 @@ static bool vdpasim_blk_handle_req(struct vdpasim *vdpasim,
+> > > > > 
+> > > > >    static void vdpasim_blk_work(struct work_struct *work)
+> > > > >    {
+> > > > > -       struct vdpasim *vdpasim = container_of(work, struct vdpasim, work);
+> > > > > +       struct vdpasim *vdpasim = container_of(work, struct vdpasim, vring_work.work);
+> > > > >           bool reschedule = false;
+> > > > >           int i;
+> > > > > 
+> > > > > @@ -325,8 +325,7 @@ static void vdpasim_blk_work(struct work_struct *work)
+> > > > >    out:
+> > > > >           spin_unlock(&vdpasim->lock);
+> > > > > 
+> > > > > -       if (reschedule)
+> > > > > -               schedule_work(&vdpasim->work);
+> > > > > +       vdpasim_schedule_work(vdpasim, reschedule);
+> > > > >    }
+> > > > > 
+> > > > >    static void vdpasim_blk_get_config(struct vdpasim *vdpasim, void *config)
+> > > > > diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+> > > > > index c3cb225ea469..8b998952384b 100644
+> > > > > --- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+> > > > > +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
+> > > > > @@ -145,7 +145,7 @@ static void vdpasim_handle_cvq(struct vdpasim *vdpasim)
+> > > > > 
+> > > > >    static void vdpasim_net_work(struct work_struct *work)
+> > > > >    {
+> > > > > -       struct vdpasim *vdpasim = container_of(work, struct vdpasim, work);
+> > > > > +       struct vdpasim *vdpasim = container_of(work, struct vdpasim, vring_work.work);
+> > > > >           struct vdpasim_virtqueue *txq = &vdpasim->vqs[1];
+> > > > >           struct vdpasim_virtqueue *rxq = &vdpasim->vqs[0];
+> > > > >           ssize_t read, write;
+> > > > > @@ -196,7 +196,7 @@ static void vdpasim_net_work(struct work_struct *work)
+> > > > >                   vdpasim_net_complete(rxq, write);
+> > > > > 
+> > > > >                   if (++pkts > 4) {
+> > > > > -                       schedule_work(&vdpasim->work);
+> > > > > +                       vdpasim_schedule_work(vdpasim, true);
+> > > > >                           goto out;
+> > > > >                   }
+> > > > >           }
+> > > > > --
+> > > > > 2.23.0
+> > > > > 
+> > > > 
+> > > > .
+> > 
+> > .
+
