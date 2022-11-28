@@ -2,440 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A54F63ABA7
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:56:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B884263ABAB
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 15:56:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232167AbiK1O4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 09:56:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45822 "EHLO
+        id S231847AbiK1O4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 09:56:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232190AbiK1O4O (ORCPT
+        with ESMTP id S231359AbiK1O4h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 09:56:14 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1961F9DA
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 06:56:12 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id d3so13454951ljl.1
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 06:56:12 -0800 (PST)
+        Mon, 28 Nov 2022 09:56:37 -0500
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2127.outbound.protection.outlook.com [40.107.104.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491401F9DA;
+        Mon, 28 Nov 2022 06:56:34 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kIjGhtCYBF0ZOQKUUA3FmKUDXrlyXC8EL8Mz8Zq05qy583MvrnOl5xVugQkMGoZRjHDYLSHtG7ATMidfVpmh5pwJhJAIWcwdR0qnntAmsCYA3ofEgnT9QtDMUJ0mvm9h+2Yekk4FlqNkfrjxYHugcEjD1F0bEvH5F/ivENyuTtWOcTst4L08Cpwh7gta8kPLXj3yVz09NoqgFxpixKWSMo4dy6SUNI0KhInzy/19EAoQLfkRppWo2KxA8mF8PPa/hqmkKrgSshxqgoemayq5sPuXkpj2NjBfWeVyUi9ibAqAvLRmru+a4J6BH3u122KlCMq0Hnn7upM4+cuaTs4EYg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fLZ6DNP1ktx/hPYmzo5z4YhkL6IZRM49lF+iYUWdR7s=;
+ b=NjcUOxRfwKH+lANPn2/f42VqTDLThy2rT09UJj2DA/kkOd8VYt3OXcw74N/l2HmEMprzByG0+84uJNSpproUrpwVnxpxZ1nbYvK/55D02KpIvlt8g45SXAAifYAOp9bpfA/zwgRJovb6r9ypugrJuikqXgetxYYk6/pD0owOJde9PFekqi/4pGt5ncY1wLrP3MLSoFz+s4VZn7OALoiARRFby69Uxcfvm0+OUKexeG2mYzPeQcoDE6Z5aqaA3lIUK3GAE/fxm0qiwFlyM7Th1x5io3PnDTVpKAR10jhWaoUVb5j0sDt15WOMAs/6EBuHG0+bC1JpkI2X03i+JaQ8Cg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 217.111.95.7) smtp.rcpttodomain=microchip.com smtp.mailfrom=arri.de;
+ dmarc=none action=none header.from=arri.de; dkim=none (message not signed);
+ arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FOT7o7coi4TAoYXwjs3RFGYC2whGqK5WY9tHXZIG/1U=;
-        b=yod1UQvqmzZ2TIMIRH2ba8qILPeb5EkucSvrGKXtDxb2SED5RDSZ3McHL31zJ1SZGh
-         IKiLUpm9pxmN8TJOymI9j+szMpeBYi/ZVnpcqPfkc3fJ1hRK0lfYztqg2JOtpRNdvYO4
-         csdle3fz04ml3iZxBqYvKEZwuOcPJ9LZ03gQlHzIFPmul1gKPjrbLO86fuk+vDDcWlpk
-         FhA1Cg0GosabonZzoxLss42XnkNijGnf/MVNTWOmumhhZDLyqnXOtlQ91gjl3mCC9Wa0
-         mauNA6nvYX1KLHK1QyTfoxNq0cGSb0qudhZvDFP0Xtl9H+gdMRjqTNK0zjc4jT0tgoeg
-         bXSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FOT7o7coi4TAoYXwjs3RFGYC2whGqK5WY9tHXZIG/1U=;
-        b=7LKyGKAfs8G+7HC45VbLxUcGxBG1x/S83xYFezUR3Ve+zH4SZGwqdq1Jf/fi9nI5Fx
-         lAcahL6bhr6KIofSddyBCAi09HgM2h4jjAWNxF/bwg91Z8wUXEs1wrvsWpM4VsGMerZQ
-         bubl50ukbnUqx9C3Hw3LhaGApvTxur7kWa1I74rxbl0xuzdnYGbp8L6w/e6Dzl7vZAPB
-         sM26Go6rgMiYLwZ+kBcm0gTD4fWnKlmddgy9y8z42q9SOAf5mlVGJ3zsxO9kC5Lxj0gZ
-         WlJvFl7NkFDEzKt27QuYQG+xFj9IYAQl+G0TkgIKd2Tef4RERoYcnf+sO2E2/KMu7t+O
-         B9JA==
-X-Gm-Message-State: ANoB5pk/QHjstOwDqfVV8ey+qMOUVZx1JWJ7Cd6Ch5nKN1xNgIPhBeYU
-        +PQg5d92ccAHpzQFs/hXIQlY2ZZsHy94FQ==
-X-Google-Smtp-Source: AA0mqf4qO15HyJ3tuVS2kA3l+CAlPoep6WVE5Xhje8cpzRISXqO+oS22pLp2MptiVm8KzyaVgoGszg==
-X-Received: by 2002:a05:651c:201c:b0:279:a4b0:c34a with SMTP id s28-20020a05651c201c00b00279a4b0c34amr1992690ljo.435.1669647370814;
-        Mon, 28 Nov 2022 06:56:10 -0800 (PST)
-Received: from [192.168.1.101] (95.49.125.236.neoplus.adsl.tpnet.pl. [95.49.125.236])
-        by smtp.gmail.com with ESMTPSA id t27-20020a2e8e7b000000b0026fbac7468bsm1217757ljk.103.2022.11.28.06.56.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 06:56:10 -0800 (PST)
-Message-ID: <3751bf35-d202-99c2-fac1-12d3c69ad00a@linaro.org>
-Date:   Mon, 28 Nov 2022 15:56:08 +0100
+ d=arrigroup.onmicrosoft.com; s=selector1-arrigroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fLZ6DNP1ktx/hPYmzo5z4YhkL6IZRM49lF+iYUWdR7s=;
+ b=j443V07Iz4wN2fxEL+TCFtY4MJS9o81Fz83MhqGU1n341Fp7iqjBRzMD5vNt9rFbek4f743SqnTjIamLBtGC1ipZlIAHoGH7lZN0dXSjhZJODcThCLkdL29IgTy8to6w1uGHrZI+EzeGewmTE1j0Y0FyyIXg+BhRj51sYJdyprY=
+Received: from AS9P250CA0013.EURP250.PROD.OUTLOOK.COM (2603:10a6:20b:532::24)
+ by DB5PR07MB9454.eurprd07.prod.outlook.com (2603:10a6:10:48e::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27; Mon, 28 Nov
+ 2022 14:56:32 +0000
+Received: from AM0EUR02FT027.eop-EUR02.prod.protection.outlook.com
+ (2603:10a6:20b:532:cafe::23) by AS9P250CA0013.outlook.office365.com
+ (2603:10a6:20b:532::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19 via Frontend
+ Transport; Mon, 28 Nov 2022 14:56:32 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 217.111.95.7)
+ smtp.mailfrom=arri.de; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arri.de;
+Received-SPF: Fail (protection.outlook.com: domain of arri.de does not
+ designate 217.111.95.7 as permitted sender) receiver=protection.outlook.com;
+ client-ip=217.111.95.7; helo=mta.arri.de;
+Received: from mta.arri.de (217.111.95.7) by
+ AM0EUR02FT027.mail.protection.outlook.com (10.13.54.153) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5834.15 via Frontend Transport; Mon, 28 Nov 2022 14:56:31 +0000
+Received: from n95hx1g2.localnet (192.168.54.110) by mta.arri.de (10.10.18.5)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 28 Nov
+ 2022 15:56:30 +0100
+From:   Christian Eggers <ceggers@arri.de>
+To:     Arun Ramadoss <arun.ramadoss@microchip.com>,
+        Pavan Chebbi <pavan.chebbi@broadcom.com>
+CC:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
+        <andrew@lunn.ch>, <vivien.didelot@gmail.com>,
+        <f.fainelli@gmail.com>, <olteanv@gmail.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <linux@armlinux.org.uk>, <Tristram.Ha@microchip.com>,
+        <richardcochran@gmail.com>
+Subject: Re: [Patch net-next v1 01/12] net: dsa: microchip: ptp: add the posix clock support
+Date:   Mon, 28 Nov 2022 15:56:30 +0100
+Message-ID: <5639053.DvuYhMxLoT@n95hx1g2>
+Organization: Arnold & Richter Cine Technik GmbH & Co. Betriebs KG
+In-Reply-To: <CALs4sv19Efi0oKVqRqRFtF2SCr6Phejh4RFvuRN1UCkdvcKJeg@mail.gmail.com>
+References: <20221128103227.23171-1-arun.ramadoss@microchip.com> <20221128103227.23171-2-arun.ramadoss@microchip.com> <CALs4sv19Efi0oKVqRqRFtF2SCr6Phejh4RFvuRN1UCkdvcKJeg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v5 2/3] arm64: dts: qcom: sm8450: add Soundwire and LPASS
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-References: <20221128131016.127860-1-krzysztof.kozlowski@linaro.org>
- <20221128131016.127860-3-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221128131016.127860-3-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Originating-IP: [192.168.54.110]
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0EUR02FT027:EE_|DB5PR07MB9454:EE_
+X-MS-Office365-Filtering-Correlation-Id: 63361fa4-f5f3-45f9-f8b6-08dad150bca2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: TwTVnFj4KE2dDNB5EWjjEa6fLNyw2quX5RZ5FdW/NRERWf/uPY2pogWWm1/kkJ7pnweom4YJukVAWpT3ggdHaMOfenJYBEAZYEXbIYquBbNlyd+2DSJFsqG87TnbbDCCgGwObFgW8Fi4JThyj00y+yRIOe1qTtL/cDQyHVTtWN8ksArbV8B7liBgCOGNKsvCw7pdajFlOKHMdoGWrfjaMaUQHoPFCaH59EHvF/j/c/6u4GJ3aBSdq5ciXSaGTdOrY3SOulshEJnh40AzosBYuk8khfJYg8QrXMZcZMe5EKgp+yyCrngYWPZkPBqPMaPpBLNTtIAMFymnAtMil6vZ+g1/0ViVWOMnFJGUPWiXm4xXx8Zee7xBQXDNCGi5SbCkkwRU5uJRF925MswLMLhUKmxauxxwKOYyPzEFtnFupV0bDFWHU4vUPo8ndbiHRRVVH2x3NBRJZ5wYBr3NO1brTaWDt7kRYPIEsgG8+P3cV4+f9BdWv3mHioEULAEuMsV8Yz3OvusFhMt9gD29FUb/YanQMpNwUYsDAgm8JyF880NINCoIwrexwGpLEBaukfZ8u4mZ2xn2pIlYBrV5Mppno4NYKgxIf9YV2CG9jy40E2yE4n4yIlkS85eCY9/5XZWXLZG+IU9xVZfbE8angaql1jZbvr4ybcvmmeqfhBS017gevItpx5cHvwD9hpFsSlOqF9iNwFvdg2CJcCHK/8aOkDO+9FmU2YTEYAX3VLIG6wCgqQQ7tEhvP2PC7NIoaku1
+X-Forefront-Antispam-Report: CIP:217.111.95.7;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mta.arri.de;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(396003)(39850400004)(136003)(451199015)(36840700001)(46966006)(110136005)(26005)(8936002)(2906002)(70206006)(336012)(426003)(82740400003)(47076005)(5660300002)(7416002)(186003)(36860700001)(54906003)(41300700001)(8676002)(16526019)(53546011)(478600001)(33716001)(4326008)(83380400001)(40480700001)(9576002)(316002)(70586007)(82310400005)(9686003)(36916002)(81166007)(356005)(86362001)(36900700001);DIR:OUT;SFP:1102;
+X-OriginatorOrg: arri.de
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2022 14:56:31.8419
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 63361fa4-f5f3-45f9-f8b6-08dad150bca2
+X-MS-Exchange-CrossTenant-Id: e6a73a5a-614d-4c51-b3e3-53b660a9433a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e6a73a5a-614d-4c51-b3e3-53b660a9433a;Ip=[217.111.95.7];Helo=[mta.arri.de]
+X-MS-Exchange-CrossTenant-AuthSource: AM0EUR02FT027.eop-EUR02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB5PR07MB9454
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Monday, 28 November 2022, 15:49:33 CET, Pavan Chebbi wrote:
+> On Mon, Nov 28, 2022 at 4:03 PM Arun Ramadoss
+> <arun.ramadoss@microchip.com> wrote:
+> 
+> > diff --git a/drivers/net/dsa/microchip/ksz_ptp_reg.h b/drivers/net/dsa/microchip/ksz_ptp_reg.h
+> > new file mode 100644
+> > index 000000000000..e578a0006ecf
+> > --- /dev/null
+> > +++ b/drivers/net/dsa/microchip/ksz_ptp_reg.h
+> > @@ -0,0 +1,57 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/* Microchip KSZ PTP register definitions
+> > + * Copyright (C) 2022 Microchip Technology Inc.
+> > + */
+> > +
+> > +#ifndef __KSZ_PTP_REGS_H
+> > +#define __KSZ_PTP_REGS_H
+> > +
+> > +/* 5 - PTP Clock */
+> > +#define REG_PTP_CLK_CTRL               0x0500
+> > +
+> > +#define PTP_STEP_ADJ                   BIT(6)
+> > +#define PTP_STEP_DIR                   BIT(5)
+> > +#define PTP_READ_TIME                  BIT(4)
+> > +#define PTP_LOAD_TIME                  BIT(3)
+> 
+> PTP_WRITE_TIME sounds more intuitive than PTP_LOAD_TIME?
+PTP_LOAD_TIME has been derived from the data sheet:
+
+-------------8<--------------
+PTP Clock Load
+--------------
+Setting this bit will cause the PTP clock to be loaded with the time value in
+registers 0x0502 to 0x050B.
+------------->8--------------
+
+I would also prefer PTP_WRITE_TIME. But is it ok to deviate from data sheet?
+
+> Also I see that all the #defines are introduced in this patch, some of
+> which are used later. It is a good idea to introduce the #defines in
+> the same patches where they are being used for the first time.
+> I will be looking at the entire series but am responding to this now.
+> 
+> > +#define PTP_CLK_ADJ_ENABLE             BIT(2)
+> > +#define PTP_CLK_ENABLE                 BIT(1)
+> > +#define PTP_CLK_RESET                  BIT(0)
+> > +
+> > +#define REG_PTP_RTC_SUB_NANOSEC__2     0x0502
+> > +
+> > +#define PTP_RTC_SUB_NANOSEC_M          0x0007
+> > +#define PTP_RTC_0NS                    0x00
+> > +
+> > +#define REG_PTP_RTC_NANOSEC            0x0504
+> > +#define REG_PTP_RTC_NANOSEC_H          0x0504
+> > +#define REG_PTP_RTC_NANOSEC_L          0x0506
+> > +
+> > +#define REG_PTP_RTC_SEC                        0x0508
+> > +#define REG_PTP_RTC_SEC_H              0x0508
+> > +#define REG_PTP_RTC_SEC_L              0x050A
+> > +
+> > +#define REG_PTP_SUBNANOSEC_RATE                0x050C
+> > +#define REG_PTP_SUBNANOSEC_RATE_H      0x050C
+> > +#define PTP_SUBNANOSEC_M               0x3FFFFFFF
+> > +
+> > +#define PTP_RATE_DIR                   BIT(31)
+> > +#define PTP_TMP_RATE_ENABLE            BIT(30)
+> > +
+> > +#define REG_PTP_SUBNANOSEC_RATE_L      0x050E
+> > +
+> > +#define REG_PTP_RATE_DURATION          0x0510
+> > +#define REG_PTP_RATE_DURATION_H                0x0510
+> > +#define REG_PTP_RATE_DURATION_L                0x0512
+> > +
+> > +#define REG_PTP_MSG_CONF1              0x0514
+> > +
+> > +#define PTP_802_1AS                    BIT(7)
+> > +#define PTP_ENABLE                     BIT(6)
+> > +#define PTP_ETH_ENABLE                 BIT(5)
+> > +#define PTP_IPV4_UDP_ENABLE            BIT(4)
+> > +#define PTP_IPV6_UDP_ENABLE            BIT(3)
+> > +#define PTP_TC_P2P                     BIT(2)
+> > +#define PTP_MASTER                     BIT(1)
+> > +#define PTP_1STEP                      BIT(0)
+> > +
+> > +#endif
+> > --
+> > 2.36.1
+> >
+> 
 
 
-On 28.11.2022 14:10, Krzysztof Kozlowski wrote:
-> From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> 
-> Add Soundwire controllers, Low Power Audio SubSystem (LPASS) devices and
-> LPASS pin controller.
-> 
-> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> Co-developed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Konrad
-> 
-> Changes since v4:
-> 1. Re-order few properties between Soundwire nodes, to keep them ordered
->    consistently.
-> 2. Drop unsupported qcom,port-offset.
-> 
-> Changes since v3:
-> 1. Re-order reg and sound-dai-cells.
-> 
-> Changes since v2:
-> 1. Use lower-case hex.
-> 
-> Changes since v1:
-> 1. Whitespace cleanups.
-> 2. Correct include - do not use deprecated one.
-> ---
->  arch/arm64/boot/dts/qcom/sm8450.dtsi | 292 +++++++++++++++++++++++++++
->  1 file changed, 292 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> index 7b63c56ff2f4..380405ec3452 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> @@ -15,6 +15,7 @@
->  #include <dt-bindings/interconnect/qcom,sm8450.h>
->  #include <dt-bindings/soc/qcom,gpr.h>
->  #include <dt-bindings/soc/qcom,rpmh-rsc.h>
-> +#include <dt-bindings/sound/qcom,q6dsp-lpass-ports.h>
->  #include <dt-bindings/thermal/thermal.h>
->  
->  / {
-> @@ -2090,6 +2091,209 @@ compute-cb@3 {
->  			};
->  		};
->  
-> +		wsa2macro: codec@31e0000 {
-> +			compatible = "qcom,sm8450-lpass-wsa-macro";
-> +			reg = <0 0x031e0000 0 0x1000>;
-> +			clocks = <&q6prmcc LPASS_CLK_ID_WSA_CORE_TX_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-> +				 <&q6prmcc LPASS_CLK_ID_RX_CORE_MCLK2_2X_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-> +				 <&q6prmcc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-> +				 <&q6prmcc LPASS_HW_DCODEC_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-> +				 <&vamacro>;
-> +			clock-names = "mclk", "npl", "macro", "dcodec", "fsgen";
-> +			assigned-clocks = <&q6prmcc LPASS_CLK_ID_WSA_CORE_TX_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-> +					  <&q6prmcc LPASS_CLK_ID_RX_CORE_MCLK2_2X_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
-> +			assigned-clock-rates = <19200000>, <19200000>;
-> +
-> +			#clock-cells = <0>;
-> +			clock-output-names = "wsa2-mclk";
-> +			pinctrl-names = "default";
-> +			pinctrl-0 = <&wsa2_swr_active>;
-> +			#sound-dai-cells = <1>;
-> +		};
-> +
-> +		/* WSA2 */
-> +		swr4: soundwire-controller@31f0000 {
-> +			compatible = "qcom,soundwire-v1.7.0";
-> +			reg = <0 0x031f0000 0 0x2000>;
-> +			interrupts = <GIC_SPI 171 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&wsa2macro>;
-> +			clock-names = "iface";
-> +
-> +			qcom,din-ports = <2>;
-> +			qcom,dout-ports = <6>;
-> +
-> +			qcom,ports-sinterval-low =	/bits/ 8 <0x07 0x1f 0x3f 0x07 0x1f 0x3f 0x0f 0x0f>;
-> +			qcom,ports-offset1 =		/bits/ 8 <0x01 0x02 0x0c 0x06 0x12 0x0d 0x07 0x0a>;
-> +			qcom,ports-offset2 =		/bits/ 8 <0xff 0x00 0x1f 0xff 0x00 0x1f 0x00 0x00>;
-> +			qcom,ports-hstart =		/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
-> +			qcom,ports-hstop =		/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
-> +			qcom,ports-word-length =	/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
-> +			qcom,ports-block-pack-mode =	/bits/ 8 <0xff 0xff 0x01 0xff 0xff 0x01 0xff 0xff>;
-> +			qcom,ports-block-group-count =	/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
-> +			qcom,ports-lane-control =	/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
-> +
-> +			#address-cells = <2>;
-> +			#size-cells = <0>;
-> +			#sound-dai-cells = <1>;
-> +		};
-> +
-> +		rxmacro: codec@3200000 {
-> +			compatible = "qcom,sm8450-lpass-rx-macro";
-> +			reg = <0 0x3200000 0 0x1000>;
-> +			clocks = <&q6prmcc LPASS_CLK_ID_RX_CORE_TX_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-> +				 <&q6prmcc LPASS_CLK_ID_RX_CORE_MCLK2_2X_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-> +				 <&q6prmcc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-> +				 <&q6prmcc LPASS_HW_DCODEC_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-> +				 <&vamacro>;
-> +			clock-names = "mclk", "npl", "macro", "dcodec", "fsgen";
-> +
-> +			assigned-clocks = <&q6prmcc LPASS_CLK_ID_RX_CORE_TX_MCLK  LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-> +				 <&q6prmcc LPASS_CLK_ID_RX_CORE_MCLK2_2X_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
-> +			assigned-clock-rates = <19200000>, <19200000>;
-> +
-> +			#clock-cells = <0>;
-> +			clock-output-names = "mclk";
-> +			pinctrl-names = "default";
-> +			pinctrl-0 = <&rx_swr_active>;
-> +			#sound-dai-cells = <1>;
-> +		};
-> +
-> +		swr1: soundwire-controller@3210000 {
-> +			compatible = "qcom,soundwire-v1.7.0";
-> +			reg = <0 0x3210000 0 0x2000>;
-> +			interrupts = <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&rxmacro>;
-> +			clock-names = "iface";
-> +			label = "RX";
-> +			qcom,din-ports = <0>;
-> +			qcom,dout-ports = <5>;
-> +
-> +			qcom,ports-sinterval-low =	/bits/ 8 <0x03 0x1f 0x1f 0x07 0x00>;
-> +			qcom,ports-offset1 =		/bits/ 8 <0x00 0x00 0x0b 0x01 0x00>;
-> +			qcom,ports-offset2 =		/bits/ 8 <0x00 0x00 0x0b 0x00 0x00>;
-> +			qcom,ports-hstart =		/bits/ 8 <0xff 0x03 0xff 0xff 0xff>;
-> +			qcom,ports-hstop =		/bits/ 8 <0xff 0x06 0xff 0xff 0xff>;
-> +			qcom,ports-word-length =	/bits/ 8 <0x01 0x07 0x04 0xff 0xff>;
-> +			qcom,ports-block-pack-mode =	/bits/ 8 <0xff 0x00 0x01 0xff 0xff>;
-> +			qcom,ports-block-group-count =	/bits/ 8 <0xff 0xff 0xff 0xff 0x00>;
-> +			qcom,ports-lane-control =	/bits/ 8 <0x01 0x00 0x00 0x00 0x00>;
-> +
-> +			#address-cells = <2>;
-> +			#size-cells = <0>;
-> +			#sound-dai-cells = <1>;
-> +		};
-> +
-> +		txmacro: codec@3220000 {
-> +			compatible = "qcom,sm8450-lpass-tx-macro";
-> +			reg = <0 0x3220000 0 0x1000>;
-> +			clocks = <&q6prmcc LPASS_CLK_ID_RX_CORE_TX_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-> +				 <&q6prmcc LPASS_CLK_ID_RX_CORE_MCLK2_2X_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-> +				 <&q6prmcc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-> +				 <&q6prmcc LPASS_HW_DCODEC_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-> +				 <&vamacro>;
-> +			clock-names = "mclk", "npl", "macro", "dcodec", "fsgen";
-> +			assigned-clocks = <&q6prmcc LPASS_CLK_ID_RX_CORE_TX_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-> +					  <&q6prmcc LPASS_CLK_ID_RX_CORE_MCLK2_2X_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
-> +			assigned-clock-rates = <19200000>, <19200000>;
-> +
-> +			#clock-cells = <0>;
-> +			clock-output-names = "mclk";
-> +			pinctrl-names = "default";
-> +			pinctrl-0 = <&tx_swr_active>;
-> +			#sound-dai-cells = <1>;
-> +		};
-> +
-> +		wsamacro: codec@3240000 {
-> +			compatible = "qcom,sm8450-lpass-wsa-macro";
-> +			reg = <0 0x03240000 0 0x1000>;
-> +			clocks = <&q6prmcc LPASS_CLK_ID_WSA_CORE_TX_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-> +				 <&q6prmcc LPASS_CLK_ID_RX_CORE_MCLK2_2X_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-> +				 <&q6prmcc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-> +				 <&q6prmcc LPASS_HW_DCODEC_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-> +				 <&vamacro>;
-> +			clock-names = "mclk", "npl", "macro", "dcodec", "fsgen";
-> +
-> +			assigned-clocks = <&q6prmcc LPASS_CLK_ID_WSA_CORE_TX_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-> +					  <&q6prmcc LPASS_CLK_ID_RX_CORE_MCLK2_2X_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
-> +			assigned-clock-rates = <19200000>, <19200000>;
-> +
-> +			#clock-cells = <0>;
-> +			clock-output-names = "mclk";
-> +			pinctrl-names = "default";
-> +			pinctrl-0 = <&wsa_swr_active>;
-> +			#sound-dai-cells = <1>;
-> +		};
-> +
-> +		/* WSA */
-> +		swr0: soundwire-controller@3250000 {
-> +			compatible = "qcom,soundwire-v1.7.0";
-> +			reg = <0 0x03250000 0 0x2000>;
-> +			interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&wsamacro>;
-> +			clock-names = "iface";
-> +
-> +			qcom,din-ports = <2>;
-> +			qcom,dout-ports = <6>;
-> +
-> +			qcom,ports-sinterval-low =	/bits/ 8 <0x07 0x1f 0x3f 0x07 0x1f 0x3f 0x0f 0x0f>;
-> +			qcom,ports-offset1 =		/bits/ 8 <0x01 0x02 0x0c 0x06 0x12 0x0d 0x07 0x0a>;
-> +			qcom,ports-offset2 =		/bits/ 8 <0xff 0x00 0x1f 0xff 0x00 0x1f 0x00 0x00>;
-> +			qcom,ports-hstart =		/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
-> +			qcom,ports-hstop =		/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
-> +			qcom,ports-word-length =	/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
-> +			qcom,ports-block-pack-mode =	/bits/ 8 <0xff 0xff 0x01 0xff 0xff 0x01 0xff 0xff>;
-> +			qcom,ports-block-group-count =	/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
-> +			qcom,ports-lane-control =	/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
-> +
-> +			#address-cells = <2>;
-> +			#size-cells = <0>;
-> +			#sound-dai-cells = <1>;
-> +		};
-> +
-> +		swr2: soundwire-controller@33b0000 {
-> +			compatible = "qcom,soundwire-v1.7.0";
-> +			reg = <0 0x33b0000 0 0x2000>;
-> +			interrupts-extended = <&intc GIC_SPI 496 IRQ_TYPE_LEVEL_HIGH>,
-> +					      <&intc GIC_SPI 520 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-names = "core", "wake";
-> +
-> +			clocks = <&vamacro>;
-> +			clock-names = "iface";
-> +			label = "TX";
-> +
-> +			qcom,din-ports = <4>;
-> +			qcom,dout-ports = <0>;
-> +			qcom,ports-sinterval-low =	/bits/ 8 <0x01 0x01 0x03 0x03>;
-> +			qcom,ports-offset1 =		/bits/ 8 <0x00 0x00 0x01 0x01>;
-> +			qcom,ports-offset2 =		/bits/ 8 <0x00 0x00 0x00 0x00>;
-> +			qcom,ports-hstart =		/bits/ 8 <0xff 0xff 0xff 0xff>;
-> +			qcom,ports-hstop =		/bits/ 8 <0xff 0xff 0xff 0xff>;
-> +			qcom,ports-word-length =	/bits/ 8 <0xff 0xff 0xff 0xff>;
-> +			qcom,ports-block-pack-mode =	/bits/ 8 <0xff 0xff 0xff 0xff>;
-> +			qcom,ports-block-group-count =	/bits/ 8 <0xff 0xff 0xff 0xff>;
-> +			qcom,ports-lane-control =	/bits/ 8 <0x01 0x02 0x00 0x00>;
-> +
-> +			#address-cells = <2>;
-> +			#size-cells = <0>;
-> +			#sound-dai-cells = <1>;
-> +		};
-> +
-> +		vamacro: codec@33f0000 {
-> +			compatible = "qcom,sm8450-lpass-va-macro";
-> +			reg = <0 0x033f0000 0 0x1000>;
-> +			clocks = <&q6prmcc LPASS_CLK_ID_TX_CORE_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-> +				 <&q6prmcc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-> +				 <&q6prmcc LPASS_HW_DCODEC_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-> +				 <&q6prmcc LPASS_CLK_ID_RX_CORE_MCLK2_2X_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
-> +			clock-names = "mclk", "macro", "dcodec", "npl";
-> +			assigned-clocks = <&q6prmcc LPASS_CLK_ID_TX_CORE_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
-> +			assigned-clock-rates = <19200000>;
-> +
-> +			#clock-cells = <0>;
-> +			clock-output-names = "fsgen";
-> +			#sound-dai-cells = <1>;
-> +		};
-> +
->  		remoteproc_adsp: remoteproc@30000000 {
->  			compatible = "qcom,sm8450-adsp-pas";
->  			reg = <0 0x30000000 0 0x100>;
-> @@ -3023,6 +3227,91 @@ qup_uart20_default: qup-uart20-default-state {
->  
->  		};
->  
-> +		lpass_tlmm: pinctrl@3440000{
-> +			compatible = "qcom,sm8450-lpass-lpi-pinctrl";
-> +			reg = <0 0x3440000 0x0 0x20000>,
-> +			      <0 0x34d0000 0x0 0x10000>;
-> +			gpio-controller;
-> +			#gpio-cells = <2>;
-> +			gpio-ranges = <&lpass_tlmm 0 0 23>;
-> +
-> +			clocks = <&q6prmcc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
-> +				 <&q6prmcc LPASS_HW_DCODEC_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
-> +			clock-names = "core", "audio";
-> +
-> +			wsa_swr_active: wsa-swr-active-state {
-> +				clk-pins {
-> +					pins = "gpio10";
-> +					function = "wsa_swr_clk";
-> +					drive-strength = <2>;
-> +					slew-rate = <1>;
-> +					bias-disable;
-> +				};
-> +
-> +				data-pins {
-> +					pins = "gpio11";
-> +					function = "wsa_swr_data";
-> +					drive-strength = <2>;
-> +					slew-rate = <1>;
-> +					bias-bus-hold;
-> +				};
-> +			};
-> +
-> +			tx_swr_active: tx-swr-active-state {
-> +				clk-pins {
-> +					pins = "gpio0";
-> +					function = "swr_tx_clk";
-> +					drive-strength = <2>;
-> +					slew-rate = <1>;
-> +					bias-disable;
-> +				};
-> +
-> +				data-pins {
-> +					pins = "gpio1", "gpio2", "gpio14";
-> +					function = "swr_tx_data";
-> +					drive-strength = <2>;
-> +					slew-rate = <1>;
-> +					bias-bus-hold;
-> +				};
-> +			};
-> +
-> +			rx_swr_active: rx-swr-active-state {
-> +				clk-pins {
-> +					pins = "gpio3";
-> +					function = "swr_rx_clk";
-> +					drive-strength = <2>;
-> +					slew-rate = <1>;
-> +					bias-disable;
-> +				};
-> +
-> +				data-pins {
-> +					pins = "gpio4", "gpio5";
-> +					function = "swr_rx_data";
-> +					drive-strength = <2>;
-> +					slew-rate = <1>;
-> +					bias-bus-hold;
-> +				};
-> +			};
-> +
-> +			wsa2_swr_active: wsa2-swr-active-state {
-> +				clk-pins {
-> +					pins = "gpio15";
-> +					function = "wsa2_swr_clk";
-> +					drive-strength = <2>;
-> +					slew-rate = <1>;
-> +					bias-disable;
-> +				};
-> +
-> +				data-pins {
-> +					pins = "gpio16";
-> +					function = "wsa2_swr_data";
-> +					drive-strength = <2>;
-> +					slew-rate = <1>;
-> +					bias-bus-hold;
-> +				};
-> +			};
-> +		};
-> +
->  		apps_smmu: iommu@15000000 {
->  			compatible = "qcom,sm8450-smmu-500", "arm,mmu-500";
->  			reg = <0 0x15000000 0 0x100000>;
-> @@ -3501,6 +3790,9 @@ lpass_ag_noc: interconnect@3c40000 {
->  		};
->  	};
->  
-> +	sound: sound {
-> +	};
-> +
->  	thermal-zones {
->  		aoss0-thermal {
->  			polling-delay-passive = <0>;
+
