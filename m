@@ -2,130 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7198663A728
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 12:25:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D5D863A731
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 12:26:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbiK1LZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 06:25:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44192 "EHLO
+        id S229801AbiK1L02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 06:26:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbiK1LZZ (ORCPT
+        with ESMTP id S231321AbiK1LZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 06:25:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F7BD6C
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 03:24:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669634661;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TgEuVwr/lmoaUkwtJRv3fcPpNyiihXcpeLIB+gbkxTg=;
-        b=BwyvhNTs15KH15W/QyH8/KgmRRSn/w4cOwhiUR0x+rqTNmA8W9WTtHYc0yPLY+IyOoiDSU
-        4HmskkSpWmQQn7pQxLca+VPOr5TT8mIAY3PhadulPWB3dEFZQNe7uoSsNyAQ8u6vmZnIlF
-        nJ+I7yiVqm09qKY00mkmLwmf+wO5Ias=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-471-bzvdg8CMMMmhWvtIYJGUgQ-1; Mon, 28 Nov 2022 06:24:19 -0500
-X-MC-Unique: bzvdg8CMMMmhWvtIYJGUgQ-1
-Received: by mail-wr1-f72.google.com with SMTP id j30-20020adfa55e000000b00241b49be1a3so1786372wrb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 03:24:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TgEuVwr/lmoaUkwtJRv3fcPpNyiihXcpeLIB+gbkxTg=;
-        b=IA+46JykdAnoFhwOd5fd8tOXSEphuMJcqdauONGv8WclwBMFmDcpz0ydX90juW7qM/
-         F3IYwvVP4Tz0Q+fGkurJ12JyJy0HbVH3fRGabJe17LBco+jLQHHowpJjfXID8RsdZIBT
-         0T41zt8Jd42E9Glu5jFaQOfTjHBfQxZrbbvkh7M51tTKoAuS59ED9sZt3A/G4H12C3mX
-         3es45awOXQMHrddXHX6zj+92Wr/5jIFL9DZfOHDs8vouK8eLOYPzzxbxGsZq2ZkcaLAD
-         LYr/g+aD2CqctX+0+c8va7xEUAE3VTortauS+zcmtjB+QHC8x5nNYcRDYlJRzwab9dg4
-         YJvQ==
-X-Gm-Message-State: ANoB5plkj13xngfwC7OChUnQqlaeDDKbSp70IH0POudl7qJZejtn3ICz
-        428omX+6N12E9V9PW2AyLD+9RbtS12cOMrLmKFNDeqVfj7M93zXZhdlS4ECbhAnx995RLEpAMTr
-        5xVtSBjHpZfbfrxd5ZaX1RJsG
-X-Received: by 2002:a5d:5957:0:b0:22e:3e9:ba15 with SMTP id e23-20020a5d5957000000b0022e03e9ba15mr29705734wri.180.1669634658603;
-        Mon, 28 Nov 2022 03:24:18 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5lXkK47G//R0Blw0UXQBU9TYWc2d0eHuQmZUBkfLyu+cdpW5Dz9AAyP5KPxrAfIEojFKrF1g==
-X-Received: by 2002:a5d:5957:0:b0:22e:3e9:ba15 with SMTP id e23-20020a5d5957000000b0022e03e9ba15mr29705719wri.180.1669634658427;
-        Mon, 28 Nov 2022 03:24:18 -0800 (PST)
-Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id l22-20020a05600c4f1600b003cffd3c3d6csm15905340wmq.12.2022.11.28.03.24.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 03:24:17 -0800 (PST)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: Re: [PATCH v5 3/5] workqueue: Make too_many_workers() return the
- worker excess
-In-Reply-To: <Y30uY/Y8pffIhrUp@slm.duckdns.org>
-References: <20221122192937.2386494-1-vschneid@redhat.com>
- <20221122192937.2386494-4-vschneid@redhat.com>
- <Y30uY/Y8pffIhrUp@slm.duckdns.org>
-Date:   Mon, 28 Nov 2022 11:24:16 +0000
-Message-ID: <xhsmhbkorl3tr.mognet@vschneid.remote.csb>
+        Mon, 28 Nov 2022 06:25:48 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319D7CE39;
+        Mon, 28 Nov 2022 03:25:46 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 19B6C6600012;
+        Mon, 28 Nov 2022 11:25:44 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1669634744;
+        bh=8Cm4VhPg8SKswy2s3/jV+9mFidnrlrr9zoP/ffITeQ0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=GHQlxwXc5qu+1SLI0jHTdtMONMXw9UDBkP3u3OrH8BtRQGLEXqBL5A6oH+JW2p8s+
+         K6DdW4RWgShaQZYfYxtlKaXwGKPhJWbcMnWyHoFZkam95AWGL4CZRYDKmhMuuDcVPf
+         ku8/nz1wA0gSJlT6v6hah2fFeufGiLTbZK3REVZOZKAoqjhGffMy4EVvrqfDTuc9Nz
+         jOf6zpwkRPRS6lJfE4mo0zm2RAkxkqVt0UOZ4/tMjYIi3B879TECbwp8YfjvMvkUsr
+         XxG8QH5NyujRKZpZL3CgL8xAkgAQ4RGRETg4GkHUdq6Klk/6Dij6nPA9yVdc4evUKV
+         jvdmuUuGw33lA==
+Message-ID: <18401729-5c01-5fba-ce57-b530c5db53f0@collabora.com>
+Date:   Mon, 28 Nov 2022 12:25:40 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH RESEND v2] dt-bindings: pwm: mediatek: Add compatible for
+ MT7986
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pwm@vger.kernel.or,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Zhi Mao <zhi.mao@mediatek.com>,
+        Sam Shih <sam.shih@mediatek.com>
+References: <Y39PjU1BqBB8tZ98@makrotopia.org>
+ <375d45fa-fdfc-37a5-9d32-b0412cad7bc0@collabora.com>
+ <Y4CoX1sfJd2Q8lHj@makrotopia.org>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <Y4CoX1sfJd2Q8lHj@makrotopia.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/11/22 10:17, Tejun Heo wrote:
-> Hello,
->
-> On Tue, Nov 22, 2022 at 07:29:35PM +0000, Valentin Schneider wrote:
-> ...
->> The function currently returns true when
->>   (nr_idle - 2) * MAX_IDLE_WORKERS_RATIO >= nr_busy
->> thus, the desired number of idle workers is expressed by
->>   (nr_idle - 2) * MAX_IDLE_WORKERS_RATIO == nr_busy - 1
->> IOW
->>    nr_idle == ((nr_busy - 1) / MAX_IDLE_WORKERS_RATIO) + 2
->> +/* How many idle workers should we get rid of, if any? */
->> +static unsigned int worker_cull_count(struct worker_pool *pool)
->
-> Can we name it nr_workers_to_cull()?
->
+Il 25/11/22 12:34, Daniel Golle ha scritto:
+> On Fri, Nov 25, 2022 at 12:12:17PM +0100, AngeloGioacchino Del Regno wrote:
+>> Il 24/11/22 12:03, Daniel Golle ha scritto:
+>>> Add new compatible string for MT7986 PWM and list compatible units for
+>>> existing entries. Also make sure the number of pwm1-X clocks is listed
+>>> for all supported units.
+>>>
+>>> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+>>> ---
+>>> Changes since v1: list compatibles, fix pwm1-n clocks for all SoCs
+>>>
+>>> Rebased on linux-next and re-run scripts/get_maintainers.pl on patch to
+>>> makes sure dt maintainers are included. This has been requested by
+>>> Krzysztof Kozlowski.
+>>>
+>>>    .../devicetree/bindings/pwm/pwm-mediatek.txt  | 20 +++++++++++--------
+>>>    1 file changed, 12 insertions(+), 8 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt b/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt
+>>> index 554c96b6d0c3..952a338e06e7 100644
+>>> --- a/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt
+>>> +++ b/Documentation/devicetree/bindings/pwm/pwm-mediatek.txt
+>>> @@ -2,14 +2,15 @@ MediaTek PWM controller
+>>>    Required properties:
+>>>     - compatible: should be "mediatek,<name>-pwm":
+>>> -   - "mediatek,mt2712-pwm": found on mt2712 SoC.
+>>> +   - "mediatek,mt2712-pwm", "mediatek,mt6795-pwm": found on mt2712 SoC.
+>>>       - "mediatek,mt6795-pwm": found on mt6795 SoC.
+>>> -   - "mediatek,mt7622-pwm": found on mt7622 SoC.
+>>> -   - "mediatek,mt7623-pwm": found on mt7623 SoC.
+>>> +   - "mediatek,mt7622-pwm", "mediatek,mt8195-pwm", "mediatek,mt8183-pwm", "mediatek,mt7986-pwm": found on mt7622 SoC.
+>>> +   - "mediatek,mt7623-pwm", "mediatek,mt7628-pwm": found on mt7623 SoC.
+>>>       - "mediatek,mt7628-pwm": found on mt7628 SoC.
+>>>       - "mediatek,mt7629-pwm": found on mt7629 SoC.
+>>> -   - "mediatek,mt8183-pwm": found on mt8183 SoC.
+>>> -   - "mediatek,mt8195-pwm", "mediatek,mt8183-pwm": found on mt8195 SoC.
+>>> +   - "mediatek,mt7986-pwm": found on mt7986 SoC.
+>>> +   - "mediatek,mt8183-pwm", "mediatek,mt7986-pwm": found on mt8183 SoC.
+>>> +   - "mediatek,mt8195-pwm", "mediatek,mt8183-pwm", "mediatek,mt7986-pwm": found on mt8195 SoC.
+>>
+>> I'm sorry, but all these compatibles make little sense at best.
+>> Each of these PWM controllers have different properties as they may *by hardware*
+>> be featuring more or less channels, they may be a different IP revision and/or
+>> sub-revision requiring even ever-so-slightly different handling (check pwm45_fixup
+>> and has_ck_26m_sel).
+> 
+> I did check the two pwm45_fixup and has_ck_26m_sel for each supported
+> compatible and listed them accordingly.
+> Ie. the ones listed as compatible in this submission really only differ
+> by the number of channels offered from the driver's point of view and
+> share the same boolean values for pwm45_fixup and has_ck_26m_sel.
+> 
+>>
+>> If you want to add MT7986, the best thing that you can do is to simply add
+>>
+>> +   - "mediatek,mt7986-pwm": found on mt7986 SoC.
+>>
+>> this line ^
+>>
+>> ...and then please don't touch the others.
+>>
+>>>       - "mediatek,mt8365-pwm": found on mt8365 SoC.
+>>>       - "mediatek,mt8516-pwm": found on mt8516 SoC.
+>>>     - reg: physical base address and length of the controller's registers.
+>>> @@ -20,11 +21,14 @@ Required properties:
+>>>                    has no clocks
+>>>       - "top": the top clock generator
+>>>       - "main": clock used by the PWM core
+>>> +   - "pwm1"  : the PWM1 clock for mt7629
+>>> +   - "pwm1-2": the two per PWM clocks for mt7986
+>>
+>> That's not your fault, but the binding is already wrong (yes it must be fixed!) and
+>> unless my brain is failing somewhere, there's only one clock per pwm (as if there's
+>> any children, it must be parented to .. well, its parent, in the clock driver), and
+>> note that the driver is actually parsing "pwmX" clocks, never "pwmX-Y" clocks.
+>>
+>> Relevant snippet:
+>>
+>> 		char name[8];
+>>
+>> 		snprintf(name, sizeof(name), "pwm%d", i + 1);
+>>
+>> 		pc->clk_pwms[i] = devm_clk_get(&pdev->dev, name);
+>>
+>> Just... please don't keep doing the same mistake that is already inside of here...
+> 
+> Maybe better to write "pwm1"..."pwm2" or something like that...
+> But I just won't bother with it if you are planning to convert this to
+> YAML schema anyway.
+> 
+>>
+>> So, coming to an end: I think that this commit should be a one-liner that documents
+>> your "mediatek,mt7986-pwm" compatible and that's it.
+>>
+> 
+> This is exactly what I did in the first submission of this patch:
+> https://www.spinics.net/lists/devicetree/msg542568.html
+> 
+> Should I just re-submit this then?
+> 
+> 
+>> A schema conversion would be welcome: in that regard, I can make a conversion
+>> and send it next week, along with that clock-names fix.
+> 
+> Should I wait for you doing that and then re-submit or just re-submit
+> immediately?
+> 
 
-Ack
+I'm sorry but I forgot to Cc you on the schema conversion that I've just sent...
 
->>  {
->>  	bool managing = pool->flags & POOL_MANAGER_ACTIVE;
->>  	int nr_idle = pool->nr_idle + managing; /* manager is considered idle */
->>  	int nr_busy = pool->nr_workers - nr_idle;
->>  
->> -	return nr_idle > 2 && (nr_idle - 2) * MAX_IDLE_WORKERS_RATIO >= nr_busy;
->> +	lockdep_assert_held(&pool->lock);
->> +
->> +	/*
->> +	 * We keep at least 2 spare idle workers, but overall aim to keep at
->> +	 * most (1 / MAX_IDLE_WORKERS_RATIO) workers idle.
->> +	 */
->> +	return max(0, nr_idle - 2 - ((nr_busy - 1) / MAX_IDLE_WORKERS_RATIO));
->
-> I think we can do away with the subtraction on nr_busy. I don't think it'd
-> make any material difference, so maybe we can do:
->
->         return max(0, nr_idle - 2 - nr_busy / MAX_IDLE_WORKERS_RATIO);
->
+Find it here:
 
-I'll do that if this survives in the next revision :)
+https://lore.kernel.org/linux-mediatek/20221128112028.58021-1-angelogioacchino.delregno@collabora.com/
 
-> Thanks.
->
-> -- 
-> tejun
+...and yes at this point you should document mt7986 on the new yaml, but
+please wait for some feedback on that series before doing anything so that
+you won't find yourself rebasing over and over.
+
+Cheers,
+Angelo
 
