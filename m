@@ -2,106 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DCCE63B48A
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 22:56:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C8B263B48B
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 22:57:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233977AbiK1V4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 16:56:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44732 "EHLO
+        id S234316AbiK1V5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 16:57:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232280AbiK1V4H (ORCPT
+        with ESMTP id S232280AbiK1V5d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 16:56:07 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671A32C64C;
-        Mon, 28 Nov 2022 13:56:02 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id 3-20020a17090a098300b00219041dcbe9so10314202pjo.3;
-        Mon, 28 Nov 2022 13:56:02 -0800 (PST)
+        Mon, 28 Nov 2022 16:57:33 -0500
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1362F67E
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 13:57:31 -0800 (PST)
+Received: by mail-qv1-xf34.google.com with SMTP id a17so6680592qvt.9
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 13:57:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PNE2hM5xuRQg1qTi7Jhb4FKs2enVjE/c6i2QY7o+wfk=;
-        b=ggl4s4VnvSif8ARoD9mDKXN/FZRm5YDoU5oWpDdy9kdO32JLUN4xSZEOGPcHBoUWgA
-         ZoObHJDHHhM10FUHSyjQt9Ko1rbfCGJ33K7Y72D53oR+DqjkBRyzeQMQC6YeWX5YSmrH
-         EJkj3agiRYkp1hKpvei60t7y7yAvgJiDpYVA2xJg8rMMSb1docHC1Dlois7qzoRByu6Y
-         CRXi4UnZa5+lwkQ7+N/3nzU93/3DLwmMfLLescvqsVP7gAUgcyU5umJCVjRvsryKS/rD
-         gRe0/j/0UIxjoOkUpXVxvCwi8GYXAeX09/V+Ir8nMHBUT9K8JFeucMozXw+bv0QEFIBF
-         CfOA==
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xhp9JseacTp8Y1aGYJHSK7od8sdJspM6eNyMXZ71Mu8=;
+        b=ijTPc2YmZeXgwbZon8pdfqQUKQqb9ZBT2T6KNuoQwColvpB5KPF+xignuRoAu7gfYq
+         LcIqfmMXpifcJxWgB3ZApS7jSJwfchIEJQFRWEr/eLshcTczY6zUkRgBs5mxq2T9S1YU
+         ulB3NITHrstylTL7DM+neAGkNZ5hdePfkVksATLjATBVvUIofZ+fiHKOZXE0AsLMkoXk
+         k8oE/9rzby+VS5H30SC1qNNCSQHbMo41zhEZ/XlCOgyJ/Iikrh4JFRSagtwz2D7wQlMh
+         iIQErLJM7pL6+SRpYaKkul28r8xIsAsxzv5bVfW4mES1VjU2wwuoKqHzCBT7uRz6P4m4
+         l2Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PNE2hM5xuRQg1qTi7Jhb4FKs2enVjE/c6i2QY7o+wfk=;
-        b=o4jWO3OGzhzPGeg/qSAxyV1peuOCGoziEsaURxzqDmkim4dCZFbmRx6z/iiOSeJNp0
-         fqGCOWmDV9LFnRM9EjeaePOFvVsyeXUSNStvu2/f3Px7XPCCykbzwQlBOge/h44sHkLM
-         W6IcFWX1mghtNZjN2GS+2EAmG87jvjjA6/xPjA8Iq5glNtb6G7t/+xHd14ZGYctVfDAN
-         SzWkWYE5wtn4pDLyDVMk8kB4/IYs32Tshx39RlNHt9XCXQPJ7tAjphz8LyuWHGn2LHAG
-         7HEB7ndOhxrdMUGFQV2mDBVMJAT7X08PP4fxkma6lTSQzMZNk8CgkE7QCQMk4aVmV+H2
-         QzCA==
-X-Gm-Message-State: ANoB5ploK3MnkW7zI00YUE5iXjenMiFjevrG6CBxSgzT0wkdMN9NsF1n
-        Ek81zze1A/IKSsQfYpuBqVI=
-X-Google-Smtp-Source: AA0mqf4Ic8U/2HubojmEHBWTW6lx07dDGX5ULtU6u+Lp5wFm6qolBN7MYcPQ0ef2hXtaB5KihKcTWw==
-X-Received: by 2002:a17:902:ca14:b0:188:dcfb:f2dc with SMTP id w20-20020a170902ca1400b00188dcfbf2dcmr33894941pld.5.1669672561860;
-        Mon, 28 Nov 2022 13:56:01 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id v11-20020a17090a520b00b0020ab246ac79sm2641175pjh.47.2022.11.28.13.55.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 13:56:01 -0800 (PST)
-Message-ID: <c241736c-f50f-97c9-f662-37b65d1b8a2d@gmail.com>
-Date:   Mon, 28 Nov 2022 13:55:55 -0800
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xhp9JseacTp8Y1aGYJHSK7od8sdJspM6eNyMXZ71Mu8=;
+        b=ls24MzUZPWPYuHiiptOx3qkLO0M29kARYj0thJ6aUbnQ+pFOP/jgsyKZSLxc+PEaX9
+         SKNzqHOteCFocpLixR5OzpMZjhEQ7T6Pt50vEzkggRkUtUremp7HyBuHS+t7sLc2e9mw
+         HWa1q8ksQZNd0HAN1p0pT1iDHhzKAmExneTuV0jXTjJzMnAW1UqOkbAvlEg/SJkrIR2r
+         GHrKEtSQkHbcMXZNMRBkR/mhKrg6KUdBEMyVMZhPWA9nKrQTWYlxubYf8qK6StLd3uNE
+         eXobmxinWrb21grwFvEGa52tW/WvkE0ErDRoCXIO+4oM9dYz3SQ4tESPdbaoJwMQtM3I
+         vBiw==
+X-Gm-Message-State: ANoB5pl9cphFo0HdBU0wzRooa9/Osyhim6WrPdEkavelYyomDgIe+vV4
+        JO3vISEIx1mRHUI7Wv1ol4NyuFClo9QwLkIH6x0=
+X-Google-Smtp-Source: AA0mqf4A3oy0IMo6+W7HaeMB0trjakN4UMThY3KIE63wJhB+GIm2m5+Nc5w+w6APXnZc7MA4/mGxtCeGEUuK9/7okkM=
+X-Received: by 2002:a0c:fed0:0:b0:4af:aa40:5986 with SMTP id
+ z16-20020a0cfed0000000b004afaa405986mr31582720qvs.51.1669672650852; Mon, 28
+ Nov 2022 13:57:30 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 4.9 00/76] 4.9.334-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20221123084546.742331901@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221123084546.742331901@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Received: by 2002:ad4:5149:0:b0:4c6:9fa1:37de with HTTP; Mon, 28 Nov 2022
+ 13:57:30 -0800 (PST)
+Reply-To: markanna1047@gmail.com
+From:   Collins Mark <cm667993@gmail.com>
+Date:   Mon, 28 Nov 2022 22:57:30 +0100
+Message-ID: <CAAgmm5dfNZU9GMVvt1i47mFPV7iEU5LZ+9CRLCQE7fC_H16wkw@mail.gmail.com>
+Subject: Darlehen
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.1 required=5.0 tests=BAYES_80,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:f34 listed in]
+        [list.dnswl.org]
+        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
+        *      [score: 0.8038]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [markanna1047[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [cm667993[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [cm667993[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  2.8 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/23/22 00:49, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.334 release.
-> There are 76 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 25 Nov 2022 08:45:20 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.334-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Hallo,
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
-
+Brauchen Sie einen Kredit? Sie stecken in einer Finanzkrise oder
+brauchen Geld, um sich selbstst=C3=A4ndig zu machen? Ben=C3=B6tigen Sie ein
+Darlehen, um Ihre Schulden zu begleichen oder Rechnungen zu bezahlen
+oder ein Gesch=C3=A4ft zu gr=C3=BCnden? / Neujahrsdarlehen? Wir bieten alle
+Arten von DARLEHEN zu 3 % Jahreszins an. Um sich zu bewerben,
+kontaktieren Sie uns noch heute: E-Mail: markanna1047@gmail.com
