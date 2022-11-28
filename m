@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01FAA63A596
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 11:02:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A85E63A59D
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 11:03:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbiK1KCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 05:02:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43350 "EHLO
+        id S230157AbiK1KDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 05:03:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230142AbiK1KCh (ORCPT
+        with ESMTP id S230020AbiK1KDq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 05:02:37 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B7730B
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 02:02:35 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id a14-20020a921a0e000000b00302a8ffa8e5so8334429ila.2
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 02:02:35 -0800 (PST)
+        Mon, 28 Nov 2022 05:03:46 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71245FE5
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 02:03:39 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id x5-20020a6bda05000000b006db3112c1deso5497204iob.0
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 02:03:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=gf4bPdmIKB8ohnUy2fgXAHp/zZUcQ9WjKxhNasqNEb8=;
-        b=eqXzL9o0GHa41aIcWJVzsJFtIPxrl3hlgFAvVSwHEzAAudf+GfK5Zu1kdjwsXRdIHD
-         MiGLTAMxRC4cggK+b2/huH9u61tIpvNHna6FB4Zo7DkBqCCZTVYRD4Gt4+4ICaHqMtgc
-         iLTd8iYGq8m4iZ9gLtBClJLNjWs1yx7Ao64554NMZtHSVUVUDyyHiVU7mb+ndG16dfa1
-         TXUoRXjlwhC+Ee6PsjU5wcXOGpvz45tuVXVs2n6oJ7AGrUVmUfEqpFBHG3bLYob01I4D
-         jfutYyKC3TRX+8YMNX7EGOnGty6i1Xiu2eiq0LjoHZDJ16XmZAiJe2sUPrIwC0KI3jUY
-         KrmA==
-X-Gm-Message-State: ANoB5pmXdTCfarNwcGoDRkIcZcm2h0f23doCpUCHNVHiWAxVkYXQPEjb
-        v9dEQ5xzUKom1JjSRSR54JCzWyIZHALWYrBNyqcA2hmJPEYL
-X-Google-Smtp-Source: AA0mqf4VmdC6HsM9vY/52f6VtCrGaS8ujQGpeZI6oJIo+lIjsCsnwVDd/HOkK3FNlInaoFn1ZAUEAFMRtvpiNXHz5WRmd6zcwS/C
+        bh=t3Z7tD0qeX6aZfKu8J+Pu+V9SU8w3xwQLICQ/IZYsLw=;
+        b=IwJUOYUElmEmZ5NTFayW0kjlld8O84riL6Aehf7QpFs9WcMTLSh9KyA6i2cs9QGBNl
+         tqK9QIxoRX36hClZLHeEPDKhThuIMSQZo2Yf6d4sYCFpCcBUUXmT20jiFgbMFCbm4jO4
+         okwuFLocP7IW1quqSQI9b1l3n61scP392z1iaoOsKHq/hrBT0EFXT7D3iUX92XdHxkj8
+         uj+3mbVvvx3o/lL8Q+pi6jCCNDcI7/ndBmqqU//nN9K7pakBPs+spsZ9TxjRF1SLYweI
+         Qhb+4r5lRAMVfB6N61X40errZdOWY6iXiHmGuqLn6SS92wy/1ri84PhJkIICMyZPvIFQ
+         iDiQ==
+X-Gm-Message-State: ANoB5pkrsSHL2RrFDx8Pa7X7dT3vq33nkbfn2CiMv7Ec5+I53MlOHD5v
+        ZC/nu2/l+9uC0XWTmAs4o4dZeiFK/qrc+2MEQ9cP60Hd6H7k
+X-Google-Smtp-Source: AA0mqf6JuCYtFHLLS4RFlakMkxww1ZYJggnUkqrmDuT1eY/PB6+Gytg4KPQa6MO1p/QWC0kDA+quCQWo4F29eGZlWsSdj4LWFmwy
 MIME-Version: 1.0
-X-Received: by 2002:a02:9666:0:b0:363:b82d:d51e with SMTP id
- c93-20020a029666000000b00363b82dd51emr23485967jai.15.1669629755030; Mon, 28
- Nov 2022 02:02:35 -0800 (PST)
-Date:   Mon, 28 Nov 2022 02:02:35 -0800
+X-Received: by 2002:a5d:80ce:0:b0:6de:c30c:4d49 with SMTP id
+ h14-20020a5d80ce000000b006dec30c4d49mr14681560ior.83.1669629819147; Mon, 28
+ Nov 2022 02:03:39 -0800 (PST)
+Date:   Mon, 28 Nov 2022 02:03:39 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007482d505ee84f8dc@google.com>
-Subject: [syzbot] BUG: unable to handle kernel NULL pointer dereference in dir_search_u
-From:   syzbot <syzbot+decdb33311f46369f416@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com,
-        linux-kernel@vger.kernel.org, ntfs3@lists.linux.dev,
-        syzkaller-bugs@googlegroups.com
+Message-ID: <00000000000046def705ee84fc7a@google.com>
+Subject: [syzbot] WARNING in hfsplus_ext_write_extent
+From:   syzbot <syzbot+41264293e62d9074e4a8@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, willy@infradead.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -58,78 +57,63 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    6d464646530f Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=17244a4b880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=23eec5c79c22aaf8
-dashboard link: https://syzkaller.appspot.com/bug?extid=decdb33311f46369f416
+HEAD commit:    faf68e3523c2 Merge tag 'kbuild-fixes-v6.1-4' of git://git...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16eb5555880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8d01b6e3197974dd
+dashboard link: https://syzkaller.appspot.com/bug?extid=41264293e62d9074e4a8
 compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1430138d880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=108c8fed880000
+
+Unfortunately, I don't have any reproducer for this issue yet.
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/f22d29413625/disk-6d464646.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/389f0a5f1a4a/vmlinux-6d464646.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/48ddb02d82da/Image-6d464646.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/3f65b6de0e07/mount_0.gz
+disk image: https://storage.googleapis.com/syzbot-assets/3bfa6577f378/disk-faf68e35.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/7bf0af58cde3/vmlinux-faf68e35.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/3e15d7d640b0/bzImage-faf68e35.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+decdb33311f46369f416@syzkaller.appspotmail.com
+Reported-by: syzbot+41264293e62d9074e4a8@syzkaller.appspotmail.com
 
-loop0: detected capacity change from 0 to 8192
-ntfs3: loop0: Different NTFS' sector size (4096) and media sector size (512)
-Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-Mem abort info:
-  ESR = 0x0000000086000006
-  EC = 0x21: IABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x06: level 2 translation fault
-user pgtable: 4k pages, 48-bit VAs, pgdp=000000010d1aa000
-[0000000000000000] pgd=080000010d1ce003, p4d=080000010d1ce003, pud=080000010d251003, pmd=0000000000000000
-Internal error: Oops: 0000000086000006 [#1] PREEMPT SMP
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(lock->magic != lock)
+WARNING: CPU: 0 PID: 56 at kernel/locking/mutex.c:582 __mutex_lock_common+0x1bb0/0x26e0 kernel/locking/mutex.c:582
 Modules linked in:
-CPU: 0 PID: 3109 Comm: syz-executor169 Not tainted 6.1.0-rc6-syzkaller-32662-g6d464646530f #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : 0x0
-lr : hdr_find_e fs/ntfs3/index.c:708 [inline]
-lr : indx_find+0x3b0/0x954 fs/ntfs3/index.c:1068
-sp : ffff80000ff6b8c0
-x29: ffff80000ff6ba40 x28: 0000000000000000 x27: 0000000000000148
-x26: ffff0000c9257000 x25: ffff0000c93d8278 x24: 0000000000000000
-x23: 0000000000000000 x22: 0000000000000000 x21: 0000000000000003
-x20: 0000000000000138 x19: 0000000000000002 x18: 0000000000000098
-x17: ffff80000c0cd83c x16: ffff80000dbe6158 x15: ffff0000ce01cec0
-x14: 0000000000000010 x13: 0000000000000000 x12: ffff0000ce01cec0
-x11: ff80800008c11e14 x10: 0000000000000000 x9 : ffff800008c11e14
-x8 : ffff0000ce01cec0 x7 : 0000000000000000 x6 : 0000000000000000
-x5 : 2400490033003000 x4 : ffff0000c9257000 x3 : 0000000000000000
-x2 : ffff0000c93d8288 x1 : 0000000000000000 x0 : ffff80000c1f232e
-Call trace:
- 0x0
- dir_search_u+0xa4/0x1e0 fs/ntfs3/dir.c:254
- ntfs_extend_init+0xe4/0x238 fs/ntfs3/fsntfs.c:214
- ntfs_fill_super+0x143c/0x14a4 fs/ntfs3/super.c:1243
- get_tree_bdev+0x1e8/0x2a0 fs/super.c:1324
- ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1358
- vfs_get_tree+0x40/0x140 fs/super.c:1531
- do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
- path_mount+0x358/0x890 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-Code: bad PC value
----[ end trace 0000000000000000 ]---
+CPU: 0 PID: 56 Comm: kworker/u4:4 Not tainted 6.1.0-rc6-syzkaller-00315-gfaf68e3523c2 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Workqueue: writeback wb_workfn
+ (flush-7:3)
+
+RIP: 0010:__mutex_lock_common+0x1bb0/0x26e0 kernel/locking/mutex.c:582
+Code: 84 c0 0f 85 bd 08 00 00 83 3d 63 80 db 03 00 0f 85 6f e5 ff ff 48 c7 c7 a0 98 ed 8a 48 c7 c6 20 99 ed 8a 31 c0 e8 20 91 b7 f6 <0f> 0b e9 53 e5 ff ff e8 84 e5 65 f6 e9 5a fa ff ff 0f 0b e9 53 ef
+RSP: 0018:ffffc900015771e0 EFLAGS: 00010246
+
+RAX: 3dec4f730bdc4f00 RBX: ffff88806fda0190 RCX: ffff8880196b8000
+RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
+RBP: ffffc90001577360 R08: ffffffff816e55cd R09: ffffed1017304f1c
+R10: ffffed1017304f1c R11: 1ffff11017304f1b R12: dffffc0000000000
+R13: 1ffff920002aee50 R14: 0000000000000000 R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f2ddf1a1000 CR3: 000000004730f000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+ hfsplus_ext_write_extent+0x87/0x1e0 fs/hfsplus/extents.c:149
+ hfsplus_write_inode+0x1e/0x5c0 fs/hfsplus/super.c:154
+ write_inode fs/fs-writeback.c:1440 [inline]
+ __writeback_single_inode+0x4d6/0x670 fs/fs-writeback.c:1652
+ writeback_sb_inodes+0xb3b/0x18f0 fs/fs-writeback.c:1878
+ wb_writeback+0x41f/0x7b0 fs/fs-writeback.c:2052
+ wb_do_writeback fs/fs-writeback.c:2195 [inline]
+ wb_workfn+0x3cb/0xef0 fs/fs-writeback.c:2235
+ process_one_work+0x877/0xdb0 kernel/workqueue.c:2289
+ worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+ kthread+0x266/0x300 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
 
 
 ---
@@ -139,5 +123,3 @@ syzbot engineers can be reached at syzkaller@googlegroups.com.
 
 syzbot will keep track of this issue. See:
 https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
