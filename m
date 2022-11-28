@@ -2,139 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54EFF63A8CC
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 13:57:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61B8263A8CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 13:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230212AbiK1M5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 07:57:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57614 "EHLO
+        id S231296AbiK1M6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 07:58:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231391AbiK1M5B (ORCPT
+        with ESMTP id S229659AbiK1M6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 07:57:01 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544021659F
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 04:56:59 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id c1so17174046lfi.7
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 04:56:59 -0800 (PST)
+        Mon, 28 Nov 2022 07:58:10 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0824DF12
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 04:58:09 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id p8so17177412lfu.11
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 04:58:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=NdJ3YLGKg8Jwilc7Kq/N45SqMZfSlGNhcVTI/iJvoKg=;
-        b=LYIz1wYbCeNtkUBcsulZO9XsFMo4xD+mYQ4GH1pF83hbD3cFMydqv2GivmfvgAZes4
-         NHXc1mvyKKYKxEk8hKX/esfGoEMNc1/Jr0i44lnNRZGeFBkX2zvJGh2Q5JxTfxpO7UY9
-         CoD+f82UpLzilMSlWAYC65A4gBhAY0Hq0/LHCMeDXKZTh82PVX8v3bh7OUVxCCKZvL4S
-         YyFlF+2vyhf3X9amjAFUC9x+fUeCnoixJkuViA2YMRI7T8R7qAF/qBb3ezHgGfLqF5nZ
-         Teebyn3uPQgD6hfW6ABZk5J637j2OGJIA2fCy2izJrWIyuAI6KmejAleA+WmOEwfH2zy
-         I/mw==
+        bh=ySA7bRXHeIR11FzsN6t6JCDddPE/x+8Ds1P9CNQXQOg=;
+        b=lH2Z/gd3UH+oqwY2SOhBzqVjGuJqhBvscZA+S7Gx+WNUrzF9oDc1la6QCOV6+PDjz0
+         n/jz7GN5yoUKVSqxMSxRhRjoPQ3KRhJQuLK4ccqUhvW8bu/g5P4pdJqizJ/JljZMUWMC
+         5MrPEzHBrWHblEuwlxAqWf/DiBNMl6AZC5CwT6/Uq2eq/m3i9Pt8GtNHl6+IOXlxg0gt
+         WNcT2HEvjQVrERngJYXH6/Q7pNE2+oHQ8PtSFf+yZknzJBfxBQ0fllRki1iCTJeic0Nm
+         RWdb1uNBObR8Law4uhsIxBBJrrQUgInmLIhKXrtsMC7F9JSOdstYpGW4L14LQFgDkBS/
+         VETA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NdJ3YLGKg8Jwilc7Kq/N45SqMZfSlGNhcVTI/iJvoKg=;
-        b=47lhjR/1Y7Y5532r2LDZoZrjnAXwQqIlQ7ROa8FQJYeJcol6w+mVnJTmA/T8bGfSVN
-         o1m/VdlYC7li2gpFfMhhR9DQdpa03/P8A06K7e9nuK6dn+E+O7aMyOIXkAsihfey3fvf
-         tG4WEn9fgfHAiUyCIgfDKrBEu6V9hmseZbWfoWnVufXVcpbp2TBJBkAgoysrjB11r4DK
-         yhg8RBRZRkr+eSHDWcsmqiiiceBpTTOIfzXjSueFtOw4Jx5XLtQCATqcMspy545+4O6W
-         kV/mobxMXoKzrQQfyHcM0zQ9ONPBQHGdrrlBwsnM54GgBe+4zwKDu5COJuuvBHPRxt3j
-         8JvQ==
-X-Gm-Message-State: ANoB5pkVmhqePurIUbefeMpEvxlkqXAGIjQR9eUNuVCMXvnUx29hGmTR
-        qNX4J8Ua3gt2mw3NDqOliSd3ZQ==
-X-Google-Smtp-Source: AA0mqf4dnL/op6s/uiJLLPfcg0d+W4XM4/p87Cp/V69AwGslhviznzpSXNOtaEjUlxpQCT6CWfg89A==
-X-Received: by 2002:ac2:4e14:0:b0:4af:f5a0:8786 with SMTP id e20-20020ac24e14000000b004aff5a08786mr15821017lfr.265.1669640217687;
-        Mon, 28 Nov 2022 04:56:57 -0800 (PST)
+        bh=ySA7bRXHeIR11FzsN6t6JCDddPE/x+8Ds1P9CNQXQOg=;
+        b=wInXDhukW8s+lFst31FQwy/4FOBmhuhQ/z4PlIdjaDQFi7+2WUJWh3H8jJq5PTncvG
+         MUmcZ0oUAFgt6ZZO2zs4MpiB97gOYo1LcQ53HowPWQTaSrsv3Hujl5CZfTPQxhO8Qnyu
+         /eqpKX1Fe+TywtLtz0X4FxxrPYuOyEiaUftPRZOCW0yFRER+JpSf3PEIVhhW/aETm6Tv
+         HDO6DFKXmLwlEp+OKLSuG7uY/4YcOWXd2n/Knoys/hyGZbAjfamnxpNN3/wjECeohTzK
+         n/aLCrEOvzB1pIST4sWlpAqkc2iTOFubzoGhLBt/heJoA8Ptx5rKcIfgaLjwn1/2iQv/
+         +sew==
+X-Gm-Message-State: ANoB5pmPlNI9QT/1KQxUY3DXujHeceC39g4htOmJFlB4ch+ce+VDIZki
+        zDXtZ+aUgISkwCM27qZ3T+IhBw==
+X-Google-Smtp-Source: AA0mqf6QMGVwH029Cx6pZZnvN0zEryx1Qgz1H57o+s8YWwyVX83vzqVbypfZ8EgrqhifThnmbSuQvw==
+X-Received: by 2002:a05:6512:36c5:b0:4a5:fda9:70b1 with SMTP id e5-20020a05651236c500b004a5fda970b1mr19558003lfs.473.1669640288100;
+        Mon, 28 Nov 2022 04:58:08 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id z25-20020a195e59000000b004aa14caf6e9sm1739206lfi.58.2022.11.28.04.56.56
+        by smtp.gmail.com with ESMTPSA id i12-20020a056512318c00b004b51cec187bsm62406lfe.290.2022.11.28.04.58.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Nov 2022 04:56:57 -0800 (PST)
-Message-ID: <0b608b1e-e7a0-0084-e691-6e957028dd90@linaro.org>
-Date:   Mon, 28 Nov 2022 13:56:55 +0100
+        Mon, 28 Nov 2022 04:58:07 -0800 (PST)
+Message-ID: <b647750a-65e1-3cd2-6e66-1b8c2823b354@linaro.org>
+Date:   Mon, 28 Nov 2022 13:58:06 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH v4 2/4] dt-bindings: cpufreq: apple,soc-cpufreq: Add
- binding for Apple SoC cpufreq
+Subject: Re: [PATCH v4 3/3] arm64: dts: qcom: sc8280xp-x13s: Add soundcard
+ support
 Content-Language: en-US
-To:     Hector Martin <marcan@marcan.st>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221128124216.13477-1-marcan@marcan.st>
- <20221128124216.13477-3-marcan@marcan.st>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221128124216.13477-3-marcan@marcan.st>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        agross@kernel.org, andersson@kernel.org
+Cc:     konrad.dybcio@somainline.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+References: <20221123104342.26140-1-srinivas.kandagatla@linaro.org>
+ <20221123104342.26140-4-srinivas.kandagatla@linaro.org>
+ <30be93a3-c57f-d4c9-c154-6f12b9dc5dc5@linaro.org>
+In-Reply-To: <30be93a3-c57f-d4c9-c154-6f12b9dc5dc5@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/11/2022 13:42, Hector Martin wrote:
-> This binding represents the cpufreq/DVFS hardware present in Apple SoCs.
-> The hardware has an independent controller per CPU cluster, and we
-> represent them as unique nodes in order to accurately describe the
-> hardware. The driver is responsible for binding them as a single cpufreq
-> device (in the Linux cpufreq model).
+On 28/11/2022 13:44, Krzysztof Kozlowski wrote:
+> On 23/11/2022 11:43, Srinivas Kandagatla wrote:
+>> +
+>> +&swr1 {
+>> +	status = "okay";
+>> +
+>> +	wcd_rx: wcd9380-rx@0,4 {
+>> +		compatible = "sdw20217010d00";
+>> +		reg = <0 4>;
+>> +		qcom,rx-port-mapping = <1 2 3 4 5>;
+>> +	};
+>> +};
+>> +
+>> +&swr2 {
+>> +	status = "okay";
+>> +
+>> +	wcd_tx: wcd9380-tx@0,3 {
+>> +		compatible = "sdw20217010d00";
+>> +		reg = <0 3>;
+>> +		qcom,tx-port-mapping = <1 1 2 3>;
 > 
-> Acked-by: Marc Zyngier <maz@kernel.org>
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> ---
->  .../cpufreq/apple,cluster-cpufreq.yaml        | 117 ++++++++++++++++++
->  1 file changed, 117 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
+> I think I solved my head-phones one-channel problem.
+> This should be <1 2 3> and in DTSI:
+> qcom,din-ports = <3>;
 > 
-> diff --git a/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml b/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
-> new file mode 100644
-> index 000000000000..a21271f73fc1
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
-> @@ -0,0 +1,117 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/cpufreq/apple,cluster-cpufreq.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Apple SoC cluster cpufreq device
-> +
-> +maintainers:
-> +  - Hector Martin <marcan@marcan.st>
-> +
-> +description: |
-> +  Apple SoCs (e.g. M1) have a per-cpu-cluster DVFS controller that is part of
-> +  the cluster management register block. This binding uses the standard
-> +  operating-points-v2 table to define the CPU performance states, with the
-> +  opp-level property specifying the hardware p-state index for that level.
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - oneOf:
+> The downstream waipio-audio-overlay.dtsi says:
+> 
+>  56                         qcom,swr-port-mapping = <1 SWRM_TX1_CH1 0x1>,
+>  57                                 <1 SWRM_TX1_CH2 0x2>,
+>  58                                 <1 SWRM_TX1_CH3 0x4>, <1 SWRM_TX1_CH4 0x8>,
+>  59                                 <2 SWRM_TX2_CH1 0x1>, <2 SWRM_TX2_CH2 0x2>,
+>  60                                 <2 SWRM_TX2_CH3 0x4>, <2 SWRM_TX2_CH4 0x8>,
+>  61                                 <3 SWRM_TX3_CH1 0x1>, <3 SWRM_TX3_CH2 0x2>,
+>  62                                 <3 SWRM_TX3_CH3 0x4>, <3 SWRM_TX3_CH4 0x8>;
+> 
+> I just don't know what how to trim the port config properties - we
+> have there four entries, but channels are only three?
+> 
+> Where do these come from? The downstream:
+> asoc/waipio-port-config.h / lahaina-port-config.h
+> Do do not have port config for this SWR.
 
-This is enum.
-
-Any other changes? Your cover letter say quite unspecific "minor review
-feedback"...
+Eh, not sure anymore. My second headphone started to work without these
+changes, so I have no clue.
 
 Best regards,
 Krzysztof
