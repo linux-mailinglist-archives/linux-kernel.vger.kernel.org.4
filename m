@@ -2,99 +2,434 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D24E163A9C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:41:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D175463A9C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 14:42:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231932AbiK1Nlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 08:41:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36988 "EHLO
+        id S231939AbiK1NmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 08:42:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbiK1Nlm (ORCPT
+        with ESMTP id S229870AbiK1NmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 08:41:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CFEB49C;
-        Mon, 28 Nov 2022 05:41:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6530361178;
-        Mon, 28 Nov 2022 13:41:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77F13C433D6;
-        Mon, 28 Nov 2022 13:41:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669642900;
-        bh=c9KYmmV9Jd7E1V1b9Z2sFp2dehpiB3Gp3kkqi97DJjw=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=pq2koBUPfrVFR5bI4zQUHJja9jhYBHuJ8E33Ed1D0ngr92jT+Bn+6TAJ4EIY2U78K
-         KYFfQmjNQtzjXo+Sfl3dfVjWJq/UmptNWxAVfa73FuFn5sBoutzgtIxDfSHpt2tefB
-         xF6wZhuI+N0GRsLBk5dz5iqElLk4+u97LrkiDstg1FAyxrbFR5RsLj2LWvmA5pIgID
-         Wagn5RsiRRjHMu1Eh2MmmdK9Ozg2Y9XuPaqvw/l4LHOuAmNtn6Uj1i2uv98kPXKOFG
-         v8V/nI7/dbuuKYVMUHgcWayHMtwuHHiJgVt/F5+OC65ZgMyWMIQpp86/TGoIeHWQgG
-         O5mzVgBtsOJKQ==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     Ping-Ke Shih <pkshih@realtek.com>,
-        "linux-wireless\@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        Neo Jou <neojou@gmail.com>,
-        Hans Ulli Kroll <linux@ulli-kroll.de>,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        "netdev\@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        "kernel\@pengutronix.de" <kernel@pengutronix.de>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Alexander Hochbaum <alex@appudo.com>,
-        Da Xue <da@libre.computer>, Bernie Huang <phhuang@realtek.com>,
-        Viktor Petrenko <g0000ga@gmail.com>,
-        neo_jou <neo_jou@realtek.com>
-Subject: Re: [PATCH v3 07/11] rtw88: Add common USB chip support
-References: <20221122145226.4065843-1-s.hauer@pengutronix.de>
-        <20221122145226.4065843-8-s.hauer@pengutronix.de>
-        <1f7aa964766c4f65b836f7e1d716a1e3@realtek.com>
-        <20221128103000.GC29728@pengutronix.de>
-Date:   Mon, 28 Nov 2022 15:41:32 +0200
-In-Reply-To: <20221128103000.GC29728@pengutronix.de> (Sascha Hauer's message
-        of "Mon, 28 Nov 2022 11:30:00 +0100")
-Message-ID: <87k03f5h83.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Mon, 28 Nov 2022 08:42:07 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A33081E73D
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 05:42:05 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 82080D6E;
+        Mon, 28 Nov 2022 05:42:11 -0800 (PST)
+Received: from [10.57.71.118] (unknown [10.57.71.118])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C439F3F73D;
+        Mon, 28 Nov 2022 05:42:00 -0800 (PST)
+Message-ID: <01296f25-b507-c965-9840-119487a00534@arm.com>
+Date:   Mon, 28 Nov 2022 13:41:56 +0000
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v3 20/20] iommu: Rename attach_dev to set_dev
+Content-Language: en-GB
+To:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Will Deacon <will@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Rob Clark <robdclark@gmail.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Yong Wu <yong.wu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20221128064648.1934720-1-baolu.lu@linux.intel.com>
+ <20221128064648.1934720-21-baolu.lu@linux.intel.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20221128064648.1934720-21-baolu.lu@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sascha Hauer <s.hauer@pengutronix.de> writes:
+On 2022-11-28 06:46, Lu Baolu wrote:
+> With the retirement of the detach_dev callback, the naming of attach_dev
+> isn't meaningful anymore. Rename it to set_dev to restore its real
+> meaning, that is, setting an iommu domain to a device.
 
->> > +static void rtw_usb_write_port_tx_complete(struct urb *urb)
->> > +{
->> > +	struct rtw_usb_txcb *txcb = urb->context;
->> > +	struct rtw_dev *rtwdev = txcb->rtwdev;
->> > +	struct ieee80211_hw *hw = rtwdev->hw;
->> > +
->> > +	while (true) {
->> 
->> Is it possible to have a hard limit to prevent unexpected infinite loop?
->
-> Yes, that would be possible, but do you think it's necessary?
+English grammar alert: this part is confusing, since the usual 
+in-context reading* of "set[ting] X to Y" is going to imply assigning a 
+value of Y to some unique property of X. Given the actual semantic that 
+when we attach the device to the domain, we are setting the (current) 
+domain as a property of the device, I think the most logical and 
+intuitive abbreviation for this method would be set_domain(), where the 
+target device is then clearly implied by the argument (as the target 
+domain was for attach_dev()).
 
-It's a common advice to have a limit for loops in kernel.
+FWIW I also wouldn't say that "attach" loses its meaning in a context 
+where an equivalent "detach" operation is only ever implicit in 
+reattaching to something else, however I do agree that it *is* worth 
+switching the terminology to clearly differentiate this internal 
+behaviour from the public attach/detach API for unmanaged domains.
 
-> Each *txcb is used only once, It's allocated in rtw_usb_tx_agg_skb() and
-> &txcb->tx_ack_queue is filled with a limited number of skbs there. These
-> skbs is then iterated over in rtw_usb_write_port_tx_complete(), so I don't
-> see a way how we could end up in an infinite loop here.
+Thanks,
+Robin.
 
-Everyone always say that their code is bugfree ;) More seriously though,
-even if it would be bugfree now someone else can add buggy code later.
-So much better to have a limit for the loop.
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+[*] Note that It's not strictly incorrect, but "set to" in the sense of 
+starting work, e.g. "At 6PM I set to cooking dinner", is much less 
+commonly used, especially in code. Although I think technically 
+set_dev_to(dev, domain) would work gramatically to abbreviate that sense 
+of "set device to start using domain", it's still rather obscure and not 
+much less ambiguous.
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> ---
+>   include/linux/iommu.h                       | 4 ++--
+>   drivers/iommu/amd/iommu.c                   | 2 +-
+>   drivers/iommu/apple-dart.c                  | 2 +-
+>   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 2 +-
+>   drivers/iommu/arm/arm-smmu/arm-smmu.c       | 2 +-
+>   drivers/iommu/arm/arm-smmu/qcom_iommu.c     | 2 +-
+>   drivers/iommu/exynos-iommu.c                | 2 +-
+>   drivers/iommu/fsl_pamu_domain.c             | 2 +-
+>   drivers/iommu/intel/iommu.c                 | 4 ++--
+>   drivers/iommu/iommu.c                       | 4 ++--
+>   drivers/iommu/ipmmu-vmsa.c                  | 2 +-
+>   drivers/iommu/msm_iommu.c                   | 2 +-
+>   drivers/iommu/mtk_iommu.c                   | 2 +-
+>   drivers/iommu/mtk_iommu_v1.c                | 2 +-
+>   drivers/iommu/omap-iommu.c                  | 2 +-
+>   drivers/iommu/rockchip-iommu.c              | 2 +-
+>   drivers/iommu/s390-iommu.c                  | 2 +-
+>   drivers/iommu/sprd-iommu.c                  | 2 +-
+>   drivers/iommu/sun50i-iommu.c                | 2 +-
+>   drivers/iommu/tegra-gart.c                  | 2 +-
+>   drivers/iommu/tegra-smmu.c                  | 2 +-
+>   drivers/iommu/virtio-iommu.c                | 2 +-
+>   22 files changed, 25 insertions(+), 25 deletions(-)
+> 
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index 4c0491e5708c..1def4b4bb2b9 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -281,7 +281,7 @@ struct iommu_ops {
+>   
+>   /**
+>    * struct iommu_domain_ops - domain specific operations
+> - * @attach_dev: attach an iommu domain to a device
+> + * @set_dev: set an iommu domain to a device
+>    *  Return:
+>    * * 0		- success
+>    * * EINVAL	- can indicate that device and domain are incompatible due to
+> @@ -313,7 +313,7 @@ struct iommu_ops {
+>    * @free: Release the domain after use.
+>    */
+>   struct iommu_domain_ops {
+> -	int (*attach_dev)(struct iommu_domain *domain, struct device *dev);
+> +	int (*set_dev)(struct iommu_domain *domain, struct device *dev);
+>   	int (*set_dev_pasid)(struct iommu_domain *domain, struct device *dev,
+>   			     ioasid_t pasid);
+>   
+> diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
+> index bd1970b4f48b..f628bd0f9632 100644
+> --- a/drivers/iommu/amd/iommu.c
+> +++ b/drivers/iommu/amd/iommu.c
+> @@ -2388,7 +2388,7 @@ const struct iommu_ops amd_iommu_ops = {
+>   	.pgsize_bitmap	= AMD_IOMMU_PGSIZES,
+>   	.def_domain_type = amd_iommu_def_domain_type,
+>   	.default_domain_ops = &(const struct iommu_domain_ops) {
+> -		.attach_dev	= amd_iommu_attach_device,
+> +		.set_dev	= amd_iommu_attach_device,
+>   		.map_pages	= amd_iommu_map_pages,
+>   		.unmap_pages	= amd_iommu_unmap_pages,
+>   		.iotlb_sync_map	= amd_iommu_iotlb_sync_map,
+> diff --git a/drivers/iommu/apple-dart.c b/drivers/iommu/apple-dart.c
+> index 6fbe6b275c79..77c9e7d3e1a2 100644
+> --- a/drivers/iommu/apple-dart.c
+> +++ b/drivers/iommu/apple-dart.c
+> @@ -763,7 +763,7 @@ static const struct iommu_ops apple_dart_iommu_ops = {
+>   	.pgsize_bitmap = -1UL, /* Restricted during dart probe */
+>   	.owner = THIS_MODULE,
+>   	.default_domain_ops = &(const struct iommu_domain_ops) {
+> -		.attach_dev	= apple_dart_attach_dev,
+> +		.set_dev	= apple_dart_attach_dev,
+>   		.map_pages	= apple_dart_map_pages,
+>   		.unmap_pages	= apple_dart_unmap_pages,
+>   		.flush_iotlb_all = apple_dart_flush_iotlb_all,
+> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> index ab160198edd6..194c304c5ee8 100644
+> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> @@ -2859,7 +2859,7 @@ static struct iommu_ops arm_smmu_ops = {
+>   	.pgsize_bitmap		= -1UL, /* Restricted during device attach */
+>   	.owner			= THIS_MODULE,
+>   	.default_domain_ops = &(const struct iommu_domain_ops) {
+> -		.attach_dev		= arm_smmu_attach_dev,
+> +		.set_dev		= arm_smmu_attach_dev,
+>   		.map_pages		= arm_smmu_map_pages,
+>   		.unmap_pages		= arm_smmu_unmap_pages,
+>   		.flush_iotlb_all	= arm_smmu_flush_iotlb_all,
+> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> index 719fbca1fe52..e31002d84b4a 100644
+> --- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> @@ -1567,7 +1567,7 @@ static struct iommu_ops arm_smmu_ops = {
+>   	.pgsize_bitmap		= -1UL, /* Restricted during device attach */
+>   	.owner			= THIS_MODULE,
+>   	.default_domain_ops = &(const struct iommu_domain_ops) {
+> -		.attach_dev		= arm_smmu_attach_dev,
+> +		.set_dev		= arm_smmu_attach_dev,
+>   		.map_pages		= arm_smmu_map_pages,
+>   		.unmap_pages		= arm_smmu_unmap_pages,
+>   		.flush_iotlb_all	= arm_smmu_flush_iotlb_all,
+> diff --git a/drivers/iommu/arm/arm-smmu/qcom_iommu.c b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
+> index d7be3adee426..195add905364 100644
+> --- a/drivers/iommu/arm/arm-smmu/qcom_iommu.c
+> +++ b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
+> @@ -560,7 +560,7 @@ static const struct iommu_ops qcom_iommu_ops = {
+>   	.of_xlate	= qcom_iommu_of_xlate,
+>   	.pgsize_bitmap	= SZ_4K | SZ_64K | SZ_1M | SZ_16M,
+>   	.default_domain_ops = &(const struct iommu_domain_ops) {
+> -		.attach_dev	= qcom_iommu_attach_dev,
+> +		.set_dev	= qcom_iommu_attach_dev,
+>   		.map_pages	= qcom_iommu_map,
+>   		.unmap_pages	= qcom_iommu_unmap,
+>   		.flush_iotlb_all = qcom_iommu_flush_iotlb_all,
+> diff --git a/drivers/iommu/exynos-iommu.c b/drivers/iommu/exynos-iommu.c
+> index 29ec713e8a21..7e735929e395 100644
+> --- a/drivers/iommu/exynos-iommu.c
+> +++ b/drivers/iommu/exynos-iommu.c
+> @@ -1403,7 +1403,7 @@ static const struct iommu_ops exynos_iommu_ops = {
+>   	.pgsize_bitmap = SECT_SIZE | LPAGE_SIZE | SPAGE_SIZE,
+>   	.of_xlate = exynos_iommu_of_xlate,
+>   	.default_domain_ops = &(const struct iommu_domain_ops) {
+> -		.attach_dev	= exynos_iommu_attach_device,
+> +		.set_dev	= exynos_iommu_attach_device,
+>   		.map		= exynos_iommu_map,
+>   		.unmap		= exynos_iommu_unmap,
+>   		.iova_to_phys	= exynos_iommu_iova_to_phys,
+> diff --git a/drivers/iommu/fsl_pamu_domain.c b/drivers/iommu/fsl_pamu_domain.c
+> index 272d88e415c6..c66e48b0ed6f 100644
+> --- a/drivers/iommu/fsl_pamu_domain.c
+> +++ b/drivers/iommu/fsl_pamu_domain.c
+> @@ -462,7 +462,7 @@ static const struct iommu_ops fsl_pamu_ops = {
+>   	.device_group   = fsl_pamu_device_group,
+>   	.set_platform_dma = fsl_pamu_set_platform_dma;
+>   	.default_domain_ops = &(const struct iommu_domain_ops) {
+> -		.attach_dev	= fsl_pamu_attach_device,
+> +		.set_dev	= fsl_pamu_attach_device,
+>   		.iova_to_phys	= fsl_pamu_iova_to_phys,
+>   		.free		= fsl_pamu_domain_free,
+>   	}
+> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> index cd71194fe7a6..7bcadb702e00 100644
+> --- a/drivers/iommu/intel/iommu.c
+> +++ b/drivers/iommu/intel/iommu.c
+> @@ -4131,7 +4131,7 @@ static int blocking_domain_attach_dev(struct iommu_domain *domain,
+>   
+>   static struct iommu_domain blocking_domain = {
+>   	.ops = &(const struct iommu_domain_ops) {
+> -		.attach_dev	= blocking_domain_attach_dev,
+> +		.set_dev	= blocking_domain_attach_dev,
+>   		.free		= intel_iommu_domain_free
+>   	}
+>   };
+> @@ -4750,7 +4750,7 @@ const struct iommu_ops intel_iommu_ops = {
+>   	.page_response		= intel_svm_page_response,
+>   #endif
+>   	.default_domain_ops = &(const struct iommu_domain_ops) {
+> -		.attach_dev		= intel_iommu_attach_device,
+> +		.set_dev		= intel_iommu_attach_device,
+>   		.map_pages		= intel_iommu_map_pages,
+>   		.unmap_pages		= intel_iommu_unmap_pages,
+>   		.iotlb_sync_map		= intel_iommu_iotlb_sync_map,
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index e4966f088184..dca31065cdb5 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -1983,10 +1983,10 @@ static int __iommu_attach_device(struct iommu_domain *domain,
+>   {
+>   	int ret;
+>   
+> -	if (unlikely(domain->ops->attach_dev == NULL))
+> +	if (unlikely(!domain->ops->set_dev))
+>   		return -ENODEV;
+>   
+> -	ret = domain->ops->attach_dev(domain, dev);
+> +	ret = domain->ops->set_dev(domain, dev);
+>   	if (!ret)
+>   		trace_attach_device_to_domain(dev);
+>   	return ret;
+> diff --git a/drivers/iommu/ipmmu-vmsa.c b/drivers/iommu/ipmmu-vmsa.c
+> index 3112822ac7be..8d40a2c150d4 100644
+> --- a/drivers/iommu/ipmmu-vmsa.c
+> +++ b/drivers/iommu/ipmmu-vmsa.c
+> @@ -860,7 +860,7 @@ static const struct iommu_ops ipmmu_ops = {
+>   	.pgsize_bitmap = SZ_1G | SZ_2M | SZ_4K,
+>   	.of_xlate = ipmmu_of_xlate,
+>   	.default_domain_ops = &(const struct iommu_domain_ops) {
+> -		.attach_dev	= ipmmu_attach_device,
+> +		.set_dev	= ipmmu_attach_device,
+>   		.map_pages	= ipmmu_map,
+>   		.unmap_pages	= ipmmu_unmap,
+>   		.flush_iotlb_all = ipmmu_flush_iotlb_all,
+> diff --git a/drivers/iommu/msm_iommu.c b/drivers/iommu/msm_iommu.c
+> index 564f9dc0140d..9f7432443726 100644
+> --- a/drivers/iommu/msm_iommu.c
+> +++ b/drivers/iommu/msm_iommu.c
+> @@ -690,7 +690,7 @@ static struct iommu_ops msm_iommu_ops = {
+>   	.pgsize_bitmap = MSM_IOMMU_PGSIZES,
+>   	.of_xlate = qcom_iommu_of_xlate,
+>   	.default_domain_ops = &(const struct iommu_domain_ops) {
+> -		.attach_dev	= msm_iommu_attach_dev,
+> +		.set_dev	= msm_iommu_attach_dev,
+>   		.map_pages	= msm_iommu_map,
+>   		.unmap_pages	= msm_iommu_unmap,
+>   		/*
+> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+> index 2022f47529c1..6bd4eb39c08f 100644
+> --- a/drivers/iommu/mtk_iommu.c
+> +++ b/drivers/iommu/mtk_iommu.c
+> @@ -940,7 +940,7 @@ static const struct iommu_ops mtk_iommu_ops = {
+>   	.pgsize_bitmap	= SZ_4K | SZ_64K | SZ_1M | SZ_16M,
+>   	.owner		= THIS_MODULE,
+>   	.default_domain_ops = &(const struct iommu_domain_ops) {
+> -		.attach_dev	= mtk_iommu_attach_device,
+> +		.set_dev	= mtk_iommu_attach_device,
+>   		.map_pages	= mtk_iommu_map,
+>   		.unmap_pages	= mtk_iommu_unmap,
+>   		.flush_iotlb_all = mtk_iommu_flush_iotlb_all,
+> diff --git a/drivers/iommu/mtk_iommu_v1.c b/drivers/iommu/mtk_iommu_v1.c
+> index c2d80b7a377f..785fc1569bc7 100644
+> --- a/drivers/iommu/mtk_iommu_v1.c
+> +++ b/drivers/iommu/mtk_iommu_v1.c
+> @@ -596,7 +596,7 @@ static const struct iommu_ops mtk_iommu_v1_ops = {
+>   	.set_platform_dma = mtk_iommu_v1_set_platform_dma,
+>   	.owner          = THIS_MODULE,
+>   	.default_domain_ops = &(const struct iommu_domain_ops) {
+> -		.attach_dev	= mtk_iommu_v1_attach_device,
+> +		.set_dev	= mtk_iommu_v1_attach_device,
+>   		.map_pages	= mtk_iommu_v1_map,
+>   		.unmap_pages	= mtk_iommu_v1_unmap,
+>   		.iova_to_phys	= mtk_iommu_v1_iova_to_phys,
+> diff --git a/drivers/iommu/omap-iommu.c b/drivers/iommu/omap-iommu.c
+> index c3eedab00038..6f1031336611 100644
+> --- a/drivers/iommu/omap-iommu.c
+> +++ b/drivers/iommu/omap-iommu.c
+> @@ -1748,7 +1748,7 @@ static const struct iommu_ops omap_iommu_ops = {
+>   	.set_platform_dma = omap_iommu_set_platform_dma,
+>   	.pgsize_bitmap	= OMAP_IOMMU_PGSIZES,
+>   	.default_domain_ops = &(const struct iommu_domain_ops) {
+> -		.attach_dev	= omap_iommu_attach_dev,
+> +		.set_dev	= omap_iommu_attach_dev,
+>   		.map		= omap_iommu_map,
+>   		.unmap		= omap_iommu_unmap,
+>   		.iova_to_phys	= omap_iommu_iova_to_phys,
+> diff --git a/drivers/iommu/rockchip-iommu.c b/drivers/iommu/rockchip-iommu.c
+> index f30db22ea5d7..5381dbf624ad 100644
+> --- a/drivers/iommu/rockchip-iommu.c
+> +++ b/drivers/iommu/rockchip-iommu.c
+> @@ -1191,7 +1191,7 @@ static const struct iommu_ops rk_iommu_ops = {
+>   	.pgsize_bitmap = RK_IOMMU_PGSIZE_BITMAP,
+>   	.of_xlate = rk_iommu_of_xlate,
+>   	.default_domain_ops = &(const struct iommu_domain_ops) {
+> -		.attach_dev	= rk_iommu_attach_device,
+> +		.set_dev	= rk_iommu_attach_device,
+>   		.map		= rk_iommu_map,
+>   		.unmap		= rk_iommu_unmap,
+>   		.iova_to_phys	= rk_iommu_iova_to_phys,
+> diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
+> index 33dba5ee5e20..5fa8ea6687e7 100644
+> --- a/drivers/iommu/s390-iommu.c
+> +++ b/drivers/iommu/s390-iommu.c
+> @@ -447,7 +447,7 @@ static const struct iommu_ops s390_iommu_ops = {
+>   	.pgsize_bitmap = SZ_4K,
+>   	.get_resv_regions = s390_iommu_get_resv_regions,
+>   	.default_domain_ops = &(const struct iommu_domain_ops) {
+> -		.attach_dev	= s390_iommu_attach_device,
+> +		.set_dev	= s390_iommu_attach_device,
+>   		.map_pages	= s390_iommu_map_pages,
+>   		.unmap_pages	= s390_iommu_unmap_pages,
+>   		.flush_iotlb_all = s390_iommu_flush_iotlb_all,
+> diff --git a/drivers/iommu/sprd-iommu.c b/drivers/iommu/sprd-iommu.c
+> index ae94d74b73f4..e105fa476e94 100644
+> --- a/drivers/iommu/sprd-iommu.c
+> +++ b/drivers/iommu/sprd-iommu.c
+> @@ -398,7 +398,7 @@ static const struct iommu_ops sprd_iommu_ops = {
+>   	.pgsize_bitmap	= SPRD_IOMMU_PAGE_SIZE,
+>   	.owner		= THIS_MODULE,
+>   	.default_domain_ops = &(const struct iommu_domain_ops) {
+> -		.attach_dev	= sprd_iommu_attach_device,
+> +		.set_dev	= sprd_iommu_attach_device,
+>   		.map_pages	= sprd_iommu_map,
+>   		.unmap_pages	= sprd_iommu_unmap,
+>   		.iotlb_sync_map	= sprd_iommu_sync_map,
+> diff --git a/drivers/iommu/sun50i-iommu.c b/drivers/iommu/sun50i-iommu.c
+> index 37b074be87a5..2a35148c2b65 100644
+> --- a/drivers/iommu/sun50i-iommu.c
+> +++ b/drivers/iommu/sun50i-iommu.c
+> @@ -834,7 +834,7 @@ static const struct iommu_ops sun50i_iommu_ops = {
+>   	.of_xlate	= sun50i_iommu_of_xlate,
+>   	.probe_device	= sun50i_iommu_probe_device,
+>   	.default_domain_ops = &(const struct iommu_domain_ops) {
+> -		.attach_dev	= sun50i_iommu_attach_device,
+> +		.set_dev	= sun50i_iommu_attach_device,
+>   		.flush_iotlb_all = sun50i_iommu_flush_iotlb_all,
+>   		.iotlb_sync_map = sun50i_iommu_iotlb_sync_map,
+>   		.iotlb_sync	= sun50i_iommu_iotlb_sync,
+> diff --git a/drivers/iommu/tegra-gart.c b/drivers/iommu/tegra-gart.c
+> index a532b333233f..2b3944d10735 100644
+> --- a/drivers/iommu/tegra-gart.c
+> +++ b/drivers/iommu/tegra-gart.c
+> @@ -282,7 +282,7 @@ static const struct iommu_ops gart_iommu_ops = {
+>   	.pgsize_bitmap	= GART_IOMMU_PGSIZES,
+>   	.of_xlate	= gart_iommu_of_xlate,
+>   	.default_domain_ops = &(const struct iommu_domain_ops) {
+> -		.attach_dev	= gart_iommu_attach_dev,
+> +		.set_dev	= gart_iommu_attach_dev,
+>   		.map		= gart_iommu_map,
+>   		.unmap		= gart_iommu_unmap,
+>   		.iova_to_phys	= gart_iommu_iova_to_phys,
+> diff --git a/drivers/iommu/tegra-smmu.c b/drivers/iommu/tegra-smmu.c
+> index 247d485904c1..b9f035069794 100644
+> --- a/drivers/iommu/tegra-smmu.c
+> +++ b/drivers/iommu/tegra-smmu.c
+> @@ -977,7 +977,7 @@ static const struct iommu_ops tegra_smmu_ops = {
+>   	.of_xlate = tegra_smmu_of_xlate,
+>   	.pgsize_bitmap = SZ_4K,
+>   	.default_domain_ops = &(const struct iommu_domain_ops) {
+> -		.attach_dev	= tegra_smmu_attach_dev,
+> +		.set_dev	= tegra_smmu_attach_dev,
+>   		.map		= tegra_smmu_map,
+>   		.unmap		= tegra_smmu_unmap,
+>   		.iova_to_phys	= tegra_smmu_iova_to_phys,
+> diff --git a/drivers/iommu/virtio-iommu.c b/drivers/iommu/virtio-iommu.c
+> index 5b8fe9bfa9a5..c407c4b213db 100644
+> --- a/drivers/iommu/virtio-iommu.c
+> +++ b/drivers/iommu/virtio-iommu.c
+> @@ -1028,7 +1028,7 @@ static struct iommu_ops viommu_ops = {
+>   	.of_xlate		= viommu_of_xlate,
+>   	.owner			= THIS_MODULE,
+>   	.default_domain_ops = &(const struct iommu_domain_ops) {
+> -		.attach_dev		= viommu_attach_dev,
+> +		.set_dev		= viommu_attach_dev,
+>   		.map_pages		= viommu_map_pages,
+>   		.unmap_pages		= viommu_unmap_pages,
+>   		.iova_to_phys		= viommu_iova_to_phys,
