@@ -2,98 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2536563AD5F
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 17:12:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B51D063AD83
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 17:20:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232471AbiK1QMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 11:12:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43962 "EHLO
+        id S231896AbiK1QUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 11:20:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbiK1QM3 (ORCPT
+        with ESMTP id S231743AbiK1QUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 11:12:29 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB10D6479;
-        Mon, 28 Nov 2022 08:12:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669651948; x=1701187948;
-  h=from:to:cc:subject:date:message-id;
-  bh=PJooqv5lc87r6DlPqv7xPFz5j9kjskGlNeElh+S27Vc=;
-  b=CQ10JDwAPAcqZh88cc3QRGn1F5Stap7X3Sa1PoPwAm25mbsdVE86lcoW
-   OdzqYuxQUiGxbPPFhuLuOvfHQtVMaa9qKskArBLgY9LxbuUAl6cFhemXo
-   UE8t0B3MWobUqQvIOQ2UzPMC4hppDQznFWBXOwXZ8G0V5wWC1hmpeqFIZ
-   g1+PvVAN5L4QVDuSo8IlFzPsBRKiKc/+zLDNKj+PqaAQJljQopJ8+/akn
-   AzlQQGRDdtaPH2dAp1CrQXjGE2hRgmg59vyeZUHkY7Wpqb5qOjHUYxHS3
-   6tP3lhnb70Es3wpzVgQj69LvUr6s3tgoEILHO+SRmiHtxsfdcDIFV85Sg
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="314909049"
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="314909049"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 08:12:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="749445230"
-X-IronPort-AV: E=Sophos;i="5.96,200,1665471600"; 
-   d="scan'208";a="749445230"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga002.fm.intel.com with ESMTP; 28 Nov 2022 08:12:27 -0800
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Cc:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Len Brown <len.brown@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Haowen Bai <baihaowen@meizu.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] thermal: intel: hfi: Remove a pointless die_id check
-Date:   Mon, 28 Nov 2022 08:20:01 -0800
-Message-Id: <20221128162001.31227-1-ricardo.neri-calderon@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 28 Nov 2022 11:20:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D20A5219B
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 08:20:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 67A8F61245
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 16:20:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7403AC433D6;
+        Mon, 28 Nov 2022 16:20:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669652413;
+        bh=bMg0cj3qFxO+1K9hMYJ2UaA3wGkPMTjESiR5sw9ag58=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=h5t+jLUTb6/eznuzlaE8V6HwOERy4xcK8p/bqroQKm+Pa5ev0KZR4e/ig/zcDhcVZ
+         DDtU0rmswSg9Egqk89bBG0aVxZEzZcVU7QimSQAr+DkpQngrRM19Ox78jq8i9TH23U
+         6cAdpXgWdbDf8FqJIBx4xss+Nak66IEVhUONotomKJaQA95j+yJB++2xHZKMm9VfVa
+         pOoarKRfEfcvh72yCfOhJC5z9xNmWF8OkzNuzEirWgmzTmE/peTyN0A2gJuc5dvWkb
+         lq3zgFzhaLxd9q8MYkD+kf4jGDzXh3A+0GXyAkB2dj0jLatkcm+iHF5K4BrkhH2iia
+         Tn1B0qq/VOqtA==
+Date:   Mon, 28 Nov 2022 17:20:10 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Eric Dumazet <edumazet@google.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Arjan van de Ven <arjan@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Rik van Riel <riel@surriel.com>
+Subject: Re: [PATCH v4 14/16] timer: Implement the hierarchical pull model
+Message-ID: <20221128162010.GB1699488@lothringen>
+References: <20221104145737.71236-1-anna-maria@linutronix.de>
+ <20221104145737.71236-15-anna-maria@linutronix.de>
+ <20221115113152.GH590078@lothringen>
+ <e2b4a90-2d9-f2db-8c85-2e64caed5d0@linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e2b4a90-2d9-f2db-8c85-2e64caed5d0@linutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-die_id is an u16 quantity. On single-die systems the default value of
-die_id is 0. No need to check for negative values.
+On Thu, Nov 24, 2022 at 08:47:56AM +0100, Anna-Maria Behnsen wrote:
+> On Tue, 15 Nov 2022, Frederic Weisbecker wrote:
+> 
+> > On Fri, Nov 04, 2022 at 03:57:35PM +0100, Anna-Maria Behnsen wrote:
+> > > +static int tmigr_cpu_offline(unsigned int cpu)
+> > > +{
+> > > +	struct tmigr_cpu *tmc = this_cpu_ptr(&tmigr_cpu);
+> > > +
+> > > +	raw_spin_lock_irq(&tmc->lock);
+> > > +	tmc->online = 0;
+> > > +	__tmigr_cpu_deactivate(tmc, KTIME_MAX);
+> > 
+> > This means that if the CPU is going idle for some time during
+> > the hotplug process (ie: at some point between CPUHP_AP_TMIGR_ONLINE
+> > and CPUHP_TEARDOWN_CPU), then a global timer may be delayed for that long.
+> > 
+> > I guess it shouldn't be too bad but worth mentioning...
+> > 
+> > Although if it happens to be a problem it could be solved with simply allowing
+> > tmigr_cpu_deactivate() when !tmc->online.
+> 
+> The plan was (and I broke it) to let the CPU handle global timers by itself
+> as long as timer migration hierarchy is not completely initialized and as
+> long as CPU is marked offline in timer migration hierarchy. Otherwise
+> global timers might be delayed during this period. The proper way would be
+> that tmigr_cpu_deactivate(nextexp) directly returns nextexp if !tmc->online
+> and tmigr hierarchy is not in place yet. I will have a deeper look if there
+> was a reason why I changed the return to KTIME_MAX...
 
-Plus, removing this check makes Coverity happy.
+Well, do you need tmc->online at all?
 
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Amit Kucheria <amitk@kernel.org>
-Cc: Zhang Rui <rui.zhang@intel.com>
-Cc: Len Brown <len.brown@intel.com>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: Aubrey Li <aubrey.li@linux.intel.com>
-Cc: Haowen Bai <baihaowen@meizu.com>
-Cc: linux-pm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
----
- drivers/thermal/intel/intel_hfi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I guess tmigr_cpu_offline() could be simply removed because when the CPU goes
+finally down in do_idle() it does:
 
-diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-index 239afe02e518..d35287eb2f78 100644
---- a/drivers/thermal/intel/intel_hfi.c
-+++ b/drivers/thermal/intel/intel_hfi.c
-@@ -371,7 +371,7 @@ void intel_hfi_online(unsigned int cpu)
- 	die_id = topology_logical_die_id(cpu);
- 	hfi_instance = info->hfi_instance;
- 	if (!hfi_instance) {
--		if (die_id < 0 || die_id >= max_hfi_instances)
-+		if (die_id >= max_hfi_instances)
- 			return;
- 
- 		hfi_instance = &hfi_instances[die_id];
--- 
-2.25.1
+	tick_nohz_idle_stop_tick();
+	cpuhp_report_idle_dead();
 
+So the tick is expected to be stopped (better check it is) and thus the tmc
+should be deactivated.
+
+I guess you just need to call tmigr_cpu_activate() from timers_prepare_cpu().
+
+Or am I missing something along the way?
