@@ -2,87 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4A6263A8C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 13:54:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5AFE63A882
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 13:35:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231298AbiK1MyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 07:54:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55696 "EHLO
+        id S230429AbiK1Mfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 07:35:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231299AbiK1MyN (ORCPT
+        with ESMTP id S229659AbiK1Mfs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 07:54:13 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265C5165A2
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 04:54:11 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id bs21so16653707wrb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 04:54:11 -0800 (PST)
+        Mon, 28 Nov 2022 07:35:48 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AEB11A069
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 04:35:45 -0800 (PST)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ASAfFtx015015;
+        Mon, 28 Nov 2022 12:35:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=4EbpFA7RMaCtROAnEWYDN69iJMuZ2r8XKziUTpDmfM0=;
+ b=da+1k3A+myApLE/o1qCovAnRkIWa2lnHXLMPuz9vbwtep+Do+zFvi6pUimO1LqxKgxbi
+ k3pea5K41TJF86+AvJL0gR3i7rOPvM7pOefIbk3dlUR9jGct3sO6n7gTqe8xk1nzAEOz
+ f4ov0B/xC7cckZdvbG0Q1+JUYWIu+4gx/2U0e9gRVDZLJCS2FbV1rxSt28323lFS5FwK
+ fJFzV3iS51YOAMlqAsVBPcE/RGd7Bu3WUgIaFaS8Ydbzti0O7Ape57vYK043UoLenG0y
+ eYQIg5aT3AZkGkjt0plWRg1HhgIGyMjr3YHnm4EcTTsDso68mwPoOZ7vIr+PiTB2n2N4 bg== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3m40y3t57q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 28 Nov 2022 12:35:37 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2ASAKU4L022543;
+        Mon, 28 Nov 2022 12:35:36 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2174.outbound.protection.outlook.com [104.47.57.174])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3m3c1t7gw1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 28 Nov 2022 12:35:36 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=R/poaSM5l7fLpWBVxgWkgUXbF2GAvDO2TkSVOX/yu2FgJNBxW8Bi9UzFKngMfDUUmSPDQZfFk4jibieUR2XgrFCl250iqIULaBbqfyxUwQUcIsun6qw0blB2/Ga+7xkkQLTgpVQ1xyPQ/P3P2Gt638F+LlchxqSyR6gbVhJzrvjF2Y5teKOYaUh2VeFDdINgmAgB7XA3pDiiQ1DQUrcdyVwIKyjcvToKB5RfF8nmSB4mz7/seQ5OE3++CrXYh5+jARiXLEnJ/7Y3uClm6AONTFd5vExJg2fgzEufauFbuQFtzEGJaDqoyTWCiQZt2FKV1u8TjQSqBbfnCeewfi5mug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4EbpFA7RMaCtROAnEWYDN69iJMuZ2r8XKziUTpDmfM0=;
+ b=XcuvLkcdFHwF/86ycQMomNE4pUA3oRcAR3BX3pZireqH+isOEABOuaQ21f9zRKfsGFo3F8NY0ZAX2tqbc8v+pqJk87fLKDcVakqwOan93UDcY0hLeMEu1iu733a8YSymkXShm9jqD0iRvwLRdep3RLNW4//8eehL6KuOu4IOqr/YMNL8G0gujuxhexFaXl6nXVGfuU2crT30i/1BLXI0kXZuVs54ReNDIRyPXX41WUYdWzx3c7e4Bx/SYTfDTolPY6+2ZcGqRUET7nnqjiJin9xleRZk8y0ywadGrOTptWuSBGh43tipnR7otzQCLTRnO13t0TckEwLNXCWcjJ7Lqg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jK7qj9aXUJa826HEmyjR+0PMVp4wD4eGk7gtFFJ40nA=;
-        b=Q0uW3L0fkalrrFMcdBSypGNKFGzHvgGybKj4IpUm+p6wU1mHUg44U8cxfL5nfhmDlT
-         2VzKN44IStX/oQtwG2p43wxDtqw5wBJKqIJ9TWBxv8IWfEVs1EFUGo/Ord8B4rdm9dQi
-         firV4AN+oeO9HjsZmMW/ytu8rz45dZN/EIlG/mihescrrIaBdwUbBuZBg1HYXp7MviY1
-         pTbNuhFCrf7zM9FoIa4T10qV2DJ+4UzXaPCFdCrLE2M7xOunlFaiH8Sgwt62uEyY+Ag5
-         1jBx6joYA/VIxaMf6tDk5Ap4jDZwSa3x9AAY9Tk3EpVhDJOQ98OURBJ+dGg+hJd+7Qiz
-         L6Gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=jK7qj9aXUJa826HEmyjR+0PMVp4wD4eGk7gtFFJ40nA=;
-        b=WhRNellvAwtGtAoFut0l+KzJeCEnF5QwZAruUb40ID4skAMGL03Hiixbl7ddvOl04C
-         3coE9nCnlqrOrJ8Wma2W4IT/KBJk9cWIQNz6zy6NpZHBO2x/EyjRquR4BcOHG64AJtLl
-         pcQf6pDXeCBLH8X/fA6azzBFmfM5dPvPmLZHQe9FtZXmN37FYv6qElNWFkunnRg7Hyt8
-         Gf3zACdj9ol6ePie5vQ4f5vqUmaaKvTZVEcwNW06EmPN/o2eXe23bOFj8on1T/Tp19di
-         e0sV59mLt3PNxHJEMkr/P0HuxJ2JPRHjNDrMKjRUeeDE5weKqF5nCatqMbcFvyLSk3br
-         N3sA==
-X-Gm-Message-State: ANoB5pmI8ldQI64DRaGGfjl+5DxURONzY2yZ9a48+4iTnXxclx3pyyvl
-        1eq/VOEjtRB2fJkBzlPUurXjjw==
-X-Google-Smtp-Source: AA0mqf42I4YzFCmCIX6Y7CLLjIa2od2/zzq8dij0Vj6yhbihZB61n/r4BHawsiyTl6uEsUzNF00Z5g==
-X-Received: by 2002:a5d:526b:0:b0:242:380:c10e with SMTP id l11-20020a5d526b000000b002420380c10emr10820781wrc.132.1669640049615;
-        Mon, 28 Nov 2022 04:54:09 -0800 (PST)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id g3-20020a5d5543000000b00241a8a5bc11sm10737223wrw.80.2022.11.28.04.54.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 04:54:09 -0800 (PST)
-References: <20221123021346.18136-1-yu.tu@amlogic.com>
- <20221123021346.18136-2-yu.tu@amlogic.com>
- <f03f331a-5666-298e-a1a2-bdb9bab11a48@linaro.org>
- <92b570ea-3ddc-8e91-5a7a-ed601bb7c02c@amlogic.com>
- <eb56ed39-cfaa-3368-a2c0-0a4e89440e40@linaro.org>
- <5b7176b4-d7a2-c67f-31c6-e842e0870836@linaro.org>
- <1jfse72wqk.fsf@starbuckisacylon.baylibre.com>
- <a6cf1b3f-259d-44b7-8a9a-2a0cd29c714b@amlogic.com>
-User-agent: mu4e 1.8.10; emacs 28.2
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Yu Tu <yu.tu@amlogic.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        neil.armstrong@linaro.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     kelvin.zhang@amlogic.com
-Subject: Re: [PATCH V5 1/4] clk: meson: S4: add support for Amlogic S4 SoC
- PLL clock driver and bindings
-Date:   Mon, 28 Nov 2022 13:33:47 +0100
-In-reply-to: <a6cf1b3f-259d-44b7-8a9a-2a0cd29c714b@amlogic.com>
-Message-ID: <1jedtnp7db.fsf@starbuckisacylon.baylibre.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4EbpFA7RMaCtROAnEWYDN69iJMuZ2r8XKziUTpDmfM0=;
+ b=lxE9tTuETHOfNT9LJjkhTrUGp+Vmd7JtT3AutQirI+kPY71jj8ekADm97zgZCRIDPKEqTj44/eH+c0Wf/SN5kwOqfMo9zAC7Ercw3Mggkq3Z1es/8BbFC0QVcliwc8JC0Ya5PqYTgBo0nyDewKYp603pXxeJDFms8jNWdajfyKQ=
+Received: from PH8PR10MB6290.namprd10.prod.outlook.com (2603:10b6:510:1c1::7)
+ by SA1PR10MB5823.namprd10.prod.outlook.com (2603:10b6:806:235::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.20; Mon, 28 Nov
+ 2022 12:35:34 +0000
+Received: from PH8PR10MB6290.namprd10.prod.outlook.com
+ ([fe80::1717:5a07:63ca:fdab]) by PH8PR10MB6290.namprd10.prod.outlook.com
+ ([fe80::1717:5a07:63ca:fdab%9]) with mapi id 15.20.5857.023; Mon, 28 Nov 2022
+ 12:35:33 +0000
+Message-ID: <7dc11da9-ddd5-d73e-ce76-7ecbd78b946a@oracle.com>
+Date:   Mon, 28 Nov 2022 18:05:22 +0530
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Subject: Re: [PATCH v2] vduse: Validate vq_num in vduse_validate_config()
+Content-Language: en-US
+To:     Stefano Garzarella <sgarzare@redhat.com>,
+        Dan Carpenter <error27@gmail.com>
+Cc:     harshit.m.mogalapalli@gmail.com,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Gautam Dawar <gautam.dawar@xilinx.com>,
+        Parav Pandit <parav@nvidia.com>, Eli Cohen <elic@nvidia.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+References: <20221128083627.1199512-1-harshit.m.mogalapalli@oracle.com>
+ <20221128105312.3ajursuudvmysiie@sgarzare-redhat> <Y4SUOPX2WRFiuB7n@kadam>
+ <20221128111310.6exrqi26grwspqcz@sgarzare-redhat>
+From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+In-Reply-To: <20221128111310.6exrqi26grwspqcz@sgarzare-redhat>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SG2PR04CA0180.apcprd04.prod.outlook.com
+ (2603:1096:4:14::18) To PH8PR10MB6290.namprd10.prod.outlook.com
+ (2603:10b6:510:1c1::7)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR10MB6290:EE_|SA1PR10MB5823:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8a4e95b2-f3ba-48b2-289f-08dad13d0b16
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wsS7NyTEw3suxNh0lzIfrOiKUiHRHx+OpwgOVgJ6nLO5gLFAQgBbh/y5MVz0TeTfsYY9f7wXpkQy+ICXPo6Oy6CwWuRX7fBKClJPN0/u0KVKVdt8sy3fFHVddGnZLWPRMXH7qpCx26/ZqTCiWbctBT7jc3FI0TOhjIrujnpAwDvOeavbcb8s2mRi9eQibg+ejYzaGhnKbpOGCCYjtiEJJ35a4AdCjbhAmw6VKcmaYbu5AQvSfvoTvUHJ9XXc9jzEqBSWkhME3KowbtaD06FIBIlxktEZ+2Xe8uVAng9Hy4WI3Z0jHblG7ebAPhrnj8IB4n50kReh8YmSBPAR1D9M73Nspqtf+nNYMx/KUO2ciHTcVoH+3xGKdkY2/VFAagGyDaibde1Qf+qRYDNoMcJZ0UrqLgIDjg8FGP/xGcvIgPL2mhhbHkM0C6p+NC8GlRb4QEL0aZ/tASxkMpylXmrTXfjqfsdSKRPKII5L3DqnD+qNpvqd9/4fO7R0jbj3spt7tUCkVvO00soQMy67QBP2eB9ZotjM/8tNDwmaVRr0EnxlxHyaRHjNDYxUceR657UFLgt3iTpnUNjS1ZoPDBr1k68ze0vNCyMDC5jnAR/wxt0wp3Tx76tTcXUzRR05s5ioYGCSrUlwo6MzOBYKJ0nWvERO8JDHHbylXi1fvZ7FMUDZpOB3ZhLxjYu4gh7Dxy5gdxdiNoiAu2A4ALoS+SHkACE0Dv5FkOoFrr6/FFyZL6L7yknVSf9FtaBkdj94QFOA
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR10MB6290.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(366004)(376002)(136003)(39860400002)(346002)(451199015)(15650500001)(316002)(478600001)(2906002)(186003)(6506007)(86362001)(36756003)(8676002)(66556008)(66476007)(31696002)(4326008)(83380400001)(66946007)(53546011)(26005)(6512007)(54906003)(6666004)(2616005)(110136005)(6486002)(966005)(38100700002)(31686004)(41300700001)(8936002)(7416002)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eWpTN0hmRFFPU3BVM3E4TWhMbEZRWkJrQUxWU1JpSFljaHJtL3piMjU4ZG1F?=
+ =?utf-8?B?cHE1VTVZL280RkVGQUorK1JpaW5tU3BzTHZSR0Jtb29hOEREVGZnaUpHamV3?=
+ =?utf-8?B?TG0vVjB2RElqSGtOR1ppVHRxQmUvbmgwQU1ZQ3QzUkJwcXlWRDh0ZWlDN2Jk?=
+ =?utf-8?B?dkNOcmZUTlFvSGw3alhsS3lwVGh4T2t3bVFhUGZMMVA5enpLSVA1bWxJTDRO?=
+ =?utf-8?B?Y0tjeUJITTVCV1p0cHlHdlJVODVCcmJqdURVVE5zaktXcGc2MnFpaFpTQTAw?=
+ =?utf-8?B?N2tYbVlQUk15K3FXbko1Znk2NSsxU2FLL0drYmo0U3hETE5YSkxlbFA0NUlU?=
+ =?utf-8?B?ckI4UldFQ00rWTRNa3VpbjN6Z0dtNThNdlEwQ1N1ck5PN0lNcWZUMllYRlcw?=
+ =?utf-8?B?R2ZTcjBzeGFVZUo1akcvQ2pqYklVd2xTTnFna3hMMEY5Q1I3SnFGRXVPeGla?=
+ =?utf-8?B?bzZwUHJOQlFqWnl1RnNFUytUWnVxbVpqUlUzbHlFRFpyR2Z0WmljR0ZxVi9v?=
+ =?utf-8?B?YlU5TDNGQlR2VkZ4MDY5WHhpa08rOWYrQlRBbGkybGJjeDFVZFFlZ2RyaklB?=
+ =?utf-8?B?RFlEUFhEZFFoNlRsSVJURnBuY1RldDIrU0FWU2RPN0Rwd2Q3V3k1a2JhMFpR?=
+ =?utf-8?B?SVNTbDNjRnBwd3RNQlRwdy92d3piVTNsT1Z5YjVlMmpNRGJpb1F5dE5xMVB0?=
+ =?utf-8?B?SGpxang2TUlpMlIzZkMwUkFZaW9XZWRucXV4UVNlRUdWYk5jWXBYN3VmcTM4?=
+ =?utf-8?B?U0ZFRVlBZUdzaEdVZUxrTTZ0VitXdDNKYnlaM1BXY2lnNmtJK2xpYS9YL1VI?=
+ =?utf-8?B?VFRYNmo0MFVkQk84Q2VUQU9aNWUrZ1pFZ24rUVhhYmIzMmIzUms3NmttNGdr?=
+ =?utf-8?B?T1ZmeGM3RnJBVXpEV1lpc3J5YzBMbDVmWkd0dTBuNDdGUEN1MzZtTmd3REFs?=
+ =?utf-8?B?SElkNDlyZWsxbEFTWVNBNThpSjRqalV3RzExT0k3aFl5aVcyNjZnSU50Mjlo?=
+ =?utf-8?B?SmlDWGZMaW12Zk1zaU9BZ0xvOFVXZHlCK2U3bFpSVHRXNTdHTlNNRmJEVnpS?=
+ =?utf-8?B?U2k3SEpWY2Rva3ZjTkUyODlmT2NTSEtXUlEyRjBjOHVrb010SG92NFNMMTVm?=
+ =?utf-8?B?cE1zdStva1pPUy9wdmNHVWVUc0tRRzhmdENwR3czTEJtRDdrLzRUaTNBRURn?=
+ =?utf-8?B?aTNVZTR4TXpBOVVjMmNvWlFGa0NUemE4N25KeklMYTlHZWFuQnpuWklFWWlU?=
+ =?utf-8?B?K1I5Y3p4aGtWYVN0VVhuYW5DeVZVR2ZLd21ybWVRbWpqZTgyYllzN2NyWmpB?=
+ =?utf-8?B?S2Z6VVgvVHJ5bTYzTTh1NEFVRVhpRHBOU0lhMFl0dGVpZEFENnJoTGdLZUsw?=
+ =?utf-8?B?QTUzZ2NQMC9oYTNEK1VaZ1k5ZEVQUkxnWmo4dnZJWGdNTlRYN08zOVd0eUE3?=
+ =?utf-8?B?Z0d3TG16N2g1bUZyUlVIckZUQy9NamlBTzVpVmNWSThnVTg0T0lWRnpZWms3?=
+ =?utf-8?B?MDNWS25uditJRTRwUkhrNXF5NDdkT0F6WXJVcDQ2RFRCM2dGVEdhS2x0alpy?=
+ =?utf-8?B?YWNPeXRCV3RxZzIvakwrY0lib0xxYitkcFJWMmZXV0NWR21CTGlnMmtxeHpU?=
+ =?utf-8?B?RSs3a1BNMzQ2bFRaYUhPbGpNWTRrWkNjQ1NLQ3ZRcDQ4OXFqQXpiNE94K0Nt?=
+ =?utf-8?B?SzFQaU1ydXUvdUU3aFVTbS9SdkZqR2NIOG83T05IN2FNaHVrN1RBYzA3bnha?=
+ =?utf-8?B?QkJUWWMwOEkvdUVvZmc1ZFFESkFmbmVhdHZ1NjN5THRMVjJxb0MrSkJkSERz?=
+ =?utf-8?B?aW9hVGJydEJ2Mm01L3cvQThvVWgybVQ1aVBxOWF1bWJUbjlZcTd5cUZxMjRy?=
+ =?utf-8?B?MkRubHovRjNYTm5lQUpxc2JrcncwOGtxVEtKeXE4Z1FaajZlVVBnYnlNbk9K?=
+ =?utf-8?B?RmZ3enBRZjl1Z0hUOVo1anN5T0tqTXBTY0NncEVWMGRDMDQ0VU1xbU9WQW1n?=
+ =?utf-8?B?TDhaYjFtTHdWcFRJZ3BlVGNLUVB0VnVyRE1nbFg4RkJyZW9QS3prYnBwWW13?=
+ =?utf-8?B?MXBBR0twcCtiVW1SOFQ2QjdFSUF6a2VzY0d2aVFzbEpCYWpCZ2VHMUxpQ3Ar?=
+ =?utf-8?B?b3Q2U2xIVXNpWllGcWpUY05xaVJkOWFPTXJWTHArWUxPdjhmckFiMmJVWTl1?=
+ =?utf-8?Q?LFwzyUfUTZ8E7fXNOQNS42g=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?NEZ6cWhVM3hzUnFFbzlMcWoySGh1SThOVEZZOFY4ajZ1WlhzVDl0S0RPRUhx?=
+ =?utf-8?B?ZTRyWU1wL0gycW9LVldkSlQzbVJMM2dMUDBuakZSVlRzYWh6VWkvQ3pnUzhY?=
+ =?utf-8?B?OHE5UWdEV29uZHN4YnBKMHd1WHlvSVN4NnJYb0pITFdRNXFLdGk3STd4WlBs?=
+ =?utf-8?B?ajhiak9hTHJLVnlFVzJaUXZ0amNwTVJkelRaWnBtYUFsbTdBbmlGWUdIVWVv?=
+ =?utf-8?B?OC9sTFl1MVI1YTJvT25xdGYwS0NvTmNoOW9yQzUvM0pwNWI2bkU1SHdSVnJM?=
+ =?utf-8?B?MDU2QVhBNERadVgwWHdwWnBtaGpvSUNCVWtBVDI2cWlhNjF6U281V0t2cVJa?=
+ =?utf-8?B?WkR5OFVXeGZoWlA0WlJEVUFuSUFYWGVkRElJOEZyY01vd29TZHBIeGpSZ2Rk?=
+ =?utf-8?B?Y1JxOHZ5ckhVdms5UzFzQXNVSGZrOTdxZWxFSktIOVg5TElsMTlLdEVlMm1F?=
+ =?utf-8?B?RWhtVTVVSHZST0YvNHB6eEo1K2VBTXcyNXVRN0NyWjNxNmFjOWNJSGtGUDVk?=
+ =?utf-8?B?TU1KRHhuemtiZndyLy9BUVRrVThoWStCOTFXdC9iU2pIanZXdTRrM3Z0bEE0?=
+ =?utf-8?B?QmV5Q1dMQUo1bFlpdlpuSnlLd3ZYNnNsaFp0WXBRc0V3Q29kSURDOURIS2lT?=
+ =?utf-8?B?TjdHTTVMbUU2R0JtMGM0czFieUJGMnJKUHJlTDk1OHBiMTlIdE1xY21VNmtL?=
+ =?utf-8?B?TTB6a1J1VmUrZ3Z5RHJ4Vi9ZR2lqQ0JEUHVHV1NhanRWd3MvMk9WdGNBRzBu?=
+ =?utf-8?B?YnpiVHA2MnMrQk0xdVFpQlBmOTBHdmNTRFJNTjVkQkY1bjFxUCtva3FxRnF0?=
+ =?utf-8?B?VGRZdmllZ2hZY0xZT2dBVXZvdG9pK3ZkNmdlS1EvNzY5WTlHdWFKMmoyRmVF?=
+ =?utf-8?B?RWs5WVdPUFJiOC83M1FaQzEzK3k1eGZ3Z2Y2VjdNOHQ5d2pQa3BFTTlKaVN5?=
+ =?utf-8?B?NXM4Tm8xUGd4QjNZcjZxNUZBeitnbHBGdm9iLzlyMnp4dzN0VUplMW1uNjYy?=
+ =?utf-8?B?VlR6NkpCRUVYdVNVWHhRbGdETHFpVk9ZaFZGSjFyWWRhdFNOUjJaanFCdnUv?=
+ =?utf-8?B?S2tIQ0l2OWZkd09mODdCYTZnaTRLRksrS3lPd2hWejZTTFc5VlVndzBCWEc2?=
+ =?utf-8?B?dmJFY29VeklzdlFBT1lCQjI4QUFtMmlUWGN4MTU1OFQ5TzJZblFaRzE3S3E1?=
+ =?utf-8?B?dDZJWUlnTzRaSkxXUUUrbTZxekNNTkh2a2dDeVBNbVUxV1h3ZVpHQksxTlQx?=
+ =?utf-8?B?cWttcHFkTk5QcUNlMGhaemdmVU94NnFnQnk2OFRvOFpXeXJhcE1Nd28va1g3?=
+ =?utf-8?B?ZnNsSGlhVTJZVWp5WUhWbG5YU2pFdFd1emtBUWVvSHRFeFJQWmpLSXloeUdO?=
+ =?utf-8?B?ZThEUHNzbXVvR1JLS1lwWDcxa0FOUEc2c1lqMVhhaWJSVlpjV1JCVC9BWGov?=
+ =?utf-8?B?cHVIT1Q2bHN1OWpzNDlZN1I1b29NQllEYmp6UFFBbDdmbmNrZlBxUkZJQnNC?=
+ =?utf-8?Q?O6DUbU=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8a4e95b2-f3ba-48b2-289f-08dad13d0b16
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR10MB6290.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2022 12:35:33.8381
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CxQyPMZUhVWRVN7ZPuCGZW7+AvXcvJizwRjLOxvuqljbz/vV68zTBj3ZBalC7I6Q38INp20cBLykhZMUVGtFcJfPGaZW9uCmNOClUIIOClTst7GDGa4q7rJlRDjSxrmU
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB5823
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-28_10,2022-11-28_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 suspectscore=0
+ bulkscore=0 adultscore=0 mlxlogscore=999 malwarescore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211280096
+X-Proofpoint-GUID: -_T4VMPrgebqVfUMeL_XysUALASxWWe6
+X-Proofpoint-ORIG-GUID: -_T4VMPrgebqVfUMeL_XysUALASxWWe6
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -90,237 +193,73 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Mon 28 Nov 2022 at 15:39, Yu Tu <yu.tu@amlogic.com> wrote:
 
-> Hi Jerome,
-> 	Thank you for your reply.
->
-> On 2022/11/25 17:23, Jerome Brunet wrote:
->> [ EXTERNAL EMAIL ]
->> On Wed 23 Nov 2022 at 14:53, Krzysztof Kozlowski
->> <krzysztof.kozlowski@linaro.org> wrote:
->>=20
->>> On 23/11/2022 14:23, Neil Armstrong wrote:
->>>> Hi,
->>>>
->>>> On 23/11/2022 12:16, Yu Tu wrote:
->>>>> Hi Krzysztof,
->>>>>   =C2=A0=C2=A0=C2=A0=C2=A0Thank you for your reply.
->>>>>
->>>>> On 2022/11/23 18:08, Krzysztof Kozlowski wrote:
->>>>>> [ EXTERNAL EMAIL ]
->>>>>>
->>>>>> On 23/11/2022 03:13, Yu Tu wrote:
->>>>>>> Add the S4 PLL clock controller found and bindings in the s4 SoC fa=
-mily.
->>>>>>>
->>>>>>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
->>>>>>> ---
->>>>>>>  =C2=A0 .../bindings/clock/amlogic,s4-pll-clkc.yaml=C2=A0=C2=A0 |=
-=C2=A0 51 +
->>>>>>
->>>>>> This is v5 and still bindings are here? Bindings are always separate
->>>>>> patches. Use subject prefixes matching the subsystem (git log --onel=
-ine
->>>>>> -- ...).
->>>>>>
->>>>>> And this was split, wasn't it? What happened here?!?
->>>>>
->>>>> Put bindings and clock driver patch together from Jerome. Maybe you c=
-an read this chat history.
->>>>> https://lore.kernel.or/all/1jy1v6z14n.fsf@starbuckisacylon.baylibre.c=
-om/
->>>>
->>>> Jerome was asking you to send 2 patchsets, one with :
->>>> - bindings in separate patches
->>>> - drivers in separate patches
->>>> and a second with DT changes.
->> Indeed, this is what was asked. It is aligned with Krzysztof's request.
->
-> According to your discussion, I still should send patches in the previous
-> way in series. But I'm going to change it like you suggested.
-> I don't know, am I getting it right?
-
-3 people tried to explain this already and we all told you the same thing.
-
-* 1 patchset per maintainer: clk and dt
-* bindings must be dedicated patches - never mixed with driver code.
-
-I strongly suggest that you take some time to (re)read:
-* https://docs.kernel.org/process/submitting-patches.html
-* https://docs.kernel.org/devicetree/bindings/submitting-patches.html
-
-If still unclear, please take some time to look at the kernel mailing
-list archive and see how others have done the same things.
-
-Thx.
-
->
->>=20
->>>>
->>>> Then when the bindings + clocks patches are merged, a pull request of =
-the bindings
->>>> can be done to me so I can merge it with DT.
->>>>
->>>>>
->>>>>>
->>>>>>
->>>>>>>  =C2=A0 MAINTAINERS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 |=C2=A0=C2=A0 1 +
->>>>>>>  =C2=A0 drivers/clk/meson/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 |=C2=A0 13 +
->>>>>>>  =C2=A0 drivers/clk/meson/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 |=C2=A0=C2=A0 1 +
->>>>>>>  =C2=A0 drivers/clk/meson/s4-pll.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 | 875 ++++++++++++++++++
->>>>>>>  =C2=A0 drivers/clk/meson/s4-pll.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 |=C2=A0 88 ++
->>>>>>>  =C2=A0 .../dt-bindings/clock/amlogic,s4-pll-clkc.h=C2=A0=C2=A0 |=
-=C2=A0 30 +
->>>>>>>  =C2=A0 7 files changed, 1059 insertions(+)
->>>>>>>  =C2=A0 create mode 100644 Documentation/devicetree/bindings/clock/=
-amlogic,s4-pll-clkc.yaml
->>>>>>>  =C2=A0 create mode 100644 drivers/clk/meson/s4-pll.c
->>>>>>>  =C2=A0 create mode 100644 drivers/clk/meson/s4-pll.h
->>>>>>>  =C2=A0 create mode 100644 include/dt-bindings/clock/amlogic,s4-pll=
--clkc.h
->>>>>>>
->>>>>>> diff --git a/Documentation/devicetree/bindings/clock/amlogic,s4-pll=
--clkc.yaml b/Documentation/devicetree/bindings/clock/amlogic,s4-pll-clkc.ya=
-ml
->>>>>>> new file mode 100644
->>>>>>> index 000000000000..fd517e8ef14f
->>>>>>> --- /dev/null
->>>>>>> +++ b/Documentation/devicetree/bindings/clock/amlogic,s4-pll-clkc.y=
-aml
->>>>>>> @@ -0,0 +1,51 @@
->>>>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>>>>>> +%YAML 1.2
->>>>>>> +---
->>>>>>> +$id: http://devicetree.org/schemas/clock/amlogic,s4-pll-clkc.yaml#
->>>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>>>> +
->>>>>>> +title: Amlogic Meson S serials PLL Clock Controller
->>>>>>> +
->>>>>>> +maintainers:
->>>>>>> +=C2=A0 - Neil Armstrong <narmstrong@baylibre.com>
->>>>>>> +=C2=A0 - Jerome Brunet <jbrunet@baylibre.com>
->>>>>>> +=C2=A0 - Yu Tu <yu.hu@amlogic.com>
->>>>>>> +
->>>>>> One blank line.
->>>>>
->>>>>   =C2=A0I will delete this, on next version patch.
->>>>>
->>>>>>
->>>>>>> +
->>>>>>> +properties:
->>>>>>> +=C2=A0 compatible:
->>>>>>> +=C2=A0=C2=A0=C2=A0 const: amlogic,s4-pll-clkc
->>>>>>> +
->>>>>>> +=C2=A0 reg:
->>>>>>> +=C2=A0=C2=A0=C2=A0 maxItems: 1
->>>>>>> +
->>>>>>> +=C2=A0 clocks:
->>>>>>> +=C2=A0=C2=A0=C2=A0 maxItems: 1
->>>>>>> +
->>>>>>> +=C2=A0 clock-names:
->>>>>>> +=C2=A0=C2=A0=C2=A0 items:
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: xtal
->>>>>>> +
->>>>>>> +=C2=A0 "#clock-cells":
->>>>>>> +=C2=A0=C2=A0=C2=A0 const: 1
->>>>>>> +
->>>>>>> +required:
->>>>>>> +=C2=A0 - compatible
->>>>>>> +=C2=A0 - reg
->>>>>>> +=C2=A0 - clocks
->>>>>>> +=C2=A0 - clock-names
->>>>>>> +=C2=A0 - "#clock-cells"
->>>>>>> +
->>>>>>> +additionalProperties: false
->>>>>>> +
->>>>>>> +examples:
->>>>>>> +=C2=A0 - |
->>>>>>> +=C2=A0=C2=A0=C2=A0 clkc_pll: clock-controller@fe008000 {
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 compatible =3D "amlogic,s4-pll-clkc=
-";
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg =3D <0xfe008000 0x1e8>;
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clocks =3D <&xtal>;
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clock-names =3D "xtal";
->>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #clock-cells =3D <1>;
->>>>>>> +=C2=A0=C2=A0=C2=A0 };
->>>>>>
->>>>>>
->>>>>>> +#endif /* __MESON_S4_PLL_H__ */
->>>>>>> diff --git a/include/dt-bindings/clock/amlogic,s4-pll-clkc.h b/incl=
-ude/dt-bindings/clock/amlogic,s4-pll-clkc.h
->>>>>>> new file mode 100644
->>>>>>> index 000000000000..345f87023886
->>>>>>> --- /dev/null
->>>>>>> +++ b/include/dt-bindings/clock/amlogic,s4-pll-clkc.h
->>>>>>
->>>>>> This belongs to bindings patch, not driver.
->>>>>>
->>>>>>> @@ -0,0 +1,30 @@
->>>>>>> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
->>>>>>> +/*
->>>>>>> + * Copyright (c) 2021 Amlogic, Inc. All rights reserved.
->>>>>>> + * Author: Yu Tu <yu.tu@amlogic.com>
->>>>>>> + */
->>>>>>> +
->>>>>>> +#ifndef _DT_BINDINGS_CLOCK_AMLOGIC_S4_PLL_CLKC_H
->>>>>>> +#define _DT_BINDINGS_CLOCK_AMLOGIC_S4_PLL_CLKC_H
->>>>>>> +
->>>>>>> +/*
->>>>>>> + * CLKID index values
->>>>>>> + */
->>>>>>> +
->>>>>>> +#define CLKID_FIXED_PLL=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 1
->>>>>>> +#define CLKID_FCLK_DIV2=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 3
->>>>>>
->>>>>> Indexes start from 0 and are incremented by 1. Not by 2.
->>>>>>
->>>>>> NAK.
->>>>>
->>>>> I remember Jerome discussing this with you.You can look at this submi=
-ssion history.
->>>>> https://lore.kernel.org/all/c088e01c-0714-82be-8347-6140daf56640@lina=
-ro.org/
->>>>
->>>> Historically we did that by only exposing part of the numbers, control=
-ling which
->>>> clocks were part of the bindings.
->>>>
->>>> But it seems this doesn't make sens anymore, maybe it would be time to=
- put all the
->>>> clock ids in the bindings for this new SoC and break with the previous=
- strategy.
->> Krzysztof and I agreed there is nothing wrong with the current
->> approach, I believe.
->> It does not prevent someone from using an un-exposed clock, sure, or
->> exposing it in the future if necessary.
->> However, I think it clearly shows that an un-exposed element is not
->> expected to be used by an external consumers. It should be enough to
->> trigger a discussion if this expectation is wrong.
->>=20
+On 28/11/22 4:43 pm, Stefano Garzarella wrote:
+> On Mon, Nov 28, 2022 at 01:58:00PM +0300, Dan Carpenter wrote:
+>> On Mon, Nov 28, 2022 at 11:53:12AM +0100, Stefano Garzarella wrote:
+>>> On Mon, Nov 28, 2022 at 12:36:26AM -0800, Harshit Mogalapalli wrote:
+>>> > Add a limit to 'config->vq_num' which is user controlled data which
+>>> > comes from an vduse_ioctl to prevent large memory allocations.
+>>> >
+>>> > This is found using static analysis with smatch.
+>>> >
+>>> > Suggested-by: Michael S. Tsirkin <mst@redhat.com>
+>>> > Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+>>> > ---
+>>> > v1->v2: Change title of the commit and description, add a limit to
+>>> >     vq_num.
+>>> >
+>>> > Note: I think here 0xffff is the max size of vring =  no: of vqueues.
+>>> > Only compile and boot tested.
+>>> > ---
+>>> > drivers/vdpa/vdpa_user/vduse_dev.c | 3 +++
+>>> > 1 file changed, 3 insertions(+)
+>>> >
+>>> > diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c 
+>>> b/drivers/vdpa/vdpa_user/vduse_dev.c
+>>> > index 35dceee3ed56..31017ebc4d7c 100644
+>>> > --- a/drivers/vdpa/vdpa_user/vduse_dev.c
+>>> > +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
+>>> > @@ -1440,6 +1440,9 @@ static bool vduse_validate_config(struct 
+>>> vduse_dev_config *config)
+>>> >     if (config->config_size > PAGE_SIZE)
+>>> >         return false;
+>>> >
+>>> > +    if (config->vq_num > 0xffff)
 >>>
->>> So the outcome of the previous discussion was somewhere later in that
->>> thread:
->>>
->>>> It is just a choice to not expose some IDs.
->>>> It is not tied to the implementation at all.
->>>> I think we actually follow the rules and the idea behind it.
->>>
->>>
->>> Best regards,
->>> Krzysztof
->> .
+>>> What about using U16_MAX here?
+>>
+>> Where is the ->vq_num stored in a u16?  I looked for this but didn't
+>> see it.
+> 
+> I thought vq_num referred to the number of elements in the vq (like 
+> .get_vq_num_max), since this patch wants to limit to 0xffff.
+> 
+> But it actually refers to the number of virtqueue, so @Harshit why do we 
+> limit it to 0xffff?
+> 
 
+Hi Stefano,
+
+I may be incorrect about the details of this driver, my v1 was purely 
+based on static analysis, Micheal suggested me to put a limit of 0xffff 
+on vq_num. I really don't know about the driver, while I was searching 
+other parts of code, I thought 0xffff is based vring size, I have asked 
+the same question on v1 today.
+
+Ref to v1: 
+https://lore.kernel.org/all/82e8ce27-0743-59bf-fbe8-a25093167451@oracle.com/
+
+> Maybe we should explain it in the commit message or in a comment.
+> 
+
+yeah, we should clarify the limit in commit message, once Micheal shares 
+about the limit '0xffff), I will add those details and send a next 
+version if that's okay.
+
+
+Thanks,
+Harshit
+> Thanks,
+> Stefano
+> 
