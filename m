@@ -2,115 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BDB963B513
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 23:58:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2899563B515
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 23:59:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234658AbiK1W6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 17:58:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50156 "EHLO
+        id S234666AbiK1W7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 17:59:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234607AbiK1W5w (ORCPT
+        with ESMTP id S234642AbiK1W67 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 17:57:52 -0500
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E912A248
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 14:57:50 -0800 (PST)
-Received: by mail-io1-f72.google.com with SMTP id c20-20020a5d9754000000b006dbd4e6a5abso7125659ioo.17
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 14:57:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M9Zslu+374mV4v3rdyS4dptOs0an64BkcbviyYygMKY=;
-        b=qngeuwpprnm5V6Gdve2YkxSjt7pJYRHJAs+Gch/liG6ArlN1MZG/ZSvnPQr5whn2OP
-         s0imM1nWuJvmelIcneQIBICW9MOGM4fyGsBxfxSh+Hd6HezGuE/KrqdlaGiUAGJSWFYC
-         pO1IC36gIleI7DHT1WN+ekof/xlSU23SnCGX3EQkYRe8akRvvhDuQENbz1cUipuOd+30
-         UqDvu6qhE6fc0D7wmrLNb/+X6yoFQTYZab6uhm9K00nTQHAyUxHJURjGKANkwVVA9OTk
-         yXohYRbmqVzJjtvm++TC1kfhbs6oxKkpdznqX4/ZIVLq8trNyOdp7TSZ7e+h2yd3IcIG
-         WIiA==
-X-Gm-Message-State: ANoB5pn28++1U6FFocL9uZSsv8k2dNwXjgLBOdWjO2UxyXP3+oBB0+K/
-        Jt59FXKiVLcI0i/ca/ctFndJ/Wd944EyGSZaXQO3rWgb3va4
-X-Google-Smtp-Source: AA0mqf6JnUKEsSgMERO94OvBnY5xscDjj25wJZrd/XQtzyIQupgQkMmtbfbcO5kgcJnBZllXZqOhIr7J2UZ948QggFbNBciuEWHw
+        Mon, 28 Nov 2022 17:58:59 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BAFF2EF3E;
+        Mon, 28 Nov 2022 14:58:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669676319; x=1701212319;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=NqdzenDwRJoM0Q5eOYVe5/eswfY3W7drqgwURMNKSmc=;
+  b=hosnQchwuWEFIZOcThO0hYfqDHn5WD6laQKtwR+KbIdFmQASaNIsDyAw
+   /AA3+WrjDHzvxK/ELWV9ePIpB20jJW5S+sU+p3dXYFq+7N1pps9lLlW5r
+   RlT7sayOWtntAAmr3neqQnVWS7RF1M4RGdO0Tlz46Tyj1AJHzXnWs3UTA
+   NehESKAQaZF0PYTwsjaeIy3wEnQWJLKD/E+RgOzZHAApzxQpzJ9svIwF6
+   hRLLOs7JZepwyoyd9LYqya/KFfofWw7WsiJqjj2yQcm5F7a6gFHdJrjNR
+   UJaIgvyZiZXsagR0WlOGgVfTe3n2U6QPd16BsPjR8PFDVw5lX8i5AJa3H
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="294660275"
+X-IronPort-AV: E=Sophos;i="5.96,201,1665471600"; 
+   d="scan'208";a="294660275"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 14:58:38 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="706974454"
+X-IronPort-AV: E=Sophos;i="5.96,201,1665471600"; 
+   d="scan'208";a="706974454"
+Received: from nroy-mobl1.amr.corp.intel.com (HELO [10.212.209.4]) ([10.212.209.4])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 14:58:37 -0800
+Message-ID: <aa80863f-ab3b-c3d2-917d-b2b7e564a4ff@intel.com>
+Date:   Mon, 28 Nov 2022 14:58:36 -0800
 MIME-Version: 1.0
-X-Received: by 2002:a5d:980d:0:b0:6a0:ee21:53fb with SMTP id
- a13-20020a5d980d000000b006a0ee2153fbmr16057838iol.190.1669676269954; Mon, 28
- Nov 2022 14:57:49 -0800 (PST)
-Date:   Mon, 28 Nov 2022 14:57:49 -0800
-In-Reply-To: <000000000000519d0205ee4ba094@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f5ecad05ee8fccf0@google.com>
-Subject: Re: [syzbot] WARNING in iov_iter_revert (3)
-From:   syzbot <syzbot+8c7a4ca1cc31b7ce7070@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, dan.j.williams@intel.com, hch@lst.de,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
-        viro@zeniv.linux.org.uk, willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v7 14/20] x86/virt/tdx: Set up reserved areas for all
+ TDMRs
+Content-Language: en-US
+To:     "Huang, Kai" <kai.huang@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "Luck, Tony" <tony.luck@intel.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+References: <cover.1668988357.git.kai.huang@intel.com>
+ <5a5644e691134dc72c5e3fb0fc22fa40d4aa0b34.1668988357.git.kai.huang@intel.com>
+ <5526fedd-fa54-0ad2-f356-94b167e6e290@intel.com>
+ <0ebf26d1ee540b4e082b65c51cabe3327f6d51ac.camel@intel.com>
+ <c752d17e-23fd-4452-e1d8-6c82748b6c8a@intel.com>
+ <2b3568f3ff472a83c0539aa351cb0c1fec834728.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <2b3568f3ff472a83c0539aa351cb0c1fec834728.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On 11/28/22 14:24, Huang, Kai wrote:
+>> I don't know.  I'll look at the naming again once I see it all together.
+> Sure. I'll only change the one you mentioned above and keep the others for the
+> next version.
 
-HEAD commit:    b7b275e60bcd Linux 6.1-rc7
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1498138d880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2325e409a9a893e1
-dashboard link: https://syzkaller.appspot.com/bug?extid=8c7a4ca1cc31b7ce7070
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17219fbb880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=172d94d5880000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/525233126d34/disk-b7b275e6.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/e8299bf41400/vmlinux-b7b275e6.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/eebf691dbf6f/bzImage-b7b275e6.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/b1f44a556b42/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8c7a4ca1cc31b7ce7070@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 3655 at lib/iov_iter.c:918 iov_iter_revert+0x394/0x850
-Modules linked in:
-CPU: 0 PID: 3655 Comm: syz-executor207 Not tainted 6.1.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:iov_iter_revert+0x394/0x850 lib/iov_iter.c:918
-Code: 80 3c 01 00 48 8b 5c 24 20 74 08 48 89 df e8 33 c0 a7 fd 4c 89 2b 48 83 c4 68 5b 41 5c 41 5d 41 5e 41 5f 5d c3 e8 dc a5 53 fd <0f> 0b eb e8 48 8d 6b 18 48 89 e8 48 c1 e8 03 42 80 3c 28 00 74 08
-RSP: 0018:ffffc90003c0fac8 EFLAGS: 00010293
-RAX: ffffffff8436f214 RBX: ffffc90003c0fe40 RCX: ffff888026a39d40
-RDX: 0000000000000000 RSI: fffffffffffa6000 RDI: 000000007ffff000
-RBP: fffffffffffa6000 R08: ffffffff8436eebc R09: fffffbfff1cebe0e
-R10: fffffbfff1cebe0e R11: 1ffffffff1cebe0d R12: fffffffffffa6000
-R13: ffffc90003c0fe40 R14: ffffc90003c0fe50 R15: 000000007ffa4000
-FS:  00007fc698110700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000100 CR3: 00000000235e6000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- generic_file_read_iter+0x3d4/0x540 mm/filemap.c:2804
- do_iter_read+0x6e3/0xc10 fs/read_write.c:796
- vfs_readv fs/read_write.c:916 [inline]
- do_preadv+0x1f4/0x330 fs/read_write.c:1008
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fc698185789
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 71 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fc6981102e8 EFLAGS: 00000246 ORIG_RAX: 0000000000000147
-RAX: ffffffffffffffda RBX: 00007fc6982297b8 RCX: 00007fc698185789
-RDX: 0000000000000001 RSI: 0000000020000100 RDI: 0000000000000004
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007fc6982297b0
-R13: 00007fc6981f67e4 R14: 6573726168636f69 R15: 0030656c69662f2e
- </TASK>
-
+The alternative is that you can look at what I suggested, try and learn
+something from it, and try to apply that elsewhere in the series before
+you post again.
