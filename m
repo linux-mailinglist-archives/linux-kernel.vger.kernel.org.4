@@ -2,71 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 149FE63B2B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 21:03:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D623E63B2BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 21:04:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233950AbiK1UDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 15:03:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52372 "EHLO
+        id S232000AbiK1UEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 15:04:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232966AbiK1UDL (ORCPT
+        with ESMTP id S230454AbiK1UE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 15:03:11 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B145C62DB;
-        Mon, 28 Nov 2022 12:03:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 03D76CE102D;
-        Mon, 28 Nov 2022 20:03:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6A21C4347C;
-        Mon, 28 Nov 2022 20:03:02 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ANgoiN5/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1669665779;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3abNITP0dzAb4S+Ys/N4ktn79tvtLrAVp0KnndQQeQg=;
-        b=ANgoiN5/DzPsE7NInUnHVXjdtzboZOf/VjIBRG+BW3kDUneiTj7LQLt58UD7stOajqEl5g
-        CZ2WpjAd0YSOzB7rw/CAuMEAy8F2QnmOwvsj2h7Q8zDvkg15tVw2HUvK3+nCJ4Ey1DsAzG
-        2YDBQ+ItutUQCay0oOWJuPvUMg7C6dc=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 22aa6657 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 28 Nov 2022 20:02:59 +0000 (UTC)
-Received: by mail-vs1-f53.google.com with SMTP id i2so11784410vsc.1;
-        Mon, 28 Nov 2022 12:02:59 -0800 (PST)
-X-Gm-Message-State: ANoB5pmHMKENNlaOq8NbSpmrJuznVdxVGA8bLnFpUVc90U568J4RqGm0
-        g39Eip5Z9ScVWuoNwlQgdAJTOeH0z6nZZkEMOCA=
-X-Google-Smtp-Source: AA0mqf5cX87+Dzqv5dsvQPzXX+ACSAgn3+NnHk6t8bD7/9VXA7phYasi8Xi6M8nM7bGSqgRv5Mh405sAFnNKGR0AFK0=
-X-Received: by 2002:a67:f54e:0:b0:3b0:4e31:10f7 with SMTP id
- z14-20020a67f54e000000b003b04e3110f7mr19050387vsn.73.1669665778586; Mon, 28
- Nov 2022 12:02:58 -0800 (PST)
+        Mon, 28 Nov 2022 15:04:28 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527AFBF4A;
+        Mon, 28 Nov 2022 12:04:28 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id 130so11563434pfu.8;
+        Mon, 28 Nov 2022 12:04:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nq2obDql/SvoqdGDGhq2FSglDN+k+dj8tWzgIrUSRGQ=;
+        b=PvHd88p2dkeNSPDNwv2LNFENr8gU5q9YJnjR/ZadgGPvSVk3tEhnn0RzxNaU0xUslI
+         FOKbEZ0xIF46XOj4JzS6+YAeG5Ve89E6kD032+dNpmvT/RdOwodT7rsWL2FclK5mK0FR
+         vcrWO5TQ8H4ds8g/pzjuLzGX7RBg9Bdj/hcLM9pdmSnl6kwW2WzpWBXnEFnmJlTkV/On
+         GSTeFVyBq65IqqF2F4F8EFVhlqLqwPIzdE16jD/XaHdFxdRin8VlDeOLQTQs324uecE2
+         6DnZ/d4we8clbQcMwsnHjhdp4KxjZUcr0Y9H6BOcH5Y9DXp4FDMGG2zIi2wInrF10kVJ
+         42cQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nq2obDql/SvoqdGDGhq2FSglDN+k+dj8tWzgIrUSRGQ=;
+        b=cVwpV9UjSGpAvKoeKcCxuuE6lZyshecLJHMfNxYktr+LfNOjds8eD3q+JEjrq/U7Rg
+         dgv61F7Vlh8kk5TwcIC9If41GcD68fN7C162hADjFKH5f03gKTpJETYfH2rOvDQKfHvA
+         Q8uxRd1i7udAQzCzC/PIs9a+zgRoMB0h7pHTmUWWtFzVIOVqkPsWGUytbxnoF9S+Kp4/
+         GG6innYVm/kdGeHkCVVvfpqQEY3+M1duKb7rYlOAM3oOlFME7TkUrC1T4myHJgK4owVf
+         0h0zmZ8ZYtioI6bVkySh0//KD5HKqpR1CiOTraGddeyUB2+6LKbzz1si3BJ+ufr7b1CY
+         hmoQ==
+X-Gm-Message-State: ANoB5pmDkimpSQr2c3VIIEBabqbAzJkd/H8TTd6tQ7bWiSyJrNhppwUl
+        5VK1Cn1jnjdy994WxDcQeXa7LrmIzq4=
+X-Google-Smtp-Source: AA0mqf47DIQHjZ7ptCb74TWFe8jUseUyRUs5/iybM/ApKWJ151EahpRGq1HvLkuxuNxFJIrMenod6w==
+X-Received: by 2002:a63:e411:0:b0:45f:b2a7:2659 with SMTP id a17-20020a63e411000000b0045fb2a72659mr29450315pgi.132.1669665867643;
+        Mon, 28 Nov 2022 12:04:27 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id oj2-20020a17090b4d8200b001fde655225fsm67357pjb.2.2022.11.28.12.04.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Nov 2022 12:04:27 -0800 (PST)
+Message-ID: <9619489a-1325-4124-d2c8-3dddab1fc625@gmail.com>
+Date:   Mon, 28 Nov 2022 12:04:22 -0800
 MIME-Version: 1.0
-References: <20221128111829.2477505-1-Jason@zx2c4.com> <20221128111829.2477505-4-Jason@zx2c4.com>
- <8f9326ba-f879-4b9e-9e5d-b65cad7cd726@app.fastmail.com> <Y4UKpP7/NOwPIkYe@zx2c4.com>
- <cd01e0b4-579f-48fc-995f-6e1acebd02af@app.fastmail.com>
-In-Reply-To: <cd01e0b4-579f-48fc-995f-6e1acebd02af@app.fastmail.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 28 Nov 2022 21:02:47 +0100
-X-Gmail-Original-Message-ID: <CAHmME9rp+Nx_S8OgABzadc1+j_FrSRbUvGu2r9W_svrr+HMjSg@mail.gmail.com>
-Message-ID: <CAHmME9rp+Nx_S8OgABzadc1+j_FrSRbUvGu2r9W_svrr+HMjSg@mail.gmail.com>
-Subject: Re: [PATCH v8 3/3] x86: vdso: Wire up getrandom() vDSO implementation
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-crypto@vger.kernel.org, linux-api@vger.kernel.org,
-        x86@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        "Carlos O'Donell" <carlos@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Samuel Neves <sneves@dei.uc.pt>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [net PATCH] dsa: lan9303: Correct stat name
+Content-Language: en-US
+To:     Jerry Ray <jerry.ray@microchip.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221128193559.6572-1-jerry.ray@microchip.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221128193559.6572-1-jerry.ray@microchip.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,47 +79,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On 11/28/22 11:35, Jerry Ray wrote:
+> Fixes: a1292595e006 ("net: dsa: add new DSA switch driver for the SMSC-LAN9303")
 
-On Mon, Nov 28, 2022 at 8:57 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Mon, Nov 28, 2022, at 20:23, Jason A. Donenfeld wrote:
-> > On Mon, Nov 28, 2022 at 08:18:12PM +0100, Arnd Bergmann wrote:
-> >> On Mon, Nov 28, 2022, at 12:18, Jason A. Donenfeld wrote:
-> >
-> > That's more or less how v7 was, but Thomas thought the x86 stuff should
-> > be separate. So for v8, the organization is:
-> >
-> > 1) generic syscall
-> > 2) generic vdso
-> > 3) x86 wiring
-> >
-> > The primary advantage is that future archs wanting to add this now can
-> > just look at commit (3) only, and make a similar commit for that new
-> > arch.
-> >
-> > If you think a different organization outweighs that advantage, can you
-> > spell out what division of patches you want, and I'll do that for v9?
-> > Or maybe this v8 is okay?
->
-> My interest is that at the end of the series, all architectures
-> are hooked up with the same syscall number, which avoids confusion
-> and merge conflicts when we add the next syscall to all tables.
->
-> How about one patch to add all the syscall table entries, and then
-> have the x86 specific change just turn on the Kconfig symbol that
-> actually enables the syscall?
+The Fixes: tag is supposed to come above your Signed-off-by, I don't 
+know if the maintainers will fix that up manually or not, but in any case:
 
-Okay, I can split it that way. If I gather your meaning correctly:
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 
-1) generic syscall C code
-2) #define __NR_... in asm-generic/unistd.h x86/.../unistd.h,
-x86/.../syscall_64.tbl
-3) generic vdso C code
-4) hook up x86 vdso, and select the right Kconfig symbol to start
-compiling the code
+> 
+> This patch changes the reported ethtool statistics for the lan9303
+> family of parts covered by this driver.
+> 
+> The TxUnderRun statistic label is renamed to RxShort to accurately
+> reflect what stat the device is reporting.  I did not reorder the
+> statistics as that might cause problems with existing user code that
+> are expecting the stats at a certain offset.
+> 
+> Signed-off-by: Jerry Ray <jerry.ray@microchip.com>
+> ---
+>   drivers/net/dsa/lan9303-core.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/dsa/lan9303-core.c b/drivers/net/dsa/lan9303-core.c
+> index 438e46af03e9..80f07bd20593 100644
+> --- a/drivers/net/dsa/lan9303-core.c
+> +++ b/drivers/net/dsa/lan9303-core.c
+> @@ -961,7 +961,7 @@ static const struct lan9303_mib_desc lan9303_mib[] = {
+>   	{ .offset = LAN9303_MAC_TX_BRDCST_CNT_0, .name = "TxBroad", },
+>   	{ .offset = LAN9303_MAC_TX_PAUSE_CNT_0, .name = "TxPause", },
+>   	{ .offset = LAN9303_MAC_TX_MULCST_CNT_0, .name = "TxMulti", },
+> -	{ .offset = LAN9303_MAC_RX_UNDSZE_CNT_0, .name = "TxUnderRun", },
+> +	{ .offset = LAN9303_MAC_RX_UNDSZE_CNT_0, .name = "RxShort", },
+>   	{ .offset = LAN9303_MAC_TX_64_CNT_0, .name = "Tx64Byte", },
+>   	{ .offset = LAN9303_MAC_TX_127_CNT_0, .name = "Tx128Byte", },
+>   	{ .offset = LAN9303_MAC_TX_255_CNT_0, .name = "Tx256Byte", },
 
-Is that what you have in mind? If so, I'll name (2) "arch: wire up
-vgetrandom_alloc() syscall number".
+-- 
+Florian
 
-Jason
