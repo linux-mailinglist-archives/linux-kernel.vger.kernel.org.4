@@ -2,115 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D3B463B495
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 23:04:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97A6F63B494
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 23:03:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234393AbiK1WD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 17:03:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48222 "EHLO
+        id S234368AbiK1WDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 17:03:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233273AbiK1WD5 (ORCPT
+        with ESMTP id S233273AbiK1WDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 17:03:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D262205C2
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 14:03:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669672984;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=xPbpoVxrgjiZ1v3Q2JskuQaETCCbk7MGRQwhwRfymp0=;
-        b=EFrROx1FBeaStuHExh3QbKR+jfhsG08c2R86lHCplRdbTXfpRS5HjLuyHIYXrHi35ZJRmH
-        aNxGKg8mwnuwVY8I1hEbHcrR4T9FJXpm9K5QCgbfFpocWMyOmROoNAeGfb462rvdGDL+Lc
-        4vM/cd9rBAoE3fmnwv7sraarKwybSe4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-457-R_KxuDuRMS6e_XWpvLpXFQ-1; Mon, 28 Nov 2022 17:03:00 -0500
-X-MC-Unique: R_KxuDuRMS6e_XWpvLpXFQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 28 Nov 2022 17:03:47 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB6724BCD;
+        Mon, 28 Nov 2022 14:03:45 -0800 (PST)
+Received: from notapiano.myfiosgateway.com (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A2A60811E81;
-        Mon, 28 Nov 2022 22:02:59 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.14])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E08421415100;
-        Mon, 28 Nov 2022 22:02:58 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     torvalds@linux-foundation.org
-cc:     dhowells@redhat.com, marc.dionne@auristor.com,
-        linux-afs@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] afs: Fix fileserver probe RTT handling
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BB3B16602AB1;
+        Mon, 28 Nov 2022 22:03:43 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1669673024;
+        bh=eocx9jyPGyUFPK58l8dbQu46lL3zk0WxNc1r0CBITUk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BDxHaQtOjRDrRawPm0wE1M8kKZo9u9eBWJZ9EQdNLUPP6+zw7YnM40cM53A/9bwHR
+         UBaiYK/ozQkI6VFke4k5jzMLtCNhD8BAKFiRKOOncFrTcfGFgXNEb6CkBSj0ACgrBn
+         /s/OChZKyYI4vTbnZzhn1fmFdhVYCRK5nVeqlbcz6kUjv2aTihrpxcMKaypKu/upEI
+         PGikCp32nFoxUHSaA9mS/RFGEK6ESJiZ/VzRJd8AY0+FWr2jm7bMHzm3vtCb0yoIYE
+         NlJtkN4iBRLa5MbMURytwET5blK/U2HudkevkO8VEaR7xSJTskbxJtkNE8xWXoyuew
+         4wQMAA/o/KwCw==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Shuah Khan <shuah@kernel.org>, Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     kernel@collabora.com,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests/tpm2: Split async tests call to separate shell script runner
+Date:   Mon, 28 Nov 2022 17:03:40 -0500
+Message-Id: <20221128220340.536558-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3528468.1669672976.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Mon, 28 Nov 2022 22:02:56 +0000
-Message-ID: <3528469.1669672976@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+When the async test case was introduced, despite being a completely
+independent test case, the command to run it was added to the same shell
+script as the smoke test case. Since a shell script implicitly returns
+the error code from the last run command, this effectively caused the
+script to only return as error code the result from the async test case,
+hiding the smoke test result (which could then only be seen from the
+python unittest logs).
 
-Could you apply this patch, please?
+Move the async test case call to its own shell script runner to avoid
+the aforementioned issue. This also makes the output clearer to read,
+since each kselftest KTAP result now matches with one python unittest
+report.
 
-Thanks,
-David
+While at it, also make it so the async test case is skipped if
+/dev/tpmrm0 doesn't exist, since commit 8335adb8f9d3 ("selftests: tpm:
+add async space test with noneexisting handle") added a test that relies
+on it.
+
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+
 ---
-The fileserver probing code attempts to work out the best fileserver to us=
-e
-for a volume by retrieving the RTT calculated by AF_RXRPC for the probe
-call sent to each server and comparing them.  Sometimes, however, no RTT
-estimate is available and rxrpc_kernel_get_srtt() returns false, leading
-good fileservers to be given an RTT of UINT_MAX and thus causing the
-rotation algorithm to ignore them.
 
-Fix afs_select_fileserver() to ignore rxrpc_kernel_get_srtt()'s return
-value and just take the estimated RTT it provides - which will be capped a=
-t
-1 second.
+ tools/testing/selftests/tpm2/Makefile      |  2 +-
+ tools/testing/selftests/tpm2/test_async.sh | 10 ++++++++++
+ tools/testing/selftests/tpm2/test_smoke.sh |  1 -
+ 3 files changed, 11 insertions(+), 2 deletions(-)
+ create mode 100755 tools/testing/selftests/tpm2/test_async.sh
 
-Fixes: 1d4adfaf6574 ("rxrpc: Make rxrpc_kernel_get_srtt() indicate validit=
-y")
-Signed-off-by: David Howells <dhowells@redhat.com>
-Reviewed-by: Marc Dionne <marc.dionne@auristor.com>
-Tested-by: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
-Link: https://lore.kernel.org/r/166965503999.3392585.13954054113218099395.=
-stgit@warthog.procyon.org.uk/
----
- fs/afs/fs_probe.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/fs/afs/fs_probe.c b/fs/afs/fs_probe.c
-index c0031a3ab42f..3ac5fcf98d0d 100644
---- a/fs/afs/fs_probe.c
-+++ b/fs/afs/fs_probe.c
-@@ -167,8 +167,8 @@ void afs_fileserver_probe_result(struct afs_call *call=
-)
- 			clear_bit(AFS_SERVER_FL_HAS_FS64, &server->flags);
- 	}
- =
-
--	if (rxrpc_kernel_get_srtt(call->net->socket, call->rxcall, &rtt_us) &&
--	    rtt_us < server->probe.rtt) {
-+	rxrpc_kernel_get_srtt(call->net->socket, call->rxcall, &rtt_us);
-+	if (rtt_us < server->probe.rtt) {
- 		server->probe.rtt =3D rtt_us;
- 		server->rtt =3D rtt_us;
- 		alist->preferred =3D index;
+diff --git a/tools/testing/selftests/tpm2/Makefile b/tools/testing/selftests/tpm2/Makefile
+index 1a5db1eb8ed5..a9bf9459fb25 100644
+--- a/tools/testing/selftests/tpm2/Makefile
++++ b/tools/testing/selftests/tpm2/Makefile
+@@ -1,5 +1,5 @@
+ # SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
+ include ../lib.mk
+ 
+-TEST_PROGS := test_smoke.sh test_space.sh
++TEST_PROGS := test_smoke.sh test_space.sh test_async.sh
+ TEST_PROGS_EXTENDED := tpm2.py tpm2_tests.py
+diff --git a/tools/testing/selftests/tpm2/test_async.sh b/tools/testing/selftests/tpm2/test_async.sh
+new file mode 100755
+index 000000000000..43bf5bd772fd
+--- /dev/null
++++ b/tools/testing/selftests/tpm2/test_async.sh
+@@ -0,0 +1,10 @@
++#!/bin/sh
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
++
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++
++[ -e /dev/tpm0 ] || exit $ksft_skip
++[ -e /dev/tpmrm0 ] || exit $ksft_skip
++
++python3 -m unittest -v tpm2_tests.AsyncTest
+diff --git a/tools/testing/selftests/tpm2/test_smoke.sh b/tools/testing/selftests/tpm2/test_smoke.sh
+index 3e5ff29ee1dd..58af963e5b55 100755
+--- a/tools/testing/selftests/tpm2/test_smoke.sh
++++ b/tools/testing/selftests/tpm2/test_smoke.sh
+@@ -7,4 +7,3 @@ ksft_skip=4
+ [ -e /dev/tpm0 ] || exit $ksft_skip
+ 
+ python3 -m unittest -v tpm2_tests.SmokeTest
+-python3 -m unittest -v tpm2_tests.AsyncTest
+-- 
+2.38.1
 
