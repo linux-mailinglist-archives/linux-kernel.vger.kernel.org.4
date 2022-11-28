@@ -2,81 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E173063A4FC
-	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:28:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2E5563A517
+	for <lists+linux-kernel@lfdr.de>; Mon, 28 Nov 2022 10:30:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbiK1J2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 28 Nov 2022 04:28:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53468 "EHLO
+        id S230320AbiK1Jao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 28 Nov 2022 04:30:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbiK1J2D (ORCPT
+        with ESMTP id S230087AbiK1Jal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 28 Nov 2022 04:28:03 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0CC13EB3
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:28:00 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id g12so16413348lfh.3
-        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:28:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=N+sBWVG81GD3481BhUaem1GToFImFejdTt3G+jJFbTA=;
-        b=hjUgUErDZ+19NMPpHO7f+9ODRzxn+XK2Ycdjza/1dE3OxfZYjyNx40iDMwU+Eisfm1
-         yNq8UDD8yh3er3beQUzsJovBe3rFyiYnNJUHz5PWRr7qFrIpPnbx9DVWgkb0jgu/uocT
-         NuJYpGCuBCbwGrvXDcC0MIz4NyvR6U6b0mHFLLQf9g8HTgsL1ErpKZs4I2t166HCJfIA
-         RSGo3DtnQz3CjwksURfJi5eYIh4Vy7yLh0opskGu8uMpQe8wBE8HX8TDSWYtC5RiL93m
-         s4k55xnmzP0oguaVDnWPRIJUYThTEcSZUebrdpyunRGuqyvaGLVxW4srIZlPw3dmt9eC
-         JfLQ==
+        Mon, 28 Nov 2022 04:30:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006AE18E2B
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:29:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669627784;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yXe5/Gs5NMc9hqQvF6Q+od4uwWeU4d6k98E6eiWSSHg=;
+        b=AVqVd6TGQeIDyPh68Ta5EVvrDu7aWB0Uc43D7fsE+8ng1jms2/x3RcTQ7bTA6sX25s+aHY
+        PxQS9kUTp1kuNGrt5IgElq4US1mOOLQf3+KBcok8hpNins5ywXNVjOKsu+6chNTDp3mDEq
+        H8Isv9VsC62KeCFjc5V/X4JqZNzAM14=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-484-JQWUwaBDMGK3QHh4PHH92g-1; Mon, 28 Nov 2022 04:29:42 -0500
+X-MC-Unique: JQWUwaBDMGK3QHh4PHH92g-1
+Received: by mail-wr1-f71.google.com with SMTP id g14-20020adfa48e000000b00241f94bcd54so1697625wrb.23
+        for <linux-kernel@vger.kernel.org>; Mon, 28 Nov 2022 01:29:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=N+sBWVG81GD3481BhUaem1GToFImFejdTt3G+jJFbTA=;
-        b=p/68ewNMqE8x3XTAjwPrFO4ON50NxmezRJD3jHVZQl4UODE7TC4GiBxIBnCOZd1hJu
-         1noyTTZkr3YhSgmXzho4rojRmBXLP6xl2oZe5o3Ihhp8DH8d3Uekk30pUOBEmRJdNpAI
-         zpE5tBDkk03/sOu9Pn2J3YPlSjBTAgDvodfW9c6AuLCL+yqVrDWjUIxeZowhOcSS63Xf
-         5i2RUax8lufExiT4bzdWaA8RNVqflcA1kuliVfucjGkbDe503tlCgOExUKDpi805j/+M
-         NBblU+beVv6lLiKR6hEQ1xlbvmkFdOkjGomC+1Ug6wl51zDMxVz3hwZHMDXakfLItYUE
-         Waxw==
-X-Gm-Message-State: ANoB5pltmIpZNBdSGvKMjkOdn3uJfKH5c1ljnpv2hBBkyTCMIu5mTrBK
-        4yTUgmTC0CNvXncPuT3Px/w=
-X-Google-Smtp-Source: AA0mqf7a8VeQAiQIJsxYtepIL7oukeN1hN3rKYbKuileisL49UhMYwm5SWvB1I9zrrIJoJItVsLAXQ==
-X-Received: by 2002:a19:dc02:0:b0:4a8:b9c6:8741 with SMTP id t2-20020a19dc02000000b004a8b9c68741mr12423161lfg.178.1669627678695;
-        Mon, 28 Nov 2022 01:27:58 -0800 (PST)
-Received: from eldfell ([194.136.85.206])
-        by smtp.gmail.com with ESMTPSA id r5-20020ac25c05000000b004b4f3c0d9f8sm1657493lfp.283.2022.11.28.01.27.57
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yXe5/Gs5NMc9hqQvF6Q+od4uwWeU4d6k98E6eiWSSHg=;
+        b=h2bKyymhXtsHUE1IFjDkjf2iADvRX/k/avQg3/n8n/5DQeIxkJUJaYOgTKGDF6l4+A
+         RPwOg5E0z5DS6retGJZ+lirz5ZPXzDQ0EEeKh8AnziWOWRcgc71IJhiyFVmrTna2kZDT
+         ogGw9v4V/rjscB14uKgtXsPCCfvtMk23Und5KunGsyEUcRTavWICS1bMQ3UwUl+LdYcx
+         zJNeDEsVI9JnBhsbCdwqkzPvLLoMebllv9oRt7dqgXmOJuzulSDJF+6UakRZkgYgKpkC
+         bjP2XlHYwGe59WzCCOGmYCcCE2ykhEkEgP2OXMajKRjhkpa+H5ThiKH6iVcDYKaBlFt+
+         5JZg==
+X-Gm-Message-State: ANoB5pl1mnQujzVcI3XjDHrAaB7HId4ZkdeFOPxkNw3N1XVEyOf4ZwEq
+        FYXNWxnu9L3C1MzuJgRzAELxB0ciq2YrGOjK35uTTcscgVq/cAcQi713de403KVT/YR6lCZbO9a
+        1FSRkWlmTWlhZ03LymtsMEkv/
+X-Received: by 2002:adf:ebc6:0:b0:241:c6d8:be83 with SMTP id v6-20020adfebc6000000b00241c6d8be83mr22842215wrn.454.1669627781399;
+        Mon, 28 Nov 2022 01:29:41 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5NNWLiFYkS/4BWx2K5W3KIsae1W7cB7QkH/0YG2DaPbKUxNFXJ8iBUflEeJZH3AcNSktTgUw==
+X-Received: by 2002:adf:ebc6:0:b0:241:c6d8:be83 with SMTP id v6-20020adfebc6000000b00241c6d8be83mr22842182wrn.454.1669627781095;
+        Mon, 28 Nov 2022 01:29:41 -0800 (PST)
+Received: from redhat.com ([2.52.149.178])
+        by smtp.gmail.com with ESMTPSA id z14-20020a7bc7ce000000b003cf78aafdd7sm14055513wmk.39.2022.11.28.01.29.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 01:27:58 -0800 (PST)
-Date:   Mon, 28 Nov 2022 11:27:55 +0200
-From:   Pekka Paalanen <ppaalanen@gmail.com>
-To:     =?UTF-8?B?QW5kcsOp?= Almeida <andrealmeid@igalia.com>
-Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, kernel-dev@igalia.com,
-        alexander.deucher@amd.com, contactshashanksharma@gmail.com,
-        amaranath.somalapuram@amd.com, christian.koenig@amd.com,
-        pierre-eric.pelloux-prayer@amd.com,
-        Simon Ser <contact@emersion.fr>,
-        Rob Clark <robdclark@gmail.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Stone <daniel@fooishbar.org>,
-        'Marek =?UTF-8?B?T2zFocOhayc=?= <maraeo@gmail.com>,
-        Dave Airlie <airlied@gmail.com>,
-        "Pierre-Loup A . Griffais" <pgriffais@valvesoftware.com>,
-        Shashank Sharma <shashank.sharma@amd.com>
-Subject: Re: [PATCH v3 1/2] drm: Add GPU reset sysfs event
-Message-ID: <20221128112755.52df3f6b@eldfell>
-In-Reply-To: <20221125175203.52481-2-andrealmeid@igalia.com>
-References: <20221125175203.52481-1-andrealmeid@igalia.com>
-        <20221125175203.52481-2-andrealmeid@igalia.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 28 Nov 2022 01:29:40 -0800 (PST)
+Date:   Mon, 28 Nov 2022 04:29:36 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Li Zetao <lizetao1@huawei.com>
+Cc:     jasowang@redhat.com, pbonzini@redhat.com, stefanha@redhat.com,
+        axboe@kernel.dk, kraxel@redhat.com, david@redhat.com,
+        ericvh@gmail.com, lucho@ionkov.net, asmadeus@codewreck.org,
+        linux_oss@crudebyte.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, rusty@rustcorp.com.au,
+        virtualization@lists.linux-foundation.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net, netdev@vger.kernel.org
+Subject: Re: [PATCH 3/4] virtio-input: Fix probe failed when modprobe
+ virtio_input
+Message-ID: <20221128042649-mutt-send-email-mst@kernel.org>
+References: <20221128021005.232105-1-lizetao1@huawei.com>
+ <20221128021005.232105-4-lizetao1@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/aUlzZ38K0WssssJjVJMpEdE";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221128021005.232105-4-lizetao1@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,177 +85,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/aUlzZ38K0WssssJjVJMpEdE
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+On Mon, Nov 28, 2022 at 10:10:04AM +0800, Li Zetao wrote:
+> When doing the following test steps, an error was found:
+>   step 1: modprobe virtio_input succeeded
+>     # modprobe virtio_input      <-- OK
+> 
+>   step 2: fault injection in input_allocate_device()
+>     # modprobe -r virtio_input   <-- OK
+>     # ...
+>       CPU: 0 PID: 4260 Comm: modprobe Tainted: G        W
+>       6.1.0-rc6-00285-g6a1e40c4b995-dirty #109
+>       Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+>       Call Trace:
+>        <TASK>
+>        should_fail.cold+0x5/0x1f
+>        ...
+>        kmalloc_trace+0x27/0xa0
+>        input_allocate_device+0x43/0x280
+>        virtinput_probe+0x23b/0x1648 [virtio_input]
+>        ...
+>        </TASK>
+>       virtio_input: probe of virtio5 failed with error -12
+> 
+>   step 3: modprobe virtio_net failed
+>     # modprobe virtio_input       <-- failed
+>       virtio_input: probe of virtio1 failed with error -2
+> 
+> The root cause of the problem is that the virtqueues are not
+> stopped on the error handling path when input_allocate_device()
+> fails in virtinput_probe(), resulting in an error "-ENOENT"
+> returned in the next modprobe call in setup_vq().
+> 
+> virtio_pci_modern_device uses virtqueues to send or
+> receive message, and "queue_enable" records whether the
+> queues are available. In vp_modern_find_vqs(), all queues
+> will be selected and activated, but once queues are enabled
+> there is no way to go back except reset.
+> 
+> Fix it by reset virtio device on error handling path. After
+> virtinput_init_vqs() succeeded, all virtqueues should be
+> stopped on error handling path.
+> 
+> Fixes: 1fcf0512c9c8 ("virtio_pci: modern driver")
 
-On Fri, 25 Nov 2022 14:52:02 -0300
-Andr=C3=A9 Almeida <andrealmeid@igalia.com> wrote:
+Probably 271c865161c57cfabca45b93eaa712b19da365bc
 
-> From: Shashank Sharma <shashank.sharma@amd.com>
->=20
-> Add a sysfs event to notify userspace about GPU resets providing:
-> - PID that triggered the GPU reset, if any. Resets can happen from
->   kernel threads as well, in that case no PID is provided
-> - Information about the reset (e.g. was VRAM lost?)
->=20
-> Co-developed-by: Andr=C3=A9 Almeida <andrealmeid@igalia.com>
-> Signed-off-by: Andr=C3=A9 Almeida <andrealmeid@igalia.com>
-> Signed-off-by: Shashank Sharma <shashank.sharma@amd.com>
+
+> Signed-off-by: Li Zetao <lizetao1@huawei.com>
 > ---
->=20
-> V3:
->    - Reduce information to just PID and flags
->    - Use pid pointer instead of just pid number
->    - BUG() if no reset info is provided
->=20
-> V2:
->    - Addressed review comments from Christian and Amar
->    - move the reset information structure to DRM layer
->    - drop _ctx from struct name
->    - make pid 32 bit(than 64)
->    - set flag when VRAM invalid (than valid)
->    - add process name as well (Amar)
-> ---
->  drivers/gpu/drm/drm_sysfs.c | 26 ++++++++++++++++++++++++++
->  include/drm/drm_sysfs.h     | 13 +++++++++++++
->  2 files changed, 39 insertions(+)
->=20
-> diff --git a/drivers/gpu/drm/drm_sysfs.c b/drivers/gpu/drm/drm_sysfs.c
-> index 430e00b16eec..85777abf4194 100644
-> --- a/drivers/gpu/drm/drm_sysfs.c
-> +++ b/drivers/gpu/drm/drm_sysfs.c
-> @@ -409,6 +409,32 @@ void drm_sysfs_hotplug_event(struct drm_device *dev)
->  }
->  EXPORT_SYMBOL(drm_sysfs_hotplug_event);
-> =20
-> +/**
-> + * drm_sysfs_reset_event - generate a DRM uevent to indicate GPU reset
-> + * @dev: DRM device
-> + * @reset_info: The contextual information about the reset (like PID, fl=
-ags)
-> + *
-> + * Send a uevent for the DRM device specified by @dev. This informs
-> + * user that a GPU reset has occurred, so that an interested client
-> + * can take any recovery or profiling measure.
-> + */
-> +void drm_sysfs_reset_event(struct drm_device *dev, struct drm_reset_even=
-t_info *reset_info)
-> +{
-> +	unsigned char pid_str[13];
+>  drivers/virtio/virtio_input.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/virtio/virtio_input.c b/drivers/virtio/virtio_input.c
+> index 3aa46703872d..f638f1cd3531 100644
+> --- a/drivers/virtio/virtio_input.c
+> +++ b/drivers/virtio/virtio_input.c
+> @@ -330,6 +330,7 @@ static int virtinput_probe(struct virtio_device *vdev)
+>  err_mt_init_slots:
+>  	input_free_device(vi->idev);
+>  err_input_alloc:
+> +	virtio_reset_device(vdev);
+>  	vdev->config->del_vqs(vdev);
+>  err_init_vq:
+>  	kfree(vi);
+> -- 
+> 2.25.1
 
-Hi,
-
-"PID=3D4111222333\0"
-
-I count 15 bytes instead of 13?
-
-> +	unsigned char flags_str[18];
-> +	unsigned char reset_str[] =3D "RESET=3D1";
-> +	char *envp[] =3D { reset_str, pid_str, flags_str, NULL };
-
-It seems you always send PID attribute, even if it's nonsense (I guess
-zero). Should sending nonsense be avoided?
-
-> +
-> +	DRM_DEBUG("generating reset event\n");
-> +
-> +	BUG_ON(!reset_info);
-> +
-> +	snprintf(pid_str, sizeof(pid_str), "PID=3D%u", pid_vnr(reset_info->pid)=
-);
-
-Passing PID by number is racy, but I suppose it has two rationales:
-- there is no way to pass a pidfd?
-- it's safe enough because the kernel avoids aggressive PID re-use?
-
-Maybe this would be good to note in the commit message to justify the
-design.
-
-What about pid namespaces, are they handled by pid_vnr() auto-magically
-somehow? Does it mean that the daemon handling these events *must not*
-be running under a (non-root?) pid namespace to work at all?
-
-E.g. if you have a container that is given a dedicated GPU device, I
-guess it might be reasonable to want to run the daemon inside that
-container as well. I have no idea how pid namespaces work, but I recall
-hearing they are a thing.
-
-> +	snprintf(flags_str, sizeof(flags_str), "FLAGS=3D0x%llx", reset_info->fl=
-ags);
-> +	kobject_uevent_env(&dev->primary->kdev->kobj, KOBJ_CHANGE, envp);
-> +}
-> +EXPORT_SYMBOL(drm_sysfs_reset_event);
-> +
->  /**
->   * drm_sysfs_connector_hotplug_event - generate a DRM uevent for any con=
-nector
->   * change
-> diff --git a/include/drm/drm_sysfs.h b/include/drm/drm_sysfs.h
-> index 6273cac44e47..dbb0ac6230b8 100644
-> --- a/include/drm/drm_sysfs.h
-> +++ b/include/drm/drm_sysfs.h
-> @@ -2,15 +2,28 @@
->  #ifndef _DRM_SYSFS_H_
->  #define _DRM_SYSFS_H_
-> =20
-> +#define DRM_RESET_EVENT_VRAM_LOST (1 << 0)
-
-Since flags are UAPI, they should be documented somewhere in UAPI docs.
-
-Shouldn't this whole event be documented somewhere in UAPI docs to say
-what it means and what attributes it may have and what they mean?
-
-
-Thanks,
-pq
-
-> +
->  struct drm_device;
->  struct device;
->  struct drm_connector;
->  struct drm_property;
-> =20
-> +/**
-> + * struct drm_reset_event_info - Information about a GPU reset event
-> + * @pid: Process that triggered the reset, if any
-> + * @flags: Extra information around the reset event (e.g. is VRAM lost?)
-> + */
-> +struct drm_reset_event_info {
-> +	struct pid *pid;
-> +	uint64_t flags;
-> +};
-> +
->  int drm_class_device_register(struct device *dev);
->  void drm_class_device_unregister(struct device *dev);
-> =20
->  void drm_sysfs_hotplug_event(struct drm_device *dev);
-> +void drm_sysfs_reset_event(struct drm_device *dev, struct drm_reset_even=
-t_info *reset_info);
->  void drm_sysfs_connector_hotplug_event(struct drm_connector *connector);
->  void drm_sysfs_connector_status_event(struct drm_connector *connector,
->  				      struct drm_property *property);
-
-
---Sig_/aUlzZ38K0WssssJjVJMpEdE
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmOEfxsACgkQI1/ltBGq
-qqffnhAAn/qNAIPJJSqP+3/6qTZQhkiLuZ+MvbCFtrLOTr1DAd6yeNcWF8biypY2
-J5CI42EyZfMiuwiVgsyEESGrf6/gGhF7G47NzsA1oal4iDkj9WZ8Wizzyw8M84gS
-1DqX0ACVl7dDu741GZo1H3fDrnAEqdrvmJ5vzHeVb3EQovg8ZdSVJutuaqXqqP2L
-6haRA6KGyTNV+pr5sEDiXPm6oj7sQgvaB4mJ4odnczUmIS9IJdaI+nZ1PFkIaD0E
-BepXG805OeZCylLW56ikirup6GnKjhAkNShgySlK9cfOmDlerv5n5wKjgjTixJC9
-tXbLUlXkbMDPuRFnaaWa0r7fYKbWBooBRtuaFimry0mStYbpqhYkdvWPa21ZzNsD
-nFo7eAWv6fkue9m5bdWVMeVh1B0Fy6Jyi9ZiO/kIZ6Fisd9Mx2eqIWq2+X2EIEIx
-C4GJ4v19EDNZ15FYisPUkUyTfnwOaY0ifK04PRJItYILm75VxV/64oclekA+APQ0
-sIBbwU9XUg2WobEi6pe7l4V9EfhW1+MzuvuB9z0mZ8krBoMVCnpDWv2Jcr4kq8U5
-l1Onx8sN/hFlB3JR4DoWjd2kHuUfqU2yAvdxAaA76DlK6blfEfjYgjD7rENJHdPl
-wPpV57+ercFPrdfKKmW1AZr6z5Wpvizn02tX0emPuK/wYF3zuFg=
-=lH7L
------END PGP SIGNATURE-----
-
---Sig_/aUlzZ38K0WssssJjVJMpEdE--
